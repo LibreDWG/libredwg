@@ -26,7 +26,7 @@
  * Publikaj funkcioj
  */
 int
-dvg_legi_dosiero (char *dosiernomo, Dvg_Strukturo * dvg_strukt)
+dwg_read_file (char *filename, Dwg_Structure * dwg_struct)
 {
 	int signo;
 	FILE *dt;
@@ -36,20 +36,20 @@ dvg_legi_dosiero (char *dosiernomo, Dvg_Strukturo * dvg_strukt)
 
 	/* Testi kaj sxargi je la dosiero
 	 */
-	if (stat (dosiernomo, &atrib))
+	if (stat (filename, &atrib))
 	{
-		printf ("Ne ekzistas tiu dosiero:\n %s\n", dosiernomo);
+		printf ("Ne ekzistas tiu dosiero:\n %s\n", filename);
 		return -1;
 	}
 	if (!S_ISREG (atrib.st_mode))
 	{
-		printf ("Ne eblas trakti dosierujojn, aparat-dosierojn, ligil-dosierojn, ktp:\n %s\n", dosiernomo);
+		printf ("Ne eblas trakti dosierujojn, aparat-dosierojn, ligil-dosierojn, ktp:\n %s\n", filename);
 		return -1;
 	}
-	dt = fopen (dosiernomo, "rb");
+	dt = fopen (filename, "rb");
 	if (!dt)
 	{
-		printf ("Ne eblas malfermi la dosieron:\n %s\n", dosiernomo);
+		printf ("Ne eblas malfermi la dosieron:\n %s\n", filename);
 		return -1;
 	}
 
@@ -70,7 +70,7 @@ dvg_legi_dosiero (char *dosiernomo, Dvg_Strukturo * dvg_strukt)
 	if (kiom != bitaro.kiom)
 	{
 		printf ("Ne eblis legi la tutan dosieron (%lu el %lu):\n %s\n", kiom, bitaro.kiom,
-			dosiernomo);
+			filename);
 		fclose (dt);
 		free (bitaro.cxeno);
 		return -1;
@@ -79,9 +79,9 @@ dvg_legi_dosiero (char *dosiernomo, Dvg_Strukturo * dvg_strukt)
 
 	/* Dekodigi la dvg-datenaron
 	 */
-	if (dvg_dek_strukturigi (&bitaro, dvg_strukt))
+	if (dvg_dek_strukturigi (&bitaro, dwg_struct))
 	{
-		printf ("Ni ne sukcesis dekodigi la dosieron:\n %s\n", dosiernomo);
+		printf ("Ni ne sukcesis dekodigi la dosieron:\n %s\n", filename);
 		free (bitaro.cxeno);
 		return -1;
 	}
@@ -91,7 +91,7 @@ dvg_legi_dosiero (char *dosiernomo, Dvg_Strukturo * dvg_strukt)
 }
 
 int
-dvg_skribi_dosiero (char *dosiernomo, Dvg_Strukturo * strukt)
+dwg_write_file (char *filename, Dwg_Structure * dwg_struct)
 {
 	FILE *dt;
 	struct stat atrib;
@@ -99,7 +99,7 @@ dvg_skribi_dosiero (char *dosiernomo, Dvg_Strukturo * strukt)
 
 	/* Enkodigi la dvg-datenaron
 	bitaro.kiom = 0;
-	if (dvg_enk_cxenigi (strukt, &bitaro))
+	if (dvg_enk_cxenigi (dwg_struct, &bitaro))
 	{
 		puts ("Ni ne sukcesis enkodigi la strukturon.");
 		if (bitaro.kiom > 0)
@@ -109,15 +109,15 @@ dvg_skribi_dosiero (char *dosiernomo, Dvg_Strukturo * strukt)
 	 */
 
 	/* Testi kaj malfermi dosieron por skribi
-	if (!stat (dosiernomo, &atrib))
+	if (!stat (filename, &atrib))
 	{
 		puts ("La skribota dosiero jam ekzistas, ni ne povas surskribi gxin.");
 		return -1;
 	}
-	dt = fopen (dosiernomo, "w");
+	dt = fopen (filename, "w");
 	if (!dt)
 	{
-		printf ("Ne eblas krei la dosieron:\n %s\n", dosiernomo);
+		printf ("Ne eblas krei la dosieron:\n %s\n", filename);
 		return -1;
 	}
 	 */
@@ -125,7 +125,7 @@ dvg_skribi_dosiero (char *dosiernomo, Dvg_Strukturo * strukt)
 	/* Skribi la datenaron en la dosiero
 	if (fwrite (bitaro.cxeno, sizeof (char), bitaro.kiom, dt) != bitaro.kiom)
 	{
-		printf ("Ne eblis skribi la tutan dosieron:\n %s\n", dosiernomo);
+		printf ("Ne eblis skribi la tutan dosieron:\n %s\n", filename);
 		fclose (dt);
 		free (bitaro.cxeno);
 		return -1;
@@ -518,7 +518,7 @@ dvg_montri_LAYOUT (Dvg_Ordinarajxo_LAYOUT *ord)
  * Speciala publika funkcio por montrigi valorojn de la objektoj
  */
 void
-dvg_montri (Dvg_Strukturo *skt)
+dvg_montri (Dwg_Structure *skt)
 {
 	unsigned char sig;
 	unsigned int i, j;

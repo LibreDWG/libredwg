@@ -23,7 +23,7 @@
 /*--------------------------------------------------------------------------------
  * Privataj funkcioj
  */
-static void dvg_dek_aldoni_objekto (Dvg_Strukturo * skt, Bit_Cxeno * dat, long unsigned int adreso);
+static void dvg_dek_aldoni_objekto (Dwg_Structure * skt, Bit_Cxeno * dat, long unsigned int adreso);
 
 /*--------------------------------------------------------------------------------
  * Publikaj variabloj
@@ -34,7 +34,7 @@ long unsigned int ktl_lastadreso;
  * Difino de publikaj funkcioj
  */
 int
-dvg_dek_strukturigi (Bit_Cxeno * dat, Dvg_Strukturo * skt)
+dvg_dek_strukturigi (Bit_Cxeno * dat, Dwg_Structure * skt)
 {
 	unsigned char sig;
 	unsigned int sekgrandeco = 0;
@@ -1408,7 +1408,7 @@ dvg_dek_NEUZATA (Bit_Cxeno * dat, Dvg_Objekto * obj)
  * Privata funkcio, kiu dependas de la antaŭaj
  */
 static void
-dvg_dek_aldoni_objekto (Dvg_Strukturo * skt, Bit_Cxeno * dat, long unsigned int adreso)
+dvg_dek_aldoni_objekto (Dwg_Structure * skt, Bit_Cxeno * dat, long unsigned int adreso)
 {
 	long unsigned int antauxa_adreso;
 	long unsigned int objekadres;

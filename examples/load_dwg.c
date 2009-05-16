@@ -10,7 +10,7 @@
 /* Simple functions to show how to read lines, circles and texts
  */
 
-#include <dvg.h>
+#include <dwg.h>
 
 void add_line (double x1, double y1, double x2, double y2)
 {
@@ -31,10 +31,10 @@ int load_dwg (char *filename)
 {
 	int i;
 	int success;
-	Dvg_Strukturo dwg;
+	Dwg_Structure dwg;
 
 	dwg.objekto_kiom = 0;
-	success = dvg_legi_dosiero (filename, &dwg);
+	success = dwg_read_file (filename, &dwg);
 	for (i = 0; i < dwg.objekto_kiom; i++)
 	{
 		Dvg_Estajxo_LINE *line;

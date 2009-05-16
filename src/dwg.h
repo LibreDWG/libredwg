@@ -748,16 +748,16 @@ extern "C"
 
 		unsigned int dvg_ot_layout;
 
-	} Dvg_Strukturo;
+	} Dwg_Structure;
 
 
 /*--------------------------------------------------
  * Funkcioj
  */
 
-	int dvg_legi_dosiero (char *dosiernomo, Dvg_Strukturo * skt);
+	int dwg_read_file (char *filename, Dwg_Structure * dwg);
 
-	void dvg_montri (Dvg_Strukturo * skt);
+	void dvg_montri (Dwg_Structure * dwg);
 
 #ifdef __cplusplus
 }
