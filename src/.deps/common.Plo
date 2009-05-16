@@ -1,0 +1,3 @@
+common.lo: common.c common.h
+
+common.h:

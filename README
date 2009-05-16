@@ -1,0 +1,34 @@
+== LibDWG 0.2
+
+LibDWG estas biblioteko de programeroj, kiu faciligas legadon de DWG-aj dosieroj. DWG estas tre populara dosierformo uzata en teknika fasonado (CAD), kiu tamen prezentas malfacilaĵojn por esti malferme kaj libere aplikata.
+
+DWG estas dosier-formo kreita, posedita kaj disvolvigita de la privata entrepreno "AutoCAD", kiu neniam publikigis (nek publikigos ŝajne) iun ajn specifon pri ĝi. Tamen, la societo "Open Alliance" klopodadas deĉifri tiun formon, disponigante specifon nomatan "OpenDWG". Por pli da informoj, aliru ilian anglan retpaĝon:
+
+http://opendwg.org
+
+Ni intencas disponigi Esperantan tradukon de la specifon OpenDWG en tiu retpaĝo:
+
+http://libdwg.sourceforge.net/dokumentado
+
+Por faciligi tajpadon ni ne uzas la mallongigon DWG. Anstataŭe, ni uzas DVG-on, kiu signifas simple Do-Vavo-Go. Krome, oni ne scias la signifon de DWG, nur AutoCAD ŝajne scias pri tio, eble estas simpla mallongigo por "DRAWING" (el la angla, DESEGNAĴO). Do, jen simpla regulo: por ni, "dvg-io" signifas io rilatita al la formo DWG (aŭ al la biblioteko LibDWG mem).
+
+=== Aplikado
+
+La biblioteko estas organizita laŭ tre simpla skemo. Ĝi ebligas ŝargi je la dvg-dosiero kaj plenigi internan datenar-strukturon kun la diversaj variabloj kaj objektoj difinitaj tie. La datenar-strukturo estas laŭ la specifo de "OpenDWG". Ni nomigas ĝin "dvg-strukturon". La biblioteko ankaŭ ebligas registri dvg-dosieron el difino de iu dvg-strukturo.
+
+Por legi dvg-dosierojn, la programisto uzanta LibDWG-on bezonas koni bone la aranĝon de tiu dvg-strukturo, kiu estas difinita en la kap-dosiero "dvg.h". Tiu dosiero deklaras diversajn funkciojn por manipuli la dvg-strukturon. Ĝi prezentas ankaŭ du kernajn funkciojn por legi/skribi la dvg-strukturon el/al dvg-dosiero.
+
+==== Legi dosieron
+
+(int) dvg_legi_dosiero (char * dosiernomo, Dvg_Strukturo *strukt);
+
+Ĉi tie oni informas al la funkcio la nomon de ekzistanta dvg-dosiero por esti legota kaj liveras al ĝi la adreson de jam ekzistanta, tamen malplena, dvg-strukturo por enteni dvg-datenaron.
+
+La funkcio redonas entjeran valoron nula okaze de sukceso, male ĝi redonas -1.
+
+==== Montri strukturon
+
+(void) dvg_montri (Dvg_Strukturo *strukt);
+
+Post ŝargo je dvg-dosiero, per tiu ĉi funkcio eblas eligi (al la ekrano) ĝian enhavon.
+

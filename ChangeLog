@@ -1,0 +1,40 @@
+2009-04-10  Felipe Emmanuel Ferreira de Castro  <fefcas@gmail.com>
+
+	* libdwg-0.2: dua alfa lanĉo.
+	- Eblas legi plurajn objektojn, almenaŭ la plej simplajn por desegnaĵoj laŭ 2D.
+
+2008-06-29  Felipe Emmanuel Ferreira de Castro  <fefcas@gmail.com>
+
+	* libdwg-0.1: unua alfa lanĉo.
+	- Eblas legi la jenajn objektojn: TEXT, LINE, CIRCLE.
+	- Ne eblas skribi: dumtempe oni rezignis pri tio, ĉar la rezultoj ne
+	estas kontentigaj, malfacilas deĉifri la dwg-formon.
+
+2008-03-16  Felipe Emmanuel Ferreira de Castro  <fefcas@gmail.com>
+
+	* libdwg: kvara lancxo.
+	- La dua kap-datenaro estas jam konata kaj oni suficxe trafe povas
+	skribi gxin.
+	- Krome, oni jam bone kreas la CKR-ajn dubitokojn. Sxajne do, legita
+	dosiero povas esti reskribita senmodife kaj dauxre resti konforma.
+
+2008-03-09  Felipe Emmanuel Ferreira de Castro  <fefcas@gmail.com>
+
+	* libdwg: tria lancxo.
+	- Nun eblas skribi dosierojn ankaux. Tamen la rezulto ankoraux ne
+	uzeblas, cxar ni scias nenion pri du sekcioj: sekcio [5] kaj la dua
+	kap-datenaro. Sed almenaux la antauxrigarda bildo jam montrigxas bone
+	kopiita, interne de la rezultita dosiero.
+
+2008-03-04  Felipe Emmanuel Ferreira de Castro  <fefcas@gmail.com>
+
+	* libdwg: dua lancxo.
+	- La biblioteko traktas nur dosierformatojn R2000.
+	- Eblas legi nur liniojn kaj cirklojn, krom montri ties atributojn en la ekrano.
+	- Por testi la programon, oni uzu "make check" kaj rulu la
+	testo-programon kreotan en la fontkoda subdosierujo.
+
+2008-02-23  Felipe Emmanuel Ferreira de Castro  <fefcas@gmail.com>
+
+	* libdwg: unua lancxo.
+
