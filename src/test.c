@@ -37,7 +37,7 @@ main (int argc, char *argv[])
 int
 testo_dvg_c (char *dosiero)
 {
-	int malsukceso = 0;
+	int error = 0;
 	Dvg_Strukturo strukt;
 
 	/* Komenci testojn
@@ -45,25 +45,25 @@ testo_dvg_c (char *dosiero)
 	puts (" ---------------------------------------> Oni testas: \"dvg.c\"");
 
 	if (dosiero)
-		malsukceso = malsukceso || dvg_legi_dosiero (dosiero, &strukt);
+		error = error || dvg_legi_dosiero (dosiero, &strukt);
 	else
-		malsukceso = malsukceso || dvg_legi_dosiero (DOSIERO ".dwg", &strukt);
+		error = error || dvg_legi_dosiero (DOSIERO ".dwg", &strukt);
 
-	if (!malsukceso)
+	if (!error)
 	{
 		dvg_montri (&strukt);
 		/*
 		   unlink ("nova_rezulto.dwg");
-		   malsukceso = malsukceso || dvg_skribi_dosiero ("nova_rezulto.dwg", &strukt);
+		   error = error || dvg_skribi_dosiero ("nova_rezulto.dwg", &strukt);
 		 */
 	}
 
-	if (malsukceso)
+	if (error)
 		puts (" \"dvg.c\" ==> Malsukcesis...");
 	else
 	{
 		puts (" \"dvg.c\" ==> SUKCESO!");
 	}
 
-	return malsukceso;
+	return error;
 }

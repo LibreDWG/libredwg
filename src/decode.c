@@ -562,11 +562,11 @@ dwg_decode_estajxo (Bit_Cxeno * dat, Dwg_Object_Estajxo * est)
 {
 	unsigned int i;
 	unsigned int grando;
-	int malsukceso = 2;
+	int error = 2;
 
 	est->bitgrandeco = bit_legi_RL (dat);
-	malsukceso = bit_legi_H (dat, &est->traktilo);
-	if (malsukceso)
+	error = bit_legi_H (dat, &est->traktilo);
+	if (error)
 	{
 		printf ("\tEraro en traktilo de objekto! Adreso en la ĉeno: 0x%0x\n", dat->bajto);
 		est->bitgrandeco = 0;
@@ -598,8 +598,8 @@ dwg_decode_estajxo (Bit_Cxeno * dat, Dwg_Object_Estajxo * est)
 			est->kromdat_kiom += grando;
 			est->kromdat = realloc (est->kromdat, est->kromdat_kiom);
 		}
-		malsukceso = bit_legi_H (dat, &est->kromdat_trakt);
-		if (malsukceso)
+		error = bit_legi_H (dat, &est->kromdat_trakt);
+		if (error)
 			printf ("Ops...\n");
 		for (i = est->kromdat_kiom - grando; i < est->kromdat_kiom; i++)
 			est->kromdat[i] = bit_legi_RC (dat);
@@ -638,11 +638,11 @@ dwg_decode_ordinarajxo (Bit_Cxeno * dat, Dwg_Object_Ordinarajxo * ord)
 {
 	unsigned int i;
 	unsigned int grando;
-	int malsukceso = 2;
+	int error = 2;
 
 	ord->bitgrandeco = bit_legi_RL (dat);
-	malsukceso = bit_legi_H (dat, &ord->traktilo);
-	if (malsukceso)
+	error = bit_legi_H (dat, &ord->traktilo);
+	if (error)
 	{
 		printf ("\tEraro en traktilo de objekto! Adreso en la ĉeno: 0x%0x\n", dat->bajto);
 		ord->bitgrandeco = 0;
@@ -672,8 +672,8 @@ dwg_decode_ordinarajxo (Bit_Cxeno * dat, Dwg_Object_Ordinarajxo * ord)
 			ord->kromdat_kiom += grando;
 			ord->kromdat = realloc (ord->kromdat, ord->kromdat_kiom);
 		}
-		malsukceso = bit_legi_H (dat, &ord->kromdat_trakt);
-		if (malsukceso)
+		error = bit_legi_H (dat, &ord->kromdat_trakt);
+		if (error)
 			printf ("Ops...\n");
 		for (i = ord->kromdat_kiom - grando; i < ord->kromdat_kiom; i++)
 			ord->kromdat[i] = bit_legi_RC (dat);
