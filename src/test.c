@@ -14,7 +14,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "bite.h"
+#include "bits.h"
 #include "dwg.h"
 
 #define CXEN_LONGO (80)
@@ -22,47 +22,47 @@
 Bit_Cxeno dat;
 Bit_Cxeno dat_2;
 
-int testo_dvg_c (char *dosiero);
+int test_dwg_c (char *filename);
 
 int
 main (int argc, char *argv[])
 {
 	if (argc > 1)
-		return (testo_dvg_c (argv[1]));
+		return (test_dwg_c (argv[1]));
 	else
-		return (testo_dvg_c (NULL));
+		return (test_dwg_c (NULL));
 }
 
-#define DOSIERO "ekzemplo"
+#define FILENAME "example"
 int
-testo_dvg_c (char *dosiero)
+test_dwg_c (char *filename)
 {
 	int error = 0;
-	Dvg_Strukturo strukt;
+	Dwg_Structure dwg_struct;
 
 	/* Komenci testojn
 	 */
-	puts (" ---------------------------------------> Oni testas: \"dvg.c\"");
+	puts (" ---------------------------------------> Oni testas: \"dwg.c\"");
 
-	if (dosiero)
-		error = error || dvg_legi_dosiero (dosiero, &strukt);
+	if (filename)
+		error = error || dwg_read_file (filename, &dwg_struct);
 	else
-		error = error || dvg_legi_dosiero (DOSIERO ".dwg", &strukt);
+		error = error || dwg_read_file (FILENAME ".dwg", &dwg_struct);
 
 	if (!error)
 	{
-		dvg_montri (&strukt);
+		dwg_print (&dwg_struct);
 		/*
-		   unlink ("nova_rezulto.dwg");
-		   error = error || dvg_skribi_dosiero ("nova_rezulto.dwg", &strukt);
+		   unlink ("new_result.dwg");
+		   error = error || dwg_write_file ("new_result.dwg", &dwg_struct);
 		 */
 	}
 
 	if (error)
-		puts (" \"dvg.c\" ==> Malsukcesis...");
+		puts (" \"dwg.c\" ==> Error...");
 	else
 	{
-		puts (" \"dvg.c\" ==> SUKCESO!");
+		puts (" \"dwg.c\" ==> SUCCESS!");
 	}
 
 	return error;

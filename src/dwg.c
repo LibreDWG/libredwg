@@ -79,7 +79,7 @@ dwg_read_file (char *filename, Dwg_Structure * dwg_struct)
 
 	/* Dekodigi la dvg-datenaron
 	 */
-	if (dvg_dek_strukturigi (&bitaro, dwg_struct))
+	if (dwg_decode_strukturigi (&bitaro, dwg_struct))
 	{
 		printf ("Ni ne sukcesis dekodigi la dosieron:\n %s\n", filename);
 		free (bitaro.cxeno);
