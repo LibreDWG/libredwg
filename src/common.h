@@ -17,45 +17,45 @@
 /**
  Tipoj de (eble kompaktitaj) dateneroj, kiuj komponas dwg-dosierojn.
  */
-typedef enum DVG_DATENERO_TIPO
+typedef enum DWG_DATENERO_TIPO
 {
-	DVG_DT_B,   /** bito (1 or 0) */
-	DVG_DT_BB,  /** speciala 2-bita kodo (\angla{entmode} en \angla{entities}, ekzemple) */
-	DVG_DT_RC,  /** kruda bitoko (ne kompaktita) */
-	DVG_DT_RS,  /** kruda dubitoko (ne kompaktita) */
-	DVG_DT_RD,  /** kruda duglitajxo (ne kompaktita) */
-	DVG_DT_RL,  /** kruda kvarbitoko (ne kompaktita) */
-	DVG_DT_BS,  /** bit-dubitoko (\angla{bitshort}) */
-	DVG_DT_BL,  /** bit-kvarbitoko (\angla{bitlong}) */
-	DVG_DT_BD,  /** bit-duglitajxo (\angla{bitdouble}) */
-	DVG_DT_MC,  /** moduleca bitoko  */
-	DVG_DT_MS,  /** moduleca dubitoko  */
-	DVG_DT_BE,  /** bit-forpusxigo (\angla{BitExtrusion}) */
-	DVG_DT_DD,  /** bit-duglitajxo kun antauxdifinajxo */
-	DVG_DT_BT,  /** bit-dikeco (\angla{BitThickness}) */
-	DVG_DT_H,   /** traktila referenco (vidu la sekcion \angla{HANDLE REFERENCES}) */
-	DVG_DT_CMC, /** valoro de koloro? \angla{CmColor} */
-	DVG_DT_T,   /** teksto (bit-dubitoka grandeco, sekvata de la signocxeno) */
-	DVG_DT_TU,  /** Unikoda teksto (bit-dubitoka grandeco (laux kiom signoj), sekvata de unikoda signocxeno, po 2 bitokoj por signo) */
-	DVG_DT_2RD,
-	DVG_DT_2BD,
-	DVG_DT_3BD,
+	DWG_DT_B,   /** bito (1 or 0) */
+	DWG_DT_BB,  /** speciala 2-bita kodo (\angla{entmode} en \angla{entities}, ekzemple) */
+	DWG_DT_RC,  /** kruda bitoko (ne kompaktita) */
+	DWG_DT_RS,  /** kruda dubitoko (ne kompaktita) */
+	DWG_DT_RD,  /** kruda duglitajxo (ne kompaktita) */
+	DWG_DT_RL,  /** kruda kvarbitoko (ne kompaktita) */
+	DWG_DT_BS,  /** bit-dubitoko (\angla{bitshort}) */
+	DWG_DT_BL,  /** bit-kvarbitoko (\angla{bitlong}) */
+	DWG_DT_BD,  /** bit-duglitajxo (\angla{bitdouble}) */
+	DWG_DT_MC,  /** moduleca bitoko  */
+	DWG_DT_MS,  /** moduleca dubitoko  */
+	DWG_DT_BE,  /** bit-forpusxigo (\angla{BitExtrusion}) */
+	DWG_DT_DD,  /** bit-duglitajxo kun antauxdifinajxo */
+	DWG_DT_BT,  /** bit-dikeco (\angla{BitThickness}) */
+	DWG_DT_H,   /** traktila referenco (vidu la sekcion \angla{HANDLE REFERENCES}) */
+	DWG_DT_CMC, /** valoro de koloro? \angla{CmColor} */
+	DWG_DT_T,   /** teksto (bit-dubitoka grandeco, sekvata de la signocxeno) */
+	DWG_DT_TU,  /** Unikoda teksto (bit-dubitoka grandeco (laux kiom signoj), sekvata de unikoda signocxeno, po 2 bitokoj por signo) */
+	DWG_DT_2RD,
+	DWG_DT_2BD,
+	DWG_DT_3BD,
 } Dwg_Datenero_Tipo;
 
 /**
  Identigaj referencoj de gardostarantoj.
  */
-typedef enum DVG_GARDOSTARANTO
+typedef enum DWG_GARDOSTARANTO
 {
-	DVG_GS_KAPO_FINO,
-	DVG_GS_BILDO_EKO,
-	DVG_GS_BILDO_FINO,
-	DVG_GS_VARIABLO_EKO,
-	DVG_GS_VARIABLO_FINO,
-	DVG_GS_KLASO_EKO,
-	DVG_GS_KLASO_FINO,
-	DVG_GS_DUAKAPO_EKO,
-	DVG_GS_DUAKAPO_FINO
+	DWG_GS_KAPO_FINO,
+	DWG_GS_BILDO_EKO,
+	DWG_GS_BILDO_FINO,
+	DWG_GS_VARIABLO_EKO,
+	DWG_GS_VARIABLO_FINO,
+	DWG_GS_KLASO_EKO,
+	DWG_GS_KLASO_FINO,
+	DWG_GS_DUAKAPO_EKO,
+	DWG_GS_DUAKAPO_FINO
 } Dwg_Gardostaranto;
 
 Dwg_Datenero_Tipo dwg_varmapo (int indico);

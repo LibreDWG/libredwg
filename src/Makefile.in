@@ -55,7 +55,7 @@ am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includedir)"
 libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libdwg_la_LIBADD =
-am_libdwg_la_OBJECTS = dwg.lo common.lo bits.lo decode.lo
+am_libdwg_la_OBJECTS = dwg.lo common.lo bits.lo decode.lo encode.lo
 libdwg_la_OBJECTS = $(am_libdwg_la_OBJECTS)
 libdwg_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
@@ -198,7 +198,9 @@ libdwg_la_SOURCES = \
 	dwg.c \
 	common.c \
 	bits.c \
-	decode.c
+	decode.c \
+	encode.c
+	
 
 libdwg_la_LDFLAGS = \
 	-version-info 0:0:0
@@ -210,8 +212,7 @@ EXTRA_DIST = \
 	bits.h \
 	decode.h \
 	example.dwg \
-	encode.h \
-	encode.c
+	encode.h
 
 test_SOURCES = \
 	test.c

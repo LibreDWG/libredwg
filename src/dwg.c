@@ -567,7 +567,7 @@ dwg_print (Dwg_Structure *skt)
 	puts ("**************************************************");
 	puts ("Sekcio VARIABLOJ");
 	puts ("**************************************************");
-	for (i = 0; i < DVG_KIOM_VARIABLOJ; i++)
+	for (i = 0; i < DWG_KIOM_VARIABLOJ; i++)
 	{
 		printf ("[%03i] - ", i + 1);
 		if (i == 221 && skt->var[220].dubitoko != 3)
@@ -577,33 +577,33 @@ dwg_print (Dwg_Structure *skt)
 		}
 		switch (dwg_varmapo (i))
 		{
-		case DVG_DT_B:
+		case DWG_DT_B:
 			printf ("B: %u", skt->var[i].bitoko);
 			break;
-		case DVG_DT_BS:
+		case DWG_DT_BS:
 			printf ("BS: %u", skt->var[i].dubitoko);
 			break;
-		case DVG_DT_BL:
+		case DWG_DT_BL:
 			printf ("BL: %lu", skt->var[i].kvarbitoko);
 			break;
-		case DVG_DT_BD:
+		case DWG_DT_BD:
 			printf ("BD: %lg", skt->var[i].duglitajxo);
 			break;
-		case DVG_DT_H:
+		case DWG_DT_H:
 			printf ("H: %i.%i.%li", skt->var[i].traktilo.kodo,
 				skt->var[i].traktilo.kiom, skt->var[i].traktilo.valoro);
 			break;
-		case DVG_DT_T:
+		case DWG_DT_T:
 			printf ("T: \"%s\"", skt->var[i].teksto);
 			break;
-		case DVG_DT_CMC:
+		case DWG_DT_CMC:
 			printf ("CMC: %u", skt->var[i].dubitoko);
 			break;
-		case DVG_DT_2RD:
+		case DWG_DT_2RD:
 			printf ("X: %lg\t", skt->var[i].xy[0]);
 			printf ("Y: %lg", skt->var[i].xy[1]);
 			break;
-		case DVG_DT_3BD:
+		case DWG_DT_3BD:
 			printf ("X: %lg\t", skt->var[i].xyz[0]);
 			printf ("Y: %lg\t", skt->var[i].xyz[1]);
 			printf ("Z: %lg", skt->var[i].xyz[2]);

@@ -43,15 +43,15 @@ int load_dwg (char *filename)
 
 		switch (dwg.objekto[i].tipo)
 		{
-		case DVG_OT_LINE:
+		case DWG_OT_LINE:
 			line = dwg.objekto[i].tio.estajxo->tio.LINE;
 			add_line (line->x0, line->x1, line->y0, line->y1);
 			break;
-		case DVG_OT_CIRCLE:
+		case DWG_OT_CIRCLE:
 			circle = dwg.objekto[i].tio.estajxo->tio.CIRCLE;
 			add_circle (circle->x0, circle->y0, circle->radiuso);
 			break;
-		case DVG_OT_TEXT:
+		case DWG_OT_TEXT:
 			text = dwg.objekto[i].tio.estajxo->tio.TEXT;
 			add_text (text->x0, text->y0, text->teksto);
 			break;

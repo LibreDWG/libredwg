@@ -122,7 +122,7 @@ dwg_decode_strukturigi (Bit_Cxeno * dat, Dwg_Structure * skt)
 	   printf ("Legita: %X\nKreita: %X\n", ckr, ckr2);
 	 */
 
-	if (bit_sercxi_gardostaranto (dat, dwg_gardostaranto (DVG_GS_KAPO_FINO)))
+	if (bit_sercxi_gardostaranto (dat, dwg_gardostaranto (DWG_GS_KAPO_FINO)))
 		printf ("=======> KAPO (fino): %8X\n", dat->bajto);
 
 
@@ -136,7 +136,7 @@ dwg_decode_strukturigi (Bit_Cxeno * dat, Dwg_Structure * skt)
 		printf ("   NEKONATA 1 (fino): %8X\n",
 			skt->kapo.sekcio[5].adresilo + skt->kapo.sekcio[5].grandeco);
 		dat->bajto = skt->kapo.sekcio[5].adresilo;
-		skt->nekonata1.kiom = DVG_NEKONATA1_KIOM;
+		skt->nekonata1.kiom = DWG_NEKONATA1_KIOM;
 		skt->nekonata1.bajto = skt->nekonata1.bito = 0;
 		skt->nekonata1.cxeno = malloc (skt->nekonata1.kiom);
 		memcpy (skt->nekonata1.cxeno, &dat->cxeno[dat->bajto], skt->nekonata1.kiom);
@@ -149,14 +149,14 @@ dwg_decode_strukturigi (Bit_Cxeno * dat, Dwg_Structure * skt)
 	 * Antauxrigarda bildo
 	 */
 
-	if (bit_sercxi_gardostaranto (dat, dwg_gardostaranto (DVG_GS_BILDO_EKO)))
+	if (bit_sercxi_gardostaranto (dat, dwg_gardostaranto (DWG_GS_BILDO_EKO)))
 	{
 		unsigned long int ekadreso;
 
 		dat->bito = 0;
 		ekadreso = dat->bajto;
 		printf ("=============> BILDO: %8X\n", ekadreso - 16);
-		if (bit_sercxi_gardostaranto (dat, dwg_gardostaranto (DVG_GS_BILDO_FINO)))
+		if (bit_sercxi_gardostaranto (dat, dwg_gardostaranto (DWG_GS_BILDO_FINO)))
 		{
 			printf ("        BILDO (fino): %8X\n", dat->bajto);
 			skt->bildo.kiom = (dat->bajto - 16) - ekadreso;
@@ -183,7 +183,7 @@ dwg_decode_strukturigi (Bit_Cxeno * dat, Dwg_Structure * skt)
 
 	/* Legi la kap-variablojn
 	 */
-	for (i = 0; i < DVG_KIOM_VARIABLOJ; i++)
+	for (i = 0; i < DWG_KIOM_VARIABLOJ; i++)
 	{
 		//printf ("[%03i] - ", i + 1);
 		if (i == 221 && skt->var[220].dubitoko != 3)
@@ -195,41 +195,41 @@ dwg_decode_strukturigi (Bit_Cxeno * dat, Dwg_Structure * skt)
 		}
 		switch (dwg_varmapo (i))
 		{
-		case DVG_DT_B:
+		case DWG_DT_B:
 			skt->var[i].bitoko = bit_legi_B (dat);
 			//printf ("B: %u", skt->var[i].bitoko);
 			break;
-		case DVG_DT_BS:
+		case DWG_DT_BS:
 			skt->var[i].dubitoko = bit_legi_BS (dat);
 			//printf ("BS: %u", skt->var[i].dubitoko);
 			break;
-		case DVG_DT_BL:
+		case DWG_DT_BL:
 			skt->var[i].kvarbitoko = bit_legi_BL (dat);
 			//printf ("BL: %lu", skt->var[i].kvarbitoko);
 			break;
-		case DVG_DT_BD:
+		case DWG_DT_BD:
 			skt->var[i].duglitajxo = bit_legi_BD (dat);
 			//printf ("BD: %lg", skt->var[i].duglitajxo);
 			break;
-		case DVG_DT_H:
+		case DWG_DT_H:
 			bit_legi_H (dat, &skt->var[i].traktilo);
 			//printf ("H: %i.%i.0x%08X", skt->var[i].traktilo.kodo, skt->var[i].traktilo.kiom, skt->var[i].traktilo.valoro);
 			break;
-		case DVG_DT_T:
+		case DWG_DT_T:
 			skt->var[i].teksto = bit_legi_T (dat);
 			//printf ("T: \"%s\"", skt->var[i].teksto);
 			break;
-		case DVG_DT_CMC:
+		case DWG_DT_CMC:
 			skt->var[i].dubitoko = bit_legi_BS (dat);
 			//printf ("CMC: %u", skt->var[i].dubitoko);
 			break;
-		case DVG_DT_2RD:
+		case DWG_DT_2RD:
 			skt->var[i].xy[0] = bit_legi_RD (dat);
 			skt->var[i].xy[1] = bit_legi_RD (dat);
 			//printf ("X: %lg\t", skt->var[i].xy[0]);
 			//printf ("Y: %lg", skt->var[i].xy[1]);
 			break;
-		case DVG_DT_3BD:
+		case DWG_DT_3BD:
 			skt->var[i].xyz[0] = bit_legi_BD (dat);
 			skt->var[i].xyz[1] = bit_legi_BD (dat);
 			skt->var[i].xyz[2] = bit_legi_BD (dat);
@@ -438,7 +438,7 @@ dwg_decode_strukturigi (Bit_Cxeno * dat, Dwg_Structure * skt)
 	 * Dua kap-datenaro
 	 */
 
-	if (bit_sercxi_gardostaranto (dat, dwg_gardostaranto (DVG_GS_DUAKAPO_EKO)))
+	if (bit_sercxi_gardostaranto (dat, dwg_gardostaranto (DWG_GS_DUAKAPO_EKO)))
 	{
 		long unsigned int pvzadr;
 		long unsigned int pvz;
@@ -532,7 +532,7 @@ dwg_decode_strukturigi (Bit_Cxeno * dat, Dwg_Structure * skt)
 		   printf (" Rubajxo 1: %08X\n", bit_legi_RL (dat));
 		 */
 
-		if (bit_sercxi_gardostaranto (dat, dwg_gardostaranto (DVG_GS_DUAKAPO_FINO)))
+		if (bit_sercxi_gardostaranto (dat, dwg_gardostaranto (DWG_GS_DUAKAPO_FINO)))
 			printf (" DUA KAP-DAT. (fino): %8X\n", dat->bajto);
 	}
 

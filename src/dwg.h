@@ -710,12 +710,12 @@ extern "C"
 			} sekcio[6];
 		} kapo;
 
-#		define DVG_NEKONATA1_KIOM 123
+#		define DWG_NEKONATA1_KIOM 123
 		Dwg_Cxeno nekonata1;
 
 		Dwg_Cxeno bildo;
 
-#		define DVG_KIOM_VARIABLOJ 233
+#		define DWG_KIOM_VARIABLOJ 233
 		union
 		{
 			unsigned char bitoko;
@@ -726,7 +726,7 @@ extern "C"
 			double xy[2];
 			unsigned char *teksto;
 			Dwg_Traktilo traktilo;
-		} var[DVG_KIOM_VARIABLOJ];
+		} var[DWG_KIOM_VARIABLOJ];
 
 		unsigned int klaso_kiom;
 		Dwg_Klaso *klaso;

@@ -4,7 +4,8 @@ libdwg_la_SOURCES = \
 	dwg.c \
 	common.c \
 	bits.c \
-	decode.c
+	decode.c \
+	encode.c
 
 libdwg_la_LDFLAGS = \
 	-version-info 0:0:0
@@ -17,8 +18,7 @@ EXTRA_DIST = \
 	bits.h \
 	decode.h \
 	example.dwg \
-	encode.h \
-	encode.c
+	encode.h
 
 check_PROGRAMS = test
 

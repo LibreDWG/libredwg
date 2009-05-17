@@ -9,7 +9,7 @@
 /*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
 /*****************************************************************************/
 
-///  Funkcioj por enkodigi dvg-datenaron.
+///  Funkcioj por enkodigi dwg-datenaron.
 
 #ifndef ENCODE_H
 #define ENCODE_H
@@ -17,6 +17,6 @@
 #include "bits.h"
 #include "dwg.h"
 
-int dvg_enk_cxenigi (Dvg_Strukturo * strukt, Bit_Cxeno * bitaro);
+int dwg_encode_cxenigi (Dwg_Structure * dwg_struct, Bit_Cxeno * bitaro);
 
 #endif
