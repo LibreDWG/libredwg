@@ -181,7 +181,7 @@ dwg_print_traktref (Dwg_Objekto * obj)
 {
 	unsigned int i;
 
-	if (obj->supertipo == DWG_OST_ESTAJXO)
+	if (obj->supertipo == DWG_SUPERTYPE_ESTAJXO)
 	{
 		Dwg_Object_Estajxo *est;
 
@@ -199,7 +199,7 @@ dwg_print_traktref (Dwg_Objekto * obj)
 		printf ("%i.%i.%li\n", est->traktref[i].kodo, est->traktref[i].kiom,
 			est->traktref[i].valoro);
 	}
-	else if (obj->supertipo == DWG_OST_ORDINARAJXO)
+	else if (obj->supertipo == DWG_SUPERTYPE_ORDINARAJXO)
 	{
 		Dwg_Object_Ordinarajxo *ord;
 
@@ -647,11 +647,11 @@ dwg_print (Dwg_Structure *skt)
 		printf ("Super-tipo: ");
 		switch (obj->supertipo)
 		{
-		case DWG_OST_ESTAJXO:
+		case DWG_SUPERTYPE_ESTAJXO:
 			puts ("estajxo");
 			dwg_print_estajxo (obj->tio.estajxo);
 			break;
-		case DWG_OST_ORDINARAJXO:
+		case DWG_SUPERTYPE_ORDINARAJXO:
 			puts ("ordinarajxo");
 			dwg_print_ordinarajxo (obj->tio.ordinarajxo);
 			break;
@@ -662,67 +662,67 @@ dwg_print (Dwg_Structure *skt)
 
 		switch (obj->tipo)
 		{
-		case DWG_OT_TEXT:
+		case DWG_TYPE_TEXT:
 			dwg_print_TEXT (obj->tio.estajxo->tio.TEXT);
 			break;
-		case DWG_OT_ATTRIB:
+		case DWG_TYPE_ATTRIB:
 			dwg_print_ATTRIB (obj->tio.estajxo->tio.ATTRIB);
 			break;
-		case DWG_OT_ATTDEF:
+		case DWG_TYPE_ATTDEF:
 			dwg_print_ATTDEF (obj->tio.estajxo->tio.ATTDEF);
 			break;
-		case DWG_OT_BLOCK:
+		case DWG_TYPE_BLOCK:
 			dwg_print_BLOCK (obj->tio.estajxo->tio.BLOCK);
 			break;
-		case DWG_OT_ENDBLK:
-		case DWG_OT_SEQEND:
+		case DWG_TYPE_ENDBLK:
+		case DWG_TYPE_SEQEND:
 			break;
-		case DWG_OT_INSERT:
+		case DWG_TYPE_INSERT:
 			dwg_print_INSERT (obj->tio.estajxo->tio.INSERT);
 			break;
-		case DWG_OT_MINSERT:
+		case DWG_TYPE_MINSERT:
 			dwg_print_MINSERT (obj->tio.estajxo->tio.MINSERT);
 			break;
-		case DWG_OT_VERTEX_2D:
+		case DWG_TYPE_VERTEX_2D:
 			dwg_print_VERTEX_2D (obj->tio.estajxo->tio.VERTEX_2D);
 			break;
-		case DWG_OT_VERTEX_3D:
-		case DWG_OT_VERTEX_MESH:
-		case DWG_OT_VERTEX_PFACE:
+		case DWG_TYPE_VERTEX_3D:
+		case DWG_TYPE_VERTEX_MESH:
+		case DWG_TYPE_VERTEX_PFACE:
 			dwg_print_VERTEX_3D (obj->tio.estajxo->tio.VERTEX_3D);
 			break;
-		case DWG_OT_VERTEX_PFACE_FACE:
+		case DWG_TYPE_VERTEX_PFACE_FACE:
 			dwg_print_VERTEX_PFACE_FACE (obj->tio.estajxo->tio.VERTEX_PFACE_FACE);
 			break;
-		case DWG_OT_POLYLINE_2D:
+		case DWG_TYPE_POLYLINE_2D:
 			dwg_print_POLYLINE_2D (obj->tio.estajxo->tio.POLYLINE_2D);
 			break;
-		case DWG_OT_POLYLINE_3D:
+		case DWG_TYPE_POLYLINE_3D:
 			dwg_print_POLYLINE_3D (obj->tio.estajxo->tio.POLYLINE_3D);
 			break;
-		case DWG_OT_ARC:
+		case DWG_TYPE_ARC:
 			dwg_print_ARC (obj->tio.estajxo->tio.ARC);
 			break;
-		case DWG_OT_CIRCLE:
+		case DWG_TYPE_CIRCLE:
 			dwg_print_CIRCLE (obj->tio.estajxo->tio.CIRCLE);
 			break;
-		case DWG_OT_LINE:
+		case DWG_TYPE_LINE:
 			dwg_print_LINE (obj->tio.estajxo->tio.LINE);
 			break;
-		case DWG_OT_POINT:
+		case DWG_TYPE_POINT:
 			dwg_print_POINT (obj->tio.estajxo->tio.POINT);
 			break;
-		case DWG_OT_ELLIPSE:
+		case DWG_TYPE_ELLIPSE:
 			dwg_print_ELLIPSE (obj->tio.estajxo->tio.ELLIPSE);
 			break;
-		case DWG_OT_RAY:
-		case DWG_OT_XLINE:
+		case DWG_TYPE_RAY:
+		case DWG_TYPE_XLINE:
 			dwg_print_RAY (obj->tio.estajxo->tio.RAY);
 			break;
-		case DWG_OT_MTEXT:
+		case DWG_TYPE_MTEXT:
 			dwg_print_MTEXT (obj->tio.estajxo->tio.MTEXT);
 			break;
-		case DWG_OT_LAYER:
+		case DWG_TYPE_LAYER:
 			dwg_print_LAYER (obj->tio.ordinarajxo->tio.LAYER);
 			break;
 		default:

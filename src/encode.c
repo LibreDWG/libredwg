@@ -250,11 +250,11 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Cxeno * dat)
 
 		/* Difini la traktilojn de cxiuj objektoj, inkluzive la nekonataj */
 		omap[i].idc = i;
-		if (skt->objekto[i].supertipo == DWG_OST_ESTAJXO)
+		if (skt->objekto[i].supertipo == DWG_SUPERTYPE_ESTAJXO)
 			omap[i].traktilo = skt->objekto[i].tio.estajxo->traktilo.valoro;
-		else if (skt->objekto[i].supertipo == DWG_OST_ORDINARAJXO)
+		else if (skt->objekto[i].supertipo == DWG_SUPERTYPE_ORDINARAJXO)
 			omap[i].traktilo = skt->objekto[i].tio.ordinarajxo->traktilo.valoro;
-		else if (skt->objekto[i].supertipo == DWG_OST_NEKONATAJXO)
+		else if (skt->objekto[i].supertipo == DWG_SUPERTYPE_NEKONATAJXO)
 		{
 			nkn.cxeno = skt->objekto[i].tio.nekonatajxo;
 			nkn.kiom = skt->objekto[i].grandeco;
@@ -295,7 +295,7 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Cxeno * dat)
 	{
 		omap[i].adreso = dat->bajto;
 		obj = &skt->objekto[omap[i].idc];
-		if (obj->supertipo == DWG_OST_NEKONATAJXO)
+		if (obj->supertipo == DWG_SUPERTYPE_NEKONATAJXO)
 		{
 			bit_skribi_MS (dat, obj->grandeco);
 			if (dat->bajto + obj->grandeco >= dat->kiom - 2)
@@ -305,9 +305,9 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Cxeno * dat)
 		}
 		else
 		{
-			if (obj->supertipo == DWG_OST_ESTAJXO)
+			if (obj->supertipo == DWG_SUPERTYPE_ESTAJXO)
 				dwg_encode_estajxo (obj, dat);
-			else if (obj->supertipo == DWG_OST_ORDINARAJXO)
+			else if (obj->supertipo == DWG_SUPERTYPE_ORDINARAJXO)
 				dwg_encode_ordinarajxo (obj, dat);
 			else
 			{
@@ -571,10 +571,10 @@ dwg_encode_estajxo (Dwg_Objekto * obj, Bit_Cxeno * dat)
 
 	switch (obj->tipo)
 	{
-	case DWG_OT_LINE:
+	case DWG_TYPE_LINE:
 		dwg_encode_LINE (est->tio.LINE, dat);
 		break;
-	case DWG_OT_CIRCLE:
+	case DWG_TYPE_CIRCLE:
 		dwg_encode_CIRCLE (est->tio.CIRCLE, dat);
 		break;
 
