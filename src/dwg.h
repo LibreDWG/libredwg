@@ -752,7 +752,7 @@ extern "C"
 
 
 /*--------------------------------------------------
- * Funkcioj
+ * Functions
  */
 
 	int dwg_read_file (char *filename, Dwg_Structure * dwg);

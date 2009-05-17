@@ -34,7 +34,7 @@ long unsigned int ktl_lastadreso;
  * Difino de publikaj funkcioj
  */
 int
-dwg_decode_strukturigi (Bit_Cxeno * dat, Dwg_Structure * skt)
+dwg_decode_structures (Bit_Cxeno * dat, Dwg_Structure * skt)
 {
 	unsigned char sig;
 	unsigned int sekgrandeco = 0;

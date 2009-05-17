@@ -23,13 +23,13 @@
 #include "dwg.h"
 
 /*------------------------------------------------------------------------------
- * Publikaj funkcioj
+ * Public functions
  */
 int
 dwg_read_file (char *filename, Dwg_Structure * dwg_struct)
 {
 	int signo;
-	FILE *dt;
+	FILE *fp;
 	struct stat atrib;
 	size_t kiom;
 	Bit_Cxeno bitaro;
@@ -38,7 +38,7 @@ dwg_read_file (char *filename, Dwg_Structure * dwg_struct)
 	 */
 	if (stat (filename, &atrib))
 	{
-		printf ("Ne ekzistas tiu dosiero:\n %s\n", filename);
+		printf ("File not found:\n %s\n", filename);
 		return -1;
 	}
 	if (!S_ISREG (atrib.st_mode))
@@ -46,10 +46,10 @@ dwg_read_file (char *filename, Dwg_Structure * dwg_struct)
 		printf ("Ne eblas trakti dosierujojn, aparat-dosierojn, ligil-dosierojn, ktp:\n %s\n", filename);
 		return -1;
 	}
-	dt = fopen (filename, "rb");
-	if (!dt)
+	fp = fopen (filename, "rb");
+	if (!fp)
 	{
-		printf ("Ne eblas malfermi la dosieron:\n %s\n", filename);
+		printf ("Error while opening the file:\n %s\n", filename);
 		return -1;
 	}
 
@@ -61,25 +61,25 @@ dwg_read_file (char *filename, Dwg_Structure * dwg_struct)
 	bitaro.cxeno = (char *) malloc (bitaro.kiom);
 	if (!bitaro.cxeno)
 	{
-		puts ("Manko de memoro.");
-		fclose (dt);
+		puts ("Not enough memory.");
+		fclose (fp);
 		return -1;
 	}
 	kiom = 0;
-	kiom = fread (bitaro.cxeno, sizeof (char), bitaro.kiom, dt);
+	kiom = fread (bitaro.cxeno, sizeof (char), bitaro.kiom, fp);
 	if (kiom != bitaro.kiom)
 	{
 		printf ("Ne eblis legi la tutan dosieron (%lu el %lu):\n %s\n", kiom, bitaro.kiom,
 			filename);
-		fclose (dt);
+		fclose (fp);
 		free (bitaro.cxeno);
 		return -1;
 	}
-	fclose (dt);
+	fclose (fp);
 
 	/* Dekodigi la dwg-datenaron
 	 */
-	if (dwg_decode_strukturigi (&bitaro, dwg_struct))
+	if (dwg_decode_structures (&bitaro, dwg_struct))
 	{
 		printf ("Ni ne sukcesis dekodigi la dosieron:\n %s\n", filename);
 		free (bitaro.cxeno);
@@ -139,7 +139,7 @@ dwg_write_file (char *filename, Dwg_Structure * dwg_struct)
 }
 
 /*------------------------------------------------------------------------------
- * Privataj funkcioj
+ * Private functions
  */
 
 static void
