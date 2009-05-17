@@ -9,7 +9,7 @@
 /*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
 /*****************************************************************************/
 
-/// Cxefa interna inkluziv-dosiero de la biblioteko.
+/// Main include-file for the library.
 
 #ifndef DWG_H
 #define DWG_H
@@ -20,7 +20,7 @@ extern "C"
 #endif
 
 /**
- Supertipoj de objektoj kiuj ekzistas en dwg-dosieroj.
+ Object supertypes that exist in dwg-files.
  */
 	typedef enum DWG_OBJECT_SUPERTYPE
 	{
@@ -30,11 +30,11 @@ extern "C"
 	} Dwg_Object_Supertype;
 
 /**
- Tipoj de objektoj kiuj ekzistas en dwg-dosieroj.
+ Object types that exist in dwg-files.
  */
 	typedef enum DWG_OBJECT_TYPE
 	{
-		DWG_OT_NEUZATA = 0,
+		DWG_OT_UNUSED = 0,
 		DWG_OT_TEXT = 1,
 		DWG_OT_ATTRIB = 2,
 		DWG_OT_ATTDEF = 3,
@@ -92,9 +92,9 @@ extern "C"
 
 /* OBJEKTOJ *******************************************************************/
 /**
- Strukturo por tekstoj - NEUZATA (0)
+ Strukturo por tekstoj - UNUSED (0)
  */
-	typedef int Dwg_Estajxo_NEUZATA;
+	typedef int Dwg_Estajxo_UNUSED;
 
 /**
  Strukturo por tekstoj - TEXT (1)
@@ -576,7 +576,7 @@ extern "C"
 	{
 		union
 		{
-			Dwg_Estajxo_NEUZATA *NEUZATA;
+			Dwg_Estajxo_UNUSED *UNUSED;
 			Dwg_Estajxo_TEXT *TEXT;
 			Dwg_Estajxo_ATTRIB *ATTRIB;
 			Dwg_Estajxo_ATTDEF *ATTDEF;

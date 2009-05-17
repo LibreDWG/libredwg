@@ -1387,15 +1387,15 @@ dwg_decode_LAYOUT (Bit_Cxeno * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_NEUZATA (Bit_Cxeno * dat, Dwg_Objekto * obj)
+dwg_decode_UNUSED (Bit_Cxeno * dat, Dwg_Objekto * obj)
 {
-	Dwg_Estajxo_NEUZATA *est;
+	Dwg_Estajxo_UNUSED *est;
 
 	obj->supertipo = DWG_OST_ESTAJXO;
 	obj->tio.estajxo = malloc (sizeof (Dwg_Object_Estajxo));
-	obj->tio.estajxo->tio.NEUZATA = calloc (sizeof (Dwg_Estajxo_NEUZATA), 1);
+	obj->tio.estajxo->tio.UNUSED = calloc (sizeof (Dwg_Estajxo_UNUSED), 1);
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
-	est = obj->tio.estajxo->tio.NEUZATA;
+	est = obj->tio.estajxo->tio.UNUSED;
 
 	/* Legitaj valoroj
 	 */
