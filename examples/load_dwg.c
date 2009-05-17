@@ -37,9 +37,9 @@ int load_dwg (char *filename)
 	success = dwg_read_file (filename, &dwg);
 	for (i = 0; i < dwg.objekto_kiom; i++)
 	{
-		Dvg_Estajxo_LINE *line;
-		Dvg_Estajxo_CIRCLE *circle;
-		Dvg_Estajxo_TEXT *text;
+		Dwg_Estajxo_LINE *line;
+		Dwg_Estajxo_CIRCLE *circle;
+		Dwg_Estajxo_TEXT *text;
 
 		switch (dwg.objekto[i].tipo)
 		{

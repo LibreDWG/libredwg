@@ -61,7 +61,7 @@ dwg_decode_strukturigi (Bit_Cxeno * dat, Dwg_Structure * skt)
 	skt->kapo.versio[6] = '\0';
 	if (strcmp (skt->kapo.versio, "AC1015") != 0)
 	{
-		printf ("Nur eblas dekodigi dvg-dosierojn laux la versio R2000 (AC1015). "
+		printf ("Nur eblas dekodigi dwg-dosierojn laux la versio R2000 (AC1015). "
 			"La trovita versio kodo estas: %s\n", skt->kapo.versio);
 		return -1;
 	}
@@ -122,7 +122,7 @@ dwg_decode_strukturigi (Bit_Cxeno * dat, Dwg_Structure * skt)
 	   printf ("Legita: %X\nKreita: %X\n", ckr, ckr2);
 	 */
 
-	if (bit_sercxi_gardostaranto (dat, dvg_gardostaranto (DVG_GS_KAPO_FINO)))
+	if (bit_sercxi_gardostaranto (dat, dwg_gardostaranto (DVG_GS_KAPO_FINO)))
 		printf ("=======> KAPO (fino): %8X\n", dat->bajto);
 
 
@@ -149,14 +149,14 @@ dwg_decode_strukturigi (Bit_Cxeno * dat, Dwg_Structure * skt)
 	 * Antauxrigarda bildo
 	 */
 
-	if (bit_sercxi_gardostaranto (dat, dvg_gardostaranto (DVG_GS_BILDO_EKO)))
+	if (bit_sercxi_gardostaranto (dat, dwg_gardostaranto (DVG_GS_BILDO_EKO)))
 	{
 		unsigned long int ekadreso;
 
 		dat->bito = 0;
 		ekadreso = dat->bajto;
 		printf ("=============> BILDO: %8X\n", ekadreso - 16);
-		if (bit_sercxi_gardostaranto (dat, dvg_gardostaranto (DVG_GS_BILDO_FINO)))
+		if (bit_sercxi_gardostaranto (dat, dwg_gardostaranto (DVG_GS_BILDO_FINO)))
 		{
 			printf ("        BILDO (fino): %8X\n", dat->bajto);
 			skt->bildo.kiom = (dat->bajto - 16) - ekadreso;
@@ -193,7 +193,7 @@ dwg_decode_strukturigi (Bit_Cxeno * dat, Dwg_Structure * skt)
 			//puts ("(NE EKZISTANTA)");
 			continue;
 		}
-		switch (dvg_varmapo (i))
+		switch (dwg_varmapo (i))
 		{
 		case DVG_DT_B:
 			skt->var[i].bitoko = bit_legi_B (dat);
@@ -238,7 +238,7 @@ dwg_decode_strukturigi (Bit_Cxeno * dat, Dwg_Structure * skt)
 			//printf ("Z: %lg", skt->var[i].xyz[2]);
 			break;
 		default:
-			printf ("Ne traktebla tipo: %i (var: %i)\n", dvg_varmapo (i), i);
+			printf ("Ne traktebla tipo: %i (var: %i)\n", dwg_varmapo (i), i);
 		}
 		//puts ("");
 	}
@@ -277,7 +277,7 @@ dwg_decode_strukturigi (Bit_Cxeno * dat, Dwg_Structure * skt)
 
 	/* Legi la klasojn
 	 */
-	skt->dvg_ot_layout = 0;
+	skt->dwg_ot_layout = 0;
 	skt->klaso_kiom = 0;
 	i = 0;
 	do
@@ -286,10 +286,10 @@ dwg_decode_strukturigi (Bit_Cxeno * dat, Dwg_Structure * skt)
 
 		idc = skt->klaso_kiom;
 		if (idc == 0)
-			skt->klaso = (Dvg_Klaso *) malloc (sizeof (Dvg_Klaso));
+			skt->klaso = (Dwg_Klaso *) malloc (sizeof (Dwg_Klaso));
 		else
 			skt->klaso =
-				(Dvg_Klaso *) realloc (skt->klaso, (idc + 1) * sizeof (Dvg_Klaso));
+				(Dwg_Klaso *) realloc (skt->klaso, (idc + 1) * sizeof (Dwg_Klaso));
 
 		skt->klaso[idc].numero = bit_legi_BS (dat);
 		skt->klaso[idc].versio = bit_legi_BS (dat);
@@ -300,7 +300,7 @@ dwg_decode_strukturigi (Bit_Cxeno * dat, Dwg_Structure * skt)
 		skt->klaso[idc].eroid = bit_legi_BS (dat);
 
 		if (strcmp (skt->klaso[idc].dxfnomo, "LAYOUT") == 0)
-			skt->dvg_ot_layout = skt->klaso[idc].numero;
+			skt->dwg_ot_layout = skt->klaso[idc].numero;
 
 		skt->klaso_kiom++;
 		if (skt->klaso_kiom > 100)
@@ -438,7 +438,7 @@ dwg_decode_strukturigi (Bit_Cxeno * dat, Dwg_Structure * skt)
 	 * Dua kap-datenaro
 	 */
 
-	if (bit_sercxi_gardostaranto (dat, dvg_gardostaranto (DVG_GS_DUAKAPO_EKO)))
+	if (bit_sercxi_gardostaranto (dat, dwg_gardostaranto (DVG_GS_DUAKAPO_EKO)))
 	{
 		long unsigned int pvzadr;
 		long unsigned int pvz;
@@ -532,7 +532,7 @@ dwg_decode_strukturigi (Bit_Cxeno * dat, Dwg_Structure * skt)
 		   printf (" Rubajxo 1: %08X\n", bit_legi_RL (dat));
 		 */
 
-		if (bit_sercxi_gardostaranto (dat, dvg_gardostaranto (DVG_GS_DUAKAPO_FINO)))
+		if (bit_sercxi_gardostaranto (dat, dwg_gardostaranto (DVG_GS_DUAKAPO_FINO)))
 			printf (" DUA KAP-DAT. (fino): %8X\n", dat->bajto);
 	}
 
@@ -683,7 +683,7 @@ dwg_decode_ordinarajxo (Bit_Cxeno * dat, Dwg_Object_Ordinarajxo * ord)
 }
 
 static void
-dwg_decode_traktref (Bit_Cxeno * dat, Dvg_Objekto * obj)
+dwg_decode_traktref (Bit_Cxeno * dat, Dwg_Objekto * obj)
 {
 	int i;
 
@@ -693,14 +693,14 @@ dwg_decode_traktref (Bit_Cxeno * dat, Dvg_Objekto * obj)
 
 		est = obj->tio.estajxo;
 
-		est->traktref = (Dvg_Traktilo *) calloc (sizeof (Dvg_Traktilo), 10);
+		est->traktref = (Dwg_Traktilo *) calloc (sizeof (Dwg_Traktilo), 10);
 		i = 0;
 		while (1)
 		{
 			if (i % 10 == 0)
 				est->traktref =
-					(Dvg_Traktilo *) realloc (est->traktref,
-								  (i + 10) * sizeof (Dvg_Traktilo));
+					(Dwg_Traktilo *) realloc (est->traktref,
+								  (i + 10) * sizeof (Dwg_Traktilo));
 			if (bit_legi_H (dat, &est->traktref[i]))
 			{
 				//printf ("\tEraro en tiu traktilo: %lu\n", est->traktilo.valoro);
@@ -721,14 +721,14 @@ dwg_decode_traktref (Bit_Cxeno * dat, Dvg_Objekto * obj)
 
 		ord = obj->tio.ordinarajxo;
 
-		ord->traktref = (Dvg_Traktilo *) calloc (sizeof (Dvg_Traktilo), 10);
+		ord->traktref = (Dwg_Traktilo *) calloc (sizeof (Dwg_Traktilo), 10);
 		i = 0;
 		while (1)
 		{
 			if (i % 10 == 0)
 				ord->traktref =
-					(Dvg_Traktilo *) realloc (ord->traktref,
-								  (i + 10) * sizeof (Dvg_Traktilo));
+					(Dwg_Traktilo *) realloc (ord->traktref,
+								  (i + 10) * sizeof (Dwg_Traktilo));
 			if (bit_legi_H (dat, &ord->traktref[i]))
 			{
 				//printf ("\tEraro en tiu traktilo: %lu\n", est->traktilo.valoro);
@@ -748,13 +748,13 @@ dwg_decode_traktref (Bit_Cxeno * dat, Dvg_Objekto * obj)
 /* OBJEKTOJ *******************************************************************/
 
 static void
-dwg_decode_TEXT (Bit_Cxeno * dat, Dvg_Objekto * obj)
+dwg_decode_TEXT (Bit_Cxeno * dat, Dwg_Objekto * obj)
 {
-	Dvg_Estajxo_TEXT *est;
+	Dwg_Estajxo_TEXT *est;
 
 	obj->supertipo = DWG_OST_ESTAJXO;
 	obj->tio.estajxo = malloc (sizeof (Dwg_Object_Estajxo));
-	obj->tio.estajxo->tio.TEXT = calloc (sizeof (Dvg_Estajxo_TEXT), 1);
+	obj->tio.estajxo->tio.TEXT = calloc (sizeof (Dwg_Estajxo_TEXT), 1);
 	est = obj->tio.estajxo->tio.TEXT;
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 
@@ -791,13 +791,13 @@ dwg_decode_TEXT (Bit_Cxeno * dat, Dvg_Objekto * obj)
 }
 
 static void
-dwg_decode_ATTRIB (Bit_Cxeno * dat, Dvg_Objekto * obj)
+dwg_decode_ATTRIB (Bit_Cxeno * dat, Dwg_Objekto * obj)
 {
-	Dvg_Estajxo_ATTRIB *est;
+	Dwg_Estajxo_ATTRIB *est;
 
 	obj->supertipo = DWG_OST_ESTAJXO;
 	obj->tio.estajxo = malloc (sizeof (Dwg_Object_Estajxo));
-	obj->tio.estajxo->tio.ATTRIB = calloc (sizeof (Dvg_Estajxo_ATTRIB), 1);
+	obj->tio.estajxo->tio.ATTRIB = calloc (sizeof (Dwg_Estajxo_ATTRIB), 1);
 	est = obj->tio.estajxo->tio.ATTRIB;
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 
@@ -837,13 +837,13 @@ dwg_decode_ATTRIB (Bit_Cxeno * dat, Dvg_Objekto * obj)
 }
 
 static void
-dwg_decode_ATTDEF (Bit_Cxeno * dat, Dvg_Objekto * obj)
+dwg_decode_ATTDEF (Bit_Cxeno * dat, Dwg_Objekto * obj)
 {
-	Dvg_Estajxo_ATTDEF *est;
+	Dwg_Estajxo_ATTDEF *est;
 
 	obj->supertipo = DWG_OST_ESTAJXO;
 	obj->tio.estajxo = malloc (sizeof (Dwg_Object_Estajxo));
-	obj->tio.estajxo->tio.ATTDEF = calloc (sizeof (Dvg_Estajxo_ATTDEF), 1);
+	obj->tio.estajxo->tio.ATTDEF = calloc (sizeof (Dwg_Estajxo_ATTDEF), 1);
 	est = obj->tio.estajxo->tio.ATTDEF;
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 
@@ -884,13 +884,13 @@ dwg_decode_ATTDEF (Bit_Cxeno * dat, Dvg_Objekto * obj)
 }
 
 static void
-dwg_decode_BLOCK (Bit_Cxeno * dat, Dvg_Objekto * obj)
+dwg_decode_BLOCK (Bit_Cxeno * dat, Dwg_Objekto * obj)
 {
-	Dvg_Estajxo_BLOCK *est;
+	Dwg_Estajxo_BLOCK *est;
 
 	obj->supertipo = DWG_OST_ESTAJXO;
 	obj->tio.estajxo = malloc (sizeof (Dwg_Object_Estajxo));
-	obj->tio.estajxo->tio.BLOCK = calloc (sizeof (Dvg_Estajxo_BLOCK), 1);
+	obj->tio.estajxo->tio.BLOCK = calloc (sizeof (Dwg_Estajxo_BLOCK), 1);
 	est = obj->tio.estajxo->tio.BLOCK;
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 
@@ -902,13 +902,13 @@ dwg_decode_BLOCK (Bit_Cxeno * dat, Dvg_Objekto * obj)
 }
 
 static void
-dwg_decode_ENDBLK (Bit_Cxeno * dat, Dvg_Objekto * obj)
+dwg_decode_ENDBLK (Bit_Cxeno * dat, Dwg_Objekto * obj)
 {
-	Dvg_Estajxo_ENDBLK *est;
+	Dwg_Estajxo_ENDBLK *est;
 
 	obj->supertipo = DWG_OST_ESTAJXO;
 	obj->tio.estajxo = malloc (sizeof (Dwg_Object_Estajxo));
-	obj->tio.estajxo->tio.ENDBLK = calloc (sizeof (Dvg_Estajxo_ENDBLK), 1);
+	obj->tio.estajxo->tio.ENDBLK = calloc (sizeof (Dwg_Estajxo_ENDBLK), 1);
 	est = obj->tio.estajxo->tio.ENDBLK;
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 
@@ -916,13 +916,13 @@ dwg_decode_ENDBLK (Bit_Cxeno * dat, Dvg_Objekto * obj)
 }
 
 static void
-dwg_decode_INSERT (Bit_Cxeno * dat, Dvg_Objekto * obj)
+dwg_decode_INSERT (Bit_Cxeno * dat, Dwg_Objekto * obj)
 {
-	Dvg_Estajxo_INSERT *est;
+	Dwg_Estajxo_INSERT *est;
 
 	obj->supertipo = DWG_OST_ESTAJXO;
 	obj->tio.estajxo = malloc (sizeof (Dwg_Object_Estajxo));
-	obj->tio.estajxo->tio.INSERT = calloc (sizeof (Dvg_Estajxo_INSERT), 1);
+	obj->tio.estajxo->tio.INSERT = calloc (sizeof (Dwg_Estajxo_INSERT), 1);
 	est = obj->tio.estajxo->tio.INSERT;
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 
@@ -958,13 +958,13 @@ dwg_decode_INSERT (Bit_Cxeno * dat, Dvg_Objekto * obj)
 }
 
 static void
-dwg_decode_MINSERT (Bit_Cxeno * dat, Dvg_Objekto * obj)
+dwg_decode_MINSERT (Bit_Cxeno * dat, Dwg_Objekto * obj)
 {
-	Dvg_Estajxo_MINSERT *est;
+	Dwg_Estajxo_MINSERT *est;
 
 	obj->supertipo = DWG_OST_ESTAJXO;
 	obj->tio.estajxo = malloc (sizeof (Dwg_Object_Estajxo));
-	obj->tio.estajxo->tio.MINSERT = calloc (sizeof (Dvg_Estajxo_MINSERT), 1);
+	obj->tio.estajxo->tio.MINSERT = calloc (sizeof (Dwg_Estajxo_MINSERT), 1);
 	est = obj->tio.estajxo->tio.MINSERT;
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 
@@ -1004,13 +1004,13 @@ dwg_decode_MINSERT (Bit_Cxeno * dat, Dvg_Objekto * obj)
 }
 
 static void
-dwg_decode_VERTEX_2D (Bit_Cxeno * dat, Dvg_Objekto * obj)
+dwg_decode_VERTEX_2D (Bit_Cxeno * dat, Dwg_Objekto * obj)
 {
-	Dvg_Estajxo_VERTEX_2D *est;
+	Dwg_Estajxo_VERTEX_2D *est;
 
 	obj->supertipo = DWG_OST_ESTAJXO;
 	obj->tio.estajxo = malloc (sizeof (Dwg_Object_Estajxo));
-	obj->tio.estajxo->tio.VERTEX_2D = calloc (sizeof (Dvg_Estajxo_VERTEX_2D), 1);
+	obj->tio.estajxo->tio.VERTEX_2D = calloc (sizeof (Dwg_Estajxo_VERTEX_2D), 1);
 	est = obj->tio.estajxo->tio.VERTEX_2D;
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 
@@ -1032,13 +1032,13 @@ dwg_decode_VERTEX_2D (Bit_Cxeno * dat, Dvg_Objekto * obj)
 }
 
 static void
-dwg_decode_VERTEX_3D (Bit_Cxeno * dat, Dvg_Objekto * obj)
+dwg_decode_VERTEX_3D (Bit_Cxeno * dat, Dwg_Objekto * obj)
 {
-	Dvg_Estajxo_VERTEX_3D *est;
+	Dwg_Estajxo_VERTEX_3D *est;
 
 	obj->supertipo = DWG_OST_ESTAJXO;
 	obj->tio.estajxo = malloc (sizeof (Dwg_Object_Estajxo));
-	obj->tio.estajxo->tio.VERTEX_3D = calloc (sizeof (Dvg_Estajxo_VERTEX_3D), 1);
+	obj->tio.estajxo->tio.VERTEX_3D = calloc (sizeof (Dwg_Estajxo_VERTEX_3D), 1);
 	est = obj->tio.estajxo->tio.VERTEX_3D;
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 
@@ -1053,13 +1053,13 @@ dwg_decode_VERTEX_3D (Bit_Cxeno * dat, Dvg_Objekto * obj)
 }
 
 static void
-dwg_decode_VERTEX_PFACE_FACE (Bit_Cxeno * dat, Dvg_Objekto * obj)
+dwg_decode_VERTEX_PFACE_FACE (Bit_Cxeno * dat, Dwg_Objekto * obj)
 {
-	Dvg_Estajxo_VERTEX_PFACE_FACE *est;
+	Dwg_Estajxo_VERTEX_PFACE_FACE *est;
 
 	obj->supertipo = DWG_OST_ESTAJXO;
 	obj->tio.estajxo = malloc (sizeof (Dwg_Object_Estajxo));
-	obj->tio.estajxo->tio.VERTEX_PFACE_FACE = calloc (sizeof (Dvg_Estajxo_VERTEX_PFACE_FACE), 1);
+	obj->tio.estajxo->tio.VERTEX_PFACE_FACE = calloc (sizeof (Dwg_Estajxo_VERTEX_PFACE_FACE), 1);
 	est = obj->tio.estajxo->tio.VERTEX_PFACE_FACE;
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 
@@ -1074,13 +1074,13 @@ dwg_decode_VERTEX_PFACE_FACE (Bit_Cxeno * dat, Dvg_Objekto * obj)
 }
 
 static void
-dwg_decode_POLYLINE_2D (Bit_Cxeno * dat, Dvg_Objekto * obj)
+dwg_decode_POLYLINE_2D (Bit_Cxeno * dat, Dwg_Objekto * obj)
 {
-	Dvg_Estajxo_POLYLINE_2D *est;
+	Dwg_Estajxo_POLYLINE_2D *est;
 
 	obj->supertipo = DWG_OST_ESTAJXO;
 	obj->tio.estajxo = malloc (sizeof (Dwg_Object_Estajxo));
-	obj->tio.estajxo->tio.POLYLINE_2D = calloc (sizeof (Dvg_Estajxo_POLYLINE_2D), 1);
+	obj->tio.estajxo->tio.POLYLINE_2D = calloc (sizeof (Dwg_Estajxo_POLYLINE_2D), 1);
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 	est = obj->tio.estajxo->tio.POLYLINE_2D;
 
@@ -1098,13 +1098,13 @@ dwg_decode_POLYLINE_2D (Bit_Cxeno * dat, Dvg_Objekto * obj)
 }
 
 static void
-dwg_decode_POLYLINE_3D (Bit_Cxeno * dat, Dvg_Objekto * obj)
+dwg_decode_POLYLINE_3D (Bit_Cxeno * dat, Dwg_Objekto * obj)
 {
-	Dvg_Estajxo_POLYLINE_3D *est;
+	Dwg_Estajxo_POLYLINE_3D *est;
 
 	obj->supertipo = DWG_OST_ESTAJXO;
 	obj->tio.estajxo = malloc (sizeof (Dwg_Object_Estajxo));
-	obj->tio.estajxo->tio.POLYLINE_3D = calloc (sizeof (Dvg_Estajxo_POLYLINE_3D), 1);
+	obj->tio.estajxo->tio.POLYLINE_3D = calloc (sizeof (Dwg_Estajxo_POLYLINE_3D), 1);
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 	est = obj->tio.estajxo->tio.POLYLINE_3D;
 
@@ -1117,13 +1117,13 @@ dwg_decode_POLYLINE_3D (Bit_Cxeno * dat, Dvg_Objekto * obj)
 }
 
 static void
-dwg_decode_ARC (Bit_Cxeno * dat, Dvg_Objekto * obj)
+dwg_decode_ARC (Bit_Cxeno * dat, Dwg_Objekto * obj)
 {
-	Dvg_Estajxo_ARC *est;
+	Dwg_Estajxo_ARC *est;
 
 	obj->supertipo = DWG_OST_ESTAJXO;
 	obj->tio.estajxo = malloc (sizeof (Dwg_Object_Estajxo));
-	obj->tio.estajxo->tio.ARC = calloc (sizeof (Dvg_Estajxo_ARC), 1);
+	obj->tio.estajxo->tio.ARC = calloc (sizeof (Dwg_Estajxo_ARC), 1);
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 	est = obj->tio.estajxo->tio.ARC;
 
@@ -1140,13 +1140,13 @@ dwg_decode_ARC (Bit_Cxeno * dat, Dvg_Objekto * obj)
 }
 
 static void
-dwg_decode_CIRCLE (Bit_Cxeno * dat, Dvg_Objekto * obj)
+dwg_decode_CIRCLE (Bit_Cxeno * dat, Dwg_Objekto * obj)
 {
-	Dvg_Estajxo_CIRCLE *est;
+	Dwg_Estajxo_CIRCLE *est;
 
 	obj->supertipo = DWG_OST_ESTAJXO;
 	obj->tio.estajxo = malloc (sizeof (Dwg_Object_Estajxo));
-	obj->tio.estajxo->tio.CIRCLE = calloc (sizeof (Dvg_Estajxo_CIRCLE), 1);
+	obj->tio.estajxo->tio.CIRCLE = calloc (sizeof (Dwg_Estajxo_CIRCLE), 1);
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 	est = obj->tio.estajxo->tio.CIRCLE;
 
@@ -1161,13 +1161,13 @@ dwg_decode_CIRCLE (Bit_Cxeno * dat, Dvg_Objekto * obj)
 }
 
 static void
-dwg_decode_LINE (Bit_Cxeno * dat, Dvg_Objekto * obj)
+dwg_decode_LINE (Bit_Cxeno * dat, Dwg_Objekto * obj)
 {
-	Dvg_Estajxo_LINE *est;
+	Dwg_Estajxo_LINE *est;
 
 	obj->supertipo = DWG_OST_ESTAJXO;
 	obj->tio.estajxo = malloc (sizeof (Dwg_Object_Estajxo));
-	obj->tio.estajxo->tio.LINE = calloc (sizeof (Dvg_Estajxo_LINE), 1);
+	obj->tio.estajxo->tio.LINE = calloc (sizeof (Dwg_Estajxo_LINE), 1);
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 	est = obj->tio.estajxo->tio.LINE;
 
@@ -1189,13 +1189,13 @@ dwg_decode_LINE (Bit_Cxeno * dat, Dvg_Objekto * obj)
 }
 
 static void
-dwg_decode_POINT (Bit_Cxeno * dat, Dvg_Objekto * obj)
+dwg_decode_POINT (Bit_Cxeno * dat, Dwg_Objekto * obj)
 {
-	Dvg_Estajxo_POINT *est;
+	Dwg_Estajxo_POINT *est;
 
 	obj->supertipo = DWG_OST_ESTAJXO;
 	obj->tio.estajxo = malloc (sizeof (Dwg_Object_Estajxo));
-	obj->tio.estajxo->tio.POINT = calloc (sizeof (Dvg_Estajxo_POINT), 1);
+	obj->tio.estajxo->tio.POINT = calloc (sizeof (Dwg_Estajxo_POINT), 1);
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 	est = obj->tio.estajxo->tio.POINT;
 
@@ -1210,13 +1210,13 @@ dwg_decode_POINT (Bit_Cxeno * dat, Dvg_Objekto * obj)
 }
 
 static void
-dwg_decode_ELLIPSE (Bit_Cxeno * dat, Dvg_Objekto * obj)
+dwg_decode_ELLIPSE (Bit_Cxeno * dat, Dwg_Objekto * obj)
 {
-	Dvg_Estajxo_ELLIPSE *est;
+	Dwg_Estajxo_ELLIPSE *est;
 
 	obj->supertipo = DWG_OST_ESTAJXO;
 	obj->tio.estajxo = malloc (sizeof (Dwg_Object_Estajxo));
-	obj->tio.estajxo->tio.ELLIPSE = calloc (sizeof (Dvg_Estajxo_ELLIPSE), 1);
+	obj->tio.estajxo->tio.ELLIPSE = calloc (sizeof (Dwg_Estajxo_ELLIPSE), 1);
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 	est = obj->tio.estajxo->tio.ELLIPSE;
 
@@ -1237,13 +1237,13 @@ dwg_decode_ELLIPSE (Bit_Cxeno * dat, Dvg_Objekto * obj)
 }
 
 static void
-dwg_decode_RAY (Bit_Cxeno * dat, Dvg_Objekto * obj)
+dwg_decode_RAY (Bit_Cxeno * dat, Dwg_Objekto * obj)
 {
-	Dvg_Estajxo_RAY *est;
+	Dwg_Estajxo_RAY *est;
 
 	obj->supertipo = DWG_OST_ESTAJXO;
 	obj->tio.estajxo = malloc (sizeof (Dwg_Object_Estajxo));
-	obj->tio.estajxo->tio.RAY = calloc (sizeof (Dvg_Estajxo_RAY), 1);
+	obj->tio.estajxo->tio.RAY = calloc (sizeof (Dwg_Estajxo_RAY), 1);
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 	est = obj->tio.estajxo->tio.RAY;
 
@@ -1258,13 +1258,13 @@ dwg_decode_RAY (Bit_Cxeno * dat, Dvg_Objekto * obj)
 }
 
 static void
-dwg_decode_MTEXT (Bit_Cxeno * dat, Dvg_Objekto * obj)
+dwg_decode_MTEXT (Bit_Cxeno * dat, Dwg_Objekto * obj)
 {
-	Dvg_Estajxo_MTEXT *est;
+	Dwg_Estajxo_MTEXT *est;
 
 	obj->supertipo = DWG_OST_ESTAJXO;
 	obj->tio.estajxo = malloc (sizeof (Dwg_Object_Estajxo));
-	obj->tio.estajxo->tio.MTEXT = calloc (sizeof (Dvg_Estajxo_MTEXT), 1);
+	obj->tio.estajxo->tio.MTEXT = calloc (sizeof (Dwg_Estajxo_MTEXT), 1);
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 	est = obj->tio.estajxo->tio.MTEXT;
 
@@ -1292,13 +1292,13 @@ dwg_decode_MTEXT (Bit_Cxeno * dat, Dvg_Objekto * obj)
 }
 
 static void
-dwg_decode_LAYER (Bit_Cxeno * dat, Dvg_Objekto * obj)
+dwg_decode_LAYER (Bit_Cxeno * dat, Dwg_Objekto * obj)
 {
-	Dvg_Ordinarajxo_LAYER *ord;
+	Dwg_Ordinarajxo_LAYER *ord;
 
 	obj->supertipo = DWG_OST_ORDINARAJXO;
 	obj->tio.ordinarajxo = malloc (sizeof (Dwg_Object_Ordinarajxo));
-	obj->tio.ordinarajxo->tio.LAYER = calloc (sizeof (Dvg_Ordinarajxo_LAYER), 1);
+	obj->tio.ordinarajxo->tio.LAYER = calloc (sizeof (Dwg_Ordinarajxo_LAYER), 1);
 	dwg_decode_ordinarajxo (dat, obj->tio.ordinarajxo);
 	ord = obj->tio.ordinarajxo->tio.LAYER;
 
@@ -1315,13 +1315,13 @@ dwg_decode_LAYER (Bit_Cxeno * dat, Dvg_Objekto * obj)
 }
 
 static void
-dwg_decode_LAYOUT (Bit_Cxeno * dat, Dvg_Objekto * obj)
+dwg_decode_LAYOUT (Bit_Cxeno * dat, Dwg_Objekto * obj)
 {
-	Dvg_Ordinarajxo_LAYOUT *ord;
+	Dwg_Ordinarajxo_LAYOUT *ord;
 
 	obj->supertipo = DWG_OST_ORDINARAJXO;
 	obj->tio.ordinarajxo = malloc (sizeof (Dwg_Object_Ordinarajxo));
-	obj->tio.ordinarajxo->tio.LAYOUT = calloc (sizeof (Dvg_Ordinarajxo_LAYOUT), 1);
+	obj->tio.ordinarajxo->tio.LAYOUT = calloc (sizeof (Dwg_Ordinarajxo_LAYOUT), 1);
 	dwg_decode_ordinarajxo (dat, obj->tio.ordinarajxo);
 	ord = obj->tio.ordinarajxo->tio.LAYOUT;
 
@@ -1387,13 +1387,13 @@ dwg_decode_LAYOUT (Bit_Cxeno * dat, Dvg_Objekto * obj)
 }
 
 static void
-dwg_decode_NEUZATA (Bit_Cxeno * dat, Dvg_Objekto * obj)
+dwg_decode_NEUZATA (Bit_Cxeno * dat, Dwg_Objekto * obj)
 {
-	Dvg_Estajxo_NEUZATA *est;
+	Dwg_Estajxo_NEUZATA *est;
 
 	obj->supertipo = DWG_OST_ESTAJXO;
 	obj->tio.estajxo = malloc (sizeof (Dwg_Object_Estajxo));
-	obj->tio.estajxo->tio.NEUZATA = calloc (sizeof (Dvg_Estajxo_NEUZATA), 1);
+	obj->tio.estajxo->tio.NEUZATA = calloc (sizeof (Dwg_Estajxo_NEUZATA), 1);
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 	est = obj->tio.estajxo->tio.NEUZATA;
 
@@ -1413,7 +1413,7 @@ dwg_decode_aldoni_objekto (Dwg_Structure * skt, Bit_Cxeno * dat, long unsigned i
 	long unsigned int antauxa_adreso;
 	long unsigned int objekadres;
 	unsigned char antauxa_bito;
-	Dvg_Objekto *obj;
+	Dwg_Objekto *obj;
 
 	/* Gardi la antauxan adreson
 	 */
@@ -1428,11 +1428,11 @@ dwg_decode_aldoni_objekto (Dwg_Structure * skt, Bit_Cxeno * dat, long unsigned i
 	/* Rezervi memor-spacon por plia objekto
 	 */
 	if (skt->objekto_kiom == 0)
-		skt->objekto = (Dvg_Objekto *) malloc (sizeof (Dvg_Objekto));
+		skt->objekto = (Dwg_Objekto *) malloc (sizeof (Dwg_Objekto));
 	else
 		skt->objekto =
-			(Dvg_Objekto *) realloc (skt->objekto,
-						 (skt->objekto_kiom + 1) * sizeof (Dvg_Objekto));
+			(Dwg_Objekto *) realloc (skt->objekto,
+						 (skt->objekto_kiom + 1) * sizeof (Dwg_Objekto));
 
 	//printf ("Objekto numero: %u\n", skt->objekto_kiom);
 
@@ -1513,7 +1513,7 @@ dwg_decode_aldoni_objekto (Dwg_Structure * skt, Bit_Cxeno * dat, long unsigned i
 		dwg_decode_LAYER (dat, obj);
 		break;
 	default:
-		if (obj->tipo == skt->dvg_ot_layout)
+		if (obj->tipo == skt->dwg_ot_layout)
 			dwg_decode_LAYOUT (dat, obj);
 		else
 		{

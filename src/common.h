@@ -15,7 +15,7 @@
 #define COMMON_H
 
 /**
- Tipoj de (eble kompaktitaj) dateneroj, kiuj komponas dvg-dosierojn.
+ Tipoj de (eble kompaktitaj) dateneroj, kiuj komponas dwg-dosierojn.
  */
 typedef enum DVG_DATENERO_TIPO
 {
@@ -40,7 +40,7 @@ typedef enum DVG_DATENERO_TIPO
 	DVG_DT_2RD,
 	DVG_DT_2BD,
 	DVG_DT_3BD,
-} Dvg_Datenero_Tipo;
+} Dwg_Datenero_Tipo;
 
 /**
  Identigaj referencoj de gardostarantoj.
@@ -56,10 +56,10 @@ typedef enum DVG_GARDOSTARANTO
 	DVG_GS_KLASO_FINO,
 	DVG_GS_DUAKAPO_EKO,
 	DVG_GS_DUAKAPO_FINO
-} Dvg_Gardostaranto;
+} Dwg_Gardostaranto;
 
-Dvg_Datenero_Tipo dvg_varmapo (int indico);
+Dwg_Datenero_Tipo dwg_varmapo (int indico);
 
-unsigned char *dvg_gardostaranto (Dvg_Gardostaranto kiu_gardostaranto);
+unsigned char *dwg_gardostaranto (Dwg_Gardostaranto kiu_gardostaranto);
 
 #endif

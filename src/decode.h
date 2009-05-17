@@ -9,7 +9,7 @@
 /*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
 /*****************************************************************************/
 
-///  Funkcioj por dekodigi dvg-datenaron.
+///  Funkcioj por dekodigi dwg-datenaron.
 
 #ifndef DECODE_H
 #define DECODE_H

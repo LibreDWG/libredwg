@@ -20,7 +20,7 @@ extern "C"
 #endif
 
 /**
- Supertipoj de objektoj kiuj ekzistas en dvg-dosieroj.
+ Supertipoj de objektoj kiuj ekzistas en dwg-dosieroj.
  */
 	typedef enum DWG_OBJECT_SUPERTYPE
 	{
@@ -30,7 +30,7 @@ extern "C"
 	} Dwg_Object_Supertype;
 
 /**
- Tipoj de objektoj kiuj ekzistas en dvg-dosieroj.
+ Tipoj de objektoj kiuj ekzistas en dwg-dosieroj.
  */
 	typedef enum DWG_OBJECT_TYPE
 	{
@@ -83,23 +83,23 @@ extern "C"
 /**
  Strukturo por traktiloj.
  */
-	typedef struct _dvg_traktilo
+	typedef struct _dwg_traktilo
 	{
 		unsigned char kodo;
 		unsigned char kiom;
 		long unsigned int valoro;
-	} Dvg_Traktilo;
+	} Dwg_Traktilo;
 
 /* OBJEKTOJ *******************************************************************/
 /**
  Strukturo por tekstoj - NEUZATA (0)
  */
-	typedef int Dvg_Estajxo_NEUZATA;
+	typedef int Dwg_Estajxo_NEUZATA;
 
 /**
  Strukturo por tekstoj - TEXT (1)
  */
-	typedef struct _dvg_estajxo_TEXT
+	typedef struct _dwg_estajxo_TEXT
 	{
 		unsigned char datumindik;
 		double levigxo;
@@ -125,12 +125,12 @@ extern "C"
 		double largxfaktoro;
 		unsigned char *teksto;
 		unsigned int generacio;
-	} Dvg_Estajxo_TEXT;
+	} Dwg_Estajxo_TEXT;
 
 /**
  Strukturo por atributoj - ATTRIB (2)
  */
-	typedef struct _dvg_estajxo_ATTRIB
+	typedef struct _dwg_estajxo_ATTRIB
 	{
 		unsigned char datumindik;
 		double levigxo;
@@ -159,12 +159,12 @@ extern "C"
 		unsigned char *etikedo;
 		unsigned int kamplong; //neuzita
 		unsigned char indikiloj;
-	} Dvg_Estajxo_ATTRIB;
+	} Dwg_Estajxo_ATTRIB;
 
 /**
  Strukturo por atributo-difinoj - ATTDEF (3)
  */
-	typedef struct _dvg_estajxo_ATTDEF
+	typedef struct _dwg_estajxo_ATTDEF
 	{
 		unsigned char datumindik;
 		double levigxo;
@@ -194,27 +194,27 @@ extern "C"
 		unsigned int kamplong; //neuzita
 		unsigned char indikiloj;
 		unsigned char *invitilo;
-	} Dvg_Estajxo_ATTDEF;
+	} Dwg_Estajxo_ATTDEF;
 
 /**
  Strukturo por blokoj - BLOCK (4)
  */
-	typedef struct _dvg_estajxo_BLOCK
+	typedef struct _dwg_estajxo_BLOCK
 	{
 		unsigned char *nomo;
-	} Dvg_Estajxo_BLOCK;
+	} Dwg_Estajxo_BLOCK;
 
 /**
  Strukturo por blokfinoj - ENDBLK (5)
  */
-	typedef struct _dvg_estajxo_ENDBLK
+	typedef struct _dwg_estajxo_ENDBLK
 	{
-	} Dvg_Estajxo_ENDBLK;
+	} Dwg_Estajxo_ENDBLK;
 
 /**
  Strukturo por enmetoj - INSERT (7)
  */
-	typedef struct _dvg_estajxo_INSERT
+	typedef struct _dwg_estajxo_INSERT
 	{
 		double x0;
 		double y0;
@@ -234,12 +234,12 @@ extern "C"
 			double z;
 		} forpusxigo;
 		unsigned char kun_attrib;
-	} Dvg_Estajxo_INSERT;
+	} Dwg_Estajxo_INSERT;
 
 /**
  Strukturo por multoblaj enmetoj - MINSERT (7)
  */
-	typedef struct _dvg_estajxo_MINSERT
+	typedef struct _dwg_estajxo_MINSERT
 	{
 		double x0;
 		double y0;
@@ -269,12 +269,12 @@ extern "C"
 			unsigned int kiom;
 			double dy;
 		} lin;
-	} Dvg_Estajxo_MINSERT;
+	} Dwg_Estajxo_MINSERT;
 
 /**
  Strukturo por verticoj - VERTEX_2D (10)
  */
-	typedef struct _dvg_estajxo_VERTEX_2D
+	typedef struct _dwg_estajxo_VERTEX_2D
 	{
 		unsigned char indikiloj;
 		double x0;
@@ -284,31 +284,31 @@ extern "C"
 		double finlargxo;
 		double protub;
 		double tangxdir;
-	} Dvg_Estajxo_VERTEX_2D;
+	} Dwg_Estajxo_VERTEX_2D;
 
 /**
  Strukturo por verticoj - VERTEX_3D (11)
  */
-	typedef struct _dvg_estajxo_VERTEX_3D
+	typedef struct _dwg_estajxo_VERTEX_3D
 	{
 		unsigned char indikiloj;
 		double x0;
 		double y0;
 		double z0;
-	} Dvg_Estajxo_VERTEX_3D;
+	} Dwg_Estajxo_VERTEX_3D;
 
 /**
  Strukturo por verticoj - VERTEX_PFACE_FACE (14)
  */
-	typedef struct _dvg_estajxo_VERTEX_PFACE_FACE
+	typedef struct _dwg_estajxo_VERTEX_PFACE_FACE
 	{
 		unsigned int vertind[4];
-	} Dvg_Estajxo_VERTEX_PFACE_FACE;
+	} Dwg_Estajxo_VERTEX_PFACE_FACE;
 
 /**
  Strukturo por:  2D POLYLINE (15)
  */
-	typedef struct _dvg_estajxo_POLYLINE_2D
+	typedef struct _dwg_estajxo_POLYLINE_2D
 	{
 		unsigned int indikiloj;
 		unsigned int kurbtipo;
@@ -322,21 +322,21 @@ extern "C"
 			double y;
 			double z;
 		} forpusxigo;
-	} Dvg_Estajxo_POLYLINE_2D;
+	} Dwg_Estajxo_POLYLINE_2D;
 
 /**
  Strukturo por:  3D POLYLINE (16)
  */
-	typedef struct _dvg_estajxo_POLYLINE_3D
+	typedef struct _dwg_estajxo_POLYLINE_3D
 	{
 		unsigned char indikiloj_1;
 		unsigned char indikiloj_2;
-	} Dvg_Estajxo_POLYLINE_3D;
+	} Dwg_Estajxo_POLYLINE_3D;
 
 /**
  Strukturo por arkoj - ARC (17)
  */
-	typedef struct _dvg_estajxo_ARC
+	typedef struct _dwg_estajxo_ARC
 	{
 		double x0;
 		double y0;
@@ -351,12 +351,12 @@ extern "C"
 		} forpusxigo;
 		double ekangulo;
 		double finangulo;
-	} Dvg_Estajxo_ARC;
+	} Dwg_Estajxo_ARC;
 
 /**
  Strukturo por cirkloj - CIRCLE (18)
  */
-	typedef struct _dvg_estajxo_CIRCLE
+	typedef struct _dwg_estajxo_CIRCLE
 	{
 		double x0;
 		double y0;
@@ -369,12 +369,12 @@ extern "C"
 			double y;
 			double z;
 		} forpusxigo;
-	} Dvg_Estajxo_CIRCLE;
+	} Dwg_Estajxo_CIRCLE;
 
 /**
  Strukturo por linioj - LINE (19)
  */
-	typedef struct _dvg_estajxo_LINE
+	typedef struct _dwg_estajxo_LINE
 	{
 		unsigned char nur_2D;
 		double x0;
@@ -390,12 +390,12 @@ extern "C"
 			double y;
 			double z;
 		} forpusxigo;
-	} Dvg_Estajxo_LINE;
+	} Dwg_Estajxo_LINE;
 
 /**
  Strukturo por puktoj - POINT (27)
  */
-	typedef struct _dvg_estajxo_POINT
+	typedef struct _dwg_estajxo_POINT
 	{
 		double x0;
 		double y0;
@@ -408,12 +408,12 @@ extern "C"
 			double z;
 		} forpusxigo;
 		double x_ang;
-	} Dvg_Estajxo_POINT;
+	} Dwg_Estajxo_POINT;
 
 /**
  Strukturo por elipsoj - ELLIPSE (35)
  */
-	typedef struct _dvg_estajxo_ELLIPSE
+	typedef struct _dwg_estajxo_ELLIPSE
 	{
 		double x0;
 		double y0;
@@ -430,12 +430,12 @@ extern "C"
 		double radiusproporcio;
 		double ekangulo;
 		double finangulo;
-	} Dvg_Estajxo_ELLIPSE;
+	} Dwg_Estajxo_ELLIPSE;
 
 /**
  Strukturo por radioj - RAY (40)
  */
-	typedef struct _dvg_estajxo_RAY
+	typedef struct _dwg_estajxo_RAY
 	{
 		double x0;
 		double y0;
@@ -443,12 +443,12 @@ extern "C"
 		double x1;
 		double y1;
 		double z1;
-	} Dvg_Estajxo_RAY;
+	} Dwg_Estajxo_RAY;
 
 /**
  Strukturo por tekstoj - MTEXT (40)
  */
-	typedef struct _dvg_estajxo_MTEXT
+	typedef struct _dwg_estajxo_MTEXT
 	{
 		double x0;
 		double y0;
@@ -472,12 +472,12 @@ extern "C"
 		unsigned int linispaco_stilo;
 		unsigned int linispaco_faktoro;
 		unsigned char ia_bito;
-	} Dvg_Estajxo_MTEXT;
+	} Dwg_Estajxo_MTEXT;
 
 /**
  Strukturo por tavoloj - LAYER (51)
  */
-	typedef struct _dvg_ordinarajxo_LAYER
+	typedef struct _dwg_ordinarajxo_LAYER
 	{
 		char *nomo;
 		unsigned char bito64;
@@ -485,12 +485,12 @@ extern "C"
 		unsigned char xrefdep;
 		unsigned int ecoj;
 		unsigned int koloro;
-	} Dvg_Ordinarajxo_LAYER;
+	} Dwg_Ordinarajxo_LAYER;
 
 /**
  Strukturo por arangxo - LAYOUT (502?)
  */
-	typedef struct _dvg_ordinarajxo_LAYOUT
+	typedef struct _dwg_ordinarajxo_LAYOUT
 	{
 		struct
 		{
@@ -565,44 +565,44 @@ extern "C"
 			double y_maks;
 			double z_maks;
 		} limo;
-	} Dvg_Ordinarajxo_LAYOUT;
+	} Dwg_Ordinarajxo_LAYOUT;
 
 /* OBJEKTOJ - FINO ************************************************************/
 
 /**
  Strukturo de rikordoj por atributoj de estajxoj.
  */
-	typedef struct _dvg_objekto_estajxo
+	typedef struct _dwg_objekto_estajxo
 	{
 		union
 		{
-			Dvg_Estajxo_NEUZATA *NEUZATA;
-			Dvg_Estajxo_TEXT *TEXT;
-			Dvg_Estajxo_ATTRIB *ATTRIB;
-			Dvg_Estajxo_ATTDEF *ATTDEF;
-			Dvg_Estajxo_BLOCK *BLOCK;
-			Dvg_Estajxo_ENDBLK *ENDBLK;
-			Dvg_Estajxo_INSERT *INSERT;
-			Dvg_Estajxo_MINSERT *MINSERT;
-			Dvg_Estajxo_VERTEX_2D *VERTEX_2D;
-			Dvg_Estajxo_VERTEX_3D *VERTEX_3D;
-			Dvg_Estajxo_VERTEX_PFACE_FACE *VERTEX_PFACE_FACE;
-			Dvg_Estajxo_POLYLINE_2D *POLYLINE_2D;
-			Dvg_Estajxo_POLYLINE_3D *POLYLINE_3D;
-			Dvg_Estajxo_ARC *ARC;
-			Dvg_Estajxo_CIRCLE *CIRCLE;
-			Dvg_Estajxo_LINE *LINE;
-			Dvg_Estajxo_POINT *POINT;
-			Dvg_Estajxo_ELLIPSE *ELLIPSE;
-			Dvg_Estajxo_RAY *RAY;
-			Dvg_Estajxo_MTEXT *MTEXT;
+			Dwg_Estajxo_NEUZATA *NEUZATA;
+			Dwg_Estajxo_TEXT *TEXT;
+			Dwg_Estajxo_ATTRIB *ATTRIB;
+			Dwg_Estajxo_ATTDEF *ATTDEF;
+			Dwg_Estajxo_BLOCK *BLOCK;
+			Dwg_Estajxo_ENDBLK *ENDBLK;
+			Dwg_Estajxo_INSERT *INSERT;
+			Dwg_Estajxo_MINSERT *MINSERT;
+			Dwg_Estajxo_VERTEX_2D *VERTEX_2D;
+			Dwg_Estajxo_VERTEX_3D *VERTEX_3D;
+			Dwg_Estajxo_VERTEX_PFACE_FACE *VERTEX_PFACE_FACE;
+			Dwg_Estajxo_POLYLINE_2D *POLYLINE_2D;
+			Dwg_Estajxo_POLYLINE_3D *POLYLINE_3D;
+			Dwg_Estajxo_ARC *ARC;
+			Dwg_Estajxo_CIRCLE *CIRCLE;
+			Dwg_Estajxo_LINE *LINE;
+			Dwg_Estajxo_POINT *POINT;
+			Dwg_Estajxo_ELLIPSE *ELLIPSE;
+			Dwg_Estajxo_RAY *RAY;
+			Dwg_Estajxo_MTEXT *MTEXT;
 		} tio;
 
 		long unsigned int bitgrandeco;
-		Dvg_Traktilo traktilo;
+		Dwg_Traktilo traktilo;
 
 		unsigned int kromdat_kiom;
-		Dvg_Traktilo kromdat_trakt;
+		Dwg_Traktilo kromdat_trakt;
 		unsigned char *kromdat;
 
 		unsigned char bildo_ekzistas;
@@ -620,37 +620,37 @@ extern "C"
 		unsigned char linidikeco;
 
 		unsigned int traktref_kiom;
-		Dvg_Traktilo *traktref;
+		Dwg_Traktilo *traktref;
 	} Dwg_Object_Estajxo;
 
 /**
  Strukturo de rikordoj por atributoj de ordinaraj objektoj.
  */
-	typedef struct _dvg_objekto_ordinarajxo
+	typedef struct _dwg_objekto_ordinarajxo
 	{
 		union
 		{
-			Dvg_Ordinarajxo_LAYER *LAYER;
-			Dvg_Ordinarajxo_LAYOUT *LAYOUT;
+			Dwg_Ordinarajxo_LAYER *LAYER;
+			Dwg_Ordinarajxo_LAYOUT *LAYOUT;
 		} tio;
 
 		long unsigned int bitgrandeco;
-		Dvg_Traktilo traktilo;
+		Dwg_Traktilo traktilo;
 
 		unsigned int kromdat_kiom;
-		Dvg_Traktilo kromdat_trakt;
+		Dwg_Traktilo kromdat_trakt;
 		unsigned char *kromdat;
 
 		long unsigned int reagilo_kiom;
 
 		unsigned int traktref_kiom;
-		Dvg_Traktilo *traktref;
+		Dwg_Traktilo *traktref;
 	} Dwg_Object_Ordinarajxo;
 
 /**
  Gxenerala strukturo de rikordoj por objektoj.
  */
-	typedef struct _dvg_objekto
+	typedef struct _dwg_objekto
 	{
 		unsigned int grandeco;
 		unsigned int tipo;
@@ -665,12 +665,12 @@ extern "C"
 		} tio;
 
 		long unsigned int trakt;
-	} Dvg_Objekto;
+	} Dwg_Objekto;
 
 /**
  Strukturo de rikordoj por klasoj.
  */
-	typedef struct _dvg_klaso
+	typedef struct _dwg_klaso
 	{
 		unsigned int numero;
 		unsigned int versio;
@@ -679,23 +679,23 @@ extern "C"
 		unsigned char *dxfnomo;
 		unsigned char estisfantomo;
 		unsigned int eroid;
-	} Dvg_Klaso;
+	} Dwg_Klaso;
 
 /**
- Dvg_Cxeno sama kiel Bit_Cxeno, en "bite.h"
+ Dwg_Cxeno sama kiel Bit_Cxeno, en "bite.h"
  */
-	typedef struct _dvg_cxeno
+	typedef struct _dwg_cxeno
 	{
 		unsigned char *cxeno;
 		long unsigned int kiom;
 		long unsigned int bajto;
 		unsigned char bito;
-	} Dvg_Cxeno;
+	} Dwg_Cxeno;
 
 /**
- Cxefa strukturo de la dvg-datenaro.
+ Cxefa strukturo de la dwg-datenaro.
  */
-	typedef struct _dvg_strukturo
+	typedef struct _dwg_strukturo
 	{
 		struct
 		{
@@ -711,9 +711,9 @@ extern "C"
 		} kapo;
 
 #		define DVG_NEKONATA1_KIOM 123
-		Dvg_Cxeno nekonata1;
+		Dwg_Cxeno nekonata1;
 
-		Dvg_Cxeno bildo;
+		Dwg_Cxeno bildo;
 
 #		define DVG_KIOM_VARIABLOJ 233
 		union
@@ -725,14 +725,14 @@ extern "C"
 			double xyz[3];
 			double xy[2];
 			unsigned char *teksto;
-			Dvg_Traktilo traktilo;
+			Dwg_Traktilo traktilo;
 		} var[DVG_KIOM_VARIABLOJ];
 
 		unsigned int klaso_kiom;
-		Dvg_Klaso *klaso;
+		Dwg_Klaso *klaso;
 
 		long unsigned int objekto_kiom;
-		Dvg_Objekto *objekto;
+		Dwg_Objekto *objekto;
 
 		struct
 		{
@@ -746,7 +746,7 @@ extern "C"
 
 		long unsigned int mezuro;
 
-		unsigned int dvg_ot_layout;
+		unsigned int dwg_ot_layout;
 
 	} Dwg_Structure;
 
@@ -757,7 +757,7 @@ extern "C"
 
 	int dwg_read_file (char *filename, Dwg_Structure * dwg);
 
-	void dvg_montri (Dwg_Structure * dwg);
+	void dwg_print (Dwg_Structure * dwg);
 
 #ifdef __cplusplus
 }

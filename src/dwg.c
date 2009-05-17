@@ -77,7 +77,7 @@ dwg_read_file (char *filename, Dwg_Structure * dwg_struct)
 	}
 	fclose (dt);
 
-	/* Dekodigi la dvg-datenaron
+	/* Dekodigi la dwg-datenaron
 	 */
 	if (dwg_decode_strukturigi (&bitaro, dwg_struct))
 	{
@@ -97,9 +97,9 @@ dwg_write_file (char *filename, Dwg_Structure * dwg_struct)
 	struct stat atrib;
 	Bit_Cxeno bitaro;
 
-	/* Enkodigi la dvg-datenaron
+	/* Enkodigi la dwg-datenaron
 	bitaro.kiom = 0;
-	if (dvg_enk_cxenigi (dwg_struct, &bitaro))
+	if (dwg_enk_cxenigi (dwg_struct, &bitaro))
 	{
 		puts ("Ni ne sukcesis enkodigi la strukturon.");
 		if (bitaro.kiom > 0)
@@ -177,7 +177,7 @@ dwg_print_ordinarajxo (Dwg_Object_Ordinarajxo *ord)
 
 
 static void
-dwg_print_traktref (Dvg_Objekto * obj)
+dwg_print_traktref (Dwg_Objekto * obj)
 {
 	unsigned int i;
 
@@ -222,7 +222,7 @@ dwg_print_traktref (Dvg_Objekto * obj)
 /* OBJEKTOJ *******************************************************************/
 
 static void
-dwg_print_TEXT (Dvg_Estajxo_TEXT * est)
+dwg_print_TEXT (Dwg_Estajxo_TEXT * est)
 {
 	printf ("\tDatumar-indikilo: 0x%02x\n", est->datumindik);
 
@@ -243,7 +243,7 @@ dwg_print_TEXT (Dvg_Estajxo_TEXT * est)
 }
 
 static void
-dwg_print_ATTRIB (Dvg_Estajxo_ATTRIB * est)
+dwg_print_ATTRIB (Dwg_Estajxo_ATTRIB * est)
 {
 	printf ("\tDatumar-indikilo: 0x%02x\n", est->datumindik);
 
@@ -267,7 +267,7 @@ dwg_print_ATTRIB (Dvg_Estajxo_ATTRIB * est)
 }
 
 static void
-dwg_print_ATTDEF (Dvg_Estajxo_ATTDEF * est)
+dwg_print_ATTDEF (Dwg_Estajxo_ATTDEF * est)
 {
 	printf ("\tDatumar-indikilo: 0x%02x\n", est->datumindik);
 
@@ -292,13 +292,13 @@ dwg_print_ATTDEF (Dvg_Estajxo_ATTDEF * est)
 }
 
 static void
-dwg_print_BLOCK (Dvg_Estajxo_BLOCK * est)
+dwg_print_BLOCK (Dwg_Estajxo_BLOCK * est)
 {
 	printf ("\tNomo: %s\n", est->nomo);
 }
 
 static void
-dwg_print_INSERT (Dvg_Estajxo_INSERT * est)
+dwg_print_INSERT (Dwg_Estajxo_INSERT * est)
 {
 	printf ("\tEnmeta punkto: (%1.13g, %1.13g, %1.13g)\n", est->x0, est->y0, est->z0);
 	printf ("\tSkal-indikilo: 0x%02x\n", est->skalindik);
@@ -310,7 +310,7 @@ dwg_print_INSERT (Dvg_Estajxo_INSERT * est)
 }
 
 static void
-dwg_print_MINSERT (Dvg_Estajxo_MINSERT * est)
+dwg_print_MINSERT (Dwg_Estajxo_MINSERT * est)
 {
 	printf ("\tEnmeta punkto: (%1.13g, %1.13g, %1.13g)\n", est->x0, est->y0, est->z0);
 	printf ("\tSkal-indikilo: 0x%02x\n", est->skalindik);
@@ -324,7 +324,7 @@ dwg_print_MINSERT (Dvg_Estajxo_MINSERT * est)
 }
 
 static void
-dwg_print_VERTEX_2D (Dvg_Estajxo_VERTEX_2D * est)
+dwg_print_VERTEX_2D (Dwg_Estajxo_VERTEX_2D * est)
 {
 	printf ("\tIndikiloj: 0x%02x\n", est->indikiloj);
 	printf ("\tPunkto: (%1.13g, %1.13g, %1.13g)\n", est->x0, est->y0, est->z0);
@@ -335,14 +335,14 @@ dwg_print_VERTEX_2D (Dvg_Estajxo_VERTEX_2D * est)
 }
 
 static void
-dwg_print_VERTEX_3D (Dvg_Estajxo_VERTEX_3D * est)
+dwg_print_VERTEX_3D (Dwg_Estajxo_VERTEX_3D * est)
 {
 	printf ("\tIndikiloj: 0x%02x\n", est->indikiloj);
 	printf ("\tPunkto: (%1.13g, %1.13g, %1.13g)\n", est->x0, est->y0, est->z0);
 }
 
 static void
-dwg_print_VERTEX_PFACE_FACE (Dvg_Estajxo_VERTEX_PFACE_FACE * est)
+dwg_print_VERTEX_PFACE_FACE (Dwg_Estajxo_VERTEX_PFACE_FACE * est)
 {
 	printf ("\tVertic-indico 1: %i\n", est->vertind[0]);
 	printf ("\tVertic-indico 2: %i\n", est->vertind[1]);
@@ -351,7 +351,7 @@ dwg_print_VERTEX_PFACE_FACE (Dvg_Estajxo_VERTEX_PFACE_FACE * est)
 }
 
 static void
-dwg_print_POLYLINE_2D (Dvg_Estajxo_POLYLINE_2D * est)
+dwg_print_POLYLINE_2D (Dwg_Estajxo_POLYLINE_2D * est)
 {
 	printf ("\tIndikiloj: 0x%02x\n", est->indikiloj);
 	printf ("\tKurbtipo: 0x%02x\n", est->kurbtipo);
@@ -364,13 +364,13 @@ dwg_print_POLYLINE_2D (Dvg_Estajxo_POLYLINE_2D * est)
 }
 
 static void
-dwg_print_POLYLINE_3D (Dvg_Estajxo_POLYLINE_3D * est)
+dwg_print_POLYLINE_3D (Dwg_Estajxo_POLYLINE_3D * est)
 {
 	printf ("\tIndikiloj: 0x%02x / 0x%02x\n", est->indikiloj_1, est->indikiloj_2);
 }
 
 static void
-dwg_print_ARC (Dvg_Estajxo_ARC * est)
+dwg_print_ARC (Dwg_Estajxo_ARC * est)
 {
 	printf ("\tCentra punkto: (%1.13g, %1.13g, %1.13g)\n", est->x0, est->y0, est->z0);
 	printf ("\tRadiuso: %1.13g\n", est->radiuso);
@@ -382,7 +382,7 @@ dwg_print_ARC (Dvg_Estajxo_ARC * est)
 }
 
 static void
-dwg_print_CIRCLE (Dvg_Estajxo_CIRCLE * est)
+dwg_print_CIRCLE (Dwg_Estajxo_CIRCLE * est)
 {
 	printf ("\tCentra punkto: (%1.13g, %1.13g, %1.13g)\n", est->x0, est->y0, est->z0);
 	printf ("\tRadiuso: %1.13g\n", est->radiuso);
@@ -392,7 +392,7 @@ dwg_print_CIRCLE (Dvg_Estajxo_CIRCLE * est)
 }
 
 static void
-dwg_print_LINE (Dvg_Estajxo_LINE * est)
+dwg_print_LINE (Dwg_Estajxo_LINE * est)
 {
 	printf ("\tĈu nur 2D?: %s\n", est->nur_2D ? "Jes" : "Ne");
 	printf ("\t1-a punkto: (%1.13g, %1.13g, %1.13g)\n", est->x0, est->y0,
@@ -405,7 +405,7 @@ dwg_print_LINE (Dvg_Estajxo_LINE * est)
 }
 
 static void
-dwg_print_POINT (Dvg_Estajxo_POINT *est)
+dwg_print_POINT (Dwg_Estajxo_POINT *est)
 {
 	printf ("\tPunkto: (%1.13g, %1.13g, %1.13g)\n", est->x0, est->y0, est->z0);
 	printf ("\tDikeco: %1.13g\n", est->dikeco);
@@ -415,7 +415,7 @@ dwg_print_POINT (Dvg_Estajxo_POINT *est)
 }
 
 static void
-dwg_print_ELLIPSE (Dvg_Estajxo_ELLIPSE *est)
+dwg_print_ELLIPSE (Dwg_Estajxo_ELLIPSE *est)
 {
 	printf ("\tCentra punkto: (%1.13g, %1.13g, %1.13g)\n", est->x0, est->y0, est->z0);
 	printf ("\tDuonĉef-aksa vektoro: (%1.13g, %1.13g, %1.13g)\n", est->x1, est->y1, est->z1);
@@ -427,14 +427,14 @@ dwg_print_ELLIPSE (Dvg_Estajxo_ELLIPSE *est)
 }
 
 static void
-dwg_print_RAY (Dvg_Estajxo_RAY *est)
+dwg_print_RAY (Dwg_Estajxo_RAY *est)
 {
 	printf ("\tPunkto: (%1.13g, %1.13g, %1.13g)\n", est->x0, est->y0, est->z0);
 	printf ("\tVektoro: (%1.13g, %1.13g, %1.13g)\n", est->x1, est->y1, est->z1);
 }
 
 static void
-dwg_print_MTEXT (Dvg_Estajxo_MTEXT *est)
+dwg_print_MTEXT (Dwg_Estajxo_MTEXT *est)
 {
 	printf ("\tEnmeto: (%1.13g, %1.13g, %1.13g)\n", est->x0, est->y0, est->z0);
 	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", est->forpusxigo.x, est->forpusxigo.y,
@@ -450,7 +450,7 @@ dwg_print_MTEXT (Dvg_Estajxo_MTEXT *est)
 }
 
 static void
-dwg_print_LAYER (Dvg_Ordinarajxo_LAYER *ord)
+dwg_print_LAYER (Dwg_Ordinarajxo_LAYER *ord)
 {
 	printf ("\tNomo: %s\n", ord->nomo);
 	printf ("\tĈu 64?: %s\n", ord->bito64 ? "Jes" : "Ne");
@@ -461,7 +461,7 @@ dwg_print_LAYER (Dvg_Ordinarajxo_LAYER *ord)
 }
 
 static void
-dwg_print_LAYOUT (Dvg_Ordinarajxo_LAYOUT *ord)
+dwg_print_LAYOUT (Dwg_Ordinarajxo_LAYOUT *ord)
 {
 	printf ("\tAgord-nomo: %s\n", ord->pagxo.agordo);
 	printf ("\tPrintilo: %s\n", ord->pagxo.printilo);
@@ -522,7 +522,7 @@ dwg_print (Dwg_Structure *skt)
 {
 	unsigned char sig;
 	unsigned int i, j;
-	const char *dvg_obtipo[81] = {
+	const char *dwg_obtipo[81] = {
 	"NE_UZATA", "TEXT", "ATTRIB", "ATTDEF",	"BLOCK",
        	"ENDBLK", "SEQEND", "INSERT", "MINSERT", "NULL_09",
 	"VERTEX_2D", "VERTEX_3D", "VERTEX_MESH", "VERTEX_PFACE", "VERTEX_PFACE_FACE",
@@ -575,7 +575,7 @@ dwg_print (Dwg_Structure *skt)
 			puts ("(NE EKZISTANTA)");
 			continue;
 		}
-		switch (dvg_varmapo (i))
+		switch (dwg_varmapo (i))
 		{
 		case DVG_DT_B:
 			printf ("B: %u", skt->var[i].bitoko);
@@ -609,7 +609,7 @@ dwg_print (Dwg_Structure *skt)
 			printf ("Z: %lg", skt->var[i].xyz[2]);
 			break;
 		default:
-			printf ("Ne traktebla tipo: %i (var: %i)\n", dvg_varmapo (i), i);
+			printf ("Ne traktebla tipo: %i (var: %i)\n", dwg_varmapo (i), i);
 		}
 		puts ("");
 	}
@@ -636,12 +636,12 @@ dwg_print (Dwg_Structure *skt)
 	puts ("**************************************************");
 	for (i = 0; i < skt->objekto_kiom; i++)
 	{
-		Dvg_Objekto *obj;
+		Dwg_Objekto *obj;
 
 		printf ("(%u) ", i);
 		obj = &skt->objekto[i];
 
-		printf ("Tipo: %s (%03i)\t", obj->tipo > 80 ? (obj->tipo == skt->dvg_ot_layout ? "LAYOUT" : "??") : dvg_obtipo[obj->tipo], obj->tipo);
+		printf ("Tipo: %s (%03i)\t", obj->tipo > 80 ? (obj->tipo == skt->dwg_ot_layout ? "LAYOUT" : "??") : dwg_obtipo[obj->tipo], obj->tipo);
 		printf ("Grandeco: %u\t", obj->grandeco);
 		printf ("Traktilo: (%lu)\t", obj->trakt);
 		printf ("Super-tipo: ");
@@ -726,7 +726,7 @@ dwg_print (Dwg_Structure *skt)
 			dwg_print_LAYER (obj->tio.ordinarajxo->tio.LAYER);
 			break;
 		default:
-			if (obj->tipo == skt->dvg_ot_layout)
+			if (obj->tipo == skt->dwg_ot_layout)
 				dwg_print_LAYOUT (obj->tio.ordinarajxo->tio.LAYOUT);
 			else
 				continue;

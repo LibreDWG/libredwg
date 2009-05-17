@@ -27,7 +27,7 @@
 #endif
 
 /**
- Strukturo por enteni la krudan datenaron de dvg-dosieroj.
+ Strukturo por enteni la krudan datenaron de dwg-dosieroj.
  */
 typedef struct _bit_cxeno
 {
@@ -99,9 +99,9 @@ double bit_legi_BT (Bit_Cxeno * bit_datenaro);
 
 void bit_skribi_BT (Bit_Cxeno * bit_datenaro, double valoro);
 
-int bit_legi_H (Bit_Cxeno * bit_datenaro, Dvg_Traktilo * traktilo);
+int bit_legi_H (Bit_Cxeno * bit_datenaro, Dwg_Traktilo * traktilo);
 
-void bit_skribi_H (Bit_Cxeno * dat, Dvg_Traktilo * traktilo);
+void bit_skribi_H (Bit_Cxeno * dat, Dwg_Traktilo * traktilo);
 
 unsigned int bit_legi_CRC (Bit_Cxeno * bit_datenaro);
 

@@ -682,7 +682,7 @@ bit_skribi_BT (Bit_Cxeno * dat, double valoro)
 /** Legi traktilo-referencon.
  */
 int
-bit_legi_H (Bit_Cxeno * dat, Dvg_Traktilo * trakt)
+bit_legi_H (Bit_Cxeno * dat, Dwg_Traktilo * trakt)
 {
 	Bit_Cxeno tmpdat;
 	unsigned char *val;
@@ -713,7 +713,7 @@ bit_legi_H (Bit_Cxeno * dat, Dvg_Traktilo * trakt)
 /** Skribi traktilo-referencon.
  */
 void
-bit_skribi_H (Bit_Cxeno * dat, Dvg_Traktilo * trakt)
+bit_skribi_H (Bit_Cxeno * dat, Dwg_Traktilo * trakt)
 {
 	int i, j;
 	unsigned char *val;
