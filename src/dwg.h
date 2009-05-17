@@ -22,63 +22,63 @@ extern "C"
 /**
  Supertipoj de objektoj kiuj ekzistas en dvg-dosieroj.
  */
-	typedef enum DVG_OBJEKTO_SUPERTIPO
+	typedef enum DWG_OBJECT_SUPERTYPE
 	{
-		DVG_OST_NEKONATAJXO,
-		DVG_OST_ESTAJXO,
-		DVG_OST_ORDINARAJXO
-	} Dvg_Objekto_Supertipo;
+		DWG_OST_NEKONATAJXO,
+		DWG_OST_ESTAJXO,
+		DWG_OST_ORDINARAJXO
+	} Dwg_Object_Supertype;
 
 /**
  Tipoj de objektoj kiuj ekzistas en dvg-dosieroj.
  */
-	typedef enum DVG_OBJEKTO_TIPO
+	typedef enum DWG_OBJECT_TYPE
 	{
-		DVG_OT_NEUZATA = 0,
-		DVG_OT_TEXT = 1,
-		DVG_OT_ATTRIB = 2,
-		DVG_OT_ATTDEF = 3,
-		DVG_OT_BLOCK = 4,
-		DVG_OT_ENDBLK = 5,
-		DVG_OT_SEQEND = 6,
-		DVG_OT_INSERT = 7,
-		DVG_OT_MINSERT = 8,
-		DVG_OT_VERTEX_2D = 10,
-		DVG_OT_VERTEX_3D = 11,
-		DVG_OT_VERTEX_MESH = 12,
-		DVG_OT_VERTEX_PFACE = 13,
-		DVG_OT_VERTEX_PFACE_FACE = 14,
-		DVG_OT_POLYLINE_2D = 15,
-		DVG_OT_POLYLINE_3D = 16,
-		DVG_OT_ARC = 17,
-		DVG_OT_CIRCLE = 18,
-		DVG_OT_LINE = 19,
-		DVG_OT_POINT = 27,
-		DVG_OT_ELLIPSE = 35,
-		DVG_OT_RAY = 40,
-		DVG_OT_XLINE = 41,
-		DVG_OT_DICTIONARY = 42,
-		DVG_OT_MTEXT = 44,
-		DVG_OT_BLOCK_CONTROL = 48,
-		DVG_OT_BLOCK_HEADER = 49,
-		DVG_OT_LAYER_CONTROL = 50,
-		DVG_OT_LAYER = 51,
-		DVG_OT_SHAPEFILE_CONTROL = 52,
-		DVG_OT_SHAPEFILE = 53,
-		DVG_OT_LINETYPE_CONTROL = 56,
-		DVG_OT_LTYPE = 56,
-		DVG_OT_VIEW_CONTROL = 60,
-		DVG_OT_UCS_CONTROL = 62,
-		DVG_OT_TABLE_VIEWPORT = 64,
-		DVG_OT_VPORT = 64,
-		DVG_OT_TABLE_APPID = 66,
-		DVG_OT_APPID = 67,
-		DVG_OT_DIMSTYLE_CONTROL = 68,
-		DVG_OT_DIMSTYLE = 69,
-		DVG_OT_VIEWPORT_ENTITY_CONTROL = 70,
-		DVG_OT_MLINESTYLE = 73,
-		DVG_OT_FREMDA = 79
-	} Dvg_Objekto_Tipo;
+		DWG_OT_NEUZATA = 0,
+		DWG_OT_TEXT = 1,
+		DWG_OT_ATTRIB = 2,
+		DWG_OT_ATTDEF = 3,
+		DWG_OT_BLOCK = 4,
+		DWG_OT_ENDBLK = 5,
+		DWG_OT_SEQEND = 6,
+		DWG_OT_INSERT = 7,
+		DWG_OT_MINSERT = 8,
+		DWG_OT_VERTEX_2D = 10,
+		DWG_OT_VERTEX_3D = 11,
+		DWG_OT_VERTEX_MESH = 12,
+		DWG_OT_VERTEX_PFACE = 13,
+		DWG_OT_VERTEX_PFACE_FACE = 14,
+		DWG_OT_POLYLINE_2D = 15,
+		DWG_OT_POLYLINE_3D = 16,
+		DWG_OT_ARC = 17,
+		DWG_OT_CIRCLE = 18,
+		DWG_OT_LINE = 19,
+		DWG_OT_POINT = 27,
+		DWG_OT_ELLIPSE = 35,
+		DWG_OT_RAY = 40,
+		DWG_OT_XLINE = 41,
+		DWG_OT_DICTIONARY = 42,
+		DWG_OT_MTEXT = 44,
+		DWG_OT_BLOCK_CONTROL = 48,
+		DWG_OT_BLOCK_HEADER = 49,
+		DWG_OT_LAYER_CONTROL = 50,
+		DWG_OT_LAYER = 51,
+		DWG_OT_SHAPEFILE_CONTROL = 52,
+		DWG_OT_SHAPEFILE = 53,
+		DWG_OT_LINETYPE_CONTROL = 56,
+		DWG_OT_LTYPE = 56,
+		DWG_OT_VIEW_CONTROL = 60,
+		DWG_OT_UCS_CONTROL = 62,
+		DWG_OT_TABLE_VIEWPORT = 64,
+		DWG_OT_VPORT = 64,
+		DWG_OT_TABLE_APPID = 66,
+		DWG_OT_APPID = 67,
+		DWG_OT_DIMSTYLE_CONTROL = 68,
+		DWG_OT_DIMSTYLE = 69,
+		DWG_OT_VIEWPORT_ENTITY_CONTROL = 70,
+		DWG_OT_MLINESTYLE = 73,
+		DWG_OT_FREMDA = 79
+	} Dwg_Object_Type;
 
 /**
  Strukturo por traktiloj.
@@ -621,7 +621,7 @@ extern "C"
 
 		unsigned int traktref_kiom;
 		Dvg_Traktilo *traktref;
-	} Dvg_Objekto_Estajxo;
+	} Dwg_Object_Estajxo;
 
 /**
  Strukturo de rikordoj por atributoj de ordinaraj objektoj.
@@ -645,7 +645,7 @@ extern "C"
 
 		unsigned int traktref_kiom;
 		Dvg_Traktilo *traktref;
-	} Dvg_Objekto_Ordinarajxo;
+	} Dwg_Object_Ordinarajxo;
 
 /**
  Gxenerala strukturo de rikordoj por objektoj.
@@ -656,11 +656,11 @@ extern "C"
 		unsigned int tipo;
 		unsigned int ckr;
 
-		Dvg_Objekto_Supertipo supertipo;
+		Dwg_Object_Supertype supertipo;
 		union
 		{
-			Dvg_Objekto_Estajxo *estajxo;
-			Dvg_Objekto_Ordinarajxo *ordinarajxo;
+			Dwg_Object_Estajxo *estajxo;
+			Dwg_Object_Ordinarajxo *ordinarajxo;
 			unsigned char *nekonatajxo;
 		} tio;
 
