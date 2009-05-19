@@ -87,7 +87,7 @@ extern "C"
 	{
 		unsigned char kodo;
 		unsigned char kiom;
-		long unsigned int valoro;
+		long unsigned int value;
 	} Dwg_Traktilo;
 
 /* OBJEKTOJ *******************************************************************/

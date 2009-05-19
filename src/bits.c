@@ -17,12 +17,12 @@
 #include "bits.h"
 
 /*------------------------------------------------------------------------------
- * Prototipoj de privataj funkcioj
+ * Private functions prototypes
  */
 static unsigned int bit_ckr8 (unsigned int dx, unsigned char *adr, long n);
 
 /*------------------------------------------------------------------------------
- * Publikaj funkcioj
+ * Public functions
  */
 
 /* Pretersalti tiom da bitoj (antauxen aux malantauxen)
@@ -42,30 +42,30 @@ bit_ref_salti (Bit_Cxeno * dat, int salto)
 	dat->bajto += finpoz / 8;
 }
 
-/** Legi 1 biton.
+/** Read 1 biton.
  */
 unsigned char
-bit_legi_B (Bit_Cxeno * dat)
+bit_read_B (Bit_Cxeno * dat)
 {
-	unsigned char rezulto;
+	unsigned char result;
 	unsigned char bitoko;
 
 	bitoko = dat->cxeno[dat->bajto];
-	rezulto = (bitoko & (0x80 >> dat->bito)) >> (7 - dat->bito);
+	result = (bitoko & (0x80 >> dat->bito)) >> (7 - dat->bito);
 
 	bit_ref_salti (dat, 1);
-	return rezulto;
+	return result;
 }
 
-/** Skribi 1 biton.
+/** Write 1 biton.
  */
 void
-bit_skribi_B (Bit_Cxeno * dat, unsigned char valoro)
+bit_write_B (Bit_Cxeno * dat, unsigned char value)
 {
 	if (dat->bajto >= dat->kiom - 1)
 		bit_cxeno_rezervi (dat);
 
-	if (valoro)
+	if (value)
 		dat->cxeno[dat->bajto] |= 0x80 >> dat->bito;
 	else
 		dat->cxeno[dat->bajto] &= ~(0x80 >> dat->bito);
@@ -73,35 +73,35 @@ bit_skribi_B (Bit_Cxeno * dat, unsigned char valoro)
 	bit_ref_salti (dat, 1);
 }
 
-/** Legi 2 bitojn.
+/** Read 2 bitojn.
  */
 unsigned char
-bit_legi_BB (Bit_Cxeno * dat)
+bit_read_BB (Bit_Cxeno * dat)
 {
-	unsigned char rezulto;
+	unsigned char result;
 	unsigned char bitoko;
 
 	bitoko = dat->cxeno[dat->bajto];
 	if (dat->bito < 7)
-		rezulto = (bitoko & (0xc0 >> dat->bito)) >> (6 - dat->bito);
+		result = (bitoko & (0xc0 >> dat->bito)) >> (6 - dat->bito);
 	else
 	{
-		rezulto = (bitoko & 0x01) << 1;
+		result = (bitoko & 0x01) << 1;
 		if (dat->bajto < dat->kiom - 1)
 		{
 			bitoko = dat->cxeno[dat->bajto + 1];
-			rezulto |= (bitoko & 0x80) >> 7;
+			result |= (bitoko & 0x80) >> 7;
 		}
 	}
 
 	bit_ref_salti (dat, 2);
-	return rezulto;
+	return result;
 }
 
-/** Skribi 2 bitojn.
+/** Write 2 bitojn.
  */
 void
-bit_skribi_BB (Bit_Cxeno * dat, unsigned char valoro)
+bit_write_BB (Bit_Cxeno * dat, unsigned char value)
 {
 	unsigned char masko;
 	unsigned char bitoko;
@@ -113,50 +113,50 @@ bit_skribi_BB (Bit_Cxeno * dat, unsigned char valoro)
 	if (dat->bito < 7)
 	{
 		masko = 0xc0 >> dat->bito;
-		dat->cxeno[dat->bajto] = (bitoko & ~masko) | (valoro << (6 - dat->bito));
+		dat->cxeno[dat->bajto] = (bitoko & ~masko) | (value << (6 - dat->bito));
 	}
 	else
 	{
-		dat->cxeno[dat->bajto] = (bitoko & 0xfe) | (valoro >> 1);
+		dat->cxeno[dat->bajto] = (bitoko & 0xfe) | (value >> 1);
 		if (dat->bajto < dat->kiom - 1)
 		{
 			bitoko = dat->cxeno[dat->bajto + 1];
-			dat->cxeno[dat->bajto + 1] = (bitoko & 0x7f) | ((valoro & 0x01) << 7);
+			dat->cxeno[dat->bajto + 1] = (bitoko & 0x7f) | ((value & 0x01) << 7);
 		}
 	}
 
 	bit_ref_salti (dat, 2);
 }
 
-/** Legi 1 bitokon.
+/** Read 1 bitokon.
  */
 unsigned char
-bit_legi_RC (Bit_Cxeno * dat)
+bit_read_RC (Bit_Cxeno * dat)
 {
-	unsigned char rezulto;
+	unsigned char result;
 	unsigned char bitoko;
 
 	bitoko = dat->cxeno[dat->bajto];
 	if (dat->bito == 0)
-		rezulto = bitoko;
+		result = bitoko;
 	else
 	{
-		rezulto = bitoko << dat->bito;
+		result = bitoko << dat->bito;
 		if (dat->bajto < dat->kiom - 1)
 		{
 			bitoko = dat->cxeno[dat->bajto + 1];
-			rezulto |= bitoko >> (8 - dat->bito);
+			result |= bitoko >> (8 - dat->bito);
 		}
 	}
 
 	bit_ref_salti (dat, 8);
-	return ((unsigned char) rezulto);
+	return ((unsigned char) result);
 }
 
-/** Skribi 1 bitokon.
+/** Write 1 bitokon.
  */
 void
-bit_skribi_RC (Bit_Cxeno * dat, unsigned char valoro)
+bit_write_RC (Bit_Cxeno * dat, unsigned char value)
 {
 	unsigned char bitoko;
 	unsigned char cetero;
@@ -166,126 +166,126 @@ bit_skribi_RC (Bit_Cxeno * dat, unsigned char valoro)
 
 	if (dat->bito == 0)
 	{
-		dat->cxeno[dat->bajto] = valoro;
+		dat->cxeno[dat->bajto] = value;
 	}
 	else
 	{
 		bitoko = dat->cxeno[dat->bajto];
 		cetero = bitoko & (0xff << (8 - dat->bito));
-		dat->cxeno[dat->bajto] = cetero | (valoro >> dat->bito);
+		dat->cxeno[dat->bajto] = cetero | (value >> dat->bito);
 		if (dat->bajto < dat->kiom - 1)
 		{
 			bitoko = dat->cxeno[dat->bajto + 1];
 			cetero = bitoko & (0xff >> dat->bito);
-			dat->cxeno[dat->bajto + 1] = cetero | (valoro << (8 - dat->bito));
+			dat->cxeno[dat->bajto + 1] = cetero | (value << (8 - dat->bito));
 		}
 	}
 
 	bit_ref_salti (dat, 8);
 }
 
-/** Legi 1 dubitokon.
+/** Read 1 dubitokon.
  */
 unsigned int
-bit_legi_RS (Bit_Cxeno * dat)
+bit_read_RS (Bit_Cxeno * dat)
 {
 	unsigned char btk1, btk2;
 
-	btk1 = bit_legi_RC (dat);
-	btk2 = bit_legi_RC (dat);
+	btk1 = bit_read_RC (dat);
+	btk2 = bit_read_RC (dat);
 
 	/* Malinversigi la pez-finan ordon
 	 */
 	return ((unsigned int) ((btk2 << 8) | btk1));
 }
 
-/** Skribi 1 dubitokon.
+/** Write 1 dubitokon.
  */
 void
-bit_skribi_RS (Bit_Cxeno * dat, unsigned int valoro)
+bit_write_RS (Bit_Cxeno * dat, unsigned int value)
 {
 	/* Inversigi al pez-fina ordo
 	 */
-	bit_skribi_RC (dat, valoro & 0xFF);
-	bit_skribi_RC (dat, valoro >> 8);
+	bit_write_RC (dat, value & 0xFF);
+	bit_write_RC (dat, value >> 8);
 }
 
-/** Legi 1 kvarbitokon.
+/** Read 1 kvarbitokon.
  */
 long unsigned int
-bit_legi_RL (Bit_Cxeno * dat)
+bit_read_RL (Bit_Cxeno * dat)
 {
 	unsigned int dbtk1, dbtk2;
 
-	dbtk1 = bit_legi_RS (dat);
-	dbtk2 = bit_legi_RS (dat);
+	dbtk1 = bit_read_RS (dat);
+	dbtk2 = bit_read_RS (dat);
 
 	/* Malinversigi la pez-finan ordon
 	 */
 	return ((((long unsigned int) dbtk2) << 16) | ((long unsigned int) dbtk1));
 }
 
-/** Skribi 1 kvarbitokon.
+/** Write 1 kvarbitokon.
  */
 void
-bit_skribi_RL (Bit_Cxeno * dat, long unsigned int valoro)
+bit_write_RL (Bit_Cxeno * dat, long unsigned int value)
 {
 	/* Inversigi al la pez-fina ordo
 	 */
-	bit_skribi_RS (dat, valoro & 0xFFFF);
-	bit_skribi_RS (dat, valoro >> 16);
+	bit_write_RS (dat, value & 0xFFFF);
+	bit_write_RS (dat, value >> 16);
 }
 
 
-/** Legi 1 duglitajxon.
+/** Read 1 duglitajxon.
  */
 double
-bit_legi_RD (Bit_Cxeno * dat)
+bit_read_RD (Bit_Cxeno * dat)
 {
 	int i;
 	unsigned char btk[8];
-	double *rezulto;
+	double *result;
 
 	for (i = 0; i < 8; i++)
-		btk[i] = bit_legi_RC (dat);
+		btk[i] = bit_read_RC (dat);
 
-	rezulto = (double *) btk;
-	return (*rezulto);
+	result = (double *) btk;
+	return (*result);
 }
 
-/** Skribi 1 duglitajxon.
+/** Write 1 duglitajxon.
  */
 void
-bit_skribi_RD (Bit_Cxeno * dat, double valoro)
+bit_write_RD (Bit_Cxeno * dat, double value)
 {
 	int i;
 	unsigned char *val;
 
-	val = (unsigned char *) &valoro;
+	val = (unsigned char *) &value;
 
 	for (i = 0; i < 8; i++)
-		bit_skribi_RC (dat, val[i]);
+		bit_write_RC (dat, val[i]);
 }
 
-/** Legi 1 kompaktitan dubitokon.
+/** Read 1 kompaktitan dubitokon.
  */
 unsigned int
-bit_legi_BS (Bit_Cxeno * dat)
+bit_read_BS (Bit_Cxeno * dat)
 {
 	unsigned char bitduo;
-	unsigned int rezulto;
+	unsigned int result;
 
-	bitduo = bit_legi_BB (dat);
+	bitduo = bit_read_BB (dat);
 
 	if (bitduo == 0)
 	{
-		rezulto = bit_legi_RS (dat);
-		return (rezulto);
+		result = bit_read_RS (dat);
+		return (result);
 	}
 	else if (bitduo == 1)
 	{
-		rezulto = bit_legi_RC (dat);
-		return (rezulto);
+		result = bit_read_RC (dat);
+		return (result);
 	}
 	else if (bitduo == 2)
 		return (0);
@@ -293,91 +293,91 @@ bit_legi_BS (Bit_Cxeno * dat)
 		return (256);
 }
 
-/** Skribi 1 kompaktitan dubitokon.
+/** Write 1 kompaktitan dubitokon.
  */
 void
-bit_skribi_BS (Bit_Cxeno * dat, unsigned int valoro)
+bit_write_BS (Bit_Cxeno * dat, unsigned int value)
 {
 
-	if (valoro > 256)
+	if (value > 256)
 	{
-		bit_skribi_BB (dat, 0);
-		bit_skribi_RS (dat, valoro);
+		bit_write_BB (dat, 0);
+		bit_write_RS (dat, value);
 	}
-	else if (valoro == 0)
-		bit_skribi_BB (dat, 2);
-	else if (valoro == 256)
-		bit_skribi_BB (dat, 3);
+	else if (value == 0)
+		bit_write_BB (dat, 2);
+	else if (value == 256)
+		bit_write_BB (dat, 3);
 	else
 	{
-		bit_skribi_BB (dat, 1);
-		bit_skribi_RC (dat, valoro);
+		bit_write_BB (dat, 1);
+		bit_write_RC (dat, value);
 	}
 }
 
-/** Legi 1 kompaktitan kvarbitokon.
+/** Read 1 kompaktitan kvarbitokon.
  */
 long unsigned int
-bit_legi_BL (Bit_Cxeno * dat)
+bit_read_BL (Bit_Cxeno * dat)
 {
 	unsigned char bitduo;
-	long unsigned int rezulto;
+	long unsigned int result;
 
-	bitduo = bit_legi_BB (dat);
+	bitduo = bit_read_BB (dat);
 
 	if (bitduo == 0)
 	{
-		rezulto = bit_legi_RL (dat);
-		return (rezulto);
+		result = bit_read_RL (dat);
+		return (result);
 	}
 	else if (bitduo == 1)
 	{
-		rezulto = bit_legi_RC (dat);
-		return (rezulto);
+		result = bit_read_RC (dat);
+		return (result);
 	}
 	else if (bitduo == 2)
 		return (0);
 	else			/* if (bitduo == 3) */
 	{
-		printf ("Eraro: ne atendita valoro por BIT-KVARBITOKO: '11'\n");
+		printf ("Eraro: ne atendita value por BIT-KVARBITOKO: '11'\n");
 		return (256);
 	}
 }
 
-/** Skribi 1 kompaktitan kvarbitokon.
+/** Write 1 kompaktitan kvarbitokon.
  */
 void
-bit_skribi_BL (Bit_Cxeno * dat, long unsigned int valoro)
+bit_write_BL (Bit_Cxeno * dat, long unsigned int value)
 {
-	if (valoro > 255)
+	if (value > 255)
 	{
-		bit_skribi_BB (dat, 0);
-		bit_skribi_RL (dat, valoro);
+		bit_write_BB (dat, 0);
+		bit_write_RL (dat, value);
 	}
-	else if (valoro == 0)
-		bit_skribi_BB (dat, 2);
+	else if (value == 0)
+		bit_write_BB (dat, 2);
 	else
 	{
-		bit_skribi_BB (dat, 1);
-		bit_skribi_RC (dat, valoro);
+		bit_write_BB (dat, 1);
+		bit_write_RC (dat, value);
 	}
 }
 
-/** Legi 1 kompaktitan duglitajxon.
+/** Read 1 kompaktitan duglitajxon.
  */
 double
-bit_legi_BD (Bit_Cxeno * dat)
+bit_read_BD (Bit_Cxeno * dat)
 {
 	unsigned char bitduo;
 	long int *rez;
-	double rezulto;
+	double result;
 
-	bitduo = bit_legi_BB (dat);
+	bitduo = bit_read_BB (dat);
 
 	if (bitduo == 0)
 	{
-		rezulto = bit_legi_RD (dat);
-		return (rezulto);
+		result = bit_read_RD (dat);
+		return (result);
 	}
 	else if (bitduo == 1)
 		return (1.0);
@@ -385,46 +385,46 @@ bit_legi_BD (Bit_Cxeno * dat)
 		return (0.0);
 	else			/* if (bitduo == 3) */
 	{
-		printf ("Eraro: ne atendita valoro por BIT-DUGLITAJXO: '11'\n");
+		printf ("Eraro: ne atendita value por BIT-DUGLITAJXO: '11'\n");
 		/* Krei NeNumero-n (NaN) */
-		rez = (long int *) &rezulto;
+		rez = (long int *) &result;
 		rez[0] = -1;
 		rez[1] = -1;
-		return (rezulto);
+		return (result);
 	}
 }
 
-/** Skribi 1 kompaktitan duglitajxon.
+/** Write 1 kompaktitan duglitajxon.
  */
 void
-bit_skribi_BD (Bit_Cxeno * dat, double valoro)
+bit_write_BD (Bit_Cxeno * dat, double value)
 {
-	if (valoro == 0.0)
-		bit_skribi_BB (dat, 2);
-	else if (valoro == 1.0)
-		bit_skribi_BB (dat, 1);
+	if (value == 0.0)
+		bit_write_BB (dat, 2);
+	else if (value == 1.0)
+		bit_write_BB (dat, 1);
 	else
 	{
-		bit_skribi_BB (dat, 0);
-		bit_skribi_RD (dat, valoro);
+		bit_write_BB (dat, 0);
+		bit_write_RD (dat, value);
 	}
 }
 
-/** Legi 1 kompaktitan entjeron, laux moduleca bitoka formo (maksimume 4 bitokojn).
+/** Read 1 kompaktitan entjeron, laux moduleca bitoka formo (maksimume 4 bitokojn).
  */
 long int
-bit_legi_MC (Bit_Cxeno * dat)
+bit_read_MC (Bit_Cxeno * dat)
 {
 	int i, j;
 	int negativi;
 	unsigned char bitoko[4];
-	long unsigned int rezulto;
+	long unsigned int result;
 
 	negativi = 0;
-	rezulto = 0;
+	result = 0;
 	for (i = 3, j = 0; i > -1; i--, j += 7)
 	{
-		bitoko[i] = bit_legi_RC (dat);
+		bitoko[i] = bit_read_RC (dat);
 		if (!(bitoko[i] & 0x80))
 		{
 			if ((bitoko[i] & 0x40))
@@ -432,43 +432,43 @@ bit_legi_MC (Bit_Cxeno * dat)
 				negativi = 1;
 				bitoko[i] &= 0xbf;
 			}
-			rezulto |= (((long unsigned int) bitoko[i]) << j);
-			return (negativi ? -((long int) rezulto) : (long int) rezulto);
+			result |= (((long unsigned int) bitoko[i]) << j);
+			return (negativi ? -((long int) result) : (long int) result);
 		}
 		else
 			bitoko[i] &= 0x7f;
-		rezulto |= ((long unsigned int) bitoko[i]) << j;
+		result |= ((long unsigned int) bitoko[i]) << j;
 	}
 
 	return 0;		/* malsukcese... */
 }
 
-/** Skribi 1 kompaktitan entjeron, laux moduleca bitoka formo (maksimume 4 bitokojn).
+/** Write 1 kompaktitan entjeron, laux moduleca bitoka formo (maksimume 4 bitokojn).
  */
 void
-bit_skribi_MC (Bit_Cxeno * dat, long int val)
+bit_write_MC (Bit_Cxeno * dat, long int val)
 {
 	int i, j;
 	int negativi;
 	unsigned char bitoko[4];
 	long unsigned int masko;
-	long unsigned int valoro;
+	long unsigned int value;
 
 	if (val < 0)
 	{
 		negativi = 1;
-		valoro = (long unsigned int) -val;
+		value = (long unsigned int) -val;
 	}
 	else
 	{
 		negativi = 0;
-		valoro = (long unsigned int) val;
+		value = (long unsigned int) val;
 	}
 
 	masko = 0x0000007f;
 	for (i = 3, j = 0; i > -1; i--, j += 7)
 	{
-		bitoko[i] = (unsigned char) ((valoro & masko) >> j);
+		bitoko[i] = (unsigned char) ((value & masko) >> j);
 		bitoko[i] |= 0x80;
 		masko = masko << 7;
 	}
@@ -482,40 +482,40 @@ bit_skribi_MC (Bit_Cxeno * dat, long int val)
 	if (negativi)
 		bitoko[i] |= 0x40;
 	for (j = 3; j >= i; j--)
-		bit_skribi_RC (dat, bitoko[j]);
-//if (valoro == 64) printf ("(%2X) \n", bitoko[i]);
+		bit_write_RC (dat, bitoko[j]);
+//if (value == 64) printf ("(%2X) \n", bitoko[i]);
 }
 
-/** Legi 1 kompaktitan entjeron, laux moduleca dubitoka formo (maksimume 2 dubitokojn).
+/** Read 1 kompaktitan entjeron, laux moduleca dubitoka formo (maksimume 2 dubitokojn).
  */
 long unsigned int
-bit_legi_MS (Bit_Cxeno * dat)
+bit_read_MS (Bit_Cxeno * dat)
 {
 	int i, j;
 	unsigned int dubitoko[2];
-	long unsigned int rezulto;
+	long unsigned int result;
 
-	rezulto = 0;
+	result = 0;
 	for (i = 1, j = 0; i > -1; i--, j += 15)
 	{
-		dubitoko[i] = bit_legi_RS (dat);
+		dubitoko[i] = bit_read_RS (dat);
 		if (!(dubitoko[i] & 0x8000))
 		{
-			rezulto |= (((long unsigned int) dubitoko[i]) << j);
-			return (rezulto);
+			result |= (((long unsigned int) dubitoko[i]) << j);
+			return (result);
 		}
 		else
 			dubitoko[i] &= 0x7fff;
-		rezulto |= ((long unsigned int) dubitoko[i]) << j;
+		result |= ((long unsigned int) dubitoko[i]) << j;
 	}
 
 	return 0;		/* malsukcese... */
 }
 
-/** Skribi 1 kompaktitan entjeron, laux moduleca dubitoka formo (maksimume 2 dubitokojn).
+/** Write 1 kompaktitan entjeron, laux moduleca dubitoka formo (maksimume 2 dubitokojn).
  */
 void
-bit_skribi_MS (Bit_Cxeno * dat, long unsigned int valoro)
+bit_write_MS (Bit_Cxeno * dat, long unsigned int value)
 {
 	int i, j;
 	unsigned int dubitoko[4];
@@ -524,7 +524,7 @@ bit_skribi_MS (Bit_Cxeno * dat, long unsigned int valoro)
 	masko = 0x00007fff;
 	for (i = 1, j = 0; i > -1; i--, j += 15)
 	{
-		dubitoko[i] = ((unsigned int) ((valoro & masko) >> j)) | 0x8000;
+		dubitoko[i] = ((unsigned int) ((value & masko) >> j)) | 0x8000;
 		masko = masko << 15;
 	}
 	/* Ne uzu tion sube: cxiam faru gxin kvarbitoka!
@@ -535,15 +535,15 @@ bit_skribi_MS (Bit_Cxeno * dat, long unsigned int valoro)
 	i = 1;
 	dubitoko[i] &= 0x7fff;
 	for (j = 1; j >= i; j--)
-		bit_skribi_RS (dat, dubitoko[j]);
+		bit_write_RS (dat, dubitoko[j]);
 }
 
-/** Legi bit-forpusxigon.
+/** Read bit-forpusxigon.
  */
 void
-bit_legi_BE (Bit_Cxeno * dat, double *x, double *y, double *z)
+bit_read_BE (Bit_Cxeno * dat, double *x, double *y, double *z)
 {
-	if (bit_legi_B (dat))
+	if (bit_read_B (dat))
 	{
 		*x = 0.0;
 		*y = 0.0;
@@ -551,181 +551,181 @@ bit_legi_BE (Bit_Cxeno * dat, double *x, double *y, double *z)
 	}
 	else
 	{
-		*x = bit_legi_BD (dat);
-		*y = bit_legi_BD (dat);
-		*z = bit_legi_BD (dat);
+		*x = bit_read_BD (dat);
+		*y = bit_read_BD (dat);
+		*z = bit_read_BD (dat);
 	}
 }
 
-/** Skribi bit-forpusxigon.
+/** Write bit-forpusxigon.
  */
 void
-bit_skribi_BE (Bit_Cxeno * dat, double x, double y, double z)
+bit_write_BE (Bit_Cxeno * dat, double x, double y, double z)
 {
 	if (x == 0.0 && y == 0.0 && z == 1.0)
-		bit_skribi_B (dat, 1);
+		bit_write_B (dat, 1);
 	else
 	{
-		bit_skribi_B (dat, 0);
-		bit_skribi_BD (dat, x);
-		bit_skribi_BD (dat, y);
-		bit_skribi_BD (dat, z);
+		bit_write_B (dat, 0);
+		bit_write_BD (dat, x);
+		bit_write_BD (dat, y);
+		bit_write_BD (dat, z);
 	}
 }
 
-/** Legi duglitajxon kun antauxdifinajxo.
+/** Read duglitajxon kun antauxdifinajxo.
  */
 double
-bit_legi_DD (Bit_Cxeno * dat, double antauxdif)
+bit_read_DD (Bit_Cxeno * dat, double antauxdif)
 {
 	unsigned char kodero;
 	unsigned char *uc_rez;
 
-	kodero = bit_legi_BB (dat);
+	kodero = bit_read_BB (dat);
 	if (kodero == 0)
 		return antauxdif;
 	if (kodero == 3)
-		return (bit_legi_RD (dat));
+		return (bit_read_RD (dat));
 	if (kodero == 2)
 	{
 		uc_rez = (char *) &antauxdif;
-		uc_rez[3] = bit_legi_RC (dat);
-		uc_rez[2] = bit_legi_RC (dat);
-		uc_rez[7] = bit_legi_RC (dat);
-		uc_rez[6] = bit_legi_RC (dat);
-		uc_rez[5] = bit_legi_RC (dat);
-		uc_rez[4] = bit_legi_RC (dat);
+		uc_rez[3] = bit_read_RC (dat);
+		uc_rez[2] = bit_read_RC (dat);
+		uc_rez[7] = bit_read_RC (dat);
+		uc_rez[6] = bit_read_RC (dat);
+		uc_rez[5] = bit_read_RC (dat);
+		uc_rez[4] = bit_read_RC (dat);
 		return antauxdif;
 	}
 	else			/* if (kodero == 1) */
 	{
 		uc_rez = (char *) &antauxdif;
-		uc_rez[7] = bit_legi_RC (dat);
-		uc_rez[6] = bit_legi_RC (dat);
-		uc_rez[5] = bit_legi_RC (dat);
-		uc_rez[4] = bit_legi_RC (dat);
+		uc_rez[7] = bit_read_RC (dat);
+		uc_rez[6] = bit_read_RC (dat);
+		uc_rez[5] = bit_read_RC (dat);
+		uc_rez[4] = bit_read_RC (dat);
 		return antauxdif;
 	}
 }
 
-/** Skribi duglitajxon kun antauxdifinajxo.
+/** Write duglitajxon kun antauxdifinajxo.
  */
 void
-bit_skribi_DD (Bit_Cxeno * dat, double valoro, double antauxdif)
+bit_write_DD (Bit_Cxeno * dat, double value, double antauxdif)
 {
 	unsigned char *uc_val;
 
 	unsigned int *ui_val;
 	unsigned int *ui_ant;
 
-	if (valoro == antauxdif)
-		bit_skribi_BB (dat, 0);
+	if (value == antauxdif)
+		bit_write_BB (dat, 0);
 	else
 	{
-		uc_val = (char *) &valoro;
-		ui_val = (int *) &valoro;
+		uc_val = (char *) &value;
+		ui_val = (int *) &value;
 		ui_ant = (int *) &antauxdif;
 		if (ui_val[0] == ui_ant[0])
 		{
 			if (ui_val[1] != ui_ant[1])
 			{
-				bit_skribi_BB (dat, 2);
-				bit_skribi_RC (dat, uc_val[3]);
-				bit_skribi_RC (dat, uc_val[2]);
-				bit_skribi_RC (dat, uc_val[7]);
-				bit_skribi_RC (dat, uc_val[6]);
-				bit_skribi_RC (dat, uc_val[5]);
-				bit_skribi_RC (dat, uc_val[4]);
+				bit_write_BB (dat, 2);
+				bit_write_RC (dat, uc_val[3]);
+				bit_write_RC (dat, uc_val[2]);
+				bit_write_RC (dat, uc_val[7]);
+				bit_write_RC (dat, uc_val[6]);
+				bit_write_RC (dat, uc_val[5]);
+				bit_write_RC (dat, uc_val[4]);
 			}
 			else
 			{
-				bit_skribi_BB (dat, 1);
-				bit_skribi_RC (dat, uc_val[7]);
-				bit_skribi_RC (dat, uc_val[6]);
-				bit_skribi_RC (dat, uc_val[5]);
-				bit_skribi_RC (dat, uc_val[4]);
+				bit_write_BB (dat, 1);
+				bit_write_RC (dat, uc_val[7]);
+				bit_write_RC (dat, uc_val[6]);
+				bit_write_RC (dat, uc_val[5]);
+				bit_write_RC (dat, uc_val[4]);
 			}
 		}
 		else
 		{
-			bit_skribi_BB (dat, 0);
-			bit_skribi_RD (dat, valoro);
+			bit_write_BB (dat, 0);
+			bit_write_RD (dat, value);
 		}
 	}
 }
 
-/** Legi dikec-valoron.
+/** Read dikec-valuen.
  */
 double
-bit_legi_BT (Bit_Cxeno * dat)
+bit_read_BT (Bit_Cxeno * dat)
 {
 	int modo;
 
-	modo = bit_legi_B (dat);
-	return (modo ? 0.0 : bit_legi_BD (dat));
+	modo = bit_read_B (dat);
+	return (modo ? 0.0 : bit_read_BD (dat));
 }
 
-/** Skribi dikec-valoron.
+/** Write dikec-valuen.
  */
 void
-bit_skribi_BT (Bit_Cxeno * dat, double valoro)
+bit_write_BT (Bit_Cxeno * dat, double value)
 {
-	if (valoro == 0.0)
-		bit_skribi_B (dat, 1);
+	if (value == 0.0)
+		bit_write_B (dat, 1);
 	else
 	{
-		bit_skribi_B (dat, 0);
-		bit_skribi_BD (dat, valoro);
+		bit_write_B (dat, 0);
+		bit_write_BD (dat, value);
 	}
 }
 
-/** Legi traktilo-referencon.
+/** Read traktilo-referencon.
  */
 int
-bit_legi_H (Bit_Cxeno * dat, Dwg_Traktilo * trakt)
+bit_read_H (Bit_Cxeno * dat, Dwg_Traktilo * trakt)
 {
 	Bit_Cxeno tmpdat;
 	unsigned char *val;
 	int i;
 
-	trakt->kodo = bit_legi_RC (dat);
+	trakt->kodo = bit_read_RC (dat);
 	trakt->kiom = trakt->kodo & 0x0f;
 	trakt->kodo = (trakt->kodo & 0xf0) >> 4;
 
-	trakt->valoro = 0;
+	trakt->value = 0;
 	if (trakt->kiom > 4)
 	{
 		/*
 		printf ("Eraro: traktilo-referenco pli longa ol 4 bitokoj: %i.%i.%lu\n",
-			trakt->kodo, trakt->kiom, trakt->valoro);
+			trakt->kodo, trakt->kiom, trakt->value);
 		*/
 		trakt->kiom = 0;
 		return (-1);
 	}
 
-	val = (char *) &trakt->valoro;
+	val = (char *) &trakt->value;
 	for (i = trakt->kiom - 1; i >= 0; i--)
-		val[i] = bit_legi_RC (dat);
+		val[i] = bit_read_RC (dat);
 
 	return (0);
 }
 
-/** Skribi traktilo-referencon.
+/** Write traktilo-referencon.
  */
 void
-bit_skribi_H (Bit_Cxeno * dat, Dwg_Traktilo * trakt)
+bit_write_H (Bit_Cxeno * dat, Dwg_Traktilo * trakt)
 {
 	int i, j;
 	unsigned char *val;
 	unsigned char kodo_nombrilo;
 
-	if (trakt->valoro == 0)
+	if (trakt->value == 0)
 	{
-		bit_skribi_RC (dat, (trakt->kodo << 4));
+		bit_write_RC (dat, (trakt->kodo << 4));
 		return;
 	}
 
-	val = (char *) &trakt->valoro;
+	val = (char *) &trakt->value;
 	for (i = 3; i >= 0; i--)
 		if (val[i])
 			break;
@@ -733,19 +733,19 @@ bit_skribi_H (Bit_Cxeno * dat, Dwg_Traktilo * trakt)
 	kodo_nombrilo = trakt->kodo << 4;
 	kodo_nombrilo |= i + 1;
 
-	bit_skribi_RC (dat, kodo_nombrilo);
+	bit_write_RC (dat, kodo_nombrilo);
 
 	for (; i >= 0; i--)
-		bit_skribi_RC (dat, val[i]);
+		bit_write_RC (dat, val[i]);
 }
 
-/** Nur legi CRK-numeron, sen iu ajn kontrolo, nur por iri al la sekva bajto,
+/** Nur read CRK-numeron, sen iu ajn kontrolo, nur por iri al la sekva bajto,
  * saltante eventualajn neuzitajn bitojn.
  */
 unsigned int
-bit_legi_CRC (Bit_Cxeno * dat)
+bit_read_CRC (Bit_Cxeno * dat)
 {
-	unsigned int rezulto;
+	unsigned int result;
 	unsigned char rez[2];
 
 	if (dat->bito > 0)
@@ -754,21 +754,21 @@ bit_legi_CRC (Bit_Cxeno * dat)
 		dat->bito = 0;
 	}
 
-	rez[0] = bit_legi_RC (dat);
-	rez[1] = bit_legi_RC (dat);
+	rez[0] = bit_read_RC (dat);
+	rez[1] = bit_read_RC (dat);
 
-	rezulto = (unsigned int) (rez[0] << 8 | rez[1]);
+	result = (unsigned int) (rez[0] << 8 | rez[1]);
 
-	return rezulto;
+	return result;
 }
 
-/** Legi kaj kontroli CRK-numeron.
+/** Read kaj kontroli CRK-numeron.
  */
 int
-bit_konfirmi_CRC (Bit_Cxeno * dat, long unsigned int ekadreso, unsigned int semo)
+bit_check_CRC (Bit_Cxeno * dat, long unsigned int ekadreso, unsigned int semo)
 {
 	unsigned int kalkulita;
-	unsigned int legita;
+	unsigned int readta;
 	unsigned char rez[2];
 
 	if (dat->bito > 0)
@@ -777,15 +777,15 @@ bit_konfirmi_CRC (Bit_Cxeno * dat, long unsigned int ekadreso, unsigned int semo
 
 	kalkulita = bit_ckr8 (semo, &(dat->cxeno[ekadreso]), dat->bajto - ekadreso);
 
-	rez[0] = bit_legi_RC (dat);
-	rez[1] = bit_legi_RC (dat);
+	rez[0] = bit_read_RC (dat);
+	rez[1] = bit_read_RC (dat);
 
-	legita = (unsigned int) (rez[0] << 8 | rez[1]);
+	readta = (unsigned int) (rez[0] << 8 | rez[1]);
 
-	return (kalkulita == legita);
+	return (kalkulita == readta);
 }
 
-/** Krei kaj skribi CRK-numeron.
+/** Krei kaj write CRK-numeron.
  */
 unsigned int
 bit_krei_CRC (Bit_Cxeno * dat, long unsigned int ekadreso, unsigned int semo)
@@ -794,30 +794,30 @@ bit_krei_CRC (Bit_Cxeno * dat, long unsigned int ekadreso, unsigned int semo)
 	unsigned char *ckra;
 
 	while (dat->bito > 0)
-		bit_skribi_B (dat, 0);
+		bit_write_B (dat, 0);
 
 	ckr = bit_ckr8 (semo, &(dat->cxeno[ekadreso]), dat->bajto - ekadreso);
 
-	bit_skribi_RC (dat, (unsigned char) (ckr >> 8));
-	bit_skribi_RC (dat, (unsigned char) (ckr & 0xFF));
+	bit_write_RC (dat, (unsigned char) (ckr >> 8));
+	bit_write_RC (dat, (unsigned char) (ckr & 0xFF));
 
 	return (ckr);
 }
 
-/** Legi simplan tekston. Post uzado, oni devas liberigi la rezervitan memor-spacon.
+/** Read simplan tekston. Post uzado, oni devas liberigi la rezervitan memor-spacon.
  */
 unsigned char *
-bit_legi_T (Bit_Cxeno * dat)
+bit_read_T (Bit_Cxeno * dat)
 {
 	unsigned int i;
 	unsigned int longeco;
 	unsigned char *cxeno;
 
-	longeco = bit_legi_BS (dat);
+	longeco = bit_read_BS (dat);
 	cxeno = (char *) malloc (longeco + 1);
 	for (i = 0; i < longeco; i++)
 	{
-		cxeno[i] = bit_legi_RC (dat);
+		cxeno[i] = bit_read_RC (dat);
 		if (cxeno[i] == 0)
 			cxeno[i] = '*';
 		else if (!isprint (cxeno[i]))
@@ -828,47 +828,47 @@ bit_legi_T (Bit_Cxeno * dat)
 	return (cxeno);
 }
 
-/** Skribi simplan tekston.
+/** Write simplan tekston.
  */
 void
-bit_skribi_T (Bit_Cxeno * dat, unsigned char *cxeno)
+bit_write_T (Bit_Cxeno * dat, unsigned char *cxeno)
 {
 	int i;
 	int longeco;
 
 	longeco = strlen (cxeno);
-	bit_skribi_BS (dat, longeco);
+	bit_write_BS (dat, longeco);
 	for (i = 0; i < longeco; i++)
-		bit_skribi_RC (dat, cxeno[i]);
+		bit_write_RC (dat, cxeno[i]);
 }
 
-/** Legi 1 kvarbitokon laux normala (komenc-peza) ordo.
+/** Read 1 kvarbitokon laux normala (komenc-peza) ordo.
  */
 long unsigned int
-bit_legi_L (Bit_Cxeno * dat)
+bit_read_L (Bit_Cxeno * dat)
 {
 	unsigned char btk[4];
 
-	btk[3] = bit_legi_RC (dat);
-	btk[2] = bit_legi_RC (dat);
-	btk[1] = bit_legi_RC (dat);
-	btk[0] = bit_legi_RC (dat);
+	btk[3] = bit_read_RC (dat);
+	btk[2] = bit_read_RC (dat);
+	btk[1] = bit_read_RC (dat);
+	btk[0] = bit_read_RC (dat);
 
 	return (*((long unsigned int *) btk));
 }
 
-/** Skribi 1 kvarbitokon laux normala ordo.
+/** Write 1 kvarbitokon laux normala ordo.
  */
 void
-bit_skribi_L (Bit_Cxeno * dat, long unsigned int valoro)
+bit_write_L (Bit_Cxeno * dat, long unsigned int value)
 {
 	unsigned char *btk;
 
-	btk = (char *) valoro;
-	bit_skribi_RC (dat, btk[3]);
-	bit_skribi_RC (dat, btk[2]);
-	bit_skribi_RC (dat, btk[1]);
-	bit_skribi_RC (dat, btk[0]);
+	btk = (char *) value;
+	bit_write_RC (dat, btk[3]);
+	bit_write_RC (dat, btk[2]);
+	bit_write_RC (dat, btk[1]);
+	bit_write_RC (dat, btk[0]);
 }
 
 /** Sercxi gardostaranton; se trovite, poziciigas "dat->bajto" tuj post gxi.
@@ -896,16 +896,16 @@ bit_sercxi_gardostaranto (Bit_Cxeno * dat, unsigned char gdst[16])
 }
 
 void
-bit_skribi_gardostaranto (Bit_Cxeno * dat, unsigned char gdst[16])
+bit_write_gardostaranto (Bit_Cxeno * dat, unsigned char gdst[16])
 {
 	int i;
 
 	for (i = 0; i < 16; i++)
-		bit_skribi_RC (dat, gdst[i]);
+		bit_write_RC (dat, gdst[i]);
 }
 
 /*
- * Rezervi spacon por skribi en bitara cxeno
+ * Rezervi spacon por write en bitara cxeno
  */
 #define CXENO_BLOKO 40960
 void
@@ -926,7 +926,7 @@ bit_cxeno_rezervi (Bit_Cxeno * dat)
 }
 
 void
-bit_montri (Bit_Cxeno * dat, long unsigned int kiom)
+bit_print (Bit_Cxeno * dat, long unsigned int kiom)
 {
 	unsigned char sig;
 	long unsigned int i, j, k;
@@ -968,7 +968,7 @@ bit_esplori_cxeno (Bit_Cxeno * dat, long unsigned int kiom)
 		{
 			if (i % 16 == 0)
 				printf ("\n[0x%04X]: ", i);
-			sig = bit_legi_RC (dat);
+			sig = bit_read_RC (dat);
 			printf ("%c", sig >= ' ' && sig < 128 ? sig : '.');
 		}
 		puts ("");

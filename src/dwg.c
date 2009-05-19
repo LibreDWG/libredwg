@@ -69,7 +69,7 @@ dwg_read_file (char *filename, Dwg_Structure * dwg_struct)
 	kiom = fread (bitaro.cxeno, sizeof (char), bitaro.kiom, fp);
 	if (kiom != bitaro.kiom)
 	{
-		printf ("Ne eblis legi la tutan dosieron (%lu el %lu):\n %s\n", kiom, bitaro.kiom,
+		printf ("Ne eblis read la tutan dosieron (%lu el %lu):\n %s\n", kiom, bitaro.kiom,
 			filename);
 		fclose (fp);
 		free (bitaro.cxeno);
@@ -108,10 +108,10 @@ dwg_write_file (char *filename, Dwg_Structure * dwg_struct)
 	}
 	 */
 
-	/* Testi kaj malfermi dosieron por skribi
+	/* Testi kaj malfermi dosieron por write
 	if (!stat (filename, &atrib))
 	{
-		puts ("La skribota dosiero jam ekzistas, ni ne povas surskribi gxin.");
+		puts ("La skribota dosiero jam ekzistas, ni ne povas surwrite gxin.");
 		return -1;
 	}
 	dt = fopen (filename, "w");
@@ -125,7 +125,7 @@ dwg_write_file (char *filename, Dwg_Structure * dwg_struct)
 	/* Skribi la datenaron en la dosiero
 	if (fwrite (bitaro.cxeno, sizeof (char), bitaro.kiom, dt) != bitaro.kiom)
 	{
-		printf ("Ne eblis skribi la tutan dosieron:\n %s\n", filename);
+		printf ("Ne eblis write la tutan dosieron:\n %s\n", filename);
 		fclose (dt);
 		free (bitaro.cxeno);
 		return -1;
@@ -147,7 +147,7 @@ dwg_print_estajxo (Dwg_Object_Estajxo * est)
 {
 	printf ("Bitgrandeco: %lu\n", est->bitgrandeco);
 	printf ("Vera traktilo: %i.%i.%lu\n", est->traktilo.kodo, est->traktilo.kiom,
-		est->traktilo.valoro);
+		est->traktilo.value);
 	printf ("Kroma datenaro: %lu B\n", est->kromdat_kiom);
 	printf ("Ĉu bildo?: %s", est->bildo_ekzistas ? "Jes" : "Ne");
 	if (est->bildo_ekzistas)
@@ -170,7 +170,7 @@ dwg_print_ordinarajxo (Dwg_Object_Ordinarajxo *ord)
 {
 	printf ("Bitgrandeco: %lu\n", ord->bitgrandeco);
 	printf ("Vera traktilo: %i.%i.%lu\n", ord->traktilo.kodo, ord->traktilo.kiom,
-		ord->traktilo.valoro);
+		ord->traktilo.value);
 	printf ("Kroma datenaro: %lu B\n", ord->kromdat_kiom);
 	printf ("Kiom reagiloj: %lu\n", ord->reagilo_kiom);
 }
@@ -195,9 +195,9 @@ dwg_print_traktref (Dwg_Objekto * obj)
 		}
 		for (i = 0; i < est->traktref_kiom - 1; i++)
 			printf ("%i.%i.%li / ", est->traktref[i].kodo, est->traktref[i].kiom,
-				est->traktref[i].valoro);
+				est->traktref[i].value);
 		printf ("%i.%i.%li\n", est->traktref[i].kodo, est->traktref[i].kiom,
-			est->traktref[i].valoro);
+			est->traktref[i].value);
 	}
 	else if (obj->supertipo == DWG_SUPERTYPE_ORDINARAJXO)
 	{
@@ -213,9 +213,9 @@ dwg_print_traktref (Dwg_Objekto * obj)
 		}
 		for (i = 0; i < ord->traktref_kiom - 1; i++)
 			printf ("%i.%i.%li / ", ord->traktref[i].kodo, ord->traktref[i].kiom,
-				ord->traktref[i].valoro);
+				ord->traktref[i].value);
 		printf ("%i.%i.%li\n", ord->traktref[i].kodo, ord->traktref[i].kiom,
-			ord->traktref[i].valoro);
+			ord->traktref[i].value);
 	}
 }
 
@@ -515,7 +515,7 @@ dwg_print_LAYOUT (Dwg_Ordinarajxo_LAYOUT *ord)
 }
 
 /*------------------------------------------------------------------------------
- * Speciala publika funkcio por montrigi valorojn de la objektoj
+ * Speciala publika funkcio por printgi valuejn de la objektoj
  */
 void
 dwg_print (Dwg_Structure *skt)
@@ -553,7 +553,7 @@ dwg_print (Dwg_Structure *skt)
 		puts ("Sekcio NEKONATA 1");
 		puts ("**************************************************");
 		printf ("Grandeco: %lu B\n", skt->nekonata1.kiom);
-		bit_montri ((Bit_Cxeno *) & skt->nekonata1, skt->nekonata1.kiom);
+		bit_print ((Bit_Cxeno *) & skt->nekonata1, skt->nekonata1.kiom);
 		puts ("");
 	}
 
@@ -561,7 +561,7 @@ dwg_print (Dwg_Structure *skt)
 	puts ("Sekcio BILDO");
 	puts ("**************************************************");
 	printf ("Grandeco: %lu B\n", skt->bildo.kiom);
-	//bit_montri ((Bit_Cxeno *) &skt->bildo, skt->bildo.kiom);
+	//bit_print ((Bit_Cxeno *) &skt->bildo, skt->bildo.kiom);
 	puts ("");
 
 	puts ("**************************************************");
@@ -591,7 +591,7 @@ dwg_print (Dwg_Structure *skt)
 			break;
 		case DWG_DT_H:
 			printf ("H: %i.%i.%li", skt->var[i].traktilo.kodo,
-				skt->var[i].traktilo.kiom, skt->var[i].traktilo.valoro);
+				skt->var[i].traktilo.kiom, skt->var[i].traktilo.value);
 			break;
 		case DWG_DT_T:
 			printf ("T: \"%s\"", skt->var[i].teksto);

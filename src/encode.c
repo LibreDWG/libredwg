@@ -65,21 +65,21 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Cxeno * dat)
 	dat->bajto += 6;
 
 	for (i = 0; i < 5; i++)
-		bit_skribi_RC (dat, 0);	// Nekonata sekcio
-	bit_skribi_RC (dat, 0x0F);	// Nekonatajxo
-	bit_skribi_RC (dat, 0x01);	// Nekonatajxo
-	bit_skribi_RL (dat, 0);	// Bildo-adreso
-	bit_skribi_RC (dat, 25);	// Versio
-	bit_skribi_RC (dat, 0);	// Lancxo
-	bit_skribi_RS (dat, skt->kapo.kodpagxo);	// Kodpagxo
+		bit_write_RC (dat, 0);	// Nekonata sekcio
+	bit_write_RC (dat, 0x0F);	// Nekonatajxo
+	bit_write_RC (dat, 0x01);	// Nekonatajxo
+	bit_write_RL (dat, 0);	// Bildo-adreso
+	bit_write_RC (dat, 25);	// Versio
+	bit_write_RC (dat, 0);	// Lancxo
+	bit_write_RS (dat, skt->kapo.kodpagxo);	// Kodpagxo
 
 	//skt->kapo.sekcio_kiom = 5; // Cxu kasxi la nekonatan sekcion 1 ?
-	bit_skribi_RL (dat, skt->kapo.sekcio_kiom);
+	bit_write_RL (dat, skt->kapo.sekcio_kiom);
 	sekciadresaro = dat->bajto;	// Salti sekciadresaron
 	dat->bajto += (skt->kapo.sekcio_kiom * 9);
-	bit_legi_CRC (dat);	// Salti CKR-on
+	bit_read_CRC (dat);	// Salti CKR-on
 
-	bit_skribi_gardostaranto (dat, dwg_gardostaranto (DWG_GS_KAPO_FINO));
+	bit_write_gardostaranto (dat, dwg_gardostaranto (DWG_GS_KAPO_FINO));
 
 	/*------------------------------------------------------------
 	 * Nekonata sekcio 1
@@ -106,25 +106,25 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Cxeno * dat)
 	 * Antauxrigarda bildo
 	 */
 
-	/* Finfine skribi la adreson de la bildo
+	/* Finfine write la adreson de la bildo
 	 */
 	pvzadr = dat->bajto;
 	dat->bajto = 0x0D;
-	bit_skribi_RL (dat, pvzadr);
+	bit_write_RL (dat, pvzadr);
 	dat->bajto = pvzadr;
 
 	/* Kopii la bildon
 	 */
 	//skt->bildo.kiom = 0; // Se oni deziras ne kopii bildon, malkomentu tiun cxi linion
-	bit_skribi_gardostaranto (dat, dwg_gardostaranto (DWG_GS_BILDO_EKO));
+	bit_write_gardostaranto (dat, dwg_gardostaranto (DWG_GS_BILDO_EKO));
 	for (i = 0; i < skt->bildo.kiom; i++)
-		bit_skribi_RC (dat, skt->bildo.cxeno[i]);
+		bit_write_RC (dat, skt->bildo.cxeno[i]);
 	if (skt->bildo.kiom == 0)
 	{
-		bit_skribi_RL (dat, 5);
-		bit_skribi_RC (dat, 0);
+		bit_write_RL (dat, 5);
+		bit_write_RC (dat, 0);
 	}
-	bit_skribi_gardostaranto (dat, dwg_gardostaranto (DWG_GS_BILDO_FINO));
+	bit_write_gardostaranto (dat, dwg_gardostaranto (DWG_GS_BILDO_FINO));
 
 
 	/*------------------------------------------------------------
@@ -133,9 +133,9 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Cxeno * dat)
 
 	skt->kapo.sekcio[0].numero = 0;
 	skt->kapo.sekcio[0].adresilo = dat->bajto;
-	bit_skribi_gardostaranto (dat, dwg_gardostaranto (DWG_GS_VARIABLO_EKO));
-	pvzadr = dat->bajto;	// poste oni devas reskribi la korektan valoron de grandeco cxi tie:
-	bit_skribi_RL (dat, 0);	// Grandeco de la sekcio
+	bit_write_gardostaranto (dat, dwg_gardostaranto (DWG_GS_VARIABLO_EKO));
+	pvzadr = dat->bajto;	// poste oni devas rewrite la korektan valuen de grandeco cxi tie:
+	bit_write_RL (dat, 0);	// Grandeco de la sekcio
 
 	for (i = 0; i < DWG_KIOM_VARIABLOJ; i++)
 	{
@@ -144,34 +144,34 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Cxeno * dat)
 		switch (dwg_varmapo (i))
 		{
 		case DWG_DT_B:
-			bit_skribi_B (dat, skt->var[i].bitoko);
+			bit_write_B (dat, skt->var[i].bitoko);
 			break;
 		case DWG_DT_BS:
-			bit_skribi_BS (dat, skt->var[i].dubitoko);
+			bit_write_BS (dat, skt->var[i].dubitoko);
 			break;
 		case DWG_DT_BL:
-			bit_skribi_BL (dat, skt->var[i].kvarbitoko);
+			bit_write_BL (dat, skt->var[i].kvarbitoko);
 			break;
 		case DWG_DT_BD:
-			bit_skribi_BD (dat, skt->var[i].duglitajxo);
+			bit_write_BD (dat, skt->var[i].duglitajxo);
 			break;
 		case DWG_DT_H:
-			bit_skribi_H (dat, &skt->var[i].traktilo);
+			bit_write_H (dat, &skt->var[i].traktilo);
 			break;
 		case DWG_DT_T:
-			bit_skribi_T (dat, skt->var[i].teksto);
+			bit_write_T (dat, skt->var[i].teksto);
 			break;
 		case DWG_DT_CMC:
-			bit_skribi_BS (dat, skt->var[i].dubitoko);
+			bit_write_BS (dat, skt->var[i].dubitoko);
 			break;
 		case DWG_DT_2RD:
-			bit_skribi_RD (dat, skt->var[i].xy[0]);
-			bit_skribi_RD (dat, skt->var[i].xy[1]);
+			bit_write_RD (dat, skt->var[i].xy[0]);
+			bit_write_RD (dat, skt->var[i].xy[1]);
 			break;
 		case DWG_DT_3BD:
-			bit_skribi_BD (dat, skt->var[i].xyz[0]);
-			bit_skribi_BD (dat, skt->var[i].xyz[1]);
-			bit_skribi_BD (dat, skt->var[i].xyz[2]);
+			bit_write_BD (dat, skt->var[i].xyz[0]);
+			bit_write_BD (dat, skt->var[i].xyz[1]);
+			bit_write_BD (dat, skt->var[i].xyz[2]);
 			break;
 		default:
 			printf ("Ne traktebla tipo: %i (var: %i)\n", dwg_varmapo (i), i);
@@ -184,7 +184,7 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Cxeno * dat)
 	pvzbit = dat->bito;
 	dat->bajto = pvzadr;
 	dat->bito = 0;
-	bit_skribi_RL (dat, pvzadr_2 - pvzadr - (pvzbit ? 3 : 4));
+	bit_write_RL (dat, pvzadr_2 - pvzadr - (pvzbit ? 3 : 4));
 	dat->bajto = pvzadr_2;
 	dat->bito = pvzbit;
 	//printf ("Grandeco: %lu\n", pvzadr_2 - pvzadr - (pvzbit ? 3 : 4));
@@ -192,7 +192,7 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Cxeno * dat)
 	/* CKR kaj gardostaranto
 	 */
 	bit_krei_CRC (dat, pvzadr, 0xC0C1);
-	bit_skribi_gardostaranto (dat, dwg_gardostaranto (DWG_GS_VARIABLO_FINO));
+	bit_write_gardostaranto (dat, dwg_gardostaranto (DWG_GS_VARIABLO_FINO));
 	skt->kapo.sekcio[0].grandeco = dat->bajto - skt->kapo.sekcio[0].adresilo;
 
 	/*------------------------------------------------------------
@@ -200,19 +200,19 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Cxeno * dat)
 	 */
 	skt->kapo.sekcio[1].numero = 1;
 	skt->kapo.sekcio[1].adresilo = dat->bajto;
-	bit_skribi_gardostaranto (dat, dwg_gardostaranto (DWG_GS_KLASO_EKO));
-	pvzadr = dat->bajto;	// poste oni devas reskribi la korektan valoron de grandeco cxi tie:
-	bit_skribi_RL (dat, 0);	// Grandeco de la sekcio
+	bit_write_gardostaranto (dat, dwg_gardostaranto (DWG_GS_KLASO_EKO));
+	pvzadr = dat->bajto;	// poste oni devas rewrite la korektan valuen de grandeco cxi tie:
+	bit_write_RL (dat, 0);	// Grandeco de la sekcio
 
 	for (i = 0; i < skt->klaso_kiom; i++)
 	{
-		bit_skribi_BS (dat, skt->klaso[i].numero);
-		bit_skribi_BS (dat, skt->klaso[i].versio);
-		bit_skribi_T (dat, skt->klaso[i].apnomo);
-		bit_skribi_T (dat, skt->klaso[i].cpliplinomo);
-		bit_skribi_T (dat, skt->klaso[i].dxfnomo);
-		bit_skribi_B (dat, skt->klaso[i].estisfantomo);
-		bit_skribi_BS (dat, skt->klaso[i].eroid);
+		bit_write_BS (dat, skt->klaso[i].numero);
+		bit_write_BS (dat, skt->klaso[i].versio);
+		bit_write_T (dat, skt->klaso[i].apnomo);
+		bit_write_T (dat, skt->klaso[i].cpliplinomo);
+		bit_write_T (dat, skt->klaso[i].dxfnomo);
+		bit_write_B (dat, skt->klaso[i].estisfantomo);
+		bit_write_BS (dat, skt->klaso[i].eroid);
 	}
 
 	/* Skribi la grandecon de la sekcio cxe gxia komenco
@@ -221,7 +221,7 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Cxeno * dat)
 	pvzbit = dat->bito;
 	dat->bajto = pvzadr;
 	dat->bito = 0;
-	bit_skribi_RL (dat, pvzadr_2 - pvzadr - (pvzbit ? 3 : 4));
+	bit_write_RL (dat, pvzadr_2 - pvzadr - (pvzbit ? 3 : 4));
 	dat->bajto = pvzadr_2;
 	dat->bito = pvzbit;
 	//printf ("Grandeco: %lu\n", pvzadr_2 - pvzadr - (pvzbit ? 3 : 4));
@@ -230,14 +230,14 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Cxeno * dat)
 	 */
 	bit_krei_CRC (dat, pvzadr, 0xC0C1);
 
-	bit_skribi_gardostaranto (dat, dwg_gardostaranto (DWG_GS_KLASO_FINO));
+	bit_write_gardostaranto (dat, dwg_gardostaranto (DWG_GS_KLASO_FINO));
 	skt->kapo.sekcio[1].grandeco = dat->bajto - skt->kapo.sekcio[1].adresilo;
 
 
 	/*------------------------------------------------------------
 	 * Objektoj
 	 */
-	bit_skribi_RL (dat, 0x00000000);	// 0xDCA Nekonata kvarbitoko inter klasoj kaj objektaro
+	bit_write_RL (dat, 0x00000000);	// 0xDCA Nekonata kvarbitoko inter klasoj kaj objektaro
 	pvzadr = dat->bajto;
 
 	/* Ekdifini objekto-mapon
@@ -251,18 +251,18 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Cxeno * dat)
 		/* Difini la traktilojn de cxiuj objektoj, inkluzive la nekonataj */
 		omap[i].idc = i;
 		if (skt->objekto[i].supertipo == DWG_SUPERTYPE_ESTAJXO)
-			omap[i].traktilo = skt->objekto[i].tio.estajxo->traktilo.valoro;
+			omap[i].traktilo = skt->objekto[i].tio.estajxo->traktilo.value;
 		else if (skt->objekto[i].supertipo == DWG_SUPERTYPE_ORDINARAJXO)
-			omap[i].traktilo = skt->objekto[i].tio.ordinarajxo->traktilo.valoro;
+			omap[i].traktilo = skt->objekto[i].tio.ordinarajxo->traktilo.value;
 		else if (skt->objekto[i].supertipo == DWG_SUPERTYPE_NEKONATAJXO)
 		{
 			nkn.cxeno = skt->objekto[i].tio.nekonatajxo;
 			nkn.kiom = skt->objekto[i].grandeco;
 			nkn.bajto = nkn.bito = 0;
-			bit_legi_BS (&nkn);
-			bit_legi_RL (&nkn);
-			bit_legi_H (&nkn, &tkt);
-			omap[i].traktilo = tkt.valoro;
+			bit_read_BS (&nkn);
+			bit_read_RL (&nkn);
+			bit_read_H (&nkn, &tkt);
+			omap[i].traktilo = tkt.value;
 		}
 		else
 			omap[i].traktilo = 0x7FFFFFFF;	/* Eraro! */
@@ -297,7 +297,7 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Cxeno * dat)
 		obj = &skt->objekto[omap[i].idc];
 		if (obj->supertipo == DWG_SUPERTYPE_NEKONATAJXO)
 		{
-			bit_skribi_MS (dat, obj->grandeco);
+			bit_write_MS (dat, obj->grandeco);
 			if (dat->bajto + obj->grandeco >= dat->kiom - 2)
 				bit_cxeno_rezervi (dat);
 			memcpy (&dat->cxeno[dat->bajto], obj->tio.nekonatajxo, obj->grandeco);
@@ -311,7 +311,7 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Cxeno * dat)
 				dwg_encode_ordinarajxo (obj, dat);
 			else
 			{
-				printf ("Eraro: ne difinita (super)tipo de objekto por skribi\n");
+				printf ("Eraro: ne difinita (super)tipo de objekto por write\n");
 				exit (-1);
 			}
 		}
@@ -321,17 +321,17 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Cxeno * dat)
 
 	/* Nekonata dubitoko inter la objektaron kaj la objekto-mapo
 	 */
-	bit_skribi_RS (dat, 0);
+	bit_write_RS (dat, 0);
 
 	/*------------------------------------------------------------
 	 * Objekto-mapo
 	 */
 	skt->kapo.sekcio[2].numero = 2;
-	skt->kapo.sekcio[2].adresilo = dat->bajto;	// poste oni devas kalkuli la valoron de grandeco
+	skt->kapo.sekcio[2].adresilo = dat->bajto;	// poste oni devas kalkuli la valuen de grandeco
 	//printf ("Ekadreso: 0x%08X\n", dat->bajto);
 
 	sekcigrandeco = 0;
-	pvzadr = dat->bajto;	// poste oni devas skribi cxi tie la korektan valoron de grandeco de la unua sekcio
+	pvzadr = dat->bajto;	// poste oni devas write cxi tie la korektan valuen de grandeco de la unua sekcio
 	dat->bajto += 2;
 	lastadres = 0;
 	lastatrakt = 0;
@@ -343,12 +343,12 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Cxeno * dat)
 		idc = omap[i].idc;
 
 		pvz = omap[idc].traktilo - lastatrakt;
-		bit_skribi_MC (dat, pvz);
+		bit_write_MC (dat, pvz);
 		//printf ("Trakt(%i): %6lu / ", i, pvz);
 		lastatrakt = omap[idc].traktilo;
 
 		pvz = omap[idc].adreso - lastadres;
-		bit_skribi_MC (dat, pvz);
+		bit_write_MC (dat, pvz);
 		//printf ("Adreso: %08X\n", pvz);
 		lastadres = omap[idc].adreso;
 
@@ -376,11 +376,11 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Cxeno * dat)
 		bit_krei_CRC (dat, pvzadr, 0xC0C1);
 	}
 	pvzadr = dat->bajto;
-	bit_skribi_RC (dat, 0);
-	bit_skribi_RC (dat, 2);
+	bit_write_RC (dat, 0);
+	bit_write_RC (dat, 2);
 	bit_krei_CRC (dat, pvzadr, 0xC0C1);
 
-	/* Kalkuli kaj skribi la grandecon de la objekto-mapo
+	/* Kalkuli kaj write la grandecon de la objekto-mapo
 	 */
 	skt->kapo.sekcio[2].grandeco = dat->bajto - skt->kapo.sekcio[2].adresilo;
 	free (omap);
@@ -388,66 +388,66 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Cxeno * dat)
 	/*------------------------------------------------------------
 	 * Dua kap-datenaro
 	 */
-	bit_skribi_gardostaranto (dat, dwg_gardostaranto (DWG_GS_DUAKAPO_EKO));
+	bit_write_gardostaranto (dat, dwg_gardostaranto (DWG_GS_DUAKAPO_EKO));
 
-	pvzadr = dat->bajto;	// Gardi la unuan adreson de la sekcio por skribi ties grandecon poste
-	bit_skribi_RL (dat, 0);
+	pvzadr = dat->bajto;	// Gardi la unuan adreson de la sekcio por write ties grandecon poste
+	bit_write_RL (dat, 0);
 
-	bit_skribi_BL (dat, pvzadr - 16);	// ekadreso de la sekcio
+	bit_write_BL (dat, pvzadr - 16);	// ekadreso de la sekcio
 
 	/* Cxeno "AC1015"
 	 */
-	bit_skribi_RC (dat, 'A');
-	bit_skribi_RC (dat, 'C');
-	bit_skribi_RC (dat, '1');
-	bit_skribi_RC (dat, '0');
-	bit_skribi_RC (dat, '1');
-	bit_skribi_RC (dat, '5');
+	bit_write_RC (dat, 'A');
+	bit_write_RC (dat, 'C');
+	bit_write_RC (dat, '1');
+	bit_write_RC (dat, '0');
+	bit_write_RC (dat, '1');
+	bit_write_RC (dat, '5');
 
 	/* 5 (aux 6) nuloj
 	 */
 	for (i = 0; i < 5; i++)	// 6 se estas pli malnova...
-		bit_skribi_RC (dat, 0);
+		bit_write_RC (dat, 0);
 
 	/* 4 nulaj bitoj
 	 */
-	bit_skribi_BB (dat, 0);
-	bit_skribi_BB (dat, 0);
+	bit_write_BB (dat, 0);
+	bit_write_BB (dat, 0);
 
 	/* Fiksa cxeno
 	 */
-	bit_skribi_RC (dat, 0x0F);
-	bit_skribi_RC (dat, 0x14);
-	bit_skribi_RC (dat, 0x64);
-	bit_skribi_RC (dat, 0x78);
-	bit_skribi_RC (dat, 0x01);
-	bit_skribi_RC (dat, 0x06);
+	bit_write_RC (dat, 0x0F);
+	bit_write_RC (dat, 0x14);
+	bit_write_RC (dat, 0x64);
+	bit_write_RC (dat, 0x78);
+	bit_write_RC (dat, 0x01);
+	bit_write_RC (dat, 0x06);
 
 	/* Adresaro
 	 */
 	for (i = 0; i < 6; i++)
 	{
-		bit_skribi_RC (dat, 0);
-		bit_skribi_BL (dat, skt->kapo.sekcio[0].adresilo);
-		bit_skribi_BL (dat, skt->kapo.sekcio[0].grandeco);
+		bit_write_RC (dat, 0);
+		bit_write_BL (dat, skt->kapo.sekcio[0].adresilo);
+		bit_write_BL (dat, skt->kapo.sekcio[0].grandeco);
 	}
 
 	/* Traktilaro
 	 */
-	bit_skribi_BS (dat, 14);
+	bit_write_BS (dat, 14);
 	for (i = 0; i < 14; i++)
 	{
-		bit_skribi_RC (dat, skt->duakapo.traktrik[i].kiom);
-		bit_skribi_RC (dat, i);
+		bit_write_RC (dat, skt->duakapo.traktrik[i].kiom);
+		bit_write_RC (dat, i);
 		for (j = 0; j < skt->duakapo.traktrik[i].kiom; j++)
-			bit_skribi_RC (dat, skt->duakapo.traktrik[i].cxeno[j]);
+			bit_write_RC (dat, skt->duakapo.traktrik[i].cxeno[j]);
 	}
 
-	/* Returni al la komenco por skribi la grandecon
+	/* Returni al la komenco por write la grandecon
 	 */
 	pvzadr_2 = dat->bajto;
 	dat->bajto = pvzadr;
-	bit_skribi_RL (dat, pvzadr_2 - pvzadr + 10);
+	bit_write_RL (dat, pvzadr_2 - pvzadr + 10);
 	dat->bajto = pvzadr_2;
 
 	/* CKR
@@ -456,10 +456,10 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Cxeno * dat)
 
 	/* Jen 8 bitokoj da rubajxo
 	 */
-	bit_skribi_RL (dat, 0);
-	bit_skribi_RL (dat, 0);
+	bit_write_RL (dat, 0);
+	bit_write_RL (dat, 0);
 
-	bit_skribi_gardostaranto (dat, dwg_gardostaranto (DWG_GS_DUAKAPO_FINO));
+	bit_write_gardostaranto (dat, dwg_gardostaranto (DWG_GS_DUAKAPO_FINO));
 
 	/*------------------------------------------------------------
 	 * MEASUREMENT
@@ -470,7 +470,7 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Cxeno * dat)
 	skt->kapo.sekcio[4].numero = 4;
 	skt->kapo.sekcio[4].adresilo = dat->bajto;
 	skt->kapo.sekcio[4].grandeco = 4;
-	bit_skribi_RL (dat, skt->mezuro);
+	bit_write_RL (dat, skt->mezuro);
 
 	/* Fino de la dosiero
 	 */
@@ -482,33 +482,33 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Cxeno * dat)
 	dat->bito = 0;
 	for (i = 0; i < skt->kapo.sekcio_kiom; i++)
 	{
-		bit_skribi_RC (dat, skt->kapo.sekcio[i].numero);
-		bit_skribi_RL (dat, skt->kapo.sekcio[i].adresilo);
-		bit_skribi_RL (dat, skt->kapo.sekcio[i].grandeco);
+		bit_write_RC (dat, skt->kapo.sekcio[i].numero);
+		bit_write_RL (dat, skt->kapo.sekcio[i].adresilo);
+		bit_write_RL (dat, skt->kapo.sekcio[i].grandeco);
 	}
 
 	/* Skribi CKR-on
 	 */
 	bit_krei_CRC (dat, 0, 0);
 	dat->bajto -= 2;
-	ckr = bit_legi_CRC (dat);
+	ckr = bit_read_CRC (dat);
 	dat->bajto -= 2;
 	switch (skt->kapo.sekcio_kiom)
 	{
 	case 3:
-		bit_skribi_RS (dat, ckr ^ 0xA598);
+		bit_write_RS (dat, ckr ^ 0xA598);
 		break;
 	case 4:
-		bit_skribi_RS (dat, ckr ^ 0x8101);
+		bit_write_RS (dat, ckr ^ 0x8101);
 		break;
 	case 5:
-		bit_skribi_RS (dat, ckr ^ 0x3CC4);
+		bit_write_RS (dat, ckr ^ 0x3CC4);
 		break;
 	case 6:
-		bit_skribi_RS (dat, ckr ^ 0x8461);
+		bit_write_RS (dat, ckr ^ 0x8461);
 		break;
 	default:
-		bit_skribi_RS (dat, ckr);
+		bit_write_RS (dat, ckr);
 	}
 
 	return 0;
@@ -530,44 +530,44 @@ dwg_encode_estajxo (Dwg_Objekto * obj, Bit_Cxeno * dat)
 	gdadr.bajto = dat->bajto;
 	gdadr.bito = dat->bito;
 
-	bit_skribi_MS (dat, obj->grandeco);
+	bit_write_MS (dat, obj->grandeco);
 
 	ekadr.bajto = dat->bajto;	// Por kalkuli poste la bajta kaj bita grandecoj de la objekto
 	ekadr.bito = dat->bito;
 
-	bit_skribi_BS (dat, obj->tipo);
+	bit_write_BS (dat, obj->tipo);
 
 	bgadr.bajto = dat->bajto;
 	bgadr.bito = dat->bito;
 
-	bit_skribi_RL (dat, 0);	// Nulo nun, kalkulendas por skribi poste
+	bit_write_RL (dat, 0);	// Nulo nun, kalkulendas por write poste
 
-	bit_skribi_H (dat, &est->traktilo);
-	bit_skribi_BS (dat, est->kromdat_kiom);
+	bit_write_H (dat, &est->traktilo);
+	bit_write_BS (dat, est->kromdat_kiom);
 	if (est->kromdat_kiom > 0)
 	{
-		bit_skribi_H (dat, &est->kromdat_trakt);
+		bit_write_H (dat, &est->kromdat_trakt);
 		for (i = 0; i < est->kromdat_kiom; i++)
-			bit_skribi_RC (dat, est->kromdat[i]);
+			bit_write_RC (dat, est->kromdat[i]);
 	}
 
-	bit_skribi_B (dat, est->bildo_ekzistas);
+	bit_write_B (dat, est->bildo_ekzistas);
 	if (est->bildo_ekzistas)
 	{
-		bit_skribi_RL (dat, est->bildo_kiom);
+		bit_write_RL (dat, est->bildo_kiom);
 		for (i = 0; i < est->bildo_kiom; i++)
-			bit_skribi_RC (dat, est->bildo[i]);
+			bit_write_RC (dat, est->bildo[i]);
 	}
 
-	bit_skribi_BB (dat, est->regximo);
-	bit_skribi_BL (dat, est->reagilo_kiom);
-	bit_skribi_B (dat, est->senligiloj);
-	bit_skribi_BS (dat, est->koloro);
-	bit_skribi_BD (dat, est->linitiposkalo);
-	bit_skribi_BB (dat, est->linitipo);
-	bit_skribi_BB (dat, est->printstilo);
-	bit_skribi_BS (dat, est->malvidebleco);
-	bit_skribi_RC (dat, est->linidikeco);
+	bit_write_BB (dat, est->regximo);
+	bit_write_BL (dat, est->reagilo_kiom);
+	bit_write_B (dat, est->senligiloj);
+	bit_write_BS (dat, est->koloro);
+	bit_write_BD (dat, est->linitiposkalo);
+	bit_write_BB (dat, est->linitipo);
+	bit_write_BB (dat, est->printstilo);
+	bit_write_BS (dat, est->malvidebleco);
+	bit_write_RC (dat, est->linidikeco);
 
 	switch (obj->tipo)
 	{
@@ -583,7 +583,7 @@ dwg_encode_estajxo (Dwg_Objekto * obj, Bit_Cxeno * dat)
 		exit (-1);
 	}
 
-	/* Finfine kalkuli kaj skribi la bit-grandecon de la objekto
+	/* Finfine kalkuli kaj write la bit-grandecon de la objekto
 	 */
 	pvadr.bajto = dat->bajto;
 	pvadr.bito = dat->bito;
@@ -592,7 +592,7 @@ dwg_encode_estajxo (Dwg_Objekto * obj, Bit_Cxeno * dat)
 	dat->bito = bgadr.bito;
 
 	longo = 8 * (pvadr.bajto - ekadr.bajto) + (pvadr.bito);
-	bit_skribi_RL (dat, longo);
+	bit_write_RL (dat, longo);
 	//printf ("Longo (bit): %lu\t", longo);
 
 	dat->bajto = pvadr.bajto;
@@ -601,9 +601,9 @@ dwg_encode_estajxo (Dwg_Objekto * obj, Bit_Cxeno * dat)
 	/* Traktilaj referencoj
 	 */
 	for (i = 0; i < est->traktref_kiom; i++)
-		bit_skribi_H (dat, &est->traktref[i]);
+		bit_write_H (dat, &est->traktref[i]);
 
-	/* Finfine kalkuli kaj skribi la bajt-grandecon de la objekto (cxu estas erara?)
+	/* Finfine kalkuli kaj write la bajt-grandecon de la objekto (cxu estas erara?)
 	 */
 	pvadr.bajto = dat->bajto;
 	pvadr.bito = dat->bito;
@@ -612,7 +612,7 @@ dwg_encode_estajxo (Dwg_Objekto * obj, Bit_Cxeno * dat)
 	dat->bito = gdadr.bito;
 
 	longo = pvadr.bajto - ekadr.bajto;
-	bit_skribi_MS (dat, longo);
+	bit_write_MS (dat, longo);
 	//printf ("Longo: %lu\n", longo);
 
 	dat->bajto = pvadr.bajto;
@@ -624,36 +624,36 @@ dwg_encode_ordinarajxo (Dwg_Objekto * obj, Bit_Cxeno * dat)
 {
 	Bit_Cxeno ekadr;
 
-	bit_skribi_MS (dat, obj->grandeco);
+	bit_write_MS (dat, obj->grandeco);
 	ekadr.bajto = dat->bajto;	// Por kalkuli poste la bita grandeco de la objekto
 	ekadr.bito = dat->bito;
-	bit_skribi_BS (dat, obj->tipo);
+	bit_write_BS (dat, obj->tipo);
 }
 
 static void
 dwg_encode_LINE (Dwg_Estajxo_LINE * est, Bit_Cxeno * dat)
 {
-	bit_skribi_B (dat, est->nur_2D);
-	bit_skribi_RD (dat, est->x0);
-	bit_skribi_DD (dat, est->x1, est->x0);
-	bit_skribi_RD (dat, est->y0);
-	bit_skribi_DD (dat, est->y1, est->y0);
+	bit_write_B (dat, est->nur_2D);
+	bit_write_RD (dat, est->x0);
+	bit_write_DD (dat, est->x1, est->x0);
+	bit_write_RD (dat, est->y0);
+	bit_write_DD (dat, est->y1, est->y0);
 	if (!est->nur_2D)
 	{
-		bit_skribi_RD (dat, est->z0);
-		bit_skribi_DD (dat, est->z1, est->z0);
+		bit_write_RD (dat, est->z0);
+		bit_write_DD (dat, est->z1, est->z0);
 	}
-	bit_skribi_BT (dat, est->dikeco);
-	bit_skribi_BE (dat, est->forpusxigo.x, est->forpusxigo.y, est->forpusxigo.z);
+	bit_write_BT (dat, est->dikeco);
+	bit_write_BE (dat, est->forpusxigo.x, est->forpusxigo.y, est->forpusxigo.z);
 }
 
 static void
 dwg_encode_CIRCLE (Dwg_Estajxo_CIRCLE * est, Bit_Cxeno * dat)
 {
-	bit_skribi_BD (dat, est->x0);
-	bit_skribi_BD (dat, est->y0);
-	bit_skribi_BD (dat, est->z0);
-	bit_skribi_BD (dat, est->radiuso);
-	bit_skribi_BT (dat, est->dikeco);
-	bit_skribi_BE (dat, est->forpusxigo.x, est->forpusxigo.y, est->forpusxigo.z);
+	bit_write_BD (dat, est->x0);
+	bit_write_BD (dat, est->y0);
+	bit_write_BD (dat, est->z0);
+	bit_write_BD (dat, est->radiuso);
+	bit_write_BT (dat, est->dikeco);
+	bit_write_BE (dat, est->forpusxigo.x, est->forpusxigo.y, est->forpusxigo.z);
 }

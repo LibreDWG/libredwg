@@ -67,35 +67,35 @@ dwg_decode_structures (Bit_Cxeno * dat, Dwg_Structure * skt)
 	}
 	dat->bajto = 0x06;
 
-	// 6 Nuloj kaj valoro
+	// 6 Nuloj kaj value
 	for (i = 0; i < 7; i++)
 	{
-		sig = bit_legi_RC (dat);
+		sig = bit_read_RC (dat);
 		//printf ("0x%02X ", sig);
 	}
 	//puts ("");
 
 	/* Bildadresilo
 	 */
-	pvz = bit_legi_RL (dat);
+	pvz = bit_read_RL (dat);
 	//printf ("0x%08X\n", pvz);
 
 	// Versio kaj lancxo
-	sig = bit_legi_RC (dat);
+	sig = bit_read_RC (dat);
 	printf ("Versio: %u\n", sig);
-	sig = bit_legi_RC (dat);
+	sig = bit_read_RC (dat);
 	printf ("Lancxo: %u\n", sig);
 
 	/* Kodpagxo
 	 */
 	dat->bajto = 0x13;
-	skt->kapo.kodpagxo = bit_legi_RS (dat);
+	skt->kapo.kodpagxo = bit_read_RS (dat);
 	printf ("Kodpagxo: %u\n", skt->kapo.kodpagxo);
 
 	/* Sekcioj
 	 */
 	dat->bajto = 0x15;
-	skt->kapo.sekcio_kiom = bit_legi_RL (dat);
+	skt->kapo.sekcio_kiom = bit_read_RL (dat);
 	if (skt->kapo.sekcio_kiom > 6)
 		skt->kapo.sekcio_kiom = 6;
 	for (i = 0; i < skt->kapo.sekcio_kiom; i++)
@@ -103,22 +103,22 @@ dwg_decode_structures (Bit_Cxeno * dat, Dwg_Structure * skt)
 		skt->kapo.sekcio[i].adresilo = 0;
 		skt->kapo.sekcio[i].grandeco = 0;
 
-		skt->kapo.sekcio[i].numero = bit_legi_RC (dat);
-		skt->kapo.sekcio[i].adresilo = bit_legi_RL (dat);
-		skt->kapo.sekcio[i].grandeco = bit_legi_RL (dat);
+		skt->kapo.sekcio[i].numero = bit_read_RC (dat);
+		skt->kapo.sekcio[i].adresilo = bit_read_RL (dat);
+		skt->kapo.sekcio[i].grandeco = bit_read_RL (dat);
 	}
 
 	// Kontroli CKR-on
 	/*
-	   ckr = bit_legi_CRC (dat);
+	   ckr = bit_read_CRC (dat);
 	   dat->bajto -= 2;
 	   bit_krei_CRC (dat, 0, 0);
 	   dat->bajto -= 2;
-	   ckr2 = bit_legi_CRC (dat);
+	   ckr2 = bit_read_CRC (dat);
 	   dat->bajto -= 2;
-	   bit_skribi_RS (dat, ckr2 ^ 0x8461);
+	   bit_write_RS (dat, ckr2 ^ 0x8461);
 	   dat->bajto -= 2;
-	   ckr2 = bit_legi_CRC (dat);
+	   ckr2 = bit_read_CRC (dat);
 	   printf ("Legita: %X\nKreita: %X\n", ckr, ckr2);
 	 */
 
@@ -141,7 +141,7 @@ dwg_decode_structures (Bit_Cxeno * dat, Dwg_Structure * skt)
 		skt->nekonata1.cxeno = malloc (skt->nekonata1.kiom);
 		memcpy (skt->nekonata1.cxeno, &dat->cxeno[dat->bajto], skt->nekonata1.kiom);
 		//bit_esplori_cxeno ((Bit_Cxeno *) &skt->nekonata1, skt->nekonata1.kiom);
-		//bit_montri ((Bit_Cxeno *) &skt->nekonata1, skt->nekonata1.kiom);
+		//bit_print ((Bit_Cxeno *) &skt->nekonata1, skt->nekonata1.kiom);
 	}
 
 
@@ -176,7 +176,7 @@ dwg_decode_structures (Bit_Cxeno * dat, Dwg_Structure * skt)
 	printf ("KAP-VARIABLOJ (fino): %8X\n",
 		skt->kapo.sekcio[0].adresilo + skt->kapo.sekcio[0].grandeco);
 	dat->bajto = skt->kapo.sekcio[0].adresilo + 16;
-	pvz = bit_legi_RL (dat);
+	pvz = bit_read_RL (dat);
 	//printf ("Longeco: %lu\n", pvz);
 
 	dat->bito = 0;
@@ -189,50 +189,50 @@ dwg_decode_structures (Bit_Cxeno * dat, Dwg_Structure * skt)
 		if (i == 221 && skt->var[220].dubitoko != 3)
 		{
 			skt->var[i].traktilo.kodo = 0;
-			skt->var[i].traktilo.valoro = 0;
+			skt->var[i].traktilo.value = 0;
 			//puts ("(NE EKZISTANTA)");
 			continue;
 		}
 		switch (dwg_varmapo (i))
 		{
 		case DWG_DT_B:
-			skt->var[i].bitoko = bit_legi_B (dat);
+			skt->var[i].bitoko = bit_read_B (dat);
 			//printf ("B: %u", skt->var[i].bitoko);
 			break;
 		case DWG_DT_BS:
-			skt->var[i].dubitoko = bit_legi_BS (dat);
+			skt->var[i].dubitoko = bit_read_BS (dat);
 			//printf ("BS: %u", skt->var[i].dubitoko);
 			break;
 		case DWG_DT_BL:
-			skt->var[i].kvarbitoko = bit_legi_BL (dat);
+			skt->var[i].kvarbitoko = bit_read_BL (dat);
 			//printf ("BL: %lu", skt->var[i].kvarbitoko);
 			break;
 		case DWG_DT_BD:
-			skt->var[i].duglitajxo = bit_legi_BD (dat);
+			skt->var[i].duglitajxo = bit_read_BD (dat);
 			//printf ("BD: %lg", skt->var[i].duglitajxo);
 			break;
 		case DWG_DT_H:
-			bit_legi_H (dat, &skt->var[i].traktilo);
-			//printf ("H: %i.%i.0x%08X", skt->var[i].traktilo.kodo, skt->var[i].traktilo.kiom, skt->var[i].traktilo.valoro);
+			bit_read_H (dat, &skt->var[i].traktilo);
+			//printf ("H: %i.%i.0x%08X", skt->var[i].traktilo.kodo, skt->var[i].traktilo.kiom, skt->var[i].traktilo.value);
 			break;
 		case DWG_DT_T:
-			skt->var[i].teksto = bit_legi_T (dat);
+			skt->var[i].teksto = bit_read_T (dat);
 			//printf ("T: \"%s\"", skt->var[i].teksto);
 			break;
 		case DWG_DT_CMC:
-			skt->var[i].dubitoko = bit_legi_BS (dat);
+			skt->var[i].dubitoko = bit_read_BS (dat);
 			//printf ("CMC: %u", skt->var[i].dubitoko);
 			break;
 		case DWG_DT_2RD:
-			skt->var[i].xy[0] = bit_legi_RD (dat);
-			skt->var[i].xy[1] = bit_legi_RD (dat);
+			skt->var[i].xy[0] = bit_read_RD (dat);
+			skt->var[i].xy[1] = bit_read_RD (dat);
 			//printf ("X: %lg\t", skt->var[i].xy[0]);
 			//printf ("Y: %lg", skt->var[i].xy[1]);
 			break;
 		case DWG_DT_3BD:
-			skt->var[i].xyz[0] = bit_legi_BD (dat);
-			skt->var[i].xyz[1] = bit_legi_BD (dat);
-			skt->var[i].xyz[2] = bit_legi_BD (dat);
+			skt->var[i].xyz[0] = bit_read_BD (dat);
+			skt->var[i].xyz[1] = bit_read_BD (dat);
+			skt->var[i].xyz[2] = bit_read_BD (dat);
 			//printf ("X: %lg\t", skt->var[i].xyz[0]);
 			//printf ("Y: %lg\t", skt->var[i].xyz[1]);
 			//printf ("Z: %lg", skt->var[i].xyz[2]);
@@ -244,14 +244,14 @@ dwg_decode_structures (Bit_Cxeno * dat, Dwg_Structure * skt)
 	}
 
 	// Kontroli CKR-on
-	ckr = bit_legi_CRC (dat);
+	ckr = bit_read_CRC (dat);
 	/*
 	   for (i = 0xC001; i != 0xC000; i++)
 	   {
 	   dat->bajto -= 2;
 	   bit_krei_CRC (dat, skt->kapo.sekcio[0].adresilo + 16, i);
 	   dat->bajto -= 2;
-	   ckr2 = bit_legi_CRC (dat);
+	   ckr2 = bit_read_CRC (dat);
 	   if (ckr == ckr2)
 	   {
 	   printf ("Legita: %X\nKreita: %X\t SEMO: %02X\n", ckr, ckr2, i);
@@ -271,7 +271,7 @@ dwg_decode_structures (Bit_Cxeno * dat, Dwg_Structure * skt)
 	dat->bajto = skt->kapo.sekcio[1].adresilo + 16;
 	dat->bito = 0;
 
-	kiom = bit_legi_RL (dat);
+	kiom = bit_read_RL (dat);
 	lasta = dat->bajto + kiom;
 	//printf ("Longeco: %lu\n", kiom);
 
@@ -291,13 +291,13 @@ dwg_decode_structures (Bit_Cxeno * dat, Dwg_Structure * skt)
 			skt->klaso =
 				(Dwg_Klaso *) realloc (skt->klaso, (idc + 1) * sizeof (Dwg_Klaso));
 
-		skt->klaso[idc].numero = bit_legi_BS (dat);
-		skt->klaso[idc].versio = bit_legi_BS (dat);
-		skt->klaso[idc].apnomo = bit_legi_T (dat);
-		skt->klaso[idc].cpliplinomo = bit_legi_T (dat);
-		skt->klaso[idc].dxfnomo = bit_legi_T (dat);
-		skt->klaso[idc].estisfantomo = bit_legi_B (dat);
-		skt->klaso[idc].eroid = bit_legi_BS (dat);
+		skt->klaso[idc].numero = bit_read_BS (dat);
+		skt->klaso[idc].versio = bit_read_BS (dat);
+		skt->klaso[idc].apnomo = bit_read_T (dat);
+		skt->klaso[idc].cpliplinomo = bit_read_T (dat);
+		skt->klaso[idc].dxfnomo = bit_read_T (dat);
+		skt->klaso[idc].estisfantomo = bit_read_B (dat);
+		skt->klaso[idc].eroid = bit_read_BS (dat);
 
 		if (strcmp (skt->klaso[idc].dxfnomo, "LAYOUT") == 0)
 			skt->dwg_ot_layout = skt->klaso[idc].numero;
@@ -309,14 +309,14 @@ dwg_decode_structures (Bit_Cxeno * dat, Dwg_Structure * skt)
 	while (dat->bajto < (lasta - 1));
 
 	// Kontroli CKR-on
-	ckr = bit_legi_CRC (dat);
+	ckr = bit_read_CRC (dat);
 	/*
 	   for (i = 0xC001; i != 0xC000; i++)
 	   {
 	   dat->bajto -= 2;
 	   bit_krei_CRC (dat, skt->kapo.sekcio[1].adresilo + 16, i);
 	   dat->bajto -= 2;
-	   ckr2 = bit_legi_CRC (dat);
+	   ckr2 = bit_read_CRC (dat);
 	   if (ckr == ckr2)
 	   {
 	   printf ("Legita: %X\nKreita: %X\t SEMO: %02X\n", ckr, ckr2, i);
@@ -326,9 +326,9 @@ dwg_decode_structures (Bit_Cxeno * dat, Dwg_Structure * skt)
 	 */
 
 	dat->bajto += 16;
-	pvz = bit_legi_RL (dat);	// Nekonata kvarbitoko inter klasoj kaj objektaro
+	pvz = bit_read_RL (dat);	// Nekonata kvarbitoko inter klasoj kaj objektaro
 	//printf ("Adreso: %lu / Enhavo: 0x%08X\n", dat->bajto - 4, pvz);
-	//printf ("Kiom klasoj legitaj: %u\n", skt->klaso_kiom);
+	//printf ("Kiom klasoj readtaj: %u\n", skt->klaso_kiom);
 
 
 	/*-------------------------------------------------------------------------
@@ -349,8 +349,8 @@ dwg_decode_structures (Bit_Cxeno * dat, Dwg_Structure * skt)
 		long unsigned int antauxadr;
 
 		duabajto = dat->bajto;
-		sgdc[0] = bit_legi_RC (dat);
-		sgdc[1] = bit_legi_RC (dat);
+		sgdc[0] = bit_read_RC (dat);
+		sgdc[1] = bit_read_RC (dat);
 		sekgrandeco = (sgdc[0] << 8) | sgdc[1];
 		//printf ("sekgrandeco: %u\n", sekgrandeco);
 		if (sekgrandeco > 2034)	// 2032 + 2
@@ -368,9 +368,9 @@ dwg_decode_structures (Bit_Cxeno * dat, Dwg_Structure * skt)
 			long int pvzadr;
 
 			antauxadr = dat->bajto;
-			pvztkt = bit_legi_MC (dat);
+			pvztkt = bit_read_MC (dat);
 			lastatrakt += pvztkt;
-			pvzadr = bit_legi_MC (dat);
+			pvzadr = bit_read_MC (dat);
 			lastadres += pvzadr;
 			//printf ("Idc: %li\t", skt->objekto_kiom);
 			//printf ("Trakt: %li\tAdres: %li\n", pvztkt, pvzadr);
@@ -402,12 +402,12 @@ dwg_decode_structures (Bit_Cxeno * dat, Dwg_Structure * skt)
 
 	printf ("=========> OBJEKTARO: %8X\n", obek);
 	dat->bajto = obfin;
-	obek = bit_legi_MS (dat);	// La komenco de la lasta objekto legita
+	obek = bit_read_MS (dat);	// La komenco de la lasta objekto readta
 	printf ("    OBJEKTARO (fino): %8X\n", obfin + obek + 2);
 
 	/*
 	   dat->bajto = skt->kapo.sekcio[2].adresilo - 2;
-	   antckr = bit_legi_CRC (dat); // Nekonata dubitoko inter objektaro kaj objekto-mapo
+	   antckr = bit_read_CRC (dat); // Nekonata dubitoko inter objektaro kaj objekto-mapo
 	   printf ("Adreso: %08X / Enhavo: 0x%04X\n", dat->bajto - 2, antckr);
 
 	   // Kontroli CKR-ojn
@@ -415,16 +415,16 @@ dwg_decode_structures (Bit_Cxeno * dat, Dwg_Structure * skt)
 	   do
 	   {
 	   duabajto = dat->bajto;
-	   sgdc[0] = bit_legi_RC (dat);
-	   sgdc[1] = bit_legi_RC (dat);
+	   sgdc[0] = bit_read_RC (dat);
+	   sgdc[1] = bit_read_RC (dat);
 	   sekgrandeco = (sgdc[0] << 8) | sgdc[1];
 	   sekgrandeco -= 2;
 	   dat->bajto += sekgrandeco;
-	   ckr = bit_legi_CRC (dat);
+	   ckr = bit_read_CRC (dat);
 	   dat->bajto -= 2;
 	   bit_krei_CRC (dat, duabajto, antckr);
 	   dat->bajto -= 2;
-	   ckr2 = bit_legi_CRC (dat);
+	   ckr2 = bit_read_CRC (dat);
 	   printf ("Legita: %X\nKreita: %X\t SEMO: %X\n", ckr, ckr2, antckr);
 	   //antckr = ckr;
 	   } while (sekgrandeco > 0);
@@ -447,73 +447,73 @@ dwg_decode_structures (Bit_Cxeno * dat, Dwg_Structure * skt)
 		printf ("==> DUA KAP-DATENARO: %8X\n", dat->bajto - 16);
 		pvzadr = dat->bajto;
 
-		pvz = bit_legi_RL (dat);
+		pvz = bit_read_RL (dat);
 		//printf ("Kiomo: %lu\n", pvz);
 
-		pvz = bit_legi_BL (dat);
+		pvz = bit_read_BL (dat);
 		//printf ("Ekadreso: %8X\n", pvz);
 
 		//printf ("AC1015?: ");
 		for (i = 0; i < 6; i++)
 		{
-			sig = bit_legi_RC (dat);
+			sig = bit_read_RC (dat);
 			//printf ("%c", sig >= ' ' && sig < 128 ? sig : '.');
 		}
 
 		//printf ("\nNuloj?:");
 		for (i = 0; i < 5; i++)	// 6 se estas pli malnova...
 		{
-			sig = bit_legi_RC (dat);
+			sig = bit_read_RC (dat);
 			//printf (" 0x%02X", sig);
 		}
 
 		//printf ("\n4 nulaj bitoj?: ");
 		for (i = 0; i < 4; i++)
 		{
-			sig = bit_legi_B (dat);
+			sig = bit_read_B (dat);
 			//printf (" %c", sig ? '1' : '0');
 		}
 
 		//printf ("\nCxeno?: ");
 		for (i = 0; i < 6; i++)
 		{
-			skt->duakapo.nekonatajxo[i] = bit_legi_RC (dat);
+			skt->duakapo.nekonatajxo[i] = bit_read_RC (dat);
 			//printf (" 0x%02X", skt->duakapo.nekonatajxo[i]);
 		}
 		if (skt->duakapo.nekonatajxo[3] != 0x78 || skt->duakapo.nekonatajxo[5] != 0x06)
-			sig = bit_legi_RC (dat);	// por kompenso okaze de eventuala kroma nulo ne legita antauxe
+			sig = bit_read_RC (dat);	// por kompenso okaze de eventuala kroma nulo ne readta antauxe
 
 		//puts("");
 		for (i = 0; i < 6; i++)
 		{
-			sig = bit_legi_RC (dat);
+			sig = bit_read_RC (dat);
 			//printf ("[%u]\n", sig);
-			pvz = bit_legi_BL (dat);
+			pvz = bit_read_BL (dat);
 			//printf (" Adreso: %8X\n", pvz);
-			pvz = bit_legi_BL (dat);
+			pvz = bit_read_BL (dat);
 			//printf ("  Kiomo: %8X\n", pvz);
 		}
 
-		bit_legi_BS (dat);
+		bit_read_BS (dat);
 		//printf ("\n14 --------------");
 		for (i = 0; i < 14; i++)
 		{
-			sig2 = bit_legi_RC (dat);
+			sig2 = bit_read_RC (dat);
 			skt->duakapo.traktrik[i].kiom = sig2;
 			//printf ("\nLongo: %u\n", sig2);
-			sig = bit_legi_RC (dat);
+			sig = bit_read_RC (dat);
 			//printf ("\t[%u]\n", sig);
 			//printf ("\tCxeno:");
 			for (j = 0; j < sig2; j++)
 			{
-				sig = bit_legi_RC (dat);
+				sig = bit_read_RC (dat);
 				skt->duakapo.traktrik[i].cxeno[j] = sig;
 				//printf (" %02X", sig);
 			}
 		}
 
 		// Kontroli CKR-on
-		ckr = bit_legi_CRC (dat);
+		ckr = bit_read_CRC (dat);
 		/*
 		   puts ("");
 		   for (i = 0; i != 0xFFFF; i++)
@@ -521,15 +521,15 @@ dwg_decode_structures (Bit_Cxeno * dat, Dwg_Structure * skt)
 		   dat->bajto -= 2;
 		   bit_krei_CRC (dat, pvzadr, i);
 		   dat->bajto -= 2;
-		   ckr2 = bit_legi_CRC (dat);
+		   ckr2 = bit_read_CRC (dat);
 		   if (ckr == ckr2)
 		   {
 		   printf ("Legita: %X\nKreita: %X\t SEMO: %02X\n", ckr, ckr2, i);
 		   break;
 		   }
 		   }
-		   printf (" Rubajxo 1: %08X\n", bit_legi_RL (dat));
-		   printf (" Rubajxo 1: %08X\n", bit_legi_RL (dat));
+		   printf (" Rubajxo 1: %08X\n", bit_read_RL (dat));
+		   printf (" Rubajxo 1: %08X\n", bit_read_RL (dat));
 		 */
 
 		if (bit_sercxi_gardostaranto (dat, dwg_gardostaranto (DWG_GS_DUAKAPO_FINO)))
@@ -545,7 +545,7 @@ dwg_decode_structures (Bit_Cxeno * dat, Dwg_Structure * skt)
 		skt->kapo.sekcio[4].adresilo + skt->kapo.sekcio[4].grandeco);
 	dat->bajto = skt->kapo.sekcio[4].adresilo;
 	dat->bito = 0;
-	skt->mezuro = bit_legi_RL (dat);
+	skt->mezuro = bit_read_RL (dat);
 
 	printf ("KIOM BAJTOJ :\t%lu\n", dat->kiom);
 
@@ -564,8 +564,8 @@ dwg_decode_estajxo (Bit_Cxeno * dat, Dwg_Object_Estajxo * est)
 	unsigned int grando;
 	int error = 2;
 
-	est->bitgrandeco = bit_legi_RL (dat);
-	error = bit_legi_H (dat, &est->traktilo);
+	est->bitgrandeco = bit_read_RL (dat);
+	error = bit_read_H (dat, &est->traktilo);
 	if (error)
 	{
 		printf ("\tEraro en traktilo de objekto! Adreso en la ĉeno: 0x%0x\n", dat->bajto);
@@ -576,12 +576,12 @@ dwg_decode_estajxo (Bit_Cxeno * dat, Dwg_Object_Estajxo * est)
 		return;
 	}
 	est->kromdat_kiom = 0;
-	while (grando = bit_legi_BS (dat))
+	while (grando = bit_read_BS (dat))
 	{
 		if (grando > 10210)
 		{
 			printf ("Absurdo! Kromdato-grandeco: %lu. Objekto: %lu (traktilo).\n",
-				grando, est->traktilo.valoro);
+				grando, est->traktilo.value);
 			est->bitgrandeco = 0;
 			est->kromdat_kiom = 0;
 			est->bildo_ekzistas = 0;
@@ -598,39 +598,39 @@ dwg_decode_estajxo (Bit_Cxeno * dat, Dwg_Object_Estajxo * est)
 			est->kromdat_kiom += grando;
 			est->kromdat = realloc (est->kromdat, est->kromdat_kiom);
 		}
-		error = bit_legi_H (dat, &est->kromdat_trakt);
+		error = bit_read_H (dat, &est->kromdat_trakt);
 		if (error)
 			printf ("Ops...\n");
 		for (i = est->kromdat_kiom - grando; i < est->kromdat_kiom; i++)
-			est->kromdat[i] = bit_legi_RC (dat);
+			est->kromdat[i] = bit_read_RC (dat);
 	}
-	est->bildo_ekzistas = bit_legi_B (dat);
+	est->bildo_ekzistas = bit_read_B (dat);
 	if (est->bildo_ekzistas)
 	{
-		est->bildo_kiom = bit_legi_RL (dat);
+		est->bildo_kiom = bit_read_RL (dat);
 		if (est->bildo_kiom < 210210)
 		{
 			est->bildo = malloc (est->bildo_kiom);
 			for (i = 0; i < est->bildo_kiom; i++)
-				est->bildo[i] = bit_legi_RC (dat);
+				est->bildo[i] = bit_read_RC (dat);
 		}
 		else
 		{
 			printf ("Absurdo! Bildo-grandeco: %lu kB. Objekto: %lu (traktilo).\n",
-				est->bildo_kiom / 1000, est->traktilo.valoro);
+				est->bildo_kiom / 1000, est->traktilo.value);
 			bit_ref_salti (dat, -(4 * 8 + 1));
 		}
 	}
 
-	est->regximo = bit_legi_BB (dat);
-	est->reagilo_kiom = bit_legi_BL (dat);
-	est->senligiloj = bit_legi_B (dat);
-	est->koloro = bit_legi_BS (dat);
-	est->linitiposkalo = bit_legi_BD (dat);
-	est->linitipo = bit_legi_BB (dat);
-	est->printstilo = bit_legi_BB (dat);
-	est->malvidebleco = bit_legi_BS (dat);
-	est->linidikeco = bit_legi_RC (dat);
+	est->regximo = bit_read_BB (dat);
+	est->reagilo_kiom = bit_read_BL (dat);
+	est->senligiloj = bit_read_B (dat);
+	est->koloro = bit_read_BS (dat);
+	est->linitiposkalo = bit_read_BD (dat);
+	est->linitipo = bit_read_BB (dat);
+	est->printstilo = bit_read_BB (dat);
+	est->malvidebleco = bit_read_BS (dat);
+	est->linidikeco = bit_read_RC (dat);
 }
 
 static void
@@ -640,8 +640,8 @@ dwg_decode_ordinarajxo (Bit_Cxeno * dat, Dwg_Object_Ordinarajxo * ord)
 	unsigned int grando;
 	int error = 2;
 
-	ord->bitgrandeco = bit_legi_RL (dat);
-	error = bit_legi_H (dat, &ord->traktilo);
+	ord->bitgrandeco = bit_read_RL (dat);
+	error = bit_read_H (dat, &ord->traktilo);
 	if (error)
 	{
 		printf ("\tEraro en traktilo de objekto! Adreso en la ĉeno: 0x%0x\n", dat->bajto);
@@ -651,12 +651,12 @@ dwg_decode_ordinarajxo (Bit_Cxeno * dat, Dwg_Object_Ordinarajxo * ord)
 		return;
 	}
 	ord->kromdat_kiom = 0;
-	while (grando = bit_legi_BS (dat))
+	while (grando = bit_read_BS (dat))
 	{
 		if (grando > 10210)
 		{
 			printf ("Absurdo! Kromdato-grandeco: %lu. Objekto: %lu (traktilo).\n",
-				grando, ord->traktilo.valoro);
+				grando, ord->traktilo.value);
 			ord->bitgrandeco = 0;
 			ord->kromdat_kiom = 0;
 			ord->traktref_kiom = 0;
@@ -672,14 +672,14 @@ dwg_decode_ordinarajxo (Bit_Cxeno * dat, Dwg_Object_Ordinarajxo * ord)
 			ord->kromdat_kiom += grando;
 			ord->kromdat = realloc (ord->kromdat, ord->kromdat_kiom);
 		}
-		error = bit_legi_H (dat, &ord->kromdat_trakt);
+		error = bit_read_H (dat, &ord->kromdat_trakt);
 		if (error)
 			printf ("Ops...\n");
 		for (i = ord->kromdat_kiom - grando; i < ord->kromdat_kiom; i++)
-			ord->kromdat[i] = bit_legi_RC (dat);
+			ord->kromdat[i] = bit_read_RC (dat);
 	}
 
-	ord->reagilo_kiom = bit_legi_BL (dat);
+	ord->reagilo_kiom = bit_read_BL (dat);
 }
 
 static void
@@ -701,9 +701,9 @@ dwg_decode_traktref (Bit_Cxeno * dat, Dwg_Objekto * obj)
 				est->traktref =
 					(Dwg_Traktilo *) realloc (est->traktref,
 								  (i + 10) * sizeof (Dwg_Traktilo));
-			if (bit_legi_H (dat, &est->traktref[i]))
+			if (bit_read_H (dat, &est->traktref[i]))
 			{
-				//printf ("\tEraro en tiu traktilo: %lu\n", est->traktilo.valoro);
+				//printf ("\tEraro en tiu traktilo: %lu\n", est->traktilo.value);
 				break;
 			}
 			if (!(dat->bajto == ktl_lastadreso + 1 && dat->bito == 0))
@@ -729,9 +729,9 @@ dwg_decode_traktref (Bit_Cxeno * dat, Dwg_Objekto * obj)
 				ord->traktref =
 					(Dwg_Traktilo *) realloc (ord->traktref,
 								  (i + 10) * sizeof (Dwg_Traktilo));
-			if (bit_legi_H (dat, &ord->traktref[i]))
+			if (bit_read_H (dat, &ord->traktref[i]))
 			{
-				//printf ("\tEraro en tiu traktilo: %lu\n", est->traktilo.valoro);
+				//printf ("\tEraro en tiu traktilo: %lu\n", est->traktilo.value);
 				break;
 			}
 			if (!(dat->bajto == ktl_lastadreso + 1 && dat->bito == 0))
@@ -758,34 +758,34 @@ dwg_decode_TEXT (Bit_Cxeno * dat, Dwg_Objekto * obj)
 	est = obj->tio.estajxo->tio.TEXT;
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 
-	/* Legitaj valoroj
+	/* Legitaj valuej
 	 */
-	est->datumindik = bit_legi_RC (dat);
+	est->datumindik = bit_read_RC (dat);
 	if ((!est->datumindik & 0x01))
-		est->levigxo = bit_legi_RD (dat);
-	est->x0 = bit_legi_RD (dat);
-	est->y0 = bit_legi_RD (dat);
+		est->levigxo = bit_read_RD (dat);
+	est->x0 = bit_read_RD (dat);
+	est->y0 = bit_read_RD (dat);
 	if (!(est->datumindik & 0x02))
 	{
-		est->gxisrandigo.x = bit_legi_DD (dat, 10);
-		est->gxisrandigo.y = bit_legi_DD (dat, 20);
+		est->gxisrandigo.x = bit_read_DD (dat, 10);
+		est->gxisrandigo.y = bit_read_DD (dat, 20);
 	}
-	bit_legi_BE (dat, &est->forpusxigo.x, &est->forpusxigo.y, &est->forpusxigo.z);
-	est->dikeco = bit_legi_BT (dat);
+	bit_read_BE (dat, &est->forpusxigo.x, &est->forpusxigo.y, &est->forpusxigo.z);
+	est->dikeco = bit_read_BT (dat);
 	if (!(est->datumindik & 0x04))
-		est->klinang = bit_legi_RD (dat);
+		est->klinang = bit_read_RD (dat);
 	if (!(est->datumindik & 0x08))
-		est->turnang = bit_legi_RD (dat);
-	est->alteco = bit_legi_RD (dat);
+		est->turnang = bit_read_RD (dat);
+	est->alteco = bit_read_RD (dat);
 	if (!(est->datumindik & 0x10))
-		est->largxfaktoro = bit_legi_RD (dat);
-	est->teksto = bit_legi_T (dat);
+		est->largxfaktoro = bit_read_RD (dat);
+	est->teksto = bit_read_T (dat);
 	if (!(est->datumindik & 0x20))
-		est->generacio = bit_legi_BS (dat);
+		est->generacio = bit_read_BS (dat);
 	if (!(est->datumindik & 0x40))
-		est->gxisrandigo.h = bit_legi_BS (dat);
+		est->gxisrandigo.h = bit_read_BS (dat);
 	if (!(est->datumindik & 0x80))
-		est->gxisrandigo.v = bit_legi_BS (dat);
+		est->gxisrandigo.v = bit_read_BS (dat);
 
 	dwg_decode_traktref (dat, obj);
 }
@@ -801,37 +801,37 @@ dwg_decode_ATTRIB (Bit_Cxeno * dat, Dwg_Objekto * obj)
 	est = obj->tio.estajxo->tio.ATTRIB;
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 
-	/* Legitaj valoroj
+	/* Legitaj valuej
 	 */
-	est->datumindik = bit_legi_RC (dat);
+	est->datumindik = bit_read_RC (dat);
 	if ((!est->datumindik & 0x01))
-		est->levigxo = bit_legi_RD (dat);
-	est->x0 = bit_legi_RD (dat);
-	est->y0 = bit_legi_RD (dat);
+		est->levigxo = bit_read_RD (dat);
+	est->x0 = bit_read_RD (dat);
+	est->y0 = bit_read_RD (dat);
 	if (!(est->datumindik & 0x02))
 	{
-		est->gxisrandigo.x = bit_legi_DD (dat, 10);
-		est->gxisrandigo.y = bit_legi_DD (dat, 20);
+		est->gxisrandigo.x = bit_read_DD (dat, 10);
+		est->gxisrandigo.y = bit_read_DD (dat, 20);
 	}
-	bit_legi_BE (dat, &est->forpusxigo.x, &est->forpusxigo.y, &est->forpusxigo.z);
-	est->dikeco = bit_legi_BT (dat);
+	bit_read_BE (dat, &est->forpusxigo.x, &est->forpusxigo.y, &est->forpusxigo.z);
+	est->dikeco = bit_read_BT (dat);
 	if (!(est->datumindik & 0x04))
-		est->klinang = bit_legi_RD (dat);
+		est->klinang = bit_read_RD (dat);
 	if (!(est->datumindik & 0x08))
-		est->turnang = bit_legi_RD (dat);
-	est->alteco = bit_legi_RD (dat);
+		est->turnang = bit_read_RD (dat);
+	est->alteco = bit_read_RD (dat);
 	if (!(est->datumindik & 0x10))
-		est->largxfaktoro = bit_legi_RD (dat);
-	est->teksto = bit_legi_T (dat);
+		est->largxfaktoro = bit_read_RD (dat);
+	est->teksto = bit_read_T (dat);
 	if (!(est->datumindik & 0x20))
-		est->generacio = bit_legi_BS (dat);
+		est->generacio = bit_read_BS (dat);
 	if (!(est->datumindik & 0x40))
-		est->gxisrandigo.h = bit_legi_BS (dat);
+		est->gxisrandigo.h = bit_read_BS (dat);
 	if (!(est->datumindik & 0x80))
-		est->gxisrandigo.v = bit_legi_BS (dat);
-	est->etikedo = bit_legi_T (dat);
-	est->kamplong = bit_legi_BS (dat);
-	est->indikiloj = bit_legi_RC (dat);
+		est->gxisrandigo.v = bit_read_BS (dat);
+	est->etikedo = bit_read_T (dat);
+	est->kamplong = bit_read_BS (dat);
+	est->indikiloj = bit_read_RC (dat);
 
 	dwg_decode_traktref (dat, obj);
 }
@@ -847,38 +847,38 @@ dwg_decode_ATTDEF (Bit_Cxeno * dat, Dwg_Objekto * obj)
 	est = obj->tio.estajxo->tio.ATTDEF;
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 
-	/* Legitaj valoroj
+	/* Legitaj valuej
 	 */
-	est->datumindik = bit_legi_RC (dat);
+	est->datumindik = bit_read_RC (dat);
 	if ((!est->datumindik & 0x01))
-		est->levigxo = bit_legi_RD (dat);
-	est->x0 = bit_legi_RD (dat);
-	est->y0 = bit_legi_RD (dat);
+		est->levigxo = bit_read_RD (dat);
+	est->x0 = bit_read_RD (dat);
+	est->y0 = bit_read_RD (dat);
 	if (!(est->datumindik & 0x02))
 	{
-		est->gxisrandigo.x = bit_legi_DD (dat, 10);
-		est->gxisrandigo.y = bit_legi_DD (dat, 20);
+		est->gxisrandigo.x = bit_read_DD (dat, 10);
+		est->gxisrandigo.y = bit_read_DD (dat, 20);
 	}
-	bit_legi_BE (dat, &est->forpusxigo.x, &est->forpusxigo.y, &est->forpusxigo.z);
-	est->dikeco = bit_legi_BT (dat);
+	bit_read_BE (dat, &est->forpusxigo.x, &est->forpusxigo.y, &est->forpusxigo.z);
+	est->dikeco = bit_read_BT (dat);
 	if (!(est->datumindik & 0x04))
-		est->klinang = bit_legi_RD (dat);
+		est->klinang = bit_read_RD (dat);
 	if (!(est->datumindik & 0x08))
-		est->turnang = bit_legi_RD (dat);
-	est->alteco = bit_legi_RD (dat);
+		est->turnang = bit_read_RD (dat);
+	est->alteco = bit_read_RD (dat);
 	if (!(est->datumindik & 0x10))
-		est->largxfaktoro = bit_legi_RD (dat);
-	est->teksto = bit_legi_T (dat);
+		est->largxfaktoro = bit_read_RD (dat);
+	est->teksto = bit_read_T (dat);
 	if (!(est->datumindik & 0x20))
-		est->generacio = bit_legi_BS (dat);
+		est->generacio = bit_read_BS (dat);
 	if (!(est->datumindik & 0x40))
-		est->gxisrandigo.h = bit_legi_BS (dat);
+		est->gxisrandigo.h = bit_read_BS (dat);
 	if (!(est->datumindik & 0x80))
-		est->gxisrandigo.v = bit_legi_BS (dat);
-	est->etikedo = bit_legi_T (dat);
-	est->kamplong = bit_legi_BS (dat);
-	est->indikiloj = bit_legi_RC (dat);
-	est->invitilo = bit_legi_T (dat);
+		est->gxisrandigo.v = bit_read_BS (dat);
+	est->etikedo = bit_read_T (dat);
+	est->kamplong = bit_read_BS (dat);
+	est->indikiloj = bit_read_RC (dat);
+	est->invitilo = bit_read_T (dat);
 
 	dwg_decode_traktref (dat, obj);
 }
@@ -894,9 +894,9 @@ dwg_decode_BLOCK (Bit_Cxeno * dat, Dwg_Objekto * obj)
 	est = obj->tio.estajxo->tio.BLOCK;
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 
-	/* Legitaj valoroj
+	/* Legitaj valuej
 	 */
-	est->nomo = bit_legi_T (dat);
+	est->nomo = bit_read_T (dat);
 
 	dwg_decode_traktref (dat, obj);
 }
@@ -926,33 +926,33 @@ dwg_decode_INSERT (Bit_Cxeno * dat, Dwg_Objekto * obj)
 	est = obj->tio.estajxo->tio.INSERT;
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 
-	/* Legitaj valoroj
+	/* Legitaj valuej
 	 */
-	est->x0 = bit_legi_BD (dat);
-	est->y0 = bit_legi_BD (dat);
-	est->z0 = bit_legi_BD (dat);
-	est->skalindik = bit_legi_BB (dat);
+	est->x0 = bit_read_BD (dat);
+	est->y0 = bit_read_BD (dat);
+	est->z0 = bit_read_BD (dat);
+	est->skalindik = bit_read_BB (dat);
 	if (est->skalindik == 3)
 		est->skalo.x = est->skalo.y = est->skalo.y = 1.0;
 	else if (est->skalindik == 1)
 	{
 		est->skalo.x = 1.0;
-		est->skalo.y = bit_legi_DD (dat, 1.0);
-		est->skalo.z = bit_legi_DD (dat, 1.0);
+		est->skalo.y = bit_read_DD (dat, 1.0);
+		est->skalo.z = bit_read_DD (dat, 1.0);
 	}
 	else if (est->skalindik == 2)
-		est->skalo.x = est->skalo.y = est->skalo.y = bit_legi_RD (dat);
+		est->skalo.x = est->skalo.y = est->skalo.y = bit_read_RD (dat);
 	else //if (est->skalindik == 0)
 	{
-		est->skalo.x = bit_legi_RD (dat);
-		est->skalo.y = bit_legi_DD (dat, est->skalo.x);
-		est->skalo.z = bit_legi_DD (dat, est->skalo.x);
+		est->skalo.x = bit_read_RD (dat);
+		est->skalo.y = bit_read_DD (dat, est->skalo.x);
+		est->skalo.z = bit_read_DD (dat, est->skalo.x);
 	}
-	est->turnang = bit_legi_BD (dat);
-	est->forpusxigo.x = bit_legi_BD (dat);
-	est->forpusxigo.y = bit_legi_BD (dat);
-	est->forpusxigo.z = bit_legi_BD (dat);
-	est->kun_attrib = bit_legi_B (dat);
+	est->turnang = bit_read_BD (dat);
+	est->forpusxigo.x = bit_read_BD (dat);
+	est->forpusxigo.y = bit_read_BD (dat);
+	est->forpusxigo.z = bit_read_BD (dat);
+	est->kun_attrib = bit_read_B (dat);
 
 	dwg_decode_traktref (dat, obj);
 }
@@ -968,37 +968,37 @@ dwg_decode_MINSERT (Bit_Cxeno * dat, Dwg_Objekto * obj)
 	est = obj->tio.estajxo->tio.MINSERT;
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 
-	/* Legitaj valoroj
+	/* Legitaj valuej
 	 */
-	est->x0 = bit_legi_BD (dat);
-	est->y0 = bit_legi_BD (dat);
-	est->z0 = bit_legi_BD (dat);
-	est->skalindik = bit_legi_BB (dat);
+	est->x0 = bit_read_BD (dat);
+	est->y0 = bit_read_BD (dat);
+	est->z0 = bit_read_BD (dat);
+	est->skalindik = bit_read_BB (dat);
 	if (est->skalindik == 3)
 		est->skalo.x = est->skalo.y = est->skalo.y = 1.0;
 	else if (est->skalindik == 1)
 	{
 		est->skalo.x = 1.0;
-		est->skalo.y = bit_legi_DD (dat, 1.0);
-		est->skalo.z = bit_legi_DD (dat, 1.0);
+		est->skalo.y = bit_read_DD (dat, 1.0);
+		est->skalo.z = bit_read_DD (dat, 1.0);
 	}
 	else if (est->skalindik == 2)
-		est->skalo.x = est->skalo.y = est->skalo.y = bit_legi_RD (dat);
+		est->skalo.x = est->skalo.y = est->skalo.y = bit_read_RD (dat);
 	else //if (est->skalindik == 0)
 	{
-		est->skalo.x = bit_legi_RD (dat);
-		est->skalo.y = bit_legi_DD (dat, est->skalo.x);
-		est->skalo.z = bit_legi_DD (dat, est->skalo.x);
+		est->skalo.x = bit_read_RD (dat);
+		est->skalo.y = bit_read_DD (dat, est->skalo.x);
+		est->skalo.z = bit_read_DD (dat, est->skalo.x);
 	}
-	est->turnang = bit_legi_BD (dat);
-	est->forpusxigo.x = bit_legi_BD (dat);
-	est->forpusxigo.y = bit_legi_BD (dat);
-	est->forpusxigo.z = bit_legi_BD (dat);
-	est->kun_attrib = bit_legi_B (dat);
-	est->kol.kiom = bit_legi_BS (dat);
-	est->lin.kiom = bit_legi_BS (dat);
-	est->kol.dx = bit_legi_BD (dat);
-	est->lin.dy = bit_legi_BD (dat);
+	est->turnang = bit_read_BD (dat);
+	est->forpusxigo.x = bit_read_BD (dat);
+	est->forpusxigo.y = bit_read_BD (dat);
+	est->forpusxigo.z = bit_read_BD (dat);
+	est->kun_attrib = bit_read_B (dat);
+	est->kol.kiom = bit_read_BS (dat);
+	est->lin.kiom = bit_read_BS (dat);
+	est->kol.dx = bit_read_BD (dat);
+	est->lin.dy = bit_read_BD (dat);
 
 	dwg_decode_traktref (dat, obj);
 }
@@ -1014,19 +1014,19 @@ dwg_decode_VERTEX_2D (Bit_Cxeno * dat, Dwg_Objekto * obj)
 	est = obj->tio.estajxo->tio.VERTEX_2D;
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 
-	/* Legitaj valoroj
+	/* Legitaj valuej
 	 */
-	est->indikiloj = bit_legi_RC (dat);
-	est->x0 = bit_legi_BD (dat);
-	est->y0 = bit_legi_BD (dat);
-	est->z0 = bit_legi_BD (dat);
-	est->eklargxo = bit_legi_BD (dat);
+	est->indikiloj = bit_read_RC (dat);
+	est->x0 = bit_read_BD (dat);
+	est->y0 = bit_read_BD (dat);
+	est->z0 = bit_read_BD (dat);
+	est->eklargxo = bit_read_BD (dat);
 	if (est->eklargxo < 0)
 		est->finlargxo = est->eklargxo = -est->eklargxo;
 	else
-		est->finlargxo = bit_legi_BD (dat);
-	est->protub = bit_legi_BD (dat);
-	est->tangxdir = bit_legi_BD (dat);
+		est->finlargxo = bit_read_BD (dat);
+	est->protub = bit_read_BD (dat);
+	est->tangxdir = bit_read_BD (dat);
 
 	dwg_decode_traktref (dat, obj);
 }
@@ -1042,12 +1042,12 @@ dwg_decode_VERTEX_3D (Bit_Cxeno * dat, Dwg_Objekto * obj)
 	est = obj->tio.estajxo->tio.VERTEX_3D;
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 
-	/* Legitaj valoroj
+	/* Legitaj valuej
 	 */
-	est->indikiloj = bit_legi_RC (dat);
-	est->x0 = bit_legi_BD (dat);
-	est->y0 = bit_legi_BD (dat);
-	est->z0 = bit_legi_BD (dat);
+	est->indikiloj = bit_read_RC (dat);
+	est->x0 = bit_read_BD (dat);
+	est->y0 = bit_read_BD (dat);
+	est->z0 = bit_read_BD (dat);
 
 	dwg_decode_traktref (dat, obj);
 }
@@ -1063,12 +1063,12 @@ dwg_decode_VERTEX_PFACE_FACE (Bit_Cxeno * dat, Dwg_Objekto * obj)
 	est = obj->tio.estajxo->tio.VERTEX_PFACE_FACE;
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 
-	/* Legitaj valoroj
+	/* Legitaj valuej
 	 */
-	est->vertind[0] = bit_legi_BS (dat);
-	est->vertind[1] = bit_legi_BS (dat);
-	est->vertind[2] = bit_legi_BS (dat);
-	est->vertind[3] = bit_legi_BS (dat);
+	est->vertind[0] = bit_read_BS (dat);
+	est->vertind[1] = bit_read_BS (dat);
+	est->vertind[2] = bit_read_BS (dat);
+	est->vertind[3] = bit_read_BS (dat);
 
 	dwg_decode_traktref (dat, obj);
 }
@@ -1084,15 +1084,15 @@ dwg_decode_POLYLINE_2D (Bit_Cxeno * dat, Dwg_Objekto * obj)
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 	est = obj->tio.estajxo->tio.POLYLINE_2D;
 
-	/* Legitaj valoroj
+	/* Legitaj valuej
 	 */
-	est->indikiloj = bit_legi_BS (dat);
-	est->kurbtipo = bit_legi_BS (dat);
-	est->eklargxo = bit_legi_BD (dat);
-	est->finlargxo = bit_legi_BD (dat);
-	est->dikeco = bit_legi_BT (dat);
-	est->levigxo = bit_legi_BD (dat);
-	bit_legi_BE (dat, &est->forpusxigo.x, &est->forpusxigo.y, &est->forpusxigo.z);
+	est->indikiloj = bit_read_BS (dat);
+	est->kurbtipo = bit_read_BS (dat);
+	est->eklargxo = bit_read_BD (dat);
+	est->finlargxo = bit_read_BD (dat);
+	est->dikeco = bit_read_BT (dat);
+	est->levigxo = bit_read_BD (dat);
+	bit_read_BE (dat, &est->forpusxigo.x, &est->forpusxigo.y, &est->forpusxigo.z);
 
 	dwg_decode_traktref (dat, obj);
 }
@@ -1108,10 +1108,10 @@ dwg_decode_POLYLINE_3D (Bit_Cxeno * dat, Dwg_Objekto * obj)
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 	est = obj->tio.estajxo->tio.POLYLINE_3D;
 
-	/* Legitaj valoroj
+	/* Legitaj valuej
 	 */
-	est->indikiloj_1 = bit_legi_RC (dat);
-	est->indikiloj_2 = bit_legi_RC (dat);
+	est->indikiloj_1 = bit_read_RC (dat);
+	est->indikiloj_2 = bit_read_RC (dat);
 
 	dwg_decode_traktref (dat, obj);
 }
@@ -1127,14 +1127,14 @@ dwg_decode_ARC (Bit_Cxeno * dat, Dwg_Objekto * obj)
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 	est = obj->tio.estajxo->tio.ARC;
 
-	est->x0 = bit_legi_BD (dat);
-	est->y0 = bit_legi_BD (dat);
-	est->z0 = bit_legi_BD (dat);
-	est->radiuso = bit_legi_BD (dat);
-	est->dikeco = bit_legi_BT (dat);
-	bit_legi_BE (dat, &est->forpusxigo.x, &est->forpusxigo.y, &est->forpusxigo.z);
-	est->ekangulo = bit_legi_BD (dat);
-	est->finangulo = bit_legi_BD (dat);
+	est->x0 = bit_read_BD (dat);
+	est->y0 = bit_read_BD (dat);
+	est->z0 = bit_read_BD (dat);
+	est->radiuso = bit_read_BD (dat);
+	est->dikeco = bit_read_BT (dat);
+	bit_read_BE (dat, &est->forpusxigo.x, &est->forpusxigo.y, &est->forpusxigo.z);
+	est->ekangulo = bit_read_BD (dat);
+	est->finangulo = bit_read_BD (dat);
 
 	dwg_decode_traktref (dat, obj);
 }
@@ -1150,12 +1150,12 @@ dwg_decode_CIRCLE (Bit_Cxeno * dat, Dwg_Objekto * obj)
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 	est = obj->tio.estajxo->tio.CIRCLE;
 
-	est->x0 = bit_legi_BD (dat);
-	est->y0 = bit_legi_BD (dat);
-	est->z0 = bit_legi_BD (dat);
-	est->radiuso = bit_legi_BD (dat);
-	est->dikeco = bit_legi_BT (dat);
-	bit_legi_BE (dat, &est->forpusxigo.x, &est->forpusxigo.y, &est->forpusxigo.z);
+	est->x0 = bit_read_BD (dat);
+	est->y0 = bit_read_BD (dat);
+	est->z0 = bit_read_BD (dat);
+	est->radiuso = bit_read_BD (dat);
+	est->dikeco = bit_read_BT (dat);
+	bit_read_BE (dat, &est->forpusxigo.x, &est->forpusxigo.y, &est->forpusxigo.z);
 
 	dwg_decode_traktref (dat, obj);
 }
@@ -1171,19 +1171,19 @@ dwg_decode_LINE (Bit_Cxeno * dat, Dwg_Objekto * obj)
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 	est = obj->tio.estajxo->tio.LINE;
 
-	est->nur_2D = bit_legi_B (dat);
-	est->x0 = bit_legi_RD (dat);
-	est->x1 = bit_legi_DD (dat, est->x0);
-	est->y0 = bit_legi_RD (dat);
-	est->y1 = bit_legi_DD (dat, est->y0);
+	est->nur_2D = bit_read_B (dat);
+	est->x0 = bit_read_RD (dat);
+	est->x1 = bit_read_DD (dat, est->x0);
+	est->y0 = bit_read_RD (dat);
+	est->y1 = bit_read_DD (dat, est->y0);
 	est->z0 = est->z1 = 0.0;
 	if (!est->nur_2D)
 	{
-		est->z0 = bit_legi_RD (dat);
-		est->z1 = bit_legi_DD (dat, est->z0);
+		est->z0 = bit_read_RD (dat);
+		est->z1 = bit_read_DD (dat, est->z0);
 	}
-	est->dikeco = bit_legi_BT (dat);
-	bit_legi_BE (dat, &est->forpusxigo.x, &est->forpusxigo.y, &est->forpusxigo.z);
+	est->dikeco = bit_read_BT (dat);
+	bit_read_BE (dat, &est->forpusxigo.x, &est->forpusxigo.y, &est->forpusxigo.z);
 
 	dwg_decode_traktref (dat, obj);
 }
@@ -1199,12 +1199,12 @@ dwg_decode_POINT (Bit_Cxeno * dat, Dwg_Objekto * obj)
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 	est = obj->tio.estajxo->tio.POINT;
 
-	est->x0 = bit_legi_BD (dat);
-	est->y0 = bit_legi_BD (dat);
-	est->z0 = bit_legi_BD (dat);
-	est->dikeco = bit_legi_BT (dat);
-	bit_legi_BE (dat, &est->forpusxigo.x, &est->forpusxigo.y, &est->forpusxigo.z);
-	est->x_ang = bit_legi_BD (dat);
+	est->x0 = bit_read_BD (dat);
+	est->y0 = bit_read_BD (dat);
+	est->z0 = bit_read_BD (dat);
+	est->dikeco = bit_read_BT (dat);
+	bit_read_BE (dat, &est->forpusxigo.x, &est->forpusxigo.y, &est->forpusxigo.z);
+	est->x_ang = bit_read_BD (dat);
 
 	dwg_decode_traktref (dat, obj);
 }
@@ -1220,18 +1220,18 @@ dwg_decode_ELLIPSE (Bit_Cxeno * dat, Dwg_Objekto * obj)
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 	est = obj->tio.estajxo->tio.ELLIPSE;
 
-	est->x0 = bit_legi_BD (dat);
-	est->y0 = bit_legi_BD (dat);
-	est->z0 = bit_legi_BD (dat);
-	est->x1 = bit_legi_BD (dat);
-	est->y1 = bit_legi_BD (dat);
-	est->z1 = bit_legi_BD (dat);
-	est->forpusxigo.x = bit_legi_BD (dat);
-	est->forpusxigo.y = bit_legi_BD (dat);
-	est->forpusxigo.z = bit_legi_BD (dat);
-	est->radiusproporcio = bit_legi_BD (dat);
-	est->ekangulo = bit_legi_BD (dat);
-	est->finangulo = bit_legi_BD (dat);
+	est->x0 = bit_read_BD (dat);
+	est->y0 = bit_read_BD (dat);
+	est->z0 = bit_read_BD (dat);
+	est->x1 = bit_read_BD (dat);
+	est->y1 = bit_read_BD (dat);
+	est->z1 = bit_read_BD (dat);
+	est->forpusxigo.x = bit_read_BD (dat);
+	est->forpusxigo.y = bit_read_BD (dat);
+	est->forpusxigo.z = bit_read_BD (dat);
+	est->radiusproporcio = bit_read_BD (dat);
+	est->ekangulo = bit_read_BD (dat);
+	est->finangulo = bit_read_BD (dat);
 
 	dwg_decode_traktref (dat, obj);
 }
@@ -1247,12 +1247,12 @@ dwg_decode_RAY (Bit_Cxeno * dat, Dwg_Objekto * obj)
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 	est = obj->tio.estajxo->tio.RAY;
 
-	est->x0 = bit_legi_BD (dat);
-	est->y0 = bit_legi_BD (dat);
-	est->z0 = bit_legi_BD (dat);
-	est->x1 = bit_legi_BD (dat);
-	est->y1 = bit_legi_BD (dat);
-	est->z1 = bit_legi_BD (dat);
+	est->x0 = bit_read_BD (dat);
+	est->y0 = bit_read_BD (dat);
+	est->z0 = bit_read_BD (dat);
+	est->x1 = bit_read_BD (dat);
+	est->y1 = bit_read_BD (dat);
+	est->z1 = bit_read_BD (dat);
 
 	dwg_decode_traktref (dat, obj);
 }
@@ -1268,25 +1268,25 @@ dwg_decode_MTEXT (Bit_Cxeno * dat, Dwg_Objekto * obj)
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 	est = obj->tio.estajxo->tio.MTEXT;
 
-	est->x0 = bit_legi_BD (dat);
-	est->y0 = bit_legi_BD (dat);
-	est->y0 = bit_legi_BD (dat);
-	est->forpusxigo.x = bit_legi_BD (dat);
-	est->forpusxigo.y = bit_legi_BD (dat);
-	est->forpusxigo.z = bit_legi_BD (dat);
-	est->x1 = bit_legi_BD (dat);
-	est->y1 = bit_legi_BD (dat);
-	est->z1 = bit_legi_BD (dat);
-	est->largxeco = bit_legi_BD (dat);
-	est->alteco = bit_legi_BD (dat);
-	est->kunmeto = bit_legi_BS (dat);
-	est->direkto = bit_legi_BS (dat);
-	est->etendo = bit_legi_BD (dat);
-	est->etendlargxo = bit_legi_BD (dat);
-	est->teksto = bit_legi_T (dat);
-	est->linispaco_stilo = bit_legi_BS (dat);
-	est->linispaco_faktoro = bit_legi_BD (dat);
-	est->ia_bito = bit_legi_B (dat);
+	est->x0 = bit_read_BD (dat);
+	est->y0 = bit_read_BD (dat);
+	est->y0 = bit_read_BD (dat);
+	est->forpusxigo.x = bit_read_BD (dat);
+	est->forpusxigo.y = bit_read_BD (dat);
+	est->forpusxigo.z = bit_read_BD (dat);
+	est->x1 = bit_read_BD (dat);
+	est->y1 = bit_read_BD (dat);
+	est->z1 = bit_read_BD (dat);
+	est->largxeco = bit_read_BD (dat);
+	est->alteco = bit_read_BD (dat);
+	est->kunmeto = bit_read_BS (dat);
+	est->direkto = bit_read_BS (dat);
+	est->etendo = bit_read_BD (dat);
+	est->etendlargxo = bit_read_BD (dat);
+	est->teksto = bit_read_T (dat);
+	est->linispaco_stilo = bit_read_BS (dat);
+	est->linispaco_faktoro = bit_read_BD (dat);
+	est->ia_bito = bit_read_B (dat);
 
 	dwg_decode_traktref (dat, obj);
 }
@@ -1302,14 +1302,14 @@ dwg_decode_LAYER (Bit_Cxeno * dat, Dwg_Objekto * obj)
 	dwg_decode_ordinarajxo (dat, obj->tio.ordinarajxo);
 	ord = obj->tio.ordinarajxo->tio.LAYER;
 
-	/* Legitaj valoroj
+	/* Legitaj valuej
 	 */
-	ord->nomo = bit_legi_T (dat);
-	ord->bito64 = bit_legi_B (dat);
-	ord->xrefi = bit_legi_BS (dat);
-	ord->xrefdep = bit_legi_B (dat);
-	ord->ecoj = bit_legi_BS (dat);
-	ord->koloro = bit_legi_BS (dat);
+	ord->nomo = bit_read_T (dat);
+	ord->bito64 = bit_read_B (dat);
+	ord->xrefi = bit_read_BS (dat);
+	ord->xrefdep = bit_read_B (dat);
+	ord->ecoj = bit_read_BS (dat);
+	ord->koloro = bit_read_BS (dat);
 
 	dwg_decode_traktref (dat, obj);
 }
@@ -1325,63 +1325,63 @@ dwg_decode_LAYOUT (Bit_Cxeno * dat, Dwg_Objekto * obj)
 	dwg_decode_ordinarajxo (dat, obj->tio.ordinarajxo);
 	ord = obj->tio.ordinarajxo->tio.LAYOUT;
 
-	/* Legitaj valoroj
+	/* Legitaj valuej
 	 */
-	ord->pagxo.agordo = bit_legi_T (dat);
-	ord->pagxo.printilo = bit_legi_T (dat);
-	ord->pagxo.indikiloj = bit_legi_BS (dat);
-	ord->pagxo.maldekstre = bit_legi_BD (dat);
-	ord->pagxo.malsupre = bit_legi_BD (dat);
-	ord->pagxo.dekstre = bit_legi_BD (dat);
-	ord->pagxo.supre = bit_legi_BD (dat);
-	ord->pagxo.largxeco = bit_legi_BD (dat);
-	ord->pagxo.alteco = bit_legi_BD (dat);
-	ord->pagxo.grandeco = bit_legi_T (dat);
-	ord->pagxo.dx = bit_legi_BD (dat);
-	ord->pagxo.dy = bit_legi_BD (dat);
-	ord->pagxo.unuoj = bit_legi_BS (dat);
-	ord->pagxo.rotacio = bit_legi_BS (dat);
-	ord->pagxo.tipo = bit_legi_BS (dat);
-	ord->pagxo.x_min = bit_legi_BD (dat);
-	ord->pagxo.y_min = bit_legi_BD (dat);
-	ord->pagxo.x_maks = bit_legi_BD (dat);
-	ord->pagxo.y_maks = bit_legi_BD (dat);
-	ord->pagxo.nomo = bit_legi_T (dat);
-	ord->pagxo.skalo.A = bit_legi_BD (dat);
-	ord->pagxo.skalo.B = bit_legi_BD (dat);
-	ord->pagxo.stilfolio = bit_legi_T (dat);
-	ord->pagxo.skalo.tipo = bit_legi_BS (dat);
-	ord->pagxo.skalo.faktoro = bit_legi_BD (dat);
-	ord->pagxo.x0 = bit_legi_BD (dat);
-	ord->pagxo.y0 = bit_legi_BD (dat);
+	ord->pagxo.agordo = bit_read_T (dat);
+	ord->pagxo.printilo = bit_read_T (dat);
+	ord->pagxo.indikiloj = bit_read_BS (dat);
+	ord->pagxo.maldekstre = bit_read_BD (dat);
+	ord->pagxo.malsupre = bit_read_BD (dat);
+	ord->pagxo.dekstre = bit_read_BD (dat);
+	ord->pagxo.supre = bit_read_BD (dat);
+	ord->pagxo.largxeco = bit_read_BD (dat);
+	ord->pagxo.alteco = bit_read_BD (dat);
+	ord->pagxo.grandeco = bit_read_T (dat);
+	ord->pagxo.dx = bit_read_BD (dat);
+	ord->pagxo.dy = bit_read_BD (dat);
+	ord->pagxo.unuoj = bit_read_BS (dat);
+	ord->pagxo.rotacio = bit_read_BS (dat);
+	ord->pagxo.tipo = bit_read_BS (dat);
+	ord->pagxo.x_min = bit_read_BD (dat);
+	ord->pagxo.y_min = bit_read_BD (dat);
+	ord->pagxo.x_maks = bit_read_BD (dat);
+	ord->pagxo.y_maks = bit_read_BD (dat);
+	ord->pagxo.nomo = bit_read_T (dat);
+	ord->pagxo.skalo.A = bit_read_BD (dat);
+	ord->pagxo.skalo.B = bit_read_BD (dat);
+	ord->pagxo.stilfolio = bit_read_T (dat);
+	ord->pagxo.skalo.tipo = bit_read_BS (dat);
+	ord->pagxo.skalo.faktoro = bit_read_BD (dat);
+	ord->pagxo.x0 = bit_read_BD (dat);
+	ord->pagxo.y0 = bit_read_BD (dat);
 
-	ord->nomo = bit_legi_T (dat);
-	ord->ordo = bit_legi_BS (dat);
-	ord->indikiloj = bit_legi_BS (dat);
-	ord->x0 = bit_legi_BD (dat);
-	ord->y0 = bit_legi_BD (dat);
-	ord->z0 = bit_legi_BD (dat);
-	ord->x_min = bit_legi_RD (dat);
-	ord->y_min = bit_legi_RD (dat);
-	ord->x_maks = bit_legi_RD (dat);
-	ord->y_maks = bit_legi_RD (dat);
-	ord->enmeto.x0 = bit_legi_BD (dat);
-	ord->enmeto.y0 = bit_legi_BD (dat);
-	ord->enmeto.z0 = bit_legi_BD (dat);
-	ord->akso_X.x0 = bit_legi_BD (dat);
-	ord->akso_X.y0 = bit_legi_BD (dat);
-	ord->akso_X.z0 = bit_legi_BD (dat);
-	ord->akso_Y.x0 = bit_legi_BD (dat);
-	ord->akso_Y.y0 = bit_legi_BD (dat);
-	ord->akso_Y.z0 = bit_legi_BD (dat);
-	ord->levigxo = bit_legi_BD (dat);
-	ord->rigardtipo = bit_legi_BS (dat);
-	ord->limo.x_min = bit_legi_BD (dat);
-	ord->limo.y_min = bit_legi_BD (dat);
-	ord->limo.z_min = bit_legi_BD (dat);
-	ord->limo.x_maks = bit_legi_BD (dat);
-	ord->limo.y_maks = bit_legi_BD (dat);
-	ord->limo.z_maks = bit_legi_BD (dat);
+	ord->nomo = bit_read_T (dat);
+	ord->ordo = bit_read_BS (dat);
+	ord->indikiloj = bit_read_BS (dat);
+	ord->x0 = bit_read_BD (dat);
+	ord->y0 = bit_read_BD (dat);
+	ord->z0 = bit_read_BD (dat);
+	ord->x_min = bit_read_RD (dat);
+	ord->y_min = bit_read_RD (dat);
+	ord->x_maks = bit_read_RD (dat);
+	ord->y_maks = bit_read_RD (dat);
+	ord->enmeto.x0 = bit_read_BD (dat);
+	ord->enmeto.y0 = bit_read_BD (dat);
+	ord->enmeto.z0 = bit_read_BD (dat);
+	ord->akso_X.x0 = bit_read_BD (dat);
+	ord->akso_X.y0 = bit_read_BD (dat);
+	ord->akso_X.z0 = bit_read_BD (dat);
+	ord->akso_Y.x0 = bit_read_BD (dat);
+	ord->akso_Y.y0 = bit_read_BD (dat);
+	ord->akso_Y.z0 = bit_read_BD (dat);
+	ord->levigxo = bit_read_BD (dat);
+	ord->rigardtipo = bit_read_BS (dat);
+	ord->limo.x_min = bit_read_BD (dat);
+	ord->limo.y_min = bit_read_BD (dat);
+	ord->limo.z_min = bit_read_BD (dat);
+	ord->limo.x_maks = bit_read_BD (dat);
+	ord->limo.y_maks = bit_read_BD (dat);
+	ord->limo.z_maks = bit_read_BD (dat);
 
 	dwg_decode_traktref (dat, obj);
 }
@@ -1397,7 +1397,7 @@ dwg_decode_UNUSED (Bit_Cxeno * dat, Dwg_Objekto * obj)
 	dwg_decode_estajxo (dat, obj->tio.estajxo);
 	est = obj->tio.estajxo->tio.UNUSED;
 
-	/* Legitaj valoroj
+	/* Legitaj valuej
 	 */
 
 
@@ -1439,10 +1439,10 @@ dwg_decode_aldoni_objekto (Dwg_Structure * skt, Bit_Cxeno * dat, long unsigned i
 	obj = &skt->objekto[skt->objekto_kiom];
 	skt->objekto_kiom++;
 
-	obj->grandeco = bit_legi_MS (dat);
+	obj->grandeco = bit_read_MS (dat);
 	objekadres = dat->bajto;
 	ktl_lastadreso = dat->bajto + obj->grandeco;	/* (de cxi tie oni kalkulas la bitgrandecon) */
-	obj->tipo = bit_legi_BS (dat);
+	obj->tipo = bit_read_BS (dat);
 
 	/* Kontroli la tipon de objekto
 	 */

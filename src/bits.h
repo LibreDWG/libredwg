@@ -9,7 +9,7 @@
 /*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
 /*****************************************************************************/
 
-///  Funkcioj por legi/skribi kompaktitajn datenerojn en bitok-cxenoj.
+///  Funkcioj por read/write kompaktitajn datenerojn en bitok-cxenoj.
 /**
  La pozicioj de bitoj en cxiu bitoko (bajto) estas numeritaj laux jene:
 
@@ -41,89 +41,89 @@ typedef struct _bit_cxeno
  */
 void bit_ref_salti (Bit_Cxeno * dat, int salto);
 
-unsigned char bit_legi_B (Bit_Cxeno * bit_datenaro);
+unsigned char bit_read_B (Bit_Cxeno * bit_datenaro);
 
-void bit_skribi_B (Bit_Cxeno * bit_datenaro, unsigned char valoro);
+void bit_write_B (Bit_Cxeno * bit_datenaro, unsigned char value);
 
-unsigned char bit_legi_BB (Bit_Cxeno * bit_datenaro);
+unsigned char bit_read_BB (Bit_Cxeno * bit_datenaro);
 
-void bit_skribi_BB (Bit_Cxeno * bit_datenaro, unsigned char valoro);
+void bit_write_BB (Bit_Cxeno * bit_datenaro, unsigned char value);
 
-unsigned char bit_legi_RC (Bit_Cxeno * bit_datenaro);
+unsigned char bit_read_RC (Bit_Cxeno * bit_datenaro);
 
-void bit_skribi_RC (Bit_Cxeno * bit_datenaro, unsigned char valoro);
+void bit_write_RC (Bit_Cxeno * bit_datenaro, unsigned char value);
 
-unsigned int bit_legi_RS (Bit_Cxeno * bit_datenaro);
+unsigned int bit_read_RS (Bit_Cxeno * bit_datenaro);
 
-void bit_skribi_RS (Bit_Cxeno * bit_datenaro, unsigned int valoro);
+void bit_write_RS (Bit_Cxeno * bit_datenaro, unsigned int value);
 
-long unsigned int bit_legi_RL (Bit_Cxeno * bit_datenaro);
+long unsigned int bit_read_RL (Bit_Cxeno * bit_datenaro);
 
-void bit_skribi_RL (Bit_Cxeno * bit_datenaro, long unsigned int valoro);
+void bit_write_RL (Bit_Cxeno * bit_datenaro, long unsigned int value);
 
-double bit_legi_RD (Bit_Cxeno * bit_datenaro);
+double bit_read_RD (Bit_Cxeno * bit_datenaro);
 
-void bit_skribi_RD (Bit_Cxeno * bit_datenaro, double valoro);
+void bit_write_RD (Bit_Cxeno * bit_datenaro, double value);
 
 /* Funkcioj por manipuli kompaktecan datenaron.
  */
-unsigned int bit_legi_BS (Bit_Cxeno * bit_datenaro);
+unsigned int bit_read_BS (Bit_Cxeno * bit_datenaro);
 
-void bit_skribi_BS (Bit_Cxeno * bit_datenaro, unsigned int valoro);
+void bit_write_BS (Bit_Cxeno * bit_datenaro, unsigned int value);
 
-long unsigned int bit_legi_BL (Bit_Cxeno * bit_datenaro);
+long unsigned int bit_read_BL (Bit_Cxeno * bit_datenaro);
 
-void bit_skribi_BL (Bit_Cxeno * bit_datenaro, long unsigned int valoro);
+void bit_write_BL (Bit_Cxeno * bit_datenaro, long unsigned int value);
 
-double bit_legi_BD (Bit_Cxeno * bit_datenaro);
+double bit_read_BD (Bit_Cxeno * bit_datenaro);
 
-void bit_skribi_BD (Bit_Cxeno * bit_datenaro, double valoro);
+void bit_write_BD (Bit_Cxeno * bit_datenaro, double value);
 
-long int bit_legi_MC (Bit_Cxeno * bit_datenaro);
+long int bit_read_MC (Bit_Cxeno * bit_datenaro);
 
-void bit_skribi_MC (Bit_Cxeno * bit_datenaro, long int valoro);
+void bit_write_MC (Bit_Cxeno * bit_datenaro, long int value);
 
-long unsigned int bit_legi_MS (Bit_Cxeno * bit_datenaro);
+long unsigned int bit_read_MS (Bit_Cxeno * bit_datenaro);
 
-void bit_skribi_MS (Bit_Cxeno * bit_datenaro, long unsigned int valoro);
+void bit_write_MS (Bit_Cxeno * bit_datenaro, long unsigned int value);
 
-void bit_legi_BE (Bit_Cxeno * bit_datenaro, double *x, double *y, double *z);
+void bit_read_BE (Bit_Cxeno * bit_datenaro, double *x, double *y, double *z);
 
-void bit_skribi_BE (Bit_Cxeno * bit_datenaro, double x, double y, double z);
+void bit_write_BE (Bit_Cxeno * bit_datenaro, double x, double y, double z);
 
-double bit_legi_DD (Bit_Cxeno * bit_datenaro, double antauxdifinajxo);
+double bit_read_DD (Bit_Cxeno * bit_datenaro, double antauxdifinajxo);
 
-void bit_skribi_DD (Bit_Cxeno * bit_datenaro, double valoro, double antauxdifinajxo);
+void bit_write_DD (Bit_Cxeno * bit_datenaro, double value, double antauxdifinajxo);
 
-double bit_legi_BT (Bit_Cxeno * bit_datenaro);
+double bit_read_BT (Bit_Cxeno * bit_datenaro);
 
-void bit_skribi_BT (Bit_Cxeno * bit_datenaro, double valoro);
+void bit_write_BT (Bit_Cxeno * bit_datenaro, double value);
 
-int bit_legi_H (Bit_Cxeno * bit_datenaro, Dwg_Traktilo * traktilo);
+int bit_read_H (Bit_Cxeno * bit_datenaro, Dwg_Traktilo * traktilo);
 
-void bit_skribi_H (Bit_Cxeno * dat, Dwg_Traktilo * traktilo);
+void bit_write_H (Bit_Cxeno * dat, Dwg_Traktilo * traktilo);
 
-unsigned int bit_legi_CRC (Bit_Cxeno * bit_datenaro);
+unsigned int bit_read_CRC (Bit_Cxeno * bit_datenaro);
 
-int bit_konfirmi_CRC (Bit_Cxeno * bit_datenaro, long unsigned int ekadreso, unsigned int semo);
+int bit_check_CRC (Bit_Cxeno * bit_datenaro, long unsigned int ekadreso, unsigned int semo);
 
 unsigned int bit_krei_CRC (Bit_Cxeno * bit_datenaro, long unsigned int ekadreso, unsigned int semo);
 
-unsigned char *bit_legi_T (Bit_Cxeno * bit_datenaro);
+unsigned char *bit_read_T (Bit_Cxeno * bit_datenaro);
 
-void bit_skribi_T (Bit_Cxeno * bit_datenaro, unsigned char *valoro);
+void bit_write_T (Bit_Cxeno * bit_datenaro, unsigned char *value);
 
-long unsigned int bit_legi_L (Bit_Cxeno * dat);
+long unsigned int bit_read_L (Bit_Cxeno * dat);
 
-void bit_skribi_L (Bit_Cxeno * dat, long unsigned int valoro);
+void bit_write_L (Bit_Cxeno * dat, long unsigned int value);
 
 int bit_sercxi_gardostaranto (Bit_Cxeno * dat, unsigned char gdst[16]);
 
-void bit_skribi_gardostaranto (Bit_Cxeno * dat, unsigned char gdst[16]);
+void bit_write_gardostaranto (Bit_Cxeno * dat, unsigned char gdst[16]);
 
 void bit_cxeno_rezervi (Bit_Cxeno * dat);
 
-void bit_montri (Bit_Cxeno * dat, long unsigned int kiom);
+void bit_print (Bit_Cxeno * dat, long unsigned int kiom);
 
 void bit_esplori_cxeno (Bit_Cxeno * dat, long unsigned int kiom);
 
