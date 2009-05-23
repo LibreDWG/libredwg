@@ -69,7 +69,7 @@ dwg_read_file (char *filename, Dwg_Structure * dwg_struct)
 	kiom = fread (bitaro.cxeno, sizeof (char), bitaro.kiom, fp);
 	if (kiom != bitaro.kiom)
 	{
-		printf ("Ne eblis read la tutan dosieron (%lu el %lu):\n %s\n", kiom, bitaro.kiom,
+		printf ("Ne eblis read la tutan dosieron (%lu el %lu):\n %s\n", (long unsigned int) kiom, bitaro.kiom,
 			filename);
 		fclose (fp);
 		free (bitaro.cxeno);
@@ -148,7 +148,7 @@ dwg_print_estajxo (Dwg_Object_Estajxo * est)
 	printf ("Bitgrandeco: %lu\n", est->bitgrandeco);
 	printf ("Vera traktilo: %i.%i.%lu\n", est->traktilo.kodo, est->traktilo.kiom,
 		est->traktilo.value);
-	printf ("Kroma datenaro: %lu B\n", est->kromdat_kiom);
+	printf ("Kroma datenaro: %lu B\n", (long unsigned int) est->kromdat_kiom);
 	printf ("Ĉu bildo?: %s", est->bildo_ekzistas ? "Jes" : "Ne");
 	if (est->bildo_ekzistas)
 		printf ("\tGrandeco: %lu B\n", est->bildo_kiom);
@@ -171,7 +171,7 @@ dwg_print_ordinarajxo (Dwg_Object_Ordinarajxo *ord)
 	printf ("Bitgrandeco: %lu\n", ord->bitgrandeco);
 	printf ("Vera traktilo: %i.%i.%lu\n", ord->traktilo.kodo, ord->traktilo.kiom,
 		ord->traktilo.value);
-	printf ("Kroma datenaro: %lu B\n", ord->kromdat_kiom);
+	printf ("Kroma datenaro: %lu B\n", (long unsigned int) ord->kromdat_kiom);
 	printf ("Kiom reagiloj: %lu\n", ord->reagilo_kiom);
 }
 
@@ -446,7 +446,7 @@ dwg_print_MTEXT (Dwg_Estajxo_MTEXT *est)
 	printf ("\tDirekto: 0x%0x\n", est->direkto);
 	printf ("\tTeksto: %s\n", est->teksto);
 	printf ("\tLinispaca stilo: 0x%0x\n", est->linispaco_stilo);
-	printf ("\tLinispaca faktoro: %1.13g\n", est->linispaco_faktoro);
+	printf ("\tLinispaca faktoro: %1.13g\n", (double) est->linispaco_faktoro);
 }
 
 static void
@@ -484,10 +484,10 @@ dwg_print_LAYOUT (Dwg_Ordinarajxo_LAYOUT *ord)
 		ord->pagxo.x_maks,
 		ord->pagxo.y_maks);
 	printf ("\tPaĝ-nomo: %s\n", ord->pagxo.nomo);
-	printf ("\tSkal-proporcio: %u:%u\n", ord->pagxo.skalo.A, ord->pagxo.skalo.B);
+	printf ("\tSkal-proporcio: %u:%u\n", (unsigned int) ord->pagxo.skalo.A, (unsigned int) ord->pagxo.skalo.B);
 	printf ("\tStilfolio: %s\n", ord->pagxo.stilfolio);
 	printf ("\tSkal-tipo: %u\n", ord->pagxo.skalo.tipo);
-	printf ("\tSkal-faktoro: %u\n", ord->pagxo.skalo.faktoro);
+	printf ("\tSkal-faktoro: %u\n", (unsigned int) ord->pagxo.skalo.faktoro);
 	printf ("\tPaĝ-origino: (%1.13g, %1.13g)\n", ord->pagxo.x0, ord->pagxo.y0);
 	puts ("");
 	printf ("\tAranĝ-nomo: %s\n", ord->nomo);
@@ -752,6 +752,6 @@ dwg_print (Dwg_Structure *skt)
 	puts ("**************************************************");
 	puts ("Sekcio MEZURO (MEASUREMENT)");
 	puts ("**************************************************");
-	printf ("MEZURO: 0x%08X\n", skt->mezuro);
+	printf ("MEZURO: 0x%08X\n", (unsigned int) skt->mezuro);
 	puts ("");
 }
