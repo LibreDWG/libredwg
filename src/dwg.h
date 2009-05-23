@@ -684,9 +684,9 @@ extern "C"
 /**
  Dwg_Cxeno sama kiel Bit_Cxeno, en "bite.h"
  */
-	typedef struct _dwg_cxeno
+	typedef struct _dwg_chain
 	{
-		unsigned char *cxeno;
+		unsigned char *chain;
 		long unsigned int kiom;
 		long unsigned int bajto;
 		unsigned char bito;
@@ -740,7 +740,7 @@ extern "C"
 			struct
 			{
 				int kiom;
-				unsigned char cxeno[4];
+				unsigned char chain[4];
 			} traktrik[14];
 		} duakapo;
 

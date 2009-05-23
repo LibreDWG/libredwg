@@ -19,8 +19,8 @@
 
 #define CXEN_LONGO (80)
 
-Bit_Cxeno dat;
-Bit_Cxeno dat_2;
+Bit_Chain dat;
+Bit_Chain dat_2;
 
 int test_dwg_c (char *filename);
 

@@ -32,7 +32,7 @@ dwg_read_file (char *filename, Dwg_Structure * dwg_struct)
 	FILE *fp;
 	struct stat atrib;
 	size_t kiom;
-	Bit_Cxeno bitaro;
+	Bit_Chain bitaro;
 
 	/* Testi kaj sxargi je la dosiero
 	 */
@@ -58,21 +58,21 @@ dwg_read_file (char *filename, Dwg_Structure * dwg_struct)
 	bitaro.bito = 0;
 	bitaro.bajto = 0;
 	bitaro.kiom = atrib.st_size;
-	bitaro.cxeno = (char *) malloc (bitaro.kiom);
-	if (!bitaro.cxeno)
+	bitaro.chain = (char *) malloc (bitaro.kiom);
+	if (!bitaro.chain)
 	{
 		puts ("Not enough memory.");
 		fclose (fp);
 		return -1;
 	}
 	kiom = 0;
-	kiom = fread (bitaro.cxeno, sizeof (char), bitaro.kiom, fp);
+	kiom = fread (bitaro.chain, sizeof (char), bitaro.kiom, fp);
 	if (kiom != bitaro.kiom)
 	{
 		printf ("Ne eblis read la tutan dosieron (%lu el %lu):\n %s\n", (long unsigned int) kiom, bitaro.kiom,
 			filename);
 		fclose (fp);
-		free (bitaro.cxeno);
+		free (bitaro.chain);
 		return -1;
 	}
 	fclose (fp);
@@ -82,10 +82,10 @@ dwg_read_file (char *filename, Dwg_Structure * dwg_struct)
 	if (dwg_decode_structures (&bitaro, dwg_struct))
 	{
 		printf ("Ni ne sukcesis dekodigi la dosieron:\n %s\n", filename);
-		free (bitaro.cxeno);
+		free (bitaro.chain);
 		return -1;
 	}
-	free (bitaro.cxeno);
+	free (bitaro.chain);
 
 	return 0;
 }
@@ -95,7 +95,7 @@ dwg_write_file (char *filename, Dwg_Structure * dwg_struct)
 {
 	FILE *dt;
 	struct stat atrib;
-	Bit_Cxeno bitaro;
+	Bit_Chain bitaro;
 
 	/* Enkodigi la dwg-datenaron
 	bitaro.kiom = 0;
@@ -103,7 +103,7 @@ dwg_write_file (char *filename, Dwg_Structure * dwg_struct)
 	{
 		puts ("Ni ne sukcesis enkodigi la strukturon.");
 		if (bitaro.kiom > 0)
-			free (bitaro.cxeno);
+			free (bitaro.chain);
 		return -1;
 	}
 	 */
@@ -123,17 +123,17 @@ dwg_write_file (char *filename, Dwg_Structure * dwg_struct)
 	 */
 
 	/* Skribi la datenaron en la dosiero
-	if (fwrite (bitaro.cxeno, sizeof (char), bitaro.kiom, dt) != bitaro.kiom)
+	if (fwrite (bitaro.chain, sizeof (char), bitaro.kiom, dt) != bitaro.kiom)
 	{
 		printf ("Ne eblis write la tutan dosieron:\n %s\n", filename);
 		fclose (dt);
-		free (bitaro.cxeno);
+		free (bitaro.chain);
 		return -1;
 	}
 	fclose (dt);
 
 	if (bitaro.kiom > 0)
-		free (bitaro.cxeno);
+		free (bitaro.chain);
 	 */
 	return 0;
 }
@@ -553,7 +553,7 @@ dwg_print (Dwg_Structure *skt)
 		puts ("Sekcio NEKONATA 1");
 		puts ("**************************************************");
 		printf ("Grandeco: %lu B\n", skt->nekonata1.kiom);
-		bit_print ((Bit_Cxeno *) & skt->nekonata1, skt->nekonata1.kiom);
+		bit_print ((Bit_Chain *) & skt->nekonata1, skt->nekonata1.kiom);
 		puts ("");
 	}
 
@@ -561,7 +561,7 @@ dwg_print (Dwg_Structure *skt)
 	puts ("Sekcio BILDO");
 	puts ("**************************************************");
 	printf ("Grandeco: %lu B\n", skt->bildo.kiom);
-	//bit_print ((Bit_Cxeno *) &skt->bildo, skt->bildo.kiom);
+	//bit_print ((Bit_Chain *) &skt->bildo, skt->bildo.kiom);
 	puts ("");
 
 	puts ("**************************************************");
@@ -742,9 +742,9 @@ dwg_print (Dwg_Structure *skt)
 	puts ("**************************************************");
 	for (i = 0; i < 14; i++)
 	{
-		printf ("Rikordo[%02i] Longo: %u\tCxeno:", i, skt->duakapo.traktrik[i].kiom);
+		printf ("Rikordo[%02i] Longo: %u\tChain:", i, skt->duakapo.traktrik[i].kiom);
 		for (j = 0; j < skt->duakapo.traktrik[i].kiom; j++)
-			printf (" %02X", skt->duakapo.traktrik[i].cxeno[j]);
+			printf (" %02X", skt->duakapo.traktrik[i].chain[j]);
 		puts ("");
 	}
 	puts ("");

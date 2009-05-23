@@ -17,6 +17,6 @@
 #include "bits.h"
 #include "dwg.h"
 
-int dwg_decode_structures (Bit_Cxeno * bitaro, Dwg_Structure * dwg_struct);
+int dwg_decode_structures (Bit_Chain * bitaro, Dwg_Structure * dwg_struct);
 
 #endif

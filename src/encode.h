@@ -17,6 +17,6 @@
 #include "bits.h"
 #include "dwg.h"
 
-int dwg_encode_cxenigi (Dwg_Structure * dwg_struct, Bit_Cxeno * bitaro);
+int dwg_encode_cxenigi (Dwg_Structure * dwg_struct, Bit_Chain * bitaro);
 
 #endif

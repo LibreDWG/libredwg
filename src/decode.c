@@ -23,7 +23,7 @@
 /*--------------------------------------------------------------------------------
  * Privataj funkcioj
  */
-static void dwg_decode_aldoni_objekto (Dwg_Structure * skt, Bit_Cxeno * dat, long unsigned int adreso);
+static void dwg_decode_aldoni_objekto (Dwg_Structure * skt, Bit_Chain * dat, long unsigned int adreso);
 
 /*--------------------------------------------------------------------------------
  * Publikaj variabloj
@@ -34,7 +34,7 @@ long unsigned int ktl_lastadreso;
  * Difino de publikaj funkcioj
  */
 int
-dwg_decode_structures (Bit_Cxeno * dat, Dwg_Structure * skt)
+dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 {
 	unsigned char sig;
 	unsigned int sekgrandeco = 0;
@@ -57,7 +57,7 @@ dwg_decode_structures (Bit_Cxeno * dat, Dwg_Structure * skt)
 	 */
 	dat->bajto = 0;
 	dat->bito = 0;
-	strncpy (skt->kapo.versio, dat->cxeno, 6);
+	strncpy (skt->kapo.versio, dat->chain, 6);
 	skt->kapo.versio[6] = '\0';
 	if (strcmp (skt->kapo.versio, "AC1015") != 0)
 	{
@@ -137,10 +137,10 @@ dwg_decode_structures (Bit_Cxeno * dat, Dwg_Structure * skt)
 		dat->bajto = skt->kapo.sekcio[5].adresilo;
 		skt->nekonata1.kiom = DWG_NEKONATA1_KIOM;
 		skt->nekonata1.bajto = skt->nekonata1.bito = 0;
-		skt->nekonata1.cxeno = malloc (skt->nekonata1.kiom);
-		memcpy (skt->nekonata1.cxeno, &dat->cxeno[dat->bajto], skt->nekonata1.kiom);
-		//bit_esplori_cxeno ((Bit_Cxeno *) &skt->nekonata1, skt->nekonata1.kiom);
-		//bit_print ((Bit_Cxeno *) &skt->nekonata1, skt->nekonata1.kiom);
+		skt->nekonata1.chain = malloc (skt->nekonata1.kiom);
+		memcpy (skt->nekonata1.chain, &dat->chain[dat->bajto], skt->nekonata1.kiom);
+		//bit_esplori_chain ((Bit_Chain *) &skt->nekonata1, skt->nekonata1.kiom);
+		//bit_print ((Bit_Chain *) &skt->nekonata1, skt->nekonata1.kiom);
 	}
 
 
@@ -159,8 +159,8 @@ dwg_decode_structures (Bit_Cxeno * dat, Dwg_Structure * skt)
 		{
 			printf ("        BILDO (fino): %8X\n", (unsigned int) dat->bajto);
 			skt->bildo.kiom = (dat->bajto - 16) - ekadreso;
-			skt->bildo.cxeno = (char *) malloc (skt->bildo.kiom);
-			memcpy (skt->bildo.cxeno, &dat->cxeno[ekadreso], skt->bildo.kiom);
+			skt->bildo.chain = (char *) malloc (skt->bildo.kiom);
+			memcpy (skt->bildo.chain, &dat->chain[ekadreso], skt->bildo.kiom);
 		}
 		else
 			skt->bildo.kiom = 0;
@@ -470,7 +470,7 @@ dwg_decode_structures (Bit_Cxeno * dat, Dwg_Structure * skt)
 			//printf (" %c", sig ? '1' : '0');
 		}
 
-		//printf ("\nCxeno?: ");
+		//printf ("\nChain?: ");
 		for (i = 0; i < 6; i++)
 		{
 			skt->duakapo.nekonatajxo[i] = bit_read_RC (dat);
@@ -499,11 +499,11 @@ dwg_decode_structures (Bit_Cxeno * dat, Dwg_Structure * skt)
 			//printf ("\nLongo: %u\n", sig2);
 			sig = bit_read_RC (dat);
 			//printf ("\t[%u]\n", sig);
-			//printf ("\tCxeno:");
+			//printf ("\tChain:");
 			for (j = 0; j < sig2; j++)
 			{
 				sig = bit_read_RC (dat);
-				skt->duakapo.traktrik[i].cxeno[j] = sig;
+				skt->duakapo.traktrik[i].chain[j] = sig;
 				//printf (" %02X", sig);
 			}
 		}
@@ -553,7 +553,7 @@ dwg_decode_structures (Bit_Cxeno * dat, Dwg_Structure * skt)
  */
 
 static void
-dwg_decode_estajxo (Bit_Cxeno * dat, Dwg_Object_Estajxo * est)
+dwg_decode_estajxo (Bit_Chain * dat, Dwg_Object_Estajxo * est)
 {
 	unsigned int i;
 	unsigned int grando;
@@ -628,7 +628,7 @@ dwg_decode_estajxo (Bit_Cxeno * dat, Dwg_Object_Estajxo * est)
 }
 
 static void
-dwg_decode_ordinarajxo (Bit_Cxeno * dat, Dwg_Object_Ordinarajxo * ord)
+dwg_decode_ordinarajxo (Bit_Chain * dat, Dwg_Object_Ordinarajxo * ord)
 {
 	unsigned int i;
 	unsigned int grando;
@@ -676,7 +676,7 @@ dwg_decode_ordinarajxo (Bit_Cxeno * dat, Dwg_Object_Ordinarajxo * ord)
 }
 
 static void
-dwg_decode_traktref (Bit_Cxeno * dat, Dwg_Objekto * obj)
+dwg_decode_traktref (Bit_Chain * dat, Dwg_Objekto * obj)
 {
 	int i;
 
@@ -741,7 +741,7 @@ dwg_decode_traktref (Bit_Cxeno * dat, Dwg_Objekto * obj)
 /* OBJEKTOJ *******************************************************************/
 
 static void
-dwg_decode_TEXT (Bit_Cxeno * dat, Dwg_Objekto * obj)
+dwg_decode_TEXT (Bit_Chain * dat, Dwg_Objekto * obj)
 {
 	Dwg_Estajxo_TEXT *est;
 
@@ -784,7 +784,7 @@ dwg_decode_TEXT (Bit_Cxeno * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_ATTRIB (Bit_Cxeno * dat, Dwg_Objekto * obj)
+dwg_decode_ATTRIB (Bit_Chain * dat, Dwg_Objekto * obj)
 {
 	Dwg_Estajxo_ATTRIB *est;
 
@@ -830,7 +830,7 @@ dwg_decode_ATTRIB (Bit_Cxeno * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_ATTDEF (Bit_Cxeno * dat, Dwg_Objekto * obj)
+dwg_decode_ATTDEF (Bit_Chain * dat, Dwg_Objekto * obj)
 {
 	Dwg_Estajxo_ATTDEF *est;
 
@@ -877,7 +877,7 @@ dwg_decode_ATTDEF (Bit_Cxeno * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_BLOCK (Bit_Cxeno * dat, Dwg_Objekto * obj)
+dwg_decode_BLOCK (Bit_Chain * dat, Dwg_Objekto * obj)
 {
 	Dwg_Estajxo_BLOCK *est;
 
@@ -895,7 +895,7 @@ dwg_decode_BLOCK (Bit_Cxeno * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_ENDBLK (Bit_Cxeno * dat, Dwg_Objekto * obj)
+dwg_decode_ENDBLK (Bit_Chain * dat, Dwg_Objekto * obj)
 {
 	Dwg_Estajxo_ENDBLK *est;
 
@@ -909,7 +909,7 @@ dwg_decode_ENDBLK (Bit_Cxeno * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_INSERT (Bit_Cxeno * dat, Dwg_Objekto * obj)
+dwg_decode_INSERT (Bit_Chain * dat, Dwg_Objekto * obj)
 {
 	Dwg_Estajxo_INSERT *est;
 
@@ -951,7 +951,7 @@ dwg_decode_INSERT (Bit_Cxeno * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_MINSERT (Bit_Cxeno * dat, Dwg_Objekto * obj)
+dwg_decode_MINSERT (Bit_Chain * dat, Dwg_Objekto * obj)
 {
 	Dwg_Estajxo_MINSERT *est;
 
@@ -997,7 +997,7 @@ dwg_decode_MINSERT (Bit_Cxeno * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_VERTEX_2D (Bit_Cxeno * dat, Dwg_Objekto * obj)
+dwg_decode_VERTEX_2D (Bit_Chain * dat, Dwg_Objekto * obj)
 {
 	Dwg_Estajxo_VERTEX_2D *est;
 
@@ -1025,7 +1025,7 @@ dwg_decode_VERTEX_2D (Bit_Cxeno * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_VERTEX_3D (Bit_Cxeno * dat, Dwg_Objekto * obj)
+dwg_decode_VERTEX_3D (Bit_Chain * dat, Dwg_Objekto * obj)
 {
 	Dwg_Estajxo_VERTEX_3D *est;
 
@@ -1046,7 +1046,7 @@ dwg_decode_VERTEX_3D (Bit_Cxeno * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_VERTEX_PFACE_FACE (Bit_Cxeno * dat, Dwg_Objekto * obj)
+dwg_decode_VERTEX_PFACE_FACE (Bit_Chain * dat, Dwg_Objekto * obj)
 {
 	Dwg_Estajxo_VERTEX_PFACE_FACE *est;
 
@@ -1067,7 +1067,7 @@ dwg_decode_VERTEX_PFACE_FACE (Bit_Cxeno * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_POLYLINE_2D (Bit_Cxeno * dat, Dwg_Objekto * obj)
+dwg_decode_POLYLINE_2D (Bit_Chain * dat, Dwg_Objekto * obj)
 {
 	Dwg_Estajxo_POLYLINE_2D *est;
 
@@ -1091,7 +1091,7 @@ dwg_decode_POLYLINE_2D (Bit_Cxeno * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_POLYLINE_3D (Bit_Cxeno * dat, Dwg_Objekto * obj)
+dwg_decode_POLYLINE_3D (Bit_Chain * dat, Dwg_Objekto * obj)
 {
 	Dwg_Estajxo_POLYLINE_3D *est;
 
@@ -1110,7 +1110,7 @@ dwg_decode_POLYLINE_3D (Bit_Cxeno * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_ARC (Bit_Cxeno * dat, Dwg_Objekto * obj)
+dwg_decode_ARC (Bit_Chain * dat, Dwg_Objekto * obj)
 {
 	Dwg_Estajxo_ARC *est;
 
@@ -1133,7 +1133,7 @@ dwg_decode_ARC (Bit_Cxeno * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_CIRCLE (Bit_Cxeno * dat, Dwg_Objekto * obj)
+dwg_decode_CIRCLE (Bit_Chain * dat, Dwg_Objekto * obj)
 {
 	Dwg_Estajxo_CIRCLE *est;
 
@@ -1154,7 +1154,7 @@ dwg_decode_CIRCLE (Bit_Cxeno * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_LINE (Bit_Cxeno * dat, Dwg_Objekto * obj)
+dwg_decode_LINE (Bit_Chain * dat, Dwg_Objekto * obj)
 {
 	Dwg_Estajxo_LINE *est;
 
@@ -1182,7 +1182,7 @@ dwg_decode_LINE (Bit_Cxeno * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_POINT (Bit_Cxeno * dat, Dwg_Objekto * obj)
+dwg_decode_POINT (Bit_Chain * dat, Dwg_Objekto * obj)
 {
 	Dwg_Estajxo_POINT *est;
 
@@ -1203,7 +1203,7 @@ dwg_decode_POINT (Bit_Cxeno * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_ELLIPSE (Bit_Cxeno * dat, Dwg_Objekto * obj)
+dwg_decode_ELLIPSE (Bit_Chain * dat, Dwg_Objekto * obj)
 {
 	Dwg_Estajxo_ELLIPSE *est;
 
@@ -1230,7 +1230,7 @@ dwg_decode_ELLIPSE (Bit_Cxeno * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_RAY (Bit_Cxeno * dat, Dwg_Objekto * obj)
+dwg_decode_RAY (Bit_Chain * dat, Dwg_Objekto * obj)
 {
 	Dwg_Estajxo_RAY *est;
 
@@ -1251,7 +1251,7 @@ dwg_decode_RAY (Bit_Cxeno * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_MTEXT (Bit_Cxeno * dat, Dwg_Objekto * obj)
+dwg_decode_MTEXT (Bit_Chain * dat, Dwg_Objekto * obj)
 {
 	Dwg_Estajxo_MTEXT *est;
 
@@ -1285,7 +1285,7 @@ dwg_decode_MTEXT (Bit_Cxeno * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_LAYER (Bit_Cxeno * dat, Dwg_Objekto * obj)
+dwg_decode_LAYER (Bit_Chain * dat, Dwg_Objekto * obj)
 {
 	Dwg_Ordinarajxo_LAYER *ord;
 
@@ -1308,7 +1308,7 @@ dwg_decode_LAYER (Bit_Cxeno * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_LAYOUT (Bit_Cxeno * dat, Dwg_Objekto * obj)
+dwg_decode_LAYOUT (Bit_Chain * dat, Dwg_Objekto * obj)
 {
 	Dwg_Ordinarajxo_LAYOUT *ord;
 
@@ -1380,7 +1380,7 @@ dwg_decode_LAYOUT (Bit_Cxeno * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_UNUSED (Bit_Cxeno * dat, Dwg_Objekto * obj)
+dwg_decode_UNUSED (Bit_Chain * dat, Dwg_Objekto * obj)
 {
 	Dwg_Estajxo_UNUSED *est;
 
@@ -1401,7 +1401,7 @@ dwg_decode_UNUSED (Bit_Cxeno * dat, Dwg_Objekto * obj)
  * Privata funkcio, kiu dependas de la antaŭaj
  */
 static void
-dwg_decode_aldoni_objekto (Dwg_Structure * skt, Bit_Cxeno * dat, long unsigned int adreso)
+dwg_decode_aldoni_objekto (Dwg_Structure * skt, Bit_Chain * dat, long unsigned int adreso)
 {
 	long unsigned int antauxa_adreso;
 	long unsigned int objekadres;
@@ -1512,7 +1512,7 @@ dwg_decode_aldoni_objekto (Dwg_Structure * skt, Bit_Cxeno * dat, long unsigned i
 		{
 			obj->supertipo = DWG_SUPERTYPE_NEKONATAJXO;
 			obj->tio.nekonatajxo = malloc (obj->grandeco);
-			memcpy (obj->tio.nekonatajxo, &dat->cxeno[objekadres], obj->grandeco);
+			memcpy (obj->tio.nekonatajxo, &dat->chain[objekadres], obj->grandeco);
 		}
 	}
 
