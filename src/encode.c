@@ -174,7 +174,7 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Cxeno * dat)
 			bit_write_BD (dat, skt->var[i].xyz[2]);
 			break;
 		default:
-			printf ("Ne traktebla tipo: %i (var: %i)\n", dwg_varmapo (i), i);
+			printf ("Ne traktebla tipo: %i (var: %i)\n", dwg_varmapo (i), (int) i);
 		}
 	}
 
