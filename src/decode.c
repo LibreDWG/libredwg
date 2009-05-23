@@ -123,7 +123,7 @@ dwg_decode_structures (Bit_Cxeno * dat, Dwg_Structure * skt)
 	 */
 
 	if (bit_sercxi_gardostaranto (dat, dwg_gardostaranto (DWG_GS_KAPO_FINO)))
-		printf ("=======> KAPO (fino): %8X\n", dat->bajto);
+		printf ("=======> KAPO (fino): %8X\n", (unsigned int) dat->bajto);
 
 
 	/*-------------------------------------------------------------------------
@@ -132,9 +132,8 @@ dwg_decode_structures (Bit_Cxeno * dat, Dwg_Structure * skt)
 
 	if (skt->kapo.sekcio_kiom == 6)
 	{
-		printf ("========> NEKONATA 1: %8X\n", skt->kapo.sekcio[5].adresilo);
-		printf ("   NEKONATA 1 (fino): %8X\n",
-			skt->kapo.sekcio[5].adresilo + skt->kapo.sekcio[5].grandeco);
+		printf ("========> NEKONATA 1: %8X\n", (unsigned int) skt->kapo.sekcio[5].adresilo);
+		printf ("   NEKONATA 1 (fino): %8X\n", (unsigned int) (skt->kapo.sekcio[5].adresilo + skt->kapo.sekcio[5].grandeco));
 		dat->bajto = skt->kapo.sekcio[5].adresilo;
 		skt->nekonata1.kiom = DWG_NEKONATA1_KIOM;
 		skt->nekonata1.bajto = skt->nekonata1.bito = 0;
@@ -155,10 +154,10 @@ dwg_decode_structures (Bit_Cxeno * dat, Dwg_Structure * skt)
 
 		dat->bito = 0;
 		ekadreso = dat->bajto;
-		printf ("=============> BILDO: %8X\n", ekadreso - 16);
+		printf ("=============> BILDO: %8X\n", (unsigned int) ekadreso - 16);
 		if (bit_sercxi_gardostaranto (dat, dwg_gardostaranto (DWG_GS_BILDO_FINO)))
 		{
-			printf ("        BILDO (fino): %8X\n", dat->bajto);
+			printf ("        BILDO (fino): %8X\n", (unsigned int) dat->bajto);
 			skt->bildo.kiom = (dat->bajto - 16) - ekadreso;
 			skt->bildo.cxeno = (char *) malloc (skt->bildo.kiom);
 			memcpy (skt->bildo.cxeno, &dat->cxeno[ekadreso], skt->bildo.kiom);
@@ -172,9 +171,8 @@ dwg_decode_structures (Bit_Cxeno * dat, Dwg_Structure * skt)
 	 * Kap-variabloj
 	 */
 
-	printf ("=====> KAP-VARIABLOJ: %8X\n", skt->kapo.sekcio[0].adresilo);
-	printf ("KAP-VARIABLOJ (fino): %8X\n",
-		skt->kapo.sekcio[0].adresilo + skt->kapo.sekcio[0].grandeco);
+	printf ("=====> KAP-VARIABLOJ: %8X\n", (unsigned int) skt->kapo.sekcio[0].adresilo);
+	printf ("KAP-VARIABLOJ (fino): %8X\n", (unsigned int) (skt->kapo.sekcio[0].adresilo + skt->kapo.sekcio[0].grandeco));
 	dat->bajto = skt->kapo.sekcio[0].adresilo + 16;
 	pvz = bit_read_RL (dat);
 	//printf ("Longeco: %lu\n", pvz);
@@ -265,9 +263,8 @@ dwg_decode_structures (Bit_Cxeno * dat, Dwg_Structure * skt)
 	 * Klasoj
 	 */
 
-	printf ("============> KLASOJ: %8X\n", skt->kapo.sekcio[1].adresilo);
-	printf ("       KLASOJ (fino): %8X\n",
-		skt->kapo.sekcio[1].adresilo + skt->kapo.sekcio[1].grandeco);
+	printf ("============> KLASOJ: %8X\n", (unsigned int) skt->kapo.sekcio[1].adresilo);
+	printf ("       KLASOJ (fino): %8X\n", (unsigned int) (skt->kapo.sekcio[1].adresilo + skt->kapo.sekcio[1].grandeco));
 	dat->bajto = skt->kapo.sekcio[1].adresilo + 16;
 	dat->bito = 0;
 
@@ -400,10 +397,10 @@ dwg_decode_structures (Bit_Cxeno * dat, Dwg_Structure * skt)
 	while (sekgrandeco > 2);
 	printf ("Kiom objektoj: %lu\n", skt->objekto_kiom);
 
-	printf ("=========> OBJEKTARO: %8X\n", obek);
+	printf ("=========> OBJEKTARO: %8X\n", (unsigned int) obek);
 	dat->bajto = obfin;
 	obek = bit_read_MS (dat);	// La komenco de la lasta objekto readta
-	printf ("    OBJEKTARO (fino): %8X\n", obfin + obek + 2);
+	printf ("    OBJEKTARO (fino): %8X\n", (unsigned int) (obfin + obek + 2));
 
 	/*
 	   dat->bajto = skt->kapo.sekcio[2].adresilo - 2;
@@ -430,9 +427,8 @@ dwg_decode_structures (Bit_Cxeno * dat, Dwg_Structure * skt)
 	   } while (sekgrandeco > 0);
 	 */
 
-	printf ("======> OBJEKTO-MAPO: %8X\n", skt->kapo.sekcio[2].adresilo);
-	printf (" OBJEKTO-MAPO (fino): %8X\n",
-		skt->kapo.sekcio[2].adresilo + skt->kapo.sekcio[2].grandeco);
+	printf ("======> OBJEKTO-MAPO: %8X\n", (unsigned int) skt->kapo.sekcio[2].adresilo);
+	printf (" OBJEKTO-MAPO (fino): %8X\n", (unsigned int) (skt->kapo.sekcio[2].adresilo + skt->kapo.sekcio[2].grandeco));
 
 	/*-------------------------------------------------------------------------
 	 * Dua kap-datenaro
@@ -444,7 +440,7 @@ dwg_decode_structures (Bit_Cxeno * dat, Dwg_Structure * skt)
 		long unsigned int pvz;
 		unsigned char sig, sig2;
 
-		printf ("==> DUA KAP-DATENARO: %8X\n", dat->bajto - 16);
+		printf ("==> DUA KAP-DATENARO: %8X\n", (unsigned int) dat->bajto - 16);
 		pvzadr = dat->bajto;
 
 		pvz = bit_read_RL (dat);
@@ -533,16 +529,15 @@ dwg_decode_structures (Bit_Cxeno * dat, Dwg_Structure * skt)
 		 */
 
 		if (bit_sercxi_gardostaranto (dat, dwg_gardostaranto (DWG_GS_DUAKAPO_FINO)))
-			printf (" DUA KAP-DAT. (fino): %8X\n", dat->bajto);
+			printf (" DUA KAP-DAT. (fino): %8X\n", (unsigned int) dat->bajto);
 	}
 
 	/*-------------------------------------------------------------------------
 	 * Sekcio MEASUREMENT
 	 */
 
-	printf ("========> NEKONATA 2: %8X\n", skt->kapo.sekcio[4].adresilo);
-	printf ("   NEKONATA 2 (fino): %8X\n",
-		skt->kapo.sekcio[4].adresilo + skt->kapo.sekcio[4].grandeco);
+	printf ("========> NEKONATA 2: %8X\n", (unsigned int) skt->kapo.sekcio[4].adresilo);
+	printf ("   NEKONATA 2 (fino): %8X\n", (unsigned int) (skt->kapo.sekcio[4].adresilo + skt->kapo.sekcio[4].grandeco));
 	dat->bajto = skt->kapo.sekcio[4].adresilo;
 	dat->bito = 0;
 	skt->mezuro = bit_read_RL (dat);
@@ -568,7 +563,7 @@ dwg_decode_estajxo (Bit_Cxeno * dat, Dwg_Object_Estajxo * est)
 	error = bit_read_H (dat, &est->traktilo);
 	if (error)
 	{
-		printf ("\tEraro en traktilo de objekto! Adreso en la ĉeno: 0x%0x\n", dat->bajto);
+		printf ("\tEraro en traktilo de objekto! Adreso en la ĉeno: 0x%0x\n", (unsigned int) dat->bajto);
 		est->bitgrandeco = 0;
 		est->kromdat_kiom = 0;
 		est->bildo_ekzistas = 0;
@@ -580,8 +575,7 @@ dwg_decode_estajxo (Bit_Cxeno * dat, Dwg_Object_Estajxo * est)
 	{
 		if (grando > 10210)
 		{
-			printf ("Absurdo! Kromdato-grandeco: %lu. Objekto: %lu (traktilo).\n",
-				grando, est->traktilo.value);
+			printf ("Absurdo! Kromdato-grandeco: %lu. Objekto: %lu (traktilo).\n", (long unsigned int) grando, est->traktilo.value);
 			est->bitgrandeco = 0;
 			est->kromdat_kiom = 0;
 			est->bildo_ekzistas = 0;
@@ -644,7 +638,7 @@ dwg_decode_ordinarajxo (Bit_Cxeno * dat, Dwg_Object_Ordinarajxo * ord)
 	error = bit_read_H (dat, &ord->traktilo);
 	if (error)
 	{
-		printf ("\tEraro en traktilo de objekto! Adreso en la ĉeno: 0x%0x\n", dat->bajto);
+		printf ("\tEraro en traktilo de objekto! Adreso en la ĉeno: 0x%0x\n", (unsigned int) dat->bajto);
 		ord->bitgrandeco = 0;
 		ord->kromdat_kiom = 0;
 		ord->traktref_kiom = 0;
@@ -655,8 +649,7 @@ dwg_decode_ordinarajxo (Bit_Cxeno * dat, Dwg_Object_Ordinarajxo * ord)
 	{
 		if (grando > 10210)
 		{
-			printf ("Absurdo! Kromdato-grandeco: %lu. Objekto: %lu (traktilo).\n",
-				grando, ord->traktilo.value);
+			printf ("Absurdo! Kromdato-grandeco: %lu. Objekto: %lu (traktilo).\n", (long unsigned int) grando, ord->traktilo.value);
 			ord->bitgrandeco = 0;
 			ord->kromdat_kiom = 0;
 			ord->traktref_kiom = 0;

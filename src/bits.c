@@ -937,7 +937,7 @@ bit_print (Bit_Cxeno * dat, long unsigned int kiom)
 	for (i = 0; i < kiom; i++)
 	{
 		if (i % 16 == 0)
-			printf ("\n[0x%04X]: ", i);
+			printf ("\n[0x%04X]: ", (unsigned int) i);
 		printf ("%02X ", dat->cxeno[i]);
 		if (i % 16 == 15)
 			for (j = i - 15; j <= i; j++)
@@ -967,7 +967,7 @@ bit_esplori_cxeno (Bit_Cxeno * dat, long unsigned int kiom)
 		for (i = 0; i < kiom - 1; i++)
 		{
 			if (i % 16 == 0)
-				printf ("\n[0x%04X]: ", i);
+				printf ("\n[0x%04X]: ", (unsigned int) i);
 			sig = bit_read_RC (dat);
 			printf ("%c", sig >= ' ' && sig < 128 ? sig : '.');
 		}
