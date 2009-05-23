@@ -34,8 +34,6 @@ dwg_read_file (char *filename, Dwg_Structure * dwg_struct)
 	size_t kiom;
 	Bit_Chain bitaro;
 
-	/* Testi kaj sxargi je la dosiero
-	 */
 	if (stat (filename, &atrib))
 	{
 		printf ("File not found:\n %s\n", filename);
@@ -43,7 +41,7 @@ dwg_read_file (char *filename, Dwg_Structure * dwg_struct)
 	}
 	if (!S_ISREG (atrib.st_mode))
 	{
-		printf ("Ne eblas trakti dosierujojn, aparat-dosierojn, ligil-dosierojn, ktp:\n %s\n", filename);
+		printf ("Error:\n %s\n", filename);
 		return -1;
 	}
 	fp = fopen (filename, "rb");
@@ -518,7 +516,7 @@ dwg_print_LAYOUT (Dwg_Ordinarajxo_LAYOUT *ord)
  * Speciala publika funkcio por printgi valuejn de la objektoj
  */
 void
-dwg_print (Dwg_Structure *skt)
+dwg_print (Dwg_Structure *dwg_struct)
 {
 	unsigned char sig;
 	unsigned int i, j;
@@ -539,29 +537,29 @@ dwg_print (Dwg_Structure *skt)
 	puts ("**************************************************");
 	puts ("Sekcio KAPO");
 	puts ("**************************************************");
-	printf ("Versio: %s\n", skt->kapo.versio);
-	printf ("Kodpagxo: %u\n", skt->kapo.kodpagxo);
-	for (i = 0; i < skt->kapo.sekcio_kiom; i++)
+	printf ("Versio: %s\n", dwg_struct->kapo.versio);
+	printf ("Kodpagxo: %u\n", dwg_struct->kapo.kodpagxo);
+	for (i = 0; i < dwg_struct->kapo.sekcio_kiom; i++)
 		printf ("Sekcio %i\t Kie: %7lu\t Kiom: %7lu B\n",
-			skt->kapo.sekcio[i].numero,
-			skt->kapo.sekcio[i].adresilo, skt->kapo.sekcio[i].grandeco);
+			dwg_struct->kapo.sekcio[i].numero,
+			dwg_struct->kapo.sekcio[i].adresilo, dwg_struct->kapo.sekcio[i].grandeco);
 	puts ("");
 
-	if (skt->kapo.sekcio_kiom == 6)
+	if (dwg_struct->kapo.sekcio_kiom == 6)
 	{
 		puts ("**************************************************");
 		puts ("Sekcio NEKONATA 1");
 		puts ("**************************************************");
-		printf ("Grandeco: %lu B\n", skt->nekonata1.kiom);
-		bit_print ((Bit_Chain *) & skt->nekonata1, skt->nekonata1.kiom);
+		printf ("Grandeco: %lu B\n", dwg_struct->nekonata1.kiom);
+		bit_print ((Bit_Chain *) & dwg_struct->nekonata1, dwg_struct->nekonata1.kiom);
 		puts ("");
 	}
 
 	puts ("**************************************************");
 	puts ("Sekcio BILDO");
 	puts ("**************************************************");
-	printf ("Grandeco: %lu B\n", skt->bildo.kiom);
-	//bit_print ((Bit_Chain *) &skt->bildo, skt->bildo.kiom);
+	printf ("Grandeco: %lu B\n", dwg_struct->bildo.kiom);
+	//bit_print ((Bit_Chain *) &dwg_struct->bildo, dwg_struct->bildo.kiom);
 	puts ("");
 
 	puts ("**************************************************");
@@ -570,7 +568,7 @@ dwg_print (Dwg_Structure *skt)
 	for (i = 0; i < DWG_KIOM_VARIABLOJ; i++)
 	{
 		printf ("[%03i] - ", i + 1);
-		if (i == 221 && skt->var[220].dubitoko != 3)
+		if (i == 221 && dwg_struct->var[220].dubitoko != 3)
 		{
 			puts ("(NE EKZISTANTA)");
 			continue;
@@ -578,35 +576,35 @@ dwg_print (Dwg_Structure *skt)
 		switch (dwg_varmapo (i))
 		{
 		case DWG_DT_B:
-			printf ("B: %u", skt->var[i].bitoko);
+			printf ("B: %u", dwg_struct->var[i].bitoko);
 			break;
 		case DWG_DT_BS:
-			printf ("BS: %u", skt->var[i].dubitoko);
+			printf ("BS: %u", dwg_struct->var[i].dubitoko);
 			break;
 		case DWG_DT_BL:
-			printf ("BL: %lu", skt->var[i].kvarbitoko);
+			printf ("BL: %lu", dwg_struct->var[i].kvarbitoko);
 			break;
 		case DWG_DT_BD:
-			printf ("BD: %lg", skt->var[i].duglitajxo);
+			printf ("BD: %lg", dwg_struct->var[i].duglitajxo);
 			break;
 		case DWG_DT_H:
-			printf ("H: %i.%i.%li", skt->var[i].traktilo.kodo,
-				skt->var[i].traktilo.kiom, skt->var[i].traktilo.value);
+			printf ("H: %i.%i.%li", dwg_struct->var[i].traktilo.kodo,
+				dwg_struct->var[i].traktilo.kiom, dwg_struct->var[i].traktilo.value);
 			break;
 		case DWG_DT_T:
-			printf ("T: \"%s\"", skt->var[i].teksto);
+			printf ("T: \"%s\"", dwg_struct->var[i].teksto);
 			break;
 		case DWG_DT_CMC:
-			printf ("CMC: %u", skt->var[i].dubitoko);
+			printf ("CMC: %u", dwg_struct->var[i].dubitoko);
 			break;
 		case DWG_DT_2RD:
-			printf ("X: %lg\t", skt->var[i].xy[0]);
-			printf ("Y: %lg", skt->var[i].xy[1]);
+			printf ("X: %lg\t", dwg_struct->var[i].xy[0]);
+			printf ("Y: %lg", dwg_struct->var[i].xy[1]);
 			break;
 		case DWG_DT_3BD:
-			printf ("X: %lg\t", skt->var[i].xyz[0]);
-			printf ("Y: %lg\t", skt->var[i].xyz[1]);
-			printf ("Z: %lg", skt->var[i].xyz[2]);
+			printf ("X: %lg\t", dwg_struct->var[i].xyz[0]);
+			printf ("Y: %lg\t", dwg_struct->var[i].xyz[1]);
+			printf ("Z: %lg", dwg_struct->var[i].xyz[2]);
 			break;
 		default:
 			printf ("Ne traktebla tipo: %i (var: %i)\n", dwg_varmapo (i), i);
@@ -618,30 +616,30 @@ dwg_print (Dwg_Structure *skt)
 	puts ("**************************************************");
 	puts ("Sekcio KLASOJ");
 	puts ("**************************************************");
-	for (i = 0; i < skt->klaso_kiom; i++)
+	for (i = 0; i < dwg_struct->klaso_kiom; i++)
 	{
 		printf ("Klaso: [%02u]\n", i);
-		printf ("\tNumero: %u\n", skt->klaso[i].numero);
-		printf ("\tVersio: %u\n", skt->klaso[i].versio);
-		printf ("\tAp Nomo: \"%s\"\n", skt->klaso[i].apnomo);
-		printf ("\tC++ Nomo: \"%s\"\n", skt->klaso[i].cpliplinomo);
-		printf ("\tDXF Nomo: \"%s\"\n", skt->klaso[i].dxfnomo);
-		printf ("\tEstis fantomo: \"%s\"\n", skt->klaso[i].estisfantomo ? "Jes" : "Ne");
-		printf ("\tEroId: %u\n", skt->klaso[i].eroid);
+		printf ("\tNumero: %u\n", dwg_struct->klaso[i].numero);
+		printf ("\tVersio: %u\n", dwg_struct->klaso[i].versio);
+		printf ("\tAp Nomo: \"%s\"\n", dwg_struct->klaso[i].apnomo);
+		printf ("\tC++ Nomo: \"%s\"\n", dwg_struct->klaso[i].cpliplinomo);
+		printf ("\tDXF Nomo: \"%s\"\n", dwg_struct->klaso[i].dxfnomo);
+		printf ("\tEstis fantomo: \"%s\"\n", dwg_struct->klaso[i].estisfantomo ? "Jes" : "Ne");
+		printf ("\tEroId: %u\n", dwg_struct->klaso[i].eroid);
 	}
 	puts ("");
 
 	puts ("**************************************************");
 	puts ("Sekcio OBJEKTOJ");
 	puts ("**************************************************");
-	for (i = 0; i < skt->objekto_kiom; i++)
+	for (i = 0; i < dwg_struct->objekto_kiom; i++)
 	{
 		Dwg_Objekto *obj;
 
 		printf ("(%u) ", i);
-		obj = &skt->objekto[i];
+		obj = &dwg_struct->objekto[i];
 
-		printf ("Tipo: %s (%03i)\t", obj->tipo > 80 ? (obj->tipo == skt->dwg_ot_layout ? "LAYOUT" : "??") : dwg_obtipo[obj->tipo], obj->tipo);
+		printf ("Tipo: %s (%03i)\t", obj->tipo > 80 ? (obj->tipo == dwg_struct->dwg_ot_layout ? "LAYOUT" : "??") : dwg_obtipo[obj->tipo], obj->tipo);
 		printf ("Grandeco: %u\t", obj->grandeco);
 		printf ("Traktilo: (%lu)\t", obj->trakt);
 		printf ("Super-tipo: ");
@@ -726,7 +724,7 @@ dwg_print (Dwg_Structure *skt)
 			dwg_print_LAYER (obj->tio.ordinarajxo->tio.LAYER);
 			break;
 		default:
-			if (obj->tipo == skt->dwg_ot_layout)
+			if (obj->tipo == dwg_struct->dwg_ot_layout)
 				dwg_print_LAYOUT (obj->tio.ordinarajxo->tio.LAYOUT);
 			else
 				continue;
@@ -742,9 +740,9 @@ dwg_print (Dwg_Structure *skt)
 	puts ("**************************************************");
 	for (i = 0; i < 14; i++)
 	{
-		printf ("Rikordo[%02i] Longo: %u\tChain:", i, skt->duakapo.traktrik[i].kiom);
-		for (j = 0; j < skt->duakapo.traktrik[i].kiom; j++)
-			printf (" %02X", skt->duakapo.traktrik[i].chain[j]);
+		printf ("Rikordo[%02i] Longo: %u\tChain:", i, dwg_struct->duakapo.traktrik[i].kiom);
+		for (j = 0; j < dwg_struct->duakapo.traktrik[i].kiom; j++)
+			printf (" %02X", dwg_struct->duakapo.traktrik[i].chain[j]);
 		puts ("");
 	}
 	puts ("");
@@ -752,6 +750,6 @@ dwg_print (Dwg_Structure *skt)
 	puts ("**************************************************");
 	puts ("Sekcio MEZURO (MEASUREMENT)");
 	puts ("**************************************************");
-	printf ("MEZURO: 0x%08X\n", (unsigned int) skt->mezuro);
+	printf ("MEZURO: 0x%08X\n", (unsigned int) dwg_struct->mezuro);
 	puts ("");
 }

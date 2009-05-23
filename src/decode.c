@@ -1510,14 +1510,14 @@ dwg_decode_aldoni_objekto (Dwg_Structure * skt, Bit_Chain * dat, long unsigned i
 			dwg_decode_LAYOUT (dat, obj);
 		else
 		{
-			obj->supertipo = DWG_SUPERTYPE_NEKONATAJXO;
+			obj->supertipo = DWG_SUPERTYPE_UNKNOWN;
 			obj->tio.nekonatajxo = malloc (obj->grandeco);
 			memcpy (obj->tio.nekonatajxo, &dat->chain[objekadres], obj->grandeco);
 		}
 	}
 
 	/*
-	   if (obj->supertipo != DWG_SUPERTYPE_NEKONATAJXO)
+	   if (obj->supertipo != DWG_SUPERTYPE_UNKNOWN)
 	   {
 	   printf (" Ekadr:\t%10lu\n", adreso);
 	   printf (" Lasta:\t%10lu\tGrandeco: %10lu\n", dat->bajto, obj->grandeco);

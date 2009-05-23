@@ -254,7 +254,7 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Chain * dat)
 			omap[i].traktilo = skt->objekto[i].tio.estajxo->traktilo.value;
 		else if (skt->objekto[i].supertipo == DWG_SUPERTYPE_ORDINARAJXO)
 			omap[i].traktilo = skt->objekto[i].tio.ordinarajxo->traktilo.value;
-		else if (skt->objekto[i].supertipo == DWG_SUPERTYPE_NEKONATAJXO)
+		else if (skt->objekto[i].supertipo == DWG_SUPERTYPE_UNKNOWN)
 		{
 			nkn.chain = skt->objekto[i].tio.nekonatajxo;
 			nkn.kiom = skt->objekto[i].grandeco;
@@ -295,7 +295,7 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Chain * dat)
 	{
 		omap[i].adreso = dat->bajto;
 		obj = &skt->objekto[omap[i].idc];
-		if (obj->supertipo == DWG_SUPERTYPE_NEKONATAJXO)
+		if (obj->supertipo == DWG_SUPERTYPE_UNKNOWN)
 		{
 			bit_write_MS (dat, obj->grandeco);
 			if (dat->bajto + obj->grandeco >= dat->kiom - 2)
