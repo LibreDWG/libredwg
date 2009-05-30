@@ -65,7 +65,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	dat->bajto += 6;
 
 	for (i = 0; i < 5; i++)
-		bit_write_RC (dat, 0);	// Nekonata sekcio
+		bit_write_RC (dat, 0);	// Nekonata section
 	bit_write_RC (dat, 0x0F);	// Nekonatajxo
 	bit_write_RC (dat, 0x01);	// Nekonatajxo
 	bit_write_RL (dat, 0);	// Bildo-address
@@ -73,27 +73,27 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	bit_write_RC (dat, 0);	// Lancxo
 	bit_write_RS (dat, skt->header.kodpagxo);	// Kodpagxo
 
-	//skt->header.sekcio_kiom = 5; // Cxu kasxi la nekonatan sekcion 1 ?
-	bit_write_RL (dat, skt->header.sekcio_kiom);
+	//skt->header.section_kiom = 5; // Cxu kasxi la nekonatan sectionn 1 ?
+	bit_write_RL (dat, skt->header.section_kiom);
 	sekciadresaro = dat->bajto;	// Salti sekciadresaron
-	dat->bajto += (skt->header.sekcio_kiom * 9);
+	dat->bajto += (skt->header.section_kiom * 9);
 	bit_read_CRC (dat);	// Salti CKR-on
 
 	bit_write_gardostaranto (dat, dwg_gardostaranto (DWG_GS_KAPO_FINO));
 
 	/*------------------------------------------------------------
-	 * Nekonata sekcio 1
+	 * Nekonata section 1
 	 */
 
-	skt->header.sekcio[5].numero = 5;
-	skt->header.sekcio[5].adresilo = 0;
-	skt->header.sekcio[5].grandeco = 0;
-	if (skt->header.sekcio_kiom == 6)
+	skt->header.section[5].numero = 5;
+	skt->header.section[5].adresilo = 0;
+	skt->header.section[5].grandeco = 0;
+	if (skt->header.section_kiom == 6)
 	{
-		skt->header.sekcio[5].adresilo = dat->bajto;
-		skt->header.sekcio[5].grandeco = DWG_NEKONATA1_KIOM;
+		skt->header.section[5].adresilo = dat->bajto;
+		skt->header.section[5].grandeco = DWG_NEKONATA1_KIOM;
 
-		skt->nekonata1.kiom = skt->header.sekcio[5].grandeco;
+		skt->nekonata1.kiom = skt->header.section[5].grandeco;
 		skt->nekonata1.bajto = skt->nekonata1.bito = 0;
 		while (dat->bajto + skt->nekonata1.kiom >= dat->kiom)
 			bit_chain_rezervi (dat);
@@ -131,11 +131,11 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	 * Kap-variabloj
 	 */
 
-	skt->header.sekcio[0].numero = 0;
-	skt->header.sekcio[0].adresilo = dat->bajto;
+	skt->header.section[0].numero = 0;
+	skt->header.section[0].adresilo = dat->bajto;
 	bit_write_gardostaranto (dat, dwg_gardostaranto (DWG_GS_VARIABLO_EKO));
 	pvzadr = dat->bajto;	// poste oni devas rewrite la korektan valuen de grandeco cxi tie:
-	bit_write_RL (dat, 0);	// Grandeco de la sekcio
+	bit_write_RL (dat, 0);	// Grandeco de la section
 
 	for (i = 0; i < DWG_KIOM_VARIABLOJ; i++)
 	{
@@ -178,7 +178,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 		}
 	}
 
-	/* Skribi la grandecon de la sekcio cxe gxia komenco
+	/* Skribi la grandecon de la section cxe gxia komenco
 	 */
 	pvzadr_2 = dat->bajto;
 	pvzbit = dat->bito;
@@ -193,16 +193,16 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	 */
 	bit_krei_CRC (dat, pvzadr, 0xC0C1);
 	bit_write_gardostaranto (dat, dwg_gardostaranto (DWG_GS_VARIABLO_FINO));
-	skt->header.sekcio[0].grandeco = dat->bajto - skt->header.sekcio[0].adresilo;
+	skt->header.section[0].grandeco = dat->bajto - skt->header.section[0].adresilo;
 
 	/*------------------------------------------------------------
 	 * Klasoj
 	 */
-	skt->header.sekcio[1].numero = 1;
-	skt->header.sekcio[1].adresilo = dat->bajto;
+	skt->header.section[1].numero = 1;
+	skt->header.section[1].adresilo = dat->bajto;
 	bit_write_gardostaranto (dat, dwg_gardostaranto (DWG_GS_KLASO_EKO));
 	pvzadr = dat->bajto;	// poste oni devas rewrite la korektan valuen de grandeco cxi tie:
-	bit_write_RL (dat, 0);	// Grandeco de la sekcio
+	bit_write_RL (dat, 0);	// Grandeco de la section
 
 	for (i = 0; i < skt->klaso_kiom; i++)
 	{
@@ -215,7 +215,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 		bit_write_BS (dat, skt->klaso[i].eroid);
 	}
 
-	/* Skribi la grandecon de la sekcio cxe gxia komenco
+	/* Skribi la grandecon de la section cxe gxia komenco
 	 */
 	pvzadr_2 = dat->bajto;
 	pvzbit = dat->bito;
@@ -231,7 +231,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	bit_krei_CRC (dat, pvzadr, 0xC0C1);
 
 	bit_write_gardostaranto (dat, dwg_gardostaranto (DWG_GS_KLASO_FINO));
-	skt->header.sekcio[1].grandeco = dat->bajto - skt->header.sekcio[1].adresilo;
+	skt->header.section[1].grandeco = dat->bajto - skt->header.section[1].adresilo;
 
 
 	/*------------------------------------------------------------
@@ -326,12 +326,12 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	/*------------------------------------------------------------
 	 * Object-mapo
 	 */
-	skt->header.sekcio[2].numero = 2;
-	skt->header.sekcio[2].adresilo = dat->bajto;	// poste oni devas kalkuli la valuen de grandeco
+	skt->header.section[2].numero = 2;
+	skt->header.section[2].adresilo = dat->bajto;	// poste oni devas kalkuli la valuen de grandeco
 	//printf ("Ekaddress: 0x%08X\n", dat->bajto);
 
 	sekcigrandeco = 0;
-	pvzadr = dat->bajto;	// poste oni devas write cxi tie la korektan valuen de grandeco de la unua sekcio
+	pvzadr = dat->bajto;	// poste oni devas write cxi tie la korektan valuen de grandeco de la unua section
 	dat->bajto += 2;
 	lastadres = 0;
 	lastatrakt = 0;
@@ -382,7 +382,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 
 	/* Kalkuli kaj write la grandecon de la object-mapo
 	 */
-	skt->header.sekcio[2].grandeco = dat->bajto - skt->header.sekcio[2].adresilo;
+	skt->header.section[2].grandeco = dat->bajto - skt->header.section[2].adresilo;
 	free (omap);
 
 	/*------------------------------------------------------------
@@ -390,10 +390,10 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	 */
 	bit_write_gardostaranto (dat, dwg_gardostaranto (DWG_GS_DUAKAPO_EKO));
 
-	pvzadr = dat->bajto;	// Gardi la unuan addressn de la sekcio por write ties grandecon poste
+	pvzadr = dat->bajto;	// Gardi la unuan addressn de la section por write ties grandecon poste
 	bit_write_RL (dat, 0);
 
-	bit_write_BL (dat, pvzadr - 16);	// ekaddress de la sekcio
+	bit_write_BL (dat, pvzadr - 16);	// ekaddress de la section
 
 	/* Chain "AC1015"
 	 */
@@ -428,8 +428,8 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	for (i = 0; i < 6; i++)
 	{
 		bit_write_RC (dat, 0);
-		bit_write_BL (dat, skt->header.sekcio[0].adresilo);
-		bit_write_BL (dat, skt->header.sekcio[0].grandeco);
+		bit_write_BL (dat, skt->header.section[0].adresilo);
+		bit_write_BL (dat, skt->header.section[0].grandeco);
 	}
 
 	/* Traktilaro
@@ -464,12 +464,12 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	/*------------------------------------------------------------
 	 * MEASUREMENT
 	 */
-	skt->header.sekcio[3].numero = 3;
-	skt->header.sekcio[3].adresilo = 0;
-	skt->header.sekcio[3].grandeco = 0;
-	skt->header.sekcio[4].numero = 4;
-	skt->header.sekcio[4].adresilo = dat->bajto;
-	skt->header.sekcio[4].grandeco = 4;
+	skt->header.section[3].numero = 3;
+	skt->header.section[3].adresilo = 0;
+	skt->header.section[3].grandeco = 0;
+	skt->header.section[4].numero = 4;
+	skt->header.section[4].adresilo = dat->bajto;
+	skt->header.section[4].grandeco = 4;
 	bit_write_RL (dat, skt->mezuro);
 
 	/* Fino de la dosiero
@@ -480,11 +480,11 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	 */
 	dat->bajto = sekciadresaro;
 	dat->bito = 0;
-	for (i = 0; i < skt->header.sekcio_kiom; i++)
+	for (i = 0; i < skt->header.section_kiom; i++)
 	{
-		bit_write_RC (dat, skt->header.sekcio[i].numero);
-		bit_write_RL (dat, skt->header.sekcio[i].adresilo);
-		bit_write_RL (dat, skt->header.sekcio[i].grandeco);
+		bit_write_RC (dat, skt->header.section[i].numero);
+		bit_write_RL (dat, skt->header.section[i].adresilo);
+		bit_write_RL (dat, skt->header.section[i].grandeco);
 	}
 
 	/* Skribi CKR-on
@@ -493,7 +493,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	dat->bajto -= 2;
 	ckr = bit_read_CRC (dat);
 	dat->bajto -= 2;
-	switch (skt->header.sekcio_kiom)
+	switch (skt->header.section_kiom)
 	{
 	case 3:
 		bit_write_RS (dat, ckr ^ 0xA598);

@@ -539,13 +539,13 @@ dwg_print (Dwg_Structure *dwg_struct)
 	puts ("**************************************************");
 	printf ("Version: %s\n", dwg_struct->header.versio);
 	printf ("Kodpagxo: %u\n", dwg_struct->header.kodpagxo);
-	for (i = 0; i < dwg_struct->header.sekcio_kiom; i++)
+	for (i = 0; i < dwg_struct->header.section_kiom; i++)
 		printf ("Section %i\t Kie: %7lu\t Kiom: %7lu B\n",
-			dwg_struct->header.sekcio[i].numero,
-			dwg_struct->header.sekcio[i].adresilo, dwg_struct->header.sekcio[i].grandeco);
+			dwg_struct->header.section[i].numero,
+			dwg_struct->header.section[i].adresilo, dwg_struct->header.section[i].grandeco);
 	puts ("");
 
-	if (dwg_struct->header.sekcio_kiom == 6)
+	if (dwg_struct->header.section_kiom == 6)
 	{
 		puts ("**************************************************");
 		puts ("Section UNKNOWN 1");

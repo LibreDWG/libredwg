@@ -887,13 +887,13 @@ extern "C"
 		{
 			char versio[6];
 			unsigned int kodpagxo;
-			unsigned int sekcio_kiom;
+			unsigned int section_kiom;
 			struct
 			{
 				unsigned char numero;
 				long unsigned int adresilo;
 				long unsigned int grandeco;
-			} sekcio[6];
+			} section[6];
 		} header;
 
 #		define DWG_NEKONATA1_KIOM 123
