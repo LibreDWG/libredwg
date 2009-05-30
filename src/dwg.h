@@ -894,7 +894,7 @@ extern "C"
 				long unsigned int adresilo;
 				long unsigned int grandeco;
 			} sekcio[6];
-		} kapo;
+		} header;
 
 #		define DWG_NEKONATA1_KIOM 123
 		Dwg_Cxeno nekonata1;
@@ -928,7 +928,7 @@ extern "C"
 				int kiom;
 				unsigned char chain[4];
 			} traktrik[14];
-		} duakapo;
+		} duaheader;
 
 		long unsigned int mezuro;
 

@@ -57,12 +57,12 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	 */
 	dat->bajto = 0;
 	dat->bito = 0;
-	strncpy (skt->kapo.versio, dat->chain, 6);
-	skt->kapo.versio[6] = '\0';
-	if (strcmp (skt->kapo.versio, "AC1015") != 0)
+	strncpy (skt->header.versio, dat->chain, 6);
+	skt->header.versio[6] = '\0';
+	if (strcmp (skt->header.versio, "AC1015") != 0)
 	{
 		printf ("Nur eblas dekodigi dwg-dosierojn laux la versio R2000 (AC1015). "
-			"La trovita versio code estas: %s\n", skt->kapo.versio);
+			"La trovita versio code estas: %s\n", skt->header.versio);
 		return -1;
 	}
 	dat->bajto = 0x06;
@@ -89,23 +89,23 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	/* Kodpagxo
 	 */
 	dat->bajto = 0x13;
-	skt->kapo.kodpagxo = bit_read_RS (dat);
-	printf ("Kodpagxo: %u\n", skt->kapo.kodpagxo);
+	skt->header.kodpagxo = bit_read_RS (dat);
+	printf ("Kodpagxo: %u\n", skt->header.kodpagxo);
 
 	/* Sekcioj
 	 */
 	dat->bajto = 0x15;
-	skt->kapo.sekcio_kiom = bit_read_RL (dat);
-	if (skt->kapo.sekcio_kiom > 6)
-		skt->kapo.sekcio_kiom = 6;
-	for (i = 0; i < skt->kapo.sekcio_kiom; i++)
+	skt->header.sekcio_kiom = bit_read_RL (dat);
+	if (skt->header.sekcio_kiom > 6)
+		skt->header.sekcio_kiom = 6;
+	for (i = 0; i < skt->header.sekcio_kiom; i++)
 	{
-		skt->kapo.sekcio[i].adresilo = 0;
-		skt->kapo.sekcio[i].grandeco = 0;
+		skt->header.sekcio[i].adresilo = 0;
+		skt->header.sekcio[i].grandeco = 0;
 
-		skt->kapo.sekcio[i].numero = bit_read_RC (dat);
-		skt->kapo.sekcio[i].adresilo = bit_read_RL (dat);
-		skt->kapo.sekcio[i].grandeco = bit_read_RL (dat);
+		skt->header.sekcio[i].numero = bit_read_RC (dat);
+		skt->header.sekcio[i].adresilo = bit_read_RL (dat);
+		skt->header.sekcio[i].grandeco = bit_read_RL (dat);
 	}
 
 	// Kontroli CKR-on
@@ -130,11 +130,11 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	 * Nekonata sekcio 1
 	 */
 
-	if (skt->kapo.sekcio_kiom == 6)
+	if (skt->header.sekcio_kiom == 6)
 	{
-		printf ("========> NEKONATA 1: %8X\n", (unsigned int) skt->kapo.sekcio[5].adresilo);
-		printf ("   NEKONATA 1 (fino): %8X\n", (unsigned int) (skt->kapo.sekcio[5].adresilo + skt->kapo.sekcio[5].grandeco));
-		dat->bajto = skt->kapo.sekcio[5].adresilo;
+		printf ("========> NEKONATA 1: %8X\n", (unsigned int) skt->header.sekcio[5].adresilo);
+		printf ("   NEKONATA 1 (fino): %8X\n", (unsigned int) (skt->header.sekcio[5].adresilo + skt->header.sekcio[5].grandeco));
+		dat->bajto = skt->header.sekcio[5].adresilo;
 		skt->nekonata1.kiom = DWG_NEKONATA1_KIOM;
 		skt->nekonata1.bajto = skt->nekonata1.bito = 0;
 		skt->nekonata1.chain = malloc (skt->nekonata1.kiom);
@@ -171,9 +171,9 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	 * Kap-variabloj
 	 */
 
-	printf ("=====> KAP-VARIABLOJ: %8X\n", (unsigned int) skt->kapo.sekcio[0].adresilo);
-	printf ("KAP-VARIABLOJ (fino): %8X\n", (unsigned int) (skt->kapo.sekcio[0].adresilo + skt->kapo.sekcio[0].grandeco));
-	dat->bajto = skt->kapo.sekcio[0].adresilo + 16;
+	printf ("=====> KAP-VARIABLOJ: %8X\n", (unsigned int) skt->header.sekcio[0].adresilo);
+	printf ("KAP-VARIABLOJ (fino): %8X\n", (unsigned int) (skt->header.sekcio[0].adresilo + skt->header.sekcio[0].grandeco));
+	dat->bajto = skt->header.sekcio[0].adresilo + 16;
 	pvz = bit_read_RL (dat);
 	//printf ("Longeco: %lu\n", pvz);
 
@@ -247,7 +247,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	   for (i = 0xC001; i != 0xC000; i++)
 	   {
 	   dat->bajto -= 2;
-	   bit_krei_CRC (dat, skt->kapo.sekcio[0].adresilo + 16, i);
+	   bit_krei_CRC (dat, skt->header.sekcio[0].adresilo + 16, i);
 	   dat->bajto -= 2;
 	   ckr2 = bit_read_CRC (dat);
 	   if (ckr == ckr2)
@@ -263,9 +263,9 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	 * Klasoj
 	 */
 
-	printf ("============> KLASOJ: %8X\n", (unsigned int) skt->kapo.sekcio[1].adresilo);
-	printf ("       KLASOJ (fino): %8X\n", (unsigned int) (skt->kapo.sekcio[1].adresilo + skt->kapo.sekcio[1].grandeco));
-	dat->bajto = skt->kapo.sekcio[1].adresilo + 16;
+	printf ("============> KLASOJ: %8X\n", (unsigned int) skt->header.sekcio[1].adresilo);
+	printf ("       KLASOJ (fino): %8X\n", (unsigned int) (skt->header.sekcio[1].adresilo + skt->header.sekcio[1].grandeco));
+	dat->bajto = skt->header.sekcio[1].adresilo + 16;
 	dat->bito = 0;
 
 	kiom = bit_read_RL (dat);
@@ -311,7 +311,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	   for (i = 0xC001; i != 0xC000; i++)
 	   {
 	   dat->bajto -= 2;
-	   bit_krei_CRC (dat, skt->kapo.sekcio[1].adresilo + 16, i);
+	   bit_krei_CRC (dat, skt->header.sekcio[1].adresilo + 16, i);
 	   dat->bajto -= 2;
 	   ckr2 = bit_read_CRC (dat);
 	   if (ckr == ckr2)
@@ -332,10 +332,10 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	 * Objekto-mapo (kaj objectj mem)
 	 */
 
-	dat->bajto = skt->kapo.sekcio[2].adresilo;
+	dat->bajto = skt->header.sekcio[2].adresilo;
 	dat->bito = 0;
 
-	maplasta = dat->bajto + skt->kapo.sekcio[2].grandeco;	// 4
+	maplasta = dat->bajto + skt->header.sekcio[2].grandeco;	// 4
 	skt->object_kiom = 0;
 	obek = dat->kiom;
 	obfin = 0;
@@ -403,7 +403,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	printf ("    OBJEKTARO (fino): %8X\n", (unsigned int) (obfin + obek + 2));
 
 	/*
-	   dat->bajto = skt->kapo.sekcio[2].adresilo - 2;
+	   dat->bajto = skt->header.sekcio[2].adresilo - 2;
 	   antckr = bit_read_CRC (dat); // Nekonata dubitoko inter objektaro kaj object-mapo
 	   printf ("Adreso: %08X / Enhavo: 0x%04X\n", dat->bajto - 2, antckr);
 
@@ -427,8 +427,8 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	   } while (sekgrandeco > 0);
 	 */
 
-	printf ("======> OBJEKTO-MAPO: %8X\n", (unsigned int) skt->kapo.sekcio[2].adresilo);
-	printf (" OBJEKTO-MAPO (fino): %8X\n", (unsigned int) (skt->kapo.sekcio[2].adresilo + skt->kapo.sekcio[2].grandeco));
+	printf ("======> OBJEKTO-MAPO: %8X\n", (unsigned int) skt->header.sekcio[2].adresilo);
+	printf (" OBJEKTO-MAPO (fino): %8X\n", (unsigned int) (skt->header.sekcio[2].adresilo + skt->header.sekcio[2].grandeco));
 
 	/*-------------------------------------------------------------------------
 	 * Dua kap-datenaro
@@ -473,10 +473,10 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 		//printf ("\nChain?: ");
 		for (i = 0; i < 6; i++)
 		{
-			skt->duakapo.nekonatajxo[i] = bit_read_RC (dat);
-			//printf (" 0x%02X", skt->duakapo.nekonatajxo[i]);
+			skt->duaheader.nekonatajxo[i] = bit_read_RC (dat);
+			//printf (" 0x%02X", skt->duaheader.nekonatajxo[i]);
 		}
-		if (skt->duakapo.nekonatajxo[3] != 0x78 || skt->duakapo.nekonatajxo[5] != 0x06)
+		if (skt->duaheader.nekonatajxo[3] != 0x78 || skt->duaheader.nekonatajxo[5] != 0x06)
 			sig = bit_read_RC (dat);	// por kompenso okaze de eventuala kroma nulo ne readta antauxe
 
 		//puts("");
@@ -495,7 +495,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 		for (i = 0; i < 14; i++)
 		{
 			sig2 = bit_read_RC (dat);
-			skt->duakapo.traktrik[i].kiom = sig2;
+			skt->duaheader.traktrik[i].kiom = sig2;
 			//printf ("\nLongo: %u\n", sig2);
 			sig = bit_read_RC (dat);
 			//printf ("\t[%u]\n", sig);
@@ -503,7 +503,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 			for (j = 0; j < sig2; j++)
 			{
 				sig = bit_read_RC (dat);
-				skt->duakapo.traktrik[i].chain[j] = sig;
+				skt->duaheader.traktrik[i].chain[j] = sig;
 				//printf (" %02X", sig);
 			}
 		}
@@ -536,9 +536,9 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	 * Sekcio MEASUREMENT
 	 */
 
-	printf ("========> NEKONATA 2: %8X\n", (unsigned int) skt->kapo.sekcio[4].adresilo);
-	printf ("   NEKONATA 2 (fino): %8X\n", (unsigned int) (skt->kapo.sekcio[4].adresilo + skt->kapo.sekcio[4].grandeco));
-	dat->bajto = skt->kapo.sekcio[4].adresilo;
+	printf ("========> NEKONATA 2: %8X\n", (unsigned int) skt->header.sekcio[4].adresilo);
+	printf ("   NEKONATA 2 (fino): %8X\n", (unsigned int) (skt->header.sekcio[4].adresilo + skt->header.sekcio[4].grandeco));
+	dat->bajto = skt->header.sekcio[4].adresilo;
 	dat->bito = 0;
 	skt->mezuro = bit_read_RL (dat);
 

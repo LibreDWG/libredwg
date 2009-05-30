@@ -513,7 +513,7 @@ dwg_print_LAYOUT (Dwg_Ordinarajxo_LAYOUT *ord)
 }
 
 /*------------------------------------------------------------------------------
- * Speciala publika funkcio por printgi valuejn de la objectj
+ * Special public function for printing values of an object
  */
 void
 dwg_print (Dwg_Structure *dwg_struct)
@@ -521,7 +521,7 @@ dwg_print (Dwg_Structure *dwg_struct)
 	unsigned char sig;
 	unsigned int i, j;
 	const char *dwg_obtipo[81] = {
-	"NE_UZATA", "TEXT", "ATTRIB", "ATTDEF",	"BLOCK",
+	"UNUSED", "TEXT", "ATTRIB", "ATTDEF",	"BLOCK",
        	"ENDBLK", "SEQEND", "INSERT", "MINSERT", "NULL_09",
 	"VERTEX_2D", "VERTEX_3D", "VERTEX_MESH", "VERTEX_PFACE", "VERTEX_PFACE_FACE",
        	"POLYLINE_2D", "POLYLINE_3D", "ARC", "CIRCLE", "LINE",
@@ -535,20 +535,20 @@ dwg_print (Dwg_Structure *dwg_struct)
 
 
 	puts ("**************************************************");
-	puts ("Sekcio KAPO");
+	puts ("Section HEADER");
 	puts ("**************************************************");
-	printf ("Versio: %s\n", dwg_struct->kapo.versio);
-	printf ("Kodpagxo: %u\n", dwg_struct->kapo.kodpagxo);
-	for (i = 0; i < dwg_struct->kapo.sekcio_kiom; i++)
-		printf ("Sekcio %i\t Kie: %7lu\t Kiom: %7lu B\n",
-			dwg_struct->kapo.sekcio[i].numero,
-			dwg_struct->kapo.sekcio[i].adresilo, dwg_struct->kapo.sekcio[i].grandeco);
+	printf ("Version: %s\n", dwg_struct->header.versio);
+	printf ("Kodpagxo: %u\n", dwg_struct->header.kodpagxo);
+	for (i = 0; i < dwg_struct->header.sekcio_kiom; i++)
+		printf ("Section %i\t Kie: %7lu\t Kiom: %7lu B\n",
+			dwg_struct->header.sekcio[i].numero,
+			dwg_struct->header.sekcio[i].adresilo, dwg_struct->header.sekcio[i].grandeco);
 	puts ("");
 
-	if (dwg_struct->kapo.sekcio_kiom == 6)
+	if (dwg_struct->header.sekcio_kiom == 6)
 	{
 		puts ("**************************************************");
-		puts ("Sekcio NEKONATA 1");
+		puts ("Section UNKNOWN 1");
 		puts ("**************************************************");
 		printf ("Grandeco: %lu B\n", dwg_struct->nekonata1.kiom);
 		bit_print ((Bit_Chain *) & dwg_struct->nekonata1, dwg_struct->nekonata1.kiom);
@@ -556,14 +556,14 @@ dwg_print (Dwg_Structure *dwg_struct)
 	}
 
 	puts ("**************************************************");
-	puts ("Sekcio BILDO");
+	puts ("Section BILDO");
 	puts ("**************************************************");
 	printf ("Grandeco: %lu B\n", dwg_struct->picture.kiom);
 	//bit_print ((Bit_Chain *) &dwg_struct->picture, dwg_struct->picture.kiom);
 	puts ("");
 
 	puts ("**************************************************");
-	puts ("Sekcio VARIABLOJ");
+	puts ("Section VARIABLOJ");
 	puts ("**************************************************");
 	for (i = 0; i < DWG_KIOM_VARIABLOJ; i++)
 	{
@@ -614,13 +614,13 @@ dwg_print (Dwg_Structure *dwg_struct)
 	puts ("");
 
 	puts ("**************************************************");
-	puts ("Sekcio KLASOJ");
+	puts ("Section KLASOJ");
 	puts ("**************************************************");
 	for (i = 0; i < dwg_struct->klaso_kiom; i++)
 	{
 		printf ("Klaso: [%02u]\n", i);
 		printf ("\tNumero: %u\n", dwg_struct->klaso[i].numero);
-		printf ("\tVersio: %u\n", dwg_struct->klaso[i].versio);
+		printf ("\tVersion: %u\n", dwg_struct->klaso[i].versio);
 		printf ("\tAp Nomo: \"%s\"\n", dwg_struct->klaso[i].apname);
 		printf ("\tC++ Nomo: \"%s\"\n", dwg_struct->klaso[i].cplipliname);
 		printf ("\tDXF Nomo: \"%s\"\n", dwg_struct->klaso[i].dxfname);
@@ -630,7 +630,7 @@ dwg_print (Dwg_Structure *dwg_struct)
 	puts ("");
 
 	puts ("**************************************************");
-	puts ("Sekcio OBJEKTOJ");
+	puts ("Section OBJEKTOJ");
 	puts ("**************************************************");
 	for (i = 0; i < dwg_struct->object_kiom; i++)
 	{
@@ -736,19 +736,19 @@ dwg_print (Dwg_Structure *dwg_struct)
 	}
 
 	puts ("**************************************************");
-	puts ("Sekcio DUA KAP-DATENARO ");
+	puts ("Section DUA KAP-DATENARO ");
 	puts ("**************************************************");
 	for (i = 0; i < 14; i++)
 	{
-		printf ("Rikordo[%02i] Longo: %u\tChain:", i, dwg_struct->duakapo.traktrik[i].kiom);
-		for (j = 0; j < dwg_struct->duakapo.traktrik[i].kiom; j++)
-			printf (" %02X", dwg_struct->duakapo.traktrik[i].chain[j]);
+		printf ("Rikordo[%02i] Longo: %u\tChain:", i, dwg_struct->duaheader.traktrik[i].kiom);
+		for (j = 0; j < dwg_struct->duaheader.traktrik[i].kiom; j++)
+			printf (" %02X", dwg_struct->duaheader.traktrik[i].chain[j]);
 		puts ("");
 	}
 	puts ("");
 
 	puts ("**************************************************");
-	puts ("Sekcio MEZURO (MEASUREMENT)");
+	puts ("Section MEZURO (MEASUREMENT)");
 	puts ("**************************************************");
 	printf ("MEZURO: 0x%08X\n", (unsigned int) dwg_struct->mezuro);
 	puts ("");
