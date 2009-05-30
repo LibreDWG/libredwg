@@ -227,8 +227,8 @@ dwg_print_TEXT (Dwg_Estajxo_TEXT * est)
 	printf ("\tLeviĝo: %1.13g\n", est->levigxo);
 	printf ("\tEnmeta punkto: (%1.13g, %1.13g)\n", est->x0, est->y0);
 	printf ("\tEnmeta ĝisrandigo: (%1.13g, %1.13g)\n", est->gxisrandigo.x, est->gxisrandigo.y);
-	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", est->forpusxigo.x, est->forpusxigo.y,
-		est->forpusxigo.z);
+	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", est->extrusion.x, est->extrusion.y,
+		est->extrusion.z);
 	printf ("\tDikeco: %1.13g\n", est->dikeco);
 	printf ("\tKlina angulo: %1.13g\n", est->klinang);
 	printf ("\tTurna angulo: %1.13g\n", est->turnang);
@@ -248,8 +248,8 @@ dwg_print_ATTRIB (Dwg_Estajxo_ATTRIB * est)
 	printf ("\tLeviĝo: %1.13g\n", est->levigxo);
 	printf ("\tEnmeta punkto: (%1.13g, %1.13g)\n", est->x0, est->y0);
 	printf ("\tEnmeta ĝisrandigo: (%1.13g, %1.13g)\n", est->gxisrandigo.x, est->gxisrandigo.y);
-	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", est->forpusxigo.x, est->forpusxigo.y,
-		est->forpusxigo.z);
+	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", est->extrusion.x, est->extrusion.y,
+		est->extrusion.z);
 	printf ("\tDikeco: %1.13g\n", est->dikeco);
 	printf ("\tKlina angulo: %1.13g\n", est->klinang);
 	printf ("\tTurna angulo: %1.13g\n", est->turnang);
@@ -272,8 +272,8 @@ dwg_print_ATTDEF (Dwg_Estajxo_ATTDEF * est)
 	printf ("\tLeviĝo: %1.13g\n", est->levigxo);
 	printf ("\tEnmeta punkto: (%1.13g, %1.13g)\n", est->x0, est->y0);
 	printf ("\tEnmeta ĝisrandigo: (%1.13g, %1.13g)\n", est->gxisrandigo.x, est->gxisrandigo.y);
-	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", est->forpusxigo.x, est->forpusxigo.y,
-		est->forpusxigo.z);
+	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", est->extrusion.x, est->extrusion.y,
+		est->extrusion.z);
 	printf ("\tDikeco: %1.13g\n", est->dikeco);
 	printf ("\tKlina angulo: %1.13g\n", est->klinang);
 	printf ("\tTurna angulo: %1.13g\n", est->turnang);
@@ -302,8 +302,8 @@ dwg_print_INSERT (Dwg_Estajxo_INSERT * est)
 	printf ("\tSkal-indikilo: 0x%02x\n", est->skalindik);
 	printf ("\tSkalo: (%1.13g, %1.13g, %1.13g)\n", est->skalo.x, est->skalo.y, est->skalo.z);
 	printf ("\tTurna angulo: %1.13g\n", est->turnang);
-	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", est->forpusxigo.x, est->forpusxigo.y,
-		est->forpusxigo.z);
+	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", est->extrusion.x, est->extrusion.y,
+		est->extrusion.z);
 	printf ("\tĈu kun ATTRIB-oj?: %s\n", est->kun_attrib ? "Jes" : "Ne");
 }
 
@@ -314,8 +314,8 @@ dwg_print_MINSERT (Dwg_Estajxo_MINSERT * est)
 	printf ("\tSkal-indikilo: 0x%02x\n", est->skalindik);
 	printf ("\tSkalo: (%1.13g, %1.13g, %1.13g)\n", est->skalo.x, est->skalo.y, est->skalo.z);
 	printf ("\tTurna angulo: %1.13g\n", est->turnang);
-	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", est->forpusxigo.x, est->forpusxigo.y,
-		est->forpusxigo.z);
+	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", est->extrusion.x, est->extrusion.y,
+		est->extrusion.z);
 	printf ("\tĈu kun ATTRIB-oj?: %s\n", est->kun_attrib ? "Jes" : "Ne");
 	printf ("\tKolumnoj: %02i\tInterspaco: %1.13g\n", est->kol.kiom, est->kol.dx);
 	printf ("\t  Linioj: %02i\tInterspaco: %1.13g\n", est->lin.kiom, est->lin.dy);
@@ -357,8 +357,8 @@ dwg_print_POLYLINE_2D (Dwg_Estajxo_POLYLINE_2D * est)
 	printf ("\tFinlarĝo: %1.13g\n", est->finlargxo);
 	printf ("\tDikeco: %1.13g\n", est->dikeco);
 	printf ("\tLeviĝo: %1.13g\n", est->levigxo);
-	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", est->forpusxigo.x, est->forpusxigo.y,
-		est->forpusxigo.z);
+	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", est->extrusion.x, est->extrusion.y,
+		est->extrusion.z);
 }
 
 static void
@@ -373,8 +373,8 @@ dwg_print_ARC (Dwg_Estajxo_ARC * est)
 	printf ("\tCentra punkto: (%1.13g, %1.13g, %1.13g)\n", est->x0, est->y0, est->z0);
 	printf ("\tRadiuso: %1.13g\n", est->radiuso);
 	printf ("\tDikeco: %1.13g\n", est->dikeco);
-	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", est->forpusxigo.x, est->forpusxigo.y,
-		est->forpusxigo.z);
+	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", est->extrusion.x, est->extrusion.y,
+		est->extrusion.z);
 	printf ("\tEkangulo: %1.13g\n", est->ekangulo);
 	printf ("\tFinangulo: %1.13g\n", est->finangulo);
 }
@@ -385,8 +385,8 @@ dwg_print_CIRCLE (Dwg_Estajxo_CIRCLE * est)
 	printf ("\tCentra punkto: (%1.13g, %1.13g, %1.13g)\n", est->x0, est->y0, est->z0);
 	printf ("\tRadiuso: %1.13g\n", est->radiuso);
 	printf ("\tDikeco: %1.13g\n", est->dikeco);
-	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", est->forpusxigo.x, est->forpusxigo.y,
-		est->forpusxigo.z);
+	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", est->extrusion.x, est->extrusion.y,
+		est->extrusion.z);
 }
 
 static void
@@ -398,8 +398,8 @@ dwg_print_LINE (Dwg_Estajxo_LINE * est)
 	printf ("\t2-a punkto: (%1.13g, %1.13g, %1.13g)\n", est->x1, est->y1,
 		est->nur_2D ? 0 : est->z1);
 	printf ("\tDikeco: %1.13g\n", est->dikeco);
-	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", est->forpusxigo.x, est->forpusxigo.y,
-		est->forpusxigo.z);
+	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", est->extrusion.x, est->extrusion.y,
+		est->extrusion.z);
 }
 
 static void
@@ -407,8 +407,8 @@ dwg_print_POINT (Dwg_Estajxo_POINT *est)
 {
 	printf ("\tPunkto: (%1.13g, %1.13g, %1.13g)\n", est->x0, est->y0, est->z0);
 	printf ("\tDikeco: %1.13g\n", est->dikeco);
-	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", est->forpusxigo.x, est->forpusxigo.y,
-		est->forpusxigo.z);
+	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", est->extrusion.x, est->extrusion.y,
+		est->extrusion.z);
 	printf ("\tX-angulo: %1.13g\n", est->x_ang);
 }
 
@@ -417,8 +417,8 @@ dwg_print_ELLIPSE (Dwg_Estajxo_ELLIPSE *est)
 {
 	printf ("\tCentra punkto: (%1.13g, %1.13g, %1.13g)\n", est->x0, est->y0, est->z0);
 	printf ("\tDuonĉef-aksa vektoro: (%1.13g, %1.13g, %1.13g)\n", est->x1, est->y1, est->z1);
-	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", est->forpusxigo.x, est->forpusxigo.y,
-		est->forpusxigo.z);
+	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", est->extrusion.x, est->extrusion.y,
+		est->extrusion.z);
 	printf ("\tRadius-proporcio: %1.13g\n", est->radiusproporcio);
 	printf ("\tEkangulo: %1.13g\n", est->ekangulo);
 	printf ("\tFinangulo: %1.13g\n", est->finangulo);
@@ -435,8 +435,8 @@ static void
 dwg_print_MTEXT (Dwg_Estajxo_MTEXT *est)
 {
 	printf ("\tEnmeto: (%1.13g, %1.13g, %1.13g)\n", est->x0, est->y0, est->z0);
-	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", est->forpusxigo.x, est->forpusxigo.y,
-		est->forpusxigo.z);
+	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", est->extrusion.x, est->extrusion.y,
+		est->extrusion.z);
 	printf ("\tX-direkto: (%1.13g, %1.13g, %1.13g)\n", est->x1, est->y1, est->z1);
 	printf ("\tLargxeco: %1.13g\n", est->largxeco);
 	printf ("\tAlteco: %1.13g\n", est->alteco);

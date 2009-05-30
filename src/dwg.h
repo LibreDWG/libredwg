@@ -117,7 +117,7 @@ extern "C"
 			double x;
 			double y;
 			double z;
-		} forpusxigo;
+		} extrusion;
 		double dikeco;
 		double klinang;
 		double turnang;
@@ -148,7 +148,7 @@ extern "C"
 			double x;
 			double y;
 			double z;
-		} forpusxigo;
+		} extrusion;
 		double dikeco;
 		double klinang;
 		double turnang;
@@ -182,7 +182,7 @@ extern "C"
 			double x;
 			double y;
 			double z;
-		} forpusxigo;
+		} extrusion;
 		double dikeco;
 		double klinang;
 		double turnang;
@@ -232,7 +232,7 @@ extern "C"
 			double x;
 			double y;
 			double z;
-		} forpusxigo;
+		} extrusion;
 		unsigned char kun_attrib;
 	} Dwg_Estajxo_INSERT;
 
@@ -257,7 +257,7 @@ extern "C"
 			double x;
 			double y;
 			double z;
-		} forpusxigo;
+		} extrusion;
 		unsigned char kun_attrib;
 		struct
 		{
@@ -321,7 +321,7 @@ extern "C"
 			double x;
 			double y;
 			double z;
-		} forpusxigo;
+		} extrusion;
 	} Dwg_Estajxo_POLYLINE_2D;
 
 /**
@@ -348,7 +348,7 @@ extern "C"
 			double x;
 			double y;
 			double z;
-		} forpusxigo;
+		} extrusion;
 		double ekangulo;
 		double finangulo;
 	} Dwg_Estajxo_ARC;
@@ -368,7 +368,7 @@ extern "C"
 			double x;
 			double y;
 			double z;
-		} forpusxigo;
+		} extrusion;
 	} Dwg_Estajxo_CIRCLE;
 
 /**
@@ -389,7 +389,7 @@ extern "C"
 			double x;
 			double y;
 			double z;
-		} forpusxigo;
+		} extrusion;
 	} Dwg_Estajxo_LINE;
 
 /**
@@ -406,7 +406,7 @@ extern "C"
 			double x;
 			double y;
 			double z;
-		} forpusxigo;
+		} extrusion;
 		double x_ang;
 	} Dwg_Estajxo_POINT;
 
@@ -426,7 +426,7 @@ extern "C"
 			double x;
 			double y;
 			double z;
-		} forpusxigo;
+		} extrusion;
 		double radiusproporcio;
 		double ekangulo;
 		double finangulo;
@@ -458,7 +458,7 @@ extern "C"
 			double x;
 			double y;
 			double z;
-		} forpusxigo;
+		} extrusion;
 		double x1;
 		double y1;
 		double z1;
