@@ -488,6 +488,115 @@ extern "C"
 	} Dwg_Estajxo_POLILYNE_MESH;
 
 /**
+ Struct for:  SOLID (31)
+ */
+
+	typedef struct _dwg_estajxo_SOLID
+	{
+		double thickness;
+		double elevation;
+		struct
+		{
+			double x;
+			double y;
+			double z;
+		} corner1;
+		struct
+		{
+			double x;
+			double y;
+			double z;
+		} corner2;
+		struct
+		{
+			double x;
+			double y;
+			double z;
+		} corner3;		
+		struct
+		{
+			double x;
+			double y;
+			double z;
+		} corner4;
+		struct
+		{
+			double x;
+			double y;
+			double z;
+		} extrusion;
+		
+	} Dwg_Estajxo_SOLID;
+
+/**
+ Struct for:  TRACE (32)
+ */
+
+	typedef struct _dwg_estajxo_TRACE
+	{
+		double thickness;
+		double elevation;
+		struct
+		{
+			double x;
+			double y;
+			double z;
+		} corner1;
+		struct
+		{
+			double x;
+			double y;
+			double z;
+		} corner2;
+		struct
+		{
+			double x;
+			double y;
+			double z;
+		} corner3;		
+		struct
+		{
+			double x;
+			double y;
+			double z;
+		} corner4;
+		struct
+		{
+			double x;
+			double y;
+			double z;
+		} extrusion;
+		
+	} Dwg_Estajxo_TRACE;
+
+/**
+ Struct for:  SHAPE (33)
+ */
+
+	typedef struct _dwg_estajxo_SHAPE
+	{
+		struct
+		{
+			double x;
+			double y;
+			double z;
+		} ins_pt;
+		double scale;
+		double rotation;
+		double width_factor;
+		double oblique;
+		double thickness;
+		double shape_no;
+		struct
+		{
+			double x;
+			double y;
+			double z;
+		} extrusion;
+		
+	} Dwg_Estajxo_SHAPE;
+
+/**
  Struct for elipsoj - ELLIPSE (35)
  */
 	typedef struct _dwg_estajxo_ELLIPSE
