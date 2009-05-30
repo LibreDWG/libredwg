@@ -37,7 +37,7 @@ int
 dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 {
 	unsigned char sig;
-	unsigned int sekgrandeco = 0;
+	unsigned int seksize = 0;
 	unsigned char sgdc[2];
 	unsigned int i, j;
 	unsigned int ckr, ckr2, antckr;
@@ -101,11 +101,11 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	for (i = 0; i < skt->header.num_sections; i++)
 	{
 		skt->header.section[i].adresilo = 0;
-		skt->header.section[i].grandeco = 0;
+		skt->header.section[i].size = 0;
 
 		skt->header.section[i].number = bit_read_RC (dat);
 		skt->header.section[i].adresilo = bit_read_RL (dat);
-		skt->header.section[i].grandeco = bit_read_RL (dat);
+		skt->header.section[i].size = bit_read_RL (dat);
 	}
 
 	// Kontroli CKR-on
@@ -133,7 +133,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	if (skt->header.num_sections == 6)
 	{
 		printf ("========> NBEGINNATA 1: %8X\n", (unsigned int) skt->header.section[5].adresilo);
-		printf ("   NBEGINNATA 1 (fino): %8X\n", (unsigned int) (skt->header.section[5].adresilo + skt->header.section[5].grandeco));
+		printf ("   NBEGINNATA 1 (fino): %8X\n", (unsigned int) (skt->header.section[5].adresilo + skt->header.section[5].size));
 		dat->bajto = skt->header.section[5].adresilo;
 		skt->nekonata1.kiom = DWG_NBEGINNATA1_KIOM;
 		skt->nekonata1.bajto = skt->nekonata1.bito = 0;
@@ -172,7 +172,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	 */
 
 	printf ("=====> KAP-VARIABLEJ: %8X\n", (unsigned int) skt->header.section[0].adresilo);
-	printf ("KAP-VARIABLEJ (fino): %8X\n", (unsigned int) (skt->header.section[0].adresilo + skt->header.section[0].grandeco));
+	printf ("KAP-VARIABLEJ (fino): %8X\n", (unsigned int) (skt->header.section[0].adresilo + skt->header.section[0].size));
 	dat->bajto = skt->header.section[0].adresilo + 16;
 	pvz = bit_read_RL (dat);
 	//printf ("Longeco: %lu\n", pvz);
@@ -264,7 +264,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	 */
 
 	printf ("============> CLASSJ: %8X\n", (unsigned int) skt->header.section[1].adresilo);
-	printf ("       CLASSJ (fino): %8X\n", (unsigned int) (skt->header.section[1].adresilo + skt->header.section[1].grandeco));
+	printf ("       CLASSJ (fino): %8X\n", (unsigned int) (skt->header.section[1].adresilo + skt->header.section[1].size));
 	dat->bajto = skt->header.section[1].adresilo + 16;
 	dat->bito = 0;
 
@@ -335,7 +335,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	dat->bajto = skt->header.section[2].adresilo;
 	dat->bito = 0;
 
-	maplasta = dat->bajto + skt->header.section[2].grandeco;	// 4
+	maplasta = dat->bajto + skt->header.section[2].size;	// 4
 	skt->object_kiom = 0;
 	obek = dat->kiom;
 	obfin = 0;
@@ -348,9 +348,9 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 		duabajto = dat->bajto;
 		sgdc[0] = bit_read_RC (dat);
 		sgdc[1] = bit_read_RC (dat);
-		sekgrandeco = (sgdc[0] << 8) | sgdc[1];
-		//printf ("sekgrandeco: %u\n", sekgrandeco);
-		if (sekgrandeco > 2034)	// 2032 + 2
+		seksize = (sgdc[0] << 8) | sgdc[1];
+		//printf ("seksize: %u\n", seksize);
+		if (seksize > 2034)	// 2032 + 2
 		{
 			puts ("Eraro: Object-mapa section pli granda ol 2034!");
 			return -1;
@@ -358,7 +358,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 
 		lastatrakt = 0;
 		lastadres = 0;
-		while (dat->bajto - duabajto < sekgrandeco)
+		while (dat->bajto - duabajto < seksize)
 		{
 			long unsigned int kobj;
 			long int pvztkt;
@@ -373,7 +373,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 			//printf ("Trakt: %li\tAdres: %li\n", pvztkt, pvzadr);
 			if (dat->bajto == antauxadr)
 				break;
-			//if (dat->bajto - duabajto >= sekgrandeco)
+			//if (dat->bajto - duabajto >= seksize)
 			//break;
 
 			if (obfin < lastadres)
@@ -394,7 +394,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 		if (dat->bajto >= maplasta)
 			break;
 	}
-	while (sekgrandeco > 2);
+	while (seksize > 2);
 	printf ("Kiom objectj: %lu\n", skt->object_kiom);
 
 	printf ("=========> OBJEKTARO: %8X\n", (unsigned int) obek);
@@ -414,9 +414,9 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	   duabajto = dat->bajto;
 	   sgdc[0] = bit_read_RC (dat);
 	   sgdc[1] = bit_read_RC (dat);
-	   sekgrandeco = (sgdc[0] << 8) | sgdc[1];
-	   sekgrandeco -= 2;
-	   dat->bajto += sekgrandeco;
+	   seksize = (sgdc[0] << 8) | sgdc[1];
+	   seksize -= 2;
+	   dat->bajto += seksize;
 	   ckr = bit_read_CRC (dat);
 	   dat->bajto -= 2;
 	   bit_krei_CRC (dat, duabajto, antckr);
@@ -424,11 +424,11 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	   ckr2 = bit_read_CRC (dat);
 	   printf ("Legita: %X\nKreita: %X\t SEMO: %X\n", ckr, ckr2, antckr);
 	   //antckr = ckr;
-	   } while (sekgrandeco > 0);
+	   } while (seksize > 0);
 	 */
 
 	printf ("======> OBJEKTO-MAPO: %8X\n", (unsigned int) skt->header.section[2].adresilo);
-	printf (" OBJEKTO-MAPO (fino): %8X\n", (unsigned int) (skt->header.section[2].adresilo + skt->header.section[2].grandeco));
+	printf (" OBJEKTO-MAPO (fino): %8X\n", (unsigned int) (skt->header.section[2].adresilo + skt->header.section[2].size));
 
 	/*-------------------------------------------------------------------------
 	 * Dua kap-datenaro
@@ -537,7 +537,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	 */
 
 	printf ("========> NBEGINNATA 2: %8X\n", (unsigned int) skt->header.section[4].adresilo);
-	printf ("   NBEGINNATA 2 (fino): %8X\n", (unsigned int) (skt->header.section[4].adresilo + skt->header.section[4].grandeco));
+	printf ("   NBEGINNATA 2 (fino): %8X\n", (unsigned int) (skt->header.section[4].adresilo + skt->header.section[4].size));
 	dat->bajto = skt->header.section[4].adresilo;
 	dat->bito = 0;
 	skt->mezuro = bit_read_RL (dat);
@@ -559,12 +559,12 @@ dwg_decode_estajxo (Bit_Chain * dat, Dwg_Object_Estajxo * est)
 	unsigned int grando;
 	int error = 2;
 
-	est->bitgrandeco = bit_read_RL (dat);
+	est->bitsize = bit_read_RL (dat);
 	error = bit_read_H (dat, &est->traktilo);
 	if (error)
 	{
 		printf ("\tEraro en traktilo de object! Adreso en la ĉeno: 0x%0x\n", (unsigned int) dat->bajto);
-		est->bitgrandeco = 0;
+		est->bitsize = 0;
 		est->kromdat_kiom = 0;
 		est->picture_ekzistas = 0;
 		est->traktref_kiom = 0;
@@ -575,8 +575,8 @@ dwg_decode_estajxo (Bit_Chain * dat, Dwg_Object_Estajxo * est)
 	{
 		if (grando > 10210)
 		{
-			printf ("Absurdo! Kromdato-grandeco: %lu. Object: %lu (traktilo).\n", (long unsigned int) grando, est->traktilo.value);
-			est->bitgrandeco = 0;
+			printf ("Absurdo! Kromdato-size: %lu. Object: %lu (traktilo).\n", (long unsigned int) grando, est->traktilo.value);
+			est->bitsize = 0;
 			est->kromdat_kiom = 0;
 			est->picture_ekzistas = 0;
 			est->traktref_kiom = 0;
@@ -610,7 +610,7 @@ dwg_decode_estajxo (Bit_Chain * dat, Dwg_Object_Estajxo * est)
 		}
 		else
 		{
-			printf ("Absurdo! Bildo-grandeco: %lu kB. Object: %lu (traktilo).\n",
+			printf ("Absurdo! Bildo-size: %lu kB. Object: %lu (traktilo).\n",
 				est->picture_kiom / 1000, est->traktilo.value);
 			bit_ref_salti (dat, -(4 * 8 + 1));
 		}
@@ -634,12 +634,12 @@ dwg_decode_ordinarajxo (Bit_Chain * dat, Dwg_Object_Ordinarajxo * ord)
 	unsigned int grando;
 	int error = 2;
 
-	ord->bitgrandeco = bit_read_RL (dat);
+	ord->bitsize = bit_read_RL (dat);
 	error = bit_read_H (dat, &ord->traktilo);
 	if (error)
 	{
 		printf ("\tEraro en traktilo de object! Adreso en la ĉeno: 0x%0x\n", (unsigned int) dat->bajto);
-		ord->bitgrandeco = 0;
+		ord->bitsize = 0;
 		ord->kromdat_kiom = 0;
 		ord->traktref_kiom = 0;
 		return;
@@ -649,8 +649,8 @@ dwg_decode_ordinarajxo (Bit_Chain * dat, Dwg_Object_Ordinarajxo * ord)
 	{
 		if (grando > 10210)
 		{
-			printf ("Absurdo! Kromdato-grandeco: %lu. Object: %lu (traktilo).\n", (long unsigned int) grando, ord->traktilo.value);
-			ord->bitgrandeco = 0;
+			printf ("Absurdo! Kromdato-size: %lu. Object: %lu (traktilo).\n", (long unsigned int) grando, ord->traktilo.value);
+			ord->bitsize = 0;
 			ord->kromdat_kiom = 0;
 			ord->traktref_kiom = 0;
 			return;
@@ -1329,7 +1329,7 @@ dwg_decode_LAYOUT (Bit_Chain * dat, Dwg_Object * obj)
 	ord->pagxo.supre = bit_read_BD (dat);
 	ord->pagxo.largxeco = bit_read_BD (dat);
 	ord->pagxo.height = bit_read_BD (dat);
-	ord->pagxo.grandeco = bit_read_T (dat);
+	ord->pagxo.size = bit_read_T (dat);
 	ord->pagxo.dx = bit_read_BD (dat);
 	ord->pagxo.dy = bit_read_BD (dat);
 	ord->pagxo.unuoj = bit_read_BS (dat);
@@ -1432,9 +1432,9 @@ dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned in
 	obj = &skt->object[skt->object_kiom];
 	skt->object_kiom++;
 
-	obj->grandeco = bit_read_MS (dat);
+	obj->size = bit_read_MS (dat);
 	objekadres = dat->bajto;
-	ktl_lastaddress = dat->bajto + obj->grandeco;	/* (de cxi tie oni kalkulas la bitgrandecon) */
+	ktl_lastaddress = dat->bajto + obj->size;	/* (de cxi tie oni kalkulas la bitsizen) */
 	obj->tipo = bit_read_BS (dat);
 
 	/* Kontroli la tipon de object
@@ -1511,8 +1511,8 @@ dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned in
 		else
 		{
 			obj->supertipo = DWG_SUPERTYPE_UNKNOWN;
-			obj->tio.nekonatajxo = malloc (obj->grandeco);
-			memcpy (obj->tio.nekonatajxo, &dat->chain[objekadres], obj->grandeco);
+			obj->tio.nekonatajxo = malloc (obj->size);
+			memcpy (obj->tio.nekonatajxo, &dat->chain[objekadres], obj->size);
 		}
 	}
 
@@ -1520,8 +1520,8 @@ dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned in
 	   if (obj->supertipo != DWG_SUPERTYPE_UNKNOWN)
 	   {
 	   printf (" Ekadr:\t%10lu\n", address);
-	   printf (" Lasta:\t%10lu\tGrandeco: %10lu\n", dat->bajto, obj->grandeco);
-	   printf ("Finadr:\t%10lu (kalkulite)\n", address + 2 + obj->grandeco);
+	   printf (" Lasta:\t%10lu\tGrandeco: %10lu\n", dat->bajto, obj->size);
+	   printf ("Finadr:\t%10lu (kalkulite)\n", address + 2 + obj->size);
 	   }
 	 */
 

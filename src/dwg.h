@@ -689,7 +689,7 @@ extern "C"
 			double supre;
 			double largxeco;
 			double height;
-			char *grandeco;
+			char *size;
 			double dx;
 			double dy;
 			unsigned int unuoj;
@@ -784,7 +784,7 @@ extern "C"
 			Dwg_Estajxo_MTEXT *MTEXT;
 		} tio;
 
-		long unsigned int bitgrandeco;
+		long unsigned int bitsize;
 		Dwg_Traktilo traktilo;
 
 		unsigned int kromdat_kiom;
@@ -820,7 +820,7 @@ extern "C"
 			Dwg_Ordinarajxo_LAYOUT *LAYOUT;
 		} tio;
 
-		long unsigned int bitgrandeco;
+		long unsigned int bitsize;
 		Dwg_Traktilo traktilo;
 
 		unsigned int kromdat_kiom;
@@ -838,7 +838,7 @@ extern "C"
  */
 	typedef struct _dwg_object
 	{
-		unsigned int grandeco;
+		unsigned int size;
 		unsigned int tipo;
 		unsigned int ckr;
 
@@ -892,7 +892,7 @@ extern "C"
 			{
 				unsigned char number;
 				long unsigned int adresilo;
-				long unsigned int grandeco;
+				long unsigned int size;
 			} section[6];
 		} header;
 

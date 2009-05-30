@@ -143,7 +143,7 @@ dwg_write_file (char *filename, Dwg_Structure * dwg_struct)
 static void
 dwg_print_estajxo (Dwg_Object_Estajxo * est)
 {
-	printf ("Bitgrandeco: %lu\n", est->bitgrandeco);
+	printf ("Bitsize: %lu\n", est->bitsize);
 	printf ("Vera traktilo: %i.%i.%lu\n", est->traktilo.code, est->traktilo.kiom,
 		est->traktilo.value);
 	printf ("Kroma datenaro: %lu B\n", (long unsigned int) est->kromdat_kiom);
@@ -166,7 +166,7 @@ dwg_print_estajxo (Dwg_Object_Estajxo * est)
 static void
 dwg_print_ordinarajxo (Dwg_Object_Ordinarajxo *ord)
 {
-	printf ("Bitgrandeco: %lu\n", ord->bitgrandeco);
+	printf ("Bitsize: %lu\n", ord->bitsize);
 	printf ("Vera traktilo: %i.%i.%lu\n", ord->traktilo.code, ord->traktilo.kiom,
 		ord->traktilo.value);
 	printf ("Kroma datenaro: %lu B\n", (long unsigned int) ord->kromdat_kiom);
@@ -471,7 +471,7 @@ dwg_print_LAYOUT (Dwg_Ordinarajxo_LAYOUT *ord)
 		ord->pagxo.supre);
 	printf ("\tLargxeco: %1.13g\n", ord->pagxo.largxeco);
 	printf ("\tAlteco: %1.13g\n", ord->pagxo.height);
-	printf ("\tGrandeco: %s\n", ord->pagxo.grandeco);
+	printf ("\tGrandeco: %s\n", ord->pagxo.size);
 	printf ("\tDeŝovo: (%1.13g, %1.13g)\n", ord->pagxo.dx, ord->pagxo.dy);
 	printf ("\tUnuoj: %u\n", ord->pagxo.unuoj);
 	printf ("\tRotacio: %u\n", ord->pagxo.rotacio);
@@ -542,7 +542,7 @@ dwg_print (Dwg_Structure *dwg_struct)
 	for (i = 0; i < dwg_struct->header.num_sections; i++)
 		printf ("Section %i\t Kie: %7lu\t Kiom: %7lu B\n",
 			dwg_struct->header.section[i].number,
-			dwg_struct->header.section[i].adresilo, dwg_struct->header.section[i].grandeco);
+			dwg_struct->header.section[i].adresilo, dwg_struct->header.section[i].size);
 	puts ("");
 
 	if (dwg_struct->header.num_sections == 6)
@@ -640,7 +640,7 @@ dwg_print (Dwg_Structure *dwg_struct)
 		obj = &dwg_struct->object[i];
 
 		printf ("Tipo: %s (%03i)\t", obj->tipo > 80 ? (obj->tipo == dwg_struct->dwg_ot_layout ? "LAYOUT" : "??") : dwg_obtipo[obj->tipo], obj->tipo);
-		printf ("Grandeco: %u\t", obj->grandeco);
+		printf ("Grandeco: %u\t", obj->size);
 		printf ("Traktilo: (%lu)\t", obj->trakt);
 		printf ("Super-tipo: ");
 		switch (obj->supertipo)
