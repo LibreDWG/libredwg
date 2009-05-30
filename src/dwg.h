@@ -753,7 +753,7 @@ extern "C"
 		} limo;
 	} Dwg_Ordinarajxo_LAYOUT;
 
-/* OBJEKTOJ - FINO ************************************************************/
+/* OBJEKTOJ - END ************************************************************/
 
 /**
  Strukturo de rikordoj por atributoj de estajxoj.
@@ -896,12 +896,12 @@ extern "C"
 			} section[6];
 		} header;
 
-#		define DWG_NEKONATA1_KIOM 123
+#		define DWG_NBEGINNATA1_KIOM 123
 		Dwg_Cxeno nekonata1;
 
 		Dwg_Cxeno picture;
 
-#		define DWG_KIOM_VARIABLOJ 233
+#		define DWG_KIOM_VARIABLEJ 233
 		union
 		{
 			unsigned char bitoko;
@@ -912,7 +912,7 @@ extern "C"
 			double xy[2];
 			unsigned char *text;
 			Dwg_Traktilo traktilo;
-		} var[DWG_KIOM_VARIABLOJ];
+		} var[DWG_KIOM_VARIABLEJ];
 
 		unsigned int class_kiom;
 		Dwg_Class *class;

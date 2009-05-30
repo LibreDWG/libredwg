@@ -12,7 +12,7 @@
 #include "common.h"
 
 unsigned char *
-dwg_gardostaranto (Dwg_Gardostaranto kiu_gardostaranto)
+dwg_sentinel (Dwg_Sentinel kiu_sentinel)
 {
 	static unsigned char gdst[9][16] = {
 		{0x95, 0xA0, 0x4E, 0x28, 0x99, 0x82, 0x1A, 0xE5, 0x5E, 0x41, 0xE0, 0x5F, 0x9D, 0x3A,
@@ -35,7 +35,7 @@ dwg_gardostaranto (Dwg_Gardostaranto kiu_gardostaranto)
 		 0x55, 0xFE}
 	};
 
-	return (gdst[kiu_gardostaranto]);
+	return (gdst[kiu_sentinel]);
 }
 
 /**

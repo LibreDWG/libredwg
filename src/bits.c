@@ -871,10 +871,10 @@ bit_write_L (Bit_Chain * dat, long unsigned int value)
 	bit_write_RC (dat, btk[0]);
 }
 
-/** Sercxi gardostaranton; se trovite, poziciigas "dat->bajto" tuj post gxi.
+/** Sercxi sentineln; se trovite, poziciigas "dat->bajto" tuj post gxi.
  */
 int
-bit_sercxi_gardostaranto (Bit_Chain * dat, unsigned char gdst[16])
+bit_sercxi_sentinel (Bit_Chain * dat, unsigned char gdst[16])
 {
 	long unsigned int i, j;
 
@@ -896,7 +896,7 @@ bit_sercxi_gardostaranto (Bit_Chain * dat, unsigned char gdst[16])
 }
 
 void
-bit_write_gardostaranto (Bit_Chain * dat, unsigned char gdst[16])
+bit_write_sentinel (Bit_Chain * dat, unsigned char gdst[16])
 {
 	int i;
 

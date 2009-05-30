@@ -79,7 +79,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	dat->bajto += (skt->header.num_sections * 9);
 	bit_read_CRC (dat);	// Salti CKR-on
 
-	bit_write_gardostaranto (dat, dwg_gardostaranto (DWG_GS_KAPO_FINO));
+	bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_HEAD_END));
 
 	/*------------------------------------------------------------
 	 * Nekonata section 1
@@ -91,7 +91,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	if (skt->header.num_sections == 6)
 	{
 		skt->header.section[5].adresilo = dat->bajto;
-		skt->header.section[5].grandeco = DWG_NEKONATA1_KIOM;
+		skt->header.section[5].grandeco = DWG_NBEGINNATA1_KIOM;
 
 		skt->nekonata1.kiom = skt->header.section[5].grandeco;
 		skt->nekonata1.bajto = skt->nekonata1.bito = 0;
@@ -116,7 +116,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	/* Kopii la picturen
 	 */
 	//skt->picture.kiom = 0; // Se oni deziras ne kopii picturen, malkomentu tiun cxi linion
-	bit_write_gardostaranto (dat, dwg_gardostaranto (DWG_GS_BILDO_EKO));
+	bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_PICTURE_BEGIN));
 	for (i = 0; i < skt->picture.kiom; i++)
 		bit_write_RC (dat, skt->picture.chain[i]);
 	if (skt->picture.kiom == 0)
@@ -124,7 +124,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 		bit_write_RL (dat, 5);
 		bit_write_RC (dat, 0);
 	}
-	bit_write_gardostaranto (dat, dwg_gardostaranto (DWG_GS_BILDO_FINO));
+	bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_PICTURE_END));
 
 
 	/*------------------------------------------------------------
@@ -133,11 +133,11 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 
 	skt->header.section[0].number = 0;
 	skt->header.section[0].adresilo = dat->bajto;
-	bit_write_gardostaranto (dat, dwg_gardostaranto (DWG_GS_VARIABLO_EKO));
+	bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_VARIABLE_BEGIN));
 	pvzadr = dat->bajto;	// poste oni devas rewrite la korektan valuen de grandeco cxi tie:
 	bit_write_RL (dat, 0);	// Grandeco de la section
 
-	for (i = 0; i < DWG_KIOM_VARIABLOJ; i++)
+	for (i = 0; i < DWG_KIOM_VARIABLEJ; i++)
 	{
 		if (i == 221 && skt->var[220].dubitoko != 3)
 			continue;
@@ -189,10 +189,10 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	dat->bito = pvzbit;
 	//printf ("Grandeco: %lu\n", pvzadr_2 - pvzadr - (pvzbit ? 3 : 4));
 
-	/* CKR kaj gardostaranto
+	/* CKR kaj sentinel
 	 */
 	bit_krei_CRC (dat, pvzadr, 0xC0C1);
-	bit_write_gardostaranto (dat, dwg_gardostaranto (DWG_GS_VARIABLO_FINO));
+	bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_VARIABLE_END));
 	skt->header.section[0].grandeco = dat->bajto - skt->header.section[0].adresilo;
 
 	/*------------------------------------------------------------
@@ -200,7 +200,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	 */
 	skt->header.section[1].number = 1;
 	skt->header.section[1].adresilo = dat->bajto;
-	bit_write_gardostaranto (dat, dwg_gardostaranto (DWG_GS_KLASO_EKO));
+	bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_CLASS_BEGIN));
 	pvzadr = dat->bajto;	// poste oni devas rewrite la korektan valuen de grandeco cxi tie:
 	bit_write_RL (dat, 0);	// Grandeco de la section
 
@@ -226,11 +226,11 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	dat->bito = pvzbit;
 	//printf ("Grandeco: %lu\n", pvzadr_2 - pvzadr - (pvzbit ? 3 : 4));
 
-	/* CKR kaj gardostaranto
+	/* CKR kaj sentinel
 	 */
 	bit_krei_CRC (dat, pvzadr, 0xC0C1);
 
-	bit_write_gardostaranto (dat, dwg_gardostaranto (DWG_GS_KLASO_FINO));
+	bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_CLASS_END));
 	skt->header.section[1].grandeco = dat->bajto - skt->header.section[1].adresilo;
 
 
@@ -388,7 +388,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	/*------------------------------------------------------------
 	 * Dua kap-datenaro
 	 */
-	bit_write_gardostaranto (dat, dwg_gardostaranto (DWG_GS_DUAKAPO_EKO));
+	bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_DUAHEAD_BEGIN));
 
 	pvzadr = dat->bajto;	// Gardi la unuan addressn de la section por write ties grandecon poste
 	bit_write_RL (dat, 0);
@@ -459,7 +459,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	bit_write_RL (dat, 0);
 	bit_write_RL (dat, 0);
 
-	bit_write_gardostaranto (dat, dwg_gardostaranto (DWG_GS_DUAKAPO_FINO));
+	bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_DUAHEAD_END));
 
 	/*------------------------------------------------------------
 	 * MEASUREMENT

@@ -117,9 +117,9 @@ long unsigned int bit_read_L (Bit_Chain * dat);
 
 void bit_write_L (Bit_Chain * dat, long unsigned int value);
 
-int bit_sercxi_gardostaranto (Bit_Chain * dat, unsigned char gdst[16]);
+int bit_sercxi_sentinel (Bit_Chain * dat, unsigned char gdst[16]);
 
-void bit_write_gardostaranto (Bit_Chain * dat, unsigned char gdst[16]);
+void bit_write_sentinel (Bit_Chain * dat, unsigned char gdst[16]);
 
 void bit_chain_rezervi (Bit_Chain * dat);
 

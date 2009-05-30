@@ -556,16 +556,16 @@ dwg_print (Dwg_Structure *dwg_struct)
 	}
 
 	puts ("**************************************************");
-	puts ("Section BILDO");
+	puts ("Section PICTURE");
 	puts ("**************************************************");
 	printf ("Grandeco: %lu B\n", dwg_struct->picture.kiom);
 	//bit_print ((Bit_Chain *) &dwg_struct->picture, dwg_struct->picture.kiom);
 	puts ("");
 
 	puts ("**************************************************");
-	puts ("Section VARIABLOJ");
+	puts ("Section VARIABLEJ");
 	puts ("**************************************************");
-	for (i = 0; i < DWG_KIOM_VARIABLOJ; i++)
+	for (i = 0; i < DWG_KIOM_VARIABLEJ; i++)
 	{
 		printf ("[%03i] - ", i + 1);
 		if (i == 221 && dwg_struct->var[220].dubitoko != 3)
@@ -614,7 +614,7 @@ dwg_print (Dwg_Structure *dwg_struct)
 	puts ("");
 
 	puts ("**************************************************");
-	puts ("Section KLASOJ");
+	puts ("Section CLASSJ");
 	puts ("**************************************************");
 	for (i = 0; i < dwg_struct->class_kiom; i++)
 	{

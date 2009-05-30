@@ -45,23 +45,23 @@ object data, see the main Object description section for details. */
 } Dwg_Datenero_Tipo;
 
 /**
- Identigaj referencoj de gardostarantoj.
+ Identigaj referencoj de sentinels.
  */
-typedef enum DWG_GARDOSTARANTO
+typedef enum DWG_SENTINEL
 {
-	DWG_GS_KAPO_FINO,
-	DWG_GS_BILDO_EKO,
-	DWG_GS_BILDO_FINO,
-	DWG_GS_VARIABLO_EKO,
-	DWG_GS_VARIABLO_FINO,
-	DWG_GS_KLASO_EKO,
-	DWG_GS_KLASO_FINO,
-	DWG_GS_DUAKAPO_EKO,
-	DWG_GS_DUAKAPO_FINO
-} Dwg_Gardostaranto;
+	DWG_SENTINEL_HEAD_END,
+	DWG_SENTINEL_PICTURE_BEGIN,
+	DWG_SENTINEL_PICTURE_END,
+	DWG_SENTINEL_VARIABLE_BEGIN,
+	DWG_SENTINEL_VARIABLE_END,
+	DWG_SENTINEL_CLASS_BEGIN,
+	DWG_SENTINEL_CLASS_END,
+	DWG_SENTINEL_DUAHEAD_BEGIN,
+	DWG_SENTINEL_DUAHEAD_END
+} Dwg_Sentinel;
 
 Dwg_Datenero_Tipo dwg_varmapo (int indico);
 
-unsigned char *dwg_gardostaranto (Dwg_Gardostaranto kiu_gardostaranto);
+unsigned char *dwg_sentinel (Dwg_Sentinel kiu_sentinel);
 
 #endif
