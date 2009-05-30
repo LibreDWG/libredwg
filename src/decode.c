@@ -62,7 +62,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	if (strcmp (skt->kapo.versio, "AC1015") != 0)
 	{
 		printf ("Nur eblas dekodigi dwg-dosierojn laux la versio R2000 (AC1015). "
-			"La trovita versio kodo estas: %s\n", skt->kapo.versio);
+			"La trovita versio code estas: %s\n", skt->kapo.versio);
 		return -1;
 	}
 	dat->bajto = 0x06;
@@ -186,7 +186,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 		//printf ("[%03i] - ", i + 1);
 		if (i == 221 && skt->var[220].dubitoko != 3)
 		{
-			skt->var[i].traktilo.kodo = 0;
+			skt->var[i].traktilo.code = 0;
 			skt->var[i].traktilo.value = 0;
 			//puts ("(NE EKZISTANTA)");
 			continue;
@@ -211,7 +211,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 			break;
 		case DWG_DT_H:
 			bit_read_H (dat, &skt->var[i].traktilo);
-			//printf ("H: %i.%i.0x%08X", skt->var[i].traktilo.kodo, skt->var[i].traktilo.kiom, skt->var[i].traktilo.value);
+			//printf ("H: %i.%i.0x%08X", skt->var[i].traktilo.code, skt->var[i].traktilo.kiom, skt->var[i].traktilo.value);
 			break;
 		case DWG_DT_T:
 			skt->var[i].text = bit_read_T (dat);

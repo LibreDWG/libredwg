@@ -688,16 +688,16 @@ bit_read_H (Bit_Chain * dat, Dwg_Traktilo * trakt)
 	unsigned char *val;
 	int i;
 
-	trakt->kodo = bit_read_RC (dat);
-	trakt->kiom = trakt->kodo & 0x0f;
-	trakt->kodo = (trakt->kodo & 0xf0) >> 4;
+	trakt->code = bit_read_RC (dat);
+	trakt->kiom = trakt->code & 0x0f;
+	trakt->code = (trakt->code & 0xf0) >> 4;
 
 	trakt->value = 0;
 	if (trakt->kiom > 4)
 	{
 		/*
 		printf ("Eraro: traktilo-referenco pli longa ol 4 bitokoj: %i.%i.%lu\n",
-			trakt->kodo, trakt->kiom, trakt->value);
+			trakt->code, trakt->kiom, trakt->value);
 		*/
 		trakt->kiom = 0;
 		return (-1);
@@ -717,11 +717,11 @@ bit_write_H (Bit_Chain * dat, Dwg_Traktilo * trakt)
 {
 	int i, j;
 	unsigned char *val;
-	unsigned char kodo_nombrilo;
+	unsigned char code_nombrilo;
 
 	if (trakt->value == 0)
 	{
-		bit_write_RC (dat, (trakt->kodo << 4));
+		bit_write_RC (dat, (trakt->code << 4));
 		return;
 	}
 
@@ -730,10 +730,10 @@ bit_write_H (Bit_Chain * dat, Dwg_Traktilo * trakt)
 		if (val[i])
 			break;
 
-	kodo_nombrilo = trakt->kodo << 4;
-	kodo_nombrilo |= i + 1;
+	code_nombrilo = trakt->code << 4;
+	code_nombrilo |= i + 1;
 
-	bit_write_RC (dat, kodo_nombrilo);
+	bit_write_RC (dat, code_nombrilo);
 
 	for (; i >= 0; i--)
 		bit_write_RC (dat, val[i]);

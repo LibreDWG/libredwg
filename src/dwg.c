@@ -144,7 +144,7 @@ static void
 dwg_print_estajxo (Dwg_Object_Estajxo * est)
 {
 	printf ("Bitgrandeco: %lu\n", est->bitgrandeco);
-	printf ("Vera traktilo: %i.%i.%lu\n", est->traktilo.kodo, est->traktilo.kiom,
+	printf ("Vera traktilo: %i.%i.%lu\n", est->traktilo.code, est->traktilo.kiom,
 		est->traktilo.value);
 	printf ("Kroma datenaro: %lu B\n", (long unsigned int) est->kromdat_kiom);
 	printf ("Ĉu picture?: %s", est->picture_ekzistas ? "Jes" : "Ne");
@@ -167,7 +167,7 @@ static void
 dwg_print_ordinarajxo (Dwg_Object_Ordinarajxo *ord)
 {
 	printf ("Bitgrandeco: %lu\n", ord->bitgrandeco);
-	printf ("Vera traktilo: %i.%i.%lu\n", ord->traktilo.kodo, ord->traktilo.kiom,
+	printf ("Vera traktilo: %i.%i.%lu\n", ord->traktilo.code, ord->traktilo.kiom,
 		ord->traktilo.value);
 	printf ("Kroma datenaro: %lu B\n", (long unsigned int) ord->kromdat_kiom);
 	printf ("Kiom reagiloj: %lu\n", ord->reagilo_kiom);
@@ -192,9 +192,9 @@ dwg_print_traktref (Dwg_Objekto * obj)
 			return;
 		}
 		for (i = 0; i < est->traktref_kiom - 1; i++)
-			printf ("%i.%i.%li / ", est->traktref[i].kodo, est->traktref[i].kiom,
+			printf ("%i.%i.%li / ", est->traktref[i].code, est->traktref[i].kiom,
 				est->traktref[i].value);
-		printf ("%i.%i.%li\n", est->traktref[i].kodo, est->traktref[i].kiom,
+		printf ("%i.%i.%li\n", est->traktref[i].code, est->traktref[i].kiom,
 			est->traktref[i].value);
 	}
 	else if (obj->supertipo == DWG_SUPERTYPE_ORDINARAJXO)
@@ -210,9 +210,9 @@ dwg_print_traktref (Dwg_Objekto * obj)
 			return;
 		}
 		for (i = 0; i < ord->traktref_kiom - 1; i++)
-			printf ("%i.%i.%li / ", ord->traktref[i].kodo, ord->traktref[i].kiom,
+			printf ("%i.%i.%li / ", ord->traktref[i].code, ord->traktref[i].kiom,
 				ord->traktref[i].value);
-		printf ("%i.%i.%li\n", ord->traktref[i].kodo, ord->traktref[i].kiom,
+		printf ("%i.%i.%li\n", ord->traktref[i].code, ord->traktref[i].kiom,
 			ord->traktref[i].value);
 	}
 }
@@ -588,7 +588,7 @@ dwg_print (Dwg_Structure *dwg_struct)
 			printf ("BD: %lg", dwg_struct->var[i].duglitajxo);
 			break;
 		case DWG_DT_H:
-			printf ("H: %i.%i.%li", dwg_struct->var[i].traktilo.kodo,
+			printf ("H: %i.%i.%li", dwg_struct->var[i].traktilo.code,
 				dwg_struct->var[i].traktilo.kiom, dwg_struct->var[i].traktilo.value);
 			break;
 		case DWG_DT_T:

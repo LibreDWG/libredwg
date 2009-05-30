@@ -86,7 +86,7 @@ extern "C"
  */
 	typedef struct _dwg_traktilo
 	{
-		unsigned char kodo;
+		unsigned char code;
 		unsigned char kiom;
 		long unsigned int value;
 	} Dwg_Traktilo;
