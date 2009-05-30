@@ -433,6 +433,37 @@ extern "C"
 	} Dwg_Estajxo_POINT;
 
 /**
+ Struct for:  3D FACE (28)
+ */
+	typedef struct _dwg_estajxo_3D_FACE
+	{
+		struct
+		{
+			double x;
+			double y;
+			double z;
+		} corner1;
+		struct
+		{
+			double x;
+			double y;
+			double z;
+		} corner2;
+		struct
+		{
+			double x;
+			double y;
+			double z;
+		} corner3;		
+		struct
+		{
+			double x;
+			double y;
+			double z;
+		} corner4;
+	} Dwg_Estajxo_3D_FACE;
+
+/**
  Struct for elipsoj - ELLIPSE (35)
  */
 	typedef struct _dwg_estajxo_ELLIPSE
