@@ -858,7 +858,7 @@ extern "C"
  */
 	typedef struct _dwg_klaso
 	{
-		unsigned int numero;
+		unsigned int number;
 		unsigned int version;
 		unsigned char *apname;
 		unsigned char *cplipliname;
@@ -890,7 +890,7 @@ extern "C"
 			unsigned int num_sections;
 			struct
 			{
-				unsigned char numero;
+				unsigned char number;
 				long unsigned int adresilo;
 				long unsigned int grandeco;
 			} section[6];

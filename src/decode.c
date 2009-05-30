@@ -103,7 +103,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 		skt->header.section[i].adresilo = 0;
 		skt->header.section[i].grandeco = 0;
 
-		skt->header.section[i].numero = bit_read_RC (dat);
+		skt->header.section[i].number = bit_read_RC (dat);
 		skt->header.section[i].adresilo = bit_read_RL (dat);
 		skt->header.section[i].grandeco = bit_read_RL (dat);
 	}
@@ -288,7 +288,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 			skt->klaso =
 				(Dwg_Klaso *) realloc (skt->klaso, (idc + 1) * sizeof (Dwg_Klaso));
 
-		skt->klaso[idc].numero = bit_read_BS (dat);
+		skt->klaso[idc].number = bit_read_BS (dat);
 		skt->klaso[idc].version = bit_read_BS (dat);
 		skt->klaso[idc].apname = bit_read_T (dat);
 		skt->klaso[idc].cplipliname = bit_read_T (dat);
@@ -297,7 +297,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 		skt->klaso[idc].eroid = bit_read_BS (dat);
 
 		if (strcmp (skt->klaso[idc].dxfname, "LAYOUT") == 0)
-			skt->dwg_ot_layout = skt->klaso[idc].numero;
+			skt->dwg_ot_layout = skt->klaso[idc].number;
 
 		skt->klaso_kiom++;
 		if (skt->klaso_kiom > 100)
@@ -1427,7 +1427,7 @@ dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned in
 			(Dwg_Object *) realloc (skt->object,
 						 (skt->object_kiom + 1) * sizeof (Dwg_Object));
 
-	//printf ("Object numero: %u\n", skt->object_kiom);
+	//printf ("Object number: %u\n", skt->object_kiom);
 
 	obj = &skt->object[skt->object_kiom];
 	skt->object_kiom++;

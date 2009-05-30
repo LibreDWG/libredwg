@@ -541,7 +541,7 @@ dwg_print (Dwg_Structure *dwg_struct)
 	printf ("Codepage: %u\n", dwg_struct->header.codepage);
 	for (i = 0; i < dwg_struct->header.num_sections; i++)
 		printf ("Section %i\t Kie: %7lu\t Kiom: %7lu B\n",
-			dwg_struct->header.section[i].numero,
+			dwg_struct->header.section[i].number,
 			dwg_struct->header.section[i].adresilo, dwg_struct->header.section[i].grandeco);
 	puts ("");
 
@@ -619,7 +619,7 @@ dwg_print (Dwg_Structure *dwg_struct)
 	for (i = 0; i < dwg_struct->klaso_kiom; i++)
 	{
 		printf ("Klaso: [%02u]\n", i);
-		printf ("\tNumero: %u\n", dwg_struct->klaso[i].numero);
+		printf ("\tNumero: %u\n", dwg_struct->klaso[i].number);
 		printf ("\tVersion: %u\n", dwg_struct->klaso[i].version);
 		printf ("\tAp Nomo: \"%s\"\n", dwg_struct->klaso[i].apname);
 		printf ("\tC++ Nomo: \"%s\"\n", dwg_struct->klaso[i].cplipliname);

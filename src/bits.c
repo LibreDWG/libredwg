@@ -739,7 +739,7 @@ bit_write_H (Bit_Chain * dat, Dwg_Traktilo * trakt)
 		bit_write_RC (dat, val[i]);
 }
 
-/** Nur read CRK-numeron, sen iu ajn kontrolo, nur por iri al la sekva bajto,
+/** Nur read CRK-numbern, sen iu ajn kontrolo, nur por iri al la sekva bajto,
  * saltante eventualajn neuzitajn bitojn.
  */
 unsigned int
@@ -762,7 +762,7 @@ bit_read_CRC (Bit_Chain * dat)
 	return result;
 }
 
-/** Read kaj kontroli CRK-numeron.
+/** Read kaj kontroli CRK-numbern.
  */
 int
 bit_check_CRC (Bit_Chain * dat, long unsigned int ekaddress, unsigned int semo)
@@ -785,7 +785,7 @@ bit_check_CRC (Bit_Chain * dat, long unsigned int ekaddress, unsigned int semo)
 	return (kalkulita == readta);
 }
 
-/** Krei kaj write CRK-numeron.
+/** Krei kaj write CRK-numbern.
  */
 unsigned int
 bit_krei_CRC (Bit_Chain * dat, long unsigned int ekaddress, unsigned int semo)
