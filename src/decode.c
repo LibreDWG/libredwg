@@ -619,7 +619,7 @@ dwg_decode_estajxo (Bit_Chain * dat, Dwg_Object_Estajxo * est)
 	est->regximo = bit_read_BB (dat);
 	est->reagilo_kiom = bit_read_BL (dat);
 	est->senligiloj = bit_read_B (dat);
-	est->koloro = bit_read_BS (dat);
+	est->colour = bit_read_BS (dat);
 	est->linitiposkalo = bit_read_BD (dat);
 	est->linitipo = bit_read_BB (dat);
 	est->printstilo = bit_read_BB (dat);
@@ -1302,7 +1302,7 @@ dwg_decode_LAYER (Bit_Chain * dat, Dwg_Objekto * obj)
 	ord->xrefi = bit_read_BS (dat);
 	ord->xrefdep = bit_read_B (dat);
 	ord->ecoj = bit_read_BS (dat);
-	ord->koloro = bit_read_BS (dat);
+	ord->colour = bit_read_BS (dat);
 
 	dwg_decode_traktref (dat, obj);
 }

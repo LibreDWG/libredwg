@@ -155,7 +155,7 @@ dwg_print_estajxo (Dwg_Object_Estajxo * est)
 	printf ("Reĝimo: %i\n", est->regximo);
 	printf ("Kiom reagiloj: %lu\n", est->reagilo_kiom);
 	printf ("Ĉu senligiloj?: %s\n", est->senligiloj ? "Jes" : "Ne");
-	printf ("Koloro: %u\n", est->koloro);
+	printf ("Koloro: %u\n", est->colour);
 	printf ("Skalo de linitipo: %1.13g\n", est->linitiposkalo);
 	printf ("Linitipo: 0x%02X\n", est->linitipo);
 	printf ("Printstilo: 0x%02X\n", est->printstilo);
@@ -455,7 +455,7 @@ dwg_print_LAYER (Dwg_Ordinarajxo_LAYER *ord)
 	printf ("\tIndico Xref: %u\n", ord->xrefi);
 	printf ("\tXref-dependa?: %s\n", ord->xrefdep ? "Jes" : "Ne");
 	printf ("\tEcoj: 0x%0x\n", ord->ecoj);
-	printf ("\tKoloro: %u\n", ord->koloro);
+	printf ("\tKoloro: %u\n", ord->colour);
 }
 
 static void

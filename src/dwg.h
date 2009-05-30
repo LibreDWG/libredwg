@@ -537,7 +537,7 @@ extern "C"
 		unsigned int xrefi;
 		unsigned char xrefdep;
 		unsigned int ecoj;
-		unsigned int koloro;
+		unsigned int colour;
 	} Dwg_Ordinarajxo_LAYER;
 
 /**
@@ -665,7 +665,7 @@ extern "C"
 		unsigned char regximo;
 		long unsigned int reagilo_kiom;
 		unsigned char senligiloj;
-		unsigned int koloro;
+		unsigned int colour;
 		double linitiposkalo;
 		unsigned char linitipo;
 		unsigned char printstilo;
