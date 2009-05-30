@@ -147,17 +147,17 @@ dwg_print_estajxo (Dwg_Object_Estajxo * est)
 	printf ("Vera traktilo: %i.%i.%lu\n", est->traktilo.code, est->traktilo.kiom,
 		est->traktilo.value);
 	printf ("Kroma datenaro: %lu B\n", (long unsigned int) est->kromdat_kiom);
-	printf ("Ĉu picture?: %s", est->picture_ekzistas ? "Jes" : "Ne");
+	printf ("Ĉu picture?: %s", est->picture_ekzistas ? "Yes" : "Ne");
 	if (est->picture_ekzistas)
 		printf ("\tSize: %lu B\n", est->picture_kiom);
 	else
 		puts ("");
 	printf ("Reĝimo: %i\n", est->regime);
 	printf ("Kiom reagiloj: %lu\n", est->reagilo_kiom);
-	printf ("Ĉu senligiloj?: %s\n", est->senligiloj ? "Jes" : "Ne");
+	printf ("Ĉu senligiloj?: %s\n", est->senligiloj ? "Yes" : "Ne");
 	printf ("Koloro: %u\n", est->colour);
-	printf ("Skalo de linitipo: %1.13g\n", est->linitiposkalo);
-	printf ("Linitipo: 0x%02X\n", est->linitipo);
+	printf ("Skalo de linitype: %1.13g\n", est->linitypeskalo);
+	printf ("Linitype: 0x%02X\n", est->linitype);
 	printf ("Printstilo: 0x%02X\n", est->printstilo);
 	printf ("Malvidebleco: 0x%04X\n", est->malvidebleco);
 	printf ("Linithickness: %u\n", est->linithickness);
@@ -179,7 +179,7 @@ dwg_print_traktref (Dwg_Object * obj)
 {
 	unsigned int i;
 
-	if (obj->supertipo == DWG_SUPERTYPE_ESTAJXO)
+	if (obj->supertype == DWG_SUPERTYPE_ESTAJXO)
 	{
 		Dwg_Object_Estajxo *est;
 
@@ -197,7 +197,7 @@ dwg_print_traktref (Dwg_Object * obj)
 		printf ("%i.%i.%li\n", est->traktref[i].code, est->traktref[i].kiom,
 			est->traktref[i].value);
 	}
-	else if (obj->supertipo == DWG_SUPERTYPE_ORDINARAJXO)
+	else if (obj->supertype == DWG_SUPERTYPE_ORDINARAJXO)
 	{
 		Dwg_Object_Ordinarajxo *ord;
 
@@ -217,7 +217,7 @@ dwg_print_traktref (Dwg_Object * obj)
 	}
 }
 
-/* OBJEKTOJ *******************************************************************/
+/* OBJECTS *******************************************************************/
 
 static void
 dwg_print_TEXT (Dwg_Estajxo_TEXT * est)
@@ -304,7 +304,7 @@ dwg_print_INSERT (Dwg_Estajxo_INSERT * est)
 	printf ("\tTurna angulo: %1.13g\n", est->turnang);
 	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", est->extrusion.x, est->extrusion.y,
 		est->extrusion.z);
-	printf ("\tĈu kun ATTRIB-oj?: %s\n", est->kun_attrib ? "Jes" : "Ne");
+	printf ("\tĈu kun ATTRIB-oj?: %s\n", est->kun_attrib ? "Yes" : "Ne");
 }
 
 static void
@@ -316,7 +316,7 @@ dwg_print_MINSERT (Dwg_Estajxo_MINSERT * est)
 	printf ("\tTurna angulo: %1.13g\n", est->turnang);
 	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", est->extrusion.x, est->extrusion.y,
 		est->extrusion.z);
-	printf ("\tĈu kun ATTRIB-oj?: %s\n", est->kun_attrib ? "Jes" : "Ne");
+	printf ("\tĈu kun ATTRIB-oj?: %s\n", est->kun_attrib ? "Yes" : "Ne");
 	printf ("\tKolumnoj: %02i\tInterspaco: %1.13g\n", est->kol.kiom, est->kol.dx);
 	printf ("\t  Linioj: %02i\tInterspaco: %1.13g\n", est->lin.kiom, est->lin.dy);
 }
@@ -352,7 +352,7 @@ static void
 dwg_print_POLYLINE_2D (Dwg_Estajxo_POLYLINE_2D * est)
 {
 	printf ("\tIndikiloj: 0x%02x\n", est->indikiloj);
-	printf ("\tKurbtipo: 0x%02x\n", est->kurbtipo);
+	printf ("\tKurbtype: 0x%02x\n", est->kurbtype);
 	printf ("\tEklarĝo: %1.13g\n", est->eklargxo);
 	printf ("\tFinlarĝo: %1.13g\n", est->finlargxo);
 	printf ("\tthickness: %1.13g\n", est->thickness);
@@ -392,7 +392,7 @@ dwg_print_CIRCLE (Dwg_Estajxo_CIRCLE * est)
 static void
 dwg_print_LINE (Dwg_Estajxo_LINE * est)
 {
-	printf ("\tĈu nur 2D?: %s\n", est->nur_2D ? "Jes" : "Ne");
+	printf ("\tĈu nur 2D?: %s\n", est->nur_2D ? "Yes" : "Ne");
 	printf ("\t1-a punkto: (%1.13g, %1.13g, %1.13g)\n", est->x0, est->y0,
 		est->nur_2D ? 0 : est->z0);
 	printf ("\t2-a punkto: (%1.13g, %1.13g, %1.13g)\n", est->x1, est->y1,
@@ -451,9 +451,9 @@ static void
 dwg_print_LAYER (Dwg_Ordinarajxo_LAYER *ord)
 {
 	printf ("\tName: %s\n", ord->name);
-	printf ("\tĈu 64?: %s\n", ord->bito64 ? "Jes" : "Ne");
+	printf ("\tĈu 64?: %s\n", ord->bito64 ? "Yes" : "Ne");
 	printf ("\tIndico Xref: %u\n", ord->xrefi);
-	printf ("\tXref-dependa?: %s\n", ord->xrefdep ? "Jes" : "Ne");
+	printf ("\tXref-dependa?: %s\n", ord->xrefdep ? "Yes" : "Ne");
 	printf ("\tEcoj: 0x%0x\n", ord->ecoj);
 	printf ("\tKoloro: %u\n", ord->colour);
 }
@@ -475,7 +475,7 @@ dwg_print_LAYOUT (Dwg_Ordinarajxo_LAYOUT *ord)
 	printf ("\tDeŝovo: (%1.13g, %1.13g)\n", ord->pagxo.dx, ord->pagxo.dy);
 	printf ("\tUnuoj: %u\n", ord->pagxo.unuoj);
 	printf ("\tRotacio: %u\n", ord->pagxo.rotacio);
-	printf ("\tTipo: %u\n", ord->pagxo.tipo);
+	printf ("\tType: %u\n", ord->pagxo.type);
 	printf ("\tPrint-limoj: (%1.13g, %1.13g) / (%1.13g, %1.13g)\n",
 		ord->pagxo.x_min,
 		ord->pagxo.y_min,
@@ -484,7 +484,7 @@ dwg_print_LAYOUT (Dwg_Ordinarajxo_LAYOUT *ord)
 	printf ("\tPaĝ-name: %s\n", ord->pagxo.name);
 	printf ("\tSkal-proporcio: %u:%u\n", (unsigned int) ord->pagxo.skalo.A, (unsigned int) ord->pagxo.skalo.B);
 	printf ("\tStilfolio: %s\n", ord->pagxo.stilfolio);
-	printf ("\tSkal-tipo: %u\n", ord->pagxo.skalo.tipo);
+	printf ("\tSkal-type: %u\n", ord->pagxo.skalo.type);
 	printf ("\tSkal-faktoro: %u\n", (unsigned int) ord->pagxo.skalo.faktoro);
 	printf ("\tPaĝ-origino: (%1.13g, %1.13g)\n", ord->pagxo.x0, ord->pagxo.y0);
 	puts ("");
@@ -501,7 +501,7 @@ dwg_print_LAYOUT (Dwg_Ordinarajxo_LAYOUT *ord)
 	printf ("\tUCS-akso_X: (%1.13g, %1.13g, %1.13g)\n", ord->akso_X.x0, ord->akso_X.y0, ord->akso_X.z0);
 	printf ("\tUCS-akso_Y: (%1.13g, %1.13g, %1.13g)\n", ord->akso_Y.x0, ord->akso_Y.y0, ord->akso_Y.z0);
 	printf ("\tLevigxo: %1.13g\n", ord->levigxo);
-	printf ("\tRigard-tipo: %u\n", ord->rigardtipo);
+	printf ("\tRigard-type: %u\n", ord->rigardtype);
 	printf ("\tMinimumo: (%1.13g, %1.13g, %1.13g)\n",
 		ord->limo.x_min,
 		ord->limo.y_min,
@@ -520,7 +520,7 @@ dwg_print (Dwg_Structure *dwg_struct)
 {
 	unsigned char sig;
 	unsigned int i, j;
-	const char *dwg_obtipo[81] = {
+	const char *dwg_obtype[81] = {
 	"UNUSED", "TEXT", "ATTRIB", "ATTDEF",	"BLOCK",
        	"ENDBLK", "SEQEND", "INSERT", "MINSERT", "NULL_09",
 	"VERTEX_2D", "VERTEX_3D", "VERTEX_MESH", "VERTEX_PFACE", "VERTEX_PFACE_FACE",
@@ -607,7 +607,7 @@ dwg_print (Dwg_Structure *dwg_struct)
 			printf ("Z: %lg", dwg_struct->var[i].xyz[2]);
 			break;
 		default:
-			printf ("Ne traktebla tipo: %i (var: %i)\n", dwg_var_map (i), i);
+			printf ("Ne traktebla type: %i (var: %i)\n", dwg_var_map (i), i);
 		}
 		puts ("");
 	}
@@ -624,26 +624,26 @@ dwg_print (Dwg_Structure *dwg_struct)
 		printf ("\tApplication Name: \"%s\"\n", dwg_struct->class[i].appname);
 		printf ("\tC++ Name: \"%s\"\n", dwg_struct->class[i].cppname);
 		printf ("\tDXF Name: \"%s\"\n", dwg_struct->class[i].dxfname);
-		printf ("\tEstis fantomo: \"%s\"\n", dwg_struct->class[i].estisfantomo ? "Jes" : "Ne");
+		printf ("\tWas ghost: \"%s\"\n", dwg_struct->class[i].estisfantomo ? "Yes" : "No");
 		printf ("\tEroId: %u\n", dwg_struct->class[i].eroid);
 	}
 	puts ("");
 
 	puts ("**************************************************");
-	puts ("Section OBJEKTOJ");
+	puts ("Section OBJECTS");
 	puts ("**************************************************");
-	for (i = 0; i < dwg_struct->object_kiom; i++)
+	for (i = 0; i < dwg_struct->num_objects; i++)
 	{
 		Dwg_Object *obj;
 
 		printf ("(%u) ", i);
 		obj = &dwg_struct->object[i];
 
-		printf ("Tipo: %s (%03i)\t", obj->tipo > 80 ? (obj->tipo == dwg_struct->dwg_ot_layout ? "LAYOUT" : "??") : dwg_obtipo[obj->tipo], obj->tipo);
+		printf ("Type: %s (%03i)\t", obj->type > 80 ? (obj->type == dwg_struct->dwg_ot_layout ? "LAYOUT" : "??") : dwg_obtype[obj->type], obj->type);
 		printf ("Size: %u\t", obj->size);
 		printf ("Traktilo: (%lu)\t", obj->trakt);
-		printf ("Super-tipo: ");
-		switch (obj->supertipo)
+		printf ("Super-type: ");
+		switch (obj->supertype)
 		{
 		case DWG_SUPERTYPE_ESTAJXO:
 			puts ("estajxo");
@@ -654,11 +654,11 @@ dwg_print (Dwg_Structure *dwg_struct)
 			dwg_print_ordinarajxo (obj->tio.ordinarajxo);
 			break;
 		default:
-			puts ("unknownjxo");
+			puts ("unknown");
 			continue;
 		}
 
-		switch (obj->tipo)
+		switch (obj->type)
 		{
 		case DWG_TYPE_TEXT:
 			dwg_print_TEXT (obj->tio.estajxo->tio.TEXT);
@@ -724,7 +724,7 @@ dwg_print (Dwg_Structure *dwg_struct)
 			dwg_print_LAYER (obj->tio.ordinarajxo->tio.LAYER);
 			break;
 		default:
-			if (obj->tipo == dwg_struct->dwg_ot_layout)
+			if (obj->type == dwg_struct->dwg_ot_layout)
 				dwg_print_LAYOUT (obj->tio.ordinarajxo->tio.LAYOUT);
 			else
 				continue;

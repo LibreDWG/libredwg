@@ -91,7 +91,7 @@ extern "C"
 		long unsigned int value;
 	} Dwg_Traktilo;
 
-/* OBJEKTOJ *******************************************************************/
+/* OBJECTS *******************************************************************/
 /**
  Struct for textj - UNUSED (0)
  */
@@ -333,7 +333,7 @@ extern "C"
 	typedef struct _dwg_estajxo_POLYLINE_2D
 	{
 		unsigned int indikiloj;
-		unsigned int kurbtipo;
+		unsigned int kurbtype;
 		double eklargxo;
 		double finlargxo;
 		double thickness;
@@ -694,7 +694,7 @@ extern "C"
 			double dy;
 			unsigned int unuoj;
 			unsigned int rotacio;
-			unsigned int tipo;
+			unsigned int type;
 			double x_min;
 			double y_min;
 			double x_maks;
@@ -704,7 +704,7 @@ extern "C"
 			{
 				double A; // A:B (ekz: 1:10, 1:2, 50:1, ktp)
 				double B;
-				unsigned int tipo;
+				unsigned int type;
 				double faktoro;
 			} skalo;
 			char *stilfolio;
@@ -741,7 +741,7 @@ extern "C"
 			double z0;
 		} akso_Y;
 		double levigxo;
-		unsigned int rigardtipo;
+		unsigned int rigardtype;
 		struct
 		{
 			double x_min;
@@ -753,7 +753,7 @@ extern "C"
 		} limo;
 	} Dwg_Ordinarajxo_LAYOUT;
 
-/* OBJEKTOJ - END ************************************************************/
+/* OBJECTS - END ************************************************************/
 
 /**
  Strukturo de rikordoj por atributoj de estajxoj.
@@ -799,8 +799,8 @@ extern "C"
 		long unsigned int reagilo_kiom;
 		unsigned char senligiloj;
 		unsigned int colour;
-		double linitiposkalo;
-		unsigned char linitipo;
+		double linitypeskalo;
+		unsigned char linitype;
 		unsigned char printstilo;
 		unsigned int malvidebleco;
 		unsigned char linithickness;
@@ -839,10 +839,10 @@ extern "C"
 	typedef struct _dwg_object
 	{
 		unsigned int size;
-		unsigned int tipo;
+		unsigned int type;
 		unsigned int ckr;
 
-		Dwg_Object_Supertype supertipo;
+		Dwg_Object_Supertype supertype;
 		union
 		{
 			Dwg_Object_Estajxo *estajxo;
@@ -917,7 +917,7 @@ extern "C"
 		unsigned int num_classes;
 		Dwg_Class *class;
 
-		long unsigned int object_kiom;
+		long unsigned int num_objects;
 		Dwg_Object *object;
 
 		struct

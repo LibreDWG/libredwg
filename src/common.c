@@ -41,7 +41,7 @@ dwg_sentinel (Dwg_Sentinel kiu_sentinel)
 /**
  * Mapigi la pozicion de variablo aperanta en la kap-variablo sekcio kaj ties tipo
  */
-Dwg_Datenero_Tipo
+Dwg_Datenero_Type
 dwg_var_map (int index)
 {
 	static int map[] = {

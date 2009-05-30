@@ -15,7 +15,7 @@
 #define COMMON_H
 
 /**
- Tipoj de (eble kompaktitaj) dateneroj, kiuj komponas dwg-dosierojn.
+ Typej de (eble kompaktitaj) dateneroj, kiuj komponas dwg-dosierojn.
  */
 typedef enum DWG_DATENERO_TIPO
 {
@@ -42,7 +42,7 @@ object data, see the main Object description section for details. */
 	DWG_DT_3RD, /** 3 raw doubles **/
 	DWG_DT_2BD, /** 2D point (2 bitdoubles) **/
 	DWG_DT_3BD, /** 3D point (3 bitdoubles) **/
-} Dwg_Datenero_Tipo;
+} Dwg_Datenero_Type;
 
 /**
  Identigaj referencoj de sentinels.
@@ -60,7 +60,7 @@ typedef enum DWG_SENTINEL
 	DWG_SENTINEL_DUAHEAD_END
 } Dwg_Sentinel;
 
-Dwg_Datenero_Tipo dwg_var_map (int index);
+Dwg_Datenero_Type dwg_var_map (int index);
 
 unsigned char *dwg_sentinel (Dwg_Sentinel kiu_sentinel);
 
