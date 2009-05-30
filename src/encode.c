@@ -103,23 +103,23 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Chain * dat)
 	}
 
 	/*------------------------------------------------------------
-	 * Antauxrigarda bildo
+	 * Antauxrigarda picture
 	 */
 
-	/* Finfine write la addressn de la bildo
+	/* Finfine write la addressn de la picture
 	 */
 	pvzadr = dat->bajto;
 	dat->bajto = 0x0D;
 	bit_write_RL (dat, pvzadr);
 	dat->bajto = pvzadr;
 
-	/* Kopii la bildon
+	/* Kopii la picturen
 	 */
-	//skt->bildo.kiom = 0; // Se oni deziras ne kopii bildon, malkomentu tiun cxi linion
+	//skt->picture.kiom = 0; // Se oni deziras ne kopii picturen, malkomentu tiun cxi linion
 	bit_write_gardostaranto (dat, dwg_gardostaranto (DWG_GS_BILDO_EKO));
-	for (i = 0; i < skt->bildo.kiom; i++)
-		bit_write_RC (dat, skt->bildo.chain[i]);
-	if (skt->bildo.kiom == 0)
+	for (i = 0; i < skt->picture.kiom; i++)
+		bit_write_RC (dat, skt->picture.chain[i]);
+	if (skt->picture.kiom == 0)
 	{
 		bit_write_RL (dat, 5);
 		bit_write_RC (dat, 0);
@@ -159,7 +159,7 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Chain * dat)
 			bit_write_H (dat, &skt->var[i].traktilo);
 			break;
 		case DWG_DT_T:
-			bit_write_T (dat, skt->var[i].teksto);
+			bit_write_T (dat, skt->var[i].text);
 			break;
 		case DWG_DT_CMC:
 			bit_write_BS (dat, skt->var[i].dubitoko);
@@ -551,12 +551,12 @@ dwg_encode_estajxo (Dwg_Objekto * obj, Bit_Chain * dat)
 			bit_write_RC (dat, est->kromdat[i]);
 	}
 
-	bit_write_B (dat, est->bildo_ekzistas);
-	if (est->bildo_ekzistas)
+	bit_write_B (dat, est->picture_ekzistas);
+	if (est->picture_ekzistas)
 	{
-		bit_write_RL (dat, est->bildo_kiom);
-		for (i = 0; i < est->bildo_kiom; i++)
-			bit_write_RC (dat, est->bildo[i]);
+		bit_write_RL (dat, est->picture_kiom);
+		for (i = 0; i < est->picture_kiom; i++)
+			bit_write_RC (dat, est->picture[i]);
 	}
 
 	bit_write_BB (dat, est->regime);

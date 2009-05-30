@@ -145,7 +145,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 
 
 	/*-------------------------------------------------------------------------
-	 * Antauxrigarda bildo
+	 * Antauxrigarda picture
 	 */
 
 	if (bit_sercxi_gardostaranto (dat, dwg_gardostaranto (DWG_GS_BILDO_EKO)))
@@ -158,12 +158,12 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 		if (bit_sercxi_gardostaranto (dat, dwg_gardostaranto (DWG_GS_BILDO_FINO)))
 		{
 			printf ("        BILDO (fino): %8X\n", (unsigned int) dat->bajto);
-			skt->bildo.kiom = (dat->bajto - 16) - ekaddress;
-			skt->bildo.chain = (char *) malloc (skt->bildo.kiom);
-			memcpy (skt->bildo.chain, &dat->chain[ekaddress], skt->bildo.kiom);
+			skt->picture.kiom = (dat->bajto - 16) - ekaddress;
+			skt->picture.chain = (char *) malloc (skt->picture.kiom);
+			memcpy (skt->picture.chain, &dat->chain[ekaddress], skt->picture.kiom);
 		}
 		else
-			skt->bildo.kiom = 0;
+			skt->picture.kiom = 0;
 	}
 
 
@@ -214,8 +214,8 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 			//printf ("H: %i.%i.0x%08X", skt->var[i].traktilo.kodo, skt->var[i].traktilo.kiom, skt->var[i].traktilo.value);
 			break;
 		case DWG_DT_T:
-			skt->var[i].teksto = bit_read_T (dat);
-			//printf ("T: \"%s\"", skt->var[i].teksto);
+			skt->var[i].text = bit_read_T (dat);
+			//printf ("T: \"%s\"", skt->var[i].text);
 			break;
 		case DWG_DT_CMC:
 			skt->var[i].dubitoko = bit_read_BS (dat);
@@ -566,7 +566,7 @@ dwg_decode_estajxo (Bit_Chain * dat, Dwg_Object_Estajxo * est)
 		printf ("\tEraro en traktilo de object! Adreso en la ĉeno: 0x%0x\n", (unsigned int) dat->bajto);
 		est->bitgrandeco = 0;
 		est->kromdat_kiom = 0;
-		est->bildo_ekzistas = 0;
+		est->picture_ekzistas = 0;
 		est->traktref_kiom = 0;
 		return;
 	}
@@ -578,7 +578,7 @@ dwg_decode_estajxo (Bit_Chain * dat, Dwg_Object_Estajxo * est)
 			printf ("Absurdo! Kromdato-grandeco: %lu. Objekto: %lu (traktilo).\n", (long unsigned int) grando, est->traktilo.value);
 			est->bitgrandeco = 0;
 			est->kromdat_kiom = 0;
-			est->bildo_ekzistas = 0;
+			est->picture_ekzistas = 0;
 			est->traktref_kiom = 0;
 			return;
 		}
@@ -598,20 +598,20 @@ dwg_decode_estajxo (Bit_Chain * dat, Dwg_Object_Estajxo * est)
 		for (i = est->kromdat_kiom - grando; i < est->kromdat_kiom; i++)
 			est->kromdat[i] = bit_read_RC (dat);
 	}
-	est->bildo_ekzistas = bit_read_B (dat);
-	if (est->bildo_ekzistas)
+	est->picture_ekzistas = bit_read_B (dat);
+	if (est->picture_ekzistas)
 	{
-		est->bildo_kiom = bit_read_RL (dat);
-		if (est->bildo_kiom < 210210)
+		est->picture_kiom = bit_read_RL (dat);
+		if (est->picture_kiom < 210210)
 		{
-			est->bildo = malloc (est->bildo_kiom);
-			for (i = 0; i < est->bildo_kiom; i++)
-				est->bildo[i] = bit_read_RC (dat);
+			est->picture = malloc (est->picture_kiom);
+			for (i = 0; i < est->picture_kiom; i++)
+				est->picture[i] = bit_read_RC (dat);
 		}
 		else
 		{
 			printf ("Absurdo! Bildo-grandeco: %lu kB. Objekto: %lu (traktilo).\n",
-				est->bildo_kiom / 1000, est->traktilo.value);
+				est->picture_kiom / 1000, est->traktilo.value);
 			bit_ref_salti (dat, -(4 * 8 + 1));
 		}
 	}
@@ -772,7 +772,7 @@ dwg_decode_TEXT (Bit_Chain * dat, Dwg_Objekto * obj)
 	est->height = bit_read_RD (dat);
 	if (!(est->datumindik & 0x10))
 		est->largxfaktoro = bit_read_RD (dat);
-	est->teksto = bit_read_T (dat);
+	est->text = bit_read_T (dat);
 	if (!(est->datumindik & 0x20))
 		est->generacio = bit_read_BS (dat);
 	if (!(est->datumindik & 0x40))
@@ -815,7 +815,7 @@ dwg_decode_ATTRIB (Bit_Chain * dat, Dwg_Objekto * obj)
 	est->height = bit_read_RD (dat);
 	if (!(est->datumindik & 0x10))
 		est->largxfaktoro = bit_read_RD (dat);
-	est->teksto = bit_read_T (dat);
+	est->text = bit_read_T (dat);
 	if (!(est->datumindik & 0x20))
 		est->generacio = bit_read_BS (dat);
 	if (!(est->datumindik & 0x40))
@@ -861,7 +861,7 @@ dwg_decode_ATTDEF (Bit_Chain * dat, Dwg_Objekto * obj)
 	est->height = bit_read_RD (dat);
 	if (!(est->datumindik & 0x10))
 		est->largxfaktoro = bit_read_RD (dat);
-	est->teksto = bit_read_T (dat);
+	est->text = bit_read_T (dat);
 	if (!(est->datumindik & 0x20))
 		est->generacio = bit_read_BS (dat);
 	if (!(est->datumindik & 0x40))
@@ -1276,7 +1276,7 @@ dwg_decode_MTEXT (Bit_Chain * dat, Dwg_Objekto * obj)
 	est->direkto = bit_read_BS (dat);
 	est->etendo = bit_read_BD (dat);
 	est->etendlargxo = bit_read_BD (dat);
-	est->teksto = bit_read_T (dat);
+	est->text = bit_read_T (dat);
 	est->linispaco_stilo = bit_read_BS (dat);
 	est->linispaco_faktoro = bit_read_BD (dat);
 	est->ia_bito = bit_read_B (dat);

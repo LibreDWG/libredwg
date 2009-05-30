@@ -147,9 +147,9 @@ dwg_print_estajxo (Dwg_Object_Estajxo * est)
 	printf ("Vera traktilo: %i.%i.%lu\n", est->traktilo.kodo, est->traktilo.kiom,
 		est->traktilo.value);
 	printf ("Kroma datenaro: %lu B\n", (long unsigned int) est->kromdat_kiom);
-	printf ("Ĉu bildo?: %s", est->bildo_ekzistas ? "Jes" : "Ne");
-	if (est->bildo_ekzistas)
-		printf ("\tGrandeco: %lu B\n", est->bildo_kiom);
+	printf ("Ĉu picture?: %s", est->picture_ekzistas ? "Jes" : "Ne");
+	if (est->picture_ekzistas)
+		printf ("\tGrandeco: %lu B\n", est->picture_kiom);
 	else
 		puts ("");
 	printf ("Reĝimo: %i\n", est->regime);
@@ -234,7 +234,7 @@ dwg_print_TEXT (Dwg_Estajxo_TEXT * est)
 	printf ("\tTurna angulo: %1.13g\n", est->turnang);
 	printf ("\tAlteco: %1.13g\n", est->height);
 	printf ("\tLarĝ-faktoro: %1.13g\n", est->largxfaktoro);
-	printf ("\tTeksto: \"%s\"\n", est->teksto);
+	printf ("\tTeksto: \"%s\"\n", est->text);
 	printf ("\tGeneracio: %u\n", est->generacio);
 	printf ("\tĜisrandigo (horiz.): %u\n", est->gxisrandigo.h);
 	printf ("\tĜisrandigo (vert.): %u\n", est->gxisrandigo.v);
@@ -255,7 +255,7 @@ dwg_print_ATTRIB (Dwg_Estajxo_ATTRIB * est)
 	printf ("\tTurna angulo: %1.13g\n", est->turnang);
 	printf ("\tAlteco: %1.13g\n", est->height);
 	printf ("\tLarĝ-faktoro: %1.13g\n", est->largxfaktoro);
-	printf ("\tTeksto: \"%s\"\n", est->teksto);
+	printf ("\tTeksto: \"%s\"\n", est->text);
 	printf ("\tGeneracio: %u\n", est->generacio);
 	printf ("\tĜisrandigo (horiz.): %u\n", est->gxisrandigo.h);
 	printf ("\tĜisrandigo (vert.): %u\n", est->gxisrandigo.v);
@@ -279,7 +279,7 @@ dwg_print_ATTDEF (Dwg_Estajxo_ATTDEF * est)
 	printf ("\tTurna angulo: %1.13g\n", est->turnang);
 	printf ("\tAlteco: %1.13g\n", est->height);
 	printf ("\tLarĝ-faktoro: %1.13g\n", est->largxfaktoro);
-	printf ("\tTeksto: \"%s\"\n", est->teksto);
+	printf ("\tTeksto: \"%s\"\n", est->text);
 	printf ("\tGeneracio: %u\n", est->generacio);
 	printf ("\tĜisrandigo (horiz.): %u\n", est->gxisrandigo.h);
 	printf ("\tĜisrandigo (vert.): %u\n", est->gxisrandigo.v);
@@ -442,7 +442,7 @@ dwg_print_MTEXT (Dwg_Estajxo_MTEXT *est)
 	printf ("\tAlteco: %1.13g\n", est->height);
 	printf ("\tKunmeto: 0x%0x\n", est->kunmeto);
 	printf ("\tDirekto: 0x%0x\n", est->direkto);
-	printf ("\tTeksto: %s\n", est->teksto);
+	printf ("\tTeksto: %s\n", est->text);
 	printf ("\tLinispaca stilo: 0x%0x\n", est->linispaco_stilo);
 	printf ("\tLinispaca faktoro: %1.13g\n", (double) est->linispaco_faktoro);
 }
@@ -558,8 +558,8 @@ dwg_print (Dwg_Structure *dwg_struct)
 	puts ("**************************************************");
 	puts ("Sekcio BILDO");
 	puts ("**************************************************");
-	printf ("Grandeco: %lu B\n", dwg_struct->bildo.kiom);
-	//bit_print ((Bit_Chain *) &dwg_struct->bildo, dwg_struct->bildo.kiom);
+	printf ("Grandeco: %lu B\n", dwg_struct->picture.kiom);
+	//bit_print ((Bit_Chain *) &dwg_struct->picture, dwg_struct->picture.kiom);
 	puts ("");
 
 	puts ("**************************************************");
@@ -592,7 +592,7 @@ dwg_print (Dwg_Structure *dwg_struct)
 				dwg_struct->var[i].traktilo.kiom, dwg_struct->var[i].traktilo.value);
 			break;
 		case DWG_DT_T:
-			printf ("T: \"%s\"", dwg_struct->var[i].teksto);
+			printf ("T: \"%s\"", dwg_struct->var[i].text);
 			break;
 		case DWG_DT_CMC:
 			printf ("CMC: %u", dwg_struct->var[i].dubitoko);

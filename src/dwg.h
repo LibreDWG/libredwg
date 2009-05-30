@@ -93,12 +93,12 @@ extern "C"
 
 /* OBJEKTOJ *******************************************************************/
 /**
- Struct for tekstoj - UNUSED (0)
+ Struct for textj - UNUSED (0)
  */
 	typedef int Dwg_Estajxo_UNUSED;
 
 /**
- Struct for tekstoj - TEXT (1)
+ Struct for textj - TEXT (1)
  */
 	typedef struct _dwg_estajxo_TEXT
 	{
@@ -124,7 +124,7 @@ extern "C"
 		double turnang;
 		double height;
 		double largxfaktoro;
-		unsigned char *teksto;
+		unsigned char *text;
 		unsigned int generacio;
 	} Dwg_Estajxo_TEXT;
 
@@ -155,7 +155,7 @@ extern "C"
 		double turnang;
 		double height;
 		double largxfaktoro;
-		unsigned char *teksto;
+		unsigned char *text;
 		unsigned int generacio;
 		unsigned char *etikedo;
 		unsigned int kamplong; //neuzita
@@ -189,7 +189,7 @@ extern "C"
 		double turnang;
 		double height;
 		double largxfaktoro;
-		unsigned char *teksto;
+		unsigned char *text;
 		unsigned int generacio;
 		unsigned char *etikedo;
 		unsigned int kamplong; //neuzita
@@ -499,7 +499,7 @@ extern "C"
 	} Dwg_Estajxo_RAY;
 
 /**
- Struct for tekstoj - MTEXT (40)
+ Struct for textj - MTEXT (40)
  */
 	typedef struct _dwg_estajxo_MTEXT
 	{
@@ -521,7 +521,7 @@ extern "C"
 		unsigned int direkto;
 		double etendo;
 		double etendlargxo;
-		char *teksto;
+		char *text;
 		unsigned int linispaco_stilo;
 		unsigned int linispaco_faktoro;
 		unsigned char ia_bito;
@@ -658,9 +658,9 @@ extern "C"
 		Dwg_Traktilo kromdat_trakt;
 		unsigned char *kromdat;
 
-		unsigned char bildo_ekzistas;
-		long unsigned int bildo_kiom;
-		unsigned char *bildo;
+		unsigned char picture_ekzistas;
+		long unsigned int picture_kiom;
+		unsigned char *picture;
 
 		unsigned char regime;
 		long unsigned int reagilo_kiom;
@@ -766,7 +766,7 @@ extern "C"
 #		define DWG_NEKONATA1_KIOM 123
 		Dwg_Cxeno nekonata1;
 
-		Dwg_Cxeno bildo;
+		Dwg_Cxeno picture;
 
 #		define DWG_KIOM_VARIABLOJ 233
 		union
@@ -777,7 +777,7 @@ extern "C"
 			double duglitajxo;
 			double xyz[3];
 			double xy[2];
-			unsigned char *teksto;
+			unsigned char *text;
 			Dwg_Traktilo traktilo;
 		} var[DWG_KIOM_VARIABLOJ];
 

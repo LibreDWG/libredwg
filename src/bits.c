@@ -804,7 +804,7 @@ bit_krei_CRC (Bit_Chain * dat, long unsigned int ekaddress, unsigned int semo)
 	return (ckr);
 }
 
-/** Read simplan tekston. Post uzado, oni devas liberigi la rezervitan memor-spacon.
+/** Read simplan textn. Post uzado, oni devas liberigi la rezervitan memor-spacon.
  */
 unsigned char *
 bit_read_T (Bit_Chain * dat)
@@ -828,7 +828,7 @@ bit_read_T (Bit_Chain * dat)
 	return (chain);
 }
 
-/** Write simplan tekston.
+/** Write simplan textn.
  */
 void
 bit_write_T (Bit_Chain * dat, unsigned char *chain)

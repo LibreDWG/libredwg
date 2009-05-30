@@ -53,7 +53,7 @@ int load_dwg (char *filename)
 			break;
 		case DWG_OT_TEXT:
 			text = dwg.object[i].tio.estajxo->tio.TEXT;
-			add_text (text->x0, text->y0, text->teksto);
+			add_text (text->x0, text->y0, text->text);
 			break;
 		}
 	}
