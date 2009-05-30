@@ -662,7 +662,7 @@ extern "C"
 		long unsigned int bildo_kiom;
 		unsigned char *bildo;
 
-		unsigned char regximo;
+		unsigned char regime;
 		long unsigned int reagilo_kiom;
 		unsigned char senligiloj;
 		unsigned int colour;

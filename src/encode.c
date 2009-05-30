@@ -559,7 +559,7 @@ dwg_encode_estajxo (Dwg_Objekto * obj, Bit_Chain * dat)
 			bit_write_RC (dat, est->bildo[i]);
 	}
 
-	bit_write_BB (dat, est->regximo);
+	bit_write_BB (dat, est->regime);
 	bit_write_BL (dat, est->reagilo_kiom);
 	bit_write_B (dat, est->senligiloj);
 	bit_write_BS (dat, est->colour);

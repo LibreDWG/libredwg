@@ -152,7 +152,7 @@ dwg_print_estajxo (Dwg_Object_Estajxo * est)
 		printf ("\tGrandeco: %lu B\n", est->bildo_kiom);
 	else
 		puts ("");
-	printf ("Reĝimo: %i\n", est->regximo);
+	printf ("Reĝimo: %i\n", est->regime);
 	printf ("Kiom reagiloj: %lu\n", est->reagilo_kiom);
 	printf ("Ĉu senligiloj?: %s\n", est->senligiloj ? "Jes" : "Ne");
 	printf ("Koloro: %u\n", est->colour);

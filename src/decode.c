@@ -616,7 +616,7 @@ dwg_decode_estajxo (Bit_Chain * dat, Dwg_Object_Estajxo * est)
 		}
 	}
 
-	est->regximo = bit_read_BB (dat);
+	est->regime = bit_read_BB (dat);
 	est->reagilo_kiom = bit_read_BL (dat);
 	est->senligiloj = bit_read_B (dat);
 	est->colour = bit_read_BS (dat);
