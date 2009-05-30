@@ -540,7 +540,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	printf ("   NBEGINNATA 2 (fino): %8X\n", (unsigned int) (skt->header.section[4].adresilo + skt->header.section[4].size));
 	dat->bajto = skt->header.section[4].adresilo;
 	dat->bito = 0;
-	skt->mezuro = bit_read_RL (dat);
+	skt->measurement = bit_read_RL (dat);
 
 	printf ("KIOM BAJTOJ :\t%lu\n", dat->kiom);
 

@@ -930,7 +930,7 @@ extern "C"
 			} traktrik[14];
 		} duaheader;
 
-		long unsigned int mezuro;
+		long unsigned int measurement;
 
 		unsigned int dwg_ot_layout;
 

@@ -470,7 +470,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	skt->header.section[4].number = 4;
 	skt->header.section[4].adresilo = dat->bajto;
 	skt->header.section[4].size = 4;
-	bit_write_RL (dat, skt->mezuro);
+	bit_write_RL (dat, skt->measurement);
 
 	/* Fino de la dosiero
 	 */

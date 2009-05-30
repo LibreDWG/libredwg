@@ -748,8 +748,8 @@ dwg_print (Dwg_Structure *dwg_struct)
 	puts ("");
 
 	puts ("**************************************************");
-	puts ("Section MEZURO (MEASUREMENT)");
+	puts ("Section MEASUREMENT");
 	puts ("**************************************************");
-	printf ("MEZURO: 0x%08X\n", (unsigned int) dwg_struct->mezuro);
+	printf ("MEASUREMENT: 0x%08X\n", (unsigned int) dwg_struct->measurement);
 	puts ("");
 }
