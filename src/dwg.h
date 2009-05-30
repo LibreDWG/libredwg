@@ -112,7 +112,7 @@ extern "C"
 			double y;
 			unsigned int h;
 			unsigned int v;
-		} gxisrandigo;
+		} gxisrandigo; //gxis = Until / randigo = Edge. UntilEdge == Snap? perhaps Trim!?
 		struct
 		{
 			double x;
