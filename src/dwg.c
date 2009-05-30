@@ -342,10 +342,10 @@ dwg_print_VERTEX_3D (Dwg_Estajxo_VERTEX_3D * est)
 static void
 dwg_print_VERTEX_PFACE_FACE (Dwg_Estajxo_VERTEX_PFACE_FACE * est)
 {
-	printf ("\tVertic-indico 1: %i\n", est->vertind[0]);
-	printf ("\tVertic-indico 2: %i\n", est->vertind[1]);
-	printf ("\tVertic-indico 3: %i\n", est->vertind[2]);
-	printf ("\tVertic-indico 4: %i\n", est->vertind[3]);
+	printf ("\tVertic-index 1: %i\n", est->vertind[0]);
+	printf ("\tVertic-index 2: %i\n", est->vertind[1]);
+	printf ("\tVertic-index 3: %i\n", est->vertind[2]);
+	printf ("\tVertic-index 4: %i\n", est->vertind[3]);
 }
 
 static void
@@ -573,7 +573,7 @@ dwg_print (Dwg_Structure *dwg_struct)
 			puts ("(NE EKZISTANTA)");
 			continue;
 		}
-		switch (dwg_varmapo (i))
+		switch (dwg_var_map (i))
 		{
 		case DWG_DT_B:
 			printf ("B: %u", dwg_struct->var[i].bitoko);
@@ -607,7 +607,7 @@ dwg_print (Dwg_Structure *dwg_struct)
 			printf ("Z: %lg", dwg_struct->var[i].xyz[2]);
 			break;
 		default:
-			printf ("Ne traktebla tipo: %i (var: %i)\n", dwg_varmapo (i), i);
+			printf ("Ne traktebla tipo: %i (var: %i)\n", dwg_var_map (i), i);
 		}
 		puts ("");
 	}

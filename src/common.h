@@ -60,7 +60,7 @@ typedef enum DWG_SENTINEL
 	DWG_SENTINEL_DUAHEAD_END
 } Dwg_Sentinel;
 
-Dwg_Datenero_Tipo dwg_varmapo (int indico);
+Dwg_Datenero_Tipo dwg_var_map (int index);
 
 unsigned char *dwg_sentinel (Dwg_Sentinel kiu_sentinel);
 

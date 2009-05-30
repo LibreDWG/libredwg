@@ -191,7 +191,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 			//puts ("(NE EKZISTANTA)");
 			continue;
 		}
-		switch (dwg_varmapo (i))
+		switch (dwg_var_map (i))
 		{
 		case DWG_DT_B:
 			skt->var[i].bitoko = bit_read_B (dat);
@@ -236,7 +236,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 			//printf ("Z: %lg", skt->var[i].xyz[2]);
 			break;
 		default:
-			printf ("Ne traktebla tipo: %i (var: %i)\n", dwg_varmapo (i), i);
+			printf ("Ne traktebla tipo: %i (var: %i)\n", dwg_var_map (i), i);
 		}
 		//puts ("");
 	}

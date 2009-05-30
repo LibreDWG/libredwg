@@ -42,9 +42,9 @@ dwg_sentinel (Dwg_Sentinel kiu_sentinel)
  * Mapigi la pozicion de variablo aperanta en la kap-variablo sekcio kaj ties tipo
  */
 Dwg_Datenero_Tipo
-dwg_varmapo (int indico)
+dwg_var_map (int index)
 {
-	static int mapo[] = {
+	static int map[] = {
 		DWG_DT_BD,
 		DWG_DT_BD,
 		DWG_DT_BD,
@@ -280,5 +280,5 @@ dwg_varmapo (int indico)
 		DWG_DT_BS
 	};
 
-	return (mapo[indico]);
+	return (map[index]);
 }
