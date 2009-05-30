@@ -616,16 +616,16 @@ dwg_print (Dwg_Structure *dwg_struct)
 	puts ("**************************************************");
 	puts ("Section KLASOJ");
 	puts ("**************************************************");
-	for (i = 0; i < dwg_struct->klaso_kiom; i++)
+	for (i = 0; i < dwg_struct->class_kiom; i++)
 	{
-		printf ("Klaso: [%02u]\n", i);
-		printf ("\tNumero: %u\n", dwg_struct->klaso[i].number);
-		printf ("\tVersion: %u\n", dwg_struct->klaso[i].version);
-		printf ("\tAp Nomo: \"%s\"\n", dwg_struct->klaso[i].apname);
-		printf ("\tC++ Nomo: \"%s\"\n", dwg_struct->klaso[i].cplipliname);
-		printf ("\tDXF Nomo: \"%s\"\n", dwg_struct->klaso[i].dxfname);
-		printf ("\tEstis fantomo: \"%s\"\n", dwg_struct->klaso[i].estisfantomo ? "Jes" : "Ne");
-		printf ("\tEroId: %u\n", dwg_struct->klaso[i].eroid);
+		printf ("Class: [%02u]\n", i);
+		printf ("\tNumero: %u\n", dwg_struct->class[i].number);
+		printf ("\tVersion: %u\n", dwg_struct->class[i].version);
+		printf ("\tAp Nomo: \"%s\"\n", dwg_struct->class[i].apname);
+		printf ("\tC++ Nomo: \"%s\"\n", dwg_struct->class[i].cplipliname);
+		printf ("\tDXF Nomo: \"%s\"\n", dwg_struct->class[i].dxfname);
+		printf ("\tEstis fantomo: \"%s\"\n", dwg_struct->class[i].estisfantomo ? "Jes" : "Ne");
+		printf ("\tEroId: %u\n", dwg_struct->class[i].eroid);
 	}
 	puts ("");
 

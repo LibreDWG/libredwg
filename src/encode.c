@@ -196,7 +196,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	skt->header.section[0].grandeco = dat->bajto - skt->header.section[0].adresilo;
 
 	/*------------------------------------------------------------
-	 * Klasoj
+	 * Classj
 	 */
 	skt->header.section[1].number = 1;
 	skt->header.section[1].adresilo = dat->bajto;
@@ -204,15 +204,15 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	pvzadr = dat->bajto;	// poste oni devas rewrite la korektan valuen de grandeco cxi tie:
 	bit_write_RL (dat, 0);	// Grandeco de la section
 
-	for (i = 0; i < skt->klaso_kiom; i++)
+	for (i = 0; i < skt->class_kiom; i++)
 	{
-		bit_write_BS (dat, skt->klaso[i].number);
-		bit_write_BS (dat, skt->klaso[i].version);
-		bit_write_T (dat, skt->klaso[i].apname);
-		bit_write_T (dat, skt->klaso[i].cplipliname);
-		bit_write_T (dat, skt->klaso[i].dxfname);
-		bit_write_B (dat, skt->klaso[i].estisfantomo);
-		bit_write_BS (dat, skt->klaso[i].eroid);
+		bit_write_BS (dat, skt->class[i].number);
+		bit_write_BS (dat, skt->class[i].version);
+		bit_write_T (dat, skt->class[i].apname);
+		bit_write_T (dat, skt->class[i].cplipliname);
+		bit_write_T (dat, skt->class[i].dxfname);
+		bit_write_B (dat, skt->class[i].estisfantomo);
+		bit_write_BS (dat, skt->class[i].eroid);
 	}
 
 	/* Skribi la grandecon de la section cxe gxia komenco
@@ -237,7 +237,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	/*------------------------------------------------------------
 	 * Objectj
 	 */
-	bit_write_RL (dat, 0x00000000);	// 0xDCA Nekonata kvarbitoko inter klasoj kaj objektaro
+	bit_write_RL (dat, 0x00000000);	// 0xDCA Nekonata kvarbitoko inter classj kaj objektaro
 	pvzadr = dat->bajto;
 
 	/* Ekdifini object-mapon

@@ -260,7 +260,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 
 
 	/*-------------------------------------------------------------------------
-	 * Klasoj
+	 * Classj
 	 */
 
 	printf ("============> KLASOJ: %8X\n", (unsigned int) skt->header.section[1].adresilo);
@@ -272,35 +272,35 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	lasta = dat->bajto + kiom;
 	//printf ("Longeco: %lu\n", kiom);
 
-	/* Legi la klasojn
+	/* Legi la classjn
 	 */
 	skt->dwg_ot_layout = 0;
-	skt->klaso_kiom = 0;
+	skt->class_kiom = 0;
 	i = 0;
 	do
 	{
 		unsigned int idc;
 
-		idc = skt->klaso_kiom;
+		idc = skt->class_kiom;
 		if (idc == 0)
-			skt->klaso = (Dwg_Klaso *) malloc (sizeof (Dwg_Klaso));
+			skt->class = (Dwg_Class *) malloc (sizeof (Dwg_Class));
 		else
-			skt->klaso =
-				(Dwg_Klaso *) realloc (skt->klaso, (idc + 1) * sizeof (Dwg_Klaso));
+			skt->class =
+				(Dwg_Class *) realloc (skt->class, (idc + 1) * sizeof (Dwg_Class));
 
-		skt->klaso[idc].number = bit_read_BS (dat);
-		skt->klaso[idc].version = bit_read_BS (dat);
-		skt->klaso[idc].apname = bit_read_T (dat);
-		skt->klaso[idc].cplipliname = bit_read_T (dat);
-		skt->klaso[idc].dxfname = bit_read_T (dat);
-		skt->klaso[idc].estisfantomo = bit_read_B (dat);
-		skt->klaso[idc].eroid = bit_read_BS (dat);
+		skt->class[idc].number = bit_read_BS (dat);
+		skt->class[idc].version = bit_read_BS (dat);
+		skt->class[idc].apname = bit_read_T (dat);
+		skt->class[idc].cplipliname = bit_read_T (dat);
+		skt->class[idc].dxfname = bit_read_T (dat);
+		skt->class[idc].estisfantomo = bit_read_B (dat);
+		skt->class[idc].eroid = bit_read_BS (dat);
 
-		if (strcmp (skt->klaso[idc].dxfname, "LAYOUT") == 0)
-			skt->dwg_ot_layout = skt->klaso[idc].number;
+		if (strcmp (skt->class[idc].dxfname, "LAYOUT") == 0)
+			skt->dwg_ot_layout = skt->class[idc].number;
 
-		skt->klaso_kiom++;
-		if (skt->klaso_kiom > 100)
+		skt->class_kiom++;
+		if (skt->class_kiom > 100)
 			break;
 	}
 	while (dat->bajto < (lasta - 1));
@@ -323,9 +323,9 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	 */
 
 	dat->bajto += 16;
-	pvz = bit_read_RL (dat);	// Nekonata kvarbitoko inter klasoj kaj objektaro
+	pvz = bit_read_RL (dat);	// Nekonata kvarbitoko inter classj kaj objektaro
 	//printf ("Adreso: %lu / Enhavo: 0x%08X\n", dat->bajto - 4, pvz);
-	//printf ("Kiom klasoj readtaj: %u\n", skt->klaso_kiom);
+	//printf ("Kiom classj readtaj: %u\n", skt->class_kiom);
 
 
 	/*-------------------------------------------------------------------------

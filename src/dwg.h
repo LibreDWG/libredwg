@@ -854,9 +854,9 @@ extern "C"
 	} Dwg_Object;
 
 /**
- Strukturo de rikordoj por klasoj.
+ Strukturo de rikordoj por classj.
  */
-	typedef struct _dwg_klaso
+	typedef struct _dwg_class
 	{
 		unsigned int number;
 		unsigned int version;
@@ -865,7 +865,7 @@ extern "C"
 		unsigned char *dxfname;
 		unsigned char estisfantomo;
 		unsigned int eroid;
-	} Dwg_Klaso;
+	} Dwg_Class;
 
 /**
  Dwg_Cxeno sama kiel Bit_Cxeno, en "bite.h"
@@ -914,8 +914,8 @@ extern "C"
 			Dwg_Traktilo traktilo;
 		} var[DWG_KIOM_VARIABLOJ];
 
-		unsigned int klaso_kiom;
-		Dwg_Klaso *klaso;
+		unsigned int class_kiom;
+		Dwg_Class *class;
 
 		long unsigned int object_kiom;
 		Dwg_Object *object;
