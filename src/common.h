@@ -19,27 +19,29 @@
  */
 typedef enum DWG_DATENERO_TIPO
 {
-	DWG_DT_B,   /** bito (1 or 0) */
-	DWG_DT_BB,  /** speciala 2-bita kodo (\angla{entmode} en \angla{entities}, ekzemple) */
-	DWG_DT_RC,  /** kruda bitoko (ne kompaktita) */
-	DWG_DT_RS,  /** kruda dubitoko (ne kompaktita) */
-	DWG_DT_RD,  /** kruda duglitajxo (ne kompaktita) */
-	DWG_DT_RL,  /** kruda kvarbitoko (ne kompaktita) */
-	DWG_DT_BS,  /** bit-dubitoko (\angla{bitshort}) */
-	DWG_DT_BL,  /** bit-kvarbitoko (\angla{bitlong}) */
-	DWG_DT_BD,  /** bit-duglitajxo (\angla{bitdouble}) */
-	DWG_DT_MC,  /** moduleca bitoko  */
-	DWG_DT_MS,  /** moduleca dubitoko  */
-	DWG_DT_BE,  /** bit-forpusxigo (\angla{BitExtrusion}) */
-	DWG_DT_DD,  /** bit-duglitajxo kun antauxdifinajxo */
-	DWG_DT_BT,  /** bit-dikeco (\angla{BitThickness}) */
-	DWG_DT_H,   /** traktila referenco (vidu la sekcion \angla{HANDLE REFERENCES}) */
-	DWG_DT_CMC, /** valoro de koloro? \angla{CmColor} */
-	DWG_DT_T,   /** teksto (bit-dubitoka grandeco, sekvata de la signocxeno) */
-	DWG_DT_TU,  /** Unikoda teksto (bit-dubitoka grandeco (laux kiom signoj), sekvata de unikoda signocxeno, po 2 bitokoj por signo) */
-	DWG_DT_2RD,
-	DWG_DT_2BD,
-	DWG_DT_3BD,
+	DWG_DT_B,   /** bit (1 or 0) */
+	DWG_DT_BB,  /** special 2-bit code (entmode in entities, for instance) */
+	DWG_DT_RC,  /** raw char (not compressed) */
+	DWG_DT_RS,  /** raw short (not compressed) */
+	DWG_DT_RD,  /** raw double (not compressed) */
+	DWG_DT_RL,  /** raw long (not compressed) */
+	DWG_DT_BS,  /** bitshort */
+	DWG_DT_BL,  /** bitlong */
+	DWG_DT_BD,  /** bitdouble */
+	DWG_DT_MC,  /** modular char  */
+	DWG_DT_MS,  /** modular short  */
+	DWG_DT_BE,  /** BitExtrusion */
+	DWG_DT_DD,  /** BitDouble With Default */
+	DWG_DT_BT,  /** BitThickness */
+	DWG_DT_H,   /** handle reference (see the HANDLE REFERENCES section) */
+	DWG_DT_CMC, /** CmColor value */
+	DWG_DT_T,   /** text (bitshort length, followed by the string) */
+	DWG_DT_TU,  /** Unicode text (bitshort character length, followed by Unicode string, 2 bytes per character). Unicode text is read from the “string stream” within the
+object data, see the main Object description section for details. */
+	DWG_DT_2RD, /** 2 raw doubles **/
+	DWG_DT_3RD, /** 3 raw doubles **/
+	DWG_DT_2BD, /** 2D point (2 bitdoubles) **/
+	DWG_DT_3BD, /** 3D point (3 bitdoubles) **/
 } Dwg_Datenero_Tipo;
 
 /**
