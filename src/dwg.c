@@ -292,7 +292,7 @@ dwg_print_ATTDEF (Dwg_Estajxo_ATTDEF * est)
 static void
 dwg_print_BLOCK (Dwg_Estajxo_BLOCK * est)
 {
-	printf ("\tNomo: %s\n", est->name);
+	printf ("\tName: %s\n", est->name);
 }
 
 static void
@@ -450,7 +450,7 @@ dwg_print_MTEXT (Dwg_Estajxo_MTEXT *est)
 static void
 dwg_print_LAYER (Dwg_Ordinarajxo_LAYER *ord)
 {
-	printf ("\tNomo: %s\n", ord->name);
+	printf ("\tName: %s\n", ord->name);
 	printf ("\tĈu 64?: %s\n", ord->bito64 ? "Jes" : "Ne");
 	printf ("\tIndico Xref: %u\n", ord->xrefi);
 	printf ("\tXref-dependa?: %s\n", ord->xrefdep ? "Jes" : "Ne");
@@ -614,16 +614,16 @@ dwg_print (Dwg_Structure *dwg_struct)
 	puts ("");
 
 	puts ("**************************************************");
-	puts ("Section CLASSJ");
+	puts ("Section CLASSES");
 	puts ("**************************************************");
-	for (i = 0; i < dwg_struct->class_kiom; i++)
+	for (i = 0; i < dwg_struct->num_classes; i++)
 	{
 		printf ("Class: [%02u]\n", i);
-		printf ("\tNumero: %u\n", dwg_struct->class[i].number);
+		printf ("\tNumber: %u\n", dwg_struct->class[i].number);
 		printf ("\tVersion: %u\n", dwg_struct->class[i].version);
-		printf ("\tAp Nomo: \"%s\"\n", dwg_struct->class[i].apname);
-		printf ("\tC++ Nomo: \"%s\"\n", dwg_struct->class[i].cplipliname);
-		printf ("\tDXF Nomo: \"%s\"\n", dwg_struct->class[i].dxfname);
+		printf ("\tApplication Name: \"%s\"\n", dwg_struct->class[i].appname);
+		printf ("\tC++ Name: \"%s\"\n", dwg_struct->class[i].cppname);
+		printf ("\tDXF Name: \"%s\"\n", dwg_struct->class[i].dxfname);
 		printf ("\tEstis fantomo: \"%s\"\n", dwg_struct->class[i].estisfantomo ? "Jes" : "Ne");
 		printf ("\tEroId: %u\n", dwg_struct->class[i].eroid);
 	}

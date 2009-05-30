@@ -275,13 +275,13 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	/* Legi la classjn
 	 */
 	skt->dwg_ot_layout = 0;
-	skt->class_kiom = 0;
+	skt->num_classes = 0;
 	i = 0;
 	do
 	{
 		unsigned int idc;
 
-		idc = skt->class_kiom;
+		idc = skt->num_classes;
 		if (idc == 0)
 			skt->class = (Dwg_Class *) malloc (sizeof (Dwg_Class));
 		else
@@ -290,8 +290,8 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 
 		skt->class[idc].number = bit_read_BS (dat);
 		skt->class[idc].version = bit_read_BS (dat);
-		skt->class[idc].apname = bit_read_T (dat);
-		skt->class[idc].cplipliname = bit_read_T (dat);
+		skt->class[idc].appname = bit_read_T (dat);
+		skt->class[idc].cppname = bit_read_T (dat);
 		skt->class[idc].dxfname = bit_read_T (dat);
 		skt->class[idc].estisfantomo = bit_read_B (dat);
 		skt->class[idc].eroid = bit_read_BS (dat);
@@ -299,8 +299,8 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 		if (strcmp (skt->class[idc].dxfname, "LAYOUT") == 0)
 			skt->dwg_ot_layout = skt->class[idc].number;
 
-		skt->class_kiom++;
-		if (skt->class_kiom > 100)
+		skt->num_classes++;
+		if (skt->num_classes > 100)
 			break;
 	}
 	while (dat->bajto < (lasta - 1));
@@ -325,7 +325,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	dat->bajto += 16;
 	pvz = bit_read_RL (dat);	// Nekonata kvarbitoko inter classj kaj objektaro
 	//printf ("Adreso: %lu / Enhavo: 0x%08X\n", dat->bajto - 4, pvz);
-	//printf ("Kiom classj readtaj: %u\n", skt->class_kiom);
+	//printf ("Kiom classj readtaj: %u\n", skt->num_classes);
 
 
 	/*-------------------------------------------------------------------------

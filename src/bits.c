@@ -386,7 +386,7 @@ bit_read_BD (Bit_Chain * dat)
 	else			/* if (bitduo == 3) */
 	{
 		printf ("Eraro: ne atendita value por BIT-DUGLITAJXO: '11'\n");
-		/* Krei NeNumero-n (NaN) */
+		/* Krei NeNumber-n (NaN) */
 		rez = (long int *) &result;
 		rez[0] = -1;
 		rez[1] = -1;

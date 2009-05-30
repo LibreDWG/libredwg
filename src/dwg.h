@@ -860,8 +860,8 @@ extern "C"
 	{
 		unsigned int number;
 		unsigned int version;
-		unsigned char *apname;
-		unsigned char *cplipliname;
+		unsigned char *appname;
+		unsigned char *cppname;
 		unsigned char *dxfname;
 		unsigned char estisfantomo;
 		unsigned int eroid;
@@ -914,7 +914,7 @@ extern "C"
 			Dwg_Traktilo traktilo;
 		} var[DWG_NUM_VARIABLES];
 
-		unsigned int class_kiom;
+		unsigned int num_classes;
 		Dwg_Class *class;
 
 		long unsigned int object_kiom;

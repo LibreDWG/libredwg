@@ -204,12 +204,12 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	pvzadr = dat->bajto;	// poste oni devas rewrite la korektan valuen de size cxi tie:
 	bit_write_RL (dat, 0);	// Size de la section
 
-	for (i = 0; i < skt->class_kiom; i++)
+	for (i = 0; i < skt->num_classes; i++)
 	{
 		bit_write_BS (dat, skt->class[i].number);
 		bit_write_BS (dat, skt->class[i].version);
-		bit_write_T (dat, skt->class[i].apname);
-		bit_write_T (dat, skt->class[i].cplipliname);
+		bit_write_T (dat, skt->class[i].appname);
+		bit_write_T (dat, skt->class[i].cppname);
 		bit_write_T (dat, skt->class[i].dxfname);
 		bit_write_B (dat, skt->class[i].estisfantomo);
 		bit_write_BS (dat, skt->class[i].eroid);
