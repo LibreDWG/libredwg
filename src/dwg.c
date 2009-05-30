@@ -97,7 +97,7 @@ dwg_write_file (char *filename, Dwg_Structure * dwg_struct)
 
 	/* Enkodigi la dwg-datenaron
 	bitaro.kiom = 0;
-	if (dwg_enk_cxenigi (dwg_struct, &bitaro))
+	if (dwg_encode_chains (dwg_struct, &bitaro))
 	{
 		puts ("Ni ne sukcesis enkodigi la strukturon.");
 		if (bitaro.kiom > 0)

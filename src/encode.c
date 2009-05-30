@@ -39,7 +39,7 @@ static void dwg_encode_CIRCLE (Dwg_Estajxo_CIRCLE * est, Bit_Chain * dat);
  * Public functions
  */
 int
-dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Chain * dat)
+dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 {
 	int ckr_mankanta;
 	long unsigned int i, j;
