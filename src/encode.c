@@ -23,7 +23,7 @@
 typedef struct
 {
 	long int traktilo;
-	long int adreso;
+	long int address;
 	unsigned int idc;
 } Objekto_Mapo;
 
@@ -68,7 +68,7 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Chain * dat)
 		bit_write_RC (dat, 0);	// Nekonata sekcio
 	bit_write_RC (dat, 0x0F);	// Nekonatajxo
 	bit_write_RC (dat, 0x01);	// Nekonatajxo
-	bit_write_RL (dat, 0);	// Bildo-adreso
+	bit_write_RL (dat, 0);	// Bildo-address
 	bit_write_RC (dat, 25);	// Versio
 	bit_write_RC (dat, 0);	// Lancxo
 	bit_write_RS (dat, skt->kapo.kodpagxo);	// Kodpagxo
@@ -106,7 +106,7 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Chain * dat)
 	 * Antauxrigarda bildo
 	 */
 
-	/* Finfine write la adreson de la bildo
+	/* Finfine write la addressn de la bildo
 	 */
 	pvzadr = dat->bajto;
 	dat->bajto = 0x0D;
@@ -293,7 +293,7 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Chain * dat)
 	 */
 	for (i = 0; i < skt->object_kiom; i++)
 	{
-		omap[i].adreso = dat->bajto;
+		omap[i].address = dat->bajto;
 		obj = &skt->object[omap[i].idc];
 		if (obj->supertipo == DWG_SUPERTYPE_UNKNOWN)
 		{
@@ -315,9 +315,9 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Chain * dat)
 				exit (-1);
 			}
 		}
-		bit_krei_CRC (dat, omap[i].adreso, 0xC0C1);
+		bit_krei_CRC (dat, omap[i].address, 0xC0C1);
 	}
-	//for (i = 0; i < skt->object_kiom; i++) printf ("Trakt(%i): %6lu / Adreso: %08X / Idc: %u\n", i, omap[i].traktilo, omap[i].adreso, omap[i].idc);
+	//for (i = 0; i < skt->object_kiom; i++) printf ("Trakt(%i): %6lu / Adreso: %08X / Idc: %u\n", i, omap[i].traktilo, omap[i].address, omap[i].idc);
 
 	/* Nekonata dubitoko inter la objektaron kaj la object-mapo
 	 */
@@ -328,7 +328,7 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Chain * dat)
 	 */
 	skt->kapo.sekcio[2].numero = 2;
 	skt->kapo.sekcio[2].adresilo = dat->bajto;	// poste oni devas kalkuli la valuen de grandeco
-	//printf ("Ekadreso: 0x%08X\n", dat->bajto);
+	//printf ("Ekaddress: 0x%08X\n", dat->bajto);
 
 	sekcigrandeco = 0;
 	pvzadr = dat->bajto;	// poste oni devas write cxi tie la korektan valuen de grandeco de la unua sekcio
@@ -347,10 +347,10 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Chain * dat)
 		//printf ("Trakt(%i): %6lu / ", i, pvz);
 		lastatrakt = omap[idc].traktilo;
 
-		pvz = omap[idc].adreso - lastadres;
+		pvz = omap[idc].address - lastadres;
 		bit_write_MC (dat, pvz);
 		//printf ("Adreso: %08X\n", pvz);
-		lastadres = omap[idc].adreso;
+		lastadres = omap[idc].address;
 
 		ckr_mankanta = 1;
 		if (dat->bajto - pvzadr > 2030)	// 2029
@@ -390,10 +390,10 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Chain * dat)
 	 */
 	bit_write_gardostaranto (dat, dwg_gardostaranto (DWG_GS_DUAKAPO_EKO));
 
-	pvzadr = dat->bajto;	// Gardi la unuan adreson de la sekcio por write ties grandecon poste
+	pvzadr = dat->bajto;	// Gardi la unuan addressn de la sekcio por write ties grandecon poste
 	bit_write_RL (dat, 0);
 
-	bit_write_BL (dat, pvzadr - 16);	// ekadreso de la sekcio
+	bit_write_BL (dat, pvzadr - 16);	// ekaddress de la sekcio
 
 	/* Chain "AC1015"
 	 */

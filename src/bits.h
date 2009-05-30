@@ -105,9 +105,9 @@ void bit_write_H (Bit_Chain * dat, Dwg_Traktilo * traktilo);
 
 unsigned int bit_read_CRC (Bit_Chain * bit_datenaro);
 
-int bit_check_CRC (Bit_Chain * bit_datenaro, long unsigned int ekadreso, unsigned int semo);
+int bit_check_CRC (Bit_Chain * bit_datenaro, long unsigned int ekaddress, unsigned int semo);
 
-unsigned int bit_krei_CRC (Bit_Chain * bit_datenaro, long unsigned int ekadreso, unsigned int semo);
+unsigned int bit_krei_CRC (Bit_Chain * bit_datenaro, long unsigned int ekaddress, unsigned int semo);
 
 unsigned char *bit_read_T (Bit_Chain * bit_datenaro);
 

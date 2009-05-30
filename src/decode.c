@@ -23,12 +23,12 @@
 /*--------------------------------------------------------------------------------
  * Privataj funkcioj
  */
-static void dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned int adreso);
+static void dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned int address);
 
 /*--------------------------------------------------------------------------------
  * Publikaj variabloj
  */
-long unsigned int ktl_lastadreso;
+long unsigned int ktl_lastaddress;
 
 /*--------------------------------------------------------------------------------
  * Difino de publikaj funkcioj
@@ -150,17 +150,17 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 
 	if (bit_sercxi_gardostaranto (dat, dwg_gardostaranto (DWG_GS_BILDO_EKO)))
 	{
-		unsigned long int ekadreso;
+		unsigned long int ekaddress;
 
 		dat->bito = 0;
-		ekadreso = dat->bajto;
-		printf ("=============> BILDO: %8X\n", (unsigned int) ekadreso - 16);
+		ekaddress = dat->bajto;
+		printf ("=============> BILDO: %8X\n", (unsigned int) ekaddress - 16);
 		if (bit_sercxi_gardostaranto (dat, dwg_gardostaranto (DWG_GS_BILDO_FINO)))
 		{
 			printf ("        BILDO (fino): %8X\n", (unsigned int) dat->bajto);
-			skt->bildo.kiom = (dat->bajto - 16) - ekadreso;
+			skt->bildo.kiom = (dat->bajto - 16) - ekaddress;
 			skt->bildo.chain = (char *) malloc (skt->bildo.kiom);
-			memcpy (skt->bildo.chain, &dat->chain[ekadreso], skt->bildo.kiom);
+			memcpy (skt->bildo.chain, &dat->chain[ekaddress], skt->bildo.kiom);
 		}
 		else
 			skt->bildo.kiom = 0;
@@ -447,7 +447,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 		//printf ("Kiomo: %lu\n", pvz);
 
 		pvz = bit_read_BL (dat);
-		//printf ("Ekadreso: %8X\n", pvz);
+		//printf ("Ekaddress: %8X\n", pvz);
 
 		//printf ("AC1015?: ");
 		for (i = 0; i < 6; i++)
@@ -699,9 +699,9 @@ dwg_decode_traktref (Bit_Chain * dat, Dwg_Objekto * obj)
 				//printf ("\tEraro en tiu traktilo: %lu\n", est->traktilo.value);
 				break;
 			}
-			if (!(dat->bajto == ktl_lastadreso + 1 && dat->bito == 0))
+			if (!(dat->bajto == ktl_lastaddress + 1 && dat->bito == 0))
 			{
-				if (dat->bajto > ktl_lastadreso)
+				if (dat->bajto > ktl_lastaddress)
 					break;
 			}
 			i++;
@@ -727,9 +727,9 @@ dwg_decode_traktref (Bit_Chain * dat, Dwg_Objekto * obj)
 				//printf ("\tEraro en tiu traktilo: %lu\n", est->traktilo.value);
 				break;
 			}
-			if (!(dat->bajto == ktl_lastadreso + 1 && dat->bito == 0))
+			if (!(dat->bajto == ktl_lastaddress + 1 && dat->bito == 0))
 			{
-				if (dat->bajto > ktl_lastadreso)
+				if (dat->bajto > ktl_lastaddress)
 					break;
 			}
 			i++;
@@ -1401,21 +1401,21 @@ dwg_decode_UNUSED (Bit_Chain * dat, Dwg_Objekto * obj)
  * Privata funkcio, kiu dependas de la antaŭaj
  */
 static void
-dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned int adreso)
+dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned int address)
 {
-	long unsigned int antauxa_adreso;
+	long unsigned int antauxa_address;
 	long unsigned int objekadres;
 	unsigned char antauxa_bito;
 	Dwg_Objekto *obj;
 
-	/* Gardi la antauxan adreson
+	/* Gardi la antauxan addressn
 	 */
-	antauxa_adreso = dat->bajto;
+	antauxa_address = dat->bajto;
 	antauxa_bito = dat->bito;
 
-	/* Uzi la indikitan adreson por la object
+	/* Uzi la indikitan addressn por la object
 	 */
-	dat->bajto = adreso;
+	dat->bajto = address;
 	dat->bito = 0;
 
 	/* Rezervi memor-spacon por plia object
@@ -1434,7 +1434,7 @@ dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned in
 
 	obj->grandeco = bit_read_MS (dat);
 	objekadres = dat->bajto;
-	ktl_lastadreso = dat->bajto + obj->grandeco;	/* (de cxi tie oni kalkulas la bitgrandecon) */
+	ktl_lastaddress = dat->bajto + obj->grandeco;	/* (de cxi tie oni kalkulas la bitgrandecon) */
 	obj->tipo = bit_read_BS (dat);
 
 	/* Kontroli la tipon de object
@@ -1519,15 +1519,15 @@ dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned in
 	/*
 	   if (obj->supertipo != DWG_SUPERTYPE_UNKNOWN)
 	   {
-	   printf (" Ekadr:\t%10lu\n", adreso);
+	   printf (" Ekadr:\t%10lu\n", address);
 	   printf (" Lasta:\t%10lu\tGrandeco: %10lu\n", dat->bajto, obj->grandeco);
-	   printf ("Finadr:\t%10lu (kalkulite)\n", adreso + 2 + obj->grandeco);
+	   printf ("Finadr:\t%10lu (kalkulite)\n", address + 2 + obj->grandeco);
 	   }
 	 */
 
-	/* Restarigi la antauxan adreson por returni
+	/* Restarigi la antauxan addressn por returni
 	 */
-	dat->bajto = antauxa_adreso;
+	dat->bajto = antauxa_address;
 	dat->bito = antauxa_bito;
 }
 

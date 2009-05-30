@@ -765,7 +765,7 @@ bit_read_CRC (Bit_Chain * dat)
 /** Read kaj kontroli CRK-numeron.
  */
 int
-bit_check_CRC (Bit_Chain * dat, long unsigned int ekadreso, unsigned int semo)
+bit_check_CRC (Bit_Chain * dat, long unsigned int ekaddress, unsigned int semo)
 {
 	unsigned int kalkulita;
 	unsigned int readta;
@@ -775,7 +775,7 @@ bit_check_CRC (Bit_Chain * dat, long unsigned int ekadreso, unsigned int semo)
 		dat->bajto++;
 	dat->bito = 0;
 
-	kalkulita = bit_ckr8 (semo, &(dat->chain[ekadreso]), dat->bajto - ekadreso);
+	kalkulita = bit_ckr8 (semo, &(dat->chain[ekaddress]), dat->bajto - ekaddress);
 
 	rez[0] = bit_read_RC (dat);
 	rez[1] = bit_read_RC (dat);
@@ -788,7 +788,7 @@ bit_check_CRC (Bit_Chain * dat, long unsigned int ekadreso, unsigned int semo)
 /** Krei kaj write CRK-numeron.
  */
 unsigned int
-bit_krei_CRC (Bit_Chain * dat, long unsigned int ekadreso, unsigned int semo)
+bit_krei_CRC (Bit_Chain * dat, long unsigned int ekaddress, unsigned int semo)
 {
 	unsigned int ckr;
 	unsigned char *ckra;
@@ -796,7 +796,7 @@ bit_krei_CRC (Bit_Chain * dat, long unsigned int ekadreso, unsigned int semo)
 	while (dat->bito > 0)
 		bit_write_B (dat, 0);
 
-	ckr = bit_ckr8 (semo, &(dat->chain[ekadreso]), dat->bajto - ekadreso);
+	ckr = bit_ckr8 (semo, &(dat->chain[ekaddress]), dat->bajto - ekaddress);
 
 	bit_write_RC (dat, (unsigned char) (ckr >> 8));
 	bit_write_RC (dat, (unsigned char) (ckr & 0xFF));
