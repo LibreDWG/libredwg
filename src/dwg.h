@@ -1,6 +1,7 @@
 /*****************************************************************************/
 /*  LibDWG - Free DWG read-only library                                      */
 /*  Copyright (C) 2008, 2009 Free Software Foundation, Inc.                  */
+/*  Copyright (C) 2009 Rodrigo Rodrigues da Silva <rodrigopitanga@gmail.com> */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -81,7 +82,7 @@ extern "C"
 	} Dwg_Object_Type;
 
 /**
- Strukturo por traktiloj.
+ Struct for traktiloj.
  */
 	typedef struct _dwg_traktilo
 	{
@@ -92,12 +93,12 @@ extern "C"
 
 /* OBJEKTOJ *******************************************************************/
 /**
- Strukturo por tekstoj - UNUSED (0)
+ Struct for tekstoj - UNUSED (0)
  */
 	typedef int Dwg_Estajxo_UNUSED;
 
 /**
- Strukturo por tekstoj - TEXT (1)
+ Struct for tekstoj - TEXT (1)
  */
 	typedef struct _dwg_estajxo_TEXT
 	{
@@ -128,7 +129,7 @@ extern "C"
 	} Dwg_Estajxo_TEXT;
 
 /**
- Strukturo por atributoj - ATTRIB (2)
+ Struct for atributoj - ATTRIB (2)
  */
 	typedef struct _dwg_estajxo_ATTRIB
 	{
@@ -162,7 +163,7 @@ extern "C"
 	} Dwg_Estajxo_ATTRIB;
 
 /**
- Strukturo por atributo-difinoj - ATTDEF (3)
+ Struct for atributo-difinoj - ATTDEF (3)
  */
 	typedef struct _dwg_estajxo_ATTDEF
 	{
@@ -197,7 +198,7 @@ extern "C"
 	} Dwg_Estajxo_ATTDEF;
 
 /**
- Strukturo por blokoj - BLOCK (4)
+ Struct for blokoj - BLOCK (4)
  */
 	typedef struct _dwg_estajxo_BLOCK
 	{
@@ -205,14 +206,21 @@ extern "C"
 	} Dwg_Estajxo_BLOCK;
 
 /**
- Strukturo por blokfinoj - ENDBLK (5)
+ Struct for blokfinoj - ENDBLK (5)
  */
 	typedef struct _dwg_estajxo_ENDBLK
 	{
 	} Dwg_Estajxo_ENDBLK;
 
 /**
- Strukturo por enmetoj - INSERT (7)
+ Struct for enmetoj - SEQEND (6)
+ */
+	typedef struct _dwg_estajxo_SEQNED
+	{
+	} Dwg_Estajxo_SEQEND;
+
+/**
+ Struct for enmetoj - INSERT (7)
  */
 	typedef struct _dwg_estajxo_INSERT
 	{
@@ -237,7 +245,7 @@ extern "C"
 	} Dwg_Estajxo_INSERT;
 
 /**
- Strukturo por multoblaj enmetoj - MINSERT (7)
+ Struct for multoblaj enmetoj - MINSERT (8)
  */
 	typedef struct _dwg_estajxo_MINSERT
 	{
@@ -272,7 +280,11 @@ extern "C"
 	} Dwg_Estajxo_MINSERT;
 
 /**
- Strukturo por verticoj - VERTEX_2D (10)
+ Struct for ?? - ?? (9)
+ */
+
+/**
+ Struct for verticoj - VERTEX_2D (10)
  */
 	typedef struct _dwg_estajxo_VERTEX_2D
 	{
@@ -287,7 +299,7 @@ extern "C"
 	} Dwg_Estajxo_VERTEX_2D;
 
 /**
- Strukturo por verticoj - VERTEX_3D (11)
+ Struct for verticoj - VERTEX_3D (11)
  */
 	typedef struct _dwg_estajxo_VERTEX_3D
 	{
@@ -298,7 +310,17 @@ extern "C"
 	} Dwg_Estajxo_VERTEX_3D;
 
 /**
- Strukturo por verticoj - VERTEX_PFACE_FACE (14)
+ Struct for verticoj - VERTEX_MESH (12) - same as VERTEX_3D
+ */
+	typedef Dwg_Estajxo_VERTEX_3D Dwg_Estajxo_VERTEX_MESH;
+
+/**
+ Struct for verticoj - VERTEX_PFACE (13) - same as VERTEX_3D
+ */
+	typedef Dwg_Estajxo_VERTEX_3D Dwg_Estajxo_VERTEX_PFACE;
+
+/**
+ Struct for verticoj - VERTEX_PFACE_FACE (14)
  */
 	typedef struct _dwg_estajxo_VERTEX_PFACE_FACE
 	{
@@ -306,7 +328,7 @@ extern "C"
 	} Dwg_Estajxo_VERTEX_PFACE_FACE;
 
 /**
- Strukturo por:  2D POLYLINE (15)
+ Struct for:  2D POLYLINE (15)
  */
 	typedef struct _dwg_estajxo_POLYLINE_2D
 	{
@@ -325,7 +347,7 @@ extern "C"
 	} Dwg_Estajxo_POLYLINE_2D;
 
 /**
- Strukturo por:  3D POLYLINE (16)
+ Struct for:  3D POLYLINE (16)
  */
 	typedef struct _dwg_estajxo_POLYLINE_3D
 	{
@@ -334,7 +356,7 @@ extern "C"
 	} Dwg_Estajxo_POLYLINE_3D;
 
 /**
- Strukturo por arkoj - ARC (17)
+ Struct for arkoj - ARC (17)
  */
 	typedef struct _dwg_estajxo_ARC
 	{
@@ -354,7 +376,7 @@ extern "C"
 	} Dwg_Estajxo_ARC;
 
 /**
- Strukturo por cirkloj - CIRCLE (18)
+ Struct for cirkloj - CIRCLE (18)
  */
 	typedef struct _dwg_estajxo_CIRCLE
 	{
@@ -372,7 +394,7 @@ extern "C"
 	} Dwg_Estajxo_CIRCLE;
 
 /**
- Strukturo por linioj - LINE (19)
+ Struct for linioj - LINE (19)
  */
 	typedef struct _dwg_estajxo_LINE
 	{
@@ -393,7 +415,7 @@ extern "C"
 	} Dwg_Estajxo_LINE;
 
 /**
- Strukturo por puktoj - POINT (27)
+ Struct for puktoj - POINT (27)
  */
 	typedef struct _dwg_estajxo_POINT
 	{
@@ -411,7 +433,7 @@ extern "C"
 	} Dwg_Estajxo_POINT;
 
 /**
- Strukturo por elipsoj - ELLIPSE (35)
+ Struct for elipsoj - ELLIPSE (35)
  */
 	typedef struct _dwg_estajxo_ELLIPSE
 	{
@@ -433,7 +455,7 @@ extern "C"
 	} Dwg_Estajxo_ELLIPSE;
 
 /**
- Strukturo por radioj - RAY (40)
+ Struct for radioj - RAY (40)
  */
 	typedef struct _dwg_estajxo_RAY
 	{
@@ -446,7 +468,7 @@ extern "C"
 	} Dwg_Estajxo_RAY;
 
 /**
- Strukturo por tekstoj - MTEXT (40)
+ Struct for tekstoj - MTEXT (40)
  */
 	typedef struct _dwg_estajxo_MTEXT
 	{
@@ -475,7 +497,7 @@ extern "C"
 	} Dwg_Estajxo_MTEXT;
 
 /**
- Strukturo por tavoloj - LAYER (51)
+ Struct for tavoloj - LAYER (51)
  */
 	typedef struct _dwg_ordinarajxo_LAYER
 	{
@@ -488,7 +510,7 @@ extern "C"
 	} Dwg_Ordinarajxo_LAYER;
 
 /**
- Strukturo por arangxo - LAYOUT (502?)
+ Struct for arangxo - LAYOUT (502?)
  */
 	typedef struct _dwg_ordinarajxo_LAYOUT
 	{
