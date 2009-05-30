@@ -232,7 +232,7 @@ dwg_print_TEXT (Dwg_Estajxo_TEXT * est)
 	printf ("\tthickness: %1.13g\n", est->thickness);
 	printf ("\tKlina angulo: %1.13g\n", est->klinang);
 	printf ("\tTurna angulo: %1.13g\n", est->turnang);
-	printf ("\tAlteco: %1.13g\n", est->alteco);
+	printf ("\tAlteco: %1.13g\n", est->height);
 	printf ("\tLarĝ-faktoro: %1.13g\n", est->largxfaktoro);
 	printf ("\tTeksto: \"%s\"\n", est->teksto);
 	printf ("\tGeneracio: %u\n", est->generacio);
@@ -253,7 +253,7 @@ dwg_print_ATTRIB (Dwg_Estajxo_ATTRIB * est)
 	printf ("\tthickness: %1.13g\n", est->thickness);
 	printf ("\tKlina angulo: %1.13g\n", est->klinang);
 	printf ("\tTurna angulo: %1.13g\n", est->turnang);
-	printf ("\tAlteco: %1.13g\n", est->alteco);
+	printf ("\tAlteco: %1.13g\n", est->height);
 	printf ("\tLarĝ-faktoro: %1.13g\n", est->largxfaktoro);
 	printf ("\tTeksto: \"%s\"\n", est->teksto);
 	printf ("\tGeneracio: %u\n", est->generacio);
@@ -277,7 +277,7 @@ dwg_print_ATTDEF (Dwg_Estajxo_ATTDEF * est)
 	printf ("\tthickness: %1.13g\n", est->thickness);
 	printf ("\tKlina angulo: %1.13g\n", est->klinang);
 	printf ("\tTurna angulo: %1.13g\n", est->turnang);
-	printf ("\tAlteco: %1.13g\n", est->alteco);
+	printf ("\tAlteco: %1.13g\n", est->height);
 	printf ("\tLarĝ-faktoro: %1.13g\n", est->largxfaktoro);
 	printf ("\tTeksto: \"%s\"\n", est->teksto);
 	printf ("\tGeneracio: %u\n", est->generacio);
@@ -439,7 +439,7 @@ dwg_print_MTEXT (Dwg_Estajxo_MTEXT *est)
 		est->extrusion.z);
 	printf ("\tX-direkto: (%1.13g, %1.13g, %1.13g)\n", est->x1, est->y1, est->z1);
 	printf ("\tLargxeco: %1.13g\n", est->largxeco);
-	printf ("\tAlteco: %1.13g\n", est->alteco);
+	printf ("\tAlteco: %1.13g\n", est->height);
 	printf ("\tKunmeto: 0x%0x\n", est->kunmeto);
 	printf ("\tDirekto: 0x%0x\n", est->direkto);
 	printf ("\tTeksto: %s\n", est->teksto);
@@ -470,7 +470,7 @@ dwg_print_LAYOUT (Dwg_Ordinarajxo_LAYOUT *ord)
 		ord->pagxo.dekstre,
 		ord->pagxo.supre);
 	printf ("\tLargxeco: %1.13g\n", ord->pagxo.largxeco);
-	printf ("\tAlteco: %1.13g\n", ord->pagxo.alteco);
+	printf ("\tAlteco: %1.13g\n", ord->pagxo.height);
 	printf ("\tGrandeco: %s\n", ord->pagxo.grandeco);
 	printf ("\tDeŝovo: (%1.13g, %1.13g)\n", ord->pagxo.dx, ord->pagxo.dy);
 	printf ("\tUnuoj: %u\n", ord->pagxo.unuoj);

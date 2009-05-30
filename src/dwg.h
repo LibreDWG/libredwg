@@ -122,7 +122,7 @@ extern "C"
 		double thickness;
 		double klinang;
 		double turnang;
-		double alteco;
+		double height;
 		double largxfaktoro;
 		unsigned char *teksto;
 		unsigned int generacio;
@@ -153,7 +153,7 @@ extern "C"
 		double thickness;
 		double klinang;
 		double turnang;
-		double alteco;
+		double height;
 		double largxfaktoro;
 		unsigned char *teksto;
 		unsigned int generacio;
@@ -187,7 +187,7 @@ extern "C"
 		double thickness;
 		double klinang;
 		double turnang;
-		double alteco;
+		double height;
 		double largxfaktoro;
 		unsigned char *teksto;
 		unsigned int generacio;
@@ -390,7 +390,7 @@ extern "C"
 			double x;
 			double y;
 			double z;
-		} extrusion	;
+		} extrusion;
 	} Dwg_Estajxo_CIRCLE;
 
 /**
@@ -516,7 +516,7 @@ extern "C"
 		double y1;
 		double z1;
 		double largxeco;
-		double alteco;
+		double height;
 		unsigned int kunmeto;
 		unsigned int direkto;
 		double etendo;
@@ -555,7 +555,7 @@ extern "C"
 			double dekstre;
 			double supre;
 			double largxeco;
-			double alteco;
+			double height;
 			char *grandeco;
 			double dx;
 			double dy;

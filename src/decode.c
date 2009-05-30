@@ -769,7 +769,7 @@ dwg_decode_TEXT (Bit_Chain * dat, Dwg_Objekto * obj)
 		est->klinang = bit_read_RD (dat);
 	if (!(est->datumindik & 0x08))
 		est->turnang = bit_read_RD (dat);
-	est->alteco = bit_read_RD (dat);
+	est->height = bit_read_RD (dat);
 	if (!(est->datumindik & 0x10))
 		est->largxfaktoro = bit_read_RD (dat);
 	est->teksto = bit_read_T (dat);
@@ -812,7 +812,7 @@ dwg_decode_ATTRIB (Bit_Chain * dat, Dwg_Objekto * obj)
 		est->klinang = bit_read_RD (dat);
 	if (!(est->datumindik & 0x08))
 		est->turnang = bit_read_RD (dat);
-	est->alteco = bit_read_RD (dat);
+	est->height = bit_read_RD (dat);
 	if (!(est->datumindik & 0x10))
 		est->largxfaktoro = bit_read_RD (dat);
 	est->teksto = bit_read_T (dat);
@@ -858,7 +858,7 @@ dwg_decode_ATTDEF (Bit_Chain * dat, Dwg_Objekto * obj)
 		est->klinang = bit_read_RD (dat);
 	if (!(est->datumindik & 0x08))
 		est->turnang = bit_read_RD (dat);
-	est->alteco = bit_read_RD (dat);
+	est->height = bit_read_RD (dat);
 	if (!(est->datumindik & 0x10))
 		est->largxfaktoro = bit_read_RD (dat);
 	est->teksto = bit_read_T (dat);
@@ -1271,7 +1271,7 @@ dwg_decode_MTEXT (Bit_Chain * dat, Dwg_Objekto * obj)
 	est->y1 = bit_read_BD (dat);
 	est->z1 = bit_read_BD (dat);
 	est->largxeco = bit_read_BD (dat);
-	est->alteco = bit_read_BD (dat);
+	est->height = bit_read_BD (dat);
 	est->kunmeto = bit_read_BS (dat);
 	est->direkto = bit_read_BS (dat);
 	est->etendo = bit_read_BD (dat);
@@ -1328,7 +1328,7 @@ dwg_decode_LAYOUT (Bit_Chain * dat, Dwg_Objekto * obj)
 	ord->pagxo.dekstre = bit_read_BD (dat);
 	ord->pagxo.supre = bit_read_BD (dat);
 	ord->pagxo.largxeco = bit_read_BD (dat);
-	ord->pagxo.alteco = bit_read_BD (dat);
+	ord->pagxo.height = bit_read_BD (dat);
 	ord->pagxo.grandeco = bit_read_T (dat);
 	ord->pagxo.dx = bit_read_BD (dat);
 	ord->pagxo.dy = bit_read_BD (dat);
