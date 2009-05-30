@@ -329,7 +329,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 
 
 	/*-------------------------------------------------------------------------
-	 * Objekto-mapo (kaj objectj mem)
+	 * Object-mapo (kaj objectj mem)
 	 */
 
 	dat->bajto = skt->header.sekcio[2].adresilo;
@@ -352,7 +352,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 		//printf ("sekgrandeco: %u\n", sekgrandeco);
 		if (sekgrandeco > 2034)	// 2032 + 2
 		{
-			puts ("Eraro: Objekto-mapa sekcio pli granda ol 2034!");
+			puts ("Eraro: Object-mapa sekcio pli granda ol 2034!");
 			return -1;
 		}
 
@@ -575,7 +575,7 @@ dwg_decode_estajxo (Bit_Chain * dat, Dwg_Object_Estajxo * est)
 	{
 		if (grando > 10210)
 		{
-			printf ("Absurdo! Kromdato-grandeco: %lu. Objekto: %lu (traktilo).\n", (long unsigned int) grando, est->traktilo.value);
+			printf ("Absurdo! Kromdato-grandeco: %lu. Object: %lu (traktilo).\n", (long unsigned int) grando, est->traktilo.value);
 			est->bitgrandeco = 0;
 			est->kromdat_kiom = 0;
 			est->picture_ekzistas = 0;
@@ -610,7 +610,7 @@ dwg_decode_estajxo (Bit_Chain * dat, Dwg_Object_Estajxo * est)
 		}
 		else
 		{
-			printf ("Absurdo! Bildo-grandeco: %lu kB. Objekto: %lu (traktilo).\n",
+			printf ("Absurdo! Bildo-grandeco: %lu kB. Object: %lu (traktilo).\n",
 				est->picture_kiom / 1000, est->traktilo.value);
 			bit_ref_salti (dat, -(4 * 8 + 1));
 		}
@@ -649,7 +649,7 @@ dwg_decode_ordinarajxo (Bit_Chain * dat, Dwg_Object_Ordinarajxo * ord)
 	{
 		if (grando > 10210)
 		{
-			printf ("Absurdo! Kromdato-grandeco: %lu. Objekto: %lu (traktilo).\n", (long unsigned int) grando, ord->traktilo.value);
+			printf ("Absurdo! Kromdato-grandeco: %lu. Object: %lu (traktilo).\n", (long unsigned int) grando, ord->traktilo.value);
 			ord->bitgrandeco = 0;
 			ord->kromdat_kiom = 0;
 			ord->traktref_kiom = 0;
@@ -676,7 +676,7 @@ dwg_decode_ordinarajxo (Bit_Chain * dat, Dwg_Object_Ordinarajxo * ord)
 }
 
 static void
-dwg_decode_traktref (Bit_Chain * dat, Dwg_Objekto * obj)
+dwg_decode_traktref (Bit_Chain * dat, Dwg_Object * obj)
 {
 	int i;
 
@@ -741,7 +741,7 @@ dwg_decode_traktref (Bit_Chain * dat, Dwg_Objekto * obj)
 /* OBJEKTOJ *******************************************************************/
 
 static void
-dwg_decode_TEXT (Bit_Chain * dat, Dwg_Objekto * obj)
+dwg_decode_TEXT (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Estajxo_TEXT *est;
 
@@ -784,7 +784,7 @@ dwg_decode_TEXT (Bit_Chain * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_ATTRIB (Bit_Chain * dat, Dwg_Objekto * obj)
+dwg_decode_ATTRIB (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Estajxo_ATTRIB *est;
 
@@ -830,7 +830,7 @@ dwg_decode_ATTRIB (Bit_Chain * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_ATTDEF (Bit_Chain * dat, Dwg_Objekto * obj)
+dwg_decode_ATTDEF (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Estajxo_ATTDEF *est;
 
@@ -877,7 +877,7 @@ dwg_decode_ATTDEF (Bit_Chain * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_BLOCK (Bit_Chain * dat, Dwg_Objekto * obj)
+dwg_decode_BLOCK (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Estajxo_BLOCK *est;
 
@@ -895,7 +895,7 @@ dwg_decode_BLOCK (Bit_Chain * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_ENDBLK (Bit_Chain * dat, Dwg_Objekto * obj)
+dwg_decode_ENDBLK (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Estajxo_ENDBLK *est;
 
@@ -909,7 +909,7 @@ dwg_decode_ENDBLK (Bit_Chain * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_INSERT (Bit_Chain * dat, Dwg_Objekto * obj)
+dwg_decode_INSERT (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Estajxo_INSERT *est;
 
@@ -951,7 +951,7 @@ dwg_decode_INSERT (Bit_Chain * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_MINSERT (Bit_Chain * dat, Dwg_Objekto * obj)
+dwg_decode_MINSERT (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Estajxo_MINSERT *est;
 
@@ -997,7 +997,7 @@ dwg_decode_MINSERT (Bit_Chain * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_VERTEX_2D (Bit_Chain * dat, Dwg_Objekto * obj)
+dwg_decode_VERTEX_2D (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Estajxo_VERTEX_2D *est;
 
@@ -1025,7 +1025,7 @@ dwg_decode_VERTEX_2D (Bit_Chain * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_VERTEX_3D (Bit_Chain * dat, Dwg_Objekto * obj)
+dwg_decode_VERTEX_3D (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Estajxo_VERTEX_3D *est;
 
@@ -1046,7 +1046,7 @@ dwg_decode_VERTEX_3D (Bit_Chain * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_VERTEX_PFACE_FACE (Bit_Chain * dat, Dwg_Objekto * obj)
+dwg_decode_VERTEX_PFACE_FACE (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Estajxo_VERTEX_PFACE_FACE *est;
 
@@ -1067,7 +1067,7 @@ dwg_decode_VERTEX_PFACE_FACE (Bit_Chain * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_POLYLINE_2D (Bit_Chain * dat, Dwg_Objekto * obj)
+dwg_decode_POLYLINE_2D (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Estajxo_POLYLINE_2D *est;
 
@@ -1091,7 +1091,7 @@ dwg_decode_POLYLINE_2D (Bit_Chain * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_POLYLINE_3D (Bit_Chain * dat, Dwg_Objekto * obj)
+dwg_decode_POLYLINE_3D (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Estajxo_POLYLINE_3D *est;
 
@@ -1110,7 +1110,7 @@ dwg_decode_POLYLINE_3D (Bit_Chain * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_ARC (Bit_Chain * dat, Dwg_Objekto * obj)
+dwg_decode_ARC (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Estajxo_ARC *est;
 
@@ -1133,7 +1133,7 @@ dwg_decode_ARC (Bit_Chain * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_CIRCLE (Bit_Chain * dat, Dwg_Objekto * obj)
+dwg_decode_CIRCLE (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Estajxo_CIRCLE *est;
 
@@ -1154,7 +1154,7 @@ dwg_decode_CIRCLE (Bit_Chain * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_LINE (Bit_Chain * dat, Dwg_Objekto * obj)
+dwg_decode_LINE (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Estajxo_LINE *est;
 
@@ -1182,7 +1182,7 @@ dwg_decode_LINE (Bit_Chain * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_POINT (Bit_Chain * dat, Dwg_Objekto * obj)
+dwg_decode_POINT (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Estajxo_POINT *est;
 
@@ -1203,7 +1203,7 @@ dwg_decode_POINT (Bit_Chain * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_ELLIPSE (Bit_Chain * dat, Dwg_Objekto * obj)
+dwg_decode_ELLIPSE (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Estajxo_ELLIPSE *est;
 
@@ -1230,7 +1230,7 @@ dwg_decode_ELLIPSE (Bit_Chain * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_RAY (Bit_Chain * dat, Dwg_Objekto * obj)
+dwg_decode_RAY (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Estajxo_RAY *est;
 
@@ -1251,7 +1251,7 @@ dwg_decode_RAY (Bit_Chain * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_MTEXT (Bit_Chain * dat, Dwg_Objekto * obj)
+dwg_decode_MTEXT (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Estajxo_MTEXT *est;
 
@@ -1285,7 +1285,7 @@ dwg_decode_MTEXT (Bit_Chain * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_LAYER (Bit_Chain * dat, Dwg_Objekto * obj)
+dwg_decode_LAYER (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Ordinarajxo_LAYER *ord;
 
@@ -1308,7 +1308,7 @@ dwg_decode_LAYER (Bit_Chain * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_LAYOUT (Bit_Chain * dat, Dwg_Objekto * obj)
+dwg_decode_LAYOUT (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Ordinarajxo_LAYOUT *ord;
 
@@ -1380,7 +1380,7 @@ dwg_decode_LAYOUT (Bit_Chain * dat, Dwg_Objekto * obj)
 }
 
 static void
-dwg_decode_UNUSED (Bit_Chain * dat, Dwg_Objekto * obj)
+dwg_decode_UNUSED (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Estajxo_UNUSED *est;
 
@@ -1406,7 +1406,7 @@ dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned in
 	long unsigned int antauxa_address;
 	long unsigned int objekadres;
 	unsigned char antauxa_bito;
-	Dwg_Objekto *obj;
+	Dwg_Object *obj;
 
 	/* Gardi la antauxan addressn
 	 */
@@ -1421,13 +1421,13 @@ dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned in
 	/* Rezervi memor-spacon por plia object
 	 */
 	if (skt->object_kiom == 0)
-		skt->object = (Dwg_Objekto *) malloc (sizeof (Dwg_Objekto));
+		skt->object = (Dwg_Object *) malloc (sizeof (Dwg_Object));
 	else
 		skt->object =
-			(Dwg_Objekto *) realloc (skt->object,
-						 (skt->object_kiom + 1) * sizeof (Dwg_Objekto));
+			(Dwg_Object *) realloc (skt->object,
+						 (skt->object_kiom + 1) * sizeof (Dwg_Object));
 
-	//printf ("Objekto numero: %u\n", skt->object_kiom);
+	//printf ("Object numero: %u\n", skt->object_kiom);
 
 	obj = &skt->object[skt->object_kiom];
 	skt->object_kiom++;

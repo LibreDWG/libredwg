@@ -851,7 +851,7 @@ extern "C"
 		} tio;
 
 		long unsigned int trakt;
-	} Dwg_Objekto;
+	} Dwg_Object;
 
 /**
  Strukturo de rikordoj por klasoj.
@@ -918,7 +918,7 @@ extern "C"
 		Dwg_Klaso *klaso;
 
 		long unsigned int object_kiom;
-		Dwg_Objekto *object;
+		Dwg_Object *object;
 
 		struct
 		{

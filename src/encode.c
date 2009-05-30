@@ -25,18 +25,18 @@ typedef struct
 	long int traktilo;
 	long int address;
 	unsigned int idc;
-} Objekto_Mapo;
+} Object_Mapo;
 
 /*--------------------------------------------------------------------------------
- * Prototipoj de privataj funkcioj
+ * Private functions prototypes
  */
-static void dwg_encode_estajxo (Dwg_Objekto * obj, Bit_Chain * dat);
-static void dwg_encode_ordinarajxo (Dwg_Objekto * obj, Bit_Chain * dat);
+static void dwg_encode_estajxo (Dwg_Object * obj, Bit_Chain * dat);
+static void dwg_encode_ordinarajxo (Dwg_Object * obj, Bit_Chain * dat);
 static void dwg_encode_LINE (Dwg_Estajxo_LINE * est, Bit_Chain * dat);
 static void dwg_encode_CIRCLE (Dwg_Estajxo_CIRCLE * est, Bit_Chain * dat);
 
 /*--------------------------------------------------------------------------------
- * Publikaj funkcioj
+ * Public functions
  */
 int
 dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Chain * dat)
@@ -51,9 +51,9 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Chain * dat)
 	unsigned int sekcigrandeco = 0;
 	long unsigned int lastadres;
 	long unsigned int lastatrakt;
-	Objekto_Mapo *omap;
-	Objekto_Mapo pvzmap;
-	Dwg_Objekto *obj;
+	Object_Mapo *omap;
+	Object_Mapo pvzmap;
+	Dwg_Object *obj;
 
 	bit_chain_rezervi (dat);
 
@@ -235,14 +235,14 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Chain * dat)
 
 
 	/*------------------------------------------------------------
-	 * Objektoj
+	 * Objectj
 	 */
 	bit_write_RL (dat, 0x00000000);	// 0xDCA Nekonata kvarbitoko inter klasoj kaj objektaro
 	pvzadr = dat->bajto;
 
 	/* Ekdifini object-mapon
 	 */
-	omap = (Objekto_Mapo *) malloc (skt->object_kiom * sizeof (Objekto_Mapo));
+	omap = (Object_Mapo *) malloc (skt->object_kiom * sizeof (Object_Mapo));
 	for (i = 0; i < skt->object_kiom; i++)
 	{
 		Bit_Chain nkn;
@@ -324,7 +324,7 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Chain * dat)
 	bit_write_RS (dat, 0);
 
 	/*------------------------------------------------------------
-	 * Objekto-mapo
+	 * Object-mapo
 	 */
 	skt->header.sekcio[2].numero = 2;
 	skt->header.sekcio[2].adresilo = dat->bajto;	// poste oni devas kalkuli la valuen de grandeco
@@ -515,7 +515,7 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Chain * dat)
 }
 
 static void
-dwg_encode_estajxo (Dwg_Objekto * obj, Bit_Chain * dat)
+dwg_encode_estajxo (Dwg_Object * obj, Bit_Chain * dat)
 {
 	unsigned int i;
 	long unsigned int longo;
@@ -620,7 +620,7 @@ dwg_encode_estajxo (Dwg_Objekto * obj, Bit_Chain * dat)
 }
 
 static void
-dwg_encode_ordinarajxo (Dwg_Objekto * obj, Bit_Chain * dat)
+dwg_encode_ordinarajxo (Dwg_Object * obj, Bit_Chain * dat)
 {
 	Bit_Chain ekadr;
 

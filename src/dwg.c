@@ -175,7 +175,7 @@ dwg_print_ordinarajxo (Dwg_Object_Ordinarajxo *ord)
 
 
 static void
-dwg_print_traktref (Dwg_Objekto * obj)
+dwg_print_traktref (Dwg_Object * obj)
 {
 	unsigned int i;
 
@@ -634,7 +634,7 @@ dwg_print (Dwg_Structure *dwg_struct)
 	puts ("**************************************************");
 	for (i = 0; i < dwg_struct->object_kiom; i++)
 	{
-		Dwg_Objekto *obj;
+		Dwg_Object *obj;
 
 		printf ("(%u) ", i);
 		obj = &dwg_struct->object[i];
