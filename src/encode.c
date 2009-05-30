@@ -240,24 +240,24 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Chain * dat)
 	bit_write_RL (dat, 0x00000000);	// 0xDCA Nekonata kvarbitoko inter klasoj kaj objektaro
 	pvzadr = dat->bajto;
 
-	/* Ekdifini objekto-mapon
+	/* Ekdifini object-mapon
 	 */
-	omap = (Objekto_Mapo *) malloc (skt->objekto_kiom * sizeof (Objekto_Mapo));
-	for (i = 0; i < skt->objekto_kiom; i++)
+	omap = (Objekto_Mapo *) malloc (skt->object_kiom * sizeof (Objekto_Mapo));
+	for (i = 0; i < skt->object_kiom; i++)
 	{
 		Bit_Chain nkn;
 		Dwg_Traktilo tkt;
 
-		/* Difini la traktilojn de cxiuj objektoj, inkluzive la nekonataj */
+		/* Difini la traktilojn de cxiuj objectj, inkluzive la nekonataj */
 		omap[i].idc = i;
-		if (skt->objekto[i].supertipo == DWG_SUPERTYPE_ESTAJXO)
-			omap[i].traktilo = skt->objekto[i].tio.estajxo->traktilo.value;
-		else if (skt->objekto[i].supertipo == DWG_SUPERTYPE_ORDINARAJXO)
-			omap[i].traktilo = skt->objekto[i].tio.ordinarajxo->traktilo.value;
-		else if (skt->objekto[i].supertipo == DWG_SUPERTYPE_UNKNOWN)
+		if (skt->object[i].supertipo == DWG_SUPERTYPE_ESTAJXO)
+			omap[i].traktilo = skt->object[i].tio.estajxo->traktilo.value;
+		else if (skt->object[i].supertipo == DWG_SUPERTYPE_ORDINARAJXO)
+			omap[i].traktilo = skt->object[i].tio.ordinarajxo->traktilo.value;
+		else if (skt->object[i].supertipo == DWG_SUPERTYPE_UNKNOWN)
 		{
-			nkn.chain = skt->objekto[i].tio.nekonatajxo;
-			nkn.kiom = skt->objekto[i].grandeco;
+			nkn.chain = skt->object[i].tio.nekonatajxo;
+			nkn.kiom = skt->object[i].grandeco;
 			nkn.bajto = nkn.bito = 0;
 			bit_read_BS (&nkn);
 			bit_read_RL (&nkn);
@@ -287,14 +287,14 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Chain * dat)
 			}
 		}
 	}
-	//for (i = 0; i < skt->objekto_kiom; i++) printf ("Trakt(%i): %lu / Idc: %u\n", i, omap[i].traktilo, omap[i].idc);
+	//for (i = 0; i < skt->object_kiom; i++) printf ("Trakt(%i): %lu / Idc: %u\n", i, omap[i].traktilo, omap[i].idc);
 
 	/* Skribi la objektaron
 	 */
-	for (i = 0; i < skt->objekto_kiom; i++)
+	for (i = 0; i < skt->object_kiom; i++)
 	{
 		omap[i].adreso = dat->bajto;
-		obj = &skt->objekto[omap[i].idc];
+		obj = &skt->object[omap[i].idc];
 		if (obj->supertipo == DWG_SUPERTYPE_UNKNOWN)
 		{
 			bit_write_MS (dat, obj->grandeco);
@@ -311,15 +311,15 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Chain * dat)
 				dwg_encode_ordinarajxo (obj, dat);
 			else
 			{
-				printf ("Eraro: ne difinita (super)tipo de objekto por write\n");
+				printf ("Eraro: ne difinita (super)tipo de object por write\n");
 				exit (-1);
 			}
 		}
 		bit_krei_CRC (dat, omap[i].adreso, 0xC0C1);
 	}
-	//for (i = 0; i < skt->objekto_kiom; i++) printf ("Trakt(%i): %6lu / Adreso: %08X / Idc: %u\n", i, omap[i].traktilo, omap[i].adreso, omap[i].idc);
+	//for (i = 0; i < skt->object_kiom; i++) printf ("Trakt(%i): %6lu / Adreso: %08X / Idc: %u\n", i, omap[i].traktilo, omap[i].adreso, omap[i].idc);
 
-	/* Nekonata dubitoko inter la objektaron kaj la objekto-mapo
+	/* Nekonata dubitoko inter la objektaron kaj la object-mapo
 	 */
 	bit_write_RS (dat, 0);
 
@@ -335,7 +335,7 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Chain * dat)
 	dat->bajto += 2;
 	lastadres = 0;
 	lastatrakt = 0;
-	for (i = 0; i < skt->objekto_kiom; i++)
+	for (i = 0; i < skt->object_kiom; i++)
 	{
 		unsigned int idc;
 		long int pvz;
@@ -380,7 +380,7 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Chain * dat)
 	bit_write_RC (dat, 2);
 	bit_krei_CRC (dat, pvzadr, 0xC0C1);
 
-	/* Kalkuli kaj write la grandecon de la objekto-mapo
+	/* Kalkuli kaj write la grandecon de la object-mapo
 	 */
 	skt->kapo.sekcio[2].grandeco = dat->bajto - skt->kapo.sekcio[2].adresilo;
 	free (omap);
@@ -532,7 +532,7 @@ dwg_encode_estajxo (Dwg_Objekto * obj, Bit_Chain * dat)
 
 	bit_write_MS (dat, obj->grandeco);
 
-	ekadr.bajto = dat->bajto;	// Por kalkuli poste la bajta kaj bita grandecoj de la objekto
+	ekadr.bajto = dat->bajto;	// Por kalkuli poste la bajta kaj bita grandecoj de la object
 	ekadr.bito = dat->bito;
 
 	bit_write_BS (dat, obj->tipo);
@@ -579,11 +579,11 @@ dwg_encode_estajxo (Dwg_Objekto * obj, Bit_Chain * dat)
 		break;
 
 	default:
-		printf ("Eraro: nekonata objekto-tipo dum enkodigo de estaĵo\n");
+		printf ("Eraro: nekonata object-tipo dum enkodigo de estaĵo\n");
 		exit (-1);
 	}
 
-	/* Finfine kalkuli kaj write la bit-grandecon de la objekto
+	/* Finfine kalkuli kaj write la bit-grandecon de la object
 	 */
 	pvadr.bajto = dat->bajto;
 	pvadr.bito = dat->bito;
@@ -603,7 +603,7 @@ dwg_encode_estajxo (Dwg_Objekto * obj, Bit_Chain * dat)
 	for (i = 0; i < est->traktref_kiom; i++)
 		bit_write_H (dat, &est->traktref[i]);
 
-	/* Finfine kalkuli kaj write la bajt-grandecon de la objekto (cxu estas erara?)
+	/* Finfine kalkuli kaj write la bajt-grandecon de la object (cxu estas erara?)
 	 */
 	pvadr.bajto = dat->bajto;
 	pvadr.bito = dat->bito;
@@ -625,7 +625,7 @@ dwg_encode_ordinarajxo (Dwg_Objekto * obj, Bit_Chain * dat)
 	Bit_Chain ekadr;
 
 	bit_write_MS (dat, obj->grandeco);
-	ekadr.bajto = dat->bajto;	// Por kalkuli poste la bita grandeco de la objekto
+	ekadr.bajto = dat->bajto;	// Por kalkuli poste la bita grandeco de la object
 	ekadr.bito = dat->bito;
 	bit_write_BS (dat, obj->tipo);
 }

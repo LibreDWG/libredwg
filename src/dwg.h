@@ -572,7 +572,7 @@ extern "C"
 /**
  Strukturo de rikordoj por atributoj de estajxoj.
  */
-	typedef struct _dwg_objekto_estajxo
+	typedef struct _dwg_object_estajxo
 	{
 		union
 		{
@@ -624,9 +624,9 @@ extern "C"
 	} Dwg_Object_Estajxo;
 
 /**
- Strukturo de rikordoj por atributoj de ordinaraj objektoj.
+ Strukturo de rikordoj por atributoj de ordinaraj objectj.
  */
-	typedef struct _dwg_objekto_ordinarajxo
+	typedef struct _dwg_object_ordinarajxo
 	{
 		union
 		{
@@ -648,9 +648,9 @@ extern "C"
 	} Dwg_Object_Ordinarajxo;
 
 /**
- Gxenerala strukturo de rikordoj por objektoj.
+ Gxenerala strukturo de rikordoj por objectj.
  */
-	typedef struct _dwg_objekto
+	typedef struct _dwg_object
 	{
 		unsigned int grandeco;
 		unsigned int tipo;
@@ -731,8 +731,8 @@ extern "C"
 		unsigned int klaso_kiom;
 		Dwg_Klaso *klaso;
 
-		long unsigned int objekto_kiom;
-		Dwg_Objekto *objekto;
+		long unsigned int object_kiom;
+		Dwg_Objekto *object;
 
 		struct
 		{

@@ -23,7 +23,7 @@
 /*--------------------------------------------------------------------------------
  * Privataj funkcioj
  */
-static void dwg_decode_aldoni_objekto (Dwg_Structure * skt, Bit_Chain * dat, long unsigned int adreso);
+static void dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned int adreso);
 
 /*--------------------------------------------------------------------------------
  * Publikaj variabloj
@@ -329,14 +329,14 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 
 
 	/*-------------------------------------------------------------------------
-	 * Objekto-mapo (kaj objektoj mem)
+	 * Objekto-mapo (kaj objectj mem)
 	 */
 
 	dat->bajto = skt->kapo.sekcio[2].adresilo;
 	dat->bito = 0;
 
 	maplasta = dat->bajto + skt->kapo.sekcio[2].grandeco;	// 4
-	skt->objekto_kiom = 0;
+	skt->object_kiom = 0;
 	obek = dat->kiom;
 	obfin = 0;
 	do
@@ -369,7 +369,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 			lastatrakt += pvztkt;
 			pvzadr = bit_read_MC (dat);
 			lastadres += pvzadr;
-			//printf ("Idc: %li\t", skt->objekto_kiom);
+			//printf ("Idc: %li\t", skt->object_kiom);
 			//printf ("Trakt: %li\tAdres: %li\n", pvztkt, pvzadr);
 			if (dat->bajto == antauxadr)
 				break;
@@ -381,10 +381,10 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 			if (obek > lastadres)
 				obek = lastadres;
 
-			kobj = skt->objekto_kiom;
-			dwg_decode_aldoni_objekto (skt, dat, lastadres);
-			if (skt->objekto_kiom > kobj)
-				skt->objekto[skt->objekto_kiom - 1].trakt = lastatrakt;
+			kobj = skt->object_kiom;
+			dwg_decode_aldoni_object (skt, dat, lastadres);
+			if (skt->object_kiom > kobj)
+				skt->object[skt->object_kiom - 1].trakt = lastatrakt;
 
 		}
 		if (dat->bajto == antauxadr)
@@ -395,16 +395,16 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 			break;
 	}
 	while (sekgrandeco > 2);
-	printf ("Kiom objektoj: %lu\n", skt->objekto_kiom);
+	printf ("Kiom objectj: %lu\n", skt->object_kiom);
 
 	printf ("=========> OBJEKTARO: %8X\n", (unsigned int) obek);
 	dat->bajto = obfin;
-	obek = bit_read_MS (dat);	// La komenco de la lasta objekto readta
+	obek = bit_read_MS (dat);	// La komenco de la lasta object readta
 	printf ("    OBJEKTARO (fino): %8X\n", (unsigned int) (obfin + obek + 2));
 
 	/*
 	   dat->bajto = skt->kapo.sekcio[2].adresilo - 2;
-	   antckr = bit_read_CRC (dat); // Nekonata dubitoko inter objektaro kaj objekto-mapo
+	   antckr = bit_read_CRC (dat); // Nekonata dubitoko inter objektaro kaj object-mapo
 	   printf ("Adreso: %08X / Enhavo: 0x%04X\n", dat->bajto - 2, antckr);
 
 	   // Kontroli CKR-ojn
@@ -563,7 +563,7 @@ dwg_decode_estajxo (Bit_Chain * dat, Dwg_Object_Estajxo * est)
 	error = bit_read_H (dat, &est->traktilo);
 	if (error)
 	{
-		printf ("\tEraro en traktilo de objekto! Adreso en la ĉeno: 0x%0x\n", (unsigned int) dat->bajto);
+		printf ("\tEraro en traktilo de object! Adreso en la ĉeno: 0x%0x\n", (unsigned int) dat->bajto);
 		est->bitgrandeco = 0;
 		est->kromdat_kiom = 0;
 		est->bildo_ekzistas = 0;
@@ -638,7 +638,7 @@ dwg_decode_ordinarajxo (Bit_Chain * dat, Dwg_Object_Ordinarajxo * ord)
 	error = bit_read_H (dat, &ord->traktilo);
 	if (error)
 	{
-		printf ("\tEraro en traktilo de objekto! Adreso en la ĉeno: 0x%0x\n", (unsigned int) dat->bajto);
+		printf ("\tEraro en traktilo de object! Adreso en la ĉeno: 0x%0x\n", (unsigned int) dat->bajto);
 		ord->bitgrandeco = 0;
 		ord->kromdat_kiom = 0;
 		ord->traktref_kiom = 0;
@@ -1401,7 +1401,7 @@ dwg_decode_UNUSED (Bit_Chain * dat, Dwg_Objekto * obj)
  * Privata funkcio, kiu dependas de la antaŭaj
  */
 static void
-dwg_decode_aldoni_objekto (Dwg_Structure * skt, Bit_Chain * dat, long unsigned int adreso)
+dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned int adreso)
 {
 	long unsigned int antauxa_adreso;
 	long unsigned int objekadres;
@@ -1413,31 +1413,31 @@ dwg_decode_aldoni_objekto (Dwg_Structure * skt, Bit_Chain * dat, long unsigned i
 	antauxa_adreso = dat->bajto;
 	antauxa_bito = dat->bito;
 
-	/* Uzi la indikitan adreson por la objekto
+	/* Uzi la indikitan adreson por la object
 	 */
 	dat->bajto = adreso;
 	dat->bito = 0;
 
-	/* Rezervi memor-spacon por plia objekto
+	/* Rezervi memor-spacon por plia object
 	 */
-	if (skt->objekto_kiom == 0)
-		skt->objekto = (Dwg_Objekto *) malloc (sizeof (Dwg_Objekto));
+	if (skt->object_kiom == 0)
+		skt->object = (Dwg_Objekto *) malloc (sizeof (Dwg_Objekto));
 	else
-		skt->objekto =
-			(Dwg_Objekto *) realloc (skt->objekto,
-						 (skt->objekto_kiom + 1) * sizeof (Dwg_Objekto));
+		skt->object =
+			(Dwg_Objekto *) realloc (skt->object,
+						 (skt->object_kiom + 1) * sizeof (Dwg_Objekto));
 
-	//printf ("Objekto numero: %u\n", skt->objekto_kiom);
+	//printf ("Objekto numero: %u\n", skt->object_kiom);
 
-	obj = &skt->objekto[skt->objekto_kiom];
-	skt->objekto_kiom++;
+	obj = &skt->object[skt->object_kiom];
+	skt->object_kiom++;
 
 	obj->grandeco = bit_read_MS (dat);
 	objekadres = dat->bajto;
 	ktl_lastadreso = dat->bajto + obj->grandeco;	/* (de cxi tie oni kalkulas la bitgrandecon) */
 	obj->tipo = bit_read_BS (dat);
 
-	/* Kontroli la tipon de objekto
+	/* Kontroli la tipon de object
 	 */
 	switch (obj->tipo)
 	{

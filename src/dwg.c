@@ -513,7 +513,7 @@ dwg_print_LAYOUT (Dwg_Ordinarajxo_LAYOUT *ord)
 }
 
 /*------------------------------------------------------------------------------
- * Speciala publika funkcio por printgi valuejn de la objektoj
+ * Speciala publika funkcio por printgi valuejn de la objectj
  */
 void
 dwg_print (Dwg_Structure *dwg_struct)
@@ -632,12 +632,12 @@ dwg_print (Dwg_Structure *dwg_struct)
 	puts ("**************************************************");
 	puts ("Sekcio OBJEKTOJ");
 	puts ("**************************************************");
-	for (i = 0; i < dwg_struct->objekto_kiom; i++)
+	for (i = 0; i < dwg_struct->object_kiom; i++)
 	{
 		Dwg_Objekto *obj;
 
 		printf ("(%u) ", i);
-		obj = &dwg_struct->objekto[i];
+		obj = &dwg_struct->object[i];
 
 		printf ("Tipo: %s (%03i)\t", obj->tipo > 80 ? (obj->tipo == dwg_struct->dwg_ot_layout ? "LAYOUT" : "??") : dwg_obtipo[obj->tipo], obj->tipo);
 		printf ("Grandeco: %u\t", obj->grandeco);
