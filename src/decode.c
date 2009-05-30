@@ -135,12 +135,12 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 		printf ("========> NBEGINNATA 1: %8X\n", (unsigned int) skt->header.section[5].adresilo);
 		printf ("   NBEGINNATA 1 (fino): %8X\n", (unsigned int) (skt->header.section[5].adresilo + skt->header.section[5].size));
 		dat->bajto = skt->header.section[5].adresilo;
-		skt->nekonata1.kiom = DWG_NBEGINNATA1_KIOM;
-		skt->nekonata1.bajto = skt->nekonata1.bito = 0;
-		skt->nekonata1.chain = malloc (skt->nekonata1.kiom);
-		memcpy (skt->nekonata1.chain, &dat->chain[dat->bajto], skt->nekonata1.kiom);
-		//bit_esplori_chain ((Bit_Chain *) &skt->nekonata1, skt->nekonata1.kiom);
-		//bit_print ((Bit_Chain *) &skt->nekonata1, skt->nekonata1.kiom);
+		skt->unknown1.kiom = DWG_NBEGINNATA1_KIOM;
+		skt->unknown1.bajto = skt->unknown1.bito = 0;
+		skt->unknown1.chain = malloc (skt->unknown1.kiom);
+		memcpy (skt->unknown1.chain, &dat->chain[dat->bajto], skt->unknown1.kiom);
+		//bit_esplori_chain ((Bit_Chain *) &skt->unknown1, skt->unknown1.kiom);
+		//bit_print ((Bit_Chain *) &skt->unknown1, skt->unknown1.kiom);
 	}
 
 
@@ -181,7 +181,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 
 	/* Legi la kap-variablojn
 	 */
-	for (i = 0; i < DWG_KIOM_VARIABLEJ; i++)
+	for (i = 0; i < DWG_NUM_VARIABLES; i++)
 	{
 		//printf ("[%03i] - ", i + 1);
 		if (i == 221 && skt->var[220].dubitoko != 3)
@@ -473,10 +473,10 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 		//printf ("\nChain?: ");
 		for (i = 0; i < 6; i++)
 		{
-			skt->duaheader.nekonatajxo[i] = bit_read_RC (dat);
-			//printf (" 0x%02X", skt->duaheader.nekonatajxo[i]);
+			skt->duaheader.unknownjxo[i] = bit_read_RC (dat);
+			//printf (" 0x%02X", skt->duaheader.unknownjxo[i]);
 		}
-		if (skt->duaheader.nekonatajxo[3] != 0x78 || skt->duaheader.nekonatajxo[5] != 0x06)
+		if (skt->duaheader.unknownjxo[3] != 0x78 || skt->duaheader.unknownjxo[5] != 0x06)
 			sig = bit_read_RC (dat);	// por kompenso okaze de eventuala kroma nulo ne readta antauxe
 
 		//puts("");
@@ -1511,8 +1511,8 @@ dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned in
 		else
 		{
 			obj->supertipo = DWG_SUPERTYPE_UNKNOWN;
-			obj->tio.nekonatajxo = malloc (obj->size);
-			memcpy (obj->tio.nekonatajxo, &dat->chain[objekadres], obj->size);
+			obj->tio.unknownjxo = malloc (obj->size);
+			memcpy (obj->tio.unknownjxo, &dat->chain[objekadres], obj->size);
 		}
 	}
 
@@ -1520,7 +1520,7 @@ dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned in
 	   if (obj->supertipo != DWG_SUPERTYPE_UNKNOWN)
 	   {
 	   printf (" Ekadr:\t%10lu\n", address);
-	   printf (" Lasta:\t%10lu\tGrandeco: %10lu\n", dat->bajto, obj->size);
+	   printf (" Lasta:\t%10lu\tSize: %10lu\n", dat->bajto, obj->size);
 	   printf ("Finadr:\t%10lu (kalkulite)\n", address + 2 + obj->size);
 	   }
 	 */

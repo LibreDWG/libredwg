@@ -847,7 +847,7 @@ extern "C"
 		{
 			Dwg_Object_Estajxo *estajxo;
 			Dwg_Object_Ordinarajxo *ordinarajxo;
-			unsigned char *nekonatajxo;
+			unsigned char *unknownjxo;
 		} tio;
 
 		long unsigned int trakt;
@@ -868,7 +868,7 @@ extern "C"
 	} Dwg_Class;
 
 /**
- Dwg_Cxeno sama kiel Bit_Cxeno, en "bite.h"
+ Dwg_Chain sama kiel Bit_Chain, en "bite.h"
  */
 	typedef struct _dwg_chain
 	{
@@ -876,7 +876,7 @@ extern "C"
 		long unsigned int kiom;
 		long unsigned int bajto;
 		unsigned char bito;
-	} Dwg_Cxeno;
+	} Dwg_Chain;
 
 /**
  Cxefa strukturo de la dwg-datenaro.
@@ -897,11 +897,11 @@ extern "C"
 		} header;
 
 #		define DWG_NBEGINNATA1_KIOM 123
-		Dwg_Cxeno nekonata1;
+		Dwg_Chain unknown1;
 
-		Dwg_Cxeno picture;
+		Dwg_Chain picture;
 
-#		define DWG_KIOM_VARIABLEJ 233
+#		define DWG_NUM_VARIABLES 233
 		union
 		{
 			unsigned char bitoko;
@@ -912,7 +912,7 @@ extern "C"
 			double xy[2];
 			unsigned char *text;
 			Dwg_Traktilo traktilo;
-		} var[DWG_KIOM_VARIABLEJ];
+		} var[DWG_NUM_VARIABLES];
 
 		unsigned int class_kiom;
 		Dwg_Class *class;
@@ -922,7 +922,7 @@ extern "C"
 
 		struct
 		{
-			unsigned char nekonatajxo[6];
+			unsigned char unknownjxo[6];
 			struct
 			{
 				int kiom;

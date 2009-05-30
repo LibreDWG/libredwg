@@ -149,7 +149,7 @@ dwg_print_estajxo (Dwg_Object_Estajxo * est)
 	printf ("Kroma datenaro: %lu B\n", (long unsigned int) est->kromdat_kiom);
 	printf ("Ĉu picture?: %s", est->picture_ekzistas ? "Jes" : "Ne");
 	if (est->picture_ekzistas)
-		printf ("\tGrandeco: %lu B\n", est->picture_kiom);
+		printf ("\tSize: %lu B\n", est->picture_kiom);
 	else
 		puts ("");
 	printf ("Reĝimo: %i\n", est->regime);
@@ -471,7 +471,7 @@ dwg_print_LAYOUT (Dwg_Ordinarajxo_LAYOUT *ord)
 		ord->pagxo.supre);
 	printf ("\tLargxeco: %1.13g\n", ord->pagxo.largxeco);
 	printf ("\tAlteco: %1.13g\n", ord->pagxo.height);
-	printf ("\tGrandeco: %s\n", ord->pagxo.size);
+	printf ("\tSize: %s\n", ord->pagxo.size);
 	printf ("\tDeŝovo: (%1.13g, %1.13g)\n", ord->pagxo.dx, ord->pagxo.dy);
 	printf ("\tUnuoj: %u\n", ord->pagxo.unuoj);
 	printf ("\tRotacio: %u\n", ord->pagxo.rotacio);
@@ -540,7 +540,7 @@ dwg_print (Dwg_Structure *dwg_struct)
 	printf ("Version: %s\n", dwg_struct->header.version);
 	printf ("Codepage: %u\n", dwg_struct->header.codepage);
 	for (i = 0; i < dwg_struct->header.num_sections; i++)
-		printf ("Section %i\t Kie: %7lu\t Kiom: %7lu B\n",
+		printf ("Section %i\t Address: %7lu\t Size: %7lu B\n",
 			dwg_struct->header.section[i].number,
 			dwg_struct->header.section[i].adresilo, dwg_struct->header.section[i].size);
 	puts ("");
@@ -550,27 +550,27 @@ dwg_print (Dwg_Structure *dwg_struct)
 		puts ("**************************************************");
 		puts ("Section UNKNOWN 1");
 		puts ("**************************************************");
-		printf ("Grandeco: %lu B\n", dwg_struct->nekonata1.kiom);
-		bit_print ((Bit_Chain *) & dwg_struct->nekonata1, dwg_struct->nekonata1.kiom);
+		printf ("Size: %lu B\n", dwg_struct->unknown1.kiom);
+		bit_print ((Bit_Chain *) & dwg_struct->unknown1, dwg_struct->unknown1.kiom);
 		puts ("");
 	}
 
 	puts ("**************************************************");
 	puts ("Section PICTURE");
 	puts ("**************************************************");
-	printf ("Grandeco: %lu B\n", dwg_struct->picture.kiom);
+	printf ("Size: %lu B\n", dwg_struct->picture.kiom);
 	//bit_print ((Bit_Chain *) &dwg_struct->picture, dwg_struct->picture.kiom);
 	puts ("");
 
 	puts ("**************************************************");
-	puts ("Section VARIABLEJ");
+	puts ("Section VARIABLES");
 	puts ("**************************************************");
-	for (i = 0; i < DWG_KIOM_VARIABLEJ; i++)
+	for (i = 0; i < DWG_NUM_VARIABLES; i++)
 	{
 		printf ("[%03i] - ", i + 1);
 		if (i == 221 && dwg_struct->var[220].dubitoko != 3)
 		{
-			puts ("(NE EKZISTANTA)");
+			puts ("(Non-Existant)");
 			continue;
 		}
 		switch (dwg_var_map (i))
@@ -640,7 +640,7 @@ dwg_print (Dwg_Structure *dwg_struct)
 		obj = &dwg_struct->object[i];
 
 		printf ("Tipo: %s (%03i)\t", obj->tipo > 80 ? (obj->tipo == dwg_struct->dwg_ot_layout ? "LAYOUT" : "??") : dwg_obtipo[obj->tipo], obj->tipo);
-		printf ("Grandeco: %u\t", obj->size);
+		printf ("Size: %u\t", obj->size);
 		printf ("Traktilo: (%lu)\t", obj->trakt);
 		printf ("Super-tipo: ");
 		switch (obj->supertipo)
@@ -654,7 +654,7 @@ dwg_print (Dwg_Structure *dwg_struct)
 			dwg_print_ordinarajxo (obj->tio.ordinarajxo);
 			break;
 		default:
-			puts ("nekonatajxo");
+			puts ("unknownjxo");
 			continue;
 		}
 

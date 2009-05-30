@@ -73,7 +73,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	bit_write_RC (dat, 0);	// Lancxo
 	bit_write_RS (dat, skt->header.codepage);	// Codepage
 
-	//skt->header.num_sections = 5; // Cxu kasxi la nekonatan sectionn 1 ?
+	//skt->header.num_sections = 5; // Cxu kasxi la unknownn sectionn 1 ?
 	bit_write_RL (dat, skt->header.num_sections);
 	sekciadresaro = dat->bajto;	// Salti sekciadresaron
 	dat->bajto += (skt->header.num_sections * 9);
@@ -93,12 +93,12 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 		skt->header.section[5].adresilo = dat->bajto;
 		skt->header.section[5].size = DWG_NBEGINNATA1_KIOM;
 
-		skt->nekonata1.kiom = skt->header.section[5].size;
-		skt->nekonata1.bajto = skt->nekonata1.bito = 0;
-		while (dat->bajto + skt->nekonata1.kiom >= dat->kiom)
+		skt->unknown1.kiom = skt->header.section[5].size;
+		skt->unknown1.bajto = skt->unknown1.bito = 0;
+		while (dat->bajto + skt->unknown1.kiom >= dat->kiom)
 			bit_chain_rezervi (dat);
-		memcpy (&dat->chain[dat->bajto], skt->nekonata1.chain, skt->nekonata1.kiom);
-		dat->bajto += skt->nekonata1.kiom;
+		memcpy (&dat->chain[dat->bajto], skt->unknown1.chain, skt->unknown1.kiom);
+		dat->bajto += skt->unknown1.kiom;
 
 	}
 
@@ -135,9 +135,9 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	skt->header.section[0].adresilo = dat->bajto;
 	bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_VARIABLE_BEGIN));
 	pvzadr = dat->bajto;	// poste oni devas rewrite la korektan valuen de size cxi tie:
-	bit_write_RL (dat, 0);	// Grandeco de la section
+	bit_write_RL (dat, 0);	// Size de la section
 
-	for (i = 0; i < DWG_KIOM_VARIABLEJ; i++)
+	for (i = 0; i < DWG_NUM_VARIABLES; i++)
 	{
 		if (i == 221 && skt->var[220].dubitoko != 3)
 			continue;
@@ -187,7 +187,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	bit_write_RL (dat, pvzadr_2 - pvzadr - (pvzbit ? 3 : 4));
 	dat->bajto = pvzadr_2;
 	dat->bito = pvzbit;
-	//printf ("Grandeco: %lu\n", pvzadr_2 - pvzadr - (pvzbit ? 3 : 4));
+	//printf ("Size: %lu\n", pvzadr_2 - pvzadr - (pvzbit ? 3 : 4));
 
 	/* CKR kaj sentinel
 	 */
@@ -202,7 +202,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	skt->header.section[1].adresilo = dat->bajto;
 	bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_CLASS_BEGIN));
 	pvzadr = dat->bajto;	// poste oni devas rewrite la korektan valuen de size cxi tie:
-	bit_write_RL (dat, 0);	// Grandeco de la section
+	bit_write_RL (dat, 0);	// Size de la section
 
 	for (i = 0; i < skt->class_kiom; i++)
 	{
@@ -224,7 +224,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	bit_write_RL (dat, pvzadr_2 - pvzadr - (pvzbit ? 3 : 4));
 	dat->bajto = pvzadr_2;
 	dat->bito = pvzbit;
-	//printf ("Grandeco: %lu\n", pvzadr_2 - pvzadr - (pvzbit ? 3 : 4));
+	//printf ("Size: %lu\n", pvzadr_2 - pvzadr - (pvzbit ? 3 : 4));
 
 	/* CKR kaj sentinel
 	 */
@@ -248,7 +248,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 		Bit_Chain nkn;
 		Dwg_Traktilo tkt;
 
-		/* Difini la traktilojn de cxiuj objectj, inkluzive la nekonataj */
+		/* Difini la traktilojn de cxiuj objectj, inkluzive la unknownj */
 		omap[i].idc = i;
 		if (skt->object[i].supertipo == DWG_SUPERTYPE_ESTAJXO)
 			omap[i].traktilo = skt->object[i].tio.estajxo->traktilo.value;
@@ -256,7 +256,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 			omap[i].traktilo = skt->object[i].tio.ordinarajxo->traktilo.value;
 		else if (skt->object[i].supertipo == DWG_SUPERTYPE_UNKNOWN)
 		{
-			nkn.chain = skt->object[i].tio.nekonatajxo;
+			nkn.chain = skt->object[i].tio.unknownjxo;
 			nkn.kiom = skt->object[i].size;
 			nkn.bajto = nkn.bito = 0;
 			bit_read_BS (&nkn);
@@ -300,7 +300,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 			bit_write_MS (dat, obj->size);
 			if (dat->bajto + obj->size >= dat->kiom - 2)
 				bit_chain_rezervi (dat);
-			memcpy (&dat->chain[dat->bajto], obj->tio.nekonatajxo, obj->size);
+			memcpy (&dat->chain[dat->bajto], obj->tio.unknownjxo, obj->size);
 			dat->bajto += obj->size;
 		}
 		else
@@ -579,7 +579,7 @@ dwg_encode_estajxo (Dwg_Object * obj, Bit_Chain * dat)
 		break;
 
 	default:
-		printf ("Eraro: nekonata object-tipo dum enkodigo de estaĵo\n");
+		printf ("Eraro: unknown object-tipo dum enkodigo de estaĵo\n");
 		exit (-1);
 	}
 
