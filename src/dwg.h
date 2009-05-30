@@ -464,6 +464,30 @@ extern "C"
 	} Dwg_Estajxo_3D_FACE;
 
 /**
+ Struct for:  POLYLINE (PFACE) (29)
+ */
+	typedef struct _dwg_estajxo_POLYLINE_PFACE
+	{
+		unsigned int numverts;
+		unsigned int numfaces;
+		
+	} Dwg_Estajxo_POLILYNE_PFACE;
+
+/**
+ Struct for:  POLYLINE (MESH) (30)
+ */
+	typedef struct _dwg_estajxo_POLYLINE_MESH
+	{
+		unsigned int flags;
+		unsigned int curve_type;
+		unsigned int m_vert_count;
+		unsigned int n_vert_count;
+		unsigned int m_density;
+		unsigned int n_density;
+		
+	} Dwg_Estajxo_POLILYNE_MESH;
+
+/**
  Struct for elipsoj - ELLIPSE (35)
  */
 	typedef struct _dwg_estajxo_ELLIPSE
