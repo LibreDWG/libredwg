@@ -118,7 +118,7 @@ extern "C"
 			double y;
 			double z;
 		} extrusion;
-		double dikeco;
+		double thickness;
 		double klinang;
 		double turnang;
 		double alteco;
@@ -149,7 +149,7 @@ extern "C"
 			double y;
 			double z;
 		} extrusion;
-		double dikeco;
+		double thickness;
 		double klinang;
 		double turnang;
 		double alteco;
@@ -183,7 +183,7 @@ extern "C"
 			double y;
 			double z;
 		} extrusion;
-		double dikeco;
+		double thickness;
 		double klinang;
 		double turnang;
 		double alteco;
@@ -314,7 +314,7 @@ extern "C"
 		unsigned int kurbtipo;
 		double eklargxo;
 		double finlargxo;
-		double dikeco;
+		double thickness;
 		double levigxo;
 		struct
 		{
@@ -341,8 +341,8 @@ extern "C"
 		double x0;
 		double y0;
 		double z0;
-		double radiuso;
-		double dikeco;
+		double radius;
+		double thickness;
 		struct
 		{
 			double x;
@@ -361,14 +361,14 @@ extern "C"
 		double x0;
 		double y0;
 		double z0;
-		double radiuso;
-		double dikeco;
+		double radius;
+		double thickness;
 		struct
 		{
 			double x;
 			double y;
 			double z;
-		} extrusion;
+		} extrusion	;
 	} Dwg_Estajxo_CIRCLE;
 
 /**
@@ -383,7 +383,7 @@ extern "C"
 		double y1;
 		double z0;
 		double z1;
-		double dikeco;
+		double thickness;
 		struct
 		{
 			double x;
@@ -400,7 +400,7 @@ extern "C"
 		double x0;
 		double y0;
 		double z0;
-		double dikeco;
+		double thickness;
 		struct
 		{
 			double x;
@@ -617,7 +617,7 @@ extern "C"
 		unsigned char linitipo;
 		unsigned char printstilo;
 		unsigned int malvidebleco;
-		unsigned char linidikeco;
+		unsigned char linithickness;
 
 		unsigned int traktref_kiom;
 		Dwg_Traktilo *traktref;

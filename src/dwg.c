@@ -160,7 +160,7 @@ dwg_print_estajxo (Dwg_Object_Estajxo * est)
 	printf ("Linitipo: 0x%02X\n", est->linitipo);
 	printf ("Printstilo: 0x%02X\n", est->printstilo);
 	printf ("Malvidebleco: 0x%04X\n", est->malvidebleco);
-	printf ("Linidikeco: %u\n", est->linidikeco);
+	printf ("Linithickness: %u\n", est->linithickness);
 }
 
 static void
@@ -229,7 +229,7 @@ dwg_print_TEXT (Dwg_Estajxo_TEXT * est)
 	printf ("\tEnmeta ĝisrandigo: (%1.13g, %1.13g)\n", est->gxisrandigo.x, est->gxisrandigo.y);
 	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", est->extrusion.x, est->extrusion.y,
 		est->extrusion.z);
-	printf ("\tDikeco: %1.13g\n", est->dikeco);
+	printf ("\tthickness: %1.13g\n", est->thickness);
 	printf ("\tKlina angulo: %1.13g\n", est->klinang);
 	printf ("\tTurna angulo: %1.13g\n", est->turnang);
 	printf ("\tAlteco: %1.13g\n", est->alteco);
@@ -250,7 +250,7 @@ dwg_print_ATTRIB (Dwg_Estajxo_ATTRIB * est)
 	printf ("\tEnmeta ĝisrandigo: (%1.13g, %1.13g)\n", est->gxisrandigo.x, est->gxisrandigo.y);
 	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", est->extrusion.x, est->extrusion.y,
 		est->extrusion.z);
-	printf ("\tDikeco: %1.13g\n", est->dikeco);
+	printf ("\tthickness: %1.13g\n", est->thickness);
 	printf ("\tKlina angulo: %1.13g\n", est->klinang);
 	printf ("\tTurna angulo: %1.13g\n", est->turnang);
 	printf ("\tAlteco: %1.13g\n", est->alteco);
@@ -274,7 +274,7 @@ dwg_print_ATTDEF (Dwg_Estajxo_ATTDEF * est)
 	printf ("\tEnmeta ĝisrandigo: (%1.13g, %1.13g)\n", est->gxisrandigo.x, est->gxisrandigo.y);
 	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", est->extrusion.x, est->extrusion.y,
 		est->extrusion.z);
-	printf ("\tDikeco: %1.13g\n", est->dikeco);
+	printf ("\tthickness: %1.13g\n", est->thickness);
 	printf ("\tKlina angulo: %1.13g\n", est->klinang);
 	printf ("\tTurna angulo: %1.13g\n", est->turnang);
 	printf ("\tAlteco: %1.13g\n", est->alteco);
@@ -355,7 +355,7 @@ dwg_print_POLYLINE_2D (Dwg_Estajxo_POLYLINE_2D * est)
 	printf ("\tKurbtipo: 0x%02x\n", est->kurbtipo);
 	printf ("\tEklarĝo: %1.13g\n", est->eklargxo);
 	printf ("\tFinlarĝo: %1.13g\n", est->finlargxo);
-	printf ("\tDikeco: %1.13g\n", est->dikeco);
+	printf ("\tthickness: %1.13g\n", est->thickness);
 	printf ("\tLeviĝo: %1.13g\n", est->levigxo);
 	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", est->extrusion.x, est->extrusion.y,
 		est->extrusion.z);
@@ -371,8 +371,8 @@ static void
 dwg_print_ARC (Dwg_Estajxo_ARC * est)
 {
 	printf ("\tCentra punkto: (%1.13g, %1.13g, %1.13g)\n", est->x0, est->y0, est->z0);
-	printf ("\tRadiuso: %1.13g\n", est->radiuso);
-	printf ("\tDikeco: %1.13g\n", est->dikeco);
+	printf ("\tRadiuso: %1.13g\n", est->radius);
+	printf ("\tthickness: %1.13g\n", est->thickness);
 	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", est->extrusion.x, est->extrusion.y,
 		est->extrusion.z);
 	printf ("\tEkangulo: %1.13g\n", est->ekangulo);
@@ -383,8 +383,8 @@ static void
 dwg_print_CIRCLE (Dwg_Estajxo_CIRCLE * est)
 {
 	printf ("\tCentra punkto: (%1.13g, %1.13g, %1.13g)\n", est->x0, est->y0, est->z0);
-	printf ("\tRadiuso: %1.13g\n", est->radiuso);
-	printf ("\tDikeco: %1.13g\n", est->dikeco);
+	printf ("\tRadiuso: %1.13g\n", est->radius);
+	printf ("\tthickness: %1.13g\n", est->thickness);
 	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", est->extrusion.x, est->extrusion.y,
 		est->extrusion.z);
 }
@@ -397,7 +397,7 @@ dwg_print_LINE (Dwg_Estajxo_LINE * est)
 		est->nur_2D ? 0 : est->z0);
 	printf ("\t2-a punkto: (%1.13g, %1.13g, %1.13g)\n", est->x1, est->y1,
 		est->nur_2D ? 0 : est->z1);
-	printf ("\tDikeco: %1.13g\n", est->dikeco);
+	printf ("\tthickness: %1.13g\n", est->thickness);
 	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", est->extrusion.x, est->extrusion.y,
 		est->extrusion.z);
 }
@@ -406,7 +406,7 @@ static void
 dwg_print_POINT (Dwg_Estajxo_POINT *est)
 {
 	printf ("\tPunkto: (%1.13g, %1.13g, %1.13g)\n", est->x0, est->y0, est->z0);
-	printf ("\tDikeco: %1.13g\n", est->dikeco);
+	printf ("\tthickness: %1.13g\n", est->thickness);
 	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", est->extrusion.x, est->extrusion.y,
 		est->extrusion.z);
 	printf ("\tX-angulo: %1.13g\n", est->x_ang);

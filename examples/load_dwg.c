@@ -49,7 +49,7 @@ int load_dwg (char *filename)
 			break;
 		case DWG_OT_CIRCLE:
 			circle = dwg.objekto[i].tio.estajxo->tio.CIRCLE;
-			add_circle (circle->x0, circle->y0, circle->radiuso);
+			add_circle (circle->x0, circle->y0, circle->radius);
 			break;
 		case DWG_OT_TEXT:
 			text = dwg.objekto[i].tio.estajxo->tio.TEXT;

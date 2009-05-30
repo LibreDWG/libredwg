@@ -567,7 +567,7 @@ dwg_encode_estajxo (Dwg_Objekto * obj, Bit_Chain * dat)
 	bit_write_BB (dat, est->linitipo);
 	bit_write_BB (dat, est->printstilo);
 	bit_write_BS (dat, est->malvidebleco);
-	bit_write_RC (dat, est->linidikeco);
+	bit_write_RC (dat, est->linithickness);
 
 	switch (obj->tipo)
 	{
@@ -643,7 +643,7 @@ dwg_encode_LINE (Dwg_Estajxo_LINE * est, Bit_Chain * dat)
 		bit_write_RD (dat, est->z0);
 		bit_write_DD (dat, est->z1, est->z0);
 	}
-	bit_write_BT (dat, est->dikeco);
+	bit_write_BT (dat, est->thickness);
 	bit_write_BE (dat, est->extrusion.x, est->extrusion.y, est->extrusion.z);
 }
 
@@ -653,7 +653,7 @@ dwg_encode_CIRCLE (Dwg_Estajxo_CIRCLE * est, Bit_Chain * dat)
 	bit_write_BD (dat, est->x0);
 	bit_write_BD (dat, est->y0);
 	bit_write_BD (dat, est->z0);
-	bit_write_BD (dat, est->radiuso);
-	bit_write_BT (dat, est->dikeco);
+	bit_write_BD (dat, est->radius);
+	bit_write_BT (dat, est->thickness);
 	bit_write_BE (dat, est->extrusion.x, est->extrusion.y, est->extrusion.z);
 }

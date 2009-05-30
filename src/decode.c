@@ -624,7 +624,7 @@ dwg_decode_estajxo (Bit_Chain * dat, Dwg_Object_Estajxo * est)
 	est->linitipo = bit_read_BB (dat);
 	est->printstilo = bit_read_BB (dat);
 	est->malvidebleco = bit_read_BS (dat);
-	est->linidikeco = bit_read_RC (dat);
+	est->linithickness = bit_read_RC (dat);
 }
 
 static void
@@ -764,7 +764,7 @@ dwg_decode_TEXT (Bit_Chain * dat, Dwg_Objekto * obj)
 		est->gxisrandigo.y = bit_read_DD (dat, 20);
 	}
 	bit_read_BE (dat, &est->extrusion.x, &est->extrusion.y, &est->extrusion.z);
-	est->dikeco = bit_read_BT (dat);
+	est->thickness = bit_read_BT (dat);
 	if (!(est->datumindik & 0x04))
 		est->klinang = bit_read_RD (dat);
 	if (!(est->datumindik & 0x08))
@@ -807,7 +807,7 @@ dwg_decode_ATTRIB (Bit_Chain * dat, Dwg_Objekto * obj)
 		est->gxisrandigo.y = bit_read_DD (dat, 20);
 	}
 	bit_read_BE (dat, &est->extrusion.x, &est->extrusion.y, &est->extrusion.z);
-	est->dikeco = bit_read_BT (dat);
+	est->thickness = bit_read_BT (dat);
 	if (!(est->datumindik & 0x04))
 		est->klinang = bit_read_RD (dat);
 	if (!(est->datumindik & 0x08))
@@ -853,7 +853,7 @@ dwg_decode_ATTDEF (Bit_Chain * dat, Dwg_Objekto * obj)
 		est->gxisrandigo.y = bit_read_DD (dat, 20);
 	}
 	bit_read_BE (dat, &est->extrusion.x, &est->extrusion.y, &est->extrusion.z);
-	est->dikeco = bit_read_BT (dat);
+	est->thickness = bit_read_BT (dat);
 	if (!(est->datumindik & 0x04))
 		est->klinang = bit_read_RD (dat);
 	if (!(est->datumindik & 0x08))
@@ -1083,7 +1083,7 @@ dwg_decode_POLYLINE_2D (Bit_Chain * dat, Dwg_Objekto * obj)
 	est->kurbtipo = bit_read_BS (dat);
 	est->eklargxo = bit_read_BD (dat);
 	est->finlargxo = bit_read_BD (dat);
-	est->dikeco = bit_read_BT (dat);
+	est->thickness = bit_read_BT (dat);
 	est->levigxo = bit_read_BD (dat);
 	bit_read_BE (dat, &est->extrusion.x, &est->extrusion.y, &est->extrusion.z);
 
@@ -1123,8 +1123,8 @@ dwg_decode_ARC (Bit_Chain * dat, Dwg_Objekto * obj)
 	est->x0 = bit_read_BD (dat);
 	est->y0 = bit_read_BD (dat);
 	est->z0 = bit_read_BD (dat);
-	est->radiuso = bit_read_BD (dat);
-	est->dikeco = bit_read_BT (dat);
+	est->radius = bit_read_BD (dat);
+	est->thickness = bit_read_BT (dat);
 	bit_read_BE (dat, &est->extrusion.x, &est->extrusion.y, &est->extrusion.z);
 	est->ekangulo = bit_read_BD (dat);
 	est->finangulo = bit_read_BD (dat);
@@ -1146,8 +1146,8 @@ dwg_decode_CIRCLE (Bit_Chain * dat, Dwg_Objekto * obj)
 	est->x0 = bit_read_BD (dat);
 	est->y0 = bit_read_BD (dat);
 	est->z0 = bit_read_BD (dat);
-	est->radiuso = bit_read_BD (dat);
-	est->dikeco = bit_read_BT (dat);
+	est->radius = bit_read_BD (dat);
+	est->thickness = bit_read_BT (dat);
 	bit_read_BE (dat, &est->extrusion.x, &est->extrusion.y, &est->extrusion.z);
 
 	dwg_decode_traktref (dat, obj);
@@ -1175,7 +1175,7 @@ dwg_decode_LINE (Bit_Chain * dat, Dwg_Objekto * obj)
 		est->z0 = bit_read_RD (dat);
 		est->z1 = bit_read_DD (dat, est->z0);
 	}
-	est->dikeco = bit_read_BT (dat);
+	est->thickness = bit_read_BT (dat);
 	bit_read_BE (dat, &est->extrusion.x, &est->extrusion.y, &est->extrusion.z);
 
 	dwg_decode_traktref (dat, obj);
@@ -1195,7 +1195,7 @@ dwg_decode_POINT (Bit_Chain * dat, Dwg_Objekto * obj)
 	est->x0 = bit_read_BD (dat);
 	est->y0 = bit_read_BD (dat);
 	est->z0 = bit_read_BD (dat);
-	est->dikeco = bit_read_BT (dat);
+	est->thickness = bit_read_BT (dat);
 	bit_read_BE (dat, &est->extrusion.x, &est->extrusion.y, &est->extrusion.z);
 	est->x_ang = bit_read_BD (dat);
 
