@@ -208,9 +208,9 @@ dwg_encode_cxenigi (Dwg_Structure * skt, Bit_Chain * dat)
 	{
 		bit_write_BS (dat, skt->klaso[i].numero);
 		bit_write_BS (dat, skt->klaso[i].versio);
-		bit_write_T (dat, skt->klaso[i].apnomo);
-		bit_write_T (dat, skt->klaso[i].cpliplinomo);
-		bit_write_T (dat, skt->klaso[i].dxfnomo);
+		bit_write_T (dat, skt->klaso[i].apname);
+		bit_write_T (dat, skt->klaso[i].cplipliname);
+		bit_write_T (dat, skt->klaso[i].dxfname);
 		bit_write_B (dat, skt->klaso[i].estisfantomo);
 		bit_write_BS (dat, skt->klaso[i].eroid);
 	}

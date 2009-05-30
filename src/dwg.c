@@ -292,7 +292,7 @@ dwg_print_ATTDEF (Dwg_Estajxo_ATTDEF * est)
 static void
 dwg_print_BLOCK (Dwg_Estajxo_BLOCK * est)
 {
-	printf ("\tNomo: %s\n", est->nomo);
+	printf ("\tNomo: %s\n", est->name);
 }
 
 static void
@@ -450,7 +450,7 @@ dwg_print_MTEXT (Dwg_Estajxo_MTEXT *est)
 static void
 dwg_print_LAYER (Dwg_Ordinarajxo_LAYER *ord)
 {
-	printf ("\tNomo: %s\n", ord->nomo);
+	printf ("\tNomo: %s\n", ord->name);
 	printf ("\tĈu 64?: %s\n", ord->bito64 ? "Jes" : "Ne");
 	printf ("\tIndico Xref: %u\n", ord->xrefi);
 	printf ("\tXref-dependa?: %s\n", ord->xrefdep ? "Jes" : "Ne");
@@ -461,7 +461,7 @@ dwg_print_LAYER (Dwg_Ordinarajxo_LAYER *ord)
 static void
 dwg_print_LAYOUT (Dwg_Ordinarajxo_LAYOUT *ord)
 {
-	printf ("\tAgord-nomo: %s\n", ord->pagxo.agordo);
+	printf ("\tAgord-name: %s\n", ord->pagxo.agordo);
 	printf ("\tPrintilo: %s\n", ord->pagxo.printilo);
 	printf ("\tPrint-indikiloj: 0x%0x\n", ord->pagxo.indikiloj);
 	printf ("\tMarĝenoj. maldekstre: %1.13g; malsupre: %1.13g; dekstre: %1.13g; supre: %1.13g\n",
@@ -481,14 +481,14 @@ dwg_print_LAYOUT (Dwg_Ordinarajxo_LAYOUT *ord)
 		ord->pagxo.y_min,
 		ord->pagxo.x_maks,
 		ord->pagxo.y_maks);
-	printf ("\tPaĝ-nomo: %s\n", ord->pagxo.nomo);
+	printf ("\tPaĝ-name: %s\n", ord->pagxo.name);
 	printf ("\tSkal-proporcio: %u:%u\n", (unsigned int) ord->pagxo.skalo.A, (unsigned int) ord->pagxo.skalo.B);
 	printf ("\tStilfolio: %s\n", ord->pagxo.stilfolio);
 	printf ("\tSkal-tipo: %u\n", ord->pagxo.skalo.tipo);
 	printf ("\tSkal-faktoro: %u\n", (unsigned int) ord->pagxo.skalo.faktoro);
 	printf ("\tPaĝ-origino: (%1.13g, %1.13g)\n", ord->pagxo.x0, ord->pagxo.y0);
 	puts ("");
-	printf ("\tAranĝ-nomo: %s\n", ord->nomo);
+	printf ("\tAranĝ-name: %s\n", ord->name);
 	printf ("\tOrdo: %u\n", ord->ordo);
 	printf ("\tIndikiloj: 0x%0x\n", ord->indikiloj);
 	printf ("\tUCS-origino: (%1.13g, %1.13g, %1.13g)\n", ord->x0, ord->y0, ord->z0);
@@ -621,9 +621,9 @@ dwg_print (Dwg_Structure *dwg_struct)
 		printf ("Klaso: [%02u]\n", i);
 		printf ("\tNumero: %u\n", dwg_struct->klaso[i].numero);
 		printf ("\tVersio: %u\n", dwg_struct->klaso[i].versio);
-		printf ("\tAp Nomo: \"%s\"\n", dwg_struct->klaso[i].apnomo);
-		printf ("\tC++ Nomo: \"%s\"\n", dwg_struct->klaso[i].cpliplinomo);
-		printf ("\tDXF Nomo: \"%s\"\n", dwg_struct->klaso[i].dxfnomo);
+		printf ("\tAp Nomo: \"%s\"\n", dwg_struct->klaso[i].apname);
+		printf ("\tC++ Nomo: \"%s\"\n", dwg_struct->klaso[i].cplipliname);
+		printf ("\tDXF Nomo: \"%s\"\n", dwg_struct->klaso[i].dxfname);
 		printf ("\tEstis fantomo: \"%s\"\n", dwg_struct->klaso[i].estisfantomo ? "Jes" : "Ne");
 		printf ("\tEroId: %u\n", dwg_struct->klaso[i].eroid);
 	}

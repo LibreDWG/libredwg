@@ -202,7 +202,7 @@ extern "C"
  */
 	typedef struct _dwg_estajxo_BLOCK
 	{
-		unsigned char *nomo;
+		unsigned char *name;
 	} Dwg_Estajxo_BLOCK;
 
 /**
@@ -665,7 +665,7 @@ extern "C"
  */
 	typedef struct _dwg_ordinarajxo_LAYER
 	{
-		char *nomo;
+		char *name;
 		unsigned char bito64;
 		unsigned int xrefi;
 		unsigned char xrefdep;
@@ -699,7 +699,7 @@ extern "C"
 			double y_min;
 			double x_maks;
 			double y_maks;
-			char *nomo;
+			char *name;
 			struct
 			{
 				double A; // A:B (ekz: 1:10, 1:2, 50:1, ktp)
@@ -712,7 +712,7 @@ extern "C"
 			double y0;
 		} pagxo;
 
-		char *nomo;
+		char *name;
 		unsigned int ordo;
 		unsigned int indikiloj;
 		double x0;
@@ -860,9 +860,9 @@ extern "C"
 	{
 		unsigned int numero;
 		unsigned int versio;
-		unsigned char *apnomo;
-		unsigned char *cpliplinomo;
-		unsigned char *dxfnomo;
+		unsigned char *apname;
+		unsigned char *cplipliname;
+		unsigned char *dxfname;
 		unsigned char estisfantomo;
 		unsigned int eroid;
 	} Dwg_Klaso;

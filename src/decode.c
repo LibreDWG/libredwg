@@ -290,13 +290,13 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 
 		skt->klaso[idc].numero = bit_read_BS (dat);
 		skt->klaso[idc].versio = bit_read_BS (dat);
-		skt->klaso[idc].apnomo = bit_read_T (dat);
-		skt->klaso[idc].cpliplinomo = bit_read_T (dat);
-		skt->klaso[idc].dxfnomo = bit_read_T (dat);
+		skt->klaso[idc].apname = bit_read_T (dat);
+		skt->klaso[idc].cplipliname = bit_read_T (dat);
+		skt->klaso[idc].dxfname = bit_read_T (dat);
 		skt->klaso[idc].estisfantomo = bit_read_B (dat);
 		skt->klaso[idc].eroid = bit_read_BS (dat);
 
-		if (strcmp (skt->klaso[idc].dxfnomo, "LAYOUT") == 0)
+		if (strcmp (skt->klaso[idc].dxfname, "LAYOUT") == 0)
 			skt->dwg_ot_layout = skt->klaso[idc].numero;
 
 		skt->klaso_kiom++;
@@ -889,7 +889,7 @@ dwg_decode_BLOCK (Bit_Chain * dat, Dwg_Objekto * obj)
 
 	/* Legitaj valuej
 	 */
-	est->nomo = bit_read_T (dat);
+	est->name = bit_read_T (dat);
 
 	dwg_decode_traktref (dat, obj);
 }
@@ -1297,7 +1297,7 @@ dwg_decode_LAYER (Bit_Chain * dat, Dwg_Objekto * obj)
 
 	/* Legitaj valuej
 	 */
-	ord->nomo = bit_read_T (dat);
+	ord->name = bit_read_T (dat);
 	ord->bito64 = bit_read_B (dat);
 	ord->xrefi = bit_read_BS (dat);
 	ord->xrefdep = bit_read_B (dat);
@@ -1339,7 +1339,7 @@ dwg_decode_LAYOUT (Bit_Chain * dat, Dwg_Objekto * obj)
 	ord->pagxo.y_min = bit_read_BD (dat);
 	ord->pagxo.x_maks = bit_read_BD (dat);
 	ord->pagxo.y_maks = bit_read_BD (dat);
-	ord->pagxo.nomo = bit_read_T (dat);
+	ord->pagxo.name = bit_read_T (dat);
 	ord->pagxo.skalo.A = bit_read_BD (dat);
 	ord->pagxo.skalo.B = bit_read_BD (dat);
 	ord->pagxo.stilfolio = bit_read_T (dat);
@@ -1348,7 +1348,7 @@ dwg_decode_LAYOUT (Bit_Chain * dat, Dwg_Objekto * obj)
 	ord->pagxo.x0 = bit_read_BD (dat);
 	ord->pagxo.y0 = bit_read_BD (dat);
 
-	ord->nomo = bit_read_T (dat);
+	ord->name = bit_read_T (dat);
 	ord->ordo = bit_read_BS (dat);
 	ord->indikiloj = bit_read_BS (dat);
 	ord->x0 = bit_read_BD (dat);
