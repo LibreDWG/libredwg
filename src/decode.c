@@ -4,7 +4,7 @@
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
-/*  either version 3 of the License, or (at your option) any later version.  */
+/*  either versionn 3 of the License, or (at your option) any later versionn.  */
 /*  You should have received a copy of the GNU General Public License        */
 /*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
 /*****************************************************************************/
@@ -21,17 +21,17 @@
 #include "decode.h"
 
 /*--------------------------------------------------------------------------------
- * Privataj funkcioj
+ * Private functions
  */
 static void dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned int address);
 
 /*--------------------------------------------------------------------------------
- * Publikaj variabloj
+ * Public variables
  */
 long unsigned int ktl_lastaddress;
 
 /*--------------------------------------------------------------------------------
- * Difino de publikaj funkcioj
+ * Public function definitions
  */
 int
 dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
@@ -53,16 +53,16 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	 * Kap-datenaro
 	 */
 
-	/* Versio
+	/* Version
 	 */
 	dat->bajto = 0;
 	dat->bito = 0;
-	strncpy (skt->header.versio, dat->chain, 6);
-	skt->header.versio[6] = '\0';
-	if (strcmp (skt->header.versio, "AC1015") != 0)
+	strncpy (skt->header.version, dat->chain, 6);
+	skt->header.version[6] = '\0';
+	if (strcmp (skt->header.version, "AC1015") != 0)
 	{
-		printf ("Nur eblas dekodigi dwg-dosierojn laux la versio R2000 (AC1015). "
-			"La trovita versio code estas: %s\n", skt->header.versio);
+		printf ("Nur eblas dekodigi dwg-dosierojn laux la version R2000 (AC1015). "
+			"La trovita version code estas: %s\n", skt->header.version);
 		return -1;
 	}
 	dat->bajto = 0x06;
@@ -86,19 +86,19 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	sig = bit_read_RC (dat);
 	printf ("Lancxo: %u\n", sig);
 
-	/* Kodpagxo
+	/* Codepage
 	 */
 	dat->bajto = 0x13;
-	skt->header.kodpagxo = bit_read_RS (dat);
-	printf ("Kodpagxo: %u\n", skt->header.kodpagxo);
+	skt->header.codepage = bit_read_RS (dat);
+	printf ("Codepage: %u\n", skt->header.codepage);
 
 	/* Sekcioj
 	 */
 	dat->bajto = 0x15;
-	skt->header.section_kiom = bit_read_RL (dat);
-	if (skt->header.section_kiom > 6)
-		skt->header.section_kiom = 6;
-	for (i = 0; i < skt->header.section_kiom; i++)
+	skt->header.num_sections = bit_read_RL (dat);
+	if (skt->header.num_sections > 6)
+		skt->header.num_sections = 6;
+	for (i = 0; i < skt->header.num_sections; i++)
 	{
 		skt->header.section[i].adresilo = 0;
 		skt->header.section[i].grandeco = 0;
@@ -130,7 +130,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	 * Nekonata section 1
 	 */
 
-	if (skt->header.section_kiom == 6)
+	if (skt->header.num_sections == 6)
 	{
 		printf ("========> NEKONATA 1: %8X\n", (unsigned int) skt->header.section[5].adresilo);
 		printf ("   NEKONATA 1 (fino): %8X\n", (unsigned int) (skt->header.section[5].adresilo + skt->header.section[5].grandeco));
@@ -289,7 +289,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 				(Dwg_Klaso *) realloc (skt->klaso, (idc + 1) * sizeof (Dwg_Klaso));
 
 		skt->klaso[idc].numero = bit_read_BS (dat);
-		skt->klaso[idc].versio = bit_read_BS (dat);
+		skt->klaso[idc].version = bit_read_BS (dat);
 		skt->klaso[idc].apname = bit_read_T (dat);
 		skt->klaso[idc].cplipliname = bit_read_T (dat);
 		skt->klaso[idc].dxfname = bit_read_T (dat);

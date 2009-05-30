@@ -4,7 +4,7 @@
 /*  Copyright (C) 2009 Felipe Corrêa da Silva Sanches <felipe.sanches@gmail.com>  */
 /*  This library is free software, licensed under the terms of the GNU            */
 /*  General Public License as published by the Free Software Foundation,          */
-/*  either version 3 of the License, or (at your option) any later version.       */
+/*  either versionn 3 of the License, or (at your option) any later versionn.       */
 /*  You should have received a copy of the GNU General Public License             */
 /*  along with this program.  If not, see <http://www.gnu.org/licenses/>.         */
 /**********************************************************************************/

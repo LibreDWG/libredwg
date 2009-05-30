@@ -4,7 +4,7 @@
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
-/*  either version 3 of the License, or (at your option) any later version.  */
+/*  either versionn 3 of the License, or (at your option) any later versionn.  */
 /*  You should have received a copy of the GNU General Public License        */
 /*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
 /*****************************************************************************/
@@ -60,8 +60,8 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	/*------------------------------------------------------------
 	 * Kap-datenaro
 	 */
-	//strcpy (dat->chain, skt->header.versio); // Chain pri versio: devas esti AC1015
-	strcpy (dat->chain, "AC1015");	// Chain pri versio: devas esti AC1015
+	//strcpy (dat->chain, skt->header.version); // Chain pri version: devas esti AC1015
+	strcpy (dat->chain, "AC1015");	// Chain pri version: devas esti AC1015
 	dat->bajto += 6;
 
 	for (i = 0; i < 5; i++)
@@ -71,12 +71,12 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	bit_write_RL (dat, 0);	// Bildo-address
 	bit_write_RC (dat, 25);	// Versio
 	bit_write_RC (dat, 0);	// Lancxo
-	bit_write_RS (dat, skt->header.kodpagxo);	// Kodpagxo
+	bit_write_RS (dat, skt->header.codepage);	// Codepage
 
-	//skt->header.section_kiom = 5; // Cxu kasxi la nekonatan sectionn 1 ?
-	bit_write_RL (dat, skt->header.section_kiom);
+	//skt->header.num_sections = 5; // Cxu kasxi la nekonatan sectionn 1 ?
+	bit_write_RL (dat, skt->header.num_sections);
 	sekciadresaro = dat->bajto;	// Salti sekciadresaron
-	dat->bajto += (skt->header.section_kiom * 9);
+	dat->bajto += (skt->header.num_sections * 9);
 	bit_read_CRC (dat);	// Salti CKR-on
 
 	bit_write_gardostaranto (dat, dwg_gardostaranto (DWG_GS_KAPO_FINO));
@@ -88,7 +88,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	skt->header.section[5].numero = 5;
 	skt->header.section[5].adresilo = 0;
 	skt->header.section[5].grandeco = 0;
-	if (skt->header.section_kiom == 6)
+	if (skt->header.num_sections == 6)
 	{
 		skt->header.section[5].adresilo = dat->bajto;
 		skt->header.section[5].grandeco = DWG_NEKONATA1_KIOM;
@@ -207,7 +207,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	for (i = 0; i < skt->klaso_kiom; i++)
 	{
 		bit_write_BS (dat, skt->klaso[i].numero);
-		bit_write_BS (dat, skt->klaso[i].versio);
+		bit_write_BS (dat, skt->klaso[i].version);
 		bit_write_T (dat, skt->klaso[i].apname);
 		bit_write_T (dat, skt->klaso[i].cplipliname);
 		bit_write_T (dat, skt->klaso[i].dxfname);
@@ -480,7 +480,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	 */
 	dat->bajto = sekciadresaro;
 	dat->bito = 0;
-	for (i = 0; i < skt->header.section_kiom; i++)
+	for (i = 0; i < skt->header.num_sections; i++)
 	{
 		bit_write_RC (dat, skt->header.section[i].numero);
 		bit_write_RL (dat, skt->header.section[i].adresilo);
@@ -493,7 +493,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	dat->bajto -= 2;
 	ckr = bit_read_CRC (dat);
 	dat->bajto -= 2;
-	switch (skt->header.section_kiom)
+	switch (skt->header.num_sections)
 	{
 	case 3:
 		bit_write_RS (dat, ckr ^ 0xA598);

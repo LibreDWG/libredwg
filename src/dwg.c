@@ -4,7 +4,7 @@
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
-/*  either version 3 of the License, or (at your option) any later version.  */
+/*  either versionn 3 of the License, or (at your option) any later versionn.  */
 /*  You should have received a copy of the GNU General Public License        */
 /*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
 /*****************************************************************************/
@@ -537,15 +537,15 @@ dwg_print (Dwg_Structure *dwg_struct)
 	puts ("**************************************************");
 	puts ("Section HEADER");
 	puts ("**************************************************");
-	printf ("Version: %s\n", dwg_struct->header.versio);
-	printf ("Kodpagxo: %u\n", dwg_struct->header.kodpagxo);
-	for (i = 0; i < dwg_struct->header.section_kiom; i++)
+	printf ("Version: %s\n", dwg_struct->header.version);
+	printf ("Codepage: %u\n", dwg_struct->header.codepage);
+	for (i = 0; i < dwg_struct->header.num_sections; i++)
 		printf ("Section %i\t Kie: %7lu\t Kiom: %7lu B\n",
 			dwg_struct->header.section[i].numero,
 			dwg_struct->header.section[i].adresilo, dwg_struct->header.section[i].grandeco);
 	puts ("");
 
-	if (dwg_struct->header.section_kiom == 6)
+	if (dwg_struct->header.num_sections == 6)
 	{
 		puts ("**************************************************");
 		puts ("Section UNKNOWN 1");
@@ -620,7 +620,7 @@ dwg_print (Dwg_Structure *dwg_struct)
 	{
 		printf ("Klaso: [%02u]\n", i);
 		printf ("\tNumero: %u\n", dwg_struct->klaso[i].numero);
-		printf ("\tVersion: %u\n", dwg_struct->klaso[i].versio);
+		printf ("\tVersion: %u\n", dwg_struct->klaso[i].version);
 		printf ("\tAp Nomo: \"%s\"\n", dwg_struct->klaso[i].apname);
 		printf ("\tC++ Nomo: \"%s\"\n", dwg_struct->klaso[i].cplipliname);
 		printf ("\tDXF Nomo: \"%s\"\n", dwg_struct->klaso[i].dxfname);

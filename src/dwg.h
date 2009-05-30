@@ -5,7 +5,7 @@
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
-/*  either version 3 of the License, or (at your option) any later version.  */
+/*  either versionn 3 of the License, or (at your option) any later versionn.  */
 /*  You should have received a copy of the GNU General Public License        */
 /*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
 /*****************************************************************************/
@@ -859,7 +859,7 @@ extern "C"
 	typedef struct _dwg_klaso
 	{
 		unsigned int numero;
-		unsigned int versio;
+		unsigned int version;
 		unsigned char *apname;
 		unsigned char *cplipliname;
 		unsigned char *dxfname;
@@ -885,9 +885,9 @@ extern "C"
 	{
 		struct
 		{
-			char versio[6];
-			unsigned int kodpagxo;
-			unsigned int section_kiom;
+			char version[6];
+			unsigned int codepage;
+			unsigned int num_sections;
 			struct
 			{
 				unsigned char numero;
