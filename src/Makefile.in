@@ -33,7 +33,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-check_PROGRAMS = test$(EXEEXT)
+check_PROGRAMS = test$(EXEEXT) testsvg$(EXEEXT)
 subdir = src
 DIST_COMMON = $(include_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -63,6 +63,9 @@ libdwg_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 am_test_OBJECTS = test.$(OBJEXT)
 test_OBJECTS = $(am_test_OBJECTS)
 test_DEPENDENCIES = libdwg.la
+am_testsvg_OBJECTS = testSVG.$(OBJEXT)
+testsvg_OBJECTS = $(am_testsvg_OBJECTS)
+testsvg_DEPENDENCIES = libdwg.la
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/build/depcomp
 am__depfiles_maybe = depfiles
@@ -75,8 +78,8 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(libdwg_la_SOURCES) $(test_SOURCES)
-DIST_SOURCES = $(libdwg_la_SOURCES) $(test_SOURCES)
+SOURCES = $(libdwg_la_SOURCES) $(test_SOURCES) $(testsvg_SOURCES)
+DIST_SOURCES = $(libdwg_la_SOURCES) $(test_SOURCES) $(testsvg_SOURCES)
 includeHEADERS_INSTALL = $(INSTALL_HEADER)
 HEADERS = $(include_HEADERS)
 ETAGS = etags
@@ -200,7 +203,6 @@ libdwg_la_SOURCES = \
 	bits.c \
 	decode.c \
 	encode.c
-	
 
 libdwg_la_LDFLAGS = \
 	-version-info 0:0:0
@@ -218,6 +220,10 @@ test_SOURCES = \
 	test.c
 
 test_LDADD = libdwg.la
+testsvg_SOURCES = \
+	testSVG.c
+
+testsvg_LDADD = libdwg.la
 all: all-am
 
 .SUFFIXES:
@@ -290,6 +296,9 @@ clean-checkPROGRAMS:
 test$(EXEEXT): $(test_OBJECTS) $(test_DEPENDENCIES) 
 	@rm -f test$(EXEEXT)
 	$(LINK) $(test_OBJECTS) $(test_LDADD) $(LIBS)
+testsvg$(EXEEXT): $(testsvg_OBJECTS) $(testsvg_DEPENDENCIES) 
+	@rm -f testsvg$(EXEEXT)
+	$(LINK) $(testsvg_OBJECTS) $(testsvg_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -301,7 +310,9 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/common.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/decode.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dwg.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/encode.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/testSVG.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

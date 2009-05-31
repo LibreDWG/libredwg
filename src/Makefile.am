@@ -20,9 +20,14 @@ EXTRA_DIST = \
 	example.dwg \
 	encode.h
 
-check_PROGRAMS = test
+check_PROGRAMS = test testsvg
 
 test_SOURCES = \
 	test.c
 
 test_LDADD = libdwg.la
+
+testsvg_SOURCES = \
+	testSVG.c
+	
+testsvg_LDADD = libdwg.la
