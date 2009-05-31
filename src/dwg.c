@@ -36,18 +36,18 @@ dwg_read_file (char *filename, Dwg_Structure * dwg_struct)
 
 	if (stat (filename, &atrib))
 	{
-		printf ("File not found:\n %s\n", filename);
+		fprintf (stderr, "File not found: %s\n", filename);
 		return -1;
 	}
 	if (!S_ISREG (atrib.st_mode))
 	{
-		printf ("Error:\n %s\n", filename);
+		fprintf (stderr, "Error: %s\n", filename);
 		return -1;
 	}
 	fp = fopen (filename, "rb");
 	if (!fp)
 	{
-		printf ("Error while opening the file:\n %s\n", filename);
+		fprintf (stderr, "Error while opening the file: %s\n", filename);
 		return -1;
 	}
 
@@ -59,7 +59,7 @@ dwg_read_file (char *filename, Dwg_Structure * dwg_struct)
 	bitaro.chain = (char *) malloc (bitaro.kiom);
 	if (!bitaro.chain)
 	{
-		puts ("Not enough memory.");
+		fprintf (stderr, "Not enough memory.\n");
 		fclose (fp);
 		return -1;
 	}
@@ -67,7 +67,7 @@ dwg_read_file (char *filename, Dwg_Structure * dwg_struct)
 	kiom = fread (bitaro.chain, sizeof (char), bitaro.kiom, fp);
 	if (kiom != bitaro.kiom)
 	{
-		printf ("Ne eblis read la tutan dosieron (%lu el %lu):\n %s\n", (long unsigned int) kiom, bitaro.kiom,
+		fprintf (stderr, "Could not read the entire file (%lu out of %lu): %s\n", (long unsigned int) kiom, bitaro.kiom,
 			filename);
 		fclose (fp);
 		free (bitaro.chain);
@@ -79,7 +79,7 @@ dwg_read_file (char *filename, Dwg_Structure * dwg_struct)
 	 */
 	if (dwg_decode_structures (&bitaro, dwg_struct))
 	{
-		printf ("Ni ne sukcesis dekodigi la dosieron:\n %s\n", filename);
+		fprintf (stderr, "Failed to decode file: %s\n", filename);
 		free (bitaro.chain);
 		return -1;
 	}
@@ -99,31 +99,31 @@ dwg_write_file (char *filename, Dwg_Structure * dwg_struct)
 	bitaro.kiom = 0;
 	if (dwg_encode_chains (dwg_struct, &bitaro))
 	{
-		puts ("Ni ne sukcesis enkodigi la strukturon.");
+		fprintf (stderr, "Failed to encode datastructure.\n");
 		if (bitaro.kiom > 0)
 			free (bitaro.chain);
 		return -1;
 	}
 	 */
 
-	/* Testi kaj malfermi dosieron por write
+	/* try opening the output file in write mode
 	if (!stat (filename, &atrib))
 	{
-		puts ("La skribota dosiero jam ekzistas, ni ne povas surwrite gxin.");
+		fprintf (stderr, "The file already exists. We won't overwrite it.");
 		return -1;
 	}
 	dt = fopen (filename, "w");
 	if (!dt)
 	{
-		printf ("Ne eblas krei la dosieron:\n %s\n", filename);
+		fprintf (stderr, "Failed to create the file: %s\n", filename);
 		return -1;
 	}
 	 */
 
-	/* Skribi la datenaron en la dosiero
+	/* Write the data into the file
 	if (fwrite (bitaro.chain, sizeof (char), bitaro.kiom, dt) != bitaro.kiom)
 	{
-		printf ("Ne eblis write la tutan dosieron:\n %s\n", filename);
+		fprintf (stderr, "Failed to write data into the file: %s\n", filename);
 		fclose (dt);
 		free (bitaro.chain);
 		return -1;

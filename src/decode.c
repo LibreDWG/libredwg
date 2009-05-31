@@ -62,8 +62,8 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	skt->header.version[6] = '\0';
 	if (strcmp (skt->header.version, "AC1015") != 0)
 	{
-		printf ("Nur eblas dekodigi dwg-dosierojn laux la version R2000 (AC1015). "
-			"La trovita version code estas: %s\n", skt->header.version);
+		fprintf (stderr, "This version of Libredwg is only capable of decoding version R2000 (code: AC1015) dwg-files. "
+			"This file's version code is: %s\n", skt->header.version);
 		return -1;
 	}
 	dat->bajto = 0x06;
@@ -72,14 +72,14 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	for (i = 0; i < 7; i++)
 	{
 		sig = bit_read_RC (dat);
-		//printf ("0x%02X ", sig);
+		//if (loglevel) printf ("0x%02X ", sig);
 	}
 	//puts ("");
 
 	/* Bildadresilo
 	 */
 	pvz = bit_read_RL (dat);
-	//printf ("0x%08X\n", pvz);
+	//if (loglevel) printf ("0x%08X\n", pvz);
 
 	// Versio kaj lancxo
 	sig = bit_read_RC (dat);
@@ -120,7 +120,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	   bit_write_RS (dat, ckr2 ^ 0x8461);
 	   dat->bajto -= 2;
 	   ckr2 = bit_read_CRC (dat);
-	   printf ("Legita: %X\nKreita: %X\n", ckr, ckr2);
+	   if (loglevel) printf ("Legita: %X\nKreita: %X\n", ckr, ckr2);
 	 */
 
 	if (loglevel && bit_sercxi_sentinel (dat, dwg_sentinel (DWG_SENTINEL_HEAD_END)))
@@ -261,15 +261,15 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	   ckr2 = bit_read_CRC (dat);
 	   if (ckr == ckr2)
 	   {
-	   printf ("Legita: %X\nKreita: %X\t SEMO: %02X\n", ckr, ckr2, i);
-	   break;
+	        if (loglevel) printf ("Legita: %X\nKreita: %X\t SEMO: %02X\n", ckr, ckr2, i);
+	        break;
 	   }
 	   }
 	 */
 
 
 	/*-------------------------------------------------------------------------
-	 * Classj
+	 * Classes
 	 */
     if (loglevel){
     	printf ("============> CLASS: %8X\n", (unsigned int) skt->header.section[1].adresilo);
@@ -282,7 +282,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	lasta = dat->bajto + kiom;
 	//if (loglevel) printf ("Longeco: %lu\n", kiom);
 
-	/* Legi la classjn
+	/* read the classes
 	 */
 	skt->dwg_ot_layout = 0;
 	skt->num_classes = 0;
@@ -333,10 +333,10 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	 */
 
 	dat->bajto += 16;
-	pvz = bit_read_RL (dat);	// Nekonata kvarbitoko inter classj kaj objektaro
+	pvz = bit_read_RL (dat);	// Nekonata kvarbitoko inter class kaj objektaro
 	//if (loglevel) {
 	// printf ("Adreso: %lu / Enhavo: 0x%08X\n", dat->bajto - 4, pvz);
-	// printf ("Kiom classj readtaj: %u\n", skt->num_classes);
+	// printf ("Kiom class readtaj: %u\n", skt->num_classes);
     //}
 
 	/*-------------------------------------------------------------------------
@@ -363,7 +363,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 		//if (loglevel) printf ("seksize: %u\n", seksize);
 		if (seksize > 2034)	// 2032 + 2
 		{
-			puts ("Eraro: Object-mapa section pli granda ol 2034!");
+			fprintf (stderr, "Error: Object-map section size greater than 2034!");
 			return -1;
 		}
 
