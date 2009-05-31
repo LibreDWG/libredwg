@@ -29,6 +29,7 @@ static void dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long
  * Public variables
  */
 long unsigned int ktl_lastaddress;
+static int loglevel = 0;
 
 /*--------------------------------------------------------------------------------
  * Public function definitions
@@ -82,15 +83,15 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 
 	// Versio kaj lancxo
 	sig = bit_read_RC (dat);
-	printf ("Versio: %u\n", sig);
+    if (loglevel) printf ("Versio: %u\n", sig);
 	sig = bit_read_RC (dat);
-	printf ("Lancxo: %u\n", sig);
+    if (loglevel) printf ("Lancxo: %u\n", sig);
 
 	/* Codepage
 	 */
 	dat->bajto = 0x13;
 	skt->header.codepage = bit_read_RS (dat);
-	printf ("Codepage: %u\n", skt->header.codepage);
+    if (loglevel) printf ("Codepage: %u\n", skt->header.codepage);
 
 	/* Sekcioj
 	 */
@@ -122,7 +123,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	   printf ("Legita: %X\nKreita: %X\n", ckr, ckr2);
 	 */
 
-	if (bit_sercxi_sentinel (dat, dwg_sentinel (DWG_SENTINEL_HEAD_END)))
+	if (loglevel && bit_sercxi_sentinel (dat, dwg_sentinel (DWG_SENTINEL_HEAD_END)))
 		printf ("=======> HEAD (fino): %8X\n", (unsigned int) dat->bajto);
 
 
@@ -132,8 +133,10 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 
 	if (skt->header.num_sections == 6)
 	{
-		printf ("========> NBEGINNATA 1: %8X\n", (unsigned int) skt->header.section[5].adresilo);
-		printf ("   NBEGINNATA 1 (fino): %8X\n", (unsigned int) (skt->header.section[5].adresilo + skt->header.section[5].size));
+        if (loglevel){
+            printf ("========> NBEGINNATA 1: %8X\n", (unsigned int) skt->header.section[5].adresilo);
+		    printf ("   NBEGINNATA 1 (fino): %8X\n", (unsigned int) (skt->header.section[5].adresilo + skt->header.section[5].size));
+		}
 		dat->bajto = skt->header.section[5].adresilo;
 		skt->unknown1.kiom = DWG_NBEGINNATA1_KIOM;
 		skt->unknown1.bajto = skt->unknown1.bito = 0;
@@ -154,10 +157,10 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 
 		dat->bito = 0;
 		ekaddress = dat->bajto;
-		printf ("=============> PICTURE: %8X\n", (unsigned int) ekaddress - 16);
+        if (loglevel) printf ("=============> PICTURE: %8X\n", (unsigned int) ekaddress - 16);
 		if (bit_sercxi_sentinel (dat, dwg_sentinel (DWG_SENTINEL_PICTURE_END)))
 		{
-			printf ("        PICTURE (fino): %8X\n", (unsigned int) dat->bajto);
+            if (loglevel) printf ("        PICTURE (fino): %8X\n", (unsigned int) dat->bajto);
 			skt->picture.kiom = (dat->bajto - 16) - ekaddress;
 			skt->picture.chain = (char *) malloc (skt->picture.kiom);
 			memcpy (skt->picture.chain, &dat->chain[ekaddress], skt->picture.kiom);
@@ -171,11 +174,13 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	 * Kap-variabloj
 	 */
 
-	printf ("=====> KAP-VARIABLEJ: %8X\n", (unsigned int) skt->header.section[0].adresilo);
-	printf ("KAP-VARIABLEJ (fino): %8X\n", (unsigned int) (skt->header.section[0].adresilo + skt->header.section[0].size));
+    if (loglevel){
+    	printf ("=====> KAP-VARIABLEJ: %8X\n", (unsigned int) skt->header.section[0].adresilo);
+	    printf ("KAP-VARIABLEJ (fino): %8X\n", (unsigned int) (skt->header.section[0].adresilo + skt->header.section[0].size));
+    }
 	dat->bajto = skt->header.section[0].adresilo + 16;
 	pvz = bit_read_RL (dat);
-	//printf ("Longeco: %lu\n", pvz);
+	//if (loglevel) printf ("Longeco: %lu\n", pvz);
 
 	dat->bito = 0;
 
@@ -183,7 +188,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	 */
 	for (i = 0; i < DWG_NUM_VARIABLES; i++)
 	{
-		//printf ("[%03i] - ", i + 1);
+		//if (loglevel) printf ("[%03i] - ", i + 1);
 		if (i == 221 && skt->var[220].dubitoko != 3)
 		{
 			skt->var[i].traktilo.code = 0;
@@ -195,48 +200,52 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 		{
 		case DWG_DT_B:
 			skt->var[i].bitoko = bit_read_B (dat);
-			//printf ("B: %u", skt->var[i].bitoko);
+			//if (loglevel) printf ("B: %u", skt->var[i].bitoko);
 			break;
 		case DWG_DT_BS:
 			skt->var[i].dubitoko = bit_read_BS (dat);
-			//printf ("BS: %u", skt->var[i].dubitoko);
+			//if (loglevel) printf ("BS: %u", skt->var[i].dubitoko);
 			break;
 		case DWG_DT_BL:
 			skt->var[i].kvarbitoko = bit_read_BL (dat);
-			//printf ("BL: %lu", skt->var[i].kvarbitoko);
+			//if (loglevel) printf ("BL: %lu", skt->var[i].kvarbitoko);
 			break;
 		case DWG_DT_BD:
 			skt->var[i].duglitajxo = bit_read_BD (dat);
-			//printf ("BD: %lg", skt->var[i].duglitajxo);
+			//if (loglevel) printf ("BD: %lg", skt->var[i].duglitajxo);
 			break;
 		case DWG_DT_H:
 			bit_read_H (dat, &skt->var[i].traktilo);
-			//printf ("H: %i.%i.0x%08X", skt->var[i].traktilo.code, skt->var[i].traktilo.kiom, skt->var[i].traktilo.value);
+			//if (loglevel) printf ("H: %i.%i.0x%08X", skt->var[i].traktilo.code, skt->var[i].traktilo.kiom, skt->var[i].traktilo.value);
 			break;
 		case DWG_DT_T:
 			skt->var[i].text = bit_read_T (dat);
-			//printf ("T: \"%s\"", skt->var[i].text);
+			//if (loglevel) printf ("T: \"%s\"", skt->var[i].text);
 			break;
 		case DWG_DT_CMC:
 			skt->var[i].dubitoko = bit_read_BS (dat);
-			//printf ("CMC: %u", skt->var[i].dubitoko);
+			//if (loglevel) printf ("CMC: %u", skt->var[i].dubitoko);
 			break;
 		case DWG_DT_2RD:
 			skt->var[i].xy[0] = bit_read_RD (dat);
 			skt->var[i].xy[1] = bit_read_RD (dat);
-			//printf ("X: %lg\t", skt->var[i].xy[0]);
-			//printf ("Y: %lg", skt->var[i].xy[1]);
+			//if (loglevel){
+			// printf ("X: %lg\t", skt->var[i].xy[0]);
+			// printf ("Y: %lg", skt->var[i].xy[1]);
+			//}
 			break;
 		case DWG_DT_3BD:
 			skt->var[i].xyz[0] = bit_read_BD (dat);
 			skt->var[i].xyz[1] = bit_read_BD (dat);
 			skt->var[i].xyz[2] = bit_read_BD (dat);
-			//printf ("X: %lg\t", skt->var[i].xyz[0]);
-			//printf ("Y: %lg\t", skt->var[i].xyz[1]);
-			//printf ("Z: %lg", skt->var[i].xyz[2]);
+			//if (loglevel) {
+			// printf ("X: %lg\t", skt->var[i].xyz[0]);
+			// printf ("Y: %lg\t", skt->var[i].xyz[1]);
+			// printf ("Z: %lg", skt->var[i].xyz[2]);
+			//}
 			break;
 		default:
-			printf ("Ne traktebla type: %i (var: %i)\n", dwg_var_map (i), i);
+	        if (loglevel) printf ("Ne traktebla type: %i (var: %i)\n", dwg_var_map (i), i);
 		}
 		//puts ("");
 	}
@@ -262,15 +271,16 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	/*-------------------------------------------------------------------------
 	 * Classj
 	 */
-
-	printf ("============> CLASSJ: %8X\n", (unsigned int) skt->header.section[1].adresilo);
-	printf ("       CLASSJ (fino): %8X\n", (unsigned int) (skt->header.section[1].adresilo + skt->header.section[1].size));
+    if (loglevel){
+    	printf ("============> CLASS: %8X\n", (unsigned int) skt->header.section[1].adresilo);
+	    printf ("       CLASS (end): %8X\n", (unsigned int) (skt->header.section[1].adresilo + skt->header.section[1].size));
+    }
 	dat->bajto = skt->header.section[1].adresilo + 16;
 	dat->bito = 0;
 
 	kiom = bit_read_RL (dat);
 	lasta = dat->bajto + kiom;
-	//printf ("Longeco: %lu\n", kiom);
+	//if (loglevel) printf ("Longeco: %lu\n", kiom);
 
 	/* Legi la classjn
 	 */
@@ -316,7 +326,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	   ckr2 = bit_read_CRC (dat);
 	   if (ckr == ckr2)
 	   {
-	   printf ("Legita: %X\nKreita: %X\t SEMO: %02X\n", ckr, ckr2, i);
+	    if (loglevel) printf ("Legita: %X\nKreita: %X\t SEMO: %02X\n", ckr, ckr2, i);
 	   break;
 	   }
 	   }
@@ -324,9 +334,10 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 
 	dat->bajto += 16;
 	pvz = bit_read_RL (dat);	// Nekonata kvarbitoko inter classj kaj objektaro
-	//printf ("Adreso: %lu / Enhavo: 0x%08X\n", dat->bajto - 4, pvz);
-	//printf ("Kiom classj readtaj: %u\n", skt->num_classes);
-
+	//if (loglevel) {
+	// printf ("Adreso: %lu / Enhavo: 0x%08X\n", dat->bajto - 4, pvz);
+	// printf ("Kiom classj readtaj: %u\n", skt->num_classes);
+    //}
 
 	/*-------------------------------------------------------------------------
 	 * Object-mapo (kaj objectj mem)
@@ -349,7 +360,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 		sgdc[0] = bit_read_RC (dat);
 		sgdc[1] = bit_read_RC (dat);
 		seksize = (sgdc[0] << 8) | sgdc[1];
-		//printf ("seksize: %u\n", seksize);
+		//if (loglevel) printf ("seksize: %u\n", seksize);
 		if (seksize > 2034)	// 2032 + 2
 		{
 			puts ("Eraro: Object-mapa section pli granda ol 2034!");
@@ -369,8 +380,10 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 			lastatrakt += pvztkt;
 			pvzadr = bit_read_MC (dat);
 			lastadres += pvzadr;
-			//printf ("Idc: %li\t", skt->num_objects);
-			//printf ("Trakt: %li\tAdres: %li\n", pvztkt, pvzadr);
+			//if (loglevel) {
+			// printf ("Idc: %li\t", skt->num_objects);
+			// printf ("Trakt: %li\tAdres: %li\n", pvztkt, pvzadr);
+			//}
 			if (dat->bajto == antauxadr)
 				break;
 			//if (dat->bajto - duabajto >= seksize)
@@ -395,17 +408,18 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 			break;
 	}
 	while (seksize > 2);
-	printf ("Kiom objectj: %lu\n", skt->num_objects);
-
-	printf ("=========> OBJEKTARO: %8X\n", (unsigned int) obek);
+	if (loglevel){
+    	printf ("Kiom objectj: %lu\n", skt->num_objects);
+    	printf ("=========> OBJEKTARO: %8X\n", (unsigned int) obek);
+    }
 	dat->bajto = obfin;
 	obek = bit_read_MS (dat);	// La komenco de la lasta object readta
-	printf ("    OBJEKTARO (fino): %8X\n", (unsigned int) (obfin + obek + 2));
+	if (loglevel) printf ("    OBJEKTARO (fino): %8X\n", (unsigned int) (obfin + obek + 2));
 
 	/*
 	   dat->bajto = skt->header.section[2].adresilo - 2;
 	   antckr = bit_read_CRC (dat); // Nekonata dubitoko inter objektaro kaj object-mapo
-	   printf ("Adreso: %08X / Enhavo: 0x%04X\n", dat->bajto - 2, antckr);
+	   if (loglevel) printf ("Adreso: %08X / Enhavo: 0x%04X\n", dat->bajto - 2, antckr);
 
 	   // Kontroli CKR-ojn
 	   antckr = 0xC0C1;
@@ -422,13 +436,14 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	   bit_krei_CRC (dat, duabajto, antckr);
 	   dat->bajto -= 2;
 	   ckr2 = bit_read_CRC (dat);
-	   printf ("Legita: %X\nKreita: %X\t SEMO: %X\n", ckr, ckr2, antckr);
+	   if (loglevel) printf ("Legita: %X\nKreita: %X\t SEMO: %X\n", ckr, ckr2, antckr);
 	   //antckr = ckr;
 	   } while (seksize > 0);
 	 */
-
-	printf ("======> OBJECT-MAPO: %8X\n", (unsigned int) skt->header.section[2].adresilo);
-	printf (" OBJECT-MAPO (fino): %8X\n", (unsigned int) (skt->header.section[2].adresilo + skt->header.section[2].size));
+    if (loglevel) {
+    	printf ("======> OBJECT-MAPO: %8X\n", (unsigned int) skt->header.section[2].adresilo);
+	    printf (" OBJECT-MAPO (fino): %8X\n", (unsigned int) (skt->header.section[2].adresilo + skt->header.section[2].size));
+	}
 
 	/*-------------------------------------------------------------------------
 	 * Dua kap-datenaro
@@ -440,41 +455,41 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 		long unsigned int pvz;
 		unsigned char sig, sig2;
 
-		printf ("==> DUA KAP-DATENARO: %8X\n", (unsigned int) dat->bajto - 16);
+		if (loglevel) printf ("==> DUA KAP-DATENARO: %8X\n", (unsigned int) dat->bajto - 16);
 		pvzadr = dat->bajto;
 
 		pvz = bit_read_RL (dat);
-		//printf ("Kiomo: %lu\n", pvz);
+		//if (loglevel) printf ("Kiomo: %lu\n", pvz);
 
 		pvz = bit_read_BL (dat);
-		//printf ("Ekaddress: %8X\n", pvz);
+		//if (loglevel) printf ("Ekaddress: %8X\n", pvz);
 
-		//printf ("AC1015?: ");
+		//if (loglevel) printf ("AC1015?: ");
 		for (i = 0; i < 6; i++)
 		{
 			sig = bit_read_RC (dat);
-			//printf ("%c", sig >= ' ' && sig < 128 ? sig : '.');
+			//if (loglevel) printf ("%c", sig >= ' ' && sig < 128 ? sig : '.');
 		}
 
-		//printf ("\nNuloj?:");
+		//if (loglevel) printf ("\nNuloj?:");
 		for (i = 0; i < 5; i++)	// 6 se estas pli malnova...
 		{
 			sig = bit_read_RC (dat);
-			//printf (" 0x%02X", sig);
+			//if (loglevel) printf (" 0x%02X", sig);
 		}
 
-		//printf ("\n4 nulaj bitoj?: ");
+		//if (loglevel) printf ("\n4 nulaj bitoj?: ");
 		for (i = 0; i < 4; i++)
 		{
 			sig = bit_read_B (dat);
-			//printf (" %c", sig ? '1' : '0');
+			//if (loglevel) printf (" %c", sig ? '1' : '0');
 		}
 
-		//printf ("\nChain?: ");
+		//if (loglevel) printf ("\nChain?: ");
 		for (i = 0; i < 6; i++)
 		{
 			skt->duaheader.unknownjxo[i] = bit_read_RC (dat);
-			//printf (" 0x%02X", skt->duaheader.unknownjxo[i]);
+			//if (loglevel) printf (" 0x%02X", skt->duaheader.unknownjxo[i]);
 		}
 		if (skt->duaheader.unknownjxo[3] != 0x78 || skt->duaheader.unknownjxo[5] != 0x06)
 			sig = bit_read_RC (dat);	// por kompenso okaze de eventuala kroma nulo ne readta antauxe
@@ -483,28 +498,28 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 		for (i = 0; i < 6; i++)
 		{
 			sig = bit_read_RC (dat);
-			//printf ("[%u]\n", sig);
+			//if (loglevel) printf ("[%u]\n", sig);
 			pvz = bit_read_BL (dat);
-			//printf (" Adreso: %8X\n", pvz);
+			//if (loglevel) printf (" Adreso: %8X\n", pvz);
 			pvz = bit_read_BL (dat);
-			//printf ("  Kiomo: %8X\n", pvz);
+			//if (loglevel) printf ("  Kiomo: %8X\n", pvz);
 		}
 
 		bit_read_BS (dat);
-		//printf ("\n14 --------------");
+		//if (loglevel) printf ("\n14 --------------");
 		for (i = 0; i < 14; i++)
 		{
 			sig2 = bit_read_RC (dat);
 			skt->duaheader.traktrik[i].kiom = sig2;
-			//printf ("\nLongo: %u\n", sig2);
+			//if (loglevel) printf ("\nLongo: %u\n", sig2);
 			sig = bit_read_RC (dat);
-			//printf ("\t[%u]\n", sig);
-			//printf ("\tChain:");
+			//if (loglevel) printf ("\t[%u]\n", sig);
+			//if (loglevel) printf ("\tChain:");
 			for (j = 0; j < sig2; j++)
 			{
 				sig = bit_read_RC (dat);
 				skt->duaheader.traktrik[i].chain[j] = sig;
-				//printf (" %02X", sig);
+				//if (loglevel) printf (" %02X", sig);
 			}
 		}
 
@@ -520,15 +535,17 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 		   ckr2 = bit_read_CRC (dat);
 		   if (ckr == ckr2)
 		   {
-		   printf ("Legita: %X\nKreita: %X\t SEMO: %02X\n", ckr, ckr2, i);
+		        if (loglevel) printf ("Legita: %X\nKreita: %X\t SEMO: %02X\n", ckr, ckr2, i);
 		   break;
 		   }
 		   }
-		   printf (" Rubajxo 1: %08X\n", bit_read_RL (dat));
-		   printf (" Rubajxo 1: %08X\n", bit_read_RL (dat));
+		   if (loglevel) {
+		        printf (" Rubajxo 1: %08X\n", bit_read_RL (dat));
+		        printf (" Rubajxo 1: %08X\n", bit_read_RL (dat));
+		   }
 		 */
 
-		if (bit_sercxi_sentinel (dat, dwg_sentinel (DWG_SENTINEL_DUAHEAD_END)))
+		if (loglevel && bit_sercxi_sentinel (dat, dwg_sentinel (DWG_SENTINEL_DUAHEAD_END)))
 			printf (" DUA KAP-DAT. (fino): %8X\n", (unsigned int) dat->bajto);
 	}
 
@@ -536,13 +553,15 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	 * Sekcio MEASUREMENT
 	 */
 
-	printf ("========> NBEGINNATA 2: %8X\n", (unsigned int) skt->header.section[4].adresilo);
-	printf ("   NBEGINNATA 2 (fino): %8X\n", (unsigned int) (skt->header.section[4].adresilo + skt->header.section[4].size));
+    if (loglevel) {
+	    printf ("========> NBEGINNATA 2: %8X\n", (unsigned int) skt->header.section[4].adresilo);
+	    printf ("   NBEGINNATA 2 (fino): %8X\n", (unsigned int) (skt->header.section[4].adresilo + skt->header.section[4].size));
+	}
 	dat->bajto = skt->header.section[4].adresilo;
 	dat->bito = 0;
 	skt->measurement = bit_read_RL (dat);
 
-	printf ("KIOM BAJTOJ :\t%lu\n", dat->kiom);
+    if (loglevel) printf ("KIOM BAJTOJ :\t%lu\n", dat->kiom);
 
 	//exit (0);
 	return 0;
