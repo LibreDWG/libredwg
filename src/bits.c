@@ -339,7 +339,7 @@ bit_read_BL (Bit_Chain * dat)
 		return (0);
 	else			/* if (bitduo == 3) */
 	{
-		printf ("Eraro: ne atendita value por BIT-KVARBITOKO: '11'\n");
+		fprintf (stderr, "Error: bit_read_BL: unexpected 2-bit code: '11'\n");
 		return (256);
 	}
 }
@@ -369,7 +369,7 @@ double
 bit_read_BD (Bit_Chain * dat)
 {
 	unsigned char bitduo;
-	long int *rez;
+	long int *res;
 	double result;
 
 	bitduo = bit_read_BB (dat);
@@ -385,11 +385,11 @@ bit_read_BD (Bit_Chain * dat)
 		return (0.0);
 	else			/* if (bitduo == 3) */
 	{
-		printf ("Eraro: ne atendita value por BIT-DUGLITAJXO: '11'\n");
-		/* Krei NeNumber-n (NaN) */
-		rez = (long int *) &result;
-		rez[0] = -1;
-		rez[1] = -1;
+		fprintf (stderr, "Error: bit_read_BD: unexpected 2-bit code: '11'\n");
+		/* create a Not-A-Number (NaN) */
+		res = (long int *) &result;
+		res[0] = -1;
+		res[1] = -1;
 		return (result);
 	}
 }

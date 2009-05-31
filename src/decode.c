@@ -9,7 +9,7 @@
 /*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
 /*****************************************************************************/
 
-/// Dekodigo
+/// Decode
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -58,12 +58,26 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	 */
 	dat->bajto = 0;
 	dat->bito = 0;
-	strncpy (skt->header.version, dat->chain, 6);
-	skt->header.version[6] = '\0';
-	if (strcmp (skt->header.version, "AC1015") != 0)
+	char version[7];
+	strncpy (version, dat->chain, 6);
+	version[6] = '\0';
+
+	skt->header.version=0;
+	if (!strcmp (version, version_codes[R_13])) skt->header.version = R_13;
+	if (!strcmp (version, version_codes[R_14])) skt->header.version = R_14;
+	if (!strcmp (version, version_codes[R_2000])) skt->header.version = R_2000;
+	if (!strcmp (version, version_codes[R_2004])) skt->header.version = R_2004;
+	if (!strcmp (version, version_codes[R_2007])) skt->header.version = R_2007;
+    if (skt->header.version==0){
+        fprintf (stderr, "Invalid or unimplemented version code!"
+			"This file's version code is: %s\n", version);
+        return -1;
+    }
+	
+	if (skt->header.version != R_2000)
 	{
 		fprintf (stderr, "This version of Libredwg is only capable of decoding version R2000 (code: AC1015) dwg-files. "
-			"This file's version code is: %s\n", skt->header.version);
+			"This file's version code is: %s\n", version);
 		return -1;
 	}
 	dat->bajto = 0x06;
@@ -180,7 +194,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
     }
 	dat->bajto = skt->header.section[0].adresilo + 16;
 	pvz = bit_read_RL (dat);
-	//if (loglevel) printf ("Longeco: %lu\n", pvz);
+	if (loglevel) printf ("Longeco: %lu\n", pvz);
 
 	dat->bito = 0;
 
@@ -188,7 +202,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	 */
 	for (i = 0; i < DWG_NUM_VARIABLES; i++)
 	{
-		//if (loglevel) printf ("[%03i] - ", i + 1);
+		if (loglevel) printf ("[%03i] - ", i + 1);
 		if (i == 221 && skt->var[220].dubitoko != 3)
 		{
 			skt->var[i].traktilo.code = 0;
@@ -196,56 +210,56 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 			//puts ("(NE EKZISTANTA)");
 			continue;
 		}
-		switch (dwg_var_map (i))
+		switch (dwg_var_map (skt->header.version, i))
 		{
 		case DWG_DT_B:
 			skt->var[i].bitoko = bit_read_B (dat);
-			//if (loglevel) printf ("B: %u", skt->var[i].bitoko);
+			if (loglevel) printf ("B: %u", skt->var[i].bitoko);
 			break;
 		case DWG_DT_BS:
 			skt->var[i].dubitoko = bit_read_BS (dat);
-			//if (loglevel) printf ("BS: %u", skt->var[i].dubitoko);
+			if (loglevel) printf ("BS: %u", skt->var[i].dubitoko);
 			break;
 		case DWG_DT_BL:
 			skt->var[i].kvarbitoko = bit_read_BL (dat);
-			//if (loglevel) printf ("BL: %lu", skt->var[i].kvarbitoko);
+			if (loglevel) printf ("BL: %lu", skt->var[i].kvarbitoko);
 			break;
 		case DWG_DT_BD:
 			skt->var[i].duglitajxo = bit_read_BD (dat);
-			//if (loglevel) printf ("BD: %lg", skt->var[i].duglitajxo);
+			if (loglevel) printf ("BD: %lg", skt->var[i].duglitajxo);
 			break;
 		case DWG_DT_H:
 			bit_read_H (dat, &skt->var[i].traktilo);
-			//if (loglevel) printf ("H: %i.%i.0x%08X", skt->var[i].traktilo.code, skt->var[i].traktilo.kiom, skt->var[i].traktilo.value);
+			if (loglevel) printf ("H: %i.%i.0x%08X", skt->var[i].traktilo.code, skt->var[i].traktilo.kiom, (unsigned int) skt->var[i].traktilo.value);
 			break;
 		case DWG_DT_T:
 			skt->var[i].text = bit_read_T (dat);
-			//if (loglevel) printf ("T: \"%s\"", skt->var[i].text);
+			if (loglevel) printf ("T: \"%s\"", skt->var[i].text);
 			break;
 		case DWG_DT_CMC:
 			skt->var[i].dubitoko = bit_read_BS (dat);
-			//if (loglevel) printf ("CMC: %u", skt->var[i].dubitoko);
+			if (loglevel) printf ("CMC: %u", skt->var[i].dubitoko);
 			break;
 		case DWG_DT_2RD:
 			skt->var[i].xy[0] = bit_read_RD (dat);
 			skt->var[i].xy[1] = bit_read_RD (dat);
-			//if (loglevel){
-			// printf ("X: %lg\t", skt->var[i].xy[0]);
-			// printf ("Y: %lg", skt->var[i].xy[1]);
-			//}
+			if (loglevel){
+			 printf ("X: %lg\t", skt->var[i].xy[0]);
+			 printf ("Y: %lg", skt->var[i].xy[1]);
+			}
 			break;
 		case DWG_DT_3BD:
 			skt->var[i].xyz[0] = bit_read_BD (dat);
 			skt->var[i].xyz[1] = bit_read_BD (dat);
 			skt->var[i].xyz[2] = bit_read_BD (dat);
-			//if (loglevel) {
-			// printf ("X: %lg\t", skt->var[i].xyz[0]);
-			// printf ("Y: %lg\t", skt->var[i].xyz[1]);
-			// printf ("Z: %lg", skt->var[i].xyz[2]);
-			//}
+			if (loglevel) {
+			 printf ("X: %lg\t", skt->var[i].xyz[0]);
+			 printf ("Y: %lg\t", skt->var[i].xyz[1]);
+			 printf ("Z: %lg", skt->var[i].xyz[2]);
+			}
 			break;
 		default:
-	        if (loglevel) printf ("Ne traktebla type: %i (var: %i)\n", dwg_var_map (i), i);
+	        if (loglevel) printf ("Ne traktebla type: %i (var: %i)\n", dwg_var_map (skt->header.version, i), i);
 		}
 		//puts ("");
 	}
@@ -582,7 +596,7 @@ dwg_decode_estajxo (Bit_Chain * dat, Dwg_Object_Estajxo * est)
 	error = bit_read_H (dat, &est->traktilo);
 	if (error)
 	{
-		printf ("\tEraro en traktilo de object! Adreso en la ĉeno: 0x%0x\n", (unsigned int) dat->bajto);
+		fprintf (stderr, "dwg_decode_estajxo:\tEraro en traktilo de object! Adreso en la ĉeno: 0x%0x\n", (unsigned int) dat->bajto);
 		est->bitsize = 0;
 		est->kromdat_kiom = 0;
 		est->picture_ekzistas = 0;
@@ -594,7 +608,7 @@ dwg_decode_estajxo (Bit_Chain * dat, Dwg_Object_Estajxo * est)
 	{
 		if (grando > 10210)
 		{
-			printf ("Absurdo! Kromdato-size: %lu. Object: %lu (traktilo).\n", (long unsigned int) grando, est->traktilo.value);
+			fprintf (stderr, "dwg_decode_estajxo: Absurdo! Kromdato-size: %lu. Object: %lu (traktilo).\n", (long unsigned int) grando, est->traktilo.value);
 			est->bitsize = 0;
 			est->kromdat_kiom = 0;
 			est->picture_ekzistas = 0;
@@ -613,7 +627,7 @@ dwg_decode_estajxo (Bit_Chain * dat, Dwg_Object_Estajxo * est)
 		}
 		error = bit_read_H (dat, &est->kromdat_trakt);
 		if (error)
-			printf ("Ops...\n");
+			fprintf (stderr, "Ops...\n");
 		for (i = est->kromdat_kiom - grando; i < est->kromdat_kiom; i++)
 			est->kromdat[i] = bit_read_RC (dat);
 	}
@@ -629,7 +643,7 @@ dwg_decode_estajxo (Bit_Chain * dat, Dwg_Object_Estajxo * est)
 		}
 		else
 		{
-			printf ("Absurdo! Bildo-size: %lu kB. Object: %lu (traktilo).\n",
+			fprintf (stderr, "dwg_decode_estajxo:  Absurdo! Bildo-size: %lu kB. Object: %lu (traktilo).\n",
 				est->picture_kiom / 1000, est->traktilo.value);
 			bit_ref_salti (dat, -(4 * 8 + 1));
 		}
@@ -657,7 +671,7 @@ dwg_decode_ordinarajxo (Bit_Chain * dat, Dwg_Object_Ordinarajxo * ord)
 	error = bit_read_H (dat, &ord->traktilo);
 	if (error)
 	{
-		printf ("\tEraro en traktilo de object! Adreso en la ĉeno: 0x%0x\n", (unsigned int) dat->bajto);
+		fprintf (stderr, "\tEraro en traktilo de object! Adreso en la ĉeno: 0x%0x\n", (unsigned int) dat->bajto);
 		ord->bitsize = 0;
 		ord->kromdat_kiom = 0;
 		ord->traktref_kiom = 0;
@@ -668,7 +682,7 @@ dwg_decode_ordinarajxo (Bit_Chain * dat, Dwg_Object_Ordinarajxo * ord)
 	{
 		if (grando > 10210)
 		{
-			printf ("Absurdo! Kromdato-size: %lu. Object: %lu (traktilo).\n", (long unsigned int) grando, ord->traktilo.value);
+			fprintf (stderr, "dwg_decode_ordinarajxo: Absurdo! Kromdato-size: %lu. Object: %lu (traktilo).\n", (long unsigned int) grando, ord->traktilo.value);
 			ord->bitsize = 0;
 			ord->kromdat_kiom = 0;
 			ord->traktref_kiom = 0;
@@ -686,7 +700,7 @@ dwg_decode_ordinarajxo (Bit_Chain * dat, Dwg_Object_Ordinarajxo * ord)
 		}
 		error = bit_read_H (dat, &ord->kromdat_trakt);
 		if (error)
-			printf ("Ops...\n");
+			fprintf (stderr, "Ops...\n");
 		for (i = ord->kromdat_kiom - grando; i < ord->kromdat_kiom; i++)
 			ord->kromdat[i] = bit_read_RC (dat);
 	}
@@ -715,7 +729,7 @@ dwg_decode_traktref (Bit_Chain * dat, Dwg_Object * obj)
 								  (i + 10) * sizeof (Dwg_Traktilo));
 			if (bit_read_H (dat, &est->traktref[i]))
 			{
-				//printf ("\tEraro en tiu traktilo: %lu\n", est->traktilo.value);
+				fprintf (stderr, "\tEraro en tiu traktilo: %lu\n", est->traktilo.value);
 				break;
 			}
 			if (!(dat->bajto == ktl_lastaddress + 1 && dat->bito == 0))
@@ -743,7 +757,7 @@ dwg_decode_traktref (Bit_Chain * dat, Dwg_Object * obj)
 								  (i + 10) * sizeof (Dwg_Traktilo));
 			if (bit_read_H (dat, &ord->traktref[i]))
 			{
-				//printf ("\tEraro en tiu traktilo: %lu\n", est->traktilo.value);
+				//fprintf (stderr, "\tEraro en tiu traktilo: %lu\n", est->traktilo.value);
 				break;
 			}
 			if (!(dat->bajto == ktl_lastaddress + 1 && dat->bito == 0))
@@ -1306,6 +1320,7 @@ dwg_decode_MTEXT (Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_LAYER (Bit_Chain * dat, Dwg_Object * obj)
 {
+    if (loglevel) fprintf(stderr, "dwg_decode_LAYER\n");
 	Dwg_Ordinarajxo_LAYER *ord;
 
 	obj->supertype = DWG_SUPERTYPE_ORDINARAJXO;
@@ -1329,6 +1344,7 @@ dwg_decode_LAYER (Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_LAYOUT (Bit_Chain * dat, Dwg_Object * obj)
 {
+    if (loglevel) fprintf(stderr, "dwg_decode_LAYOUT\n");
 	Dwg_Ordinarajxo_LAYOUT *ord;
 
 	obj->supertype = DWG_SUPERTYPE_ORDINARAJXO;

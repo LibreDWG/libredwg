@@ -54,25 +54,26 @@ void output_SVG(Dwg_Structure* dwg_struct){
 	int i;
 	Dwg_Object *obj;
 
-	printf("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\
-<svg\
-   xmlns:svg=\"http://www.w3.org/2000/svg\"\
-   xmlns=\"http://www.w3.org/2000/svg\"\
-   version=\"1.0\"\
-   width=\"210mm\"\
-   height=\"297mm\"\
->");
+	printf(
+        "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
+        "<svg\n"
+        "   xmlns:svg=\"http://www.w3.org/2000/svg\"\n"
+        "   xmlns=\"http://www.w3.org/2000/svg\"\n"
+        "   version=\"1.0\"\n"
+        "   width=\"210mm\"\n"
+        "   height=\"297mm\"\n"
+        ">\n"
+    );
 
 	for (i = 0; i < dwg_struct->num_objects; i++)
 	{
 		obj = &dwg_struct->object[i];
 
-
 		if (obj->type == DWG_TYPE_LINE){
 			Dwg_Estajxo_LINE* line;
 			line = obj->tio.estajxo->tio.LINE;
-			printf("<path d=\"M %f,%f L %f,%f\" />\n", line->x0, line->y0, line->x1, line->y1);		
+			printf("    <path d=\"M %f,%f L %f,%f\" />\n", line->x0, line->y0, line->x1, line->y1);		
 		}
 	}
-	printf("</svg>");
+	printf("</svg>\n");
 }

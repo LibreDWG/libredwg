@@ -141,7 +141,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	{
 		if (i == 221 && skt->var[220].dubitoko != 3)
 			continue;
-		switch (dwg_var_map (i))
+		switch (dwg_var_map (skt->header.version, i))
 		{
 		case DWG_DT_B:
 			bit_write_B (dat, skt->var[i].bitoko);
@@ -174,7 +174,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 			bit_write_BD (dat, skt->var[i].xyz[2]);
 			break;
 		default:
-			printf ("Ne traktebla type: %i (var: %i)\n", dwg_var_map (i), (int) i);
+			printf ("Ne traktebla type: %i (var: %i)\n", dwg_var_map (skt->header.version, i), (int) i);
 		}
 	}
 

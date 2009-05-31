@@ -885,7 +885,8 @@ extern "C"
 	{
 		struct
 		{
-			char version[6];
+		    unsigned int version;
+			//char version[6];
 			unsigned int codepage;
 			unsigned int num_sections;
 			struct

@@ -537,7 +537,7 @@ dwg_print (Dwg_Structure *dwg_struct)
 	puts ("**************************************************");
 	puts ("Section HEADER");
 	puts ("**************************************************");
-	printf ("Version: %s\n", dwg_struct->header.version);
+	printf ("Version: %s\n", version_codes[dwg_struct->header.version]);
 	printf ("Codepage: %u\n", dwg_struct->header.codepage);
 	for (i = 0; i < dwg_struct->header.num_sections; i++)
 		printf ("Section %i\t Address: %7lu\t Size: %7lu B\n",
@@ -573,7 +573,7 @@ dwg_print (Dwg_Structure *dwg_struct)
 			puts ("(Non-Existant)");
 			continue;
 		}
-		switch (dwg_var_map (i))
+		switch (dwg_var_map (dwg_struct->header.version, i))
 		{
 		case DWG_DT_B:
 			printf ("B: %u", dwg_struct->var[i].bitoko);
@@ -607,7 +607,7 @@ dwg_print (Dwg_Structure *dwg_struct)
 			printf ("Z: %lg", dwg_struct->var[i].xyz[2]);
 			break;
 		default:
-			printf ("Ne traktebla type: %i (var: %i)\n", dwg_var_map (i), i);
+			printf ("Ne traktebla type: %i (var: %i)\n", dwg_var_map (dwg_struct->header.version, i), i);
 		}
 		puts ("");
 	}
