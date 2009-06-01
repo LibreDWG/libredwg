@@ -595,6 +595,88 @@ extern "C"
 		} extrusion;
 		
 	} Dwg_Estajxo_SHAPE;
+/**
+ Struct for:  VIEWPORT ENTITY (34)
+ */
+
+	typedef struct _dwg_estajxo_VIEWPORT_ENTITY
+	{
+		struct
+		{
+			double x;
+			double y;
+			double z;
+		} center;
+		double width;
+		double height;
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} view_target;
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} view_direction;
+		double view_twist_angle;
+		double view_height;
+		double lens_length;
+                double front_clip_z;
+                double back_clip_z;
+                double snap_angle;
+                struct
+		{
+			double x;
+			double y;
+		} view_center;
+                struct
+		{
+			double x;
+			double y;
+		} snap_base;
+                struct
+		{
+			double x;
+			double y;
+		} snap_spacing;
+                struct
+		{
+			double x;
+			double y;
+		} grid_spacing;
+                unsigned int circle_zoom;
+                unsigned long frozen_layer_count;
+                unsigned long status_flags;
+                unsigned char* style_sheet;
+                char render_mode;
+                unsigned int ucs_at_origin;
+                unsigned int ucs_per_viewport;
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} ucs_origin;
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} ucs_x_axis;
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} ucs_y_axis;
+                double ucs_elevation;
+                unsigned int ucs_ortho_view_type;
+                //add handles
+
+	} Dwg_Estajxo_VIEWPORT_ENTITY;
 
 /**
  Struct for elipsoj - ELLIPSE (35)
