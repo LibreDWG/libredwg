@@ -70,8 +70,8 @@ void output_SVG(Dwg_Structure* dwg_struct){
 		obj = &dwg_struct->object[i];
 
 		if (obj->type == DWG_TYPE_LINE){
-			Dwg_Estajxo_LINE* line;
-			line = obj->tio.estajxo->tio.LINE;
+			Dwg_Entity_LINE* line;
+			line = obj->tio.entity->tio.LINE;
 			printf("    <path d=\"M %f,%f L %f,%f\" />\n", line->x0, line->y0, line->x1, line->y1);		
 		}
 	}

@@ -38,22 +38,22 @@ int load_dwg (char *filename)
 	success = dwg_read_file (filename, &dwg);
 	for (i = 0; i < dwg.num_objects; i++)
 	{
-		Dwg_Estajxo_LINE *line;
-		Dwg_Estajxo_CIRCLE *circle;
-		Dwg_Estajxo_TEXT *text;
+		Dwg_Entity_LINE *line;
+		Dwg_Entity_CIRCLE *circle;
+		Dwg_Entity_TEXT *text;
 
 		switch (dwg.object[i].type)
 		{
 		case DWG_TYPE_LINE:
-			line = dwg.object[i].tio.estajxo->tio.LINE;
+			line = dwg.object[i].tio.entity->tio.LINE;
 			add_line (line->x0, line->x1, line->y0, line->y1);
 			break;
 		case DWG_TYPE_CIRCLE:
-			circle = dwg.object[i].tio.estajxo->tio.CIRCLE;
+			circle = dwg.object[i].tio.entity->tio.CIRCLE;
 			add_circle (circle->x0, circle->y0, circle->radius);
 			break;
 		case DWG_TYPE_TEXT:
-			text = dwg.object[i].tio.estajxo->tio.TEXT;
+			text = dwg.object[i].tio.entity->tio.TEXT;
 			add_text (text->x0, text->y0, text->text);
 			break;
 		}

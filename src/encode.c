@@ -30,10 +30,10 @@ typedef struct
 /*--------------------------------------------------------------------------------
  * Private functions prototypes
  */
-static void dwg_encode_estajxo (Dwg_Object * obj, Bit_Chain * dat);
-static void dwg_encode_ordinarajxo (Dwg_Object * obj, Bit_Chain * dat);
-static void dwg_encode_LINE (Dwg_Estajxo_LINE * est, Bit_Chain * dat);
-static void dwg_encode_CIRCLE (Dwg_Estajxo_CIRCLE * est, Bit_Chain * dat);
+static void dwg_encode_entity (Dwg_Object * obj, Bit_Chain * dat);
+static void dwg_encode_object (Dwg_Object * obj, Bit_Chain * dat);
+static void dwg_encode_LINE (Dwg_Entity_LINE * est, Bit_Chain * dat);
+static void dwg_encode_CIRCLE (Dwg_Entity_CIRCLE * est, Bit_Chain * dat);
 
 /*--------------------------------------------------------------------------------
  * Public functions
@@ -251,9 +251,9 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 		/* Difini la traktilojn de cxiuj objectj, inkluzive la unknownj */
 		omap[i].idc = i;
 		if (skt->object[i].supertype == DWG_SUPERTYPE_ESTAJXO)
-			omap[i].traktilo = skt->object[i].tio.estajxo->traktilo.value;
+			omap[i].traktilo = skt->object[i].tio.entity->traktilo.value;
 		else if (skt->object[i].supertype == DWG_SUPERTYPE_ORDINARAJXO)
-			omap[i].traktilo = skt->object[i].tio.ordinarajxo->traktilo.value;
+			omap[i].traktilo = skt->object[i].tio.object->traktilo.value;
 		else if (skt->object[i].supertype == DWG_SUPERTYPE_UNKNOWN)
 		{
 			nkn.chain = skt->object[i].tio.unknownjxo;
@@ -306,9 +306,9 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 		else
 		{
 			if (obj->supertype == DWG_SUPERTYPE_ESTAJXO)
-				dwg_encode_estajxo (obj, dat);
+				dwg_encode_entity (obj, dat);
 			else if (obj->supertype == DWG_SUPERTYPE_ORDINARAJXO)
-				dwg_encode_ordinarajxo (obj, dat);
+				dwg_encode_object (obj, dat);
 			else
 			{
 				printf ("Eraro: ne difinita (super)type de object por write\n");
@@ -515,7 +515,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 }
 
 static void
-dwg_encode_estajxo (Dwg_Object * obj, Bit_Chain * dat)
+dwg_encode_entity (Dwg_Object * obj, Bit_Chain * dat)
 {
 	unsigned int i;
 	long unsigned int longo;
@@ -523,9 +523,9 @@ dwg_encode_estajxo (Dwg_Object * obj, Bit_Chain * dat)
 	Bit_Chain ekadr;
 	Bit_Chain bgadr;
 	Bit_Chain pvadr;
-	Dwg_Object_Estajxo *est;
+	Dwg_Object_Entity *est;
 
-	est = obj->tio.estajxo;
+	est = obj->tio.entity;
 
 	gdadr.bajto = dat->bajto;
 	gdadr.bito = dat->bito;
@@ -620,7 +620,7 @@ dwg_encode_estajxo (Dwg_Object * obj, Bit_Chain * dat)
 }
 
 static void
-dwg_encode_ordinarajxo (Dwg_Object * obj, Bit_Chain * dat)
+dwg_encode_object (Dwg_Object * obj, Bit_Chain * dat)
 {
 	Bit_Chain ekadr;
 
@@ -631,7 +631,7 @@ dwg_encode_ordinarajxo (Dwg_Object * obj, Bit_Chain * dat)
 }
 
 static void
-dwg_encode_LINE (Dwg_Estajxo_LINE * est, Bit_Chain * dat)
+dwg_encode_LINE (Dwg_Entity_LINE * est, Bit_Chain * dat)
 {
 	bit_write_B (dat, est->nur_2D);
 	bit_write_RD (dat, est->x0);
@@ -648,7 +648,7 @@ dwg_encode_LINE (Dwg_Estajxo_LINE * est, Bit_Chain * dat)
 }
 
 static void
-dwg_encode_CIRCLE (Dwg_Estajxo_CIRCLE * est, Bit_Chain * dat)
+dwg_encode_CIRCLE (Dwg_Entity_CIRCLE * est, Bit_Chain * dat)
 {
 	bit_write_BD (dat, est->x0);
 	bit_write_BD (dat, est->y0);

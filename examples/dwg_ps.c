@@ -78,11 +78,11 @@ create_postscript (Dwg_Structure *dwg, char *output)
 			continue;
 		if (obj->type = DWG_SUPERTYPE_ORDINARAJXO) // not entity
 			continue;
-		if (obj->tio.estajxo->regime == 0) // belongs to block
+		if (obj->tio.entity->regime == 0) // belongs to block
 			continue;
 		if (obj->type == DWG_TYPE_LINE){
-    		Dwg_Estajxo_LINE* line;
-			line = obj->tio.estajxo->tio.LINE;
+    		Dwg_Entity_LINE* line;
+			line = obj->tio.entity->tio.LINE;
 			PS_moveto (ps, line->x0, line->y0);
 			PS_lineto (ps, line->x1, line->y1);
 			PS_stroke (ps);

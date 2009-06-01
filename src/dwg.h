@@ -95,12 +95,12 @@ extern "C"
 /**
  Struct for textj - UNUSED (0)
  */
-	typedef int Dwg_Estajxo_UNUSED;
+	typedef int Dwg_Entity_UNUSED;
 
 /**
  Struct for textj - TEXT (1)
  */
-	typedef struct _dwg_estajxo_TEXT
+	typedef struct _dwg_entity_TEXT
 	{
 		unsigned char datumindik;
 		double levigxo;
@@ -126,12 +126,12 @@ extern "C"
 		double largxfaktoro;
 		unsigned char *text;
 		unsigned int generacio;
-	} Dwg_Estajxo_TEXT;
+	} Dwg_Entity_TEXT;
 
 /**
  Struct for atributoj - ATTRIB (2)
  */
-	typedef struct _dwg_estajxo_ATTRIB
+	typedef struct _dwg_entity_ATTRIB
 	{
 		unsigned char datumindik;
 		double levigxo;
@@ -160,12 +160,12 @@ extern "C"
 		unsigned char *etikedo;
 		unsigned int kamplong; //neuzita
 		unsigned char indikiloj;
-	} Dwg_Estajxo_ATTRIB;
+	} Dwg_Entity_ATTRIB;
 
 /**
  Struct for atributo-difinoj - ATTDEF (3)
  */
-	typedef struct _dwg_estajxo_ATTDEF
+	typedef struct _dwg_entity_ATTDEF
 	{
 		unsigned char datumindik;
 		double levigxo;
@@ -195,34 +195,34 @@ extern "C"
 		unsigned int kamplong; //neuzita
 		unsigned char indikiloj;
 		unsigned char *invitilo;
-	} Dwg_Estajxo_ATTDEF;
+	} Dwg_Entity_ATTDEF;
 
 /**
  Struct for blokoj - BLOCK (4)
  */
-	typedef struct _dwg_estajxo_BLOCK
+	typedef struct _dwg_entity_BLOCK
 	{
 		unsigned char *name;
-	} Dwg_Estajxo_BLOCK;
+	} Dwg_Entity_BLOCK;
 
 /**
  Struct for blokfinoj - ENDBLK (5)
  */
-	typedef struct _dwg_estajxo_ENDBLK
+	typedef struct _dwg_entity_ENDBLK
 	{
-	} Dwg_Estajxo_ENDBLK;
+	} Dwg_Entity_ENDBLK;
 
 /**
  Struct for enmetoj - SEQEND (6)
  */
-	typedef struct _dwg_estajxo_SEQNED
+	typedef struct _dwg_entity_SEQNED
 	{
-	} Dwg_Estajxo_SEQEND;
+	} Dwg_Entity_SEQEND;
 
 /**
  Struct for enmetoj - INSERT (7)
  */
-	typedef struct _dwg_estajxo_INSERT
+	typedef struct _dwg_entity_INSERT
 	{
 		double x0;
 		double y0;
@@ -242,12 +242,12 @@ extern "C"
 			double z;
 		} extrusion;
 		unsigned char kun_attrib;
-	} Dwg_Estajxo_INSERT;
+	} Dwg_Entity_INSERT;
 
 /**
  Struct for multoblaj enmetoj - MINSERT (8)
  */
-	typedef struct _dwg_estajxo_MINSERT
+	typedef struct _dwg_entity_MINSERT
 	{
 		double x0;
 		double y0;
@@ -277,7 +277,7 @@ extern "C"
 			unsigned int kiom;
 			double dy;
 		} lin;
-	} Dwg_Estajxo_MINSERT;
+	} Dwg_Entity_MINSERT;
 
 /**
  Struct for ?? - ?? (9)
@@ -286,7 +286,7 @@ extern "C"
 /**
  Struct for verticoj - VERTEX_2D (10)
  */
-	typedef struct _dwg_estajxo_VERTEX_2D
+	typedef struct _dwg_entity_VERTEX_2D
 	{
 		unsigned char indikiloj;
 		double x0;
@@ -296,41 +296,41 @@ extern "C"
 		double finlargxo;
 		double protub;
 		double tangxdir;
-	} Dwg_Estajxo_VERTEX_2D;
+	} Dwg_Entity_VERTEX_2D;
 
 /**
  Struct for verticoj - VERTEX_3D (11)
  */
-	typedef struct _dwg_estajxo_VERTEX_3D
+	typedef struct _dwg_entity_VERTEX_3D
 	{
 		unsigned char indikiloj;
 		double x0;
 		double y0;
 		double z0;
-	} Dwg_Estajxo_VERTEX_3D;
+	} Dwg_Entity_VERTEX_3D;
 
 /**
  Struct for verticoj - VERTEX_MESH (12) - same as VERTEX_3D
  */
-	typedef Dwg_Estajxo_VERTEX_3D Dwg_Estajxo_VERTEX_MESH;
+	typedef Dwg_Entity_VERTEX_3D Dwg_Entity_VERTEX_MESH;
 
 /**
  Struct for verticoj - VERTEX_PFACE (13) - same as VERTEX_3D
  */
-	typedef Dwg_Estajxo_VERTEX_3D Dwg_Estajxo_VERTEX_PFACE;
+	typedef Dwg_Entity_VERTEX_3D Dwg_Entity_VERTEX_PFACE;
 
 /**
  Struct for verticoj - VERTEX_PFACE_FACE (14)
  */
-	typedef struct _dwg_estajxo_VERTEX_PFACE_FACE
+	typedef struct _dwg_entity_VERTEX_PFACE_FACE
 	{
 		unsigned int vertind[4];
-	} Dwg_Estajxo_VERTEX_PFACE_FACE;
+	} Dwg_Entity_VERTEX_PFACE_FACE;
 
 /**
  Struct for:  2D POLYLINE (15)
  */
-	typedef struct _dwg_estajxo_POLYLINE_2D
+	typedef struct _dwg_entity_POLYLINE_2D
 	{
 		unsigned int indikiloj;
 		unsigned int kurbtype;
@@ -344,21 +344,21 @@ extern "C"
 			double y;
 			double z;
 		} extrusion;
-	} Dwg_Estajxo_POLYLINE_2D;
+	} Dwg_Entity_POLYLINE_2D;
 
 /**
  Struct for:  3D POLYLINE (16)
  */
-	typedef struct _dwg_estajxo_POLYLINE_3D
+	typedef struct _dwg_entity_POLYLINE_3D
 	{
 		unsigned char indikiloj_1;
 		unsigned char indikiloj_2;
-	} Dwg_Estajxo_POLYLINE_3D;
+	} Dwg_Entity_POLYLINE_3D;
 
 /**
  Struct for arkoj - ARC (17)
  */
-	typedef struct _dwg_estajxo_ARC
+	typedef struct _dwg_entity_ARC
 	{
 		double x0;
 		double y0;
@@ -373,12 +373,12 @@ extern "C"
 		} extrusion;
 		double ekangulo;
 		double finangulo;
-	} Dwg_Estajxo_ARC;
+	} Dwg_Entity_ARC;
 
 /**
  Struct for cirkloj - CIRCLE (18)
  */
-	typedef struct _dwg_estajxo_CIRCLE
+	typedef struct _dwg_entity_CIRCLE
 	{
 		double x0;
 		double y0;
@@ -391,12 +391,12 @@ extern "C"
 			double y;
 			double z;
 		} extrusion;
-	} Dwg_Estajxo_CIRCLE;
+	} Dwg_Entity_CIRCLE;
 
 /**
  Struct for linioj - LINE (19)
  */
-	typedef struct _dwg_estajxo_LINE
+	typedef struct _dwg_entity_LINE
 	{
 		unsigned char nur_2D;
 		double x0;
@@ -412,12 +412,12 @@ extern "C"
 			double y;
 			double z;
 		} extrusion;
-	} Dwg_Estajxo_LINE;
+	} Dwg_Entity_LINE;
 
 /**
  Struct for puktoj - POINT (27)
  */
-	typedef struct _dwg_estajxo_POINT
+	typedef struct _dwg_entity_POINT
 	{
 		double x0;
 		double y0;
@@ -430,12 +430,12 @@ extern "C"
 			double z;
 		} extrusion;
 		double x_ang;
-	} Dwg_Estajxo_POINT;
+	} Dwg_Entity_POINT;
 
 /**
  Struct for:  3D FACE (28)
  */
-	typedef struct _dwg_estajxo_3D_FACE
+	typedef struct _dwg_entity_3D_FACE
 	{
 		struct
 		{
@@ -461,22 +461,22 @@ extern "C"
 			double y;
 			double z;
 		} corner4;
-	} Dwg_Estajxo_3D_FACE;
+	} Dwg_Entity_3D_FACE;
 
 /**
  Struct for:  POLYLINE (PFACE) (29)
  */
-	typedef struct _dwg_estajxo_POLYLINE_PFACE
+	typedef struct _dwg_entity_POLYLINE_PFACE
 	{
 		unsigned int numverts;
 		unsigned int numfaces;
 		
-	} Dwg_Estajxo_POLILYNE_PFACE;
+	} Dwg_Entity_POLILYNE_PFACE;
 
 /**
  Struct for:  POLYLINE (MESH) (30)
  */
-	typedef struct _dwg_estajxo_POLYLINE_MESH
+	typedef struct _dwg_entity_POLYLINE_MESH
 	{
 		unsigned int flags;
 		unsigned int curve_type;
@@ -485,13 +485,13 @@ extern "C"
 		unsigned int m_density;
 		unsigned int n_density;
 		
-	} Dwg_Estajxo_POLILYNE_MESH;
+	} Dwg_Entity_POLILYNE_MESH;
 
 /**
  Struct for:  SOLID (31)
  */
 
-	typedef struct _dwg_estajxo_SOLID
+	typedef struct _dwg_entity_SOLID
 	{
 		double thickness;
 		double elevation;
@@ -526,13 +526,13 @@ extern "C"
 			double z;
 		} extrusion;
 		
-	} Dwg_Estajxo_SOLID;
+	} Dwg_Entity_SOLID;
 
 /**
  Struct for:  TRACE (32)
  */
 
-	typedef struct _dwg_estajxo_TRACE
+	typedef struct _dwg_entity_TRACE
 	{
 		double thickness;
 		double elevation;
@@ -567,13 +567,13 @@ extern "C"
 			double z;
 		} extrusion;
 		
-	} Dwg_Estajxo_TRACE;
+	} Dwg_Entity_TRACE;
 
 /**
  Struct for:  SHAPE (33)
  */
 
-	typedef struct _dwg_estajxo_SHAPE
+	typedef struct _dwg_entity_SHAPE
 	{
 		struct
 		{
@@ -594,12 +594,12 @@ extern "C"
 			double z;
 		} extrusion;
 		
-	} Dwg_Estajxo_SHAPE;
+	} Dwg_Entity_SHAPE;
 /**
  Struct for:  VIEWPORT ENTITY (34)
  */
 
-	typedef struct _dwg_estajxo_VIEWPORT_ENTITY
+	typedef struct _dwg_entity_VIEWPORT_ENTITY
 	{
 		struct
 		{
@@ -676,12 +676,12 @@ extern "C"
                 unsigned int ucs_ortho_view_type;
                 //add handles
 
-	} Dwg_Estajxo_VIEWPORT_ENTITY;
+	} Dwg_Entity_VIEWPORT_ENTITY;
 
 /**
  Struct for elipsoj - ELLIPSE (35)
  */
-	typedef struct _dwg_estajxo_ELLIPSE
+	typedef struct _dwg_entity_ELLIPSE
 	{
 		double x0;
 		double y0;
@@ -698,12 +698,12 @@ extern "C"
 		double radiusproporcio;
 		double ekangulo;
 		double finangulo;
-	} Dwg_Estajxo_ELLIPSE;
+	} Dwg_Entity_ELLIPSE;
 
 /**
  Struct for radioj - RAY (40)
  */
-	typedef struct _dwg_estajxo_RAY
+	typedef struct _dwg_entity_RAY
 	{
 		double x0;
 		double y0;
@@ -711,12 +711,12 @@ extern "C"
 		double x1;
 		double y1;
 		double z1;
-	} Dwg_Estajxo_RAY;
+	} Dwg_Entity_RAY;
 
 /**
  Struct for textj - MTEXT (40)
  */
-	typedef struct _dwg_estajxo_MTEXT
+	typedef struct _dwg_entity_MTEXT
 	{
 		double x0;
 		double y0;
@@ -740,12 +740,12 @@ extern "C"
 		unsigned int linispaco_stilo;
 		unsigned int linispaco_faktoro;
 		unsigned char ia_bito;
-	} Dwg_Estajxo_MTEXT;
+	} Dwg_Entity_MTEXT;
 
 /**
  Struct for tavoloj - LAYER (51)
  */
-	typedef struct _dwg_ordinarajxo_LAYER
+	typedef struct _dwg_object_LAYER
 	{
 		char *name;
 		unsigned char bito64;
@@ -753,12 +753,12 @@ extern "C"
 		unsigned char xrefdep;
 		unsigned int ecoj;
 		unsigned int colour;
-	} Dwg_Ordinarajxo_LAYER;
+	} Dwg_Object_LAYER;
 
 /**
  Struct for arangxo - LAYOUT (502?)
  */
-	typedef struct _dwg_ordinarajxo_LAYOUT
+	typedef struct _dwg_object_LAYOUT
 	{
 		struct
 		{
@@ -833,37 +833,37 @@ extern "C"
 			double y_maks;
 			double z_maks;
 		} limo;
-	} Dwg_Ordinarajxo_LAYOUT;
+	} Dwg_Object_LAYOUT;
 
 /* OBJECTS - END ************************************************************/
 
 /**
- Strukturo de rikordoj por atributoj de estajxoj.
+ Strukturo de rikordoj por atributoj de entityj.
  */
-	typedef struct _dwg_object_estajxo
+	typedef struct _dwg_object_entity
 	{
 		union
 		{
-			Dwg_Estajxo_UNUSED *UNUSED;
-			Dwg_Estajxo_TEXT *TEXT;
-			Dwg_Estajxo_ATTRIB *ATTRIB;
-			Dwg_Estajxo_ATTDEF *ATTDEF;
-			Dwg_Estajxo_BLOCK *BLOCK;
-			Dwg_Estajxo_ENDBLK *ENDBLK;
-			Dwg_Estajxo_INSERT *INSERT;
-			Dwg_Estajxo_MINSERT *MINSERT;
-			Dwg_Estajxo_VERTEX_2D *VERTEX_2D;
-			Dwg_Estajxo_VERTEX_3D *VERTEX_3D;
-			Dwg_Estajxo_VERTEX_PFACE_FACE *VERTEX_PFACE_FACE;
-			Dwg_Estajxo_POLYLINE_2D *POLYLINE_2D;
-			Dwg_Estajxo_POLYLINE_3D *POLYLINE_3D;
-			Dwg_Estajxo_ARC *ARC;
-			Dwg_Estajxo_CIRCLE *CIRCLE;
-			Dwg_Estajxo_LINE *LINE;
-			Dwg_Estajxo_POINT *POINT;
-			Dwg_Estajxo_ELLIPSE *ELLIPSE;
-			Dwg_Estajxo_RAY *RAY;
-			Dwg_Estajxo_MTEXT *MTEXT;
+			Dwg_Entity_UNUSED *UNUSED;
+			Dwg_Entity_TEXT *TEXT;
+			Dwg_Entity_ATTRIB *ATTRIB;
+			Dwg_Entity_ATTDEF *ATTDEF;
+			Dwg_Entity_BLOCK *BLOCK;
+			Dwg_Entity_ENDBLK *ENDBLK;
+			Dwg_Entity_INSERT *INSERT;
+			Dwg_Entity_MINSERT *MINSERT;
+			Dwg_Entity_VERTEX_2D *VERTEX_2D;
+			Dwg_Entity_VERTEX_3D *VERTEX_3D;
+			Dwg_Entity_VERTEX_PFACE_FACE *VERTEX_PFACE_FACE;
+			Dwg_Entity_POLYLINE_2D *POLYLINE_2D;
+			Dwg_Entity_POLYLINE_3D *POLYLINE_3D;
+			Dwg_Entity_ARC *ARC;
+			Dwg_Entity_CIRCLE *CIRCLE;
+			Dwg_Entity_LINE *LINE;
+			Dwg_Entity_POINT *POINT;
+			Dwg_Entity_ELLIPSE *ELLIPSE;
+			Dwg_Entity_RAY *RAY;
+			Dwg_Entity_MTEXT *MTEXT;
 		} tio;
 
 		long unsigned int bitsize;
@@ -889,17 +889,17 @@ extern "C"
 
 		unsigned int traktref_kiom;
 		Dwg_Traktilo *traktref;
-	} Dwg_Object_Estajxo;
+	} Dwg_Object_Entity;
 
 /**
  Strukturo de rikordoj por atributoj de ordinaraj objectj.
  */
-	typedef struct _dwg_object_ordinarajxo
+	typedef struct _dwg_object_object
 	{
 		union
 		{
-			Dwg_Ordinarajxo_LAYER *LAYER;
-			Dwg_Ordinarajxo_LAYOUT *LAYOUT;
+			Dwg_Object_LAYER *LAYER;
+			Dwg_Object_LAYOUT *LAYOUT;
 		} tio;
 
 		long unsigned int bitsize;
@@ -913,7 +913,7 @@ extern "C"
 
 		unsigned int traktref_kiom;
 		Dwg_Traktilo *traktref;
-	} Dwg_Object_Ordinarajxo;
+	} Dwg_Object_Object;
 
 /**
  Gxenerala strukturo de rikordoj por objectj.
@@ -927,8 +927,8 @@ extern "C"
 		Dwg_Object_Supertype supertype;
 		union
 		{
-			Dwg_Object_Estajxo *estajxo;
-			Dwg_Object_Ordinarajxo *ordinarajxo;
+			Dwg_Object_Entity *entity;
+			Dwg_Object_Object *object;
 			unsigned char *unknownjxo;
 		} tio;
 
