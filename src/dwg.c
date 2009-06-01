@@ -136,6 +136,108 @@ dwg_write_file (char *filename, Dwg_Structure * dwg_struct)
 	return 0;
 }
 
+/* Liveras la datumaron de DIB-bitmapo (kap-datumaro plus bitmapo mem).
+ * La grandeco (kiom) ampleksas ambaŭ partoj.
+ */
+
+unsigned char *
+dwg_bmp (Dwg_Structure *stk, long int *kiom)
+{
+	char num_pictures;
+	char kodo;
+	unsigned i;
+	int plene;
+	long int kiom_kapo;
+	Bit_Chain *dat;
+	
+	dat = (Bit_Chain*) &stk->picture;
+	dat->bito = 0;
+	dat->bajto = 0;
+ 
+	bit_read_RL (dat);
+	num_pictures = bit_read_RC (dat);
+	//printf ("Kiom bildetoj: %i\n", num_pictures);
+ 
+	*kiom = 0;
+	plene = 0;
+	kiom_kapo = 0;
+	for (i = 0; i < num_pictures; i++)
+ 	{
+		kodo = bit_read_RC (dat);
+		//printf ("\t%i - Kodo: %i\n", i, kodo);
+		//printf ("\t\tAdreso: 0x%x\n", bit_legi_RL (dat));
+		bit_read_RL (dat);
+		if (kodo == 1)
+ 		{
+			kiom_kapo += bit_read_RL (dat);
+			//printf ("\t\tGrandeco de kapo: %i\n", kiom_kapo);
+ 		}
+		else if (kodo == 2 && plene == 0)
+ 		{
+			*kiom = bit_read_RL (dat);
+			plene = 1;
+			//printf ("\t\tGrandeco de BMP: %i\n", *kiom);
+ 		}
+		else if (kodo == 3)
+		{
+			bit_read_RL (dat);
+			//printf ("\t\tGrandeco de WMF: 0x%x\n", bit_legi_RL (dat));
+		}
+		else
+		{
+			bit_read_RL (dat);
+			//printf ("\t\tGrandeco: 0x%x\n", bit_read_RL (dat));
+		}
+ 	}
+	dat->bajto += kiom_kapo;
+	//printf ("Adreso nun: 0x%x\n", dat->bajto);
+ 
+	if (*kiom > 0)
+		return (dat->chain + dat->bajto);
+	else
+		return NULL;
+}
+
+double dwg_model_x_min(Dwg_Structure *dwg){
+	return dwg->var[116].xyz[0];
+}
+
+double dwg_model_x_max(Dwg_Structure *dwg){
+	return dwg->var[117].xyz[0];
+}
+
+double dwg_model_y_min(Dwg_Structure *dwg){
+	return dwg->var[116].xyz[1];
+}
+
+double dwg_model_y_max(Dwg_Structure *dwg){
+	return dwg->var[117].xyz[1];
+}
+
+double dwg_model_z_min(Dwg_Structure *dwg){
+	return dwg->var[116].xyz[2];
+}
+
+double dwg_model_z_max(Dwg_Structure *dwg){
+    return dwg->var[117].xyz[2];
+}
+
+double dwg_model_page_x_min(Dwg_Structure *dwg){
+	return dwg->var[118].xy[0];
+}
+
+double dwg_model_page_x_max(Dwg_Structure *dwg){
+	return dwg->var[119].xy[0];
+}
+
+double dwg_model_page_y_min(Dwg_Structure *dwg){
+	return dwg->var[118].xy[1];
+}
+ 
+double dwg_model_page_y_max(Dwg_Structure *dwg){
+	return dwg->var[119].xy[1];
+}
+
 /*------------------------------------------------------------------------------
  * Private functions
  */

@@ -12,6 +12,7 @@
 
 #include <dwg.h>
 
+#define INPUT_FILE "sample.dwg"
 void add_line (double x1, double y1, double x2, double y2)
 {
 	// Make something with that
@@ -29,29 +30,29 @@ void add_text (double x, double y, char *txt)
 
 int load_dwg (char *filename)
 {
-	int i;
+	unsigned int i;
 	int success;
 	Dwg_Structure dwg;
 
-	dwg.object_kiom = 0;
+	dwg.num_objects = 0;
 	success = dwg_read_file (filename, &dwg);
-	for (i = 0; i < dwg.object_kiom; i++)
+	for (i = 0; i < dwg.num_objects; i++)
 	{
 		Dwg_Estajxo_LINE *line;
 		Dwg_Estajxo_CIRCLE *circle;
 		Dwg_Estajxo_TEXT *text;
 
-		switch (dwg.object[i].tipo)
+		switch (dwg.object[i].type)
 		{
-		case DWG_OT_LINE:
+		case DWG_TYPE_LINE:
 			line = dwg.object[i].tio.estajxo->tio.LINE;
 			add_line (line->x0, line->x1, line->y0, line->y1);
 			break;
-		case DWG_OT_CIRCLE:
+		case DWG_TYPE_CIRCLE:
 			circle = dwg.object[i].tio.estajxo->tio.CIRCLE;
 			add_circle (circle->x0, circle->y0, circle->radius);
 			break;
-		case DWG_OT_TEXT:
+		case DWG_TYPE_TEXT:
 			text = dwg.object[i].tio.estajxo->tio.TEXT;
 			add_text (text->x0, text->y0, text->text);
 			break;
@@ -62,6 +63,6 @@ int load_dwg (char *filename)
 
 int main ()
 {
-	load_dwg ("sample.dwg");
+    load_dwg (INPUT_FILE);
 	return 0;
 }

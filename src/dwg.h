@@ -1028,6 +1028,19 @@ extern "C"
 
 	void dwg_print (Dwg_Structure * dwg);
 
+    unsigned char* dwg_bmp (Dwg_Structure *, long *);
+    
+    double dwg_model_x_min(Dwg_Structure *);
+    double dwg_model_x_max(Dwg_Structure *);
+    double dwg_model_y_min(Dwg_Structure *);
+    double dwg_model_y_max(Dwg_Structure *);
+    double dwg_model_z_min(Dwg_Structure *);
+    double dwg_model_z_max(Dwg_Structure *);
+    double dwg_model_page_x_min(Dwg_Structure *);
+    double dwg_model_page_x_max(Dwg_Structure *);
+    double dwg_model_page_y_min(Dwg_Structure *);
+    double dwg_model_page_y_max(Dwg_Structure *);
+
 #ifdef __cplusplus
 }
 #endif
