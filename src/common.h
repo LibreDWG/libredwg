@@ -45,7 +45,6 @@ object data, see the main Object description section for details. */
 	DWG_DT_3RD, /** 3 raw doubles **/
 	DWG_DT_2BD, /** 2D point (2 bitdoubles) **/
 	DWG_DT_3BD, /** 3D point (3 bitdoubles) **/
-	DWG_DT_TV, /** **/
 } Dwg_Datenero_Type;
 
 /**

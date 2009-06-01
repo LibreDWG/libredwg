@@ -10,6 +10,7 @@
 /*****************************************************************************/
 
 #include "common.h"
+#include "stdio.h"
 
 unsigned char *
 dwg_sentinel (Dwg_Sentinel kiu_sentinel)
@@ -55,10 +56,10 @@ dwg_var_map (Dwg_Version_Type version, int index)
 			R_BEFORE, R_AFTER, DWG_DT_BD,
 			R_BEFORE, R_AFTER, DWG_DT_BD,
 			R_BEFORE, R_AFTER, DWG_DT_BD,
-			R_BEFORE, R_AFTER, DWG_DT_TV,
-			R_BEFORE, R_AFTER, DWG_DT_TV,
-			R_BEFORE, R_AFTER, DWG_DT_TV,
-			R_BEFORE, R_AFTER, DWG_DT_TV,
+			R_BEFORE, R_AFTER, DWG_DT_T,
+			R_BEFORE, R_AFTER, DWG_DT_T,
+			R_BEFORE, R_AFTER, DWG_DT_T,
+			R_BEFORE, R_AFTER, DWG_DT_T,
 			R_BEFORE, R_AFTER, DWG_DT_BL,
 			R_BEFORE, R_AFTER, DWG_DT_BL,
 //R13-R14 Only:
@@ -168,7 +169,7 @@ dwg_var_map (Dwg_Version_Type version, int index)
 			R_BEFORE, R_AFTER, DWG_DT_BD,
 			R_BEFORE, R_AFTER, DWG_DT_BD,
 			R_BEFORE, R_AFTER, DWG_DT_BD,
-			R_BEFORE, R_AFTER, DWG_DT_TV,
+			R_BEFORE, R_AFTER, DWG_DT_T,
 			R_BEFORE, R_AFTER, DWG_DT_BL,
 			R_BEFORE, R_AFTER, DWG_DT_BL,
 			R_BEFORE, R_AFTER, DWG_DT_BL,
@@ -236,8 +237,8 @@ dwg_var_map (Dwg_Version_Type version, int index)
 			R_2000, R_AFTER, DWG_DT_3BD,
 			R_2000, R_AFTER, DWG_DT_3BD,
 			R_2000, R_AFTER, DWG_DT_3BD,
-			R_2000, R_AFTER, DWG_DT_TV,
-			R_2000, R_AFTER, DWG_DT_TV,
+			R_2000, R_AFTER, DWG_DT_T,
+			R_2000, R_AFTER, DWG_DT_T,
 //R13-R14 Only:
 			R_13, R_14, DWG_DT_B,
 			R_13, R_14, DWG_DT_B,
@@ -368,8 +369,8 @@ dwg_var_map (Dwg_Version_Type version, int index)
 			R_BEFORE, R_AFTER, DWG_DT_H,
 			R_BEFORE, R_AFTER, DWG_DT_H,
 			R_BEFORE, R_AFTER, DWG_DT_H,
-//R13-R14 Only:
-			R_13, R_14, DWG_DT_H,
+//R13-R15 Only:
+			R_13, R_2000, DWG_DT_H,
 //Common:
 			R_BEFORE, R_AFTER, DWG_DT_H,
 			R_BEFORE, R_AFTER, DWG_DT_H,
@@ -377,8 +378,8 @@ dwg_var_map (Dwg_Version_Type version, int index)
 //R2000+ Only:
 			R_2000, R_AFTER, DWG_DT_BS,
 			R_2000, R_AFTER, DWG_DT_BS,
-			R_2000, R_AFTER, DWG_DT_TV,
-			R_2000, R_AFTER, DWG_DT_TV,
+			R_2000, R_AFTER, DWG_DT_T,
+			R_2000, R_AFTER, DWG_DT_T,
 			R_2000, R_AFTER, DWG_DT_H,
 			R_2000, R_AFTER, DWG_DT_H,
 			R_2000, R_AFTER, DWG_DT_H,
@@ -392,8 +393,8 @@ dwg_var_map (Dwg_Version_Type version, int index)
 			R_2000, R_AFTER, DWG_DT_BS,
 			R_2000, R_AFTER, DWG_DT_BS,
 			R_2000, R_AFTER, DWG_DT_H,
-			R_2000, R_AFTER, DWG_DT_TV,
-			R_2000, R_AFTER, DWG_DT_TV,
+			R_2000, R_AFTER, DWG_DT_T,
+			R_2000, R_AFTER, DWG_DT_T,
 //R2004+:
 			R_2004, R_AFTER, DWG_DT_RC,
 			R_2004, R_AFTER, DWG_DT_RC,
@@ -405,7 +406,7 @@ dwg_var_map (Dwg_Version_Type version, int index)
 			R_2004, R_AFTER, DWG_DT_BS,
 			R_2004, R_AFTER, DWG_DT_RC,
 			R_2004, R_AFTER, DWG_DT_RC,
-			R_2004, R_AFTER, DWG_DT_TV,
+			R_2004, R_AFTER, DWG_DT_T,
 //Common:
 			R_BEFORE, R_AFTER, DWG_DT_H,
 			R_BEFORE, R_AFTER, DWG_DT_H,
@@ -457,11 +458,18 @@ dwg_var_map (Dwg_Version_Type version, int index)
 };
 
     int i, res=0;
-    for (i=0;i<index;i++){
+
+    for (i=0;i<index;i++, res+=3){
         while( (map[res]!=R_BEFORE && version<map[res]) || (map[res+1]!=R_AFTER && version>map[res+1]) ){
             res+=3;
         }
     }
 
+    while( (map[res]!=R_BEFORE && version<map[res]) || (map[res+1]!=R_AFTER && version>map[res+1]) ){
+        res+=3;
+    }
+
 	return (map[res+2]);
 }
+
+
