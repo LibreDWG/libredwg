@@ -25,6 +25,7 @@ int get_bmp (char *filename)
 	long size;
 	long tmp;
 	FILE *fh;
+	size_t retval;
 	Dwg_Structure dwg;
 	struct _BITMAP_HEADER
 	{
@@ -68,11 +69,11 @@ int get_bmp (char *filename)
 	bmp_h.file_size = 14 + size; // file header + DIB data
 	bmp_h.reserved = 0;
 	bmp_h.offset = 14 + 40 + 4*256; // file header + DIB header + color table
-	fwrite (&bmp_h.magic[0], 2, sizeof (char), fh);
-	fwrite (&bmp_h.file_size, 3, sizeof (long), fh);
+	retval = fwrite (&bmp_h.magic[0], 2, sizeof (char), fh);
+	retval = fwrite (&bmp_h.file_size, 3, sizeof (long), fh);
 
 	/* Write data (DIB header + bitmap) */
-	fwrite (data, 1, size, fh); 
+	retval = fwrite (data, 1, size, fh); 
 	fclose (fh);
 
 	puts ("Success! See the file '" OUTPUT_FILE "'");
