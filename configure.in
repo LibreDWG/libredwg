@@ -2,9 +2,12 @@ dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.61)
 
 dnl !!!!! Ne forgesu gxisdatigi la version de la biblioteko (?:?:?) en la dosiero ./src/Makefile.am
-AC_INIT(libdwg, 0.3, polignu@gmail.com)
+AC_INIT(libredwg, 0.4-dev, polignu@gmail.com)
 AC_CONFIG_AUX_DIR(build)
-AM_INIT_AUTOMAKE(libdwg, 0.3)
+AM_INIT_AUTOMAKE(libredwg, 0.4-dev)
+
+dnl libretoolize asked me for it
+AC_CONFIG_MACRO_DIR([m4])
 
 dnl create a config.h file (Automake will add -DHAVE_CONFIG_H)
 AM_CONFIG_HEADER(config.h)
@@ -22,7 +25,7 @@ AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_INSTALL
 AC_PROG_LIBTOOL
-AC_PROG_RANLIB
+LT_INIT
 
 dnl Checks for libraries.
 

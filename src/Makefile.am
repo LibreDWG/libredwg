@@ -1,13 +1,13 @@
-lib_LTLIBRARIES = libdwg.la
+lib_LTLIBRARIES = libredwg.la
 
-libdwg_la_SOURCES = \
+libredwg_la_SOURCES = \
 	dwg.c \
 	common.c \
 	bits.c \
 	decode.c \
 	encode.c
 
-libdwg_la_LDFLAGS = \
+libredwg_la_LDFLAGS = \
 	-version-info 0:0:0
 
 include_HEADERS = dwg.h
@@ -25,9 +25,9 @@ check_PROGRAMS = test testsvg
 test_SOURCES = \
 	test.c
 
-test_LDADD = libdwg.la
+test_LDADD = libredwg.la
 
 testsvg_SOURCES = \
 	testSVG.c
 	
-testsvg_LDADD = libdwg.la
+testsvg_LDADD = libredwg.la
