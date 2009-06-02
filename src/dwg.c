@@ -855,3 +855,8 @@ dwg_print (Dwg_Structure *dwg_struct)
 	printf ("MEASUREMENT: 0x%08X\n", (unsigned int) dwg_struct->measurement);
 	puts ("");
 }
+
+    void dwg_free (Dwg_Structure * dwg){
+        if (dwg->header.section)
+            free(dwg->header.section);
+    }

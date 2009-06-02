@@ -58,6 +58,7 @@ int load_dwg (char *filename)
 			break;
 		}
 	}
+    dwg_free(&dwg);
 	return success;
 }
 

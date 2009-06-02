@@ -41,9 +41,6 @@ test_dwg_c (char *filename)
 	int error;
 	Dwg_Structure dwg_struct;
 
-	/* Beginning tests */
-	puts (" ---------------------------------------> Test one: \"dwg.c\"");
-
 	if (filename)
 		error = dwg_read_file (filename, &dwg_struct);
 	else
@@ -57,6 +54,8 @@ test_dwg_c (char *filename)
 		   error = error || dwg_write_file ("new_result.dwg", &dwg_struct);
 		 */
 	}
+
+    dwg_free(&dwg_struct);
 
 	if (error)
 		puts (" \"dwg.c\" ==> Error...");

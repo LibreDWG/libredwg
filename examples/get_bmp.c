@@ -45,6 +45,8 @@ int get_bmp (char *filename)
 
 	/* Get DIB bitmap data */
 	data = dwg_bmp (&dwg, &size);
+    dwg_free(&dwg);
+
 	if (!data)
 	{
 		puts ("No thumb in dwg file");

@@ -113,8 +113,9 @@ main (int argc, char *argv[])
 	}
 
 	create_postscript (&dwg, OUTPUT_FILE);
+    dwg_free(&dwg);
+    
 	puts ("Success! See the '" OUTPUT_FILE "'file");
-
 	return 0;
 }
 

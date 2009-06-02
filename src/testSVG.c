@@ -46,6 +46,7 @@ test_SVG (char *filename)
 		output_SVG(&dwg_struct);
 	}
 
+    dwg_free(&dwg_struct);
 	return error;
 }
 
