@@ -140,9 +140,8 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	   if (loglevel) printf ("Legita: %X\nKreita: %X\n", ckr, ckr2);
 	 */
 
-	if (loglevel && bit_sercxi_sentinel (dat, dwg_sentinel (DWG_SENTINEL_HEAD_END)))
+	if (bit_sercxi_sentinel (dat, dwg_sentinel (DWG_SENTINEL_HEADER_END)) && loglevel)
 		printf ("=======> HEAD (fino): %8X\n", (unsigned int) dat->byte);
-
 
 	/*-------------------------------------------------------------------------
 	 * Nekonata section 1
@@ -466,7 +465,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	 * Dua kap-datenaro
 	 */
 
-	if (bit_sercxi_sentinel (dat, dwg_sentinel (DWG_SENTINEL_DUAHEAD_BEGIN)))
+	if (bit_sercxi_sentinel (dat, dwg_sentinel (DWG_SENTINEL_SECOND_HEADER_BEGIN)))
 	{
 		long unsigned int pvzadr;
 		long unsigned int pvz;
@@ -562,7 +561,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 		   }
 		 */
 
-		if (loglevel && bit_sercxi_sentinel (dat, dwg_sentinel (DWG_SENTINEL_DUAHEAD_END)))
+		if (loglevel && bit_sercxi_sentinel (dat, dwg_sentinel (DWG_SENTINEL_SECOND_HEADER_END)))
 			printf (" DUA KAP-DAT. (fino): %8X\n", (unsigned int) dat->byte);
 	}
 

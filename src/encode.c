@@ -79,7 +79,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	dat->byte += (skt->header.num_sections * 9);
 	bit_read_CRC (dat);	// Salti CKR-on
 
-	bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_HEAD_END));
+	bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_HEADER_END));
 
 	/*------------------------------------------------------------
 	 * Nekonata section 1
@@ -388,7 +388,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	/*------------------------------------------------------------
 	 * Dua kap-datenaro
 	 */
-	bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_DUAHEAD_BEGIN));
+	bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_SECOND_HEADER_BEGIN));
 
 	pvzadr = dat->byte;	// Gardi la unuan addressn de la section por write ties sizen poste
 	bit_write_RL (dat, 0);
@@ -459,7 +459,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	bit_write_RL (dat, 0);
 	bit_write_RL (dat, 0);
 
-	bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_DUAHEAD_END));
+	bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_SECOND_HEADER_END));
 
 	/*------------------------------------------------------------
 	 * MEASUREMENT
