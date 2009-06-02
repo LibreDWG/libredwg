@@ -73,7 +73,7 @@ bit_write_B (Bit_Chain * dat, unsigned char value)
 	bit_advance_position (dat, 1);
 }
 
-/** Read 2 bitojn.
+/** Read 2 bits.
  */
 unsigned char
 bit_read_BB (Bit_Chain * dat)
@@ -98,12 +98,12 @@ bit_read_BB (Bit_Chain * dat)
 	return result;
 }
 
-/** Write 2 bitojn.
+/** Write 2 bits.
  */
 void
 bit_write_BB (Bit_Chain * dat, unsigned char value)
 {
-	unsigned char masko;
+	unsigned char mask;
 	unsigned char byte;
 
 	if (dat->byte >= dat->size - 1)
@@ -112,8 +112,8 @@ bit_write_BB (Bit_Chain * dat, unsigned char value)
 	byte = dat->chain[dat->byte];
 	if (dat->bit < 7)
 	{
-		masko = 0xc0 >> dat->bit;
-		dat->chain[dat->byte] = (byte & ~masko) | (value << (6 - dat->bit));
+		mask = 0xc0 >> dat->bit;
+		dat->chain[dat->byte] = (byte & ~mask) | (value << (6 - dat->bit));
 	}
 	else
 	{
@@ -451,7 +451,7 @@ bit_write_MC (Bit_Chain * dat, long int val)
 	int i, j;
 	int negativi;
 	unsigned char byte[4];
-	long unsigned int masko;
+	long unsigned int mask;
 	long unsigned int value;
 
 	if (val < 0)
@@ -465,12 +465,12 @@ bit_write_MC (Bit_Chain * dat, long int val)
 		value = (long unsigned int) val;
 	}
 
-	masko = 0x0000007f;
+	mask = 0x0000007f;
 	for (i = 3, j = 0; i > -1; i--, j += 7)
 	{
-		byte[i] = (unsigned char) ((value & masko) >> j);
+		byte[i] = (unsigned char) ((value & mask) >> j);
 		byte[i] |= 0x80;
-		masko = masko << 7;
+		mask = mask << 7;
 	}
 	for (i = 0; i < 3; i++)
 		if (byte[i] & 0x7f)
@@ -519,13 +519,13 @@ bit_write_MS (Bit_Chain * dat, long unsigned int value)
 {
 	int i, j;
 	unsigned int word[4];
-	long unsigned int masko;
+	long unsigned int mask;
 
-	masko = 0x00007fff;
+	mask = 0x00007fff;
 	for (i = 1, j = 0; i > -1; i--, j += 15)
 	{
-		word[i] = ((unsigned int) ((value & masko) >> j)) | 0x8000;
-		masko = masko << 15;
+		word[i] = ((unsigned int) ((value & mask) >> j)) | 0x8000;
+		mask = mask << 15;
 	}
 	/* Ne uzu tion sube: cxiam faru gxin kvarbitoka!
 	   for (i = 0; i < 1; i++)
