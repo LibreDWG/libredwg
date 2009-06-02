@@ -505,10 +505,10 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 		//if (loglevel) printf ("\nChain?: ");
 		for (i = 0; i < 6; i++)
 		{
-			skt->duaheader.unknownjxo[i] = bit_read_RC (dat);
-			//if (loglevel) printf (" 0x%02X", skt->duaheader.unknownjxo[i]);
+			skt->second_header.unknownjxo[i] = bit_read_RC (dat);
+			//if (loglevel) printf (" 0x%02X", skt->second_header.unknownjxo[i]);
 		}
-		if (skt->duaheader.unknownjxo[3] != 0x78 || skt->duaheader.unknownjxo[5] != 0x06)
+		if (skt->second_header.unknownjxo[3] != 0x78 || skt->second_header.unknownjxo[5] != 0x06)
 			sig = bit_read_RC (dat);	// por kompenso okaze de eventuala kroma nulo ne readta antauxe
 
 		//puts("");
@@ -527,7 +527,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 		for (i = 0; i < 14; i++)
 		{
 			sig2 = bit_read_RC (dat);
-			skt->duaheader.traktrik[i].size = sig2;
+			skt->second_header.traktrik[i].size = sig2;
 			//if (loglevel) printf ("\nLongo: %u\n", sig2);
 			sig = bit_read_RC (dat);
 			//if (loglevel) printf ("\t[%u]\n", sig);
@@ -535,7 +535,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 			for (j = 0; j < sig2; j++)
 			{
 				sig = bit_read_RC (dat);
-				skt->duaheader.traktrik[i].chain[j] = sig;
+				skt->second_header.traktrik[i].chain[j] = sig;
 				//if (loglevel) printf (" %02X", sig);
 			}
 		}

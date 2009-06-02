@@ -437,10 +437,10 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	bit_write_BS (dat, 14);
 	for (i = 0; i < 14; i++)
 	{
-		bit_write_RC (dat, skt->duaheader.traktrik[i].size);
+		bit_write_RC (dat, skt->second_header.traktrik[i].size);
 		bit_write_RC (dat, i);
-		for (j = 0; j < skt->duaheader.traktrik[i].size; j++)
-			bit_write_RC (dat, skt->duaheader.traktrik[i].chain[j]);
+		for (j = 0; j < skt->second_header.traktrik[i].size; j++)
+			bit_write_RC (dat, skt->second_header.traktrik[i].chain[j]);
 	}
 
 	/* Returni al la komenco por write la sizen

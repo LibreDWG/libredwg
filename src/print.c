@@ -605,9 +605,9 @@ dwg_print (Dwg_Structure *dwg_struct)
 	puts ("**************************************************");
 	for (i = 0; i < 14; i++)
 	{
-		printf ("Rikordo[%02i] Longo: %u\tChain:", i, dwg_struct->duaheader.traktrik[i].size);
-		for (j = 0; j < dwg_struct->duaheader.traktrik[i].size; j++)
-			printf (" %02X", dwg_struct->duaheader.traktrik[i].chain[j]);
+		printf ("Rikordo[%02i] Longo: %u\tChain:", i, dwg_struct->second_header.traktrik[i].size);
+		for (j = 0; j < dwg_struct->second_header.traktrik[i].size; j++)
+			printf (" %02X", dwg_struct->second_header.traktrik[i].chain[j]);
 		puts ("");
 	}
 	puts ("");

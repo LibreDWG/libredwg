@@ -1011,7 +1011,7 @@ extern "C"
 				int size;
 				unsigned char chain[4];
 			} traktrik[14];
-		} duaheader;
+		} second_header;
 
 		long unsigned int measurement;
 
