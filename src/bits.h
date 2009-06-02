@@ -11,12 +11,12 @@
 
 ///  Funkcioj por read/write kompaktitajn datenerojn en bitok-chainj.
 /**
- La pozicioj de bitoj en cxiu bitoko (bajto) estas numeritaj laux jene:
+ La pozicioj de bitoj en cxiu bitoko (byte) estas numeritaj laux jene:
 
  pozicio: 01234567 01234567 01234567 ...
  bitoj:   76543210 76543210 76543210 ...
           \______/ \______/ \______/
-          bajto 1  bajto 2  bajto 3  ...
+          byte 1  byte 2  byte 3  ...
 */
 
 #ifndef BITS_H
@@ -33,7 +33,7 @@ typedef struct _bit_chain
 {
 	unsigned char *chain;
 	long unsigned int kiom;
-	long unsigned int bajto;
+	long unsigned int byte;
 	unsigned char bito;
 } Bit_Chain;
 

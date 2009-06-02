@@ -33,13 +33,13 @@ bit_ref_salti (Bit_Chain * dat, int salto)
 	int finpoz;
 
 	finpoz = dat->bito + salto;
-	if (dat->bajto >= dat->kiom - 1 && finpoz > 7)
+	if (dat->byte >= dat->kiom - 1 && finpoz > 7)
 	{
 		dat->bito = 7;
 		return;
 	}
 	dat->bito = finpoz % 8;
-	dat->bajto += finpoz / 8;
+	dat->byte += finpoz / 8;
 }
 
 /** Read 1 biton.
@@ -50,7 +50,7 @@ bit_read_B (Bit_Chain * dat)
 	unsigned char result;
 	unsigned char bitoko;
 
-	bitoko = dat->chain[dat->bajto];
+	bitoko = dat->chain[dat->byte];
 	result = (bitoko & (0x80 >> dat->bito)) >> (7 - dat->bito);
 
 	bit_ref_salti (dat, 1);
@@ -62,13 +62,13 @@ bit_read_B (Bit_Chain * dat)
 void
 bit_write_B (Bit_Chain * dat, unsigned char value)
 {
-	if (dat->bajto >= dat->kiom - 1)
+	if (dat->byte >= dat->kiom - 1)
 		bit_chain_rezervi (dat);
 
 	if (value)
-		dat->chain[dat->bajto] |= 0x80 >> dat->bito;
+		dat->chain[dat->byte] |= 0x80 >> dat->bito;
 	else
-		dat->chain[dat->bajto] &= ~(0x80 >> dat->bito);
+		dat->chain[dat->byte] &= ~(0x80 >> dat->bito);
 
 	bit_ref_salti (dat, 1);
 }
@@ -81,15 +81,15 @@ bit_read_BB (Bit_Chain * dat)
 	unsigned char result;
 	unsigned char bitoko;
 
-	bitoko = dat->chain[dat->bajto];
+	bitoko = dat->chain[dat->byte];
 	if (dat->bito < 7)
 		result = (bitoko & (0xc0 >> dat->bito)) >> (6 - dat->bito);
 	else
 	{
 		result = (bitoko & 0x01) << 1;
-		if (dat->bajto < dat->kiom - 1)
+		if (dat->byte < dat->kiom - 1)
 		{
-			bitoko = dat->chain[dat->bajto + 1];
+			bitoko = dat->chain[dat->byte + 1];
 			result |= (bitoko & 0x80) >> 7;
 		}
 	}
@@ -106,22 +106,22 @@ bit_write_BB (Bit_Chain * dat, unsigned char value)
 	unsigned char masko;
 	unsigned char bitoko;
 
-	if (dat->bajto >= dat->kiom - 1)
+	if (dat->byte >= dat->kiom - 1)
 		bit_chain_rezervi (dat);
 
-	bitoko = dat->chain[dat->bajto];
+	bitoko = dat->chain[dat->byte];
 	if (dat->bito < 7)
 	{
 		masko = 0xc0 >> dat->bito;
-		dat->chain[dat->bajto] = (bitoko & ~masko) | (value << (6 - dat->bito));
+		dat->chain[dat->byte] = (bitoko & ~masko) | (value << (6 - dat->bito));
 	}
 	else
 	{
-		dat->chain[dat->bajto] = (bitoko & 0xfe) | (value >> 1);
-		if (dat->bajto < dat->kiom - 1)
+		dat->chain[dat->byte] = (bitoko & 0xfe) | (value >> 1);
+		if (dat->byte < dat->kiom - 1)
 		{
-			bitoko = dat->chain[dat->bajto + 1];
-			dat->chain[dat->bajto + 1] = (bitoko & 0x7f) | ((value & 0x01) << 7);
+			bitoko = dat->chain[dat->byte + 1];
+			dat->chain[dat->byte + 1] = (bitoko & 0x7f) | ((value & 0x01) << 7);
 		}
 	}
 
@@ -136,15 +136,15 @@ bit_read_RC (Bit_Chain * dat)
 	unsigned char result;
 	unsigned char bitoko;
 
-	bitoko = dat->chain[dat->bajto];
+	bitoko = dat->chain[dat->byte];
 	if (dat->bito == 0)
 		result = bitoko;
 	else
 	{
 		result = bitoko << dat->bito;
-		if (dat->bajto < dat->kiom - 1)
+		if (dat->byte < dat->kiom - 1)
 		{
-			bitoko = dat->chain[dat->bajto + 1];
+			bitoko = dat->chain[dat->byte + 1];
 			result |= bitoko >> (8 - dat->bito);
 		}
 	}
@@ -161,23 +161,23 @@ bit_write_RC (Bit_Chain * dat, unsigned char value)
 	unsigned char bitoko;
 	unsigned char cetero;
 
-	if (dat->bajto >= dat->kiom - 1)
+	if (dat->byte >= dat->kiom - 1)
 		bit_chain_rezervi (dat);
 
 	if (dat->bito == 0)
 	{
-		dat->chain[dat->bajto] = value;
+		dat->chain[dat->byte] = value;
 	}
 	else
 	{
-		bitoko = dat->chain[dat->bajto];
+		bitoko = dat->chain[dat->byte];
 		cetero = bitoko & (0xff << (8 - dat->bito));
-		dat->chain[dat->bajto] = cetero | (value >> dat->bito);
-		if (dat->bajto < dat->kiom - 1)
+		dat->chain[dat->byte] = cetero | (value >> dat->bito);
+		if (dat->byte < dat->kiom - 1)
 		{
-			bitoko = dat->chain[dat->bajto + 1];
+			bitoko = dat->chain[dat->byte + 1];
 			cetero = bitoko & (0xff >> dat->bito);
-			dat->chain[dat->bajto + 1] = cetero | (value << (8 - dat->bito));
+			dat->chain[dat->byte + 1] = cetero | (value << (8 - dat->bito));
 		}
 	}
 
@@ -739,7 +739,7 @@ bit_write_H (Bit_Chain * dat, Dwg_Traktilo * trakt)
 		bit_write_RC (dat, val[i]);
 }
 
-/** Nur read CRK-numbern, sen iu ajn kontrolo, nur por iri al la sekva bajto,
+/** Nur read CRK-numbern, sen iu ajn kontrolo, nur por iri al la sekva byte,
  * saltante eventualajn neuzitajn bitojn.
  */
 unsigned int
@@ -750,7 +750,7 @@ bit_read_CRC (Bit_Chain * dat)
 
 	if (dat->bito > 0)
 	{
-		dat->bajto++;
+		dat->byte++;
 		dat->bito = 0;
 	}
 
@@ -772,10 +772,10 @@ bit_check_CRC (Bit_Chain * dat, long unsigned int ekaddress, unsigned int semo)
 	unsigned char rez[2];
 
 	if (dat->bito > 0)
-		dat->bajto++;
+		dat->byte++;
 	dat->bito = 0;
 
-	kalkulita = bit_ckr8 (semo, &(dat->chain[ekaddress]), dat->bajto - ekaddress);
+	kalkulita = bit_ckr8 (semo, &(dat->chain[ekaddress]), dat->byte - ekaddress);
 
 	rez[0] = bit_read_RC (dat);
 	rez[1] = bit_read_RC (dat);
@@ -796,7 +796,7 @@ bit_krei_CRC (Bit_Chain * dat, long unsigned int ekaddress, unsigned int semo)
 	while (dat->bito > 0)
 		bit_write_B (dat, 0);
 
-	ckr = bit_ckr8 (semo, &(dat->chain[ekaddress]), dat->bajto - ekaddress);
+	ckr = bit_ckr8 (semo, &(dat->chain[ekaddress]), dat->byte - ekaddress);
 
 	bit_write_RC (dat, (unsigned char) (ckr >> 8));
 	bit_write_RC (dat, (unsigned char) (ckr & 0xFF));
@@ -871,7 +871,7 @@ bit_write_L (Bit_Chain * dat, long unsigned int value)
 	bit_write_RC (dat, btk[0]);
 }
 
-/** Sercxi sentineln; se trovite, poziciigas "dat->bajto" tuj post gxi.
+/** Sercxi sentineln; se trovite, poziciigas "dat->byte" tuj post gxi.
  */
 int
 bit_sercxi_sentinel (Bit_Chain * dat, unsigned char gdst[16])
@@ -887,7 +887,7 @@ bit_sercxi_sentinel (Bit_Chain * dat, unsigned char gdst[16])
 		}
 		if (j == 16)
 		{
-			dat->bajto = i + j;
+			dat->byte = i + j;
 			dat->bito = 0;
 			return -1;
 		}
@@ -915,7 +915,7 @@ bit_chain_rezervi (Bit_Chain * dat)
 	{
 		dat->chain = calloc (1, CXENO_BLOKO);
 		dat->kiom = CXENO_BLOKO;
-		dat->bajto = 0;
+		dat->byte = 0;
 		dat->bito = 0;
 	}
 	else
@@ -962,7 +962,7 @@ bit_esplori_chain (Bit_Chain * dat, long unsigned int kiom)
 	for (k = 0; k < 8; k++)
 	{
 		printf ("---------------------------------------------------------");
-		dat->bajto = 0;
+		dat->byte = 0;
 		dat->bito = k;
 		for (i = 0; i < kiom - 1; i++)
 		{

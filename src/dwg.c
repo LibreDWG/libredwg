@@ -54,7 +54,7 @@ dwg_read_file (char *filename, Dwg_Structure * dwg_struct)
 	/* Sxargi la memoron je la dosiero
 	 */
 	bitaro.bito = 0;
-	bitaro.bajto = 0;
+	bitaro.byte = 0;
 	bitaro.kiom = atrib.st_size;
 	bitaro.chain = (char *) malloc (bitaro.kiom);
 	if (!bitaro.chain)
@@ -152,7 +152,7 @@ dwg_bmp (Dwg_Structure *stk, long int *kiom)
 	
 	dat = (Bit_Chain*) &stk->picture;
 	dat->bito = 0;
-	dat->bajto = 0;
+	dat->byte = 0;
  
 	bit_read_RL (dat);
 	num_pictures = bit_read_RC (dat);
@@ -189,11 +189,11 @@ dwg_bmp (Dwg_Structure *stk, long int *kiom)
 			//printf ("\t\tGrandeco: 0x%x\n", bit_read_RL (dat));
 		}
  	}
-	dat->bajto += kiom_kapo;
-	//printf ("Adreso nun: 0x%x\n", dat->bajto);
+	dat->byte += kiom_kapo;
+	//printf ("Adreso nun: 0x%x\n", dat->byte);
  
 	if (*kiom > 0)
-		return (dat->chain + dat->bajto);
+		return (dat->chain + dat->byte);
 	else
 		return NULL;
 }

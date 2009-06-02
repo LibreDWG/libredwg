@@ -956,7 +956,7 @@ extern "C"
 	{
 		unsigned char *chain;
 		long unsigned int kiom;
-		long unsigned int bajto;
+		long unsigned int byte;
 		unsigned char bito;
 	} Dwg_Chain;
 
