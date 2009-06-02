@@ -543,11 +543,11 @@ bit_write_MS (Bit_Chain * dat, long unsigned int value)
 void
 bit_read_BE (Bit_Chain * dat, double *x, double *y, double *z)
 {
-	if (bit_read_B (dat))
+	if (dat->version>=R_2000 && bit_read_B (dat))
 	{
 		*x = 0.0;
 		*y = 0.0;
-		*y = 1.0;
+		*z = 1.0;
 	}
 	else
 	{

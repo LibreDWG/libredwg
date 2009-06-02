@@ -94,6 +94,7 @@ dwg_write_file (char *filename, Dwg_Structure * dwg_struct)
 	FILE *dt;
 	struct stat atrib;
 	Bit_Chain bitaro;
+    bitaro.version = dwg_struct->header.version;
 
 	/* Enkodigi la dwg-datenaron
 	bitaro.kiom = 0;

@@ -27,6 +27,8 @@
 #include "dwg.h"
 #endif
 
+#include "common.h"
+
 /**
  Structure for DWG-files raw data storage
  */
@@ -36,6 +38,7 @@ typedef struct _bit_chain
 	long unsigned int kiom;
 	long unsigned int byte;
 	unsigned char bito;
+	Dwg_Version_Type version;
 } Bit_Chain;
 
 /* Functions for raw data manipulations.

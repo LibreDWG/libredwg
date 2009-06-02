@@ -68,7 +68,8 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 			"This file's version code is: %s\n", version);
         return -1;
     }
-	
+	dat->version = skt->header.version;
+
 	if (skt->header.version != R_2000)
 	{
 		fprintf (stderr, "This version of Libredwg is only capable of decoding version R2000 (code: AC1015) dwg-files. "
