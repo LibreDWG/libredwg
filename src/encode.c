@@ -55,7 +55,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	Object_Mapo pvzmap;
 	Dwg_Object *obj;
 
-	bit_chain_rezervi (dat);
+	bit_chain_alloc (dat);
 
 	/*------------------------------------------------------------
 	 * Kap-datenaro
@@ -96,7 +96,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 		skt->unknown1.size = skt->header.section[5].size;
 		skt->unknown1.byte = skt->unknown1.bit = 0;
 		while (dat->byte + skt->unknown1.size >= dat->size)
-			bit_chain_rezervi (dat);
+			bit_chain_alloc (dat);
 		memcpy (&dat->chain[dat->byte], skt->unknown1.chain, skt->unknown1.size);
 		dat->byte += skt->unknown1.size;
 
@@ -299,7 +299,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 		{
 			bit_write_MS (dat, obj->size);
 			if (dat->byte + obj->size >= dat->size - 2)
-				bit_chain_rezervi (dat);
+				bit_chain_alloc (dat);
 			memcpy (&dat->chain[dat->byte], obj->tio.unknownjxo, obj->size);
 			dat->byte += obj->size;
 		}

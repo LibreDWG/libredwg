@@ -648,7 +648,7 @@ dwg_decode_entity (Bit_Chain * dat, Dwg_Object_Entity * est)
 		{
 			fprintf (stderr, "dwg_decode_entity:  Absurdo! Bildo-size: %lu kB. Object: %lu (traktilo).\n",
 				est->picture_size / 1000, est->traktilo.value);
-			bit_ref_salti (dat, -(4 * 8 + 1));
+			bit_advance_position (dat, -(4 * 8 + 1));
 		}
 	}
 

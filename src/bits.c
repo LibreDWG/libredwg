@@ -28,49 +28,49 @@ static unsigned int bit_ckr8 (unsigned int dx, unsigned char *adr, long n);
 /* Pretersalti tiom da bitoj (antauxen aux malantauxen)
  */
 void
-bit_ref_salti (Bit_Chain * dat, int salto)
+bit_advance_position (Bit_Chain * dat, int advance)
 {
-	int finpoz;
+	int endpos;
 
-	finpoz = dat->bit + salto;
-	if (dat->byte >= dat->size - 1 && finpoz > 7)
+	endpos = dat->bit + advance;
+	if (dat->byte >= dat->size - 1 && endpos > 7)
 	{
 		dat->bit = 7;
 		return;
 	}
-	dat->bit = finpoz % 8;
-	dat->byte += finpoz / 8;
+	dat->bit = endpos % 8;
+	dat->byte += endpos / 8;
 }
 
-/** Read 1 biton.
+/** Read 1 bit.
  */
 unsigned char
 bit_read_B (Bit_Chain * dat)
 {
 	unsigned char result;
-	unsigned char bitoko;
+	unsigned char byte;
 
-	bitoko = dat->chain[dat->byte];
-	result = (bitoko & (0x80 >> dat->bit)) >> (7 - dat->bit);
+	byte = dat->chain[dat->byte];
+	result = (byte & (0x80 >> dat->bit)) >> (7 - dat->bit);
 
-	bit_ref_salti (dat, 1);
+	bit_advance_position (dat, 1);
 	return result;
 }
 
-/** Write 1 biton.
+/** Write 1 bit.
  */
 void
 bit_write_B (Bit_Chain * dat, unsigned char value)
 {
 	if (dat->byte >= dat->size - 1)
-		bit_chain_rezervi (dat);
+		bit_chain_alloc (dat);
 
 	if (value)
 		dat->chain[dat->byte] |= 0x80 >> dat->bit;
 	else
 		dat->chain[dat->byte] &= ~(0x80 >> dat->bit);
 
-	bit_ref_salti (dat, 1);
+	bit_advance_position (dat, 1);
 }
 
 /** Read 2 bitojn.
@@ -79,22 +79,22 @@ unsigned char
 bit_read_BB (Bit_Chain * dat)
 {
 	unsigned char result;
-	unsigned char bitoko;
+	unsigned char byte;
 
-	bitoko = dat->chain[dat->byte];
+	byte = dat->chain[dat->byte];
 	if (dat->bit < 7)
-		result = (bitoko & (0xc0 >> dat->bit)) >> (6 - dat->bit);
+		result = (byte & (0xc0 >> dat->bit)) >> (6 - dat->bit);
 	else
 	{
-		result = (bitoko & 0x01) << 1;
+		result = (byte & 0x01) << 1;
 		if (dat->byte < dat->size - 1)
 		{
-			bitoko = dat->chain[dat->byte + 1];
-			result |= (bitoko & 0x80) >> 7;
+			byte = dat->chain[dat->byte + 1];
+			result |= (byte & 0x80) >> 7;
 		}
 	}
 
-	bit_ref_salti (dat, 2);
+	bit_advance_position (dat, 2);
 	return result;
 }
 
@@ -104,28 +104,28 @@ void
 bit_write_BB (Bit_Chain * dat, unsigned char value)
 {
 	unsigned char masko;
-	unsigned char bitoko;
+	unsigned char byte;
 
 	if (dat->byte >= dat->size - 1)
-		bit_chain_rezervi (dat);
+		bit_chain_alloc (dat);
 
-	bitoko = dat->chain[dat->byte];
+	byte = dat->chain[dat->byte];
 	if (dat->bit < 7)
 	{
 		masko = 0xc0 >> dat->bit;
-		dat->chain[dat->byte] = (bitoko & ~masko) | (value << (6 - dat->bit));
+		dat->chain[dat->byte] = (byte & ~masko) | (value << (6 - dat->bit));
 	}
 	else
 	{
-		dat->chain[dat->byte] = (bitoko & 0xfe) | (value >> 1);
+		dat->chain[dat->byte] = (byte & 0xfe) | (value >> 1);
 		if (dat->byte < dat->size - 1)
 		{
-			bitoko = dat->chain[dat->byte + 1];
-			dat->chain[dat->byte + 1] = (bitoko & 0x7f) | ((value & 0x01) << 7);
+			byte = dat->chain[dat->byte + 1];
+			dat->chain[dat->byte + 1] = (byte & 0x7f) | ((value & 0x01) << 7);
 		}
 	}
 
-	bit_ref_salti (dat, 2);
+	bit_advance_position (dat, 2);
 }
 
 /** Read 1 bitokon.
@@ -134,22 +134,22 @@ unsigned char
 bit_read_RC (Bit_Chain * dat)
 {
 	unsigned char result;
-	unsigned char bitoko;
+	unsigned char byte;
 
-	bitoko = dat->chain[dat->byte];
+	byte = dat->chain[dat->byte];
 	if (dat->bit == 0)
-		result = bitoko;
+		result = byte;
 	else
 	{
-		result = bitoko << dat->bit;
+		result = byte << dat->bit;
 		if (dat->byte < dat->size - 1)
 		{
-			bitoko = dat->chain[dat->byte + 1];
-			result |= bitoko >> (8 - dat->bit);
+			byte = dat->chain[dat->byte + 1];
+			result |= byte >> (8 - dat->bit);
 		}
 	}
 
-	bit_ref_salti (dat, 8);
+	bit_advance_position (dat, 8);
 	return ((unsigned char) result);
 }
 
@@ -158,11 +158,11 @@ bit_read_RC (Bit_Chain * dat)
 void
 bit_write_RC (Bit_Chain * dat, unsigned char value)
 {
-	unsigned char bitoko;
+	unsigned char byte;
 	unsigned char cetero;
 
 	if (dat->byte >= dat->size - 1)
-		bit_chain_rezervi (dat);
+		bit_chain_alloc (dat);
 
 	if (dat->bit == 0)
 	{
@@ -170,18 +170,18 @@ bit_write_RC (Bit_Chain * dat, unsigned char value)
 	}
 	else
 	{
-		bitoko = dat->chain[dat->byte];
-		cetero = bitoko & (0xff << (8 - dat->bit));
+		byte = dat->chain[dat->byte];
+		cetero = byte & (0xff << (8 - dat->bit));
 		dat->chain[dat->byte] = cetero | (value >> dat->bit);
 		if (dat->byte < dat->size - 1)
 		{
-			bitoko = dat->chain[dat->byte + 1];
-			cetero = bitoko & (0xff >> dat->bit);
+			byte = dat->chain[dat->byte + 1];
+			cetero = byte & (0xff >> dat->bit);
 			dat->chain[dat->byte + 1] = cetero | (value << (8 - dat->bit));
 		}
 	}
 
-	bit_ref_salti (dat, 8);
+	bit_advance_position (dat, 8);
 }
 
 /** Read 1 dubitokon.
@@ -410,34 +410,34 @@ bit_write_BD (Bit_Chain * dat, double value)
 	}
 }
 
-/** Read 1 kompaktitan entjeron, laux moduleca bitoka formo (maksimume 4 bitokojn).
+/** Read 1 kompaktitan entjeron, laux moduleca bitoka formo (maksimume 4 bytejn).
  */
 long int
 bit_read_MC (Bit_Chain * dat)
 {
 	int i, j;
 	int negativi;
-	unsigned char bitoko[4];
+	unsigned char byte[4];
 	long unsigned int result;
 
 	negativi = 0;
 	result = 0;
 	for (i = 3, j = 0; i > -1; i--, j += 7)
 	{
-		bitoko[i] = bit_read_RC (dat);
-		if (!(bitoko[i] & 0x80))
+		byte[i] = bit_read_RC (dat);
+		if (!(byte[i] & 0x80))
 		{
-			if ((bitoko[i] & 0x40))
+			if ((byte[i] & 0x40))
 			{
 				negativi = 1;
-				bitoko[i] &= 0xbf;
+				byte[i] &= 0xbf;
 			}
-			result |= (((long unsigned int) bitoko[i]) << j);
+			result |= (((long unsigned int) byte[i]) << j);
 			return (negativi ? -((long int) result) : (long int) result);
 		}
 		else
-			bitoko[i] &= 0x7f;
-		result |= ((long unsigned int) bitoko[i]) << j;
+			byte[i] &= 0x7f;
+		result |= ((long unsigned int) byte[i]) << j;
 	}
 
 	return 0;		/* malsukcese... */
@@ -450,7 +450,7 @@ bit_write_MC (Bit_Chain * dat, long int val)
 {
 	int i, j;
 	int negativi;
-	unsigned char bitoko[4];
+	unsigned char byte[4];
 	long unsigned int masko;
 	long unsigned int value;
 
@@ -468,22 +468,22 @@ bit_write_MC (Bit_Chain * dat, long int val)
 	masko = 0x0000007f;
 	for (i = 3, j = 0; i > -1; i--, j += 7)
 	{
-		bitoko[i] = (unsigned char) ((value & masko) >> j);
-		bitoko[i] |= 0x80;
+		byte[i] = (unsigned char) ((value & masko) >> j);
+		byte[i] |= 0x80;
 		masko = masko << 7;
 	}
 	for (i = 0; i < 3; i++)
-		if (bitoko[i] & 0x7f)
+		if (byte[i] & 0x7f)
 			break;
 
-	if (bitoko[i] & 0x40)
+	if (byte[i] & 0x40)
 		i--;
-	bitoko[i] &= 0x7f;
+	byte[i] &= 0x7f;
 	if (negativi)
-		bitoko[i] |= 0x40;
+		byte[i] |= 0x40;
 	for (j = 3; j >= i; j--)
-		bit_write_RC (dat, bitoko[j]);
-//if (value == 64) printf ("(%2X) \n", bitoko[i]);
+		bit_write_RC (dat, byte[j]);
+//if (value == 64) printf ("(%2X) \n", byte[i]);
 }
 
 /** Read 1 kompaktitan entjeron, laux moduleca dubitoka formo (maksimume 2 dubitokojn).
@@ -492,21 +492,21 @@ long unsigned int
 bit_read_MS (Bit_Chain * dat)
 {
 	int i, j;
-	unsigned int dubitoko[2];
+	unsigned int word[2];
 	long unsigned int result;
 
 	result = 0;
 	for (i = 1, j = 0; i > -1; i--, j += 15)
 	{
-		dubitoko[i] = bit_read_RS (dat);
-		if (!(dubitoko[i] & 0x8000))
+		word[i] = bit_read_RS (dat);
+		if (!(word[i] & 0x8000))
 		{
-			result |= (((long unsigned int) dubitoko[i]) << j);
+			result |= (((long unsigned int) word[i]) << j);
 			return (result);
 		}
 		else
-			dubitoko[i] &= 0x7fff;
-		result |= ((long unsigned int) dubitoko[i]) << j;
+			word[i] &= 0x7fff;
+		result |= ((long unsigned int) word[i]) << j;
 	}
 
 	return 0;		/* malsukcese... */
@@ -518,24 +518,24 @@ void
 bit_write_MS (Bit_Chain * dat, long unsigned int value)
 {
 	int i, j;
-	unsigned int dubitoko[4];
+	unsigned int word[4];
 	long unsigned int masko;
 
 	masko = 0x00007fff;
 	for (i = 1, j = 0; i > -1; i--, j += 15)
 	{
-		dubitoko[i] = ((unsigned int) ((value & masko) >> j)) | 0x8000;
+		word[i] = ((unsigned int) ((value & masko) >> j)) | 0x8000;
 		masko = masko << 15;
 	}
 	/* Ne uzu tion sube: cxiam faru gxin kvarbitoka!
 	   for (i = 0; i < 1; i++)
-	   if (dubitoko[i] & 0x7fff)
+	   if (word[i] & 0x7fff)
 	   break;
 	 */
 	i = 1;
-	dubitoko[i] &= 0x7fff;
+	word[i] &= 0x7fff;
 	for (j = 1; j >= i; j--)
-		bit_write_RS (dat, dubitoko[j]);
+		bit_write_RS (dat, word[j]);
 }
 
 /** Read bit-extrusionn.
@@ -904,23 +904,23 @@ bit_write_sentinel (Bit_Chain * dat, unsigned char sentinel[16])
 }
 
 /*
- * Rezervi spacon por write en bitara chain
+ * Allocates memory space for bit_chain
  */
-#define CXENO_BLOKO 40960
+#define CHAIN_BLOCK 40960
 void
-bit_chain_rezervi (Bit_Chain * dat)
+bit_chain_alloc (Bit_Chain * dat)
 {
 	if (dat->size == 0)
 	{
-		dat->chain = calloc (1, CXENO_BLOKO);
-		dat->size = CXENO_BLOKO;
+		dat->chain = calloc (1, CHAIN_BLOCK);
+		dat->size = CHAIN_BLOCK;
 		dat->byte = 0;
 		dat->bit = 0;
 	}
 	else
 	{
-		dat->chain = realloc (dat->chain, dat->size + CXENO_BLOKO);
-		dat->size += CXENO_BLOKO;
+		dat->chain = realloc (dat->chain, dat->size + CHAIN_BLOCK);
+		dat->size += CHAIN_BLOCK;
 	}
 }
 

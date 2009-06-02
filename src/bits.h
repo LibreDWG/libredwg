@@ -43,7 +43,7 @@ typedef struct _bit_chain
 
 /* Functions for raw data manipulations.
  */
-void bit_ref_salti (Bit_Chain * dat, int salto);
+void bit_advance_position (Bit_Chain * dat, int salto);
 
 unsigned char bit_read_B (Bit_Chain * bit_datenaro);
 
@@ -125,7 +125,7 @@ int bit_search_sentinel (Bit_Chain * dat, unsigned char sentinel[16]);
 
 void bit_write_sentinel (Bit_Chain * dat, unsigned char sentinel[16]);
 
-void bit_chain_rezervi (Bit_Chain * dat);
+void bit_chain_alloc (Bit_Chain * dat);
 
 void bit_print (Bit_Chain * dat, long unsigned int size);
 
