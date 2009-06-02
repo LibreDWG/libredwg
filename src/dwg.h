@@ -163,7 +163,7 @@ extern "C"
 	} Dwg_Entity_ATTRIB;
 
 /**
- Struct for atributo-difinoj - ATTDEF (3)
+ Struct for atributo-diendj - ATTDEF (3)
  */
 	typedef struct _dwg_entity_ATTDEF
 	{
@@ -206,7 +206,7 @@ extern "C"
 	} Dwg_Entity_BLOCK;
 
 /**
- Struct for blokfinoj - ENDBLK (5)
+ Struct for blokendj - ENDBLK (5)
  */
 	typedef struct _dwg_entity_ENDBLK
 	{
@@ -979,7 +979,7 @@ extern "C"
             Dwg_Section* section;
 		} header;
 
-#		define DWG_NBEGINNATA1_KIOM 123
+#		define DWG_UNKNOWN1_KIOM 123
 		Dwg_Chain unknown1;
 
 		Dwg_Chain picture;

@@ -141,7 +141,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	 */
 
 	if (bit_sercxi_sentinel (dat, dwg_sentinel (DWG_SENTINEL_HEADER_END)) && loglevel)
-		printf ("=======> HEAD (fino): %8X\n", (unsigned int) dat->byte);
+		printf ("=======> HEADER (end): %8X\n", (unsigned int) dat->byte);
 
 	/*-------------------------------------------------------------------------
 	 * Nekonata section 1
@@ -150,11 +150,11 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	if (skt->header.num_sections == 6)
 	{
         if (loglevel){
-            printf ("========> NBEGINNATA 1: %8X\n", (unsigned int) skt->header.section[5].address);
-		    printf ("   NBEGINNATA 1 (fino): %8X\n", (unsigned int) (skt->header.section[5].address + skt->header.section[5].size));
+            printf ("========> UNKNOWN 1: %8X\n", (unsigned int) skt->header.section[5].address);
+		    printf ("   UNKNOWN 1 (end): %8X\n", (unsigned int) (skt->header.section[5].address + skt->header.section[5].size));
 		}
 		dat->byte = skt->header.section[5].address;
-		skt->unknown1.kiom = DWG_NBEGINNATA1_KIOM;
+		skt->unknown1.kiom = DWG_UNKNOWN1_KIOM;
 		skt->unknown1.byte = skt->unknown1.bito = 0;
 		skt->unknown1.chain = malloc (skt->unknown1.kiom);
 		memcpy (skt->unknown1.chain, &dat->chain[dat->byte], skt->unknown1.kiom);
@@ -176,7 +176,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
         if (loglevel) printf ("=============> PICTURE: %8X\n", (unsigned int) ekaddress - 16);
 		if (bit_sercxi_sentinel (dat, dwg_sentinel (DWG_SENTINEL_PICTURE_END)))
 		{
-            if (loglevel) printf ("        PICTURE (fino): %8X\n", (unsigned int) dat->byte);
+            if (loglevel) printf ("        PICTURE (end): %8X\n", (unsigned int) dat->byte);
 			skt->picture.kiom = (dat->byte - 16) - ekaddress;
 			skt->picture.chain = (char *) malloc (skt->picture.kiom);
 			memcpy (skt->picture.chain, &dat->chain[ekaddress], skt->picture.kiom);
@@ -192,7 +192,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 
     if (loglevel){
     	printf ("=====> KAP-VARIABLEJ: %8X\n", (unsigned int) skt->header.section[0].address);
-	    printf ("KAP-VARIABLEJ (fino): %8X\n", (unsigned int) (skt->header.section[0].address + skt->header.section[0].size));
+	    printf ("KAP-VARIABLEJ (end): %8X\n", (unsigned int) (skt->header.section[0].address + skt->header.section[0].size));
     }
 	dat->byte = skt->header.section[0].address + 16;
 	pvz = bit_read_RL (dat);
@@ -430,7 +430,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
     }
 	dat->byte = obfin;
 	obek = bit_read_MS (dat);	// La komenco de la lasta object readta
-	if (loglevel) printf ("    OBJEKTARO (fino): %8X\n", (unsigned int) (obfin + obek + 2));
+	if (loglevel) printf ("    OBJEKTARO (end): %8X\n", (unsigned int) (obfin + obek + 2));
 
 	/*
 	   dat->byte = skt->header.section[2].address - 2;
@@ -458,7 +458,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	 */
     if (loglevel) {
     	printf ("======> OBJECT-MAPO: %8X\n", (unsigned int) skt->header.section[2].address);
-	    printf (" OBJECT-MAPO (fino): %8X\n", (unsigned int) (skt->header.section[2].address + skt->header.section[2].size));
+	    printf (" OBJECT-MAPO (end): %8X\n", (unsigned int) (skt->header.section[2].address + skt->header.section[2].size));
 	}
 
 	/*-------------------------------------------------------------------------
@@ -562,7 +562,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 		 */
 
 		if (loglevel && bit_sercxi_sentinel (dat, dwg_sentinel (DWG_SENTINEL_SECOND_HEADER_END)))
-			printf (" DUA KAP-DAT. (fino): %8X\n", (unsigned int) dat->byte);
+			printf (" DUA KAP-DAT. (end): %8X\n", (unsigned int) dat->byte);
 	}
 
 	/*-------------------------------------------------------------------------
@@ -570,8 +570,8 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	 */
 
     if (loglevel) {
-	    printf ("========> NBEGINNATA 2: %8X\n", (unsigned int) skt->header.section[4].address);
-	    printf ("   NBEGINNATA 2 (fino): %8X\n", (unsigned int) (skt->header.section[4].address + skt->header.section[4].size));
+	    printf ("========> UNKNOWN 2: %8X\n", (unsigned int) skt->header.section[4].address);
+	    printf ("   UNKNOWN 2 (end): %8X\n", (unsigned int) (skt->header.section[4].address + skt->header.section[4].size));
 	}
 	dat->byte = skt->header.section[4].address;
 	dat->bito = 0;
