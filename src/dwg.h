@@ -1026,7 +1026,6 @@ extern "C"
 
 	int dwg_read_file (char *filename, Dwg_Structure * dwg);
     void dwg_free (Dwg_Structure * dwg);
-	void dwg_print (Dwg_Structure * dwg);
     unsigned char* dwg_bmp (Dwg_Structure *, long *);
     
     double dwg_model_x_min(Dwg_Structure *);
