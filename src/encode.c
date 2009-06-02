@@ -250,9 +250,9 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 
 		/* Difini la traktilojn de cxiuj objectj, inkluzive la unknownj */
 		omap[i].idc = i;
-		if (skt->object[i].supertype == DWG_SUPERTYPE_ESTAJXO)
+		if (skt->object[i].supertype == DWG_SUPERTYPE_ENTITY)
 			omap[i].traktilo = skt->object[i].tio.entity->traktilo.value;
-		else if (skt->object[i].supertype == DWG_SUPERTYPE_ORDINARAJXO)
+		else if (skt->object[i].supertype == DWG_SUPERTYPE_OBJECT)
 			omap[i].traktilo = skt->object[i].tio.object->traktilo.value;
 		else if (skt->object[i].supertype == DWG_SUPERTYPE_UNKNOWN)
 		{
@@ -305,9 +305,9 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 		}
 		else
 		{
-			if (obj->supertype == DWG_SUPERTYPE_ESTAJXO)
+			if (obj->supertype == DWG_SUPERTYPE_ENTITY)
 				dwg_encode_entity (obj, dat);
-			else if (obj->supertype == DWG_SUPERTYPE_ORDINARAJXO)
+			else if (obj->supertype == DWG_SUPERTYPE_OBJECT)
 				dwg_encode_object (obj, dat);
 			else
 			{

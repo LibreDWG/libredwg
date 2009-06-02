@@ -281,7 +281,7 @@ dwg_print_traktref (Dwg_Object * obj)
 {
 	unsigned int i;
 
-	if (obj->supertype == DWG_SUPERTYPE_ESTAJXO)
+	if (obj->supertype == DWG_SUPERTYPE_ENTITY)
 	{
 		Dwg_Object_Entity *est;
 
@@ -299,7 +299,7 @@ dwg_print_traktref (Dwg_Object * obj)
 		printf ("%i.%i.%li\n", est->traktref[i].code, est->traktref[i].kiom,
 			est->traktref[i].value);
 	}
-	else if (obj->supertype == DWG_SUPERTYPE_ORDINARAJXO)
+	else if (obj->supertype == DWG_SUPERTYPE_OBJECT)
 	{
 		Dwg_Object_Object *ord;
 
@@ -747,11 +747,11 @@ dwg_print (Dwg_Structure *dwg_struct)
 		printf ("Super-type: ");
 		switch (obj->supertype)
 		{
-		case DWG_SUPERTYPE_ESTAJXO:
+		case DWG_SUPERTYPE_ENTITY:
 			puts ("entity");
 			dwg_print_entity (obj->tio.entity);
 			break;
-		case DWG_SUPERTYPE_ORDINARAJXO:
+		case DWG_SUPERTYPE_OBJECT:
 			puts ("object");
 			dwg_print_object (obj->tio.object);
 			break;

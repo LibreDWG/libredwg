@@ -716,7 +716,7 @@ dwg_decode_traktref (Bit_Chain * dat, Dwg_Object * obj)
 {
 	int i;
 
-	if (obj->supertype == DWG_SUPERTYPE_ESTAJXO)
+	if (obj->supertype == DWG_SUPERTYPE_ENTITY)
 	{
 		Dwg_Object_Entity *est;
 
@@ -781,7 +781,7 @@ dwg_decode_TEXT (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Entity_TEXT *est;
 
-	obj->supertype = DWG_SUPERTYPE_ESTAJXO;
+	obj->supertype = DWG_SUPERTYPE_ENTITY;
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
 	obj->tio.entity->tio.TEXT = calloc (sizeof (Dwg_Entity_TEXT), 1);
 	est = obj->tio.entity->tio.TEXT;
@@ -824,7 +824,7 @@ dwg_decode_ATTRIB (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Entity_ATTRIB *est;
 
-	obj->supertype = DWG_SUPERTYPE_ESTAJXO;
+	obj->supertype = DWG_SUPERTYPE_ENTITY;
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
 	obj->tio.entity->tio.ATTRIB = calloc (sizeof (Dwg_Entity_ATTRIB), 1);
 	est = obj->tio.entity->tio.ATTRIB;
@@ -870,7 +870,7 @@ dwg_decode_ATTDEF (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Entity_ATTDEF *est;
 
-	obj->supertype = DWG_SUPERTYPE_ESTAJXO;
+	obj->supertype = DWG_SUPERTYPE_ENTITY;
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
 	obj->tio.entity->tio.ATTDEF = calloc (sizeof (Dwg_Entity_ATTDEF), 1);
 	est = obj->tio.entity->tio.ATTDEF;
@@ -917,7 +917,7 @@ dwg_decode_BLOCK (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Entity_BLOCK *est;
 
-	obj->supertype = DWG_SUPERTYPE_ESTAJXO;
+	obj->supertype = DWG_SUPERTYPE_ENTITY;
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
 	obj->tio.entity->tio.BLOCK = calloc (sizeof (Dwg_Entity_BLOCK), 1);
 	est = obj->tio.entity->tio.BLOCK;
@@ -935,7 +935,7 @@ dwg_decode_ENDBLK (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Entity_ENDBLK *est;
 
-	obj->supertype = DWG_SUPERTYPE_ESTAJXO;
+	obj->supertype = DWG_SUPERTYPE_ENTITY;
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
 	obj->tio.entity->tio.ENDBLK = calloc (sizeof (Dwg_Entity_ENDBLK), 1);
 	est = obj->tio.entity->tio.ENDBLK;
@@ -949,7 +949,7 @@ dwg_decode_INSERT (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Entity_INSERT *est;
 
-	obj->supertype = DWG_SUPERTYPE_ESTAJXO;
+	obj->supertype = DWG_SUPERTYPE_ENTITY;
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
 	obj->tio.entity->tio.INSERT = calloc (sizeof (Dwg_Entity_INSERT), 1);
 	est = obj->tio.entity->tio.INSERT;
@@ -991,7 +991,7 @@ dwg_decode_MINSERT (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Entity_MINSERT *est;
 
-	obj->supertype = DWG_SUPERTYPE_ESTAJXO;
+	obj->supertype = DWG_SUPERTYPE_ENTITY;
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
 	obj->tio.entity->tio.MINSERT = calloc (sizeof (Dwg_Entity_MINSERT), 1);
 	est = obj->tio.entity->tio.MINSERT;
@@ -1037,7 +1037,7 @@ dwg_decode_VERTEX_2D (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Entity_VERTEX_2D *est;
 
-	obj->supertype = DWG_SUPERTYPE_ESTAJXO;
+	obj->supertype = DWG_SUPERTYPE_ENTITY;
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
 	obj->tio.entity->tio.VERTEX_2D = calloc (sizeof (Dwg_Entity_VERTEX_2D), 1);
 	est = obj->tio.entity->tio.VERTEX_2D;
@@ -1065,7 +1065,7 @@ dwg_decode_VERTEX_3D (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Entity_VERTEX_3D *est;
 
-	obj->supertype = DWG_SUPERTYPE_ESTAJXO;
+	obj->supertype = DWG_SUPERTYPE_ENTITY;
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
 	obj->tio.entity->tio.VERTEX_3D = calloc (sizeof (Dwg_Entity_VERTEX_3D), 1);
 	est = obj->tio.entity->tio.VERTEX_3D;
@@ -1086,7 +1086,7 @@ dwg_decode_VERTEX_PFACE_FACE (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Entity_VERTEX_PFACE_FACE *est;
 
-	obj->supertype = DWG_SUPERTYPE_ESTAJXO;
+	obj->supertype = DWG_SUPERTYPE_ENTITY;
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
 	obj->tio.entity->tio.VERTEX_PFACE_FACE = calloc (sizeof (Dwg_Entity_VERTEX_PFACE_FACE), 1);
 	est = obj->tio.entity->tio.VERTEX_PFACE_FACE;
@@ -1107,7 +1107,7 @@ dwg_decode_POLYLINE_2D (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Entity_POLYLINE_2D *est;
 
-	obj->supertype = DWG_SUPERTYPE_ESTAJXO;
+	obj->supertype = DWG_SUPERTYPE_ENTITY;
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
 	obj->tio.entity->tio.POLYLINE_2D = calloc (sizeof (Dwg_Entity_POLYLINE_2D), 1);
 	dwg_decode_entity (dat, obj->tio.entity);
@@ -1131,7 +1131,7 @@ dwg_decode_POLYLINE_3D (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Entity_POLYLINE_3D *est;
 
-	obj->supertype = DWG_SUPERTYPE_ESTAJXO;
+	obj->supertype = DWG_SUPERTYPE_ENTITY;
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
 	obj->tio.entity->tio.POLYLINE_3D = calloc (sizeof (Dwg_Entity_POLYLINE_3D), 1);
 	dwg_decode_entity (dat, obj->tio.entity);
@@ -1150,7 +1150,7 @@ dwg_decode_ARC (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Entity_ARC *est;
 
-	obj->supertype = DWG_SUPERTYPE_ESTAJXO;
+	obj->supertype = DWG_SUPERTYPE_ENTITY;
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
 	obj->tio.entity->tio.ARC = calloc (sizeof (Dwg_Entity_ARC), 1);
 	dwg_decode_entity (dat, obj->tio.entity);
@@ -1173,7 +1173,7 @@ dwg_decode_CIRCLE (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Entity_CIRCLE *est;
 
-	obj->supertype = DWG_SUPERTYPE_ESTAJXO;
+	obj->supertype = DWG_SUPERTYPE_ENTITY;
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
 	obj->tio.entity->tio.CIRCLE = calloc (sizeof (Dwg_Entity_CIRCLE), 1);
 	dwg_decode_entity (dat, obj->tio.entity);
@@ -1194,7 +1194,7 @@ dwg_decode_LINE (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Entity_LINE *est;
 
-	obj->supertype = DWG_SUPERTYPE_ESTAJXO;
+	obj->supertype = DWG_SUPERTYPE_ENTITY;
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
 	obj->tio.entity->tio.LINE = calloc (sizeof (Dwg_Entity_LINE), 1);
 	dwg_decode_entity (dat, obj->tio.entity);
@@ -1222,7 +1222,7 @@ dwg_decode_POINT (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Entity_POINT *est;
 
-	obj->supertype = DWG_SUPERTYPE_ESTAJXO;
+	obj->supertype = DWG_SUPERTYPE_ENTITY;
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
 	obj->tio.entity->tio.POINT = calloc (sizeof (Dwg_Entity_POINT), 1);
 	dwg_decode_entity (dat, obj->tio.entity);
@@ -1243,7 +1243,7 @@ dwg_decode_ELLIPSE (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Entity_ELLIPSE *est;
 
-	obj->supertype = DWG_SUPERTYPE_ESTAJXO;
+	obj->supertype = DWG_SUPERTYPE_ENTITY;
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
 	obj->tio.entity->tio.ELLIPSE = calloc (sizeof (Dwg_Entity_ELLIPSE), 1);
 	dwg_decode_entity (dat, obj->tio.entity);
@@ -1270,7 +1270,7 @@ dwg_decode_RAY (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Entity_RAY *est;
 
-	obj->supertype = DWG_SUPERTYPE_ESTAJXO;
+	obj->supertype = DWG_SUPERTYPE_ENTITY;
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
 	obj->tio.entity->tio.RAY = calloc (sizeof (Dwg_Entity_RAY), 1);
 	dwg_decode_entity (dat, obj->tio.entity);
@@ -1291,7 +1291,7 @@ dwg_decode_MTEXT (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Entity_MTEXT *est;
 
-	obj->supertype = DWG_SUPERTYPE_ESTAJXO;
+	obj->supertype = DWG_SUPERTYPE_ENTITY;
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
 	obj->tio.entity->tio.MTEXT = calloc (sizeof (Dwg_Entity_MTEXT), 1);
 	dwg_decode_entity (dat, obj->tio.entity);
@@ -1326,7 +1326,7 @@ dwg_decode_LAYER (Bit_Chain * dat, Dwg_Object * obj)
     if (loglevel) fprintf(stderr, "dwg_decode_LAYER\n");
 	Dwg_Object_LAYER *ord;
 
-	obj->supertype = DWG_SUPERTYPE_ORDINARAJXO;
+	obj->supertype = DWG_SUPERTYPE_OBJECT;
 	obj->tio.object = malloc (sizeof (Dwg_Object_Object));
 	obj->tio.object->tio.LAYER = calloc (sizeof (Dwg_Object_LAYER), 1);
 	dwg_decode_object (dat, obj->tio.object);
@@ -1350,7 +1350,7 @@ dwg_decode_LAYOUT (Bit_Chain * dat, Dwg_Object * obj)
     if (loglevel) fprintf(stderr, "dwg_decode_LAYOUT\n");
 	Dwg_Object_LAYOUT *ord;
 
-	obj->supertype = DWG_SUPERTYPE_ORDINARAJXO;
+	obj->supertype = DWG_SUPERTYPE_OBJECT;
 	obj->tio.object = malloc (sizeof (Dwg_Object_Object));
 	obj->tio.object->tio.LAYOUT = calloc (sizeof (Dwg_Object_LAYOUT), 1);
 	dwg_decode_object (dat, obj->tio.object);
@@ -1422,7 +1422,7 @@ dwg_decode_UNUSED (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Entity_UNUSED *est;
 
-	obj->supertype = DWG_SUPERTYPE_ESTAJXO;
+	obj->supertype = DWG_SUPERTYPE_ENTITY;
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
 	obj->tio.entity->tio.UNUSED = calloc (sizeof (Dwg_Entity_UNUSED), 1);
 	dwg_decode_entity (dat, obj->tio.entity);

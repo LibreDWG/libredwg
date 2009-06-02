@@ -76,7 +76,7 @@ create_postscript (Dwg_Structure *dwg, char *output)
     	obj = &dwg->object[i];
 		if (obj->supertype = DWG_SUPERTYPE_UNKNOWN) // unknown
 			continue;
-		if (obj->type = DWG_SUPERTYPE_ORDINARAJXO) // not entity
+		if (obj->type = DWG_SUPERTYPE_OBJECT) // not entity
 			continue;
 		if (obj->tio.entity->regime == 0) // belongs to block
 			continue;
