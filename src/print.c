@@ -92,7 +92,7 @@ dwg_print_TEXT (Dwg_Entity_TEXT * ent)
 	printf ("\tLeviĝo: %1.13g\n", ent->levigxo);
 	printf ("\tEnmeta punkto: (%1.13g, %1.13g)\n", ent->x0, ent->y0);
 	printf ("\tEnmeta ĝisrandigo: (%1.13g, %1.13g)\n", ent->gxisrandigo.x, ent->gxisrandigo.y);
-	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
+	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
 		ent->extrusion.z);
 	printf ("\tthickness: %1.13g\n", ent->thickness);
 	printf ("\tKlina angulo: %1.13g\n", ent->klinang);
@@ -113,7 +113,7 @@ dwg_print_ATTRIB (Dwg_Entity_ATTRIB * ent)
 	printf ("\tLeviĝo: %1.13g\n", ent->levigxo);
 	printf ("\tEnmeta punkto: (%1.13g, %1.13g)\n", ent->x0, ent->y0);
 	printf ("\tEnmeta ĝisrandigo: (%1.13g, %1.13g)\n", ent->gxisrandigo.x, ent->gxisrandigo.y);
-	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
+	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
 		ent->extrusion.z);
 	printf ("\tthickness: %1.13g\n", ent->thickness);
 	printf ("\tKlina angulo: %1.13g\n", ent->klinang);
@@ -137,7 +137,7 @@ dwg_print_ATTDEF (Dwg_Entity_ATTDEF * ent)
 	printf ("\tLeviĝo: %1.13g\n", ent->levigxo);
 	printf ("\tEnmeta punkto: (%1.13g, %1.13g)\n", ent->x0, ent->y0);
 	printf ("\tEnmeta ĝisrandigo: (%1.13g, %1.13g)\n", ent->gxisrandigo.x, ent->gxisrandigo.y);
-	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
+	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
 		ent->extrusion.z);
 	printf ("\tthickness: %1.13g\n", ent->thickness);
 	printf ("\tKlina angulo: %1.13g\n", ent->klinang);
@@ -167,7 +167,7 @@ dwg_print_INSERT (Dwg_Entity_INSERT * ent)
 	printf ("\tSkal-indikilo: 0x%02x\n", ent->skalindik);
 	printf ("\tSkalo: (%1.13g, %1.13g, %1.13g)\n", ent->skalo.x, ent->skalo.y, ent->skalo.z);
 	printf ("\tTurna angulo: %1.13g\n", ent->turnang);
-	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
+	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
 		ent->extrusion.z);
 	printf ("\tĈu kun ATTRIB-oj?: %s\n", ent->kun_attrib ? "Yes" : "Ne");
 }
@@ -179,7 +179,7 @@ dwg_print_MINSERT (Dwg_Entity_MINSERT * ent)
 	printf ("\tSkal-indikilo: 0x%02x\n", ent->skalindik);
 	printf ("\tSkalo: (%1.13g, %1.13g, %1.13g)\n", ent->skalo.x, ent->skalo.y, ent->skalo.z);
 	printf ("\tTurna angulo: %1.13g\n", ent->turnang);
-	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
+	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
 		ent->extrusion.z);
 	printf ("\tĈu kun ATTRIB-oj?: %s\n", ent->kun_attrib ? "Yes" : "Ne");
 	printf ("\tKolumnoj: %02i\tInterspaco: %1.13g\n", ent->kol.size, ent->kol.dx);
@@ -222,7 +222,7 @@ dwg_print_POLYLINE_2D (Dwg_Entity_POLYLINE_2D * ent)
 	printf ("\tFinlarĝo: %1.13g\n", ent->finlargxo);
 	printf ("\tthickness: %1.13g\n", ent->thickness);
 	printf ("\tLeviĝo: %1.13g\n", ent->levigxo);
-	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
+	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
 		ent->extrusion.z);
 }
 
@@ -238,7 +238,7 @@ dwg_print_ARC (Dwg_Entity_ARC * ent)
 	printf ("\tCentra punkto: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
 	printf ("\tRadiuso: %1.13g\n", ent->radius);
 	printf ("\tthickness: %1.13g\n", ent->thickness);
-	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
+	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
 		ent->extrusion.z);
 	printf ("\tEkangulo: %1.13g\n", ent->ekangulo);
 	printf ("\tFinangulo: %1.13g\n", ent->finangulo);
@@ -250,7 +250,7 @@ dwg_print_CIRCLE (Dwg_Entity_CIRCLE * ent)
 	printf ("\tCentra punkto: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
 	printf ("\tRadiuso: %1.13g\n", ent->radius);
 	printf ("\tthickness: %1.13g\n", ent->thickness);
-	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
+	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
 		ent->extrusion.z);
 }
 
@@ -263,7 +263,7 @@ dwg_print_LINE (Dwg_Entity_LINE * ent)
 	printf ("\t2-a punkto: (%1.13g, %1.13g, %1.13g)\n", ent->x1, ent->y1,
 		ent->nur_2D ? 0 : ent->z1);
 	printf ("\tthickness: %1.13g\n", ent->thickness);
-	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
+	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
 		ent->extrusion.z);
 }
 
@@ -272,7 +272,7 @@ dwg_print_POINT (Dwg_Entity_POINT *ent)
 {
 	printf ("\tPunkto: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
 	printf ("\tthickness: %1.13g\n", ent->thickness);
-	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
+	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
 		ent->extrusion.z);
 	printf ("\tX-angulo: %1.13g\n", ent->x_ang);
 }
@@ -282,7 +282,7 @@ dwg_print_ELLIPSE (Dwg_Entity_ELLIPSE *ent)
 {
 	printf ("\tCentra punkto: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
 	printf ("\tDuonĉef-aksa vektoro: (%1.13g, %1.13g, %1.13g)\n", ent->x1, ent->y1, ent->z1);
-	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
+	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
 		ent->extrusion.z);
 	printf ("\tRadius-proporcio: %1.13g\n", ent->radiusproporcio);
 	printf ("\tEkangulo: %1.13g\n", ent->ekangulo);
@@ -300,7 +300,7 @@ void
 dwg_print_MTEXT (Dwg_Entity_MTEXT *ent)
 {
 	printf ("\tEnmeto: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
-	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
+	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
 		ent->extrusion.z);
 	printf ("\tX-direkto: (%1.13g, %1.13g, %1.13g)\n", ent->x1, ent->y1, ent->z1);
 	printf ("\tLargxeco: %1.13g\n", ent->largxeco);

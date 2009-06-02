@@ -170,17 +170,17 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 
 	if (bit_search_sentinel (dat, dwg_sentinel (DWG_SENTINEL_PICTURE_BEGIN)))
 	{
-		unsigned long int ekaddress;
+		unsigned long int start_address;
 
 		dat->bit = 0;
-		ekaddress = dat->byte;
-        if (loglevel) printf ("=============> PICTURE: %8X\n", (unsigned int) ekaddress - 16);
+		start_address = dat->byte;
+        if (loglevel) printf ("=============> PICTURE: %8X\n", (unsigned int) start_address - 16);
 		if (bit_search_sentinel (dat, dwg_sentinel (DWG_SENTINEL_PICTURE_END)))
 		{
             if (loglevel) printf ("        PICTURE (end): %8X\n", (unsigned int) dat->byte);
-			skt->picture.size = (dat->byte - 16) - ekaddress;
+			skt->picture.size = (dat->byte - 16) - start_address;
 			skt->picture.chain = (char *) malloc (skt->picture.size);
-			memcpy (skt->picture.chain, &dat->chain[ekaddress], skt->picture.size);
+			memcpy (skt->picture.chain, &dat->chain[start_address], skt->picture.size);
 		}
 		else
 			skt->picture.size = 0;
@@ -197,7 +197,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
     }
 	dat->byte = skt->header.section[0].address + 16;
 	pvz = bit_read_RL (dat);
-	if (loglevel) printf ("Longeco: %lu\n", pvz);
+	if (loglevel) printf ("Length: %lu\n", pvz);
 
 	dat->bit = 0;
 
@@ -297,7 +297,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 
 	size = bit_read_RL (dat);
 	lasta = dat->byte + size;
-	//if (loglevel) printf ("Longeco: %lu\n", size);
+	//if (loglevel) printf ("Length: %lu\n", size);
 
 	/* read the classes
 	 */

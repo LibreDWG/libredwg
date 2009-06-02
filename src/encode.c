@@ -393,7 +393,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	pvzadr = dat->byte;	// Gardi la unuan addressn de la section por write ties sizen poste
 	bit_write_RL (dat, 0);
 
-	bit_write_BL (dat, pvzadr - 16);	// ekaddress de la section
+	bit_write_BL (dat, pvzadr - 16);	// start_address de la section
 
 	/* Chain "AC1015"
 	 */
