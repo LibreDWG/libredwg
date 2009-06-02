@@ -644,7 +644,7 @@ dwg_print (Dwg_Structure *dwg_struct)
 	for (i = 0; i < dwg_struct->header.num_sections; i++)
 		printf ("Section %i\t Address: %7lu\t Size: %7lu B\n",
 			dwg_struct->header.section[i].number,
-			dwg_struct->header.section[i].adresilo, dwg_struct->header.section[i].size);
+			dwg_struct->header.section[i].address, dwg_struct->header.section[i].size);
 	puts ("");
 
 	if (dwg_struct->header.num_sections == 6)

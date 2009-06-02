@@ -960,6 +960,12 @@ extern "C"
 		unsigned char bito;
 	} Dwg_Chain;
 
+	typedef struct _dwg_section
+	{
+		unsigned char number;
+		long unsigned int address;
+		long unsigned int size;
+	} Dwg_Section;
 /**
  Cxefa strukturo de la dwg-datenaro.
  */
@@ -968,15 +974,9 @@ extern "C"
 		struct
 		{
 		    unsigned int version;
-			//char version[6];
 			unsigned int codepage;
 			unsigned int num_sections;
-			struct
-			{
-				unsigned char number;
-				long unsigned int adresilo;
-				long unsigned int size;
-			} section[6];
+            Dwg_Section* section;
 		} header;
 
 #		define DWG_NBEGINNATA1_KIOM 123

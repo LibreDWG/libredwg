@@ -86,11 +86,11 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	 */
 
 	skt->header.section[5].number = 5;
-	skt->header.section[5].adresilo = 0;
+	skt->header.section[5].address = 0;
 	skt->header.section[5].size = 0;
 	if (skt->header.num_sections == 6)
 	{
-		skt->header.section[5].adresilo = dat->bajto;
+		skt->header.section[5].address = dat->bajto;
 		skt->header.section[5].size = DWG_NBEGINNATA1_KIOM;
 
 		skt->unknown1.kiom = skt->header.section[5].size;
@@ -132,7 +132,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	 */
 
 	skt->header.section[0].number = 0;
-	skt->header.section[0].adresilo = dat->bajto;
+	skt->header.section[0].address = dat->bajto;
 	bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_VARIABLE_BEGIN));
 	pvzadr = dat->bajto;	// poste oni devas rewrite la korektan valuen de size cxi tie:
 	bit_write_RL (dat, 0);	// Size de la section
@@ -193,13 +193,13 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	 */
 	bit_krei_CRC (dat, pvzadr, 0xC0C1);
 	bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_VARIABLE_END));
-	skt->header.section[0].size = dat->bajto - skt->header.section[0].adresilo;
+	skt->header.section[0].size = dat->bajto - skt->header.section[0].address;
 
 	/*------------------------------------------------------------
 	 * Classj
 	 */
 	skt->header.section[1].number = 1;
-	skt->header.section[1].adresilo = dat->bajto;
+	skt->header.section[1].address = dat->bajto;
 	bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_CLASS_BEGIN));
 	pvzadr = dat->bajto;	// poste oni devas rewrite la korektan valuen de size cxi tie:
 	bit_write_RL (dat, 0);	// Size de la section
@@ -231,7 +231,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	bit_krei_CRC (dat, pvzadr, 0xC0C1);
 
 	bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_CLASS_END));
-	skt->header.section[1].size = dat->bajto - skt->header.section[1].adresilo;
+	skt->header.section[1].size = dat->bajto - skt->header.section[1].address;
 
 
 	/*------------------------------------------------------------
@@ -327,7 +327,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	 * Object-mapo
 	 */
 	skt->header.section[2].number = 2;
-	skt->header.section[2].adresilo = dat->bajto;	// poste oni devas kalkuli la valuen de size
+	skt->header.section[2].address = dat->bajto;	// poste oni devas kalkuli la valuen de size
 	//printf ("Ekaddress: 0x%08X\n", dat->bajto);
 
 	sekcisize = 0;
@@ -382,7 +382,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 
 	/* Kalkuli kaj write la sizen de la object-mapo
 	 */
-	skt->header.section[2].size = dat->bajto - skt->header.section[2].adresilo;
+	skt->header.section[2].size = dat->bajto - skt->header.section[2].address;
 	free (omap);
 
 	/*------------------------------------------------------------
@@ -428,7 +428,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	for (i = 0; i < 6; i++)
 	{
 		bit_write_RC (dat, 0);
-		bit_write_BL (dat, skt->header.section[0].adresilo);
+		bit_write_BL (dat, skt->header.section[0].address);
 		bit_write_BL (dat, skt->header.section[0].size);
 	}
 
@@ -465,10 +465,10 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	 * MEASUREMENT
 	 */
 	skt->header.section[3].number = 3;
-	skt->header.section[3].adresilo = 0;
+	skt->header.section[3].address = 0;
 	skt->header.section[3].size = 0;
 	skt->header.section[4].number = 4;
-	skt->header.section[4].adresilo = dat->bajto;
+	skt->header.section[4].address = dat->bajto;
 	skt->header.section[4].size = 4;
 	bit_write_RL (dat, skt->measurement);
 
@@ -483,7 +483,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	for (i = 0; i < skt->header.num_sections; i++)
 	{
 		bit_write_RC (dat, skt->header.section[i].number);
-		bit_write_RL (dat, skt->header.section[i].adresilo);
+		bit_write_RL (dat, skt->header.section[i].address);
 		bit_write_RL (dat, skt->header.section[i].size);
 	}
 
