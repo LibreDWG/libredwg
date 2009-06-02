@@ -140,11 +140,11 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	   if (loglevel) printf ("Legita: %X\nKreita: %X\n", ckr, ckr2);
 	 */
 
-	if (bit_sercxi_sentinel (dat, dwg_sentinel (DWG_SENTINEL_HEADER_END)) && loglevel)
+	if (bit_search_sentinel (dat, dwg_sentinel (DWG_SENTINEL_HEADER_END)) && loglevel)
 		printf ("=======> HEADER (end): %8X\n", (unsigned int) dat->byte);
 
 	/*-------------------------------------------------------------------------
-	 * Nekonata section 1
+	 * Unknown section 1
 	 */
 
 	if (skt->header.num_sections == 6)
@@ -167,14 +167,14 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	 * Antauxrigarda picture
 	 */
 
-	if (bit_sercxi_sentinel (dat, dwg_sentinel (DWG_SENTINEL_PICTURE_BEGIN)))
+	if (bit_search_sentinel (dat, dwg_sentinel (DWG_SENTINEL_PICTURE_BEGIN)))
 	{
 		unsigned long int ekaddress;
 
 		dat->bito = 0;
 		ekaddress = dat->byte;
         if (loglevel) printf ("=============> PICTURE: %8X\n", (unsigned int) ekaddress - 16);
-		if (bit_sercxi_sentinel (dat, dwg_sentinel (DWG_SENTINEL_PICTURE_END)))
+		if (bit_search_sentinel (dat, dwg_sentinel (DWG_SENTINEL_PICTURE_END)))
 		{
             if (loglevel) printf ("        PICTURE (end): %8X\n", (unsigned int) dat->byte);
 			skt->picture.kiom = (dat->byte - 16) - ekaddress;
@@ -465,7 +465,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	 * Dua kap-datenaro
 	 */
 
-	if (bit_sercxi_sentinel (dat, dwg_sentinel (DWG_SENTINEL_SECOND_HEADER_BEGIN)))
+	if (bit_search_sentinel (dat, dwg_sentinel (DWG_SENTINEL_SECOND_HEADER_BEGIN)))
 	{
 		long unsigned int pvzadr;
 		long unsigned int pvz;
@@ -561,7 +561,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 		   }
 		 */
 
-		if (loglevel && bit_sercxi_sentinel (dat, dwg_sentinel (DWG_SENTINEL_SECOND_HEADER_END)))
+		if (loglevel && bit_search_sentinel (dat, dwg_sentinel (DWG_SENTINEL_SECOND_HEADER_END)))
 			printf (" DUA KAP-DAT. (end): %8X\n", (unsigned int) dat->byte);
 	}
 

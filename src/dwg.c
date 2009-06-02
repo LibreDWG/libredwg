@@ -362,7 +362,7 @@ dwg_print_ATTRIB (Dwg_Entity_ATTRIB * est)
 	printf ("\tĜisrandigo (horiz.): %u\n", est->gxisrandigo.h);
 	printf ("\tĜisrandigo (vert.): %u\n", est->gxisrandigo.v);
 	printf ("\tEtikedo: %s\n", est->etikedo);
-	printf ("\tKamp-longeco: %i (ne uzata)\n", est->kamplong);
+	printf ("\tKamp-length: %i (ne uzata)\n", est->kamplong);
 	printf ("\tIndikiloj: 0x%02x\n", est->indikiloj);
 }
 
@@ -386,7 +386,7 @@ dwg_print_ATTDEF (Dwg_Entity_ATTDEF * est)
 	printf ("\tĜisrandigo (horiz.): %u\n", est->gxisrandigo.h);
 	printf ("\tĜisrandigo (vert.): %u\n", est->gxisrandigo.v);
 	printf ("\tEtikedo: %s\n", est->etikedo);
-	printf ("\tKamp-longeco: %i (ne uzata)\n", est->kamplong);
+	printf ("\tKamp-length: %i (ne uzata)\n", est->kamplong);
 	printf ("\tIndikilo: 0x%02x\n", est->indikiloj);
 	printf ("\tInvitilo (prompt): %s\n", est->invitilo);
 }

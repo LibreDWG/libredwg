@@ -746,7 +746,7 @@ unsigned int
 bit_read_CRC (Bit_Chain * dat)
 {
 	unsigned int result;
-	unsigned char rez[2];
+	unsigned char res[2];
 
 	if (dat->bito > 0)
 	{
@@ -754,68 +754,67 @@ bit_read_CRC (Bit_Chain * dat)
 		dat->bito = 0;
 	}
 
-	rez[0] = bit_read_RC (dat);
-	rez[1] = bit_read_RC (dat);
+	res[0] = bit_read_RC (dat);
+	res[1] = bit_read_RC (dat);
 
-	result = (unsigned int) (rez[0] << 8 | rez[1]);
+	result = (unsigned int) (res[0] << 8 | res[1]);
 
 	return result;
 }
 
-/** Read kaj kontroli CRK-numbern.
+/** Read and check CRC-number.
  */
 int
-bit_check_CRC (Bit_Chain * dat, long unsigned int ekaddress, unsigned int semo)
+bit_check_CRC (Bit_Chain * dat, long unsigned int start_address, unsigned int seed)
 {
-	unsigned int kalkulita;
-	unsigned int readta;
-	unsigned char rez[2];
+	unsigned int calculated;
+	unsigned int read;
+	unsigned char res[2];
 
 	if (dat->bito > 0)
 		dat->byte++;
 	dat->bito = 0;
 
-	kalkulita = bit_ckr8 (semo, &(dat->chain[ekaddress]), dat->byte - ekaddress);
+	calculated = bit_ckr8 (seed, &(dat->chain[start_address]), dat->byte - start_address);
 
-	rez[0] = bit_read_RC (dat);
-	rez[1] = bit_read_RC (dat);
+	res[0] = bit_read_RC (dat);
+	res[1] = bit_read_RC (dat);
 
-	readta = (unsigned int) (rez[0] << 8 | rez[1]);
+	read = (unsigned int) (res[0] << 8 | res[1]);
 
-	return (kalkulita == readta);
+	return (calculated == read);
 }
 
-/** Krei kaj write CRK-numbern.
+/** Create and write CRC-number.
  */
 unsigned int
-bit_krei_CRC (Bit_Chain * dat, long unsigned int ekaddress, unsigned int semo)
+bit_krei_CRC (Bit_Chain * dat, long unsigned int start_address, unsigned int seed)
 {
-	unsigned int ckr;
-	unsigned char *ckra;
+	unsigned int crc;
 
 	while (dat->bito > 0)
 		bit_write_B (dat, 0);
 
-	ckr = bit_ckr8 (semo, &(dat->chain[ekaddress]), dat->byte - ekaddress);
+	crc = bit_ckr8 (seed, &(dat->chain[start_address]), dat->byte - start_address);
 
-	bit_write_RC (dat, (unsigned char) (ckr >> 8));
-	bit_write_RC (dat, (unsigned char) (ckr & 0xFF));
+	bit_write_RC (dat, (unsigned char) (crc >> 8));
+	bit_write_RC (dat, (unsigned char) (crc & 0xFF));
 
-	return (ckr);
+	return (crc);
 }
 
-/** Read simplan textn. Post uzado, oni devas liberigi la rezervitan memor-spacon.
+/** Read simple text. After usage, the allocated memory must be proprly freed.
  */
 unsigned char *
 bit_read_T (Bit_Chain * dat)
 {
 	unsigned int i;
-	unsigned int longeco;
+	unsigned int length;
 	unsigned char *chain;
 
-	longeco = bit_read_BS (dat);
-	chain = (char *) malloc (longeco + 1);
-	for (i = 0; i < longeco; i++)
+	length = bit_read_BS (dat);
+	chain = (char *) malloc (length + 1);
+	for (i = 0; i < length; i++)
 	{
 		chain[i] = bit_read_RC (dat);
 		if (chain[i] == 0)
@@ -828,17 +827,17 @@ bit_read_T (Bit_Chain * dat)
 	return (chain);
 }
 
-/** Write simplan textn.
+/** Write simple text.
  */
 void
 bit_write_T (Bit_Chain * dat, unsigned char *chain)
 {
 	int i;
-	int longeco;
+	int length;
 
-	longeco = strlen (chain);
-	bit_write_BS (dat, longeco);
-	for (i = 0; i < longeco; i++)
+	length = strlen (chain);
+	bit_write_BS (dat, length);
+	for (i = 0; i < length; i++)
 		bit_write_RC (dat, chain[i]);
 }
 
@@ -871,10 +870,10 @@ bit_write_L (Bit_Chain * dat, long unsigned int value)
 	bit_write_RC (dat, btk[0]);
 }
 
-/** Sercxi sentineln; se trovite, poziciigas "dat->byte" tuj post gxi.
+/** Search for a sentinel; if found, positions "dat->byte" imediatly after it.
  */
 int
-bit_sercxi_sentinel (Bit_Chain * dat, unsigned char gdst[16])
+bit_search_sentinel (Bit_Chain * dat, unsigned char sentinel[16])
 {
 	long unsigned int i, j;
 
@@ -882,7 +881,7 @@ bit_sercxi_sentinel (Bit_Chain * dat, unsigned char gdst[16])
 	{
 		for (j = 0; j < 16; j++)
 		{
-			if (dat->chain[i + j] != gdst[j])
+			if (dat->chain[i + j] != sentinel[j])
 				break;
 		}
 		if (j == 16)
@@ -896,12 +895,12 @@ bit_sercxi_sentinel (Bit_Chain * dat, unsigned char gdst[16])
 }
 
 void
-bit_write_sentinel (Bit_Chain * dat, unsigned char gdst[16])
+bit_write_sentinel (Bit_Chain * dat, unsigned char sentinel[16])
 {
 	int i;
 
 	for (i = 0; i < 16; i++)
-		bit_write_RC (dat, gdst[i]);
+		bit_write_RC (dat, sentinel[i]);
 }
 
 /*

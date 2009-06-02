@@ -1,6 +1,7 @@
 /*****************************************************************************/
 /*  LibDWG - Free DWG read-only library                                      */
 /*  Copyright (C) 2008, 2009 Free Software Foundation, Inc.                  */
+/*  Copyright (C) 2009 Felipe Sanches <jucablues@users.sourceforge.net>      */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -9,14 +10,14 @@
 /*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
 /*****************************************************************************/
 
-///  Funkcioj por read/write kompaktitajn datenerojn en bitok-chainj.
+///  Functions for read/write access to data in bit-chains.
 /**
- La pozicioj de bitoj en cxiu bitoko (byte) estas numeritaj laux jene:
+ The position of bits within bytes is numerically ordered as depicted below:
 
- pozicio: 01234567 01234567 01234567 ...
- bitoj:   76543210 76543210 76543210 ...
-          \______/ \______/ \______/
-          byte 1  byte 2  byte 3  ...
+ position: 01234567 01234567 01234567 ...
+ bits:     76543210 76543210 76543210 ...
+           \______/ \______/ \______/
+            byte 1   byte 2   byte 3  ...
 */
 
 #ifndef BITS_H
@@ -65,7 +66,7 @@ double bit_read_RD (Bit_Chain * bit_datenaro);
 
 void bit_write_RD (Bit_Chain * bit_datenaro, double value);
 
-/* Funkcioj por manipuli kompaktecan datenaron.
+/* Functions for manipulating compacted data
  */
 unsigned int bit_read_BS (Bit_Chain * bit_datenaro);
 
@@ -117,9 +118,9 @@ long unsigned int bit_read_L (Bit_Chain * dat);
 
 void bit_write_L (Bit_Chain * dat, long unsigned int value);
 
-int bit_sercxi_sentinel (Bit_Chain * dat, unsigned char gdst[16]);
+int bit_search_sentinel (Bit_Chain * dat, unsigned char sentinel[16]);
 
-void bit_write_sentinel (Bit_Chain * dat, unsigned char gdst[16]);
+void bit_write_sentinel (Bit_Chain * dat, unsigned char sentinel[16]);
 
 void bit_chain_rezervi (Bit_Chain * dat);
 
