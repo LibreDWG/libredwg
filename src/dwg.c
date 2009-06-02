@@ -32,7 +32,7 @@ dwg_read_file (char *filename, Dwg_Structure * dwg_struct)
 	int signo;
 	FILE *fp;
 	struct stat atrib;
-	size_t kiom;
+	size_t size;
 	Bit_Chain bitaro;
 
 	if (stat (filename, &atrib))
@@ -56,19 +56,19 @@ dwg_read_file (char *filename, Dwg_Structure * dwg_struct)
 	 */
 	bitaro.bit = 0;
 	bitaro.byte = 0;
-	bitaro.kiom = atrib.st_size;
-	bitaro.chain = (char *) malloc (bitaro.kiom);
+	bitaro.size = atrib.st_size;
+	bitaro.chain = (char *) malloc (bitaro.size);
 	if (!bitaro.chain)
 	{
 		fprintf (stderr, "Not enough memory.\n");
 		fclose (fp);
 		return -1;
 	}
-	kiom = 0;
-	kiom = fread (bitaro.chain, sizeof (char), bitaro.kiom, fp);
-	if (kiom != bitaro.kiom)
+	size = 0;
+	size = fread (bitaro.chain, sizeof (char), bitaro.size, fp);
+	if (size != bitaro.size)
 	{
-		fprintf (stderr, "Could not read the entire file (%lu out of %lu): %s\n", (long unsigned int) kiom, bitaro.kiom,
+		fprintf (stderr, "Could not read the entire file (%lu out of %lu): %s\n", (long unsigned int) size, bitaro.size,
 			filename);
 		fclose (fp);
 		free (bitaro.chain);
@@ -98,11 +98,11 @@ dwg_write_file (char *filename, Dwg_Structure * dwg_struct)
     bitaro.version = dwg_struct->header.version;
 
 	/* Enkodigi la dwg-datenaron
-	bitaro.kiom = 0;
+	bitaro.size = 0;
 	if (dwg_encode_chains (dwg_struct, &bitaro))
 	{
 		fprintf (stderr, "Failed to encode datastructure.\n");
-		if (bitaro.kiom > 0)
+		if (bitaro.size > 0)
 			free (bitaro.chain);
 		return -1;
 	}
@@ -123,7 +123,7 @@ dwg_write_file (char *filename, Dwg_Structure * dwg_struct)
 	 */
 
 	/* Write the data into the file
-	if (fwrite (bitaro.chain, sizeof (char), bitaro.kiom, dt) != bitaro.kiom)
+	if (fwrite (bitaro.chain, sizeof (char), bitaro.size, dt) != bitaro.size)
 	{
 		fprintf (stderr, "Failed to write data into the file: %s\n", filename);
 		fclose (dt);
@@ -132,24 +132,24 @@ dwg_write_file (char *filename, Dwg_Structure * dwg_struct)
 	}
 	fclose (dt);
 
-	if (bitaro.kiom > 0)
+	if (bitaro.size > 0)
 		free (bitaro.chain);
 	 */
 	return 0;
 }
 
 /* Liveras la datumaron de DIB-bitmapo (kap-datumaro plus bitmapo mem).
- * La grandeco (kiom) ampleksas ambaŭ partoj.
+ * La grandeco (size) ampleksas ambaŭ partoj.
  */
 
 unsigned char *
-dwg_bmp (Dwg_Structure *stk, long int *kiom)
+dwg_bmp (Dwg_Structure *stk, long int *size)
 {
 	char num_pictures;
 	char kodo;
 	unsigned i;
 	int plene;
-	long int kiom_kapo;
+	long int size_kapo;
 	Bit_Chain *dat;
 	
 	dat = (Bit_Chain*) &stk->picture;
@@ -160,9 +160,9 @@ dwg_bmp (Dwg_Structure *stk, long int *kiom)
 	num_pictures = bit_read_RC (dat);
 	//printf ("Kiom bildetoj: %i\n", num_pictures);
  
-	*kiom = 0;
+	*size = 0;
 	plene = 0;
-	kiom_kapo = 0;
+	size_kapo = 0;
 	for (i = 0; i < num_pictures; i++)
  	{
 		kodo = bit_read_RC (dat);
@@ -171,14 +171,14 @@ dwg_bmp (Dwg_Structure *stk, long int *kiom)
 		bit_read_RL (dat);
 		if (kodo == 1)
  		{
-			kiom_kapo += bit_read_RL (dat);
-			//printf ("\t\tGrandeco de kapo: %i\n", kiom_kapo);
+			size_kapo += bit_read_RL (dat);
+			//printf ("\t\tGrandeco de kapo: %i\n", size_kapo);
  		}
 		else if (kodo == 2 && plene == 0)
  		{
-			*kiom = bit_read_RL (dat);
+			*size = bit_read_RL (dat);
 			plene = 1;
-			//printf ("\t\tGrandeco de BMP: %i\n", *kiom);
+			//printf ("\t\tGrandeco de BMP: %i\n", *size);
  		}
 		else if (kodo == 3)
 		{
@@ -191,10 +191,10 @@ dwg_bmp (Dwg_Structure *stk, long int *kiom)
 			//printf ("\t\tGrandeco: 0x%x\n", bit_read_RL (dat));
 		}
  	}
-	dat->byte += kiom_kapo;
+	dat->byte += size_kapo;
 	//printf ("Adreso nun: 0x%x\n", dat->byte);
  
-	if (*kiom > 0)
+	if (*size > 0)
 		return (dat->chain + dat->byte);
 	else
 		return NULL;

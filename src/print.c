@@ -9,16 +9,16 @@ void
 dwg_print_entity (Dwg_Object_Entity * ent)
 {
 	printf ("Bitsize: %lu\n", ent->bitsize);
-	printf ("Vera traktilo: %i.%i.%lu\n", ent->traktilo.code, ent->traktilo.kiom,
+	printf ("Vera traktilo: %i.%i.%lu\n", ent->traktilo.code, ent->traktilo.size,
 		ent->traktilo.value);
-	printf ("Kroma datenaro: %lu B\n", (long unsigned int) ent->kromdat_kiom);
+	printf ("Kroma datenaro: %lu B\n", (long unsigned int) ent->kromdat_size);
 	printf ("Ĉu picture?: %s", ent->picture_ekzistas ? "Yes" : "Ne");
 	if (ent->picture_ekzistas)
-		printf ("\tSize: %lu B\n", ent->picture_kiom);
+		printf ("\tSize: %lu B\n", ent->picture_size);
 	else
 		puts ("");
 	printf ("Reĝimo: %i\n", ent->regime);
-	printf ("Kiom reagiloj: %lu\n", ent->reagilo_kiom);
+	printf ("Kiom reagiloj: %lu\n", ent->reagilo_size);
 	printf ("Ĉu senligiloj?: %s\n", ent->senligiloj ? "Yes" : "Ne");
 	printf ("Koloro: %u\n", ent->colour);
 	printf ("Skalo de linitype: %1.13g\n", ent->linitypeskalo);
@@ -32,10 +32,10 @@ void
 dwg_print_object (Dwg_Object_Object *ord)
 {
 	printf ("Bitsize: %lu\n", ord->bitsize);
-	printf ("Vera traktilo: %i.%i.%lu\n", ord->traktilo.code, ord->traktilo.kiom,
+	printf ("Vera traktilo: %i.%i.%lu\n", ord->traktilo.code, ord->traktilo.size,
 		ord->traktilo.value);
-	printf ("Kroma datenaro: %lu B\n", (long unsigned int) ord->kromdat_kiom);
-	printf ("Kiom reagiloj: %lu\n", ord->reagilo_kiom);
+	printf ("Kroma datenaro: %lu B\n", (long unsigned int) ord->kromdat_size);
+	printf ("Kiom reagiloj: %lu\n", ord->reagilo_size);
 }
 
 
@@ -50,16 +50,16 @@ dwg_print_traktref (Dwg_Object * obj)
 
 		ent = obj->tio.entity;
 
-		printf ("\tTraktil-referencoj (%u): ", ent->traktref_kiom);
-		if (ent->traktref_kiom == 0)
+		printf ("\tTraktil-referencoj (%u): ", ent->traktref_size);
+		if (ent->traktref_size == 0)
 		{
 			puts ("");
 			return;
 		}
-		for (i = 0; i < ent->traktref_kiom - 1; i++)
-			printf ("%i.%i.%li / ", ent->traktref[i].code, ent->traktref[i].kiom,
+		for (i = 0; i < ent->traktref_size - 1; i++)
+			printf ("%i.%i.%li / ", ent->traktref[i].code, ent->traktref[i].size,
 				ent->traktref[i].value);
-		printf ("%i.%i.%li\n", ent->traktref[i].code, ent->traktref[i].kiom,
+		printf ("%i.%i.%li\n", ent->traktref[i].code, ent->traktref[i].size,
 			ent->traktref[i].value);
 	}
 	else if (obj->supertype == DWG_SUPERTYPE_OBJECT)
@@ -68,16 +68,16 @@ dwg_print_traktref (Dwg_Object * obj)
 
 		ord = obj->tio.object;
 
-		printf ("\tTraktil-referencoj (%u): ", ord->traktref_kiom);
-		if (ord->traktref_kiom == 0)
+		printf ("\tTraktil-referencoj (%u): ", ord->traktref_size);
+		if (ord->traktref_size == 0)
 		{
 			puts ("");
 			return;
 		}
-		for (i = 0; i < ord->traktref_kiom - 1; i++)
-			printf ("%i.%i.%li / ", ord->traktref[i].code, ord->traktref[i].kiom,
+		for (i = 0; i < ord->traktref_size - 1; i++)
+			printf ("%i.%i.%li / ", ord->traktref[i].code, ord->traktref[i].size,
 				ord->traktref[i].value);
-		printf ("%i.%i.%li\n", ord->traktref[i].code, ord->traktref[i].kiom,
+		printf ("%i.%i.%li\n", ord->traktref[i].code, ord->traktref[i].size,
 			ord->traktref[i].value);
 	}
 }
@@ -182,8 +182,8 @@ dwg_print_MINSERT (Dwg_Entity_MINSERT * ent)
 	printf ("\tForpuŝigo: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
 		ent->extrusion.z);
 	printf ("\tĈu kun ATTRIB-oj?: %s\n", ent->kun_attrib ? "Yes" : "Ne");
-	printf ("\tKolumnoj: %02i\tInterspaco: %1.13g\n", ent->kol.kiom, ent->kol.dx);
-	printf ("\t  Linioj: %02i\tInterspaco: %1.13g\n", ent->lin.kiom, ent->lin.dy);
+	printf ("\tKolumnoj: %02i\tInterspaco: %1.13g\n", ent->kol.size, ent->kol.dx);
+	printf ("\t  Linioj: %02i\tInterspaco: %1.13g\n", ent->lin.size, ent->lin.dy);
 }
 
 void
@@ -415,16 +415,16 @@ dwg_print (Dwg_Structure *dwg_struct)
 		puts ("**************************************************");
 		puts ("Section UNKNOWN 1");
 		puts ("**************************************************");
-		printf ("Size: %lu B\n", dwg_struct->unknown1.kiom);
-		bit_print ((Bit_Chain *) & dwg_struct->unknown1, dwg_struct->unknown1.kiom);
+		printf ("Size: %lu B\n", dwg_struct->unknown1.size);
+		bit_print ((Bit_Chain *) & dwg_struct->unknown1, dwg_struct->unknown1.size);
 		puts ("");
 	}
 
 	puts ("**************************************************");
 	puts ("Section PICTURE");
 	puts ("**************************************************");
-	printf ("Size: %lu B\n", dwg_struct->picture.kiom);
-	//bit_print ((Bit_Chain *) &dwg_struct->picture, dwg_struct->picture.kiom);
+	printf ("Size: %lu B\n", dwg_struct->picture.size);
+	//bit_print ((Bit_Chain *) &dwg_struct->picture, dwg_struct->picture.size);
 	puts ("");
 
 	puts ("**************************************************");
@@ -454,7 +454,7 @@ dwg_print (Dwg_Structure *dwg_struct)
 			break;
 		case DWG_DT_H:
 			printf ("H: %i.%i.%li", dwg_struct->var[i].traktilo.code,
-				dwg_struct->var[i].traktilo.kiom, dwg_struct->var[i].traktilo.value);
+				dwg_struct->var[i].traktilo.size, dwg_struct->var[i].traktilo.value);
 			break;
 		case DWG_DT_T:
 			printf ("T: \"%s\"", dwg_struct->var[i].text);
@@ -605,8 +605,8 @@ dwg_print (Dwg_Structure *dwg_struct)
 	puts ("**************************************************");
 	for (i = 0; i < 14; i++)
 	{
-		printf ("Rikordo[%02i] Longo: %u\tChain:", i, dwg_struct->duaheader.traktrik[i].kiom);
-		for (j = 0; j < dwg_struct->duaheader.traktrik[i].kiom; j++)
+		printf ("Rikordo[%02i] Longo: %u\tChain:", i, dwg_struct->duaheader.traktrik[i].size);
+		for (j = 0; j < dwg_struct->duaheader.traktrik[i].size; j++)
 			printf (" %02X", dwg_struct->duaheader.traktrik[i].chain[j]);
 		puts ("");
 	}

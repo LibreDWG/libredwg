@@ -93,12 +93,12 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 		skt->header.section[5].address = dat->byte;
 		skt->header.section[5].size = DWG_UNKNOWN1_KIOM;
 
-		skt->unknown1.kiom = skt->header.section[5].size;
+		skt->unknown1.size = skt->header.section[5].size;
 		skt->unknown1.byte = skt->unknown1.bit = 0;
-		while (dat->byte + skt->unknown1.kiom >= dat->kiom)
+		while (dat->byte + skt->unknown1.size >= dat->size)
 			bit_chain_rezervi (dat);
-		memcpy (&dat->chain[dat->byte], skt->unknown1.chain, skt->unknown1.kiom);
-		dat->byte += skt->unknown1.kiom;
+		memcpy (&dat->chain[dat->byte], skt->unknown1.chain, skt->unknown1.size);
+		dat->byte += skt->unknown1.size;
 
 	}
 
@@ -115,11 +115,11 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 
 	/* Kopii la picturen
 	 */
-	//skt->picture.kiom = 0; // Se oni deziras ne kopii picturen, malkomentu tiun cxi linion
+	//skt->picture.size = 0; // Se oni deziras ne kopii picturen, malkomentu tiun cxi linion
 	bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_PICTURE_BEGIN));
-	for (i = 0; i < skt->picture.kiom; i++)
+	for (i = 0; i < skt->picture.size; i++)
 		bit_write_RC (dat, skt->picture.chain[i]);
-	if (skt->picture.kiom == 0)
+	if (skt->picture.size == 0)
 	{
 		bit_write_RL (dat, 5);
 		bit_write_RC (dat, 0);
@@ -257,7 +257,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 		else if (skt->object[i].supertype == DWG_SUPERTYPE_UNKNOWN)
 		{
 			nkn.chain = skt->object[i].tio.unknownjxo;
-			nkn.kiom = skt->object[i].size;
+			nkn.size = skt->object[i].size;
 			nkn.byte = nkn.bit = 0;
 			bit_read_BS (&nkn);
 			bit_read_RL (&nkn);
@@ -298,7 +298,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 		if (obj->supertype == DWG_SUPERTYPE_UNKNOWN)
 		{
 			bit_write_MS (dat, obj->size);
-			if (dat->byte + obj->size >= dat->kiom - 2)
+			if (dat->byte + obj->size >= dat->size - 2)
 				bit_chain_rezervi (dat);
 			memcpy (&dat->chain[dat->byte], obj->tio.unknownjxo, obj->size);
 			dat->byte += obj->size;
@@ -367,7 +367,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 			lastatrakt = 0;
 		}
 	}
-	//printf ("Obj kiom: %u\n", i);
+	//printf ("Obj size: %u\n", i);
 	if (ckr_mankanta)
 	{
 		sekcisize = dat->byte - pvzadr;
@@ -437,9 +437,9 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	bit_write_BS (dat, 14);
 	for (i = 0; i < 14; i++)
 	{
-		bit_write_RC (dat, skt->duaheader.traktrik[i].kiom);
+		bit_write_RC (dat, skt->duaheader.traktrik[i].size);
 		bit_write_RC (dat, i);
-		for (j = 0; j < skt->duaheader.traktrik[i].kiom; j++)
+		for (j = 0; j < skt->duaheader.traktrik[i].size; j++)
 			bit_write_RC (dat, skt->duaheader.traktrik[i].chain[j]);
 	}
 
@@ -474,7 +474,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 
 	/* Fino de la dosiero
 	 */
-	dat->kiom = dat->byte;
+	dat->size = dat->byte;
 
 	/* Skribi sekciadresaron
 	 */
@@ -543,24 +543,24 @@ dwg_encode_entity (Dwg_Object * obj, Bit_Chain * dat)
 	bit_write_RL (dat, 0);	// Nulo nun, kalkulendas por write poste
 
 	bit_write_H (dat, &est->traktilo);
-	bit_write_BS (dat, est->kromdat_kiom);
-	if (est->kromdat_kiom > 0)
+	bit_write_BS (dat, est->kromdat_size);
+	if (est->kromdat_size > 0)
 	{
 		bit_write_H (dat, &est->kromdat_trakt);
-		for (i = 0; i < est->kromdat_kiom; i++)
+		for (i = 0; i < est->kromdat_size; i++)
 			bit_write_RC (dat, est->kromdat[i]);
 	}
 
 	bit_write_B (dat, est->picture_ekzistas);
 	if (est->picture_ekzistas)
 	{
-		bit_write_RL (dat, est->picture_kiom);
-		for (i = 0; i < est->picture_kiom; i++)
+		bit_write_RL (dat, est->picture_size);
+		for (i = 0; i < est->picture_size; i++)
 			bit_write_RC (dat, est->picture[i]);
 	}
 
 	bit_write_BB (dat, est->regime);
-	bit_write_BL (dat, est->reagilo_kiom);
+	bit_write_BL (dat, est->reagilo_size);
 	bit_write_B (dat, est->senligiloj);
 	bit_write_BS (dat, est->colour);
 	bit_write_BD (dat, est->linitypeskalo);
@@ -600,7 +600,7 @@ dwg_encode_entity (Dwg_Object * obj, Bit_Chain * dat)
 
 	/* Traktilaj referencoj
 	 */
-	for (i = 0; i < est->traktref_kiom; i++)
+	for (i = 0; i < est->traktref_size; i++)
 		bit_write_H (dat, &est->traktref[i]);
 
 	/* Finfine kalkuli kaj write la bajt-sizen de la object (cxu estas erara?)

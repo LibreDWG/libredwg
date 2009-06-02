@@ -42,7 +42,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	unsigned char sgdc[2];
 	unsigned int i, j;
 	unsigned int ckr, ckr2, antckr;
-	long unsigned int kiom;
+	long unsigned int size;
 	long unsigned int lasta;
 	long unsigned int maplasta;
 	long unsigned int duabyte;
@@ -155,12 +155,12 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 		    printf ("   UNKNOWN 1 (end): %8X\n", (unsigned int) (skt->header.section[5].address + skt->header.section[5].size));
 		}
 		dat->byte = skt->header.section[5].address;
-		skt->unknown1.kiom = DWG_UNKNOWN1_KIOM;
+		skt->unknown1.size = DWG_UNKNOWN1_KIOM;
 		skt->unknown1.byte = skt->unknown1.bit = 0;
-		skt->unknown1.chain = malloc (skt->unknown1.kiom);
-		memcpy (skt->unknown1.chain, &dat->chain[dat->byte], skt->unknown1.kiom);
-		//bit_esplori_chain ((Bit_Chain *) &skt->unknown1, skt->unknown1.kiom);
-		//bit_print ((Bit_Chain *) &skt->unknown1, skt->unknown1.kiom);
+		skt->unknown1.chain = malloc (skt->unknown1.size);
+		memcpy (skt->unknown1.chain, &dat->chain[dat->byte], skt->unknown1.size);
+		//bit_esplori_chain ((Bit_Chain *) &skt->unknown1, skt->unknown1.size);
+		//bit_print ((Bit_Chain *) &skt->unknown1, skt->unknown1.size);
 	}
 
 
@@ -178,12 +178,12 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 		if (bit_search_sentinel (dat, dwg_sentinel (DWG_SENTINEL_PICTURE_END)))
 		{
             if (loglevel) printf ("        PICTURE (end): %8X\n", (unsigned int) dat->byte);
-			skt->picture.kiom = (dat->byte - 16) - ekaddress;
-			skt->picture.chain = (char *) malloc (skt->picture.kiom);
-			memcpy (skt->picture.chain, &dat->chain[ekaddress], skt->picture.kiom);
+			skt->picture.size = (dat->byte - 16) - ekaddress;
+			skt->picture.chain = (char *) malloc (skt->picture.size);
+			memcpy (skt->picture.chain, &dat->chain[ekaddress], skt->picture.size);
 		}
 		else
-			skt->picture.kiom = 0;
+			skt->picture.size = 0;
 	}
 
 
@@ -233,7 +233,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 			break;
 		case DWG_DT_H:
 			bit_read_H (dat, &skt->var[i].traktilo);
-			if (loglevel) printf ("H: %i.%i.0x%08X", skt->var[i].traktilo.code, skt->var[i].traktilo.kiom, (unsigned int) skt->var[i].traktilo.value);
+			if (loglevel) printf ("H: %i.%i.0x%08X", skt->var[i].traktilo.code, skt->var[i].traktilo.size, (unsigned int) skt->var[i].traktilo.value);
 			break;
 		case DWG_DT_T:
 			skt->var[i].text = bit_read_T (dat);
@@ -295,9 +295,9 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	dat->byte = skt->header.section[1].address + 16;
 	dat->bit = 0;
 
-	kiom = bit_read_RL (dat);
-	lasta = dat->byte + kiom;
-	//if (loglevel) printf ("Longeco: %lu\n", kiom);
+	size = bit_read_RL (dat);
+	lasta = dat->byte + size;
+	//if (loglevel) printf ("Longeco: %lu\n", size);
 
 	/* read the classes
 	 */
@@ -365,7 +365,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 
 	maplasta = dat->byte + skt->header.section[2].size;	// 4
 	skt->num_objects = 0;
-	obek = dat->kiom;
+	obek = dat->size;
 	obfin = 0;
 	do
 	{
@@ -527,7 +527,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 		for (i = 0; i < 14; i++)
 		{
 			sig2 = bit_read_RC (dat);
-			skt->duaheader.traktrik[i].kiom = sig2;
+			skt->duaheader.traktrik[i].size = sig2;
 			//if (loglevel) printf ("\nLongo: %u\n", sig2);
 			sig = bit_read_RC (dat);
 			//if (loglevel) printf ("\t[%u]\n", sig);
@@ -578,7 +578,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	dat->bit = 0;
 	skt->measurement = bit_read_RL (dat);
 
-    if (loglevel) printf ("KIOM BAJTOJ :\t%lu\n", dat->kiom);
+    if (loglevel) printf ("KIOM BAJTOJ :\t%lu\n", dat->size);
 
 	//exit (0);
 	return 0;
@@ -601,59 +601,59 @@ dwg_decode_entity (Bit_Chain * dat, Dwg_Object_Entity * est)
 	{
 		fprintf (stderr, "dwg_decode_entity:\tEraro en traktilo de object! Adreso en la ĉeno: 0x%0x\n", (unsigned int) dat->byte);
 		est->bitsize = 0;
-		est->kromdat_kiom = 0;
+		est->kromdat_size = 0;
 		est->picture_ekzistas = 0;
-		est->traktref_kiom = 0;
+		est->traktref_size = 0;
 		return;
 	}
-	est->kromdat_kiom = 0;
+	est->kromdat_size = 0;
 	while (grando = bit_read_BS (dat))
 	{
 		if (grando > 10210)
 		{
 			fprintf (stderr, "dwg_decode_entity: Absurdo! Kromdato-size: %lu. Object: %lu (traktilo).\n", (long unsigned int) grando, est->traktilo.value);
 			est->bitsize = 0;
-			est->kromdat_kiom = 0;
+			est->kromdat_size = 0;
 			est->picture_ekzistas = 0;
-			est->traktref_kiom = 0;
+			est->traktref_size = 0;
 			return;
 		}
-		if (est->kromdat_kiom == 0)
+		if (est->kromdat_size == 0)
 		{
 			est->kromdat = malloc (grando);
-			est->kromdat_kiom = grando;
+			est->kromdat_size = grando;
 		}
 		else
 		{
-			est->kromdat_kiom += grando;
-			est->kromdat = realloc (est->kromdat, est->kromdat_kiom);
+			est->kromdat_size += grando;
+			est->kromdat = realloc (est->kromdat, est->kromdat_size);
 		}
 		error = bit_read_H (dat, &est->kromdat_trakt);
 		if (error)
 			fprintf (stderr, "Ops...\n");
-		for (i = est->kromdat_kiom - grando; i < est->kromdat_kiom; i++)
+		for (i = est->kromdat_size - grando; i < est->kromdat_size; i++)
 			est->kromdat[i] = bit_read_RC (dat);
 	}
 	est->picture_ekzistas = bit_read_B (dat);
 	if (est->picture_ekzistas)
 	{
-		est->picture_kiom = bit_read_RL (dat);
-		if (est->picture_kiom < 210210)
+		est->picture_size = bit_read_RL (dat);
+		if (est->picture_size < 210210)
 		{
-			est->picture = malloc (est->picture_kiom);
-			for (i = 0; i < est->picture_kiom; i++)
+			est->picture = malloc (est->picture_size);
+			for (i = 0; i < est->picture_size; i++)
 				est->picture[i] = bit_read_RC (dat);
 		}
 		else
 		{
 			fprintf (stderr, "dwg_decode_entity:  Absurdo! Bildo-size: %lu kB. Object: %lu (traktilo).\n",
-				est->picture_kiom / 1000, est->traktilo.value);
+				est->picture_size / 1000, est->traktilo.value);
 			bit_ref_salti (dat, -(4 * 8 + 1));
 		}
 	}
 
 	est->regime = bit_read_BB (dat);
-	est->reagilo_kiom = bit_read_BL (dat);
+	est->reagilo_size = bit_read_BL (dat);
 	est->senligiloj = bit_read_B (dat);
 	est->colour = bit_read_BS (dat);
 	est->linitypeskalo = bit_read_BD (dat);
@@ -676,39 +676,39 @@ dwg_decode_object (Bit_Chain * dat, Dwg_Object_Object * ord)
 	{
 		fprintf (stderr, "\tEraro en traktilo de object! Adreso en la ĉeno: 0x%0x\n", (unsigned int) dat->byte);
 		ord->bitsize = 0;
-		ord->kromdat_kiom = 0;
-		ord->traktref_kiom = 0;
+		ord->kromdat_size = 0;
+		ord->traktref_size = 0;
 		return;
 	}
-	ord->kromdat_kiom = 0;
+	ord->kromdat_size = 0;
 	while (grando = bit_read_BS (dat))
 	{
 		if (grando > 10210)
 		{
 			fprintf (stderr, "dwg_decode_object: Absurdo! Kromdato-size: %lu. Object: %lu (traktilo).\n", (long unsigned int) grando, ord->traktilo.value);
 			ord->bitsize = 0;
-			ord->kromdat_kiom = 0;
-			ord->traktref_kiom = 0;
+			ord->kromdat_size = 0;
+			ord->traktref_size = 0;
 			return;
 		}
-		if (ord->kromdat_kiom == 0)
+		if (ord->kromdat_size == 0)
 		{
 			ord->kromdat = malloc (grando);
-			ord->kromdat_kiom = grando;
+			ord->kromdat_size = grando;
 		}
 		else
 		{
-			ord->kromdat_kiom += grando;
-			ord->kromdat = realloc (ord->kromdat, ord->kromdat_kiom);
+			ord->kromdat_size += grando;
+			ord->kromdat = realloc (ord->kromdat, ord->kromdat_size);
 		}
 		error = bit_read_H (dat, &ord->kromdat_trakt);
 		if (error)
 			fprintf (stderr, "Ops...\n");
-		for (i = ord->kromdat_kiom - grando; i < ord->kromdat_kiom; i++)
+		for (i = ord->kromdat_size - grando; i < ord->kromdat_size; i++)
 			ord->kromdat[i] = bit_read_RC (dat);
 	}
 
-	ord->reagilo_kiom = bit_read_BL (dat);
+	ord->reagilo_size = bit_read_BL (dat);
 }
 
 static void
@@ -742,7 +742,7 @@ dwg_decode_traktref (Bit_Chain * dat, Dwg_Object * obj)
 			}
 			i++;
 		}
-		est->traktref_kiom = i;
+		est->traktref_size = i;
 	}
 	else
 	{
@@ -770,7 +770,7 @@ dwg_decode_traktref (Bit_Chain * dat, Dwg_Object * obj)
 			}
 			i++;
 		}
-		ord->traktref_kiom = i;
+		ord->traktref_size = i;
 	}
 }
 
@@ -1024,8 +1024,8 @@ dwg_decode_MINSERT (Bit_Chain * dat, Dwg_Object * obj)
 	est->extrusion.y = bit_read_BD (dat);
 	est->extrusion.z = bit_read_BD (dat);
 	est->kun_attrib = bit_read_B (dat);
-	est->kol.kiom = bit_read_BS (dat);
-	est->lin.kiom = bit_read_BS (dat);
+	est->kol.size = bit_read_BS (dat);
+	est->lin.size = bit_read_BS (dat);
 	est->kol.dx = bit_read_BD (dat);
 	est->lin.dy = bit_read_BD (dat);
 

@@ -87,7 +87,7 @@ extern "C"
 	typedef struct _dwg_traktilo
 	{
 		unsigned char code;
-		unsigned char kiom;
+		unsigned char size;
 		long unsigned int value;
 	} Dwg_Traktilo;
 
@@ -269,12 +269,12 @@ extern "C"
 		unsigned char kun_attrib;
 		struct
 		{
-			unsigned int kiom;
+			unsigned int size;
 			double dx;
 		} kol;
 		struct
 		{
-			unsigned int kiom;
+			unsigned int size;
 			double dy;
 		} lin;
 	} Dwg_Entity_MINSERT;
@@ -869,16 +869,16 @@ extern "C"
 		long unsigned int bitsize;
 		Dwg_Traktilo traktilo;
 
-		unsigned int kromdat_kiom;
+		unsigned int kromdat_size;
 		Dwg_Traktilo kromdat_trakt;
 		unsigned char *kromdat;
 
 		unsigned char picture_ekzistas;
-		long unsigned int picture_kiom;
+		long unsigned int picture_size;
 		unsigned char *picture;
 
 		unsigned char regime;
-		long unsigned int reagilo_kiom;
+		long unsigned int reagilo_size;
 		unsigned char senligiloj;
 		unsigned int colour;
 		double linitypeskalo;
@@ -887,7 +887,7 @@ extern "C"
 		unsigned int malvidebleco;
 		unsigned char linithickness;
 
-		unsigned int traktref_kiom;
+		unsigned int traktref_size;
 		Dwg_Traktilo *traktref;
 	} Dwg_Object_Entity;
 
@@ -905,13 +905,13 @@ extern "C"
 		long unsigned int bitsize;
 		Dwg_Traktilo traktilo;
 
-		unsigned int kromdat_kiom;
+		unsigned int kromdat_size;
 		Dwg_Traktilo kromdat_trakt;
 		unsigned char *kromdat;
 
-		long unsigned int reagilo_kiom;
+		long unsigned int reagilo_size;
 
-		unsigned int traktref_kiom;
+		unsigned int traktref_size;
 		Dwg_Traktilo *traktref;
 	} Dwg_Object_Object;
 
@@ -955,7 +955,7 @@ extern "C"
 	typedef struct _dwg_chain
 	{
 		unsigned char *chain;
-		long unsigned int kiom;
+		long unsigned int size;
 		long unsigned int byte;
 		unsigned char bit;
 	} Dwg_Chain;
@@ -1008,7 +1008,7 @@ extern "C"
 			unsigned char unknownjxo[6];
 			struct
 			{
-				int kiom;
+				int size;
 				unsigned char chain[4];
 			} traktrik[14];
 		} duaheader;

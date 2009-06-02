@@ -33,7 +33,7 @@ bit_ref_salti (Bit_Chain * dat, int salto)
 	int finpoz;
 
 	finpoz = dat->bit + salto;
-	if (dat->byte >= dat->kiom - 1 && finpoz > 7)
+	if (dat->byte >= dat->size - 1 && finpoz > 7)
 	{
 		dat->bit = 7;
 		return;
@@ -62,7 +62,7 @@ bit_read_B (Bit_Chain * dat)
 void
 bit_write_B (Bit_Chain * dat, unsigned char value)
 {
-	if (dat->byte >= dat->kiom - 1)
+	if (dat->byte >= dat->size - 1)
 		bit_chain_rezervi (dat);
 
 	if (value)
@@ -87,7 +87,7 @@ bit_read_BB (Bit_Chain * dat)
 	else
 	{
 		result = (bitoko & 0x01) << 1;
-		if (dat->byte < dat->kiom - 1)
+		if (dat->byte < dat->size - 1)
 		{
 			bitoko = dat->chain[dat->byte + 1];
 			result |= (bitoko & 0x80) >> 7;
@@ -106,7 +106,7 @@ bit_write_BB (Bit_Chain * dat, unsigned char value)
 	unsigned char masko;
 	unsigned char bitoko;
 
-	if (dat->byte >= dat->kiom - 1)
+	if (dat->byte >= dat->size - 1)
 		bit_chain_rezervi (dat);
 
 	bitoko = dat->chain[dat->byte];
@@ -118,7 +118,7 @@ bit_write_BB (Bit_Chain * dat, unsigned char value)
 	else
 	{
 		dat->chain[dat->byte] = (bitoko & 0xfe) | (value >> 1);
-		if (dat->byte < dat->kiom - 1)
+		if (dat->byte < dat->size - 1)
 		{
 			bitoko = dat->chain[dat->byte + 1];
 			dat->chain[dat->byte + 1] = (bitoko & 0x7f) | ((value & 0x01) << 7);
@@ -142,7 +142,7 @@ bit_read_RC (Bit_Chain * dat)
 	else
 	{
 		result = bitoko << dat->bit;
-		if (dat->byte < dat->kiom - 1)
+		if (dat->byte < dat->size - 1)
 		{
 			bitoko = dat->chain[dat->byte + 1];
 			result |= bitoko >> (8 - dat->bit);
@@ -161,7 +161,7 @@ bit_write_RC (Bit_Chain * dat, unsigned char value)
 	unsigned char bitoko;
 	unsigned char cetero;
 
-	if (dat->byte >= dat->kiom - 1)
+	if (dat->byte >= dat->size - 1)
 		bit_chain_rezervi (dat);
 
 	if (dat->bit == 0)
@@ -173,7 +173,7 @@ bit_write_RC (Bit_Chain * dat, unsigned char value)
 		bitoko = dat->chain[dat->byte];
 		cetero = bitoko & (0xff << (8 - dat->bit));
 		dat->chain[dat->byte] = cetero | (value >> dat->bit);
-		if (dat->byte < dat->kiom - 1)
+		if (dat->byte < dat->size - 1)
 		{
 			bitoko = dat->chain[dat->byte + 1];
 			cetero = bitoko & (0xff >> dat->bit);
@@ -689,22 +689,22 @@ bit_read_H (Bit_Chain * dat, Dwg_Traktilo * trakt)
 	int i;
 
 	trakt->code = bit_read_RC (dat);
-	trakt->kiom = trakt->code & 0x0f;
+	trakt->size = trakt->code & 0x0f;
 	trakt->code = (trakt->code & 0xf0) >> 4;
 
 	trakt->value = 0;
-	if (trakt->kiom > 4)
+	if (trakt->size > 4)
 	{
 		/*
 		printf ("Eraro: traktilo-referenco pli longa ol 4 bitokoj: %i.%i.%lu\n",
-			trakt->code, trakt->kiom, trakt->value);
+			trakt->code, trakt->size, trakt->value);
 		*/
-		trakt->kiom = 0;
+		trakt->size = 0;
 		return (-1);
 	}
 
 	val = (char *) &trakt->value;
-	for (i = trakt->kiom - 1; i >= 0; i--)
+	for (i = trakt->size - 1; i >= 0; i--)
 		val[i] = bit_read_RC (dat);
 
 	return (0);
@@ -877,7 +877,7 @@ bit_search_sentinel (Bit_Chain * dat, unsigned char sentinel[16])
 {
 	long unsigned int i, j;
 
-	for (i = 0; i < dat->kiom; i++)
+	for (i = 0; i < dat->size; i++)
 	{
 		for (j = 0; j < 16; j++)
 		{
@@ -910,30 +910,30 @@ bit_write_sentinel (Bit_Chain * dat, unsigned char sentinel[16])
 void
 bit_chain_rezervi (Bit_Chain * dat)
 {
-	if (dat->kiom == 0)
+	if (dat->size == 0)
 	{
 		dat->chain = calloc (1, CXENO_BLOKO);
-		dat->kiom = CXENO_BLOKO;
+		dat->size = CXENO_BLOKO;
 		dat->byte = 0;
 		dat->bit = 0;
 	}
 	else
 	{
-		dat->chain = realloc (dat->chain, dat->kiom + CXENO_BLOKO);
-		dat->kiom += CXENO_BLOKO;
+		dat->chain = realloc (dat->chain, dat->size + CXENO_BLOKO);
+		dat->size += CXENO_BLOKO;
 	}
 }
 
 void
-bit_print (Bit_Chain * dat, long unsigned int kiom)
+bit_print (Bit_Chain * dat, long unsigned int size)
 {
 	unsigned char sig;
 	long unsigned int i, j, k;
 
 	printf ("---------------------------------------------------------");
-	if (kiom > dat->kiom)
-		kiom = dat->kiom;
-	for (i = 0; i < kiom; i++)
+	if (size > dat->size)
+		size = dat->size;
+	for (i = 0; i < size; i++)
 	{
 		if (i % 16 == 0)
 			printf ("\n[0x%04X]: ", (unsigned int) i);
@@ -950,20 +950,20 @@ bit_print (Bit_Chain * dat, long unsigned int kiom)
 }
 
 void
-bit_esplori_chain (Bit_Chain * dat, long unsigned int kiom)
+bit_esplori_chain (Bit_Chain * dat, long unsigned int size)
 {
 	unsigned char sig;
 	long unsigned int i, j, k;
 
-	if (kiom > dat->kiom)
-		kiom = dat->kiom;
+	if (size > dat->size)
+		size = dat->size;
 
 	for (k = 0; k < 8; k++)
 	{
 		printf ("---------------------------------------------------------");
 		dat->byte = 0;
 		dat->bit = k;
-		for (i = 0; i < kiom - 1; i++)
+		for (i = 0; i < size - 1; i++)
 		{
 			if (i % 16 == 0)
 				printf ("\n[0x%04X]: ", (unsigned int) i);

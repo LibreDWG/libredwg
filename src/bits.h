@@ -35,7 +35,7 @@
 typedef struct _bit_chain
 {
 	unsigned char *chain;
-	long unsigned int kiom;
+	long unsigned int size;
 	long unsigned int byte;
 	unsigned char bit;
 	Dwg_Version_Type version;
@@ -127,8 +127,8 @@ void bit_write_sentinel (Bit_Chain * dat, unsigned char sentinel[16]);
 
 void bit_chain_rezervi (Bit_Chain * dat);
 
-void bit_print (Bit_Chain * dat, long unsigned int kiom);
+void bit_print (Bit_Chain * dat, long unsigned int size);
 
-void bit_esplori_chain (Bit_Chain * dat, long unsigned int kiom);
+void bit_esplori_chain (Bit_Chain * dat, long unsigned int size);
 
 #endif
