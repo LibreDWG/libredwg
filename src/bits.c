@@ -128,7 +128,7 @@ bit_write_BB (Bit_Chain * dat, unsigned char value)
 	bit_advance_position (dat, 2);
 }
 
-/** Read 1 bitokon.
+/** Read 1 byte (raw char).
  */
 unsigned char
 bit_read_RC (Bit_Chain * dat)
@@ -153,13 +153,13 @@ bit_read_RC (Bit_Chain * dat)
 	return ((unsigned char) result);
 }
 
-/** Write 1 bitokon.
+/** Write 1 byte (raw char).
  */
 void
 bit_write_RC (Bit_Chain * dat, unsigned char value)
 {
 	unsigned char byte;
-	unsigned char cetero;
+	unsigned char remainder;
 
 	if (dat->byte >= dat->size - 1)
 		bit_chain_alloc (dat);
@@ -171,13 +171,13 @@ bit_write_RC (Bit_Chain * dat, unsigned char value)
 	else
 	{
 		byte = dat->chain[dat->byte];
-		cetero = byte & (0xff << (8 - dat->bit));
-		dat->chain[dat->byte] = cetero | (value >> dat->bit);
+		remainder = byte & (0xff << (8 - dat->bit));
+		dat->chain[dat->byte] = remainder | (value >> dat->bit);
 		if (dat->byte < dat->size - 1)
 		{
 			byte = dat->chain[dat->byte + 1];
-			cetero = byte & (0xff >> dat->bit);
-			dat->chain[dat->byte + 1] = cetero | (value << (8 - dat->bit));
+			remainder = byte & (0xff >> dat->bit);
+			dat->chain[dat->byte + 1] = remainder | (value << (8 - dat->bit));
 		}
 	}
 
