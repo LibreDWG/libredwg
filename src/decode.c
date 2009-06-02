@@ -656,7 +656,7 @@ dwg_decode_entity (Bit_Chain * dat, Dwg_Object_Entity * est)
 	est->reagilo_size = bit_read_BL (dat);
 	est->senligiloj = bit_read_B (dat);
 	est->colour = bit_read_BS (dat);
-	est->linitypeskalo = bit_read_BD (dat);
+	est->linitypescale = bit_read_BD (dat);
 	est->linitype = bit_read_BB (dat);
 	est->printstilo = bit_read_BB (dat);
 	est->malvidebleco = bit_read_BS (dat);
@@ -962,20 +962,20 @@ dwg_decode_INSERT (Bit_Chain * dat, Dwg_Object * obj)
 	est->z0 = bit_read_BD (dat);
 	est->skalindik = bit_read_BB (dat);
 	if (est->skalindik == 3)
-		est->skalo.x = est->skalo.y = est->skalo.y = 1.0;
+		est->scale.x = est->scale.y = est->scale.y = 1.0;
 	else if (est->skalindik == 1)
 	{
-		est->skalo.x = 1.0;
-		est->skalo.y = bit_read_DD (dat, 1.0);
-		est->skalo.z = bit_read_DD (dat, 1.0);
+		est->scale.x = 1.0;
+		est->scale.y = bit_read_DD (dat, 1.0);
+		est->scale.z = bit_read_DD (dat, 1.0);
 	}
 	else if (est->skalindik == 2)
-		est->skalo.x = est->skalo.y = est->skalo.y = bit_read_RD (dat);
+		est->scale.x = est->scale.y = est->scale.y = bit_read_RD (dat);
 	else //if (est->skalindik == 0)
 	{
-		est->skalo.x = bit_read_RD (dat);
-		est->skalo.y = bit_read_DD (dat, est->skalo.x);
-		est->skalo.z = bit_read_DD (dat, est->skalo.x);
+		est->scale.x = bit_read_RD (dat);
+		est->scale.y = bit_read_DD (dat, est->scale.x);
+		est->scale.z = bit_read_DD (dat, est->scale.x);
 	}
 	est->turnang = bit_read_BD (dat);
 	est->extrusion.x = bit_read_BD (dat);
@@ -1004,20 +1004,20 @@ dwg_decode_MINSERT (Bit_Chain * dat, Dwg_Object * obj)
 	est->z0 = bit_read_BD (dat);
 	est->skalindik = bit_read_BB (dat);
 	if (est->skalindik == 3)
-		est->skalo.x = est->skalo.y = est->skalo.y = 1.0;
+		est->scale.x = est->scale.y = est->scale.y = 1.0;
 	else if (est->skalindik == 1)
 	{
-		est->skalo.x = 1.0;
-		est->skalo.y = bit_read_DD (dat, 1.0);
-		est->skalo.z = bit_read_DD (dat, 1.0);
+		est->scale.x = 1.0;
+		est->scale.y = bit_read_DD (dat, 1.0);
+		est->scale.z = bit_read_DD (dat, 1.0);
 	}
 	else if (est->skalindik == 2)
-		est->skalo.x = est->skalo.y = est->skalo.y = bit_read_RD (dat);
+		est->scale.x = est->scale.y = est->scale.y = bit_read_RD (dat);
 	else //if (est->skalindik == 0)
 	{
-		est->skalo.x = bit_read_RD (dat);
-		est->skalo.y = bit_read_DD (dat, est->skalo.x);
-		est->skalo.z = bit_read_DD (dat, est->skalo.x);
+		est->scale.x = bit_read_RD (dat);
+		est->scale.y = bit_read_DD (dat, est->scale.x);
+		est->scale.z = bit_read_DD (dat, est->scale.x);
 	}
 	est->turnang = bit_read_BD (dat);
 	est->extrusion.x = bit_read_BD (dat);
@@ -1378,11 +1378,11 @@ dwg_decode_LAYOUT (Bit_Chain * dat, Dwg_Object * obj)
 	ord->pagxo.x_maks = bit_read_BD (dat);
 	ord->pagxo.y_maks = bit_read_BD (dat);
 	ord->pagxo.name = bit_read_T (dat);
-	ord->pagxo.skalo.A = bit_read_BD (dat);
-	ord->pagxo.skalo.B = bit_read_BD (dat);
+	ord->pagxo.scale.A = bit_read_BD (dat);
+	ord->pagxo.scale.B = bit_read_BD (dat);
 	ord->pagxo.stilfolio = bit_read_T (dat);
-	ord->pagxo.skalo.type = bit_read_BS (dat);
-	ord->pagxo.skalo.faktoro = bit_read_BD (dat);
+	ord->pagxo.scale.type = bit_read_BS (dat);
+	ord->pagxo.scale.faktoro = bit_read_BD (dat);
 	ord->pagxo.x0 = bit_read_BD (dat);
 	ord->pagxo.y0 = bit_read_BD (dat);
 

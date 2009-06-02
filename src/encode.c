@@ -563,7 +563,7 @@ dwg_encode_entity (Dwg_Object * obj, Bit_Chain * dat)
 	bit_write_BL (dat, est->reagilo_size);
 	bit_write_B (dat, est->senligiloj);
 	bit_write_BS (dat, est->colour);
-	bit_write_BD (dat, est->linitypeskalo);
+	bit_write_BD (dat, est->linitypescale);
 	bit_write_BB (dat, est->linitype);
 	bit_write_BB (dat, est->printstilo);
 	bit_write_BS (dat, est->malvidebleco);

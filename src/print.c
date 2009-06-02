@@ -21,7 +21,7 @@ dwg_print_entity (Dwg_Object_Entity * ent)
 	printf ("Kiom reagiloj: %lu\n", ent->reagilo_size);
 	printf ("Ĉu senligiloj?: %s\n", ent->senligiloj ? "Yes" : "Ne");
 	printf ("Koloro: %u\n", ent->colour);
-	printf ("Skalo de linitype: %1.13g\n", ent->linitypeskalo);
+	printf ("Skalo de linitype: %1.13g\n", ent->linitypescale);
 	printf ("Linitype: 0x%02X\n", ent->linitype);
 	printf ("Printstilo: 0x%02X\n", ent->printstilo);
 	printf ("Malvidebleco: 0x%04X\n", ent->malvidebleco);
@@ -165,7 +165,7 @@ dwg_print_INSERT (Dwg_Entity_INSERT * ent)
 {
 	printf ("\tEnmeta punkto: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
 	printf ("\tSkal-indikilo: 0x%02x\n", ent->skalindik);
-	printf ("\tSkalo: (%1.13g, %1.13g, %1.13g)\n", ent->skalo.x, ent->skalo.y, ent->skalo.z);
+	printf ("\tSkalo: (%1.13g, %1.13g, %1.13g)\n", ent->scale.x, ent->scale.y, ent->scale.z);
 	printf ("\tTurna angulo: %1.13g\n", ent->turnang);
 	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
 		ent->extrusion.z);
@@ -177,7 +177,7 @@ dwg_print_MINSERT (Dwg_Entity_MINSERT * ent)
 {
 	printf ("\tEnmeta punkto: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
 	printf ("\tSkal-indikilo: 0x%02x\n", ent->skalindik);
-	printf ("\tSkalo: (%1.13g, %1.13g, %1.13g)\n", ent->skalo.x, ent->skalo.y, ent->skalo.z);
+	printf ("\tSkalo: (%1.13g, %1.13g, %1.13g)\n", ent->scale.x, ent->scale.y, ent->scale.z);
 	printf ("\tTurna angulo: %1.13g\n", ent->turnang);
 	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
 		ent->extrusion.z);
@@ -347,10 +347,10 @@ dwg_print_LAYOUT (Dwg_Object_LAYOUT *ord)
 		ord->pagxo.x_maks,
 		ord->pagxo.y_maks);
 	printf ("\tPaĝ-name: %s\n", ord->pagxo.name);
-	printf ("\tSkal-proporcio: %u:%u\n", (unsigned int) ord->pagxo.skalo.A, (unsigned int) ord->pagxo.skalo.B);
+	printf ("\tSkal-proporcio: %u:%u\n", (unsigned int) ord->pagxo.scale.A, (unsigned int) ord->pagxo.scale.B);
 	printf ("\tStilfolio: %s\n", ord->pagxo.stilfolio);
-	printf ("\tSkal-type: %u\n", ord->pagxo.skalo.type);
-	printf ("\tSkal-faktoro: %u\n", (unsigned int) ord->pagxo.skalo.faktoro);
+	printf ("\tSkal-type: %u\n", ord->pagxo.scale.type);
+	printf ("\tSkal-faktoro: %u\n", (unsigned int) ord->pagxo.scale.faktoro);
 	printf ("\tPaĝ-origino: (%1.13g, %1.13g)\n", ord->pagxo.x0, ord->pagxo.y0);
 	puts ("");
 	printf ("\tAranĝ-name: %s\n", ord->name);

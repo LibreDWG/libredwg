@@ -233,7 +233,7 @@ extern "C"
 			double x;
 			double y;
 			double z;
-		} skalo;
+		} scale;
 		double turnang;
 		struct
 		{
@@ -258,7 +258,7 @@ extern "C"
 			double x;
 			double y;
 			double z;
-		} skalo;
+		} scale;
 		double turnang;
 		struct
 		{
@@ -788,7 +788,7 @@ extern "C"
 				double B;
 				unsigned int type;
 				double faktoro;
-			} skalo;
+			} scale;
 			char *stilfolio;
 			double x0;
 			double y0;
@@ -881,7 +881,7 @@ extern "C"
 		long unsigned int reagilo_size;
 		unsigned char senligiloj;
 		unsigned int colour;
-		double linitypeskalo;
+		double linitypescale;
 		unsigned char linitype;
 		unsigned char printstilo;
 		unsigned int malvidebleco;
