@@ -316,7 +316,7 @@ void
 dwg_print_LAYER (Dwg_Object_LAYER *ord)
 {
 	printf ("\tName: %s\n", ord->name);
-	printf ("\tĈu 64?: %s\n", ord->bito64 ? "Yes" : "Ne");
+	printf ("\tĈu 64?: %s\n", ord->bit64 ? "Yes" : "Ne");
 	printf ("\tIndico Xref: %u\n", ord->xrefi);
 	printf ("\tXref-dependa?: %s\n", ord->xrefdep ? "Yes" : "Ne");
 	printf ("\tEcoj: 0x%0x\n", ord->ecoj);

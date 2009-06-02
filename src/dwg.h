@@ -739,7 +739,7 @@ extern "C"
 		char *text;
 		unsigned int linispaco_stilo;
 		unsigned int linispaco_faktoro;
-		unsigned char ia_bito;
+		unsigned char ia_bit;
 	} Dwg_Entity_MTEXT;
 
 /**
@@ -748,7 +748,7 @@ extern "C"
 	typedef struct _dwg_object_LAYER
 	{
 		char *name;
-		unsigned char bito64;
+		unsigned char bit64;
 		unsigned int xrefi;
 		unsigned char xrefdep;
 		unsigned int ecoj;
@@ -957,7 +957,7 @@ extern "C"
 		unsigned char *chain;
 		long unsigned int kiom;
 		long unsigned int byte;
-		unsigned char bito;
+		unsigned char bit;
 	} Dwg_Chain;
 
 	typedef struct _dwg_section

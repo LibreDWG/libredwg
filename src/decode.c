@@ -52,7 +52,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 
 	/* Version */
 	dat->byte = 0;
-	dat->bito = 0;
+	dat->bit = 0;
 	char version[7];
 	strncpy (version, dat->chain, 6);
 	version[6] = '\0';
@@ -76,9 +76,9 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 			"This file's version code is: %s\n", version);
 		return -1;
 	}
-	dat->byte = 0x06;
 
 	// Still unknown values: 6 'zeroes' and a 'one'
+	dat->byte = 0x06;
 	if (loglevel) printf ("Still unknown values: 6 'zeroes' and a 'one': ");
 	for (i = 0; i < 7; i++)
 	{
@@ -156,7 +156,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 		}
 		dat->byte = skt->header.section[5].address;
 		skt->unknown1.kiom = DWG_UNKNOWN1_KIOM;
-		skt->unknown1.byte = skt->unknown1.bito = 0;
+		skt->unknown1.byte = skt->unknown1.bit = 0;
 		skt->unknown1.chain = malloc (skt->unknown1.kiom);
 		memcpy (skt->unknown1.chain, &dat->chain[dat->byte], skt->unknown1.kiom);
 		//bit_esplori_chain ((Bit_Chain *) &skt->unknown1, skt->unknown1.kiom);
@@ -172,7 +172,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	{
 		unsigned long int ekaddress;
 
-		dat->bito = 0;
+		dat->bit = 0;
 		ekaddress = dat->byte;
         if (loglevel) printf ("=============> PICTURE: %8X\n", (unsigned int) ekaddress - 16);
 		if (bit_search_sentinel (dat, dwg_sentinel (DWG_SENTINEL_PICTURE_END)))
@@ -199,7 +199,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	pvz = bit_read_RL (dat);
 	if (loglevel) printf ("Longeco: %lu\n", pvz);
 
-	dat->bito = 0;
+	dat->bit = 0;
 
 	/* Legi la kap-variablojn
 	 */
@@ -293,7 +293,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	    printf ("       CLASS (end): %8X\n", (unsigned int) (skt->header.section[1].address + skt->header.section[1].size));
     }
 	dat->byte = skt->header.section[1].address + 16;
-	dat->bito = 0;
+	dat->bit = 0;
 
 	kiom = bit_read_RL (dat);
 	lasta = dat->byte + kiom;
@@ -361,7 +361,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	 */
 
 	dat->byte = skt->header.section[2].address;
-	dat->bito = 0;
+	dat->bit = 0;
 
 	maplasta = dat->byte + skt->header.section[2].size;	// 4
 	skt->num_objects = 0;
@@ -495,7 +495,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 			//if (loglevel) printf (" 0x%02X", sig);
 		}
 
-		//if (loglevel) printf ("\n4 nulaj bitoj?: ");
+		//if (loglevel) printf ("\n4 nulaj bitj?: ");
 		for (i = 0; i < 4; i++)
 		{
 			sig = bit_read_B (dat);
@@ -575,7 +575,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 	    printf ("   UNKNOWN 2 (end): %8X\n", (unsigned int) (skt->header.section[4].address + skt->header.section[4].size));
 	}
 	dat->byte = skt->header.section[4].address;
-	dat->bito = 0;
+	dat->bit = 0;
 	skt->measurement = bit_read_RL (dat);
 
     if (loglevel) printf ("KIOM BAJTOJ :\t%lu\n", dat->kiom);
@@ -735,7 +735,7 @@ dwg_decode_traktref (Bit_Chain * dat, Dwg_Object * obj)
 				fprintf (stderr, "\tEraro en tiu traktilo: %lu\n", est->traktilo.value);
 				break;
 			}
-			if (!(dat->byte == ktl_lastaddress + 1 && dat->bito == 0))
+			if (!(dat->byte == ktl_lastaddress + 1 && dat->bit == 0))
 			{
 				if (dat->byte > ktl_lastaddress)
 					break;
@@ -763,7 +763,7 @@ dwg_decode_traktref (Bit_Chain * dat, Dwg_Object * obj)
 				//fprintf (stderr, "\tEraro en tiu traktilo: %lu\n", est->traktilo.value);
 				break;
 			}
-			if (!(dat->byte == ktl_lastaddress + 1 && dat->bito == 0))
+			if (!(dat->byte == ktl_lastaddress + 1 && dat->bit == 0))
 			{
 				if (dat->byte > ktl_lastaddress)
 					break;
@@ -1315,7 +1315,7 @@ dwg_decode_MTEXT (Bit_Chain * dat, Dwg_Object * obj)
 	est->text = bit_read_T (dat);
 	est->linispaco_stilo = bit_read_BS (dat);
 	est->linispaco_faktoro = bit_read_BD (dat);
-	est->ia_bito = bit_read_B (dat);
+	est->ia_bit = bit_read_B (dat);
 
 	dwg_decode_traktref (dat, obj);
 }
@@ -1335,7 +1335,7 @@ dwg_decode_LAYER (Bit_Chain * dat, Dwg_Object * obj)
 	/* Legitaj valuej
 	 */
 	ord->name = bit_read_T (dat);
-	ord->bito64 = bit_read_B (dat);
+	ord->bit64 = bit_read_B (dat);
 	ord->xrefi = bit_read_BS (dat);
 	ord->xrefdep = bit_read_B (dat);
 	ord->ecoj = bit_read_BS (dat);
@@ -1443,18 +1443,18 @@ dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned in
 {
 	long unsigned int antauxa_address;
 	long unsigned int objekadres;
-	unsigned char antauxa_bito;
+	unsigned char antauxa_bit;
 	Dwg_Object *obj;
 
 	/* Gardi la antauxan addressn
 	 */
 	antauxa_address = dat->byte;
-	antauxa_bito = dat->bito;
+	antauxa_bit = dat->bit;
 
 	/* Uzi la indikitan addressn por la object
 	 */
 	dat->byte = address;
-	dat->bito = 0;
+	dat->bit = 0;
 
 	/* Rezervi memor-spacon por plia object
 	 */
@@ -1566,6 +1566,6 @@ dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned in
 	/* Restarigi la antauxan addressn por returni
 	 */
 	dat->byte = antauxa_address;
-	dat->bito = antauxa_bito;
+	dat->bit = antauxa_bit;
 }
 

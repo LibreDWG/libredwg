@@ -37,7 +37,7 @@ typedef struct _bit_chain
 	unsigned char *chain;
 	long unsigned int kiom;
 	long unsigned int byte;
-	unsigned char bito;
+	unsigned char bit;
 	Dwg_Version_Type version;
 } Bit_Chain;
 

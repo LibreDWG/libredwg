@@ -94,7 +94,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 		skt->header.section[5].size = DWG_UNKNOWN1_KIOM;
 
 		skt->unknown1.kiom = skt->header.section[5].size;
-		skt->unknown1.byte = skt->unknown1.bito = 0;
+		skt->unknown1.byte = skt->unknown1.bit = 0;
 		while (dat->byte + skt->unknown1.kiom >= dat->kiom)
 			bit_chain_rezervi (dat);
 		memcpy (&dat->chain[dat->byte], skt->unknown1.chain, skt->unknown1.kiom);
@@ -181,12 +181,12 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	/* Skribi la sizen de la section cxe gxia komenco
 	 */
 	pvzadr_2 = dat->byte;
-	pvzbit = dat->bito;
+	pvzbit = dat->bit;
 	dat->byte = pvzadr;
-	dat->bito = 0;
+	dat->bit = 0;
 	bit_write_RL (dat, pvzadr_2 - pvzadr - (pvzbit ? 3 : 4));
 	dat->byte = pvzadr_2;
-	dat->bito = pvzbit;
+	dat->bit = pvzbit;
 	//printf ("Size: %lu\n", pvzadr_2 - pvzadr - (pvzbit ? 3 : 4));
 
 	/* CKR kaj sentinel
@@ -218,12 +218,12 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	/* Skribi la sizen de la section cxe gxia komenco
 	 */
 	pvzadr_2 = dat->byte;
-	pvzbit = dat->bito;
+	pvzbit = dat->bit;
 	dat->byte = pvzadr;
-	dat->bito = 0;
+	dat->bit = 0;
 	bit_write_RL (dat, pvzadr_2 - pvzadr - (pvzbit ? 3 : 4));
 	dat->byte = pvzadr_2;
-	dat->bito = pvzbit;
+	dat->bit = pvzbit;
 	//printf ("Size: %lu\n", pvzadr_2 - pvzadr - (pvzbit ? 3 : 4));
 
 	/* CKR kaj sentinel
@@ -258,7 +258,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 		{
 			nkn.chain = skt->object[i].tio.unknownjxo;
 			nkn.kiom = skt->object[i].size;
-			nkn.byte = nkn.bito = 0;
+			nkn.byte = nkn.bit = 0;
 			bit_read_BS (&nkn);
 			bit_read_RL (&nkn);
 			bit_read_H (&nkn, &tkt);
@@ -479,7 +479,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	/* Skribi sekciadresaron
 	 */
 	dat->byte = sekciadresaro;
-	dat->bito = 0;
+	dat->bit = 0;
 	for (i = 0; i < skt->header.num_sections; i++)
 	{
 		bit_write_RC (dat, skt->header.section[i].number);
@@ -528,17 +528,17 @@ dwg_encode_entity (Dwg_Object * obj, Bit_Chain * dat)
 	est = obj->tio.entity;
 
 	gdadr.byte = dat->byte;
-	gdadr.bito = dat->bito;
+	gdadr.bit = dat->bit;
 
 	bit_write_MS (dat, obj->size);
 
 	ekadr.byte = dat->byte;	// Por kalkuli poste la bajta kaj bita sizej de la object
-	ekadr.bito = dat->bito;
+	ekadr.bit = dat->bit;
 
 	bit_write_BS (dat, obj->type);
 
 	bgadr.byte = dat->byte;
-	bgadr.bito = dat->bito;
+	bgadr.bit = dat->bit;
 
 	bit_write_RL (dat, 0);	// Nulo nun, kalkulendas por write poste
 
@@ -586,17 +586,17 @@ dwg_encode_entity (Dwg_Object * obj, Bit_Chain * dat)
 	/* Finfine kalkuli kaj write la bit-sizen de la object
 	 */
 	pvadr.byte = dat->byte;
-	pvadr.bito = dat->bito;
+	pvadr.bit = dat->bit;
 
 	dat->byte = bgadr.byte;
-	dat->bito = bgadr.bito;
+	dat->bit = bgadr.bit;
 
-	longo = 8 * (pvadr.byte - ekadr.byte) + (pvadr.bito);
+	longo = 8 * (pvadr.byte - ekadr.byte) + (pvadr.bit);
 	bit_write_RL (dat, longo);
 	//printf ("Longo (bit): %lu\t", longo);
 
 	dat->byte = pvadr.byte;
-	dat->bito = pvadr.bito;
+	dat->bit = pvadr.bit;
 
 	/* Traktilaj referencoj
 	 */
@@ -606,17 +606,17 @@ dwg_encode_entity (Dwg_Object * obj, Bit_Chain * dat)
 	/* Finfine kalkuli kaj write la bajt-sizen de la object (cxu estas erara?)
 	 */
 	pvadr.byte = dat->byte;
-	pvadr.bito = dat->bito;
+	pvadr.bit = dat->bit;
 
 	dat->byte = gdadr.byte;
-	dat->bito = gdadr.bito;
+	dat->bit = gdadr.bit;
 
 	longo = pvadr.byte - ekadr.byte;
 	bit_write_MS (dat, longo);
 	//printf ("Longo: %lu\n", longo);
 
 	dat->byte = pvadr.byte;
-	dat->bito = pvadr.bito;
+	dat->bit = pvadr.bit;
 }
 
 static void
@@ -626,7 +626,7 @@ dwg_encode_object (Dwg_Object * obj, Bit_Chain * dat)
 
 	bit_write_MS (dat, obj->size);
 	ekadr.byte = dat->byte;	// Por kalkuli poste la bita size de la object
-	ekadr.bito = dat->bito;
+	ekadr.bit = dat->bit;
 	bit_write_BS (dat, obj->type);
 }
 

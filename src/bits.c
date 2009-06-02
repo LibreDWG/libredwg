@@ -32,13 +32,13 @@ bit_ref_salti (Bit_Chain * dat, int salto)
 {
 	int finpoz;
 
-	finpoz = dat->bito + salto;
+	finpoz = dat->bit + salto;
 	if (dat->byte >= dat->kiom - 1 && finpoz > 7)
 	{
-		dat->bito = 7;
+		dat->bit = 7;
 		return;
 	}
-	dat->bito = finpoz % 8;
+	dat->bit = finpoz % 8;
 	dat->byte += finpoz / 8;
 }
 
@@ -51,7 +51,7 @@ bit_read_B (Bit_Chain * dat)
 	unsigned char bitoko;
 
 	bitoko = dat->chain[dat->byte];
-	result = (bitoko & (0x80 >> dat->bito)) >> (7 - dat->bito);
+	result = (bitoko & (0x80 >> dat->bit)) >> (7 - dat->bit);
 
 	bit_ref_salti (dat, 1);
 	return result;
@@ -66,9 +66,9 @@ bit_write_B (Bit_Chain * dat, unsigned char value)
 		bit_chain_rezervi (dat);
 
 	if (value)
-		dat->chain[dat->byte] |= 0x80 >> dat->bito;
+		dat->chain[dat->byte] |= 0x80 >> dat->bit;
 	else
-		dat->chain[dat->byte] &= ~(0x80 >> dat->bito);
+		dat->chain[dat->byte] &= ~(0x80 >> dat->bit);
 
 	bit_ref_salti (dat, 1);
 }
@@ -82,8 +82,8 @@ bit_read_BB (Bit_Chain * dat)
 	unsigned char bitoko;
 
 	bitoko = dat->chain[dat->byte];
-	if (dat->bito < 7)
-		result = (bitoko & (0xc0 >> dat->bito)) >> (6 - dat->bito);
+	if (dat->bit < 7)
+		result = (bitoko & (0xc0 >> dat->bit)) >> (6 - dat->bit);
 	else
 	{
 		result = (bitoko & 0x01) << 1;
@@ -110,10 +110,10 @@ bit_write_BB (Bit_Chain * dat, unsigned char value)
 		bit_chain_rezervi (dat);
 
 	bitoko = dat->chain[dat->byte];
-	if (dat->bito < 7)
+	if (dat->bit < 7)
 	{
-		masko = 0xc0 >> dat->bito;
-		dat->chain[dat->byte] = (bitoko & ~masko) | (value << (6 - dat->bito));
+		masko = 0xc0 >> dat->bit;
+		dat->chain[dat->byte] = (bitoko & ~masko) | (value << (6 - dat->bit));
 	}
 	else
 	{
@@ -137,15 +137,15 @@ bit_read_RC (Bit_Chain * dat)
 	unsigned char bitoko;
 
 	bitoko = dat->chain[dat->byte];
-	if (dat->bito == 0)
+	if (dat->bit == 0)
 		result = bitoko;
 	else
 	{
-		result = bitoko << dat->bito;
+		result = bitoko << dat->bit;
 		if (dat->byte < dat->kiom - 1)
 		{
 			bitoko = dat->chain[dat->byte + 1];
-			result |= bitoko >> (8 - dat->bito);
+			result |= bitoko >> (8 - dat->bit);
 		}
 	}
 
@@ -164,20 +164,20 @@ bit_write_RC (Bit_Chain * dat, unsigned char value)
 	if (dat->byte >= dat->kiom - 1)
 		bit_chain_rezervi (dat);
 
-	if (dat->bito == 0)
+	if (dat->bit == 0)
 	{
 		dat->chain[dat->byte] = value;
 	}
 	else
 	{
 		bitoko = dat->chain[dat->byte];
-		cetero = bitoko & (0xff << (8 - dat->bito));
-		dat->chain[dat->byte] = cetero | (value >> dat->bito);
+		cetero = bitoko & (0xff << (8 - dat->bit));
+		dat->chain[dat->byte] = cetero | (value >> dat->bit);
 		if (dat->byte < dat->kiom - 1)
 		{
 			bitoko = dat->chain[dat->byte + 1];
-			cetero = bitoko & (0xff >> dat->bito);
-			dat->chain[dat->byte + 1] = cetero | (value << (8 - dat->bito));
+			cetero = bitoko & (0xff >> dat->bit);
+			dat->chain[dat->byte + 1] = cetero | (value << (8 - dat->bit));
 		}
 	}
 
@@ -748,10 +748,10 @@ bit_read_CRC (Bit_Chain * dat)
 	unsigned int result;
 	unsigned char res[2];
 
-	if (dat->bito > 0)
+	if (dat->bit > 0)
 	{
 		dat->byte++;
-		dat->bito = 0;
+		dat->bit = 0;
 	}
 
 	res[0] = bit_read_RC (dat);
@@ -771,9 +771,9 @@ bit_check_CRC (Bit_Chain * dat, long unsigned int start_address, unsigned int se
 	unsigned int read;
 	unsigned char res[2];
 
-	if (dat->bito > 0)
+	if (dat->bit > 0)
 		dat->byte++;
-	dat->bito = 0;
+	dat->bit = 0;
 
 	calculated = bit_ckr8 (seed, &(dat->chain[start_address]), dat->byte - start_address);
 
@@ -792,7 +792,7 @@ bit_krei_CRC (Bit_Chain * dat, long unsigned int start_address, unsigned int see
 {
 	unsigned int crc;
 
-	while (dat->bito > 0)
+	while (dat->bit > 0)
 		bit_write_B (dat, 0);
 
 	crc = bit_ckr8 (seed, &(dat->chain[start_address]), dat->byte - start_address);
@@ -887,7 +887,7 @@ bit_search_sentinel (Bit_Chain * dat, unsigned char sentinel[16])
 		if (j == 16)
 		{
 			dat->byte = i + j;
-			dat->bito = 0;
+			dat->bit = 0;
 			return -1;
 		}
 	}
@@ -915,7 +915,7 @@ bit_chain_rezervi (Bit_Chain * dat)
 		dat->chain = calloc (1, CXENO_BLOKO);
 		dat->kiom = CXENO_BLOKO;
 		dat->byte = 0;
-		dat->bito = 0;
+		dat->bit = 0;
 	}
 	else
 	{
@@ -962,7 +962,7 @@ bit_esplori_chain (Bit_Chain * dat, long unsigned int kiom)
 	{
 		printf ("---------------------------------------------------------");
 		dat->byte = 0;
-		dat->bito = k;
+		dat->bit = k;
 		for (i = 0; i < kiom - 1; i++)
 		{
 			if (i % 16 == 0)

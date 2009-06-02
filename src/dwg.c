@@ -54,7 +54,7 @@ dwg_read_file (char *filename, Dwg_Structure * dwg_struct)
 
 	/* Sxargi la memoron je la dosiero
 	 */
-	bitaro.bito = 0;
+	bitaro.bit = 0;
 	bitaro.byte = 0;
 	bitaro.kiom = atrib.st_size;
 	bitaro.chain = (char *) malloc (bitaro.kiom);
@@ -153,7 +153,7 @@ dwg_bmp (Dwg_Structure *stk, long int *kiom)
 	Bit_Chain *dat;
 	
 	dat = (Bit_Chain*) &stk->picture;
-	dat->bito = 0;
+	dat->bit = 0;
 	dat->byte = 0;
  
 	bit_read_RL (dat);
