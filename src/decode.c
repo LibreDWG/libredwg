@@ -789,32 +789,32 @@ dwg_decode_TEXT (Bit_Chain * dat, Dwg_Object * obj)
 
 	/* Legitaj valuej
 	 */
-	est->datumindik = bit_read_RC (dat);
-	if ((!est->datumindik & 0x01))
-		est->levigxo = bit_read_RD (dat);
+	est->dataflags = bit_read_RC (dat);
+	if ((!est->dataflags & 0x01))
+		est->elevation = bit_read_RD (dat);
 	est->x0 = bit_read_RD (dat);
 	est->y0 = bit_read_RD (dat);
-	if (!(est->datumindik & 0x02))
+	if (!(est->dataflags & 0x02))
 	{
-		est->gxisrandigo.x = bit_read_DD (dat, 10);
-		est->gxisrandigo.y = bit_read_DD (dat, 20);
+		est->alignment.x = bit_read_DD (dat, 10);
+		est->alignment.y = bit_read_DD (dat, 20);
 	}
 	bit_read_BE (dat, &est->extrusion.x, &est->extrusion.y, &est->extrusion.z);
 	est->thickness = bit_read_BT (dat);
-	if (!(est->datumindik & 0x04))
-		est->klinang = bit_read_RD (dat);
-	if (!(est->datumindik & 0x08))
-		est->turnang = bit_read_RD (dat);
+	if (!(est->dataflags & 0x04))
+		est->oblique_ang = bit_read_RD (dat);
+	if (!(est->dataflags & 0x08))
+		est->rotation_ang = bit_read_RD (dat);
 	est->height = bit_read_RD (dat);
-	if (!(est->datumindik & 0x10))
-		est->largxfaktoro = bit_read_RD (dat);
+	if (!(est->dataflags & 0x10))
+		est->width_factor = bit_read_RD (dat);
 	est->text = bit_read_T (dat);
-	if (!(est->datumindik & 0x20))
-		est->generacio = bit_read_BS (dat);
-	if (!(est->datumindik & 0x40))
-		est->gxisrandigo.h = bit_read_BS (dat);
-	if (!(est->datumindik & 0x80))
-		est->gxisrandigo.v = bit_read_BS (dat);
+	if (!(est->dataflags & 0x20))
+		est->generation = bit_read_BS (dat);
+	if (!(est->dataflags & 0x40))
+		est->alignment.h = bit_read_BS (dat);
+	if (!(est->dataflags & 0x80))
+		est->alignment.v = bit_read_BS (dat);
 
 	dwg_decode_traktref (dat, obj);
 }
@@ -832,35 +832,35 @@ dwg_decode_ATTRIB (Bit_Chain * dat, Dwg_Object * obj)
 
 	/* Legitaj valuej
 	 */
-	est->datumindik = bit_read_RC (dat);
-	if ((!est->datumindik & 0x01))
-		est->levigxo = bit_read_RD (dat);
+	est->dataflags = bit_read_RC (dat);
+	if ((!est->dataflags & 0x01))
+		est->elevation = bit_read_RD (dat);
 	est->x0 = bit_read_RD (dat);
 	est->y0 = bit_read_RD (dat);
-	if (!(est->datumindik & 0x02))
+	if (!(est->dataflags & 0x02))
 	{
-		est->gxisrandigo.x = bit_read_DD (dat, 10);
-		est->gxisrandigo.y = bit_read_DD (dat, 20);
+		est->alignment.x = bit_read_DD (dat, 10);
+		est->alignment.y = bit_read_DD (dat, 20);
 	}
 	bit_read_BE (dat, &est->extrusion.x, &est->extrusion.y, &est->extrusion.z);
 	est->thickness = bit_read_BT (dat);
-	if (!(est->datumindik & 0x04))
-		est->klinang = bit_read_RD (dat);
-	if (!(est->datumindik & 0x08))
-		est->turnang = bit_read_RD (dat);
+	if (!(est->dataflags & 0x04))
+		est->oblique_ang = bit_read_RD (dat);
+	if (!(est->dataflags & 0x08))
+		est->rotation_ang = bit_read_RD (dat);
 	est->height = bit_read_RD (dat);
-	if (!(est->datumindik & 0x10))
-		est->largxfaktoro = bit_read_RD (dat);
+	if (!(est->dataflags & 0x10))
+		est->width_factor = bit_read_RD (dat);
 	est->text = bit_read_T (dat);
-	if (!(est->datumindik & 0x20))
-		est->generacio = bit_read_BS (dat);
-	if (!(est->datumindik & 0x40))
-		est->gxisrandigo.h = bit_read_BS (dat);
-	if (!(est->datumindik & 0x80))
-		est->gxisrandigo.v = bit_read_BS (dat);
-	est->etikedo = bit_read_T (dat);
-	est->kamplong = bit_read_BS (dat);
-	est->indikiloj = bit_read_RC (dat);
+	if (!(est->dataflags & 0x20))
+		est->generation = bit_read_BS (dat);
+	if (!(est->dataflags & 0x40))
+		est->alignment.h = bit_read_BS (dat);
+	if (!(est->dataflags & 0x80))
+		est->alignment.v = bit_read_BS (dat);
+	est->tag = bit_read_T (dat);
+	est->field_length = bit_read_BS (dat);
+	est->flags = bit_read_RC (dat);
 
 	dwg_decode_traktref (dat, obj);
 }
@@ -878,36 +878,36 @@ dwg_decode_ATTDEF (Bit_Chain * dat, Dwg_Object * obj)
 
 	/* Legitaj valuej
 	 */
-	est->datumindik = bit_read_RC (dat);
-	if ((!est->datumindik & 0x01))
-		est->levigxo = bit_read_RD (dat);
+	est->dataflags = bit_read_RC (dat);
+	if ((!est->dataflags & 0x01))
+		est->elevation = bit_read_RD (dat);
 	est->x0 = bit_read_RD (dat);
 	est->y0 = bit_read_RD (dat);
-	if (!(est->datumindik & 0x02))
+	if (!(est->dataflags & 0x02))
 	{
-		est->gxisrandigo.x = bit_read_DD (dat, 10);
-		est->gxisrandigo.y = bit_read_DD (dat, 20);
+		est->alignment.x = bit_read_DD (dat, 10);
+		est->alignment.y = bit_read_DD (dat, 20);
 	}
 	bit_read_BE (dat, &est->extrusion.x, &est->extrusion.y, &est->extrusion.z);
 	est->thickness = bit_read_BT (dat);
-	if (!(est->datumindik & 0x04))
-		est->klinang = bit_read_RD (dat);
-	if (!(est->datumindik & 0x08))
-		est->turnang = bit_read_RD (dat);
+	if (!(est->dataflags & 0x04))
+		est->oblique_ang = bit_read_RD (dat);
+	if (!(est->dataflags & 0x08))
+		est->rotation_ang = bit_read_RD (dat);
 	est->height = bit_read_RD (dat);
-	if (!(est->datumindik & 0x10))
-		est->largxfaktoro = bit_read_RD (dat);
+	if (!(est->dataflags & 0x10))
+		est->width_factor = bit_read_RD (dat);
 	est->text = bit_read_T (dat);
-	if (!(est->datumindik & 0x20))
-		est->generacio = bit_read_BS (dat);
-	if (!(est->datumindik & 0x40))
-		est->gxisrandigo.h = bit_read_BS (dat);
-	if (!(est->datumindik & 0x80))
-		est->gxisrandigo.v = bit_read_BS (dat);
-	est->etikedo = bit_read_T (dat);
-	est->kamplong = bit_read_BS (dat);
-	est->indikiloj = bit_read_RC (dat);
-	est->invitilo = bit_read_T (dat);
+	if (!(est->dataflags & 0x20))
+		est->generation = bit_read_BS (dat);
+	if (!(est->dataflags & 0x40))
+		est->alignment.h = bit_read_BS (dat);
+	if (!(est->dataflags & 0x80))
+		est->alignment.v = bit_read_BS (dat);
+	est->tag = bit_read_T (dat);
+	est->field_length = bit_read_BS (dat);
+	est->flags = bit_read_RC (dat);
+	est->prompt = bit_read_T (dat);
 
 	dwg_decode_traktref (dat, obj);
 }
@@ -960,28 +960,28 @@ dwg_decode_INSERT (Bit_Chain * dat, Dwg_Object * obj)
 	est->x0 = bit_read_BD (dat);
 	est->y0 = bit_read_BD (dat);
 	est->z0 = bit_read_BD (dat);
-	est->skalindik = bit_read_BB (dat);
-	if (est->skalindik == 3)
+	est->scale_flag = bit_read_BB (dat);
+	if (est->scale_flag == 3)
 		est->scale.x = est->scale.y = est->scale.y = 1.0;
-	else if (est->skalindik == 1)
+	else if (est->scale_flag == 1)
 	{
 		est->scale.x = 1.0;
 		est->scale.y = bit_read_DD (dat, 1.0);
 		est->scale.z = bit_read_DD (dat, 1.0);
 	}
-	else if (est->skalindik == 2)
+	else if (est->scale_flag == 2)
 		est->scale.x = est->scale.y = est->scale.y = bit_read_RD (dat);
-	else //if (est->skalindik == 0)
+	else //if (est->scale_flag == 0)
 	{
 		est->scale.x = bit_read_RD (dat);
 		est->scale.y = bit_read_DD (dat, est->scale.x);
 		est->scale.z = bit_read_DD (dat, est->scale.x);
 	}
-	est->turnang = bit_read_BD (dat);
+	est->rotation_ang = bit_read_BD (dat);
 	est->extrusion.x = bit_read_BD (dat);
 	est->extrusion.y = bit_read_BD (dat);
 	est->extrusion.z = bit_read_BD (dat);
-	est->kun_attrib = bit_read_B (dat);
+	est->has_attribs = bit_read_B (dat);
 
 	dwg_decode_traktref (dat, obj);
 }
@@ -1002,32 +1002,32 @@ dwg_decode_MINSERT (Bit_Chain * dat, Dwg_Object * obj)
 	est->x0 = bit_read_BD (dat);
 	est->y0 = bit_read_BD (dat);
 	est->z0 = bit_read_BD (dat);
-	est->skalindik = bit_read_BB (dat);
-	if (est->skalindik == 3)
+	est->scale_flag = bit_read_BB (dat);
+	if (est->scale_flag == 3)
 		est->scale.x = est->scale.y = est->scale.y = 1.0;
-	else if (est->skalindik == 1)
+	else if (est->scale_flag == 1)
 	{
 		est->scale.x = 1.0;
 		est->scale.y = bit_read_DD (dat, 1.0);
 		est->scale.z = bit_read_DD (dat, 1.0);
 	}
-	else if (est->skalindik == 2)
+	else if (est->scale_flag == 2)
 		est->scale.x = est->scale.y = est->scale.y = bit_read_RD (dat);
-	else //if (est->skalindik == 0)
+	else //if (est->scale_flag == 0)
 	{
 		est->scale.x = bit_read_RD (dat);
 		est->scale.y = bit_read_DD (dat, est->scale.x);
 		est->scale.z = bit_read_DD (dat, est->scale.x);
 	}
-	est->turnang = bit_read_BD (dat);
+	est->rotation_ang = bit_read_BD (dat);
 	est->extrusion.x = bit_read_BD (dat);
 	est->extrusion.y = bit_read_BD (dat);
 	est->extrusion.z = bit_read_BD (dat);
-	est->kun_attrib = bit_read_B (dat);
-	est->kol.size = bit_read_BS (dat);
-	est->lin.size = bit_read_BS (dat);
-	est->kol.dx = bit_read_BD (dat);
-	est->lin.dy = bit_read_BD (dat);
+	est->has_attribs = bit_read_B (dat);
+	est->column.size = bit_read_BS (dat);
+	est->line.size = bit_read_BS (dat);
+	est->column.dx = bit_read_BD (dat);
+	est->line.dy = bit_read_BD (dat);
 
 	dwg_decode_traktref (dat, obj);
 }
@@ -1045,17 +1045,17 @@ dwg_decode_VERTEX_2D (Bit_Chain * dat, Dwg_Object * obj)
 
 	/* Legitaj valuej
 	 */
-	est->indikiloj = bit_read_RC (dat);
+	est->flags = bit_read_RC (dat);
 	est->x0 = bit_read_BD (dat);
 	est->y0 = bit_read_BD (dat);
 	est->z0 = bit_read_BD (dat);
-	est->eklargxo = bit_read_BD (dat);
-	if (est->eklargxo < 0)
-		est->finlargxo = est->eklargxo = -est->eklargxo;
+	est->start_width = bit_read_BD (dat);
+	if (est->start_width < 0)
+		est->end_width = est->start_width = -est->start_width;
 	else
-		est->finlargxo = bit_read_BD (dat);
-	est->protub = bit_read_BD (dat);
-	est->tangxdir = bit_read_BD (dat);
+		est->end_width = bit_read_BD (dat);
+	est->bulge = bit_read_BD (dat);
+	est->tangent_dir = bit_read_BD (dat);
 
 	dwg_decode_traktref (dat, obj);
 }
@@ -1073,7 +1073,7 @@ dwg_decode_VERTEX_3D (Bit_Chain * dat, Dwg_Object * obj)
 
 	/* Legitaj valuej
 	 */
-	est->indikiloj = bit_read_RC (dat);
+	est->flags = bit_read_RC (dat);
 	est->x0 = bit_read_BD (dat);
 	est->y0 = bit_read_BD (dat);
 	est->z0 = bit_read_BD (dat);
@@ -1115,12 +1115,12 @@ dwg_decode_POLYLINE_2D (Bit_Chain * dat, Dwg_Object * obj)
 
 	/* Legitaj valuej
 	 */
-	est->indikiloj = bit_read_BS (dat);
-	est->kurbtype = bit_read_BS (dat);
-	est->eklargxo = bit_read_BD (dat);
-	est->finlargxo = bit_read_BD (dat);
+	est->flags = bit_read_BS (dat);
+	est->curve_type = bit_read_BS (dat);
+	est->start_width = bit_read_BD (dat);
+	est->end_width = bit_read_BD (dat);
 	est->thickness = bit_read_BT (dat);
-	est->levigxo = bit_read_BD (dat);
+	est->elevation = bit_read_BD (dat);
 	bit_read_BE (dat, &est->extrusion.x, &est->extrusion.y, &est->extrusion.z);
 
 	dwg_decode_traktref (dat, obj);
@@ -1139,8 +1139,8 @@ dwg_decode_POLYLINE_3D (Bit_Chain * dat, Dwg_Object * obj)
 
 	/* Legitaj valuej
 	 */
-	est->indikiloj_1 = bit_read_RC (dat);
-	est->indikiloj_2 = bit_read_RC (dat);
+	est->flags_1 = bit_read_RC (dat);
+	est->flags_2 = bit_read_RC (dat);
 
 	dwg_decode_traktref (dat, obj);
 }
@@ -1162,8 +1162,8 @@ dwg_decode_ARC (Bit_Chain * dat, Dwg_Object * obj)
 	est->radius = bit_read_BD (dat);
 	est->thickness = bit_read_BT (dat);
 	bit_read_BE (dat, &est->extrusion.x, &est->extrusion.y, &est->extrusion.z);
-	est->ekangulo = bit_read_BD (dat);
-	est->finangulo = bit_read_BD (dat);
+	est->start_angle = bit_read_BD (dat);
+	est->end_angle = bit_read_BD (dat);
 
 	dwg_decode_traktref (dat, obj);
 }
@@ -1259,8 +1259,8 @@ dwg_decode_ELLIPSE (Bit_Chain * dat, Dwg_Object * obj)
 	est->extrusion.y = bit_read_BD (dat);
 	est->extrusion.z = bit_read_BD (dat);
 	est->radiusproporcio = bit_read_BD (dat);
-	est->ekangulo = bit_read_BD (dat);
-	est->finangulo = bit_read_BD (dat);
+	est->start_angle = bit_read_BD (dat);
+	est->end_angle = bit_read_BD (dat);
 
 	dwg_decode_traktref (dat, obj);
 }
@@ -1360,7 +1360,7 @@ dwg_decode_LAYOUT (Bit_Chain * dat, Dwg_Object * obj)
 	 */
 	ord->pagxo.agordo = bit_read_T (dat);
 	ord->pagxo.printilo = bit_read_T (dat);
-	ord->pagxo.indikiloj = bit_read_BS (dat);
+	ord->pagxo.flags = bit_read_BS (dat);
 	ord->pagxo.maldekstre = bit_read_BD (dat);
 	ord->pagxo.malsupre = bit_read_BD (dat);
 	ord->pagxo.dekstre = bit_read_BD (dat);
@@ -1388,7 +1388,7 @@ dwg_decode_LAYOUT (Bit_Chain * dat, Dwg_Object * obj)
 
 	ord->name = bit_read_T (dat);
 	ord->ordo = bit_read_BS (dat);
-	ord->indikiloj = bit_read_BS (dat);
+	ord->flags = bit_read_BS (dat);
 	ord->x0 = bit_read_BD (dat);
 	ord->y0 = bit_read_BD (dat);
 	ord->z0 = bit_read_BD (dat);
@@ -1405,7 +1405,7 @@ dwg_decode_LAYOUT (Bit_Chain * dat, Dwg_Object * obj)
 	ord->akso_Y.x0 = bit_read_BD (dat);
 	ord->akso_Y.y0 = bit_read_BD (dat);
 	ord->akso_Y.z0 = bit_read_BD (dat);
-	ord->levigxo = bit_read_BD (dat);
+	ord->elevation = bit_read_BD (dat);
 	ord->rigardtype = bit_read_BS (dat);
 	ord->limo.x_min = bit_read_BD (dat);
 	ord->limo.y_min = bit_read_BD (dat);
