@@ -252,7 +252,7 @@ extern "C"
 /**
  Struct for SEQEND (6)
  */
-	typedef struct _dwg_entity_SEQNED
+	typedef struct _dwg_entity_SEQEND
 	{
 	} Dwg_Entity_SEQEND;
 
@@ -1177,12 +1177,15 @@ extern "C"
                 //periodic - bit 1
                 //rational - bit 2
                 //weighted ctrl pts - bit 4
-                unsigned char flags;
+                unsigned char rational;
+                unsigned char closed_b;
+                unsigned char periodic;
+                unsigned char weighted;
                 double knot_tol;
                 double ctrl_tol;
                 unsigned int num_fit_pts;
                 unsigned int num_knots;
-                unsigned int num_ctrlpts;
+                unsigned int num_ctrl_pts;
                 struct
                 {
                    	double x;
@@ -1191,16 +1194,14 @@ extern "C"
                 } * fit_pts;
                 struct
                 {
-                   	double x;
-			double y;
-			double z;
-                } * knot_pts;
+                   	double value;
+                } * knots;
                 struct
                 {
                    	double x;
 			double y;
 			double z;
-                        double weight;
+                        double w;
                 } * ctrl_pts;
 	} Dwg_Entity_SPLINE;
 
@@ -1373,6 +1374,7 @@ extern "C"
 			Dwg_Entity_LINE *LINE;
 			Dwg_Entity_POINT *POINT;
 			Dwg_Entity_ELLIPSE *ELLIPSE;
+			Dwg_Entity_SPLINE *SPLINE;
 			Dwg_Entity_RAY *RAY;
 			Dwg_Entity_MTEXT *MTEXT;
 		} tio;
