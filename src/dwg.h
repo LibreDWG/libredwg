@@ -447,22 +447,440 @@ extern "C"
 		} extrusion;
 	} Dwg_Entity_LINE;
 
+ /**
+ Struct for ordinate dimension - DIMENSION_ORDINATE (20)
+ */
+	typedef struct _dwg_entity_DIMENSION_ORDINATE
+	{
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} extrusion;
+                double x0;
+                double y0;
+                struct
+		{
+			double ecs_11;
+			double ecs_12;
+		} elevation;
+                unsigned char flags_1;
+                unsigned char* user_text;
+                double text_rot;
+                double horiz_dir;
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} ins_scale;
+                double ins_rotation;
+                unsigned int attachment_point;
+                unsigned int lspace_style;
+                unsigned int lspace_factor;
+                unsigned int act_measurement;
+                struct
+		{
+			double x;
+			double y;
+		} _12_pt;
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} _10_pt;
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} _13_pt;
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} _14_pt;
+                unsigned char flags_2;
+	} Dwg_Entity_DIMENSION_ORDINATE;
+
 /**
- Struct for puktoj - POINT (27)
+ Struct for linear dimension - DIMENSION_LINEAR (21)
+ */
+	typedef struct _dwg_entity_DIMENSION_LINEAR
+	{
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} extrusion;
+                double x0;
+                double y0;
+                struct
+		{
+			double ecs_11;
+			double ecs_12;
+		} elevation;
+                unsigned char flags;
+                unsigned char* user_text;
+                double text_rot;
+                double horiz_dir;
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} ins_scale;
+                double ins_rotation;
+                unsigned int attachment_point;
+                unsigned int lspace_style;
+                unsigned int lspace_factor;
+                unsigned int act_measurement;
+                struct
+		{
+			double x;
+			double y;
+		} _12_pt;
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} _13_pt;
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} _14_pt;
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} _10_pt;
+                double ext_line_rot;
+                double dim_rot;
+	} Dwg_Entity_DIMENSION_LINEAR;
+
+/**
+ Struct for aligned dimension - DIMENSION_ALIGNED (22)
+ */
+	typedef struct _dwg_entity_DIMENSION_ALIGNED
+	{
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} extrusion;
+                double x0;
+                double y0;
+                struct
+		{
+			double ecs_11;
+			double ecs_12;
+		} elevation;
+                unsigned char flags;
+                unsigned char* user_text;
+                double text_rot;
+                double horiz_dir;
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} ins_scale;
+                double ins_rotation;
+                unsigned int attachment_point;
+                unsigned int lspace_style;
+                unsigned int lspace_factor;
+                unsigned int act_measurement;
+                struct
+		{
+			double x;
+			double y;
+		} _12_pt;
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} _13_pt;
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} _14_pt;
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} _10_pt;
+                double ext_line_rot;
+	} Dwg_Entity_DIMENSION_ALIGNED;
+
+/**
+ Struct for angular 3pt dimension - DIMENSION_ANG3PT (23)
+ */
+	typedef struct _dwg_entity_DIMENSION_ANG3PT
+	{
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} extrusion;
+                double x0;
+                double y0;
+                struct
+		{
+			double ecs_11;
+			double ecs_12;
+		} elevation;
+                unsigned char flags;
+                unsigned char* user_text;
+                double text_rot;
+                double horiz_dir;
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} ins_scale;
+                double ins_rotation;
+                unsigned int attachment_point;
+                unsigned int lspace_style;
+                unsigned int lspace_factor;
+                unsigned int act_measurement;
+                struct
+		{
+			double x;
+			double y;
+		} _12_pt;
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} _10_pt;
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} _13_pt;
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} _14_pt;
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} _15_pt;
+	} Dwg_Entity_DIMENSION_ANG3PT;
+
+/**
+ Struct for angular 2 line dimension - DIMENSION_ANG2LN (24)
+ */
+	typedef struct _dwg_entity_DIMENSION_ANG2LN
+	{
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} extrusion;
+                double x0;
+                double y0;
+                struct
+		{
+			double ecs_11;
+			double ecs_12;
+			double ecs_16;
+		} elevation;
+                unsigned char flags;
+                unsigned char* user_text;
+                double text_rot;
+                double horiz_dir;
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} ins_scale;
+                double ins_rotation;
+                unsigned int attachment_point;
+                unsigned int lspace_style;
+                unsigned int lspace_factor;
+                unsigned int act_measurement;
+                struct
+		{
+			double x;
+			double y;
+		} _12_pt;
+                struct
+		{
+			double x;
+			double y;
+		} _16_pt;
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} _13_pt;
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} _14_pt;
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} _15_pt;
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} _10_pt;
+	} Dwg_Entity_DIMENSION_ANG2LN;
+
+ /**
+ Struct for radius dimension - DIMENSION_RADIUS (25)
+ */
+	typedef struct _dwg_entity_DIMENSION_RADIUS
+	{
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} extrusion;
+                double x0;
+                double y0;
+                struct
+		{
+			double ecs_11;
+			double ecs_12;
+		} elevation;
+                unsigned char flags;
+                unsigned char* user_text;
+                double text_rot;
+                double horiz_dir;
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} ins_scale;
+                double ins_rotation;
+                unsigned int attachment_point;
+                unsigned int lspace_style;
+                unsigned int lspace_factor;
+                unsigned int act_measurement;
+                struct
+		{
+			double x;
+			double y;
+		} _12_pt;
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} _10_pt;
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} _15_pt;
+                double leader_len;
+	} Dwg_Entity_DIMENSION_RADIUS;
+
+ /**
+ Struct for diameter dimension - DIMENSION_DIAMETER (26)
+ */
+	typedef struct _dwg_entity_DIMENSION_DIAMETER
+	{
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} extrusion;
+                double x0;
+                double y0;
+                struct
+		{
+			double ecs_11;
+			double ecs_12;
+		} elevation;
+                unsigned char flags;
+                unsigned char* user_text;
+                double text_rot;
+                double horiz_dir;
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} ins_scale;
+                double ins_rotation;
+                unsigned int attachment_point;
+                unsigned int lspace_style;
+                unsigned int lspace_factor;
+                unsigned int act_measurement;
+                struct
+		{
+			double x;
+			double y;
+		} _12_pt;
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} _10_pt;
+                struct
+		{
+			double x;
+			double y;
+			double z;
+		} _15_pt;
+                double leader_len;
+	} Dwg_Entity_DIMENSION_DIAMETER;
+
+/**
+ Struct for:  POINT (27)
  */
 	typedef struct _dwg_entity_POINT
-	{
-		double x0;
-		double y0;
-		double z0;
-		double thickness;
+        {
+                double x;
+                double y;
+                double z;
+                double thickness;
 		struct
 		{
 			double x;
 			double y;
 			double z;
 		} extrusion;
-		double x_ang;
+                double x_ang;
 	} Dwg_Entity_POINT;
 
 /**
@@ -470,6 +888,8 @@ extern "C"
  */
 	typedef struct _dwg_entity_3D_FACE
 	{
+                unsigned int has_no_flags;
+                unsigned int z_is_zero;
 		struct
 		{
 			double x;
@@ -494,6 +914,7 @@ extern "C"
 			double y;
 			double z;
 		} corner4;
+                unsigned char flags;
 	} Dwg_Entity_3D_FACE;
 
 /**
@@ -511,8 +932,8 @@ extern "C"
  */
 	typedef struct _dwg_entity_POLYLINE_MESH
 	{
-		unsigned int flags;
-		unsigned int curve_type;
+		unsigned char flags;
+		unsigned char curve_type;
 		unsigned int m_vert_count;
 		unsigned int n_vert_count;
 		unsigned int m_density;
@@ -527,7 +948,6 @@ extern "C"
 	typedef struct _dwg_entity_SOLID
 	{
 		double thickness;
-		double elevation;
 		struct
 		{
 			double x;
@@ -568,7 +988,6 @@ extern "C"
 	typedef struct _dwg_entity_TRACE
 	{
 		double thickness;
-		double elevation;
 		struct
 		{
 			double x;
@@ -734,7 +1153,62 @@ extern "C"
 	} Dwg_Entity_ELLIPSE;
 
 /**
- Struct for radioj - RAY (40)
+ Struct for spline - SPLINE (36)
+ */
+	typedef struct _dwg_entity_SPLINE
+	{
+                unsigned char scenario;
+                unsigned int degree;
+                double fit_tol;
+                struct
+                {
+			double x;
+			double y;
+			double z;
+		} beg_tan_vec;
+                struct
+                {
+			double x;
+			double y;
+			double z;
+		} end_tan_vec;
+                //flags:
+                //closed - bit 0
+                //periodic - bit 1
+                //rational - bit 2
+                //weighted ctrl pts - bit 4
+                unsigned char flags;
+                double knot_tol;
+                double ctrl_tol;
+                unsigned int num_fit_pts;
+                unsigned int num_knots;
+                unsigned int num_ctrlpts;
+                struct
+                {
+                   	double x;
+			double y;
+			double z;
+                } * fit_pts;
+                struct
+                {
+                   	double x;
+			double y;
+			double z;
+                } * knot_pts;
+                struct
+                {
+                   	double x;
+			double y;
+			double z;
+                        double weight;
+                } * ctrl_pts;
+	} Dwg_Entity_SPLINE;
+
+        //TODO: 3DSOLID, REGION, BODY
+
+
+/**
+ Struct for ray - RAY (40)
  */
 	typedef struct _dwg_entity_RAY
 	{
@@ -747,7 +1221,11 @@ extern "C"
 	} Dwg_Entity_RAY;
 
 /**
- Struct for textj - MTEXT (40)
+ Struct for ray - RAY (40)
+ */
+        typedef Dwg_Entity_RAY Dwg_Entity_XLINE;
+/**
+ Struct for textj - MTEXT (44)
  */
 	typedef struct _dwg_entity_MTEXT
 	{

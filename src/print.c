@@ -270,7 +270,7 @@ dwg_print_LINE (Dwg_Entity_LINE * ent)
 void
 dwg_print_POINT (Dwg_Entity_POINT *ent)
 {
-	printf ("\tPunkto: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
+	printf ("\tPunkto: (%1.13g, %1.13g, %1.13g)\n", ent->x, ent->y, ent->z);
 	printf ("\tthickness: %1.13g\n", ent->thickness);
 	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
 		ent->extrusion.z);

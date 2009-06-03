@@ -1228,9 +1228,9 @@ dwg_decode_POINT (Bit_Chain * dat, Dwg_Object * obj)
 	dwg_decode_entity (dat, obj->tio.entity);
 	est = obj->tio.entity->tio.POINT;
 
-	est->x0 = bit_read_BD (dat);
-	est->y0 = bit_read_BD (dat);
-	est->z0 = bit_read_BD (dat);
+	est->x = bit_read_BD (dat);
+	est->y = bit_read_BD (dat);
+	est->z = bit_read_BD (dat);
 	est->thickness = bit_read_BT (dat);
 	bit_read_BE (dat, &est->extrusion.x, &est->extrusion.y, &est->extrusion.z);
 	est->x_ang = bit_read_BD (dat);
