@@ -569,77 +569,77 @@ bit_write_BE (Bit_Chain * dat, double x, double y, double z)
 	}
 }
 
-/** Read duglitajxon kun antauxdifinajxo.
+/** Read bit-double with default.
  */
 double
-bit_read_DD (Bit_Chain * dat, double antauxdif)
+bit_read_DD (Bit_Chain * dat, double default_value)
 {
-	unsigned char kodero;
-	unsigned char *uc_rez;
+	unsigned char two_bit_code;
+	unsigned char *uchar_result;
 
-	kodero = bit_read_BB (dat);
-	if (kodero == 0)
-		return antauxdif;
-	if (kodero == 3)
+	two_bit_code = bit_read_BB (dat);
+	if (two_bit_code == 0)
+		return default_value;
+	if (two_bit_code == 3)
 		return (bit_read_RD (dat));
-	if (kodero == 2)
+	if (two_bit_code == 2)
 	{
-		uc_rez = (char *) &antauxdif;
-		uc_rez[3] = bit_read_RC (dat);
-		uc_rez[2] = bit_read_RC (dat);
-		uc_rez[7] = bit_read_RC (dat);
-		uc_rez[6] = bit_read_RC (dat);
-		uc_rez[5] = bit_read_RC (dat);
-		uc_rez[4] = bit_read_RC (dat);
-		return antauxdif;
+		uchar_result = (char *) &default_value;
+		uchar_result[3] = bit_read_RC (dat);
+		uchar_result[2] = bit_read_RC (dat);
+		uchar_result[7] = bit_read_RC (dat);
+		uchar_result[6] = bit_read_RC (dat);
+		uchar_result[5] = bit_read_RC (dat);
+		uchar_result[4] = bit_read_RC (dat);
+		return default_value;
 	}
-	else			/* if (kodero == 1) */
+	else			/* if (two_bit_code == 1) */
 	{
-		uc_rez = (char *) &antauxdif;
-		uc_rez[7] = bit_read_RC (dat);
-		uc_rez[6] = bit_read_RC (dat);
-		uc_rez[5] = bit_read_RC (dat);
-		uc_rez[4] = bit_read_RC (dat);
-		return antauxdif;
+		uchar_result = (char *) &default_value;
+		uchar_result[7] = bit_read_RC (dat);
+		uchar_result[6] = bit_read_RC (dat);
+		uchar_result[5] = bit_read_RC (dat);
+		uchar_result[4] = bit_read_RC (dat);
+		return default_value;
 	}
 }
 
-/** Write duglitajxon kun antauxdifinajxo.
+/** Write bit-double with default.
  */
 void
-bit_write_DD (Bit_Chain * dat, double value, double antauxdif)
+bit_write_DD (Bit_Chain * dat, double value, double default_value)
 {
-	unsigned char *uc_val;
+	unsigned char *uchar_value;
 
-	unsigned int *ui_val;
-	unsigned int *ui_ant;
+	unsigned int *uint_value;
+	unsigned int *uint_default;
 
-	if (value == antauxdif)
+	if (value == default_value)
 		bit_write_BB (dat, 0);
 	else
 	{
-		uc_val = (char *) &value;
-		ui_val = (int *) &value;
-		ui_ant = (int *) &antauxdif;
-		if (ui_val[0] == ui_ant[0])
+		uchar_value = (char *) &value;
+		uint_value = (int *) &value;
+		uint_default = (int *) &default_value;
+		if (uint_value[0] == uint_default[0])
 		{
-			if (ui_val[1] != ui_ant[1])
+			if (uint_value[1] != uint_default[1])
 			{
 				bit_write_BB (dat, 2);
-				bit_write_RC (dat, uc_val[3]);
-				bit_write_RC (dat, uc_val[2]);
-				bit_write_RC (dat, uc_val[7]);
-				bit_write_RC (dat, uc_val[6]);
-				bit_write_RC (dat, uc_val[5]);
-				bit_write_RC (dat, uc_val[4]);
+				bit_write_RC (dat, uchar_value[3]);
+				bit_write_RC (dat, uchar_value[2]);
+				bit_write_RC (dat, uchar_value[7]);
+				bit_write_RC (dat, uchar_value[6]);
+				bit_write_RC (dat, uchar_value[5]);
+				bit_write_RC (dat, uchar_value[4]);
 			}
 			else
 			{
 				bit_write_BB (dat, 1);
-				bit_write_RC (dat, uc_val[7]);
-				bit_write_RC (dat, uc_val[6]);
-				bit_write_RC (dat, uc_val[5]);
-				bit_write_RC (dat, uc_val[4]);
+				bit_write_RC (dat, uchar_value[7]);
+				bit_write_RC (dat, uchar_value[6]);
+				bit_write_RC (dat, uchar_value[5]);
+				bit_write_RC (dat, uchar_value[4]);
 			}
 		}
 		else
@@ -650,23 +650,25 @@ bit_write_DD (Bit_Chain * dat, double value, double antauxdif)
 	}
 }
 
-/** Read dikec-valuen.
+/** Read bit-thickness.
  */
 double
 bit_read_BT (Bit_Chain * dat)
 {
-	int modo;
+	int mode = 0;
 
-	modo = bit_read_B (dat);
-	return (modo ? 0.0 : bit_read_BD (dat));
+	if (dat->version >= R_2000)
+	    mode = bit_read_B (dat);
+
+	return (mode ? 0.0 : bit_read_BD (dat));
 }
 
-/** Write dikec-valuen.
+/** Write bit-thickness.
  */
 void
 bit_write_BT (Bit_Chain * dat, double value)
 {
-	if (value == 0.0)
+	if (dat->version >= R_2000 && value == 0.0)
 		bit_write_B (dat, 1);
 	else
 	{
