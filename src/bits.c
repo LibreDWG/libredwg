@@ -184,76 +184,70 @@ bit_write_RC (Bit_Chain * dat, unsigned char value)
 	bit_advance_position (dat, 8);
 }
 
-/** Read 1 dubitokon.
+/** Read 1 word (raw short).
  */
 unsigned int
 bit_read_RS (Bit_Chain * dat)
 {
-	unsigned char btk1, btk2;
+	unsigned char byte1, byte2;
 
-	btk1 = bit_read_RC (dat);
-	btk2 = bit_read_RC (dat);
-
-	/* Malinversigi la pez-finan ordon
-	 */
-	return ((unsigned int) ((btk2 << 8) | btk1));
+    //least significant byte first:
+	byte1 = bit_read_RC (dat);
+	byte2 = bit_read_RC (dat);
+    return ((unsigned int) ((byte2 << 8) | byte1));
 }
 
-/** Write 1 dubitokon.
+/** Write 1 word (raw short).
  */
 void
 bit_write_RS (Bit_Chain * dat, unsigned int value)
 {
-	/* Inversigi al pez-fina ordo
-	 */
+    //least significant byte first:
 	bit_write_RC (dat, value & 0xFF);
 	bit_write_RC (dat, value >> 8);
 }
 
-/** Read 1 kvarbitokon.
+/** Read 1 raw long (2 words).
  */
 long unsigned int
 bit_read_RL (Bit_Chain * dat)
 {
-	unsigned int dbtk1, dbtk2;
+	unsigned int word1, word2;
 
-	dbtk1 = bit_read_RS (dat);
-	dbtk2 = bit_read_RS (dat);
-
-	/* Malinversigi la pez-finan ordon
-	 */
-	return ((((long unsigned int) dbtk2) << 16) | ((long unsigned int) dbtk1));
+    //least significant word first:
+	word1 = bit_read_RS (dat);
+	word2 = bit_read_RS (dat);
+	return ((((long unsigned int) word2) << 16) | ((long unsigned int) word1));
 }
 
-/** Write 1 kvarbitokon.
+/** Write 1 raw long (2 words).
  */
 void
 bit_write_RL (Bit_Chain * dat, long unsigned int value)
 {
-	/* Inversigi al la pez-fina ordo
-	 */
+    //least significant word first:
 	bit_write_RS (dat, value & 0xFFFF);
 	bit_write_RS (dat, value >> 16);
 }
 
-
-/** Read 1 duglitajxon.
- */
+/** Read 1 raw double (8 bytes).
+     */
 double
 bit_read_RD (Bit_Chain * dat)
 {
 	int i;
-	unsigned char btk[8];
+	unsigned char byte[8];
 	double *result;
 
+//TODO: I think it might not work on big-endian platforms:
 	for (i = 0; i < 8; i++)
-		btk[i] = bit_read_RC (dat);
+		byte[i] = bit_read_RC (dat);
 
-	result = (double *) btk;
+	result = (double *) byte;
 	return (*result);
 }
 
-/** Write 1 duglitajxon.
+/** Write 1 raw double (8 bytes).
  */
 void
 bit_write_RD (Bit_Chain * dat, double value)
@@ -261,6 +255,7 @@ bit_write_RD (Bit_Chain * dat, double value)
 	int i;
 	unsigned char *val;
 
+//TODO: I think it might not work on big-endian platforms:
 	val = (unsigned char *) &value;
 
 	for (i = 0; i < 8; i++)
