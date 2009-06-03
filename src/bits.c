@@ -262,33 +262,33 @@ bit_write_RD (Bit_Chain * dat, double value)
 		bit_write_RC (dat, val[i]);
 }
 
-/** Read 1 kompaktitan dubitokon.
+/** Read 1 bitshort (compacted data).
  */
 unsigned int
 bit_read_BS (Bit_Chain * dat)
 {
-	unsigned char bitduo;
+	unsigned char two_bit_code;
 	unsigned int result;
 
-	bitduo = bit_read_BB (dat);
+	two_bit_code = bit_read_BB (dat);
 
-	if (bitduo == 0)
+	if (two_bit_code == 0)
 	{
 		result = bit_read_RS (dat);
 		return (result);
 	}
-	else if (bitduo == 1)
+	else if (two_bit_code == 1)
 	{
 		result = bit_read_RC (dat);
 		return (result);
 	}
-	else if (bitduo == 2)
+	else if (two_bit_code == 2)
 		return (0);
-	else			/* if (bitduo == 3) */
+	else			/* if (two_bit_code == 3) */
 		return (256);
 }
 
-/** Write 1 kompaktitan dubitokon.
+/** Write 1 bitshort (compacted data).
  */
 void
 bit_write_BS (Bit_Chain * dat, unsigned int value)
@@ -310,36 +310,36 @@ bit_write_BS (Bit_Chain * dat, unsigned int value)
 	}
 }
 
-/** Read 1 kompaktitan kvarbitokon.
+/** Read 1 bitlong (compacted data).
  */
 long unsigned int
 bit_read_BL (Bit_Chain * dat)
 {
-	unsigned char bitduo;
+	unsigned char two_bit_code;
 	long unsigned int result;
 
-	bitduo = bit_read_BB (dat);
+	two_bit_code = bit_read_BB (dat);
 
-	if (bitduo == 0)
+	if (two_bit_code == 0)
 	{
 		result = bit_read_RL (dat);
 		return (result);
 	}
-	else if (bitduo == 1)
+	else if (two_bit_code == 1)
 	{
 		result = bit_read_RC (dat);
 		return (result);
 	}
-	else if (bitduo == 2)
+	else if (two_bit_code == 2)
 		return (0);
-	else			/* if (bitduo == 3) */
+	else			/* if (two_bit_code == 3) */
 	{
 		fprintf (stderr, "Error: bit_read_BL: unexpected 2-bit code: '11'\n");
 		return (256);
 	}
 }
 
-/** Write 1 kompaktitan kvarbitokon.
+/** Write 1 bitlong (compacted data).
  */
 void
 bit_write_BL (Bit_Chain * dat, long unsigned int value)
