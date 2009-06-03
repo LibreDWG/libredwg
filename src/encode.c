@@ -22,7 +22,7 @@
 
 typedef struct
 {
-	long int traktilo;
+	long int handle;
 	long int address;
 	unsigned int idc;
 } Object_Mapo;
@@ -156,7 +156,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 			bit_write_BD (dat, skt->var[i].duglitajxo);
 			break;
 		case DWG_DT_H:
-			bit_write_H (dat, &skt->var[i].traktilo);
+			bit_write_H (dat, &skt->var[i].handle);
 			break;
 		case DWG_DT_T:
 			bit_write_T (dat, skt->var[i].text);
@@ -246,14 +246,14 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	for (i = 0; i < skt->num_objects; i++)
 	{
 		Bit_Chain nkn;
-		Dwg_Traktilo tkt;
+		Dwg_Handle tkt;
 
-		/* Difini la traktilojn de cxiuj objectj, inkluzive la unknownj */
+		/* Difini la handlejn de cxiuj objectj, inkluzive la unknownj */
 		omap[i].idc = i;
 		if (skt->object[i].supertype == DWG_SUPERTYPE_ENTITY)
-			omap[i].traktilo = skt->object[i].tio.entity->traktilo.value;
+			omap[i].handle = skt->object[i].tio.entity->handle.value;
 		else if (skt->object[i].supertype == DWG_SUPERTYPE_OBJECT)
-			omap[i].traktilo = skt->object[i].tio.object->traktilo.value;
+			omap[i].handle = skt->object[i].tio.object->handle.value;
 		else if (skt->object[i].supertype == DWG_SUPERTYPE_UNKNOWN)
 		{
 			nkn.chain = skt->object[i].tio.unknownjxo;
@@ -262,24 +262,24 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 			bit_read_BS (&nkn);
 			bit_read_RL (&nkn);
 			bit_read_H (&nkn, &tkt);
-			omap[i].traktilo = tkt.value;
+			omap[i].handle = tkt.value;
 		}
 		else
-			omap[i].traktilo = 0x7FFFFFFF;	/* Eraro! */
+			omap[i].handle = 0x7FFFFFFF;	/* Eraro! */
 
-		/* Ordigi la sekvon de traktiloj laux kreskanta ordo */
+		/* Ordigi la sekvon de handlej laux kreskanta ordo */
 		if (i > 0)
 		{
 			j = i;
-			while (omap[j].traktilo < omap[j - 1].traktilo)
+			while (omap[j].handle < omap[j - 1].handle)
 			{
-				omap[j - 1].traktilo = pvzmap.traktilo;
+				omap[j - 1].handle = pvzmap.handle;
 				omap[j - 1].idc = pvzmap.idc;
 
-				omap[j - 1].traktilo = omap[j].traktilo;
+				omap[j - 1].handle = omap[j].handle;
 				omap[j - 1].idc = omap[j].idc;
 
-				omap[j].traktilo = pvzmap.traktilo;
+				omap[j].handle = pvzmap.handle;
 				omap[j].idc = pvzmap.idc;
 				j--;
 				if (j == 0)
@@ -287,7 +287,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 			}
 		}
 	}
-	//for (i = 0; i < skt->num_objects; i++) printf ("Trakt(%i): %lu / Idc: %u\n", i, omap[i].traktilo, omap[i].idc);
+	//for (i = 0; i < skt->num_objects; i++) printf ("Trakt(%i): %lu / Idc: %u\n", i, omap[i].handle, omap[i].idc);
 
 	/* Skribi la objektaron
 	 */
@@ -317,7 +317,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 		}
 		bit_krei_CRC (dat, omap[i].address, 0xC0C1);
 	}
-	//for (i = 0; i < skt->num_objects; i++) printf ("Trakt(%i): %6lu / Adreso: %08X / Idc: %u\n", i, omap[i].traktilo, omap[i].address, omap[i].idc);
+	//for (i = 0; i < skt->num_objects; i++) printf ("Trakt(%i): %6lu / Adreso: %08X / Idc: %u\n", i, omap[i].handle, omap[i].address, omap[i].idc);
 
 	/* Nekonata dubitoko inter la objektaron kaj la object-mapo
 	 */
@@ -342,10 +342,10 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 
 		idc = omap[i].idc;
 
-		pvz = omap[idc].traktilo - lastatrakt;
+		pvz = omap[idc].handle - lastatrakt;
 		bit_write_MC (dat, pvz);
 		//printf ("Trakt(%i): %6lu / ", i, pvz);
-		lastatrakt = omap[idc].traktilo;
+		lastatrakt = omap[idc].handle;
 
 		pvz = omap[idc].address - lastadres;
 		bit_write_MC (dat, pvz);
@@ -542,7 +542,7 @@ dwg_encode_entity (Dwg_Object * obj, Bit_Chain * dat)
 
 	bit_write_RL (dat, 0);	// Nulo nun, kalkulendas por write poste
 
-	bit_write_H (dat, &est->traktilo);
+	bit_write_H (dat, &est->handle);
 	bit_write_BS (dat, est->kromdat_size);
 	if (est->kromdat_size > 0)
 	{

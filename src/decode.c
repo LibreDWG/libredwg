@@ -208,8 +208,8 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 		if (loglevel) printf ("[%03i] - ", i + 1);
 		if (i == 221 && skt->var[220].dubitoko != 3)
 		{
-			skt->var[i].traktilo.code = 0;
-			skt->var[i].traktilo.value = 0;
+			skt->var[i].handle.code = 0;
+			skt->var[i].handle.value = 0;
 			//puts ("(NE EKZISTANTA)");
 			continue;
 		}
@@ -232,8 +232,8 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 			if (loglevel) printf ("BD: %lg", skt->var[i].duglitajxo);
 			break;
 		case DWG_DT_H:
-			bit_read_H (dat, &skt->var[i].traktilo);
-			if (loglevel) printf ("H: %i.%i.0x%08X", skt->var[i].traktilo.code, skt->var[i].traktilo.size, (unsigned int) skt->var[i].traktilo.value);
+			bit_read_H (dat, &skt->var[i].handle);
+			if (loglevel) printf ("H: %i.%i.0x%08X", skt->var[i].handle.code, skt->var[i].handle.size, (unsigned int) skt->var[i].handle.value);
 			break;
 		case DWG_DT_T:
 			skt->var[i].text = bit_read_T (dat);
@@ -596,10 +596,10 @@ dwg_decode_entity (Bit_Chain * dat, Dwg_Object_Entity * est)
 	int error = 2;
 
 	est->bitsize = bit_read_RL (dat);
-	error = bit_read_H (dat, &est->traktilo);
+	error = bit_read_H (dat, &est->handle);
 	if (error)
 	{
-		fprintf (stderr, "dwg_decode_entity:\tEraro en traktilo de object! Adreso en la ĉeno: 0x%0x\n", (unsigned int) dat->byte);
+		fprintf (stderr, "dwg_decode_entity:\tEraro en handle de object! Adreso en la ĉeno: 0x%0x\n", (unsigned int) dat->byte);
 		est->bitsize = 0;
 		est->kromdat_size = 0;
 		est->picture_ekzistas = 0;
@@ -611,7 +611,7 @@ dwg_decode_entity (Bit_Chain * dat, Dwg_Object_Entity * est)
 	{
 		if (grando > 10210)
 		{
-			fprintf (stderr, "dwg_decode_entity: Absurdo! Kromdato-size: %lu. Object: %lu (traktilo).\n", (long unsigned int) grando, est->traktilo.value);
+			fprintf (stderr, "dwg_decode_entity: Absurdo! Kromdato-size: %lu. Object: %lu (handle).\n", (long unsigned int) grando, est->handle.value);
 			est->bitsize = 0;
 			est->kromdat_size = 0;
 			est->picture_ekzistas = 0;
@@ -646,8 +646,8 @@ dwg_decode_entity (Bit_Chain * dat, Dwg_Object_Entity * est)
 		}
 		else
 		{
-			fprintf (stderr, "dwg_decode_entity:  Absurdo! Bildo-size: %lu kB. Object: %lu (traktilo).\n",
-				est->picture_size / 1000, est->traktilo.value);
+			fprintf (stderr, "dwg_decode_entity:  Absurdo! Bildo-size: %lu kB. Object: %lu (handle).\n",
+				est->picture_size / 1000, est->handle.value);
 			bit_advance_position (dat, -(4 * 8 + 1));
 		}
 	}
@@ -671,10 +671,10 @@ dwg_decode_object (Bit_Chain * dat, Dwg_Object_Object * ord)
 	int error = 2;
 
 	ord->bitsize = bit_read_RL (dat);
-	error = bit_read_H (dat, &ord->traktilo);
+	error = bit_read_H (dat, &ord->handle);
 	if (error)
 	{
-		fprintf (stderr, "\tEraro en traktilo de object! Adreso en la ĉeno: 0x%0x\n", (unsigned int) dat->byte);
+		fprintf (stderr, "\tEraro en handle de object! Adreso en la ĉeno: 0x%0x\n", (unsigned int) dat->byte);
 		ord->bitsize = 0;
 		ord->kromdat_size = 0;
 		ord->traktref_size = 0;
@@ -685,7 +685,7 @@ dwg_decode_object (Bit_Chain * dat, Dwg_Object_Object * ord)
 	{
 		if (grando > 10210)
 		{
-			fprintf (stderr, "dwg_decode_object: Absurdo! Kromdato-size: %lu. Object: %lu (traktilo).\n", (long unsigned int) grando, ord->traktilo.value);
+			fprintf (stderr, "dwg_decode_object: Absurdo! Kromdato-size: %lu. Object: %lu (handle).\n", (long unsigned int) grando, ord->handle.value);
 			ord->bitsize = 0;
 			ord->kromdat_size = 0;
 			ord->traktref_size = 0;
@@ -722,17 +722,17 @@ dwg_decode_traktref (Bit_Chain * dat, Dwg_Object * obj)
 
 		est = obj->tio.entity;
 
-		est->traktref = (Dwg_Traktilo *) calloc (sizeof (Dwg_Traktilo), 10);
+		est->traktref = (Dwg_Handle *) calloc (sizeof (Dwg_Handle), 10);
 		i = 0;
 		while (1)
 		{
 			if (i % 10 == 0)
 				est->traktref =
-					(Dwg_Traktilo *) realloc (est->traktref,
-								  (i + 10) * sizeof (Dwg_Traktilo));
+					(Dwg_Handle *) realloc (est->traktref,
+								  (i + 10) * sizeof (Dwg_Handle));
 			if (bit_read_H (dat, &est->traktref[i]))
 			{
-				fprintf (stderr, "\tEraro en tiu traktilo: %lu\n", est->traktilo.value);
+				fprintf (stderr, "\tEraro en tiu handle: %lu\n", est->handle.value);
 				break;
 			}
 			if (!(dat->byte == ktl_lastaddress + 1 && dat->bit == 0))
@@ -750,17 +750,17 @@ dwg_decode_traktref (Bit_Chain * dat, Dwg_Object * obj)
 
 		ord = obj->tio.object;
 
-		ord->traktref = (Dwg_Traktilo *) calloc (sizeof (Dwg_Traktilo), 10);
+		ord->traktref = (Dwg_Handle *) calloc (sizeof (Dwg_Handle), 10);
 		i = 0;
 		while (1)
 		{
 			if (i % 10 == 0)
 				ord->traktref =
-					(Dwg_Traktilo *) realloc (ord->traktref,
-								  (i + 10) * sizeof (Dwg_Traktilo));
+					(Dwg_Handle *) realloc (ord->traktref,
+								  (i + 10) * sizeof (Dwg_Handle));
 			if (bit_read_H (dat, &ord->traktref[i]))
 			{
-				//fprintf (stderr, "\tEraro en tiu traktilo: %lu\n", est->traktilo.value);
+				//fprintf (stderr, "\tEraro en tiu handle: %lu\n", est->handle.value);
 				break;
 			}
 			if (!(dat->byte == ktl_lastaddress + 1 && dat->bit == 0))

@@ -103,9 +103,9 @@ double bit_read_BT (Bit_Chain * bit_datenaro);
 
 void bit_write_BT (Bit_Chain * bit_datenaro, double value);
 
-int bit_read_H (Bit_Chain * bit_datenaro, Dwg_Traktilo * traktilo);
+int bit_read_H (Bit_Chain * bit_datenaro, Dwg_Handle * handle);
 
-void bit_write_H (Bit_Chain * dat, Dwg_Traktilo * traktilo);
+void bit_write_H (Bit_Chain * dat, Dwg_Handle * handle);
 
 unsigned int bit_read_CRC (Bit_Chain * bit_datenaro);
 

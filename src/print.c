@@ -9,8 +9,8 @@ void
 dwg_print_entity (Dwg_Object_Entity * ent)
 {
 	printf ("Bitsize: %lu\n", ent->bitsize);
-	printf ("Vera traktilo: %i.%i.%lu\n", ent->traktilo.code, ent->traktilo.size,
-		ent->traktilo.value);
+	printf ("Vera handle: %i.%i.%lu\n", ent->handle.code, ent->handle.size,
+		ent->handle.value);
 	printf ("Kroma datenaro: %lu B\n", (long unsigned int) ent->kromdat_size);
 	printf ("Ĉu picture?: %s", ent->picture_ekzistas ? "Yes" : "Ne");
 	if (ent->picture_ekzistas)
@@ -32,8 +32,8 @@ void
 dwg_print_object (Dwg_Object_Object *ord)
 {
 	printf ("Bitsize: %lu\n", ord->bitsize);
-	printf ("Vera traktilo: %i.%i.%lu\n", ord->traktilo.code, ord->traktilo.size,
-		ord->traktilo.value);
+	printf ("Vera handle: %i.%i.%lu\n", ord->handle.code, ord->handle.size,
+		ord->handle.value);
 	printf ("Kroma datenaro: %lu B\n", (long unsigned int) ord->kromdat_size);
 	printf ("Kiom reagiloj: %lu\n", ord->reagilo_size);
 }
@@ -453,8 +453,8 @@ dwg_print (Dwg_Structure *dwg_struct)
 			printf ("BD: %lg", dwg_struct->var[i].duglitajxo);
 			break;
 		case DWG_DT_H:
-			printf ("H: %i.%i.%li", dwg_struct->var[i].traktilo.code,
-				dwg_struct->var[i].traktilo.size, dwg_struct->var[i].traktilo.value);
+			printf ("H: %i.%i.%li", dwg_struct->var[i].handle.code,
+				dwg_struct->var[i].handle.size, dwg_struct->var[i].handle.value);
 			break;
 		case DWG_DT_T:
 			printf ("T: \"%s\"", dwg_struct->var[i].text);
@@ -506,7 +506,7 @@ dwg_print (Dwg_Structure *dwg_struct)
 
 		printf ("Type: %s (%03i)\t", obj->type > 80 ? (obj->type == dwg_struct->dwg_ot_layout ? "LAYOUT" : "??") : dwg_obtype[obj->type], obj->type);
 		printf ("Size: %u\t", obj->size);
-		printf ("Traktilo: (%lu)\t", obj->trakt);
+		printf ("Handle: (%lu)\t", obj->trakt);
 		printf ("Super-type: ");
 		switch (obj->supertype)
 		{

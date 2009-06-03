@@ -677,10 +677,10 @@ bit_write_BT (Bit_Chain * dat, double value)
 	}
 }
 
-/** Read traktilo-referencon.
+/** Read handle-referencon.
  */
 int
-bit_read_H (Bit_Chain * dat, Dwg_Traktilo * trakt)
+bit_read_H (Bit_Chain * dat, Dwg_Handle * trakt)
 {
 	Bit_Chain tmpdat;
 	unsigned char *val;
@@ -694,7 +694,7 @@ bit_read_H (Bit_Chain * dat, Dwg_Traktilo * trakt)
 	if (trakt->size > 4)
 	{
 		/*
-		printf ("Eraro: traktilo-referenco pli longa ol 4 bitokoj: %i.%i.%lu\n",
+		printf ("Eraro: handle-referenco pli longa ol 4 bitokoj: %i.%i.%lu\n",
 			trakt->code, trakt->size, trakt->value);
 		*/
 		trakt->size = 0;
@@ -708,10 +708,10 @@ bit_read_H (Bit_Chain * dat, Dwg_Traktilo * trakt)
 	return (0);
 }
 
-/** Write traktilo-referencon.
+/** Write handle-referencon.
  */
 void
-bit_write_H (Bit_Chain * dat, Dwg_Traktilo * trakt)
+bit_write_H (Bit_Chain * dat, Dwg_Handle * trakt)
 {
 	int i, j;
 	unsigned char *val;

@@ -113,14 +113,14 @@ extern "C"
 	} Dwg_Object_Type;
 
 /**
- Struct for traktiloj.
+ Struct for handles.
  */
-	typedef struct _dwg_traktilo
+	typedef struct _dwg_handle
 	{
 		unsigned char code;
 		unsigned char size;
 		long unsigned int value;
-	} Dwg_Traktilo;
+	} Dwg_Handle;
 
 /* OBJECTS *******************************************************************/
 /**
@@ -1378,10 +1378,10 @@ extern "C"
 		} tio;
 
 		long unsigned int bitsize;
-		Dwg_Traktilo traktilo;
+		Dwg_Handle handle;
 
 		unsigned int kromdat_size;
-		Dwg_Traktilo kromdat_trakt;
+		Dwg_Handle kromdat_trakt;
 		unsigned char *kromdat;
 
 		unsigned char picture_ekzistas;
@@ -1399,7 +1399,7 @@ extern "C"
 		unsigned char linithickness;
 
 		unsigned int traktref_size;
-		Dwg_Traktilo *traktref;
+		Dwg_Handle *traktref;
 	} Dwg_Object_Entity;
 
 /**
@@ -1414,16 +1414,16 @@ extern "C"
 		} tio;
 
 		long unsigned int bitsize;
-		Dwg_Traktilo traktilo;
+		Dwg_Handle handle;
 
 		unsigned int kromdat_size;
-		Dwg_Traktilo kromdat_trakt;
+		Dwg_Handle kromdat_trakt;
 		unsigned char *kromdat;
 
 		long unsigned int reagilo_size;
 
 		unsigned int traktref_size;
-		Dwg_Traktilo *traktref;
+		Dwg_Handle *traktref;
 	} Dwg_Object_Object;
 
 /**
@@ -1505,7 +1505,7 @@ extern "C"
 			double xyz[3];
 			double xy[2];
 			unsigned char *text;
-			Dwg_Traktilo traktilo;
+			Dwg_Handle handle;
 		} var[DWG_NUM_VARIABLES];
 
 		unsigned int num_classes;
