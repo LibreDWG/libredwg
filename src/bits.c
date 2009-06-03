@@ -358,27 +358,27 @@ bit_write_BL (Bit_Chain * dat, long unsigned int value)
 	}
 }
 
-/** Read 1 kompaktitan duglitajxon.
+/** Read 1 bitdouble (compacted data).
  */
 double
 bit_read_BD (Bit_Chain * dat)
 {
-	unsigned char bitduo;
+	unsigned char two_bit_code;
 	long int *res;
 	double result;
 
-	bitduo = bit_read_BB (dat);
+	two_bit_code = bit_read_BB (dat);
 
-	if (bitduo == 0)
+	if (two_bit_code == 0)
 	{
 		result = bit_read_RD (dat);
 		return (result);
 	}
-	else if (bitduo == 1)
+	else if (two_bit_code == 1)
 		return (1.0);
-	else if (bitduo == 2)
+	else if (two_bit_code == 2)
 		return (0.0);
-	else			/* if (bitduo == 3) */
+	else			/* if (two_bit_code == 3) */
 	{
 		fprintf (stderr, "Error: bit_read_BD: unexpected 2-bit code: '11'\n");
 		/* create a Not-A-Number (NaN) */
@@ -389,7 +389,7 @@ bit_read_BD (Bit_Chain * dat)
 	}
 }
 
-/** Write 1 kompaktitan duglitajxon.
+/** Write 1 bitdouble (compacted data).
  */
 void
 bit_write_BD (Bit_Chain * dat, double value)
@@ -405,58 +405,59 @@ bit_write_BD (Bit_Chain * dat, double value)
 	}
 }
 
-/** Read 1 kompaktitan entjeron, laux moduleca bitoka formo (maksimume 4 bytejn).
+/** Read 1 modular char (max 4 bytes).
  */
 long int
 bit_read_MC (Bit_Chain * dat)
 {
 	int i, j;
-	int negativi;
+	int negative;
 	unsigned char byte[4];
 	long unsigned int result;
 
-	negativi = 0;
+	negative = 0;
 	result = 0;
-	for (i = 3, j = 0; i > -1; i--, j += 7)
+	for (i=3, j=0; i>=0; i--, j+=7)
 	{
 		byte[i] = bit_read_RC (dat);
 		if (!(byte[i] & 0x80))
 		{
 			if ((byte[i] & 0x40))
 			{
-				negativi = 1;
+				negative = 1;
 				byte[i] &= 0xbf;
 			}
 			result |= (((long unsigned int) byte[i]) << j);
-			return (negativi ? -((long int) result) : (long int) result);
+			return (negative ? -((long int) result) : (long int) result);
 		}
 		else
 			byte[i] &= 0x7f;
 		result |= ((long unsigned int) byte[i]) << j;
 	}
 
-	return 0;		/* malsukcese... */
+    fprintf(stderr, "bit_read_MC: error parsing modular char.\n");
+	return 0;		/* error... */
 }
 
-/** Write 1 kompaktitan entjeron, laux moduleca bitoka formo (maksimume 4 bitokojn).
+/** Write 1 modular char (max 4 bytes).
  */
 void
 bit_write_MC (Bit_Chain * dat, long int val)
 {
 	int i, j;
-	int negativi;
+	int negative;
 	unsigned char byte[4];
 	long unsigned int mask;
 	long unsigned int value;
 
 	if (val < 0)
 	{
-		negativi = 1;
+		negative = 1;
 		value = (long unsigned int) -val;
 	}
 	else
 	{
-		negativi = 0;
+		negative = 0;
 		value = (long unsigned int) val;
 	}
 
@@ -474,14 +475,14 @@ bit_write_MC (Bit_Chain * dat, long int val)
 	if (byte[i] & 0x40)
 		i--;
 	byte[i] &= 0x7f;
-	if (negativi)
+	if (negative)
 		byte[i] |= 0x40;
 	for (j = 3; j >= i; j--)
 		bit_write_RC (dat, byte[j]);
 //if (value == 64) printf ("(%2X) \n", byte[i]);
 }
 
-/** Read 1 kompaktitan entjeron, laux moduleca dubitoka formo (maksimume 2 dubitokojn).
+/** Read 1 modular short (max 2 words).
  */
 long unsigned int
 bit_read_MS (Bit_Chain * dat)
@@ -503,11 +504,11 @@ bit_read_MS (Bit_Chain * dat)
 			word[i] &= 0x7fff;
 		result |= ((long unsigned int) word[i]) << j;
 	}
-
-	return 0;		/* malsukcese... */
+    fprintf(stderr, "bit_read_MS: error parsing modular short.\n");
+	return 0;		/* error... */
 }
 
-/** Write 1 kompaktitan entjeron, laux moduleca dubitoka formo (maksimume 2 dubitokojn).
+/** Write 1 modular short (max 2 words).
  */
 void
 bit_write_MS (Bit_Chain * dat, long unsigned int value)
@@ -517,12 +518,12 @@ bit_write_MS (Bit_Chain * dat, long unsigned int value)
 	long unsigned int mask;
 
 	mask = 0x00007fff;
-	for (i = 1, j = 0; i > -1; i--, j += 15)
+	for (i=1, j=0; i>=0; i--, j+=15)
 	{
 		word[i] = ((unsigned int) ((value & mask) >> j)) | 0x8000;
 		mask = mask << 15;
 	}
-	/* Ne uzu tion sube: cxiam faru gxin kvarbitoka!
+	/* TODO: useless?
 	   for (i = 0; i < 1; i++)
 	   if (word[i] & 0x7fff)
 	   break;
@@ -557,7 +558,7 @@ bit_read_BE (Bit_Chain * dat, double *x, double *y, double *z)
 void
 bit_write_BE (Bit_Chain * dat, double x, double y, double z)
 {
-	if (x == 0.0 && y == 0.0 && z == 1.0)
+	if (dat->version>=R_2000 && x == 0.0 && y == 0.0 && z == 1.0)
 		bit_write_B (dat, 1);
 	else
 	{
