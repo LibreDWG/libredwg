@@ -1147,7 +1147,7 @@ extern "C"
 			double y;
 			double z;
 		} extrusion;
-		double radiusproporcio;
+		double radiusproporcion;
 		double start_angle;
 		double end_angle;
 	} Dwg_Entity_ELLIPSE;
@@ -1225,6 +1225,18 @@ extern "C"
  Struct for ray - RAY (40)
  */
         typedef Dwg_Entity_RAY Dwg_Entity_XLINE;
+        
+/**
+ Structure for DICTIONARY (42)
+ */
+	typedef struct _dwg_entity_DICTIONARY
+	{
+		unsigned int size;
+		unsigned int cloning;
+		unsigned char hard_owner;
+		char **name;
+	} Dwg_Object_DICTIONARY;
+
 /**
  Struct for MTEXT (44)
  */
@@ -1254,6 +1266,14 @@ extern "C"
 		unsigned char ia_bit;
 	} Dwg_Entity_MTEXT;
 
+/**
+ Structure for BLOCK_CONTROL (48)
+ */
+	typedef struct _dwg_entity_BLOCK_CONTROL
+	{
+		unsigned int size;
+	} Dwg_Object_BLOCK_CONTROL;
+	
 /**
  Struct for LAYER (51)
  */
@@ -1412,6 +1432,9 @@ extern "C"
 		union
 		{
 			Dwg_Object_LAYER *LAYER;
+			Dwg_Object_DICTIONARY *DICTIONARY;
+			Dwg_Object_BLOCK_CONTROL *BLOCK_CONTROL;
+			//Dwg_Object_BLOCK_HEADER *BLOCK_HEADER;
 			Dwg_Object_LAYOUT *LAYOUT;
 		} tio;
 

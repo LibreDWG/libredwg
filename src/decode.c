@@ -1280,7 +1280,7 @@ dwg_decode_ELLIPSE (Bit_Chain * dat, Dwg_Object * obj)
 	ent->extrusion.x = bit_read_BD (dat);
 	ent->extrusion.y = bit_read_BD (dat);
 	ent->extrusion.z = bit_read_BD (dat);
-	ent->radiusproporcio = bit_read_BD (dat);
+	ent->radiusproporcion = bit_read_BD (dat);
 	ent->start_angle = bit_read_BD (dat);
 	ent->end_angle = bit_read_BD (dat);
 
@@ -1409,6 +1409,51 @@ dwg_decode_MTEXT (Bit_Chain * dat, Dwg_Object * obj)
 	ent->linispaco_stilo = bit_read_BS (dat);
 	ent->linispaco_faktoro = bit_read_BD (dat);
 	ent->ia_bit = bit_read_B (dat);
+
+	dwg_decode_traktref (dat, obj);
+}
+
+static void
+dwg_decode_DICTIONARY (Bit_Chain *dat, Dwg_Object *obj)
+{
+	int i;
+	Dwg_Object_DICTIONARY *dict;
+
+	obj->supertype = DWG_SUPERTYPE_OBJECT;
+	obj->tio.object = malloc (sizeof (Dwg_Object_Object));
+	obj->tio.object->tio.DICTIONARY = calloc (sizeof (Dwg_Object_DICTIONARY), 1);
+	dwg_decode_object (dat, obj->tio.object);
+	dict = obj->tio.object->tio.DICTIONARY;
+	
+	dict->size = bit_read_BS (dat);
+	dict->cloning = bit_read_BS (dat);
+	dict->hard_owner = bit_read_RC (dat);
+	if (dict->size > 10000)
+	{
+//TODO:Dwg_Handle
+//		fprintf (stderr, "Strange: dictionary with more than 10 thousand entries! Handle: %u\n", obj->trakt.value);
+		return;
+	}
+	dict->name = calloc (sizeof (char *), dict->size);
+	for (i = 0; i < dict->size; i++)
+		dict->name[i] = bit_read_T (dat);
+
+	dwg_decode_traktref (dat, obj);
+}
+
+static void
+dwg_decode_BLOCK_CONTROL (Bit_Chain *dat, Dwg_Object *obj)
+{
+	int i;
+	Dwg_Object_BLOCK_CONTROL *blk;
+
+	obj->supertype = DWG_SUPERTYPE_OBJECT;
+	obj->tio.object = malloc (sizeof (Dwg_Object_Object));
+	obj->tio.object->tio.BLOCK_CONTROL = calloc (sizeof (Dwg_Object_BLOCK_CONTROL), 1);
+	dwg_decode_object (dat, obj->tio.object);
+	blk = obj->tio.object->tio.BLOCK_CONTROL;
+	
+	blk->size = bit_read_BS (dat);
 
 	dwg_decode_traktref (dat, obj);
 }
@@ -1636,6 +1681,12 @@ dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned in
 	case DWG_TYPE_MTEXT:
 		dwg_decode_MTEXT (dat, obj);
 		break;
+    case DWG_TYPE_BLOCK_CONTROL:
+ 	    dwg_decode_BLOCK_CONTROL (dat, obj);
+        break;
+    case DWG_TYPE_DICTIONARY:
+ 	    dwg_decode_DICTIONARY (dat, obj);
+        break;
 	case DWG_TYPE_LAYER:
 		dwg_decode_LAYER (dat, obj);
 		break;

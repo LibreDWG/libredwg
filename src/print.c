@@ -284,7 +284,7 @@ dwg_print_ELLIPSE (Dwg_Entity_ELLIPSE *ent)
 	printf ("\tDuonĉef-aksa vektoro: (%1.13g, %1.13g, %1.13g)\n", ent->x1, ent->y1, ent->z1);
 	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
 		ent->extrusion.z);
-	printf ("\tRadius-proporcio: %1.13g\n", ent->radiusproporcio);
+	printf ("\tRadius-proporcion: %1.13g\n", ent->radiusproporcion);
 	printf ("\tEkangulo: %1.13g\n", ent->start_angle);
 	printf ("\tFinangulo: %1.13g\n", ent->end_angle);
 }
