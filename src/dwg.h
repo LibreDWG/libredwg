@@ -124,12 +124,12 @@ extern "C"
 
 /* OBJECTS *******************************************************************/
 /**
- Struct for textj - UNUSED (0)
+ Struct for UNUSED (0)
  */
 	typedef int Dwg_Entity_UNUSED;
 
 /**
- Struct for textj - TEXT (1)
+ Struct for TEXT (1)
  */
 	typedef struct _dwg_entity_TEXT
 	{
@@ -162,7 +162,7 @@ extern "C"
 	} Dwg_Entity_TEXT;
 
 /**
- Struct for atributoj - ATTRIB (2)
+ Struct for ATTRIB (2)
  */
 	typedef struct _dwg_entity_ATTRIB
 	{
@@ -198,7 +198,7 @@ extern "C"
 	} Dwg_Entity_ATTRIB;
 
 /**
- Struct for atributo-diendj - ATTDEF (3)
+ Struct for ATTDEF (3)
  */
 	typedef struct _dwg_entity_ATTDEF
 	{
@@ -235,7 +235,7 @@ extern "C"
 	} Dwg_Entity_ATTDEF;
 
 /**
- Struct for blokoj - BLOCK (4)
+ Struct for BLOCK (4)
  */
 	typedef struct _dwg_entity_BLOCK
 	{
@@ -243,21 +243,21 @@ extern "C"
 	} Dwg_Entity_BLOCK;
 
 /**
- Struct for blokendj - ENDBLK (5)
+ Struct for ENDBLK (5)
  */
 	typedef struct _dwg_entity_ENDBLK
 	{
 	} Dwg_Entity_ENDBLK;
 
 /**
- Struct for enmetoj - SEQEND (6)
+ Struct for SEQEND (6)
  */
 	typedef struct _dwg_entity_SEQNED
 	{
 	} Dwg_Entity_SEQEND;
 
 /**
- Struct for enmetoj - INSERT (7)
+ Struct for INSERT (7)
  */
 	typedef struct _dwg_entity_INSERT
 	{
@@ -282,7 +282,7 @@ extern "C"
 	} Dwg_Entity_INSERT;
 
 /**
- Struct for multoblaj enmetoj - MINSERT (8)
+ Struct for MINSERT (8)
  */
 	typedef struct _dwg_entity_MINSERT
 	{
@@ -317,7 +317,7 @@ extern "C"
 	} Dwg_Entity_MINSERT;
 
 /**
- Struct for verticoj - VERTEX_2D (10)
+ Struct for VERTEX_2D (10)
  */
 	typedef struct _dwg_entity_VERTEX_2D
 	{
@@ -332,7 +332,7 @@ extern "C"
 	} Dwg_Entity_VERTEX_2D;
 
 /**
- Struct for verticoj - VERTEX_3D (11)
+ Struct for VERTEX_3D (11)
  */
 	typedef struct _dwg_entity_VERTEX_3D
 	{
@@ -343,17 +343,17 @@ extern "C"
 	} Dwg_Entity_VERTEX_3D;
 
 /**
- Struct for verticoj - VERTEX_MESH (12) - same as VERTEX_3D
+ Struct for VERTEX_MESH (12) - same as VERTEX_3D
  */
 	typedef Dwg_Entity_VERTEX_3D Dwg_Entity_VERTEX_MESH;
 
 /**
- Struct for verticoj - VERTEX_PFACE (13) - same as VERTEX_3D
+ Struct for VERTEX_PFACE (13) - same as VERTEX_3D
  */
 	typedef Dwg_Entity_VERTEX_3D Dwg_Entity_VERTEX_PFACE;
 
 /**
- Struct for verticoj - VERTEX_PFACE_FACE (14)
+ Struct for VERTEX_PFACE_FACE (14)
  */
 	typedef struct _dwg_entity_VERTEX_PFACE_FACE
 	{
@@ -361,7 +361,7 @@ extern "C"
 	} Dwg_Entity_VERTEX_PFACE_FACE;
 
 /**
- Struct for:  2D POLYLINE (15)
+ Struct for 2D POLYLINE (15)
  */
 	typedef struct _dwg_entity_POLYLINE_2D
 	{
@@ -380,7 +380,7 @@ extern "C"
 	} Dwg_Entity_POLYLINE_2D;
 
 /**
- Struct for:  3D POLYLINE (16)
+ Struct for 3D POLYLINE (16)
  */
 	typedef struct _dwg_entity_POLYLINE_3D
 	{
@@ -389,7 +389,7 @@ extern "C"
 	} Dwg_Entity_POLYLINE_3D;
 
 /**
- Struct for arkoj - ARC (17)
+ Struct for ARC (17)
  */
 	typedef struct _dwg_entity_ARC
 	{
@@ -409,7 +409,7 @@ extern "C"
 	} Dwg_Entity_ARC;
 
 /**
- Struct for cirkloj - CIRCLE (18)
+ Struct for CIRCLE (18)
  */
 	typedef struct _dwg_entity_CIRCLE
 	{
@@ -427,7 +427,7 @@ extern "C"
 	} Dwg_Entity_CIRCLE;
 
 /**
- Struct for linioj - LINE (19)
+ Struct for LINE (19)
  */
 	typedef struct _dwg_entity_LINE
 	{
@@ -1131,7 +1131,7 @@ extern "C"
 	} Dwg_Entity_VIEWPORT_ENTITY;
 
 /**
- Struct for elipsoj - ELLIPSE (35)
+ Struct for ELLIPSE (35)
  */
 	typedef struct _dwg_entity_ELLIPSE
 	{
@@ -1225,7 +1225,7 @@ extern "C"
  */
         typedef Dwg_Entity_RAY Dwg_Entity_XLINE;
 /**
- Struct for textj - MTEXT (44)
+ Struct for MTEXT (44)
  */
 	typedef struct _dwg_entity_MTEXT
 	{
@@ -1254,7 +1254,7 @@ extern "C"
 	} Dwg_Entity_MTEXT;
 
 /**
- Struct for tavoloj - LAYER (51)
+ Struct for LAYER (51)
  */
 	typedef struct _dwg_object_LAYER
 	{
@@ -1267,7 +1267,7 @@ extern "C"
 	} Dwg_Object_LAYER;
 
 /**
- Struct for arangxo - LAYOUT (502?)
+ Struct for LAYOUT (502?)
  */
 	typedef struct _dwg_object_LAYOUT
 	{
