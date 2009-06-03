@@ -133,8 +133,8 @@ extern "C"
  */
 	typedef struct _dwg_entity_TEXT
 	{
-		unsigned char datumindik;
-		double levigxo;
+		unsigned char dataflags;
+		double elevation;
 		double x0;
 		double y0;
 		struct
@@ -143,7 +143,7 @@ extern "C"
 			double y;
 			unsigned int h;
 			unsigned int v;
-		} gxisrandigo; //gxis = Until / randigo = Edge. UntilEdge == Snap? perhaps Trim!?
+		} alignment;
 		struct
 		{
 			double x;
@@ -151,12 +151,14 @@ extern "C"
 			double z;
 		} extrusion;
 		double thickness;
-		double klinang;
-		double turnang;
+		double oblique_ang;
+		double rotation_ang;
 		double height;
-		double largxfaktoro;
+		double width_factor;
 		unsigned char *text;
-		unsigned int generacio;
+		unsigned int generation;
+                unsigned int horiz_align;
+                unsigned int vert_align;
 	} Dwg_Entity_TEXT;
 
 /**
@@ -164,8 +166,8 @@ extern "C"
  */
 	typedef struct _dwg_entity_ATTRIB
 	{
-		unsigned char datumindik;
-		double levigxo;
+		unsigned char dataflags;
+		double elevation;
 		double x0;
 		double y0;
 		struct
@@ -174,7 +176,7 @@ extern "C"
 			double y;
 			unsigned int h;
 			unsigned int v;
-		} gxisrandigo;
+		} alignment;
 		struct
 		{
 			double x;
@@ -182,15 +184,17 @@ extern "C"
 			double z;
 		} extrusion;
 		double thickness;
-		double klinang;
-		double turnang;
+		double oblique_ang;
+		double rotation_ang;
 		double height;
-		double largxfaktoro;
+		double width_factor;
 		unsigned char *text;
-		unsigned int generacio;
-		unsigned char *etikedo;
-		unsigned int kamplong; //neuzita
-		unsigned char indikiloj;
+		unsigned int generation;
+                unsigned int horiz_align;
+                unsigned int vert_align;
+		unsigned char *tag;
+		unsigned int field_length;
+		unsigned char flags;
 	} Dwg_Entity_ATTRIB;
 
 /**
@@ -198,8 +202,8 @@ extern "C"
  */
 	typedef struct _dwg_entity_ATTDEF
 	{
-		unsigned char datumindik;
-		double levigxo;
+		unsigned char dataflags;
+		double elevation;
 		double x0;
 		double y0;
 		struct
@@ -208,7 +212,7 @@ extern "C"
 			double y;
 			unsigned int h;
 			unsigned int v;
-		} gxisrandigo;
+		} alignment;
 		struct
 		{
 			double x;
@@ -216,16 +220,18 @@ extern "C"
 			double z;
 		} extrusion;
 		double thickness;
-		double klinang;
-		double turnang;
+		double oblique_ang;
+		double rotation_ang;
 		double height;
-		double largxfaktoro;
+		double width_factor;
 		unsigned char *text;
-		unsigned int generacio;
-		unsigned char *etikedo;
-		unsigned int kamplong; //neuzita
-		unsigned char indikiloj;
-		unsigned char *invitilo;
+		unsigned int generation;
+                unsigned int horiz_align;
+                unsigned int vert_align;
+		unsigned char *tag;
+		unsigned int field_length;
+		unsigned char flags;
+		unsigned char *prompt;
 	} Dwg_Entity_ATTDEF;
 
 /**
@@ -258,21 +264,21 @@ extern "C"
 		double x0;
 		double y0;
 		double z0;
-		unsigned char skalindik;
+		unsigned char scale_flag;
 		struct
 		{
 			double x;
 			double y;
 			double z;
 		} scale;
-		double turnang;
+		double rotation_ang;
 		struct
 		{
 			double x;
 			double y;
 			double z;
 		} extrusion;
-		unsigned char kun_attrib;
+		unsigned char has_attribs;
 	} Dwg_Entity_INSERT;
 
 /**
@@ -283,50 +289,46 @@ extern "C"
 		double x0;
 		double y0;
 		double z0;
-		unsigned char skalindik;
+		unsigned char scale_flag;
 		struct
 		{
 			double x;
 			double y;
 			double z;
 		} scale;
-		double turnang;
+		double rotation_ang;
 		struct
 		{
 			double x;
 			double y;
 			double z;
 		} extrusion;
-		unsigned char kun_attrib;
+		unsigned char has_attribs;
 		struct
 		{
 			unsigned int size;
 			double dx;
-		} kol;
+		} column;
 		struct
 		{
 			unsigned int size;
 			double dy;
-		} lin;
+		} line;
 	} Dwg_Entity_MINSERT;
-
-/**
- Struct for ?? - ?? (9)
- */
 
 /**
  Struct for verticoj - VERTEX_2D (10)
  */
 	typedef struct _dwg_entity_VERTEX_2D
 	{
-		unsigned char indikiloj;
+		unsigned char flags;
 		double x0;
 		double y0;
 		double z0;
-		double eklargxo;
-		double finlargxo;
-		double protub;
-		double tangxdir;
+		double start_width;
+		double end_width;
+		double bulge;
+		double tangent_dir;
 	} Dwg_Entity_VERTEX_2D;
 
 /**
@@ -334,7 +336,7 @@ extern "C"
  */
 	typedef struct _dwg_entity_VERTEX_3D
 	{
-		unsigned char indikiloj;
+		unsigned char flags;
 		double x0;
 		double y0;
 		double z0;
@@ -363,12 +365,12 @@ extern "C"
  */
 	typedef struct _dwg_entity_POLYLINE_2D
 	{
-		unsigned int indikiloj;
-		unsigned int kurbtype;
-		double eklargxo;
-		double finlargxo;
+		unsigned int flags;
+		unsigned int curve_type;
+		double start_width;
+		double end_width;
 		double thickness;
-		double levigxo;
+		double elevation;
 		struct
 		{
 			double x;
@@ -382,8 +384,8 @@ extern "C"
  */
 	typedef struct _dwg_entity_POLYLINE_3D
 	{
-		unsigned char indikiloj_1;
-		unsigned char indikiloj_2;
+		unsigned char flags_1;
+		unsigned char flags_2;
 	} Dwg_Entity_POLYLINE_3D;
 
 /**
@@ -402,8 +404,8 @@ extern "C"
 			double y;
 			double z;
 		} extrusion;
-		double ekangulo;
-		double finangulo;
+		double start_angle;
+		double end_angle;
 	} Dwg_Entity_ARC;
 
 /**
@@ -727,8 +729,8 @@ extern "C"
 			double z;
 		} extrusion;
 		double radiusproporcio;
-		double ekangulo;
-		double finangulo;
+		double start_angle;
+		double end_angle;
 	} Dwg_Entity_ELLIPSE;
 
 /**
@@ -795,7 +797,7 @@ extern "C"
 		{
 			char *agordo;
 			char *printilo;
-			unsigned int indikiloj;
+			unsigned int flags;
 			double maldekstre;
 			double malsupre;
 			double dekstre;
@@ -827,7 +829,7 @@ extern "C"
 
 		char *name;
 		unsigned int ordo;
-		unsigned int indikiloj;
+		unsigned int flags;
 		double x0;
 		double y0;
 		double z0;
@@ -853,7 +855,7 @@ extern "C"
 			double y0;
 			double z0;
 		} akso_Y;
-		double levigxo;
+		double elevation;
 		unsigned int rigardtype;
 		struct
 		{
