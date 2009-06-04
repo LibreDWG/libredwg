@@ -195,6 +195,7 @@ extern "C"
 		unsigned char *tag;
 		unsigned int field_length;
 		unsigned char flags;
+		unsigned char lock_position_flag;
 	} Dwg_Entity_ATTRIB;
 
 /**
