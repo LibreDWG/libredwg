@@ -232,6 +232,7 @@ extern "C"
 		unsigned char *tag;
 		unsigned int field_length;
 		unsigned char flags;
+		unsigned char lock_position_flag;
 		unsigned char *prompt;
 	} Dwg_Entity_ATTDEF;
 
