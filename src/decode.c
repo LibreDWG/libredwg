@@ -1426,7 +1426,7 @@ dwg_decode_MTEXT (Bit_Chain * dat, Dwg_Object * obj)
 	ent->x1 = bit_read_BD (dat);
 	ent->y1 = bit_read_BD (dat);
 	ent->z1 = bit_read_BD (dat);
-	ent->largxeco = bit_read_BD (dat);
+	ent->width = bit_read_BD (dat);
 	ent->height = bit_read_BD (dat);
 	ent->kunmeto = bit_read_BS (dat);
 	ent->direkto = bit_read_BS (dat);
@@ -1530,7 +1530,7 @@ dwg_decode_LAYOUT (Bit_Chain * dat, Dwg_Object * obj)
 	ord->pagxo.malsupre = bit_read_BD (dat);
 	ord->pagxo.dekstre = bit_read_BD (dat);
 	ord->pagxo.supre = bit_read_BD (dat);
-	ord->pagxo.largxeco = bit_read_BD (dat);
+	ord->pagxo.width = bit_read_BD (dat);
 	ord->pagxo.height = bit_read_BD (dat);
 	ord->pagxo.size = bit_read_T (dat);
 	ord->pagxo.dx = bit_read_BD (dat);

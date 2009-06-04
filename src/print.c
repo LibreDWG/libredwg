@@ -303,7 +303,7 @@ dwg_print_MTEXT (Dwg_Entity_MTEXT *ent)
 	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
 		ent->extrusion.z);
 	printf ("\tX-direkto: (%1.13g, %1.13g, %1.13g)\n", ent->x1, ent->y1, ent->z1);
-	printf ("\tLargxeco: %1.13g\n", ent->largxeco);
+	printf ("\tLargxeco: %1.13g\n", ent->width);
 	printf ("\tAlteco: %1.13g\n", ent->height);
 	printf ("\tKunmeto: 0x%0x\n", ent->kunmeto);
 	printf ("\tDirekto: 0x%0x\n", ent->direkto);
@@ -354,7 +354,7 @@ dwg_print_LAYOUT (Dwg_Object_LAYOUT *ord)
 		ord->pagxo.malsupre,
 		ord->pagxo.dekstre,
 		ord->pagxo.supre);
-	printf ("\tLargxeco: %1.13g\n", ord->pagxo.largxeco);
+	printf ("\tLargxeco: %1.13g\n", ord->pagxo.width);
 	printf ("\tAlteco: %1.13g\n", ord->pagxo.height);
 	printf ("\tSize: %s\n", ord->pagxo.size);
 	printf ("\tDeŝovo: (%1.13g, %1.13g)\n", ord->pagxo.dx, ord->pagxo.dy);

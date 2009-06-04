@@ -1255,7 +1255,7 @@ extern "C"
 		double x1;
 		double y1;
 		double z1;
-		double largxeco;
+		double width;
 		double height;
 		unsigned int kunmeto;
 		unsigned int direkto;
@@ -1302,7 +1302,7 @@ extern "C"
 			double malsupre;
 			double dekstre;
 			double supre;
-			double largxeco;
+			double width;
 			double height;
 			char *size;
 			double dx;
