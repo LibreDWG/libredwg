@@ -307,6 +307,7 @@ extern "C"
 			double z;
 		} extrusion;
 		unsigned char has_attribs;
+		long unsigned int owned_obj_count;
 		struct
 		{
 			unsigned int size;
