@@ -854,8 +854,8 @@ dwg_decode_ATTRIB (Bit_Chain * dat, Dwg_Object * obj)
 
 	/* Read values
 	 */
-    if (dat->version >= R_13 ||
-        dat->version >= R_14){
+    if (dat->version == R_13 ||
+        dat->version == R_14){
 
 	    ent->elevation = bit_read_BD (dat);
 	    ent->x0 = bit_read_RD (dat);
@@ -902,7 +902,7 @@ dwg_decode_ATTRIB (Bit_Chain * dat, Dwg_Object * obj)
 	    if (!(ent->dataflags & 0x80))
 		    ent->alignment.v = bit_read_BS (dat);
     }
-    
+
 	ent->tag = bit_read_T (dat);
 	ent->field_length = bit_read_BS (dat);
 	ent->flags = bit_read_RC (dat);
@@ -927,8 +927,8 @@ dwg_decode_ATTDEF (Bit_Chain * dat, Dwg_Object * obj)
 
 	/* Read values
 	 */
-    if (dat->version >= R_13 ||
-        dat->version >= R_14){
+    if (dat->version == R_13 ||
+        dat->version == R_14){
 
 	    ent->elevation = bit_read_BD (dat);
 	    ent->x0 = bit_read_RD (dat);
