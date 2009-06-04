@@ -999,7 +999,7 @@ dwg_decode_BLOCK (Bit_Chain * dat, Dwg_Object * obj)
 	ent = obj->tio.entity->tio.BLOCK;
 	dwg_decode_entity (dat, obj->tio.entity);
 
-	/* Legitaj valuej
+	/* Read values
 	 */
 	ent->name = bit_read_T (dat);
 
@@ -1031,33 +1031,50 @@ dwg_decode_INSERT (Bit_Chain * dat, Dwg_Object * obj)
 	ent = obj->tio.entity->tio.INSERT;
 	dwg_decode_entity (dat, obj->tio.entity);
 
-	/* Legitaj valuej
+	/* Read values
 	 */
 	ent->x0 = bit_read_BD (dat);
 	ent->y0 = bit_read_BD (dat);
 	ent->z0 = bit_read_BD (dat);
-	ent->scale_flag = bit_read_BB (dat);
-	if (ent->scale_flag == 3)
-		ent->scale.x = ent->scale.y = ent->scale.y = 1.0;
-	else if (ent->scale_flag == 1)
-	{
-		ent->scale.x = 1.0;
-		ent->scale.y = bit_read_DD (dat, 1.0);
-		ent->scale.z = bit_read_DD (dat, 1.0);
+
+	if (dat->version == R_13 ||
+	    dat->version == R_14){
+		ent->scale.x = bit_read_BD (dat);
+		ent->scale.y = bit_read_BD (dat);
+		ent->scale.z = bit_read_BD (dat);
 	}
-	else if (ent->scale_flag == 2)
-		ent->scale.x = ent->scale.y = ent->scale.y = bit_read_RD (dat);
-	else //if (ent->scale_flag == 0)
-	{
-		ent->scale.x = bit_read_RD (dat);
-		ent->scale.y = bit_read_DD (dat, ent->scale.x);
-		ent->scale.z = bit_read_DD (dat, ent->scale.x);
+
+	if (dat->version >= R_2000){
+		ent->scale_flag = bit_read_BB (dat);
+		if (ent->scale_flag == 3)
+			ent->scale.x = ent->scale.y = ent->scale.y = 1.0;
+		else if (ent->scale_flag == 1)
+		{
+			ent->scale.x = 1.0;
+			ent->scale.y = bit_read_DD (dat, 1.0);
+			ent->scale.z = bit_read_DD (dat, 1.0);
+		}
+		else if (ent->scale_flag == 2)
+			ent->scale.x = ent->scale.y = ent->scale.y = bit_read_RD (dat);
+		else //if (ent->scale_flag == 0)
+		{
+			ent->scale.x = bit_read_RD (dat);
+			ent->scale.y = bit_read_DD (dat, ent->scale.x);
+			ent->scale.z = bit_read_DD (dat, ent->scale.x);
+		}
 	}
+
 	ent->rotation_ang = bit_read_BD (dat);
 	ent->extrusion.x = bit_read_BD (dat);
 	ent->extrusion.y = bit_read_BD (dat);
 	ent->extrusion.z = bit_read_BD (dat);
 	ent->has_attribs = bit_read_B (dat);
+
+	if (dat->version >= R_2004){
+		ent->owned_obj_count = bit_read_BL(dat);
+	}
+
+//TODO: incomplete implementation. Check spec!
 
 	dwg_decode_traktref (dat, obj);
 }

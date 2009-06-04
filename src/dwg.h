@@ -281,6 +281,7 @@ extern "C"
 			double z;
 		} extrusion;
 		unsigned char has_attribs;
+		long unsigned int owned_obj_count;
 	} Dwg_Entity_INSERT;
 
 /**
