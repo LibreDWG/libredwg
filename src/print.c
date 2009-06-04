@@ -313,6 +313,26 @@ dwg_print_MTEXT (Dwg_Entity_MTEXT *ent)
 }
 
 void
+dwg_print_DICTIONARY (Dwg_Object_DICTIONARY *obj)
+{
+	int i;
+
+	printf ("\tSize: %lu\n", (long unsigned int) obj->size);
+	printf ("\tCloning flag: 0x%X\n", obj->cloning);
+	printf ("\tHard Owner flag: 0x%X\n", obj->hard_owner);
+	printf ("\tNames:");
+	for (i = 0; i < obj->size; i++)
+		printf (" %s,", obj->name[i]);
+	printf ("\n");
+}
+
+void
+dwg_print_BLOCK_CONTROL (Dwg_Object_BLOCK_CONTROL *obj)
+{
+	printf ("\tSize: %u\n", obj->size);
+}
+
+void
 dwg_print_LAYER (Dwg_Object_LAYER *ord)
 {
 	printf ("\tName: %s\n", ord->name);

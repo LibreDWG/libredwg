@@ -24,6 +24,8 @@ void dwg_print_POINT (Dwg_Entity_POINT *ent);
 void dwg_print_ELLIPSE (Dwg_Entity_ELLIPSE *ent);
 void dwg_print_RAY (Dwg_Entity_RAY *ent);
 void dwg_print_MTEXT (Dwg_Entity_MTEXT *ent);
+void dwg_print_DICTIONARY (Dwg_Object_DICTIONARY *obj);
+void dwg_print_BLOCK_CONTROL (Dwg_Object_BLOCK_CONTROL *obj);
 void dwg_print_LAYER (Dwg_Object_LAYER *obj);
 void dwg_print_LAYOUT (Dwg_Object_LAYOUT *obj);
 
