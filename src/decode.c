@@ -1786,9 +1786,10 @@ dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned in
 	case DWG_TYPE_ELLIPSE:
 		dwg_decode_ELLIPSE (dat, obj);
 		break;
-        case DWG_TYPE_SPLINE:
-		dwg_decode_SPLINE (dat, obj);
-                break;
+// Commenting out code to avoid segfault (TODO: review spline)
+//        case DWG_TYPE_SPLINE:
+//		dwg_decode_SPLINE (dat, obj);
+//                break;
 	case DWG_TYPE_RAY:
 	case DWG_TYPE_XLINE:
 		dwg_decode_RAY (dat, obj);
