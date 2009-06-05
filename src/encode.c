@@ -631,6 +631,365 @@ dwg_encode_object (Dwg_Object * obj, Bit_Chain * dat)
 }
 
 static void
+dwg_encode_TEXT (Dwg_Entity_TEXT * ent, Bit_Chain * dat)
+{
+        //TODO: check
+        if (dat->version == R_13 ||
+            dat->version == R_14)
+        {
+                bit_write_BD (dat, ent->elevation);
+                bit_write_RD (dat, ent->x0);
+                bit_write_RD (dat, ent->y0);
+                bit_write_RD (dat, ent->alignment.x);
+                bit_write_RD (dat, ent->alignment.y);
+                bit_write_BE (dat, ent->extrusion.x, ent->extrusion.y, ent->extrusion.z);
+                bit_write_BD (dat, ent->thickness);
+                bit_write_BD (dat, ent->oblique_ang);
+                bit_write_BD (dat, ent->rotation_ang);
+                bit_write_BD (dat, ent->height);
+                bit_write_BD (dat, ent->width_factor);
+                bit_write_T (dat, ent->text);
+                bit_write_BS (dat, ent->generation);
+                bit_write_BS (dat, ent->alignment.h);
+                bit_write_BS (dat, ent->alignment.v);
+        }
+
+        if (dat->version >= R_2000)
+        {
+                bit_write_RC (dat, ent->dataflags);
+                if ((!ent->dataflags & 0x01))
+                        bit_write_RD (dat, ent->elevation);
+                bit_write_RD (dat, ent->x0);
+                bit_write_RD (dat, ent->y0);
+                if (!(ent->dataflags & 0x02))
+                {
+                        bit_write_DD (dat, ent->alignment.x, 10);
+                        bit_write_DD (dat, ent->alignment.y, 20);
+                }
+                bit_write_BE (dat, ent->extrusion.x, ent->extrusion.y, ent->extrusion.z);
+                bit_write_BT (dat, ent->thickness);
+                if (!(ent->dataflags & 0x04))
+                        bit_write_RD (dat, ent->oblique_ang);
+                if (!(ent->dataflags & 0x08))
+                        bit_write_RD (dat, ent->rotation_ang);
+                bit_write_RD (dat, ent->height);
+                if (!(ent->dataflags & 0x10))
+                        bit_write_RD (dat, ent->width_factor);
+                bit_write_T (dat, ent->text);
+                if (!(ent->dataflags & 0x20))
+                        bit_write_BS (dat, ent->generation);
+                if (!(ent->dataflags & 0x40))
+                        bit_write_BS (dat, ent->alignment.h);
+                if (!(ent->dataflags & 0x80))
+                        bit_write_BS (dat, ent->alignment.v);
+        }
+}
+
+static void
+dwg_encode_ATTRIB (Dwg_Entity_ATTRIB * ent, Bit_Chain * dat)
+{
+    //TODO: check
+    if (dat->version == R_13 ||
+        dat->version == R_14)
+    {
+	    bit_write_BD (dat, ent->elevation);
+	    bit_write_RD (dat,ent->x0);
+	    bit_write_RD (dat, ent->y0);
+	    bit_write_RD (dat, ent->alignment.x);
+	    bit_write_RD (dat, ent->alignment.y);
+	    bit_write_BE (dat, ent->extrusion.x, ent->extrusion.y, ent->extrusion.z);
+	    bit_write_BD (dat, ent->thickness);
+	    bit_write_BD (dat, ent->oblique_ang);
+	    bit_write_BD (dat, ent->rotation_ang);
+	    bit_write_BD (dat, ent->height);
+	    bit_write_BD (dat, ent->width_factor);
+	    bit_write_T (dat, ent->text);
+	    bit_write_BS (dat, ent->generation);
+	    bit_write_BS (dat, ent->alignment.h);
+	    bit_write_BS (dat, ent->alignment.v);
+    }
+
+    if (dat->version >= R_2000)
+    {
+	    bit_write_RC (dat, ent->dataflags);
+	    if ((!ent->dataflags & 0x01))
+		    bit_write_RD (dat, ent->elevation);
+	    bit_write_RD (dat, ent->x0);
+	    bit_write_RD (dat, ent->y0);
+	    if (!(ent->dataflags & 0x02))
+	    {
+		    bit_write_DD (dat, ent->alignment.x, 10);
+		    bit_write_DD (dat, ent->alignment.y, 20);
+	    }
+	    bit_write_BE (dat, ent->extrusion.x, ent->extrusion.y, ent->extrusion.z);
+	    bit_write_BT (dat, ent->thickness);
+	    if (!(ent->dataflags & 0x04))
+		    bit_write_RD (dat, ent->oblique_ang);
+	    if (!(ent->dataflags & 0x08))
+		    bit_write_RD (dat, ent->rotation_ang);
+	    bit_write_RD (dat, ent->height);
+	    if (!(ent->dataflags & 0x10))
+		    bit_write_RD (dat, ent->width_factor);
+	    bit_write_T (dat, ent->text);
+	    if (!(ent->dataflags & 0x20))
+		    bit_write_BS (dat, ent->generation);
+	    if (!(ent->dataflags & 0x40))
+		    bit_write_BS (dat, ent->alignment.h);
+	    if (!(ent->dataflags & 0x80))
+		    bit_write_BS (dat, ent->alignment.v);
+    }
+
+	bit_write_T (dat, ent->tag);
+	bit_write_BS (dat, ent->field_length);
+	bit_write_RC (dat, ent->flags);
+
+    if (dat->version >= R_2007){
+        bit_write_B (dat, ent->lock_position_flag);
+    }
+}
+
+static void
+dwg_encode_ATTDEF (Dwg_Entity_ATTDEF * ent, Bit_Chain * dat)
+{
+    //TODO: check
+    if (dat->version == R_13 ||
+        dat->version == R_14)
+    {
+
+	    bit_write_BD (dat, ent->elevation);
+	    bit_write_RD (dat, ent->x0);
+	    bit_write_RD (dat, ent->y0);
+	    bit_write_RD (dat, ent->alignment.x);
+	    bit_write_RD (dat, ent->alignment.y);
+	    bit_write_BE (dat, ent->extrusion.x, ent->extrusion.y, ent->extrusion.z);
+	    bit_write_BD (dat, ent->thickness);
+	    bit_write_BD (dat, ent->oblique_ang);
+	    bit_write_BD (dat, ent->rotation_ang);
+	    bit_write_BD (dat, ent->height);
+	    bit_write_BD (dat, ent->width_factor);
+	    bit_write_T (dat, ent->text);
+	    bit_write_BS (dat, ent->generation);
+	    bit_write_BS (dat, ent->alignment.h);
+	    bit_write_BS (dat, ent->alignment.v);
+    }
+
+    if (dat->version >= R_2000)
+    {
+	    bit_write_RC (dat, ent->dataflags);
+	    if ((!ent->dataflags & 0x01))
+		    bit_write_RD (dat, ent->elevation);
+	    bit_write_RD (dat, ent->x0);
+	    bit_write_RD (dat, ent->y0);
+	    if (!(ent->dataflags & 0x02))
+	    {
+		    bit_write_DD (dat, ent->alignment.x, 10);
+		    bit_write_DD (dat, ent->alignment.y, 20);
+	    }
+	    bit_write_BE (dat, ent->extrusion.x, ent->extrusion.y, ent->extrusion.z);
+	    bit_write_BT (dat, ent->thickness);
+	    if (!(ent->dataflags & 0x04))
+		    bit_write_RD (dat, ent->oblique_ang);
+	    if (!(ent->dataflags & 0x08))
+		    bit_write_RD (dat, ent->rotation_ang);
+	    bit_write_RD (dat, ent->height);
+	    if (!(ent->dataflags & 0x10))
+		    bit_write_RD (dat, ent->width_factor);
+	    bit_write_T (dat, ent->text);
+	    if (!(ent->dataflags & 0x20))
+		    bit_write_BS (dat, ent->generation);
+	    if (!(ent->dataflags & 0x40))
+		    bit_write_BS (dat, ent->alignment.h);
+	    if (!(ent->dataflags & 0x80))
+		    bit_write_BS (dat, ent->alignment.v);
+    }
+
+	bit_write_T (dat, ent->tag);
+	bit_write_BS (dat, ent->field_length);
+	bit_write_RC (dat, ent->flags);
+
+    if (dat->version >= R_2007)
+    {
+        bit_write_B(dat, ent->lock_position_flag);
+    }
+    bit_write_T (dat, ent->prompt);
+}
+
+static void
+dwg_encode_BLOCK (Dwg_Entity_BLOCK *ent, Bit_Chain * dat)
+{
+    //TODO: check
+	bit_write_T (dat, ent->name);
+
+}
+
+static void
+dwg_encode_ENDBLK (Dwg_Entity_ENDBLK *ent, Bit_Chain * dat)
+{
+    //TODO: check
+    //nothing to do
+
+}
+
+static void
+dwg_encode_INSERT (Dwg_Entity_INSERT *ent, Bit_Chain * dat)
+{
+        //TODO: check
+	bit_write_BD (dat, ent->x0);
+	bit_write_BD (dat, ent->y0);
+	bit_write_BD (dat, ent->z0);
+        if (ent->scale.x == ent->scale.y == ent->scale.z == 1.0)
+                bit_write_BB (dat, 3);
+        else if (ent->scale.x == 1.0)
+        {
+                bit_write_BB (dat, 1);
+                bit_write_DD (dat, ent->scale.y, 1.0);
+		bit_write_DD (dat, ent->scale.z, 1.0);
+        }
+        else if (ent->scale.x == ent->scale.y == ent->scale.z)
+        {
+                bit_write_BB (dat, 2);
+                bit_write_RD (dat, ent->scale.x);
+        }
+        else
+        {
+                bit_write_BB (dat, 0);
+                bit_write_RD (dat, ent->scale.x);
+		bit_write_DD (dat, ent->scale.y, ent->scale.x);
+		bit_write_DD (dat, ent->scale.z, ent->scale.x);
+        }
+	bit_write_BD (dat, ent->rotation_ang);
+	bit_write_BD (dat, ent->extrusion.x);
+	bit_write_BD (dat, ent->extrusion.y);
+	bit_write_BD (dat, ent->extrusion.z);
+	bit_write_B (dat, ent->has_attribs);
+}
+
+static void
+dwg_encode_MINSERT (Dwg_Entity_MINSERT *ent, Bit_Chain * dat)
+{
+        //TODO: check
+	bit_write_BD (dat, ent->x0);
+	bit_write_BD (dat, ent->y0);
+	bit_write_BD (dat, ent->z0);
+        if (ent->scale.x == ent->scale.y == ent->scale.z == 1.0)
+                bit_write_BB (dat, 3);
+        else if (ent->scale.x == 1.0)
+        {
+                bit_write_BB (dat, 1);
+                bit_write_DD (dat, ent->scale.y, 1.0);
+		bit_write_DD (dat, ent->scale.z, 1.0);
+        }
+        else if (ent->scale.x == ent->scale.y == ent->scale.z)
+        {
+                bit_write_BB (dat, 2);
+                bit_write_RD (dat, ent->scale.x);
+        }
+        else
+        {
+                bit_write_BB (dat, 0);
+                bit_write_RD (dat, ent->scale.x);
+		bit_write_DD (dat, ent->scale.y, ent->scale.x);
+		bit_write_DD (dat, ent->scale.z, ent->scale.x);
+        }
+	bit_write_BD (dat, ent->rotation_ang);
+	bit_write_BD (dat, ent->extrusion.x);
+	bit_write_BD (dat, ent->extrusion.y);
+	bit_write_BD (dat, ent->extrusion.z);
+	bit_write_B (dat, ent->has_attribs);
+	bit_write_BS (dat, ent->column.size);
+	bit_write_BS (dat, ent->line.size);
+	bit_write_BD (dat, ent->column.dx);
+	bit_write_BD (dat, ent->line.dy);
+}
+
+static void
+dwg_encode_VERTEX_2D (Dwg_Entity_VERTEX_2D *ent, Bit_Chain * dat)
+{
+        //TODO: check
+	bit_write_RC (dat, ent->flags);
+	bit_write_BD (dat, ent->x0);
+	bit_write_BD (dat, ent->y0);
+	bit_write_BD (dat, ent->z0);
+        if ((ent->start_width == ent->end_width) && (ent->end_width!= 0))
+        {
+            bit_write_BD (dat, -ent->start_width);
+        }
+        else
+        {
+            bit_write_BD (dat, ent->start_width);
+            bit_write_BD (dat, ent->end_width);
+        }
+	bit_write_BD (dat, ent->bulge);
+	bit_write_BD (dat, ent->tangent_dir);
+}
+
+static void
+dwg_encode_VERTEX_3D (Dwg_Entity_VERTEX_3D *ent, Bit_Chain * dat)
+{
+        //TODO: check
+	bit_write_RC (dat, ent->flags);
+	bit_write_BD (dat, ent->x0);
+	bit_write_BD (dat, ent->y0);
+	bit_write_BD (dat, ent->z0);
+}
+
+static void
+dwg_encode_VERTEX_PFACE_FACE (Dwg_Entity_VERTEX_PFACE_FACE *ent, Bit_Chain * dat)
+{
+        //TODO: check
+	bit_write_BS (dat, ent->vertind[0]);
+	bit_write_BS (dat, ent->vertind[1]);
+	bit_write_BS (dat, ent->vertind[2]);
+	bit_write_BS (dat, ent->vertind[3]);
+}
+
+static void
+dwg_encode_POLYLINE_2D (Dwg_Entity_POLYLINE_2D *ent, Bit_Chain * dat)
+{
+        //TODO: check
+	bit_write_BS (dat, ent->flags);
+	bit_write_BS (dat, ent->curve_type);
+	bit_write_BD (dat, ent->start_width);
+	bit_write_BD (dat, ent->end_width);
+	bit_write_BT (dat, ent->thickness);
+	bit_write_BD (dat, ent->elevation);
+	bit_write_BE (dat, ent->extrusion.x, ent->extrusion.y, ent->extrusion.z);
+}
+
+static void
+dwg_encode_POLYLINE_3D (Dwg_Entity_POLYLINE_3D *ent, Bit_Chain * dat)
+{
+        //TODO: check
+	bit_write_RC (dat, ent->flags_1);
+	bit_write_RC (dat, ent->flags_2);
+}
+
+static void
+dwg_encode_ARC (Dwg_Entity_ARC *ent, Bit_Chain * dat)
+{
+        //TODO: check
+	bit_write_BD (dat, ent->x0);
+	bit_write_BD (dat, ent->y0);
+	bit_write_BD (dat, ent->z0);
+	bit_write_BD (dat, ent->radius);
+	bit_write_BT (dat, ent->thickness);
+	bit_write_BE (dat, ent->extrusion.x, ent->extrusion.y, ent->extrusion.z);
+	bit_write_BD (dat, ent->start_angle);
+	bit_write_BD (dat, ent->end_angle);
+}
+
+static void
+dwg_encode_CIRCLE (Dwg_Entity_CIRCLE * est, Bit_Chain * dat)
+{
+	bit_write_BD (dat, est->x0);
+	bit_write_BD (dat, est->y0);
+	bit_write_BD (dat, est->z0);
+	bit_write_BD (dat, est->radius);
+	bit_write_BT (dat, est->thickness);
+	bit_write_BE (dat, est->extrusion.x, est->extrusion.y, est->extrusion.z);
+}
+
+static void
 dwg_encode_LINE (Dwg_Entity_LINE * est, Bit_Chain * dat)
 {
 	bit_write_B (dat, est->Zs_are_zero);
@@ -648,12 +1007,70 @@ dwg_encode_LINE (Dwg_Entity_LINE * est, Bit_Chain * dat)
 }
 
 static void
-dwg_encode_CIRCLE (Dwg_Entity_CIRCLE * est, Bit_Chain * dat)
+dwg_encode_SPLINE (Dwg_Entity_SPLINE * ent, Bit_Chain * dat)
 {
-	bit_write_BD (dat, est->x0);
-	bit_write_BD (dat, est->y0);
-	bit_write_BD (dat, est->z0);
-	bit_write_BD (dat, est->radius);
-	bit_write_BT (dat, est->thickness);
-	bit_write_BE (dat, est->extrusion.x, est->extrusion.y, est->extrusion.z);
+        //TODO: check
+        int i;
+
+        bit_write_BS(dat, ent->scenario);
+        bit_write_BS(dat, ent->degree);
+        if(ent->scenario == 2)
+        {
+            bit_write_BD(dat, ent->fit_tol);
+            bit_write_BD(dat, ent->beg_tan_vec.x);
+            bit_write_BD(dat, ent->beg_tan_vec.y);
+            bit_write_BD(dat, ent->beg_tan_vec.z);
+            bit_write_BD(dat, ent->end_tan_vec.x);
+            bit_write_BD(dat, ent->end_tan_vec.y);
+            bit_write_BD(dat, ent->end_tan_vec.z);
+            bit_write_BS(dat, ent->num_fit_pts);
+            for (i=0;i<ent->num_fit_pts;i++)
+            {
+                bit_write_BD(dat,ent->fit_pts[i].x);
+                bit_write_BD(dat, ent->fit_pts[i].y);
+                bit_write_BD(dat, ent->fit_pts[i].z);
+            }
+        } else
+        {
+            if (ent->scenario == 1)
+            {
+                    bit_write_B(dat, ent->rational);
+                    bit_write_B(dat, ent->closed_b);
+                    bit_write_B(dat, ent->periodic);
+                    bit_write_BD(dat, ent->knot_tol);
+                    bit_write_BD(dat,ent->ctrl_tol);
+                    bit_write_BL(dat, ent->num_knots);
+                    bit_write_BL(dat, ent->num_ctrl_pts);
+                    bit_write_B(dat, ent->weighted);
+
+                    for (i=0;i<ent->num_knots;i++)
+                        bit_write_BD(dat, ent->knots[i].value);
+
+                    for (i=0;i<ent->num_ctrl_pts;i++)
+                    {
+                            bit_write_BD(dat, ent->ctrl_pts[i].x);
+                            bit_write_BD(dat, ent->ctrl_pts[i].y);
+                            bit_write_BD(dat, ent->ctrl_pts[i].z);
+                            if (ent->weighted)
+                                //TODO check what "D" means on spec.
+                                //assuming typo - should be BD
+                                bit_write_BD(dat, ent->ctrl_pts[i].w);
+                    }
+            } else
+            {
+                 fprintf (stderr, "Error: unknown scenario %d", ent->scenario);
+            }
+        }
+}
+
+static void
+dwg_encode_RAY (Dwg_Entity_RAY * ent, Bit_Chain * dat)
+{
+        //TODO: check
+	bit_write_BD (dat, ent->x0);
+	bit_write_BD (dat, ent->y0);
+	bit_write_BD (dat, ent->z0);
+	bit_write_BD (dat, ent->x1);
+	bit_write_BD (dat, ent->y1);
+	bit_write_BD (dat, ent->z1);
 }

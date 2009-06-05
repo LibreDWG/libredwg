@@ -1037,17 +1037,18 @@ dwg_decode_INSERT (Bit_Chain * dat, Dwg_Object * obj)
 	ent->y0 = bit_read_BD (dat);
 	ent->z0 = bit_read_BD (dat);
 
-	if (dat->version == R_13 ||
-	    dat->version == R_14){
+	if (dat->version == R_13 || dat->version == R_14)
+        {
 		ent->scale.x = bit_read_BD (dat);
 		ent->scale.y = bit_read_BD (dat);
 		ent->scale.z = bit_read_BD (dat);
 	}
 
-	if (dat->version >= R_2000){
+        if (dat->version >= R_2000)
+        {
 		ent->scale_flag = bit_read_BB (dat);
 		if (ent->scale_flag == 3)
-			ent->scale.x = ent->scale.y = ent->scale.y = 1.0;
+			ent->scale.x = ent->scale.y = ent->scale.z = 1.0;
 		else if (ent->scale_flag == 1)
 		{
 			ent->scale.x = 1.0;
@@ -1055,7 +1056,7 @@ dwg_decode_INSERT (Bit_Chain * dat, Dwg_Object * obj)
 			ent->scale.z = bit_read_DD (dat, 1.0);
 		}
 		else if (ent->scale_flag == 2)
-			ent->scale.x = ent->scale.y = ent->scale.y = bit_read_RD (dat);
+			ent->scale.x = ent->scale.y = ent->scale.z = bit_read_RD (dat);
 		else //if (ent->scale_flag == 0)
 		{
 			ent->scale.x = bit_read_RD (dat);
@@ -1070,7 +1071,8 @@ dwg_decode_INSERT (Bit_Chain * dat, Dwg_Object * obj)
 	ent->extrusion.z = bit_read_BD (dat);
 	ent->has_attribs = bit_read_B (dat);
 
-	if (dat->version >= R_2004){
+	if (dat->version >= R_2004)
+        {
 		ent->owned_obj_count = bit_read_BL(dat);
 	}
 
@@ -1794,12 +1796,12 @@ dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned in
 	case DWG_TYPE_MTEXT:
 		dwg_decode_MTEXT (dat, obj);
 		break;
-    case DWG_TYPE_BLOCK_CONTROL:
- 	    dwg_decode_BLOCK_CONTROL (dat, obj);
-        break;
-    case DWG_TYPE_DICTIONARY:
- 	    dwg_decode_DICTIONARY (dat, obj);
-        break;
+        case DWG_TYPE_BLOCK_CONTROL:
+                dwg_decode_BLOCK_CONTROL (dat, obj);
+                break;
+        case DWG_TYPE_DICTIONARY:
+                dwg_decode_DICTIONARY (dat, obj);
+                break;
 	case DWG_TYPE_LAYER:
 		dwg_decode_LAYER (dat, obj);
 		break;
