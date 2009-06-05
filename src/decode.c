@@ -1233,6 +1233,12 @@ dwg_decode_POLYLINE_2D (Bit_Chain * dat, Dwg_Object * obj)
 	ent->elevation = bit_read_BD (dat);
 	bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
 
+	if (dat->version >= R_2004){
+		ent->owned_obj_count = bit_read_BL(dat);
+	}
+
+//TODO: incomplete implementation. Check spec!
+
 	dwg_decode_traktref (dat, obj);
 }
 
@@ -1251,6 +1257,12 @@ dwg_decode_POLYLINE_3D (Bit_Chain * dat, Dwg_Object * obj)
 	 */
 	ent->flags_1 = bit_read_RC (dat);
 	ent->flags_2 = bit_read_RC (dat);
+
+	if (dat->version >= R_2004){
+		ent->owned_obj_count = bit_read_BL(dat);
+	}
+
+//TODO: incomplete implementation. Check spec!
 
 	dwg_decode_traktref (dat, obj);
 }

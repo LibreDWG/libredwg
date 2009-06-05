@@ -381,6 +381,7 @@ extern "C"
 			double y;
 			double z;
 		} extrusion;
+		long unsigned int owned_obj_count;
 	} Dwg_Entity_POLYLINE_2D;
 
 /**
@@ -390,6 +391,7 @@ extern "C"
 	{
 		unsigned char flags_1;
 		unsigned char flags_2;
+		long unsigned int owned_obj_count;
 	} Dwg_Entity_POLYLINE_3D;
 
 /**
