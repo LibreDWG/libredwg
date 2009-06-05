@@ -923,7 +923,7 @@ extern "C"
 			double y;
 			double z;
 		} corner4;
-                unsigned char flags;
+                unsigned char invis_flags;
 	} Dwg_Entity_3D_FACE;
 
 /**
@@ -1402,6 +1402,7 @@ extern "C"
 			Dwg_Entity_CIRCLE *CIRCLE;
 			Dwg_Entity_LINE *LINE;
 			Dwg_Entity_POINT *POINT;
+                        Dwg_Entity_3D_FACE *_3DFACE;
 			Dwg_Entity_ELLIPSE *ELLIPSE;
 			Dwg_Entity_SPLINE *SPLINE;
 			Dwg_Entity_RAY *RAY;

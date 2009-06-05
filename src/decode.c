@@ -1152,6 +1152,7 @@ dwg_decode_MINSERT (Bit_Chain * dat, Dwg_Object * obj)
 	dwg_decode_traktref (dat, obj);
 }
 
+
 static void
 dwg_decode_VERTEX_2D (Bit_Chain * dat, Dwg_Object * obj)
 {
@@ -1421,6 +1422,53 @@ dwg_decode_POINT (Bit_Chain * dat, Dwg_Object * obj)
 	ent->x_ang = bit_read_BD (dat);
 
 	dwg_decode_traktref (dat, obj);
+}
+
+static void
+dwg_decode_3DFACE (Bit_Chain * dat, Dwg_Object * obj)
+{
+        Dwg_Entity_3D_FACE *ent;
+
+	obj->supertype = DWG_SUPERTYPE_ENTITY;
+	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
+	obj->tio.entity->tio._3DFACE = calloc (sizeof (Dwg_Entity_3D_FACE), 1);
+	dwg_decode_entity (dat, obj->tio.entity);
+	ent = obj->tio.entity->tio._3DFACE;
+
+        if (dat->version == R_13 || dat->version == R_14)
+        {
+            ent->corner1.x = bit_read_BD(dat);
+            ent->corner1.y = bit_read_BD(dat);
+            ent->corner1.z = bit_read_BD(dat);
+            ent->corner2.x = bit_read_BD(dat);
+            ent->corner2.y = bit_read_BD(dat);
+            ent->corner2.z = bit_read_BD(dat);
+            ent->corner3.x = bit_read_BD(dat);
+            ent->corner3.y = bit_read_BD(dat);
+            ent->corner3.z = bit_read_BD(dat);
+            ent->corner4.x = bit_read_BD(dat);
+            ent->corner4.y = bit_read_BD(dat);
+            ent->corner4.z = bit_read_BD(dat);
+            ent->invis_flags = bit_read_BS(dat);
+        }
+        if (dat->version >= R_2000)
+        {
+            ent->has_no_flags = bit_read_B (dat);
+            ent->z_is_zero = bit_read_B (dat);
+            ent->corner1.x = bit_read_BD(dat);
+            ent->corner1.y = bit_read_BD(dat);
+            ent->corner1.z = bit_read_BD(dat);
+            ent->corner2.x = bit_read_BD(dat);
+            ent->corner2.y = bit_read_BD(dat);
+            ent->corner2.z = bit_read_BD(dat);
+            ent->corner3.x = bit_read_BD(dat);
+            ent->corner3.y = bit_read_BD(dat);
+            ent->corner3.z = bit_read_BD(dat);
+            ent->corner4.x = bit_read_BD(dat);
+            ent->corner4.y = bit_read_BD(dat);
+            ent->corner4.z = bit_read_BD(dat);
+        }
+        dwg_decode_traktref (dat, obj);
 }
 
 static void
