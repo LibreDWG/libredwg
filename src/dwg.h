@@ -486,6 +486,9 @@ extern "C"
                 unsigned int lspace_style;
                 unsigned int lspace_factor;
                 unsigned int act_measurement;
+                unsigned char unknown;
+                unsigned char flip_arrow1;
+                unsigned char flip_arrow2;
                 struct
 		{
 			double x;
