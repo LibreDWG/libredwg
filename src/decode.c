@@ -592,50 +592,54 @@ static void
 dwg_decode_entity (Bit_Chain * dat, Dwg_Object_Entity * ent)
 {
 	unsigned int i;
-	unsigned int grando;
+	unsigned int size;
 	int error = 2;
 
-	ent->bitsize = bit_read_RL (dat);
+	if (dat->version >= R_2000)
+	{
+		ent->bitsize = bit_read_RL (dat);
+	}
+
 	error = bit_read_H (dat, &ent->handle);
 	if (error)
 	{
-		fprintf (stderr, "dwg_decode_entity:\tEraro en handle de object! Adreso en la ĉeno: 0x%0x\n", (unsigned int) dat->byte);
+		fprintf (stderr, "dwg_decode_entity:\tError in object handle! Current Bit_Chain address: 0x%0x\n", (unsigned int) dat->byte);
 		ent->bitsize = 0;
-		ent->kromdat_size = 0;
-		ent->picture_ekzistas = 0;
+		ent->extended_size = 0;
+		ent->picture_exists = 0;
 		ent->traktref_size = 0;
 		return;
 	}
-	ent->kromdat_size = 0;
-	while (grando = bit_read_BS (dat))
+	ent->extended_size = 0;
+	while (size = bit_read_BS (dat))
 	{
-		if (grando > 10210)
+		if (size > 10210)
 		{
-			fprintf (stderr, "dwg_decode_entity: Absurdo! Kromdato-size: %lu. Object: %lu (handle).\n", (long unsigned int) grando, ent->handle.value);
+			fprintf (stderr, "dwg_decode_entity: Absurd! Extended object data size: %lu. Object: %lu (handle).\n", (long unsigned int) size, ent->handle.value);
 			ent->bitsize = 0;
-			ent->kromdat_size = 0;
-			ent->picture_ekzistas = 0;
+			ent->extended_size = 0;
+			ent->picture_exists = 0;
 			ent->traktref_size = 0;
 			return;
 		}
-		if (ent->kromdat_size == 0)
+		if (ent->extended_size == 0)
 		{
-			ent->kromdat = malloc (grando);
-			ent->kromdat_size = grando;
+			ent->extended = malloc (size);
+			ent->extended_size = size;
 		}
 		else
 		{
-			ent->kromdat_size += grando;
-			ent->kromdat = realloc (ent->kromdat, ent->kromdat_size);
+			ent->extended_size += size;
+			ent->extended = realloc (ent->extended, ent->extended_size);
 		}
-		error = bit_read_H (dat, &ent->kromdat_trakt);
+		error = bit_read_H (dat, &ent->extended_trakt);
 		if (error)
 			fprintf (stderr, "Ops...\n");
-		for (i = ent->kromdat_size - grando; i < ent->kromdat_size; i++)
-			ent->kromdat[i] = bit_read_RC (dat);
+		for (i = ent->extended_size - size; i < ent->extended_size; i++)
+			ent->extended[i] = bit_read_RC (dat);
 	}
-	ent->picture_ekzistas = bit_read_B (dat);
-	if (ent->picture_ekzistas)
+	ent->picture_exists = bit_read_B (dat);
+	if (ent->picture_exists)
 	{
 		ent->picture_size = bit_read_RL (dat);
 		if (ent->picture_size < 210210)
@@ -646,7 +650,7 @@ dwg_decode_entity (Bit_Chain * dat, Dwg_Object_Entity * ent)
 		}
 		else
 		{
-			fprintf (stderr, "dwg_decode_entity:  Absurdo! Bildo-size: %lu kB. Object: %lu (handle).\n",
+			fprintf (stderr, "dwg_decode_entity:  Absurd! Picture-size: %lu kB. Object: %lu (handle).\n",
 				ent->picture_size / 1000, ent->handle.value);
 			bit_advance_position (dat, -(4 * 8 + 1));
 		}
@@ -656,56 +660,60 @@ dwg_decode_entity (Bit_Chain * dat, Dwg_Object_Entity * ent)
 	ent->reagilo_size = bit_read_BL (dat);
 	ent->senligiloj = bit_read_B (dat);
 	ent->colour = bit_read_BS (dat);
-	ent->linitypescale = bit_read_BD (dat);
-	ent->linitype = bit_read_BB (dat);
-	ent->printstilo = bit_read_BB (dat);
-	ent->malvidebleco = bit_read_BS (dat);
-	ent->linithickness = bit_read_RC (dat);
+	ent->linetype_scale = bit_read_BD (dat);
+	ent->linetype = bit_read_BB (dat);
+	ent->plot_style = bit_read_BB (dat);
+
+	ent->invisible = bit_read_BS (dat);
+	ent->lineweight = bit_read_RC (dat);
 }
 
 static void
 dwg_decode_object (Bit_Chain * dat, Dwg_Object_Object * ord)
 {
 	unsigned int i;
-	unsigned int grando;
+	unsigned int size;
 	int error = 2;
 
-	ord->bitsize = bit_read_RL (dat);
+	if (dat->version >= R_2000){
+		ord->bitsize = bit_read_RL (dat);
+	}
+
 	error = bit_read_H (dat, &ord->handle);
 	if (error)
 	{
-		fprintf (stderr, "\tEraro en handle de object! Adreso en la ĉeno: 0x%0x\n", (unsigned int) dat->byte);
+		fprintf (stderr, "\tError in object handle! Bit_Chain current address: 0x%0x\n", (unsigned int) dat->byte);
 		ord->bitsize = 0;
-		ord->kromdat_size = 0;
+		ord->extended_size = 0;
 		ord->traktref_size = 0;
 		return;
 	}
-	ord->kromdat_size = 0;
-	while (grando = bit_read_BS (dat))
+	ord->extended_size = 0;
+	while (size = bit_read_BS (dat))
 	{
-		if (grando > 10210)
+		if (size > 10210)
 		{
-			fprintf (stderr, "dwg_decode_object: Absurdo! Kromdato-size: %lu. Object: %lu (handle).\n", (long unsigned int) grando, ord->handle.value);
+			fprintf (stderr, "dwg_decode_object: Absurd! Extended object data size: %lu. Object: %lu (handle).\n", (long unsigned int) size, ord->handle.value);
 			ord->bitsize = 0;
-			ord->kromdat_size = 0;
+			ord->extended_size = 0;
 			ord->traktref_size = 0;
 			return;
 		}
-		if (ord->kromdat_size == 0)
+		if (ord->extended_size == 0)
 		{
-			ord->kromdat = malloc (grando);
-			ord->kromdat_size = grando;
+			ord->extended = malloc (size);
+			ord->extended_size = size;
 		}
 		else
 		{
-			ord->kromdat_size += grando;
-			ord->kromdat = realloc (ord->kromdat, ord->kromdat_size);
+			ord->extended_size += size;
+			ord->extended = realloc (ord->extended, ord->extended_size);
 		}
-		error = bit_read_H (dat, &ord->kromdat_trakt);
+		error = bit_read_H (dat, &ord->extended_trakt);
 		if (error)
 			fprintf (stderr, "Ops...\n");
-		for (i = ord->kromdat_size - grando; i < ord->kromdat_size; i++)
-			ord->kromdat[i] = bit_read_RC (dat);
+		for (i = ord->extended_size - size; i < ord->extended_size; i++)
+			ord->extended[i] = bit_read_RC (dat);
 	}
 
 	ord->reagilo_size = bit_read_BL (dat);

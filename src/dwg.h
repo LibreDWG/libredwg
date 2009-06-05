@@ -1408,11 +1408,11 @@ extern "C"
 		long unsigned int bitsize;
 		Dwg_Handle handle;
 
-		unsigned int kromdat_size;
-		Dwg_Handle kromdat_trakt;
-		unsigned char *kromdat;
+		unsigned int extended_size;
+		Dwg_Handle extended_trakt;
+		unsigned char *extended;
 
-		unsigned char picture_ekzistas;
+		unsigned char picture_exists;
 		long unsigned int picture_size;
 		unsigned char *picture;
 
@@ -1420,11 +1420,11 @@ extern "C"
 		long unsigned int reagilo_size;
 		unsigned char senligiloj;
 		unsigned int colour;
-		double linitypescale;
-		unsigned char linitype;
-		unsigned char printstilo;
-		unsigned int malvidebleco;
-		unsigned char linithickness;
+		double linetype_scale;
+		unsigned char linetype;
+		unsigned char plot_style;
+		unsigned int invisible;
+		unsigned char lineweight;
 
 		unsigned int traktref_size;
 		Dwg_Handle *traktref;
@@ -1447,9 +1447,9 @@ extern "C"
 		long unsigned int bitsize;
 		Dwg_Handle handle;
 
-		unsigned int kromdat_size;
-		Dwg_Handle kromdat_trakt;
-		unsigned char *kromdat;
+		unsigned int extended_size;
+		Dwg_Handle extended_trakt;
+		unsigned char *extended;
 
 		long unsigned int reagilo_size;
 

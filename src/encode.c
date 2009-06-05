@@ -543,16 +543,16 @@ dwg_encode_entity (Dwg_Object * obj, Bit_Chain * dat)
 	bit_write_RL (dat, 0);	// Nulo nun, kalkulendas por write poste
 
 	bit_write_H (dat, &est->handle);
-	bit_write_BS (dat, est->kromdat_size);
-	if (est->kromdat_size > 0)
+	bit_write_BS (dat, est->extended_size);
+	if (est->extended_size > 0)
 	{
-		bit_write_H (dat, &est->kromdat_trakt);
-		for (i = 0; i < est->kromdat_size; i++)
-			bit_write_RC (dat, est->kromdat[i]);
+		bit_write_H (dat, &est->extended_trakt);
+		for (i = 0; i < est->extended_size; i++)
+			bit_write_RC (dat, est->extended[i]);
 	}
 
-	bit_write_B (dat, est->picture_ekzistas);
-	if (est->picture_ekzistas)
+	bit_write_B (dat, est->picture_exists);
+	if (est->picture_exists)
 	{
 		bit_write_RL (dat, est->picture_size);
 		for (i = 0; i < est->picture_size; i++)
@@ -563,11 +563,11 @@ dwg_encode_entity (Dwg_Object * obj, Bit_Chain * dat)
 	bit_write_BL (dat, est->reagilo_size);
 	bit_write_B (dat, est->senligiloj);
 	bit_write_BS (dat, est->colour);
-	bit_write_BD (dat, est->linitypescale);
-	bit_write_BB (dat, est->linitype);
-	bit_write_BB (dat, est->printstilo);
-	bit_write_BS (dat, est->malvidebleco);
-	bit_write_RC (dat, est->linithickness);
+	bit_write_BD (dat, est->linetype_scale);
+	bit_write_BB (dat, est->linetype);
+	bit_write_BB (dat, est->plot_style);
+	bit_write_BS (dat, est->invisible);
+	bit_write_RC (dat, est->lineweight);
 
 	switch (obj->type)
 	{

@@ -11,9 +11,9 @@ dwg_print_entity (Dwg_Object_Entity * ent)
 	printf ("Bitsize: %lu\n", ent->bitsize);
 	printf ("Vera handle: %i.%i.%lu\n", ent->handle.code, ent->handle.size,
 		ent->handle.value);
-	printf ("Kroma datenaro: %lu B\n", (long unsigned int) ent->kromdat_size);
-	printf ("Ĉu picture?: %s", ent->picture_ekzistas ? "Yes" : "Ne");
-	if (ent->picture_ekzistas)
+	printf ("Kroma datenaro: %lu B\n", (long unsigned int) ent->extended_size);
+	printf ("Ĉu picture?: %s", ent->picture_exists ? "Yes" : "Ne");
+	if (ent->picture_exists)
 		printf ("\tSize: %lu B\n", ent->picture_size);
 	else
 		puts ("");
@@ -21,11 +21,11 @@ dwg_print_entity (Dwg_Object_Entity * ent)
 	printf ("Kiom reagiloj: %lu\n", ent->reagilo_size);
 	printf ("Ĉu senligiloj?: %s\n", ent->senligiloj ? "Yes" : "Ne");
 	printf ("Koloro: %u\n", ent->colour);
-	printf ("Skalo de linitype: %1.13g\n", ent->linitypescale);
-	printf ("Linitype: 0x%02X\n", ent->linitype);
-	printf ("Printstilo: 0x%02X\n", ent->printstilo);
-	printf ("Malvidebleco: 0x%04X\n", ent->malvidebleco);
-	printf ("Linithickness: %u\n", ent->linithickness);
+	printf ("Skalo de linetype: %1.13g\n", ent->linetype_scale);
+	printf ("Linitype: 0x%02X\n", ent->linetype);
+	printf ("Printstilo: 0x%02X\n", ent->plot_style);
+	printf ("Malvidebleco: 0x%04X\n", ent->invisible);
+	printf ("Linithickness: %u\n", ent->lineweight);
 }
 
 void
@@ -34,7 +34,7 @@ dwg_print_object (Dwg_Object_Object *ord)
 	printf ("Bitsize: %lu\n", ord->bitsize);
 	printf ("Vera handle: %i.%i.%lu\n", ord->handle.code, ord->handle.size,
 		ord->handle.value);
-	printf ("Kroma datenaro: %lu B\n", (long unsigned int) ord->kromdat_size);
+	printf ("Kroma datenaro: %lu B\n", (long unsigned int) ord->extended_size);
 	printf ("Kiom reagiloj: %lu\n", ord->reagilo_size);
 }
 
