@@ -1090,7 +1090,7 @@ dwg_decode_MINSERT (Bit_Chain * dat, Dwg_Object * obj)
 	ent = obj->tio.entity->tio.MINSERT;
 	dwg_decode_entity (dat, obj->tio.entity);
 
-	/* Legitaj valuej
+	/* Read values
 	 */
 	ent->x0 = bit_read_BD (dat);
 	ent->y0 = bit_read_BD (dat);
@@ -1153,7 +1153,7 @@ dwg_decode_VERTEX_2D (Bit_Chain * dat, Dwg_Object * obj)
 	ent = obj->tio.entity->tio.VERTEX_2D;
 	dwg_decode_entity (dat, obj->tio.entity);
 
-	/* Legitaj valuej
+	/* Read values
 	 */
 	ent->flags = bit_read_RC (dat);
 	ent->x0 = bit_read_BD (dat);
@@ -1181,7 +1181,7 @@ dwg_decode_VERTEX_3D (Bit_Chain * dat, Dwg_Object * obj)
 	ent = obj->tio.entity->tio.VERTEX_3D;
 	dwg_decode_entity (dat, obj->tio.entity);
 
-	/* Legitaj valuej
+	/* Read values
 	 */
 	ent->flags = bit_read_RC (dat);
 	ent->x0 = bit_read_BD (dat);
@@ -1202,7 +1202,7 @@ dwg_decode_VERTEX_PFACE_FACE (Bit_Chain * dat, Dwg_Object * obj)
 	ent = obj->tio.entity->tio.VERTEX_PFACE_FACE;
 	dwg_decode_entity (dat, obj->tio.entity);
 
-	/* Legitaj valuej
+	/* Read values
 	 */
 	ent->vertind[0] = bit_read_BS (dat);
 	ent->vertind[1] = bit_read_BS (dat);
@@ -1223,7 +1223,7 @@ dwg_decode_POLYLINE_2D (Bit_Chain * dat, Dwg_Object * obj)
 	dwg_decode_entity (dat, obj->tio.entity);
 	ent = obj->tio.entity->tio.POLYLINE_2D;
 
-	/* Legitaj valuej
+	/* Read values
 	 */
 	ent->flags = bit_read_BS (dat);
 	ent->curve_type = bit_read_BS (dat);
@@ -1247,7 +1247,7 @@ dwg_decode_POLYLINE_3D (Bit_Chain * dat, Dwg_Object * obj)
 	dwg_decode_entity (dat, obj->tio.entity);
 	ent = obj->tio.entity->tio.POLYLINE_3D;
 
-	/* Legitaj valuej
+	/* Read values
 	 */
 	ent->flags_1 = bit_read_RC (dat);
 	ent->flags_2 = bit_read_RC (dat);
@@ -1558,7 +1558,7 @@ dwg_decode_LAYER (Bit_Chain * dat, Dwg_Object * obj)
 	dwg_decode_object (dat, obj->tio.object);
 	ord = obj->tio.object->tio.LAYER;
 
-	/* Legitaj valuej
+	/* Read values
 	 */
 	ord->name = bit_read_T (dat);
 	ord->bit64 = bit_read_B (dat);
@@ -1582,7 +1582,7 @@ dwg_decode_LAYOUT (Bit_Chain * dat, Dwg_Object * obj)
 	dwg_decode_object (dat, obj->tio.object);
 	ord = obj->tio.object->tio.LAYOUT;
 
-	/* Legitaj valuej
+	/* Read values
 	 */
 	ord->pagxo.agordo = bit_read_T (dat);
 	ord->pagxo.printilo = bit_read_T (dat);
@@ -1654,7 +1654,7 @@ dwg_decode_UNUSED (Bit_Chain * dat, Dwg_Object * obj)
 	dwg_decode_entity (dat, obj->tio.entity);
 	ent = obj->tio.entity->tio.UNUSED;
 
-	/* Legitaj valuej
+	/* Read values
 	 */
 
 
