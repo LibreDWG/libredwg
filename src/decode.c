@@ -1322,16 +1322,29 @@ dwg_decode_LINE (Bit_Chain * dat, Dwg_Object * obj)
 	dwg_decode_entity (dat, obj->tio.entity);
 	ent = obj->tio.entity->tio.LINE;
 
-	ent->nur_2D = bit_read_B (dat);
-	ent->x0 = bit_read_RD (dat);
-	ent->x1 = bit_read_DD (dat, ent->x0);
-	ent->y0 = bit_read_RD (dat);
-	ent->y1 = bit_read_DD (dat, ent->y0);
-	ent->z0 = ent->z1 = 0.0;
-	if (!ent->nur_2D)
-	{
-		ent->z0 = bit_read_RD (dat);
-		ent->z1 = bit_read_DD (dat, ent->z0);
+	if (dat->version == R_13 ||
+	    dat->version == R_14){
+		ent->x0 = bit_read_BD (dat);
+		ent->y0 = bit_read_BD (dat);
+		ent->z0 = bit_read_BD (dat);
+
+		ent->x1 = bit_read_BD (dat);
+		ent->y1 = bit_read_BD (dat);
+		ent->z1 = bit_read_BD (dat);		
+	}
+
+	if (dat->version == R_2000){
+		ent->Zs_are_zero = bit_read_B (dat);
+		ent->x0 = bit_read_RD (dat);
+		ent->x1 = bit_read_DD (dat, ent->x0);
+		ent->y0 = bit_read_RD (dat);
+		ent->y1 = bit_read_DD (dat, ent->y0);
+		ent->z0 = ent->z1 = 0.0;
+		if (!ent->Zs_are_zero)
+		{
+			ent->z0 = bit_read_RD (dat);
+			ent->z1 = bit_read_DD (dat, ent->z0);
+		}
 	}
 	ent->thickness = bit_read_BT (dat);
 	bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);

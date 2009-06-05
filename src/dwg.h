@@ -437,7 +437,7 @@ extern "C"
  */
 	typedef struct _dwg_entity_LINE
 	{
-		unsigned char nur_2D;
+		unsigned char Zs_are_zero;
 		double x0;
 		double x1;
 		double y0;

@@ -633,12 +633,12 @@ dwg_encode_object (Dwg_Object * obj, Bit_Chain * dat)
 static void
 dwg_encode_LINE (Dwg_Entity_LINE * est, Bit_Chain * dat)
 {
-	bit_write_B (dat, est->nur_2D);
+	bit_write_B (dat, est->Zs_are_zero);
 	bit_write_RD (dat, est->x0);
 	bit_write_DD (dat, est->x1, est->x0);
 	bit_write_RD (dat, est->y0);
 	bit_write_DD (dat, est->y1, est->y0);
-	if (!est->nur_2D)
+	if (!est->Zs_are_zero)
 	{
 		bit_write_RD (dat, est->z0);
 		bit_write_DD (dat, est->z1, est->z0);

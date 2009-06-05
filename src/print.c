@@ -257,11 +257,11 @@ dwg_print_CIRCLE (Dwg_Entity_CIRCLE * ent)
 void
 dwg_print_LINE (Dwg_Entity_LINE * ent)
 {
-	printf ("\tĈu nur 2D?: %s\n", ent->nur_2D ? "Yes" : "Ne");
+	printf ("\tĈu nur 2D?: %s\n", ent->Zs_are_zero ? "Yes" : "Ne");
 	printf ("\t1-a punkto: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0,
-		ent->nur_2D ? 0 : ent->z0);
+		ent->Zs_are_zero ? 0 : ent->z0);
 	printf ("\t2-a punkto: (%1.13g, %1.13g, %1.13g)\n", ent->x1, ent->y1,
-		ent->nur_2D ? 0 : ent->z1);
+		ent->Zs_are_zero ? 0 : ent->z1);
 	printf ("\tthickness: %1.13g\n", ent->thickness);
 	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
 		ent->extrusion.z);
