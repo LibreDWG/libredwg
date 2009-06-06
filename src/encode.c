@@ -436,12 +436,8 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 
 	/* Version Code
 	 */
-	bit_write_RC (dat, version_codes[dat->version][0]);
-	bit_write_RC (dat, version_codes[dat->version][1]);
-	bit_write_RC (dat, version_codes[dat->version][2]);
-	bit_write_RC (dat, version_codes[dat->version][3]);
-	bit_write_RC (dat, version_codes[dat->version][4]);
-	bit_write_RC (dat, version_codes[dat->version][5]);
+	for (i-0;i<6;i++)
+		bit_write_RC (dat, version_codes[dat->version][i]);
 
 	/* 5 (aux 6) nuloj
 	 */
