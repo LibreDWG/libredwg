@@ -1398,7 +1398,7 @@ dwg_decode_LINE (Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_DIMENSION_ORDINATE (Bit_Chain * dat, Dwg_Object * obj)
 {
-        Dwg_Entity_DIMENSION_ORDINATE *ent;
+    Dwg_Entity_DIMENSION_ORDINATE *ent;
 
 	obj->supertype = DWG_SUPERTYPE_ENTITY;
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
@@ -1406,52 +1406,55 @@ dwg_decode_DIMENSION_ORDINATE (Bit_Chain * dat, Dwg_Object * obj)
 	dwg_decode_entity (dat, obj->tio.entity);
 	ent = obj->tio.entity->tio.DIMENSION_ORDINATE;
 
-        //TODO: check extrusion reading
-        //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
-        ent->extrusion.x = bit_read_BD(dat);
-        ent->extrusion.y = bit_read_BD(dat);
-        ent->extrusion.z = bit_read_BD(dat);
-        ent->x0 = bit_read_RD (dat);
-        ent->y0 = bit_read_RD (dat);
-        ent->elevation.ecs_11 = bit_read_BD(dat);
-        ent->elevation.ecs_12 = bit_read_BD(dat);
-        //spec: flag bit 6 indicates ORDINATE dimension
-        ent->flags_1 = bit_read_RC(dat);
-        ent->user_text = bit_read_T(dat);
-        ent->text_rot = bit_read_BD(dat);
-        ent->horiz_dir = bit_read_BD(dat);
-        ent->ins_scale.x = bit_read_BD(dat);
-        ent->ins_scale.y = bit_read_BD(dat);
-        ent->ins_scale.z = bit_read_BD(dat);
-        ent->ins_rotation = bit_read_BD(dat);
+    //TODO: check extrusion reading
+    //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
+    ent->extrusion.x = bit_read_BD(dat);
+    ent->extrusion.y = bit_read_BD(dat);
+    ent->extrusion.z = bit_read_BD(dat);
+    ent->x0 = bit_read_RD (dat);
+    ent->y0 = bit_read_RD (dat);
+    
+    //TODO:review the parsing of these elevation values in the spec:
+    ent->elevation.ecs_11 = ent->elevation.ecs_12 = bit_read_BD(dat);
 
-        if(dat->version >= R_2000){
-            ent->attachment_point = bit_read_BS(dat);
-            ent->lspace_style = bit_read_BS(dat);
-            ent->lspace_factor = bit_read_BD(dat);
-            ent->act_measurement = bit_read_BD(dat);
-        }
-        if(dat->version >= R_2007){
-            ent->unknown = bit_read_B(dat);
-            ent->flip_arrow1 = bit_read_B(dat);
-            ent->flip_arrow2 = bit_read_B(dat);
-        }
+    //spec: flag bit 6 indicates ORDINATE dimension
+    ent->flags_1 = bit_read_RC(dat);
+    ent->user_text = bit_read_T(dat);
+    ent->text_rot = bit_read_BD(dat);
+    ent->horiz_dir = bit_read_BD(dat);
+    ent->ins_scale.x = bit_read_BD(dat);
+    ent->ins_scale.y = bit_read_BD(dat);
+    ent->ins_scale.z = bit_read_BD(dat);
+    ent->ins_rotation = bit_read_BD(dat);
 
-        ent->_12_pt.x = bit_read_RD(dat);
-        ent->_12_pt.y = bit_read_RD(dat);
-        ent->_10_pt.x = bit_read_BD(dat);
-        ent->_10_pt.y = bit_read_BD(dat);
-        ent->_10_pt.z = bit_read_BD(dat);
-        ent->_13_pt.x = bit_read_BD(dat);
-        ent->_13_pt.y = bit_read_BD(dat);
-        ent->_13_pt.z = bit_read_BD(dat);
-        ent->_14_pt.x = bit_read_BD(dat);
-        ent->_14_pt.y = bit_read_BD(dat);
-        ent->_14_pt.z = bit_read_BD(dat);
+    if(dat->version >= R_2000){
+        ent->attachment_point = bit_read_BS(dat);
+        ent->lspace_style = bit_read_BS(dat);
+        ent->lspace_factor = bit_read_BD(dat);
+        ent->act_measurement = bit_read_BD(dat);
+    }
 
-        ent->flags_2 = bit_read_RC(dat);
-        
-        dwg_decode_traktref (dat, obj);
+    if(dat->version >= R_2007){
+        ent->unknown = bit_read_B(dat);
+        ent->flip_arrow1 = bit_read_B(dat);
+        ent->flip_arrow2 = bit_read_B(dat);
+    }
+
+    ent->_12_pt.x = bit_read_RD(dat);
+    ent->_12_pt.y = bit_read_RD(dat);
+    ent->_10_pt.x = bit_read_BD(dat);
+    ent->_10_pt.y = bit_read_BD(dat);
+    ent->_10_pt.z = bit_read_BD(dat);
+    ent->_13_pt.x = bit_read_BD(dat);
+    ent->_13_pt.y = bit_read_BD(dat);
+    ent->_13_pt.z = bit_read_BD(dat);
+    ent->_14_pt.x = bit_read_BD(dat);
+    ent->_14_pt.y = bit_read_BD(dat);
+    ent->_14_pt.z = bit_read_BD(dat);
+
+    ent->flags_2 = bit_read_RC(dat);
+    
+    dwg_decode_traktref (dat, obj);
 }
 
 static void
