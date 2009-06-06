@@ -1151,5 +1151,23 @@ dwg_encode_TRACE (Dwg_Entity_TRACE *ent, Bit_Chain * dat)
 	bit_write_RD(dat, ent->corner3.y);
     bit_write_RD(dat, ent->corner4.x);
 	bit_write_RD(dat, ent->corner4.y);
-    bit_write_BE(dat, ent->extrusion.x, ent->extrusion.y, ent->extrusion.z);}
+    bit_write_BE(dat, ent->extrusion.x, ent->extrusion.y, ent->extrusion.z);
+}
+
+static void
+dwg_encode_SHAPE (Dwg_Entity_SHAPE *ent, Bit_Chain * dat)
+{
+    bit_write_BD(dat, ent->ins_pt.x);
+    bit_write_BD(dat, ent->ins_pt.y);
+    bit_write_BD(dat, ent->ins_pt.z);
+    bit_write_BD(dat, ent->scale);
+    bit_write_BD(dat, ent->rotation);
+    bit_write_BD(dat, ent->width_factor);
+    bit_write_BD(dat, ent->oblique);
+    bit_write_BD(dat, ent->thickness);
+    bit_write_BS(dat, ent->shape_no);
+    bit_write_BD(dat, ent->extrusion.x);
+    bit_write_BD(dat, ent->extrusion.y);
+    bit_write_BD(dat, ent->extrusion.z);
+}
 
