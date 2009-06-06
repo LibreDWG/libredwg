@@ -548,6 +548,9 @@ extern "C"
                 unsigned int lspace_style;
                 unsigned int lspace_factor;
                 unsigned int act_measurement;
+                unsigned char unknown;
+                unsigned char flip_arrow1;
+                unsigned char flip_arrow2;
                 struct
 		{
 			double x;
@@ -608,6 +611,9 @@ extern "C"
                 unsigned int lspace_style;
                 unsigned int lspace_factor;
                 unsigned int act_measurement;
+                unsigned char unknown;
+                unsigned char flip_arrow1;
+                unsigned char flip_arrow2;
                 struct
 		{
 			double x;
@@ -667,6 +673,9 @@ extern "C"
                 unsigned int lspace_style;
                 unsigned int lspace_factor;
                 unsigned int act_measurement;
+                unsigned char unknown;
+                unsigned char flip_arrow1;
+                unsigned char flip_arrow2;
                 struct
 		{
 			double x;
@@ -732,6 +741,9 @@ extern "C"
                 unsigned int lspace_style;
                 unsigned int lspace_factor;
                 unsigned int act_measurement;
+                unsigned char unknown;
+                unsigned char flip_arrow1;
+                unsigned char flip_arrow2;
                 struct
 		{
 			double x;
@@ -801,6 +813,9 @@ extern "C"
                 unsigned int lspace_style;
                 unsigned int lspace_factor;
                 unsigned int act_measurement;
+                unsigned char unknown;
+                unsigned char flip_arrow1;
+                unsigned char flip_arrow2;
                 struct
 		{
 			double x;
@@ -854,6 +869,9 @@ extern "C"
                 unsigned int lspace_style;
                 unsigned int lspace_factor;
                 unsigned int act_measurement;
+                unsigned char unknown;
+                unsigned char flip_arrow1;
+                unsigned char flip_arrow2;
                 struct
 		{
 			double x;
@@ -934,7 +952,7 @@ extern "C"
 		unsigned int numverts;
 		unsigned int numfaces;
 		
-	} Dwg_Entity_POLILYNE_PFACE;
+	} Dwg_Entity_POLYLINE_PFACE;
 
 /**
  Struct for:  POLYLINE (MESH) (30)
@@ -948,7 +966,7 @@ extern "C"
 		unsigned int m_density;
 		unsigned int n_density;
 		
-	} Dwg_Entity_POLILYNE_MESH;
+	} Dwg_Entity_POLYLINE_MESH;
 
 /**
  Struct for:  SOLID (31)
@@ -1060,7 +1078,7 @@ extern "C"
  Struct for:  VIEWPORT ENTITY (34)
  */
 
-	typedef struct _dwg_entity_VIEWPORT_ENTITY
+	typedef struct _dwg_entity_VIEWPORT
 	{
 		struct
 		{
@@ -1137,7 +1155,7 @@ extern "C"
                 unsigned int ucs_ortho_view_type;
                 //add handles
 
-	} Dwg_Entity_VIEWPORT_ENTITY;
+	} Dwg_Entity_VIEWPORT;
 
 /**
  Struct for ELLIPSE (35)
@@ -1391,21 +1409,40 @@ extern "C"
 			Dwg_Entity_ATTDEF *ATTDEF;
 			Dwg_Entity_BLOCK *BLOCK;
 			Dwg_Entity_ENDBLK *ENDBLK;
+			Dwg_Entity_SEQEND *SEQEND;
 			Dwg_Entity_INSERT *INSERT;
 			Dwg_Entity_MINSERT *MINSERT;
 			Dwg_Entity_VERTEX_2D *VERTEX_2D;
 			Dwg_Entity_VERTEX_3D *VERTEX_3D;
+			Dwg_Entity_VERTEX_MESH *VERTEX_MESH;
+			Dwg_Entity_VERTEX_PFACE *VERTEX_PFACE;
 			Dwg_Entity_VERTEX_PFACE_FACE *VERTEX_PFACE_FACE;
 			Dwg_Entity_POLYLINE_2D *POLYLINE_2D;
 			Dwg_Entity_POLYLINE_3D *POLYLINE_3D;
 			Dwg_Entity_ARC *ARC;
 			Dwg_Entity_CIRCLE *CIRCLE;
 			Dwg_Entity_LINE *LINE;
+			Dwg_Entity_DIMENSION_ORDINATE *DIMENSION_ORDINATE;
+			Dwg_Entity_DIMENSION_LINEAR *DIMENSION_LINEAR;
+			Dwg_Entity_DIMENSION_ALIGNED *DIMENSION_ALIGNED;
+			Dwg_Entity_DIMENSION_ANG3PT *DIMENSION_ANG3PT;
+			Dwg_Entity_DIMENSION_ANG2LN *DIMENSION_ANG2LN;
+			Dwg_Entity_DIMENSION_RADIUS *DIMENSION_RADIUS;
+			Dwg_Entity_DIMENSION_DIAMETER *DIMENSION_DIAMETER;
 			Dwg_Entity_POINT *POINT;
                         Dwg_Entity_3D_FACE *_3DFACE;
+                        Dwg_Entity_POLYLINE_PFACE *POLYLINE_PFACE;
+                        Dwg_Entity_POLYLINE_MESH *POLYLINE_MESH;
+                        Dwg_Entity_SOLID *SOLID;
+                        Dwg_Entity_TRACE *TRACE;
+                        Dwg_Entity_SHAPE *SHAPE;
+                        Dwg_Entity_VIEWPORT *VIEWPORT;
 			Dwg_Entity_ELLIPSE *ELLIPSE;
 			Dwg_Entity_SPLINE *SPLINE;
 			Dwg_Entity_RAY *RAY;
+			Dwg_Entity_XLINE *XLINE;
+                        //TODO: is it really an object_entity? seems to be an object_object
+                        Dwg_Object_DICTIONARY *DICTIONARY;
 			Dwg_Entity_MTEXT *MTEXT;
 		} tio;
 
