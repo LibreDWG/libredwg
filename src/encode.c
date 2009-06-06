@@ -1088,3 +1088,18 @@ dwg_encode_POLYLINE_PFACE (Dwg_Entity_POLYLINE_PFACE* ent, Bit_Chain * dat)
         //TODO: what about the handles?
 }
 
+static void
+dwg_encode_POLYLINE_MESH (Dwg_Entity_POLYLINE_MESH *ent, Bit_Chain * dat)
+{
+        bit_write_BS(dat, ent->flags);
+        bit_write_BS(dat, ent->curve_type);
+        bit_write_BS(dat, ent->m_vert_count);
+        bit_write_BS(dat, ent->n_vert_count);
+        bit_write_BS(dat, ent->m_density);
+        bit_write_BS(dat, ent->n_density);
+
+        if (dat->version >= R_2004)
+        {
+            bit_write_BL(dat, ent->owned_object_count);
+        }
+}
