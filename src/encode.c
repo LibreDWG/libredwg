@@ -65,14 +65,15 @@ static void dwg_encode_POLYLINE_MESH (Dwg_Entity_POLYLINE_MESH * est, Bit_Chain 
 static void dwg_encode_SOLID (Dwg_Entity_SOLID * est, Bit_Chain * dat);
 static void dwg_encode_TRACE (Dwg_Entity_TRACE * est, Bit_Chain * dat);
 static void dwg_encode_SHAPE (Dwg_Entity_SHAPE * est, Bit_Chain * dat);
+static void dwg_encode_VIEWPORT (Dwg_Entity_VIEWPORT *ent, Bit_Chain * dat);
 static void dwg_encode_ELLIPSE (Dwg_Entity_ELLIPSE * est, Bit_Chain * dat);
 static void dwg_encode_SPLINE (Dwg_Entity_SPLINE * est, Bit_Chain * dat);
 static void dwg_encode_RAY (Dwg_Entity_RAY * est, Bit_Chain * dat);
 static void dwg_encode_XLINE (Dwg_Entity_XLINE * est, Bit_Chain * dat);
 static void dwg_encode_MTEXT (Dwg_Entity_MTEXT * est, Bit_Chain * dat);
-static void dwg_encode_BLOCK_CONTROL (Dwg_Object_BLOCK_CONTROL * est, Bit_Chain * dat);
-static void dwg_encode_DICTIONARY (Dwg_Object_DICTIONARY * est, Bit_Chain * dat);
-static void dwg_encode_LAYER (Dwg_Object_LAYER * est, Bit_Chain * dat);
+static void dwg_encode_BLOCK_CONTROL (Dwg_Object_BLOCK_CONTROL * obj, Bit_Chain * dat);
+static void dwg_encode_DICTIONARY (Dwg_Object_DICTIONARY * obj, Bit_Chain * dat);
+static void dwg_encode_LAYER (Dwg_Object_LAYER * obj, Bit_Chain * dat);
 
 /*--------------------------------------------------------------------------------
  * Public functions
@@ -701,6 +702,9 @@ dwg_encode_entity (Dwg_Object * obj, Bit_Chain * dat)
 		break;
 	case DWG_TYPE_SHAPE:
 		dwg_encode_SHAPE (est->tio.SHAPE, dat);
+		break;
+	case DWG_TYPE_VIEWPORT:
+		dwg_encode_VIEWPORT (est->tio.VIEWPORT, dat);
 		break;
 	case DWG_TYPE_ELLIPSE:
 		dwg_encode_ELLIPSE (est->tio.ELLIPSE, dat);
@@ -1705,6 +1709,12 @@ dwg_encode_SHAPE (Dwg_Entity_SHAPE *ent, Bit_Chain * dat)
 }
 
 static void
+dwg_encode_VIEWPORT (Dwg_Entity_VIEWPORT *ent, Bit_Chain * dat)
+{
+    //TODO: implement-me!
+}
+
+static void
 dwg_encode_ELLIPSE (Dwg_Entity_ELLIPSE *ent, Bit_Chain * dat)
 {
     //TODO: implement-me!
@@ -1824,5 +1834,21 @@ dwg_encode_MTEXT (Dwg_Entity_MTEXT *ent, Bit_Chain * dat)
     if (dat->version >= R_2004){
     	bit_write_BL (dat, ent->unknown_long);
     }
+}
+
+static void
+dwg_encode_DICTIONARY (Dwg_Object_DICTIONARY *ent, Bit_Chain * dat)
+{
+    //Implement-me!
+}
+
+static void dwg_encode_BLOCK_CONTROL (Dwg_Object_BLOCK_CONTROL * obj, Bit_Chain * dat)
+{
+    //Implement-me!
+}
+
+static void dwg_encode_LAYER (Dwg_Object_LAYER * obj, Bit_Chain * dat)
+{
+    //Implement-me!
 }
 

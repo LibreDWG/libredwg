@@ -2004,6 +2004,20 @@ dwg_decode_SHAPE (Bit_Chain * dat, Dwg_Object * obj)
 }
 
 static void
+dwg_decode_VIEWPORT (Bit_Chain * dat, Dwg_Object * obj)
+{
+	Dwg_Entity_VIEWPORT *ent;
+
+	obj->supertype = DWG_SUPERTYPE_ENTITY;
+	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
+	obj->tio.entity->tio.VIEWPORT = calloc (sizeof (Dwg_Entity_VIEWPORT), 1);
+	dwg_decode_entity (dat, obj->tio.entity);
+	ent = obj->tio.entity->tio.VIEWPORT;
+
+    //Implement-me!
+}
+
+static void
 dwg_decode_ELLIPSE (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Entity_ELLIPSE *ent;
@@ -2448,6 +2462,9 @@ dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned in
 		break;
 	case DWG_TYPE_SHAPE:
 		dwg_decode_SHAPE (dat, obj);
+		break;
+	case DWG_TYPE_VIEWPORT:
+		dwg_decode_VIEWPORT (dat, obj);
 		break;
 	case DWG_TYPE_ELLIPSE:
 		dwg_decode_ELLIPSE (dat, obj);
