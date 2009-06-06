@@ -951,6 +951,7 @@ extern "C"
 	{
 		unsigned int numverts;
 		unsigned int numfaces;
+                unsigned long owned_object_count;
 		
 	} Dwg_Entity_POLYLINE_PFACE;
 
@@ -965,6 +966,7 @@ extern "C"
 		unsigned int n_vert_count;
 		unsigned int m_density;
 		unsigned int n_density;
+                unsigned long owned_object_count;
 		
 	} Dwg_Entity_POLYLINE_MESH;
 
@@ -1441,8 +1443,6 @@ extern "C"
 			Dwg_Entity_SPLINE *SPLINE;
 			Dwg_Entity_RAY *RAY;
 			Dwg_Entity_XLINE *XLINE;
-                        //TODO: is it really an object_entity? seems to be an object_object
-                        Dwg_Object_DICTIONARY *DICTIONARY;
 			Dwg_Entity_MTEXT *MTEXT;
 		} tio;
 

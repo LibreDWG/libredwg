@@ -1047,6 +1047,20 @@ dwg_decode_ENDBLK (Bit_Chain * dat, Dwg_Object * obj)
 }
 
 static void
+dwg_decode_SEQEND (Bit_Chain * dat, Dwg_Object * obj)
+{
+	Dwg_Entity_SEQEND *ent;
+
+	obj->supertype = DWG_SUPERTYPE_ENTITY;
+	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
+	obj->tio.entity->tio.SEQEND = calloc (sizeof (Dwg_Entity_SEQEND), 1);
+	ent = obj->tio.entity->tio.SEQEND;
+	dwg_decode_entity (dat, obj->tio.entity);
+
+	dwg_decode_traktref (dat, obj);
+}
+
+static void
 dwg_decode_INSERT (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Entity_INSERT *ent;
@@ -1860,6 +1874,133 @@ dwg_decode_3DFACE (Bit_Chain * dat, Dwg_Object * obj)
 }
 
 static void
+dwg_decode_POLYLINE_PFACE (Bit_Chain * dat, Dwg_Object * obj)
+{
+        Dwg_Entity_POLYLINE_PFACE *ent;
+
+	obj->supertype = DWG_SUPERTYPE_ENTITY;
+	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
+	obj->tio.entity->tio.POLYLINE_PFACE = calloc (sizeof (Dwg_Entity_POLYLINE_PFACE), 1);
+	dwg_decode_entity (dat, obj->tio.entity);
+	ent = obj->tio.entity->tio.POLYLINE_PFACE;
+
+        ent->numverts = bit_read_BS(dat);
+        ent->numfaces = bit_read_BS(dat);
+
+        if (dat->version >= R_2004)
+        {
+            ent->owned_object_count = bit_read_BL(dat);
+        }
+
+        dwg_decode_traktref (dat, obj);
+}
+
+static void
+dwg_decode_POLYLINE_MESH (Bit_Chain * dat, Dwg_Object * obj)
+{
+        Dwg_Entity_POLYLINE_MESH *ent;
+
+	obj->supertype = DWG_SUPERTYPE_ENTITY;
+	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
+	obj->tio.entity->tio.POLYLINE_MESH = calloc (sizeof (Dwg_Entity_POLYLINE_MESH), 1);
+	dwg_decode_entity (dat, obj->tio.entity);
+	ent = obj->tio.entity->tio.POLYLINE_MESH;
+
+        ent->flags = bit_read_BS(dat);
+        ent->curve_type = bit_read_BS(dat);
+        ent->m_vert_count = bit_read_BS(dat);
+        ent->n_vert_count = bit_read_BS(dat);
+        ent->m_density = bit_read_BS(dat);
+        ent->n_density = bit_read_BS(dat);
+
+        if (dat->version >= R_2004)
+        {
+            ent->owned_object_count = bit_read_BL(dat);
+        }
+
+        dwg_decode_traktref (dat, obj);
+}
+
+static void
+dwg_decode_SOLID (Bit_Chain * dat, Dwg_Object * obj)
+{
+	Dwg_Entity_SOLID *ent;
+
+	obj->supertype = DWG_SUPERTYPE_ENTITY;
+	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
+	obj->tio.entity->tio.SOLID = calloc (sizeof (Dwg_Entity_SOLID), 1);
+	dwg_decode_entity (dat, obj->tio.entity);
+	ent = obj->tio.entity->tio.SOLID;
+
+	ent->thickness = bit_read_BT (dat);
+	ent->corner1.z = ent->corner2.z = ent->corner3.z = ent->corner4.z = bit_read_BD(dat);
+	ent->corner1.x = bit_read_RD (dat);
+	ent->corner1.y = bit_read_RD (dat);
+        ent->corner2.x = bit_read_RD (dat);
+	ent->corner2.y = bit_read_RD (dat);
+        ent->corner3.x = bit_read_RD (dat);
+	ent->corner3.y = bit_read_RD (dat);
+        ent->corner4.x = bit_read_RD (dat);
+	ent->corner4.y = bit_read_RD (dat);
+        bit_read_BE(dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
+
+	dwg_decode_traktref (dat, obj);
+}
+
+static void
+dwg_decode_TRACE (Bit_Chain * dat, Dwg_Object * obj)
+{
+	Dwg_Entity_TRACE *ent;
+
+	obj->supertype = DWG_SUPERTYPE_ENTITY;
+	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
+	obj->tio.entity->tio.TRACE = calloc (sizeof (Dwg_Entity_TRACE), 1);
+	dwg_decode_entity (dat, obj->tio.entity);
+	ent = obj->tio.entity->tio.TRACE;
+
+	ent->thickness = bit_read_BT (dat);
+	ent->corner1.z = ent->corner2.z = ent->corner3.z = ent->corner4.z = bit_read_BD(dat);
+	ent->corner1.x = bit_read_RD (dat);
+	ent->corner1.y = bit_read_RD (dat);
+        ent->corner2.x = bit_read_RD (dat);
+	ent->corner2.y = bit_read_RD (dat);
+        ent->corner3.x = bit_read_RD (dat);
+	ent->corner3.y = bit_read_RD (dat);
+        ent->corner4.x = bit_read_RD (dat);
+	ent->corner4.y = bit_read_RD (dat);
+        bit_read_BE(dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
+
+	dwg_decode_traktref (dat, obj);
+}
+
+static void
+dwg_decode_SHAPE (Bit_Chain * dat, Dwg_Object * obj)
+{
+	Dwg_Entity_SHAPE *ent;
+
+	obj->supertype = DWG_SUPERTYPE_ENTITY;
+	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
+	obj->tio.entity->tio.SHAPE = calloc (sizeof (Dwg_Entity_SHAPE), 1);
+	dwg_decode_entity (dat, obj->tio.entity);
+	ent = obj->tio.entity->tio.SHAPE;
+
+        ent->ins_pt.x = bit_read_BD(dat);
+        ent->ins_pt.y = bit_read_BD(dat);
+        ent->ins_pt.z = bit_read_BD(dat);
+        ent->scale = bit_read_BD(dat);
+        ent->rotation = bit_read_BD(dat);
+        ent->width_factor = bit_read_BD(dat);
+        ent->oblique = bit_read_BD(dat);
+        ent->thickness = bit_read_BD(dat);
+        ent->shape_no = bit_read_BS(dat);
+        ent->extrusion.x = bit_read_BD(dat);
+        ent->extrusion.y = bit_read_BD(dat);
+        ent->extrusion.z = bit_read_BD(dat);
+
+	dwg_decode_traktref (dat, obj);
+}
+
+static void
 dwg_decode_ELLIPSE (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Entity_ELLIPSE *ent;
@@ -2211,8 +2352,10 @@ dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned in
 		dwg_decode_BLOCK (dat, obj);
 		break;
 	case DWG_TYPE_ENDBLK:
-	case DWG_TYPE_SEQEND:
 		dwg_decode_ENDBLK (dat, obj);
+		break;
+	case DWG_TYPE_SEQEND:
+		dwg_decode_SEQEND (dat, obj);
 		break;
 	case DWG_TYPE_INSERT:
 		dwg_decode_INSERT (dat, obj);
@@ -2246,8 +2389,47 @@ dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned in
 	case DWG_TYPE_LINE:
 		dwg_decode_LINE (dat, obj);
 		break;
+        case DWG_TYPE_DIMENSION_ORDINATE:
+                dwg_decode_DIMENSION_ORDINATE(dat, obj);
+                break;
+        case DWG_TYPE_DIMENSION_LINEAR:
+                dwg_decode_DIMENSION_LINEAR(dat, obj);
+                break;
+        case DWG_TYPE_DIMENSION_ALIGNED:
+                dwg_decode_DIMENSION_ALIGNED(dat, obj);
+                break;
+        case DWG_TYPE_DIMENSION_ANG3PT:
+                dwg_decode_DIMENSION_ANG3PT(dat, obj);
+                break;
+        case DWG_TYPE_DIMENSION_ANG2LN:
+                dwg_decode_DIMENSION_ANG2LN(dat, obj);
+                break;
+        case DWG_TYPE_DIMENSION_RADIUS:
+                dwg_decode_DIMENSION_RADIUS(dat, obj);
+                break;
+        case DWG_TYPE_DIMENSION_DIAMETER:
+                dwg_decode_DIMENSION_DIAMETER(dat, obj);
+                break;
 	case DWG_TYPE_POINT:
 		dwg_decode_POINT (dat, obj);
+		break;
+	case DWG_TYPE_3DFACE:
+		dwg_decode_3DFACE (dat, obj);
+		break;
+	case DWG_TYPE_POLYLINE_PFACE:
+		dwg_decode_POLYLINE_PFACE (dat, obj);
+		break;
+	case DWG_TYPE_POLYLINE_MESH:
+		dwg_decode_POLYLINE_MESH (dat, obj);
+		break;
+	case DWG_TYPE_SOLID:
+		dwg_decode_SOLID (dat, obj);
+		break;
+	case DWG_TYPE_TRACE:
+		dwg_decode_TRACE (dat, obj);
+		break;
+	case DWG_TYPE_SHAPE:
+		dwg_decode_SHAPE (dat, obj);
 		break;
 	case DWG_TYPE_ELLIPSE:
 		dwg_decode_ELLIPSE (dat, obj);
