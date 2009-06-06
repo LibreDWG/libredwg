@@ -1279,37 +1279,293 @@ dwg_encode_DIMENSION_LINEAR (Dwg_Entity_DIMENSION_LINEAR *ent, Bit_Chain * dat)
 static void
 dwg_encode_DIMENSION_ALIGNED (Dwg_Entity_DIMENSION_ALIGNED *ent, Bit_Chain * dat)
 {
-    //TODO: implement-me!
+    //TODO: check extrusion writing:
+    //bit_write_BE (dat, ent->extrusion.x, ent->extrusion.y, ent->extrusion.z);
+    bit_write_BD(dat, ent->extrusion.x);
+    bit_write_BD(dat, ent->extrusion.y);
+    bit_write_BD(dat, ent->extrusion.z);
+    bit_write_RD(dat, ent->x0);
+    bit_write_RD(dat, ent->y0);
+    
+    //TODO:review the parsing of these elevation values in the spec:
+    //TODO: shouldnt we store only once this value in our data-struct?
+    if (ent->elevation.ecs_11 != ent->elevation.ecs_12){
+        fprintf(stderr, "encode_DIMENSION_ALIGNED: Maybe there is something wrong here. Elevation values should be all the same.\n");
+    }
+    bit_write_BD(dat, ent->elevation.ecs_11);
+
+    //spec: flag bit 6 indicates ORDINATE dimension
+    bit_write_RC(dat, ent->flags);
+    bit_write_T(dat, ent->user_text);
+    bit_write_BD(dat, ent->text_rot);
+    bit_write_BD(dat, ent->horiz_dir);
+    bit_write_BD(dat, ent->ins_scale.x);
+    bit_write_BD(dat, ent->ins_scale.y);
+    bit_write_BD(dat, ent->ins_scale.z);
+    bit_write_BD(dat, ent->ins_rotation);
+
+    if(dat->version >= R_2000){
+        bit_write_BS(dat, ent->attachment_point);
+        bit_write_BS(dat, ent->lspace_style);
+        bit_write_BD(dat, ent->lspace_factor);
+        bit_write_BD(dat, ent->act_measurement);
+    }
+
+    if(dat->version >= R_2007){
+        bit_write_B(dat, ent->unknown);
+        bit_write_B(dat, ent->flip_arrow1);
+        bit_write_B(dat, ent->flip_arrow2);
+    }
+
+    bit_write_RD(dat, ent->_12_pt.x);
+    bit_write_RD(dat, ent->_12_pt.y);
+    bit_write_BD(dat, ent->_13_pt.x);
+    bit_write_BD(dat, ent->_13_pt.y);
+    bit_write_BD(dat, ent->_13_pt.z);
+    bit_write_BD(dat, ent->_14_pt.x);
+    bit_write_BD(dat, ent->_14_pt.y);
+    bit_write_BD(dat, ent->_14_pt.z);
+    bit_write_BD(dat, ent->_10_pt.x);
+    bit_write_BD(dat, ent->_10_pt.y);
+    bit_write_BD(dat, ent->_10_pt.z);
+
+    bit_write_BD(dat, ent->ext_line_rot);
 }
 
 static void
 dwg_encode_DIMENSION_ANG3PT (Dwg_Entity_DIMENSION_ANG3PT *ent, Bit_Chain * dat)
 {
-    //TODO: implement-me!
+    //TODO: check extrusion writing:
+    //bit_write_BE (dat, ent->extrusion.x, ent->extrusion.y, ent->extrusion.z);
+    bit_write_BD(dat, ent->extrusion.x);
+    bit_write_BD(dat, ent->extrusion.y);
+    bit_write_BD(dat, ent->extrusion.z);
+    bit_write_RD(dat, ent->x0);
+    bit_write_RD(dat, ent->y0);
+    
+    //TODO:review the parsing of these elevation values in the spec:
+    //TODO: shouldnt we store only once this value in our data-struct?
+    if (ent->elevation.ecs_11 != ent->elevation.ecs_12){
+        fprintf(stderr, "encode_DIMENSION_ALIGNED: Maybe there is something wrong here. Elevation values should be all the same.\n");
+    }
+    bit_write_BD(dat, ent->elevation.ecs_11);
+
+    //spec: flag bit 6 indicates ORDINATE dimension
+    bit_write_RC(dat, ent->flags);
+    bit_write_T(dat, ent->user_text);
+    bit_write_BD(dat, ent->text_rot);
+    bit_write_BD(dat, ent->horiz_dir);
+    bit_write_BD(dat, ent->ins_scale.x);
+    bit_write_BD(dat, ent->ins_scale.y);
+    bit_write_BD(dat, ent->ins_scale.z);
+    bit_write_BD(dat, ent->ins_rotation);
+
+    if(dat->version >= R_2000){
+        bit_write_BS(dat, ent->attachment_point);
+        bit_write_BS(dat, ent->lspace_style);
+        bit_write_BD(dat, ent->lspace_factor);
+        bit_write_BD(dat, ent->act_measurement);
+    }
+
+    if(dat->version >= R_2007){
+        bit_write_B(dat, ent->unknown);
+        bit_write_B(dat, ent->flip_arrow1);
+        bit_write_B(dat, ent->flip_arrow2);
+    }
+
+    bit_write_RD(dat, ent->_12_pt.x);
+    bit_write_RD(dat, ent->_12_pt.y);
+    bit_write_BD(dat, ent->_10_pt.x);
+    bit_write_BD(dat, ent->_10_pt.y);
+    bit_write_BD(dat, ent->_10_pt.z);
+    bit_write_BD(dat, ent->_13_pt.x);
+    bit_write_BD(dat, ent->_13_pt.y);
+    bit_write_BD(dat, ent->_13_pt.z);
+    bit_write_BD(dat, ent->_14_pt.x);
+    bit_write_BD(dat, ent->_14_pt.y);
+    bit_write_BD(dat, ent->_14_pt.z);
+    bit_write_BD(dat, ent->_15_pt.x);
+    bit_write_BD(dat, ent->_15_pt.y);
+    bit_write_BD(dat, ent->_15_pt.z);
 }
 
 static void
 dwg_encode_DIMENSION_ANG2LN (Dwg_Entity_DIMENSION_ANG2LN *ent, Bit_Chain * dat)
 {
-    //TODO: implement-me!
+    //TODO: check extrusion writing:
+    //bit_write_BE (dat, ent->extrusion.x, ent->extrusion.y, ent->extrusion.z);
+    bit_write_BD(dat, ent->extrusion.x);
+    bit_write_BD(dat, ent->extrusion.y);
+    bit_write_BD(dat, ent->extrusion.z);
+    bit_write_RD(dat, ent->x0);
+    bit_write_RD(dat, ent->y0);
+    
+    //TODO:review the parsing of these elevation values in the spec:
+    //TODO: shouldnt we store only once this value in our data-struct?
+    if (ent->elevation.ecs_11 != ent->elevation.ecs_12){
+        fprintf(stderr, "encode_DIMENSION_ALIGNED: Maybe there is something wrong here. Elevation values should be all the same.\n");
+    }
+    bit_write_BD(dat, ent->elevation.ecs_11);
+
+    //spec: flag bit 6 indicates ORDINATE dimension
+    bit_write_RC(dat, ent->flags);
+    bit_write_T(dat, ent->user_text);
+    bit_write_BD(dat, ent->text_rot);
+    bit_write_BD(dat, ent->horiz_dir);
+    bit_write_BD(dat, ent->ins_scale.x);
+    bit_write_BD(dat, ent->ins_scale.y);
+    bit_write_BD(dat, ent->ins_scale.z);
+    bit_write_BD(dat, ent->ins_rotation);
+
+    if(dat->version >= R_2000){
+        bit_write_BS(dat, ent->attachment_point);
+        bit_write_BS(dat, ent->lspace_style);
+        bit_write_BD(dat, ent->lspace_factor);
+        bit_write_BD(dat, ent->act_measurement);
+    }
+
+    if(dat->version >= R_2007){
+        bit_write_B(dat, ent->unknown);
+        bit_write_B(dat, ent->flip_arrow1);
+        bit_write_B(dat, ent->flip_arrow2);
+    }
+
+    bit_write_RD(dat, ent->_12_pt.x);
+    bit_write_RD(dat, ent->_12_pt.y);
+    bit_write_RD(dat, ent->_16_pt.x);
+    bit_write_RD(dat, ent->_16_pt.y);
+    bit_write_BD(dat, ent->_13_pt.x);
+    bit_write_BD(dat, ent->_13_pt.y);
+    bit_write_BD(dat, ent->_13_pt.z);
+    bit_write_BD(dat, ent->_14_pt.x);
+    bit_write_BD(dat, ent->_14_pt.y);
+    bit_write_BD(dat, ent->_14_pt.z);
+    bit_write_BD(dat, ent->_15_pt.x);
+    bit_write_BD(dat, ent->_15_pt.y);
+    bit_write_BD(dat, ent->_15_pt.z);
+    bit_write_BD(dat, ent->_10_pt.x);
+    bit_write_BD(dat, ent->_10_pt.y);
+    bit_write_BD(dat, ent->_10_pt.z);
 }
 
 static void
 dwg_encode_DIMENSION_RADIUS (Dwg_Entity_DIMENSION_RADIUS *ent, Bit_Chain * dat)
 {
-    //TODO: implement-me!
+    //TODO: check extrusion writing:
+    //bit_write_BE (dat, ent->extrusion.x, ent->extrusion.y, ent->extrusion.z);
+    bit_write_BD(dat, ent->extrusion.x);
+    bit_write_BD(dat, ent->extrusion.y);
+    bit_write_BD(dat, ent->extrusion.z);
+    bit_write_RD(dat, ent->x0);
+    bit_write_RD(dat, ent->y0);
+    
+    //TODO:review the parsing of these elevation values in the spec:
+    //TODO: shouldnt we store only once this value in our data-struct?
+    if (ent->elevation.ecs_11 != ent->elevation.ecs_12){
+        fprintf(stderr, "encode_DIMENSION_ALIGNED: Maybe there is something wrong here. Elevation values should be all the same.\n");
+    }
+    bit_write_BD(dat, ent->elevation.ecs_11); //Spec-typo? It says: D instead of BD...
+
+    //spec: flag bit 6 indicates ORDINATE dimension
+    bit_write_RC(dat, ent->flags);//Spec-typo? It says: EC instead of RC...
+    bit_write_T(dat, ent->user_text);
+
+//Spec-typo? For all these values the spec says: D instead of BD... (could eventually be RD)
+    bit_write_BD(dat, ent->text_rot);
+    bit_write_BD(dat, ent->horiz_dir);
+    bit_write_BD(dat, ent->ins_scale.x);
+    bit_write_BD(dat, ent->ins_scale.y);
+    bit_write_BD(dat, ent->ins_scale.z);
+    bit_write_BD(dat, ent->ins_rotation);
+
+    if(dat->version >= R_2000){
+        bit_write_BS(dat, ent->attachment_point);
+        bit_write_BS(dat, ent->lspace_style);
+        bit_write_BD(dat, ent->lspace_factor);
+        bit_write_BD(dat, ent->act_measurement);
+    }
+
+    if(dat->version >= R_2007){
+        bit_write_B(dat, ent->unknown);
+        bit_write_B(dat, ent->flip_arrow1);
+        bit_write_B(dat, ent->flip_arrow2);
+    }
+
+    bit_write_RD(dat, ent->_12_pt.x);
+    bit_write_RD(dat, ent->_12_pt.y);
+    bit_write_BD(dat, ent->_10_pt.x);
+    bit_write_BD(dat, ent->_10_pt.y);
+    bit_write_BD(dat, ent->_10_pt.z);
+    bit_write_BD(dat, ent->_15_pt.x);
+    bit_write_BD(dat, ent->_15_pt.y);
+    bit_write_BD(dat, ent->_15_pt.z);
+
+    bit_write_BD(dat, ent->leader_len);
 }
 
 static void
 dwg_encode_DIMENSION_DIAMETER (Dwg_Entity_DIMENSION_DIAMETER *ent, Bit_Chain * dat)
 {
-    //TODO: implement-me!
+    //TODO: check extrusion writing:
+    //bit_write_BE (dat, ent->extrusion.x, ent->extrusion.y, ent->extrusion.z);
+    bit_write_BD(dat, ent->extrusion.x);
+    bit_write_BD(dat, ent->extrusion.y);
+    bit_write_BD(dat, ent->extrusion.z);
+    bit_write_RD(dat, ent->x0);
+    bit_write_RD(dat, ent->y0);
+    
+    //TODO:review the parsing of these elevation values in the spec:
+    //TODO: shouldnt we store only once this value in our data-struct?
+    if (ent->elevation.ecs_11 != ent->elevation.ecs_12){
+        fprintf(stderr, "encode_DIMENSION_ALIGNED: Maybe there is something wrong here. Elevation values should be all the same.\n");
+    }
+    bit_write_BD(dat, ent->elevation.ecs_11);
+
+    //spec: flag bit 6 indicates ORDINATE dimension
+    bit_write_RC(dat, ent->flags);
+
+    bit_write_T(dat, ent->user_text);
+    bit_write_BD(dat, ent->text_rot);
+    bit_write_BD(dat, ent->horiz_dir);
+    bit_write_BD(dat, ent->ins_scale.x);
+    bit_write_BD(dat, ent->ins_scale.y);
+    bit_write_BD(dat, ent->ins_scale.z);
+    bit_write_BD(dat, ent->ins_rotation);
+
+    if(dat->version >= R_2000){
+        bit_write_BS(dat, ent->attachment_point);
+        bit_write_BS(dat, ent->lspace_style);
+        bit_write_BD(dat, ent->lspace_factor);
+        bit_write_BD(dat, ent->act_measurement);
+    }
+
+    if(dat->version >= R_2007){
+        bit_write_B(dat, ent->unknown);
+        bit_write_B(dat, ent->flip_arrow1);
+        bit_write_B(dat, ent->flip_arrow2);
+    }
+
+    bit_write_RD(dat, ent->_12_pt.x);
+    bit_write_RD(dat, ent->_12_pt.y);
+    bit_write_BD(dat, ent->_15_pt.x);
+    bit_write_BD(dat, ent->_15_pt.y);
+    bit_write_BD(dat, ent->_15_pt.z);
+    bit_write_BD(dat, ent->_10_pt.x);
+    bit_write_BD(dat, ent->_10_pt.y);
+    bit_write_BD(dat, ent->_10_pt.z);
+
+    bit_write_BD(dat, ent->leader_len);
 }
 
 static void
 dwg_encode_POINT (Dwg_Entity_POINT *ent, Bit_Chain * dat)
 {
-    //TODO: implement-me!
+    bit_write_BD(dat, ent->x);
+    bit_write_BD(dat, ent->y);
+    bit_write_BD(dat, ent->z);
+    bit_write_BT(dat, ent->thickness);
+    bit_write_BE(dat, ent->extrusion.x, ent->extrusion.y, ent->extrusion.z);
+    bit_write_BD(dat, ent->x_ang);
 }
 
 static void
