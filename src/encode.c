@@ -1103,3 +1103,28 @@ dwg_encode_POLYLINE_MESH (Dwg_Entity_POLYLINE_MESH *ent, Bit_Chain * dat)
             bit_write_BL(dat, ent->owned_object_count);
         }
 }
+
+static void
+dwg_encode_SOLID (Dwg_Entity_SOLID *ent, Bit_Chain * dat)
+{
+	bit_write_BT (dat, ent->thickness);
+    //TODO: shouldn't we store only env->elevation instead of storing the same value 4 times?
+    if (ent->corner1.z != ent->corner2.z ||
+        ent->corner1.z != ent->corner3.z ||
+        ent->corner1.z != ent->corner4.z){
+        fprintf(stderr, "warning: dwg_encode_SOLID: There is something wrong here. Z coordinate for the 4 corners should be equal (elevation value).\n");
+    }
+
+    //elevation:
+	bit_write_BD(dat, ent->corner1.z);
+
+	bit_write_RD(dat, ent->corner1.x);
+	bit_write_RD(dat, ent->corner1.y);
+    bit_write_RD(dat, ent->corner2.x);
+	bit_write_RD(dat, ent->corner2.y);
+    bit_write_RD(dat, ent->corner3.x);
+	bit_write_RD(dat, ent->corner3.y);
+    bit_write_RD(dat, ent->corner4.x);
+	bit_write_RD(dat, ent->corner4.y);
+    bit_write_BE(dat, ent->extrusion.x, ent->extrusion.y, ent->extrusion.z);
+}
