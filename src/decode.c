@@ -1460,7 +1460,7 @@ dwg_decode_DIMENSION_ORDINATE (Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_DIMENSION_LINEAR (Bit_Chain * dat, Dwg_Object * obj)
 {
-        Dwg_Entity_DIMENSION_LINEAR *ent;
+    Dwg_Entity_DIMENSION_LINEAR *ent;
 
 	obj->supertype = DWG_SUPERTYPE_ENTITY;
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
@@ -1468,59 +1468,59 @@ dwg_decode_DIMENSION_LINEAR (Bit_Chain * dat, Dwg_Object * obj)
 	dwg_decode_entity (dat, obj->tio.entity);
 	ent = obj->tio.entity->tio.DIMENSION_LINEAR;
 
-        //TODO: check extrusion reading
-        //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
-        ent->extrusion.x = bit_read_BD(dat);
-        ent->extrusion.y = bit_read_BD(dat);
-        ent->extrusion.z = bit_read_BD(dat);
-        ent->x0 = bit_read_RD (dat);
-        ent->y0 = bit_read_RD (dat);
-        ent->elevation.ecs_11 = bit_read_BD(dat);
-        ent->elevation.ecs_12 = bit_read_BD(dat);
-        //spec: flag bit 0 indicates LINEAR dimension
-        ent->flags = bit_read_RC(dat);
-        ent->user_text = bit_read_T(dat);
-        ent->text_rot = bit_read_BD(dat);
-        ent->horiz_dir = bit_read_BD(dat);
-        ent->ins_scale.x = bit_read_BD(dat);
-        ent->ins_scale.y = bit_read_BD(dat);
-        ent->ins_scale.z = bit_read_BD(dat);
-        ent->ins_rotation = bit_read_BD(dat);
+    //TODO: check extrusion reading
+    //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
+    ent->extrusion.x = bit_read_BD(dat);
+    ent->extrusion.y = bit_read_BD(dat);
+    ent->extrusion.z = bit_read_BD(dat);
+    ent->x0 = bit_read_RD (dat);
+    ent->y0 = bit_read_RD (dat);
+    ent->elevation.ecs_11 = bit_read_BD(dat);
+    ent->elevation.ecs_12 = bit_read_BD(dat);
+    //spec: flag bit 0 indicates LINEAR dimension
+    ent->flags = bit_read_RC(dat);
+    ent->user_text = bit_read_T(dat);
+    ent->text_rot = bit_read_BD(dat);
+    ent->horiz_dir = bit_read_BD(dat);
+    ent->ins_scale.x = bit_read_BD(dat);
+    ent->ins_scale.y = bit_read_BD(dat);
+    ent->ins_scale.z = bit_read_BD(dat);
+    ent->ins_rotation = bit_read_BD(dat);
 
-        if(dat->version >= R_2000){
-            ent->attachment_point = bit_read_BS(dat);
-            ent->lspace_style = bit_read_BS(dat);
-            ent->lspace_factor = bit_read_BD(dat);
-            ent->act_measurement = bit_read_BD(dat);
-        }
-        if(dat->version >= R_2007){
-            ent->unknown = bit_read_B(dat);
-            ent->flip_arrow1 = bit_read_B(dat);
-            ent->flip_arrow2 = bit_read_B(dat);
-        }
+    if(dat->version >= R_2000){
+        ent->attachment_point = bit_read_BS(dat);
+        ent->lspace_style = bit_read_BS(dat);
+        ent->lspace_factor = bit_read_BD(dat);
+        ent->act_measurement = bit_read_BD(dat);
+    }
+    if(dat->version >= R_2007){
+        ent->unknown = bit_read_B(dat);
+        ent->flip_arrow1 = bit_read_B(dat);
+        ent->flip_arrow2 = bit_read_B(dat);
+    }
 
-        ent->_12_pt.x = bit_read_RD(dat);
-        ent->_12_pt.y = bit_read_RD(dat);        
-        ent->_13_pt.x = bit_read_BD(dat);
-        ent->_13_pt.y = bit_read_BD(dat);
-        ent->_13_pt.z = bit_read_BD(dat);
-        ent->_14_pt.x = bit_read_BD(dat);
-        ent->_14_pt.y = bit_read_BD(dat);
-        ent->_14_pt.z = bit_read_BD(dat);
-        ent->_10_pt.x = bit_read_BD(dat);
-        ent->_10_pt.y = bit_read_BD(dat);
-        ent->_10_pt.z = bit_read_BD(dat);
+    ent->_12_pt.x = bit_read_RD(dat);
+    ent->_12_pt.y = bit_read_RD(dat);        
+    ent->_13_pt.x = bit_read_BD(dat);
+    ent->_13_pt.y = bit_read_BD(dat);
+    ent->_13_pt.z = bit_read_BD(dat);
+    ent->_14_pt.x = bit_read_BD(dat);
+    ent->_14_pt.y = bit_read_BD(dat);
+    ent->_14_pt.z = bit_read_BD(dat);
+    ent->_10_pt.x = bit_read_BD(dat);
+    ent->_10_pt.y = bit_read_BD(dat);
+    ent->_10_pt.z = bit_read_BD(dat);
 
-        ent->ext_line_rot = bit_read_BD(dat);
-        ent->dim_rot = bit_read_BD(dat);
+    ent->ext_line_rot = bit_read_BD(dat);
+    ent->dim_rot = bit_read_BD(dat);
 
-        dwg_decode_traktref (dat, obj);
+    dwg_decode_traktref (dat, obj);
 }
 
 static void
 dwg_decode_DIMENSION_ALIGNED (Bit_Chain * dat, Dwg_Object * obj)
 {
-        Dwg_Entity_DIMENSION_ALIGNED *ent;
+    Dwg_Entity_DIMENSION_ALIGNED *ent;
 
 	obj->supertype = DWG_SUPERTYPE_ENTITY;
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
@@ -1528,58 +1528,58 @@ dwg_decode_DIMENSION_ALIGNED (Bit_Chain * dat, Dwg_Object * obj)
 	dwg_decode_entity (dat, obj->tio.entity);
 	ent = obj->tio.entity->tio.DIMENSION_ALIGNED;
 
-        //TODO: check extrusion reading
-        //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
-        ent->extrusion.x = bit_read_BD(dat);
-        ent->extrusion.y = bit_read_BD(dat);
-        ent->extrusion.z = bit_read_BD(dat);
-        ent->x0 = bit_read_RD (dat);
-        ent->y0 = bit_read_RD (dat);
-        ent->elevation.ecs_11 = bit_read_BD(dat);
-        ent->elevation.ecs_12 = bit_read_BD(dat);
-        //spec: flag bit 1 indicates ALIGNED dimension
-        ent->flags = bit_read_RC(dat);
-        ent->user_text = bit_read_T(dat);
-        ent->text_rot = bit_read_BD(dat);
-        ent->horiz_dir = bit_read_BD(dat);
-        ent->ins_scale.x = bit_read_BD(dat);
-        ent->ins_scale.y = bit_read_BD(dat);
-        ent->ins_scale.z = bit_read_BD(dat);
-        ent->ins_rotation = bit_read_BD(dat);
+    //TODO: check extrusion reading
+    //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
+    ent->extrusion.x = bit_read_BD(dat);
+    ent->extrusion.y = bit_read_BD(dat);
+    ent->extrusion.z = bit_read_BD(dat);
+    ent->x0 = bit_read_RD (dat);
+    ent->y0 = bit_read_RD (dat);
+    ent->elevation.ecs_11 = bit_read_BD(dat);
+    ent->elevation.ecs_12 = bit_read_BD(dat);
+    //spec: flag bit 1 indicates ALIGNED dimension
+    ent->flags = bit_read_RC(dat);
+    ent->user_text = bit_read_T(dat);
+    ent->text_rot = bit_read_BD(dat);
+    ent->horiz_dir = bit_read_BD(dat);
+    ent->ins_scale.x = bit_read_BD(dat);
+    ent->ins_scale.y = bit_read_BD(dat);
+    ent->ins_scale.z = bit_read_BD(dat);
+    ent->ins_rotation = bit_read_BD(dat);
 
-        if(dat->version >= R_2000){
-            ent->attachment_point = bit_read_BS(dat);
-            ent->lspace_style = bit_read_BS(dat);
-            ent->lspace_factor = bit_read_BD(dat);
-            ent->act_measurement = bit_read_BD(dat);
-        }
-        if(dat->version >= R_2007){
-            ent->unknown = bit_read_B(dat);
-            ent->flip_arrow1 = bit_read_B(dat);
-            ent->flip_arrow2 = bit_read_B(dat);
-        }
+    if(dat->version >= R_2000){
+        ent->attachment_point = bit_read_BS(dat);
+        ent->lspace_style = bit_read_BS(dat);
+        ent->lspace_factor = bit_read_BD(dat);
+        ent->act_measurement = bit_read_BD(dat);
+    }
+    if(dat->version >= R_2007){
+        ent->unknown = bit_read_B(dat);
+        ent->flip_arrow1 = bit_read_B(dat);
+        ent->flip_arrow2 = bit_read_B(dat);
+    }
 
-        ent->_12_pt.x = bit_read_RD(dat);
-        ent->_12_pt.y = bit_read_RD(dat);
-        ent->_13_pt.x = bit_read_BD(dat);
-        ent->_13_pt.y = bit_read_BD(dat);
-        ent->_13_pt.z = bit_read_BD(dat);
-        ent->_14_pt.x = bit_read_BD(dat);
-        ent->_14_pt.y = bit_read_BD(dat);
-        ent->_14_pt.z = bit_read_BD(dat);
-        ent->_10_pt.x = bit_read_BD(dat);
-        ent->_10_pt.y = bit_read_BD(dat);
-        ent->_10_pt.z = bit_read_BD(dat);
+    ent->_12_pt.x = bit_read_RD(dat);
+    ent->_12_pt.y = bit_read_RD(dat);
+    ent->_13_pt.x = bit_read_BD(dat);
+    ent->_13_pt.y = bit_read_BD(dat);
+    ent->_13_pt.z = bit_read_BD(dat);
+    ent->_14_pt.x = bit_read_BD(dat);
+    ent->_14_pt.y = bit_read_BD(dat);
+    ent->_14_pt.z = bit_read_BD(dat);
+    ent->_10_pt.x = bit_read_BD(dat);
+    ent->_10_pt.y = bit_read_BD(dat);
+    ent->_10_pt.z = bit_read_BD(dat);
 
-        ent->ext_line_rot = bit_read_BD(dat);
+    ent->ext_line_rot = bit_read_BD(dat);
 
-        dwg_decode_traktref (dat, obj);
+    dwg_decode_traktref (dat, obj);
 }
 
 static void
 dwg_decode_DIMENSION_ANG3PT (Bit_Chain * dat, Dwg_Object * obj)
 {
-        Dwg_Entity_DIMENSION_ANG3PT *ent;
+    Dwg_Entity_DIMENSION_ANG3PT *ent;
 
 	obj->supertype = DWG_SUPERTYPE_ENTITY;
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
@@ -1587,59 +1587,59 @@ dwg_decode_DIMENSION_ANG3PT (Bit_Chain * dat, Dwg_Object * obj)
 	dwg_decode_entity (dat, obj->tio.entity);
 	ent = obj->tio.entity->tio.DIMENSION_ANG3PT;
 
-        //TODO: check extrusion reading
-        //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
-        ent->extrusion.x = bit_read_BD(dat);
-        ent->extrusion.y = bit_read_BD(dat);
-        ent->extrusion.z = bit_read_BD(dat);
-        ent->x0 = bit_read_RD (dat);
-        ent->y0 = bit_read_RD (dat);
-        ent->elevation.ecs_11 = bit_read_BD(dat);
-        ent->elevation.ecs_12 = bit_read_BD(dat);
-        //spec: flag bit 5 indicates ANGULAR 3PT dimension
-        ent->flags = bit_read_RC(dat);
-        ent->user_text = bit_read_T(dat);
-        ent->text_rot = bit_read_BD(dat);
-        ent->horiz_dir = bit_read_BD(dat);
-        ent->ins_scale.x = bit_read_BD(dat);
-        ent->ins_scale.y = bit_read_BD(dat);
-        ent->ins_scale.z = bit_read_BD(dat);
-        ent->ins_rotation = bit_read_BD(dat);
+    //TODO: check extrusion reading
+    //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
+    ent->extrusion.x = bit_read_BD(dat);
+    ent->extrusion.y = bit_read_BD(dat);
+    ent->extrusion.z = bit_read_BD(dat);
+    ent->x0 = bit_read_RD (dat);
+    ent->y0 = bit_read_RD (dat);
+    ent->elevation.ecs_11 = bit_read_BD(dat);
+    ent->elevation.ecs_12 = bit_read_BD(dat);
+    //spec: flag bit 5 indicates ANGULAR 3PT dimension
+    ent->flags = bit_read_RC(dat);
+    ent->user_text = bit_read_T(dat);
+    ent->text_rot = bit_read_BD(dat);
+    ent->horiz_dir = bit_read_BD(dat);
+    ent->ins_scale.x = bit_read_BD(dat);
+    ent->ins_scale.y = bit_read_BD(dat);
+    ent->ins_scale.z = bit_read_BD(dat);
+    ent->ins_rotation = bit_read_BD(dat);
 
-        if(dat->version >= R_2000){
-            ent->attachment_point = bit_read_BS(dat);
-            ent->lspace_style = bit_read_BS(dat);
-            ent->lspace_factor = bit_read_BD(dat);
-            ent->act_measurement = bit_read_BD(dat);
-        }
-        if(dat->version >= R_2007){
-            ent->unknown = bit_read_B(dat);
-            ent->flip_arrow1 = bit_read_B(dat);
-            ent->flip_arrow2 = bit_read_B(dat);
-        }
+    if(dat->version >= R_2000){
+        ent->attachment_point = bit_read_BS(dat);
+        ent->lspace_style = bit_read_BS(dat);
+        ent->lspace_factor = bit_read_BD(dat);
+        ent->act_measurement = bit_read_BD(dat);
+    }
+    if(dat->version >= R_2007){
+        ent->unknown = bit_read_B(dat);
+        ent->flip_arrow1 = bit_read_B(dat);
+        ent->flip_arrow2 = bit_read_B(dat);
+    }
 
-        ent->_12_pt.x = bit_read_RD(dat);
-        ent->_12_pt.y = bit_read_RD(dat);
-        ent->_10_pt.x = bit_read_BD(dat);
-        ent->_10_pt.y = bit_read_BD(dat);
-        ent->_10_pt.z = bit_read_BD(dat);
-        ent->_13_pt.x = bit_read_BD(dat);
-        ent->_13_pt.y = bit_read_BD(dat);
-        ent->_13_pt.z = bit_read_BD(dat);
-        ent->_14_pt.x = bit_read_BD(dat);
-        ent->_14_pt.y = bit_read_BD(dat);
-        ent->_14_pt.z = bit_read_BD(dat);
-        ent->_15_pt.x = bit_read_BD(dat);
-        ent->_15_pt.y = bit_read_BD(dat);
-        ent->_15_pt.z = bit_read_BD(dat);
+    ent->_12_pt.x = bit_read_RD(dat);
+    ent->_12_pt.y = bit_read_RD(dat);
+    ent->_10_pt.x = bit_read_BD(dat);
+    ent->_10_pt.y = bit_read_BD(dat);
+    ent->_10_pt.z = bit_read_BD(dat);
+    ent->_13_pt.x = bit_read_BD(dat);
+    ent->_13_pt.y = bit_read_BD(dat);
+    ent->_13_pt.z = bit_read_BD(dat);
+    ent->_14_pt.x = bit_read_BD(dat);
+    ent->_14_pt.y = bit_read_BD(dat);
+    ent->_14_pt.z = bit_read_BD(dat);
+    ent->_15_pt.x = bit_read_BD(dat);
+    ent->_15_pt.y = bit_read_BD(dat);
+    ent->_15_pt.z = bit_read_BD(dat);
 
-        dwg_decode_traktref (dat, obj);
+    dwg_decode_traktref (dat, obj);
 }
 
 static void
 dwg_decode_DIMENSION_ANG2LN (Bit_Chain * dat, Dwg_Object * obj)
 {
-        Dwg_Entity_DIMENSION_ANG2LN *ent;
+    Dwg_Entity_DIMENSION_ANG2LN *ent;
 
 	obj->supertype = DWG_SUPERTYPE_ENTITY;
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
@@ -1647,61 +1647,61 @@ dwg_decode_DIMENSION_ANG2LN (Bit_Chain * dat, Dwg_Object * obj)
 	dwg_decode_entity (dat, obj->tio.entity);
 	ent = obj->tio.entity->tio.DIMENSION_ANG2LN;
 
-        //TODO: check extrusion reading
-        //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
-        ent->extrusion.x = bit_read_BD(dat);
-        ent->extrusion.y = bit_read_BD(dat);
-        ent->extrusion.z = bit_read_BD(dat);
-        ent->x0 = bit_read_RD (dat);
-        ent->y0 = bit_read_RD (dat);
-        ent->elevation.ecs_11 = bit_read_BD(dat);
-        ent->elevation.ecs_12 = bit_read_BD(dat);
-        //spec: flag bit 2 indicates ANGULAR 2 line dimension
-        ent->flags = bit_read_RC(dat);
-        ent->user_text = bit_read_T(dat);
-        ent->text_rot = bit_read_BD(dat);
-        ent->horiz_dir = bit_read_BD(dat);
-        ent->ins_scale.x = bit_read_BD(dat);
-        ent->ins_scale.y = bit_read_BD(dat);
-        ent->ins_scale.z = bit_read_BD(dat);
-        ent->ins_rotation = bit_read_BD(dat);
+    //TODO: check extrusion reading
+    //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
+    ent->extrusion.x = bit_read_BD(dat);
+    ent->extrusion.y = bit_read_BD(dat);
+    ent->extrusion.z = bit_read_BD(dat);
+    ent->x0 = bit_read_RD (dat);
+    ent->y0 = bit_read_RD (dat);
+    ent->elevation.ecs_11 = bit_read_BD(dat);
+    ent->elevation.ecs_12 = bit_read_BD(dat);
+    //spec: flag bit 2 indicates ANGULAR 2 line dimension
+    ent->flags = bit_read_RC(dat);
+    ent->user_text = bit_read_T(dat);
+    ent->text_rot = bit_read_BD(dat);
+    ent->horiz_dir = bit_read_BD(dat);
+    ent->ins_scale.x = bit_read_BD(dat);
+    ent->ins_scale.y = bit_read_BD(dat);
+    ent->ins_scale.z = bit_read_BD(dat);
+    ent->ins_rotation = bit_read_BD(dat);
 
-        if(dat->version >= R_2000){
-            ent->attachment_point = bit_read_BS(dat);
-            ent->lspace_style = bit_read_BS(dat);
-            ent->lspace_factor = bit_read_BD(dat);
-            ent->act_measurement = bit_read_BD(dat);
-        }
-        if(dat->version >= R_2007){
-            ent->unknown = bit_read_B(dat);
-            ent->flip_arrow1 = bit_read_B(dat);
-            ent->flip_arrow2 = bit_read_B(dat);
-        }
+    if(dat->version >= R_2000){
+        ent->attachment_point = bit_read_BS(dat);
+        ent->lspace_style = bit_read_BS(dat);
+        ent->lspace_factor = bit_read_BD(dat);
+        ent->act_measurement = bit_read_BD(dat);
+    }
+    if(dat->version >= R_2007){
+        ent->unknown = bit_read_B(dat);
+        ent->flip_arrow1 = bit_read_B(dat);
+        ent->flip_arrow2 = bit_read_B(dat);
+    }
 
-        ent->_12_pt.x = bit_read_RD(dat);
-        ent->_12_pt.y = bit_read_RD(dat);
-        ent->_16_pt.x = bit_read_RD(dat);
-        ent->_16_pt.y = bit_read_RD(dat);
-        ent->_13_pt.x = bit_read_BD(dat);
-        ent->_13_pt.y = bit_read_BD(dat);
-        ent->_13_pt.z = bit_read_BD(dat);
-        ent->_14_pt.x = bit_read_BD(dat);
-        ent->_14_pt.y = bit_read_BD(dat);
-        ent->_14_pt.z = bit_read_BD(dat);
-        ent->_15_pt.x = bit_read_BD(dat);
-        ent->_15_pt.y = bit_read_BD(dat);
-        ent->_15_pt.z = bit_read_BD(dat);
-        ent->_10_pt.x = bit_read_BD(dat);
-        ent->_10_pt.y = bit_read_BD(dat);
-        ent->_10_pt.z = bit_read_BD(dat);
+    ent->_12_pt.x = bit_read_RD(dat);
+    ent->_12_pt.y = bit_read_RD(dat);
+    ent->_16_pt.x = bit_read_RD(dat);
+    ent->_16_pt.y = bit_read_RD(dat);
+    ent->_13_pt.x = bit_read_BD(dat);
+    ent->_13_pt.y = bit_read_BD(dat);
+    ent->_13_pt.z = bit_read_BD(dat);
+    ent->_14_pt.x = bit_read_BD(dat);
+    ent->_14_pt.y = bit_read_BD(dat);
+    ent->_14_pt.z = bit_read_BD(dat);
+    ent->_15_pt.x = bit_read_BD(dat);
+    ent->_15_pt.y = bit_read_BD(dat);
+    ent->_15_pt.z = bit_read_BD(dat);
+    ent->_10_pt.x = bit_read_BD(dat);
+    ent->_10_pt.y = bit_read_BD(dat);
+    ent->_10_pt.z = bit_read_BD(dat);
 
-        dwg_decode_traktref (dat, obj);
+    dwg_decode_traktref (dat, obj);
 }
 
 static void
 dwg_decode_DIMENSION_RADIUS (Bit_Chain * dat, Dwg_Object * obj)
 {
-        Dwg_Entity_DIMENSION_RADIUS *ent;
+    Dwg_Entity_DIMENSION_RADIUS *ent;
 
 	obj->supertype = DWG_SUPERTYPE_ENTITY;
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
@@ -1709,53 +1709,53 @@ dwg_decode_DIMENSION_RADIUS (Bit_Chain * dat, Dwg_Object * obj)
 	dwg_decode_entity (dat, obj->tio.entity);
 	ent = obj->tio.entity->tio.DIMENSION_RADIUS;
 
-        //TODO: check extrusion reading
-        //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
-        ent->extrusion.x = bit_read_BD(dat);
-        ent->extrusion.y = bit_read_BD(dat);
-        ent->extrusion.z = bit_read_BD(dat);
-        ent->x0 = bit_read_RD (dat);
-        ent->y0 = bit_read_RD (dat);
-        ent->elevation.ecs_11 = bit_read_BD(dat);
-        ent->elevation.ecs_12 = bit_read_BD(dat);
-        //spec: flag bit 4 indicates RADIUS dimension
-        ent->flags = bit_read_RC(dat);
-        ent->user_text = bit_read_T(dat);
-        ent->text_rot = bit_read_BD(dat);
-        ent->horiz_dir = bit_read_BD(dat);
-        ent->ins_scale.x = bit_read_BD(dat);
-        ent->ins_scale.y = bit_read_BD(dat);
-        ent->ins_scale.z = bit_read_BD(dat);
-        ent->ins_rotation = bit_read_BD(dat);
+    //TODO: check extrusion reading
+    //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
+    ent->extrusion.x = bit_read_BD(dat);
+    ent->extrusion.y = bit_read_BD(dat);
+    ent->extrusion.z = bit_read_BD(dat);
+    ent->x0 = bit_read_RD (dat);
+    ent->y0 = bit_read_RD (dat);
+    ent->elevation.ecs_11 = bit_read_BD(dat);
+    ent->elevation.ecs_12 = bit_read_BD(dat);
+    //spec: flag bit 4 indicates RADIUS dimension
+    ent->flags = bit_read_RC(dat);
+    ent->user_text = bit_read_T(dat);
+    ent->text_rot = bit_read_BD(dat);
+    ent->horiz_dir = bit_read_BD(dat);
+    ent->ins_scale.x = bit_read_BD(dat);
+    ent->ins_scale.y = bit_read_BD(dat);
+    ent->ins_scale.z = bit_read_BD(dat);
+    ent->ins_rotation = bit_read_BD(dat);
 
-        if(dat->version >= R_2000){
-            ent->attachment_point = bit_read_BS(dat);
-            ent->lspace_style = bit_read_BS(dat);
-            ent->lspace_factor = bit_read_BD(dat);
-            ent->act_measurement = bit_read_BD(dat);
-        }
-        if(dat->version >= R_2007){
-            ent->unknown = bit_read_B(dat);
-            ent->flip_arrow1 = bit_read_B(dat);
-            ent->flip_arrow2 = bit_read_B(dat);
-        }
+    if(dat->version >= R_2000){
+        ent->attachment_point = bit_read_BS(dat);
+        ent->lspace_style = bit_read_BS(dat);
+        ent->lspace_factor = bit_read_BD(dat);
+        ent->act_measurement = bit_read_BD(dat);
+    }
+    if(dat->version >= R_2007){
+        ent->unknown = bit_read_B(dat);
+        ent->flip_arrow1 = bit_read_B(dat);
+        ent->flip_arrow2 = bit_read_B(dat);
+    }
 
-        ent->_12_pt.x = bit_read_RD(dat);
-        ent->_12_pt.y = bit_read_RD(dat);
-        ent->_10_pt.x = bit_read_BD(dat);
-        ent->_10_pt.y = bit_read_BD(dat);
-        ent->_10_pt.z = bit_read_BD(dat);
-        ent->_15_pt.x = bit_read_BD(dat);
-        ent->_15_pt.y = bit_read_BD(dat);
-        ent->_15_pt.z = bit_read_BD(dat);
-        ent->leader_len = bit_read_BD(dat);
+    ent->_12_pt.x = bit_read_RD(dat);
+    ent->_12_pt.y = bit_read_RD(dat);
+    ent->_10_pt.x = bit_read_BD(dat);
+    ent->_10_pt.y = bit_read_BD(dat);
+    ent->_10_pt.z = bit_read_BD(dat);
+    ent->_15_pt.x = bit_read_BD(dat);
+    ent->_15_pt.y = bit_read_BD(dat);
+    ent->_15_pt.z = bit_read_BD(dat);
+    ent->leader_len = bit_read_BD(dat);
 
-        dwg_decode_traktref (dat, obj);
+    dwg_decode_traktref (dat, obj);
 }
 static void
 dwg_decode_DIMENSION_DIAMETER (Bit_Chain * dat, Dwg_Object * obj)
 {
-        Dwg_Entity_DIMENSION_DIAMETER *ent;
+    Dwg_Entity_DIMENSION_DIAMETER *ent;
 
 	obj->supertype = DWG_SUPERTYPE_ENTITY;
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
@@ -1763,49 +1763,49 @@ dwg_decode_DIMENSION_DIAMETER (Bit_Chain * dat, Dwg_Object * obj)
 	dwg_decode_entity (dat, obj->tio.entity);
 	ent = obj->tio.entity->tio.DIMENSION_DIAMETER;
 
-        //TODO: check extrusion reading
-        //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
-        ent->extrusion.x = bit_read_BD(dat);
-        ent->extrusion.y = bit_read_BD(dat);
-        ent->extrusion.z = bit_read_BD(dat);
-        ent->x0 = bit_read_RD (dat);
-        ent->y0 = bit_read_RD (dat);
-        ent->elevation.ecs_11 = bit_read_BD(dat);
-        ent->elevation.ecs_12 = bit_read_BD(dat);
-        //spec: flag bit 3 indicates DIAMETER dimension
-        //(spec says actually RADIUS but seems to be wrong)
-        ent->flags = bit_read_RC(dat);
-        ent->user_text = bit_read_T(dat);
-        ent->text_rot = bit_read_BD(dat);
-        ent->horiz_dir = bit_read_BD(dat);
-        ent->ins_scale.x = bit_read_BD(dat);
-        ent->ins_scale.y = bit_read_BD(dat);
-        ent->ins_scale.z = bit_read_BD(dat);
-        ent->ins_rotation = bit_read_BD(dat);
+    //TODO: check extrusion reading
+    //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
+    ent->extrusion.x = bit_read_BD(dat);
+    ent->extrusion.y = bit_read_BD(dat);
+    ent->extrusion.z = bit_read_BD(dat);
+    ent->x0 = bit_read_RD (dat);
+    ent->y0 = bit_read_RD (dat);
+    ent->elevation.ecs_11 = bit_read_BD(dat);
+    ent->elevation.ecs_12 = bit_read_BD(dat);
+    //spec: flag bit 3 indicates DIAMETER dimension
+    //(spec says actually RADIUS but seems to be wrong)
+    ent->flags = bit_read_RC(dat);
+    ent->user_text = bit_read_T(dat);
+    ent->text_rot = bit_read_BD(dat);
+    ent->horiz_dir = bit_read_BD(dat);
+    ent->ins_scale.x = bit_read_BD(dat);
+    ent->ins_scale.y = bit_read_BD(dat);
+    ent->ins_scale.z = bit_read_BD(dat);
+    ent->ins_rotation = bit_read_BD(dat);
 
-        if(dat->version >= R_2000){
-            ent->attachment_point = bit_read_BS(dat);
-            ent->lspace_style = bit_read_BS(dat);
-            ent->lspace_factor = bit_read_BD(dat);
-            ent->act_measurement = bit_read_BD(dat);
-        }
-        if(dat->version >= R_2007){
-            ent->unknown = bit_read_B(dat);
-            ent->flip_arrow1 = bit_read_B(dat);
-            ent->flip_arrow2 = bit_read_B(dat);
-        }
+    if(dat->version >= R_2000){
+        ent->attachment_point = bit_read_BS(dat);
+        ent->lspace_style = bit_read_BS(dat);
+        ent->lspace_factor = bit_read_BD(dat);
+        ent->act_measurement = bit_read_BD(dat);
+    }
+    if(dat->version >= R_2007){
+        ent->unknown = bit_read_B(dat);
+        ent->flip_arrow1 = bit_read_B(dat);
+        ent->flip_arrow2 = bit_read_B(dat);
+    }
 
-        ent->_12_pt.x = bit_read_RD(dat);
-        ent->_12_pt.y = bit_read_RD(dat);
-        ent->_15_pt.x = bit_read_BD(dat);
-        ent->_15_pt.y = bit_read_BD(dat);
-        ent->_15_pt.z = bit_read_BD(dat);
-        ent->_10_pt.x = bit_read_BD(dat);
-        ent->_10_pt.y = bit_read_BD(dat);
-        ent->_10_pt.z = bit_read_BD(dat);
-        ent->leader_len = bit_read_BD(dat);
+    ent->_12_pt.x = bit_read_RD(dat);
+    ent->_12_pt.y = bit_read_RD(dat);
+    ent->_15_pt.x = bit_read_BD(dat);
+    ent->_15_pt.y = bit_read_BD(dat);
+    ent->_15_pt.z = bit_read_BD(dat);
+    ent->_10_pt.x = bit_read_BD(dat);
+    ent->_10_pt.y = bit_read_BD(dat);
+    ent->_10_pt.z = bit_read_BD(dat);
+    ent->leader_len = bit_read_BD(dat);
 
-        dwg_decode_traktref (dat, obj);
+    dwg_decode_traktref (dat, obj);
 }
 
 static void
@@ -1832,7 +1832,7 @@ dwg_decode_POINT (Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_3DFACE (Bit_Chain * dat, Dwg_Object * obj)
 {
-        Dwg_Entity_3D_FACE *ent;
+    Dwg_Entity_3D_FACE *ent;
 
 	obj->supertype = DWG_SUPERTYPE_ENTITY;
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
@@ -1840,46 +1840,46 @@ dwg_decode_3DFACE (Bit_Chain * dat, Dwg_Object * obj)
 	dwg_decode_entity (dat, obj->tio.entity);
 	ent = obj->tio.entity->tio._3DFACE;
 
-        if (dat->version == R_13 || dat->version == R_14)
-        {
-            ent->corner1.x = bit_read_BD(dat);
-            ent->corner1.y = bit_read_BD(dat);
-            ent->corner1.z = bit_read_BD(dat);
-            ent->corner2.x = bit_read_BD(dat);
-            ent->corner2.y = bit_read_BD(dat);
-            ent->corner2.z = bit_read_BD(dat);
-            ent->corner3.x = bit_read_BD(dat);
-            ent->corner3.y = bit_read_BD(dat);
-            ent->corner3.z = bit_read_BD(dat);
-            ent->corner4.x = bit_read_BD(dat);
-            ent->corner4.y = bit_read_BD(dat);
-            ent->corner4.z = bit_read_BD(dat);
-            ent->invis_flags = bit_read_BS(dat);
-        }
-        if (dat->version >= R_2000)
-        {
-            ent->has_no_flags = bit_read_B (dat);
-            ent->z_is_zero = bit_read_B (dat);
-            ent->corner1.x = bit_read_BD(dat);
-            ent->corner1.y = bit_read_BD(dat);
-            ent->corner1.z = bit_read_BD(dat);
-            ent->corner2.x = bit_read_BD(dat);
-            ent->corner2.y = bit_read_BD(dat);
-            ent->corner2.z = bit_read_BD(dat);
-            ent->corner3.x = bit_read_BD(dat);
-            ent->corner3.y = bit_read_BD(dat);
-            ent->corner3.z = bit_read_BD(dat);
-            ent->corner4.x = bit_read_BD(dat);
-            ent->corner4.y = bit_read_BD(dat);
-            ent->corner4.z = bit_read_BD(dat);
-        }
-        dwg_decode_traktref (dat, obj);
+    if (dat->version == R_13 || dat->version == R_14)
+    {
+        ent->corner1.x = bit_read_BD(dat);
+        ent->corner1.y = bit_read_BD(dat);
+        ent->corner1.z = bit_read_BD(dat);
+        ent->corner2.x = bit_read_BD(dat);
+        ent->corner2.y = bit_read_BD(dat);
+        ent->corner2.z = bit_read_BD(dat);
+        ent->corner3.x = bit_read_BD(dat);
+        ent->corner3.y = bit_read_BD(dat);
+        ent->corner3.z = bit_read_BD(dat);
+        ent->corner4.x = bit_read_BD(dat);
+        ent->corner4.y = bit_read_BD(dat);
+        ent->corner4.z = bit_read_BD(dat);
+        ent->invis_flags = bit_read_BS(dat);
+    }
+    if (dat->version >= R_2000)
+    {
+        ent->has_no_flags = bit_read_B (dat);
+        ent->z_is_zero = bit_read_B (dat);
+        ent->corner1.x = bit_read_BD(dat);
+        ent->corner1.y = bit_read_BD(dat);
+        ent->corner1.z = bit_read_BD(dat);
+        ent->corner2.x = bit_read_BD(dat);
+        ent->corner2.y = bit_read_BD(dat);
+        ent->corner2.z = bit_read_BD(dat);
+        ent->corner3.x = bit_read_BD(dat);
+        ent->corner3.y = bit_read_BD(dat);
+        ent->corner3.z = bit_read_BD(dat);
+        ent->corner4.x = bit_read_BD(dat);
+        ent->corner4.y = bit_read_BD(dat);
+        ent->corner4.z = bit_read_BD(dat);
+    }
+    dwg_decode_traktref (dat, obj);
 }
 
 static void
 dwg_decode_POLYLINE_PFACE (Bit_Chain * dat, Dwg_Object * obj)
 {
-        Dwg_Entity_POLYLINE_PFACE *ent;
+    Dwg_Entity_POLYLINE_PFACE *ent;
 
 	obj->supertype = DWG_SUPERTYPE_ENTITY;
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
@@ -1887,21 +1887,21 @@ dwg_decode_POLYLINE_PFACE (Bit_Chain * dat, Dwg_Object * obj)
 	dwg_decode_entity (dat, obj->tio.entity);
 	ent = obj->tio.entity->tio.POLYLINE_PFACE;
 
-        ent->numverts = bit_read_BS(dat);
-        ent->numfaces = bit_read_BS(dat);
+    ent->numverts = bit_read_BS(dat);
+    ent->numfaces = bit_read_BS(dat);
 
-        if (dat->version >= R_2004)
-        {
-            ent->owned_object_count = bit_read_BL(dat);
-        }
+    if (dat->version >= R_2004)
+    {
+        ent->owned_object_count = bit_read_BL(dat);
+    }
 
-        dwg_decode_traktref (dat, obj);
+    dwg_decode_traktref (dat, obj);
 }
 
 static void
 dwg_decode_POLYLINE_MESH (Bit_Chain * dat, Dwg_Object * obj)
 {
-        Dwg_Entity_POLYLINE_MESH *ent;
+    Dwg_Entity_POLYLINE_MESH *ent;
 
 	obj->supertype = DWG_SUPERTYPE_ENTITY;
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
@@ -1909,19 +1909,19 @@ dwg_decode_POLYLINE_MESH (Bit_Chain * dat, Dwg_Object * obj)
 	dwg_decode_entity (dat, obj->tio.entity);
 	ent = obj->tio.entity->tio.POLYLINE_MESH;
 
-        ent->flags = bit_read_BS(dat);
-        ent->curve_type = bit_read_BS(dat);
-        ent->m_vert_count = bit_read_BS(dat);
-        ent->n_vert_count = bit_read_BS(dat);
-        ent->m_density = bit_read_BS(dat);
-        ent->n_density = bit_read_BS(dat);
+    ent->flags = bit_read_BS(dat);
+    ent->curve_type = bit_read_BS(dat);
+    ent->m_vert_count = bit_read_BS(dat);
+    ent->n_vert_count = bit_read_BS(dat);
+    ent->m_density = bit_read_BS(dat);
+    ent->n_density = bit_read_BS(dat);
 
-        if (dat->version >= R_2004)
-        {
-            ent->owned_object_count = bit_read_BL(dat);
-        }
+    if (dat->version >= R_2004)
+    {
+        ent->owned_object_count = bit_read_BL(dat);
+    }
 
-        dwg_decode_traktref (dat, obj);
+    dwg_decode_traktref (dat, obj);
 }
 
 static void
@@ -1987,18 +1987,18 @@ dwg_decode_SHAPE (Bit_Chain * dat, Dwg_Object * obj)
 	dwg_decode_entity (dat, obj->tio.entity);
 	ent = obj->tio.entity->tio.SHAPE;
 
-        ent->ins_pt.x = bit_read_BD(dat);
-        ent->ins_pt.y = bit_read_BD(dat);
-        ent->ins_pt.z = bit_read_BD(dat);
-        ent->scale = bit_read_BD(dat);
-        ent->rotation = bit_read_BD(dat);
-        ent->width_factor = bit_read_BD(dat);
-        ent->oblique = bit_read_BD(dat);
-        ent->thickness = bit_read_BD(dat);
-        ent->shape_no = bit_read_BS(dat);
-        ent->extrusion.x = bit_read_BD(dat);
-        ent->extrusion.y = bit_read_BD(dat);
-        ent->extrusion.z = bit_read_BD(dat);
+    ent->ins_pt.x = bit_read_BD(dat);
+    ent->ins_pt.y = bit_read_BD(dat);
+    ent->ins_pt.z = bit_read_BD(dat);
+    ent->scale = bit_read_BD(dat);
+    ent->rotation = bit_read_BD(dat);
+    ent->width_factor = bit_read_BD(dat);
+    ent->oblique = bit_read_BD(dat);
+    ent->thickness = bit_read_BD(dat);
+    ent->shape_no = bit_read_BS(dat);
+    ent->extrusion.x = bit_read_BD(dat);
+    ent->extrusion.y = bit_read_BD(dat);
+    ent->extrusion.z = bit_read_BD(dat);
 
 	dwg_decode_traktref (dat, obj);
 }
@@ -2035,8 +2035,8 @@ dwg_decode_SPLINE (Bit_Chain * dat, Dwg_Object * obj)
 {
     return;    // temporarily disabling code to avoid segfault (TODO: review spline parsing code)
 
-        Dwg_Entity_SPLINE *ent;
-        int i;
+    Dwg_Entity_SPLINE *ent;
+    int i;
 
 	obj->supertype = DWG_SUPERTYPE_ENTITY;
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
@@ -2044,62 +2044,62 @@ dwg_decode_SPLINE (Bit_Chain * dat, Dwg_Object * obj)
 	dwg_decode_entity (dat, obj->tio.entity);
 	ent = obj->tio.entity->tio.SPLINE;
 
-        ent->scenario = bit_read_BS(dat);
-        ent->degree = bit_read_BS(dat);
-        if(ent->scenario == 2)
+    ent->scenario = bit_read_BS(dat);
+    ent->degree = bit_read_BS(dat);
+    if(ent->scenario == 2)
+    {
+        ent->fit_tol = bit_read_BD(dat);
+        ent->beg_tan_vec.x = bit_read_BD(dat);
+        ent->beg_tan_vec.y = bit_read_BD(dat);
+        ent->beg_tan_vec.z = bit_read_BD(dat);
+        ent->end_tan_vec.x = bit_read_BD(dat);
+        ent->end_tan_vec.y = bit_read_BD(dat);
+        ent->end_tan_vec.z = bit_read_BD(dat);
+        ent->num_fit_pts = bit_read_BS(dat);
+        ent->fit_pts = malloc(ent->num_fit_pts*
+                sizeof(((Dwg_Entity_SPLINE *)(NULL))->fit_pts));
+        for (i=0;i<ent->num_fit_pts;i++)
         {
-            ent->fit_tol = bit_read_BD(dat);
-            ent->beg_tan_vec.x = bit_read_BD(dat);
-            ent->beg_tan_vec.y = bit_read_BD(dat);
-            ent->beg_tan_vec.z = bit_read_BD(dat);
-            ent->end_tan_vec.x = bit_read_BD(dat);
-            ent->end_tan_vec.y = bit_read_BD(dat);
-            ent->end_tan_vec.z = bit_read_BD(dat);
-            ent->num_fit_pts = bit_read_BS(dat);
-            ent->fit_pts = malloc(ent->num_fit_pts*
-                    sizeof(((Dwg_Entity_SPLINE *)(NULL))->fit_pts));
-            for (i=0;i<ent->num_fit_pts;i++)
-            {
-                ent->fit_pts[i].x = bit_read_BD(dat);
-                ent->fit_pts[i].y = bit_read_BD(dat);
-                ent->fit_pts[i].z = bit_read_BD(dat);
-            }
+            ent->fit_pts[i].x = bit_read_BD(dat);
+            ent->fit_pts[i].y = bit_read_BD(dat);
+            ent->fit_pts[i].z = bit_read_BD(dat);
+        }
+    } else
+    {
+        if (ent->scenario == 1)
+        {
+                ent->rational = bit_read_B(dat);
+                ent->closed_b = bit_read_B(dat);
+                ent->periodic = bit_read_B(dat);
+                ent->knot_tol = bit_read_BD(dat);
+                ent->ctrl_tol = bit_read_BD(dat);
+                ent->num_knots = bit_read_BL(dat);
+                ent->num_ctrl_pts = bit_read_BL(dat);
+                ent->weighted = bit_read_B(dat);
+                
+                ent->knots = malloc(ent->num_knots *
+                    sizeof (((Dwg_Entity_SPLINE *) (NULL))->knots));
+                for (i=0;i<ent->num_knots;i++)
+                    ent->knots[i].value = bit_read_BD(dat);
+                
+                ent->ctrl_pts = malloc(ent->num_ctrl_pts *
+                    sizeof (((Dwg_Entity_SPLINE *) (NULL))->ctrl_pts));
+                
+                for (i=0;i<ent->num_ctrl_pts;i++) 
+                {
+                        ent->ctrl_pts[i].x = bit_read_BD(dat);
+                        ent->ctrl_pts[i].y = bit_read_BD(dat);
+                        ent->ctrl_pts[i].z = bit_read_BD(dat);                
+                        if (ent->weighted)
+                            //TODO check what "D" means on spec. 
+                            //assuming typo - should be BD
+                            ent->ctrl_pts[i].w = bit_read_BD(dat);
+                }
         } else
         {
-            if (ent->scenario == 1)
-            {
-                    ent->rational = bit_read_B(dat);
-                    ent->closed_b = bit_read_B(dat);
-                    ent->periodic = bit_read_B(dat);
-                    ent->knot_tol = bit_read_BD(dat);
-                    ent->ctrl_tol = bit_read_BD(dat);
-                    ent->num_knots = bit_read_BL(dat);
-                    ent->num_ctrl_pts = bit_read_BL(dat);
-                    ent->weighted = bit_read_B(dat);
-                    
-                    ent->knots = malloc(ent->num_knots *
-                        sizeof (((Dwg_Entity_SPLINE *) (NULL))->knots));
-                    for (i=0;i<ent->num_knots;i++)
-                        ent->knots[i].value = bit_read_BD(dat);
-                    
-                    ent->ctrl_pts = malloc(ent->num_ctrl_pts *
-                        sizeof (((Dwg_Entity_SPLINE *) (NULL))->ctrl_pts));
-                    
-                    for (i=0;i<ent->num_ctrl_pts;i++) 
-                    {
-                            ent->ctrl_pts[i].x = bit_read_BD(dat);
-                            ent->ctrl_pts[i].y = bit_read_BD(dat);
-                            ent->ctrl_pts[i].z = bit_read_BD(dat);                
-                            if (ent->weighted)
-                                //TODO check what "D" means on spec. 
-                                //assuming typo - should be BD
-                                ent->ctrl_pts[i].w = bit_read_BD(dat);
-                    }
-            } else
-            {
-                 fprintf (stderr, "Error: unknown scenario %d", ent->scenario);
-            }
+             fprintf (stderr, "Error: unknown scenario %d", ent->scenario);
         }
+    }
 	dwg_decode_traktref (dat, obj);
 }
 
