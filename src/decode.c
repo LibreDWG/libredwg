@@ -2163,25 +2163,38 @@ dwg_decode_MTEXT (Bit_Chain * dat, Dwg_Object * obj)
 	dwg_decode_entity (dat, obj->tio.entity);
 	ent = obj->tio.entity->tio.MTEXT;
 
+    //spec-typo ? Spec says BD but we think it might be 3BD:
 	ent->x0 = bit_read_BD (dat);
 	ent->y0 = bit_read_BD (dat);
-	ent->y0 = bit_read_BD (dat);
+	ent->z0 = bit_read_BD (dat);
 	ent->extrusion.x = bit_read_BD (dat);
 	ent->extrusion.y = bit_read_BD (dat);
 	ent->extrusion.z = bit_read_BD (dat);
 	ent->x1 = bit_read_BD (dat);
 	ent->y1 = bit_read_BD (dat);
 	ent->z1 = bit_read_BD (dat);
-	ent->width = bit_read_BD (dat);
-	ent->height = bit_read_BD (dat);
-	ent->kunmeto = bit_read_BS (dat);
-	ent->direkto = bit_read_BS (dat);
-	ent->etendo = bit_read_BD (dat);
-	ent->etendlargxo = bit_read_BD (dat);
+
+    if (dat->version >= R_2007){
+    	ent->rect_height = bit_read_BD (dat);
+    }
+
+	ent->rect_width = bit_read_BD (dat);
+	ent->text_height = bit_read_BD (dat);
+	ent->attachment = bit_read_BS (dat);
+	ent->drawing_dir = bit_read_BS (dat);
+	ent->extends = bit_read_BD (dat); //not documented
+	ent->extends_wid = bit_read_BD (dat);
 	ent->text = bit_read_T (dat);
-	ent->linispaco_stilo = bit_read_BS (dat);
-	ent->linispaco_factor = bit_read_BD (dat);
-	ent->ia_bit = bit_read_B (dat);
+
+    if (dat->version >= R_2000){
+    	ent->linespace_style = bit_read_BS (dat);
+    	ent->linespace_factor = bit_read_BD (dat);
+    	ent->unknown_bit = bit_read_B (dat);
+    }	
+
+    if (dat->version >= R_2004){
+    	ent->unknown_long = bit_read_BL (dat);
+    }
 
 	dwg_decode_traktref (dat, obj);
 }

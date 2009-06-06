@@ -1770,7 +1770,6 @@ dwg_encode_SPLINE (Dwg_Entity_SPLINE * ent, Bit_Chain * dat)
 static void
 dwg_encode_RAY (Dwg_Entity_RAY * ent, Bit_Chain * dat)
 {
-        //TODO: check
 	bit_write_BD (dat, ent->x0);
 	bit_write_BD (dat, ent->y0);
 	bit_write_BD (dat, ent->z0);
@@ -1782,12 +1781,48 @@ dwg_encode_RAY (Dwg_Entity_RAY * ent, Bit_Chain * dat)
 static void
 dwg_encode_XLINE (Dwg_Entity_XLINE *ent, Bit_Chain * dat)
 {
-    //TODO: implement-me!
+	bit_write_BD (dat, ent->x0);
+	bit_write_BD (dat, ent->y0);
+	bit_write_BD (dat, ent->z0);
+	bit_write_BD (dat, ent->x1);
+	bit_write_BD (dat, ent->y1);
+	bit_write_BD (dat, ent->z1);
 }
 
 static void
 dwg_encode_MTEXT (Dwg_Entity_MTEXT *ent, Bit_Chain * dat)
 {
-    //TODO: implement-me!
+    //spec-typo ? Spec says BD but we think it might be 3BD:
+	bit_write_BD (dat, ent->x0);
+	bit_write_BD (dat, ent->y0);
+	bit_write_BD (dat, ent->z0);
+	bit_write_BD (dat, ent->extrusion.x);
+	bit_write_BD (dat, ent->extrusion.y);
+	bit_write_BD (dat, ent->extrusion.z);
+	bit_write_BD (dat, ent->x1);
+	bit_write_BD (dat, ent->y1);
+	bit_write_BD (dat, ent->z1);
+
+    if (dat->version >= R_2007){
+    	bit_write_BD (dat, ent->rect_height);
+    }
+
+	bit_write_BD (dat, ent->rect_width);
+	bit_write_BD (dat, ent->text_height);
+	bit_write_BS (dat, ent->attachment);
+	bit_write_BS (dat, ent->drawing_dir);
+	bit_write_BD (dat, ent->extends); //not documented
+	bit_write_BD (dat, ent->extends_wid);
+	bit_write_T (dat, ent->text);
+
+    if (dat->version >= R_2000){
+    	bit_write_BS (dat, ent->linespace_style);
+    	bit_write_BD (dat, ent->linespace_factor);
+    	bit_write_B (dat, ent->unknown_bit);
+    }	
+
+    if (dat->version >= R_2004){
+    	bit_write_BL (dat, ent->unknown_long);
+    }
 }
 

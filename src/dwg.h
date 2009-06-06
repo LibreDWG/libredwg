@@ -1283,16 +1283,18 @@ extern "C"
 		double x1;
 		double y1;
 		double z1;
-		double width;
-		double height;
-		unsigned int kunmeto;
-		unsigned int direkto;
-		double etendo;
-		double etendlargxo;
+		double rect_width;
+		double rect_height;
+		double text_height;
+		unsigned int attachment;
+		unsigned int drawing_dir;
+		double extends;
+		double extends_wid;
 		char *text;
-		unsigned int linispaco_stilo;
-		unsigned int linispaco_factor;
-		unsigned char ia_bit;
+		unsigned int linespace_style;
+		unsigned int linespace_factor;
+		unsigned char unknown_bit;
+		long unsigned int unknown_long;
 	} Dwg_Entity_MTEXT;
 
 /**

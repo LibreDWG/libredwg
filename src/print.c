@@ -299,17 +299,29 @@ dwg_print_RAY (Dwg_Entity_RAY *ent)
 void
 dwg_print_MTEXT (Dwg_Entity_MTEXT *ent)
 {
-	printf ("\tEnmeto: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
+	printf ("\tInsertion pt3: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
 	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
 		ent->extrusion.z);
-	printf ("\tX-direkto: (%1.13g, %1.13g, %1.13g)\n", ent->x1, ent->y1, ent->z1);
-	printf ("\tLargxeco: %1.13g\n", ent->width);
-	printf ("\tAlteco: %1.13g\n", ent->height);
-	printf ("\tKunmeto: 0x%0x\n", ent->kunmeto);
-	printf ("\tDirekto: 0x%0x\n", ent->direkto);
-	printf ("\tTeksto: %s\n", ent->text);
-	printf ("\tLinispaca stilo: 0x%0x\n", ent->linispaco_stilo);
-	printf ("\tLinispaca factor: %1.13g\n", (double) ent->linispaco_factor);
+	printf ("\tX-axis dir: (%1.13g, %1.13g, %1.13g)\n", ent->x1, ent->y1, ent->z1);
+
+	//TODO: a way to figure out DWG version 
+/*	if (version >= R_2007){
+    	printf ("\tRect height: %1.13g\n", ent->rect_height);	
+	}
+*/
+	printf ("\tRect width: %1.13g\n", ent->rect_width);
+	printf ("\tText height: %1.13g\n", ent->text_height);
+	printf ("\tAttachment: 0x%0x\n", ent->attachment);
+	printf ("\tDrawing dir: 0x%0x\n", ent->drawing_dir);
+	printf ("\tText: %s\n", ent->text);
+//	if (version >= R_2000){
+    	printf ("\tLinespacing Style: 0x%0x\n", ent->linespace_style);
+	    printf ("\tLinespacing Factor: %1.13g\n", ent->linespace_factor);
+	    printf ("\tUnknown bit: %s\n", ent->unknown_bit ? "ON":"OFF");
+//  }
+//	if (version >= R_2000){
+//      printf ("\tUnknown long: %f\n", ent->unknown_long);
+//  }
 }
 
 void
