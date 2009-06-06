@@ -1222,7 +1222,58 @@ dwg_encode_DIMENSION_ORDINATE (Dwg_Entity_DIMENSION_ORDINATE *ent, Bit_Chain * d
 static void
 dwg_encode_DIMENSION_LINEAR (Dwg_Entity_DIMENSION_LINEAR *ent, Bit_Chain * dat)
 {
-    //TODO: implement-me!
+    //TODO: check extrusion writing:
+    //bit_write_BE (dat, ent->extrusion.x, ent->extrusion.y, ent->extrusion.z);
+    bit_write_BD(dat, ent->extrusion.x);
+    bit_write_BD(dat, ent->extrusion.y);
+    bit_write_BD(dat, ent->extrusion.z);
+    bit_write_RD(dat, ent->x0);
+    bit_write_RD(dat, ent->y0);
+    
+    //TODO:review the parsing of these elevation values in the spec:
+    //TODO: shouldnt we store only once this value in our data-struct?
+    if (ent->elevation.ecs_11 != ent->elevation.ecs_12){
+        fprintf(stderr, "encode_DIMENSION_ORDINARY: Maybe there is something wrong here. Elevation values should be all the same.\n");
+    }
+    bit_write_BD(dat, ent->elevation.ecs_11);
+
+    //spec: flag bit 6 indicates ORDINATE dimension
+    bit_write_RC(dat, ent->flags);
+    bit_write_T(dat, ent->user_text);
+    bit_write_BD(dat, ent->text_rot);
+    bit_write_BD(dat, ent->horiz_dir);
+    bit_write_BD(dat, ent->ins_scale.x);
+    bit_write_BD(dat, ent->ins_scale.y);
+    bit_write_BD(dat, ent->ins_scale.z);
+    bit_write_BD(dat, ent->ins_rotation);
+
+    if(dat->version >= R_2000){
+        bit_write_BS(dat, ent->attachment_point);
+        bit_write_BS(dat, ent->lspace_style);
+        bit_write_BD(dat, ent->lspace_factor);
+        bit_write_BD(dat, ent->act_measurement);
+    }
+
+    if(dat->version >= R_2007){
+        bit_write_B(dat, ent->unknown);
+        bit_write_B(dat, ent->flip_arrow1);
+        bit_write_B(dat, ent->flip_arrow2);
+    }
+
+    bit_write_RD(dat, ent->_12_pt.x);
+    bit_write_RD(dat, ent->_12_pt.y);
+    bit_write_BD(dat, ent->_13_pt.x);
+    bit_write_BD(dat, ent->_13_pt.y);
+    bit_write_BD(dat, ent->_13_pt.z);
+    bit_write_BD(dat, ent->_14_pt.x);
+    bit_write_BD(dat, ent->_14_pt.y);
+    bit_write_BD(dat, ent->_14_pt.z);
+    bit_write_BD(dat, ent->_10_pt.x);
+    bit_write_BD(dat, ent->_10_pt.y);
+    bit_write_BD(dat, ent->_10_pt.z);
+
+    bit_write_BD(dat, ent->ext_line_rot);
+    bit_write_BD(dat, ent->dim_rot);
 }
 
 static void
