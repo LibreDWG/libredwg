@@ -1296,6 +1296,145 @@ extern "C"
 	} Dwg_Entity_MTEXT;
 
 /**
+ Struct for LEADER (45)
+ */
+	typedef struct _dwg_entity_LEADER
+	{
+                unsigned int unknown_bit_1; //always seems to be zero
+                unsigned int annot_type;
+                unsigned int path_type;
+                unsigned int numpts;
+                struct
+                {
+                        double x;
+                        double y;
+                        double z;
+                } * points;
+                struct
+                {
+                        double x;
+                        double y;
+                        double z;
+                } end_pt_proj;
+                struct
+                {
+                        double x;
+                        double y;
+                        double z;
+                } extrusion;
+                struct
+                {
+                        double x;
+                        double y;
+                        double z;
+                } x_direction;
+                struct
+                {
+                        double x;
+                        double y;
+                        double z;
+                } offset_block_inspt;
+                struct
+                {
+                        double x;
+                        double y;
+                        double z;
+                } unknown_pt;
+                double dimgap;
+                double box_height;
+                double box_width;
+                unsigned int hooklineonxdir;
+                unsigned int arrowhead_on;
+                unsigned int arrowhead_type;
+                double dimasz;
+                unsigned int unknown_bit_2;
+                unsigned int unknown_bit_3;
+                unsigned int unknown_short_1;
+                unsigned int byblock_color;
+                unsigned int unknown_bit_4;
+                unsigned int unknown_bit_5;
+	} Dwg_Entity_LEADER;
+
+/**
+ Struct for TOLERANCE (46)
+ */
+	typedef struct _dwg_entity_TOLERANCE
+	{
+                unsigned int unknown_short;
+                double height;
+                double dimgap;
+
+                struct
+                {
+                        double x;
+                        double y;
+                        double z;
+                } ins_pt;
+                struct
+                {
+                        double x;
+                        double y;
+                        double z;
+                } x_direction;
+                struct
+                {
+                        double x;
+                        double y;
+                        double z;
+                } extrusion;
+                unsigned int text_string;
+	} Dwg_Entity_TOLERANCE;
+
+/**
+ Struct for MLINE (47)
+ */
+	typedef struct _dwg_entity_MLINE
+	{
+                double scale;
+                unsigned int just;
+                struct
+                {
+                        double x;
+                        double y;
+                        double z;
+                } base_point;
+                struct
+                {
+                        double x;
+                        double y;
+                        double z;
+                } extrusion;
+                unsigned int open_closed;
+                unsigned int num_lines; //Linesinstyle
+                unsigned int num_verts;
+                struct
+                {
+                        double x;
+                        double y;
+                        double z;
+                } * vertex;
+                struct
+                {
+                        double x;
+                        double y;
+                        double z;
+                } * vertex_direction;
+                struct
+                {
+                        double x;
+                        double y;
+                        double z;
+                } * miter_direction;
+                struct
+                {
+                        unsigned int num_segparms;
+                        double * segparms;
+                        unsigned int num_areafill_parms;
+                        double areafill_parms;
+                } * line;
+	} Dwg_Entity_MLINE;
+
+/**
  Structure for BLOCK_CONTROL (48)
  */
 	typedef struct _dwg_entity_BLOCK_CONTROL
