@@ -434,14 +434,14 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 
 	bit_write_BL (dat, pvzadr - 16);	// start_address de la section
 
-	/* Chain "AC1015"
+	/* Version Code
 	 */
-	bit_write_RC (dat, 'A');
-	bit_write_RC (dat, 'C');
-	bit_write_RC (dat, '1');
-	bit_write_RC (dat, '0');
-	bit_write_RC (dat, '1');
-	bit_write_RC (dat, '5');
+	bit_write_RC (dat, version_codes[dat->version][0]);
+	bit_write_RC (dat, version_codes[dat->version][1]);
+	bit_write_RC (dat, version_codes[dat->version][2]);
+	bit_write_RC (dat, version_codes[dat->version][3]);
+	bit_write_RC (dat, version_codes[dat->version][4]);
+	bit_write_RC (dat, version_codes[dat->version][5]);
 
 	/* 5 (aux 6) nuloj
 	 */
