@@ -1074,3 +1074,17 @@ dwg_encode_RAY (Dwg_Entity_RAY * ent, Bit_Chain * dat)
 	bit_write_BD (dat, ent->y1);
 	bit_write_BD (dat, ent->z1);
 }
+
+static void
+dwg_encode_POLYLINE_PFACE (Dwg_Entity_POLYLINE_PFACE* ent, Bit_Chain * dat)
+{
+        bit_write_BS(dat, ent->numverts);
+        bit_write_BS(dat, ent->numfaces);
+
+        if (dat->version >= R_2004)
+        {
+            bit_write_BL(dat, ent->owned_object_count);
+        }
+        //TODO: what about the handles?
+}
+
