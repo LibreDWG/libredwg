@@ -1291,7 +1291,7 @@ extern "C"
 		double etendlargxo;
 		char *text;
 		unsigned int linispaco_stilo;
-		unsigned int linispaco_faktoro;
+		unsigned int linispaco_factor;
 		unsigned char ia_bit;
 	} Dwg_Entity_MTEXT;
 
@@ -1340,20 +1340,20 @@ extern "C"
 			unsigned int type;
 			double x_min;
 			double y_min;
-			double x_maks;
-			double y_maks;
+			double x_max;
+			double y_max;
 			char *name;
 			struct
 			{
 				double A; // A:B (ekz: 1:10, 1:2, 50:1, ktp)
 				double B;
 				unsigned int type;
-				double faktoro;
+				double factor;
 			} scale;
 			char *stilfolio;
 			double x0;
 			double y0;
-		} pagxo;
+		} page;
 
 		char *name;
 		unsigned int ordo;
@@ -1363,8 +1363,8 @@ extern "C"
 		double z0;
 		double x_min;
 		double y_min;
-		double x_maks;
-		double y_maks;
+		double x_max;
+		double y_max;
 		struct
 		{
 			double x0;
@@ -1376,13 +1376,13 @@ extern "C"
 			double x0;
 			double y0;
 			double z0;
-		} akso_X;
+		} axis_X;
 		struct
 		{
 			double x0;
 			double y0;
 			double z0;
-		} akso_Y;
+		} axis_Y;
 		double elevation;
 		unsigned int rigardtype;
 		struct
@@ -1390,9 +1390,9 @@ extern "C"
 			double x_min;
 			double y_min;
 			double z_min;
-			double x_maks;
-			double y_maks;
-			double z_maks;
+			double x_max;
+			double y_max;
+			double z_max;
 		} limo;
 	} Dwg_Object_LAYOUT;
 

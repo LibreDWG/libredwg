@@ -98,7 +98,7 @@ dwg_print_TEXT (Dwg_Entity_TEXT * ent)
 	printf ("\tKlina angulo: %1.13g\n", ent->oblique_ang);
 	printf ("\tTurna angulo: %1.13g\n", ent->rotation_ang);
 	printf ("\tAlteco: %1.13g\n", ent->height);
-	printf ("\tLarĝ-faktoro: %1.13g\n", ent->width_factor);
+	printf ("\tLarĝ-factor: %1.13g\n", ent->width_factor);
 	printf ("\tTeksto: \"%s\"\n", ent->text);
 	printf ("\tGeneracio: %u\n", ent->generation);
 	printf ("\tĜisrandigo (horiz.): %u\n", ent->alignment.h);
@@ -119,7 +119,7 @@ dwg_print_ATTRIB (Dwg_Entity_ATTRIB * ent)
 	printf ("\tKlina angulo: %1.13g\n", ent->oblique_ang);
 	printf ("\tTurna angulo: %1.13g\n", ent->rotation_ang);
 	printf ("\tAlteco: %1.13g\n", ent->height);
-	printf ("\tLarĝ-faktoro: %1.13g\n", ent->width_factor);
+	printf ("\tLarĝ-factor: %1.13g\n", ent->width_factor);
 	printf ("\tTeksto: \"%s\"\n", ent->text);
 	printf ("\tGeneracio: %u\n", ent->generation);
 	printf ("\tĜisrandigo (horiz.): %u\n", ent->alignment.h);
@@ -143,7 +143,7 @@ dwg_print_ATTDEF (Dwg_Entity_ATTDEF * ent)
 	printf ("\tKlina angulo: %1.13g\n", ent->oblique_ang);
 	printf ("\tTurna angulo: %1.13g\n", ent->rotation_ang);
 	printf ("\tAlteco: %1.13g\n", ent->height);
-	printf ("\tLarĝ-faktoro: %1.13g\n", ent->width_factor);
+	printf ("\tLarĝ-factor: %1.13g\n", ent->width_factor);
 	printf ("\tTeksto: \"%s\"\n", ent->text);
 	printf ("\tGeneracio: %u\n", ent->generation);
 	printf ("\tĜisrandigo (horiz.): %u\n", ent->alignment.h);
@@ -309,7 +309,7 @@ dwg_print_MTEXT (Dwg_Entity_MTEXT *ent)
 	printf ("\tDirekto: 0x%0x\n", ent->direkto);
 	printf ("\tTeksto: %s\n", ent->text);
 	printf ("\tLinispaca stilo: 0x%0x\n", ent->linispaco_stilo);
-	printf ("\tLinispaca faktoro: %1.13g\n", (double) ent->linispaco_faktoro);
+	printf ("\tLinispaca factor: %1.13g\n", (double) ent->linispaco_factor);
 }
 
 void
@@ -346,32 +346,32 @@ dwg_print_LAYER (Dwg_Object_LAYER *ord)
 void
 dwg_print_LAYOUT (Dwg_Object_LAYOUT *ord)
 {
-	printf ("\tAgord-name: %s\n", ord->pagxo.agordo);
-	printf ("\tPrintilo: %s\n", ord->pagxo.printilo);
-	printf ("\tPrint-flags: 0x%0x\n", ord->pagxo.flags);
+	printf ("\tAgord-name: %s\n", ord->page.agordo);
+	printf ("\tPrintilo: %s\n", ord->page.printilo);
+	printf ("\tPrint-flags: 0x%0x\n", ord->page.flags);
 	printf ("\tMarĝenoj. maldekstre: %1.13g; malsupre: %1.13g; dekstre: %1.13g; supre: %1.13g\n",
-		ord->pagxo.maldekstre,
-		ord->pagxo.malsupre,
-		ord->pagxo.dekstre,
-		ord->pagxo.supre);
-	printf ("\tLargxeco: %1.13g\n", ord->pagxo.width);
-	printf ("\tAlteco: %1.13g\n", ord->pagxo.height);
-	printf ("\tSize: %s\n", ord->pagxo.size);
-	printf ("\tDeŝovo: (%1.13g, %1.13g)\n", ord->pagxo.dx, ord->pagxo.dy);
-	printf ("\tUnuoj: %u\n", ord->pagxo.unuoj);
-	printf ("\tRotacio: %u\n", ord->pagxo.rotacio);
-	printf ("\tType: %u\n", ord->pagxo.type);
+		ord->page.maldekstre,
+		ord->page.malsupre,
+		ord->page.dekstre,
+		ord->page.supre);
+	printf ("\tLargxeco: %1.13g\n", ord->page.width);
+	printf ("\tAlteco: %1.13g\n", ord->page.height);
+	printf ("\tSize: %s\n", ord->page.size);
+	printf ("\tDeŝovo: (%1.13g, %1.13g)\n", ord->page.dx, ord->page.dy);
+	printf ("\tUnuoj: %u\n", ord->page.unuoj);
+	printf ("\tRotacio: %u\n", ord->page.rotacio);
+	printf ("\tType: %u\n", ord->page.type);
 	printf ("\tPrint-limoj: (%1.13g, %1.13g) / (%1.13g, %1.13g)\n",
-		ord->pagxo.x_min,
-		ord->pagxo.y_min,
-		ord->pagxo.x_maks,
-		ord->pagxo.y_maks);
-	printf ("\tPaĝ-name: %s\n", ord->pagxo.name);
-	printf ("\tSkal-proporcio: %u:%u\n", (unsigned int) ord->pagxo.scale.A, (unsigned int) ord->pagxo.scale.B);
-	printf ("\tStilfolio: %s\n", ord->pagxo.stilfolio);
-	printf ("\tSkal-type: %u\n", ord->pagxo.scale.type);
-	printf ("\tSkal-faktoro: %u\n", (unsigned int) ord->pagxo.scale.faktoro);
-	printf ("\tPaĝ-origino: (%1.13g, %1.13g)\n", ord->pagxo.x0, ord->pagxo.y0);
+		ord->page.x_min,
+		ord->page.y_min,
+		ord->page.x_max,
+		ord->page.y_max);
+	printf ("\tPaĝ-name: %s\n", ord->page.name);
+	printf ("\tSkal-proporcio: %u:%u\n", (unsigned int) ord->page.scale.A, (unsigned int) ord->page.scale.B);
+	printf ("\tStilfolio: %s\n", ord->page.stilfolio);
+	printf ("\tSkal-type: %u\n", ord->page.scale.type);
+	printf ("\tSkal-factor: %u\n", (unsigned int) ord->page.scale.factor);
+	printf ("\tPaĝ-origino: (%1.13g, %1.13g)\n", ord->page.x0, ord->page.y0);
 	puts ("");
 	printf ("\tAranĝ-name: %s\n", ord->name);
 	printf ("\tOrdo: %u\n", ord->ordo);
@@ -380,11 +380,11 @@ dwg_print_LAYOUT (Dwg_Object_LAYOUT *ord)
 	printf ("\tAranĝ-limoj: (%1.13g, %1.13g) / (%1.13g, %1.13g)\n",
 		ord->x_min,
 		ord->y_min,
-		ord->x_maks,
-		ord->y_maks);
+		ord->x_max,
+		ord->y_max);
 	printf ("\tEnmeto: (%1.13g, %1.13g, %1.13g)\n", ord->enmeto.x0, ord->enmeto.y0, ord->enmeto.z0);
-	printf ("\tUCS-akso_X: (%1.13g, %1.13g, %1.13g)\n", ord->akso_X.x0, ord->akso_X.y0, ord->akso_X.z0);
-	printf ("\tUCS-akso_Y: (%1.13g, %1.13g, %1.13g)\n", ord->akso_Y.x0, ord->akso_Y.y0, ord->akso_Y.z0);
+	printf ("\tUCS-axis_X: (%1.13g, %1.13g, %1.13g)\n", ord->axis_X.x0, ord->axis_X.y0, ord->axis_X.z0);
+	printf ("\tUCS-axis_Y: (%1.13g, %1.13g, %1.13g)\n", ord->axis_Y.x0, ord->axis_Y.y0, ord->axis_Y.z0);
 	printf ("\tLevigxo: %1.13g\n", ord->elevation);
 	printf ("\tRigard-type: %u\n", ord->rigardtype);
 	printf ("\tMinimumo: (%1.13g, %1.13g, %1.13g)\n",
@@ -392,9 +392,9 @@ dwg_print_LAYOUT (Dwg_Object_LAYOUT *ord)
 		ord->limo.y_min,
 		ord->limo.z_min);
 	printf ("\tMaksimumo: (%1.13g, %1.13g, %1.13g)\n",
-		ord->limo.x_maks,
-		ord->limo.y_maks,
-		ord->limo.z_maks);
+		ord->limo.x_max,
+		ord->limo.y_max,
+		ord->limo.z_max);
 }
 
 /*------------------------------------------------------------------------------

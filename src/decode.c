@@ -2175,7 +2175,7 @@ dwg_decode_MTEXT (Bit_Chain * dat, Dwg_Object * obj)
 	ent->etendlargxo = bit_read_BD (dat);
 	ent->text = bit_read_T (dat);
 	ent->linispaco_stilo = bit_read_BS (dat);
-	ent->linispaco_faktoro = bit_read_BD (dat);
+	ent->linispaco_factor = bit_read_BD (dat);
 	ent->ia_bit = bit_read_B (dat);
 
 	dwg_decode_traktref (dat, obj);
@@ -2236,33 +2236,33 @@ dwg_decode_LAYOUT (Bit_Chain * dat, Dwg_Object * obj)
 
 	/* Read values
 	 */
-	ord->pagxo.agordo = bit_read_T (dat);
-	ord->pagxo.printilo = bit_read_T (dat);
-	ord->pagxo.flags = bit_read_BS (dat);
-	ord->pagxo.maldekstre = bit_read_BD (dat);
-	ord->pagxo.malsupre = bit_read_BD (dat);
-	ord->pagxo.dekstre = bit_read_BD (dat);
-	ord->pagxo.supre = bit_read_BD (dat);
-	ord->pagxo.width = bit_read_BD (dat);
-	ord->pagxo.height = bit_read_BD (dat);
-	ord->pagxo.size = bit_read_T (dat);
-	ord->pagxo.dx = bit_read_BD (dat);
-	ord->pagxo.dy = bit_read_BD (dat);
-	ord->pagxo.unuoj = bit_read_BS (dat);
-	ord->pagxo.rotacio = bit_read_BS (dat);
-	ord->pagxo.type = bit_read_BS (dat);
-	ord->pagxo.x_min = bit_read_BD (dat);
-	ord->pagxo.y_min = bit_read_BD (dat);
-	ord->pagxo.x_maks = bit_read_BD (dat);
-	ord->pagxo.y_maks = bit_read_BD (dat);
-	ord->pagxo.name = bit_read_T (dat);
-	ord->pagxo.scale.A = bit_read_BD (dat);
-	ord->pagxo.scale.B = bit_read_BD (dat);
-	ord->pagxo.stilfolio = bit_read_T (dat);
-	ord->pagxo.scale.type = bit_read_BS (dat);
-	ord->pagxo.scale.faktoro = bit_read_BD (dat);
-	ord->pagxo.x0 = bit_read_BD (dat);
-	ord->pagxo.y0 = bit_read_BD (dat);
+	ord->page.agordo = bit_read_T (dat);
+	ord->page.printilo = bit_read_T (dat);
+	ord->page.flags = bit_read_BS (dat);
+	ord->page.maldekstre = bit_read_BD (dat);
+	ord->page.malsupre = bit_read_BD (dat);
+	ord->page.dekstre = bit_read_BD (dat);
+	ord->page.supre = bit_read_BD (dat);
+	ord->page.width = bit_read_BD (dat);
+	ord->page.height = bit_read_BD (dat);
+	ord->page.size = bit_read_T (dat);
+	ord->page.dx = bit_read_BD (dat);
+	ord->page.dy = bit_read_BD (dat);
+	ord->page.unuoj = bit_read_BS (dat);
+	ord->page.rotacio = bit_read_BS (dat);
+	ord->page.type = bit_read_BS (dat);
+	ord->page.x_min = bit_read_BD (dat);
+	ord->page.y_min = bit_read_BD (dat);
+	ord->page.x_max = bit_read_BD (dat);
+	ord->page.y_max = bit_read_BD (dat);
+	ord->page.name = bit_read_T (dat);
+	ord->page.scale.A = bit_read_BD (dat);
+	ord->page.scale.B = bit_read_BD (dat);
+	ord->page.stilfolio = bit_read_T (dat);
+	ord->page.scale.type = bit_read_BS (dat);
+	ord->page.scale.factor = bit_read_BD (dat);
+	ord->page.x0 = bit_read_BD (dat);
+	ord->page.y0 = bit_read_BD (dat);
 
 	ord->name = bit_read_T (dat);
 	ord->ordo = bit_read_BS (dat);
@@ -2272,25 +2272,25 @@ dwg_decode_LAYOUT (Bit_Chain * dat, Dwg_Object * obj)
 	ord->z0 = bit_read_BD (dat);
 	ord->x_min = bit_read_RD (dat);
 	ord->y_min = bit_read_RD (dat);
-	ord->x_maks = bit_read_RD (dat);
-	ord->y_maks = bit_read_RD (dat);
+	ord->x_max = bit_read_RD (dat);
+	ord->y_max = bit_read_RD (dat);
 	ord->enmeto.x0 = bit_read_BD (dat);
 	ord->enmeto.y0 = bit_read_BD (dat);
 	ord->enmeto.z0 = bit_read_BD (dat);
-	ord->akso_X.x0 = bit_read_BD (dat);
-	ord->akso_X.y0 = bit_read_BD (dat);
-	ord->akso_X.z0 = bit_read_BD (dat);
-	ord->akso_Y.x0 = bit_read_BD (dat);
-	ord->akso_Y.y0 = bit_read_BD (dat);
-	ord->akso_Y.z0 = bit_read_BD (dat);
+	ord->axis_X.x0 = bit_read_BD (dat);
+	ord->axis_X.y0 = bit_read_BD (dat);
+	ord->axis_X.z0 = bit_read_BD (dat);
+	ord->axis_Y.x0 = bit_read_BD (dat);
+	ord->axis_Y.y0 = bit_read_BD (dat);
+	ord->axis_Y.z0 = bit_read_BD (dat);
 	ord->elevation = bit_read_BD (dat);
 	ord->rigardtype = bit_read_BS (dat);
 	ord->limo.x_min = bit_read_BD (dat);
 	ord->limo.y_min = bit_read_BD (dat);
 	ord->limo.z_min = bit_read_BD (dat);
-	ord->limo.x_maks = bit_read_BD (dat);
-	ord->limo.y_maks = bit_read_BD (dat);
-	ord->limo.z_maks = bit_read_BD (dat);
+	ord->limo.x_max = bit_read_BD (dat);
+	ord->limo.y_max = bit_read_BD (dat);
+	ord->limo.z_max = bit_read_BD (dat);
 
 	dwg_decode_traktref (dat, obj);
 }
