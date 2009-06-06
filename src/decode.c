@@ -2030,6 +2030,8 @@ dwg_decode_ELLIPSE (Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_SPLINE (Bit_Chain * dat, Dwg_Object * obj)
 {
+    return;    // temporarily disabling code to avoid segfault (TODO: review spline parsing code)
+
         Dwg_Entity_SPLINE *ent;
         int i;
 
@@ -2389,27 +2391,27 @@ dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned in
 	case DWG_TYPE_LINE:
 		dwg_decode_LINE (dat, obj);
 		break;
-        case DWG_TYPE_DIMENSION_ORDINATE:
-                dwg_decode_DIMENSION_ORDINATE(dat, obj);
-                break;
-        case DWG_TYPE_DIMENSION_LINEAR:
-                dwg_decode_DIMENSION_LINEAR(dat, obj);
-                break;
-        case DWG_TYPE_DIMENSION_ALIGNED:
-                dwg_decode_DIMENSION_ALIGNED(dat, obj);
-                break;
-        case DWG_TYPE_DIMENSION_ANG3PT:
-                dwg_decode_DIMENSION_ANG3PT(dat, obj);
-                break;
-        case DWG_TYPE_DIMENSION_ANG2LN:
-                dwg_decode_DIMENSION_ANG2LN(dat, obj);
-                break;
-        case DWG_TYPE_DIMENSION_RADIUS:
-                dwg_decode_DIMENSION_RADIUS(dat, obj);
-                break;
-        case DWG_TYPE_DIMENSION_DIAMETER:
-                dwg_decode_DIMENSION_DIAMETER(dat, obj);
-                break;
+    case DWG_TYPE_DIMENSION_ORDINATE:
+        dwg_decode_DIMENSION_ORDINATE(dat, obj);
+        break;
+    case DWG_TYPE_DIMENSION_LINEAR:
+        dwg_decode_DIMENSION_LINEAR(dat, obj);
+        break;
+    case DWG_TYPE_DIMENSION_ALIGNED:
+        dwg_decode_DIMENSION_ALIGNED(dat, obj);
+        break;
+    case DWG_TYPE_DIMENSION_ANG3PT:
+        dwg_decode_DIMENSION_ANG3PT(dat, obj);
+        break;
+    case DWG_TYPE_DIMENSION_ANG2LN:
+        dwg_decode_DIMENSION_ANG2LN(dat, obj);
+        break;
+    case DWG_TYPE_DIMENSION_RADIUS:
+        dwg_decode_DIMENSION_RADIUS(dat, obj);
+        break;
+    case DWG_TYPE_DIMENSION_DIAMETER:
+        dwg_decode_DIMENSION_DIAMETER(dat, obj);
+        break;
 	case DWG_TYPE_POINT:
 		dwg_decode_POINT (dat, obj);
 		break;
@@ -2434,10 +2436,9 @@ dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned in
 	case DWG_TYPE_ELLIPSE:
 		dwg_decode_ELLIPSE (dat, obj);
 		break;
-// Commenting out code to avoid segfault (TODO: review spline)
-//        case DWG_TYPE_SPLINE:
-//		dwg_decode_SPLINE (dat, obj);
-//                break;
+    case DWG_TYPE_SPLINE:
+		dwg_decode_SPLINE (dat, obj);
+        break;
 	case DWG_TYPE_RAY:
 	case DWG_TYPE_XLINE:
 		dwg_decode_RAY (dat, obj);
@@ -2445,12 +2446,12 @@ dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned in
 	case DWG_TYPE_MTEXT:
 		dwg_decode_MTEXT (dat, obj);
 		break;
-        case DWG_TYPE_BLOCK_CONTROL:
-                dwg_decode_BLOCK_CONTROL (dat, obj);
-                break;
-        case DWG_TYPE_DICTIONARY:
-                dwg_decode_DICTIONARY (dat, obj);
-                break;
+    case DWG_TYPE_BLOCK_CONTROL:
+        dwg_decode_BLOCK_CONTROL (dat, obj);
+        break;
+    case DWG_TYPE_DICTIONARY:
+        dwg_decode_DICTIONARY (dat, obj);
+        break;
 	case DWG_TYPE_LAYER:
 		dwg_decode_LAYER (dat, obj);
 		break;

@@ -32,8 +32,47 @@ typedef struct
  */
 static void dwg_encode_entity (Dwg_Object * obj, Bit_Chain * dat);
 static void dwg_encode_object (Dwg_Object * obj, Bit_Chain * dat);
-static void dwg_encode_LINE (Dwg_Entity_LINE * est, Bit_Chain * dat);
+
+static void dwg_encode_TEXT (Dwg_Entity_TEXT * est, Bit_Chain * dat);
+static void dwg_encode_ATTRIB (Dwg_Entity_ATTRIB * est, Bit_Chain * dat);
+static void dwg_encode_ATTDEF (Dwg_Entity_ATTDEF * est, Bit_Chain * dat);
+static void dwg_encode_BLOCK (Dwg_Entity_BLOCK * est, Bit_Chain * dat);
+static void dwg_encode_ENDBLK (Dwg_Entity_ENDBLK * est, Bit_Chain * dat);
+static void dwg_encode_SEQEND (Dwg_Entity_SEQEND * est, Bit_Chain * dat);
+static void dwg_encode_INSERT (Dwg_Entity_INSERT * est, Bit_Chain * dat);
+static void dwg_encode_MINSERT (Dwg_Entity_MINSERT * est, Bit_Chain * dat);
+static void dwg_encode_VERTEX_2D (Dwg_Entity_VERTEX_2D * est, Bit_Chain * dat);
+static void dwg_encode_VERTEX_3D (Dwg_Entity_VERTEX_3D * est, Bit_Chain * dat);
+static void dwg_encode_VERTEX_MESH (Dwg_Entity_VERTEX_MESH * est, Bit_Chain * dat);
+static void dwg_encode_VERTEX_PFACE (Dwg_Entity_VERTEX_PFACE * est, Bit_Chain * dat);
+static void dwg_encode_VERTEX_PFACE_FACE (Dwg_Entity_VERTEX_PFACE_FACE * est, Bit_Chain * dat);
+static void dwg_encode_POLYLINE_2D (Dwg_Entity_POLYLINE_2D * est, Bit_Chain * dat);
+static void dwg_encode_POLYLINE_3D (Dwg_Entity_POLYLINE_3D * est, Bit_Chain * dat);
+static void dwg_encode_ARC (Dwg_Entity_ARC * est, Bit_Chain * dat);
 static void dwg_encode_CIRCLE (Dwg_Entity_CIRCLE * est, Bit_Chain * dat);
+static void dwg_encode_LINE (Dwg_Entity_LINE * est, Bit_Chain * dat);
+static void dwg_encode_DIMENSION_ORDINATE (Dwg_Entity_DIMENSION_ORDINATE * est, Bit_Chain * dat);
+static void dwg_encode_DIMENSION_LINEAR (Dwg_Entity_DIMENSION_LINEAR * est, Bit_Chain * dat);
+static void dwg_encode_DIMENSION_ALIGNED (Dwg_Entity_DIMENSION_ALIGNED * est, Bit_Chain * dat);
+static void dwg_encode_DIMENSION_ANG3PT (Dwg_Entity_DIMENSION_ANG3PT * est, Bit_Chain * dat);
+static void dwg_encode_DIMENSION_ANG2LN (Dwg_Entity_DIMENSION_ANG2LN * est, Bit_Chain * dat);
+static void dwg_encode_DIMENSION_RADIUS (Dwg_Entity_DIMENSION_RADIUS * est, Bit_Chain * dat);
+static void dwg_encode_DIMENSION_DIAMETER (Dwg_Entity_DIMENSION_DIAMETER * est, Bit_Chain * dat);
+static void dwg_encode_POINT (Dwg_Entity_POINT * est, Bit_Chain * dat);
+static void dwg_encode_3DFACE (Dwg_Entity_3D_FACE * est, Bit_Chain * dat);
+static void dwg_encode_POLYLINE_PFACE (Dwg_Entity_POLYLINE_PFACE * est, Bit_Chain * dat);
+static void dwg_encode_POLYLINE_MESH (Dwg_Entity_POLYLINE_MESH * est, Bit_Chain * dat);
+static void dwg_encode_SOLID (Dwg_Entity_SOLID * est, Bit_Chain * dat);
+static void dwg_encode_TRACE (Dwg_Entity_TRACE * est, Bit_Chain * dat);
+static void dwg_encode_SHAPE (Dwg_Entity_SHAPE * est, Bit_Chain * dat);
+static void dwg_encode_ELLIPSE (Dwg_Entity_ELLIPSE * est, Bit_Chain * dat);
+static void dwg_encode_SPLINE (Dwg_Entity_SPLINE * est, Bit_Chain * dat);
+static void dwg_encode_RAY (Dwg_Entity_RAY * est, Bit_Chain * dat);
+static void dwg_encode_XLINE (Dwg_Entity_XLINE * est, Bit_Chain * dat);
+static void dwg_encode_MTEXT (Dwg_Entity_MTEXT * est, Bit_Chain * dat);
+static void dwg_encode_BLOCK_CONTROL (Dwg_Object_BLOCK_CONTROL * est, Bit_Chain * dat);
+static void dwg_encode_DICTIONARY (Dwg_Object_DICTIONARY * est, Bit_Chain * dat);
+static void dwg_encode_LAYER (Dwg_Object_LAYER * est, Bit_Chain * dat);
 
 /*--------------------------------------------------------------------------------
  * Public functions
@@ -571,13 +610,117 @@ dwg_encode_entity (Dwg_Object * obj, Bit_Chain * dat)
 
 	switch (obj->type)
 	{
+	case DWG_TYPE_TEXT:
+		dwg_encode_TEXT (est->tio.TEXT, dat);
+		break;
+	case DWG_TYPE_ATTRIB:
+		dwg_encode_ATTRIB (est->tio.ATTRIB, dat);
+		break;
+	case DWG_TYPE_ATTDEF:
+		dwg_encode_ATTDEF (est->tio.ATTDEF, dat);
+		break;
+	case DWG_TYPE_BLOCK:
+		dwg_encode_BLOCK (est->tio.BLOCK, dat);
+		break;
+	case DWG_TYPE_ENDBLK:
+		dwg_encode_ENDBLK (est->tio.ENDBLK, dat);
+		break;
+	case DWG_TYPE_SEQEND:
+		dwg_encode_SEQEND (est->tio.SEQEND, dat);
+		break;
+	case DWG_TYPE_INSERT:
+		dwg_encode_INSERT (est->tio.INSERT, dat);
+		break;
+	case DWG_TYPE_MINSERT:
+		dwg_encode_MINSERT (est->tio.MINSERT, dat);
+		break;
+	case DWG_TYPE_VERTEX_2D:
+		dwg_encode_VERTEX_2D (est->tio.VERTEX_2D, dat);
+		break;
+	case DWG_TYPE_VERTEX_3D:
+		dwg_encode_VERTEX_3D (est->tio.VERTEX_3D, dat);
+		break;
+	case DWG_TYPE_VERTEX_MESH:
+		dwg_encode_VERTEX_MESH (est->tio.VERTEX_MESH, dat);
+		break;
+	case DWG_TYPE_VERTEX_PFACE:
+		dwg_encode_VERTEX_PFACE (est->tio.VERTEX_PFACE, dat);
+		break;
+	case DWG_TYPE_VERTEX_PFACE_FACE:
+		dwg_encode_VERTEX_PFACE_FACE (est->tio.VERTEX_PFACE_FACE, dat);
+		break;
+	case DWG_TYPE_POLYLINE_2D:
+		dwg_encode_POLYLINE_2D (est->tio.POLYLINE_2D, dat);
+		break;
+	case DWG_TYPE_POLYLINE_3D:
+		dwg_encode_POLYLINE_3D (est->tio.POLYLINE_3D, dat);
+		break;
+	case DWG_TYPE_ARC:
+		dwg_encode_ARC (est->tio.ARC, dat);
+		break;
 	case DWG_TYPE_LINE:
 		dwg_encode_LINE (est->tio.LINE, dat);
 		break;
 	case DWG_TYPE_CIRCLE:
 		dwg_encode_CIRCLE (est->tio.CIRCLE, dat);
 		break;
-
+	case DWG_TYPE_DIMENSION_ORDINATE:
+		dwg_encode_DIMENSION_ORDINATE (est->tio.DIMENSION_ORDINATE, dat);
+		break;
+	case DWG_TYPE_DIMENSION_LINEAR:
+		dwg_encode_DIMENSION_LINEAR (est->tio.DIMENSION_LINEAR, dat);
+		break;
+	case DWG_TYPE_DIMENSION_ALIGNED:
+		dwg_encode_DIMENSION_ALIGNED (est->tio.DIMENSION_ALIGNED, dat);
+		break;
+	case DWG_TYPE_DIMENSION_ANG3PT:
+		dwg_encode_DIMENSION_ANG3PT (est->tio.DIMENSION_ANG3PT, dat);
+		break;
+	case DWG_TYPE_DIMENSION_ANG2LN:
+		dwg_encode_DIMENSION_ANG2LN (est->tio.DIMENSION_ANG2LN, dat);
+		break;
+	case DWG_TYPE_DIMENSION_RADIUS:
+		dwg_encode_DIMENSION_RADIUS (est->tio.DIMENSION_RADIUS, dat);
+		break;
+	case DWG_TYPE_DIMENSION_DIAMETER:
+		dwg_encode_DIMENSION_DIAMETER (est->tio.DIMENSION_DIAMETER, dat);
+		break;
+	case DWG_TYPE_POINT:
+		dwg_encode_POINT (est->tio.POINT, dat);
+		break;
+	case DWG_TYPE_3DFACE:
+		dwg_encode_3DFACE (est->tio._3DFACE, dat);
+		break;
+	case DWG_TYPE_POLYLINE_PFACE:
+		dwg_encode_POLYLINE_PFACE (est->tio.POLYLINE_PFACE, dat);
+		break;
+	case DWG_TYPE_POLYLINE_MESH:
+		dwg_encode_POLYLINE_MESH (est->tio.POLYLINE_MESH, dat);
+		break;
+	case DWG_TYPE_SOLID:
+		dwg_encode_SOLID (est->tio.SOLID, dat);
+		break;
+	case DWG_TYPE_TRACE:
+		dwg_encode_TRACE (est->tio.TRACE, dat);
+		break;
+	case DWG_TYPE_SHAPE:
+		dwg_encode_SHAPE (est->tio.SHAPE, dat);
+		break;
+	case DWG_TYPE_ELLIPSE:
+		dwg_encode_ELLIPSE (est->tio.ELLIPSE, dat);
+		break;
+	case DWG_TYPE_SPLINE:
+		dwg_encode_SPLINE (est->tio.SPLINE, dat);
+		break;
+	case DWG_TYPE_RAY:
+		dwg_encode_RAY (est->tio.RAY, dat);
+		break;
+	case DWG_TYPE_XLINE:
+		dwg_encode_XLINE (est->tio.XLINE, dat);
+		break;
+	case DWG_TYPE_MTEXT:
+		dwg_encode_MTEXT (est->tio.MTEXT, dat);
+		break;
 	default:
 		printf ("Eraro: unknown object-type dum enkodigo de estaĵo\n");
 		exit (-1);
@@ -831,6 +974,12 @@ dwg_encode_ENDBLK (Dwg_Entity_ENDBLK *ent, Bit_Chain * dat)
 }
 
 static void
+dwg_encode_SEQEND (Dwg_Entity_SEQEND *ent, Bit_Chain * dat)
+{
+    //TODO: implement-me!
+}
+
+static void
 dwg_encode_INSERT (Dwg_Entity_INSERT *ent, Bit_Chain * dat)
 {
         //TODO: check
@@ -934,6 +1083,18 @@ dwg_encode_VERTEX_3D (Dwg_Entity_VERTEX_3D *ent, Bit_Chain * dat)
 }
 
 static void
+dwg_encode_VERTEX_MESH (Dwg_Entity_VERTEX_MESH *ent, Bit_Chain * dat)
+{
+    //TODO: implement-me!
+}
+
+static void
+dwg_encode_VERTEX_PFACE (Dwg_Entity_VERTEX_PFACE *ent, Bit_Chain * dat)
+{
+    //TODO: implement-me!
+}
+
+static void
 dwg_encode_VERTEX_PFACE_FACE (Dwg_Entity_VERTEX_PFACE_FACE *ent, Bit_Chain * dat)
 {
         //TODO: check
@@ -1007,72 +1168,57 @@ dwg_encode_LINE (Dwg_Entity_LINE * est, Bit_Chain * dat)
 }
 
 static void
-dwg_encode_SPLINE (Dwg_Entity_SPLINE * ent, Bit_Chain * dat)
+dwg_encode_DIMENSION_ORDINATE (Dwg_Entity_DIMENSION_ORDINATE *ent, Bit_Chain * dat)
 {
-        //TODO: check
-        int i;
-
-        bit_write_BS(dat, ent->scenario);
-        bit_write_BS(dat, ent->degree);
-        if(ent->scenario == 2)
-        {
-            bit_write_BD(dat, ent->fit_tol);
-            bit_write_BD(dat, ent->beg_tan_vec.x);
-            bit_write_BD(dat, ent->beg_tan_vec.y);
-            bit_write_BD(dat, ent->beg_tan_vec.z);
-            bit_write_BD(dat, ent->end_tan_vec.x);
-            bit_write_BD(dat, ent->end_tan_vec.y);
-            bit_write_BD(dat, ent->end_tan_vec.z);
-            bit_write_BS(dat, ent->num_fit_pts);
-            for (i=0;i<ent->num_fit_pts;i++)
-            {
-                bit_write_BD(dat,ent->fit_pts[i].x);
-                bit_write_BD(dat, ent->fit_pts[i].y);
-                bit_write_BD(dat, ent->fit_pts[i].z);
-            }
-        } else
-        {
-            if (ent->scenario == 1)
-            {
-                    bit_write_B(dat, ent->rational);
-                    bit_write_B(dat, ent->closed_b);
-                    bit_write_B(dat, ent->periodic);
-                    bit_write_BD(dat, ent->knot_tol);
-                    bit_write_BD(dat,ent->ctrl_tol);
-                    bit_write_BL(dat, ent->num_knots);
-                    bit_write_BL(dat, ent->num_ctrl_pts);
-                    bit_write_B(dat, ent->weighted);
-
-                    for (i=0;i<ent->num_knots;i++)
-                        bit_write_BD(dat, ent->knots[i].value);
-
-                    for (i=0;i<ent->num_ctrl_pts;i++)
-                    {
-                            bit_write_BD(dat, ent->ctrl_pts[i].x);
-                            bit_write_BD(dat, ent->ctrl_pts[i].y);
-                            bit_write_BD(dat, ent->ctrl_pts[i].z);
-                            if (ent->weighted)
-                                //TODO check what "D" means on spec.
-                                //assuming typo - should be BD
-                                bit_write_BD(dat, ent->ctrl_pts[i].w);
-                    }
-            } else
-            {
-                 fprintf (stderr, "Error: unknown scenario %d", ent->scenario);
-            }
-        }
+    //TODO: implement-me!
 }
 
 static void
-dwg_encode_RAY (Dwg_Entity_RAY * ent, Bit_Chain * dat)
+dwg_encode_DIMENSION_LINEAR (Dwg_Entity_DIMENSION_LINEAR *ent, Bit_Chain * dat)
 {
-        //TODO: check
-	bit_write_BD (dat, ent->x0);
-	bit_write_BD (dat, ent->y0);
-	bit_write_BD (dat, ent->z0);
-	bit_write_BD (dat, ent->x1);
-	bit_write_BD (dat, ent->y1);
-	bit_write_BD (dat, ent->z1);
+    //TODO: implement-me!
+}
+
+static void
+dwg_encode_DIMENSION_ALIGNED (Dwg_Entity_DIMENSION_ALIGNED *ent, Bit_Chain * dat)
+{
+    //TODO: implement-me!
+}
+
+static void
+dwg_encode_DIMENSION_ANG3PT (Dwg_Entity_DIMENSION_ANG3PT *ent, Bit_Chain * dat)
+{
+    //TODO: implement-me!
+}
+
+static void
+dwg_encode_DIMENSION_ANG2LN (Dwg_Entity_DIMENSION_ANG2LN *ent, Bit_Chain * dat)
+{
+    //TODO: implement-me!
+}
+
+static void
+dwg_encode_DIMENSION_RADIUS (Dwg_Entity_DIMENSION_RADIUS *ent, Bit_Chain * dat)
+{
+    //TODO: implement-me!
+}
+
+static void
+dwg_encode_DIMENSION_DIAMETER (Dwg_Entity_DIMENSION_DIAMETER *ent, Bit_Chain * dat)
+{
+    //TODO: implement-me!
+}
+
+static void
+dwg_encode_POINT (Dwg_Entity_POINT *ent, Bit_Chain * dat)
+{
+    //TODO: implement-me!
+}
+
+static void
+dwg_encode_3DFACE (Dwg_Entity_3D_FACE *ent, Bit_Chain * dat)
+{
+    //TODO: implement-me!
 }
 
 static void
@@ -1169,5 +1315,92 @@ dwg_encode_SHAPE (Dwg_Entity_SHAPE *ent, Bit_Chain * dat)
     bit_write_BD(dat, ent->extrusion.x);
     bit_write_BD(dat, ent->extrusion.y);
     bit_write_BD(dat, ent->extrusion.z);
+}
+
+static void
+dwg_encode_ELLIPSE (Dwg_Entity_ELLIPSE *ent, Bit_Chain * dat)
+{
+    //TODO: implement-me!
+}
+
+static void
+dwg_encode_SPLINE (Dwg_Entity_SPLINE * ent, Bit_Chain * dat)
+{
+        //TODO: check
+        int i;
+
+        bit_write_BS(dat, ent->scenario);
+        bit_write_BS(dat, ent->degree);
+        if(ent->scenario == 2)
+        {
+            bit_write_BD(dat, ent->fit_tol);
+            bit_write_BD(dat, ent->beg_tan_vec.x);
+            bit_write_BD(dat, ent->beg_tan_vec.y);
+            bit_write_BD(dat, ent->beg_tan_vec.z);
+            bit_write_BD(dat, ent->end_tan_vec.x);
+            bit_write_BD(dat, ent->end_tan_vec.y);
+            bit_write_BD(dat, ent->end_tan_vec.z);
+            bit_write_BS(dat, ent->num_fit_pts);
+            for (i=0;i<ent->num_fit_pts;i++)
+            {
+                bit_write_BD(dat,ent->fit_pts[i].x);
+                bit_write_BD(dat, ent->fit_pts[i].y);
+                bit_write_BD(dat, ent->fit_pts[i].z);
+            }
+        } else
+        {
+            if (ent->scenario == 1)
+            {
+                    bit_write_B(dat, ent->rational);
+                    bit_write_B(dat, ent->closed_b);
+                    bit_write_B(dat, ent->periodic);
+                    bit_write_BD(dat, ent->knot_tol);
+                    bit_write_BD(dat,ent->ctrl_tol);
+                    bit_write_BL(dat, ent->num_knots);
+                    bit_write_BL(dat, ent->num_ctrl_pts);
+                    bit_write_B(dat, ent->weighted);
+
+                    for (i=0;i<ent->num_knots;i++)
+                        bit_write_BD(dat, ent->knots[i].value);
+
+                    for (i=0;i<ent->num_ctrl_pts;i++)
+                    {
+                            bit_write_BD(dat, ent->ctrl_pts[i].x);
+                            bit_write_BD(dat, ent->ctrl_pts[i].y);
+                            bit_write_BD(dat, ent->ctrl_pts[i].z);
+                            if (ent->weighted)
+                                //TODO check what "D" means on spec.
+                                //assuming typo - should be BD
+                                bit_write_BD(dat, ent->ctrl_pts[i].w);
+                    }
+            } else
+            {
+                 fprintf (stderr, "Error: unknown scenario %d", ent->scenario);
+            }
+        }
+}
+
+static void
+dwg_encode_RAY (Dwg_Entity_RAY * ent, Bit_Chain * dat)
+{
+        //TODO: check
+	bit_write_BD (dat, ent->x0);
+	bit_write_BD (dat, ent->y0);
+	bit_write_BD (dat, ent->z0);
+	bit_write_BD (dat, ent->x1);
+	bit_write_BD (dat, ent->y1);
+	bit_write_BD (dat, ent->z1);
+}
+
+static void
+dwg_encode_XLINE (Dwg_Entity_XLINE *ent, Bit_Chain * dat)
+{
+    //TODO: implement-me!
+}
+
+static void
+dwg_encode_MTEXT (Dwg_Entity_MTEXT *ent, Bit_Chain * dat)
+{
+    //TODO: implement-me!
 }
 
