@@ -1571,7 +1571,41 @@ dwg_encode_POINT (Dwg_Entity_POINT *ent, Bit_Chain * dat)
 static void
 dwg_encode_3DFACE (Dwg_Entity_3D_FACE *ent, Bit_Chain * dat)
 {
-    //TODO: implement-me!
+	if (dat->version == R_13 || dat->version == R_14){
+		bit_write_BD(dat, ent->corner1.x);
+		bit_write_BD(dat, ent->corner1.y);
+		bit_write_BD(dat, ent->corner1.z);
+		bit_write_BD(dat, ent->corner2.x);
+		bit_write_BD(dat, ent->corner2.y);
+		bit_write_BD(dat, ent->corner2.z);
+		bit_write_BD(dat, ent->corner3.x);
+		bit_write_BD(dat, ent->corner3.y);
+		bit_write_BD(dat, ent->corner3.z);
+		bit_write_BD(dat, ent->corner4.x);
+		bit_write_BD(dat, ent->corner4.y);
+		bit_write_BD(dat, ent->corner4.z);
+		bit_write_BS(dat, ent->invis_flags);
+	}
+
+	if (dat->version >= R_2000){
+		bit_write_B(dat, ent->invis_flags);
+		bit_write_B(dat, ent->z_is_zero);
+		bit_write_RD(dat, ent->corner1.x);
+		bit_write_RD(dat, ent->corner1.y);
+		if (ent->z_is_zero)
+			bit_write_RD(dat, ent->corner1.z);
+		bit_write_DD(dat, ent->corner2.x, ent->corner1.x);
+		bit_write_DD(dat, ent->corner2.y, ent->corner1.y);
+		bit_write_DD(dat, ent->corner2.z, ent->corner1.z);
+		bit_write_DD(dat, ent->corner3.x, ent->corner2.x);
+		bit_write_DD(dat, ent->corner3.y, ent->corner2.y);
+		bit_write_DD(dat, ent->corner3.z, ent->corner2.z);
+		bit_write_DD(dat, ent->corner4.x, ent->corner3.x);
+		bit_write_DD(dat, ent->corner4.y, ent->corner3.y);
+		bit_write_DD(dat, ent->corner4.z, ent->corner3.z);
+		bit_write_BS(dat, ent->invis_flags);
+	}
+
 }
 
 static void
