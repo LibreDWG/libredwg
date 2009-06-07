@@ -2351,7 +2351,22 @@ dwg_decode_TOLERANCE (Bit_Chain *dat, Dwg_Object *obj)
 	dwg_decode_entity (dat, obj->tio.entity);
 	ent = obj->tio.entity->tio.TOLERANCE;
 
-    //Implement-me!
+    if (dat->version == R_13 || dat->version == R_14){
+        ent->unknown_short = bit_read_BS(dat); //spec-typo? Spec says S instead of BS.
+        ent->height = bit_read_BD(dat);
+        ent->dimgap = bit_read_BD(dat);
+    }
+    
+    ent->ins_pt.x = bit_read_BD(dat);
+    ent->ins_pt.y = bit_read_BD(dat);
+    ent->ins_pt.z = bit_read_BD(dat);
+    ent->x_direction.x = bit_read_BD(dat);
+    ent->x_direction.y = bit_read_BD(dat);
+    ent->x_direction.z = bit_read_BD(dat);
+    ent->extrusion.x = bit_read_BD(dat);
+    ent->extrusion.y = bit_read_BD(dat);
+    ent->extrusion.z = bit_read_BD(dat);
+    ent->text_string = bit_read_BS(dat);
 
   	dwg_decode_traktref (dat, obj);
 

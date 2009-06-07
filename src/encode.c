@@ -1983,7 +1983,22 @@ dwg_encode_LEADER (Dwg_Entity_LEADER *ent, Bit_Chain * dat)
 static void
 dwg_encode_TOLERANCE (Dwg_Entity_TOLERANCE *ent, Bit_Chain * dat)
 {
-    //Implement-me!
+    if (dat->version == R_13 || dat->version == R_14){
+        bit_write_BS(dat, ent->unknown_short); //spec-typo? Spec says S instead of BS.
+        bit_write_BD(dat, ent->height);
+        bit_write_BD(dat, ent->dimgap);
+    }
+    
+    bit_write_BD(dat, ent->ins_pt.x);
+    bit_write_BD(dat, ent->ins_pt.y);
+    bit_write_BD(dat, ent->ins_pt.z);
+    bit_write_BD(dat, ent->x_direction.x);
+    bit_write_BD(dat, ent->x_direction.y);
+    bit_write_BD(dat, ent->x_direction.z);
+    bit_write_BD(dat, ent->extrusion.x);
+    bit_write_BD(dat, ent->extrusion.y);
+    bit_write_BD(dat, ent->extrusion.z);
+    bit_write_BS(dat, ent->text_string);
 }
 
 static void
