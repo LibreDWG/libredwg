@@ -2275,19 +2275,50 @@ dwg_decode_MTEXT (Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_LEADER (Bit_Chain *dat, Dwg_Object *obj)
 {
+	Dwg_Entity_LEADER *ent;
+
+	obj->supertype = DWG_SUPERTYPE_ENTITY;
+	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
+	obj->tio.entity->tio.LEADER = calloc (sizeof (Dwg_Entity_LEADER), 1);
+	dwg_decode_entity (dat, obj->tio.entity);
+	ent = obj->tio.entity->tio.LEADER;
+
     //Implement-me!
+
+  	dwg_decode_traktref (dat, obj);
 }
 
 static void
 dwg_decode_TOLERANCE (Bit_Chain *dat, Dwg_Object *obj)
 {
+	Dwg_Entity_TOLERANCE *ent;
+
+	obj->supertype = DWG_SUPERTYPE_ENTITY;
+	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
+	obj->tio.entity->tio.TOLERANCE = calloc (sizeof (Dwg_Entity_TOLERANCE), 1);
+	dwg_decode_entity (dat, obj->tio.entity);
+	ent = obj->tio.entity->tio.TOLERANCE;
+
     //Implement-me!
+
+  	dwg_decode_traktref (dat, obj);
+
 }
 
 static void
 dwg_decode_MLINE (Bit_Chain *dat, Dwg_Object *obj)
 {
+	Dwg_Entity_MLINE *ent;
+
+	obj->supertype = DWG_SUPERTYPE_ENTITY;
+	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
+	obj->tio.entity->tio.MLINE = calloc (sizeof (Dwg_Entity_MLINE), 1);
+	dwg_decode_entity (dat, obj->tio.entity);
+	ent = obj->tio.entity->tio.MLINE;
+
     //Implement-me!
+
+  	dwg_decode_traktref (dat, obj);
 }
 
 static void
