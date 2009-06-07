@@ -1919,7 +1919,11 @@ dwg_encode_DICTIONARY (Dwg_Object_DICTIONARY *ent, Bit_Chain * dat)
 
 static void dwg_encode_BLOCK_CONTROL (Dwg_Object_BLOCK_CONTROL * obj, Bit_Chain * dat)
 {
-    //Implement-me!
+    //TODO: check the spec. How do we deal with Length (MS)?
+   	bit_write_BS (dat, obj->type);
+    if (dat->version >= R_2000){
+	    bit_write_RL (dat, obj->size);
+	}
 }
 
 static void dwg_encode_LAYER (Dwg_Object_LAYER * obj, Bit_Chain * dat)

@@ -2283,9 +2283,12 @@ dwg_decode_BLOCK_CONTROL (Bit_Chain *dat, Dwg_Object *obj)
 	obj->tio.object->tio.BLOCK_CONTROL = calloc (sizeof (Dwg_Object_BLOCK_CONTROL), 1);
 	dwg_decode_object (dat, obj->tio.object);
 	blk = obj->tio.object->tio.BLOCK_CONTROL;
-	
-	blk->size = bit_read_BS (dat);
 
+    //TODO: check the spec. How do we deal with Length (MS)?
+   	blk->type = bit_read_BS (dat);
+    if (dat->version >= R_2000){	
+    	blk->size = bit_read_RL (dat);
+    }
 	dwg_decode_traktref (dat, obj);
 }
 

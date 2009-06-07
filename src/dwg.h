@@ -1443,6 +1443,7 @@ extern "C"
  */
 	typedef struct _dwg_entity_BLOCK_CONTROL
 	{
+	    unsigned int type;
 		unsigned int size;
 	} Dwg_Object_BLOCK_CONTROL;
 	
