@@ -1926,7 +1926,58 @@ dwg_encode_MTEXT (Dwg_Entity_MTEXT *ent, Bit_Chain * dat)
 static void
 dwg_encode_LEADER (Dwg_Entity_LEADER *ent, Bit_Chain * dat)
 {
-    //Implement-me!
+    int i;
+    bit_write_B (dat, ent->unknown_bit_1);
+    bit_write_BS (dat, ent->annot_type);
+    bit_write_BS (dat, ent->path_type);
+    bit_write_BL (dat, ent->numpts);
+
+    for (i=0;i<ent->numpts;i++){
+        bit_write_BD (dat, ent->point[i].x);
+        bit_write_BD (dat, ent->point[i].y);
+        bit_write_BD (dat, ent->point[i].z);
+    }
+    bit_write_BD (dat, ent->end_pt_proj.x);
+    bit_write_BD (dat, ent->end_pt_proj.y);
+    bit_write_BD (dat, ent->end_pt_proj.z);
+    bit_write_BD (dat, ent->extrusion.x);
+    bit_write_BD (dat, ent->extrusion.y);
+    bit_write_BD (dat, ent->extrusion.z);
+    bit_write_BD (dat, ent->x_direction.x);
+    bit_write_BD (dat, ent->x_direction.y);
+    bit_write_BD (dat, ent->x_direction.z);
+    
+    if (dat->version >= R_14){
+        bit_write_BD (dat, ent->unknown_pt.x);
+        bit_write_BD (dat, ent->unknown_pt.y);
+        bit_write_BD (dat, ent->unknown_pt.z);
+    }
+    
+    if (dat->version == R_13 || dat->version == R_14){
+        bit_write_BD (dat, ent->dimgap);
+    }
+    
+    bit_write_BD (dat, ent->box_height);
+    bit_write_BD (dat, ent->box_width);
+    bit_write_B (dat, ent->hooklineonxdir);
+    bit_write_B (dat, ent->arrowhead_on);
+
+    if (dat->version == R_13 || dat->version == R_14){
+        bit_write_BS (dat, ent->arrowhead_type);
+        bit_write_BD (dat, ent->dimasz);
+        bit_write_B (dat, ent->unknown_bit_2);
+        bit_write_B (dat, ent->unknown_bit_3);
+        bit_write_BS (dat, ent->unknown_short_1);
+        bit_write_BS (dat, ent->byblock_color);
+        bit_write_B (dat, ent->unknown_bit_4);
+        bit_write_B (dat, ent->unknown_bit_5);
+    }
+
+    if (dat->version >= R_2000){
+        bit_write_BS (dat, ent->unknown_short_1);
+        bit_write_B (dat, ent->unknown_bit_4);
+        bit_write_B (dat, ent->unknown_bit_5);
+    }
 }
 
 static void
