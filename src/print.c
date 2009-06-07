@@ -316,7 +316,7 @@ dwg_print_MTEXT (Dwg_Entity_MTEXT *ent)
 	printf ("\tText: %s\n", ent->text);
 //	if (version >= R_2000){
     	printf ("\tLinespacing Style: 0x%0x\n", ent->linespace_style);
-	    printf ("\tLinespacing Factor: %1.13g\n", ent->linespace_factor);
+	    printf ("\tLinespacing Factor: %1.13g\n", (double) ent->linespace_factor);
 	    printf ("\tUnknown bit: %s\n", ent->unknown_bit ? "ON":"OFF");
 //  }
 //	if (version >= R_2000){

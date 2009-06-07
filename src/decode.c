@@ -2276,6 +2276,7 @@ static void
 dwg_decode_LEADER (Bit_Chain *dat, Dwg_Object *obj)
 {
 	Dwg_Entity_LEADER *ent;
+    int i;
 
 	obj->supertype = DWG_SUPERTYPE_ENTITY;
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
@@ -2283,7 +2284,58 @@ dwg_decode_LEADER (Bit_Chain *dat, Dwg_Object *obj)
 	dwg_decode_entity (dat, obj->tio.entity);
 	ent = obj->tio.entity->tio.LEADER;
 
-    //Implement-me!
+    ent->unknown_bit_1 = bit_read_B (dat);
+    ent->annot_type = bit_read_BS (dat);
+    ent->path_type = bit_read_BS (dat);
+    ent->numpts = bit_read_BL (dat);
+
+    ent->point = malloc(ent->numpts * 3 * sizeof(double));
+    for (i=0;i<ent->numpts;i++){
+        ent->point[i].x = bit_read_BD (dat);
+        ent->point[i].y = bit_read_BD (dat);
+        ent->point[i].z = bit_read_BD (dat);
+    }
+    ent->end_pt_proj.x = bit_read_BD (dat);
+    ent->end_pt_proj.y = bit_read_BD (dat);
+    ent->end_pt_proj.z = bit_read_BD (dat);
+    ent->extrusion.x = bit_read_BD (dat);
+    ent->extrusion.y = bit_read_BD (dat);
+    ent->extrusion.z = bit_read_BD (dat);
+    ent->x_direction.x = bit_read_BD (dat);
+    ent->x_direction.y = bit_read_BD (dat);
+    ent->x_direction.z = bit_read_BD (dat);
+    
+    if (dat->version >= R_14){
+        ent->unknown_pt.x = bit_read_BD (dat);
+        ent->unknown_pt.y = bit_read_BD (dat);
+        ent->unknown_pt.z = bit_read_BD (dat);
+    }
+    
+    if (dat->version == R_13 || dat->version == R_14){
+        ent->dimgap = bit_read_BD (dat);
+    }
+    
+    ent->box_height = bit_read_BD (dat);
+    ent->box_width = bit_read_BD (dat);
+    ent->hooklineonxdir = bit_read_B (dat);
+    ent->arrowhead_on = bit_read_B (dat);
+
+    if (dat->version == R_13 || dat->version == R_14){
+        ent->arrowhead_type = bit_read_BS (dat);
+        ent->dimasz = bit_read_BD (dat);
+        ent->unknown_bit_2 = bit_read_B (dat);
+        ent->unknown_bit_3 = bit_read_B (dat);
+        ent->unknown_short_1 = bit_read_BS (dat);
+        ent->byblock_color = bit_read_BS (dat);
+        ent->unknown_bit_4 = bit_read_B (dat);
+        ent->unknown_bit_5 = bit_read_B (dat);
+    }
+
+    if (dat->version >= R_2000){
+        ent->unknown_short_1 = bit_read_BS (dat);
+        ent->unknown_bit_4 = bit_read_B (dat);
+        ent->unknown_bit_5 = bit_read_B (dat);
+    }
 
   	dwg_decode_traktref (dat, obj);
 }

@@ -1313,7 +1313,7 @@ extern "C"
                         double x;
                         double y;
                         double z;
-                } * points;
+                } * point;
                 struct
                 {
                         double x;
