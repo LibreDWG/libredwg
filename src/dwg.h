@@ -1105,10 +1105,10 @@ extern "C"
 		double view_twist_angle;
 		double view_height;
 		double lens_length;
-                double front_clip_z;
-                double back_clip_z;
-                double snap_angle;
-                struct
+        double front_clip_z;
+        double back_clip_z;
+        double snap_angle;
+        struct
 		{
 			double x;
 			double y;
@@ -1128,35 +1128,40 @@ extern "C"
 			double x;
 			double y;
 		} grid_spacing;
-                unsigned int circle_zoom;
-                unsigned long frozen_layer_count;
-                unsigned long status_flags;
-                unsigned char* style_sheet;
-                char render_mode;
-                unsigned int ucs_at_origin;
-                unsigned int ucs_per_viewport;
-                struct
+        unsigned int circle_zoom;
+        unsigned int grid_major;
+        unsigned long frozen_layer_count;
+        unsigned long status_flags;
+        unsigned char* style_sheet;
+        char render_mode;
+        unsigned int ucs_at_origin;
+        unsigned int ucs_per_viewport;
+        struct
 		{
 			double x;
 			double y;
 			double z;
 		} ucs_origin;
-                struct
+        struct
 		{
 			double x;
 			double y;
 			double z;
 		} ucs_x_axis;
-                struct
+        struct
 		{
 			double x;
 			double y;
 			double z;
 		} ucs_y_axis;
-                double ucs_elevation;
-                unsigned int ucs_ortho_view_type;
-                //add handles
-
+        double ucs_elevation;
+        unsigned int ucs_ortho_view_type;
+        unsigned int shadeplot_mode;
+        unsigned int use_def_lights;
+        char def_lighting_type;
+        double brightness;
+        double contrast;
+        double ambient_light_color;//TODO: CMC (Color)
 	} Dwg_Entity_VIEWPORT;
 
 /**

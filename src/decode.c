@@ -2014,7 +2014,71 @@ dwg_decode_VIEWPORT (Bit_Chain * dat, Dwg_Object * obj)
 	dwg_decode_entity (dat, obj->tio.entity);
 	ent = obj->tio.entity->tio.VIEWPORT;
 
-    //Implement-me!
+	ent->center.x = bit_read_BD (dat);
+	ent->center.y = bit_read_BD (dat);
+	ent->center.z = bit_read_BD (dat);
+	ent->width = bit_read_BD (dat);
+	ent->height = bit_read_BD (dat);
+	
+	if (dat->version >= R_2000){
+	    ent->view_target.x = bit_read_BD (dat);
+	    ent->view_target.y = bit_read_BD (dat);
+	    ent->view_target.z = bit_read_BD (dat);
+	    ent->view_direction.x = bit_read_BD (dat);
+	    ent->view_direction.y = bit_read_BD (dat);
+	    ent->view_direction.z = bit_read_BD (dat);
+	    ent->view_twist_angle = bit_read_BD (dat);
+	    ent->view_height = bit_read_BD (dat);
+   	    ent->lens_length = bit_read_BD (dat);
+   	    ent->front_clip_z = bit_read_BD (dat);
+   	    ent->back_clip_z = bit_read_BD (dat);
+   	    ent->snap_angle = bit_read_BD (dat);
+   	    ent->view_center.x = bit_read_RD (dat);
+   	    ent->view_center.y = bit_read_RD (dat);
+   	    ent->snap_base.x = bit_read_RD (dat);
+   	    ent->snap_base.y = bit_read_RD (dat);
+   	    ent->snap_spacing.x = bit_read_RD (dat);
+   	    ent->snap_spacing.y = bit_read_RD (dat);
+   	    ent->grid_spacing.x = bit_read_RD (dat);
+   	    ent->grid_spacing.y = bit_read_RD (dat);
+   	    ent->circle_zoom = bit_read_BS (dat);
+	}
+	
+	if (dat->version >= R_2007){
+   	    ent->grid_major = bit_read_BS (dat);
+	}
+
+	if (dat->version >= R_2000){
+   	    ent->frozen_layer_count = bit_read_BL (dat);
+   	    ent->status_flags = bit_read_BL (dat);
+   	    ent->style_sheet = bit_read_T (dat);
+   	    ent->render_mode = bit_read_RC (dat);
+   	    ent->ucs_at_origin = bit_read_B (dat);
+   	    ent->ucs_per_viewport = bit_read_B (dat);
+   	    ent->ucs_origin.x = bit_read_BD (dat);
+   	    ent->ucs_origin.y = bit_read_BD (dat);
+   	    ent->ucs_origin.z = bit_read_BD (dat);
+   	    ent->ucs_x_axis.x = bit_read_BD (dat);
+   	    ent->ucs_x_axis.y = bit_read_BD (dat);
+   	    ent->ucs_x_axis.z = bit_read_BD (dat);
+   	    ent->ucs_y_axis.x = bit_read_BD (dat);
+   	    ent->ucs_y_axis.y = bit_read_BD (dat);
+   	    ent->ucs_y_axis.z = bit_read_BD (dat);
+   	    ent->ucs_elevation = bit_read_BD (dat);
+   	    ent->ucs_ortho_view_type = bit_read_BS (dat);
+	}
+
+	if (dat->version >= R_2004){
+   	    ent->shadeplot_mode = bit_read_BS (dat);
+	}
+
+	if (dat->version >= R_2007){
+   	    ent->use_def_lights = bit_read_B (dat);
+   	    ent->def_lighting_type = bit_read_RC (dat);
+   	    ent->brightness = bit_read_BD (dat);
+   	    ent->contrast = bit_read_BD (dat);
+//TODO:   	    ent->use_def_lights = bit_read_CMC (dat);
+	}
 }
 
 static void
