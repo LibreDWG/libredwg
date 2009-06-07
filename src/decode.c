@@ -2273,6 +2273,24 @@ dwg_decode_MTEXT (Bit_Chain * dat, Dwg_Object * obj)
 }
 
 static void
+dwg_decode_LEADER (Bit_Chain *dat, Dwg_Object *obj)
+{
+    //Implement-me!
+}
+
+static void
+dwg_decode_TOLERANCE (Bit_Chain *dat, Dwg_Object *obj)
+{
+    //Implement-me!
+}
+
+static void
+dwg_decode_MLINE (Bit_Chain *dat, Dwg_Object *obj)
+{
+    //Implement-me!
+}
+
+static void
 dwg_decode_BLOCK_CONTROL (Bit_Chain *dat, Dwg_Object *obj)
 {
 	int i;
@@ -2290,6 +2308,12 @@ dwg_decode_BLOCK_CONTROL (Bit_Chain *dat, Dwg_Object *obj)
     	blk->size = bit_read_RL (dat);
     }
 	dwg_decode_traktref (dat, obj);
+}
+
+static void
+dwg_decode_BLOCK_HEADER (Bit_Chain *dat, Dwg_Object *obj)
+{
+    //Implement-me!
 }
 
 static void
@@ -2540,6 +2564,15 @@ dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned in
 		break;
 	case DWG_TYPE_MTEXT:
 		dwg_decode_MTEXT (dat, obj);
+		break;
+	case DWG_TYPE_LEADER:
+		dwg_decode_LEADER (dat, obj);
+		break;
+	case DWG_TYPE_TOLERANCE:
+		dwg_decode_TOLERANCE (dat, obj);
+		break;
+	case DWG_TYPE_MLINE:
+		dwg_decode_MLINE (dat, obj);
 		break;
     case DWG_TYPE_BLOCK_CONTROL:
         dwg_decode_BLOCK_CONTROL (dat, obj);

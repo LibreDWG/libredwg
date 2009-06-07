@@ -1588,6 +1588,9 @@ extern "C"
 			Dwg_Entity_RAY *RAY;
 			Dwg_Entity_XLINE *XLINE;
 			Dwg_Entity_MTEXT *MTEXT;
+			Dwg_Entity_LEADER *LEADER;
+			Dwg_Entity_TOLERANCE *TOLERANCE;
+			Dwg_Entity_MLINE *MLINE;
 		} tio;
 
 		long unsigned int bitsize;

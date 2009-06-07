@@ -71,6 +71,9 @@ static void dwg_encode_SPLINE (Dwg_Entity_SPLINE * est, Bit_Chain * dat);
 static void dwg_encode_RAY (Dwg_Entity_RAY * est, Bit_Chain * dat);
 static void dwg_encode_XLINE (Dwg_Entity_XLINE * est, Bit_Chain * dat);
 static void dwg_encode_MTEXT (Dwg_Entity_MTEXT * est, Bit_Chain * dat);
+static void dwg_encode_LEADER (Dwg_Entity_LEADER *ent, Bit_Chain * dat);
+static void dwg_encode_TOLERANCE (Dwg_Entity_TOLERANCE *ent, Bit_Chain * dat);
+static void dwg_encode_MLINE (Dwg_Entity_MLINE *ent, Bit_Chain * dat);
 static void dwg_encode_BLOCK_CONTROL (Dwg_Object_BLOCK_CONTROL * obj, Bit_Chain * dat);
 static void dwg_encode_DICTIONARY (Dwg_Object_DICTIONARY * obj, Bit_Chain * dat);
 static void dwg_encode_LAYER (Dwg_Object_LAYER * obj, Bit_Chain * dat);
@@ -720,6 +723,15 @@ dwg_encode_entity (Dwg_Object * obj, Bit_Chain * dat)
 		break;
 	case DWG_TYPE_MTEXT:
 		dwg_encode_MTEXT (est->tio.MTEXT, dat);
+		break;
+	case DWG_TYPE_LEADER:
+		dwg_encode_LEADER (est->tio.LEADER, dat);
+		break;
+	case DWG_TYPE_TOLERANCE:
+		dwg_encode_TOLERANCE (est->tio.TOLERANCE, dat);
+		break;
+	case DWG_TYPE_MLINE:
+		dwg_encode_MLINE (est->tio.MLINE, dat);
 		break;
 	default:
 		printf ("Eraro: unknown object-type dum enkodigo de estaĵo\n");
@@ -1909,6 +1921,24 @@ dwg_encode_MTEXT (Dwg_Entity_MTEXT *ent, Bit_Chain * dat)
     if (dat->version >= R_2004){
     	bit_write_BL (dat, ent->unknown_long);
     }
+}
+
+static void
+dwg_encode_LEADER (Dwg_Entity_LEADER *ent, Bit_Chain * dat)
+{
+    //Implement-me!
+}
+
+static void
+dwg_encode_TOLERANCE (Dwg_Entity_TOLERANCE *ent, Bit_Chain * dat)
+{
+    //Implement-me!
+}
+
+static void
+dwg_encode_MLINE (Dwg_Entity_MLINE *ent, Bit_Chain * dat)
+{
+    //Implement-me!
 }
 
 static void
