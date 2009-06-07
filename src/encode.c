@@ -1781,7 +1781,18 @@ dwg_encode_VIEWPORT (Dwg_Entity_VIEWPORT *ent, Bit_Chain * dat)
 static void
 dwg_encode_ELLIPSE (Dwg_Entity_ELLIPSE *ent, Bit_Chain * dat)
 {
-    //TODO: implement-me!
+	bit_write_BD (dat, ent->x0);
+	bit_write_BD (dat, ent->y0);
+	bit_write_BD (dat, ent->z0);
+	bit_write_BD (dat, ent->x1);
+	bit_write_BD (dat, ent->y1);
+	bit_write_BD (dat, ent->z1);
+	bit_write_BD (dat, ent->extrusion.x);
+	bit_write_BD (dat, ent->extrusion.y);
+	bit_write_BD (dat, ent->extrusion.z);
+	bit_write_BD (dat, ent->axis_ratio);
+	bit_write_BD (dat, ent->start_angle);
+	bit_write_BD (dat, ent->end_angle);
 }
 
 static void

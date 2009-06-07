@@ -1181,7 +1181,7 @@ extern "C"
 			double y;
 			double z;
 		} extrusion;
-		double radiusproporcion;
+		double axis_ratio;
 		double start_angle;
 		double end_angle;
 	} Dwg_Entity_ELLIPSE;

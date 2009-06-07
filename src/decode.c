@@ -2101,7 +2101,7 @@ dwg_decode_ELLIPSE (Bit_Chain * dat, Dwg_Object * obj)
 	ent->extrusion.x = bit_read_BD (dat);
 	ent->extrusion.y = bit_read_BD (dat);
 	ent->extrusion.z = bit_read_BD (dat);
-	ent->radiusproporcion = bit_read_BD (dat);
+	ent->axis_ratio = bit_read_BD (dat);
 	ent->start_angle = bit_read_BD (dat);
 	ent->end_angle = bit_read_BD (dat);
 
