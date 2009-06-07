@@ -1711,7 +1711,71 @@ dwg_encode_SHAPE (Dwg_Entity_SHAPE *ent, Bit_Chain * dat)
 static void
 dwg_encode_VIEWPORT (Dwg_Entity_VIEWPORT *ent, Bit_Chain * dat)
 {
-    //TODO: implement-me!
+	bit_write_BD (dat, ent->center.x);
+	bit_write_BD (dat, ent->center.y);
+	bit_write_BD (dat, ent->center.z);
+	bit_write_BD (dat, ent->width);
+	bit_write_BD (dat, ent->height);
+	
+	if (dat->version >= R_2000){
+	    bit_write_BD (dat, ent->view_target.x);
+	    bit_write_BD (dat, ent->view_target.y);
+	    bit_write_BD (dat, ent->view_target.z);
+	    bit_write_BD (dat, ent->view_direction.x);
+	    bit_write_BD (dat, ent->view_direction.y);
+	    bit_write_BD (dat, ent->view_direction.z);
+	    bit_write_BD (dat, ent->view_twist_angle);
+	    bit_write_BD (dat, ent->view_height);
+   	    bit_write_BD (dat, ent->lens_length);
+   	    bit_write_BD (dat, ent->front_clip_z);
+   	    bit_write_BD (dat, ent->back_clip_z);
+   	    bit_write_BD (dat, ent->snap_angle);
+   	    bit_write_RD (dat, ent->view_center.x);
+   	    bit_write_RD (dat, ent->view_center.y);
+   	    bit_write_RD (dat, ent->snap_base.x);
+   	    bit_write_RD (dat, ent->snap_base.y);
+   	    bit_write_RD (dat, ent->snap_spacing.x);
+   	    bit_write_RD (dat, ent->snap_spacing.y);
+   	    bit_write_RD (dat, ent->grid_spacing.x);
+   	    bit_write_RD (dat, ent->grid_spacing.y);
+   	    bit_write_BS (dat, ent->circle_zoom);
+	}
+	
+	if (dat->version >= R_2007){
+   	    bit_write_BS (dat, ent->grid_major);
+	}
+
+	if (dat->version >= R_2000){
+   	    bit_write_BL (dat, ent->frozen_layer_count);
+   	    bit_write_BL (dat, ent->status_flags);
+   	    bit_write_T (dat, ent->style_sheet);
+   	    bit_write_RC (dat, ent->render_mode);
+   	    bit_write_B (dat, ent->ucs_at_origin);
+   	    bit_write_B (dat, ent->ucs_per_viewport);
+   	    bit_write_BD (dat, ent->ucs_origin.x);
+   	    bit_write_BD (dat, ent->ucs_origin.y);
+   	    bit_write_BD (dat, ent->ucs_origin.z);
+   	    bit_write_BD (dat, ent->ucs_x_axis.x);
+   	    bit_write_BD (dat, ent->ucs_x_axis.y);
+   	    bit_write_BD (dat, ent->ucs_x_axis.z);
+   	    bit_write_BD (dat, ent->ucs_y_axis.x);
+   	    bit_write_BD (dat, ent->ucs_y_axis.y);
+   	    bit_write_BD (dat, ent->ucs_y_axis.z);
+   	    bit_write_BD (dat, ent->ucs_elevation);
+   	    bit_write_BS (dat, ent->ucs_ortho_view_type);
+	}
+
+	if (dat->version >= R_2004){
+   	    bit_write_BS (dat, ent->shadeplot_mode);
+	}
+
+	if (dat->version >= R_2007){
+   	    bit_write_B (dat, ent->use_def_lights);
+   	    bit_write_RC (dat, ent->def_lighting_type);
+   	    bit_write_BD (dat, ent->brightness);
+   	    bit_write_BD (dat, ent->contrast);
+//TODO:   	    bit_write_CMC (dat, ent->use_def_lights);
+	}
 }
 
 static void
