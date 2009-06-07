@@ -1191,55 +1191,52 @@ extern "C"
  */
 	typedef struct _dwg_entity_SPLINE
 	{
-                unsigned char scenario;
-                unsigned int degree;
-                double fit_tol;
-                struct
-                {
+        unsigned char scenario;
+        unsigned int degree;
+        double fit_tol;
+        struct
+        {
 			double x;
 			double y;
 			double z;
 		} beg_tan_vec;
-                struct
-                {
+        struct
+        {
 			double x;
 			double y;
 			double z;
 		} end_tan_vec;
-                //flags:
-                //closed - bit 0
-                //periodic - bit 1
-                //rational - bit 2
-                //weighted ctrl pts - bit 4
-                unsigned char rational;
-                unsigned char closed_b;
-                unsigned char periodic;
-                unsigned char weighted;
-                double knot_tol;
-                double ctrl_tol;
-                unsigned int num_fit_pts;
-                unsigned int num_knots;
-                unsigned int num_ctrl_pts;
-                struct
-                {
-                   	double x;
+        //flags:
+        //closed - bit 0
+        //periodic - bit 1
+        //rational - bit 2
+        //weighted ctrl pts - bit 4
+        unsigned char rational;
+        unsigned char closed_b;
+        unsigned char periodic;
+        unsigned char weighted;
+        double knot_tol;
+        double ctrl_tol;
+        unsigned int num_fit_pts;
+        unsigned int num_knots;
+        unsigned int num_ctrl_pts;
+        struct
+        {
+           	double x;
+	        double y;
+	        double z;
+        } * fit_pts;
+        double* knots;
+        struct
+        {
+           	double x;
 			double y;
 			double z;
-                } * fit_pts;
-                struct
-                {
-                   	double value;
-                } * knots;
-                struct
-                {
-                   	double x;
-			double y;
-			double z;
-                        double w;
-                } * ctrl_pts;
-	} Dwg_Entity_SPLINE;
+            double w;
+    } * ctrl_pts;
+} Dwg_Entity_SPLINE;
 
-        //TODO: 3DSOLID, REGION, BODY
+//TODO: 3DSOLID, REGION, BODY
 
 
 /**

@@ -2111,8 +2111,6 @@ dwg_decode_ELLIPSE (Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_SPLINE (Bit_Chain * dat, Dwg_Object * obj)
 {
-    return;    // temporarily disabling code to avoid segfault (TODO: review spline parsing code)
-
     Dwg_Entity_SPLINE *ent;
     int i;
 
@@ -2134,8 +2132,7 @@ dwg_decode_SPLINE (Bit_Chain * dat, Dwg_Object * obj)
         ent->end_tan_vec.y = bit_read_BD(dat);
         ent->end_tan_vec.z = bit_read_BD(dat);
         ent->num_fit_pts = bit_read_BS(dat);
-        ent->fit_pts = malloc(ent->num_fit_pts*
-                sizeof(((Dwg_Entity_SPLINE *)(NULL))->fit_pts));
+        ent->fit_pts = malloc(ent->num_fit_pts * 3 * sizeof(double));
         for (i=0;i<ent->num_fit_pts;i++)
         {
             ent->fit_pts[i].x = bit_read_BD(dat);
@@ -2156,13 +2153,11 @@ dwg_decode_SPLINE (Bit_Chain * dat, Dwg_Object * obj)
                 ent->weighted = bit_read_B(dat);
                 
                 ent->knots = malloc(ent->num_knots *
-                    sizeof (((Dwg_Entity_SPLINE *) (NULL))->knots));
+                    sizeof (double));
                 for (i=0;i<ent->num_knots;i++)
-                    ent->knots[i].value = bit_read_BD(dat);
+                    ent->knots[i] = bit_read_BD(dat);
                 
-                ent->ctrl_pts = malloc(ent->num_ctrl_pts *
-                    sizeof (((Dwg_Entity_SPLINE *) (NULL))->ctrl_pts));
-                
+                ent->ctrl_pts = malloc(ent->num_ctrl_pts * 3 * sizeof(unsigned int));
                 for (i=0;i<ent->num_ctrl_pts;i++) 
                 {
                         ent->ctrl_pts[i].x = bit_read_BD(dat);

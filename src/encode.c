@@ -1833,7 +1833,7 @@ dwg_encode_SPLINE (Dwg_Entity_SPLINE * ent, Bit_Chain * dat)
                     bit_write_B(dat, ent->weighted);
 
                     for (i=0;i<ent->num_knots;i++)
-                        bit_write_BD(dat, ent->knots[i].value);
+                        bit_write_BD(dat, ent->knots[i]);
 
                     for (i=0;i<ent->num_ctrl_pts;i++)
                     {
