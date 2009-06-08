@@ -2440,6 +2440,7 @@ static void
 dwg_decode_MLINE (Bit_Chain *dat, Dwg_Object *obj)
 {
 	Dwg_Entity_MLINE *ent;
+    int i, j, k;
 
 	obj->supertype = DWG_SUPERTYPE_ENTITY;
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
@@ -2447,8 +2448,45 @@ dwg_decode_MLINE (Bit_Chain *dat, Dwg_Object *obj)
 	dwg_decode_entity (dat, obj->tio.entity);
 	ent = obj->tio.entity->tio.MLINE;
 
-    //Implement-me!
+    ent->scale = bit_read_BD (dat);
+    ent->just = bit_read_RC (dat);    //spec-typo? Spec says EC instead of RC...
+    ent->base_point.x = bit_read_BD (dat);
+    ent->base_point.y = bit_read_BD (dat);
+    ent->base_point.z = bit_read_BD (dat);
+    ent->extrusion.x = bit_read_BD (dat);
+    ent->extrusion.y = bit_read_BD (dat);
+    ent->extrusion.z = bit_read_BD (dat);
+    ent->open_closed = bit_read_BS (dat);
+    ent->num_lines = bit_read_RC (dat);
+    ent->num_verts = bit_read_BD (dat);
 
+    ent->verts = malloc(ent->num_verts * sizeof(Dwg_Entity_MLINE_vert));
+    for (i=0;i<ent->num_verts;i++){
+        ent->verts[i].vertex.x = bit_read_BD(dat);
+        ent->verts[i].vertex.y = bit_read_BD(dat);
+        ent->verts[i].vertex.z = bit_read_BD(dat);
+        ent->verts[i].vertex_direction.x = bit_read_BD(dat);
+        ent->verts[i].vertex_direction.y = bit_read_BD(dat);
+        ent->verts[i].vertex_direction.z = bit_read_BD(dat);
+        ent->verts[i].miter_direction.x = bit_read_BD(dat);
+        ent->verts[i].miter_direction.y = bit_read_BD(dat);
+        ent->verts[i].miter_direction.z = bit_read_BD(dat);
+        ent->verts[i].lines = malloc(ent->num_lines * sizeof(Dwg_Entity_MLINE_line));
+        for (j=0;j<ent->num_lines;j++){
+            ent->verts[i].lines[j].num_segparms = bit_read_BS(dat);
+            ent->verts[i].lines[j].segparms = malloc(ent->verts[i].lines[j].num_segparms * sizeof(double));
+            for (k=0;k<ent->verts[i].lines[j].num_segparms;k++){
+                ent->verts[i].lines[j].segparms[k] = bit_read_BD(dat);
+            }
+            ent->verts[i].lines[j].num_areafillparms = bit_read_BS(dat);
+            ent->verts[i].lines[j].areafillparms = malloc(ent->verts[i].lines[j].num_areafillparms * sizeof(double));
+            for (k=0;k<ent->verts[i].lines[j].num_areafillparms;k++){
+                ent->verts[i].lines[j].areafillparms[k] = bit_read_BD(dat);
+            }
+        }
+    }    
+    
+    
   	dwg_decode_traktref (dat, obj);
 }
 

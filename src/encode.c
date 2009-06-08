@@ -2013,7 +2013,41 @@ dwg_encode_TOLERANCE (Dwg_Entity_TOLERANCE *ent, Bit_Chain * dat)
 static void
 dwg_encode_MLINE (Dwg_Entity_MLINE *ent, Bit_Chain * dat)
 {
-    //Implement-me!
+    int i, j, k;
+
+    bit_write_BD (dat, ent->scale);
+    bit_write_RC (dat, ent->just);    //spec-typo? Spec says EC instead of RC...
+    bit_write_BD (dat, ent->base_point.x);
+    bit_write_BD (dat, ent->base_point.y);
+    bit_write_BD (dat, ent->base_point.z);
+    bit_write_BD (dat, ent->extrusion.x);
+    bit_write_BD (dat, ent->extrusion.y);
+    bit_write_BD (dat, ent->extrusion.z);
+    bit_write_BS (dat, ent->open_closed);
+    bit_write_RC (dat, ent->num_lines);
+    bit_write_BD (dat, ent->num_verts);
+
+    for (i=0;i<ent->num_verts;i++){
+        bit_write_BD(dat, ent->verts[i].vertex.x);
+        bit_write_BD(dat, ent->verts[i].vertex.y);
+        bit_write_BD(dat, ent->verts[i].vertex.z);
+        bit_write_BD(dat, ent->verts[i].vertex_direction.x);
+        bit_write_BD(dat, ent->verts[i].vertex_direction.y);
+        bit_write_BD(dat, ent->verts[i].vertex_direction.z);
+        bit_write_BD(dat, ent->verts[i].miter_direction.x);
+        bit_write_BD(dat, ent->verts[i].miter_direction.y);
+        bit_write_BD(dat, ent->verts[i].miter_direction.z);
+        for (j=0;j<ent->num_lines;j++){
+            bit_write_BS(dat, ent->verts[i].lines[j].num_segparms);
+            for (k=0;k<ent->verts[i].lines[j].num_segparms;k++){
+                bit_write_BD(dat, ent->verts[i].lines[j].segparms[k]);
+            }
+            bit_write_BS(dat, ent->verts[i].lines[j].num_areafillparms);
+            for (k=0;k<ent->verts[i].lines[j].num_areafillparms;k++){
+                bit_write_BD(dat, ent->verts[i].lines[j].areafillparms[k]);
+            }
+        }
+    }    
 }
 
 static void

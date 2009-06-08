@@ -1390,52 +1390,59 @@ extern "C"
 	} Dwg_Entity_TOLERANCE;
 
 /**
- Struct for MLINE (47)
+ Structures for MLINE (47)
  */
+	typedef struct _dwg_entity_MLINE_line
+	{
+        unsigned int num_segparms;
+        double* segparms;
+        unsigned int num_areafillparms;
+        double* areafillparms;
+    } Dwg_Entity_MLINE_line;
+
+	typedef struct _dwg_entity_MLINE_vert
+	{
+        struct
+        {
+            double x;
+            double y;
+            double z;
+        } vertex;
+        struct
+        {
+            double x;
+            double y;
+            double z;
+        } vertex_direction;
+        struct
+        {
+            double x;
+            double y;
+            double z;
+        } miter_direction;
+        Dwg_Entity_MLINE_line* lines;
+	} Dwg_Entity_MLINE_vert;
+
 	typedef struct _dwg_entity_MLINE
 	{
-                double scale;
-                unsigned int just;
-                struct
-                {
-                        double x;
-                        double y;
-                        double z;
-                } base_point;
-                struct
-                {
-                        double x;
-                        double y;
-                        double z;
-                } extrusion;
-                unsigned int open_closed;
-                unsigned int num_lines; //Linesinstyle
-                unsigned int num_verts;
-                struct
-                {
-                        double x;
-                        double y;
-                        double z;
-                } * vertex;
-                struct
-                {
-                        double x;
-                        double y;
-                        double z;
-                } * vertex_direction;
-                struct
-                {
-                        double x;
-                        double y;
-                        double z;
-                } * miter_direction;
-                struct
-                {
-                        unsigned int num_segparms;
-                        double * segparms;
-                        unsigned int num_areafill_parms;
-                        double areafill_parms;
-                } * line;
+        double scale;
+        unsigned int just;
+        struct
+        {
+            double x;
+            double y;
+            double z;
+        } base_point;
+        struct
+        {
+            double x;
+            double y;
+            double z;
+        } extrusion;
+        unsigned int open_closed;
+        unsigned int num_lines; //Linesinstyle
+        unsigned int num_verts;
+        Dwg_Entity_MLINE_vert* verts;
 	} Dwg_Entity_MLINE;
 
 /**
