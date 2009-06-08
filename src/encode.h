@@ -1,6 +1,13 @@
 /*****************************************************************************/
-/*  LibDWG - Free DWG read-only library                                      */
+/*  LibreDWG - Free DWG library                                              */
+/*  http://code.google.com/p/libredwg/                                       */
+/*                                                                           */
+/*    based on LibDWG - Free DWG read-only library                           */
+/*    http://sourceforge.net/projects/libdwg                                 */
+/*    originally written by Felipe Castro <felipo at users.sourceforge.net>  */
+/*                                                                           */
 /*  Copyright (C) 2008, 2009 Free Software Foundation, Inc.                  */
+/*  Copyright (C) 2009 Felipe Sanches <jucablues@users.sourceforge.net>      */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -9,7 +16,7 @@
 /*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
 /*****************************************************************************/
 
-///  Funkcioj por enkodigi dwg-datenaron.
+///  Functions for encoding dwg data-structures.
 
 #ifndef ENCODE_H
 #define ENCODE_H

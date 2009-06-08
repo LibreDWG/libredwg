@@ -1,11 +1,20 @@
-/**************************************************************************/
-/*  LibDWG - Free DWG read-only library                                   */
-/*  Copyright (C) 2008, 2009 Free Software Foundation, Inc.               */
-/*                                                                        */
-/*  This program is free software, licensed under the terms of the GNU    */
-/*  General Public License as published by the Free Software Foundation,  */
-/*  which is also included in this package, in a file named "COPYING".    */
-/**************************************************************************/
+/*****************************************************************************/
+/*  LibreDWG - Free DWG library                                              */
+/*  http://code.google.com/p/libredwg/                                       */
+/*                                                                           */
+/*    based on LibDWG - Free DWG read-only library                           */
+/*    http://sourceforge.net/projects/libdwg                                 */
+/*    originally written by Felipe Castro <felipo at users.sourceforge.net>  */
+/*                                                                           */
+/*  Copyright (C) 2008, 2009 Free Software Foundation, Inc.                  */
+/*  Copyright (C) 2009 Felipe Sanches <jucablues@users.sourceforge.net>      */
+/*                                                                           */
+/*  This library is free software, licensed under the terms of the GNU       */
+/*  General Public License as published by the Free Software Foundation,     */
+/*  either version 3 of the License, or (at your option) any later version.  */
+/*  You should have received a copy of the GNU General Public License        */
+/*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
+/*****************************************************************************/
 
 /* Simple functions to show how to read lines, circles and texts
  */
