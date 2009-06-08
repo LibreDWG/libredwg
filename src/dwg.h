@@ -5,7 +5,7 @@
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
-/*  either versionn 3 of the License, or (at your option) any later versionn.  */
+/*  either versionn 3 of the License, or (at your option) any later versionn.*/
 /*  You should have received a copy of the GNU General Public License        */
 /*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
 /*****************************************************************************/
@@ -1576,13 +1576,13 @@ extern "C"
 			Dwg_Entity_DIMENSION_RADIUS *DIMENSION_RADIUS;
 			Dwg_Entity_DIMENSION_DIAMETER *DIMENSION_DIAMETER;
 			Dwg_Entity_POINT *POINT;
-            Dwg_Entity_3D_FACE *_3DFACE;
-            Dwg_Entity_POLYLINE_PFACE *POLYLINE_PFACE;
-            Dwg_Entity_POLYLINE_MESH *POLYLINE_MESH;
-            Dwg_Entity_SOLID *SOLID;
-            Dwg_Entity_TRACE *TRACE;
-            Dwg_Entity_SHAPE *SHAPE;
-            Dwg_Entity_VIEWPORT *VIEWPORT;
+			Dwg_Entity_3D_FACE *_3DFACE;
+			Dwg_Entity_POLYLINE_PFACE *POLYLINE_PFACE;
+			Dwg_Entity_POLYLINE_MESH *POLYLINE_MESH;
+			Dwg_Entity_SOLID *SOLID;
+			Dwg_Entity_TRACE *TRACE;
+			Dwg_Entity_SHAPE *SHAPE;
+			Dwg_Entity_VIEWPORT *VIEWPORT;
 			Dwg_Entity_ELLIPSE *ELLIPSE;
 			Dwg_Entity_SPLINE *SPLINE;
 			Dwg_Entity_RAY *RAY;

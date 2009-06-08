@@ -1,10 +1,11 @@
 /*****************************************************************************/
 /*  LibDWG - Free DWG read-only library                                      */
 /*  Copyright (C) 2008, 2009 Free Software Foundation, Inc.                  */
+/*  Copyright (C) 2009 Rodrigo Rodrigues da Silva <rodrigopitanga@gmail.com> */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
-/*  either versionn 3 of the License, or (at your option) any later versionn.  */
+/*  either versionn 3 of the License, or (at your option) any later versionn.*/
 /*  You should have received a copy of the GNU General Public License        */
 /*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
 /*****************************************************************************/
@@ -1097,13 +1098,21 @@ dwg_encode_VERTEX_3D (Dwg_Entity_VERTEX_3D *ent, Bit_Chain * dat)
 static void
 dwg_encode_VERTEX_MESH (Dwg_Entity_VERTEX_MESH *ent, Bit_Chain * dat)
 {
-    //TODO: implement-me!
+    	//TODO: check
+	bit_write_RC (dat, ent->flags);
+	bit_write_BD (dat, ent->x0);
+	bit_write_BD (dat, ent->y0);
+	bit_write_BD (dat, ent->z0);
 }
 
 static void
 dwg_encode_VERTEX_PFACE (Dwg_Entity_VERTEX_PFACE *ent, Bit_Chain * dat)
 {
-    //TODO: implement-me!
+    	//TODO: check
+	bit_write_RC (dat, ent->flags);
+	bit_write_BD (dat, ent->x0);
+	bit_write_BD (dat, ent->y0);
+	bit_write_BD (dat, ent->z0);
 }
 
 static void

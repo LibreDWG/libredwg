@@ -1,10 +1,11 @@
 /*****************************************************************************/
 /*  LibDWG - Free DWG read-only library                                      */
 /*  Copyright (C) 2008, 2009 Free Software Foundation, Inc.                  */
+/*  Copyright (C) 2009 Rodrigo Rodrigues da Silva <rodrigopitanga@gmail.com> */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
-/*  either versionn 3 of the License, or (at your option) any later versionn.  */
+/*  either versionn 3 of the License, or (at your option) any later versionn.*/
 /*  You should have received a copy of the GNU General Public License        */
 /*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
 /*****************************************************************************/
@@ -1235,6 +1236,48 @@ dwg_decode_VERTEX_3D (Bit_Chain * dat, Dwg_Object * obj)
 }
 
 static void
+dwg_decode_VERTEX_MESH (Bit_Chain * dat, Dwg_Object * obj)
+{
+	Dwg_Entity_VERTEX_MESH *ent;
+
+	obj->supertype = DWG_SUPERTYPE_ENTITY;
+	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
+	obj->tio.entity->tio.VERTEX_MESH = calloc (sizeof (Dwg_Entity_VERTEX_MESH), 1);
+	ent = obj->tio.entity->tio.VERTEX_MESH;
+	dwg_decode_entity (dat, obj->tio.entity);
+
+	/* Read values
+	 */
+	ent->flags = bit_read_RC (dat);
+	ent->x0 = bit_read_BD (dat);
+	ent->y0 = bit_read_BD (dat);
+	ent->z0 = bit_read_BD (dat);
+
+	dwg_decode_traktref (dat, obj);
+}
+
+static void
+dwg_decode_VERTEX_PFACE (Bit_Chain * dat, Dwg_Object * obj)
+{
+	Dwg_Entity_VERTEX_PFACE *ent;
+
+	obj->supertype = DWG_SUPERTYPE_ENTITY;
+	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
+	obj->tio.entity->tio.VERTEX_PFACE = calloc (sizeof (Dwg_Entity_VERTEX_PFACE), 1);
+	ent = obj->tio.entity->tio.VERTEX_PFACE;
+	dwg_decode_entity (dat, obj->tio.entity);
+
+	/* Read values
+	 */
+	ent->flags = bit_read_RC (dat);
+	ent->x0 = bit_read_BD (dat);
+	ent->y0 = bit_read_BD (dat);
+	ent->z0 = bit_read_BD (dat);
+
+	dwg_decode_traktref (dat, obj);
+}
+
+static void
 dwg_decode_VERTEX_PFACE_FACE (Bit_Chain * dat, Dwg_Object * obj)
 {
 	Dwg_Entity_VERTEX_PFACE_FACE *ent;
@@ -2198,6 +2241,27 @@ dwg_decode_RAY (Bit_Chain * dat, Dwg_Object * obj)
 }
 
 static void
+dwg_decode_XLINE (Bit_Chain * dat, Dwg_Object * obj)
+{
+	Dwg_Entity_XLINE *ent;
+
+	obj->supertype = DWG_SUPERTYPE_ENTITY;
+	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
+	obj->tio.entity->tio.XLINE = calloc (sizeof (Dwg_Entity_XLINE), 1);
+	dwg_decode_entity (dat, obj->tio.entity);
+	ent = obj->tio.entity->tio.XLINE;
+
+	ent->x0 = bit_read_BD (dat);
+	ent->y0 = bit_read_BD (dat);
+	ent->z0 = bit_read_BD (dat);
+	ent->x1 = bit_read_BD (dat);
+	ent->y1 = bit_read_BD (dat);
+	ent->z1 = bit_read_BD (dat);
+
+	dwg_decode_traktref (dat, obj);
+}
+
+static void
 dwg_decode_DICTIONARY (Bit_Chain *dat, Dwg_Object *obj)
 {
 	int i;
@@ -2583,9 +2647,13 @@ dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned in
 		dwg_decode_VERTEX_2D (dat, obj);
 		break;
 	case DWG_TYPE_VERTEX_3D:
-	case DWG_TYPE_VERTEX_MESH:
-	case DWG_TYPE_VERTEX_PFACE:
 		dwg_decode_VERTEX_3D (dat, obj);
+		break;
+	case DWG_TYPE_VERTEX_MESH:
+		dwg_decode_VERTEX_MESH (dat, obj);
+		break;
+	case DWG_TYPE_VERTEX_PFACE:
+		dwg_decode_VERTEX_PFACE (dat, obj);
 		break;
 	case DWG_TYPE_VERTEX_PFACE_FACE:
 		dwg_decode_VERTEX_PFACE_FACE (dat, obj);
@@ -2605,27 +2673,27 @@ dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned in
 	case DWG_TYPE_LINE:
 		dwg_decode_LINE (dat, obj);
 		break;
-    case DWG_TYPE_DIMENSION_ORDINATE:
-        dwg_decode_DIMENSION_ORDINATE(dat, obj);
-        break;
-    case DWG_TYPE_DIMENSION_LINEAR:
-        dwg_decode_DIMENSION_LINEAR(dat, obj);
-        break;
-    case DWG_TYPE_DIMENSION_ALIGNED:
-        dwg_decode_DIMENSION_ALIGNED(dat, obj);
-        break;
-    case DWG_TYPE_DIMENSION_ANG3PT:
-        dwg_decode_DIMENSION_ANG3PT(dat, obj);
-        break;
-    case DWG_TYPE_DIMENSION_ANG2LN:
-        dwg_decode_DIMENSION_ANG2LN(dat, obj);
-        break;
-    case DWG_TYPE_DIMENSION_RADIUS:
-        dwg_decode_DIMENSION_RADIUS(dat, obj);
-        break;
-    case DWG_TYPE_DIMENSION_DIAMETER:
-        dwg_decode_DIMENSION_DIAMETER(dat, obj);
-        break;
+	case DWG_TYPE_DIMENSION_ORDINATE:
+		dwg_decode_DIMENSION_ORDINATE(dat, obj);
+		break;
+	case DWG_TYPE_DIMENSION_LINEAR:
+		dwg_decode_DIMENSION_LINEAR(dat, obj);
+		break;
+	case DWG_TYPE_DIMENSION_ALIGNED:
+		dwg_decode_DIMENSION_ALIGNED(dat, obj);
+		break;
+	case DWG_TYPE_DIMENSION_ANG3PT:
+		dwg_decode_DIMENSION_ANG3PT(dat, obj);
+		break;
+	case DWG_TYPE_DIMENSION_ANG2LN:
+		dwg_decode_DIMENSION_ANG2LN(dat, obj);
+		break;
+	case DWG_TYPE_DIMENSION_RADIUS:
+		dwg_decode_DIMENSION_RADIUS(dat, obj);
+		break;
+	case DWG_TYPE_DIMENSION_DIAMETER:
+		dwg_decode_DIMENSION_DIAMETER(dat, obj);
+		break;
 	case DWG_TYPE_POINT:
 		dwg_decode_POINT (dat, obj);
 		break;
@@ -2653,12 +2721,14 @@ dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned in
 	case DWG_TYPE_ELLIPSE:
 		dwg_decode_ELLIPSE (dat, obj);
 		break;
-    case DWG_TYPE_SPLINE:
+    	case DWG_TYPE_SPLINE:
 		dwg_decode_SPLINE (dat, obj);
-        break;
+       		break;
 	case DWG_TYPE_RAY:
-	case DWG_TYPE_XLINE:
 		dwg_decode_RAY (dat, obj);
+		break;
+	case DWG_TYPE_XLINE:
+		dwg_decode_XLINE (dat, obj);
 		break;
 	case DWG_TYPE_MTEXT:
 		dwg_decode_MTEXT (dat, obj);
@@ -2672,12 +2742,12 @@ dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned in
 	case DWG_TYPE_MLINE:
 		dwg_decode_MLINE (dat, obj);
 		break;
-    case DWG_TYPE_BLOCK_CONTROL:
-        dwg_decode_BLOCK_CONTROL (dat, obj);
-        break;
-    case DWG_TYPE_DICTIONARY:
-        dwg_decode_DICTIONARY (dat, obj);
-        break;
+        case DWG_TYPE_BLOCK_CONTROL:
+                dwg_decode_BLOCK_CONTROL (dat, obj);
+                break;
+        case DWG_TYPE_DICTIONARY:
+                dwg_decode_DICTIONARY (dat, obj);
+                break;
 	case DWG_TYPE_LAYER:
 		dwg_decode_LAYER (dat, obj);
 		break;
