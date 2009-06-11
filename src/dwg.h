@@ -1475,6 +1475,62 @@ extern "C"
 	} Dwg_Object_LAYER;
 
 /**
+ Struct for IMAGE (78)
+ */
+
+	typedef struct _dwg_entity_IMAGE_clip_vert
+	{
+		double x;
+		double y;
+	} Dwg_Entity_IMAGE_clip_vert;
+
+	typedef struct _dwg_entity_IMAGE
+	{
+		long unsigned int class_version;
+		struct
+		{
+		    double x;
+		    double y;
+		    double z;
+		} pt0;
+		struct
+		{
+		    double x;
+		    double y;
+		    double z;
+		} uvec;
+		struct
+		{
+		    double x;
+		    double y;
+		    double z;
+		} vvec;
+		struct
+		{
+		    double width;
+		    double height;
+		} size;
+		unsigned int display_props;
+		unsigned char clipping;
+		unsigned char brightness;
+		unsigned char contrast;
+		unsigned char fade;
+		unsigned int clip_boundary_type;
+		struct
+		{
+		    double x;
+		    double y;
+		} boundary_pt0;
+		struct
+		{
+		    double x;
+		    double y;
+		} boundary_pt1;
+		unsigned long num_clip_verts;
+		Dwg_Entity_IMAGE_clip_vert* clip_verts;
+	} Dwg_Entity_IMAGE;
+
+/**
  Struct for LAYOUT (502?)
  */
 	typedef struct _dwg_object_LAYOUT
