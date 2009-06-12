@@ -76,6 +76,9 @@ static void dwg_encode_SHAPE (Dwg_Entity_SHAPE * est, Bit_Chain * dat);
 static void dwg_encode_VIEWPORT (Dwg_Entity_VIEWPORT *ent, Bit_Chain * dat);
 static void dwg_encode_ELLIPSE (Dwg_Entity_ELLIPSE * est, Bit_Chain * dat);
 static void dwg_encode_SPLINE (Dwg_Entity_SPLINE * est, Bit_Chain * dat);
+static void dwg_encode_REGION (Dwg_Entity_REGION * est, Bit_Chain * dat);
+static void dwg_encode_3DSOLID (Dwg_Entity_3DSOLID * est, Bit_Chain * dat);
+static void dwg_encode_BODY (Dwg_Entity_BODY * est, Bit_Chain * dat);
 static void dwg_encode_RAY (Dwg_Entity_RAY * est, Bit_Chain * dat);
 static void dwg_encode_XLINE (Dwg_Entity_XLINE * est, Bit_Chain * dat);
 static void dwg_encode_MTEXT (Dwg_Entity_MTEXT * est, Bit_Chain * dat);
@@ -666,11 +669,11 @@ dwg_encode_entity (Dwg_Object * obj, Bit_Chain * dat)
 	case DWG_TYPE_ARC:
 		dwg_encode_ARC (est->tio.ARC, dat);
 		break;
-	case DWG_TYPE_LINE:
-		dwg_encode_LINE (est->tio.LINE, dat);
-		break;
 	case DWG_TYPE_CIRCLE:
 		dwg_encode_CIRCLE (est->tio.CIRCLE, dat);
+		break;
+	case DWG_TYPE_LINE:
+		dwg_encode_LINE (est->tio.LINE, dat);
 		break;
 	case DWG_TYPE_DIMENSION_ORDINATE:
 		dwg_encode_DIMENSION_ORDINATE (est->tio.DIMENSION_ORDINATE, dat);
@@ -723,6 +726,15 @@ dwg_encode_entity (Dwg_Object * obj, Bit_Chain * dat)
 	case DWG_TYPE_SPLINE:
 		dwg_encode_SPLINE (est->tio.SPLINE, dat);
 		break;
+	case DWG_TYPE_REGION:
+		dwg_encode_REGION (est->tio.REGION, dat);
+		break;
+	case DWG_TYPE_3DSOLID:
+		dwg_encode_3DSOLID (est->tio._3DSOLID, dat);
+		break;
+	case DWG_TYPE_BODY:
+		dwg_encode_BODY (est->tio.BODY, dat);
+		break;
 	case DWG_TYPE_RAY:
 		dwg_encode_RAY (est->tio.RAY, dat);
 		break;
@@ -741,6 +753,20 @@ dwg_encode_entity (Dwg_Object * obj, Bit_Chain * dat)
 	case DWG_TYPE_MLINE:
 		dwg_encode_MLINE (est->tio.MLINE, dat);
 		break;
+/* TODO: figure out how to deal with these types
+	case DWG_TYPE_IMAGE:
+		dwg_encode_IMAGE (est->tio.IMAGE, dat);
+		break;
+	case DWG_TYPE_LWPLINE:
+		dwg_encode_LWPLINE (est->tio.LWPLINE, dat);
+		break;
+	case DWG_TYPE_OLE2FRAME:
+		dwg_encode_OLE2FRAME (est->tio.OLE2FRAME, dat);
+		break;
+	case DWG_TYPE_TABLE:
+		dwg_encode_TABLE (est->tio.TABLE, dat);
+		break;
+*/
 	default:
 		printf ("Eraro: unknown object-type dum enkodigo de estaĵo\n");
 		exit (-1);
@@ -1878,6 +1904,24 @@ dwg_encode_SPLINE (Dwg_Entity_SPLINE * ent, Bit_Chain * dat)
 }
 
 static void
+dwg_encode_REGION (Dwg_Entity_REGION * ent, Bit_Chain * dat)
+{
+//TODO: Implement-me!
+}
+
+static void
+dwg_encode_3DSOLID (Dwg_Entity_3DSOLID * ent, Bit_Chain * dat)
+{
+//TODO: Implement-me!
+}
+
+static void
+dwg_encode_BODY (Dwg_Entity_BODY * ent, Bit_Chain * dat)
+{
+//TODO: Implement-me!
+}
+
+static void
 dwg_encode_RAY (Dwg_Entity_RAY * ent, Bit_Chain * dat)
 {
 	bit_write_BD (dat, ent->x0);
@@ -1897,6 +1941,12 @@ dwg_encode_XLINE (Dwg_Entity_XLINE *ent, Bit_Chain * dat)
 	bit_write_BD (dat, ent->x1);
 	bit_write_BD (dat, ent->y1);
 	bit_write_BD (dat, ent->z1);
+}
+
+static void
+dwg_encode_DICTIONARY (Dwg_Object_DICTIONARY *ent, Bit_Chain * dat)
+{
+    //Implement-me!
 }
 
 static void
@@ -2054,12 +2104,6 @@ dwg_encode_MLINE (Dwg_Entity_MLINE *ent, Bit_Chain * dat)
     }    
 }
 
-static void
-dwg_encode_DICTIONARY (Dwg_Object_DICTIONARY *ent, Bit_Chain * dat)
-{
-    //Implement-me!
-}
-
 static void dwg_encode_BLOCK_CONTROL (Dwg_Object_BLOCK_CONTROL * obj, Bit_Chain * dat)
 {
     //TODO: check the spec. How do we deal with Length (MS)?
@@ -2069,17 +2113,22 @@ static void dwg_encode_BLOCK_CONTROL (Dwg_Object_BLOCK_CONTROL * obj, Bit_Chain 
 	}
 }
 
-/*
 static void dwg_encode_BLOCK_HEADER (Dwg_Object_BLOCK_HEADER * obj, Bit_Chain * dat)
 {
     //Implement-me!
 }
-*/
+
+static void dwg_encode_LAYER_CONTROL (Dwg_Object_LAYER_CONTROL * obj, Bit_Chain * dat)
+{
+    //Implement-me!
+}
 
 static void dwg_encode_LAYER (Dwg_Object_LAYER * obj, Bit_Chain * dat)
 {
     //Implement-me!
 }
+
+//TODO: encoders for objects from STYLE_CONTROL(52) until IDBUFFER(77) 
 
 static void dwg_encode_IMAGE (Dwg_Entity_IMAGE * ent, Bit_Chain * dat)
 {
@@ -2115,6 +2164,8 @@ static void dwg_encode_IMAGE (Dwg_Entity_IMAGE * ent, Bit_Chain * dat)
 		}
 	}
 }
+
+//TODO: encoders for objects from IMAGEDEF, IMAGEDEFREACTOR and LAYER_INDEX 
 
 static void dwg_encode_LAYOUT (Dwg_Object_LAYOUT * obj, Bit_Chain * dat)
 {
@@ -2166,3 +2217,24 @@ static void dwg_encode_LWPLINE (Dwg_Entity_LWPLINE * ent, Bit_Chain * dat)
 		bit_write_BD (dat, ent->widths[i].end);
 	}
 }
+
+static void dwg_encode_OLE2FRAME (Dwg_Entity_OLE2FRAME * ent, Bit_Chain * dat)
+{
+	int i;
+	bit_write_BS (dat, ent->flags);
+
+	if (dat->version >= R_2000){
+		bit_write_BS (dat, ent->mode);
+	}
+
+	bit_write_BL (dat, ent->data_length);
+	for(i=0;i<ent->data_length;i++)
+		bit_write_RC (dat, ent->data[i]);
+
+	if (dat->version >= R_2000){
+		bit_write_RC (dat, ent->unknown);
+	}
+}
+
+//TODO: encoders for objects from PROXY(85) until XRECORD(94) 
+

@@ -1254,8 +1254,29 @@ extern "C"
 	Dwg_Entity_SPLINE_control_point* ctrl_pts;
 } Dwg_Entity_SPLINE;
 
-//TODO: 3DSOLID, REGION, BODY
+/**
+ Struct for 3DSOLID (37)
+ */
+	typedef struct _dwg_entity_3DSOLID
+	{
+//TODO
+	} Dwg_Entity_3DSOLID;
 
+/**
+ Struct for REGION (38)
+ */
+	typedef struct _dwg_entity_REGION
+	{
+//TODO
+	} Dwg_Entity_REGION;
+
+/**
+ Struct for BODY (39)
+ */
+	typedef struct _dwg_entity_BODY
+	{
+//TODO
+	} Dwg_Entity_BODY;
 
 /**
  Struct for ray - RAY (40)
@@ -1475,12 +1496,18 @@ extern "C"
 /**
  Struct for BLOCK_HEADER (49)
  */	
+	typedef struct _dwg_entity_BLOCK_HEADER
+	{
 //TODO 
+	} Dwg_Object_BLOCK_HEADER;
 
 /**
  Struct for LAYER_CONTROL (50)
  */	
+	typedef struct _dwg_entity_LAYER_CONTROL
+	{
 //TODO 
+	} Dwg_Object_LAYER_CONTROL;
 
 /**
  Struct for LAYER (51)
@@ -1673,7 +1700,7 @@ extern "C"
  */
 	typedef struct _dwg_entity_OLE2FRAME
 	{
-		unsigned int flag;
+		unsigned int flags;
 		unsigned int mode;
 		long unsigned int data_length;
 		unsigned char* data;
@@ -1725,6 +1752,9 @@ extern "C"
 			Dwg_Entity_VIEWPORT *VIEWPORT;
 			Dwg_Entity_ELLIPSE *ELLIPSE;
 			Dwg_Entity_SPLINE *SPLINE;
+			Dwg_Entity_REGION *REGION;
+			Dwg_Entity_3DSOLID *_3DSOLID;
+			Dwg_Entity_BODY *BODY;
 			Dwg_Entity_RAY *RAY;
 			Dwg_Entity_XLINE *XLINE;
 			Dwg_Entity_MTEXT *MTEXT;
@@ -1733,6 +1763,7 @@ extern "C"
 			Dwg_Entity_MLINE *MLINE;
 			Dwg_Entity_IMAGE *IMAGE;
 			Dwg_Entity_LWPLINE *LWPLINE;
+			Dwg_Entity_OLE2FRAME *OLE2FRAME;
 		} tio;
 
 		long unsigned int bitsize;

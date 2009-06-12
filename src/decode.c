@@ -2731,6 +2731,39 @@ dwg_decode_LWPLINE (Bit_Chain * dat, Dwg_Object * obj)
 	dwg_decode_traktref (dat, obj);
 }
 
+
+static void
+dwg_decode_OLE2FRAME (Bit_Chain * dat, Dwg_Object * obj)
+{
+	int i;
+	Dwg_Entity_OLE2FRAME *ent;
+
+	obj->supertype = DWG_SUPERTYPE_ENTITY;
+	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
+	obj->tio.entity->tio.OLE2FRAME = calloc (sizeof (Dwg_Entity_OLE2FRAME), 1);
+	dwg_decode_entity (dat, obj->tio.entity);
+	ent = obj->tio.entity->tio.OLE2FRAME;
+
+	/* Read values
+	 */
+	ent->flags = bit_read_BS (dat);
+
+	if (dat->version >= R_2000){
+		ent->mode = bit_read_BS (dat);
+	}
+
+	ent->data_length = bit_read_BL (dat);
+	ent->data = (unsigned char*) malloc(ent->data_length * sizeof(unsigned char));
+	for(i=0;i<ent->data_length;i++)
+		ent->data[i] = bit_read_RC (dat);
+
+	if (dat->version >= R_2000){
+		ent->unknown = bit_read_RC (dat);
+	}
+
+	dwg_decode_traktref (dat, obj);
+}
+
 /*--------------------------------------------------------------------------------
  * Privata funkcio, kiu dependas de la antaŭaj
  */
