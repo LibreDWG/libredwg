@@ -1453,7 +1453,7 @@ extern "C"
 	} Dwg_Entity_MLINE;
 
 /**
- Structure for BLOCK_CONTROL (48)
+ Struct for BLOCK_CONTROL (48)
  */
 	typedef struct _dwg_entity_BLOCK_CONTROL
 	{
@@ -1529,42 +1529,6 @@ extern "C"
 		unsigned long num_clip_verts;
 		Dwg_Entity_IMAGE_clip_vert* clip_verts;
 	} Dwg_Entity_IMAGE;
-
-
-/**
- Structes for LWPLINE
- */
-	typedef struct _dwg_entity_LWPLINE_point
-	{
-		double x;
-		double y;
-	} Dwg_Entity_LWPLINE_point;
-
-	typedef struct _dwg_entity_LWPLINE_width
-	{
-		double start;
-		double end;
-	} Dwg_Entity_LWPLINE_width;
-
-	typedef struct _dwg_entity_LWPLINE
-	{
-		unsigned int flag;
-		double const_width;
-		double elevation;
-		double thickness;
-		struct
-		{
-		    double x;
-		    double y;
-		    double z;
-		} normal;
-		long unsigned int num_points;
-		Dwg_Entity_LWPLINE_point* points;
-		long unsigned int num_bulges;
-		double* bulges;
-		long unsigned int num_widths;
-		Dwg_Entity_LWPLINE_width* widths;
-	} Dwg_Entity_LWPLINE;
 
 /**
  Struct for LAYOUT (502?)
@@ -1645,6 +1609,55 @@ extern "C"
 			double z_max;
 		} limo;
 	} Dwg_Object_LAYOUT;
+
+
+/**
+ Structures for LWPLINE
+ */
+	typedef struct _dwg_entity_LWPLINE_point
+	{
+		double x;
+		double y;
+	} Dwg_Entity_LWPLINE_point;
+
+	typedef struct _dwg_entity_LWPLINE_width
+	{
+		double start;
+		double end;
+	} Dwg_Entity_LWPLINE_width;
+
+	typedef struct _dwg_entity_LWPLINE
+	{
+		unsigned int flag;
+		double const_width;
+		double elevation;
+		double thickness;
+		struct
+		{
+		    double x;
+		    double y;
+		    double z;
+		} normal;
+		long unsigned int num_points;
+		Dwg_Entity_LWPLINE_point* points;
+		long unsigned int num_bulges;
+		double* bulges;
+		long unsigned int num_widths;
+		Dwg_Entity_LWPLINE_width* widths;
+	} Dwg_Entity_LWPLINE;
+
+
+/**
+ Struct for OLE2FRAME
+ */
+	typedef struct _dwg_entity_OLE2FRAME
+	{
+		unsigned int flag;
+		unsigned int mode;
+		long unsigned int data_length;
+		unsigned char* data;
+		unsigned char unknown;
+	} Dwg_Entity_OLE2FRAME;
 
 /* OBJECTS - END ************************************************************/
 
