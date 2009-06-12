@@ -2161,8 +2161,8 @@ dwg_decode_ELLIPSE (Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_SPLINE (Bit_Chain * dat, Dwg_Object * obj)
 {
-    Dwg_Entity_SPLINE *ent;
-    int i;
+	Dwg_Entity_SPLINE *ent;
+	int i;
 
 	obj->supertype = DWG_SUPERTYPE_ENTITY;
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
@@ -2170,59 +2170,60 @@ dwg_decode_SPLINE (Bit_Chain * dat, Dwg_Object * obj)
 	dwg_decode_entity (dat, obj->tio.entity);
 	ent = obj->tio.entity->tio.SPLINE;
 
-    ent->scenario = bit_read_BS(dat);
-    ent->degree = bit_read_BS(dat);
-    if(ent->scenario == 2)
-    {
-        ent->fit_tol = bit_read_BD(dat);
-        ent->beg_tan_vec.x = bit_read_BD(dat);
-        ent->beg_tan_vec.y = bit_read_BD(dat);
-        ent->beg_tan_vec.z = bit_read_BD(dat);
-        ent->end_tan_vec.x = bit_read_BD(dat);
-        ent->end_tan_vec.y = bit_read_BD(dat);
-        ent->end_tan_vec.z = bit_read_BD(dat);
-        ent->num_fit_pts = bit_read_BS(dat);
-        ent->fit_pts = malloc(ent->num_fit_pts * 3 * sizeof(double));
-        for (i=0;i<ent->num_fit_pts;i++)
-        {
-            ent->fit_pts[i].x = bit_read_BD(dat);
-            ent->fit_pts[i].y = bit_read_BD(dat);
-            ent->fit_pts[i].z = bit_read_BD(dat);
-        }
-    } else
-    {
-        if (ent->scenario == 1)
-        {
-                ent->rational = bit_read_B(dat);
-                ent->closed_b = bit_read_B(dat);
-                ent->periodic = bit_read_B(dat);
-                ent->knot_tol = bit_read_BD(dat);
-                ent->ctrl_tol = bit_read_BD(dat);
-                ent->num_knots = bit_read_BL(dat);
-                ent->num_ctrl_pts = bit_read_BL(dat);
-                ent->weighted = bit_read_B(dat);
-                
-                ent->knots = malloc(ent->num_knots *
-                    sizeof (double));
-                for (i=0;i<ent->num_knots;i++)
-                    ent->knots[i] = bit_read_BD(dat);
-                
-                ent->ctrl_pts = malloc(ent->num_ctrl_pts * 3 * sizeof(unsigned int));
-                for (i=0;i<ent->num_ctrl_pts;i++) 
-                {
-                        ent->ctrl_pts[i].x = bit_read_BD(dat);
-                        ent->ctrl_pts[i].y = bit_read_BD(dat);
-                        ent->ctrl_pts[i].z = bit_read_BD(dat);                
-                        if (ent->weighted)
-                            //TODO check what "D" means on spec. 
-                            //assuming typo - should be BD
-                            ent->ctrl_pts[i].w = bit_read_BD(dat);
-                }
-        } else
-        {
-             fprintf (stderr, "Error: unknown scenario %d", ent->scenario);
-        }
-    }
+	ent->scenario = bit_read_BS(dat);
+	if (ent->scenario!=1 && ent->scenario!=2)
+		fprintf (stderr, "Error: unknown scenario %d", ent->scenario);
+
+	ent->degree = bit_read_BS(dat);
+	if(ent->scenario == 2)
+	{
+		ent->fit_tol = bit_read_BD(dat);
+		ent->beg_tan_vec.x = bit_read_BD(dat);
+		ent->beg_tan_vec.y = bit_read_BD(dat);
+		ent->beg_tan_vec.z = bit_read_BD(dat);
+		ent->end_tan_vec.x = bit_read_BD(dat);
+		ent->end_tan_vec.y = bit_read_BD(dat);
+		ent->end_tan_vec.z = bit_read_BD(dat);
+		ent->num_fit_pts = bit_read_BS(dat);
+		ent->fit_pts = (Dwg_Entity_SPLINE_point*) malloc(ent->num_fit_pts * sizeof(Dwg_Entity_SPLINE_point));
+		for (i=0;i<ent->num_fit_pts;i++)
+		{
+			ent->fit_pts[i].x = bit_read_BD(dat);
+			ent->fit_pts[i].y = bit_read_BD(dat);
+			ent->fit_pts[i].z = bit_read_BD(dat);
+		}
+	}
+	if (ent->scenario == 1)
+	{
+		ent->rational = bit_read_B(dat);
+		ent->closed_b = bit_read_B(dat);
+		ent->periodic = bit_read_B(dat);
+		ent->knot_tol = bit_read_BD(dat);
+		ent->ctrl_tol = bit_read_BD(dat);
+		ent->num_knots = bit_read_BL(dat);
+		ent->num_ctrl_pts = bit_read_BL(dat);
+		ent->weighted = bit_read_B(dat);
+
+		ent->knots = malloc(ent->num_knots * sizeof (double));
+		for (i=0;i<ent->num_knots;i++)
+			ent->knots[i] = bit_read_BD(dat);
+
+		ent->ctrl_pts = malloc(ent->num_ctrl_pts * 3 * sizeof(unsigned int));
+		for (i=0;i<ent->num_ctrl_pts;i++) 
+		{
+			ent->ctrl_pts[i].x = bit_read_BD(dat);
+			ent->ctrl_pts[i].y = bit_read_BD(dat);
+			ent->ctrl_pts[i].z = bit_read_BD(dat);                
+			if (ent->weighted)
+				//TODO check what "D" means on spec. 
+				//assuming typo - should be BD
+				ent->ctrl_pts[i].w = bit_read_BD(dat);
+			else
+				//assuming w=0 when not present.
+				ent->ctrl_pts[i].w = 0;	
+		}
+	}
+
 	dwg_decode_traktref (dat, obj);
 }
 

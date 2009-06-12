@@ -1826,58 +1826,55 @@ dwg_encode_ELLIPSE (Dwg_Entity_ELLIPSE *ent, Bit_Chain * dat)
 static void
 dwg_encode_SPLINE (Dwg_Entity_SPLINE * ent, Bit_Chain * dat)
 {
-        //TODO: check
         int i;
-
+	if (ent->scenario!=1 && ent->scenario!=2){
+		fprintf (stderr, "dwg_encode_SPLINE: Error: unknown scenario %d", ent->scenario);
+		return;
+	}
         bit_write_BS(dat, ent->scenario);
         bit_write_BS(dat, ent->degree);
         if(ent->scenario == 2)
         {
-            bit_write_BD(dat, ent->fit_tol);
-            bit_write_BD(dat, ent->beg_tan_vec.x);
-            bit_write_BD(dat, ent->beg_tan_vec.y);
-            bit_write_BD(dat, ent->beg_tan_vec.z);
-            bit_write_BD(dat, ent->end_tan_vec.x);
-            bit_write_BD(dat, ent->end_tan_vec.y);
-            bit_write_BD(dat, ent->end_tan_vec.z);
-            bit_write_BS(dat, ent->num_fit_pts);
-            for (i=0;i<ent->num_fit_pts;i++)
-            {
-                bit_write_BD(dat,ent->fit_pts[i].x);
-                bit_write_BD(dat, ent->fit_pts[i].y);
-                bit_write_BD(dat, ent->fit_pts[i].z);
-            }
-        } else
-        {
-            if (ent->scenario == 1)
-            {
-                    bit_write_B(dat, ent->rational);
-                    bit_write_B(dat, ent->closed_b);
-                    bit_write_B(dat, ent->periodic);
-                    bit_write_BD(dat, ent->knot_tol);
-                    bit_write_BD(dat,ent->ctrl_tol);
-                    bit_write_BL(dat, ent->num_knots);
-                    bit_write_BL(dat, ent->num_ctrl_pts);
-                    bit_write_B(dat, ent->weighted);
-
-                    for (i=0;i<ent->num_knots;i++)
-                        bit_write_BD(dat, ent->knots[i]);
-
-                    for (i=0;i<ent->num_ctrl_pts;i++)
-                    {
-                            bit_write_BD(dat, ent->ctrl_pts[i].x);
-                            bit_write_BD(dat, ent->ctrl_pts[i].y);
-                            bit_write_BD(dat, ent->ctrl_pts[i].z);
-                            if (ent->weighted)
-                                //TODO check what "D" means on spec.
-                                //assuming typo - should be BD
-                                bit_write_BD(dat, ent->ctrl_pts[i].w);
-                    }
-            } else
-            {
-                 fprintf (stderr, "Error: unknown scenario %d", ent->scenario);
-            }
+		bit_write_BD(dat, ent->fit_tol);
+		bit_write_BD(dat, ent->beg_tan_vec.x);
+		bit_write_BD(dat, ent->beg_tan_vec.y);
+		bit_write_BD(dat, ent->beg_tan_vec.z);
+		bit_write_BD(dat, ent->end_tan_vec.x);
+		bit_write_BD(dat, ent->end_tan_vec.y);
+		bit_write_BD(dat, ent->end_tan_vec.z);
+		bit_write_BS(dat, ent->num_fit_pts);
+		for (i=0;i<ent->num_fit_pts;i++)
+		{
+			bit_write_BD(dat,ent->fit_pts[i].x);
+			bit_write_BD(dat, ent->fit_pts[i].y);
+			bit_write_BD(dat, ent->fit_pts[i].z);
+		}
         }
+	if (ent->scenario == 1)
+	{
+		bit_write_B(dat, ent->rational);
+		bit_write_B(dat, ent->closed_b);
+		bit_write_B(dat, ent->periodic);
+		bit_write_BD(dat, ent->knot_tol);
+		bit_write_BD(dat,ent->ctrl_tol);
+		bit_write_BL(dat, ent->num_knots);
+		bit_write_BL(dat, ent->num_ctrl_pts);
+		bit_write_B(dat, ent->weighted);
+
+		for (i=0;i<ent->num_knots;i++)
+			bit_write_BD(dat, ent->knots[i]);
+
+		for (i=0;i<ent->num_ctrl_pts;i++)
+		{
+			bit_write_BD(dat, ent->ctrl_pts[i].x);
+			bit_write_BD(dat, ent->ctrl_pts[i].y);
+			bit_write_BD(dat, ent->ctrl_pts[i].z);
+			if (ent->weighted)
+				//TODO check what "D" means on spec.
+				//assuming typo - should be BD
+				bit_write_BD(dat, ent->ctrl_pts[i].w);
+		}
+	}
 }
 
 static void

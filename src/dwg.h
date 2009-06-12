@@ -1196,6 +1196,21 @@ extern "C"
 /**
  Struct for spline - SPLINE (36)
  */
+        typedef struct _dwg_entity_SPLINE_point
+        {
+           	double x;
+	        double y;
+	        double z;
+        } Dwg_Entity_SPLINE_point;
+
+	typedef struct _dwg_entity_SPLINE_control_point
+	{
+		double x;
+		double y;
+		double z;
+		double w;
+	} Dwg_Entity_SPLINE_control_point;
+
 	typedef struct _dwg_entity_SPLINE
 	{
         unsigned char scenario;
@@ -1213,11 +1228,6 @@ extern "C"
 			double y;
 			double z;
 		} end_tan_vec;
-        //flags:
-        //closed - bit 0
-        //periodic - bit 1
-        //rational - bit 2
-        //weighted ctrl pts - bit 4
         unsigned char rational;
         unsigned char closed_b;
         unsigned char periodic;
@@ -1225,22 +1235,11 @@ extern "C"
         double knot_tol;
         double ctrl_tol;
         unsigned int num_fit_pts;
+	Dwg_Entity_SPLINE_point* fit_pts;
         unsigned int num_knots;
-        unsigned int num_ctrl_pts;
-        struct
-        {
-           	double x;
-	        double y;
-	        double z;
-        } * fit_pts;
         double* knots;
-        struct
-        {
-           	double x;
-			double y;
-			double z;
-            double w;
-    } * ctrl_pts;
+        unsigned int num_ctrl_pts;
+	Dwg_Entity_SPLINE_control_point* ctrl_pts;
 } Dwg_Entity_SPLINE;
 
 //TODO: 3DSOLID, REGION, BODY
