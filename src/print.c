@@ -540,8 +540,8 @@ dwg_print (Dwg_Structure *dwg_struct)
 		printf ("\tApplication Name: \"%s\"\n", dwg_struct->class[i].appname);
 		printf ("\tC++ Name: \"%s\"\n", dwg_struct->class[i].cppname);
 		printf ("\tDXF Name: \"%s\"\n", dwg_struct->class[i].dxfname);
-		printf ("\tWas ghost: \"%s\"\n", dwg_struct->class[i].estisfantomo ? "Yes" : "No");
-		printf ("\tEroId: %u\n", dwg_struct->class[i].eroid);
+		printf ("\tWas ghost: \"%s\"\n", dwg_struct->class[i].wasazombie ? "Yes" : "No");
+		printf ("\tEroId: %u\n", dwg_struct->class[i].item_class_id);
 	}
 	puts ("");
 

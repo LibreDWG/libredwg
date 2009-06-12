@@ -250,7 +250,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	skt->header.section[0].size = dat->byte - skt->header.section[0].address;
 
 	/*------------------------------------------------------------
-	 * Classj
+	 * Classes
 	 */
 	skt->header.section[1].number = 1;
 	skt->header.section[1].address = dat->byte;
@@ -265,8 +265,8 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 		bit_write_T (dat, skt->class[i].appname);
 		bit_write_T (dat, skt->class[i].cppname);
 		bit_write_T (dat, skt->class[i].dxfname);
-		bit_write_B (dat, skt->class[i].estisfantomo);
-		bit_write_BS (dat, skt->class[i].eroid);
+		bit_write_B (dat, skt->class[i].wasazombie);
+		bit_write_BS (dat, skt->class[i].item_class_id);
 	}
 
 	/* Skribi la sizen de la section cxe gxia komenco

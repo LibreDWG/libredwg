@@ -328,15 +328,15 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 		skt->class[idc].appname = bit_read_T (dat);
 		skt->class[idc].cppname = bit_read_T (dat);
 		skt->class[idc].dxfname = bit_read_T (dat);
-		skt->class[idc].estisfantomo = bit_read_B (dat);
-		skt->class[idc].eroid = bit_read_BS (dat);
+		skt->class[idc].wasazombie = bit_read_B (dat);
+		skt->class[idc].item_class_id = bit_read_BS (dat);
 
 		if (strcmp (skt->class[idc].dxfname, "LAYOUT") == 0)
 			skt->dwg_ot_layout = skt->class[idc].number;
 
 		skt->num_classes++;
 		if (skt->num_classes > 100)
-			break;
+			break;//TODO: Why?!
 	}
 	while (dat->byte < (lasta - 1));
 

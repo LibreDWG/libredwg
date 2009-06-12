@@ -1487,7 +1487,7 @@ extern "C"
 /**
  Struct for BLOCK_CONTROL (48)
  */
-	typedef struct _dwg_entity_BLOCK_CONTROL
+	typedef struct _dwg_object_BLOCK_CONTROL
 	{
 	    unsigned int type;
 		unsigned int size;
@@ -1496,7 +1496,7 @@ extern "C"
 /**
  Struct for BLOCK_HEADER (49)
  */	
-	typedef struct _dwg_entity_BLOCK_HEADER
+	typedef struct _dwg_object_BLOCK_HEADER
 	{
 //TODO 
 	} Dwg_Object_BLOCK_HEADER;
@@ -1504,7 +1504,7 @@ extern "C"
 /**
  Struct for LAYER_CONTROL (50)
  */	
-	typedef struct _dwg_entity_LAYER_CONTROL
+	typedef struct _dwg_object_LAYER_CONTROL
 	{
 //TODO 
 	} Dwg_Object_LAYER_CONTROL;
@@ -1848,8 +1848,8 @@ extern "C"
 		unsigned char *appname;
 		unsigned char *cppname;
 		unsigned char *dxfname;
-		unsigned char estisfantomo;
-		unsigned int eroid;
+		unsigned char wasazombie;
+		unsigned int item_class_id;
 	} Dwg_Class;
 
 /**
