@@ -2548,6 +2548,53 @@ dwg_decode_LAYER (Bit_Chain * dat, Dwg_Object * obj)
 }
 
 static void
+dwg_decode_IMAGE (Bit_Chain *dat, Dwg_Object *obj)
+{
+	int i;
+	Dwg_Entity_IMAGE *ent;
+
+	obj->supertype = DWG_SUPERTYPE_ENTITY;
+	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
+	obj->tio.entity->tio.IMAGE = calloc (sizeof (Dwg_Entity_IMAGE), 1);
+	dwg_decode_entity (dat, obj->tio.entity);
+	ent = obj->tio.entity->tio.IMAGE;
+
+	ent->class_version = bit_read_BL (dat);
+	ent->pt0.x = bit_read_BD (dat);
+	ent->pt0.y = bit_read_BD (dat);
+	ent->pt0.z = bit_read_BD (dat);
+	ent->uvec.x = bit_read_BD (dat);
+	ent->uvec.y = bit_read_BD (dat);
+	ent->uvec.z = bit_read_BD (dat);
+	ent->vvec.x = bit_read_BD (dat);
+	ent->vvec.y = bit_read_BD (dat);
+	ent->vvec.z = bit_read_BD (dat);
+	ent->size.width = bit_read_RD (dat);
+	ent->size.height = bit_read_RD (dat);
+	ent->display_props = bit_read_BS (dat);
+	ent->clipping = bit_read_B (dat);
+	ent->brightness = bit_read_RC (dat);
+	ent->contrast = bit_read_RC (dat);
+	ent->fade = bit_read_RC (dat);
+	ent->clip_boundary_type = bit_read_BS (dat);
+	if (ent->clip_boundary_type==1){
+		ent->boundary_pt0.x = bit_read_RD (dat);
+		ent->boundary_pt0.y = bit_read_RD (dat);
+		ent->boundary_pt1.x = bit_read_RD (dat);
+		ent->boundary_pt1.y = bit_read_RD (dat);
+	}else{
+		ent->num_clip_verts = bit_read_BL (dat);
+		ent->clip_verts = (Dwg_Entity_IMAGE_clip_vert*) malloc(ent->num_clip_verts * sizeof(Dwg_Entity_IMAGE_clip_vert));
+		for (i=0;i<ent->num_clip_verts;i++){
+			ent->clip_verts[i].x = bit_read_RD(dat);
+			ent->clip_verts[i].y = bit_read_RD(dat);
+		}
+	}
+
+	dwg_decode_traktref (dat, obj);
+}
+
+static void
 dwg_decode_LAYOUT (Bit_Chain * dat, Dwg_Object * obj)
 {
     if (loglevel) fprintf(stderr, "dwg_decode_LAYOUT\n");

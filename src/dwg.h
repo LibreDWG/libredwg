@@ -1720,6 +1720,7 @@ extern "C"
 			Dwg_Entity_LEADER *LEADER;
 			Dwg_Entity_TOLERANCE *TOLERANCE;
 			Dwg_Entity_MLINE *MLINE;
+			Dwg_Entity_IMAGE *IMAGE;
 			Dwg_Entity_LWPLINE *LWPLINE;
 		} tio;
 
