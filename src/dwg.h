@@ -1460,7 +1460,17 @@ extern "C"
 	    unsigned int type;
 		unsigned int size;
 	} Dwg_Object_BLOCK_CONTROL;
-	
+
+/**
+ Struct for BLOCK_HEADER (49)
+ */	
+//TODO 
+
+/**
+ Struct for LAYER_CONTROL (50)
+ */	
+//TODO 
+
 /**
  Struct for LAYER (51)
  */

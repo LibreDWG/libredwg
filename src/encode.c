@@ -2072,8 +2072,65 @@ static void dwg_encode_BLOCK_CONTROL (Dwg_Object_BLOCK_CONTROL * obj, Bit_Chain 
 	}
 }
 
+/*
+static void dwg_encode_BLOCK_HEADER (Dwg_Object_BLOCK_HEADER * obj, Bit_Chain * dat)
+{
+    //Implement-me!
+}
+*/
+
 static void dwg_encode_LAYER (Dwg_Object_LAYER * obj, Bit_Chain * dat)
 {
     //Implement-me!
 }
 
+static void dwg_encode_LAYOUT (Dwg_Object_LAYOUT * obj, Bit_Chain * dat)
+{
+    //Implement-me!
+}
+
+static void dwg_encode_LWPLINE (Dwg_Entity_LWPLINE * ent, Bit_Chain * dat)
+{
+	int i;
+	bit_write_BS (dat, ent->flags);
+	if (ent->flags & 4)
+		bit_write_BD (dat, ent->const_width);
+	if (ent->flags & 8)
+		bit_write_BD (dat, ent->elevation);
+	if (ent->flags & 2)
+		bit_write_BD (dat, ent->thickness);
+	if (ent->flags & 1){
+		bit_write_BD (dat, ent->normal.x);
+		bit_write_BD (dat, ent->normal.y);
+		bit_write_BD (dat, ent->normal.z);
+	}
+	bit_write_BL (dat, ent->num_points);
+	if (ent->flags & 16)
+		bit_write_BL (dat, ent->num_bulges);
+	if (ent->flags & 32)
+		bit_write_BL (dat, ent->num_widths);
+
+	if (dat->version == R_13 || dat->version == R_14){
+		for (i=0;i<ent->num_points;i++){
+			bit_write_RD (dat, ent->points[i].x);
+			bit_write_RD (dat, ent->points[i].y);
+		}
+	}
+
+	if (dat->version >= R_2000){
+		bit_write_RD (dat, ent->points[0].x);
+		bit_write_RD (dat, ent->points[0].y);
+		for (i=1;i<ent->num_points;i++){
+			bit_write_DD (dat, ent->points[i].x, ent->points[i-1].x);
+			bit_write_DD (dat, ent->points[i].y, ent->points[i-1].y);
+		}
+	}
+
+	for (i=0;i<ent->num_bulges;i++)
+		bit_write_BD (dat, ent->bulges[i]);
+
+	for (i=0;i<ent->num_widths;i++){
+		bit_write_BD (dat, ent->widths[i].start);
+		bit_write_BD (dat, ent->widths[i].end);
+	}
+}
