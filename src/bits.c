@@ -875,6 +875,38 @@ bit_write_L (Bit_Chain * dat, long unsigned int value)
 	bit_write_RC (dat, btk[0]);
 }
 
+/** Read color
+ */
+void
+bit_read_CMC (Bit_Chain * dat, Dwg_Color* color)
+{
+	color->index = bit_read_BS(dat);
+	if (dat->version >= R_2004){
+		color->rgb = bit_read_BL(dat);
+		color->byte = bit_read_RC(dat);
+		if (color->byte & 1)
+			color->name = bit_read_T(dat);
+		if (color->byte & 2)
+			color->book_name = bit_read_T(dat);
+	}
+}
+
+/** Write color
+ */
+void
+bit_write_CMC (Bit_Chain * dat, Dwg_Color color)
+{
+	bit_write_BS(dat, color.index);
+	if (dat->version >= R_2004){
+		bit_write_BL(dat, color.rgb);
+		bit_write_RC(dat, color.byte);
+		if (color.byte & 1)
+			bit_write_T(dat, color.name);
+		if (color.byte & 2)
+			bit_write_T(dat, color.book_name);
+	}
+}
+
 /** Search for a sentinel; if found, positions "dat->byte" imediatly after it.
  */
 int

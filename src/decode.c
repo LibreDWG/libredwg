@@ -2123,11 +2123,11 @@ dwg_decode_VIEWPORT (Bit_Chain * dat, Dwg_Object * obj)
 	}
 
 	if (dat->version >= R_2007){
-   	    ent->use_def_lights = bit_read_B (dat);
-   	    ent->def_lighting_type = bit_read_RC (dat);
-   	    ent->brightness = bit_read_BD (dat);
-   	    ent->contrast = bit_read_BD (dat);
-//TODO:   	    ent->use_def_lights = bit_read_CMC (dat);
+		ent->use_def_lights = bit_read_B (dat);
+		ent->def_lighting_type = bit_read_RC (dat);
+		ent->brightness = bit_read_BD (dat);
+		ent->contrast = bit_read_BD (dat);
+		bit_read_CMC (dat, &ent->ambient_light_color);
 	}
 }
 

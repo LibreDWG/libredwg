@@ -129,6 +129,18 @@ extern "C"
 		long unsigned int value;
 	} Dwg_Handle;
 
+/**
+ Struct for CMC colors.
+ */
+	typedef struct _dwg_color
+	{
+		unsigned int index;
+		long unsigned int rgb;
+		unsigned char byte;
+		char* name;
+		char* book_name;
+	} Dwg_Color;
+
 /* OBJECTS *******************************************************************/
 /**
  Struct for UNUSED (0)
@@ -1168,7 +1180,7 @@ extern "C"
         char def_lighting_type;
         double brightness;
         double contrast;
-        double ambient_light_color;//TODO: CMC (Color)
+        Dwg_Color ambient_light_color;
 	} Dwg_Entity_VIEWPORT;
 
 /**
