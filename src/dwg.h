@@ -1628,7 +1628,7 @@ extern "C"
 
 	typedef struct _dwg_entity_LWPLINE
 	{
-		unsigned int flag;
+		unsigned int flags;
 		double const_width;
 		double elevation;
 		double thickness;
@@ -1710,6 +1710,7 @@ extern "C"
 			Dwg_Entity_LEADER *LEADER;
 			Dwg_Entity_TOLERANCE *TOLERANCE;
 			Dwg_Entity_MLINE *MLINE;
+			Dwg_Entity_LWPLINE *LWPLINE;
 		} tio;
 
 		long unsigned int bitsize;

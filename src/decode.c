@@ -2620,6 +2620,69 @@ dwg_decode_LAYOUT (Bit_Chain * dat, Dwg_Object * obj)
 	dwg_decode_traktref (dat, obj);
 }
 
+static void
+dwg_decode_LWPLINE (Bit_Chain * dat, Dwg_Object * obj)
+{
+	int i;
+	Dwg_Entity_LWPLINE *ent;
+
+	obj->supertype = DWG_SUPERTYPE_ENTITY;
+	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
+	obj->tio.entity->tio.LWPLINE = calloc (sizeof (Dwg_Entity_LWPLINE), 1);
+	dwg_decode_entity (dat, obj->tio.entity);
+	ent = obj->tio.entity->tio.LWPLINE;
+
+	/* Read values
+	 */
+	ent->flags = bit_read_BS (dat);
+	if (ent->flags & 4)
+		ent->const_width = bit_read_BD (dat);
+	if (ent->flags & 8)
+		ent->elevation = bit_read_BD (dat);
+	if (ent->flags & 2)
+		ent->thickness = bit_read_BD (dat);
+	if (ent->flags & 1){
+		ent->normal.x = bit_read_BD (dat);
+		ent->normal.y = bit_read_BD (dat);
+		ent->normal.z = bit_read_BD (dat);
+	}
+	ent->num_points = bit_read_BL (dat);
+	if (ent->flags & 16)
+		ent->num_bulges = bit_read_BL (dat);
+	if (ent->flags & 32)
+		ent->num_widths = bit_read_BL (dat);
+
+	ent->points = (Dwg_Entity_LWPLINE_point*) malloc(ent->num_points * sizeof(Dwg_Entity_LWPLINE_point));
+
+	if (dat->version == R_13 || dat->version == R_14){
+		for (i=0;i<ent->num_points;i++){
+			ent->points[i].x = bit_read_RD (dat);
+			ent->points[i].y = bit_read_RD (dat);
+		}
+	}
+
+	if (dat->version >= R_2000){
+		ent->points[0].x = bit_read_RD (dat);
+		ent->points[0].y = bit_read_RD (dat);
+		for (i=1;i<ent->num_points;i++){
+			ent->points[i].x = bit_read_DD (dat, ent->points[i-1].x);
+			ent->points[i].y = bit_read_DD (dat, ent->points[i-1].y);
+		}
+	}
+
+	ent->bulges = (double*) malloc(ent->num_bulges * sizeof(double));
+	for (i=0;i<ent->num_bulges;i++)
+		ent->bulges[i] = bit_read_BD (dat);
+
+	ent->widths = (Dwg_Entity_LWPLINE_width*) malloc(ent->num_widths * sizeof(Dwg_Entity_LWPLINE_width));
+	for (i=0;i<ent->num_widths;i++){
+		ent->widths[i].start = bit_read_BD (dat);
+		ent->widths[i].end = bit_read_BD (dat);
+	}
+
+	dwg_decode_traktref (dat, obj);
+}
+
 /*--------------------------------------------------------------------------------
  * Privata funkcio, kiu dependas de la antaŭaj
  */
