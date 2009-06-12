@@ -2084,6 +2084,41 @@ static void dwg_encode_LAYER (Dwg_Object_LAYER * obj, Bit_Chain * dat)
     //Implement-me!
 }
 
+static void dwg_encode_IMAGE (Dwg_Entity_IMAGE * ent, Bit_Chain * dat)
+{
+	int i;
+	bit_write_BL (dat, ent->class_version);
+	bit_write_BD (dat, ent->pt0.x);
+	bit_write_BD (dat, ent->pt0.y);
+	bit_write_BD (dat, ent->pt0.z);
+	bit_write_BD (dat, ent->uvec.x);
+	bit_write_BD (dat, ent->uvec.y);
+	bit_write_BD (dat, ent->uvec.z);
+	bit_write_BD (dat, ent->vvec.x);
+	bit_write_BD (dat, ent->vvec.y);
+	bit_write_BD (dat, ent->vvec.z);
+	bit_write_RD (dat, ent->size.width);
+	bit_write_RD (dat, ent->size.height);
+	bit_write_BS (dat, ent->display_props);
+	bit_write_B (dat, ent->clipping);
+	bit_write_RC (dat, ent->brightness);
+	bit_write_RC (dat, ent->contrast);
+	bit_write_RC (dat, ent->fade);
+	bit_write_BS (dat, ent->clip_boundary_type);
+	if (ent->clip_boundary_type==1){
+		bit_write_RD (dat, ent->boundary_pt0.x);
+		bit_write_RD (dat, ent->boundary_pt0.y);
+		bit_write_RD (dat, ent->boundary_pt1.x);
+		bit_write_RD (dat, ent->boundary_pt1.y);
+	}else{
+		bit_write_BL (dat, ent->num_clip_verts);
+		for (i=0;i<ent->num_clip_verts;i++){
+			bit_write_RD(dat, ent->clip_verts[i].x);
+			bit_write_RD(dat, ent->clip_verts[i].y);
+		}
+	}
+}
+
 static void dwg_encode_LAYOUT (Dwg_Object_LAYOUT * obj, Bit_Chain * dat)
 {
     //Implement-me!
