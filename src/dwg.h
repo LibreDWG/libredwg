@@ -1523,9 +1523,188 @@ extern "C"
 	} Dwg_Object_LAYER;
 
 /**
- Struct for IMAGE (78)
- */
+ Struct for STYLE_CONTROL (52)
+ */	
+	typedef struct _dwg_object_STYLE_CONTROL
+	{
+//TODO 
+	} Dwg_Object_STYLE_CONTROL;
 
+/**
+ Struct for STYLE (53)
+ */	
+	typedef struct _dwg_object_STYLE
+	{
+//TODO 
+	} Dwg_Object_STYLE;
+
+// 54 and 55 are UNKNOWN OBJECTS
+
+/**
+ Struct for LTYPE_CONTROL (56)
+ */	
+	typedef struct _dwg_object_LTYPE_CONTROL
+	{
+//TODO 
+	} Dwg_Object_LTYPE_CONTROL;
+
+/**
+ Struct for LTYPE (57)
+ */	
+	typedef struct _dwg_object_LTYPE
+	{
+//TODO 
+	} Dwg_Object_LTYPE;
+
+// 58 and 59 are UNKNOWN OBJECTS
+
+/**
+ Struct for VIEW_CONTROL (60)
+ */	
+	typedef struct _dwg_object_VIEW_CONTROL
+	{
+//TODO 
+	} Dwg_Object_VIEW_CONTROL;
+
+/**
+ Struct for VIEW (61)
+ */	
+	typedef struct _dwg_object_VIEW
+	{
+//TODO 
+	} Dwg_Object_VIEW;
+
+/**
+ Struct for UCS_CONTROL (62)
+ */	
+	typedef struct _dwg_object_UCS_CONTROL
+	{
+//TODO 
+	} Dwg_Object_UCS_CONTROL;
+
+/**
+ Struct for UCS (63)
+ */	
+	typedef struct _dwg_object_UCS
+	{
+//TODO 
+	} Dwg_Object_UCS;
+
+/**
+ Struct for VPORT_CONTROL (64)
+ */	
+	typedef struct _dwg_object_VPORT_CONTROL
+	{
+//TODO 
+	} Dwg_Object_VPORT_CONTROL;
+
+/**
+ Struct for VPORT (65)
+ */	
+	typedef struct _dwg_object_VPORT
+	{
+//TODO 
+	} Dwg_Object_VPORT;
+
+/**
+ Struct for APPID_CONTROL (66)
+ */	
+	typedef struct _dwg_object_APPID_CONTROL
+	{
+//TODO 
+	} Dwg_Object_APPID_CONTROL;
+
+/**
+ Struct for APPID (67)
+ */	
+	typedef struct _dwg_object_APPID
+	{
+//TODO 
+	} Dwg_Object_APPID;
+
+/**
+ Struct for DIMSTYLE_CONTROL (68)
+ */	
+	typedef struct _dwg_object_DIMSTYLE_CONTROL
+	{
+//TODO 
+	} Dwg_Object_DIMSTYLE_CONTROL;
+
+/**
+ Struct for DIMSTYLE (69)
+ */	
+	typedef struct _dwg_object_DIMSTYLE
+	{
+//TODO 
+	} Dwg_Object_DIMSTYLE;
+
+/**
+ Struct for VP_ENT_HDR_CTRL (70)
+ */	
+	typedef struct _dwg_object_VP_ENT_HDR_CTRL
+	{
+//TODO 
+	} Dwg_Object_VP_ENT_HDR_CTRL;
+
+/**
+ Struct for VP_ENT_HDR (71)
+ */	
+	typedef struct _dwg_object_VP_ENT_HDR
+	{
+//TODO 
+	} Dwg_Object_VP_ENT_HDR;
+
+/**
+ Struct for GROUP (72)
+ */	
+	typedef struct _dwg_object_GROUP
+	{
+//TODO 
+	} Dwg_Object_GROUP;
+
+/**
+ Struct for MLINESTYLE (73)
+ */	
+	typedef struct _dwg_object_MLINESTYLE
+	{
+//TODO 
+	} Dwg_Object_MLINESTYLE;
+
+/**
+ Struct for DICTIONARYVAR (varies)
+ */	
+	typedef struct _dwg_object_DICTIONARYVAR
+	{
+//TODO 
+	} Dwg_Object_DICTIONARYVAR;
+
+/**
+ Struct for DICTIONARYWDLFT (varies)
+ */	
+	typedef struct _dwg_object_DICTIONARYWDLFT
+	{
+//TODO 
+	} Dwg_Object_DICTIONARYWDLFT;
+
+/**
+ Struct for HATCH (varies)
+ */	
+	typedef struct _dwg_object_HATCH
+	{
+//TODO 
+	} Dwg_Object_HATCH;
+
+/**
+ Struct for IDBUFFER (varies)
+ */	
+	typedef struct _dwg_object_IDBUFFER
+	{
+//TODO 
+	} Dwg_Object_IDBUFFER;
+
+/**
+ Struct for IMAGE (varies)
+ */
 	typedef struct _dwg_entity_IMAGE_clip_vert
 	{
 		double x;
@@ -1579,7 +1758,31 @@ extern "C"
 	} Dwg_Entity_IMAGE;
 
 /**
- Struct for LAYOUT (502?)
+ Struct for IMAGEDEF (varies)
+ */	
+	typedef struct _dwg_object_IMAGEDEF
+	{
+//TODO 
+	} Dwg_Object_IMAGEDEF;
+
+/**
+ Struct for IMAGEDEFREACTOR (varies)
+ */	
+	typedef struct _dwg_object_IMAGEDEFREACTOR
+	{
+//TODO 
+	} Dwg_Object_IMAGEDEFREACTOR;
+
+/**
+ Struct for LAYER_INDEX (varies)
+ */	
+	typedef struct _dwg_object_LAYER_INDEX
+	{
+//TODO 
+	} Dwg_Object_LAYER_INDEX;
+
+/**
+ Struct for LAYOUT (varies)
  */
 	typedef struct _dwg_object_LAYOUT
 	{
@@ -1658,7 +1861,6 @@ extern "C"
 		} limo;
 	} Dwg_Object_LAYOUT;
 
-
 /**
  Structures for LWPLINE
  */
@@ -1706,6 +1908,103 @@ extern "C"
 		unsigned char* data;
 		unsigned char unknown;
 	} Dwg_Entity_OLE2FRAME;
+
+
+/**
+ Struct for PROXY (varies)
+ */	
+	typedef struct _dwg_object_PROXY
+	{
+//TODO 
+	} Dwg_Object_PROXY;
+
+
+/**
+ Struct for PLACEHOLDER (varies)
+ */	
+	typedef struct _dwg_object_PLACEHOLDER
+	{
+//TODO 
+	} Dwg_Object_PLACEHOLDER;
+
+
+/**
+ Struct for RASTERVARIABLES (varies)
+ */	
+	typedef struct _dwg_object_RASTERVARIABLES
+	{
+//TODO 
+	} Dwg_Object_RASTERVARIABLES;
+
+
+/**
+ Struct for SORTENTSTABLE (varies)
+ */	
+	typedef struct _dwg_object_SORTENTSTABLE
+	{
+//TODO 
+	} Dwg_Object_SORTENTSTABLE;
+
+
+/**
+ Struct for SPATIAL_FILTER (varies)
+ */	
+	typedef struct _dwg_object_SPATIAL_FILTER
+	{
+//TODO 
+	} Dwg_Object_SPATIAL_FILTER;
+
+/**
+ Struct for TABLE (varies)
+ */	
+	typedef struct _dwg_entity_TABLE
+	{
+//TODO 
+	} Dwg_Entity_TABLE;
+
+//NOT SURE ABOUT THIS ONE (IS IT OBJECT OR ENTITY?):
+/**
+ Struct for SPATIAL_INDEX (varies)
+ */	
+	typedef struct _dwg_object_SPATIAL_INDEX
+	{
+//TODO 
+	} Dwg_Object_SPATIAL_INDEX;
+
+//NOT SURE ABOUT THIS ONE (IS IT OBJECT OR ENTITY?):
+/**
+ Struct for VBA_PROJECT (varies)
+ */	
+	typedef struct _dwg_object_VBA_PROJECT
+	{
+//TODO 
+	} Dwg_Object_VBA_PROJECT;
+
+//NOT SURE ABOUT THIS ONE (IS IT OBJECT OR ENTITY?):
+/**
+ Struct for WIPEOUTVARIABLE (varies)
+ */	
+	typedef struct _dwg_object_WIPEOUTVARIABLE
+	{
+//TODO 
+	} Dwg_Object_WIPEOUTVARIABLE;
+
+
+/**
+ Struct for XRECORD (varies)
+ */	
+	typedef struct _dwg_object_XRECORD
+	{
+//TODO 
+	} Dwg_Object_XRECORD;
+
+
+			Dwg_Object_PROXY *PROXY;
+			Dwg_Object_PLACEHOLDER *PLACEHOLDER;
+			Dwg_Object_RASTERVARIABLES *RASTERVARIABLES;
+			Dwg_Object_SORTENTSTABLE *SORTENTSTABLE;
+			Dwg_Object_SPATIAL_FILTER *SPATIAL_FILTER;
+
 
 /* OBJECTS - END ************************************************************/
 
@@ -1764,6 +2063,7 @@ extern "C"
 			Dwg_Entity_IMAGE *IMAGE;
 			Dwg_Entity_LWPLINE *LWPLINE;
 			Dwg_Entity_OLE2FRAME *OLE2FRAME;
+			Dwg_Entity_TABLE *TABLE;
 		} tio;
 
 		long unsigned int bitsize;
@@ -1798,11 +2098,48 @@ extern "C"
 	{
 		union
 		{
-			Dwg_Object_LAYER *LAYER;
 			Dwg_Object_DICTIONARY *DICTIONARY;
 			Dwg_Object_BLOCK_CONTROL *BLOCK_CONTROL;
-			//Dwg_Object_BLOCK_HEADER *BLOCK_HEADER;
+			Dwg_Object_BLOCK_HEADER *BLOCK_HEADER;
+			Dwg_Object_LAYER_CONTROL *LAYER_CONTROL;
+			Dwg_Object_LAYER *LAYER;
+			Dwg_Object_STYLE_CONTROL *STYLE_CONTROL;
+			Dwg_Object_STYLE *STYLE;
+			Dwg_Object_LTYPE_CONTROL *LTYPE_CONTROL;
+			Dwg_Object_LTYPE *LTYPE;
+			Dwg_Object_VIEW_CONTROL *VIEW_CONTROL;
+			Dwg_Object_VIEW *VIEW;
+			Dwg_Object_UCS_CONTROL *UCS_CONTROL;
+			Dwg_Object_UCS *UCS;
+			Dwg_Object_VPORT_CONTROL *VPORT_CONTROL;
+			Dwg_Object_VPORT *VPORT;
+			Dwg_Object_APPID_CONTROL *APPID_CONTROL;
+			Dwg_Object_APPID *APPID;
+			Dwg_Object_DIMSTYLE_CONTROL *DIMSTYLE_CONTROL;
+			Dwg_Object_DIMSTYLE *DIMSTYLE;
+			Dwg_Object_VP_ENT_HDR_CTRL *VP_ENT_HDR_CTRL;
+			Dwg_Object_VP_ENT_HDR *VP_ENT_HDR;
+			Dwg_Object_GROUP *GROUP;
+			Dwg_Object_MLINESTYLE *MLINESTYLE;
+			Dwg_Object_DICTIONARYVAR *DICTIONARYVAR;
+			Dwg_Object_DICTIONARYWDLFT *DICTIONARYWDLFT;
+			Dwg_Object_HATCH *HATCH;
+			Dwg_Object_IDBUFFER *IDBUFFER;
+			Dwg_Object_IMAGEDEF *IMAGEDEF;
+			Dwg_Object_IMAGEDEFREACTOR *IMAGEDEFREACTOR;
+			Dwg_Object_LAYER_INDEX *LAYER_INDEX;
 			Dwg_Object_LAYOUT *LAYOUT;
+			Dwg_Object_PROXY *PROXY;
+			Dwg_Object_PLACEHOLDER *PLACEHOLDER;
+			Dwg_Object_RASTERVARIABLES *RASTERVARIABLES;
+			Dwg_Object_SORTENTSTABLE *SORTENTSTABLE;
+			Dwg_Object_SPATIAL_FILTER *SPATIAL_FILTER;
+//NOT SURE ABOUT THESE:
+			Dwg_Object_SPATIAL_INDEX *SPATIAL_INDEX;
+			Dwg_Object_VBA_PROJECT *VBA_PROJECT;
+			Dwg_Object_WIPEOUTVARIABLE *WIPEOUTVARIABLE;
+
+			Dwg_Object_XRECORD *XRECORD;
 		} tio;
 
 		long unsigned int bitsize;
@@ -1832,7 +2169,7 @@ extern "C"
 		{
 			Dwg_Object_Entity *entity;
 			Dwg_Object_Object *object;
-			unsigned char *unknownjxo;
+			unsigned char *unknown;
 		} tio;
 
 		long unsigned int trakt;
@@ -1908,7 +2245,7 @@ extern "C"
 
 		struct
 		{
-			unsigned char unknownjxo[6];
+			unsigned char unknown[6];
 			struct
 			{
 				int size;

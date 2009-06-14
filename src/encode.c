@@ -310,7 +310,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 			omap[i].handle = skt->object[i].tio.object->handle.value;
 		else if (skt->object[i].supertype == DWG_SUPERTYPE_UNKNOWN)
 		{
-			nkn.chain = skt->object[i].tio.unknownjxo;
+			nkn.chain = skt->object[i].tio.unknown;
 			nkn.size = skt->object[i].size;
 			nkn.byte = nkn.bit = 0;
 			bit_read_BS (&nkn);
@@ -354,7 +354,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 			bit_write_MS (dat, obj->size);
 			if (dat->byte + obj->size >= dat->size - 2)
 				bit_chain_alloc (dat);
-			memcpy (&dat->chain[dat->byte], obj->tio.unknownjxo, obj->size);
+			memcpy (&dat->chain[dat->byte], obj->tio.unknown, obj->size);
 			dat->byte += obj->size;
 		}
 		else
