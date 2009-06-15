@@ -57,7 +57,7 @@ test_SVG (char *filename)
 	return error;
 }
 
-
+#define MAXVALUE 100000
 void output_SVG(Dwg_Structure* dwg_struct){
 	int i;
 	Dwg_Object *obj;
@@ -67,21 +67,71 @@ void output_SVG(Dwg_Structure* dwg_struct){
         "<svg\n"
         "   xmlns:svg=\"http://www.w3.org/2000/svg\"\n"
         "   xmlns=\"http://www.w3.org/2000/svg\"\n"
-        "   version=\"1.0\"\n"
+        "   version=\"1.1\"\n"
         "   width=\"210mm\"\n"
         "   height=\"297mm\"\n"
-        ">\n"
+	">\n"
     );
+
+	int lines = 0, bad_lines = 0;
+	int circles = 0, bad_circles = 0;
+	int arcs = 0, bad_arcs = 0;
 
 	for (i = 0; i < dwg_struct->num_objects; i++)
 	{
 		obj = &dwg_struct->object[i];
 
 		if (obj->type == DWG_TYPE_LINE){
+			lines++;
 			Dwg_Entity_LINE* line;
 			line = obj->tio.entity->tio.LINE;
-			printf("    <path d=\"M %f,%f L %f,%f\" />\n", line->x0, line->y0, line->x1, line->y1);		
+			if ((line->x0 < MAXVALUE) && (line->x0 > -MAXVALUE) &&
+			    (line->y0 < MAXVALUE) && (line->y0 > -MAXVALUE) &&
+			    (line->x1 < MAXVALUE) && (line->x1 > -MAXVALUE) &&
+			    (line->y1 < MAXVALUE) && (line->y1 > -MAXVALUE)){
+				printf("\t<path d=\"M %f,%f %f,%f\" style=\"fill:none;stroke:blue;stroke-width:0.1px\" />\n", line->x0, -line->y0, line->x1, -line->y1);
+			} else {
+				bad_lines++;
+			}
 		}
+
+
+		if (obj->type == DWG_TYPE_CIRCLE){
+			circles++;
+			Dwg_Entity_CIRCLE* circle;
+			circle = obj->tio.entity->tio.CIRCLE;
+			if ((circle->x0 < MAXVALUE) && (circle->x0 > -MAXVALUE) &&
+			    (circle->y0 < MAXVALUE) && (circle->y0 > -MAXVALUE) &&
+			    (circle->radius < MAXVALUE) && (circle->radius > -MAXVALUE)){
+				printf("\t<circle cx=\"%f\" cy=\"%f\" r=\"%f\" fill=\"none\" stroke=\"blue\" stroke-width=\"0.1px\" />\n", circle->x0, -circle->y0, circle->radius);
+			} else {
+				bad_circles++;
+			}
+		}
+/*
+		if (obj->type == DWG_TYPE_ARC){
+			arcs++;
+			Dwg_Entity_ARC* arc;
+			arc = obj->tio.entity->tio.ARC;
+			if ((arc->x0 < MAXVALUE) && (arc->x0 > -MAXVALUE) &&
+			    (arc->y0 < MAXVALUE) && (arc->y0 > -MAXVALUE) &&
+			    (arc->radius < MAXVALUE) && (arc->radius > -MAXVALUE)){
+				double x_start = arc->x0 + arc->radius*cos(arc->start_angle);
+				double y_start = arc->y0 + arc->radius*sin(arc->start_angle);
+				double x_end = arc->x0 + arc->radius*cos(arc->end_angle);
+				double y_end = arc->y0 + arc->radius*sin(arc->end_angle);
+
+				printf(	"\t<path d=\"M %f,%f, a%f,%f 0 %d %d %f,%f\" fill=\"none\" stroke=\"blue\" stroke-width=\"0.1px\" />\n", x_start, -y_start, arc->radius, arc->radius, 1, 1, x_end, -y_end);
+			} else {
+				bad_arcs++;
+			}
+		}
+*/
+
 	}
 	printf("</svg>\n");
+	fprintf(stderr, "%d bad lines (%.2f\%)\n", bad_lines, 100 * ((double) bad_lines)/lines);
+	fprintf(stderr, "%d bad circles (%.2f\%)\n", bad_circles, 100 * ((double) bad_circles)/circles);
+	fprintf(stderr, "%d bad arcs (%.2f\%)\n", bad_arcs, 100 * ((double) bad_arcs)/arcs);
+	fprintf(stderr, "%d bad objects (%.2f\%)\n", bad_circles+bad_lines, 100 * ((double) (bad_circles+bad_lines))/dwg_struct->num_objects);
 }
