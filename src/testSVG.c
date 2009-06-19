@@ -118,12 +118,13 @@ void output_SVG(Dwg_Structure* dwg_struct){
 			if ((arc->x0 < MAXVALUE) && (arc->x0 > -MAXVALUE) &&
 			    (arc->y0 < MAXVALUE) && (arc->y0 > -MAXVALUE) &&
 			    (arc->radius < MAXVALUE) && (arc->radius > -MAXVALUE)){
-				double x_start = arc->x0 + arc->radius*cos(arc->start_angle);
-				double y_start = arc->y0 + arc->radius*sin(arc->start_angle);
-				double x_end = arc->x0 + arc->radius*cos(arc->end_angle);
-				double y_end = arc->y0 + arc->radius*sin(arc->end_angle);
-
-				printf(	"\t<path d=\"M %f,%f, a%f,%f 0 %d %d %f,%f\" fill=\"none\" stroke=\"blue\" stroke-width=\"0.1px\" />\n", x_start, -y_start, arc->radius, arc->radius, 1, 1, x_end, -y_end);
+				double x_start = arc->x0 + arc->radius * cos(arc->start_angle);
+				double y_start = arc->y0 + arc->radius * sin(arc->start_angle);
+				double x_end = arc->x0 + arc->radius * cos(arc->end_angle);
+				double y_end = arc->y0 + arc->radius * sin(arc->end_angle);
+				//Assuming clockwise arcs.
+				int large_arc = (arc->end_angle - arc->start_angle < 3.1415) ? 0 : 1;
+				printf(	"\t<path d=\"M %f,%f A %f,%f 0 %d 0 %f,%f\" fill=\"none\" stroke=\"blue\" stroke-width=\"%f\" />\n", x_start, -y_start, arc->radius, arc->radius, large_arc, x_end, -y_end, 0.1);
 			} else {
 				bad_arcs++;
 			}
@@ -135,6 +136,7 @@ void output_SVG(Dwg_Structure* dwg_struct){
 			text = obj->tio.entity->tio.TEXT;
 			if ((text->x0 < MAXVALUE) && (text->x0 > -MAXVALUE) &&
 			    (text->y0 < MAXVALUE) && (text->y0 > -MAXVALUE) && text->text
+/*TODO: Juca, fix it properly: */ && text->text[0] != '&'
 			    ){
 				printf("\t<text x=\"%f\" y=\"%f\" font-family=\"Verdana\" font-size=\"%f\" fill=\"blue\">%s</text>\n", text->x0, -text->y0, text->height /* fontsize ? */, text->text);
 			} else {
