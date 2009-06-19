@@ -2078,8 +2078,8 @@ extern "C"
 		unsigned char *picture;
 
 		unsigned char regime;
-		long unsigned int reagilo_size;
-		unsigned char senligiloj;
+		long unsigned int num_reactors;
+		unsigned char nolinks;
 		unsigned int colour;
 		double linetype_scale;
 		unsigned char linetype;
@@ -2087,7 +2087,7 @@ extern "C"
 		unsigned int invisible;
 		unsigned char lineweight;
 
-		unsigned int traktref_size;
+		unsigned int num_handles;
 		Dwg_Handle *traktref;
 	} Dwg_Object_Entity;
 
@@ -2149,9 +2149,9 @@ extern "C"
 		Dwg_Handle extended_trakt;
 		unsigned char *extended;
 
-		long unsigned int reagilo_size;
+		long unsigned int num_reactors;
 
-		unsigned int traktref_size;
+		unsigned int num_handles;
 		Dwg_Handle *traktref;
 	} Dwg_Object_Object;
 

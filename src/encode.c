@@ -228,7 +228,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 			bit_write_BD (dat, skt->var[i].xyz[2]);
 			break;
 		default:
-			printf ("Ne traktebla type: %i (var: %i)\n", dwg_var_map (skt->header.version, i), (int) i);
+			printf ("No traktebla type: %i (var: %i)\n", dwg_var_map (skt->header.version, i), (int) i);
 		}
 	}
 
@@ -610,8 +610,8 @@ dwg_encode_entity (Dwg_Object * obj, Bit_Chain * dat)
 	}
 
 	bit_write_BB (dat, est->regime);
-	bit_write_BL (dat, est->reagilo_size);
-	bit_write_B (dat, est->senligiloj);
+	bit_write_BL (dat, est->num_reactors);
+	bit_write_B (dat, est->nolinks);
 	bit_write_BS (dat, est->colour);
 	bit_write_BD (dat, est->linetype_scale);
 	bit_write_BB (dat, est->linetype);
@@ -789,7 +789,7 @@ dwg_encode_entity (Dwg_Object * obj, Bit_Chain * dat)
 
 	/* Traktilaj referencoj
 	 */
-	for (i = 0; i < est->traktref_size; i++)
+	for (i = 0; i < est->num_handles; i++)
 		bit_write_H (dat, &est->traktref[i]);
 
 	/* Finfine kalkuli kaj write la bajt-sizen de la object (cxu estas erara?)

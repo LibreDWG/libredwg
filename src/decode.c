@@ -270,7 +270,7 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 			}
 			break;
 		default:
-	        if (loglevel) printf ("Ne traktebla type: %i (var: %i)\n", dwg_var_map (skt->header.version, i), i);
+	        if (loglevel) printf ("No traktebla type: %i (var: %i)\n", dwg_var_map (skt->header.version, i), i);
 		}
 		//puts ("");
 	}
@@ -615,7 +615,7 @@ dwg_decode_entity (Bit_Chain * dat, Dwg_Object_Entity * ent)
 		ent->bitsize = 0;
 		ent->extended_size = 0;
 		ent->picture_exists = 0;
-		ent->traktref_size = 0;
+		ent->num_handles = 0;
 		return;
 	}
 	ent->extended_size = 0;
@@ -627,7 +627,7 @@ dwg_decode_entity (Bit_Chain * dat, Dwg_Object_Entity * ent)
 			ent->bitsize = 0;
 			ent->extended_size = 0;
 			ent->picture_exists = 0;
-			ent->traktref_size = 0;
+			ent->num_handles = 0;
 			return;
 		}
 		if (ent->extended_size == 0)
@@ -665,8 +665,8 @@ dwg_decode_entity (Bit_Chain * dat, Dwg_Object_Entity * ent)
 	}
 
 	ent->regime = bit_read_BB (dat);
-	ent->reagilo_size = bit_read_BL (dat);
-	ent->senligiloj = bit_read_B (dat);
+	ent->num_reactors = bit_read_BL (dat);
+	ent->nolinks = bit_read_B (dat);
 	ent->colour = bit_read_BS (dat);
 	ent->linetype_scale = bit_read_BD (dat);
 	ent->linetype = bit_read_BB (dat);
@@ -693,7 +693,7 @@ dwg_decode_object (Bit_Chain * dat, Dwg_Object_Object * ord)
 		fprintf (stderr, "\tError in object handle! Bit_Chain current address: 0x%0x\n", (unsigned int) dat->byte);
 		ord->bitsize = 0;
 		ord->extended_size = 0;
-		ord->traktref_size = 0;
+		ord->num_handles = 0;
 		return;
 	}
 	ord->extended_size = 0;
@@ -704,7 +704,7 @@ dwg_decode_object (Bit_Chain * dat, Dwg_Object_Object * ord)
 			fprintf (stderr, "dwg_decode_object: Absurd! Extended object data size: %lu. Object: %lu (handle).\n", (long unsigned int) size, ord->handle.value);
 			ord->bitsize = 0;
 			ord->extended_size = 0;
-			ord->traktref_size = 0;
+			ord->num_handles = 0;
 			return;
 		}
 		if (ord->extended_size == 0)
@@ -724,7 +724,7 @@ dwg_decode_object (Bit_Chain * dat, Dwg_Object_Object * ord)
 			ord->extended[i] = bit_read_RC (dat);
 	}
 
-	ord->reagilo_size = bit_read_BL (dat);
+	ord->num_reactors = bit_read_BL (dat);
 }
 
 static void
@@ -758,7 +758,7 @@ dwg_decode_traktref (Bit_Chain * dat, Dwg_Object * obj)
 			}
 			i++;
 		}
-		ent->traktref_size = i;
+		ent->num_handles = i;
 	}
 	else
 	{
@@ -786,7 +786,7 @@ dwg_decode_traktref (Bit_Chain * dat, Dwg_Object * obj)
 			}
 			i++;
 		}
-		ord->traktref_size = i;
+		ord->num_handles = i;
 	}
 }
 

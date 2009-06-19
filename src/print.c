@@ -28,33 +28,33 @@ void
 dwg_print_entity (Dwg_Object_Entity * ent)
 {
 	printf ("Bitsize: %lu\n", ent->bitsize);
-	printf ("Vera handle: %i.%i.%lu\n", ent->handle.code, ent->handle.size,
+	printf ("Handle: %i.%i.%lu\n", ent->handle.code, ent->handle.size,
 		ent->handle.value);
-	printf ("Kroma datenaro: %lu B\n", (long unsigned int) ent->extended_size);
-	printf ("Ĉu picture?: %s", ent->picture_exists ? "Yes" : "Ne");
+	printf ("Extended size: %lu B\n", (long unsigned int) ent->extended_size);
+	printf ("Picture exists?: %s", ent->picture_exists ? "Yes" : "No");
 	if (ent->picture_exists)
 		printf ("\tSize: %lu B\n", ent->picture_size);
 	else
 		puts ("");
-	printf ("Reĝimo: %i\n", ent->regime);
-	printf ("Kiom reagiloj: %lu\n", ent->reagilo_size);
-	printf ("Ĉu senligiloj?: %s\n", ent->senligiloj ? "Yes" : "Ne");
-	printf ("Koloro: %u\n", ent->colour);
-	printf ("Skalo de linetype: %1.13g\n", ent->linetype_scale);
-	printf ("Linitype: 0x%02X\n", ent->linetype);
-	printf ("Printstilo: 0x%02X\n", ent->plot_style);
-	printf ("Malvidebleco: 0x%04X\n", ent->invisible);
-	printf ("Linithickness: %u\n", ent->lineweight);
+	printf ("Regime: %i\n", ent->regime);
+	printf ("Numreactors: %lu\n", ent->num_reactors);
+	printf ("No links?: %s\n", ent->nolinks ? "Yes" : "No");
+	printf ("Colour: %u\n", ent->colour);
+	printf ("Linetype scale: %1.13g\n", ent->linetype_scale);
+	printf ("Linetype: 0x%02X\n", ent->linetype);
+	printf ("Plot Style: 0x%02X\n", ent->plot_style);
+	printf ("Invisible: 0x%04X\n", ent->invisible);
+	printf ("Linethickness: %u\n", ent->lineweight);
 }
 
 void
 dwg_print_object (Dwg_Object_Object *ord)
 {
 	printf ("Bitsize: %lu\n", ord->bitsize);
-	printf ("Vera handle: %i.%i.%lu\n", ord->handle.code, ord->handle.size,
+	printf ("Handle: %i.%i.%lu\n", ord->handle.code, ord->handle.size,
 		ord->handle.value);
-	printf ("Kroma datenaro: %lu B\n", (long unsigned int) ord->extended_size);
-	printf ("Kiom reagiloj: %lu\n", ord->reagilo_size);
+	printf ("Extended size: %lu B\n", (long unsigned int) ord->extended_size);
+	printf ("Numreactors: %lu\n", ord->num_reactors);
 }
 
 
@@ -69,13 +69,13 @@ dwg_print_traktref (Dwg_Object * obj)
 
 		ent = obj->tio.entity;
 
-		printf ("\tTraktil-referencoj (%u): ", ent->traktref_size);
-		if (ent->traktref_size == 0)
+		printf ("\tHandle references (%u): ", ent->num_handles);
+		if (ent->num_handles == 0)
 		{
 			puts ("");
 			return;
 		}
-		for (i = 0; i < ent->traktref_size - 1; i++)
+		for (i = 0; i < ent->num_handles - 1; i++)
 			printf ("%i.%i.%li / ", ent->traktref[i].code, ent->traktref[i].size,
 				ent->traktref[i].value);
 		printf ("%i.%i.%li\n", ent->traktref[i].code, ent->traktref[i].size,
@@ -87,13 +87,13 @@ dwg_print_traktref (Dwg_Object * obj)
 
 		ord = obj->tio.object;
 
-		printf ("\tTraktil-referencoj (%u): ", ord->traktref_size);
-		if (ord->traktref_size == 0)
+		printf ("\tHandle references (%u): ", ord->num_handles);
+		if (ord->num_handles == 0)
 		{
 			puts ("");
 			return;
 		}
-		for (i = 0; i < ord->traktref_size - 1; i++)
+		for (i = 0; i < ord->num_handles - 1; i++)
 			printf ("%i.%i.%li / ", ord->traktref[i].code, ord->traktref[i].size,
 				ord->traktref[i].value);
 		printf ("%i.%i.%li\n", ord->traktref[i].code, ord->traktref[i].size,
@@ -203,7 +203,7 @@ dwg_print_INSERT (Dwg_Entity_INSERT * ent)
 	printf ("\tTurna angulo: %1.13g\n", ent->rotation_ang);
 	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
 		ent->extrusion.z);
-	printf ("\tĈu kun ATTRIB-oj?: %s\n", ent->has_attribs ? "Yes" : "Ne");
+	printf ("\tĈu kun ATTRIB-oj?: %s\n", ent->has_attribs ? "Yes" : "No");
 }
 
 void
@@ -215,7 +215,7 @@ dwg_print_MINSERT (Dwg_Entity_MINSERT * ent)
 	printf ("\tTurna angulo: %1.13g\n", ent->rotation_ang);
 	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
 		ent->extrusion.z);
-	printf ("\tĈu kun ATTRIB-oj?: %s\n", ent->has_attribs ? "Yes" : "Ne");
+	printf ("\tĈu kun ATTRIB-oj?: %s\n", ent->has_attribs ? "Yes" : "No");
 	printf ("\tKolumnoj: %02i\tInterspaco: %1.13g\n", ent->column.size, ent->column.dx);
 	printf ("\t  Linioj: %02i\tInterspaco: %1.13g\n", ent->line.size, ent->line.dy);
 }
@@ -305,7 +305,7 @@ dwg_print_CIRCLE (Dwg_Entity_CIRCLE * ent)
 void
 dwg_print_LINE (Dwg_Entity_LINE * ent)
 {
-	printf ("\tĈu nur 2D?: %s\n", ent->Zs_are_zero ? "Yes" : "Ne");
+	printf ("\tĈu nur 2D?: %s\n", ent->Zs_are_zero ? "Yes" : "No");
 	printf ("\t1-a punkto: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0,
 		ent->Zs_are_zero ? 0 : ent->z0);
 	printf ("\t2-a punkto: (%1.13g, %1.13g, %1.13g)\n", ent->x1, ent->y1,
@@ -550,9 +550,9 @@ void
 dwg_print_LAYER (Dwg_Object_LAYER *ord)
 {
 	printf ("\tName: %s\n", ord->name);
-	printf ("\tĈu 64?: %s\n", ord->bit64 ? "Yes" : "Ne");
+	printf ("\tĈu 64?: %s\n", ord->bit64 ? "Yes" : "No");
 	printf ("\tIndico Xref: %u\n", ord->xrefi);
-	printf ("\tXref-dependa?: %s\n", ord->xrefdep ? "Yes" : "Ne");
+	printf ("\tXref-dependa?: %s\n", ord->xrefdep ? "Yes" : "No");
 	printf ("\tEcoj: 0x%0x\n", ord->ecoj);
 	printf ("\tKoloro: %u\n", ord->colour);
 }
@@ -707,7 +707,7 @@ dwg_print (Dwg_Structure *dwg_struct)
 			printf ("Z: %lg", dwg_struct->var[i].xyz[2]);
 			break;
 		default:
-			printf ("Ne traktebla type: %i (var: %i)\n", dwg_var_map (dwg_struct->header.version, i), i);
+			printf ("No traktebla type: %i (var: %i)\n", dwg_var_map (dwg_struct->header.version, i), i);
 		}
 		puts ("");
 	}
@@ -910,7 +910,7 @@ dwg_print (Dwg_Structure *dwg_struct)
 	}
 
 	puts ("**************************************************");
-	puts ("Section DUA KAP-DATENARO ");
+	puts ("Section SECOND HEADER ");
 	puts ("**************************************************");
 	for (i = 0; i < 14; i++)
 	{
