@@ -223,6 +223,20 @@ dwg_print_VERTEX_3D (Dwg_Entity_VERTEX_3D * ent)
 }
 
 void
+dwg_print_VERTEX_MESH (Dwg_Entity_VERTEX_MESH * ent)
+{
+	printf ("\tIndikiloj: 0x%02x\n", ent->flags);
+	printf ("\tPunkto: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
+}
+
+void
+dwg_print_VERTEX_PFACE (Dwg_Entity_VERTEX_PFACE * ent)
+{
+	printf ("\tIndikiloj: 0x%02x\n", ent->flags);
+	printf ("\tPunkto: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
+}
+
+void
 dwg_print_VERTEX_PFACE_FACE (Dwg_Entity_VERTEX_PFACE_FACE * ent)
 {
 	printf ("\tVertic-index 1: %i\n", ent->vertind[0]);

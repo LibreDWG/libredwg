@@ -67,6 +67,9 @@ test_DEPENDENCIES = libredwg.la
 am_testsvg_OBJECTS = testSVG.$(OBJEXT)
 testsvg_OBJECTS = $(am_testsvg_OBJECTS)
 testsvg_DEPENDENCIES = libredwg.la
+testsvg_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
+	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(testsvg_LDFLAGS) \
+	$(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/build/depcomp
 am__depfiles_maybe = depfiles
@@ -228,6 +231,7 @@ testsvg_SOURCES = \
 	testSVG.c
 
 testsvg_LDADD = libredwg.la
+testsvg_LDFLAGS = -lm
 all: all-am
 
 .SUFFIXES:
@@ -302,7 +306,7 @@ test$(EXEEXT): $(test_OBJECTS) $(test_DEPENDENCIES)
 	$(LINK) $(test_OBJECTS) $(test_LDADD) $(LIBS)
 testsvg$(EXEEXT): $(testsvg_OBJECTS) $(testsvg_DEPENDENCIES) 
 	@rm -f testsvg$(EXEEXT)
-	$(LINK) $(testsvg_OBJECTS) $(testsvg_LDADD) $(LIBS)
+	$(testsvg_LINK) $(testsvg_OBJECTS) $(testsvg_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)

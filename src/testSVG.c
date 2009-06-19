@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <math.h>
 
 #include "bits.h"
 #include "dwg.h"
@@ -109,7 +110,7 @@ void output_SVG(Dwg_Structure* dwg_struct){
 				bad_circles++;
 			}
 		}
-/*
+
 		if (obj->type == DWG_TYPE_ARC){
 			arcs++;
 			Dwg_Entity_ARC* arc;
@@ -127,7 +128,6 @@ void output_SVG(Dwg_Structure* dwg_struct){
 				bad_arcs++;
 			}
 		}
-*/
 
 		if (obj->type == DWG_TYPE_TEXT){
 			texts++;
@@ -145,9 +145,9 @@ void output_SVG(Dwg_Structure* dwg_struct){
 
 	}
 	printf("</svg>\n");
-	if (lines>0) fprintf(stderr, "%d lines. %d bad lines (%.2f\%)\n", lines, bad_lines, 100 * ((double) bad_lines)/lines);
-	if (circles>0) fprintf(stderr, "%d circles. %d bad circles (%.2f\%)\n", circles, bad_circles, 100 * ((double) bad_circles)/circles);
-	if (arcs>0) fprintf(stderr, "%d arcs. %d bad arcs (%.2f\%)\n", arcs, bad_arcs, 100 * ((double) bad_arcs)/arcs);
-	if (texts>0) fprintf(stderr, "%d texts. %d bad texts (%.2f\%)\n", texts, bad_texts, 100 * ((double) bad_texts)/texts);
-	fprintf(stderr, "%d bad objects (%.2f\%)\n", bad_circles + bad_texts + bad_lines + bad_arcs, 100 * ((double) (bad_lines + bad_arcs + bad_circles + bad_lines))/dwg_struct->num_objects);
+	if (lines>0) fprintf(stderr, "%d lines. %d bad lines (%.2f)\n", lines, bad_lines, 100 * ((double) bad_lines)/lines);
+	if (circles>0) fprintf(stderr, "%d circles. %d bad circles (%.2f)\n", circles, bad_circles, 100 * ((double) bad_circles)/circles);
+	if (arcs>0) fprintf(stderr, "%d arcs. %d bad arcs (%.2f)\n", arcs, bad_arcs, 100 * ((double) bad_arcs)/arcs);
+	if (texts>0) fprintf(stderr, "%d texts. %d bad texts (%.2f)\n", texts, bad_texts, 100 * ((double) bad_texts)/texts);
+	fprintf(stderr, "%d bad objects (%.2f)\n", bad_circles + bad_texts + bad_lines + bad_arcs, 100 * ((double) (bad_lines + bad_arcs + bad_circles + bad_lines))/dwg_struct->num_objects);
 }
