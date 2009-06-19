@@ -961,7 +961,7 @@ extern "C"
 			double z;
 		} corner4;
                 unsigned char invis_flags;
-	} Dwg_Entity_3D_FACE;
+	} Dwg_Entity_3DFACE;
 
 /**
  Struct for:  POLYLINE (PFACE) (29)
@@ -2042,7 +2042,7 @@ extern "C"
 			Dwg_Entity_DIMENSION_RADIUS *DIMENSION_RADIUS;
 			Dwg_Entity_DIMENSION_DIAMETER *DIMENSION_DIAMETER;
 			Dwg_Entity_POINT *POINT;
-			Dwg_Entity_3D_FACE *_3DFACE;
+			Dwg_Entity_3DFACE *_3DFACE;
 			Dwg_Entity_POLYLINE_PFACE *POLYLINE_PFACE;
 			Dwg_Entity_POLYLINE_MESH *POLYLINE_MESH;
 			Dwg_Entity_SOLID *SOLID;

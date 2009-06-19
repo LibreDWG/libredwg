@@ -103,6 +103,11 @@ dwg_print_traktref (Dwg_Object * obj)
 /* OBJECTS *******************************************************************/
 
 void
+dwg_print_UNUSED (Dwg_Entity_UNUSED * ent)
+{
+}
+
+void
 dwg_print_TEXT (Dwg_Entity_TEXT * ent)
 {
 	printf ("\tDatumar-indikilo: 0x%02x\n", ent->dataflags);
@@ -176,6 +181,16 @@ void
 dwg_print_BLOCK (Dwg_Entity_BLOCK * ent)
 {
 	printf ("\tName: %s\n", ent->name);
+}
+
+void
+dwg_print_ENDBLK (Dwg_Entity_ENDBLK * ent)
+{
+}
+
+void
+dwg_print_SEQEND (Dwg_Entity_SEQEND * ent)
+{
 }
 
 void
@@ -300,6 +315,55 @@ dwg_print_LINE (Dwg_Entity_LINE * ent)
 }
 
 void
+dwg_print_DIMENSION_ORDINATE (Dwg_Entity_DIMENSION_ORDINATE * ent)
+{
+    //TODO: implement me!
+    puts("print not implemented!");
+}
+
+void
+dwg_print_DIMENSION_LINEAR (Dwg_Entity_DIMENSION_LINEAR * ent)
+{
+    //TODO: implement me!
+    puts("print not implemented!");
+}
+
+void
+dwg_print_DIMENSION_ALIGNED (Dwg_Entity_DIMENSION_ALIGNED * ent)
+{
+    //TODO: implement me!
+    puts("print not implemented!");
+}
+
+void
+dwg_print_DIMENSION_ANG3PT (Dwg_Entity_DIMENSION_ANG3PT * ent)
+{
+    //TODO: implement me!
+    puts("print not implemented!");
+}
+
+void
+dwg_print_DIMENSION_ANG2LN (Dwg_Entity_DIMENSION_ANG2LN * ent)
+{
+    //TODO: implement me!
+    puts("print not implemented!");
+}
+
+void
+dwg_print_DIMENSION_RADIUS (Dwg_Entity_DIMENSION_RADIUS * ent)
+{
+    //TODO: implement me!
+    puts("print not implemented!");
+}
+
+void
+dwg_print_DIMENSION_DIAMETER (Dwg_Entity_DIMENSION_DIAMETER * ent)
+{
+    //TODO: implement me!
+    puts("print not implemented!");
+}
+
+void
 dwg_print_POINT (Dwg_Entity_POINT *ent)
 {
 	printf ("\tPunkto: (%1.13g, %1.13g, %1.13g)\n", ent->x, ent->y, ent->z);
@@ -307,6 +371,55 @@ dwg_print_POINT (Dwg_Entity_POINT *ent)
 	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
 		ent->extrusion.z);
 	printf ("\tX-angulo: %1.13g\n", ent->x_ang);
+}
+
+void
+dwg_print_3DFACE (Dwg_Entity_3DFACE * ent)
+{
+    //TODO: implement me!
+    puts("print not implemented!");
+}
+
+void
+dwg_print_POLYLINE_PFACE (Dwg_Entity_POLYLINE_PFACE * ent)
+{
+    //TODO: implement me!
+    puts("print not implemented!");
+}
+
+void
+dwg_print_POLYLINE_MESH (Dwg_Entity_POLYLINE_MESH * ent)
+{
+    //TODO: implement me!
+    puts("print not implemented!");
+}
+
+void
+dwg_print_SOLID (Dwg_Entity_SOLID * ent)
+{
+    //TODO: implement me!
+    puts("print not implemented!");
+}
+
+void
+dwg_print_TRACE (Dwg_Entity_TRACE * ent)
+{
+    //TODO: implement me!
+    puts("print not implemented!");
+}
+
+void
+dwg_print_SHAPE (Dwg_Entity_SHAPE * ent)
+{
+    //TODO: implement me!
+    puts("print not implemented!");
+}
+
+void
+dwg_print_VIEWPORT (Dwg_Entity_VIEWPORT * ent)
+{
+    //TODO: implement me!
+    puts("print not implemented!");
 }
 
 void
@@ -322,10 +435,59 @@ dwg_print_ELLIPSE (Dwg_Entity_ELLIPSE *ent)
 }
 
 void
+dwg_print_SPLINE (Dwg_Entity_SPLINE * ent)
+{
+    //TODO: implement me!
+    puts("print not implemented!");
+}
+
+void
+dwg_print_REGION (Dwg_Entity_REGION * ent)
+{
+    //TODO: implement me!
+    puts("print not implemented!");
+}
+
+void
+dwg_print_3DSOLID (Dwg_Entity_3DSOLID * ent)
+{
+    //TODO: implement me!
+    puts("print not implemented!");
+}
+
+void
+dwg_print_BODY (Dwg_Entity_BODY * ent)
+{
+    //TODO: implement me!
+    puts("print not implemented!");
+}
+
+void
 dwg_print_RAY (Dwg_Entity_RAY *ent)
 {
 	printf ("\tPunkto: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
 	printf ("\tVektoro: (%1.13g, %1.13g, %1.13g)\n", ent->x1, ent->y1, ent->z1);
+}
+
+void
+dwg_print_XLINE (Dwg_Entity_XLINE * ent)
+{
+	printf ("\tPunkto: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
+	printf ("\tVektoro: (%1.13g, %1.13g, %1.13g)\n", ent->x1, ent->y1, ent->z1);
+}
+
+void
+dwg_print_DICTIONARY (Dwg_Object_DICTIONARY *obj)
+{
+	int i;
+
+	printf ("\tSize: %lu\n", (long unsigned int) obj->size);
+	printf ("\tCloning flag: 0x%X\n", obj->cloning);
+	printf ("\tHard Owner flag: 0x%X\n", obj->hard_owner);
+	printf ("\tNames:");
+	for (i = 0; i < obj->size; i++)
+		printf (" %s,", obj->name[i]);
+	printf ("\n");
 }
 
 void
@@ -357,17 +519,24 @@ dwg_print_MTEXT (Dwg_Entity_MTEXT *ent)
 }
 
 void
-dwg_print_DICTIONARY (Dwg_Object_DICTIONARY *obj)
+dwg_print_LEADER (Dwg_Entity_LEADER * ent)
 {
-	int i;
+    //TODO: implement me!
+    puts("print not implemented!");
+}
 
-	printf ("\tSize: %lu\n", (long unsigned int) obj->size);
-	printf ("\tCloning flag: 0x%X\n", obj->cloning);
-	printf ("\tHard Owner flag: 0x%X\n", obj->hard_owner);
-	printf ("\tNames:");
-	for (i = 0; i < obj->size; i++)
-		printf (" %s,", obj->name[i]);
-	printf ("\n");
+void
+dwg_print_TOLERANCE (Dwg_Entity_TOLERANCE * ent)
+{
+    //TODO: implement me!
+    puts("print not implemented!");
+}
+
+void
+dwg_print_MLINE (Dwg_Entity_MLINE * ent)
+{
+    //TODO: implement me!
+    puts("print not implemented!");
 }
 
 void
@@ -456,12 +625,12 @@ dwg_print (Dwg_Structure *dwg_struct)
        	"POLYLINE_2D", "POLYLINE_3D", "ARC", "CIRCLE", "LINE",
 	"DIMENSION_ORDINATE", "DIMENSION_LINEAR", "DIMENSION_ALIGNED", "DIMENSION_ANG3PT",
         "DIMENSION_ANG2LN", "DIMENSION_RADIUS", "DIMENSION_DIAMETER", "POINT", "3DFACE", "POLYLINE_PFACE",
-       	"POLYLINE_MESH", "SOLID", "TRACE", "SHAPE",	"VIEWPORT", "ELLIPSE", "SPLINE", "37", "38", "39",
-       	"RAY", "XLINE", "DICTIONARY", "43", "MTEXT", "45", "46", "47", "BLOCK_CONTROL", "49",
-       	"50", "LAYER", "52", "53", "54", "55", "56", "57", "58", "59",
-	"60", "61", "62", "63", "64", "65", "66", "67", "68", "69",
-	"70", "71", "72", "73", "74", "75", "76", "77", "78", "79",
-	"80"};
+       	"POLYLINE_MESH", "SOLID", "TRACE", "SHAPE",	"VIEWPORT", "ELLIPSE", "SPLINE", "REGION", "3DSOLID", "BODY",
+       	"RAY", "XLINE", "DICTIONARY", "NULL_43", "MTEXT", "LEADER", "TOLERANCE", "MLINE", "BLOCK_CONTROL", "BLOCK_HEADER",
+       	"LAYER_CONTROL", "LAYER", "STYLE_CONTROL", "STYLE", "NULL_54", "NULL_55", "LTYPE_CONTROL", "LTYPE", "NULL_58", "NULL_59",
+	"VIEW_CONTROL", "VIEW", "UCS_CONTROL", "UCS", "VPORT_CONTROL", "VPORT", "APPID_CONTROL", "APPID", "DIMSTYLE_CONTROL", "DIMSTYLE",
+	"VP_ENT_HDR_CTRL", "VP_ENT_HDR", "GROUP", "MLINESTYLE", "DICTIONARYVAR", "DICTIONARYWDLFT", "HATCH", "IDBUFFER", "IMAGE", "IMAGEDEF",
+	"IMAGEDEFREACTOR"};
 
 
 	puts ("**************************************************");
@@ -588,7 +757,7 @@ dwg_print (Dwg_Structure *dwg_struct)
 			continue;
 		}
 
-		switch (obj->type)
+		switch  (obj->type)
 		{
 		case DWG_TYPE_TEXT:
 			dwg_print_TEXT (obj->tio.entity->tio.TEXT);

@@ -1882,11 +1882,11 @@ dwg_decode_POINT (Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_3DFACE (Bit_Chain * dat, Dwg_Object * obj)
 {
-    Dwg_Entity_3D_FACE *ent;
+    Dwg_Entity_3DFACE *ent;
 
 	obj->supertype = DWG_SUPERTYPE_ENTITY;
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio._3DFACE = calloc (sizeof (Dwg_Entity_3D_FACE), 1);
+	obj->tio.entity->tio._3DFACE = calloc (sizeof (Dwg_Entity_3DFACE), 1);
 	dwg_decode_entity (dat, obj->tio.entity);
 	ent = obj->tio.entity->tio._3DFACE;
 
