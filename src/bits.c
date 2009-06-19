@@ -592,21 +592,23 @@ bit_read_DD (Bit_Chain * dat, double default_value)
 	if (two_bit_code == 2)
 	{
 		uchar_result = (char *) &default_value;
-		uchar_result[3] = bit_read_RC (dat);
-		uchar_result[2] = bit_read_RC (dat);
-		uchar_result[7] = bit_read_RC (dat);
-		uchar_result[6] = bit_read_RC (dat);
-		uchar_result[5] = bit_read_RC (dat);
 		uchar_result[4] = bit_read_RC (dat);
+		uchar_result[5] = bit_read_RC (dat);
+		uchar_result[0] = bit_read_RC (dat);
+		uchar_result[1] = bit_read_RC (dat);
+		uchar_result[2] = bit_read_RC (dat);
+		uchar_result[3] = bit_read_RC (dat);
+
 		return default_value;
 	}
 	else			/* if (two_bit_code == 1) */
 	{
 		uchar_result = (char *) &default_value;
-		uchar_result[7] = bit_read_RC (dat);
-		uchar_result[6] = bit_read_RC (dat);
-		uchar_result[5] = bit_read_RC (dat);
-		uchar_result[4] = bit_read_RC (dat);
+		uchar_result[0] = bit_read_RC (dat);
+		uchar_result[1] = bit_read_RC (dat);
+		uchar_result[2] = bit_read_RC (dat);
+		uchar_result[3] = bit_read_RC (dat);
+
 		return default_value;
 	}
 }
@@ -633,20 +635,20 @@ bit_write_DD (Bit_Chain * dat, double value, double default_value)
 			if (uint_value[1] != uint_default[1])
 			{
 				bit_write_BB (dat, 2);
-				bit_write_RC (dat, uchar_value[3]);
-				bit_write_RC (dat, uchar_value[2]);
-				bit_write_RC (dat, uchar_value[7]);
-				bit_write_RC (dat, uchar_value[6]);
-				bit_write_RC (dat, uchar_value[5]);
 				bit_write_RC (dat, uchar_value[4]);
+				bit_write_RC (dat, uchar_value[5]);
+				bit_write_RC (dat, uchar_value[0]);
+				bit_write_RC (dat, uchar_value[1]);
+				bit_write_RC (dat, uchar_value[2]);
+				bit_write_RC (dat, uchar_value[3]);
 			}
 			else
 			{
 				bit_write_BB (dat, 1);
-				bit_write_RC (dat, uchar_value[7]);
-				bit_write_RC (dat, uchar_value[6]);
-				bit_write_RC (dat, uchar_value[5]);
-				bit_write_RC (dat, uchar_value[4]);
+				bit_write_RC (dat, uchar_value[0]);
+				bit_write_RC (dat, uchar_value[1]);
+				bit_write_RC (dat, uchar_value[2]);
+				bit_write_RC (dat, uchar_value[3]);
 			}
 		}
 		else
