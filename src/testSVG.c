@@ -76,6 +76,7 @@ void output_SVG(Dwg_Structure* dwg_struct){
 	int lines = 0, bad_lines = 0;
 	int circles = 0, bad_circles = 0;
 	int arcs = 0, bad_arcs = 0;
+	int texts = 0, bad_texts = 0;
 
 	for (i = 0; i < dwg_struct->num_objects; i++)
 	{
@@ -128,10 +129,25 @@ void output_SVG(Dwg_Structure* dwg_struct){
 		}
 */
 
+		if (obj->type == DWG_TYPE_TEXT){
+			texts++;
+			Dwg_Entity_TEXT* text;
+			text = obj->tio.entity->tio.TEXT;
+			if ((text->x0 < MAXVALUE) && (text->x0 > -MAXVALUE) &&
+			    (text->y0 < MAXVALUE) && (text->y0 > -MAXVALUE) && text->text
+			    ){
+				printf("\t<text x=\"%f\" y=\"%f\" font-family=\"Verdana\" font-size=\"%f\" fill=\"blue\">%s</text>\n", text->x0, -text->y0, text->height /* fontsize ? */, text->text);
+			} else {
+				bad_texts++;
+			}
+		}
+
+
 	}
 	printf("</svg>\n");
-	fprintf(stderr, "%d bad lines (%.2f\%)\n", bad_lines, 100 * ((double) bad_lines)/lines);
-	fprintf(stderr, "%d bad circles (%.2f\%)\n", bad_circles, 100 * ((double) bad_circles)/circles);
-	fprintf(stderr, "%d bad arcs (%.2f\%)\n", bad_arcs, 100 * ((double) bad_arcs)/arcs);
-	fprintf(stderr, "%d bad objects (%.2f\%)\n", bad_circles+bad_lines, 100 * ((double) (bad_circles+bad_lines))/dwg_struct->num_objects);
+	if (lines>0) fprintf(stderr, "%d lines. %d bad lines (%.2f\%)\n", lines, bad_lines, 100 * ((double) bad_lines)/lines);
+	if (circles>0) fprintf(stderr, "%d circles. %d bad circles (%.2f\%)\n", circles, bad_circles, 100 * ((double) bad_circles)/circles);
+	if (arcs>0) fprintf(stderr, "%d arcs. %d bad arcs (%.2f\%)\n", arcs, bad_arcs, 100 * ((double) bad_arcs)/arcs);
+	if (texts>0) fprintf(stderr, "%d texts. %d bad texts (%.2f\%)\n", texts, bad_texts, 100 * ((double) bad_texts)/texts);
+	fprintf(stderr, "%d bad objects (%.2f\%)\n", bad_circles + bad_texts + bad_lines + bad_arcs, 100 * ((double) (bad_lines + bad_arcs + bad_circles + bad_lines))/dwg_struct->num_objects);
 }
