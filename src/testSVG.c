@@ -63,15 +63,17 @@ void output_SVG(Dwg_Structure* dwg_struct){
 	int i;
 	Dwg_Object *obj;
 
+	double page_width = dwg_model_x_max(dwg_struct) - dwg_model_x_min(dwg_struct);
+	double page_height = dwg_model_y_max(dwg_struct) - dwg_model_y_min(dwg_struct);
 	printf(
         "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
         "<svg\n"
         "   xmlns:svg=\"http://www.w3.org/2000/svg\"\n"
         "   xmlns=\"http://www.w3.org/2000/svg\"\n"
         "   version=\"1.1\"\n"
-        "   width=\"210mm\"\n"
-        "   height=\"297mm\"\n"
-	">\n"
+        "   width=\"%f\"\n"
+        "   height=\"%f\"\n"
+	">\n", page_width, page_height
     );
 
 	int lines = 0, bad_lines = 0;
@@ -91,7 +93,7 @@ void output_SVG(Dwg_Structure* dwg_struct){
 			    (line->y0 < MAXVALUE) && (line->y0 > -MAXVALUE) &&
 			    (line->x1 < MAXVALUE) && (line->x1 > -MAXVALUE) &&
 			    (line->y1 < MAXVALUE) && (line->y1 > -MAXVALUE)){
-				printf("\t<path id=\"dwg-%d\" d=\"M %f,%f %f,%f\" style=\"fill:none;stroke:blue;stroke-width:0.1px\" />\n", i, line->x0, -line->y0, line->x1, -line->y1);
+				printf("\t<path id=\"dwg-%d\" d=\"M %f,%f %f,%f\" style=\"fill:none;stroke:blue;stroke-width:0.1px\" />\n", i, line->x0, page_height - line->y0, line->x1, page_height - line->y1);
 			} else {
 				bad_lines++;
 			}
@@ -105,7 +107,7 @@ void output_SVG(Dwg_Structure* dwg_struct){
 			if ((circle->x0 < MAXVALUE) && (circle->x0 > -MAXVALUE) &&
 			    (circle->y0 < MAXVALUE) && (circle->y0 > -MAXVALUE) &&
 			    (circle->radius < MAXVALUE) && (circle->radius > -MAXVALUE)){
-				printf("\t<circle id=\"dwg-%d\" cx=\"%f\" cy=\"%f\" r=\"%f\" fill=\"none\" stroke=\"blue\" stroke-width=\"0.1px\" />\n", i, circle->x0, -circle->y0, circle->radius);
+				printf("\t<circle id=\"dwg-%d\" cx=\"%f\" cy=\"%f\" r=\"%f\" fill=\"none\" stroke=\"blue\" stroke-width=\"0.1px\" />\n", i, circle->x0, page_height - circle->y0, circle->radius);
 			} else {
 				bad_circles++;
 			}
@@ -124,7 +126,7 @@ void output_SVG(Dwg_Structure* dwg_struct){
 				double y_end = arc->y0 + arc->radius * sin(arc->end_angle);
 				//Assuming clockwise arcs.
 				int large_arc = (arc->end_angle - arc->start_angle < 3.1415) ? 0 : 1;
-				printf(	"\t<path id=\"dwg-%d\" d=\"M %f,%f A %f,%f 0 %d 0 %f,%f\" fill=\"none\" stroke=\"blue\" stroke-width=\"%f\" />\n", i, x_start, -y_start, arc->radius, arc->radius, large_arc, x_end, -y_end, 0.1);
+				printf(	"\t<path id=\"dwg-%d\" d=\"M %f,%f A %f,%f 0 %d 0 %f,%f\" fill=\"none\" stroke=\"blue\" stroke-width=\"%f\" />\n", i, x_start, page_height - y_start, arc->radius, arc->radius, large_arc, x_end, page_height - y_end, 0.1);
 			} else {
 				bad_arcs++;
 			}
@@ -138,7 +140,7 @@ void output_SVG(Dwg_Structure* dwg_struct){
 			    (text->y0 < MAXVALUE) && (text->y0 > -MAXVALUE) && text->text
 /*TODO: Juca, fix it properly: */ && text->text[0] != '&'
 			    ){
-				printf("\t<text id=\"dwg-%d\" x=\"%f\" y=\"%f\" font-family=\"Verdana\" font-size=\"%f\" fill=\"blue\">%s</text>\n", i, text->x0, -text->y0, text->height /* fontsize ? */, text->text);
+				printf("\t<text id=\"dwg-%d\" x=\"%f\" y=\"%f\" font-family=\"Verdana\" font-size=\"%f\" fill=\"blue\">%s</text>\n", i, text->x0, page_height - text->y0, text->height /* fontsize ? */, text->text);
 			} else {
 				bad_texts++;
 			}
