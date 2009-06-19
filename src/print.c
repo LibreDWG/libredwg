@@ -8,6 +8,7 @@
 /*                                                                           */
 /*  Copyright (C) 2008, 2009 Free Software Foundation, Inc.                  */
 /*  Copyright (C) 2009 Felipe Sanches <jucablues@users.sourceforge.net>      */
+/*  Copyright (C) 2009 Rodrigo Rodrigues da Silva <rodrigopitanga@gmail.com> */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -744,94 +745,168 @@ dwg_print (Dwg_Structure *dwg_struct)
 		printf ("Super-type: ");
 		switch (obj->supertype)
 		{
-		case DWG_SUPERTYPE_ENTITY:
-			puts ("entity");
-			dwg_print_entity (obj->tio.entity);
-			break;
-		case DWG_SUPERTYPE_OBJECT:
-			puts ("object");
-			dwg_print_object (obj->tio.object);
-			break;
-		default:
-			puts ("unknown");
-			continue;
+                    case DWG_SUPERTYPE_ENTITY:
+                            puts ("entity");
+                            dwg_print_entity (obj->tio.entity);
+                            break;
+                    case DWG_SUPERTYPE_OBJECT:
+                            puts ("object");
+                            dwg_print_object (obj->tio.object);
+                            break;
+                    default:
+                            puts ("unknown");
+                            continue;
 		}
 
 		switch  (obj->type)
 		{
-		case DWG_TYPE_TEXT:
-			dwg_print_TEXT (obj->tio.entity->tio.TEXT);
-			break;
-		case DWG_TYPE_ATTRIB:
-			dwg_print_ATTRIB (obj->tio.entity->tio.ATTRIB);
-			break;
-		case DWG_TYPE_ATTDEF:
-			dwg_print_ATTDEF (obj->tio.entity->tio.ATTDEF);
-			break;
-		case DWG_TYPE_BLOCK:
-			dwg_print_BLOCK (obj->tio.entity->tio.BLOCK);
-			break;
-		case DWG_TYPE_ENDBLK:
-		case DWG_TYPE_SEQEND:
-			break;
-		case DWG_TYPE_INSERT:
-			dwg_print_INSERT (obj->tio.entity->tio.INSERT);
-			break;
-		case DWG_TYPE_MINSERT:
-			dwg_print_MINSERT (obj->tio.entity->tio.MINSERT);
-			break;
-		case DWG_TYPE_VERTEX_2D:
-			dwg_print_VERTEX_2D (obj->tio.entity->tio.VERTEX_2D);
-			break;
-		case DWG_TYPE_VERTEX_3D:
-		case DWG_TYPE_VERTEX_MESH:
-		case DWG_TYPE_VERTEX_PFACE:
-			dwg_print_VERTEX_3D (obj->tio.entity->tio.VERTEX_3D);
-			break;
-		case DWG_TYPE_VERTEX_PFACE_FACE:
-			dwg_print_VERTEX_PFACE_FACE (obj->tio.entity->tio.VERTEX_PFACE_FACE);
-			break;
-		case DWG_TYPE_POLYLINE_2D:
-			dwg_print_POLYLINE_2D (obj->tio.entity->tio.POLYLINE_2D);
-			break;
-		case DWG_TYPE_POLYLINE_3D:
-			dwg_print_POLYLINE_3D (obj->tio.entity->tio.POLYLINE_3D);
-			break;
-		case DWG_TYPE_ARC:
-			dwg_print_ARC (obj->tio.entity->tio.ARC);
-			break;
-		case DWG_TYPE_CIRCLE:
-			dwg_print_CIRCLE (obj->tio.entity->tio.CIRCLE);
-			break;
-		case DWG_TYPE_LINE:
-			dwg_print_LINE (obj->tio.entity->tio.LINE);
-			break;
-		case DWG_TYPE_POINT:
-			dwg_print_POINT (obj->tio.entity->tio.POINT);
-			break;
-		case DWG_TYPE_ELLIPSE:
-			dwg_print_ELLIPSE (obj->tio.entity->tio.ELLIPSE);
-			break;
-		case DWG_TYPE_RAY:
-		case DWG_TYPE_XLINE:
-			dwg_print_RAY (obj->tio.entity->tio.RAY);
-			break;
-		case DWG_TYPE_MTEXT:
-			dwg_print_MTEXT (obj->tio.entity->tio.MTEXT);
-			break;
-		case DWG_TYPE_LAYER:
-			dwg_print_LAYER (obj->tio.object->tio.LAYER);
-			break;
-		default:
-			if (obj->type == dwg_struct->dwg_ot_layout)
-				dwg_print_LAYOUT (obj->tio.object->tio.LAYOUT);
-			else
-				continue;
-		}
+                    case DWG_TYPE_UNUSED:
+                            break;
+                    case DWG_TYPE_TEXT:
+                            dwg_print_TEXT (obj->tio.entity->tio.TEXT);
+                            break;
+                    case DWG_TYPE_ATTRIB:
+                            dwg_print_ATTRIB (obj->tio.entity->tio.ATTRIB);
+                            break;
+                    case DWG_TYPE_ATTDEF:
+                            dwg_print_ATTDEF (obj->tio.entity->tio.ATTDEF);
+                            break;
+                    case DWG_TYPE_BLOCK:
+                            dwg_print_BLOCK (obj->tio.entity->tio.BLOCK);
+                            break;
+                    case DWG_TYPE_ENDBLK:
+                    case DWG_TYPE_SEQEND:
+                            break;
+                    case DWG_TYPE_INSERT:
+                            dwg_print_INSERT (obj->tio.entity->tio.INSERT);
+                            break;
+                    case DWG_TYPE_MINSERT:
+                            dwg_print_MINSERT (obj->tio.entity->tio.MINSERT);
+                            break;
+                    case DWG_TYPE_VERTEX_2D:
+                            dwg_print_VERTEX_2D (obj->tio.entity->tio.VERTEX_2D);
+                            break;
+                    case DWG_TYPE_VERTEX_3D:
+                            dwg_print_VERTEX_3D (obj->tio.entity->tio.VERTEX_3D);
+                            break;
+                    case DWG_TYPE_VERTEX_MESH:
+                            dwg_print_VERTEX_MESH (obj->tio.entity->tio.VERTEX_MESH);
+                            break;
+                    case DWG_TYPE_VERTEX_PFACE:
+                            dwg_print_VERTEX_PFACE (obj->tio.entity->tio.VERTEX_PFACE);
+                            break;
+                    case DWG_TYPE_VERTEX_PFACE_FACE:
+                            dwg_print_VERTEX_PFACE_FACE (obj->tio.entity->tio.VERTEX_PFACE_FACE);
+                            break;
+                    case DWG_TYPE_POLYLINE_2D:
+                            dwg_print_POLYLINE_2D (obj->tio.entity->tio.POLYLINE_2D);
+                            break;
+                    case DWG_TYPE_POLYLINE_3D:
+                            dwg_print_POLYLINE_3D (obj->tio.entity->tio.POLYLINE_3D);
+                            break;
+                    case DWG_TYPE_ARC:
+                            dwg_print_ARC (obj->tio.entity->tio.ARC);
+                            break;
+                    case DWG_TYPE_CIRCLE:
+                            dwg_print_CIRCLE (obj->tio.entity->tio.CIRCLE);
+                            break;
+                    case DWG_TYPE_LINE:
+                            dwg_print_LINE (obj->tio.entity->tio.LINE);
+                            break;
+                    case DWG_TYPE_DIMENSION_ORDINATE:
+                            dwg_print_DIMENSION_ORDINATE (obj->tio.entity->tio.DIMENSION_ORDINATE);
+                            break;
+                    case DWG_TYPE_DIMENSION_LINEAR:
+                            dwg_print_DIMENSION_LINEAR (obj->tio.entity->tio.DIMENSION_LINEAR);
+                            break;
+                    case DWG_TYPE_DIMENSION_ALIGNED:
+                            dwg_print_DIMENSION_ALIGNED (obj->tio.entity->tio.DIMENSION_ALIGNED);
+                            break;
+                    case DWG_TYPE_DIMENSION_ANG3PT:
+                            dwg_print_DIMENSION_ANG3PT (obj->tio.entity->tio.DIMENSION_ANG3PT);
+                            break;
+                    case DWG_TYPE_DIMENSION_ANG2LN:
+                            dwg_print_DIMENSION_ANG2LN (obj->tio.entity->tio.DIMENSION_ANG2LN);
+                            break;
+                    case DWG_TYPE_DIMENSION_RADIUS:
+                            dwg_print_DIMENSION_RADIUS (obj->tio.entity->tio.DIMENSION_RADIUS);
+                            break;
+                    case DWG_TYPE_DIMENSION_DIAMETER:
+                            dwg_print_DIMENSION_DIAMETER (obj->tio.entity->tio.DIMENSION_DIAMETER);
+                            break;
+                    case DWG_TYPE_POINT:
+                            dwg_print_POINT (obj->tio.entity->tio.POINT);
+                            break;
+                    case DWG_TYPE_3DFACE:
+                            dwg_print_3DFACE (obj->tio.entity->tio._3DFACE);
+                            break;
+                    case DWG_TYPE_POLYLINE_PFACE:
+                            dwg_print_POLYLINE_PFACE (obj->tio.entity->tio.POLYLINE_PFACE);
+                            break;
+                    case DWG_TYPE_POLYLINE_MESH:
+                            dwg_print_POLYLINE_MESH (obj->tio.entity->tio.POLYLINE_MESH);
+                            break;
+                    case DWG_TYPE_SOLID:
+                            dwg_print_SOLID (obj->tio.entity->tio.SOLID);
+                            break;
+                    case DWG_TYPE_TRACE:
+                            dwg_print_TRACE (obj->tio.entity->tio.TRACE);
+                            break;
+                    case DWG_TYPE_SHAPE:
+                            dwg_print_SHAPE (obj->tio.entity->tio.SHAPE);
+                            break;
+                    case DWG_TYPE_VIEWPORT:
+                            dwg_print_VIEWPORT (obj->tio.entity->tio.VIEWPORT);
+                            break;
+                    case DWG_TYPE_ELLIPSE:
+                            dwg_print_ELLIPSE (obj->tio.entity->tio.ELLIPSE);
+                            break;
+                    case DWG_TYPE_SPLINE:
+                            dwg_print_SPLINE (obj->tio.entity->tio.SPLINE);
+                            break;
+                    case DWG_TYPE_REGION:
+                            dwg_print_REGION (obj->tio.entity->tio.REGION);
+                            break;
+                    case DWG_TYPE_3DSOLID:
+                            dwg_print_3DSOLID (obj->tio.entity->tio._3DSOLID);
+                            break;
+                    case DWG_TYPE_BODY:
+                            dwg_print_BODY (obj->tio.entity->tio.BODY);
+                            break;
+                    case DWG_TYPE_RAY:
+                            dwg_print_RAY (obj->tio.entity->tio.RAY);
+                            break;
+                    case DWG_TYPE_XLINE:
+                            dwg_print_XLINE (obj->tio.entity->tio.XLINE);
+                            break;
+                    case DWG_TYPE_DICTIONARY:
+                            dwg_print_DICTIONARY (obj->tio.object->tio.DICTIONARY);
+                            break;
+                    case DWG_TYPE_MTEXT:
+                            dwg_print_MTEXT (obj->tio.entity->tio.MTEXT);
+                            break;
+                    case DWG_TYPE_LEADER:
+                            dwg_print_LEADER (obj->tio.entity->tio.LEADER);
+                            break;
+                    case DWG_TYPE_TOLERANCE:
+                            dwg_print_TOLERANCE (obj->tio.entity->tio.TOLERANCE);
+                            break;
+                    case DWG_TYPE_MLINE:
+                            dwg_print_MLINE (obj->tio.entity->tio.MLINE);
+                            break;
+                    case DWG_TYPE_LAYER:
+                            dwg_print_LAYER (obj->tio.object->tio.LAYER);
+                            break;
+                    default:
+                            if (obj->type == dwg_struct->dwg_ot_layout)
+                                    dwg_print_LAYOUT (obj->tio.object->tio.LAYOUT);
+                            else
+                                    continue;
+                }
 
-		dwg_print_traktref (obj);
+                dwg_print_traktref (obj);
 
-		puts ("");
+                puts ("");
 	}
 
 	puts ("**************************************************");
