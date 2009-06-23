@@ -70,6 +70,7 @@ void output_SVG(Dwg_Structure* dwg_struct){
         "<svg\n"
         "   xmlns:svg=\"http://www.w3.org/2000/svg\"\n"
         "   xmlns=\"http://www.w3.org/2000/svg\"\n"
+	"   xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n"
         "   version=\"1.1\"\n"
         "   width=\"%f\"\n"
         "   height=\"%f\"\n"
@@ -84,6 +85,38 @@ void output_SVG(Dwg_Structure* dwg_struct){
 	for (i = 0; i < dwg_struct->num_objects; i++)
 	{
 		obj = &dwg_struct->object[i];
+
+
+		if (obj->type == DWG_TYPE_BLOCK_HEADER){
+			printf("\t<g id=\"dwg-handle-%d\" >\n", obj->handle);
+		}
+
+
+		if (obj->type == DWG_TYPE_ENDBLK){
+			printf("\t</g>\n");
+		}
+
+
+		if (obj->type == DWG_TYPE_INSERT){
+			Dwg_Entity_INSERT* insert;
+			insert = obj->tio.entity->tio.INSERT;
+			printf("\t<use x=\"%f\" y=\"%f\" xlink:href=\"#dwg-handle-%d\" />\n", insert->x0, page_height - insert->y0, insert->block_header_handle.value);
+		}
+
+		if (obj->type == DWG_TYPE_LINE){
+			lines++;
+			Dwg_Entity_LINE* line;
+			line = obj->tio.entity->tio.LINE;
+			if ((line->x0 < MAXVALUE) && (line->x0 > -MAXVALUE) &&
+			    (line->y0 < MAXVALUE) && (line->y0 > -MAXVALUE) &&
+			    (line->x1 < MAXVALUE) && (line->x1 > -MAXVALUE) &&
+			    (line->y1 < MAXVALUE) && (line->y1 > -MAXVALUE)){
+				printf("\t<path id=\"dwg-%d\" d=\"M %f,%f %f,%f\" style=\"fill:none;stroke:blue;stroke-width:0.1px\" />\n", i, line->x0, page_height - line->y0, line->x1, page_height - line->y1);
+			} else {
+				bad_lines++;
+			}
+		}
+
 
 		if (obj->type == DWG_TYPE_LINE){
 			lines++;

@@ -59,7 +59,7 @@ dwg_print_object (Dwg_Object_Object *ord)
 
 
 void
-dwg_print_traktref (Dwg_Object * obj)
+dwg_print_handleref (Dwg_Object * obj)
 {
 	unsigned int i;
 
@@ -76,10 +76,10 @@ dwg_print_traktref (Dwg_Object * obj)
 			return;
 		}
 		for (i = 0; i < ent->num_handles - 1; i++)
-			printf ("%i.%i.%li / ", ent->traktref[i].code, ent->traktref[i].size,
-				ent->traktref[i].value);
-		printf ("%i.%i.%li\n", ent->traktref[i].code, ent->traktref[i].size,
-			ent->traktref[i].value);
+			printf ("%i.%i.%li / ", ent->handleref[i].code, ent->handleref[i].size,
+				ent->handleref[i].value);
+		printf ("%i.%i.%li\n", ent->handleref[i].code, ent->handleref[i].size,
+			ent->handleref[i].value);
 	}
 	else if (obj->supertype == DWG_SUPERTYPE_OBJECT)
 	{
@@ -94,10 +94,10 @@ dwg_print_traktref (Dwg_Object * obj)
 			return;
 		}
 		for (i = 0; i < ord->num_handles - 1; i++)
-			printf ("%i.%i.%li / ", ord->traktref[i].code, ord->traktref[i].size,
-				ord->traktref[i].value);
-		printf ("%i.%i.%li\n", ord->traktref[i].code, ord->traktref[i].size,
-			ord->traktref[i].value);
+			printf ("%i.%i.%li / ", ord->handleref[i].code, ord->handleref[i].size,
+				ord->handleref[i].value);
+		printf ("%i.%i.%li\n", ord->handleref[i].code, ord->handleref[i].size,
+			ord->handleref[i].value);
 	}
 }
 
@@ -707,7 +707,7 @@ dwg_print (Dwg_Structure *dwg_struct)
 			printf ("Z: %lg", dwg_struct->var[i].xyz[2]);
 			break;
 		default:
-			printf ("No traktebla type: %i (var: %i)\n", dwg_var_map (dwg_struct->header.version, i), i);
+			printf ("No handleebla type: %i (var: %i)\n", dwg_var_map (dwg_struct->header.version, i), i);
 		}
 		puts ("");
 	}
@@ -741,7 +741,7 @@ dwg_print (Dwg_Structure *dwg_struct)
 
 		printf ("Type: %s (%03i)\t", obj->type > 80 ? (obj->type == dwg_struct->dwg_ot_layout ? "LAYOUT" : "??") : dwg_obtype[obj->type], obj->type);
 		printf ("Size: %u\t", obj->size);
-		printf ("Handle: (%lu)\t", obj->trakt);
+		printf ("Handle: (%lu)\t", obj->handle);
 		printf ("Super-type: ");
 		switch (obj->supertype)
 		{
@@ -904,7 +904,7 @@ dwg_print (Dwg_Structure *dwg_struct)
                                     continue;
                 }
 
-                dwg_print_traktref (obj);
+                dwg_print_handleref (obj);
 
                 puts ("");
 	}
@@ -914,9 +914,9 @@ dwg_print (Dwg_Structure *dwg_struct)
 	puts ("**************************************************");
 	for (i = 0; i < 14; i++)
 	{
-		printf ("Rikordo[%02i] Longo: %u\tChain:", i, dwg_struct->second_header.traktrik[i].size);
-		for (j = 0; j < dwg_struct->second_header.traktrik[i].size; j++)
-			printf (" %02X", dwg_struct->second_header.traktrik[i].chain[j]);
+		printf ("Rikordo[%02i] Longo: %u\tChain:", i, dwg_struct->second_header.handlerik[i].size);
+		for (j = 0; j < dwg_struct->second_header.handlerik[i].size; j++)
+			printf (" %02X", dwg_struct->second_header.handlerik[i].chain[j]);
 		puts ("");
 	}
 	puts ("");

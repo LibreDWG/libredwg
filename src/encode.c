@@ -104,7 +104,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	unsigned int ckr;
 	unsigned int sekcisize = 0;
 	long unsigned int lastadres;
-	long unsigned int lastatrakt;
+	long unsigned int lastahandle;
 	Object_Mapo *omap;
 	Object_Mapo pvzmap;
 	Dwg_Object *obj;
@@ -228,7 +228,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 			bit_write_BD (dat, skt->var[i].xyz[2]);
 			break;
 		default:
-			printf ("No traktebla type: %i (var: %i)\n", dwg_var_map (skt->header.version, i), (int) i);
+			printf ("No handleebla type: %i (var: %i)\n", dwg_var_map (skt->header.version, i), (int) i);
 		}
 	}
 
@@ -388,7 +388,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	pvzadr = dat->byte;	// poste oni devas write cxi tie la korektan valuen de size de la unua section
 	dat->byte += 2;
 	lastadres = 0;
-	lastatrakt = 0;
+	lastahandle = 0;
 	for (i = 0; i < skt->num_objects; i++)
 	{
 		unsigned int idc;
@@ -396,10 +396,10 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 
 		idc = omap[i].idc;
 
-		pvz = omap[idc].handle - lastatrakt;
+		pvz = omap[idc].handle - lastahandle;
 		bit_write_MC (dat, pvz);
 		//printf ("Trakt(%i): %6lu / ", i, pvz);
-		lastatrakt = omap[idc].handle;
+		lastahandle = omap[idc].handle;
 
 		pvz = omap[idc].address - lastadres;
 		bit_write_MC (dat, pvz);
@@ -418,7 +418,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 			pvzadr = dat->byte;
 			dat->byte += 2;
 			lastadres = 0;
-			lastatrakt = 0;
+			lastahandle = 0;
 		}
 	}
 	//printf ("Obj size: %u\n", i);
@@ -487,10 +487,10 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	bit_write_BS (dat, 14);
 	for (i = 0; i < 14; i++)
 	{
-		bit_write_RC (dat, skt->second_header.traktrik[i].size);
+		bit_write_RC (dat, skt->second_header.handlerik[i].size);
 		bit_write_RC (dat, i);
-		for (j = 0; j < skt->second_header.traktrik[i].size; j++)
-			bit_write_RC (dat, skt->second_header.traktrik[i].chain[j]);
+		for (j = 0; j < skt->second_header.handlerik[i].size; j++)
+			bit_write_RC (dat, skt->second_header.handlerik[i].chain[j]);
 	}
 
 	/* Returni al la komenco por write la sizen
@@ -596,7 +596,7 @@ dwg_encode_entity (Dwg_Object * obj, Bit_Chain * dat)
 	bit_write_BS (dat, est->extended_size);
 	if (est->extended_size > 0)
 	{
-		bit_write_H (dat, &est->extended_trakt);
+		bit_write_H (dat, &est->extended_handle);
 		for (i = 0; i < est->extended_size; i++)
 			bit_write_RC (dat, est->extended[i]);
 	}
@@ -790,7 +790,7 @@ dwg_encode_entity (Dwg_Object * obj, Bit_Chain * dat)
 	/* Traktilaj referencoj
 	 */
 	for (i = 0; i < est->num_handles; i++)
-		bit_write_H (dat, &est->traktref[i]);
+		bit_write_H (dat, &est->handleref[i]);
 
 	/* Finfine kalkuli kaj write la bajt-sizen de la object (cxu estas erara?)
 	 */

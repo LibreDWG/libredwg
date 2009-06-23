@@ -686,58 +686,55 @@ bit_write_BT (Bit_Chain * dat, double value)
 	}
 }
 
-/** Read handle-referencon.
+/** Read handle-references.
  */
 int
-bit_read_H (Bit_Chain * dat, Dwg_Handle * trakt)
+bit_read_H (Bit_Chain * dat, Dwg_Handle * handle)
 {
-	Bit_Chain tmpdat;
 	unsigned char *val;
 	int i;
 
-	trakt->code = bit_read_RC (dat);
-	trakt->size = trakt->code & 0x0f;
-	trakt->code = (trakt->code & 0xf0) >> 4;
+	handle->code = bit_read_RC (dat);
+	handle->size = handle->code & 0x0f;
+	handle->code = (handle->code & 0xf0) >> 4;
 
-	trakt->value = 0;
-	if (trakt->size > 4)
+	handle->value = 0;
+	if (handle->size > 4)
 	{
-		/*
-		printf ("Eraro: handle-referenco pli longa ol 4 bitokoj: %i.%i.%lu\n",
-			trakt->code, trakt->size, trakt->value);
-		*/
-		trakt->size = 0;
+		fprintf (stderr, "Error: handle-reference is longer than 4 bytes: %i.%i.%lu\n",
+			handle->code, handle->size, handle->value);
+		handle->size = 0;
 		return (-1);
 	}
 
-	val = (char *) &trakt->value;
-	for (i = trakt->size - 1; i >= 0; i--)
+	val = (char *) &handle->value;
+	for (i = handle->size - 1; i >= 0; i--)
 		val[i] = bit_read_RC (dat);
 
 	return (0);
 }
 
-/** Write handle-referencon.
+/** Write handle-references.
  */
 void
-bit_write_H (Bit_Chain * dat, Dwg_Handle * trakt)
+bit_write_H (Bit_Chain * dat, Dwg_Handle * handle)
 {
 	int i, j;
 	unsigned char *val;
 	unsigned char code_nombrilo;
 
-	if (trakt->value == 0)
+	if (handle->value == 0)
 	{
-		bit_write_RC (dat, (trakt->code << 4));
+		bit_write_RC (dat, (handle->code << 4));
 		return;
 	}
 
-	val = (char *) &trakt->value;
+	val = (char *) &handle->value;
 	for (i = 3; i >= 0; i--)
 		if (val[i])
 			break;
 
-	code_nombrilo = trakt->code << 4;
+	code_nombrilo = handle->code << 4;
 	code_nombrilo |= i + 1;
 
 	bit_write_RC (dat, code_nombrilo);

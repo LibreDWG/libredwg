@@ -301,6 +301,7 @@ extern "C"
 		} extrusion;
 		unsigned char has_attribs;
 		long unsigned int owned_obj_count;
+		Dwg_Handle block_header_handle;
 	} Dwg_Entity_INSERT;
 
 /**
@@ -2070,7 +2071,7 @@ extern "C"
 		Dwg_Handle handle;
 
 		unsigned int extended_size;
-		Dwg_Handle extended_trakt;
+		Dwg_Handle extended_handle;
 		unsigned char *extended;
 
 		unsigned char picture_exists;
@@ -2088,7 +2089,7 @@ extern "C"
 		unsigned char lineweight;
 
 		unsigned int num_handles;
-		Dwg_Handle *traktref;
+		Dwg_Handle *handleref;
 	} Dwg_Object_Entity;
 
 /**
@@ -2146,13 +2147,13 @@ extern "C"
 		Dwg_Handle handle;
 
 		unsigned int extended_size;
-		Dwg_Handle extended_trakt;
+		Dwg_Handle extended_handle;
 		unsigned char *extended;
 
 		long unsigned int num_reactors;
 
 		unsigned int num_handles;
-		Dwg_Handle *traktref;
+		Dwg_Handle *handleref;
 	} Dwg_Object_Object;
 
 /**
@@ -2172,7 +2173,7 @@ extern "C"
 			unsigned char *unknown;
 		} tio;
 
-		long unsigned int trakt;
+		long unsigned int handle;
 	} Dwg_Object;
 
 /**
@@ -2250,7 +2251,7 @@ extern "C"
 			{
 				int size;
 				unsigned char chain[4];
-			} traktrik[14];
+			} handlerik[14];
 		} second_header;
 
 		long unsigned int measurement;
