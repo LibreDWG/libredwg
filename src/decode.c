@@ -664,16 +664,41 @@ dwg_decode_entity (Bit_Chain * dat, Dwg_Object_Entity * ent)
 		}
 	}
 
+	if (dat->version == R_13 || dat->version == R_14){
+		ent->bitsize = bit_read_RL (dat);
+	}
+
+//TODO: use "entity_mode" instead of "regime"
 	ent->regime = bit_read_BB (dat);
 	ent->num_reactors = bit_read_BL (dat);
+
+	if (dat->version >= R_2004){
+		ent->xdict_missing_flag = bit_read_B (dat);
+	}
+
+	if (dat->version == R_13 || dat->version == R_14){
+		ent->isbylayerlt = bit_read_B (dat);
+	}
+
 	ent->nolinks = bit_read_B (dat);
-	ent->colour = bit_read_BS (dat);
+	ent->colour = bit_read_CMC (dat);
 	ent->linetype_scale = bit_read_BD (dat);
-	ent->linetype = bit_read_BB (dat);
-	ent->plot_style = bit_read_BB (dat);
+
+	if (dat->version >= R_2000){
+		ent->linetype = bit_read_BB (dat);
+		ent->plot_style = bit_read_BB (dat);
+	}
+
+	if (dat->version >= R_2007){
+		ent->material_flags = bit_read_BB(dat);
+		ent->shadow_flags = bit_read_RC(dat);
+	}
 
 	ent->invisible = bit_read_BS (dat);
-	ent->lineweight = bit_read_RC (dat);
+
+	if (dat->version >= R_2000){
+		ent->lineweight = bit_read_RC (dat);
+	}
 }
 
 static void

@@ -2080,11 +2080,15 @@ extern "C"
 
 		unsigned char regime;
 		long unsigned int num_reactors;
+		unsigned char xdict_missing_flag;
+		unsigned char isbylayerlt; 
 		unsigned char nolinks;
 		unsigned int colour;
 		double linetype_scale;
 		unsigned char linetype;
 		unsigned char plot_style;
+		unsigned char material_flags;
+		unsigned char shadow_flags;
 		unsigned int invisible;
 		unsigned char lineweight;
 
