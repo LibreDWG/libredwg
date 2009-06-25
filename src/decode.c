@@ -2184,6 +2184,8 @@ dwg_decode_VIEWPORT (Bit_Chain * dat, Dwg_Object * obj)
 		ent->contrast = bit_read_BD (dat);
 		bit_read_CMC (dat, &ent->ambient_light_color);
 	}
+
+	dwg_decode_handleref (dat, obj);
 }
 
 static void
