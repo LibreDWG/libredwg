@@ -58,7 +58,6 @@ test_SVG (char *filename)
 	return error;
 }
 
-#define MAXVALUE 100000
 void output_SVG(Dwg_Structure* dwg_struct){
 	int i;
 	Dwg_Object *obj;
@@ -77,25 +76,19 @@ void output_SVG(Dwg_Structure* dwg_struct){
 	">\n", page_width, page_height
     );
 
-	int lines = 0, bad_lines = 0;
-	int circles = 0, bad_circles = 0;
-	int arcs = 0, bad_arcs = 0;
-	int texts = 0, bad_texts = 0;
+	int lines=0, arcs=0, circles=0, texts=0;  
 
 	for (i = 0; i < dwg_struct->num_objects; i++)
 	{
 		obj = &dwg_struct->object[i];
 
-
 		if (obj->type == DWG_TYPE_BLOCK_HEADER){
 			printf("\t<g id=\"dwg-handle-%lu\" >\n", obj->handle);
 		}
 
-
 		if (obj->type == DWG_TYPE_ENDBLK){
 			printf("\t</g>\n");
 		}
-
 
 		if (obj->type == DWG_TYPE_INSERT){
 			Dwg_Entity_INSERT* insert;
@@ -107,84 +100,43 @@ void output_SVG(Dwg_Structure* dwg_struct){
 			lines++;
 			Dwg_Entity_LINE* line;
 			line = obj->tio.entity->tio.LINE;
-			if ((line->x0 < MAXVALUE) && (line->x0 > -MAXVALUE) &&
-			    (line->y0 < MAXVALUE) && (line->y0 > -MAXVALUE) &&
-			    (line->x1 < MAXVALUE) && (line->x1 > -MAXVALUE) &&
-			    (line->y1 < MAXVALUE) && (line->y1 > -MAXVALUE)){
-				printf("\t<path id=\"dwg-%d\" d=\"M %f,%f %f,%f\" style=\"fill:none;stroke:blue;stroke-width:0.1px\" />\n", i, line->x0, page_height - line->y0, line->x1, page_height - line->y1);
-			} else {
-				bad_lines++;
-			}
+			printf("\t<path id=\"dwg-%d\" d=\"M %f,%f %f,%f\" style=\"fill:none;stroke:blue;stroke-width:0.1px\" />\n", i, line->x0, page_height - line->y0, line->x1, page_height - line->y1);
 		}
-
-
-		if (obj->type == DWG_TYPE_LINE){
-			lines++;
-			Dwg_Entity_LINE* line;
-			line = obj->tio.entity->tio.LINE;
-			if ((line->x0 < MAXVALUE) && (line->x0 > -MAXVALUE) &&
-			    (line->y0 < MAXVALUE) && (line->y0 > -MAXVALUE) &&
-			    (line->x1 < MAXVALUE) && (line->x1 > -MAXVALUE) &&
-			    (line->y1 < MAXVALUE) && (line->y1 > -MAXVALUE)){
-				printf("\t<path id=\"dwg-%d\" d=\"M %f,%f %f,%f\" style=\"fill:none;stroke:blue;stroke-width:0.1px\" />\n", i, line->x0, page_height - line->y0, line->x1, page_height - line->y1);
-			} else {
-				bad_lines++;
-			}
-		}
-
 
 		if (obj->type == DWG_TYPE_CIRCLE){
 			circles++;
 			Dwg_Entity_CIRCLE* circle;
 			circle = obj->tio.entity->tio.CIRCLE;
-			if ((circle->x0 < MAXVALUE) && (circle->x0 > -MAXVALUE) &&
-			    (circle->y0 < MAXVALUE) && (circle->y0 > -MAXVALUE) &&
-			    (circle->radius < MAXVALUE) && (circle->radius > -MAXVALUE)){
-				printf("\t<circle id=\"dwg-%d\" cx=\"%f\" cy=\"%f\" r=\"%f\" fill=\"none\" stroke=\"blue\" stroke-width=\"0.1px\" />\n", i, circle->x0, page_height - circle->y0, circle->radius);
-			} else {
-				bad_circles++;
-			}
+			printf("\t<circle id=\"dwg-%d\" cx=\"%f\" cy=\"%f\" r=\"%f\" fill=\"none\" stroke=\"blue\" stroke-width=\"0.1px\" />\n", i, circle->x0, page_height - circle->y0, circle->radius);
 		}
 
 		if (obj->type == DWG_TYPE_ARC){
 			arcs++;
 			Dwg_Entity_ARC* arc;
 			arc = obj->tio.entity->tio.ARC;
-			if ((arc->x0 < MAXVALUE) && (arc->x0 > -MAXVALUE) &&
-			    (arc->y0 < MAXVALUE) && (arc->y0 > -MAXVALUE) &&
-			    (arc->radius < MAXVALUE) && (arc->radius > -MAXVALUE)){
-				double x_start = arc->x0 + arc->radius * cos(arc->start_angle);
-				double y_start = arc->y0 + arc->radius * sin(arc->start_angle);
-				double x_end = arc->x0 + arc->radius * cos(arc->end_angle);
-				double y_end = arc->y0 + arc->radius * sin(arc->end_angle);
-				//Assuming clockwise arcs.
-				int large_arc = (arc->end_angle - arc->start_angle < 3.1415) ? 0 : 1;
-				printf(	"\t<path id=\"dwg-%d\" d=\"M %f,%f A %f,%f 0 %d 0 %f,%f\" fill=\"none\" stroke=\"blue\" stroke-width=\"%f\" />\n", i, x_start, page_height - y_start, arc->radius, arc->radius, large_arc, x_end, page_height - y_end, 0.1);
-			} else {
-				bad_arcs++;
-			}
+			double x_start = arc->x0 + arc->radius * cos(arc->start_angle);
+			double y_start = arc->y0 + arc->radius * sin(arc->start_angle);
+			double x_end = arc->x0 + arc->radius * cos(arc->end_angle);
+			double y_end = arc->y0 + arc->radius * sin(arc->end_angle);
+			//Assuming clockwise arcs.
+			int large_arc = (arc->end_angle - arc->start_angle < 3.1415) ? 0 : 1;
+			printf(	"\t<path id=\"dwg-%d\" d=\"M %f,%f A %f,%f 0 %d 0 %f,%f\" fill=\"none\" stroke=\"blue\" stroke-width=\"%f\" />\n", i, x_start, page_height - y_start, arc->radius, arc->radius, large_arc, x_end, page_height - y_end, 0.1);
 		}
 
 		if (obj->type == DWG_TYPE_TEXT){
 			texts++;
 			Dwg_Entity_TEXT* text;
 			text = obj->tio.entity->tio.TEXT;
-			if ((text->x0 < MAXVALUE) && (text->x0 > -MAXVALUE) &&
-			    (text->y0 < MAXVALUE) && (text->y0 > -MAXVALUE) && text->text
-/*TODO: Juca, fix it properly: */ && text->text[0] != '&'
-			    ){
-				printf("\t<text id=\"dwg-%d\" x=\"%f\" y=\"%f\" font-family=\"Verdana\" font-size=\"%f\" fill=\"blue\">%s</text>\n", i, text->x0, page_height - text->y0, text->height /* fontsize ? */, text->text);
-			} else {
-				bad_texts++;
+			/*TODO: Juca, fix it properly: */
+			if (text->text[0] != '&'){
+				printf("\t<text id=\"dwg-%d\" x=\"%f\" y=\"%f\" font-family=\"Verdana\" font-size=\"%f\" fill=\"blue\">%s</text>\n", i, text->x0, page_height - text->y0, text->height /* fontsize */, text->text);
 			}
 		}
-
-
 	}
 	printf("</svg>\n");
-	if (lines>0) fprintf(stderr, "%d lines. %d bad lines (%.2f)\n", lines, bad_lines, 100 * ((double) bad_lines)/lines);
-	if (circles>0) fprintf(stderr, "%d circles. %d bad circles (%.2f)\n", circles, bad_circles, 100 * ((double) bad_circles)/circles);
-	if (arcs>0) fprintf(stderr, "%d arcs. %d bad arcs (%.2f)\n", arcs, bad_arcs, 100 * ((double) bad_arcs)/arcs);
-	if (texts>0) fprintf(stderr, "%d texts. %d bad texts (%.2f)\n", texts, bad_texts, 100 * ((double) bad_texts)/texts);
-	fprintf(stderr, "%d bad objects (%.2f)\n", bad_circles + bad_texts + bad_lines + bad_arcs, 100 * ((double) (bad_lines + bad_arcs + bad_circles + bad_lines))/dwg_struct->num_objects);
+	if (lines>0) fprintf(stderr, "Lines: %d ", lines);
+	if (circles>0) fprintf(stderr, "Circles: %d ", circles);
+	if (arcs>0) fprintf(stderr, "Arcs: %d ", arcs);
+	if (texts>0) fprintf(stderr, "Texts: %d ", texts);
+	fprintf(stderr, "\n\n");
 }
