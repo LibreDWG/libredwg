@@ -793,12 +793,12 @@ dwg_decode_handleref (Bit_Chain * dat, Dwg_Object * obj)
 								  (i + 10) * sizeof (Dwg_Handle));
 			if (bit_read_H (dat, &ent->handleref[i]))
 			{
-				fprintf (stderr, "dump: handle: %d.%d.%d\n", ent->handleref[i].code, ent->handleref[i].size, ent->handleref[i].value);
+				fprintf (stderr, "dump: handle: %d.%d.%lu\n", ent->handleref[i].code, ent->handleref[i].size, ent->handleref[i].value);
 				fprintf (stderr, "\tENTITY: Eraro en tiu handle: %lu\n", ent->handle.value);
 				break;
 			}
 
-			fprintf (stderr, "dump: handle: %d.%d.%d\n", ent->handleref[i].code, ent->handleref[i].size, ent->handleref[i].value);
+			fprintf (stderr, "dump: handle: %d.%d.%lu\n", ent->handleref[i].code, ent->handleref[i].size, ent->handleref[i].value);
 
 			if (!(dat->byte == ktl_lastaddress + 1 && dat->bit == 0))
 			{
@@ -825,12 +825,12 @@ dwg_decode_handleref (Bit_Chain * dat, Dwg_Object * obj)
 								  (i + 10) * sizeof (Dwg_Handle));
 			if (bit_read_H (dat, &ord->handleref[i]))
 			{
-				fprintf (stderr, "dump: handle: %d.%d.%d\n", ord->handleref[i].code, ord->handleref[i].size, ord->handleref[i].value);
+				fprintf (stderr, "dump: handle: %d.%d.%lu\n", ord->handleref[i].code, ord->handleref[i].size, ord->handleref[i].value);
 				fprintf (stderr, "\tOBJECT: Eraro en tiu handle: %lu\n", ord->handle.value);
 				break;
 			}
 
-			fprintf (stderr, "dump: handle: %d.%d.%d\n", ord->handleref[i].code, ord->handleref[i].size, ord->handleref[i].value);
+			fprintf (stderr, "dump: handle: %d.%d.%lu\n", ord->handleref[i].code, ord->handleref[i].size, ord->handleref[i].value);
 
 			if (!(dat->byte == ktl_lastaddress + 1 && dat->bit == 0))
 			{
