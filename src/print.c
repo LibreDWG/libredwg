@@ -49,30 +49,30 @@ dwg_print_entity (Dwg_Object_Entity * ent)
 	printf ("Linetype: 0x%02X\n", ent->linetype);
 	printf ("Plot Style: 0x%02X\n", ent->plot_style);
 	printf ("Invisible: 0x%04X\n", ent->invisible);
-	printf ("Linethickness: %u\n", ent->lineweight);
+	printf ("LineThickness: %u\n", ent->lineweight);
 }
 
 void
-dwg_print_object (Dwg_Object_Object *ord)
+dwg_print_object (Dwg_Object_Object *obj)
 {
-	printf ("Bitsize: %lu\n", ord->bitsize);
-	printf ("Handle: %i.%i.%lu\n", ord->handle.code, ord->handle.size,
-		ord->handle.value);
-	printf ("Extended size: %lu B\n", (long unsigned int) ord->extended_size);
-	printf ("Numreactors: %lu\n", ord->num_reactors);
+	printf ("Bitsize: %lu\n", obj->bitsize);
+	printf ("Handle: %i.%i.%lu\n", obj->handle.code, obj->handle.size,
+		obj->handle.value);
+	printf ("Extended size: %lu B\n", (long unsigned int) obj->extended_size);
+	printf ("Numreactors: %lu\n", obj->num_reactors);
 }
 
 
 void
-dwg_print_handleref (Dwg_Object * obj)
+dwg_print_handleref (Dwg_Object * object)
 {
 	unsigned int i;
 
-	if (obj->supertype == DWG_SUPERTYPE_ENTITY)
+	if (object->supertype == DWG_SUPERTYPE_ENTITY)
 	{
 		Dwg_Object_Entity *ent;
 
-		ent = obj->tio.entity;
+		ent = object->tio.entity;
 
 		printf ("\tHandle references (%u): ", ent->num_handles);
 		if (ent->num_handles == 0)
@@ -86,23 +86,23 @@ dwg_print_handleref (Dwg_Object * obj)
 		printf ("%i.%i.%li\n", ent->handleref[i].code, ent->handleref[i].size,
 			ent->handleref[i].value);
 	}
-	else if (obj->supertype == DWG_SUPERTYPE_OBJECT)
+        else if (object->supertype == DWG_SUPERTYPE_OBJECT)
 	{
-		Dwg_Object_Object *ord;
+		Dwg_Object_Object *obj;
 
-		ord = obj->tio.object;
+		obj = object->tio.object;
 
-		printf ("\tHandle references (%u): ", ord->num_handles);
-		if (ord->num_handles == 0)
+		printf ("\tHandle references (%u): ", obj->num_handles);
+		if (obj->num_handles == 0)
 		{
 			puts ("");
 			return;
 		}
-		for (i = 0; i < ord->num_handles - 1; i++)
-			printf ("%i.%i.%li / ", ord->handleref[i].code, ord->handleref[i].size,
-				ord->handleref[i].value);
-		printf ("%i.%i.%li\n", ord->handleref[i].code, ord->handleref[i].size,
-			ord->handleref[i].value);
+		for (i = 0; i < obj->num_handles - 1; i++)
+			printf ("%i.%i.%li / ", obj->handleref[i].code, obj->handleref[i].size,
+				obj->handleref[i].value);
+		printf ("%i.%i.%li\n", obj->handleref[i].code, obj->handleref[i].size,
+			obj->handleref[i].value);
 	}
 }
 
@@ -116,71 +116,71 @@ dwg_print_UNUSED (Dwg_Entity_UNUSED * ent)
 void
 dwg_print_TEXT (Dwg_Entity_TEXT * ent)
 {
-	printf ("\tDatumar-indikilo: 0x%02x\n", ent->dataflags);
+	printf ("\tData flags: 0x%02x\n", ent->dataflags);
 
-	printf ("\tLeviĝo: %1.13g\n", ent->elevation);
-	printf ("\tEnmeta punkto: (%1.13g, %1.13g)\n", ent->x0, ent->y0);
-	printf ("\tEnmeta ĝisrandigo: (%1.13g, %1.13g)\n", ent->alignment.x, ent->alignment.y);
+	printf ("\tElevation: %1.13g\n", ent->elevation);
+	printf ("\tInsertion Point: (%1.13g, %1.13g)\n", ent->x0, ent->y0);
+	printf ("\tAlignment Point: (%1.13g, %1.13g)\n", ent->alignment.x, ent->alignment.y);
 	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
 		ent->extrusion.z);
-	printf ("\tthickness: %1.13g\n", ent->thickness);
-	printf ("\tKlina angulo: %1.13g\n", ent->oblique_ang);
-	printf ("\tTurna angulo: %1.13g\n", ent->rotation_ang);
-	printf ("\tAlteco: %1.13g\n", ent->height);
-	printf ("\tLarĝ-factor: %1.13g\n", ent->width_factor);
-	printf ("\tTeksto: \"%s\"\n", ent->text);
-	printf ("\tGeneracio: %u\n", ent->generation);
-	printf ("\tĜisrandigo (horiz.): %u\n", ent->alignment.h);
-	printf ("\tĜisrandigo (vert.): %u\n", ent->alignment.v);
+	printf ("\tThickness: %1.13g\n", ent->thickness);
+	printf ("\tOblique ang: %1.13g\n", ent->oblique_ang);
+	printf ("\tRotation ang: %1.13g\n", ent->rotation_ang);
+	printf ("\tHeight: %1.13g\n", ent->height);
+	printf ("\tWidth factor: %1.13g\n", ent->width_factor);
+	printf ("\tText: \"%s\"\n", ent->text);
+	printf ("\tGeneration: %u\n", ent->generation);
+	printf ("\tAlignment (horiz.): %u\n", ent->alignment.h);
+	printf ("\tAlignment (vert.): %u\n", ent->alignment.v);
 }
 
 void
 dwg_print_ATTRIB (Dwg_Entity_ATTRIB * ent)
 {
-	printf ("\tDatumar-indikilo: 0x%02x\n", ent->dataflags);
+	printf ("\tData flags: 0x%02x\n", ent->dataflags);
 
-	printf ("\tLeviĝo: %1.13g\n", ent->elevation);
-	printf ("\tEnmeta punkto: (%1.13g, %1.13g)\n", ent->x0, ent->y0);
-	printf ("\tEnmeta ĝisrandigo: (%1.13g, %1.13g)\n", ent->alignment.x, ent->alignment.y);
+	printf ("\tElevation: %1.13g\n", ent->elevation);
+	printf ("\tInsertion Point: (%1.13g, %1.13g)\n", ent->x0, ent->y0);
+	printf ("\tAlignment Point: (%1.13g, %1.13g)\n", ent->alignment.x, ent->alignment.y);
 	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
 		ent->extrusion.z);
-	printf ("\tthickness: %1.13g\n", ent->thickness);
-	printf ("\tKlina angulo: %1.13g\n", ent->oblique_ang);
-	printf ("\tTurna angulo: %1.13g\n", ent->rotation_ang);
-	printf ("\tAlteco: %1.13g\n", ent->height);
-	printf ("\tLarĝ-factor: %1.13g\n", ent->width_factor);
-	printf ("\tTeksto: \"%s\"\n", ent->text);
-	printf ("\tGeneracio: %u\n", ent->generation);
-	printf ("\tĜisrandigo (horiz.): %u\n", ent->alignment.h);
-	printf ("\tĜisrandigo (vert.): %u\n", ent->alignment.v);
-	printf ("\tEtikedo: %s\n", ent->tag);
-	printf ("\tKamp-length: %i (ne uzata)\n", ent->field_length);
-	printf ("\tIndikiloj: 0x%02x\n", ent->flags);
+	printf ("\tThickness: %1.13g\n", ent->thickness);
+	printf ("\tOblique ang: %1.13g\n", ent->oblique_ang);
+	printf ("\tRotation ang: %1.13g\n", ent->rotation_ang);
+	printf ("\tHeight: %1.13g\n", ent->height);
+	printf ("\tWidth factor: %1.13g\n", ent->width_factor);
+	printf ("\tText: \"%s\"\n", ent->text);
+	printf ("\tGeneration: %u\n", ent->generation);
+	printf ("\tAlignment (horiz.): %u\n", ent->alignment.h);
+	printf ("\tAlignment (vert.): %u\n", ent->alignment.v);
+	printf ("\tTag: %s\n", ent->tag);
+	printf ("\tField length: %i (ne uzata)\n", ent->field_length);
+	printf ("\tFlags: 0x%02x\n", ent->flags);
 }
 
 void
 dwg_print_ATTDEF (Dwg_Entity_ATTDEF * ent)
 {
-	printf ("\tDatumar-indikilo: 0x%02x\n", ent->dataflags);
+	printf ("\tData flags: 0x%02x\n", ent->dataflags);
 
-	printf ("\tLeviĝo: %1.13g\n", ent->elevation);
-	printf ("\tEnmeta punkto: (%1.13g, %1.13g)\n", ent->x0, ent->y0);
-	printf ("\tEnmeta ĝisrandigo: (%1.13g, %1.13g)\n", ent->alignment.x, ent->alignment.y);
+	printf ("\tElevation: %1.13g\n", ent->elevation);
+	printf ("\tInsertion Point: (%1.13g, %1.13g)\n", ent->x0, ent->y0);
+	printf ("\tAlignment Point: (%1.13g, %1.13g)\n", ent->alignment.x, ent->alignment.y);
 	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
 		ent->extrusion.z);
-	printf ("\tthickness: %1.13g\n", ent->thickness);
-	printf ("\tKlina angulo: %1.13g\n", ent->oblique_ang);
-	printf ("\tTurna angulo: %1.13g\n", ent->rotation_ang);
-	printf ("\tAlteco: %1.13g\n", ent->height);
-	printf ("\tLarĝ-factor: %1.13g\n", ent->width_factor);
-	printf ("\tTeksto: \"%s\"\n", ent->text);
-	printf ("\tGeneracio: %u\n", ent->generation);
-	printf ("\tĜisrandigo (horiz.): %u\n", ent->alignment.h);
-	printf ("\tĜisrandigo (vert.): %u\n", ent->alignment.v);
-	printf ("\tEtikedo: %s\n", ent->tag);
-	printf ("\tKamp-length: %i (ne uzata)\n", ent->field_length);
-	printf ("\tIndikilo: 0x%02x\n", ent->flags);
-	printf ("\tInvitilo (prompt): %s\n", ent->prompt);
+	printf ("\tThickness: %1.13g\n", ent->thickness);
+	printf ("\tOblique ang: %1.13g\n", ent->oblique_ang);
+	printf ("\tRotation ang: %1.13g\n", ent->rotation_ang);
+	printf ("\tHeight: %1.13g\n", ent->height);
+	printf ("\tWidth factor: %1.13g\n", ent->width_factor);
+	printf ("\tText: \"%s\"\n", ent->text);
+	printf ("\tGeneration: %u\n", ent->generation);
+	printf ("\tAlignment (horiz.): %u\n", ent->alignment.h);
+	printf ("\tAlignment (vert.): %u\n", ent->alignment.v);
+	printf ("\tTag: %s\n", ent->tag);
+	printf ("\tField length: %i\n", ent->field_length);
+	printf ("\tFlags: 0x%02x\n", ent->flags);
+	printf ("\tPrompt (prompt): %s\n", ent->prompt);
 }
 
 void
@@ -202,59 +202,59 @@ dwg_print_SEQEND (Dwg_Entity_SEQEND * ent)
 void
 dwg_print_INSERT (Dwg_Entity_INSERT * ent)
 {
-	printf ("\tEnmeta punkto: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
-	printf ("\tSkal-indikilo: 0x%02x\n", ent->scale_flag);
-	printf ("\tSkalo: (%1.13g, %1.13g, %1.13g)\n", ent->scale.x, ent->scale.y, ent->scale.z);
-	printf ("\tTurna angulo: %1.13g\n", ent->rotation_ang);
+	printf ("\tInsertion Point: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
+	printf ("\tScale flag: 0x%02x\n", ent->scale_flag);
+	printf ("\tScale: (%1.13g, %1.13g, %1.13g)\n", ent->scale.x, ent->scale.y, ent->scale.z);
+	printf ("\tRotation ang: %1.13g\n", ent->rotation_ang);
 	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
 		ent->extrusion.z);
-	printf ("\tĈu kun ATTRIB-oj?: %s\n", ent->has_attribs ? "Yes" : "No");
+	printf ("\tHas attribs?: %s\n", ent->has_attribs ? "Yes" : "No");
 }
 
 void
 dwg_print_MINSERT (Dwg_Entity_MINSERT * ent)
 {
-	printf ("\tEnmeta punkto: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
-	printf ("\tSkal-indikilo: 0x%02x\n", ent->scale_flag);
-	printf ("\tSkalo: (%1.13g, %1.13g, %1.13g)\n", ent->scale.x, ent->scale.y, ent->scale.z);
-	printf ("\tTurna angulo: %1.13g\n", ent->rotation_ang);
+	printf ("\tInsertion Point: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
+	printf ("\tScale flag: 0x%02x\n", ent->scale_flag);
+	printf ("\tScale: (%1.13g, %1.13g, %1.13g)\n", ent->scale.x, ent->scale.y, ent->scale.z);
+	printf ("\tRotation ang: %1.13g\n", ent->rotation_ang);
 	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
 		ent->extrusion.z);
-	printf ("\tĈu kun ATTRIB-oj?: %s\n", ent->has_attribs ? "Yes" : "No");
-	printf ("\tKolumnoj: %02i\tInterspaco: %1.13g\n", ent->column.size, ent->column.dx);
-	printf ("\t  Linioj: %02i\tInterspaco: %1.13g\n", ent->line.size, ent->line.dy);
+	printf ("\tHas attribs?: %s\n", ent->has_attribs ? "Yes" : "No");
+	printf ("\tColumns: %02i\tInterspace: %1.13g\n", ent->column.size, ent->column.dx);
+	printf ("\tLines: %02i\tInterspace: %1.13g\n", ent->line.size, ent->line.dy);
 }
 
 void
 dwg_print_VERTEX_2D (Dwg_Entity_VERTEX_2D * ent)
 {
-	printf ("\tIndikiloj: 0x%02x\n", ent->flags);
-	printf ("\tPunkto: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
-	printf ("\tEklarĝo: %1.13g\n", ent->start_width);
-	printf ("\tFinlarĝo: %1.13g\n", ent->end_width);
-	printf ("\tProtuberanco: %1.13g\n", ent->bulge);
-	printf ("\tTanĝento dir.: %1.13g\n", ent->tangent_dir);
+	printf ("\tFlags: 0x%02x\n", ent->flags);
+	printf ("\tPoint: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
+	printf ("\tStart width: %1.13g\n", ent->start_width);
+	printf ("\tEnd width: %1.13g\n", ent->end_width);
+	printf ("\tBulge: %1.13g\n", ent->bulge);
+	printf ("\tTangent dir.: %1.13g\n", ent->tangent_dir);
 }
 
 void
 dwg_print_VERTEX_3D (Dwg_Entity_VERTEX_3D * ent)
 {
-	printf ("\tIndikiloj: 0x%02x\n", ent->flags);
-	printf ("\tPunkto: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
+	printf ("\tFlags: 0x%02x\n", ent->flags);
+	printf ("\tPoint: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
 }
 
 void
 dwg_print_VERTEX_MESH (Dwg_Entity_VERTEX_MESH * ent)
 {
-	printf ("\tIndikiloj: 0x%02x\n", ent->flags);
-	printf ("\tPunkto: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
+	printf ("\tFlags: 0x%02x\n", ent->flags);
+	printf ("\tPoint: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
 }
 
 void
 dwg_print_VERTEX_PFACE (Dwg_Entity_VERTEX_PFACE * ent)
 {
-	printf ("\tIndikiloj: 0x%02x\n", ent->flags);
-	printf ("\tPunkto: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
+	printf ("\tFlags: 0x%02x\n", ent->flags);
+	printf ("\tPoint: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
 }
 
 void
@@ -269,12 +269,12 @@ dwg_print_VERTEX_PFACE_FACE (Dwg_Entity_VERTEX_PFACE_FACE * ent)
 void
 dwg_print_POLYLINE_2D (Dwg_Entity_POLYLINE_2D * ent)
 {
-	printf ("\tIndikiloj: 0x%02x\n", ent->flags);
-	printf ("\tKurbtype: 0x%02x\n", ent->curve_type);
-	printf ("\tEklarĝo: %1.13g\n", ent->start_width);
-	printf ("\tFinlarĝo: %1.13g\n", ent->end_width);
-	printf ("\tthickness: %1.13g\n", ent->thickness);
-	printf ("\tLeviĝo: %1.13g\n", ent->elevation);
+	printf ("\tFlags: 0x%02x\n", ent->flags);
+	printf ("\tCurve type: 0x%02x\n", ent->curve_type);
+	printf ("\tStart width: %1.13g\n", ent->start_width);
+	printf ("\tEnd width: %1.13g\n", ent->end_width);
+	printf ("\tThickness: %1.13g\n", ent->thickness);
+	printf ("\tElevation: %1.13g\n", ent->elevation);
 	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
 		ent->extrusion.z);
 }
@@ -282,27 +282,27 @@ dwg_print_POLYLINE_2D (Dwg_Entity_POLYLINE_2D * ent)
 void
 dwg_print_POLYLINE_3D (Dwg_Entity_POLYLINE_3D * ent)
 {
-	printf ("\tIndikiloj: 0x%02x / 0x%02x\n", ent->flags_1, ent->flags_2);
+	printf ("\tFlags: 0x%02x / 0x%02x\n", ent->flags_1, ent->flags_2);
 }
 
 void
 dwg_print_ARC (Dwg_Entity_ARC * ent)
 {
-	printf ("\tCentra punkto: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
-	printf ("\tRadiuso: %1.13g\n", ent->radius);
-	printf ("\tthickness: %1.13g\n", ent->thickness);
+	printf ("\tCentral point: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
+	printf ("\tRadius: %1.13g\n", ent->radius);
+	printf ("\tThickness: %1.13g\n", ent->thickness);
 	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
 		ent->extrusion.z);
-	printf ("\tEkangulo: %1.13g\n", ent->start_angle);
-	printf ("\tFinangulo: %1.13g\n", ent->end_angle);
+	printf ("\tStart angle: %1.13g\n", ent->start_angle);
+	printf ("\tEnd angle: %1.13g\n", ent->end_angle);
 }
 
 void
 dwg_print_CIRCLE (Dwg_Entity_CIRCLE * ent)
 {
-	printf ("\tCentra punkto: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
-	printf ("\tRadiuso: %1.13g\n", ent->radius);
-	printf ("\tthickness: %1.13g\n", ent->thickness);
+	printf ("\tCentral point: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
+	printf ("\tRadius: %1.13g\n", ent->radius);
+	printf ("\tThickness: %1.13g\n", ent->thickness);
 	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
 		ent->extrusion.z);
 }
@@ -310,12 +310,12 @@ dwg_print_CIRCLE (Dwg_Entity_CIRCLE * ent)
 void
 dwg_print_LINE (Dwg_Entity_LINE * ent)
 {
-	printf ("\tĈu nur 2D?: %s\n", ent->Zs_are_zero ? "Yes" : "No");
-	printf ("\t1-a punkto: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0,
+	printf ("\tz's are zero?: %s\n", ent->Zs_are_zero ? "Yes" : "No");
+	printf ("\t1st point: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0,
 		ent->Zs_are_zero ? 0 : ent->z0);
-	printf ("\t2-a punkto: (%1.13g, %1.13g, %1.13g)\n", ent->x1, ent->y1,
+	printf ("\t2nd point: (%1.13g, %1.13g, %1.13g)\n", ent->x1, ent->y1,
 		ent->Zs_are_zero ? 0 : ent->z1);
-	printf ("\tthickness: %1.13g\n", ent->thickness);
+	printf ("\tThickness: %1.13g\n", ent->thickness);
 	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
 		ent->extrusion.z);
 }
@@ -372,11 +372,11 @@ dwg_print_DIMENSION_DIAMETER (Dwg_Entity_DIMENSION_DIAMETER * ent)
 void
 dwg_print_POINT (Dwg_Entity_POINT *ent)
 {
-	printf ("\tPunkto: (%1.13g, %1.13g, %1.13g)\n", ent->x, ent->y, ent->z);
-	printf ("\tthickness: %1.13g\n", ent->thickness);
+	printf ("\tPoint: (%1.13g, %1.13g, %1.13g)\n", ent->x, ent->y, ent->z);
+	printf ("\tThickness: %1.13g\n", ent->thickness);
 	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
 		ent->extrusion.z);
-	printf ("\tX-angulo: %1.13g\n", ent->x_ang);
+	printf ("\tX-angle: %1.13g\n", ent->x_ang);
 }
 
 void
@@ -431,13 +431,13 @@ dwg_print_VIEWPORT (Dwg_Entity_VIEWPORT * ent)
 void
 dwg_print_ELLIPSE (Dwg_Entity_ELLIPSE *ent)
 {
-	printf ("\tCentra punkto: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
-	printf ("\tDuonĉef-aksa vektoro: (%1.13g, %1.13g, %1.13g)\n", ent->x1, ent->y1, ent->z1);
+	printf ("\tCentral point: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
+	printf ("\tSemi-major axis: (%1.13g, %1.13g, %1.13g)\n", ent->x1, ent->y1, ent->z1);
 	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y,
 		ent->extrusion.z);
-	printf ("\tRadius-proporcion: %1.13g\n", ent->axis_ratio);
-	printf ("\tEkangulo: %1.13g\n", ent->start_angle);
-	printf ("\tFinangulo: %1.13g\n", ent->end_angle);
+	printf ("\tRadius-ratio: %1.13g\n", ent->axis_ratio);
+	printf ("\tStart angle: %1.13g\n", ent->start_angle);
+	printf ("\tEnd angle: %1.13g\n", ent->end_angle);
 }
 
 void
@@ -471,15 +471,15 @@ dwg_print_BODY (Dwg_Entity_BODY * ent)
 void
 dwg_print_RAY (Dwg_Entity_RAY *ent)
 {
-	printf ("\tPunkto: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
-	printf ("\tVektoro: (%1.13g, %1.13g, %1.13g)\n", ent->x1, ent->y1, ent->z1);
+	printf ("\tPoint: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
+	printf ("\tVector: (%1.13g, %1.13g, %1.13g)\n", ent->x1, ent->y1, ent->z1);
 }
 
 void
 dwg_print_XLINE (Dwg_Entity_XLINE * ent)
 {
-	printf ("\tPunkto: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
-	printf ("\tVektoro: (%1.13g, %1.13g, %1.13g)\n", ent->x1, ent->y1, ent->z1);
+	printf ("\tPoint: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
+	printf ("\tVector: (%1.13g, %1.13g, %1.13g)\n", ent->x1, ent->y1, ent->z1);
 }
 
 void
@@ -552,68 +552,68 @@ dwg_print_BLOCK_CONTROL (Dwg_Object_BLOCK_CONTROL *obj)
 }
 
 void
-dwg_print_LAYER (Dwg_Object_LAYER *ord)
+dwg_print_LAYER (Dwg_Object_LAYER *obj)
 {
-	printf ("\tName: %s\n", ord->name);
-	printf ("\tĈu 64?: %s\n", ord->bit64 ? "Yes" : "No");
-	printf ("\tIndico Xref: %u\n", ord->xrefi);
-	printf ("\tXref-dependa?: %s\n", ord->xrefdep ? "Yes" : "No");
-	printf ("\tEcoj: 0x%0x\n", ord->ecoj);
-	printf ("\tKoloro: %u\n", ord->colour);
+	printf ("\tName: %s\n", obj->name);
+	printf ("\tIs 64?: %s\n", obj->bit64 ? "Yes" : "No");
+	printf ("\tXref index: %u\n", obj->xrefi);
+	printf ("\tXref dependant?: %s\n", obj->xrefdep ? "Yes" : "No");
+	printf ("\tValues: 0x%0x\n", obj->values);
+	printf ("\tColour: %u\n", obj->colour);
 }
 
 void
-dwg_print_LAYOUT (Dwg_Object_LAYOUT *ord)
+dwg_print_LAYOUT (Dwg_Object_LAYOUT *obj)
 {
-	printf ("\tAgord-name: %s\n", ord->page.agordo);
-	printf ("\tPrintilo: %s\n", ord->page.printilo);
-	printf ("\tPrint-flags: 0x%0x\n", ord->page.flags);
+	printf ("\tAgord-name: %s\n", obj->page.agordo);
+	printf ("\tPrintilo: %s\n", obj->page.printilo);
+	printf ("\tPrint-flags: 0x%0x\n", obj->page.flags);
 	printf ("\tMarĝenoj. maldekstre: %1.13g; malsupre: %1.13g; dekstre: %1.13g; supre: %1.13g\n",
-		ord->page.maldekstre,
-		ord->page.malsupre,
-		ord->page.dekstre,
-		ord->page.supre);
-	printf ("\tLargxeco: %1.13g\n", ord->page.width);
-	printf ("\tAlteco: %1.13g\n", ord->page.height);
-	printf ("\tSize: %s\n", ord->page.size);
-	printf ("\tDeŝovo: (%1.13g, %1.13g)\n", ord->page.dx, ord->page.dy);
-	printf ("\tUnuoj: %u\n", ord->page.unuoj);
-	printf ("\tRotacio: %u\n", ord->page.rotacio);
-	printf ("\tType: %u\n", ord->page.type);
+		obj->page.maldekstre,
+		obj->page.malsupre,
+		obj->page.dekstre,
+		obj->page.supre);
+	printf ("\tLargxeco: %1.13g\n", obj->page.width);
+	printf ("\tHeight: %1.13g\n", obj->page.height);
+	printf ("\tSize: %s\n", obj->page.size);
+	printf ("\tDeŝovo: (%1.13g, %1.13g)\n", obj->page.dx, obj->page.dy);
+	printf ("\tUnuoj: %u\n", obj->page.unuoj);
+	printf ("\tRotacio: %u\n", obj->page.rotacio);
+	printf ("\tType: %u\n", obj->page.type);
 	printf ("\tPrint-limoj: (%1.13g, %1.13g) / (%1.13g, %1.13g)\n",
-		ord->page.x_min,
-		ord->page.y_min,
-		ord->page.x_max,
-		ord->page.y_max);
-	printf ("\tPaĝ-name: %s\n", ord->page.name);
-	printf ("\tSkal-proporcio: %u:%u\n", (unsigned int) ord->page.scale.A, (unsigned int) ord->page.scale.B);
-	printf ("\tStilfolio: %s\n", ord->page.stilfolio);
-	printf ("\tSkal-type: %u\n", ord->page.scale.type);
-	printf ("\tSkal-factor: %u\n", (unsigned int) ord->page.scale.factor);
-	printf ("\tPaĝ-origino: (%1.13g, %1.13g)\n", ord->page.x0, ord->page.y0);
+		obj->page.x_min,
+		obj->page.y_min,
+		obj->page.x_max,
+		obj->page.y_max);
+	printf ("\tPaĝ-name: %s\n", obj->page.name);
+	printf ("\tSkal-proporcio: %u:%u\n", (unsigned int) obj->page.scale.A, (unsigned int) obj->page.scale.B);
+	printf ("\tStilfolio: %s\n", obj->page.stilfolio);
+	printf ("\tSkal-type: %u\n", obj->page.scale.type);
+	printf ("\tSkal-factor: %u\n", (unsigned int) obj->page.scale.factor);
+	printf ("\tPaĝ-origino: (%1.13g, %1.13g)\n", obj->page.x0, obj->page.y0);
 	puts ("");
-	printf ("\tAranĝ-name: %s\n", ord->name);
-	printf ("\tOrdo: %u\n", ord->ordo);
-	printf ("\tIndikiloj: 0x%0x\n", ord->flags);
-	printf ("\tUCS-origino: (%1.13g, %1.13g, %1.13g)\n", ord->x0, ord->y0, ord->z0);
+	printf ("\tAranĝ-name: %s\n", obj->name);
+	printf ("\tOrdo: %u\n", obj->ordo);
+	printf ("\tFlags: 0x%0x\n", obj->flags);
+	printf ("\tUCS-origino: (%1.13g, %1.13g, %1.13g)\n", obj->x0, obj->y0, obj->z0);
 	printf ("\tAranĝ-limoj: (%1.13g, %1.13g) / (%1.13g, %1.13g)\n",
-		ord->x_min,
-		ord->y_min,
-		ord->x_max,
-		ord->y_max);
-	printf ("\tEnmeto: (%1.13g, %1.13g, %1.13g)\n", ord->enmeto.x0, ord->enmeto.y0, ord->enmeto.z0);
-	printf ("\tUCS-axis_X: (%1.13g, %1.13g, %1.13g)\n", ord->axis_X.x0, ord->axis_X.y0, ord->axis_X.z0);
-	printf ("\tUCS-axis_Y: (%1.13g, %1.13g, %1.13g)\n", ord->axis_Y.x0, ord->axis_Y.y0, ord->axis_Y.z0);
-	printf ("\tLevigxo: %1.13g\n", ord->elevation);
-	printf ("\tRigard-type: %u\n", ord->rigardtype);
+		obj->x_min,
+		obj->y_min,
+		obj->x_max,
+		obj->y_max);
+	printf ("\tEnmeto: (%1.13g, %1.13g, %1.13g)\n", obj->enmeto.x0, obj->enmeto.y0, obj->enmeto.z0);
+	printf ("\tUCS-axis_X: (%1.13g, %1.13g, %1.13g)\n", obj->axis_X.x0, obj->axis_X.y0, obj->axis_X.z0);
+	printf ("\tUCS-axis_Y: (%1.13g, %1.13g, %1.13g)\n", obj->axis_Y.x0, obj->axis_Y.y0, obj->axis_Y.z0);
+	printf ("\tLevigxo: %1.13g\n", obj->elevation);
+	printf ("\tRigard-type: %u\n", obj->rigardtype);
 	printf ("\tMinimumo: (%1.13g, %1.13g, %1.13g)\n",
-		ord->limo.x_min,
-		ord->limo.y_min,
-		ord->limo.z_min);
+		obj->limo.x_min,
+		obj->limo.y_min,
+		obj->limo.z_min);
 	printf ("\tMaksimumo: (%1.13g, %1.13g, %1.13g)\n",
-		ord->limo.x_max,
-		ord->limo.y_max,
-		ord->limo.z_max);
+		obj->limo.x_max,
+		obj->limo.y_max,
+		obj->limo.z_max);
 }
 
 /*------------------------------------------------------------------------------

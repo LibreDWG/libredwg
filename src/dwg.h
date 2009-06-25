@@ -1519,7 +1519,7 @@ extern "C"
 		unsigned char bit64;
 		unsigned int xrefi;
 		unsigned char xrefdep;
-		unsigned int ecoj;
+		unsigned int values;
 		unsigned int colour;
 	} Dwg_Object_LAYER;
 

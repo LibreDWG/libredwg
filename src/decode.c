@@ -2602,7 +2602,7 @@ dwg_decode_LAYER (Bit_Chain * dat, Dwg_Object * obj)
 	ord->bit64 = bit_read_B (dat);
 	ord->xrefi = bit_read_BS (dat);
 	ord->xrefdep = bit_read_B (dat);
-	ord->ecoj = bit_read_BS (dat);
+	ord->values = bit_read_BS (dat);
 	ord->colour = bit_read_BS (dat);
 
 	dwg_decode_handleref (dat, obj);
