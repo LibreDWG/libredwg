@@ -612,7 +612,7 @@ dwg_encode_entity (Dwg_Object * obj, Bit_Chain * dat)
 	bit_write_BB (dat, est->regime);
 	bit_write_BL (dat, est->num_reactors);
 	bit_write_B (dat, est->nolinks);
-	bit_write_BS (dat, est->colour);
+	bit_write_CMC (dat, est->color);
 	bit_write_BD (dat, est->linetype_scale);
 	bit_write_BB (dat, est->linetype);
 	bit_write_BB (dat, est->plot_style);

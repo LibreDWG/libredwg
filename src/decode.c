@@ -681,7 +681,7 @@ dwg_decode_entity (Bit_Chain * dat, Dwg_Object_Entity * ent)
 	}
 
 	ent->nolinks = bit_read_B (dat);
-	ent->colour = bit_read_CMC (dat);
+	bit_read_CMC (dat, &ent->color);
 	ent->linetype_scale = bit_read_BD (dat);
 
 	if (dat->version >= R_2000){

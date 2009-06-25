@@ -2083,7 +2083,7 @@ extern "C"
 		unsigned char xdict_missing_flag;
 		unsigned char isbylayerlt; 
 		unsigned char nolinks;
-		unsigned int colour;
+		Dwg_Color color;
 		double linetype_scale;
 		unsigned char linetype;
 		unsigned char plot_style;

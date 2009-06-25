@@ -24,6 +24,11 @@
  * Private functions
  */
 
+void dwg_print_CMC(Dwg_Color color){
+	printf ("Color:\n\tindex: %u\n", color.index);
+//TODO: detect other versions
+}
+
 void
 dwg_print_entity (Dwg_Object_Entity * ent)
 {
@@ -39,7 +44,7 @@ dwg_print_entity (Dwg_Object_Entity * ent)
 	printf ("Regime: %i\n", ent->regime);
 	printf ("Numreactors: %lu\n", ent->num_reactors);
 	printf ("No links?: %s\n", ent->nolinks ? "Yes" : "No");
-	printf ("Colour: %u\n", ent->colour);
+	dwg_print_CMC (ent->color);
 	printf ("Linetype scale: %1.13g\n", ent->linetype_scale);
 	printf ("Linetype: 0x%02X\n", ent->linetype);
 	printf ("Plot Style: 0x%02X\n", ent->plot_style);
