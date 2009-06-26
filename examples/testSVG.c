@@ -22,8 +22,8 @@
 #include <unistd.h>
 #include <math.h>
 
-#include "bits.h"
-#include "dwg.h"
+#include "../src/bits.h"
+#include <dwg.h>
 
 int test_SVG (char *filename);
 void output_SVG(Dwg_Structure* dwg_struct);

@@ -21,9 +21,9 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "bits.h"
-#include "common.h"
-#include "dwg.h"
+#include "../src/bits.h"
+#include "../src/common.h"
+#include <dwg.h>
 
 int test_dwg_c (char *filename);
 void test_map_R2000();

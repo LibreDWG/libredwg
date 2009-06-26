@@ -1,4 +1,10 @@
-check_PROGRAMS = load_dwg get_bmp dwg_ps
+check_PROGRAMS = load_dwg get_bmp dwg_ps test testSVG
+
+test_SOURCES = test.c
+test_LDADD = -lredwg
+
+testSVG_SOURCES = testSVG.c
+testSVG_LDADD   = -lredwg -lm
 
 load_dwg_SOURCES = load_dwg.c
 load_dwg_LDADD = -lredwg

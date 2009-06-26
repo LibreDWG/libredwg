@@ -31,7 +31,8 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-check_PROGRAMS = load_dwg$(EXEEXT) get_bmp$(EXEEXT) dwg_ps$(EXEEXT)
+check_PROGRAMS = load_dwg$(EXEEXT) get_bmp$(EXEEXT) dwg_ps$(EXEEXT) \
+	test$(EXEEXT) testSVG$(EXEEXT)
 subdir = examples
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -51,6 +52,12 @@ get_bmp_DEPENDENCIES =
 am_load_dwg_OBJECTS = load_dwg.$(OBJEXT)
 load_dwg_OBJECTS = $(am_load_dwg_OBJECTS)
 load_dwg_DEPENDENCIES =
+am_test_OBJECTS = test.$(OBJEXT)
+test_OBJECTS = $(am_test_OBJECTS)
+test_DEPENDENCIES =
+am_testSVG_OBJECTS = testSVG.$(OBJEXT)
+testSVG_OBJECTS = $(am_testSVG_OBJECTS)
+testSVG_DEPENDENCIES =
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/build/depcomp
 am__depfiles_maybe = depfiles
@@ -63,9 +70,10 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(dwg_ps_SOURCES) $(get_bmp_SOURCES) $(load_dwg_SOURCES)
+SOURCES = $(dwg_ps_SOURCES) $(get_bmp_SOURCES) $(load_dwg_SOURCES) \
+	$(test_SOURCES) $(testSVG_SOURCES)
 DIST_SOURCES = $(dwg_ps_SOURCES) $(get_bmp_SOURCES) \
-	$(load_dwg_SOURCES)
+	$(load_dwg_SOURCES) $(test_SOURCES) $(testSVG_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -180,6 +188,10 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+test_SOURCES = test.c
+test_LDADD = -lredwg
+testSVG_SOURCES = testSVG.c
+testSVG_LDADD = -lredwg -lm
 load_dwg_SOURCES = load_dwg.c
 load_dwg_LDADD = -lredwg
 get_bmp_SOURCES = get_bmp.c
@@ -237,6 +249,12 @@ get_bmp$(EXEEXT): $(get_bmp_OBJECTS) $(get_bmp_DEPENDENCIES)
 load_dwg$(EXEEXT): $(load_dwg_OBJECTS) $(load_dwg_DEPENDENCIES) 
 	@rm -f load_dwg$(EXEEXT)
 	$(LINK) $(load_dwg_OBJECTS) $(load_dwg_LDADD) $(LIBS)
+test$(EXEEXT): $(test_OBJECTS) $(test_DEPENDENCIES) 
+	@rm -f test$(EXEEXT)
+	$(LINK) $(test_OBJECTS) $(test_LDADD) $(LIBS)
+testSVG$(EXEEXT): $(testSVG_OBJECTS) $(testSVG_DEPENDENCIES) 
+	@rm -f testSVG$(EXEEXT)
+	$(LINK) $(testSVG_OBJECTS) $(testSVG_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -247,6 +265,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dwg_ps.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/get_bmp.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/load_dwg.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/testSVG.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
