@@ -1944,9 +1944,16 @@ dwg_encode_XLINE (Dwg_Entity_XLINE *ent, Bit_Chain * dat)
 }
 
 static void
-dwg_encode_DICTIONARY (Dwg_Object_DICTIONARY *ent, Bit_Chain * dat)
+dwg_encode_DICTIONARY (Dwg_Object_DICTIONARY *obj, Bit_Chain * dat)
 {
-    //Implement-me!
+	int i;
+	bit_write_BS (dat, obj->size);
+	if (obj->size > 10000)
+		fprintf (stderr, "Strange: dictionary with more than 10 thousand entries! Size: %u\n", obj->size);
+	bit_write_BS (dat, obj->cloning);
+	bit_write_RC (dat, obj->hard_owner);
+	for (i = 0; i < obj->size; i++)
+		bit_write_T (dat, obj->name[i]);
 }
 
 static void
