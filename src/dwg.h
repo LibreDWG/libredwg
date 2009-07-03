@@ -504,8 +504,8 @@ extern "C"
                 double ins_rotation;
                 unsigned int attachment_point;
                 unsigned int lspace_style;
-                unsigned int lspace_factor;
-                unsigned int act_measurement;
+                double lspace_factor;
+                double act_measurement;
                 unsigned char unknown;
                 unsigned char flip_arrow1;
                 unsigned char flip_arrow2;
@@ -566,8 +566,8 @@ extern "C"
                 double ins_rotation;
                 unsigned int attachment_point;
                 unsigned int lspace_style;
-                unsigned int lspace_factor;
-                unsigned int act_measurement;
+                double lspace_factor;
+                double act_measurement;
                 unsigned char unknown;
                 unsigned char flip_arrow1;
                 unsigned char flip_arrow2;
@@ -629,8 +629,8 @@ extern "C"
                 double ins_rotation;
                 unsigned int attachment_point;
                 unsigned int lspace_style;
-                unsigned int lspace_factor;
-                unsigned int act_measurement;
+                double lspace_factor;
+                double act_measurement;
                 unsigned char unknown;
                 unsigned char flip_arrow1;
                 unsigned char flip_arrow2;
@@ -691,8 +691,8 @@ extern "C"
                 double ins_rotation;
                 unsigned int attachment_point;
                 unsigned int lspace_style;
-                unsigned int lspace_factor;
-                unsigned int act_measurement;
+                double lspace_factor;
+                double act_measurement;
                 unsigned char unknown;
                 unsigned char flip_arrow1;
                 unsigned char flip_arrow2;
@@ -759,8 +759,8 @@ extern "C"
                 double ins_rotation;
                 unsigned int attachment_point;
                 unsigned int lspace_style;
-                unsigned int lspace_factor;
-                unsigned int act_measurement;
+                double lspace_factor;
+                double act_measurement;
                 unsigned char unknown;
                 unsigned char flip_arrow1;
                 unsigned char flip_arrow2;
@@ -831,8 +831,8 @@ extern "C"
                 double ins_rotation;
                 unsigned int attachment_point;
                 unsigned int lspace_style;
-                unsigned int lspace_factor;
-                unsigned int act_measurement;
+                double lspace_factor;
+                double act_measurement;
                 unsigned char unknown;
                 unsigned char flip_arrow1;
                 unsigned char flip_arrow2;
@@ -887,8 +887,8 @@ extern "C"
                 double ins_rotation;
                 unsigned int attachment_point;
                 unsigned int lspace_style;
-                unsigned int lspace_factor;
-                unsigned int act_measurement;
+                double lspace_factor;
+                double act_measurement;
                 unsigned char unknown;
                 unsigned char flip_arrow1;
                 unsigned char flip_arrow2;
@@ -1248,36 +1248,123 @@ extern "C"
         double knot_tol;
         double ctrl_tol;
         unsigned int num_fit_pts;
-	Dwg_Entity_SPLINE_point* fit_pts;
+	    Dwg_Entity_SPLINE_point* fit_pts;
         unsigned int num_knots;
         double* knots;
         unsigned int num_ctrl_pts;
-	Dwg_Entity_SPLINE_control_point* ctrl_pts;
+	    Dwg_Entity_SPLINE_control_point* ctrl_pts;
 } Dwg_Entity_SPLINE;
 
 /**
  Struct for 3DSOLID (37)
  */
+	typedef struct _dwg_entity_3DSOLID_wire
+	{
+		unsigned char type;
+		long unsigned int selection_marker;
+		unsigned int color;
+		long unsigned int acis_index;
+		long unsigned int num_points;
+		struct
+		{
+			double x;
+			double y;
+			double z;
+		} point;
+		unsigned int transform_present;
+		struct
+		{
+			double x;
+			double y;
+			double z;
+		} axis_x;
+		struct
+		{
+			double x;
+			double y;
+			double z;
+		} axis_y;
+		struct
+		{
+			double x;
+			double y;
+			double z;
+		} axis_z;
+		struct
+		{
+			double x;
+			double y;
+			double z;
+		} translation;
+		double scale;
+		unsigned int has_rotation;
+		unsigned int has_reflection;
+		unsigned int has_shear;
+	} Dwg_Entity_3DSOLID_wire;
+
+	typedef struct _dwg_entity_3DSOLID_silhouette
+	{
+		unsigned long vp_id;
+		struct
+		{
+			double x;
+			double y;
+			double z;
+		} vp_target;
+		struct
+		{
+			double x;
+			double y;
+			double z;
+		} dir_target;
+		struct
+		{
+			double x;
+			double y;
+			double z;
+		} up_dir;
+		unsigned long num_wires;
+		Dwg_Entity_3DSOLID_wire * wires;
+	} Dwg_Entity_3DSOLID_silhouette;
+		
+
 	typedef struct _dwg_entity_3DSOLID
 	{
-//TODO
+		unsigned char acis_empty;
+		unsigned char unknown;
+		unsigned int version;
+		long unsigned int block_size;
+		unsigned char ** sat_data;
+		unsigned char * acis_data;
+		unsigned int acis_data_size;
+		unsigned int wireframe_data_present;
+		unsigned int point_present;
+		struct
+		{
+			double x;
+			double y;
+			double z;
+		} point;
+		unsigned long num_isolines;
+		unsigned int isoline_present;
+		unsigned int num_wires;
+		Dwg_Entity_3DSOLID_wire * wires;
+		unsigned long num_silhouettes;
+		Dwg_Entity_3DSOLID_silhouette * silhouettes;
+		//TODO review spec - extremely fuzzy
+		unsigned int acis_empty2;
+		long unsigned int unknown2007;
 	} Dwg_Entity_3DSOLID;
 
 /**
  Struct for REGION (38)
  */
-	typedef struct _dwg_entity_REGION
-	{
-//TODO
-	} Dwg_Entity_REGION;
+	typedef Dwg_Entity_3DSOLID Dwg_Entity_REGION;
 
 /**
  Struct for BODY (39)
  */
-	typedef struct _dwg_entity_BODY
-	{
-//TODO
-	} Dwg_Entity_BODY;
+	typedef Dwg_Entity_3DSOLID Dwg_Entity_BODY;
 
 /**
  Struct for ray - RAY (40)
@@ -2052,8 +2139,8 @@ extern "C"
 			Dwg_Entity_VIEWPORT *VIEWPORT;
 			Dwg_Entity_ELLIPSE *ELLIPSE;
 			Dwg_Entity_SPLINE *SPLINE;
-			Dwg_Entity_REGION *REGION;
 			Dwg_Entity_3DSOLID *_3DSOLID;
+			Dwg_Entity_REGION *REGION;
 			Dwg_Entity_BODY *BODY;
 			Dwg_Entity_RAY *RAY;
 			Dwg_Entity_XLINE *XLINE;

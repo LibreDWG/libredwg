@@ -323,50 +323,355 @@ dwg_print_LINE (Dwg_Entity_LINE * ent)
 void
 dwg_print_DIMENSION_ORDINATE (Dwg_Entity_DIMENSION_ORDINATE * ent)
 {
-    //TODO: implement me!
-    puts("print not implemented!");
+	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y, ent->extrusion.z);
+	printf ("\tText midpt: (%1.13g, %1.13g)\n", ent->x0, ent->y0);
+
+	if (ent->elevation.ecs_11 != ent->elevation.ecs_12){
+		fprintf(stderr, "encode_DIMENSION_ORDINARY: Maybe there is something wrong here. Elevation values should be all the same.\n");
+	}
+	printf ("\tElevation: %1.13g\n", ent->elevation.ecs_11);
+
+	//spec: flag bit 6 indicates ORDINATE dimension
+	printf ("\tFlags1: 0x%02x\n", ent->flags_1);
+	printf ("\tUser text: %s\n", ent->user_text);
+	printf ("\tText rot: %1.13g\n", ent->text_rot);
+	printf ("\tHoriz dir: %1.13g\n", ent->horiz_dir);
+	printf ("\tIns X-scale: %1.13g\n", ent->ins_scale.x);
+	printf ("\tIns Y-scale: %1.13g\n", ent->ins_scale.y);
+	printf ("\tIns Z-scale: %1.13g\n", ent->ins_scale.z);
+	printf ("\tIns rotation: %1.13g\n", ent->ins_rotation);
+
+	//if(dat->version >= R_2000){
+		printf("\tAttachment point: %u", ent->attachment_point);
+		printf("\tLspace style: %u", ent->lspace_style);
+		printf ("\tLspace factor: %1.13g\n", ent->lspace_factor);
+		printf ("\tAct measurement: %1.13g\n", ent->act_measurement);
+	//}
+
+	/*
+	if(dat->version >= R_2007){
+		printf("\tUnknown: %u", (int)ent->unknown);
+	    printf("\tFlip arrow1: %u", (int)ent->flip_arrow1);
+	    printf("\tFlip arrow2: %u", (int)ent->flip_arrow2);
+	}
+	*/
+
+	printf ("\t12 x: %1.13g\n", ent->_12_pt.x);
+	printf ("\t12 y: %1.13g\n", ent->_12_pt.y);
+	printf ("\t10 x: %1.13g\n", ent->_10_pt.x);
+	printf ("\t10 y: %1.13g\n", ent->_10_pt.y);
+	printf ("\t10 z: %1.13g\n", ent->_10_pt.z);
+	printf ("\t13 x: %1.13g\n", ent->_13_pt.x);
+	printf ("\t13 y: %1.13g\n", ent->_13_pt.y);
+	printf ("\t13 z: %1.13g\n", ent->_13_pt.z);
+	printf ("\t14 x: %1.13g\n", ent->_14_pt.x);
+	printf ("\t14 y: %1.13g\n", ent->_14_pt.y);
+	printf ("\t14 z: %1.13g\n", ent->_14_pt.z);
+
+	printf ("\tFlags2: 0x%02x\n", ent->flags_2);
 }
 
 void
 dwg_print_DIMENSION_LINEAR (Dwg_Entity_DIMENSION_LINEAR * ent)
 {
-    //TODO: implement me!
-    puts("print not implemented!");
+	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y, ent->extrusion.z);
+	printf ("\tText midpt: (%1.13g, %1.13g)\n", ent->x0, ent->y0);
+
+	if (ent->elevation.ecs_11 != ent->elevation.ecs_12){
+		fprintf(stderr, "encode_DIMENSION_ORDINARY: Maybe there is something wrong here. Elevation values should be all the same.\n");
+	}
+	printf ("\tElevation: %1.13g\n", ent->elevation.ecs_11);
+
+	//spec: flag bit 6 indicates ORDINATE dimension
+	printf ("\tFlags: 0x%02x\n", ent->flags);
+	printf ("\tUser text: %s\n", ent->user_text);
+	printf ("\tText rot: %1.13g\n", ent->text_rot);
+	printf ("\tHoriz dir: %1.13g\n", ent->horiz_dir);
+	printf ("\tIns X-scale: %1.13g\n", ent->ins_scale.x);
+	printf ("\tIns Y-scale: %1.13g\n", ent->ins_scale.y);
+	printf ("\tIns Z-scale: %1.13g\n", ent->ins_scale.z);
+	printf ("\tIns rotation: %1.13g\n", ent->ins_rotation);
+
+	//if(dat->version >= R_2000){
+		printf("\tAttachment point: %u", ent->attachment_point);
+		printf("\tLspace style: %u", ent->lspace_style);
+		printf ("\tLspace factor: %1.13g\n", ent->lspace_factor);
+		printf ("\tAct measurement: %1.13g\n", ent->act_measurement);
+	//}
+
+	/*
+	if(dat->version >= R_2007){
+		printf("\tUnknown: %u", (int)ent->unknown);
+	    printf("\tFlip arrow1: %u", (int)ent->flip_arrow1);
+	    printf("\tFlip arrow2: %u", (int)ent->flip_arrow2);
+	}
+	*/
+
+	printf ("\t12 x: %1.13g\n", ent->_12_pt.x);
+	printf ("\t12 y: %1.13g\n", ent->_12_pt.y);
+	printf ("\t13 x: %1.13g\n", ent->_13_pt.x);
+	printf ("\t13 y: %1.13g\n", ent->_13_pt.y);
+	printf ("\t13 z: %1.13g\n", ent->_13_pt.z);
+	printf ("\t14 x: %1.13g\n", ent->_14_pt.x);
+	printf ("\t14 y: %1.13g\n", ent->_14_pt.y);
+	printf ("\t14 z: %1.13g\n", ent->_14_pt.z);
+	printf ("\t10 x: %1.13g\n", ent->_10_pt.x);
+	printf ("\t10 y: %1.13g\n", ent->_10_pt.y);
+	printf ("\t10 z: %1.13g\n", ent->_10_pt.z);
+
+	printf ("\tExtension line rotation ln rot: %1.13g\n", ent->ext_line_rot);
+	printf ("\tLinear dimension rotation: %1.13g\n", ent->dim_rot);
 }
 
 void
 dwg_print_DIMENSION_ALIGNED (Dwg_Entity_DIMENSION_ALIGNED * ent)
 {
-    //TODO: implement me!
-    puts("print not implemented!");
+	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y, ent->extrusion.z);
+	printf ("\tText midpt: (%1.13g, %1.13g)\n", ent->x0, ent->y0);
+
+	if (ent->elevation.ecs_11 != ent->elevation.ecs_12){
+		fprintf(stderr, "encode_DIMENSION_ORDINARY: Maybe there is something wrong here. Elevation values should be all the same.\n");
+	}
+	printf ("\tElevation: %1.13g\n", ent->elevation.ecs_11);
+
+	//spec: flag bit 6 indicates ORDINATE dimension
+	printf ("\tFlags: 0x%02x\n", ent->flags);
+	printf ("\tUser text: %s\n", ent->user_text);
+	printf ("\tText rot: %1.13g\n", ent->text_rot);
+	printf ("\tHoriz dir: %1.13g\n", ent->horiz_dir);
+	printf ("\tIns X-scale: %1.13g\n", ent->ins_scale.x);
+	printf ("\tIns Y-scale: %1.13g\n", ent->ins_scale.y);
+	printf ("\tIns Z-scale: %1.13g\n", ent->ins_scale.z);
+	printf ("\tIns rotation: %1.13g\n", ent->ins_rotation);
+
+	//if(dat->version >= R_2000){
+		printf("\tAttachment point: %u", ent->attachment_point);
+		printf("\tLspace style: %u", ent->lspace_style);
+		printf ("\tLspace factor: %1.13g\n", ent->lspace_factor);
+		printf ("\tAct measurement: %1.13g\n", ent->act_measurement);
+	//}
+
+	/*
+	if(dat->version >= R_2007){
+		printf("\tUnknown: %u", (int)ent->unknown);
+	    printf("\tFlip arrow1: %u", (int)ent->flip_arrow1);
+	    printf("\tFlip arrow2: %u", (int)ent->flip_arrow2);
+	}
+	*/
+
+	printf ("\t12 x: %1.13g\n", ent->_12_pt.x);
+	printf ("\t12 y: %1.13g\n", ent->_12_pt.y);
+	printf ("\t13 x: %1.13g\n", ent->_13_pt.x);
+	printf ("\t13 y: %1.13g\n", ent->_13_pt.y);
+	printf ("\t13 z: %1.13g\n", ent->_13_pt.z);
+	printf ("\t14 x: %1.13g\n", ent->_14_pt.x);
+	printf ("\t14 y: %1.13g\n", ent->_14_pt.y);
+	printf ("\t14 z: %1.13g\n", ent->_14_pt.z);
+	printf ("\t10 x: %1.13g\n", ent->_10_pt.x);
+	printf ("\t10 y: %1.13g\n", ent->_10_pt.y);
+	printf ("\t10 z: %1.13g\n", ent->_10_pt.z);
+
+	printf ("\tExtension line rotation ln rot: %1.13g\n", ent->ext_line_rot);
 }
 
 void
 dwg_print_DIMENSION_ANG3PT (Dwg_Entity_DIMENSION_ANG3PT * ent)
 {
-    //TODO: implement me!
-    puts("print not implemented!");
+	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y, ent->extrusion.z);
+	printf ("\tText midpt: (%1.13g, %1.13g)\n", ent->x0, ent->y0);
+
+	if (ent->elevation.ecs_11 != ent->elevation.ecs_12){
+		fprintf(stderr, "encode_DIMENSION_ORDINARY: Maybe there is something wrong here. Elevation values should be all the same.\n");
+	}
+	printf ("\tElevation: %1.13g\n", ent->elevation.ecs_11);
+
+	//spec: flag bit 6 indicates ORDINATE dimension
+	printf ("\tFlags: 0x%02x\n", ent->flags);
+	printf ("\tUser text: %s\n", ent->user_text);
+	printf ("\tText rot: %1.13g\n", ent->text_rot);
+	printf ("\tHoriz dir: %1.13g\n", ent->horiz_dir);
+	printf ("\tIns X-scale: %1.13g\n", ent->ins_scale.x);
+	printf ("\tIns Y-scale: %1.13g\n", ent->ins_scale.y);
+	printf ("\tIns Z-scale: %1.13g\n", ent->ins_scale.z);
+	printf ("\tIns rotation: %1.13g\n", ent->ins_rotation);
+
+	//if(dat->version >= R_2000){
+		printf("\tAttachment point: %u", ent->attachment_point);
+		printf("\tLspace style: %u", ent->lspace_style);
+		printf ("\tLspace factor: %1.13g\n", ent->lspace_factor);
+		printf ("\tAct measurement: %1.13g\n", ent->act_measurement);
+	//}
+
+	/*
+	if(dat->version >= R_2007){
+		printf("\tUnknown: %u", (int)ent->unknown);
+	    printf("\tFlip arrow1: %u", (int)ent->flip_arrow1);
+	    printf("\tFlip arrow2: %u", (int)ent->flip_arrow2);
+	}
+	*/
+
+	printf ("\t12 x: %1.13g\n", ent->_12_pt.x);
+	printf ("\t12 y: %1.13g\n", ent->_12_pt.y);
+	printf ("\t10 x: %1.13g\n", ent->_10_pt.x);
+	printf ("\t10 y: %1.13g\n", ent->_10_pt.y);
+	printf ("\t10 z: %1.13g\n", ent->_10_pt.z);
+	printf ("\t13 x: %1.13g\n", ent->_13_pt.x);
+	printf ("\t13 y: %1.13g\n", ent->_13_pt.y);
+	printf ("\t13 z: %1.13g\n", ent->_13_pt.z);
+	printf ("\t14 x: %1.13g\n", ent->_14_pt.x);
+	printf ("\t14 y: %1.13g\n", ent->_14_pt.y);
+	printf ("\t14 z: %1.13g\n", ent->_14_pt.z);
+	printf ("\t15 x: %1.13g\n", ent->_15_pt.x);
+	printf ("\t15 y: %1.13g\n", ent->_15_pt.y);
+	printf ("\t15 z: %1.13g\n", ent->_15_pt.z);
 }
 
 void
 dwg_print_DIMENSION_ANG2LN (Dwg_Entity_DIMENSION_ANG2LN * ent)
 {
-    //TODO: implement me!
-    puts("print not implemented!");
+	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y, ent->extrusion.z);
+	printf ("\tText midpt: (%1.13g, %1.13g)\n", ent->x0, ent->y0);
+
+	if (ent->elevation.ecs_11 != ent->elevation.ecs_12){
+		fprintf(stderr, "encode_DIMENSION_ORDINARY: Maybe there is something wrong here. Elevation values should be all the same.\n");
+	}
+	printf ("\tElevation: %1.13g\n", ent->elevation.ecs_11);
+
+	//spec: flag bit 6 indicates ORDINATE dimension
+	printf ("\tFlags: 0x%02x\n", ent->flags);
+	printf ("\tUser text: %s\n", ent->user_text);
+	printf ("\tText rot: %1.13g\n", ent->text_rot);
+	printf ("\tHoriz dir: %1.13g\n", ent->horiz_dir);
+	printf ("\tIns X-scale: %1.13g\n", ent->ins_scale.x);
+	printf ("\tIns Y-scale: %1.13g\n", ent->ins_scale.y);
+	printf ("\tIns Z-scale: %1.13g\n", ent->ins_scale.z);
+	printf ("\tIns rotation: %1.13g\n", ent->ins_rotation);
+
+	//if(dat->version >= R_2000){
+		printf("\tAttachment point: %u", ent->attachment_point);
+		printf("\tLspace style: %u", ent->lspace_style);
+		printf ("\tLspace factor: %1.13g\n", ent->lspace_factor);
+		printf ("\tAct measurement: %1.13g\n", ent->act_measurement);
+	//}
+
+	/*
+	if(dat->version >= R_2007){
+		printf("\tUnknown: %u", (int)ent->unknown);
+	    printf("\tFlip arrow1: %u", (int)ent->flip_arrow1);
+	    printf("\tFlip arrow2: %u", (int)ent->flip_arrow2);
+	}
+	*/
+
+	printf ("\t12 x: %1.13g\n", ent->_12_pt.x);
+	printf ("\t12 y: %1.13g\n", ent->_12_pt.y);
+	printf ("\t16 x: %1.13g\n", ent->_16_pt.x);
+	printf ("\t16 y: %1.13g\n", ent->_16_pt.y);
+	printf ("\t13 x: %1.13g\n", ent->_13_pt.x);
+	printf ("\t13 y: %1.13g\n", ent->_13_pt.y);
+	printf ("\t13 z: %1.13g\n", ent->_13_pt.z);
+	printf ("\t14 x: %1.13g\n", ent->_14_pt.x);
+	printf ("\t14 y: %1.13g\n", ent->_14_pt.y);
+	printf ("\t14 z: %1.13g\n", ent->_14_pt.z);
+	printf ("\t15 x: %1.13g\n", ent->_15_pt.x);
+	printf ("\t15 y: %1.13g\n", ent->_15_pt.y);
+	printf ("\t15 z: %1.13g\n", ent->_15_pt.z);
+	printf ("\t10 x: %1.13g\n", ent->_10_pt.x);
+	printf ("\t10 y: %1.13g\n", ent->_10_pt.y);
+	printf ("\t10 z: %1.13g\n", ent->_10_pt.z);
 }
 
 void
 dwg_print_DIMENSION_RADIUS (Dwg_Entity_DIMENSION_RADIUS * ent)
 {
-    //TODO: implement me!
-    puts("print not implemented!");
+	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y, ent->extrusion.z);
+	printf ("\tText midpt: (%1.13g, %1.13g)\n", ent->x0, ent->y0);
+
+	if (ent->elevation.ecs_11 != ent->elevation.ecs_12){
+		fprintf(stderr, "encode_DIMENSION_ORDINARY: Maybe there is something wrong here. Elevation values should be all the same.\n");
+	}
+	printf ("\tElevation: %1.13g\n", ent->elevation.ecs_11);
+
+	printf ("\tFlags: 0x%02x\n", ent->flags);
+	printf ("\tUser text: %s\n", ent->user_text);
+	printf ("\tText rot: %1.13g\n", ent->text_rot);
+	printf ("\tHoriz dir: %1.13g\n", ent->horiz_dir);
+	printf ("\tIns X-scale: %1.13g\n", ent->ins_scale.x);
+	printf ("\tIns Y-scale: %1.13g\n", ent->ins_scale.y);
+	printf ("\tIns Z-scale: %1.13g\n", ent->ins_scale.z);
+	printf ("\tIns rotation: %1.13g\n", ent->ins_rotation);
+
+	//if(dat->version >= R_2000){
+		printf("\tAttachment point: %u", ent->attachment_point);
+		printf("\tLspace style: %u", ent->lspace_style);
+		printf ("\tLspace factor: %1.13g\n", ent->lspace_factor);
+		printf ("\tAct measurement: %1.13g\n", ent->act_measurement);
+	//}
+
+	/*
+	if(dat->version >= R_2007){
+		printf("\tUnknown: %u", (int)ent->unknown);
+	    printf("\tFlip arrow1: %u", (int)ent->flip_arrow1);
+	    printf("\tFlip arrow2: %u", (int)ent->flip_arrow2);
+	}
+	*/
+
+	printf ("\t12 x: %1.13g\n", ent->_12_pt.x);
+	printf ("\t12 y: %1.13g\n", ent->_12_pt.y);
+	printf ("\t10 x: %1.13g\n", ent->_10_pt.x);
+	printf ("\t10 y: %1.13g\n", ent->_10_pt.y);
+	printf ("\t10 z: %1.13g\n", ent->_10_pt.z);
+	printf ("\t15 x: %1.13g\n", ent->_15_pt.x);
+	printf ("\t15 y: %1.13g\n", ent->_15_pt.y);
+	printf ("\t15 z: %1.13g\n", ent->_15_pt.z);
+
+	printf ("\tLeader length: %1.13g\n", ent->leader_len);
 }
 
 void
 dwg_print_DIMENSION_DIAMETER (Dwg_Entity_DIMENSION_DIAMETER * ent)
 {
-    //TODO: implement me!
-    puts("print not implemented!");
+	printf ("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x, ent->extrusion.y, ent->extrusion.z);
+	printf ("\tText midpt: (%1.13g, %1.13g)\n", ent->x0, ent->y0);
+
+	if (ent->elevation.ecs_11 != ent->elevation.ecs_12){
+		fprintf(stderr, "encode_DIMENSION_ORDINARY: Maybe there is something wrong here. Elevation values should be all the same.\n");
+	}
+	printf ("\tElevation: %1.13g\n", ent->elevation.ecs_11);
+
+	printf ("\tFlags: 0x%02x\n", ent->flags);
+	printf ("\tUser text: %s\n", ent->user_text);
+	printf ("\tText rot: %1.13g\n", ent->text_rot);
+	printf ("\tHoriz dir: %1.13g\n", ent->horiz_dir);
+	printf ("\tIns X-scale: %1.13g\n", ent->ins_scale.x);
+	printf ("\tIns Y-scale: %1.13g\n", ent->ins_scale.y);
+	printf ("\tIns Z-scale: %1.13g\n", ent->ins_scale.z);
+	printf ("\tIns rotation: %1.13g\n", ent->ins_rotation);
+
+	//if(dat->version >= R_2000){
+		printf("\tAttachment point: %u", ent->attachment_point);
+		printf("\tLspace style: %u", ent->lspace_style);
+		printf ("\tLspace factor: %1.13g\n", ent->lspace_factor);
+		printf ("\tAct measurement: %1.13g\n", ent->act_measurement);
+	//}
+
+	/*
+	if(dat->version >= R_2007){
+		printf("\tUnknown: %u", (int)ent->unknown);
+	    printf("\tFlip arrow1: %u", (int)ent->flip_arrow1);
+	    printf("\tFlip arrow2: %u", (int)ent->flip_arrow2);
+	}
+	*/
+
+	printf ("\t12 x: %1.13g\n", ent->_12_pt.x);
+	printf ("\t12 y: %1.13g\n", ent->_12_pt.y);
+	printf ("\t15 x: %1.13g\n", ent->_15_pt.x);
+	printf ("\t15 y: %1.13g\n", ent->_15_pt.y);
+	printf ("\t15 z: %1.13g\n", ent->_15_pt.z);
+	printf ("\t10 x: %1.13g\n", ent->_10_pt.x);
+	printf ("\t10 y: %1.13g\n", ent->_10_pt.y);
+	printf ("\t10 z: %1.13g\n", ent->_10_pt.z);
+
+	printf ("\tLeader length: %1.13g\n", ent->leader_len);
 }
 
 void
