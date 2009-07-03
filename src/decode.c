@@ -78,11 +78,20 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
     }
 	dat->version = skt->header.version;
 
-	if (skt->header.version != R_2000)
+	if (skt->header.version > R_2000)
 	{
-		fprintf (stderr, "This version of Libredwg is only capable of decoding version R2000 (code: AC1015) dwg-files. "
-			"This file's version code is: %s\n", version);
+		fprintf (stderr,
+		"This version of Libredwg is only capable of decoding version R2000 (code: AC1015) dwg-files.\n"
+		"This file's version code is: %s\n", version);
 		return -1;
+	}
+
+	if (skt->header.version < R_2000)
+	{
+		fprintf (stderr,
+		"This version of Libredwg is only capable of safely decoding version R2000 (code: AC1015) dwg-files.\n"
+		"This file's version code is: %s Support for this version is still experimental.\n"
+		"It might crash or give you invalid output.\n", version);
 	}
 
 	// Still unknown values: 6 'zeroes' and a 'one'
