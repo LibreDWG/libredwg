@@ -45,23 +45,11 @@ static int loglevel = 0;
 int
 dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 {
-	unsigned char sig;
-	unsigned int seksize = 0;
-	unsigned char sgdc[2];
-	unsigned int i, j;
-	unsigned int ckr, ckr2, antckr;
-	long unsigned int size;
-	long unsigned int lasta;
-	long unsigned int maplasta;
-	long unsigned int duabyte;
-	long unsigned int obek;
-	long unsigned int obfin;
-	long unsigned int pvz;
+	char version[7];
 
 	/* Version */
 	dat->byte = 0;
 	dat->bit = 0;
-	char version[7];
 	strncpy (version, dat->chain, 6);
 	version[6] = '\0';
 
@@ -78,21 +66,56 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
     }
 	dat->version = skt->header.version;
 
-	if (skt->header.version > R_2000)
+	if (dat->version < R_2000)
 	{
 		fprintf (stderr,
-		"This version of Libredwg is only capable of decoding version R2000 (code: AC1015) dwg-files.\n"
-		"This file's version code is: %s\n", version);
-		return -1;
-	}
-
-	if (skt->header.version < R_2000)
-	{
-		fprintf (stderr,
-		"This version of Libredwg is only capable of safely decoding version R2000 (code: AC1015) dwg-files.\n"
+		"WARNING: This version of Libredwg is only capable of safely decoding version R2000 (code: AC1015) dwg-files.\n"
 		"This file's version code is: %s Support for this version is still experimental.\n"
 		"It might crash or give you invalid output.\n", version);
+		return decode_R13_R15_header(dat, skt);
 	}
+
+
+	if (dat->version == R_2000){
+		return decode_R13_R15_header(dat, skt);
+	}
+
+	if (dat->version == R_2004)
+	{
+		fprintf (stderr,
+		"WARNING: This version of Libredwg is only capable of properly decoding version R2000 (code: AC1015) dwg-files.\n"
+		"This file's version code is: %s\n This version is not yet actively developed.\n"
+		"It will probably crash and/or give you invalid output.\n", version);
+		return decode_R2004_header(dat, skt);
+	}
+
+	if (dat->version == R_2007)
+	{
+		fprintf (stderr,
+		"WARNING: This version of Libredwg is only capable of properly decoding version R2000 (code: AC1015) dwg-files.\n"
+		"This file's version code is: %s\n This version is not yet actively developed.\n"
+		"It will probably crash and/or give you invalid output.\n", version);
+		return decode_R2007_header(dat, skt);
+	}
+
+	//This line should not be reached!
+	fprintf (stderr, "ERROR: LibreDWG could not recognize the version string in this file: %s.\n", version);
+	return -1;
+}
+
+int decode_R13_R15_header(Bit_Chain* dat, Dwg_Structure * skt){
+	unsigned char sig;
+	unsigned int seksize = 0;
+	unsigned char sgdc[2];
+	unsigned int ckr, ckr2, antckr;
+	long unsigned int size;
+	long unsigned int lasta;
+	long unsigned int maplasta;
+	long unsigned int duabyte;
+	long unsigned int obek;
+	long unsigned int obfin;
+	long unsigned int pvz;
+	unsigned int i, j;
 
 	// Still unknown values: 6 'zeroes' and a 'one'
 	dat->byte = 0x06;
@@ -599,6 +622,18 @@ dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 
 	//exit (0);
 	return 0;
+}
+
+int decode_R2004_header(Bit_Chain* dat, Dwg_Structure * skt){
+	//	implement-me!
+	fprintf(stderr, "Decoding of DWG version R2004 header is not implemented yet.\n");
+	return -1;
+}
+
+int decode_R2007_header(Bit_Chain* dat, Dwg_Structure * skt){
+	//	implement-me!
+	fprintf(stderr, "Decoding of DWG version R2007 header is not implemented yet.\n");
+	return -1;
 }
 
 /*--------------------------------------------------------------------------------
