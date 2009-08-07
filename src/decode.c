@@ -631,8 +631,55 @@ int decode_R2004_header(Bit_Chain* dat, Dwg_Structure * skt){
 }
 
 int decode_R2007_header(Bit_Chain* dat, Dwg_Structure * skt){
-	//	implement-me!
-	fprintf(stderr, "Decoding of DWG version R2007 header is not implemented yet.\n");
+	int i;
+	unsigned long int preview_address;
+	unsigned char sig, DwgVer, MaintReleaseVer;
+
+
+	// Still unknown values:
+	dat->byte = 0x06;
+	if (loglevel) printf ("5 bytes of 0x00: ");
+	for (i = 0; i < 5; i++)
+	{
+		sig = bit_read_RC (dat);
+		if (loglevel) printf ("0x%02X ", sig);
+	}
+	if (loglevel) puts("");
+
+	// Still unknown values:
+	if (loglevel) printf ("Unknown: ");
+	sig = bit_read_RC (dat);
+	if (loglevel) printf ("0x%02X\n", sig);
+
+	// Still unknown values:
+	if (loglevel) printf ("Byte 0x00, 0x01, or 0x03: ");
+	for (i = 0; i < 3; i++)
+	{
+		sig = bit_read_RC (dat);
+		if (loglevel) printf ("0x%02X ", sig);
+	}
+	if (loglevel) puts("");
+
+	/* Preview Address */
+	preview_address = bit_read_RL (dat);
+	if (loglevel) printf ("Preview Address: 0x%08X\n", (unsigned int) preview_address);
+
+	DwgVer = bit_read_RC (dat);
+	if (loglevel) printf ("DwgVer: %u\n", DwgVer);
+
+	MaintReleaseVer = bit_read_RC (dat);
+	if (loglevel) printf ("MaintRelease: %u\n", MaintReleaseVer);
+
+	/* Codepage */
+	dat->byte = 0x13;
+	skt->header.codepage = bit_read_RS (dat);
+	if (loglevel) printf ("Codepage: %u\n", skt->header.codepage);
+
+	/////////////////////////////////////////
+	//	incomplete implementation!
+	/////////////////////////////////////////
+
+	fprintf(stderr, "Decoding of DWG version R2007 header is not fully implemented yet.\n");
 	return -1;
 }
 
