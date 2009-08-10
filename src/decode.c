@@ -241,7 +241,7 @@ int decode_R13_R15_header(Bit_Chain* dat, Dwg_Structure * skt){
 
 	dat->bit = 0;
 
-	/* Legi la kap-variablojn
+	/* Read header variables
 	 */
 	for (i = 0; i < DWG_NUM_VARIABLES; i++)
 	{
@@ -250,7 +250,6 @@ int decode_R13_R15_header(Bit_Chain* dat, Dwg_Structure * skt){
 		{
 			skt->var[i].handle.code = 0;
 			skt->var[i].handle.value = 0;
-			//puts ("(NE EKZISTANTA)");
 			continue;
 		}
 		switch (dwg_var_map (skt->header.version, i))
@@ -304,7 +303,6 @@ int decode_R13_R15_header(Bit_Chain* dat, Dwg_Structure * skt){
 		default:
 	        if (loglevel) printf ("No handleebla type: %i (var: %i)\n", dwg_var_map (skt->header.version, i), i);
 		}
-		//puts ("");
 	}
 
 	// Kontroli CKR-on
@@ -625,7 +623,137 @@ int decode_R13_R15_header(Bit_Chain* dat, Dwg_Structure * skt){
 }
 
 int decode_R2004_header(Bit_Chain* dat, Dwg_Structure * skt){
-	//	implement-me!
+	int i;
+	unsigned long int preview_address, security_type, unknown_long, dwg_property_address, vba_proj_address;
+	unsigned char sig, DwgVer, MaintReleaseVer;
+
+	//6 bytes of 0x00
+	dat->byte = 0x06;
+	if (loglevel) printf ("6 bytes of 0x00: ");
+	for (i = 0; i < 6; i++)
+	{
+		sig = bit_read_RC (dat);
+		if (loglevel) printf ("0x%02X ", sig);
+	}
+	if (loglevel) puts("");
+
+	/* Byte 0x00, 0x01, or 0x03 */
+	dat->byte = 0x0C;
+	sig = bit_read_RC (dat);
+	if (loglevel) printf ("Byte 0x00, 0x01, or 0x03: 0x%02X\n", sig);
+
+	/* Preview Address */
+	dat->byte = 0x0D;
+	preview_address = bit_read_RL (dat);
+	if (loglevel) printf ("Preview Address: 0x%08X\n", (unsigned int) preview_address);
+
+  /* DwgVer */
+	dat->byte = 0x11;
+	DwgVer = bit_read_RC (dat);
+	if (loglevel) printf ("DwgVer: %u\n", DwgVer);
+
+  /* MaintReleaseVer */
+	dat->byte = 0x12;
+	MaintReleaseVer = bit_read_RC (dat);
+	if (loglevel) printf ("MaintRelease: %u\n", MaintReleaseVer);
+
+	/* Codepage */
+	dat->byte = 0x13;
+	skt->header.codepage = bit_read_RS (dat);
+	if (loglevel) printf ("Codepage: %u\n", skt->header.codepage);
+
+	/* 3 0x00 bytes */
+	dat->byte = 0x15;
+	if (loglevel) printf ("3 0x00 bytes: ");
+	for (i = 0; i < 3; i++)
+	{
+		sig = bit_read_RC (dat);
+		if (loglevel) printf ("0x%02X ", sig);
+	}
+	if (loglevel) puts("");
+
+	/* SecurityType */
+	dat->byte = 0x18;
+	security_type = bit_read_RL (dat);
+	if (loglevel) printf ("SecurityType: 0x%08X\n", (unsigned int) security_type);
+
+	/* Unknown long */
+	dat->byte = 0x1C;
+	unknown_long = bit_read_RL (dat);
+	if (loglevel) printf ("Unknown long: 0x%08X\n", (unsigned int) unknown_long);
+
+	/* DWG Property Addr */
+	dat->byte = 0x20;
+	dwg_property_address = bit_read_RL (dat);
+	if (loglevel) printf ("DWG Property Addr: 0x%08X\n", (unsigned int) dwg_property_address);
+
+	/* VBA Project Addr */
+	dat->byte = 0x24;
+	vba_proj_address = bit_read_RL (dat);
+	if (loglevel) printf ("VBA Project Addr: 0x%08X\n", (unsigned int) vba_proj_address);
+
+	/* 0x00000080 */
+	dat->byte = 0x28;
+	unknown_long = bit_read_RL (dat);
+	if (loglevel) printf ("0x00000080: 0x%08X\n", (unsigned int) unknown_long);
+
+	/* 0x00 bytes (length = 0x54 bytes) */
+	dat->byte = 0x2C;
+  for (i=0;i<0x54;i++){
+    sig = bit_read_RC(dat);
+    if (sig!=0 && loglevel) printf("Warning: Byte should be zero! But a value=%x was read instead.\n", sig); 
+  }
+
+  /* Encripted Data */
+  union{
+    unsigned char encripted_data[0x6c];
+    struct{
+      unsigned char file_ID_string[12];
+      unsigned long int x00;
+      unsigned long int x6c;
+      unsigned long int x04;
+      unsigned long int root_tree_node_gap;
+      unsigned long int lowermost_left_tree_node_gap;
+      unsigned long int lowermost_right_tree_node_gap;
+      unsigned long int unknown_long;
+      unsigned long int last_section_id;
+      unsigned long int last_section_address;
+      unsigned long int x00_2;
+      unsigned long int second_header_address;
+      unsigned long int x00_3;
+      unsigned long int gap_amount;
+      unsigned long int section_amount;
+      unsigned long int x20;
+      unsigned long int x80;
+      unsigned long int x40;
+      unsigned long int section_map_ip;
+      unsigned long int section_map_address;
+      unsigned long int x00_4;
+      unsigned long int section_info_id;
+      unsigned long int section_array_size;
+      unsigned long int gap_array_size;
+      unsigned long int CRC;
+    } fields;
+  } _2004_header_data;
+
+  int rseed = 1;
+  dat->byte = 0x80;
+  for (i=0; i<0x6c; i++){
+    rseed *= 0x343fd;
+    rseed += 0x269ec3;
+    _2004_header_data.encripted_data[i] = bit_read_RC(dat) ^ (rseed >> 0x10);
+  }
+
+  if (loglevel){
+    printf("\n#### 2004 File Header Data fields ####\n\n");
+    printf("File ID string (must be AcFssFcAJMB): ");
+    for (i=0; i<12; i++)
+      printf("%c", _2004_header_data.fields.file_ID_string[i]);
+    printf("\n");
+
+    printf("much more...\n");
+  }
+
 	fprintf(stderr, "Decoding of DWG version R2004 header is not implemented yet.\n");
 	return -1;
 }
