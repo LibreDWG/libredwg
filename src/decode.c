@@ -37,7 +37,7 @@ static void dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long
  * Public variables
  */
 long unsigned int ktl_lastaddress;
-static int loglevel = 0;
+static int loglevel = 1;
 
 /*--------------------------------------------------------------------------------
  * Public function definitions
@@ -760,11 +760,10 @@ int decode_R2004_header(Bit_Chain* dat, Dwg_Structure * skt){
 
 int decode_R2007_header(Bit_Chain* dat, Dwg_Structure * skt){
 	int i;
-	unsigned long int preview_address;
+	unsigned long int preview_address, security_type, unknown_long, dwg_property_address, vba_proj_address, app_info_address;
 	unsigned char sig, DwgVer, MaintReleaseVer;
 
-
-	// Still unknown values:
+	/* 5 bytes of 0x00 */
 	dat->byte = 0x06;
 	if (loglevel) printf ("5 bytes of 0x00: ");
 	for (i = 0; i < 5; i++)
@@ -774,27 +773,28 @@ int decode_R2007_header(Bit_Chain* dat, Dwg_Structure * skt){
 	}
 	if (loglevel) puts("");
 
-	// Still unknown values:
-	if (loglevel) printf ("Unknown: ");
+	/* Unknown */
+	dat->byte = 0x0B;
 	sig = bit_read_RC (dat);
-	if (loglevel) printf ("0x%02X\n", sig);
+	if (loglevel) printf ("Unknown: 0x%02X\n", sig);
 
-	// Still unknown values:
-	if (loglevel) printf ("Byte 0x00, 0x01, or 0x03: ");
-	for (i = 0; i < 3; i++)
-	{
-		sig = bit_read_RC (dat);
-		if (loglevel) printf ("0x%02X ", sig);
-	}
-	if (loglevel) puts("");
+	/* Byte 0x00, 0x01, or 0x03 */
+	dat->byte = 0x0C;
+	sig = bit_read_RC (dat);
+	if (loglevel) printf ("Byte 0x00, 0x01, or 0x03: 0x%02X\n", sig);
 
 	/* Preview Address */
+	dat->byte = 0x0D;
 	preview_address = bit_read_RL (dat);
 	if (loglevel) printf ("Preview Address: 0x%08X\n", (unsigned int) preview_address);
 
+  /* DwgVer */
+	dat->byte = 0x11;
 	DwgVer = bit_read_RC (dat);
 	if (loglevel) printf ("DwgVer: %u\n", DwgVer);
 
+  /* MaintReleaseVer */
+	dat->byte = 0x12;
 	MaintReleaseVer = bit_read_RC (dat);
 	if (loglevel) printf ("MaintRelease: %u\n", MaintReleaseVer);
 
@@ -802,6 +802,56 @@ int decode_R2007_header(Bit_Chain* dat, Dwg_Structure * skt){
 	dat->byte = 0x13;
 	skt->header.codepage = bit_read_RS (dat);
 	if (loglevel) printf ("Codepage: %u\n", skt->header.codepage);
+
+	/* Unknown */
+	dat->byte = 0x15;
+	if (loglevel) printf ("Unknown: ");
+	for (i = 0; i < 3; i++)
+	{
+		sig = bit_read_RC (dat);
+		if (loglevel) printf ("0x%02X ", sig);
+	}
+	if (loglevel) puts("");
+
+	/* SecurityType */
+	dat->byte = 0x18;
+	security_type = bit_read_RL (dat);
+	if (loglevel) printf ("SecurityType: 0x%08X\n", (unsigned int) security_type);
+
+	/* Unknown long */
+	dat->byte = 0x1C;
+	unknown_long = bit_read_RL (dat);
+	if (loglevel) printf ("Unknown long: 0x%08X\n", (unsigned int) unknown_long);
+
+	/* DWG Property Addr */
+	dat->byte = 0x20;
+	dwg_property_address = bit_read_RL (dat);
+	if (loglevel) printf ("DWG Property Addr: 0x%08X\n", (unsigned int) dwg_property_address);
+
+	/* VBA Project Addr */
+	dat->byte = 0x24;
+	vba_proj_address = bit_read_RL (dat);
+	if (loglevel) printf ("VBA Project Addr: 0x%08X\n", (unsigned int) vba_proj_address);
+
+	/* 0x00000080 */
+	dat->byte = 0x28;
+	unknown_long = bit_read_RL (dat);
+	if (loglevel) printf ("0x00000080: 0x%08X\n", (unsigned int) unknown_long);
+
+	/* Application Info Address */
+	dat->byte = 0x2C;
+	app_info_address = bit_read_RL (dat);
+	if (loglevel) printf ("Application Info Address: 0x%08X\n", (unsigned int) app_info_address);
+
+	/* Reed-Solomon(255,239) encoded section */
+  if (loglevel) printf("Reed-Solomon(255,239) encoded section:\n\n");
+  unsigned char solomon[0x3d8];
+	dat->byte = 0x80;
+  for (i=0;i<0x3d8;i++){
+    solomon[i] = bit_read_RC(dat);
+    if (loglevel) printf("%2x ", solomon[i]);
+  }
+  if (loglevel) printf("\n\n");
 
 	/////////////////////////////////////////
 	//	incomplete implementation!
