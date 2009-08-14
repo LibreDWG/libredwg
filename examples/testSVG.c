@@ -82,6 +82,11 @@ void output_SVG(Dwg_Structure* dwg_struct){
 	{
 		obj = &dwg_struct->object[i];
 
+    if (!obj){
+      fprintf(stderr, "dwg_struct->object[%d] == NULL\n", i);
+      continue;
+    }
+
 		if (obj->type == DWG_TYPE_BLOCK_HEADER){
 			printf("\t<g id=\"dwg-handle-%lu\" >\n", obj->handle);
 		}
