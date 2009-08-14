@@ -2314,9 +2314,16 @@ extern "C"
 #		define DWG_UNKNOWN1_KIOM 123
 		Dwg_Chain unknown1;
 
-		Dwg_Chain picture;
+		Dwg_Chain picture; 
 
-#		define DWG_NUM_VARIABLES 233
+//number of header variables:
+//R13: 199
+//R14: 203
+//R2000: 233
+//R2004: 251
+//R2007: 297
+
+#		define DWG_NUM_VARIABLES 297
 		union
 		{
 			unsigned char bitoko;

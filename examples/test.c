@@ -27,6 +27,7 @@
 
 int test_dwg_c (char *filename);
 void test_map_R2000();
+int num_vars(enum DWG_VERSION_TYPE version);
 
 int
 main (int argc, char *argv[])
@@ -34,6 +35,14 @@ main (int argc, char *argv[])
     printf("Starting to test the type-map for DWG version R2000.\n");
     test_map_R2000();
     printf("End of type-map test.\n");
+
+    printf("Testing number of header variables:\n");
+
+    printf("R13: %d\n", num_vars(R_13));
+    printf("R14: %d\n", num_vars(R_14));
+    printf("R2000: %d\n", num_vars(R_2000));
+    printf("R2004: %d\n", num_vars(R_2004));
+    printf("R2007: %d\n\n", num_vars(R_2007));
 
 	if (argc > 1)
 		return (test_dwg_c (argv[1]));
@@ -72,6 +81,12 @@ test_dwg_c (char *filename)
 	}
 
 	return error;
+}
+
+int num_vars(Dwg_Version_Type version){
+  int i;
+  for (i=0; dwg_var_map(version, i) != DWG_END_OF_HEADER_VARIABLES; i++){};
+  return i-1;
 }
 
 void test_map_R2000(){
