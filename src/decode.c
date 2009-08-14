@@ -254,6 +254,8 @@ int decode_R13_R15_header(Bit_Chain* dat, Dwg_Structure * skt){
 		}
 		switch (dwg_var_map (skt->header.version, i))
 		{
+    case DWG_END_OF_HEADER_VARIABLES:
+      break; 
 		case DWG_DT_B:
 			skt->var[i].bitoko = bit_read_B (dat);
 			if (loglevel) printf ("B: %u", skt->var[i].bitoko);

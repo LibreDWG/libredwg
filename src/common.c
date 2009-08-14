@@ -461,18 +461,21 @@ dwg_var_map (Dwg_Version_Type version, int index)
 			R_14, R_AFTER, DWG_DT_BS,
 			R_14, R_AFTER, DWG_DT_BS,
 //Common:
-			R_BEFORE, R_AFTER, DWG_DT_RS
+			R_BEFORE, R_AFTER, DWG_DT_RS,
+      DWG_END_OF_HEADER_VARIABLES 
 };
 
     int i, res=0;
 
     for (i=0;i<index;i++, res+=3){
         while( (map[res]!=R_BEFORE && version<map[res]) || (map[res+1]!=R_AFTER && version>map[res+1]) ){
+            if (map[res] == DWG_END_OF_HEADER_VARIABLES) return DWG_END_OF_HEADER_VARIABLES;
             res+=3;
         }
     }
 
     while( (map[res]!=R_BEFORE && version<map[res]) || (map[res+1]!=R_AFTER && version>map[res+1]) ){
+        if (map[res] == DWG_END_OF_HEADER_VARIABLES) return DWG_END_OF_HEADER_VARIABLES;
         res+=3;
     }
 
