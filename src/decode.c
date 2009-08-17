@@ -728,7 +728,7 @@ int decode_R2004_header(Bit_Chain* dat, Dwg_Structure * skt){
       unsigned long int x20;
       unsigned long int x80;
       unsigned long int x40;
-      unsigned long int section_map_ip;
+      unsigned long int section_map_id;
       unsigned long int section_map_address;
       unsigned long int x00_4;
       unsigned long int section_info_id;
@@ -753,7 +753,20 @@ int decode_R2004_header(Bit_Chain* dat, Dwg_Structure * skt){
       fprintf (stderr, "%c", _2004_header_data.fields.file_ID_string[i]);
     fprintf (stderr, "\n");
 
-    fprintf (stderr, "much more...\n");
+    fprintf (stderr, "Root tree node gap: %x\n", (unsigned int) _2004_header_data.fields.root_tree_node_gap);
+    fprintf (stderr, "Lowermost left tree node gap: %x\n", (unsigned int) _2004_header_data.fields.lowermost_left_tree_node_gap);
+    fprintf (stderr, "Lowermost right tree node gap: %x\n", (unsigned int) _2004_header_data.fields.lowermost_right_tree_node_gap);
+    fprintf (stderr, "Last section id: %x\n", (unsigned int) _2004_header_data.fields.last_section_id);
+    fprintf (stderr, "Last section address: %x\n", (unsigned int) _2004_header_data.fields.last_section_address);
+    fprintf (stderr, "Second header address: %x\n", (unsigned int) _2004_header_data.fields.second_header_address);
+    fprintf (stderr, "Gap amount: %x\n", (unsigned int) _2004_header_data.fields.gap_amount);
+    fprintf (stderr, "Section amount: %x\n", (unsigned int) _2004_header_data.fields.section_amount);
+    fprintf (stderr, "Section map id: %x\n", (unsigned int) _2004_header_data.fields.section_map_id);
+    fprintf (stderr, "Section map address: %x\n", (unsigned int) _2004_header_data.fields.section_map_address + 0x100);
+    fprintf (stderr, "Section Info id: %x\n", (unsigned int) _2004_header_data.fields.section_info_id);
+    fprintf (stderr, "Section array size: %x\n", (unsigned int) _2004_header_data.fields.section_array_size);
+    fprintf (stderr, "Gap array size: %x\n", (unsigned int) _2004_header_data.fields.gap_array_size);
+    fprintf (stderr, "CRC: %x\n", (unsigned int) _2004_header_data.fields.CRC);
   }
 
 	fprintf(stderr, "Decoding of DWG version R2004 header is not implemented yet.\n");
