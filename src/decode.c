@@ -752,17 +752,26 @@ int decode_R2004_header(Bit_Chain* dat, Dwg_Structure * skt){
     for (i=0; i<12; i++)
       fprintf (stderr, "%c", _2004_header_data.fields.file_ID_string[i]);
     fprintf (stderr, "\n");
-
+    fprintf (stderr, "0x00 (long): %x\n", (unsigned int) _2004_header_data.fields.x00);
+    fprintf (stderr, "0x6c (long): %x\n", (unsigned int) _2004_header_data.fields.x6c);
+    fprintf (stderr, "0x04 (long): %x\n", (unsigned int) _2004_header_data.fields.x04);
     fprintf (stderr, "Root tree node gap: %x\n", (unsigned int) _2004_header_data.fields.root_tree_node_gap);
     fprintf (stderr, "Lowermost left tree node gap: %x\n", (unsigned int) _2004_header_data.fields.lowermost_left_tree_node_gap);
     fprintf (stderr, "Lowermost right tree node gap: %x\n", (unsigned int) _2004_header_data.fields.lowermost_right_tree_node_gap);
+    fprintf (stderr, "Unknown long: %x\n", (unsigned int) _2004_header_data.fields.unknown_long);
     fprintf (stderr, "Last section id: %x\n", (unsigned int) _2004_header_data.fields.last_section_id);
     fprintf (stderr, "Last section address: %x\n", (unsigned int) _2004_header_data.fields.last_section_address);
+    fprintf (stderr, "0x00 (long): %x\n", (unsigned int) _2004_header_data.fields.x00_2);
     fprintf (stderr, "Second header address: %x\n", (unsigned int) _2004_header_data.fields.second_header_address);
+    fprintf (stderr, "0x00 (long): %x\n", (unsigned int) _2004_header_data.fields.x00_3);
     fprintf (stderr, "Gap amount: %x\n", (unsigned int) _2004_header_data.fields.gap_amount);
     fprintf (stderr, "Section amount: %x\n", (unsigned int) _2004_header_data.fields.section_amount);
+    fprintf (stderr, "0x20 (long): %x\n", (unsigned int) _2004_header_data.fields.x20);
+    fprintf (stderr, "0x80 (long): %x\n", (unsigned int) _2004_header_data.fields.x80);
+    fprintf (stderr, "0x40 (long): %x\n", (unsigned int) _2004_header_data.fields.x40);
     fprintf (stderr, "Section map id: %x\n", (unsigned int) _2004_header_data.fields.section_map_id);
     fprintf (stderr, "Section map address: %x\n", (unsigned int) _2004_header_data.fields.section_map_address + 0x100);
+    fprintf (stderr, "0x00 (long): %x\n", (unsigned int) _2004_header_data.fields.x00_4);
     fprintf (stderr, "Section Info id: %x\n", (unsigned int) _2004_header_data.fields.section_info_id);
     fprintf (stderr, "Section array size: %x\n", (unsigned int) _2004_header_data.fields.section_array_size);
     fprintf (stderr, "Gap array size: %x\n", (unsigned int) _2004_header_data.fields.gap_array_size);
@@ -784,7 +793,7 @@ int decode_R2004_header(Bit_Chain* dat, Dwg_Structure * skt){
 
   system_section ss;
 
-  fprintf(stderr, "raw system section bytes:\n");
+  fprintf(stderr, "\n\nRaw system section bytes:\n");
   for (i=0; i<0x14; i++){
     ss.data[i] = bit_read_RC(dat);
     fprintf(stderr, "%x ", ss.data[i]);
