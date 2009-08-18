@@ -769,6 +769,36 @@ int decode_R2004_header(Bit_Chain* dat, Dwg_Structure * skt){
     fprintf (stderr, "CRC: %x\n", (unsigned int) _2004_header_data.fields.CRC);
   }
 
+  /* System Section */
+  typedef union _system_section
+  {
+    unsigned char data[0x14];
+    struct{
+      unsigned long int section_type;
+      unsigned long int DecompDataSize;
+      unsigned long int CompDataSize;
+      unsigned long int compression_type;
+      unsigned long int checksum;
+    } fields;
+  } system_section;
+
+  system_section ss;
+
+  fprintf(stderr, "raw system section bytes:\n");
+  for (i=0; i<0x14; i++){
+    ss.data[i] = bit_read_RC(dat);
+    fprintf(stderr, "%x ", ss.data[i]);
+  }
+  
+  if (loglevel){
+    fprintf (stderr, "\n\n=== System Section ===\n");
+    fprintf (stderr, "Section Type (should be 0x4163043b): %x\n", (unsigned int) ss.fields.section_type);
+    fprintf (stderr, "DecompDataSize: %x\n", (unsigned int) ss.fields.DecompDataSize);
+    fprintf (stderr, "CompDataSize: %x\n", (unsigned int) ss.fields.CompDataSize);
+    fprintf (stderr, "Compression Type: %x\n", (unsigned int) ss.fields.compression_type);
+    fprintf (stderr, "Checksum: %x\n\n", (unsigned int) ss.fields.checksum);
+  }
+
 	fprintf(stderr, "Decoding of DWG version R2004 header is not implemented yet.\n");
 	return -1;
 }
