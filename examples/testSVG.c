@@ -98,7 +98,7 @@ void output_SVG(Dwg_Structure* dwg_struct){
 		if (obj->type == DWG_TYPE_INSERT){
 			Dwg_Entity_INSERT* insert;
 			insert = obj->tio.entity->tio.INSERT;
-			printf("\t<use x=\"%f\" y=\"%f\" xlink:href=\"#dwg-handle-%lu\" />\n", insert->x0, page_height - insert->y0, insert->block_header_handle.value);
+			printf("\t<use x=\"%f\" y=\"%f\" xlink:href=\"#dwg-handle-%lu\" />\n", insert->x0, page_height - insert->y0, insert->block_header->obj->handle);
 		}
 
 		if (obj->type == DWG_TYPE_LINE){

@@ -27,6 +27,7 @@ extern "C"
 {
 #endif
 
+
 /**
  Object supertypes that exist in dwg-files.
  */
@@ -62,46 +63,46 @@ extern "C"
 		DWG_TYPE_ARC = 0x11,
 		DWG_TYPE_CIRCLE = 0x12,
 		DWG_TYPE_LINE = 0x13,
-                DWG_TYPE_DIMENSION_ORDINATE = 0x14,
-                DWG_TYPE_DIMENSION_LINEAR = 0x15,
-                DWG_TYPE_DIMENSION_ALIGNED = 0x16,
-                DWG_TYPE_DIMENSION_ANG3PT = 0x17,
-                DWG_TYPE_DIMENSION_ANG2LN = 0x18,
-                DWG_TYPE_DIMENSION_RADIUS = 0x19,
-                DWG_TYPE_DIMENSION_DIAMETER = 0x1A,
+		DWG_TYPE_DIMENSION_ORDINATE = 0x14,
+		DWG_TYPE_DIMENSION_LINEAR = 0x15,
+		DWG_TYPE_DIMENSION_ALIGNED = 0x16,
+		DWG_TYPE_DIMENSION_ANG3PT = 0x17,
+		DWG_TYPE_DIMENSION_ANG2LN = 0x18,
+		DWG_TYPE_DIMENSION_RADIUS = 0x19,
+		DWG_TYPE_DIMENSION_DIAMETER = 0x1A,
 		DWG_TYPE_POINT = 0x1b,
-                DWG_TYPE_3DFACE = 0x1c,
-                DWG_TYPE_POLYLINE_PFACE = 0x1d,
-                DWG_TYPE_POLYLINE_MESH = 0x1e,
-                DWG_TYPE_SOLID = 0x1f,
-                DWG_TYPE_TRACE = 0x20,
-                DWG_TYPE_SHAPE = 0x21,
-                DWG_TYPE_VIEWPORT = 0x22,
+		DWG_TYPE_3DFACE = 0x1c,
+		DWG_TYPE_POLYLINE_PFACE = 0x1d,
+		DWG_TYPE_POLYLINE_MESH = 0x1e,
+		DWG_TYPE_SOLID = 0x1f,
+		DWG_TYPE_TRACE = 0x20,
+		DWG_TYPE_SHAPE = 0x21,
+		DWG_TYPE_VIEWPORT = 0x22,
 		DWG_TYPE_ELLIPSE = 0x23,
-                DWG_TYPE_SPLINE = 0x24,
-                DWG_TYPE_REGION = 0x25,
-                DWG_TYPE_3DSOLID = 0x26,
-                DWG_TYPE_BODY = 0x27,
-                DWG_TYPE_RAY = 0x28,
+		DWG_TYPE_SPLINE = 0x24,
+		DWG_TYPE_REGION = 0x25,
+		DWG_TYPE_3DSOLID = 0x26,
+		DWG_TYPE_BODY = 0x27,
+		DWG_TYPE_RAY = 0x28,
 		DWG_TYPE_XLINE = 0x29,
 		DWG_TYPE_DICTIONARY = 0x2a,
-                //DWG_TYPE_<UNKNOWN> = 0x2b,
+		//DWG_TYPE_<UNKNOWN> = 0x2b,
 		DWG_TYPE_MTEXT = 0x2c,
-                DWG_TYPE_LEADER = 0x2d,
-                DWG_TYPE_TOLERANCE = 0x2e,
-                DWG_TYPE_MLINE = 0x2f,
+		DWG_TYPE_LEADER = 0x2d,
+		DWG_TYPE_TOLERANCE = 0x2e,
+		DWG_TYPE_MLINE = 0x2f,
 		DWG_TYPE_BLOCK_CONTROL = 0x30,
 		DWG_TYPE_BLOCK_HEADER = 0x31,
 		DWG_TYPE_LAYER_CONTROL = 0x32,
 		DWG_TYPE_LAYER = 0x33,
 		DWG_TYPE_STYLE_CONTROL = 0x34,
 		DWG_TYPE_STYLE = 0x35,
-                //DWG_TYPE_<UNKNOWN> = 0x36,
-                //DWG_TYPE_<UNKNOWN> = 0x37,
+		//DWG_TYPE_<UNKNOWN> = 0x36,
+		//DWG_TYPE_<UNKNOWN> = 0x37,
 		DWG_TYPE_LTYPE_CONTROL = 0x38,
 		DWG_TYPE_LTYPE = 0x39,
-                //DWG_TYPE_<UNKNOWN> = 0x3a,
-                //DWG_TYPE_<UNKNOWN> = 0x3b,
+		//DWG_TYPE_<UNKNOWN> = 0x3a,
+		//DWG_TYPE_<UNKNOWN> = 0x3b,
 		DWG_TYPE_VIEW_CONTROL = 0x3c,
 		DWG_TYPE_VIEW = 0x3d,
 		DWG_TYPE_UCS_CONTROL = 0x3e,
@@ -128,6 +129,15 @@ extern "C"
 		unsigned char size;
 		long unsigned int value;
 	} Dwg_Handle;
+
+/**
+ Struct for object references.
+ */
+	typedef struct _dwg_object_ref
+	{
+		struct _dwg_object* obj;
+		Dwg_Handle handleref;
+	} Dwg_Object_Ref;
 
 /**
  Struct for CMC colors.
@@ -301,7 +311,7 @@ extern "C"
 		} extrusion;
 		unsigned char has_attribs;
 		long unsigned int owned_obj_count;
-		Dwg_Handle block_header_handle;
+		Dwg_Object_Ref* block_header;
 	} Dwg_Entity_INSERT;
 
 /**
@@ -2097,7 +2107,7 @@ extern "C"
 /* OBJECTS - END ************************************************************/
 
 /**
- Strukturo de rikordoj por atributoj de entityj.
+ Structure for common entity attributes
  */
 	typedef struct _dwg_object_entity
 	{
@@ -2165,26 +2175,37 @@ extern "C"
 		long unsigned int picture_size;
 		unsigned char *picture;
 
-		unsigned char regime;
+		unsigned char entity_mode;
 		long unsigned int num_reactors;
 		unsigned char xdict_missing_flag;
 		unsigned char isbylayerlt; 
 		unsigned char nolinks;
 		Dwg_Color color;
 		double linetype_scale;
-		unsigned char linetype;
-		unsigned char plot_style;
+		unsigned char linetype_flags;
+		unsigned char plotstyle_flags;
 		unsigned char material_flags;
 		unsigned char shadow_flags;
 		unsigned int invisible;
 		unsigned char lineweight;
 
 		unsigned int num_handles;
-		Dwg_Handle *handleref;
+
+		//Common Entity Handle Data
+		Dwg_Object_Ref* subentity_ref_handle;
+		Dwg_Object_Ref* reactors;
+		Dwg_Object_Ref* xdicobjhandle;
+		Dwg_Object_Ref* prev_entity;
+		Dwg_Object_Ref* next_entity;
+		Dwg_Object_Ref* layer;
+		Dwg_Object_Ref* ltype;
+		Dwg_Object_Ref* plotstyle;
+		Dwg_Object_Ref* material;
+
 	} Dwg_Object_Entity;
 
 /**
- Strukturo de rikordoj por atributoj de ordinaraj objectj.
+ Structure for ordinary object attributes
  */
 	typedef struct _dwg_object_object
 	{
@@ -2248,7 +2269,7 @@ extern "C"
 	} Dwg_Object_Object;
 
 /**
- Gxenerala strukturo de rikordoj por objectj.
+ General object structure
  */
 	typedef struct _dwg_object
 	{
@@ -2265,10 +2286,13 @@ extern "C"
 		} tio;
 
 		long unsigned int handle;
+
+		struct _dwg_strukturo *parent;
+
 	} Dwg_Object;
 
 /**
- Strukturo de rikordoj por classj.
+ Structure for classes
  */
 	typedef struct _dwg_class
 	{
@@ -2299,7 +2323,7 @@ extern "C"
 		long unsigned int size;
 	} Dwg_Section;
 /**
- Cxefa strukturo de la dwg-datenaro.
+ Main DWG struct
  */
 	typedef struct _dwg_strukturo
 	{
@@ -2341,6 +2365,9 @@ extern "C"
 
 		long unsigned int num_objects;
 		Dwg_Object *object;
+
+		long unsigned int num_object_refs;
+		Dwg_Object_Ref *object_ref;
 
 		struct
 		{

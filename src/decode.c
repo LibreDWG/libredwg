@@ -32,6 +32,7 @@
  * Private functions
  */
 static void dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned int address);
+static Dwg_Object * dwg_resolve_handle (Dwg_Structure* skt, unsigned long int handle);
 
 /*--------------------------------------------------------------------------------
  * Public variables
@@ -46,6 +47,7 @@ int
 dwg_decode_structures (Bit_Chain * dat, Dwg_Structure * skt)
 {
 	char version[7];
+	skt->num_object_refs=0;
 
 	/* Version */
 	dat->byte = 0;
@@ -465,6 +467,13 @@ int decode_R13_R15_header(Bit_Chain* dat, Dwg_Structure * skt){
 			break;
 	}
 	while (seksize > 2);
+
+	//XXX move this somewhere else
+	//step II of handles parsing: resolve pointers from handle value
+	for (i=0; i< skt->num_object_refs; i++) {
+		skt->object_ref[i].obj = dwg_resolve_handle(skt, skt->object_ref[i].handleref.value);
+	}
+
 	if (loglevel){
     	printf ("Kiom objectj: %lu\n", skt->num_objects);
     	printf ("=========> OBJEKTARO: %8X\n", (unsigned int) obek);
@@ -916,7 +925,7 @@ int decode_R2007_header(Bit_Chain* dat, Dwg_Structure * skt){
 }
 
 /*--------------------------------------------------------------------------------
- * Privataj funkcioj
+ * Private functions
  */
 
 static void
@@ -991,8 +1000,7 @@ dwg_decode_entity (Bit_Chain * dat, Dwg_Object_Entity * ent)
 		ent->bitsize = bit_read_RL (dat);
 	}
 
-//TODO: use "entity_mode" instead of "regime"
-	ent->regime = bit_read_BB (dat);
+	ent->entity_mode = bit_read_BB (dat);
 	ent->num_reactors = bit_read_BL (dat);
 
 	if (dat->version >= R_2004){
@@ -1008,8 +1016,8 @@ dwg_decode_entity (Bit_Chain * dat, Dwg_Object_Entity * ent)
 	ent->linetype_scale = bit_read_BD (dat);
 
 	if (dat->version >= R_2000){
-		ent->linetype = bit_read_BB (dat);
-		ent->plot_style = bit_read_BB (dat);
+		ent->linetype_flags = bit_read_BB (dat);
+		ent->plotstyle_flags = bit_read_BB (dat);
 	}
 
 	if (dat->version >= R_2007){
@@ -1075,7 +1083,8 @@ dwg_decode_object (Bit_Chain * dat, Dwg_Object_Object * ord)
 	ord->num_reactors = bit_read_BL (dat);
 }
 
-static void dump(Bit_Chain* dat, int num, char* name)
+static void
+dump(Bit_Chain* dat, int num, char* name)
 {
 	int i;
 	int tmp_byte = dat->byte;
@@ -1093,77 +1102,126 @@ static void dump(Bit_Chain* dat, int num, char* name)
 	dat->bit = tmp_bit;
 }
 
-static void
+/**
+ * Check if a given handle is already listed in object_ref list
+ */
+static unsigned int
+dwg_find_handle (Dwg_Structure* skt, Dwg_Handle* handleref, int* index)
+{
+	//FIXME find a faster algorithm
+	int i;
+	for (i=0;i<skt->num_object_refs;i++)
+		if (skt->object_ref[i].handleref.value == handleref->value){
+			*index = i;
+			return 1;
+		}
+	return 0;
+}
+
+/**
+ * Find a pointer to an object given it's id (handle)
+ */
+static Dwg_Object *
+dwg_resolve_handle (Dwg_Structure* skt, unsigned long int handle)
+{
+	//FIXME find a faster algorithm
+	int i;
+	for (i=0;i<skt->num_object_refs;i++)
+		if (skt->object[i].handle == handle)
+			return &skt->object[i];
+	return 0;
+}
+
+static Dwg_Object_Ref *
 dwg_decode_handleref (Bit_Chain * dat, Dwg_Object * obj)
 {
+	//decode handle
+	Dwg_Handle handleref;
+	Dwg_Object_Ref* ref;
+	Dwg_Structure* skt = obj->parent;;
+	unsigned int exists;
+	unsigned int index;
+
+	if(loglevel) dump(dat, 32, "decode_handleref");
+
+	if (bit_read_H (dat, &handleref))
+	{
+		fprintf (stderr, "dump: handle(code, size, value): %d.%d.%lu\n", handleref.code, handleref.size, handleref.value);
+		fprintf (stderr, "\tENTITY: Error reading handle in object: %lu\n", obj->handle);
+	} else {
+		if (loglevel)
+			fprintf (stderr, "Success: handle(code, size, value): %d.%d.%lu read in object %lu\n", handleref.code, handleref.size, handleref.value, obj->handle);
+	}
+
+	//check if handle is already listed
+	exists = dwg_find_handle(obj->parent, &handleref, &index);
+	if (!exists) {
+
+
+
+		fprintf(stderr, "hay!");
+		//Reserve memory space for object references
+		if (skt->num_object_refs == 0)
+				skt->object_ref = (Dwg_Object_Ref *) malloc (sizeof (Dwg_Object_Ref));
+		else
+			skt->object_ref =
+				(Dwg_Object_Ref *) realloc (skt->object_ref,
+							 (skt->num_object_refs + 1) * sizeof (Dwg_Object_Ref));
+
+		fprintf(stderr, "ho!");
+		ref = &skt->object_ref[skt->num_object_refs];
+		skt->num_object_refs++;
+
+		fprintf(stderr, "let's!");
+		ref->handleref = handleref;
+
+		fprintf(stderr, "go!");
+		return ref;
+
+	} else {
+		return &skt->object_ref[index];
+	}
+}
+
+static void
+dwg_decode_common_entity_handle_data (Bit_Chain * dat, Dwg_Object * obj) {
+
+	Dwg_Object_Entity *ent;
 	int i;
+	ent = obj->tio.entity;
 
-	dump(dat, 32, "decode_handleref");
-
-	if (obj->supertype == DWG_SUPERTYPE_ENTITY)
-	{
-		Dwg_Object_Entity *ent;
-
-		ent = obj->tio.entity;
-
-		ent->handleref = (Dwg_Handle *) calloc (sizeof (Dwg_Handle), 10);
-		i = 0;
-		while (1)
-		{
-			if (i % 10 == 0)
-				ent->handleref =
-					(Dwg_Handle *) realloc (ent->handleref,
-								  (i + 10) * sizeof (Dwg_Handle));
-			if (bit_read_H (dat, &ent->handleref[i]))
-			{
-				fprintf (stderr, "dump: handle: %d.%d.%lu\n", ent->handleref[i].code, ent->handleref[i].size, ent->handleref[i].value);
-				fprintf (stderr, "\tENTITY: Eraro en tiu handle: %lu\n", ent->handle.value);
-				break;
-			}
-
-			fprintf (stderr, "dump: handle: %d.%d.%lu\n", ent->handleref[i].code, ent->handleref[i].size, ent->handleref[i].value);
-
-			if (!(dat->byte == ktl_lastaddress + 1 && dat->bit == 0))
-			{
-				if (dat->byte > ktl_lastaddress)
-					break;
-			}
-			i++;
-		}
-		ent->num_handles = i;
+	//ent->subentity_ref_handle = dwg_decode_handleref (dat, obj);
+	if (ent->num_reactors)
+		ent->reactors = malloc (ent->num_reactors*sizeof (Dwg_Object_Ref*));
+	for(i=0; i<ent->num_reactors; i++){
+		ent->reactors[i] = *dwg_decode_handleref (dat, obj);
 	}
-	else
-	{
-		Dwg_Object_Object *ord;
+	ent->xdicobjhandle = dwg_decode_handleref (dat, obj);
 
-		ord = obj->tio.object;
-
-		ord->handleref = (Dwg_Handle *) calloc (sizeof (Dwg_Handle), 10);
-		i = 0;
-		while (1)
-		{
-			if (i % 10 == 0)
-				ord->handleref =
-					(Dwg_Handle *) realloc (ord->handleref,
-								  (i + 10) * sizeof (Dwg_Handle));
-			if (bit_read_H (dat, &ord->handleref[i]))
-			{
-				fprintf (stderr, "dump: handle: %d.%d.%lu\n", ord->handleref[i].code, ord->handleref[i].size, ord->handleref[i].value);
-				fprintf (stderr, "\tOBJECT: Eraro en tiu handle: %lu\n", ord->handle.value);
-				break;
-			}
-
-			fprintf (stderr, "dump: handle: %d.%d.%lu\n", ord->handleref[i].code, ord->handleref[i].size, ord->handleref[i].value);
-
-			if (!(dat->byte == ktl_lastaddress + 1 && dat->bit == 0))
-			{
-				if (dat->byte > ktl_lastaddress)
-					break;
-			}
-			i++;
+    if (dat->version == R_13 || dat->version == R_14){
+    	ent->layer = dwg_decode_handleref (dat, obj);
+		if (ent->isbylayerlt){
+				ent->ltype = dwg_decode_handleref (dat, obj);
 		}
-		ord->num_handles = i;
-	}
+    }
+
+    ent->prev_entity = dwg_decode_handleref (dat, obj);
+    ent->next_entity = dwg_decode_handleref (dat, obj);
+
+    if (dat->version >= R_2000) {
+    	ent->layer = dwg_decode_handleref (dat, obj);
+		if (ent->linetype_flags == 3){
+				ent->ltype = dwg_decode_handleref (dat, obj);
+		}
+		if (ent->plotstyle_flags == 3){
+				ent->plotstyle = dwg_decode_handleref (dat, obj);
+		}
+    }
+
+    if (dat->version >= R_2007) {
+    	ent->material = dwg_decode_handleref (dat, obj);
+    }
+
 }
 
 /* OBJECTS *******************************************************************/
@@ -1183,7 +1241,7 @@ dwg_decode_UNUSED (Bit_Chain * dat, Dwg_Object * obj)
 	 */
 
 
-	dwg_decode_handleref (dat, obj);
+	dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -1248,7 +1306,7 @@ dwg_decode_TEXT (Bit_Chain * dat, Dwg_Object * obj)
                 if (!(ent->dataflags & 0x80))
                         ent->alignment.v = bit_read_BS (dat);
         }
-	dwg_decode_handleref (dat, obj);
+	dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -1321,7 +1379,7 @@ dwg_decode_ATTRIB (Bit_Chain * dat, Dwg_Object * obj)
         ent->lock_position_flag = bit_read_B (dat);
     }
 
-	dwg_decode_handleref (dat, obj);
+	dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -1395,7 +1453,7 @@ dwg_decode_ATTDEF (Bit_Chain * dat, Dwg_Object * obj)
     }
     ent->prompt = bit_read_T (dat);
 
-	dwg_decode_handleref (dat, obj);
+	dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -1413,7 +1471,7 @@ dwg_decode_BLOCK (Bit_Chain * dat, Dwg_Object * obj)
 	 */
 	ent->name = bit_read_T (dat);
 
-	dwg_decode_handleref (dat, obj);
+	dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -1427,7 +1485,7 @@ dwg_decode_ENDBLK (Bit_Chain * dat, Dwg_Object * obj)
 	ent = obj->tio.entity->tio.ENDBLK;
 	dwg_decode_entity (dat, obj->tio.entity);
 
-	dwg_decode_handleref (dat, obj);
+	dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -1441,7 +1499,7 @@ dwg_decode_SEQEND (Bit_Chain * dat, Dwg_Object * obj)
 	ent = obj->tio.entity->tio.SEQEND;
 	dwg_decode_entity (dat, obj->tio.entity);
 
-	dwg_decode_handleref (dat, obj);
+	dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -1502,9 +1560,11 @@ dwg_decode_INSERT (Bit_Chain * dat, Dwg_Object * obj)
 
 //TODO: incomplete implementation. Check spec!
 
-	dwg_decode_handleref (dat, obj);
+	dwg_decode_common_entity_handle_data (dat, obj);
 
-	bit_read_H(dat, &ent->block_header_handle);
+	ent->block_header = dwg_decode_handleref(dat, obj);
+
+	//TODO: implement missing headers
 }
 
 static void
@@ -1567,7 +1627,7 @@ dwg_decode_MINSERT (Bit_Chain * dat, Dwg_Object * obj)
 	ent->line.dy = bit_read_BD (dat);
 
 //TODO: incomplete implementation. Check spec!
-	dwg_decode_handleref (dat, obj);
+	dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 
@@ -1596,7 +1656,7 @@ dwg_decode_VERTEX_2D (Bit_Chain * dat, Dwg_Object * obj)
 	ent->bulge = bit_read_BD (dat);
 	ent->tangent_dir = bit_read_BD (dat);
 
-	dwg_decode_handleref (dat, obj);
+	dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -1617,7 +1677,7 @@ dwg_decode_VERTEX_3D (Bit_Chain * dat, Dwg_Object * obj)
 	ent->y0 = bit_read_BD (dat);
 	ent->z0 = bit_read_BD (dat);
 
-	dwg_decode_handleref (dat, obj);
+	dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -1638,7 +1698,7 @@ dwg_decode_VERTEX_MESH (Bit_Chain * dat, Dwg_Object * obj)
 	ent->y0 = bit_read_BD (dat);
 	ent->z0 = bit_read_BD (dat);
 
-	dwg_decode_handleref (dat, obj);
+	dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -1659,7 +1719,7 @@ dwg_decode_VERTEX_PFACE (Bit_Chain * dat, Dwg_Object * obj)
 	ent->y0 = bit_read_BD (dat);
 	ent->z0 = bit_read_BD (dat);
 
-	dwg_decode_handleref (dat, obj);
+	dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -1680,7 +1740,7 @@ dwg_decode_VERTEX_PFACE_FACE (Bit_Chain * dat, Dwg_Object * obj)
 	ent->vertind[2] = bit_read_BS (dat);
 	ent->vertind[3] = bit_read_BS (dat);
 
-	dwg_decode_handleref (dat, obj);
+	dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -1710,7 +1770,7 @@ dwg_decode_POLYLINE_2D (Bit_Chain * dat, Dwg_Object * obj)
 
 //TODO: incomplete implementation. Check spec!
 
-	dwg_decode_handleref (dat, obj);
+	dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -1735,7 +1795,7 @@ dwg_decode_POLYLINE_3D (Bit_Chain * dat, Dwg_Object * obj)
 
 //TODO: incomplete implementation. Check spec!
 
-	dwg_decode_handleref (dat, obj);
+	dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -1758,7 +1818,7 @@ dwg_decode_ARC (Bit_Chain * dat, Dwg_Object * obj)
 	ent->start_angle = bit_read_BD (dat);
 	ent->end_angle = bit_read_BD (dat);
 
-	dwg_decode_handleref (dat, obj);
+	dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -1779,7 +1839,7 @@ dwg_decode_CIRCLE (Bit_Chain * dat, Dwg_Object * obj)
 	ent->thickness = bit_read_BT (dat);
 	bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
 
-	dwg_decode_handleref (dat, obj);
+	dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -1820,7 +1880,7 @@ dwg_decode_LINE (Bit_Chain * dat, Dwg_Object * obj)
 	ent->thickness = bit_read_BT (dat);
 	bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
 
-	dwg_decode_handleref (dat, obj);
+	dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -1882,7 +1942,7 @@ dwg_decode_DIMENSION_ORDINATE (Bit_Chain * dat, Dwg_Object * obj)
 
     ent->flags_2 = bit_read_RC(dat);
     
-    dwg_decode_handleref (dat, obj);
+    dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -1942,7 +2002,7 @@ dwg_decode_DIMENSION_LINEAR (Bit_Chain * dat, Dwg_Object * obj)
     ent->ext_line_rot = bit_read_BD(dat);
     ent->dim_rot = bit_read_BD(dat);
 
-    dwg_decode_handleref (dat, obj);
+    dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -2001,7 +2061,7 @@ dwg_decode_DIMENSION_ALIGNED (Bit_Chain * dat, Dwg_Object * obj)
 
     ent->ext_line_rot = bit_read_BD(dat);
 
-    dwg_decode_handleref (dat, obj);
+    dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -2061,7 +2121,7 @@ dwg_decode_DIMENSION_ANG3PT (Bit_Chain * dat, Dwg_Object * obj)
     ent->_15_pt.y = bit_read_BD(dat);
     ent->_15_pt.z = bit_read_BD(dat);
 
-    dwg_decode_handleref (dat, obj);
+    dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -2123,7 +2183,7 @@ dwg_decode_DIMENSION_ANG2LN (Bit_Chain * dat, Dwg_Object * obj)
     ent->_10_pt.y = bit_read_BD(dat);
     ent->_10_pt.z = bit_read_BD(dat);
 
-    dwg_decode_handleref (dat, obj);
+    dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -2178,7 +2238,7 @@ dwg_decode_DIMENSION_RADIUS (Bit_Chain * dat, Dwg_Object * obj)
     ent->_15_pt.z = bit_read_BD(dat);
     ent->leader_len = bit_read_BD(dat);
 
-    dwg_decode_handleref (dat, obj);
+    dwg_decode_common_entity_handle_data (dat, obj);
 }
 static void
 dwg_decode_DIMENSION_DIAMETER (Bit_Chain * dat, Dwg_Object * obj)
@@ -2233,7 +2293,7 @@ dwg_decode_DIMENSION_DIAMETER (Bit_Chain * dat, Dwg_Object * obj)
     ent->_10_pt.z = bit_read_BD(dat);
     ent->leader_len = bit_read_BD(dat);
 
-    dwg_decode_handleref (dat, obj);
+    dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -2254,7 +2314,7 @@ dwg_decode_POINT (Bit_Chain * dat, Dwg_Object * obj)
 	bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
 	ent->x_ang = bit_read_BD (dat);
 
-	dwg_decode_handleref (dat, obj);
+	dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -2301,7 +2361,7 @@ dwg_decode_3DFACE (Bit_Chain * dat, Dwg_Object * obj)
         ent->corner4.y = bit_read_BD(dat);
         ent->corner4.z = bit_read_BD(dat);
     }
-    dwg_decode_handleref (dat, obj);
+    dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -2323,7 +2383,7 @@ dwg_decode_POLYLINE_PFACE (Bit_Chain * dat, Dwg_Object * obj)
         ent->owned_object_count = bit_read_BL(dat);
     }
 
-    dwg_decode_handleref (dat, obj);
+    dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -2349,7 +2409,7 @@ dwg_decode_POLYLINE_MESH (Bit_Chain * dat, Dwg_Object * obj)
         ent->owned_object_count = bit_read_BL(dat);
     }
 
-    dwg_decode_handleref (dat, obj);
+    dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -2375,7 +2435,7 @@ dwg_decode_SOLID (Bit_Chain * dat, Dwg_Object * obj)
 	ent->corner4.y = bit_read_RD (dat);
         bit_read_BE(dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
 
-	dwg_decode_handleref (dat, obj);
+	dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -2401,7 +2461,7 @@ dwg_decode_TRACE (Bit_Chain * dat, Dwg_Object * obj)
 	ent->corner4.y = bit_read_RD (dat);
         bit_read_BE(dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
 
-	dwg_decode_handleref (dat, obj);
+	dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -2428,7 +2488,7 @@ dwg_decode_SHAPE (Bit_Chain * dat, Dwg_Object * obj)
     ent->extrusion.y = bit_read_BD(dat);
     ent->extrusion.z = bit_read_BD(dat);
 
-	dwg_decode_handleref (dat, obj);
+	dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -2508,7 +2568,7 @@ dwg_decode_VIEWPORT (Bit_Chain * dat, Dwg_Object * obj)
 		bit_read_CMC (dat, &ent->ambient_light_color);
 	}
 
-	dwg_decode_handleref (dat, obj);
+	dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -2535,7 +2595,7 @@ dwg_decode_ELLIPSE (Bit_Chain * dat, Dwg_Object * obj)
 	ent->start_angle = bit_read_BD (dat);
 	ent->end_angle = bit_read_BD (dat);
 
-	dwg_decode_handleref (dat, obj);
+	dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -2604,7 +2664,7 @@ dwg_decode_SPLINE (Bit_Chain * dat, Dwg_Object * obj)
 		}
 	}
 
-	dwg_decode_handleref (dat, obj);
+	dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -2625,7 +2685,7 @@ dwg_decode_RAY (Bit_Chain * dat, Dwg_Object * obj)
 	ent->y1 = bit_read_BD (dat);
 	ent->z1 = bit_read_BD (dat);
 
-	dwg_decode_handleref (dat, obj);
+	dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -2646,7 +2706,7 @@ dwg_decode_XLINE (Bit_Chain * dat, Dwg_Object * obj)
 	ent->y1 = bit_read_BD (dat);
 	ent->z1 = bit_read_BD (dat);
 
-	dwg_decode_handleref (dat, obj);
+	dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -2674,7 +2734,7 @@ dwg_decode_DICTIONARY (Bit_Chain *dat, Dwg_Object *obj)
 	for (i = 0; i < dict->size; i++)
 		dict->name[i] = bit_read_T (dat);
 
-	dwg_decode_handleref (dat, obj);
+	//dwg_decode_handleref (dat, obj);
 }
 
 static void
@@ -2721,7 +2781,7 @@ dwg_decode_MTEXT (Bit_Chain * dat, Dwg_Object * obj)
     	ent->unknown_long = bit_read_BL (dat);
     }
 
-	dwg_decode_handleref (dat, obj);
+	dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -2789,7 +2849,7 @@ dwg_decode_LEADER (Bit_Chain *dat, Dwg_Object *obj)
         ent->unknown_bit_5 = bit_read_B (dat);
     }
 
-  	dwg_decode_handleref (dat, obj);
+  	dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -2820,7 +2880,7 @@ dwg_decode_TOLERANCE (Bit_Chain *dat, Dwg_Object *obj)
     ent->extrusion.z = bit_read_BD(dat);
     ent->text_string = bit_read_BS(dat);
 
-  	dwg_decode_handleref (dat, obj);
+  	dwg_decode_common_entity_handle_data (dat, obj);
 
 }
 
@@ -2875,7 +2935,7 @@ dwg_decode_MLINE (Bit_Chain *dat, Dwg_Object *obj)
     }    
     
     
-  	dwg_decode_handleref (dat, obj);
+  	dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -2898,7 +2958,7 @@ dwg_decode_BLOCK_CONTROL (Bit_Chain *dat, Dwg_Object *obj)
 
 //TODO: Implement-me!
 
-	dwg_decode_handleref (dat, obj);
+	//dwg_decode_handleref (dat, obj);
 }
 
 static void
@@ -2928,7 +2988,7 @@ dwg_decode_LAYER (Bit_Chain * dat, Dwg_Object * obj)
 	ord->values = bit_read_BS (dat);
 	ord->colour = bit_read_BS (dat);
 
-	dwg_decode_handleref (dat, obj);
+	//dwg_decode_handleref (dat, obj);
 }
 
 static void
@@ -2975,7 +3035,7 @@ dwg_decode_IMAGE (Bit_Chain *dat, Dwg_Object *obj)
 		}
 	}
 
-	dwg_decode_handleref (dat, obj);
+	dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -3048,7 +3108,7 @@ dwg_decode_LAYOUT (Bit_Chain * dat, Dwg_Object * obj)
 	ord->limo.y_max = bit_read_BD (dat);
 	ord->limo.z_max = bit_read_BD (dat);
 
-	dwg_decode_handleref (dat, obj);
+	//dwg_decode_handleref (dat, obj);
 }
 
 static void
@@ -3111,7 +3171,7 @@ dwg_decode_LWPLINE (Bit_Chain * dat, Dwg_Object * obj)
 		ent->widths[i].end = bit_read_BD (dat);
 	}
 
-	dwg_decode_handleref (dat, obj);
+	dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 
@@ -3144,7 +3204,7 @@ dwg_decode_OLE2FRAME (Bit_Chain * dat, Dwg_Object * obj)
 		ent->unknown = bit_read_RC (dat);
 	}
 
-	dwg_decode_handleref (dat, obj);
+	dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -3163,7 +3223,7 @@ dwg_decode_PLACEHOLDER (Bit_Chain * dat, Dwg_Object * object)
 
 	//TODO: Implement-me!
 
-	dwg_decode_handleref (dat, object);
+	//dwg_decode_handleref (dat, object);
 }
 
 static void
@@ -3182,7 +3242,7 @@ dwg_decode_DICTIONARYVAR (Bit_Chain * dat, Dwg_Object * object)
 
 	//TODO: Implement-me!
 
-	dwg_decode_handleref (dat, object);
+	//dwg_decode_handleref (dat, object);
 }
 
 static void
@@ -3201,7 +3261,7 @@ dwg_decode_WIPEOUTVARIABLE (Bit_Chain * dat, Dwg_Object * object)
 
 	//TODO: Implement-me!
 
-	dwg_decode_handleref (dat, object);
+	//dwg_decode_handleref (dat, object);
 }
 
 static void
@@ -3220,7 +3280,7 @@ dwg_decode_IMAGEDEF (Bit_Chain * dat, Dwg_Object * object)
 
 	//TODO: Implement-me!
 
-	dwg_decode_handleref (dat, object);
+	//dwg_decode_handleref (dat, object);
 }
 
 static void
@@ -3239,7 +3299,7 @@ dwg_decode_RASTERVARIABLES (Bit_Chain * dat, Dwg_Object * object)
 
 	//TODO: Implement-me!
 
-	dwg_decode_handleref (dat, object);
+	//dwg_decode_handleref (dat, object);
 }
 
 static void
@@ -3258,7 +3318,7 @@ dwg_decode_SPATIAL_INDEX (Bit_Chain * dat, Dwg_Object * object)
 
 	//TODO: Implement-me!
 
-	dwg_decode_handleref (dat, object);
+	//dwg_decode_handleref (dat, object);
 }
 
 static void
@@ -3277,7 +3337,7 @@ dwg_decode_XRECORD (Bit_Chain * dat, Dwg_Object * object)
 
 	//TODO: Implement-me!
 
-	dwg_decode_handleref (dat, object);
+	//dwg_decode_handleref (dat, object);
 }
 
 static void
@@ -3296,7 +3356,7 @@ dwg_decode_SPATIAL_FILTER (Bit_Chain * dat, Dwg_Object * object)
 
 	//TODO: Implement-me!
 
-	dwg_decode_handleref (dat, object);
+	//dwg_decode_handleref (dat, object);
 }
 
 static void
@@ -3315,7 +3375,7 @@ dwg_decode_LAYER_INDEX (Bit_Chain * dat, Dwg_Object * object)
 
 	//TODO: Implement-me!
 
-	dwg_decode_handleref (dat, object);
+	//dwg_decode_handleref (dat, object);
 }
 
 static void
@@ -3334,7 +3394,7 @@ dwg_decode_DICTIONARYWDLFT (Bit_Chain * dat, Dwg_Object * object)
 
 	//TODO: Implement-me!
 
-	dwg_decode_handleref (dat, object);
+	//dwg_decode_handleref (dat, object);
 }
 
 static void
@@ -3353,7 +3413,7 @@ dwg_decode_IMAGEDEFREACTOR (Bit_Chain * dat, Dwg_Object * object)
 
 	//TODO: Implement-me!
 
-	dwg_decode_handleref (dat, object);
+	//dwg_decode_handleref (dat, object);
 }
 
 static void
@@ -3372,7 +3432,7 @@ dwg_decode_IDBUFFER (Bit_Chain * dat, Dwg_Object * object)
 
 	//TODO: Implement-me!
 
-	dwg_decode_handleref (dat, object);
+	//dwg_decode_handleref (dat, object);
 }
 
 static void
@@ -3391,7 +3451,7 @@ dwg_decode_HATCH (Bit_Chain * dat, Dwg_Object * object)
 
 	//TODO: Implement-me!
 
-	dwg_decode_handleref (dat, object);
+	//dwg_decode_handleref (dat, object);
 }
 
 static void
@@ -3410,7 +3470,7 @@ dwg_decode_VBA_PROJECT (Bit_Chain * dat, Dwg_Object * object)
 
 	//TODO: Implement-me!
 
-	dwg_decode_handleref (dat, object);
+	//dwg_decode_handleref (dat, object);
 }
 
 static void
@@ -3429,7 +3489,7 @@ dwg_decode_SORTENTSTABLE (Bit_Chain * dat, Dwg_Object * object)
 
 	//TODO: Implement-me!
 
-	dwg_decode_handleref (dat, object);
+	//dwg_decode_handleref (dat, object);
 }
 
 static int
@@ -3482,7 +3542,8 @@ dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned in
 	dat->byte = address;
 	dat->bit = 0;
 
-	/* Rezervi memor-spacon por plia object
+	/*
+	 * Reserve memory space for objects
 	 */
 	if (skt->num_objects == 0)
 		skt->object = (Dwg_Object *) malloc (sizeof (Dwg_Object));
@@ -3491,11 +3552,13 @@ dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned in
 			(Dwg_Object *) realloc (skt->object,
 						 (skt->num_objects + 1) * sizeof (Dwg_Object));
 
-	//printf ("Object number: %u\n", skt->num_objects);
+
+	sprintf (stderr, "Object number: %lu\n", skt->num_objects);
 
 	obj = &skt->object[skt->num_objects];
 	skt->num_objects++;
 
+	obj->parent = skt;
 	obj->size = bit_read_MS (dat);
 	object_address = dat->byte;
 	ktl_lastaddress = dat->byte + obj->size;	/* (de cxi tie oni kalkulas la bitsizen) */

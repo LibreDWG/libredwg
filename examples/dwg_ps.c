@@ -86,7 +86,7 @@ create_postscript (Dwg_Structure *dwg, char *output)
 			continue;
 		if (obj->type = DWG_SUPERTYPE_OBJECT) // not entity
 			continue;
-		if (obj->tio.entity->regime == 0) // belongs to block
+		if (obj->tio.entity->entity_mode == 0) // belongs to block
 			continue;
 		if (obj->type == DWG_TYPE_LINE){
     		Dwg_Entity_LINE* line;

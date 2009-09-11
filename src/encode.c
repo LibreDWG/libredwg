@@ -609,13 +609,13 @@ dwg_encode_entity (Dwg_Object * obj, Bit_Chain * dat)
 			bit_write_RC (dat, est->picture[i]);
 	}
 
-	bit_write_BB (dat, est->regime);
+	bit_write_BB (dat, est->entity_mode);
 	bit_write_BL (dat, est->num_reactors);
 	bit_write_B (dat, est->nolinks);
 	bit_write_CMC (dat, est->color);
 	bit_write_BD (dat, est->linetype_scale);
-	bit_write_BB (dat, est->linetype);
-	bit_write_BB (dat, est->plot_style);
+	bit_write_BB (dat, est->linetype_flags);
+	bit_write_BB (dat, est->plotstyle_flags);
 	bit_write_BS (dat, est->invisible);
 	bit_write_RC (dat, est->lineweight);
 
@@ -789,8 +789,9 @@ dwg_encode_entity (Dwg_Object * obj, Bit_Chain * dat)
 
 	/* Traktilaj referencoj
 	 */
+	//FIXME write new handle encoding routines like print_handleref
 	for (i = 0; i < est->num_handles; i++)
-		bit_write_H (dat, &est->handleref[i]);
+		//bit_write_H (dat, &est->handleref[i]);
 
 	/* Finfine kalkuli kaj write la bajt-sizen de la object (cxu estas erara?)
 	 */

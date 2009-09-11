@@ -41,13 +41,13 @@ dwg_print_entity (Dwg_Object_Entity * ent)
 		printf ("\tSize: %lu B\n", ent->picture_size);
 	else
 		puts ("");
-	printf ("Regime: %i\n", ent->regime);
+	printf ("Regime: %i\n", ent->entity_mode);
 	printf ("Numreactors: %lu\n", ent->num_reactors);
 	printf ("No links?: %s\n", ent->nolinks ? "Yes" : "No");
 	dwg_print_CMC (ent->color);
 	printf ("Linetype scale: %1.13g\n", ent->linetype_scale);
-	printf ("Linetype: 0x%02X\n", ent->linetype);
-	printf ("Plot Style: 0x%02X\n", ent->plot_style);
+	printf ("Linetype: 0x%02X\n", ent->linetype_flags);
+	printf ("Plot Style: 0x%02X\n", ent->plotstyle_flags);
 	printf ("Invisible: 0x%04X\n", ent->invisible);
 	printf ("LineThickness: %u\n", ent->lineweight);
 }
@@ -64,46 +64,20 @@ dwg_print_object (Dwg_Object_Object *obj)
 
 
 void
-dwg_print_handleref (Dwg_Object * object)
+dwg_print_handleref (Dwg_Object * obj)
 {
 	unsigned int i;
+	unsigned int num_handles =  obj->parent->num_object_refs;
+	Dwg_Object_Ref* ref = obj->parent->object_ref;
 
-	if (object->supertype == DWG_SUPERTYPE_ENTITY)
-	{
-		Dwg_Object_Entity *ent;
-
-		ent = object->tio.entity;
-
-		printf ("\tHandle references (%u): ", ent->num_handles);
-		if (ent->num_handles == 0)
-		{
-			puts ("");
-			return;
-		}
-		for (i = 0; i < ent->num_handles - 1; i++)
-			printf ("%i.%i.%li / ", ent->handleref[i].code, ent->handleref[i].size,
-				ent->handleref[i].value);
-		printf ("%i.%i.%li\n", ent->handleref[i].code, ent->handleref[i].size,
-			ent->handleref[i].value);
+	printf ("\tHandle references (%u): ", num_handles);
+	if (num_handles == 0){
+		puts ("");
+		return;
 	}
-        else if (object->supertype == DWG_SUPERTYPE_OBJECT)
-	{
-		Dwg_Object_Object *obj;
-
-		obj = object->tio.object;
-
-		printf ("\tHandle references (%u): ", obj->num_handles);
-		if (obj->num_handles == 0)
-		{
-			puts ("");
-			return;
-		}
-		for (i = 0; i < obj->num_handles - 1; i++)
-			printf ("%i.%i.%li / ", obj->handleref[i].code, obj->handleref[i].size,
-				obj->handleref[i].value);
-		printf ("%i.%i.%li\n", obj->handleref[i].code, obj->handleref[i].size,
-			obj->handleref[i].value);
-	}
+	for (i=0; i<= num_handles; i++)
+		printf ("%i.%i.%li / ", ref[i].handleref.code, ref[i].handleref.size,
+				ref[i].handleref.value);
 }
 
 /* OBJECTS *******************************************************************/
