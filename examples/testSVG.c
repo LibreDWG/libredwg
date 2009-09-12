@@ -100,7 +100,7 @@ void output_SVG(Dwg_Structure* dwg_struct){
 			insert = obj->tio.entity->tio.INSERT;
 			printf("\t<use x=\"%f\" y=\"%f\" xlink:href=\"#dwg-handle-%lu\" />\n", insert->x0, page_height - insert->y0, insert->block_header->handleref.value);
       if (insert->block_header->obj){
-  			printf("\t<circle cx=\"%f\" cy=\"%f\" r=\"0.1\" fill=\"red\" id=\"handle-circle-%lu-%lu\" />\n", insert->x0, page_height - insert->y0, insert->block_header->handleref.value, insert->block_header->obj->handle.value);
+//  			printf("\t<circle cx=\"%f\" cy=\"%f\" r=\"0.1\" fill=\"red\" id=\"handle-circle-%lu-%lu\" />\n", insert->x0, page_height - insert->y0, insert->block_header->handleref.value, insert->block_header->obj->handle.value);
       }
 		}
 
