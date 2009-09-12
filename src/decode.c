@@ -633,6 +633,23 @@ int decode_R13_R15_header(Bit_Chain* dat, Dwg_Structure * skt){
 	return 0;
 }
 
+//negative value indicates a compression opcode
+int read_literal_length(Bit_Chain* dat){
+  int total = 0;
+  unsigned char byte = bit_read_RC(dat);
+  if (byte>=0x01 && byte<=0x0E) return byte+3;
+  if (byte==0) {
+    total=0x0F;
+    while ((byte=bit_read_RC(dat)) > 0x00){
+      total += 0xFF;
+    }
+    return total+3;
+  }
+  if (byte&0xF0){
+    return -byte;
+  }
+}
+
 int decode_R2004_header(Bit_Chain* dat, Dwg_Structure * skt){
 	int i;
 	unsigned long int preview_address, security_type, unknown_long, dwg_property_address, vba_proj_address;
@@ -787,6 +804,16 @@ int decode_R2004_header(Bit_Chain* dat, Dwg_Structure * skt){
     fprintf (stderr, "CRC: %x\n", (unsigned int) _2004_header_data.fields.CRC);
   }
 
+//////////////////////////////////////////////
+// up to this line the code seems to be ok. //
+//////////////////////////////////////////////
+
+  dat->byte = _2004_header_data.fields.section_map_address + 0x100;
+  fprintf(stderr, "section_map_address DUMP:\n");
+  for (i=0; i<32; i++){
+    fprintf(stderr, "%x ", bit_read_RC(dat));
+  }
+
   /* System Section */
   typedef union _system_section
   {
@@ -799,6 +826,45 @@ int decode_R2004_header(Bit_Chain* dat, Dwg_Structure * skt){
       unsigned long int checksum;
     } fields;
   } system_section;
+
+  /* Encrypted Section Header */
+  typedef union _encrypted_section_header
+  {
+    unsigned long int long_data[8];
+    unsigned char char_data[32];
+    struct{
+      unsigned long int section_type;
+      unsigned long int data_size;
+      unsigned long int section_size;
+      unsigned long int start_offset;
+      unsigned long int unknown;
+      unsigned long int checksum_1;
+      unsigned long int checksum_2;
+      unsigned long int unknown_2;
+    } fields;
+  } encrypted_section_header;
+
+  encrypted_section_header es;
+  for (i=0; i<32; i++){
+    es.char_data[i] = bit_read_RC(dat);
+  }
+
+  unsigned long int secMask = 0x4164536b;
+  for (i=0; i<8; i++){
+    es.long_data[i] ^= secMask;
+  }
+
+  if (loglevel){
+    fprintf (stderr, "\n\n=== Encrypted Section Header ===\n");
+    fprintf (stderr, "Section Type: %x\n", (unsigned int) es.fields.section_type);
+    fprintf (stderr, "Data size: %x\n", (unsigned int) es.fields.data_size);
+    fprintf (stderr, "Section size: %x\n", (unsigned int) es.fields.section_size);
+    fprintf (stderr, "Start Offset: %x\n", (unsigned int) es.fields.start_offset);
+    fprintf (stderr, "Unknown: %x\n", (unsigned int) es.fields.unknown);
+    fprintf (stderr, "Checksum 1: %x\n", (unsigned int) es.fields.checksum_1);
+    fprintf (stderr, "Checksum 2: %x\n", (unsigned int) es.fields.checksum_2);
+    fprintf (stderr, "???: %x\n", (unsigned int) es.fields.unknown_2);
+  }
 
   system_section ss;
 
@@ -3553,7 +3619,7 @@ dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned in
 						 (skt->num_objects + 1) * sizeof (Dwg_Object));
 
 
-	sprintf (stderr, "Object number: %lu\n", skt->num_objects);
+	fprintf (stderr, "Object number: %lu\n", skt->num_objects);
 
 	obj = &skt->object[skt->num_objects];
 	skt->num_objects++;
