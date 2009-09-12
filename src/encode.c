@@ -305,9 +305,9 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 		/* Difini la handlejn de cxiuj objectj, inkluzive la unknownj */
 		omap[i].idc = i;
 		if (skt->object[i].supertype == DWG_SUPERTYPE_ENTITY)
-			omap[i].handle = skt->object[i].tio.entity->handle.value;
+			omap[i].handle = skt->object[i].handle.value;
 		else if (skt->object[i].supertype == DWG_SUPERTYPE_OBJECT)
-			omap[i].handle = skt->object[i].tio.object->handle.value;
+			omap[i].handle = skt->object[i].handle.value;
 		else if (skt->object[i].supertype == DWG_SUPERTYPE_UNKNOWN)
 		{
 			nkn.chain = skt->object[i].tio.unknown;
@@ -592,7 +592,7 @@ dwg_encode_entity (Dwg_Object * obj, Bit_Chain * dat)
 
 	bit_write_RL (dat, 0);	// Nulo nun, kalkulendas por write poste
 
-	bit_write_H (dat, &est->handle);
+	bit_write_H (dat, &est->object->handle);
 	bit_write_BS (dat, est->extended_size);
 	if (est->extended_size > 0)
 	{

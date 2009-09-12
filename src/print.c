@@ -33,8 +33,8 @@ void
 dwg_print_entity (Dwg_Object_Entity * ent)
 {
 	printf ("Bitsize: %lu\n", ent->bitsize);
-	printf ("Handle: %i.%i.%lu\n", ent->handle.code, ent->handle.size,
-		ent->handle.value);
+	printf ("Handle: %i.%i.%lu\n", ent->object->handle.code, ent->object->handle.size,
+		ent->object->handle.value);
 	printf ("Extended size: %lu B\n", (long unsigned int) ent->extended_size);
 	printf ("Picture exists?: %s", ent->picture_exists ? "Yes" : "No");
 	if (ent->picture_exists)
@@ -56,8 +56,8 @@ void
 dwg_print_object (Dwg_Object_Object *obj)
 {
 	printf ("Bitsize: %lu\n", obj->bitsize);
-	printf ("Handle: %i.%i.%lu\n", obj->handle.code, obj->handle.size,
-		obj->handle.value);
+	printf ("Handle: %i.%i.%lu\n", obj->object->handle.code, obj->object->handle.size,
+		obj->object->handle.value);
 	printf ("Extended size: %lu B\n", (long unsigned int) obj->extended_size);
 	printf ("Numreactors: %lu\n", obj->num_reactors);
 }

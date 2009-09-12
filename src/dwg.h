@@ -2111,6 +2111,7 @@ extern "C"
  */
 	typedef struct _dwg_object_entity
 	{
+    struct _dwg_object* object;
 		union
 		{
 			Dwg_Entity_UNUSED *UNUSED;
@@ -2165,7 +2166,7 @@ extern "C"
 		} tio;
 
 		long unsigned int bitsize;
-		Dwg_Handle handle;
+		//Dwg_Handle handle;
 
 		unsigned int extended_size;
 		Dwg_Handle extended_handle;
@@ -2209,6 +2210,7 @@ extern "C"
  */
 	typedef struct _dwg_object_object
 	{
+    struct _dwg_object* object;
 		union
 		{
 			Dwg_Object_DICTIONARY *DICTIONARY;
@@ -2256,7 +2258,7 @@ extern "C"
 		} tio;
 
 		long unsigned int bitsize;
-		Dwg_Handle handle;
+		//Dwg_Handle handle;
 
 		unsigned int extended_size;
 		Dwg_Handle extended_handle;
@@ -2285,7 +2287,7 @@ extern "C"
 			unsigned char *unknown;
 		} tio;
 
-		long unsigned int handle;
+		Dwg_Handle handle;
 
 		struct _dwg_strukturo *parent;
 
