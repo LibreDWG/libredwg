@@ -1189,7 +1189,8 @@ dwg_find_handle (Dwg_Structure* skt, Dwg_Handle* handleref, int* index)
 	//FIXME find a faster algorithm
 	int i;
 	for (i=0;i<skt->num_object_refs;i++)
-		if (skt->object_ref[i].handleref.value == handleref->value){
+		if (skt->object_ref[i].handleref.value == handleref->value &&
+        skt->object_ref[i].handleref.code == handleref->code){
 			*index = i;
 			return 1;
 		}
@@ -1224,15 +1225,28 @@ dwg_decode_handleref (Bit_Chain * dat, Dwg_Object * obj)
 
 	if (bit_read_H (dat, &handleref))
 	{
-		fprintf (stderr, "dump: handle %d.%d.%lu\n", handleref.code, handleref.size, handleref.value);
-		fprintf (stderr, "\tENTITY: Error reading handle in object whose handle is: %d.%d.%lu\n", obj->handle.code, obj->handle.size, obj->handle.value);
+		fprintf (stderr, "dump: handleref %d.%d.%lu\n",
+      handleref.code,
+      handleref.size,
+      handleref.value);
+		fprintf (stderr, "\tENTITY: Error reading handle in object whose handle is: %d.%d.%lu\n",
+      obj->handle.code,
+      obj->handle.size,
+      obj->handle.value);
 	} else {
 		if (loglevel)
-			fprintf (stderr, "Success: handle %d.%d.%lu read in object whose handle is %d.%d.%lu\n", handleref.code, handleref.size, handleref.value, obj->handle.code, obj->handle.size, obj->handle.value);
+			fprintf (stderr, "Success: handle %d.%d.%lu read in object whose handle is %d.%d.%lu\n",
+        handleref.code,
+        handleref.size,
+        handleref.value,
+        obj->handle.code,
+        obj->handle.size,
+        obj->handle.value);
 	}
 
 	//check if handle is already listed
 	exists = dwg_find_handle(obj->parent, &handleref, &index);
+  exists = 0;
 	if (!exists) {
 
 		//Reserve memory space for object references
@@ -1256,6 +1270,24 @@ dwg_decode_handleref (Bit_Chain * dat, Dwg_Object * obj)
 	}
 }
 
+static Dwg_Object_Ref *
+dwg_decode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj, unsigned int code){
+  Dwg_Object_Ref * ref;
+  ref = dwg_decode_handleref (dat,obj);
+  if (ref->handleref.code != code){
+    fprintf(stderr, "ERROR: expected a CODE %d handle, but got %d.%d.%lu instead.\n",
+      code,
+      ref->handleref.code,
+      ref->handleref.size,
+      ref->handleref.value);
+      //TODO: At the moment we are tolerating wrong codes in handles.
+      // in the future we might want to get strict and return 0 here so that code will crash
+      // whenever it reaches the first handle parsing error. This might make debugging easier.
+      //return 0;
+  }
+  return ref;
+}
+
 static void
 dwg_decode_common_entity_handle_data (Bit_Chain * dat, Dwg_Object * obj) {
 
@@ -1263,7 +1295,8 @@ dwg_decode_common_entity_handle_data (Bit_Chain * dat, Dwg_Object * obj) {
 	int i;
 	ent = obj->tio.entity;
 
-	//ent->subentity_ref_handle = dwg_decode_handleref (dat, obj);
+//	ent->subentity_ref_handle = dwg_decode_handleref (dat, obj);
+
 	if (ent->num_reactors)
 		ent->reactors = malloc (ent->num_reactors * sizeof (Dwg_Object_Ref*));
 	for(i=0; i<ent->num_reactors; i++){
@@ -1601,7 +1634,10 @@ dwg_decode_INSERT (Bit_Chain * dat, Dwg_Object * obj)
   obj->tio.entity->object = obj;
 	dwg_decode_entity (dat, obj->tio.entity);
 
-  fprintf (stderr, "INSERT (%d.%d.%lu)\n", obj->handle.code, obj->handle.size, obj->handle.value);
+  fprintf (stderr, "INSERT (%d.%d.%lu)\n",
+    obj->handle.code,
+    obj->handle.size,
+    obj->handle.value);
 
 	/* Read values
 	 */
@@ -1649,8 +1685,11 @@ dwg_decode_INSERT (Bit_Chain * dat, Dwg_Object * obj)
 
 	dwg_decode_common_entity_handle_data (dat, obj);
 
-	ent->block_header = dwg_decode_handleref(dat, obj);
-  fprintf (stderr, "handleref: %d.%d.%lu\n", ent->block_header->handleref.code, ent->block_header->handleref.size, ent->block_header->handleref.value);
+	ent->block_header = dwg_decode_handleref_with_code(dat, obj, 5);
+  fprintf (stderr, "handleref: %d.%d.%lu\n",
+      ent->block_header->handleref.code,
+      ent->block_header->handleref.size,
+      ent->block_header->handleref.value);
 
   //There is a typo in the spec. it says "R13-R200:".
   //I guess it means "R13-R2000:" 
