@@ -1265,35 +1265,38 @@ dwg_decode_common_entity_handle_data (Bit_Chain * dat, Dwg_Object * obj) {
 
 	//ent->subentity_ref_handle = dwg_decode_handleref (dat, obj);
 	if (ent->num_reactors)
-		ent->reactors = malloc (ent->num_reactors*sizeof (Dwg_Object_Ref*));
+		ent->reactors = malloc (ent->num_reactors * sizeof (Dwg_Object_Ref*));
 	for(i=0; i<ent->num_reactors; i++){
-		ent->reactors[i] = *dwg_decode_handleref (dat, obj);
+		ent->reactors[i] = dwg_decode_handleref (dat, obj);
 	}
+
 	ent->xdicobjhandle = dwg_decode_handleref (dat, obj);
 
-    if (dat->version == R_13 || dat->version == R_14){
-    	ent->layer = dwg_decode_handleref (dat, obj);
-		if (ent->isbylayerlt){
-				ent->ltype = dwg_decode_handleref (dat, obj);
-		}
-    }
+  if (dat->version == R_13 || dat->version == R_14){
+  	ent->layer = dwg_decode_handleref (dat, obj);
+	  if (!ent->isbylayerlt){
+			  ent->ltype = dwg_decode_handleref (dat, obj);
+	  }
+  }
 
+  if (0){   //TODO: these are optional. Figure out what is the condition.
     ent->prev_entity = dwg_decode_handleref (dat, obj);
     ent->next_entity = dwg_decode_handleref (dat, obj);
+  }
 
-    if (dat->version >= R_2000) {
-    	ent->layer = dwg_decode_handleref (dat, obj);
-		if (ent->linetype_flags == 3){
-				ent->ltype = dwg_decode_handleref (dat, obj);
-		}
-		if (ent->plotstyle_flags == 3){
-				ent->plotstyle = dwg_decode_handleref (dat, obj);
-		}
-    }
+  if (dat->version >= R_2000) {
+  	ent->layer = dwg_decode_handleref (dat, obj);
+	  if (ent->linetype_flags == 3){
+			  ent->ltype = dwg_decode_handleref (dat, obj);
+	  }
+	  if (ent->plotstyle_flags == 3){
+			  ent->plotstyle = dwg_decode_handleref (dat, obj);
+	  }
+  }
 
-    if (dat->version >= R_2007) {
-    	ent->material = dwg_decode_handleref (dat, obj);
-    }
+  if (dat->version >= R_2007 && ent->material_flags == 3) {
+  	ent->material = dwg_decode_handleref (dat, obj);
+  }
 
 }
 

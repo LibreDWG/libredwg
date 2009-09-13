@@ -2224,7 +2224,7 @@ extern "C"
 
 		//Common Entity Handle Data
 		Dwg_Object_Ref* subentity_ref_handle;
-		Dwg_Object_Ref* reactors;
+		Dwg_Object_Ref** reactors;
 		Dwg_Object_Ref* xdicobjhandle;
 		Dwg_Object_Ref* prev_entity;
 		Dwg_Object_Ref* next_entity;
