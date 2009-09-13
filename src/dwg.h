@@ -312,6 +312,10 @@ extern "C"
 		unsigned char has_attribs;
 		long unsigned int owned_obj_count;
 		Dwg_Object_Ref* block_header;
+		Dwg_Object_Ref* first_attrib;
+		Dwg_Object_Ref* last_attrib;
+		Dwg_Object_Ref** attrib_handles;
+		Dwg_Object_Ref* seqend;
 	} Dwg_Entity_INSERT;
 
 /**

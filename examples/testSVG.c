@@ -90,7 +90,14 @@ void output_SVG(Dwg_Structure* dwg_struct){
 		if (obj->type == DWG_TYPE_BLOCK_HEADER){
       Dwg_Object_BLOCK_HEADER* hdr;
       hdr = obj->tio.object->tio.BLOCK_HEADER;
-      printf("\t<g id=\"dwg-handle-%lu\" >\n<!--\n\tBLOCK_HEADER obj->handle: %d.%d.%d\n\treferenced BLOCK: %d.%d.%d -->\n", hdr->block_entity.value, obj->handle.code, obj->handle.size, obj->handle.value, hdr->block_entity.code, hdr->block_entity.size, hdr->block_entity.value);
+      if (hdr->block_entity.code == 3){
+        printf("\t<g id=\"dwg-handle-%lu\" >\n<!--\n\tBLOCK_HEADER obj->handle: %d.%d.%d\n\treferenced BLOCK: %d.%d.%d -->\n", hdr->block_entity.value, obj->handle.code, obj->handle.size, obj->handle.value, hdr->block_entity.code, hdr->block_entity.size, hdr->block_entity.value);
+      } else {
+        printf("\n\n<g id=\"wrong-handle-%lu\" >\n\t<!-- WRONG BLOCK reference (%d.%d.%lu - code should be 3) in BLOCK_HEADER (%d.%d.%lu) -->\n",
+          hdr->block_entity.value,
+          hdr->block_entity.code, hdr->block_entity.size, hdr->block_entity.value,
+          obj->handle.code, obj->handle.size, obj->handle.value);
+      }
 		}
 
 		if (obj->type == DWG_TYPE_BLOCK){
