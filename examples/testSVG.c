@@ -91,10 +91,13 @@ void output_SVG(Dwg_Structure* dwg_struct){
       Dwg_Object_BLOCK_HEADER* hdr;
       hdr = obj->tio.object->tio.BLOCK_HEADER;
       if (hdr->block_entity.code == 3){
-        printf("\t<g id=\"dwg-handle-%lu\" >\n<!--\n\tBLOCK_HEADER obj->handle: %d.%d.%d\n\treferenced BLOCK: %d.%d.%d -->\n", hdr->block_entity.value, obj->handle.code, obj->handle.size, obj->handle.value, hdr->block_entity.code, hdr->block_entity.size, hdr->block_entity.value);
+        printf("\t<g id=\"dwg-handle-%lu\" >\n<!--\n\tBLOCK_HEADER obj->handle: %d.%d.%d\n\treferenced BLOCK: %d.%d.%d -->\n",
+          obj->handle.value,
+          obj->handle.code, obj->handle.size, obj->handle.value,
+          hdr->block_entity.code, hdr->block_entity.size, hdr->block_entity.value);
       } else {
         printf("\n\n<g id=\"wrong-handle-%lu\" >\n\t<!-- WRONG BLOCK reference (%d.%d.%lu - code should be 3) in BLOCK_HEADER (%d.%d.%lu) -->\n",
-          hdr->block_entity.value,
+          obj->handle.value,
           hdr->block_entity.code, hdr->block_entity.size, hdr->block_entity.value,
           obj->handle.code, obj->handle.size, obj->handle.value);
       }
@@ -112,7 +115,9 @@ void output_SVG(Dwg_Structure* dwg_struct){
 			Dwg_Entity_INSERT* insert;
 			insert = obj->tio.entity->tio.INSERT;
       if (insert->block_header->handleref.code == 5){
-			  printf("\t<use x=\"%f\" y=\"%f\" xlink:href=\"#dwg-handle-%lu\" /><!-- block_header->handleref: %d.%d.%lu -->\n", insert->x0, page_height - insert->y0, insert->block_header->handleref.value, insert->block_header->handleref.code, insert->block_header->handleref.size, insert->block_header->handleref.value);
+			  printf("\t<use x=\"%f\" y=\"%f\" xlink:href=\"#dwg-handle-%lu\" /><!-- block_header->handleref: %d.%d.%lu -->\n", insert->x0, page_height - insert->y0,
+          insert->block_header->handleref.value,
+          insert->block_header->handleref.code, insert->block_header->handleref.size, insert->block_header->handleref.value);
       } else {
         printf("\n\n<!-- WRONG INSERT: handleref = %d.%d.%lu -->\n", insert->block_header->handleref.code, insert->block_header->handleref.size, insert->block_header->handleref.value);
       }
