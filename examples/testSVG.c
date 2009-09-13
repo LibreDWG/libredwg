@@ -122,7 +122,7 @@ void output_SVG(Dwg_Structure* dwg_struct){
           insert->block_header->handleref.value,
           insert->block_header->handleref.code, insert->block_header->handleref.size, insert->block_header->handleref.value);
       } else {
-        printf("\n\n<!-- WRONG INSERT: handleref = %d.%d.%lu -->\n", insert->block_header->handleref.code, insert->block_header->handleref.size, insert->block_header->handleref.value);
+          printf("\n\n<!-- WRONG INSERT(%d.%d.%lu): handleref = %d.%d.%lu -->\n", obj->handle.code, obj->handle.size, obj->handle.value, insert->block_header->handleref.code, insert->block_header->handleref.size, insert->block_header->handleref.value);
       }
 		}
 

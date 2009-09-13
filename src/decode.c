@@ -3163,6 +3163,7 @@ fprintf(stderr, "entry_name: \"%s\"\n", ord->entry_name);
     for (i=0;i<ord->size_of_preview_data;i++){
       //TO-DO
     	//ord->binary_preview_data[i] = bit_read_RC (dat);
+      bit_read_RC (dat);
     }
   }
 
