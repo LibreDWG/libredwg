@@ -455,9 +455,9 @@ int decode_R13_R15_header(Bit_Chain* dat, Dwg_Structure * skt){
 
 			kobj = skt->num_objects;
 			dwg_decode_aldoni_object (skt, dat, lastadres);
-			if (skt->num_objects > kobj)
-				skt->object[skt->num_objects - 1].handle.value = lastahandle;
-
+			//if (skt->num_objects > kobj)
+				//skt->object[skt->num_objects - 1].handle.value = lastahandle;
+//TODO: blame Juca
 		}
 		if (dat->byte == antauxadr)
 			break;
@@ -1016,7 +1016,7 @@ dwg_decode_entity (Bit_Chain * dat, Dwg_Object_Entity * ent)
 		ent->num_handles = 0;
 		return;
 	}
-  fprintf (stderr, "this entity handle value is %d\n", ent->object->handle.value);
+  fprintf (stderr, "this entity handle is %d.%d.%lu\n", ent->object->handle.code, ent->object->handle.size, ent->object->handle.value);
 
 	ent->extended_size = 0;
 	while (size = bit_read_BS (dat))
@@ -1148,7 +1148,16 @@ dwg_decode_object (Bit_Chain * dat, Dwg_Object_Object * ord)
 			ord->extended[i] = bit_read_RC (dat);
 	}
 
+	if (dat->version == R_13 || dat->version == R_14){
+		ord->bitsize = bit_read_RL (dat);
+	}
+
 	ord->num_reactors = bit_read_BL (dat);
+
+	if (dat->version >= R_2004){
+		ord->xdic_missing_flag = bit_read_B (dat);
+	}
+
 }
 
 static void
@@ -1216,10 +1225,10 @@ dwg_decode_handleref (Bit_Chain * dat, Dwg_Object * obj)
 	if (bit_read_H (dat, &handleref))
 	{
 		fprintf (stderr, "dump: handle(code, size, value): %d.%d.%lu\n", handleref.code, handleref.size, handleref.value);
-		fprintf (stderr, "\tENTITY: Error reading handle in object: %lu\n", obj->handle);
+		fprintf (stderr, "\tENTITY: Error reading handle in object whose handle is: %d.%d.%lu\n", obj->handle.code, obj->handle.size, obj->handle.value);
 	} else {fprintf (stderr, "BLOCK HEADER: ");
 		if (loglevel)
-			fprintf (stderr, "Success: handle(code, size, value): %d.%d.%lu read in object %lu\n", handleref.code, handleref.size, handleref.value, obj->handle);
+			fprintf (stderr, "Success: handle(code, size, value): %d.%d.%lu read in object whose handle is %d.%d.%lu\n", handleref.code, handleref.size, handleref.value, obj->handle.code, obj->handle.size, obj->handle.value);
 	}
 
 	//check if handle is already listed
@@ -1535,6 +1544,7 @@ dwg_decode_BLOCK (Bit_Chain * dat, Dwg_Object * obj)
 	ent = obj->tio.entity->tio.BLOCK;
   obj->tio.entity->object = obj;
 	dwg_decode_entity (dat, obj->tio.entity);
+  fprintf (stderr, "this BLOCK handle is %d.%d.%lu \n", obj->handle.code, obj->handle.size, obj->handle.value);
 
 	/* Read values
 	 */
@@ -1586,6 +1596,7 @@ dwg_decode_INSERT (Bit_Chain * dat, Dwg_Object * obj)
   obj->tio.entity->object = obj;
 	dwg_decode_entity (dat, obj->tio.entity);
 
+
 	/* Read values
 	 */
 	ent->x0 = bit_read_BD (dat);
@@ -1636,7 +1647,7 @@ dwg_decode_INSERT (Bit_Chain * dat, Dwg_Object * obj)
 	dwg_decode_common_entity_handle_data (dat, obj);
 
 	ent->block_header = dwg_decode_handleref(dat, obj);
-fprintf (stderr, "INSERT.block_header->handleref.value = %d\n", ent->block_header->handleref.value);
+  fprintf (stderr, "INSERT handleref: %d.%d.%lu\n", ent->block_header->handleref.code, ent->block_header->handleref.size, ent->block_header->handleref.value);
 
 	//TODO: implement missing headers
 }
@@ -3076,7 +3087,76 @@ dwg_decode_BLOCK_CONTROL (Bit_Chain *dat, Dwg_Object *obj)
 static void
 dwg_decode_BLOCK_HEADER (Bit_Chain *dat, Dwg_Object *obj)
 {
-    //Implement-me!
+  int i;
+	Dwg_Object_BLOCK_HEADER *ord;
+
+	obj->supertype = DWG_SUPERTYPE_OBJECT;
+	obj->tio.object = malloc (sizeof (Dwg_Object_Object));
+	obj->tio.object->tio.BLOCK_HEADER = calloc (sizeof (Dwg_Object_BLOCK_HEADER), 1);
+  obj->tio.object->object = obj;
+	dwg_decode_object (dat, obj->tio.object);
+	ord = obj->tio.object->tio.BLOCK_HEADER;
+
+	/* Read values
+	 */
+
+	ord->entry_name = bit_read_T (dat);
+fprintf(stderr, "entry_name: \"%s\"\n", ord->entry_name);
+	ord->_64_flag = bit_read_B (dat);
+	ord->xrefindex_plus1 = bit_read_BS (dat);
+	ord->xdep = bit_read_B (dat);
+	ord->anonymous = bit_read_B (dat);
+	ord->hasattrs = bit_read_B (dat);
+	ord->blxisxref = bit_read_B (dat);
+	ord->xrefoverlaid = bit_read_B (dat);
+
+  if (dat->version >= R_2000){
+	  ord->loaded_bit = bit_read_B (dat);
+  }
+
+  if (dat->version >= R_2004){
+	  ord->owned_object_count = bit_read_BL (dat);
+  }
+
+	ord->base_pt.x = bit_read_BD (dat);
+	ord->base_pt.y = bit_read_BD (dat);
+	ord->base_pt.z = bit_read_BD (dat);
+
+	ord->xref_pname = bit_read_T (dat);
+
+  if (dat->version >= R_2000){
+  	ord->insert_count = bit_read_RC (dat);
+    ord->block_description = bit_read_T (dat);
+  	ord->size_of_preview_data = bit_read_BL (dat);
+    for (i=0;i<ord->size_of_preview_data;i++){
+      //TO-DO
+    	//ord->binary_preview_data[i] = bit_read_RC (dat);
+    }
+  }
+
+  if (dat->version >= R_2007){
+  	//TODO
+
+//ord->insert_units = bit_read_BS (dat);
+
+  }
+
+  bit_read_H(dat, &ord->block_control_handle);
+
+  ord->reactor = (Dwg_Handle*) malloc(obj->tio.object->num_reactors * sizeof(Dwg_Handle));
+  fprintf(stderr, "ord->num_reactors = %d\n", obj->tio.object->num_reactors);
+
+  for (i=0;i<obj->tio.object->num_reactors;i++){
+    fprintf(stderr, "&ord->reactor[%d]=%x\n", i, &ord->reactor[i]);
+    bit_read_H(dat, &ord->reactor[i]);
+  }
+  bit_read_H(dat, &ord->xdicobjhandle);
+  bit_read_H(dat, &ord->NULL_handle);
+  bit_read_H(dat, &ord->block_entity);
+
+
+//TODO: imcomplete. check spec.
+
 }
 
 static void
@@ -3690,6 +3770,10 @@ dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned in
 	obj = &skt->object[skt->num_objects];
 	skt->num_objects++;
 
+  obj->handle.code = 0;
+  obj->handle.size = 0;
+  obj->handle.value = 0;
+
 	obj->parent = skt;
 	obj->size = bit_read_MS (dat);
 	object_address = dat->byte;
@@ -3831,6 +3915,9 @@ dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned in
                 break;
 	case DWG_TYPE_LAYER:
 		dwg_decode_LAYER (dat, obj);
+		break;
+	case DWG_TYPE_BLOCK_HEADER:
+		dwg_decode_BLOCK_HEADER (dat, obj);
 		break;
 	default:
 		if (obj->type == skt->dwg_ot_layout)

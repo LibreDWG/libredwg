@@ -1597,6 +1597,32 @@ extern "C"
 	typedef struct _dwg_object_BLOCK_HEADER
 	{
 //TODO 
+
+    unsigned char *entry_name;
+    unsigned char _64_flag;
+    unsigned int xrefindex_plus1;
+    unsigned char xdep;
+    unsigned char anonymous;
+    unsigned char hasattrs;
+    unsigned char blxisxref;
+    unsigned char xrefoverlaid;
+    unsigned char loaded_bit;
+	  long unsigned int owned_object_count;
+    struct
+		{
+		    double x;
+		    double y;
+		    double z;
+		} base_pt;
+    unsigned char* xref_pname;
+  	unsigned char insert_count;
+    unsigned char* block_description;
+  	long unsigned int size_of_preview_data;
+    Dwg_Handle block_control_handle;
+    Dwg_Handle *reactor;
+    Dwg_Handle xdicobjhandle;
+    Dwg_Handle NULL_handle;
+    Dwg_Handle block_entity;
 	} Dwg_Object_BLOCK_HEADER;
 
 /**
@@ -2259,12 +2285,12 @@ extern "C"
 
 		long unsigned int bitsize;
 		//Dwg_Handle handle;
-
 		unsigned int extended_size;
 		Dwg_Handle extended_handle;
 		unsigned char *extended;
-
 		long unsigned int num_reactors;
+  	unsigned char xdic_missing_flag;
+//		unsigned char picture_exists;
 
 		unsigned int num_handles;
 		Dwg_Handle *handleref;

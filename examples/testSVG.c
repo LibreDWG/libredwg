@@ -88,7 +88,13 @@ void output_SVG(Dwg_Structure* dwg_struct){
     }
 
 		if (obj->type == DWG_TYPE_BLOCK_HEADER){
-      printf("\t<g id=\"dwg-handle-%lu\" >\n", obj->handle.value);
+      Dwg_Object_BLOCK_HEADER* hdr;
+      hdr = obj->tio.object->tio.BLOCK_HEADER;
+      printf("\t<g id=\"dwg-handle-%lu\" >\n<!--\n\tBLOCK_HEADER obj->handle: %d.%d.%d\n\treferenced BLOCK: %d.%d.%d -->\n", hdr->block_entity.value, obj->handle.code, obj->handle.size, obj->handle.value, hdr->block_entity.code, hdr->block_entity.size, hdr->block_entity.value);
+		}
+
+		if (obj->type == DWG_TYPE_BLOCK){
+//      printf("\t<g id=\"dwg-handle-%lu\" ><!-- BLOCK obj->handle: %d.%d.%d -->\n", obj->handle.value, obj->handle.code, obj->handle.size, obj->handle.value);
 		}
 
 		if (obj->type == DWG_TYPE_ENDBLK){
@@ -98,9 +104,10 @@ void output_SVG(Dwg_Structure* dwg_struct){
 		if (obj->type == DWG_TYPE_INSERT){
 			Dwg_Entity_INSERT* insert;
 			insert = obj->tio.entity->tio.INSERT;
-			printf("\t<use x=\"%f\" y=\"%f\" xlink:href=\"#dwg-handle-%lu\" />\n", insert->x0, page_height - insert->y0, insert->block_header->handleref.value);
-      if (insert->block_header->obj){
-//  			printf("\t<circle cx=\"%f\" cy=\"%f\" r=\"0.1\" fill=\"red\" id=\"handle-circle-%lu-%lu\" />\n", insert->x0, page_height - insert->y0, insert->block_header->handleref.value, insert->block_header->obj->handle.value);
+      if (insert->block_header->handleref.code == 5){
+			  printf("\t<use x=\"%f\" y=\"%f\" xlink:href=\"#dwg-handle-%lu\" /><!-- block_header->handleref: %d.%d.%lu -->\n", insert->x0, page_height - insert->y0, insert->block_header->handleref.value, insert->block_header->handleref.code, insert->block_header->handleref.size, insert->block_header->handleref.value);
+      } else {
+        printf("\n\n<!-- WRONG INSERT: handleref = %d.%d.%lu -->\n", insert->block_header->handleref.code, insert->block_header->handleref.size, insert->block_header->handleref.value);
       }
 		}
 
