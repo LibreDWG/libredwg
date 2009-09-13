@@ -115,7 +115,10 @@ void output_SVG(Dwg_Structure* dwg_struct){
 			Dwg_Entity_INSERT* insert;
 			insert = obj->tio.entity->tio.INSERT;
       if (insert->block_header->handleref.code == 5){
-			  printf("\t<use x=\"%f\" y=\"%f\" xlink:href=\"#dwg-handle-%lu\" /><!-- block_header->handleref: %d.%d.%lu -->\n", insert->x0, page_height - insert->y0,
+			  printf("\t<use transform=\"translate(%f %f) rotate(%f) scale(%f %f)\" xlink:href=\"#dwg-handle-%lu\" /><!-- block_header->handleref: %d.%d.%lu -->\n",
+          insert->x0, page_height - insert->y0,
+          (180.0/M_PI)*insert->rotation_ang,
+          insert->scale.x, insert->scale.y,
           insert->block_header->handleref.value,
           insert->block_header->handleref.code, insert->block_header->handleref.size, insert->block_header->handleref.value);
       } else {
