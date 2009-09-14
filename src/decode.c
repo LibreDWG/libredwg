@@ -166,12 +166,12 @@ dwg_decode_structures(Bit_Chain * dat, Dwg_Structure * skt)
       return decode_R13_R15_header(dat, skt);
     }
 
-  if (dat->version == R_2000)
+  VERSION(R_2000)
     {
       return decode_R13_R15_header(dat, skt);
     }
 
-  if (dat->version == R_2004)
+  VERSION(R_2004)
     {
       fprintf(
           stderr,
@@ -181,7 +181,7 @@ dwg_decode_structures(Bit_Chain * dat, Dwg_Structure * skt)
       return decode_R2004_header(dat, skt);
     }
 
-  if (dat->version == R_2007)
+  VERSION(R_2007)
     {
       fprintf(
           stderr,
@@ -1255,7 +1255,7 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
   unsigned int size;
   int error = 2;
 
-  if (dat->version >= R_2000)
+  SINCE(R_2000)
     {
       ent->bitsize = bit_read_RL(dat);
     }
@@ -1328,7 +1328,7 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
         }
     }
 
-  if (dat->version == R_13 || dat->version == R_14)
+  VERSIONS(R_13,R_14)
     {
       ent->bitsize = bit_read_RL(dat);
     }
@@ -1336,12 +1336,12 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
   ent->entity_mode = bit_read_BB(dat);
   ent->num_reactors = bit_read_BL(dat);
 
-  if (dat->version >= R_2004)
+  SINCE(R_2004)
     {
       ent->xdict_missing_flag = bit_read_B(dat);
     }
 
-  if (dat->version == R_13 || dat->version == R_14)
+  VERSIONS(R_13,R_14)
     {
       ent->isbylayerlt = bit_read_B(dat);
     }
@@ -1350,13 +1350,13 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
   bit_read_CMC(dat, &ent->color);
   ent->linetype_scale = bit_read_BD(dat);
 
-  if (dat->version >= R_2000)
+  SINCE(R_2000)
     {
       ent->linetype_flags = bit_read_BB(dat);
       ent->plotstyle_flags = bit_read_BB(dat);
     }
 
-  if (dat->version >= R_2007)
+  SINCE(R_2007)
     {
       ent->material_flags = bit_read_BB(dat);
       ent->shadow_flags = bit_read_RC(dat);
@@ -1364,7 +1364,7 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
 
   ent->invisible = bit_read_BS(dat);
 
-  if (dat->version >= R_2000)
+  SINCE(R_2000)
     {
       ent->lineweight = bit_read_RC(dat);
     }
@@ -1377,7 +1377,7 @@ dwg_decode_object(Bit_Chain * dat, Dwg_Object_Object * ord)
   unsigned int size;
   int error = 2;
 
-  if (dat->version >= R_2000)
+  SINCE(R_2000)
     {
       ord->bitsize = bit_read_RL(dat);
     }
@@ -1424,14 +1424,14 @@ dwg_decode_object(Bit_Chain * dat, Dwg_Object_Object * ord)
         ord->extended[i] = bit_read_RC(dat);
     }
 
-  if (dat->version == R_13 || dat->version == R_14)
+  VERSIONS(R_13,R_14)
     {
       ord->bitsize = bit_read_RL(dat);
     }
 
   ord->num_reactors = bit_read_BL(dat);
 
-  if (dat->version >= R_2004)
+  SINCE(R_2004)
     {
       ord->xdic_missing_flag = bit_read_B(dat);
     }
@@ -1590,7 +1590,7 @@ dwg_decode_common_entity_handle_data(Bit_Chain * dat, Dwg_Object * obj)
 
   ent->xdicobjhandle = dwg_decode_handleref_with_code(dat, obj, 3);
 
-  if (dat->version == R_13 || dat->version == R_14)
+  VERSIONS(R_13,R_14)
     {
       ent->layer = dwg_decode_handleref_with_code(dat, obj, 5);
       if (!ent->isbylayerlt)
@@ -1605,7 +1605,7 @@ dwg_decode_common_entity_handle_data(Bit_Chain * dat, Dwg_Object * obj)
       ent->next_entity = dwg_decode_handleref_with_code(dat, obj, 4);
     }
 
-  if (dat->version >= R_2000)
+  SINCE(R_2000)
     {
       ent->layer = dwg_decode_handleref_with_code(dat, obj, 5);
       if (ent->linetype_flags == 3)
@@ -1643,7 +1643,7 @@ dwg_decode_TEXT(Bit_Chain * dat, Dwg_Object * obj)
   /* Read values
    */
 
-  if (dat->version == R_13 || dat->version == R_14)
+  VERSIONS(R_13,R_14)
     {
 
       ent->elevation = bit_read_BD(dat);
@@ -1663,7 +1663,7 @@ dwg_decode_TEXT(Bit_Chain * dat, Dwg_Object * obj)
       ent->alignment.v = bit_read_BS(dat);
     }
 
-  if (dat->version >= R_2000)
+  SINCE(R_2000)
     {
       ent->dataflags = bit_read_RC(dat);
       if ((!ent->dataflags & 0x01))
@@ -1705,7 +1705,7 @@ dwg_decode_ATTRIB(Bit_Chain * dat, Dwg_Object * obj)
 
   /* Read values
    */
-  if (dat->version == R_13 || dat->version == R_14)
+  VERSIONS(R_13,R_14)
     {
 
       ent->elevation = bit_read_BD(dat);
@@ -1725,7 +1725,7 @@ dwg_decode_ATTRIB(Bit_Chain * dat, Dwg_Object * obj)
       ent->alignment.v = bit_read_BS(dat);
     }
 
-  if (dat->version >= R_2000)
+  SINCE(R_2000)
     {
       ent->dataflags = bit_read_RC(dat);
       if ((!ent->dataflags & 0x01))
@@ -1759,7 +1759,7 @@ dwg_decode_ATTRIB(Bit_Chain * dat, Dwg_Object * obj)
   ent->field_length = bit_read_BS(dat);
   ent->flags = bit_read_RC(dat);
 
-  if (dat->version >= R_2007)
+  SINCE(R_2007)
     {
       ent->lock_position_flag = bit_read_B(dat);
     }
@@ -1776,7 +1776,7 @@ dwg_decode_ATTDEF(Bit_Chain * dat, Dwg_Object * obj)
 
   /* Read values
    */
-  if (dat->version == R_13 || dat->version == R_14)
+  VERSIONS(R_13,R_14)
     {
 
       ent->elevation = bit_read_BD(dat);
@@ -1796,7 +1796,7 @@ dwg_decode_ATTDEF(Bit_Chain * dat, Dwg_Object * obj)
       ent->alignment.v = bit_read_BS(dat);
     }
 
-  if (dat->version >= R_2000)
+  SINCE(R_2000)
     {
       ent->dataflags = bit_read_RC(dat);
       if ((!ent->dataflags & 0x01))
@@ -1830,7 +1830,7 @@ dwg_decode_ATTDEF(Bit_Chain * dat, Dwg_Object * obj)
   ent->field_length = bit_read_BS(dat);
   ent->flags = bit_read_RC(dat);
 
-  if (dat->version >= R_2007)
+  SINCE(R_2007)
     {
       ent->lock_position_flag = bit_read_B(dat);
     }
@@ -1881,14 +1881,14 @@ dwg_decode_INSERT(Bit_Chain * dat, Dwg_Object * obj)
   ent->y0 = bit_read_BD(dat);
   ent->z0 = bit_read_BD(dat);
 
-  if (dat->version == R_13 || dat->version == R_14)
+  VERSIONS(R_13,R_14)
     {
       ent->scale.x = bit_read_BD(dat);
       ent->scale.y = bit_read_BD(dat);
       ent->scale.z = bit_read_BD(dat);
     }
 
-  if (dat->version >= R_2000)
+  SINCE(R_2000)
     {
       ent->scale_flag = bit_read_BB(dat);
       if (ent->scale_flag == 3)
@@ -1915,7 +1915,7 @@ dwg_decode_INSERT(Bit_Chain * dat, Dwg_Object * obj)
   ent->extrusion.z = bit_read_BD(dat);
   ent->has_attribs = bit_read_B(dat);
 
-  if (dat->version >= R_2004)
+  SINCE(R_2004)
     {
       ent->owned_obj_count = bit_read_BL(dat);
     }
@@ -1928,8 +1928,10 @@ dwg_decode_INSERT(Bit_Chain * dat, Dwg_Object * obj)
 
   //There is a typo in the spec. it says "R13-R200:".
   //I guess it means "R13-R2000:" 
-  if (dat->version >= R_13 && dat->version <= R_2000 && ent->has_attribs)
+  VERSIONS(R_13,R_2000)
     {
+    if(ent->has_attribs)
+      {
       ent->first_attrib = dwg_decode_handleref_with_code(dat, obj, 4);
       fprintf(stderr, "first_attrib: %d.%d.%lu\n",
           ent->first_attrib->handleref.code, ent->first_attrib->handleref.size,
@@ -1939,9 +1941,10 @@ dwg_decode_INSERT(Bit_Chain * dat, Dwg_Object * obj)
       fprintf(stderr, "last_attrib: %d.%d.%lu\n",
           ent->last_attrib->handleref.code, ent->last_attrib->handleref.size,
           ent->last_attrib->handleref.value);
+      }
     }
 
-  if (dat->version == R_2004)
+  VERSION(R_2004)
     {
       ent->attrib_handles = (Dwg_Object_Ref**) malloc(ent->owned_obj_count
           * sizeof(Dwg_Object_Ref*));
@@ -1976,14 +1979,14 @@ dwg_decode_MINSERT(Bit_Chain * dat, Dwg_Object * obj)
   ent->y0 = bit_read_BD(dat);
   ent->z0 = bit_read_BD(dat);
 
-  if (dat->version == R_13 || dat->version == R_14)
+  VERSIONS(R_13,R_14)
     {
       ent->scale.x = bit_read_BD(dat);
       ent->scale.y = bit_read_BD(dat);
       ent->scale.z = bit_read_BD(dat);
     }
 
-  if (dat->version >= R_2000)
+  SINCE(R_2000)
     {
       ent->scale_flag = bit_read_BB(dat);
       if (ent->scale_flag == 3)
@@ -2010,7 +2013,7 @@ dwg_decode_MINSERT(Bit_Chain * dat, Dwg_Object * obj)
   ent->extrusion.z = bit_read_BD(dat);
   ent->has_attribs = bit_read_B(dat);
 
-  if (dat->version >= R_2004)
+  SINCE(R_2004)
     {
       ent->owned_obj_count = bit_read_BL(dat);
     }
@@ -2041,7 +2044,7 @@ dwg_decode_MINSERT(Bit_Chain * dat, Dwg_Object * obj)
           ent->last_attrib->handleref.value);
     }
 
-  if (dat->version == R_2004)
+  VERSION(R_2004)
     {
       ent->attrib_handles = (Dwg_Object_Ref**) malloc(ent->owned_obj_count
           * sizeof(Dwg_Object_Ref*));
@@ -2163,14 +2166,14 @@ dwg_decode_POLYLINE_2D(Bit_Chain * dat, Dwg_Object * obj)
   ent->elevation = bit_read_BD(dat);
   bit_read_BE(dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
 
-  if (dat->version >= R_2004)
+  SINCE(R_2004)
     {
       ent->owned_obj_count = bit_read_BL(dat);
     }
 
   dwg_decode_common_entity_handle_data(dat, obj);
 
-  if (dat->version >= R_13 && dat->version <= R_2000)
+  VERSIONS(R_13,R_2000)
     {
       ent->first_vertex = dwg_decode_handleref_with_code(dat, obj, 4);
       fprintf(stderr, "first_vertex: %d.%d.%lu\n",
@@ -2183,7 +2186,7 @@ dwg_decode_POLYLINE_2D(Bit_Chain * dat, Dwg_Object * obj)
           ent->last_vertex->handleref.value);
     }
 
-  if (dat->version == R_2004)
+  VERSION(R_2004)
     {
       ent->vertex = (Dwg_Object_Ref**) malloc(ent->owned_obj_count
           * sizeof(Dwg_Object_Ref*));
@@ -2212,14 +2215,14 @@ dwg_decode_POLYLINE_3D(Bit_Chain * dat, Dwg_Object * obj)
   ent->flags_1 = bit_read_RC(dat);
   ent->flags_2 = bit_read_RC(dat);
 
-  if (dat->version >= R_2004)
+  SINCE(R_2004)
     {
       ent->owned_obj_count = bit_read_BL(dat);
     }
 
   dwg_decode_common_entity_handle_data(dat, obj);
 
-  if (dat->version >= R_13 && dat->version <= R_2000)
+  VERSIONS(R_13,R_2000)
     {
       ent->first_vertex = dwg_decode_handleref_with_code(dat, obj, 4);
       fprintf(stderr, "first_vertex: %d.%d.%lu\n",
@@ -2232,7 +2235,7 @@ dwg_decode_POLYLINE_3D(Bit_Chain * dat, Dwg_Object * obj)
           ent->last_vertex->handleref.value);
     }
 
-  if (dat->version == R_2004)
+  VERSION(R_2004)
     {
       ent->vertex = (Dwg_Object_Ref**) malloc(ent->owned_obj_count
           * sizeof(Dwg_Object_Ref*));
@@ -2293,7 +2296,7 @@ dwg_decode_LINE(Bit_Chain * dat, Dwg_Object * obj)
 
   /* Read values
    */
-  if (dat->version == R_13 || dat->version == R_14)
+  VERSIONS(R_13,R_14)
     {
       ent->x0 = bit_read_BD(dat);
       ent->y0 = bit_read_BD(dat);
@@ -2304,7 +2307,7 @@ dwg_decode_LINE(Bit_Chain * dat, Dwg_Object * obj)
       ent->z1 = bit_read_BD(dat);
     }
 
-  if (dat->version == R_2000)
+  VERSION(R_2000)
     {
       ent->Zs_are_zero = bit_read_B(dat);
       ent->x0 = bit_read_RD(dat);
@@ -2352,7 +2355,7 @@ dwg_decode_DIMENSION_ORDINATE(Bit_Chain * dat, Dwg_Object * obj)
   ent->ins_scale.z = bit_read_BD(dat);
   ent->ins_rotation = bit_read_BD(dat);
 
-  if (dat->version >= R_2000)
+  SINCE(R_2000)
     {
       ent->attachment_point = bit_read_BS(dat);
       ent->lspace_style = bit_read_BS(dat);
@@ -2360,7 +2363,7 @@ dwg_decode_DIMENSION_ORDINATE(Bit_Chain * dat, Dwg_Object * obj)
       ent->act_measurement = bit_read_BD(dat);
     }
 
-  if (dat->version >= R_2007)
+  SINCE(R_2007)
     {
       ent->unknown = bit_read_B(dat);
       ent->flip_arrow1 = bit_read_B(dat);
@@ -2415,14 +2418,14 @@ dwg_decode_DIMENSION_LINEAR(Bit_Chain * dat, Dwg_Object * obj)
   ent->ins_scale.z = bit_read_BD(dat);
   ent->ins_rotation = bit_read_BD(dat);
 
-  if (dat->version >= R_2000)
+  SINCE(R_2000)
     {
       ent->attachment_point = bit_read_BS(dat);
       ent->lspace_style = bit_read_BS(dat);
       ent->lspace_factor = bit_read_BD(dat);
       ent->act_measurement = bit_read_BD(dat);
     }
-  if (dat->version >= R_2007)
+  SINCE(R_2007)
     {
       ent->unknown = bit_read_B(dat);
       ent->flip_arrow1 = bit_read_B(dat);
@@ -2477,14 +2480,14 @@ dwg_decode_DIMENSION_ALIGNED(Bit_Chain * dat, Dwg_Object * obj)
   ent->ins_scale.z = bit_read_BD(dat);
   ent->ins_rotation = bit_read_BD(dat);
 
-  if (dat->version >= R_2000)
+  SINCE(R_2000)
     {
       ent->attachment_point = bit_read_BS(dat);
       ent->lspace_style = bit_read_BS(dat);
       ent->lspace_factor = bit_read_BD(dat);
       ent->act_measurement = bit_read_BD(dat);
     }
-  if (dat->version >= R_2007)
+  SINCE(R_2007)
     {
       ent->unknown = bit_read_B(dat);
       ent->flip_arrow1 = bit_read_B(dat);
@@ -2538,14 +2541,14 @@ dwg_decode_DIMENSION_ANG3PT(Bit_Chain * dat, Dwg_Object * obj)
   ent->ins_scale.z = bit_read_BD(dat);
   ent->ins_rotation = bit_read_BD(dat);
 
-  if (dat->version >= R_2000)
+  SINCE(R_2000)
     {
       ent->attachment_point = bit_read_BS(dat);
       ent->lspace_style = bit_read_BS(dat);
       ent->lspace_factor = bit_read_BD(dat);
       ent->act_measurement = bit_read_BD(dat);
     }
-  if (dat->version >= R_2007)
+  SINCE(R_2007)
     {
       ent->unknown = bit_read_B(dat);
       ent->flip_arrow1 = bit_read_B(dat);
@@ -2600,14 +2603,14 @@ dwg_decode_DIMENSION_ANG2LN(Bit_Chain * dat, Dwg_Object * obj)
   ent->ins_scale.z = bit_read_BD(dat);
   ent->ins_rotation = bit_read_BD(dat);
 
-  if (dat->version >= R_2000)
+  SINCE(R_2000)
     {
       ent->attachment_point = bit_read_BS(dat);
       ent->lspace_style = bit_read_BS(dat);
       ent->lspace_factor = bit_read_BD(dat);
       ent->act_measurement = bit_read_BD(dat);
     }
-  if (dat->version >= R_2007)
+  SINCE(R_2007)
     {
       ent->unknown = bit_read_B(dat);
       ent->flip_arrow1 = bit_read_B(dat);
@@ -2664,14 +2667,14 @@ dwg_decode_DIMENSION_RADIUS(Bit_Chain * dat, Dwg_Object * obj)
   ent->ins_scale.z = bit_read_BD(dat);
   ent->ins_rotation = bit_read_BD(dat);
 
-  if (dat->version >= R_2000)
+  SINCE(R_2000)
     {
       ent->attachment_point = bit_read_BS(dat);
       ent->lspace_style = bit_read_BS(dat);
       ent->lspace_factor = bit_read_BD(dat);
       ent->act_measurement = bit_read_BD(dat);
     }
-  if (dat->version >= R_2007)
+  SINCE(R_2007)
     {
       ent->unknown = bit_read_B(dat);
       ent->flip_arrow1 = bit_read_B(dat);
@@ -2721,14 +2724,14 @@ dwg_decode_DIMENSION_DIAMETER(Bit_Chain * dat, Dwg_Object * obj)
   ent->ins_scale.z = bit_read_BD(dat);
   ent->ins_rotation = bit_read_BD(dat);
 
-  if (dat->version >= R_2000)
+  SINCE(R_2000)
     {
       ent->attachment_point = bit_read_BS(dat);
       ent->lspace_style = bit_read_BS(dat);
       ent->lspace_factor = bit_read_BD(dat);
       ent->act_measurement = bit_read_BD(dat);
     }
-  if (dat->version >= R_2007)
+  SINCE(R_2007)
     {
       ent->unknown = bit_read_B(dat);
       ent->flip_arrow1 = bit_read_B(dat);
@@ -2777,7 +2780,7 @@ dwg_decode_3DFACE(Bit_Chain * dat, Dwg_Object * obj)
   /* Read values
    */
 
-  if (dat->version == R_13 || dat->version == R_14)
+  VERSIONS(R_13,R_14)
     {
       ent->corner1.x = bit_read_BD(dat);
       ent->corner1.y = bit_read_BD(dat);
@@ -2793,7 +2796,7 @@ dwg_decode_3DFACE(Bit_Chain * dat, Dwg_Object * obj)
       ent->corner4.z = bit_read_BD(dat);
       ent->invis_flags = bit_read_BS(dat);
     }
-  if (dat->version >= R_2000)
+  SINCE(R_2000)
     {
       ent->has_no_flags = bit_read_B(dat);
       ent->z_is_zero = bit_read_B(dat);
@@ -2823,14 +2826,14 @@ dwg_decode_POLYLINE_PFACE(Bit_Chain * dat, Dwg_Object * obj)
   ent->numverts = bit_read_BS(dat);
   ent->numfaces = bit_read_BS(dat);
 
-  if (dat->version >= R_2004)
+  SINCE(R_2004)
     {
       ent->owned_obj_count = bit_read_BL(dat);
     }
 
   dwg_decode_common_entity_handle_data(dat, obj);
 
-  if (dat->version >= R_13 && dat->version <= R_2000)
+  VERSIONS(R_13,R_2000)
     {
       ent->first_vertex = dwg_decode_handleref_with_code(dat, obj, 4);
       fprintf(stderr, "first_vertex: %d.%d.%lu\n",
@@ -2843,7 +2846,7 @@ dwg_decode_POLYLINE_PFACE(Bit_Chain * dat, Dwg_Object * obj)
           ent->last_vertex->handleref.value);
     }
 
-  if (dat->version == R_2004)
+  VERSION(R_2004)
     {
       ent->vertex = (Dwg_Object_Ref**) malloc(ent->owned_obj_count
           * sizeof(Dwg_Object_Ref*));
@@ -2878,14 +2881,14 @@ dwg_decode_POLYLINE_MESH(Bit_Chain * dat, Dwg_Object * obj)
   ent->m_density = bit_read_BS(dat);
   ent->n_density = bit_read_BS(dat);
 
-  if (dat->version >= R_2004)
+  SINCE(R_2004)
     {
       ent->owned_obj_count = bit_read_BL(dat);
     }
 
   dwg_decode_common_entity_handle_data(dat, obj);
 
-  if (dat->version >= R_13 && dat->version <= R_2000)
+  VERSIONS(R_13,R_2000)
     {
       ent->first_vertex = dwg_decode_handleref_with_code(dat, obj, 4);
       fprintf(stderr, "first_vertex: %d.%d.%lu\n",
@@ -2898,7 +2901,7 @@ dwg_decode_POLYLINE_MESH(Bit_Chain * dat, Dwg_Object * obj)
           ent->last_vertex->handleref.value);
     }
 
-  if (dat->version == R_2004)
+  VERSION(R_2004)
     {
       ent->vertex = (Dwg_Object_Ref**) malloc(ent->owned_obj_count
           * sizeof(Dwg_Object_Ref*));
@@ -3004,7 +3007,7 @@ dwg_decode_VIEWPORT(Bit_Chain * dat, Dwg_Object * obj)
   ent->width = bit_read_BD(dat);
   ent->height = bit_read_BD(dat);
 
-  if (dat->version >= R_2000)
+  SINCE(R_2000)
     {
       ent->view_target.x = bit_read_BD(dat);
       ent->view_target.y = bit_read_BD(dat);
@@ -3029,12 +3032,12 @@ dwg_decode_VIEWPORT(Bit_Chain * dat, Dwg_Object * obj)
       ent->circle_zoom = bit_read_BS(dat);
     }
 
-  if (dat->version >= R_2007)
+  SINCE(R_2007)
     {
       ent->grid_major = bit_read_BS(dat);
     }
 
-  if (dat->version >= R_2000)
+  SINCE(R_2000)
     {
       ent->frozen_layer_count = bit_read_BL(dat);
       ent->status_flags = bit_read_BL(dat);
@@ -3055,12 +3058,12 @@ dwg_decode_VIEWPORT(Bit_Chain * dat, Dwg_Object * obj)
       ent->ucs_ortho_view_type = bit_read_BS(dat);
     }
 
-  if (dat->version >= R_2004)
+  SINCE(R_2004)
     {
       ent->shadeplot_mode = bit_read_BS(dat);
     }
 
-  if (dat->version >= R_2007)
+  SINCE(R_2007)
     {
       ent->use_def_lights = bit_read_B(dat);
       ent->def_lighting_type = bit_read_RC(dat);
@@ -3247,7 +3250,7 @@ dwg_decode_MTEXT(Bit_Chain * dat, Dwg_Object * obj)
   ent->y1 = bit_read_BD(dat);
   ent->z1 = bit_read_BD(dat);
 
-  if (dat->version >= R_2007)
+  SINCE(R_2007)
     {
       ent->rect_height = bit_read_BD(dat);
     }
@@ -3260,14 +3263,14 @@ dwg_decode_MTEXT(Bit_Chain * dat, Dwg_Object * obj)
   ent->extends_wid = bit_read_BD(dat);
   ent->text = bit_read_T(dat);
 
-  if (dat->version >= R_2000)
+  SINCE(R_2000)
     {
       ent->linespace_style = bit_read_BS(dat);
       ent->linespace_factor = bit_read_BD(dat);
       ent->unknown_bit = bit_read_B(dat);
     }
 
-  if (dat->version >= R_2004)
+  SINCE(R_2004)
     {
       ent->unknown_long = bit_read_BL(dat);
     }
@@ -3676,7 +3679,7 @@ dwg_decode_LWPLINE(Bit_Chain * dat, Dwg_Object * obj)
   ent->points = (Dwg_Entity_LWPLINE_point*) malloc(ent->num_points
       * sizeof(Dwg_Entity_LWPLINE_point));
 
-  if (dat->version == R_13 || dat->version == R_14)
+  VERSIONS(R_13,R_14)
     {
       for (i = 0; i < ent->num_points; i++)
         {
@@ -3685,7 +3688,7 @@ dwg_decode_LWPLINE(Bit_Chain * dat, Dwg_Object * obj)
         }
     }
 
-  if (dat->version >= R_2000)
+  SINCE(R_2000)
     {
       ent->points[0].x = bit_read_RD(dat);
       ent->points[0].y = bit_read_RD(dat);
@@ -3728,7 +3731,7 @@ dwg_decode_OLE2FRAME(Bit_Chain * dat, Dwg_Object * obj)
    */
   ent->flags = bit_read_BS(dat);
 
-  if (dat->version >= R_2000)
+  SINCE(R_2000)
     {
       ent->mode = bit_read_BS(dat);
     }
@@ -3738,7 +3741,7 @@ dwg_decode_OLE2FRAME(Bit_Chain * dat, Dwg_Object * obj)
   for (i = 0; i < ent->data_length; i++)
     ent->data[i] = bit_read_RC(dat);
 
-  if (dat->version >= R_2000)
+  SINCE(R_2000)
     {
       ent->unknown = bit_read_RC(dat);
     }
