@@ -1948,13 +1948,13 @@ static void
 dwg_encode_DICTIONARY (Dwg_Object_DICTIONARY *obj, Bit_Chain * dat)
 {
 	int i;
-	bit_write_BS (dat, obj->size);
-	if (obj->size > 10000)
-		fprintf (stderr, "Strange: dictionary with more than 10 thousand entries! Size: %u\n", obj->size);
+	bit_write_BS (dat, obj->numitems);
+	if (obj->numitems > 10000)
+		fprintf (stderr, "Strange: dictionary with more than 10 thousand entries! Size: %u\n", obj->numitems);
 	bit_write_BS (dat, obj->cloning);
 	bit_write_RC (dat, obj->hard_owner);
-	for (i = 0; i < obj->size; i++)
-		bit_write_T (dat, obj->name[i]);
+	for (i = 0; i < obj->numitems; i++)
+		bit_write_T (dat, obj->text[i]);
 }
 
 static void

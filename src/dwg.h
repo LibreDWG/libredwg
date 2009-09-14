@@ -1442,10 +1442,16 @@ extern "C"
  */
 	typedef struct _dwg_entity_DICTIONARY
 	{
-		unsigned int size;
+		unsigned int numitems;
+    unsigned char unknown_r14;
 		unsigned int cloning;
 		unsigned char hard_owner;
-		char **name;
+		char ** text;
+    Dwg_Object_Ref* parenthandle;
+    Dwg_Object_Ref** reactors;
+    Dwg_Object_Ref* xdicobjhandle;
+    Dwg_Object_Ref** itemhandles;
+
 	} Dwg_Object_DICTIONARY;
 
 /**

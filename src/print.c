@@ -766,12 +766,12 @@ dwg_print_DICTIONARY (Dwg_Object_DICTIONARY *obj)
 {
 	int i;
 
-	printf ("\tSize: %lu\n", (long unsigned int) obj->size);
+	printf ("\Numitems: %lu\n", (long unsigned int) obj->numitems);
 	printf ("\tCloning flag: 0x%X\n", obj->cloning);
 	printf ("\tHard Owner flag: 0x%X\n", obj->hard_owner);
-	printf ("\tNames:");
-	for (i = 0; i < obj->size; i++)
-		printf (" %s,", obj->name[i]);
+	printf ("\tDictionary items:");
+	for (i = 0; i < obj->numitems; i++)
+		printf (" %s,", obj->text[i]);
 	printf ("\n");
 }
 

@@ -30,21 +30,54 @@
 
 #define HANDLE_CODE(c) dwg_decode_handleref_with_code(dat, obj, c)
 
+#define VERSION(v) if (dat->version == v)
+#define SINCE(v) if (dat->version >= v)
+#define VERSIONS(v1,v2) if (dat->version >= v1 && dat->version <= v2)
+
+#define FIELD(name,type) _obj->name = bit_read_##type(dat)
+#define GET_FIELD (n) _obj->n
+
+#define DWG_PRIMITIVE_TYPE_RC char
+#define DWG_PRIMITIVE_TYPE_B unsigned char
+#define DWG_PRIMITIVE_TYPE_T unsigned char *
+
+//FIELD_VECTOR(name, type, size):
+// reads data of the type indicated by 'type' 'size' times and stores
+// it all in the vector called 'name'.
+#define FIELD_VECTOR(name, type, size)\
+_obj->name = (DWG_PRIMITIVE_TYPE_##type*) malloc(_obj->size * sizeof(DWG_PRIMITIVE_TYPE_##type));\
+for (vector_counter=0; vector_counter< _obj->size; vector_counter++)\
+  FIELD(name[vector_counter], type)
+
 #define DWG_ENTITY(token) \
-fprintf(stderr, #token "\n");\
+  int vector_counter;\
+  if (loglevel)\
+  fprintf (stderr, "Entity " #token " (%d.%d.%lu):\n",\
+    obj->handle.code,\
+    obj->handle.size,\
+    obj->handle.value);\
 	Dwg_Entity_##token *ent;\
-    ent = 0;\
 	obj->supertype = DWG_SUPERTYPE_ENTITY;\
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));\
 	obj->tio.entity->tio.token = calloc (sizeof (Dwg_Entity_##token), 1);\
 	ent = obj->tio.entity->tio.token;\
   obj->tio.entity->object = obj;\
 	dwg_decode_entity (dat, obj->tio.entity);\
-\
-  fprintf (stderr, "Entity " #token " (%d.%d.%lu)\n",\
-    obj->handle.code,\
-    obj->handle.size,\
-    obj->handle.value);\
+
+#define DWG_OBJECT(token) \
+  int vector_counter;\
+  if (loglevel)\
+    fprintf (stderr, "Object " #token " (%d.%d.%lu):\n",\
+      obj->handle.code,\
+      obj->handle.size,\
+      obj->handle.value);\
+	Dwg_Object_##token *_obj;\
+	obj->supertype = DWG_SUPERTYPE_OBJECT;\
+	obj->tio.object = malloc (sizeof (Dwg_Object_Object));\
+	obj->tio.object->tio.token = calloc (sizeof (Dwg_Object_##token), 1);\
+  obj->tio.object->object = obj;\
+	dwg_decode_object (dat, obj->tio.object);\
+	_obj = obj->tio.object->tio.token;
 
 /*--------------------------------------------------------------------------------
  * Private functions
@@ -2836,28 +2869,26 @@ static void
 dwg_decode_DICTIONARY (Bit_Chain *dat, Dwg_Object *obj)
 {
 	int i;
-	Dwg_Object_DICTIONARY *dict;
+  DWG_OBJECT(DICTIONARY);
 
-	obj->supertype = DWG_SUPERTYPE_OBJECT;
-	obj->tio.object = malloc (sizeof (Dwg_Object_Object));
-	obj->tio.object->tio.DICTIONARY = calloc (sizeof (Dwg_Object_DICTIONARY), 1);
-  obj->tio.object->object = obj;
-	dwg_decode_object (dat, obj->tio.object);
-	dict = obj->tio.object->tio.DICTIONARY;
+  FIELD(numitems, BS);
+  VERSION(R_14) FIELD(unknown_r14, RC);
 
+	SINCE(R_2000){
+    FIELD(cloning, BS);
+	  FIELD(hard_owner, RC);
+  }
 
-	dict->size = bit_read_BS (dat);
-	dict->cloning = bit_read_BS (dat);
-	dict->hard_owner = bit_read_RC (dat);
-	if (dict->size > 10000)
+	if (_obj->numitems > 10000)
 	{
 //TODO:Dwg_Handle
 //		fprintf (stderr, "Strange: dictionary with more than 10 thousand entries! Handle: %u\n", obj->handle.value);
 		return;
 	}
-	dict->name = calloc (sizeof (char *), dict->size);
-	for (i = 0; i < dict->size; i++)
-		dict->name[i] = bit_read_T (dat);
+
+	FIELD_VECTOR(text, RC, numitems);
+  _obj->parenthandle = HANDLE_CODE(4);
+
 
 	//dwg_decode_handleref (dat, obj);
 }
