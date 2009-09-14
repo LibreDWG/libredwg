@@ -1338,25 +1338,6 @@ dwg_decode_common_entity_handle_data (Bit_Chain * dat, Dwg_Object * obj) {
 
 /* OBJECTS *******************************************************************/
 
-static void
-dwg_decode_UNUSED (Bit_Chain * dat, Dwg_Object * obj)
-{
-	Dwg_Entity_UNUSED *ent;
-
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.UNUSED = calloc (sizeof (Dwg_Entity_UNUSED), 1);
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
-	ent = obj->tio.entity->tio.UNUSED;
-
-	/* Read values
-	 */
-
-
-	dwg_decode_common_entity_handle_data (dat, obj);
-}
-
 #define DWG_ENTITY(token) \
 fprintf(stderr, #token "\n");\
 	Dwg_Entity_##token *ent;\
@@ -1372,6 +1353,15 @@ fprintf(stderr, #token "\n");\
     obj->handle.code,\
     obj->handle.size,\
     obj->handle.value);\
+
+
+static void
+dwg_decode_UNUSED (Bit_Chain * dat, Dwg_Object * obj)
+{
+  DWG_ENTITY(UNUSED);
+
+	dwg_decode_common_entity_handle_data (dat, obj);
+}
 
 static void
 dwg_decode_TEXT (Bit_Chain * dat, Dwg_Object * obj)
