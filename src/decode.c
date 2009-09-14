@@ -34,9 +34,18 @@
 #define SINCE(v) if (dat->version >= v)
 #define VERSIONS(v1,v2) if (dat->version >= v1 && dat->version <= v2)
 
-#define FIELD(name,type) _obj->name = bit_read_##type(dat)
-#define HANDLE_FIELD(name, code) _obj->name = dwg_decode_handleref_with_code(dat, obj, code)
+#define FIELD(name,type)\
+  _obj->name = bit_read_##type(dat);\
+  if (loglevel>=2)\
+    {\
+        fprintf(stderr, #name ": " FORMAT_##type "\n", _obj->name);\
+    }
+
 #define GET_FIELD(name) _obj->name
+
+#define ANYCODE -1
+#define FIELD_HANDLE(name, code) if (code>=0){_obj->name = dwg_decode_handleref_with_code(dat, obj, code);}
+#define FIELD_3DPOINT(name) FIELD(name.x, BD); FIELD(name.y, BD); FIELD(name.z, BD);
 
 //FIELD_VECTOR(name, type, size):
 // reads data of the type indicated by 'type' 'size' times and stores
@@ -46,22 +55,21 @@
   for (vector_counter=0; vector_counter< _obj->size; vector_counter++)\
     FIELD(name[vector_counter], type)
 
-#define HANDLE_VECTOR(name, sizefield, code)\
-  GET_FIELD(name) = malloc(sizeof(Dwg_Object_Ref*) * GET_FIELD(sizefield));\
-  for (vector_counter=0; vector_counter<GET_FIELD(sizefield); vector_counter++){\
-    HANDLE_FIELD(name[vector_counter], code);\
-  }
-
-#define FIELD_3DPOINT(name) FIELD(name.x, BD); FIELD(name.y, BD); FIELD(name.z, BD);
 #define FIELD_3DPOINT_VECTOR(name, size)\
   _obj->name = (BITCODE_3DPOINT *) malloc(_obj->size * sizeof(BITCODE_3DPOINT));\
   for (vector_counter=0; vector_counter< _obj->size; vector_counter++)\
     {FIELD_3DPOINT(name[vector_counter])}
 
+#define HANDLE_VECTOR(name, sizefield, code)\
+  GET_FIELD(name) = malloc(sizeof(Dwg_Object_Ref*) * GET_FIELD(sizefield));\
+  for (vector_counter=0; vector_counter<GET_FIELD(sizefield); vector_counter++){\
+    FIELD_HANDLE(name[vector_counter], code);\
+  }
+
 #define REACTORS(code)\
   GET_FIELD(reactors) = malloc(sizeof(Dwg_Object_Ref*) * obj->tio.object->num_reactors);\
   for (vector_counter=0; vector_counter<obj->tio.object->num_reactors; vector_counter++){\
-    HANDLE_FIELD(reactors[vector_counter], code);\
+    FIELD_HANDLE(reactors[vector_counter], code);\
   }
 
 #define DWG_ENTITY(token) \
@@ -1687,7 +1695,7 @@ dwg_decode_TEXT(Bit_Chain * dat, Dwg_Object * obj)
 
   dwg_decode_common_entity_handle_data(dat, obj);
 
-  HANDLE_FIELD(style, 5);
+  FIELD_HANDLE(style, 5);
 }
 
 static void
@@ -3217,9 +3225,9 @@ dwg_decode_DICTIONARY(Bit_Chain *dat, Dwg_Object *obj)
     }
 
   FIELD_VECTOR(text, T, numitems);
-  HANDLE_FIELD(parenthandle, 4);
+  FIELD_HANDLE(parenthandle, 4);
   REACTORS(4);
-  HANDLE_FIELD(xdicobjhandle,3);
+  FIELD_HANDLE(xdicobjhandle,3);
   HANDLE_VECTOR(itemhandles, numitems, 2);
 }
 
@@ -3387,11 +3395,9 @@ dwg_decode_BLOCK_CONTROL(Bit_Chain *dat, Dwg_Object *obj)
   int i;
 
   //TODO: check the spec. How do we deal with Length (MS)?
-  _obj->type = bit_read_BS(dat);
-  if (dat->version >= R_2000)
-    {
-      _obj->size = bit_read_RL(dat);
-    }
+  FIELD(type, BS);
+  SINCE(R_2000)
+      FIELD(size, RL);
 
   //TODO: Implement-me!
 
@@ -3404,75 +3410,79 @@ dwg_decode_BLOCK_HEADER(Bit_Chain *dat, Dwg_Object *obj)
   int i;
   DWG_OBJECT(BLOCK_HEADER);
 
-  _obj->entry_name = bit_read_T(dat);
-  fprintf(stderr, "entry_name: \"%s\"\n", _obj->entry_name);
-  _obj->_64_flag = bit_read_B(dat);
-  _obj->xrefindex_plus1 = bit_read_BS(dat);
-  _obj->xdep = bit_read_B(dat);
-  _obj->anonymous = bit_read_B(dat);
-  _obj->hasattrs = bit_read_B(dat);
-  _obj->blxisxref = bit_read_B(dat);
-  _obj->xrefoverlaid = bit_read_B(dat);
+  FIELD(entry_name, T);
+  fprintf(stderr, "entry_name: \"%s\"\n", GET_FIELD(entry_name));
+  FIELD(_64_flag, B);
+  FIELD(xrefindex_plus1, BS);
+  FIELD(xdep, B);
+  FIELD(anonymous, B);
+  FIELD(hasattrs, B);
+  FIELD(blkisxref, B);
+  FIELD(xrefoverlaid, B);
 
-  if (dat->version >= R_2000)
+  SINCE(R_2000)
     {
-      _obj->loaded_bit = bit_read_B(dat);
+      FIELD(loaded_bit, B);
     }
 
-  if (dat->version >= R_2004)
+  SINCE(R_2004)
     {
-      _obj->owned_object_count = bit_read_BL(dat);
+      FIELD(owned_object_count, BL);
     }
 
-  _obj->base_pt.x = bit_read_BD(dat);
-  _obj->base_pt.y = bit_read_BD(dat);
-  _obj->base_pt.z = bit_read_BD(dat);
+  FIELD_3DPOINT(base_pt);
+  FIELD(xref_pname, T);
+  fprintf(stderr, "xref_pname: \"%s\"\n", GET_FIELD(xref_pname));
 
-  _obj->xref_pname = bit_read_T(dat);
-  fprintf(stderr, "xref_pname: \"%s\"\n", _obj->xref_pname);
-
-  if (dat->version >= R_2000)
+  SINCE(R_2000)
     {
 
       //skip non-zero bytes and a terminating zero:
+      GET_FIELD(insert_count)=0;
       while (bit_read_RC(dat))
         {
+          GET_FIELD(insert_count)++;
         };
 
-      _obj->block_description = bit_read_T(dat);
-      fprintf(stderr, "block_description: \"%s\"\n", _obj->block_description);
+      FIELD(block_description, T);
+      fprintf(stderr, "block_description: \"%s\"\n", GET_FIELD(block_description));
 
-      _obj->size_of_preview_data = bit_read_BL(dat);
-      for (i = 0; i < _obj->size_of_preview_data; i++)
+      FIELD(size_of_preview_data, BL);
+      FIELD_VECTOR(binary_preview_data, RC, size_of_preview_data);
+    }
+
+  SINCE(R_2007)
+    {
+      FIELD(insert_units, BS);
+      FIELD(explodable, B);
+      FIELD(block_scaling, RC);
+    }
+
+  FIELD_HANDLE(block_control_handle, 4);
+  REACTORS(4);
+  FIELD_HANDLE(xdicobjhandle, 3);
+  FIELD_HANDLE(NULL_handle, 5);
+  FIELD_HANDLE(block_entity, 3);
+
+  VERSIONS(R_13,R_2000)
+    {
+      if (!GET_FIELD(blkisxref) && !GET_FIELD(xrefoverlaid))
         {
-          //TO-DO
-          //ord->binary_preview_data[i] = bit_read_RC (dat);
-          bit_read_RC(dat);
+          FIELD_HANDLE(first_entity, 4);
+          FIELD_HANDLE(last_entity, 4);
         }
     }
 
-  if (dat->version >= R_2007)
+  SINCE(R_2004)
+    HANDLE_VECTOR(entities, owned_object_count, 4);
+
+  FIELD_HANDLE(endblk_entity, 3);
+
+  SINCE(R_2000)
     {
-      //TODO
-
-      //_obj->insert_units = bit_read_BS (dat);
-
+      HANDLE_VECTOR(insert_handles, insert_count, ANYCODE)
+      FIELD_HANDLE(layout_handle, ANYCODE);
     }
-
-  _obj->block_control_handle = HANDLE_CODE(4);
-
-  _obj->reactor = (Dwg_Object_Ref**) malloc(obj->tio.object->num_reactors
-      * sizeof(Dwg_Object_Ref*));
-  for (i = 0; i < obj->tio.object->num_reactors; i++)
-    {
-      _obj->reactor[i] = HANDLE_CODE(4);
-    }
-
-  _obj->xdicobjhandle = HANDLE_CODE(3);
-  _obj->NULL_handle = HANDLE_CODE(5);
-  _obj->block_entity = HANDLE_CODE(3);
-  //TODO: imcomplete. check spec.
-
 }
 
 static void

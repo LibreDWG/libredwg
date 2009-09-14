@@ -28,19 +28,33 @@ extern "C"
 #endif
 
 #define BITCODE_RC char
+#define FORMAT_RC "%2x"
 #define BITCODE_MC long int
+#define FORMAT_MC "%l"
 #define BITCODE_MS long unsigned int
+#define FORMAT_MS "%lu"
 #define BITCODE_B unsigned char
+#define FORMAT_B "%d"
 #define BITCODE_BB unsigned char
+#define FORMAT_BB "%d"
 #define BITCODE_BS unsigned int
-#define BITCODE_RS unsigned int 
+#define FORMAT_BS "%d"
+#define BITCODE_RS unsigned int
+#define FORMAT_RS "%d" 
 #define BITCODE_RL long unsigned int
+#define FORMAT_RL "%lu"
 #define BITCODE_RD double
+#define FORMAT_RD "%f"
 #define BITCODE_BL long unsigned int
+#define FORMAT_BL "%lu"
 #define BITCODE_T unsigned char *
+#define FORMAT_T "\"%s\""
 #define BITCODE_BT double
+#define FORMAT_BT "%f"
 #define BITCODE_DD double
+#define FORMAT_DD "%f"
 #define BITCODE_BD double
+#define FORMAT_BD "%f"
 #define BITCODE_3DPOINT struct { BITCODE_BD x; BITCODE_BD y; BITCODE_BD z; }
 
 /**
@@ -1627,33 +1641,36 @@ typedef struct _dwg_object_BLOCK_CONTROL
  */
 typedef struct _dwg_object_BLOCK_HEADER
 {
-  //TODO
-
-  unsigned char *entry_name;
-  unsigned char _64_flag;
-  unsigned int xrefindex_plus1;
-  unsigned char xdep;
-  unsigned char anonymous;
-  unsigned char hasattrs;
-  unsigned char blxisxref;
-  unsigned char xrefoverlaid;
-  unsigned char loaded_bit;
-  long unsigned int owned_object_count;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } base_pt;
-  unsigned char* xref_pname;
-  unsigned char insert_count;
-  unsigned char* block_description;
-  long unsigned int size_of_preview_data;
+  BITCODE_T entry_name;
+  BITCODE_B _64_flag;
+  BITCODE_BS xrefindex_plus1;
+  BITCODE_B xdep;
+  BITCODE_B anonymous;
+  BITCODE_B hasattrs;
+  BITCODE_B blkisxref;
+  BITCODE_B xrefoverlaid;
+  BITCODE_B loaded_bit;
+  BITCODE_BL owned_object_count;
+  BITCODE_3DPOINT base_pt;
+  BITCODE_T xref_pname;
+  BITCODE_RC insert_count;
+  BITCODE_T block_description;
+  BITCODE_BL size_of_preview_data;
+  BITCODE_RC* binary_preview_data;
+  BITCODE_BS insert_units;
+  BITCODE_B explodable;
+  BITCODE_RC block_scaling;
   Dwg_Object_Ref* block_control_handle;
-  Dwg_Object_Ref** reactor;
+  Dwg_Object_Ref** reactors;
   Dwg_Object_Ref* xdicobjhandle;
   Dwg_Object_Ref* NULL_handle;
   Dwg_Object_Ref* block_entity;
+  Dwg_Object_Ref* first_entity;
+  Dwg_Object_Ref* last_entity;
+  Dwg_Object_Ref** entities;
+  Dwg_Object_Ref* endblk_entity;
+  Dwg_Object_Ref** insert_handles;
+  Dwg_Object_Ref* layout_handle;
 } Dwg_Object_BLOCK_HEADER;
 
 /**
