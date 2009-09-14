@@ -52,7 +52,7 @@ bit_advance_position(Bit_Chain * dat, int advance)
 
 /** Read 1 bit.
  */
-unsigned char
+BITCODE_B
 bit_read_B(Bit_Chain * dat)
 {
   unsigned char result;
@@ -83,7 +83,7 @@ bit_write_B(Bit_Chain * dat, unsigned char value)
 
 /** Read 2 bits.
  */
-unsigned char
+BITCODE_BB
 bit_read_BB(Bit_Chain * dat)
 {
   unsigned char result;
@@ -138,7 +138,7 @@ bit_write_BB(Bit_Chain * dat, unsigned char value)
 
 /** Read 1 byte (raw char).
  */
-unsigned char
+BITCODE_RC
 bit_read_RC(Bit_Chain * dat)
 {
   unsigned char result;
@@ -194,7 +194,7 @@ bit_write_RC(Bit_Chain * dat, unsigned char value)
 
 /** Read 1 word (raw short).
  */
-unsigned int
+BITCODE_RS
 bit_read_RS(Bit_Chain * dat)
 {
   unsigned char byte1, byte2;
@@ -240,7 +240,7 @@ bit_write_RL(Bit_Chain * dat, long unsigned int value)
 
 /** Read 1 raw double (8 bytes).
  */
-double
+BITCODE_RD
 bit_read_RD(Bit_Chain * dat)
 {
   int i;
@@ -272,7 +272,7 @@ bit_write_RD(Bit_Chain * dat, double value)
 
 /** Read 1 bitshort (compacted data).
  */
-unsigned int
+BITCODE_BS
 bit_read_BS(Bit_Chain * dat)
 {
   unsigned char two_bit_code;
@@ -321,7 +321,7 @@ bit_write_BS(Bit_Chain * dat, unsigned int value)
 
 /** Read 1 bitlong (compacted data).
  */
-long unsigned int
+BITCODE_BL
 bit_read_BL(Bit_Chain * dat)
 {
   unsigned char two_bit_code;
@@ -369,7 +369,7 @@ bit_write_BL(Bit_Chain * dat, long unsigned int value)
 
 /** Read 1 bitdouble (compacted data).
  */
-double
+BITCODE_BD
 bit_read_BD(Bit_Chain * dat)
 {
   unsigned char two_bit_code;
@@ -416,7 +416,7 @@ bit_write_BD(Bit_Chain * dat, double value)
 
 /** Read 1 modular char (max 4 bytes).
  */
-long int
+BITCODE_MC
 bit_read_MC(Bit_Chain * dat)
 {
   int i, j;
@@ -493,7 +493,7 @@ bit_write_MC(Bit_Chain * dat, long int val)
 
 /** Read 1 modular short (max 2 words).
  */
-long unsigned int
+BITCODE_MS
 bit_read_MS(Bit_Chain * dat)
 {
   int i, j;
@@ -580,7 +580,7 @@ bit_write_BE(Bit_Chain * dat, double x, double y, double z)
 
 /** Read bit-double with default.
  */
-double
+BITCODE_DD
 bit_read_DD(Bit_Chain * dat, double default_value)
 {
   unsigned char two_bit_code;
@@ -663,7 +663,7 @@ bit_write_DD(Bit_Chain * dat, double value, double default_value)
 
 /** Read bit-thickness.
  */
-double
+BITCODE_BT
 bit_read_BT(Bit_Chain * dat)
 {
   int mode = 0;
@@ -815,7 +815,7 @@ bit_krei_CRC(Bit_Chain * dat, long unsigned int start_address,
 
 /** Read simple text. After usage, the allocated memory must be proprly freed.
  */
-unsigned char *
+BITCODE_T
 bit_read_T(Bit_Chain * dat)
 {
   unsigned int i;

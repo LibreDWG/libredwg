@@ -27,6 +27,22 @@ extern "C"
   {
 #endif
 
+#define BITCODE_RC char
+#define BITCODE_MC long int
+#define BITCODE_MS long unsigned int
+#define BITCODE_B unsigned char
+#define BITCODE_BB unsigned char
+#define BITCODE_BS unsigned int
+#define BITCODE_RS unsigned int 
+#define BITCODE_RL long unsigned int
+#define BITCODE_RD double
+#define BITCODE_BL long unsigned int
+#define BITCODE_T unsigned char *
+#define BITCODE_BT double
+#define BITCODE_DD double
+#define BITCODE_BD double
+#define BITCODE_3DPOINT struct { BITCODE_BD x; BITCODE_BD y; BITCODE_BD z; }
+
 /**
  Object supertypes that exist in dwg-files.
  */
@@ -1442,7 +1458,7 @@ typedef struct _dwg_entity_DICTIONARY
   unsigned char unknown_r14;
   unsigned int cloning;
   unsigned char hard_owner;
-  char ** text;
+  unsigned char** text;
   Dwg_Object_Ref* parenthandle;
   Dwg_Object_Ref** reactors;
   Dwg_Object_Ref* xdicobjhandle;
@@ -1486,46 +1502,16 @@ typedef struct _dwg_entity_MTEXT
  */
 typedef struct _dwg_entity_LEADER
 {
-  unsigned int unknown_bit_1; //always seems to be zero
-  unsigned int annot_type;
-  unsigned int path_type;
-  unsigned int numpts;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  }* point;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } end_pt_proj;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } extrusion;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } x_direction;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } offset_block_inspt;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } unknown_pt;
+  BITCODE_B unknown_bit_1; //always seems to be zero
+  BITCODE_BS annot_type;
+  BITCODE_BS path_type;
+  BITCODE_BL numpts;
+  BITCODE_3DPOINT* point;
+  BITCODE_3DPOINT end_pt_proj;
+  BITCODE_3DPOINT extrusion;
+  BITCODE_3DPOINT x_direction;
+  BITCODE_3DPOINT offset_block_inspt;
+  BITCODE_3DPOINT unknown_pt;
   double dimgap;
   double box_height;
   double box_width;

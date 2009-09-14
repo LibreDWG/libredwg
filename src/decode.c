@@ -38,15 +38,11 @@
 #define HANDLE_FIELD(name, code) _obj->name = dwg_decode_handleref_with_code(dat, obj, code)
 #define GET_FIELD(name) _obj->name
 
-#define DWG_PRIMITIVE_TYPE_RC char
-#define DWG_PRIMITIVE_TYPE_B unsigned char
-#define DWG_PRIMITIVE_TYPE_T unsigned char *
-
 //FIELD_VECTOR(name, type, size):
 // reads data of the type indicated by 'type' 'size' times and stores
 // it all in the vector called 'name'.
 #define FIELD_VECTOR(name, type, size)\
-  _obj->name = (DWG_PRIMITIVE_TYPE_##type*) malloc(_obj->size * sizeof(DWG_PRIMITIVE_TYPE_##type));\
+  _obj->name = (BITCODE_##type *) malloc(_obj->size * sizeof(BITCODE_##type));\
   for (vector_counter=0; vector_counter< _obj->size; vector_counter++)\
     FIELD(name[vector_counter], type)
 
@@ -55,6 +51,12 @@
   for (vector_counter=0; vector_counter<GET_FIELD(sizefield); vector_counter++){\
     HANDLE_FIELD(name[vector_counter], code);\
   }
+
+#define FIELD_3DPOINT(name) FIELD(name.x, BD); FIELD(name.y, BD); FIELD(name.z, BD);
+#define FIELD_3DPOINT_VECTOR(name, size)\
+  _obj->name = (BITCODE_3DPOINT *) malloc(_obj->size * sizeof(BITCODE_3DPOINT));\
+  for (vector_counter=0; vector_counter< _obj->size; vector_counter++)\
+    {FIELD_3DPOINT(name[vector_counter])}
 
 #define REACTORS(code)\
   GET_FIELD(reactors) = malloc(sizeof(Dwg_Object_Ref*) * obj->tio.object->num_reactors);\
@@ -3195,6 +3197,7 @@ dwg_decode_DICTIONARY(Bit_Chain *dat, Dwg_Object *obj)
   DWG_OBJECT(DICTIONARY);
 
   FIELD(numitems, BS);
+
   VERSION(R_14)
     FIELD(unknown_r14, RC);
 
@@ -3213,12 +3216,12 @@ dwg_decode_DICTIONARY(Bit_Chain *dat, Dwg_Object *obj)
       return;
     }
 
-  FIELD_VECTOR(text, RC, numitems);
-HANDLE_FIELD    (parenthandle, 4);
-    REACTORS(4);
-    HANDLE_FIELD(xdicobjhandle,3);
-    HANDLE_VECTOR(itemhandles, numitems, 2);
-  }
+  FIELD_VECTOR(text, T, numitems);
+  HANDLE_FIELD(parenthandle, 4);
+  REACTORS(4);
+  HANDLE_FIELD(xdicobjhandle,3);
+  HANDLE_VECTOR(itemhandles, numitems, 2);
+}
 
 static void
 dwg_decode_MTEXT(Bit_Chain * dat, Dwg_Object * obj)
@@ -3267,65 +3270,47 @@ dwg_decode_MTEXT(Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_LEADER(Bit_Chain *dat, Dwg_Object *obj)
 {
-  int i;
   DWG_ENTITY(LEADER);
 
-  ent->unknown_bit_1 = bit_read_B(dat);
-  ent->annot_type = bit_read_BS(dat);
-  ent->path_type = bit_read_BS(dat);
-  ent->numpts = bit_read_BL(dat);
+  FIELD(unknown_bit_1, B);
+  FIELD(annot_type, BS);
+  FIELD(path_type, BS);
+  FIELD(numpts, BL);
 
-  ent->point = malloc(ent->numpts * 3 * sizeof(double));
-  for (i = 0; i < ent->numpts; i++)
+  FIELD_3DPOINT_VECTOR(point, numpts);
+
+  FIELD_3DPOINT(end_pt_proj);
+  FIELD_3DPOINT(extrusion);
+  FIELD_3DPOINT(x_direction);
+
+  SINCE(R_14)
+    FIELD_3DPOINT(unknown_pt);
+
+  VERSIONS(R_13,R_14)
+    FIELD(dimgap, BD);
+
+  FIELD(box_height, BD);
+  FIELD(box_width, BD);
+  FIELD(hooklineonxdir, B);
+  FIELD(arrowhead_on, B);
+
+  VERSIONS(R_13,R_14)
     {
-      ent->point[i].x = bit_read_BD(dat);
-      ent->point[i].y = bit_read_BD(dat);
-      ent->point[i].z = bit_read_BD(dat);
-    }
-  ent->end_pt_proj.x = bit_read_BD(dat);
-  ent->end_pt_proj.y = bit_read_BD(dat);
-  ent->end_pt_proj.z = bit_read_BD(dat);
-  ent->extrusion.x = bit_read_BD(dat);
-  ent->extrusion.y = bit_read_BD(dat);
-  ent->extrusion.z = bit_read_BD(dat);
-  ent->x_direction.x = bit_read_BD(dat);
-  ent->x_direction.y = bit_read_BD(dat);
-  ent->x_direction.z = bit_read_BD(dat);
-
-  if (dat->version >= R_14)
-    {
-      ent->unknown_pt.x = bit_read_BD(dat);
-      ent->unknown_pt.y = bit_read_BD(dat);
-      ent->unknown_pt.z = bit_read_BD(dat);
-    }
-
-  if (dat->version == R_13 || dat->version == R_14)
-    {
-      ent->dimgap = bit_read_BD(dat);
-    }
-
-  ent->box_height = bit_read_BD(dat);
-  ent->box_width = bit_read_BD(dat);
-  ent->hooklineonxdir = bit_read_B(dat);
-  ent->arrowhead_on = bit_read_B(dat);
-
-  if (dat->version == R_13 || dat->version == R_14)
-    {
-      ent->arrowhead_type = bit_read_BS(dat);
-      ent->dimasz = bit_read_BD(dat);
-      ent->unknown_bit_2 = bit_read_B(dat);
-      ent->unknown_bit_3 = bit_read_B(dat);
-      ent->unknown_short_1 = bit_read_BS(dat);
-      ent->byblock_color = bit_read_BS(dat);
-      ent->unknown_bit_4 = bit_read_B(dat);
-      ent->unknown_bit_5 = bit_read_B(dat);
+      FIELD(arrowhead_type, BS);
+      FIELD(dimasz, BD);
+      FIELD(unknown_bit_2, B);
+      FIELD(unknown_bit_3, B);
+      FIELD(unknown_short_1, BS);
+      FIELD(byblock_color, BS);
+      FIELD(unknown_bit_4, B);
+      FIELD(unknown_bit_5, B);
     }
 
-  if (dat->version >= R_2000)
+  SINCE(R_2000)
     {
-      ent->unknown_short_1 = bit_read_BS(dat);
-      ent->unknown_bit_4 = bit_read_B(dat);
-      ent->unknown_bit_5 = bit_read_B(dat);
+      FIELD(unknown_short_1, BS);
+      FIELD(unknown_bit_4, B);
+      FIELD(unknown_bit_5, B);
     }
 
   dwg_decode_common_entity_handle_data(dat, obj);
@@ -3336,26 +3321,19 @@ dwg_decode_TOLERANCE(Bit_Chain *dat, Dwg_Object *obj)
 {
   DWG_ENTITY(TOLERANCE);
 
-  if (dat->version == R_13 || dat->version == R_14)
+  VERSIONS(R_13, R_14)
     {
-      ent->unknown_short = bit_read_BS(dat); //spec-typo? Spec says S instead of BS.
-      ent->height = bit_read_BD(dat);
-      ent->dimgap = bit_read_BD(dat);
+      FIELD(unknown_short, BS); //spec-typo? Spec says S instead of BS.
+      FIELD(height, BD);
+      FIELD(dimgap, BD);
     }
 
-  ent->ins_pt.x = bit_read_BD(dat);
-  ent->ins_pt.y = bit_read_BD(dat);
-  ent->ins_pt.z = bit_read_BD(dat);
-  ent->x_direction.x = bit_read_BD(dat);
-  ent->x_direction.y = bit_read_BD(dat);
-  ent->x_direction.z = bit_read_BD(dat);
-  ent->extrusion.x = bit_read_BD(dat);
-  ent->extrusion.y = bit_read_BD(dat);
-  ent->extrusion.z = bit_read_BD(dat);
-  ent->text_string = bit_read_BS(dat);
+  FIELD_3DPOINT(ins_pt);
+  FIELD_3DPOINT(x_direction);
+  FIELD_3DPOINT(extrusion);
+  FIELD(text_string, BS);
 
   dwg_decode_common_entity_handle_data(dat, obj);
-
 }
 
 static void

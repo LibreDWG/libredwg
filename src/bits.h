@@ -52,37 +52,37 @@ typedef struct _bit_chain
 void
 bit_advance_position(Bit_Chain * dat, int salto);
 
-unsigned char
+BITCODE_B
 bit_read_B(Bit_Chain * bit_datenaro);
 
 void
 bit_write_B(Bit_Chain * bit_datenaro, unsigned char value);
 
-unsigned char
+BITCODE_BB
 bit_read_BB(Bit_Chain * bit_datenaro);
 
 void
 bit_write_BB(Bit_Chain * bit_datenaro, unsigned char value);
 
-unsigned char
+BITCODE_RC
 bit_read_RC(Bit_Chain * bit_datenaro);
 
 void
 bit_write_RC(Bit_Chain * bit_datenaro, unsigned char value);
 
-unsigned int
+BITCODE_RS
 bit_read_RS(Bit_Chain * bit_datenaro);
 
 void
 bit_write_RS(Bit_Chain * bit_datenaro, unsigned int value);
 
-long unsigned int
+BITCODE_RL
 bit_read_RL(Bit_Chain * bit_datenaro);
 
 void
 bit_write_RL(Bit_Chain * bit_datenaro, long unsigned int value);
 
-double
+BITCODE_RD
 bit_read_RD(Bit_Chain * bit_datenaro);
 
 void
@@ -90,31 +90,31 @@ bit_write_RD(Bit_Chain * bit_datenaro, double value);
 
 /* Functions for manipulating compacted data
  */
-unsigned int
+BITCODE_BS
 bit_read_BS(Bit_Chain * bit_datenaro);
 
 void
 bit_write_BS(Bit_Chain * bit_datenaro, unsigned int value);
 
-long unsigned int
+BITCODE_BL
 bit_read_BL(Bit_Chain * bit_datenaro);
 
 void
 bit_write_BL(Bit_Chain * bit_datenaro, long unsigned int value);
 
-double
+BITCODE_BD
 bit_read_BD(Bit_Chain * bit_datenaro);
 
 void
 bit_write_BD(Bit_Chain * bit_datenaro, double value);
 
-long int
+BITCODE_MC
 bit_read_MC(Bit_Chain * bit_datenaro);
 
 void
 bit_write_MC(Bit_Chain * bit_datenaro, long int value);
 
-long unsigned int
+BITCODE_MS
 bit_read_MS(Bit_Chain * bit_datenaro);
 
 void
@@ -126,13 +126,13 @@ bit_read_BE(Bit_Chain * bit_datenaro, double *x, double *y, double *z);
 void
 bit_write_BE(Bit_Chain * bit_datenaro, double x, double y, double z);
 
-double
+BITCODE_DD
 bit_read_DD(Bit_Chain * bit_datenaro, double antauxdifinajxo);
 
 void
 bit_write_DD(Bit_Chain * bit_datenaro, double value, double antauxdifinajxo);
 
-double
+BITCODE_BT
 bit_read_BT(Bit_Chain * bit_datenaro);
 
 void
