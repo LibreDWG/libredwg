@@ -226,6 +226,7 @@ extern "C"
 		unsigned int field_length;
 		unsigned char flags;
 		unsigned char lock_position_flag;
+	    Dwg_Object_Ref* style;
 	} Dwg_Entity_ATTRIB;
 
 /**
@@ -264,6 +265,7 @@ extern "C"
 		unsigned char flags;
 		unsigned char lock_position_flag;
 		unsigned char *prompt;
+	    Dwg_Object_Ref* style;
 	} Dwg_Entity_ATTDEF;
 
 /**
@@ -353,6 +355,11 @@ extern "C"
 			unsigned int size;
 			double dy;
 		} line;
+		Dwg_Object_Ref* block_header;
+                Dwg_Object_Ref* first_attrib;
+                Dwg_Object_Ref* last_attrib;
+                Dwg_Object_Ref** attrib_handles;
+                Dwg_Object_Ref* seqend;
 	} Dwg_Entity_MINSERT;
 
 /**
@@ -417,6 +424,10 @@ extern "C"
 			double z;
 		} extrusion;
 		long unsigned int owned_obj_count;
+                Dwg_Object_Ref* first_vertex;
+                Dwg_Object_Ref* last_vertex;
+                Dwg_Object_Ref** vertex;
+                Dwg_Object_Ref* seqend;
 	} Dwg_Entity_POLYLINE_2D;
 
 /**
@@ -427,6 +438,10 @@ extern "C"
 		unsigned char flags_1;
 		unsigned char flags_2;
 		long unsigned int owned_obj_count;
+		Dwg_Object_Ref* first_vertex;
+                Dwg_Object_Ref* last_vertex;
+                Dwg_Object_Ref** vertex;
+                Dwg_Object_Ref* seqend;
 	} Dwg_Entity_POLYLINE_3D;
 
 /**
@@ -548,6 +563,8 @@ extern "C"
 			double z;
 		} _14_pt;
                 unsigned char flags_2;
+                Dwg_Object_Ref* dimstyle;
+                Dwg_Object_Ref* block;
 	} Dwg_Entity_DIMENSION_ORDINATE;
 
 /**
@@ -611,6 +628,8 @@ extern "C"
 		} _10_pt;
                 double ext_line_rot;
                 double dim_rot;
+                Dwg_Object_Ref* dimstyle;
+                Dwg_Object_Ref* block;
 	} Dwg_Entity_DIMENSION_LINEAR;
 
 /**
@@ -673,6 +692,8 @@ extern "C"
 			double z;
 		} _10_pt;
                 double ext_line_rot;
+                Dwg_Object_Ref* dimstyle;
+                Dwg_Object_Ref* block;
 	} Dwg_Entity_DIMENSION_ALIGNED;
 
 /**
@@ -740,6 +761,8 @@ extern "C"
 			double y;
 			double z;
 		} _15_pt;
+                Dwg_Object_Ref* dimstyle;
+                Dwg_Object_Ref* block;
 	} Dwg_Entity_DIMENSION_ANG3PT;
 
 /**
@@ -813,6 +836,8 @@ extern "C"
 			double y;
 			double z;
 		} _10_pt;
+                Dwg_Object_Ref* dimstyle;
+                Dwg_Object_Ref* block;
 	} Dwg_Entity_DIMENSION_ANG2LN;
 
  /**
@@ -869,6 +894,8 @@ extern "C"
 			double z;
 		} _15_pt;
                 double leader_len;
+                Dwg_Object_Ref* dimstyle;
+                Dwg_Object_Ref* block;
 	} Dwg_Entity_DIMENSION_RADIUS;
 
  /**
@@ -925,6 +952,8 @@ extern "C"
 			double z;
 		} _15_pt;
                 double leader_len;
+                Dwg_Object_Ref* dimstyle;
+                Dwg_Object_Ref* block;
 	} Dwg_Entity_DIMENSION_DIAMETER;
 
 /**
@@ -986,7 +1015,11 @@ extern "C"
 	{
 		unsigned int numverts;
 		unsigned int numfaces;
-                unsigned long owned_object_count;
+                unsigned long owned_obj_count;
+                Dwg_Object_Ref* first_vertex;
+                Dwg_Object_Ref* last_vertex;
+                Dwg_Object_Ref** vertex;
+                Dwg_Object_Ref* seqend;
 		
 	} Dwg_Entity_POLYLINE_PFACE;
 
@@ -1001,7 +1034,11 @@ extern "C"
 		unsigned int n_vert_count;
 		unsigned int m_density;
 		unsigned int n_density;
-                unsigned long owned_object_count;
+                unsigned long owned_obj_count;
+                Dwg_Object_Ref* first_vertex;
+                Dwg_Object_Ref* last_vertex;
+                Dwg_Object_Ref** vertex;
+                Dwg_Object_Ref* seqend;
 		
 	} Dwg_Entity_POLYLINE_MESH;
 
@@ -1109,6 +1146,7 @@ extern "C"
 			double y;
 			double z;
 		} extrusion;
+		Dwg_Object_Ref* shapefile;
 		
 	} Dwg_Entity_SHAPE;
 /**

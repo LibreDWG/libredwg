@@ -1675,7 +1675,7 @@ dwg_encode_POLYLINE_PFACE (Dwg_Entity_POLYLINE_PFACE* ent, Bit_Chain * dat)
 
         if (dat->version >= R_2004)
         {
-            bit_write_BL(dat, ent->owned_object_count);
+            bit_write_BL(dat, ent->owned_obj_count);
         }
         //TODO: what about the handles?
 }
@@ -1692,7 +1692,7 @@ dwg_encode_POLYLINE_MESH (Dwg_Entity_POLYLINE_MESH *ent, Bit_Chain * dat)
 
         if (dat->version >= R_2004)
         {
-            bit_write_BL(dat, ent->owned_object_count);
+            bit_write_BL(dat, ent->owned_obj_count);
         }
 }
 
