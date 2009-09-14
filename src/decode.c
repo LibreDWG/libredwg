@@ -1367,7 +1367,11 @@ fprintf(stderr, #token "\n");\
 	ent = obj->tio.entity->tio.token;\
   obj->tio.entity->object = obj;\
 	dwg_decode_entity (dat, obj->tio.entity);\
-
+\
+  fprintf (stderr, "Entity " #token " (%d.%d.%lu)\n",\
+    obj->handle.code,\
+    obj->handle.size,\
+    obj->handle.value);\
 
 static void
 dwg_decode_TEXT (Bit_Chain * dat, Dwg_Object * obj)
@@ -1433,14 +1437,7 @@ dwg_decode_TEXT (Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_ATTRIB (Bit_Chain * dat, Dwg_Object * obj)
 {
-	Dwg_Entity_ATTRIB *ent;
-
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.ATTRIB = calloc (sizeof (Dwg_Entity_ATTRIB), 1);
-	ent = obj->tio.entity->tio.ATTRIB;
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
+  DWG_ENTITY(ATTRIB);
 
 	/* Read values
 	 */
@@ -1507,14 +1504,7 @@ dwg_decode_ATTRIB (Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_ATTDEF (Bit_Chain * dat, Dwg_Object * obj)
 {
-	Dwg_Entity_ATTDEF *ent;
-
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.ATTDEF = calloc (sizeof (Dwg_Entity_ATTDEF), 1);
-	ent = obj->tio.entity->tio.ATTDEF;
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
+  DWG_ENTITY(ATTDEF);
 
 	/* Read values
 	 */
@@ -1582,16 +1572,7 @@ dwg_decode_ATTDEF (Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_BLOCK (Bit_Chain * dat, Dwg_Object * obj)
 {
-	Dwg_Entity_BLOCK *ent;
-
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.BLOCK = calloc (sizeof (Dwg_Entity_BLOCK), 1);
-	ent = obj->tio.entity->tio.BLOCK;
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
-
-  fprintf (stderr, "BLOCK (%d.%d.%lu)\n", obj->handle.code, obj->handle.size, obj->handle.value);
+  DWG_ENTITY(BLOCK);
 
 	/* Read values
 	 */
@@ -1604,14 +1585,7 @@ dwg_decode_BLOCK (Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_ENDBLK (Bit_Chain * dat, Dwg_Object * obj)
 {
-	Dwg_Entity_ENDBLK *ent;
-
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.ENDBLK = calloc (sizeof (Dwg_Entity_ENDBLK), 1);
-	ent = obj->tio.entity->tio.ENDBLK;
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
+  DWG_ENTITY(ENDBLK);
 
 	dwg_decode_common_entity_handle_data (dat, obj);
 }
@@ -1619,14 +1593,7 @@ dwg_decode_ENDBLK (Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_SEQEND (Bit_Chain * dat, Dwg_Object * obj)
 {
-	Dwg_Entity_SEQEND *ent;
-
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.SEQEND = calloc (sizeof (Dwg_Entity_SEQEND), 1);
-	ent = obj->tio.entity->tio.SEQEND;
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
+  DWG_ENTITY(SEQEND);
 
 	dwg_decode_common_entity_handle_data (dat, obj);
 }
@@ -1635,19 +1602,7 @@ static void
 dwg_decode_INSERT (Bit_Chain * dat, Dwg_Object * obj)
 {
   int i;
-	Dwg_Entity_INSERT *ent;
-
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.INSERT = calloc (sizeof (Dwg_Entity_INSERT), 1);
-	ent = obj->tio.entity->tio.INSERT;
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
-
-  fprintf (stderr, "INSERT (%d.%d.%lu)\n",
-    obj->handle.code,
-    obj->handle.size,
-    obj->handle.value);
+  DWG_ENTITY(INSERT);
 
 	/* Read values
 	 */
@@ -1728,14 +1683,7 @@ dwg_decode_INSERT (Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_MINSERT (Bit_Chain * dat, Dwg_Object * obj)
 {
-	Dwg_Entity_MINSERT *ent;
-
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.MINSERT = calloc (sizeof (Dwg_Entity_MINSERT), 1);
-	ent = obj->tio.entity->tio.MINSERT;
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
+  DWG_ENTITY(MINSERT);
 
 	/* Read values
 	 */
@@ -1793,14 +1741,7 @@ dwg_decode_MINSERT (Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_VERTEX_2D (Bit_Chain * dat, Dwg_Object * obj)
 {
-	Dwg_Entity_VERTEX_2D *ent;
-
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.VERTEX_2D = calloc (sizeof (Dwg_Entity_VERTEX_2D), 1);
-	ent = obj->tio.entity->tio.VERTEX_2D;
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
+  DWG_ENTITY(VERTEX_2D);
 
 	/* Read values
 	 */
@@ -1822,14 +1763,7 @@ dwg_decode_VERTEX_2D (Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_VERTEX_3D (Bit_Chain * dat, Dwg_Object * obj)
 {
-	Dwg_Entity_VERTEX_3D *ent;
-
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.VERTEX_3D = calloc (sizeof (Dwg_Entity_VERTEX_3D), 1);
-	ent = obj->tio.entity->tio.VERTEX_3D;
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
+  DWG_ENTITY(VERTEX_3D);
 
 	/* Read values
 	 */
@@ -1844,14 +1778,7 @@ dwg_decode_VERTEX_3D (Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_VERTEX_MESH (Bit_Chain * dat, Dwg_Object * obj)
 {
-	Dwg_Entity_VERTEX_MESH *ent;
-
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.VERTEX_MESH = calloc (sizeof (Dwg_Entity_VERTEX_MESH), 1);
-	ent = obj->tio.entity->tio.VERTEX_MESH;
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
+  DWG_ENTITY(VERTEX_MESH);
 
 	/* Read values
 	 */
@@ -1866,14 +1793,7 @@ dwg_decode_VERTEX_MESH (Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_VERTEX_PFACE (Bit_Chain * dat, Dwg_Object * obj)
 {
-	Dwg_Entity_VERTEX_PFACE *ent;
-
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.VERTEX_PFACE = calloc (sizeof (Dwg_Entity_VERTEX_PFACE), 1);
-	ent = obj->tio.entity->tio.VERTEX_PFACE;
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
+  DWG_ENTITY(VERTEX_PFACE);
 
 	/* Read values
 	 */
@@ -1888,14 +1808,7 @@ dwg_decode_VERTEX_PFACE (Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_VERTEX_PFACE_FACE (Bit_Chain * dat, Dwg_Object * obj)
 {
-	Dwg_Entity_VERTEX_PFACE_FACE *ent;
-
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.VERTEX_PFACE_FACE = calloc (sizeof (Dwg_Entity_VERTEX_PFACE_FACE), 1);
-	ent = obj->tio.entity->tio.VERTEX_PFACE_FACE;
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
+  DWG_ENTITY(VERTEX_PFACE_FACE);
 
 	/* Read values
 	 */
@@ -1910,14 +1823,7 @@ dwg_decode_VERTEX_PFACE_FACE (Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_POLYLINE_2D (Bit_Chain * dat, Dwg_Object * obj)
 {
-	Dwg_Entity_POLYLINE_2D *ent;
-
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.POLYLINE_2D = calloc (sizeof (Dwg_Entity_POLYLINE_2D), 1);
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
-	ent = obj->tio.entity->tio.POLYLINE_2D;
+  DWG_ENTITY(POLYLINE_2D);
 
 	/* Read values
 	 */
@@ -1941,14 +1847,7 @@ dwg_decode_POLYLINE_2D (Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_POLYLINE_3D (Bit_Chain * dat, Dwg_Object * obj)
 {
-	Dwg_Entity_POLYLINE_3D *ent;
-
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.POLYLINE_3D = calloc (sizeof (Dwg_Entity_POLYLINE_3D), 1);
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
-	ent = obj->tio.entity->tio.POLYLINE_3D;
+  DWG_ENTITY(POLYLINE_3D);
 
 	/* Read values
 	 */
@@ -1967,15 +1866,10 @@ dwg_decode_POLYLINE_3D (Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_ARC (Bit_Chain * dat, Dwg_Object * obj)
 {
-	Dwg_Entity_ARC *ent;
+  DWG_ENTITY(ARC);
 
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.ARC = calloc (sizeof (Dwg_Entity_ARC), 1);
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
-	ent = obj->tio.entity->tio.ARC;
-
+	/* Read values
+	 */
 	ent->x0 = bit_read_BD (dat);
 	ent->y0 = bit_read_BD (dat);
 	ent->z0 = bit_read_BD (dat);
@@ -1991,15 +1885,10 @@ dwg_decode_ARC (Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_CIRCLE (Bit_Chain * dat, Dwg_Object * obj)
 {
-	Dwg_Entity_CIRCLE *ent;
+  DWG_ENTITY(CIRCLE);
 
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.CIRCLE = calloc (sizeof (Dwg_Entity_CIRCLE), 1);
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
-	ent = obj->tio.entity->tio.CIRCLE;
-
+	/* Read values
+	 */
 	ent->x0 = bit_read_BD (dat);
 	ent->y0 = bit_read_BD (dat);
 	ent->z0 = bit_read_BD (dat);
@@ -2013,15 +1902,10 @@ dwg_decode_CIRCLE (Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_LINE (Bit_Chain * dat, Dwg_Object * obj)
 {
-	Dwg_Entity_LINE *ent;
+  DWG_ENTITY(LINE);
 
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.LINE = calloc (sizeof (Dwg_Entity_LINE), 1);
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
-	ent = obj->tio.entity->tio.LINE;
-
+	/* Read values
+	 */
 	if (dat->version == R_13 ||
 	    dat->version == R_14){
 		ent->x0 = bit_read_BD (dat);
@@ -2055,434 +1939,401 @@ dwg_decode_LINE (Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_DIMENSION_ORDINATE (Bit_Chain * dat, Dwg_Object * obj)
 {
-    Dwg_Entity_DIMENSION_ORDINATE *ent;
+  DWG_ENTITY(DIMENSION_ORDINATE);
 
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.DIMENSION_ORDINATE = calloc (sizeof (Dwg_Entity_DIMENSION_ORDINATE), 1);
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
-	ent = obj->tio.entity->tio.DIMENSION_ORDINATE;
+	/* Read values
+	 */
+  //TODO: check extrusion reading
+  //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
+  ent->extrusion.x = bit_read_BD(dat);
+  ent->extrusion.y = bit_read_BD(dat);
+  ent->extrusion.z = bit_read_BD(dat);
+  ent->x0 = bit_read_RD (dat);
+  ent->y0 = bit_read_RD (dat);
+  
+  //TODO:review the parsing of these elevation values in the spec:
+  ent->elevation.ecs_11 = ent->elevation.ecs_12 = bit_read_BD(dat);
 
-    //TODO: check extrusion reading
-    //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
-    ent->extrusion.x = bit_read_BD(dat);
-    ent->extrusion.y = bit_read_BD(dat);
-    ent->extrusion.z = bit_read_BD(dat);
-    ent->x0 = bit_read_RD (dat);
-    ent->y0 = bit_read_RD (dat);
-    
-    //TODO:review the parsing of these elevation values in the spec:
-    ent->elevation.ecs_11 = ent->elevation.ecs_12 = bit_read_BD(dat);
+  //spec: flag bit 6 indicates ORDINATE dimension
+  ent->flags_1 = bit_read_RC(dat);
+  ent->user_text = bit_read_T(dat);
+  ent->text_rot = bit_read_BD(dat);
+  ent->horiz_dir = bit_read_BD(dat);
+  ent->ins_scale.x = bit_read_BD(dat);
+  ent->ins_scale.y = bit_read_BD(dat);
+  ent->ins_scale.z = bit_read_BD(dat);
+  ent->ins_rotation = bit_read_BD(dat);
 
-    //spec: flag bit 6 indicates ORDINATE dimension
-    ent->flags_1 = bit_read_RC(dat);
-    ent->user_text = bit_read_T(dat);
-    ent->text_rot = bit_read_BD(dat);
-    ent->horiz_dir = bit_read_BD(dat);
-    ent->ins_scale.x = bit_read_BD(dat);
-    ent->ins_scale.y = bit_read_BD(dat);
-    ent->ins_scale.z = bit_read_BD(dat);
-    ent->ins_rotation = bit_read_BD(dat);
+  if(dat->version >= R_2000){
+      ent->attachment_point = bit_read_BS(dat);
+      ent->lspace_style = bit_read_BS(dat);
+      ent->lspace_factor = bit_read_BD(dat);
+      ent->act_measurement = bit_read_BD(dat);
+  }
 
-    if(dat->version >= R_2000){
-        ent->attachment_point = bit_read_BS(dat);
-        ent->lspace_style = bit_read_BS(dat);
-        ent->lspace_factor = bit_read_BD(dat);
-        ent->act_measurement = bit_read_BD(dat);
-    }
+  if(dat->version >= R_2007){
+      ent->unknown = bit_read_B(dat);
+      ent->flip_arrow1 = bit_read_B(dat);
+      ent->flip_arrow2 = bit_read_B(dat);
+  }
 
-    if(dat->version >= R_2007){
-        ent->unknown = bit_read_B(dat);
-        ent->flip_arrow1 = bit_read_B(dat);
-        ent->flip_arrow2 = bit_read_B(dat);
-    }
+  ent->_12_pt.x = bit_read_RD(dat);
+  ent->_12_pt.y = bit_read_RD(dat);
+  ent->_10_pt.x = bit_read_BD(dat);
+  ent->_10_pt.y = bit_read_BD(dat);
+  ent->_10_pt.z = bit_read_BD(dat);
+  ent->_13_pt.x = bit_read_BD(dat);
+  ent->_13_pt.y = bit_read_BD(dat);
+  ent->_13_pt.z = bit_read_BD(dat);
+  ent->_14_pt.x = bit_read_BD(dat);
+  ent->_14_pt.y = bit_read_BD(dat);
+  ent->_14_pt.z = bit_read_BD(dat);
 
-    ent->_12_pt.x = bit_read_RD(dat);
-    ent->_12_pt.y = bit_read_RD(dat);
-    ent->_10_pt.x = bit_read_BD(dat);
-    ent->_10_pt.y = bit_read_BD(dat);
-    ent->_10_pt.z = bit_read_BD(dat);
-    ent->_13_pt.x = bit_read_BD(dat);
-    ent->_13_pt.y = bit_read_BD(dat);
-    ent->_13_pt.z = bit_read_BD(dat);
-    ent->_14_pt.x = bit_read_BD(dat);
-    ent->_14_pt.y = bit_read_BD(dat);
-    ent->_14_pt.z = bit_read_BD(dat);
-
-    ent->flags_2 = bit_read_RC(dat);
-    
-    dwg_decode_common_entity_handle_data (dat, obj);
+  ent->flags_2 = bit_read_RC(dat);
+  
+  dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
 dwg_decode_DIMENSION_LINEAR (Bit_Chain * dat, Dwg_Object * obj)
 {
-    Dwg_Entity_DIMENSION_LINEAR *ent;
+  DWG_ENTITY(DIMENSION_LINEAR);
 
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.DIMENSION_LINEAR = calloc (sizeof (Dwg_Entity_DIMENSION_LINEAR), 1);
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
-	ent = obj->tio.entity->tio.DIMENSION_LINEAR;
+	/* Read values
+	 */
 
-    //TODO: check extrusion reading
-    //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
-    ent->extrusion.x = bit_read_BD(dat);
-    ent->extrusion.y = bit_read_BD(dat);
-    ent->extrusion.z = bit_read_BD(dat);
-    ent->x0 = bit_read_RD (dat);
-    ent->y0 = bit_read_RD (dat);
-    ent->elevation.ecs_11 = bit_read_BD(dat);
-    ent->elevation.ecs_12 = bit_read_BD(dat);
-    //spec: flag bit 0 indicates LINEAR dimension
-    ent->flags = bit_read_RC(dat);
-    ent->user_text = bit_read_T(dat);
-    ent->text_rot = bit_read_BD(dat);
-    ent->horiz_dir = bit_read_BD(dat);
-    ent->ins_scale.x = bit_read_BD(dat);
-    ent->ins_scale.y = bit_read_BD(dat);
-    ent->ins_scale.z = bit_read_BD(dat);
-    ent->ins_rotation = bit_read_BD(dat);
+  //TODO: check extrusion reading
+  //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
+  ent->extrusion.x = bit_read_BD(dat);
+  ent->extrusion.y = bit_read_BD(dat);
+  ent->extrusion.z = bit_read_BD(dat);
+  ent->x0 = bit_read_RD (dat);
+  ent->y0 = bit_read_RD (dat);
+  ent->elevation.ecs_11 = bit_read_BD(dat);
+  ent->elevation.ecs_12 = bit_read_BD(dat);
+  //spec: flag bit 0 indicates LINEAR dimension
+  ent->flags = bit_read_RC(dat);
+  ent->user_text = bit_read_T(dat);
+  ent->text_rot = bit_read_BD(dat);
+  ent->horiz_dir = bit_read_BD(dat);
+  ent->ins_scale.x = bit_read_BD(dat);
+  ent->ins_scale.y = bit_read_BD(dat);
+  ent->ins_scale.z = bit_read_BD(dat);
+  ent->ins_rotation = bit_read_BD(dat);
 
-    if(dat->version >= R_2000){
-        ent->attachment_point = bit_read_BS(dat);
-        ent->lspace_style = bit_read_BS(dat);
-        ent->lspace_factor = bit_read_BD(dat);
-        ent->act_measurement = bit_read_BD(dat);
-    }
-    if(dat->version >= R_2007){
-        ent->unknown = bit_read_B(dat);
-        ent->flip_arrow1 = bit_read_B(dat);
-        ent->flip_arrow2 = bit_read_B(dat);
-    }
+  if(dat->version >= R_2000){
+      ent->attachment_point = bit_read_BS(dat);
+      ent->lspace_style = bit_read_BS(dat);
+      ent->lspace_factor = bit_read_BD(dat);
+      ent->act_measurement = bit_read_BD(dat);
+  }
+  if(dat->version >= R_2007){
+      ent->unknown = bit_read_B(dat);
+      ent->flip_arrow1 = bit_read_B(dat);
+      ent->flip_arrow2 = bit_read_B(dat);
+  }
 
-    ent->_12_pt.x = bit_read_RD(dat);
-    ent->_12_pt.y = bit_read_RD(dat);        
-    ent->_13_pt.x = bit_read_BD(dat);
-    ent->_13_pt.y = bit_read_BD(dat);
-    ent->_13_pt.z = bit_read_BD(dat);
-    ent->_14_pt.x = bit_read_BD(dat);
-    ent->_14_pt.y = bit_read_BD(dat);
-    ent->_14_pt.z = bit_read_BD(dat);
-    ent->_10_pt.x = bit_read_BD(dat);
-    ent->_10_pt.y = bit_read_BD(dat);
-    ent->_10_pt.z = bit_read_BD(dat);
+  ent->_12_pt.x = bit_read_RD(dat);
+  ent->_12_pt.y = bit_read_RD(dat);        
+  ent->_13_pt.x = bit_read_BD(dat);
+  ent->_13_pt.y = bit_read_BD(dat);
+  ent->_13_pt.z = bit_read_BD(dat);
+  ent->_14_pt.x = bit_read_BD(dat);
+  ent->_14_pt.y = bit_read_BD(dat);
+  ent->_14_pt.z = bit_read_BD(dat);
+  ent->_10_pt.x = bit_read_BD(dat);
+  ent->_10_pt.y = bit_read_BD(dat);
+  ent->_10_pt.z = bit_read_BD(dat);
 
-    ent->ext_line_rot = bit_read_BD(dat);
-    ent->dim_rot = bit_read_BD(dat);
+  ent->ext_line_rot = bit_read_BD(dat);
+  ent->dim_rot = bit_read_BD(dat);
 
-    dwg_decode_common_entity_handle_data (dat, obj);
+  dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
 dwg_decode_DIMENSION_ALIGNED (Bit_Chain * dat, Dwg_Object * obj)
 {
-    Dwg_Entity_DIMENSION_ALIGNED *ent;
+  DWG_ENTITY(DIMENSION_ALIGNED);
 
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.DIMENSION_ALIGNED = calloc (sizeof (Dwg_Entity_DIMENSION_ALIGNED), 1);
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
-	ent = obj->tio.entity->tio.DIMENSION_ALIGNED;
+	/* Read values
+	 */
 
-    //TODO: check extrusion reading
-    //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
-    ent->extrusion.x = bit_read_BD(dat);
-    ent->extrusion.y = bit_read_BD(dat);
-    ent->extrusion.z = bit_read_BD(dat);
-    ent->x0 = bit_read_RD (dat);
-    ent->y0 = bit_read_RD (dat);
-    ent->elevation.ecs_11 = bit_read_BD(dat);
-    ent->elevation.ecs_12 = bit_read_BD(dat);
-    //spec: flag bit 1 indicates ALIGNED dimension
-    ent->flags = bit_read_RC(dat);
-    ent->user_text = bit_read_T(dat);
-    ent->text_rot = bit_read_BD(dat);
-    ent->horiz_dir = bit_read_BD(dat);
-    ent->ins_scale.x = bit_read_BD(dat);
-    ent->ins_scale.y = bit_read_BD(dat);
-    ent->ins_scale.z = bit_read_BD(dat);
-    ent->ins_rotation = bit_read_BD(dat);
+  //TODO: check extrusion reading
+  //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
+  ent->extrusion.x = bit_read_BD(dat);
+  ent->extrusion.y = bit_read_BD(dat);
+  ent->extrusion.z = bit_read_BD(dat);
+  ent->x0 = bit_read_RD (dat);
+  ent->y0 = bit_read_RD (dat);
+  ent->elevation.ecs_11 = bit_read_BD(dat);
+  ent->elevation.ecs_12 = bit_read_BD(dat);
+  //spec: flag bit 1 indicates ALIGNED dimension
+  ent->flags = bit_read_RC(dat);
+  ent->user_text = bit_read_T(dat);
+  ent->text_rot = bit_read_BD(dat);
+  ent->horiz_dir = bit_read_BD(dat);
+  ent->ins_scale.x = bit_read_BD(dat);
+  ent->ins_scale.y = bit_read_BD(dat);
+  ent->ins_scale.z = bit_read_BD(dat);
+  ent->ins_rotation = bit_read_BD(dat);
 
-    if(dat->version >= R_2000){
-        ent->attachment_point = bit_read_BS(dat);
-        ent->lspace_style = bit_read_BS(dat);
-        ent->lspace_factor = bit_read_BD(dat);
-        ent->act_measurement = bit_read_BD(dat);
-    }
-    if(dat->version >= R_2007){
-        ent->unknown = bit_read_B(dat);
-        ent->flip_arrow1 = bit_read_B(dat);
-        ent->flip_arrow2 = bit_read_B(dat);
-    }
+  if(dat->version >= R_2000){
+      ent->attachment_point = bit_read_BS(dat);
+      ent->lspace_style = bit_read_BS(dat);
+      ent->lspace_factor = bit_read_BD(dat);
+      ent->act_measurement = bit_read_BD(dat);
+  }
+  if(dat->version >= R_2007){
+      ent->unknown = bit_read_B(dat);
+      ent->flip_arrow1 = bit_read_B(dat);
+      ent->flip_arrow2 = bit_read_B(dat);
+  }
 
-    ent->_12_pt.x = bit_read_RD(dat);
-    ent->_12_pt.y = bit_read_RD(dat);
-    ent->_13_pt.x = bit_read_BD(dat);
-    ent->_13_pt.y = bit_read_BD(dat);
-    ent->_13_pt.z = bit_read_BD(dat);
-    ent->_14_pt.x = bit_read_BD(dat);
-    ent->_14_pt.y = bit_read_BD(dat);
-    ent->_14_pt.z = bit_read_BD(dat);
-    ent->_10_pt.x = bit_read_BD(dat);
-    ent->_10_pt.y = bit_read_BD(dat);
-    ent->_10_pt.z = bit_read_BD(dat);
+  ent->_12_pt.x = bit_read_RD(dat);
+  ent->_12_pt.y = bit_read_RD(dat);
+  ent->_13_pt.x = bit_read_BD(dat);
+  ent->_13_pt.y = bit_read_BD(dat);
+  ent->_13_pt.z = bit_read_BD(dat);
+  ent->_14_pt.x = bit_read_BD(dat);
+  ent->_14_pt.y = bit_read_BD(dat);
+  ent->_14_pt.z = bit_read_BD(dat);
+  ent->_10_pt.x = bit_read_BD(dat);
+  ent->_10_pt.y = bit_read_BD(dat);
+  ent->_10_pt.z = bit_read_BD(dat);
 
-    ent->ext_line_rot = bit_read_BD(dat);
+  ent->ext_line_rot = bit_read_BD(dat);
 
-    dwg_decode_common_entity_handle_data (dat, obj);
+  dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
 dwg_decode_DIMENSION_ANG3PT (Bit_Chain * dat, Dwg_Object * obj)
 {
-    Dwg_Entity_DIMENSION_ANG3PT *ent;
+  DWG_ENTITY(DIMENSION_ANG3PT);
 
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.DIMENSION_ANG3PT = calloc (sizeof (Dwg_Entity_DIMENSION_ANG3PT), 1);
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
-	ent = obj->tio.entity->tio.DIMENSION_ANG3PT;
+	/* Read values
+	 */
 
-    //TODO: check extrusion reading
-    //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
-    ent->extrusion.x = bit_read_BD(dat);
-    ent->extrusion.y = bit_read_BD(dat);
-    ent->extrusion.z = bit_read_BD(dat);
-    ent->x0 = bit_read_RD (dat);
-    ent->y0 = bit_read_RD (dat);
-    ent->elevation.ecs_11 = bit_read_BD(dat);
-    ent->elevation.ecs_12 = bit_read_BD(dat);
-    //spec: flag bit 5 indicates ANGULAR 3PT dimension
-    ent->flags = bit_read_RC(dat);
-    ent->user_text = bit_read_T(dat);
-    ent->text_rot = bit_read_BD(dat);
-    ent->horiz_dir = bit_read_BD(dat);
-    ent->ins_scale.x = bit_read_BD(dat);
-    ent->ins_scale.y = bit_read_BD(dat);
-    ent->ins_scale.z = bit_read_BD(dat);
-    ent->ins_rotation = bit_read_BD(dat);
+  //TODO: check extrusion reading
+  //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
+  ent->extrusion.x = bit_read_BD(dat);
+  ent->extrusion.y = bit_read_BD(dat);
+  ent->extrusion.z = bit_read_BD(dat);
+  ent->x0 = bit_read_RD (dat);
+  ent->y0 = bit_read_RD (dat);
+  ent->elevation.ecs_11 = bit_read_BD(dat);
+  ent->elevation.ecs_12 = bit_read_BD(dat);
+  //spec: flag bit 5 indicates ANGULAR 3PT dimension
+  ent->flags = bit_read_RC(dat);
+  ent->user_text = bit_read_T(dat);
+  ent->text_rot = bit_read_BD(dat);
+  ent->horiz_dir = bit_read_BD(dat);
+  ent->ins_scale.x = bit_read_BD(dat);
+  ent->ins_scale.y = bit_read_BD(dat);
+  ent->ins_scale.z = bit_read_BD(dat);
+  ent->ins_rotation = bit_read_BD(dat);
 
-    if(dat->version >= R_2000){
-        ent->attachment_point = bit_read_BS(dat);
-        ent->lspace_style = bit_read_BS(dat);
-        ent->lspace_factor = bit_read_BD(dat);
-        ent->act_measurement = bit_read_BD(dat);
-    }
-    if(dat->version >= R_2007){
-        ent->unknown = bit_read_B(dat);
-        ent->flip_arrow1 = bit_read_B(dat);
-        ent->flip_arrow2 = bit_read_B(dat);
-    }
+  if(dat->version >= R_2000){
+      ent->attachment_point = bit_read_BS(dat);
+      ent->lspace_style = bit_read_BS(dat);
+      ent->lspace_factor = bit_read_BD(dat);
+      ent->act_measurement = bit_read_BD(dat);
+  }
+  if(dat->version >= R_2007){
+      ent->unknown = bit_read_B(dat);
+      ent->flip_arrow1 = bit_read_B(dat);
+      ent->flip_arrow2 = bit_read_B(dat);
+  }
 
-    ent->_12_pt.x = bit_read_RD(dat);
-    ent->_12_pt.y = bit_read_RD(dat);
-    ent->_10_pt.x = bit_read_BD(dat);
-    ent->_10_pt.y = bit_read_BD(dat);
-    ent->_10_pt.z = bit_read_BD(dat);
-    ent->_13_pt.x = bit_read_BD(dat);
-    ent->_13_pt.y = bit_read_BD(dat);
-    ent->_13_pt.z = bit_read_BD(dat);
-    ent->_14_pt.x = bit_read_BD(dat);
-    ent->_14_pt.y = bit_read_BD(dat);
-    ent->_14_pt.z = bit_read_BD(dat);
-    ent->_15_pt.x = bit_read_BD(dat);
-    ent->_15_pt.y = bit_read_BD(dat);
-    ent->_15_pt.z = bit_read_BD(dat);
+  ent->_12_pt.x = bit_read_RD(dat);
+  ent->_12_pt.y = bit_read_RD(dat);
+  ent->_10_pt.x = bit_read_BD(dat);
+  ent->_10_pt.y = bit_read_BD(dat);
+  ent->_10_pt.z = bit_read_BD(dat);
+  ent->_13_pt.x = bit_read_BD(dat);
+  ent->_13_pt.y = bit_read_BD(dat);
+  ent->_13_pt.z = bit_read_BD(dat);
+  ent->_14_pt.x = bit_read_BD(dat);
+  ent->_14_pt.y = bit_read_BD(dat);
+  ent->_14_pt.z = bit_read_BD(dat);
+  ent->_15_pt.x = bit_read_BD(dat);
+  ent->_15_pt.y = bit_read_BD(dat);
+  ent->_15_pt.z = bit_read_BD(dat);
 
-    dwg_decode_common_entity_handle_data (dat, obj);
+  dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
 dwg_decode_DIMENSION_ANG2LN (Bit_Chain * dat, Dwg_Object * obj)
 {
-    Dwg_Entity_DIMENSION_ANG2LN *ent;
+  DWG_ENTITY(DIMENSION_ANG2LN);
 
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.DIMENSION_ANG2LN = calloc (sizeof (Dwg_Entity_DIMENSION_ANG2LN), 1);
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
-	ent = obj->tio.entity->tio.DIMENSION_ANG2LN;
+	/* Read values
+	 */
 
-    //TODO: check extrusion reading
-    //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
-    ent->extrusion.x = bit_read_BD(dat);
-    ent->extrusion.y = bit_read_BD(dat);
-    ent->extrusion.z = bit_read_BD(dat);
-    ent->x0 = bit_read_RD (dat);
-    ent->y0 = bit_read_RD (dat);
-    ent->elevation.ecs_11 = bit_read_BD(dat);
-    ent->elevation.ecs_12 = bit_read_BD(dat);
-    //spec: flag bit 2 indicates ANGULAR 2 line dimension
-    ent->flags = bit_read_RC(dat);
-    ent->user_text = bit_read_T(dat);
-    ent->text_rot = bit_read_BD(dat);
-    ent->horiz_dir = bit_read_BD(dat);
-    ent->ins_scale.x = bit_read_BD(dat);
-    ent->ins_scale.y = bit_read_BD(dat);
-    ent->ins_scale.z = bit_read_BD(dat);
-    ent->ins_rotation = bit_read_BD(dat);
+  //TODO: check extrusion reading
+  //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
+  ent->extrusion.x = bit_read_BD(dat);
+  ent->extrusion.y = bit_read_BD(dat);
+  ent->extrusion.z = bit_read_BD(dat);
+  ent->x0 = bit_read_RD (dat);
+  ent->y0 = bit_read_RD (dat);
+  ent->elevation.ecs_11 = bit_read_BD(dat);
+  ent->elevation.ecs_12 = bit_read_BD(dat);
+  //spec: flag bit 2 indicates ANGULAR 2 line dimension
+  ent->flags = bit_read_RC(dat);
+  ent->user_text = bit_read_T(dat);
+  ent->text_rot = bit_read_BD(dat);
+  ent->horiz_dir = bit_read_BD(dat);
+  ent->ins_scale.x = bit_read_BD(dat);
+  ent->ins_scale.y = bit_read_BD(dat);
+  ent->ins_scale.z = bit_read_BD(dat);
+  ent->ins_rotation = bit_read_BD(dat);
 
-    if(dat->version >= R_2000){
-        ent->attachment_point = bit_read_BS(dat);
-        ent->lspace_style = bit_read_BS(dat);
-        ent->lspace_factor = bit_read_BD(dat);
-        ent->act_measurement = bit_read_BD(dat);
-    }
-    if(dat->version >= R_2007){
-        ent->unknown = bit_read_B(dat);
-        ent->flip_arrow1 = bit_read_B(dat);
-        ent->flip_arrow2 = bit_read_B(dat);
-    }
+  if(dat->version >= R_2000){
+      ent->attachment_point = bit_read_BS(dat);
+      ent->lspace_style = bit_read_BS(dat);
+      ent->lspace_factor = bit_read_BD(dat);
+      ent->act_measurement = bit_read_BD(dat);
+  }
+  if(dat->version >= R_2007){
+      ent->unknown = bit_read_B(dat);
+      ent->flip_arrow1 = bit_read_B(dat);
+      ent->flip_arrow2 = bit_read_B(dat);
+  }
 
-    ent->_12_pt.x = bit_read_RD(dat);
-    ent->_12_pt.y = bit_read_RD(dat);
-    ent->_16_pt.x = bit_read_RD(dat);
-    ent->_16_pt.y = bit_read_RD(dat);
-    ent->_13_pt.x = bit_read_BD(dat);
-    ent->_13_pt.y = bit_read_BD(dat);
-    ent->_13_pt.z = bit_read_BD(dat);
-    ent->_14_pt.x = bit_read_BD(dat);
-    ent->_14_pt.y = bit_read_BD(dat);
-    ent->_14_pt.z = bit_read_BD(dat);
-    ent->_15_pt.x = bit_read_BD(dat);
-    ent->_15_pt.y = bit_read_BD(dat);
-    ent->_15_pt.z = bit_read_BD(dat);
-    ent->_10_pt.x = bit_read_BD(dat);
-    ent->_10_pt.y = bit_read_BD(dat);
-    ent->_10_pt.z = bit_read_BD(dat);
+  ent->_12_pt.x = bit_read_RD(dat);
+  ent->_12_pt.y = bit_read_RD(dat);
+  ent->_16_pt.x = bit_read_RD(dat);
+  ent->_16_pt.y = bit_read_RD(dat);
+  ent->_13_pt.x = bit_read_BD(dat);
+  ent->_13_pt.y = bit_read_BD(dat);
+  ent->_13_pt.z = bit_read_BD(dat);
+  ent->_14_pt.x = bit_read_BD(dat);
+  ent->_14_pt.y = bit_read_BD(dat);
+  ent->_14_pt.z = bit_read_BD(dat);
+  ent->_15_pt.x = bit_read_BD(dat);
+  ent->_15_pt.y = bit_read_BD(dat);
+  ent->_15_pt.z = bit_read_BD(dat);
+  ent->_10_pt.x = bit_read_BD(dat);
+  ent->_10_pt.y = bit_read_BD(dat);
+  ent->_10_pt.z = bit_read_BD(dat);
 
-    dwg_decode_common_entity_handle_data (dat, obj);
+  dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
 dwg_decode_DIMENSION_RADIUS (Bit_Chain * dat, Dwg_Object * obj)
 {
-    Dwg_Entity_DIMENSION_RADIUS *ent;
+  DWG_ENTITY(DIMENSION_RADIUS);
 
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.DIMENSION_RADIUS = calloc (sizeof (Dwg_Entity_DIMENSION_RADIUS), 1);
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
-	ent = obj->tio.entity->tio.DIMENSION_RADIUS;
+	/* Read values
+	 */
 
-    //TODO: check extrusion reading
-    //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
-    ent->extrusion.x = bit_read_BD(dat);
-    ent->extrusion.y = bit_read_BD(dat);
-    ent->extrusion.z = bit_read_BD(dat);
-    ent->x0 = bit_read_RD (dat);
-    ent->y0 = bit_read_RD (dat);
-    ent->elevation.ecs_11 = bit_read_BD(dat);
-    ent->elevation.ecs_12 = bit_read_BD(dat);
-    //spec: flag bit 4 indicates RADIUS dimension
-    ent->flags = bit_read_RC(dat);
-    ent->user_text = bit_read_T(dat);
-    ent->text_rot = bit_read_BD(dat);
-    ent->horiz_dir = bit_read_BD(dat);
-    ent->ins_scale.x = bit_read_BD(dat);
-    ent->ins_scale.y = bit_read_BD(dat);
-    ent->ins_scale.z = bit_read_BD(dat);
-    ent->ins_rotation = bit_read_BD(dat);
+  //TODO: check extrusion reading
+  //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
+  ent->extrusion.x = bit_read_BD(dat);
+  ent->extrusion.y = bit_read_BD(dat);
+  ent->extrusion.z = bit_read_BD(dat);
+  ent->x0 = bit_read_RD (dat);
+  ent->y0 = bit_read_RD (dat);
+  ent->elevation.ecs_11 = bit_read_BD(dat);
+  ent->elevation.ecs_12 = bit_read_BD(dat);
+  //spec: flag bit 4 indicates RADIUS dimension
+  ent->flags = bit_read_RC(dat);
+  ent->user_text = bit_read_T(dat);
+  ent->text_rot = bit_read_BD(dat);
+  ent->horiz_dir = bit_read_BD(dat);
+  ent->ins_scale.x = bit_read_BD(dat);
+  ent->ins_scale.y = bit_read_BD(dat);
+  ent->ins_scale.z = bit_read_BD(dat);
+  ent->ins_rotation = bit_read_BD(dat);
 
-    if(dat->version >= R_2000){
-        ent->attachment_point = bit_read_BS(dat);
-        ent->lspace_style = bit_read_BS(dat);
-        ent->lspace_factor = bit_read_BD(dat);
-        ent->act_measurement = bit_read_BD(dat);
-    }
-    if(dat->version >= R_2007){
-        ent->unknown = bit_read_B(dat);
-        ent->flip_arrow1 = bit_read_B(dat);
-        ent->flip_arrow2 = bit_read_B(dat);
-    }
+  if(dat->version >= R_2000){
+      ent->attachment_point = bit_read_BS(dat);
+      ent->lspace_style = bit_read_BS(dat);
+      ent->lspace_factor = bit_read_BD(dat);
+      ent->act_measurement = bit_read_BD(dat);
+  }
+  if(dat->version >= R_2007){
+      ent->unknown = bit_read_B(dat);
+      ent->flip_arrow1 = bit_read_B(dat);
+      ent->flip_arrow2 = bit_read_B(dat);
+  }
 
-    ent->_12_pt.x = bit_read_RD(dat);
-    ent->_12_pt.y = bit_read_RD(dat);
-    ent->_10_pt.x = bit_read_BD(dat);
-    ent->_10_pt.y = bit_read_BD(dat);
-    ent->_10_pt.z = bit_read_BD(dat);
-    ent->_15_pt.x = bit_read_BD(dat);
-    ent->_15_pt.y = bit_read_BD(dat);
-    ent->_15_pt.z = bit_read_BD(dat);
-    ent->leader_len = bit_read_BD(dat);
+  ent->_12_pt.x = bit_read_RD(dat);
+  ent->_12_pt.y = bit_read_RD(dat);
+  ent->_10_pt.x = bit_read_BD(dat);
+  ent->_10_pt.y = bit_read_BD(dat);
+  ent->_10_pt.z = bit_read_BD(dat);
+  ent->_15_pt.x = bit_read_BD(dat);
+  ent->_15_pt.y = bit_read_BD(dat);
+  ent->_15_pt.z = bit_read_BD(dat);
+  ent->leader_len = bit_read_BD(dat);
 
-    dwg_decode_common_entity_handle_data (dat, obj);
+  dwg_decode_common_entity_handle_data (dat, obj);
 }
 static void
 dwg_decode_DIMENSION_DIAMETER (Bit_Chain * dat, Dwg_Object * obj)
 {
-    Dwg_Entity_DIMENSION_DIAMETER *ent;
+  DWG_ENTITY(DIMENSION_DIAMETER);
 
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.DIMENSION_DIAMETER = calloc (sizeof (Dwg_Entity_DIMENSION_DIAMETER), 1);
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
-	ent = obj->tio.entity->tio.DIMENSION_DIAMETER;
+	/* Read values
+	 */
 
-    //TODO: check extrusion reading
-    //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
-    ent->extrusion.x = bit_read_BD(dat);
-    ent->extrusion.y = bit_read_BD(dat);
-    ent->extrusion.z = bit_read_BD(dat);
-    ent->x0 = bit_read_RD (dat);
-    ent->y0 = bit_read_RD (dat);
-    ent->elevation.ecs_11 = bit_read_BD(dat);
-    ent->elevation.ecs_12 = bit_read_BD(dat);
-    //spec: flag bit 3 indicates DIAMETER dimension
-    //(spec says actually RADIUS but seems to be wrong)
-    ent->flags = bit_read_RC(dat);
-    ent->user_text = bit_read_T(dat);
-    ent->text_rot = bit_read_BD(dat);
-    ent->horiz_dir = bit_read_BD(dat);
-    ent->ins_scale.x = bit_read_BD(dat);
-    ent->ins_scale.y = bit_read_BD(dat);
-    ent->ins_scale.z = bit_read_BD(dat);
-    ent->ins_rotation = bit_read_BD(dat);
+  //TODO: check extrusion reading
+  //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
+  ent->extrusion.x = bit_read_BD(dat);
+  ent->extrusion.y = bit_read_BD(dat);
+  ent->extrusion.z = bit_read_BD(dat);
+  ent->x0 = bit_read_RD (dat);
+  ent->y0 = bit_read_RD (dat);
+  ent->elevation.ecs_11 = bit_read_BD(dat);
+  ent->elevation.ecs_12 = bit_read_BD(dat);
+  //spec: flag bit 3 indicates DIAMETER dimension
+  //(spec says actually RADIUS but seems to be wrong)
+  ent->flags = bit_read_RC(dat);
+  ent->user_text = bit_read_T(dat);
+  ent->text_rot = bit_read_BD(dat);
+  ent->horiz_dir = bit_read_BD(dat);
+  ent->ins_scale.x = bit_read_BD(dat);
+  ent->ins_scale.y = bit_read_BD(dat);
+  ent->ins_scale.z = bit_read_BD(dat);
+  ent->ins_rotation = bit_read_BD(dat);
 
-    if(dat->version >= R_2000){
-        ent->attachment_point = bit_read_BS(dat);
-        ent->lspace_style = bit_read_BS(dat);
-        ent->lspace_factor = bit_read_BD(dat);
-        ent->act_measurement = bit_read_BD(dat);
-    }
-    if(dat->version >= R_2007){
-        ent->unknown = bit_read_B(dat);
-        ent->flip_arrow1 = bit_read_B(dat);
-        ent->flip_arrow2 = bit_read_B(dat);
-    }
+  if(dat->version >= R_2000){
+      ent->attachment_point = bit_read_BS(dat);
+      ent->lspace_style = bit_read_BS(dat);
+      ent->lspace_factor = bit_read_BD(dat);
+      ent->act_measurement = bit_read_BD(dat);
+  }
+  if(dat->version >= R_2007){
+      ent->unknown = bit_read_B(dat);
+      ent->flip_arrow1 = bit_read_B(dat);
+      ent->flip_arrow2 = bit_read_B(dat);
+  }
 
-    ent->_12_pt.x = bit_read_RD(dat);
-    ent->_12_pt.y = bit_read_RD(dat);
-    ent->_15_pt.x = bit_read_BD(dat);
-    ent->_15_pt.y = bit_read_BD(dat);
-    ent->_15_pt.z = bit_read_BD(dat);
-    ent->_10_pt.x = bit_read_BD(dat);
-    ent->_10_pt.y = bit_read_BD(dat);
-    ent->_10_pt.z = bit_read_BD(dat);
-    ent->leader_len = bit_read_BD(dat);
+  ent->_12_pt.x = bit_read_RD(dat);
+  ent->_12_pt.y = bit_read_RD(dat);
+  ent->_15_pt.x = bit_read_BD(dat);
+  ent->_15_pt.y = bit_read_BD(dat);
+  ent->_15_pt.z = bit_read_BD(dat);
+  ent->_10_pt.x = bit_read_BD(dat);
+  ent->_10_pt.y = bit_read_BD(dat);
+  ent->_10_pt.z = bit_read_BD(dat);
+  ent->leader_len = bit_read_BD(dat);
 
-    dwg_decode_common_entity_handle_data (dat, obj);
+  dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
 dwg_decode_POINT (Bit_Chain * dat, Dwg_Object * obj)
 {
-	Dwg_Entity_POINT *ent;
+  DWG_ENTITY(POINT);
 
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.POINT = calloc (sizeof (Dwg_Entity_POINT), 1);
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
-	ent = obj->tio.entity->tio.POINT;
+	/* Read values
+	 */
 
 	ent->x = bit_read_BD (dat);
 	ent->y = bit_read_BD (dat);
@@ -2495,126 +2346,110 @@ dwg_decode_POINT (Bit_Chain * dat, Dwg_Object * obj)
 }
 
 static void
-dwg_decode_3DFACE (Bit_Chain * dat, Dwg_Object * obj)
+dwg_decode__3DFACE (Bit_Chain * dat, Dwg_Object * obj)
 {
-    Dwg_Entity_3DFACE *ent;
+  DWG_ENTITY(_3DFACE);
 
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio._3DFACE = calloc (sizeof (Dwg_Entity_3DFACE), 1);
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
-	ent = obj->tio.entity->tio._3DFACE;
+	/* Read values
+	 */
 
-    if (dat->version == R_13 || dat->version == R_14)
-    {
-        ent->corner1.x = bit_read_BD(dat);
-        ent->corner1.y = bit_read_BD(dat);
-        ent->corner1.z = bit_read_BD(dat);
-        ent->corner2.x = bit_read_BD(dat);
-        ent->corner2.y = bit_read_BD(dat);
-        ent->corner2.z = bit_read_BD(dat);
-        ent->corner3.x = bit_read_BD(dat);
-        ent->corner3.y = bit_read_BD(dat);
-        ent->corner3.z = bit_read_BD(dat);
-        ent->corner4.x = bit_read_BD(dat);
-        ent->corner4.y = bit_read_BD(dat);
-        ent->corner4.z = bit_read_BD(dat);
-        ent->invis_flags = bit_read_BS(dat);
-    }
-    if (dat->version >= R_2000)
-    {
-        ent->has_no_flags = bit_read_B (dat);
-        ent->z_is_zero = bit_read_B (dat);
-        ent->corner1.x = bit_read_BD(dat);
-        ent->corner1.y = bit_read_BD(dat);
-        ent->corner1.z = bit_read_BD(dat);
-        ent->corner2.x = bit_read_BD(dat);
-        ent->corner2.y = bit_read_BD(dat);
-        ent->corner2.z = bit_read_BD(dat);
-        ent->corner3.x = bit_read_BD(dat);
-        ent->corner3.y = bit_read_BD(dat);
-        ent->corner3.z = bit_read_BD(dat);
-        ent->corner4.x = bit_read_BD(dat);
-        ent->corner4.y = bit_read_BD(dat);
-        ent->corner4.z = bit_read_BD(dat);
-    }
-    dwg_decode_common_entity_handle_data (dat, obj);
+  if (dat->version == R_13 || dat->version == R_14)
+  {
+    ent->corner1.x = bit_read_BD(dat);
+    ent->corner1.y = bit_read_BD(dat);
+    ent->corner1.z = bit_read_BD(dat);
+    ent->corner2.x = bit_read_BD(dat);
+    ent->corner2.y = bit_read_BD(dat);
+    ent->corner2.z = bit_read_BD(dat);
+    ent->corner3.x = bit_read_BD(dat);
+    ent->corner3.y = bit_read_BD(dat);
+    ent->corner3.z = bit_read_BD(dat);
+    ent->corner4.x = bit_read_BD(dat);
+    ent->corner4.y = bit_read_BD(dat);
+    ent->corner4.z = bit_read_BD(dat);
+    ent->invis_flags = bit_read_BS(dat);
+  }
+  if (dat->version >= R_2000)
+  {
+    ent->has_no_flags = bit_read_B (dat);
+    ent->z_is_zero = bit_read_B (dat);
+    ent->corner1.x = bit_read_BD(dat);
+    ent->corner1.y = bit_read_BD(dat);
+    ent->corner1.z = bit_read_BD(dat);
+    ent->corner2.x = bit_read_BD(dat);
+    ent->corner2.y = bit_read_BD(dat);
+    ent->corner2.z = bit_read_BD(dat);
+    ent->corner3.x = bit_read_BD(dat);
+    ent->corner3.y = bit_read_BD(dat);
+    ent->corner3.z = bit_read_BD(dat);
+    ent->corner4.x = bit_read_BD(dat);
+    ent->corner4.y = bit_read_BD(dat);
+    ent->corner4.z = bit_read_BD(dat);
+  }
+  dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
 dwg_decode_POLYLINE_PFACE (Bit_Chain * dat, Dwg_Object * obj)
 {
-    Dwg_Entity_POLYLINE_PFACE *ent;
+  DWG_ENTITY(POLYLINE_PFACE);
 
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.POLYLINE_PFACE = calloc (sizeof (Dwg_Entity_POLYLINE_PFACE), 1);
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
-	ent = obj->tio.entity->tio.POLYLINE_PFACE;
+	/* Read values
+	 */
 
-    ent->numverts = bit_read_BS(dat);
-    ent->numfaces = bit_read_BS(dat);
+  ent->numverts = bit_read_BS(dat);
+  ent->numfaces = bit_read_BS(dat);
 
-    if (dat->version >= R_2004)
-    {
-        ent->owned_object_count = bit_read_BL(dat);
-    }
+  if (dat->version >= R_2004)
+  {
+    ent->owned_object_count = bit_read_BL(dat);
+  }
 
-    dwg_decode_common_entity_handle_data (dat, obj);
+  dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
 dwg_decode_POLYLINE_MESH (Bit_Chain * dat, Dwg_Object * obj)
 {
-    Dwg_Entity_POLYLINE_MESH *ent;
+  DWG_ENTITY(POLYLINE_MESH);
 
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.POLYLINE_MESH = calloc (sizeof (Dwg_Entity_POLYLINE_MESH), 1);
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
-	ent = obj->tio.entity->tio.POLYLINE_MESH;
+	/* Read values
+	 */
 
-    ent->flags = bit_read_BS(dat);
-    ent->curve_type = bit_read_BS(dat);
-    ent->m_vert_count = bit_read_BS(dat);
-    ent->n_vert_count = bit_read_BS(dat);
-    ent->m_density = bit_read_BS(dat);
-    ent->n_density = bit_read_BS(dat);
+  ent->flags = bit_read_BS(dat);
+  ent->curve_type = bit_read_BS(dat);
+  ent->m_vert_count = bit_read_BS(dat);
+  ent->n_vert_count = bit_read_BS(dat);
+  ent->m_density = bit_read_BS(dat);
+  ent->n_density = bit_read_BS(dat);
 
-    if (dat->version >= R_2004)
-    {
-        ent->owned_object_count = bit_read_BL(dat);
-    }
+  if (dat->version >= R_2004)
+  {
+    ent->owned_object_count = bit_read_BL(dat);
+  }
 
-    dwg_decode_common_entity_handle_data (dat, obj);
+  dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
 dwg_decode_SOLID (Bit_Chain * dat, Dwg_Object * obj)
 {
-	Dwg_Entity_SOLID *ent;
+  DWG_ENTITY(SOLID);
 
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.SOLID = calloc (sizeof (Dwg_Entity_SOLID), 1);
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
-	ent = obj->tio.entity->tio.SOLID;
+	/* Read values
+	 */
 
 	ent->thickness = bit_read_BT (dat);
 	ent->corner1.z = ent->corner2.z = ent->corner3.z = ent->corner4.z = bit_read_BD(dat);
 	ent->corner1.x = bit_read_RD (dat);
 	ent->corner1.y = bit_read_RD (dat);
-        ent->corner2.x = bit_read_RD (dat);
+  ent->corner2.x = bit_read_RD (dat);
 	ent->corner2.y = bit_read_RD (dat);
-        ent->corner3.x = bit_read_RD (dat);
+  ent->corner3.x = bit_read_RD (dat);
 	ent->corner3.y = bit_read_RD (dat);
-        ent->corner4.x = bit_read_RD (dat);
+  ent->corner4.x = bit_read_RD (dat);
 	ent->corner4.y = bit_read_RD (dat);
-        bit_read_BE(dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
+  bit_read_BE(dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
 
 	dwg_decode_common_entity_handle_data (dat, obj);
 }
@@ -2622,26 +2457,22 @@ dwg_decode_SOLID (Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_TRACE (Bit_Chain * dat, Dwg_Object * obj)
 {
-	Dwg_Entity_TRACE *ent;
+  DWG_ENTITY(TRACE);
 
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.TRACE = calloc (sizeof (Dwg_Entity_TRACE), 1);
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
-	ent = obj->tio.entity->tio.TRACE;
+	/* Read values
+	 */
 
 	ent->thickness = bit_read_BT (dat);
 	ent->corner1.z = ent->corner2.z = ent->corner3.z = ent->corner4.z = bit_read_BD(dat);
 	ent->corner1.x = bit_read_RD (dat);
 	ent->corner1.y = bit_read_RD (dat);
-        ent->corner2.x = bit_read_RD (dat);
+  ent->corner2.x = bit_read_RD (dat);
 	ent->corner2.y = bit_read_RD (dat);
-        ent->corner3.x = bit_read_RD (dat);
+  ent->corner3.x = bit_read_RD (dat);
 	ent->corner3.y = bit_read_RD (dat);
-        ent->corner4.x = bit_read_RD (dat);
+  ent->corner4.x = bit_read_RD (dat);
 	ent->corner4.y = bit_read_RD (dat);
-        bit_read_BE(dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
+  bit_read_BE(dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
 
 	dwg_decode_common_entity_handle_data (dat, obj);
 }
@@ -2649,27 +2480,23 @@ dwg_decode_TRACE (Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_SHAPE (Bit_Chain * dat, Dwg_Object * obj)
 {
-	Dwg_Entity_SHAPE *ent;
+  DWG_ENTITY(SHAPE);
 
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.SHAPE = calloc (sizeof (Dwg_Entity_SHAPE), 1);
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
-	ent = obj->tio.entity->tio.SHAPE;
+	/* Read values
+	 */
 
-    ent->ins_pt.x = bit_read_BD(dat);
-    ent->ins_pt.y = bit_read_BD(dat);
-    ent->ins_pt.z = bit_read_BD(dat);
-    ent->scale = bit_read_BD(dat);
-    ent->rotation = bit_read_BD(dat);
-    ent->width_factor = bit_read_BD(dat);
-    ent->oblique = bit_read_BD(dat);
-    ent->thickness = bit_read_BD(dat);
-    ent->shape_no = bit_read_BS(dat);
-    ent->extrusion.x = bit_read_BD(dat);
-    ent->extrusion.y = bit_read_BD(dat);
-    ent->extrusion.z = bit_read_BD(dat);
+  ent->ins_pt.x = bit_read_BD(dat);
+  ent->ins_pt.y = bit_read_BD(dat);
+  ent->ins_pt.z = bit_read_BD(dat);
+  ent->scale = bit_read_BD(dat);
+  ent->rotation = bit_read_BD(dat);
+  ent->width_factor = bit_read_BD(dat);
+  ent->oblique = bit_read_BD(dat);
+  ent->thickness = bit_read_BD(dat);
+  ent->shape_no = bit_read_BS(dat);
+  ent->extrusion.x = bit_read_BD(dat);
+  ent->extrusion.y = bit_read_BD(dat);
+  ent->extrusion.z = bit_read_BD(dat);
 
 	dwg_decode_common_entity_handle_data (dat, obj);
 }
@@ -2677,14 +2504,10 @@ dwg_decode_SHAPE (Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_VIEWPORT (Bit_Chain * dat, Dwg_Object * obj)
 {
-	Dwg_Entity_VIEWPORT *ent;
+  DWG_ENTITY(VIEWPORT);
 
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.VIEWPORT = calloc (sizeof (Dwg_Entity_VIEWPORT), 1);
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
-	ent = obj->tio.entity->tio.VIEWPORT;
+	/* Read values
+	 */
 
 	ent->center.x = bit_read_BD (dat);
 	ent->center.y = bit_read_BD (dat);
@@ -2693,55 +2516,55 @@ dwg_decode_VIEWPORT (Bit_Chain * dat, Dwg_Object * obj)
 	ent->height = bit_read_BD (dat);
 	
 	if (dat->version >= R_2000){
-	    ent->view_target.x = bit_read_BD (dat);
-	    ent->view_target.y = bit_read_BD (dat);
-	    ent->view_target.z = bit_read_BD (dat);
-	    ent->view_direction.x = bit_read_BD (dat);
-	    ent->view_direction.y = bit_read_BD (dat);
-	    ent->view_direction.z = bit_read_BD (dat);
-	    ent->view_twist_angle = bit_read_BD (dat);
-	    ent->view_height = bit_read_BD (dat);
-   	    ent->lens_length = bit_read_BD (dat);
-   	    ent->front_clip_z = bit_read_BD (dat);
-   	    ent->back_clip_z = bit_read_BD (dat);
-   	    ent->snap_angle = bit_read_BD (dat);
-   	    ent->view_center.x = bit_read_RD (dat);
-   	    ent->view_center.y = bit_read_RD (dat);
-   	    ent->snap_base.x = bit_read_RD (dat);
-   	    ent->snap_base.y = bit_read_RD (dat);
-   	    ent->snap_spacing.x = bit_read_RD (dat);
-   	    ent->snap_spacing.y = bit_read_RD (dat);
-   	    ent->grid_spacing.x = bit_read_RD (dat);
-   	    ent->grid_spacing.y = bit_read_RD (dat);
-   	    ent->circle_zoom = bit_read_BS (dat);
+    ent->view_target.x = bit_read_BD (dat);
+    ent->view_target.y = bit_read_BD (dat);
+    ent->view_target.z = bit_read_BD (dat);
+    ent->view_direction.x = bit_read_BD (dat);
+    ent->view_direction.y = bit_read_BD (dat);
+    ent->view_direction.z = bit_read_BD (dat);
+    ent->view_twist_angle = bit_read_BD (dat);
+    ent->view_height = bit_read_BD (dat);
+    ent->lens_length = bit_read_BD (dat);
+    ent->front_clip_z = bit_read_BD (dat);
+    ent->back_clip_z = bit_read_BD (dat);
+    ent->snap_angle = bit_read_BD (dat);
+    ent->view_center.x = bit_read_RD (dat);
+    ent->view_center.y = bit_read_RD (dat);
+    ent->snap_base.x = bit_read_RD (dat);
+    ent->snap_base.y = bit_read_RD (dat);
+    ent->snap_spacing.x = bit_read_RD (dat);
+    ent->snap_spacing.y = bit_read_RD (dat);
+    ent->grid_spacing.x = bit_read_RD (dat);
+    ent->grid_spacing.y = bit_read_RD (dat);
+    ent->circle_zoom = bit_read_BS (dat);
 	}
 	
 	if (dat->version >= R_2007){
-   	    ent->grid_major = bit_read_BS (dat);
+    ent->grid_major = bit_read_BS (dat);
 	}
 
 	if (dat->version >= R_2000){
-   	    ent->frozen_layer_count = bit_read_BL (dat);
-   	    ent->status_flags = bit_read_BL (dat);
-   	    ent->style_sheet = bit_read_T (dat);
-   	    ent->render_mode = bit_read_RC (dat);
-   	    ent->ucs_at_origin = bit_read_B (dat);
-   	    ent->ucs_per_viewport = bit_read_B (dat);
-   	    ent->ucs_origin.x = bit_read_BD (dat);
-   	    ent->ucs_origin.y = bit_read_BD (dat);
-   	    ent->ucs_origin.z = bit_read_BD (dat);
-   	    ent->ucs_x_axis.x = bit_read_BD (dat);
-   	    ent->ucs_x_axis.y = bit_read_BD (dat);
-   	    ent->ucs_x_axis.z = bit_read_BD (dat);
-   	    ent->ucs_y_axis.x = bit_read_BD (dat);
-   	    ent->ucs_y_axis.y = bit_read_BD (dat);
-   	    ent->ucs_y_axis.z = bit_read_BD (dat);
-   	    ent->ucs_elevation = bit_read_BD (dat);
-   	    ent->ucs_ortho_view_type = bit_read_BS (dat);
+    ent->frozen_layer_count = bit_read_BL (dat);
+    ent->status_flags = bit_read_BL (dat);
+    ent->style_sheet = bit_read_T (dat);
+    ent->render_mode = bit_read_RC (dat);
+    ent->ucs_at_origin = bit_read_B (dat);
+    ent->ucs_per_viewport = bit_read_B (dat);
+    ent->ucs_origin.x = bit_read_BD (dat);
+    ent->ucs_origin.y = bit_read_BD (dat);
+    ent->ucs_origin.z = bit_read_BD (dat);
+    ent->ucs_x_axis.x = bit_read_BD (dat);
+    ent->ucs_x_axis.y = bit_read_BD (dat);
+    ent->ucs_x_axis.z = bit_read_BD (dat);
+    ent->ucs_y_axis.x = bit_read_BD (dat);
+    ent->ucs_y_axis.y = bit_read_BD (dat);
+    ent->ucs_y_axis.z = bit_read_BD (dat);
+    ent->ucs_elevation = bit_read_BD (dat);
+    ent->ucs_ortho_view_type = bit_read_BS (dat);
 	}
 
 	if (dat->version >= R_2004){
-   	    ent->shadeplot_mode = bit_read_BS (dat);
+    ent->shadeplot_mode = bit_read_BS (dat);
 	}
 
 	if (dat->version >= R_2007){
@@ -2758,14 +2581,10 @@ dwg_decode_VIEWPORT (Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_ELLIPSE (Bit_Chain * dat, Dwg_Object * obj)
 {
-	Dwg_Entity_ELLIPSE *ent;
+  DWG_ENTITY(ELLIPSE);
 
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.ELLIPSE = calloc (sizeof (Dwg_Entity_ELLIPSE), 1);
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
-	ent = obj->tio.entity->tio.ELLIPSE;
+	/* Read values
+	 */
 
 	ent->x0 = bit_read_BD (dat);
 	ent->y0 = bit_read_BD (dat);
@@ -2786,15 +2605,11 @@ dwg_decode_ELLIPSE (Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_SPLINE (Bit_Chain * dat, Dwg_Object * obj)
 {
-	Dwg_Entity_SPLINE *ent;
-	int i;
+  int i;
+  DWG_ENTITY(SPLINE);
 
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.SPLINE = calloc (sizeof (Dwg_Entity_SPLINE), 1);
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
-	ent = obj->tio.entity->tio.SPLINE;
+	/* Read values
+	 */
 
 	ent->scenario = bit_read_BS(dat);
 	if (ent->scenario!=1 && ent->scenario!=2)
@@ -2856,14 +2671,10 @@ dwg_decode_SPLINE (Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_RAY (Bit_Chain * dat, Dwg_Object * obj)
 {
-	Dwg_Entity_RAY *ent;
+  DWG_ENTITY(RAY);
 
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.RAY = calloc (sizeof (Dwg_Entity_RAY), 1);
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
-	ent = obj->tio.entity->tio.RAY;
+	/* Read values
+	 */
 
 	ent->x0 = bit_read_BD (dat);
 	ent->y0 = bit_read_BD (dat);
@@ -2878,14 +2689,10 @@ dwg_decode_RAY (Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_XLINE (Bit_Chain * dat, Dwg_Object * obj)
 {
-	Dwg_Entity_XLINE *ent;
+  DWG_ENTITY(XLINE);
 
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.XLINE = calloc (sizeof (Dwg_Entity_XLINE), 1);
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
-	ent = obj->tio.entity->tio.XLINE;
+	/* Read values
+	 */
 
 	ent->x0 = bit_read_BD (dat);
 	ent->y0 = bit_read_BD (dat);
@@ -3963,8 +3770,8 @@ dwg_decode_aldoni_object (Dwg_Structure * skt, Bit_Chain * dat, long unsigned in
 	case DWG_TYPE_POINT:
 		dwg_decode_POINT (dat, obj);
 		break;
-	case DWG_TYPE_3DFACE:
-		dwg_decode_3DFACE (dat, obj);
+	case DWG_TYPE__3DFACE:
+		dwg_decode__3DFACE (dat, obj);
 		break;
 	case DWG_TYPE_POLYLINE_PFACE:
 		dwg_decode_POLYLINE_PFACE (dat, obj);

@@ -67,7 +67,7 @@ static void dwg_encode_DIMENSION_ANG2LN (Dwg_Entity_DIMENSION_ANG2LN * est, Bit_
 static void dwg_encode_DIMENSION_RADIUS (Dwg_Entity_DIMENSION_RADIUS * est, Bit_Chain * dat);
 static void dwg_encode_DIMENSION_DIAMETER (Dwg_Entity_DIMENSION_DIAMETER * est, Bit_Chain * dat);
 static void dwg_encode_POINT (Dwg_Entity_POINT * est, Bit_Chain * dat);
-static void dwg_encode_3DFACE (Dwg_Entity_3DFACE * est, Bit_Chain * dat);
+static void dwg_encode__3DFACE (Dwg_Entity__3DFACE * est, Bit_Chain * dat);
 static void dwg_encode_POLYLINE_PFACE (Dwg_Entity_POLYLINE_PFACE * est, Bit_Chain * dat);
 static void dwg_encode_POLYLINE_MESH (Dwg_Entity_POLYLINE_MESH * est, Bit_Chain * dat);
 static void dwg_encode_SOLID (Dwg_Entity_SOLID * est, Bit_Chain * dat);
@@ -699,8 +699,8 @@ dwg_encode_entity (Dwg_Object * obj, Bit_Chain * dat)
 	case DWG_TYPE_POINT:
 		dwg_encode_POINT (est->tio.POINT, dat);
 		break;
-	case DWG_TYPE_3DFACE:
-		dwg_encode_3DFACE (est->tio._3DFACE, dat);
+	case DWG_TYPE__3DFACE:
+		dwg_encode__3DFACE (est->tio._3DFACE, dat);
 		break;
 	case DWG_TYPE_POLYLINE_PFACE:
 		dwg_encode_POLYLINE_PFACE (est->tio.POLYLINE_PFACE, dat);
@@ -1628,7 +1628,7 @@ dwg_encode_POINT (Dwg_Entity_POINT *ent, Bit_Chain * dat)
 }
 
 static void
-dwg_encode_3DFACE (Dwg_Entity_3DFACE *ent, Bit_Chain * dat)
+dwg_encode__3DFACE (Dwg_Entity__3DFACE *ent, Bit_Chain * dat)
 {
 	if (dat->version == R_13 || dat->version == R_14){
 		bit_write_BD(dat, ent->corner1.x);

@@ -659,7 +659,7 @@ dwg_print_POINT (Dwg_Entity_POINT *ent)
 }
 
 void
-dwg_print_3DFACE (Dwg_Entity_3DFACE * ent)
+dwg_print__3DFACE (Dwg_Entity__3DFACE * ent)
 {
     //TODO: implement me!
     puts("print not implemented!");
@@ -1121,8 +1121,8 @@ dwg_print (Dwg_Structure *dwg_struct)
                     case DWG_TYPE_POINT:
                             dwg_print_POINT (obj->tio.entity->tio.POINT);
                             break;
-                    case DWG_TYPE_3DFACE:
-                            dwg_print_3DFACE (obj->tio.entity->tio._3DFACE);
+                    case DWG_TYPE__3DFACE:
+                            dwg_print__3DFACE (obj->tio.entity->tio._3DFACE);
                             break;
                     case DWG_TYPE_POLYLINE_PFACE:
                             dwg_print_POLYLINE_PFACE (obj->tio.entity->tio.POLYLINE_PFACE);

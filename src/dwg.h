@@ -71,7 +71,7 @@ extern "C"
 		DWG_TYPE_DIMENSION_RADIUS = 0x19,
 		DWG_TYPE_DIMENSION_DIAMETER = 0x1A,
 		DWG_TYPE_POINT = 0x1b,
-		DWG_TYPE_3DFACE = 0x1c,
+		DWG_TYPE__3DFACE = 0x1c,
 		DWG_TYPE_POLYLINE_PFACE = 0x1d,
 		DWG_TYPE_POLYLINE_MESH = 0x1e,
 		DWG_TYPE_SOLID = 0x1f,
@@ -977,7 +977,7 @@ extern "C"
 			double z;
 		} corner4;
                 unsigned char invis_flags;
-	} Dwg_Entity_3DFACE;
+	} Dwg_Entity__3DFACE;
 
 /**
  Struct for:  POLYLINE (PFACE) (29)
@@ -2172,7 +2172,7 @@ extern "C"
 			Dwg_Entity_DIMENSION_RADIUS *DIMENSION_RADIUS;
 			Dwg_Entity_DIMENSION_DIAMETER *DIMENSION_DIAMETER;
 			Dwg_Entity_POINT *POINT;
-			Dwg_Entity_3DFACE *_3DFACE;
+			Dwg_Entity__3DFACE *_3DFACE;
 			Dwg_Entity_POLYLINE_PFACE *POLYLINE_PFACE;
 			Dwg_Entity_POLYLINE_MESH *POLYLINE_MESH;
 			Dwg_Entity_SOLID *SOLID;
