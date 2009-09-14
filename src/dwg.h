@@ -2346,7 +2346,7 @@ extern "C"
 	} Dwg_Object_Object;
 
 /**
- General object structure
+ General object struct
  */
 	typedef struct _dwg_object
 	{
@@ -2364,12 +2364,12 @@ extern "C"
 
 		Dwg_Handle handle;
 
-		struct _dwg_strukturo *parent;
+		struct _dwg_struct *parent;
 
 	} Dwg_Object;
 
 /**
- Structure for classes
+ Struct for classes
  */
 	typedef struct _dwg_class
 	{
@@ -2383,7 +2383,7 @@ extern "C"
 	} Dwg_Class;
 
 /**
- Dwg_Chain sama kiel Bit_Chain, en "bite.h"
+ Dwg_Chain same as Bit_Chain in "bits.h"
  */
 	typedef struct _dwg_chain
 	{
@@ -2402,7 +2402,7 @@ extern "C"
 /**
  Main DWG struct
  */
-	typedef struct _dwg_strukturo
+	typedef struct _dwg_struct
 	{
 		struct
 		{
@@ -2412,7 +2412,7 @@ extern "C"
             Dwg_Section* section;
 		} header;
 
-#		define DWG_UNKNOWN1_KIOM 123
+#		define DWG_UNKNOWN1_SIZE 123
 		Dwg_Chain unknown1;
 
 		Dwg_Chain picture; 

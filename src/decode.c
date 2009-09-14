@@ -248,7 +248,7 @@ int decode_R13_R15_header(Bit_Chain* dat, Dwg_Structure * skt){
 		    fprintf (stderr, "   UNKNOWN 1 (end): %8X\n", (unsigned int) (skt->header.section[5].address + skt->header.section[5].size));
 		}
 		dat->byte = skt->header.section[5].address;
-		skt->unknown1.size = DWG_UNKNOWN1_KIOM;
+		skt->unknown1.size = DWG_UNKNOWN1_SIZE;
 		skt->unknown1.byte = skt->unknown1.bit = 0;
 		skt->unknown1.chain = malloc (skt->unknown1.size);
 		memcpy (skt->unknown1.chain, &dat->chain[dat->byte], skt->unknown1.size);

@@ -145,7 +145,7 @@ dwg_encode_chains (Dwg_Structure * skt, Bit_Chain * dat)
 	if (skt->header.num_sections == 6)
 	{
 		skt->header.section[5].address = dat->byte;
-		skt->header.section[5].size = DWG_UNKNOWN1_KIOM;
+		skt->header.section[5].size = DWG_UNKNOWN1_SIZE;
 
 		skt->unknown1.size = skt->header.section[5].size;
 		skt->unknown1.byte = skt->unknown1.bit = 0;

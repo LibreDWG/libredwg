@@ -16,7 +16,7 @@
 /*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
 /*****************************************************************************/
 
-/* Cxefa fontkoda dosiero de la biblioteko, kie restas la interfacaj funkcioj.
+/* Main source file of the library, whith the API functions.
  */
 
 #include <stdio.h>
@@ -36,18 +36,18 @@
 int
 dwg_read_file (char *filename, Dwg_Structure * dwg_struct)
 {
-	int signo;
+	int sign;
 	FILE *fp;
-	struct stat atrib;
+	struct stat attrib;
 	size_t size;
-	Bit_Chain bitaro;
+	Bit_Chain bit_chain;
 
-	if (stat (filename, &atrib))
+	if (stat (filename, &attrib))
 	{
 		fprintf (stderr, "File not found: %s\n", filename);
 		return -1;
 	}
-	if (!S_ISREG (atrib.st_mode))
+	if (!S_ISREG (attrib.st_mode))
 	{
 		fprintf (stderr, "Error: %s\n", filename);
 		return -1;
@@ -59,39 +59,39 @@ dwg_read_file (char *filename, Dwg_Structure * dwg_struct)
 		return -1;
 	}
 
-	/* Sxargi la memoron je la dosiero
+	/* Load file to memory
 	 */
-	bitaro.bit = 0;
-	bitaro.byte = 0;
-	bitaro.size = atrib.st_size;
-	bitaro.chain = (char *) malloc (bitaro.size);
-	if (!bitaro.chain)
+	bit_chain.bit = 0;
+	bit_chain.byte = 0;
+	bit_chain.size = attrib.st_size;
+	bit_chain.chain = (char *) malloc (bit_chain.size);
+	if (!bit_chain.chain)
 	{
 		fprintf (stderr, "Not enough memory.\n");
 		fclose (fp);
 		return -1;
 	}
 	size = 0;
-	size = fread (bitaro.chain, sizeof (char), bitaro.size, fp);
-	if (size != bitaro.size)
+	size = fread (bit_chain.chain, sizeof (char), bit_chain.size, fp);
+	if (size != bit_chain.size)
 	{
-		fprintf (stderr, "Could not read the entire file (%lu out of %lu): %s\n", (long unsigned int) size, bitaro.size,
+		fprintf (stderr, "Could not read the entire file (%lu out of %lu): %s\n", (long unsigned int) size, bit_chain.size,
 			filename);
 		fclose (fp);
-		free (bitaro.chain);
+		free (bit_chain.chain);
 		return -1;
 	}
 	fclose (fp);
 
-	/* Dekodigi la dwg-datenaron
+	/* Decode the dwg structure
 	 */
-	if (dwg_decode_structures (&bitaro, dwg_struct))
+	if (dwg_decode_structures (&bit_chain, dwg_struct))
 	{
 		fprintf (stderr, "Failed to decode file: %s\n", filename);
-		free (bitaro.chain);
+		free (bit_chain.chain);
 		return -1;
 	}
-	free (bitaro.chain);
+	free (bit_chain.chain);
 
 	return 0;
 }
@@ -101,16 +101,16 @@ dwg_write_file (char *filename, Dwg_Structure * dwg_struct)
 {
 	FILE *dt;
 	struct stat atrib;
-	Bit_Chain bitaro;
-    bitaro.version = dwg_struct->header.version;
+	Bit_Chain bit_chain;
+        bit_chain.version = dwg_struct->header.version;
 
-	/* Enkodigi la dwg-datenaron
-	bitaro.size = 0;
-	if (dwg_encode_chains (dwg_struct, &bitaro))
+	/* Encode the DWG struct
+	bit_chain.size = 0;
+	if (dwg_encode_chains (dwg_struct, &bit_chain))
 	{
 		fprintf (stderr, "Failed to encode datastructure.\n");
-		if (bitaro.size > 0)
-			free (bitaro.chain);
+		if (bit_chain.size > 0)
+			free (bit_chain.chain);
 		return -1;
 	}
 	 */
@@ -130,33 +130,29 @@ dwg_write_file (char *filename, Dwg_Structure * dwg_struct)
 	 */
 
 	/* Write the data into the file
-	if (fwrite (bitaro.chain, sizeof (char), bitaro.size, dt) != bitaro.size)
+	if (fwrite (bit_chain.chain, sizeof (char), bit_chain.size, dt) != bit_chain.size)
 	{
 		fprintf (stderr, "Failed to write data into the file: %s\n", filename);
 		fclose (dt);
-		free (bitaro.chain);
+		free (bit_chain.chain);
 		return -1;
 	}
 	fclose (dt);
 
-	if (bitaro.size > 0)
-		free (bitaro.chain);
+	if (bit_chain.size > 0)
+		free (bit_chain.chain);
 	 */
 	return 0;
 }
-
-/* Liveras la datumaron de DIB-bitmapo (kap-datumaro plus bitmapo mem).
- * La grandeco (size) ampleksas ambaŭ partoj.
- */
 
 unsigned char *
 dwg_bmp (Dwg_Structure *stk, long int *size)
 {
 	char num_pictures;
-	char kodo;
+	char code;
 	unsigned i;
 	int plene;
-	long int size_kapo;
+	long int header_size;
 	Bit_Chain *dat;
 	
 	dat = (Bit_Chain*) &stk->picture;
@@ -165,41 +161,41 @@ dwg_bmp (Dwg_Structure *stk, long int *size)
  
 	bit_read_RL (dat);
 	num_pictures = bit_read_RC (dat);
-	//printf ("Kiom bildetoj: %i\n", num_pictures);
+	//printf ("num_pictures: %i\n", num_pictures);
  
 	*size = 0;
 	plene = 0;
-	size_kapo = 0;
+	header_size = 0;
 	for (i = 0; i < num_pictures; i++)
  	{
-		kodo = bit_read_RC (dat);
-		//printf ("\t%i - Kodo: %i\n", i, kodo);
-		//printf ("\t\tAdreso: 0x%x\n", bit_legi_RL (dat));
+		code = bit_read_RC (dat);
+		//printf ("\t%i - Code: %i\n", i, code);
+		//printf ("\t\tAdress: 0x%x\n", bit_read_RL (dat));
 		bit_read_RL (dat);
-		if (kodo == 1)
+		if (code == 1)
  		{
-			size_kapo += bit_read_RL (dat);
-			//printf ("\t\tGrandeco de kapo: %i\n", size_kapo);
+			header_size += bit_read_RL (dat);
+			//printf ("\t\tHeader size: %i\n", header_size);
  		}
-		else if (kodo == 2 && plene == 0)
+		else if (code == 2 && plene == 0)
  		{
 			*size = bit_read_RL (dat);
 			plene = 1;
-			//printf ("\t\tGrandeco de BMP: %i\n", *size);
+			//printf ("\t\tBMP size: %i\n", *size);
  		}
-		else if (kodo == 3)
+		else if (code == 3)
 		{
 			bit_read_RL (dat);
-			//printf ("\t\tGrandeco de WMF: 0x%x\n", bit_legi_RL (dat));
+			//printf ("\t\tWMF size: 0x%x\n", bit_legi_RL (dat));
 		}
 		else
 		{
 			bit_read_RL (dat);
-			//printf ("\t\tGrandeco: 0x%x\n", bit_read_RL (dat));
+			//printf ("\t\tSize: 0x%x\n", bit_read_RL (dat));
 		}
  	}
-	dat->byte += size_kapo;
-	//printf ("Adreso nun: 0x%x\n", dat->byte);
+	dat->byte += header_size;
+	//printf ("Current adress: 0x%x\n", dat->byte);
  
 	if (*size > 0)
 		return (dat->chain + dat->byte);
