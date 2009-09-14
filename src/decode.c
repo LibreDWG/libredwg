@@ -53,32 +53,35 @@ for (vector_counter=0; vector_counter< _obj->size; vector_counter++)\
 #define DWG_ENTITY(token) \
   int vector_counter;\
   if (loglevel)\
-  fprintf (stderr, "Entity " #token " (%d.%d.%lu):\n",\
-    obj->handle.code,\
-    obj->handle.size,\
-    obj->handle.value);\
-	Dwg_Entity_##token *ent;\
+  fprintf (stderr, "Entity " #token ":\n");\
+	Dwg_Entity_##token *ent, *_obj;\
 	obj->supertype = DWG_SUPERTYPE_ENTITY;\
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));\
 	obj->tio.entity->tio.token = calloc (sizeof (Dwg_Entity_##token), 1);\
 	ent = obj->tio.entity->tio.token;\
+  _obj=ent;\
   obj->tio.entity->object = obj;\
 	dwg_decode_entity (dat, obj->tio.entity);\
+  fprintf (stderr, "Entity handle: %d.%d.%lu\n",\
+    obj->handle.code,\
+    obj->handle.size,\
+    obj->handle.value);
 
 #define DWG_OBJECT(token) \
   int vector_counter;\
   if (loglevel)\
-    fprintf (stderr, "Object " #token " (%d.%d.%lu):\n",\
-      obj->handle.code,\
-      obj->handle.size,\
-      obj->handle.value);\
+    fprintf (stderr, "Object " #token ":\n");\
 	Dwg_Object_##token *_obj;\
 	obj->supertype = DWG_SUPERTYPE_OBJECT;\
 	obj->tio.object = malloc (sizeof (Dwg_Object_Object));\
 	obj->tio.object->tio.token = calloc (sizeof (Dwg_Object_##token), 1);\
   obj->tio.object->object = obj;\
 	dwg_decode_object (dat, obj->tio.object);\
-	_obj = obj->tio.object->tio.token;
+	_obj = obj->tio.object->tio.token;\
+  fprintf (stderr, "Object handle: %d.%d.%lu\n",\
+    obj->handle.code,\
+    obj->handle.size,\
+    obj->handle.value);
 
 /*--------------------------------------------------------------------------------
  * Private functions
@@ -1455,7 +1458,7 @@ dwg_decode_TEXT (Bit_Chain * dat, Dwg_Object * obj)
 
 	dwg_decode_common_entity_handle_data (dat, obj);
 
-	ent->style = HANDLE_CODE(5);
+	HANDLE_FIELD(style, 5);
 }
 
 static void
@@ -2889,12 +2892,16 @@ dwg_decode_DICTIONARY (Bit_Chain *dat, Dwg_Object *obj)
   HANDLE_FIELD(parenthandle, 4);
 
   int i;
+  fprintf(stderr, "num_reactors:%d\n", obj->tio.object->num_reactors);
+  GET_FIELD(reactors) = malloc(sizeof(Dwg_Object_Ref*) * obj->tio.object->num_reactors);
   for (i=0; i<obj->tio.object->num_reactors; i++){
     HANDLE_FIELD(reactors[i], 4);
   }
 
   HANDLE_FIELD(xdicobjhandle,3);
 
+  fprintf(stderr, "numitems:%d\n", GET_FIELD(numitems));
+  GET_FIELD(itemhandles) = malloc(sizeof(Dwg_Object_Ref*) * GET_FIELD(numitems));
   for (i=0; i<GET_FIELD(numitems); i++){
     HANDLE_FIELD(itemhandles[i], 2);
   }
