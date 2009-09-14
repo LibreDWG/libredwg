@@ -2910,14 +2910,7 @@ dwg_decode_DICTIONARY (Bit_Chain *dat, Dwg_Object *obj)
 static void
 dwg_decode_MTEXT (Bit_Chain * dat, Dwg_Object * obj)
 {
-	Dwg_Entity_MTEXT *ent;
-
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.MTEXT = calloc (sizeof (Dwg_Entity_MTEXT), 1);
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
-	ent = obj->tio.entity->tio.MTEXT;
+  DWG_ENTITY(MTEXT);
 
     //spec-typo ? Spec says BD but we think it might be 3BD:
 	ent->x0 = bit_read_BD (dat);
@@ -2958,15 +2951,8 @@ dwg_decode_MTEXT (Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_LEADER (Bit_Chain *dat, Dwg_Object *obj)
 {
-	Dwg_Entity_LEADER *ent;
-    int i;
-
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.LEADER = calloc (sizeof (Dwg_Entity_LEADER), 1);
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
-	ent = obj->tio.entity->tio.LEADER;
+  int i;
+  DWG_ENTITY(LEADER);
 
     ent->unknown_bit_1 = bit_read_B (dat);
     ent->annot_type = bit_read_BS (dat);
@@ -3027,14 +3013,7 @@ dwg_decode_LEADER (Bit_Chain *dat, Dwg_Object *obj)
 static void
 dwg_decode_TOLERANCE (Bit_Chain *dat, Dwg_Object *obj)
 {
-	Dwg_Entity_TOLERANCE *ent;
-
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.TOLERANCE = calloc (sizeof (Dwg_Entity_TOLERANCE), 1);
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
-	ent = obj->tio.entity->tio.TOLERANCE;
+  DWG_ENTITY(TOLERANCE);
 
     if (dat->version == R_13 || dat->version == R_14){
         ent->unknown_short = bit_read_BS(dat); //spec-typo? Spec says S instead of BS.
@@ -3060,15 +3039,9 @@ dwg_decode_TOLERANCE (Bit_Chain *dat, Dwg_Object *obj)
 static void
 dwg_decode_MLINE (Bit_Chain *dat, Dwg_Object *obj)
 {
-	Dwg_Entity_MLINE *ent;
-    int i, j, k;
+  DWG_ENTITY(MLINE);
 
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.MLINE = calloc (sizeof (Dwg_Entity_MLINE), 1);
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
-	ent = obj->tio.entity->tio.MLINE;
+    int i, j, k;
 
     ent->scale = bit_read_BD (dat);
     ent->just = bit_read_RC (dat);    //spec-typo? Spec says EC instead of RC...
@@ -3115,21 +3088,14 @@ dwg_decode_MLINE (Bit_Chain *dat, Dwg_Object *obj)
 static void
 dwg_decode_BLOCK_CONTROL (Bit_Chain *dat, Dwg_Object *obj)
 {
+  DWG_OBJECT(BLOCK_CONTROL);
+
 	int i;
-	Dwg_Object_BLOCK_CONTROL *blk;
-
-	obj->supertype = DWG_SUPERTYPE_OBJECT;
-	obj->tio.object = malloc (sizeof (Dwg_Object_Object));
-	obj->tio.object->tio.BLOCK_CONTROL = calloc (sizeof (Dwg_Object_BLOCK_CONTROL), 1);
-  obj->tio.object->object = obj;
-	dwg_decode_object (dat, obj->tio.object);
-	blk = obj->tio.object->tio.BLOCK_CONTROL;
-
 
     //TODO: check the spec. How do we deal with Length (MS)?
-   	blk->type = bit_read_BS (dat);
+   	_obj->type = bit_read_BS (dat);
     if (dat->version >= R_2000){	
-    	blk->size = bit_read_RL (dat);
+    	_obj->size = bit_read_RL (dat);
     }
 
 //TODO: Implement-me!
@@ -3141,55 +3107,43 @@ static void
 dwg_decode_BLOCK_HEADER (Bit_Chain *dat, Dwg_Object *obj)
 {
   int i;
-	Dwg_Object_BLOCK_HEADER *ord;
+  DWG_OBJECT(BLOCK_HEADER);
 
-	obj->supertype = DWG_SUPERTYPE_OBJECT;
-	obj->tio.object = malloc (sizeof (Dwg_Object_Object));
-	obj->tio.object->tio.BLOCK_HEADER = calloc (sizeof (Dwg_Object_BLOCK_HEADER), 1);
-  obj->tio.object->object = obj;
-	dwg_decode_object (dat, obj->tio.object);
-	ord = obj->tio.object->tio.BLOCK_HEADER;
-
-  fprintf (stderr, "BLOCK_HEADER (%d.%d.%lu)\n", obj->handle.code, obj->handle.size, obj->handle.value);
-
-	/* Read values
-	 */
-
-	ord->entry_name = bit_read_T (dat);
-fprintf(stderr, "entry_name: \"%s\"\n", ord->entry_name);
-	ord->_64_flag = bit_read_B (dat);
-	ord->xrefindex_plus1 = bit_read_BS (dat);
-	ord->xdep = bit_read_B (dat);
-	ord->anonymous = bit_read_B (dat);
-	ord->hasattrs = bit_read_B (dat);
-	ord->blxisxref = bit_read_B (dat);
-	ord->xrefoverlaid = bit_read_B (dat);
+	_obj->entry_name = bit_read_T (dat);
+fprintf(stderr, "entry_name: \"%s\"\n", _obj->entry_name);
+	_obj->_64_flag = bit_read_B (dat);
+	_obj->xrefindex_plus1 = bit_read_BS (dat);
+	_obj->xdep = bit_read_B (dat);
+	_obj->anonymous = bit_read_B (dat);
+	_obj->hasattrs = bit_read_B (dat);
+	_obj->blxisxref = bit_read_B (dat);
+	_obj->xrefoverlaid = bit_read_B (dat);
 
   if (dat->version >= R_2000){
-	  ord->loaded_bit = bit_read_B (dat);
+	  _obj->loaded_bit = bit_read_B (dat);
   }
 
   if (dat->version >= R_2004){
-	  ord->owned_object_count = bit_read_BL (dat);
+	  _obj->owned_object_count = bit_read_BL (dat);
   }
 
-	ord->base_pt.x = bit_read_BD (dat);
-	ord->base_pt.y = bit_read_BD (dat);
-	ord->base_pt.z = bit_read_BD (dat);
+	_obj->base_pt.x = bit_read_BD (dat);
+	_obj->base_pt.y = bit_read_BD (dat);
+	_obj->base_pt.z = bit_read_BD (dat);
 
-	ord->xref_pname = bit_read_T (dat);
-  fprintf(stderr, "xref_pname: \"%s\"\n", ord->xref_pname);
+	_obj->xref_pname = bit_read_T (dat);
+  fprintf(stderr, "xref_pname: \"%s\"\n", _obj->xref_pname);
 
   if (dat->version >= R_2000){
 
     //skip non-zero bytes and a terminating zero:
     while(bit_read_RC (dat)){};
 
-    ord->block_description = bit_read_T (dat);
-    fprintf(stderr, "block_description: \"%s\"\n", ord->block_description);
+    _obj->block_description = bit_read_T (dat);
+    fprintf(stderr, "block_description: \"%s\"\n", _obj->block_description);
 
-  	ord->size_of_preview_data = bit_read_BL (dat);
-    for (i=0;i<ord->size_of_preview_data;i++){
+  	_obj->size_of_preview_data = bit_read_BL (dat);
+    for (i=0;i<_obj->size_of_preview_data;i++){
       //TO-DO
     	//ord->binary_preview_data[i] = bit_read_RC (dat);
       bit_read_RC (dat);
@@ -3199,43 +3153,20 @@ fprintf(stderr, "entry_name: \"%s\"\n", ord->entry_name);
   if (dat->version >= R_2007){
   	//TODO
 
-//ord->insert_units = bit_read_BS (dat);
+//_obj->insert_units = bit_read_BS (dat);
 
   }
 
-  ord->block_control_handle = HANDLE_CODE(4);
+  _obj->block_control_handle = HANDLE_CODE(4);
 
-  ord->reactor = (Dwg_Object_Ref**) malloc(obj->tio.object->num_reactors * sizeof(Dwg_Object_Ref*));
+  _obj->reactor = (Dwg_Object_Ref**) malloc(obj->tio.object->num_reactors * sizeof(Dwg_Object_Ref*));
   for (i=0;i<obj->tio.object->num_reactors;i++){
-    ord->reactor[i] = HANDLE_CODE(4);
+    _obj->reactor[i] = HANDLE_CODE(4);
   }
 
-  ord->xdicobjhandle = HANDLE_CODE(3);
-  ord->NULL_handle = HANDLE_CODE(5);
-  ord->block_entity = HANDLE_CODE(3);
-
-
-/*  bit_read_H(dat, &ord->block_control_handle);
-  fprintf(stderr, "block_control_handle: %d.%d.%lu\n", ord->block_control_handle.code, ord->block_control_handle.size, ord->block_control_handle.value);
-
-  ord->reactor = (Dwg_Handle*) malloc(obj->tio.object->num_reactors * sizeof(Dwg_Handle));
-  fprintf(stderr, "ord->num_reactors = %d\n", obj->tio.object->num_reactors);
-
-  for (i=0;i<obj->tio.object->num_reactors;i++){
-    fprintf(stderr, "&ord->reactor[%d]=%x\n", i, &ord->reactor[i]);
-    bit_read_H(dat, &ord->reactor[i]);
-  }
-  bit_read_H(dat, &ord->xdicobjhandle);
-  fprintf(stderr, "xdicobjhandle: %d.%d.%lu\n", ord->xdicobjhandle.code, ord->xdicobjhandle.size, ord->xdicobjhandle.value);
-
-  bit_read_H(dat, &ord->NULL_handle);
-fprintf(stderr, "NULL_handle: %d.%d.%lu\n", ord->NULL_handle.code, ord->NULL_handle.size, ord->NULL_handle.value);
-
-  bit_read_H(dat, &ord->block_entity);
-
-fprintf(stderr, "referenced BLOCK: %d.%d.%lu\n", ord->block_entity.code, ord->block_entity.size, ord->block_entity.value);
-*/
-
+  _obj->xdicobjhandle = HANDLE_CODE(3);
+  _obj->NULL_handle = HANDLE_CODE(5);
+  _obj->block_entity = HANDLE_CODE(3);
 //TODO: imcomplete. check spec.
 
 }
