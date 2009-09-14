@@ -186,8 +186,9 @@ extern "C"
 		double width_factor;
 		unsigned char *text;
 		unsigned int generation;
-                unsigned int horiz_align;
-                unsigned int vert_align;
+    unsigned int horiz_align;
+    unsigned int vert_align;
+    Dwg_Object_Ref* style;
 	} Dwg_Entity_TEXT;
 
 /**
@@ -1622,11 +1623,11 @@ extern "C"
   	unsigned char insert_count;
     unsigned char* block_description;
   	long unsigned int size_of_preview_data;
-    Dwg_Handle block_control_handle;
-    Dwg_Handle *reactor;
-    Dwg_Handle xdicobjhandle;
-    Dwg_Handle NULL_handle;
-    Dwg_Handle block_entity;
+    Dwg_Object_Ref* block_control_handle;
+    Dwg_Object_Ref** reactor;
+    Dwg_Object_Ref* xdicobjhandle;
+    Dwg_Object_Ref* NULL_handle;
+    Dwg_Object_Ref* block_entity;
 	} Dwg_Object_BLOCK_HEADER;
 
 /**

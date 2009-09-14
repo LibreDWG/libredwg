@@ -28,6 +28,8 @@
 #include "dwg.h"
 #include "decode.h"
 
+#define HANDLE_CODE(c) dwg_decode_handleref_with_code(dat, obj, c)
+
 /*--------------------------------------------------------------------------------
  * Private functions
  */
@@ -1275,7 +1277,7 @@ dwg_decode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj, unsigned int c
   Dwg_Object_Ref * ref;
   ref = dwg_decode_handleref (dat,obj);
   if (ref->handleref.code != code){
-    fprintf(stderr, "ERROR: expected a CODE %d handle, but got %d.%d.%lu instead.\n",
+    fprintf(stderr, "ERROR: expected a CODE %d handle, but got %d.%d.%lu instead.\n\n",
       code,
       ref->handleref.code,
       ref->handleref.size,
@@ -1295,35 +1297,36 @@ dwg_decode_common_entity_handle_data (Bit_Chain * dat, Dwg_Object * obj) {
 	int i;
 	ent = obj->tio.entity;
 
-//	ent->subentity_ref_handle = dwg_decode_handleref (dat, obj);
+//TODO: check what is the condition for the presence of this handle:
+//	ent->subentity_ref_handle = dwg_decode_handleref_with_code (dat, obj, 3);
 
 	if (ent->num_reactors)
 		ent->reactors = malloc (ent->num_reactors * sizeof (Dwg_Object_Ref*));
 	for(i=0; i<ent->num_reactors; i++){
-		ent->reactors[i] = dwg_decode_handleref (dat, obj);
+		ent->reactors[i] = dwg_decode_handleref_with_code (dat, obj, 4);
 	}
 
-	ent->xdicobjhandle = dwg_decode_handleref (dat, obj);
+	ent->xdicobjhandle = dwg_decode_handleref_with_code (dat, obj, 3);
 
   if (dat->version == R_13 || dat->version == R_14){
-  	ent->layer = dwg_decode_handleref (dat, obj);
+  	ent->layer = dwg_decode_handleref_with_code (dat, obj, 5);
 	  if (!ent->isbylayerlt){
-			  ent->ltype = dwg_decode_handleref (dat, obj);
+			  ent->ltype = dwg_decode_handleref_with_code (dat, obj, 5);
 	  }
   }
 
   if (0){   //TODO: these are optional. Figure out what is the condition.
-    ent->prev_entity = dwg_decode_handleref (dat, obj);
-    ent->next_entity = dwg_decode_handleref (dat, obj);
+    ent->prev_entity = dwg_decode_handleref_with_code (dat, obj, 4);
+    ent->next_entity = dwg_decode_handleref_with_code (dat, obj, 4);
   }
 
   if (dat->version >= R_2000) {
-  	ent->layer = dwg_decode_handleref (dat, obj);
+  	ent->layer = dwg_decode_handleref_with_code (dat, obj, 5);
 	  if (ent->linetype_flags == 3){
-			  ent->ltype = dwg_decode_handleref (dat, obj);
+			  ent->ltype = dwg_decode_handleref_with_code (dat, obj, 5);
 	  }
 	  if (ent->plotstyle_flags == 3){
-			  ent->plotstyle = dwg_decode_handleref (dat, obj);
+			  ent->plotstyle = dwg_decode_handleref_with_code (dat, obj, 5);
 	  }
   }
 
@@ -1418,6 +1421,8 @@ dwg_decode_TEXT (Bit_Chain * dat, Dwg_Object * obj)
                         ent->alignment.v = bit_read_BS (dat);
         }
 	dwg_decode_common_entity_handle_data (dat, obj);
+
+  ent->style = HANDLE_CODE(5);
 }
 
 static void
@@ -1586,9 +1591,9 @@ dwg_decode_BLOCK (Bit_Chain * dat, Dwg_Object * obj)
 	/* Read values
 	 */
 	ent->name = bit_read_T (dat);
-fprintf (stderr, "block_name = %s\n", ent->name);
-	dwg_decode_common_entity_handle_data (dat, obj);
+  fprintf (stderr, "block_name = %s\n", ent->name);
 
+	dwg_decode_common_entity_handle_data (dat, obj);
 }
 
 static void
@@ -1694,23 +1699,23 @@ dwg_decode_INSERT (Bit_Chain * dat, Dwg_Object * obj)
   //There is a typo in the spec. it says "R13-R200:".
   //I guess it means "R13-R2000:" 
   if (dat->version >=R_13 && dat->version <= R_2000 && ent->has_attribs){
-  	ent->first_attrib = dwg_decode_handleref(dat, obj);
+  	ent->first_attrib = dwg_decode_handleref_with_code (dat, obj, 4);
     fprintf (stderr, "first_attrib: %d.%d.%lu\n", ent->first_attrib->handleref.code, ent->first_attrib->handleref.size, ent->first_attrib->handleref.value);
 
-  	ent->last_attrib = dwg_decode_handleref(dat, obj);
+  	ent->last_attrib = dwg_decode_handleref_with_code (dat, obj, 4);
     fprintf (stderr, "last_attrib: %d.%d.%lu\n", ent->last_attrib->handleref.code, ent->last_attrib->handleref.size, ent->last_attrib->handleref.value);
   }
 
   if (dat->version ==R_2004){
     ent->attrib_handles = (Dwg_Object_Ref**) malloc(ent->owned_obj_count * sizeof(Dwg_Object_Ref*));
   	for (i=0;i<ent->owned_obj_count;i++){
-      ent->attrib_handles[i] = dwg_decode_handleref(dat, obj);
+      ent->attrib_handles[i] = dwg_decode_handleref_with_code (dat, obj, 4);
       fprintf (stderr, "ent->attrib_handles[%d]: %d.%d.%lu\n", i, ent->attrib_handles[i]->handleref.code, ent->attrib_handles[i]->handleref.size, ent->attrib_handles[i]->handleref.value);
     }
   }
 
   if (ent->has_attribs){
-  	ent->seqend = dwg_decode_handleref(dat, obj);
+  	ent->seqend = dwg_decode_handleref_with_code (dat, obj, 3);
     fprintf (stderr, "seqend: %d.%d.%lu\n", ent->seqend->handleref.code, ent->seqend->handleref.size, ent->seqend->handleref.value);
   }
 }
@@ -3213,7 +3218,19 @@ fprintf(stderr, "entry_name: \"%s\"\n", ord->entry_name);
 
   }
 
-  bit_read_H(dat, &ord->block_control_handle);
+  ord->block_control_handle = HANDLE_CODE(4);
+
+  ord->reactor = (Dwg_Object_Ref**) malloc(obj->tio.object->num_reactors * sizeof(Dwg_Object_Ref*));
+  for (i=0;i<obj->tio.object->num_reactors;i++){
+    ord->reactor[i] = HANDLE_CODE(4);
+  }
+
+  ord->xdicobjhandle = HANDLE_CODE(3);
+  ord->NULL_handle = HANDLE_CODE(5);
+  ord->block_entity = HANDLE_CODE(3);
+
+
+/*  bit_read_H(dat, &ord->block_control_handle);
   fprintf(stderr, "block_control_handle: %d.%d.%lu\n", ord->block_control_handle.code, ord->block_control_handle.size, ord->block_control_handle.value);
 
   ord->reactor = (Dwg_Handle*) malloc(obj->tio.object->num_reactors * sizeof(Dwg_Handle));
@@ -3232,6 +3249,7 @@ fprintf(stderr, "NULL_handle: %d.%d.%lu\n", ord->NULL_handle.code, ord->NULL_han
   bit_read_H(dat, &ord->block_entity);
 
 fprintf(stderr, "referenced BLOCK: %d.%d.%lu\n", ord->block_entity.code, ord->block_entity.size, ord->block_entity.value);
+*/
 
 //TODO: imcomplete. check spec.
 
