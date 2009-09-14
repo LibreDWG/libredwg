@@ -50,6 +50,18 @@ _obj->name = (DWG_PRIMITIVE_TYPE_##type*) malloc(_obj->size * sizeof(DWG_PRIMITI
 for (vector_counter=0; vector_counter< _obj->size; vector_counter++)\
   FIELD(name[vector_counter], type)
 
+#define HANDLE_VECTOR(name, sizefield, code)\
+  GET_FIELD(name) = malloc(sizeof(Dwg_Object_Ref*) * GET_FIELD(sizefield));\
+  for (vector_counter=0; vector_counter<GET_FIELD(sizefield); vector_counter++){\
+    HANDLE_FIELD(name[vector_counter], code);\
+  }
+
+#define REACTORS(code)\
+  GET_FIELD(reactors) = malloc(sizeof(Dwg_Object_Ref*) * obj->tio.object->num_reactors);\
+  for (vector_counter=0; vector_counter<obj->tio.object->num_reactors; vector_counter++){\
+    HANDLE_FIELD(reactors[vector_counter], code);\
+  }
+
 #define DWG_ENTITY(token) \
   int vector_counter;\
   if (loglevel)\
@@ -2890,21 +2902,9 @@ dwg_decode_DICTIONARY (Bit_Chain *dat, Dwg_Object *obj)
 
 	FIELD_VECTOR(text, RC, numitems);
   HANDLE_FIELD(parenthandle, 4);
-
-  int i;
-  fprintf(stderr, "num_reactors:%d\n", obj->tio.object->num_reactors);
-  GET_FIELD(reactors) = malloc(sizeof(Dwg_Object_Ref*) * obj->tio.object->num_reactors);
-  for (i=0; i<obj->tio.object->num_reactors; i++){
-    HANDLE_FIELD(reactors[i], 4);
-  }
-
+  REACTORS(4);
   HANDLE_FIELD(xdicobjhandle,3);
-
-  fprintf(stderr, "numitems:%d\n", GET_FIELD(numitems));
-  GET_FIELD(itemhandles) = malloc(sizeof(Dwg_Object_Ref*) * GET_FIELD(numitems));
-  for (i=0; i<GET_FIELD(numitems); i++){
-    HANDLE_FIELD(itemhandles[i], 2);
-  }
+  HANDLE_VECTOR(itemhandles, numitems, 2);
 }
 
 static void
