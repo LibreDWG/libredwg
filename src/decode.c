@@ -1357,17 +1357,22 @@ dwg_decode_UNUSED (Bit_Chain * dat, Dwg_Object * obj)
 	dwg_decode_common_entity_handle_data (dat, obj);
 }
 
+#define DWG_ENTITY(token) \
+fprintf(stderr, #token "\n");\
+	Dwg_Entity_##token *ent;\
+  ent = 0;\
+	obj->supertype = DWG_SUPERTYPE_ENTITY;\
+	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));\
+	obj->tio.entity->tio.token = calloc (sizeof (Dwg_Entity_##token), 1);\
+	ent = obj->tio.entity->tio.token;\
+  obj->tio.entity->object = obj;\
+	dwg_decode_entity (dat, obj->tio.entity);\
+
+
 static void
 dwg_decode_TEXT (Bit_Chain * dat, Dwg_Object * obj)
 {
-	Dwg_Entity_TEXT *ent;
-
-	obj->supertype = DWG_SUPERTYPE_ENTITY;
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));
-	obj->tio.entity->tio.TEXT = calloc (sizeof (Dwg_Entity_TEXT), 1);
-	ent = obj->tio.entity->tio.TEXT;
-  obj->tio.entity->object = obj;
-	dwg_decode_entity (dat, obj->tio.entity);
+  DWG_ENTITY (TEXT);
 
 	/* Read values
 	 */
