@@ -24,6 +24,7 @@
 #include "bits.h"
 #include "dwg.h"
 
-int dwg_encode_chains (Dwg_Structure * dwg_struct, Bit_Chain * bitaro);
+int
+dwg_encode_chains(Dwg_Structure * dwg_struct, Bit_Chain * bitaro);
 
 #endif
