@@ -35,7 +35,8 @@
 #define VERSIONS(v1,v2) if (dat->version >= v1 && dat->version <= v2)
 
 #define FIELD(name,type) _obj->name = bit_read_##type(dat)
-#define GET_FIELD (n) _obj->n
+#define HANDLE_FIELD(name, code) _obj->name = dwg_decode_handleref_with_code(dat, obj, code)
+#define GET_FIELD(name) _obj->name
 
 #define DWG_PRIMITIVE_TYPE_RC char
 #define DWG_PRIMITIVE_TYPE_B unsigned char
@@ -2868,7 +2869,6 @@ dwg_decode_XLINE (Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_DICTIONARY (Bit_Chain *dat, Dwg_Object *obj)
 {
-	int i;
   DWG_OBJECT(DICTIONARY);
 
   FIELD(numitems, BS);
@@ -2879,18 +2879,25 @@ dwg_decode_DICTIONARY (Bit_Chain *dat, Dwg_Object *obj)
 	  FIELD(hard_owner, RC);
   }
 
-	if (_obj->numitems > 10000)
+	if (GET_FIELD(numitems) > 10000)
 	{
-//TODO:Dwg_Handle
-//		fprintf (stderr, "Strange: dictionary with more than 10 thousand entries! Handle: %u\n", obj->handle.value);
+		fprintf (stderr, "Strange: dictionary with more than 10 thousand entries! Handle: %u\n", obj->handle.value);
 		return;
 	}
 
 	FIELD_VECTOR(text, RC, numitems);
-  _obj->parenthandle = HANDLE_CODE(4);
+  HANDLE_FIELD(parenthandle, 4);
 
+  int i;
+  for (i=0; i<obj->tio.object->num_reactors; i++){
+    HANDLE_FIELD(reactors[i], 4);
+  }
 
-	//dwg_decode_handleref (dat, obj);
+  HANDLE_FIELD(xdicobjhandle,3);
+
+  for (i=0; i<GET_FIELD(numitems); i++){
+    HANDLE_FIELD(itemhandles[i], 2);
+  }
 }
 
 static void
