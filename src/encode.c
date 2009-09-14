@@ -1080,9 +1080,9 @@ static void
 dwg_encode_INSERT(Dwg_Entity_INSERT *ent, Bit_Chain * dat)
 {
   //TODO: check
-  bit_write_BD(dat, ent->x0);
-  bit_write_BD(dat, ent->y0);
-  bit_write_BD(dat, ent->z0);
+  bit_write_BD(dat, ent->ins_pt.x);
+  bit_write_BD(dat, ent->ins_pt.y);
+  bit_write_BD(dat, ent->ins_pt.z);
   if (ent->scale.x == ent->scale.y == ent->scale.z == 1.0)
     bit_write_BB(dat, 3);
   else if (ent->scale.x == 1.0)
@@ -1114,9 +1114,9 @@ static void
 dwg_encode_MINSERT(Dwg_Entity_MINSERT *ent, Bit_Chain * dat)
 {
   //TODO: check
-  bit_write_BD(dat, ent->x0);
-  bit_write_BD(dat, ent->y0);
-  bit_write_BD(dat, ent->z0);
+  bit_write_BD(dat, ent->ins_pt.x);
+  bit_write_BD(dat, ent->ins_pt.y);
+  bit_write_BD(dat, ent->ins_pt.z);
   if (ent->scale.x == ent->scale.y == ent->scale.z == 1.0)
     bit_write_BB(dat, 3);
   else if (ent->scale.x == 1.0)
@@ -1142,10 +1142,10 @@ dwg_encode_MINSERT(Dwg_Entity_MINSERT *ent, Bit_Chain * dat)
   bit_write_BD(dat, ent->extrusion.y);
   bit_write_BD(dat, ent->extrusion.z);
   bit_write_B(dat, ent->has_attribs);
-  bit_write_BS(dat, ent->column.size);
-  bit_write_BS(dat, ent->line.size);
-  bit_write_BD(dat, ent->column.dx);
-  bit_write_BD(dat, ent->line.dy);
+  bit_write_BS(dat, ent->numcols);
+  bit_write_BS(dat, ent->numrows);
+  bit_write_BD(dat, ent->col_spacing);
+  bit_write_BD(dat, ent->row_spacing);
 }
 
 static void

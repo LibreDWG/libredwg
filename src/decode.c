@@ -1875,33 +1875,27 @@ dwg_decode_INSERT(Bit_Chain * dat, Dwg_Object * obj)
   int i;
   DWG_ENTITY(INSERT);
 
-  /* Read values
-   */
-  ent->x0 = bit_read_BD(dat);
-  ent->y0 = bit_read_BD(dat);
-  ent->z0 = bit_read_BD(dat);
+  FIELD_3DPOINT(ins_pt);
 
   VERSIONS(R_13,R_14)
     {
-      ent->scale.x = bit_read_BD(dat);
-      ent->scale.y = bit_read_BD(dat);
-      ent->scale.z = bit_read_BD(dat);
+      FIELD_3DPOINT(scale);
     }
 
   SINCE(R_2000)
     {
-      ent->scale_flag = bit_read_BB(dat);
-      if (ent->scale_flag == 3)
+      FIELD(scale_flag, BB);
+      if (GET_FIELD(scale_flag) == 3)
         ent->scale.x = ent->scale.y = ent->scale.z = 1.0;
-      else if (ent->scale_flag == 1)
+      else if (GET_FIELD(scale_flag) == 1)
         {
           ent->scale.x = 1.0;
           ent->scale.y = bit_read_DD(dat, 1.0);
           ent->scale.z = bit_read_DD(dat, 1.0);
         }
-      else if (ent->scale_flag == 2)
+      else if (GET_FIELD(scale_flag) == 2)
         ent->scale.x = ent->scale.y = ent->scale.z = bit_read_RD(dat);
-      else //if (ent->scale_flag == 0)
+      else //if (GET_FIELD(scale_flag) == 0)
         {
           ent->scale.x = bit_read_RD(dat);
           ent->scale.y = bit_read_DD(dat, ent->scale.x);
@@ -1909,97 +1903,67 @@ dwg_decode_INSERT(Bit_Chain * dat, Dwg_Object * obj)
         }
     }
 
-  ent->rotation_ang = bit_read_BD(dat);
-  ent->extrusion.x = bit_read_BD(dat);
-  ent->extrusion.y = bit_read_BD(dat);
-  ent->extrusion.z = bit_read_BD(dat);
-  ent->has_attribs = bit_read_B(dat);
+  FIELD(rotation_ang, BD);
+  FIELD_3DPOINT(extrusion);
+  FIELD(has_attribs, B);
 
   SINCE(R_2004)
     {
-      ent->owned_obj_count = bit_read_BL(dat);
+      FIELD(owned_obj_count, BL);
     }
 
   dwg_decode_common_entity_handle_data(dat, obj);
 
-  ent->block_header = dwg_decode_handleref_with_code(dat, obj, 5);
-  fprintf(stderr, "handleref: %d.%d.%lu\n", ent->block_header->handleref.code,
-      ent->block_header->handleref.size, ent->block_header->handleref.value);
+  FIELD_HANDLE(block_header, 5);
 
   //There is a typo in the spec. it says "R13-R200:".
   //I guess it means "R13-R2000:" 
   VERSIONS(R_13,R_2000)
     {
-    if(ent->has_attribs)
+    if(GET_FIELD(has_attribs))
       {
-      ent->first_attrib = dwg_decode_handleref_with_code(dat, obj, 4);
-      fprintf(stderr, "first_attrib: %d.%d.%lu\n",
-          ent->first_attrib->handleref.code, ent->first_attrib->handleref.size,
-          ent->first_attrib->handleref.value);
-
-      ent->last_attrib = dwg_decode_handleref_with_code(dat, obj, 4);
-      fprintf(stderr, "last_attrib: %d.%d.%lu\n",
-          ent->last_attrib->handleref.code, ent->last_attrib->handleref.size,
-          ent->last_attrib->handleref.value);
+        FIELD_HANDLE(first_attrib, 4);
+        FIELD_HANDLE(last_attrib, 4);
       }
     }
 
   VERSION(R_2004)
     {
-      ent->attrib_handles = (Dwg_Object_Ref**) malloc(ent->owned_obj_count
-          * sizeof(Dwg_Object_Ref*));
-      for (i = 0; i < ent->owned_obj_count; i++)
-        {
-          ent->attrib_handles[i] = dwg_decode_handleref_with_code(dat, obj, 4);
-          fprintf(stderr, "ent->attrib_handles[%d]: %d.%d.%lu\n", i,
-              ent->attrib_handles[i]->handleref.code,
-              ent->attrib_handles[i]->handleref.size,
-              ent->attrib_handles[i]->handleref.value);
-        }
+      HANDLE_VECTOR(attrib_handles, owned_obj_count, 4);
     }
 
-  if (ent->has_attribs)
+  if (GET_FIELD(has_attribs))
     {
-      ent->seqend = dwg_decode_handleref_with_code(dat, obj, 3);
-      fprintf(stderr, "seqend: %d.%d.%lu\n", ent->seqend->handleref.code,
-          ent->seqend->handleref.size, ent->seqend->handleref.value);
+      FIELD_HANDLE(seqend, 3);
     }
 }
 
 static void
 dwg_decode_MINSERT(Bit_Chain * dat, Dwg_Object * obj)
 {
-  int i;
-
   DWG_ENTITY(MINSERT);
 
-  /* Read values
-   */
-  ent->x0 = bit_read_BD(dat);
-  ent->y0 = bit_read_BD(dat);
-  ent->z0 = bit_read_BD(dat);
+  FIELD_3DPOINT(ins_pt);
 
   VERSIONS(R_13,R_14)
     {
-      ent->scale.x = bit_read_BD(dat);
-      ent->scale.y = bit_read_BD(dat);
-      ent->scale.z = bit_read_BD(dat);
+      FIELD_3DPOINT(scale);
     }
 
   SINCE(R_2000)
     {
-      ent->scale_flag = bit_read_BB(dat);
-      if (ent->scale_flag == 3)
+      FIELD(scale_flag, BB);
+      if (GET_FIELD(scale_flag) == 3)
         ent->scale.x = ent->scale.y = ent->scale.y = 1.0;
-      else if (ent->scale_flag == 1)
+      else if (GET_FIELD(scale_flag) == 1)
         {
           ent->scale.x = 1.0;
           ent->scale.y = bit_read_DD(dat, 1.0);
           ent->scale.z = bit_read_DD(dat, 1.0);
         }
-      else if (ent->scale_flag == 2)
+      else if (GET_FIELD(scale_flag) == 2)
         ent->scale.x = ent->scale.y = ent->scale.y = bit_read_RD(dat);
-      else //if (ent->scale_flag == 0)
+      else //if (GET_FIELD(scale_flag) == 0)
         {
           ent->scale.x = bit_read_RD(dat);
           ent->scale.y = bit_read_DD(dat, ent->scale.x);
@@ -2007,62 +1971,41 @@ dwg_decode_MINSERT(Bit_Chain * dat, Dwg_Object * obj)
         }
     }
 
-  ent->rotation_ang = bit_read_BD(dat);
-  ent->extrusion.x = bit_read_BD(dat);
-  ent->extrusion.y = bit_read_BD(dat);
-  ent->extrusion.z = bit_read_BD(dat);
-  ent->has_attribs = bit_read_B(dat);
+  FIELD(rotation_ang, BD);
+  FIELD_3DPOINT(extrusion);
+  FIELD(has_attribs, B);
 
   SINCE(R_2004)
     {
-      ent->owned_obj_count = bit_read_BL(dat);
+      FIELD(owned_obj_count, BL);
     }
 
-  ent->column.size = bit_read_BS(dat);
-  ent->line.size = bit_read_BS(dat);
-  ent->column.dx = bit_read_BD(dat);
-  ent->line.dy = bit_read_BD(dat);
+  FIELD(numcols, BS);
+  FIELD(numrows, BS);
+  FIELD(col_spacing, BD);
+  FIELD(row_spacing, BD);
 
   dwg_decode_common_entity_handle_data(dat, obj);
 
-  ent->block_header = dwg_decode_handleref_with_code(dat, obj, 5);
-  fprintf(stderr, "handleref: %d.%d.%lu\n", ent->block_header->handleref.code,
-      ent->block_header->handleref.size, ent->block_header->handleref.value);
+  FIELD_HANDLE(block_header, 5);
 
   //There is a typo in the spec. it says "R13-R200:".
   //I guess it means "R13-R2000:"
-  if (dat->version >= R_13 && dat->version <= R_2000 && ent->has_attribs)
-    {
-      ent->first_attrib = dwg_decode_handleref_with_code(dat, obj, 4);
-      fprintf(stderr, "first_attrib: %d.%d.%lu\n",
-          ent->first_attrib->handleref.code, ent->first_attrib->handleref.size,
-          ent->first_attrib->handleref.value);
-
-      ent->last_attrib = dwg_decode_handleref_with_code(dat, obj, 4);
-      fprintf(stderr, "last_attrib: %d.%d.%lu\n",
-          ent->last_attrib->handleref.code, ent->last_attrib->handleref.size,
-          ent->last_attrib->handleref.value);
-    }
+  VERSIONS(R_13,R_2000)
+    if (GET_FIELD(has_attribs))
+      {
+        FIELD_HANDLE(first_attrib, 4);
+        FIELD_HANDLE(last_attrib, 4);
+      }
 
   VERSION(R_2004)
     {
-      ent->attrib_handles = (Dwg_Object_Ref**) malloc(ent->owned_obj_count
-          * sizeof(Dwg_Object_Ref*));
-      for (i = 0; i < ent->owned_obj_count; i++)
-        {
-          ent->attrib_handles[i] = dwg_decode_handleref_with_code(dat, obj, 4);
-          fprintf(stderr, "ent->attrib_handles[%d]: %d.%d.%lu\n", i,
-              ent->attrib_handles[i]->handleref.code,
-              ent->attrib_handles[i]->handleref.size,
-              ent->attrib_handles[i]->handleref.value);
-        }
+      HANDLE_VECTOR(attrib_handles, owned_obj_count, 4);
     }
 
-  if (ent->has_attribs)
+  if (GET_FIELD(has_attribs))
     {
-      ent->seqend = dwg_decode_handleref_with_code(dat, obj, 3);
-      fprintf(stderr, "seqend: %d.%d.%lu\n", ent->seqend->handleref.code,
-          ent->seqend->handleref.size, ent->seqend->handleref.value);
+      FIELD_HANDLE(seqend, 3);
     }
 }
 

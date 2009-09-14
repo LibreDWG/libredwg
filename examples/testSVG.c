@@ -135,7 +135,7 @@ output_SVG(Dwg_Structure* dwg_struct)
             {
               printf(
                   "\t<use transform=\"translate(%f %f) rotate(%f) scale(%f %f)\" xlink:href=\"#dwg-handle-%lu\" /><!-- block_header->handleref: %d.%d.%lu -->\n",
-                  insert->x0, page_height - insert->y0, (180.0 / M_PI)
+                  insert->ins_pt.x, page_height - insert->ins_pt.y, (180.0 / M_PI)
                       * insert->rotation_ang, insert->scale.x, insert->scale.y,
                   insert->block_header->handleref.value,
                   insert->block_header->handleref.code,

@@ -322,30 +322,19 @@ typedef struct _dwg_entity_SEQEND
  */
 typedef struct _dwg_entity_INSERT
 {
-  double x0;
-  double y0;
-  double z0;
-  unsigned char scale_flag;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } scale;
-  double rotation_ang;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } extrusion;
-  unsigned char has_attribs;
-  long unsigned int owned_obj_count;
-  Dwg_Object_Ref* block_header;
-  Dwg_Object_Ref* first_attrib;
-  Dwg_Object_Ref* last_attrib;
-  Dwg_Object_Ref** attrib_handles;
-  Dwg_Object_Ref* seqend;
+  BITCODE_3DPOINT   ins_pt;
+  BITCODE_BB        scale_flag;
+  BITCODE_3DPOINT   scale;
+  BITCODE_BD        rotation_ang;
+  BITCODE_3DPOINT   extrusion;
+  BITCODE_B         has_attribs;
+  BITCODE_BL        owned_obj_count;
+
+  Dwg_Object_Ref*   block_header;
+  Dwg_Object_Ref*   first_attrib;
+  Dwg_Object_Ref*   last_attrib;
+  Dwg_Object_Ref**  attrib_handles;
+  Dwg_Object_Ref*   seqend;
 } Dwg_Entity_INSERT;
 
 /**
@@ -353,40 +342,24 @@ typedef struct _dwg_entity_INSERT
  */
 typedef struct _dwg_entity_MINSERT
 {
-  double x0;
-  double y0;
-  double z0;
-  unsigned char scale_flag;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } scale;
-  double rotation_ang;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } extrusion;
-  unsigned char has_attribs;
-  long unsigned int owned_obj_count;
-  struct
-  {
-    unsigned int size;
-    double dx;
-  } column;
-  struct
-  {
-    unsigned int size;
-    double dy;
-  } line;
-  Dwg_Object_Ref* block_header;
-  Dwg_Object_Ref* first_attrib;
-  Dwg_Object_Ref* last_attrib;
-  Dwg_Object_Ref** attrib_handles;
-  Dwg_Object_Ref* seqend;
+  BITCODE_3DPOINT   ins_pt;
+  BITCODE_BB        scale_flag;
+  BITCODE_3DPOINT   scale;
+  BITCODE_BD        rotation_ang;
+  BITCODE_3DPOINT   extrusion;
+  BITCODE_B         has_attribs;
+  BITCODE_BL        owned_obj_count;
+
+  BITCODE_BS        numcols;
+  BITCODE_BS        numrows;
+  BITCODE_BD        col_spacing;
+  BITCODE_BD        row_spacing;
+
+  Dwg_Object_Ref*   block_header;
+  Dwg_Object_Ref*   first_attrib;
+  Dwg_Object_Ref*   last_attrib;
+  Dwg_Object_Ref**  attrib_handles;
+  Dwg_Object_Ref*   seqend;
 } Dwg_Entity_MINSERT;
 
 /**

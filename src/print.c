@@ -181,8 +181,8 @@ dwg_print_SEQEND(Dwg_Entity_SEQEND * ent)
 void
 dwg_print_INSERT(Dwg_Entity_INSERT * ent)
 {
-  printf("\tInsertion Point: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0,
-      ent->z0);
+  printf("\tInsertion Point: (%1.13g, %1.13g, %1.13g)\n", ent->ins_pt.x, ent->ins_pt.y,
+      ent->ins_pt.z);
   printf("\tScale flag: 0x%02x\n", ent->scale_flag);
   printf("\tScale: (%1.13g, %1.13g, %1.13g)\n", ent->scale.x, ent->scale.y,
       ent->scale.z);
@@ -195,8 +195,8 @@ dwg_print_INSERT(Dwg_Entity_INSERT * ent)
 void
 dwg_print_MINSERT(Dwg_Entity_MINSERT * ent)
 {
-  printf("\tInsertion Point: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0,
-      ent->z0);
+  printf("\tInsertion Point: (%1.13g, %1.13g, %1.13g)\n", ent->ins_pt.x, ent->ins_pt.y,
+      ent->ins_pt.z);
   printf("\tScale flag: 0x%02x\n", ent->scale_flag);
   printf("\tScale: (%1.13g, %1.13g, %1.13g)\n", ent->scale.x, ent->scale.y,
       ent->scale.z);
@@ -204,9 +204,9 @@ dwg_print_MINSERT(Dwg_Entity_MINSERT * ent)
   printf("\tExtrusion: (%1.13g, %1.13g, %1.13g)\n", ent->extrusion.x,
       ent->extrusion.y, ent->extrusion.z);
   printf("\tHas attribs?: %s\n", ent->has_attribs ? "Yes" : "No");
-  printf("\tColumns: %02i\tInterspace: %1.13g\n", ent->column.size,
-      ent->column.dx);
-  printf("\tLines: %02i\tInterspace: %1.13g\n", ent->line.size, ent->line.dy);
+  printf("\tColumns: %02i\tInterspace: %1.13g\n", ent->numcols,
+      ent->col_spacing);
+  printf("\tLines: %02i\tInterspace: %1.13g\n", ent->numrows, ent->row_spacing);
 }
 
 void
