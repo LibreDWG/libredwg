@@ -47,8 +47,8 @@ extern "C"
 #define FORMAT_RD "%f"
 #define BITCODE_BL long unsigned int
 #define FORMAT_BL "%lu"
-#define BITCODE_T unsigned char *
-#define FORMAT_T "\"%s\""
+#define BITCODE_TV unsigned char *
+#define FORMAT_TV "\"%s\""
 #define BITCODE_BT double
 #define FORMAT_BT "%f"
 #define BITCODE_DD double
@@ -1614,7 +1614,7 @@ typedef struct _dwg_object_BLOCK_CONTROL
  */
 typedef struct _dwg_object_BLOCK_HEADER
 {
-  BITCODE_T entry_name;
+  BITCODE_TV entry_name;
   BITCODE_B _64_flag;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xdep;
@@ -1625,9 +1625,9 @@ typedef struct _dwg_object_BLOCK_HEADER
   BITCODE_B loaded_bit;
   BITCODE_BL owned_object_count;
   BITCODE_3DPOINT base_pt;
-  BITCODE_T xref_pname;
+  BITCODE_TV xref_pname;
   BITCODE_RC insert_count;
-  BITCODE_T block_description;
+  BITCODE_TV block_description;
   BITCODE_BL size_of_preview_data;
   BITCODE_RC* binary_preview_data;
   BITCODE_BS insert_units;

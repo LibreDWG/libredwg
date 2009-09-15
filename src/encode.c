@@ -265,7 +265,7 @@ dwg_encode_chains(Dwg_Structure * skt, Bit_Chain * dat)
         bit_write_H(dat, &skt->var[i].handle);
         break;
       case DWG_DT_T:
-        bit_write_T(dat, skt->var[i].text);
+        bit_write_TV(dat, skt->var[i].text);
         break;
       case DWG_DT_CMC:
         bit_write_BS(dat, skt->var[i].dubitoko);
@@ -315,9 +315,9 @@ dwg_encode_chains(Dwg_Structure * skt, Bit_Chain * dat)
     {
       bit_write_BS(dat, skt->class[i].number);
       bit_write_BS(dat, skt->class[i].version);
-      bit_write_T(dat, skt->class[i].appname);
-      bit_write_T(dat, skt->class[i].cppname);
-      bit_write_T(dat, skt->class[i].dxfname);
+      bit_write_TV(dat, skt->class[i].appname);
+      bit_write_TV(dat, skt->class[i].cppname);
+      bit_write_TV(dat, skt->class[i].dxfname);
       bit_write_B(dat, skt->class[i].wasazombie);
       bit_write_BS(dat, skt->class[i].item_class_id);
     }
@@ -889,7 +889,7 @@ dwg_encode_TEXT(Dwg_Entity_TEXT * ent, Bit_Chain * dat)
       bit_write_BD(dat, ent->rotation_ang);
       bit_write_BD(dat, ent->height);
       bit_write_BD(dat, ent->width_factor);
-      bit_write_T(dat, ent->text);
+      bit_write_TV(dat, ent->text);
       bit_write_BS(dat, ent->generation);
       bit_write_BS(dat, ent->alignment.h);
       bit_write_BS(dat, ent->alignment.v);
@@ -916,7 +916,7 @@ dwg_encode_TEXT(Dwg_Entity_TEXT * ent, Bit_Chain * dat)
       bit_write_RD(dat, ent->height);
       if (!(ent->dataflags & 0x10))
         bit_write_RD(dat, ent->width_factor);
-      bit_write_T(dat, ent->text);
+      bit_write_TV(dat, ent->text);
       if (!(ent->dataflags & 0x20))
         bit_write_BS(dat, ent->generation);
       if (!(ent->dataflags & 0x40))
@@ -943,7 +943,7 @@ dwg_encode_ATTRIB(Dwg_Entity_ATTRIB * ent, Bit_Chain * dat)
       bit_write_BD(dat, ent->rotation_ang);
       bit_write_BD(dat, ent->height);
       bit_write_BD(dat, ent->width_factor);
-      bit_write_T(dat, ent->text);
+      bit_write_TV(dat, ent->text);
       bit_write_BS(dat, ent->generation);
       bit_write_BS(dat, ent->alignment.h);
       bit_write_BS(dat, ent->alignment.v);
@@ -970,7 +970,7 @@ dwg_encode_ATTRIB(Dwg_Entity_ATTRIB * ent, Bit_Chain * dat)
       bit_write_RD(dat, ent->height);
       if (!(ent->dataflags & 0x10))
         bit_write_RD(dat, ent->width_factor);
-      bit_write_T(dat, ent->text);
+      bit_write_TV(dat, ent->text);
       if (!(ent->dataflags & 0x20))
         bit_write_BS(dat, ent->generation);
       if (!(ent->dataflags & 0x40))
@@ -979,7 +979,7 @@ dwg_encode_ATTRIB(Dwg_Entity_ATTRIB * ent, Bit_Chain * dat)
         bit_write_BS(dat, ent->alignment.v);
     }
 
-  bit_write_T(dat, ent->tag);
+  bit_write_TV(dat, ent->tag);
   bit_write_BS(dat, ent->field_length);
   bit_write_RC(dat, ent->flags);
 
@@ -1007,7 +1007,7 @@ dwg_encode_ATTDEF(Dwg_Entity_ATTDEF * ent, Bit_Chain * dat)
       bit_write_BD(dat, ent->rotation_ang);
       bit_write_BD(dat, ent->height);
       bit_write_BD(dat, ent->width_factor);
-      bit_write_T(dat, ent->text);
+      bit_write_TV(dat, ent->text);
       bit_write_BS(dat, ent->generation);
       bit_write_BS(dat, ent->alignment.h);
       bit_write_BS(dat, ent->alignment.v);
@@ -1034,7 +1034,7 @@ dwg_encode_ATTDEF(Dwg_Entity_ATTDEF * ent, Bit_Chain * dat)
       bit_write_RD(dat, ent->height);
       if (!(ent->dataflags & 0x10))
         bit_write_RD(dat, ent->width_factor);
-      bit_write_T(dat, ent->text);
+      bit_write_TV(dat, ent->text);
       if (!(ent->dataflags & 0x20))
         bit_write_BS(dat, ent->generation);
       if (!(ent->dataflags & 0x40))
@@ -1043,7 +1043,7 @@ dwg_encode_ATTDEF(Dwg_Entity_ATTDEF * ent, Bit_Chain * dat)
         bit_write_BS(dat, ent->alignment.v);
     }
 
-  bit_write_T(dat, ent->tag);
+  bit_write_TV(dat, ent->tag);
   bit_write_BS(dat, ent->field_length);
   bit_write_RC(dat, ent->flags);
 
@@ -1051,14 +1051,14 @@ dwg_encode_ATTDEF(Dwg_Entity_ATTDEF * ent, Bit_Chain * dat)
     {
       bit_write_B(dat, ent->lock_position_flag);
     }
-  bit_write_T(dat, ent->prompt);
+  bit_write_TV(dat, ent->prompt);
 }
 
 static void
 dwg_encode_BLOCK(Dwg_Entity_BLOCK *ent, Bit_Chain * dat)
 {
   //TODO: check
-  bit_write_T(dat, ent->name);
+  bit_write_TV(dat, ent->name);
 
 }
 
@@ -1296,7 +1296,7 @@ dwg_encode_DIMENSION_ORDINATE(Dwg_Entity_DIMENSION_ORDINATE *ent,
 
   //spec: flag bit 6 indicates ORDINATE dimension
   bit_write_RC(dat, ent->flags_1);
-  bit_write_T(dat, ent->user_text);
+  bit_write_TV(dat, ent->user_text);
   bit_write_BD(dat, ent->text_rot);
   bit_write_BD(dat, ent->horiz_dir);
   bit_write_BD(dat, ent->ins_scale.x);
@@ -1357,7 +1357,7 @@ dwg_encode_DIMENSION_LINEAR(Dwg_Entity_DIMENSION_LINEAR *ent, Bit_Chain * dat)
 
   //spec: flag bit 6 indicates ORDINATE dimension
   bit_write_RC(dat, ent->flags);
-  bit_write_T(dat, ent->user_text);
+  bit_write_TV(dat, ent->user_text);
   bit_write_BD(dat, ent->text_rot);
   bit_write_BD(dat, ent->horiz_dir);
   bit_write_BD(dat, ent->ins_scale.x);
@@ -1419,7 +1419,7 @@ dwg_encode_DIMENSION_ALIGNED(Dwg_Entity_DIMENSION_ALIGNED *ent, Bit_Chain * dat)
 
   //spec: flag bit 6 indicates ORDINATE dimension
   bit_write_RC(dat, ent->flags);
-  bit_write_T(dat, ent->user_text);
+  bit_write_TV(dat, ent->user_text);
   bit_write_BD(dat, ent->text_rot);
   bit_write_BD(dat, ent->horiz_dir);
   bit_write_BD(dat, ent->ins_scale.x);
@@ -1480,7 +1480,7 @@ dwg_encode_DIMENSION_ANG3PT(Dwg_Entity_DIMENSION_ANG3PT *ent, Bit_Chain * dat)
 
   //spec: flag bit 6 indicates ORDINATE dimension
   bit_write_RC(dat, ent->flags);
-  bit_write_T(dat, ent->user_text);
+  bit_write_TV(dat, ent->user_text);
   bit_write_BD(dat, ent->text_rot);
   bit_write_BD(dat, ent->horiz_dir);
   bit_write_BD(dat, ent->ins_scale.x);
@@ -1542,7 +1542,7 @@ dwg_encode_DIMENSION_ANG2LN(Dwg_Entity_DIMENSION_ANG2LN *ent, Bit_Chain * dat)
 
   //spec: flag bit 6 indicates ORDINATE dimension
   bit_write_RC(dat, ent->flags);
-  bit_write_T(dat, ent->user_text);
+  bit_write_TV(dat, ent->user_text);
   bit_write_BD(dat, ent->text_rot);
   bit_write_BD(dat, ent->horiz_dir);
   bit_write_BD(dat, ent->ins_scale.x);
@@ -1606,7 +1606,7 @@ dwg_encode_DIMENSION_RADIUS(Dwg_Entity_DIMENSION_RADIUS *ent, Bit_Chain * dat)
 
   //spec: flag bit 6 indicates ORDINATE dimension
   bit_write_RC(dat, ent->flags);//Spec-typo? It says: EC instead of RC...
-  bit_write_T(dat, ent->user_text);
+  bit_write_TV(dat, ent->user_text);
 
   //Spec-typo? For all these values the spec says: D instead of BD... (could eventually be RD)
   bit_write_BD(dat, ent->text_rot);
@@ -1668,7 +1668,7 @@ dwg_encode_DIMENSION_DIAMETER(Dwg_Entity_DIMENSION_DIAMETER *ent,
   //spec: flag bit 6 indicates ORDINATE dimension
   bit_write_RC(dat, ent->flags);
 
-  bit_write_T(dat, ent->user_text);
+  bit_write_TV(dat, ent->user_text);
   bit_write_BD(dat, ent->text_rot);
   bit_write_BD(dat, ent->horiz_dir);
   bit_write_BD(dat, ent->ins_scale.x);
@@ -1899,7 +1899,7 @@ dwg_encode_VIEWPORT(Dwg_Entity_VIEWPORT *ent, Bit_Chain * dat)
     {
       bit_write_BL(dat, ent->frozen_layer_count);
       bit_write_BL(dat, ent->status_flags);
-      bit_write_T(dat, ent->style_sheet);
+      bit_write_TV(dat, ent->style_sheet);
       bit_write_RC(dat, ent->render_mode);
       bit_write_B(dat, ent->ucs_at_origin);
       bit_write_B(dat, ent->ucs_per_viewport);
@@ -2056,7 +2056,7 @@ dwg_encode_DICTIONARY(Dwg_Object_DICTIONARY *obj, Bit_Chain * dat)
   bit_write_BS(dat, obj->cloning);
   bit_write_RC(dat, obj->hard_owner);
   for (i = 0; i < obj->numitems; i++)
-    bit_write_T(dat, obj->text[i]);
+    bit_write_TV(dat, obj->text[i]);
 }
 
 static void
@@ -2084,7 +2084,7 @@ dwg_encode_MTEXT(Dwg_Entity_MTEXT *ent, Bit_Chain * dat)
   bit_write_BS(dat, ent->drawing_dir);
   bit_write_BD(dat, ent->extends); //not documented
   bit_write_BD(dat, ent->extends_wid);
-  bit_write_T(dat, ent->text);
+  bit_write_TV(dat, ent->text);
 
   if (dat->version >= R_2000)
     {

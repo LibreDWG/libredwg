@@ -815,8 +815,8 @@ bit_krei_CRC(Bit_Chain * dat, long unsigned int start_address,
 
 /** Read simple text. After usage, the allocated memory must be proprly freed.
  */
-BITCODE_T
-bit_read_T(Bit_Chain * dat)
+BITCODE_TV
+bit_read_TV(Bit_Chain * dat)
 {
   unsigned int i;
   unsigned int length;
@@ -840,7 +840,7 @@ bit_read_T(Bit_Chain * dat)
 /** Write simple text.
  */
 void
-bit_write_T(Bit_Chain * dat, unsigned char *chain)
+bit_write_TV(Bit_Chain * dat, unsigned char *chain)
 {
   int i;
   int length;
@@ -891,9 +891,9 @@ bit_read_CMC(Bit_Chain * dat, Dwg_Color* color)
       color->rgb = bit_read_BL(dat);
       color->byte = bit_read_RC(dat);
       if (color->byte & 1)
-        color->name = bit_read_T(dat);
+        color->name = bit_read_TV(dat);
       if (color->byte & 2)
-        color->book_name = bit_read_T(dat);
+        color->book_name = bit_read_TV(dat);
     }
 }
 
@@ -908,9 +908,9 @@ bit_write_CMC(Bit_Chain * dat, Dwg_Color color)
       bit_write_BL(dat, color.rgb);
       bit_write_RC(dat, color.byte);
       if (color.byte & 1)
-        bit_write_T(dat, color.name);
+        bit_write_TV(dat, color.name);
       if (color.byte & 2)
-        bit_write_T(dat, color.book_name);
+        bit_write_TV(dat, color.book_name);
     }
 }
 

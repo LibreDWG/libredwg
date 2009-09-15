@@ -403,7 +403,7 @@ decode_R13_R15_header(Bit_Chain* dat, Dwg_Structure * skt)
               skt->var[i].handle.size, (unsigned int) skt->var[i].handle.value);
         break;
       case DWG_DT_T:
-        skt->var[i].text = bit_read_T(dat);
+        skt->var[i].text = bit_read_TV(dat);
         if (loglevel)
           fprintf(stderr, "T: \"%s\"", skt->var[i].text);
         break;
@@ -492,9 +492,9 @@ decode_R13_R15_header(Bit_Chain* dat, Dwg_Structure * skt)
 
       skt->class[idc].number = bit_read_BS(dat);
       skt->class[idc].version = bit_read_BS(dat);
-      skt->class[idc].appname = bit_read_T(dat);
-      skt->class[idc].cppname = bit_read_T(dat);
-      skt->class[idc].dxfname = bit_read_T(dat);
+      skt->class[idc].appname = bit_read_TV(dat);
+      skt->class[idc].cppname = bit_read_TV(dat);
+      skt->class[idc].dxfname = bit_read_TV(dat);
       skt->class[idc].wasazombie = bit_read_B(dat);
       skt->class[idc].item_class_id = bit_read_BS(dat);
 
@@ -1657,7 +1657,7 @@ dwg_decode_TEXT(Bit_Chain * dat, Dwg_Object * obj)
       ent->rotation_ang = bit_read_BD(dat);
       ent->height = bit_read_BD(dat);
       ent->width_factor = bit_read_BD(dat);
-      ent->text = bit_read_T(dat);
+      ent->text = bit_read_TV(dat);
       ent->generation = bit_read_BS(dat);
       ent->alignment.h = bit_read_BS(dat);
       ent->alignment.v = bit_read_BS(dat);
@@ -1684,7 +1684,7 @@ dwg_decode_TEXT(Bit_Chain * dat, Dwg_Object * obj)
       ent->height = bit_read_RD(dat);
       if (!(ent->dataflags & 0x10))
         ent->width_factor = bit_read_RD(dat);
-      ent->text = bit_read_T(dat);
+      ent->text = bit_read_TV(dat);
       if (!(ent->dataflags & 0x20))
         ent->generation = bit_read_BS(dat);
       if (!(ent->dataflags & 0x40))
@@ -1719,7 +1719,7 @@ dwg_decode_ATTRIB(Bit_Chain * dat, Dwg_Object * obj)
       ent->rotation_ang = bit_read_BD(dat);
       ent->height = bit_read_BD(dat);
       ent->width_factor = bit_read_BD(dat);
-      ent->text = bit_read_T(dat);
+      ent->text = bit_read_TV(dat);
       ent->generation = bit_read_BS(dat);
       ent->alignment.h = bit_read_BS(dat);
       ent->alignment.v = bit_read_BS(dat);
@@ -1746,7 +1746,7 @@ dwg_decode_ATTRIB(Bit_Chain * dat, Dwg_Object * obj)
       ent->height = bit_read_RD(dat);
       if (!(ent->dataflags & 0x10))
         ent->width_factor = bit_read_RD(dat);
-      ent->text = bit_read_T(dat);
+      ent->text = bit_read_TV(dat);
       if (!(ent->dataflags & 0x20))
         ent->generation = bit_read_BS(dat);
       if (!(ent->dataflags & 0x40))
@@ -1755,7 +1755,7 @@ dwg_decode_ATTRIB(Bit_Chain * dat, Dwg_Object * obj)
         ent->alignment.v = bit_read_BS(dat);
     }
 
-  ent->tag = bit_read_T(dat);
+  ent->tag = bit_read_TV(dat);
   ent->field_length = bit_read_BS(dat);
   ent->flags = bit_read_RC(dat);
 
@@ -1790,7 +1790,7 @@ dwg_decode_ATTDEF(Bit_Chain * dat, Dwg_Object * obj)
       ent->rotation_ang = bit_read_BD(dat);
       ent->height = bit_read_BD(dat);
       ent->width_factor = bit_read_BD(dat);
-      ent->text = bit_read_T(dat);
+      ent->text = bit_read_TV(dat);
       ent->generation = bit_read_BS(dat);
       ent->alignment.h = bit_read_BS(dat);
       ent->alignment.v = bit_read_BS(dat);
@@ -1817,7 +1817,7 @@ dwg_decode_ATTDEF(Bit_Chain * dat, Dwg_Object * obj)
       ent->height = bit_read_RD(dat);
       if (!(ent->dataflags & 0x10))
         ent->width_factor = bit_read_RD(dat);
-      ent->text = bit_read_T(dat);
+      ent->text = bit_read_TV(dat);
       if (!(ent->dataflags & 0x20))
         ent->generation = bit_read_BS(dat);
       if (!(ent->dataflags & 0x40))
@@ -1826,7 +1826,7 @@ dwg_decode_ATTDEF(Bit_Chain * dat, Dwg_Object * obj)
         ent->alignment.v = bit_read_BS(dat);
     }
 
-  ent->tag = bit_read_T(dat);
+  ent->tag = bit_read_TV(dat);
   ent->field_length = bit_read_BS(dat);
   ent->flags = bit_read_RC(dat);
 
@@ -1834,7 +1834,7 @@ dwg_decode_ATTDEF(Bit_Chain * dat, Dwg_Object * obj)
     {
       ent->lock_position_flag = bit_read_B(dat);
     }
-  ent->prompt = bit_read_T(dat);
+  ent->prompt = bit_read_TV(dat);
 
   dwg_decode_common_entity_handle_data(dat, obj);
   ent->style = HANDLE_CODE(5);
@@ -1847,7 +1847,7 @@ dwg_decode_BLOCK(Bit_Chain * dat, Dwg_Object * obj)
 
   /* Read values
    */
-  ent->name = bit_read_T(dat);
+  ent->name = bit_read_TV(dat);
   fprintf(stderr, "block_name = %s\n", ent->name);
 
   dwg_decode_common_entity_handle_data(dat, obj);
@@ -2290,7 +2290,7 @@ dwg_decode_DIMENSION_ORDINATE(Bit_Chain * dat, Dwg_Object * obj)
 
   //spec: flag bit 6 indicates ORDINATE dimension
   ent->flags_1 = bit_read_RC(dat);
-  ent->user_text = bit_read_T(dat);
+  ent->user_text = bit_read_TV(dat);
   ent->text_rot = bit_read_BD(dat);
   ent->horiz_dir = bit_read_BD(dat);
   ent->ins_scale.x = bit_read_BD(dat);
@@ -2353,7 +2353,7 @@ dwg_decode_DIMENSION_LINEAR(Bit_Chain * dat, Dwg_Object * obj)
   ent->elevation.ecs_12 = bit_read_BD(dat);
   //spec: flag bit 0 indicates LINEAR dimension
   ent->flags = bit_read_RC(dat);
-  ent->user_text = bit_read_T(dat);
+  ent->user_text = bit_read_TV(dat);
   ent->text_rot = bit_read_BD(dat);
   ent->horiz_dir = bit_read_BD(dat);
   ent->ins_scale.x = bit_read_BD(dat);
@@ -2415,7 +2415,7 @@ dwg_decode_DIMENSION_ALIGNED(Bit_Chain * dat, Dwg_Object * obj)
   ent->elevation.ecs_12 = bit_read_BD(dat);
   //spec: flag bit 1 indicates ALIGNED dimension
   ent->flags = bit_read_RC(dat);
-  ent->user_text = bit_read_T(dat);
+  ent->user_text = bit_read_TV(dat);
   ent->text_rot = bit_read_BD(dat);
   ent->horiz_dir = bit_read_BD(dat);
   ent->ins_scale.x = bit_read_BD(dat);
@@ -2476,7 +2476,7 @@ dwg_decode_DIMENSION_ANG3PT(Bit_Chain * dat, Dwg_Object * obj)
   ent->elevation.ecs_12 = bit_read_BD(dat);
   //spec: flag bit 5 indicates ANGULAR 3PT dimension
   ent->flags = bit_read_RC(dat);
-  ent->user_text = bit_read_T(dat);
+  ent->user_text = bit_read_TV(dat);
   ent->text_rot = bit_read_BD(dat);
   ent->horiz_dir = bit_read_BD(dat);
   ent->ins_scale.x = bit_read_BD(dat);
@@ -2538,7 +2538,7 @@ dwg_decode_DIMENSION_ANG2LN(Bit_Chain * dat, Dwg_Object * obj)
   ent->elevation.ecs_12 = bit_read_BD(dat);
   //spec: flag bit 2 indicates ANGULAR 2 line dimension
   ent->flags = bit_read_RC(dat);
-  ent->user_text = bit_read_T(dat);
+  ent->user_text = bit_read_TV(dat);
   ent->text_rot = bit_read_BD(dat);
   ent->horiz_dir = bit_read_BD(dat);
   ent->ins_scale.x = bit_read_BD(dat);
@@ -2602,7 +2602,7 @@ dwg_decode_DIMENSION_RADIUS(Bit_Chain * dat, Dwg_Object * obj)
   ent->elevation.ecs_12 = bit_read_BD(dat);
   //spec: flag bit 4 indicates RADIUS dimension
   ent->flags = bit_read_RC(dat);
-  ent->user_text = bit_read_T(dat);
+  ent->user_text = bit_read_TV(dat);
   ent->text_rot = bit_read_BD(dat);
   ent->horiz_dir = bit_read_BD(dat);
   ent->ins_scale.x = bit_read_BD(dat);
@@ -2659,7 +2659,7 @@ dwg_decode_DIMENSION_DIAMETER(Bit_Chain * dat, Dwg_Object * obj)
   //spec: flag bit 3 indicates DIAMETER dimension
   //(spec says actually RADIUS but seems to be wrong)
   ent->flags = bit_read_RC(dat);
-  ent->user_text = bit_read_T(dat);
+  ent->user_text = bit_read_TV(dat);
   ent->text_rot = bit_read_BD(dat);
   ent->horiz_dir = bit_read_BD(dat);
   ent->ins_scale.x = bit_read_BD(dat);
@@ -2984,7 +2984,7 @@ dwg_decode_VIEWPORT(Bit_Chain * dat, Dwg_Object * obj)
     {
       ent->frozen_layer_count = bit_read_BL(dat);
       ent->status_flags = bit_read_BL(dat);
-      ent->style_sheet = bit_read_T(dat);
+      ent->style_sheet = bit_read_TV(dat);
       ent->render_mode = bit_read_RC(dat);
       ent->ucs_at_origin = bit_read_B(dat);
       ent->ucs_per_viewport = bit_read_B(dat);
@@ -3170,7 +3170,7 @@ dwg_decode_DICTIONARY(Bit_Chain *dat, Dwg_Object *obj)
       return;
     }
 
-  FIELD_VECTOR(text, T, numitems);
+  FIELD_VECTOR(text, TV, numitems);
   FIELD_HANDLE(parenthandle, 4);
   REACTORS(4);
   FIELD_HANDLE(xdicobjhandle,3);
@@ -3204,7 +3204,7 @@ dwg_decode_MTEXT(Bit_Chain * dat, Dwg_Object * obj)
   ent->drawing_dir = bit_read_BS(dat);
   ent->extends = bit_read_BD(dat); //not documented
   ent->extends_wid = bit_read_BD(dat);
-  ent->text = bit_read_T(dat);
+  ent->text = bit_read_TV(dat);
 
   SINCE(R_2000)
     {
@@ -3356,7 +3356,7 @@ dwg_decode_BLOCK_HEADER(Bit_Chain *dat, Dwg_Object *obj)
   int i;
   DWG_OBJECT(BLOCK_HEADER);
 
-  FIELD(entry_name, T);
+  FIELD(entry_name, TV);
   fprintf(stderr, "entry_name: \"%s\"\n", GET_FIELD(entry_name));
   FIELD(_64_flag, B);
   FIELD(xrefindex_plus1, BS);
@@ -3377,7 +3377,7 @@ dwg_decode_BLOCK_HEADER(Bit_Chain *dat, Dwg_Object *obj)
     }
 
   FIELD_3DPOINT(base_pt);
-  FIELD(xref_pname, T);
+  FIELD(xref_pname, TV);
   fprintf(stderr, "xref_pname: \"%s\"\n", GET_FIELD(xref_pname));
 
   SINCE(R_2000)
@@ -3390,7 +3390,7 @@ dwg_decode_BLOCK_HEADER(Bit_Chain *dat, Dwg_Object *obj)
           GET_FIELD(insert_count)++;
         };
 
-      FIELD(block_description, T);
+      FIELD(block_description, TV);
       fprintf(stderr, "block_description: \"%s\"\n", GET_FIELD(block_description));
 
       FIELD(size_of_preview_data, BL);
@@ -3447,7 +3447,7 @@ dwg_decode_LAYER(Bit_Chain * dat, Dwg_Object * obj)
 
   /* Read values
    */
-  ord->name = bit_read_T(dat);
+  ord->name = bit_read_TV(dat);
   ord->bit64 = bit_read_B(dat);
   ord->xrefi = bit_read_BS(dat);
   ord->xrefdep = bit_read_B(dat);
@@ -3526,8 +3526,8 @@ dwg_decode_LAYOUT(Bit_Chain * dat, Dwg_Object * obj)
 
   /* Read values
    */
-  ord->page.agordo = bit_read_T(dat);
-  ord->page.printilo = bit_read_T(dat);
+  ord->page.agordo = bit_read_TV(dat);
+  ord->page.printilo = bit_read_TV(dat);
   ord->page.flags = bit_read_BS(dat);
   ord->page.maldekstre = bit_read_BD(dat);
   ord->page.malsupre = bit_read_BD(dat);
@@ -3535,7 +3535,7 @@ dwg_decode_LAYOUT(Bit_Chain * dat, Dwg_Object * obj)
   ord->page.supre = bit_read_BD(dat);
   ord->page.width = bit_read_BD(dat);
   ord->page.height = bit_read_BD(dat);
-  ord->page.size = bit_read_T(dat);
+  ord->page.size = bit_read_TV(dat);
   ord->page.dx = bit_read_BD(dat);
   ord->page.dy = bit_read_BD(dat);
   ord->page.unuoj = bit_read_BS(dat);
@@ -3545,16 +3545,16 @@ dwg_decode_LAYOUT(Bit_Chain * dat, Dwg_Object * obj)
   ord->page.y_min = bit_read_BD(dat);
   ord->page.x_max = bit_read_BD(dat);
   ord->page.y_max = bit_read_BD(dat);
-  ord->page.name = bit_read_T(dat);
+  ord->page.name = bit_read_TV(dat);
   ord->page.scale.A = bit_read_BD(dat);
   ord->page.scale.B = bit_read_BD(dat);
-  ord->page.stilfolio = bit_read_T(dat);
+  ord->page.stilfolio = bit_read_TV(dat);
   ord->page.scale.type = bit_read_BS(dat);
   ord->page.scale.factor = bit_read_BD(dat);
   ord->page.x0 = bit_read_BD(dat);
   ord->page.y0 = bit_read_BD(dat);
 
-  ord->name = bit_read_T(dat);
+  ord->name = bit_read_TV(dat);
   ord->ordo = bit_read_BS(dat);
   ord->flags = bit_read_BS(dat);
   ord->x0 = bit_read_BD(dat);

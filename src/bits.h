@@ -156,10 +156,10 @@ bit_krei_CRC(Bit_Chain * bit_datenaro, long unsigned int start_address,
     unsigned int semo);
 
 unsigned char *
-bit_read_T(Bit_Chain * bit_datenaro);
+bit_read_TV(Bit_Chain * bit_datenaro);
 
 void
-bit_write_T(Bit_Chain * bit_datenaro, unsigned char *value);
+bit_write_TV(Bit_Chain * bit_datenaro, unsigned char *value);
 
 long unsigned int
 bit_read_L(Bit_Chain * dat);
