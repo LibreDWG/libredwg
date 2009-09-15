@@ -3425,72 +3425,63 @@ dwg_decode_IMAGE(Bit_Chain *dat, Dwg_Object *obj)
 static void
 dwg_decode_LAYOUT(Bit_Chain * dat, Dwg_Object * obj)
 {
-  if (loglevel)
-    fprintf(stderr, "dwg_decode_LAYOUT\n");
-  Dwg_Object_LAYOUT *ord;
+  DWG_OBJECT(LAYOUT);
 
-  obj->supertype = DWG_SUPERTYPE_OBJECT;
-  obj->tio.object = malloc(sizeof(Dwg_Object_Object));
-  obj->tio.object->tio.LAYOUT = calloc(sizeof(Dwg_Object_LAYOUT), 1);
-  obj->tio.object->object = obj;
-  dwg_decode_object(dat, obj->tio.object);
-  ord = obj->tio.object->tio.LAYOUT;
+  FIELD(page.agordo, TV);
+  FIELD(page.printilo, TV);
+  FIELD(page.flags, BS);
+  FIELD(page.maldekstre, BD);
+  FIELD(page.malsupre, BD);
+  FIELD(page.dekstre, BD);
+  FIELD(page.supre, BD);
+  FIELD(page.width, BD);
+  FIELD(page.height, BD);
+  FIELD(page.size, TV);
+  FIELD(page.dx, BD);
+  FIELD(page.dy, BD);
+  FIELD(page.unuoj, BS);
+  FIELD(page.rotacio, BS);
+  FIELD(page.type, BS);
+  FIELD(page.x_min, BD);
+  FIELD(page.y_min, BD);
+  FIELD(page.x_max, BD);
+  FIELD(page.y_max, BD);
+  FIELD(page.name, TV);
+  FIELD(page.scale.A, BD);
+  FIELD(page.scale.B, BD);
+  FIELD(page.stilfolio, TV);
+  FIELD(page.scale.type, BS);
+  FIELD(page.scale.factor, BD);
+  FIELD(page.x0, BD);
+  FIELD(page.y0, BD);
 
-  ord->page.agordo = bit_read_TV(dat);
-  ord->page.printilo = bit_read_TV(dat);
-  ord->page.flags = bit_read_BS(dat);
-  ord->page.maldekstre = bit_read_BD(dat);
-  ord->page.malsupre = bit_read_BD(dat);
-  ord->page.dekstre = bit_read_BD(dat);
-  ord->page.supre = bit_read_BD(dat);
-  ord->page.width = bit_read_BD(dat);
-  ord->page.height = bit_read_BD(dat);
-  ord->page.size = bit_read_TV(dat);
-  ord->page.dx = bit_read_BD(dat);
-  ord->page.dy = bit_read_BD(dat);
-  ord->page.unuoj = bit_read_BS(dat);
-  ord->page.rotacio = bit_read_BS(dat);
-  ord->page.type = bit_read_BS(dat);
-  ord->page.x_min = bit_read_BD(dat);
-  ord->page.y_min = bit_read_BD(dat);
-  ord->page.x_max = bit_read_BD(dat);
-  ord->page.y_max = bit_read_BD(dat);
-  ord->page.name = bit_read_TV(dat);
-  ord->page.scale.A = bit_read_BD(dat);
-  ord->page.scale.B = bit_read_BD(dat);
-  ord->page.stilfolio = bit_read_TV(dat);
-  ord->page.scale.type = bit_read_BS(dat);
-  ord->page.scale.factor = bit_read_BD(dat);
-  ord->page.x0 = bit_read_BD(dat);
-  ord->page.y0 = bit_read_BD(dat);
-
-  ord->name = bit_read_TV(dat);
-  ord->ordo = bit_read_BS(dat);
-  ord->flags = bit_read_BS(dat);
-  ord->x0 = bit_read_BD(dat);
-  ord->y0 = bit_read_BD(dat);
-  ord->z0 = bit_read_BD(dat);
-  ord->x_min = bit_read_RD(dat);
-  ord->y_min = bit_read_RD(dat);
-  ord->x_max = bit_read_RD(dat);
-  ord->y_max = bit_read_RD(dat);
-  ord->enmeto.x0 = bit_read_BD(dat);
-  ord->enmeto.y0 = bit_read_BD(dat);
-  ord->enmeto.z0 = bit_read_BD(dat);
-  ord->axis_X.x0 = bit_read_BD(dat);
-  ord->axis_X.y0 = bit_read_BD(dat);
-  ord->axis_X.z0 = bit_read_BD(dat);
-  ord->axis_Y.x0 = bit_read_BD(dat);
-  ord->axis_Y.y0 = bit_read_BD(dat);
-  ord->axis_Y.z0 = bit_read_BD(dat);
-  ord->elevation = bit_read_BD(dat);
-  ord->rigardtype = bit_read_BS(dat);
-  ord->limo.x_min = bit_read_BD(dat);
-  ord->limo.y_min = bit_read_BD(dat);
-  ord->limo.z_min = bit_read_BD(dat);
-  ord->limo.x_max = bit_read_BD(dat);
-  ord->limo.y_max = bit_read_BD(dat);
-  ord->limo.z_max = bit_read_BD(dat);
+  FIELD(name, TV);
+  FIELD(ordo, BS);
+  FIELD(flags, BS);
+  FIELD(x0, BD);
+  FIELD(y0, BD);
+  FIELD(z0, BD);
+  FIELD(x_min, RD);
+  FIELD(y_min, RD);
+  FIELD(x_max, RD);
+  FIELD(y_max, RD);
+  FIELD(enmeto.x0, BD);
+  FIELD(enmeto.y0, BD);
+  FIELD(enmeto.z0, BD);
+  FIELD(axis_X.x0, BD);
+  FIELD(axis_X.y0, BD);
+  FIELD(axis_X.z0, BD);
+  FIELD(axis_Y.x0, BD);
+  FIELD(axis_Y.y0, BD);
+  FIELD(axis_Y.z0, BD);
+  FIELD(elevation, BD);
+  FIELD(rigardtype, BS);
+  FIELD(limo.x_min, BD);
+  FIELD(limo.y_min, BD);
+  FIELD(limo.z_min, BD);
+  FIELD(limo.x_max, BD);
+  FIELD(limo.y_max, BD);
+  FIELD(limo.z_max, BD);
 
   //dwg_decode_handleref (dat, obj);
 }
@@ -3499,14 +3490,7 @@ static void
 dwg_decode_LWPLINE(Bit_Chain * dat, Dwg_Object * obj)
 {
   int i;
-  Dwg_Entity_LWPLINE *ent;
-
-  obj->supertype = DWG_SUPERTYPE_ENTITY;
-  obj->tio.entity = malloc(sizeof(Dwg_Object_Entity));
-  obj->tio.entity->tio.LWPLINE = calloc(sizeof(Dwg_Entity_LWPLINE), 1);
-  obj->tio.entity->object = obj;
-  dwg_decode_entity(dat, obj->tio.entity);
-  ent = obj->tio.entity->tio.LWPLINE;
+  DWG_ENTITY(LWPLINE);
 
   ent->flags = bit_read_BS(dat);
   if (ent->flags & 4)
@@ -3569,14 +3553,7 @@ static void
 dwg_decode_OLE2FRAME(Bit_Chain * dat, Dwg_Object * obj)
 {
   int i;
-  Dwg_Entity_OLE2FRAME *ent;
-
-  obj->supertype = DWG_SUPERTYPE_ENTITY;
-  obj->tio.entity = malloc(sizeof(Dwg_Object_Entity));
-  obj->tio.entity->tio.OLE2FRAME = calloc(sizeof(Dwg_Entity_OLE2FRAME), 1);
-  obj->tio.entity->object = obj;
-  dwg_decode_entity(dat, obj->tio.entity);
-  ent = obj->tio.entity->tio.OLE2FRAME;
+  DWG_ENTITY(OLE2FRAME);
 
   ent->flags = bit_read_BS(dat);
 
@@ -3599,18 +3576,9 @@ dwg_decode_OLE2FRAME(Bit_Chain * dat, Dwg_Object * obj)
 }
 
 static void
-dwg_decode_PLACEHOLDER(Bit_Chain * dat, Dwg_Object * object)
+dwg_decode_PLACEHOLDER(Bit_Chain * dat, Dwg_Object * obj)
 {
-  Dwg_Object_PLACEHOLDER *obj;
-
-  object->supertype = DWG_SUPERTYPE_OBJECT;
-  object->tio.object = malloc(sizeof(Dwg_Object_Object));
-  object->tio.object->tio.PLACEHOLDER = calloc(sizeof(Dwg_Object_PLACEHOLDER),
-      1);
-  object->tio.object->object = object;
-  dwg_decode_object(dat, object->tio.object);
-  obj = object->tio.object->tio.PLACEHOLDER;
-
+  DWG_OBJECT(PLACEHOLDER);
 
   //TODO: Implement-me!
 
@@ -3618,17 +3586,9 @@ dwg_decode_PLACEHOLDER(Bit_Chain * dat, Dwg_Object * object)
 }
 
 static void
-dwg_decode_DICTIONARYVAR(Bit_Chain * dat, Dwg_Object * object)
+dwg_decode_DICTIONARYVAR(Bit_Chain * dat, Dwg_Object * obj)
 {
-  Dwg_Object_DICTIONARYVAR *obj;
-
-  object->supertype = DWG_SUPERTYPE_OBJECT;
-  object->tio.object = malloc(sizeof(Dwg_Object_Object));
-  object->tio.object->tio.DICTIONARYVAR = calloc(
-      sizeof(Dwg_Object_DICTIONARYVAR), 1);
-  object->tio.object->object = object;
-  dwg_decode_object(dat, object->tio.object);
-  obj = object->tio.object->tio.DICTIONARYVAR;
+  DWG_OBJECT(DICTIONARYVAR);
 
   //TODO: Implement-me!
 
@@ -3636,17 +3596,9 @@ dwg_decode_DICTIONARYVAR(Bit_Chain * dat, Dwg_Object * object)
 }
 
 static void
-dwg_decode_WIPEOUTVARIABLE(Bit_Chain * dat, Dwg_Object * object)
+dwg_decode_WIPEOUTVARIABLE(Bit_Chain * dat, Dwg_Object * obj)
 {
-  Dwg_Object_WIPEOUTVARIABLE *obj;
-
-  object->supertype = DWG_SUPERTYPE_OBJECT;
-  object->tio.object = malloc(sizeof(Dwg_Object_Object));
-  object->tio.object->tio.WIPEOUTVARIABLE = calloc(
-      sizeof(Dwg_Object_WIPEOUTVARIABLE), 1);
-  object->tio.object->object = object;
-  dwg_decode_object(dat, object->tio.object);
-  obj = object->tio.object->tio.WIPEOUTVARIABLE;
+  DWG_OBJECT(WIPEOUTVARIABLE);
 
   //TODO: Implement-me!
 
@@ -3654,16 +3606,9 @@ dwg_decode_WIPEOUTVARIABLE(Bit_Chain * dat, Dwg_Object * object)
 }
 
 static void
-dwg_decode_IMAGEDEF(Bit_Chain * dat, Dwg_Object * object)
+dwg_decode_IMAGEDEF(Bit_Chain * dat, Dwg_Object * obj)
 {
-  Dwg_Object_IMAGEDEF *obj;
-
-  object->supertype = DWG_SUPERTYPE_OBJECT;
-  object->tio.object = malloc(sizeof(Dwg_Object_Object));
-  object->tio.object->tio.IMAGEDEF = calloc(sizeof(Dwg_Object_IMAGEDEF), 1);
-  object->tio.object->object = object;
-  dwg_decode_object(dat, object->tio.object);
-  obj = object->tio.object->tio.IMAGEDEF;
+  DWG_OBJECT(IMAGEDEF);
 
   //TODO: Implement-me!
 
@@ -3671,17 +3616,9 @@ dwg_decode_IMAGEDEF(Bit_Chain * dat, Dwg_Object * object)
 }
 
 static void
-dwg_decode_RASTERVARIABLES(Bit_Chain * dat, Dwg_Object * object)
+dwg_decode_RASTERVARIABLES(Bit_Chain * dat, Dwg_Object * obj)
 {
-  Dwg_Object_RASTERVARIABLES *obj;
-
-  object->supertype = DWG_SUPERTYPE_OBJECT;
-  object->tio.object = malloc(sizeof(Dwg_Object_Object));
-  object->tio.object->tio.RASTERVARIABLES = calloc(
-      sizeof(Dwg_Object_RASTERVARIABLES), 1);
-  object->tio.object->object = object;
-  dwg_decode_object(dat, object->tio.object);
-  obj = object->tio.object->tio.RASTERVARIABLES;
+  DWG_OBJECT(RASTERVARIABLES);
 
   //TODO: Implement-me!
 
@@ -3689,17 +3626,9 @@ dwg_decode_RASTERVARIABLES(Bit_Chain * dat, Dwg_Object * object)
 }
 
 static void
-dwg_decode_SPATIAL_INDEX(Bit_Chain * dat, Dwg_Object * object)
+dwg_decode_SPATIAL_INDEX(Bit_Chain * dat, Dwg_Object * obj)
 {
-  Dwg_Object_SPATIAL_INDEX *obj;
-
-  object->supertype = DWG_SUPERTYPE_OBJECT;
-  object->tio.object = malloc(sizeof(Dwg_Object_Object));
-  object->tio.object->tio.SPATIAL_INDEX = calloc(
-      sizeof(Dwg_Object_SPATIAL_INDEX), 1);
-  object->tio.object->object = object;
-  dwg_decode_object(dat, object->tio.object);
-  obj = object->tio.object->tio.SPATIAL_INDEX;
+  DWG_OBJECT(SPATIAL_INDEX);
 
   //TODO: Implement-me!
 
@@ -3707,16 +3636,9 @@ dwg_decode_SPATIAL_INDEX(Bit_Chain * dat, Dwg_Object * object)
 }
 
 static void
-dwg_decode_XRECORD(Bit_Chain * dat, Dwg_Object * object)
+dwg_decode_XRECORD(Bit_Chain * dat, Dwg_Object * obj)
 {
-  Dwg_Object_XRECORD *obj;
-
-  object->supertype = DWG_SUPERTYPE_OBJECT;
-  object->tio.object = malloc(sizeof(Dwg_Object_Object));
-  object->tio.object->tio.XRECORD = calloc(sizeof(Dwg_Object_XRECORD), 1);
-  object->tio.object->object = object;
-  dwg_decode_object(dat, object->tio.object);
-  obj = object->tio.object->tio.XRECORD;
+  DWG_OBJECT(XRECORD);
 
   //TODO: Implement-me!
 
@@ -3724,17 +3646,9 @@ dwg_decode_XRECORD(Bit_Chain * dat, Dwg_Object * object)
 }
 
 static void
-dwg_decode_SPATIAL_FILTER(Bit_Chain * dat, Dwg_Object * object)
+dwg_decode_SPATIAL_FILTER(Bit_Chain * dat, Dwg_Object * obj)
 {
-  Dwg_Object_SPATIAL_FILTER *obj;
-
-  object->supertype = DWG_SUPERTYPE_OBJECT;
-  object->tio.object = malloc(sizeof(Dwg_Object_Object));
-  object->tio.object->tio.SPATIAL_FILTER = calloc(
-      sizeof(Dwg_Object_SPATIAL_FILTER), 1);
-  object->tio.object->object = object;
-  dwg_decode_object(dat, object->tio.object);
-  obj = object->tio.object->tio.SPATIAL_FILTER;
+  DWG_OBJECT(SPATIAL_FILTER);
 
   //TODO: Implement-me!
 
@@ -3742,17 +3656,9 @@ dwg_decode_SPATIAL_FILTER(Bit_Chain * dat, Dwg_Object * object)
 }
 
 static void
-dwg_decode_LAYER_INDEX(Bit_Chain * dat, Dwg_Object * object)
+dwg_decode_LAYER_INDEX(Bit_Chain * dat, Dwg_Object * obj)
 {
-  Dwg_Object_LAYER_INDEX *obj;
-
-  object->supertype = DWG_SUPERTYPE_OBJECT;
-  object->tio.object = malloc(sizeof(Dwg_Object_Object));
-  object->tio.object->tio.LAYER_INDEX = calloc(sizeof(Dwg_Object_LAYER_INDEX),
-      1);
-  object->tio.object->object = object;
-  dwg_decode_object(dat, object->tio.object);
-  obj = object->tio.object->tio.LAYER_INDEX;
+  DWG_OBJECT(LAYER_INDEX);
 
   //TODO: Implement-me!
 
@@ -3760,17 +3666,9 @@ dwg_decode_LAYER_INDEX(Bit_Chain * dat, Dwg_Object * object)
 }
 
 static void
-dwg_decode_DICTIONARYWDLFT(Bit_Chain * dat, Dwg_Object * object)
+dwg_decode_DICTIONARYWDLFT(Bit_Chain * dat, Dwg_Object * obj)
 {
-  Dwg_Object_DICTIONARYWDLFT *obj;
-
-  object->supertype = DWG_SUPERTYPE_OBJECT;
-  object->tio.object = malloc(sizeof(Dwg_Object_Object));
-  object->tio.object->tio.DICTIONARYWDLFT = calloc(
-      sizeof(Dwg_Object_DICTIONARYWDLFT), 1);
-  object->tio.object->object = object;
-  dwg_decode_object(dat, object->tio.object);
-  obj = object->tio.object->tio.DICTIONARYWDLFT;
+  DWG_OBJECT(DICTIONARYWDLFT);
 
   //TODO: Implement-me!
 
@@ -3778,17 +3676,9 @@ dwg_decode_DICTIONARYWDLFT(Bit_Chain * dat, Dwg_Object * object)
 }
 
 static void
-dwg_decode_IMAGEDEFREACTOR(Bit_Chain * dat, Dwg_Object * object)
+dwg_decode_IMAGEDEFREACTOR(Bit_Chain * dat, Dwg_Object * obj)
 {
-  Dwg_Object_IMAGEDEFREACTOR *obj;
-
-  object->supertype = DWG_SUPERTYPE_OBJECT;
-  object->tio.object = malloc(sizeof(Dwg_Object_Object));
-  object->tio.object->tio.IMAGEDEFREACTOR = calloc(
-      sizeof(Dwg_Object_IMAGEDEFREACTOR), 1);
-  object->tio.object->object = object;
-  dwg_decode_object(dat, object->tio.object);
-  obj = object->tio.object->tio.IMAGEDEFREACTOR;
+  DWG_OBJECT(IMAGEDEFREACTOR);
 
   //TODO: Implement-me!
 
@@ -3796,16 +3686,9 @@ dwg_decode_IMAGEDEFREACTOR(Bit_Chain * dat, Dwg_Object * object)
 }
 
 static void
-dwg_decode_IDBUFFER(Bit_Chain * dat, Dwg_Object * object)
+dwg_decode_IDBUFFER(Bit_Chain * dat, Dwg_Object * obj)
 {
-  Dwg_Object_IDBUFFER *obj;
-
-  object->supertype = DWG_SUPERTYPE_OBJECT;
-  object->tio.object = malloc(sizeof(Dwg_Object_Object));
-  object->tio.object->tio.IDBUFFER = calloc(sizeof(Dwg_Object_IDBUFFER), 1);
-  object->tio.object->object = object;
-  dwg_decode_object(dat, object->tio.object);
-  obj = object->tio.object->tio.IDBUFFER;
+  DWG_OBJECT(IDBUFFER);
 
   //TODO: Implement-me!
 
@@ -3813,16 +3696,9 @@ dwg_decode_IDBUFFER(Bit_Chain * dat, Dwg_Object * object)
 }
 
 static void
-dwg_decode_HATCH(Bit_Chain * dat, Dwg_Object * object)
+dwg_decode_HATCH(Bit_Chain * dat, Dwg_Object * obj)
 {
-  Dwg_Object_HATCH *obj;
-
-  object->supertype = DWG_SUPERTYPE_OBJECT;
-  object->tio.object = malloc(sizeof(Dwg_Object_Object));
-  object->tio.object->tio.HATCH = calloc(sizeof(Dwg_Object_HATCH), 1);
-  object->tio.object->object = object;
-  dwg_decode_object(dat, object->tio.object);
-  obj = object->tio.object->tio.HATCH;
+  DWG_OBJECT(HATCH);
 
   //TODO: Implement-me!
 
@@ -3830,17 +3706,9 @@ dwg_decode_HATCH(Bit_Chain * dat, Dwg_Object * object)
 }
 
 static void
-dwg_decode_VBA_PROJECT(Bit_Chain * dat, Dwg_Object * object)
+dwg_decode_VBA_PROJECT(Bit_Chain * dat, Dwg_Object * obj)
 {
-  Dwg_Object_VBA_PROJECT *obj;
-
-  object->supertype = DWG_SUPERTYPE_OBJECT;
-  object->tio.object = malloc(sizeof(Dwg_Object_Object));
-  object->tio.object->tio.VBA_PROJECT = calloc(sizeof(Dwg_Object_VBA_PROJECT),
-      1);
-  object->tio.object->object = object;
-  dwg_decode_object(dat, object->tio.object);
-  obj = object->tio.object->tio.VBA_PROJECT;
+  DWG_OBJECT(VBA_PROJECT);
 
   //TODO: Implement-me!
 
@@ -3848,20 +3716,9 @@ dwg_decode_VBA_PROJECT(Bit_Chain * dat, Dwg_Object * object)
 }
 
 static void
-dwg_decode_SORTENTSTABLE(Bit_Chain * dat, Dwg_Object * object)
+dwg_decode_SORTENTSTABLE(Bit_Chain * dat, Dwg_Object * obj)
 {
-  Dwg_Object_SORTENTSTABLE *obj;
-
-  object->supertype = DWG_SUPERTYPE_OBJECT;
-  object->tio.object = malloc(sizeof(Dwg_Object_Object));
-  object->tio.object->tio.SORTENTSTABLE = calloc(
-      sizeof(Dwg_Object_SORTENTSTABLE), 1);
-  object->tio.object->object = object;
-  dwg_decode_object(dat, object->tio.object);
-  obj = object->tio.object->tio.SORTENTSTABLE;
-
-  /* Read values
-   */
+  DWG_OBJECT(SORTENTSTABLE);
 
   //TODO: Implement-me!
 
