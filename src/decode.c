@@ -44,8 +44,26 @@
 #define GET_FIELD(name) _obj->name
 
 #define ANYCODE -1
-#define FIELD_HANDLE(name, code) if (code>=0){_obj->name = dwg_decode_handleref_with_code(dat, obj, code);}
+#define FIELD_HANDLE(name, handle_code)\
+  if (handle_code>=0)\
+    {\
+      _obj->name = dwg_decode_handleref_with_code(dat, obj, handle_code);\
+    }\
+  else\
+    {\
+      _obj->name = dwg_decode_handleref(dat, obj);\
+    }\
+  if (loglevel>=2)\
+    {\
+      fprintf(stderr, #name ": HANDLE(%d.%d.%lu)\n",\
+        _obj->name->handleref.code,\
+        _obj->name->handleref.size,\
+        _obj->name->handleref.value);\
+    }
+
 #define FIELD_3DPOINT(name) FIELD(name.x, BD); FIELD(name.y, BD); FIELD(name.z, BD);
+#define FIELD_BE(name) bit_read_BE(dat, &_obj->name.x, &_obj->name.y, &_obj->name.z);
+#define FIELD_DD(name, default) GET_FIELD(name) = bit_read_DD(dat, default);
 
 //FIELD_VECTOR(name, type, size):
 // reads data of the type indicated by 'type' 'size' times and stores
@@ -1512,13 +1530,14 @@ dwg_decode_handleref(Bit_Chain * dat, Dwg_Object * obj)
 
   if (bit_read_H(dat, &handleref))
     {
-      fprintf(stderr, "dump: handleref %d.%d.%lu\n", handleref.code,
-          handleref.size, handleref.value);
+//      fprintf(stderr, "dump: handleref %d.%d.%lu\n", handleref.code,
+//          handleref.size, handleref.value);
       fprintf(
           stderr,
           "\tENTITY: Error reading handle in object whose handle is: %d.%d.%lu\n",
           obj->handle.code, obj->handle.size, obj->handle.value);
     }
+/*
   else
     {
       if (loglevel)
@@ -1528,6 +1547,7 @@ dwg_decode_handleref(Bit_Chain * dat, Dwg_Object * obj)
             handleref.code, handleref.size, handleref.value, obj->handle.code,
             obj->handle.size, obj->handle.value);
     }
+*/
 
   //check if handle is already listed
   exists = dwg_find_handle(obj->parent, &handleref, &index);
@@ -1565,9 +1585,7 @@ dwg_decode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj,
   ref = dwg_decode_handleref(dat, obj);
   if (ref->handleref.code != code)
     {
-      fprintf(stderr,
-          "ERROR: expected a CODE %d handle, but got %d.%d.%lu instead.\n\n",
-          code, ref->handleref.code, ref->handleref.size, ref->handleref.value);
+      fprintf(stderr, "ERROR: expected a CODE %d handle\nERROR: ", code);
       //TODO: At the moment we are tolerating wrong codes in handles.
       // in the future we might want to get strict and return 0 here so that code will crash
       // whenever it reaches the first handle parsing error. This might make debugging easier.
@@ -1640,9 +1658,6 @@ dwg_decode_UNUSED(Bit_Chain * dat, Dwg_Object * obj)
 
   dwg_decode_common_entity_handle_data(dat, obj);
 }
-
-#define FIELD_BE(name) bit_read_BE(dat, &_obj->name.x, &_obj->name.y, &_obj->name.z);
-#define FIELD_DD(name, default) GET_FIELD(name) = bit_read_DD(dat, default);
 
 static void
 dwg_decode_TEXT(Bit_Chain * dat, Dwg_Object * obj)
