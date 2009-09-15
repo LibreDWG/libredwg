@@ -92,6 +92,7 @@ dwg_print_UNUSED(Dwg_Entity_UNUSED * ent)
 void
 dwg_print_TEXT(Dwg_Entity_TEXT * ent)
 {
+/*
   printf("\tData flags: 0x%02x\n", ent->dataflags);
 
   printf("\tElevation: %1.13g\n", ent->elevation);
@@ -109,11 +110,13 @@ dwg_print_TEXT(Dwg_Entity_TEXT * ent)
   printf("\tGeneration: %u\n", ent->generation);
   printf("\tAlignment (horiz.): %u\n", ent->alignment.h);
   printf("\tAlignment (vert.): %u\n", ent->alignment.v);
+*/
 }
 
 void
 dwg_print_ATTRIB(Dwg_Entity_ATTRIB * ent)
 {
+/*
   printf("\tData flags: 0x%02x\n", ent->dataflags);
 
   printf("\tElevation: %1.13g\n", ent->elevation);
@@ -134,6 +137,7 @@ dwg_print_ATTRIB(Dwg_Entity_ATTRIB * ent)
   printf("\tTag: %s\n", ent->tag);
   printf("\tField length: %i (ne uzata)\n", ent->field_length);
   printf("\tFlags: 0x%02x\n", ent->flags);
+*/
 }
 
 void

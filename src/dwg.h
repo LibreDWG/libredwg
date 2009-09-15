@@ -27,6 +27,8 @@ extern "C"
   {
 #endif
 
+#define BITCODE_DOUBLE double
+
 #define BITCODE_RC char
 #define FORMAT_RC "%2x"
 #define BITCODE_MC long int
@@ -43,17 +45,17 @@ extern "C"
 #define FORMAT_RS "%d" 
 #define BITCODE_RL long unsigned int
 #define FORMAT_RL "%lu"
-#define BITCODE_RD double
+#define BITCODE_RD BITCODE_DOUBLE
 #define FORMAT_RD "%f"
 #define BITCODE_BL long unsigned int
 #define FORMAT_BL "%lu"
 #define BITCODE_TV unsigned char *
 #define FORMAT_TV "\"%s\""
-#define BITCODE_BT double
+#define BITCODE_BT BITCODE_DOUBLE
 #define FORMAT_BT "%f"
-#define BITCODE_DD double
+#define BITCODE_DD BITCODE_DOUBLE
 #define FORMAT_DD "%f"
-#define BITCODE_BD double
+#define BITCODE_BD BITCODE_DOUBLE
 #define FORMAT_BD "%f"
 #define BITCODE_2DPOINT struct { BITCODE_RD x; BITCODE_RD y; }
 #define BITCODE_3DPOINT struct { BITCODE_BD x; BITCODE_BD y; BITCODE_BD z; }
@@ -190,32 +192,20 @@ typedef int Dwg_Entity_UNUSED;
  */
 typedef struct _dwg_entity_TEXT
 {
-  unsigned char dataflags;
-  double elevation;
-  double x0;
-  double y0;
-  struct
-  {
-    double x;
-    double y;
-    unsigned int h;
-    unsigned int v;
-  } alignment;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } extrusion;
-  double thickness;
-  double oblique_ang;
-  double rotation_ang;
-  double height;
-  double width_factor;
-  unsigned char *text;
-  unsigned int generation;
-  unsigned int horiz_align;
-  unsigned int vert_align;
+  BITCODE_RC dataflags;
+  BITCODE_RD elevation;
+  BITCODE_2DPOINT insertion_pt;
+  BITCODE_2DPOINT alignment_pt;
+  BITCODE_3DPOINT extrusion;
+  BITCODE_RD thickness;
+  BITCODE_RD oblique_ang;
+  BITCODE_RD rotation_ang;
+  BITCODE_RD height;
+  BITCODE_RD width_factor;
+  BITCODE_TV text_value;
+  BITCODE_BS generation;
+  BITCODE_BS horiz_alignment;
+  BITCODE_BS vert_alignment;
   Dwg_Object_Ref* style;
 } Dwg_Entity_TEXT;
 
@@ -224,36 +214,24 @@ typedef struct _dwg_entity_TEXT
  */
 typedef struct _dwg_entity_ATTRIB
 {
-  unsigned char dataflags;
-  double elevation;
-  double x0;
-  double y0;
-  struct
-  {
-    double x;
-    double y;
-    unsigned int h;
-    unsigned int v;
-  } alignment;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } extrusion;
-  double thickness;
-  double oblique_ang;
-  double rotation_ang;
-  double height;
-  double width_factor;
-  unsigned char *text;
-  unsigned int generation;
-  unsigned int horiz_align;
-  unsigned int vert_align;
-  unsigned char *tag;
-  unsigned int field_length;
-  unsigned char flags;
-  unsigned char lock_position_flag;
+  BITCODE_BD elevation;
+  BITCODE_2DPOINT insertion_pt;
+  BITCODE_2DPOINT alignment_pt;
+  BITCODE_3DPOINT extrusion;
+  BITCODE_RD thickness;
+  BITCODE_RD oblique_ang;
+  BITCODE_RD rotation_ang;
+  BITCODE_RD height;
+  BITCODE_RD width_factor;
+  BITCODE_TV text_value;
+  BITCODE_BS generation;
+  BITCODE_BS horiz_alignment;
+  BITCODE_BS vert_alignment;
+  BITCODE_RC dataflags;
+  BITCODE_TV tag;
+  BITCODE_BS field_length;
+  BITCODE_RC flags;
+  BITCODE_B lock_position_flag;
   Dwg_Object_Ref* style;
 } Dwg_Entity_ATTRIB;
 

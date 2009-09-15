@@ -21,6 +21,10 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#define VERSION(v) if (dat->version == v)
+#define SINCE(v) if (dat->version >= v)
+#define VERSIONS(v1,v2) if (dat->version >= v1 && dat->version <= v2)
+
 typedef enum DWG_VERSION_TYPE
 {
   R_BEFORE, R_13, R_14, R_2000, R_2004, R_2007, R_AFTER

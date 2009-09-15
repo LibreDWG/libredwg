@@ -68,7 +68,7 @@ load_dwg(char *filename)
         break;
       case DWG_TYPE_TEXT:
         text = dwg.object[i].tio.entity->tio.TEXT;
-        add_text(text->x0, text->y0, text->text);
+        add_text(text->insertion_pt.x, text->insertion_pt.y, text->text_value);
         break;
         }
     }

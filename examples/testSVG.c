@@ -199,12 +199,12 @@ output_SVG(Dwg_Structure* dwg_struct)
           Dwg_Entity_TEXT* text;
           text = obj->tio.entity->tio.TEXT;
           /*TODO: Juca, fix it properly: */
-          if (text->text[0] != '&')
+          if (text->text_value[0] != '&')
             {
               printf(
                   "\t<text id=\"dwg-%d\" x=\"%f\" y=\"%f\" font-family=\"Verdana\" font-size=\"%f\" fill=\"blue\">%s</text>\n",
-                  i, text->x0, page_height - text->y0,
-                  text->height /* fontsize */, text->text);
+                  i, text->insertion_pt.x, page_height - text->insertion_pt.y,
+                  text->height /* fontsize */, text->text_value);
             }
         }
     }
