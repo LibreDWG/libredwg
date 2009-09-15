@@ -28,6 +28,11 @@
 #include "dwg.h"
 #include "decode.h"
 
+
+/*--------------------------------------------------------------------------------
+ * MACROS
+ */
+
 #define HANDLE_CODE(c) dwg_decode_handleref_with_code(dat, obj, c)
 
 #define VERSION(v) if (dat->version == v)
@@ -61,6 +66,7 @@
         _obj->name->handleref.value);\
     }
 
+#define FIELD_2DPOINT(name) FIELD(name.x, BD); FIELD(name.y, BD);
 #define FIELD_3DPOINT(name) FIELD(name.x, BD); FIELD(name.y, BD); FIELD(name.z, BD);
 #define FIELD_BE(name) bit_read_BE(dat, &_obj->name.x, &_obj->name.y, &_obj->name.z);
 #define FIELD_DD(name, default) GET_FIELD(name) = bit_read_DD(dat, default);
@@ -3367,23 +3373,14 @@ dwg_decode_BLOCK_HEADER(Bit_Chain *dat, Dwg_Object *obj)
 static void
 dwg_decode_LAYER(Bit_Chain * dat, Dwg_Object * obj)
 {
-  if (loglevel)
-    fprintf(stderr, "dwg_decode_LAYER\n");
-  Dwg_Object_LAYER *ord;
+  DWG_OBJECT(LAYER);
 
-  obj->supertype = DWG_SUPERTYPE_OBJECT;
-  obj->tio.object = malloc(sizeof(Dwg_Object_Object));
-  obj->tio.object->tio.LAYER = calloc(sizeof(Dwg_Object_LAYER), 1);
-  obj->tio.object->object = obj;
-  dwg_decode_object(dat, obj->tio.object);
-  ord = obj->tio.object->tio.LAYER;
-
-  ord->name = bit_read_TV(dat);
-  ord->bit64 = bit_read_B(dat);
-  ord->xrefi = bit_read_BS(dat);
-  ord->xrefdep = bit_read_B(dat);
-  ord->values = bit_read_BS(dat);
-  ord->colour = bit_read_BS(dat);
+  FIELD(name, TV);
+  FIELD(bit64, B);
+  FIELD(xrefi, BS);
+  FIELD(xrefdep, B);
+  FIELD(values, BS);
+  FIELD(colour, BS);
 
   //dwg_decode_handleref (dat, obj);
 }
@@ -3392,49 +3389,33 @@ static void
 dwg_decode_IMAGE(Bit_Chain *dat, Dwg_Object *obj)
 {
   int i;
-  Dwg_Entity_IMAGE *ent;
+  DWG_ENTITY(IMAGE);
 
-  obj->supertype = DWG_SUPERTYPE_ENTITY;
-  obj->tio.entity = malloc(sizeof(Dwg_Object_Entity));
-  obj->tio.entity->tio.IMAGE = calloc(sizeof(Dwg_Entity_IMAGE), 1);
-  obj->tio.entity->object = obj;
-  dwg_decode_entity(dat, obj->tio.entity);
-  ent = obj->tio.entity->tio.IMAGE;
-
-  ent->class_version = bit_read_BL(dat);
-  ent->pt0.x = bit_read_BD(dat);
-  ent->pt0.y = bit_read_BD(dat);
-  ent->pt0.z = bit_read_BD(dat);
-  ent->uvec.x = bit_read_BD(dat);
-  ent->uvec.y = bit_read_BD(dat);
-  ent->uvec.z = bit_read_BD(dat);
-  ent->vvec.x = bit_read_BD(dat);
-  ent->vvec.y = bit_read_BD(dat);
-  ent->vvec.z = bit_read_BD(dat);
-  ent->size.width = bit_read_RD(dat);
-  ent->size.height = bit_read_RD(dat);
-  ent->display_props = bit_read_BS(dat);
-  ent->clipping = bit_read_B(dat);
-  ent->brightness = bit_read_RC(dat);
-  ent->contrast = bit_read_RC(dat);
-  ent->fade = bit_read_RC(dat);
-  ent->clip_boundary_type = bit_read_BS(dat);
-  if (ent->clip_boundary_type == 1)
+  FIELD(class_version, BL);
+  FIELD_3DPOINT(pt0);
+  FIELD_3DPOINT(uvec);
+  FIELD_3DPOINT(vvec);
+  FIELD(size.width, RD);
+  FIELD(size.height, RD);
+  FIELD(display_props, BS);
+  FIELD(clipping, B);
+  FIELD(brightness, RC);
+  FIELD(contrast, RC);
+  FIELD(fade, RC);
+  FIELD(clip_boundary_type, BS);
+  if (GET_FIELD(clip_boundary_type) == 1)
     {
-      ent->boundary_pt0.x = bit_read_RD(dat);
-      ent->boundary_pt0.y = bit_read_RD(dat);
-      ent->boundary_pt1.x = bit_read_RD(dat);
-      ent->boundary_pt1.y = bit_read_RD(dat);
+      FIELD_2DPOINT(boundary_pt0);
+      FIELD_2DPOINT(boundary_pt1);
     }
   else
     {
-      ent->num_clip_verts = bit_read_BL(dat);
+      FIELD(num_clip_verts, BL);
       ent->clip_verts = (Dwg_Entity_IMAGE_clip_vert*) malloc(
           ent->num_clip_verts * sizeof(Dwg_Entity_IMAGE_clip_vert));
       for (i = 0; i < ent->num_clip_verts; i++)
         {
-          ent->clip_verts[i].x = bit_read_RD(dat);
-          ent->clip_verts[i].y = bit_read_RD(dat);
+          FIELD_2DPOINT(clip_verts[i]);
         }
     }
 
