@@ -55,6 +55,7 @@ extern "C"
 #define FORMAT_DD "%f"
 #define BITCODE_BD double
 #define FORMAT_BD "%f"
+#define BITCODE_2DPOINT struct { BITCODE_RD x; BITCODE_RD y; }
 #define BITCODE_3DPOINT struct { BITCODE_BD x; BITCODE_BD y; BITCODE_BD z; }
 
 /**
@@ -1931,79 +1932,57 @@ typedef struct _dwg_object_LAYER_INDEX
  */
 typedef struct _dwg_object_LAYOUT
 {
-  struct
-  {
-    char *agordo;
-    char *printilo;
-    unsigned int flags;
-    double maldekstre;
-    double malsupre;
-    double dekstre;
-    double supre;
-    double width;
-    double height;
-    char *size;
-    double dx;
-    double dy;
-    unsigned int unuoj;
-    unsigned int rotacio;
-    unsigned int type;
-    double x_min;
-    double y_min;
-    double x_max;
-    double y_max;
-    char *name;
-    struct
-    {
-      double A; // A:B (ekz: 1:10, 1:2, 50:1, ktp)
-      double B;
-      unsigned int type;
-      double factor;
-    } scale;
-    char *stilfolio;
-    double x0;
-    double y0;
-  } page;
+  BITCODE_TV page_setup_name;
+  BITCODE_TV printer_or_config;
+  BITCODE_BS plot_layout_flags;
+  BITCODE_BD left_margin;
+  BITCODE_BD bottom_margin;
+  BITCODE_BD right_margin;
+  BITCODE_BD top_margin;
+  BITCODE_BD paper_width;
+  BITCODE_BD paper_height;
+  BITCODE_TV paper_size;
+  BITCODE_2DPOINT plot_origin;
+  BITCODE_BS paper_units;
+  BITCODE_BS plot_rotation;
+  BITCODE_BS plot_type;
+  BITCODE_2DPOINT window_min;
+  BITCODE_2DPOINT window_max;
+  BITCODE_TV plot_view_name;
+  BITCODE_BD real_world_units;
+  BITCODE_BD drawing_units;
+  BITCODE_TV current_style_sheet;
+  BITCODE_BS scale_type;
+  BITCODE_BD scale_factor;
+  BITCODE_2DPOINT paper_image_origin;
+  BITCODE_BS shade_plot_mode;
+  BITCODE_BS shade_plot_res_level;
+  BITCODE_BS shade_plot_custom_dpi;
+  BITCODE_TV layout_name;
+  BITCODE_BS tab_order;
+  BITCODE_BS flags;
+  BITCODE_3DPOINT ucs_origin;
+  BITCODE_2DPOINT minimum_limits;
+  BITCODE_2DPOINT maximum_limits;
+  BITCODE_3DPOINT ins_point;
+  BITCODE_3DPOINT ucs_x_axis;
+  BITCODE_3DPOINT ucs_y_axis;
+  BITCODE_BD elevation;
+  BITCODE_BS orthoview_type;
+  BITCODE_3DPOINT extent_min;
+  BITCODE_3DPOINT extent_max;
+  BITCODE_RL viewport_count;
+  Dwg_Object_Ref* parenthandle;
+  Dwg_Object_Ref** reactors;
+  Dwg_Object_Ref* xdicobjhandle;
+  Dwg_Object_Ref* plot_view_handle;
+  Dwg_Object_Ref* visual_style_handle;
+  Dwg_Object_Ref* associated_paperspace_block_record_handle;
+  Dwg_Object_Ref* last_active_viewport_handle;
+  Dwg_Object_Ref* base_ucs_handle;
+  Dwg_Object_Ref* named_ucs_handle;
+  Dwg_Object_Ref** viewport_handles;
 
-  char *name;
-  unsigned int ordo;
-  unsigned int flags;
-  double x0;
-  double y0;
-  double z0;
-  double x_min;
-  double y_min;
-  double x_max;
-  double y_max;
-  struct
-  {
-    double x0;
-    double y0;
-    double z0;
-  } enmeto;
-  struct
-  {
-    double x0;
-    double y0;
-    double z0;
-  } axis_X;
-  struct
-  {
-    double x0;
-    double y0;
-    double z0;
-  } axis_Y;
-  double elevation;
-  unsigned int rigardtype;
-  struct
-  {
-    double x_min;
-    double y_min;
-    double z_min;
-    double x_max;
-    double y_max;
-    double z_max;
-  } limo;
 } Dwg_Object_LAYOUT;
 
 /**

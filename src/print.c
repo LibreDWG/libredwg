@@ -887,6 +887,7 @@ dwg_print_LAYER(Dwg_Object_LAYER *obj)
 void
 dwg_print_LAYOUT(Dwg_Object_LAYOUT *obj)
 {
+/*
   printf("\tAgord-name: %s\n", obj->page.agordo);
   printf("\tPrintilo: %s\n", obj->page.printilo);
   printf("\tPrint-flags: 0x%0x\n", obj->page.flags);
@@ -929,6 +930,7 @@ dwg_print_LAYOUT(Dwg_Object_LAYOUT *obj)
       obj->limo.y_min, obj->limo.z_min);
   printf("\tMaksimumo: (%1.13g, %1.13g, %1.13g)\n", obj->limo.x_max,
       obj->limo.y_max, obj->limo.z_max);
+*/
 }
 
 /*------------------------------------------------------------------------------

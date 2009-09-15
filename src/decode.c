@@ -66,7 +66,8 @@
         _obj->name->handleref.value);\
     }
 
-#define FIELD_2DPOINT(name) FIELD(name.x, BD); FIELD(name.y, BD);
+#define FIELD_2RD(name) FIELD(name.x, RD); FIELD(name.y, RD);
+#define FIELD_2BD(name) FIELD(name.x, BD); FIELD(name.y, BD);
 #define FIELD_3DPOINT(name) FIELD(name.x, BD); FIELD(name.y, BD); FIELD(name.z, BD);
 #define FIELD_BE(name) bit_read_BE(dat, &_obj->name.x, &_obj->name.y, &_obj->name.z);
 #define FIELD_DD(name, default) GET_FIELD(name) = bit_read_DD(dat, default);
@@ -3405,8 +3406,8 @@ dwg_decode_IMAGE(Bit_Chain *dat, Dwg_Object *obj)
   FIELD(clip_boundary_type, BS);
   if (GET_FIELD(clip_boundary_type) == 1)
     {
-      FIELD_2DPOINT(boundary_pt0);
-      FIELD_2DPOINT(boundary_pt1);
+      FIELD_2RD(boundary_pt0);
+      FIELD_2RD(boundary_pt1);
     }
   else
     {
@@ -3415,7 +3416,7 @@ dwg_decode_IMAGE(Bit_Chain *dat, Dwg_Object *obj)
           ent->num_clip_verts * sizeof(Dwg_Entity_IMAGE_clip_vert));
       for (i = 0; i < ent->num_clip_verts; i++)
         {
-          FIELD_2DPOINT(clip_verts[i]);
+          FIELD_2RD(clip_verts[i]);
         }
     }
 
@@ -3427,63 +3428,84 @@ dwg_decode_LAYOUT(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_OBJECT(LAYOUT);
 
-  FIELD(page.agordo, TV);
-  FIELD(page.printilo, TV);
-  FIELD(page.flags, BS);
-  FIELD(page.maldekstre, BD);
-  FIELD(page.malsupre, BD);
-  FIELD(page.dekstre, BD);
-  FIELD(page.supre, BD);
-  FIELD(page.width, BD);
-  FIELD(page.height, BD);
-  FIELD(page.size, TV);
-  FIELD(page.dx, BD);
-  FIELD(page.dy, BD);
-  FIELD(page.unuoj, BS);
-  FIELD(page.rotacio, BS);
-  FIELD(page.type, BS);
-  FIELD(page.x_min, BD);
-  FIELD(page.y_min, BD);
-  FIELD(page.x_max, BD);
-  FIELD(page.y_max, BD);
-  FIELD(page.name, TV);
-  FIELD(page.scale.A, BD);
-  FIELD(page.scale.B, BD);
-  FIELD(page.stilfolio, TV);
-  FIELD(page.scale.type, BS);
-  FIELD(page.scale.factor, BD);
-  FIELD(page.x0, BD);
-  FIELD(page.y0, BD);
+  FIELD(page_setup_name, TV);
+  FIELD(printer_or_config, TV);
+  FIELD(plot_layout_flags, BS);
+  FIELD(left_margin, BD);
+  FIELD(bottom_margin, BD);
+  FIELD(right_margin, BD);
+  FIELD(top_margin, BD);
+  FIELD(paper_width, BD);
+  FIELD(paper_height, BD);
+  FIELD(paper_size, TV);
+  FIELD_2BD(plot_origin);
+  FIELD(paper_units, BS);
+  FIELD(plot_rotation, BS);
+  FIELD(plot_type, BS);
+  FIELD_2BD(window_min);
+  FIELD_2BD(window_max);
 
-  FIELD(name, TV);
-  FIELD(ordo, BS);
+  VERSIONS(R_13,R_2000)
+    {
+      FIELD(plot_view_name, TV);
+    }
+
+  FIELD(real_world_units, BD);
+  FIELD(drawing_units, BD);
+  FIELD(current_style_sheet, TV);
+  FIELD(scale_type, BS);
+  FIELD(scale_factor, BD);
+  FIELD_2BD(paper_image_origin);
+
+  SINCE(R_2004)
+    {
+      FIELD(shade_plot_mode, BS);
+      FIELD(shade_plot_res_level, BS);
+      FIELD(shade_plot_custom_dpi, BS);
+    }
+
+  FIELD(layout_name, TV);
+  FIELD(tab_order, BS);
   FIELD(flags, BS);
-  FIELD(x0, BD);
-  FIELD(y0, BD);
-  FIELD(z0, BD);
-  FIELD(x_min, RD);
-  FIELD(y_min, RD);
-  FIELD(x_max, RD);
-  FIELD(y_max, RD);
-  FIELD(enmeto.x0, BD);
-  FIELD(enmeto.y0, BD);
-  FIELD(enmeto.z0, BD);
-  FIELD(axis_X.x0, BD);
-  FIELD(axis_X.y0, BD);
-  FIELD(axis_X.z0, BD);
-  FIELD(axis_Y.x0, BD);
-  FIELD(axis_Y.y0, BD);
-  FIELD(axis_Y.z0, BD);
+  FIELD_3DPOINT(ucs_origin);
+  FIELD_2RD(minimum_limits);
+  FIELD_2RD(maximum_limits);
+  FIELD_3DPOINT(ins_point);
+  FIELD_3DPOINT(ucs_x_axis);
+  FIELD_3DPOINT(ucs_y_axis);
   FIELD(elevation, BD);
-  FIELD(rigardtype, BS);
-  FIELD(limo.x_min, BD);
-  FIELD(limo.y_min, BD);
-  FIELD(limo.z_min, BD);
-  FIELD(limo.x_max, BD);
-  FIELD(limo.y_max, BD);
-  FIELD(limo.z_max, BD);
+  FIELD(orthoview_type, BS);
+  FIELD_3DPOINT(extent_min);
+  FIELD_3DPOINT(extent_max);
 
-  //dwg_decode_handleref (dat, obj);
+  SINCE(R_2004)
+    {
+      FIELD(viewport_count, RL);
+    }
+
+  FIELD_HANDLE(parenthandle, 4);
+  REACTORS(4);
+  FIELD_HANDLE(xdicobjhandle, 3);
+
+  SINCE(R_2004)
+    {
+      FIELD_HANDLE(plot_view_handle, ANYCODE);
+    }
+
+  SINCE(R_2007)
+    {
+      FIELD_HANDLE(visual_style_handle, ANYCODE);
+    }
+
+  FIELD_HANDLE(associated_paperspace_block_record_handle, ANYCODE);
+  FIELD_HANDLE(last_active_viewport_handle, ANYCODE);
+  FIELD_HANDLE(base_ucs_handle, ANYCODE);
+  FIELD_HANDLE(named_ucs_handle, ANYCODE);
+
+  SINCE(R_2004)
+    {
+      HANDLE_VECTOR(viewport_handles, viewport_count, ANYCODE);
+    }
 }
 
 static void
