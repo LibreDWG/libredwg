@@ -53,7 +53,13 @@
 #define FIELD_VECTOR(name, type, size)\
   _obj->name = (BITCODE_##type *) malloc(_obj->size * sizeof(BITCODE_##type));\
   for (vector_counter=0; vector_counter< _obj->size; vector_counter++)\
-    FIELD(name[vector_counter], type)
+    {\
+      _obj->name = bit_read_##type(dat);\
+      if (loglevel>=2)\
+        {\
+            fprintf(stderr, #name "[%d]: " FORMAT_##type "\n", vector_counter, _obj->name);\
+        }\
+    }
 
 #define FIELD_3DPOINT_VECTOR(name, size)\
   _obj->name = (BITCODE_3DPOINT *) malloc(_obj->size * sizeof(BITCODE_3DPOINT));\
@@ -120,7 +126,7 @@ dwg_resolve_handle(Dwg_Structure* skt, unsigned long int handle);
  */
 long unsigned int ktl_lastaddress;
 
-static int loglevel = 1;
+static int loglevel = 2;
 
 /*--------------------------------------------------------------------------------
  * Public function definitions
@@ -3378,7 +3384,6 @@ dwg_decode_BLOCK_HEADER(Bit_Chain *dat, Dwg_Object *obj)
 
   FIELD_3DPOINT(base_pt);
   FIELD(xref_pname, TV);
-  fprintf(stderr, "xref_pname: \"%s\"\n", GET_FIELD(xref_pname));
 
   SINCE(R_2000)
     {
@@ -3391,7 +3396,6 @@ dwg_decode_BLOCK_HEADER(Bit_Chain *dat, Dwg_Object *obj)
         };
 
       FIELD(block_description, TV);
-      fprintf(stderr, "block_description: \"%s\"\n", GET_FIELD(block_description));
 
       FIELD(size_of_preview_data, BL);
       FIELD_VECTOR(binary_preview_data, RC, size_of_preview_data);
