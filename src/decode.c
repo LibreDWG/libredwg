@@ -1641,62 +1641,57 @@ dwg_decode_UNUSED(Bit_Chain * dat, Dwg_Object * obj)
   dwg_decode_common_entity_handle_data(dat, obj);
 }
 
+#define FIELD_BE(name) bit_read_BE(dat, &_obj->name.x, &_obj->name.y, &_obj->name.z);
+#define FIELD_DD(name, default) GET_FIELD(name) = bit_read_DD(dat, default);
+
 static void
 dwg_decode_TEXT(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY (TEXT);
 
-  /* Read values
-   */
-
   VERSIONS(R_13,R_14)
     {
 
-      ent->elevation = bit_read_BD(dat);
-      ent->x0 = bit_read_RD(dat);
-      ent->y0 = bit_read_RD(dat);
-      ent->alignment.x = bit_read_RD(dat);
-      ent->alignment.y = bit_read_RD(dat);
-      bit_read_BE(dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
-      ent->thickness = bit_read_BD(dat);
-      ent->oblique_ang = bit_read_BD(dat);
-      ent->rotation_ang = bit_read_BD(dat);
-      ent->height = bit_read_BD(dat);
-      ent->width_factor = bit_read_BD(dat);
-      ent->text = bit_read_TV(dat);
-      ent->generation = bit_read_BS(dat);
-      ent->alignment.h = bit_read_BS(dat);
-      ent->alignment.v = bit_read_BS(dat);
+      FIELD(elevation, BD);
+      FIELD(x0, RD);
+      FIELD(y0, RD);
+      FIELD(alignment.x, RD);
+      FIELD(alignment.y, RD);
+      FIELD_BE(extrusion);
+      FIELD(thickness, BD);
+      FIELD(oblique_ang, BD);
+      FIELD(rotation_ang, BD);
+      FIELD(height, BD);
+      FIELD(width_factor, BD);
+      FIELD(text, TV);
+      FIELD(generation, BS);
+      FIELD(alignment.h, BS);
+      FIELD(alignment.v, BS);
     }
 
   SINCE(R_2000)
     {
-      ent->dataflags = bit_read_RC(dat);
-      if ((!ent->dataflags & 0x01))
-        ent->elevation = bit_read_RD(dat);
-      ent->x0 = bit_read_RD(dat);
-      ent->y0 = bit_read_RD(dat);
-      if (!(ent->dataflags & 0x02))
+      FIELD(dataflags, RC);
+      if (!(GET_FIELD(dataflags) & 0x01)) FIELD(elevation, RD);
+      FIELD(x0, RD);
+      FIELD(y0, RD);
+
+      if (!(GET_FIELD(dataflags) & 0x02))
         {
-          ent->alignment.x = bit_read_DD(dat, 10);
-          ent->alignment.y = bit_read_DD(dat, 20);
+          FIELD_DD(alignment.x, 10);
+          FIELD_DD(alignment.y, 20);
         }
-      bit_read_BE(dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
-      ent->thickness = bit_read_BT(dat);
-      if (!(ent->dataflags & 0x04))
-        ent->oblique_ang = bit_read_RD(dat);
-      if (!(ent->dataflags & 0x08))
-        ent->rotation_ang = bit_read_RD(dat);
-      ent->height = bit_read_RD(dat);
-      if (!(ent->dataflags & 0x10))
-        ent->width_factor = bit_read_RD(dat);
-      ent->text = bit_read_TV(dat);
-      if (!(ent->dataflags & 0x20))
-        ent->generation = bit_read_BS(dat);
-      if (!(ent->dataflags & 0x40))
-        ent->alignment.h = bit_read_BS(dat);
-      if (!(ent->dataflags & 0x80))
-        ent->alignment.v = bit_read_BS(dat);
+
+      FIELD_BE(extrusion);
+      FIELD(thickness, BT);
+      if (!(GET_FIELD(dataflags) & 0x04)) FIELD(oblique_ang, RD);
+      if (!(GET_FIELD(dataflags) & 0x08)) FIELD(rotation_ang, RD);
+      FIELD(height, RD);
+      if (!(GET_FIELD(dataflags) & 0x10)) FIELD(width_factor, RD);
+      FIELD(text, TV);
+      if (!(GET_FIELD(dataflags) & 0x20)) FIELD(generation, BS);
+      if (!(GET_FIELD(dataflags) & 0x40)) FIELD(alignment.h, BS);
+      if (!(GET_FIELD(dataflags) & 0x80)) FIELD(alignment.v, BS);
     }
 
   dwg_decode_common_entity_handle_data(dat, obj);
@@ -1709,8 +1704,6 @@ dwg_decode_ATTRIB(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(ATTRIB);
 
-  /* Read values
-   */
   VERSIONS(R_13,R_14)
     {
 
@@ -1780,8 +1773,6 @@ dwg_decode_ATTDEF(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(ATTDEF);
 
-  /* Read values
-   */
   VERSIONS(R_13,R_14)
     {
 
@@ -1851,10 +1842,7 @@ dwg_decode_BLOCK(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(BLOCK);
 
-  /* Read values
-   */
-  ent->name = bit_read_TV(dat);
-  fprintf(stderr, "block_name = %s\n", ent->name);
+  FIELD(name, TV);
 
   dwg_decode_common_entity_handle_data(dat, obj);
 }
@@ -2020,8 +2008,6 @@ dwg_decode_VERTEX_2D(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(VERTEX_2D);
 
-  /* Read values
-   */
   ent->flags = bit_read_RC(dat);
   ent->x0 = bit_read_BD(dat);
   ent->y0 = bit_read_BD(dat);
@@ -2043,8 +2029,6 @@ dwg_decode_VERTEX_3D(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(VERTEX_3D);
 
-  /* Read values
-   */
   ent->flags = bit_read_RC(dat);
   ent->x0 = bit_read_BD(dat);
   ent->y0 = bit_read_BD(dat);
@@ -2059,8 +2043,6 @@ dwg_decode_VERTEX_MESH(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(VERTEX_MESH);
 
-  /* Read values
-   */
   ent->flags = bit_read_RC(dat);
   ent->x0 = bit_read_BD(dat);
   ent->y0 = bit_read_BD(dat);
@@ -2074,8 +2056,6 @@ dwg_decode_VERTEX_PFACE(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(VERTEX_PFACE);
 
-  /* Read values
-   */
   ent->flags = bit_read_RC(dat);
   ent->x0 = bit_read_BD(dat);
   ent->y0 = bit_read_BD(dat);
@@ -2089,8 +2069,6 @@ dwg_decode_VERTEX_PFACE_FACE(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(VERTEX_PFACE_FACE);
 
-  /* Read values
-   */
   ent->vertind[0] = bit_read_BS(dat);
   ent->vertind[1] = bit_read_BS(dat);
   ent->vertind[2] = bit_read_BS(dat);
@@ -2105,8 +2083,6 @@ dwg_decode_POLYLINE_2D(Bit_Chain * dat, Dwg_Object * obj)
   int i;
   DWG_ENTITY(POLYLINE_2D);
 
-  /* Read values
-   */
   ent->flags = bit_read_BS(dat);
   ent->curve_type = bit_read_BS(dat);
   ent->start_width = bit_read_BD(dat);
@@ -2159,8 +2135,6 @@ dwg_decode_POLYLINE_3D(Bit_Chain * dat, Dwg_Object * obj)
   int i;
   DWG_ENTITY(POLYLINE_3D);
 
-  /* Read values
-   */
   ent->flags_1 = bit_read_RC(dat);
   ent->flags_2 = bit_read_RC(dat);
 
@@ -2207,8 +2181,6 @@ dwg_decode_ARC(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(ARC);
 
-  /* Read values
-   */
   ent->x0 = bit_read_BD(dat);
   ent->y0 = bit_read_BD(dat);
   ent->z0 = bit_read_BD(dat);
@@ -2226,8 +2198,6 @@ dwg_decode_CIRCLE(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(CIRCLE);
 
-  /* Read values
-   */
   ent->x0 = bit_read_BD(dat);
   ent->y0 = bit_read_BD(dat);
   ent->z0 = bit_read_BD(dat);
@@ -2243,8 +2213,6 @@ dwg_decode_LINE(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(LINE);
 
-  /* Read values
-   */
   VERSIONS(R_13,R_14)
     {
       ent->x0 = bit_read_BD(dat);
@@ -2281,8 +2249,6 @@ dwg_decode_DIMENSION_ORDINATE(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(DIMENSION_ORDINATE);
 
-  /* Read values
-   */
   //TODO: check extrusion reading
   //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
   ent->extrusion.x = bit_read_BD(dat);
@@ -2345,9 +2311,6 @@ dwg_decode_DIMENSION_LINEAR(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(DIMENSION_LINEAR);
 
-  /* Read values
-   */
-
   //TODO: check extrusion reading
   //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
   ent->extrusion.x = bit_read_BD(dat);
@@ -2407,9 +2370,6 @@ dwg_decode_DIMENSION_ALIGNED(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(DIMENSION_ALIGNED);
 
-  /* Read values
-   */
-
   //TODO: check extrusion reading
   //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
   ent->extrusion.x = bit_read_BD(dat);
@@ -2467,9 +2427,6 @@ static void
 dwg_decode_DIMENSION_ANG3PT(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(DIMENSION_ANG3PT);
-
-  /* Read values
-   */
 
   //TODO: check extrusion reading
   //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
@@ -2529,9 +2486,6 @@ static void
 dwg_decode_DIMENSION_ANG2LN(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(DIMENSION_ANG2LN);
-
-  /* Read values
-   */
 
   //TODO: check extrusion reading
   //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
@@ -2594,9 +2548,6 @@ dwg_decode_DIMENSION_RADIUS(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(DIMENSION_RADIUS);
 
-  /* Read values
-   */
-
   //TODO: check extrusion reading
   //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
   ent->extrusion.x = bit_read_BD(dat);
@@ -2649,9 +2600,6 @@ static void
 dwg_decode_DIMENSION_DIAMETER(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(DIMENSION_DIAMETER);
-
-  /* Read values
-   */
 
   //TODO: check extrusion reading
   //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
@@ -2708,9 +2656,6 @@ dwg_decode_POINT(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(POINT);
 
-  /* Read values
-   */
-
   ent->x = bit_read_BD(dat);
   ent->y = bit_read_BD(dat);
   ent->z = bit_read_BD(dat);
@@ -2725,9 +2670,6 @@ static void
 dwg_decode_3DFACE(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(_3DFACE);
-
-  /* Read values
-   */
 
   VERSIONS(R_13,R_14)
     {
@@ -2820,9 +2762,6 @@ dwg_decode_POLYLINE_MESH(Bit_Chain * dat, Dwg_Object * obj)
   int i;
   DWG_ENTITY(POLYLINE_MESH);
 
-  /* Read values
-   */
-
   ent->flags = bit_read_BS(dat);
   ent->curve_type = bit_read_BS(dat);
   ent->m_vert_count = bit_read_BS(dat);
@@ -2874,9 +2813,6 @@ dwg_decode_SOLID(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(SOLID);
 
-  /* Read values
-   */
-
   ent->thickness = bit_read_BT(dat);
   ent->corner1.z = ent->corner2.z = ent->corner3.z = ent->corner4.z
       = bit_read_BD(dat);
@@ -2897,9 +2833,6 @@ static void
 dwg_decode_TRACE(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(TRACE);
-
-  /* Read values
-   */
 
   ent->thickness = bit_read_BT(dat);
   ent->corner1.z = ent->corner2.z = ent->corner3.z = ent->corner4.z
@@ -2922,9 +2855,6 @@ dwg_decode_SHAPE(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(SHAPE);
 
-  /* Read values
-   */
-
   ent->ins_pt.x = bit_read_BD(dat);
   ent->ins_pt.y = bit_read_BD(dat);
   ent->ins_pt.z = bit_read_BD(dat);
@@ -2946,9 +2876,6 @@ static void
 dwg_decode_VIEWPORT(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(VIEWPORT);
-
-  /* Read values
-   */
 
   ent->center.x = bit_read_BD(dat);
   ent->center.y = bit_read_BD(dat);
@@ -3029,9 +2956,6 @@ dwg_decode_ELLIPSE(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(ELLIPSE);
 
-  /* Read values
-   */
-
   ent->x0 = bit_read_BD(dat);
   ent->y0 = bit_read_BD(dat);
   ent->z0 = bit_read_BD(dat);
@@ -3053,9 +2977,6 @@ dwg_decode_SPLINE(Bit_Chain * dat, Dwg_Object * obj)
 {
   int i;
   DWG_ENTITY(SPLINE);
-
-  /* Read values
-   */
 
   ent->scenario = bit_read_BS(dat);
   if (ent->scenario != 1 && ent->scenario != 2)
@@ -3120,9 +3041,6 @@ dwg_decode_RAY(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(RAY);
 
-  /* Read values
-   */
-
   ent->x0 = bit_read_BD(dat);
   ent->y0 = bit_read_BD(dat);
   ent->z0 = bit_read_BD(dat);
@@ -3137,9 +3055,6 @@ static void
 dwg_decode_XLINE(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(XLINE);
-
-  /* Read values
-   */
 
   ent->x0 = bit_read_BD(dat);
   ent->y0 = bit_read_BD(dat);
@@ -3363,7 +3278,6 @@ dwg_decode_BLOCK_HEADER(Bit_Chain *dat, Dwg_Object *obj)
   DWG_OBJECT(BLOCK_HEADER);
 
   FIELD(entry_name, TV);
-  fprintf(stderr, "entry_name: \"%s\"\n", GET_FIELD(entry_name));
   FIELD(_64_flag, B);
   FIELD(xrefindex_plus1, BS);
   FIELD(xdep, B);
@@ -3449,8 +3363,6 @@ dwg_decode_LAYER(Bit_Chain * dat, Dwg_Object * obj)
   dwg_decode_object(dat, obj->tio.object);
   ord = obj->tio.object->tio.LAYER;
 
-  /* Read values
-   */
   ord->name = bit_read_TV(dat);
   ord->bit64 = bit_read_B(dat);
   ord->xrefi = bit_read_BS(dat);
@@ -3528,8 +3440,6 @@ dwg_decode_LAYOUT(Bit_Chain * dat, Dwg_Object * obj)
   dwg_decode_object(dat, obj->tio.object);
   ord = obj->tio.object->tio.LAYOUT;
 
-  /* Read values
-   */
   ord->page.agordo = bit_read_TV(dat);
   ord->page.printilo = bit_read_TV(dat);
   ord->page.flags = bit_read_BS(dat);
@@ -3602,8 +3512,6 @@ dwg_decode_LWPLINE(Bit_Chain * dat, Dwg_Object * obj)
   dwg_decode_entity(dat, obj->tio.entity);
   ent = obj->tio.entity->tio.LWPLINE;
 
-  /* Read values
-   */
   ent->flags = bit_read_BS(dat);
   if (ent->flags & 4)
     ent->const_width = bit_read_BD(dat);
@@ -3674,8 +3582,6 @@ dwg_decode_OLE2FRAME(Bit_Chain * dat, Dwg_Object * obj)
   dwg_decode_entity(dat, obj->tio.entity);
   ent = obj->tio.entity->tio.OLE2FRAME;
 
-  /* Read values
-   */
   ent->flags = bit_read_BS(dat);
 
   SINCE(R_2000)
@@ -3709,8 +3615,6 @@ dwg_decode_PLACEHOLDER(Bit_Chain * dat, Dwg_Object * object)
   dwg_decode_object(dat, object->tio.object);
   obj = object->tio.object->tio.PLACEHOLDER;
 
-  /* Read values
-   */
 
   //TODO: Implement-me!
 
@@ -3730,9 +3634,6 @@ dwg_decode_DICTIONARYVAR(Bit_Chain * dat, Dwg_Object * object)
   dwg_decode_object(dat, object->tio.object);
   obj = object->tio.object->tio.DICTIONARYVAR;
 
-  /* Read values
-   */
-
   //TODO: Implement-me!
 
   //dwg_decode_handleref (dat, object);
@@ -3751,9 +3652,6 @@ dwg_decode_WIPEOUTVARIABLE(Bit_Chain * dat, Dwg_Object * object)
   dwg_decode_object(dat, object->tio.object);
   obj = object->tio.object->tio.WIPEOUTVARIABLE;
 
-  /* Read values
-   */
-
   //TODO: Implement-me!
 
   //dwg_decode_handleref (dat, object);
@@ -3770,9 +3668,6 @@ dwg_decode_IMAGEDEF(Bit_Chain * dat, Dwg_Object * object)
   object->tio.object->object = object;
   dwg_decode_object(dat, object->tio.object);
   obj = object->tio.object->tio.IMAGEDEF;
-
-  /* Read values
-   */
 
   //TODO: Implement-me!
 
@@ -3792,9 +3687,6 @@ dwg_decode_RASTERVARIABLES(Bit_Chain * dat, Dwg_Object * object)
   dwg_decode_object(dat, object->tio.object);
   obj = object->tio.object->tio.RASTERVARIABLES;
 
-  /* Read values
-   */
-
   //TODO: Implement-me!
 
   //dwg_decode_handleref (dat, object);
@@ -3813,9 +3705,6 @@ dwg_decode_SPATIAL_INDEX(Bit_Chain * dat, Dwg_Object * object)
   dwg_decode_object(dat, object->tio.object);
   obj = object->tio.object->tio.SPATIAL_INDEX;
 
-  /* Read values
-   */
-
   //TODO: Implement-me!
 
   //dwg_decode_handleref (dat, object);
@@ -3832,9 +3721,6 @@ dwg_decode_XRECORD(Bit_Chain * dat, Dwg_Object * object)
   object->tio.object->object = object;
   dwg_decode_object(dat, object->tio.object);
   obj = object->tio.object->tio.XRECORD;
-
-  /* Read values
-   */
 
   //TODO: Implement-me!
 
@@ -3854,9 +3740,6 @@ dwg_decode_SPATIAL_FILTER(Bit_Chain * dat, Dwg_Object * object)
   dwg_decode_object(dat, object->tio.object);
   obj = object->tio.object->tio.SPATIAL_FILTER;
 
-  /* Read values
-   */
-
   //TODO: Implement-me!
 
   //dwg_decode_handleref (dat, object);
@@ -3874,9 +3757,6 @@ dwg_decode_LAYER_INDEX(Bit_Chain * dat, Dwg_Object * object)
   object->tio.object->object = object;
   dwg_decode_object(dat, object->tio.object);
   obj = object->tio.object->tio.LAYER_INDEX;
-
-  /* Read values
-   */
 
   //TODO: Implement-me!
 
@@ -3896,9 +3776,6 @@ dwg_decode_DICTIONARYWDLFT(Bit_Chain * dat, Dwg_Object * object)
   dwg_decode_object(dat, object->tio.object);
   obj = object->tio.object->tio.DICTIONARYWDLFT;
 
-  /* Read values
-   */
-
   //TODO: Implement-me!
 
   //dwg_decode_handleref (dat, object);
@@ -3917,9 +3794,6 @@ dwg_decode_IMAGEDEFREACTOR(Bit_Chain * dat, Dwg_Object * object)
   dwg_decode_object(dat, object->tio.object);
   obj = object->tio.object->tio.IMAGEDEFREACTOR;
 
-  /* Read values
-   */
-
   //TODO: Implement-me!
 
   //dwg_decode_handleref (dat, object);
@@ -3936,9 +3810,6 @@ dwg_decode_IDBUFFER(Bit_Chain * dat, Dwg_Object * object)
   object->tio.object->object = object;
   dwg_decode_object(dat, object->tio.object);
   obj = object->tio.object->tio.IDBUFFER;
-
-  /* Read values
-   */
 
   //TODO: Implement-me!
 
@@ -3957,9 +3828,6 @@ dwg_decode_HATCH(Bit_Chain * dat, Dwg_Object * object)
   dwg_decode_object(dat, object->tio.object);
   obj = object->tio.object->tio.HATCH;
 
-  /* Read values
-   */
-
   //TODO: Implement-me!
 
   //dwg_decode_handleref (dat, object);
@@ -3977,9 +3845,6 @@ dwg_decode_VBA_PROJECT(Bit_Chain * dat, Dwg_Object * object)
   object->tio.object->object = object;
   dwg_decode_object(dat, object->tio.object);
   obj = object->tio.object->tio.VBA_PROJECT;
-
-  /* Read values
-   */
 
   //TODO: Implement-me!
 
