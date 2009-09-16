@@ -64,31 +64,18 @@ test_SVG(char *filename)
 
 void output_symbol(Dwg_Object_Ref* ref)
 {
-
-
-  fprintf(stderr, "DWG2SVG DEBUG: handleref: %d.%d.%lu obj=\"%x\"\n", ref->handleref.code, ref->handleref.size, ref->handleref.value, ref->obj);
-
-  return; // TODO: remove this "return;" statement once handling of handles is properly fixed.
-  
-  fprintf(stderr, "DWG2SVG DEBUG: obj->type: %d obj->handle %d.%d.%lu\n", ref->obj->type, ref->obj->handle.code, ref->obj->handle.size, ref->obj->handle.value);
-
   if (ref->obj->type == DWG_TYPE_BLOCK_HEADER)
     {
       Dwg_Object_BLOCK_HEADER* hdr;
       hdr = ref->obj->tio.object->tio.BLOCK_HEADER;
 
-      fprintf(stderr, "hdr->entry_name=\"%s\"\n", hdr->entry_name);
       printf(
-          "\t<g id=\"dwg-handle-%lu\" >\n<!--\n\tBLOCK_HEADER obj->handle: %d.%d.%d\n\treferenced BLOCK: %d.%d.%d -->\n", ref->obj->handle.value,
-          ref->obj->handle.code,
-          ref->obj->handle.size,
-          ref->obj->handle.value,
-          hdr->block_entity->handleref.code,
-          hdr->block_entity->handleref.size,
-          hdr->block_entity->handleref.value);
+          "\t<g id=\"symbol-%lu\" >\n\t\t<!-- %s -->\n", ref->obj->handle.value, hdr->entry_name);
 
       //TODO: output contents of the symbol
-      printf("</g>");
+      printf("\n\t\t<!-- TODO -->\n");
+
+      printf("\t</g>\n");
     }
   else
     {
@@ -124,13 +111,12 @@ output_SVG(Dwg_Structure* dwg_struct)
 
   Dwg_Object_BLOCK_CONTROL* block_control;
   block_control = obj->tio.object->tio.BLOCK_CONTROL;
-  printf("\t<def>\n");
+  printf("\t<defs>\n");
   for (i=0; i<block_control->num_entries; i++)
     {
-      printf("<!-- symbol %d -->\n", i);
       output_symbol(block_control->block_headers[i]);
     }
-  printf("\t</def>\n");
+  printf("\t</defs>\n");
 
   output_symbol(block_control->model_space);
   output_symbol(block_control->paper_space);

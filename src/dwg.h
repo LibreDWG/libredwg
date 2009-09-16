@@ -2332,7 +2332,7 @@ typedef struct _dwg_struct
   Dwg_Object *object;
 
   long unsigned int num_object_refs;
-  Dwg_Object_Ref *object_ref;
+  Dwg_Object_Ref ** object_ref;
 
   struct
   {

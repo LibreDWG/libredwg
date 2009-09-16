@@ -821,8 +821,8 @@ decode_R13_R15_header(Bit_Chain* dat, Dwg_Structure * skt)
   //step II of handles parsing: resolve pointers from handle value
   for (i = 0; i < skt->num_object_refs; i++)
     {
-      skt->object_ref[i].obj = dwg_resolve_handle(skt,
-          skt->object_ref[i].handleref.value);
+      skt->object_ref[i]->obj = dwg_resolve_handle(skt,
+          skt->object_ref[i]->handleref.value);
     }
 
   return 0;
@@ -1496,10 +1496,11 @@ dwg_resolve_handle(Dwg_Structure* skt, unsigned long int handle)
   return 0;
 }
 
+#define REFS_PER_REALLOC 100
+
 static Dwg_Object_Ref *
 dwg_decode_handleref(Bit_Chain * dat, Dwg_Object * obj)
 {
-  //decode handle
   Dwg_Handle handleref;
   Dwg_Object_Ref* ref = 0;
   Dwg_Structure* skt = obj->parent;
@@ -1509,24 +1510,25 @@ dwg_decode_handleref(Bit_Chain * dat, Dwg_Object * obj)
       fprintf(stderr,
           "\tENTITY: Error reading handle in object whose handle is: %d.%d.%lu\n",
           obj->handle.code, obj->handle.size, obj->handle.value);
+      return 0;
     }
+
+  ref = (Dwg_Object_Ref *) malloc(sizeof(Dwg_Object_Ref));
 
   //Reserve memory space for object references
   if (skt->num_object_refs == 0)
-    skt->object_ref = (Dwg_Object_Ref *) malloc(sizeof(Dwg_Object_Ref));
+    skt->object_ref = (Dwg_Object_Ref **) malloc(REFS_PER_REALLOC * sizeof(Dwg_Object_Ref*));
   else
-    skt->object_ref = (Dwg_Object_Ref *) realloc(skt->object_ref,
-        (skt->num_object_refs + 1) * sizeof(Dwg_Object_Ref));
+    if (skt->num_object_refs % REFS_PER_REALLOC == 0)
+      skt->object_ref = (Dwg_Object_Ref **) realloc(skt->object_ref,
+          (skt->num_object_refs + REFS_PER_REALLOC) * sizeof(Dwg_Object_Ref*));
 
-  ref = &skt->object_ref[skt->num_object_refs];
-  skt->num_object_refs++;
+  skt->object_ref[skt->num_object_refs++] = ref;
 
   ref->handleref.code = handleref.code;
   ref->handleref.size = handleref.size;
   ref->handleref.value = handleref.value;
   ref->obj = 0;
-
-//  fprintf(stderr, "DEBUG: handleref: %d.%d.%lu obj=\"%x\"\n", ref->handleref.code, ref->handleref.size, ref->handleref.value, ref->obj);
 
   return ref;
 }
