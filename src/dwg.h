@@ -348,10 +348,8 @@ typedef struct _dwg_entity_VERTEX_2D
  */
 typedef struct _dwg_entity_VERTEX_3D
 {
-  unsigned char flags;
-  double x0;
-  double y0;
-  double z0;
+  BITCODE_RC flags;
+  BITCODE_3BD point;
 } Dwg_Entity_VERTEX_3D;
 
 /**

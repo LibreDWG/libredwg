@@ -2108,10 +2108,8 @@ dwg_decode_VERTEX_3D(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(VERTEX_3D);
 
-  ent->flags = bit_read_RC(dat);
-  ent->x0 = bit_read_BD(dat);
-  ent->y0 = bit_read_BD(dat);
-  ent->z0 = bit_read_BD(dat);
+  FIELD(flags, RC);
+  FIELD_3BD(point);
 
   dwg_decode_common_entity_handle_data(dat, obj);
 
@@ -2122,10 +2120,8 @@ dwg_decode_VERTEX_MESH(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(VERTEX_MESH);
 
-  ent->flags = bit_read_RC(dat);
-  ent->x0 = bit_read_BD(dat);
-  ent->y0 = bit_read_BD(dat);
-  ent->z0 = bit_read_BD(dat);
+  FIELD(flags, RC);
+  FIELD_3BD(point);
 
   dwg_decode_common_entity_handle_data(dat, obj);
 }
@@ -2135,10 +2131,8 @@ dwg_decode_VERTEX_PFACE(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(VERTEX_PFACE);
 
-  ent->flags = bit_read_RC(dat);
-  ent->x0 = bit_read_BD(dat);
-  ent->y0 = bit_read_BD(dat);
-  ent->z0 = bit_read_BD(dat);
+  FIELD(flags, RC);
+  FIELD_3BD(point);
 
   dwg_decode_common_entity_handle_data(dat, obj);
 }

@@ -1086,29 +1086,25 @@ dwg_encode_ATTDEF(Dwg_Entity_ATTDEF * ent, Bit_Chain * dat)
 static void
 dwg_encode_BLOCK(Dwg_Entity_BLOCK *ent, Bit_Chain * dat)
 {
-  //TODO: check
   bit_write_TV(dat, ent->name);
-
+  //TODO: dwg_encode_common_entity_handle_data(dat, ent->object);
 }
 
 static void
 dwg_encode_ENDBLK(Dwg_Entity_ENDBLK *ent, Bit_Chain * dat)
 {
-  //TODO: check
-  //nothing to do
+  //TODO: dwg_encode_common_entity_handle_data(dat, ent->object);
 }
 
 static void
 dwg_encode_SEQEND(Dwg_Entity_SEQEND *ent, Bit_Chain * dat)
 {
-  //TODO: check
-  //nothing to do
+  //TODO: dwg_encode_common_entity_handle_data(dat, ent->object);
 }
 
 static void
 dwg_encode_INSERT(Dwg_Entity_INSERT *ent, Bit_Chain * dat)
 {
-  //TODO: check
   bit_write_BD(dat, ent->ins_pt.x);
   bit_write_BD(dat, ent->ins_pt.y);
   bit_write_BD(dat, ent->ins_pt.z);
@@ -1137,12 +1133,12 @@ dwg_encode_INSERT(Dwg_Entity_INSERT *ent, Bit_Chain * dat)
   bit_write_BD(dat, ent->extrusion.y);
   bit_write_BD(dat, ent->extrusion.z);
   bit_write_B(dat, ent->has_attribs);
+  //TODO: dwg_encode_common_entity_handle_data(dat, ent->object);
 }
 
 static void
 dwg_encode_MINSERT(Dwg_Entity_MINSERT *ent, Bit_Chain * dat)
 {
-  //TODO: check
   bit_write_BD(dat, ent->ins_pt.x);
   bit_write_BD(dat, ent->ins_pt.y);
   bit_write_BD(dat, ent->ins_pt.z);
@@ -1175,12 +1171,12 @@ dwg_encode_MINSERT(Dwg_Entity_MINSERT *ent, Bit_Chain * dat)
   bit_write_BS(dat, ent->numrows);
   bit_write_BD(dat, ent->col_spacing);
   bit_write_BD(dat, ent->row_spacing);
+  //TODO: dwg_encode_common_entity_handle_data(dat, ent->object);
 }
 
 static void
 dwg_encode_VERTEX_2D(Dwg_Entity_VERTEX_2D *ent, Bit_Chain * dat)
 {
-  //TODO: check
   bit_write_RC(dat, ent->flags);
   bit_write_BD(dat, ent->point.x);
   bit_write_BD(dat, ent->point.y);
@@ -1196,36 +1192,37 @@ dwg_encode_VERTEX_2D(Dwg_Entity_VERTEX_2D *ent, Bit_Chain * dat)
     }
   bit_write_BD(dat, ent->bulge);
   bit_write_BD(dat, ent->tangent_dir);
+  //TODO: dwg_encode_common_entity_handle_data(dat, ent->object);
 }
 
 static void
 dwg_encode_VERTEX_3D(Dwg_Entity_VERTEX_3D *ent, Bit_Chain * dat)
 {
-  //TODO: check
   bit_write_RC(dat, ent->flags);
-  bit_write_BD(dat, ent->x0);
-  bit_write_BD(dat, ent->y0);
-  bit_write_BD(dat, ent->z0);
+  bit_write_BD(dat, ent->point.x);
+  bit_write_BD(dat, ent->point.y);
+  bit_write_BD(dat, ent->point.z);
+  //TODO: dwg_encode_common_entity_handle_data(dat, ent->object);
 }
 
 static void
 dwg_encode_VERTEX_MESH(Dwg_Entity_VERTEX_MESH *ent, Bit_Chain * dat)
 {
-  //TODO: check
   bit_write_RC(dat, ent->flags);
-  bit_write_BD(dat, ent->x0);
-  bit_write_BD(dat, ent->y0);
-  bit_write_BD(dat, ent->z0);
+  bit_write_BD(dat, ent->point.x);
+  bit_write_BD(dat, ent->point.y);
+  bit_write_BD(dat, ent->point.z);
+  //TODO: dwg_encode_common_entity_handle_data(dat, ent->object);
 }
 
 static void
 dwg_encode_VERTEX_PFACE(Dwg_Entity_VERTEX_PFACE *ent, Bit_Chain * dat)
 {
-  //TODO: check
   bit_write_RC(dat, ent->flags);
-  bit_write_BD(dat, ent->x0);
-  bit_write_BD(dat, ent->y0);
-  bit_write_BD(dat, ent->z0);
+  bit_write_BD(dat, ent->point.x);
+  bit_write_BD(dat, ent->point.y);
+  bit_write_BD(dat, ent->point.z);
+  //TODO: dwg_encode_common_entity_handle_data(dat, ent->object);
 }
 
 static void
