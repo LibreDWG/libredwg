@@ -1983,7 +1983,7 @@ dwg_decode_INSERT(Bit_Chain * dat, Dwg_Object * obj)
   FIELD_HANDLE(block_header, 5);
 
   //There is a typo in the spec. it says "R13-R200:".
-  //I guess it means "R13-R2000:" 
+  //I guess it means "R13-R2000:" (just like in MINSERT)
   VERSIONS(R_13,R_2000)
     {
     if(GET_FIELD(has_attribs))
@@ -1993,7 +1993,9 @@ dwg_decode_INSERT(Bit_Chain * dat, Dwg_Object * obj)
       }
     }
 
-  VERSION(R_2004)
+  //Spec typo? Spec says "2004:" but I think it should be "2004+:"
+  // just like field owned_obj_count (AND just like in MINSERT)
+  SINCE(R_2004)
     {
       HANDLE_VECTOR(attrib_handles, owned_obj_count, 4);
     }
@@ -2009,11 +2011,11 @@ dwg_decode_MINSERT(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(MINSERT);
 
-  FIELD_3DPOINT(ins_pt);
+  FIELD_3BD(ins_pt);
 
   VERSIONS(R_13,R_14)
     {
-      FIELD_3DPOINT(scale);
+      FIELD_3BD(scale);
     }
 
   SINCE(R_2000)
@@ -2042,7 +2044,7 @@ dwg_decode_MINSERT(Bit_Chain * dat, Dwg_Object * obj)
     }
 
   FIELD(rotation_ang, BD);
-  FIELD_3DPOINT(extrusion);
+  FIELD_3BD(extrusion);
   FIELD(has_attribs, B);
 
   SINCE(R_2004)
@@ -2059,8 +2061,6 @@ dwg_decode_MINSERT(Bit_Chain * dat, Dwg_Object * obj)
 
   FIELD_HANDLE(block_header, 5);
 
-  //There is a typo in the spec. it says "R13-R200:".
-  //I guess it means "R13-R2000:"
   VERSIONS(R_13,R_2000)
     if (GET_FIELD(has_attribs))
       {
@@ -2068,7 +2068,7 @@ dwg_decode_MINSERT(Bit_Chain * dat, Dwg_Object * obj)
         FIELD_HANDLE(last_attrib, 4);
       }
 
-  VERSION(R_2004)
+  SINCE(R_2004)
     {
       HANDLE_VECTOR(attrib_handles, owned_obj_count, 4);
     }
