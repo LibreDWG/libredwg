@@ -60,7 +60,7 @@ load_dwg(char *filename)
         {
       case DWG_TYPE_LINE:
         line = dwg.object[i].tio.entity->tio.LINE;
-        add_line(line->x0, line->x1, line->y0, line->y1);
+        add_line(line->start.x, line->end.x, line->start.y, line->end.y);
         break;
       case DWG_TYPE_CIRCLE:
         circle = dwg.object[i].tio.entity->tio.CIRCLE;

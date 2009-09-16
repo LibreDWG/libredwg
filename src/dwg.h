@@ -433,20 +433,11 @@ typedef struct _dwg_entity_CIRCLE
  */
 typedef struct _dwg_entity_LINE
 {
-  unsigned char Zs_are_zero;
-  double x0;
-  double x1;
-  double y0;
-  double y1;
-  double z0;
-  double z1;
-  double thickness;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } extrusion;
+  BITCODE_RC Zs_are_zero;
+  BITCODE_3BD start;
+  BITCODE_3BD end;
+  BITCODE_BT thickness;
+  BITCODE_BE extrusion;
 } Dwg_Entity_LINE;
 
 /**

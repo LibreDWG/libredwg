@@ -2248,31 +2248,32 @@ dwg_decode_LINE(Bit_Chain * dat, Dwg_Object * obj)
 
   VERSIONS(R_13,R_14)
     {
-      ent->x0 = bit_read_BD(dat);
-      ent->y0 = bit_read_BD(dat);
-      ent->z0 = bit_read_BD(dat);
-
-      ent->x1 = bit_read_BD(dat);
-      ent->y1 = bit_read_BD(dat);
-      ent->z1 = bit_read_BD(dat);
+      FIELD_3BD(start);
+      FIELD_3BD(end);
     }
 
-  VERSION(R_2000)
+  SINCE(R_2000)
     {
-      ent->Zs_are_zero = bit_read_B(dat);
-      ent->x0 = bit_read_RD(dat);
-      ent->x1 = bit_read_DD(dat, ent->x0);
-      ent->y0 = bit_read_RD(dat);
-      ent->y1 = bit_read_DD(dat, ent->y0);
-      ent->z0 = ent->z1 = 0.0;
-      if (!ent->Zs_are_zero)
+      FIELD(Zs_are_zero, B);
+      FIELD(start.x, RD);
+      FIELD_DD(end.x, GET_FIELD(start.x));
+      FIELD(start.y, RD);
+      FIELD_DD(end.y, GET_FIELD(start.y));
+
+      if (ent->Zs_are_zero)
         {
-          ent->z0 = bit_read_RD(dat);
-          ent->z1 = bit_read_DD(dat, ent->z0);
+          GET_FIELD(start.z) = 0.0;
+          GET_FIELD(end.z) = 0.0;
+        }
+      else
+        {
+          FIELD(start.z, RD);
+          FIELD_DD(end.z, GET_FIELD(start.z));
         }
     }
-  ent->thickness = bit_read_BT(dat);
-  bit_read_BE(dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
+
+  FIELD(thickness, BT);
+  FIELD_BE(extrusion);
 
   dwg_decode_common_entity_handle_data(dat, obj);
 }

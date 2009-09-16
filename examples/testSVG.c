@@ -162,8 +162,8 @@ output_SVG(Dwg_Structure* dwg_struct)
           line = obj->tio.entity->tio.LINE;
           printf(
               "\t<path id=\"dwg-%d\" d=\"M %f,%f %f,%f\" style=\"fill:none;stroke:blue;stroke-width:0.1px\" />\n",
-              i, line->x0, page_height - line->y0, line->x1, page_height
-                  - line->y1);
+              i, line->start.x, page_height - line->start.y, line->end.x, page_height
+                  - line->end.y);
         }
 
       if (obj->type == DWG_TYPE_CIRCLE)

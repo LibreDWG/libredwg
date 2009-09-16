@@ -1296,20 +1296,37 @@ dwg_encode_CIRCLE(Dwg_Entity_CIRCLE * est, Bit_Chain * dat)
 }
 
 static void
-dwg_encode_LINE(Dwg_Entity_LINE * est, Bit_Chain * dat)
+dwg_encode_LINE(Dwg_Entity_LINE * ent, Bit_Chain * dat)
 {
-  bit_write_B(dat, est->Zs_are_zero);
-  bit_write_RD(dat, est->x0);
-  bit_write_DD(dat, est->x1, est->x0);
-  bit_write_RD(dat, est->y0);
-  bit_write_DD(dat, est->y1, est->y0);
-  if (!est->Zs_are_zero)
+  VERSIONS(R_13,R_14)
     {
-      bit_write_RD(dat, est->z0);
-      bit_write_DD(dat, est->z1, est->z0);
+      bit_write_BD(dat, ent->start.x);
+      bit_write_BD(dat, ent->start.y);
+      bit_write_BD(dat, ent->start.z);
+      bit_write_BD(dat, ent->end.x);
+      bit_write_BD(dat, ent->end.y);
+      bit_write_BD(dat, ent->end.z);
     }
-  bit_write_BT(dat, est->thickness);
-  bit_write_BE(dat, est->extrusion.x, est->extrusion.y, est->extrusion.z);
+
+  SINCE(R_2000)
+    {
+      ent->Zs_are_zero = (ent->start.z == 0.0 && ent->end.z == 0.0);
+      bit_write_B(dat, ent->Zs_are_zero);
+      bit_write_RD(dat, ent->start.x);
+      bit_write_DD(dat, ent->end.x, ent->start.x);
+      bit_write_RD(dat, ent->start.y);
+      bit_write_DD(dat, ent->end.y, ent->start.y);
+      if (!ent->Zs_are_zero)
+        {
+          bit_write_RD(dat, ent->start.z);
+          bit_write_DD(dat, ent->end.z, ent->start.z);
+        }
+    }
+
+  bit_write_BT(dat, ent->thickness);
+  bit_write_BE(dat, ent->extrusion.x, ent->extrusion.y, ent->extrusion.z);
+
+  //TODO: dwg_encode_common_entity_handle_data(dat, ent->object);
 }
 
 static void

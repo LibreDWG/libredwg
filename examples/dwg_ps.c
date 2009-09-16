@@ -92,8 +92,8 @@ create_postscript(Dwg_Structure *dwg, char *output)
         {
           Dwg_Entity_LINE* line;
           line = obj->tio.entity->tio.LINE;
-          PS_moveto(ps, line->x0, line->y0);
-          PS_lineto(ps, line->x1, line->y1);
+          PS_moveto(ps, line->start.x, line->start.y);
+          PS_lineto(ps, line->end.x, line->end.y);
           PS_stroke(ps);
         }
     }
