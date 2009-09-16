@@ -64,7 +64,7 @@ load_dwg(char *filename)
         break;
       case DWG_TYPE_CIRCLE:
         circle = dwg.object[i].tio.entity->tio.CIRCLE;
-        add_circle(circle->x0, circle->y0, circle->radius);
+        add_circle(circle->center.x, circle->center.y, circle->radius);
         break;
       case DWG_TYPE_TEXT:
         text = dwg.object[i].tio.entity->tio.TEXT;

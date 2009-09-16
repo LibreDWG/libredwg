@@ -422,17 +422,10 @@ typedef struct _dwg_entity_ARC
  */
 typedef struct _dwg_entity_CIRCLE
 {
-  double x0;
-  double y0;
-  double z0;
-  double radius;
-  double thickness;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } extrusion;
+  BITCODE_3BD center;
+  BITCODE_BD radius;
+  BITCODE_BT thickness;
+  BITCODE_BE extrusion;
 } Dwg_Entity_CIRCLE;
 
 /**

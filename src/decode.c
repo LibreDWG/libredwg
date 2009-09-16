@@ -2233,12 +2233,10 @@ dwg_decode_CIRCLE(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(CIRCLE);
 
-  ent->x0 = bit_read_BD(dat);
-  ent->y0 = bit_read_BD(dat);
-  ent->z0 = bit_read_BD(dat);
-  ent->radius = bit_read_BD(dat);
-  ent->thickness = bit_read_BT(dat);
-  bit_read_BE(dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
+  FIELD_3BD(center);
+  FIELD(radius, BD);
+  FIELD(thickness, BT);
+  FIELD_BE(extrusion);
 
   dwg_decode_common_entity_handle_data(dat, obj);
 }

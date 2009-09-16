@@ -1285,12 +1285,14 @@ dwg_encode_ARC(Dwg_Entity_ARC *ent, Bit_Chain * dat)
 static void
 dwg_encode_CIRCLE(Dwg_Entity_CIRCLE * est, Bit_Chain * dat)
 {
-  bit_write_BD(dat, est->x0);
-  bit_write_BD(dat, est->y0);
-  bit_write_BD(dat, est->z0);
+  bit_write_BD(dat, est->center.x);
+  bit_write_BD(dat, est->center.y);
+  bit_write_BD(dat, est->center.z);
   bit_write_BD(dat, est->radius);
   bit_write_BT(dat, est->thickness);
   bit_write_BE(dat, est->extrusion.x, est->extrusion.y, est->extrusion.z);
+
+  //TODO: dwg_encode_common_entity_handle_data(dat, ent->object);
 }
 
 static void

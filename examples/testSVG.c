@@ -173,7 +173,7 @@ output_SVG(Dwg_Structure* dwg_struct)
           circle = obj->tio.entity->tio.CIRCLE;
           printf(
               "\t<circle id=\"dwg-%d\" cx=\"%f\" cy=\"%f\" r=\"%f\" fill=\"none\" stroke=\"blue\" stroke-width=\"0.1px\" />\n",
-              i, circle->x0, page_height - circle->y0, circle->radius);
+              i, circle->center.x, page_height - circle->center.y, circle->radius);
         }
 
       if (obj->type == DWG_TYPE_ARC)
