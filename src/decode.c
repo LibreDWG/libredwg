@@ -1931,34 +1931,41 @@ dwg_decode_SEQEND(Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_INSERT(Bit_Chain * dat, Dwg_Object * obj)
 {
-  int i;
   DWG_ENTITY(INSERT);
 
-  FIELD_3DPOINT(ins_pt);
+  FIELD_3BD(ins_pt);
 
   VERSIONS(R_13,R_14)
     {
-      FIELD_3DPOINT(scale);
+      FIELD_3BD(scale);
     }
 
   SINCE(R_2000)
     {
       FIELD(scale_flag, BB);
       if (GET_FIELD(scale_flag) == 3)
-        ent->scale.x = ent->scale.y = ent->scale.z = 1.0;
+        {
+          GET_FIELD(scale.x) = 1.0;
+          GET_FIELD(scale.y) = 1.0;
+          GET_FIELD(scale.z) = 1.0;
+        }
       else if (GET_FIELD(scale_flag) == 1)
         {
-          ent->scale.x = 1.0;
-          ent->scale.y = bit_read_DD(dat, 1.0);
-          ent->scale.z = bit_read_DD(dat, 1.0);
+          GET_FIELD(scale.x) = 1.0;
+          FIELD_DD(scale.y, 1.0);
+          FIELD_DD(scale.z, 1.0);
         }
       else if (GET_FIELD(scale_flag) == 2)
-        ent->scale.x = ent->scale.y = ent->scale.z = bit_read_RD(dat);
+        {
+          FIELD(scale.x, RD); 
+          GET_FIELD(scale.y) = GET_FIELD(scale.x);
+          GET_FIELD(scale.z) = GET_FIELD(scale.x);
+        }
       else //if (GET_FIELD(scale_flag) == 0)
         {
-          ent->scale.x = bit_read_RD(dat);
-          ent->scale.y = bit_read_DD(dat, ent->scale.x);
-          ent->scale.z = bit_read_DD(dat, ent->scale.x);
+          FIELD(scale.x, RD);
+          FIELD_DD(scale.y, GET_FIELD(scale.x));
+          FIELD_DD(scale.z, GET_FIELD(scale.x));
         }
     }
 
@@ -2016,17 +2023,21 @@ dwg_decode_MINSERT(Bit_Chain * dat, Dwg_Object * obj)
         ent->scale.x = ent->scale.y = ent->scale.y = 1.0;
       else if (GET_FIELD(scale_flag) == 1)
         {
-          ent->scale.x = 1.0;
-          ent->scale.y = bit_read_DD(dat, 1.0);
-          ent->scale.z = bit_read_DD(dat, 1.0);
+          GET_FIELD(scale.x) = 1.0;
+          FIELD_DD(scale.y, 1.0);
+          FIELD_DD(scale.z, 1.0);
         }
       else if (GET_FIELD(scale_flag) == 2)
-        ent->scale.x = ent->scale.y = ent->scale.y = bit_read_RD(dat);
+        {
+          FIELD(scale.x, RD);
+          GET_FIELD(scale.y) = GET_FIELD(scale.x);
+          GET_FIELD(scale.z) = GET_FIELD(scale.x);
+        }
       else //if (GET_FIELD(scale_flag) == 0)
         {
-          ent->scale.x = bit_read_RD(dat);
-          ent->scale.y = bit_read_DD(dat, ent->scale.x);
-          ent->scale.z = bit_read_DD(dat, ent->scale.x);
+          FIELD(scale.x, RD);
+          FIELD_DD(scale.y, GET_FIELD(scale.x));
+          FIELD_DD(scale.z, GET_FIELD(scale.x));
         }
     }
 
