@@ -1754,7 +1754,7 @@ dwg_decode_ATTRIB(Bit_Chain * dat, Dwg_Object * obj)
       FIELD(elevation, BD);
       FIELD_2RD(insertion_pt);
       FIELD_2RD(alignment_pt);
-      FIELD_BE(extrusion);
+      FIELD_3BD(extrusion);
       FIELD(thickness, BD);
       FIELD(oblique_ang, BD);
       FIELD(rotation_ang, BD);
@@ -1829,66 +1829,77 @@ dwg_decode_ATTDEF(Bit_Chain * dat, Dwg_Object * obj)
 
   VERSIONS(R_13,R_14)
     {
-
-      ent->elevation = bit_read_BD(dat);
-      ent->x0 = bit_read_RD(dat);
-      ent->y0 = bit_read_RD(dat);
-      ent->alignment.x = bit_read_RD(dat);
-      ent->alignment.y = bit_read_RD(dat);
-      bit_read_BE(dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
-      ent->thickness = bit_read_BD(dat);
-      ent->oblique_ang = bit_read_BD(dat);
-      ent->rotation_ang = bit_read_BD(dat);
-      ent->height = bit_read_BD(dat);
-      ent->width_factor = bit_read_BD(dat);
-      ent->text = bit_read_TV(dat);
-      ent->generation = bit_read_BS(dat);
-      ent->alignment.h = bit_read_BS(dat);
-      ent->alignment.v = bit_read_BS(dat);
+      FIELD(elevation, BD);
+      FIELD_2RD(insertion_pt);
+      FIELD_2RD(alignment_pt);
+      FIELD_3BD(extrusion);
+      FIELD(thickness, BD);
+      FIELD(oblique_ang, BD);
+      FIELD(rotation_ang, BD);
+      FIELD(height, BD);
+      FIELD(width_factor, BD);
+      FIELD(default_value, TV);
+      FIELD(generation, BS);
+      FIELD(horiz_alignment, BS);
+      FIELD(vert_alignment, BS);
     }
 
   SINCE(R_2000)
     {
-      ent->dataflags = bit_read_RC(dat);
-      if ((!ent->dataflags & 0x01))
-        ent->elevation = bit_read_RD(dat);
-      ent->x0 = bit_read_RD(dat);
-      ent->y0 = bit_read_RD(dat);
-      if (!(ent->dataflags & 0x02))
+      FIELD(dataflags, RC);
+      if (!(GET_FIELD(dataflags) & 0x01))
         {
-          ent->alignment.x = bit_read_DD(dat, 10);
-          ent->alignment.y = bit_read_DD(dat, 20);
+          FIELD(elevation, RD);
         }
-      bit_read_BE(dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
-      ent->thickness = bit_read_BT(dat);
-      if (!(ent->dataflags & 0x04))
-        ent->oblique_ang = bit_read_RD(dat);
-      if (!(ent->dataflags & 0x08))
-        ent->rotation_ang = bit_read_RD(dat);
-      ent->height = bit_read_RD(dat);
-      if (!(ent->dataflags & 0x10))
-        ent->width_factor = bit_read_RD(dat);
-      ent->text = bit_read_TV(dat);
-      if (!(ent->dataflags & 0x20))
-        ent->generation = bit_read_BS(dat);
-      if (!(ent->dataflags & 0x40))
-        ent->alignment.h = bit_read_BS(dat);
-      if (!(ent->dataflags & 0x80))
-        ent->alignment.v = bit_read_BS(dat);
+      FIELD_2RD(insertion_pt);
+      if (!(GET_FIELD(dataflags) & 0x02))
+        {
+          FIELD_2DD(alignment_pt, 10, 20);
+        }
+      FIELD_BE(extrusion);
+      FIELD(thickness, BT);
+      if (!(GET_FIELD(dataflags) & 0x04))
+        {
+          FIELD(oblique_ang, RD);
+        }
+      if (!(GET_FIELD(dataflags) & 0x08))
+        {
+          FIELD(rotation_ang, RD);
+        }
+      FIELD(height, RD);
+      if (!(GET_FIELD(dataflags) & 0x10))
+        {
+          FIELD(width_factor, RD);
+        }
+      FIELD(default_value, TV);
+      if (!(GET_FIELD(dataflags) & 0x20))
+        {
+          FIELD(generation, BS);
+        }
+      if (!(GET_FIELD(dataflags) & 0x40))
+        {
+          FIELD(horiz_alignment, BS);
+        }
+      if (!(GET_FIELD(dataflags) & 0x80))
+        {
+          FIELD(vert_alignment, BS);
+        }
     }
 
-  ent->tag = bit_read_TV(dat);
-  ent->field_length = bit_read_BS(dat);
-  ent->flags = bit_read_RC(dat);
+  FIELD(tag, TV);
+  FIELD(field_length, BS);
+  FIELD(flags, RC);
 
   SINCE(R_2007)
     {
-      ent->lock_position_flag = bit_read_B(dat);
+      FIELD(lock_position_flag, B);
     }
-  ent->prompt = bit_read_TV(dat);
+
+  FIELD(prompt, TV);
 
   dwg_decode_common_entity_handle_data(dat, obj);
-  ent->style = HANDLE_CODE(5);
+
+  FIELD_HANDLE(style, 5);
 }
 
 static void

@@ -240,37 +240,25 @@ typedef struct _dwg_entity_ATTRIB
  */
 typedef struct _dwg_entity_ATTDEF
 {
-  unsigned char dataflags;
-  double elevation;
-  double x0;
-  double y0;
-  struct
-  {
-    double x;
-    double y;
-    unsigned int h;
-    unsigned int v;
-  } alignment;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } extrusion;
-  double thickness;
-  double oblique_ang;
-  double rotation_ang;
-  double height;
-  double width_factor;
-  unsigned char *text;
-  unsigned int generation;
-  unsigned int horiz_align;
-  unsigned int vert_align;
-  unsigned char *tag;
-  unsigned int field_length;
-  unsigned char flags;
-  unsigned char lock_position_flag;
-  unsigned char *prompt;
+  BITCODE_BD elevation;
+  BITCODE_2DPOINT insertion_pt;
+  BITCODE_2DPOINT alignment_pt;
+  BITCODE_3DPOINT extrusion;
+  BITCODE_RD thickness;
+  BITCODE_RD oblique_ang;
+  BITCODE_RD rotation_ang;
+  BITCODE_RD height;
+  BITCODE_RD width_factor;
+  BITCODE_TV default_value;
+  BITCODE_BS generation;
+  BITCODE_BS horiz_alignment;
+  BITCODE_BS vert_alignment;
+  BITCODE_RC dataflags;
+  BITCODE_TV tag;
+  BITCODE_BS field_length;
+  BITCODE_RC flags;
+  BITCODE_B lock_position_flag;
+  BITCODE_TV prompt;
   Dwg_Object_Ref* style;
 } Dwg_Entity_ATTDEF;
 

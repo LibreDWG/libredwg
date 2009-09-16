@@ -143,6 +143,7 @@ dwg_print_ATTRIB(Dwg_Entity_ATTRIB * ent)
 void
 dwg_print_ATTDEF(Dwg_Entity_ATTDEF * ent)
 {
+/*
   printf("\tData flags: 0x%02x\n", ent->dataflags);
 
   printf("\tElevation: %1.13g\n", ent->elevation);
@@ -164,6 +165,7 @@ dwg_print_ATTDEF(Dwg_Entity_ATTDEF * ent)
   printf("\tField length: %i\n", ent->field_length);
   printf("\tFlags: 0x%02x\n", ent->flags);
   printf("\tPrompt (prompt): %s\n", ent->prompt);
+*/
 }
 
 void
