@@ -1182,9 +1182,9 @@ dwg_encode_VERTEX_2D(Dwg_Entity_VERTEX_2D *ent, Bit_Chain * dat)
 {
   //TODO: check
   bit_write_RC(dat, ent->flags);
-  bit_write_BD(dat, ent->x0);
-  bit_write_BD(dat, ent->y0);
-  bit_write_BD(dat, ent->z0);
+  bit_write_BD(dat, ent->point.x);
+  bit_write_BD(dat, ent->point.y);
+  bit_write_BD(dat, ent->point.z);
   if ((ent->start_width == ent->end_width) && (ent->end_width != 0))
     {
       bit_write_BD(dat, -ent->start_width);

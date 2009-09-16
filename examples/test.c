@@ -70,7 +70,8 @@ test_dwg_c(char *filename)
 
   if (!error)
     {
-      dwg_print(&dwg_struct);
+      //I have temporarily disabled the print module. ~Juca
+      //dwg_print(&dwg_struct);
       /*
        unlink ("new_result.dwg");
        error = error || dwg_write_file ("new_result.dwg", &dwg_struct);

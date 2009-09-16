@@ -2084,17 +2084,20 @@ dwg_decode_VERTEX_2D(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(VERTEX_2D);
 
-  ent->flags = bit_read_RC(dat);
-  ent->x0 = bit_read_BD(dat);
-  ent->y0 = bit_read_BD(dat);
-  ent->z0 = bit_read_BD(dat);
-  ent->start_width = bit_read_BD(dat);
-  if (ent->start_width < 0)
-    ent->end_width = ent->start_width = -ent->start_width;
+  FIELD(flags, RC);
+  FIELD_3BD(point);
+  FIELD(start_width, BD);
+  if (GET_FIELD(start_width) < 0)
+    {
+      GET_FIELD(start_width) = -GET_FIELD(start_width);
+      GET_FIELD(end_width) = GET_FIELD(start_width);
+    }
   else
-    ent->end_width = bit_read_BD(dat);
-  ent->bulge = bit_read_BD(dat);
-  ent->tangent_dir = bit_read_BD(dat);
+    {
+      FIELD(end_width, BD);
+    }
+  FIELD(bulge, BD);
+  FIELD(tangent_dir, BD);
 
   dwg_decode_common_entity_handle_data(dat, obj);
 

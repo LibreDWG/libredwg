@@ -57,9 +57,10 @@ extern "C"
 #define FORMAT_DD "%f"
 #define BITCODE_BD BITCODE_DOUBLE
 #define FORMAT_BD "%f"
-#define BITCODE_2DPOINT struct { BITCODE_RD x; BITCODE_RD y; }
-#define BITCODE_3DPOINT struct { BITCODE_BD x; BITCODE_BD y; BITCODE_BD z; }
-
+#define BITCODE_2RD struct { BITCODE_RD x; BITCODE_RD y; }
+#define BITCODE_2DPOINT BITCODE_2RD
+#define BITCODE_3BD struct { BITCODE_BD x; BITCODE_BD y; BITCODE_BD z; }
+#define BITCODE_3DPOINT BITCODE_3BD
 /**
  Object supertypes that exist in dwg-files.
  */
@@ -267,7 +268,7 @@ typedef struct _dwg_entity_ATTDEF
  */
 typedef struct _dwg_entity_BLOCK
 {
-  unsigned char *name;
+  BITCODE_TV name;
 } Dwg_Entity_BLOCK;
 
 /**
@@ -334,14 +335,12 @@ typedef struct _dwg_entity_MINSERT
  */
 typedef struct _dwg_entity_VERTEX_2D
 {
-  unsigned char flags;
-  double x0;
-  double y0;
-  double z0;
-  double start_width;
-  double end_width;
-  double bulge;
-  double tangent_dir;
+  BITCODE_RC flags;
+  BITCODE_3BD point;
+  BITCODE_BD start_width;
+  BITCODE_BD end_width;
+  BITCODE_BD bulge;
+  BITCODE_BD tangent_dir;
 } Dwg_Entity_VERTEX_2D;
 
 /**

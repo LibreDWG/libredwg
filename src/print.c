@@ -17,6 +17,9 @@
 /*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
 /*****************************************************************************/
 
+//I am disabling the print module because our MACROS on decode.c provide us enough debugging messages
+#if 0 
+
 #include "print.h"
 #include <stdio.h>
 
@@ -218,14 +221,16 @@ dwg_print_MINSERT(Dwg_Entity_MINSERT * ent)
 void
 dwg_print_VERTEX_2D(Dwg_Entity_VERTEX_2D * ent)
 {
+/*
   printf("\tFlags: 0x%02x\n", ent->flags);
   printf("\tPoint: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
   printf("\tStart width: %1.13g\n", ent->start_width);
   printf("\tEnd width: %1.13g\n", ent->end_width);
   printf("\tBulge: %1.13g\n", ent->bulge);
   printf("\tTangent dir.: %1.13g\n", ent->tangent_dir);
+*/
 }
-
+/*
 void
 dwg_print_VERTEX_3D(Dwg_Entity_VERTEX_3D * ent)
 {
@@ -239,7 +244,7 @@ dwg_print_VERTEX_MESH(Dwg_Entity_VERTEX_MESH * ent)
   printf("\tFlags: 0x%02x\n", ent->flags);
   printf("\tPoint: (%1.13g, %1.13g, %1.13g)\n", ent->x0, ent->y0, ent->z0);
 }
-
+*/
 void
 dwg_print_VERTEX_PFACE(Dwg_Entity_VERTEX_PFACE * ent)
 {
@@ -1264,3 +1269,5 @@ dwg_print(Dwg_Structure *dwg_struct)
   printf("MEASUREMENT: 0x%08X\n", (unsigned int) dwg_struct->measurement);
   puts("");
 }
+
+#endif // #if 0
