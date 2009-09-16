@@ -73,13 +73,16 @@
 // reads data of the type indicated by 'type' 'size' times and stores
 // it all in the vector called 'name'.
 #define FIELD_VECTOR(name, type, size)\
-  _obj->name = (BITCODE_##type *) malloc(_obj->size * sizeof(BITCODE_##type));\
-  for (vector_counter=0; vector_counter< _obj->size; vector_counter++)\
+  if (_obj->size>0)\
     {\
-      _obj->name = bit_read_##type(dat);\
-      if (loglevel>=2)\
+      _obj->name = (BITCODE_##type*) malloc(_obj->size * sizeof(BITCODE_##type));\
+      for (vector_counter=0; vector_counter< _obj->size; vector_counter++)\
         {\
-            fprintf(stderr, #name "[%d]: " FORMAT_##type "\n", vector_counter, _obj->name);\
+          _obj->name = bit_read_##type(dat);\
+          if (loglevel>=2)\
+            {\
+                fprintf(stderr, #name "[%d]: " FORMAT_##type "\n", vector_counter, _obj->name);\
+            }\
         }\
     }
 
@@ -91,7 +94,7 @@
     }
 
 #define HANDLE_VECTOR(name, sizefield, code)\
-  GET_FIELD(name) = malloc(sizeof(Dwg_Object_Ref*) * GET_FIELD(sizefield));\
+  GET_FIELD(name) = (Dwg_Object_Ref**) malloc(sizeof(Dwg_Object_Ref*) * GET_FIELD(sizefield));\
   for (vector_counter=0; vector_counter<GET_FIELD(sizefield); vector_counter++)\
     {\
       FIELD_HANDLE(name[vector_counter], code);\
@@ -3123,7 +3126,9 @@ dwg_decode_DICTIONARY(Bit_Chain *dat, Dwg_Object *obj)
   FIELD(numitems, BS);
 
   VERSION(R_14)
-    FIELD(unknown_r14, RC);
+    {
+      FIELD(unknown_r14, RC);
+    }
 
   SINCE(R_2000)
     {
@@ -3143,7 +3148,7 @@ dwg_decode_DICTIONARY(Bit_Chain *dat, Dwg_Object *obj)
   FIELD_VECTOR(text, TV, numitems);
   FIELD_HANDLE(parenthandle, 4);
   REACTORS(4);
-  FIELD_HANDLE(xdicobjhandle,3);
+  XDICOBJHANDLE(3);
   HANDLE_VECTOR(itemhandles, numitems, 2);
 }
 
@@ -3373,7 +3378,7 @@ dwg_decode_BLOCK_HEADER(Bit_Chain *dat, Dwg_Object *obj)
 
   FIELD_HANDLE(block_control_handle, 4);
   REACTORS(4);
-  FIELD_HANDLE(xdicobjhandle, 3);
+  XDICOBJHANDLE(3);
   FIELD_HANDLE(NULL_handle, 5);
   FIELD_HANDLE(block_entity, 3);
 
@@ -3512,7 +3517,7 @@ dwg_decode_LAYOUT(Bit_Chain * dat, Dwg_Object * obj)
 
   FIELD_HANDLE(parenthandle, 4);
   REACTORS(4);
-  FIELD_HANDLE(xdicobjhandle, 3);
+  XDICOBJHANDLE(3);
 
   SINCE(R_2004)
     {
@@ -3633,9 +3638,6 @@ dwg_decode_PLACEHOLDER(Bit_Chain * dat, Dwg_Object * obj)
 
   //dwg_decode_handleref (dat, object);
 }
-
-#define OTHER_VERSIONS else
-#define PRIOR_VERSIONS else
 
 static void
 dwg_decode_DICTIONARYVAR(Bit_Chain * dat, Dwg_Object * obj)

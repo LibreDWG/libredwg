@@ -24,6 +24,8 @@
 #define VERSION(v) if (dat->version == v)
 #define SINCE(v) if (dat->version >= v)
 #define VERSIONS(v1,v2) if (dat->version >= v1 && dat->version <= v2)
+#define OTHER_VERSIONS else
+#define PRIOR_VERSIONS else
 
 typedef enum DWG_VERSION_TYPE
 {
