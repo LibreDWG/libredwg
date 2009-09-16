@@ -181,10 +181,10 @@ output_SVG(Dwg_Structure* dwg_struct)
           arcs++;
           Dwg_Entity_ARC* arc;
           arc = obj->tio.entity->tio.ARC;
-          double x_start = arc->x0 + arc->radius * cos(arc->start_angle);
-          double y_start = arc->y0 + arc->radius * sin(arc->start_angle);
-          double x_end = arc->x0 + arc->radius * cos(arc->end_angle);
-          double y_end = arc->y0 + arc->radius * sin(arc->end_angle);
+          double x_start = arc->center.x + arc->radius * cos(arc->start_angle);
+          double y_start = arc->center.y + arc->radius * sin(arc->start_angle);
+          double x_end = arc->center.x + arc->radius * cos(arc->end_angle);
+          double y_end = arc->center.y + arc->radius * sin(arc->end_angle);
           //Assuming clockwise arcs.
           int large_arc = (arc->end_angle - arc->start_angle < 3.1415) ? 0 : 1;
           printf(

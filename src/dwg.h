@@ -409,19 +409,12 @@ typedef struct _dwg_entity_POLYLINE_3D
  */
 typedef struct _dwg_entity_ARC
 {
-  double x0;
-  double y0;
-  double z0;
-  double radius;
-  double thickness;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } extrusion;
-  double start_angle;
-  double end_angle;
+  BITCODE_3BD center;
+  BITCODE_BD radius;
+  BITCODE_BT thickness;
+  BITCODE_BE extrusion;
+  BITCODE_BD start_angle;
+  BITCODE_BD end_angle;
 } Dwg_Entity_ARC;
 
 /**

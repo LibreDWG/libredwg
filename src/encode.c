@@ -1270,15 +1270,16 @@ dwg_encode_POLYLINE_3D(Dwg_Entity_POLYLINE_3D *ent, Bit_Chain * dat)
 static void
 dwg_encode_ARC(Dwg_Entity_ARC *ent, Bit_Chain * dat)
 {
-  //TODO: check
-  bit_write_BD(dat, ent->x0);
-  bit_write_BD(dat, ent->y0);
-  bit_write_BD(dat, ent->z0);
+  bit_write_BD(dat, ent->center.x);
+  bit_write_BD(dat, ent->center.y);
+  bit_write_BD(dat, ent->center.z);
   bit_write_BD(dat, ent->radius);
   bit_write_BT(dat, ent->thickness);
   bit_write_BE(dat, ent->extrusion.x, ent->extrusion.y, ent->extrusion.z);
   bit_write_BD(dat, ent->start_angle);
   bit_write_BD(dat, ent->end_angle);
+
+  //TODO: dwg_encode_common_entity_handle_data(dat, ent->object);
 }
 
 static void
