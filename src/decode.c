@@ -86,19 +86,34 @@
 #define FIELD_3DPOINT_VECTOR(name, size)\
   _obj->name = (BITCODE_3DPOINT *) malloc(_obj->size * sizeof(BITCODE_3DPOINT));\
   for (vector_counter=0; vector_counter< _obj->size; vector_counter++)\
-    {FIELD_3DPOINT(name[vector_counter])}
+    {\
+      FIELD_3DPOINT(name[vector_counter]);\
+    }
 
 #define HANDLE_VECTOR(name, sizefield, code)\
   GET_FIELD(name) = malloc(sizeof(Dwg_Object_Ref*) * GET_FIELD(sizefield));\
-  for (vector_counter=0; vector_counter<GET_FIELD(sizefield); vector_counter++){\
-    FIELD_HANDLE(name[vector_counter], code);\
-  }
+  for (vector_counter=0; vector_counter<GET_FIELD(sizefield); vector_counter++)\
+    {\
+      FIELD_HANDLE(name[vector_counter], code);\
+    }
 
 #define REACTORS(code)\
   GET_FIELD(reactors) = malloc(sizeof(Dwg_Object_Ref*) * obj->tio.object->num_reactors);\
-  for (vector_counter=0; vector_counter<obj->tio.object->num_reactors; vector_counter++){\
-    FIELD_HANDLE(reactors[vector_counter], code);\
-  }
+  for (vector_counter=0; vector_counter<obj->tio.object->num_reactors; vector_counter++)\
+    {\
+      FIELD_HANDLE(reactors[vector_counter], code);\
+    }
+
+#define XDICOBJHANDLE(code)\
+  SINCE(R_2004)\
+    {\
+      if (!obj->tio.object->xdic_missing_flag)\
+        FIELD_HANDLE(xdicobjhandle, code);\
+    }\
+  PRIOR_VERSIONS\
+    {\
+      FIELD_HANDLE(xdicobjhandle, code);\
+    }
 
 #define DWG_ENTITY(token) \
   int vector_counter;\
@@ -3619,14 +3634,20 @@ dwg_decode_PLACEHOLDER(Bit_Chain * dat, Dwg_Object * obj)
   //dwg_decode_handleref (dat, object);
 }
 
+#define OTHER_VERSIONS else
+#define PRIOR_VERSIONS else
+
 static void
 dwg_decode_DICTIONARYVAR(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_OBJECT(DICTIONARYVAR);
 
-  //TODO: Implement-me!
+  FIELD(intval, RC);
+  FIELD(str, BS);
 
-  //dwg_decode_handleref (dat, object);
+  FIELD_HANDLE(parenthandle, 4);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
 }
 
 static void

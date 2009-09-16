@@ -1757,7 +1757,11 @@ typedef struct _dwg_object_MLINESTYLE
  */
 typedef struct _dwg_object_DICTIONARYVAR
 {
-//TODO 
+  BITCODE_RC intval;
+  BITCODE_BS str;
+  Dwg_Object_Ref* parenthandle;
+  Dwg_Object_Ref** reactors;
+  Dwg_Object_Ref* xdicobjhandle;
 } Dwg_Object_DICTIONARYVAR;
 
 /**
