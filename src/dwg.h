@@ -61,6 +61,7 @@ extern "C"
 #define BITCODE_2DPOINT BITCODE_2RD
 #define BITCODE_3BD struct { BITCODE_BD x; BITCODE_BD y; BITCODE_BD z; }
 #define BITCODE_3DPOINT BITCODE_3BD
+#define BITCODE_BE BITCODE_3BD
 /**
  Object supertypes that exist in dwg-files.
  */
@@ -375,19 +376,14 @@ typedef struct _dwg_entity_VERTEX_PFACE_FACE
  */
 typedef struct _dwg_entity_POLYLINE_2D
 {
-  unsigned int flags;
-  unsigned int curve_type;
-  double start_width;
-  double end_width;
-  double thickness;
-  double elevation;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } extrusion;
-  long unsigned int owned_obj_count;
+  BITCODE_BS flags;
+  BITCODE_BS curve_type;
+  BITCODE_BD start_width;
+  BITCODE_BD end_width;
+  BITCODE_BT thickness;
+  BITCODE_BD elevation;
+  BITCODE_BE extrusion;
+  BITCODE_BL owned_obj_count;
   Dwg_Object_Ref* first_vertex;
   Dwg_Object_Ref* last_vertex;
   Dwg_Object_Ref** vertex;

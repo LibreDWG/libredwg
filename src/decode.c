@@ -2153,53 +2153,35 @@ dwg_decode_VERTEX_PFACE_FACE(Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_POLYLINE_2D(Bit_Chain * dat, Dwg_Object * obj)
 {
-  int i;
   DWG_ENTITY(POLYLINE_2D);
 
-  ent->flags = bit_read_BS(dat);
-  ent->curve_type = bit_read_BS(dat);
-  ent->start_width = bit_read_BD(dat);
-  ent->end_width = bit_read_BD(dat);
-  ent->thickness = bit_read_BT(dat);
-  ent->elevation = bit_read_BD(dat);
-  bit_read_BE(dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
+  FIELD(flags, BS);
+  FIELD(curve_type, BS);
+  FIELD(start_width, BD);
+  FIELD(end_width, BD);
+  FIELD(thickness, BT);
+  FIELD(elevation, BD);
+  FIELD_BE(extrusion);
 
   SINCE(R_2004)
     {
-      ent->owned_obj_count = bit_read_BL(dat);
+      FIELD(owned_obj_count, BL);
     }
 
   dwg_decode_common_entity_handle_data(dat, obj);
 
   VERSIONS(R_13,R_2000)
     {
-      ent->first_vertex = dwg_decode_handleref_with_code(dat, obj, 4);
-      fprintf(stderr, "first_vertex: %d.%d.%lu\n",
-          ent->first_vertex->handleref.code, ent->first_vertex->handleref.size,
-          ent->first_vertex->handleref.value);
-
-      ent->last_vertex = dwg_decode_handleref_with_code(dat, obj, 4);
-      fprintf(stderr, "last_vertex: %d.%d.%lu\n",
-          ent->last_vertex->handleref.code, ent->last_vertex->handleref.size,
-          ent->last_vertex->handleref.value);
+      FIELD_HANDLE(first_vertex, 4);
+      FIELD_HANDLE(last_vertex, 4);
     }
 
   VERSION(R_2004)
     {
-      ent->vertex = (Dwg_Object_Ref**) malloc(ent->owned_obj_count
-          * sizeof(Dwg_Object_Ref*));
-      for (i = 0; i < ent->owned_obj_count; i++)
-        {
-          ent->vertex[i] = dwg_decode_handleref_with_code(dat, obj, 4);
-          fprintf(stderr, "ent->vertex[%d]: %d.%d.%lu\n", i,
-              ent->vertex[i]->handleref.code, ent->vertex[i]->handleref.size,
-              ent->vertex[i]->handleref.value);
-        }
+      HANDLE_VECTOR(vertex, owned_obj_count, 4);
     }
 
-  ent->seqend = dwg_decode_handleref_with_code(dat, obj, 3);
-  fprintf(stderr, "seqend: %d.%d.%lu\n", ent->seqend->handleref.code,
-      ent->seqend->handleref.size, ent->seqend->handleref.value);
+  FIELD_HANDLE(seqend, 3);
 }
 
 static void
