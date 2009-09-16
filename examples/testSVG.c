@@ -62,6 +62,40 @@ test_SVG(char *filename)
   return error;
 }
 
+void output_symbol(Dwg_Object_Ref* ref)
+{
+
+
+  fprintf(stderr, "DWG2SVG DEBUG: handleref: %d.%d.%lu obj=\"%x\"\n", ref->handleref.code, ref->handleref.size, ref->handleref.value, ref->obj);
+
+  return; // TODO: remove this "return;" statement once handling of handles is properly fixed.
+  
+  fprintf(stderr, "DWG2SVG DEBUG: obj->type: %d obj->handle %d.%d.%lu\n", ref->obj->type, ref->obj->handle.code, ref->obj->handle.size, ref->obj->handle.value);
+
+  if (ref->obj->type == DWG_TYPE_BLOCK_HEADER)
+    {
+      Dwg_Object_BLOCK_HEADER* hdr;
+      hdr = ref->obj->tio.object->tio.BLOCK_HEADER;
+
+      fprintf(stderr, "hdr->entry_name=\"%s\"\n", hdr->entry_name);
+      printf(
+          "\t<g id=\"dwg-handle-%lu\" >\n<!--\n\tBLOCK_HEADER obj->handle: %d.%d.%d\n\treferenced BLOCK: %d.%d.%d -->\n", ref->obj->handle.value,
+          ref->obj->handle.code,
+          ref->obj->handle.size,
+          ref->obj->handle.value,
+          hdr->block_entity->handleref.code,
+          hdr->block_entity->handleref.size,
+          hdr->block_entity->handleref.value);
+
+      //TODO: output contents of the symbol
+      printf("</g>");
+    }
+  else
+    {
+      fprintf(stderr, "referenced object in BLOCK_CONTROL is not a BLOCK_HEADER\n");
+    }
+}
+
 void
 output_SVG(Dwg_Structure* dwg_struct)
 {
@@ -81,6 +115,26 @@ output_SVG(Dwg_Structure* dwg_struct)
     "   height=\"%f\"\n"
     ">\n", page_width, page_height);
 
+  obj = &dwg_struct->object[0];
+  if (obj->type != DWG_TYPE_BLOCK_CONTROL)
+    {
+      fprintf(stderr, "ERROR: First object is not a BLOCK_CONTROL\n");
+      return;
+    }
+
+  Dwg_Object_BLOCK_CONTROL* block_control;
+  block_control = obj->tio.object->tio.BLOCK_CONTROL;
+  printf("\t<def>\n");
+  for (i=0; i<block_control->num_entries; i++)
+    {
+      printf("<!-- symbol %d -->\n", i);
+      output_symbol(block_control->block_headers[i]);
+    }
+  printf("\t</def>\n");
+
+  output_symbol(block_control->model_space);
+  output_symbol(block_control->paper_space);
+  
   int lines = 0, arcs = 0, circles = 0, texts = 0;
 
   for (i = 0; i < dwg_struct->num_objects; i++)
@@ -99,9 +153,11 @@ output_SVG(Dwg_Structure* dwg_struct)
           hdr = obj->tio.object->tio.BLOCK_HEADER;
           //      if (hdr->block_entity->handleref.code == 3){
           printf(
-              "\t<g id=\"dwg-handle-%lu\" >\n<!--\n\tBLOCK_HEADER obj->handle: %d.%d.%d\n\treferenced BLOCK: %d.%d.%d -->\n",
-              obj->handle.value, obj->handle.code, obj->handle.size,
-              obj->handle.value, hdr->block_entity->handleref.code,
+              "\t<g id=\"dwg-handle-%lu\" >\n<!--\n\tBLOCK_HEADER obj->handle: %d.%d.%d\n\treferenced BLOCK: %d.%d.%d -->\n", obj->handle.value,
+              obj->handle.code,
+              obj->handle.size,
+              obj->handle.value,
+              hdr->block_entity->handleref.code,
               hdr->block_entity->handleref.size,
               hdr->block_entity->handleref.value);
           /*      } else {

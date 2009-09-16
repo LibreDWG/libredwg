@@ -647,14 +647,6 @@ decode_R13_R15_header(Bit_Chain* dat, Dwg_Structure * skt)
     }
   while (seksize > 2);
 
-  //XXX move this somewhere else
-  //step II of handles parsing: resolve pointers from handle value
-  for (i = 0; i < skt->num_object_refs; i++)
-    {
-      skt->object_ref[i].obj = dwg_resolve_handle(skt,
-          skt->object_ref[i].handleref.value);
-    }
-
   if (loglevel)
     {
       fprintf(stderr, "Kiom objectj: %lu\n", skt->num_objects);
@@ -826,7 +818,13 @@ decode_R13_R15_header(Bit_Chain* dat, Dwg_Structure * skt)
   if (loglevel)
     fprintf(stderr, "KIOM BAJTOJ :\t%lu\n", dat->size);
 
-  //exit (0);
+  //step II of handles parsing: resolve pointers from handle value
+  for (i = 0; i < skt->num_object_refs; i++)
+    {
+      skt->object_ref[i].obj = dwg_resolve_handle(skt,
+          skt->object_ref[i].handleref.value);
+    }
+
   return 0;
 }
 
@@ -1484,46 +1482,6 @@ dwg_decode_object(Bit_Chain * dat, Dwg_Object_Object * ord)
 
 }
 
-static void
-dump(Bit_Chain* dat, int num, char* name)
-{
-  int i;
-  int tmp_byte = dat->byte;
-  int tmp_bit = dat->bit;
-
-  fprintf(stderr, "\n\nDUMP (%s):", name);
-
-  for (i = 0; i < num; i++)
-    {
-      if (i % 8 == 0)
-        fprintf(stderr, "\n");
-      fprintf(stderr, "0x%02x ", bit_read_RC(dat));
-    }
-  fprintf(stderr, "\n");
-
-  dat->byte = tmp_byte;
-  dat->bit = tmp_bit;
-}
-
-/**
- * Check if a given handle is already listed in object_ref list
- */
-//TODO: boolean?
-static unsigned int
-dwg_find_handle(Dwg_Structure* skt, Dwg_Handle* handleref, int* index)
-{
-  //FIXME find a faster algorithm
-  int i;
-  for (i = 0; i < skt->num_object_refs; i++)
-    if (skt->object_ref[i].handleref.value == handleref->value
-        && skt->object_ref[i].handleref.code == handleref->code)
-      {
-        *index = i;
-        return 1;
-      }
-  return 0;
-}
-
 /**
  * Find a pointer to an object given it's id (handle)
  */
@@ -1545,58 +1503,32 @@ dwg_decode_handleref(Bit_Chain * dat, Dwg_Object * obj)
   Dwg_Handle handleref;
   Dwg_Object_Ref* ref = 0;
   Dwg_Structure* skt = obj->parent;
-  unsigned int exists;
-  unsigned int index;
-
-  //	if(loglevel) dump(dat, 32, "decode_handleref");
 
   if (bit_read_H(dat, &handleref))
     {
-//      fprintf(stderr, "dump: handleref %d.%d.%lu\n", handleref.code,
-//          handleref.size, handleref.value);
-      fprintf(
-          stderr,
+      fprintf(stderr,
           "\tENTITY: Error reading handle in object whose handle is: %d.%d.%lu\n",
           obj->handle.code, obj->handle.size, obj->handle.value);
     }
-/*
+
+  //Reserve memory space for object references
+  if (skt->num_object_refs == 0)
+    skt->object_ref = (Dwg_Object_Ref *) malloc(sizeof(Dwg_Object_Ref));
   else
-    {
-      if (loglevel)
-        fprintf(
-            stderr,
-            "Success: handle %d.%d.%lu read in object whose handle is %d.%d.%lu\n",
-            handleref.code, handleref.size, handleref.value, obj->handle.code,
-            obj->handle.size, obj->handle.value);
-    }
-*/
+    skt->object_ref = (Dwg_Object_Ref *) realloc(skt->object_ref,
+        (skt->num_object_refs + 1) * sizeof(Dwg_Object_Ref));
 
-  //check if handle is already listed
-  exists = dwg_find_handle(obj->parent, &handleref, &index);
-  exists = 0;
-  if (!exists)
-    {
+  ref = &skt->object_ref[skt->num_object_refs];
+  skt->num_object_refs++;
 
-      //Reserve memory space for object references
-      if (skt->num_object_refs == 0)
-        skt->object_ref = (Dwg_Object_Ref *) malloc(sizeof(Dwg_Object_Ref));
-      else
-        skt->object_ref = (Dwg_Object_Ref *) realloc(skt->object_ref,
-            (skt->num_object_refs + 1) * sizeof(Dwg_Object_Ref));
+  ref->handleref.code = handleref.code;
+  ref->handleref.size = handleref.size;
+  ref->handleref.value = handleref.value;
+  ref->obj = 0;
 
-      ref = &skt->object_ref[skt->num_object_refs];
-      skt->num_object_refs++;
+//  fprintf(stderr, "DEBUG: handleref: %d.%d.%lu obj=\"%x\"\n", ref->handleref.code, ref->handleref.size, ref->handleref.value, ref->obj);
 
-      ref->handleref = handleref;
-      ref->obj = dwg_resolve_handle(skt, handleref.value);
-
-      return ref;
-
-    }
-  else
-    {
-      return &skt->object_ref[index];
-    }
+  return ref;
 }
 
 static Dwg_Object_Ref *

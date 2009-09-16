@@ -2223,6 +2223,8 @@ typedef struct _dwg_object_object
   unsigned int extended_size;
   Dwg_Handle extended_handle;
   unsigned char *extended;
+
+//TODO: should these be removed?
   long unsigned int num_reactors;
   unsigned char xdic_missing_flag;
   //		unsigned char picture_exists;
