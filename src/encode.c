@@ -2287,12 +2287,9 @@ dwg_encode_MLINE(Dwg_Entity_MLINE *ent, Bit_Chain * dat)
 static void
 dwg_encode_BLOCK_CONTROL(Dwg_Object_BLOCK_CONTROL * obj, Bit_Chain * dat)
 {
-  //TODO: check the spec. How do we deal with Length (MS)?
-  bit_write_BS(dat, obj->type);
-  if (dat->version >= R_2000)
-    {
-      bit_write_RL(dat, obj->size);
-    }
+//TODO: dwg_encode_common_object_data();
+//  bit_write_BS(dat, obj->num_entries);
+//TODO: WRITE HANDLES
 }
 
 static void

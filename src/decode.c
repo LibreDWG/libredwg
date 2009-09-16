@@ -3313,16 +3313,12 @@ dwg_decode_BLOCK_CONTROL(Bit_Chain *dat, Dwg_Object *obj)
 {
   DWG_OBJECT(BLOCK_CONTROL);
 
-  int i;
-
-  //TODO: check the spec. How do we deal with Length (MS)?
-  FIELD(type, BS);
-  SINCE(R_2000)
-      FIELD(size, RL);
-
-  //TODO: Implement-me!
-
-  //dwg_decode_handleref (dat, obj);
+  FIELD(num_entries, BS);
+  FIELD_HANDLE(null_handle, 4);
+  XDICOBJHANDLE(3);
+  HANDLE_VECTOR(block_headers, num_entries, 2);
+  FIELD_HANDLE(model_space,3);
+  FIELD_HANDLE(paper_space,3);
 }
 
 static void

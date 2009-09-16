@@ -1542,8 +1542,12 @@ typedef struct _dwg_entity_MLINE
  */
 typedef struct _dwg_object_BLOCK_CONTROL
 {
-  unsigned int type;
-  unsigned int size;
+  BITCODE_BS num_entries;
+  Dwg_Object_Ref* null_handle;
+  Dwg_Object_Ref* xdicobjhandle;
+  Dwg_Object_Ref** block_headers;
+  Dwg_Object_Ref* model_space;
+  Dwg_Object_Ref* paper_space;
 } Dwg_Object_BLOCK_CONTROL;
 
 /**
