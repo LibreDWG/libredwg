@@ -1233,12 +1233,12 @@ dwg_encode_VERTEX_PFACE_FACE(Dwg_Entity_VERTEX_PFACE_FACE *ent, Bit_Chain * dat)
   bit_write_BS(dat, ent->vertind[1]);
   bit_write_BS(dat, ent->vertind[2]);
   bit_write_BS(dat, ent->vertind[3]);
+  //TODO: dwg_encode_common_entity_handle_data(dat, ent->object);
 }
 
 static void
 dwg_encode_POLYLINE_2D(Dwg_Entity_POLYLINE_2D *ent, Bit_Chain * dat)
 {
-  //TODO: check
   bit_write_BS(dat, ent->flags);
   bit_write_BS(dat, ent->curve_type);
   bit_write_BD(dat, ent->start_width);
@@ -1246,14 +1246,25 @@ dwg_encode_POLYLINE_2D(Dwg_Entity_POLYLINE_2D *ent, Bit_Chain * dat)
   bit_write_BT(dat, ent->thickness);
   bit_write_BD(dat, ent->elevation);
   bit_write_BE(dat, ent->extrusion.x, ent->extrusion.y, ent->extrusion.z);
+
+  SINCE(2004)
+    bit_write_BL(dat, ent->owned_obj_count);
+
+  //TODO: dwg_encode_common_entity_handle_data(dat, ent->object);
+  //TODO: ENCODE HANDLES
 }
 
 static void
 dwg_encode_POLYLINE_3D(Dwg_Entity_POLYLINE_3D *ent, Bit_Chain * dat)
 {
-  //TODO: check
   bit_write_RC(dat, ent->flags_1);
   bit_write_RC(dat, ent->flags_2);
+
+  SINCE(2004)
+    bit_write_BL(dat, ent->owned_obj_count);
+
+  //TODO: dwg_encode_common_entity_handle_data(dat, ent->object);
+  //TODO: ENCODE HANDLES
 }
 
 static void

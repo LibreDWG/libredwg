@@ -2176,7 +2176,7 @@ dwg_decode_POLYLINE_2D(Bit_Chain * dat, Dwg_Object * obj)
       FIELD_HANDLE(last_vertex, 4);
     }
 
-  VERSION(R_2004)
+  SINCE(R_2004)
     {
       HANDLE_VECTOR(vertex, owned_obj_count, 4);
     }
@@ -2187,48 +2187,30 @@ dwg_decode_POLYLINE_2D(Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_POLYLINE_3D(Bit_Chain * dat, Dwg_Object * obj)
 {
-  int i;
   DWG_ENTITY(POLYLINE_3D);
 
-  ent->flags_1 = bit_read_RC(dat);
-  ent->flags_2 = bit_read_RC(dat);
+  FIELD(flags_1, RC);
+  FIELD(flags_2, RC);
 
   SINCE(R_2004)
     {
-      ent->owned_obj_count = bit_read_BL(dat);
+      FIELD(owned_obj_count, BL);
     }
 
   dwg_decode_common_entity_handle_data(dat, obj);
 
   VERSIONS(R_13,R_2000)
     {
-      ent->first_vertex = dwg_decode_handleref_with_code(dat, obj, 4);
-      fprintf(stderr, "first_vertex: %d.%d.%lu\n",
-          ent->first_vertex->handleref.code, ent->first_vertex->handleref.size,
-          ent->first_vertex->handleref.value);
-
-      ent->last_vertex = dwg_decode_handleref_with_code(dat, obj, 4);
-      fprintf(stderr, "last_vertex: %d.%d.%lu\n",
-          ent->last_vertex->handleref.code, ent->last_vertex->handleref.size,
-          ent->last_vertex->handleref.value);
+      FIELD_HANDLE(first_vertex, 4);
+      FIELD_HANDLE(last_vertex, 4);
     }
 
-  VERSION(R_2004)
+  SINCE(R_2004)
     {
-      ent->vertex = (Dwg_Object_Ref**) malloc(ent->owned_obj_count
-          * sizeof(Dwg_Object_Ref*));
-      for (i = 0; i < ent->owned_obj_count; i++)
-        {
-          ent->vertex[i] = dwg_decode_handleref_with_code(dat, obj, 4);
-          fprintf(stderr, "ent->vertex[%d]: %d.%d.%lu\n", i,
-              ent->vertex[i]->handleref.code, ent->vertex[i]->handleref.size,
-              ent->vertex[i]->handleref.value);
-        }
+      HANDLE_VECTOR(vertex, owned_obj_count, 4);
     }
 
-  ent->seqend = dwg_decode_handleref_with_code(dat, obj, 3);
-  fprintf(stderr, "seqend: %d.%d.%lu\n", ent->seqend->handleref.code,
-      ent->seqend->handleref.size, ent->seqend->handleref.value);
+  FIELD_HANDLE(seqend, 3);
 }
 
 static void

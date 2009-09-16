@@ -395,9 +395,9 @@ typedef struct _dwg_entity_POLYLINE_2D
  */
 typedef struct _dwg_entity_POLYLINE_3D
 {
-  unsigned char flags_1;
-  unsigned char flags_2;
-  long unsigned int owned_obj_count;
+  BITCODE_RC flags_1;
+  BITCODE_RC flags_2;
+  BITCODE_BL owned_obj_count;
   Dwg_Object_Ref* first_vertex;
   Dwg_Object_Ref* last_vertex;
   Dwg_Object_Ref** vertex;
