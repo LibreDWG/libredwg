@@ -367,7 +367,7 @@ typedef Dwg_Entity_VERTEX_3D Dwg_Entity_VERTEX_PFACE;
  */
 typedef struct _dwg_entity_VERTEX_PFACE_FACE
 {
-  unsigned int vertind[4];
+  BITCODE_BS vertind[4];
 } Dwg_Entity_VERTEX_PFACE_FACE;
 
 /**

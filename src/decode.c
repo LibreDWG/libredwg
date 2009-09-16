@@ -2142,10 +2142,10 @@ dwg_decode_VERTEX_PFACE_FACE(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(VERTEX_PFACE_FACE);
 
-  ent->vertind[0] = bit_read_BS(dat);
-  ent->vertind[1] = bit_read_BS(dat);
-  ent->vertind[2] = bit_read_BS(dat);
-  ent->vertind[3] = bit_read_BS(dat);
+  FIELD(vertind[0], BS);
+  FIELD(vertind[1], BS);
+  FIELD(vertind[2], BS);
+  FIELD(vertind[3], BS);
 
   dwg_decode_common_entity_handle_data(dat, obj);
 }
