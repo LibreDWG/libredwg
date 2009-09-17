@@ -1666,15 +1666,45 @@ typedef struct _dwg_object_SHAPEFILE
  */
 typedef struct _dwg_object_LTYPE_CONTROL
 {
-//TODO 
+  BITCODE_BS num_entries;
+  Dwg_Object_Ref* null_handle;
+  Dwg_Object_Ref* xdicobjhandle;
+  Dwg_Object_Ref** linetypes;
+  Dwg_Object_Ref* bylayer;
+  Dwg_Object_Ref* byblock; 
 } Dwg_Object_LTYPE_CONTROL;
 
 /**
  Struct for LTYPE (57)
  */
+
+typedef struct _ltype_dash{
+    BITCODE_BD length;
+    BITCODE_BS complex_shapecode;
+    BITCODE_RD x_offset;
+    BITCODE_RD y_offset;
+    BITCODE_BD scale;
+    BITCODE_BD rotation;
+    BITCODE_BS shape_flag;
+} LTYPE_dash;
+
 typedef struct _dwg_object_LTYPE
 {
-//TODO 
+  BITCODE_TV entry_name;
+  BITCODE_B _64_flag;
+  BITCODE_BS xrefindex_plus1;
+  BITCODE_B xrefdep;
+  BITCODE_TV description;
+  BITCODE_BD pattern_len;
+  BITCODE_RC alignment;
+  BITCODE_RC num_dashes;
+  LTYPE_dash* dash;
+  BITCODE_RC* strings_area;
+  Dwg_Object_Ref* linetype_control;
+  Dwg_Object_Ref** reactors;
+  Dwg_Object_Ref* xdicobjhandle;
+  Dwg_Object_Ref* null_handle;
+  Dwg_Object_Ref** shapefiles;
 } Dwg_Object_LTYPE;
 
 // 58 and 59 are UNKNOWN OBJECTS
@@ -1684,7 +1714,10 @@ typedef struct _dwg_object_LTYPE
  */
 typedef struct _dwg_object_VIEW_CONTROL
 {
-//TODO 
+  BITCODE_BS num_entries;
+  Dwg_Object_Ref* null_handle;
+  Dwg_Object_Ref* xdicobjhandle;
+  Dwg_Object_Ref** views;
 } Dwg_Object_VIEW_CONTROL;
 
 /**
@@ -1692,7 +1725,36 @@ typedef struct _dwg_object_VIEW_CONTROL
  */
 typedef struct _dwg_object_VIEW
 {
-//TODO 
+  BITCODE_TV entry_name;
+  BITCODE_B _64_flag;
+  BITCODE_BS xrefindex_plus1;
+  BITCODE_B xrefdep;
+  BITCODE_BD height;
+  BITCODE_BD width;
+  BITCODE_2RD center;
+  BITCODE_3BD target;
+  BITCODE_3BD direction;
+  BITCODE_BD twist_angle;
+  BITCODE_BD lens_legth;
+  BITCODE_BD front_clip;
+  BITCODE_BD back_clip;
+  BITCODE_RC view_mode; //??? 4bits
+  BITCODE_RC render_mode;
+  BITCODE_B pspace_flag;
+  BITCODE_B associated_ucs;
+  BITCODE_3BD origin;
+  BITCODE_3BD x_direction;
+  BITCODE_3BD y_direction;
+  BITCODE_BD elevation;
+  BITCODE_BS orthographic_view_type;
+  BITCODE_B camera_plottable;
+  Dwg_Object_Ref* view_control_handle;
+  Dwg_Object_Ref** reactors;
+  Dwg_Object_Ref* xdicobjhandle;
+  Dwg_Object_Ref* null_handle;
+  Dwg_Object_Ref* base_ucs_handle;
+  Dwg_Object_Ref* named_ucs_handle; 
+  Dwg_Object_Ref* live_section;
 } Dwg_Object_VIEW;
 
 /**
@@ -1700,7 +1762,10 @@ typedef struct _dwg_object_VIEW
  */
 typedef struct _dwg_object_UCS_CONTROL
 {
-//TODO 
+  BITCODE_BS num_entries;
+  Dwg_Object_Ref* null_handle;
+  Dwg_Object_Ref* xdicobjhandle;
+  Dwg_Object_Ref** ucs;
 } Dwg_Object_UCS_CONTROL;
 
 /**
@@ -1708,7 +1773,21 @@ typedef struct _dwg_object_UCS_CONTROL
  */
 typedef struct _dwg_object_UCS
 {
-//TODO 
+  BITCODE_TV entry_name;
+  BITCODE_B _64_flag;
+  BITCODE_BS xrefindex_plus1;
+  BITCODE_B xrefdep;
+  BITCODE_3BD x_direction;
+  BITCODE_3BD y_direction;
+  BITCODE_BD elevation;
+  BITCODE_BS orthographic_view_type;
+  BITCODE_BS orthographic_type;
+  Dwg_Object_Ref* ucs_control_handle;
+  Dwg_Object_Ref** reactors;
+  Dwg_Object_Ref* xdicobjhandle;
+  Dwg_Object_Ref* null_handle;
+  Dwg_Object_Ref* base_ucs_handle;
+  Dwg_Object_Ref* unknown; 
 } Dwg_Object_UCS;
 
 /**

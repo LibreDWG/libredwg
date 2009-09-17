@@ -75,14 +75,14 @@
       fprintf(stderr, #name ": index %d\n", _obj->name.index);\
   }
 
-//FIELD_VECTOR(name, type, size):
+//FIELD_VECTOR_N(name, type, size):
 // reads data of the type indicated by 'type' 'size' times and stores
 // it all in the vector called 'name'.
-#define FIELD_VECTOR(name, type, size)\
-  if (_obj->size>0)\
+#define FIELD_VECTOR_N(name, type, size)\
+  if (size>0)\
     {\
-      _obj->name = (BITCODE_##type*) malloc(_obj->size * sizeof(BITCODE_##type));\
-      for (vector_counter=0; vector_counter< _obj->size; vector_counter++)\
+      _obj->name = (BITCODE_##type*) malloc(size * sizeof(BITCODE_##type));\
+      for (vector_counter=0; vector_counter< size; vector_counter++)\
         {\
           _obj->name = bit_read_##type(dat);\
           if (loglevel>=2)\
@@ -92,6 +92,7 @@
         }\
     }
 
+#define FIELD_VECTOR(name, type, size) FIELD_VECTOR_N(name, type, _obj->size)
 #define FIELD_3DPOINT_VECTOR(name, size)\
   _obj->name = (BITCODE_3DPOINT *) malloc(_obj->size * sizeof(BITCODE_3DPOINT));\
   for (vector_counter=0; vector_counter< _obj->size; vector_counter++)\
@@ -3437,6 +3438,182 @@ dwg_decode_SHAPEFILE(Bit_Chain *dat, Dwg_Object *obj)
 }
 
 static void
+dwg_decode_LTYPE_CONTROL(Bit_Chain *dat, Dwg_Object *obj)
+{
+  DWG_OBJECT(LTYPE_CONTROL);
+
+  FIELD(num_entries, BS);
+  FIELD_HANDLE(null_handle, 4);
+  XDICOBJHANDLE(3);
+  HANDLE_VECTOR(linetypes, num_entries, 2);
+  FIELD_HANDLE(bylayer, 3);
+  FIELD_HANDLE(byblock, 3);
+}
+
+static void
+dwg_decode_LTYPE(Bit_Chain *dat, Dwg_Object *obj)
+{
+  char R2007plus_text_area_is_present = 0;
+  DWG_OBJECT(LTYPE);
+
+  FIELD(entry_name, TV);
+  FIELD(_64_flag, B);
+  FIELD(xrefindex_plus1, BS);
+  FIELD(xrefdep, B);
+  FIELD(description, TV);
+  FIELD(pattern_len, BD);
+  FIELD(alignment, RC);
+  FIELD(num_dashes, RC);
+
+  int i;
+  GET_FIELD(dash) = (LTYPE_dash*) malloc(GET_FIELD(num_dashes) * sizeof(LTYPE_dash));
+  for (i=0; i<GET_FIELD(num_dashes);i++)
+    {
+      FIELD(dash[i].length, BD);
+      FIELD(dash[i].complex_shapecode, BS);
+      FIELD(dash[i].x_offset, RD);
+      FIELD(dash[i].y_offset, RD);
+      FIELD(dash[i].scale, BD);
+      FIELD(dash[i].rotation, BD);
+      FIELD(dash[i].shape_flag, BS);
+      if (GET_FIELD(dash[i].shape_flag) & 0x02)
+        R2007plus_text_area_is_present = 1;
+    }
+
+  UNTIL(R_2004)
+    {
+      FIELD_VECTOR_N(strings_area, RC, 256);
+    }
+  LATER_VERSIONS
+    {
+      if (R2007plus_text_area_is_present)
+        {
+          FIELD_VECTOR_N(strings_area, RC, 512);
+        }
+    }
+
+  FIELD_HANDLE(linetype_control, 4);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+  FIELD_HANDLE(null_handle, 5);
+  HANDLE_VECTOR(shapefiles, num_dashes, 5);
+}
+
+static void
+dwg_decode_VIEW_CONTROL(Bit_Chain *dat, Dwg_Object *obj)
+{
+  DWG_OBJECT(VIEW_CONTROL);
+
+  FIELD(num_entries, BS);
+  FIELD_HANDLE(null_handle, 4);
+  XDICOBJHANDLE(3);
+  HANDLE_VECTOR(views, num_entries, 2);
+}
+
+static void
+dwg_decode_VIEW(Bit_Chain *dat, Dwg_Object *obj)
+{
+  DWG_OBJECT(VIEW);
+
+  FIELD(entry_name, TV);
+  FIELD(_64_flag, B);
+  FIELD(xrefindex_plus1, BS);
+  FIELD(xrefdep, B);
+  FIELD(height, BD);
+  FIELD(width, BD);
+  FIELD_2RD(center);
+  FIELD_3BD(target);
+  FIELD_3BD(direction);
+  FIELD(twist_angle, BD);
+  FIELD(lens_legth, BD);
+  FIELD(front_clip, BD);
+  FIELD(back_clip, BD);
+  FIELD(view_mode, RC); //??? 4bits
+
+  SINCE(R_2000)
+    {
+      FIELD(render_mode, RC);
+    }
+
+  FIELD(pspace_flag, B);
+
+  SINCE(R_2000)
+    {
+      FIELD(associated_ucs, B);
+      FIELD_3BD(origin);
+      FIELD_3BD(x_direction);
+      FIELD_3BD(y_direction);
+      FIELD(elevation, BD);
+      FIELD(orthographic_view_type, BS);
+    }
+
+  SINCE(R_2007)
+    {
+      FIELD(camera_plottable, B);
+    }
+
+  FIELD_HANDLE(view_control_handle, 4);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+  FIELD_HANDLE(null_handle, 5);
+
+  SINCE(R_2000)
+    {
+      FIELD_HANDLE(base_ucs_handle, ANYCODE);
+      FIELD_HANDLE(named_ucs_handle, ANYCODE); 
+    }
+
+  SINCE(R_2007)
+    {
+      FIELD_HANDLE(live_section, ANYCODE);
+    }
+}
+
+
+static void
+dwg_decode_UCS_CONTROL(Bit_Chain *dat, Dwg_Object *obj)
+{
+  DWG_OBJECT(UCS_CONTROL);
+
+  FIELD(num_entries, BS);
+  FIELD_HANDLE(null_handle, 4);
+  XDICOBJHANDLE(3);
+  HANDLE_VECTOR(ucs, num_entries, 2);
+}
+
+static void
+dwg_decode_UCS(Bit_Chain *dat, Dwg_Object *obj)
+{
+  DWG_OBJECT(UCS);
+
+  FIELD(entry_name, TV);
+  FIELD(_64_flag, B);
+  FIELD(xrefindex_plus1, BS);
+  FIELD(xrefdep, B);
+  FIELD_3BD(x_direction);
+  FIELD_3BD(y_direction);
+
+  SINCE(R_2000)
+    {
+      FIELD(elevation, BD);
+      FIELD(orthographic_view_type, BS);
+      FIELD(orthographic_type, BS);
+    }
+
+  FIELD_HANDLE(ucs_control_handle, 4);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+  FIELD_HANDLE(null_handle, 5);
+
+  SINCE(R_2000)
+    {
+      FIELD_HANDLE(base_ucs_handle, ANYCODE);
+      FIELD_HANDLE(unknown, ANYCODE); 
+    }
+}
+
+
+static void
 dwg_decode_IMAGE(Bit_Chain *dat, Dwg_Object *obj)
 {
   int i;
@@ -4096,6 +4273,12 @@ dwg_decode_add_object(Dwg_Data * skt, Bit_Chain * dat,
     break;
   case DWG_TYPE_SHAPEFILE:
     dwg_decode_SHAPEFILE(dat, obj);
+    break;
+  case DWG_TYPE_UCS_CONTROL:
+    dwg_decode_UCS_CONTROL(dat, obj);
+    break;
+  case DWG_TYPE_UCS:
+    dwg_decode_UCS(dat, obj);
     break;
   case DWG_TYPE_LAYER:
     dwg_decode_LAYER(dat, obj);
