@@ -57,12 +57,26 @@ extern "C"
 #define FORMAT_DD "%f"
 #define BITCODE_BD BITCODE_DOUBLE
 #define FORMAT_BD "%f"
-#define BITCODE_2RD struct { BITCODE_RD x; BITCODE_RD y; }
-#define BITCODE_2DPOINT BITCODE_2RD
-#define BITCODE_3BD struct { BITCODE_BD x; BITCODE_BD y; BITCODE_BD z; }
-#define BITCODE_3DPOINT BITCODE_3BD
 #define BITCODE_BE BITCODE_3BD 
 #define BITCODE_CMC Dwg_Color
+
+typedef struct _dwg_bitecode_2rd
+{
+  BITCODE_RD x;
+  BITCODE_RD y;
+} Dwg_Bitcode_2RD;
+
+typedef struct _dwg_bitecode_3bd
+{
+  BITCODE_BD x;
+  BITCODE_BD y;
+  BITCODE_BD z;
+} Dwg_Bitcode_3BD;
+
+#define BITCODE_2RD Dwg_Bitcode_2RD
+#define BITCODE_2DPOINT BITCODE_2RD
+#define BITCODE_3BD Dwg_Bitcode_3BD
+#define BITCODE_3DPOINT BITCODE_3BD
 
 /**
  Object supertypes that exist in dwg-files.
@@ -1433,7 +1447,7 @@ typedef struct _dwg_entity_LEADER
   BITCODE_BS annot_type;
   BITCODE_BS path_type;
   BITCODE_BL numpts;
-  BITCODE_3DPOINT* point;
+  BITCODE_3DPOINT* points;
   BITCODE_3DPOINT end_pt_proj;
   BITCODE_3DPOINT extrusion;
   BITCODE_3DPOINT x_direction;

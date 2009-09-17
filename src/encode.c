@@ -2169,9 +2169,9 @@ dwg_encode_LEADER(Dwg_Entity_LEADER *ent, Bit_Chain * dat)
 
   for (i = 0; i < ent->numpts; i++)
     {
-      bit_write_BD(dat, ent->point[i].x);
-      bit_write_BD(dat, ent->point[i].y);
-      bit_write_BD(dat, ent->point[i].z);
+      bit_write_BD(dat, ent->points[i].x);
+      bit_write_BD(dat, ent->points[i].y);
+      bit_write_BD(dat, ent->points[i].z);
     }
   bit_write_BD(dat, ent->end_pt_proj.x);
   bit_write_BD(dat, ent->end_pt_proj.y);

@@ -3170,6 +3170,7 @@ dwg_decode_MTEXT(Bit_Chain * dat, Dwg_Object * obj)
   dwg_decode_common_entity_handle_data(dat, obj);
 }
 
+
 static void
 dwg_decode_LEADER(Bit_Chain *dat, Dwg_Object *obj)
 {
@@ -3179,9 +3180,7 @@ dwg_decode_LEADER(Bit_Chain *dat, Dwg_Object *obj)
   FIELD(annot_type, BS);
   FIELD(path_type, BS);
   FIELD(numpts, BL);
-
-  FIELD_3DPOINT_VECTOR(point, numpts);
-
+  FIELD_3DPOINT_VECTOR(points, numpts);
   FIELD_3DPOINT(end_pt_proj);
   FIELD_3DPOINT(extrusion);
   FIELD_3DPOINT(x_direction);
@@ -3642,6 +3641,7 @@ static void
 dwg_decode_VP_ENT_HDR(Bit_Chain *dat, Dwg_Object *obj)
 {
   DWG_OBJECT(VP_ENT_HDR);
+
   FIELD(entry_name, TV);
   FIELD(_64_flag, B);
   FIELD(xrefindex_plus1, BS);
@@ -3656,6 +3656,7 @@ static void
 dwg_decode_MLINESTYLE(Bit_Chain *dat, Dwg_Object *obj)
 {
   DWG_OBJECT(MLINESTYLE);
+
   FIELD(name, TV);
   FIELD(desc, TV);
   FIELD(flags, BS);
