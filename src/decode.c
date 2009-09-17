@@ -3496,6 +3496,77 @@ dwg_decode_LTYPE(Bit_Chain *dat, Dwg_Object *obj)
   FIELD_HANDLE(null_handle, 5);
   HANDLE_VECTOR(shapefiles, num_dashes, 5);
 }
+
+static void
+dwg_decode_VIEW_CONTROL(Bit_Chain *dat, Dwg_Object *obj)
+{
+  DWG_OBJECT(VIEW_CONTROL);
+
+  FIELD(num_entries, BS);
+  FIELD_HANDLE(null_handle, 4);
+  XDICOBJHANDLE(3);
+  HANDLE_VECTOR(views, num_entries, 2);
+}
+
+static void
+dwg_decode_VIEW(Bit_Chain *dat, Dwg_Object *obj)
+{
+  DWG_OBJECT(VIEW);
+
+  FIELD(entry_name, TV);
+  FIELD(_64_flag, B);
+  FIELD(xrefindex_plus1, BS);
+  FIELD(xrefdep, B);
+  FIELD(height, BD);
+  FIELD(width, BD);
+  FIELD_2RD(center);
+  FIELD_3BD(target);
+  FIELD_3BD(direction);
+  FIELD(twist_angle, BD);
+  FIELD(lens_legth, BD);
+  FIELD(front_clip, BD);
+  FIELD(back_clip, BD);
+  FIELD(view_mode, RC); //??? 4bits
+
+  SINCE(R_2000)
+    {
+      FIELD(render_mode, RC);
+    }
+
+  FIELD(pspace_flag, B);
+
+  SINCE(R_2000)
+    {
+      FIELD(associated_ucs, B);
+      FIELD_3BD(origin);
+      FIELD_3BD(x_direction);
+      FIELD_3BD(y_direction);
+      FIELD(elevation, BD);
+      FIELD(orthographic_view_type, BS);
+    }
+
+  SINCE(R_2007)
+    {
+      FIELD(camera_plottable, B);
+    }
+
+  FIELD_HANDLE(view_control_handle, 4);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+  FIELD_HANDLE(null_handle, 5);
+
+  SINCE(R_2000)
+    {
+      FIELD_HANDLE(base_ucs_handle, ANYCODE);
+      FIELD_HANDLE(named_ucs_handle, ANYCODE); 
+    }
+
+  SINCE(R_2007)
+    {
+      FIELD_HANDLE(live_section, ANYCODE);
+    }
+}
+
 static void
 dwg_decode_IMAGE(Bit_Chain *dat, Dwg_Object *obj)
 {
@@ -4162,6 +4233,12 @@ dwg_decode_aldoni_object(Dwg_Structure * skt, Bit_Chain * dat,
     break;
   case DWG_TYPE_LTYPE:
     dwg_decode_LTYPE(dat, obj);
+    break;
+  case DWG_TYPE_VIEW_CONTROL:
+    dwg_decode_VIEW_CONTROL(dat, obj);
+    break;
+  case DWG_TYPE_VIEW:
+    dwg_decode_VIEW(dat, obj);
     break;
   case DWG_TYPE_LAYER:
     dwg_decode_LAYER(dat, obj);

@@ -1715,7 +1715,10 @@ typedef struct _dwg_object_LTYPE
  */
 typedef struct _dwg_object_VIEW_CONTROL
 {
-//TODO 
+  BITCODE_BS num_entries;
+  Dwg_Object_Ref* null_handle;
+  Dwg_Object_Ref* xdicobjhandle;
+  Dwg_Object_Ref** views;
 } Dwg_Object_VIEW_CONTROL;
 
 /**
@@ -1723,7 +1726,36 @@ typedef struct _dwg_object_VIEW_CONTROL
  */
 typedef struct _dwg_object_VIEW
 {
-//TODO 
+  BITCODE_TV entry_name;
+  BITCODE_B _64_flag;
+  BITCODE_BS xrefindex_plus1;
+  BITCODE_B xrefdep;
+  BITCODE_BD height;
+  BITCODE_BD width;
+  BITCODE_2RD center;
+  BITCODE_3BD target;
+  BITCODE_3BD direction;
+  BITCODE_BD twist_angle;
+  BITCODE_BD lens_legth;
+  BITCODE_BD front_clip;
+  BITCODE_BD back_clip;
+  BITCODE_RC view_mode; //??? 4bits
+  BITCODE_RC render_mode;
+  BITCODE_B pspace_flag;
+  BITCODE_B associated_ucs;
+  BITCODE_3BD origin;
+  BITCODE_3BD x_direction;
+  BITCODE_3BD y_direction;
+  BITCODE_BD elevation;
+  BITCODE_BS orthographic_view_type;
+  BITCODE_B camera_plottable;
+  Dwg_Object_Ref* view_control_handle;
+  Dwg_Object_Ref** reactors;
+  Dwg_Object_Ref* xdicobjhandle;
+  Dwg_Object_Ref* null_handle;
+  Dwg_Object_Ref* base_ucs_handle;
+  Dwg_Object_Ref* named_ucs_handle; 
+  Dwg_Object_Ref* live_section;
 } Dwg_Object_VIEW;
 
 /**
