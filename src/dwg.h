@@ -7,7 +7,7 @@
 /*    originally written by Felipe Castro <felipo at users.sourceforge.net>  */
 /*                                                                           */
 /*  Copyright (C) 2008, 2009 Free Software Foundation, Inc.                  */
-/*  Copyright (C) 2009 Rodrigo Rodrigues da Silva <rodrigopitanga@gmail.com> */
+/*  Copyright (C) 2009 Rodrigo Rodrigues da Silva <pitanga@members.fsf.org>  */
 /*  Copyright (C) 2009 Felipe Sanches <jucablues@users.sourceforge.net>      */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
@@ -1666,46 +1666,15 @@ typedef struct _dwg_object_SHAPEFILE
  */
 typedef struct _dwg_object_LTYPE_CONTROL
 {
-  BITCODE_BS num_entries;
-  Dwg_Object_Ref* null_handle;
-  Dwg_Object_Ref* xdicobjhandle;
-  Dwg_Object_Ref** linetypes;
-  Dwg_Object_Ref* bylayer;
-  Dwg_Object_Ref* byblock;
-
+//TODO 
 } Dwg_Object_LTYPE_CONTROL;
 
 /**
  Struct for LTYPE (57)
  */
-
-typedef struct _ltype_dash{
-    BITCODE_BD length;
-    BITCODE_BS complex_shapecode;
-    BITCODE_RD x_offset;
-    BITCODE_RD y_offset;
-    BITCODE_BD scale;
-    BITCODE_BD rotation;
-    BITCODE_BS shape_flag;
-} LTYPE_dash;
-
 typedef struct _dwg_object_LTYPE
 {
-  BITCODE_TV entry_name;
-  BITCODE_B _64_flag;
-  BITCODE_BS xrefindex_plus1;
-  BITCODE_B xrefdep;
-  BITCODE_TV description;
-  BITCODE_BD pattern_len;
-  BITCODE_RC alignment;
-  BITCODE_RC num_dashes;
-  LTYPE_dash* dash;
-  BITCODE_RC* strings_area;
-  Dwg_Object_Ref* linetype_control;
-  Dwg_Object_Ref** reactors;
-  Dwg_Object_Ref* xdicobjhandle;
-  Dwg_Object_Ref* null_handle;
-  Dwg_Object_Ref** shapefiles;
+//TODO 
 } Dwg_Object_LTYPE;
 
 // 58 and 59 are UNKNOWN OBJECTS
@@ -1715,10 +1684,7 @@ typedef struct _dwg_object_LTYPE
  */
 typedef struct _dwg_object_VIEW_CONTROL
 {
-  BITCODE_BS num_entries;
-  Dwg_Object_Ref* null_handle;
-  Dwg_Object_Ref* xdicobjhandle;
-  Dwg_Object_Ref** views;
+//TODO 
 } Dwg_Object_VIEW_CONTROL;
 
 /**
@@ -1726,36 +1692,7 @@ typedef struct _dwg_object_VIEW_CONTROL
  */
 typedef struct _dwg_object_VIEW
 {
-  BITCODE_TV entry_name;
-  BITCODE_B _64_flag;
-  BITCODE_BS xrefindex_plus1;
-  BITCODE_B xrefdep;
-  BITCODE_BD height;
-  BITCODE_BD width;
-  BITCODE_2RD center;
-  BITCODE_3BD target;
-  BITCODE_3BD direction;
-  BITCODE_BD twist_angle;
-  BITCODE_BD lens_legth;
-  BITCODE_BD front_clip;
-  BITCODE_BD back_clip;
-  BITCODE_RC view_mode; //??? 4bits
-  BITCODE_RC render_mode;
-  BITCODE_B pspace_flag;
-  BITCODE_B associated_ucs;
-  BITCODE_3BD origin;
-  BITCODE_3BD x_direction;
-  BITCODE_3BD y_direction;
-  BITCODE_BD elevation;
-  BITCODE_BS orthographic_view_type;
-  BITCODE_B camera_plottable;
-  Dwg_Object_Ref* view_control_handle;
-  Dwg_Object_Ref** reactors;
-  Dwg_Object_Ref* xdicobjhandle;
-  Dwg_Object_Ref* null_handle;
-  Dwg_Object_Ref* base_ucs_handle;
-  Dwg_Object_Ref* named_ucs_handle; 
-  Dwg_Object_Ref* live_section;
+//TODO 
 } Dwg_Object_VIEW;
 
 /**
@@ -2414,10 +2351,10 @@ typedef struct _dwg_struct
 #		define DWG_NUM_VARIABLES 297
   union
   {
-    unsigned char bitoko;
-    unsigned int dubitoko;
-    long unsigned int kvarbitoko;
-    double duglitajxo;
+    unsigned char bit;
+    unsigned int bitbit;
+    long unsigned int bitlong;
+    double bitdouble;
     double xyz[3];
     double xy[2];
     unsigned char *text;
@@ -2447,39 +2384,39 @@ typedef struct _dwg_struct
 
   unsigned int dwg_ot_layout;
 
-} Dwg_Structure;
+} Dwg_Data;
 
 /*--------------------------------------------------
  * Functions
  */
 
 int
-dwg_read_file(char *filename, Dwg_Structure * dwg);
+dwg_read_file(char *filename, Dwg_Data * dwg);
 void
-dwg_free(Dwg_Structure * dwg);
+dwg_free(Dwg_Data * dwg);
 unsigned char*
-dwg_bmp(Dwg_Structure *, long *);
+dwg_bmp(Dwg_Data *, long *);
 
 double
-dwg_model_x_min(Dwg_Structure *);
+dwg_model_x_min(Dwg_Data *);
 double
-dwg_model_x_max(Dwg_Structure *);
+dwg_model_x_max(Dwg_Data *);
 double
-dwg_model_y_min(Dwg_Structure *);
+dwg_model_y_min(Dwg_Data *);
 double
-dwg_model_y_max(Dwg_Structure *);
+dwg_model_y_max(Dwg_Data *);
 double
-dwg_model_z_min(Dwg_Structure *);
+dwg_model_z_min(Dwg_Data *);
 double
-dwg_model_z_max(Dwg_Structure *);
+dwg_model_z_max(Dwg_Data *);
 double
-dwg_model_page_x_min(Dwg_Structure *);
+dwg_model_page_x_min(Dwg_Data *);
 double
-dwg_model_page_x_max(Dwg_Structure *);
+dwg_model_page_x_max(Dwg_Data *);
 double
-dwg_model_page_y_min(Dwg_Structure *);
+dwg_model_page_y_min(Dwg_Data *);
 double
-dwg_model_page_y_max(Dwg_Structure *);
+dwg_model_page_y_max(Dwg_Data *);
 
 Dwg_Object*
 dwg_next_object(Dwg_Object* obj);

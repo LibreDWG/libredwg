@@ -7,7 +7,7 @@
 /*    originally written by Felipe Castro <felipo at users.sourceforge.net>  */
 /*                                                                           */
 /*  Copyright (C) 2008, 2009 Free Software Foundation, Inc.                  */
-/*  Copyright (C) 2009 Rodrigo Rodrigues da Silva <rodrigopitanga@gmail.com> */
+/*  Copyright (C) 2009 Rodrigo Rodrigues da Silva <pitanga@members.fsf.org>  */
 /*  Copyright (C) 2009 Felipe Sanches <jucablues@users.sourceforge.net>      */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
@@ -17,7 +17,7 @@
 /*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
 /*****************************************************************************/
 
-/// Enkodigo - tio cxi ne funkciis...
+/// Encode - doesn't work yet!
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -33,7 +33,7 @@ typedef struct
   long int handle;
   long int address;
   unsigned int idc;
-} Object_Mapo;
+} Object_Map;
 
 /*--------------------------------------------------------------------------------
  * Private functions prototypes
@@ -44,91 +44,91 @@ static void
 dwg_encode_object(Dwg_Object * obj, Bit_Chain * dat);
 
 static void
-dwg_encode_TEXT(Dwg_Entity_TEXT * est, Bit_Chain * dat);
+dwg_encode_TEXT(Dwg_Entity_TEXT * ent, Bit_Chain * dat);
 static void
-dwg_encode_ATTRIB(Dwg_Entity_ATTRIB * est, Bit_Chain * dat);
+dwg_encode_ATTRIB(Dwg_Entity_ATTRIB * ent, Bit_Chain * dat);
 static void
-dwg_encode_ATTDEF(Dwg_Entity_ATTDEF * est, Bit_Chain * dat);
+dwg_encode_ATTDEF(Dwg_Entity_ATTDEF * ent, Bit_Chain * dat);
 static void
-dwg_encode_BLOCK(Dwg_Entity_BLOCK * est, Bit_Chain * dat);
+dwg_encode_BLOCK(Dwg_Entity_BLOCK * ent, Bit_Chain * dat);
 static void
-dwg_encode_ENDBLK(Dwg_Entity_ENDBLK * est, Bit_Chain * dat);
+dwg_encode_ENDBLK(Dwg_Entity_ENDBLK * ent, Bit_Chain * dat);
 static void
-dwg_encode_SEQEND(Dwg_Entity_SEQEND * est, Bit_Chain * dat);
+dwg_encode_SEQEND(Dwg_Entity_SEQEND * ent, Bit_Chain * dat);
 static void
-dwg_encode_INSERT(Dwg_Entity_INSERT * est, Bit_Chain * dat);
+dwg_encode_INSERT(Dwg_Entity_INSERT * ent, Bit_Chain * dat);
 static void
-dwg_encode_MINSERT(Dwg_Entity_MINSERT * est, Bit_Chain * dat);
+dwg_encode_MINSERT(Dwg_Entity_MINSERT * ent, Bit_Chain * dat);
 static void
-dwg_encode_VERTEX_2D(Dwg_Entity_VERTEX_2D * est, Bit_Chain * dat);
+dwg_encode_VERTEX_2D(Dwg_Entity_VERTEX_2D * ent, Bit_Chain * dat);
 static void
-dwg_encode_VERTEX_3D(Dwg_Entity_VERTEX_3D * est, Bit_Chain * dat);
+dwg_encode_VERTEX_3D(Dwg_Entity_VERTEX_3D * ent, Bit_Chain * dat);
 static void
-dwg_encode_VERTEX_MESH(Dwg_Entity_VERTEX_MESH * est, Bit_Chain * dat);
+dwg_encode_VERTEX_MESH(Dwg_Entity_VERTEX_MESH * ent, Bit_Chain * dat);
 static void
-dwg_encode_VERTEX_PFACE(Dwg_Entity_VERTEX_PFACE * est, Bit_Chain * dat);
+dwg_encode_VERTEX_PFACE(Dwg_Entity_VERTEX_PFACE * ent, Bit_Chain * dat);
 static void
-dwg_encode_VERTEX_PFACE_FACE(Dwg_Entity_VERTEX_PFACE_FACE * est,
+dwg_encode_VERTEX_PFACE_FACE(Dwg_Entity_VERTEX_PFACE_FACE * ent,
     Bit_Chain * dat);
 static void
-dwg_encode_POLYLINE_2D(Dwg_Entity_POLYLINE_2D * est, Bit_Chain * dat);
+dwg_encode_POLYLINE_2D(Dwg_Entity_POLYLINE_2D * ent, Bit_Chain * dat);
 static void
-dwg_encode_POLYLINE_3D(Dwg_Entity_POLYLINE_3D * est, Bit_Chain * dat);
+dwg_encode_POLYLINE_3D(Dwg_Entity_POLYLINE_3D * ent, Bit_Chain * dat);
 static void
-dwg_encode_ARC(Dwg_Entity_ARC * est, Bit_Chain * dat);
+dwg_encode_ARC(Dwg_Entity_ARC * ent, Bit_Chain * dat);
 static void
-dwg_encode_CIRCLE(Dwg_Entity_CIRCLE * est, Bit_Chain * dat);
+dwg_encode_CIRCLE(Dwg_Entity_CIRCLE * ent, Bit_Chain * dat);
 static void
-dwg_encode_LINE(Dwg_Entity_LINE * est, Bit_Chain * dat);
+dwg_encode_LINE(Dwg_Entity_LINE * ent, Bit_Chain * dat);
 static void
-dwg_encode_DIMENSION_ORDINATE(Dwg_Entity_DIMENSION_ORDINATE * est,
+dwg_encode_DIMENSION_ORDINATE(Dwg_Entity_DIMENSION_ORDINATE * ent,
     Bit_Chain * dat);
 static void
-dwg_encode_DIMENSION_LINEAR(Dwg_Entity_DIMENSION_LINEAR * est, Bit_Chain * dat);
+dwg_encode_DIMENSION_LINEAR(Dwg_Entity_DIMENSION_LINEAR * ent, Bit_Chain * dat);
 static void
-dwg_encode_DIMENSION_ALIGNED(Dwg_Entity_DIMENSION_ALIGNED * est,
+dwg_encode_DIMENSION_ALIGNED(Dwg_Entity_DIMENSION_ALIGNED * ent,
     Bit_Chain * dat);
 static void
-dwg_encode_DIMENSION_ANG3PT(Dwg_Entity_DIMENSION_ANG3PT * est, Bit_Chain * dat);
+dwg_encode_DIMENSION_ANG3PT(Dwg_Entity_DIMENSION_ANG3PT * ent, Bit_Chain * dat);
 static void
-dwg_encode_DIMENSION_ANG2LN(Dwg_Entity_DIMENSION_ANG2LN * est, Bit_Chain * dat);
+dwg_encode_DIMENSION_ANG2LN(Dwg_Entity_DIMENSION_ANG2LN * ent, Bit_Chain * dat);
 static void
-dwg_encode_DIMENSION_RADIUS(Dwg_Entity_DIMENSION_RADIUS * est, Bit_Chain * dat);
+dwg_encode_DIMENSION_RADIUS(Dwg_Entity_DIMENSION_RADIUS * ent, Bit_Chain * dat);
 static void
-dwg_encode_DIMENSION_DIAMETER(Dwg_Entity_DIMENSION_DIAMETER * est,
+dwg_encode_DIMENSION_DIAMETER(Dwg_Entity_DIMENSION_DIAMETER * ent,
     Bit_Chain * dat);
 static void
-dwg_encode_POINT(Dwg_Entity_POINT * est, Bit_Chain * dat);
+dwg_encode_POINT(Dwg_Entity_POINT * ent, Bit_Chain * dat);
 static void
-dwg_encode__3DFACE(Dwg_Entity__3DFACE * est, Bit_Chain * dat);
+dwg_encode__3DFACE(Dwg_Entity__3DFACE * ent, Bit_Chain * dat);
 static void
-dwg_encode_POLYLINE_PFACE(Dwg_Entity_POLYLINE_PFACE * est, Bit_Chain * dat);
+dwg_encode_POLYLINE_PFACE(Dwg_Entity_POLYLINE_PFACE * ent, Bit_Chain * dat);
 static void
-dwg_encode_POLYLINE_MESH(Dwg_Entity_POLYLINE_MESH * est, Bit_Chain * dat);
+dwg_encode_POLYLINE_MESH(Dwg_Entity_POLYLINE_MESH * ent, Bit_Chain * dat);
 static void
-dwg_encode_SOLID(Dwg_Entity_SOLID * est, Bit_Chain * dat);
+dwg_encode_SOLID(Dwg_Entity_SOLID * ent, Bit_Chain * dat);
 static void
-dwg_encode_TRACE(Dwg_Entity_TRACE * est, Bit_Chain * dat);
+dwg_encode_TRACE(Dwg_Entity_TRACE * ent, Bit_Chain * dat);
 static void
-dwg_encode_SHAPE(Dwg_Entity_SHAPE * est, Bit_Chain * dat);
+dwg_encode_SHAPE(Dwg_Entity_SHAPE * ent, Bit_Chain * dat);
 static void
 dwg_encode_VIEWPORT(Dwg_Entity_VIEWPORT *ent, Bit_Chain * dat);
 static void
-dwg_encode_ELLIPSE(Dwg_Entity_ELLIPSE * est, Bit_Chain * dat);
+dwg_encode_ELLIPSE(Dwg_Entity_ELLIPSE * ent, Bit_Chain * dat);
 static void
-dwg_encode_SPLINE(Dwg_Entity_SPLINE * est, Bit_Chain * dat);
+dwg_encode_SPLINE(Dwg_Entity_SPLINE * ent, Bit_Chain * dat);
 static void
-dwg_encode_REGION(Dwg_Entity_REGION * est, Bit_Chain * dat);
+dwg_encode_REGION(Dwg_Entity_REGION * ent, Bit_Chain * dat);
 static void
-dwg_encode_3DSOLID(Dwg_Entity_3DSOLID * est, Bit_Chain * dat);
+dwg_encode_3DSOLID(Dwg_Entity_3DSOLID * ent, Bit_Chain * dat);
 static void
-dwg_encode_BODY(Dwg_Entity_BODY * est, Bit_Chain * dat);
+dwg_encode_BODY(Dwg_Entity_BODY * ent, Bit_Chain * dat);
 static void
-dwg_encode_RAY(Dwg_Entity_RAY * est, Bit_Chain * dat);
+dwg_encode_RAY(Dwg_Entity_RAY * ent, Bit_Chain * dat);
 static void
-dwg_encode_XLINE(Dwg_Entity_XLINE * est, Bit_Chain * dat);
+dwg_encode_XLINE(Dwg_Entity_XLINE * ent, Bit_Chain * dat);
 static void
-dwg_encode_MTEXT(Dwg_Entity_MTEXT * est, Bit_Chain * dat);
+dwg_encode_MTEXT(Dwg_Entity_MTEXT * ent, Bit_Chain * dat);
 static void
 dwg_encode_LEADER(Dwg_Entity_LEADER *ent, Bit_Chain * dat);
 static void
@@ -152,50 +152,50 @@ static int loglevel = 2; //This is not the same as loglevel from decode.c !
  * Public functions
  */
 int
-dwg_encode_chains(Dwg_Structure * skt, Bit_Chain * dat)
+dwg_encode_chains(Dwg_Data * skt, Bit_Chain * dat)
 {
-  int ckr_mankanta;
+  int ckr_missing;
   long unsigned int i, j;
-  long unsigned int sekciadresaro;
+  long unsigned int section_address;
   unsigned char pvzbit;
   long unsigned int pvzadr;
   long unsigned int pvzadr_2;
   unsigned int ckr;
   unsigned int sekcisize = 0;
-  long unsigned int lastadres;
-  long unsigned int lastahandle;
-  Object_Mapo *omap;
-  Object_Mapo pvzmap;
+  long unsigned int last_address;
+  long unsigned int last_handle;
+  Object_Map *omap;
+  Object_Map pvzmap;
   Dwg_Object *obj;
 
   bit_chain_alloc(dat);
 
   /*------------------------------------------------------------
-   * Kap-datenaro
+   * Header variables
    */
-  //strcpy (dat->chain, skt->header.version); // Chain pri version: devas esti AC1015
-  strcpy(dat->chain, "AC1015"); // Chain pri version: devas esti AC1015
+  //strcpy (dat->chain, skt->header.version); // Chain version: should be AC1015
+  strcpy(dat->chain, "AC1015"); // Chain version: should be AC1015
   dat->byte += 6;
 
   for (i = 0; i < 5; i++)
-    bit_write_RC(dat, 0); // Nekonata section
-  bit_write_RC(dat, 0x0F); // Nekonatajxo
-  bit_write_RC(dat, 0x01); // Nekonatajxo
-  bit_write_RL(dat, 0); // Bildo-address
-  bit_write_RC(dat, 25); // Versio
-  bit_write_RC(dat, 0); // Lancxo
+    bit_write_RC(dat, 0); // Unknown section
+  bit_write_RC(dat, 0x0F); // Unknown
+  bit_write_RC(dat, 0x01); // Unknown
+  bit_write_RL(dat, 0); // Picture address
+  bit_write_RC(dat, 25); // Version
+  bit_write_RC(dat, 0); // ?
   bit_write_RS(dat, skt->header.codepage); // Codepage
 
-  //skt->header.num_sections = 5; // Cxu kasxi la unknownn sectionn 1 ?
+  //skt->header.num_sections = 5; // hide unknownn sectionn 1 ?
   bit_write_RL(dat, skt->header.num_sections);
-  sekciadresaro = dat->byte; // Salti sekciadresaron
+  section_address = dat->byte; // Jump to section address
   dat->byte += (skt->header.num_sections * 9);
-  bit_read_CRC(dat); // Salti CKR-on
+  bit_read_CRC(dat); // Check crc
 
   bit_write_sentinel(dat, dwg_sentinel(DWG_SENTINEL_HEADER_END));
 
   /*------------------------------------------------------------
-   * Nekonata section 1
+   * Unknown section 1
    */
 
   skt->header.section[5].number = 5;
@@ -216,19 +216,20 @@ dwg_encode_chains(Dwg_Structure * skt, Bit_Chain * dat)
     }
 
   /*------------------------------------------------------------
-   * Antauxrigarda picture
+   * Picture (Pre-R13C3?)
    */
 
-  /* Finfine write la addressn de la picture
+  /* Write the address of the picture
    */
   pvzadr = dat->byte;
   dat->byte = 0x0D;
   bit_write_RL(dat, pvzadr);
   dat->byte = pvzadr;
 
-  /* Kopii la picturen
+  /* Copy picture
    */
-  //skt->picture.size = 0; // Se oni deziras ne kopii picturen, malkomentu tiun cxi linion
+  //skt->picture.size = 0; // If one desires not to copy pictures,
+                           // should un-comment this line
   bit_write_sentinel(dat, dwg_sentinel(DWG_SENTINEL_PICTURE_BEGIN));
   for (i = 0; i < skt->picture.size; i++)
     bit_write_RC(dat, skt->picture.chain[i]);
@@ -240,32 +241,33 @@ dwg_encode_chains(Dwg_Structure * skt, Bit_Chain * dat)
   bit_write_sentinel(dat, dwg_sentinel(DWG_SENTINEL_PICTURE_END));
 
   /*------------------------------------------------------------
-   * Kap-variabloj
+   * Header Variables
    */
 
   skt->header.section[0].number = 0;
   skt->header.section[0].address = dat->byte;
   bit_write_sentinel(dat, dwg_sentinel(DWG_SENTINEL_VARIABLE_BEGIN));
-  pvzadr = dat->byte; // poste oni devas rewrite la korektan valuen de size cxi tie:
-  bit_write_RL(dat, 0); // Size de la section
+  pvzadr = dat->byte; // Afterwards one must rewrite the correct values of size here
+
+  bit_write_RL(dat, 0); // Size of the section
 
   for (i = 0; i < DWG_NUM_VARIABLES; i++)
     {
-      if (i == 221 && skt->var[220].dubitoko != 3)
+      if (i == 221 && skt->var[220].bitdouble != 3)
         continue;
       switch (dwg_var_map(skt->header.version, i))
         {
       case DWG_DT_B:
-        bit_write_B(dat, skt->var[i].bitoko);
+        bit_write_B(dat, skt->var[i].bit);
         break;
       case DWG_DT_BS:
-        bit_write_BS(dat, skt->var[i].dubitoko);
+        bit_write_BS(dat, skt->var[i].bitdouble);
         break;
       case DWG_DT_BL:
-        bit_write_BL(dat, skt->var[i].kvarbitoko);
+        bit_write_BL(dat, skt->var[i].bitlong);
         break;
       case DWG_DT_BD:
-        bit_write_BD(dat, skt->var[i].duglitajxo);
+        bit_write_BD(dat, skt->var[i].bitdouble);
         break;
       case DWG_DT_H:
         bit_write_H(dat, &skt->var[i].handle);
@@ -274,7 +276,7 @@ dwg_encode_chains(Dwg_Structure * skt, Bit_Chain * dat)
         bit_write_TV(dat, skt->var[i].text);
         break;
       case DWG_DT_CMC:
-        bit_write_BS(dat, skt->var[i].dubitoko);
+        bit_write_BS(dat, skt->var[i].bitdouble);
         break;
       case DWG_DT_2RD:
         bit_write_RD(dat, skt->var[i].xy[0]);
@@ -286,12 +288,12 @@ dwg_encode_chains(Dwg_Structure * skt, Bit_Chain * dat)
         bit_write_BD(dat, skt->var[i].xyz[2]);
         break;
       default:
-        printf("No handleebla type: %i (var: %i)\n", dwg_var_map(
+        printf("No handle type: %i (var: %i)\n", dwg_var_map(
             skt->header.version, i), (int) i);
         }
     }
 
-  /* Skribi la sizen de la section cxe gxia komenco
+  /* Write the size of the section at its beginning
    */
   pvzadr_2 = dat->byte;
   pvzbit = dat->bit;
@@ -302,9 +304,9 @@ dwg_encode_chains(Dwg_Structure * skt, Bit_Chain * dat)
   dat->bit = pvzbit;
   //printf ("Size: %lu\n", pvzadr_2 - pvzadr - (pvzbit ? 3 : 4));
 
-  /* CKR kaj sentinel
+  /* CKR and sentinel
    */
-  bit_krei_CRC(dat, pvzadr, 0xC0C1);
+  bit_write_CRC(dat, pvzadr, 0xC0C1);
   bit_write_sentinel(dat, dwg_sentinel(DWG_SENTINEL_VARIABLE_END));
   skt->header.section[0].size = dat->byte - skt->header.section[0].address;
 
@@ -314,8 +316,8 @@ dwg_encode_chains(Dwg_Structure * skt, Bit_Chain * dat)
   skt->header.section[1].number = 1;
   skt->header.section[1].address = dat->byte;
   bit_write_sentinel(dat, dwg_sentinel(DWG_SENTINEL_CLASS_BEGIN));
-  pvzadr = dat->byte; // poste oni devas rewrite la korektan valuen de size cxi tie:
-  bit_write_RL(dat, 0); // Size de la section
+  pvzadr = dat->byte; // Afterwards one must rewrite the correct values of size here
+  bit_write_RL(dat, 0); // Size of the section
 
   for (i = 0; i < skt->num_classes; i++)
     {
@@ -328,7 +330,7 @@ dwg_encode_chains(Dwg_Structure * skt, Bit_Chain * dat)
       bit_write_BS(dat, skt->class[i].item_class_id);
     }
 
-  /* Skribi la sizen de la section cxe gxia komenco
+  /* Write the size of the section at its beginning
    */
   pvzadr_2 = dat->byte;
   pvzbit = dat->bit;
@@ -339,28 +341,28 @@ dwg_encode_chains(Dwg_Structure * skt, Bit_Chain * dat)
   dat->bit = pvzbit;
   //printf ("Size: %lu\n", pvzadr_2 - pvzadr - (pvzbit ? 3 : 4));
 
-  /* CKR kaj sentinel
+  /* CKR and sentinel
    */
-  bit_krei_CRC(dat, pvzadr, 0xC0C1);
+  bit_write_CRC(dat, pvzadr, 0xC0C1);
 
   bit_write_sentinel(dat, dwg_sentinel(DWG_SENTINEL_CLASS_END));
   skt->header.section[1].size = dat->byte - skt->header.section[1].address;
 
   /*------------------------------------------------------------
-   * Objectj
+   * Objects
    */
-  bit_write_RL(dat, 0x00000000); // 0xDCA Nekonata kvarbitoko inter classj kaj objektaro
+  bit_write_RL(dat, 0x00000000); // 0xDCA Unknown bitlong inter class and objects
   pvzadr = dat->byte;
 
-  /* Ekdifini object-mapon
+  /* Define object-map
    */
-  omap = (Object_Mapo *) malloc(skt->num_objects * sizeof(Object_Mapo));
+  omap = (Object_Map *) malloc(skt->num_objects * sizeof(Object_Map));
   for (i = 0; i < skt->num_objects; i++)
     {
       Bit_Chain nkn;
       Dwg_Handle tkt;
 
-      /* Difini la handlejn de cxiuj objectj, inkluzive la unknownj */
+      /* Define the handle of each object, including unknown */
       omap[i].idc = i;
       if (skt->object[i].supertype == DWG_SUPERTYPE_ENTITY)
         omap[i].handle = skt->object[i].handle.value;
@@ -379,7 +381,7 @@ dwg_encode_chains(Dwg_Structure * skt, Bit_Chain * dat)
       else
         omap[i].handle = 0x7FFFFFFF; /* Eraro! */
 
-      /* Ordigi la sekvon de handlej laux kreskanta ordo */
+      /* Arrange the sequence of handles according to a growing order  */
       if (i > 0)
         {
           j = i;
@@ -399,9 +401,9 @@ dwg_encode_chains(Dwg_Structure * skt, Bit_Chain * dat)
             }
         }
     }
-  //for (i = 0; i < skt->num_objects; i++) printf ("Trakt(%i): %lu / Idc: %u\n", i, omap[i].handle, omap[i].idc);
+  //for (i = 0; i < skt->num_objects; i++) printf ("Handle(%i): %lu / Idc: %u\n", i, omap[i].handle, omap[i].idc);
 
-  /* Skribi la objektaron
+  /* Write the objects
    */
   for (i = 0; i < skt->num_objects; i++)
     {
@@ -423,30 +425,30 @@ dwg_encode_chains(Dwg_Structure * skt, Bit_Chain * dat)
             dwg_encode_object(obj, dat);
           else
             {
-              printf("Eraro: ne difinita (super)type de object por write\n");
+              sprintf(stderr, "Error: undefined (super)type of object\n");
               exit(-1);
             }
         }
-      bit_krei_CRC(dat, omap[i].address, 0xC0C1);
+      bit_write_CRC(dat, omap[i].address, 0xC0C1);
     }
-  //for (i = 0; i < skt->num_objects; i++) printf ("Trakt(%i): %6lu / Adreso: %08X / Idc: %u\n", i, omap[i].handle, omap[i].address, omap[i].idc);
+  //for (i = 0; i < skt->num_objects; i++) printf ("Trakt(%i): %6lu / Address: %08X / Idc: %u\n", i, omap[i].handle, omap[i].address, omap[i].idc);
 
-  /* Nekonata dubitoko inter la objektaron kaj la object-mapo
+  /* Unknown bitdouble between objects and object map
    */
   bit_write_RS(dat, 0);
 
   /*------------------------------------------------------------
-   * Object-mapo
+   * Object-map
    */
   skt->header.section[2].number = 2;
-  skt->header.section[2].address = dat->byte; // poste oni devas kalkuli la valuen de size
-  //printf ("Ekaddress: 0x%08X\n", dat->byte);
+  skt->header.section[2].address = dat->byte; // Value of size should be calculated later
+  //printf ("Begin: 0x%08X\n", dat->byte);
 
   sekcisize = 0;
-  pvzadr = dat->byte; // poste oni devas write cxi tie la korektan valuen de size de la unua section
+  pvzadr = dat->byte; // Correct value of section size must be written later
   dat->byte += 2;
-  lastadres = 0;
-  lastahandle = 0;
+  last_address = 0;
+  last_handle = 0;
   for (i = 0; i < skt->num_objects; i++)
     {
       unsigned int idc;
@@ -454,75 +456,75 @@ dwg_encode_chains(Dwg_Structure * skt, Bit_Chain * dat)
 
       idc = omap[i].idc;
 
-      pvz = omap[idc].handle - lastahandle;
+      pvz = omap[idc].handle - last_handle;
       bit_write_MC(dat, pvz);
-      //printf ("Trakt(%i): %6lu / ", i, pvz);
-      lastahandle = omap[idc].handle;
+      //printf ("Handle(%i): %6lu / ", i, pvz);
+      last_handle = omap[idc].handle;
 
-      pvz = omap[idc].address - lastadres;
+      pvz = omap[idc].address - last_address;
       bit_write_MC(dat, pvz);
-      //printf ("Adreso: %08X\n", pvz);
-      lastadres = omap[idc].address;
+      //printf ("Address: %08X\n", pvz);
+      last_address = omap[idc].address;
 
-      ckr_mankanta = 1;
+      ckr_missing = 1;
       if (dat->byte - pvzadr > 2030) // 2029
         {
-          ckr_mankanta = 0;
+          ckr_missing = 0;
           sekcisize = dat->byte - pvzadr;
           dat->chain[pvzadr] = sekcisize >> 8;
           dat->chain[pvzadr + 1] = sekcisize & 0xFF;
-          bit_krei_CRC(dat, pvzadr, 0xC0C1);
+          bit_write_CRC(dat, pvzadr, 0xC0C1);
 
           pvzadr = dat->byte;
           dat->byte += 2;
-          lastadres = 0;
-          lastahandle = 0;
+          last_address = 0;
+          last_handle = 0;
         }
     }
   //printf ("Obj size: %u\n", i);
-  if (ckr_mankanta)
+  if (ckr_missing)
     {
       sekcisize = dat->byte - pvzadr;
       dat->chain[pvzadr] = sekcisize >> 8;
       dat->chain[pvzadr + 1] = sekcisize & 0xFF;
-      bit_krei_CRC(dat, pvzadr, 0xC0C1);
+      bit_write_CRC(dat, pvzadr, 0xC0C1);
     }
   pvzadr = dat->byte;
   bit_write_RC(dat, 0);
   bit_write_RC(dat, 2);
-  bit_krei_CRC(dat, pvzadr, 0xC0C1);
+  bit_write_CRC(dat, pvzadr, 0xC0C1);
 
-  /* Kalkuli kaj write la sizen de la object-mapo
+  /* Calculate and write the size of the object map
    */
   skt->header.section[2].size = dat->byte - skt->header.section[2].address;
   free(omap);
 
   /*------------------------------------------------------------
-   * Dua kap-datenaro
+   * Second header
    */
   bit_write_sentinel(dat, dwg_sentinel(DWG_SENTINEL_SECOND_HEADER_BEGIN));
 
-  pvzadr = dat->byte; // Gardi la unuan addressn de la section por write ties sizen poste
+  pvzadr = dat->byte; // Keep the first address of the section to write its size later
   bit_write_RL(dat, 0);
 
-  bit_write_BL(dat, pvzadr - 16); // start_address de la section
+  bit_write_BL(dat, pvzadr - 16); // start_address of the section
 
   /* Version Code
    */
   for (i - 0; i < 6; i++)
     bit_write_RC(dat, version_codes[dat->version][i]);
 
-  /* 5 (aux 6) nuloj
+  /* 5 (aux 6) null
    */
-  for (i = 0; i < 5; i++) // 6 se estas pli malnova...
+  for (i = 0; i < 5; i++) // 6 if is older
     bit_write_RC(dat, 0);
 
-  /* 4 nulaj bitoj
+  /* 4 nulll bits
    */
   bit_write_BB(dat, 0);
   bit_write_BB(dat, 0);
 
-  /* Fiksa chain
+  /* Fixed chain
    */
   bit_write_RC(dat, 0x0F);
   bit_write_RC(dat, 0x14);
@@ -531,7 +533,7 @@ dwg_encode_chains(Dwg_Structure * skt, Bit_Chain * dat)
   bit_write_RC(dat, 0x01);
   bit_write_RC(dat, 0x06);
 
-  /* Adresaro
+  /* Addresses
    */
   for (i = 0; i < 6; i++)
     {
@@ -540,7 +542,7 @@ dwg_encode_chains(Dwg_Structure * skt, Bit_Chain * dat)
       bit_write_BL(dat, skt->header.section[0].size);
     }
 
-  /* Traktilaro
+  /* Handles
    */
   bit_write_BS(dat, 14);
   for (i = 0; i < 14; i++)
@@ -551,7 +553,7 @@ dwg_encode_chains(Dwg_Structure * skt, Bit_Chain * dat)
         bit_write_RC(dat, skt->second_header.handlerik[i].chain[j]);
     }
 
-  /* Returni al la komenco por write la sizen
+  /* Go back to begin to write the size
    */
   pvzadr_2 = dat->byte;
   dat->byte = pvzadr;
@@ -560,9 +562,9 @@ dwg_encode_chains(Dwg_Structure * skt, Bit_Chain * dat)
 
   /* CKR
    */
-  bit_krei_CRC(dat, pvzadr, 0xC0C1);
+  bit_write_CRC(dat, pvzadr, 0xC0C1);
 
-  /* Jen 8 bitokoj da rubajxo
+  /* 8 garbage bytes
    */
   bit_write_RL(dat, 0);
   bit_write_RL(dat, 0);
@@ -580,13 +582,13 @@ dwg_encode_chains(Dwg_Structure * skt, Bit_Chain * dat)
   skt->header.section[4].size = 4;
   bit_write_RL(dat, skt->measurement);
 
-  /* Fino de la dosiero
+  /* End of the file
    */
   dat->size = dat->byte;
 
-  /* Skribi sekciadresaron
+  /* Write section addresses
    */
-  dat->byte = sekciadresaro;
+  dat->byte = section_address;
   dat->bit = 0;
   for (i = 0; i < skt->header.num_sections; i++)
     {
@@ -595,9 +597,9 @@ dwg_encode_chains(Dwg_Structure * skt, Bit_Chain * dat)
       bit_write_RL(dat, skt->header.section[i].size);
     }
 
-  /* Skribi CKR-on
+  /* Write CRC's
    */
-  bit_krei_CRC(dat, 0, 0);
+  bit_write_CRC(dat, 0, 0);
   dat->byte -= 2;
   ckr = bit_read_CRC(dat);
   dat->byte -= 2;
@@ -626,21 +628,21 @@ static void
 dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
 {
   unsigned int i;
-  long unsigned int longo;
+  long unsigned int size;
   Bit_Chain gdadr;
   Bit_Chain ekadr;
   Bit_Chain bgadr;
   Bit_Chain pvadr;
-  Dwg_Object_Entity *est;
+  Dwg_Object_Entity *ent;
 
-  est = obj->tio.entity;
+  ent = obj->tio.entity;
 
   gdadr.byte = dat->byte;
   gdadr.bit = dat->bit;
 
   bit_write_MS(dat, obj->size);
 
-  ekadr.byte = dat->byte; // Por kalkuli poste la bajta kaj bita sizej de la object
+  ekadr.byte = dat->byte; // In order to calculate afterwards the byte and bit size of the object
   ekadr.bit = dat->bit;
 
   bit_write_BS(dat, obj->type);
@@ -648,189 +650,189 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
   bgadr.byte = dat->byte;
   bgadr.bit = dat->bit;
 
-  bit_write_RL(dat, 0); // Nulo nun, kalkulendas por write poste
+  bit_write_RL(dat, 0); // Zero for now. Calculate and write later
 
-  bit_write_H(dat, &est->object->handle);
-  bit_write_BS(dat, est->extended_size);
-  if (est->extended_size > 0)
+  bit_write_H(dat, &ent->object->handle);
+  bit_write_BS(dat, ent->extended_size);
+  if (ent->extended_size > 0)
     {
-      bit_write_H(dat, &est->extended_handle);
-      for (i = 0; i < est->extended_size; i++)
-        bit_write_RC(dat, est->extended[i]);
+      bit_write_H(dat, &ent->extended_handle);
+      for (i = 0; i < ent->extended_size; i++)
+        bit_write_RC(dat, ent->extended[i]);
     }
 
-  bit_write_B(dat, est->picture_exists);
-  if (est->picture_exists)
+  bit_write_B(dat, ent->picture_exists);
+  if (ent->picture_exists)
     {
-      bit_write_RL(dat, est->picture_size);
-      for (i = 0; i < est->picture_size; i++)
-        bit_write_RC(dat, est->picture[i]);
+      bit_write_RL(dat, ent->picture_size);
+      for (i = 0; i < ent->picture_size; i++)
+        bit_write_RC(dat, ent->picture[i]);
     }
 
-  bit_write_BB(dat, est->entity_mode);
-  bit_write_BL(dat, est->num_reactors);
-  bit_write_B(dat, est->nolinks);
-  bit_write_CMC(dat, est->color);
-  bit_write_BD(dat, est->linetype_scale);
-  bit_write_BB(dat, est->linetype_flags);
-  bit_write_BB(dat, est->plotstyle_flags);
-  bit_write_BS(dat, est->invisible);
-  bit_write_RC(dat, est->lineweight);
+  bit_write_BB(dat, ent->entity_mode);
+  bit_write_BL(dat, ent->num_reactors);
+  bit_write_B(dat, ent->nolinks);
+  bit_write_CMC(dat, ent->color);
+  bit_write_BD(dat, ent->linetype_scale);
+  bit_write_BB(dat, ent->linetype_flags);
+  bit_write_BB(dat, ent->plotstyle_flags);
+  bit_write_BS(dat, ent->invisible);
+  bit_write_RC(dat, ent->lineweight);
 
   switch (obj->type)
     {
   case DWG_TYPE_TEXT:
-    dwg_encode_TEXT(est->tio.TEXT, dat);
+    dwg_encode_TEXT(ent->tio.TEXT, dat);
     break;
   case DWG_TYPE_ATTRIB:
-    dwg_encode_ATTRIB(est->tio.ATTRIB, dat);
+    dwg_encode_ATTRIB(ent->tio.ATTRIB, dat);
     break;
   case DWG_TYPE_ATTDEF:
-    dwg_encode_ATTDEF(est->tio.ATTDEF, dat);
+    dwg_encode_ATTDEF(ent->tio.ATTDEF, dat);
     break;
   case DWG_TYPE_BLOCK:
-    dwg_encode_BLOCK(est->tio.BLOCK, dat);
+    dwg_encode_BLOCK(ent->tio.BLOCK, dat);
     break;
   case DWG_TYPE_ENDBLK:
-    dwg_encode_ENDBLK(est->tio.ENDBLK, dat);
+    dwg_encode_ENDBLK(ent->tio.ENDBLK, dat);
     break;
   case DWG_TYPE_SEQEND:
-    dwg_encode_SEQEND(est->tio.SEQEND, dat);
+    dwg_encode_SEQEND(ent->tio.SEQEND, dat);
     break;
   case DWG_TYPE_INSERT:
-    dwg_encode_INSERT(est->tio.INSERT, dat);
+    dwg_encode_INSERT(ent->tio.INSERT, dat);
     break;
   case DWG_TYPE_MINSERT:
-    dwg_encode_MINSERT(est->tio.MINSERT, dat);
+    dwg_encode_MINSERT(ent->tio.MINSERT, dat);
     break;
   case DWG_TYPE_VERTEX_2D:
-    dwg_encode_VERTEX_2D(est->tio.VERTEX_2D, dat);
+    dwg_encode_VERTEX_2D(ent->tio.VERTEX_2D, dat);
     break;
   case DWG_TYPE_VERTEX_3D:
-    dwg_encode_VERTEX_3D(est->tio.VERTEX_3D, dat);
+    dwg_encode_VERTEX_3D(ent->tio.VERTEX_3D, dat);
     break;
   case DWG_TYPE_VERTEX_MESH:
-    dwg_encode_VERTEX_MESH(est->tio.VERTEX_MESH, dat);
+    dwg_encode_VERTEX_MESH(ent->tio.VERTEX_MESH, dat);
     break;
   case DWG_TYPE_VERTEX_PFACE:
-    dwg_encode_VERTEX_PFACE(est->tio.VERTEX_PFACE, dat);
+    dwg_encode_VERTEX_PFACE(ent->tio.VERTEX_PFACE, dat);
     break;
   case DWG_TYPE_VERTEX_PFACE_FACE:
-    dwg_encode_VERTEX_PFACE_FACE(est->tio.VERTEX_PFACE_FACE, dat);
+    dwg_encode_VERTEX_PFACE_FACE(ent->tio.VERTEX_PFACE_FACE, dat);
     break;
   case DWG_TYPE_POLYLINE_2D:
-    dwg_encode_POLYLINE_2D(est->tio.POLYLINE_2D, dat);
+    dwg_encode_POLYLINE_2D(ent->tio.POLYLINE_2D, dat);
     break;
   case DWG_TYPE_POLYLINE_3D:
-    dwg_encode_POLYLINE_3D(est->tio.POLYLINE_3D, dat);
+    dwg_encode_POLYLINE_3D(ent->tio.POLYLINE_3D, dat);
     break;
   case DWG_TYPE_ARC:
-    dwg_encode_ARC(est->tio.ARC, dat);
+    dwg_encode_ARC(ent->tio.ARC, dat);
     break;
   case DWG_TYPE_CIRCLE:
-    dwg_encode_CIRCLE(est->tio.CIRCLE, dat);
+    dwg_encode_CIRCLE(ent->tio.CIRCLE, dat);
     break;
   case DWG_TYPE_LINE:
-    dwg_encode_LINE(est->tio.LINE, dat);
+    dwg_encode_LINE(ent->tio.LINE, dat);
     break;
   case DWG_TYPE_DIMENSION_ORDINATE:
-    dwg_encode_DIMENSION_ORDINATE(est->tio.DIMENSION_ORDINATE, dat);
+    dwg_encode_DIMENSION_ORDINATE(ent->tio.DIMENSION_ORDINATE, dat);
     break;
   case DWG_TYPE_DIMENSION_LINEAR:
-    dwg_encode_DIMENSION_LINEAR(est->tio.DIMENSION_LINEAR, dat);
+    dwg_encode_DIMENSION_LINEAR(ent->tio.DIMENSION_LINEAR, dat);
     break;
   case DWG_TYPE_DIMENSION_ALIGNED:
-    dwg_encode_DIMENSION_ALIGNED(est->tio.DIMENSION_ALIGNED, dat);
+    dwg_encode_DIMENSION_ALIGNED(ent->tio.DIMENSION_ALIGNED, dat);
     break;
   case DWG_TYPE_DIMENSION_ANG3PT:
-    dwg_encode_DIMENSION_ANG3PT(est->tio.DIMENSION_ANG3PT, dat);
+    dwg_encode_DIMENSION_ANG3PT(ent->tio.DIMENSION_ANG3PT, dat);
     break;
   case DWG_TYPE_DIMENSION_ANG2LN:
-    dwg_encode_DIMENSION_ANG2LN(est->tio.DIMENSION_ANG2LN, dat);
+    dwg_encode_DIMENSION_ANG2LN(ent->tio.DIMENSION_ANG2LN, dat);
     break;
   case DWG_TYPE_DIMENSION_RADIUS:
-    dwg_encode_DIMENSION_RADIUS(est->tio.DIMENSION_RADIUS, dat);
+    dwg_encode_DIMENSION_RADIUS(ent->tio.DIMENSION_RADIUS, dat);
     break;
   case DWG_TYPE_DIMENSION_DIAMETER:
-    dwg_encode_DIMENSION_DIAMETER(est->tio.DIMENSION_DIAMETER, dat);
+    dwg_encode_DIMENSION_DIAMETER(ent->tio.DIMENSION_DIAMETER, dat);
     break;
   case DWG_TYPE_POINT:
-    dwg_encode_POINT(est->tio.POINT, dat);
+    dwg_encode_POINT(ent->tio.POINT, dat);
     break;
   case DWG_TYPE__3DFACE:
-    dwg_encode__3DFACE(est->tio._3DFACE, dat);
+    dwg_encode__3DFACE(ent->tio._3DFACE, dat);
     break;
   case DWG_TYPE_POLYLINE_PFACE:
-    dwg_encode_POLYLINE_PFACE(est->tio.POLYLINE_PFACE, dat);
+    dwg_encode_POLYLINE_PFACE(ent->tio.POLYLINE_PFACE, dat);
     break;
   case DWG_TYPE_POLYLINE_MESH:
-    dwg_encode_POLYLINE_MESH(est->tio.POLYLINE_MESH, dat);
+    dwg_encode_POLYLINE_MESH(ent->tio.POLYLINE_MESH, dat);
     break;
   case DWG_TYPE_SOLID:
-    dwg_encode_SOLID(est->tio.SOLID, dat);
+    dwg_encode_SOLID(ent->tio.SOLID, dat);
     break;
   case DWG_TYPE_TRACE:
-    dwg_encode_TRACE(est->tio.TRACE, dat);
+    dwg_encode_TRACE(ent->tio.TRACE, dat);
     break;
   case DWG_TYPE_SHAPE:
-    dwg_encode_SHAPE(est->tio.SHAPE, dat);
+    dwg_encode_SHAPE(ent->tio.SHAPE, dat);
     break;
   case DWG_TYPE_VIEWPORT:
-    dwg_encode_VIEWPORT(est->tio.VIEWPORT, dat);
+    dwg_encode_VIEWPORT(ent->tio.VIEWPORT, dat);
     break;
   case DWG_TYPE_ELLIPSE:
-    dwg_encode_ELLIPSE(est->tio.ELLIPSE, dat);
+    dwg_encode_ELLIPSE(ent->tio.ELLIPSE, dat);
     break;
   case DWG_TYPE_SPLINE:
-    dwg_encode_SPLINE(est->tio.SPLINE, dat);
+    dwg_encode_SPLINE(ent->tio.SPLINE, dat);
     break;
   case DWG_TYPE_REGION:
-    dwg_encode_REGION(est->tio.REGION, dat);
+    dwg_encode_REGION(ent->tio.REGION, dat);
     break;
   case DWG_TYPE_3DSOLID:
-    dwg_encode_3DSOLID(est->tio._3DSOLID, dat);
+    dwg_encode_3DSOLID(ent->tio._3DSOLID, dat);
     break;
   case DWG_TYPE_BODY:
-    dwg_encode_BODY(est->tio.BODY, dat);
+    dwg_encode_BODY(ent->tio.BODY, dat);
     break;
   case DWG_TYPE_RAY:
-    dwg_encode_RAY(est->tio.RAY, dat);
+    dwg_encode_RAY(ent->tio.RAY, dat);
     break;
   case DWG_TYPE_XLINE:
-    dwg_encode_XLINE(est->tio.XLINE, dat);
+    dwg_encode_XLINE(ent->tio.XLINE, dat);
     break;
   case DWG_TYPE_MTEXT:
-    dwg_encode_MTEXT(est->tio.MTEXT, dat);
+    dwg_encode_MTEXT(ent->tio.MTEXT, dat);
     break;
   case DWG_TYPE_LEADER:
-    dwg_encode_LEADER(est->tio.LEADER, dat);
+    dwg_encode_LEADER(ent->tio.LEADER, dat);
     break;
   case DWG_TYPE_TOLERANCE:
-    dwg_encode_TOLERANCE(est->tio.TOLERANCE, dat);
+    dwg_encode_TOLERANCE(ent->tio.TOLERANCE, dat);
     break;
   case DWG_TYPE_MLINE:
-    dwg_encode_MLINE(est->tio.MLINE, dat);
+    dwg_encode_MLINE(ent->tio.MLINE, dat);
     break;
     /* TODO: figure out how to deal with these types
      case DWG_TYPE_IMAGE:
-     dwg_encode_IMAGE (est->tio.IMAGE, dat);
+     dwg_encode_IMAGE (ent->tio.IMAGE, dat);
      break;
      case DWG_TYPE_LWPLINE:
-     dwg_encode_LWPLINE (est->tio.LWPLINE, dat);
+     dwg_encode_LWPLINE (ent->tio.LWPLINE, dat);
      break;
      case DWG_TYPE_OLE2FRAME:
-     dwg_encode_OLE2FRAME (est->tio.OLE2FRAME, dat);
+     dwg_encode_OLE2FRAME (ent->tio.OLE2FRAME, dat);
      break;
      case DWG_TYPE_TABLE:
-     dwg_encode_TABLE (est->tio.TABLE, dat);
+     dwg_encode_TABLE (ent->tio.TABLE, dat);
      break;
      */
   default:
-    printf("Eraro: unknown object-type dum enkodigo de estaĵo\n");
+    sprintf(stderr, "Error: unknown object-type while encoding entity\n");
     exit(-1);
     }
 
-  /* Finfine kalkuli kaj write la bit-sizen de la object
+  /* Finally calculate and write the bit-size of the object
    */
   pvadr.byte = dat->byte;
   pvadr.bit = dat->bit;
@@ -838,20 +840,20 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
   dat->byte = bgadr.byte;
   dat->bit = bgadr.bit;
 
-  longo = 8 * (pvadr.byte - ekadr.byte) + (pvadr.bit);
-  bit_write_RL(dat, longo);
-  //printf ("Longo (bit): %lu\t", longo);
+  size = 8 * (pvadr.byte - ekadr.byte) + (pvadr.bit);
+  bit_write_RL(dat, size);
+  //printf ("Size (bit): %lu\t", size);
 
   dat->byte = pvadr.byte;
   dat->bit = pvadr.bit;
 
-  /* Traktilaj referencoj
+  /* Handle references
    */
   //FIXME write new handle encoding routines like print_handleref
-  for (i = 0; i < est->num_handles; i++)
-    //bit_write_H (dat, &est->handleref[i]);
+  for (i = 0; i < ent->num_handles; i++)
+    //bit_write_H (dat, &ent->handleref[i]);
 
-    /* Finfine kalkuli kaj write la bajt-sizen de la object (cxu estas erara?)
+    /* Finally calculate and write the bit-size of the object
      */
     pvadr.byte = dat->byte;
   pvadr.bit = dat->bit;
@@ -859,9 +861,9 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
   dat->byte = gdadr.byte;
   dat->bit = gdadr.bit;
 
-  longo = pvadr.byte - ekadr.byte;
-  bit_write_MS(dat, longo);
-  //printf ("Longo: %lu\n", longo);
+  size = pvadr.byte - ekadr.byte;
+  bit_write_MS(dat, size);
+  //printf ("Size: %lu\n", size);
 
   dat->byte = pvadr.byte;
   dat->bit = pvadr.bit;
@@ -887,7 +889,7 @@ dwg_encode_object(Dwg_Object * obj, Bit_Chain * dat)
   Bit_Chain ekadr;
 
   bit_write_MS(dat, obj->size);
-  ekadr.byte = dat->byte; // Por kalkuli poste la bita size de la object
+  ekadr.byte = dat->byte; // Calculate later the bit size of the object
   ekadr.bit = dat->bit;
   bit_write_BS(dat, obj->type);
 }
@@ -1283,14 +1285,14 @@ dwg_encode_ARC(Dwg_Entity_ARC *ent, Bit_Chain * dat)
 }
 
 static void
-dwg_encode_CIRCLE(Dwg_Entity_CIRCLE * est, Bit_Chain * dat)
+dwg_encode_CIRCLE(Dwg_Entity_CIRCLE * ent, Bit_Chain * dat)
 {
-  bit_write_BD(dat, est->center.x);
-  bit_write_BD(dat, est->center.y);
-  bit_write_BD(dat, est->center.z);
-  bit_write_BD(dat, est->radius);
-  bit_write_BT(dat, est->thickness);
-  bit_write_BE(dat, est->extrusion.x, est->extrusion.y, est->extrusion.z);
+  bit_write_BD(dat, ent->center.x);
+  bit_write_BD(dat, ent->center.y);
+  bit_write_BD(dat, ent->center.z);
+  bit_write_BD(dat, ent->radius);
+  bit_write_BT(dat, ent->thickness);
+  bit_write_BE(dat, ent->extrusion.x, ent->extrusion.y, ent->extrusion.z);
 
   //TODO: dwg_encode_common_entity_handle_data(dat, ent->object);
 }

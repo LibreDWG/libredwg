@@ -8,6 +8,7 @@
 /*                                                                           */
 /*  Copyright (C) 2008, 2009 Free Software Foundation, Inc.                  */
 /*  Copyright (C) 2009 Felipe Sanches <jucablues@users.sourceforge.net>      */
+/*  Copyright (C) 2009 Rodrigo Rodrigues da Silva <pitanga@members.fsf.org>  */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -152,7 +153,7 @@ bit_check_CRC(Bit_Chain * bit_datenaro, long unsigned int start_address,
     unsigned int semo);
 
 unsigned int
-bit_krei_CRC(Bit_Chain * bit_datenaro, long unsigned int start_address,
+bit_write_CRC(Bit_Chain * bit_datenaro, long unsigned int start_address,
     unsigned int semo);
 
 unsigned char *
@@ -180,6 +181,6 @@ void
 bit_print(Bit_Chain * dat, long unsigned int size);
 
 void
-bit_esplori_chain(Bit_Chain * dat, long unsigned int size);
+bit_explore_chain(Bit_Chain * dat, long unsigned int size);
 
 #endif

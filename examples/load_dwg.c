@@ -46,7 +46,7 @@ load_dwg(char *filename)
 {
   unsigned int i;
   int success;
-  Dwg_Structure dwg;
+  Dwg_Data dwg;
 
   dwg.num_objects = 0;
   success = dwg_read_file(filename, &dwg);

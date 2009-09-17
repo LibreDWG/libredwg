@@ -61,7 +61,7 @@ int
 test_dwg_c(char *filename)
 {
   int error;
-  Dwg_Structure dwg_struct;
+  Dwg_Data dwg_struct;
 
   if (filename)
     error = dwg_read_file(filename, &dwg_struct);
@@ -104,7 +104,7 @@ void
 test_map_R2000()
 {
   int i;
-  static int map_R2000[] =
+  static unsigned int map_R2000[] =
     { DWG_DT_BD, DWG_DT_BD, DWG_DT_BD, DWG_DT_BD, DWG_DT_T, DWG_DT_T, DWG_DT_T,
         DWG_DT_T, DWG_DT_BL, DWG_DT_BL, DWG_DT_H, DWG_DT_B, DWG_DT_B, DWG_DT_B,
         DWG_DT_B, DWG_DT_B, DWG_DT_B, DWG_DT_B, DWG_DT_B, DWG_DT_B, DWG_DT_B,

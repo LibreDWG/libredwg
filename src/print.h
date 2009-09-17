@@ -8,6 +8,7 @@
 /*                                                                           */
 /*  Copyright (C) 2008, 2009 Free Software Foundation, Inc.                  */
 /*  Copyright (C) 2009 Felipe Sanches <jucablues@users.sourceforge.net>      */
+/*  Copyright (C) 2009 Rodrigo Rodrigues da Silva <pitanga@members.fsf.org>  */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -16,12 +17,15 @@
 /*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
 /*****************************************************************************/
 
+//I am disabling the print module because our MACROS on decode.c provide us enough debugging messages
+#if 0
+
 #include "common.h"
 #include "bits.h"
 #include "dwg.h"
 
 void
-dwg_print(Dwg_Structure * dwg);
+dwg_print(Dwg_Data * dwg);
 
 void
 dwg_print_entity(Dwg_Object_Entity * ent);
@@ -98,3 +102,4 @@ dwg_print_LAYER(Dwg_Object_LAYER *obj);
 void
 dwg_print_LAYOUT(Dwg_Object_LAYOUT *obj);
 
+#endif

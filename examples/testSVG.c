@@ -32,7 +32,7 @@ int
 test_SVG(char *filename);
 
 void
-output_SVG(Dwg_Structure* dwg_struct);
+output_SVG(Dwg_Data* dwg_struct);
 
 int
 main(int argc, char *argv[])
@@ -49,7 +49,7 @@ int
 test_SVG(char *filename)
 {
   int error;
-  Dwg_Structure dwg_struct;
+  Dwg_Data dwg_struct;
 
   if (filename)
     error = dwg_read_file(filename, &dwg_struct);
@@ -205,7 +205,7 @@ void output_BLOCK_HEADER(Dwg_Object_Ref* ref)
 }
 
 void
-output_SVG(Dwg_Structure* dwg_struct)
+output_SVG(Dwg_Data* dwg_struct)
 {
   unsigned int i;
   Dwg_Object *obj;

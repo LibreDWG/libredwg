@@ -27,7 +27,7 @@
 #define OUTPUT_FILE "sample.ps"
 
 void
-create_postscript(Dwg_Structure *dwg, char *output)
+create_postscript(Dwg_Data *dwg, char *output)
 {
   float dx;
   float dy;
@@ -109,7 +109,7 @@ create_postscript(Dwg_Structure *dwg, char *output)
 main(int argc, char *argv[])
 {
   int success;
-  Dwg_Structure dwg;
+  Dwg_Data dwg;
 
   if (argc > 1)
     success = dwg_read_file(argv[1], &dwg);

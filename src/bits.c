@@ -8,6 +8,7 @@
 /*                                                                           */
 /*  Copyright (C) 2008, 2009 Free Software Foundation, Inc.                  */
 /*  Copyright (C) 2009 Felipe Sanches <jucablues@users.sourceforge.net>      */
+/*  Copyright (C) 2009 Rodrigo Rodrigues da Silva <pitanga@members.fsf.org>  */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -33,7 +34,7 @@ bit_ckr8(unsigned int dx, unsigned char *adr, long n);
  * Public functions
  */
 
-/* Pretersalti tiom da bitoj (antauxen aux malantauxen)
+/* Advance bits (forward or backward)
  */
 void
 bit_advance_position(Bit_Chain * dat, int advance)
@@ -724,7 +725,7 @@ bit_write_H(Bit_Chain * dat, Dwg_Handle * handle)
 {
   int i, j;
   unsigned char *val;
-  unsigned char code_nombrilo;
+  unsigned char code_counter;
 
   if (handle->value == 0)
     {
@@ -737,17 +738,17 @@ bit_write_H(Bit_Chain * dat, Dwg_Handle * handle)
     if (val[i])
       break;
 
-  code_nombrilo = handle->code << 4;
-  code_nombrilo |= i + 1;
+  code_counter = handle->code << 4;
+  code_counter |= i + 1;
 
-  bit_write_RC(dat, code_nombrilo);
+  bit_write_RC(dat, code_counter);
 
   for (; i >= 0; i--)
     bit_write_RC(dat, val[i]);
 }
 
-/** Nur read CRK-numbern, sen iu ajn kontrolo, nur por iri al la sekva byte,
- * saltante eventualajn neuzitajn bitojn.
+/** Only read CRK-numbers, without checking, only in order to go to
+ * the next byte, while jumping contingent non-used bits
  */
 unsigned int
 bit_read_CRC(Bit_Chain * dat)
@@ -797,7 +798,7 @@ bit_check_CRC(Bit_Chain * dat, long unsigned int start_address,
 /** Create and write CRC-number.
  */
 unsigned int
-bit_krei_CRC(Bit_Chain * dat, long unsigned int start_address,
+bit_write_CRC(Bit_Chain * dat, long unsigned int start_address,
     unsigned int seed)
 {
   unsigned int crc;
@@ -813,7 +814,7 @@ bit_krei_CRC(Bit_Chain * dat, long unsigned int start_address,
   return (crc);
 }
 
-/** Read simple text. After usage, the allocated memory must be proprly freed.
+/** Read simple text. After usage, the allocated memory must be properly freed.
  */
 BITCODE_TV
 bit_read_TV(Bit_Chain * dat)
@@ -851,7 +852,7 @@ bit_write_TV(Bit_Chain * dat, unsigned char *chain)
     bit_write_RC(dat, chain[i]);
 }
 
-/** Read 1 kvarbitokon laux normala (komenc-peza) ordo.
+/** Read 1 bitlong according to normal order
  */
 long unsigned int
 bit_read_L(Bit_Chain * dat)
@@ -866,7 +867,7 @@ bit_read_L(Bit_Chain * dat)
   return (*((long unsigned int *) btk));
 }
 
-/** Write 1 kvarbitokon laux normala ordo.
+/** Write 1 bitlong according to normal order
  */
 void
 bit_write_L(Bit_Chain * dat, long unsigned int value)
@@ -915,7 +916,7 @@ bit_write_CMC(Bit_Chain * dat, Dwg_Color color)
     }
 }
 
-/** Search for a sentinel; if found, positions "dat->byte" imediatly after it.
+/** Search for a sentinel; if found, positions "dat->byte" immediately after it.
  */
 int
 bit_search_sentinel(Bit_Chain * dat, unsigned char sentinel[16])
@@ -995,7 +996,7 @@ bit_print(Bit_Chain * dat, long unsigned int size)
 }
 
 void
-bit_esplori_chain(Bit_Chain * dat, long unsigned int size)
+bit_explore_chain(Bit_Chain * dat, long unsigned int size)
 {
   unsigned char sig;
   long unsigned int i, j, k;
@@ -1021,7 +1022,7 @@ bit_esplori_chain(Bit_Chain * dat, long unsigned int size)
 }
 
 /*------------------------------------------------------------------------------
- * Privataj funkcioj
+ * Private functions
  */
 
 static unsigned int

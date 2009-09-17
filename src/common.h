@@ -8,6 +8,7 @@
 /*                                                                           */
 /*  Copyright (C) 2008, 2009 Free Software Foundation, Inc.                  */
 /*  Copyright (C) 2009 Felipe Sanches <jucablues@users.sourceforge.net>      */
+/*  Copyright (C) 2009 Rodrigo Rodrigues da Silva <pitanga@members.fsf.org>  */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -16,18 +17,16 @@
 /*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
 /*****************************************************************************/
 
-/// Komunaj kaj gxeneralaj funkcioj
+/// Common and general functions
 
 #ifndef COMMON_H
 #define COMMON_H
 
 #define VERSION(v) if (dat->version == v)
+#define SINCE(v) if (dat->version >= v)
 #define VERSIONS(v1,v2) if (dat->version >= v1 && dat->version <= v2)
 #define OTHER_VERSIONS else
-#define SINCE(v) if (dat->version >= v)
 #define PRIOR_VERSIONS else
-#define UNTIL(v) if (dat->version <= v)
-#define LATER_VERSIONS else
 
 typedef enum DWG_VERSION_TYPE
 {
@@ -36,9 +35,9 @@ typedef enum DWG_VERSION_TYPE
 char version_codes[7][7];
 
 /**
- Typej de (eble kompaktitaj) dateneroj, kiuj komponas dwg-dosierojn.
+ Data types (including compressed forms) used trough the file
  */
-typedef enum DWG_DATENERO_TIPO
+typedef enum DWG_DATA_TYPE
 {
   DWG_DT_B,   /** bit (1 or 0) */
   DWG_DT_BB,  /** special 2-bit code (entmode in entities, for instance) */
@@ -66,10 +65,10 @@ typedef enum DWG_DATENERO_TIPO
   DWG_DT_2BD, /** 2D point (2 bitdoubles) **/
   DWG_DT_3BD, /** 3D point (3 bitdoubles) **/
   DWG_END_OF_HEADER_VARIABLES
-} Dwg_Datenero_Type;
+} Dwg_Data_Type;
 
 /**
- Identigaj referencoj de sentinels.
+ * References of sentinels
  */
 typedef enum DWG_SENTINEL
 {
@@ -84,7 +83,7 @@ typedef enum DWG_SENTINEL
   DWG_SENTINEL_SECOND_HEADER_END
 } Dwg_Sentinel;
 
-Dwg_Datenero_Type
+Dwg_Data_Type
 dwg_var_map(Dwg_Version_Type version, int index);
 
 unsigned char *

@@ -35,7 +35,7 @@ get_bmp(char *filename)
   long tmp;
   FILE *fh;
   size_t retval;
-  Dwg_Structure dwg;
+  Dwg_Data dwg;
   struct _BITMAP_HEADER
   {
     char magic[2];

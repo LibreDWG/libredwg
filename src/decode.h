@@ -8,6 +8,7 @@
 /*                                                                           */
 /*  Copyright (C) 2008, 2009 Free Software Foundation, Inc.                  */
 /*  Copyright (C) 2009 Felipe Sanches <jucablues@users.sourceforge.net>      */
+/*  Copyright (C) 2009 Rodrigo Rodrigues da Silva <pitanga@members.fsf.org>  */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -24,6 +25,6 @@
 #include "dwg.h"
 
 int
-dwg_decode_structures(Bit_Chain * bitaro, Dwg_Structure * dwg_struct);
+dwg_decode_data(Bit_Chain * bit_chain, Dwg_Data * dwg_data);
 
 #endif

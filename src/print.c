@@ -8,7 +8,7 @@
 /*                                                                           */
 /*  Copyright (C) 2008, 2009 Free Software Foundation, Inc.                  */
 /*  Copyright (C) 2009 Felipe Sanches <jucablues@users.sourceforge.net>      */
-/*  Copyright (C) 2009 Rodrigo Rodrigues da Silva <rodrigopitanga@gmail.com> */
+/*  Copyright (C) 2009 Rodrigo Rodrigues da Silva <pitanga@members.fsf.org>  */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -948,7 +948,7 @@ dwg_print_LAYOUT(Dwg_Object_LAYOUT *obj)
  * Special public function for printing values of an object
  */
 void
-dwg_print(Dwg_Structure *dwg_struct)
+dwg_print(Dwg_Data *dwg_struct)
 {
   unsigned char sig;
   unsigned int i, j;
@@ -1005,7 +1005,7 @@ dwg_print(Dwg_Structure *dwg_struct)
   for (i = 0; i < DWG_NUM_VARIABLES; i++)
     {
       printf("[%03i] - ", i + 1);
-      if (i == 221 && dwg_struct->var[220].dubitoko != 3)
+      if (i == 221 && dwg_struct->var[220].bitbit != 3)
         {
           puts("(Non-Existant)");
           continue;
@@ -1013,16 +1013,16 @@ dwg_print(Dwg_Structure *dwg_struct)
       switch (dwg_var_map(dwg_struct->header.version, i))
         {
       case DWG_DT_B:
-        printf("B: %u", dwg_struct->var[i].bitoko);
+        printf("B: %u", dwg_struct->var[i].bit);
         break;
       case DWG_DT_BS:
-        printf("BS: %u", dwg_struct->var[i].dubitoko);
+        printf("BS: %u", dwg_struct->var[i].bitbit);
         break;
       case DWG_DT_BL:
-        printf("BL: %lu", dwg_struct->var[i].kvarbitoko);
+        printf("BL: %lu", dwg_struct->var[i].bitlong);
         break;
       case DWG_DT_BD:
-        printf("BD: %lg", dwg_struct->var[i].duglitajxo);
+        printf("BD: %lg", dwg_struct->var[i].bitbit);
         break;
       case DWG_DT_H:
         printf("H: %i.%i.%li", dwg_struct->var[i].handle.code,
@@ -1032,7 +1032,7 @@ dwg_print(Dwg_Structure *dwg_struct)
         printf("T: \"%s\"", dwg_struct->var[i].text);
         break;
       case DWG_DT_CMC:
-        printf("CMC: %u", dwg_struct->var[i].dubitoko);
+        printf("CMC: %u", dwg_struct->var[i].bitbit);
         break;
       case DWG_DT_2RD:
         printf("X: %lg\t", dwg_struct->var[i].xy[0]);

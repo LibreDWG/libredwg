@@ -7,7 +7,7 @@
 /*    originally written by Felipe Castro <felipo at users.sourceforge.net>  */
 /*                                                                           */
 /*  Copyright (C) 2008, 2009 Free Software Foundation, Inc.                  */
-/*  Copyright (C) 2009 Rodrigo Rodrigues da Silva <rodrigopitanga@gmail.com> */
+/*  Copyright (C) 2009 Rodrigo Rodrigues da Silva <pitanga@members.fsf.org>  */
 /*  Copyright (C) 2009 Felipe Sanches <jucablues@users.sourceforge.net>      */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
@@ -75,14 +75,14 @@
       fprintf(stderr, #name ": index %d\n", _obj->name.index);\
   }
 
-//FIELD_VECTOR_N(name, type, size):
+//FIELD_VECTOR(name, type, size):
 // reads data of the type indicated by 'type' 'size' times and stores
 // it all in the vector called 'name'.
-#define FIELD_VECTOR_N(name, type, size)\
-  if (size>0)\
+#define FIELD_VECTOR(name, type, size)\
+  if (_obj->size>0)\
     {\
-      _obj->name = (BITCODE_##type*) malloc(size * sizeof(BITCODE_##type));\
-      for (vector_counter=0; vector_counter< size; vector_counter++)\
+      _obj->name = (BITCODE_##type*) malloc(_obj->size * sizeof(BITCODE_##type));\
+      for (vector_counter=0; vector_counter< _obj->size; vector_counter++)\
         {\
           _obj->name = bit_read_##type(dat);\
           if (loglevel>=2)\
@@ -92,7 +92,6 @@
         }\
     }
 
-#define FIELD_VECTOR(name, type, size) FIELD_VECTOR_N(name, type, _obj->size)
 #define FIELD_3DPOINT_VECTOR(name, size)\
   _obj->name = (BITCODE_3DPOINT *) malloc(_obj->size * sizeof(BITCODE_3DPOINT));\
   for (vector_counter=0; vector_counter< _obj->size; vector_counter++)\
@@ -162,11 +161,11 @@
  * Private functions
  */
 static void
-dwg_decode_aldoni_object(Dwg_Structure * skt, Bit_Chain * dat,
+dwg_decode_add_object(Dwg_Data * skt, Bit_Chain * dat,
     long unsigned int address);
 
 static Dwg_Object *
-dwg_resolve_handle(Dwg_Structure* skt, unsigned long int handle);
+dwg_resolve_handle(Dwg_Data* skt, unsigned long int handle);
 
 /*--------------------------------------------------------------------------------
  * Public variables
@@ -179,7 +178,7 @@ static int loglevel = 2;
  * Public function definitions
  */
 int
-dwg_decode_structures(Bit_Chain * dat, Dwg_Structure * skt)
+dwg_decode_data(Bit_Chain * dat, Dwg_Data * skt)
 {
   char version[7];
   skt->num_object_refs = 0;
@@ -213,7 +212,7 @@ dwg_decode_structures(Bit_Chain * dat, Dwg_Structure * skt)
     {
       fprintf(
           stderr,
-          "WARNING: This version of Libredwg is only capable of safely decoding version R2000 (code: AC1015) dwg-files.\n"
+          "WARNING: This version of LibreDWG is only capable of safely decoding version R2000 (code: AC1015) dwg-files.\n"
             "This file's version code is: %s Support for this version is still experimental.\n"
             "It might crash or give you invalid output.\n", version);
       return decode_R13_R15_header(dat, skt);
@@ -228,7 +227,7 @@ dwg_decode_structures(Bit_Chain * dat, Dwg_Structure * skt)
     {
       fprintf(
           stderr,
-          "WARNING: This version of Libredwg is only capable of properly decoding version R2000 (code: AC1015) dwg-files.\n"
+          "WARNING: This version of LibreDWG is only capable of properly decoding version R2000 (code: AC1015) dwg-files.\n"
             "This file's version code is: %s\n This version is not yet actively developed.\n"
             "It will probably crash and/or give you invalid output.\n", version);
       return decode_R2004_header(dat, skt);
@@ -238,7 +237,7 @@ dwg_decode_structures(Bit_Chain * dat, Dwg_Structure * skt)
     {
       fprintf(
           stderr,
-          "WARNING: This version of Libredwg is only capable of properly decoding version R2000 (code: AC1015) dwg-files.\n"
+          "WARNING: This version of LibreDWG is only capable of properly decoding version R2000 (code: AC1015) dwg-files.\n"
             "This file's version code is: %s\n This version is not yet actively developed.\n"
             "It will probably crash and/or give you invalid output.\n", version);
       return decode_R2007_header(dat, skt);
@@ -259,18 +258,18 @@ Dwg_Object* dwg_next_object(Dwg_Object* obj){
 }
 
 int
-decode_R13_R15_header(Bit_Chain* dat, Dwg_Structure * skt)
+decode_R13_R15_header(Bit_Chain* dat, Dwg_Data * skt)
 {
   unsigned char sig;
-  unsigned int seksize = 0;
+  unsigned int section_size = 0;
   unsigned char sgdc[2];
   unsigned int ckr, ckr2, antckr;
   long unsigned int size;
   long unsigned int lasta;
   long unsigned int maplasta;
   long unsigned int duabyte;
-  long unsigned int obek;
-  long unsigned int obfin;
+  long unsigned int object_begin;
+  long unsigned int object_end;
   long unsigned int pvz;
   unsigned int i, j;
 
@@ -311,7 +310,7 @@ decode_R13_R15_header(Bit_Chain* dat, Dwg_Structure * skt)
   skt->header.num_sections = bit_read_RL(dat);
 
   //  why do we have this limit to only 6 sections?
-  //  It seems to be a bug, so I'll comment it out and will add dinamic
+  //  It seems to be a bug, so I'll comment it out and will add dynamic
   //  allocation of the sections vector.
   //  OpenDWG spec speaks of 6 possible values for the record number
   //  Maybe the original libdwg author got confused about that.
@@ -332,18 +331,18 @@ decode_R13_R15_header(Bit_Chain* dat, Dwg_Structure * skt)
       skt->header.section[i].size = bit_read_RL(dat);
     }
 
-  // Kontroli CKR-on
+  // Check CKR-on
   /*
    ckr = bit_read_CRC (dat);
    dat->byte -= 2;
-   bit_krei_CRC (dat, 0, 0);
+   bit_create_CRC (dat, 0, 0);
    dat->byte -= 2;
    ckr2 = bit_read_CRC (dat);
    dat->byte -= 2;
    bit_write_RS (dat, ckr2 ^ 0x8461);
    dat->byte -= 2;
    ckr2 = bit_read_CRC (dat);
-   if (loglevel) fprintf (stderr, "Legita: %X\nKreita: %X\n", ckr, ckr2);
+   if (loglevel) fprintf (stderr, "Read: %X\nCalculated: %X\n", ckr, ckr2);
    */
 
   if (bit_search_sentinel(dat, dwg_sentinel(DWG_SENTINEL_HEADER_END))
@@ -369,12 +368,12 @@ decode_R13_R15_header(Bit_Chain* dat, Dwg_Structure * skt)
       skt->unknown1.byte = skt->unknown1.bit = 0;
       skt->unknown1.chain = malloc(skt->unknown1.size);
       memcpy(skt->unknown1.chain, &dat->chain[dat->byte], skt->unknown1.size);
-      //bit_esplori_chain ((Bit_Chain *) &skt->unknown1, skt->unknown1.size);
+      //bit_explore_chain ((Bit_Chain *) &skt->unknown1, skt->unknown1.size);
       //bit_print ((Bit_Chain *) &skt->unknown1, skt->unknown1.size);
     }
 
   /*-------------------------------------------------------------------------
-   * Antauxrigarda picture
+   * Picture (Pre-R13C3?)
    */
 
   if (bit_search_sentinel(dat, dwg_sentinel(DWG_SENTINEL_PICTURE_BEGIN)))
@@ -401,14 +400,14 @@ decode_R13_R15_header(Bit_Chain* dat, Dwg_Structure * skt)
     }
 
   /*-------------------------------------------------------------------------
-   * Kap-variabloj
+   * Header Variables
    */
 
   if (loglevel)
     {
-      fprintf(stderr, "=====> KAP-VARIABLEJ: %8X\n",
+      fprintf(stderr, "=====> Header Variables: %8X\n",
           (unsigned int) skt->header.section[0].address);
-      fprintf(stderr, "KAP-VARIABLEJ (end): %8X\n",
+      fprintf(stderr, "Header Variables (end): %8X\n",
           (unsigned int) (skt->header.section[0].address
               + skt->header.section[0].size));
     }
@@ -425,7 +424,7 @@ decode_R13_R15_header(Bit_Chain* dat, Dwg_Structure * skt)
     {
       if (loglevel)
         fprintf(stderr, "[%03i] - ", i + 1);
-      if (i == 221 && skt->var[220].dubitoko != 3)
+      if (i == 221 && skt->var[220].bitdouble != 3)
         {
           skt->var[i].handle.code = 0;
           skt->var[i].handle.value = 0;
@@ -436,24 +435,24 @@ decode_R13_R15_header(Bit_Chain* dat, Dwg_Structure * skt)
       case DWG_END_OF_HEADER_VARIABLES:
         break;
       case DWG_DT_B:
-        skt->var[i].bitoko = bit_read_B(dat);
+        skt->var[i].bit = bit_read_B(dat);
         if (loglevel)
-          fprintf(stderr, "B: %u", skt->var[i].bitoko);
+          fprintf(stderr, "B: %u", skt->var[i].bit);
         break;
       case DWG_DT_BS:
-        skt->var[i].dubitoko = bit_read_BS(dat);
+        skt->var[i].bitdouble = bit_read_BS(dat);
         if (loglevel)
-          fprintf(stderr, "BS: %u", skt->var[i].dubitoko);
+          fprintf(stderr, "BS: %u", skt->var[i].bitdouble);
         break;
       case DWG_DT_BL:
-        skt->var[i].kvarbitoko = bit_read_BL(dat);
+        skt->var[i].bitlong = bit_read_BL(dat);
         if (loglevel)
-          fprintf(stderr, "BL: %lu", skt->var[i].kvarbitoko);
+          fprintf(stderr, "BL: %lu", skt->var[i].bitlong);
         break;
       case DWG_DT_BD:
-        skt->var[i].duglitajxo = bit_read_BD(dat);
+        skt->var[i].bitdouble = bit_read_BD(dat);
         if (loglevel)
-          fprintf(stderr, "BD: %lg", skt->var[i].duglitajxo);
+          fprintf(stderr, "BD: %lg", skt->var[i].bitdouble);
         break;
       case DWG_DT_H:
         bit_read_H(dat, &skt->var[i].handle);
@@ -467,9 +466,9 @@ decode_R13_R15_header(Bit_Chain* dat, Dwg_Structure * skt)
           fprintf(stderr, "T: \"%s\"", skt->var[i].text);
         break;
       case DWG_DT_CMC:
-        skt->var[i].dubitoko = bit_read_BS(dat);
+        skt->var[i].bitdouble = bit_read_BS(dat);
         if (loglevel)
-          fprintf(stderr, "CMC: %u", skt->var[i].dubitoko);
+          fprintf(stderr, "CMC: %u", skt->var[i].bitdouble);
         break;
       case DWG_DT_2RD:
         skt->var[i].xy[0] = bit_read_RD(dat);
@@ -493,23 +492,23 @@ decode_R13_R15_header(Bit_Chain* dat, Dwg_Structure * skt)
         break;
       default:
         if (loglevel)
-          fprintf(stderr, "No handleebla type: %i (var: %i)\n", dwg_var_map(
+          fprintf(stderr, "No handle type: %i (var: %i)\n", dwg_var_map(
               skt->header.version, i), i);
         }
     }
 
-  // Kontroli CKR-on
+  // Check CKR-on
   ckr = bit_read_CRC(dat);
   /*
    for (i = 0xC001; i != 0xC000; i++)
    {
    dat->byte -= 2;
-   bit_krei_CRC (dat, skt->header.section[0].address + 16, i);
+   bit_write_CRC (dat, skt->header.section[0].address + 16, i);
    dat->byte -= 2;
    ckr2 = bit_read_CRC (dat);
    if (ckr == ckr2)
    {
-   if (loglevel) fprintf (stderr, "Legita: %X\nKreita: %X\t SEMO: %02X\n", ckr, ckr2, i);
+   if (loglevel) fprintf (stderr, "Read: %X\nCreated: %X\t SEMO: %02X\n", ckr, ckr2, i);
    break;
    }
    }
@@ -566,32 +565,32 @@ decode_R13_R15_header(Bit_Chain* dat, Dwg_Structure * skt)
     }
   while (dat->byte < (lasta - 1));
 
-  // Kontroli CKR-on
+  // Check CKR-on
   ckr = bit_read_CRC(dat);
   /*
    for (i = 0xC001; i != 0xC000; i++)
    {
    dat->byte -= 2;
-   bit_krei_CRC (dat, skt->header.section[1].address + 16, i);
+   bit_write_CRC (dat, skt->header.section[1].address + 16, i);
    dat->byte -= 2;
    ckr2 = bit_read_CRC (dat);
    if (ckr == ckr2)
    {
-   if (loglevel) fprintf (stderr, "Legita: %X\nKreita: %X\t SEMO: %02X\n", ckr, ckr2, i);
+   if (loglevel) fprintf (stderr, "Read: %X\nCreated: %X\t SEMO: %02X\n", ckr, ckr2, i);
    break;
    }
    }
    */
 
   dat->byte += 16;
-  pvz = bit_read_RL(dat); // Nekonata kvarbitoko inter class kaj objektaro
+  pvz = bit_read_RL(dat); // Unknown bitlong inter class and object
   //if (loglevel) {
-  // fprintf (stderr, "Adreso: %lu / Enhavo: 0x%08X\n", dat->byte - 4, pvz);
-  // fprintf (stderr, "Kiom class readtaj: %u\n", skt->num_classes);
+  // fprintf (stderr, "Address: %lu / Content: 0x%08X\n", dat->byte - 4, pvz);
+  // fprintf (stderr, "Number of classes read: %u\n", skt->num_classes);
   //}
 
   /*-------------------------------------------------------------------------
-   * Object-mapo (kaj objectj mem)
+   * Object-map (object mem)
    */
 
   dat->byte = skt->header.section[2].address;
@@ -599,107 +598,107 @@ decode_R13_R15_header(Bit_Chain* dat, Dwg_Structure * skt)
 
   maplasta = dat->byte + skt->header.section[2].size; // 4
   skt->num_objects = 0;
-  obek = dat->size;
-  obfin = 0;
+  object_begin = dat->size;
+  object_end = 0;
   do
     {
-      long unsigned int lastadres;
-      long unsigned int lastahandle;
-      long unsigned int antauxadr;
+      long unsigned int last_address;
+      long unsigned int last_handle;
+      long unsigned int previous_address;
 
       duabyte = dat->byte;
       sgdc[0] = bit_read_RC(dat);
       sgdc[1] = bit_read_RC(dat);
-      seksize = (sgdc[0] << 8) | sgdc[1];
-      //if (loglevel) fprintf (stderr, "seksize: %u\n", seksize);
-      if (seksize > 2034) // 2032 + 2
+      section_size = (sgdc[0] << 8) | sgdc[1];
+      //if (loglevel) fprintf (stderr, "section_size: %u\n", section_size);
+      if (section_size > 2034) // 2032 + 2
         {
           fprintf(stderr, "Error: Object-map section size greater than 2034!");
           return -1;
         }
 
-      lastahandle = 0;
-      lastadres = 0;
-      while (dat->byte - duabyte < seksize)
+      last_handle = 0;
+      last_address = 0;
+      while (dat->byte - duabyte < section_size)
         {
           long unsigned int kobj;
           long int pvztkt;
           long int pvzadr;
 
-          antauxadr = dat->byte;
+          previous_address = dat->byte;
           pvztkt = bit_read_MC(dat);
-          lastahandle += pvztkt;
+          last_handle += pvztkt;
           pvzadr = bit_read_MC(dat);
-          lastadres += pvzadr;
+          last_address += pvzadr;
           //if (loglevel) {
           // fprintf (stderr, "Idc: %li\t", skt->num_objects);
-          // fprintf (stderr, "Trakt: %li\tAdres: %li\n", pvztkt, pvzadr);
+          // fprintf (stderr, "Handle: %li\tAddress: %li\n", pvztkt, pvzadr);
           //}
-          if (dat->byte == antauxadr)
+          if (dat->byte == previous_address)
             break;
           //if (dat->byte - duabyte >= seksize)
           //break;
 
-          if (obfin < lastadres)
-            obfin = lastadres;
-          if (obek > lastadres)
-            obek = lastadres;
+          if (object_end < last_address)
+            object_end = last_address;
+          if (object_begin > last_address)
+            object_begin = last_address;
 
           kobj = skt->num_objects;
-          dwg_decode_aldoni_object(skt, dat, lastadres);
+          dwg_decode_add_object(skt, dat, last_address);
           //if (skt->num_objects > kobj)
           //skt->object[skt->num_objects - 1].handle.value = lastahandle;
           //TODO: blame Juca
         }
-      if (dat->byte == antauxadr)
+      if (dat->byte == previous_address)
         break;
       dat->byte += 2; // CKR
 
       if (dat->byte >= maplasta)
         break;
     }
-  while (seksize > 2);
+  while (section_size > 2);
 
   if (loglevel)
     {
-      fprintf(stderr, "Kiom objectj: %lu\n", skt->num_objects);
-      fprintf(stderr, "=========> OBJEKTARO: %8X\n", (unsigned int) obek);
+      fprintf(stderr, "Num objects: %lu\n", skt->num_objects);
+      fprintf(stderr, "=========> Object Data: %8X\n", (unsigned int) object_begin);
     }
-  dat->byte = obfin;
-  obek = bit_read_MS(dat); // La komenco de la lasta object readta
+  dat->byte = object_end;
+  object_begin = bit_read_MS(dat);
   if (loglevel)
-    fprintf(stderr, "    OBJEKTARO (end): %8X\n", (unsigned int) (obfin + obek
+    fprintf(stderr, "    Object Data (end): %8X\n", (unsigned int) (object_end + object_begin
         + 2));
 
   /*
    dat->byte = skt->header.section[2].address - 2;
-   antckr = bit_read_CRC (dat); // Nekonata dubitoko inter objektaro kaj object-mapo
-   if (loglevel) fprintf (stderr, "Adreso: %08X / Enhavo: 0x%04X\n", dat->byte - 2, antckr);
+   antckr = bit_read_CRC (dat); // Unknown bitdouble inter object data and object map
+   if (loglevel) fprintf (stderr, "Address: %08X / Content: 0x%04X\n", dat->byte - 2, antckr);
 
-   // Kontroli CKR-ojn
+   // check CKR-on
    antckr = 0xC0C1;
    do
    {
    duabyte = dat->byte;
    sgdc[0] = bit_read_RC (dat);
    sgdc[1] = bit_read_RC (dat);
-   seksize = (sgdc[0] << 8) | sgdc[1];
-   seksize -= 2;
-   dat->byte += seksize;
+   section_size = (sgdc[0] << 8) | sgdc[1];
+   section_size -= 2;
+   dat->byte += section_size;
    ckr = bit_read_CRC (dat);
    dat->byte -= 2;
-   bit_krei_CRC (dat, duabyte, antckr);
+   bit_write_CRC (dat, duabyte, antckr);
    dat->byte -= 2;
    ckr2 = bit_read_CRC (dat);
-   if (loglevel) fprintf (stderr, "Legita: %X\nKreita: %X\t SEMO: %X\n", ckr, ckr2, antckr);
+   if (loglevel) fprintf (stderr, "Read: %X\nCreated: %X\t SEMO: %X\n", ckr, ckr2, antckr);
    //antckr = ckr;
-   } while (seksize > 0);
+   } while (section_size > 0);
    */
   if (loglevel)
     {
-      fprintf(stderr, "======> OBJECT-MAPO: %8X\n",
+      fprintf(stderr, "======> Object Map: %8X\n",
           (unsigned int) skt->header.section[2].address);
-      fprintf(stderr, " OBJECT-MAPO (end): %8X\n",
+      fprintf(stderr, " Object Map (end): %8X\n",
           (unsigned int) (skt->header.section[2].address
               + skt->header.section[2].size));
     }
@@ -715,15 +714,15 @@ decode_R13_R15_header(Bit_Chain* dat, Dwg_Structure * skt)
       unsigned char sig, sig2;
 
       if (loglevel)
-        fprintf(stderr, "==> DUA KAP-DATENARO: %8X\n", (unsigned int) dat->byte
+        fprintf(stderr, "==> Second Header: %8X\n", (unsigned int) dat->byte
             - 16);
       pvzadr = dat->byte;
 
       pvz = bit_read_RL(dat);
-      //if (loglevel) fprintf (stderr, "Kiomo: %lu\n", pvz);
+      //if (loglevel) fprintf (stderr, "Size: %lu\n", pvz);
 
       pvz = bit_read_BL(dat);
-      //if (loglevel) fprintf (stderr, "Ekaddress: %8X\n", pvz);
+      //if (loglevel) fprintf (stderr, "Begin address: %8X\n", pvz);
 
       //if (loglevel) fprintf (stderr, "AC1015?: ");
       for (i = 0; i < 6; i++)
@@ -732,14 +731,14 @@ decode_R13_R15_header(Bit_Chain* dat, Dwg_Structure * skt)
           //if (loglevel) fprintf (stderr, "%c", sig >= ' ' && sig < 128 ? sig : '.');
         }
 
-      //if (loglevel) fprintf (stderr, "\nNuloj?:");
-      for (i = 0; i < 5; i++) // 6 se estas pli malnova...
+      //if (loglevel) fprintf (stderr, "\nNull?:");
+      for (i = 0; i < 5; i++) // 6 if is older...
         {
           sig = bit_read_RC(dat);
           //if (loglevel) fprintf (stderr, " 0x%02X", sig);
         }
 
-      //if (loglevel) fprintf (stderr, "\n4 nulaj bitj?: ");
+      //if (loglevel) fprintf (stderr, "\n4 null bits?: ");
       for (i = 0; i < 4; i++)
         {
           sig = bit_read_B(dat);
@@ -754,7 +753,8 @@ decode_R13_R15_header(Bit_Chain* dat, Dwg_Structure * skt)
         }
       if (skt->second_header.unknown[3] != 0x78
           || skt->second_header.unknown[5] != 0x06)
-        sig = bit_read_RC(dat); // por kompenso okaze de eventuala kroma nulo ne readta antauxe
+        sig = bit_read_RC(dat); // To compensate in the event of a contingent
+                                // additional zero not read previously
 
       //puts("");
       for (i = 0; i < 6; i++)
@@ -762,9 +762,9 @@ decode_R13_R15_header(Bit_Chain* dat, Dwg_Structure * skt)
           sig = bit_read_RC(dat);
           //if (loglevel) fprintf (stderr, "[%u]\n", sig);
           pvz = bit_read_BL(dat);
-          //if (loglevel) fprintf (stderr, " Adreso: %8X\n", pvz);
+          //if (loglevel) fprintf (stderr, " Address: %8X\n", pvz);
           pvz = bit_read_BL(dat);
-          //if (loglevel) fprintf (stderr, "  Kiomo: %8X\n", pvz);
+          //if (loglevel) fprintf (stderr, "  Size: %8X\n", pvz);
         }
 
       bit_read_BS(dat);
@@ -773,7 +773,7 @@ decode_R13_R15_header(Bit_Chain* dat, Dwg_Structure * skt)
         {
           sig2 = bit_read_RC(dat);
           skt->second_header.handlerik[i].size = sig2;
-          //if (loglevel) fprintf (stderr, "\nLongo: %u\n", sig2);
+          //if (loglevel) fprintf (stderr, "\nSize: %u\n", sig2);
           sig = bit_read_RC(dat);
           //if (loglevel) fprintf (stderr, "\t[%u]\n", sig);
           //if (loglevel) fprintf (stderr, "\tChain:");
@@ -785,42 +785,42 @@ decode_R13_R15_header(Bit_Chain* dat, Dwg_Structure * skt)
             }
         }
 
-      // Kontroli CKR-on
+      // Check CKR-on
       ckr = bit_read_CRC(dat);
       /*
        puts ("");
        for (i = 0; i != 0xFFFF; i++)
        {
        dat->byte -= 2;
-       bit_krei_CRC (dat, pvzadr, i);
+       bit_write_CRC (dat, pvzadr, i);
        dat->byte -= 2;
        ckr2 = bit_read_CRC (dat);
        if (ckr == ckr2)
        {
-       if (loglevel) fprintf (stderr, "Legita: %X\nKreita: %X\t SEMO: %02X\n", ckr, ckr2, i);
+       if (loglevel) fprintf (stderr, "Read: %X\nCreated: %X\t SEMO: %02X\n", ckr, ckr2, i);
        break;
        }
        }
        if (loglevel) {
-       fprintf (stderr, " Rubajxo 1: %08X\n", bit_read_RL (dat));
-       fprintf (stderr, " Rubajxo 1: %08X\n", bit_read_RL (dat));
+       fprintf (stderr, " Garbage 1: %08X\n", bit_read_RL (dat));
+       fprintf (stderr, " Garbage 2: %08X\n", bit_read_RL (dat));
        }
        */
 
       if (loglevel && bit_search_sentinel(dat, dwg_sentinel(
           DWG_SENTINEL_SECOND_HEADER_END)))
-        fprintf(stderr, " DUA KAP-DAT. (end): %8X\n", (unsigned int) dat->byte);
+        fprintf(stderr, " Second Header (end): %8X\n", (unsigned int) dat->byte);
     }
 
   /*-------------------------------------------------------------------------
-   * Sekcio MEASUREMENT
+   * Section MEASUREMENT
    */
 
   if (loglevel)
     {
-      fprintf(stderr, "========> UNKNOWN 2: %8X\n",
+      fprintf(stderr, "========> Unknown 2: %8X\n",
           (unsigned int) skt->header.section[4].address);
-      fprintf(stderr, "   UNKNOWN 2 (end): %8X\n",
+      fprintf(stderr, "   Unknown 2 (end): %8X\n",
           (unsigned int) (skt->header.section[4].address
               + skt->header.section[4].size));
     }
@@ -829,9 +829,10 @@ decode_R13_R15_header(Bit_Chain* dat, Dwg_Structure * skt)
   skt->measurement = bit_read_RL(dat);
 
   if (loglevel)
-    fprintf(stderr, "KIOM BAJTOJ :\t%lu\n", dat->size);
+    fprintf(stderr, "Size bytes :\t%lu\n", dat->size);
 
   //step II of handles parsing: resolve pointers from handle value
+  //XXX: move this somewhere else
   for (i = 0; i < skt->num_object_refs; i++)
     {
       skt->object_ref[i]->obj = dwg_resolve_handle(skt,
@@ -865,12 +866,12 @@ read_literal_length(Bit_Chain* dat)
 }
 
 int
-decode_R2004_header(Bit_Chain* dat, Dwg_Structure * skt)
+decode_R2004_header(Bit_Chain* dat, Dwg_Data * skt)
 {
   int i;
   unsigned long int preview_address, security_type, unknown_long,
       dwg_property_address, vba_proj_address;
-  unsigned char sig, DwgVer, MaintReleaseVer;
+  unsigned char sig, dwg_ver, maint_release_ver;
 
   //6 bytes of 0x00
   dat->byte = 0x06;
@@ -899,15 +900,15 @@ decode_R2004_header(Bit_Chain* dat, Dwg_Structure * skt)
 
   /* DwgVer */
   dat->byte = 0x11;
-  DwgVer = bit_read_RC(dat);
+  dwg_ver = bit_read_RC(dat);
   if (loglevel)
-    fprintf(stderr, "DwgVer: %u\n", DwgVer);
+    fprintf(stderr, "DwgVer: %u\n", dwg_ver);
 
   /* MaintReleaseVer */
   dat->byte = 0x12;
-  MaintReleaseVer = bit_read_RC(dat);
+  maint_release_ver = bit_read_RC(dat);
   if (loglevel)
-    fprintf(stderr, "MaintRelease: %u\n", MaintReleaseVer);
+    fprintf(stderr, "MaintRelease: %u\n", maint_release_ver);
 
   /* Codepage */
   dat->byte = 0x13;
@@ -1170,7 +1171,7 @@ decode_R2004_header(Bit_Chain* dat, Dwg_Structure * skt)
 }
 
 int
-decode_R2007_header(Bit_Chain* dat, Dwg_Structure * skt)
+decode_R2007_header(Bit_Chain* dat, Dwg_Data * skt)
 {
   int i;
   unsigned long int preview_address, security_type, unknown_long,
@@ -1499,7 +1500,7 @@ dwg_decode_object(Bit_Chain * dat, Dwg_Object_Object * ord)
  * Find a pointer to an object given it's id (handle)
  */
 static Dwg_Object *
-dwg_resolve_handle(Dwg_Structure* skt, unsigned long int handle)
+dwg_resolve_handle(Dwg_Data* skt, unsigned long int handle)
 {
   //FIXME find a faster algorithm
   int i;
@@ -1516,7 +1517,7 @@ dwg_decode_handleref(Bit_Chain * dat, Dwg_Object * obj)
 {
   Dwg_Handle handleref;
   Dwg_Object_Ref* ref = 0;
-  Dwg_Structure* skt = obj->parent;
+  Dwg_Data* skt = obj->parent;
 
   if (bit_read_H(dat, &handleref))
     {
@@ -3436,138 +3437,6 @@ dwg_decode_SHAPEFILE(Bit_Chain *dat, Dwg_Object *obj)
 }
 
 static void
-dwg_decode_LTYPE_CONTROL(Bit_Chain *dat, Dwg_Object *obj)
-{
-  DWG_OBJECT(LTYPE_CONTROL);
-
-  FIELD(num_entries, BS);
-  FIELD_HANDLE(null_handle, 4);
-  XDICOBJHANDLE(3);
-  HANDLE_VECTOR(linetypes, num_entries, 2);
-  FIELD_HANDLE(bylayer, 3);
-  FIELD_HANDLE(byblock, 3);
-}
-
-static void
-dwg_decode_LTYPE(Bit_Chain *dat, Dwg_Object *obj)
-{
-  char R2007plus_text_area_is_present = 0;
-  DWG_OBJECT(LTYPE);
-
-  FIELD(entry_name, TV);
-  FIELD(_64_flag, B);
-  FIELD(xrefindex_plus1, BS);
-  FIELD(xrefdep, B);
-  FIELD(description, TV);
-  FIELD(pattern_len, BD);
-  FIELD(alignment, RC);
-  FIELD(num_dashes, RC);
-
-  int i;
-  GET_FIELD(dash) = (LTYPE_dash*) malloc(GET_FIELD(num_dashes) * sizeof(LTYPE_dash));
-  for (i=0; i<GET_FIELD(num_dashes);i++)
-    {
-      FIELD(dash[i].length, BD);
-      FIELD(dash[i].complex_shapecode, BS);
-      FIELD(dash[i].x_offset, RD);
-      FIELD(dash[i].y_offset, RD);
-      FIELD(dash[i].scale, BD);
-      FIELD(dash[i].rotation, BD);
-      FIELD(dash[i].shape_flag, BS);
-      if (GET_FIELD(dash[i].shape_flag) & 0x02)
-        R2007plus_text_area_is_present = 1;
-    }
-
-  UNTIL(R_2004)
-    {
-      FIELD_VECTOR_N(strings_area, RC, 256);
-    }
-  LATER_VERSIONS
-    {
-      if (R2007plus_text_area_is_present)
-        {
-          FIELD_VECTOR_N(strings_area, RC, 512);
-        }
-    }
-
-  FIELD_HANDLE(linetype_control, 4);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
-  FIELD_HANDLE(null_handle, 5);
-  HANDLE_VECTOR(shapefiles, num_dashes, 5);
-}
-
-static void
-dwg_decode_VIEW_CONTROL(Bit_Chain *dat, Dwg_Object *obj)
-{
-  DWG_OBJECT(VIEW_CONTROL);
-
-  FIELD(num_entries, BS);
-  FIELD_HANDLE(null_handle, 4);
-  XDICOBJHANDLE(3);
-  HANDLE_VECTOR(views, num_entries, 2);
-}
-
-static void
-dwg_decode_VIEW(Bit_Chain *dat, Dwg_Object *obj)
-{
-  DWG_OBJECT(VIEW);
-
-  FIELD(entry_name, TV);
-  FIELD(_64_flag, B);
-  FIELD(xrefindex_plus1, BS);
-  FIELD(xrefdep, B);
-  FIELD(height, BD);
-  FIELD(width, BD);
-  FIELD_2RD(center);
-  FIELD_3BD(target);
-  FIELD_3BD(direction);
-  FIELD(twist_angle, BD);
-  FIELD(lens_legth, BD);
-  FIELD(front_clip, BD);
-  FIELD(back_clip, BD);
-  FIELD(view_mode, RC); //??? 4bits
-
-  SINCE(R_2000)
-    {
-      FIELD(render_mode, RC);
-    }
-
-  FIELD(pspace_flag, B);
-
-  SINCE(R_2000)
-    {
-      FIELD(associated_ucs, B);
-      FIELD_3BD(origin);
-      FIELD_3BD(x_direction);
-      FIELD_3BD(y_direction);
-      FIELD(elevation, BD);
-      FIELD(orthographic_view_type, BS);
-    }
-
-  SINCE(R_2007)
-    {
-      FIELD(camera_plottable, B);
-    }
-
-  FIELD_HANDLE(view_control_handle, 4);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
-  FIELD_HANDLE(null_handle, 5);
-
-  SINCE(R_2000)
-    {
-      FIELD_HANDLE(base_ucs_handle, ANYCODE);
-      FIELD_HANDLE(named_ucs_handle, ANYCODE); 
-    }
-
-  SINCE(R_2007)
-    {
-      FIELD_HANDLE(live_section, ANYCODE);
-    }
-}
-
-static void
 dwg_decode_IMAGE(Bit_Chain *dat, Dwg_Object *obj)
 {
   int i;
@@ -3932,7 +3801,7 @@ dwg_decode_SORTENTSTABLE(Bit_Chain * dat, Dwg_Object * obj)
 }
 
 static int
-dwg_decode_variable_type(Dwg_Structure * skt, Bit_Chain * dat, Dwg_Object* obj)
+dwg_decode_variable_type(Dwg_Data * skt, Bit_Chain * dat, Dwg_Object* obj)
 {
   if ((obj->type - 500) > skt->num_classes)
     return 1;
@@ -4038,23 +3907,23 @@ dwg_decode_variable_type(Dwg_Structure * skt, Bit_Chain * dat, Dwg_Object* obj)
 }
 
 /*--------------------------------------------------------------------------------
- * Privata funkcio, kiu dependas de la antaŭaj
+ * Private functions, which depend from the preceding
  */
 static void
-dwg_decode_aldoni_object(Dwg_Structure * skt, Bit_Chain * dat,
+dwg_decode_add_object(Dwg_Data * skt, Bit_Chain * dat,
     long unsigned int address)
 {
-  long unsigned int antauxa_address;
+  long unsigned int previous_address;
   long unsigned int object_address;
-  unsigned char antauxa_bit;
+  unsigned char previous_bit;
   Dwg_Object *obj;
 
-  /* Gardi la antauxan addressn
+  /* Keep the previous address
    */
-  antauxa_address = dat->byte;
-  antauxa_bit = dat->bit;
+  previous_address = dat->byte;
+  previous_bit = dat->bit;
 
-  /* Uzi la indikitan addressn por la object
+  /* Use the indicated address for the object
    */
   dat->byte = address;
   dat->bit = 0;
@@ -4082,11 +3951,11 @@ dwg_decode_aldoni_object(Dwg_Structure * skt, Bit_Chain * dat,
   obj->parent = skt;
   obj->size = bit_read_MS(dat);
   object_address = dat->byte;
-  ktl_lastaddress = dat->byte + obj->size; /* (de cxi tie oni kalkulas la bitsizen) */
+  ktl_lastaddress = dat->byte + obj->size; /* (calculate the bitsize) */
   obj->type = bit_read_BS(dat);
   fprintf(stderr, " Type: %d\n", obj->type);
 
-  /* Kontroli la typen de object
+  /* Check the type of the object
    */
   switch (obj->type)
     {
@@ -4228,18 +4097,6 @@ dwg_decode_aldoni_object(Dwg_Structure * skt, Bit_Chain * dat,
   case DWG_TYPE_SHAPEFILE:
     dwg_decode_SHAPEFILE(dat, obj);
     break;
-  case DWG_TYPE_LTYPE_CONTROL:
-    dwg_decode_LTYPE_CONTROL(dat, obj);
-    break;
-  case DWG_TYPE_LTYPE:
-    dwg_decode_LTYPE(dat, obj);
-    break;
-  case DWG_TYPE_VIEW_CONTROL:
-    dwg_decode_VIEW_CONTROL(dat, obj);
-    break;
-  case DWG_TYPE_VIEW:
-    dwg_decode_VIEW(dat, obj);
-    break;
   case DWG_TYPE_LAYER:
     dwg_decode_LAYER(dat, obj);
     break;
@@ -4263,15 +4120,15 @@ dwg_decode_aldoni_object(Dwg_Structure * skt, Bit_Chain * dat,
   /*
    if (obj->supertype != DWG_SUPERTYPE_UNKNOWN)
    {
-   fprintf (stderr, " Ekadr:\t%10lu\n", address);
-   fprintf (stderr, " Lasta:\t%10lu\tSize: %10lu\n", dat->byte, obj->size);
-   fprintf (stderr, "Finadr:\t%10lu (kalkulite)\n", address + 2 + obj->size);
+   fprintf (stderr, " Begin address:\t%10lu\n", address);
+   fprintf (stderr, " Last address:\t%10lu\tSize: %10lu\n", dat->byte, obj->size);
+   fprintf (stderr, "End address:\t%10lu (calculated)\n", address + 2 + obj->size);
    }
    */
 
-  /* Restarigi la antauxan addressn por returni
+  /* Register the previous addresses for return
    */
-  dat->byte = antauxa_address;
-  dat->bit = antauxa_bit;
+  dat->byte = previous_address;
+  dat->bit = previous_bit;
 }
 

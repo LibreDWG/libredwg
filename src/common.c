@@ -8,6 +8,7 @@
 /*                                                                           */
 /*  Copyright (C) 2008, 2009 Free Software Foundation, Inc.                  */
 /*  Copyright (C) 2009 Felipe Sanches <jucablues@users.sourceforge.net>      */
+/*  Copyright (C) 2009 Rodrigo Rodrigues da Silva <pitanga@members.fsf.org>  */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -20,7 +21,7 @@
 #include "stdio.h"
 
 unsigned char *
-dwg_sentinel(Dwg_Sentinel kiu_sentinel)
+dwg_sentinel(Dwg_Sentinel sentinel)
 {
   static unsigned char gdst[9][16] =
     {
@@ -43,16 +44,17 @@ dwg_sentinel(Dwg_Sentinel kiu_sentinel)
       { 0x2B, 0x84, 0xDE, 0x31, 0xD7, 0x6C, 0x60, 0x40, 0xAC, 0xDB, 0xBF, 0xF6,
           0xED, 0xC3, 0x55, 0xFE } };
 
-  return (gdst[kiu_sentinel]);
+  return (gdst[sentinel]);
 }
 
 char version_codes[7][7] =
   { "------", "AC1012", "AC1014", "AC1015", "AC1018", "AC1021", "------" };
 
 /**
- * Mapigi la pozicion de variablo aperanta en la kap-variablo sekcio kaj ties tipo
+ * To map the position of a variable appearing in the header-variablo section
+ * to its type
  */
-Dwg_Datenero_Type
+Dwg_Data_Type
 dwg_var_map(Dwg_Version_Type version, int index)
 {
   static int map[] =

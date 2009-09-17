@@ -8,6 +8,7 @@
 /*                                                                           */
 /*  Copyright (C) 2008, 2009 Free Software Foundation, Inc.                  */
 /*  Copyright (C) 2009 Felipe Sanches <jucablues@users.sourceforge.net>      */
+/*  Copyright (C) 2009 Rodrigo Rodrigues da Silva <pitanga@members.fsf.org>  */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -34,7 +35,7 @@
  * Public functions
  */
 int
-dwg_read_file(char *filename, Dwg_Structure * dwg_struct)
+dwg_read_file(char *filename, Dwg_Data * dwg_data)
 {
   int sign;
   FILE *fp;
@@ -85,7 +86,7 @@ dwg_read_file(char *filename, Dwg_Structure * dwg_struct)
 
   /* Decode the dwg structure
    */
-  if (dwg_decode_structures(&bit_chain, dwg_struct))
+  if (dwg_decode_data(&bit_chain, dwg_data))
     {
       fprintf(stderr, "Failed to decode file: %s\n", filename);
       free(bit_chain.chain);
@@ -97,12 +98,12 @@ dwg_read_file(char *filename, Dwg_Structure * dwg_struct)
 }
 
 int
-dwg_write_file(char *filename, Dwg_Structure * dwg_struct)
+dwg_write_file(char *filename, Dwg_Data * dwg_data)
 {
   FILE *dt;
   struct stat atrib;
   Bit_Chain bit_chain;
-  bit_chain.version = dwg_struct->header.version;
+  bit_chain.version = dwg_data->header.version;
 
   /* Encode the DWG struct
    bit_chain.size = 0;
@@ -146,7 +147,7 @@ dwg_write_file(char *filename, Dwg_Structure * dwg_struct)
 }
 
 unsigned char *
-dwg_bmp(Dwg_Structure *stk, long int *size)
+dwg_bmp(Dwg_Data *stk, long int *size)
 {
   char num_pictures;
   char code;
@@ -204,67 +205,67 @@ dwg_bmp(Dwg_Structure *stk, long int *size)
 }
 
 double
-dwg_model_x_min(Dwg_Structure *dwg)
+dwg_model_x_min(Dwg_Data *dwg)
 {
   return dwg->var[116].xyz[0];
 }
 
 double
-dwg_model_x_max(Dwg_Structure *dwg)
+dwg_model_x_max(Dwg_Data *dwg)
 {
   return dwg->var[117].xyz[0];
 }
 
 double
-dwg_model_y_min(Dwg_Structure *dwg)
+dwg_model_y_min(Dwg_Data *dwg)
 {
   return dwg->var[116].xyz[1];
 }
 
 double
-dwg_model_y_max(Dwg_Structure *dwg)
+dwg_model_y_max(Dwg_Data *dwg)
 {
   return dwg->var[117].xyz[1];
 }
 
 double
-dwg_model_z_min(Dwg_Structure *dwg)
+dwg_model_z_min(Dwg_Data *dwg)
 {
   return dwg->var[116].xyz[2];
 }
 
 double
-dwg_model_z_max(Dwg_Structure *dwg)
+dwg_model_z_max(Dwg_Data *dwg)
 {
   return dwg->var[117].xyz[2];
 }
 
 double
-dwg_model_page_x_min(Dwg_Structure *dwg)
+dwg_model_page_x_min(Dwg_Data *dwg)
 {
   return dwg->var[118].xy[0];
 }
 
 double
-dwg_model_page_x_max(Dwg_Structure *dwg)
+dwg_model_page_x_max(Dwg_Data *dwg)
 {
   return dwg->var[119].xy[0];
 }
 
 double
-dwg_model_page_y_min(Dwg_Structure *dwg)
+dwg_model_page_y_min(Dwg_Data *dwg)
 {
   return dwg->var[118].xy[1];
 }
 
 double
-dwg_model_page_y_max(Dwg_Structure *dwg)
+dwg_model_page_y_max(Dwg_Data *dwg)
 {
   return dwg->var[119].xy[1];
 }
 
 void
-dwg_free(Dwg_Structure * dwg)
+dwg_free(Dwg_Data * dwg)
 {
   if (dwg->header.section)
     free(dwg->header.section);
