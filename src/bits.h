@@ -153,20 +153,26 @@ bit_check_CRC(Bit_Chain * bit_datenaro, long unsigned int start_address,
     unsigned int semo);
 
 unsigned int
-bit_write_CRC(Bit_Chain * bit_datenaro, long unsigned int start_address,
+bit_write_CRC(Bit_Chain * dat, long unsigned int start_address,
     unsigned int semo);
 
 unsigned char *
-bit_read_TV(Bit_Chain * bit_datenaro);
+bit_read_TV(Bit_Chain * dat);
 
 void
-bit_write_TV(Bit_Chain * bit_datenaro, unsigned char *value);
+bit_write_TV(Bit_Chain * dat, unsigned char *value);
 
 long unsigned int
 bit_read_L(Bit_Chain * dat);
 
 void
 bit_write_L(Bit_Chain * dat, long unsigned int value);
+
+void
+bit_read_CMC(Bit_Chain * dat, Dwg_Color* color);
+
+void
+bit_write_CMC(Bit_Chain * dat, Dwg_Color color);
 
 int
 bit_search_sentinel(Bit_Chain * dat, unsigned char sentinel[16]);

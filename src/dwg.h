@@ -171,6 +171,7 @@ typedef struct _dwg_object_ref
 {
   struct _dwg_object* obj;
   Dwg_Handle handleref;
+  long unsigned int handle;
 } Dwg_Object_Ref;
 
 /**
@@ -1851,7 +1852,15 @@ typedef struct _dwg_object_VP_ENT_HDR_CTRL
  */
 typedef struct _dwg_object_VP_ENT_HDR
 {
-//TODO 
+  BITCODE_TV entry_name;
+  BITCODE_B _64_flag;
+  BITCODE_BS xrefindex_plus1;
+  BITCODE_B xrefdep;
+  BITCODE_B one_flag;
+  Dwg_Object_Ref* vp_ent_ctrl;
+  Dwg_Object_Ref* xdicobjhandle;
+  Dwg_Object_Ref* null;
+
 } Dwg_Object_VP_ENT_HDR;
 
 /**
@@ -1865,9 +1874,27 @@ typedef struct _dwg_object_GROUP
 /**
  Struct for MLINESTYLE (73)
  */
+typedef struct _dwg_object_MLINESTYLE_line
+{
+  BITCODE_BD offset;
+  BITCODE_CMC color;
+  BITCODE_BS ltindex;
+} Dwg_Object_MLINESTYLE_line;
+
 typedef struct _dwg_object_MLINESTYLE
 {
-//TODO 
+  BITCODE_TV name;
+  BITCODE_TV desc;
+  BITCODE_BS flags;
+  BITCODE_CMC fillcolor;
+  BITCODE_BD startang;
+  BITCODE_BD endang;
+  BITCODE_RC linesinstyle;
+  Dwg_Object_MLINESTYLE_line* lines;
+  Dwg_Object_Ref* parenthandle;
+  Dwg_Object_Ref** reactors;
+  Dwg_Object_Ref* xdicobjhandle;
+
 } Dwg_Object_MLINESTYLE;
 
 /**

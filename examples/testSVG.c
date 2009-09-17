@@ -124,14 +124,15 @@ output_INSERT(Dwg_Object* obj)
 {
   Dwg_Entity_INSERT* insert;
   insert = obj->tio.entity->tio.INSERT;
-  if (insert->block_header->handleref.code == 5)
+  //if (insert->block_header->handleref.code == 5)
+  if(42) //XXX did this to test the new handleref.code handling "code"
     {
       printf(
           "\t<use id=\"dwg-object-%d\" transform=\"translate(%f %f) rotate(%f) scale(%f %f)\" xlink:href=\"#symbol-%lu\" /><!-- block_header->handleref: %d.%d.%lu -->\n",
           obj->index,
           insert->ins_pt.x, page_height - insert->ins_pt.y, (180.0 / M_PI)
               * insert->rotation_ang, insert->scale.x, insert->scale.y,
-          insert->block_header->handleref.value,
+          insert->block_header->handle,
           insert->block_header->handleref.code,
           insert->block_header->handleref.size,
           insert->block_header->handleref.value);
@@ -189,7 +190,7 @@ void output_BLOCK_HEADER(Dwg_Object_Ref* ref)
   hdr = ref->obj->tio.object->tio.BLOCK_HEADER;
 
   printf(
-      "\t<g id=\"symbol-%lu\" >\n\t\t<!-- %s -->\n", ref->obj->handle.value, hdr->entry_name);
+      "\t<g id=\"symbol-%lu\" >\n\t\t<!-- %s -->\n", ref->handle, hdr->entry_name);
 
   //TODO:still not quite right I think...
   obj = hdr->first_entity->obj;

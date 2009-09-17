@@ -93,6 +93,7 @@
     }
 
 #define FIELD_VECTOR(name, type, size) FIELD_VECTOR_N(name, type, _obj->size)
+
 #define FIELD_3DPOINT_VECTOR(name, size)\
   _obj->name = (BITCODE_3DPOINT *) malloc(_obj->size * sizeof(BITCODE_3DPOINT));\
   for (vector_counter=0; vector_counter< _obj->size; vector_counter++)\
@@ -124,6 +125,10 @@
     {\
       FIELD_HANDLE(xdicobjhandle, code);\
     }
+
+#define REPEAT(times, name, type) \
+  _obj->name = (type *) malloc(_obj->times * sizeof(type));\
+  for (vector_counter=0; vector_counter<_obj->times; vector_counter++)\
 
 #define DWG_ENTITY(token) \
   int vector_counter;\
@@ -837,7 +842,7 @@ decode_R13_R15_header(Bit_Chain* dat, Dwg_Data * dwg)
   for (i = 0; i < dwg->num_object_refs; i++)
     {
       dwg->object_ref[i]->obj = dwg_resolve_handle(dwg,
-          dwg->object_ref[i]->handleref.value);
+          dwg->object_ref[i]->handle);
     }
 
   return 0;
@@ -1543,8 +1548,31 @@ dwg_decode_handleref(Bit_Chain * dat, Dwg_Object * obj)
   ref->handleref.code = handleref.code;
   ref->handleref.size = handleref.size;
   ref->handleref.value = handleref.value;
-  ref->obj = 0;
+  /*
+   * sometimes the code indicates the type of ownership
+   * in other cases the handle is stored as an offset from some other handle
+   * how is it determined?
+   */
+  switch(handleref.code) //that's right: don't bother the code on the spec.
+    {
+    case 0x06: //what if 6 means HARD_OWNER?
+      ref->handle = (obj->handle.value + 1);
+      break;
+    case 0x08:
+      ref->handle = (obj->handle.value - 1);
+      break;
+    case 0x0A:
+      ref->handle = (obj->handle.value + handleref.value);
+      break;
+    case 0x0C:
+      ref->handle = (obj->handle.value - handleref.value);
+      break;
+    default: //0x02, 0x03, 0x04, 0x05 or none
+      ref->handle = handleref.value;
+      break;
+    }
 
+  ref->obj = 0;
   return ref;
 }
 
@@ -3613,6 +3641,44 @@ dwg_decode_UCS(Bit_Chain *dat, Dwg_Object *obj)
     }
 }
 
+static void
+dwg_decode_VP_ENT_HDR(Bit_Chain *dat, Dwg_Object *obj)
+{
+  DWG_OBJECT(VP_ENT_HDR);
+  FIELD(entry_name, TV);
+  FIELD(_64_flag, B);
+  FIELD(xrefindex_plus1, BS);
+  FIELD(xrefdep, B);
+  FIELD(one_flag, B);
+  FIELD_HANDLE(vp_ent_ctrl, ANYCODE);
+  XDICOBJHANDLE(3);
+  FIELD_HANDLE(null, 5);
+}
+
+static void
+dwg_decode_MLINESTYLE(Bit_Chain *dat, Dwg_Object *obj)
+{
+  DWG_OBJECT(MLINESTYLE);
+  FIELD(name, TV);
+  FIELD(desc, TV);
+  FIELD(flags, BS);
+  FIELD_CMC(fillcolor);
+  FIELD(startang, BD);
+  FIELD(endang, BD);
+  FIELD(linesinstyle, RC);
+
+  //XXX Ugly! We must find a better way to handle arbitrary vectors
+  REPEAT(linesinstyle, lines, Dwg_Object_MLINESTYLE_line)
+  {
+    FIELD(lines[vector_counter].offset, BD);
+    FIELD_CMC(lines[vector_counter].color);
+    FIELD(lines[vector_counter].ltindex, BS);
+  }
+  FIELD_HANDLE(parenthandle, 4);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+}
+
 
 static void
 dwg_decode_IMAGE(Bit_Chain *dat, Dwg_Object *obj)
@@ -4295,6 +4361,12 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
     break;
   case DWG_TYPE_UCS:
     dwg_decode_UCS(dat, obj);
+    break;
+  case DWG_TYPE_VP_ENT_HDR:
+    dwg_decode_VP_ENT_HDR(dat, obj);
+    break;
+  case DWG_TYPE_MLINESTYLE:
+    dwg_decode_MLINESTYLE(dat, obj);
     break;
   case DWG_TYPE_BLOCK_HEADER:
     dwg_decode_BLOCK_HEADER(dat, obj);

@@ -1986,7 +1986,7 @@ dwg_encode_VIEWPORT(Dwg_Entity_VIEWPORT *ent, Bit_Chain * dat)
       bit_write_RC(dat, ent->def_lighting_type);
       bit_write_BD(dat, ent->brightness);
       bit_write_BD(dat, ent->contrast);
-      bit_write_CMC(dat, ent->use_def_lights);
+      bit_write_CMC(dat, ent->ambient_light_color);
     }
 }
 
