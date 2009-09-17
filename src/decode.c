@@ -3569,7 +3569,6 @@ dwg_decode_VIEW(Bit_Chain *dat, Dwg_Object *obj)
     }
 }
 
-
 static void
 dwg_decode_UCS_CONTROL(Bit_Chain *dat, Dwg_Object *obj)
 {
@@ -4268,20 +4267,32 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
   case DWG_TYPE_LAYER_CONTROL:
     dwg_decode_LAYER_CONTROL(dat, obj);
     break;
+  case DWG_TYPE_LAYER:
+    dwg_decode_LAYER(dat, obj);
+    break;
   case DWG_TYPE_SHAPEFILE_CONTROL:
     dwg_decode_SHAPEFILE_CONTROL(dat, obj);
     break;
   case DWG_TYPE_SHAPEFILE:
     dwg_decode_SHAPEFILE(dat, obj);
     break;
+  case DWG_TYPE_LTYPE_CONTROL:
+    dwg_decode_LTYPE_CONTROL(dat, obj);
+    break;
+  case DWG_TYPE_LTYPE:
+    dwg_decode_LTYPE(dat, obj);
+    break;
+  case DWG_TYPE_VIEW_CONTROL:
+    dwg_decode_VIEW_CONTROL(dat, obj);
+    break;
+  case DWG_TYPE_VIEW:
+    dwg_decode_VIEW(dat, obj);
+    break;
   case DWG_TYPE_UCS_CONTROL:
     dwg_decode_UCS_CONTROL(dat, obj);
     break;
   case DWG_TYPE_UCS:
     dwg_decode_UCS(dat, obj);
-    break;
-  case DWG_TYPE_LAYER:
-    dwg_decode_LAYER(dat, obj);
     break;
   case DWG_TYPE_BLOCK_HEADER:
     dwg_decode_BLOCK_HEADER(dat, obj);
