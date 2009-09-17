@@ -152,7 +152,7 @@ static int loglevel = 2; //This is not the same as loglevel from decode.c !
  * Public functions
  */
 int
-dwg_encode_chains(Dwg_Data * skt, Bit_Chain * dat)
+dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
 {
   int ckr_missing;
   long unsigned int i, j;
@@ -173,7 +173,7 @@ dwg_encode_chains(Dwg_Data * skt, Bit_Chain * dat)
   /*------------------------------------------------------------
    * Header variables
    */
-  //strcpy (dat->chain, skt->header.version); // Chain version: should be AC1015
+  //strcpy (dat->chain, dwg->header.version); // Chain version: should be AC1015
   strcpy(dat->chain, "AC1015"); // Chain version: should be AC1015
   dat->byte += 6;
 
@@ -184,12 +184,12 @@ dwg_encode_chains(Dwg_Data * skt, Bit_Chain * dat)
   bit_write_RL(dat, 0); // Picture address
   bit_write_RC(dat, 25); // Version
   bit_write_RC(dat, 0); // ?
-  bit_write_RS(dat, skt->header.codepage); // Codepage
+  bit_write_RS(dat, dwg->header.codepage); // Codepage
 
-  //skt->header.num_sections = 5; // hide unknownn sectionn 1 ?
-  bit_write_RL(dat, skt->header.num_sections);
+  //dwg->header.num_sections = 5; // hide unknownn sectionn 1 ?
+  bit_write_RL(dat, dwg->header.num_sections);
   section_address = dat->byte; // Jump to section address
-  dat->byte += (skt->header.num_sections * 9);
+  dat->byte += (dwg->header.num_sections * 9);
   bit_read_CRC(dat); // Check crc
 
   bit_write_sentinel(dat, dwg_sentinel(DWG_SENTINEL_HEADER_END));
@@ -198,20 +198,20 @@ dwg_encode_chains(Dwg_Data * skt, Bit_Chain * dat)
    * Unknown section 1
    */
 
-  skt->header.section[5].number = 5;
-  skt->header.section[5].address = 0;
-  skt->header.section[5].size = 0;
-  if (skt->header.num_sections == 6)
+  dwg->header.section[5].number = 5;
+  dwg->header.section[5].address = 0;
+  dwg->header.section[5].size = 0;
+  if (dwg->header.num_sections == 6)
     {
-      skt->header.section[5].address = dat->byte;
-      skt->header.section[5].size = DWG_UNKNOWN1_SIZE;
+      dwg->header.section[5].address = dat->byte;
+      dwg->header.section[5].size = DWG_UNKNOWN1_SIZE;
 
-      skt->unknown1.size = skt->header.section[5].size;
-      skt->unknown1.byte = skt->unknown1.bit = 0;
-      while (dat->byte + skt->unknown1.size >= dat->size)
+      dwg->unknown1.size = dwg->header.section[5].size;
+      dwg->unknown1.byte = dwg->unknown1.bit = 0;
+      while (dat->byte + dwg->unknown1.size >= dat->size)
         bit_chain_alloc(dat);
-      memcpy(&dat->chain[dat->byte], skt->unknown1.chain, skt->unknown1.size);
-      dat->byte += skt->unknown1.size;
+      memcpy(&dat->chain[dat->byte], dwg->unknown1.chain, dwg->unknown1.size);
+      dat->byte += dwg->unknown1.size;
 
     }
 
@@ -228,12 +228,12 @@ dwg_encode_chains(Dwg_Data * skt, Bit_Chain * dat)
 
   /* Copy picture
    */
-  //skt->picture.size = 0; // If one desires not to copy pictures,
+  //dwg->picture.size = 0; // If one desires not to copy pictures,
                            // should un-comment this line
   bit_write_sentinel(dat, dwg_sentinel(DWG_SENTINEL_PICTURE_BEGIN));
-  for (i = 0; i < skt->picture.size; i++)
-    bit_write_RC(dat, skt->picture.chain[i]);
-  if (skt->picture.size == 0)
+  for (i = 0; i < dwg->picture.size; i++)
+    bit_write_RC(dat, dwg->picture.chain[i]);
+  if (dwg->picture.size == 0)
     {
       bit_write_RL(dat, 5);
       bit_write_RC(dat, 0);
@@ -244,8 +244,8 @@ dwg_encode_chains(Dwg_Data * skt, Bit_Chain * dat)
    * Header Variables
    */
 
-  skt->header.section[0].number = 0;
-  skt->header.section[0].address = dat->byte;
+  dwg->header.section[0].number = 0;
+  dwg->header.section[0].address = dat->byte;
   bit_write_sentinel(dat, dwg_sentinel(DWG_SENTINEL_VARIABLE_BEGIN));
   pvzadr = dat->byte; // Afterwards one must rewrite the correct values of size here
 
@@ -253,43 +253,43 @@ dwg_encode_chains(Dwg_Data * skt, Bit_Chain * dat)
 
   for (i = 0; i < DWG_NUM_VARIABLES; i++)
     {
-      if (i == 221 && skt->var[220].bitdouble != 3)
+      if (i == 221 && dwg->var[220].bitdouble != 3)
         continue;
-      switch (dwg_var_map(skt->header.version, i))
+      switch (dwg_var_map(dwg->header.version, i))
         {
       case DWG_DT_B:
-        bit_write_B(dat, skt->var[i].bit);
+        bit_write_B(dat, dwg->var[i].bit);
         break;
       case DWG_DT_BS:
-        bit_write_BS(dat, skt->var[i].bitdouble);
+        bit_write_BS(dat, dwg->var[i].bitdouble);
         break;
       case DWG_DT_BL:
-        bit_write_BL(dat, skt->var[i].bitlong);
+        bit_write_BL(dat, dwg->var[i].bitlong);
         break;
       case DWG_DT_BD:
-        bit_write_BD(dat, skt->var[i].bitdouble);
+        bit_write_BD(dat, dwg->var[i].bitdouble);
         break;
       case DWG_DT_H:
-        bit_write_H(dat, &skt->var[i].handle);
+        bit_write_H(dat, &dwg->var[i].handle);
         break;
       case DWG_DT_T:
-        bit_write_TV(dat, skt->var[i].text);
+        bit_write_TV(dat, dwg->var[i].text);
         break;
       case DWG_DT_CMC:
-        bit_write_BS(dat, skt->var[i].bitdouble);
+        bit_write_BS(dat, dwg->var[i].bitdouble);
         break;
       case DWG_DT_2RD:
-        bit_write_RD(dat, skt->var[i].xy[0]);
-        bit_write_RD(dat, skt->var[i].xy[1]);
+        bit_write_RD(dat, dwg->var[i].xy[0]);
+        bit_write_RD(dat, dwg->var[i].xy[1]);
         break;
       case DWG_DT_3BD:
-        bit_write_BD(dat, skt->var[i].xyz[0]);
-        bit_write_BD(dat, skt->var[i].xyz[1]);
-        bit_write_BD(dat, skt->var[i].xyz[2]);
+        bit_write_BD(dat, dwg->var[i].xyz[0]);
+        bit_write_BD(dat, dwg->var[i].xyz[1]);
+        bit_write_BD(dat, dwg->var[i].xyz[2]);
         break;
       default:
         printf("No handle type: %i (var: %i)\n", dwg_var_map(
-            skt->header.version, i), (int) i);
+            dwg->header.version, i), (int) i);
         }
     }
 
@@ -304,30 +304,30 @@ dwg_encode_chains(Dwg_Data * skt, Bit_Chain * dat)
   dat->bit = pvzbit;
   //printf ("Size: %lu\n", pvzadr_2 - pvzadr - (pvzbit ? 3 : 4));
 
-  /* CKR and sentinel
+  /* CRC and sentinel
    */
   bit_write_CRC(dat, pvzadr, 0xC0C1);
   bit_write_sentinel(dat, dwg_sentinel(DWG_SENTINEL_VARIABLE_END));
-  skt->header.section[0].size = dat->byte - skt->header.section[0].address;
+  dwg->header.section[0].size = dat->byte - dwg->header.section[0].address;
 
   /*------------------------------------------------------------
    * Classes
    */
-  skt->header.section[1].number = 1;
-  skt->header.section[1].address = dat->byte;
+  dwg->header.section[1].number = 1;
+  dwg->header.section[1].address = dat->byte;
   bit_write_sentinel(dat, dwg_sentinel(DWG_SENTINEL_CLASS_BEGIN));
   pvzadr = dat->byte; // Afterwards one must rewrite the correct values of size here
   bit_write_RL(dat, 0); // Size of the section
 
-  for (i = 0; i < skt->num_classes; i++)
+  for (i = 0; i < dwg->num_classes; i++)
     {
-      bit_write_BS(dat, skt->class[i].number);
-      bit_write_BS(dat, skt->class[i].version);
-      bit_write_TV(dat, skt->class[i].appname);
-      bit_write_TV(dat, skt->class[i].cppname);
-      bit_write_TV(dat, skt->class[i].dxfname);
-      bit_write_B(dat, skt->class[i].wasazombie);
-      bit_write_BS(dat, skt->class[i].item_class_id);
+      bit_write_BS(dat, dwg->class[i].number);
+      bit_write_BS(dat, dwg->class[i].version);
+      bit_write_TV(dat, dwg->class[i].appname);
+      bit_write_TV(dat, dwg->class[i].cppname);
+      bit_write_TV(dat, dwg->class[i].dxfname);
+      bit_write_B(dat, dwg->class[i].wasazombie);
+      bit_write_BS(dat, dwg->class[i].item_class_id);
     }
 
   /* Write the size of the section at its beginning
@@ -341,12 +341,12 @@ dwg_encode_chains(Dwg_Data * skt, Bit_Chain * dat)
   dat->bit = pvzbit;
   //printf ("Size: %lu\n", pvzadr_2 - pvzadr - (pvzbit ? 3 : 4));
 
-  /* CKR and sentinel
+  /* CRC and sentinel
    */
   bit_write_CRC(dat, pvzadr, 0xC0C1);
 
   bit_write_sentinel(dat, dwg_sentinel(DWG_SENTINEL_CLASS_END));
-  skt->header.section[1].size = dat->byte - skt->header.section[1].address;
+  dwg->header.section[1].size = dat->byte - dwg->header.section[1].address;
 
   /*------------------------------------------------------------
    * Objects
@@ -356,22 +356,22 @@ dwg_encode_chains(Dwg_Data * skt, Bit_Chain * dat)
 
   /* Define object-map
    */
-  omap = (Object_Map *) malloc(skt->num_objects * sizeof(Object_Map));
-  for (i = 0; i < skt->num_objects; i++)
+  omap = (Object_Map *) malloc(dwg->num_objects * sizeof(Object_Map));
+  for (i = 0; i < dwg->num_objects; i++)
     {
       Bit_Chain nkn;
       Dwg_Handle tkt;
 
       /* Define the handle of each object, including unknown */
       omap[i].idc = i;
-      if (skt->object[i].supertype == DWG_SUPERTYPE_ENTITY)
-        omap[i].handle = skt->object[i].handle.value;
-      else if (skt->object[i].supertype == DWG_SUPERTYPE_OBJECT)
-        omap[i].handle = skt->object[i].handle.value;
-      else if (skt->object[i].supertype == DWG_SUPERTYPE_UNKNOWN)
+      if (dwg->object[i].supertype == DWG_SUPERTYPE_ENTITY)
+        omap[i].handle = dwg->object[i].handle.value;
+      else if (dwg->object[i].supertype == DWG_SUPERTYPE_OBJECT)
+        omap[i].handle = dwg->object[i].handle.value;
+      else if (dwg->object[i].supertype == DWG_SUPERTYPE_UNKNOWN)
         {
-          nkn.chain = skt->object[i].tio.unknown;
-          nkn.size = skt->object[i].size;
+          nkn.chain = dwg->object[i].tio.unknown;
+          nkn.size = dwg->object[i].size;
           nkn.byte = nkn.bit = 0;
           bit_read_BS(&nkn);
           bit_read_RL(&nkn);
@@ -401,14 +401,14 @@ dwg_encode_chains(Dwg_Data * skt, Bit_Chain * dat)
             }
         }
     }
-  //for (i = 0; i < skt->num_objects; i++) printf ("Handle(%i): %lu / Idc: %u\n", i, omap[i].handle, omap[i].idc);
+  //for (i = 0; i < dwg->num_objects; i++) printf ("Handle(%i): %lu / Idc: %u\n", i, omap[i].handle, omap[i].idc);
 
   /* Write the objects
    */
-  for (i = 0; i < skt->num_objects; i++)
+  for (i = 0; i < dwg->num_objects; i++)
     {
       omap[i].address = dat->byte;
-      obj = &skt->object[omap[i].idc];
+      obj = &dwg->object[omap[i].idc];
       if (obj->supertype == DWG_SUPERTYPE_UNKNOWN)
         {
           bit_write_MS(dat, obj->size);
@@ -425,13 +425,13 @@ dwg_encode_chains(Dwg_Data * skt, Bit_Chain * dat)
             dwg_encode_object(obj, dat);
           else
             {
-              sprintf(stderr, "Error: undefined (super)type of object\n");
+              fprintf(stderr, "Error: undefined (super)type of object\n");
               exit(-1);
             }
         }
       bit_write_CRC(dat, omap[i].address, 0xC0C1);
     }
-  //for (i = 0; i < skt->num_objects; i++) printf ("Trakt(%i): %6lu / Address: %08X / Idc: %u\n", i, omap[i].handle, omap[i].address, omap[i].idc);
+  //for (i = 0; i < dwg->num_objects; i++) printf ("Trakt(%i): %6lu / Address: %08X / Idc: %u\n", i, omap[i].handle, omap[i].address, omap[i].idc);
 
   /* Unknown bitdouble between objects and object map
    */
@@ -440,8 +440,8 @@ dwg_encode_chains(Dwg_Data * skt, Bit_Chain * dat)
   /*------------------------------------------------------------
    * Object-map
    */
-  skt->header.section[2].number = 2;
-  skt->header.section[2].address = dat->byte; // Value of size should be calculated later
+  dwg->header.section[2].number = 2;
+  dwg->header.section[2].address = dat->byte; // Value of size should be calculated later
   //printf ("Begin: 0x%08X\n", dat->byte);
 
   sekcisize = 0;
@@ -449,7 +449,7 @@ dwg_encode_chains(Dwg_Data * skt, Bit_Chain * dat)
   dat->byte += 2;
   last_address = 0;
   last_handle = 0;
-  for (i = 0; i < skt->num_objects; i++)
+  for (i = 0; i < dwg->num_objects; i++)
     {
       unsigned int idc;
       long int pvz;
@@ -496,7 +496,7 @@ dwg_encode_chains(Dwg_Data * skt, Bit_Chain * dat)
 
   /* Calculate and write the size of the object map
    */
-  skt->header.section[2].size = dat->byte - skt->header.section[2].address;
+  dwg->header.section[2].size = dat->byte - dwg->header.section[2].address;
   free(omap);
 
   /*------------------------------------------------------------
@@ -538,8 +538,8 @@ dwg_encode_chains(Dwg_Data * skt, Bit_Chain * dat)
   for (i = 0; i < 6; i++)
     {
       bit_write_RC(dat, 0);
-      bit_write_BL(dat, skt->header.section[0].address);
-      bit_write_BL(dat, skt->header.section[0].size);
+      bit_write_BL(dat, dwg->header.section[0].address);
+      bit_write_BL(dat, dwg->header.section[0].size);
     }
 
   /* Handles
@@ -547,10 +547,10 @@ dwg_encode_chains(Dwg_Data * skt, Bit_Chain * dat)
   bit_write_BS(dat, 14);
   for (i = 0; i < 14; i++)
     {
-      bit_write_RC(dat, skt->second_header.handlerik[i].size);
+      bit_write_RC(dat, dwg->second_header.handlerik[i].size);
       bit_write_RC(dat, i);
-      for (j = 0; j < skt->second_header.handlerik[i].size; j++)
-        bit_write_RC(dat, skt->second_header.handlerik[i].chain[j]);
+      for (j = 0; j < dwg->second_header.handlerik[i].size; j++)
+        bit_write_RC(dat, dwg->second_header.handlerik[i].chain[j]);
     }
 
   /* Go back to begin to write the size
@@ -560,7 +560,7 @@ dwg_encode_chains(Dwg_Data * skt, Bit_Chain * dat)
   bit_write_RL(dat, pvzadr_2 - pvzadr + 10);
   dat->byte = pvzadr_2;
 
-  /* CKR
+  /* CRC
    */
   bit_write_CRC(dat, pvzadr, 0xC0C1);
 
@@ -574,13 +574,13 @@ dwg_encode_chains(Dwg_Data * skt, Bit_Chain * dat)
   /*------------------------------------------------------------
    * MEASUREMENT
    */
-  skt->header.section[3].number = 3;
-  skt->header.section[3].address = 0;
-  skt->header.section[3].size = 0;
-  skt->header.section[4].number = 4;
-  skt->header.section[4].address = dat->byte;
-  skt->header.section[4].size = 4;
-  bit_write_RL(dat, skt->measurement);
+  dwg->header.section[3].number = 3;
+  dwg->header.section[3].address = 0;
+  dwg->header.section[3].size = 0;
+  dwg->header.section[4].number = 4;
+  dwg->header.section[4].address = dat->byte;
+  dwg->header.section[4].size = 4;
+  bit_write_RL(dat, dwg->measurement);
 
   /* End of the file
    */
@@ -590,11 +590,11 @@ dwg_encode_chains(Dwg_Data * skt, Bit_Chain * dat)
    */
   dat->byte = section_address;
   dat->bit = 0;
-  for (i = 0; i < skt->header.num_sections; i++)
+  for (i = 0; i < dwg->header.num_sections; i++)
     {
-      bit_write_RC(dat, skt->header.section[i].number);
-      bit_write_RL(dat, skt->header.section[i].address);
-      bit_write_RL(dat, skt->header.section[i].size);
+      bit_write_RC(dat, dwg->header.section[i].number);
+      bit_write_RL(dat, dwg->header.section[i].address);
+      bit_write_RL(dat, dwg->header.section[i].size);
     }
 
   /* Write CRC's
@@ -603,7 +603,7 @@ dwg_encode_chains(Dwg_Data * skt, Bit_Chain * dat)
   dat->byte -= 2;
   ckr = bit_read_CRC(dat);
   dat->byte -= 2;
-  switch (skt->header.num_sections)
+  switch (dwg->header.num_sections)
     {
   case 3:
     bit_write_RS(dat, ckr ^ 0xA598);
@@ -828,7 +828,7 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
      break;
      */
   default:
-    sprintf(stderr, "Error: unknown object-type while encoding entity\n");
+    fprintf(stderr, "Error: unknown object-type while encoding entity\n");
     exit(-1);
     }
 

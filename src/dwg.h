@@ -2431,7 +2431,7 @@ typedef struct _dwg_struct
   union
   {
     unsigned char bit;
-    unsigned int bitbit;
+    unsigned int bitshort;
     long unsigned int bitlong;
     double bitdouble;
     double xyz[3];
