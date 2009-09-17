@@ -84,10 +84,10 @@
       _obj->name = (BITCODE_##type*) malloc(size * sizeof(BITCODE_##type));\
       for (vector_counter=0; vector_counter< size; vector_counter++)\
         {\
-          _obj->name = bit_read_##type(dat);\
+          _obj->name[vector_counter] = bit_read_##type(dat);\
           if (loglevel>=2)\
             {\
-                fprintf(stderr, #name "[%d]: " FORMAT_##type "\n", vector_counter, _obj->name);\
+                fprintf(stderr, #name "[%d]: " FORMAT_##type "\n", vector_counter, _obj->name[vector_counter]);\
             }\
         }\
     }
