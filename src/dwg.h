@@ -2241,6 +2241,7 @@ typedef struct _dwg_object
   unsigned int size;
   unsigned int type;
   unsigned int ckr;
+  unsigned int index;
 
   Dwg_Object_Supertype supertype;
   union
@@ -2381,6 +2382,9 @@ double
 dwg_model_page_y_min(Dwg_Structure *);
 double
 dwg_model_page_y_max(Dwg_Structure *);
+
+Dwg_Object*
+dwg_next_object(Dwg_Object* obj);
 
 #ifdef __cplusplus
 }

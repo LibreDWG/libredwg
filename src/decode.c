@@ -245,6 +245,12 @@ dwg_decode_structures(Bit_Chain * dat, Dwg_Structure * skt)
   return -1;
 }
 
+Dwg_Object* dwg_next_object(Dwg_Object* obj){
+  if ((obj->index+1) > obj->parent->num_objects-1)
+    return 0;
+  return &obj->parent->object[obj->index+1];
+}
+
 int
 decode_R13_R15_header(Bit_Chain* dat, Dwg_Structure * skt)
 {
@@ -3853,6 +3859,7 @@ dwg_decode_aldoni_object(Dwg_Structure * skt, Bit_Chain * dat,
       skt->num_objects);
 
   obj = &skt->object[skt->num_objects];
+  obj->index = skt->num_objects;
   skt->num_objects++;
 
   obj->handle.code = 0;

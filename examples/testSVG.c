@@ -25,6 +25,9 @@
 #include "../src/bits.h"
 #include <dwg.h>
 
+double page_width;
+double page_height;
+
 int
 test_SVG(char *filename);
 
@@ -62,25 +65,143 @@ test_SVG(char *filename)
   return error;
 }
 
-void output_symbol(Dwg_Object_Ref* ref)
+void
+output_TEXT(Dwg_Object* obj)
 {
-  if (ref->obj->type == DWG_TYPE_BLOCK_HEADER)
+  Dwg_Entity_TEXT* text;
+  text = obj->tio.entity->tio.TEXT;
+
+  /*TODO: Juca, fix it properly: */
+  if (text->text_value[0] == '&') return;
+
+  printf(
+      "\t<text id=\"dwg-object-%d\" x=\"%f\" y=\"%f\" font-family=\"Verdana\" font-size=\"%f\" fill=\"blue\">%s</text>\n",
+      obj->index, text->insertion_pt.x, page_height - text->insertion_pt.y,
+      text->height /* fontsize */, text->text_value);
+}
+
+
+void
+output_LINE(Dwg_Object* obj)
+{
+  Dwg_Entity_LINE* line;
+  line = obj->tio.entity->tio.LINE;
+  printf(
+      "\t<path id=\"dwg-object-%d\" d=\"M %f,%f %f,%f\" style=\"fill:none;stroke:blue;stroke-width:0.1px\" />\n",
+      obj->index, line->start.x, page_height - line->start.y, line->end.x, page_height
+          - line->end.y);
+}
+
+void
+output_CIRCLE(Dwg_Object* obj)
+{
+  Dwg_Entity_CIRCLE* circle;
+  circle = obj->tio.entity->tio.CIRCLE;
+  printf(
+      "\t<circle id=\"dwg-object-%d\" cx=\"%f\" cy=\"%f\" r=\"%f\" fill=\"none\" stroke=\"blue\" stroke-width=\"0.1px\" />\n",
+      obj->index, circle->center.x, page_height - circle->center.y, circle->radius);
+}
+
+void
+output_ARC(Dwg_Object* obj)
+{
+  Dwg_Entity_ARC* arc;
+  arc = obj->tio.entity->tio.ARC;
+  double x_start = arc->center.x + arc->radius * cos(arc->start_angle);
+  double y_start = arc->center.y + arc->radius * sin(arc->start_angle);
+  double x_end = arc->center.x + arc->radius * cos(arc->end_angle);
+  double y_end = arc->center.y + arc->radius * sin(arc->end_angle);
+  //Assuming clockwise arcs.
+  int large_arc = (arc->end_angle - arc->start_angle < 3.1415) ? 0 : 1;
+  printf(
+      "\t<path id=\"dwg-object-%d\" d=\"M %f,%f A %f,%f 0 %d 0 %f,%f\" fill=\"none\" stroke=\"blue\" stroke-width=\"%f\" />\n",
+      obj->index, x_start, page_height - y_start, arc->radius, arc->radius,
+      large_arc, x_end, page_height - y_end, 0.1);
+}
+
+void
+output_INSERT(Dwg_Object* obj)
+{
+  Dwg_Entity_INSERT* insert;
+  insert = obj->tio.entity->tio.INSERT;
+  if (insert->block_header->handleref.code == 5)
     {
-      Dwg_Object_BLOCK_HEADER* hdr;
-      hdr = ref->obj->tio.object->tio.BLOCK_HEADER;
-
       printf(
-          "\t<g id=\"symbol-%lu\" >\n\t\t<!-- %s -->\n", ref->obj->handle.value, hdr->entry_name);
-
-      //TODO: output contents of the symbol
-      printf("\n\t\t<!-- TODO -->\n");
-
-      printf("\t</g>\n");
+          "\t<use id=\"dwg-object-%d\" transform=\"translate(%f %f) rotate(%f) scale(%f %f)\" xlink:href=\"#symbol-%lu\" /><!-- block_header->handleref: %d.%d.%lu -->\n",
+          obj->index,
+          insert->ins_pt.x, page_height - insert->ins_pt.y, (180.0 / M_PI)
+              * insert->rotation_ang, insert->scale.x, insert->scale.y,
+          insert->block_header->handleref.value,
+          insert->block_header->handleref.code,
+          insert->block_header->handleref.size,
+          insert->block_header->handleref.value);
     }
   else
     {
-      fprintf(stderr, "referenced object in BLOCK_CONTROL is not a BLOCK_HEADER\n");
+      printf(
+          "\n\n<!-- WRONG INSERT(%d.%d.%lu): handleref = %d.%d.%lu -->\n",
+          obj->handle.code, obj->handle.size, obj->handle.value,
+          insert->block_header->handleref.code,
+          insert->block_header->handleref.size,
+          insert->block_header->handleref.value);
     }
+}
+
+void
+output_object(Dwg_Object* obj){
+  if (!obj)
+    {
+      fprintf(stderr, "object is NULL\n");
+      return;
+    }
+
+  if (obj->type == DWG_TYPE_INSERT)
+    {
+      output_INSERT(obj);
+    }
+
+  if (obj->type == DWG_TYPE_LINE)
+    {
+      output_LINE(obj);
+    }
+
+  if (obj->type == DWG_TYPE_CIRCLE)
+    {
+      output_CIRCLE(obj);
+    }
+
+  if (obj->type == DWG_TYPE_TEXT)
+    {
+      output_TEXT(obj);
+    }
+
+  if (obj->type == DWG_TYPE_ARC)
+    {
+      output_ARC(obj);
+    }
+}
+
+void output_BLOCK_HEADER(Dwg_Object_Ref* ref)
+{
+  Dwg_Object* obj;
+
+  Dwg_Object_BLOCK_HEADER* hdr;
+  hdr = ref->obj->tio.object->tio.BLOCK_HEADER;
+
+  printf(
+      "\t<g id=\"symbol-%lu\" >\n\t\t<!-- %s -->\n", ref->obj->handle.value, hdr->entry_name);
+
+  //TODO:still not quite right I think...
+  obj = hdr->first_entity->obj;
+  while(obj && obj != hdr->last_entity->obj)
+    {
+      output_object(obj);
+      obj = dwg_next_object(obj);
+    }
+  //output the last one:
+  if (obj) output_object(obj);
+
+  printf("\t</g>\n");
 }
 
 void
@@ -88,10 +209,9 @@ output_SVG(Dwg_Structure* dwg_struct)
 {
   unsigned int i;
   Dwg_Object *obj;
+  page_width = dwg_model_x_max(dwg_struct) - dwg_model_x_min(dwg_struct);
+  page_height = dwg_model_y_max(dwg_struct) - dwg_model_y_min(dwg_struct);
 
-  double page_width = dwg_model_x_max(dwg_struct) - dwg_model_x_min(dwg_struct);
-  double page_height = dwg_model_y_max(dwg_struct)
-      - dwg_model_y_min(dwg_struct);
   printf("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
     "<svg\n"
     "   xmlns:svg=\"http://www.w3.org/2000/svg\"\n"
@@ -114,150 +234,19 @@ output_SVG(Dwg_Structure* dwg_struct)
   printf("\t<defs>\n");
   for (i=0; i<block_control->num_entries; i++)
     {
-      output_symbol(block_control->block_headers[i]);
+      output_BLOCK_HEADER(block_control->block_headers[i]);
     }
   printf("\t</defs>\n");
 
-  output_symbol(block_control->model_space);
-  output_symbol(block_control->paper_space);
-  
-  int lines = 0, arcs = 0, circles = 0, texts = 0;
+  output_BLOCK_HEADER(block_control->model_space);
+  output_BLOCK_HEADER(block_control->paper_space);
 
+/*
   for (i = 0; i < dwg_struct->num_objects; i++)
     {
       obj = &dwg_struct->object[i];
-
-      if (!obj)
-        {
-          fprintf(stderr, "dwg_struct->object[%d] == NULL\n", i);
-          continue;
-        }
-
-      if (obj->type == DWG_TYPE_BLOCK_HEADER)
-        {
-          Dwg_Object_BLOCK_HEADER* hdr;
-          hdr = obj->tio.object->tio.BLOCK_HEADER;
-          //      if (hdr->block_entity->handleref.code == 3){
-          printf(
-              "\t<g id=\"dwg-handle-%lu\" >\n<!--\n\tBLOCK_HEADER obj->handle: %d.%d.%d\n\treferenced BLOCK: %d.%d.%d -->\n", obj->handle.value,
-              obj->handle.code,
-              obj->handle.size,
-              obj->handle.value,
-              hdr->block_entity->handleref.code,
-              hdr->block_entity->handleref.size,
-              hdr->block_entity->handleref.value);
-          /*      } else {
-           printf("\n\n<g id=\"wrong-handle-%lu\" >\n\t<!-- WRONG BLOCK reference (%d.%d.%lu - code should be 3) in BLOCK_HEADER (%d.%d.%lu) -->\n",
-           obj->handle.value,
-           hdr->block_entity->handleref.code,
-           hdr->block_entity->handleref.size,
-           hdr->block_entity->handleref.value,
-           obj->handle.code,
-           obj->handle.size,
-           obj->handle.value);
-           }
-           */
-        }
-
-      if (obj->type == DWG_TYPE_BLOCK)
-        {
-          //      printf("\t<g id=\"dwg-handle-%lu\" ><!-- BLOCK obj->handle: %d.%d.%d -->\n", obj->handle.value, obj->handle.code, obj->handle.size, obj->handle.value);
-        }
-
-      if (obj->type == DWG_TYPE_ENDBLK)
-        {
-          printf("\t</g>\n");
-        }
-
-      if (obj->type == DWG_TYPE_INSERT)
-        {
-          Dwg_Entity_INSERT* insert;
-          insert = obj->tio.entity->tio.INSERT;
-          if (insert->block_header->handleref.code == 5)
-            {
-              printf(
-                  "\t<use transform=\"translate(%f %f) rotate(%f) scale(%f %f)\" xlink:href=\"#dwg-handle-%lu\" /><!-- block_header->handleref: %d.%d.%lu -->\n",
-                  insert->ins_pt.x, page_height - insert->ins_pt.y, (180.0 / M_PI)
-                      * insert->rotation_ang, insert->scale.x, insert->scale.y,
-                  insert->block_header->handleref.value,
-                  insert->block_header->handleref.code,
-                  insert->block_header->handleref.size,
-                  insert->block_header->handleref.value);
-
-            }
-          else
-            {
-
-              printf(
-                  "\n\n<!-- WRONG INSERT(%d.%d.%lu): handleref = %d.%d.%lu -->\n",
-                  obj->handle.code, obj->handle.size, obj->handle.value,
-                  insert->block_header->handleref.code,
-                  insert->block_header->handleref.size,
-                  insert->block_header->handleref.value);
-            }
-        }
-
-      if (obj->type == DWG_TYPE_LINE)
-        {
-          lines++;
-          Dwg_Entity_LINE* line;
-          line = obj->tio.entity->tio.LINE;
-          printf(
-              "\t<path id=\"dwg-%d\" d=\"M %f,%f %f,%f\" style=\"fill:none;stroke:blue;stroke-width:0.1px\" />\n",
-              i, line->start.x, page_height - line->start.y, line->end.x, page_height
-                  - line->end.y);
-        }
-
-      if (obj->type == DWG_TYPE_CIRCLE)
-        {
-          circles++;
-          Dwg_Entity_CIRCLE* circle;
-          circle = obj->tio.entity->tio.CIRCLE;
-          printf(
-              "\t<circle id=\"dwg-%d\" cx=\"%f\" cy=\"%f\" r=\"%f\" fill=\"none\" stroke=\"blue\" stroke-width=\"0.1px\" />\n",
-              i, circle->center.x, page_height - circle->center.y, circle->radius);
-        }
-
-      if (obj->type == DWG_TYPE_ARC)
-        {
-          arcs++;
-          Dwg_Entity_ARC* arc;
-          arc = obj->tio.entity->tio.ARC;
-          double x_start = arc->center.x + arc->radius * cos(arc->start_angle);
-          double y_start = arc->center.y + arc->radius * sin(arc->start_angle);
-          double x_end = arc->center.x + arc->radius * cos(arc->end_angle);
-          double y_end = arc->center.y + arc->radius * sin(arc->end_angle);
-          //Assuming clockwise arcs.
-          int large_arc = (arc->end_angle - arc->start_angle < 3.1415) ? 0 : 1;
-          printf(
-              "\t<path id=\"dwg-%d\" d=\"M %f,%f A %f,%f 0 %d 0 %f,%f\" fill=\"none\" stroke=\"blue\" stroke-width=\"%f\" />\n",
-              i, x_start, page_height - y_start, arc->radius, arc->radius,
-              large_arc, x_end, page_height - y_end, 0.1);
-        }
-
-      if (obj->type == DWG_TYPE_TEXT)
-        {
-          texts++;
-          Dwg_Entity_TEXT* text;
-          text = obj->tio.entity->tio.TEXT;
-          /*TODO: Juca, fix it properly: */
-          if (text->text_value[0] != '&')
-            {
-              printf(
-                  "\t<text id=\"dwg-%d\" x=\"%f\" y=\"%f\" font-family=\"Verdana\" font-size=\"%f\" fill=\"blue\">%s</text>\n",
-                  i, text->insertion_pt.x, page_height - text->insertion_pt.y,
-                  text->height /* fontsize */, text->text_value);
-            }
-        }
+      output_object(obj);
     }
+*/
   printf("</svg>\n");
-  if (lines > 0)
-    fprintf(stderr, "Lines: %d ", lines);
-  if (circles > 0)
-    fprintf(stderr, "Circles: %d ", circles);
-  if (arcs > 0)
-    fprintf(stderr, "Arcs: %d ", arcs);
-  if (texts > 0)
-    fprintf(stderr, "Texts: %d ", texts);
-  fprintf(stderr, "\n\n");
 }
