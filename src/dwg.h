@@ -1666,15 +1666,46 @@ typedef struct _dwg_object_SHAPEFILE
  */
 typedef struct _dwg_object_LTYPE_CONTROL
 {
-//TODO 
+  BITCODE_BS num_entries;
+  Dwg_Object_Ref* null_handle;
+  Dwg_Object_Ref* xdicobjhandle;
+  Dwg_Object_Ref** linetypes;
+  Dwg_Object_Ref* bylayer;
+  Dwg_Object_Ref* byblock;
+
 } Dwg_Object_LTYPE_CONTROL;
 
 /**
  Struct for LTYPE (57)
  */
+
+typedef struct _ltype_dash{
+    BITCODE_BD length;
+    BITCODE_BS complex_shapecode;
+    BITCODE_RD x_offset;
+    BITCODE_RD y_offset;
+    BITCODE_BD scale;
+    BITCODE_BD rotation;
+    BITCODE_BS shape_flag;
+} LTYPE_dash;
+
 typedef struct _dwg_object_LTYPE
 {
-//TODO 
+  BITCODE_TV entry_name;
+  BITCODE_B _64_flag;
+  BITCODE_BS xrefindex_plus1;
+  BITCODE_B xrefdep;
+  BITCODE_TV description;
+  BITCODE_BD pattern_len;
+  BITCODE_RC alignment;
+  BITCODE_RC num_dashes;
+  LTYPE_dash* dash;
+  BITCODE_RC* strings_area;
+  Dwg_Object_Ref* linetype_control;
+  Dwg_Object_Ref** reactors;
+  Dwg_Object_Ref* xdicobjhandle;
+  Dwg_Object_Ref* null_handle;
+  Dwg_Object_Ref** shapefiles;
 } Dwg_Object_LTYPE;
 
 // 58 and 59 are UNKNOWN OBJECTS
