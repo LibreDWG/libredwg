@@ -55,10 +55,11 @@
     }\
   if (loglevel>=2)\
     {\
-      fprintf(stderr, #name ": HANDLE(%d.%d.%lu)\n",\
+      fprintf(stderr, #name ": HANDLE(%d.%d.%lu) absolute:%lu\n",\
         _obj->name->handleref.code,\
         _obj->name->handleref.size,\
-        _obj->name->handleref.value);\
+        _obj->name->handleref.value,\
+        _obj->name->absolute_ref);\
     }
 
 #define FIELD_BE(name) bit_read_BE(dat, &_obj->name.x, &_obj->name.y, &_obj->name.z);
@@ -842,7 +843,7 @@ decode_R13_R15_header(Bit_Chain* dat, Dwg_Data * dwg)
   for (i = 0; i < dwg->num_object_refs; i++)
     {
       dwg->object_ref[i]->obj = dwg_resolve_handle(dwg,
-          dwg->object_ref[i]->handle);
+          dwg->object_ref[i]->absolute_ref);
     }
 
   return 0;
@@ -1506,12 +1507,12 @@ dwg_decode_object(Bit_Chain * dat, Dwg_Object_Object * ord)
  * Find a pointer to an object given it's id (handle)
  */
 static Dwg_Object *
-dwg_resolve_handle(Dwg_Data* dwg, unsigned long int handle)
+dwg_resolve_handle(Dwg_Data* dwg, unsigned long int absref)
 {
   //FIXME find a faster algorithm
   int i;
   for (i = 0; i < dwg->num_objects; i++)
-    if (dwg->object[i].handle.value == handle)
+    if (dwg->object[i].handle.value == absref)
       return &dwg->object[i];
   return 0;
 }
@@ -1521,19 +1522,17 @@ dwg_resolve_handle(Dwg_Data* dwg, unsigned long int handle)
 static Dwg_Object_Ref *
 dwg_decode_handleref(Bit_Chain * dat, Dwg_Object * obj)
 {
-  Dwg_Handle handleref;
-  Dwg_Object_Ref* ref = 0;
+  Dwg_Object_Ref* ref = (Dwg_Object_Ref *) malloc(sizeof(Dwg_Object_Ref));
   Dwg_Data* dwg = obj->parent;
 
-  if (bit_read_H(dat, &handleref))
+  if (bit_read_H(dat, &ref->handleref))
     {
       fprintf(stderr,
           "\tENTITY: Error reading handle in object whose handle is: %d.%d.%lu\n",
           obj->handle.code, obj->handle.size, obj->handle.value);
+      free(ref);
       return 0;
     }
-
-  ref = (Dwg_Object_Ref *) malloc(sizeof(Dwg_Object_Ref));
 
   //Reserve memory space for object references
   if (dwg->num_object_refs == 0)
@@ -1545,30 +1544,28 @@ dwg_decode_handleref(Bit_Chain * dat, Dwg_Object * obj)
 
   dwg->object_ref[dwg->num_object_refs++] = ref;
 
-  ref->handleref.code = handleref.code;
-  ref->handleref.size = handleref.size;
-  ref->handleref.value = handleref.value;
   /*
    * sometimes the code indicates the type of ownership
    * in other cases the handle is stored as an offset from some other handle
    * how is it determined?
    */
-  switch(handleref.code) //that's right: don't bother the code on the spec.
+  ref->absolute_ref = 0;
+  switch(ref->handleref.code) //that's right: don't bother the code on the spec.
     {
     case 0x06: //what if 6 means HARD_OWNER?
-      ref->handle = (obj->handle.value + 1);
+      ref->absolute_ref = (obj->handle.value + 1);
       break;
     case 0x08:
-      ref->handle = (obj->handle.value - 1);
+      ref->absolute_ref = (obj->handle.value - 1);
       break;
     case 0x0A:
-      ref->handle = (obj->handle.value + handleref.value);
+      ref->absolute_ref = (obj->handle.value + ref->handleref.value);
       break;
     case 0x0C:
-      ref->handle = (obj->handle.value - handleref.value);
+      ref->absolute_ref = (obj->handle.value - ref->handleref.value);
       break;
     default: //0x02, 0x03, 0x04, 0x05 or none
-      ref->handle = handleref.value;
+      ref->absolute_ref = ref->handleref.value;
       break;
     }
 
@@ -1582,7 +1579,7 @@ dwg_decode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj,
 {
   Dwg_Object_Ref * ref;
   ref = dwg_decode_handleref(dat, obj);
-  if (ref->handleref.code != code)
+  if (ref->absolute_ref == 0 && ref->handleref.code != code)
     {
       fprintf(stderr, "ERROR: expected a CODE %d handle\nERROR: ", code);
       //TODO: At the moment we are tolerating wrong codes in handles.

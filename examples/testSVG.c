@@ -132,7 +132,7 @@ output_INSERT(Dwg_Object* obj)
           obj->index,
           insert->ins_pt.x, page_height - insert->ins_pt.y, (180.0 / M_PI)
               * insert->rotation_ang, insert->scale.x, insert->scale.y,
-          insert->block_header->handle,
+          insert->block_header->absolute_ref,
           insert->block_header->handleref.code,
           insert->block_header->handleref.size,
           insert->block_header->handleref.value);
@@ -190,7 +190,7 @@ void output_BLOCK_HEADER(Dwg_Object_Ref* ref)
   hdr = ref->obj->tio.object->tio.BLOCK_HEADER;
 
   printf(
-      "\t<g id=\"symbol-%lu\" >\n\t\t<!-- %s -->\n", ref->handle, hdr->entry_name);
+      "\t<g id=\"symbol-%lu\" >\n\t\t<!-- %s -->\n", ref->absolute_ref, hdr->entry_name);
 
   //TODO:still not quite right I think...
   obj = hdr->first_entity->obj;

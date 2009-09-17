@@ -171,7 +171,7 @@ typedef struct _dwg_object_ref
 {
   struct _dwg_object* obj;
   Dwg_Handle handleref;
-  long unsigned int handle;
+  long unsigned int absolute_ref;
 } Dwg_Object_Ref;
 
 /**
