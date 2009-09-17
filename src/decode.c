@@ -3337,7 +3337,9 @@ dwg_decode_BLOCK_HEADER(Bit_Chain *dat, Dwg_Object *obj)
     }
 
   SINCE(R_2004)
-    HANDLE_VECTOR(entities, owned_object_count, 4);
+    {
+      HANDLE_VECTOR(entities, owned_object_count, 4);
+    }
 
   FIELD_HANDLE(endblk_entity, 3);
 
