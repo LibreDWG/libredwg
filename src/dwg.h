@@ -1594,7 +1594,10 @@ typedef struct _dwg_object_BLOCK_HEADER
  */
 typedef struct _dwg_object_LAYER_CONTROL
 {
-//TODO 
+  BITCODE_BS num_entries;
+  Dwg_Object_Ref* null_handle;
+  Dwg_Object_Ref* xdicobjhandle;
+  Dwg_Object_Ref** layers;
 } Dwg_Object_LAYER_CONTROL;
 
 /**

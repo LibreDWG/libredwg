@@ -3346,6 +3346,17 @@ dwg_decode_BLOCK_HEADER(Bit_Chain *dat, Dwg_Object *obj)
 }
 
 static void
+dwg_decode_LAYER_CONTROL(Bit_Chain * dat, Dwg_Object * obj)
+{
+  DWG_OBJECT(LAYER_CONTROL);
+
+  FIELD(num_entries, BS);
+  FIELD_HANDLE(null_handle, 4);
+  XDICOBJHANDLE(3);
+  HANDLE_VECTOR(layers, num_entries, 2);
+}
+
+static void
 dwg_decode_LAYER(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_OBJECT(LAYER);
@@ -4038,6 +4049,9 @@ dwg_decode_aldoni_object(Dwg_Structure * skt, Bit_Chain * dat,
     break;
   case DWG_TYPE_DICTIONARY:
     dwg_decode_DICTIONARY(dat, obj);
+    break;
+  case DWG_TYPE_LAYER_CONTROL:
+    dwg_decode_LAYER_CONTROL(dat, obj);
     break;
   case DWG_TYPE_LAYER:
     dwg_decode_LAYER(dat, obj);
