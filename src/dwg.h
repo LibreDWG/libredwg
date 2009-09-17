@@ -129,8 +129,8 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_BLOCK_HEADER = 0x31,
   DWG_TYPE_LAYER_CONTROL = 0x32,
   DWG_TYPE_LAYER = 0x33,
-  DWG_TYPE_STYLE_CONTROL = 0x34,
-  DWG_TYPE_STYLE = 0x35,
+  DWG_TYPE_SHAPEFILE_CONTROL = 0x34,
+  DWG_TYPE_SHAPEFILE = 0x35,
   //DWG_TYPE_<UNKNOWN> = 0x36,
   //DWG_TYPE_<UNKNOWN> = 0x37,
   DWG_TYPE_LTYPE_CONTROL = 0x38,
@@ -1371,7 +1371,7 @@ typedef struct _dwg_entity_RAY
 } Dwg_Entity_RAY;
 
 /**
- Struct for ray - RAY (40)
+ Struct for XLINE (41)
  */
 typedef Dwg_Entity_RAY Dwg_Entity_XLINE;
 
@@ -1625,20 +1625,39 @@ typedef struct _dwg_object_LAYER
 } Dwg_Object_LAYER;
 
 /**
- Struct for STYLE_CONTROL (52)
+ Struct for SHAPEFILE_CONTROL (52)
  */
-typedef struct _dwg_object_STYLE_CONTROL
+typedef struct _dwg_object_SHAPEFILE_CONTROL
 {
-//TODO 
-} Dwg_Object_STYLE_CONTROL;
+  BITCODE_BS num_entries;
+  Dwg_Object_Ref* null_handle;
+  Dwg_Object_Ref* xdicobjhandle;
+  Dwg_Object_Ref** shapefiles;  
+} Dwg_Object_SHAPEFILE_CONTROL;
 
 /**
- Struct for STYLE (53)
+ Struct for SHAPEFILE (53)
  */
-typedef struct _dwg_object_STYLE
+typedef struct _dwg_object_SHAPEFILE
 {
-//TODO 
-} Dwg_Object_STYLE;
+  BITCODE_TV entry_name;
+  BITCODE_B _64_flag;
+  BITCODE_BS xrefindex_plus1;
+  BITCODE_B xrefdep;
+  BITCODE_B vertical;
+  BITCODE_B shape_file;
+  BITCODE_BD fixed_height;
+  BITCODE_BD width_factor;
+  BITCODE_BD oblique_ang;
+  BITCODE_RC generation;
+  BITCODE_BD last_height;
+  BITCODE_TV font_name;
+  BITCODE_TV bigfont_name;
+  Dwg_Object_Ref* shapefile_control;
+  Dwg_Object_Ref** reactors;
+  Dwg_Object_Ref* xdicobjhandle;
+  Dwg_Object_Ref* null_handle;
+} Dwg_Object_SHAPEFILE;
 
 // 54 and 55 are UNKNOWN OBJECTS
 
@@ -2195,8 +2214,8 @@ typedef struct _dwg_object_object
     Dwg_Object_BLOCK_HEADER *BLOCK_HEADER;
     Dwg_Object_LAYER_CONTROL *LAYER_CONTROL;
     Dwg_Object_LAYER *LAYER;
-    Dwg_Object_STYLE_CONTROL *STYLE_CONTROL;
-    Dwg_Object_STYLE *STYLE;
+    Dwg_Object_SHAPEFILE_CONTROL *SHAPEFILE_CONTROL;
+    Dwg_Object_SHAPEFILE *SHAPEFILE;
     Dwg_Object_LTYPE_CONTROL *LTYPE_CONTROL;
     Dwg_Object_LTYPE *LTYPE;
     Dwg_Object_VIEW_CONTROL *VIEW_CONTROL;

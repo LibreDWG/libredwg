@@ -3398,6 +3398,42 @@ dwg_decode_LAYER(Bit_Chain * dat, Dwg_Object * obj)
   FIELD_HANDLE(linetype, 5);
 }
 
+
+static void
+dwg_decode_SHAPEFILE_CONTROL(Bit_Chain *dat, Dwg_Object *obj)
+{
+  DWG_OBJECT(SHAPEFILE_CONTROL);
+
+  FIELD(num_entries, BS);
+  FIELD_HANDLE(null_handle, 4);
+  XDICOBJHANDLE(3);
+  HANDLE_VECTOR(shapefiles, num_entries, 2);
+}
+
+static void
+dwg_decode_SHAPEFILE(Bit_Chain *dat, Dwg_Object *obj)
+{
+  DWG_OBJECT(SHAPEFILE);
+
+  FIELD(entry_name, TV);
+  FIELD(_64_flag, B);
+  FIELD(xrefindex_plus1, BS);
+  FIELD(xrefdep, B);
+  FIELD(vertical, B);
+  FIELD(shape_file, B);
+  FIELD(fixed_height, BD);
+  FIELD(width_factor, BD);
+  FIELD(oblique_ang, BD);
+  FIELD(generation, RC);
+  FIELD(last_height, BD);
+  FIELD(font_name, TV);
+  FIELD(bigfont_name, TV);
+  FIELD_HANDLE(shapefile_control, 4);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+  FIELD_HANDLE(null_handle, 5);
+}
+
 static void
 dwg_decode_IMAGE(Bit_Chain *dat, Dwg_Object *obj)
 {
@@ -4052,6 +4088,12 @@ dwg_decode_aldoni_object(Dwg_Structure * skt, Bit_Chain * dat,
     break;
   case DWG_TYPE_LAYER_CONTROL:
     dwg_decode_LAYER_CONTROL(dat, obj);
+    break;
+  case DWG_TYPE_SHAPEFILE_CONTROL:
+    dwg_decode_SHAPEFILE_CONTROL(dat, obj);
+    break;
+  case DWG_TYPE_SHAPEFILE:
+    dwg_decode_SHAPEFILE(dat, obj);
     break;
   case DWG_TYPE_LAYER:
     dwg_decode_LAYER(dat, obj);
