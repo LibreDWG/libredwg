@@ -68,6 +68,12 @@
 #define FIELD_2BD(name) FIELD(name.x, BD); FIELD(name.y, BD);
 #define FIELD_3BD(name) FIELD(name.x, BD); FIELD(name.y, BD); FIELD(name.z, BD);
 #define FIELD_3DPOINT(name) FIELD_3BD(name)
+#define FIELD_CMC(name)\
+  {\
+    bit_read_CMC(dat, &_obj->name);\
+    if (loglevel>=2)\
+      fprintf(stderr, #name ": index %d\n", _obj->name.index);\
+  }
 
 //FIELD_VECTOR(name, type, size):
 // reads data of the type indicated by 'type' 'size' times and stores
@@ -3344,14 +3350,41 @@ dwg_decode_LAYER(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_OBJECT(LAYER);
 
-  FIELD(name, TV);
-  FIELD(bit64, B);
-  FIELD(xrefi, BS);
+  FIELD(entry_name, TV);
+  FIELD(_64_flag, B);
+  FIELD(xrefindex_plus1, BS);
   FIELD(xrefdep, B);
-  FIELD(values, BS);
-  FIELD(colour, BS);
+  VERSIONS(R_13, R_14)
+    {
+      FIELD(frozen, B);
+      FIELD(on, B);
+      FIELD(frozen_in_new, B);
+      FIELD(locked, B);
+    }
 
-  //dwg_decode_handleref (dat, obj);
+  SINCE(R_2000)
+    {
+      FIELD(values, BS);      
+    }
+
+  FIELD_CMC(color);
+
+  FIELD_HANDLE(layer_control, 4);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+  FIELD_HANDLE(null_handle, 5);
+
+  SINCE(R_2000)
+    {
+      FIELD_HANDLE(plotstyle, 5);
+    }
+
+  SINCE(R_2007)
+    {
+      FIELD_HANDLE(material, ANYCODE);
+    }
+
+  FIELD_HANDLE(linetype, 5);
 }
 
 static void
@@ -3855,7 +3888,7 @@ dwg_decode_aldoni_object(Dwg_Structure * skt, Bit_Chain * dat,
     skt->object = (Dwg_Object *) realloc(skt->object, (skt->num_objects + 1)
         * sizeof(Dwg_Object));
 
-  fprintf(stderr, "\n\n======================\nObject number: %lu\n",
+  fprintf(stderr, "\n\n======================\nObject number: %lu",
       skt->num_objects);
 
   obj = &skt->object[skt->num_objects];
@@ -3871,6 +3904,7 @@ dwg_decode_aldoni_object(Dwg_Structure * skt, Bit_Chain * dat,
   object_address = dat->byte;
   ktl_lastaddress = dat->byte + obj->size; /* (de cxi tie oni kalkulas la bitsizen) */
   obj->type = bit_read_BS(dat);
+  fprintf(stderr, " Type: %d\n", obj->type);
 
   /* Kontroli la typen de object
    */

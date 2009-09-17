@@ -61,7 +61,9 @@ extern "C"
 #define BITCODE_2DPOINT BITCODE_2RD
 #define BITCODE_3BD struct { BITCODE_BD x; BITCODE_BD y; BITCODE_BD z; }
 #define BITCODE_3DPOINT BITCODE_3BD
-#define BITCODE_BE BITCODE_3BD
+#define BITCODE_BE BITCODE_3BD 
+#define BITCODE_CMC Dwg_Color
+
 /**
  Object supertypes that exist in dwg-files.
  */
@@ -1600,12 +1602,23 @@ typedef struct _dwg_object_LAYER_CONTROL
  */
 typedef struct _dwg_object_LAYER
 {
-  char *name;
-  unsigned char bit64;
-  unsigned int xrefi;
-  unsigned char xrefdep;
-  unsigned int values;
-  unsigned int colour;
+  BITCODE_TV entry_name;
+  BITCODE_B _64_flag;
+  BITCODE_BS xrefindex_plus1;
+  BITCODE_B xrefdep;
+  BITCODE_B frozen;
+  BITCODE_B on;
+  BITCODE_B frozen_in_new;
+  BITCODE_B locked;
+  BITCODE_BS values;
+  BITCODE_CMC color;
+  Dwg_Object_Ref* layer_control;
+  Dwg_Object_Ref** reactors;
+  Dwg_Object_Ref* xdicobjhandle;
+  Dwg_Object_Ref* null_handle;
+  Dwg_Object_Ref* plotstyle;
+  Dwg_Object_Ref* material;
+  Dwg_Object_Ref* linetype;
 } Dwg_Object_LAYER;
 
 /**
