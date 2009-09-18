@@ -2122,15 +2122,15 @@ static void
 dwg_encode_MTEXT(Dwg_Entity_MTEXT *ent, Bit_Chain * dat)
 {
   //spec-typo ? Spec says BD but we think it might be 3BD:
-  bit_write_BD(dat, ent->x0);
-  bit_write_BD(dat, ent->y0);
-  bit_write_BD(dat, ent->z0);
+  bit_write_BD(dat, ent->insertion_pt.x);
+  bit_write_BD(dat, ent->insertion_pt.y);
+  bit_write_BD(dat, ent->insertion_pt.z);
   bit_write_BD(dat, ent->extrusion.x);
   bit_write_BD(dat, ent->extrusion.y);
   bit_write_BD(dat, ent->extrusion.z);
-  bit_write_BD(dat, ent->x1);
-  bit_write_BD(dat, ent->y1);
-  bit_write_BD(dat, ent->z1);
+  bit_write_BD(dat, ent->x_axis_dir.x);
+  bit_write_BD(dat, ent->x_axis_dir.y);
+  bit_write_BD(dat, ent->x_axis_dir.z);
 
   if (dat->version >= R_2007)
     {
@@ -2141,7 +2141,7 @@ dwg_encode_MTEXT(Dwg_Entity_MTEXT *ent, Bit_Chain * dat)
   bit_write_BD(dat, ent->text_height);
   bit_write_BS(dat, ent->attachment);
   bit_write_BS(dat, ent->drawing_dir);
-  bit_write_BD(dat, ent->extends); //not documented
+  bit_write_BD(dat, ent->extends_ht); //not documented
   bit_write_BD(dat, ent->extends_wid);
   bit_write_TV(dat, ent->text);
 

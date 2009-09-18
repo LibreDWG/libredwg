@@ -3132,42 +3132,38 @@ dwg_decode_MTEXT(Bit_Chain * dat, Dwg_Object * obj)
   DWG_ENTITY(MTEXT);
 
   //spec-typo ? Spec says BD but we think it might be 3BD:
-  ent->x0 = bit_read_BD(dat);
-  ent->y0 = bit_read_BD(dat);
-  ent->z0 = bit_read_BD(dat);
-  ent->extrusion.x = bit_read_BD(dat);
-  ent->extrusion.y = bit_read_BD(dat);
-  ent->extrusion.z = bit_read_BD(dat);
-  ent->x1 = bit_read_BD(dat);
-  ent->y1 = bit_read_BD(dat);
-  ent->z1 = bit_read_BD(dat);
+  FIELD_3BD(insertion_pt);
+  FIELD_3BD(extrusion);
+  FIELD_3BD(x_axis_dir);
 
   SINCE(R_2007)
     {
-      ent->rect_height = bit_read_BD(dat);
+      FIELD(rect_height, BD);
     }
 
-  ent->rect_width = bit_read_BD(dat);
-  ent->text_height = bit_read_BD(dat);
-  ent->attachment = bit_read_BS(dat);
-  ent->drawing_dir = bit_read_BS(dat);
-  ent->extends = bit_read_BD(dat); //not documented
-  ent->extends_wid = bit_read_BD(dat);
-  ent->text = bit_read_TV(dat);
+  FIELD(rect_width, BD);
+  FIELD(text_height, BD);
+  FIELD(attachment, BS);
+  FIELD(drawing_dir, BS);
+  FIELD(extends_ht, BD); //not documented
+  FIELD(extends_wid, BD);
+  FIELD(text, TV);
 
   SINCE(R_2000)
     {
-      ent->linespace_style = bit_read_BS(dat);
-      ent->linespace_factor = bit_read_BD(dat);
-      ent->unknown_bit = bit_read_B(dat);
+      FIELD(linespace_style, BS);
+      FIELD(linespace_factor, BD);
+      FIELD(unknown_bit, B);
     }
 
   SINCE(R_2004)
     {
-      ent->unknown_long = bit_read_BL(dat);
+      FIELD(unknown_long, BL);
     }
 
   dwg_decode_common_entity_handle_data(dat, obj);
+
+  FIELD_HANDLE(style, 5);
 }
 
 
