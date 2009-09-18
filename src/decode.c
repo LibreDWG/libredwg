@@ -4178,9 +4178,10 @@ dwg_decode_IMAGEDEFREACTOR(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_OBJECT(IMAGEDEFREACTOR);
 
-  //TODO: Implement-me!
-
-  //dwg_decode_handleref (dat, object);
+  FIELD_BL (class_version);
+  FIELD_HANDLE (parent_handle, 4);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
 }
 
 static void

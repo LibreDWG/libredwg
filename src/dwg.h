@@ -1934,7 +1934,10 @@ typedef struct _dwg_object_IMAGEDEF
  */
 typedef struct _dwg_object_IMAGEDEFREACTOR
 {
-//TODO 
+  BITCODE_BL class_version;
+  BITCODE_H parent_handle;
+  BITCODE_H* reactors;
+  BITCODE_H xdicobjhandle;
 } Dwg_Object_IMAGEDEFREACTOR;
 
 /**
