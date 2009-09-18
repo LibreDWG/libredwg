@@ -75,6 +75,7 @@
 #define FIELD_MC(name) FIELD(name, MC);
 #define FIELD_MS(name) FIELD(name, MS);
 #define FIELD_TV(name) FIELD(name, TV);
+#define FIELD_T FIELD_TV /*TODO: implement version dependant string fields */
 #define FIELD_BT(name) FIELD(name, BT);
 
 #define FIELD_BE(name) bit_read_BE(dat, &_obj->name.x, &_obj->name.y, &_obj->name.z);
