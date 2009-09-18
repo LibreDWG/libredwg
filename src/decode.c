@@ -4158,9 +4158,18 @@ dwg_decode_LAYER_INDEX(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_OBJECT(LAYER_INDEX);
 
-  //TODO: Implement-me!
-
-  //dwg_decode_handleref (dat, object);
+  FIELD_BL (timestamp1);
+  FIELD_BL (timestamp2);
+  FIELD_BL (num_entries);
+  REPEAT (num_entries, entries, Dwg_LAYER_entry)
+    {
+      FIELD_BL (entries[vector_counter].index_long);
+      FIELD_TV (entries[vector_counter].index_str);
+    }
+  FIELD_HANDLE (parent_handle, 4);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+  HANDLE_VECTOR(entry_handles, num_entries, ANYCODE);
 }
 
 static void

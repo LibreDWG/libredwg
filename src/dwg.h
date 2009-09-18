@@ -1943,9 +1943,22 @@ typedef struct _dwg_object_IMAGEDEFREACTOR
 /**
  Struct for LAYER_INDEX (varies)
  */
+typedef struct _dwg_layer_entry
+{
+  BITCODE_BL index_long;
+  BITCODE_TV index_str;
+} Dwg_LAYER_entry;
+
 typedef struct _dwg_object_LAYER_INDEX
 {
-//TODO 
+  BITCODE_BL timestamp1;
+  BITCODE_BL timestamp2;
+  BITCODE_BL num_entries;
+  Dwg_LAYER_entry* entries;
+  BITCODE_H parent_handle;
+  BITCODE_H* reactors;
+  BITCODE_H xdicobjhandle;
+  BITCODE_H* entry_handles;
 } Dwg_Object_LAYER_INDEX;
 
 /**
