@@ -59,12 +59,19 @@ extern "C"
 #define FORMAT_BD "%f"
 #define BITCODE_BE BITCODE_3BD 
 #define BITCODE_CMC Dwg_Color
+#define BITCODE_H Dwg_Object_Ref*
 
 typedef struct _dwg_bitecode_2rd
 {
   BITCODE_RD x;
   BITCODE_RD y;
 } Dwg_Bitcode_2RD;
+
+typedef struct _dwg_bitecode_2bd
+{
+  BITCODE_BD x;
+  BITCODE_BD y;
+} Dwg_Bitcode_2BD;
 
 typedef struct _dwg_bitecode_3bd
 {
@@ -74,6 +81,7 @@ typedef struct _dwg_bitecode_3bd
 } Dwg_Bitcode_3BD;
 
 #define BITCODE_2RD Dwg_Bitcode_2RD
+#define BITCODE_2BD Dwg_Bitcode_2BD
 #define BITCODE_2DPOINT BITCODE_2RD
 #define BITCODE_3BD Dwg_Bitcode_3BD
 #define BITCODE_3DPOINT BITCODE_3BD
@@ -458,67 +466,43 @@ typedef struct _dwg_entity_LINE
 } Dwg_Entity_LINE;
 
 /**
+ * Macro for common DIMENSION declaration
+ */
+#define DIMENSION_COMMON \
+    BITCODE_3BD extrusion; \
+    BITCODE_2RD text_midpt; \
+    struct \
+      { \
+        BITCODE_BD ecs_11; \
+        BITCODE_BD ecs_12; \
+      } elevation; \
+    BITCODE_RC flags_1; \
+    BITCODE_TV user_text; \
+    BITCODE_BD text_rot; \
+    BITCODE_BD horiz_dir; \
+    BITCODE_3BD ins_scale; \
+    BITCODE_BD ins_rotation; \
+    BITCODE_BS attachment_point; \
+    BITCODE_BS lspace_style; \
+    BITCODE_BD lspace_factor; \
+    BITCODE_BD act_measurement; \
+    BITCODE_B unknown; \
+    BITCODE_B flip_arrow1; \
+    BITCODE_B flip_arrow2;
+
+/**
  Struct for ordinate dimension - DIMENSION_ORDINATE (20)
  */
 typedef struct _dwg_entity_DIMENSION_ORDINATE
 {
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } extrusion;
-  double x0;
-  double y0;
-  struct
-  {
-    double ecs_11;
-    double ecs_12;
-  } elevation;
-  unsigned char flags_1;
-  unsigned char* user_text;
-  double text_rot;
-  double horiz_dir;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } ins_scale;
-  double ins_rotation;
-  unsigned int attachment_point;
-  unsigned int lspace_style;
-  double lspace_factor;
-  double act_measurement;
-  unsigned char unknown;
-  unsigned char flip_arrow1;
-  unsigned char flip_arrow2;
-  struct
-  {
-    double x;
-    double y;
-  } _12_pt;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } _10_pt;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } _13_pt;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } _14_pt;
-  unsigned char flags_2;
-  Dwg_Object_Ref* dimstyle;
-  Dwg_Object_Ref* block;
+  DIMENSION_COMMON;
+  BITCODE_2RD _12_pt;
+  BITCODE_3BD _10_pt;
+  BITCODE_3BD _13_pt;
+  BITCODE_3BD _14_pt;
+  BITCODE_RC flags_2;
+  BITCODE_H dimstyle;
+  BITCODE_H block;
 } Dwg_Entity_DIMENSION_ORDINATE;
 
 /**
@@ -526,64 +510,15 @@ typedef struct _dwg_entity_DIMENSION_ORDINATE
  */
 typedef struct _dwg_entity_DIMENSION_LINEAR
 {
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } extrusion;
-  double x0;
-  double y0;
-  struct
-  {
-    double ecs_11;
-    double ecs_12;
-  } elevation;
-  unsigned char flags;
-  unsigned char* user_text;
-  double text_rot;
-  double horiz_dir;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } ins_scale;
-  double ins_rotation;
-  unsigned int attachment_point;
-  unsigned int lspace_style;
-  double lspace_factor;
-  double act_measurement;
-  unsigned char unknown;
-  unsigned char flip_arrow1;
-  unsigned char flip_arrow2;
-  struct
-  {
-    double x;
-    double y;
-  } _12_pt;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } _13_pt;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } _14_pt;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } _10_pt;
-  double ext_line_rot;
-  double dim_rot;
-  Dwg_Object_Ref* dimstyle;
-  Dwg_Object_Ref* block;
+  DIMENSION_COMMON;
+  BITCODE_2RD _12_pt;
+  BITCODE_3BD _13_pt;
+  BITCODE_3BD _14_pt;
+  BITCODE_3BD _10_pt;
+  BITCODE_BD ext_line_rot;
+  BITCODE_BD dim_rot;
+  BITCODE_H dimstyle;
+  BITCODE_H block;
 } Dwg_Entity_DIMENSION_LINEAR;
 
 /**
@@ -591,63 +526,14 @@ typedef struct _dwg_entity_DIMENSION_LINEAR
  */
 typedef struct _dwg_entity_DIMENSION_ALIGNED
 {
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } extrusion;
-  double x0;
-  double y0;
-  struct
-  {
-    double ecs_11;
-    double ecs_12;
-  } elevation;
-  unsigned char flags;
-  unsigned char* user_text;
-  double text_rot;
-  double horiz_dir;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } ins_scale;
-  double ins_rotation;
-  unsigned int attachment_point;
-  unsigned int lspace_style;
-  double lspace_factor;
-  double act_measurement;
-  unsigned char unknown;
-  unsigned char flip_arrow1;
-  unsigned char flip_arrow2;
-  struct
-  {
-    double x;
-    double y;
-  } _12_pt;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } _13_pt;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } _14_pt;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } _10_pt;
-  double ext_line_rot;
-  Dwg_Object_Ref* dimstyle;
-  Dwg_Object_Ref* block;
+  DIMENSION_COMMON;
+  BITCODE_2RD _12_pt;
+  BITCODE_3BD _13_pt;
+  BITCODE_3BD _14_pt;
+  BITCODE_3BD _10_pt;
+  BITCODE_BD ext_line_rot;
+  BITCODE_H dimstyle;
+  BITCODE_H block;
 } Dwg_Entity_DIMENSION_ALIGNED;
 
 /**
@@ -655,68 +541,14 @@ typedef struct _dwg_entity_DIMENSION_ALIGNED
  */
 typedef struct _dwg_entity_DIMENSION_ANG3PT
 {
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } extrusion;
-  double x0;
-  double y0;
-  struct
-  {
-    double ecs_11;
-    double ecs_12;
-  } elevation;
-  unsigned char flags;
-  unsigned char* user_text;
-  double text_rot;
-  double horiz_dir;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } ins_scale;
-  double ins_rotation;
-  unsigned int attachment_point;
-  unsigned int lspace_style;
-  double lspace_factor;
-  double act_measurement;
-  unsigned char unknown;
-  unsigned char flip_arrow1;
-  unsigned char flip_arrow2;
-  struct
-  {
-    double x;
-    double y;
-  } _12_pt;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } _10_pt;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } _13_pt;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } _14_pt;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } _15_pt;
-  Dwg_Object_Ref* dimstyle;
-  Dwg_Object_Ref* block;
+  DIMENSION_COMMON;
+  BITCODE_2RD _12_pt;
+  BITCODE_3BD _10_pt;
+  BITCODE_3BD _13_pt;
+  BITCODE_3BD _14_pt;
+  BITCODE_3BD _15_pt;
+  BITCODE_H dimstyle;
+  BITCODE_H block;
 } Dwg_Entity_DIMENSION_ANG3PT;
 
 /**
@@ -724,74 +556,15 @@ typedef struct _dwg_entity_DIMENSION_ANG3PT
  */
 typedef struct _dwg_entity_DIMENSION_ANG2LN
 {
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } extrusion;
-  double x0;
-  double y0;
-  struct
-  {
-    double ecs_11;
-    double ecs_12;
-    double ecs_16;
-  } elevation;
-  unsigned char flags;
-  unsigned char* user_text;
-  double text_rot;
-  double horiz_dir;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } ins_scale;
-  double ins_rotation;
-  unsigned int attachment_point;
-  unsigned int lspace_style;
-  double lspace_factor;
-  double act_measurement;
-  unsigned char unknown;
-  unsigned char flip_arrow1;
-  unsigned char flip_arrow2;
-  struct
-  {
-    double x;
-    double y;
-  } _12_pt;
-  struct
-  {
-    double x;
-    double y;
-  } _16_pt;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } _13_pt;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } _14_pt;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } _15_pt;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } _10_pt;
-  Dwg_Object_Ref* dimstyle;
-  Dwg_Object_Ref* block;
+  DIMENSION_COMMON;
+  BITCODE_2RD _12_pt;
+  BITCODE_2RD _16_pt;
+  BITCODE_3BD _13_pt;
+  BITCODE_3BD _14_pt;
+  BITCODE_3BD _15_pt;
+  BITCODE_3BD _10_pt;
+  BITCODE_H dimstyle;
+  BITCODE_H block;
 } Dwg_Entity_DIMENSION_ANG2LN;
 
 /**
@@ -799,57 +572,13 @@ typedef struct _dwg_entity_DIMENSION_ANG2LN
  */
 typedef struct _dwg_entity_DIMENSION_RADIUS
 {
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } extrusion;
-  double x0;
-  double y0;
-  struct
-  {
-    double ecs_11;
-    double ecs_12;
-  } elevation;
-  unsigned char flags;
-  unsigned char* user_text;
-  double text_rot;
-  double horiz_dir;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } ins_scale;
-  double ins_rotation;
-  unsigned int attachment_point;
-  unsigned int lspace_style;
-  double lspace_factor;
-  double act_measurement;
-  unsigned char unknown;
-  unsigned char flip_arrow1;
-  unsigned char flip_arrow2;
-  struct
-  {
-    double x;
-    double y;
-  } _12_pt;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } _10_pt;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } _15_pt;
-  double leader_len;
-  Dwg_Object_Ref* dimstyle;
-  Dwg_Object_Ref* block;
+  DIMENSION_COMMON;
+  BITCODE_2RD _12_pt;
+  BITCODE_3BD _10_pt;
+  BITCODE_3BD _15_pt;
+  BITCODE_BD leader_len;
+  BITCODE_H dimstyle;
+  BITCODE_H block;
 } Dwg_Entity_DIMENSION_RADIUS;
 
 /**
@@ -857,57 +586,13 @@ typedef struct _dwg_entity_DIMENSION_RADIUS
  */
 typedef struct _dwg_entity_DIMENSION_DIAMETER
 {
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } extrusion;
-  double x0;
-  double y0;
-  struct
-  {
-    double ecs_11;
-    double ecs_12;
-  } elevation;
-  unsigned char flags;
-  unsigned char* user_text;
-  double text_rot;
-  double horiz_dir;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } ins_scale;
-  double ins_rotation;
-  unsigned int attachment_point;
-  unsigned int lspace_style;
-  double lspace_factor;
-  double act_measurement;
-  unsigned char unknown;
-  unsigned char flip_arrow1;
-  unsigned char flip_arrow2;
-  struct
-  {
-    double x;
-    double y;
-  } _12_pt;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } _10_pt;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } _15_pt;
-  double leader_len;
-  Dwg_Object_Ref* dimstyle;
-  Dwg_Object_Ref* block;
+  DIMENSION_COMMON;
+  BITCODE_2RD _12_pt;
+  BITCODE_3BD _15_pt;
+  BITCODE_3BD _10_pt;
+  BITCODE_BD leader_len;
+  BITCODE_H dimstyle;
+  BITCODE_H block;
 } Dwg_Entity_DIMENSION_DIAMETER;
 
 /**

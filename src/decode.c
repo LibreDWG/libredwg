@@ -62,8 +62,21 @@
         _obj->name->absolute_ref);\
     }
 
+#define FIELD_B(name) FIELD(name, B);
+#define FIELD_BB(name) FIELD(name, BB);
+#define FIELD_BS(name) FIELD(name, BS);
+#define FIELD_BL(name) FIELD(name, BL);
+#define FIELD_BD(name) FIELD(name, BD);
+#define FIELD_RC(name) FIELD(name, RC);
+#define FIELD_RS(name) FIELD(name, RS);
+#define FIELD_RD(name) FIELD(name, RD);
+#define FIELD_RL(name) FIELD(name, RL);
+#define FIELD_MC(name) FIELD(name, MC);
+#define FIELD_MS(name) FIELD(name, MS);
+#define FIELD_TV(name) FIELD(name, TV);
+
 #define FIELD_BE(name) bit_read_BE(dat, &_obj->name.x, &_obj->name.y, &_obj->name.z);
-#define FIELD_DD(name, default) GET_FIELD(name) = bit_read_DD(dat, default);
+#define FIELD_DD(name, _default) GET_FIELD(name) = bit_read_DD(dat, _default);
 #define FIELD_2DD(name, d1, d2) FIELD_DD(name.x, d1); FIELD_DD(name.y, d2);  
 #define FIELD_2RD(name) FIELD(name.x, RD); FIELD(name.y, RD);
 #define FIELD_2BD(name) FIELD(name.x, BD); FIELD(name.y, BD);
@@ -129,7 +142,10 @@
 
 #define REPEAT(times, name, type) \
   _obj->name = (type *) malloc(_obj->times * sizeof(type));\
-  for (vector_counter=0; vector_counter<_obj->times; vector_counter++)\
+  for (vector_counter=0; vector_counter<_obj->times; vector_counter++)
+
+#define COMMON_ENTITY_HANDLE_DATA \
+  dwg_decode_common_entity_handle_data(dat, obj)
 
 #define DWG_ENTITY(token) \
   int vector_counter;\
@@ -1338,6 +1354,7 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
       ent->num_handles = 0;
       return;
     }
+
   fprintf(stderr, "this entity handle is %d.%d.%lu\n",
       ent->object->handle.code, ent->object->handle.size,
       ent->object->handle.value);
@@ -1522,6 +1539,7 @@ dwg_resolve_handle(Dwg_Data* dwg, unsigned long int absref)
 static Dwg_Object_Ref *
 dwg_decode_handleref(Bit_Chain * dat, Dwg_Object * obj)
 {
+  // Welcome to the house of evil code!
   Dwg_Object_Ref* ref = (Dwg_Object_Ref *) malloc(sizeof(Dwg_Object_Ref));
   Dwg_Data* dwg = obj->parent;
 
@@ -1652,7 +1670,7 @@ dwg_decode_UNUSED(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(UNUSED);
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
 }
 
 static void
@@ -1731,7 +1749,7 @@ dwg_decode_TEXT(Bit_Chain * dat, Dwg_Object * obj)
         }
     }
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
 
   FIELD_HANDLE(style, 5);
 }
@@ -1809,7 +1827,7 @@ dwg_decode_ATTRIB(Bit_Chain * dat, Dwg_Object * obj)
       FIELD(lock_position_flag, B);
     }
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
 
   FIELD_HANDLE(style, 5);
 }
@@ -1889,7 +1907,7 @@ dwg_decode_ATTDEF(Bit_Chain * dat, Dwg_Object * obj)
 
   FIELD(prompt, TV);
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
 
   FIELD_HANDLE(style, 5);
 }
@@ -1901,7 +1919,7 @@ dwg_decode_BLOCK(Bit_Chain * dat, Dwg_Object * obj)
 
   FIELD(name, TV);
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
 }
 
 static void
@@ -1909,7 +1927,7 @@ dwg_decode_ENDBLK(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(ENDBLK);
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
 }
 
 static void
@@ -1917,7 +1935,7 @@ dwg_decode_SEQEND(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(SEQEND);
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
 }
 
 static void
@@ -1970,7 +1988,7 @@ dwg_decode_INSERT(Bit_Chain * dat, Dwg_Object * obj)
       FIELD(owned_obj_count, BL);
     }
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
 
   FIELD_HANDLE(block_header, 5);
 
@@ -2049,7 +2067,7 @@ dwg_decode_MINSERT(Bit_Chain * dat, Dwg_Object * obj)
   FIELD(col_spacing, BD);
   FIELD(row_spacing, BD);
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
 
   FIELD_HANDLE(block_header, 5);
 
@@ -2091,7 +2109,7 @@ dwg_decode_VERTEX_2D(Bit_Chain * dat, Dwg_Object * obj)
   FIELD(bulge, BD);
   FIELD(tangent_dir, BD);
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
 
 }
 
@@ -2103,7 +2121,7 @@ dwg_decode_VERTEX_3D(Bit_Chain * dat, Dwg_Object * obj)
   FIELD(flags, RC);
   FIELD_3BD(point);
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
 
 }
 
@@ -2115,7 +2133,7 @@ dwg_decode_VERTEX_MESH(Bit_Chain * dat, Dwg_Object * obj)
   FIELD(flags, RC);
   FIELD_3BD(point);
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
 }
 
 static void
@@ -2126,7 +2144,7 @@ dwg_decode_VERTEX_PFACE(Bit_Chain * dat, Dwg_Object * obj)
   FIELD(flags, RC);
   FIELD_3BD(point);
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
 }
 
 static void
@@ -2139,7 +2157,7 @@ dwg_decode_VERTEX_PFACE_FACE(Bit_Chain * dat, Dwg_Object * obj)
   FIELD(vertind[2], BS);
   FIELD(vertind[3], BS);
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
 }
 
 static void
@@ -2160,7 +2178,7 @@ dwg_decode_POLYLINE_2D(Bit_Chain * dat, Dwg_Object * obj)
       FIELD(owned_obj_count, BL);
     }
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
 
   VERSIONS(R_13,R_2000)
     {
@@ -2189,7 +2207,7 @@ dwg_decode_POLYLINE_3D(Bit_Chain * dat, Dwg_Object * obj)
       FIELD(owned_obj_count, BL);
     }
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
 
   VERSIONS(R_13,R_2000)
     {
@@ -2217,7 +2235,7 @@ dwg_decode_ARC(Bit_Chain * dat, Dwg_Object * obj)
   FIELD(start_angle, BD);
   FIELD(end_angle, BD);
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
 }
 
 static void
@@ -2230,7 +2248,7 @@ dwg_decode_CIRCLE(Bit_Chain * dat, Dwg_Object * obj)
   FIELD(thickness, BT);
   FIELD_BE(extrusion);
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
 }
 
 static void
@@ -2267,69 +2285,52 @@ dwg_decode_LINE(Bit_Chain * dat, Dwg_Object * obj)
   FIELD(thickness, BT);
   FIELD_BE(extrusion);
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
 }
+
+/**
+ * Macro for common DIMENSION declaration
+ */
+/*FIELD_BD(elevation.ecs_11); \ */
+#define DIMENSION_COMMON_DECODE \
+    FIELD_3BD(extrusion); \
+    FIELD_2RD(text_midpt); \
+    FIELD_BD(elevation.ecs_12); \
+    FIELD_RC(flags_1); \
+    FIELD_TV(user_text); \
+    FIELD_BD(text_rot); \
+    FIELD_BD(horiz_dir); \
+    FIELD_3BD(ins_scale); \
+    FIELD_BD(ins_rotation); \
+    SINCE(R_2000) \
+      { \
+        FIELD_BS(attachment_point); \
+        FIELD_BS(lspace_style); \
+        FIELD_BD(lspace_factor); \
+        FIELD_BD(act_measurement); \
+      } \
+    SINCE(R_2007) \
+      { \
+        FIELD_B(unknown); \
+        FIELD_B(flip_arrow1); \
+        FIELD_B(flip_arrow2); \
+      }
 
 static void
 dwg_decode_DIMENSION_ORDINATE(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(DIMENSION_ORDINATE);
 
-  //TODO: check extrusion reading
-  //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
-  ent->extrusion.x = bit_read_BD(dat);
-  ent->extrusion.y = bit_read_BD(dat);
-  ent->extrusion.z = bit_read_BD(dat);
-  ent->x0 = bit_read_RD(dat);
-  ent->y0 = bit_read_RD(dat);
+  DIMENSION_COMMON_DECODE;
+  FIELD_2RD(_12_pt);
+  FIELD_3BD(_10_pt);
+  FIELD_3BD(_13_pt);
+  FIELD_3BD(_14_pt);
+  FIELD_RC(flags_2);
 
-  //TODO:review the parsing of these elevation values in the spec:
-  ent->elevation.ecs_11 = ent->elevation.ecs_12 = bit_read_BD(dat);
-
-  //spec: flag bit 6 indicates ORDINATE dimension
-  ent->flags_1 = bit_read_RC(dat);
-  ent->user_text = bit_read_TV(dat);
-  ent->text_rot = bit_read_BD(dat);
-  ent->horiz_dir = bit_read_BD(dat);
-  ent->ins_scale.x = bit_read_BD(dat);
-  ent->ins_scale.y = bit_read_BD(dat);
-  ent->ins_scale.z = bit_read_BD(dat);
-  ent->ins_rotation = bit_read_BD(dat);
-
-  SINCE(R_2000)
-    {
-      ent->attachment_point = bit_read_BS(dat);
-      ent->lspace_style = bit_read_BS(dat);
-      ent->lspace_factor = bit_read_BD(dat);
-      ent->act_measurement = bit_read_BD(dat);
-    }
-
-  SINCE(R_2007)
-    {
-      ent->unknown = bit_read_B(dat);
-      ent->flip_arrow1 = bit_read_B(dat);
-      ent->flip_arrow2 = bit_read_B(dat);
-    }
-
-  ent->_12_pt.x = bit_read_RD(dat);
-  ent->_12_pt.y = bit_read_RD(dat);
-  ent->_10_pt.x = bit_read_BD(dat);
-  ent->_10_pt.y = bit_read_BD(dat);
-  ent->_10_pt.z = bit_read_BD(dat);
-  ent->_13_pt.x = bit_read_BD(dat);
-  ent->_13_pt.y = bit_read_BD(dat);
-  ent->_13_pt.z = bit_read_BD(dat);
-  ent->_14_pt.x = bit_read_BD(dat);
-  ent->_14_pt.y = bit_read_BD(dat);
-  ent->_14_pt.z = bit_read_BD(dat);
-
-  ent->flags_2 = bit_read_RC(dat);
-
-  dwg_decode_common_entity_handle_data(dat, obj);
-
-  ent->dimstyle = HANDLE_CODE(5);
-  ent->block = HANDLE_CODE(5);
-
+  COMMON_ENTITY_HANDLE_DATA;
+  FIELD_HANDLE(dimstyle, 5);
+  FIELD_HANDLE(block, 5);
 }
 
 static void
@@ -2337,58 +2338,17 @@ dwg_decode_DIMENSION_LINEAR(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(DIMENSION_LINEAR);
 
-  //TODO: check extrusion reading
-  //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
-  ent->extrusion.x = bit_read_BD(dat);
-  ent->extrusion.y = bit_read_BD(dat);
-  ent->extrusion.z = bit_read_BD(dat);
-  ent->x0 = bit_read_RD(dat);
-  ent->y0 = bit_read_RD(dat);
-  ent->elevation.ecs_11 = bit_read_BD(dat);
-  ent->elevation.ecs_12 = bit_read_BD(dat);
-  //spec: flag bit 0 indicates LINEAR dimension
-  ent->flags = bit_read_RC(dat);
-  ent->user_text = bit_read_TV(dat);
-  ent->text_rot = bit_read_BD(dat);
-  ent->horiz_dir = bit_read_BD(dat);
-  ent->ins_scale.x = bit_read_BD(dat);
-  ent->ins_scale.y = bit_read_BD(dat);
-  ent->ins_scale.z = bit_read_BD(dat);
-  ent->ins_rotation = bit_read_BD(dat);
+  DIMENSION_COMMON_DECODE;
+  FIELD_2RD(_12_pt);
+  FIELD_3BD(_13_pt);
+  FIELD_3BD(_14_pt);
+  FIELD_3BD(_10_pt);
+  FIELD_BD(ext_line_rot);
+  FIELD_BD(dim_rot);
 
-  SINCE(R_2000)
-    {
-      ent->attachment_point = bit_read_BS(dat);
-      ent->lspace_style = bit_read_BS(dat);
-      ent->lspace_factor = bit_read_BD(dat);
-      ent->act_measurement = bit_read_BD(dat);
-    }
-  SINCE(R_2007)
-    {
-      ent->unknown = bit_read_B(dat);
-      ent->flip_arrow1 = bit_read_B(dat);
-      ent->flip_arrow2 = bit_read_B(dat);
-    }
-
-  ent->_12_pt.x = bit_read_RD(dat);
-  ent->_12_pt.y = bit_read_RD(dat);
-  ent->_13_pt.x = bit_read_BD(dat);
-  ent->_13_pt.y = bit_read_BD(dat);
-  ent->_13_pt.z = bit_read_BD(dat);
-  ent->_14_pt.x = bit_read_BD(dat);
-  ent->_14_pt.y = bit_read_BD(dat);
-  ent->_14_pt.z = bit_read_BD(dat);
-  ent->_10_pt.x = bit_read_BD(dat);
-  ent->_10_pt.y = bit_read_BD(dat);
-  ent->_10_pt.z = bit_read_BD(dat);
-
-  ent->ext_line_rot = bit_read_BD(dat);
-  ent->dim_rot = bit_read_BD(dat);
-
-  dwg_decode_common_entity_handle_data(dat, obj);
-
-  ent->dimstyle = HANDLE_CODE(5);
-  ent->block = HANDLE_CODE(5);
+  COMMON_ENTITY_HANDLE_DATA;
+  FIELD_HANDLE(dimstyle, 5);
+  FIELD_HANDLE(block, 5);
 }
 
 static void
@@ -2396,57 +2356,16 @@ dwg_decode_DIMENSION_ALIGNED(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(DIMENSION_ALIGNED);
 
-  //TODO: check extrusion reading
-  //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
-  ent->extrusion.x = bit_read_BD(dat);
-  ent->extrusion.y = bit_read_BD(dat);
-  ent->extrusion.z = bit_read_BD(dat);
-  ent->x0 = bit_read_RD(dat);
-  ent->y0 = bit_read_RD(dat);
-  ent->elevation.ecs_11 = bit_read_BD(dat);
-  ent->elevation.ecs_12 = bit_read_BD(dat);
-  //spec: flag bit 1 indicates ALIGNED dimension
-  ent->flags = bit_read_RC(dat);
-  ent->user_text = bit_read_TV(dat);
-  ent->text_rot = bit_read_BD(dat);
-  ent->horiz_dir = bit_read_BD(dat);
-  ent->ins_scale.x = bit_read_BD(dat);
-  ent->ins_scale.y = bit_read_BD(dat);
-  ent->ins_scale.z = bit_read_BD(dat);
-  ent->ins_rotation = bit_read_BD(dat);
+  DIMENSION_COMMON_DECODE;
+  FIELD_2RD(_12_pt);
+  FIELD_3BD(_13_pt);
+  FIELD_3BD(_14_pt);
+  FIELD_3BD(_10_pt);
+  FIELD_BD(ext_line_rot);
 
-  SINCE(R_2000)
-    {
-      ent->attachment_point = bit_read_BS(dat);
-      ent->lspace_style = bit_read_BS(dat);
-      ent->lspace_factor = bit_read_BD(dat);
-      ent->act_measurement = bit_read_BD(dat);
-    }
-  SINCE(R_2007)
-    {
-      ent->unknown = bit_read_B(dat);
-      ent->flip_arrow1 = bit_read_B(dat);
-      ent->flip_arrow2 = bit_read_B(dat);
-    }
-
-  ent->_12_pt.x = bit_read_RD(dat);
-  ent->_12_pt.y = bit_read_RD(dat);
-  ent->_13_pt.x = bit_read_BD(dat);
-  ent->_13_pt.y = bit_read_BD(dat);
-  ent->_13_pt.z = bit_read_BD(dat);
-  ent->_14_pt.x = bit_read_BD(dat);
-  ent->_14_pt.y = bit_read_BD(dat);
-  ent->_14_pt.z = bit_read_BD(dat);
-  ent->_10_pt.x = bit_read_BD(dat);
-  ent->_10_pt.y = bit_read_BD(dat);
-  ent->_10_pt.z = bit_read_BD(dat);
-
-  ent->ext_line_rot = bit_read_BD(dat);
-
-  dwg_decode_common_entity_handle_data(dat, obj);
-
-  ent->dimstyle = HANDLE_CODE(5);
-  ent->block = HANDLE_CODE(5);
+  COMMON_ENTITY_HANDLE_DATA;
+  FIELD_HANDLE(dimstyle, 5);
+  FIELD_HANDLE(block, 5);
 }
 
 static void
@@ -2454,58 +2373,16 @@ dwg_decode_DIMENSION_ANG3PT(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(DIMENSION_ANG3PT);
 
-  //TODO: check extrusion reading
-  //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
-  ent->extrusion.x = bit_read_BD(dat);
-  ent->extrusion.y = bit_read_BD(dat);
-  ent->extrusion.z = bit_read_BD(dat);
-  ent->x0 = bit_read_RD(dat);
-  ent->y0 = bit_read_RD(dat);
-  ent->elevation.ecs_11 = bit_read_BD(dat);
-  ent->elevation.ecs_12 = bit_read_BD(dat);
-  //spec: flag bit 5 indicates ANGULAR 3PT dimension
-  ent->flags = bit_read_RC(dat);
-  ent->user_text = bit_read_TV(dat);
-  ent->text_rot = bit_read_BD(dat);
-  ent->horiz_dir = bit_read_BD(dat);
-  ent->ins_scale.x = bit_read_BD(dat);
-  ent->ins_scale.y = bit_read_BD(dat);
-  ent->ins_scale.z = bit_read_BD(dat);
-  ent->ins_rotation = bit_read_BD(dat);
+  DIMENSION_COMMON_DECODE;
+  FIELD_2RD(_12_pt);
+  FIELD_3BD(_10_pt);
+  FIELD_3BD(_13_pt);
+  FIELD_3BD(_14_pt);
+  FIELD_3BD(_15_pt);
 
-  SINCE(R_2000)
-    {
-      ent->attachment_point = bit_read_BS(dat);
-      ent->lspace_style = bit_read_BS(dat);
-      ent->lspace_factor = bit_read_BD(dat);
-      ent->act_measurement = bit_read_BD(dat);
-    }
-  SINCE(R_2007)
-    {
-      ent->unknown = bit_read_B(dat);
-      ent->flip_arrow1 = bit_read_B(dat);
-      ent->flip_arrow2 = bit_read_B(dat);
-    }
-
-  ent->_12_pt.x = bit_read_RD(dat);
-  ent->_12_pt.y = bit_read_RD(dat);
-  ent->_10_pt.x = bit_read_BD(dat);
-  ent->_10_pt.y = bit_read_BD(dat);
-  ent->_10_pt.z = bit_read_BD(dat);
-  ent->_13_pt.x = bit_read_BD(dat);
-  ent->_13_pt.y = bit_read_BD(dat);
-  ent->_13_pt.z = bit_read_BD(dat);
-  ent->_14_pt.x = bit_read_BD(dat);
-  ent->_14_pt.y = bit_read_BD(dat);
-  ent->_14_pt.z = bit_read_BD(dat);
-  ent->_15_pt.x = bit_read_BD(dat);
-  ent->_15_pt.y = bit_read_BD(dat);
-  ent->_15_pt.z = bit_read_BD(dat);
-
-  dwg_decode_common_entity_handle_data(dat, obj);
-
-  ent->dimstyle = HANDLE_CODE(5);
-  ent->block = HANDLE_CODE(5);
+  COMMON_ENTITY_HANDLE_DATA;
+  FIELD_HANDLE(dimstyle, 5);
+  FIELD_HANDLE(block, 5);
 }
 
 static void
@@ -2513,60 +2390,17 @@ dwg_decode_DIMENSION_ANG2LN(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(DIMENSION_ANG2LN);
 
-  //TODO: check extrusion reading
-  //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
-  ent->extrusion.x = bit_read_BD(dat);
-  ent->extrusion.y = bit_read_BD(dat);
-  ent->extrusion.z = bit_read_BD(dat);
-  ent->x0 = bit_read_RD(dat);
-  ent->y0 = bit_read_RD(dat);
-  ent->elevation.ecs_11 = bit_read_BD(dat);
-  ent->elevation.ecs_12 = bit_read_BD(dat);
-  //spec: flag bit 2 indicates ANGULAR 2 line dimension
-  ent->flags = bit_read_RC(dat);
-  ent->user_text = bit_read_TV(dat);
-  ent->text_rot = bit_read_BD(dat);
-  ent->horiz_dir = bit_read_BD(dat);
-  ent->ins_scale.x = bit_read_BD(dat);
-  ent->ins_scale.y = bit_read_BD(dat);
-  ent->ins_scale.z = bit_read_BD(dat);
-  ent->ins_rotation = bit_read_BD(dat);
+  DIMENSION_COMMON_DECODE;
+  FIELD_2RD(_12_pt);
+  FIELD_2RD(_16_pt);
+  FIELD_3BD(_13_pt);
+  FIELD_3BD(_14_pt);
+  FIELD_3BD(_15_pt);
+  FIELD_3BD(_10_pt);
 
-  SINCE(R_2000)
-    {
-      ent->attachment_point = bit_read_BS(dat);
-      ent->lspace_style = bit_read_BS(dat);
-      ent->lspace_factor = bit_read_BD(dat);
-      ent->act_measurement = bit_read_BD(dat);
-    }
-  SINCE(R_2007)
-    {
-      ent->unknown = bit_read_B(dat);
-      ent->flip_arrow1 = bit_read_B(dat);
-      ent->flip_arrow2 = bit_read_B(dat);
-    }
-
-  ent->_12_pt.x = bit_read_RD(dat);
-  ent->_12_pt.y = bit_read_RD(dat);
-  ent->_16_pt.x = bit_read_RD(dat);
-  ent->_16_pt.y = bit_read_RD(dat);
-  ent->_13_pt.x = bit_read_BD(dat);
-  ent->_13_pt.y = bit_read_BD(dat);
-  ent->_13_pt.z = bit_read_BD(dat);
-  ent->_14_pt.x = bit_read_BD(dat);
-  ent->_14_pt.y = bit_read_BD(dat);
-  ent->_14_pt.z = bit_read_BD(dat);
-  ent->_15_pt.x = bit_read_BD(dat);
-  ent->_15_pt.y = bit_read_BD(dat);
-  ent->_15_pt.z = bit_read_BD(dat);
-  ent->_10_pt.x = bit_read_BD(dat);
-  ent->_10_pt.y = bit_read_BD(dat);
-  ent->_10_pt.z = bit_read_BD(dat);
-
-  dwg_decode_common_entity_handle_data(dat, obj);
-
-  ent->dimstyle = HANDLE_CODE(5);
-  ent->block = HANDLE_CODE(5);
+  COMMON_ENTITY_HANDLE_DATA;
+  FIELD_HANDLE(dimstyle, 5);
+  FIELD_HANDLE(block, 5);
 }
 
 static void
@@ -2574,107 +2408,30 @@ dwg_decode_DIMENSION_RADIUS(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(DIMENSION_RADIUS);
 
-  //TODO: check extrusion reading
-  //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
-  ent->extrusion.x = bit_read_BD(dat);
-  ent->extrusion.y = bit_read_BD(dat);
-  ent->extrusion.z = bit_read_BD(dat);
-  ent->x0 = bit_read_RD(dat);
-  ent->y0 = bit_read_RD(dat);
-  ent->elevation.ecs_11 = bit_read_BD(dat);
-  ent->elevation.ecs_12 = bit_read_BD(dat);
-  //spec: flag bit 4 indicates RADIUS dimension
-  ent->flags = bit_read_RC(dat);
-  ent->user_text = bit_read_TV(dat);
-  ent->text_rot = bit_read_BD(dat);
-  ent->horiz_dir = bit_read_BD(dat);
-  ent->ins_scale.x = bit_read_BD(dat);
-  ent->ins_scale.y = bit_read_BD(dat);
-  ent->ins_scale.z = bit_read_BD(dat);
-  ent->ins_rotation = bit_read_BD(dat);
+  DIMENSION_COMMON_DECODE;
+  FIELD_2RD(_12_pt);
+  FIELD_3BD(_10_pt);
+  FIELD_3BD(_15_pt);
+  FIELD_BD(leader_len);
 
-  SINCE(R_2000)
-    {
-      ent->attachment_point = bit_read_BS(dat);
-      ent->lspace_style = bit_read_BS(dat);
-      ent->lspace_factor = bit_read_BD(dat);
-      ent->act_measurement = bit_read_BD(dat);
-    }
-  SINCE(R_2007)
-    {
-      ent->unknown = bit_read_B(dat);
-      ent->flip_arrow1 = bit_read_B(dat);
-      ent->flip_arrow2 = bit_read_B(dat);
-    }
-
-  ent->_12_pt.x = bit_read_RD(dat);
-  ent->_12_pt.y = bit_read_RD(dat);
-  ent->_10_pt.x = bit_read_BD(dat);
-  ent->_10_pt.y = bit_read_BD(dat);
-  ent->_10_pt.z = bit_read_BD(dat);
-  ent->_15_pt.x = bit_read_BD(dat);
-  ent->_15_pt.y = bit_read_BD(dat);
-  ent->_15_pt.z = bit_read_BD(dat);
-  ent->leader_len = bit_read_BD(dat);
-
-  dwg_decode_common_entity_handle_data(dat, obj);
-
-  ent->dimstyle = HANDLE_CODE(5);
-  ent->block = HANDLE_CODE(5);
+  COMMON_ENTITY_HANDLE_DATA;
+  FIELD_HANDLE(dimstyle, 5);
+  FIELD_HANDLE(block, 5);
 }
 static void
 dwg_decode_DIMENSION_DIAMETER(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(DIMENSION_DIAMETER);
 
-  //TODO: check extrusion reading
-  //bit_read_BE (dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
-  ent->extrusion.x = bit_read_BD(dat);
-  ent->extrusion.y = bit_read_BD(dat);
-  ent->extrusion.z = bit_read_BD(dat);
-  ent->x0 = bit_read_RD(dat);
-  ent->y0 = bit_read_RD(dat);
-  ent->elevation.ecs_11 = bit_read_BD(dat);
-  ent->elevation.ecs_12 = bit_read_BD(dat);
-  //spec: flag bit 3 indicates DIAMETER dimension
-  //(spec says actually RADIUS but seems to be wrong)
-  ent->flags = bit_read_RC(dat);
-  ent->user_text = bit_read_TV(dat);
-  ent->text_rot = bit_read_BD(dat);
-  ent->horiz_dir = bit_read_BD(dat);
-  ent->ins_scale.x = bit_read_BD(dat);
-  ent->ins_scale.y = bit_read_BD(dat);
-  ent->ins_scale.z = bit_read_BD(dat);
-  ent->ins_rotation = bit_read_BD(dat);
+  DIMENSION_COMMON_DECODE;
+  FIELD_2RD(_12_pt);
+  FIELD_3BD(_15_pt);
+  FIELD_3BD(_10_pt);
+  FIELD_BD(leader_len);
 
-  SINCE(R_2000)
-    {
-      ent->attachment_point = bit_read_BS(dat);
-      ent->lspace_style = bit_read_BS(dat);
-      ent->lspace_factor = bit_read_BD(dat);
-      ent->act_measurement = bit_read_BD(dat);
-    }
-  SINCE(R_2007)
-    {
-      ent->unknown = bit_read_B(dat);
-      ent->flip_arrow1 = bit_read_B(dat);
-      ent->flip_arrow2 = bit_read_B(dat);
-    }
-
-  ent->_12_pt.x = bit_read_RD(dat);
-  ent->_12_pt.y = bit_read_RD(dat);
-  ent->_15_pt.x = bit_read_BD(dat);
-  ent->_15_pt.y = bit_read_BD(dat);
-  ent->_15_pt.z = bit_read_BD(dat);
-  ent->_10_pt.x = bit_read_BD(dat);
-  ent->_10_pt.y = bit_read_BD(dat);
-  ent->_10_pt.z = bit_read_BD(dat);
-  ent->leader_len = bit_read_BD(dat);
-
-  dwg_decode_common_entity_handle_data(dat, obj);
-
-  ent->dimstyle = HANDLE_CODE(5);
-  ent->block = HANDLE_CODE(5);
+  COMMON_ENTITY_HANDLE_DATA;
+  FIELD_HANDLE(dimstyle, 5);
+  FIELD_HANDLE(block, 5);
 }
 
 static void
@@ -2689,7 +2446,7 @@ dwg_decode_POINT(Bit_Chain * dat, Dwg_Object * obj)
   bit_read_BE(dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
   ent->x_ang = bit_read_BD(dat);
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
 }
 
 static void
@@ -2731,7 +2488,7 @@ dwg_decode_3DFACE(Bit_Chain * dat, Dwg_Object * obj)
       ent->corner4.z = bit_read_BD(dat);
     }
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
 }
 
 static void
@@ -2748,7 +2505,7 @@ dwg_decode_POLYLINE_PFACE(Bit_Chain * dat, Dwg_Object * obj)
       ent->owned_obj_count = bit_read_BL(dat);
     }
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
 
   VERSIONS(R_13,R_2000)
     {
@@ -2800,7 +2557,7 @@ dwg_decode_POLYLINE_MESH(Bit_Chain * dat, Dwg_Object * obj)
       ent->owned_obj_count = bit_read_BL(dat);
     }
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
 
   VERSIONS(R_13,R_2000)
     {
@@ -2852,7 +2609,7 @@ dwg_decode_SOLID(Bit_Chain * dat, Dwg_Object * obj)
   ent->corner4.y = bit_read_RD(dat);
   bit_read_BE(dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
 }
 
 static void
@@ -2873,7 +2630,7 @@ dwg_decode_TRACE(Bit_Chain * dat, Dwg_Object * obj)
   ent->corner4.y = bit_read_RD(dat);
   bit_read_BE(dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
 }
 
 static void
@@ -2894,7 +2651,7 @@ dwg_decode_SHAPE(Bit_Chain * dat, Dwg_Object * obj)
   ent->extrusion.y = bit_read_BD(dat);
   ent->extrusion.z = bit_read_BD(dat);
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
   ent->shapefile = HANDLE_CODE(5);
 }
 
@@ -2974,7 +2731,7 @@ dwg_decode_VIEWPORT(Bit_Chain * dat, Dwg_Object * obj)
       bit_read_CMC(dat, &ent->ambient_light_color);
     }
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
 }
 
 static void
@@ -2995,7 +2752,7 @@ dwg_decode_ELLIPSE(Bit_Chain * dat, Dwg_Object * obj)
   ent->start_angle = bit_read_BD(dat);
   ent->end_angle = bit_read_BD(dat);
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
 }
 
 static void
@@ -3059,7 +2816,7 @@ dwg_decode_SPLINE(Bit_Chain * dat, Dwg_Object * obj)
         }
     }
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
 }
 
 static void
@@ -3074,7 +2831,7 @@ dwg_decode_RAY(Bit_Chain * dat, Dwg_Object * obj)
   ent->y1 = bit_read_BD(dat);
   ent->z1 = bit_read_BD(dat);
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
 }
 
 static void
@@ -3089,7 +2846,7 @@ dwg_decode_XLINE(Bit_Chain * dat, Dwg_Object * obj)
   ent->y1 = bit_read_BD(dat);
   ent->z1 = bit_read_BD(dat);
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
 }
 
 static void
@@ -3161,7 +2918,7 @@ dwg_decode_MTEXT(Bit_Chain * dat, Dwg_Object * obj)
       FIELD(unknown_long, BL);
     }
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
 
   FIELD_HANDLE(style, 5);
 }
@@ -3215,7 +2972,7 @@ dwg_decode_LEADER(Bit_Chain *dat, Dwg_Object *obj)
       FIELD(unknown_bit_5, B);
     }
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
 }
 
 static void
@@ -3235,7 +2992,7 @@ dwg_decode_TOLERANCE(Bit_Chain *dat, Dwg_Object *obj)
   FIELD_3DPOINT(extrusion);
   FIELD(text_string, BS);
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
 }
 
 static void
@@ -3278,7 +3035,7 @@ dwg_decode_MLINE(Bit_Chain *dat, Dwg_Object *obj)
         }
     }
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
 }
 
 static void
@@ -3712,7 +3469,7 @@ dwg_decode_IMAGE(Bit_Chain *dat, Dwg_Object *obj)
         }
     }
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
 }
 
 static void
@@ -3860,7 +3617,7 @@ dwg_decode_LWPLINE(Bit_Chain * dat, Dwg_Object * obj)
       ent->widths[i].end = bit_read_BD(dat);
     }
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
 }
 
 static void
@@ -3886,7 +3643,7 @@ dwg_decode_OLE2FRAME(Bit_Chain * dat, Dwg_Object * obj)
       ent->unknown = bit_read_RC(dat);
     }
 
-  dwg_decode_common_entity_handle_data(dat, obj);
+  COMMON_ENTITY_HANDLE_DATA;
 }
 
 static void

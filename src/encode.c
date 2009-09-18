@@ -1340,8 +1340,8 @@ dwg_encode_DIMENSION_ORDINATE(Dwg_Entity_DIMENSION_ORDINATE *ent,
   bit_write_BD(dat, ent->extrusion.x);
   bit_write_BD(dat, ent->extrusion.y);
   bit_write_BD(dat, ent->extrusion.z);
-  bit_write_RD(dat, ent->x0);
-  bit_write_RD(dat, ent->y0);
+  bit_write_RD(dat, ent->text_midpt.x);
+  bit_write_RD(dat, ent->text_midpt.y);
 
   //TODO:review the parsing of these elevation values in the spec:
   //TODO: shouldnt we store only once this value in our data-struct?
@@ -1401,8 +1401,8 @@ dwg_encode_DIMENSION_LINEAR(Dwg_Entity_DIMENSION_LINEAR *ent, Bit_Chain * dat)
   bit_write_BD(dat, ent->extrusion.x);
   bit_write_BD(dat, ent->extrusion.y);
   bit_write_BD(dat, ent->extrusion.z);
-  bit_write_RD(dat, ent->x0);
-  bit_write_RD(dat, ent->y0);
+  bit_write_RD(dat, ent->text_midpt.x);
+  bit_write_RD(dat, ent->text_midpt.y);
 
   //TODO:review the parsing of these elevation values in the spec:
   //TODO: shouldnt we store only once this value in our data-struct?
@@ -1415,7 +1415,7 @@ dwg_encode_DIMENSION_LINEAR(Dwg_Entity_DIMENSION_LINEAR *ent, Bit_Chain * dat)
   bit_write_BD(dat, ent->elevation.ecs_11);
 
   //spec: flag bit 6 indicates ORDINATE dimension
-  bit_write_RC(dat, ent->flags);
+  bit_write_RC(dat, ent->flags_1);
   bit_write_TV(dat, ent->user_text);
   bit_write_BD(dat, ent->text_rot);
   bit_write_BD(dat, ent->horiz_dir);
@@ -1463,8 +1463,8 @@ dwg_encode_DIMENSION_ALIGNED(Dwg_Entity_DIMENSION_ALIGNED *ent, Bit_Chain * dat)
   bit_write_BD(dat, ent->extrusion.x);
   bit_write_BD(dat, ent->extrusion.y);
   bit_write_BD(dat, ent->extrusion.z);
-  bit_write_RD(dat, ent->x0);
-  bit_write_RD(dat, ent->y0);
+  bit_write_RD(dat, ent->text_midpt.x);
+  bit_write_RD(dat, ent->text_midpt.y);
 
   //TODO:review the parsing of these elevation values in the spec:
   //TODO: shouldnt we store only once this value in our data-struct?
@@ -1477,7 +1477,7 @@ dwg_encode_DIMENSION_ALIGNED(Dwg_Entity_DIMENSION_ALIGNED *ent, Bit_Chain * dat)
   bit_write_BD(dat, ent->elevation.ecs_11);
 
   //spec: flag bit 6 indicates ORDINATE dimension
-  bit_write_RC(dat, ent->flags);
+  bit_write_RC(dat, ent->flags_1);
   bit_write_TV(dat, ent->user_text);
   bit_write_BD(dat, ent->text_rot);
   bit_write_BD(dat, ent->horiz_dir);
@@ -1524,8 +1524,8 @@ dwg_encode_DIMENSION_ANG3PT(Dwg_Entity_DIMENSION_ANG3PT *ent, Bit_Chain * dat)
   bit_write_BD(dat, ent->extrusion.x);
   bit_write_BD(dat, ent->extrusion.y);
   bit_write_BD(dat, ent->extrusion.z);
-  bit_write_RD(dat, ent->x0);
-  bit_write_RD(dat, ent->y0);
+  bit_write_RD(dat, ent->text_midpt.x);
+  bit_write_RD(dat, ent->text_midpt.y);
 
   //TODO:review the parsing of these elevation values in the spec:
   //TODO: shouldnt we store only once this value in our data-struct?
@@ -1538,7 +1538,7 @@ dwg_encode_DIMENSION_ANG3PT(Dwg_Entity_DIMENSION_ANG3PT *ent, Bit_Chain * dat)
   bit_write_BD(dat, ent->elevation.ecs_11);
 
   //spec: flag bit 6 indicates ORDINATE dimension
-  bit_write_RC(dat, ent->flags);
+  bit_write_RC(dat, ent->flags_1);
   bit_write_TV(dat, ent->user_text);
   bit_write_BD(dat, ent->text_rot);
   bit_write_BD(dat, ent->horiz_dir);
@@ -1586,8 +1586,8 @@ dwg_encode_DIMENSION_ANG2LN(Dwg_Entity_DIMENSION_ANG2LN *ent, Bit_Chain * dat)
   bit_write_BD(dat, ent->extrusion.x);
   bit_write_BD(dat, ent->extrusion.y);
   bit_write_BD(dat, ent->extrusion.z);
-  bit_write_RD(dat, ent->x0);
-  bit_write_RD(dat, ent->y0);
+  bit_write_RD(dat, ent->text_midpt.x);
+  bit_write_RD(dat, ent->text_midpt.y);
 
   //TODO:review the parsing of these elevation values in the spec:
   //TODO: shouldnt we store only once this value in our data-struct?
@@ -1600,7 +1600,7 @@ dwg_encode_DIMENSION_ANG2LN(Dwg_Entity_DIMENSION_ANG2LN *ent, Bit_Chain * dat)
   bit_write_BD(dat, ent->elevation.ecs_11);
 
   //spec: flag bit 6 indicates ORDINATE dimension
-  bit_write_RC(dat, ent->flags);
+  bit_write_RC(dat, ent->flags_1);
   bit_write_TV(dat, ent->user_text);
   bit_write_BD(dat, ent->text_rot);
   bit_write_BD(dat, ent->horiz_dir);
@@ -1650,8 +1650,8 @@ dwg_encode_DIMENSION_RADIUS(Dwg_Entity_DIMENSION_RADIUS *ent, Bit_Chain * dat)
   bit_write_BD(dat, ent->extrusion.x);
   bit_write_BD(dat, ent->extrusion.y);
   bit_write_BD(dat, ent->extrusion.z);
-  bit_write_RD(dat, ent->x0);
-  bit_write_RD(dat, ent->y0);
+  bit_write_RD(dat, ent->text_midpt.x);
+  bit_write_RD(dat, ent->text_midpt.y);
 
   //TODO:review the parsing of these elevation values in the spec:
   //TODO: shouldnt we store only once this value in our data-struct?
@@ -1664,7 +1664,7 @@ dwg_encode_DIMENSION_RADIUS(Dwg_Entity_DIMENSION_RADIUS *ent, Bit_Chain * dat)
   bit_write_BD(dat, ent->elevation.ecs_11); //Spec-typo? It says: D instead of BD...
 
   //spec: flag bit 6 indicates ORDINATE dimension
-  bit_write_RC(dat, ent->flags);//Spec-typo? It says: EC instead of RC...
+  bit_write_RC(dat, ent->flags_1);//Spec-typo? It says: EC instead of RC...
   bit_write_TV(dat, ent->user_text);
 
   //Spec-typo? For all these values the spec says: D instead of BD... (could eventually be RD)
@@ -1711,8 +1711,8 @@ dwg_encode_DIMENSION_DIAMETER(Dwg_Entity_DIMENSION_DIAMETER *ent,
   bit_write_BD(dat, ent->extrusion.x);
   bit_write_BD(dat, ent->extrusion.y);
   bit_write_BD(dat, ent->extrusion.z);
-  bit_write_RD(dat, ent->x0);
-  bit_write_RD(dat, ent->y0);
+  bit_write_RD(dat, ent->text_midpt.x);
+  bit_write_RD(dat, ent->text_midpt.y);
 
   //TODO:review the parsing of these elevation values in the spec:
   //TODO: shouldnt we store only once this value in our data-struct?
@@ -1725,7 +1725,7 @@ dwg_encode_DIMENSION_DIAMETER(Dwg_Entity_DIMENSION_DIAMETER *ent,
   bit_write_BD(dat, ent->elevation.ecs_11);
 
   //spec: flag bit 6 indicates ORDINATE dimension
-  bit_write_RC(dat, ent->flags);
+  bit_write_RC(dat, ent->flags_1);
 
   bit_write_TV(dat, ent->user_text);
   bit_write_BD(dat, ent->text_rot);
