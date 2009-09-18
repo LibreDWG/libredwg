@@ -3182,10 +3182,14 @@ dwg_decode_LEADER(Bit_Chain *dat, Dwg_Object *obj)
   FIELD_3DPOINT(x_direction);
 
   SINCE(R_14)
-    FIELD_3DPOINT(unknown_pt);
+    {
+      FIELD_3DPOINT(unknown_pt);
+    }
 
   VERSIONS(R_13,R_14)
-    FIELD(dimgap, BD);
+    {
+      FIELD(dimgap, BD);
+    }
 
   FIELD(box_height, BD);
   FIELD(box_width, BD);
@@ -3245,7 +3249,7 @@ dwg_decode_MLINE(Bit_Chain *dat, Dwg_Object *obj)
   FIELD_3DPOINT(extrusion);
   FIELD(open_closed, BS);
   FIELD(num_lines, RC);
-  FIELD(num_verts, BD);
+  FIELD(num_verts, BS);
 
   int i, j, k;
   GET_FIELD(verts) = malloc(GET_FIELD(num_verts) * sizeof(Dwg_Entity_MLINE_vert));

@@ -902,17 +902,17 @@ bit_read_CMC(Bit_Chain * dat, Dwg_Color* color)
 /** Write color
  */
 void
-bit_write_CMC(Bit_Chain * dat, Dwg_Color color)
+bit_write_CMC(Bit_Chain * dat, Dwg_Color* color)
 {
-  bit_write_BS(dat, color.index);
+  bit_write_BS(dat, color->index);
   if (dat->version >= R_2004)
     {
-      bit_write_BL(dat, color.rgb);
-      bit_write_RC(dat, color.byte);
-      if (color.byte & 1)
-        bit_write_TV(dat, color.name);
-      if (color.byte & 2)
-        bit_write_TV(dat, color.book_name);
+      bit_write_BL(dat, color->rgb);
+      bit_write_RC(dat, color->byte);
+      if (color->byte & 1)
+        bit_write_TV(dat, color->name);
+      if (color->byte & 2)
+        bit_write_TV(dat, color->book_name);
     }
 }
 

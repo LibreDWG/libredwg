@@ -672,7 +672,7 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
   bit_write_BB(dat, ent->entity_mode);
   bit_write_BL(dat, ent->num_reactors);
   bit_write_B(dat, ent->nolinks);
-  bit_write_CMC(dat, ent->color);
+  bit_write_CMC(dat, &ent->color);
   bit_write_BD(dat, ent->linetype_scale);
   bit_write_BB(dat, ent->linetype_flags);
   bit_write_BB(dat, ent->plotstyle_flags);
@@ -1986,7 +1986,7 @@ dwg_encode_VIEWPORT(Dwg_Entity_VIEWPORT *ent, Bit_Chain * dat)
       bit_write_RC(dat, ent->def_lighting_type);
       bit_write_BD(dat, ent->brightness);
       bit_write_BD(dat, ent->contrast);
-      bit_write_CMC(dat, ent->ambient_light_color);
+      bit_write_CMC(dat, &ent->ambient_light_color);
     }
 }
 

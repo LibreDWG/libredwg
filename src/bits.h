@@ -172,7 +172,7 @@ void
 bit_read_CMC(Bit_Chain * dat, Dwg_Color* color);
 
 void
-bit_write_CMC(Bit_Chain * dat, Dwg_Color color);
+bit_write_CMC(Bit_Chain * dat, Dwg_Color* color);
 
 int
 bit_search_sentinel(Bit_Chain * dat, unsigned char sentinel[16]);
