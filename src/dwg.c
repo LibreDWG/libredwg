@@ -207,61 +207,61 @@ dwg_bmp(Dwg_Data *stk, long int *size)
 double
 dwg_model_x_min(Dwg_Data *dwg)
 {
-  return dwg->var[116].xyz[0];
+  return 0;//return dwg->var[116].xyz[0];
 }
 
 double
 dwg_model_x_max(Dwg_Data *dwg)
 {
-  return dwg->var[117].xyz[0];
+  return 0;//return dwg->var[117].xyz[0];
 }
 
 double
 dwg_model_y_min(Dwg_Data *dwg)
 {
-  return dwg->var[116].xyz[1];
+  return 0;//return dwg->var[116].xyz[1];
 }
 
 double
 dwg_model_y_max(Dwg_Data *dwg)
 {
-  return dwg->var[117].xyz[1];
+  return 0;//return dwg->var[117].xyz[1];
 }
 
 double
 dwg_model_z_min(Dwg_Data *dwg)
 {
-  return dwg->var[116].xyz[2];
+  return 0;//return dwg->var[116].xyz[2];
 }
 
 double
 dwg_model_z_max(Dwg_Data *dwg)
 {
-  return dwg->var[117].xyz[2];
+  return 0;//return dwg->var[117].xyz[2];
 }
 
 double
 dwg_model_page_x_min(Dwg_Data *dwg)
 {
-  return dwg->var[118].xy[0];
+  return 0;//return dwg->var[118].xy[0];
 }
 
 double
 dwg_model_page_x_max(Dwg_Data *dwg)
 {
-  return dwg->var[119].xy[0];
+  return 0;//return dwg->var[119].xy[0];
 }
 
 double
 dwg_model_page_y_min(Dwg_Data *dwg)
 {
-  return dwg->var[118].xy[1];
+  return 0;//return dwg->var[118].xy[1];
 }
 
 double
 dwg_model_page_y_max(Dwg_Data *dwg)
 {
-  return dwg->var[119].xy[1];
+  return 0;//return dwg->var[119].xy[1];
 }
 
 void

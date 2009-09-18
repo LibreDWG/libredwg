@@ -251,47 +251,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
 
   bit_write_RL(dat, 0); // Size of the section
 
-  for (i = 0; i < DWG_NUM_VARIABLES; i++)
-    {
-      if (i == 221 && dwg->var[220].bitdouble != 3)
-        continue;
-      switch (dwg_var_map(dwg->header.version, i))
-        {
-      case DWG_DT_B:
-        bit_write_B(dat, dwg->var[i].bit);
-        break;
-      case DWG_DT_BS:
-        bit_write_BS(dat, dwg->var[i].bitdouble);
-        break;
-      case DWG_DT_BL:
-        bit_write_BL(dat, dwg->var[i].bitlong);
-        break;
-      case DWG_DT_BD:
-        bit_write_BD(dat, dwg->var[i].bitdouble);
-        break;
-      case DWG_DT_H:
-        bit_write_H(dat, &dwg->var[i].handle);
-        break;
-      case DWG_DT_T:
-        bit_write_TV(dat, dwg->var[i].text);
-        break;
-      case DWG_DT_CMC:
-        bit_write_BS(dat, dwg->var[i].bitdouble);
-        break;
-      case DWG_DT_2RD:
-        bit_write_RD(dat, dwg->var[i].xy[0]);
-        bit_write_RD(dat, dwg->var[i].xy[1]);
-        break;
-      case DWG_DT_3BD:
-        bit_write_BD(dat, dwg->var[i].xyz[0]);
-        bit_write_BD(dat, dwg->var[i].xyz[1]);
-        bit_write_BD(dat, dwg->var[i].xyz[2]);
-        break;
-      default:
-        printf("No handle type: %i (var: %i)\n", dwg_var_map(
-            dwg->header.version, i), (int) i);
-        }
-    }
+  //TODO: dwg_encode_header_variables(...);
 
   /* Write the size of the section at its beginning
    */

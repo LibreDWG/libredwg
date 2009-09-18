@@ -451,8 +451,8 @@ typedef struct _dwg_header_variables {
   BITCODE_H DIMLTYPE;
   BITCODE_H DIMLTEX1;
   BITCODE_H DIMLTEX2;
-  BITCODE_H DIMLWD;
-  BITCODE_H DIMLWE;
+  BITCODE_BS DIMLWD;
+  BITCODE_BS DIMLWE;
   BITCODE_H BLOCK_CONTROL_OBJECT;
   BITCODE_H LAYER_CONTROL_OBJECT;
   BITCODE_H STYLE_CONTROL_OBJECT;
@@ -2372,26 +2372,7 @@ typedef struct _dwg_struct
 
   Dwg_Chain picture;
 
-  //number of header variables:
-  //R13: 199
-  //R14: 203
-  //R2000: 233
-  //R2004: 251
-  //R2007: 297
-
-#		define DWG_NUM_VARIABLES 297
-  union
-  {
-    unsigned char bit;
-    unsigned int bitshort;
-    long unsigned int bitlong;
-    double bitdouble;
-    double xyz[3];
-    double xy[2];
-    unsigned char *text;
-    Dwg_Handle handle;
-  } var[DWG_NUM_VARIABLES];
-
+  Dwg_Header_Variables header_vars;
   unsigned int num_classes;
   Dwg_Class *class;
 

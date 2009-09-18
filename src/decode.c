@@ -34,7 +34,6 @@
  * MACROS
  */
 
-#define HANDLE_CODE(c) dwg_decode_handleref_with_code(dat, obj, c)
 #define FIELD(name,type)\
   _obj->name = bit_read_##type(dat);\
   if (loglevel>=2)\
@@ -48,11 +47,11 @@
 #define FIELD_HANDLE(name, handle_code)\
   if (handle_code>=0)\
     {\
-      _obj->name = dwg_decode_handleref_with_code(dat, obj, handle_code);\
+      _obj->name = dwg_decode_handleref_with_code(dat, obj, dwg, handle_code);\
     }\
   else\
     {\
-      _obj->name = dwg_decode_handleref(dat, obj);\
+      _obj->name = dwg_decode_handleref(dat, obj, dwg);\
     }\
   if (loglevel>=2)\
     {\
@@ -155,6 +154,7 @@
   if (loglevel)\
   fprintf (stderr, "Entity " #token ":\n");\
 	Dwg_Entity_##token *ent, *_obj;\
+	Dwg_Data* dwg = obj->parent;\
 	obj->supertype = DWG_SUPERTYPE_ENTITY;\
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));\
 	obj->tio.entity->tio.token = calloc (sizeof (Dwg_Entity_##token), 1);\
@@ -172,6 +172,7 @@
   if (loglevel)\
     fprintf (stderr, "Object " #token ":\n");\
 	Dwg_Object_##token *_obj;\
+	Dwg_Data* dwg = obj->parent;\
 	obj->supertype = DWG_SUPERTYPE_OBJECT;\
 	obj->tio.object = malloc (sizeof (Dwg_Object_Object));\
 	obj->tio.object->tio.token = calloc (sizeof (Dwg_Object_##token), 1);\
@@ -192,6 +193,9 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
 
 static Dwg_Object *
 dwg_resolve_handle(Dwg_Data* dwg, unsigned long int handle);
+
+static void
+dwg_decode_header_variables(Bit_Chain* dat, Dwg_Data * dwg);
 
 /*--------------------------------------------------------------------------------
  * Public variables
@@ -444,86 +448,9 @@ decode_R13_R15_header(Bit_Chain* dat, Dwg_Data * dwg)
 
   dat->bit = 0;
 
-  /* Read header variables
-   */
-  for (i = 0; i < DWG_NUM_VARIABLES; i++)
-    {
-      if (loglevel)
-        fprintf(stderr, "[%03i] - ", i + 1);
-      if (i == 221 && dwg->var[220].bitdouble != 3)
-        {
-          dwg->var[i].handle.code = 0;
-          dwg->var[i].handle.value = 0;
-          continue;
-        }
-      switch (dwg_var_map(dwg->header.version, i))
-        {
-      case DWG_END_OF_HEADER_VARIABLES:
-        break;
-      case DWG_DT_B:
-        dwg->var[i].bit = bit_read_B(dat);
-        if (loglevel)
-          fprintf(stderr, "B: %u", dwg->var[i].bit);
-        break;
-      case DWG_DT_BS:
-        dwg->var[i].bitshort = bit_read_BS(dat);
-        if (loglevel)
-          fprintf(stderr, "BS: %u", dwg->var[i].bitshort);
-        break;
-      case DWG_DT_BL:
-        dwg->var[i].bitlong = bit_read_BL(dat);
-        if (loglevel)
-          fprintf(stderr, "BL: %lu", dwg->var[i].bitlong);
-        break;
-      case DWG_DT_BD:
-        dwg->var[i].bitdouble = bit_read_BD(dat);
-        if (loglevel)
-          fprintf(stderr, "BD: %lg", dwg->var[i].bitdouble);
-        break;
-      case DWG_DT_H:
-        bit_read_H(dat, &dwg->var[i].handle);
-        if (loglevel)
-          fprintf(stderr, "H: %i.%i.0x%08X", dwg->var[i].handle.code,
-              dwg->var[i].handle.size, (unsigned int) dwg->var[i].handle.value);
-        break;
-      case DWG_DT_T:
-        dwg->var[i].text = bit_read_TV(dat);
-        if (loglevel)
-          fprintf(stderr, "T: \"%s\"", dwg->var[i].text);
-        break;
-      case DWG_DT_CMC:
-        dwg->var[i].bitshort = bit_read_BS(dat);
-        if (loglevel)
-          fprintf(stderr, "CMC: %u", dwg->var[i].bitshort);
-        break;
-      case DWG_DT_2RD:
-        dwg->var[i].xy[0] = bit_read_RD(dat);
-        dwg->var[i].xy[1] = bit_read_RD(dat);
-        if (loglevel)
-          {
-            fprintf(stderr, "X: %lg\t", dwg->var[i].xy[0]);
-            fprintf(stderr, "Y: %lg", dwg->var[i].xy[1]);
-          }
-        break;
-      case DWG_DT_3BD:
-        dwg->var[i].xyz[0] = bit_read_BD(dat);
-        dwg->var[i].xyz[1] = bit_read_BD(dat);
-        dwg->var[i].xyz[2] = bit_read_BD(dat);
-        if (loglevel)
-          {
-            fprintf(stderr, "X: %lg\t", dwg->var[i].xyz[0]);
-            fprintf(stderr, "Y: %lg\t", dwg->var[i].xyz[1]);
-            fprintf(stderr, "Z: %lg", dwg->var[i].xyz[2]);
-          }
-        break;
-      default:
-        if (loglevel)
-          fprintf(stderr, "No handle type: %i (var: %i)\n", dwg_var_map(
-              dwg->header.version, i), i);
-        }
-    }
+  dwg_decode_header_variables(dat, dwg);
 
-  // Check CRC-on
+// Check CRC-on
   ckr = bit_read_CRC(dat);
   /*
    for (i = 0xC001; i != 0xC000; i++)
@@ -1540,17 +1467,23 @@ dwg_resolve_handle(Dwg_Data* dwg, unsigned long int absref)
 #define REFS_PER_REALLOC 100
 
 static Dwg_Object_Ref *
-dwg_decode_handleref(Bit_Chain * dat, Dwg_Object * obj)
+dwg_decode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg)
 {
   // Welcome to the house of evil code!
   Dwg_Object_Ref* ref = (Dwg_Object_Ref *) malloc(sizeof(Dwg_Object_Ref));
-  Dwg_Data* dwg = obj->parent;
 
   if (bit_read_H(dat, &ref->handleref))
     {
-      fprintf(stderr,
-          "\tENTITY: Error reading handle in object whose handle is: %d.%d.%lu\n",
-          obj->handle.code, obj->handle.size, obj->handle.value);
+      if (obj)
+        {
+          fprintf(stderr,
+            "Error reading handle in object whose handle is: %d.%d.%lu\n",
+            obj->handle.code, obj->handle.size, obj->handle.value);
+        }
+      else
+        {
+          fprintf(stderr, "Error reading handle in the header variables section\n");
+        }
       free(ref);
       return 0;
     }
@@ -1564,6 +1497,14 @@ dwg_decode_handleref(Bit_Chain * dat, Dwg_Object * obj)
           (dwg->num_object_refs + REFS_PER_REALLOC) * sizeof(Dwg_Object_Ref*));
 
   dwg->object_ref[dwg->num_object_refs++] = ref;
+
+  ref->absolute_ref = ref->handleref.value;
+  ref->obj = 0;
+
+  //we receive a null obj when we are reading
+  // handles in the header variables section
+  if (!obj)
+    return ref;
 
   /*
    * sometimes the code indicates the type of ownership
@@ -1589,17 +1530,14 @@ dwg_decode_handleref(Bit_Chain * dat, Dwg_Object * obj)
       ref->absolute_ref = ref->handleref.value;
       break;
     }
-
-  ref->obj = 0;
   return ref;
 }
 
 static Dwg_Object_Ref *
-dwg_decode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj,
-    unsigned int code)
+dwg_decode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg, unsigned int code)
 {
   Dwg_Object_Ref * ref;
-  ref = dwg_decode_handleref(dat, obj);
+  ref = dwg_decode_handleref(dat, obj, dwg);
   if (ref->absolute_ref == 0 && ref->handleref.code != code)
     {
       fprintf(stderr, "ERROR: expected a CODE %d handle\nERROR: ", code);
@@ -1612,17 +1550,20 @@ dwg_decode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj,
 }
 
 static void
-dwg_decode_header_variables(Bit_Chain * dat, Dwg_Object * obj)
+dwg_decode_header_variables(Bit_Chain* dat, Dwg_Data * dwg)
 {
-  Dwg_Header_Variables header_vars;
-  Dwg_Header_Variables* _obj = &header_vars;
+  Dwg_Header_Variables* _obj = &dwg->header_vars;
+  Dwg_Object* obj=0;
 
+/*
   VERSION(R_2007)
     {
       FIELD_RL(bitsize);
     }
 
   FIELD_RL (bitsize);
+*/
+
   FIELD_BD (unknown_0);
   FIELD_BD (unknown_1);
   FIELD_BD (unknown_2);
@@ -1989,6 +1930,7 @@ dwg_decode_header_variables(Bit_Chain * dat, Dwg_Object * obj)
       FIELD_BS (DIMDSEP);
       FIELD_BS (DIMTMOVE);
       FIELD_BS (DIMJUST);
+      FIELD_BS (DIMJUST);//TESTE
       FIELD_B (DIMSD1);
       FIELD_B (DIMSD2);
       FIELD_BS (DIMTOLJ);
@@ -2022,8 +1964,8 @@ dwg_decode_header_variables(Bit_Chain * dat, Dwg_Object * obj)
 
   SINCE(R_2000)
     {
-      FIELD_HANDLE (DIMLWD, ANYCODE);
-      FIELD_HANDLE (DIMLWE, ANYCODE);
+      FIELD_BS (DIMLWD);
+      FIELD_BS (DIMLWE);
     }
 
   FIELD_HANDLE (BLOCK_CONTROL_OBJECT, ANYCODE);
@@ -2072,7 +2014,10 @@ dwg_decode_header_variables(Bit_Chain * dat, Dwg_Object * obj)
       FIELD_BL (FLAGS);
       FIELD_BS (INSUNITS);
       FIELD_BS (CEPSNTYPE);
-      FIELD_HANDLE (CPSNID, ANYCODE);
+      if (GET_FIELD(CEPSNTYPE) == 3)
+        {
+          FIELD_HANDLE (CPSNID, ANYCODE);
+        }
       FIELD_TV (FINGERPRINTGUID);
       FIELD_TV (VERSIONGUID);
     }
@@ -2156,48 +2101,48 @@ dwg_decode_common_entity_handle_data(Bit_Chain * dat, Dwg_Object * obj)
   ent = obj->tio.entity;
 
   //TODO: check what is the condition for the presence of this handle:
-  //	ent->subentity_ref_handle = dwg_decode_handleref_with_code (dat, obj, 3);
+  //	ent->subentity_ref_handle = dwg_decode_handleref_with_code (dat, obj, obj->parent, 3);
 
   if (ent->num_reactors)
     ent->reactors = malloc(ent->num_reactors * sizeof(Dwg_Object_Ref*));
   for (i = 0; i < ent->num_reactors; i++)
     {
-      ent->reactors[i] = dwg_decode_handleref_with_code(dat, obj, 4);
+      ent->reactors[i] = dwg_decode_handleref_with_code(dat, obj, obj->parent, 4);
     }
 
-  ent->xdicobjhandle = dwg_decode_handleref_with_code(dat, obj, 3);
+  ent->xdicobjhandle = dwg_decode_handleref_with_code(dat, obj, obj->parent, 3);
 
   VERSIONS(R_13,R_14)
     {
-      ent->layer = dwg_decode_handleref_with_code(dat, obj, 5);
+      ent->layer = dwg_decode_handleref_with_code(dat, obj, obj->parent, 5);
       if (!ent->isbylayerlt)
         {
-          ent->ltype = dwg_decode_handleref_with_code(dat, obj, 5);
+          ent->ltype = dwg_decode_handleref_with_code(dat, obj, obj->parent, 5);
         }
     }
 
   if (0)
     { //TODO: these are optional. Figure out what is the condition.
-      ent->prev_entity = dwg_decode_handleref_with_code(dat, obj, 4);
-      ent->next_entity = dwg_decode_handleref_with_code(dat, obj, 4);
+      ent->prev_entity = dwg_decode_handleref_with_code(dat, obj, obj->parent, 4);
+      ent->next_entity = dwg_decode_handleref_with_code(dat, obj, obj->parent, 4);
     }
 
   SINCE(R_2000)
     {
-      ent->layer = dwg_decode_handleref_with_code(dat, obj, 5);
+      ent->layer = dwg_decode_handleref_with_code(dat, obj, obj->parent, 5);
       if (ent->linetype_flags == 3)
         {
-          ent->ltype = dwg_decode_handleref_with_code(dat, obj, 5);
+          ent->ltype = dwg_decode_handleref_with_code(dat, obj, obj->parent, 5);
         }
       if (ent->plotstyle_flags == 3)
         {
-          ent->plotstyle = dwg_decode_handleref_with_code(dat, obj, 5);
+          ent->plotstyle = dwg_decode_handleref_with_code(dat, obj, obj->parent, 5);
         }
     }
 
   if (dat->version >= R_2007 && ent->material_flags == 3)
     {
-      ent->material = dwg_decode_handleref(dat, obj);
+      ent->material = dwg_decode_handleref(dat, obj, obj->parent);
     }
 
 }
