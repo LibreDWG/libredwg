@@ -1285,10 +1285,6 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
       return;
     }
 
-  fprintf(stderr, "this entity handle is %d.%d.%lu\n",
-      ent->object->handle.code, ent->object->handle.size,
-      ent->object->handle.value);
-
   ent->extended_size = 0;
   while (size = bit_read_BS(dat))
     {
