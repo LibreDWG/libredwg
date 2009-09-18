@@ -30,6 +30,7 @@
 
 
 /*--------------------------------------------------------------------------------
+ * Welcome to the dark side of the moon...
  * MACROS
  */
 
@@ -74,7 +75,7 @@
 #define FIELD_MC(name) FIELD(name, MC);
 #define FIELD_MS(name) FIELD(name, MS);
 #define FIELD_TV(name) FIELD(name, TV);
-#define FIELD_T FIELD_TV /*TODO*/
+#define FIELD_BT(name) FIELD(name, BT);
 
 #define FIELD_BE(name) bit_read_BE(dat, &_obj->name.x, &_obj->name.y, &_obj->name.z);
 #define FIELD_DD(name, _default) GET_FIELD(name) = bit_read_DD(dat, _default);
@@ -2976,12 +2977,12 @@ dwg_decode_POINT(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(POINT);
 
-  ent->x = bit_read_BD(dat);
-  ent->y = bit_read_BD(dat);
-  ent->z = bit_read_BD(dat);
-  ent->thickness = bit_read_BT(dat);
-  bit_read_BE(dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
-  ent->x_ang = bit_read_BD(dat);
+  FIELD_BD(x);
+  FIELD_BD(y);
+  FIELD_BD(z);
+  FIELD_BT(thickness);
+  FIELD_BE(extrusion);
+  FIELD_BD(x_ang);
 
   COMMON_ENTITY_HANDLE_DATA;
 }
@@ -2993,36 +2994,36 @@ dwg_decode_3DFACE(Bit_Chain * dat, Dwg_Object * obj)
 
   VERSIONS(R_13,R_14)
     {
-      ent->corner1.x = bit_read_BD(dat);
-      ent->corner1.y = bit_read_BD(dat);
-      ent->corner1.z = bit_read_BD(dat);
-      ent->corner2.x = bit_read_BD(dat);
-      ent->corner2.y = bit_read_BD(dat);
-      ent->corner2.z = bit_read_BD(dat);
-      ent->corner3.x = bit_read_BD(dat);
-      ent->corner3.y = bit_read_BD(dat);
-      ent->corner3.z = bit_read_BD(dat);
-      ent->corner4.x = bit_read_BD(dat);
-      ent->corner4.y = bit_read_BD(dat);
-      ent->corner4.z = bit_read_BD(dat);
-      ent->invis_flags = bit_read_BS(dat);
+      FIELD_3BD(corner1);
+      FIELD_3BD(corner2);
+      FIELD_3BD(corner3);
+      FIELD_3BD(corner4);
+      FIELD_BS(invis_flags);
     }
+
   SINCE(R_2000)
     {
-      ent->has_no_flags = bit_read_B(dat);
-      ent->z_is_zero = bit_read_B(dat);
-      ent->corner1.x = bit_read_BD(dat);
-      ent->corner1.y = bit_read_BD(dat);
-      ent->corner1.z = bit_read_BD(dat);
-      ent->corner2.x = bit_read_BD(dat);
-      ent->corner2.y = bit_read_BD(dat);
-      ent->corner2.z = bit_read_BD(dat);
-      ent->corner3.x = bit_read_BD(dat);
-      ent->corner3.y = bit_read_BD(dat);
-      ent->corner3.z = bit_read_BD(dat);
-      ent->corner4.x = bit_read_BD(dat);
-      ent->corner4.y = bit_read_BD(dat);
-      ent->corner4.z = bit_read_BD(dat);
+      FIELD_B(has_no_flags);
+      FIELD_B(z_is_zero);
+      FIELD_RD(corner1.x);
+      FIELD_RD(corner1.y);
+      if(GET_FIELD(z_is_zero))
+        {
+          GET_FIELD(corner1.z) = 0;
+        }
+      else
+        {
+          FIELD_RD(corner1.z);
+        }
+      FIELD_DD(corner2.x, GET_FIELD(corner1.x));
+      FIELD_DD(corner2.y, GET_FIELD(corner1.y));
+      FIELD_DD(corner2.z, GET_FIELD(corner1.z));
+      FIELD_DD(corner3.x, GET_FIELD(corner2.x));
+      FIELD_DD(corner3.y, GET_FIELD(corner2.y));
+      FIELD_DD(corner3.z, GET_FIELD(corner2.z));
+      FIELD_DD(corner4.x, GET_FIELD(corner3.x));
+      FIELD_DD(corner4.y, GET_FIELD(corner3.y));
+      FIELD_DD(corner4.z, GET_FIELD(corner3.z));
     }
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -3031,101 +3032,60 @@ dwg_decode_3DFACE(Bit_Chain * dat, Dwg_Object * obj)
 static void
 dwg_decode_POLYLINE_PFACE(Bit_Chain * dat, Dwg_Object * obj)
 {
-  int i;
   DWG_ENTITY(POLYLINE_PFACE);
 
-  ent->numverts = bit_read_BS(dat);
-  ent->numfaces = bit_read_BS(dat);
+  FIELD_BS(numverts);
+  FIELD_BS(numfaces);
 
   SINCE(R_2004)
     {
-      ent->owned_obj_count = bit_read_BL(dat);
+      FIELD_BL(owned_obj_count);
     }
 
   COMMON_ENTITY_HANDLE_DATA;
 
-  VERSIONS(R_13,R_2000)
+  VERSIONS(R_13, R_2000)
     {
-      ent->first_vertex = dwg_decode_handleref_with_code(dat, obj, 4);
-      fprintf(stderr, "first_vertex: %d.%d.%lu\n",
-          ent->first_vertex->handleref.code, ent->first_vertex->handleref.size,
-          ent->first_vertex->handleref.value);
-
-      ent->last_vertex = dwg_decode_handleref_with_code(dat, obj, 4);
-      fprintf(stderr, "last_vertex: %d.%d.%lu\n",
-          ent->last_vertex->handleref.code, ent->last_vertex->handleref.size,
-          ent->last_vertex->handleref.value);
+      FIELD_HANDLE(first_vertex, 4);
+      FIELD_HANDLE(last_vertex, 4);
     }
-
-  VERSION(R_2004)
+  SINCE(R_2004)
     {
-      ent->vertex = (Dwg_Object_Ref**) malloc(ent->owned_obj_count
-          * sizeof(Dwg_Object_Ref*));
-      for (i = 0; i < ent->owned_obj_count; i++)
-        {
-          ent->vertex[i] = dwg_decode_handleref_with_code(dat, obj, 4);
-          fprintf(stderr, "ent->vertex[%d]: %d.%d.%lu\n", i,
-              ent->vertex[i]->handleref.code, ent->vertex[i]->handleref.size,
-              ent->vertex[i]->handleref.value);
-        }
+      HANDLE_VECTOR(vertex, owned_obj_count, 4);
     }
-
-  ent->seqend = dwg_decode_handleref_with_code(dat, obj, 3);
-  fprintf(stderr, "seqend: %d.%d.%lu\n", ent->seqend->handleref.code,
-      ent->seqend->handleref.size, ent->seqend->handleref.value);
-
+  FIELD_HANDLE(seqend, 3);
 }
 
 static void
 dwg_decode_POLYLINE_MESH(Bit_Chain * dat, Dwg_Object * obj)
 {
-  int i;
+
   DWG_ENTITY(POLYLINE_MESH);
 
-  ent->flags = bit_read_BS(dat);
-  ent->curve_type = bit_read_BS(dat);
-  ent->m_vert_count = bit_read_BS(dat);
-  ent->n_vert_count = bit_read_BS(dat);
-  ent->m_density = bit_read_BS(dat);
-  ent->n_density = bit_read_BS(dat);
+  FIELD_BS(flags);
+  FIELD_BS(curve_type);
+  FIELD_BS(m_vert_count);
+  FIELD_BS(n_vert_count);
+  FIELD_BS(m_density);
+  FIELD_BS(n_density);
 
   SINCE(R_2004)
     {
-      ent->owned_obj_count = bit_read_BL(dat);
+      FIELD_BL(owned_obj_count);
     }
 
   COMMON_ENTITY_HANDLE_DATA;
 
-  VERSIONS(R_13,R_2000)
+  VERSIONS(R_13, R_2000)
     {
-      ent->first_vertex = dwg_decode_handleref_with_code(dat, obj, 4);
-      fprintf(stderr, "first_vertex: %d.%d.%lu\n",
-          ent->first_vertex->handleref.code, ent->first_vertex->handleref.size,
-          ent->first_vertex->handleref.value);
-
-      ent->last_vertex = dwg_decode_handleref_with_code(dat, obj, 4);
-      fprintf(stderr, "last_vertex: %d.%d.%lu\n",
-          ent->last_vertex->handleref.code, ent->last_vertex->handleref.size,
-          ent->last_vertex->handleref.value);
+      FIELD_HANDLE(first_vertex, 4);
+      FIELD_HANDLE(last_vertex, 4);
     }
-
-  VERSION(R_2004)
+  SINCE(R_2004)
     {
-      ent->vertex = (Dwg_Object_Ref**) malloc(ent->owned_obj_count
-          * sizeof(Dwg_Object_Ref*));
-      for (i = 0; i < ent->owned_obj_count; i++)
-        {
-          ent->vertex[i] = dwg_decode_handleref_with_code(dat, obj, 4);
-          fprintf(stderr, "ent->vertex[%d]: %d.%d.%lu\n", i,
-              ent->vertex[i]->handleref.code, ent->vertex[i]->handleref.size,
-              ent->vertex[i]->handleref.value);
-        }
+      HANDLE_VECTOR(vertex, owned_obj_count, 4);
     }
-
-  ent->seqend = dwg_decode_handleref_with_code(dat, obj, 3);
-  fprintf(stderr, "seqend: %d.%d.%lu\n", ent->seqend->handleref.code,
-      ent->seqend->handleref.size, ent->seqend->handleref.value);
-
+  FIELD_HANDLE(seqend, 3);
 }
 
 static void

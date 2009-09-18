@@ -931,17 +931,12 @@ typedef struct _dwg_entity_DIMENSION_DIAMETER
  */
 typedef struct _dwg_entity_POINT
 {
-  double x;
-  double y;
-  double z;
-  double thickness;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } extrusion;
-  double x_ang;
+  BITCODE_BD x;
+  BITCODE_BD y;
+  BITCODE_BD z;
+  BITCODE_BT thickness;
+  BITCODE_BE extrusion;
+  BITCODE_BD x_ang;
 } Dwg_Entity_POINT;
 
 /**
@@ -949,33 +944,13 @@ typedef struct _dwg_entity_POINT
  */
 typedef struct _dwg_entity_3D_FACE
 {
-  unsigned int has_no_flags;
-  unsigned int z_is_zero;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } corner1;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } corner2;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } corner3;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } corner4;
-  unsigned char invis_flags;
+  BITCODE_B has_no_flags;
+  BITCODE_B z_is_zero;
+  BITCODE_3BD corner1;
+  BITCODE_3BD corner2;
+  BITCODE_3BD corner3;
+  BITCODE_3BD corner4;
+  BITCODE_BS invis_flags;
 } Dwg_Entity__3DFACE;
 
 /**
@@ -983,13 +958,13 @@ typedef struct _dwg_entity_3D_FACE
  */
 typedef struct _dwg_entity_POLYLINE_PFACE
 {
-  unsigned int numverts;
-  unsigned int numfaces;
-  unsigned long owned_obj_count;
-  Dwg_Object_Ref* first_vertex;
-  Dwg_Object_Ref* last_vertex;
-  Dwg_Object_Ref** vertex;
-  Dwg_Object_Ref* seqend;
+  BITCODE_BS numverts;
+  BITCODE_BS numfaces;
+  BITCODE_BL owned_obj_count;
+  BITCODE_H first_vertex;
+  BITCODE_H last_vertex;
+  BITCODE_H* vertex;
+  BITCODE_H seqend;
 
 } Dwg_Entity_POLYLINE_PFACE;
 
@@ -998,17 +973,17 @@ typedef struct _dwg_entity_POLYLINE_PFACE
  */
 typedef struct _dwg_entity_POLYLINE_MESH
 {
-  unsigned char flags;
-  unsigned char curve_type;
-  unsigned int m_vert_count;
-  unsigned int n_vert_count;
-  unsigned int m_density;
-  unsigned int n_density;
-  unsigned long owned_obj_count;
-  Dwg_Object_Ref* first_vertex;
-  Dwg_Object_Ref* last_vertex;
-  Dwg_Object_Ref** vertex;
-  Dwg_Object_Ref* seqend;
+  BITCODE_BS flags;
+  BITCODE_BS curve_type;
+  BITCODE_BS m_vert_count;
+  BITCODE_BS n_vert_count;
+  BITCODE_BS m_density;
+  BITCODE_BS n_density;
+  BITCODE_BL owned_obj_count;
+  BITCODE_H first_vertex;
+  BITCODE_H last_vertex;
+  BITCODE_H* vertex;
+  BITCODE_H seqend;
 
 } Dwg_Entity_POLYLINE_MESH;
 
