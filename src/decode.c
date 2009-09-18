@@ -3094,18 +3094,13 @@ dwg_decode_SOLID(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(SOLID);
 
-  ent->thickness = bit_read_BT(dat);
-  ent->corner1.z = ent->corner2.z = ent->corner3.z = ent->corner4.z
-      = bit_read_BD(dat);
-  ent->corner1.x = bit_read_RD(dat);
-  ent->corner1.y = bit_read_RD(dat);
-  ent->corner2.x = bit_read_RD(dat);
-  ent->corner2.y = bit_read_RD(dat);
-  ent->corner3.x = bit_read_RD(dat);
-  ent->corner3.y = bit_read_RD(dat);
-  ent->corner4.x = bit_read_RD(dat);
-  ent->corner4.y = bit_read_RD(dat);
-  bit_read_BE(dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
+  FIELD_BT(thickness);
+  FIELD_BD(elevation);
+  FIELD_2RD(corner1);
+  FIELD_2RD(corner2);
+  FIELD_2RD(corner3);
+  FIELD_2RD(corner4);
+  FIELD_BE(extrusion);
 
   COMMON_ENTITY_HANDLE_DATA;
 }
@@ -3115,18 +3110,13 @@ dwg_decode_TRACE(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(TRACE);
 
-  ent->thickness = bit_read_BT(dat);
-  ent->corner1.z = ent->corner2.z = ent->corner3.z = ent->corner4.z
-      = bit_read_BD(dat);
-  ent->corner1.x = bit_read_RD(dat);
-  ent->corner1.y = bit_read_RD(dat);
-  ent->corner2.x = bit_read_RD(dat);
-  ent->corner2.y = bit_read_RD(dat);
-  ent->corner3.x = bit_read_RD(dat);
-  ent->corner3.y = bit_read_RD(dat);
-  ent->corner4.x = bit_read_RD(dat);
-  ent->corner4.y = bit_read_RD(dat);
-  bit_read_BE(dat, &ent->extrusion.x, &ent->extrusion.y, &ent->extrusion.z);
+  FIELD_BT(thickness);
+  FIELD_BD(elevation);
+  FIELD_2RD(corner1);
+  FIELD_2RD(corner2);
+  FIELD_2RD(corner3);
+  FIELD_2RD(corner4);
+  FIELD_BE(extrusion);
 
   COMMON_ENTITY_HANDLE_DATA;
 }
@@ -3136,21 +3126,17 @@ dwg_decode_SHAPE(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(SHAPE);
 
-  ent->ins_pt.x = bit_read_BD(dat);
-  ent->ins_pt.y = bit_read_BD(dat);
-  ent->ins_pt.z = bit_read_BD(dat);
-  ent->scale = bit_read_BD(dat);
-  ent->rotation = bit_read_BD(dat);
-  ent->width_factor = bit_read_BD(dat);
-  ent->oblique = bit_read_BD(dat);
-  ent->thickness = bit_read_BD(dat);
-  ent->shape_no = bit_read_BS(dat);
-  ent->extrusion.x = bit_read_BD(dat);
-  ent->extrusion.y = bit_read_BD(dat);
-  ent->extrusion.z = bit_read_BD(dat);
+  FIELD_3BD(ins_pt);
+  FIELD_BD(scale);
+  FIELD_BD(rotation);
+  FIELD_BD(width_factor);
+  FIELD_BD(oblique);
+  FIELD_BD(thickness);
+  FIELD_BS(shape_no);
+  FIELD_3BD(extrusion);
 
   COMMON_ENTITY_HANDLE_DATA;
-  ent->shapefile = HANDLE_CODE(5);
+  FIELD_HANDLE(shapefile, 5);
 }
 
 static void
@@ -3237,18 +3223,12 @@ dwg_decode_ELLIPSE(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_ENTITY(ELLIPSE);
 
-  ent->x0 = bit_read_BD(dat);
-  ent->y0 = bit_read_BD(dat);
-  ent->z0 = bit_read_BD(dat);
-  ent->x1 = bit_read_BD(dat);
-  ent->y1 = bit_read_BD(dat);
-  ent->z1 = bit_read_BD(dat);
-  ent->extrusion.x = bit_read_BD(dat);
-  ent->extrusion.y = bit_read_BD(dat);
-  ent->extrusion.z = bit_read_BD(dat);
-  ent->axis_ratio = bit_read_BD(dat);
-  ent->start_angle = bit_read_BD(dat);
-  ent->end_angle = bit_read_BD(dat);
+  FIELD_3BD(center);
+  FIELD_3BD(sm_axis);
+  FIELD_3BD(extrusion);
+  FIELD_BD(axis_ratio);
+  FIELD_BD(start_angle);
+  FIELD_BD(end_angle);
 
   COMMON_ENTITY_HANDLE_DATA;
 }

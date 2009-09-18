@@ -1848,18 +1848,7 @@ static void
 dwg_encode_SOLID(Dwg_Entity_SOLID *ent, Bit_Chain * dat)
 {
   bit_write_BT(dat, ent->thickness);
-  //TODO: shouldn't we store only env->elevation instead of storing the same value 4 times?
-  if (ent->corner1.z != ent->corner2.z || ent->corner1.z != ent->corner3.z
-      || ent->corner1.z != ent->corner4.z)
-    {
-      fprintf(
-          stderr,
-          "warning: dwg_encode_SOLID: There is something wrong here. Z coordinate for the 4 corners should be equal (elevation value).\n");
-    }
-
-  //elevation:
-  bit_write_BD(dat, ent->corner1.z);
-
+  bit_write_BD(dat, ent->elevation);
   bit_write_RD(dat, ent->corner1.x);
   bit_write_RD(dat, ent->corner1.y);
   bit_write_RD(dat, ent->corner2.x);
@@ -1875,18 +1864,7 @@ static void
 dwg_encode_TRACE(Dwg_Entity_TRACE *ent, Bit_Chain * dat)
 {
   bit_write_BT(dat, ent->thickness);
-  //TODO: shouldn't we store only env->elevation instead of storing the same value 4 times?
-  if (ent->corner1.z != ent->corner2.z || ent->corner1.z != ent->corner3.z
-      || ent->corner1.z != ent->corner4.z)
-    {
-      fprintf(
-          stderr,
-          "warning: dwg_encode_TRACE: There is something wrong here. Z coordinate for the 4 corners should be equal (elevation value).\n");
-    }
-
-  //elevation:
-  bit_write_BD(dat, ent->corner1.z);
-
+  bit_write_BD(dat, ent->elevation);
   bit_write_RD(dat, ent->corner1.x);
   bit_write_RD(dat, ent->corner1.y);
   bit_write_RD(dat, ent->corner2.x);
@@ -1993,12 +1971,12 @@ dwg_encode_VIEWPORT(Dwg_Entity_VIEWPORT *ent, Bit_Chain * dat)
 static void
 dwg_encode_ELLIPSE(Dwg_Entity_ELLIPSE *ent, Bit_Chain * dat)
 {
-  bit_write_BD(dat, ent->x0);
-  bit_write_BD(dat, ent->y0);
-  bit_write_BD(dat, ent->z0);
-  bit_write_BD(dat, ent->x1);
-  bit_write_BD(dat, ent->y1);
-  bit_write_BD(dat, ent->z1);
+  bit_write_BD(dat, ent->center.x);
+  bit_write_BD(dat, ent->center.y);
+  bit_write_BD(dat, ent->center.z);
+  bit_write_BD(dat, ent->sm_axis.x);
+  bit_write_BD(dat, ent->sm_axis.y);
+  bit_write_BD(dat, ent->sm_axis.z);
   bit_write_BD(dat, ent->extrusion.x);
   bit_write_BD(dat, ent->extrusion.y);
   bit_write_BD(dat, ent->extrusion.z);
