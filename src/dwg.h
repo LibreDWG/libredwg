@@ -1918,7 +1918,15 @@ typedef struct _dwg_entity_IMAGE
  */
 typedef struct _dwg_object_IMAGEDEF
 {
-//TODO 
+  BITCODE_BL class_version;
+  BITCODE_2RD image_size;
+  BITCODE_TV file_path;
+  BITCODE_B is_loaded;
+  BITCODE_RC resunits;
+  BITCODE_2RD pixel_size;
+  BITCODE_H parent_handle;
+  BITCODE_H* reactors;
+  BITCODE_H xdicobjhandle;
 } Dwg_Object_IMAGEDEF;
 
 /**

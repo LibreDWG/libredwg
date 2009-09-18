@@ -125,7 +125,7 @@
     }
 
 #define REACTORS(code)\
-  GET_FIELD(reactors) = malloc(sizeof(Dwg_Object_Ref*) * obj->tio.object->num_reactors);\
+  GET_FIELD(reactors) = malloc(sizeof(BITCODE_H) * obj->tio.object->num_reactors);\
   for (vector_counter=0; vector_counter<obj->tio.object->num_reactors; vector_counter++)\
     {\
       FIELD_HANDLE(reactors[vector_counter], code);\
@@ -4070,9 +4070,8 @@ dwg_decode_PLACEHOLDER(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_OBJECT(PLACEHOLDER);
 
-  //TODO: Implement-me!
-
-  //dwg_decode_handleref (dat, object);
+  //spec says nothing about this one...
+  //TODO: find out what to do here.
 }
 
 static void
@@ -4103,9 +4102,15 @@ dwg_decode_IMAGEDEF(Bit_Chain * dat, Dwg_Object * obj)
 {
   DWG_OBJECT(IMAGEDEF);
 
-  //TODO: Implement-me!
-
-  //dwg_decode_handleref (dat, object);
+  FIELD_BL (class_version);
+  FIELD_2RD (image_size);
+  FIELD_TV (file_path);
+  FIELD_B (is_loaded);
+  FIELD_RC (resunits);
+  FIELD_2RD (pixel_size);
+  FIELD_HANDLE (parent_handle, 3);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
 }
 
 static void
