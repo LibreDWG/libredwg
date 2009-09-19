@@ -4028,7 +4028,184 @@ DWG_OBJECT_END
 
 /*(69)*/
 DWG_OBJECT(DIMSTYLE);
-//TODO
+
+  FIELD_TV (entry_name);
+  FIELD_B (_64_flag);
+  FIELD_BS (xrefindex_plus1);
+  FIELD_B (xrefdep);
+
+  VERSIONS(R_13, R_14)
+    {
+      FIELD_B (DIMTOL);
+      FIELD_B (DIMLIM);
+      FIELD_B (DIMTIH);
+      FIELD_B (DIMTOH);
+      FIELD_B (DIMSE1);
+      FIELD_B (DIMSE2);
+      FIELD_B (DIMALT);
+      FIELD_B (DIMTOFL);
+      FIELD_B (DIMSAH);
+      FIELD_B (DIMTIX);
+      FIELD_B (DIMSOXD);
+      FIELD_RC (DIMALTD);
+      FIELD_RC (DIMZIN);
+      FIELD_B (DIMSD1);
+      FIELD_B (DIMSD2);
+      FIELD_RC (DIMTOLJ);
+      FIELD_RC (DIMJUST);
+      FIELD_RC (DIMFIT);
+      FIELD_B (DIMUPT);
+      FIELD_RC (DIMTZIN);
+      FIELD_RC (DIMMALTZ);
+      FIELD_RC (DIMMALTTZ);
+      FIELD_RC (DIMTAD);
+      FIELD_BS (DIMUNIT);
+      FIELD_BS (DIMAUNIT);
+      FIELD_BS (DIMDEC);
+      FIELD_BS (DIMTDEC);
+      FIELD_BS (DIMALTU);
+      FIELD_BS (DIMALTTD);
+      FIELD_BD (DIMSCALE);
+      FIELD_BD (DIMASZ);
+      FIELD_BD (DIMEXO);
+      FIELD_BD (DIMDLI);
+      FIELD_BD (DIMEXE);
+      FIELD_BD (DIMRND);
+      FIELD_BD (DIMDLE);
+      FIELD_BD (DIMTP);
+      FIELD_BD (DIMTM);
+      FIELD_BD (DIMCEN);
+      FIELD_BD (DIMTSZ);
+      FIELD_BD (DIMALTF);
+      FIELD_BD (DIMLFAC);
+      FIELD_BD (DIMTVP);
+      FIELD_BD (DIMTFAC);
+      FIELD_BD (DIMGAP);
+      FIELD_T (DIMPOST_T);
+      FIELD_T (DIMAPOST_T);
+      FIELD_T (DIMBLK_T);
+      FIELD_T (DIMBLK1_T);
+      FIELD_T (DIMBLK2_T);
+      FIELD_BS (DIMCLRD);
+      FIELD_BS (DIMCLRE);
+      FIELD_BS (DIMCLRT);
+    }
+
+  SINCE(R_2000)
+    {
+      FIELD_TV (DIMPOST);
+      FIELD_TV (DIMAPOST);
+      FIELD_BD (DIMSCALE);
+      FIELD_BD (DIMASZ);
+      FIELD_BD (DIMEXO);
+      FIELD_BD (DIMDLI);
+      FIELD_BD (DIMEXE);
+      FIELD_BD (DIMRND);
+      FIELD_BD (DIMDLE);
+      FIELD_BD (DIMTP);//
+      FIELD_BD (DIMTM);//
+    }
+
+  SINCE(R_2007)
+    {
+      FIELD_BD (DIMFXL);
+      FIELD_BD (DIMJOGANG);
+      FIELD_BS (DIMTFILL);
+      FIELD_CMC (DIMTFILLCLR);
+    }
+
+  SINCE(R_2000)
+    {
+      FIELD_B (DIMTOL);
+      FIELD_B (DIMLIM);
+      FIELD_B (DIMTIH);
+      FIELD_B (DIMTOH);
+      FIELD_B (DIMSE1);
+      FIELD_B (DIMSE2);
+      FIELD_BS (DIMTAD);
+      FIELD_BS (DIMZIN);
+      FIELD_BS (DIMAZIN);
+    }
+
+  SINCE(R_2007)
+    {
+      FIELD_BS (DIMARCSYM);
+    }
+
+  SINCE(R_2000)
+    {
+      FIELD_BD (DIMTXT);
+      FIELD_BD (DIMCEN);
+      FIELD_BD (DIMTSZ);
+      FIELD_BD (DIMALTF);
+      FIELD_BD (DIMLFAC);
+      FIELD_BD (DIMTVP);
+      FIELD_BD (DIMTFAC);
+      FIELD_BD (DIMGAP);
+      FIELD_BD (DIMALTRND);
+      FIELD_B (DIMALT);
+      FIELD_BS (DIMALTD);
+      FIELD_B (DIMTOFL);
+      FIELD_B (DIMSAH);
+      FIELD_B (DIMTIX);
+      FIELD_B (DIMSOXD);
+      FIELD_BS (DIMCLRD);
+      FIELD_BS (DIMCLRE);
+      FIELD_BS (DIMCLRT);
+      FIELD_BS (DIMADEC);
+      FIELD_BS (DIMDEC);
+      FIELD_BS (DIMTDEC);
+      FIELD_BS (DIMALTU);
+      FIELD_BS (DIMALTTD);
+      FIELD_BS (DIMAUNIT);
+      FIELD_BS (DIMFRAC);
+      FIELD_BS (DIMLUNIT);
+      FIELD_BS (DIMDSEP);
+      FIELD_BS (DIMTMOVE);
+      FIELD_BS (DIMJUST);
+      FIELD_B (DIMSD1);
+      FIELD_B (DIMSD2);
+      FIELD_BS (DIMTOLJ);
+      FIELD_BS (DIMTZIN);
+      FIELD_BS (DIMALTZ);
+      FIELD_BS (DIMALTTZ);
+      FIELD_B (DIMUPT);
+      FIELD_BS (DIMFIT);
+    }
+
+  SINCE(R_2007)
+    {
+      FIELD_B (DIMFXLON);
+    }
+
+  SINCE(R_2000)
+    {
+      FIELD_BS (DIMLWD);
+      FIELD_BS (DIMLWE);
+    }
+
+  FIELD_B (unknown);
+  FIELD_HANDLE(dimstyle_control, 4);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+  FIELD_HANDLE(null_handle, 5);
+  FIELD_HANDLE(shapefile, 5); /*(DIMTXSTY)*/
+
+  SINCE(R_2000)
+    {
+      FIELD_HANDLE(leader_block,5); /*(DIMLDRBLK)*/
+      FIELD_HANDLE(dimblk,5); /*(DIMBLK)*/
+      FIELD_HANDLE(dimblk1,5); /*(DIMBLK1)*/
+      FIELD_HANDLE(dimblk2,5); /*(DIMBLK2)*/
+    }
+
+  SINCE(R_2007)
+    {
+      FIELD_HANDLE(dimltype, ANYCODE);
+      FIELD_HANDLE(dimltex1, ANYCODE);
+      FIELD_HANDLE(dimltex2, ANYCODE);     
+    }
+
 DWG_OBJECT_END
 
 /*(70)*/
