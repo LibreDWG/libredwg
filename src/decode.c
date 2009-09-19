@@ -3991,12 +3991,28 @@ DWG_OBJECT_END
 
 /*(66)*/
 DWG_OBJECT(APPID_CONTROL);
-//TODO
+
+  FIELD_BS(num_entries);
+  FIELD_HANDLE (null_handle, 4);
+  XDICOBJHANDLE(3);
+  HANDLE_VECTOR(apps, num_entries, 2);
+
 DWG_OBJECT_END
 
 /*(67)*/
 DWG_OBJECT(APPID);
-//TODO
+
+  FIELD_TV (entry_name);
+  FIELD_B (_64_flag);
+  FIELD_BS (xrefindex_plus1);
+  FIELD_B (xrefdep);
+  FIELD_RC (unknown);
+
+  FIELD_HANDLE (app_control, 4);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+  FIELD_HANDLE (null_handle, 5);
+
 DWG_OBJECT_END
 
 /*(68)*/

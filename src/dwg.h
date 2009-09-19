@@ -1751,7 +1751,10 @@ typedef struct _dwg_object_VPORT
  */
 typedef struct _dwg_object_APPID_CONTROL
 {
-//TODO 
+  BITCODE_BS num_entries;
+  BITCODE_H null_handle;
+  BITCODE_H xdicobjhandle;
+  BITCODE_H* apps;
 } Dwg_Object_APPID_CONTROL;
 
 /**
@@ -1759,7 +1762,15 @@ typedef struct _dwg_object_APPID_CONTROL
  */
 typedef struct _dwg_object_APPID
 {
-//TODO 
+  BITCODE_TV entry_name;
+  BITCODE_B _64_flag;
+  BITCODE_BS xrefindex_plus1;
+  BITCODE_B xrefdep;
+  BITCODE_RC unknown;
+  BITCODE_H app_control;
+  BITCODE_H* reactors;
+  BITCODE_H xdicobjhandle;
+  BITCODE_H null_handle;
 } Dwg_Object_APPID;
 
 /**
