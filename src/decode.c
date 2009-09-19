@@ -4017,7 +4017,13 @@ DWG_OBJECT_END
 
 /*(68)*/
 DWG_OBJECT(DIMSTYLE_CONTROL);
-//TODO
+
+  FIELD_BS (num_entries);
+  FIELD_HANDLE (unknown_handle, ANYCODE); /*This is not stated in the spec*/
+  FIELD_HANDLE (null_handle, 4);
+  XDICOBJHANDLE(3);
+  HANDLE_VECTOR (dimstyles, num_entries, 2);
+
 DWG_OBJECT_END
 
 /*(69)*/

@@ -1778,7 +1778,11 @@ typedef struct _dwg_object_APPID
  */
 typedef struct _dwg_object_DIMSTYLE_CONTROL
 {
-//TODO 
+  BITCODE_BS num_entries;
+  BITCODE_H unknown_handle;  /*This is not stated in the spec*/
+  BITCODE_H null_handle;
+  BITCODE_H xdicobjhandle;
+  BITCODE_H* dimstyles;
 } Dwg_Object_DIMSTYLE_CONTROL;
 
 /**
