@@ -4234,7 +4234,16 @@ DWG_OBJECT_END
 
 /*(72)*/
 DWG_OBJECT(GROUP);
-//TODO
+
+  FIELD_TV (str);
+  FIELD_BS (unnamed);
+  FIELD_BS (selectable);
+  FIELD_BL (num_handles);
+  FIELD_HANDLE (parenthandle, 4);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+  HANDLE_VECTOR(group_entries, num_handles, 5);
+
 DWG_OBJECT_END;
 
 /*(73)*/

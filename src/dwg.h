@@ -1897,7 +1897,7 @@ typedef struct _dwg_object_DIMSTYLE
 } Dwg_Object_DIMSTYLE;
 
 /**
- Struct for VP_ENT_HDR_CTRL (70)
+ Struct for VP_ENT_HDR_CONTROL (70)
  */
 typedef struct _dwg_object_VP_ENT_HDR_CONTROL
 {
@@ -1928,7 +1928,14 @@ typedef struct _dwg_object_VP_ENT_HDR
  */
 typedef struct _dwg_object_GROUP
 {
-//TODO 
+  BITCODE_TV str;
+  BITCODE_BS unnamed;
+  BITCODE_BS selectable;
+  BITCODE_BL num_handles;
+  BITCODE_H parenthandle;
+  BITCODE_H* reactors;
+  BITCODE_H xdicobjhandle;
+  BITCODE_H* group_entries;
 } Dwg_Object_GROUP;
 
 /**
