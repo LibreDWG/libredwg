@@ -1721,7 +1721,10 @@ typedef struct _dwg_object_UCS
  */
 typedef struct _dwg_object_VPORT_CONTROL
 {
-//TODO 
+  BITCODE_BS num_entries;
+  BITCODE_H null_handle;
+  BITCODE_H xdicobjhandle;
+  BITCODE_H* vports; 
 } Dwg_Object_VPORT_CONTROL;
 
 /**
@@ -1767,10 +1770,10 @@ typedef struct _dwg_object_DIMSTYLE
 /**
  Struct for VP_ENT_HDR_CTRL (70)
  */
-typedef struct _dwg_object_VP_ENT_HDR_CTRL
+typedef struct _dwg_object_VP_ENT_HDR_CONTROL
 {
 //TODO 
-} Dwg_Object_VP_ENT_HDR_CTRL;
+} Dwg_Object_VP_ENT_HDR_CONTROL;
 
 /**
  Struct for VP_ENT_HDR (71)
@@ -2283,7 +2286,7 @@ typedef struct _dwg_object_object
     Dwg_Object_APPID *APPID;
     Dwg_Object_DIMSTYLE_CONTROL *DIMSTYLE_CONTROL;
     Dwg_Object_DIMSTYLE *DIMSTYLE;
-    Dwg_Object_VP_ENT_HDR_CTRL *VP_ENT_HDR_CTRL;
+    Dwg_Object_VP_ENT_HDR_CONTROL *VP_ENT_HDR_CONTROL;
     Dwg_Object_VP_ENT_HDR *VP_ENT_HDR;
     Dwg_Object_GROUP *GROUP;
     Dwg_Object_MLINESTYLE *MLINESTYLE;
@@ -2300,12 +2303,10 @@ typedef struct _dwg_object_object
     Dwg_Object_RASTERVARIABLES *RASTERVARIABLES;
     Dwg_Object_SORTENTSTABLE *SORTENTSTABLE;
     Dwg_Object_SPATIAL_FILTER *SPATIAL_FILTER;
-    //NOT SURE ABOUT THESE:
     Dwg_Object_SPATIAL_INDEX *SPATIAL_INDEX;
+    Dwg_Object_XRECORD *XRECORD;
     Dwg_Object_VBA_PROJECT *VBA_PROJECT;
     Dwg_Object_WIPEOUTVARIABLE *WIPEOUTVARIABLE;
-
-    Dwg_Object_XRECORD *XRECORD;
   } tio;
 
   long unsigned int bitsize;

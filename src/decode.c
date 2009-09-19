@@ -150,6 +150,9 @@
   dwg_decode_common_entity_handle_data(dat, obj)
 
 #define DWG_ENTITY(token) \
+static void \
+dwg_decode_##token(Bit_Chain * dat, Dwg_Object * obj)\
+{\
   int vector_counter;\
   if (loglevel)\
   fprintf (stderr, "Entity " #token ":\n");\
@@ -167,7 +170,12 @@
     obj->handle.size,\
     obj->handle.value);
 
+#define DWG_ENTITY_END }
+
 #define DWG_OBJECT(token) \
+static void \
+dwg_decode_##token(Bit_Chain * dat, Dwg_Object * obj)\
+{\
   int vector_counter;\
   if (loglevel)\
     fprintf (stderr, "Object " #token ":\n");\
@@ -183,6 +191,8 @@
     obj->handle.code,\
     obj->handle.size,\
     obj->handle.value);
+
+#define DWG_OBJECT_END }
 
 /*--------------------------------------------------------------------------------
  * Private functions
@@ -2145,18 +2155,14 @@ dwg_decode_common_entity_handle_data(Bit_Chain * dat, Dwg_Object * obj)
 
 /* OBJECTS *******************************************************************/
 
-static void
-dwg_decode_UNUSED(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_ENTITY(UNUSED);
+DWG_ENTITY(UNUSED);
 
   COMMON_ENTITY_HANDLE_DATA;
-}
 
-static void
-dwg_decode_TEXT(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_ENTITY (TEXT);
+DWG_ENTITY_END
+
+/*(1)*/
+DWG_ENTITY (TEXT);
 
   VERSIONS(R_13,R_14)
     {
@@ -2232,12 +2238,10 @@ dwg_decode_TEXT(Bit_Chain * dat, Dwg_Object * obj)
   COMMON_ENTITY_HANDLE_DATA;
 
   FIELD_HANDLE(style, 5);
-}
+DWG_ENTITY_END
 
-static void
-dwg_decode_ATTRIB(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_ENTITY(ATTRIB);
+/*(2)*/
+DWG_ENTITY(ATTRIB);
 
   VERSIONS(R_13,R_14)
     {
@@ -2310,12 +2314,11 @@ dwg_decode_ATTRIB(Bit_Chain * dat, Dwg_Object * obj)
   COMMON_ENTITY_HANDLE_DATA;
 
   FIELD_HANDLE(style, 5);
-}
 
-static void
-dwg_decode_ATTDEF(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_ENTITY(ATTDEF);
+DWG_ENTITY_END
+
+/*(3)*/
+DWG_ENTITY(ATTDEF);
 
   VERSIONS(R_13,R_14)
     {
@@ -2390,38 +2393,34 @@ dwg_decode_ATTDEF(Bit_Chain * dat, Dwg_Object * obj)
   COMMON_ENTITY_HANDLE_DATA;
 
   FIELD_HANDLE(style, 5);
-}
 
-static void
-dwg_decode_BLOCK(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_ENTITY(BLOCK);
+DWG_ENTITY_END
+
+/*(4)*/
+DWG_ENTITY(BLOCK);
 
   FIELD(name, TV);
 
   COMMON_ENTITY_HANDLE_DATA;
-}
 
-static void
-dwg_decode_ENDBLK(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_ENTITY(ENDBLK);
+DWG_ENTITY_END
 
-  COMMON_ENTITY_HANDLE_DATA;
-}
-
-static void
-dwg_decode_SEQEND(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_ENTITY(SEQEND);
+/*(5)*/
+DWG_ENTITY(ENDBLK);
 
   COMMON_ENTITY_HANDLE_DATA;
-}
 
-static void
-dwg_decode_INSERT(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_ENTITY(INSERT);
+DWG_ENTITY_END
+
+/*(6)*/
+DWG_ENTITY(SEQEND);
+
+  COMMON_ENTITY_HANDLE_DATA;
+
+DWG_ENTITY_END
+
+/*(7)*/
+DWG_ENTITY(INSERT);
 
   FIELD_3BD(ins_pt);
 
@@ -2494,12 +2493,11 @@ dwg_decode_INSERT(Bit_Chain * dat, Dwg_Object * obj)
     {
       FIELD_HANDLE(seqend, 3);
     }
-}
 
-static void
-dwg_decode_MINSERT(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_ENTITY(MINSERT);
+DWG_ENTITY_END
+
+/*(8)*/
+DWG_ENTITY(MINSERT);
 
   FIELD_3BD(ins_pt);
 
@@ -2567,12 +2565,13 @@ dwg_decode_MINSERT(Bit_Chain * dat, Dwg_Object * obj)
     {
       FIELD_HANDLE(seqend, 3);
     }
-}
 
-static void
-dwg_decode_VERTEX_2D(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_ENTITY(VERTEX_2D);
+DWG_ENTITY_END
+
+//(9) Unknown
+
+/*(10)*/
+DWG_ENTITY(VERTEX_2D);
 
   FIELD(flags, RC);
   FIELD_3BD(point);
@@ -2591,46 +2590,40 @@ dwg_decode_VERTEX_2D(Bit_Chain * dat, Dwg_Object * obj)
 
   COMMON_ENTITY_HANDLE_DATA;
 
-}
+DWG_ENTITY_END
 
-static void
-dwg_decode_VERTEX_3D(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_ENTITY(VERTEX_3D);
+/*(11)*/
+DWG_ENTITY(VERTEX_3D);
 
   FIELD(flags, RC);
   FIELD_3BD(point);
 
   COMMON_ENTITY_HANDLE_DATA;
 
-}
+DWG_ENTITY_END
 
-static void
-dwg_decode_VERTEX_MESH(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_ENTITY(VERTEX_MESH);
+/*(12)*/
+DWG_ENTITY(VERTEX_MESH);
 
   FIELD(flags, RC);
   FIELD_3BD(point);
 
   COMMON_ENTITY_HANDLE_DATA;
-}
 
-static void
-dwg_decode_VERTEX_PFACE(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_ENTITY(VERTEX_PFACE);
+DWG_ENTITY_END
+
+/*(13)*/
+DWG_ENTITY(VERTEX_PFACE);
 
   FIELD(flags, RC);
   FIELD_3BD(point);
 
   COMMON_ENTITY_HANDLE_DATA;
-}
 
-static void
-dwg_decode_VERTEX_PFACE_FACE(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_ENTITY(VERTEX_PFACE_FACE);
+DWG_ENTITY_END
+
+/*(14)*/
+DWG_ENTITY(VERTEX_PFACE_FACE);
 
   FIELD(vertind[0], BS);
   FIELD(vertind[1], BS);
@@ -2638,12 +2631,11 @@ dwg_decode_VERTEX_PFACE_FACE(Bit_Chain * dat, Dwg_Object * obj)
   FIELD(vertind[3], BS);
 
   COMMON_ENTITY_HANDLE_DATA;
-}
 
-static void
-dwg_decode_POLYLINE_2D(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_ENTITY(POLYLINE_2D);
+DWG_ENTITY_END
+
+/*(15)*/
+DWG_ENTITY(POLYLINE_2D);
 
   FIELD(flags, BS);
   FIELD(curve_type, BS);
@@ -2672,12 +2664,11 @@ dwg_decode_POLYLINE_2D(Bit_Chain * dat, Dwg_Object * obj)
     }
 
   FIELD_HANDLE(seqend, 3);
-}
 
-static void
-dwg_decode_POLYLINE_3D(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_ENTITY(POLYLINE_3D);
+DWG_ENTITY_END
+
+/*(16)*/
+DWG_ENTITY(POLYLINE_3D);
 
   FIELD(flags_1, RC);
   FIELD(flags_2, RC);
@@ -2701,12 +2692,11 @@ dwg_decode_POLYLINE_3D(Bit_Chain * dat, Dwg_Object * obj)
     }
 
   FIELD_HANDLE(seqend, 3);
-}
 
-static void
-dwg_decode_ARC(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_ENTITY(ARC);
+DWG_ENTITY_END
+
+/*(17)*/
+DWG_ENTITY(ARC);
 
   FIELD_3BD(center);
   FIELD(radius, BD);
@@ -2716,12 +2706,11 @@ dwg_decode_ARC(Bit_Chain * dat, Dwg_Object * obj)
   FIELD(end_angle, BD);
 
   COMMON_ENTITY_HANDLE_DATA;
-}
 
-static void
-dwg_decode_CIRCLE(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_ENTITY(CIRCLE);
+DWG_ENTITY_END
+
+/*(18)*/
+DWG_ENTITY(CIRCLE);
 
   FIELD_3BD(center);
   FIELD(radius, BD);
@@ -2729,12 +2718,11 @@ dwg_decode_CIRCLE(Bit_Chain * dat, Dwg_Object * obj)
   FIELD_BE(extrusion);
 
   COMMON_ENTITY_HANDLE_DATA;
-}
 
-static void
-dwg_decode_LINE(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_ENTITY(LINE);
+DWG_ENTITY_END
+
+/*(19)*/
+DWG_ENTITY(LINE);
 
   VERSIONS(R_13,R_14)
     {
@@ -2766,7 +2754,9 @@ dwg_decode_LINE(Bit_Chain * dat, Dwg_Object * obj)
   FIELD_BE(extrusion);
 
   COMMON_ENTITY_HANDLE_DATA;
-}
+
+DWG_ENTITY_END
+
 
 /**
  * Macro for common DIMENSION declaration
@@ -2796,10 +2786,9 @@ dwg_decode_LINE(Bit_Chain * dat, Dwg_Object * obj)
         FIELD_B(flip_arrow2); \
       }
 
-static void
-dwg_decode_DIMENSION_ORDINATE(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_ENTITY(DIMENSION_ORDINATE);
+
+/*(20)*/
+DWG_ENTITY(DIMENSION_ORDINATE);
 
   DIMENSION_COMMON_DECODE;
   FIELD_2RD(_12_pt);
@@ -2811,12 +2800,11 @@ dwg_decode_DIMENSION_ORDINATE(Bit_Chain * dat, Dwg_Object * obj)
   COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE(dimstyle, 5);
   FIELD_HANDLE(block, 5);
-}
 
-static void
-dwg_decode_DIMENSION_LINEAR(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_ENTITY(DIMENSION_LINEAR);
+DWG_ENTITY_END
+
+/*(21)*/
+DWG_ENTITY(DIMENSION_LINEAR);
 
   DIMENSION_COMMON_DECODE;
   FIELD_2RD(_12_pt);
@@ -2829,12 +2817,11 @@ dwg_decode_DIMENSION_LINEAR(Bit_Chain * dat, Dwg_Object * obj)
   COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE(dimstyle, 5);
   FIELD_HANDLE(block, 5);
-}
 
-static void
-dwg_decode_DIMENSION_ALIGNED(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_ENTITY(DIMENSION_ALIGNED);
+DWG_ENTITY_END
+
+/*(22)*/
+DWG_ENTITY(DIMENSION_ALIGNED);
 
   DIMENSION_COMMON_DECODE;
   FIELD_2RD(_12_pt);
@@ -2846,12 +2833,11 @@ dwg_decode_DIMENSION_ALIGNED(Bit_Chain * dat, Dwg_Object * obj)
   COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE(dimstyle, 5);
   FIELD_HANDLE(block, 5);
-}
 
-static void
-dwg_decode_DIMENSION_ANG3PT(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_ENTITY(DIMENSION_ANG3PT);
+DWG_ENTITY_END
+
+/*(23)*/
+DWG_ENTITY(DIMENSION_ANG3PT);
 
   DIMENSION_COMMON_DECODE;
   FIELD_2RD(_12_pt);
@@ -2863,12 +2849,11 @@ dwg_decode_DIMENSION_ANG3PT(Bit_Chain * dat, Dwg_Object * obj)
   COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE(dimstyle, 5);
   FIELD_HANDLE(block, 5);
-}
 
-static void
-dwg_decode_DIMENSION_ANG2LN(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_ENTITY(DIMENSION_ANG2LN);
+DWG_ENTITY_END
+
+/*(24)*/
+DWG_ENTITY(DIMENSION_ANG2LN);
 
   DIMENSION_COMMON_DECODE;
   FIELD_2RD(_12_pt);
@@ -2881,12 +2866,11 @@ dwg_decode_DIMENSION_ANG2LN(Bit_Chain * dat, Dwg_Object * obj)
   COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE(dimstyle, 5);
   FIELD_HANDLE(block, 5);
-}
 
-static void
-dwg_decode_DIMENSION_RADIUS(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_ENTITY(DIMENSION_RADIUS);
+DWG_ENTITY_END
+
+/*(25)*/
+DWG_ENTITY(DIMENSION_RADIUS);
 
   DIMENSION_COMMON_DECODE;
   FIELD_2RD(_12_pt);
@@ -2897,11 +2881,11 @@ dwg_decode_DIMENSION_RADIUS(Bit_Chain * dat, Dwg_Object * obj)
   COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE(dimstyle, 5);
   FIELD_HANDLE(block, 5);
-}
-static void
-dwg_decode_DIMENSION_DIAMETER(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_ENTITY(DIMENSION_DIAMETER);
+
+DWG_ENTITY_END
+
+/*(26)*/
+DWG_ENTITY(DIMENSION_DIAMETER);
 
   DIMENSION_COMMON_DECODE;
   FIELD_2RD(_12_pt);
@@ -2912,12 +2896,11 @@ dwg_decode_DIMENSION_DIAMETER(Bit_Chain * dat, Dwg_Object * obj)
   COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE(dimstyle, 5);
   FIELD_HANDLE(block, 5);
-}
 
-static void
-dwg_decode_POINT(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_ENTITY(POINT);
+DWG_ENTITY_END
+
+/*(27)*/
+DWG_ENTITY(POINT);
 
   FIELD_BD(x);
   FIELD_BD(y);
@@ -2927,12 +2910,11 @@ dwg_decode_POINT(Bit_Chain * dat, Dwg_Object * obj)
   FIELD_BD(x_ang);
 
   COMMON_ENTITY_HANDLE_DATA;
-}
 
-static void
-dwg_decode_3DFACE(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_ENTITY(_3DFACE);
+DWG_ENTITY_END
+
+/*(28)*/
+DWG_ENTITY(_3DFACE);
 
   VERSIONS(R_13,R_14)
     {
@@ -2969,12 +2951,11 @@ dwg_decode_3DFACE(Bit_Chain * dat, Dwg_Object * obj)
     }
 
   COMMON_ENTITY_HANDLE_DATA;
-}
 
-static void
-dwg_decode_POLYLINE_PFACE(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_ENTITY(POLYLINE_PFACE);
+DWG_ENTITY_END
+
+/*(29)*/
+DWG_ENTITY(POLYLINE_PFACE);
 
   FIELD_BS(numverts);
   FIELD_BS(numfaces);
@@ -2996,13 +2977,11 @@ dwg_decode_POLYLINE_PFACE(Bit_Chain * dat, Dwg_Object * obj)
       HANDLE_VECTOR(vertex, owned_obj_count, 4);
     }
   FIELD_HANDLE(seqend, 3);
-}
 
-static void
-dwg_decode_POLYLINE_MESH(Bit_Chain * dat, Dwg_Object * obj)
-{
+DWG_ENTITY_END
 
-  DWG_ENTITY(POLYLINE_MESH);
+/*(30)*/
+DWG_ENTITY(POLYLINE_MESH);
 
   FIELD_BS(flags);
   FIELD_BS(curve_type);
@@ -3028,28 +3007,11 @@ dwg_decode_POLYLINE_MESH(Bit_Chain * dat, Dwg_Object * obj)
       HANDLE_VECTOR(vertex, owned_obj_count, 4);
     }
   FIELD_HANDLE(seqend, 3);
-}
 
-static void
-dwg_decode_SOLID(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_ENTITY(SOLID);
+DWG_ENTITY_END
 
-  FIELD_BT(thickness);
-  FIELD_BD(elevation);
-  FIELD_2RD(corner1);
-  FIELD_2RD(corner2);
-  FIELD_2RD(corner3);
-  FIELD_2RD(corner4);
-  FIELD_BE(extrusion);
-
-  COMMON_ENTITY_HANDLE_DATA;
-}
-
-static void
-dwg_decode_TRACE(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_ENTITY(TRACE);
+/*(31)*/
+DWG_ENTITY(SOLID);
 
   FIELD_BT(thickness);
   FIELD_BD(elevation);
@@ -3060,12 +3022,26 @@ dwg_decode_TRACE(Bit_Chain * dat, Dwg_Object * obj)
   FIELD_BE(extrusion);
 
   COMMON_ENTITY_HANDLE_DATA;
-}
 
-static void
-dwg_decode_SHAPE(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_ENTITY(SHAPE);
+DWG_ENTITY_END
+
+/*(32)*/
+DWG_ENTITY(TRACE);
+
+  FIELD_BT(thickness);
+  FIELD_BD(elevation);
+  FIELD_2RD(corner1);
+  FIELD_2RD(corner2);
+  FIELD_2RD(corner3);
+  FIELD_2RD(corner4);
+  FIELD_BE(extrusion);
+
+  COMMON_ENTITY_HANDLE_DATA;
+
+DWG_ENTITY_END
+
+/*(33)*/
+DWG_ENTITY(SHAPE);
 
   FIELD_3BD(ins_pt);
   FIELD_BD(scale);
@@ -3078,12 +3054,11 @@ dwg_decode_SHAPE(Bit_Chain * dat, Dwg_Object * obj)
 
   COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE(shapefile, 5);
-}
 
-static void
-dwg_decode_VIEWPORT(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_ENTITY(VIEWPORT);
+DWG_ENTITY_END
+
+/*(34)*/
+DWG_ENTITY(VIEWPORT);
 
   ent->center.x = bit_read_BD(dat);
   ent->center.y = bit_read_BD(dat);
@@ -3157,12 +3132,11 @@ dwg_decode_VIEWPORT(Bit_Chain * dat, Dwg_Object * obj)
     }
 
   COMMON_ENTITY_HANDLE_DATA;
-}
 
-static void
-dwg_decode_ELLIPSE(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_ENTITY(ELLIPSE);
+DWG_ENTITY_END
+
+/*(35)*/
+DWG_ENTITY(ELLIPSE);
 
   FIELD_3BD(center);
   FIELD_3BD(sm_axis);
@@ -3172,13 +3146,12 @@ dwg_decode_ELLIPSE(Bit_Chain * dat, Dwg_Object * obj)
   FIELD_BD(end_angle);
 
   COMMON_ENTITY_HANDLE_DATA;
-}
 
-static void
-dwg_decode_SPLINE(Bit_Chain * dat, Dwg_Object * obj)
-{
+DWG_ENTITY_END
+
+/*(36)*/
+DWG_ENTITY(SPLINE);
   int i;
-  DWG_ENTITY(SPLINE);
 
   ent->scenario = bit_read_BS(dat);
   if (ent->scenario != 1 && ent->scenario != 2)
@@ -3236,27 +3209,14 @@ dwg_decode_SPLINE(Bit_Chain * dat, Dwg_Object * obj)
     }
 
   COMMON_ENTITY_HANDLE_DATA;
-}
+DWG_ENTITY_END
 
-static void
-dwg_decode_RAY(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_ENTITY(RAY);
+//TODO: region(37)
+//TODO: 3dsolid(38)
+//TODO: body(39)
 
-  ent->x0 = bit_read_BD(dat);
-  ent->y0 = bit_read_BD(dat);
-  ent->z0 = bit_read_BD(dat);
-  ent->x1 = bit_read_BD(dat);
-  ent->y1 = bit_read_BD(dat);
-  ent->z1 = bit_read_BD(dat);
-
-  COMMON_ENTITY_HANDLE_DATA;
-}
-
-static void
-dwg_decode_XLINE(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_ENTITY(XLINE);
+/*(40)*/
+DWG_ENTITY(RAY);
 
   ent->x0 = bit_read_BD(dat);
   ent->y0 = bit_read_BD(dat);
@@ -3266,12 +3226,25 @@ dwg_decode_XLINE(Bit_Chain * dat, Dwg_Object * obj)
   ent->z1 = bit_read_BD(dat);
 
   COMMON_ENTITY_HANDLE_DATA;
-}
 
-static void
-dwg_decode_DICTIONARY(Bit_Chain *dat, Dwg_Object *obj)
-{
-  DWG_OBJECT(DICTIONARY);
+DWG_ENTITY_END
+
+/*(41)*/
+DWG_ENTITY(XLINE);
+
+  ent->x0 = bit_read_BD(dat);
+  ent->y0 = bit_read_BD(dat);
+  ent->z0 = bit_read_BD(dat);
+  ent->x1 = bit_read_BD(dat);
+  ent->y1 = bit_read_BD(dat);
+  ent->z1 = bit_read_BD(dat);
+
+  COMMON_ENTITY_HANDLE_DATA;
+
+DWG_ENTITY_END
+
+/*(42)*/
+DWG_OBJECT(DICTIONARY);
 
   FIELD(numitems, BS);
 
@@ -3300,12 +3273,13 @@ dwg_decode_DICTIONARY(Bit_Chain *dat, Dwg_Object *obj)
   REACTORS(4);
   XDICOBJHANDLE(3);
   HANDLE_VECTOR(itemhandles, numitems, 2);
-}
 
-static void
-dwg_decode_MTEXT(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_ENTITY(MTEXT);
+DWG_ENTITY_END
+
+//(43): Unknown
+
+/*(44)*/
+DWG_ENTITY(MTEXT);
 
   //spec-typo ? Spec says BD but we think it might be 3BD:
   FIELD_3BD(insertion_pt);
@@ -3340,13 +3314,11 @@ dwg_decode_MTEXT(Bit_Chain * dat, Dwg_Object * obj)
   COMMON_ENTITY_HANDLE_DATA;
 
   FIELD_HANDLE(style, 5);
-}
 
+DWG_ENTITY_END
 
-static void
-dwg_decode_LEADER(Bit_Chain *dat, Dwg_Object *obj)
-{
-  DWG_ENTITY(LEADER);
+/*(45)*/
+DWG_ENTITY(LEADER);
 
   FIELD(unknown_bit_1, B);
   FIELD(annot_type, BS);
@@ -3392,12 +3364,11 @@ dwg_decode_LEADER(Bit_Chain *dat, Dwg_Object *obj)
     }
 
   COMMON_ENTITY_HANDLE_DATA;
-}
 
-static void
-dwg_decode_TOLERANCE(Bit_Chain *dat, Dwg_Object *obj)
-{
-  DWG_ENTITY(TOLERANCE);
+DWG_ENTITY_END
+
+/*(46)*/
+DWG_ENTITY(TOLERANCE);
 
   VERSIONS(R_13, R_14)
     {
@@ -3412,12 +3383,11 @@ dwg_decode_TOLERANCE(Bit_Chain *dat, Dwg_Object *obj)
   FIELD(text_string, BS);
 
   COMMON_ENTITY_HANDLE_DATA;
-}
 
-static void
-dwg_decode_MLINE(Bit_Chain *dat, Dwg_Object *obj)
-{
-  DWG_ENTITY(MLINE);
+DWG_ENTITY_END
+
+/*(47)*/
+DWG_ENTITY(MLINE);
 
   FIELD(scale, BD);
   FIELD(just, RC); //spec-typo? Spec says EC instead of RC...
@@ -3455,12 +3425,11 @@ dwg_decode_MLINE(Bit_Chain *dat, Dwg_Object *obj)
     }
 
   COMMON_ENTITY_HANDLE_DATA;
-}
 
-static void
-dwg_decode_BLOCK_CONTROL(Bit_Chain *dat, Dwg_Object *obj)
-{
-  DWG_OBJECT(BLOCK_CONTROL);
+DWG_ENTITY_END
+
+/*(48)*/
+DWG_OBJECT(BLOCK_CONTROL);
 
   FIELD(num_entries, BS);
   FIELD_HANDLE(null_handle, 4);
@@ -3468,13 +3437,11 @@ dwg_decode_BLOCK_CONTROL(Bit_Chain *dat, Dwg_Object *obj)
   HANDLE_VECTOR(block_headers, num_entries, 2);
   FIELD_HANDLE(model_space,3);
   FIELD_HANDLE(paper_space,3);
-}
 
-static void
-dwg_decode_BLOCK_HEADER(Bit_Chain *dat, Dwg_Object *obj)
-{
-  int i;
-  DWG_OBJECT(BLOCK_HEADER);
+DWG_OBJECT_END
+
+/*(49)*/
+DWG_OBJECT(BLOCK_HEADER);
 
   FIELD(entry_name, TV);
   FIELD(_64_flag, B);
@@ -3548,23 +3515,21 @@ dwg_decode_BLOCK_HEADER(Bit_Chain *dat, Dwg_Object *obj)
       HANDLE_VECTOR(insert_handles, insert_count, ANYCODE)
       FIELD_HANDLE(layout_handle, ANYCODE);
     }
-}
 
-static void
-dwg_decode_LAYER_CONTROL(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_OBJECT(LAYER_CONTROL);
+DWG_OBJECT_END
+
+/*(50)*/
+DWG_OBJECT(LAYER_CONTROL);
 
   FIELD(num_entries, BS);
   FIELD_HANDLE(null_handle, 4);
   XDICOBJHANDLE(3);
   HANDLE_VECTOR(layers, num_entries, 2);
-}
 
-static void
-dwg_decode_LAYER(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_OBJECT(LAYER);
+DWG_OBJECT_END
+
+/*(51)*/
+DWG_OBJECT(LAYER);
 
   FIELD(entry_name, TV);
   FIELD(_64_flag, B);
@@ -3601,24 +3566,21 @@ dwg_decode_LAYER(Bit_Chain * dat, Dwg_Object * obj)
     }
 
   FIELD_HANDLE(linetype, 5);
-}
 
+DWG_OBJECT_END
 
-static void
-dwg_decode_SHAPEFILE_CONTROL(Bit_Chain *dat, Dwg_Object *obj)
-{
-  DWG_OBJECT(SHAPEFILE_CONTROL);
+/*(52)*/
+DWG_OBJECT(SHAPEFILE_CONTROL);
 
   FIELD(num_entries, BS);
   FIELD_HANDLE(null_handle, 4);
   XDICOBJHANDLE(3);
   HANDLE_VECTOR(shapefiles, num_entries, 2);
-}
 
-static void
-dwg_decode_SHAPEFILE(Bit_Chain *dat, Dwg_Object *obj)
-{
-  DWG_OBJECT(SHAPEFILE);
+DWG_OBJECT_END
+
+/*(53)*/
+DWG_OBJECT(SHAPEFILE);
 
   FIELD(entry_name, TV);
   FIELD(_64_flag, B);
@@ -3637,12 +3599,14 @@ dwg_decode_SHAPEFILE(Bit_Chain *dat, Dwg_Object *obj)
   REACTORS(4);
   XDICOBJHANDLE(3);
   FIELD_HANDLE(null_handle, 5);
-}
 
-static void
-dwg_decode_LTYPE_CONTROL(Bit_Chain *dat, Dwg_Object *obj)
-{
-  DWG_OBJECT(LTYPE_CONTROL);
+DWG_OBJECT_END
+
+//(54): Unknown
+//(55): Unknown
+
+/*(56)*/
+DWG_OBJECT(LTYPE_CONTROL);
 
   FIELD(num_entries, BS);
   FIELD_HANDLE(null_handle, 4);
@@ -3650,13 +3614,12 @@ dwg_decode_LTYPE_CONTROL(Bit_Chain *dat, Dwg_Object *obj)
   HANDLE_VECTOR(linetypes, num_entries, 2);
   FIELD_HANDLE(bylayer, 3);
   FIELD_HANDLE(byblock, 3);
-}
 
-static void
-dwg_decode_LTYPE(Bit_Chain *dat, Dwg_Object *obj)
-{
+DWG_OBJECT_END
+
+/*(57)*/
+DWG_OBJECT(LTYPE);
   char R2007plus_text_area_is_present = 0;
-  DWG_OBJECT(LTYPE);
 
   FIELD(entry_name, TV);
   FIELD(_64_flag, B);
@@ -3699,23 +3662,24 @@ dwg_decode_LTYPE(Bit_Chain *dat, Dwg_Object *obj)
   XDICOBJHANDLE(3);
   FIELD_HANDLE(null_handle, 5);
   HANDLE_VECTOR(shapefiles, num_dashes, 5);
-}
 
-static void
-dwg_decode_VIEW_CONTROL(Bit_Chain *dat, Dwg_Object *obj)
-{
-  DWG_OBJECT(VIEW_CONTROL);
+DWG_OBJECT_END
+
+//(58): Unknown
+//(59): Unknown
+
+/*(60)*/
+DWG_OBJECT(VIEW_CONTROL);
 
   FIELD(num_entries, BS);
   FIELD_HANDLE(null_handle, 4);
   XDICOBJHANDLE(3);
   HANDLE_VECTOR(views, num_entries, 2);
-}
 
-static void
-dwg_decode_VIEW(Bit_Chain *dat, Dwg_Object *obj)
-{
-  DWG_OBJECT(VIEW);
+DWG_OBJECT_END
+
+/*(61)*/
+DWG_OBJECT(VIEW);
 
   FIELD(entry_name, TV);
   FIELD(_64_flag, B);
@@ -3769,23 +3733,21 @@ dwg_decode_VIEW(Bit_Chain *dat, Dwg_Object *obj)
     {
       FIELD_HANDLE(live_section, ANYCODE);
     }
-}
 
-static void
-dwg_decode_UCS_CONTROL(Bit_Chain *dat, Dwg_Object *obj)
-{
-  DWG_OBJECT(UCS_CONTROL);
+DWG_OBJECT_END
+
+/*(62)*/
+DWG_OBJECT(UCS_CONTROL);
 
   FIELD(num_entries, BS);
   FIELD_HANDLE(null_handle, 4);
   XDICOBJHANDLE(3);
   HANDLE_VECTOR(ucs, num_entries, 2);
-}
 
-static void
-dwg_decode_UCS(Bit_Chain *dat, Dwg_Object *obj)
-{
-  DWG_OBJECT(UCS);
+DWG_OBJECT_END
+
+/*(63)*/
+DWG_OBJECT(UCS);
 
   FIELD(entry_name, TV);
   FIELD(_64_flag, B);
@@ -3811,12 +3773,47 @@ dwg_decode_UCS(Bit_Chain *dat, Dwg_Object *obj)
       FIELD_HANDLE(base_ucs_handle, ANYCODE);
       FIELD_HANDLE(unknown, ANYCODE); 
     }
-}
+DWG_OBJECT_END
 
-static void
-dwg_decode_VP_ENT_HDR(Bit_Chain *dat, Dwg_Object *obj)
-{
-  DWG_OBJECT(VP_ENT_HDR);
+/*(64)*/
+DWG_OBJECT(VPORT_CONTROL);
+//TODO
+DWG_OBJECT_END
+
+/*(65)*/
+DWG_OBJECT(VPORT);
+//TODO
+DWG_OBJECT_END
+
+/*(66)*/
+DWG_OBJECT(APPID_CONTROL);
+//TODO
+DWG_OBJECT_END
+
+/*(67)*/
+DWG_OBJECT(APPID);
+//TODO
+DWG_OBJECT_END
+
+/*(68)*/
+DWG_OBJECT(DIMSTYLE_CONTROL);
+//TODO
+DWG_OBJECT_END
+
+/*(69)*/
+DWG_OBJECT(DIMSTYLE);
+//TODO
+DWG_OBJECT_END
+
+/*(70)*/
+DWG_OBJECT(VP_ENT_HDR_CONTROL);
+
+//TODO
+
+DWG_OBJECT_END
+
+/*(71)*/
+DWG_OBJECT(VP_ENT_HDR);
 
   FIELD(entry_name, TV);
   FIELD(_64_flag, B);
@@ -3826,12 +3823,16 @@ dwg_decode_VP_ENT_HDR(Bit_Chain *dat, Dwg_Object *obj)
   FIELD_HANDLE(vp_ent_ctrl, ANYCODE);
   XDICOBJHANDLE(3);
   FIELD_HANDLE(null, 5);
-}
 
-static void
-dwg_decode_MLINESTYLE(Bit_Chain *dat, Dwg_Object *obj)
-{
-  DWG_OBJECT(MLINESTYLE);
+DWG_OBJECT_END
+
+/*(72)*/
+DWG_OBJECT(GROUP);
+//TODO
+DWG_OBJECT_END;
+
+/*(73)*/
+DWG_OBJECT(MLINESTYLE);
 
   FIELD(name, TV);
   FIELD(desc, TV);
@@ -3851,14 +3852,46 @@ dwg_decode_MLINESTYLE(Bit_Chain *dat, Dwg_Object *obj)
   FIELD_HANDLE(parenthandle, 4);
   REACTORS(4);
   XDICOBJHANDLE(3);
-}
+
+DWG_OBJECT_END
 
 
-static void
-dwg_decode_IMAGE(Bit_Chain *dat, Dwg_Object *obj)
-{
+
+
+
+
+
+
+
+//pg.135
+DWG_OBJECT(DICTIONARYVAR);
+
+  FIELD(intval, RC);
+  FIELD(str, BS);
+
+  FIELD_HANDLE(parenthandle, 4);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+
+DWG_OBJECT_END
+
+//pg.136
+DWG_OBJECT(HATCH);
+
+  //TODO: Implement-me!
+
+DWG_OBJECT_END
+
+//pg.139
+DWG_OBJECT(IDBUFFER);
+
+  //TODO: Implement-me!
+
+DWG_OBJECT_END
+
+//pg.140
+DWG_ENTITY(IMAGE);
   int i;
-  DWG_ENTITY(IMAGE);
 
   FIELD(class_version, BL);
   FIELD_3DPOINT(pt0);
@@ -3889,12 +3922,54 @@ dwg_decode_IMAGE(Bit_Chain *dat, Dwg_Object *obj)
     }
 
   COMMON_ENTITY_HANDLE_DATA;
-}
 
-static void
-dwg_decode_LAYOUT(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_OBJECT(LAYOUT);
+DWG_ENTITY_END
+
+//pg.142
+DWG_OBJECT(IMAGEDEF);
+
+  FIELD_BL (class_version);
+  FIELD_2RD (image_size);
+  FIELD_TV (file_path);
+  FIELD_B (is_loaded);
+  FIELD_RC (resunits);
+  FIELD_2RD (pixel_size);
+  FIELD_HANDLE (parent_handle, 3);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+
+DWG_OBJECT_END
+
+//PG.143
+DWG_OBJECT(IMAGEDEFREACTOR);
+
+  FIELD_BL (class_version);
+  FIELD_HANDLE (parent_handle, 4);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+
+DWG_OBJECT_END
+
+//pg.144
+DWG_OBJECT(LAYER_INDEX);
+
+  FIELD_BL (timestamp1);
+  FIELD_BL (timestamp2);
+  FIELD_BL (num_entries);
+  REPEAT (num_entries, entries, Dwg_LAYER_entry)
+    {
+      FIELD_BL (entries[vector_counter].index_long);
+      FIELD_TV (entries[vector_counter].index_str);
+    }
+  FIELD_HANDLE (parent_handle, 4);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+  HANDLE_VECTOR(entry_handles, num_entries, ANYCODE);
+
+DWG_OBJECT_END
+
+//pg.145
+DWG_OBJECT(LAYOUT);
 
   FIELD(page_setup_name, TV);
   FIELD(printer_or_config, TV);
@@ -3974,13 +4049,12 @@ dwg_decode_LAYOUT(Bit_Chain * dat, Dwg_Object * obj)
     {
       HANDLE_VECTOR(viewport_handles, viewport_count, ANYCODE);
     }
-}
 
-static void
-dwg_decode_LWPLINE(Bit_Chain * dat, Dwg_Object * obj)
-{
+DWG_OBJECT_END
+
+//pg.147
+DWG_ENTITY(LWPLINE);
   int i;
-  DWG_ENTITY(LWPLINE);
 
   ent->flags = bit_read_BS(dat);
   if (ent->flags & 4)
@@ -4037,14 +4111,12 @@ dwg_decode_LWPLINE(Bit_Chain * dat, Dwg_Object * obj)
     }
 
   COMMON_ENTITY_HANDLE_DATA;
-}
 
-static void
-dwg_decode_OLE2FRAME(Bit_Chain * dat, Dwg_Object * obj)
-{
+DWG_ENTITY_END
+
+//pg.149
+DWG_ENTITY(OLE2FRAME);
   int i;
-  DWG_ENTITY(OLE2FRAME);
-
   ent->flags = bit_read_BS(dat);
 
   SINCE(R_2000)
@@ -4063,175 +4135,59 @@ dwg_decode_OLE2FRAME(Bit_Chain * dat, Dwg_Object * obj)
     }
 
   COMMON_ENTITY_HANDLE_DATA;
-}
 
-static void
-dwg_decode_PLACEHOLDER(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_OBJECT(PLACEHOLDER);
+DWG_ENTITY_END
 
-  //spec says nothing about this one...
-  //TODO: find out what to do here.
-}
-
-static void
-dwg_decode_DICTIONARYVAR(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_OBJECT(DICTIONARYVAR);
-
-  FIELD(intval, RC);
-  FIELD(str, BS);
-
-  FIELD_HANDLE(parenthandle, 4);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
-}
-
-static void
-dwg_decode_WIPEOUTVARIABLE(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_OBJECT(WIPEOUTVARIABLE);
+//pg.150
+DWG_OBJECT(RASTERVARIABLES);
 
   //TODO: Implement-me!
 
-  //dwg_decode_handleref (dat, object);
-}
+DWG_OBJECT_END
 
-static void
-dwg_decode_IMAGEDEF(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_OBJECT(IMAGEDEF);
-
-  FIELD_BL (class_version);
-  FIELD_2RD (image_size);
-  FIELD_TV (file_path);
-  FIELD_B (is_loaded);
-  FIELD_RC (resunits);
-  FIELD_2RD (pixel_size);
-  FIELD_HANDLE (parent_handle, 3);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
-}
-
-static void
-dwg_decode_RASTERVARIABLES(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_OBJECT(RASTERVARIABLES);
+//pg.151
+DWG_OBJECT(SORTENTSTABLE);
 
   //TODO: Implement-me!
 
-  //dwg_decode_handleref (dat, object);
-}
+DWG_OBJECT_END
 
-static void
-dwg_decode_SPATIAL_INDEX(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_OBJECT(SPATIAL_INDEX);
+//pg.152
+DWG_OBJECT(SPATIAL_FILTER);
 
   //TODO: Implement-me!
 
-  //dwg_decode_handleref (dat, object);
-}
+DWG_OBJECT_END
 
-static void
-dwg_decode_XRECORD(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_OBJECT(XRECORD);
+//pg.153
+DWG_OBJECT(SPATIAL_INDEX);
 
   //TODO: Implement-me!
 
-  //dwg_decode_handleref (dat, object);
-}
+DWG_OBJECT_END
 
-static void
-dwg_decode_SPATIAL_FILTER(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_OBJECT(SPATIAL_FILTER);
+//pg.158
+DWG_ENTITY(TABLE);
 
   //TODO: Implement-me!
 
-  //dwg_decode_handleref (dat, object);
-}
+DWG_ENTITY_END
 
-static void
-dwg_decode_LAYER_INDEX(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_OBJECT(LAYER_INDEX);
-
-  FIELD_BL (timestamp1);
-  FIELD_BL (timestamp2);
-  FIELD_BL (num_entries);
-  REPEAT (num_entries, entries, Dwg_LAYER_entry)
-    {
-      FIELD_BL (entries[vector_counter].index_long);
-      FIELD_TV (entries[vector_counter].index_str);
-    }
-  FIELD_HANDLE (parent_handle, 4);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
-  HANDLE_VECTOR(entry_handles, num_entries, ANYCODE);
-}
-
-static void
-dwg_decode_DICTIONARYWDLFT(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_OBJECT(DICTIONARYWDLFT);
+//pg.164
+DWG_OBJECT(XRECORD);
 
   //TODO: Implement-me!
 
-  //dwg_decode_handleref (dat, object);
-}
+DWG_OBJECT_END
 
-static void
-dwg_decode_IMAGEDEFREACTOR(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_OBJECT(IMAGEDEFREACTOR);
-
-  FIELD_BL (class_version);
-  FIELD_HANDLE (parent_handle, 4);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
-}
-
-static void
-dwg_decode_IDBUFFER(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_OBJECT(IDBUFFER);
-
-  //TODO: Implement-me!
-
-  //dwg_decode_handleref (dat, object);
-}
-
-static void
-dwg_decode_HATCH(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_OBJECT(HATCH);
-
-  //TODO: Implement-me!
-
-  //dwg_decode_handleref (dat, object);
-}
-
-static void
-dwg_decode_VBA_PROJECT(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_OBJECT(VBA_PROJECT);
-
-  //TODO: Implement-me!
-
-  //dwg_decode_handleref (dat, object);
-}
-
-static void
-dwg_decode_SORTENTSTABLE(Bit_Chain * dat, Dwg_Object * obj)
-{
-  DWG_OBJECT(SORTENTSTABLE);
-
-  //TODO: Implement-me!
-
-  //dwg_decode_handleref (dat, object);
-}
+////////////////////
+// These objects are not described in the spec:
+//
+// DICTIONARYWDLFT
+// WIPEOUTVARIABLE
+// PLACEHOLDER
+// VBA_PROJECT
+//
 
 static int
 dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
@@ -4247,7 +4203,7 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp(dwg->class[i].dxfname, "DICTIONARYWDFLT"))
     {
-      dwg_decode_DICTIONARYWDLFT(dat, obj);
+//TODO:      dwg_decode_DICTIONARYWDLFT(dat, obj);
       return 0;
     }
   if (!strcmp(dwg->class[i].dxfname, "HATCH"))
@@ -4297,7 +4253,7 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp(dwg->class[i].dxfname, "PLACEHOLDER"))
     {
-      dwg_decode_PLACEHOLDER(dat, obj);
+//TODO:      dwg_decode_PLACEHOLDER(dat, obj);
       return 0;
     }
   if (!strcmp(dwg->class[i].dxfname, "RASTERVARIABLES"))
@@ -4322,12 +4278,12 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp(dwg->class[i].dxfname, "VBA_PROJECT"))
     {
-      dwg_decode_VBA_PROJECT(dat, obj);
+//TODO:      dwg_decode_VBA_PROJECT(dat, obj);
       return 0;
     }
   if (!strcmp(dwg->class[i].dxfname, "WIPEOUTVARIABLE"))
     {
-      dwg_decode_WIPEOUTVARIABLE(dat, obj);
+//TODO:      dwg_decode_WIPEOUTVARIABLE(dat, obj);
       return 0;
     }
   if (!strcmp(dwg->class[i].dxfname, "XRECORD"))
@@ -4471,7 +4427,7 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
     dwg_decode_POINT(dat, obj);
     break;
   case DWG_TYPE__3DFACE:
-    dwg_decode_3DFACE(dat, obj);
+    dwg_decode__3DFACE(dat, obj);
     break;
   case DWG_TYPE_POLYLINE_PFACE:
     dwg_decode_POLYLINE_PFACE(dat, obj);
