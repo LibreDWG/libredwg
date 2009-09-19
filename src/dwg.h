@@ -1901,7 +1901,10 @@ typedef struct _dwg_object_DIMSTYLE
  */
 typedef struct _dwg_object_VP_ENT_HDR_CONTROL
 {
-//TODO 
+  BITCODE_BS num_entries;
+  BITCODE_H null_handle;
+  BITCODE_H xdicobjhandle;
+  BITCODE_H* viewport_entity_headers;
 } Dwg_Object_VP_ENT_HDR_CONTROL;
 
 /**

@@ -4211,7 +4211,10 @@ DWG_OBJECT_END
 /*(70)*/
 DWG_OBJECT(VP_ENT_HDR_CONTROL);
 
-//TODO
+  FIELD_BS (num_entries);
+  FIELD_HANDLE (null_handle, 4);
+  XDICOBJHANDLE(3);
+  HANDLE_VECTOR(viewport_entity_headers, num_entries, 2);
 
 DWG_OBJECT_END
 
