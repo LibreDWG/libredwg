@@ -25,14 +25,22 @@
 #include "../src/bits.h"
 #include <dwg.h>
 
-double page_width;
-double page_height;
+double model_xmin, model_ymin;
+double page_width, page_height, scale;
+
+double transform_X(double x){
+  return x - model_xmin;
+}
+
+double transform_Y(double y){
+  return page_height - (y - model_ymin);
+}
 
 int
 test_SVG(char *filename);
 
 void
-output_SVG(Dwg_Data* dwg_struct);
+output_SVG(Dwg_Data* dwg);
 
 int
 main(int argc, char *argv[])
@@ -49,19 +57,19 @@ int
 test_SVG(char *filename)
 {
   int error;
-  Dwg_Data dwg_struct;
+  Dwg_Data dwg;
 
   if (filename)
-    error = dwg_read_file(filename, &dwg_struct);
+    error = dwg_read_file(filename, &dwg);
   else
-    error = dwg_read_file(FILENAME ".dwg", &dwg_struct);
+    error = dwg_read_file(FILENAME ".dwg", &dwg);
 
   if (!error)
     {
-      output_SVG(&dwg_struct);
+      output_SVG(&dwg);
     }
 
-  dwg_free(&dwg_struct);
+  dwg_free(&dwg);
   return error;
 }
 
@@ -76,7 +84,7 @@ output_TEXT(Dwg_Object* obj)
 
   printf(
       "\t<text id=\"dwg-object-%d\" x=\"%f\" y=\"%f\" font-family=\"Verdana\" font-size=\"%f\" fill=\"blue\">%s</text>\n",
-      obj->index, text->insertion_pt.x, page_height - text->insertion_pt.y,
+      obj->index, transform_X(text->insertion_pt.x), transform_Y(text->insertion_pt.y),
       text->height /* fontsize */, text->text_value);
 }
 
@@ -88,8 +96,7 @@ output_LINE(Dwg_Object* obj)
   line = obj->tio.entity->tio.LINE;
   printf(
       "\t<path id=\"dwg-object-%d\" d=\"M %f,%f %f,%f\" style=\"fill:none;stroke:blue;stroke-width:0.1px\" />\n",
-      obj->index, line->start.x, page_height - line->start.y, line->end.x, page_height
-          - line->end.y);
+      obj->index, transform_X(line->start.x), transform_Y(line->start.y), transform_X(line->end.x), transform_Y(line->end.y));
 }
 
 void
@@ -99,7 +106,7 @@ output_CIRCLE(Dwg_Object* obj)
   circle = obj->tio.entity->tio.CIRCLE;
   printf(
       "\t<circle id=\"dwg-object-%d\" cx=\"%f\" cy=\"%f\" r=\"%f\" fill=\"none\" stroke=\"blue\" stroke-width=\"0.1px\" />\n",
-      obj->index, circle->center.x, page_height - circle->center.y, circle->radius);
+      obj->index, transform_X(circle->center.x), transform_Y(circle->center.y), circle->radius);
 }
 
 void
@@ -115,8 +122,8 @@ output_ARC(Dwg_Object* obj)
   int large_arc = (arc->end_angle - arc->start_angle < 3.1415) ? 0 : 1;
   printf(
       "\t<path id=\"dwg-object-%d\" d=\"M %f,%f A %f,%f 0 %d 0 %f,%f\" fill=\"none\" stroke=\"blue\" stroke-width=\"%f\" />\n",
-      obj->index, x_start, page_height - y_start, arc->radius, arc->radius,
-      large_arc, x_end, page_height - y_end, 0.1);
+      obj->index, transform_X(x_start), transform_Y(y_start), arc->radius, arc->radius,
+      large_arc, transform_X(x_end), transform_Y(y_end), 0.1);
 }
 
 void
@@ -130,7 +137,7 @@ output_INSERT(Dwg_Object* obj)
       printf(
           "\t<use id=\"dwg-object-%d\" transform=\"translate(%f %f) rotate(%f) scale(%f %f)\" xlink:href=\"#symbol-%lu\" /><!-- block_header->handleref: %d.%d.%lu -->\n",
           obj->index,
-          insert->ins_pt.x, page_height - insert->ins_pt.y, (180.0 / M_PI)
+          transform_X(insert->ins_pt.x), transform_Y(insert->ins_pt.y), (180.0 / M_PI)
               * insert->rotation_ang, insert->scale.x, insert->scale.y,
           insert->block_header->absolute_ref,
           insert->block_header->handleref.code,
@@ -206,12 +213,22 @@ void output_BLOCK_HEADER(Dwg_Object_Ref* ref)
 }
 
 void
-output_SVG(Dwg_Data* dwg_struct)
+output_SVG(Dwg_Data* dwg)
 {
   unsigned int i;
   Dwg_Object *obj;
-  page_width = dwg_model_x_max(dwg_struct) - dwg_model_x_min(dwg_struct);
-  page_height = dwg_model_y_max(dwg_struct) - dwg_model_y_min(dwg_struct);
+
+  model_xmin = dwg_model_x_min(dwg);
+  model_ymin = dwg_model_y_min(dwg);
+
+  double dx = (dwg_model_x_max(dwg) - dwg_model_x_min(dwg));
+  double dy = (dwg_model_y_max(dwg) - dwg_model_y_min(dwg));
+  double scale_x = dx / (dwg_page_x_max(dwg) - dwg_page_x_min(dwg));
+  double scale_y = dy / (dwg_page_y_max(dwg) - dwg_page_y_min(dwg));
+  //scale = 25.4 / 72; // pt:mm
+  page_width = dx;
+  page_height = dy;
+  //scale *= (scale_x > scale_y ? scale_x : scale_y);
 
   printf("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
     "<svg\n"
@@ -223,7 +240,7 @@ output_SVG(Dwg_Data* dwg_struct)
     "   height=\"%f\"\n"
     ">\n", page_width, page_height);
 
-  obj = &dwg_struct->object[0];
+  obj = &dwg->object[0];
   if (obj->type != DWG_TYPE_BLOCK_CONTROL)
     {
       fprintf(stderr, "ERROR: First object is not a BLOCK_CONTROL\n");
@@ -243,9 +260,9 @@ output_SVG(Dwg_Data* dwg_struct)
   output_BLOCK_HEADER(block_control->paper_space);
 
 /*
-  for (i = 0; i < dwg_struct->num_objects; i++)
+  for (i = 0; i < dwg->num_objects; i++)
     {
-      obj = &dwg_struct->object[i];
+      obj = &dwg->object[i];
       output_object(obj);
     }
 */

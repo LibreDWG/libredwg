@@ -55,8 +55,8 @@ create_postscript(Dwg_Data *dwg, char *output)
 
   /* First page: Model Space (?)
    */
-  dx = (dwg_model_page_x_max(dwg) - dwg_model_page_x_min(dwg));
-  dy = (dwg_model_page_y_max(dwg) - dwg_model_page_y_min(dwg));
+  dx = (dwg_model_x_max(dwg) - dwg_model_x_min(dwg));
+  dy = (dwg_model_y_max(dwg) - dwg_model_y_min(dwg));
   scale_x = dx / (dwg_model_x_max(dwg) - dwg_model_x_min(dwg));
   scale_y = dy / (dwg_model_y_max(dwg) - dwg_model_y_min(dwg));
   scale = 25.4 / 72; // pt:mm
