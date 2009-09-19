@@ -65,6 +65,9 @@ bit_read_BB(Bit_Chain * bit_datenaro);
 void
 bit_write_BB(Bit_Chain * bit_datenaro, unsigned char value);
 
+BITCODE_4BITS
+bit_read_4BITS(Bit_Chain * dat);
+
 BITCODE_RC
 bit_read_RC(Bit_Chain * bit_datenaro);
 

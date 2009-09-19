@@ -60,6 +60,8 @@ extern "C"
 #define BITCODE_BE BITCODE_3BD 
 #define BITCODE_CMC Dwg_Color
 #define BITCODE_H Dwg_Object_Ref*
+#define BITCODE_4BITS BITCODE_RC
+#define FORMAT_4BITS "%1x" 
 
 #define BITCODE_T BITCODE_TV //TODO: implement version dependant string parsing
 
@@ -1621,7 +1623,7 @@ typedef struct _dwg_object_VIEW
   BITCODE_BD lens_legth;
   BITCODE_BD front_clip;
   BITCODE_BD back_clip;
-  BITCODE_RC view_mode; //??? 4bits
+  BITCODE_4BITS view_mode;
   BITCODE_RC render_mode;
   BITCODE_B pspace_flag;
   BITCODE_B associated_ucs;
@@ -1689,7 +1691,59 @@ typedef struct _dwg_object_VPORT_CONTROL
  */
 typedef struct _dwg_object_VPORT
 {
-//TODO 
+  BITCODE_TV entry_name;
+  BITCODE_B _64_flag;
+  BITCODE_BS xrefindex_plus1;
+  BITCODE_B xrefdep;
+  BITCODE_BD view_height;
+  BITCODE_BD aspect_ratio;
+  BITCODE_2RD view_center;
+  BITCODE_3BD view_target;
+  BITCODE_3BD view_dir;
+  BITCODE_BD view_twist;
+  BITCODE_BD lens_length;
+  BITCODE_BD front_clip;
+  BITCODE_BD back_clip;
+  BITCODE_4BITS view_mode;
+  BITCODE_RC render_mode;
+  BITCODE_B use_default_lights;
+  BITCODE_RC default_lightining_type;
+  BITCODE_BD brightness;
+  BITCODE_BD contrast;
+  BITCODE_CMC ambient_color;
+  BITCODE_2RD lower_left;
+  BITCODE_2RD upper_right;
+  BITCODE_B UCSFOLLOW;
+  BITCODE_BS circle_zoom;
+  BITCODE_B fast_zoom;
+  BITCODE_B UCSICON_0;
+  BITCODE_B UCSICON_1;
+  BITCODE_B grid_on_off;
+  BITCODE_2RD grid_spacing;
+  BITCODE_B snap_on_off;
+  BITCODE_B snap_style;
+  BITCODE_BS snap_isopair;
+  BITCODE_BD snap_rot;
+  BITCODE_2RD snap_base;
+  BITCODE_2RD snap_spacing;
+  BITCODE_B unknown;
+  BITCODE_B ucs_pre_viewport;
+  BITCODE_3BD ucs_origin;
+  BITCODE_3BD ucs_x_axis;
+  BITCODE_3BD ucs_y_axis;
+  BITCODE_BD ucs_elevation;
+  BITCODE_BS ucs_orthografic_type;
+  BITCODE_BS grid_flags;
+  BITCODE_BS grid_major;
+  BITCODE_H vport_control;
+  BITCODE_H* reactors;
+  BITCODE_H xdicobjhandle;
+  BITCODE_H null_handle;
+  BITCODE_H background_handle;
+  BITCODE_H visual_style_handle;
+  BITCODE_H sun_handle;
+  BITCODE_H named_ucs_handle;
+  BITCODE_H base_ucs_handle;
 } Dwg_Object_VPORT;
 
 /**

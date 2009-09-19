@@ -137,6 +137,16 @@ bit_write_BB(Bit_Chain * dat, unsigned char value)
   bit_advance_position(dat, 2);
 }
 
+/** Read 1 nibble.
+ */
+BITCODE_4BITS
+bit_read_4BITS(Bit_Chain * dat)
+{
+  BITCODE_4BITS result = bit_read_RC(dat);
+  bit_advance_position(dat, -4);
+  return (result & 0xf0) >> 4;
+}
+
 /** Read 1 byte (raw char).
  */
 BITCODE_RC

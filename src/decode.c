@@ -75,7 +75,8 @@
 #define FIELD_MS(name) FIELD(name, MS);
 #define FIELD_TV(name) FIELD(name, TV);
 #define FIELD_T FIELD_TV /*TODO: implement version dependant string fields */
-#define FIELD_BT(name) FIELD(name, BT);
+#define FIELD_BT(name) FIELD(name, BT); 
+#define FIELD_4BITS(name) _obj->name = bit_read_4BITS(dat);
 
 #define FIELD_BE(name) bit_read_BE(dat, &_obj->name.x, &_obj->name.y, &_obj->name.z);
 #define FIELD_DD(name, _default) GET_FIELD(name) = bit_read_DD(dat, _default);
@@ -2133,6 +2134,7 @@ dwg_decode_common_entity_handle_data(Bit_Chain * dat, Dwg_Object * obj)
 
   if (0)
     { //TODO: these are optional. Figure out what is the condition.
+      // These seem to depend on FEDCBA flags: look at page 53 in the spec.
       ent->prev_entity = dwg_decode_handleref_with_code(dat, obj, obj->parent, 4);
       ent->next_entity = dwg_decode_handleref_with_code(dat, obj, obj->parent, 4);
     }
@@ -3904,7 +3906,87 @@ DWG_OBJECT_END
 
 /*(65)*/
 DWG_OBJECT(VPORT);
-//TODO
+
+  FIELD_TV (entry_name);
+  FIELD_B (_64_flag);
+  FIELD_BS (xrefindex_plus1);
+  FIELD_B (xrefdep);
+  FIELD_BD (view_height);
+  FIELD_BD (aspect_ratio);
+  FIELD_2RD (view_center);
+  FIELD_3BD (view_target);
+  FIELD_3BD (view_dir);
+  FIELD_BD (view_twist);
+  FIELD_BD (lens_length);
+  FIELD_BD (front_clip);
+  FIELD_BD (back_clip);
+  FIELD_4BITS (view_mode);
+
+  SINCE(R_2000)
+    {
+      FIELD_RC (render_mode);
+    }
+
+  SINCE(R_2007)
+    {
+      FIELD_B (use_default_lights);
+      FIELD_RC (default_lightining_type);
+      FIELD_BD (brightness);
+      FIELD_BD (contrast);
+      FIELD_CMC (ambient_color);
+    }
+
+  FIELD_2RD (lower_left);
+  FIELD_2RD (upper_right);
+  FIELD_B (UCSFOLLOW);
+  FIELD_BS (circle_zoom);
+  FIELD_B (fast_zoom);
+  FIELD_B (UCSICON_0);
+  FIELD_B (UCSICON_1);
+  FIELD_B (grid_on_off);
+  FIELD_2RD (grid_spacing);
+  FIELD_B (snap_on_off);
+  FIELD_B (snap_style);
+  FIELD_BS (snap_isopair);
+  FIELD_BD (snap_rot);
+  FIELD_2RD (snap_base);
+  FIELD_2RD (snap_spacing);
+
+  SINCE(R_2000)
+    {
+      FIELD_B (unknown);
+      FIELD_B (ucs_pre_viewport);
+      FIELD_3BD (ucs_origin);
+      FIELD_3BD (ucs_x_axis);
+      FIELD_3BD (ucs_y_axis);
+      FIELD_BD (ucs_elevation);
+      FIELD_BS (ucs_orthografic_type);
+    }
+
+  SINCE(R_2007)
+    {
+      FIELD_BS (grid_flags);
+      FIELD_BS (grid_major);
+    }
+
+  FIELD_HANDLE (vport_control, 4);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+  FIELD_HANDLE(null_handle, 5);
+
+  SINCE(R_2007)
+    {
+      FIELD_HANDLE (background_handle, ANYCODE);
+      FIELD_HANDLE (visual_style_handle, ANYCODE);
+      FIELD_HANDLE (sun_handle, ANYCODE);
+    }
+
+  SINCE(R_2000)
+    {
+      FIELD_HANDLE (named_ucs_handle, ANYCODE);
+      FIELD_HANDLE (base_ucs_handle, ANYCODE);
+    }
+
 DWG_OBJECT_END
 
 /*(66)*/
