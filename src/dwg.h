@@ -1681,7 +1681,7 @@ typedef struct _dwg_object_VPORT_CONTROL
   BITCODE_BS num_entries;
   BITCODE_H null_handle;
   BITCODE_H xdicobjhandle;
-  BITCODE_H* vports; 
+  BITCODE_H* vports;
 } Dwg_Object_VPORT_CONTROL;
 
 /**

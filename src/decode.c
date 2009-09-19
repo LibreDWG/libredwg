@@ -3894,7 +3894,12 @@ DWG_OBJECT_END
 
 /*(64)*/
 DWG_OBJECT(VPORT_CONTROL);
-//TODO
+
+  FIELD_BS (num_entries);
+  FIELD_HANDLE (null_handle, 4);
+  XDICOBJHANDLE(3);
+  HANDLE_VECTOR(vports, num_entries, 2); 
+
 DWG_OBJECT_END
 
 /*(65)*/
@@ -4320,7 +4325,7 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp(dwg->class[i].dxfname, "DICTIONARYWDFLT"))
     {
-//TODO:      dwg_decode_DICTIONARYWDLFT(dat, obj);
+      //dwg_decode_DICTIONARYWDLFT(dat, obj);
       return 0;
     }
   if (!strcmp(dwg->class[i].dxfname, "HATCH"))
@@ -4624,8 +4629,32 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
   case DWG_TYPE_UCS:
     dwg_decode_UCS(dat, obj);
     break;
+  case DWG_TYPE_VPORT_CONTROL:
+    dwg_decode_VPORT_CONTROL(dat, obj);
+    break;
+  case DWG_TYPE_VPORT:
+    dwg_decode_VPORT(dat, obj);
+    break;
+  case DWG_TYPE_APPID_CONTROL:
+    dwg_decode_APPID_CONTROL(dat, obj);
+    break;
+  case DWG_TYPE_APPID:
+    dwg_decode_APPID(dat, obj);
+    break;
+  case DWG_TYPE_DIMSTYLE_CONTROL:
+    dwg_decode_DIMSTYLE_CONTROL(dat, obj);
+    break;
+  case DWG_TYPE_DIMSTYLE:
+    dwg_decode_DIMSTYLE(dat, obj);
+    break;
+  case DWG_TYPE_VP_ENT_HDR_CONTROL:
+    dwg_decode_VP_ENT_HDR_CONTROL(dat, obj);
+    break;
   case DWG_TYPE_VP_ENT_HDR:
     dwg_decode_VP_ENT_HDR(dat, obj);
+    break;
+  case DWG_TYPE_GROUP:
+    dwg_decode_GROUP(dat, obj);
     break;
   case DWG_TYPE_MLINESTYLE:
     dwg_decode_MLINESTYLE(dat, obj);
