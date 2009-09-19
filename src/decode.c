@@ -146,6 +146,10 @@
   _obj->name = (type *) malloc(_obj->times * sizeof(type));\
   for (vector_counter=0; vector_counter<_obj->times; vector_counter++)
 
+#define REPEAT2(times, name, type) \
+  _obj->name = (type *) malloc(_obj->times * sizeof(type));\
+  for (vector_counter2=0; vector_counter2<_obj->times; vector_counter2++)
+
 #define COMMON_ENTITY_HANDLE_DATA \
   dwg_decode_common_entity_handle_data(dat, obj)
 
@@ -3211,9 +3215,122 @@ DWG_ENTITY(SPLINE);
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
-//TODO: region(37)
-//TODO: 3dsolid(38)
-//TODO: body(39)
+//TODO: 37, 38 and 39 are ACIS entities
+
+#define PARSE_WIRE_STRUCT(name)                       \
+  FIELD_RC(name.type);                                \
+  FIELD_BL(name.selection_marker);                    \
+  FIELD_BS(name.color);                               \
+  FIELD_BL(name.acis_index);                          \
+  FIELD_BL(name.num_points);                             \
+  FIELD_3DPOINT_VECTOR(name.points, name.num_points); \
+  FIELD_B(name.transform_present);                      \
+  if (GET_FIELD(name.transform_present))              \
+    {                                                 \
+      FIELD_3BD(name.axis_x);                         \
+      FIELD_3BD(name.axis_y);                         \
+      FIELD_3BD(name.axis_z);                         \
+      FIELD_3BD(name.translation);                    \
+      FIELD_BD(name.scale);                           \
+      FIELD_B(name.has_rotation);                     \
+      FIELD_B(name.has_reflection);                    \
+      FIELD_B(name.has_shear);                        \
+    }
+
+
+#define DECODE_3DSOLID decode_3dsolid(dat, obj, _obj, dwg);
+
+inline void decode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj, Dwg_Data* dwg){
+  int vector_counter, vector_counter2;
+
+  FIELD_B(acis_empty);
+  int i=0;
+  if (!GET_FIELD(acis_empty))
+    {
+      FIELD_B (unknown);
+      FIELD_BS (version);
+      if (GET_FIELD(version)==1)
+        {
+          do
+            {
+              GET_FIELD(sat_data) = (BITCODE_RC**) realloc(GET_FIELD(sat_data), i * sizeof(BITCODE_RC*));
+              FIELD_BL (block_size);
+              FIELD_VECTOR (sat_data[i++], RC, block_size);
+            } while(GET_FIELD(block_size));
+        }
+      else
+        {
+          //TODO
+          fprintf(stderr, "TODO: Implement parsing of ACIS file in entities 37,38 and 39.\n");
+        }
+
+      FIELD_B (wireframe_data_present);
+      if (GET_FIELD(wireframe_data_present))
+        {
+          FIELD_B (point_present);
+          if (GET_FIELD(point_present))
+            {
+              FIELD_3BD (point);
+            }
+          else
+            {
+              GET_FIELD(point.x) = 0;
+              GET_FIELD(point.y) = 0;
+              GET_FIELD(point.z) = 0;
+            }
+          FIELD_BL (num_isolines);
+          FIELD_B (isoline_present);
+          if (GET_FIELD(isoline_present))
+            {
+              FIELD_BL (num_wires);
+              REPEAT(num_wires, wires, Dwg_Entity_3DSOLID_wire)
+                {
+                  PARSE_WIRE_STRUCT(wires[vector_counter])
+                }
+              FIELD_BL(num_silhouettes);
+              REPEAT(num_silhouettes, silhouettes, Dwg_Entity_3DSOLID_silhouette)
+                {
+                  FIELD_BL(silhouettes[vector_counter].vp_id);
+                  FIELD_3BD(silhouettes[vector_counter].vp_target);
+                  FIELD_3BD(silhouettes[vector_counter].vp_dir_from_target);
+                  FIELD_3BD(silhouettes[vector_counter].vp_up_dir);
+                  FIELD_B(silhouettes[vector_counter].vp_perspective);
+                  FIELD_BL(silhouettes[vector_counter].num_wires);
+                  REPEAT2(silhouettes[vector_counter].num_wires, silhouettes[vector_counter].wires, Dwg_Entity_3DSOLID_wire)
+                    {
+                      PARSE_WIRE_STRUCT(silhouettes[vector_counter].wires[vector_counter2])
+                    }
+                }
+              SINCE(R_2007)
+                {
+                  FIELD_BL(unknown_2007);
+                }
+
+              COMMON_ENTITY_HANDLE_DATA;
+
+              SINCE(R_2007)
+                {
+                  FIELD_HANDLE(history_id, ANYCODE);
+                }
+            }
+        }
+    }
+}
+
+/*(37)*/
+DWG_ENTITY(REGION);
+  DECODE_3DSOLID
+DWG_ENTITY_END
+
+/*(38)*/
+DWG_ENTITY(_3DSOLID);
+  DECODE_3DSOLID
+DWG_ENTITY_END
+
+/*(39)*/
+DWG_ENTITY(BODY);
+  DECODE_3DSOLID
+DWG_ENTITY_END
 
 /*(40)*/
 DWG_ENTITY(RAY);

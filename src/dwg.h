@@ -1182,107 +1182,64 @@ typedef struct _dwg_entity_SPLINE
 } Dwg_Entity_SPLINE;
 
 /**
- Struct for 3DSOLID (37)
+ Struct for 3DSOLID (38)
  */
+#define Dwg_Entity_3DSOLID Dwg_Entity__3DSOLID
 typedef struct _dwg_entity_3DSOLID_wire
 {
-  unsigned char type;
-  long unsigned int selection_marker;
-  unsigned int color;
-  long unsigned int acis_index;
-  long unsigned int num_points;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } point;
-  unsigned int transform_present;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } axis_x;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } axis_y;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } axis_z;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } translation;
-  double scale;
-  unsigned int has_rotation;
-  unsigned int has_reflection;
-  unsigned int has_shear;
+  BITCODE_RC type;
+  BITCODE_BL selection_marker;
+  BITCODE_BS color;
+  BITCODE_BL acis_index;
+  BITCODE_BL num_points;
+  BITCODE_3BD* points;
+  BITCODE_B transform_present;
+  BITCODE_3BD axis_x;
+  BITCODE_3BD axis_y;
+  BITCODE_3BD axis_z;
+  BITCODE_3BD translation;
+  BITCODE_BD scale;
+  BITCODE_B has_rotation;
+  BITCODE_B has_reflection;
+  BITCODE_B has_shear;
 } Dwg_Entity_3DSOLID_wire;
 
 typedef struct _dwg_entity_3DSOLID_silhouette
 {
-  unsigned long vp_id;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } vp_target;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } dir_target;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } up_dir;
-  unsigned long num_wires;
+  BITCODE_BL vp_id;
+  BITCODE_3BD vp_target;
+  BITCODE_3BD vp_dir_from_target;
+  BITCODE_3BD vp_up_dir;
+  BITCODE_B vp_perspective;
+  BITCODE_BL num_wires;
   Dwg_Entity_3DSOLID_wire * wires;
 } Dwg_Entity_3DSOLID_silhouette;
 
 typedef struct _dwg_entity_3DSOLID
 {
-  unsigned char acis_empty;
-  unsigned char unknown;
-  unsigned int version;
-  long unsigned int block_size;
-  unsigned char ** sat_data;
-  unsigned char * acis_data;
-  unsigned int acis_data_size;
-  unsigned int wireframe_data_present;
-  unsigned int point_present;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } point;
-  unsigned long num_isolines;
-  unsigned int isoline_present;
-  unsigned int num_wires;
+  BITCODE_B acis_empty;
+  BITCODE_B unknown;
+  BITCODE_BS version;
+  BITCODE_BL block_size;
+  BITCODE_RC** sat_data;
+  BITCODE_RC* acis_data;
+  BITCODE_B wireframe_data_present;
+  BITCODE_B point_present;
+  BITCODE_3BD point;
+  BITCODE_BL num_isolines;
+  BITCODE_B isoline_present;
+  BITCODE_BL num_wires;
   Dwg_Entity_3DSOLID_wire * wires;
-  unsigned long num_silhouettes;
+  BITCODE_BL num_silhouettes;
   Dwg_Entity_3DSOLID_silhouette * silhouettes;
-  //TODO review spec - extremely fuzzy
-  unsigned int acis_empty2;
-  long unsigned int unknown2007;
+  BITCODE_B acis_empty2;
+  struct _dwg_entity_3DSOLID* extra_acis_data;//is it the best approach?
+  BITCODE_BL unknown_2007;
+  BITCODE_H history_id;
 } Dwg_Entity_3DSOLID;
 
 /**
- Struct for REGION (38)
+ Struct for REGION (37)
  */
 typedef Dwg_Entity_3DSOLID Dwg_Entity_REGION;
 
