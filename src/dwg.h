@@ -1985,12 +1985,78 @@ typedef struct _dwg_object_DICTIONARYWDLFT
 } Dwg_Object_DICTIONARYWDLFT;
 
 /**
- Struct for HATCH (varies)
+ Structs for HATCH (varies)
  */
-typedef struct _dwg_object_HATCH
+
+typedef struct _dwg_entity_HATCH_color
 {
-//TODO 
-} Dwg_Object_HATCH;
+  BITCODE_BD unknown_double;
+  BITCODE_BS unknown_short;
+  BITCODE_BL rgb_color;
+  BITCODE_RC ignored_color_byte;
+} Dwg_Entity_HATCH_Color;
+
+typedef struct _dwg_entity_HATCH_control_point
+{
+  BITCODE_2RD point;
+  BITCODE_BD weigth;
+} Dwg_Entity_HATCH_ControlPoint;
+
+typedef struct _dwg_entity_HATCH_pathseg
+{
+  BITCODE_RC type_status;
+  /* LINE */
+  BITCODE_2RD first_endpoint;
+  BITCODE_2RD second_endpoint;
+  /* CIRCULAR ARC */
+  BITCODE_2RD center;
+  BITCODE_BD radius;
+  BITCODE_BD start_angle;
+  BITCODE_BD end_angle;
+  BITCODE_B is_ccw;
+  /* ELLIPTICAL ARC */
+//BITCODE_2RD center
+  BITCODE_2RD endpoint;
+  BITCODE_BD minor_major_ratio;
+//BITCODE_BD start_angle;
+//BITCODE_BD end_angle;
+//BITCODE_B is_ccw;
+  /* SPLINE */
+  BITCODE_BL degree;
+  BITCODE_B is_rational;
+  BITCODE_B is_periodic;
+  BITCODE_BL num_knots;
+  BITCODE_BL num_control_points;
+  BITCODE_BD* knots;
+  Dwg_Entity_HATCH_ControlPoint* control_points;
+} Dwg_Entity_HATCH_PathSeg;
+
+typedef struct _dwg_entity_HATCH_path
+{
+  BITCODE_BL flag;
+  BITCODE_BL num_path_segs;
+  Dwg_Entity_HATCH_PathSeg* segs;
+} Dwg_Entity_HATCH_Path;
+
+typedef struct _dwg_entity_HATCH
+{
+  BITCODE_BL is_gradient_fill;
+  BITCODE_BL reserved;
+  BITCODE_BD gradient_angle;
+  BITCODE_BD gradient_shift;
+  BITCODE_BL single_color_gradient;
+  BITCODE_BD gradient_tint;
+  BITCODE_BL num_colors;
+  Dwg_Entity_HATCH_Color* colors;
+  BITCODE_TV gradient_name;
+  BITCODE_BD z_coord; //x,y always 0.0
+  BITCODE_3BD extrusion;
+  BITCODE_TV name;
+  BITCODE_B solid_fill;
+  BITCODE_B associative;
+  BITCODE_BL num_paths;
+  Dwg_Entity_HATCH_Path* paths;
+} Dwg_Entity_HATCH;
 
 /**
  Struct for IDBUFFER (varies)
@@ -2356,6 +2422,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_LWPLINE *LWPLINE;
     Dwg_Entity_OLE2FRAME *OLE2FRAME;
     Dwg_Entity_TABLE *TABLE;
+    Dwg_Entity_HATCH *HATCH;
   } tio;
 
   long unsigned int bitsize;
@@ -2431,7 +2498,6 @@ typedef struct _dwg_object_object
     Dwg_Object_MLINESTYLE *MLINESTYLE;
     Dwg_Object_DICTIONARYVAR *DICTIONARYVAR;
     Dwg_Object_DICTIONARYWDLFT *DICTIONARYWDLFT;
-    Dwg_Object_HATCH *HATCH;
     Dwg_Object_IDBUFFER *IDBUFFER;
     Dwg_Object_IMAGEDEF *IMAGEDEF;
     Dwg_Object_IMAGEDEFREACTOR *IMAGEDEFREACTOR;

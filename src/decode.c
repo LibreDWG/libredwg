@@ -4271,13 +4271,6 @@ DWG_OBJECT(MLINESTYLE);
 DWG_OBJECT_END
 
 
-
-
-
-
-
-
-
 //pg.135
 DWG_OBJECT(DICTIONARYVAR);
 
@@ -4291,9 +4284,50 @@ DWG_OBJECT(DICTIONARYVAR);
 DWG_OBJECT_END
 
 //pg.136
-DWG_OBJECT(HATCH);
+DWG_ENTITY(HATCH);
+  int vector_counter2;
+  SINCE(R_2004)
+    {
+      FIELD_BL (is_gradient_fill);
+      FIELD_BL (reserved);
+      FIELD_BD (gradient_angle);
+      FIELD_BD (gradient_shift);
+      FIELD_BL (single_color_gradient);
+      FIELD_BD (gradient_tint);
+      FIELD_BL (num_colors);
+      REPEAT(num_colors, colors, Dwg_Entity_HATCH_Color)
+        {
+          FIELD_BD(colors[vector_counter].unknown_double);
+          FIELD_BS(colors[vector_counter].unknown_short);
+          FIELD_BL(colors[vector_counter].rgb_color);
+          FIELD_RC(colors[vector_counter].ignored_color_byte);
+        }
+      FIELD_TV (gradient_name);
+    }
 
-  //TODO: Implement-me!
+  FIELD_BD (z_coord); /* x,y always 0.0 */
+  FIELD_3BD (extrusion);
+  FIELD_TV (name);
+  FIELD_B (solid_fill);
+  FIELD_B (associative);
+  FIELD_BL (num_paths);
+  REPEAT(num_paths, paths, Dwg_Entity_HATCH_Path)
+    {
+      FIELD_BL(paths[vector_counter].flag);
+      if (!(GET_FIELD(paths[vector_counter].flag) & 2))
+        {
+          FIELD_BL(paths[vector_counter].num_path_segs);
+          REPEAT2(paths[vector_counter].num_path_segs, paths[vector_counter].segs, Dwg_Entity_HATCH_PathSeg)
+            {
+              FIELD_BL(paths[vector_counter].segs[vector_counter2].type_status);
+              if (GET_FIELD(paths[vector_counter].segs[vector_counter2].type_status) == 1)
+                { /* LINE */
+                  FIELD_2RD(paths[vector_counter].segs[vector_counter2].first_endpoint);
+                  FIELD_2RD(paths[vector_counter].segs[vector_counter2].second_endpoint);
+                }
+            }
+        }
+    }
 
 DWG_OBJECT_END
 
