@@ -4638,6 +4638,22 @@ DWG_ENTITY(OLE2FRAME);
 
 DWG_ENTITY_END
 
+
+//pg.149
+DWG_OBJECT(PROXY);
+
+  SINCE(R_2000)
+    {
+      FIELD_BL (class_id);
+      FIELD_BL (object_drawing_format);
+      FIELD_B (original_data_format);
+    }
+
+  //TODO: figure out how to deal with the arbitrary size vector databits described on the spec
+
+DWG_OBJECT_END
+
+
 //pg.150
 DWG_OBJECT(RASTERVARIABLES);
 

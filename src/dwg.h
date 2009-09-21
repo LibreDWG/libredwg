@@ -2287,7 +2287,13 @@ typedef struct _dwg_entity_OLE2FRAME
  */
 typedef struct _dwg_object_PROXY
 {
-//TODO 
+  BITCODE_BL class_id;
+  BITCODE_BL object_drawing_format;
+  BITCODE_B original_data_format;
+  BITCODE_RC* data;
+  BITCODE_H parenthandle;
+  BITCODE_H* reactors;
+  BITCODE_H* objid_object_handles;
 } Dwg_Object_PROXY;
 
 /**
