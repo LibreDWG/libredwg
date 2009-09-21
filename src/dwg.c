@@ -28,7 +28,6 @@
 #include "bits.h"
 #include "common.h"
 #include "decode.h"
-#include "print.h"
 #include "dwg.h"
 
 /*------------------------------------------------------------------------------

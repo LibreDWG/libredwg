@@ -5,8 +5,7 @@ libredwg_la_SOURCES = \
 	common.c \
 	bits.c \
 	decode.c \
-	encode.c \
-	print.c
+	encode.c
 
 libredwg_la_LDFLAGS = \
 	-version-info 0:0:0
@@ -19,8 +18,7 @@ EXTRA_DIST = \
 	bits.h \
 	decode.h \
 	example.dwg \
-	encode.h \
-	print.h
+	encode.h
 
 #check_PROGRAMS = test testsvg
 

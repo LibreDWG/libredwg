@@ -54,8 +54,7 @@ am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includedir)"
 libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libredwg_la_LIBADD =
-am_libredwg_la_OBJECTS = dwg.lo common.lo bits.lo decode.lo encode.lo \
-	print.lo
+am_libredwg_la_OBJECTS = dwg.lo common.lo bits.lo decode.lo encode.lo
 libredwg_la_OBJECTS = $(am_libredwg_la_OBJECTS)
 libredwg_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
@@ -196,8 +195,7 @@ libredwg_la_SOURCES = \
 	common.c \
 	bits.c \
 	decode.c \
-	encode.c \
-	print.c
+	encode.c
 
 libredwg_la_LDFLAGS = \
 	-version-info 0:0:0
@@ -209,8 +207,7 @@ EXTRA_DIST = \
 	bits.h \
 	decode.h \
 	example.dwg \
-	encode.h \
-	print.h
+	encode.h
 
 all: all-am
 
@@ -286,7 +283,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/decode.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dwg.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/encode.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/print.Plo@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
