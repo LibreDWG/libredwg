@@ -4301,8 +4301,8 @@ DWG_OBJECT_END
 //pg.135
 DWG_OBJECT(DICTIONARYVAR);
 
-  FIELD(intval, RC);
-  FIELD(str, BS);
+  FIELD_RC(intval);
+  FIELD_TV(str);
 
   FIELD_HANDLE(parenthandle, 4);
   REACTORS(4);

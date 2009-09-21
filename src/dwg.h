@@ -1970,7 +1970,7 @@ typedef struct _dwg_object_MLINESTYLE
 typedef struct _dwg_object_DICTIONARYVAR
 {
   BITCODE_RC intval;
-  BITCODE_BS str;
+  BITCODE_TV str;
   BITCODE_H parenthandle;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
