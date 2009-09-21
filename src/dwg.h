@@ -2323,7 +2323,13 @@ typedef struct _dwg_object_RASTERVARIABLES
  */
 typedef struct _dwg_object_SORTENTSTABLE
 {
-//TODO 
+  BITCODE_BL num_entries;
+  BITCODE_H sort_handle;
+  BITCODE_H parenthandle;
+  BITCODE_H* reactors;
+  BITCODE_H xdicobjhandle;
+  BITCODE_H owner_handle;
+  BITCODE_H* object_handles;
 } Dwg_Object_SORTENTSTABLE;
 
 /**

@@ -4670,7 +4670,13 @@ DWG_OBJECT_END
 //pg.151
 DWG_OBJECT(SORTENTSTABLE);
 
-  //TODO: Implement-me!
+  FIELD_BL (num_entries);
+  FIELD_HANDLE (sort_handle, 0);
+  FIELD_HANDLE (parenthandle, 4);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+  FIELD_HANDLE (owner_handle, 4);
+  HANDLE_VECTOR (object_handles, num_entries, 4);
 
 DWG_OBJECT_END
 
