@@ -99,12 +99,12 @@
   if (size>0)\
     {\
       _obj->name = (BITCODE_##type*) malloc(size * sizeof(BITCODE_##type));\
-      for (vector_counter=0; vector_counter< size; vector_counter++)\
+      for (vcount=0; vcount< size; vcount++)\
         {\
-          _obj->name[vector_counter] = bit_read_##type(dat);\
+          _obj->name[vcount] = bit_read_##type(dat);\
           if (loglevel>=2)\
             {\
-                fprintf(stderr, #name "[%d]: " FORMAT_##type "\n", vector_counter, _obj->name[vector_counter]);\
+                fprintf(stderr, #name "[%d]: " FORMAT_##type "\n", vcount, _obj->name[vcount]);\
             }\
         }\
     }
@@ -113,23 +113,23 @@
 
 #define FIELD_3DPOINT_VECTOR(name, size)\
   _obj->name = (BITCODE_3DPOINT *) malloc(_obj->size * sizeof(BITCODE_3DPOINT));\
-  for (vector_counter=0; vector_counter< _obj->size; vector_counter++)\
+  for (vcount=0; vcount< _obj->size; vcount++)\
     {\
-      FIELD_3DPOINT(name[vector_counter]);\
+      FIELD_3DPOINT(name[vcount]);\
     }
 
 #define HANDLE_VECTOR(name, sizefield, code)\
   GET_FIELD(name) = (Dwg_Object_Ref**) malloc(sizeof(Dwg_Object_Ref*) * GET_FIELD(sizefield));\
-  for (vector_counter=0; vector_counter<GET_FIELD(sizefield); vector_counter++)\
+  for (vcount=0; vcount<GET_FIELD(sizefield); vcount++)\
     {\
-      FIELD_HANDLE(name[vector_counter], code);\
+      FIELD_HANDLE(name[vcount], code);\
     }
 
 #define REACTORS(code)\
   GET_FIELD(reactors) = malloc(sizeof(BITCODE_H) * obj->tio.object->num_reactors);\
-  for (vector_counter=0; vector_counter<obj->tio.object->num_reactors; vector_counter++)\
+  for (vcount=0; vcount<obj->tio.object->num_reactors; vcount++)\
     {\
-      FIELD_HANDLE(reactors[vector_counter], code);\
+      FIELD_HANDLE(reactors[vcount], code);\
     }
 
 #define XDICOBJHANDLE(code)\
@@ -145,11 +145,17 @@
 
 #define REPEAT(times, name, type) \
   _obj->name = (type *) malloc(_obj->times * sizeof(type));\
-  for (vector_counter=0; vector_counter<_obj->times; vector_counter++)
+  for (rcount=0; rcount<_obj->times; rcount++)
 
 #define REPEAT2(times, name, type) \
   _obj->name = (type *) malloc(_obj->times * sizeof(type));\
-  for (vector_counter2=0; vector_counter2<_obj->times; vector_counter2++)
+  for (rcount2=0; rcount2<_obj->times; rcount2++)
+
+#define REPEAT3(times, name, type) \
+  _obj->name = (type *) malloc(_obj->times * sizeof(type));\
+  for (rcount3=0; rcount3<_obj->times; rcount3++)
+
+//TODO unify REPEAT macros!
 
 #define COMMON_ENTITY_HANDLE_DATA \
   dwg_decode_common_entity_handle_data(dat, obj)
@@ -158,7 +164,7 @@
 static void \
 dwg_decode_##token(Bit_Chain * dat, Dwg_Object * obj)\
 {\
-  int vector_counter;\
+  int vcount, rcount, rcount2, rcount3;\
   if (loglevel)\
   fprintf (stderr, "Entity " #token ":\n");\
 	Dwg_Entity_##token *ent, *_obj;\
@@ -181,7 +187,7 @@ dwg_decode_##token(Bit_Chain * dat, Dwg_Object * obj)\
 static void \
 dwg_decode_##token(Bit_Chain * dat, Dwg_Object * obj)\
 {\
-  int vector_counter;\
+  int vcount, rcount, rcount2, rcount3;\
   if (loglevel)\
     fprintf (stderr, "Object " #token ":\n");\
 	Dwg_Object_##token *_obj;\
@@ -3243,8 +3249,7 @@ DWG_ENTITY_END
 #define DECODE_3DSOLID decode_3dsolid(dat, obj, _obj, dwg);
 
 inline void decode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj, Dwg_Data* dwg){
-  int vector_counter, vector_counter2;
-
+  int vcount, rcount, rcount2;
   FIELD_B(acis_empty);
   int i=0;
   if (!GET_FIELD(acis_empty))
@@ -3287,20 +3292,20 @@ inline void decode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* 
               FIELD_BL (num_wires);
               REPEAT(num_wires, wires, Dwg_Entity_3DSOLID_wire)
                 {
-                  PARSE_WIRE_STRUCT(wires[vector_counter])
+                  PARSE_WIRE_STRUCT(wires[rcount])
                 }
               FIELD_BL(num_silhouettes);
               REPEAT(num_silhouettes, silhouettes, Dwg_Entity_3DSOLID_silhouette)
                 {
-                  FIELD_BL(silhouettes[vector_counter].vp_id);
-                  FIELD_3BD(silhouettes[vector_counter].vp_target);
-                  FIELD_3BD(silhouettes[vector_counter].vp_dir_from_target);
-                  FIELD_3BD(silhouettes[vector_counter].vp_up_dir);
-                  FIELD_B(silhouettes[vector_counter].vp_perspective);
-                  FIELD_BL(silhouettes[vector_counter].num_wires);
-                  REPEAT2(silhouettes[vector_counter].num_wires, silhouettes[vector_counter].wires, Dwg_Entity_3DSOLID_wire)
+                  FIELD_BL(silhouettes[rcount].vp_id);
+                  FIELD_3BD(silhouettes[rcount].vp_target);
+                  FIELD_3BD(silhouettes[rcount].vp_dir_from_target);
+                  FIELD_3BD(silhouettes[rcount].vp_up_dir);
+                  FIELD_B(silhouettes[rcount].vp_perspective);
+                  FIELD_BL(silhouettes[rcount].num_wires);
+                  REPEAT2(silhouettes[rcount].num_wires, silhouettes[rcount].wires, Dwg_Entity_3DSOLID_wire)
                     {
-                      PARSE_WIRE_STRUCT(silhouettes[vector_counter].wires[vector_counter2])
+                      PARSE_WIRE_STRUCT(silhouettes[rcount].wires[rcount2])
                     }
                 }
               SINCE(R_2007)
@@ -4260,9 +4265,9 @@ DWG_OBJECT(MLINESTYLE);
   //XXX Ugly! We must find a better way to handle arbitrary vectors
   REPEAT(linesinstyle, lines, Dwg_Object_MLINESTYLE_line)
   {
-    FIELD(lines[vector_counter].offset, BD);
-    FIELD_CMC(lines[vector_counter].color);
-    FIELD(lines[vector_counter].ltindex, BS);
+    FIELD(lines[rcount].offset, BD);
+    FIELD_CMC(lines[rcount].color);
+    FIELD(lines[rcount].ltindex, BS);
   }
   FIELD_HANDLE(parenthandle, 4);
   REACTORS(4);
@@ -4285,7 +4290,7 @@ DWG_OBJECT_END
 
 //pg.136
 DWG_ENTITY(HATCH);
-  int vector_counter2;
+
   SINCE(R_2004)
     {
       FIELD_BL (is_gradient_fill);
@@ -4297,10 +4302,10 @@ DWG_ENTITY(HATCH);
       FIELD_BL (num_colors);
       REPEAT(num_colors, colors, Dwg_Entity_HATCH_Color)
         {
-          FIELD_BD(colors[vector_counter].unknown_double);
-          FIELD_BS(colors[vector_counter].unknown_short);
-          FIELD_BL(colors[vector_counter].rgb_color);
-          FIELD_RC(colors[vector_counter].ignored_color_byte);
+          FIELD_BD(colors[rcount].unknown_double);
+          FIELD_BS(colors[rcount].unknown_short);
+          FIELD_BL(colors[rcount].rgb_color);
+          FIELD_RC(colors[rcount].ignored_color_byte);
         }
       FIELD_TV (gradient_name);
     }
@@ -4313,19 +4318,60 @@ DWG_ENTITY(HATCH);
   FIELD_BL (num_paths);
   REPEAT(num_paths, paths, Dwg_Entity_HATCH_Path)
     {
-      FIELD_BL(paths[vector_counter].flag);
-      if (!(GET_FIELD(paths[vector_counter].flag) & 2))
+      FIELD_BL(paths[rcount].flag);
+      if (!(GET_FIELD(paths[rcount].flag) & 2))
         {
-          FIELD_BL(paths[vector_counter].num_path_segs);
-          REPEAT2(paths[vector_counter].num_path_segs, paths[vector_counter].segs, Dwg_Entity_HATCH_PathSeg)
+          FIELD_BL(paths[rcount].num_path_segs);
+          REPEAT2(paths[rcount].num_path_segs, paths[rcount].segs, Dwg_Entity_HATCH_PathSeg)
             {
-              FIELD_BL(paths[vector_counter].segs[vector_counter2].type_status);
-              if (GET_FIELD(paths[vector_counter].segs[vector_counter2].type_status) == 1)
-                { /* LINE */
-                  FIELD_2RD(paths[vector_counter].segs[vector_counter2].first_endpoint);
-                  FIELD_2RD(paths[vector_counter].segs[vector_counter2].second_endpoint);
+              FIELD_BL(paths[rcount].segs[rcount2].type_status);
+              switch (GET_FIELD(paths[rcount].segs[rcount2].type_status))
+                {
+                    case 1: /* LINE */
+                      FIELD_2RD(paths[rcount].segs[rcount2].first_endpoint);
+                      FIELD_2RD(paths[rcount].segs[rcount2].second_endpoint);
+                      break;
+                    case 2: /* CIRCULAR ARC */
+                      FIELD_2RD(paths[rcount].segs[rcount2].center);
+                      FIELD_BD(paths[rcount].segs[rcount2].radius);
+                      FIELD_BD(paths[rcount].segs[rcount2].start_angle);
+                      FIELD_BD(paths[rcount].segs[rcount2].end_angle);
+                      FIELD_B(paths[rcount].segs[rcount2].is_ccw);
+                      break;
+                    case 3: /* ELLIPTICAL ARC */
+                      FIELD_2RD(paths[rcount].segs[rcount2].center);
+                      FIELD_2RD(paths[rcount].segs[rcount2].endpoint);
+                      FIELD_BD(paths[rcount].segs[rcount2].minor_major_ratio);
+                      FIELD_BD(paths[rcount].segs[rcount2].start_angle);
+                      FIELD_BD(paths[rcount].segs[rcount2].end_angle);
+                      FIELD_B(paths[rcount].segs[rcount2].is_ccw);
+                      break;
+                    case 4: /* SPLINE */
+                      FIELD_BL(paths[rcount].segs[rcount2].degree);
+                      FIELD_B(paths[rcount].segs[rcount2].is_rational);
+                      FIELD_B(paths[rcount].segs[rcount2].is_periodic);
+                      FIELD_BL(paths[rcount].segs[rcount2].num_knots);
+                      FIELD_BL(paths[rcount].segs[rcount2].num_control_points);
+                      FIELD_VECTOR(paths[rcount].segs[rcount2].knots, BD, paths[rcount].segs[rcount2].num_knots)
+                      REPEAT3(paths[rcount].segs[rcount2].num_control_points, paths[rcount].segs[rcount2].control_points, Dwg_Entity_HATCH_ControlPoint)
+                        {
+                          FIELD_2RD(paths[rcount].segs[rcount2].control_points[rcount3].point);
+                          if (GET_FIELD(paths[rcount].segs[rcount2].is_rational))
+                            {
+                              FIELD_BD(paths[rcount].segs[rcount2].control_points[rcount3].weigth);
+                            }
+                        }                      
+                      break;
                 }
             }
+        }
+      else
+        { /* POLYLINE PATH */
+          FIELD_B(bulges_present);
+          FIELD_B(closed);
+          FIELD_BL(num_path_segs);
+          // TODO: incomplete parsing. check spec. 
+          // TODO: We need a better REPEAT macro to clean up this code.
         }
     }
 
@@ -4407,8 +4453,8 @@ DWG_OBJECT(LAYER_INDEX);
   FIELD_BL (num_entries);
   REPEAT (num_entries, entries, Dwg_LAYER_entry)
     {
-      FIELD_BL (entries[vector_counter].index_long);
-      FIELD_TV (entries[vector_counter].index_str);
+      FIELD_BL (entries[rcount].index_long);
+      FIELD_TV (entries[rcount].index_str);
     }
   FIELD_HANDLE (parent_handle, 4);
   REACTORS(4);

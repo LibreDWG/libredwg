@@ -2056,6 +2056,9 @@ typedef struct _dwg_entity_HATCH
   BITCODE_B associative;
   BITCODE_BL num_paths;
   Dwg_Entity_HATCH_Path* paths;
+  BITCODE_B bulges_present;
+  BITCODE_B closed;
+  BITCODE_BL num_path_segs;
 } Dwg_Entity_HATCH;
 
 /**
