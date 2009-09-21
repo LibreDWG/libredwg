@@ -1,0 +1,5 @@
+these are some websites that host DWG files that we are using as our testcases:
+
+http://blocks.theswamp.org/index.php?dir=COMMON/PIPING/3D/Pipe_03/
+ftp://geodetic.ncdenr.org/maps/
+http://www.naval.com/drawings/
