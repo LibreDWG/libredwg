@@ -4031,7 +4031,18 @@ DWG_OBJECT_END
 DWG_OBJECT(DIMSTYLE_CONTROL);
 
   FIELD_BS (num_entries);
-  FIELD_HANDLE (unknown_handle, ANYCODE); /*This is not stated in the spec*/
+  SINCE(R_2000)
+    {
+      /*
+      This is not stated in the spec.
+       I've seen it in a R2000 file but not on a R14,
+       so I'll assume it is a R_2000+ field.
+      TODO: this should be checked with more sample files from various DWG versions.
+        ~Juca
+      */
+      FIELD_HANDLE (unknown_handle, ANYCODE);
+    }
+
   FIELD_HANDLE (null_handle, 4);
   XDICOBJHANDLE(3);
   HANDLE_VECTOR (dimstyles, num_entries, 2);
@@ -4086,6 +4097,7 @@ DWG_OBJECT(DIMSTYLE);
       FIELD_BD (DIMDLE);
       FIELD_BD (DIMTP);
       FIELD_BD (DIMTM);
+      FIELD_BD (DIMTXT);
       FIELD_BD (DIMCEN);
       FIELD_BD (DIMTSZ);
       FIELD_BD (DIMALTF);
