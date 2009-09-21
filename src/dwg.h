@@ -2031,11 +2031,25 @@ typedef struct _dwg_entity_HATCH_pathseg
   Dwg_Entity_HATCH_ControlPoint* control_points;
 } Dwg_Entity_HATCH_PathSeg;
 
+
+typedef struct _dwg_entity_HATCH_polylinepath
+{
+  BITCODE_2RD point;
+  BITCODE_BD bulge;
+} Dwg_Entity_HATCH_PolylinePath;
+
 typedef struct _dwg_entity_HATCH_path
 {
   BITCODE_BL flag;
   BITCODE_BL num_path_segs;
   Dwg_Entity_HATCH_PathSeg* segs;
+
+  /*POLYLINE PATH:*/
+  BITCODE_B bulges_present;
+  BITCODE_B closed;
+  //BITCODE_BL num_path_segs;
+  Dwg_Entity_HATCH_PolylinePath* polyline_paths;
+  BITCODE_BL num_boundary_obj_handles;
 } Dwg_Entity_HATCH_Path;
 
 typedef struct _dwg_entity_HATCH
@@ -2056,9 +2070,6 @@ typedef struct _dwg_entity_HATCH
   BITCODE_B associative;
   BITCODE_BL num_paths;
   Dwg_Entity_HATCH_Path* paths;
-  BITCODE_B bulges_present;
-  BITCODE_B closed;
-  BITCODE_BL num_path_segs;
 } Dwg_Entity_HATCH;
 
 /**

@@ -4343,7 +4343,7 @@ DWG_ENTITY(HATCH);
           FIELD_BL(paths[rcount].num_path_segs);
           REPEAT2(paths[rcount].num_path_segs, paths[rcount].segs, Dwg_Entity_HATCH_PathSeg)
             {
-              FIELD_BL(paths[rcount].segs[rcount2].type_status);
+              FIELD_RC(paths[rcount].segs[rcount2].type_status);
               switch (GET_FIELD(paths[rcount].segs[rcount2].type_status))
                 {
                     case 1: /* LINE */
@@ -4386,13 +4386,22 @@ DWG_ENTITY(HATCH);
         }
       else
         { /* POLYLINE PATH */
-          FIELD_B(bulges_present);
-          FIELD_B(closed);
-          FIELD_BL(num_path_segs);
-          // TODO: incomplete parsing. check spec. 
-          // TODO: We need a better REPEAT macro to clean up this code.
+          FIELD_B(paths[rcount].bulges_present);
+          FIELD_B(paths[rcount].closed);
+          FIELD_BL(paths[rcount].num_path_segs);
+          REPEAT2(paths[rcount].num_path_segs, paths[rcount].polyline_paths, Dwg_Entity_HATCH_PolylinePath)
+            {
+              FIELD_2RD (paths[rcount].polyline_paths[rcount2].point);
+              if (GET_FIELD(paths[rcount].bulges_present))
+                {
+                  FIELD_BD (paths[rcount].polyline_paths[rcount2].bulge);
+                }
+            }
         }
+      FIELD_BL(paths[rcount].num_boundary_obj_handles);
     }
+
+// TODO: incomplete parsing. check spec. 
 
 DWG_OBJECT_END
 
