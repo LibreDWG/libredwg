@@ -182,7 +182,7 @@ dwg_decode_##token(Bit_Chain * dat, Dwg_Object * obj)\
 	ent = obj->tio.entity->tio.token;\
   _obj=ent;\
   obj->tio.entity->object = obj;\
-	dwg_decode_entity (dat, obj->tio.entity);\
+	if (dwg_decode_entity (dat, obj->tio.entity)) return;\
   fprintf (stderr, "Entity handle: %d.%d.%lu\n",\
     obj->handle.code,\
     obj->handle.size,\
@@ -203,7 +203,7 @@ dwg_decode_##token(Bit_Chain * dat, Dwg_Object * obj)\
 	obj->tio.object = malloc (sizeof (Dwg_Object_Object));\
 	obj->tio.object->tio.token = calloc (sizeof (Dwg_Object_##token), 1);\
   obj->tio.object->object = obj;\
-	dwg_decode_object (dat, obj->tio.object);\
+	if (dwg_decode_object (dat, obj->tio.object)) return;\
 	_obj = obj->tio.object->tio.token;\
   fprintf (stderr, "Object handle: %d.%d.%lu\n",\
     obj->handle.code,\
@@ -1287,7 +1287,7 @@ decode_R2007_header(Bit_Chain* dat, Dwg_Data * dwg)
  * Private functions
  */
 
-static void
+static int
 dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
 {
   unsigned int i;
@@ -1326,7 +1326,7 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
           ent->extended_size = 0;
           ent->picture_exists = 0;
           ent->num_handles = 0;
-          return;
+          return -1;
         }
       if (ent->extended_size == 0)
         {
@@ -1404,9 +1404,11 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
     {
       ent->lineweight = bit_read_RC(dat);
     }
+
+  return 0;
 }
 
-static void
+static int
 dwg_decode_object(Bit_Chain * dat, Dwg_Object_Object * ord)
 {
   unsigned int i;
@@ -1427,7 +1429,7 @@ dwg_decode_object(Bit_Chain * dat, Dwg_Object_Object * ord)
       ord->bitsize = 0;
       ord->extended_size = 0;
       ord->num_handles = 0;
-      return;
+      return -1;
     }
   ord->extended_size = 0;
   while (size = bit_read_BS(dat))
@@ -1472,6 +1474,7 @@ dwg_decode_object(Bit_Chain * dat, Dwg_Object_Object * ord)
       ord->xdic_missing_flag = bit_read_B(dat);
     }
 
+  return 0;
 }
 
 /**
