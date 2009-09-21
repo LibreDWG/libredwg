@@ -111,6 +111,13 @@
 
 #define FIELD_VECTOR(name, type, size) FIELD_VECTOR_N(name, type, _obj->size)
 
+#define FIELD_2RD_VECTOR(name, size)\
+  _obj->name = (BITCODE_2RD *) malloc(_obj->size * sizeof(BITCODE_2RD));\
+  for (vcount=0; vcount< _obj->size; vcount++)\
+    {\
+      FIELD_2RD(name[vcount]);\
+    }
+
 #define FIELD_3DPOINT_VECTOR(name, size)\
   _obj->name = (BITCODE_3DPOINT *) malloc(_obj->size * sizeof(BITCODE_3DPOINT));\
   for (vcount=0; vcount< _obj->size; vcount++)\
@@ -4683,7 +4690,28 @@ DWG_OBJECT_END
 //pg.152
 DWG_OBJECT(SPATIAL_FILTER);
 
-  //TODO: Implement-me!
+  FIELD_BS (num_points);
+  FIELD_2RD_VECTOR (points, num_points);
+  FIELD_3BD (extrusion);
+  FIELD_3BD (clip_bound_origin);
+  FIELD_BS (display_boundary);
+  FIELD_BS (front_clip_on);
+  if (GET_FIELD(front_clip_on)==1)
+    {
+      FIELD_BD (front_clip_dist);
+    }
+
+  FIELD_BS (back_clip_on);
+  if (GET_FIELD(back_clip_on)==1)
+    {
+      FIELD_BD (back_clip_dist);
+    }
+
+  FIELD_VECTOR_N (inverse_block_transform, BD, 12);
+  FIELD_VECTOR_N (clip_bound_transform, BD, 12);
+  FIELD_HANDLE (parenthandle, 4);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
 
 DWG_OBJECT_END
 

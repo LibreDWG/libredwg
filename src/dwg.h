@@ -2337,7 +2337,20 @@ typedef struct _dwg_object_SORTENTSTABLE
  */
 typedef struct _dwg_object_SPATIAL_FILTER
 {
-//TODO 
+  BITCODE_BS num_points;
+  BITCODE_2RD* points;
+  BITCODE_3BD extrusion;
+  BITCODE_3BD clip_bound_origin;
+  BITCODE_BS display_boundary;
+  BITCODE_BS front_clip_on;
+  BITCODE_BD front_clip_dist;
+  BITCODE_BS back_clip_on;
+  BITCODE_BD back_clip_dist;
+  BITCODE_BD* inverse_block_transform;
+  BITCODE_BD* clip_bound_transform;
+  BITCODE_H parenthandle;
+  BITCODE_H* reactors;
+  BITCODE_H xdicobjhandle;
 } Dwg_Object_SPATIAL_FILTER;
 
 /**
