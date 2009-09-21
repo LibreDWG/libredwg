@@ -2309,7 +2309,13 @@ typedef struct _dwg_object_PLACEHOLDER
  */
 typedef struct _dwg_object_RASTERVARIABLES
 {
-//TODO 
+  BITCODE_BL class_version;
+  BITCODE_BS display_frame;
+  BITCODE_BS display_quality;
+  BITCODE_BS units;
+  BITCODE_H parenthandle;
+  BITCODE_H* reactors;
+  BITCODE_H xdicobjhandle;
 } Dwg_Object_RASTERVARIABLES;
 
 /**

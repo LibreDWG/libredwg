@@ -4657,7 +4657,13 @@ DWG_OBJECT_END
 //pg.150
 DWG_OBJECT(RASTERVARIABLES);
 
-  //TODO: Implement-me!
+  BITCODE_BL (class_version);
+  BITCODE_BS (display_frame);
+  BITCODE_BS (display_quality);
+  BITCODE_BS (units);
+  FIELD_HANDLE (parenthandle, 4);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
 
 DWG_OBJECT_END
 
