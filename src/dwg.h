@@ -2066,7 +2066,12 @@ typedef struct _dwg_entity_HATCH
  */
 typedef struct _dwg_object_IDBUFFER
 {
-//TODO 
+  BITCODE_RC unknown;
+  BITCODE_BL num_ids;
+  BITCODE_H parenthandle;
+  BITCODE_H* reactors;
+  BITCODE_H xdicobjhandle;
+  BITCODE_H* obj_ids;
 } Dwg_Object_IDBUFFER;
 
 /**

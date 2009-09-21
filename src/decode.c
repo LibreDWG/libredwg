@@ -4380,7 +4380,12 @@ DWG_OBJECT_END
 //pg.139
 DWG_OBJECT(IDBUFFER);
 
-  //TODO: Implement-me!
+  FIELD_RC (unknown);
+  FIELD_BL (num_ids);
+  FIELD_HANDLE (parenthandle, 4);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+  HANDLE_VECTOR(obj_ids, num_ids, 4);
 
 DWG_OBJECT_END
 
