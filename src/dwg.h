@@ -2375,7 +2375,14 @@ typedef struct _dwg_object_WIPEOUTVARIABLE
  */
 typedef struct _dwg_object_XRECORD
 {
-//TODO 
+  BITCODE_BL numdatabytes;
+  BITCODE_BS cloning_flags;
+  BITCODE_RS indicator;
+  BITCODE_RC* data;
+  BITCODE_H parent;
+  BITCODE_H* reactors;
+  BITCODE_H xdicobjhandle;
+  BITCODE_H* objid_handles;
 } Dwg_Object_XRECORD;
 
 /* OBJECTS - END ************************************************************/

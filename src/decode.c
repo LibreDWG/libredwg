@@ -4811,7 +4811,17 @@ DWG_ENTITY_END
 //pg.164
 DWG_OBJECT(XRECORD);
 
-  //TODO: Implement-me!
+  FIELD_BL(numdatabytes);
+  FIELD_BS(cloning_flags);
+  FIELD_RS(indicator);
+  //since it also counts the first RS indicator
+  GET_FIELD(numdatabytes)--;
+  FIELD_VECTOR(data, RC, numdatabytes);
+  FIELD_HANDLE(parent, 3);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+  //XXX how to known when I run out of data?
+  //BITCODE_H* objid_handles;
 
 DWG_OBJECT_END
 
