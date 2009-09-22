@@ -150,6 +150,10 @@
       FIELD_HANDLE(xdicobjhandle, code);\
     }
 
+#define REPEAT_N(times, name, type) \
+  _obj->name = (type *) malloc(times * sizeof(type));\
+  for (rcount=0; rcount<times; rcount++)
+
 #define REPEAT(times, name, type) \
   _obj->name = (type *) malloc(_obj->times * sizeof(type));\
   for (rcount=0; rcount<_obj->times; rcount++)
@@ -4740,7 +4744,67 @@ DWG_OBJECT_END
 //pg.158
 DWG_ENTITY(TABLE);
 
-  //TODO: Implement-me!
+  FIELD_3BD (insertion_point);
+
+  VERSIONS(R_13,R_14)
+    {
+      FIELD_3BD (scale);
+    }
+
+  SINCE(R_2000)
+    {
+      FIELD_BB (data_flags);
+      switch (GET_FIELD(data_flags))
+        {
+          case 0:
+            GET_FIELD(scale.x)=1.0;
+            FIELD_DD(scale.y, GET_FIELD(scale.x));
+            FIELD_DD(scale.z, GET_FIELD(scale.x));
+            break;
+          case 1:
+            GET_FIELD(scale.x)=1.0;
+            FIELD_DD(scale.y, 1.0);
+            FIELD_DD(scale.z, 1.0);
+            break;
+          case 2:
+            FIELD_RD(scale.x);
+            GET_FIELD(scale.y) = GET_FIELD(scale.x);
+            GET_FIELD(scale.z) = GET_FIELD(scale.x);
+            break;
+          case 3:
+            GET_FIELD(scale.x)=1.0;
+            GET_FIELD(scale.y)=1.0;
+            GET_FIELD(scale.z)=1.0;
+            break;
+        }
+    }
+
+  FIELD_BD (rotation);
+  FIELD_3BD (extrusion);
+  FIELD_B (has_attribs);
+
+  SINCE(R_2004)
+    {
+      FIELD_BL (owned_object_count);
+    }
+
+  FIELD_BS (flag_for_table_value);
+  FIELD_3BD (horiz_direction);
+  FIELD_BL (num_cols);
+  FIELD_BL (num_rows);
+  FIELD_VECTOR(col_widths, BD, num_cols);
+  FIELD_VECTOR(row_heights, BD, num_rows);
+  REPEAT_N(GET_FIELD(num_rows)*GET_FIELD(num_cols), cells, Dwg_Entity_TABLE_Cell)
+    {
+      FIELD_BS(cells[rcount].type);
+      FIELD_RC(cells[rcount].flags);
+      FIELD_B(cells[rcount].merged_value);
+      FIELD_B(cells[rcount].autofit_flag);
+      FIELD_BL(cells[rcount].merged_width_flag);
+      FIELD_BL(cells[rcount].merged_height_flag);
+      FIELD_BD(cells[rcount].rotation_value);
+    }
+//TODO: incomplete parser. check spec.
 
 DWG_ENTITY_END
 

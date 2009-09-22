@@ -2293,11 +2293,54 @@ typedef struct _dwg_object_SPATIAL_FILTER
 } Dwg_Object_SPATIAL_FILTER;
 
 /**
- Struct for TABLE (varies)
+ Struct for SPATIAL_INDEX (varies)
  */
-typedef struct _dwg_entity_TABLE
+typedef struct _dwg_entity_SPATIAL_INDEX
 {
 //TODO 
+} Dwg_Entity_SPATIAL_INDEX;
+
+/**
+ Structs for TABLE (varies)
+ */
+
+typedef struct _dwg_entity_TABLE_cell
+{
+  BITCODE_BS type;
+  BITCODE_RC flags;
+  BITCODE_B merged_value;
+  BITCODE_B autofit_flag;
+  BITCODE_BL merged_width_flag;
+  BITCODE_BL merged_height_flag;
+  BITCODE_BD rotation_value;
+  BITCODE_TV text_string;
+  BITCODE_BD block_scale;
+  BITCODE_B additional_data_flag;
+  BITCODE_BS attr_def_count;
+  BITCODE_BS attr_def_index;
+  BITCODE_TV attr_def_text;
+  BITCODE_B additional_data_flag2;
+  BITCODE_BL cell_flag_override;
+  BITCODE_RC virtual_edge_flag;
+  BITCODE_RS cell_alignment;
+} Dwg_Entity_TABLE_Cell;
+
+typedef struct _dwg_entity_TABLE
+{
+  BITCODE_3BD insertion_point;
+  BITCODE_3BD scale;
+  BITCODE_BB data_flags;
+  BITCODE_BD rotation;
+  BITCODE_3BD extrusion;
+  BITCODE_B has_attribs;
+  BITCODE_BL owned_object_count;
+  BITCODE_BS flag_for_table_value;
+  BITCODE_3BD horiz_direction;
+  BITCODE_BL num_cols;
+  BITCODE_BL num_rows;
+  BITCODE_BD* col_widths;
+  BITCODE_BD* row_heights;
+  Dwg_Entity_TABLE_Cell* cells; 
 } Dwg_Entity_TABLE;
 
 //NOT SURE ABOUT THIS ONE (IS IT OBJECT OR ENTITY?):
