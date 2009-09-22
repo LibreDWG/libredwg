@@ -2053,7 +2053,7 @@ dwg_encode_DICTIONARY(Dwg_Object_DICTIONARY *obj, Bit_Chain * dat)
   bit_write_BS(dat, obj->cloning);
   bit_write_RC(dat, obj->hard_owner);
   for (i = 0; i < obj->numitems; i++)
-    bit_write_TV(dat, &obj->text[i]);
+    bit_write_TV(dat, obj->text[i]);
 }
 
 static void
