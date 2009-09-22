@@ -3352,12 +3352,8 @@ DWG_ENTITY_END
 /*(40)*/
 DWG_ENTITY(RAY);
 
-  ent->x0 = bit_read_BD(dat);
-  ent->y0 = bit_read_BD(dat);
-  ent->z0 = bit_read_BD(dat);
-  ent->x1 = bit_read_BD(dat);
-  ent->y1 = bit_read_BD(dat);
-  ent->z1 = bit_read_BD(dat);
+  FIELD_3BD(point);
+  FIELD_3BD(vector);
 
   COMMON_ENTITY_HANDLE_DATA;
 
@@ -3366,12 +3362,8 @@ DWG_ENTITY_END
 /*(41)*/
 DWG_ENTITY(XLINE);
 
-  ent->x0 = bit_read_BD(dat);
-  ent->y0 = bit_read_BD(dat);
-  ent->z0 = bit_read_BD(dat);
-  ent->x1 = bit_read_BD(dat);
-  ent->y1 = bit_read_BD(dat);
-  ent->z1 = bit_read_BD(dat);
+  FIELD_3BD(point);
+  FIELD_3BD(vector);
 
   COMMON_ENTITY_HANDLE_DATA;
 
@@ -3380,7 +3372,7 @@ DWG_ENTITY_END
 /*(42)*/
 DWG_OBJECT(DICTIONARY);
 
-  FIELD(numitems, BS);
+  FIELD(numitems, BL);
 
   VERSION(R_14)
     {
@@ -3517,6 +3509,7 @@ DWG_ENTITY(TOLERANCE);
   FIELD(text_string, BS);
 
   COMMON_ENTITY_HANDLE_DATA;
+  FIELD_HANDLE(dimstyle, 5);
 
 DWG_ENTITY_END
 
@@ -4587,58 +4580,42 @@ DWG_OBJECT_END
 DWG_ENTITY(LWPLINE);
   int i;
 
-  ent->flags = bit_read_BS(dat);
-  if (ent->flags & 4)
-    ent->const_width = bit_read_BD(dat);
-  if (ent->flags & 8)
-    ent->elevation = bit_read_BD(dat);
-  if (ent->flags & 2)
-    ent->thickness = bit_read_BD(dat);
-  if (ent->flags & 1)
-    {
-      ent->normal.x = bit_read_BD(dat);
-      ent->normal.y = bit_read_BD(dat);
-      ent->normal.z = bit_read_BD(dat);
-    }
-  ent->num_points = bit_read_BL(dat);
-  if (ent->flags & 16)
-    ent->num_bulges = bit_read_BL(dat);
-  if (ent->flags & 32)
-    ent->num_widths = bit_read_BL(dat);
+  FIELD_BS(flags);
 
-  ent->points = (Dwg_Entity_LWPLINE_point*) malloc(ent->num_points
-      * sizeof(Dwg_Entity_LWPLINE_point));
+  if (GET_FIELD(flags) & 4)
+    FIELD_BD(const_width);
+  if (GET_FIELD(flags) & 8)
+    FIELD_BD(elevation);
+  if (GET_FIELD(flags) & 2)
+    FIELD_BD(thickness);
+  if (GET_FIELD(flags) & 1)
+    FIELD_3BD(normal);
+  FIELD_BL(num_points);
+
+  if (GET_FIELD(flags) & 16)
+    FIELD_BL(num_bulges);
+  if (GET_FIELD(flags) & 32)
+    FIELD_BL(num_widths);
 
   VERSIONS(R_13,R_14)
     {
-      for (i = 0; i < ent->num_points; i++)
-        {
-          ent->points[i].x = bit_read_RD(dat);
-          ent->points[i].y = bit_read_RD(dat);
-        }
+      FIELD_2RD_VECTOR(points, num_points);
     }
 
   SINCE(R_2000)
     {
-      ent->points[0].x = bit_read_RD(dat);
-      ent->points[0].y = bit_read_RD(dat);
+      FIELD_2RD(points[0]);
       for (i = 1; i < ent->num_points; i++)
         {
-          ent->points[i].x = bit_read_DD(dat, ent->points[i - 1].x);
-          ent->points[i].y = bit_read_DD(dat, ent->points[i - 1].y);
+          FIELD_2DD(points[i], GET_FIELD(points[i - 1].x), GET_FIELD(points[i - 1].y));
         }
     }
 
-  ent->bulges = (double*) malloc(ent->num_bulges * sizeof(double));
-  for (i = 0; i < ent->num_bulges; i++)
-    ent->bulges[i] = bit_read_BD(dat);
-
-  ent->widths = (Dwg_Entity_LWPLINE_width*) malloc(ent->num_widths
-      * sizeof(Dwg_Entity_LWPLINE_width));
-  for (i = 0; i < ent->num_widths; i++)
+  FIELD_VECTOR(bulges, BD, num_bulges);
+  REPEAT(num_widths, widths, Dwg_Entity_LWPLINE_width)
     {
-      ent->widths[i].start = bit_read_BD(dat);
-      ent->widths[i].end = bit_read_BD(dat);
+      FIELD_BD(widths[rcount].start);
+      FIELD_BD(widths[rcount].end);
     }
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -4647,22 +4624,20 @@ DWG_ENTITY_END
 
 //pg.149
 DWG_ENTITY(OLE2FRAME);
-  int i;
-  ent->flags = bit_read_BS(dat);
+
+  FIELD_BS(flags);
 
   SINCE(R_2000)
     {
-      ent->mode = bit_read_BS(dat);
+      FIELD_BS(mode);
     }
 
-  ent->data_length = bit_read_BL(dat);
-  ent->data = (unsigned char*) malloc(ent->data_length * sizeof(unsigned char));
-  for (i = 0; i < ent->data_length; i++)
-    ent->data[i] = bit_read_RC(dat);
+  FIELD_BL(data_length);
+  FIELD_VECTOR(data, RC, data_length);
 
   SINCE(R_2000)
     {
-      ent->unknown = bit_read_RC(dat);
+      FIELD_RC(unknown);
     }
 
   COMMON_ENTITY_HANDLE_DATA;

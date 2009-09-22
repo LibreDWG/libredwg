@@ -2022,23 +2022,23 @@ dwg_encode_BODY(Dwg_Entity_BODY * ent, Bit_Chain * dat)
 static void
 dwg_encode_RAY(Dwg_Entity_RAY * ent, Bit_Chain * dat)
 {
-  bit_write_BD(dat, ent->x0);
-  bit_write_BD(dat, ent->y0);
-  bit_write_BD(dat, ent->z0);
-  bit_write_BD(dat, ent->x1);
-  bit_write_BD(dat, ent->y1);
-  bit_write_BD(dat, ent->z1);
+  bit_write_BD(dat, ent->point.x);
+  bit_write_BD(dat, ent->point.y);
+  bit_write_BD(dat, ent->point.z);
+  bit_write_BD(dat, ent->vector.x);
+  bit_write_BD(dat, ent->vector.y);
+  bit_write_BD(dat, ent->vector.z);
 }
 
 static void
 dwg_encode_XLINE(Dwg_Entity_XLINE *ent, Bit_Chain * dat)
 {
-  bit_write_BD(dat, ent->x0);
-  bit_write_BD(dat, ent->y0);
-  bit_write_BD(dat, ent->z0);
-  bit_write_BD(dat, ent->x1);
-  bit_write_BD(dat, ent->y1);
-  bit_write_BD(dat, ent->z1);
+  bit_write_BD(dat, ent->point.x);
+  bit_write_BD(dat, ent->point.y);
+  bit_write_BD(dat, ent->point.z);
+  bit_write_BD(dat, ent->vector.x);
+  bit_write_BD(dat, ent->vector.y);
+  bit_write_BD(dat, ent->vector.z);
 }
 
 static void
@@ -2048,12 +2048,12 @@ dwg_encode_DICTIONARY(Dwg_Object_DICTIONARY *obj, Bit_Chain * dat)
   bit_write_BS(dat, obj->numitems);
   if (obj->numitems > 10000)
     fprintf(stderr,
-        "Strange: dictionary with more than 10 thousand entries! Size: %u\n",
+        "Strange: dictionary with more than 10 thousand entries! Size: %lu\n",
         obj->numitems);
   bit_write_BS(dat, obj->cloning);
   bit_write_RC(dat, obj->hard_owner);
   for (i = 0; i < obj->numitems; i++)
-    bit_write_TV(dat, obj->text[i]);
+    bit_write_TV(dat, &obj->text[i]);
 }
 
 static void

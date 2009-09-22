@@ -1255,12 +1255,8 @@ typedef Dwg_Entity_3DSOLID Dwg_Entity_BODY;
  */
 typedef struct _dwg_entity_RAY
 {
-  double x0;
-  double y0;
-  double z0;
-  double x1;
-  double y1;
-  double z1;
+  BITCODE_3BD point;
+  BITCODE_3BD vector;
 } Dwg_Entity_RAY;
 
 /**
@@ -1273,11 +1269,11 @@ typedef Dwg_Entity_RAY Dwg_Entity_XLINE;
  */
 typedef struct _dwg_entity_DICTIONARY
 {
-  unsigned int numitems;
-  unsigned char unknown_r14;
-  unsigned int cloning;
-  unsigned char hard_owner;
-  unsigned char** text;
+  BITCODE_BL numitems;
+  BITCODE_RC unknown_r14;
+  BITCODE_BS cloning;
+  BITCODE_RC hard_owner;
+  BITCODE_TV* text;
   BITCODE_H parenthandle;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
@@ -1323,19 +1319,19 @@ typedef struct _dwg_entity_LEADER
   BITCODE_3DPOINT x_direction;
   BITCODE_3DPOINT offset_block_inspt;
   BITCODE_3DPOINT unknown_pt;
-  double dimgap;
-  double box_height;
-  double box_width;
-  unsigned int hooklineonxdir;
-  unsigned int arrowhead_on;
-  unsigned int arrowhead_type;
-  double dimasz;
-  unsigned int unknown_bit_2;
-  unsigned int unknown_bit_3;
-  unsigned int unknown_short_1;
-  unsigned int byblock_color;
-  unsigned int unknown_bit_4;
-  unsigned int unknown_bit_5;
+  BITCODE_BD dimgap;
+  BITCODE_BD box_height;
+  BITCODE_BD box_width;
+  BITCODE_B hooklineonxdir;
+  BITCODE_B arrowhead_on;
+  BITCODE_BS arrowhead_type;
+  BITCODE_BD dimasz;
+  BITCODE_B unknown_bit_2;
+  BITCODE_B unknown_bit_3;
+  BITCODE_BS unknown_short_1;
+  BITCODE_BS byblock_color;
+  BITCODE_B unknown_bit_4;
+  BITCODE_B unknown_bit_5;
 } Dwg_Entity_LEADER;
 
 /**
@@ -1343,29 +1339,14 @@ typedef struct _dwg_entity_LEADER
  */
 typedef struct _dwg_entity_TOLERANCE
 {
-  unsigned int unknown_short;
-  double height;
-  double dimgap;
-
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } ins_pt;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } x_direction;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } extrusion;
-  unsigned int text_string;
+  BITCODE_BS unknown_short;
+  BITCODE_BD height;
+  BITCODE_BD dimgap;
+  BITCODE_3BD ins_pt;
+  BITCODE_3BD x_direction;
+  BITCODE_3BD extrusion;
+  BITCODE_BS text_string;
+  BITCODE_H dimstyle;
 } Dwg_Entity_TOLERANCE;
 
 /**
@@ -1373,54 +1354,29 @@ typedef struct _dwg_entity_TOLERANCE
  */
 typedef struct _dwg_entity_MLINE_line
 {
-  unsigned int num_segparms;
-  double* segparms;
-  unsigned int num_areafillparms;
-  double* areafillparms;
+  BITCODE_BS num_segparms;
+  BITCODE_BD * segparms;
+  BITCODE_BS num_areafillparms;
+  BITCODE_BD* areafillparms;
 } Dwg_Entity_MLINE_line;
 
 typedef struct _dwg_entity_MLINE_vert
 {
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } vertex;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } vertex_direction;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } miter_direction;
+  BITCODE_3BD vertex;
+  BITCODE_3BD vertex_direction;
+  BITCODE_3BD miter_direction;
   Dwg_Entity_MLINE_line* lines;
 } Dwg_Entity_MLINE_vert;
 
 typedef struct _dwg_entity_MLINE
 {
-  double scale;
-  unsigned int just;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } base_point;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } extrusion;
-  unsigned int open_closed;
-  unsigned int num_lines; //Linesinstyle
-  unsigned int num_verts;
+  BITCODE_BD scale;
+  BITCODE_RC just;
+  BITCODE_3BD base_point;
+  BITCODE_3BD extrusion;
+  BITCODE_BS open_closed;
+  BITCODE_RC num_lines; //Linesinstyle
+  BITCODE_BS num_verts;
   Dwg_Entity_MLINE_vert* verts;
 } Dwg_Entity_MLINE;
 
@@ -2096,47 +2052,24 @@ typedef struct _dwg_entity_IMAGE_clip_vert
 
 typedef struct _dwg_entity_IMAGE
 {
-  long unsigned int class_version;
+  BITCODE_BL class_version;
+  BITCODE_3BD pt0;
+  BITCODE_3BD uvec;
+  BITCODE_3BD vvec;
   struct
   {
-    double x;
-    double y;
-    double z;
-  } pt0;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } uvec;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } vvec;
-  struct
-  {
-    double width;
-    double height;
+    BITCODE_RD width;
+    BITCODE_RD height;
   } size;
-  unsigned int display_props;
-  unsigned char clipping;
-  unsigned char brightness;
-  unsigned char contrast;
-  unsigned char fade;
-  unsigned int clip_boundary_type;
-  struct
-  {
-    double x;
-    double y;
-  } boundary_pt0;
-  struct
-  {
-    double x;
-    double y;
-  } boundary_pt1;
-  unsigned long num_clip_verts;
+  BITCODE_BS display_props;
+  BITCODE_B clipping;
+  BITCODE_RC brightness;
+  BITCODE_RC contrast;
+  BITCODE_RC fade;
+  BITCODE_BS clip_boundary_type;
+  BITCODE_2RD boundary_pt0;
+  BITCODE_2RD boundary_pt1;
+  BITCODE_BL num_clip_verts;
   Dwg_Entity_IMAGE_clip_vert* clip_verts;
 } Dwg_Entity_IMAGE;
 
@@ -2249,35 +2182,25 @@ typedef struct _dwg_object_LAYOUT
 /**
  Structures for LWPLINE
  */
-typedef struct _dwg_entity_LWPLINE_point
-{
-  double x;
-  double y;
-} Dwg_Entity_LWPLINE_point;
 
 typedef struct _dwg_entity_LWPLINE_width
 {
-  double start;
-  double end;
+  BITCODE_BD start;
+  BITCODE_BD end;
 } Dwg_Entity_LWPLINE_width;
 
 typedef struct _dwg_entity_LWPLINE
 {
-  unsigned int flags;
-  double const_width;
-  double elevation;
-  double thickness;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } normal;
-  long unsigned int num_points;
-  Dwg_Entity_LWPLINE_point* points;
-  long unsigned int num_bulges;
-  double* bulges;
-  long unsigned int num_widths;
+  BITCODE_BS flags;
+  BITCODE_BD const_width;
+  BITCODE_BD elevation;
+  BITCODE_BD thickness;
+  BITCODE_3BD normal;
+  BITCODE_BL num_points;
+  BITCODE_2RD* points;
+  BITCODE_BL num_bulges;
+  BITCODE_BD* bulges;
+  BITCODE_BL num_widths;
   Dwg_Entity_LWPLINE_width* widths;
 } Dwg_Entity_LWPLINE;
 
@@ -2286,11 +2209,11 @@ typedef struct _dwg_entity_LWPLINE
  */
 typedef struct _dwg_entity_OLE2FRAME
 {
-  unsigned int flags;
-  unsigned int mode;
-  long unsigned int data_length;
-  unsigned char* data;
-  unsigned char unknown;
+  BITCODE_BS flags;
+  BITCODE_BS mode;
+  BITCODE_BL data_length;
+  BITCODE_RC* data;
+  BITCODE_RC unknown;
 } Dwg_Entity_OLE2FRAME;
 
 /**
@@ -2475,31 +2398,33 @@ typedef struct _dwg_object_entity
     Dwg_Entity_HATCH *HATCH;
   } tio;
 
-  long unsigned int bitsize;
+  BITCODE_RL bitsize;
   //Dwg_Handle handle;
 
-  unsigned int extended_size;
+  BITCODE_BS extended_size;
   Dwg_Handle extended_handle;
-  unsigned char *extended;
+  BITCODE_RC *extended;
 
-  unsigned char picture_exists;
-  long unsigned int picture_size;
-  unsigned char *picture;
+  BITCODE_B picture_exists;
+  BITCODE_BL picture_size;
+  BITCODE_RC *picture;
 
-  unsigned char entity_mode;
-  long unsigned int num_reactors;
-  unsigned char xdict_missing_flag;
-  unsigned char isbylayerlt;
-  unsigned char nolinks;
-  Dwg_Color color;
-  double linetype_scale;
-  unsigned char linetype_flags;
-  unsigned char plotstyle_flags;
-  unsigned char material_flags;
-  unsigned char shadow_flags;
-  unsigned int invisible;
-  unsigned char lineweight;
+  BITCODE_BB entity_mode;
+  BITCODE_BL num_reactors;
+  BITCODE_B xdict_missing_flag;
+  BITCODE_B isbylayerlt;
+  BITCODE_B nolinks;
+  BITCODE_CMC color;
+  BITCODE_BD linetype_scale;
+  BITCODE_BB linetype_flags;
+  BITCODE_BB plotstyle_flags;
+  BITCODE_BB material_flags;
+  BITCODE_RC shadow_flags;
+  BITCODE_BS invisible;
+  BITCODE_RC lineweight;
 
+  //XXX I think this field is deprecated due to
+  //the new handle parsing functions
   unsigned int num_handles;
 
   //Common Entity Handle Data
