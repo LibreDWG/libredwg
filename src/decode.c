@@ -83,6 +83,7 @@
 #define FIELD_2DD(name, d1, d2) FIELD_DD(name.x, d1); FIELD_DD(name.y, d2);  
 #define FIELD_2RD(name) FIELD(name.x, RD); FIELD(name.y, RD);
 #define FIELD_2BD(name) FIELD(name.x, BD); FIELD(name.y, BD);
+#define FIELD_3RD(name) FIELD(name.x, RD); FIELD(name.y, RD); FIELD(name.z, RD);
 #define FIELD_3BD(name) FIELD(name.x, BD); FIELD(name.y, BD); FIELD(name.z, BD);
 #define FIELD_3DPOINT(name) FIELD_3BD(name)
 #define FIELD_CMC(name)\
@@ -4803,7 +4804,157 @@ DWG_ENTITY(TABLE);
       FIELD_BL(cells[rcount].merged_width_flag);
       FIELD_BL(cells[rcount].merged_height_flag);
       FIELD_BD(cells[rcount].rotation_value);
-    }
+
+      if (GET_FIELD(cells[rcount].type)==1)
+        { /* text cell */
+          FIELD_TV(cells[rcount].text_string);
+        }
+      if (GET_FIELD(cells[rcount].type)==2)
+        { /* block cell */
+          FIELD_BD(cells[rcount].block_scale);
+          FIELD_B(cells[rcount].additional_data_flag);
+          if (GET_FIELD(cells[rcount].additional_data_flag) == 1)
+            {
+              FIELD_BS(cells[rcount].attr_def_count);
+              FIELD_BS(cells[rcount].attr_def_index);
+              FIELD_TV(cells[rcount].attr_def_text);
+            }
+        }
+      if (GET_FIELD(cells[rcount].type)==1 || GET_FIELD(cells[rcount].type)==2)
+        { /* common to both text and block cells */
+          FIELD_B(cells[rcount].additional_data_flag);
+          if (GET_FIELD(cells[rcount].additional_data_flag) == 1)
+            {
+              FIELD_BL(cells[rcount].cell_flag_override);
+              FIELD_RC(cells[rcount].virtual_edge_flag);
+              if (GET_FIELD(cells[rcount].cell_flag_override) && 0x01)
+                {
+                  FIELD_RS(cells[rcount].cell_alignment);
+                }
+              if (GET_FIELD(cells[rcount].cell_flag_override) && 0x02)
+                {
+                  FIELD_B(cells[rcount].background_fill_none);
+                }
+              if (GET_FIELD(cells[rcount].cell_flag_override) && 0x04)
+                {
+                  FIELD_CMC(cells[rcount].background_color);
+                }
+              if (GET_FIELD(cells[rcount].cell_flag_override) && 0x08)
+                {
+                  FIELD_CMC(cells[rcount].content_color);
+                }
+              if (GET_FIELD(cells[rcount].cell_flag_override) && 0x20)
+                {
+                  FIELD_BD(cells[rcount].text_height);
+                }
+              if (GET_FIELD(cells[rcount].cell_flag_override) && 0x00040)
+                {
+                  FIELD_CMC(cells[rcount].top_grid_color);
+                }
+              if (GET_FIELD(cells[rcount].cell_flag_override) && 0x00400)
+                {
+                  FIELD_BS(cells[rcount].top_grid_linewt);
+                }
+              if (GET_FIELD(cells[rcount].cell_flag_override) && 0x04000)
+                {
+                  FIELD_BS(cells[rcount].top_visibility);
+                }
+              if (GET_FIELD(cells[rcount].cell_flag_override) && 0x00080)
+                {
+                  FIELD_CMC(cells[rcount].right_grid_color);
+                }
+              if (GET_FIELD(cells[rcount].cell_flag_override) && 0x00800)
+                {
+                  FIELD_BS(cells[rcount].right_grid_linewt);
+                }
+              if (GET_FIELD(cells[rcount].cell_flag_override) && 0x08000)
+                {
+                  FIELD_BS(cells[rcount].right_visibility);
+                }
+              if (GET_FIELD(cells[rcount].cell_flag_override) && 0x00100)
+                {
+                  FIELD_CMC(cells[rcount].bottom_grid_color);
+                }
+              if (GET_FIELD(cells[rcount].cell_flag_override) && 0x01000)
+                {
+                  FIELD_BS(cells[rcount].bottom_grid_linewt);
+                }
+              if (GET_FIELD(cells[rcount].cell_flag_override) && 0x10000)
+                {
+                  FIELD_BS(cells[rcount].bottom_visibility);
+                }
+              if (GET_FIELD(cells[rcount].cell_flag_override) && 0x00200)
+                {
+                  FIELD_CMC(cells[rcount].left_grid_color);
+                }
+              if (GET_FIELD(cells[rcount].cell_flag_override) && 0x02000)
+                {
+                  FIELD_BS(cells[rcount].left_grid_linewt);
+                }
+              if (GET_FIELD(cells[rcount].cell_flag_override) && 0x20000)
+                {
+                  FIELD_BS(cells[rcount].left_visibility);
+                }
+
+              SINCE(R_2007)
+                {
+                  FIELD_BL(cells[rcount].unknown);
+                  FIELD_BL(cells[rcount].flags_2007);
+                  FIELD_BL(cells[rcount].data_type);
+                  switch (GET_FIELD(cells[rcount].data_type))
+                    {
+                      case 0: /* kLong */
+                        FIELD_BL(cells[rcount].data_long);
+                        break;
+                      case 1: /* kDouble */
+                        FIELD_BD(cells[rcount].data_double);
+                        break;
+                      case 2: /* kString */
+                        FIELD_TV(cells[rcount].data_string);
+                        break;
+                      case 4: /* kDate */
+                        FIELD_BL(cells[rcount].data_size);
+                        FIELD_VECTOR(cells[rcount].data_date, RC, cells[rcount].data_size);
+                        break;
+                      case 8: /* kPoint */
+                        FIELD_BL(cells[rcount].data_size);
+                        FIELD_2RD(cells[rcount].data_point);
+                        break;
+                      case 16: /* k3dPoint */
+                        FIELD_BL(cells[rcount].data_size);
+                        FIELD_3RD(cells[rcount].data_3dpoint);
+                        break;
+                      case 32: /* kObjectId */
+                        //data is a HANDLE
+                        //read from appropriate place in handles section
+                        break;
+                      case 64: /* kBuffer */
+                        if (loglevel)
+                          fprintf(stderr, "ERROR: Unknwon data type in TABLE entity: \"kBuffer\".\n");
+                        break;
+                      case 128: /* kResBuf */
+                        if (loglevel)
+                          fprintf(stderr, "ERROR: Unknwon data type in TABLE entity: \"kResBuf\".\n");
+                        break;
+                      case 256: /* kGeneral */
+                        if (loglevel)
+                          fprintf(stderr, "ERROR: Unknwon data type in TABLE entity: \"kGeneral\".\n");
+                        break;
+                      default:
+                        if (loglevel)
+                          fprintf(stderr, "ERROR: Invalid data type in TABLE entity\n");
+                        break;
+                    }
+                  FIELD_BL(cells[rcount].unknown2);
+                  FIELD_TV(cells[rcount].format_string);
+                  FIELD_TV(cells[rcount].value_string);
+                } /* end SINCE(2007)*/
+            }
+        }
+    } /* End Cell Data (remaining data applies to entire table)*/
+
+/* COMMON: */
+
 //TODO: incomplete parser. check spec.
 
 DWG_ENTITY_END

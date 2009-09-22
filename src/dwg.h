@@ -77,6 +77,13 @@ typedef struct _dwg_bitecode_2bd
   BITCODE_BD y;
 } Dwg_Bitcode_2BD;
 
+typedef struct _dwg_bitecode_3rd
+{
+  BITCODE_RD x;
+  BITCODE_RD y;
+  BITCODE_RD z;
+} Dwg_Bitcode_3RD;
+
 typedef struct _dwg_bitecode_3bd
 {
   BITCODE_BD x;
@@ -87,6 +94,7 @@ typedef struct _dwg_bitecode_3bd
 #define BITCODE_2RD Dwg_Bitcode_2RD
 #define BITCODE_2BD Dwg_Bitcode_2BD
 #define BITCODE_2DPOINT BITCODE_2RD
+#define BITCODE_3RD Dwg_Bitcode_3RD
 #define BITCODE_3BD Dwg_Bitcode_3BD
 #define BITCODE_3DPOINT BITCODE_3BD
 
@@ -2323,6 +2331,35 @@ typedef struct _dwg_entity_TABLE_cell
   BITCODE_BL cell_flag_override;
   BITCODE_RC virtual_edge_flag;
   BITCODE_RS cell_alignment;
+  BITCODE_B background_fill_none;
+  BITCODE_CMC background_color;
+  BITCODE_CMC content_color;
+  BITCODE_BD text_height;
+  BITCODE_CMC top_grid_color;
+  BITCODE_BS top_grid_linewt;
+  BITCODE_BS top_visibility;
+  BITCODE_CMC right_grid_color;
+  BITCODE_BS right_grid_linewt;
+  BITCODE_BS right_visibility;
+  BITCODE_CMC bottom_grid_color;
+  BITCODE_BS bottom_grid_linewt;
+  BITCODE_BS bottom_visibility;
+  BITCODE_CMC left_grid_color;
+  BITCODE_BS left_grid_linewt;
+  BITCODE_BS left_visibility;
+  BITCODE_BL unknown;
+  BITCODE_BL flags_2007;
+  BITCODE_BL data_type;
+  BITCODE_BL data_size;
+  BITCODE_BL data_long;
+  BITCODE_BD data_double;
+  BITCODE_TV data_string;
+  BITCODE_RC* data_date;
+  BITCODE_2RD data_point;
+  BITCODE_3RD data_3dpoint;
+  BITCODE_BL unknown2;
+  BITCODE_TV format_string;
+  BITCODE_TV value_string;
 } Dwg_Entity_TABLE_Cell;
 
 typedef struct _dwg_entity_TABLE
