@@ -3495,6 +3495,15 @@ DWG_ENTITY(LEADER);
 
   COMMON_ENTITY_HANDLE_DATA;
 
+  //FIXME reading these handles leaded to a segfault
+  //SINCE(R_14)
+  //{
+  //TODO check if field is present in R_13.
+  //Juca thinks it is present but inactive/not used.
+  //FIELD_HANDLE(associated_annotation, 5);
+  //}
+  //FIELD_HANDLE(dimstyle, 5);
+
 DWG_ENTITY_END
 
 /*(46)*/
@@ -3556,6 +3565,7 @@ DWG_ENTITY(MLINE);
     }
 
   COMMON_ENTITY_HANDLE_DATA;
+  FIELD_HANDLE(mline_style, 5);
 
 DWG_ENTITY_END
 
@@ -4450,6 +4460,8 @@ DWG_ENTITY(IMAGE);
     }
 
   COMMON_ENTITY_HANDLE_DATA;
+  FIELD_HANDLE(imagedef,5);
+  FIELD_HANDLE(imagedefreactor,3);
 
 DWG_ENTITY_END
 

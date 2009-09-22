@@ -1332,6 +1332,8 @@ typedef struct _dwg_entity_LEADER
   BITCODE_BS byblock_color;
   BITCODE_B unknown_bit_4;
   BITCODE_B unknown_bit_5;
+  BITCODE_H associated_annotation;
+  BITCODE_H dimstyle;
 } Dwg_Entity_LEADER;
 
 /**
@@ -1378,6 +1380,7 @@ typedef struct _dwg_entity_MLINE
   BITCODE_RC num_lines; //Linesinstyle
   BITCODE_BS num_verts;
   Dwg_Entity_MLINE_vert* verts;
+  BITCODE_H mline_style;
 } Dwg_Entity_MLINE;
 
 /**
@@ -2071,6 +2074,8 @@ typedef struct _dwg_entity_IMAGE
   BITCODE_2RD boundary_pt1;
   BITCODE_BL num_clip_verts;
   Dwg_Entity_IMAGE_clip_vert* clip_verts;
+  BITCODE_H imagedef;
+  BITCODE_H imagedefreactor;
 } Dwg_Entity_IMAGE;
 
 /**
@@ -2329,12 +2334,6 @@ typedef struct _dwg_object_XRECORD
 {
 //TODO 
 } Dwg_Object_XRECORD;
-
-Dwg_Object_PROXY *PROXY;
-Dwg_Object_PLACEHOLDER *PLACEHOLDER;
-Dwg_Object_RASTERVARIABLES *RASTERVARIABLES;
-Dwg_Object_SORTENTSTABLE *SORTENTSTABLE;
-Dwg_Object_SPATIAL_FILTER *SPATIAL_FILTER;
 
 /* OBJECTS - END ************************************************************/
 
