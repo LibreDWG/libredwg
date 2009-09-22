@@ -1316,6 +1316,8 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
   ent->extended_size = 0;
   while (size = bit_read_BS(dat))
     {
+      if (loglevel)
+        fprintf(stderr, "EED size: %lu\n", (long unsigned int)size);
       if (size > 10210)
         {
           fprintf(
@@ -1326,7 +1328,9 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
           ent->extended_size = 0;
           ent->picture_exists = 0;
           ent->num_handles = 0;
+          //XXX
           return -1;
+          //break;
         }
       if (ent->extended_size == 0)
         {
@@ -5008,11 +5012,23 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
   case DWG_TYPE_SPLINE:
     dwg_decode_SPLINE(dat, obj);
     break;
+  case DWG_TYPE_REGION:
+    dwg_decode_REGION(dat, obj);
+    break;
+  case DWG_TYPE_3DSOLID:
+    dwg_decode__3DSOLID(dat, obj);
+    break;
+  case DWG_TYPE_BODY:
+    dwg_decode_BODY(dat, obj);
+    break;
   case DWG_TYPE_RAY:
     dwg_decode_RAY(dat, obj);
     break;
   case DWG_TYPE_XLINE:
     dwg_decode_XLINE(dat, obj);
+    break;
+  case DWG_TYPE_DICTIONARY:
+    dwg_decode_DICTIONARY(dat, obj);
     break;
   case DWG_TYPE_MTEXT:
     dwg_decode_MTEXT(dat, obj);
@@ -5029,8 +5045,8 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
   case DWG_TYPE_BLOCK_CONTROL:
     dwg_decode_BLOCK_CONTROL(dat, obj);
     break;
-  case DWG_TYPE_DICTIONARY:
-    dwg_decode_DICTIONARY(dat, obj);
+  case DWG_TYPE_BLOCK_HEADER:
+    dwg_decode_BLOCK_HEADER(dat, obj);
     break;
   case DWG_TYPE_LAYER_CONTROL:
     dwg_decode_LAYER_CONTROL(dat, obj);
@@ -5091,9 +5107,6 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
     break;
   case DWG_TYPE_MLINESTYLE:
     dwg_decode_MLINESTYLE(dat, obj);
-    break;
-  case DWG_TYPE_BLOCK_HEADER:
-    dwg_decode_BLOCK_HEADER(dat, obj);
     break;
   default:
     if (obj->type == dwg->dwg_ot_layout)
