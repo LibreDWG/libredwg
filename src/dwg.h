@@ -2421,6 +2421,48 @@ typedef struct _dwg_entity_TABLE
   BITCODE_CMC data_vert_left_color;
   BITCODE_CMC data_vert_ins_color;
   BITCODE_CMC data_vert_right_color;
+
+  BITCODE_B border_lineweight_overrides_present;
+  BITCODE_BL border_lineweight_overrides_flag;
+  BITCODE_BS title_horiz_top_lineweigh;
+  BITCODE_BS title_horiz_ins_lineweigh;
+  BITCODE_BS title_horiz_bottom_lineweigh;
+  BITCODE_BS title_vert_left_lineweigh;
+  BITCODE_BS title_vert_ins_lineweigh;
+  BITCODE_BS title_vert_right_lineweigh;
+  BITCODE_BS header_horiz_top_lineweigh;
+  BITCODE_BS header_horiz_ins_lineweigh;
+  BITCODE_BS header_horiz_bottom_lineweigh;
+  BITCODE_BS header_vert_left_lineweigh;
+  BITCODE_BS header_vert_ins_lineweigh;
+  BITCODE_BS header_vert_right_lineweigh;
+  BITCODE_BS data_horiz_top_lineweigh;
+  BITCODE_BS data_horiz_ins_lineweigh;
+  BITCODE_BS data_horiz_bottom_lineweigh;
+  BITCODE_BS data_vert_left_lineweigh;
+  BITCODE_BS data_vert_ins_lineweigh;
+  BITCODE_BS data_vert_right_lineweigh;
+
+  BITCODE_B border_visibility_overrides_present;
+  BITCODE_BL border_visibility_overrides_flag;
+  BITCODE_BS title_horiz_top_visibility;
+  BITCODE_BS title_horiz_ins_visibility;
+  BITCODE_BS title_horiz_bottom_visibility;
+  BITCODE_BS title_vert_left_visibility;
+  BITCODE_BS title_vert_ins_visibility;
+  BITCODE_BS title_vert_right_visibility;
+  BITCODE_BS header_horiz_top_visibility;
+  BITCODE_BS header_horiz_ins_visibility;
+  BITCODE_BS header_horiz_bottom_visibility;
+  BITCODE_BS header_vert_left_visibility;
+  BITCODE_BS header_vert_ins_visibility;
+  BITCODE_BS header_vert_right_visibility;
+  BITCODE_BS data_horiz_top_visibility;
+  BITCODE_BS data_horiz_ins_visibility;
+  BITCODE_BS data_horiz_bottom_visibility;
+  BITCODE_BS data_vert_left_visibility;
+  BITCODE_BS data_vert_ins_visibility;
+  BITCODE_BS data_vert_right_visibility;
 } Dwg_Entity_TABLE;
 
 //NOT SURE ABOUT THIS ONE (IS IT OBJECT OR ENTITY?):

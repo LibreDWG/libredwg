@@ -5150,6 +5150,196 @@ DWG_ENTITY(TABLE);
         {
           FIELD_CMC (data_vert_right_color);
         }
+    }
+
+  FIELD_B (border_lineweight_overrides_present);
+  if (GET_FIELD(border_lineweight_overrides_present)==1)
+    {
+      FIELD_BL (border_lineweight_overrides_flag);
+      if (GET_FIELD(border_lineweight_overrides_flag) & 0x0001)
+        {
+          FIELD_BS (title_horiz_top_lineweigh);
+        }
+
+      if (GET_FIELD(border_lineweight_overrides_flag) & 0x0002)
+        {
+          FIELD_BS (title_horiz_ins_lineweigh);
+        }
+
+      if (GET_FIELD(border_lineweight_overrides_flag) & 0x0004)
+        {
+          FIELD_BS (title_horiz_bottom_lineweigh);
+        }
+
+      if (GET_FIELD(border_lineweight_overrides_flag) & 0x0008)
+        {
+          FIELD_BS (title_vert_left_lineweigh);
+        }
+
+      if (GET_FIELD(border_lineweight_overrides_flag) & 0x0010)
+        {
+          FIELD_BS (title_vert_ins_lineweigh);
+        }
+
+      if (GET_FIELD(border_lineweight_overrides_flag) & 0x0020)
+        {
+          FIELD_BS (title_vert_right_lineweigh);
+        }
+
+      if (GET_FIELD(border_lineweight_overrides_flag) & 0x0040)
+        {
+          FIELD_BS (header_horiz_top_lineweigh);
+        }
+
+      if (GET_FIELD(border_lineweight_overrides_flag) & 0x0080)
+        {
+          FIELD_BS (header_horiz_ins_lineweigh);
+        }
+
+      if (GET_FIELD(border_lineweight_overrides_flag) & 0x0100)
+        {
+          FIELD_BS (header_horiz_bottom_lineweigh);
+        }
+
+      if (GET_FIELD(border_lineweight_overrides_flag) & 0x0200)
+        {
+          FIELD_BS (header_vert_left_lineweigh);
+        }
+
+      if (GET_FIELD(border_lineweight_overrides_flag) & 0x0400)
+        {
+          FIELD_BS (header_vert_ins_lineweigh);
+        }
+
+      if (GET_FIELD(border_lineweight_overrides_flag) & 0x0800)
+        {
+          FIELD_BS (header_vert_right_lineweigh);
+        }
+
+      if (GET_FIELD(border_lineweight_overrides_flag) & 0x1000)
+        {
+          FIELD_BS (data_horiz_top_lineweigh);
+        }
+
+      if (GET_FIELD(border_lineweight_overrides_flag) & 0x2000)
+        {
+          FIELD_BS (data_horiz_ins_lineweigh);
+        }
+
+      if (GET_FIELD(border_lineweight_overrides_flag) & 0x4000)
+        {
+          FIELD_BS (data_horiz_bottom_lineweigh);
+        }
+
+      if (GET_FIELD(border_lineweight_overrides_flag) & 0x8000)
+        {
+          FIELD_BS (data_vert_left_lineweigh);
+        }
+
+      if (GET_FIELD(border_lineweight_overrides_flag) & 0x10000)
+        {
+          FIELD_BS (data_vert_ins_lineweigh);
+        }
+
+      if (GET_FIELD(border_lineweight_overrides_flag) & 0x20000)
+        {
+          FIELD_BS (data_vert_right_lineweigh);
+        }
+    }
+
+  FIELD_B (border_visibility_overrides_present);
+  if (GET_FIELD(border_visibility_overrides_present)==1)
+    {
+      FIELD_BL (border_visibility_overrides_flag);
+      if (GET_FIELD(border_visibility_overrides_flag) & 0x0001)
+        {
+          FIELD_BS (title_horiz_top_visibility);
+        }
+
+      if (GET_FIELD(border_visibility_overrides_flag) & 0x0002)
+        {
+          FIELD_BS (title_horiz_ins_visibility);
+        }
+
+      if (GET_FIELD(border_visibility_overrides_flag) & 0x0004)
+        {
+          FIELD_BS (title_horiz_bottom_visibility);
+        }
+
+      if (GET_FIELD(border_visibility_overrides_flag) & 0x0008)
+        {
+          FIELD_BS (title_vert_left_visibility);
+        }
+
+      if (GET_FIELD(border_visibility_overrides_flag) & 0x0010)
+        {
+          FIELD_BS (title_vert_ins_visibility);
+        }
+
+      if (GET_FIELD(border_visibility_overrides_flag) & 0x0020)
+        {
+          FIELD_BS (title_vert_right_visibility);
+        }
+
+      if (GET_FIELD(border_visibility_overrides_flag) & 0x0040)
+        {
+          FIELD_BS (header_horiz_top_visibility);
+        }
+
+      if (GET_FIELD(border_visibility_overrides_flag) & 0x0080)
+        {
+          FIELD_BS (header_horiz_ins_visibility);
+        }
+
+      if (GET_FIELD(border_visibility_overrides_flag) & 0x0100)
+        {
+          FIELD_BS (header_horiz_bottom_visibility);
+        }
+
+      if (GET_FIELD(border_visibility_overrides_flag) & 0x0200)
+        {
+          FIELD_BS (header_vert_left_visibility);
+        }
+
+      if (GET_FIELD(border_visibility_overrides_flag) & 0x0400)
+        {
+          FIELD_BS (header_vert_ins_visibility);
+        }
+
+      if (GET_FIELD(border_visibility_overrides_flag) & 0x0800)
+        {
+          FIELD_BS (header_vert_right_visibility);
+        }
+
+      if (GET_FIELD(border_visibility_overrides_flag) & 0x1000)
+        {
+          FIELD_BS (data_horiz_top_visibility);
+        }
+
+      if (GET_FIELD(border_visibility_overrides_flag) & 0x2000)
+        {
+          FIELD_BS (data_horiz_ins_visibility);
+        }
+
+      if (GET_FIELD(border_visibility_overrides_flag) & 0x4000)
+        {
+          FIELD_BS (data_horiz_bottom_visibility);
+        }
+
+      if (GET_FIELD(border_visibility_overrides_flag) & 0x8000)
+        {
+          FIELD_BS (data_vert_left_visibility);
+        }
+
+      if (GET_FIELD(border_visibility_overrides_flag) & 0x10000)
+        {
+          FIELD_BS (data_vert_ins_visibility);
+        }
+
+      if (GET_FIELD(border_visibility_overrides_flag) & 0x20000)
+        {
+          FIELD_BS (data_vert_right_visibility);
+        }
     }    
   /*TODO: incomplete parser. check spec.*/
 
