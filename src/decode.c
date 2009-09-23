@@ -5055,8 +5055,103 @@ DWG_ENTITY(TABLE);
         {
           FIELD_BD (data_row_height);
         }
+    }
 
-    }    /*TODO: incomplete parser. check spec.*/
+  FIELD_B (border_color_overrides_present);
+  if (GET_FIELD(border_color_overrides_present)==1)
+    {
+      FIELD_BL (border_color_overrides_flag);
+      if (GET_FIELD(border_color_overrides_flag) & 0x0001)
+        {
+          FIELD_CMC (title_horiz_top_color);
+        }
+
+      if (GET_FIELD(border_color_overrides_flag) & 0x0002)
+        {
+          FIELD_CMC (title_horiz_ins_color);
+        }
+
+      if (GET_FIELD(border_color_overrides_flag) & 0x0004)
+        {
+          FIELD_CMC (title_horiz_bottom_color);
+        }
+
+      if (GET_FIELD(border_color_overrides_flag) & 0x0008)
+        {
+          FIELD_CMC (title_vert_left_color);
+        }
+
+      if (GET_FIELD(border_color_overrides_flag) & 0x0010)
+        {
+          FIELD_CMC (title_vert_ins_color);
+        }
+
+      if (GET_FIELD(border_color_overrides_flag) & 0x0020)
+        {
+          FIELD_CMC (title_vert_right_color);
+        }
+
+      if (GET_FIELD(border_color_overrides_flag) & 0x0040)
+        {
+          FIELD_CMC (header_horiz_top_color);
+        }
+
+      if (GET_FIELD(border_color_overrides_flag) & 0x0080)
+        {
+          FIELD_CMC (header_horiz_ins_color);
+        }
+
+      if (GET_FIELD(border_color_overrides_flag) & 0x0100)
+        {
+          FIELD_CMC (header_horiz_bottom_color);
+        }
+
+      if (GET_FIELD(border_color_overrides_flag) & 0x0200)
+        {
+          FIELD_CMC (header_vert_left_color);
+        }
+
+      if (GET_FIELD(border_color_overrides_flag) & 0x0400)
+        {
+          FIELD_CMC (header_vert_ins_color);
+        }
+
+      if (GET_FIELD(border_color_overrides_flag) & 0x0800)
+        {
+          FIELD_CMC (header_vert_right_color);
+        }
+
+      if (GET_FIELD(border_color_overrides_flag) & 0x1000)
+        {
+          FIELD_CMC (data_horiz_top_color);
+        }
+
+      if (GET_FIELD(border_color_overrides_flag) & 0x2000)
+        {
+          FIELD_CMC (data_horiz_ins_color);
+        }
+
+      if (GET_FIELD(border_color_overrides_flag) & 0x4000)
+        {
+          FIELD_CMC (data_horiz_bottom_color);
+        }
+
+      if (GET_FIELD(border_color_overrides_flag) & 0x8000)
+        {
+          FIELD_CMC (data_vert_left_color);
+        }
+
+      if (GET_FIELD(border_color_overrides_flag) & 0x10000)
+        {
+          FIELD_CMC (data_vert_ins_color);
+        }
+
+      if (GET_FIELD(border_color_overrides_flag) & 0x20000)
+        {
+          FIELD_CMC (data_vert_right_color);
+        }
+    }    
+  /*TODO: incomplete parser. check spec.*/
 
 DWG_ENTITY_END
 

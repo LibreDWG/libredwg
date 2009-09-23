@@ -2401,6 +2401,26 @@ typedef struct _dwg_entity_TABLE
   BITCODE_BD header_row_height;
   BITCODE_BD data_row_height;
 
+  BITCODE_B border_color_overrides_present;
+  BITCODE_BL border_color_overrides_flag;
+  BITCODE_CMC title_horiz_top_color;
+  BITCODE_CMC title_horiz_ins_color;
+  BITCODE_CMC title_horiz_bottom_color;
+  BITCODE_CMC title_vert_left_color;
+  BITCODE_CMC title_vert_ins_color;
+  BITCODE_CMC title_vert_right_color;
+  BITCODE_CMC header_horiz_top_color;
+  BITCODE_CMC header_horiz_ins_color;
+  BITCODE_CMC header_horiz_bottom_color;
+  BITCODE_CMC header_vert_left_color;
+  BITCODE_CMC header_vert_ins_color;
+  BITCODE_CMC header_vert_right_color;
+  BITCODE_CMC data_horiz_top_color;
+  BITCODE_CMC data_horiz_ins_color;
+  BITCODE_CMC data_horiz_bottom_color;
+  BITCODE_CMC data_vert_left_color;
+  BITCODE_CMC data_vert_ins_color;
+  BITCODE_CMC data_vert_right_color;
 } Dwg_Entity_TABLE;
 
 //NOT SURE ABOUT THIS ONE (IS IT OBJECT OR ENTITY?):
