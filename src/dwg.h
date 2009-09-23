@@ -2378,6 +2378,29 @@ typedef struct _dwg_entity_TABLE
   BITCODE_BD* col_widths;
   BITCODE_BD* row_heights;
   Dwg_Entity_TABLE_Cell* cells; 
+  BITCODE_B table_overrides_present;
+  BITCODE_BL table_flag_override;
+  BITCODE_B title_suppressed;
+  BITCODE_B header_suppressed;
+  BITCODE_BS flow_direction;
+  BITCODE_BD horiz_cell_margin;
+  BITCODE_BD vert_cell_margin;
+  BITCODE_CMC title_row_color;
+  BITCODE_CMC header_row_color;
+  BITCODE_CMC data_row_color;
+  BITCODE_B title_row_fill_none;
+  BITCODE_B header_row_fill_none;
+  BITCODE_B data_row_fill_none;
+  BITCODE_CMC title_row_fill_color;
+  BITCODE_CMC header_row_fill_color;
+  BITCODE_CMC data_row_fill_color;
+  BITCODE_BS title_row_align;
+  BITCODE_BS header_row_align;
+  BITCODE_BS data_row_align;
+  BITCODE_BD title_row_height;
+  BITCODE_BD header_row_height;
+  BITCODE_BD data_row_height;
+
 } Dwg_Entity_TABLE;
 
 //NOT SURE ABOUT THIS ONE (IS IT OBJECT OR ENTITY?):

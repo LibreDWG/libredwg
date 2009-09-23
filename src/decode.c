@@ -4827,71 +4827,71 @@ DWG_ENTITY(TABLE);
             {
               FIELD_BL(cells[rcount].cell_flag_override);
               FIELD_RC(cells[rcount].virtual_edge_flag);
-              if (GET_FIELD(cells[rcount].cell_flag_override) && 0x01)
+              if (GET_FIELD(cells[rcount].cell_flag_override) & 0x01)
                 {
                   FIELD_RS(cells[rcount].cell_alignment);
                 }
-              if (GET_FIELD(cells[rcount].cell_flag_override) && 0x02)
+              if (GET_FIELD(cells[rcount].cell_flag_override) & 0x02)
                 {
                   FIELD_B(cells[rcount].background_fill_none);
                 }
-              if (GET_FIELD(cells[rcount].cell_flag_override) && 0x04)
+              if (GET_FIELD(cells[rcount].cell_flag_override) & 0x04)
                 {
                   FIELD_CMC(cells[rcount].background_color);
                 }
-              if (GET_FIELD(cells[rcount].cell_flag_override) && 0x08)
+              if (GET_FIELD(cells[rcount].cell_flag_override) & 0x08)
                 {
                   FIELD_CMC(cells[rcount].content_color);
                 }
-              if (GET_FIELD(cells[rcount].cell_flag_override) && 0x20)
+              if (GET_FIELD(cells[rcount].cell_flag_override) & 0x20)
                 {
                   FIELD_BD(cells[rcount].text_height);
                 }
-              if (GET_FIELD(cells[rcount].cell_flag_override) && 0x00040)
+              if (GET_FIELD(cells[rcount].cell_flag_override) & 0x00040)
                 {
                   FIELD_CMC(cells[rcount].top_grid_color);
                 }
-              if (GET_FIELD(cells[rcount].cell_flag_override) && 0x00400)
+              if (GET_FIELD(cells[rcount].cell_flag_override) & 0x00400)
                 {
                   FIELD_BS(cells[rcount].top_grid_linewt);
                 }
-              if (GET_FIELD(cells[rcount].cell_flag_override) && 0x04000)
+              if (GET_FIELD(cells[rcount].cell_flag_override) & 0x04000)
                 {
                   FIELD_BS(cells[rcount].top_visibility);
                 }
-              if (GET_FIELD(cells[rcount].cell_flag_override) && 0x00080)
+              if (GET_FIELD(cells[rcount].cell_flag_override) & 0x00080)
                 {
                   FIELD_CMC(cells[rcount].right_grid_color);
                 }
-              if (GET_FIELD(cells[rcount].cell_flag_override) && 0x00800)
+              if (GET_FIELD(cells[rcount].cell_flag_override) & 0x00800)
                 {
                   FIELD_BS(cells[rcount].right_grid_linewt);
                 }
-              if (GET_FIELD(cells[rcount].cell_flag_override) && 0x08000)
+              if (GET_FIELD(cells[rcount].cell_flag_override) & 0x08000)
                 {
                   FIELD_BS(cells[rcount].right_visibility);
                 }
-              if (GET_FIELD(cells[rcount].cell_flag_override) && 0x00100)
+              if (GET_FIELD(cells[rcount].cell_flag_override) & 0x00100)
                 {
                   FIELD_CMC(cells[rcount].bottom_grid_color);
                 }
-              if (GET_FIELD(cells[rcount].cell_flag_override) && 0x01000)
+              if (GET_FIELD(cells[rcount].cell_flag_override) & 0x01000)
                 {
                   FIELD_BS(cells[rcount].bottom_grid_linewt);
                 }
-              if (GET_FIELD(cells[rcount].cell_flag_override) && 0x10000)
+              if (GET_FIELD(cells[rcount].cell_flag_override) & 0x10000)
                 {
                   FIELD_BS(cells[rcount].bottom_visibility);
                 }
-              if (GET_FIELD(cells[rcount].cell_flag_override) && 0x00200)
+              if (GET_FIELD(cells[rcount].cell_flag_override) & 0x00200)
                 {
                   FIELD_CMC(cells[rcount].left_grid_color);
                 }
-              if (GET_FIELD(cells[rcount].cell_flag_override) && 0x02000)
+              if (GET_FIELD(cells[rcount].cell_flag_override) & 0x02000)
                 {
                   FIELD_BS(cells[rcount].left_grid_linewt);
                 }
-              if (GET_FIELD(cells[rcount].cell_flag_override) && 0x20000)
+              if (GET_FIELD(cells[rcount].cell_flag_override) & 0x20000)
                 {
                   FIELD_BS(cells[rcount].left_visibility);
                 }
@@ -4955,7 +4955,108 @@ DWG_ENTITY(TABLE);
 
 /* COMMON: */
 
-//TODO: incomplete parser. check spec.
+  FIELD_B (table_overrides_present);
+  if (GET_FIELD(table_overrides_present)==1)
+    {
+      FIELD_BL (table_flag_override);
+      if (GET_FIELD(table_flag_override) & 0x0001)
+        {
+          FIELD_B (title_suppressed);
+        }
+
+      FIELD_B (header_suppressed);
+
+      if (GET_FIELD(table_flag_override) & 0x0004)
+        {
+          FIELD_BS (flow_direction);
+        }
+
+      if (GET_FIELD(table_flag_override) & 0x0008)
+        {
+          FIELD_BD (horiz_cell_margin);
+        }
+
+      if (GET_FIELD(table_flag_override) & 0x0010)
+        {
+          FIELD_BD (vert_cell_margin);
+        }
+
+      if (GET_FIELD(table_flag_override) & 0x0020)
+        {
+          FIELD_CMC (title_row_color);
+        }
+
+      if (GET_FIELD(table_flag_override) & 0x0040)
+        {
+          FIELD_CMC (header_row_color);
+        }
+
+      if (GET_FIELD(table_flag_override) & 0x0080)
+        {
+          FIELD_CMC (data_row_color);
+        }
+
+      if (GET_FIELD(table_flag_override) & 0x0100)
+        {
+          FIELD_B (title_row_fill_none);
+        }
+
+      if (GET_FIELD(table_flag_override) & 0x0200)
+        {
+          FIELD_B (header_row_fill_none);
+        }
+
+      if (GET_FIELD(table_flag_override) & 0x0400)
+        {
+          FIELD_B (data_row_fill_none);
+        }
+
+      if (GET_FIELD(table_flag_override) & 0x0800)
+        {
+          FIELD_CMC (title_row_fill_color);
+        }
+
+      if (GET_FIELD(table_flag_override) & 0x1000)
+        {
+          FIELD_CMC (header_row_fill_color);
+        }
+
+      if (GET_FIELD(table_flag_override) & 0x2000)
+        {
+          FIELD_CMC (data_row_fill_color);
+        }
+
+      if (GET_FIELD(table_flag_override) & 0x4000)
+        {
+          FIELD_BS (title_row_align);
+        }
+
+      if (GET_FIELD(table_flag_override) & 0x8000)
+        {
+          FIELD_BS (header_row_align);
+        }
+
+      if (GET_FIELD(table_flag_override) & 0x10000)
+        {
+          FIELD_BS (data_row_align);
+        }
+
+      if (GET_FIELD(table_flag_override) & 0x100000)
+        {
+          FIELD_BD (title_row_height);
+        }
+
+      if (GET_FIELD(table_flag_override) & 0x200000)
+        {
+          FIELD_BD (header_row_height);
+        }
+
+      if (GET_FIELD(table_flag_override) & 0x400000)
+        {
+          FIELD_BD (data_row_height);
+        }
+
+    }    /*TODO: incomplete parser. check spec.*/
 
 DWG_ENTITY_END
 
