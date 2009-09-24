@@ -2360,6 +2360,9 @@ typedef struct _dwg_entity_TABLE_cell
   BITCODE_BL unknown2;
   BITCODE_TV format_string;
   BITCODE_TV value_string;
+  BITCODE_H cell_handle;
+  BITCODE_H* attr_def_id;
+  BITCODE_H text_style_override;
 } Dwg_Entity_TABLE_Cell;
 
 typedef struct _dwg_entity_TABLE
@@ -2463,6 +2466,16 @@ typedef struct _dwg_entity_TABLE
   BITCODE_BS data_vert_left_visibility;
   BITCODE_BS data_vert_ins_visibility;
   BITCODE_BS data_vert_right_visibility;
+
+  BITCODE_H block_header;
+  BITCODE_H first_attrib;
+  BITCODE_H last_attrib;
+  BITCODE_H* attribs;
+  BITCODE_H seqend;
+  BITCODE_H table_style_id;
+  BITCODE_H title_row_style_override;
+  BITCODE_H header_row_style_override;
+  BITCODE_H data_row_style_override;
 } Dwg_Entity_TABLE;
 
 //NOT SURE ABOUT THIS ONE (IS IT OBJECT OR ENTITY?):

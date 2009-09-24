@@ -126,12 +126,14 @@
       FIELD_3DPOINT(name[vcount]);\
     }
 
-#define HANDLE_VECTOR(name, sizefield, code)\
-  GET_FIELD(name) = (Dwg_Object_Ref**) malloc(sizeof(Dwg_Object_Ref*) * GET_FIELD(sizefield));\
-  for (vcount=0; vcount<GET_FIELD(sizefield); vcount++)\
+#define HANDLE_VECTOR_N(name, size, code)\
+  GET_FIELD(name) = (BITCODE_H*) malloc(sizeof(BITCODE_H) * size);\
+  for (vcount=0; vcount<size; vcount++)\
     {\
       FIELD_HANDLE(name[vcount], code);\
     }
+
+#define HANDLE_VECTOR(name, sizefield, code) HANDLE_VECTOR_N(name, GET_FIELD(sizefield), code)
 
 #define REACTORS(code)\
   GET_FIELD(reactors) = malloc(sizeof(BITCODE_H) * obj->tio.object->num_reactors);\
@@ -4744,6 +4746,7 @@ DWG_OBJECT_END
 
 //pg.158
 DWG_ENTITY(TABLE);
+  int total_attr_def_count = 0;
 
   FIELD_3BD (insertion_point);
 
@@ -4818,6 +4821,7 @@ DWG_ENTITY(TABLE);
               FIELD_BS(cells[rcount].attr_def_count);
               FIELD_BS(cells[rcount].attr_def_index);
               FIELD_TV(cells[rcount].attr_def_text);
+              total_attr_def_count += GET_FIELD(cells[rcount].attr_def_count);
             }
         }
       if (GET_FIELD(cells[rcount].type)==1 || GET_FIELD(cells[rcount].type)==2)
@@ -5340,8 +5344,51 @@ DWG_ENTITY(TABLE);
         {
           FIELD_BS (data_vert_right_visibility);
         }
-    }    
-  /*TODO: incomplete parser. check spec.*/
+    }
+
+  FIELD_HANDLE (block_header, 5);
+
+  VERSIONS(R_13, R_2000)
+    {
+      if (GET_FIELD(has_attribs))
+        {
+          FIELD_HANDLE (first_attrib, 4);
+          FIELD_HANDLE (last_attrib, 4);
+        }
+    }
+
+  SINCE(R_2004)
+    {
+      HANDLE_VECTOR(attribs, owned_object_count, 4)
+    }
+
+  if (GET_FIELD(has_attribs))
+    {
+      FIELD_HANDLE(seqend, 3);
+    }
+
+  FIELD_HANDLE(table_style_id, ANYCODE);
+
+  REPEAT_N(GET_FIELD(num_rows)*GET_FIELD(num_cols), cells, Dwg_Entity_TABLE_Cell)
+    {
+      FIELD_HANDLE(cells[rcount].cell_handle, ANYCODE);
+
+      if (GET_FIELD(cells[rcount].type) == 2 &&
+          GET_FIELD(cells[rcount].additional_data_flag) == 1)
+        {
+          HANDLE_VECTOR(cells[rcount].attr_def_id, cells[rcount].attr_def_count, ANYCODE);
+        }
+
+      if (GET_FIELD(cells[rcount].additional_data_flag2) == 1 &&
+          GET_FIELD(cells[rcount].cell_flag_override) & 0x08)
+        {
+          FIELD_HANDLE(cells[rcount].text_style_override, ANYCODE);
+        }
+    }
+
+  FIELD_HANDLE (title_row_style_override, ANYCODE);
+  FIELD_HANDLE (header_row_style_override, ANYCODE);
+  FIELD_HANDLE (data_row_style_override, ANYCODE);
 
 DWG_ENTITY_END
 
