@@ -298,7 +298,7 @@ bit_read_BS(Bit_Chain * dat)
     }
   else if (two_bit_code == 1)
     {
-      result = bit_read_RC(dat);
+      result = (unsigned char)bit_read_RC(dat);
       return (result);
     }
   else if (two_bit_code == 2)

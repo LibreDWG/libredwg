@@ -272,6 +272,8 @@ dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
       return -1;
     }
   dat->version = dwg->header.version;
+  if (loglevel) fprintf(stderr,
+      "This file's version code is: %s\n", version);
 
   if (dat->version < R_2000)
     {
