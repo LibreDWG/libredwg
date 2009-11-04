@@ -600,11 +600,11 @@ decode_R13_R15_header(Bit_Chain* dat, Dwg_Data * dwg)
       sgdc[0] = bit_read_RC(dat);
       sgdc[1] = bit_read_RC(dat);
       section_size = (sgdc[0] << 8) | sgdc[1];
-      //if (loglevel) fprintf (stderr, "section_size: %u\n", section_size);
+      if (loglevel) fprintf (stderr, "section_size: %u\n", section_size);
       if (section_size > 2034) // 2032 + 2
         {
           fprintf(stderr, "Error: Object-map section size greater than 2034!");
-          return -1;
+          //return -1;
         }
 
       last_handle = 0;
@@ -5397,18 +5397,20 @@ DWG_ENTITY_END
 //pg.164
 DWG_OBJECT(XRECORD);
 
+/*
+
   FIELD_BL(numdatabytes);
   FIELD_BS(cloning_flags);
   FIELD_RS(indicator);
   //since it also counts the first RS indicator
-  GET_FIELD(numdatabytes)--;
+  //GET_FIELD(numdatabytes)--;
   FIELD_VECTOR(data, RC, numdatabytes);
   FIELD_HANDLE(parent, 3);
   REACTORS(4);
   XDICOBJHANDLE(3);
   //XXX how to known when I run out of data?
   //BITCODE_H* objid_handles;
-
+*/
 DWG_OBJECT_END
 
 ////////////////////
