@@ -1,7 +1,7 @@
 LibreDWG 0.4-pre1
 
 LibreDWG is a free C library to read and write DWG files.
-
+This program is part of the GNU project, released under the aegis of GNU.
 It is licensed under the terms of the GNU General Public License version 3 (or at you
  opinion any later version).
 
