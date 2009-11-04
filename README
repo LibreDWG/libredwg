@@ -5,17 +5,23 @@ LibreDWG is a free C library to read and write DWG files.
 It is licensed under the terms of the GNU General Public License version 3 (or at you
  opinion any later version).
 
-We have forked LibDWG due to its usage of Esperanto, which we think is not the best
- strategy for a free software project which aims to get lots of contributors. LibreDWG is 
+DWG is a file format created in the 70's for the emerging CAD applications. Currently
+it is the native file format of AutoCAD(R), a proprietary, market leading CAD program
+developed by AutoDesk.
+ 
+LibreDWG is a fork from LibDWG due to its usage of Esperanto, which we think is not the best
+strategy for a free software project which aims to get lots of contributors. LibreDWG is 
 written in English. Since we forked LibDWG (May 16, 2009), its development seems to
- have been inactive. At the moment (September 25, 2009) our decoder is almost done. 
+have been inactive. At the moment (September 25, 2009) our decoder is almost done. 
 We are reaching 100% read support in our data structures parser but we still need a
- test suite. Among the example applications we wrote using LibreDWG is an initial SVG
- conversion tool. We intend to become a GNU package soon. Please contact us if you
- can help.
+test suite. Among the example applications we wrote using LibreDWG is an initial SVG
+conversion tool. We intend to become a GNU package soon. Please contact us if you
+can help.
+
+LibreDWG depends on pslib: http://pslib.sourceforge.net 
 
 Sometimes we hang on our IRC channel which is #libredwg at irc.freenode.net
-If you dont find us there, please email us:
+If you don't find us there, please email us:
 
 Felipe Corrêa da Silva Sanches <jucablues@users.sourceforge.net>
 Rodrigo Rodrigues da Silva <pitanga@members.fsf.org>
@@ -37,4 +43,23 @@ the PSlib library. On Debian-based systems this is usually available as a packag
  handle 3d content from DWG since SVG only supports 2-dimensional images.
 
 * get_bmp.c -- Extracts the bmp thumbnail of a dwg file when it is available.
+
+/*****************************************************************************/
+/*  LibreDWG - Free DWG library                                              */
+/*  http://code.google.com/p/libredwg/                                       */
+/*                                                                           */
+/*    based on LibDWG - Free DWG read-only library                           */
+/*    http://sourceforge.net/projects/libdwg                                 */
+/*    originally written by Felipe Castro <felipo at users.sourceforge.net>  */
+/*                                                                           */
+/*  Copyright (C) 2008, 2009 Free Software Foundation, Inc.                  */
+/*  Copyright (C) 2009 Felipe Sanches <jucablues@users.sourceforge.net>      */
+/*  Copyright (C) 2009 Rodrigo Rodrigues da Silva <pitanga@members.fsf.org>  */
+/*                                                                           */
+/*  This library is free software, licensed under the terms of the GNU       */
+/*  General Public License as published by the Free Software Foundation,     */
+/*  either version 3 of the License, or (at your option) any later version.  */
+/*  You should have received a copy of the GNU General Public License        */
+/*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
+/*****************************************************************************/
 
