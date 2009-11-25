@@ -28,6 +28,75 @@
 #include "dwg.h"
 #include "encode.h"
 
+
+/*--------------------------------------------------------------------------------
+ * Welcome to the dark side of the moon...
+ * MACROS
+ */
+
+#define DECODER if (0)
+#define ENCODER if (1)
+
+#define FIELD(name,type)\
+  bit_write_##type(dat, _obj->name);\
+  if (loglevel>=2)\
+    {\
+        fprintf(stderr, #name ": " FORMAT_##type "\n", _obj->name);\
+    }
+
+#define GET_FIELD(name) _obj->name
+
+#define FIELD_B(name) FIELD(name, B);
+#define FIELD_BB(name) FIELD(name, BB);
+#define FIELD_BS(name) FIELD(name, BS);
+#define FIELD_BL(name) FIELD(name, BL);
+#define FIELD_BD(name) FIELD(name, BD);
+#define FIELD_RC(name) FIELD(name, RC);
+#define FIELD_RS(name) FIELD(name, RS);
+#define FIELD_RD(name) FIELD(name, RD);
+#define FIELD_RL(name) FIELD(name, RL);
+#define FIELD_MC(name) FIELD(name, MC);
+#define FIELD_MS(name) FIELD(name, MS);
+#define FIELD_TV(name) FIELD(name, TV);
+#define FIELD_T FIELD_TV /*TODO: implement version dependant string fields */
+#define FIELD_BT(name) FIELD(name, BT); 
+
+#define FIELD_DD(name, _default) bit_write_DD(dat, GET_FIELD(name), _default);
+#define FIELD_2DD(name, d1, d2) FIELD_DD(name.x, d1); FIELD_DD(name.y, d2);  
+
+#define FIELD_2RD(name) FIELD(name.x, RD); FIELD(name.y, RD);
+#define FIELD_2BD(name) FIELD(name.x, BD); FIELD(name.y, BD);
+#define FIELD_3RD(name) FIELD(name.x, RD); FIELD(name.y, RD); FIELD(name.z, RD);
+#define FIELD_3BD(name) FIELD(name.x, BD); FIELD(name.y, BD); FIELD(name.z, BD);
+#define FIELD_3DPOINT(name) FIELD_3BD(name)
+
+#define FIELD_BE(name)\
+bit_write_BE(dat, GET_FIELD(name.x), GET_FIELD(name.y), GET_FIELD(name.z));
+
+//TODO
+#define FIELD_HANDLE(name, handle_code) {}
+
+#define COMMON_ENTITY_HANDLE_DATA
+
+//dwg_encode_common_entity_handle_data(dat, obj)
+
+#define DWG_ENTITY(token) \
+static void \
+dwg_encode_##token(Dwg_Entity_##token * _obj, Bit_Chain * dat)\
+{\
+  if (loglevel)\
+  fprintf (stderr, "Entity " #token ":\n");\
+
+#define DWG_ENTITY_END }
+
+#define DWG_OBJECT(token) \
+static void\
+dwg_encode_##token(Dwg_Object_##token *_obj, Bit_Chain * dat)\
+{\
+
+#define DWG_OBJECT_END }
+
+/*--------------------------------------------------------------------------------*/
 typedef struct
 {
   long int handle;
@@ -854,62 +923,7 @@ dwg_encode_object(Dwg_Object * obj, Bit_Chain * dat)
   bit_write_BS(dat, obj->type);
 }
 
-static void
-dwg_encode_TEXT(Dwg_Entity_TEXT * ent, Bit_Chain * dat)
-{
-  VERSIONS(R_13,R_14)
-    {
-      bit_write_BD(dat, ent->elevation);
-      bit_write_RD(dat, ent->insertion_pt.x);
-      bit_write_RD(dat, ent->insertion_pt.y);
-      bit_write_RD(dat, ent->alignment_pt.x);
-      bit_write_RD(dat, ent->alignment_pt.y);
-      bit_write_BE(dat, ent->extrusion.x, ent->extrusion.y, ent->extrusion.z);
-      bit_write_BD(dat, ent->thickness);
-      bit_write_BD(dat, ent->oblique_ang);
-      bit_write_BD(dat, ent->rotation_ang);
-      bit_write_BD(dat, ent->height);
-      bit_write_BD(dat, ent->width_factor);
-      bit_write_TV(dat, ent->text_value);
-      bit_write_BS(dat, ent->generation);
-      bit_write_BS(dat, ent->horiz_alignment);
-      bit_write_BS(dat, ent->vert_alignment);
-    }
-
-  SINCE(R_2000)
-    {
-      bit_write_RC(dat, ent->dataflags);
-      if ((!ent->dataflags & 0x01))
-        bit_write_RD(dat, ent->elevation);
-      bit_write_RD(dat, ent->insertion_pt.x);
-      bit_write_RD(dat, ent->insertion_pt.y);
-      if (!(ent->dataflags & 0x02))
-        {
-          bit_write_DD(dat, ent->alignment_pt.x, 10);
-          bit_write_DD(dat, ent->alignment_pt.y, 20);
-        }
-      bit_write_BE(dat, ent->extrusion.x, ent->extrusion.y, ent->extrusion.z);
-      bit_write_BT(dat, ent->thickness);
-      if (!(ent->dataflags & 0x04))
-        bit_write_RD(dat, ent->oblique_ang);
-      if (!(ent->dataflags & 0x08))
-        bit_write_RD(dat, ent->rotation_ang);
-      bit_write_RD(dat, ent->height);
-      if (!(ent->dataflags & 0x10))
-        bit_write_RD(dat, ent->width_factor);
-      bit_write_TV(dat, ent->text_value);
-      if (!(ent->dataflags & 0x20))
-        bit_write_BS(dat, ent->generation);
-      if (!(ent->dataflags & 0x40))
-        bit_write_BS(dat, ent->horiz_alignment);
-      if (!(ent->dataflags & 0x80))
-        bit_write_BS(dat, ent->vert_alignment);
-    }
-
-  //TODO: dwg_encode_common_entity_handle_data(dat, ent->object);
-
-  //TODO: dwg_encode_handleref_with_code(dat, obj, style, 5);
-}
+#include<dwg.spec>
 
 static void
 dwg_encode_ATTRIB(Dwg_Entity_ATTRIB * ent, Bit_Chain * dat)
