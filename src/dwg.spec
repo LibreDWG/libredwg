@@ -1,13 +1,14 @@
 #ifdef IS_ENCODER
 #define ENCODER if (1)
 #define DECODER if (0)
+#define TODO_ENCODER fprintf(stderr, "TODO: Encoder\n");
 #endif
 
 #ifdef IS_DECODER
 #define ENCODER if (0)
 #define DECODER if (1)
+#define TODO_DECODER fprintf(stderr, "TODO: Decoder\n");
 #endif
-
 
 DWG_ENTITY(UNUSED);
 
@@ -642,7 +643,17 @@ DWG_ENTITY(LINE);
 
       ENCODER
         {
-//TODO
+          GET_FIELD(Zs_are_zero) = (GET_FIELD(start.z) == 0.0 && GET_FIELD(end.z) == 0.0);
+          FIELD_B(Zs_are_zero);
+          FIELD_RD(start.x);
+          FIELD_DD(end.x, GET_FIELD(start.x));
+          FIELD_RD(start.y);
+          FIELD_DD(end.y, GET_FIELD(start.y));
+          if (!GET_FIELD(Zs_are_zero))
+            {
+              FIELD_RD(start.z);
+              FIELD_DD(end.z, GET_FIELD(start.z));
+            }
         }
     }
 
