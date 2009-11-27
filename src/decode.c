@@ -34,8 +34,7 @@
  * MACROS
  */
 
-#define ENCODER if (0)
-#define DECODER if (1)
+#define IS_DECODER
 
 #define FIELD(name,type)\
   _obj->name = bit_read_##type(dat);\
@@ -2584,3 +2583,4 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
   dat->bit = previous_bit;
 }
 
+#undef IS_DECODER

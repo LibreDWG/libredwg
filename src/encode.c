@@ -34,8 +34,7 @@
  * MACROS
  */
 
-#define DECODER if (0)
-#define ENCODER if (1)
+#define IS_ENCODER
 
 #define FIELD(name,type)\
   bit_write_##type(dat, _obj->name);\
@@ -69,6 +68,7 @@
 #define FIELD_3RD(name) FIELD(name.x, RD); FIELD(name.y, RD); FIELD(name.z, RD);
 #define FIELD_3BD(name) FIELD(name.x, BD); FIELD(name.y, BD); FIELD(name.z, BD);
 #define FIELD_3DPOINT(name) FIELD_3BD(name)
+#define FIELD_4BITS(name) bit_write_4BITS(_obj->name, dat);
 
 #define FIELD_CMC(name)\
   {\
@@ -155,19 +155,21 @@ bit_write_BE(dat, GET_FIELD(name.x), GET_FIELD(name.y), GET_FIELD(name.z));
 
 #define DWG_ENTITY(token) \
 static void \
-dwg_encode_##token(Dwg_Entity_##token * _obj, Bit_Chain * dat)\
+dwg_encode_##token(Dwg_Object* obj, Dwg_Entity_##token * _obj, Bit_Chain * dat)\
 {\
   int vcount, rcount, rcount2, rcount3;\
+	Dwg_Data* dwg = obj->parent;\
   if (loglevel)\
-  fprintf (stderr, "Entity " #token ":\n");\
+    fprintf (stderr, "Entity " #token ":\n");\
 
 #define DWG_ENTITY_END }
 
 #define DWG_OBJECT(token) \
 static void\
-dwg_encode_##token(Dwg_Object_##token *_obj, Bit_Chain * dat)\
+dwg_encode_##token(Dwg_Object* obj, Dwg_Object_##token *_obj, Bit_Chain * dat)\
 {\
   int vcount, rcount, rcount2, rcount3;\
+	Dwg_Data* dwg = obj->parent;
 
 #define DWG_OBJECT_END }
 
@@ -182,109 +184,11 @@ typedef struct
 /*--------------------------------------------------------------------------------
  * Private functions prototypes
  */
+
 static void
 dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat);
 static void
 dwg_encode_object(Dwg_Object * obj, Bit_Chain * dat);
-
-static void
-dwg_encode_TEXT(Dwg_Entity_TEXT * ent, Bit_Chain * dat);
-static void
-dwg_encode_ATTRIB(Dwg_Entity_ATTRIB * ent, Bit_Chain * dat);
-static void
-dwg_encode_ATTDEF(Dwg_Entity_ATTDEF * ent, Bit_Chain * dat);
-static void
-dwg_encode_BLOCK(Dwg_Entity_BLOCK * ent, Bit_Chain * dat);
-static void
-dwg_encode_ENDBLK(Dwg_Entity_ENDBLK * ent, Bit_Chain * dat);
-static void
-dwg_encode_SEQEND(Dwg_Entity_SEQEND * ent, Bit_Chain * dat);
-static void
-dwg_encode_INSERT(Dwg_Entity_INSERT * ent, Bit_Chain * dat);
-static void
-dwg_encode_MINSERT(Dwg_Entity_MINSERT * ent, Bit_Chain * dat);
-static void
-dwg_encode_VERTEX_2D(Dwg_Entity_VERTEX_2D * ent, Bit_Chain * dat);
-static void
-dwg_encode_VERTEX_3D(Dwg_Entity_VERTEX_3D * ent, Bit_Chain * dat);
-static void
-dwg_encode_VERTEX_MESH(Dwg_Entity_VERTEX_MESH * ent, Bit_Chain * dat);
-static void
-dwg_encode_VERTEX_PFACE(Dwg_Entity_VERTEX_PFACE * ent, Bit_Chain * dat);
-static void
-dwg_encode_VERTEX_PFACE_FACE(Dwg_Entity_VERTEX_PFACE_FACE * ent,
-    Bit_Chain * dat);
-static void
-dwg_encode_POLYLINE_2D(Dwg_Entity_POLYLINE_2D * ent, Bit_Chain * dat);
-static void
-dwg_encode_POLYLINE_3D(Dwg_Entity_POLYLINE_3D * ent, Bit_Chain * dat);
-static void
-dwg_encode_ARC(Dwg_Entity_ARC * ent, Bit_Chain * dat);
-static void
-dwg_encode_CIRCLE(Dwg_Entity_CIRCLE * ent, Bit_Chain * dat);
-static void
-dwg_encode_LINE(Dwg_Entity_LINE * ent, Bit_Chain * dat);
-static void
-dwg_encode_DIMENSION_ORDINATE(Dwg_Entity_DIMENSION_ORDINATE * ent,
-    Bit_Chain * dat);
-static void
-dwg_encode_DIMENSION_LINEAR(Dwg_Entity_DIMENSION_LINEAR * ent, Bit_Chain * dat);
-static void
-dwg_encode_DIMENSION_ALIGNED(Dwg_Entity_DIMENSION_ALIGNED * ent,
-    Bit_Chain * dat);
-static void
-dwg_encode_DIMENSION_ANG3PT(Dwg_Entity_DIMENSION_ANG3PT * ent, Bit_Chain * dat);
-static void
-dwg_encode_DIMENSION_ANG2LN(Dwg_Entity_DIMENSION_ANG2LN * ent, Bit_Chain * dat);
-static void
-dwg_encode_DIMENSION_RADIUS(Dwg_Entity_DIMENSION_RADIUS * ent, Bit_Chain * dat);
-static void
-dwg_encode_DIMENSION_DIAMETER(Dwg_Entity_DIMENSION_DIAMETER * ent,
-    Bit_Chain * dat);
-static void
-dwg_encode_POINT(Dwg_Entity_POINT * ent, Bit_Chain * dat);
-static void
-dwg_encode__3DFACE(Dwg_Entity__3DFACE * ent, Bit_Chain * dat);
-static void
-dwg_encode_POLYLINE_PFACE(Dwg_Entity_POLYLINE_PFACE * ent, Bit_Chain * dat);
-static void
-dwg_encode_POLYLINE_MESH(Dwg_Entity_POLYLINE_MESH * ent, Bit_Chain * dat);
-static void
-dwg_encode_SOLID(Dwg_Entity_SOLID * ent, Bit_Chain * dat);
-static void
-dwg_encode_TRACE(Dwg_Entity_TRACE * ent, Bit_Chain * dat);
-static void
-dwg_encode_SHAPE(Dwg_Entity_SHAPE * ent, Bit_Chain * dat);
-static void
-dwg_encode_VIEWPORT(Dwg_Entity_VIEWPORT *ent, Bit_Chain * dat);
-static void
-dwg_encode_ELLIPSE(Dwg_Entity_ELLIPSE * ent, Bit_Chain * dat);
-static void
-dwg_encode_SPLINE(Dwg_Entity_SPLINE * ent, Bit_Chain * dat);
-static void
-dwg_encode_REGION(Dwg_Entity_REGION * ent, Bit_Chain * dat);
-static void
-dwg_encode_3DSOLID(Dwg_Entity_3DSOLID * ent, Bit_Chain * dat);
-static void
-dwg_encode_BODY(Dwg_Entity_BODY * ent, Bit_Chain * dat);
-static void
-dwg_encode_RAY(Dwg_Entity_RAY * ent, Bit_Chain * dat);
-static void
-dwg_encode_XLINE(Dwg_Entity_XLINE * ent, Bit_Chain * dat);
-static void
-dwg_encode_MTEXT(Dwg_Entity_MTEXT * ent, Bit_Chain * dat);
-static void
-dwg_encode_LEADER(Dwg_Entity_LEADER *ent, Bit_Chain * dat);
-static void
-dwg_encode_TOLERANCE(Dwg_Entity_TOLERANCE *ent, Bit_Chain * dat);
-static void
-dwg_encode_MLINE(Dwg_Entity_MLINE *ent, Bit_Chain * dat);
-static void
-dwg_encode_BLOCK_CONTROL(Dwg_Object_BLOCK_CONTROL * obj, Bit_Chain * dat);
-static void
-dwg_encode_DICTIONARY(Dwg_Object_DICTIONARY * obj, Bit_Chain * dat);
-static void
-dwg_encode_LAYER(Dwg_Object_LAYER * obj, Bit_Chain * dat);
 
 /*--------------------------------------------------------------------------------
  * Public variables
@@ -728,6 +632,8 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
   return 0;
 }
 
+#include<dwg.spec>
+
 static void
 dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
 {
@@ -786,149 +692,149 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
   switch (obj->type)
     {
   case DWG_TYPE_TEXT:
-    dwg_encode_TEXT(ent->tio.TEXT, dat);
+    dwg_encode_TEXT(ent->object, ent->tio.TEXT, dat);
     break;
   case DWG_TYPE_ATTRIB:
-    dwg_encode_ATTRIB(ent->tio.ATTRIB, dat);
+    dwg_encode_ATTRIB(ent->object, ent->tio.ATTRIB, dat);
     break;
   case DWG_TYPE_ATTDEF:
-    dwg_encode_ATTDEF(ent->tio.ATTDEF, dat);
+    dwg_encode_ATTDEF(ent->object, ent->tio.ATTDEF, dat);
     break;
   case DWG_TYPE_BLOCK:
-    dwg_encode_BLOCK(ent->tio.BLOCK, dat);
+    dwg_encode_BLOCK(ent->object, ent->tio.BLOCK, dat);
     break;
   case DWG_TYPE_ENDBLK:
-    dwg_encode_ENDBLK(ent->tio.ENDBLK, dat);
+    dwg_encode_ENDBLK(ent->object, ent->tio.ENDBLK, dat);
     break;
   case DWG_TYPE_SEQEND:
-    dwg_encode_SEQEND(ent->tio.SEQEND, dat);
+    dwg_encode_SEQEND(ent->object, ent->tio.SEQEND, dat);
     break;
   case DWG_TYPE_INSERT:
-    dwg_encode_INSERT(ent->tio.INSERT, dat);
+    dwg_encode_INSERT(ent->object, ent->tio.INSERT, dat);
     break;
   case DWG_TYPE_MINSERT:
-    dwg_encode_MINSERT(ent->tio.MINSERT, dat);
+    dwg_encode_MINSERT(ent->object, ent->tio.MINSERT, dat);
     break;
   case DWG_TYPE_VERTEX_2D:
-    dwg_encode_VERTEX_2D(ent->tio.VERTEX_2D, dat);
+    dwg_encode_VERTEX_2D(ent->object, ent->tio.VERTEX_2D, dat);
     break;
   case DWG_TYPE_VERTEX_3D:
-    dwg_encode_VERTEX_3D(ent->tio.VERTEX_3D, dat);
+    dwg_encode_VERTEX_3D(ent->object, ent->tio.VERTEX_3D, dat);
     break;
   case DWG_TYPE_VERTEX_MESH:
-    dwg_encode_VERTEX_MESH(ent->tio.VERTEX_MESH, dat);
+    dwg_encode_VERTEX_MESH(ent->object, ent->tio.VERTEX_MESH, dat);
     break;
   case DWG_TYPE_VERTEX_PFACE:
-    dwg_encode_VERTEX_PFACE(ent->tio.VERTEX_PFACE, dat);
+    dwg_encode_VERTEX_PFACE(ent->object, ent->tio.VERTEX_PFACE, dat);
     break;
   case DWG_TYPE_VERTEX_PFACE_FACE:
-    dwg_encode_VERTEX_PFACE_FACE(ent->tio.VERTEX_PFACE_FACE, dat);
+    dwg_encode_VERTEX_PFACE_FACE(ent->object, ent->tio.VERTEX_PFACE_FACE, dat);
     break;
   case DWG_TYPE_POLYLINE_2D:
-    dwg_encode_POLYLINE_2D(ent->tio.POLYLINE_2D, dat);
+    dwg_encode_POLYLINE_2D(ent->object, ent->tio.POLYLINE_2D, dat);
     break;
   case DWG_TYPE_POLYLINE_3D:
-    dwg_encode_POLYLINE_3D(ent->tio.POLYLINE_3D, dat);
+    dwg_encode_POLYLINE_3D(ent->object, ent->tio.POLYLINE_3D, dat);
     break;
   case DWG_TYPE_ARC:
-    dwg_encode_ARC(ent->tio.ARC, dat);
+    dwg_encode_ARC(ent->object, ent->tio.ARC, dat);
     break;
   case DWG_TYPE_CIRCLE:
-    dwg_encode_CIRCLE(ent->tio.CIRCLE, dat);
+    dwg_encode_CIRCLE(ent->object, ent->tio.CIRCLE, dat);
     break;
   case DWG_TYPE_LINE:
-    dwg_encode_LINE(ent->tio.LINE, dat);
+    dwg_encode_LINE(ent->object, ent->tio.LINE, dat);
     break;
   case DWG_TYPE_DIMENSION_ORDINATE:
-    dwg_encode_DIMENSION_ORDINATE(ent->tio.DIMENSION_ORDINATE, dat);
+    dwg_encode_DIMENSION_ORDINATE(ent->object, ent->tio.DIMENSION_ORDINATE, dat);
     break;
   case DWG_TYPE_DIMENSION_LINEAR:
-    dwg_encode_DIMENSION_LINEAR(ent->tio.DIMENSION_LINEAR, dat);
+    dwg_encode_DIMENSION_LINEAR(ent->object, ent->tio.DIMENSION_LINEAR, dat);
     break;
   case DWG_TYPE_DIMENSION_ALIGNED:
-    dwg_encode_DIMENSION_ALIGNED(ent->tio.DIMENSION_ALIGNED, dat);
+    dwg_encode_DIMENSION_ALIGNED(ent->object, ent->tio.DIMENSION_ALIGNED, dat);
     break;
   case DWG_TYPE_DIMENSION_ANG3PT:
-    dwg_encode_DIMENSION_ANG3PT(ent->tio.DIMENSION_ANG3PT, dat);
+    dwg_encode_DIMENSION_ANG3PT(ent->object, ent->tio.DIMENSION_ANG3PT, dat);
     break;
   case DWG_TYPE_DIMENSION_ANG2LN:
-    dwg_encode_DIMENSION_ANG2LN(ent->tio.DIMENSION_ANG2LN, dat);
+    dwg_encode_DIMENSION_ANG2LN(ent->object, ent->tio.DIMENSION_ANG2LN, dat);
     break;
   case DWG_TYPE_DIMENSION_RADIUS:
-    dwg_encode_DIMENSION_RADIUS(ent->tio.DIMENSION_RADIUS, dat);
+    dwg_encode_DIMENSION_RADIUS(ent->object, ent->tio.DIMENSION_RADIUS, dat);
     break;
   case DWG_TYPE_DIMENSION_DIAMETER:
-    dwg_encode_DIMENSION_DIAMETER(ent->tio.DIMENSION_DIAMETER, dat);
+    dwg_encode_DIMENSION_DIAMETER(ent->object, ent->tio.DIMENSION_DIAMETER, dat);
     break;
   case DWG_TYPE_POINT:
-    dwg_encode_POINT(ent->tio.POINT, dat);
+    dwg_encode_POINT(ent->object, ent->tio.POINT, dat);
     break;
   case DWG_TYPE__3DFACE:
-    dwg_encode__3DFACE(ent->tio._3DFACE, dat);
+    dwg_encode__3DFACE(ent->object, ent->tio._3DFACE, dat);
     break;
   case DWG_TYPE_POLYLINE_PFACE:
-    dwg_encode_POLYLINE_PFACE(ent->tio.POLYLINE_PFACE, dat);
+    dwg_encode_POLYLINE_PFACE(ent->object, ent->tio.POLYLINE_PFACE, dat);
     break;
   case DWG_TYPE_POLYLINE_MESH:
-    dwg_encode_POLYLINE_MESH(ent->tio.POLYLINE_MESH, dat);
+    dwg_encode_POLYLINE_MESH(ent->object, ent->tio.POLYLINE_MESH, dat);
     break;
   case DWG_TYPE_SOLID:
-    dwg_encode_SOLID(ent->tio.SOLID, dat);
+    dwg_encode_SOLID(ent->object, ent->tio.SOLID, dat);
     break;
   case DWG_TYPE_TRACE:
-    dwg_encode_TRACE(ent->tio.TRACE, dat);
+    dwg_encode_TRACE(ent->object, ent->tio.TRACE, dat);
     break;
   case DWG_TYPE_SHAPE:
-    dwg_encode_SHAPE(ent->tio.SHAPE, dat);
+    dwg_encode_SHAPE(ent->object, ent->tio.SHAPE, dat);
     break;
   case DWG_TYPE_VIEWPORT:
-    dwg_encode_VIEWPORT(ent->tio.VIEWPORT, dat);
+    dwg_encode_VIEWPORT(ent->object, ent->tio.VIEWPORT, dat);
     break;
   case DWG_TYPE_ELLIPSE:
-    dwg_encode_ELLIPSE(ent->tio.ELLIPSE, dat);
+    dwg_encode_ELLIPSE(ent->object, ent->tio.ELLIPSE, dat);
     break;
   case DWG_TYPE_SPLINE:
-    dwg_encode_SPLINE(ent->tio.SPLINE, dat);
+    dwg_encode_SPLINE(ent->object, ent->tio.SPLINE, dat);
     break;
   case DWG_TYPE_REGION:
-    dwg_encode_REGION(ent->tio.REGION, dat);
+    dwg_encode_REGION(ent->object, ent->tio.REGION, dat);
     break;
   case DWG_TYPE_3DSOLID:
-    dwg_encode_3DSOLID(ent->tio._3DSOLID, dat);
+    dwg_encode__3DSOLID(ent->object, ent->tio._3DSOLID, dat);
     break;
   case DWG_TYPE_BODY:
-    dwg_encode_BODY(ent->tio.BODY, dat);
+    dwg_encode_BODY(ent->object, ent->tio.BODY, dat);
     break;
   case DWG_TYPE_RAY:
-    dwg_encode_RAY(ent->tio.RAY, dat);
+    dwg_encode_RAY(ent->object, ent->tio.RAY, dat);
     break;
   case DWG_TYPE_XLINE:
-    dwg_encode_XLINE(ent->tio.XLINE, dat);
+    dwg_encode_XLINE(ent->object, ent->tio.XLINE, dat);
     break;
   case DWG_TYPE_MTEXT:
-    dwg_encode_MTEXT(ent->tio.MTEXT, dat);
+    dwg_encode_MTEXT(ent->object, ent->tio.MTEXT, dat);
     break;
   case DWG_TYPE_LEADER:
-    dwg_encode_LEADER(ent->tio.LEADER, dat);
+    dwg_encode_LEADER(ent->object, ent->tio.LEADER, dat);
     break;
   case DWG_TYPE_TOLERANCE:
-    dwg_encode_TOLERANCE(ent->tio.TOLERANCE, dat);
+    dwg_encode_TOLERANCE(ent->object, ent->tio.TOLERANCE, dat);
     break;
   case DWG_TYPE_MLINE:
-    dwg_encode_MLINE(ent->tio.MLINE, dat);
+    dwg_encode_MLINE(ent->object, ent->tio.MLINE, dat);
     break;
     /* TODO: figure out how to deal with these types
      case DWG_TYPE_IMAGE:
-     dwg_encode_IMAGE (ent->tio.IMAGE, dat);
+     dwg_encode_IMAGE (ent->object, ent->tio.IMAGE, dat);
      break;
      case DWG_TYPE_LWPLINE:
-     dwg_encode_LWPLINE (ent->tio.LWPLINE, dat);
+     dwg_encode_LWPLINE (ent->object, ent->tio.LWPLINE, dat);
      break;
      case DWG_TYPE_OLE2FRAME:
-     dwg_encode_OLE2FRAME (ent->tio.OLE2FRAME, dat);
+     dwg_encode_OLE2FRAME (ent->object, ent->tio.OLE2FRAME, dat);
      break;
      case DWG_TYPE_TABLE:
-     dwg_encode_TABLE (ent->tio.TABLE, dat);
+     dwg_encode_TABLE (ent->object, ent->tio.TABLE, dat);
      break;
      */
   default:
@@ -998,5 +904,4 @@ dwg_encode_object(Dwg_Object * obj, Bit_Chain * dat)
   bit_write_BS(dat, obj->type);
 }
 
-#include<dwg.spec>
-
+#undef IS_ENCODER

@@ -1,3 +1,14 @@
+#ifdef IS_ENCODER
+#define ENCODER if (1)
+#define DECODER if (0)
+#endif
+
+#ifdef IS_DECODER
+#define ENCODER if (0)
+#define DECODER if (1)
+#endif
+
+
 DWG_ENTITY(UNUSED);
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -609,7 +620,7 @@ DWG_ENTITY(LINE);
 
   SINCE(R_2000)
     {
-      ENCODER
+      DECODER
         {
           FIELD(Zs_are_zero, B);
           FIELD(start.x, RD);
@@ -629,7 +640,7 @@ DWG_ENTITY(LINE);
             }
         }
 
-      DECODER
+      ENCODER
         {
 //TODO
         }
@@ -1092,10 +1103,12 @@ DWG_ENTITY_END
       FIELD_B(name.has_shear);                        \
     }
 
+#ifdef IS_DECODER
 
-#define DECODE_3DSOLID decode_3dsolid(dat, obj, _obj, dwg);
+#define DECODE_3DSOLID decode_3dsolid(dat, obj, _obj);
 
-inline void decode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj, Dwg_Data* dwg){
+inline void decode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj){
+	Dwg_Data* dwg = obj->parent;
   int vcount, rcount, rcount2;
   FIELD_B(acis_empty);
   int i=0;
@@ -1170,20 +1183,56 @@ inline void decode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* 
         }
     }
 }
+#else
+#define DECODE_3DSOLID {}
+#endif //#if IS_DECODER
+
+#ifdef IS_ENCODER
+
+#define ENCODE_3DSOLID encode_3dsolid(dat, obj, _obj);
+
+inline void encode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj){
+  //TODO Implement-me
+}
+#else
+#define ENCODE_3DSOLID {}
+#endif //#if IS_ENCODER
+
 
 /*(37)*/
 DWG_ENTITY(REGION);
-  DECODE_3DSOLID
+  DECODER
+    {
+      DECODE_3DSOLID;
+    }
+  ENCODER
+    {
+      ENCODE_3DSOLID;
+    }
 DWG_ENTITY_END
 
 /*(38)*/
 DWG_ENTITY(_3DSOLID);
-  DECODE_3DSOLID
+  DECODER
+    {
+      DECODE_3DSOLID;
+    }
+  ENCODER
+    {
+      ENCODE_3DSOLID;
+    }
 DWG_ENTITY_END
 
 /*(39)*/
 DWG_ENTITY(BODY);
-  DECODE_3DSOLID
+  DECODER
+    {
+      DECODE_3DSOLID;
+    }
+  ENCODER
+    {
+      ENCODE_3DSOLID;
+    }
 DWG_ENTITY_END
 
 /*(40)*/
@@ -2275,21 +2324,30 @@ DWG_ENTITY(IMAGE);
   FIELD(brightness, RC);
   FIELD(contrast, RC);
   FIELD(fade, RC);
-  FIELD(clip_boundary_type, BS);
-  if (GET_FIELD(clip_boundary_type) == 1)
+
+  DECODER
     {
-      FIELD_2RD(boundary_pt0);
-      FIELD_2RD(boundary_pt1);
-    }
-  else
-    {
-      FIELD(num_clip_verts, BL);
-      ent->clip_verts = (Dwg_Entity_IMAGE_clip_vert*) malloc(
-          ent->num_clip_verts * sizeof(Dwg_Entity_IMAGE_clip_vert));
-      for (i = 0; i < ent->num_clip_verts; i++)
+      FIELD(clip_boundary_type, BS);
+      if (GET_FIELD(clip_boundary_type) == 1)
         {
-          FIELD_2RD(clip_verts[i]);
+          FIELD_2RD(boundary_pt0);
+          FIELD_2RD(boundary_pt1);
         }
+      else
+        {
+          FIELD(num_clip_verts, BL);
+          GET_FIELD(clip_verts) = (Dwg_Entity_IMAGE_clip_vert*) malloc(
+              GET_FIELD(num_clip_verts) * sizeof(Dwg_Entity_IMAGE_clip_vert));
+          for (i = 0; i < GET_FIELD(num_clip_verts); i++)
+            {
+              FIELD_2RD(clip_verts[i]);
+            }
+        }
+    }
+
+  ENCODER
+    {
+      //TODO: implement me
     }
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -2454,7 +2512,7 @@ DWG_ENTITY(LWPLINE);
   SINCE(R_2000)
     {
       FIELD_2RD(points[0]);
-      for (i = 1; i < ent->num_points; i++)
+      for (i = 1; i < GET_FIELD(num_points); i++)
         {
           FIELD_2DD(points[i], GET_FIELD(points[i - 1].x), GET_FIELD(points[i - 1].y));
         }
