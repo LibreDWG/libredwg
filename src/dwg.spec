@@ -1,14 +1,15 @@
 #ifdef IS_ENCODER
 #define ENCODER if (1)
 #define DECODER if (0)
-#define TODO_ENCODER fprintf(stderr, "TODO: Encoder\n");
 #endif
 
 #ifdef IS_DECODER
 #define ENCODER if (0)
 #define DECODER if (1)
-#define TODO_DECODER fprintf(stderr, "TODO: Decoder\n");
 #endif
+
+#define TODO_ENCODER fprintf(stderr, "TODO: Encoder\n");
+#define TODO_DECODER fprintf(stderr, "TODO: Decoder\n");
 
 DWG_ENTITY(UNUSED);
 
@@ -38,55 +39,63 @@ DWG_ENTITY (TEXT);
 
   SINCE(R_2000)
     {
-      FIELD(dataflags, RC);
-
-      if (!(GET_FIELD(dataflags) & 0x01))
+      DECODER
         {
-          FIELD(elevation, RD);
+          FIELD(dataflags, RC);
+
+          if (!(GET_FIELD(dataflags) & 0x01))
+            {
+              FIELD(elevation, RD);
+            }
+
+          FIELD_2RD(insertion_pt);
+
+          if (!(GET_FIELD(dataflags) & 0x02))
+            {
+              FIELD_2DD(alignment_pt, 10, 20);
+            }
+
+          FIELD_BE(extrusion);
+          FIELD(thickness, BT);
+
+          if (!(GET_FIELD(dataflags) & 0x04))
+            {
+              FIELD(oblique_ang, RD);
+            }
+
+          if (!(GET_FIELD(dataflags) & 0x08))
+            {
+              FIELD(rotation_ang, RD);
+            }
+
+          FIELD(height, RD);
+
+          if (!(GET_FIELD(dataflags) & 0x10))
+            {
+              FIELD(width_factor, RD);
+            }
+
+          FIELD(text_value, TV);
+
+          if (!(GET_FIELD(dataflags) & 0x20))
+            {
+              FIELD(generation, BS);
+            }
+
+          if (!(GET_FIELD(dataflags) & 0x40)) 
+            {
+              FIELD(horiz_alignment, BS);
+            }
+
+          if (!(GET_FIELD(dataflags) & 0x80))
+            {
+              FIELD(vert_alignment, BS);
+            }
         }
 
-      FIELD_2RD(insertion_pt);
-
-      if (!(GET_FIELD(dataflags) & 0x02))
+      ENCODER
         {
-          FIELD_2DD(alignment_pt, 10, 20);
-        }
-
-      FIELD_BE(extrusion);
-      FIELD(thickness, BT);
-
-      if (!(GET_FIELD(dataflags) & 0x04))
-        {
-          FIELD(oblique_ang, RD);
-        }
-
-      if (!(GET_FIELD(dataflags) & 0x08))
-        {
-          FIELD(rotation_ang, RD);
-        }
-
-      FIELD(height, RD);
-
-      if (!(GET_FIELD(dataflags) & 0x10))
-        {
-          FIELD(width_factor, RD);
-        }
-
-      FIELD(text_value, TV);
-
-      if (!(GET_FIELD(dataflags) & 0x20))
-        {
-          FIELD(generation, BS);
-        }
-
-      if (!(GET_FIELD(dataflags) & 0x40)) 
-        {
-          FIELD(horiz_alignment, BS);
-        }
-
-      if (!(GET_FIELD(dataflags) & 0x80))
-        {
-          FIELD(vert_alignment, BS);
+          TODO_ENCODER
         }
     }
 
@@ -117,43 +126,51 @@ DWG_ENTITY(ATTRIB);
 
   SINCE(R_2000)
     {
-      FIELD(dataflags, RC);
-      if (!(GET_FIELD(dataflags) & 0x01))
+      DECODER
         {
-          FIELD(elevation, RD);
+          FIELD(dataflags, RC);
+          if (!(GET_FIELD(dataflags) & 0x01))
+            {
+              FIELD(elevation, RD);
+            }
+          FIELD_2RD(insertion_pt);
+          if (!(GET_FIELD(dataflags) & 0x02))
+            {
+              FIELD_2DD(alignment_pt, 10, 20);
+            }
+          FIELD_BE(extrusion);
+          FIELD(thickness, BT);
+          if (!(GET_FIELD(dataflags) & 0x04))
+            {
+              FIELD(oblique_ang, RD);
+            }
+          if (!(GET_FIELD(dataflags) & 0x08))
+            {
+              FIELD(rotation_ang, RD);
+            }
+          FIELD(height, RD);
+          if (!(GET_FIELD(dataflags) & 0x10))
+            {
+              FIELD(width_factor, RD);
+            }
+          FIELD(text_value, TV);
+          if (!(GET_FIELD(dataflags) & 0x20))
+            {
+              FIELD(generation, BS);
+            }
+          if (!(GET_FIELD(dataflags) & 0x40))
+            {
+              FIELD(horiz_alignment, BS);
+            }
+          if (!(GET_FIELD(dataflags) & 0x80))
+            {
+              FIELD(vert_alignment, BS);
+            }
         }
-      FIELD_2RD(insertion_pt);
-      if (!(GET_FIELD(dataflags) & 0x02))
+
+      ENCODER
         {
-          FIELD_2DD(alignment_pt, 10, 20);
-        }
-      FIELD_BE(extrusion);
-      FIELD(thickness, BT);
-      if (!(GET_FIELD(dataflags) & 0x04))
-        {
-          FIELD(oblique_ang, RD);
-        }
-      if (!(GET_FIELD(dataflags) & 0x08))
-        {
-          FIELD(rotation_ang, RD);
-        }
-      FIELD(height, RD);
-      if (!(GET_FIELD(dataflags) & 0x10))
-        {
-          FIELD(width_factor, RD);
-        }
-      FIELD(text_value, TV);
-      if (!(GET_FIELD(dataflags) & 0x20))
-        {
-          FIELD(generation, BS);
-        }
-      if (!(GET_FIELD(dataflags) & 0x40))
-        {
-          FIELD(horiz_alignment, BS);
-        }
-      if (!(GET_FIELD(dataflags) & 0x80))
-        {
-          FIELD(vert_alignment, BS);
+          TODO_ENCODER
         }
     }
 
@@ -194,43 +211,51 @@ DWG_ENTITY(ATTDEF);
 
   SINCE(R_2000)
     {
-      FIELD(dataflags, RC);
-      if (!(GET_FIELD(dataflags) & 0x01))
+      DECODER
         {
-          FIELD(elevation, RD);
+          FIELD(dataflags, RC);
+          if (!(GET_FIELD(dataflags) & 0x01))
+            {
+              FIELD(elevation, RD);
+            }
+          FIELD_2RD(insertion_pt);
+          if (!(GET_FIELD(dataflags) & 0x02))
+            {
+              FIELD_2DD(alignment_pt, 10, 20);
+            }
+          FIELD_BE(extrusion);
+          FIELD(thickness, BT);
+          if (!(GET_FIELD(dataflags) & 0x04))
+            {
+              FIELD(oblique_ang, RD);
+            }
+          if (!(GET_FIELD(dataflags) & 0x08))
+            {
+              FIELD(rotation_ang, RD);
+            }
+          FIELD(height, RD);
+          if (!(GET_FIELD(dataflags) & 0x10))
+            {
+              FIELD(width_factor, RD);
+            }
+          FIELD(default_value, TV);
+          if (!(GET_FIELD(dataflags) & 0x20))
+            {
+              FIELD(generation, BS);
+            }
+          if (!(GET_FIELD(dataflags) & 0x40))
+            {
+              FIELD(horiz_alignment, BS);
+            }
+          if (!(GET_FIELD(dataflags) & 0x80))
+            {
+              FIELD(vert_alignment, BS);
+            }
         }
-      FIELD_2RD(insertion_pt);
-      if (!(GET_FIELD(dataflags) & 0x02))
+
+      ENCODER
         {
-          FIELD_2DD(alignment_pt, 10, 20);
-        }
-      FIELD_BE(extrusion);
-      FIELD(thickness, BT);
-      if (!(GET_FIELD(dataflags) & 0x04))
-        {
-          FIELD(oblique_ang, RD);
-        }
-      if (!(GET_FIELD(dataflags) & 0x08))
-        {
-          FIELD(rotation_ang, RD);
-        }
-      FIELD(height, RD);
-      if (!(GET_FIELD(dataflags) & 0x10))
-        {
-          FIELD(width_factor, RD);
-        }
-      FIELD(default_value, TV);
-      if (!(GET_FIELD(dataflags) & 0x20))
-        {
-          FIELD(generation, BS);
-        }
-      if (!(GET_FIELD(dataflags) & 0x40))
-        {
-          FIELD(horiz_alignment, BS);
-        }
-      if (!(GET_FIELD(dataflags) & 0x80))
-        {
-          FIELD(vert_alignment, BS);
+          TODO_ENCODER
         }
     }
 
@@ -286,30 +311,38 @@ DWG_ENTITY(INSERT);
 
   SINCE(R_2000)
     {
-      FIELD(scale_flag, BB);
-      if (GET_FIELD(scale_flag) == 3)
+      DECODER
         {
-          GET_FIELD(scale.x) = 1.0;
-          GET_FIELD(scale.y) = 1.0;
-          GET_FIELD(scale.z) = 1.0;
+          FIELD(scale_flag, BB);
+          if (GET_FIELD(scale_flag) == 3)
+            {
+              GET_FIELD(scale.x) = 1.0;
+              GET_FIELD(scale.y) = 1.0;
+              GET_FIELD(scale.z) = 1.0;
+            }
+          else if (GET_FIELD(scale_flag) == 1)
+            {
+              GET_FIELD(scale.x) = 1.0;
+              FIELD_DD(scale.y, 1.0);
+              FIELD_DD(scale.z, 1.0);
+            }
+          else if (GET_FIELD(scale_flag) == 2)
+            {
+              FIELD(scale.x, RD); 
+              GET_FIELD(scale.y) = GET_FIELD(scale.x);
+              GET_FIELD(scale.z) = GET_FIELD(scale.x);
+            }
+          else //if (GET_FIELD(scale_flag) == 0)
+            {
+              FIELD(scale.x, RD);
+              FIELD_DD(scale.y, GET_FIELD(scale.x));
+              FIELD_DD(scale.z, GET_FIELD(scale.x));
+            }
         }
-      else if (GET_FIELD(scale_flag) == 1)
+
+      ENCODER
         {
-          GET_FIELD(scale.x) = 1.0;
-          FIELD_DD(scale.y, 1.0);
-          FIELD_DD(scale.z, 1.0);
-        }
-      else if (GET_FIELD(scale_flag) == 2)
-        {
-          FIELD(scale.x, RD); 
-          GET_FIELD(scale.y) = GET_FIELD(scale.x);
-          GET_FIELD(scale.z) = GET_FIELD(scale.x);
-        }
-      else //if (GET_FIELD(scale_flag) == 0)
-        {
-          FIELD(scale.x, RD);
-          FIELD_DD(scale.y, GET_FIELD(scale.x));
-          FIELD_DD(scale.z, GET_FIELD(scale.x));
+          TODO_ENCODER
         }
     }
 
@@ -465,15 +498,25 @@ DWG_ENTITY(VERTEX_2D);
   FIELD(flags, RC);
   FIELD_3BD(point);
   FIELD(start_width, BD);
-  if (GET_FIELD(start_width) < 0)
+
+  DECODER
     {
-      GET_FIELD(start_width) = -GET_FIELD(start_width);
-      GET_FIELD(end_width) = GET_FIELD(start_width);
+      if (GET_FIELD(start_width) < 0)
+        {
+          GET_FIELD(start_width) = -GET_FIELD(start_width);
+          GET_FIELD(end_width) = GET_FIELD(start_width);
+        }
+      else
+        {
+          FIELD(end_width, BD);
+        }
     }
-  else
+
+  ENCODER
     {
-      FIELD(end_width, BD);
+      TODO_ENCODER
     }
+
   FIELD(bulge, BD);
   FIELD(tangent_dir, BD);
 
