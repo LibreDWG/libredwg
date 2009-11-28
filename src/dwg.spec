@@ -877,17 +877,34 @@ DWG_ENTITY(_3DFACE);
   SINCE(R_2000)
     {
       FIELD_B(has_no_flags);
-      FIELD_B(z_is_zero);
-      FIELD_RD(corner1.x);
-      FIELD_RD(corner1.y);
-      if(GET_FIELD(z_is_zero))
+
+      DECODER
         {
-          GET_FIELD(corner1.z) = 0;
+          FIELD_B(z_is_zero);
+          FIELD_RD(corner1.x);
+          FIELD_RD(corner1.y);
+          if(GET_FIELD(z_is_zero))
+            {
+              GET_FIELD(corner1.z) = 0;
+            }
+          else
+            {
+              FIELD_RD(corner1.z);
+            }
         }
-      else
+
+      ENCODER
         {
-          FIELD_RD(corner1.z);
+          GET_FIELD(z_is_zero) = (GET_FIELD(corner1.z) == 0);
+          FIELD_B(z_is_zero);
+          FIELD_RD(corner1.x);
+          FIELD_RD(corner1.y);
+          if(!GET_FIELD(z_is_zero))
+            {
+              FIELD_RD(corner1.z);
+            }
         }
+
       FIELD_DD(corner2.x, GET_FIELD(corner1.x));
       FIELD_DD(corner2.y, GET_FIELD(corner1.y));
       FIELD_DD(corner2.z, GET_FIELD(corner1.z));
