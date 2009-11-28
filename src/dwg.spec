@@ -1131,23 +1131,30 @@ DWG_ENTITY(SPLINE);
       FIELD_BL(num_knots);
       FIELD_BL(num_ctrl_pts);
       FIELD_B(weighted);
+    }
+  REPEAT(num_knots, knots, BITCODE_BD)
+    {
+      FIELD_BD(knots[i]);
+    }
 
-      REPEAT(num_knots, knots, BITCODE_BD)
+  REPEAT(num_ctrl_pts, ctrl_pts, Dwg_Entity_SPLINE_control_point)
+    {
+//TODO: does it work both for encoder and decoder routines?
+      FIELD_3BD(ctrl_pts[i]);
+      if (!GET_FIELD(weighted))
         {
-          FIELD_BD(knots[i]);
+          //TODO check what "D" means on spec.
+          //assuming typo - should be BD
+          //assuming w=0 when not present.
+          GET_FIELD(ctrl_pts[i].w) = 0;
         }
-
-      REPEAT(num_ctrl_pts, ctrl_pts, Dwg_Entity_SPLINE_control_point)
+      else
         {
-          FIELD_3BD(ctrl_pts[i]);
-          if (!GET_FIELD(weighted))
-            //TODO check what "D" means on spec.
-            //assuming typo - should be BD
-            //assuming w=0 when not present.
-            GET_FIELD(ctrl_pts[i].w) = 0;
           FIELD_BD(ctrl_pts[i].w);
         }
     }
+
+//TODO: spec talks about "Repeat numfitpts times { Fit pt 3BD }" here
 
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
