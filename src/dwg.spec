@@ -1105,7 +1105,9 @@ DWG_ENTITY(SPLINE);
 
   FIELD_BS(scenario);
   if (GET_FIELD(scenario) != 1 && GET_FIELD(scenario) != 2)
-    fprintf(stderr, "Error: unknown scenario %d", GET_FIELD(scenario));
+    {
+      fprintf(stderr, "Error: unknown scenario %d", GET_FIELD(scenario));
+    }
 
   FIELD_BS(degree);
   if (GET_FIELD(scenario) == 2)
@@ -1114,9 +1116,7 @@ DWG_ENTITY(SPLINE);
       FIELD_3BD(beg_tan_vec);
       FIELD_3BD(end_tan_vec);
       FIELD_BS(num_fit_pts);
-      GET_FIELD(fit_pts) = (Dwg_Entity_SPLINE_point*) malloc(GET_FIELD(num_fit_pts)
-          * sizeof(Dwg_Entity_SPLINE_point));
-      for (i = 0; i < GET_FIELD(num_fit_pts); i++)
+      REPEAT(num_fit_pts, fit_pts, Dwg_Entity_SPLINE_point)
         {
           FIELD_3BD(fit_pts[i]);
         }
@@ -1132,12 +1132,12 @@ DWG_ENTITY(SPLINE);
       FIELD_BL(num_ctrl_pts);
       FIELD_B(weighted);
 
-      GET_FIELD(knots) = malloc(GET_FIELD(num_knots) * sizeof(BITCODE_BD));
-      for (i = 0; i < GET_FIELD(num_knots); i++)
-        FIELD_BD(knots[i]);
+      REPEAT(num_knots, knots, BITCODE_BD)
+        {
+          FIELD_BD(knots[i]);
+        }
 
-      GET_FIELD(ctrl_pts) = malloc(GET_FIELD(num_ctrl_pts) * 3 * sizeof(unsigned int));
-      for (i = 0; i < GET_FIELD(num_ctrl_pts); i++)
+      REPEAT(num_ctrl_pts, ctrl_pts, Dwg_Entity_SPLINE_control_point)
         {
           FIELD_3BD(ctrl_pts[i]);
           if (!GET_FIELD(weighted))
