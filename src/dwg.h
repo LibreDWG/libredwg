@@ -1047,86 +1047,40 @@ typedef struct _dwg_entity_SHAPE
 
 typedef struct _dwg_entity_VIEWPORT
 {
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } center;
-  double width;
-  double height;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } view_target;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } view_direction;
-  double view_twist_angle;
-  double view_height;
-  double lens_length;
-  double front_clip_z;
-  double back_clip_z;
-  double snap_angle;
-  struct
-  {
-    double x;
-    double y;
-  } view_center;
-  struct
-  {
-    double x;
-    double y;
-  } snap_base;
-  struct
-  {
-    double x;
-    double y;
-  } snap_spacing;
-  struct
-  {
-    double x;
-    double y;
-  } grid_spacing;
-  unsigned int circle_zoom;
-  unsigned int grid_major;
-  unsigned long frozen_layer_count;
-  unsigned long status_flags;
-  unsigned char* style_sheet;
-  char render_mode;
-  unsigned int ucs_at_origin;
-  unsigned int ucs_per_viewport;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } ucs_origin;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } ucs_x_axis;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } ucs_y_axis;
-  double ucs_elevation;
-  unsigned int ucs_ortho_view_type;
-  unsigned int shadeplot_mode;
-  unsigned int use_def_lights;
-  char def_lighting_type;
-  double brightness;
-  double contrast;
-  Dwg_Color ambient_light_color;
+  BITCODE_3BD center;
+  BITCODE_BD width;
+  BITCODE_BD height;
+  BITCODE_3BD view_target;
+  BITCODE_3BD view_direction;
+  BITCODE_BD view_twist_angle;
+  BITCODE_BD view_height;
+  BITCODE_BD lens_length;
+  BITCODE_BD front_clip_z;
+  BITCODE_BD back_clip_z;
+  BITCODE_BD snap_angle;
+  BITCODE_2RD view_center;
+  BITCODE_2RD snap_base;
+  BITCODE_2RD snap_spacing;
+  BITCODE_2RD grid_spacing;
+  BITCODE_BS circle_zoom;
+  BITCODE_BS grid_major;
+  BITCODE_BL frozen_layer_count;
+  BITCODE_BL status_flags;
+  BITCODE_TV style_sheet;
+  BITCODE_RC render_mode;
+  BITCODE_B ucs_at_origin;
+  BITCODE_B ucs_per_viewport;
+  BITCODE_3BD ucs_origin;
+  BITCODE_3BD ucs_x_axis;
+  BITCODE_3BD ucs_y_axis;
+  BITCODE_BD ucs_elevation;
+  BITCODE_BS ucs_ortho_view_type;
+  BITCODE_BS shadeplot_mode;
+  BITCODE_B use_def_lights;
+  BITCODE_RC def_lighting_type;
+  BITCODE_BD brightness;
+  BITCODE_BD contrast;
+  BITCODE_CMC ambient_light_color;
 } Dwg_Entity_VIEWPORT;
 
 /**
@@ -1162,32 +1116,22 @@ typedef struct _dwg_entity_SPLINE_control_point
 
 typedef struct _dwg_entity_SPLINE
 {
-  unsigned char scenario;
-  unsigned int degree;
-  double fit_tol;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } beg_tan_vec;
-  struct
-  {
-    double x;
-    double y;
-    double z;
-  } end_tan_vec;
-  unsigned char rational;
-  unsigned char closed_b;
-  unsigned char periodic;
-  unsigned char weighted;
-  double knot_tol;
-  double ctrl_tol;
-  unsigned int num_fit_pts;
+  BITCODE_BS scenario;
+  BITCODE_BS degree;
+  BITCODE_BD fit_tol;
+  BITCODE_3BD beg_tan_vec;
+  BITCODE_3BD end_tan_vec;
+  BITCODE_B rational;
+  BITCODE_B closed_b;
+  BITCODE_B periodic;
+  BITCODE_B weighted;
+  BITCODE_BD knot_tol;
+  BITCODE_BD ctrl_tol;
+  BITCODE_BS num_fit_pts;
   Dwg_Entity_SPLINE_point* fit_pts;
-  unsigned int num_knots;
-  double* knots;
-  unsigned int num_ctrl_pts;
+  BITCODE_BL num_knots;
+  BITCODE_BD* knots;
+  BITCODE_BL num_ctrl_pts;
   Dwg_Entity_SPLINE_control_point* ctrl_pts;
 } Dwg_Entity_SPLINE;
 

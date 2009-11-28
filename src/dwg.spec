@@ -1132,7 +1132,7 @@ DWG_ENTITY(SPLINE);
       FIELD_BL(num_ctrl_pts);
       FIELD_B(weighted);
 
-      GET_FIELD(knots) = malloc(GET_FIELD(num_knots) * sizeof(double));
+      GET_FIELD(knots) = malloc(GET_FIELD(num_knots) * sizeof(BITCODE_BD));
       for (i = 0; i < GET_FIELD(num_knots); i++)
         FIELD_BD(knots[i]);
 
