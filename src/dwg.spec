@@ -39,63 +39,60 @@ DWG_ENTITY (TEXT);
 
   SINCE(R_2000)
     {
-      DECODER
+      /* We assume that the user (the client application)
+      is responsible for taking care of properly updating the dataflags field 
+      which indicates which fields in the data structures are valid and which are
+      undefined */
+
+      FIELD(dataflags, RC);
+
+      if (!(GET_FIELD(dataflags) & 0x01))
         {
-          FIELD(dataflags, RC);
-
-          if (!(GET_FIELD(dataflags) & 0x01))
-            {
-              FIELD(elevation, RD);
-            }
-
-          FIELD_2RD(insertion_pt);
-
-          if (!(GET_FIELD(dataflags) & 0x02))
-            {
-              FIELD_2DD(alignment_pt, 10, 20);
-            }
-
-          FIELD_BE(extrusion);
-          FIELD(thickness, BT);
-
-          if (!(GET_FIELD(dataflags) & 0x04))
-            {
-              FIELD(oblique_ang, RD);
-            }
-
-          if (!(GET_FIELD(dataflags) & 0x08))
-            {
-              FIELD(rotation_ang, RD);
-            }
-
-          FIELD(height, RD);
-
-          if (!(GET_FIELD(dataflags) & 0x10))
-            {
-              FIELD(width_factor, RD);
-            }
-
-          FIELD(text_value, TV);
-
-          if (!(GET_FIELD(dataflags) & 0x20))
-            {
-              FIELD(generation, BS);
-            }
-
-          if (!(GET_FIELD(dataflags) & 0x40)) 
-            {
-              FIELD(horiz_alignment, BS);
-            }
-
-          if (!(GET_FIELD(dataflags) & 0x80))
-            {
-              FIELD(vert_alignment, BS);
-            }
+          FIELD(elevation, RD);
         }
 
-      ENCODER
+      FIELD_2RD(insertion_pt);
+
+      if (!(GET_FIELD(dataflags) & 0x02))
         {
-          TODO_ENCODER
+          FIELD_2DD(alignment_pt, 10, 20);
+        }
+
+      FIELD_BE(extrusion);
+      FIELD(thickness, BT);
+
+      if (!(GET_FIELD(dataflags) & 0x04))
+        {
+          FIELD(oblique_ang, RD);
+        }
+
+      if (!(GET_FIELD(dataflags) & 0x08))
+        {
+          FIELD(rotation_ang, RD);
+        }
+
+      FIELD(height, RD);
+
+      if (!(GET_FIELD(dataflags) & 0x10))
+        {
+          FIELD(width_factor, RD);
+        }
+
+      FIELD(text_value, TV);
+
+      if (!(GET_FIELD(dataflags) & 0x20))
+        {
+          FIELD(generation, BS);
+        }
+
+      if (!(GET_FIELD(dataflags) & 0x40)) 
+        {
+          FIELD(horiz_alignment, BS);
+        }
+
+      if (!(GET_FIELD(dataflags) & 0x80))
+        {
+          FIELD(vert_alignment, BS);
         }
     }
 
@@ -126,51 +123,48 @@ DWG_ENTITY(ATTRIB);
 
   SINCE(R_2000)
     {
-      DECODER
-        {
-          FIELD(dataflags, RC);
-          if (!(GET_FIELD(dataflags) & 0x01))
-            {
-              FIELD(elevation, RD);
-            }
-          FIELD_2RD(insertion_pt);
-          if (!(GET_FIELD(dataflags) & 0x02))
-            {
-              FIELD_2DD(alignment_pt, 10, 20);
-            }
-          FIELD_BE(extrusion);
-          FIELD(thickness, BT);
-          if (!(GET_FIELD(dataflags) & 0x04))
-            {
-              FIELD(oblique_ang, RD);
-            }
-          if (!(GET_FIELD(dataflags) & 0x08))
-            {
-              FIELD(rotation_ang, RD);
-            }
-          FIELD(height, RD);
-          if (!(GET_FIELD(dataflags) & 0x10))
-            {
-              FIELD(width_factor, RD);
-            }
-          FIELD(text_value, TV);
-          if (!(GET_FIELD(dataflags) & 0x20))
-            {
-              FIELD(generation, BS);
-            }
-          if (!(GET_FIELD(dataflags) & 0x40))
-            {
-              FIELD(horiz_alignment, BS);
-            }
-          if (!(GET_FIELD(dataflags) & 0x80))
-            {
-              FIELD(vert_alignment, BS);
-            }
-        }
+      /* We assume that the user (the client application)
+      is responsible for taking care of properly updating the dataflags field 
+      which indicates which fields in the data structures are valid and which are
+      undefined */
 
-      ENCODER
+      FIELD(dataflags, RC);
+      if (!(GET_FIELD(dataflags) & 0x01))
         {
-          TODO_ENCODER
+          FIELD(elevation, RD);
+        }
+      FIELD_2RD(insertion_pt);
+      if (!(GET_FIELD(dataflags) & 0x02))
+        {
+          FIELD_2DD(alignment_pt, 10, 20);
+        }
+      FIELD_BE(extrusion);
+      FIELD(thickness, BT);
+      if (!(GET_FIELD(dataflags) & 0x04))
+        {
+          FIELD(oblique_ang, RD);
+        }
+      if (!(GET_FIELD(dataflags) & 0x08))
+        {
+          FIELD(rotation_ang, RD);
+        }
+      FIELD(height, RD);
+      if (!(GET_FIELD(dataflags) & 0x10))
+        {
+          FIELD(width_factor, RD);
+        }
+      FIELD(text_value, TV);
+      if (!(GET_FIELD(dataflags) & 0x20))
+        {
+          FIELD(generation, BS);
+        }
+      if (!(GET_FIELD(dataflags) & 0x40))
+        {
+          FIELD(horiz_alignment, BS);
+        }
+      if (!(GET_FIELD(dataflags) & 0x80))
+        {
+          FIELD(vert_alignment, BS);
         }
     }
 
@@ -211,51 +205,48 @@ DWG_ENTITY(ATTDEF);
 
   SINCE(R_2000)
     {
-      DECODER
-        {
-          FIELD(dataflags, RC);
-          if (!(GET_FIELD(dataflags) & 0x01))
-            {
-              FIELD(elevation, RD);
-            }
-          FIELD_2RD(insertion_pt);
-          if (!(GET_FIELD(dataflags) & 0x02))
-            {
-              FIELD_2DD(alignment_pt, 10, 20);
-            }
-          FIELD_BE(extrusion);
-          FIELD(thickness, BT);
-          if (!(GET_FIELD(dataflags) & 0x04))
-            {
-              FIELD(oblique_ang, RD);
-            }
-          if (!(GET_FIELD(dataflags) & 0x08))
-            {
-              FIELD(rotation_ang, RD);
-            }
-          FIELD(height, RD);
-          if (!(GET_FIELD(dataflags) & 0x10))
-            {
-              FIELD(width_factor, RD);
-            }
-          FIELD(default_value, TV);
-          if (!(GET_FIELD(dataflags) & 0x20))
-            {
-              FIELD(generation, BS);
-            }
-          if (!(GET_FIELD(dataflags) & 0x40))
-            {
-              FIELD(horiz_alignment, BS);
-            }
-          if (!(GET_FIELD(dataflags) & 0x80))
-            {
-              FIELD(vert_alignment, BS);
-            }
-        }
+      /* We assume that the user (the client application)
+      is responsible for taking care of properly updating the dataflags field 
+      which indicates which fields in the data structures are valid and which are
+      undefined */
 
-      ENCODER
+      FIELD(dataflags, RC);
+      if (!(GET_FIELD(dataflags) & 0x01))
         {
-          TODO_ENCODER
+          FIELD(elevation, RD);
+        }
+      FIELD_2RD(insertion_pt);
+      if (!(GET_FIELD(dataflags) & 0x02))
+        {
+          FIELD_2DD(alignment_pt, 10, 20);
+        }
+      FIELD_BE(extrusion);
+      FIELD(thickness, BT);
+      if (!(GET_FIELD(dataflags) & 0x04))
+        {
+          FIELD(oblique_ang, RD);
+        }
+      if (!(GET_FIELD(dataflags) & 0x08))
+        {
+          FIELD(rotation_ang, RD);
+        }
+      FIELD(height, RD);
+      if (!(GET_FIELD(dataflags) & 0x10))
+        {
+          FIELD(width_factor, RD);
+        }
+      FIELD(default_value, TV);
+      if (!(GET_FIELD(dataflags) & 0x20))
+        {
+          FIELD(generation, BS);
+        }
+      if (!(GET_FIELD(dataflags) & 0x40))
+        {
+          FIELD(horiz_alignment, BS);
+        }
+      if (!(GET_FIELD(dataflags) & 0x80))
+        {
+          FIELD(vert_alignment, BS);
         }
     }
 
