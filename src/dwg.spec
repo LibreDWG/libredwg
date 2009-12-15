@@ -333,7 +333,33 @@ DWG_ENTITY(INSERT);
 
       ENCODER
         {
-          TODO_ENCODER
+          if (GET_FIELD(scale.x)==1.0 && GET_FIELD(scale.y)==1.0 && GET_FIELD(scale.z)==1.0)
+            {
+              GET_FIELD(scale_flag) = 3;
+              FIELD(scale_flag, BB);
+            }
+          else if (GET_FIELD(scale.x)==GET_FIELD(scale.y) && GET_FIELD(scale.x)==GET_FIELD(scale.z))
+            {
+              GET_FIELD(scale_flag) = 2;
+              FIELD(scale_flag, BB);
+              FIELD(scale.x, RD);
+            }
+          else if (GET_FIELD(scale.x)==1.0)
+            {
+              GET_FIELD(scale_flag) = 1;
+              FIELD(scale_flag, BB);
+              FIELD(scale.x, RD);
+              FIELD_DD(scale.y, 1.0);
+              FIELD_DD(scale.z, 1.0);
+            }
+          else
+            {
+              GET_FIELD(scale_flag) = 0;
+              FIELD(scale_flag, BB);
+              FIELD(scale.x, RD);
+              FIELD_DD(scale.y, GET_FIELD(scale.x));
+              FIELD_DD(scale.z, GET_FIELD(scale.x));
+            }
         }
     }
 
