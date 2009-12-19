@@ -46,14 +46,14 @@ DWG_ENTITY (TEXT);
 
       FIELD(dataflags, RC);
 
-      if (!(GET_FIELD(dataflags) & 0x01))
+      if (!(FIELD_VALUE(dataflags) & 0x01))
         {
           FIELD(elevation, RD);
         }
 
       FIELD_2RD(insertion_pt);
 
-      if (!(GET_FIELD(dataflags) & 0x02))
+      if (!(FIELD_VALUE(dataflags) & 0x02))
         {
           FIELD_2DD(alignment_pt, 10, 20);
         }
@@ -61,36 +61,36 @@ DWG_ENTITY (TEXT);
       FIELD_BE(extrusion);
       FIELD(thickness, BT);
 
-      if (!(GET_FIELD(dataflags) & 0x04))
+      if (!(FIELD_VALUE(dataflags) & 0x04))
         {
           FIELD(oblique_ang, RD);
         }
 
-      if (!(GET_FIELD(dataflags) & 0x08))
+      if (!(FIELD_VALUE(dataflags) & 0x08))
         {
           FIELD(rotation_ang, RD);
         }
 
       FIELD(height, RD);
 
-      if (!(GET_FIELD(dataflags) & 0x10))
+      if (!(FIELD_VALUE(dataflags) & 0x10))
         {
           FIELD(width_factor, RD);
         }
 
       FIELD(text_value, TV);
 
-      if (!(GET_FIELD(dataflags) & 0x20))
+      if (!(FIELD_VALUE(dataflags) & 0x20))
         {
           FIELD(generation, BS);
         }
 
-      if (!(GET_FIELD(dataflags) & 0x40)) 
+      if (!(FIELD_VALUE(dataflags) & 0x40)) 
         {
           FIELD(horiz_alignment, BS);
         }
 
-      if (!(GET_FIELD(dataflags) & 0x80))
+      if (!(FIELD_VALUE(dataflags) & 0x80))
         {
           FIELD(vert_alignment, BS);
         }
@@ -129,40 +129,40 @@ DWG_ENTITY(ATTRIB);
       undefined */
 
       FIELD(dataflags, RC);
-      if (!(GET_FIELD(dataflags) & 0x01))
+      if (!(FIELD_VALUE(dataflags) & 0x01))
         {
           FIELD(elevation, RD);
         }
       FIELD_2RD(insertion_pt);
-      if (!(GET_FIELD(dataflags) & 0x02))
+      if (!(FIELD_VALUE(dataflags) & 0x02))
         {
           FIELD_2DD(alignment_pt, 10, 20);
         }
       FIELD_BE(extrusion);
       FIELD(thickness, BT);
-      if (!(GET_FIELD(dataflags) & 0x04))
+      if (!(FIELD_VALUE(dataflags) & 0x04))
         {
           FIELD(oblique_ang, RD);
         }
-      if (!(GET_FIELD(dataflags) & 0x08))
+      if (!(FIELD_VALUE(dataflags) & 0x08))
         {
           FIELD(rotation_ang, RD);
         }
       FIELD(height, RD);
-      if (!(GET_FIELD(dataflags) & 0x10))
+      if (!(FIELD_VALUE(dataflags) & 0x10))
         {
           FIELD(width_factor, RD);
         }
       FIELD(text_value, TV);
-      if (!(GET_FIELD(dataflags) & 0x20))
+      if (!(FIELD_VALUE(dataflags) & 0x20))
         {
           FIELD(generation, BS);
         }
-      if (!(GET_FIELD(dataflags) & 0x40))
+      if (!(FIELD_VALUE(dataflags) & 0x40))
         {
           FIELD(horiz_alignment, BS);
         }
-      if (!(GET_FIELD(dataflags) & 0x80))
+      if (!(FIELD_VALUE(dataflags) & 0x80))
         {
           FIELD(vert_alignment, BS);
         }
@@ -211,40 +211,40 @@ DWG_ENTITY(ATTDEF);
       undefined */
 
       FIELD(dataflags, RC);
-      if (!(GET_FIELD(dataflags) & 0x01))
+      if (!(FIELD_VALUE(dataflags) & 0x01))
         {
           FIELD(elevation, RD);
         }
       FIELD_2RD(insertion_pt);
-      if (!(GET_FIELD(dataflags) & 0x02))
+      if (!(FIELD_VALUE(dataflags) & 0x02))
         {
           FIELD_2DD(alignment_pt, 10, 20);
         }
       FIELD_BE(extrusion);
       FIELD(thickness, BT);
-      if (!(GET_FIELD(dataflags) & 0x04))
+      if (!(FIELD_VALUE(dataflags) & 0x04))
         {
           FIELD(oblique_ang, RD);
         }
-      if (!(GET_FIELD(dataflags) & 0x08))
+      if (!(FIELD_VALUE(dataflags) & 0x08))
         {
           FIELD(rotation_ang, RD);
         }
       FIELD(height, RD);
-      if (!(GET_FIELD(dataflags) & 0x10))
+      if (!(FIELD_VALUE(dataflags) & 0x10))
         {
           FIELD(width_factor, RD);
         }
       FIELD(default_value, TV);
-      if (!(GET_FIELD(dataflags) & 0x20))
+      if (!(FIELD_VALUE(dataflags) & 0x20))
         {
           FIELD(generation, BS);
         }
-      if (!(GET_FIELD(dataflags) & 0x40))
+      if (!(FIELD_VALUE(dataflags) & 0x40))
         {
           FIELD(horiz_alignment, BS);
         }
-      if (!(GET_FIELD(dataflags) & 0x80))
+      if (!(FIELD_VALUE(dataflags) & 0x80))
         {
           FIELD(vert_alignment, BS);
         }
@@ -305,48 +305,48 @@ DWG_ENTITY(INSERT);
       DECODER
         {
           FIELD(scale_flag, BB);
-          if (GET_FIELD(scale_flag) == 3)
+          if (FIELD_VALUE(scale_flag) == 3)
             {
-              GET_FIELD(scale.x) = 1.0;
-              GET_FIELD(scale.y) = 1.0;
-              GET_FIELD(scale.z) = 1.0;
+              FIELD_VALUE(scale.x) = 1.0;
+              FIELD_VALUE(scale.y) = 1.0;
+              FIELD_VALUE(scale.z) = 1.0;
             }
-          else if (GET_FIELD(scale_flag) == 1)
+          else if (FIELD_VALUE(scale_flag) == 1)
             {
-              GET_FIELD(scale.x) = 1.0;
+              FIELD_VALUE(scale.x) = 1.0;
               FIELD_DD(scale.y, 1.0);
               FIELD_DD(scale.z, 1.0);
             }
-          else if (GET_FIELD(scale_flag) == 2)
+          else if (FIELD_VALUE(scale_flag) == 2)
             {
               FIELD(scale.x, RD); 
-              GET_FIELD(scale.y) = GET_FIELD(scale.x);
-              GET_FIELD(scale.z) = GET_FIELD(scale.x);
+              FIELD_VALUE(scale.y) = FIELD_VALUE(scale.x);
+              FIELD_VALUE(scale.z) = FIELD_VALUE(scale.x);
             }
-          else //if (GET_FIELD(scale_flag) == 0)
+          else //if (FIELD_VALUE(scale_flag) == 0)
             {
               FIELD(scale.x, RD);
-              FIELD_DD(scale.y, GET_FIELD(scale.x));
-              FIELD_DD(scale.z, GET_FIELD(scale.x));
+              FIELD_DD(scale.y, FIELD_VALUE(scale.x));
+              FIELD_DD(scale.z, FIELD_VALUE(scale.x));
             }
         }
 
       ENCODER
         {
-          if (GET_FIELD(scale.x)==1.0 && GET_FIELD(scale.y)==1.0 && GET_FIELD(scale.z)==1.0)
+          if (FIELD_VALUE(scale.x)==1.0 && FIELD_VALUE(scale.y)==1.0 && FIELD_VALUE(scale.z)==1.0)
             {
-              GET_FIELD(scale_flag) = 3;
+              FIELD_VALUE(scale_flag) = 3;
               FIELD(scale_flag, BB);
             }
-          else if (GET_FIELD(scale.x)==GET_FIELD(scale.y) && GET_FIELD(scale.x)==GET_FIELD(scale.z))
+          else if (FIELD_VALUE(scale.x)==FIELD_VALUE(scale.y) && FIELD_VALUE(scale.x)==FIELD_VALUE(scale.z))
             {
-              GET_FIELD(scale_flag) = 2;
+              FIELD_VALUE(scale_flag) = 2;
               FIELD(scale_flag, BB);
               FIELD(scale.x, RD);
             }
-          else if (GET_FIELD(scale.x)==1.0)
+          else if (FIELD_VALUE(scale.x)==1.0)
             {
-              GET_FIELD(scale_flag) = 1;
+              FIELD_VALUE(scale_flag) = 1;
               FIELD(scale_flag, BB);
               FIELD(scale.x, RD);
               FIELD_DD(scale.y, 1.0);
@@ -354,11 +354,11 @@ DWG_ENTITY(INSERT);
             }
           else
             {
-              GET_FIELD(scale_flag) = 0;
+              FIELD_VALUE(scale_flag) = 0;
               FIELD(scale_flag, BB);
               FIELD(scale.x, RD);
-              FIELD_DD(scale.y, GET_FIELD(scale.x));
-              FIELD_DD(scale.z, GET_FIELD(scale.x));
+              FIELD_DD(scale.y, FIELD_VALUE(scale.x));
+              FIELD_DD(scale.z, FIELD_VALUE(scale.x));
             }
         }
     }
@@ -380,7 +380,7 @@ DWG_ENTITY(INSERT);
   //I guess it means "R13-R2000:" (just like in MINSERT)
   VERSIONS(R_13,R_2000)
     {
-    if(GET_FIELD(has_attribs))
+    if(FIELD_VALUE(has_attribs))
       {
         FIELD_HANDLE(first_attrib, 4);
         FIELD_HANDLE(last_attrib, 4);
@@ -394,7 +394,7 @@ DWG_ENTITY(INSERT);
       HANDLE_VECTOR(attrib_handles, owned_obj_count, 4);
     }
 
-  if (GET_FIELD(has_attribs))
+  if (FIELD_VALUE(has_attribs))
     {
       FIELD_HANDLE(seqend, 3);
     }
@@ -416,56 +416,56 @@ DWG_ENTITY(MINSERT);
       DECODER
         {
           FIELD(scale_flag, BB);
-          if (GET_FIELD(scale_flag) == 3){
-            GET_FIELD(scale.x) = GET_FIELD(scale.y) = GET_FIELD(scale.y) = 1.0;
+          if (FIELD_VALUE(scale_flag) == 3){
+            FIELD_VALUE(scale.x) = FIELD_VALUE(scale.y) = FIELD_VALUE(scale.y) = 1.0;
           }
-          else if (GET_FIELD(scale_flag) == 1)
+          else if (FIELD_VALUE(scale_flag) == 1)
             {
-              GET_FIELD(scale.x) = 1.0;
+              FIELD_VALUE(scale.x) = 1.0;
               FIELD_DD(scale.y, 1.0);
               FIELD_DD(scale.z, 1.0);
             }
-          else if (GET_FIELD(scale_flag) == 2)
+          else if (FIELD_VALUE(scale_flag) == 2)
             {
               FIELD(scale.x, RD);
-              GET_FIELD(scale.y) = GET_FIELD(scale.x);
-              GET_FIELD(scale.z) = GET_FIELD(scale.x);
+              FIELD_VALUE(scale.y) = FIELD_VALUE(scale.x);
+              FIELD_VALUE(scale.z) = FIELD_VALUE(scale.x);
             }
-          else //if (GET_FIELD(scale_flag) == 0)
+          else //if (FIELD_VALUE(scale_flag) == 0)
             {
               FIELD(scale.x, RD);
-              FIELD_DD(scale.y, GET_FIELD(scale.x));
-              FIELD_DD(scale.z, GET_FIELD(scale.x));
+              FIELD_DD(scale.y, FIELD_VALUE(scale.x));
+              FIELD_DD(scale.z, FIELD_VALUE(scale.x));
             }
         }
 
       ENCODER
         {
-          if (GET_FIELD(scale.x) == GET_FIELD(scale.y) == GET_FIELD(scale.z) == 1.0)
+          if (FIELD_VALUE(scale.x) == FIELD_VALUE(scale.y) == FIELD_VALUE(scale.z) == 1.0)
             {
-              GET_FIELD(scale_flag) = 3;
+              FIELD_VALUE(scale_flag) = 3;
               FIELD_BB(scale_flag);
             }
-          else if (GET_FIELD(scale.x) == 1.0)
+          else if (FIELD_VALUE(scale.x) == 1.0)
              {
-              GET_FIELD(scale_flag) = 1;
+              FIELD_VALUE(scale_flag) = 1;
               FIELD_BB(scale_flag);
               FIELD_DD(scale.y, 1.0);
               FIELD_DD(scale.z, 1.0);
              }
-           else if (GET_FIELD(scale.x) == GET_FIELD(scale.y) == GET_FIELD(scale.z))
+           else if (FIELD_VALUE(scale.x) == FIELD_VALUE(scale.y) == FIELD_VALUE(scale.z))
              {
-              GET_FIELD(scale_flag) = 2;
+              FIELD_VALUE(scale_flag) = 2;
               FIELD_BB(scale_flag);
               FIELD_RD(scale.x);
              }
            else
              {
-              GET_FIELD(scale_flag) = 0;
+              FIELD_VALUE(scale_flag) = 0;
               FIELD_BB(scale_flag);
               FIELD_RD(scale.x);
-              FIELD_DD(scale.y, GET_FIELD(scale.x));
-              FIELD_DD(scale.z, GET_FIELD(scale.x));
+              FIELD_DD(scale.y, FIELD_VALUE(scale.x));
+              FIELD_DD(scale.z, FIELD_VALUE(scale.x));
              }
         }
     }
@@ -489,7 +489,7 @@ DWG_ENTITY(MINSERT);
   FIELD_HANDLE(block_header, 5);
 
   VERSIONS(R_13,R_2000)
-    if (GET_FIELD(has_attribs))
+    if (FIELD_VALUE(has_attribs))
       {
         FIELD_HANDLE(first_attrib, 4);
         FIELD_HANDLE(last_attrib, 4);
@@ -500,7 +500,7 @@ DWG_ENTITY(MINSERT);
       HANDLE_VECTOR(attrib_handles, owned_obj_count, 4);
     }
 
-  if (GET_FIELD(has_attribs))
+  if (FIELD_VALUE(has_attribs))
     {
       FIELD_HANDLE(seqend, 3);
     }
@@ -518,10 +518,10 @@ DWG_ENTITY(VERTEX_2D);
 
   DECODER
     {
-      if (GET_FIELD(start_width) < 0)
+      if (FIELD_VALUE(start_width) < 0)
         {
-          GET_FIELD(start_width) = -GET_FIELD(start_width);
-          GET_FIELD(end_width) = GET_FIELD(start_width);
+          FIELD_VALUE(start_width) = -FIELD_VALUE(start_width);
+          FIELD_VALUE(end_width) = FIELD_VALUE(start_width);
         }
       else
         {
@@ -685,34 +685,34 @@ DWG_ENTITY(LINE);
         {
           FIELD(Zs_are_zero, B);
           FIELD(start.x, RD);
-          FIELD_DD(end.x, GET_FIELD(start.x));
+          FIELD_DD(end.x, FIELD_VALUE(start.x));
           FIELD(start.y, RD);
-          FIELD_DD(end.y, GET_FIELD(start.y));
+          FIELD_DD(end.y, FIELD_VALUE(start.y));
 
-          if (GET_FIELD(Zs_are_zero))
+          if (FIELD_VALUE(Zs_are_zero))
             {
-              GET_FIELD(start.z) = 0.0;
-              GET_FIELD(end.z) = 0.0;
+              FIELD_VALUE(start.z) = 0.0;
+              FIELD_VALUE(end.z) = 0.0;
             }
           else
             {
               FIELD(start.z, RD);
-              FIELD_DD(end.z, GET_FIELD(start.z));
+              FIELD_DD(end.z, FIELD_VALUE(start.z));
             }
         }
 
       ENCODER
         {
-          GET_FIELD(Zs_are_zero) = (GET_FIELD(start.z) == 0.0 && GET_FIELD(end.z) == 0.0);
+          FIELD_VALUE(Zs_are_zero) = (FIELD_VALUE(start.z) == 0.0 && FIELD_VALUE(end.z) == 0.0);
           FIELD_B(Zs_are_zero);
           FIELD_RD(start.x);
-          FIELD_DD(end.x, GET_FIELD(start.x));
+          FIELD_DD(end.x, FIELD_VALUE(start.x));
           FIELD_RD(start.y);
-          FIELD_DD(end.y, GET_FIELD(start.y));
-          if (!GET_FIELD(Zs_are_zero))
+          FIELD_DD(end.y, FIELD_VALUE(start.y));
+          if (!FIELD_VALUE(Zs_are_zero))
             {
               FIELD_RD(start.z);
-              FIELD_DD(end.z, GET_FIELD(start.z));
+              FIELD_DD(end.z, FIELD_VALUE(start.z));
             }
         }
     }
@@ -900,9 +900,9 @@ DWG_ENTITY(_3DFACE);
           FIELD_B(z_is_zero);
           FIELD_RD(corner1.x);
           FIELD_RD(corner1.y);
-          if(GET_FIELD(z_is_zero))
+          if(FIELD_VALUE(z_is_zero))
             {
-              GET_FIELD(corner1.z) = 0;
+              FIELD_VALUE(corner1.z) = 0;
             }
           else
             {
@@ -912,25 +912,25 @@ DWG_ENTITY(_3DFACE);
 
       ENCODER
         {
-          GET_FIELD(z_is_zero) = (GET_FIELD(corner1.z) == 0);
+          FIELD_VALUE(z_is_zero) = (FIELD_VALUE(corner1.z) == 0);
           FIELD_B(z_is_zero);
           FIELD_RD(corner1.x);
           FIELD_RD(corner1.y);
-          if(!GET_FIELD(z_is_zero))
+          if(!FIELD_VALUE(z_is_zero))
             {
               FIELD_RD(corner1.z);
             }
         }
 
-      FIELD_DD(corner2.x, GET_FIELD(corner1.x));
-      FIELD_DD(corner2.y, GET_FIELD(corner1.y));
-      FIELD_DD(corner2.z, GET_FIELD(corner1.z));
-      FIELD_DD(corner3.x, GET_FIELD(corner2.x));
-      FIELD_DD(corner3.y, GET_FIELD(corner2.y));
-      FIELD_DD(corner3.z, GET_FIELD(corner2.z));
-      FIELD_DD(corner4.x, GET_FIELD(corner3.x));
-      FIELD_DD(corner4.y, GET_FIELD(corner3.y));
-      FIELD_DD(corner4.z, GET_FIELD(corner3.z));
+      FIELD_DD(corner2.x, FIELD_VALUE(corner1.x));
+      FIELD_DD(corner2.y, FIELD_VALUE(corner1.y));
+      FIELD_DD(corner2.z, FIELD_VALUE(corner1.z));
+      FIELD_DD(corner3.x, FIELD_VALUE(corner2.x));
+      FIELD_DD(corner3.y, FIELD_VALUE(corner2.y));
+      FIELD_DD(corner3.z, FIELD_VALUE(corner2.z));
+      FIELD_DD(corner4.x, FIELD_VALUE(corner3.x));
+      FIELD_DD(corner4.y, FIELD_VALUE(corner3.y));
+      FIELD_DD(corner4.z, FIELD_VALUE(corner3.z));
     }
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -1121,13 +1121,13 @@ DWG_ENTITY(SPLINE);
   int i;
 
   FIELD_BS(scenario);
-  if (GET_FIELD(scenario) != 1 && GET_FIELD(scenario) != 2)
+  if (FIELD_VALUE(scenario) != 1 && FIELD_VALUE(scenario) != 2)
     {
-      fprintf(stderr, "Error: unknown scenario %d", GET_FIELD(scenario));
+      fprintf(stderr, "Error: unknown scenario %d", FIELD_VALUE(scenario));
     }
 
   FIELD_BS(degree);
-  if (GET_FIELD(scenario) == 2)
+  if (FIELD_VALUE(scenario) == 2)
     {
       FIELD_BD(fit_tol);
       FIELD_3BD(beg_tan_vec);
@@ -1138,7 +1138,7 @@ DWG_ENTITY(SPLINE);
           FIELD_3BD(fit_pts[i]);
         }
     }
-  if (GET_FIELD(scenario) == 1)
+  if (FIELD_VALUE(scenario) == 1)
     {
       FIELD_B(rational);
       FIELD_B(closed_b);
@@ -1158,12 +1158,12 @@ DWG_ENTITY(SPLINE);
     {
 //TODO: does it work both for encoder and decoder routines?
       FIELD_3BD(ctrl_pts[i]);
-      if (!GET_FIELD(weighted))
+      if (!FIELD_VALUE(weighted))
         {
           //TODO check what "D" means on spec.
           //assuming typo - should be BD
           //assuming w=0 when not present.
-          GET_FIELD(ctrl_pts[i].w) = 0;
+          FIELD_VALUE(ctrl_pts[i].w) = 0;
         }
       else
         {
@@ -1186,7 +1186,7 @@ DWG_ENTITY_END
   FIELD_BL(name.num_points);                             \
   FIELD_3DPOINT_VECTOR(name.points, name.num_points); \
   FIELD_B(name.transform_present);                      \
-  if (GET_FIELD(name.transform_present))              \
+  if (FIELD_VALUE(name.transform_present))              \
     {                                                 \
       FIELD_3BD(name.axis_x);                         \
       FIELD_3BD(name.axis_y);                         \
@@ -1207,18 +1207,18 @@ inline void decode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* 
   int vcount, rcount, rcount2;
   FIELD_B(acis_empty);
   int i=0;
-  if (!GET_FIELD(acis_empty))
+  if (!FIELD_VALUE(acis_empty))
     {
       FIELD_B (unknown);
       FIELD_BS (version);
-      if (GET_FIELD(version)==1)
+      if (FIELD_VALUE(version)==1)
         {
           do
             {
-              GET_FIELD(sat_data) = (BITCODE_RC**) realloc(GET_FIELD(sat_data), i * sizeof(BITCODE_RC*));
+              FIELD_VALUE(sat_data) = (BITCODE_RC**) realloc(FIELD_VALUE(sat_data), i * sizeof(BITCODE_RC*));
               FIELD_BL (block_size);
               FIELD_VECTOR (sat_data[i++], RC, block_size);
-            } while(GET_FIELD(block_size));
+            } while(FIELD_VALUE(block_size));
         }
       else
         {
@@ -1227,22 +1227,22 @@ inline void decode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* 
         }
 
       FIELD_B (wireframe_data_present);
-      if (GET_FIELD(wireframe_data_present))
+      if (FIELD_VALUE(wireframe_data_present))
         {
           FIELD_B (point_present);
-          if (GET_FIELD(point_present))
+          if (FIELD_VALUE(point_present))
             {
               FIELD_3BD (point);
             }
           else
             {
-              GET_FIELD(point.x) = 0;
-              GET_FIELD(point.y) = 0;
-              GET_FIELD(point.z) = 0;
+              FIELD_VALUE(point.x) = 0;
+              FIELD_VALUE(point.y) = 0;
+              FIELD_VALUE(point.z) = 0;
             }
           FIELD_BL (num_isolines);
           FIELD_B (isoline_present);
-          if (GET_FIELD(isoline_present))
+          if (FIELD_VALUE(isoline_present))
             {
               FIELD_BL (num_wires);
               REPEAT(num_wires, wires, Dwg_Entity_3DSOLID_wire)
@@ -1366,7 +1366,7 @@ DWG_OBJECT(DICTIONARY);
       FIELD(hard_owner, RC);
     }
 
-  if (GET_FIELD(numitems) > 10000)
+  if (FIELD_VALUE(numitems) > 10000)
     {
       fprintf(
           stderr,
@@ -1582,10 +1582,10 @@ DWG_OBJECT(BLOCK_HEADER);
     {
 
       //skip non-zero bytes and a terminating zero:
-      GET_FIELD(insert_count)=0;
+      FIELD_VALUE(insert_count)=0;
       while (bit_read_RC(dat))
         {
-          GET_FIELD(insert_count)++;
+          FIELD_VALUE(insert_count)++;
         };
 
       FIELD(block_description, TV);
@@ -1609,7 +1609,7 @@ DWG_OBJECT(BLOCK_HEADER);
 
   VERSIONS(R_13,R_2000)
     {
-      if (!GET_FIELD(blkisxref) && !GET_FIELD(xrefoverlaid))
+      if (!FIELD_VALUE(blkisxref) && !FIELD_VALUE(xrefoverlaid))
         {
           FIELD_HANDLE(first_entity, 4);
           FIELD_HANDLE(last_entity, 4);
@@ -1752,7 +1752,7 @@ DWG_OBJECT(LTYPE);
       FIELD(dash[rcount].scale, BD);
       FIELD(dash[rcount].rotation, BD);
       FIELD(dash[rcount].shape_flag, BS);
-      if (GET_FIELD(dash[rcount].shape_flag) & 0x02)
+      if (FIELD_VALUE(dash[rcount].shape_flag) & 0x02)
         R2007plus_text_area_is_present = 1;
     }
 
@@ -2318,13 +2318,13 @@ DWG_ENTITY(HATCH);
   REPEAT(num_paths, paths, Dwg_Entity_HATCH_Path)
     {
       FIELD_BL(paths[rcount].flag);
-      if (!(GET_FIELD(paths[rcount].flag) & 2))
+      if (!(FIELD_VALUE(paths[rcount].flag) & 2))
         {
           FIELD_BL(paths[rcount].num_path_segs);
           REPEAT2(paths[rcount].num_path_segs, paths[rcount].segs, Dwg_Entity_HATCH_PathSeg)
             {
               FIELD_RC(paths[rcount].segs[rcount2].type_status);
-              switch (GET_FIELD(paths[rcount].segs[rcount2].type_status))
+              switch (FIELD_VALUE(paths[rcount].segs[rcount2].type_status))
                 {
                     case 1: /* LINE */
                       FIELD_2RD(paths[rcount].segs[rcount2].first_endpoint);
@@ -2355,7 +2355,7 @@ DWG_ENTITY(HATCH);
                       REPEAT3(paths[rcount].segs[rcount2].num_control_points, paths[rcount].segs[rcount2].control_points, Dwg_Entity_HATCH_ControlPoint)
                         {
                           FIELD_2RD(paths[rcount].segs[rcount2].control_points[rcount3].point);
-                          if (GET_FIELD(paths[rcount].segs[rcount2].is_rational))
+                          if (FIELD_VALUE(paths[rcount].segs[rcount2].is_rational))
                             {
                               FIELD_BD(paths[rcount].segs[rcount2].control_points[rcount3].weigth);
                             }
@@ -2372,7 +2372,7 @@ DWG_ENTITY(HATCH);
           REPEAT2(paths[rcount].num_path_segs, paths[rcount].polyline_paths, Dwg_Entity_HATCH_PolylinePath)
             {
               FIELD_2RD (paths[rcount].polyline_paths[rcount2].point);
-              if (GET_FIELD(paths[rcount].bulges_present))
+              if (FIELD_VALUE(paths[rcount].bulges_present))
                 {
                   FIELD_BD (paths[rcount].polyline_paths[rcount2].bulge);
                 }
@@ -2413,7 +2413,7 @@ DWG_ENTITY(IMAGE);
   FIELD(fade, RC);
 
   FIELD(clip_boundary_type, BS);
-  if (GET_FIELD(clip_boundary_type) == 1)
+  if (FIELD_VALUE(clip_boundary_type) == 1)
     {
       FIELD_2RD(boundary_pt0);
       FIELD_2RD(boundary_pt1);
@@ -2566,19 +2566,19 @@ DWG_ENTITY(LWPLINE);
 
   FIELD_BS(flags);
 
-  if (GET_FIELD(flags) & 4)
+  if (FIELD_VALUE(flags) & 4)
     FIELD_BD(const_width);
-  if (GET_FIELD(flags) & 8)
+  if (FIELD_VALUE(flags) & 8)
     FIELD_BD(elevation);
-  if (GET_FIELD(flags) & 2)
+  if (FIELD_VALUE(flags) & 2)
     FIELD_BD(thickness);
-  if (GET_FIELD(flags) & 1)
+  if (FIELD_VALUE(flags) & 1)
     FIELD_3BD(normal);
   FIELD_BL(num_points);
 
-  if (GET_FIELD(flags) & 16)
+  if (FIELD_VALUE(flags) & 16)
     FIELD_BL(num_bulges);
-  if (GET_FIELD(flags) & 32)
+  if (FIELD_VALUE(flags) & 32)
     FIELD_BL(num_widths);
 
   VERSIONS(R_13,R_14)
@@ -2589,9 +2589,9 @@ DWG_ENTITY(LWPLINE);
   SINCE(R_2000)
     {
       FIELD_2RD(points[0]);
-      for (i = 1; i < GET_FIELD(num_points); i++)
+      for (i = 1; i < FIELD_VALUE(num_points); i++)
         {
-          FIELD_2DD(points[i], GET_FIELD(points[i - 1].x), GET_FIELD(points[i - 1].y));
+          FIELD_2DD(points[i], FIELD_VALUE(points[i - 1].x), FIELD_VALUE(points[i - 1].y));
         }
     }
 
@@ -2679,13 +2679,13 @@ DWG_OBJECT(SPATIAL_FILTER);
   FIELD_3BD (clip_bound_origin);
   FIELD_BS (display_boundary);
   FIELD_BS (front_clip_on);
-  if (GET_FIELD(front_clip_on)==1)
+  if (FIELD_VALUE(front_clip_on)==1)
     {
       FIELD_BD (front_clip_dist);
     }
 
   FIELD_BS (back_clip_on);
-  if (GET_FIELD(back_clip_on)==1)
+  if (FIELD_VALUE(back_clip_on)==1)
     {
       FIELD_BD (back_clip_dist);
     }
@@ -2719,27 +2719,27 @@ DWG_ENTITY(TABLE);
   SINCE(R_2000)
     {
       FIELD_BB (data_flags);
-      switch (GET_FIELD(data_flags))
+      switch (FIELD_VALUE(data_flags))
         {
           case 0:
-            GET_FIELD(scale.x)=1.0;
-            FIELD_DD(scale.y, GET_FIELD(scale.x));
-            FIELD_DD(scale.z, GET_FIELD(scale.x));
+            FIELD_VALUE(scale.x)=1.0;
+            FIELD_DD(scale.y, FIELD_VALUE(scale.x));
+            FIELD_DD(scale.z, FIELD_VALUE(scale.x));
             break;
           case 1:
-            GET_FIELD(scale.x)=1.0;
+            FIELD_VALUE(scale.x)=1.0;
             FIELD_DD(scale.y, 1.0);
             FIELD_DD(scale.z, 1.0);
             break;
           case 2:
             FIELD_RD(scale.x);
-            GET_FIELD(scale.y) = GET_FIELD(scale.x);
-            GET_FIELD(scale.z) = GET_FIELD(scale.x);
+            FIELD_VALUE(scale.y) = FIELD_VALUE(scale.x);
+            FIELD_VALUE(scale.z) = FIELD_VALUE(scale.x);
             break;
           case 3:
-            GET_FIELD(scale.x)=1.0;
-            GET_FIELD(scale.y)=1.0;
-            GET_FIELD(scale.z)=1.0;
+            FIELD_VALUE(scale.x)=1.0;
+            FIELD_VALUE(scale.y)=1.0;
+            FIELD_VALUE(scale.z)=1.0;
             break;
         }
     }
@@ -2759,7 +2759,7 @@ DWG_ENTITY(TABLE);
   FIELD_BL (num_rows);
   FIELD_VECTOR(col_widths, BD, num_cols);
   FIELD_VECTOR(row_heights, BD, num_rows);
-  REPEAT_N(GET_FIELD(num_rows)*GET_FIELD(num_cols), cells, Dwg_Entity_TABLE_Cell)
+  REPEAT_N(FIELD_VALUE(num_rows)*FIELD_VALUE(num_cols), cells, Dwg_Entity_TABLE_Cell)
     {
       FIELD_BS(cells[rcount].type);
       FIELD_RC(cells[rcount].flags);
@@ -2769,94 +2769,94 @@ DWG_ENTITY(TABLE);
       FIELD_BL(cells[rcount].merged_height_flag);
       FIELD_BD(cells[rcount].rotation_value);
 
-      if (GET_FIELD(cells[rcount].type)==1)
+      if (FIELD_VALUE(cells[rcount].type)==1)
         { /* text cell */
           FIELD_TV(cells[rcount].text_string);
         }
-      if (GET_FIELD(cells[rcount].type)==2)
+      if (FIELD_VALUE(cells[rcount].type)==2)
         { /* block cell */
           FIELD_BD(cells[rcount].block_scale);
           FIELD_B(cells[rcount].additional_data_flag);
-          if (GET_FIELD(cells[rcount].additional_data_flag) == 1)
+          if (FIELD_VALUE(cells[rcount].additional_data_flag) == 1)
             {
               FIELD_BS(cells[rcount].attr_def_count);
               FIELD_BS(cells[rcount].attr_def_index);
               FIELD_TV(cells[rcount].attr_def_text);
-              total_attr_def_count += GET_FIELD(cells[rcount].attr_def_count);
+              total_attr_def_count += FIELD_VALUE(cells[rcount].attr_def_count);
             }
         }
-      if (GET_FIELD(cells[rcount].type)==1 || GET_FIELD(cells[rcount].type)==2)
+      if (FIELD_VALUE(cells[rcount].type)==1 || FIELD_VALUE(cells[rcount].type)==2)
         { /* common to both text and block cells */
           FIELD_B(cells[rcount].additional_data_flag);
-          if (GET_FIELD(cells[rcount].additional_data_flag) == 1)
+          if (FIELD_VALUE(cells[rcount].additional_data_flag) == 1)
             {
               FIELD_BL(cells[rcount].cell_flag_override);
               FIELD_RC(cells[rcount].virtual_edge_flag);
-              if (GET_FIELD(cells[rcount].cell_flag_override) & 0x01)
+              if (FIELD_VALUE(cells[rcount].cell_flag_override) & 0x01)
                 {
                   FIELD_RS(cells[rcount].cell_alignment);
                 }
-              if (GET_FIELD(cells[rcount].cell_flag_override) & 0x02)
+              if (FIELD_VALUE(cells[rcount].cell_flag_override) & 0x02)
                 {
                   FIELD_B(cells[rcount].background_fill_none);
                 }
-              if (GET_FIELD(cells[rcount].cell_flag_override) & 0x04)
+              if (FIELD_VALUE(cells[rcount].cell_flag_override) & 0x04)
                 {
                   FIELD_CMC(cells[rcount].background_color);
                 }
-              if (GET_FIELD(cells[rcount].cell_flag_override) & 0x08)
+              if (FIELD_VALUE(cells[rcount].cell_flag_override) & 0x08)
                 {
                   FIELD_CMC(cells[rcount].content_color);
                 }
-              if (GET_FIELD(cells[rcount].cell_flag_override) & 0x20)
+              if (FIELD_VALUE(cells[rcount].cell_flag_override) & 0x20)
                 {
                   FIELD_BD(cells[rcount].text_height);
                 }
-              if (GET_FIELD(cells[rcount].cell_flag_override) & 0x00040)
+              if (FIELD_VALUE(cells[rcount].cell_flag_override) & 0x00040)
                 {
                   FIELD_CMC(cells[rcount].top_grid_color);
                 }
-              if (GET_FIELD(cells[rcount].cell_flag_override) & 0x00400)
+              if (FIELD_VALUE(cells[rcount].cell_flag_override) & 0x00400)
                 {
                   FIELD_BS(cells[rcount].top_grid_linewt);
                 }
-              if (GET_FIELD(cells[rcount].cell_flag_override) & 0x04000)
+              if (FIELD_VALUE(cells[rcount].cell_flag_override) & 0x04000)
                 {
                   FIELD_BS(cells[rcount].top_visibility);
                 }
-              if (GET_FIELD(cells[rcount].cell_flag_override) & 0x00080)
+              if (FIELD_VALUE(cells[rcount].cell_flag_override) & 0x00080)
                 {
                   FIELD_CMC(cells[rcount].right_grid_color);
                 }
-              if (GET_FIELD(cells[rcount].cell_flag_override) & 0x00800)
+              if (FIELD_VALUE(cells[rcount].cell_flag_override) & 0x00800)
                 {
                   FIELD_BS(cells[rcount].right_grid_linewt);
                 }
-              if (GET_FIELD(cells[rcount].cell_flag_override) & 0x08000)
+              if (FIELD_VALUE(cells[rcount].cell_flag_override) & 0x08000)
                 {
                   FIELD_BS(cells[rcount].right_visibility);
                 }
-              if (GET_FIELD(cells[rcount].cell_flag_override) & 0x00100)
+              if (FIELD_VALUE(cells[rcount].cell_flag_override) & 0x00100)
                 {
                   FIELD_CMC(cells[rcount].bottom_grid_color);
                 }
-              if (GET_FIELD(cells[rcount].cell_flag_override) & 0x01000)
+              if (FIELD_VALUE(cells[rcount].cell_flag_override) & 0x01000)
                 {
                   FIELD_BS(cells[rcount].bottom_grid_linewt);
                 }
-              if (GET_FIELD(cells[rcount].cell_flag_override) & 0x10000)
+              if (FIELD_VALUE(cells[rcount].cell_flag_override) & 0x10000)
                 {
                   FIELD_BS(cells[rcount].bottom_visibility);
                 }
-              if (GET_FIELD(cells[rcount].cell_flag_override) & 0x00200)
+              if (FIELD_VALUE(cells[rcount].cell_flag_override) & 0x00200)
                 {
                   FIELD_CMC(cells[rcount].left_grid_color);
                 }
-              if (GET_FIELD(cells[rcount].cell_flag_override) & 0x02000)
+              if (FIELD_VALUE(cells[rcount].cell_flag_override) & 0x02000)
                 {
                   FIELD_BS(cells[rcount].left_grid_linewt);
                 }
-              if (GET_FIELD(cells[rcount].cell_flag_override) & 0x20000)
+              if (FIELD_VALUE(cells[rcount].cell_flag_override) & 0x20000)
                 {
                   FIELD_BS(cells[rcount].left_visibility);
                 }
@@ -2866,7 +2866,7 @@ DWG_ENTITY(TABLE);
                   FIELD_BL(cells[rcount].unknown);
                   FIELD_BL(cells[rcount].flags_2007);
                   FIELD_BL(cells[rcount].data_type);
-                  switch (GET_FIELD(cells[rcount].data_type))
+                  switch (FIELD_VALUE(cells[rcount].data_type))
                     {
                       case 0: /* kLong */
                         FIELD_BL(cells[rcount].data_long);
@@ -2921,387 +2921,387 @@ DWG_ENTITY(TABLE);
 /* COMMON: */
 
   FIELD_B (table_overrides_present);
-  if (GET_FIELD(table_overrides_present)==1)
+  if (FIELD_VALUE(table_overrides_present)==1)
     {
       FIELD_BL (table_flag_override);
-      if (GET_FIELD(table_flag_override) & 0x0001)
+      if (FIELD_VALUE(table_flag_override) & 0x0001)
         {
           FIELD_B (title_suppressed);
         }
 
       FIELD_B (header_suppressed);
 
-      if (GET_FIELD(table_flag_override) & 0x0004)
+      if (FIELD_VALUE(table_flag_override) & 0x0004)
         {
           FIELD_BS (flow_direction);
         }
 
-      if (GET_FIELD(table_flag_override) & 0x0008)
+      if (FIELD_VALUE(table_flag_override) & 0x0008)
         {
           FIELD_BD (horiz_cell_margin);
         }
 
-      if (GET_FIELD(table_flag_override) & 0x0010)
+      if (FIELD_VALUE(table_flag_override) & 0x0010)
         {
           FIELD_BD (vert_cell_margin);
         }
 
-      if (GET_FIELD(table_flag_override) & 0x0020)
+      if (FIELD_VALUE(table_flag_override) & 0x0020)
         {
           FIELD_CMC (title_row_color);
         }
 
-      if (GET_FIELD(table_flag_override) & 0x0040)
+      if (FIELD_VALUE(table_flag_override) & 0x0040)
         {
           FIELD_CMC (header_row_color);
         }
 
-      if (GET_FIELD(table_flag_override) & 0x0080)
+      if (FIELD_VALUE(table_flag_override) & 0x0080)
         {
           FIELD_CMC (data_row_color);
         }
 
-      if (GET_FIELD(table_flag_override) & 0x0100)
+      if (FIELD_VALUE(table_flag_override) & 0x0100)
         {
           FIELD_B (title_row_fill_none);
         }
 
-      if (GET_FIELD(table_flag_override) & 0x0200)
+      if (FIELD_VALUE(table_flag_override) & 0x0200)
         {
           FIELD_B (header_row_fill_none);
         }
 
-      if (GET_FIELD(table_flag_override) & 0x0400)
+      if (FIELD_VALUE(table_flag_override) & 0x0400)
         {
           FIELD_B (data_row_fill_none);
         }
 
-      if (GET_FIELD(table_flag_override) & 0x0800)
+      if (FIELD_VALUE(table_flag_override) & 0x0800)
         {
           FIELD_CMC (title_row_fill_color);
         }
 
-      if (GET_FIELD(table_flag_override) & 0x1000)
+      if (FIELD_VALUE(table_flag_override) & 0x1000)
         {
           FIELD_CMC (header_row_fill_color);
         }
 
-      if (GET_FIELD(table_flag_override) & 0x2000)
+      if (FIELD_VALUE(table_flag_override) & 0x2000)
         {
           FIELD_CMC (data_row_fill_color);
         }
 
-      if (GET_FIELD(table_flag_override) & 0x4000)
+      if (FIELD_VALUE(table_flag_override) & 0x4000)
         {
           FIELD_BS (title_row_align);
         }
 
-      if (GET_FIELD(table_flag_override) & 0x8000)
+      if (FIELD_VALUE(table_flag_override) & 0x8000)
         {
           FIELD_BS (header_row_align);
         }
 
-      if (GET_FIELD(table_flag_override) & 0x10000)
+      if (FIELD_VALUE(table_flag_override) & 0x10000)
         {
           FIELD_BS (data_row_align);
         }
 
-      if (GET_FIELD(table_flag_override) & 0x100000)
+      if (FIELD_VALUE(table_flag_override) & 0x100000)
         {
           FIELD_BD (title_row_height);
         }
 
-      if (GET_FIELD(table_flag_override) & 0x200000)
+      if (FIELD_VALUE(table_flag_override) & 0x200000)
         {
           FIELD_BD (header_row_height);
         }
 
-      if (GET_FIELD(table_flag_override) & 0x400000)
+      if (FIELD_VALUE(table_flag_override) & 0x400000)
         {
           FIELD_BD (data_row_height);
         }
     }
 
   FIELD_B (border_color_overrides_present);
-  if (GET_FIELD(border_color_overrides_present)==1)
+  if (FIELD_VALUE(border_color_overrides_present)==1)
     {
       FIELD_BL (border_color_overrides_flag);
-      if (GET_FIELD(border_color_overrides_flag) & 0x0001)
+      if (FIELD_VALUE(border_color_overrides_flag) & 0x0001)
         {
           FIELD_CMC (title_horiz_top_color);
         }
 
-      if (GET_FIELD(border_color_overrides_flag) & 0x0002)
+      if (FIELD_VALUE(border_color_overrides_flag) & 0x0002)
         {
           FIELD_CMC (title_horiz_ins_color);
         }
 
-      if (GET_FIELD(border_color_overrides_flag) & 0x0004)
+      if (FIELD_VALUE(border_color_overrides_flag) & 0x0004)
         {
           FIELD_CMC (title_horiz_bottom_color);
         }
 
-      if (GET_FIELD(border_color_overrides_flag) & 0x0008)
+      if (FIELD_VALUE(border_color_overrides_flag) & 0x0008)
         {
           FIELD_CMC (title_vert_left_color);
         }
 
-      if (GET_FIELD(border_color_overrides_flag) & 0x0010)
+      if (FIELD_VALUE(border_color_overrides_flag) & 0x0010)
         {
           FIELD_CMC (title_vert_ins_color);
         }
 
-      if (GET_FIELD(border_color_overrides_flag) & 0x0020)
+      if (FIELD_VALUE(border_color_overrides_flag) & 0x0020)
         {
           FIELD_CMC (title_vert_right_color);
         }
 
-      if (GET_FIELD(border_color_overrides_flag) & 0x0040)
+      if (FIELD_VALUE(border_color_overrides_flag) & 0x0040)
         {
           FIELD_CMC (header_horiz_top_color);
         }
 
-      if (GET_FIELD(border_color_overrides_flag) & 0x0080)
+      if (FIELD_VALUE(border_color_overrides_flag) & 0x0080)
         {
           FIELD_CMC (header_horiz_ins_color);
         }
 
-      if (GET_FIELD(border_color_overrides_flag) & 0x0100)
+      if (FIELD_VALUE(border_color_overrides_flag) & 0x0100)
         {
           FIELD_CMC (header_horiz_bottom_color);
         }
 
-      if (GET_FIELD(border_color_overrides_flag) & 0x0200)
+      if (FIELD_VALUE(border_color_overrides_flag) & 0x0200)
         {
           FIELD_CMC (header_vert_left_color);
         }
 
-      if (GET_FIELD(border_color_overrides_flag) & 0x0400)
+      if (FIELD_VALUE(border_color_overrides_flag) & 0x0400)
         {
           FIELD_CMC (header_vert_ins_color);
         }
 
-      if (GET_FIELD(border_color_overrides_flag) & 0x0800)
+      if (FIELD_VALUE(border_color_overrides_flag) & 0x0800)
         {
           FIELD_CMC (header_vert_right_color);
         }
 
-      if (GET_FIELD(border_color_overrides_flag) & 0x1000)
+      if (FIELD_VALUE(border_color_overrides_flag) & 0x1000)
         {
           FIELD_CMC (data_horiz_top_color);
         }
 
-      if (GET_FIELD(border_color_overrides_flag) & 0x2000)
+      if (FIELD_VALUE(border_color_overrides_flag) & 0x2000)
         {
           FIELD_CMC (data_horiz_ins_color);
         }
 
-      if (GET_FIELD(border_color_overrides_flag) & 0x4000)
+      if (FIELD_VALUE(border_color_overrides_flag) & 0x4000)
         {
           FIELD_CMC (data_horiz_bottom_color);
         }
 
-      if (GET_FIELD(border_color_overrides_flag) & 0x8000)
+      if (FIELD_VALUE(border_color_overrides_flag) & 0x8000)
         {
           FIELD_CMC (data_vert_left_color);
         }
 
-      if (GET_FIELD(border_color_overrides_flag) & 0x10000)
+      if (FIELD_VALUE(border_color_overrides_flag) & 0x10000)
         {
           FIELD_CMC (data_vert_ins_color);
         }
 
-      if (GET_FIELD(border_color_overrides_flag) & 0x20000)
+      if (FIELD_VALUE(border_color_overrides_flag) & 0x20000)
         {
           FIELD_CMC (data_vert_right_color);
         }
     }
 
   FIELD_B (border_lineweight_overrides_present);
-  if (GET_FIELD(border_lineweight_overrides_present)==1)
+  if (FIELD_VALUE(border_lineweight_overrides_present)==1)
     {
       FIELD_BL (border_lineweight_overrides_flag);
-      if (GET_FIELD(border_lineweight_overrides_flag) & 0x0001)
+      if (FIELD_VALUE(border_lineweight_overrides_flag) & 0x0001)
         {
           FIELD_BS (title_horiz_top_lineweigh);
         }
 
-      if (GET_FIELD(border_lineweight_overrides_flag) & 0x0002)
+      if (FIELD_VALUE(border_lineweight_overrides_flag) & 0x0002)
         {
           FIELD_BS (title_horiz_ins_lineweigh);
         }
 
-      if (GET_FIELD(border_lineweight_overrides_flag) & 0x0004)
+      if (FIELD_VALUE(border_lineweight_overrides_flag) & 0x0004)
         {
           FIELD_BS (title_horiz_bottom_lineweigh);
         }
 
-      if (GET_FIELD(border_lineweight_overrides_flag) & 0x0008)
+      if (FIELD_VALUE(border_lineweight_overrides_flag) & 0x0008)
         {
           FIELD_BS (title_vert_left_lineweigh);
         }
 
-      if (GET_FIELD(border_lineweight_overrides_flag) & 0x0010)
+      if (FIELD_VALUE(border_lineweight_overrides_flag) & 0x0010)
         {
           FIELD_BS (title_vert_ins_lineweigh);
         }
 
-      if (GET_FIELD(border_lineweight_overrides_flag) & 0x0020)
+      if (FIELD_VALUE(border_lineweight_overrides_flag) & 0x0020)
         {
           FIELD_BS (title_vert_right_lineweigh);
         }
 
-      if (GET_FIELD(border_lineweight_overrides_flag) & 0x0040)
+      if (FIELD_VALUE(border_lineweight_overrides_flag) & 0x0040)
         {
           FIELD_BS (header_horiz_top_lineweigh);
         }
 
-      if (GET_FIELD(border_lineweight_overrides_flag) & 0x0080)
+      if (FIELD_VALUE(border_lineweight_overrides_flag) & 0x0080)
         {
           FIELD_BS (header_horiz_ins_lineweigh);
         }
 
-      if (GET_FIELD(border_lineweight_overrides_flag) & 0x0100)
+      if (FIELD_VALUE(border_lineweight_overrides_flag) & 0x0100)
         {
           FIELD_BS (header_horiz_bottom_lineweigh);
         }
 
-      if (GET_FIELD(border_lineweight_overrides_flag) & 0x0200)
+      if (FIELD_VALUE(border_lineweight_overrides_flag) & 0x0200)
         {
           FIELD_BS (header_vert_left_lineweigh);
         }
 
-      if (GET_FIELD(border_lineweight_overrides_flag) & 0x0400)
+      if (FIELD_VALUE(border_lineweight_overrides_flag) & 0x0400)
         {
           FIELD_BS (header_vert_ins_lineweigh);
         }
 
-      if (GET_FIELD(border_lineweight_overrides_flag) & 0x0800)
+      if (FIELD_VALUE(border_lineweight_overrides_flag) & 0x0800)
         {
           FIELD_BS (header_vert_right_lineweigh);
         }
 
-      if (GET_FIELD(border_lineweight_overrides_flag) & 0x1000)
+      if (FIELD_VALUE(border_lineweight_overrides_flag) & 0x1000)
         {
           FIELD_BS (data_horiz_top_lineweigh);
         }
 
-      if (GET_FIELD(border_lineweight_overrides_flag) & 0x2000)
+      if (FIELD_VALUE(border_lineweight_overrides_flag) & 0x2000)
         {
           FIELD_BS (data_horiz_ins_lineweigh);
         }
 
-      if (GET_FIELD(border_lineweight_overrides_flag) & 0x4000)
+      if (FIELD_VALUE(border_lineweight_overrides_flag) & 0x4000)
         {
           FIELD_BS (data_horiz_bottom_lineweigh);
         }
 
-      if (GET_FIELD(border_lineweight_overrides_flag) & 0x8000)
+      if (FIELD_VALUE(border_lineweight_overrides_flag) & 0x8000)
         {
           FIELD_BS (data_vert_left_lineweigh);
         }
 
-      if (GET_FIELD(border_lineweight_overrides_flag) & 0x10000)
+      if (FIELD_VALUE(border_lineweight_overrides_flag) & 0x10000)
         {
           FIELD_BS (data_vert_ins_lineweigh);
         }
 
-      if (GET_FIELD(border_lineweight_overrides_flag) & 0x20000)
+      if (FIELD_VALUE(border_lineweight_overrides_flag) & 0x20000)
         {
           FIELD_BS (data_vert_right_lineweigh);
         }
     }
 
   FIELD_B (border_visibility_overrides_present);
-  if (GET_FIELD(border_visibility_overrides_present)==1)
+  if (FIELD_VALUE(border_visibility_overrides_present)==1)
     {
       FIELD_BL (border_visibility_overrides_flag);
-      if (GET_FIELD(border_visibility_overrides_flag) & 0x0001)
+      if (FIELD_VALUE(border_visibility_overrides_flag) & 0x0001)
         {
           FIELD_BS (title_horiz_top_visibility);
         }
 
-      if (GET_FIELD(border_visibility_overrides_flag) & 0x0002)
+      if (FIELD_VALUE(border_visibility_overrides_flag) & 0x0002)
         {
           FIELD_BS (title_horiz_ins_visibility);
         }
 
-      if (GET_FIELD(border_visibility_overrides_flag) & 0x0004)
+      if (FIELD_VALUE(border_visibility_overrides_flag) & 0x0004)
         {
           FIELD_BS (title_horiz_bottom_visibility);
         }
 
-      if (GET_FIELD(border_visibility_overrides_flag) & 0x0008)
+      if (FIELD_VALUE(border_visibility_overrides_flag) & 0x0008)
         {
           FIELD_BS (title_vert_left_visibility);
         }
 
-      if (GET_FIELD(border_visibility_overrides_flag) & 0x0010)
+      if (FIELD_VALUE(border_visibility_overrides_flag) & 0x0010)
         {
           FIELD_BS (title_vert_ins_visibility);
         }
 
-      if (GET_FIELD(border_visibility_overrides_flag) & 0x0020)
+      if (FIELD_VALUE(border_visibility_overrides_flag) & 0x0020)
         {
           FIELD_BS (title_vert_right_visibility);
         }
 
-      if (GET_FIELD(border_visibility_overrides_flag) & 0x0040)
+      if (FIELD_VALUE(border_visibility_overrides_flag) & 0x0040)
         {
           FIELD_BS (header_horiz_top_visibility);
         }
 
-      if (GET_FIELD(border_visibility_overrides_flag) & 0x0080)
+      if (FIELD_VALUE(border_visibility_overrides_flag) & 0x0080)
         {
           FIELD_BS (header_horiz_ins_visibility);
         }
 
-      if (GET_FIELD(border_visibility_overrides_flag) & 0x0100)
+      if (FIELD_VALUE(border_visibility_overrides_flag) & 0x0100)
         {
           FIELD_BS (header_horiz_bottom_visibility);
         }
 
-      if (GET_FIELD(border_visibility_overrides_flag) & 0x0200)
+      if (FIELD_VALUE(border_visibility_overrides_flag) & 0x0200)
         {
           FIELD_BS (header_vert_left_visibility);
         }
 
-      if (GET_FIELD(border_visibility_overrides_flag) & 0x0400)
+      if (FIELD_VALUE(border_visibility_overrides_flag) & 0x0400)
         {
           FIELD_BS (header_vert_ins_visibility);
         }
 
-      if (GET_FIELD(border_visibility_overrides_flag) & 0x0800)
+      if (FIELD_VALUE(border_visibility_overrides_flag) & 0x0800)
         {
           FIELD_BS (header_vert_right_visibility);
         }
 
-      if (GET_FIELD(border_visibility_overrides_flag) & 0x1000)
+      if (FIELD_VALUE(border_visibility_overrides_flag) & 0x1000)
         {
           FIELD_BS (data_horiz_top_visibility);
         }
 
-      if (GET_FIELD(border_visibility_overrides_flag) & 0x2000)
+      if (FIELD_VALUE(border_visibility_overrides_flag) & 0x2000)
         {
           FIELD_BS (data_horiz_ins_visibility);
         }
 
-      if (GET_FIELD(border_visibility_overrides_flag) & 0x4000)
+      if (FIELD_VALUE(border_visibility_overrides_flag) & 0x4000)
         {
           FIELD_BS (data_horiz_bottom_visibility);
         }
 
-      if (GET_FIELD(border_visibility_overrides_flag) & 0x8000)
+      if (FIELD_VALUE(border_visibility_overrides_flag) & 0x8000)
         {
           FIELD_BS (data_vert_left_visibility);
         }
 
-      if (GET_FIELD(border_visibility_overrides_flag) & 0x10000)
+      if (FIELD_VALUE(border_visibility_overrides_flag) & 0x10000)
         {
           FIELD_BS (data_vert_ins_visibility);
         }
 
-      if (GET_FIELD(border_visibility_overrides_flag) & 0x20000)
+      if (FIELD_VALUE(border_visibility_overrides_flag) & 0x20000)
         {
           FIELD_BS (data_vert_right_visibility);
         }
@@ -3311,7 +3311,7 @@ DWG_ENTITY(TABLE);
 
   VERSIONS(R_13, R_2000)
     {
-      if (GET_FIELD(has_attribs))
+      if (FIELD_VALUE(has_attribs))
         {
           FIELD_HANDLE (first_attrib, 4);
           FIELD_HANDLE (last_attrib, 4);
@@ -3323,25 +3323,25 @@ DWG_ENTITY(TABLE);
       HANDLE_VECTOR(attribs, owned_object_count, 4)
     }
 
-  if (GET_FIELD(has_attribs))
+  if (FIELD_VALUE(has_attribs))
     {
       FIELD_HANDLE(seqend, 3);
     }
 
   FIELD_HANDLE(table_style_id, ANYCODE);
 
-  REPEAT_N(GET_FIELD(num_rows)*GET_FIELD(num_cols), cells, Dwg_Entity_TABLE_Cell)
+  REPEAT_N(FIELD_VALUE(num_rows)*FIELD_VALUE(num_cols), cells, Dwg_Entity_TABLE_Cell)
     {
       FIELD_HANDLE(cells[rcount].cell_handle, ANYCODE);
 
-      if (GET_FIELD(cells[rcount].type) == 2 &&
-          GET_FIELD(cells[rcount].additional_data_flag) == 1)
+      if (FIELD_VALUE(cells[rcount].type) == 2 &&
+          FIELD_VALUE(cells[rcount].additional_data_flag) == 1)
         {
           HANDLE_VECTOR(cells[rcount].attr_def_id, cells[rcount].attr_def_count, ANYCODE);
         }
 
-      if (GET_FIELD(cells[rcount].additional_data_flag2) == 1 &&
-          GET_FIELD(cells[rcount].cell_flag_override) & 0x08)
+      if (FIELD_VALUE(cells[rcount].additional_data_flag2) == 1 &&
+          FIELD_VALUE(cells[rcount].cell_flag_override) & 0x08)
         {
           FIELD_HANDLE(cells[rcount].text_style_override, ANYCODE);
         }
@@ -3362,7 +3362,7 @@ DWG_OBJECT(XRECORD);
   FIELD_BS(cloning_flags);
   FIELD_RS(indicator);
   //since it also counts the first RS indicator
-  //GET_FIELD(numdatabytes)--;
+  //FIELD_VALUE(numdatabytes)--;
   FIELD_VECTOR(data, RC, numdatabytes);
   FIELD_HANDLE(parent, 3);
   REACTORS(4);

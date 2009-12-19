@@ -43,7 +43,7 @@
         fprintf(stderr, #name ": " FORMAT_##type "\n", _obj->name);\
     }
 
-#define GET_FIELD(name) _obj->name
+#define FIELD_VALUE(name) _obj->name
 
 #define FIELD_B(name) FIELD(name, B);
 #define FIELD_BB(name) FIELD(name, BB);
@@ -60,7 +60,7 @@
 #define FIELD_T FIELD_TV /*TODO: implement version dependant string fields */
 #define FIELD_BT(name) FIELD(name, BT); 
 
-#define FIELD_DD(name, _default) bit_write_DD(dat, GET_FIELD(name), _default);
+#define FIELD_DD(name, _default) bit_write_DD(dat, FIELD_VALUE(name), _default);
 #define FIELD_2DD(name, d1, d2) FIELD_DD(name.x, d1); FIELD_DD(name.y, d2);  
 
 #define FIELD_2RD(name) FIELD(name.x, RD); FIELD(name.y, RD);
@@ -76,7 +76,7 @@
   }
 
 #define FIELD_BE(name)\
-bit_write_BE(dat, GET_FIELD(name.x), GET_FIELD(name.y), GET_FIELD(name.z));
+bit_write_BE(dat, FIELD_VALUE(name.x), FIELD_VALUE(name.y), FIELD_VALUE(name.z));
 
 #define FIELD_2RD_VECTOR(name, size)\
   for (vcount=0; vcount< _obj->size; vcount++)\
@@ -133,7 +133,7 @@ bit_write_BE(dat, GET_FIELD(name.x), GET_FIELD(name.y), GET_FIELD(name.z));
       FIELD_HANDLE(name[vcount], code);\
     }
 
-#define HANDLE_VECTOR(name, sizefield, code) HANDLE_VECTOR_N(name, GET_FIELD(sizefield), code)
+#define HANDLE_VECTOR(name, sizefield, code) HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code)
 
 #define COMMON_ENTITY_HANDLE_DATA
 

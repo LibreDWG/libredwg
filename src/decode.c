@@ -43,7 +43,7 @@
         fprintf(stderr, #name ": " FORMAT_##type "\n", _obj->name);\
     }
 
-#define GET_FIELD(name) _obj->name
+#define FIELD_VALUE(name) _obj->name
 
 #define ANYCODE -1
 #define FIELD_HANDLE(name, handle_code)\
@@ -81,7 +81,7 @@
 #define FIELD_4BITS(name) _obj->name = bit_read_4BITS(dat);
 
 #define FIELD_BE(name) bit_read_BE(dat, &_obj->name.x, &_obj->name.y, &_obj->name.z);
-#define FIELD_DD(name, _default) GET_FIELD(name) = bit_read_DD(dat, _default);
+#define FIELD_DD(name, _default) FIELD_VALUE(name) = bit_read_DD(dat, _default);
 #define FIELD_2DD(name, d1, d2) FIELD_DD(name.x, d1); FIELD_DD(name.y, d2);  
 #define FIELD_2RD(name) FIELD(name.x, RD); FIELD(name.y, RD);
 #define FIELD_2BD(name) FIELD(name.x, BD); FIELD(name.y, BD);
@@ -129,16 +129,16 @@
     }
 
 #define HANDLE_VECTOR_N(name, size, code)\
-  GET_FIELD(name) = (BITCODE_H*) malloc(sizeof(BITCODE_H) * size);\
+  FIELD_VALUE(name) = (BITCODE_H*) malloc(sizeof(BITCODE_H) * size);\
   for (vcount=0; vcount<size; vcount++)\
     {\
       FIELD_HANDLE(name[vcount], code);\
     }
 
-#define HANDLE_VECTOR(name, sizefield, code) HANDLE_VECTOR_N(name, GET_FIELD(sizefield), code)
+#define HANDLE_VECTOR(name, sizefield, code) HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code)
 
 #define REACTORS(code)\
-  GET_FIELD(reactors) = malloc(sizeof(BITCODE_H) * obj->tio.object->num_reactors);\
+  FIELD_VALUE(reactors) = malloc(sizeof(BITCODE_H) * obj->tio.object->num_reactors);\
   for (vcount=0; vcount<obj->tio.object->num_reactors; vcount++)\
     {\
       FIELD_HANDLE(reactors[vcount], code);\
@@ -2056,7 +2056,7 @@ dwg_decode_header_variables(Bit_Chain* dat, Dwg_Data * dwg)
       FIELD_BL (FLAGS);
       FIELD_BS (INSUNITS);
       FIELD_BS (CEPSNTYPE);
-      if (GET_FIELD(CEPSNTYPE) == 3)
+      if (FIELD_VALUE(CEPSNTYPE) == 3)
         {
           FIELD_HANDLE (CPSNID, ANYCODE);
         }
