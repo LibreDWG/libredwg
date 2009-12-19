@@ -2247,10 +2247,15 @@ typedef struct _dwg_object_SPATIAL_FILTER
 /**
  Struct for SPATIAL_INDEX (varies)
  */
-typedef struct _dwg_entity_SPATIAL_INDEX
+typedef struct _dwg_object_SPATIAL_INDEX
 {
-//TODO 
-} Dwg_Entity_SPATIAL_INDEX;
+  BITCODE_BL timestamp1;
+  BITCODE_BL timestamp2;
+  BITCODE_RC* unknown;
+  BITCODE_H parenthandle;
+  BITCODE_H* reactors;
+  BITCODE_H xdicobjhandle;
+} Dwg_Object_SPATIAL_INDEX;
 
 /**
  Structs for TABLE (varies)
@@ -2421,15 +2426,6 @@ typedef struct _dwg_entity_TABLE
   BITCODE_H header_row_style_override;
   BITCODE_H data_row_style_override;
 } Dwg_Entity_TABLE;
-
-//NOT SURE ABOUT THIS ONE (IS IT OBJECT OR ENTITY?):
-/**
- Struct for SPATIAL_INDEX (varies)
- */
-typedef struct _dwg_object_SPATIAL_INDEX
-{
-//TODO 
-} Dwg_Object_SPATIAL_INDEX;
 
 //NOT SURE ABOUT THIS ONE (IS IT OBJECT OR ENTITY?):
 /**

@@ -2701,8 +2701,14 @@ DWG_OBJECT_END
 //pg.153
 DWG_OBJECT(SPATIAL_INDEX);
 
-  //TODO: Implement-me!
-
+  FIELD(timestamp1, BL);
+  FIELD(timestamp2, BL);
+  //TODO: parse this: "unknown X rest of bits to handles"
+/*
+  FIELD_HANDLE (parenthandle, 4);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+*/
 DWG_OBJECT_END
 
 //pg.158
