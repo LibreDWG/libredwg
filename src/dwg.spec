@@ -1521,20 +1521,20 @@ DWG_ENTITY(MLINE);
       FIELD_3DPOINT(verts[i].vertex);
       FIELD_3DPOINT(verts[i].vertex_direction);
       FIELD_3DPOINT(verts[i].miter_direction);
-      GET_FIELD(verts[i].lines) = malloc(GET_FIELD(num_lines) * sizeof(Dwg_Entity_MLINE_line));
-      for (j = 0; j < GET_FIELD(num_lines); j++)
+
+      REPEAT2(num_lines, verts[i].lines, Dwg_Entity_MLINE_line)
         {
 
-          FIELD(verts[i].lines[j].num_segparms, BS);
-          REPEAT3(verts[i].lines[j].num_segparms, verts[i].lines[j].segparms, BITCODE_BD)
+          FIELD(verts[i].lines[rcount2].num_segparms, BS);
+          REPEAT3(verts[i].lines[rcount2].num_segparms, verts[i].lines[rcount2].segparms, BITCODE_BD)
             {
-              FIELD(verts[i].lines[j].segparms[rcount3], BD);
+              FIELD(verts[i].lines[rcount2].segparms[rcount3], BD);
             }
 
-          FIELD(verts[i].lines[j].num_areafillparms, BS);
-          REPEAT3(verts[i].lines[j].num_areafillparms, verts[i].lines[j].areafillparms, BITCODE_BD)
+          FIELD(verts[i].lines[rcount2].num_areafillparms, BS);
+          REPEAT3(verts[i].lines[rcount2].num_areafillparms, verts[i].lines[rcount2].areafillparms, BITCODE_BD)
             {
-              FIELD(verts[i].lines[j].areafillparms[rcount3], BD);
+              FIELD(verts[i].lines[rcount2].areafillparms[rcount3], BD);
             }
 
         }
