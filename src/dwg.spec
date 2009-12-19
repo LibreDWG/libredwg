@@ -1514,29 +1514,25 @@ DWG_ENTITY(MLINE);
   FIELD(num_lines, RC);
   FIELD(num_verts, BS);
 
-  int i, j, k;
-  GET_FIELD(verts) = malloc(GET_FIELD(num_verts) * sizeof(Dwg_Entity_MLINE_vert));
-  for (i = 0; i < GET_FIELD(num_verts); i++)
+  REPEAT(num_verts, verts, Dwg_Entity_MLINE_vert)
     {
-      FIELD_3DPOINT(verts[i].vertex);
-      FIELD_3DPOINT(verts[i].vertex_direction);
-      FIELD_3DPOINT(verts[i].miter_direction);
+      FIELD_3DPOINT(verts[rcount].vertex);
+      FIELD_3DPOINT(verts[rcount].vertex_direction);
+      FIELD_3DPOINT(verts[rcount].miter_direction);
 
-      REPEAT2(num_lines, verts[i].lines, Dwg_Entity_MLINE_line)
+      REPEAT2(num_lines, verts[rcount].lines, Dwg_Entity_MLINE_line)
         {
-
-          FIELD(verts[i].lines[rcount2].num_segparms, BS);
-          REPEAT3(verts[i].lines[rcount2].num_segparms, verts[i].lines[rcount2].segparms, BITCODE_BD)
+          FIELD(verts[rcount].lines[rcount2].num_segparms, BS);
+          REPEAT3(verts[rcount].lines[rcount2].num_segparms, verts[rcount].lines[rcount2].segparms, BITCODE_BD)
             {
-              FIELD(verts[i].lines[rcount2].segparms[rcount3], BD);
+              FIELD(verts[rcount].lines[rcount2].segparms[rcount3], BD);
             }
 
-          FIELD(verts[i].lines[rcount2].num_areafillparms, BS);
-          REPEAT3(verts[i].lines[rcount2].num_areafillparms, verts[i].lines[rcount2].areafillparms, BITCODE_BD)
+          FIELD(verts[rcount].lines[rcount2].num_areafillparms, BS);
+          REPEAT3(verts[rcount].lines[rcount2].num_areafillparms, verts[rcount].lines[rcount2].areafillparms, BITCODE_BD)
             {
-              FIELD(verts[i].lines[rcount2].areafillparms[rcount3], BD);
+              FIELD(verts[rcount].lines[rcount2].areafillparms[rcount3], BD);
             }
-
         }
     }
 
