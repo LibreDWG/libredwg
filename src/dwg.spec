@@ -1524,20 +1524,19 @@ DWG_ENTITY(MLINE);
       GET_FIELD(verts[i].lines) = malloc(GET_FIELD(num_lines) * sizeof(Dwg_Entity_MLINE_line));
       for (j = 0; j < GET_FIELD(num_lines); j++)
         {
+
           FIELD(verts[i].lines[j].num_segparms, BS);
-          GET_FIELD(verts[i].lines[j].segparms) = malloc(
-              GET_FIELD(verts[i].lines[j].num_segparms) * sizeof(double));
-          for (k = 0; k < GET_FIELD(verts[i].lines[j].num_segparms); k++)
+          REPEAT3(verts[i].lines[j].num_segparms, verts[i].lines[j].segparms, BITCODE_BD)
             {
-              FIELD(verts[i].lines[j].segparms[k], BD);
+              FIELD(verts[i].lines[j].segparms[rcount3], BD);
             }
+
           FIELD(verts[i].lines[j].num_areafillparms, BS);
-          GET_FIELD(verts[i].lines[j].areafillparms) = malloc(
-              GET_FIELD(verts[i].lines[j].num_areafillparms) * sizeof(double));
-          for (k = 0; k < GET_FIELD(verts[i].lines[j].num_areafillparms); k++)
+          REPEAT3(verts[i].lines[j].num_areafillparms, verts[i].lines[j].areafillparms, BITCODE_BD)
             {
-              FIELD(verts[i].lines[j].areafillparms[k], BD);
+              FIELD(verts[i].lines[j].areafillparms[rcount3], BD);
             }
+
         }
     }
 
