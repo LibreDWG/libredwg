@@ -2399,7 +2399,6 @@ DWG_OBJECT_END
 
 //pg.140
 DWG_ENTITY(IMAGE);
-  int i;
 
   FIELD(class_version, BL);
   FIELD_3DPOINT(pt0);
@@ -2424,11 +2423,9 @@ DWG_ENTITY(IMAGE);
       else
         {
           FIELD(num_clip_verts, BL);
-          GET_FIELD(clip_verts) = (Dwg_Entity_IMAGE_clip_vert*) malloc(
-              GET_FIELD(num_clip_verts) * sizeof(Dwg_Entity_IMAGE_clip_vert));
-          for (i = 0; i < GET_FIELD(num_clip_verts); i++)
+          REPEAT(num_clip_verts, clip_verts, Dwg_Entity_IMAGE_clip_vert) 
             {
-              FIELD_2RD(clip_verts[i]);
+              FIELD_2RD(clip_verts[rcount]);
             }
         }
     }
