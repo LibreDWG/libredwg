@@ -514,10 +514,15 @@ DWG_ENTITY(VERTEX_2D);
 
   FIELD(flags, RC);
   FIELD_3BD(point);
-  FIELD(start_width, BD);
+
+/* Decoder and Encoder routines could be the same but then we wouldn't compress
+data when saving. So we explicitely implemented the encoder routine with the
+compression technique described in the spec. --Juca */
 
   DECODER
     {
+      FIELD(start_width, BD);
+ 
       if (FIELD_VALUE(start_width) < 0)
         {
           FIELD_VALUE(start_width) = -FIELD_VALUE(start_width);
@@ -531,7 +536,18 @@ DWG_ENTITY(VERTEX_2D);
 
   ENCODER
     {
-      TODO_ENCODER
+      if (FIELD_VALUE(start_width) && FIELD_VALUE(start_width)==FIELD_VALUE(end_width))
+        {
+          //TODO: This is ugly! We should have a better way of doing such things
+          FIELD_VALUE(start_width) = -FIELD_VALUE(start_width);
+          FIELD(start_width, BD);
+          FIELD_VALUE(start_width) = -FIELD_VALUE(start_width);
+        }
+      else
+        {
+          FIELD(start_width, BD);
+          FIELD(end_width, BD);
+        }
     }
 
   FIELD(bulge, BD);
