@@ -2412,27 +2412,19 @@ DWG_ENTITY(IMAGE);
   FIELD(contrast, RC);
   FIELD(fade, RC);
 
-  DECODER
+  FIELD(clip_boundary_type, BS);
+  if (GET_FIELD(clip_boundary_type) == 1)
     {
-      FIELD(clip_boundary_type, BS);
-      if (GET_FIELD(clip_boundary_type) == 1)
-        {
-          FIELD_2RD(boundary_pt0);
-          FIELD_2RD(boundary_pt1);
-        }
-      else
-        {
-          FIELD(num_clip_verts, BL);
-          REPEAT(num_clip_verts, clip_verts, Dwg_Entity_IMAGE_clip_vert) 
-            {
-              FIELD_2RD(clip_verts[rcount]);
-            }
-        }
+      FIELD_2RD(boundary_pt0);
+      FIELD_2RD(boundary_pt1);
     }
-
-  ENCODER
+  else
     {
-      //TODO: implement me
+      FIELD(num_clip_verts, BL);
+      REPEAT(num_clip_verts, clip_verts, Dwg_Entity_IMAGE_clip_vert) 
+        {
+          FIELD_2RD(clip_verts[rcount]);
+        }
     }
 
   COMMON_ENTITY_HANDLE_DATA;
