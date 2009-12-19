@@ -1743,18 +1743,16 @@ DWG_OBJECT(LTYPE);
   FIELD(alignment, RC);
   FIELD(num_dashes, RC);
 
-  int i;
-  GET_FIELD(dash) = (LTYPE_dash*) malloc(GET_FIELD(num_dashes) * sizeof(LTYPE_dash));
-  for (i=0; i<GET_FIELD(num_dashes);i++)
+  REPEAT(num_dashes, dash, LTYPE_dash)
     {
-      FIELD(dash[i].length, BD);
-      FIELD(dash[i].complex_shapecode, BS);
-      FIELD(dash[i].x_offset, RD);
-      FIELD(dash[i].y_offset, RD);
-      FIELD(dash[i].scale, BD);
-      FIELD(dash[i].rotation, BD);
-      FIELD(dash[i].shape_flag, BS);
-      if (GET_FIELD(dash[i].shape_flag) & 0x02)
+      FIELD(dash[rcount].length, BD);
+      FIELD(dash[rcount].complex_shapecode, BS);
+      FIELD(dash[rcount].x_offset, RD);
+      FIELD(dash[rcount].y_offset, RD);
+      FIELD(dash[rcount].scale, BD);
+      FIELD(dash[rcount].rotation, BD);
+      FIELD(dash[rcount].shape_flag, BS);
+      if (GET_FIELD(dash[rcount].shape_flag) & 0x02)
         R2007plus_text_area_is_present = 1;
     }
 
