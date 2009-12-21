@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.61)
 
 dnl !!!!! Ne forgesu gxisdatigi la version de la biblioteko (?:?:?) en la dosiero ./src/Makefile.am
-AC_INIT(libredwg, 0.4-dev, polignu@gmail.com)
+AC_INIT(libredwg, 0.4-dev, libredwg@gnu.org)
 AC_CONFIG_AUX_DIR(build)
 AM_INIT_AUTOMAKE(libredwg, 0.4-dev)
 

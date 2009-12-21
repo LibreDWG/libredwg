@@ -90,6 +90,6 @@ Dwg_Data_Type
 dwg_var_map(Dwg_Version_Type version, int index);
 
 unsigned char *
-dwg_sentinel(Dwg_Sentinel kiu_sentinel);
+dwg_sentinel(Dwg_Sentinel sentinel);
 
 #endif

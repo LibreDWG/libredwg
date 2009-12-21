@@ -2708,8 +2708,13 @@ typedef struct _dwg_struct
   long unsigned int num_objects;
   Dwg_Object *object;
 
+  long unsigned int num_layers;
+  //Dwg_Object *layer;
+
   long unsigned int num_object_refs;
   Dwg_Object_Ref ** object_ref;
+
+  Dwg_Object * layer_control;
 
   struct
   {
@@ -2758,6 +2763,9 @@ double
 dwg_model_page_y_min(Dwg_Data *);
 double
 dwg_model_page_y_max(Dwg_Data *);
+
+unsigned int
+dwg_get_layer_count(Dwg_Data *);
 
 Dwg_Object*
 dwg_next_object(Dwg_Object* obj);

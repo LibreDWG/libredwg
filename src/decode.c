@@ -192,7 +192,7 @@ dwg_decode_##token(Bit_Chain * dat, Dwg_Object * obj)\
   _obj=ent;\
   obj->tio.entity->object = obj;\
 	if (dwg_decode_entity (dat, obj->tio.entity)) return;\
-  fprintf (stderr, "Entity handle: %d.%d.%lu\n",\
+  if (loglevel) fprintf (stderr, "Entity handle: %d.%d.%lu\n",\
     obj->handle.code,\
     obj->handle.size,\
     obj->handle.value);
@@ -214,7 +214,7 @@ dwg_decode_##token(Bit_Chain * dat, Dwg_Object * obj)\
   obj->tio.object->object = obj;\
 	if (dwg_decode_object (dat, obj->tio.object)) return;\
 	_obj = obj->tio.object->tio.token;\
-  fprintf (stderr, "Object handle: %d.%d.%lu\n",\
+  if (loglevel) fprintf (stderr, "Object handle: %d.%d.%lu\n",\
     obj->handle.code,\
     obj->handle.size,\
     obj->handle.value);
@@ -239,7 +239,7 @@ dwg_decode_header_variables(Bit_Chain* dat, Dwg_Data * dwg);
  */
 long unsigned int ktl_lastaddress;
 
-static int loglevel = 2;
+static int loglevel = 0;
 
 /*--------------------------------------------------------------------------------
  * Public function definitions
@@ -249,6 +249,9 @@ dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
 {
   char version[7];
   dwg->num_object_refs = 0;
+  dwg->num_layers = 0;
+  dwg->num_objects = 0;
+  dwg->num_classes = 0;
 
   /* Version */
   dat->byte = 0;
@@ -1582,7 +1585,7 @@ dwg_decode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg,
   ref = dwg_decode_handleref(dat, obj, dwg);
   if (ref->absolute_ref == 0 && ref->handleref.code != code)
     {
-      fprintf(stderr, "ERROR: expected a CODE %d handle\nERROR: ", code);
+      if (loglevel) fprintf(stderr, "ERROR: expected a CODE %d handle\nERROR: ", code);
       //TODO: At the moment we are tolerating wrong codes in handles.
       // in the future we might want to get strict and return 0 here so that code will crash
       // whenever it reaches the first handle parsing error. This might make debugging easier.
@@ -2331,8 +2334,9 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
     dwg->object = (Dwg_Object *) realloc(dwg->object, (dwg->num_objects + 1)
         * sizeof(Dwg_Object));
 
-  fprintf(stderr, "\n\n======================\nObject number: %lu",
-      dwg->num_objects);
+  if (loglevel)
+      fprintf(stderr, "\n\n======================\nObject number: %lu",
+          dwg->num_objects);
 
   obj = &dwg->object[dwg->num_objects];
   obj->index = dwg->num_objects;
@@ -2347,7 +2351,9 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
   object_address = dat->byte;
   ktl_lastaddress = dat->byte + obj->size; /* (calculate the bitsize) */
   obj->type = bit_read_BS(dat);
-  fprintf(stderr, " Type: %d\n", obj->type);
+
+  if (loglevel)
+    fprintf(stderr, " Type: %d\n", obj->type);
 
   /* Check the type of the object
    */
@@ -2495,6 +2501,8 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
     dwg_decode_BLOCK_HEADER(dat, obj);
     break;
   case DWG_TYPE_LAYER_CONTROL:
+    //set LAYER_CONTROL object - helps keep track of layers
+    obj->parent->layer_control = obj;
     dwg_decode_LAYER_CONTROL(dat, obj);
     break;
   case DWG_TYPE_LAYER:

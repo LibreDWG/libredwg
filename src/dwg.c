@@ -263,6 +263,12 @@ dwg_page_y_max(Dwg_Data *dwg)
   return dwg->header_vars.EXTMAX_PSPACE.y;
 }
 
+unsigned int
+dwg_get_layer_count(Dwg_Data *dwg)
+{
+  return dwg->layer_control->tio.object->tio.LAYER_CONTROL->num_entries;
+}
+
 void
 dwg_free(Dwg_Data * dwg)
 {
