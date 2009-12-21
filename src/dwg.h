@@ -2766,8 +2766,9 @@ dwg_model_page_y_max(Dwg_Data *);
 
 unsigned int
 dwg_get_layer_count(Dwg_Data *);
+
 Dwg_Object_LAYER**
-dwg_get_layer_list(Dwg_Data *);
+dwg_get_layers(Dwg_Data *);
 
 Dwg_Object*
 dwg_next_object(Dwg_Object* obj);
