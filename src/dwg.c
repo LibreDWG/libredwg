@@ -269,6 +269,20 @@ dwg_get_layer_count(Dwg_Data *dwg)
   return dwg->layer_control->tio.object->tio.LAYER_CONTROL->num_entries;
 }
 
+Dwg_Object_LAYER **
+dwg_get_layer_list(Dwg_Data *dwg)
+{
+  int i;
+  Dwg_Object_LAYER ** layers = (Dwg_Object_LAYER **) malloc(
+		dwg_get_layer_count(dwg) * sizeof (Dwg_Object_LAYER));
+  for (i=0; i<dwg_get_layer_count(dwg); i++)
+    {
+    layers[i] = dwg->layer_control->tio.object->tio.LAYER_CONTROL->layers[i]->
+		obj->tio.object->tio.LAYER;
+    }
+  return layers;
+}
+
 void
 dwg_free(Dwg_Data * dwg)
 {
