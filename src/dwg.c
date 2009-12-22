@@ -277,10 +277,38 @@ dwg_get_layers(Dwg_Data *dwg)
 		dwg_get_layer_count(dwg) * sizeof (Dwg_Object_LAYER*));
   for (i=0; i<dwg_get_layer_count(dwg); i++)
     {
-    layers[i] = dwg->layer_control->tio.object->tio.LAYER_CONTROL->layers[i]->
-		obj->tio.object->tio.LAYER;
+      layers[i] = dwg->layer_control->tio.object->tio.LAYER_CONTROL->
+            layers[i]->obj->tio.object->tio.LAYER;
     }
   return layers;
+}
+
+long unsigned int
+dwg_get_entity_count(Dwg_Data *dwg)
+{
+  return dwg->num_entities;
+}
+
+Dwg_Object_Entity **
+dwg_get_entities(Dwg_Data *dwg)
+{
+  int i;
+  Dwg_Object_Entity ** entities = (Dwg_Object_Entity **) malloc(
+                dwg->num_entities * sizeof (Dwg_Object_Entity*));
+  for (i=0; i<dwg->num_entities; i++)
+    {
+      if (dwg->object[i].tio.entity)
+        {
+          entities[i] = dwg->object[i].tio.entity;
+        }
+    }
+  return entities;
+}
+
+Dwg_Object_LAYER *
+dwg_get_entity_layer(Dwg_Object_Entity * ent)
+{
+  return ent->layer->obj->tio.object->tio.LAYER;
 }
 
 void

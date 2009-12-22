@@ -185,6 +185,7 @@ dwg_decode_##token(Bit_Chain * dat, Dwg_Object * obj)\
   fprintf (stderr, "Entity " #token ":\n");\
 	Dwg_Entity_##token *ent, *_obj;\
 	Dwg_Data* dwg = obj->parent;\
+	dwg->num_entities++;\
 	obj->supertype = DWG_SUPERTYPE_ENTITY;\
 	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));\
 	obj->tio.entity->tio.token = calloc (sizeof (Dwg_Entity_##token), 1);\
@@ -250,6 +251,7 @@ dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
   char version[7];
   dwg->num_object_refs = 0;
   dwg->num_layers = 0;
+  dwg->num_entities = 0;
   dwg->num_objects = 0;
   dwg->num_classes = 0;
 

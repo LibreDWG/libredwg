@@ -2709,6 +2709,7 @@ typedef struct _dwg_struct
   Dwg_Object *object;
 
   long unsigned int num_layers;
+  long unsigned int num_entities;
   //Dwg_Object *layer;
 
   long unsigned int num_object_refs;
@@ -2769,6 +2770,15 @@ dwg_get_layer_count(Dwg_Data *);
 
 Dwg_Object_LAYER**
 dwg_get_layers(Dwg_Data *);
+
+long unsigned int
+dwg_get_entity_count(Dwg_Data *);
+
+Dwg_Object_Entity **
+dwg_get_entities(Dwg_Data *);
+
+Dwg_Object_LAYER *
+dwg_get_entity_layer(Dwg_Object_Entity *);
 
 Dwg_Object*
 dwg_next_object(Dwg_Object* obj);
