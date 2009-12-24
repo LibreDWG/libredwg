@@ -2679,10 +2679,29 @@ typedef struct _dwg_chain
 
 typedef struct _dwg_section
 {
-  unsigned char number;
-  long unsigned int address;
-  long unsigned int size;
+  int number;
+  unsigned int address;
+  unsigned int size;
+	int parent;
+	int left;
+	int right;
+	int x00;
 } Dwg_Section;
+
+typedef struct
+{ 
+  long unsigned int size;
+  long unsigned int unknown1;	   
+  long unsigned int num_sections;  
+  long unsigned int max_decomp_size;  
+  long unsigned int unknown2;	   
+  long unsigned int compressed;
+  long unsigned int type;
+  long unsigned int encrypted;
+  char name[64];
+  Dwg_Section **sections;
+} Dwg_Section_Info;
+
 /**
  Main DWG struct
  */
@@ -2694,6 +2713,8 @@ typedef struct _dwg_struct
     unsigned int codepage;
     unsigned int num_sections;
     Dwg_Section* section;
+    unsigned int num_descriptions;
+    Dwg_Section_Info* section_info;
   } header;
 
 #		define DWG_UNKNOWN1_SIZE 123
@@ -2767,12 +2788,6 @@ dwg_model_page_y_max(Dwg_Data *);
 
 unsigned int
 dwg_get_layer_count(Dwg_Data *);
-
-long unsigned int
-dwg_get_object_count(Dwg_Data *dwg);
-
-long unsigned int
-dwg_get_object_object_count(Dwg_Data *dwg);
 
 Dwg_Object_LAYER**
 dwg_get_layers(Dwg_Data *);

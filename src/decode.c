@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 #include "common.h"
 #include "bits.h"
@@ -240,7 +241,7 @@ dwg_decode_header_variables(Bit_Chain* dat, Dwg_Data * dwg);
  */
 long unsigned int ktl_lastaddress;
 
-static int loglevel = 0;
+static int loglevel = 1;
 
 /*--------------------------------------------------------------------------------
  * Public function definitions
@@ -289,12 +290,12 @@ dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
           "WARNING: This version of LibreDWG is only capable of safely decoding version R2000 (code: AC1015) dwg-files.\n"
             "This file's version code is: %s Support for this version is still experimental.\n"
             "It might crash or give you invalid output.\n", version);
-      return decode_R13_R15_header(dat, dwg);
+      return decode_R13_R15(dat, dwg);
     }
 
   VERSION(R_2000)
     {
-      return decode_R13_R15_header(dat, dwg);
+      return decode_R13_R15(dat, dwg);
     }
 
   VERSION(R_2004)
@@ -304,7 +305,7 @@ dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
           "WARNING: This version of LibreDWG is only capable of properly decoding version R2000 (code: AC1015) dwg-files.\n"
             "This file's version code is: %s\n This version is not yet actively developed.\n"
             "It will probably crash and/or give you invalid output.\n", version);
-      return decode_R2004_header(dat, dwg);
+      return decode_R2004(dat, dwg);
     }
 
   VERSION(R_2007)
@@ -314,7 +315,7 @@ dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
           "WARNING: This version of LibreDWG is only capable of properly decoding version R2000 (code: AC1015) dwg-files.\n"
             "This file's version code is: %s\n This version is not yet actively developed.\n"
             "It will probably crash and/or give you invalid output.\n", version);
-      return decode_R2007_header(dat, dwg);
+      return decode_R2007(dat, dwg);
     }
 
   //This line should not be reached!
@@ -332,7 +333,7 @@ Dwg_Object* dwg_next_object(Dwg_Object* obj){
 }
 
 int
-decode_R13_R15_header(Bit_Chain* dat, Dwg_Data * dwg)
+decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
 {
   unsigned char sig;
   unsigned int section_size = 0;
@@ -397,9 +398,6 @@ decode_R13_R15_header(Bit_Chain* dat, Dwg_Data * dwg)
 
   for (i = 0; i < dwg->header.num_sections; i++)
     {
-      dwg->header.section[i].address = 0;
-      dwg->header.section[i].size = 0;
-
       dwg->header.section[i].number = bit_read_RC(dat);
       dwg->header.section[i].address = bit_read_RL(dat);
       dwg->header.section[i].size = bit_read_RL(dat);
@@ -558,7 +556,10 @@ decode_R13_R15_header(Bit_Chain* dat, Dwg_Data * dwg)
 
       dwg->num_classes++;
       if (dwg->num_classes > 100)
-        break;//TODO: Why?!
+				{
+					fprintf(stderr, "number of classes is greater than 100. TODO: Why should we stop here?\n");
+		      break;//TODO: Why?!
+				}
     }
   while (dat->byte < (lasta - 1));
 
@@ -601,7 +602,7 @@ decode_R13_R15_header(Bit_Chain* dat, Dwg_Data * dwg)
     {
       long unsigned int last_address;
       long unsigned int last_handle;
-      long unsigned int previous_address;
+      long unsigned int previous_address = 0;
 
       duabyte = dat->byte;
       sgdc[0] = bit_read_RC(dat);
@@ -839,32 +840,559 @@ decode_R13_R15_header(Bit_Chain* dat, Dwg_Data * dwg)
   return 0;
 }
 
-//negative value indicates a compression opcode
+/* R2004 Literal Length
+ */
 int
-read_literal_length(Bit_Chain* dat)
+read_literal_length(Bit_Chain* dat, unsigned char *opcode)
 {
   int total = 0;
   unsigned char byte = bit_read_RC(dat);
-  if (byte >= 0x01 && byte <= 0x0E)
+
+  *opcode = 0x00;
+
+  if (byte >= 0x01 && byte <= 0x0F)
     return byte + 3;
-  if (byte == 0)
+  else if (byte == 0)
     {
       total = 0x0F;
-      while ((byte = bit_read_RC(dat)) > 0x00)
+      while ((byte = bit_read_RC(dat)) == 0x00)
         {
           total += 0xFF;
         }
-      return total + 3;
+      return total + byte + 3;
     }
-  if (byte & 0xF0)
+  else if (byte & 0xF0)
+    *opcode = byte;
+
+  return 0;
+}
+
+/* R2004 Long Compression Offset
+ */
+int read_long_compression_offset(Bit_Chain* dat)
+{
+  int total = 0;
+  unsigned char byte = bit_read_RC(dat);
+  if (byte >= 0x01 && byte <= 0xFF)
+    return byte;
+  // else byte = 0x00
+  total = 0xFF;
+  while ((byte = bit_read_RC(dat)) == 0x00)
+      total += 0xFF;
+  return total + byte;
+}
+
+/* R2004 Two Byte Offset
+ */
+int read_two_byte_offset(Bit_Chain* dat, int* lit_length)
+{
+  int offset;
+  unsigned char firstByte = bit_read_RC(dat);
+  offset = (firstByte >> 2) | (bit_read_RC(dat) << 6);
+  *lit_length = (firstByte & 0x03);
+  return offset;
+}
+
+/* Decompresses a system section of a 2004 DWG flie
+ */
+int
+decompress_R2004_section(Bit_Chain* dat, char *decomp, 
+                         unsigned long int CompDataSize)
+{
+  int lit_length, i;
+  int comp_offset, comp_bytes;
+  unsigned char opcode1 = 0, opcode2;
+  long unsigned int start_byte = dat->byte;
+  char *src, *dst = decomp;
+
+  // length of the first sequence of uncompressed or literal data.
+  lit_length = read_literal_length(dat, &opcode1);
+
+  for (i = 0; i < lit_length; ++i)
+    *dst++ = bit_read_RC(dat);
+
+  opcode1 = 0x00;
+  while (dat->byte - start_byte < CompDataSize)
+    { 
+      if (opcode1 == 0x00)
+        opcode1 = bit_read_RC(dat);
+
+      if (opcode1 >= 0x40 && opcode1 <= 0xFF)
+        {
+          comp_bytes = ((opcode1 & 0xF0) >> 4) - 1;
+          opcode2 = bit_read_RC(dat);
+          comp_offset = (opcode2 << 2) | ((opcode1 & 0x0C) >> 2);
+
+          if (opcode1 & 0x03)
+            {
+              lit_length = (opcode1 & 0x03);
+              opcode1  = 0x00;
+            }
+          else
+            lit_length = read_literal_length(dat, &opcode1);
+        }
+      else if (opcode1 >= 0x21 && opcode1 <= 0x3F)
+        {
+          comp_bytes  = opcode1 - 0x1E;
+          comp_offset = read_two_byte_offset(dat, &lit_length);
+
+          if (lit_length != 0)
+            opcode1 = 0x00;
+          else
+            lit_length = read_literal_length(dat, &opcode1);
+        }
+      else if (opcode1 == 0x20)
+        {
+          comp_bytes  = read_long_compression_offset(dat) + 0x21;
+          comp_offset = read_two_byte_offset(dat, &lit_length);
+
+          if (lit_length != 0)
+            opcode1 = 0x00;
+          else
+            lit_length = read_literal_length(dat, &opcode1);
+        }
+      else if (opcode1 >= 0x12 && opcode1 <= 0x1F)
+        {
+          assert(0);  // Not seen yet - could not check
+
+          comp_bytes  = (opcode1 & 0x0F) + 2;
+          comp_offset = read_two_byte_offset(dat, &lit_length) - 0x3FFF;
+
+          if (lit_length != 0)
+            opcode1 = 0x00;
+          else
+            lit_length = read_literal_length(dat, &opcode1);
+        }
+      else if (opcode1 == 0x10)
+        {
+          assert(0);  // Not seen yet - could not check
+
+          comp_bytes  = read_long_compression_offset(dat) - 9;
+          comp_offset = read_two_byte_offset(dat, &lit_length) - 0x3FFF;
+
+          if (lit_length != 0)
+            opcode1 = 0x00;
+          else
+            lit_length = read_literal_length(dat, &opcode1);
+        }
+      else if (opcode1 == 0x11)
+        {         
+          break;     // Terminates the input stream, everything is ok!
+        }
+      else
+        {
+          return 1;  // error in input stream 
+        }      
+
+      // copy "compressed data"
+      src = dst - comp_offset - 1;
+      assert(src > decomp);
+      for (i = 0; i < comp_bytes; ++i)
+        *dst++ = *src++;
+ 
+      // copy "literal data" 
+      for (i = 0; i < lit_length; ++i)
+        *dst++ = bit_read_RC(dat);
+    }  
+
+  return 0;  // Success
+}
+
+/* Read R2004 Section Map 
+ * The Section Map is a vector of number, size, and address triples used
+ * to locate the sections in the file. 
+ */
+void
+read_R2004_section_map(Bit_Chain* dat, Dwg_Data * dwg, 
+                       unsigned long int CompDataSize, 
+                       unsigned long int DecompDataSize)
+{
+  char *decomp, *ptr;
+  int i;
+  int section_address;
+
+  dwg->header.num_sections = 0;
+  dwg->header.section = 0;
+
+  // allocate memory to hold decompressed data
+  decomp = malloc(DecompDataSize * sizeof(char));
+  if (decomp == 0)
+    return;   // No memory
+
+  decompress_R2004_section(dat, decomp, CompDataSize);  
+
+  if (loglevel)
+    fprintf(stderr, "\n#### 2004 Section Map fields ####\n\n");
+  
+  section_address = 0x100;  // starting address 
+	i = 0;
+	int bytes_remaining = DecompDataSize;
+	ptr = decomp;
+	dwg->header.num_sections = 0;
+
+	while(bytes_remaining)
+		{
+			if (dwg->header.num_sections==0)
+				dwg->header.section = (Dwg_Section*) malloc(sizeof(Dwg_Section));
+			else
+				dwg->header.section = (Dwg_Section*) realloc(dwg->header.section, sizeof(Dwg_Section) * (dwg->header.num_sections+1));
+
+		  dwg->header.section[i].number  = *((int*)ptr);
+		  dwg->header.section[i].size    = *((int*)ptr+1);
+		  dwg->header.section[i].address = section_address;
+		  section_address += dwg->header.section[i].size;
+			bytes_remaining -= 8;
+			ptr+=8;
+
+		  if (loglevel)
+		    {
+		      fprintf(stderr, "SectionNumber: %d\n",   dwg->header.section[i].number);
+		      fprintf(stderr, "SectionSize:   %x\n",   dwg->header.section[i].size);
+		      fprintf(stderr, "SectionAddr:   %x\n\n", dwg->header.section[i].address);
+		    }
+
+			if (dwg->header.section[i].number<0)
+				{
+			    dwg->header.section[i].parent  = *((int*)ptr);
+			    dwg->header.section[i].left  = *((int*)ptr+1);
+			    dwg->header.section[i].right  = *((int*)ptr+2);
+			    dwg->header.section[i].x00  = *((int*)ptr+3);
+					bytes_remaining -= 16;
+					ptr+=16;
+
+			    if (loglevel)
+			      {
+				      fprintf(stderr, "Parent: %d\n",   (int)dwg->header.section[i].parent);
+				      fprintf(stderr, "Feft: %d\n",   (int)dwg->header.section[i].left);
+				      fprintf(stderr, "Right: %d\n",   (int)dwg->header.section[i].right);
+				      fprintf(stderr, "0x00: %d\n\n",   (int)dwg->header.section[i].x00);
+						}
+				}
+
+			dwg->header.num_sections++;
+			i++;
+		}
+  free(decomp);
+}
+
+Dwg_Section* find_section(Dwg_Data *dwg, unsigned long int index)
+{
+  int i;
+  if (dwg->header.section == 0 || index == 0)
+    return 0;
+  for (i = 0; i < dwg->header.num_sections; ++i)
     {
-      return -byte;
+      if (dwg->header.section[i].number == index)
+        return (&dwg->header.section[i]);
+    }
+  return 0;
+}
+
+/* Read R2004 Section Info
+ */
+void
+read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg, 
+                        unsigned long int CompDataSize, 
+                        unsigned long int DecompDataSize)
+{  
+  char *decomp, *ptr;
+  int i, j;
+  int section_number;
+  int data_size;
+  int start_offset;
+  int unknown;
+  Dwg_Section *section;
+
+  decomp = malloc(DecompDataSize * sizeof(char));
+  if (decomp == 0)
+    return;   // No memory
+
+  decompress_R2004_section(dat, decomp, CompDataSize);
+  
+  memcpy(&dwg->header.num_descriptions, decomp, 4);  
+  dwg->header.section_info = (Dwg_Section_Info*) 
+    malloc(sizeof(Dwg_Section_Info) * dwg->header.num_descriptions);  
+  
+  if (loglevel)
+    {
+      fprintf(stderr, "\n#### 2004 Section Info fields ####\n\n");
+      fprintf(stderr, "NumDescriptions: %d\n", *((int*)decomp));
+      fprintf(stderr, "0x02:            %x\n", *((int*)decomp + 1));
+      fprintf(stderr, "0x00007400:      %x\n", *((int*)decomp + 2));
+      fprintf(stderr, "0x00:            %x\n", *((int*)decomp + 3));
+      fprintf(stderr, "Unknown:         %x\n", *((int*)decomp + 4));
+    }
+
+  ptr = decomp + 20;
+  for (i = 0; i < dwg->header.num_descriptions; ++i)
+    {      
+      //memcpy(&dwg->header.section_info[i], ptr, 96);  
+      dwg->header.section_info[i].size            = *((int*)ptr);
+      dwg->header.section_info[i].unknown1 	      = *((int*)ptr + 1);
+      dwg->header.section_info[i].num_sections    = *((int*)ptr + 2);
+      dwg->header.section_info[i].max_decomp_size = *((int*)ptr + 3);  
+      dwg->header.section_info[i].unknown2        = *((int*)ptr + 4);	   
+      dwg->header.section_info[i].compressed      = *((int*)ptr + 5);
+      dwg->header.section_info[i].type            = *((int*)ptr + 6);
+      dwg->header.section_info[i].encrypted       = *((int*)ptr + 7);
+      ptr += 32;
+      memcpy(dwg->header.section_info[i].name, ptr, 64);      
+      ptr += 64;
+
+      if (loglevel)
+        {
+          fprintf(stderr, "\nSection Info description fields\n\n");
+          fprintf(stderr, "Size:                  %d\n", 
+           (int) dwg->header.section_info[i].size);
+          fprintf(stderr, "Unknown:               %d\n", 
+           (int) dwg->header.section_info[i].unknown1);	   
+          fprintf(stderr, "Number of sections:    %d\n", 
+           (int) dwg->header.section_info[i].num_sections);
+          fprintf(stderr, "Max decompressed size: %d\n", 
+           (int) dwg->header.section_info[i].max_decomp_size);
+          fprintf(stderr, "Unknown:               %d\n", 
+           (int) dwg->header.section_info[i].unknown2);
+          fprintf(stderr, "Compressed (0x02):     %x\n", 
+           (unsigned int) dwg->header.section_info[i].compressed);
+          fprintf(stderr, "Section Type:          %d\n", 
+           (int) dwg->header.section_info[i].type);
+          fprintf(stderr, "Encrypted:             %d\n", 
+           (int) dwg->header.section_info[i].encrypted);
+          fprintf(stderr, "SectionName:           %s\n\n", 
+            dwg->header.section_info[i].name);
+        }
+
+      dwg->header.section_info[i].sections = (Dwg_Section**)
+        malloc(dwg->header.section_info[i].num_sections * sizeof(Dwg_Section*));
+
+      for (j = 0; j < dwg->header.section_info[i].num_sections; j++)
+        {
+          section_number = *((int*)ptr);      // Index into SectionMap
+          data_size      = *((int*)ptr + 1);
+          start_offset   = *((int*)ptr + 2);
+          unknown        = *((int*)ptr + 3);  // high 32 bits of 64-bit start offset?
+          ptr += 16;
+
+          dwg->header.section_info[i].sections[j] = find_section(dwg, section_number);
+
+          if (loglevel)
+            {
+              fprintf(stderr, "-------------------\n");
+              fprintf(stderr, "Section Number: %d\n", section_number);
+              fprintf(stderr, "Data size:      %d\n", data_size);
+              fprintf(stderr, "Start offset:   %x\n", start_offset);
+              fprintf(stderr, "Unknown:        %d\n", unknown);
+            }
+        }
+    }
+  free(decomp);
+}
+
+/* Encrypted Section Header */
+typedef union _encrypted_section_header
+{
+  unsigned long int long_data[8];
+  unsigned char char_data[32];
+  struct
+  {    
+    unsigned long int tag;
+    unsigned long int section_type;
+    unsigned long int data_size;
+    unsigned long int section_size;
+    unsigned long int start_offset;
+    unsigned long int unknown;
+    unsigned long int checksum_1;
+    unsigned long int checksum_2;    
+  } fields;
+} encrypted_section_header;
+
+/* R2004 Class Section
+ */
+void 
+read_2004_class_section(Bit_Chain* dat, Dwg_Data *dwg)
+{
+  char sentinel[] = {0x8D, 0xA1, 0xC4, 0xB8, 0xC4, 0xA9, 0xF8, 0xC5, 0xC0, 
+    0xDC, 0xF4, 0x5F, 0xE7, 0xCF, 0xB6, 0x8A};
+  unsigned long int size;
+  unsigned long int max_num;
+  unsigned long int num_objects, dwg_version, maint_version, unknown;
+  unsigned long int class_address, secMask;
+  unsigned int class_number;
+  Dwg_Section_Info *info = 0;
+  encrypted_section_header es;
+  char *decomp, *ptr;
+  char c;
+  int i;
+
+  Bit_Chain class_dat;
+
+  for (i = 0; i < dwg->header.num_descriptions && info == 0; ++i) 
+      if (dwg->header.section_info[i].type == 3)
+        info = &dwg->header.section_info[i];
+
+  if (info == 0)
+    return;
+
+  class_address = info->sections[0]->address;
+  dat->byte = class_address;
+
+  fprintf(stderr, "\n\nRaw section header bytes:\n");
+  for (i = 0; i < 0x20; i++)
+    {
+      es.char_data[i] = bit_read_RC(dat);            
+      fprintf(stderr, "%x ", es.char_data[i]);
+    }
+
+  secMask = 0x4164536b ^ class_address;
+  for (i = 0; i < 8; ++i)
+    es.long_data[i] ^= secMask;
+
+  if (loglevel)
+    {
+      fprintf(stderr, "\n\n=== Section (Class) ===\n");
+      fprintf(stderr, "Section Tag (should be 0x4163043b): %x\n",
+          (unsigned int) es.fields.tag);
+      fprintf(stderr, "Section Type:     %x\n",
+          (unsigned int) es.fields.section_type);
+      fprintf(stderr, "DecompDataSize:   %x\n",
+          (unsigned int) es.fields.data_size);
+      fprintf(stderr, "CompDataSize:     %x\n",
+          (unsigned int) es.fields.section_size);
+      fprintf(stderr, "StartOffset:      %x\n",
+          (unsigned int) es.fields.start_offset);
+      fprintf(stderr, "Checksum1:        %x\n", 
+        (unsigned int) es.fields.checksum_1);
+      fprintf(stderr, "Checksum2:        %x\n\n", 
+        (unsigned int) es.fields.checksum_2);
+    }
+  
+  decomp = malloc(info->max_decomp_size * sizeof(char));
+  if (decomp == 0)
+    return;   // No memory
+
+  decompress_R2004_section(dat, decomp, es.fields.section_size);
+
+  class_dat.bit     = 0;
+  class_dat.byte    = 0;
+  class_dat.chain   = decomp;
+  class_dat.size    = info->max_decomp_size;
+  class_dat.version = dat->version;
+
+  if (bit_search_sentinel(&class_dat, dwg_sentinel(DWG_SENTINEL_CLASS_BEGIN)))
+    { 
+      int start = class_dat.byte - 16;
+
+      size    = bit_read_RL(&class_dat);  // size of class data area
+      max_num = bit_read_BS(&class_dat);  // Maxiumum class number
+      c = bit_read_RC(&class_dat);        // 0x00
+      c = bit_read_RC(&class_dat);        // 0x00
+      c = bit_read_B(&class_dat);         // 1
+
+      dwg->dwg_ot_layout = 0;
+      dwg->num_classes = 0;
+      i = 0;
+      do
+        {
+          unsigned int idc;
+
+          idc = dwg->num_classes;
+          if (idc == 0)
+            dwg->class = (Dwg_Class *) malloc(sizeof(Dwg_Class));
+          else
+            dwg->class = (Dwg_Class *) realloc(dwg->class, (idc + 1)
+                * sizeof(Dwg_Class));
+
+          dwg->class[idc].number        = bit_read_BS(&class_dat);
+          dwg->class[idc].version       = bit_read_BS(&class_dat);
+          dwg->class[idc].appname       = bit_read_TV(&class_dat);
+          dwg->class[idc].cppname       = bit_read_TV(&class_dat);
+          dwg->class[idc].dxfname       = bit_read_TV(&class_dat);
+          dwg->class[idc].wasazombie    = bit_read_B(&class_dat);
+          dwg->class[idc].item_class_id = bit_read_BS(&class_dat);
+
+          num_objects   = bit_read_BL(&class_dat);  // DXF 91
+          dwg_version   = bit_read_BS(&class_dat);  // Dwg Version
+          maint_version = bit_read_BS(&class_dat);  // Maintenance release version.
+          unknown       = bit_read_BL(&class_dat);  // Unknown (normally 0L)
+          unknown       = bit_read_BL(&class_dat);  // Unknown (normally 0L)
+
+          if (loglevel)
+            {
+              fprintf(stderr, "-------------------\n");
+              fprintf(stderr, "Number:           %d\n", dwg->class[idc].number);
+              fprintf(stderr, "Version:          %x\n", dwg->class[idc].version);
+              fprintf(stderr, "Application name: %s\n", dwg->class[idc].appname);
+              fprintf(stderr, "C++ class name:   %s\n", dwg->class[idc].cppname);
+              fprintf(stderr, "DXF record name:  %s\n", dwg->class[idc].dxfname);
+            }
+
+          if (strcmp(dwg->class[idc].dxfname, "LAYOUT") == 0)
+            dwg->dwg_ot_layout = dwg->class[idc].number;
+
+          dwg->num_classes++;
+
+        } while (class_dat.byte < (size - 1));
     }
 }
 
 int
-decode_R2004_header(Bit_Chain* dat, Dwg_Data * dwg)
+decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
 {
+  /* Encripted Data */
+  union
+  {
+    unsigned char encripted_data[0x6c];
+    struct
+    {
+      unsigned char file_ID_string[12];
+      unsigned int x00;
+      unsigned int x6c;
+      unsigned int x04;
+      unsigned int root_tree_node_gap;
+      unsigned int lowermost_left_tree_node_gap;
+      unsigned int lowermost_right_tree_node_gap;
+      unsigned int unknown_long;
+      unsigned int last_section_id;
+      unsigned int last_section_address;
+      unsigned int x00_2;
+      unsigned int second_header_address;
+      unsigned int x00_3;
+      unsigned int gap_amount;
+      unsigned int section_amount;
+      unsigned int x20;
+      unsigned int x80;
+      unsigned int x40;
+      unsigned int section_map_id;
+      unsigned int section_map_address;
+      unsigned int x00_4;
+      unsigned int section_info_id;
+      unsigned int section_array_size;
+      unsigned int gap_array_size;
+      unsigned int CRC;
+    } fields;
+  } _2004_header_data;
+
+  /* System Section */
+  typedef union _system_section
+  {
+    unsigned char data[0x14];
+    struct
+    {
+      unsigned int section_type;   //0x4163043b
+      unsigned int DecompDataSize;
+      unsigned int CompDataSize;
+      unsigned int compression_type;
+      unsigned int checksum;
+    } fields;
+  } system_section;
+
+  encrypted_section_header es;
+  unsigned long int secMask = 0x4164536b;
+  system_section ss;
+  int rseed = 1;
+
+  Dwg_Section *section;
+
   int i;
   unsigned long int preview_address, security_type, unknown_long,
       dwg_property_address, vba_proj_address;
@@ -969,41 +1497,6 @@ decode_R2004_header(Bit_Chain* dat, Dwg_Data * dwg)
             sig);
     }
 
-  /* Encripted Data */
-  union
-  {
-    unsigned char encripted_data[0x6c];
-    struct
-    {
-      unsigned char file_ID_string[12];
-      unsigned long int x00;
-      unsigned long int x6c;
-      unsigned long int x04;
-      unsigned long int root_tree_node_gap;
-      unsigned long int lowermost_left_tree_node_gap;
-      unsigned long int lowermost_right_tree_node_gap;
-      unsigned long int unknown_long;
-      unsigned long int last_section_id;
-      unsigned long int last_section_address;
-      unsigned long int x00_2;
-      unsigned long int second_header_address;
-      unsigned long int x00_3;
-      unsigned long int gap_amount;
-      unsigned long int section_amount;
-      unsigned long int x20;
-      unsigned long int x80;
-      unsigned long int x40;
-      unsigned long int section_map_id;
-      unsigned long int section_map_address;
-      unsigned long int x00_4;
-      unsigned long int section_info_id;
-      unsigned long int section_array_size;
-      unsigned long int gap_array_size;
-      unsigned long int CRC;
-    } fields;
-  } _2004_header_data;
-
-  int rseed = 1;
   dat->byte = 0x80;
   for (i = 0; i < 0x6c; i++)
     {
@@ -1067,90 +1560,24 @@ decode_R2004_header(Bit_Chain* dat, Dwg_Data * dwg)
           (unsigned int) _2004_header_data.fields.gap_array_size);
       fprintf(stderr, "CRC: %x\n", (unsigned int) _2004_header_data.fields.CRC);
     }
-
-  //////////////////////////////////////////////
-  // up to this line the code seems to be ok. //
-  //////////////////////////////////////////////
-
+  
+  /*-------------------------------------------------------------------------
+   * Section Map
+   */
   dat->byte = _2004_header_data.fields.section_map_address + 0x100;
-  fprintf(stderr, "section_map_address DUMP:\n");
-  for (i = 0; i < 32; i++)
-    {
-      fprintf(stderr, "%x ", bit_read_RC(dat));
-    }
-
-  /* System Section */
-  typedef union _system_section
-  {
-    unsigned char data[0x14];
-    struct
-    {
-      unsigned long int section_type;
-      unsigned long int DecompDataSize;
-      unsigned long int CompDataSize;
-      unsigned long int compression_type;
-      unsigned long int checksum;
-    } fields;
-  } system_section;
-
-  /* Encrypted Section Header */
-  typedef union _encrypted_section_header
-  {
-    unsigned long int long_data[8];
-    unsigned char char_data[32];
-    struct
-    {
-      unsigned long int section_type;
-      unsigned long int data_size;
-      unsigned long int section_size;
-      unsigned long int start_offset;
-      unsigned long int unknown;
-      unsigned long int checksum_1;
-      unsigned long int checksum_2;
-      unsigned long int unknown_2;
-    } fields;
-  } encrypted_section_header;
-
-  encrypted_section_header es;
-  for (i = 0; i < 32; i++)
-    {
-      es.char_data[i] = bit_read_RC(dat);
-    }
-
-  unsigned long int secMask = 0x4164536b;
-  for (i = 0; i < 8; i++)
-    {
-      es.long_data[i] ^= secMask;
-    }
 
   if (loglevel)
-    {
-      fprintf(stderr, "\n\n=== Encrypted Section Header ===\n");
-      fprintf(stderr, "Section Type: %x\n",
-          (unsigned int) es.fields.section_type);
-      fprintf(stderr, "Data size: %x\n", (unsigned int) es.fields.data_size);
-      fprintf(stderr, "Section size: %x\n",
-          (unsigned int) es.fields.section_size);
-      fprintf(stderr, "Start Offset: %x\n",
-          (unsigned int) es.fields.start_offset);
-      fprintf(stderr, "Unknown: %x\n", (unsigned int) es.fields.unknown);
-      fprintf(stderr, "Checksum 1: %x\n", (unsigned int) es.fields.checksum_1);
-      fprintf(stderr, "Checksum 2: %x\n", (unsigned int) es.fields.checksum_2);
-      fprintf(stderr, "???: %x\n", (unsigned int) es.fields.unknown_2);
-    }
-
-  system_section ss;
-
-  fprintf(stderr, "\n\nRaw system section bytes:\n");
+	  fprintf(stderr, "\n\nRaw system section bytes:\n");
   for (i = 0; i < 0x14; i++)
     {
       ss.data[i] = bit_read_RC(dat);
-      fprintf(stderr, "%x ", ss.data[i]);
+		  if (loglevel)
+				fprintf(stderr, "%x ", ss.data[i]);
     }
 
   if (loglevel)
     {
-      fprintf(stderr, "\n\n=== System Section ===\n");
+      fprintf(stderr, "\n\n=== System Section (Section Map) ===\n");
       fprintf(stderr, "Section Type (should be 0x4163043b): %x\n",
           (unsigned int) ss.fields.section_type);
       fprintf(stderr, "DecompDataSize: %x\n",
@@ -1162,18 +1589,76 @@ decode_R2004_header(Bit_Chain* dat, Dwg_Data * dwg)
       fprintf(stderr, "Checksum: %x\n\n", (unsigned int) ss.fields.checksum);
     }
 
+  read_R2004_section_map(dat, dwg,
+      ss.fields.CompDataSize, ss.fields.DecompDataSize);
+
+  if (dwg->header.section == 0)
+    {
+      fprintf(stderr, "Failed to read R2004 Section Map.\n");
+      return -1;
+    }
+
+  /*-------------------------------------------------------------------------
+   * Section Info
+   */
+  section = find_section(dwg, _2004_header_data.fields.section_info_id);
+
+  if (section != 0)
+    {
+      dat->byte = section->address;
+      fprintf(stderr, "\n\nRaw system section bytes:\n");
+      for (i = 0; i < 0x14; i++)
+        {
+          ss.data[i] = bit_read_RC(dat);
+          fprintf(stderr, "%x ", ss.data[i]);
+        }
+
+      if (loglevel)
+        {
+          fprintf(stderr, "\n\n=== System Section (Section Info) ===\n");
+          fprintf(stderr, "Section Type (should be 0x4163043b): %x\n",
+              (unsigned int) ss.fields.section_type);
+          fprintf(stderr, "DecompDataSize: %x\n",
+              (unsigned int) ss.fields.DecompDataSize);
+          fprintf(stderr, "CompDataSize: %x\n",
+              (unsigned int) ss.fields.CompDataSize);
+          fprintf(stderr, "Compression Type: %x\n",
+              (unsigned int) ss.fields.compression_type);
+          fprintf(stderr, "Checksum: %x\n\n", (unsigned int) ss.fields.checksum);
+        }
+
+       read_R2004_section_info(dat, dwg, 
+         ss.fields.CompDataSize, ss.fields.DecompDataSize);
+    }
+
+  /*-------------------------------------------------------------------------
+   * Section: Class
+   */
+  read_2004_class_section(dat, dwg);
+
+  if (dwg->header.section_info != 0)
+    {
+      for (i = 0; i < dwg->header.num_descriptions; ++i)
+        if (dwg->header.section_info[i].sections != 0)
+          free(dwg->header.section_info[i].sections);
+
+      free(dwg->header.section_info);
+      dwg->header.num_descriptions = 0;
+    }
+
   fprintf(stderr,
       "Decoding of DWG version R2004 header is not implemented yet.\n");
   return -1;
 }
 
 int
-decode_R2007_header(Bit_Chain* dat, Dwg_Data * dwg)
+decode_R2007(Bit_Chain* dat, Dwg_Data * dwg)
 {
   int i;
   unsigned long int preview_address, security_type, unknown_long,
       dwg_property_address, vba_proj_address, app_info_address;
   unsigned char sig, DwgVer, MaintReleaseVer;
+  unsigned char solomon[0x3d8];
 
   /* 5 bytes of 0x00 */
   dat->byte = 0x06;
@@ -1279,7 +1764,7 @@ decode_R2007_header(Bit_Chain* dat, Dwg_Data * dwg)
   /* Reed-Solomon(255,239) encoded section */
   if (loglevel)
     fprintf(stderr, "Reed-Solomon(255,239) encoded section:\n\n");
-  unsigned char solomon[0x3d8];
+  
   dat->byte = 0x80;
   for (i = 0; i < 0x3d8; i++)
     {
