@@ -897,7 +897,7 @@ int read_two_byte_offset(Bit_Chain* dat, int* lit_length)
  */
 int
 decompress_R2004_section(Bit_Chain* dat, char *decomp, 
-                         unsigned long int CompDataSize)
+                         unsigned long int comp_data_size)
 {
   int lit_length, i;
   int comp_offset, comp_bytes;
@@ -912,7 +912,7 @@ decompress_R2004_section(Bit_Chain* dat, char *decomp,
     *dst++ = bit_read_RC(dat);
 
   opcode1 = 0x00;
-  while (dat->byte - start_byte < CompDataSize)
+  while (dat->byte - start_byte < comp_data_size)
     { 
       if (opcode1 == 0x00)
         opcode1 = bit_read_RC(dat);
@@ -1004,8 +1004,8 @@ decompress_R2004_section(Bit_Chain* dat, char *decomp,
  */
 void
 read_R2004_section_map(Bit_Chain* dat, Dwg_Data * dwg, 
-                       unsigned long int CompDataSize, 
-                       unsigned long int DecompDataSize)
+                       unsigned long int comp_data_size, 
+                       unsigned long int decomp_data_size)
 {
   char *decomp, *ptr;
   int i;
@@ -1015,18 +1015,18 @@ read_R2004_section_map(Bit_Chain* dat, Dwg_Data * dwg,
   dwg->header.section = 0;
 
   // allocate memory to hold decompressed data
-  decomp = malloc(DecompDataSize * sizeof(char));
+  decomp = malloc(decomp_data_size * sizeof(char));
   if (decomp == 0)
     return;   // No memory
 
-  decompress_R2004_section(dat, decomp, CompDataSize);  
+  decompress_R2004_section(dat, decomp, comp_data_size);  
 
   if (loglevel)
     fprintf(stderr, "\n#### 2004 Section Map fields ####\n\n");
   
   section_address = 0x100;  // starting address 
 	i = 0;
-	int bytes_remaining = DecompDataSize;
+	int bytes_remaining = decomp_data_size;
 	ptr = decomp;
 	dwg->header.num_sections = 0;
 
@@ -1092,8 +1092,8 @@ Dwg_Section* find_section(Dwg_Data *dwg, unsigned long int index)
  */
 void
 read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg, 
-                        unsigned long int CompDataSize, 
-                        unsigned long int DecompDataSize)
+                        unsigned long int comp_data_size, 
+                        unsigned long int decomp_data_size)
 {  
   char *decomp, *ptr;
   int i, j;
@@ -1103,11 +1103,11 @@ read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
   int unknown;
   Dwg_Section *section;
 
-  decomp = malloc(DecompDataSize * sizeof(char));
+  decomp = malloc(decomp_data_size * sizeof(char));
   if (decomp == 0)
     return;   // No memory
 
-  decompress_R2004_section(dat, decomp, CompDataSize);
+  decompress_R2004_section(dat, decomp, comp_data_size);
   
   memcpy(&dwg->header.num_descriptions, decomp, 4);  
   dwg->header.section_info = (Dwg_Section_Info*) 
@@ -1379,8 +1379,8 @@ decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
     struct
     {
       unsigned int section_type;   //0x4163043b
-      unsigned int DecompDataSize;
-      unsigned int CompDataSize;
+      unsigned int decomp_data_size;
+      unsigned int comp_data_size;
       unsigned int compression_type;
       unsigned int checksum;
     } fields;
@@ -1581,16 +1581,16 @@ decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
       fprintf(stderr, "Section Type (should be 0x4163043b): %x\n",
           (unsigned int) ss.fields.section_type);
       fprintf(stderr, "DecompDataSize: %x\n",
-          (unsigned int) ss.fields.DecompDataSize);
+          (unsigned int) ss.fields.decomp_data_size);
       fprintf(stderr, "CompDataSize: %x\n",
-          (unsigned int) ss.fields.CompDataSize);
+          (unsigned int) ss.fields.comp_data_size);
       fprintf(stderr, "Compression Type: %x\n",
           (unsigned int) ss.fields.compression_type);
       fprintf(stderr, "Checksum: %x\n\n", (unsigned int) ss.fields.checksum);
     }
 
   read_R2004_section_map(dat, dwg,
-      ss.fields.CompDataSize, ss.fields.DecompDataSize);
+      ss.fields.comp_data_size, ss.fields.decomp_data_size);
 
   if (dwg->header.section == 0)
     {
@@ -1619,16 +1619,16 @@ decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
           fprintf(stderr, "Section Type (should be 0x4163043b): %x\n",
               (unsigned int) ss.fields.section_type);
           fprintf(stderr, "DecompDataSize: %x\n",
-              (unsigned int) ss.fields.DecompDataSize);
+              (unsigned int) ss.fields.decomp_data_size);
           fprintf(stderr, "CompDataSize: %x\n",
-              (unsigned int) ss.fields.CompDataSize);
+              (unsigned int) ss.fields.comp_data_size);
           fprintf(stderr, "Compression Type: %x\n",
               (unsigned int) ss.fields.compression_type);
           fprintf(stderr, "Checksum: %x\n\n", (unsigned int) ss.fields.checksum);
         }
 
        read_R2004_section_info(dat, dwg, 
-         ss.fields.CompDataSize, ss.fields.DecompDataSize);
+         ss.fields.comp_data_size, ss.fields.decomp_data_size);
     }
 
   /*-------------------------------------------------------------------------
@@ -1646,8 +1646,10 @@ decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
       dwg->header.num_descriptions = 0;
     }
 
+
+
   fprintf(stderr,
-      "Decoding of DWG version R2004 header is not implemented yet.\n");
+      "Decoding of DWG version R2004 header is not fully implemented yet.\n");
   return -1;
 }
 
