@@ -284,6 +284,18 @@ dwg_get_layers(Dwg_Data *dwg)
 }
 
 long unsigned int
+dwg_get_object_count(Dwg_Data *dwg)
+{
+  return dwg->num_objects;
+}
+
+long unsigned int
+dwg_get_object_object_count(Dwg_Data *dwg)
+{
+  return dwg->num_objects - dwg->num_entities;
+}
+
+long unsigned int
 dwg_get_entity_count(Dwg_Data *dwg)
 {
   return dwg->num_entities;
@@ -292,14 +304,15 @@ dwg_get_entity_count(Dwg_Data *dwg)
 Dwg_Object_Entity **
 dwg_get_entities(Dwg_Data *dwg)
 {
-  int i;
+  long unsigned int i, ent_count = 0;
   Dwg_Object_Entity ** entities = (Dwg_Object_Entity **) malloc(
-                dwg->num_entities * sizeof (Dwg_Object_Entity*));
-  for (i=0; i<dwg->num_entities; i++)
+                dwg_get_entity_count(dwg) * sizeof (Dwg_Object_Entity*));
+  for (i=0; i<dwg->num_objects; i++)
     {
-      if (dwg->object[i].tio.entity)
+      if (dwg->object[i].supertype == DWG_SUPERTYPE_ENTITY)
         {
-          entities[i] = dwg->object[i].tio.entity;
+          entities[ent_count] = dwg->object[i].tio.entity;
+          ent_count++;
         }
     }
   return entities;
