@@ -6,7 +6,7 @@ It is licensed under the terms of the GNU General Public License version 3 (or a
  opinion any later version).
 
 DWG is a file format created in the 70's for the emerging CAD applications. Currently
-it is the native file format of AutoCAD(R), a proprietary, market leading CAD program
+it is the native file format of AutoCAD, a proprietary, market leading CAD program
 developed by AutoDesk.
  
 LibreDWG is a fork from LibDWG due to its usage of Esperanto, which we think is not the best
@@ -18,13 +18,17 @@ test suite. Among the example applications we wrote using LibreDWG is an initial
 conversion tool. We intend to become a GNU package soon. Please contact us if you
 can help.
 
-LibreDWG depends on pslib: http://pslib.sourceforge.net 
+LibreDWG depends on pslib: http://pslib.sourceforge.net. In many GNU/Linux distributions,
+just install the pslib-dev package to build and pslib if you want to use dwg_ps.  
 
 Sometimes we hang on our IRC channel which is #libredwg at irc.freenode.net
 If you don't find us there, please email us:
 
 Felipe Corrêa da Silva Sanches <jucablues@users.sourceforge.net>
 Rodrigo Rodrigues da Silva <pitanga@members.fsf.org>
+
+If you are looking for general information about the project, check our website:
+http://www.gnu.org/software/libredwg
 
 == Example usage of the library ==
 
