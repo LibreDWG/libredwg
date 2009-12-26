@@ -1,0 +1,9 @@
+This is a rough TODO file. It might or might not be up to date.
+
+* finish Juca's Python bindings
+* parse R2007 header (figure out how reed solomon encryption works)
+* finish R2004 read support
+* write support
+* automated testing suite
+* enhance API functions
+
