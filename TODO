@@ -6,4 +6,4 @@ This is a rough TODO file. It might or might not be up to date.
 * write support
 * automated testing suite
 * enhance API functions
-
+* fix messed ObjectRef's
