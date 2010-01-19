@@ -21,9 +21,9 @@
 #include <string.h>
 #include <unistd.h>
 #include <math.h>
-
-#include "../src/bits.h"
 #include <dwg.h>
+#include "../src/bits.h"
+
 
 double model_xmin, model_ymin;
 double page_width, page_height, scale;
@@ -211,6 +211,7 @@ void output_BLOCK_HEADER(Dwg_Object_Ref* ref)
 
   printf("\t</g>\n");
 }
+
 
 void
 output_SVG(Dwg_Data* dwg)

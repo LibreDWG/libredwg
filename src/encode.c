@@ -68,7 +68,7 @@
 #define FIELD_3RD(name) FIELD(name.x, RD); FIELD(name.y, RD); FIELD(name.z, RD);
 #define FIELD_3BD(name) FIELD(name.x, BD); FIELD(name.y, BD); FIELD(name.z, BD);
 #define FIELD_3DPOINT(name) FIELD_3BD(name)
-#define FIELD_4BITS(name) bit_write_4BITS(_obj->name, dat);
+#define FIELD_4BITS(name) bit_write_4BITS(dat,_obj->name);
 
 #define FIELD_CMC(name)\
   {\
@@ -154,8 +154,7 @@ bit_write_BE(dat, FIELD_VALUE(name.x), FIELD_VALUE(name.y), FIELD_VALUE(name.z))
 //TODO unify REPEAT macros!
 
 #define DWG_ENTITY(token) \
-static void \
-dwg_encode_##token(Dwg_Object* obj, Dwg_Entity_##token * _obj, Bit_Chain * dat)\
+static void dwg_encode_##token (Dwg_Object* obj, Dwg_Entity_##token * _obj, Bit_Chain * dat)\
 {\
   int vcount, rcount, rcount2, rcount3;\
 	Dwg_Data* dwg = obj->parent;\
@@ -164,9 +163,7 @@ dwg_encode_##token(Dwg_Object* obj, Dwg_Entity_##token * _obj, Bit_Chain * dat)\
 
 #define DWG_ENTITY_END }
 
-#define DWG_OBJECT(token) \
-static void\
-dwg_encode_##token(Dwg_Object* obj, Dwg_Object_##token *_obj, Bit_Chain * dat)\
+#define DWG_OBJECT(token) static void dwg_encode_##token (Dwg_Object* obj, Dwg_Object_##token *_obj, Bit_Chain * dat)\
 {\
   int vcount, rcount, rcount2, rcount3;\
 	Dwg_Data* dwg = obj->parent;
@@ -222,7 +219,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
    * Header variables
    */
   //strcpy (dat->chain, dwg->header.version); // Chain version: should be AC1015
-  strcpy(dat->chain, "AC1015"); // Chain version: should be AC1015
+  strcpy((char *)dat->chain, "AC1015"); // Chain version: should be AC1015
   dat->byte += 6;
 
   for (i = 0; i < 5; i++)
@@ -329,13 +326,13 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
 
   for (i = 0; i < dwg->num_classes; i++)
     {
-      bit_write_BS(dat, dwg->class[i].number);
-      bit_write_BS(dat, dwg->class[i].version);
-      bit_write_TV(dat, dwg->class[i].appname);
-      bit_write_TV(dat, dwg->class[i].cppname);
-      bit_write_TV(dat, dwg->class[i].dxfname);
-      bit_write_B(dat, dwg->class[i].wasazombie);
-      bit_write_BS(dat, dwg->class[i].item_class_id);
+      bit_write_BS(dat, dwg->dwg_class[i].number);
+      bit_write_BS(dat, dwg->dwg_class[i].version);
+      bit_write_TV(dat, dwg->dwg_class[i].appname);
+      bit_write_TV(dat, dwg->dwg_class[i].cppname);
+      bit_write_TV(dat, dwg->dwg_class[i].dxfname);
+      bit_write_B(dat, dwg->dwg_class[i].wasazombie);
+      bit_write_BS(dat, dwg->dwg_class[i].item_class_id);
     }
 
   /* Write the size of the section at its beginning

@@ -64,7 +64,7 @@ dwg_read_file(char *filename, Dwg_Data * dwg_data)
   bit_chain.bit = 0;
   bit_chain.byte = 0;
   bit_chain.size = attrib.st_size;
-  bit_chain.chain = (char *) malloc(bit_chain.size);
+  bit_chain.chain = (unsigned char *) malloc(bit_chain.size);
   if (!bit_chain.chain)
     {
       fprintf(stderr, "Not enough memory.\n");
@@ -102,7 +102,7 @@ dwg_write_file(char *filename, Dwg_Data * dwg_data)
   FILE *dt;
   struct stat atrib;
   Bit_Chain bit_chain;
-  bit_chain.version = dwg_data->header.version;
+  bit_chain.version = (Dwg_Version_Type)dwg_data->header.version;
 
   /* Encode the DWG struct
    bit_chain.size = 0;

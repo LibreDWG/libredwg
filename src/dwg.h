@@ -23,8 +23,8 @@
 #define DWG_H
 
 #ifdef __cplusplus
-extern "C"
-  {
+//extern "C"
+//  {
 #endif
 
 #define BITCODE_DOUBLE double
@@ -2724,7 +2724,7 @@ typedef struct _dwg_struct
 
   Dwg_Header_Variables header_vars;
   unsigned int num_classes;
-  Dwg_Class *class;
+  Dwg_Class * dwg_class;
 
   long unsigned int num_objects;
   Dwg_Object *object;
@@ -2804,8 +2804,14 @@ dwg_get_entity_layer(Dwg_Object_Entity *);
 Dwg_Object*
 dwg_next_object(Dwg_Object* obj);
 
+
+double dwg_page_x_min(Dwg_Data *dwg);
+double dwg_page_x_max(Dwg_Data *dwg);
+double dwg_page_y_min(Dwg_Data *dwg);
+double dwg_page_y_max(Dwg_Data *dwg);
+
 #ifdef __cplusplus
-}
+//}
 #endif
 
 #endif

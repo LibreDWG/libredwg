@@ -623,7 +623,7 @@ bit_read_DD(Bit_Chain * dat, double default_value)
     return (bit_read_RD(dat));
   if (two_bit_code == 2)
     {
-      uchar_result = (char *) &default_value;
+      uchar_result = (unsigned char *) &default_value;
       uchar_result[4] = bit_read_RC(dat);
       uchar_result[5] = bit_read_RC(dat);
       uchar_result[0] = bit_read_RC(dat);
@@ -635,7 +635,7 @@ bit_read_DD(Bit_Chain * dat, double default_value)
     }
   else /* if (two_bit_code == 1) */
     {
-      uchar_result = (char *) &default_value;
+      uchar_result = (unsigned char *) &default_value;
       uchar_result[0] = bit_read_RC(dat);
       uchar_result[1] = bit_read_RC(dat);
       uchar_result[2] = bit_read_RC(dat);
@@ -659,9 +659,9 @@ bit_write_DD(Bit_Chain * dat, double value, double default_value)
     bit_write_BB(dat, 0);
   else
     {
-      uchar_value = (char *) &value;
-      uint_value = (int *) &value;
-      uint_default = (int *) &default_value;
+      uchar_value = (unsigned char *) &value;
+      uint_value = (unsigned int *) &value;
+      uint_default = (unsigned int *) &default_value;
       if (uint_value[0] == uint_default[0])
         {
           if (uint_value[1] != uint_default[1])
@@ -740,7 +740,7 @@ bit_read_H(Bit_Chain * dat, Dwg_Handle * handle)
       return (-1);
     }
 
-  val = (char *) &handle->value;
+  val = (unsigned char *) &handle->value;
   for (i = handle->size - 1; i >= 0; i--)
     val[i] = bit_read_RC(dat);
 
@@ -762,7 +762,7 @@ bit_write_H(Bit_Chain * dat, Dwg_Handle * handle)
       return;
     }
 
-  val = (char *) &handle->value;
+  val = (unsigned char *) &handle->value;
   for (i = 3; i >= 0; i--)
     if (val[i])
       break;
@@ -853,7 +853,7 @@ bit_read_TV(Bit_Chain * dat)
   unsigned char *chain;
 
   length = bit_read_BS(dat);
-  chain = (char *) malloc(length + 1);
+  chain = (unsigned char *) malloc(length + 1);
   for (i = 0; i < length; i++)
     {
       chain[i] = bit_read_RC(dat);
@@ -875,7 +875,7 @@ bit_write_TV(Bit_Chain * dat, unsigned char *chain)
   int i;
   int length;
 
-  length = strlen(chain);
+  length = strlen((const char *)chain);
   bit_write_BS(dat, length);
   for (i = 0; i < length; i++)
     bit_write_RC(dat, chain[i]);
@@ -903,7 +903,7 @@ bit_write_L(Bit_Chain * dat, long unsigned int value)
 {
   unsigned char *btk;
 
-  btk = (char *) value;
+  btk = (unsigned char *) value;
   bit_write_RC(dat, btk[3]);
   bit_write_RC(dat, btk[2]);
   bit_write_RC(dat, btk[1]);
@@ -922,9 +922,9 @@ bit_read_CMC(Bit_Chain * dat, Dwg_Color* color)
       color->rgb = bit_read_BL(dat);
       color->byte = bit_read_RC(dat);
       if (color->byte & 1)
-        color->name = bit_read_TV(dat);
+        color->name = (char*)bit_read_TV(dat);
       if (color->byte & 2)
-        color->book_name = bit_read_TV(dat);
+        color->book_name = (char*)bit_read_TV(dat);
     }
 }
 
@@ -939,9 +939,9 @@ bit_write_CMC(Bit_Chain * dat, Dwg_Color* color)
       bit_write_BL(dat, color->rgb);
       bit_write_RC(dat, color->byte);
       if (color->byte & 1)
-        bit_write_TV(dat, color->name);
+        bit_write_TV(dat,(unsigned char*) color->name);
       if (color->byte & 2)
-        bit_write_TV(dat, color->book_name);
+        bit_write_TV(dat, (unsigned char*)color->book_name);
     }
 }
 
@@ -987,14 +987,14 @@ bit_chain_alloc(Bit_Chain * dat)
 {
   if (dat->size == 0)
     {
-      dat->chain = calloc(1, CHAIN_BLOCK);
+      dat->chain = (unsigned char *)calloc(1, CHAIN_BLOCK);
       dat->size = CHAIN_BLOCK;
       dat->byte = 0;
       dat->bit = 0;
     }
   else
     {
-      dat->chain = realloc(dat->chain, dat->size + CHAIN_BLOCK);
+      dat->chain = (unsigned char *)realloc(dat->chain, dat->size + CHAIN_BLOCK);
       dat->size += CHAIN_BLOCK;
     }
 }

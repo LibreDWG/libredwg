@@ -29,7 +29,6 @@
 #include "dwg.h"
 #include "decode.h"
 
-
 /*--------------------------------------------------------------------------------
  * Welcome to the dark side of the moon...
  * MACROS
@@ -139,7 +138,7 @@
 #define HANDLE_VECTOR(name, sizefield, code) HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code)
 
 #define REACTORS(code)\
-  FIELD_VALUE(reactors) = malloc(sizeof(BITCODE_H) * obj->tio.object->num_reactors);\
+  FIELD_VALUE(reactors) = (BITCODE_H*) malloc(sizeof(BITCODE_H) * obj->tio.object->num_reactors);\
   for (vcount=0; vcount<obj->tio.object->num_reactors; vcount++)\
     {\
       FIELD_HANDLE(reactors[vcount], code);\
@@ -179,7 +178,7 @@
 
 #define DWG_ENTITY(token) \
 static void \
-dwg_decode_##token(Bit_Chain * dat, Dwg_Object * obj)\
+ dwg_decode_##token (Bit_Chain * dat, Dwg_Object * obj)\
 {\
   int vcount, rcount, rcount2, rcount3;\
   if (loglevel)\
@@ -188,8 +187,8 @@ dwg_decode_##token(Bit_Chain * dat, Dwg_Object * obj)\
 	Dwg_Data* dwg = obj->parent;\
 	dwg->num_entities++;\
 	obj->supertype = DWG_SUPERTYPE_ENTITY;\
-	obj->tio.entity = malloc (sizeof (Dwg_Object_Entity));\
-	obj->tio.entity->tio.token = calloc (sizeof (Dwg_Entity_##token), 1);\
+	obj->tio.entity = (Dwg_Object_Entity*)malloc (sizeof (Dwg_Object_Entity));	\
+	obj->tio.entity->tio.token = (Dwg_Entity_##token *)calloc (sizeof (Dwg_Entity_##token), 1); \
 	ent = obj->tio.entity->tio.token;\
   _obj=ent;\
   obj->tio.entity->object = obj;\
@@ -201,18 +200,15 @@ dwg_decode_##token(Bit_Chain * dat, Dwg_Object * obj)\
 
 #define DWG_ENTITY_END }
 
-#define DWG_OBJECT(token) \
-static void \
-dwg_decode_##token(Bit_Chain * dat, Dwg_Object * obj)\
-{\
+#define DWG_OBJECT(token) static void  dwg_decode_ ## token (Bit_Chain * dat, Dwg_Object * obj) {\
   int vcount, rcount, rcount2, rcount3;\
   if (loglevel)\
     fprintf (stderr, "Object " #token ":\n");\
 	Dwg_Object_##token *_obj;\
 	Dwg_Data* dwg = obj->parent;\
 	obj->supertype = DWG_SUPERTYPE_OBJECT;\
-	obj->tio.object = malloc (sizeof (Dwg_Object_Object));\
-	obj->tio.object->tio.token = calloc (sizeof (Dwg_Object_##token), 1);\
+	obj->tio.object = (Dwg_Object_Object*)malloc (sizeof (Dwg_Object_Object));	\
+	obj->tio.object->tio.token = (Dwg_Object_##token * ) calloc (sizeof (Dwg_Object_##token), 1); \
   obj->tio.object->object = obj;\
 	if (dwg_decode_object (dat, obj->tio.object)) return;\
 	_obj = obj->tio.object->tio.token;\
@@ -226,6 +222,7 @@ dwg_decode_##token(Bit_Chain * dat, Dwg_Object * obj)\
 /*--------------------------------------------------------------------------------
  * Private functions
  */
+
 static void
 dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
     long unsigned int address);
@@ -243,6 +240,8 @@ long unsigned int ktl_lastaddress;
 
 static int loglevel = 1;
 
+int decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg); // froward
+
 /*--------------------------------------------------------------------------------
  * Public function definitions
  */
@@ -259,7 +258,7 @@ dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
   /* Version */
   dat->byte = 0;
   dat->bit = 0;
-  strncpy(version, dat->chain, 6);
+  strncpy(version, (const char *)dat->chain, 6);
   version[6] = '\0';
 
   dwg->header.version = 0;
@@ -279,7 +278,7 @@ dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
         "This file's version code is: %s\n", version);
       return -1;
     }
-  dat->version = dwg->header.version;
+  dat->version = (Dwg_Version_Type)dwg->header.version;
   if (loglevel) fprintf(stderr,
       "This file's version code is: %s\n", version);
 
@@ -438,7 +437,7 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
       dat->byte = dwg->header.section[5].address;
       dwg->unknown1.size = DWG_UNKNOWN1_SIZE;
       dwg->unknown1.byte = dwg->unknown1.bit = 0;
-      dwg->unknown1.chain = malloc(dwg->unknown1.size);
+      dwg->unknown1.chain = (unsigned char*)malloc(dwg->unknown1.size);
       memcpy(dwg->unknown1.chain, &dat->chain[dat->byte], dwg->unknown1.size);
       //bit_explore_chain ((Bit_Chain *) &dwg->unknown1, dwg->unknown1.size);
       //bit_print ((Bit_Chain *) &dwg->unknown1, dwg->unknown1.size);
@@ -463,7 +462,7 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
             fprintf(stderr, "        PICTURE (end): %8X\n",
                 (unsigned int) dat->byte);
           dwg->picture.size = (dat->byte - 16) - start_address;
-          dwg->picture.chain = (char *) malloc(dwg->picture.size);
+          dwg->picture.chain = (unsigned char *) malloc(dwg->picture.size);
           memcpy(dwg->picture.chain, &dat->chain[start_address],
               dwg->picture.size);
         }
@@ -536,23 +535,22 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
     {
       unsigned int idc;
 
-      idc = dwg->num_classes;
-      if (idc == 0)
-        dwg->class = (Dwg_Class *) malloc(sizeof(Dwg_Class));
+      idc = dwg->num_classes; if (idc == 0)
+        dwg->dwg_class = (Dwg_Class *) malloc(sizeof(Dwg_Class));
       else
-        dwg->class = (Dwg_Class *) realloc(dwg->class, (idc + 1)
+        dwg->dwg_class = (Dwg_Class *) realloc(dwg->dwg_class, (idc + 1)
             * sizeof(Dwg_Class));
 
-      dwg->class[idc].number = bit_read_BS(dat);
-      dwg->class[idc].version = bit_read_BS(dat);
-      dwg->class[idc].appname = bit_read_TV(dat);
-      dwg->class[idc].cppname = bit_read_TV(dat);
-      dwg->class[idc].dxfname = bit_read_TV(dat);
-      dwg->class[idc].wasazombie = bit_read_B(dat);
-      dwg->class[idc].item_class_id = bit_read_BS(dat);
+      dwg->dwg_class[idc].number = bit_read_BS(dat);
+      dwg->dwg_class[idc].version = bit_read_BS(dat);
+      dwg->dwg_class[idc].appname = bit_read_TV(dat);
+      dwg->dwg_class[idc].cppname = bit_read_TV(dat);
+      dwg->dwg_class[idc].dxfname = bit_read_TV(dat);
+      dwg->dwg_class[idc].wasazombie = bit_read_B(dat);
+      dwg->dwg_class[idc].item_class_id = bit_read_BS(dat);
 
-      if (strcmp(dwg->class[idc].dxfname, "LAYOUT") == 0)
-        dwg->dwg_ot_layout = dwg->class[idc].number;
+      if (strcmp((const char *)dwg->dwg_class[idc].dxfname, "LAYOUT") == 0)
+        dwg->dwg_ot_layout = dwg->dwg_class[idc].number;
 
       dwg->num_classes++;
       if (dwg->num_classes > 100)
@@ -953,19 +951,26 @@ decompress_R2004_section(Bit_Chain* dat, char *decomp,
         }
       else if (opcode1 >= 0x12 && opcode1 <= 0x1F)
         {
-          assert(0);  // Not seen yet - could not check
+	  printf( "got opcode1: %d\n" ,opcode1);
+	  //          assert(0);  // Not seen yet - could not check
 
           comp_bytes  = (opcode1 & 0x0F) + 2;
           comp_offset = read_two_byte_offset(dat, &lit_length) - 0x3FFF;
 
+	  printf( "got offset: %d\n" , comp_offset);
+
           if (lit_length != 0)
             opcode1 = 0x00;
           else
-            lit_length = read_literal_length(dat, &opcode1);
+	    {
+	      lit_length = read_literal_length(dat, &opcode1);
+	      printf("got read opecode: %d length:%d\n",opcode1, lit_length);
+	    }
+
         }
       else if (opcode1 == 0x10)
         {
-          assert(0);  // Not seen yet - could not check
+	  //          assert(0);  // Not seen yet - could not check
 
           comp_bytes  = read_long_compression_offset(dat) - 9;
           comp_offset = read_two_byte_offset(dat, &lit_length) - 0x3FFF;
@@ -973,7 +978,10 @@ decompress_R2004_section(Bit_Chain* dat, char *decomp,
           if (lit_length != 0)
             opcode1 = 0x00;
           else
-            lit_length = read_literal_length(dat, &opcode1);
+	    {
+	      lit_length = read_literal_length(dat, &opcode1);
+	      printf("got read opecode: %d length:%d\n",opcode1, lit_length);
+	    }
         }
       else if (opcode1 == 0x11)
         {         
@@ -984,6 +992,7 @@ decompress_R2004_section(Bit_Chain* dat, char *decomp,
           return 1;  // error in input stream 
         }      
 
+      printf("got compressed data %d\n",comp_bytes);
       // copy "compressed data"
       src = dst - comp_offset - 1;
       assert(src > decomp);
@@ -991,6 +1000,7 @@ decompress_R2004_section(Bit_Chain* dat, char *decomp,
         *dst++ = *src++;
  
       // copy "literal data" 
+      printf("got literal data %d\n",lit_length);
       for (i = 0; i < lit_length; ++i)
         *dst++ = bit_read_RC(dat);
     }  
@@ -1015,7 +1025,7 @@ read_R2004_section_map(Bit_Chain* dat, Dwg_Data * dwg,
   dwg->header.section = 0;
 
   // allocate memory to hold decompressed data
-  decomp = malloc(decomp_data_size * sizeof(char));
+  decomp = (char *)malloc(decomp_data_size * sizeof(char));
   if (decomp == 0)
     return;   // No memory
 
@@ -1103,7 +1113,7 @@ read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
   int unknown;
   Dwg_Section *section;
 
-  decomp = malloc(decomp_data_size * sizeof(char));
+  decomp = (char *)malloc(decomp_data_size * sizeof(char));
   if (decomp == 0)
     return;   // No memory
 
@@ -1165,25 +1175,34 @@ read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
       dwg->header.section_info[i].sections = (Dwg_Section**)
         malloc(dwg->header.section_info[i].num_sections * sizeof(Dwg_Section*));
 
-      for (j = 0; j < dwg->header.section_info[i].num_sections; j++)
-        {
-          section_number = *((int*)ptr);      // Index into SectionMap
-          data_size      = *((int*)ptr + 1);
-          start_offset   = *((int*)ptr + 2);
-          unknown        = *((int*)ptr + 3);  // high 32 bits of 64-bit start offset?
-          ptr += 16;
-
-          dwg->header.section_info[i].sections[j] = find_section(dwg, section_number);
-
-          if (loglevel)
-            {
-              fprintf(stderr, "-------------------\n");
-              fprintf(stderr, "Section Number: %d\n", section_number);
-              fprintf(stderr, "Data size:      %d\n", data_size);
-              fprintf(stderr, "Start offset:   %x\n", start_offset);
-              fprintf(stderr, "Unknown:        %d\n", unknown);
-            }
-        }
+      if (dwg->header.section_info[i].num_sections < 10000)
+	{
+	  fprintf(stderr, "section count %ld in area %d\n",dwg->header.section_info[i].num_sections,i);
+	  
+	  for (j = 0; j < dwg->header.section_info[i].num_sections; j++)
+	    {
+	      section_number = *((int*)ptr);      // Index into SectionMap
+	      data_size      = *((int*)ptr + 1);
+	      start_offset   = *((int*)ptr + 2);
+	      unknown        = *((int*)ptr + 3);  // high 32 bits of 64-bit start offset?
+	      ptr += 16;
+	      
+	      dwg->header.section_info[i].sections[j] = find_section(dwg, section_number);
+	      
+	      if (loglevel)
+		{
+		  fprintf(stderr, "-------------------\n");
+		  fprintf(stderr, "Section Number: %d\n", section_number);
+		  fprintf(stderr, "Data size:      %d\n", data_size);
+		  fprintf(stderr, "Start offset:   %x\n", start_offset);
+		  fprintf(stderr, "Unknown:        %d\n", unknown);
+		}
+	    }
+	}// sanity check
+      else
+	{
+	  fprintf(stderr, "section count %ld in area %d too high! skipping\n",dwg->header.section_info[i].num_sections,i); 
+	}
     }
   free(decomp);
 }
@@ -1266,7 +1285,7 @@ read_2004_class_section(Bit_Chain* dat, Dwg_Data *dwg)
         (unsigned int) es.fields.checksum_2);
     }
   
-  decomp = malloc(info->max_decomp_size * sizeof(char));
+  decomp = (char *)malloc(info->max_decomp_size * sizeof(char));
   if (decomp == 0)
     return;   // No memory
 
@@ -1274,7 +1293,7 @@ read_2004_class_section(Bit_Chain* dat, Dwg_Data *dwg)
 
   class_dat.bit     = 0;
   class_dat.byte    = 0;
-  class_dat.chain   = decomp;
+  class_dat.chain   = (unsigned char *)decomp;
   class_dat.size    = info->max_decomp_size;
   class_dat.version = dat->version;
 
@@ -1297,18 +1316,18 @@ read_2004_class_section(Bit_Chain* dat, Dwg_Data *dwg)
 
           idc = dwg->num_classes;
           if (idc == 0)
-            dwg->class = (Dwg_Class *) malloc(sizeof(Dwg_Class));
+            dwg->dwg_class = (Dwg_Class *) malloc(sizeof(Dwg_Class));
           else
-            dwg->class = (Dwg_Class *) realloc(dwg->class, (idc + 1)
+            dwg->dwg_class = (Dwg_Class *) realloc(dwg->dwg_class, (idc + 1)
                 * sizeof(Dwg_Class));
 
-          dwg->class[idc].number        = bit_read_BS(&class_dat);
-          dwg->class[idc].version       = bit_read_BS(&class_dat);
-          dwg->class[idc].appname       = bit_read_TV(&class_dat);
-          dwg->class[idc].cppname       = bit_read_TV(&class_dat);
-          dwg->class[idc].dxfname       = bit_read_TV(&class_dat);
-          dwg->class[idc].wasazombie    = bit_read_B(&class_dat);
-          dwg->class[idc].item_class_id = bit_read_BS(&class_dat);
+          dwg->dwg_class[idc].number        = bit_read_BS(&class_dat);
+          dwg->dwg_class[idc].version       = bit_read_BS(&class_dat);
+          dwg->dwg_class[idc].appname       = bit_read_TV(&class_dat);
+          dwg->dwg_class[idc].cppname       = bit_read_TV(&class_dat);
+          dwg->dwg_class[idc].dxfname       = bit_read_TV(&class_dat);
+          dwg->dwg_class[idc].wasazombie    = bit_read_B(&class_dat);
+          dwg->dwg_class[idc].item_class_id = bit_read_BS(&class_dat);
 
           num_objects   = bit_read_BL(&class_dat);  // DXF 91
           dwg_version   = bit_read_BS(&class_dat);  // Dwg Version
@@ -1319,15 +1338,15 @@ read_2004_class_section(Bit_Chain* dat, Dwg_Data *dwg)
           if (loglevel)
             {
               fprintf(stderr, "-------------------\n");
-              fprintf(stderr, "Number:           %d\n", dwg->class[idc].number);
-              fprintf(stderr, "Version:          %x\n", dwg->class[idc].version);
-              fprintf(stderr, "Application name: %s\n", dwg->class[idc].appname);
-              fprintf(stderr, "C++ class name:   %s\n", dwg->class[idc].cppname);
-              fprintf(stderr, "DXF record name:  %s\n", dwg->class[idc].dxfname);
+              fprintf(stderr, "Number:           %d\n", dwg->dwg_class[idc].number);
+              fprintf(stderr, "Version:          %x\n", dwg->dwg_class[idc].version);
+              fprintf(stderr, "Application name: %s\n", dwg->dwg_class[idc].appname);
+              fprintf(stderr, "C++ class name:   %s\n", dwg->dwg_class[idc].cppname);
+              fprintf(stderr, "DXF record name:  %s\n", dwg->dwg_class[idc].dxfname);
             }
 
-          if (strcmp(dwg->class[idc].dxfname, "LAYOUT") == 0)
-            dwg->dwg_ot_layout = dwg->class[idc].number;
+          if (strcmp((const char *)dwg->dwg_class[idc].dxfname, "LAYOUT") == 0)
+            dwg->dwg_ot_layout = dwg->dwg_class[idc].number;
 
           dwg->num_classes++;
 
@@ -1649,8 +1668,8 @@ decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
 
 
   fprintf(stderr,
-      "Decoding of DWG version R2004 header is not fully implemented yet.\n");
-  return -1;
+	  "Decoding of DWG version R2004 header is not fully implemented yet. We are going to try\n");
+  return 0;
 }
 
 int
@@ -1782,8 +1801,8 @@ decode_R2007(Bit_Chain* dat, Dwg_Data * dwg)
   /////////////////////////////////////////
 
   fprintf(stderr,
-      "Decoding of DWG version R2007 header is not fully implemented yet.\n");
-  return -1;
+      "Decoding of DWG version R2007 header is not fully implemented yet. we are going to try\n");
+  return 0;
 }
 
 /*--------------------------------------------------------------------------------
@@ -1813,7 +1832,7 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
       ent->extended_size = 0;
       ent->picture_exists = 0;
       ent->num_handles = 0;
-      return;
+      return 0;
     }
 
   ent->extended_size = 0;
@@ -1837,13 +1856,13 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
         }
       if (ent->extended_size == 0)
         {
-          ent->extended = malloc(size);
+          ent->extended = (char *)malloc(size);
           ent->extended_size = size;
         }
       else
         {
           ent->extended_size += size;
-          ent->extended = realloc(ent->extended, ent->extended_size);
+          ent->extended = (char *)realloc(ent->extended, ent->extended_size);
         }
       error = bit_read_H(dat, &ent->extended_handle);
       if (error)
@@ -1857,7 +1876,7 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
       ent->picture_size = bit_read_RL(dat);
       if (ent->picture_size < 210210)
         {
-          ent->picture = malloc(ent->picture_size);
+          ent->picture = (char *)malloc(ent->picture_size);
           for (i = 0; i < ent->picture_size; i++)
             ent->picture[i] = bit_read_RC(dat);
         }
@@ -1950,17 +1969,17 @@ dwg_decode_object(Bit_Chain * dat, Dwg_Object_Object * ord)
           ord->bitsize = 0;
           ord->extended_size = 0;
           ord->num_handles = 0;
-          return;
+          return 0;
         }
       if (ord->extended_size == 0)
         {
-          ord->extended = malloc(size);
+          ord->extended = (unsigned char *)malloc(size);
           ord->extended_size = size;
         }
       else
         {
           ord->extended_size += size;
-          ord->extended = realloc(ord->extended, ord->extended_size);
+          ord->extended = (unsigned char *)realloc(ord->extended, ord->extended_size);
         }
       error = bit_read_H(dat, &ord->extended_handle);
       if (error)
@@ -2638,7 +2657,7 @@ dwg_decode_common_entity_handle_data(Bit_Chain * dat, Dwg_Object * obj)
   //	ent->subentity_ref_handle = dwg_decode_handleref_with_code (dat, obj, obj->parent, 3);
 
   if (ent->num_reactors)
-    ent->reactors = malloc(ent->num_reactors * sizeof(Dwg_Object_Ref*));
+    ent->reactors = (Dwg_Object_Ref**) malloc(ent->num_reactors * sizeof(Dwg_Object_Ref*));
   for (i = 0; i < ent->num_reactors; i++)
     {
       ent->reactors[i] = dwg_decode_handleref_with_code(dat, obj, obj->parent, 4);
@@ -2693,97 +2712,97 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     return 1;
   int i = obj->type - 500;
 
-  if (!strcmp(dwg->class[i].dxfname, "DICTIONARYVAR"))
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "DICTIONARYVAR"))
     {
       dwg_decode_DICTIONARYVAR(dat, obj);
       return 0;
     }
-  if (!strcmp(dwg->class[i].dxfname, "DICTIONARYWDFLT"))
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "DICTIONARYWDFLT"))
     {
       //dwg_decode_DICTIONARYWDLFT(dat, obj);
       return 0;
     }
-  if (!strcmp(dwg->class[i].dxfname, "HATCH"))
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "HATCH"))
     {
       dwg_decode_HATCH(dat, obj);
       return 0;
     }
-  if (!strcmp(dwg->class[i].dxfname, "IDBUFFER"))
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "IDBUFFER"))
     {
       dwg_decode_IDBUFFER(dat, obj);
       return 0;
     }
-  if (!strcmp(dwg->class[i].dxfname, "IMAGE"))
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "IMAGE"))
     {
       dwg_decode_IMAGE(dat, obj);
       return 0;
     }
-  if (!strcmp(dwg->class[i].dxfname, "IMAGEDEF"))
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "IMAGEDEF"))
     {
       dwg_decode_IMAGEDEF(dat, obj);
       return 0;
     }
-  if (!strcmp(dwg->class[i].dxfname, "IMAGEDEFREACTOR"))
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "IMAGEDEFREACTOR"))
     {
       dwg_decode_IMAGEDEFREACTOR(dat, obj);
       return 0;
     }
-  if (!strcmp(dwg->class[i].dxfname, "LAYER_INDEX"))
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "LAYER_INDEX"))
     {
       dwg_decode_LAYER_INDEX(dat, obj);
       return 0;
     }
-  if (!strcmp(dwg->class[i].dxfname, "LAYOUT"))
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "LAYOUT"))
     {
       dwg_decode_LAYOUT(dat, obj);
       return 0;
     }
-  if (!strcmp(dwg->class[i].dxfname, "LWPLINE"))
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "LWPLINE"))
     {
       dwg_decode_LWPLINE(dat, obj);
       return 0;
     }
-  if (!strcmp(dwg->class[i].dxfname, "OLE2FRAME"))
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "OLE2FRAME"))
     {
       dwg_decode_OLE2FRAME(dat, obj);
       return 0;
     }
-  if (!strcmp(dwg->class[i].dxfname, "PLACEHOLDER"))
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "PLACEHOLDER"))
     {
 //TODO:      dwg_decode_PLACEHOLDER(dat, obj);
       return 0;
     }
-  if (!strcmp(dwg->class[i].dxfname, "RASTERVARIABLES"))
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "RASTERVARIABLES"))
     {
       dwg_decode_RASTERVARIABLES(dat, obj);
       return 0;
     }
-  if (!strcmp(dwg->class[i].dxfname, "SORTENTSTABLE"))
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "SORTENTSTABLE"))
     {
       dwg_decode_SORTENTSTABLE(dat, obj);
       return 0;
     }
-  if (!strcmp(dwg->class[i].dxfname, "SPATIAL_FILTER"))
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "SPATIAL_FILTER"))
     {
       dwg_decode_SPATIAL_FILTER(dat, obj);
       return 0;
     }
-  if (!strcmp(dwg->class[i].dxfname, "SPATIAL_INDEX"))
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "SPATIAL_INDEX"))
     {
       dwg_decode_SPATIAL_INDEX(dat, obj);
       return 0;
     }
-  if (!strcmp(dwg->class[i].dxfname, "VBA_PROJECT"))
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "VBA_PROJECT"))
     {
 //TODO:      dwg_decode_VBA_PROJECT(dat, obj);
       return 0;
     }
-  if (!strcmp(dwg->class[i].dxfname, "WIPEOUTVARIABLE"))
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "WIPEOUTVARIABLE"))
     {
 //TODO:      dwg_decode_WIPEOUTVARIABLE(dat, obj);
       return 0;
     }
-  if (!strcmp(dwg->class[i].dxfname, "XRECORD"))
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "XRECORD"))
     {
       dwg_decode_XRECORD(dat, obj);
       return 0;
@@ -3059,7 +3078,7 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
         if (!dwg_decode_variable_type(dwg, dat, obj))
           {
             obj->supertype = DWG_SUPERTYPE_UNKNOWN;
-            obj->tio.unknown = malloc(obj->size);
+            obj->tio.unknown = (unsigned char*)malloc(obj->size);
             memcpy(obj->tio.unknown, &dat->chain[object_address], obj->size);
           }
       }

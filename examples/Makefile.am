@@ -15,7 +15,7 @@ get_bmp_LDADD = -lredwg
 dwg_ps_SOURCES = dwg_ps.c
 dwg_ps_LDADD = -lredwg -lps
 
-AM_CFLAGS = -Wextra
+AM_CFLAGS = -Wextra -I../src
 
 EXTRA_DIST = sample.dwg
 

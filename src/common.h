@@ -35,7 +35,7 @@ typedef enum DWG_VERSION_TYPE
 {
   R_BEFORE, R_13, R_14, R_2000, R_2004, R_2007, R_AFTER
 } Dwg_Version_Type;
-char version_codes[7][7];
+extern char version_codes[7][7];
 
 /**
  Data types (including compressed forms) used trough the file
