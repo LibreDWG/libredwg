@@ -27,6 +27,7 @@
 #include "bits.h"
 #include "dwg.h"
 #include "encode.h"
+#include "logging.h"
 
 
 /*--------------------------------------------------------------------------------
@@ -40,7 +41,7 @@
   bit_write_##type(dat, _obj->name);\
   if (loglevel>=2)\
     {\
-        fprintf(stderr, #name ": " FORMAT_##type "\n", _obj->name);\
+        LOG_TRACE(#name ": " FORMAT_##type "\n", _obj->name)\
     }
 
 #define FIELD_VALUE(name) _obj->name
@@ -117,7 +118,7 @@ bit_write_BE(dat, FIELD_VALUE(name.x), FIELD_VALUE(name.y), FIELD_VALUE(name.z))
           bit_write_##type(dat, _obj->name[vcount]);\
           if (loglevel>=2)\
             {\
-                fprintf(stderr, #name "[%d]: " FORMAT_##type "\n", vcount, _obj->name[vcount]);\
+                LOG_TRACE(#name "[%d]: " FORMAT_##type "\n", vcount, _obj->name[vcount])\
             }\
         }\
     }
@@ -159,7 +160,7 @@ static void dwg_encode_##token (Dwg_Object* obj, Dwg_Entity_##token * _obj, Bit_
   int vcount, rcount, rcount2, rcount3;\
 	Dwg_Data* dwg = obj->parent;\
   if (loglevel)\
-    fprintf (stderr, "Entity " #token ":\n");\
+    LOG_INFO("Entity " #token ":\n")\
 
 #define DWG_ENTITY_END }
 
@@ -835,7 +836,7 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
      break;
      */
   default:
-    fprintf(stderr, "Error: unknown object-type while encoding entity\n");
+    LOG_ERROR("Error: unknown object-type while encoding entity\n")
     exit(-1);
     }
 
@@ -883,7 +884,7 @@ void dwg_encode_common_entity_handle_data(Bit_Chain * dat, Dwg_Object * obj){
 
 void dwg_encode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj, Dwg_Object_Ref* ref, int code){
   if (ref->handleref.code != code){
-    if (loglevel) fprintf(stderr, "warning: trying to write handle with wrong code. Expected code=%d, got %d.\n", code, ref->handleref.code);
+    LOG_INFO("warning: trying to write handle with wrong code. Expected code=%d, got %d.\n", code, ref->handleref.code)
   }
 
   //TODO: implement-me!
