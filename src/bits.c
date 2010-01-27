@@ -23,6 +23,7 @@
 #include <ctype.h>
 
 #include "bits.h"
+#include "logging.h"
 
 /*------------------------------------------------------------------------------
  * Private functions prototypes
@@ -373,7 +374,7 @@ bit_read_BL(Bit_Chain * dat)
     return (0);
   else /* if (two_bit_code == 3) */
     {
-      fprintf(stderr, "Error: bit_read_BL: unexpected 2-bit code: '11'\n");
+      LOG_ERROR("bit_read_BL: unexpected 2-bit code: '11'")
       return (256);
     }
 }
@@ -419,7 +420,7 @@ bit_read_BD(Bit_Chain * dat)
     return (0.0);
   else /* if (two_bit_code == 3) */
     {
-      fprintf(stderr, "Error: bit_read_BD: unexpected 2-bit code: '11'\n");
+      LOG_ERROR("bit_read_BD: unexpected 2-bit code: '11'")
       /* create a Not-A-Number (NaN) */
       res = (long int *) &result;
       res[0] = -1;
@@ -474,7 +475,7 @@ bit_read_MC(Bit_Chain * dat)
       result |= ((long unsigned int) byte[i]) << j;
     }
 
-  fprintf(stderr, "bit_read_MC: error parsing modular char.\n");
+  LOG_ERROR("bit_read_MC: error parsing modular char.")
   return 0; /* error... */
 }
 
@@ -543,7 +544,7 @@ bit_read_MS(Bit_Chain * dat)
         word[i] &= 0x7fff;
       result |= ((long unsigned int) word[i]) << j;
     }
-  fprintf(stderr, "bit_read_MS: error parsing modular short.\n");
+  LOG_ERROR("bit_read_MS: error parsing modular short.")
   return 0; /* error... */
 }
 
@@ -733,9 +734,9 @@ bit_read_H(Bit_Chain * dat, Dwg_Handle * handle)
   handle->value = 0;
   if (handle->size > 4)
     {
-      fprintf(stderr,
-          "Error: handle-reference is longer than 4 bytes: %i.%i.%lu\n",
-          handle->code, handle->size, handle->value);
+      LOG_ERROR(
+          "handle-reference is longer than 4 bytes: %i.%i.%lu",
+          handle->code, handle->size, handle->value)
       handle->size = 0;
       return (-1);
     }

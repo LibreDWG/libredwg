@@ -2,10 +2,6 @@
 /*  LibreDWG - Free DWG library                                              */
 /*  http://code.google.com/p/libredwg/                                       */
 /*                                                                           */
-/*    based on LibDWG - Free DWG read-only library                           */
-/*    http://sourceforge.net/projects/libdwg                                 */
-/*    originally written by Felipe Castro <felipo at users.sourceforge.net>  */
-/*                                                                           */
 /*  Copyright (C) 2009 Rodrigo Rodrigues da Silva <pitanga@members.fsf.org>  */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
@@ -45,20 +41,21 @@
 
 #define HANDLER fprintf
 #define OUTPUT stderr
-#define LOG(level, format, args...) \
+
+#define LOG(level, args...) \
           if (DWG_LOGLEVEL >= DWG_LOGLEVEL_##level) { \
-            HANDLER(OUTPUT, format, args); \
-            HANDLER(OUTPUT, "\n"); \
+            HANDLER(OUTPUT, args); \
           }
 
-#define LOG_ERROR(format, args...) \
-          if (DWG_LOGLEVEL > DWG_LOGLEVEL_ERROR) \
+#define LOG_ERROR(args...) \
+          if (DWG_LOGLEVEL > DWG_LOGLEVEL_ERROR) { \
               HANDLER(OUTPUT, "ERROR: "); \
-              LOG(ERROR, format, args)
+              LOG(ERROR, args) \
+          }
 
-#define LOG_INFO(format, args...) LOG(INFO, format, args)
-#define LOG_TRACE(format, args...) LOG(TRACE, format, args)
-#define LOG_ALL(format, args...) LOG(ALL, format, args)
+#define LOG_INFO(args...) LOG(INFO, args)
+#define LOG_TRACE(args...) LOG(TRACE, args)
+#define LOG_ALL(args...) LOG(ALL, args)
 
 
 #endif //#ifndef LOGGING_H
