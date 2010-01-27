@@ -28,7 +28,10 @@
 #include "bits.h"
 #include "dwg.h"
 #include "decode.h"
+
+#define DWG_LOGLEVEL DWG_LOGLEVEL_TRACE
 #include "logging.h"
+
 
 /*--------------------------------------------------------------------------------
  * Welcome to the dark side of the moon...
@@ -392,7 +395,7 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
    */
 
   if (bit_search_sentinel(dat, dwg_sentinel(DWG_SENTINEL_HEADER_END)))
-    LOG_TRACE("=======> HEADER (end): %8X\n", (unsigned int) dat->byte)
+    LOG_TRACE("\n=======> HEADER (end): %8X\n", (unsigned int) dat->byte)
 
   /*-------------------------------------------------------------------------
    * Unknown section 1
@@ -400,9 +403,9 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
 
   if (dwg->header.num_sections == 6)
     {
-      LOG_TRACE("========> UNKNOWN 1: %8X\n",
+      LOG_TRACE("\n=======> UNKNOWN 1: %8X\n",
               (unsigned int) dwg->header.section[5].address)
-      LOG_TRACE("          UNKNOWN 1 (end): %8X\n",
+      LOG_TRACE("         UNKNOWN 1 (end): %8X\n",
               (unsigned int) (dwg->header.section[5].address
                   + dwg->header.section[5].size))
       dat->byte = dwg->header.section[5].address;
@@ -424,7 +427,7 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
 
       dat->bit = 0;
       start_address = dat->byte;
-      LOG_TRACE("=======> PICTURE: %8X\n",
+      LOG_TRACE("\n=======> PICTURE: %8X\n",
             (unsigned int) start_address - 16)
       if (bit_search_sentinel(dat, dwg_sentinel(DWG_SENTINEL_PICTURE_END)))
         {
@@ -443,7 +446,7 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
    * Header Variables
    */
 
-  LOG_INFO("=======> Header Variables: %8X\n",
+  LOG_INFO("\n=======> Header Variables: %8X\n",
           (unsigned int) dwg->header.section[0].address)
   LOG_INFO("         Header Variables (end): %8X\n",
           (unsigned int) (dwg->header.section[0].address
@@ -476,7 +479,7 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
   /*-------------------------------------------------------------------------
    * Classes
    */
-  LOG_INFO("=======> CLASS: %8X\n",
+  LOG_INFO("\n=======> CLASS: %8X\n",
           (unsigned int) dwg->header.section[1].address)
   LOG_INFO("         CLASS (end): %8X\n",
           (unsigned int) (dwg->header.section[1].address
@@ -617,7 +620,7 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
   while (section_size > 2);
 
   LOG_INFO("Num objects: %lu\n", dwg->num_objects)
-  LOG_INFO("=======> Object Data: %8X\n", (unsigned int) object_begin)
+  LOG_INFO("\n=======> Object Data: %8X\n", (unsigned int) object_begin)
   dat->byte = object_end;
   object_begin = bit_read_MS(dat);
   LOG_INFO("         Object Data (end): %8X\n",
@@ -647,7 +650,7 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
    //antckr = ckr;
    } while (section_size > 0);
    */
-  LOG_INFO("=======> Object Map: %8X\n",
+  LOG_INFO("\n=======> Object Map: %8X\n",
           (unsigned int) dwg->header.section[2].address)
   LOG_INFO("         Object Map (end): %8X\n",
           (unsigned int) (dwg->header.section[2].address
@@ -663,7 +666,7 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
       long unsigned int pvz;
       unsigned char sig, sig2;
 
-      LOG_INFO("=======> Second Header: %8X\n",
+      LOG_INFO("\n=======> Second Header: %8X\n",
           (unsigned int) dat->byte-16)
       pvzadr = dat->byte;
 
@@ -765,7 +768,7 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
    * Section MEASUREMENT
    */
 
-  LOG_INFO("=======> Unknown 2: %8X\n",
+  LOG_INFO("\n=======> Unknown 2: %8X\n",
           (unsigned int) dwg->header.section[4].address)
   LOG_INFO("         Unknown 2 (end): %8X\n",
           (unsigned int) (dwg->header.section[4].address
