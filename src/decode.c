@@ -139,10 +139,28 @@
       FIELD_HANDLE(reactors[vcount], code);\
     }
 
+#define ENT_REACTORS(code)\
+  FIELD_VALUE(reactors) = (BITCODE_H*) malloc(sizeof(BITCODE_H) * obj->tio.entity->num_reactors);\
+  for (vcount=0; vcount<obj->tio.entity->num_reactors; vcount++)\
+    {\
+      FIELD_HANDLE(reactors[vcount], code);\
+    }
+
 #define XDICOBJHANDLE(code)\
   SINCE(R_2004)\
     {\
       if (!obj->tio.object->xdic_missing_flag)\
+        FIELD_HANDLE(xdicobjhandle, code);\
+    }\
+  PRIOR_VERSIONS\
+    {\
+      FIELD_HANDLE(xdicobjhandle, code);\
+    }
+
+#define ENT_XDICOBJHANDLE(code)\
+  SINCE(R_2004)\
+    {\
+      if (!obj->tio.entity->xdic_missing_flag)\
         FIELD_HANDLE(xdicobjhandle, code);\
     }\
   PRIOR_VERSIONS\
@@ -547,7 +565,7 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
 
   dat->byte += 16;
   pvz = bit_read_RL(dat); // Unknown bitlong inter class and object
-  LOG_TRACE("Address: %lu / Content: 0x%08X\n", dat->byte - 4, pvz)
+  LOG_TRACE("Address: %lu / Content: 0x%#lX\n", dat->byte - 4, pvz)
   LOG_INFO("Number of classes read: %u\n", dwg->num_classes)
 
   /*-------------------------------------------------------------------------
@@ -792,23 +810,37 @@ static void
 resolve_objectref_vector(Dwg_Data * dwg)
 {
   long unsigned int i;
+  Dwg_Object * obj;
   for (i = 0; i < dwg->num_object_refs; i++)
     {
-      Dwg_Object * obj = dwg->object_ref[i]->obj;
-      obj = dwg_resolve_handle(dwg, dwg->object_ref[i]->absolute_ref);
-
       LOG_TRACE("\n==========\n")
-      LOG_TRACE("HANDLE(%d.%d.%lu) Absolute:%lu\n",
+      LOG_TRACE("-objref: HANDLE(%d.%d.%lu) Absolute:%lu\n",
           dwg->object_ref[i]->handleref.code,
           dwg->object_ref[i]->handleref.size,
           dwg->object_ref[i]->handleref.value,
           dwg->object_ref[i]->absolute_ref)
 
+      //look for object
+      obj = dwg_resolve_handle(dwg, dwg->object_ref[i]->absolute_ref);
+
+      if(obj)
+        {
+          LOG_TRACE("-found:  HANDLE(%d.%d.%lu)\n",
+              obj->handle.code,
+              obj->handle.size,
+              obj->handle.value)
+        }
+
+      //assign found pointer to objectref vector
+      dwg->object_ref[i]->obj = obj;
+
+
       if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE)
         {
           if (obj)
             dwg_print_object(obj);
-          else LOG_ERROR("Null object pointer: %lu\n", i)
+          else
+            LOG_ERROR("Null object pointer: object_ref[%lu]\n", i)
         }
     }
 }
@@ -1811,7 +1843,7 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
 
   SINCE(R_2004)
     {
-      ent->xdict_missing_flag = bit_read_B(dat);
+      ent->xdic_missing_flag = bit_read_B(dat);
     }
 
   VERSIONS(R_13,R_14)
@@ -1917,13 +1949,18 @@ dwg_decode_object(Bit_Chain * dat, Dwg_Object_Object * ord)
  * Find a pointer to an object given it's id (handle)
  */
 static Dwg_Object *
-dwg_resolve_handle(Dwg_Data* dwg, unsigned long int absref)
+dwg_resolve_handle(Dwg_Data* dwg, long unsigned int absref)
 {
   //FIXME find a faster algorithm
-  int i;
+  long unsigned int i;
   for (i = 0; i < dwg->num_objects; i++)
-    if (dwg->object[i].handle.value == absref)
-      return &dwg->object[i];
+    {
+      if (dwg->object[i].handle.value == absref)
+        {
+          return &dwg->object[i];
+        }
+    }
+  LOG_ERROR("Object not found: %lu\n", absref)
   return 0;
 }
 
@@ -2557,56 +2594,67 @@ static void
 dwg_decode_common_entity_handle_data(Bit_Chain * dat, Dwg_Object * obj)
 {
 
+  //XXX setup required to use macros
   Dwg_Object_Entity *ent;
+  Dwg_Data *dwg = obj->parent;
   int i;
+  long unsigned int vcount;
   ent = obj->tio.entity;
+  Dwg_Object_Entity *_obj = ent;
 
-  //TODO: check what is the condition for the presence of this handle:
-  //	ent->subentity_ref_handle = dwg_decode_handleref_with_code (dat, obj, obj->parent, 3);
-
-  if (ent->num_reactors)
-    ent->reactors = (Dwg_Object_Ref**) malloc(ent->num_reactors * sizeof(Dwg_Object_Ref*));
-  for (i = 0; i < ent->num_reactors; i++)
+  if (FIELD_VALUE(entity_mode)==0)
     {
-      ent->reactors[i] = dwg_decode_handleref_with_code(dat, obj, obj->parent, 4);
+      FIELD_HANDLE(subentity, 3)
     }
-
-  ent->xdicobjhandle = dwg_decode_handleref_with_code(dat, obj, obj->parent, 3);
+  ENT_REACTORS(4)
+  ENT_XDICOBJHANDLE(3)
 
   VERSIONS(R_13,R_14)
     {
-      ent->layer = dwg_decode_handleref_with_code(dat, obj, obj->parent, 5);
-      if (!ent->isbylayerlt)
-        {
-          ent->ltype = dwg_decode_handleref_with_code(dat, obj, obj->parent, 5);
-        }
+      FIELD_HANDLE(layer, 5)
+      if (!FIELD_VALUE(isbylayerlt))
+        FIELD_HANDLE(ltype, 5)
     }
 
-  if (0)
-    { //TODO: these are optional. Figure out what is the condition.
-      // These seem to depend on FEDCBA flags: look at page 53 in the spec.
-      ent->prev_entity = dwg_decode_handleref_with_code(dat, obj, obj->parent, 4);
-      ent->next_entity = dwg_decode_handleref_with_code(dat, obj, obj->parent, 4);
+  VERSIONS(R_13,R_14)
+    {
+      if (0)
+        { //TODO: in R13, R14 these are optional. Look at page 53 in the spec
+          //      for condition.
+          FIELD_HANDLE(prev_entity, 4)
+          FIELD_HANDLE(next_entity, 4)
+        }
     }
 
   SINCE(R_2000)
     {
-      ent->layer = dwg_decode_handleref_with_code(dat, obj, obj->parent, 5);
-      if (ent->linetype_flags == 3)
-        {
-          ent->ltype = dwg_decode_handleref_with_code(dat, obj, obj->parent, 5);
-        }
-      if (ent->plotstyle_flags == 3)
-        {
-          ent->plotstyle = dwg_decode_handleref_with_code(dat, obj, obj->parent, 5);
+      if (!FIELD_VALUE(nolinks))
+        { //TODO: these are optional. see page 52
+          FIELD_HANDLE(prev_entity, 4)
+          FIELD_HANDLE(next_entity, 4)
         }
     }
 
-  if (dat->version >= R_2007 && ent->material_flags == 3)
+  SINCE(R_2000)
     {
-      ent->material = dwg_decode_handleref(dat, obj, obj->parent);
+      FIELD_HANDLE(layer, 5)
+      if (FIELD_VALUE(linetype_flags)==3)
+        {
+          FIELD_HANDLE(ltype, 5)
+        }
+      if (FIELD_VALUE(plotstyle_flags)==3)
+        {
+          FIELD_HANDLE(plotstyle, 5)
+        }
     }
 
+  SINCE(R_2007)
+    {
+      if (FIELD_VALUE(material_flags)==3)
+        {
+          FIELD_HANDLE(material, ANYCODE)
+        }
+    }
 }
 
 

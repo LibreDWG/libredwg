@@ -2535,7 +2535,7 @@ typedef struct _dwg_object_entity
 
   BITCODE_BB entity_mode;
   BITCODE_BL num_reactors;
-  BITCODE_B xdict_missing_flag;
+  BITCODE_B xdic_missing_flag;
   BITCODE_B isbylayerlt;
   BITCODE_B nolinks;
   BITCODE_CMC color;
@@ -2552,7 +2552,7 @@ typedef struct _dwg_object_entity
   unsigned int num_handles;
 
   //Common Entity Handle Data
-  BITCODE_H subentity_ref_handle;
+  BITCODE_H subentity;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
   BITCODE_H prev_entity;
@@ -2805,6 +2805,12 @@ dwg_get_entity_layer(Dwg_Object_Entity *);
 
 Dwg_Object*
 dwg_next_object(Dwg_Object* obj);
+
+int
+dwg_get_object(Dwg_Object* obj, Dwg_Object_Ref* ref);
+
+void
+dwg_print_object(Dwg_Object *obj);
 
 
 double dwg_page_x_min(Dwg_Data *dwg);

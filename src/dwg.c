@@ -329,10 +329,22 @@ dwg_get_entity_layer(Dwg_Object_Entity * ent)
 }
 
 Dwg_Object*
-dwg_next_object(Dwg_Object* obj){
+dwg_next_object(Dwg_Object* obj)
+{
   if ((obj->index+1) > obj->parent->num_objects-1)
     return 0;
   return &obj->parent->object[obj->index+1];
+}
+
+int
+dwg_get_object(Dwg_Object* obj, Dwg_Object_Ref* ref)
+{
+  if (ref->obj)
+    {
+      obj = ref->obj;
+      return 0;
+    }
+  return -1;
 }
 
 void
