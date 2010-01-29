@@ -28,10 +28,13 @@
 #include "bits.h"
 #include "dwg.h"
 #include "decode.h"
+#include "print.h"
 
+//#define DWG_LOGLEVEL DWG_LOGLEVEL_INSANE
 #define DWG_LOGLEVEL DWG_LOGLEVEL_TRACE
 #include "logging.h"
 
+#define REFS_PER_REALLOC 100
 
 /*--------------------------------------------------------------------------------
  * Welcome to the dark side of the moon...
@@ -223,6 +226,9 @@ dwg_resolve_handle(Dwg_Data* dwg, unsigned long int handle);
 static void
 dwg_decode_header_variables(Bit_Chain* dat, Dwg_Data * dwg);
 
+static void
+resolve_objectref_vector(Dwg_Data * dwg);
+
 /*--------------------------------------------------------------------------------
  * Public variables
  */
@@ -308,12 +314,6 @@ dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
       "ERROR: LibreDWG does not support this version: %s.\n",
       version)
   return -1;
-}
-
-Dwg_Object* dwg_next_object(Dwg_Object* obj){
-  if ((obj->index+1) > obj->parent->num_objects-1)
-    return 0;
-  return &obj->parent->object[obj->index+1];
 }
 
 int
@@ -761,7 +761,7 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
 
       if (bit_search_sentinel(dat, dwg_sentinel(
           DWG_SENTINEL_SECOND_HEADER_END)))
-        LOG_INFO(" Second Header (end): %8X\n", (unsigned int) dat->byte)
+        LOG_INFO("         Second Header (end): %8X\n", (unsigned int) dat->byte)
     }
 
   /*-------------------------------------------------------------------------
@@ -777,22 +777,45 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
   dat->bit = 0;
   dwg->measurement = bit_read_RL(dat);
 
-  LOG_TRACE("Size bytes :\t%lu\n", dat->size)
+  LOG_TRACE("         Size bytes :\t%lu\n", dat->size)
 
   //step II of handles parsing: resolve pointers from handle value
   //XXX: move this somewhere else
-  for (i = 0; i < dwg->num_object_refs; i++)
-    {
-      dwg->object_ref[i]->obj = dwg_resolve_handle(dwg,
-          dwg->object_ref[i]->absolute_ref);
-    }
+  LOG_TRACE("\n\nResolving pointers from ObjectRef vector.\n")
+  resolve_objectref_vector(dwg);
+  LOG_TRACE("\n")
 
   return 0;
 }
 
+static void
+resolve_objectref_vector(Dwg_Data * dwg)
+{
+  long unsigned int i;
+  for (i = 0; i < dwg->num_object_refs; i++)
+    {
+      Dwg_Object * obj = dwg->object_ref[i]->obj;
+      obj = dwg_resolve_handle(dwg, dwg->object_ref[i]->absolute_ref);
+
+      LOG_TRACE("\n==========\n")
+      LOG_TRACE("HANDLE(%d.%d.%lu) Absolute:%lu\n",
+          dwg->object_ref[i]->handleref.code,
+          dwg->object_ref[i]->handleref.size,
+          dwg->object_ref[i]->handleref.value,
+          dwg->object_ref[i]->absolute_ref)
+
+      if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE)
+        {
+          if (obj)
+            dwg_print_object(obj);
+          else LOG_ERROR("Null object pointer: %lu\n", i)
+        }
+    }
+}
+
 /* R2004 Literal Length
  */
-int
+static int
 read_literal_length(Bit_Chain* dat, unsigned char *opcode)
 {
   int total = 0;
@@ -819,7 +842,8 @@ read_literal_length(Bit_Chain* dat, unsigned char *opcode)
 
 /* R2004 Long Compression Offset
  */
-int read_long_compression_offset(Bit_Chain* dat)
+static int
+read_long_compression_offset(Bit_Chain* dat)
 {
   int total = 0;
   unsigned char byte = bit_read_RC(dat);
@@ -834,7 +858,8 @@ int read_long_compression_offset(Bit_Chain* dat)
 
 /* R2004 Two Byte Offset
  */
-int read_two_byte_offset(Bit_Chain* dat, int* lit_length)
+static int
+read_two_byte_offset(Bit_Chain* dat, int* lit_length)
 {
   int offset;
   unsigned char firstByte = bit_read_RC(dat);
@@ -845,7 +870,7 @@ int read_two_byte_offset(Bit_Chain* dat, int* lit_length)
 
 /* Decompresses a system section of a 2004 DWG flie
  */
-int
+static int
 decompress_R2004_section(Bit_Chain* dat, char *decomp, 
                          unsigned long int comp_data_size)
 {
@@ -964,7 +989,7 @@ decompress_R2004_section(Bit_Chain* dat, char *decomp,
  * The Section Map is a vector of number, size, and address triples used
  * to locate the sections in the file. 
  */
-void
+static void
 read_R2004_section_map(Bit_Chain* dat, Dwg_Data * dwg, 
                        unsigned long int comp_data_size, 
                        unsigned long int decomp_data_size)
@@ -1030,7 +1055,8 @@ read_R2004_section_map(Bit_Chain* dat, Dwg_Data * dwg,
   free(decomp);
 }
 
-Dwg_Section* find_section(Dwg_Data *dwg, unsigned long int index)
+static Dwg_Section*
+find_section(Dwg_Data *dwg, unsigned long int index)
 {
   int i;
   if (dwg->header.section == 0 || index == 0)
@@ -1045,7 +1071,7 @@ Dwg_Section* find_section(Dwg_Data *dwg, unsigned long int index)
 
 /* Read R2004 Section Info
  */
-void
+static void
 read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg, 
                         unsigned long int comp_data_size, 
                         unsigned long int decomp_data_size)
@@ -1162,7 +1188,7 @@ typedef union _encrypted_section_header
 
 /* R2004 Class Section
  */
-void 
+static void
 read_2004_class_section(Bit_Chain* dat, Dwg_Data *dwg)
 {
   char sentinel[] = {0x8D, 0xA1, 0xC4, 0xB8, 0xC4, 0xA9, 0xF8, 0xC5, 0xC0, 
@@ -1901,8 +1927,6 @@ dwg_resolve_handle(Dwg_Data* dwg, unsigned long int absref)
   return 0;
 }
 
-#define REFS_PER_REALLOC 100
-
 static Dwg_Object_Ref *
 dwg_decode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg)
 {
@@ -1977,7 +2001,7 @@ dwg_decode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg,
   ref = dwg_decode_handleref(dat, obj, dwg);
   if (ref->absolute_ref == 0 && ref->handleref.code != code)
     {
-      LOG_ERROR("Expected a CODE %d handle, got a %d", code, ref->handleref.code)
+      LOG_ERROR("Expected a CODE %d handle, got a %d\n", code, ref->handleref.code)
       //TODO: At the moment we are tolerating wrong codes in handles.
       // in the future we might want to get strict and return 0 here so that code will crash
       // whenever it reaches the first handle parsing error. This might make debugging easier.
@@ -2585,9 +2609,15 @@ dwg_decode_common_entity_handle_data(Bit_Chain * dat, Dwg_Object * obj)
 
 }
 
+
 /* OBJECTS *******************************************************************/
 
 #include<dwg.spec>
+
+
+/*--------------------------------------------------------------------------------
+ * Private functions which depend on the preceding
+ */
 
 static int
 dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
@@ -2695,9 +2725,6 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
   return 1;
 }
 
-/*--------------------------------------------------------------------------------
- * Private functions, which depend from the preceding
- */
 static void
 dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
     long unsigned int address)

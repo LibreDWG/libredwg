@@ -8,6 +8,11 @@
 #define DECODER if (1)
 #endif
 
+#ifdef IS_PRINT
+#define ENCODER if (0)
+#define DECODER if (0)
+#endif
+
 #define TODO_ENCODER fprintf(stderr, "TODO: Encoder\n");
 #define TODO_DECODER fprintf(stderr, "TODO: Decoder\n");
 
@@ -2916,20 +2921,16 @@ DWG_ENTITY(TABLE);
                         //read from appropriate place in handles section
                         break;
                       case 64: /* kBuffer */
-                        if (loglevel)
-                          fprintf(stderr, "ERROR: Unknwon data type in TABLE entity: \"kBuffer\".\n");
+                        LOG_ERROR("Unknwon data type in TABLE entity: \"kBuffer\".\n")
                         break;
                       case 128: /* kResBuf */
-                        if (loglevel)
-                          fprintf(stderr, "ERROR: Unknwon data type in TABLE entity: \"kResBuf\".\n");
+                        LOG_ERROR("Unknwon data type in TABLE entity: \"kResBuf\".\n")
                         break;
                       case 256: /* kGeneral */
-                        if (loglevel)
-                          fprintf(stderr, "ERROR: Unknwon data type in TABLE entity: \"kGeneral\".\n");
+                        LOG_ERROR("Unknwon data type in TABLE entity: \"kGeneral\".\n")
                         break;
                       default:
-                        if (loglevel)
-                          fprintf(stderr, "ERROR: Invalid data type in TABLE entity\n");
+                        LOG_ERROR("Invalid data type in TABLE entity\n")
                         break;
                     }
                   FIELD_BL(cells[rcount].unknown2);

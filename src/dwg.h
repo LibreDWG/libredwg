@@ -2752,6 +2752,8 @@ typedef struct _dwg_struct
 
   unsigned int dwg_ot_layout;
 
+  struct _bit_chain *bit_chain;
+
 } Dwg_Data;
 
 /*--------------------------------------------------

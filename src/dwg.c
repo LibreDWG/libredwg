@@ -87,6 +87,8 @@ dwg_read_file(char *filename, Dwg_Data * dwg_data)
 
   /* Decode the dwg structure
    */
+  dwg_data->bit_chain = &bit_chain;
+
   if (dwg_decode_data(&bit_chain, dwg_data))
     {
       LOG_ERROR("Failed to decode file: %s\n", filename)
@@ -324,6 +326,13 @@ Dwg_Object_LAYER *
 dwg_get_entity_layer(Dwg_Object_Entity * ent)
 {
   return ent->layer->obj->tio.object->tio.LAYER;
+}
+
+Dwg_Object*
+dwg_next_object(Dwg_Object* obj){
+  if ((obj->index+1) > obj->parent->num_objects-1)
+    return 0;
+  return &obj->parent->object[obj->index+1];
 }
 
 void
