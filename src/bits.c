@@ -155,10 +155,10 @@ bit_read_4BITS(Bit_Chain * dat)
 void
 bit_write_4BITS(Bit_Chain * dat, unsigned char value)
 {
-  bit_advance_position(dat, 4);
   unsigned char byte;
   unsigned char remainder1, remainder2;
 
+  bit_advance_position(dat, 4);
   byte = dat->chain[dat->byte];
   remainder1 = byte & (0xff << (8 - dat->bit));
   remainder2 = byte & (0xff >> (dat->bit+4));
@@ -367,7 +367,7 @@ bit_read_BL(Bit_Chain * dat)
     }
   else if (two_bit_code == 1)
     {
-      result = bit_read_RC(dat);
+      result = bit_read_RC(dat) & 0xFF;
       return (result);
     }
   else if (two_bit_code == 2)

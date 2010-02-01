@@ -300,6 +300,7 @@ typedef struct _dwg_header_variables {
   BITCODE_BS ISOLINES;
   BITCODE_BS CMLJUST;
   BITCODE_BS TEXTQLTY;
+  BITCODE_BL unknown_14b;
   BITCODE_BD LTSCALE;
   BITCODE_BD VTEXTSIZE;
   BITCODE_BD TRACEWID;
@@ -643,6 +644,7 @@ typedef struct _dwg_entity_BLOCK
  */
 typedef struct _dwg_entity_ENDBLK
 {
+  char dummy;
 } Dwg_Entity_ENDBLK;
 
 /**
@@ -650,6 +652,7 @@ typedef struct _dwg_entity_ENDBLK
  */
 typedef struct _dwg_entity_SEQEND
 {
+  char dummy;
 } Dwg_Entity_SEQEND;
 
 /**
@@ -836,7 +839,7 @@ typedef struct _dwg_entity_LINE
  */
 typedef struct _dwg_entity_DIMENSION_ORDINATE
 {
-  DIMENSION_COMMON;
+  DIMENSION_COMMON
   BITCODE_2RD _12_pt;
   BITCODE_3BD _10_pt;
   BITCODE_3BD _13_pt;
@@ -851,7 +854,7 @@ typedef struct _dwg_entity_DIMENSION_ORDINATE
  */
 typedef struct _dwg_entity_DIMENSION_LINEAR
 {
-  DIMENSION_COMMON;
+  DIMENSION_COMMON
   BITCODE_2RD _12_pt;
   BITCODE_3BD _13_pt;
   BITCODE_3BD _14_pt;
@@ -867,7 +870,7 @@ typedef struct _dwg_entity_DIMENSION_LINEAR
  */
 typedef struct _dwg_entity_DIMENSION_ALIGNED
 {
-  DIMENSION_COMMON;
+  DIMENSION_COMMON
   BITCODE_2RD _12_pt;
   BITCODE_3BD _13_pt;
   BITCODE_3BD _14_pt;
@@ -882,7 +885,7 @@ typedef struct _dwg_entity_DIMENSION_ALIGNED
  */
 typedef struct _dwg_entity_DIMENSION_ANG3PT
 {
-  DIMENSION_COMMON;
+  DIMENSION_COMMON
   BITCODE_2RD _12_pt;
   BITCODE_3BD _10_pt;
   BITCODE_3BD _13_pt;
@@ -897,7 +900,7 @@ typedef struct _dwg_entity_DIMENSION_ANG3PT
  */
 typedef struct _dwg_entity_DIMENSION_ANG2LN
 {
-  DIMENSION_COMMON;
+  DIMENSION_COMMON
   BITCODE_2RD _12_pt;
   BITCODE_2RD _16_pt;
   BITCODE_3BD _13_pt;
@@ -913,7 +916,7 @@ typedef struct _dwg_entity_DIMENSION_ANG2LN
  */
 typedef struct _dwg_entity_DIMENSION_RADIUS
 {
-  DIMENSION_COMMON;
+  DIMENSION_COMMON
   BITCODE_2RD _12_pt;
   BITCODE_3BD _10_pt;
   BITCODE_3BD _15_pt;
@@ -927,7 +930,7 @@ typedef struct _dwg_entity_DIMENSION_RADIUS
  */
 typedef struct _dwg_entity_DIMENSION_DIAMETER
 {
-  DIMENSION_COMMON;
+  DIMENSION_COMMON
   BITCODE_2RD _12_pt;
   BITCODE_3BD _15_pt;
   BITCODE_3BD _10_pt;
@@ -1365,7 +1368,7 @@ typedef struct _dwg_object_BLOCK_HEADER
   BITCODE_BL owned_object_count;
   BITCODE_3DPOINT base_pt;
   BITCODE_TV xref_pname;
-  BITCODE_RC insert_count;
+  BITCODE_RL insert_count;
   BITCODE_TV block_description;
   BITCODE_BL size_of_preview_data;
   BITCODE_RC* binary_preview_data;
@@ -1892,6 +1895,7 @@ typedef struct _dwg_object_DICTIONARYVAR
  */
 typedef struct _dwg_object_DICTIONARYWDLFT
 {
+  char dummy;
 //TODO 
 } Dwg_Object_DICTIONARYWDLFT;
 
@@ -2192,6 +2196,7 @@ typedef struct _dwg_object_PROXY
  */
 typedef struct _dwg_object_PLACEHOLDER
 {
+  char dummy;
 //TODO 
 } Dwg_Object_PLACEHOLDER;
 
@@ -2433,6 +2438,7 @@ typedef struct _dwg_entity_TABLE
  */
 typedef struct _dwg_object_VBA_PROJECT
 {
+  char dummy;
 //TODO 
 } Dwg_Object_VBA_PROJECT;
 
@@ -2442,6 +2448,7 @@ typedef struct _dwg_object_VBA_PROJECT
  */
 typedef struct _dwg_object_WIPEOUTVARIABLE
 {
+  char dummy;
 //TODO 
 } Dwg_Object_WIPEOUTVARIABLE;
 
@@ -2701,6 +2708,26 @@ typedef struct
   char name[64];
   Dwg_Section **sections;
 } Dwg_Section_Info;
+
+typedef enum DWG_SECTION_TYPE
+{
+  SECTION_HEADER = 0x01,
+  SECTION_AUXHEADER = 0x02,
+  SECTION_CLASSES = 0x03,
+  SECTION_HANDLES = 0x04,
+  SECTION_TEMPLATE = 0x05,
+  SECTION_OBJFREESPACE = 0x06,
+  SECTION_DBOBJECTS = 0x07,
+  SECTION_REVHISTORY = 0x08,
+  SECTION_SUMMARYINFO = 0x09,
+  SECTION_PREVIEW = 0x0a,
+  SECTION_APPINFO = 0x0b,
+  SECTION_APPINFOHISTORY = 0x0c,
+  SECTION_FILEDEPLIST = 0x0d,
+  SECTION_SECURITY,      // 
+  SECTION_VBAPROJECT,    // not seen
+  SECTION_SIGNATURE      //
+} Dwg_Section_Type;
 
 /**
  Main DWG struct

@@ -374,7 +374,10 @@ DWG_ENTITY(INSERT);
 
   SINCE(R_2004)
     {
-      FIELD(owned_obj_count, BL);
+      if (FIELD_VALUE(has_attribs))
+        {
+          FIELD(owned_obj_count, BL);
+        }
     }
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -385,18 +388,21 @@ DWG_ENTITY(INSERT);
   //I guess it means "R13-R2000:" (just like in MINSERT)
   VERSIONS(R_13,R_2000)
     {
-    if(FIELD_VALUE(has_attribs))
-      {
-        FIELD_HANDLE(first_attrib, 4);
-        FIELD_HANDLE(last_attrib, 4);
-      }
+      if(FIELD_VALUE(has_attribs))
+        {
+          FIELD_HANDLE(first_attrib, 4);
+          FIELD_HANDLE(last_attrib, 4);
+        }
     }
 
   //Spec typo? Spec says "2004:" but I think it should be "2004+:"
   // just like field owned_obj_count (AND just like in MINSERT)
   SINCE(R_2004)
     {
-      HANDLE_VECTOR(attrib_handles, owned_obj_count, 4);
+      if (FIELD_VALUE(has_attribs))
+        {
+          HANDLE_VECTOR(attrib_handles, owned_obj_count, 4);
+        }
     }
 
   if (FIELD_VALUE(has_attribs))
@@ -481,7 +487,10 @@ DWG_ENTITY(MINSERT);
 
   SINCE(R_2004)
     {
-      FIELD(owned_obj_count, BL);
+      if (FIELD_VALUE(has_attribs))
+        {
+          FIELD(owned_obj_count, BL);
+        }
     }
 
   FIELD(numcols, BS);
@@ -658,7 +667,7 @@ DWG_ENTITY(POLYLINE_3D);
 
   SINCE(R_2004)
     {
-      HANDLE_VECTOR(vertex, owned_obj_count, 4);
+      HANDLE_VECTOR(vertex, owned_obj_count, 4);  //code 3
     }
 
   FIELD_HANDLE(seqend, 3);
@@ -1139,7 +1148,6 @@ DWG_ENTITY_END
 
 /*(36)*/
 DWG_ENTITY(SPLINE);
-  int i;
 
   FIELD_BS(scenario);
   if (FIELD_VALUE(scenario) != 1 && FIELD_VALUE(scenario) != 2)
@@ -1156,7 +1164,7 @@ DWG_ENTITY(SPLINE);
       FIELD_BS(num_fit_pts);
       REPEAT(num_fit_pts, fit_pts, Dwg_Entity_SPLINE_point)
         {
-          FIELD_3BD(fit_pts[i]);
+          FIELD_3BD(fit_pts[rcount]);
         }
     }
   if (FIELD_VALUE(scenario) == 1)
@@ -1172,23 +1180,23 @@ DWG_ENTITY(SPLINE);
     }
   REPEAT(num_knots, knots, BITCODE_BD)
     {
-      FIELD_BD(knots[i]);
+      FIELD_BD(knots[rcount]);
     }
 
   REPEAT(num_ctrl_pts, ctrl_pts, Dwg_Entity_SPLINE_control_point)
     {
 //TODO: does it work both for encoder and decoder routines?
-      FIELD_3BD(ctrl_pts[i]);
+      FIELD_3BD(ctrl_pts[rcount]);
       if (!FIELD_VALUE(weighted))
         {
           //TODO check what "D" means on spec.
           //assuming typo - should be BD
           //assuming w=0 when not present.
-          FIELD_VALUE(ctrl_pts[i].w) = 0;
+          FIELD_VALUE(ctrl_pts[rcount].w) = 0;
         }
       else
         {
-          FIELD_BD(ctrl_pts[i].w);
+          FIELD_BD(ctrl_pts[rcount].w);
         }
     }
 
@@ -1226,8 +1234,9 @@ DWG_ENTITY_END
 inline void decode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj){
 	Dwg_Data* dwg = obj->parent;
   int vcount, rcount, rcount2;
-  FIELD_B(acis_empty);
   int i=0;
+  FIELD_B(acis_empty);
+  
   if (!FIELD_VALUE(acis_empty))
     {
       FIELD_B (unknown);
@@ -1826,7 +1835,12 @@ DWG_OBJECT(VIEW);
   FIELD(lens_legth, BD);
   FIELD(front_clip, BD);
   FIELD(back_clip, BD);
-  FIELD(view_mode, RC); //??? 4bits
+  
+  //FIELD(view_mode, RC); //??? 4bits
+  bit_read_B(dat);
+  bit_read_B(dat);
+  bit_read_B(dat);
+  bit_read_B(dat);
 
   SINCE(R_2000)
     {
@@ -1838,11 +1852,15 @@ DWG_OBJECT(VIEW);
   SINCE(R_2000)
     {
       FIELD(associated_ucs, B);
-      FIELD_3BD(origin);
-      FIELD_3BD(x_direction);
-      FIELD_3BD(y_direction);
-      FIELD(elevation, BD);
-      FIELD(orthographic_view_type, BS);
+      
+      if (FIELD_VALUE(associated_ucs) & 1)
+        {
+          FIELD_3BD(origin);
+          FIELD_3BD(x_direction);
+          FIELD_3BD(y_direction);
+          FIELD(elevation, BD);
+          FIELD(orthographic_view_type, BS);
+        }      
     }
 
   SINCE(R_2007)
@@ -2041,7 +2059,8 @@ DWG_OBJECT(DIMSTYLE_CONTROL);
       TODO: this should be checked with more sample files from various DWG versions.
         ~Juca
       */
-      FIELD_HANDLE (unknown_handle, ANYCODE);
+      //FIELD_HANDLE (unknown_handle, ANYCODE);
+      bit_read_RC(dat);  // I think it's just one byte
     }
 
   FIELD_HANDLE (null_handle, 4);
@@ -2210,11 +2229,53 @@ DWG_OBJECT(DIMSTYLE);
     }
 
   FIELD_B (unknown);
-  FIELD_HANDLE(dimstyle_control, 4);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
-  FIELD_HANDLE(null_handle, 5);
-  FIELD_HANDLE(shapefile, 5); /*(DIMTXSTY)*/
+
+  VERSION(R_2004)        
+    {
+      //TODO: I'm completely mystified.
+      
+      // 111001 1111110111111110  01000001 (dimstyle handle 4.1.xx) 
+      // followed by: dimstyle | handles | xdic | null | shapefile
+      
+      // 111001 1111110111111110  11000001 (dimstyle handle c.2.xx)
+      // followed by: dimstyle | handles | xdic | null | shapefile
+      
+      // 010000                   01010011 (textstyle handle 5.3.xx)
+      // followed by: textstyle | dimblk ...
+            
+      char c1, c2, c3, c4, c5, c6;
+      char byte1, byte2;
+      
+	  c1 = bit_read_B(dat);
+	  c2 = bit_read_B(dat);
+	  c3 = bit_read_B(dat);
+	  c4 = bit_read_B(dat);
+	  c5 = bit_read_B(dat);
+	  c6 = bit_read_B(dat);	  
+
+      if (c6 & 1)
+      {
+        byte1 = bit_read_RC(dat);
+        byte2 = bit_read_RC(dat);
+        
+        FIELD_HANDLE(dimstyle_control, 4);  
+        REACTORS(4);
+        XDICOBJHANDLE(3);
+        FIELD_HANDLE(null_handle, 5);
+	  }
+	  	  
+	  // seems to be DIMTXTSTY followed by DIMLDRBLK, DIMBLK 
+	  // DIMBLK1, DIMBLK2 just like the variables in the header
+	  FIELD_HANDLE(shapefile, 5); 
+    }
+  OTHER_VERSIONS
+    {  
+      FIELD_HANDLE(dimstyle_control, 4);  
+      REACTORS(4);
+      XDICOBJHANDLE(3);
+      FIELD_HANDLE(null_handle, 5);  
+      FIELD_HANDLE(shapefile, 5); /*(DIMTXSTY)*/
+    }
 
   SINCE(R_2000)
     {
@@ -2583,7 +2644,6 @@ DWG_OBJECT_END
 
 //pg.147
 DWG_ENTITY(LWPLINE);
-  int i;
 
   FIELD_BS(flags);
 
@@ -2609,6 +2669,7 @@ DWG_ENTITY(LWPLINE);
 
   SINCE(R_2000)
     {
+      int i;
       FIELD_2RD(points[0]);
       for (i = 1; i < FIELD_VALUE(num_points); i++)
         {
@@ -2734,7 +2795,7 @@ DWG_OBJECT_END
 
 //pg.158
 DWG_ENTITY(TABLE);
-  int total_attr_def_count = 0;
+  //int total_attr_def_count = 0;
 
   FIELD_3BD (insertion_point);
 
@@ -2809,7 +2870,7 @@ DWG_ENTITY(TABLE);
               FIELD_BS(cells[rcount].attr_def_count);
               FIELD_BS(cells[rcount].attr_def_index);
               FIELD_TV(cells[rcount].attr_def_text);
-              total_attr_def_count += FIELD_VALUE(cells[rcount].attr_def_count);
+              //total_attr_def_count += FIELD_VALUE(cells[rcount].attr_def_count);
             }
         }
       if (FIELD_VALUE(cells[rcount].type)==1 || FIELD_VALUE(cells[rcount].type)==2)
