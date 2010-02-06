@@ -916,7 +916,6 @@ bit_write_L(Bit_Chain * dat, long unsigned int value)
 void
 bit_read_CMC(Bit_Chain * dat, Dwg_Color* color)
 {
-  color = (Dwg_Color*) malloc(sizeof(Dwg_Color));
   color->index = bit_read_BS(dat);
   if (dat->version >= R_2004)
     {

@@ -2130,9 +2130,9 @@ DWG_OBJECT(DIMSTYLE);
       FIELD_T (DIMBLK_T);
       FIELD_T (DIMBLK1_T);
       FIELD_T (DIMBLK2_T);
-      FIELD_BS (DIMCLRD);
-      FIELD_BS (DIMCLRE);
-      FIELD_BS (DIMCLRT);
+      FIELD_CMC (DIMCLRD);
+      FIELD_CMC (DIMCLRE);
+      FIELD_CMC (DIMCLRT);
     }
 
   SINCE(R_2000)
@@ -2192,10 +2192,10 @@ DWG_OBJECT(DIMSTYLE);
       FIELD_B (DIMTOFL);
       FIELD_B (DIMSAH);
       FIELD_B (DIMTIX);
-      FIELD_B (DIMSOXD);
-      FIELD_BS (DIMCLRD);
-      FIELD_BS (DIMCLRE);
-      FIELD_BS (DIMCLRT);
+      FIELD_B (DIMSOXD);	  
+      FIELD_CMC (DIMCLRD);
+      FIELD_CMC (DIMCLRE);
+      FIELD_CMC (DIMCLRT);
       FIELD_BS (DIMADEC);
       FIELD_BS (DIMDEC);
       FIELD_BS (DIMTDEC);
@@ -2230,59 +2230,18 @@ DWG_OBJECT(DIMSTYLE);
 
   FIELD_B (unknown);
 
-  VERSION(R_2004)        
-    {
-      //TODO: I'm completely mystified.
-      
-      // 111001 1111110111111110  01000001 (dimstyle handle 4.1.xx) 
-      // followed by: dimstyle | handles | xdic | null | shapefile
-      
-      // 111001 1111110111111110  11000001 (dimstyle handle c.2.xx)
-      // followed by: dimstyle | handles | xdic | null | shapefile
-      
-      // 010000                   01010011 (textstyle handle 5.3.xx)
-      // followed by: textstyle | dimblk ...
-            
-      char c1, c2, c3, c4, c5, c6;
-      char byte1, byte2;
-      
-	  c1 = bit_read_B(dat);
-	  c2 = bit_read_B(dat);
-	  c3 = bit_read_B(dat);
-	  c4 = bit_read_B(dat);
-	  c5 = bit_read_B(dat);
-	  c6 = bit_read_B(dat);	  
-
-      if (c6 & 1)
-      {
-        byte1 = bit_read_RC(dat);
-        byte2 = bit_read_RC(dat);
-        
-        FIELD_HANDLE(dimstyle_control, 4);  
-        REACTORS(4);
-        XDICOBJHANDLE(3);
-        FIELD_HANDLE(null_handle, 5);
-	  }
-	  	  
-	  // seems to be DIMTXTSTY followed by DIMLDRBLK, DIMBLK 
-	  // DIMBLK1, DIMBLK2 just like the variables in the header
-	  FIELD_HANDLE(shapefile, 5); 
-    }
-  OTHER_VERSIONS
-    {  
-      FIELD_HANDLE(dimstyle_control, 4);  
-      REACTORS(4);
-      XDICOBJHANDLE(3);
-      FIELD_HANDLE(null_handle, 5);  
-      FIELD_HANDLE(shapefile, 5); /*(DIMTXSTY)*/
-    }
+  FIELD_HANDLE(dimstyle_control, 4);  
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+  FIELD_HANDLE(null_handle, 5);  
+  FIELD_HANDLE(shapefile, 5); /* Text style (DIMTXSTY) */
 
   SINCE(R_2000)
     {
-      FIELD_HANDLE(leader_block,5); /*(DIMLDRBLK)*/
-      FIELD_HANDLE(dimblk,5); /*(DIMBLK)*/
-      FIELD_HANDLE(dimblk1,5); /*(DIMBLK1)*/
-      FIELD_HANDLE(dimblk2,5); /*(DIMBLK2)*/
+      FIELD_HANDLE(leader_block,5); /* Leader arrow	(DIMLDRBLK)*/
+      FIELD_HANDLE(dimblk,5); /* Arrow */
+      FIELD_HANDLE(dimblk1,5); /* Arrow 1 */
+      FIELD_HANDLE(dimblk2,5); /* Arrow 2 */
     }
 
   SINCE(R_2007)
