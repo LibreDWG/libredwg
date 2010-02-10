@@ -192,10 +192,20 @@ output_object(Dwg_Object* obj){
 void output_BLOCK_HEADER(Dwg_Object_Ref* ref)
 {
   Dwg_Object* obj;
-
   Dwg_Object_BLOCK_HEADER* hdr;
-  hdr = ref->obj->tio.object->tio.BLOCK_HEADER;
 
+  if (!ref)
+    {
+      fprintf(stderr, "Found null object reference. Could not output an SVG symbol for this BLOCK_HEADER\n");
+      return;
+    }
+  if (!ref->obj)
+    {
+      fprintf(stderr, "Found null ref->obj\n");
+      return;
+    }
+
+  hdr = ref->obj->tio.object->tio.BLOCK_HEADER;
   printf(
       "\t<g id=\"symbol-%lu\" >\n\t\t<!-- %s -->\n", ref->absolute_ref, hdr->entry_name);
 
