@@ -1722,7 +1722,7 @@ decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
       dwg->header.num_descriptions = 0;
     }
 
-
+  resolve_objectref_vector(dwg);
 
   LOG_ERROR(
 	  "Decoding of DWG version R2004 header is not fully implemented yet. We are going to try\n")
@@ -1837,6 +1837,7 @@ decode_R2007(Bit_Chain* dat, Dwg_Data * dwg)
   /////////////////////////////////////////
   //	incomplete implementation!
   /////////////////////////////////////////
+  resolve_objectref_vector(dwg);
 
   LOG_ERROR(
       "Decoding of DWG version R2007 header is not fully implemented yet. we are going to try\n")
