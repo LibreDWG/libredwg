@@ -2169,6 +2169,13 @@ dwg_decode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg,
 {
   Dwg_Object_Ref * ref;
   ref = dwg_decode_handleref(dat, obj, dwg);
+
+  if (!ref)
+    {
+      LOG_ERROR("dwg_decode_handleref_with_code: ref is a null pointer\n");
+      return 0;
+    }
+
   if (ref->absolute_ref == 0 && ref->handleref.code != code)
     {
       LOG_ERROR("Expected a CODE %d handle, got a %d\n", code, ref->handleref.code)

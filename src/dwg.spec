@@ -1465,6 +1465,7 @@ DWG_ENTITY(LEADER);
   FIELD_3DPOINT(end_pt_proj);
   FIELD_3DPOINT(extrusion);
   FIELD_3DPOINT(x_direction);
+  FIELD_3DPOINT(offset_to_block_ins_pt);
 
   SINCE(R_14)
     {
@@ -2702,7 +2703,7 @@ DWG_OBJECT_END
 DWG_OBJECT(SORTENTSTABLE);
 
   FIELD_BL (num_entries);
-  FIELD_HANDLE (sort_handle, 0);
+  HANDLE_VECTOR (sort_handles, num_entries, 0);
   FIELD_HANDLE (parenthandle, 4);
   REACTORS(4);
   XDICOBJHANDLE(3);

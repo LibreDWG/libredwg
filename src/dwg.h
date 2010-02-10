@@ -1272,7 +1272,7 @@ typedef struct _dwg_entity_LEADER
   BITCODE_3DPOINT end_pt_proj;
   BITCODE_3DPOINT extrusion;
   BITCODE_3DPOINT x_direction;
-  BITCODE_3DPOINT offset_block_inspt;
+  BITCODE_3DPOINT offset_to_block_ins_pt;
   BITCODE_3DPOINT unknown_pt;
   BITCODE_BD dimgap;
   BITCODE_BD box_height;
@@ -2220,7 +2220,7 @@ typedef struct _dwg_object_RASTERVARIABLES
 typedef struct _dwg_object_SORTENTSTABLE
 {
   BITCODE_BL num_entries;
-  BITCODE_H sort_handle;
+  BITCODE_H* sort_handles;
   BITCODE_H parenthandle;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
