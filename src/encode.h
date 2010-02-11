@@ -7,7 +7,7 @@
 /*    originally written by Felipe Castro <felipo at users.sourceforge.net>  */
 /*                                                                           */
 /*  Copyright (C) 2008, 2009 Free Software Foundation, Inc.                  */
-/*  Copyright (C) 2009 Felipe Sanches <jucablues@users.sourceforge.net>      */
+/*  Copyright (C) 2009 Felipe Corrêa da Silva Sanches <juca@members.fsf.org> */
 /*  Copyright (C) 2009 Rodrigo Rodrigues da Silva <pitanga@members.fsf.org>  */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
