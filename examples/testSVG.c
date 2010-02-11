@@ -209,15 +209,13 @@ void output_BLOCK_HEADER(Dwg_Object_Ref* ref)
   printf(
       "\t<g id=\"symbol-%lu\" >\n\t\t<!-- %s -->\n", ref->absolute_ref, hdr->entry_name);
 
-  //TODO:still not quite right I think...
-  obj = hdr->first_entity->obj;
-  while(obj && obj != hdr->last_entity->obj)
+  obj = get_first_owned_object(ref->obj, hdr);
+
+  while(obj)
     {
       output_object(obj);
-      obj = dwg_next_object(obj);
+      obj = get_next_owned_object(ref->obj, obj, hdr);
     }
-  //output the last one:
-  if (obj) output_object(obj);
 
   printf("\t</g>\n");
 }

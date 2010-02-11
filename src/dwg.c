@@ -347,6 +347,36 @@ dwg_get_object(Dwg_Object* obj, Dwg_Object_Ref* ref)
   return -1;
 }
 
+Dwg_Object* get_first_owned_object(Dwg_Object* hdr_obj, Dwg_Object_BLOCK_HEADER* hdr){
+  Bit_Chain *dat = hdr_obj->parent->bit_chain;
+
+  VERSIONS(R_13, R_2000)
+    {
+      return hdr->first_entity->obj;
+    }
+  SINCE(R_2004)
+    {
+      hdr->__iterator = 0;
+      return hdr->entities[0]->obj;
+    }
+}
+
+Dwg_Object* get_next_owned_object(Dwg_Object* hdr_obj, Dwg_Object* current, Dwg_Object_BLOCK_HEADER* hdr){
+  Bit_Chain *dat = hdr_obj->parent->bit_chain;
+
+  VERSIONS(R_13, R_2000)
+    {
+      if (current==hdr->last_entity->obj) return 0;
+      return dwg_next_object(current);
+    }
+  SINCE(R_2004)
+    {
+      hdr->__iterator++;
+      if (hdr->__iterator == hdr->owned_object_count) return 0;
+      return hdr->entities[hdr->__iterator]->obj;
+    }
+}
+
 void
 dwg_free(Dwg_Data * dwg)
 {

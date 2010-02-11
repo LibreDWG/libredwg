@@ -1356,6 +1356,7 @@ typedef struct _dwg_object_BLOCK_CONTROL
  */
 typedef struct _dwg_object_BLOCK_HEADER
 {
+  int __iterator;
   BITCODE_TV entry_name;
   BITCODE_B _64_flag;
   BITCODE_BS xrefindex_plus1;
@@ -2835,6 +2836,12 @@ dwg_next_object(Dwg_Object* obj);
 
 int
 dwg_get_object(Dwg_Object* obj, Dwg_Object_Ref* ref);
+
+Dwg_Object*
+get_first_owned_object(Dwg_Object* hdr_obj, Dwg_Object_BLOCK_HEADER* hdr);
+
+Dwg_Object*
+get_next_owned_object(Dwg_Object* hdr_obj, Dwg_Object* current, Dwg_Object_BLOCK_HEADER* hdr);
 
 void
 dwg_print_object(Dwg_Object *obj);
