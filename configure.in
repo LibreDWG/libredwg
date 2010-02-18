@@ -12,8 +12,6 @@ AC_CONFIG_MACRO_DIR([m4])
 dnl create a config.h file (Automake will add -DHAVE_CONFIG_H)
 AM_CONFIG_HEADER(config.h)
 
-AC_SUBST(VERSION)
-
 ISODATE=`date +%Y-%m-%d`
 AC_SUBST(ISODATE)
 
