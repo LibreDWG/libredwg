@@ -1,22 +1,37 @@
+# globs, anywhere
 *.o
 *.lo
 *.la
 
-.cproject
-.project
+# filenames, anywhere
+Makefile.in
 Makefile
-config.h
-config.log
-config.status
-examples/.deps/
-examples/Makefile
-examples/dwg_ps
-examples/get_bmp
-examples/load_dwg
-examples/test
-examples/testSVG
-libtool
-src/.deps/
-src/.libs/
-src/Makefile
-stamp-h1
+.deps
+.libs
+
+# specific filenames
+/.cproject
+/.project
+/INSTALL
+/aclocal.m4
+/autom4te.cache/
+/build/config.guess
+/build/config.sub
+/build/depcomp
+/build/install-sh
+/build/ltmain.sh
+/build/missing
+/config.cache
+/config.h
+/config.h.in
+/config.log
+/config.status
+/configure
+/examples/dwg_ps
+/examples/get_bmp
+/examples/load_dwg
+/examples/test
+/examples/testSVG
+/libtool
+/m4
+/stamp-h1
