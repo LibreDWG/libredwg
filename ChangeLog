@@ -1,7 +1,7 @@
 2009-05-16	Felipe Corrêa da Silva Sanches <juca@members.fsf.org>
-		Rodrigo Rodrigues da Silva <pitanga@members.sourceforge.net> 
+		Rodrigo Rodrigues da Silva <pitanga@members.sourceforge.net>
 
-	*libredwg: initial code based on libdwg 
+	*libredwg: initial code based on libdwg
 	           (http://libdwg.sourceforge.net/en/index.html)
 
 /*****************************************************************************/

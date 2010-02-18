@@ -31,7 +31,7 @@ EXTRA_DIST = \
 
 #testsvg_SOURCES = \
 #	testSVG.c
-	
+
 #testsvg_LDADD = libredwg.la
 
 #testsvg_LDFLAGS = -lm
