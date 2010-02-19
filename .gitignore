@@ -21,6 +21,7 @@ Makefile
 /build/install-sh
 /build/ltmain.sh
 /build/missing
+/build/snap.update-policy
 /config.cache
 /config.h
 /config.h.in
