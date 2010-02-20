@@ -23,8 +23,6 @@ Makefile
 /build-aux/missing
 /build-aux/snap.update-policy
 /config.cache
-/config.h
-/config.h.in
 /config.log
 /config.status
 /configure
@@ -35,4 +33,6 @@ Makefile
 /examples/testSVG
 /libtool
 /m4
-/stamp-h1
+/src/config.h
+/src/config.h.in
+/src/stamp-h1
