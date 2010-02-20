@@ -19,6 +19,7 @@
 
 /// Encode - doesn't work yet!
 
+#include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -59,10 +60,10 @@
 #define FIELD_MS(name) FIELD(name, MS);
 #define FIELD_TV(name) FIELD(name, TV);
 #define FIELD_T FIELD_TV /*TODO: implement version dependant string fields */
-#define FIELD_BT(name) FIELD(name, BT); 
+#define FIELD_BT(name) FIELD(name, BT);
 
 #define FIELD_DD(name, _default) bit_write_DD(dat, FIELD_VALUE(name), _default);
-#define FIELD_2DD(name, d1, d2) FIELD_DD(name.x, d1); FIELD_DD(name.y, d2);  
+#define FIELD_2DD(name, d1, d2) FIELD_DD(name.x, d1); FIELD_DD(name.y, d2);
 
 #define FIELD_2RD(name) FIELD(name.x, RD); FIELD(name.y, RD);
 #define FIELD_2BD(name) FIELD(name.x, BD); FIELD(name.y, BD);

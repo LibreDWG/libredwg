@@ -18,6 +18,7 @@
 
 /// Print helpers for debugging purposes
 
+#include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

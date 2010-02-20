@@ -20,6 +20,7 @@
 
 /// Decode
 
+#include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -79,12 +80,12 @@
 #define FIELD_MS(name) FIELD(name, MS);
 #define FIELD_TV(name) FIELD(name, TV);
 #define FIELD_T FIELD_TV /*TODO: implement version dependant string fields */
-#define FIELD_BT(name) FIELD(name, BT); 
+#define FIELD_BT(name) FIELD(name, BT);
 #define FIELD_4BITS(name) _obj->name = bit_read_4BITS(dat);
 
 #define FIELD_BE(name) bit_read_BE(dat, &_obj->name.x, &_obj->name.y, &_obj->name.z);
 #define FIELD_DD(name, _default) FIELD_VALUE(name) = bit_read_DD(dat, _default);
-#define FIELD_2DD(name, d1, d2) FIELD_DD(name.x, d1); FIELD_DD(name.y, d2);  
+#define FIELD_2DD(name, d1, d2) FIELD_DD(name.x, d1); FIELD_DD(name.y, d2);
 #define FIELD_2RD(name) FIELD(name.x, RD); FIELD(name.y, RD);
 #define FIELD_2BD(name) FIELD(name.x, BD); FIELD(name.y, BD);
 #define FIELD_3RD(name) FIELD(name.x, RD); FIELD(name.y, RD); FIELD(name.z, RD);
@@ -889,8 +890,8 @@ read_long_compression_offset(Bit_Chain* dat)
     {
       total = 0xFF;
       while ((byte = bit_read_RC(dat)) == 0x00)
-        total += 0xFF;      
-	} 
+        total += 0xFF;
+	}
   return total + byte;
 }
 
@@ -910,7 +911,7 @@ read_two_byte_offset(Bit_Chain* dat, int* lit_length)
 /* Decompresses a system section of a 2004 DWG flie
  */
 static int
-decompress_R2004_section(Bit_Chain* dat, char *decomp, 
+decompress_R2004_section(Bit_Chain* dat, char *decomp,
                          unsigned long int comp_data_size)
 {
   int lit_length, i;
@@ -927,7 +928,7 @@ decompress_R2004_section(Bit_Chain* dat, char *decomp,
 
   opcode1 = 0x00;
   while (dat->byte - start_byte < comp_data_size)
-    { 
+    {
       if (opcode1 == 0x00)
         opcode1 = bit_read_RC(dat);
 
@@ -988,7 +989,7 @@ decompress_R2004_section(Bit_Chain* dat, char *decomp,
       else if (opcode1 == 0x11)
           break;     // Terminates the input stream, everything is ok!
       else
-          return 1;  // error in input stream            
+          return 1;  // error in input stream
 
       //LOG_TRACE("got compressed data %d\n",comp_bytes)
       // copy "compressed data"
@@ -996,23 +997,23 @@ decompress_R2004_section(Bit_Chain* dat, char *decomp,
       assert(src > decomp);
       for (i = 0; i < comp_bytes; ++i)
         *dst++ = *src++;
- 
-      // copy "literal data" 
+
+      // copy "literal data"
       //LOG_TRACE("got literal data %d\n",lit_length)
       for (i = 0; i < lit_length; ++i)
         *dst++ = bit_read_RC(dat);
-    }  
+    }
 
   return 0;  // Success
 }
 
-/* Read R2004 Section Map 
+/* Read R2004 Section Map
  * The Section Map is a vector of number, size, and address triples used
- * to locate the sections in the file. 
+ * to locate the sections in the file.
  */
 static void
-read_R2004_section_map(Bit_Chain* dat, Dwg_Data * dwg, 
-                       unsigned long int comp_data_size, 
+read_R2004_section_map(Bit_Chain* dat, Dwg_Data * dwg,
+                       unsigned long int comp_data_size,
                        unsigned long int decomp_data_size)
 {
   char *decomp, *ptr;
@@ -1028,11 +1029,11 @@ read_R2004_section_map(Bit_Chain* dat, Dwg_Data * dwg,
   if (decomp == 0)
     return;   // No memory
 
-  decompress_R2004_section(dat, decomp, comp_data_size);  
+  decompress_R2004_section(dat, decomp, comp_data_size);
 
   LOG_TRACE("\n#### 2004 Section Map fields ####\n")
-  
-  section_address = 0x100;  // starting address 
+
+  section_address = 0x100;  // starting address
 	i = 0;
 	bytes_remaining = decomp_data_size;
 	ptr = decomp;
@@ -1043,7 +1044,7 @@ read_R2004_section_map(Bit_Chain* dat, Dwg_Data * dwg,
 			if (dwg->header.num_sections==0)
 				dwg->header.section = (Dwg_Section*) malloc(sizeof(Dwg_Section));
 			else
-				dwg->header.section = (Dwg_Section*) realloc(dwg->header.section, 
+				dwg->header.section = (Dwg_Section*) realloc(dwg->header.section,
           sizeof(Dwg_Section) * (dwg->header.num_sections+1));
 
 		  dwg->header.section[i].number  = *((int*)ptr);
@@ -1095,10 +1096,10 @@ find_section(Dwg_Data *dwg, unsigned long int index)
 /* Read R2004 Section Info
  */
 static void
-read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg, 
-                        unsigned long int comp_data_size, 
+read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
+                        unsigned long int comp_data_size,
                         unsigned long int decomp_data_size)
-{  
+{
   char *decomp, *ptr;
   int i, j;
   int section_number;
@@ -1112,11 +1113,11 @@ read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
     return;   // No memory
 
   decompress_R2004_section(dat, decomp, comp_data_size);
-  
-  memcpy(&dwg->header.num_descriptions, decomp, 4);  
-  dwg->header.section_info = (Dwg_Section_Info*) 
-    malloc(sizeof(Dwg_Section_Info) * dwg->header.num_descriptions);  
-  
+
+  memcpy(&dwg->header.num_descriptions, decomp, 4);
+  dwg->header.section_info = (Dwg_Section_Info*)
+    malloc(sizeof(Dwg_Section_Info) * dwg->header.num_descriptions);
+
   LOG_TRACE("\n#### 2004 Section Info fields ####\n")
   LOG_TRACE("NumDescriptions: %d\n", *((int*)decomp))
   LOG_TRACE("0x02:            %x\n", *((int*)decomp + 1))
@@ -1126,17 +1127,17 @@ read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
 
   ptr = decomp + 20;
   for (i = 0; i < dwg->header.num_descriptions; ++i)
-    {      
+    {
       dwg->header.section_info[i].size            = *((int*)ptr);
       dwg->header.section_info[i].unknown1 	      = *((int*)ptr + 1);
       dwg->header.section_info[i].num_sections    = *((int*)ptr + 2);
-      dwg->header.section_info[i].max_decomp_size = *((int*)ptr + 3);  
-      dwg->header.section_info[i].unknown2        = *((int*)ptr + 4);	   
+      dwg->header.section_info[i].max_decomp_size = *((int*)ptr + 3);
+      dwg->header.section_info[i].unknown2        = *((int*)ptr + 4);
       dwg->header.section_info[i].compressed      = *((int*)ptr + 5);
       dwg->header.section_info[i].type            = *((int*)ptr + 6);
       dwg->header.section_info[i].encrypted       = *((int*)ptr + 7);
       ptr += 32;
-      memcpy(dwg->header.section_info[i].name, ptr, 64);      
+      memcpy(dwg->header.section_info[i].name, ptr, 64);
       ptr += 64;
 
       LOG_TRACE("\nSection Info description fields\n")
@@ -1165,7 +1166,7 @@ read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
       if (dwg->header.section_info[i].num_sections < 10000)
 	{
 	  LOG_INFO("section count %ld in area %d\n",dwg->header.section_info[i].num_sections,i)
-	  
+
 	  for (j = 0; j < dwg->header.section_info[i].num_sections; j++)
 	    {
 	      section_number = *((int*)ptr);      // Index into SectionMap
@@ -1173,9 +1174,9 @@ read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
 	      start_offset   = *((int*)ptr + 2);
 	      unknown        = *((int*)ptr + 3);  // high 32 bits of 64-bit start offset?
 	      ptr += 16;
-	      
+
 	      dwg->header.section_info[i].sections[j] = find_section(dwg, section_number);
-	      
+
 	      LOG_TRACE("Section Number: %d\n", section_number)
 	      LOG_TRACE("Data size:      %d\n", data_size)
 	      LOG_TRACE("Start offset:   %x\n", start_offset)
@@ -1196,7 +1197,7 @@ typedef union _encrypted_section_header
   unsigned long int long_data[8];
   unsigned char char_data[32];
   struct
-  {    
+  {
     unsigned long int tag;
     unsigned long int section_type;
     unsigned long int data_size;
@@ -1204,7 +1205,7 @@ typedef union _encrypted_section_header
     unsigned long int start_offset;
     unsigned long int unknown;
     unsigned long int checksum_1;
-    unsigned long int checksum_2;    
+    unsigned long int checksum_2;
   } fields;
 } encrypted_section_header;
 
@@ -1220,7 +1221,7 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *dwg,
   char *decomp;
   int i, j;
 
-  for (i = 0; i < dwg->header.num_descriptions && info == 0; ++i) 
+  for (i = 0; i < dwg->header.num_descriptions && info == 0; ++i)
     if (dwg->header.section_info[i].type == section_type)
       info = &dwg->header.section_info[i];
 
@@ -1237,9 +1238,9 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *dwg,
     {
       address = info->sections[i]->address;
       dat->byte = address;
-      
+
       for (j = 0; j < 0x20; j++)
-        es.char_data[j] = bit_read_RC(dat);            
+        es.char_data[j] = bit_read_RC(dat);
 
       sec_mask = 0x4164536b ^ address;
       for (j = 0; j < 8; ++j)
@@ -1263,9 +1264,9 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *dwg,
   LOG_INFO("Checksum2:        %x\n\n",
         (unsigned int) es.fields.checksum_2)
 
-      decompress_R2004_section(dat, &decomp[i * info->max_decomp_size], 
-        es.fields.data_size);      
-    } 
+      decompress_R2004_section(dat, &decomp[i * info->max_decomp_size],
+        es.fields.data_size);
+    }
 
   sec_dat->bit     = 0;
   sec_dat->byte    = 0;
@@ -1278,7 +1279,7 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *dwg,
 
 /* R2004 Class Section
  */
-static void 
+static void
 read_2004_section_classes(Bit_Chain* dat, Dwg_Data *dwg)
 {
   unsigned long int size;
@@ -1291,7 +1292,7 @@ read_2004_section_classes(Bit_Chain* dat, Dwg_Data *dwg)
     return;
 
   if (bit_search_sentinel(&sec_dat, dwg_sentinel(DWG_SENTINEL_CLASS_BEGIN)))
-    { 
+    {
       size    = bit_read_RL(&sec_dat);  // size of class data area
       max_num = bit_read_BS(&sec_dat);  // Maxiumum class number
       c = bit_read_RC(&sec_dat);        // 0x00
@@ -1345,7 +1346,7 @@ read_2004_section_classes(Bit_Chain* dat, Dwg_Data *dwg)
 
 /* R2004 Header Section
  */
-static void 
+static void
 read_2004_section_header(Bit_Chain* dat, Dwg_Data *dwg)
 {
   Bit_Chain sec_dat;
@@ -1354,11 +1355,11 @@ read_2004_section_header(Bit_Chain* dat, Dwg_Data *dwg)
     return;
 
   if (bit_search_sentinel(&sec_dat, dwg_sentinel(DWG_SENTINEL_VARIABLE_BEGIN)))
-    {       
+    {
       unsigned long int size = bit_read_RL(&sec_dat);
       LOG_TRACE("Length: %lu\n", size);
       dwg_decode_header_variables(&sec_dat, dwg);
-    }  
+    }
   free(sec_dat.chain);
 }
 
@@ -1644,7 +1645,7 @@ decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
           (unsigned int) _2004_header_data.fields.gap_array_size)
       LOG_TRACE("CRC: %x\n", (unsigned int) _2004_header_data.fields.CRC)
     }
-  
+
   /*-------------------------------------------------------------------------
    * Section Map
    */
@@ -1703,7 +1704,7 @@ decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
               (unsigned int) ss.fields.compression_type)
       LOG_TRACE("Checksum: %x\n\n", (unsigned int) ss.fields.checksum)
 
-       read_R2004_section_info(dat, dwg, 
+       read_R2004_section_info(dat, dwg,
          ss.fields.comp_data_size, ss.fields.decomp_data_size);
     }
 
@@ -1824,7 +1825,7 @@ decode_R2007(Bit_Chain* dat, Dwg_Data * dwg)
 
   /* Reed-Solomon(255,239) encoded section */
   LOG_TRACE("Reed-Solomon(255,239) encoded section:\n\n")
-  
+
   dat->byte = 0x80;
   for (i = 0; i < 0x3d8; i++)
     {
@@ -1944,7 +1945,7 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
     }
 
   ent->nolinks = bit_read_B(dat);
-  
+
   SINCE(R_2004)
     {
       char flag;
@@ -1958,11 +1959,11 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
             index = bit_read_RC(dat);  // color index
           else
             {
-              unsigned char c1, c2, c3, c4, c5, c6;              
+              unsigned char c1, c2, c3, c4, c5, c6;
               char *name=0;
 
               c1 = bit_read_RC(dat);
-              c2 = bit_read_RC(dat);  
+              c2 = bit_read_RC(dat);
 
               //TODO: verify this
               // if c2 == 0x80 it's a true type color value and
@@ -1973,10 +1974,10 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
                   c3 = bit_read_RC(dat);  // rgb color
                   c4 = bit_read_RC(dat);
                   c5 = bit_read_RC(dat);
-                  c6 = bit_read_RC(dat);   
-                  
+                  c6 = bit_read_RC(dat);
+
                   name = bit_read_TV(dat);
-                }                            
+                }
             }
         }
       else

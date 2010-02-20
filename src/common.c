@@ -17,6 +17,7 @@
 /*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
 /*****************************************************************************/
 
+#include "config.h"
 #include "common.h"
 #include "stdio.h"
 

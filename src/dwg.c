@@ -20,6 +20,7 @@
 /* Main source file of the library, whith the API functions.
  */
 
+#include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
