@@ -1,5 +1,5 @@
-":"; exec emacs -batch -l "$0" -- "$@"
-;;; create-changelog.el
+":"; exec emacs -batch -l "$0" -- "$@" # -*- emacs-lisp -*-
+;;; create-changelog
 
 ;; Copyright (C) 2010 Free Software Foundation, Inc.
 ;;
@@ -13,7 +13,7 @@
 
 ;;; Commentary:
 
-;; Usage: create-changelog.el [--since START] [FILENAME]
+;; Usage: create-changelog [--since START] [FILENAME]
 ;;
 ;; Write a suitable ChangeLog made from "git log" output to FILENAME.
 ;; If FILENAME is not specified, write to standard output.
@@ -109,4 +109,4 @@
 
 (kill-emacs)
 
-;;; create-changelog.el ends here
+;;; create-changelog ends here

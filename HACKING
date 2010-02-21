@@ -24,7 +24,7 @@ HACKING --- a simple -*-outline-*- of libredwg hacking lore
   Presently, there is only one top-level ChangeLog file, and commits go
   in without updating it.  Once we get to (??? SOME-MILESTONE), we plan
   to generate ChangeLog entries at release time based on the commit logs.
-  We use the script build/create-changelog.el for that.
+  We use the script create-changelog (in build/) for that.
 
   This means that as of (??? START-DATE) the commit logs should follow
   the GNU Coding Standards.  For example:
@@ -64,7 +64,7 @@ HACKING --- a simple -*-outline-*- of libredwg hacking lore
   There are some conventions for the one-line sentence:
 
   - Suffix "; nfc." means no functional change (e.g., changing comments only).
-    This causes build/create-changelog.el to omit the entry from its output.
+    This causes create-changelog to omit the entry from its output.
 
   - Prefix "[TOPIC]" means this change is about some TOPIC.
     Some topics we use are:
