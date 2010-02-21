@@ -21,3 +21,8 @@ AM_CFLAGS = -Wextra -I$(top_srcdir)/src
 
 EXTRA_DIST = sample.dwg
 
+TESTS_ENVIRONMENT = \
+ PROGS='$(check_PROGRAMS)' \
+ srcdir='$(srcdir)'
+
+TESTS = alive.test
