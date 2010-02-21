@@ -106,6 +106,7 @@ create_postscript(Dwg_Data *dwg, char *output)
   PS_shutdown();
 }
 
+int
 main(int argc, char *argv[])
 {
   int success;
@@ -118,7 +119,7 @@ main(int argc, char *argv[])
   if (success)
     {
       puts("Not able to read dwg file!");
-      return -1;
+      return 1;
     }
 
   create_postscript(&dwg, OUTPUT_FILE);

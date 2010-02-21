@@ -70,7 +70,9 @@ test_SVG(char *filename)
     }
 
   dwg_free(&dwg);
-  return error;
+  /* This value is the return value for `main',
+     so clamp it to either 0 or 1.  */
+  return error ? 1 : 0;
 }
 
 void

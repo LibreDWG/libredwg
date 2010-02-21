@@ -55,6 +55,8 @@ test_dwg_c(char *filename)
       printf("\nSUCCESS!\n\n");
     }
 
-  return error;
+  /* This value is the return value for `main',
+     so clamp it to either 0 or 1.  */
+  return error ? 1 : 0;
 }
 
