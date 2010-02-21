@@ -18,6 +18,7 @@
 
 #include <stdio.h>
 #include <dwg.h>
+#include "suffix.c"
 
 int
 test_dwg_c(char *filename);
@@ -25,13 +26,9 @@ test_dwg_c(char *filename);
 int
 main(int argc, char *argv[])
 {
-  if (argc > 1)
-    return (test_dwg_c(argv[1]));
-  else
-    return (test_dwg_c(NULL));
+  REQUIRE_INPUT_FILE_ARG (argc);
+  test_dwg_c (argv[1]);
 }
-
-#define FILENAME "example"
 
 int
 test_dwg_c(char *filename)
@@ -39,10 +36,7 @@ test_dwg_c(char *filename)
   int error;
   Dwg_Data dwg_struct;
 
-  if (filename)
-    error = dwg_read_file(filename, &dwg_struct);
-  else
-    error = dwg_read_file(FILENAME ".dwg", &dwg_struct);
+  error = dwg_read_file(filename, &dwg_struct);
 
   dwg_free(&dwg_struct);
 
