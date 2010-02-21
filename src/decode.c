@@ -21,6 +21,7 @@
 /// Decode
 
 #include "config.h"
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -32,8 +33,17 @@
 #include "decode.h"
 #include "print.h"
 
-//#define DWG_LOGLEVEL DWG_LOGLEVEL_INSANE
-#define DWG_LOGLEVEL DWG_LOGLEVEL_TRACE
+/* The logging level for the read (decode) path.  */
+static unsigned int loglevel;
+
+#ifdef USE_TRACING
+/* This flag means we have checked the environment variable
+   LIBREDWG_TRACE and set `loglevel' appropriately.  */
+static bool env_var_checked_p;
+
+#define DWG_LOGLEVEL loglevel
+#endif  /* USE_TRACING */
+
 #include "logging.h"
 
 #define REFS_PER_REALLOC 100
@@ -258,8 +268,6 @@ resolve_objectref_vector(Dwg_Data * dwg);
  */
 long unsigned int ktl_lastaddress;
 
-static int loglevel = 1;
-
 int decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg); // froward
 
 /*--------------------------------------------------------------------------------
@@ -274,6 +282,18 @@ dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
   dwg->num_entities = 0;
   dwg->num_objects = 0;
   dwg->num_classes = 0;
+
+#ifdef USE_TRACING
+  /* Before starting, set the logging level, but only do so once.  */
+  if (! env_var_checked_p)
+    {
+      char *probe = getenv ("LIBREDWG_TRACE");
+
+      if (probe)
+        loglevel = atoi (probe);
+      env_var_checked_p = true;
+    }
+#endif  /* USE_TRACING */
 
   /* Version */
   dat->byte = 0;
