@@ -1,4 +1,10 @@
-check_PROGRAMS = load_dwg get_bmp dwg_ps test testSVG
+check_PROGRAMS = load_dwg get_bmp test testSVG
+
+if HAVE_LIBPS
+check_PROGRAMS += dwg_ps
+dwg_ps_SOURCES = dwg_ps.c
+dwg_ps_LDADD = -lps
+endif
 
 AM_LDFLAGS = -L../src -lredwg
 
@@ -10,9 +16,6 @@ testSVG_LDADD   = -lm
 load_dwg_SOURCES = load_dwg.c
 
 get_bmp_SOURCES = get_bmp.c
-
-dwg_ps_SOURCES = dwg_ps.c
-dwg_ps_LDADD = -lps
 
 AM_CFLAGS = -Wextra -I$(top_srcdir)/src
 
