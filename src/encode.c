@@ -20,6 +20,7 @@
 /// Encode - doesn't work yet!
 
 #include "config.h"
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -28,8 +29,19 @@
 #include "bits.h"
 #include "dwg.h"
 #include "encode.h"
-#include "logging.h"
 
+/* The logging level for the write (encode) path.  */
+static unsigned int loglevel;
+
+#ifdef USE_TRACING
+/* This flag means we have checked the environment variable
+   LIBREDWG_TRACE and set `loglevel' appropriately.  */
+static bool env_var_checked_p;
+
+#define DWG_LOGLEVEL loglevel
+#endif  /* USE_TRACING */
+
+#include "logging.h"
 
 /*--------------------------------------------------------------------------------
  * Welcome to the dark side of the moon...
@@ -193,8 +205,6 @@ dwg_encode_object(Dwg_Object * obj, Bit_Chain * dat);
  * Public variables
  */
 
-static int loglevel = 2; //This is not the same as loglevel from decode.c !
-
 /*--------------------------------------------------------------------------------
  * Public functions
  */
@@ -214,6 +224,18 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
   Object_Map *omap;
   Object_Map pvzmap;
   Dwg_Object *obj;
+
+#ifdef USE_TRACING
+  /* Before starting, set the logging level, but only do so once.  */
+  if (! env_var_checked_p)
+    {
+      char *probe = getenv ("LIBREDWG_TRACE");
+
+      if (probe)
+        loglevel = atoi (probe);
+      env_var_checked_p = true;
+    }
+#endif  /* USE_TRACING */
 
   bit_chain_alloc(dat);
 
