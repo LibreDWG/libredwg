@@ -32,6 +32,27 @@ Rodrigo Rodrigues da Silva <pitanga@members.fsf.org>
 If you are looking for general information about the project, check our website:
 http://www.gnu.org/software/libredwg
 
+== Building and installing the library ==
+
+See INSTALL for generic instructions.  Basically, you do:
+
+$ ./configure [options]
+$ make
+$ make install
+
+This builds the library and installs it in ${libdir}, normally /usr/local/lib.
+
+Use "./configure --help" to see a full list of options you can use to
+customize ${libdir}.  Other options recognized by configure are:
+
+  --enable-trace
+
+    NB: This is an experimental feature that is not in its final form.
+
+    Enable runtime tracing (default: no).  When enabled, the environment
+    variable LIBREDWG_TRACE is consulted on the first decode/encode attempt.
+    Its value is an integer: 0 (no output) through 9 (full verbosity).
+
 == Example usage of the library ==
 
 The examples directory contains some application code that uses our lib:
