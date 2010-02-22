@@ -1177,7 +1177,7 @@ typedef struct _dwg_entity_3DSOLID
   BITCODE_B acis_empty;
   BITCODE_B unknown;
   BITCODE_BS version;
-  BITCODE_BL block_size;
+  BITCODE_BL* block_size;
   BITCODE_RC** sat_data;
   BITCODE_RC* acis_data;
   BITCODE_B wireframe_data_present;
