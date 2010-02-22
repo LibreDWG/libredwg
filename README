@@ -19,9 +19,10 @@ the example applications we wrote using LibreDWG is an initial SVG conversion
 tool. We intend to become a GNU package soon.  Please contact us if you can
 help.
 
-LibreDWG depends on pslib: http://pslib.sourceforge.net.  In many GNU/Linux
-distributions, just install the pslib-dev package to build and pslib if you
-want to use dwg_ps.
+The program dwg_ps (in examples/) reads DWG and outputs Postscript; it
+depends on pslib: <http://pslib.sourceforge.net>.  In many GNU/Linux
+distributions, this is available by installing the pslib-dev package.
+If the configure script does not find pslib, dwg_ps will not be built.
 
 Sometimes we hang on our IRC channel which is #libredwg at irc.freenode.net
 If you don't find us there, please email us:
