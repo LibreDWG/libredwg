@@ -13,10 +13,13 @@
 
 ;;; Commentary:
 
-;; Usage: create-changelog [--since START] [FILENAME]
+;; Usage: create-changelog [OPTIONS]
 ;;
-;; Write a suitable ChangeLog made from "git log" output to FILENAME.
-;; If FILENAME is not specified, write to standard output.
+;; Write a suitable ChangeLog made from "git log" output to stdout.
+;;
+;; Options are:
+;;  -o, --output FILENAME  -- write to FILENAME instead of stdout
+;;  -s, --since START      -- earliest entry must be on/after START
 ;;
 ;; Normally, process all log entries (since the beginning of the repo)
 ;; to the present.  Optional arg `--since START' specifies a different
@@ -24,7 +27,22 @@
 ;; (branch or tag).
 ;;
 ;; Regardless of the selected range, entries whose "subject line"
-;; ends with "; nfc." are omitted unconditionally.
+;; end with "; nfc." are omitted unconditionally.  Output format:
+;;
+;;  YYYY-MM-DD  AUTHOR  <EMAIL>
+;;
+;;          SUBJECT-LINE
+;;          * FILE (FUNC)...
+;;          [...]
+;;
+;; That is, the "discussion" paragraph and surrounding blank lines,
+;; if any, is omitted.  As a special case for old entries that do
+;; not follow the (at the time not yet specified in) HACKING format,
+;; the entire body of the entry is included.
+;;
+;; Examples:
+;;  $ create-changelog --since master
+;;  $ create-changelog -s v0.3 -o v0.4.ChangeLog
 
 ;;; Code:
 
@@ -33,7 +51,15 @@
 (defun fso (s &rest args)
   (princ (apply 'format s args)))
 
-(defvar version "1.0")
+(defconst version "1.1"
+  "Version of create-changelog.
+History:
+1.0   -- initial release
+1.1   -- require -o (--output) for FILENAME
+         accept -s to mean --since
+         add missing-arg check for --since
+         expand help text
+         include package affiliation in --version output")
 
 (defvar outfile nil)
 (defvar which nil)
@@ -44,7 +70,7 @@
     (case (and (not (zerop (length arg)))
                (intern arg))
       ((--version)
-       (fso "create-changelog %s\n" version)
+       (fso "create-changelog (LibreDWG) %s\n" version)
        (kill-emacs))
       ((--help)
        (with-temp-buffer
@@ -55,18 +81,21 @@
            (fso "%s\n" (buffer-substring (match-end 0) (line-end-position)))
            (forward-line 1)))
        (kill-emacs))
-      ((--since)
+      ((-s --since)
        (setq arg (pop ls)
-             which (format (if (string-match
-                                "[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]"
-                                arg)
-                               "--since=%s"
-                             "%s..")
-                           arg)))
+             which (if (not arg)
+                       (error "ERROR: Missing argument for option `--since'")
+                     (format (if (string-match
+                                  "[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]"
+                                  arg)
+                                 "--since=%s"
+                               "%s..")
+                             arg))))
+      ((-o --output)
+       (unless (setq outfile (pop ls))
+         (error "ERROR: Missing file name for option `--output'")))
       (t
-       (when (string-match "^--" arg)
-         (error "ERROR: Unrecognized option: `%s'" arg))
-       (setq outfile arg)))))
+       (error "ERROR: Unrecognized option: `%s'" arg)))))
 
 (fso "Generating %s\n" (or which "full history"))
 
