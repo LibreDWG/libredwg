@@ -3,7 +3,7 @@ AC_PREREQ(2.61)
 
 dnl !!!!! Ne forgesu gxisdatigi la version de la biblioteko (?:?:?) en la dosiero ./src/Makefile.am
 AC_INIT(libredwg, 0.4-dev, libredwg@gnu.org)
-AC_CONFIG_AUX_DIR(build)
+AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE(libredwg, 0.4-dev)
 
 dnl libretoolize asked me for it
