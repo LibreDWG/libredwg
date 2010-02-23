@@ -1276,10 +1276,10 @@ inline void decode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* 
             }
           LOG_TRACE("Raw SAT data:\n%s\n", FIELD_VALUE(raw_sat_data));
         }
-      else
+      else //if (FIELD_VALUE(version)==2)
         {
           //TODO
-          fprintf(stderr, "TODO: Implement parsing of ACIS file in entities 37,38 and 39.\n");
+          LOG_ERROR("TODO: Implement parsing of SAT file (version==2) in entities 37,38 and 39.\n");
         }
 
       FIELD_B (wireframe_data_present);
@@ -1319,18 +1319,25 @@ inline void decode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* 
                       PARSE_WIRE_STRUCT(silhouettes[rcount].wires[rcount2])
                     }
                 }
-              SINCE(R_2007)
-                {
-                  FIELD_BL(unknown_2007);
-                }
-
-              COMMON_ENTITY_HANDLE_DATA;
-
-              SINCE(R_2007)
-                {
-                  FIELD_HANDLE(history_id, ANYCODE);
-                }
             }
+        }
+
+      FIELD_B(ACIS_empty_bit);
+      if (!FIELD_VALUE(ACIS_empty_bit))
+        {
+          LOG_ERROR("TODO: Implement parsing of ACIS data in the end of 3dsolid object parsing (ACIS_empty_bit==0).\n");
+        }
+
+      SINCE(R_2007)
+        {
+          FIELD_BL(unknown_2007);
+        }
+
+      COMMON_ENTITY_HANDLE_DATA;
+
+      SINCE(R_2007)
+        {
+          FIELD_HANDLE(history_id, ANYCODE);
         }
     }
 }
