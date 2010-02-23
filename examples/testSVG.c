@@ -23,7 +23,7 @@
 #include <math.h>
 #include <dwg.h>
 #include "../src/bits.h"
-
+#include "suffix.c"
 
 double model_xmin, model_ymin;
 double page_width, page_height, scale;
@@ -45,13 +45,9 @@ output_SVG(Dwg_Data* dwg);
 int
 main(int argc, char *argv[])
 {
-  if (argc > 1)
-    return (test_SVG(argv[1]));
-  else
-    return (test_SVG(NULL));
+  REQUIRE_INPUT_FILE_ARG (argc);
+  return test_SVG (argv[1]);
 }
-
-#define FILENAME "example"
 
 int
 test_SVG(char *filename)
@@ -59,10 +55,7 @@ test_SVG(char *filename)
   int error;
   Dwg_Data dwg;
 
-  if (filename)
-    error = dwg_read_file(filename, &dwg);
-  else
-    error = dwg_read_file(FILENAME ".dwg", &dwg);
+  error = dwg_read_file(filename, &dwg);
 
   if (!error)
     {
@@ -70,7 +63,9 @@ test_SVG(char *filename)
     }
 
   dwg_free(&dwg);
-  return error;
+  /* This value is the return value for `main',
+     so clamp it to either 0 or 1.  */
+  return error ? 1 : 0;
 }
 
 void

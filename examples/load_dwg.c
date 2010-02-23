@@ -20,8 +20,7 @@
  */
 
 #include <dwg.h>
-
-#define INPUT_FILE "sample.dwg"
+#include "suffix.c"
 
 void
 add_line(double x1, double y1, double x2, double y2)
@@ -77,8 +76,9 @@ load_dwg(char *filename)
 }
 
 int
-main()
+main (int argc, char *argv[])
 {
-  load_dwg(INPUT_FILE);
+  REQUIRE_INPUT_FILE_ARG (argc);
+  load_dwg (argv[1]);
   return 0;
 }

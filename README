@@ -39,6 +39,7 @@ See INSTALL for generic instructions.  Basically, you do:
 
 $ ./configure [options]
 $ make
+$ make check    # optional but strongly encouraged while LibreDWG is alpha
 $ make install
 
 This builds the library and installs it in ${libdir}, normally /usr/local/lib.

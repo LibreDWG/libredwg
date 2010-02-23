@@ -9,6 +9,10 @@ Makefile
 .deps
 .libs
 
+# globs, in specific dirs
+/examples/*.log
+/examples/*.bmp
+
 # specific filenames
 /.cproject
 /.project
