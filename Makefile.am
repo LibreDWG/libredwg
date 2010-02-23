@@ -2,4 +2,4 @@ ACLOCAL_AMFLAGS = -I m4
 
 SUBDIRS = src doc examples
 
-EXTRA_DIST = README
+EXTRA_DIST = README README-alpha
