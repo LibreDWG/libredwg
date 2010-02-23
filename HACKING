@@ -72,6 +72,7 @@ HACKING --- a simple -*-outline-*- of libredwg hacking lore
     - build  -- configuration, makefiles, etc
     - r      -- read path (decoding)
     - w      -- write path (encoding)
+    - doc    -- documentation
     - [??? more topics here]
 
 * [??? other exceptions]
@@ -86,3 +87,11 @@ HACKING --- a simple -*-outline-*- of libredwg hacking lore
   If you want to push a branch that may be "git rebase"d in the future,
   either use the prefix "wip-" (work in progress), or your Savannah
   username followed by a slash (e.g., "juca/").
+
+* using gdb with programs in examples/
+
+  The programs in examples are built by libtool and dynamically linked
+  against the pre-installed library by using a wrapper script.  To run
+  them under gdb, use:
+
+  $ libtool --mode=execute gdb PROGRAM
