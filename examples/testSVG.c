@@ -200,6 +200,14 @@ void output_BLOCK_HEADER(Dwg_Object_Ref* ref)
       return;
     }
 
+  /* TODO: Review.  (This check avoids a segfault, but it is
+     still unclear whether or not the condition is valid.)  */
+  if (!ref->obj->tio.object)
+    {
+      fprintf(stderr, "Found null ref->obj->tio.object\n");
+      return;
+    }
+
   hdr = ref->obj->tio.object->tio.BLOCK_HEADER;
   printf(
       "\t<g id=\"symbol-%lu\" >\n\t\t<!-- %s -->\n", ref->absolute_ref, hdr->entry_name);
