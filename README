@@ -42,10 +42,13 @@ $ make
 $ make check    # optional but strongly encouraged while LibreDWG is alpha
 $ make install
 
-This builds the library and installs it in ${libdir}, normally /usr/local/lib.
+This builds and installs various files in the "installation dirs":
+  $libdir     ($exec_prefix/lib)   -- library files (libredwg.*)
+  $includedir ($prefix/include)    -- dwg.h
+  $infodir    ($datarootdir/info)  -- LibreDWG.info
 
 Use "./configure --help" to see a full list of options you can use to
-customize ${libdir}.  Other options recognized by configure are:
+customize the installation dirs.  Other options recognized by configure are:
 
   --enable-trace
 
