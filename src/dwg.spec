@@ -1235,6 +1235,10 @@ inline void decode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* 
 	Dwg_Data* dwg = obj->parent;
   int vcount, rcount, rcount2;
   int i=0;
+  int j=0;
+  int index;
+  int total_size=0;
+  int num_blocks=0;
   FIELD_B(acis_empty);
   
   if (!FIELD_VALUE(acis_empty))
@@ -1249,7 +1253,28 @@ inline void decode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* 
               FIELD_VALUE(block_size) = (BITCODE_BL*) realloc(FIELD_VALUE(block_size), i * sizeof(BITCODE_BL));
               FIELD_BL (block_size[i]);
               FIELD_VECTOR (sat_data[i], RC, block_size[i]);
+              total_size += FIELD_VALUE(block_size[i]);
             } while(FIELD_VALUE(block_size[i++]));
+
+          //de-obfuscate SAT data
+          FIELD_VALUE(raw_sat_data) = (unsigned char*) malloc (total_size * sizeof(unsigned char*));
+          num_blocks=i-1;
+          index=0;
+          for (i=0;i<num_blocks;i++)
+            {
+              for (j=0;j<FIELD_VALUE(block_size[i]);j++)
+                {
+                  if (FIELD_VALUE(sat_data[i][j]<=32))
+                    {
+                      FIELD_VALUE(raw_sat_data)[index++] = FIELD_VALUE(sat_data[i][j]);
+                    }
+                  else
+                    {
+                      FIELD_VALUE(raw_sat_data)[index++] = 159-FIELD_VALUE(sat_data[i][j]);
+                    }
+                }
+            }
+          LOG_TRACE("Raw SAT data:\n%s\n", FIELD_VALUE(raw_sat_data));
         }
       else
         {

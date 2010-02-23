@@ -1193,6 +1193,7 @@ typedef struct _dwg_entity_3DSOLID
   struct _dwg_entity_3DSOLID* extra_acis_data;//is it the best approach?
   BITCODE_BL unknown_2007;
   BITCODE_H history_id;
+  unsigned char* raw_sat_data;
 } Dwg_Entity_3DSOLID;
 
 /**
