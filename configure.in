@@ -11,7 +11,7 @@ dnl along with this program.  If not, see <http://www.gnu.org/licenses/>.
 AC_PREREQ([2.61])
 AC_INIT([LibreDWG],[0.4-dev],[libredwg@gnu.org])
 AC_CONFIG_AUX_DIR([build-aux])
-AM_INIT_AUTOMAKE([libredwg],[0.4-dev])
+AM_INIT_AUTOMAKE([gnu])
 
 dnl libretoolize asked me for it
 AC_CONFIG_MACRO_DIR([m4])
