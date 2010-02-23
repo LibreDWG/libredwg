@@ -19,10 +19,10 @@ get_bmp_SOURCES = get_bmp.c
 
 AM_CFLAGS = -Wextra -I$(top_srcdir)/src
 
-EXTRA_DIST = sample.dwg
-
 TESTS_ENVIRONMENT = \
  PROGS='$(check_PROGRAMS)' \
  srcdir='$(srcdir)'
 
 TESTS = alive.test
+
+EXTRA_DIST = example.dwg sample.dwg suffix.c $(TESTS)
