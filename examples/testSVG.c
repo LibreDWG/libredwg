@@ -1,6 +1,5 @@
 /*****************************************************************************/
 /*  LibreDWG - Free DWG library                                              */
-/*  http://code.google.com/p/libredwg/                                       */
 /*                                                                           */
 /*    based on LibDWG - Free DWG read-only library                           */
 /*    http://sourceforge.net/projects/libdwg                                 */
@@ -197,6 +196,14 @@ void output_BLOCK_HEADER(Dwg_Object_Ref* ref)
   if (!ref->obj)
     {
       fprintf(stderr, "Found null ref->obj\n");
+      return;
+    }
+
+  /* TODO: Review.  (This check avoids a segfault, but it is
+     still unclear whether or not the condition is valid.)  */
+  if (!ref->obj->tio.object)
+    {
+      fprintf(stderr, "Found null ref->obj->tio.object\n");
       return;
     }
 

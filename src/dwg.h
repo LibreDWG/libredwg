@@ -1,6 +1,5 @@
 /*****************************************************************************/
 /*  LibreDWG - Free DWG library                                              */
-/*  http://code.google.com/p/libredwg/                                       */
 /*                                                                           */
 /*    based on LibDWG - Free DWG read-only library                           */
 /*    http://sourceforge.net/projects/libdwg                                 */
@@ -1304,7 +1303,7 @@ typedef struct _dwg_entity_TOLERANCE
   BITCODE_3BD ins_pt;
   BITCODE_3BD x_direction;
   BITCODE_3BD extrusion;
-  BITCODE_BS text_string;
+  BITCODE_TV text_string;
   BITCODE_H dimstyle;
 } Dwg_Entity_TOLERANCE;
 
@@ -1579,6 +1578,7 @@ typedef struct _dwg_object_UCS
   BITCODE_B _64_flag;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
+  BITCODE_3BD origin;
   BITCODE_3BD x_direction;
   BITCODE_3BD y_direction;
   BITCODE_BD elevation;

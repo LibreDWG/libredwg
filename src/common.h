@@ -1,6 +1,5 @@
 /*****************************************************************************/
 /*  LibreDWG - Free DWG library                                              */
-/*  http://code.google.com/p/libredwg/                                       */
 /*                                                                           */
 /*    based on LibDWG - Free DWG read-only library                           */
 /*    http://sourceforge.net/projects/libdwg                                 */
@@ -21,12 +20,6 @@
 
 #ifndef COMMON_H
 #define COMMON_H
-
-/* There is a #define VERSION in config.h, but we want to use
-   that macro ourselves, so undef it here.  */
-#ifdef VERSION
-#undef VERSION
-#endif
 
 #define VERSION(v) if (dat->version == v)
 #define VERSIONS(v1,v2) if (dat->version >= v1 && dat->version <= v2)

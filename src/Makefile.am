@@ -14,12 +14,13 @@ libredwg_la_LDFLAGS = \
 include_HEADERS = dwg.h
 
 EXTRA_DIST = \
+	dwg.spec \
 	$(include_HEADERS) \
 	common.h \
 	bits.h \
 	decode.h \
-	example.dwg \
 	encode.h \
+	logging.h \
         print.h
 
 #check_PROGRAMS = test testsvg

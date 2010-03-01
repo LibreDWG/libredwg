@@ -1560,7 +1560,7 @@ DWG_ENTITY(TOLERANCE);
   FIELD_3DPOINT(ins_pt);
   FIELD_3DPOINT(x_direction);
   FIELD_3DPOINT(extrusion);
-  FIELD(text_string, BS);
+  FIELD(text_string, TV);
 
   COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE(dimstyle, 5);
@@ -1909,8 +1909,11 @@ DWG_OBJECT(VIEW);
 
   SINCE(R_2000)
     {
-      FIELD_HANDLE(base_ucs_handle, ANYCODE);
-      FIELD_HANDLE(named_ucs_handle, ANYCODE); 
+	  if (FIELD_VALUE(associated_ucs) & 1)
+	    {
+          FIELD_HANDLE(base_ucs_handle, ANYCODE);
+          FIELD_HANDLE(named_ucs_handle, ANYCODE);
+		}
     }
 
   SINCE(R_2007)
@@ -1937,6 +1940,7 @@ DWG_OBJECT(UCS);
   FIELD(_64_flag, B);
   FIELD(xrefindex_plus1, BS);
   FIELD(xrefdep, B);
+  FIELD_3BD(origin);
   FIELD_3BD(x_direction);
   FIELD_3BD(y_direction);
 

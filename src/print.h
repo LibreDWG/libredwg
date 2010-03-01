@@ -1,6 +1,5 @@
 /*****************************************************************************/
 /*  LibreDWG - Free DWG library                                              */
-/*  http://code.google.com/p/libredwg/                                       */
 /*                                                                           */
 /*  Copyright (C) 2009 Rodrigo Rodrigues da Silva <pitanga@members.fsf.org>  */
 /*                                                                           */
