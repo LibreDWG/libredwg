@@ -127,6 +127,14 @@ static bool env_var_checked_p;
       FIELD_2RD(name[vcount]);\
     }
 
+#define FIELD_2DD_VECTOR(name, size)\
+  _obj->name = (BITCODE_2RD *) malloc(_obj->size * sizeof(BITCODE_2RD));\
+  FIELD_2RD(name[0]);\
+  for (vcount = 1; vcount < _obj->size; vcount++)\
+    {\
+      FIELD_2DD(name[vcount], FIELD_VALUE(name[vcount - 1].x), FIELD_VALUE(name[vcount - 1].y));\
+    }
+
 #define FIELD_3DPOINT_VECTOR(name, size)\
   _obj->name = (BITCODE_3DPOINT *) malloc(_obj->size * sizeof(BITCODE_3DPOINT));\
   for (vcount=0; vcount< _obj->size; vcount++)\
@@ -209,9 +217,9 @@ static void \
  dwg_decode_##token (Bit_Chain * dat, Dwg_Object * obj)\
 {\
   int vcount, rcount, rcount2, rcount3;\
-  LOG_INFO("Entity " #token ":\n")\
   Dwg_Entity_##token *ent, *_obj;\
   Dwg_Data* dwg = obj->parent;\
+  LOG_INFO("Entity " #token ":\n")\
   dwg->num_entities++;\
   obj->supertype = DWG_SUPERTYPE_ENTITY;\
   obj->tio.entity = (Dwg_Object_Entity*)malloc (sizeof (Dwg_Object_Entity));	\
@@ -229,9 +237,9 @@ static void \
 
 #define DWG_OBJECT(token) static void  dwg_decode_ ## token (Bit_Chain * dat, Dwg_Object * obj) {\
   int vcount, rcount, rcount2, rcount3;\
-  LOG_INFO("Object " #token ":\n")\
   Dwg_Object_##token *_obj;\
   Dwg_Data* dwg = obj->parent;\
+  LOG_INFO("Object " #token ":\n")\
   obj->supertype = DWG_SUPERTYPE_OBJECT;\
   obj->tio.object = (Dwg_Object_Object*)malloc (sizeof (Dwg_Object_Object));	\
   obj->tio.object->tio.token = (Dwg_Object_##token * ) calloc (sizeof (Dwg_Object_##token), 1); \
@@ -1125,7 +1133,6 @@ read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
   int data_size;
   int start_offset;
   int unknown;
-  Dwg_Section *section;
 
   decomp = (char *)malloc(decomp_data_size * sizeof(char));
   if (decomp == 0)
@@ -2145,8 +2152,10 @@ dwg_decode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg)
     dwg->object_ref = (Dwg_Object_Ref **) malloc(REFS_PER_REALLOC * sizeof(Dwg_Object_Ref*));
   else
     if (dwg->num_object_refs % REFS_PER_REALLOC == 0)
-      dwg->object_ref = (Dwg_Object_Ref **) realloc(dwg->object_ref,
-          (dwg->num_object_refs + REFS_PER_REALLOC) * sizeof(Dwg_Object_Ref*));
+      {
+        dwg->object_ref = (Dwg_Object_Ref **) realloc(dwg->object_ref,
+            (dwg->num_object_refs + REFS_PER_REALLOC) * sizeof(Dwg_Object_Ref*));
+      }
 
   dwg->object_ref[dwg->num_object_refs++] = ref;
 
@@ -2761,8 +2770,9 @@ dwg_decode_common_entity_handle_data(Bit_Chain * dat, Dwg_Object * obj)
   Dwg_Data *dwg = obj->parent;
   int i;
   long unsigned int vcount;
+  Dwg_Object_Entity *_obj;
   ent = obj->tio.entity;
-  Dwg_Object_Entity *_obj = ent;
+  _obj = ent;
 
   if (FIELD_VALUE(entity_mode)==0)
     {
@@ -2832,18 +2842,22 @@ dwg_decode_common_entity_handle_data(Bit_Chain * dat, Dwg_Object * obj)
  * Private functions which depend on the preceding
  */
 
+/* returns 1 if object could be decoded and 0 otherwise
+ */
 static int
 dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
 {
   int i;
+
   if ((obj->type - 500) > dwg->num_classes)
-    return 1;
+    return 0;
+
   i = obj->type - 500;
 
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "DICTIONARYVAR"))
     {
       dwg_decode_DICTIONARYVAR(dat, obj);
-      return 0;
+      return 1;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "DICTIONARYWDFLT"))
     {
@@ -2853,47 +2867,47 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "HATCH"))
     {
       dwg_decode_HATCH(dat, obj);
-      return 0;
+      return 1;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "IDBUFFER"))
     {
       dwg_decode_IDBUFFER(dat, obj);
-      return 0;
+      return 1;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "IMAGE"))
     {
       dwg_decode_IMAGE(dat, obj);
-      return 0;
+      return 1;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "IMAGEDEF"))
     {
       dwg_decode_IMAGEDEF(dat, obj);
-      return 0;
+      return 1;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "IMAGEDEFREACTOR"))
     {
       dwg_decode_IMAGEDEFREACTOR(dat, obj);
-      return 0;
+      return 1;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "LAYER_INDEX"))
     {
       dwg_decode_LAYER_INDEX(dat, obj);
-      return 0;
+      return 1;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "LAYOUT"))
     {
       dwg_decode_LAYOUT(dat, obj);
-      return 0;
+      return 1;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "LWPLINE"))
     {
       dwg_decode_LWPLINE(dat, obj);
-      return 0;
+      return 1;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "OLE2FRAME"))
     {
       dwg_decode_OLE2FRAME(dat, obj);
-      return 0;
+      return 1;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "PLACEHOLDER"))
     {
@@ -2903,22 +2917,22 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "RASTERVARIABLES"))
     {
       dwg_decode_RASTERVARIABLES(dat, obj);
-      return 0;
+      return 1;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "SORTENTSTABLE"))
     {
       dwg_decode_SORTENTSTABLE(dat, obj);
-      return 0;
+      return 1;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "SPATIAL_FILTER"))
     {
       dwg_decode_SPATIAL_FILTER(dat, obj);
-      return 0;
+      return 1;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "SPATIAL_INDEX"))
     {
       dwg_decode_SPATIAL_INDEX(dat, obj);
-      return 0;
+      return 1;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "VBA_PROJECT"))
     {
@@ -2933,10 +2947,10 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "XRECORD"))
     {
       dwg_decode_XRECORD(dat, obj);
-      return 0;
+      return 1;
     }
 
-  return 1;
+  return 0;
 }
 
 static void
@@ -3194,17 +3208,37 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
   case DWG_TYPE_MLINESTYLE:
     dwg_decode_MLINESTYLE(dat, obj);
     break;
+  case DWG_TYPE_LWPLINE:
+    dwg_decode_LWPLINE(dat, obj);
+    break;
+  case DWG_TYPE_HATCH:
+    dwg_decode_HATCH(dat, obj);
+    break;
+  case DWG_TYPE_XRECORD:
+    dwg_decode_XRECORD(dat, obj);
+    break;
+  case DWG_TYPE_LAYOUT:
+    dwg_decode_LAYOUT(dat, obj);
+    break;
   default:
-    if (obj->type == dwg->dwg_ot_layout)
-      dwg_decode_LAYOUT(dat, obj);
-    else
+    if (!dwg_decode_variable_type(dwg, dat, obj))
       {
-        if (!dwg_decode_variable_type(dwg, dat, obj))
+        LOG_INFO("Object UNKNOWN:\n")
+
+        SINCE(R_2000)
           {
-            obj->supertype = DWG_SUPERTYPE_UNKNOWN;
-            obj->tio.unknown = (unsigned char*)malloc(obj->size);
-            memcpy(obj->tio.unknown, &dat->chain[object_address], obj->size);
+            bit_read_RL(dat);  // skip bitsize
           }
+
+        if (!bit_read_H(dat, &obj->handle))
+          {
+            LOG_INFO("Object handle: %x.%x.%x\n", 
+              obj->handle.code, obj->handle.size, obj->handle.value)
+          }
+
+        obj->supertype = DWG_SUPERTYPE_UNKNOWN;
+        obj->tio.unknown = (unsigned char*)malloc(obj->size);
+        memcpy(obj->tio.unknown, &dat->chain[object_address], obj->size);
       }
     }
 

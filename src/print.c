@@ -90,10 +90,16 @@
 #define FIELD_VECTOR(name, type, size) FIELD_VECTOR_N(name, type, _obj->size)
 
 #define FIELD_2RD_VECTOR(name, size)\
-  _obj->name = (BITCODE_2RD *) malloc(_obj->size * sizeof(BITCODE_2RD));\
   for (vcount=0; vcount< _obj->size; vcount++)\
     {\
       FIELD_2RD(name[vcount]);\
+    }
+
+#define FIELD_2DD_VECTOR(name, size)\
+  FIELD_2RD(name[0]);\
+  for (vcount = 1; vcount < _obj->size; vcount++)\
+    {\
+      FIELD_2DD(name[vcount], FIELD_VALUE(name[vcount - 1].x), FIELD_VALUE(name[vcount - 1].y));\
     }
 
 #define FIELD_3DPOINT_VECTOR(name, size)\
@@ -146,8 +152,8 @@ static void \
 dwg_print_##token (Bit_Chain * dat, Dwg_Object * obj)\
 {\
   int vcount, rcount, rcount2, rcount3;\
-  LOG_INFO("Entity " #token ":\n")\
   Dwg_Entity_##token *ent, *_obj;\
+  LOG_INFO("Entity " #token ":\n")\
   ent = obj->tio.entity->tio.token;\
   _obj=ent;\
   LOG_INFO("Entity handle: %d.%d.%lu\n",\
@@ -162,8 +168,8 @@ static void \
 dwg_print_ ##token (Bit_Chain * dat, Dwg_Object * obj) \
 { \
   int vcount, rcount, rcount2, rcount3;\
-  LOG_INFO("Object " #token ":\n")\
   Dwg_Object_##token *_obj;\
+  LOG_INFO("Object " #token ":\n")\
   _obj = obj->tio.object->tio.token;\
   LOG_INFO("Object handle: %d.%d.%lu\n",\
     obj->handle.code,\
