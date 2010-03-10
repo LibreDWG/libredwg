@@ -2610,7 +2610,7 @@ DWG_OBJECT(LAYOUT);
 
   SINCE(R_2004)
     {
-      FIELD(viewport_count, RL);
+      FIELD_BL(viewport_count);
     }
 
   FIELD_HANDLE(parenthandle, 4);
@@ -2645,19 +2645,32 @@ DWG_ENTITY(LWPLINE);
   FIELD_BS(flags);
 
   if (FIELD_VALUE(flags) & 4)
-    FIELD_BD(const_width);
+    {
+      FIELD_BD(const_width);
+    }    
   if (FIELD_VALUE(flags) & 8)
-    FIELD_BD(elevation);
+    {
+      FIELD_BD(elevation);
+    }
   if (FIELD_VALUE(flags) & 2)
-    FIELD_BD(thickness);
+    {
+      FIELD_BD(thickness);
+    }    
   if (FIELD_VALUE(flags) & 1)
-    FIELD_3BD(normal);
+    {
+      FIELD_3BD(normal);
+    }
+    
   FIELD_BL(num_points);
 
   if (FIELD_VALUE(flags) & 16)
-    FIELD_BL(num_bulges);
+    {
+      FIELD_BL(num_bulges);
+    }
   if (FIELD_VALUE(flags) & 32)
-    FIELD_BL(num_widths);
+    {
+      FIELD_BL(num_widths);
+    }
 
   VERSIONS(R_13,R_14)
     {
@@ -2666,12 +2679,7 @@ DWG_ENTITY(LWPLINE);
 
   SINCE(R_2000)
     {
-      int i;
-      FIELD_2RD(points[0]);
-      for (i = 1; i < FIELD_VALUE(num_points); i++)
-        {
-          FIELD_2DD(points[i], FIELD_VALUE(points[i - 1].x), FIELD_VALUE(points[i - 1].y));
-        }
+      FIELD_2DD_VECTOR(points, num_points);
     }
 
   FIELD_VECTOR(bulges, BD, num_bulges);

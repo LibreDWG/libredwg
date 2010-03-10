@@ -97,6 +97,13 @@ bit_write_BE(dat, FIELD_VALUE(name.x), FIELD_VALUE(name.y), FIELD_VALUE(name.z))
       FIELD_2RD(name[vcount]);\
     }
 
+#define FIELD_2DD_VECTOR(name, size)\
+  FIELD_2RD(name[0]);\
+  for (vcount = 1; vcount < _obj->size; vcount++)\
+    {\
+      FIELD_2DD(name[vcount], FIELD_VALUE(name[vcount - 1].x), FIELD_VALUE(name[vcount - 1].y));\
+    }
+
 #define FIELD_3DPOINT_VECTOR(name, size)\
   for (vcount=0; vcount< _obj->size; vcount++)\
     {\
