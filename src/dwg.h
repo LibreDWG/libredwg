@@ -227,6 +227,32 @@ typedef struct _dwg_color
   char* book_name;
 } Dwg_Color;
 
+struct _dwg_binary_chunk
+{
+  short size;
+  char *data;
+};
+
+/**
+ Struct for result buffers
+ */
+typedef struct _dwg_resbuf
+{
+  short type;
+  union 
+  {
+    char   *str;
+    double  pt[3];
+    char    i8;
+    short   i16;
+    int     i32;    
+    double  dbl;
+    unsigned char hdl[8];
+    struct _dwg_binary_chunk chunk;
+  } value;
+  struct _dwg_resbuf *next;
+} Dwg_Resbuf;
+
 /**
  struct for dwg header
  */
@@ -2470,8 +2496,7 @@ typedef struct _dwg_object_XRECORD
 {
   BITCODE_BL numdatabytes;
   BITCODE_BS cloning_flags;
-  BITCODE_RS indicator;
-  BITCODE_RC* data;
+  Dwg_Resbuf* rbuf;
   BITCODE_H parent;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;

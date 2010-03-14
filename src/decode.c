@@ -151,6 +151,9 @@ static bool env_var_checked_p;
 
 #define HANDLE_VECTOR(name, sizefield, code) HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code)
 
+#define FIELD_XDATA(name, size)\
+  _obj->name = dwg_decode_xdata(dat, _obj->size)
+
 #define REACTORS(code)\
   FIELD_VALUE(reactors) = (BITCODE_H*) malloc(sizeof(BITCODE_H) * obj->tio.object->num_reactors);\
   for (vcount=0; vcount<obj->tio.object->num_reactors; vcount++)\
@@ -2832,6 +2835,191 @@ dwg_decode_common_entity_handle_data(Bit_Chain * dat, Dwg_Object * obj)
     }
 }
 
+enum RES_BUF_VALUE_TYPE
+{
+  VT_INVALID = 0,
+  VT_STRING = 1,
+  VT_POINT3D = 2,
+  VT_REAL = 3,
+  VT_INT16 = 4,
+  VT_INT32 = 5,
+  VT_INT8 = 6,
+  VT_BINARY = 7,
+  VT_HANDLE = 8,
+  VT_OBJECTID = 9,
+  VT_BOOL = 10
+};
+
+enum RES_BUF_VALUE_TYPE
+get_base_value_type(short gc)
+{
+  if (gc >= 300)
+    {
+      if (gc >= 440) 
+        {
+          if (gc >= 1000)  // 1000-1071
+            {
+              if (gc == 1004) return VT_BINARY;
+              if (gc <= 1009) return VT_STRING;  
+              if (gc <= 1059) return VT_REAL;
+              if (gc <= 1070) return VT_INT16;
+              if (gc == 1071) return VT_INT32;
+            }
+          else            // 440-999
+            {
+              if (gc <= 459) return VT_INT32;
+              if (gc <= 469) return VT_REAL;
+              if (gc <= 479) return VT_STRING;
+              if (gc <= 998) return VT_INVALID;
+              if (gc == 999) return VT_STRING;
+            }         
+        }
+      else // <440 
+        {
+          if (gc >= 390)  // 390-439
+            {
+              if (gc <= 399) return VT_HANDLE;
+              if (gc <= 409) return VT_INT16;
+              if (gc <= 419) return VT_STRING;
+              if (gc <= 429) return VT_INT32;
+              if (gc <= 439) return VT_STRING;
+            }
+          else            // 330-389
+            {
+              if (gc <= 309) return VT_STRING;
+              if (gc <= 319) return VT_BINARY;
+              if (gc <= 329) return VT_HANDLE;
+              if (gc <= 369) return VT_OBJECTID;
+              if (gc <= 389) return VT_INT16;
+            }
+        }
+    }
+  else if (gc >= 105)
+    {
+      if (gc >= 210)      // 210-299
+        {
+          if (gc <= 239) return VT_REAL;
+          if (gc <= 269) return VT_INVALID;
+          if (gc <= 279) return VT_INT16;
+          if (gc <= 289) return VT_INT8;
+          if (gc <= 299) return VT_BOOL;
+        }
+      else               // 105-209
+        {
+          if (gc == 105) return VT_HANDLE;
+          if (gc <= 109) return VT_INVALID;
+          if (gc <= 149) return VT_REAL;
+          if (gc <= 169) return VT_INVALID;
+          if (gc <= 179) return VT_INT16;
+          if (gc <= 209) return VT_INVALID;
+        }
+    }
+  else  // <105
+    {
+      if (gc >= 38)     // 38-102
+        {
+          if (gc <= 59)  return VT_REAL;
+          if (gc <= 79)  return VT_INT16;
+          if (gc <= 99)  return VT_INT32;
+          if (gc <= 101) return VT_STRING;
+          if (gc == 102) return VT_STRING;
+        }
+      else              // 0-37
+        {
+          if (gc <= 0)   return VT_INVALID;
+          if (gc <= 4)   return VT_STRING;
+          if (gc == 5)   return VT_HANDLE;
+          if (gc <= 9)   return VT_STRING;
+          if (gc <= 37)  return VT_POINT3D;
+        }
+    }
+  return VT_INVALID;
+}
+
+Dwg_Resbuf*
+dwg_decode_xdata(Bit_Chain * dat, int size)
+{
+  char group_code;
+  Dwg_Resbuf *rbuf, *root=0, *curr=0;
+  unsigned char codepage;
+  long unsigned int end_address;
+  char hdl[8];
+  int i, length;
+
+  static int cnt = 0;
+  cnt++;
+
+  end_address = dat->byte + (unsigned long int)size;
+
+  while (dat->byte < end_address)
+    {
+      rbuf = (Dwg_Resbuf *) malloc(sizeof(Dwg_Resbuf));
+      rbuf->next = 0;
+      rbuf->type = bit_read_RS(dat);
+
+      switch (get_base_value_type(rbuf->type))
+        {
+        case VT_STRING:
+          length   = bit_read_RS(dat);          
+          codepage = bit_read_RC(dat);
+          if (length > 0)
+            {
+              rbuf->value.str = (char *)malloc((length + 1) * sizeof(char));
+              for (i = 0; i < length; i++)
+                rbuf->value.str[i] = bit_read_RC(dat);
+              rbuf->value.str[i] = '\0';
+            }
+          break;
+        case VT_REAL:
+          rbuf->value.dbl = bit_read_RD(dat);
+          break;
+        case VT_BOOL:
+        case VT_INT8:
+          rbuf->value.i8 = bit_read_RC(dat);
+          break;
+        case VT_INT16:
+          rbuf->value.i16 = bit_read_RS(dat);
+          break;
+        case VT_INT32:
+          rbuf->value.i32 = bit_read_RL(dat);
+          break;
+        case VT_POINT3D:
+          rbuf->value.pt[0] = bit_read_RD(dat);
+          rbuf->value.pt[1] = bit_read_RD(dat);
+          rbuf->value.pt[2] = bit_read_RD(dat);
+          break;
+        case VT_BINARY:
+          rbuf->value.chunk.size = bit_read_RC(dat);          
+          if (rbuf->value.chunk.size > 0)
+            {
+              rbuf->value.chunk.data = (char *)malloc(rbuf->value.chunk.size * sizeof(char));
+              for (i = 0; i < rbuf->value.chunk.size; i++)
+                rbuf->value.chunk.data[i] = bit_read_RC(dat);
+            }
+          break;
+        case VT_HANDLE:
+        case VT_OBJECTID:
+          for (i = 0; i < 8; i++)
+             rbuf->value.hdl[i] = bit_read_RC(dat);
+          break;
+        default:
+          LOG_ERROR("Invalid group code in xdata: %d!\n", rbuf->type)
+          free(rbuf);
+          dat->byte = end_address;
+          return root;
+          break;
+        }
+
+      if (curr == 0)
+        curr = root = rbuf;
+      else
+        {
+          curr->next = rbuf;
+          curr = rbuf;
+        }
+    }
+    return root;
+}
 
 /* OBJECTS *******************************************************************/
 
