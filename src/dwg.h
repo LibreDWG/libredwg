@@ -1272,6 +1272,23 @@ typedef struct _dwg_entity_DICTIONARY
 } Dwg_Object_DICTIONARY;
 
 /**
+ Struct for DICTIONARYWDLFT (varies)
+ */
+typedef struct _dwg_object_DICTIONARYWDLFT
+{
+  BITCODE_BL numitems;
+  BITCODE_RC unknown_r14;
+  BITCODE_BS cloning;
+  BITCODE_RC hard_owner;
+  BITCODE_TV* text;
+  BITCODE_H parenthandle;
+  BITCODE_H* reactors;
+  BITCODE_H xdicobjhandle;
+  BITCODE_H* itemhandles;
+  BITCODE_H defaultid;
+} Dwg_Object_DICTIONARYWDLFT;
+
+/**
  Struct for MTEXT (44)
  */
 typedef struct _dwg_entity_MTEXT
@@ -1928,15 +1945,6 @@ typedef struct _dwg_object_DICTIONARYVAR
 } Dwg_Object_DICTIONARYVAR;
 
 /**
- Struct for DICTIONARYWDLFT (varies)
- */
-typedef struct _dwg_object_DICTIONARYWDLFT
-{
-  char dummy;
-//TODO 
-} Dwg_Object_DICTIONARYWDLFT;
-
-/**
  Structs for HATCH (varies)
  */
 
@@ -2233,8 +2241,9 @@ typedef struct _dwg_object_PROXY
  */
 typedef struct _dwg_object_PLACEHOLDER
 {
-  char dummy;
-//TODO 
+  BITCODE_H parenthandle;
+  BITCODE_H* reactors;
+  BITCODE_H xdicobjhandle;
 } Dwg_Object_PLACEHOLDER;
 
 /**

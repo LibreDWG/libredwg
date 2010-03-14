@@ -3047,10 +3047,10 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       dwg_decode_DICTIONARYVAR(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "DICTIONARYWDFLT"))
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "ACDBDICTIONARYWDFLT"))
     {
-      //dwg_decode_DICTIONARYWDLFT(dat, obj);
-      return 0;
+      dwg_decode_DICTIONARYWDLFT(dat, obj);
+      return 1;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "HATCH"))
     {
@@ -3072,7 +3072,7 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       dwg_decode_IMAGEDEF(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "IMAGEDEFREACTOR"))
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "IMAGEDEF_REACTOR"))
     {
       dwg_decode_IMAGEDEFREACTOR(dat, obj);
       return 1;
@@ -3097,10 +3097,10 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       dwg_decode_OLE2FRAME(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "PLACEHOLDER"))
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "ACDBPLACEHOLDER"))
     {
-//TODO:      dwg_decode_PLACEHOLDER(dat, obj);
-      return 0;
+      dwg_decode_PLACEHOLDER(dat, obj);
+      return 1;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "RASTERVARIABLES"))
     {
@@ -3136,6 +3136,16 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     {
       dwg_decode_XRECORD(dat, obj);
       return 1;
+    }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "DIMASSOC"))
+    {
+//TODO:      dwg_decode_DIMASSOC(dat, obj);
+      return 0;
+    }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "MATERIAL"))
+    {
+//TODO:      dwg_decode_MATERIAL(dat, obj);
+      return 0;
     }
 
   return 0;
@@ -3404,6 +3414,9 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
     break;
   case DWG_TYPE_XRECORD:
     dwg_decode_XRECORD(dat, obj);
+    break;
+  case DWG_TYPE_PLACEHOLDER:
+    dwg_decode_PLACEHOLDER(dat, obj);
     break;
   case DWG_TYPE_LAYOUT:
     dwg_decode_LAYOUT(dat, obj);
