@@ -155,6 +155,8 @@ bit_write_BE(dat, FIELD_VALUE(name.x), FIELD_VALUE(name.y), FIELD_VALUE(name.z))
 
 #define HANDLE_VECTOR(name, sizefield, code) HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code)
 
+#define FIELD_XDATA(name, size)
+
 #define COMMON_ENTITY_HANDLE_DATA
 
 //dwg_encode_common_entity_handle_data(dat, obj)

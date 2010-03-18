@@ -1446,6 +1446,33 @@ DWG_OBJECT(DICTIONARY);
 
 DWG_ENTITY_END
 
+DWG_OBJECT(DICTIONARYWDLFT);
+	  
+  FIELD(numitems, BL);
+
+  VERSION(R_14)
+    {
+      FIELD(unknown_r14, RC);
+    }
+
+  SINCE(R_2000)
+    {
+      FIELD(cloning, BS);
+      FIELD(hard_owner, RC);
+    }
+
+  FIELD_VECTOR(text, TV, numitems);
+  
+  FIELD_HANDLE(parenthandle, 4);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+  
+  HANDLE_VECTOR(itemhandles, numitems, 2); 
+  
+  FIELD_HANDLE(defaultid, 5); // DXF:340 - default object id (one of the itemhandles)
+    
+DWG_OBJECT_END
+
 //(43): Unknown
 
 /*(44)*/
@@ -1650,7 +1677,7 @@ DWG_OBJECT(BLOCK_HEADER);
       while (bit_read_RC(dat))
         {
           FIELD_VALUE(insert_count)++;
-        };
+        }
 
       FIELD(block_description, TV);
 
@@ -3445,28 +3472,40 @@ DWG_ENTITY_END
 //pg.164
 DWG_OBJECT(XRECORD);
 
-/*
+  DECODER
+    {
+	  FIELD_BL(numdatabytes);  	    
+	  FIELD_XDATA(rbuf, numdatabytes);
+	  
+	  SINCE(R_2000)
+		{
+		  FIELD_BS(cloning_flags);
+		}
+	  
+	  FIELD_HANDLE(parent, 3);
+	  REACTORS(4);
+	  XDICOBJHANDLE(3);
+	  
+	  //XXX how to known when I run out of data?
+	  //BITCODE_H* objid_handles;
+    }
+    
+DWG_OBJECT_END
 
-  FIELD_BL(numdatabytes);
-  FIELD_BS(cloning_flags);
-  FIELD_RS(indicator);
-  //since it also counts the first RS indicator
-  //FIELD_VALUE(numdatabytes)--;
-  FIELD_VECTOR(data, RC, numdatabytes);
-  FIELD_HANDLE(parent, 3);
+DWG_OBJECT(PLACEHOLDER);
+
+  // no own data members
+  
+  FIELD_HANDLE(parenthandle, 4);
   REACTORS(4);
   XDICOBJHANDLE(3);
-  //XXX how to known when I run out of data?
-  //BITCODE_H* objid_handles;
-*/
+    
 DWG_OBJECT_END
 
 ////////////////////
 // These objects are not described in the spec:
 //
-// DICTIONARYWDLFT
 // WIPEOUTVARIABLE
-// PLACEHOLDER
 // VBA_PROJECT
 //
 

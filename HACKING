@@ -9,6 +9,11 @@ HACKING --- a simple -*-outline-*- of libredwg hacking lore
   Make sure you have recent Autoconf, Automake, Libtool installed.
   (See comments in autogen.sh for specific versions tested.)
 
+* other tools
+
+  Aside from the the autotools (see "regen", above),
+  you will also need GNU Texinfo to build the manual.
+
 * coding standards
 
   We try to follow the GNU Coding Standards, with some exceptions.

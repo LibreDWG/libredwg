@@ -227,6 +227,32 @@ typedef struct _dwg_color
   char* book_name;
 } Dwg_Color;
 
+struct _dwg_binary_chunk
+{
+  short size;
+  char *data;
+};
+
+/**
+ Struct for result buffers
+ */
+typedef struct _dwg_resbuf
+{
+  short type;
+  union 
+  {
+    char   *str;
+    double  pt[3];
+    char    i8;
+    short   i16;
+    int     i32;    
+    double  dbl;
+    unsigned char hdl[8];
+    struct _dwg_binary_chunk chunk;
+  } value;
+  struct _dwg_resbuf *next;
+} Dwg_Resbuf;
+
 /**
  struct for dwg header
  */
@@ -1246,6 +1272,23 @@ typedef struct _dwg_entity_DICTIONARY
 } Dwg_Object_DICTIONARY;
 
 /**
+ Struct for DICTIONARYWDLFT (varies)
+ */
+typedef struct _dwg_object_DICTIONARYWDLFT
+{
+  BITCODE_BL numitems;
+  BITCODE_RC unknown_r14;
+  BITCODE_BS cloning;
+  BITCODE_RC hard_owner;
+  BITCODE_TV* text;
+  BITCODE_H parenthandle;
+  BITCODE_H* reactors;
+  BITCODE_H xdicobjhandle;
+  BITCODE_H* itemhandles;
+  BITCODE_H defaultid;
+} Dwg_Object_DICTIONARYWDLFT;
+
+/**
  Struct for MTEXT (44)
  */
 typedef struct _dwg_entity_MTEXT
@@ -1902,15 +1945,6 @@ typedef struct _dwg_object_DICTIONARYVAR
 } Dwg_Object_DICTIONARYVAR;
 
 /**
- Struct for DICTIONARYWDLFT (varies)
- */
-typedef struct _dwg_object_DICTIONARYWDLFT
-{
-  char dummy;
-//TODO 
-} Dwg_Object_DICTIONARYWDLFT;
-
-/**
  Structs for HATCH (varies)
  */
 
@@ -2207,8 +2241,9 @@ typedef struct _dwg_object_PROXY
  */
 typedef struct _dwg_object_PLACEHOLDER
 {
-  char dummy;
-//TODO 
+  BITCODE_H parenthandle;
+  BITCODE_H* reactors;
+  BITCODE_H xdicobjhandle;
 } Dwg_Object_PLACEHOLDER;
 
 /**
@@ -2470,8 +2505,7 @@ typedef struct _dwg_object_XRECORD
 {
   BITCODE_BL numdatabytes;
   BITCODE_BS cloning_flags;
-  BITCODE_RS indicator;
-  BITCODE_RC* data;
+  Dwg_Resbuf* rbuf;
   BITCODE_H parent;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
