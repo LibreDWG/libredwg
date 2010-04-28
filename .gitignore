@@ -3,6 +3,8 @@
 *.lo
 *.la
 
+*~
+
 # filenames, anywhere
 Makefile.in
 Makefile
