@@ -1,7 +1,7 @@
 /*****************************************************************************/
-/*  LibreDWG - Free DWG library                                              */
+/*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2009 Rodrigo Rodrigues da Silva <pitanga@members.fsf.org>  */
+/*  Copyright (C) 2010 Free Software Foundation, Inc.                        */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -10,7 +10,10 @@
 /*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
 /*****************************************************************************/
 
-///  Functions for printing dwg data-structures.
+/*
+ * print.h: print helper function prototypes
+ * written by Rodrigo Rodrigues da Silva
+ */
 
 #ifndef PRINT_H
 #define PRINT_H

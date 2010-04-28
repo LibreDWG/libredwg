@@ -1,12 +1,7 @@
 /*****************************************************************************/
-/*  LibreDWG - Free DWG library                                              */
+/*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*    based on LibDWG - Free DWG read-only library                           */
-/*    http://sourceforge.net/projects/libdwg                                 */
-/*    originally written by Felipe Castro <felipo at users.sourceforge.net>  */
-/*                                                                           */
-/*  Copyright (C) 2009 Rodrigo Rodrigues da Silva <pitanga@members.fsf.org>  */
-/*  Copyright (C) 2009 Felipe Corrêa da Silva Sanches <juca@members.fsf.org> */
+/*  Copyright (C) 2010 Free Software Foundation, Inc.                        */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -15,7 +10,10 @@
 /*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
 /*****************************************************************************/
 
-/// Print helpers for debugging purposes
+/*
+ * print.c: print helper functions
+ * written by Rodrigo Rodrigues da Silva
+ */
 
 #include "config.h"
 #include <stdio.h>

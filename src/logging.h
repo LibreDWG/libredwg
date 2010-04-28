@@ -1,7 +1,7 @@
 /*****************************************************************************/
-/*  LibreDWG - Free DWG library                                              */
+/*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2009 Rodrigo Rodrigues da Silva <pitanga@members.fsf.org>  */
+/*  Copyright (C) 2010 Free Software Foundation, Inc.                        */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -11,9 +11,12 @@
 /*****************************************************************************/
 
 /*
- * Reduce logging code through macros. In the future, this file can be used as
- * an interface to use more sophisticated logging libraries such as gnu nana
+ * logging.h: logging macros
+ * written by Rodrigo Rodrigues da Silva
  */
+
+//Reduce logging code through macros. In the future, this file can be used as
+//an interface to use more sophisticated logging libraries such as gnu nana
 
 #ifndef LOGGING_H
 #define LOGGING_H
@@ -27,6 +30,7 @@
  * to LOGLEVEL_ALL. If LOGLEVEL is set to k, all messages with LOGLEVEL < k
  * will be displayed
  */
+
 #define DWG_LOGLEVEL_NONE    0 //no log
 #define DWG_LOGLEVEL_ERROR   1 //only error messages
 #define DWG_LOGLEVEL_INFO    2 //only general info and object codes/names

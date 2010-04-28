@@ -1,14 +1,18 @@
-/* suffix.c --- provide func `suffix' and macro `REQUIRE_INPUT_FILE_ARG'
- *
- * Copyright (C) 2010 Free Software Foundation, Inc.
- *
- * This program is free software, licensed under the terms of the GNU
- * General Public License as published by the Free Software Foundation,
- * either version 3 of the License, or (at your option) any later version.
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * Author: Thien-Thi Nguyen
+/*****************************************************************************/
+/*  LibreDWG - free implementation of the DWG file format                    */
+/*                                                                           */
+/*  Copyright (C) 2010 Thien-Thi Nguyen                                      */
+/*                                                                           */
+/*  This library is free software, licensed under the terms of the GNU       */
+/*  General Public License as published by the Free Software Foundation,     */
+/*  either version 3 of the License, or (at your option) any later version.  */
+/*  You should have received a copy of the GNU General Public License        */
+/*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
+/*****************************************************************************/
+
+/*
+ * suffix.c: avoid hardcoded input/output filenames
+ * written by Thien-Thi Nguyen
  */
 
 #include <stdio.h>

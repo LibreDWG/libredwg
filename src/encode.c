@@ -1,22 +1,25 @@
 /*****************************************************************************/
-/*  LibreDWG - Free DWG library                                              */
+/*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*    based on LibDWG - Free DWG read-only library                           */
-/*    http://sourceforge.net/projects/libdwg                                 */
-/*    originally written by Felipe Castro <felipo at users.sourceforge.net>  */
-/*                                                                           */
-/*  Copyright (C) 2008, 2009 Free Software Foundation, Inc.                  */
-/*  Copyright (C) 2009 Rodrigo Rodrigues da Silva <pitanga@members.fsf.org>  */
-/*  Copyright (C) 2009 Felipe Corrêa da Silva Sanches <juca@members.fsf.org> */
+/*  Copyright (C) 2009, 2010 Free Software Foundation, Inc.                  */
+/*  Copyright (C) 2010 Thien-Thi Nguyen                                      */
+/*  Copyright (C) 2010 Till Heuschmann                                       */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
-/*  either versionn 3 of the License, or (at your option) any later versionn.*/
+/*  either version 3 of the License, or (at your option) any later version.  */
 /*  You should have received a copy of the GNU General Public License        */
 /*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
 /*****************************************************************************/
 
-/// Encode - doesn't work yet!
+/*
+ * encode.c: encoding functions
+ * written by Felipe Castro
+ * modified by Felipe Corrêa da Silva Sances
+ * modified by Rodrigo Rodrigues da Silva
+ * modified by Thien-Thi Nguyen
+ * modified by Till Heuschmann
+ */
 
 #include "config.h"
 #include <stdbool.h>
