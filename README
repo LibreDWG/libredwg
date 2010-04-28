@@ -2,12 +2,12 @@ LibreDWG
 
 LibreDWG is a free C library to read and write DWG files.  This program is
 part of the GNU project, released under the aegis of GNU.  It is licensed
-under the terms of the GNU General Public License version 3 (or at you opinion
+under the terms of the GNU General Public License version 3 (or at you option
 any later version).
 
 DWG is a file format created in the 70's for the emerging CAD applications.
-Currently it is the native file format of AutoCAD, a proprietary, market
-leading CAD program developed by AutoDesk.
+Currently it is the native file format of AutoCAD, a proprietary CAD program 
+developed by AutoDesk.
 
 LibreDWG is a fork from LibDWG due to its usage of Esperanto, which we think
 is not the best strategy for a free software project which aims to get lots of
@@ -16,8 +16,7 @@ contributors.  LibreDWG is written in English.  Since we forked LibDWG (May
 (September 25, 2009) our decoder is almost done.  We are reaching 100% read
 support in our data structures parser but we still need a test suite.  Among
 the example applications we wrote using LibreDWG is an initial SVG conversion
-tool. We intend to become a GNU package soon.  Please contact us if you can
-help.
+tool. Please contact us if you can help.
 
 The program dwg_ps (in examples/) reads DWG and outputs Postscript; it
 depends on pslib: <http://pslib.sourceforge.net>.  In many GNU/Linux
@@ -25,7 +24,7 @@ distributions, this is available by installing the pslib-dev package.
 If the configure script does not find pslib, dwg_ps will not be built.
 
 Sometimes we hang on our IRC channel which is #libredwg at irc.freenode.net
-If you don't find us there, please email us:
+If you don't find us there, please email the package maintainers:
 
 Felipe Corrêa da Silva Sanches <juca@members.fsf.org>
 Rodrigo Rodrigues da Silva <pitanga@members.fsf.org>
@@ -37,6 +36,7 @@ http://www.gnu.org/software/libredwg
 
 See INSTALL for generic instructions.  Basically, you do:
 
+$ ./autogen.sh (if you checked out the source code from git)
 $ ./configure [options]
 $ make
 $ make check    # optional but strongly encouraged while LibreDWG is alpha
@@ -78,15 +78,9 @@ The examples directory contains some application code that uses our lib:
 * get_bmp.c -- Extracts the bmp thumbnail of a dwg file when it is available.
 
 /*****************************************************************************/
-/*  LibreDWG - Free DWG library                                              */
+/*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*    based on LibDWG - Free DWG read-only library                           */
-/*    http://sourceforge.net/projects/libdwg                                 */
-/*    originally written by Felipe Castro <felipo at users.sourceforge.net>  */
-/*                                                                           */
-/*  Copyright (C) 2008, 2009 Free Software Foundation, Inc.                  */
-/*  Copyright (C) 2009 Felipe Correa da Silva Sanches <juca@members.fsf.org> */
-/*  Copyright (C) 2009 Rodrigo Rodrigues da Silva <pitanga@members.fsf.org>  */
+/*  Copyright (C) 2009, 2010 Free Software Foundation, Inc.                  */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */

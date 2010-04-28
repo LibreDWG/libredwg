@@ -27,7 +27,7 @@ Texts.  A copy of the license is included in the section entitled
 
 @dircategory Libraries
 @direntry
-* LibreDWG: (LibreDWG).         GNU library to read/write DWG files.
+* LibreDWG: (LibreDWG).         Free implementation of the DWG file format.
 @end direntry
 
 @titlepage
