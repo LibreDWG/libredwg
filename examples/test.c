@@ -1,12 +1,8 @@
 /*****************************************************************************/
-/*  LibreDWG - Free DWG library                                              */
+/*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*    based on LibDWG - Free DWG read-only library                           */
-/*    http://sourceforge.net/projects/libdwg                                 */
-/*    originally written by Felipe Castro <felipo at users.sourceforge.net>  */
-/*                                                                           */
-/*  Copyright (C) 2008, 2009 Free Software Foundation, Inc.                  */
-/*  Copyright (C) 2009 Felipe Corrêa da Silva Sanches <juca@members.fsf.org> */
+/*  Copyright (C) 2009 Free Software Foundation, Inc.                        */
+/*  Copyright (C) 2010 Thien-Thi Nguyen                                      */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -14,6 +10,13 @@
 /*  You should have received a copy of the GNU General Public License        */
 /*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
 /*****************************************************************************/
+
+/*
+ * test.c: reading and loading a DWG file to memory
+ * written by Felipe Castro
+ * modified by Felipe Corrêa da Silva Sances
+ * modified by Thien-Thi Nguyen
+ */
 
 #include <stdio.h>
 #include <dwg.h>

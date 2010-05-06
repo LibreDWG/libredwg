@@ -1,24 +1,26 @@
-Current LibreDWG developers:
-- Felipe Corrêa da Silva Sanches <juca@members.fsf.org>
-- Rodrigo Rodrigues da Silva <pitanga@members.sourceforge.net>
 
-Original LibDWG developer:
-- Felipe Emmanuel Ferreira de Castro <felipo@users.sourceforge.net>
+Thien-Thi Nguyen <ttn@gnuvola.org>
+	First versions and changes to several Makefiles.
 
-/*****************************************************************************/
-/*  LibreDWG - Free DWG library                                              */
-/*                                                                           */
-/*    based on LibDWG - Free DWG read-only library                           */
-/*    http://sourceforge.net/projects/libdwg                                 */
-/*    originally written by Felipe Castro <felipo at users.sourceforge.net>  */
-/*                                                                           */
-/*  Copyright (C) 2008, 2009 Free Software Foundation, Inc.                  */
-/*  Copyright (C) 2009 Felipe Corrêa da Silva Sanches <juca@members.fsf.org> */
-/*  Copyright (C) 2009 Rodrigo Rodrigues da Silva <pitanga@members.fsf.org>  */
-/*                                                                           */
-/*  This library is free software, licensed under the terms of the GNU       */
-/*  General Public License as published by the Free Software Foundation,     */
-/*  either version 3 of the License, or (at your option) any later version.  */
-/*  You should have received a copy of the GNU General Public License        */
-/*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
-/*****************************************************************************/
+Till Heuschmann <theuschmann@gmail.com>
+	Substantial changes to dwg.h, dwg.spec and decode.c. R2004
+	read support.
+
+James Michael DuPont <JamesMikeDuPont@googlemail.com>
+	Changes to Makefile.in, Makefile.am, src/bits.c, src/bits.h, 
+	src/common.h, src/decode.c, src/dwg.c, src/dwg.h, src/encode.c, 
+	examples/testSVG.c to conform to C++ compiler.
+
+Rodrigo Rodrigues da Silva <pitanga@members.fsf.org>
+	First version of logging.c. Substantial changes to several files
+	under src/.
+
+Felipe Corrêa da Silva Sanches <juca@members.fsf.org>
+	First version of testSVG.c and src/dwg.spec. Substantial changes
+	to several files under src/.
+
+Felipe Emmanuel Ferreira de Castro <felipo@users.sourceforge.net>
+	Original author. First version of src/bits.c, src/bits.h, 
+	src/common.h, src/common.c, src/decode.h, src/decode.c, src/dwg.h
+	src/dwg.c, src/encode.c, src/encode.h.
+	 

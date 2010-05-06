@@ -1,13 +1,7 @@
 /*****************************************************************************/
-/*  LibreDWG - Free DWG library                                              */
+/*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*    based on LibDWG - Free DWG read-only library                           */
-/*    http://sourceforge.net/projects/libdwg                                 */
-/*    originally written by Felipe Castro <felipo at users.sourceforge.net>  */
-/*                                                                           */
-/*  Copyright (C) 2008, 2009 Free Software Foundation, Inc.                  */
-/*  Copyright (C) 2009 Felipe Corrêa da Silva Sanches <juca@members.fsf.org> */
-/*  Copyright (C) 2009 Rodrigo Rodrigues da Silva <pitanga@members.fsf.org>  */
+/*  Copyright (C) 2009 Free Software Foundation, Inc.                        */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -16,7 +10,13 @@
 /*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
 /*****************************************************************************/
 
-///  Functions for read/write access to data in bit-chains.
+/*
+ * bits.c: low level read and write function prototypes
+ * written by Felipe Castro
+ * modified by Felipe Corrêa da Silva Sances
+ * modified by Rodrigo Rodrigues da Silva
+ */
+
 /**
  The position of bits within bytes is numerically ordered as depicted below:
 
