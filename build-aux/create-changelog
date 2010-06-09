@@ -106,7 +106,10 @@ History:
 
 (save-excursion
   (let ((args `("--no-merges"
-                "--format=&B%n%ci%s%n  %an  <%ae>%n%n\t%s%n%b%n&E%n"
+                ;; We used to use ‘--format=STR’ here but that
+                ;; depends on a feature introduced in Git 1.6.3,
+                ;; which is not provided, e.g., by Debian Lenny.
+                "--pretty=format:&B%n%ci%s%n  %an  <%ae>%n%n\t%s%n%b%n&E%n"
                 ,@(when which
                     (list which)))))
     (apply 'call-process "git" nil t nil "log" args)))

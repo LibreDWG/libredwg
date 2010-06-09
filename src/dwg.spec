@@ -2,7 +2,6 @@
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
 /*  Copyright (C) 2009, 2010 Free Software Foundation, Inc.                  */
-/*  Copyright (C) 2010 Till Heuschmann                                       */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
