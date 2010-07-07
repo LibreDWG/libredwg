@@ -48,6 +48,7 @@ dwg_sentinel(Dwg_Sentinel s)
   return (sentinels[s]);
 }
 
+/* TODO: update with new codes */
 char version_codes[7][7] =
   { "------", "AC1012", "AC1014", "AC1015", "AC1018", "AC1021", "------" };
 
