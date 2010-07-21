@@ -2792,7 +2792,7 @@ dwg_decode_common_entity_handle_data(Bit_Chain * dat, Dwg_Object * obj)
 
   VERSIONS(R_13,R_14)
     {
-      if (0)
+      if (!FIELD_VALUE(nolinks))
         { //TODO: in R13, R14 these are optional. Look at page 53 in the spec
           //      for condition.
           FIELD_HANDLE(prev_entity, 4)
