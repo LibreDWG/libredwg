@@ -20,6 +20,7 @@
 ;; Options are:
 ;;  -o, --output FILENAME  -- write to FILENAME instead of stdout
 ;;  -s, --since START      -- earliest entry must be on/after START
+;;  -c, --copyright WHO    -- append copyright notice
 ;;
 ;; Normally, process all log entries (since the beginning of the repo)
 ;; to the present.  Optional arg `--since START' specifies a different
@@ -27,7 +28,8 @@
 ;; (branch or tag).
 ;;
 ;; Regardless of the selected range, entries whose "subject line"
-;; end with "; nfc." are omitted unconditionally.  Output format:
+;; end with "; nfc." or "; nfc" (no dot) are omitted unconditionally.
+;; Output format:
 ;;
 ;;  YYYY-MM-DD  AUTHOR  <EMAIL>
 ;;
@@ -40,6 +42,16 @@
 ;; not follow the (at the time not yet specified in) HACKING format,
 ;; the entire body of the entry is included.
 ;;
+;; Option `--copyright WHO' appends a copyright notice of the form:
+;;
+;;  ^L
+;;  Copyright (C) YEAR WHO
+;;
+;;  Copying and distribution of this file, with or without modification,
+;;  are permitted provided the copyright notice and this notice are preserved.
+;;
+;; where ^L is a formfeed (ASCII 12) and YEAR is the current year.
+;;
 ;; Examples:
 ;;  $ create-changelog --since master
 ;;  $ create-changelog -s v0.3 -o v0.4.ChangeLog
@@ -49,9 +61,10 @@
 (require 'cl)
 
 (defun fso (s &rest args)
+  "Format S with ARGS, writing the result to stdout."
   (princ (apply 'format s args)))
 
-(defconst version "1.1"
+(defconst version "1.2"
   "Version of create-changelog.
 History:
 1.0   -- initial release
@@ -59,10 +72,15 @@ History:
          accept -s to mean --since
          add missing-arg check for --since
          expand help text
-         include package affiliation in --version output")
+         include package affiliation in --version output
+1.2   -- fix bug: make work with older \"git log\"
+         direct \"Generating...\" message to stderr
+         also filter entries with title ending in \"; nfc\" (no dot)
+         add option --copyright (-c)")
 
 (defvar outfile nil)
 (defvar which nil)
+(defvar copyright-notice nil)
 
 (let ((ls (cdr command-line-args-left))
       arg)
@@ -81,6 +99,17 @@ History:
            (fso "%s\n" (buffer-substring (match-end 0) (line-end-position)))
            (forward-line 1)))
        (kill-emacs))
+      ((-c --copyright)
+       (setq arg (or (pop ls)
+                     (error "ERROR: Missing argument for option `--copyright'"))
+             copyright-notice (format "%c
+Copyright (C) %s %s
+
+Copying and distribution of this file, with or without modification,
+are permitted provided the copyright notice and this notice are preserved."
+                                      ?\f
+                                      (format-time-string "%Y")
+                                      arg)))
       ((-s --since)
        (setq arg (pop ls)
              which (if (not arg)
@@ -97,7 +126,7 @@ History:
       (t
        (error "ERROR: Unrecognized option: `%s'" arg)))))
 
-(fso "Generating %s\n" (or which "full history"))
+(message "Generating %s" (or which "full history"))
 
 (setq vc-handled-backends nil)
 
@@ -117,7 +146,8 @@ History:
 (let (p (q (make-marker)) r)
   (while (setq p (search-forward "&B\n" nil t))
     (set-marker q (save-excursion (search-forward "\n&E")))
-    (if (looking-at ".*; nfc.$")
+    ;; Handle "; nfc." as described by HACKING, or "; nfc" as found in practice.
+    (if (looking-at ".*; nfc\\.?$")
         (delete-region p q)
       (delete-region (+ p 10) (1+ (line-end-position)))
       (forward-line 3)
@@ -134,6 +164,10 @@ History:
 (flush-lines "^&[BE]")
 (while (re-search-forward "\\(\n\n\\)\n+" nil t)
   (replace-match "\\1"))
+
+(when copyright-notice
+  (goto-char (point-max))
+  (insert copyright-notice "\n"))
 
 (if outfile
     (write-file outfile)
