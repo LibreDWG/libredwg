@@ -27,7 +27,8 @@
 ;; (branch or tag).
 ;;
 ;; Regardless of the selected range, entries whose "subject line"
-;; end with "; nfc." are omitted unconditionally.  Output format:
+;; end with "; nfc." or "; nfc" (no dot) are omitted unconditionally.
+;; Output format:
 ;;
 ;;  YYYY-MM-DD  AUTHOR  <EMAIL>
 ;;
@@ -117,7 +118,8 @@ History:
 (let (p (q (make-marker)) r)
   (while (setq p (search-forward "&B\n" nil t))
     (set-marker q (save-excursion (search-forward "\n&E")))
-    (if (looking-at ".*; nfc.$")
+    ;; Handle "; nfc." as described by HACKING, or "; nfc" as found in practice.
+    (if (looking-at ".*; nfc\\.?$")
         (delete-region p q)
       (delete-region (+ p 10) (1+ (line-end-position)))
       (forward-line 3)
