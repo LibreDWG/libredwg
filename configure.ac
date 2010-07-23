@@ -1,4 +1,4 @@
-dnl configure.in
+dnl configure.ac
 
 dnl Copyright (C) 2010 Free Software Foundation, Inc.
 dnl
@@ -83,4 +83,4 @@ AC_CONFIG_FILES([
 
 AC_OUTPUT
 
-dnl configure.in ends here
+dnl configure.ac ends here
