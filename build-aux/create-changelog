@@ -50,6 +50,7 @@
 (require 'cl)
 
 (defun fso (s &rest args)
+  "Format S with ARGS, writing the result to stdout."
   (princ (apply 'format s args)))
 
 (defconst version "1.1"
@@ -98,7 +99,7 @@ History:
       (t
        (error "ERROR: Unrecognized option: `%s'" arg)))))
 
-(fso "Generating %s\n" (or which "full history"))
+(message "Generating %s" (or which "full history"))
 
 (setq vc-handled-backends nil)
 
