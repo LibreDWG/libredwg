@@ -64,7 +64,7 @@
   "Format S with ARGS, writing the result to stdout."
   (princ (apply 'format s args)))
 
-(defconst version "1.1"
+(defconst version "1.2"
   "Version of create-changelog.
 History:
 1.0   -- initial release
@@ -72,7 +72,11 @@ History:
          accept -s to mean --since
          add missing-arg check for --since
          expand help text
-         include package affiliation in --version output")
+         include package affiliation in --version output
+1.2   -- fix bug: make work with older \"git log\"
+         direct \"Generating...\" message to stderr
+         also filter entries with title ending in \"; nfc\" (no dot)
+         add option --copyright (-c)")
 
 (defvar outfile nil)
 (defvar which nil)
