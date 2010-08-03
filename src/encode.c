@@ -161,7 +161,6 @@ bit_write_BE(dat, FIELD_VALUE(name.x), FIELD_VALUE(name.y), FIELD_VALUE(name.z))
 #define FIELD_XDATA(name, size)
 
 #define COMMON_ENTITY_HANDLE_DATA
-
 //dwg_encode_common_entity_handle_data(dat, obj)
 
 #define REPEAT_N(times, name, type) \
@@ -255,9 +254,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
   /*------------------------------------------------------------
    * Header variables
    */
-  // XXX: Anderson: review this!!
   strcpy ((char *)dat->chain, version_codes[dwg->header.version]); // Chain version
-  //strcpy((char *)dat->chain, "AC1015"); // Chain version: should be AC1015
   dat->byte += 6;
 
   for (i = 0; i < 5; i++)
@@ -269,7 +266,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
   bit_write_RC(dat, 0); // ?
   bit_write_RS(dat, dwg->header.codepage); // Codepage
 
-  //dwg->header.num_sections = 5; // hide unknownn sectionn 1 ?
+  dwg->header.num_sections = 6; // hide unknownn sectionn 1 ? //XXX review this
   bit_write_RL(dat, dwg->header.num_sections);
   section_address = dat->byte; // Jump to section address
   dat->byte += (dwg->header.num_sections * 9);
@@ -279,8 +276,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
 
   /*------------------------------------------------------------
    * Unknown section 1
-   */
-
+   */ 
   dwg->header.section[5].number = 5;
   dwg->header.section[5].address = 0;
   dwg->header.section[5].size = 0;
@@ -334,7 +330,8 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
 
   bit_write_RL(dat, 0); // Size of the section
 
-  dwg_encode_header_variables(dat, dwg);   //XXX: Anderson:  make sure that this is correct
+  // encode 
+  dwg_encode_header_variables(dat, dwg);
 
   /* Write the size of the section at its beginning
    */
@@ -422,7 +419,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
           omap[i].handle = tkt.value;
         }
       else
-        omap[i].handle = 0x7FFFFFFF; /* Eraro! */
+        omap[i].handle = 0x7FFFFFFF; /* Error! */
 
       /* Arrange the sequence of handles according to a growing order  */
       if (i > 0)
@@ -858,23 +855,25 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
   case DWG_TYPE_MLINE:
     dwg_encode_MLINE(ent->object, ent->tio.MLINE, dat);
     break;
-    /* TODO: figure out how to deal with these types
+    /* TODO: figure out how to deal with these types 
      case DWG_TYPE_IMAGE:
-     dwg_encode_IMAGE (ent->object, ent->tio.IMAGE, dat);
+     //dwg_encode_IMAGE (ent->object, ent->tio.IMAGE, dat);
      break;
      case DWG_TYPE_LWPLINE:
-     dwg_encode_LWPLINE (ent->object, ent->tio.LWPLINE, dat);
+     //dwg_encode_LWPLINE (ent->object, ent->tio.LWPLINE, dat);
      break;
      case DWG_TYPE_OLE2FRAME:
-     dwg_encode_OLE2FRAME (ent->object, ent->tio.OLE2FRAME, dat);
+     //dwg_encode_OLE2FRAME (ent->object, ent->tio.OLE2FRAME, dat);
      break;
      case DWG_TYPE_TABLE:
-     dwg_encode_TABLE (ent->object, ent->tio.TABLE, dat);
+     //dwg_encode_TABLE (ent->object, ent->tio.TABLE, dat);
      break;
      */
   default:
     LOG_ERROR("Error: unknown object-type while encoding entity\n")
-    exit(-1);
+    //encode something null and skip (FIXME)
+    dwg_encode_UNUSED(ent->object, ent->tio.UNUSED, dat);
+    //exit(-1);
     }
 
   /* Finally calculate and write the bit-size of the object
