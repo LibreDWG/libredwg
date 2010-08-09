@@ -121,7 +121,7 @@ bit_write_BE(dat, FIELD_VALUE(name.x), FIELD_VALUE(name.y), FIELD_VALUE(name.z))
     {\
       FIELD_HANDLE(reactors[vcount], code);\
     }
-
+    
 #define XDICOBJHANDLE(code)\
   SINCE(R_2004)\
     {\
@@ -132,6 +132,21 @@ bit_write_BE(dat, FIELD_VALUE(name.x), FIELD_VALUE(name.y), FIELD_VALUE(name.z))
     {\
       FIELD_HANDLE(xdicobjhandle, code);\
     }
+
+//XXX need a review
+#define ENT_XDICOBJHANDLE(code)\
+  SINCE(R_2004)\
+    {\
+      if (!obj->tio.entity->xdic_missing_flag)\
+        {\
+          FIELD_HANDLE(xdicobjhandle, code);\
+        }\
+    }\
+  PRIOR_VERSIONS\
+    {\
+      FIELD_HANDLE(xdicobjhandle, code);\
+    }
+
 
 //FIELD_VECTOR_N(name, type, size):
 // writes a 'size' elements vector of data of the type indicated by 'type'
@@ -150,7 +165,7 @@ bit_write_BE(dat, FIELD_VALUE(name.x), FIELD_VALUE(name.y), FIELD_VALUE(name.z))
 
 #define FIELD_VECTOR(name, type, size) FIELD_VECTOR_N(name, type, _obj->size)
 
-// XXX not sure about this (anderson)
+// XXX need a review
 #define FIELD_HANDLE(name, handle_code) \
     if (handle_code>=0)\
     {\
@@ -215,32 +230,6 @@ static void dwg_encode_##token (Dwg_Object* obj, Dwg_Entity_##token * _obj, Bit_
   for (vcount=0; vcount<obj->tio.entity->num_reactors; vcount++)\
     {\
       FIELD_HANDLE(reactors[vcount], code);\
-    }
-
-#define XDICOBJHANDLE(code)\
-  SINCE(R_2004)\
-    {\
-      if (!obj->tio.object->xdic_missing_flag)\
-        {\
-          FIELD_HANDLE(xdicobjhandle, code);\
-        }\
-    }\
-  PRIOR_VERSIONS\
-    {\
-      FIELD_HANDLE(xdicobjhandle, code);\
-    }
-
-#define ENT_XDICOBJHANDLE(code)\
-  SINCE(R_2004)\
-    {\
-      if (!obj->tio.entity->xdic_missing_flag)\
-        {\
-          FIELD_HANDLE(xdicobjhandle, code);\
-        }\
-    }\
-  PRIOR_VERSIONS\
-    {\
-      FIELD_HANDLE(xdicobjhandle, code);\
     }
 
 
