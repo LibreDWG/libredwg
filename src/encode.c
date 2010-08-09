@@ -210,6 +210,40 @@ static void dwg_encode_##token (Dwg_Object* obj, Dwg_Entity_##token * _obj, Bit_
 
 #define DWG_OBJECT_END }
 
+#define ENT_REACTORS(code)\
+  FIELD_VALUE(reactors) = (BITCODE_H*) malloc(sizeof(BITCODE_H) * obj->tio.entity->num_reactors);\
+  for (vcount=0; vcount<obj->tio.entity->num_reactors; vcount++)\
+    {\
+      FIELD_HANDLE(reactors[vcount], code);\
+    }
+
+#define XDICOBJHANDLE(code)\
+  SINCE(R_2004)\
+    {\
+      if (!obj->tio.object->xdic_missing_flag)\
+        {\
+          FIELD_HANDLE(xdicobjhandle, code);\
+        }\
+    }\
+  PRIOR_VERSIONS\
+    {\
+      FIELD_HANDLE(xdicobjhandle, code);\
+    }
+
+#define ENT_XDICOBJHANDLE(code)\
+  SINCE(R_2004)\
+    {\
+      if (!obj->tio.entity->xdic_missing_flag)\
+        {\
+          FIELD_HANDLE(xdicobjhandle, code);\
+        }\
+    }\
+  PRIOR_VERSIONS\
+    {\
+      FIELD_HANDLE(xdicobjhandle, code);\
+    }
+
+
 /*--------------------------------------------------------------------------------*/
 typedef struct
 {
@@ -930,8 +964,73 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
 }
 
 void dwg_encode_common_entity_handle_data(Bit_Chain * dat, Dwg_Object * obj){
-  //TODO: implement-me!
-  return;
+  //XXX: not sure about this
+  
+  //setup required to use macros
+  Dwg_Object_Entity *ent;
+  Dwg_Data *dwg = obj->parent;
+  int i;
+  long unsigned int vcount;
+  Dwg_Object_Entity *_obj;
+  ent = obj->tio.entity;
+  _obj = ent;
+
+  if (FIELD_VALUE(entity_mode)==0)
+    {
+      FIELD_HANDLE(subentity, 3)
+    }
+  ENT_REACTORS(4)
+  ENT_XDICOBJHANDLE(3)
+
+  VERSIONS(R_13,R_14)
+    {
+      FIELD_HANDLE(layer, 5)
+      if (!FIELD_VALUE(isbylayerlt))
+        FIELD_HANDLE(ltype, 5)
+    }
+
+  VERSIONS(R_13,R_14)
+    {
+      if (!FIELD_VALUE(nolinks))
+        { //TODO: in R13, R14 these are optional. Look at page 53 in the spec
+          //      for condition.
+          FIELD_HANDLE(prev_entity, 4)
+          FIELD_HANDLE(next_entity, 4)
+        }
+    }
+
+  SINCE(R_2000)
+    {
+      VERSION(R_2000)   // not in R2004
+        {
+          if (!FIELD_VALUE(nolinks))
+            { //TODO: these are optional. see page 52
+              FIELD_HANDLE(prev_entity, 4)
+              FIELD_HANDLE(next_entity, 4)
+            }
+        }
+    }
+
+  SINCE(R_2000)
+    {
+      FIELD_HANDLE(layer, 5)
+      if (FIELD_VALUE(linetype_flags)==3)
+        {
+          FIELD_HANDLE(ltype, 5)
+        }
+      if (FIELD_VALUE(plotstyle_flags)==3)
+        {
+          FIELD_HANDLE(plotstyle, 5)
+        }
+    }
+
+  SINCE(R_2007)
+    {
+      if (FIELD_VALUE(material_flags)==3)
+        {
+          FIELD_HANDLE(material, ANYCODE)
+        }
+    }
 }
 
 void
@@ -939,7 +1038,8 @@ dwg_encode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg, Dwg_Objec
 {
   //XXX Not sure about this
   // Welcome to the house of evil code!
-  ref = (Dwg_Object_Ref *) malloc(sizeof(Dwg_Object_Ref));
+  if (ref == NULL)
+    ref = (Dwg_Object_Ref *) malloc(sizeof(Dwg_Object_Ref));
 
   /*
   //Reserve memory space for object references
@@ -952,9 +1052,9 @@ dwg_encode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg, Dwg_Objec
             (dwg->num_object_refs + REFS_PER_REALLOC) * sizeof(Dwg_Object_Ref*));
       }
 
-  ref = dwg->object_ref[dwg->num_object_refs++];
+  dwg->object_ref[dwg->num_object_refs++] = ref;
 
-  ref->handleref.value = ref->absolute_ref;
+  ref->absolute_ref = ref->handleref.value;
   ref->obj = 0;
 
   //we receive a null obj when we are reading
@@ -988,7 +1088,7 @@ dwg_encode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg, Dwg_Objec
     }
     */
     
-   bit_write_H(dat, &ref->handleref);
+   //bit_write_H(dat, &ref->handleref);
    /* 
    if (obj)
     {
