@@ -251,6 +251,11 @@ static void
 dwg_encode_object(Dwg_Object * obj, Bit_Chain * dat);
 static void
 dwg_encode_header_variables(Bit_Chain* dat, Dwg_Data * dwg);
+void
+dwg_encode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg, Dwg_Object_Ref* ref);
+void 
+dwg_encode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj,Dwg_Data* dwg, Dwg_Object_Ref* ref, int code);
+
 
 /*--------------------------------------------------------------------------------
  * Public variables
@@ -1026,12 +1031,11 @@ void
 dwg_encode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg, Dwg_Object_Ref* ref)
 {
   //XXX Not sure about this
-  // Welcome to the house of evil code!
-  if (ref == NULL)
+  if (ref == NULL)  //never should be null? its necessary?
     ref = (Dwg_Object_Ref *) malloc(sizeof(Dwg_Object_Ref));
 
   /*
-  //Reserve memory space for object references
+  //Reserve space for references
   if (dwg->num_object_refs == 0)
     dwg->object_ref = (Dwg_Object_Ref **) malloc(REFS_PER_REALLOC * sizeof(Dwg_Object_Ref*));
   else
@@ -1090,12 +1094,14 @@ dwg_encode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg, Dwg_Objec
       LOG_ERROR("Could not write handleref in the header variables section\n")
     }*/
 }
-void dwg_encode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj,Dwg_Data* dwg, Dwg_Object_Ref* ref, int code){
+
+void 
+dwg_encode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj,Dwg_Data* dwg, Dwg_Object_Ref* ref, int code){
   if (ref->handleref.code != code){
     LOG_INFO("warning: trying to write handle with wrong code. Expected code=%d, got %d.\n", code, ref->handleref.code)
   }
 
-  //XXX : not sure about this (anderson)
+  //XXX : need a review
   dwg_encode_handleref(dat, obj, dwg, ref);
   
 };
