@@ -58,6 +58,13 @@ customize the installation dirs.  Other options recognized by configure are:
     variable LIBREDWG_TRACE is consulted on the first decode/encode attempt.
     Its value is an integer: 0 (no output) through 9 (full verbosity).
 
+  --enable-write
+  
+    NB: This is an experimental feature that is not in its under construction, so its highly unstable.
+    
+    Enable write support (default: no). When enabled you activate the write
+    support for the dwg format.
+
 == Example usage of the library ==
 
 The examples directory contains some application code that uses our lib:
@@ -76,6 +83,8 @@ The examples directory contains some application code that uses our lib:
   from DWG since SVG only supports 2-dimensional images.
 
 * get_bmp.c -- Extracts the bmp thumbnail of a dwg file when it is available.
+
+* rewrite.c -- Load, rewrite and try to re-read a existing dwg file. Just for writing test. Still failing (as in 08/2010) 
 
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
