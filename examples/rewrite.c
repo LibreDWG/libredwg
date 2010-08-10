@@ -28,7 +28,7 @@ main (int argc, char *argv[])
  // check entry
  if (argc <= 2 || strcmp(argv[1],argv[2]) == 0 )
    {
-    printf("\n\nUsage: \t ./rewrite <dwg_input_file>.dwg <dwg_output_file>.dwg \n \t  Do not subscribe the input file!\n\n");
+    printf("\n\nUsage: \t ./rewrite <dwg_input_file>.dwg <dwg_output_file>.dwg \n \t  Do not subscribe the input file! Avoid subscribe the output file either (it will probably cause an error!\n\n");
     return 1;
   }
   
