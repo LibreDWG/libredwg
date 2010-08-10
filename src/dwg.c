@@ -178,18 +178,18 @@ dwg_bmp(Dwg_Data *stk, long int *size)
     {
       code = bit_read_RC(dat);
       LOG_TRACE("\t%i - Code: %i\n", i, code)
-      LOG_TRACE("\t\tAdress: 0x%x\n", bit_read_RL (dat))
+      LOG_TRACE("\t\tAdress: 0x%lx\n", bit_read_RL (dat))
       bit_read_RL(dat);
       if (code == 1)
         {
           header_size += bit_read_RL(dat);
-          LOG_TRACE("\t\tHeader size: %i\n", header_size)
+          LOG_TRACE("\t\tHeader size: %li\n", header_size)
         }
       else if (code == 2 && plene == 0)
         {
           *size = bit_read_RL(dat);
           plene = 1;
-          LOG_TRACE("\t\tBMP size: %i\n", *size)
+          LOG_TRACE("\t\tBMP size: %li\n", *size)
         }
       else if (code == 3)
         {
@@ -199,11 +199,11 @@ dwg_bmp(Dwg_Data *stk, long int *size)
       else
         {
           bit_read_RL(dat);
-          LOG_TRACE("\t\tSize: 0x%x\n", bit_read_RL (dat))
+          LOG_TRACE("\t\tSize: 0x%lx\n", bit_read_RL (dat))
         }
     }
   dat->byte += header_size;
-  LOG_TRACE("Current adress: 0x%x\n", dat->byte)
+  LOG_TRACE("Current adress: 0x%lx\n", dat->byte)
 
   if (*size > 0)
     return (dat->chain + dat->byte);

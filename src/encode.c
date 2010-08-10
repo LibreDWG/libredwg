@@ -52,6 +52,9 @@ static bool env_var_checked_p;
 
 #define IS_ENCODER
 
+#define ANYCODE -1
+#define REFS_PER_REALLOC 100
+
 #define FIELD(name,type)\
   bit_write_##type(dat, _obj->name);\
   if (loglevel>=2)\
@@ -118,7 +121,7 @@ bit_write_BE(dat, FIELD_VALUE(name.x), FIELD_VALUE(name.y), FIELD_VALUE(name.z))
     {\
       FIELD_HANDLE(reactors[vcount], code);\
     }
-
+    
 #define XDICOBJHANDLE(code)\
   SINCE(R_2004)\
     {\
@@ -129,6 +132,21 @@ bit_write_BE(dat, FIELD_VALUE(name.x), FIELD_VALUE(name.y), FIELD_VALUE(name.z))
     {\
       FIELD_HANDLE(xdicobjhandle, code);\
     }
+
+//XXX need a review
+#define ENT_XDICOBJHANDLE(code)\
+  SINCE(R_2004)\
+    {\
+      if (!obj->tio.entity->xdic_missing_flag)\
+        {\
+          FIELD_HANDLE(xdicobjhandle, code);\
+        }\
+    }\
+  PRIOR_VERSIONS\
+    {\
+      FIELD_HANDLE(xdicobjhandle, code);\
+    }
+
 
 //FIELD_VECTOR_N(name, type, size):
 // writes a 'size' elements vector of data of the type indicated by 'type'
@@ -147,8 +165,21 @@ bit_write_BE(dat, FIELD_VALUE(name.x), FIELD_VALUE(name.y), FIELD_VALUE(name.z))
 
 #define FIELD_VECTOR(name, type, size) FIELD_VECTOR_N(name, type, _obj->size)
 
-//TODO
-#define FIELD_HANDLE(name, handle_code) {}
+// XXX need a review
+#define FIELD_HANDLE(name, handle_code) \
+    if (handle_code>=0)\
+    {\
+      dwg_encode_handleref_with_code(dat, obj, dwg, _obj->name , handle_code);\
+    }\
+  else\
+    {\
+      dwg_encode_handleref(dat, obj, dwg, _obj->name );\
+    }\
+  LOG_TRACE(#name ": HANDLE(%d.%d.%lu) absolute:%lu\n",\
+        _obj->name->handleref.code,\
+        _obj->name->handleref.size,\
+        _obj->name->handleref.value,\
+        _obj->name->absolute_ref)
 
 #define HANDLE_VECTOR_N(name, size, code)\
   for (vcount=0; vcount<size; vcount++)\
@@ -160,9 +191,8 @@ bit_write_BE(dat, FIELD_VALUE(name.x), FIELD_VALUE(name.y), FIELD_VALUE(name.z))
 
 #define FIELD_XDATA(name, size)
 
-#define COMMON_ENTITY_HANDLE_DATA
-
-//dwg_encode_common_entity_handle_data(dat, obj)
+#define COMMON_ENTITY_HANDLE_DATA 
+ // dwg_encode_common_entity_handle_data(dat, obj)
 
 #define REPEAT_N(times, name, type) \
   for (rcount=0; rcount<times; rcount++)
@@ -195,6 +225,14 @@ static void dwg_encode_##token (Dwg_Object* obj, Dwg_Entity_##token * _obj, Bit_
 
 #define DWG_OBJECT_END }
 
+#define ENT_REACTORS(code)\
+  FIELD_VALUE(reactors) = (BITCODE_H*) malloc(sizeof(BITCODE_H) * obj->tio.entity->num_reactors);\
+  for (vcount=0; vcount<obj->tio.entity->num_reactors; vcount++)\
+    {\
+      FIELD_HANDLE(reactors[vcount], code);\
+    }
+
+
 /*--------------------------------------------------------------------------------*/
 typedef struct
 {
@@ -213,6 +251,11 @@ static void
 dwg_encode_object(Dwg_Object * obj, Bit_Chain * dat);
 static void
 dwg_encode_header_variables(Bit_Chain* dat, Dwg_Data * dwg);
+void
+dwg_encode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg, Dwg_Object_Ref* ref);
+void 
+dwg_encode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj,Dwg_Data* dwg, Dwg_Object_Ref* ref, int code);
+
 
 /*--------------------------------------------------------------------------------
  * Public variables
@@ -255,9 +298,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
   /*------------------------------------------------------------
    * Header variables
    */
-  // XXX: Anderson: review this!!
   strcpy ((char *)dat->chain, version_codes[dwg->header.version]); // Chain version
-  //strcpy((char *)dat->chain, "AC1015"); // Chain version: should be AC1015
   dat->byte += 6;
 
   for (i = 0; i < 5; i++)
@@ -269,7 +310,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
   bit_write_RC(dat, 0); // ?
   bit_write_RS(dat, dwg->header.codepage); // Codepage
 
-  //dwg->header.num_sections = 5; // hide unknownn sectionn 1 ?
+  dwg->header.num_sections = 6; // hide unknownn sectionn 1 ? 
   bit_write_RL(dat, dwg->header.num_sections);
   section_address = dat->byte; // Jump to section address
   dat->byte += (dwg->header.num_sections * 9);
@@ -278,9 +319,8 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
   bit_write_sentinel(dat, dwg_sentinel(DWG_SENTINEL_HEADER_END));
 
   /*------------------------------------------------------------
-   * Unknown section 1
-   */
-
+   * Unknown section 1 
+   */ 
   dwg->header.section[5].number = 5;
   dwg->header.section[5].address = 0;
   dwg->header.section[5].size = 0;
@@ -334,7 +374,8 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
 
   bit_write_RL(dat, 0); // Size of the section
 
-  dwg_encode_header_variables(dat, dwg);   //XXX: Anderson:  make sure that this is correct
+  // encode 
+  dwg_encode_header_variables(dat, dwg);
 
   /* Write the size of the section at its beginning
    */
@@ -422,7 +463,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
           omap[i].handle = tkt.value;
         }
       else
-        omap[i].handle = 0x7FFFFFFF; /* Eraro! */
+        omap[i].handle = 0x7FFFFFFF; /* Error! */
 
       /* Arrange the sequence of handles according to a growing order  */
       if (i > 0)
@@ -858,23 +899,25 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
   case DWG_TYPE_MLINE:
     dwg_encode_MLINE(ent->object, ent->tio.MLINE, dat);
     break;
-    /* TODO: figure out how to deal with these types
+    /* TODO: figure out how to deal with these types 
      case DWG_TYPE_IMAGE:
-     dwg_encode_IMAGE (ent->object, ent->tio.IMAGE, dat);
+     //dwg_encode_IMAGE (ent->object, ent->tio.IMAGE, dat);
      break;
      case DWG_TYPE_LWPLINE:
-     dwg_encode_LWPLINE (ent->object, ent->tio.LWPLINE, dat);
+     //dwg_encode_LWPLINE (ent->object, ent->tio.LWPLINE, dat);
      break;
      case DWG_TYPE_OLE2FRAME:
-     dwg_encode_OLE2FRAME (ent->object, ent->tio.OLE2FRAME, dat);
+     //dwg_encode_OLE2FRAME (ent->object, ent->tio.OLE2FRAME, dat);
      break;
      case DWG_TYPE_TABLE:
-     dwg_encode_TABLE (ent->object, ent->tio.TABLE, dat);
+     //dwg_encode_TABLE (ent->object, ent->tio.TABLE, dat);
      break;
      */
   default:
     LOG_ERROR("Error: unknown object-type while encoding entity\n")
-    exit(-1);
+    //for now encode something null and skip (FIXME)
+    dwg_encode_UNUSED(ent->object, ent->tio.UNUSED, dat);
+    //exit(-1);
     }
 
   /* Finally calculate and write the bit-size of the object
@@ -915,17 +958,152 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
 }
 
 void dwg_encode_common_entity_handle_data(Bit_Chain * dat, Dwg_Object * obj){
-  //TODO: implement-me!
-  return;
+  //XXX: not sure about this
+  
+  //setup required to use macros
+  Dwg_Object_Entity *ent;
+  Dwg_Data *dwg = obj->parent;
+  int i;
+  long unsigned int vcount;
+  Dwg_Object_Entity *_obj;
+  ent = obj->tio.entity;
+  _obj = ent;
+
+  if (FIELD_VALUE(entity_mode)==0)
+    {
+      FIELD_HANDLE(subentity, 3)
+    }
+  ENT_REACTORS(4)
+  ENT_XDICOBJHANDLE(3)
+
+  VERSIONS(R_13,R_14)
+    {
+      FIELD_HANDLE(layer, 5)
+      if (!FIELD_VALUE(isbylayerlt))
+        FIELD_HANDLE(ltype, 5)
+    }
+
+  VERSIONS(R_13,R_14)
+    {
+      if (!FIELD_VALUE(nolinks))
+        { //TODO: in R13, R14 these are optional. Look at page 53 in the spec
+          //      for condition.
+          FIELD_HANDLE(prev_entity, 4)
+          FIELD_HANDLE(next_entity, 4)
+        }
+    }
+
+  SINCE(R_2000)
+    {
+      VERSION(R_2000)   // not in R2004
+        {
+          if (!FIELD_VALUE(nolinks))
+            { //TODO: these are optional. see page 52
+              FIELD_HANDLE(prev_entity, 4)
+              FIELD_HANDLE(next_entity, 4)
+            }
+        }
+    }
+
+  SINCE(R_2000)
+    {
+      FIELD_HANDLE(layer, 5)
+      if (FIELD_VALUE(linetype_flags)==3)
+        {
+          FIELD_HANDLE(ltype, 5)
+        }
+      if (FIELD_VALUE(plotstyle_flags)==3)
+        {
+          FIELD_HANDLE(plotstyle, 5)
+        }
+    }
+
+  SINCE(R_2007)
+    {
+      if (FIELD_VALUE(material_flags)==3)
+        {
+          FIELD_HANDLE(material, ANYCODE)
+        }
+    }
 }
 
-void dwg_encode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj, Dwg_Object_Ref* ref, int code){
+void
+dwg_encode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg, Dwg_Object_Ref* ref)
+{
+  //XXX Not sure about this
+  if (ref == NULL)  //never should be null? its necessary?
+    ref = (Dwg_Object_Ref *) malloc(sizeof(Dwg_Object_Ref));
+
+  /*
+  //Reserve space for references
+  if (dwg->num_object_refs == 0)
+    dwg->object_ref = (Dwg_Object_Ref **) malloc(REFS_PER_REALLOC * sizeof(Dwg_Object_Ref*));
+  else
+    if (dwg->num_object_refs % REFS_PER_REALLOC == 0)
+      {
+        dwg->object_ref = (Dwg_Object_Ref **) realloc(dwg->object_ref,
+            (dwg->num_object_refs + REFS_PER_REALLOC) * sizeof(Dwg_Object_Ref*));
+      }
+
+  dwg->object_ref[dwg->num_object_refs++] = ref;
+
+  ref->absolute_ref = ref->handleref.value;
+  ref->obj = 0;
+
+  //we receive a null obj when we are reading
+  // handles in the header variables section
+  if (!obj)
+    return ;
+
+  /*
+   * sometimes the code indicates the type of ownership
+   * in other cases the handle is stored as an offset from some other handle
+   * how is it determined?
+   * /
+  ref->absolute_ref = 0;
+  switch(ref->handleref.code) //that's right: don't bother the code on the spec.
+    {
+    case 0x06: 
+      ref->absolute_ref = (obj->handle.value + 1);
+      break;
+    case 0x08:
+      ref->absolute_ref = (obj->handle.value - 1);
+      break;
+    case 0x0A:
+      ref->absolute_ref = (obj->handle.value + ref->handleref.value);
+      break;
+    case 0x0C:
+      ref->absolute_ref = (obj->handle.value - ref->handleref.value);
+      break;
+    default: //0x02, 0x03, 0x04, 0x05 or none
+      ref->absolute_ref = ref->handleref.value;
+      break;
+    }
+    */
+    
+   //bit_write_H(dat, &ref->handleref);
+   /* 
+   if (obj)
+    {
+      LOG_ERROR(
+        "Could not write handleref of object whose handle is: %d.%d.%lu\n",
+         obj->handle.code, obj->handle.size, obj->handle.value)
+    }
+  else
+    {
+      LOG_ERROR("Could not write handleref in the header variables section\n")
+    }*/
+}
+
+void 
+dwg_encode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj,Dwg_Data* dwg, Dwg_Object_Ref* ref, int code){
   if (ref->handleref.code != code){
     LOG_INFO("warning: trying to write handle with wrong code. Expected code=%d, got %d.\n", code, ref->handleref.code)
   }
 
-  //TODO: implement-me!
-  return;
+  //XXX : need a review
+  dwg_encode_handleref(dat, obj, dwg, ref);
+  
 };
 
 static void

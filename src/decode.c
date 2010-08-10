@@ -2897,7 +2897,7 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
 
         if (!bit_read_H(dat, &obj->handle))
           {
-            LOG_INFO("Object handle: %x.%x.%x\n", 
+            LOG_INFO("Object handle: %x.%x.%lx\n", 
               obj->handle.code, obj->handle.size, obj->handle.value)
           }
 

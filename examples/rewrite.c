@@ -52,10 +52,12 @@ main (int argc, char *argv[])
   Dwg_Data dwg_struct;
   char* filename_in = argv[1];
   char* filename_out = argv[2];
+  /*
+   * some very simple testing
+   */
 
+  // reads the file
   error = dwg_read_file(filename_in, &dwg_struct);
-
-  //dwg_free(&dwg_struct);
 
   if (error)
     {
@@ -65,7 +67,7 @@ main (int argc, char *argv[])
     {
       printf("\nREAD SUCCESS!\n\n");
     }
-
+  // rewrite it
   error = dwg_write_file(filename_out, &dwg_struct);
 
   if (error)
@@ -76,6 +78,21 @@ main (int argc, char *argv[])
     {
       printf("\nWRITE SUCCESS!\n\n");
     }
+  
+  dwg_free(&dwg_struct);
+
+  // try to read again
+  error = dwg_read_file(filename_out, &dwg_struct);
+
+  if (error)
+    {
+      printf("\nre-READ ERROR!\n\n");
+    }
+  else
+    {
+      printf("\nre-READ SUCCESS!\n\n");
+    }
+
 
   /* This value is the return value for `main',
      so clamp it to either 0 or 1.  */
