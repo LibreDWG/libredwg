@@ -1030,69 +1030,16 @@ void dwg_encode_common_entity_handle_data(Bit_Chain * dat, Dwg_Object * obj){
 void
 dwg_encode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg, Dwg_Object_Ref* ref)
 {
-  //XXX Not sure about this
-  if (ref == NULL)  //never should be null? its necessary?
-    ref = (Dwg_Object_Ref *) malloc(sizeof(Dwg_Object_Ref));
-
-  /*
-  //Reserve space for references
-  if (dwg->num_object_refs == 0)
-    dwg->object_ref = (Dwg_Object_Ref **) malloc(REFS_PER_REALLOC * sizeof(Dwg_Object_Ref*));
-  else
-    if (dwg->num_object_refs % REFS_PER_REALLOC == 0)
-      {
-        dwg->object_ref = (Dwg_Object_Ref **) realloc(dwg->object_ref,
-            (dwg->num_object_refs + REFS_PER_REALLOC) * sizeof(Dwg_Object_Ref*));
-      }
-
-  dwg->object_ref[dwg->num_object_refs++] = ref;
-
-  ref->absolute_ref = ref->handleref.value;
-  ref->obj = 0;
-
-  //we receive a null obj when we are reading
-  // handles in the header variables section
-  if (!obj)
-    return ;
-
-  /*
-   * sometimes the code indicates the type of ownership
-   * in other cases the handle is stored as an offset from some other handle
-   * how is it determined?
-   * /
-  ref->absolute_ref = 0;
-  switch(ref->handleref.code) //that's right: don't bother the code on the spec.
+  
+  
+  //if (!ref->handleref)
     {
-    case 0x06: 
-      ref->absolute_ref = (obj->handle.value + 1);
-      break;
-    case 0x08:
-      ref->absolute_ref = (obj->handle.value - 1);
-      break;
-    case 0x0A:
-      ref->absolute_ref = (obj->handle.value + ref->handleref.value);
-      break;
-    case 0x0C:
-      ref->absolute_ref = (obj->handle.value - ref->handleref.value);
-      break;
-    default: //0x02, 0x03, 0x04, 0x05 or none
-      ref->absolute_ref = ref->handleref.value;
-      break;
+      LOG_ERROR("Dwg_Handle struct is null. Nothing to write!");
+      return;
     }
-    */
-    
-   //bit_write_H(dat, &ref->handleref);
-   /* 
-   if (obj)
-    {
-      LOG_ERROR(
-        "Could not write handleref of object whose handle is: %d.%d.%lu\n",
-         obj->handle.code, obj->handle.size, obj->handle.value)
-    }
-  else
-    {
-      LOG_ERROR("Could not write handleref in the header variables section\n")
-    }*/
+
+  bit_write_H(dat, &ref->handleref);
+
 }
 
 void 
