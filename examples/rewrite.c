@@ -19,35 +19,20 @@
 #include <dwg.h>
 #include "suffix.c"
 #include "../src/common.h"
+#include <string.h>
 
-// @deprecated
-/*int
-load_and_rewrite_dwg(char *filenameIn, char *filenameOut)
-{
-  unsigned int i;
-  int error;
-  Dwg_Data dwg;
-
-  error = dwg_read_file(filenameIn, &dwg);
-  if (!error){
-
-	  error = dwg_write_file(filenameOut, &dwg);
-	  if (error) printf("\nERROR!\n");
-	  else printf("\nSUCCESS!!\n");
-  }
-  else {
-    printf("\nCould not read the file!");
-  }
- // dwg_free(&dwg);
-  return error;
-}*/
 
 int
 main (int argc, char *argv[])
 {
-  REQUIRE_INPUT_FILE_ARG (argc);
-  //load_and_rewrite_dwg (argv[1], argv[2]);
-
+ // check entry
+ if (argc <= 2 || strcmp(argv[1],argv[2]) == 0 )
+   {
+    printf("\n\nUsage: \t ./rewrite <dwg_input_file>.dwg <dwg_output_file>.dwg \n \t  Do not subscribe the input file!\n\n");
+    return 1;
+  }
+  
+  
   int error;
   Dwg_Data dwg_struct;
   char* filename_in = argv[1];
