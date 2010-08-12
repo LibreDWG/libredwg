@@ -167,19 +167,7 @@ bit_write_BE(dat, FIELD_VALUE(name.x), FIELD_VALUE(name.y), FIELD_VALUE(name.z))
 
 // XXX need a review
 #define FIELD_HANDLE(name, handle_code) \
-    if (handle_code>=0)\
-    {\
-      dwg_encode_handleref_with_code(dat, obj, dwg, _obj->name , handle_code);\
-    }\
-  else\
-    {\
-      dwg_encode_handleref(dat, obj, dwg, _obj->name );\
-    }\
-  LOG_TRACE(#name ": HANDLE(%d.%d.%lu) absolute:%lu\n",\
-        _obj->name->handleref.code,\
-        _obj->name->handleref.size,\
-        _obj->name->handleref.value,\
-        _obj->name->absolute_ref)
+    bit_write_H(dat, &_obj->name->handleref)
 
 #define HANDLE_VECTOR_N(name, size, code)\
   for (vcount=0; vcount<size; vcount++)\
@@ -938,7 +926,7 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
   /* Handle references
    */
   //FIXME write new handle encoding routines like print_handleref
-  for (i = 0; i < ent->num_handles; i++)
+  //for (i = 0; i < ent->num_handles; i++)
     //bit_write_H (dat, &ent->handleref[i]);
 
     /* Finally calculate and write the bit-size of the object
@@ -971,16 +959,16 @@ void dwg_encode_common_entity_handle_data(Bit_Chain * dat, Dwg_Object * obj){
 
   if (FIELD_VALUE(entity_mode)==0)
     {
-      FIELD_HANDLE(subentity, 3)
+      FIELD_HANDLE(subentity, 3);
     }
   ENT_REACTORS(4)
   ENT_XDICOBJHANDLE(3)
 
   VERSIONS(R_13,R_14)
     {
-      FIELD_HANDLE(layer, 5)
+      FIELD_HANDLE(layer, 5);
       if (!FIELD_VALUE(isbylayerlt))
-        FIELD_HANDLE(ltype, 5)
+        FIELD_HANDLE(ltype, 5);
     }
 
   VERSIONS(R_13,R_14)
@@ -988,8 +976,8 @@ void dwg_encode_common_entity_handle_data(Bit_Chain * dat, Dwg_Object * obj){
       if (!FIELD_VALUE(nolinks))
         { //TODO: in R13, R14 these are optional. Look at page 53 in the spec
           //      for condition.
-          FIELD_HANDLE(prev_entity, 4)
-          FIELD_HANDLE(next_entity, 4)
+          FIELD_HANDLE(prev_entity, 4);
+          FIELD_HANDLE(next_entity, 4);
         }
     }
 
@@ -999,22 +987,22 @@ void dwg_encode_common_entity_handle_data(Bit_Chain * dat, Dwg_Object * obj){
         {
           if (!FIELD_VALUE(nolinks))
             { //TODO: these are optional. see page 52
-              FIELD_HANDLE(prev_entity, 4)
-              FIELD_HANDLE(next_entity, 4)
+              FIELD_HANDLE(prev_entity, 4);
+              FIELD_HANDLE(next_entity, 4);
             }
         }
     }
 
   SINCE(R_2000)
     {
-      FIELD_HANDLE(layer, 5)
+      FIELD_HANDLE(layer, 5);
       if (FIELD_VALUE(linetype_flags)==3)
         {
-          FIELD_HANDLE(ltype, 5)
+          FIELD_HANDLE(ltype, 5);
         }
       if (FIELD_VALUE(plotstyle_flags)==3)
         {
-          FIELD_HANDLE(plotstyle, 5)
+          FIELD_HANDLE(plotstyle, 5);
         }
     }
 
@@ -1022,7 +1010,7 @@ void dwg_encode_common_entity_handle_data(Bit_Chain * dat, Dwg_Object * obj){
     {
       if (FIELD_VALUE(material_flags)==3)
         {
-          FIELD_HANDLE(material, ANYCODE)
+          FIELD_HANDLE(material, ANYCODE);
         }
     }
 }
@@ -1030,27 +1018,19 @@ void dwg_encode_common_entity_handle_data(Bit_Chain * dat, Dwg_Object * obj){
 void
 dwg_encode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg, Dwg_Object_Ref* ref)
 {
-  
-  
-  //if (!ref->handleref)
-    {
-      LOG_ERROR("Dwg_Handle struct is null. Nothing to write!");
-      return;
-    }
-
-  bit_write_H(dat, &ref->handleref);
-
+  //this function should receive a Object_Ref without an abs_ref, calculate it and return a Dwg_Handle
+  //this should be a higher level function 
+  //not sure if the prototype is correct
 }
 
 void 
 dwg_encode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj,Dwg_Data* dwg, Dwg_Object_Ref* ref, int code){
+  //XXX fixme. will this function be necessary?
+  //create the handle, then check the code. will it be necessary?
+  dwg_encode_handleref(dat, obj, dwg, ref);
   if (ref->handleref.code != code){
     LOG_INFO("warning: trying to write handle with wrong code. Expected code=%d, got %d.\n", code, ref->handleref.code)
   }
-
-  //XXX : need a review
-  dwg_encode_handleref(dat, obj, dwg, ref);
-  
 };
 
 static void
