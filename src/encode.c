@@ -701,7 +701,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
 static void
 dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
 {
-  unsigned int i;
+  /*unsigned int i;
   long unsigned int size;
   Bit_Chain gdadr;
   Bit_Chain ekadr;
@@ -900,7 +900,7 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
      case DWG_TYPE_TABLE:
      //dwg_encode_TABLE (ent->object, ent->tio.TABLE, dat);
      break;
-     */
+     * /
   default:
     LOG_ERROR("Error: unknown object-type while encoding entity\n")
     //for now encode something null and skip (FIXME)
@@ -909,7 +909,7 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
     }
 
   /* Finally calculate and write the bit-size of the object
-   */
+   * /
   pvadr.byte = dat->byte;
   pvadr.bit = dat->bit;
 
@@ -924,13 +924,13 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
   dat->bit = pvadr.bit;
 
   /* Handle references
-   */
+   * /
   //FIXME write new handle encoding routines like print_handleref
   //for (i = 0; i < ent->num_handles; i++)
     //bit_write_H (dat, &ent->handleref[i]);
 
     /* Finally calculate and write the bit-size of the object
-     */
+     * /
     pvadr.byte = dat->byte;
   pvadr.bit = dat->bit;
 
@@ -943,6 +943,17 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
 
   dat->byte = pvadr.byte;
   dat->bit = pvadr.bit;
+  */
+  
+  //XXX not sure about this
+   Dwg_Object_Entity *ent;
+   
+   SINCE(R_2000)
+    {
+      bit_write_RL(dat, 0);
+    }
+
+   bit_write_H(dat, &(obj->handle));
 }
 
 void
@@ -989,7 +1000,9 @@ dwg_encode_object(Dwg_Object * obj, Bit_Chain * dat)
   bit_write_MS(dat, obj->size);
   ekadr.byte = dat->byte; // Calculate later the bit size of the object
   ekadr.bit = dat->bit;
-  bit_write_BS(dat, obj->type);
+  //bit_write_BS(dat, obj->type);
+  bit_write_BS(dat, 0);
+  
 }
 
 static void
