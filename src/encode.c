@@ -945,15 +945,12 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
   dat->bit = pvadr.bit;
   */
   
-  //XXX not sure about this
-   Dwg_Object_Entity *ent;
-   
-   SINCE(R_2000)
-    {
-      bit_write_RL(dat, 0);
-    }
+  //XXX not sure about this   
+  bit_write_RL(dat, obj->tio.entity->num_handles);
+  bit_write_H(dat, &(obj->handle));
+  //FIXME: we are enconding something null for now, this shoul be done properly later
+  bit_write_BS(dat, 0);
 
-   bit_write_H(dat, &(obj->handle));
 }
 
 void
@@ -1001,7 +998,7 @@ dwg_encode_object(Dwg_Object * obj, Bit_Chain * dat)
   ekadr.byte = dat->byte; // Calculate later the bit size of the object
   ekadr.bit = dat->bit;
   //bit_write_BS(dat, obj->type);
-  bit_write_BS(dat, 0);
+  bit_write_BS(dat, 0); //FIXME encoding something null for now
   
 }
 
