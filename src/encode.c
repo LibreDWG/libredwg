@@ -701,255 +701,82 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
 static void
 dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
 {
-  /*unsigned int i;
-  long unsigned int size;
-  Bit_Chain gdadr;
-  Bit_Chain ekadr;
-  Bit_Chain bgadr;
-  Bit_Chain pvadr;
-  Dwg_Object_Entity *ent;
-
-  ent = obj->tio.entity;
-
-  gdadr.byte = dat->byte;
-  gdadr.bit = dat->bit;
-
-  bit_write_MS(dat, obj->size);
-
-  ekadr.byte = dat->byte; // In order to calculate afterwards the byte and bit size of the object
-  ekadr.bit = dat->bit;
-
-  bit_write_BS(dat, obj->type);
-
-  bgadr.byte = dat->byte;
-  bgadr.bit = dat->bit;
-
-  bit_write_RL(dat, 0); // Zero for now. Calculate and write later
-
-  bit_write_H(dat, &ent->object->handle);
-  bit_write_BS(dat, ent->extended_size);
-  if (ent->extended_size > 0)
+  //XXX not sure about this, someone should review
+  unsigned int size;
+  unsigned int extended_size;
+  int i;
+  
+  size =  obj->tio.entity->bitsize;
+  bit_write_RL(dat, size);
+  bit_write_H(dat, &(obj->handle));
+  extended_size = obj->tio.entity->extended_size;
+  bit_write_BS(dat, extended_size);
+  bit_write_H(dat, &(obj->tio.entity->extended_handle));
+  
+  for(i = extended_size - size; i< extended_size; i++)
+    bit_write_RC(dat, obj->tio.entity->extended[i]);
+    
+  bit_write_B(dat, obj->tio.entity->picture_exists);
+  if (obj->tio.entity->picture_exists)
     {
-      bit_write_H(dat, &ent->extended_handle);
-      for (i = 0; i < ent->extended_size; i++)
-        bit_write_RC(dat, ent->extended[i]);
-    }
-
-  bit_write_B(dat, ent->picture_exists);
-  if (ent->picture_exists)
+      bit_write_RL(dat, obj->tio.entity->picture_size);
+      if(obj->tio.entity->picture_size < 210210)
+        {
+          for(i=0; i< obj->tio.entity->picture_size; i++)
+            bit_write_RC(dat, obj->tio.entity->picture[i]);
+        }
+      else 
+        {
+          LOG_ERROR(
+              "dwg_encode_entity:  Absurd! Picture-size: %lu kB. Object: %lu (handle).\n",
+              obj->tio.entity->picture_size / 1000, obj->handle.value)
+          bit_advance_position(dat, -(4 * 8 + 1));
+        }
+     }
+  
+  Dwg_Object_Entity* ent = obj->tio.entity;
+   VERSIONS(R_13,R_14)
     {
-      bit_write_RL(dat, ent->picture_size);
-      for (i = 0; i < ent->picture_size; i++)
-        bit_write_RC(dat, ent->picture[i]);
+      bit_write_RL(dat, ent->bitsize);
     }
 
   bit_write_BB(dat, ent->entity_mode);
   bit_write_BL(dat, ent->num_reactors);
-  bit_write_B(dat, ent->nolinks);
-  bit_write_CMC(dat, &ent->color);
-  bit_write_BD(dat, ent->linetype_scale);
-  bit_write_BB(dat, ent->linetype_flags);
-  bit_write_BB(dat, ent->plotstyle_flags);
-  bit_write_BS(dat, ent->invisible);
-  bit_write_RC(dat, ent->lineweight);
 
-  switch (obj->type)
+  SINCE(R_2004)
     {
-  case DWG_TYPE_TEXT:
-    dwg_encode_TEXT(ent->object, ent->tio.TEXT, dat);
-    break;
-  case DWG_TYPE_ATTRIB:
-    dwg_encode_ATTRIB(ent->object, ent->tio.ATTRIB, dat);
-    break;
-  case DWG_TYPE_ATTDEF:
-    dwg_encode_ATTDEF(ent->object, ent->tio.ATTDEF, dat);
-    break;
-  case DWG_TYPE_BLOCK:
-    dwg_encode_BLOCK(ent->object, ent->tio.BLOCK, dat);
-    break;
-  case DWG_TYPE_ENDBLK:
-    dwg_encode_ENDBLK(ent->object, ent->tio.ENDBLK, dat);
-    break;
-  case DWG_TYPE_SEQEND:
-    dwg_encode_SEQEND(ent->object, ent->tio.SEQEND, dat);
-    break;
-  case DWG_TYPE_INSERT:
-    dwg_encode_INSERT(ent->object, ent->tio.INSERT, dat);
-    break;
-  case DWG_TYPE_MINSERT:
-    dwg_encode_MINSERT(ent->object, ent->tio.MINSERT, dat);
-    break;
-  case DWG_TYPE_VERTEX_2D:
-    dwg_encode_VERTEX_2D(ent->object, ent->tio.VERTEX_2D, dat);
-    break;
-  case DWG_TYPE_VERTEX_3D:
-    dwg_encode_VERTEX_3D(ent->object, ent->tio.VERTEX_3D, dat);
-    break;
-  case DWG_TYPE_VERTEX_MESH:
-    dwg_encode_VERTEX_MESH(ent->object, ent->tio.VERTEX_MESH, dat);
-    break;
-  case DWG_TYPE_VERTEX_PFACE:
-    dwg_encode_VERTEX_PFACE(ent->object, ent->tio.VERTEX_PFACE, dat);
-    break;
-  case DWG_TYPE_VERTEX_PFACE_FACE:
-    dwg_encode_VERTEX_PFACE_FACE(ent->object, ent->tio.VERTEX_PFACE_FACE, dat);
-    break;
-  case DWG_TYPE_POLYLINE_2D:
-    dwg_encode_POLYLINE_2D(ent->object, ent->tio.POLYLINE_2D, dat);
-    break;
-  case DWG_TYPE_POLYLINE_3D:
-    dwg_encode_POLYLINE_3D(ent->object, ent->tio.POLYLINE_3D, dat);
-    break;
-  case DWG_TYPE_ARC:
-    dwg_encode_ARC(ent->object, ent->tio.ARC, dat);
-    break;
-  case DWG_TYPE_CIRCLE:
-    dwg_encode_CIRCLE(ent->object, ent->tio.CIRCLE, dat);
-    break;
-  case DWG_TYPE_LINE:
-    dwg_encode_LINE(ent->object, ent->tio.LINE, dat);
-    break;
-  case DWG_TYPE_DIMENSION_ORDINATE:
-    dwg_encode_DIMENSION_ORDINATE(ent->object, ent->tio.DIMENSION_ORDINATE, dat);
-    break;
-  case DWG_TYPE_DIMENSION_LINEAR:
-    dwg_encode_DIMENSION_LINEAR(ent->object, ent->tio.DIMENSION_LINEAR, dat);
-    break;
-  case DWG_TYPE_DIMENSION_ALIGNED:
-    dwg_encode_DIMENSION_ALIGNED(ent->object, ent->tio.DIMENSION_ALIGNED, dat);
-    break;
-  case DWG_TYPE_DIMENSION_ANG3PT:
-    dwg_encode_DIMENSION_ANG3PT(ent->object, ent->tio.DIMENSION_ANG3PT, dat);
-    break;
-  case DWG_TYPE_DIMENSION_ANG2LN:
-    dwg_encode_DIMENSION_ANG2LN(ent->object, ent->tio.DIMENSION_ANG2LN, dat);
-    break;
-  case DWG_TYPE_DIMENSION_RADIUS:
-    dwg_encode_DIMENSION_RADIUS(ent->object, ent->tio.DIMENSION_RADIUS, dat);
-    break;
-  case DWG_TYPE_DIMENSION_DIAMETER:
-    dwg_encode_DIMENSION_DIAMETER(ent->object, ent->tio.DIMENSION_DIAMETER, dat);
-    break;
-  case DWG_TYPE_POINT:
-    dwg_encode_POINT(ent->object, ent->tio.POINT, dat);
-    break;
-  case DWG_TYPE__3DFACE:
-    dwg_encode__3DFACE(ent->object, ent->tio._3DFACE, dat);
-    break;
-  case DWG_TYPE_POLYLINE_PFACE:
-    dwg_encode_POLYLINE_PFACE(ent->object, ent->tio.POLYLINE_PFACE, dat);
-    break;
-  case DWG_TYPE_POLYLINE_MESH:
-    dwg_encode_POLYLINE_MESH(ent->object, ent->tio.POLYLINE_MESH, dat);
-    break;
-  case DWG_TYPE_SOLID:
-    dwg_encode_SOLID(ent->object, ent->tio.SOLID, dat);
-    break;
-  case DWG_TYPE_TRACE:
-    dwg_encode_TRACE(ent->object, ent->tio.TRACE, dat);
-    break;
-  case DWG_TYPE_SHAPE:
-    dwg_encode_SHAPE(ent->object, ent->tio.SHAPE, dat);
-    break;
-  case DWG_TYPE_VIEWPORT:
-    dwg_encode_VIEWPORT(ent->object, ent->tio.VIEWPORT, dat);
-    break;
-  case DWG_TYPE_ELLIPSE:
-    dwg_encode_ELLIPSE(ent->object, ent->tio.ELLIPSE, dat);
-    break;
-  case DWG_TYPE_SPLINE:
-    dwg_encode_SPLINE(ent->object, ent->tio.SPLINE, dat);
-    break;
-  case DWG_TYPE_REGION:
-    dwg_encode_REGION(ent->object, ent->tio.REGION, dat);
-    break;
-  case DWG_TYPE_3DSOLID:
-    dwg_encode__3DSOLID(ent->object, ent->tio._3DSOLID, dat);
-    break;
-  case DWG_TYPE_BODY:
-    dwg_encode_BODY(ent->object, ent->tio.BODY, dat);
-    break;
-  case DWG_TYPE_RAY:
-    dwg_encode_RAY(ent->object, ent->tio.RAY, dat);
-    break;
-  case DWG_TYPE_XLINE:
-    dwg_encode_XLINE(ent->object, ent->tio.XLINE, dat);
-    break;
-  case DWG_TYPE_MTEXT:
-    dwg_encode_MTEXT(ent->object, ent->tio.MTEXT, dat);
-    break;
-  case DWG_TYPE_LEADER:
-    dwg_encode_LEADER(ent->object, ent->tio.LEADER, dat);
-    break;
-  case DWG_TYPE_TOLERANCE:
-    dwg_encode_TOLERANCE(ent->object, ent->tio.TOLERANCE, dat);
-    break;
-  case DWG_TYPE_MLINE:
-    dwg_encode_MLINE(ent->object, ent->tio.MLINE, dat);
-    break;
-    /* TODO: figure out how to deal with these types 
-     case DWG_TYPE_IMAGE:
-     //dwg_encode_IMAGE (ent->object, ent->tio.IMAGE, dat);
-     break;
-     case DWG_TYPE_LWPLINE:
-     //dwg_encode_LWPLINE (ent->object, ent->tio.LWPLINE, dat);
-     break;
-     case DWG_TYPE_OLE2FRAME:
-     //dwg_encode_OLE2FRAME (ent->object, ent->tio.OLE2FRAME, dat);
-     break;
-     case DWG_TYPE_TABLE:
-     //dwg_encode_TABLE (ent->object, ent->tio.TABLE, dat);
-     break;
-     * /
-  default:
-    LOG_ERROR("Error: unknown object-type while encoding entity\n")
-    //for now encode something null and skip (FIXME)
-    dwg_encode_UNUSED(ent->object, ent->tio.UNUSED, dat);
-    //exit(-1);
+     bit_write_B(dat,  ent->xdic_missing_flag );
     }
 
-  /* Finally calculate and write the bit-size of the object
-   * /
-  pvadr.byte = dat->byte;
-  pvadr.bit = dat->bit;
+  VERSIONS(R_13,R_14)
+    {
+      bit_write_B(dat, ent->isbylayerlt );
+    }
 
-  dat->byte = bgadr.byte;
-  dat->bit = bgadr.bit;
+  bit_write_B(dat, ent->nolinks );
 
-  size = 8 * (pvadr.byte - ekadr.byte) + (pvadr.bit);
-  bit_write_RL(dat, size);
-  //printf ("Size (bit): %lu\t", size);
+  bit_write_CMC(dat, &ent->color);
 
-  dat->byte = pvadr.byte;
-  dat->bit = pvadr.bit;
+  bit_write_BD(dat, ent->linetype_scale);
 
-  /* Handle references
-   * /
-  //FIXME write new handle encoding routines like print_handleref
-  //for (i = 0; i < ent->num_handles; i++)
-    //bit_write_H (dat, &ent->handleref[i]);
+  SINCE(R_2000)
+    {
+       bit_write_BB(dat, ent->linetype_flags);
+       bit_write_BB(dat, ent->plotstyle_flags);
+    }
 
-    /* Finally calculate and write the bit-size of the object
-     * /
-    pvadr.byte = dat->byte;
-  pvadr.bit = dat->bit;
+  SINCE(R_2007)
+    {
+       bit_write_BB(dat, ent->material_flags);
+       bit_write_RC(dat, ent->shadow_flags);
+    }
 
-  dat->byte = gdadr.byte;
-  dat->bit = gdadr.bit;
+   bit_write_BS(dat, ent->invisible);
 
-  size = pvadr.byte - ekadr.byte;
-  bit_write_MS(dat, size);
-  //printf ("Size: %lu\n", size);
-
-  dat->byte = pvadr.byte;
-  dat->bit = pvadr.bit;
-  */
-  
-  //XXX not sure about this   
-  bit_write_RL(dat, obj->tio.entity->num_handles);
-  bit_write_H(dat, &(obj->handle));
-  //FIXME: we are enconding something null for now, this shoul be done properly later
-  bit_write_BS(dat, 0);
+  SINCE(R_2000)
+    {
+       bit_write_RC(dat, ent->lineweight);
+    }
 
 }
 
