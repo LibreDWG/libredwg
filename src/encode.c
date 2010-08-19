@@ -819,14 +819,43 @@ dwg_encode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj,Dwg_Data* dwg, 
 static void
 dwg_encode_object(Dwg_Object * obj, Bit_Chain * dat)
 {
-  Bit_Chain ekadr;
+ /* Bit_Chain ekadr;
 
   bit_write_MS(dat, obj->size);
   ekadr.byte = dat->byte; // Calculate later the bit size of the object
   ekadr.bit = dat->bit;
   //bit_write_BS(dat, obj->type);
   bit_write_BS(dat, 0); //FIXME encoding something null for now
+  */
+  //XXX need a review
+  Dwg_Object_Object* ord = obj->tio.object;
+  int i;
   
+   SINCE(R_2000)
+    {
+       bit_write_RL(dat, ord->bitsize);
+    }
+
+  bit_write_H(dat, &ord->object->handle);
+  
+  bit_write_BS(dat, obj->size);
+  bit_write_H(dat, &ord->extended_handle);
+  
+  for (i = ord->extended_size - obj->size; i < ord->extended_size; i++)
+         bit_write_RC(dat, ord->extended[i]);
+    
+
+  VERSIONS(R_13,R_14)
+    {
+       bit_write_RL(dat, ord->bitsize);
+    }
+
+   bit_write_BL(dat, ord->num_reactors);
+
+  SINCE(R_2004)
+    {
+       bit_write_B(dat, ord->xdic_missing_flag);
+    }
 }
 
 static void
