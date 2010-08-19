@@ -819,14 +819,6 @@ dwg_encode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj,Dwg_Data* dwg, 
 static void
 dwg_encode_object(Dwg_Object * obj, Bit_Chain * dat)
 {
- /* Bit_Chain ekadr;
-
-  bit_write_MS(dat, obj->size);
-  ekadr.byte = dat->byte; // Calculate later the bit size of the object
-  ekadr.bit = dat->bit;
-  //bit_write_BS(dat, obj->type);
-  bit_write_BS(dat, 0); //FIXME encoding something null for now
-  */
   //XXX need a review
   Dwg_Object_Object* ord = obj->tio.object;
   int i;
