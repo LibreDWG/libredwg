@@ -34,6 +34,8 @@ include_HEADERS = dwg.h
 
 EXTRA_DIST = \
 	dwg.spec \
+        header_variables.spec \
+        common_entity_handle_data.spec \
 	$(include_HEADERS) \
 	common.h \
 	bits.h \
