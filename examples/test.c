@@ -29,7 +29,7 @@ int
 main(int argc, char *argv[])
 {
   REQUIRE_INPUT_FILE_ARG (argc);
-  test_dwg_c (argv[1]);
+  return test_dwg_c (argv[1]);
 }
 
 int
