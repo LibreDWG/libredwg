@@ -77,6 +77,8 @@ HACKING --- a simple -*-outline-*- of libredwg hacking lore
     - build  -- configuration, makefiles, etc
     - r      -- read path (decoding)
     - w      -- write path (encoding)
+    - bind   -- language bindings
+    - api    -- user API
     - doc    -- documentation
     - [??? more topics here]
 
