@@ -538,6 +538,9 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
       //printf ("Address: %08X\n", pvz);
       last_address = omap[idc].address;
 
+
+      dwg_encode_add_object(dwg->object[i], dat, last_address);
+
       ckr_missing = 1;
       if (dat->byte - pvzadr > 2030) // 2029
         {
@@ -699,6 +702,292 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
 #include<dwg.spec>
 
 static void
+dwg_encode_add_object(Dwg_Object * obj, Bit_Chain * dat,
+    long unsigned int address)
+{
+  long unsigned int previous_address;
+  long unsigned int object_address;
+  unsigned char previous_bit;
+
+  /* Keep the previous address
+   */
+  previous_address = dat->byte;
+  previous_bit = dat->bit;
+
+  /* Use the indicated address for the object
+   */
+  dat->byte = address;
+  dat->bit = 0;
+
+      LOG_INFO("\n\n======================\nObject number: %lu",
+          obj->index)
+
+  bit_write_MS(dat, obj->size);
+  object_address = dat->byte;
+  ktl_lastaddress = dat->byte + obj->size; /* (calculate the bitsize) */
+  
+  bit_write_BS(dat, obj->type);
+
+  LOG_INFO(" Type: %d\n", obj->type)
+
+  /* Check the type of the object
+   */
+  switch (obj->type)
+    {
+  case DWG_TYPE_TEXT:
+    dwg_encode_TEXT(dat, obj);
+    break;
+  case DWG_TYPE_ATTRIB:
+    dwg_encode_ATTRIB(dat, obj);
+    break;
+  case DWG_TYPE_ATTDEF:
+    dwg_encode_ATTDEF(dat, obj);
+    break;
+  case DWG_TYPE_BLOCK:
+    dwg_encode_BLOCK(dat, obj);
+    break;
+  case DWG_TYPE_ENDBLK:
+    dwg_encode_ENDBLK(dat, obj);
+    break;
+  case DWG_TYPE_SEQEND:
+    dwg_encode_SEQEND(dat, obj);
+    break;
+  case DWG_TYPE_INSERT:
+    dwg_encode_INSERT(dat, obj);
+    break;
+  case DWG_TYPE_MINSERT:
+    dwg_encode_MINSERT(dat, obj);
+    break;
+  case DWG_TYPE_VERTEX_2D:
+    dwg_encode_VERTEX_2D(dat, obj);
+    break;
+  case DWG_TYPE_VERTEX_3D:
+    dwg_encode_VERTEX_3D(dat, obj);
+    break;
+  case DWG_TYPE_VERTEX_MESH:
+    dwg_encode_VERTEX_MESH(dat, obj);
+    break;
+  case DWG_TYPE_VERTEX_PFACE:
+    dwg_encode_VERTEX_PFACE(dat, obj);
+    break;
+  case DWG_TYPE_VERTEX_PFACE_FACE:
+    dwg_encode_VERTEX_PFACE_FACE(dat, obj);
+    break;
+  case DWG_TYPE_POLYLINE_2D:
+    dwg_encode_POLYLINE_2D(dat, obj);
+    break;
+  case DWG_TYPE_POLYLINE_3D:
+    dwg_encode_POLYLINE_3D(dat, obj);
+    break;
+  case DWG_TYPE_ARC:
+    dwg_encode_ARC(dat, obj);
+    break;
+  case DWG_TYPE_CIRCLE:
+    dwg_encode_CIRCLE(dat, obj);
+    break;
+  case DWG_TYPE_LINE:
+    dwg_encode_LINE(dat, obj);
+    break;
+  case DWG_TYPE_DIMENSION_ORDINATE:
+    dwg_encode_DIMENSION_ORDINATE(dat, obj);
+    break;
+  case DWG_TYPE_DIMENSION_LINEAR:
+    dwg_encode_DIMENSION_LINEAR(dat, obj);
+    break;
+  case DWG_TYPE_DIMENSION_ALIGNED:
+    dwg_encode_DIMENSION_ALIGNED(dat, obj);
+    break;
+  case DWG_TYPE_DIMENSION_ANG3PT:
+    dwg_encode_DIMENSION_ANG3PT(dat, obj);
+    break;
+  case DWG_TYPE_DIMENSION_ANG2LN:
+    dwg_encode_DIMENSION_ANG2LN(dat, obj);
+    break;
+  case DWG_TYPE_DIMENSION_RADIUS:
+    dwg_encode_DIMENSION_RADIUS(dat, obj);
+    break;
+  case DWG_TYPE_DIMENSION_DIAMETER:
+    dwg_encode_DIMENSION_DIAMETER(dat, obj);
+    break;
+  case DWG_TYPE_POINT:
+    dwg_encode_POINT(dat, obj);
+    break;
+  case DWG_TYPE__3DFACE:
+    dwg_encode__3DFACE(dat, obj);
+    break;
+  case DWG_TYPE_POLYLINE_PFACE:
+    dwg_encode_POLYLINE_PFACE(dat, obj);
+    break;
+  case DWG_TYPE_POLYLINE_MESH:
+    dwg_encode_POLYLINE_MESH(dat, obj);
+    break;
+  case DWG_TYPE_SOLID:
+    dwg_encode_SOLID(dat, obj);
+    break;
+  case DWG_TYPE_TRACE:
+    dwg_encode_TRACE(dat, obj);
+    break;
+  case DWG_TYPE_SHAPE:
+    dwg_encode_SHAPE(dat, obj);
+    break;
+  case DWG_TYPE_VIEWPORT:
+    dwg_encode_VIEWPORT(dat, obj);
+    break;
+  case DWG_TYPE_ELLIPSE:
+    dwg_encode_ELLIPSE(dat, obj);
+    break;
+  case DWG_TYPE_SPLINE:
+    dwg_encode_SPLINE(dat, obj);
+    break;
+  case DWG_TYPE_REGION:
+    dwg_encode_REGION(dat, obj);
+    break;
+  case DWG_TYPE_3DSOLID:
+    dwg_encode__3DSOLID(dat, obj);
+    break;
+  case DWG_TYPE_BODY:
+    dwg_encode_BODY(dat, obj);
+    break;
+  case DWG_TYPE_RAY:
+    dwg_encode_RAY(dat, obj);
+    break;
+  case DWG_TYPE_XLINE:
+    dwg_encode_XLINE(dat, obj);
+    break;
+  case DWG_TYPE_DICTIONARY:
+    dwg_encode_DICTIONARY(dat, obj);
+    break;
+  case DWG_TYPE_MTEXT:
+    dwg_encode_MTEXT(dat, obj);
+    break;
+  case DWG_TYPE_LEADER:
+    dwg_encode_LEADER(dat, obj);
+    break;
+  case DWG_TYPE_TOLERANCE:
+    dwg_encode_TOLERANCE(dat, obj);
+    break;
+  case DWG_TYPE_MLINE:
+    dwg_encode_MLINE(dat, obj);
+    break;
+  case DWG_TYPE_BLOCK_CONTROL:
+    dwg_encode_BLOCK_CONTROL(dat, obj);
+    break;
+  case DWG_TYPE_BLOCK_HEADER:
+    dwg_encode_BLOCK_HEADER(dat, obj);
+    break;
+  case DWG_TYPE_LAYER_CONTROL:
+    dwg_encode_LAYER_CONTROL(dat, obj);
+    break;
+  case DWG_TYPE_LAYER:
+    dwg_encode_LAYER(dat, obj);
+    break;
+  case DWG_TYPE_SHAPEFILE_CONTROL:
+    dwg_encode_SHAPEFILE_CONTROL(dat, obj);
+    break;
+  case DWG_TYPE_SHAPEFILE:
+    dwg_encode_SHAPEFILE(dat, obj);
+    break;
+  case DWG_TYPE_LTYPE_CONTROL:
+    dwg_encode_LTYPE_CONTROL(dat, obj);
+    break;
+  case DWG_TYPE_LTYPE:
+    dwg_encode_LTYPE(dat, obj);
+    break;
+  case DWG_TYPE_VIEW_CONTROL:
+    dwg_encode_VIEW_CONTROL(dat, obj);
+    break;
+  case DWG_TYPE_VIEW:
+    dwg_encode_VIEW(dat, obj);
+    break;
+  case DWG_TYPE_UCS_CONTROL:
+    dwg_encode_UCS_CONTROL(dat, obj);
+    break;
+  case DWG_TYPE_UCS:
+    dwg_encode_UCS(dat, obj);
+    break;
+  case DWG_TYPE_VPORT_CONTROL:
+    dwg_encode_VPORT_CONTROL(dat, obj);
+    break;
+  case DWG_TYPE_VPORT:
+    dwg_encode_VPORT(dat, obj);
+    break;
+  case DWG_TYPE_APPID_CONTROL:
+    dwg_encode_APPID_CONTROL(dat, obj);
+    break;
+  case DWG_TYPE_APPID:
+    dwg_encode_APPID(dat, obj);
+    break;
+  case DWG_TYPE_DIMSTYLE_CONTROL:
+    dwg_encode_DIMSTYLE_CONTROL(dat, obj);
+    break;
+  case DWG_TYPE_DIMSTYLE:
+    dwg_encode_DIMSTYLE(dat, obj);
+    break;
+  case DWG_TYPE_VP_ENT_HDR_CONTROL:
+    dwg_encode_VP_ENT_HDR_CONTROL(dat, obj);
+    break;
+  case DWG_TYPE_VP_ENT_HDR:
+    dwg_encode_VP_ENT_HDR(dat, obj);
+    break;
+  case DWG_TYPE_GROUP:
+    dwg_encode_GROUP(dat, obj);
+    break;
+  case DWG_TYPE_MLINESTYLE:
+    dwg_encode_MLINESTYLE(dat, obj);
+    break;
+  case DWG_TYPE_LWPLINE:
+    dwg_encode_LWPLINE(dat, obj);
+    break;
+  case DWG_TYPE_HATCH:
+    dwg_encode_HATCH(dat, obj);
+    break;
+  case DWG_TYPE_XRECORD:
+    dwg_encode_XRECORD(dat, obj);
+    break;
+  case DWG_TYPE_PLACEHOLDER:
+    dwg_encode_PLACEHOLDER(dat, obj);
+    break;
+  case DWG_TYPE_LAYOUT:
+    dwg_encode_LAYOUT(dat, obj);
+    break;
+  default:
+    if (0)//!dwg_encode_variable_type(dwg, dat, obj))
+      {
+        LOG_INFO("Object UNKNOWN:\n")
+
+        SINCE(R_2000)
+          {
+            bit_read_RL(dat);  // skip bitsize
+          }
+
+        if (!bit_read_H(dat, &obj->handle))
+          {
+            LOG_INFO("Object handle: %x.%x.%lx\n", 
+              obj->handle.code, obj->handle.size, obj->handle.value)
+          }
+
+        obj->supertype = DWG_SUPERTYPE_UNKNOWN;
+        obj->tio.unknown = (unsigned char*)malloc(obj->size);
+        memcpy(obj->tio.unknown, &dat->chain[object_address], obj->size);
+      }
+    }
+
+  /*
+   if (obj->supertype != DWG_SUPERTYPE_UNKNOWN)
+   {
+   fprintf (stderr, " Begin address:\t%10lu\n", address);
+   fprintf (stderr, " Last address:\t%10lu\tSize: %10lu\n", dat->byte, obj->size);
+   fprintf (stderr, "End address:\t%10lu (calculated)\n", address + 2 + obj->size);
+   }
+   */
+
+  /* Register the previous addresses for return
+   */
+  dat->byte = previous_address;
+  dat->bit = previous_bit;
+}
+
+static void
 dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
 {
   //XXX not sure about this, someone should review
@@ -819,7 +1108,7 @@ dwg_encode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj,Dwg_Data* dwg, 
 static void
 dwg_encode_object(Dwg_Object * obj, Bit_Chain * dat)
 {
-  //XXX need a review
+ //XXX need a review
   Dwg_Object_Object* ord = obj->tio.object;
   int i;
   
