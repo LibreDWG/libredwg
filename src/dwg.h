@@ -2852,13 +2852,13 @@ dwg_model_z_min(Dwg_Data *);
 double
 dwg_model_z_max(Dwg_Data *);
 double
-dwg_model_page_x_min(Dwg_Data *);
+dwg_page_x_min(Dwg_Data *);
 double
-dwg_model_page_x_max(Dwg_Data *);
+dwg_page_x_max(Dwg_Data *);
 double
-dwg_model_page_y_min(Dwg_Data *);
+dwg_page_y_min(Dwg_Data *);
 double
-dwg_model_page_y_max(Dwg_Data *);
+dwg_page_y_max(Dwg_Data *);
 
 unsigned int
 dwg_get_layer_count(Dwg_Data *);
