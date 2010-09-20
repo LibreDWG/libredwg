@@ -1,5 +1,3 @@
 all:
-	gcc -shared -fPIC -I/usr/include/python2.5 libredwgmodule.c -o libredwg.so -lredwg
-
-install:
-	cp libredwg.so /usr/lib/python2.5/site-packages/
+	swig -verbose -debug-classes -includeall -Wall -python -outdir . -o dwg_wrap_python.c ../dwg.i
+	gcc -v -I /usr/include/python2.6 -shared -fPIC dwg_wrap_python.c -lredwg -o _libredwg.so
