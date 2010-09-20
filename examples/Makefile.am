@@ -44,4 +44,4 @@ TESTS_ENVIRONMENT = \
 
 TESTS = alive.test
 
-EXTRA_DIST = example.dwg sample.dwg suffix.c $(TESTS)
+EXTRA_DIST = example.dwg sample.dwg suffix.c load_dwg.py $(TESTS)
