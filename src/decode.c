@@ -31,6 +31,9 @@
 #include "decode.h"
 #include "print.h"
 
+extern unsigned int
+bit_ckr8(unsigned int dx, unsigned char *adr, long n);
+
 /* The logging level for the read (decode) path.  */
 static unsigned int loglevel;
 
@@ -434,18 +437,13 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
     }
 
   // Check CRC-on
-  /*
-   ckr = bit_read_CRC (dat);
-   dat->byte -= 2;
-   bit_create_CRC (dat, 0, 0);
-   dat->byte -= 2;
-   ckr2 = bit_read_CRC (dat);
-   dat->byte -= 2;
-   bit_write_RS (dat, ckr2 ^ 0x8461);
-   dat->byte -= 2;
-   ckr2 = bit_read_CRC (dat);
-   if (loglevel) fprintf (stderr, "Read: %X\nCalculated: %X\n", ckr, ckr2);
-   */
+  ckr = bit_ckr8(0xc0c1, dat->chain, dat->byte);
+  ckr2 = bit_read_RS(dat);
+  if (ckr != ckr2)
+    {
+      printf("header crc todo ckr:%x ckr2:%x\n", ckr, ckr2);
+      return 1;
+    }
 
   if (bit_search_sentinel(dat, dwg_sentinel(DWG_SENTINEL_HEADER_END)))
     LOG_TRACE("\n=======> HEADER (end): %8X\n", (unsigned int) dat->byte)
@@ -512,22 +510,20 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
 
   dwg_decode_header_variables(dat, dwg);
 
-// Check CRC-on
-  ckr = bit_read_CRC(dat);
-  /*
-   for (i = 0xC001; i != 0xC000; i++)
-   {
-   dat->byte -= 2;
-   bit_write_CRC (dat, dwg->header.section[0].address + 16, i);
-   dat->byte -= 2;
-   ckr2 = bit_read_CRC (dat);
-   if (ckr == ckr2)
-   {
-   if (loglevel) fprintf (stderr, "Read: %X\nCreated: %X\t SEMO: %02X\n", ckr, ckr2, i);
-   break;
-   }
-   }
-   */
+  // Check CRC-on
+  dat->byte = dwg->header.section[0].address + dwg->header.section[0].size - 18;
+  dat->bit = 0;
+
+  ckr = bit_read_RS(dat);
+  ckr2 = bit_ckr8(0xc0c1, dat->chain + dwg->header.section[0].address + 16,
+          dwg->header.section[0].size - 34);
+
+  if (ckr != ckr2)
+    {
+      printf("section %d crc todo ckr:%x ckr2:%x\n",
+              dwg->header.section[0].number, ckr, ckr2);
+      return -1;
+    }
 
   /*-------------------------------------------------------------------------
    * Classes
@@ -583,21 +579,19 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
   while (dat->byte < (lasta - 1));
 
   // Check CRC-on
-  ckr = bit_read_CRC(dat);
-  /*
-   for (i = 0xC001; i != 0xC000; i++)
-   {
-   dat->byte -= 2;
-   bit_write_CRC (dat, dwg->header.section[1].address + 16, i);
-   dat->byte -= 2;
-   ckr2 = bit_read_CRC (dat);
-   if (ckr == ckr2)
-   {
-   if (loglevel) fprintf (stderr, "Read: %X\nCreated: %X\t SEMO: %02X\n", ckr, ckr2, i);
-   break;
-   }
-   }
-   */
+  dat->byte = dwg->header.section[1].address + dwg->header.section[1].size - 18;
+  dat->bit = 0;
+
+  ckr = bit_read_RS(dat);
+  ckr2 = bit_ckr8(0xc0c1, dat->chain + dwg->header.section[1].address + 16,
+          dwg->header.section[1].size - 34);
+
+  if (ckr != ckr2)
+    {
+      printf("section %d crc todo ckr:%x ckr2:%x\n",
+              dwg->header.section[1].number, ckr, ckr2);
+      return -1;
+    }
 
   dat->byte += 16;
   pvz = bit_read_RL(dat); // Unknown bitlong inter class and object
@@ -626,10 +620,10 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
       sgdc[1] = bit_read_RC(dat);
       section_size = (sgdc[0] << 8) | sgdc[1];
       //LOG_TRACE("section_size: %u\n", section_size)
-      if (section_size > 2034) // 2032 + 2
+      if (section_size > 2035)
         {
-          LOG_ERROR("Object-map section size greater than 2034!\n")
-          //return -1;
+          LOG_ERROR("Object-map section size greater than 2035!\n")
+          return -1;
         }
 
       last_handle = 0;
@@ -666,7 +660,26 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
         }
       if (dat->byte == previous_address)
         break;
-      dat->byte += 2; // CRC
+
+      // CRC on
+      if (dat->bit > 0)
+        {
+          dat->byte += 1;
+          dat->bit = 0;
+        }
+
+      sgdc[0] = bit_read_RC(dat);
+      sgdc[1] = bit_read_RC(dat);
+      ckr = (sgdc[0] << 8) | sgdc[1];
+
+      ckr2 = bit_ckr8(0xc0c1, dat->chain + duabyte, section_size);
+
+      if (ckr != ckr2)
+        {
+          printf("section %d crc todo ckr:%x ckr2:%x\n",
+                  dwg->header.section[2].number, ckr, ckr2);
+          return -1;
+        }
 
       if (dat->byte >= maplasta)
         break;

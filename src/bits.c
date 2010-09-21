@@ -31,7 +31,7 @@
 /*------------------------------------------------------------------------------
  * Private functions prototypes
  */
-static unsigned int
+unsigned int
 bit_ckr8(unsigned int dx, unsigned char *adr, long n);
 
 /*------------------------------------------------------------------------------
@@ -1057,7 +1057,7 @@ bit_explore_chain(Bit_Chain * dat, long unsigned int size)
  * Private functions
  */
 
-static unsigned int
+unsigned int
 bit_ckr8(unsigned int dx, unsigned char *adr, long n)
 {
   register unsigned char al;
