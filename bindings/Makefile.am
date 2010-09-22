@@ -19,6 +19,4 @@
 
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS = src doc examples bindings
-
-EXTRA_DIST = README README-alpha
+SUBDIRS = python

@@ -11,6 +11,6 @@
 # - ltmain.sh (GNU libtool) 2.2.6b
 
 set -ex
-autoreconf --install --symlink "$@"
+autoreconf --install --symlink "$@" -I m4
 
 # autogen.sh ends here
