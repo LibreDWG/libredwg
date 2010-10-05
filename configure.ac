@@ -73,8 +73,8 @@ AM_CONDITIONAL([HAVE_LIBPS],[test yes = "$libredwg_have_libps" &&
                              test yes = "$ac_cv_header_libps_pslib_h"])
 
 dnl for SWIG - should be optional
-AM_PATH_PYTHON(2.3)
-AX_PKG_SWIG(1.3.17, [], [ AC_MSG_ERROR([SWIG is required to build..]) ])
+AM_PATH_PYTHON([2.3])
+AX_PKG_SWIG([1.3.17], [], [ AC_MSG_ERROR([SWIG is required to build..]) ])
 dnl AX_SWIG_ENABLE_CXX
 dnl SWIG_MULTI_MODULE_SUPPORT
 SWIG_PYTHON
