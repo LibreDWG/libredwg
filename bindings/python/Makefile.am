@@ -37,6 +37,8 @@ BUILT_SOURCES = $(srcdir)/swig_wrap_python.c
 ## at least in Ubuntu python wouldn't find the module there
     pkgpythondir = $(pythondir)
 
+# the underscore is correct. the python interpreter looks for _libredwg.so
+# when libredwg module is loaded
     _libredwg_la_SOURCES = $(BUILT_SOURCES)  $(SWIG_SOURCES)
 
 ## more magic: SWIG_PYTHON_CPPFLAGS resolves to null and python includes
