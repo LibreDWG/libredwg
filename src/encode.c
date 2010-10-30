@@ -197,19 +197,22 @@ bit_write_BE(dat, FIELD_VALUE(name.x), FIELD_VALUE(name.y), FIELD_VALUE(name.z))
 //TODO unify REPEAT macros!
 
 #define DWG_ENTITY(token) \
-static void dwg_encode_##token (Dwg_Object* obj, Dwg_Entity_##token * _obj, Bit_Chain * dat)\
+  static void dwg_encode_##token (Bit_Chain * dat, Dwg_Object* obj)	\
 {\
   int vcount, rcount, rcount2, rcount3;\
-	Dwg_Data* dwg = obj->parent;\
-  if (loglevel)\
-    LOG_INFO("Entity " #token ":\n")\
+  Dwg_Data* dwg = obj->parent;\
+  Dwg_Entity_##token * _obj = obj->tio.entity->tio.token;\
+  LOG_INFO("Entity " #token ":\n")\
 
 #define DWG_ENTITY_END }
 
-#define DWG_OBJECT(token) static void dwg_encode_##token (Dwg_Object* obj, Dwg_Object_##token *_obj, Bit_Chain * dat)\
+#define DWG_OBJECT(token) \
+  static void dwg_encode_##token (Bit_Chain * dat, Dwg_Object* obj) \
 {\
   int vcount, rcount, rcount2, rcount3;\
-	Dwg_Data* dwg = obj->parent;
+  Dwg_Data* dwg = obj->parent; \
+  Dwg_Object_##token * _obj = obj->tio.object->tio.token; \
+  LOG_INFO("Entity " #token ":\n")\
 
 #define DWG_OBJECT_END }
 
@@ -243,7 +246,8 @@ void
 dwg_encode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg, Dwg_Object_Ref* ref);
 void 
 dwg_encode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj,Dwg_Data* dwg, Dwg_Object_Ref* ref, int code);
-
+void
+dwg_encode_add_object(Dwg_Object * obj, Bit_Chain * dat, long unsigned int address);
 
 /*--------------------------------------------------------------------------------
  * Public variables
@@ -420,10 +424,12 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
   bit_write_sentinel(dat, dwg_sentinel(DWG_SENTINEL_CLASS_END));
   dwg->header.section[1].size = dat->byte - dwg->header.section[1].address;
 
+  bit_write_RL(dat, 0x00000000); // 0xDCA Unknown bitlong inter class and objects
+
   /*------------------------------------------------------------
    * Objects
    */
-  bit_write_RL(dat, 0x00000000); // 0xDCA Unknown bitlong inter class and objects
+
   pvzadr = dat->byte;
 
   /* Define object-map
@@ -491,19 +497,25 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
         }
       else
         {
+	  if (obj->supertype == DWG_SUPERTYPE_ENTITY || obj->supertype == DWG_SUPERTYPE_OBJECT)
+	    dwg_encode_add_object(obj, dat, dat->byte);
+	  /*
           if (obj->supertype == DWG_SUPERTYPE_ENTITY)
             dwg_encode_entity(obj, dat);
           else if (obj->supertype == DWG_SUPERTYPE_OBJECT)
             dwg_encode_object(obj, dat);
+	  */
           else
             {
-              fprintf(stderr, "Error: undefined (super)type of object\n");
+              LOG_ERROR("Error: undefined (super)type of object\n");
               exit(-1);
             }
         }
       bit_write_CRC(dat, omap[i].address, 0xC0C1);
     }
-  //for (i = 0; i < dwg->num_objects; i++) printf ("Trakt(%i): %6lu / Address: %08X / Idc: %u\n", i, omap[i].handle, omap[i].address, omap[i].idc);
+    for (i = 0; i < dwg->num_objects; i++) 
+      LOG_INFO ("Object(%i): %6lu / Address: %08X / Idc: %u\n", 
+		 i, omap[i].handle, omap[i].address, omap[i].idc);
 
   /* Unknown bitdouble between objects and object map
    */
@@ -539,7 +551,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
       last_address = omap[idc].address;
 
 
-      dwg_encode_add_object(dwg->object[i], dat, last_address);
+      //dwg dwg_encode_add_object(dwg->object[i], dat, last_address);
 
       ckr_missing = 1;
       if (dat->byte - pvzadr > 2030) // 2029
@@ -701,7 +713,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
 
 #include<dwg.spec>
 
-static void
+void
 dwg_encode_add_object(Dwg_Object * obj, Bit_Chain * dat,
     long unsigned int address)
 {
@@ -724,7 +736,7 @@ dwg_encode_add_object(Dwg_Object * obj, Bit_Chain * dat,
 
   bit_write_MS(dat, obj->size);
   object_address = dat->byte;
-  ktl_lastaddress = dat->byte + obj->size; /* (calculate the bitsize) */
+  //  ktl_lastaddress = dat->byte + obj->size; /* (calculate the bitsize) */
   
   bit_write_BS(dat, obj->type);
 
