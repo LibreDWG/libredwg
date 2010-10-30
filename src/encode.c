@@ -288,7 +288,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
   bit_chain_alloc(dat);
 
   /*------------------------------------------------------------
-   * Header variables
+   * Header
    */
   strcpy ((char *)dat->chain, version_codes[dwg->header.version]); // Chain version
   dat->byte += 6;
@@ -383,6 +383,10 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
   /* CRC and sentinel
    */
   bit_write_CRC(dat, pvzadr, 0xC0C1);
+
+  //XXX trying to fix CRC 2-byte overflow. Must find actual reason
+  dat->byte -= 2;
+
   bit_write_sentinel(dat, dwg_sentinel(DWG_SENTINEL_VARIABLE_END));
   dwg->header.section[0].size = dat->byte - dwg->header.section[0].address;
 
