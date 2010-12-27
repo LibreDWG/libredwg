@@ -275,12 +275,13 @@ dwg_decode_header_variables(Bit_Chain* dat, Dwg_Data * dwg);
 static void
 resolve_objectref_vector(Dwg_Data * dwg);
 
+int decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg); // froward
+int read_r2007_meta_data(Bit_Chain *dat, Dwg_Data *dwg);
+
 /*--------------------------------------------------------------------------------
  * Public variables
  */
 long unsigned int ktl_lastaddress;
-
-int decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg); // froward
 
 /*--------------------------------------------------------------------------------
  * Public function definitions
@@ -1778,7 +1779,6 @@ decode_R2007(Bit_Chain* dat, Dwg_Data * dwg)
   unsigned long int preview_address, security_type, unknown_long,
       dwg_property_address, vba_proj_address, app_info_address;
   unsigned char sig, DwgVer, MaintReleaseVer;
-  unsigned char solomon[0x3d8];
 
   /* 5 bytes of 0x00 */
   dat->byte = 0x06;
@@ -1864,16 +1864,8 @@ decode_R2007(Bit_Chain* dat, Dwg_Data * dwg)
   LOG_TRACE("Application Info Address: 0x%08X\n",
         (unsigned int) app_info_address)
 
-  /* Reed-Solomon(255,239) encoded section */
-  LOG_TRACE("Reed-Solomon(255,239) encoded section:\n\n")
-
-  dat->byte = 0x80;
-  for (i = 0; i < 0x3d8; i++)
-    {
-      solomon[i] = bit_read_RC(dat);
-      if (loglevel)
-        LOG_TRACE("%2x ", solomon[i])
-    }
+  read_r2007_meta_data(dat, dwg);
+  
   LOG_TRACE("\n\n")
 
   /////////////////////////////////////////
