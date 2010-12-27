@@ -1989,35 +1989,39 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
 
   SINCE(R_2004)
     {
-      char flag;
+      char color_mode = 0;
       unsigned char index;
-
+      unsigned int flags;
+    
       if (ent->nolinks == 0)
-        {
-          flag = bit_read_B(dat);
-
-          if (flag == 1)
+        {        
+          color_mode = bit_read_B(dat);
+        
+          if (color_mode == 1)
             index = bit_read_RC(dat);  // color index
           else
-            {
-              unsigned char c1, c2, c3, c4, c5, c6;
-              char *name=0;
-
-              c1 = bit_read_RC(dat);
-              c2 = bit_read_RC(dat);
-
-              //TODO: verify this
-              // if c2 == 0x80 it's a true type color value and
-              // if c2 == 0xC0 it's a color book color
-
-              if (c2 == 0x80)
+            {              
+              flags = bit_read_RS(dat);
+            
+              if (flags & 0x8000)
                 {
-                  c3 = bit_read_RC(dat);  // rgb color
+                  unsigned char c1, c2, c3, c4;
+                  char *name=0;
+              
+                  c1 = bit_read_RC(dat);  // rgb color
+                  c2 = bit_read_RC(dat);
+                  c3 = bit_read_RC(dat);
                   c4 = bit_read_RC(dat);
-                  c5 = bit_read_RC(dat);
-                  c6 = bit_read_RC(dat);
-
+              
                   name = bit_read_TV(dat);
+                }
+            
+              if (flags & 0x4000)
+                flags = flags;   // has AcDbColor reference (handle)
+            
+              if (flags & 0x2000)
+                {
+                  int transparency = bit_read_BL(dat);
                 }
             }
         }
