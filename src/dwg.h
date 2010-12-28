@@ -64,6 +64,8 @@
 
 #define BITCODE_T BITCODE_TV //TODO: implement version dependant string parsing
 
+#define DWGCHAR wchar_t
+
 typedef struct _dwg_bitecode_2rd
 {
   BITCODE_RD x;
