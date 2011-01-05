@@ -18,9 +18,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#ifndef __APPLE__
-#include <sys/malloc.h>
-#endif
 #include <sys/types.h>
 #include <stdbool.h>
 #include "bits.h"
