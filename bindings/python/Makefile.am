@@ -44,7 +44,7 @@ BUILT_SOURCES = $(srcdir)/swig_wrap_python.c
 ## more magic: SWIG_PYTHON_CPPFLAGS resolves to null and python includes
 ## are not passed to gcc via -I
 ##    _libredwg_la_CPPFLAGS = $(SWIG_PYTHON_CPPFLAGS) -I$(top_srcdir)/src
-    _libredwg_la_CPPFLAGS = -I$(top_srcdir)/src -I/usr/include/python2.6
+    _libredwg_la_CPPFLAGS = -I$(top_srcdir)/src $(AX_SWIG_PYTHON_CPPFLAGS)
 
     _libredwg_la_LDFLAGS = -module
     _libredwg_la_LIBADD = ../../src/libredwg.la
