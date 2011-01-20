@@ -42,6 +42,7 @@ main (int argc, char *argv[])
    */
 
   // reads the file
+  printf("\n ===== \n Reading original file \n =====\n");
   error = dwg_read_file(filename_in, &dwg_struct);
 
   if (error)
@@ -52,7 +53,9 @@ main (int argc, char *argv[])
     {
       printf("\nREAD SUCCESS!\n\n");
     }
+
   // rewrite it
+  printf("\n ===== \n Writing new file \n =====\n");
   error = dwg_write_file(filename_out, &dwg_struct);
 
   if (error)
@@ -67,6 +70,7 @@ main (int argc, char *argv[])
   dwg_free(&dwg_struct);
 
   // try to read again
+  printf("\n ===== \n Reading created file \n =====\n");
   error = dwg_read_file(filename_out, &dwg_struct);
 
   if (error)

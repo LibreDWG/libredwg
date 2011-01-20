@@ -2836,6 +2836,8 @@ typedef struct _dwg_struct
 
 int
 dwg_read_file(char *filename, Dwg_Data * dwg);
+int
+dwg_write_file(char *filename, Dwg_Data * dwg_data);
 void
 dwg_free(Dwg_Data * dwg);
 unsigned char*
