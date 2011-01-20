@@ -22,4 +22,7 @@
 #include "../../src/dwg.h"
 %}
 
+%include "carrays.i"
+%array_functions(Dwg_Object, Dwg_Object_Array);
+
 #include "../../src/dwg.h"

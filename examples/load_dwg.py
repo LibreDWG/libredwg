@@ -11,6 +11,7 @@ if (len(sys.argv) != 2):
 
 filename = sys.argv[1]
 a = Dwg_Data()
+a.object = new_Dwg_Object_Array(1000)
 error = dwg_read_file(filename, a)
 
 if (error != 0):
@@ -19,9 +20,11 @@ if (error != 0):
 
 print ".dwg version: %s" % a.header.version
 print "Num objects: %d " % a.num_objects
-print "Num layers: %d" % a.layer_control.tio.object.tio.LAYER_CONTROL.num_entries
+#XXX for some reason I get a segfault when I try to read the LAYER_CONTROL in python (not in C)
+#print "Num layers: %d" % a.layer_control.tio.object.tio.LAYER_CONTROL.num_entries
 
 for i in range(0,a.num_objects):
-    a.object.index=i
-    print "-> " ,   a.object.supertype
-    print "-> " ,   a.object.type
+    #XXX ugly, but works
+    obj = Dwg_Object_Array_getitem(a.object,i)
+    print " Supertype: " ,   obj.supertype
+    print "      Type: " ,   obj.type
