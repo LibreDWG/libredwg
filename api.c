@@ -9,10 +9,19 @@ values.
 Usage : dwg_ent_circle_new();
 */
 dwg_ent_circle *
-dwg_ent_circle_new()
+dwg_ent_circle_new(int *error)
 {
     dwg_ent_circle *circle = (dwg_ent_circle*) malloc(sizeof(Dwg_Entity_CIRCLE));
-    return dwg_ent_circle_init(circle);
+    if(circle != 0)
+        {
+            *error = 0;
+            return dwg_ent_circle_init(circle);        
+        }
+    else
+        {
+            *error = 1;
+        }
+    
 }
 
 /* This function frees the memory allocated by the dwg_ent_circle_new()
@@ -20,10 +29,17 @@ function.
 Usage :- dwg_ent_circle_delete();
 */
 void 
-dwg_ent_circle_delete(dwg_ent_circle *circle)
+dwg_ent_circle_delete(dwg_ent_circle *circle, int *error)
 {
     if (circle != 0)
-        free(circle);
+        {
+            *error = 0;
+            free(circle);
+        }
+    else
+        {
+            *error = 1;
+        }
 }
 
 
@@ -51,11 +67,19 @@ where circle is a pointer of dwg_ent_circle type and point is
 of dwg_point_3d
 */
 void
-dwg_ent_circle_get_center(dwg_ent_circle *circle, dwg_point_3d *point)
+dwg_ent_circle_get_center(dwg_ent_circle *circle, dwg_point_3d *point, int *error)
 {
-    point->x = circle->center.x;
-    point->y = circle->center.y;
-    point->z = circle->center.z;
+    if(point != 0 && circle != 0)
+        {
+            *error = 0;
+            point->x = circle->center.x;
+            point->y = circle->center.y;
+            point->z = circle->center.z;
+        }
+    else
+        {
+            *error = 1;
+        }
 }
 
 /* Sets the circle center equal to values from second argument.
@@ -64,11 +88,19 @@ where circle is a pointer of dwg_ent_circle type and point is
 of dwg_point_3d
 */
 void
-dwg_ent_circle_set_center(dwg_ent_circle *circle, dwg_point_3d *point)
+dwg_ent_circle_set_center(dwg_ent_circle *circle, dwg_point_3d *point, int *error)
 {
-    circle->center.x = point->x;
-    circle->center.y = point->y;
-    circle->center.z = point->z;
+    if(point != 0 && circle != 0)
+        {
+            *error = 0;
+            circle->center.x = point->x;
+            circle->center.y = point->y;
+            circle->center.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
 }
 
 /* Returns radius of circle entity passed in argument.
@@ -77,9 +109,17 @@ double circle_radius;
 circle_radius = dwg_ent_circle_get_radius(circle); 
 */
 double
-dwg_ent_circle_get_radius(dwg_ent_circle *circle)
+dwg_ent_circle_get_radius(dwg_ent_circle *circle, int *error)
 {
-    return circle->radius;
+    if(circle != 0)
+        {
+            *error = 0;
+            return circle->radius;
+        }
+    else
+        {
+            *error = 1;
+        }
 }
 
 /* Sets radius of a circle entity passed in 
@@ -88,9 +128,17 @@ dwg_ent_circle_set_radius(circle, 50.0);
 so circle radius becomes 50.0 
 */
 void
-dwg_ent_circle_set_radius(dwg_ent_circle *circle, double radius)
+dwg_ent_circle_set_radius(dwg_ent_circle *circle, double radius, int *error)
 {
-    circle->radius = radius;
+    if(circle != 0)
+        {
+            *error = 0;
+            circle->radius = radius;
+        }
+    else
+        {
+            *error = 1;
+        }
 }
 
 /* Returns thickness of entity passed in argument.
@@ -99,9 +147,17 @@ double thickness;
 thickness = dwg_ent_circle_get_thickness(circle);
 */
 double
-dwg_ent_circle_get_thickness(dwg_ent_circle *circle)
+dwg_ent_circle_get_thickness(dwg_ent_circle *circle, int *error)
 {
-    return circle->thickness;
+    if(circle != 0)
+        {
+            *error = 0;
+            return circle->thickness;
+        }
+    else
+        {
+            *error = 1;
+        }
 }
 
 /* Sets thickness of a circle entity passed in 
@@ -110,9 +166,17 @@ Usage :- dwg_ent_circle_set_thickness(circle, 50.0);
 circle thickness becomes 50.0 
 */
 void
-dwg_ent_circle_set_thickness(dwg_ent_circle *circle, double thickness)
+dwg_ent_circle_set_thickness(dwg_ent_circle *circle, double thickness, int *error)
 {
-    circle->thickness = thickness;
+    if(circle != 0)
+        {
+            *error = 0;
+            circle->thickness = thickness;
+        }
+    else
+        {
+            *error = 1;
+        }
 }
 
 /* This function sets the extrusion values of a circle entity equal to 
@@ -126,11 +190,19 @@ the x, y and z values
 hence circle->extrusion.x = 10.0
 */
 void
-dwg_ent_circle_set_extrusion(dwg_ent_circle *circle, dwg_point_3d *vector)
+dwg_ent_circle_set_extrusion(dwg_ent_circle *circle, dwg_point_3d *vector, int *error)
 {
-    circle->extrusion.x = vector->x;
-    circle->extrusion.y = vector->y;
-    circle->extrusion.z = vector->z;
+    if(circle != 0)
+        {
+            *error = 0;
+            circle->extrusion.x = vector->x;
+            circle->extrusion.y = vector->y;
+            circle->extrusion.z = vector->z;
+        }
+    else
+        {
+            *error = 1;
+        }
 }
 
 /* This function returns the extrusion values of a circle entity 
@@ -142,11 +214,19 @@ if circle->extrusion.x = 50.0 after calling function
 extrusion_value.x = 50.0
 */
 void
-dwg_ent_circle_get_extrusion(dwg_ent_circle *circle, dwg_point_3d *vector)
+dwg_ent_circle_get_extrusion(dwg_ent_circle *circle, dwg_point_3d *vector, int *error)
 {
-    vector->x = circle->extrusion.x;
-    vector->y = circle->extrusion.y;
-    vector->z = circle->extrusion.z;
+    if(circle != 0)
+        {
+            *error = 0;
+            vector->x = circle->extrusion.x;
+            vector->y = circle->extrusion.y;
+            vector->z = circle->extrusion.z;
+        }
+    else
+        {
+            *error = 1;
+        }
 }
 
 //---------------------------------------------------------------------------
@@ -155,10 +235,18 @@ dwg_ent_circle_get_extrusion(dwg_ent_circle *circle, dwg_point_3d *vector)
 Usage :- dwg_ent_line_new();
 */
 dwg_ent_line *
-dwg_ent_line_new()
+dwg_ent_line_new(int *error)
 {
     dwg_ent_line *line = (dwg_ent_line*) malloc(sizeof(Dwg_Entity_LINE));
-    return dwg_ent_line_init(line);
+    if(line != 0)
+        {
+            *error = 0;
+            return dwg_ent_line_init(line);
+        }
+    else
+        {
+            *error = 1;
+        }
 }
 
 /* This function deletes the entity created using dwg_ent_line_new() 
@@ -166,10 +254,17 @@ function and frees the allocated memory.
 Usage :- dwg_ent_line_delete();
 */
 void 
-dwg_ent_line_delete(dwg_ent_line *line)
+dwg_ent_line_delete(dwg_ent_line *line, int *error)
 {
     if (line != 0)
-        free(line);
+        {
+            *error = 0;
+            free(line);
+        }
+    else
+        {
+            *error = 1;
+        }
 }
 
 /* This function initialises a line entity with default or zero values.
@@ -194,11 +289,19 @@ line is entity of line type and point is a dwg_point_3d datatype.
 after calling this point.x will have start x value.
 */
 void
-dwg_ent_line_get_start_point(dwg_ent_line *line, dwg_point_3d *point)
+dwg_ent_line_get_start_point(dwg_ent_line *line, dwg_point_3d *point, int *error)
 {
-    point->x = line->start.x;
-    point->y = line->start.y;
-    point->z = line->start.z;
+    if (line != 0)
+        {
+            *error = 0;
+            point->x = line->start.x;
+            point->y = line->start.y;
+            point->z = line->start.z;
+        }
+    else
+        {
+            *error = 1;
+        }
 }
 
 /* This function sets the line start points equal to the 
@@ -207,11 +310,19 @@ Usage :- dwg_ent_line_set_start_point(line, point);
 line is entity of line type and point is a dwg_point_3d datatype.
 */
 void
-dwg_ent_line_set_start_point(dwg_ent_line *line, dwg_point_3d *point)
+dwg_ent_line_set_start_point(dwg_ent_line *line, dwg_point_3d *point, int *error)
 {
-    line->start.x = point->x;
-    line->start.y = point->y;
-    line->start.z = point->z;
+    if (line != 0)
+        {
+            *error = 0;
+            line->start.x = point->x;
+            line->start.y = point->y;
+            line->start.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
 }
 
 /* This function returns the line end points to the second argument.
@@ -221,11 +332,19 @@ after calling this point.x will have end x value and point.y will have
 end y value.
 */
 void
-dwg_ent_line_get_end_point(dwg_ent_line *line, dwg_point_3d *point)
+dwg_ent_line_get_end_point(dwg_ent_line *line, dwg_point_3d *point, int *error)
 {
-    point->x = line->end.x;
-    point->y = line->end.y;
-    point->z = line->end.z;
+    if (line != 0)
+        {
+            *error = 0;
+            point->x = line->end.x;
+            point->y = line->end.y;
+            point->z = line->end.z;
+        }
+    else
+        {
+            *error = 1;
+        }
 }
 
 /* This function sets the line end points equal to the 
@@ -234,20 +353,36 @@ Usage :- dwg_ent_line_set_end_point(line, point);
 line is entity of line type and point is a dwg_point_3d datatype.
 */
 void
-dwg_ent_line_set_end_point(dwg_ent_line *line, dwg_point_3d *point)
+dwg_ent_line_set_end_point(dwg_ent_line *line, dwg_point_3d *point, int *error)
 {
-    line->end.x = point->x;
-    line->end.y = point->y;
-    line->end.z = point->z;
+    if (line != 0)
+        {
+            *error = 0;
+            line->end.x = point->x;
+            line->end.y = point->y;
+            line->end.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
 }
 
 /* Returns line thickness of line entity passed in argument. 
 Usage :- double thickness = dwg_ent_line_get_thickness(line);
 */
 double
-dwg_ent_line_get_thickness(dwg_ent_line *line)
+dwg_ent_line_get_thickness(dwg_ent_line *line, int *error)
 {
-    return line->thickness;
+    if (line != 0)
+        {
+            *error = 0;
+            return line->thickness;
+        }
+    else
+        {
+            *error = 1;
+        }
 }
 
 /* Sets line thickness equal to (thickness) value passed in second 
@@ -255,9 +390,17 @@ argument.
 Usage :- dwg_ent_line_set_thickness(line, thickness_value);
 */
 void
-dwg_ent_line_set_thickness(dwg_ent_line *line, double thickness)
+dwg_ent_line_set_thickness(dwg_ent_line *line, double thickness, int *error)
 {
-    line->thickness = thickness;
+    if (line != 0)
+        {
+            *error = 0;
+            line->thickness = thickness;
+        }
+    else
+        {
+            *error = 1;
+        }
 }
 
 /* This function returns the extrusion of a line entity into second 
@@ -267,11 +410,19 @@ where line is an entity of line type, and extrusion value contains
 the x, y and z values
 */
 void
-dwg_ent_line_get_extrusion(dwg_ent_line *line, dwg_point_3d *vector)
+dwg_ent_line_get_extrusion(dwg_ent_line *line, dwg_point_3d *vector, int *error)
 {
-    vector->x = line->extrusion.x;
-    vector->y = line->extrusion.y;
-    vector->z = line->extrusion.z;
+    if (line != 0)
+        {
+            *error = 0;
+            vector->x = line->extrusion.x;
+            vector->y = line->extrusion.y;
+            vector->z = line->extrusion.z;
+        }
+    else
+        {
+            *error = 1;
+        }
 }
 
 /* This function sets the extrusion of a line entity equal to 
@@ -281,11 +432,19 @@ where line is an entity of line type, and extrusion value contains
 the x, y and z values
 */
 void
-dwg_ent_line_set_extrusion(dwg_ent_line *line, dwg_point_3d *vector)
+dwg_ent_line_set_extrusion(dwg_ent_line *line, dwg_point_3d *vector, int *error)
 {
-    line->extrusion.x = vector->x;
-    line->extrusion.y = vector->y;
-    line->extrusion.z = vector->z;
+    if (line != 0)
+        {
+            *error = 0;
+            line->extrusion.x = vector->x;
+            line->extrusion.y = vector->y;
+            line->extrusion.z = vector->z;
+        }
+    else
+        {
+            *error = 1;
+        }
 }
 
 //---------------------------------------------------------------------------
@@ -294,10 +453,18 @@ dwg_ent_line_set_extrusion(dwg_ent_line *line, dwg_point_3d *vector)
 Usage :- dwg_ent_arc_new();
 */
 dwg_ent_arc *
-dwg_ent_arc_new()
+dwg_ent_arc_new(int *error)
 {
     dwg_ent_arc *arc = (dwg_ent_arc*) malloc(sizeof(Dwg_Entity_ARC));
-    return dwg_ent_arc_init(arc);
+    if (line != 0)
+        {
+            *error = 0;
+            return dwg_ent_arc_init(arc);
+        }
+    else
+        {
+            *error = 1;
+        }
 }
 
 /* This function deletes entity created by dwg_ent_arc_new() function
@@ -305,10 +472,17 @@ and frees the allocated memory.
 Usage :- dwg_ent_arc_delete();
 */
 void 
-dwg_ent_arc_delete(dwg_ent_arc *arc)
+dwg_ent_arc_delete(dwg_ent_arc *arc, int *error)
 {
     if (arc != 0)
-        free(arc);
+        {
+            *error = 0;
+            free(arc);
+        }
+    else
+        {
+            *error = 1;
+        }
 }
 
 /* This function initialises a arc entity with default/zero values.
@@ -336,11 +510,19 @@ of dwg_point_3d. point.x will contain x value of center,
 point.y will contain y value of center
 */
 void
-dwg_ent_arc_get_center(dwg_ent_arc *arc, dwg_point_3d *point)
+dwg_ent_arc_get_center(dwg_ent_arc *arc, dwg_point_3d *point, int *error)
 {
-    point->x = arc->center.x;
-    point->y = arc->center.y;
-    point->z = arc->center.z;
+    if (arc != 0)
+        {
+            *error = 0;
+            point->x = arc->center.x;
+            point->y = arc->center.y;
+            point->z = arc->center.z;
+        }
+    else
+        {
+            *error = 1;
+        }
 }
 
 /* Sets the second argument values equal to the arc center.
@@ -350,20 +532,36 @@ of dwg_point_3d. point.x will contain x value of center,
 point.y will contain y value of center
 */
 void
-dwg_ent_arc_set_center(dwg_ent_arc *arc, dwg_point_3d *point)
+dwg_ent_arc_set_center(dwg_ent_arc *arc, dwg_point_3d *point, int *error)
 {
-    arc->center.x = point->x;
-    arc->center.y = point->y;
-    arc->center.z = point->z;
+    if (arc != 0)
+        {
+            *error = 0;
+            arc->center.x = point->x;
+            arc->center.y = point->y;
+            arc->center.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
 }
 
 /* Returns radius of arc entity passed in argument.
 Usage :- double arc_radius = dwg_ent_arc_get_radius(arc);
 */
 double
-dwg_ent_arc_get_radius(dwg_ent_arc *arc)
+dwg_ent_arc_get_radius(dwg_ent_arc *arc, int *error)
 {
-    return arc->radius;
+    if (arc != 0)
+        {
+            *error = 0;
+            return arc->radius;
+        }
+    else
+        {
+            *error = 1;
+        }
 }
 
 /* Sets radius of arc entity equal to (radius) value 
@@ -372,9 +570,17 @@ Usage :- dwg_ent_arc_set_radius(arc, 40.0);
 hence radius of arc sets to 40.0
 */
 void
-dwg_ent_arc_set_radius(dwg_ent_arc *arc, double radius)
+dwg_ent_arc_set_radius(dwg_ent_arc *arc, double radius, int *error)
 {
-    arc->radius = radius;
+    if (arc != 0)
+        {
+            *error = 0;
+            arc->radius = radius;
+        }
+    else
+        {
+            *error = 1;
+        }
 }
 
 /* Returns thickness of entity passed in argument.
@@ -383,9 +589,17 @@ double thickness;
 thickness = dwg_ent_arc_get_thickness(circle);
 */
 double
-dwg_ent_arc_get_thickness(dwg_ent_arc *arc)
+dwg_ent_arc_get_thickness(dwg_ent_arc *arc, int *error)
 {
-    return arc->thickness;
+    if (arc != 0)
+        {
+            *error = 0;
+            return arc->thickness;
+        }
+    else
+        {
+            *error = 1;
+        }
 }
 
 /* Sets thickness of a arc entity passed in 
@@ -394,9 +608,17 @@ Usage :- dwg_ent_circle_set_thickness(circle, 50.0);
 hence circle thickness becomes 50.0 
 */
 void
-dwg_ent_arc_set_thickness(dwg_ent_arc *arc, double thickness)
+dwg_ent_arc_set_thickness(dwg_ent_arc *arc, double thickness, int *error)
 {
-    arc->thickness = thickness;
+    if (arc != 0)
+        {
+            *error = 0;
+            arc->thickness = thickness;
+        }
+    else
+        {
+            *error = 1;
+        }
 }
 
 /* This function returns the extrusion of a arc entity into second 
@@ -406,11 +628,19 @@ where arc is an entity of arc type, and extrusion value contains
 the x, y and z values
 */
 void 
-dwg_ent_arc_get_extrusion(dwg_ent_arc *arc, dwg_point_3d *vector)
+dwg_ent_arc_get_extrusion(dwg_ent_arc *arc, dwg_point_3d *vector, int *error)
 {
-    vector->x = arc->extrusion.x;
-    vector->y = arc->extrusion.y;
-    vector->z = arc->extrusion.z;
+    if (arc != 0)
+        {
+            *error = 0;
+            vector->x = arc->extrusion.x;
+            vector->y = arc->extrusion.y;
+            vector->z = arc->extrusion.z;
+        }
+    else
+        {
+            *error = 1;
+        }
 }
 
 /* This function sets the extrusion of a arc entity equal to 
@@ -420,7 +650,7 @@ where arc is an entity of arc type, and extrusion value contains
 the x, y and z values
 */
 void 
-dwg_ent_arc_set_extrusion(dwg_ent_arc *arc, dwg_point_3d *vector)
+dwg_ent_arc_set_extrusion(dwg_ent_arc *arc, dwg_point_3d *vector, int *error)
 {
     arc->extrusion.x = vector->x;
     arc->extrusion.y = vector->y;
@@ -431,7 +661,7 @@ dwg_ent_arc_set_extrusion(dwg_ent_arc *arc, dwg_point_3d *vector)
 Usage :- double start_angle = dwg_ent_arc_get_start_angle(arc);
 */
 double
-dwg_ent_arc_get_start_angle(dwg_ent_arc *arc)
+dwg_ent_arc_get_start_angle(dwg_ent_arc *arc, int *error)
 {
     return arc->start_angle;
 }
@@ -441,7 +671,7 @@ value in argument 2.
 Usage :- double start_angle = dwg_ent_arc_get_start_angle(arc);
 */
 void
-dwg_ent_arc_set_start_angle(dwg_ent_arc *arc, double start_angle)
+dwg_ent_arc_set_start_angle(dwg_ent_arc *arc, double start_angle, int *error)
 {
     arc->start_angle = start_angle;
 }
@@ -450,7 +680,7 @@ dwg_ent_arc_set_start_angle(dwg_ent_arc *arc, double start_angle)
 Usage :- double end_angle = dwg_ent_arc_get_end_angle(arc);
 */
 double
-dwg_ent_arc_get_end_angle(dwg_ent_arc *arc)
+dwg_ent_arc_get_end_angle(dwg_ent_arc *arc, int *error)
 {
     return arc->end_angle;
 }
@@ -460,7 +690,7 @@ value in argument 2.
 Usage :- double end_angle = dwg_ent_arc_get_end_angle(arc);
 */
 void
-dwg_ent_arc_set_end_angle(dwg_ent_arc *arc, double end_angle)
+dwg_ent_arc_set_end_angle(dwg_ent_arc *arc, double end_angle, int *error)
 {
     arc->end_angle = end_angle;
 }
@@ -471,7 +701,7 @@ dwg_ent_arc_set_end_angle(dwg_ent_arc *arc, double end_angle)
 Usage :- dwg_ent_ellipse_new();
 */
 dwg_ent_ellipse *
-dwg_ent_ellipse_new()
+dwg_ent_ellipse_new(int *error)
 {
     dwg_ent_ellipse *ellipse = (dwg_ent_ellipse*) malloc(sizeof(Dwg_Entity_ELLIPSE));
     return dwg_ent_ellipse_init(ellipse);
@@ -482,7 +712,7 @@ and frees the allocated memory.
 Usage :- dwg_ent_ellipse_delete();
 */
 void
-dwg_ent_ellipse_delete(dwg_ent_ellipse *ellipse)
+dwg_ent_ellipse_delete(dwg_ent_ellipse *ellipse, int *error)
 {
     if (ellipse != 0)
         free(ellipse);
@@ -513,7 +743,7 @@ of dwg_point_3d. point.x will contain x value of center,
 point.y will contain y value of center
 */
 void
-dwg_ent_ellipse_get_center(dwg_ent_ellipse *ellipse, dwg_point_3d *point)
+dwg_ent_ellipse_get_center(dwg_ent_ellipse *ellipse, dwg_point_3d *point, int *error)
 {
     point->x = ellipse->center.x;
     point->y = ellipse->center.y;
@@ -527,7 +757,7 @@ of dwg_point_3d. point.x will contain x value of center,
 point.y will contain y value of center
 */
 void
-dwg_ent_ellipse_set_center(dwg_ent_ellipse *ellipse, dwg_point_3d *point)
+dwg_ent_ellipse_set_center(dwg_ent_ellipse *ellipse, dwg_point_3d *point, int *error)
 {
     ellipse->center.x = point->x;
     ellipse->center.y = point->y;
@@ -541,7 +771,7 @@ of dwg_point_3d. point.x will contain x value of sm_axis,
 point.y will contain y value of sm_axis
 */
 void
-dwg_ent_ellipse_get_sm_axis(dwg_ent_ellipse *ellipse, dwg_point_3d *point)
+dwg_ent_ellipse_get_sm_axis(dwg_ent_ellipse *ellipse, dwg_point_3d *point, int *error)
 {
     point->x = ellipse->sm_axis.x;
     point->y = ellipse->sm_axis.y;
@@ -555,7 +785,7 @@ of dwg_point_3d. point.x will contain x value of sm_axis,
 point.y will contain y value of sm_axis
 */
 void
-dwg_ent_ellipse_set_sm_axis(dwg_ent_ellipse *ellipse, dwg_point_3d *point)
+dwg_ent_ellipse_set_sm_axis(dwg_ent_ellipse *ellipse, dwg_point_3d *point, int *error)
 {
     ellipse->sm_axis.x = point->x;
     ellipse->sm_axis.y = point->y;
@@ -569,7 +799,7 @@ of dwg_point_3d. point.x will contain x value of extrusion,
 point.y will contain y value of extrusion
 */
 void
-dwg_ent_ellipse_get_extrusion(dwg_ent_ellipse *ellipse, dwg_point_3d *vector)
+dwg_ent_ellipse_get_extrusion(dwg_ent_ellipse *ellipse, dwg_point_3d *vector, int *error)
 {
     vector->x = ellipse->extrusion.x;
     vector->y = ellipse->extrusion.y;
@@ -583,7 +813,7 @@ of dwg_point_3d. point.x will contain x value of extrusion,
 point.y will contain y value of extrusion
 */
 void
-dwg_ent_ellipse_set_extrusion(dwg_ent_ellipse *ellipse, dwg_point_3d *vector)
+dwg_ent_ellipse_set_extrusion(dwg_ent_ellipse *ellipse, dwg_point_3d *vector, int *error)
 {
     ellipse->extrusion.x = vector->x;
     ellipse->extrusion.y = vector->y;
@@ -594,7 +824,7 @@ dwg_ent_ellipse_set_extrusion(dwg_ent_ellipse *ellipse, dwg_point_3d *vector)
 Usage :- double axis_ratio = dwg_ent_ellipse_get_axis_ratio(ellipse);
 */
 double
-dwg_ent_ellipse_get_axis_ratio(dwg_ent_ellipse *ellipse)
+dwg_ent_ellipse_get_axis_ratio(dwg_ent_ellipse *ellipse, int *error)
 {
     return ellipse->axis_ratio;
 }
@@ -604,7 +834,7 @@ Usage :- dwg_ent_ellipse_get_axis_ratio(ellipse, 3.0);
 hence axis ratio of ellipse becomes 3.0
 */
 void
-dwg_ent_ellipse_set_axis_ratio(dwg_ent_ellipse *ellipse, double ratio)
+dwg_ent_ellipse_set_axis_ratio(dwg_ent_ellipse *ellipse, double ratio, int *error)
 {
     ellipse->axis_ratio = ratio;
 }
@@ -613,7 +843,7 @@ dwg_ent_ellipse_set_axis_ratio(dwg_ent_ellipse *ellipse, double ratio)
 Usage :- double start_angle = dwg_ent_ellipse_get_start_angle(ellipse);
 */
 double
-dwg_ent_ellipse_get_start_angle(dwg_ent_ellipse *ellipse)
+dwg_ent_ellipse_get_start_angle(dwg_ent_ellipse *ellipse, int *error)
 {
     return ellipse->start_angle;
 }
@@ -623,7 +853,7 @@ value in argument 2.
 Usage :- double start_angle = dwg_ent_ellipse_get_start_angle(ellipse);
 */
 void
-dwg_ent_ellipse_set_start_angle(dwg_ent_ellipse *ellipse, double start_angle)
+dwg_ent_ellipse_set_start_angle(dwg_ent_ellipse *ellipse, double start_angle, int *error)
 {
     ellipse->start_angle = start_angle;
 }
@@ -632,7 +862,7 @@ dwg_ent_ellipse_set_start_angle(dwg_ent_ellipse *ellipse, double start_angle)
 Usage :- double end_angle = dwg_ent_ellipse_get_end_angle(ellipse);
 */
 double
-dwg_ent_ellipse_get_end_angle(dwg_ent_ellipse *ellipse)
+dwg_ent_ellipse_get_end_angle(dwg_ent_ellipse *ellipse, int *error)
 {
     return ellipse->end_angle;
 }
@@ -642,7 +872,7 @@ value in argument 2.
 Usage :- double end_angle = dwg_ent_ellipse_get_end_angle(ellipse);
 */
 void
-dwg_ent_ellipse_set_end_angle(dwg_ent_ellipse *ellipse, double end_angle)
+dwg_ent_ellipse_set_end_angle(dwg_ent_ellipse *ellipse, double end_angle, int *error)
 {
     ellipse->end_angle = end_angle;
 }
@@ -655,7 +885,7 @@ Usage :- dwg_ent_text_set_text(text, "Hello world");
 This will set text value to Hello world.
 */
 void
-dwg_ent_text_set_text(dwg_ent_text *text, char * text_value)
+dwg_ent_text_set_text(dwg_ent_text *text, char * text_value, int *error)
 {
     text->text_value = text_value;
 }
@@ -664,7 +894,7 @@ dwg_ent_text_set_text(dwg_ent_text *text, char * text_value)
 Usage :- dwg_ent_text_get_text(text);
 */
 char *
-dwg_ent_text_get_text(dwg_ent_text *text)
+dwg_ent_text_get_text(dwg_ent_text *text, int *error)
 {
     return text->text_value;
 }
@@ -675,7 +905,7 @@ Usage :- dwg_ent_text_get_insertion_point(text, point);
 point.x and point.y contains x and y cordinate data respectively.
 */
 void
-dwg_ent_text_get_insertion_point(dwg_ent_text *text, dwg_point_2d *point)
+dwg_ent_text_get_insertion_point(dwg_ent_text *text, dwg_point_2d *point, int *error)
 {
     point->x = text->insertion_pt.x;
     point->y = text->insertion_pt.y;
@@ -686,7 +916,7 @@ co-ordinate values in second argument.
 Usage :- dwg_ent_text_set_insertion_point(text, point)
 */
 void
-dwg_ent_text_set_insertion_point(dwg_ent_text *text, dwg_point_2d *point)
+dwg_ent_text_set_insertion_point(dwg_ent_text *text, dwg_point_2d *point, int *error)
 {
     text->insertion_pt.x = point->x;
     text->insertion_pt.y = point->y;
@@ -696,7 +926,7 @@ dwg_ent_text_set_insertion_point(dwg_ent_text *text, dwg_point_2d *point)
 Usage :- dwg_ent_text_get_height(text);
 */
 double
-dwg_ent_text_get_height(dwg_ent_text *text)
+dwg_ent_text_get_height(dwg_ent_text *text, int *error)
 {
     return text->height;
 }
@@ -707,7 +937,7 @@ Usage :- dwg_ent_text_set_height(text, 100);
 This will set height to 100.
 */
 void
-dwg_ent_text_set_height(dwg_ent_text *text, double height)
+dwg_ent_text_set_height(dwg_ent_text *text, double height, int *error)
 {
     text->height = height;
 }
@@ -719,7 +949,7 @@ of dwg_point_3d. point.x will contain x value of extrusion,
 point.y will contain y value of extrusion
 */
 void
-dwg_ent_text_get_extrusion(dwg_ent_text *text, dwg_point_3d *vector)
+dwg_ent_text_get_extrusion(dwg_ent_text *text, dwg_point_3d *vector, int *error)
 {
     vector->x = text->extrusion.x;
     vector->y = text->extrusion.y;
@@ -733,7 +963,7 @@ of dwg_point_3d. point.x will contain x value of extrusion,
 point.y will contain y value of extrusion
 */
 void
-dwg_ent_text_set_extrusion(dwg_ent_text *text, dwg_point_3d *vector)
+dwg_ent_text_set_extrusion(dwg_ent_text *text, dwg_point_3d *vector, int *error)
 {
     text->extrusion.x = vector->x;
     text->extrusion.y = vector->y;
@@ -744,7 +974,7 @@ dwg_ent_text_set_extrusion(dwg_ent_text *text, dwg_point_3d *vector)
 Usage :- dwg_ent_text_get_thickness(text);
 */
 double
-dwg_ent_text_get_thickness(dwg_ent_text *text)
+dwg_ent_text_get_thickness(dwg_ent_text *text, int *error)
 {
     return text->thickness;
 }
@@ -754,7 +984,7 @@ value in second argument.
 Usage :- dwg_ent_text_set_thickness(text, thickness);
 */
 void
-dwg_ent_text_set_thickness(dwg_ent_text *text, double thickness)
+dwg_ent_text_set_thickness(dwg_ent_text *text, double thickness, int *error)
 {
     text->thickness = thickness;
 }
@@ -763,7 +993,7 @@ dwg_ent_text_set_thickness(dwg_ent_text *text, double thickness)
 Usage :- dwg_ent_text_get_rot_angle(text);
 */
 double
-dwg_ent_text_get_rot_angle(dwg_ent_text *text)
+dwg_ent_text_get_rot_angle(dwg_ent_text *text, int *error)
 {
     return text->rotation_ang;
 }
@@ -773,7 +1003,7 @@ value in second argument.
 Usage :- dwg_ent_text_set_rot_angle(text, angle);
 */
 void
-dwg_ent_text_set_rot_angle(dwg_ent_text *text, double angle)
+dwg_ent_text_set_rot_angle(dwg_ent_text *text, double angle, int *error)
 {
     text->rotation_ang = angle;
 }
@@ -782,7 +1012,7 @@ dwg_ent_text_set_rot_angle(dwg_ent_text *text, double angle)
 Usage :- dwg_ent_text_get_vert_align(text);
 */
 double
-dwg_ent_text_get_vert_align(dwg_ent_text *text)
+dwg_ent_text_get_vert_align(dwg_ent_text *text, int *error)
 {
     return text->vert_alignment;
 }
@@ -792,7 +1022,7 @@ equal to value in second argument.
 Usage :- dwg_ent_text_set_vert_align(text, angle);
 */
 void
-dwg_ent_text_set_vert_align(dwg_ent_text *text, double alignment)
+dwg_ent_text_set_vert_align(dwg_ent_text *text, double alignment, int *error)
 {
     text->vert_alignment = alignment;
 }
@@ -801,7 +1031,7 @@ dwg_ent_text_set_vert_align(dwg_ent_text *text, double alignment)
 Usage :- dwg_ent_text_get_horiz_align(text);
 */
 double
-dwg_ent_text_get_horiz_align(dwg_ent_text *text)
+dwg_ent_text_get_horiz_align(dwg_ent_text *text, int *error)
 {
     return text->horiz_alignment;
 }
@@ -811,7 +1041,7 @@ equal to value in second argument.
 Usage :- dwg_ent_text_set_horiz_align(text, angle);
 */
 void
-dwg_ent_text_set_horiz_align(dwg_ent_text *text, double alignment)
+dwg_ent_text_set_horiz_align(dwg_ent_text *text, double alignment, int *error)
 {
     text->horiz_alignment = alignment;
 }
@@ -824,7 +1054,7 @@ Usage :- dwg_ent_attrib_set_text(attrib, "Hello world");
 This will set text value to Hello world.
 */
 void
-dwg_ent_attrib_set_text(dwg_ent_attrib *attrib, char * text_value)
+dwg_ent_attrib_set_text(dwg_ent_attrib *attrib, char * text_value, int *error)
 {
     attrib->text_value = text_value;
 }
@@ -833,7 +1063,7 @@ dwg_ent_attrib_set_text(dwg_ent_attrib *attrib, char * text_value)
 Usage :- dwg_ent_attrib_get_text(attrib);
 */
 char *
-dwg_ent_attrib_get_text(dwg_ent_attrib *attrib)
+dwg_ent_attrib_get_text(dwg_ent_attrib *attrib, int *error)
 {
     return attrib->text_value;
 }
@@ -844,7 +1074,7 @@ Usage :- dwg_ent_attrib_get_insertion_point(attrib, point);
 point.x and point.y contains x and y cordinate data respectively.
 */
 void
-dwg_ent_attrib_get_insertion_point(dwg_ent_attrib *attrib, dwg_point_2d *point)
+dwg_ent_attrib_get_insertion_point(dwg_ent_attrib *attrib, dwg_point_2d *point, int *error)
 {
     point->x = attrib->insertion_pt.x;
     point->y = attrib->insertion_pt.y;
@@ -855,7 +1085,7 @@ co-ordinate values in second argument.
 Usage :- dwg_ent_attrib_set_insertion_point(attrib, point)
 */
 void
-dwg_ent_attrib_set_insertion_point(dwg_ent_attrib *attrib, dwg_point_2d *point)
+dwg_ent_attrib_set_insertion_point(dwg_ent_attrib *attrib, dwg_point_2d *point, int *error)
 {
     attrib->insertion_pt.x = point->x;
     attrib->insertion_pt.y = point->y;
@@ -865,7 +1095,7 @@ dwg_ent_attrib_set_insertion_point(dwg_ent_attrib *attrib, dwg_point_2d *point)
 Usage :- dwg_ent_attrib_get_height(attrib);
 */
 double
-dwg_ent_attrib_get_height(dwg_ent_attrib *attrib)
+dwg_ent_attrib_get_height(dwg_ent_attrib *attrib, int *error)
 {
     return attrib->height;
 }
@@ -876,7 +1106,7 @@ Usage :- dwg_ent_attrib_set_height(attrib, 100);
 This will set height to 100.
 */
 void
-dwg_ent_attrib_set_height(dwg_ent_attrib *attrib, double height)
+dwg_ent_attrib_set_height(dwg_ent_attrib *attrib, double height, int *error)
 {
     attrib->height = height;
 }
@@ -888,7 +1118,7 @@ of dwg_point_3d. point.x will contain x value of extrusion,
 point.y will contain y value of extrusion
 */
 void
-dwg_ent_attrib_get_extrusion(dwg_ent_attrib *attrib, dwg_point_3d *vector)
+dwg_ent_attrib_get_extrusion(dwg_ent_attrib *attrib, dwg_point_3d *vector, int *error)
 {
     vector->x = attrib->extrusion.x;
     vector->y = attrib->extrusion.y;
@@ -902,7 +1132,7 @@ of dwg_point_3d. point.x will contain x value of extrusion,
 point.y will contain y value of extrusion
 */
 void
-dwg_ent_attrib_set_extrusion(dwg_ent_attrib *attrib, dwg_point_3d *vector)
+dwg_ent_attrib_set_extrusion(dwg_ent_attrib *attrib, dwg_point_3d *vector, int *error)
 {
     attrib->extrusion.x = vector->x;
     attrib->extrusion.y = vector->y;
@@ -913,7 +1143,7 @@ dwg_ent_attrib_set_extrusion(dwg_ent_attrib *attrib, dwg_point_3d *vector)
 Usage :- dwg_ent_attrib_get_thickness(attrib);
 */
 double
-dwg_ent_attrib_get_thickness(dwg_ent_attrib *attrib)
+dwg_ent_attrib_get_thickness(dwg_ent_attrib *attrib, int *error)
 {
     return attrib->thickness;
 }
@@ -923,7 +1153,7 @@ value in second argument.
 Usage :- dwg_ent_attrib_set_thickness(attrib, thickness);
 */
 void
-dwg_ent_attrib_set_thickness(dwg_ent_attrib *attrib, double thickness)
+dwg_ent_attrib_set_thickness(dwg_ent_attrib *attrib, double thickness, int *error)
 {
     attrib->thickness = thickness;
 }
@@ -932,7 +1162,7 @@ dwg_ent_attrib_set_thickness(dwg_ent_attrib *attrib, double thickness)
 Usage :- dwg_ent_attrib_get_rot_angle(attrib);
 */
 double
-dwg_ent_attrib_get_rot_angle(dwg_ent_attrib *attrib)
+dwg_ent_attrib_get_rot_angle(dwg_ent_attrib *attrib, int *error)
 {
     return attrib->rotation_ang;
 }
@@ -942,7 +1172,7 @@ value in second argument.
 Usage :- dwg_ent_attrib_set_rot_angle(attrib, angle);
 */
 void
-dwg_ent_attrib_set_rot_angle(dwg_ent_attrib *attrib, double angle)
+dwg_ent_attrib_set_rot_angle(dwg_ent_attrib *attrib, double angle, int *error)
 {
     attrib->rotation_ang = angle;
 }
@@ -951,7 +1181,7 @@ dwg_ent_attrib_set_rot_angle(dwg_ent_attrib *attrib, double angle)
 Usage :- dwg_ent_attrib_get_vert_align(attrib);
 */
 double
-dwg_ent_attrib_get_vert_align(dwg_ent_attrib *attrib)
+dwg_ent_attrib_get_vert_align(dwg_ent_attrib *attrib, int *error)
 {
     return attrib->vert_alignment;
 }
@@ -961,7 +1191,7 @@ equal to value in second argument.
 Usage :- dwg_ent_attrib_set_vert_align(attrib, angle);
 */
 void
-dwg_ent_attrib_set_vert_align(dwg_ent_attrib *attrib, double alignment)
+dwg_ent_attrib_set_vert_align(dwg_ent_attrib *attrib, double alignment, int *error)
 {
     attrib->vert_alignment = alignment;
 }
@@ -970,7 +1200,7 @@ dwg_ent_attrib_set_vert_align(dwg_ent_attrib *attrib, double alignment)
 Usage :- dwg_ent_attrib_get_horiz_align(attrib);
 */
 double
-dwg_ent_attrib_get_horiz_align(dwg_ent_attrib *attrib)
+dwg_ent_attrib_get_horiz_align(dwg_ent_attrib *attrib, int *error)
 {
     return attrib->horiz_alignment;
 }
@@ -980,7 +1210,7 @@ equal to value in second argument.
 Usage :- dwg_ent_attrib_set_horiz_align(attrib, angle);
 */
 void
-dwg_ent_attrib_set_horiz_align(dwg_ent_attrib *attrib, double alignment)
+dwg_ent_attrib_set_horiz_align(dwg_ent_attrib *attrib, double alignment, int *error)
 {
     attrib->horiz_alignment = alignment;
 }
@@ -993,7 +1223,7 @@ Usage :- dwg_ent_attdef_set_text(attdef, "Hello world");
 This will set text value to Hello world.
 */
 void
-dwg_ent_attdef_set_text(dwg_ent_attdef *attdef, char * default_value)
+dwg_ent_attdef_set_text(dwg_ent_attdef *attdef, char * default_value, int *error)
 {
     attdef->default_value = default_value;
 }
@@ -1002,7 +1232,7 @@ dwg_ent_attdef_set_text(dwg_ent_attdef *attdef, char * default_value)
 Usage :- dwg_ent_attdef_get_text(attdef);
 */
 char *
-dwg_ent_attdef_get_text(dwg_ent_attdef *attdef)
+dwg_ent_attdef_get_text(dwg_ent_attdef *attdef, int *error)
 {
     return attdef->default_value;
 }
@@ -1013,7 +1243,7 @@ Usage :- dwg_ent_attdef_get_insertion_point(attdef, point);
 point.x and point.y contains x and y cordinate data respectively.
 */
 void
-dwg_ent_attdef_get_insertion_point(dwg_ent_attdef *attdef, dwg_point_2d *point)
+dwg_ent_attdef_get_insertion_point(dwg_ent_attdef *attdef, dwg_point_2d *point, int *error)
 {
     point->x = attdef->insertion_pt.x;
     point->y = attdef->insertion_pt.y;
@@ -1024,7 +1254,7 @@ co-ordinate values in second argument.
 Usage :- dwg_ent_attdef_set_insertion_point(attdef, point)
 */
 void
-dwg_ent_attdef_set_insertion_point(dwg_ent_attdef *attdef, dwg_point_2d *point)
+dwg_ent_attdef_set_insertion_point(dwg_ent_attdef *attdef, dwg_point_2d *point, int *error)
 {
     attdef->insertion_pt.x = point->x;
     attdef->insertion_pt.y = point->y;
@@ -1034,7 +1264,7 @@ dwg_ent_attdef_set_insertion_point(dwg_ent_attdef *attdef, dwg_point_2d *point)
 Usage :- dwg_ent_attdef_get_height(attdef);
 */
 double
-dwg_ent_attdef_get_height(dwg_ent_attdef *attdef)
+dwg_ent_attdef_get_height(dwg_ent_attdef *attdef, int *error)
 {
     return attdef->height;
 }
@@ -1045,7 +1275,7 @@ Usage :- dwg_ent_attdef_set_height(attdef, 100);
 This will set height to 100.
 */
 void
-dwg_ent_attdef_set_height(dwg_ent_attdef *attdef, double height)
+dwg_ent_attdef_set_height(dwg_ent_attdef *attdef, double height, int *error)
 {
     attdef->height = height;
 }
@@ -1057,7 +1287,7 @@ of dwg_point_3d. point.x will contain x value of extrusion,
 point.y will contain y value of extrusion
 */
 void
-dwg_ent_attdef_get_extrusion(dwg_ent_attdef *attdef, dwg_point_3d *vector)
+dwg_ent_attdef_get_extrusion(dwg_ent_attdef *attdef, dwg_point_3d *vector, int *error)
 {
     vector->x = attdef->extrusion.x;
     vector->y = attdef->extrusion.y;
@@ -1071,7 +1301,7 @@ of dwg_point_3d. point.x will contain x value of extrusion,
 point.y will contain y value of extrusion
 */
 void
-dwg_ent_attdef_set_extrusion(dwg_ent_attdef *attdef, dwg_point_3d *vector)
+dwg_ent_attdef_set_extrusion(dwg_ent_attdef *attdef, dwg_point_3d *vector, int *error)
 {
     attdef->extrusion.x = vector->x;
     attdef->extrusion.y = vector->y;
@@ -1082,7 +1312,7 @@ dwg_ent_attdef_set_extrusion(dwg_ent_attdef *attdef, dwg_point_3d *vector)
 Usage :- dwg_ent_attdef_get_thickness(attdef);
 */
 double
-dwg_ent_attdef_get_thickness(dwg_ent_attdef *attdef)
+dwg_ent_attdef_get_thickness(dwg_ent_attdef *attdef, int *error)
 {
     return attdef->thickness;
 }
@@ -1092,7 +1322,7 @@ value in second argument.
 Usage :- dwg_ent_attdef_set_thickness(attdef, thickness);
 */
 void
-dwg_ent_attdef_set_thickness(dwg_ent_attdef *attdef, double thickness)
+dwg_ent_attdef_set_thickness(dwg_ent_attdef *attdef, double thickness, int *error)
 {
     attdef->thickness = thickness;
 }
@@ -1101,7 +1331,7 @@ dwg_ent_attdef_set_thickness(dwg_ent_attdef *attdef, double thickness)
 Usage :- dwg_ent_attdef_get_rot_angle(attdef);
 */
 double
-dwg_ent_attdef_get_rot_angle(dwg_ent_attdef *attdef)
+dwg_ent_attdef_get_rot_angle(dwg_ent_attdef *attdef, int *error)
 {
     return attdef->rotation_ang;
 }
@@ -1111,7 +1341,7 @@ value in second argument.
 Usage :- dwg_ent_attdef_set_rot_angle(attdef, angle);
 */
 void
-dwg_ent_attdef_set_rot_angle(dwg_ent_attdef *attdef, double angle)
+dwg_ent_attdef_set_rot_angle(dwg_ent_attdef *attdef, double angle, int *error)
 {
     attdef->rotation_ang = angle;
 }
@@ -1120,7 +1350,7 @@ dwg_ent_attdef_set_rot_angle(dwg_ent_attdef *attdef, double angle)
 Usage :- dwg_ent_attdef_get_vert_align(attdef);
 */
 double
-dwg_ent_attdef_get_vert_align(dwg_ent_attdef *attdef)
+dwg_ent_attdef_get_vert_align(dwg_ent_attdef *attdef, int *error)
 {
     return attdef->vert_alignment;
 }
@@ -1130,7 +1360,7 @@ equal to value in second argument.
 Usage :- dwg_ent_attdef_set_vert_align(attdef, angle);
 */
 void
-dwg_ent_attdef_set_vert_align(dwg_ent_attdef *attdef, double alignment)
+dwg_ent_attdef_set_vert_align(dwg_ent_attdef *attdef, double alignment, int *error)
 {
     attdef->vert_alignment = alignment;
 }
@@ -1139,7 +1369,7 @@ dwg_ent_attdef_set_vert_align(dwg_ent_attdef *attdef, double alignment)
 Usage :- dwg_ent_attdef_get_horiz_align(attdef);
 */
 double
-dwg_ent_attdef_get_horiz_align(dwg_ent_attdef *attdef)
+dwg_ent_attdef_get_horiz_align(dwg_ent_attdef *attdef, int *error)
 {
     return attdef->horiz_alignment;
 }
@@ -1149,7 +1379,7 @@ equal to value in second argument.
 Usage :- dwg_ent_attdef_set_horiz_align(attdef, angle);
 */
 void
-dwg_ent_attdef_set_horiz_align(dwg_ent_attdef *attdef, double alignment)
+dwg_ent_attdef_set_horiz_align(dwg_ent_attdef *attdef, double alignment, int *error)
 {
     attdef->horiz_alignment = alignment;
 }
@@ -1163,7 +1393,7 @@ of dwg_point_3d. retpoint.x will contain x value of point,
 retpoint.y will contain y value of point
 */
 void
-dwg_ent_point_set_point(dwg_ent_point *point, dwg_point_3d *retpoint)
+dwg_ent_point_set_point(dwg_ent_point *point, dwg_point_3d *retpoint, int *error)
 {
     point->x = retpoint->x;
     point->y = retpoint->y;
@@ -1177,7 +1407,7 @@ of dwg_point_3d. retpoint.x will contain x value of point,
 retpoint.y will contain y value of point
 */
 void
-dwg_ent_point_get_point(dwg_ent_point *point, dwg_point_3d *retpoint)
+dwg_ent_point_get_point(dwg_ent_point *point, dwg_point_3d *retpoint, int *error)
 {
     retpoint->x = point->x;
     retpoint->y = point->y;
@@ -1188,7 +1418,7 @@ dwg_ent_point_get_point(dwg_ent_point *point, dwg_point_3d *retpoint)
 Usage :- dwg_ent_point_get_thickness(point);
 */
 double
-dwg_ent_point_get_thickness(dwg_ent_point *point)
+dwg_ent_point_get_thickness(dwg_ent_point *point, int *error)
 {
     return point->thickness;
 }
@@ -1198,7 +1428,7 @@ value in second argument.
 Usage :- dwg_ent_point_set_thickness(point, thickness);
 */
 void
-dwg_ent_point_set_thickness(dwg_ent_point *point, double thickness)
+dwg_ent_point_set_thickness(dwg_ent_point *point, double thickness, int *error)
 {
     point->thickness = thickness;
 }
@@ -1210,7 +1440,7 @@ of dwg_point_3d. retpoint.x will contain x value of extrusion,
 retpoint.y will contain y value of extrusion
 */
 void
-dwg_ent_point_set_extrusion(dwg_ent_point *point, dwg_point_3d *retpoint)
+dwg_ent_point_set_extrusion(dwg_ent_point *point, dwg_point_3d *retpoint, int *error)
 {
     point->extrusion.x = retpoint->x;
     point->extrusion.y = retpoint->y;
@@ -1224,7 +1454,7 @@ of dwg_point_3d. retpoint.x will contain x value of extrusion,
 retpoint.y will contain y value of extrusion
 */
 void
-dwg_ent_point_get_extrusion(dwg_ent_point *point, dwg_point_3d *retpoint)
+dwg_ent_point_get_extrusion(dwg_ent_point *point, dwg_point_3d *retpoint, int *error)
 {
     retpoint->x = point->extrusion.x;
     retpoint->y = point->extrusion.y;
@@ -1237,7 +1467,7 @@ dwg_ent_point_get_extrusion(dwg_ent_point *point, dwg_point_3d *retpoint)
 Usage :- dwg_ent_solid_get_thickness(solid);
 */
 double
-dwg_ent_solid_get_thickness(dwg_ent_solid *solid)
+dwg_ent_solid_get_thickness(dwg_ent_solid *solid, int *error)
 {
     return solid->thickness;
 }
@@ -1248,7 +1478,7 @@ Usage :- dwg_ent_solid_set_thickness(solid, 2.0);
 Hence thickness sets to 2.0
 */
 void
-dwg_ent_solid_set_thickness(dwg_ent_solid *solid, double thickness)
+dwg_ent_solid_set_thickness(dwg_ent_solid *solid, double thickness, int *error)
 {
     solid->thickness = thickness;
 }
@@ -1257,7 +1487,7 @@ dwg_ent_solid_set_thickness(dwg_ent_solid *solid, double thickness)
 Usage :- dwg_ent_solid_get_elevation(solid);
 */
 double
-dwg_ent_solid_get_elevation(dwg_ent_solid *solid)
+dwg_ent_solid_get_elevation(dwg_ent_solid *solid, int *error)
 {
     return solid->elevation;
 }
@@ -1268,7 +1498,7 @@ Usage :- dwg_ent_solid_set_elevation(solid, 20);
 Hence elevation sets to 20
 */
 void
-dwg_ent_solid_set_elevation(dwg_ent_solid *solid, double elevation)
+dwg_ent_solid_set_elevation(dwg_ent_solid *solid, double elevation, int *error)
 {
     solid->elevation = elevation;
 }
@@ -1280,7 +1510,7 @@ of dwg_point_3d. point.x will contain x value of corner1,
 point.y will contain y value of corner1
 */
 void
-dwg_ent_solid_get_corner1(dwg_ent_solid *solid, dwg_point_2d *point)
+dwg_ent_solid_get_corner1(dwg_ent_solid *solid, dwg_point_2d *point, int *error)
 {
     point->x = solid->corner1.x;
     point->y = solid->corner1.y;
@@ -1293,7 +1523,7 @@ of dwg_point_3d. point.x will contain x value of corner1,
 point.y will contain y value of corner1
 */
 void
-dwg_ent_solid_set_corner1(dwg_ent_solid *solid, dwg_point_2d *point)
+dwg_ent_solid_set_corner1(dwg_ent_solid *solid, dwg_point_2d *point, int *error)
 {
     solid->corner1.x = point->x;
     solid->corner1.y = point->y;
@@ -1306,7 +1536,7 @@ of dwg_point_3d. point.x will contain x value of corner2,
 point.y will contain y value of corner2
 */
 void
-dwg_ent_solid_get_corner2(dwg_ent_solid *solid, dwg_point_2d *point)
+dwg_ent_solid_get_corner2(dwg_ent_solid *solid, dwg_point_2d *point, int *error)
 {
     point->x = solid->corner2.x;
     point->y = solid->corner2.y;
@@ -1319,7 +1549,7 @@ of dwg_point_3d. point.x will contain x value of corner2,
 point.y will contain y value of corner2
 */
 void
-dwg_ent_solid_set_corner2(dwg_ent_solid *solid, dwg_point_2d *point)
+dwg_ent_solid_set_corner2(dwg_ent_solid *solid, dwg_point_2d *point, int *error)
 {
     solid->corner2.x = point->x;
     solid->corner2.y = point->y;
@@ -1332,7 +1562,7 @@ of dwg_point_3d. point.x will contain x value of corner3,
 point.y will contain y value of corner3
 */
 void
-dwg_ent_solid_get_corner3(dwg_ent_solid *solid, dwg_point_2d *point)
+dwg_ent_solid_get_corner3(dwg_ent_solid *solid, dwg_point_2d *point, int *error)
 {
     point->x = solid->corner3.x;
     point->y = solid->corner3.y;
@@ -1345,7 +1575,7 @@ of dwg_point_3d. point.x will contain x value of corner3,
 point.y will contain y value of corner3
 */
 void
-dwg_ent_solid_set_corner3(dwg_ent_solid *solid, dwg_point_2d *point)
+dwg_ent_solid_set_corner3(dwg_ent_solid *solid, dwg_point_2d *point, int *error)
 {
     solid->corner3.x = point->x;
     solid->corner3.y = point->y;
@@ -1358,7 +1588,7 @@ of dwg_point_3d. point.x will contain x value of corner4,
 point.y will contain y value of corner4
 */
 void
-dwg_ent_solid_get_corner4(dwg_ent_solid *solid, dwg_point_2d *point)
+dwg_ent_solid_get_corner4(dwg_ent_solid *solid, dwg_point_2d *point, int *error)
 {
     point->x = solid->corner4.x;
     point->y = solid->corner4.y;
@@ -1371,7 +1601,7 @@ of dwg_point_3d. point.x will contain x value of corner4,
 point.y will contain y value of corner4
 */
 void
-dwg_ent_solid_set_corner4(dwg_ent_solid *solid, dwg_point_2d *point)
+dwg_ent_solid_set_corner4(dwg_ent_solid *solid, dwg_point_2d *point, int *error)
 {
     solid->corner4.x = point->x;
     solid->corner4.y = point->y;
@@ -1384,7 +1614,7 @@ of dwg_point_3d. point.x will contain x value of extrusion,
 point.y will contain y value of extrusion
 */
 void
-dwg_ent_solid_get_extrusion(dwg_ent_solid *solid, dwg_point_3d *vector)
+dwg_ent_solid_get_extrusion(dwg_ent_solid *solid, dwg_point_3d *vector, int *error)
 {
     vector->x = solid->extrusion.x;
     vector->y = solid->extrusion.y;
@@ -1398,7 +1628,7 @@ of dwg_point_3d. point.x will contain x value of extrusion,
 point.y will contain y value of extrusion
 */
 void
-dwg_ent_solid_set_extrusion(dwg_ent_solid *solid, dwg_point_3d *vector)
+dwg_ent_solid_set_extrusion(dwg_ent_solid *solid, dwg_point_3d *vector, int *error)
 {
     solid->extrusion.x = vector->x;
     solid->extrusion.y = vector->y;
@@ -1411,7 +1641,7 @@ dwg_ent_solid_set_extrusion(dwg_ent_solid *solid, dwg_point_3d *vector)
 Usage :- dwg_ent_block_get_name(block);
 */
 void
-dwg_ent_block_set_name(dwg_ent_block *block, char * name)
+dwg_ent_block_set_name(dwg_ent_block *block, char * name, int *error)
 {
     block->name = name;
 }
@@ -1420,7 +1650,7 @@ dwg_ent_block_set_name(dwg_ent_block *block, char * name)
 Usage :- dwg_ent_block_get_name(block);
 */
 char *
-dwg_ent_block_get_name(dwg_ent_block *block)
+dwg_ent_block_get_name(dwg_ent_block *block, int *error)
 {
     return block->name;
 }
@@ -1428,7 +1658,7 @@ dwg_ent_block_get_name(dwg_ent_block *block)
 //--------------------------------------------------------------------------------
 
 void
-dwg_ent_ray_get_point(dwg_ent_ray *ray, dwg_point_3d *point)
+dwg_ent_ray_get_point(dwg_ent_ray *ray, dwg_point_3d *point, int *error)
 {
     point->x = ray->point.x;
     point->y = ray->point.y;
@@ -1436,7 +1666,7 @@ dwg_ent_ray_get_point(dwg_ent_ray *ray, dwg_point_3d *point)
 }
 
 void
-dwg_ent_ray_set_point(dwg_ent_ray *ray, dwg_point_3d *point)
+dwg_ent_ray_set_point(dwg_ent_ray *ray, dwg_point_3d *point, int *error)
 {
     ray->point.x = point->x;
     ray->point.y = point->y;
@@ -1444,7 +1674,7 @@ dwg_ent_ray_set_point(dwg_ent_ray *ray, dwg_point_3d *point)
 }
 
 void
-dwg_ent_ray_get_vector(dwg_ent_ray *ray, dwg_point_3d *vector)
+dwg_ent_ray_get_vector(dwg_ent_ray *ray, dwg_point_3d *vector, int *error)
 {
     vector->x = ray->vector.x;
     vector->y = ray->vector.y;
@@ -1452,7 +1682,7 @@ dwg_ent_ray_get_vector(dwg_ent_ray *ray, dwg_point_3d *vector)
 }
 
 void
-dwg_ent_ray_set_vector(dwg_ent_ray *ray, dwg_point_3d *vector)
+dwg_ent_ray_set_vector(dwg_ent_ray *ray, dwg_point_3d *vector, int *error)
 {
     ray->vector.x = vector->x;
     ray->vector.y = vector->y;
@@ -1462,7 +1692,7 @@ dwg_ent_ray_set_vector(dwg_ent_ray *ray, dwg_point_3d *vector)
 //--------------------------------------------------------------------------------
 
 void
-dwg_ent_xline_get_point(dwg_ent_xline *xline, dwg_point_3d *point)
+dwg_ent_xline_get_point(dwg_ent_xline *xline, dwg_point_3d *point, int *error)
 {
     point->x = xline->point.x;
     point->y = xline->point.y;
@@ -1470,7 +1700,7 @@ dwg_ent_xline_get_point(dwg_ent_xline *xline, dwg_point_3d *point)
 }
 
 void
-dwg_ent_xline_set_point(dwg_ent_xline *xline, dwg_point_3d *point)
+dwg_ent_xline_set_point(dwg_ent_xline *xline, dwg_point_3d *point, int *error)
 {
     xline->point.x = point->x;
     xline->point.y = point->y;
@@ -1478,7 +1708,7 @@ dwg_ent_xline_set_point(dwg_ent_xline *xline, dwg_point_3d *point)
 }
 
 void
-dwg_ent_xline_get_vector(dwg_ent_xline *xline, dwg_point_3d *vector)
+dwg_ent_xline_get_vector(dwg_ent_xline *xline, dwg_point_3d *vector, int *error)
 {
     vector->x = xline->vector.x;
     vector->y = xline->vector.y;
@@ -1487,7 +1717,7 @@ dwg_ent_xline_get_vector(dwg_ent_xline *xline, dwg_point_3d *vector)
 }
 
 void
-dwg_ent_xline_set_vector(dwg_ent_xline *xline, dwg_point_3d *vector)
+dwg_ent_xline_set_vector(dwg_ent_xline *xline, dwg_point_3d *vector, int *error)
 {
     xline->vector.x = vector->x;
     xline->vector.y = vector->y;
@@ -1500,7 +1730,7 @@ dwg_ent_xline_set_vector(dwg_ent_xline *xline, dwg_point_3d *vector)
 Usage :- dwg_ent_trace_get_thickness(trace);
 */
 double
-dwg_ent_trace_get_thickness(dwg_ent_trace *trace)
+dwg_ent_trace_get_thickness(dwg_ent_trace *trace, int *error)
 {
     return trace->thickness;
 }
@@ -1511,7 +1741,7 @@ Usage :- dwg_ent_trace_set_thickness(trace, 2.0);
 Hence thickness sets to 2.0
 */
 void
-dwg_ent_trace_set_thickness(dwg_ent_trace *trace, double thickness)
+dwg_ent_trace_set_thickness(dwg_ent_trace *trace, double thickness, int *error)
 {
     trace->thickness = thickness;
 }
@@ -1520,7 +1750,7 @@ dwg_ent_trace_set_thickness(dwg_ent_trace *trace, double thickness)
 Usage :- dwg_ent_trace_get_elevation(trace);
 */
 double
-dwg_ent_trace_get_elevation(dwg_ent_trace *trace)
+dwg_ent_trace_get_elevation(dwg_ent_trace *trace, int *error)
 {
     return trace->elevation;
 }
@@ -1531,7 +1761,7 @@ Usage :- dwg_ent_trace_set_elevation(trace, 20);
 Hence elevation sets to 20
 */
 void
-dwg_ent_trace_set_elevation(dwg_ent_trace *trace, double elevation)
+dwg_ent_trace_set_elevation(dwg_ent_trace *trace, double elevation, int *error)
 {
     trace->elevation = elevation;
 }
@@ -1543,7 +1773,7 @@ of dwg_point_3d. point.x will contain x value of corner1,
 point.y will contain y value of corner1
 */
 void
-dwg_ent_trace_get_corner1(dwg_ent_trace *trace, dwg_point_2d *point)
+dwg_ent_trace_get_corner1(dwg_ent_trace *trace, dwg_point_2d *point, int *error)
 {
     point->x = trace->corner1.x;
     point->y = trace->corner1.y;
@@ -1556,7 +1786,7 @@ of dwg_point_3d. point.x will contain x value of corner1,
 point.y will contain y value of corner1
 */
 void
-dwg_ent_trace_set_corner1(dwg_ent_trace *trace, dwg_point_2d *point)
+dwg_ent_trace_set_corner1(dwg_ent_trace *trace, dwg_point_2d *point, int *error)
 {
     trace->corner1.x = point->x;
     trace->corner1.y = point->y;
@@ -1569,7 +1799,7 @@ of dwg_point_3d. point.x will contain x value of corner2,
 point.y will contain y value of corner2
 */
 void
-dwg_ent_trace_get_corner2(dwg_ent_trace *trace, dwg_point_2d *point)
+dwg_ent_trace_get_corner2(dwg_ent_trace *trace, dwg_point_2d *point, int *error)
 {
     point->x = trace->corner2.x;
     point->y = trace->corner2.y;
@@ -1582,7 +1812,7 @@ of dwg_point_3d. point.x will contain x value of corner2,
 point.y will contain y value of corner2
 */
 void
-dwg_ent_trace_set_corner2(dwg_ent_trace *trace, dwg_point_2d *point)
+dwg_ent_trace_set_corner2(dwg_ent_trace *trace, dwg_point_2d *point, int *error)
 {
     trace->corner2.x = point->x;
     trace->corner2.y = point->y;
@@ -1595,7 +1825,7 @@ of dwg_point_3d. point.x will contain x value of corner3,
 point.y will contain y value of corner3
 */
 void
-dwg_ent_trace_get_corner3(dwg_ent_trace *trace, dwg_point_2d *point)
+dwg_ent_trace_get_corner3(dwg_ent_trace *trace, dwg_point_2d *point, int *error)
 {
     point->x = trace->corner3.x;
     point->y = trace->corner3.y;
@@ -1608,7 +1838,7 @@ of dwg_point_3d. point.x will contain x value of corner3,
 point.y will contain y value of corner3
 */
 void
-dwg_ent_trace_set_corner3(dwg_ent_trace *trace, dwg_point_2d *point)
+dwg_ent_trace_set_corner3(dwg_ent_trace *trace, dwg_point_2d *point, int *error)
 {
     trace->corner3.x = point->x;
     trace->corner3.y = point->y;
@@ -1621,7 +1851,7 @@ of dwg_point_3d. point.x will contain x value of corner4,
 point.y will contain y value of corner4
 */
 void
-dwg_ent_trace_get_corner4(dwg_ent_trace *trace, dwg_point_2d *point)
+dwg_ent_trace_get_corner4(dwg_ent_trace *trace, dwg_point_2d *point, int *error)
 {
     point->x = trace->corner4.x;
     point->y = trace->corner4.y;
@@ -1634,7 +1864,7 @@ of dwg_point_3d. point.x will contain x value of corner4,
 point.y will contain y value of corner4
 */
 void
-dwg_ent_trace_set_corner4(dwg_ent_trace *trace, dwg_point_2d *point)
+dwg_ent_trace_set_corner4(dwg_ent_trace *trace, dwg_point_2d *point, int *error)
 {
     trace->corner4.x = point->x;
     trace->corner4.y = point->y;
@@ -1647,7 +1877,7 @@ of dwg_point_3d. point.x will contain x value of extrusion,
 point.y will contain y value of extrusion
 */
 void
-dwg_ent_trace_get_extrusion(dwg_ent_trace *trace, dwg_point_3d *vector)
+dwg_ent_trace_get_extrusion(dwg_ent_trace *trace, dwg_point_3d *vector, int *error)
 {
     vector->x = trace->extrusion.x;
     vector->y = trace->extrusion.y;
@@ -1661,7 +1891,7 @@ of dwg_point_3d. point.x will contain x value of extrusion,
 point.y will contain y value of extrusion
 */
 void
-dwg_ent_trace_set_extrusion(dwg_ent_trace *trace, dwg_point_3d *vector)
+dwg_ent_trace_set_extrusion(dwg_ent_trace *trace, dwg_point_3d *vector, int *error)
 {
     trace->extrusion.x = vector->x;
     trace->extrusion.y = vector->y;
@@ -1671,19 +1901,19 @@ dwg_ent_trace_set_extrusion(dwg_ent_trace *trace, dwg_point_3d *vector)
 //-------------------------------------------------------------------------------
 
 char
-dwg_ent_vertex_3d_get_flags(dwg_ent_vertex_3d *vert)
+dwg_ent_vertex_3d_get_flags(dwg_ent_vertex_3d *vert, int *error)
 {
     return vert->flags;
 }
 
 void
-dwg_ent_vertex_3d_set_flags(dwg_ent_vertex_3d *vert, char flags)
+dwg_ent_vertex_3d_set_flags(dwg_ent_vertex_3d *vert, char flags, int *error)
 {
     vert->flags = flags;
 }
 
 void
-dwg_ent_vertex_3d_get_point(dwg_ent_vertex_3d *vert, dwg_point_3d *point)
+dwg_ent_vertex_3d_get_point(dwg_ent_vertex_3d *vert, dwg_point_3d *point, int *error)
 {
     point->x = vert->point.x;
     point->y = vert->point.y;
@@ -1691,7 +1921,7 @@ dwg_ent_vertex_3d_get_point(dwg_ent_vertex_3d *vert, dwg_point_3d *point)
 }
 
 void
-dwg_ent_vertex_3d_set_point(dwg_ent_vertex_3d *vert, dwg_point_3d *point)
+dwg_ent_vertex_3d_set_point(dwg_ent_vertex_3d *vert, dwg_point_3d *point, int *error)
 {
     vert->point.x = point->x;
     vert->point.y = point->y;
@@ -1701,19 +1931,19 @@ dwg_ent_vertex_3d_set_point(dwg_ent_vertex_3d *vert, dwg_point_3d *point)
 //-------------------------------------------------------------------------------
 
 char
-dwg_ent_vertex_mesh_get_flags(dwg_ent_vertex_mesh *vert)
+dwg_ent_vertex_mesh_get_flags(dwg_ent_vertex_mesh *vert, int *error)
 {
     return vert->flags;
 }
 
 void
-dwg_ent_vertex_mesh_set_flags(dwg_ent_vertex_mesh *vert, char flags)
+dwg_ent_vertex_mesh_set_flags(dwg_ent_vertex_mesh *vert, char flags, int *error)
 {
     vert->flags = flags;
 }
 
 void
-dwg_ent_vertex_mesh_get_point(dwg_ent_vertex_mesh *vert, dwg_point_3d *point)
+dwg_ent_vertex_mesh_get_point(dwg_ent_vertex_mesh *vert, dwg_point_3d *point, int *error)
 {
     point->x = vert->point.x;
     point->y = vert->point.y;
@@ -1721,7 +1951,7 @@ dwg_ent_vertex_mesh_get_point(dwg_ent_vertex_mesh *vert, dwg_point_3d *point)
 }
 
 void
-dwg_ent_vertex_mesh_set_point(dwg_ent_vertex_mesh *vert, dwg_point_3d *point)
+dwg_ent_vertex_mesh_set_point(dwg_ent_vertex_mesh *vert, dwg_point_3d *point, int *error)
 {
     vert->point.x = point->x;
     vert->point.y = point->y;
@@ -1731,19 +1961,19 @@ dwg_ent_vertex_mesh_set_point(dwg_ent_vertex_mesh *vert, dwg_point_3d *point)
 //-------------------------------------------------------------------------------
 
 char
-dwg_ent_vertex_pface_get_flags(dwg_ent_vertex_pface *vert)
+dwg_ent_vertex_pface_get_flags(dwg_ent_vertex_pface *vert, int *error)
 {
     return vert->flags;
 }
 
 void
-dwg_ent_vertex_pface_set_flags(dwg_ent_vertex_pface *vert, char flags)
+dwg_ent_vertex_pface_set_flags(dwg_ent_vertex_pface *vert, char flags, int *error)
 {
     vert->flags = flags;
 }
 
 void
-dwg_ent_vertex_pface_get_point(dwg_ent_vertex_pface *vert, dwg_point_3d *point)
+dwg_ent_vertex_pface_get_point(dwg_ent_vertex_pface *vert, dwg_point_3d *point, int *error)
 {
     point->x = vert->point.x;
     point->y = vert->point.y;
@@ -1751,7 +1981,7 @@ dwg_ent_vertex_pface_get_point(dwg_ent_vertex_pface *vert, dwg_point_3d *point)
 }
 
 void
-dwg_ent_vertex_pface_set_point(dwg_ent_vertex_pface *vert, dwg_point_3d *point)
+dwg_ent_vertex_pface_set_point(dwg_ent_vertex_pface *vert, dwg_point_3d *point, int *error)
 {
     vert->point.x = point->x;
     vert->point.y = point->y;
@@ -1761,19 +1991,19 @@ dwg_ent_vertex_pface_set_point(dwg_ent_vertex_pface *vert, dwg_point_3d *point)
 //-------------------------------------------------------------------------------
 
 char
-dwg_ent_vertex_2d_get_flags(dwg_ent_vertex_2d *vert)
+dwg_ent_vertex_2d_get_flags(dwg_ent_vertex_2d *vert, int *error)
 {
     return vert->flags;
 }
 
 void
-dwg_ent_vertex_2d_set_flags(dwg_ent_vertex_2d *vert, char flags)
+dwg_ent_vertex_2d_set_flags(dwg_ent_vertex_2d *vert, char flags, int *error)
 {
     vert->flags = flags;
 }
 
 void
-dwg_ent_vertex_2d_get_point(dwg_ent_vertex_2d *vert, dwg_point_3d *point)
+dwg_ent_vertex_2d_get_point(dwg_ent_vertex_2d *vert, dwg_point_3d *point, int *error)
 {
     point->x = vert->point.x;
     point->y = vert->point.y;
@@ -1781,7 +2011,7 @@ dwg_ent_vertex_2d_get_point(dwg_ent_vertex_2d *vert, dwg_point_3d *point)
 }
 
 void
-dwg_ent_vertex_2d_set_point(dwg_ent_vertex_2d *vert, dwg_point_3d *point)
+dwg_ent_vertex_2d_set_point(dwg_ent_vertex_2d *vert, dwg_point_3d *point, int *error)
 {
     vert->point.x = point->x;
     vert->point.y = point->y;
@@ -1789,49 +2019,49 @@ dwg_ent_vertex_2d_set_point(dwg_ent_vertex_2d *vert, dwg_point_3d *point)
 }
 
 double
-dwg_ent_vertex_2d_get_start_width(dwg_ent_vertex_2d *vert)
+dwg_ent_vertex_2d_get_start_width(dwg_ent_vertex_2d *vert, int *error)
 {
     return vert->start_width;
 }
 
 void
-dwg_ent_vertex_2d_set_start_width(dwg_ent_vertex_2d *vert, double start_width)
+dwg_ent_vertex_2d_set_start_width(dwg_ent_vertex_2d *vert, double start_width, int *error)
 {
     vert->start_width = start_width;
 }
 
 double
-dwg_ent_vertex_2d_get_end_width(dwg_ent_vertex_2d *vert)
+dwg_ent_vertex_2d_get_end_width(dwg_ent_vertex_2d *vert, int *error)
 {
     return vert->end_width;
 }
 
 void
-dwg_ent_vertex_2d_set_end_width(dwg_ent_vertex_2d *vert, double end_width)
+dwg_ent_vertex_2d_set_end_width(dwg_ent_vertex_2d *vert, double end_width, int *error)
 {
     vert->end_width = end_width;
 }
 
 double
-dwg_ent_vertex_2d_get_bulge(dwg_ent_vertex_2d *vert)
+dwg_ent_vertex_2d_get_bulge(dwg_ent_vertex_2d *vert, int *error)
 {
     return vert->bulge;
 }
 
 void
-dwg_ent_vertex_2d_set_bulge(dwg_ent_vertex_2d *vert, double bulge)
+dwg_ent_vertex_2d_set_bulge(dwg_ent_vertex_2d *vert, double bulge, int *error)
 {
     vert->bulge = bulge;
 }
 
 double
-dwg_ent_vertex_2d_get_tangent_dir(dwg_ent_vertex_2d *vert)
+dwg_ent_vertex_2d_get_tangent_dir(dwg_ent_vertex_2d *vert, int *error)
 {
     return vert->tangent_dir;
 }
 
 void
-dwg_ent_vertex_2d_set_tangent_dir(dwg_ent_vertex_2d *vert, double tangent_dir)
+dwg_ent_vertex_2d_set_tangent_dir(dwg_ent_vertex_2d *vert, double tangent_dir, int *error)
 {
     vert->tangent_dir = tangent_dir;
 }
@@ -1839,7 +2069,7 @@ dwg_ent_vertex_2d_set_tangent_dir(dwg_ent_vertex_2d *vert, double tangent_dir)
 //--------------------------------------------------------------------------------
 
 void
-dwg_ent_insert_get_ins_pt(dwg_ent_insert *insert, dwg_point_3d *point)
+dwg_ent_insert_get_ins_pt(dwg_ent_insert *insert, dwg_point_3d *point, int *error)
 {
     point->x = insert->ins_pt.x;
     point->y = insert->ins_pt.y;
@@ -1847,7 +2077,7 @@ dwg_ent_insert_get_ins_pt(dwg_ent_insert *insert, dwg_point_3d *point)
 }
 
 void
-dwg_ent_insert_set_ins_pt(dwg_ent_insert *insert, dwg_point_3d *point)
+dwg_ent_insert_set_ins_pt(dwg_ent_insert *insert, dwg_point_3d *point, int *error)
 {
     insert->ins_pt.x = point->x;
     insert->ins_pt.y = point->y;
@@ -1855,19 +2085,19 @@ dwg_ent_insert_set_ins_pt(dwg_ent_insert *insert, dwg_point_3d *point)
 }
 
 char
-dwg_ent_insert_get_scale_flag(dwg_ent_insert *insert)
+dwg_ent_insert_get_scale_flag(dwg_ent_insert *insert, int *error)
 {
     return insert->scale_flag;
 }
 
 void
-dwg_ent_insert_set_scale_flag(dwg_ent_insert *insert, char flags)
+dwg_ent_insert_set_scale_flag(dwg_ent_insert *insert, char flags, int *error)
 {
     insert->scale_flag = flags;
 }
 
 void
-dwg_ent_insert_get_scale(dwg_ent_insert *insert, dwg_point_3d *point)
+dwg_ent_insert_get_scale(dwg_ent_insert *insert, dwg_point_3d *point, int *error)
 {
     point->x = insert->scale.x;
     point->y = insert->scale.y;
@@ -1875,7 +2105,7 @@ dwg_ent_insert_get_scale(dwg_ent_insert *insert, dwg_point_3d *point)
 }
 
 void
-dwg_ent_insert_set_scale(dwg_ent_insert *insert, dwg_point_3d *point)
+dwg_ent_insert_set_scale(dwg_ent_insert *insert, dwg_point_3d *point, int *error)
 {
     insert->scale.x = point->x;
     insert->scale.y = point->y;
@@ -1883,19 +2113,19 @@ dwg_ent_insert_set_scale(dwg_ent_insert *insert, dwg_point_3d *point)
 }
 
 double
-dwg_ent_insert_get_rotation_angle(dwg_ent_insert *insert)
+dwg_ent_insert_get_rotation_angle(dwg_ent_insert *insert, int *error)
 {
     return insert->rotation_ang;
 }
 
 void
-dwg_ent_insert_set_rotation_angle(dwg_ent_insert *insert, double rot_ang)
+dwg_ent_insert_set_rotation_angle(dwg_ent_insert *insert, double rot_ang, int *error)
 {
     insert->rotation_ang = rot_ang;
 }
 
 void
-dwg_ent_insert_get_extrusion(dwg_ent_insert *insert, dwg_point_3d *point)
+dwg_ent_insert_get_extrusion(dwg_ent_insert *insert, dwg_point_3d *point, int *error)
 {
     point->x = insert->extrusion.x;
     point->y = insert->extrusion.y;
@@ -1903,7 +2133,7 @@ dwg_ent_insert_get_extrusion(dwg_ent_insert *insert, dwg_point_3d *point)
 }
 
 void
-dwg_ent_insert_set_extrusion(dwg_ent_insert *insert, dwg_point_3d *point)
+dwg_ent_insert_set_extrusion(dwg_ent_insert *insert, dwg_point_3d *point, int *error)
 {
     insert->extrusion.x = point->x;
     insert->extrusion.y = point->y;
@@ -1911,25 +2141,25 @@ dwg_ent_insert_set_extrusion(dwg_ent_insert *insert, dwg_point_3d *point)
 }
 
 char
-dwg_ent_insert_get_has_attribs(dwg_ent_insert *insert)
+dwg_ent_insert_get_has_attribs(dwg_ent_insert *insert, int *error)
 {
     return insert->has_attribs;
 }
 
 void
-dwg_ent_insert_set_has_attribs(dwg_ent_insert *insert, char attribs)
+dwg_ent_insert_set_has_attribs(dwg_ent_insert *insert, char attribs, int *error)
 {
     insert->has_attribs = attribs;
 }
 
 long
-dwg_ent_insert_get_owned_obj_count(dwg_ent_insert *insert)
+dwg_ent_insert_get_owned_obj_count(dwg_ent_insert *insert, int *error)
 {
     return insert->owned_obj_count;
 }
 
 void
-dwg_ent_insert_set_owned_obj_count(dwg_ent_insert *insert, long count)
+dwg_ent_insert_set_owned_obj_count(dwg_ent_insert *insert, long count, int *error)
 {
     insert->owned_obj_count = count;
 }
@@ -1937,7 +2167,7 @@ dwg_ent_insert_set_owned_obj_count(dwg_ent_insert *insert, long count)
 //--------------------------------------------------------------------------------
 
 void
-dwg_ent_minsert_get_ins_pt(dwg_ent_minsert *minsert, dwg_point_3d *point)
+dwg_ent_minsert_get_ins_pt(dwg_ent_minsert *minsert, dwg_point_3d *point, int *error)
 {
     point->x = minsert->ins_pt.x;
     point->y = minsert->ins_pt.y;
@@ -1945,7 +2175,7 @@ dwg_ent_minsert_get_ins_pt(dwg_ent_minsert *minsert, dwg_point_3d *point)
 }
 
 void
-dwg_ent_minsert_set_ins_pt(dwg_ent_minsert *minsert, dwg_point_3d *point)
+dwg_ent_minsert_set_ins_pt(dwg_ent_minsert *minsert, dwg_point_3d *point, int *error)
 {
     minsert->ins_pt.x = point->x;
     minsert->ins_pt.y = point->y;
@@ -1953,19 +2183,19 @@ dwg_ent_minsert_set_ins_pt(dwg_ent_minsert *minsert, dwg_point_3d *point)
 }
 
 char 
-dwg_ent_minsert_get_scale_flag(dwg_ent_minsert *minsert)
+dwg_ent_minsert_get_scale_flag(dwg_ent_minsert *minsert, int *error)
 {
     return minsert->scale_flag;
 }
 
 void
-dwg_ent_minsert_set_scale_flag(dwg_ent_minsert *minsert, char  flags)
+dwg_ent_minsert_set_scale_flag(dwg_ent_minsert *minsert, char  flags, int *error)
 {
     minsert->scale_flag = flags;
 }
 
 void
-dwg_ent_minsert_get_scale(dwg_ent_minsert *minsert, dwg_point_3d *point)
+dwg_ent_minsert_get_scale(dwg_ent_minsert *minsert, dwg_point_3d *point, int *error)
 {
     point->x = minsert->scale.x;
     point->y = minsert->scale.y;
@@ -1973,7 +2203,7 @@ dwg_ent_minsert_get_scale(dwg_ent_minsert *minsert, dwg_point_3d *point)
 }
 
 void
-dwg_ent_minsert_set_scale(dwg_ent_minsert *minsert, dwg_point_3d *point)
+dwg_ent_minsert_set_scale(dwg_ent_minsert *minsert, dwg_point_3d *point, int *error)
 {
     minsert->scale.x = point->x;
     minsert->scale.y = point->y;
@@ -1981,19 +2211,19 @@ dwg_ent_minsert_set_scale(dwg_ent_minsert *minsert, dwg_point_3d *point)
 }
 
 double
-dwg_ent_minsert_get_rotation_angle(dwg_ent_minsert *minsert)
+dwg_ent_minsert_get_rotation_angle(dwg_ent_minsert *minsert, int *error)
 {
     return minsert->rotation_ang;
 }
 
 void
-dwg_ent_minsert_set_rotation_angle(dwg_ent_minsert *minsert, double rot_ang)
+dwg_ent_minsert_set_rotation_angle(dwg_ent_minsert *minsert, double rot_ang, int *error)
 {
     minsert->rotation_ang = rot_ang;
 }
 
 void
-dwg_ent_minsert_get_extrusion(dwg_ent_minsert *minsert, dwg_point_3d *point)
+dwg_ent_minsert_get_extrusion(dwg_ent_minsert *minsert, dwg_point_3d *point, int *error)
 {
     point->x = minsert->extrusion.x;
     point->y = minsert->extrusion.y;
@@ -2001,7 +2231,7 @@ dwg_ent_minsert_get_extrusion(dwg_ent_minsert *minsert, dwg_point_3d *point)
 }
 
 void
-dwg_ent_minsert_set_extrusion(dwg_ent_minsert *minsert, dwg_point_3d *point)
+dwg_ent_minsert_set_extrusion(dwg_ent_minsert *minsert, dwg_point_3d *point, int *error)
 {
     minsert->extrusion.x = point->x;
     minsert->extrusion.y = point->y;
@@ -2009,73 +2239,73 @@ dwg_ent_minsert_set_extrusion(dwg_ent_minsert *minsert, dwg_point_3d *point)
 }
 
 char 
-dwg_ent_minsert_get_has_attribs(dwg_ent_minsert *minsert)
+dwg_ent_minsert_get_has_attribs(dwg_ent_minsert *minsert, int *error)
 {
     return minsert->has_attribs;
 }
 
 void
-dwg_ent_minsert_set_has_attribs(dwg_ent_minsert *minsert, char  attribs)
+dwg_ent_minsert_set_has_attribs(dwg_ent_minsert *minsert, char  attribs, int *error)
 {
     minsert->has_attribs = attribs;
 }
 
 long
-dwg_ent_minsert_get_owned_obj_count(dwg_ent_minsert *minsert)
+dwg_ent_minsert_get_owned_obj_count(dwg_ent_minsert *minsert, int *error)
 {
     return minsert->owned_obj_count;
 }
 
 void
-dwg_ent_minsert_set_owned_obj_count(dwg_ent_minsert *minsert, long count)
+dwg_ent_minsert_set_owned_obj_count(dwg_ent_minsert *minsert, long count, int *error)
 {
     minsert->owned_obj_count = count;
 }
 
 long
-dwg_ent_minsert_get_numcols(dwg_ent_minsert *minsert)
+dwg_ent_minsert_get_numcols(dwg_ent_minsert *minsert, int *error)
 {
     return minsert->numcols;
 }
 
 void
-dwg_ent_minsert_set_numcols(dwg_ent_minsert *minsert, long cols)
+dwg_ent_minsert_set_numcols(dwg_ent_minsert *minsert, long cols, int *error)
 {
     minsert->numcols = cols;
 }
 
 long
-dwg_ent_minsert_get_numrows(dwg_ent_minsert *minsert)
+dwg_ent_minsert_get_numrows(dwg_ent_minsert *minsert, int *error)
 {
     return minsert->numrows;
 }
 
 void
-dwg_ent_minsert_set_numrows(dwg_ent_minsert *minsert, long cols)
+dwg_ent_minsert_set_numrows(dwg_ent_minsert *minsert, long cols, int *error)
 {
     minsert->numrows = cols;
 }
 
 double
-dwg_ent_minsert_get_col_spacing(dwg_ent_minsert *minsert)
+dwg_ent_minsert_get_col_spacing(dwg_ent_minsert *minsert, int *error)
 {
     return minsert->col_spacing;
 }
 
 void
-dwg_ent_minsert_set_col_spacing(dwg_ent_minsert *minsert, double spacing)
+dwg_ent_minsert_set_col_spacing(dwg_ent_minsert *minsert, double spacing, int *error)
 {
     minsert->col_spacing = spacing;
 }
 
 double
-dwg_ent_minsert_get_row_spacing(dwg_ent_minsert *minsert)
+dwg_ent_minsert_get_row_spacing(dwg_ent_minsert *minsert, int *error)
 {
     return minsert->row_spacing;
 }
 
 void
-dwg_ent_minsert_set_row_spacing(dwg_ent_minsert *minsert, double spacing)
+dwg_ent_minsert_set_row_spacing(dwg_ent_minsert *minsert, double spacing, int *error)
 {
     minsert->row_spacing = spacing;
 }
@@ -2083,72 +2313,72 @@ dwg_ent_minsert_set_row_spacing(dwg_ent_minsert *minsert, double spacing)
 //--------------------------------------------------------------------------------
 
 char *
-dwg_obj_mlinstyle_get_name(dwg_obj_mlinestyle *mlinestyle)
+dwg_obj_mlinstyle_get_name(dwg_obj_mlinestyle *mlinestyle, int *error)
 {
     return mlinestyle->name;
 }
 
 void
-dwg_obj_mlinestyle_set_name(dwg_obj_mlinestyle *mlinestyle, char * name)
+dwg_obj_mlinestyle_set_name(dwg_obj_mlinestyle *mlinestyle, char * name, int *error)
 {
     mlinestyle->name = name;
 }
 
 char *
-dwg_obj_mlinestyle_get_desc(dwg_obj_mlinestyle *mlinestyle)
+dwg_obj_mlinestyle_get_desc(dwg_obj_mlinestyle *mlinestyle, int *error)
 {
     return mlinestyle->desc;
 }
 
 void
-dwg_obj_mlinestyle_set_desc(dwg_obj_mlinestyle *mlinestyle, char * desc)
+dwg_obj_mlinestyle_set_desc(dwg_obj_mlinestyle *mlinestyle, char * desc, int *error)
 {
     mlinestyle->desc = desc;
 }
 
 int
-dwg_obj_mlinestyle_get_flags(dwg_obj_mlinestyle *mlinestyle)
+dwg_obj_mlinestyle_get_flags(dwg_obj_mlinestyle *mlinestyle, int *error)
 {
     return mlinestyle->flags;
 }
 
 void
-dwg_obj_mlinestyle_set_flags(dwg_obj_mlinestyle *mlinestyle, int flags)
+dwg_obj_mlinestyle_set_flags(dwg_obj_mlinestyle *mlinestyle, int flags, int *error)
 {
     mlinestyle->flags = flags;
 }
 
-double dwg_obj_mlinestyle_get_start_angle(dwg_obj_mlinestyle *mlinestyle)
+double dwg_obj_mlinestyle_get_start_angle(dwg_obj_mlinestyle *mlinestyle, int *error)
 {
     return mlinestyle->startang;
 }
 
 void
-dwg_obj_mlinestyle_set_start_angle(dwg_obj_mlinestyle *mlinestyle, double startang)
+dwg_obj_mlinestyle_set_start_angle(dwg_obj_mlinestyle *mlinestyle, double startang, int *error)
 {
     mlinestyle->startang = startang;
 }
 
 double
-dwg_obj_mlinestyle_get_end_angle(dwg_obj_mlinestyle *mlinestyle)
+dwg_obj_mlinestyle_get_end_angle(dwg_obj_mlinestyle *mlinestyle, int *error)
 {
     return mlinestyle->endang;
 }
 
 void
-dwg_obj_mlinestyle_set_end_angle(dwg_obj_mlinestyle *mlinestyle, double endang)
+dwg_obj_mlinestyle_set_end_angle(dwg_obj_mlinestyle *mlinestyle, double endang, int *error)
 {
     mlinestyle->endang = endang;
 }
 
 char
-dwg_obj_mlinestyle_get_linesinstyle(dwg_obj_mlinestyle *mlinestyle)
+dwg_obj_mlinestyle_get_linesinstyle(dwg_obj_mlinestyle *mlinestyle, int *error)
 {
     return mlinestyle->linesinstyle;
 }
 
 void
-dwg_obj_mlinestyle_set_linesinstyle(dwg_obj_mlinestyle *mlinestyle, char linesinstyle)
+dwg_obj_mlinestyle_set_linesinstyle(dwg_obj_mlinestyle *mlinestyle, char linesinstyle, int *error)
 {
     mlinestyle->linesinstyle = linesinstyle;
 }
@@ -2160,7 +2390,7 @@ argument passed to function.
 Usage :- dwg_get_block_header(dwg);
 */
 dwg_obj_block_header *
-dwg_get_block_header(Dwg_Data *dwg)
+dwg_get_block_header(Dwg_Data *dwg, int *error)
 {
     Dwg_Object *obj;
     Dwg_Object_BLOCK_HEADER *blk;
@@ -2178,11 +2408,49 @@ dwg_get_block_header(Dwg_Data *dwg)
 
 //-------------------------------------------------------------------------------
 
+int
+dwg_obj_appid_control_get_num_entries(dwg_obj_appid_control *appid, int *error)
+{
+    return appid->num_entries;
+}
 
+void
+dwg_obj_appid_control_set_num_entries(dwg_obj_appid_control *appid, int entries, int *error)
+{
+    appid->num_entries = entries;
+}
 
 //-------------------------------------------------------------------------------
 
+char *
+dwg_obj_appid_get_entry_name(dwg_obj_appid *appid, int *error)
+{
+    return appid->entry_name;
+}
 
+void
+dwg_obj_appid_set_entry_name(dwg_obj_appid *appid, char * entry_name, int *error)
+{
+    appid->entry_name = entry_name;
+}
+
+char
+dwg_obj_appid_get_flag(dwg_obj_appid *appid, int *error)
+{
+    return appid->_64_flag;
+}
+
+void
+dwg_obj_appid_set_flag(dwg_obj_appid *appid, char flag, int *error)
+{
+    appid->_64_flag = flag;
+}
+
+dwg_obj_appid_control
+dwg_obj_get_appid_control(dwg_obj_appid *appid, int *error)
+{
+    appid->app_control->obj->tio.object->tio.APPID_CONTROL;
+}
 
 //-------------------------------------------------------------------------------
 
@@ -2201,7 +2469,7 @@ dwg_obj_block_control *blc;
 blc = dwg_block_header_get_block_control(hdr);
 */
 dwg_obj_block_control *
-dwg_block_header_get_block_control(dwg_obj_block_header* block_header)
+dwg_block_header_get_block_control(dwg_obj_block_header* block_header, int *error)
 {
     return block_header->block_control_handle->obj->tio.object->tio.BLOCK_CONTROL;
 }
@@ -2212,7 +2480,7 @@ dwg_block_header_get_block_control(dwg_obj_block_header* block_header)
 Usage :- char * layer_name = dwg_obj_layer_get_name(layer);
 */
 char *
-dwg_obj_layer_get_name(dwg_obj_layer *layer)
+dwg_obj_layer_get_name(dwg_obj_layer *layer, int *error)
 {
     return layer->entry_name;
 }
@@ -2223,7 +2491,7 @@ dwg_obj_layer_get_name(dwg_obj_layer *layer)
 Usage :- char * block_name = dwg_obj_block_header_get_name(hdr);
 */
 char *
-dwg_obj_block_header_get_name(dwg_obj_block_header *hdr)
+dwg_obj_block_header_get_name(dwg_obj_block_header *hdr, int *error)
 {
     return hdr->entry_name;
 }
