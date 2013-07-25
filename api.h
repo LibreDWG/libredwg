@@ -70,25 +70,26 @@ dwg_object_to_##token(Dwg_Object *obj) \
 }
 
 //------------------------------------------------------------------------------
-typedef struct _dwg_entity_CIRCLE            dwg_ent_circle;
-typedef struct _dwg_entity_LINE              dwg_ent_line;
-typedef struct _dwg_entity_ARC               dwg_ent_arc;
-typedef struct _dwg_entity_ELLIPSE           dwg_ent_ellipse;
-typedef struct _dwg_entity_TEXT              dwg_ent_text;
-typedef struct _dwg_entity_POINT             dwg_ent_point;
-typedef struct _dwg_entity_ATTRIB            dwg_ent_attrib;
-typedef struct _dwg_entity_ATTDEF            dwg_ent_attdef;
-typedef struct _dwg_entity_SOLID             dwg_ent_solid;
-typedef struct _dwg_entity_TRACE             dwg_ent_trace;
-typedef struct _dwg_entity_INSERT            dwg_ent_insert;
-typedef struct _dwg_entity_MINSERT           dwg_ent_minsert;
-typedef struct _dwg_entity_BLOCK             dwg_ent_block;
-typedef struct _dwg_entity_RAY               dwg_ent_ray, 
-                                             dwg_ent_xline;
-typedef struct _dwg_entity_VERTEX_3D         dwg_ent_vertex_3d, 
-                                             dwg_ent_vertex_mesh,
-                                             dwg_ent_vertex_pface;
-typedef struct _dwg_entity_VERTEX_2D         dwg_ent_vertex_2d;
+typedef struct _dwg_entity_CIRCLE                 dwg_ent_circle;
+typedef struct _dwg_entity_LINE                   dwg_ent_line;
+typedef struct _dwg_entity_ARC                    dwg_ent_arc;
+typedef struct _dwg_entity_ELLIPSE                dwg_ent_ellipse;
+typedef struct _dwg_entity_TEXT                   dwg_ent_text;
+typedef struct _dwg_entity_POINT                  dwg_ent_point;
+typedef struct _dwg_entity_ATTRIB                 dwg_ent_attrib;
+typedef struct _dwg_entity_ATTDEF                 dwg_ent_attdef;
+typedef struct _dwg_entity_SOLID                  dwg_ent_solid;
+typedef struct _dwg_entity_TRACE                  dwg_ent_trace;
+typedef struct _dwg_entity_INSERT                 dwg_ent_insert;
+typedef struct _dwg_entity_MINSERT                dwg_ent_minsert;
+typedef struct _dwg_entity_BLOCK                  dwg_ent_block;
+typedef struct _dwg_entity_RAY                    dwg_ent_ray, 
+                                                  dwg_ent_xline;
+typedef struct _dwg_entity_VERTEX_3D              dwg_ent_vertex_3d, 
+                                                  dwg_ent_vertex_mesh,
+                                                  dwg_ent_vertex_pface;
+typedef struct _dwg_entity_VERTEX_2D              dwg_ent_vertex_2d;
+typedef struct _dwg_entity_DIMENSION_ORDINATE     dwg_ent_dim_ordinate;
 
 //-------------------------------------------------------------------------------
 
@@ -543,7 +544,25 @@ dwg_obj_appid_control dwg_obj_appid_get_appid_control(dwg_obj_appid *appid, int 
 
 //--------------------------------------------------------------------------------
 
+void dwg_ent_dim_ordinate_set_extrusion(dwg_ent_dim_ordinate *ord, dwg_point_3d *point, int *error);
 
+void dwg_ent_dim_ordinate_get_extrusion(dwg_ent_dim_ordinate *ord, dwg_point_3d *point, int *error);
+
+void dwg_ent_dim_ordinate_set_ins_scale(dwg_ent_dim_ordinate *ord, dwg_point_3d *point, int *error);
+
+void dwg_ent_dim_ordinate_get_ins_scale(dwg_ent_dim_ordinate *ord, dwg_point_3d *point, int *error);
+
+void dwg_ent_dim_ordinate_set_10_pt(dwg_ent_dim_ordinate *ord, dwg_point_3d *point, int *error);
+
+void dwg_ent_dim_ordinate_get_10_pt(dwg_ent_dim_ordinate *ord, dwg_point_3d *point, int *error);
+
+void dwg_ent_dim_ordinate_set_13_pt(dwg_ent_dim_ordinate *ord, dwg_point_3d *point, int *error);
+
+void dwg_ent_dim_ordinate_get_13_pt(dwg_ent_dim_ordinate *ord, dwg_point_3d *point, int *error);
+
+void dwg_ent_dim_ordinate_set_14_pt(dwg_ent_dim_ordinate *ord, dwg_point_3d *point, int *error);
+
+void dwg_ent_dim_ordinate_get_14_pt(dwg_ent_dim_ordinate *ord, dwg_point_3d *point, int *error);
 
 //--------------------------------------------------------------------------------
 

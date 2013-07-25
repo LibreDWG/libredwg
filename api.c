@@ -802,6 +802,7 @@ dwg_ent_ellipse_get_center(dwg_ent_ellipse *ellipse, dwg_point_3d *point, int *e
 {
     if (ellipse != 0)
         {
+            *error = 0;
             point->x = ellipse->center.x;
             point->y = ellipse->center.y;
             point->z = ellipse->center.z;
@@ -823,6 +824,7 @@ dwg_ent_ellipse_set_center(dwg_ent_ellipse *ellipse, dwg_point_3d *point, int *e
 {
     if (ellipse != 0)
         {
+            *error = 0;
             ellipse->center.x = point->x;
             ellipse->center.y = point->y;
             ellipse->center.z = point->z;
@@ -844,6 +846,7 @@ dwg_ent_ellipse_get_sm_axis(dwg_ent_ellipse *ellipse, dwg_point_3d *point, int *
 {
     if (ellipse != 0)
         {
+            *error = 0;
             point->x = ellipse->sm_axis.x;
             point->y = ellipse->sm_axis.y;
             point->z = ellipse->sm_axis.z;
@@ -865,6 +868,7 @@ dwg_ent_ellipse_set_sm_axis(dwg_ent_ellipse *ellipse, dwg_point_3d *point, int *
 {
     if (ellipse != 0)
         {
+            *error = 0;
             ellipse->sm_axis.x = point->x;
             ellipse->sm_axis.y = point->y;
             ellipse->sm_axis.z = point->z;
@@ -886,6 +890,7 @@ dwg_ent_ellipse_get_extrusion(dwg_ent_ellipse *ellipse, dwg_point_3d *vector, in
 {
     if (ellipse != 0)
         {
+            *error = 0;
             vector->x = ellipse->extrusion.x;
             vector->y = ellipse->extrusion.y;
             vector->z = ellipse->extrusion.z;
@@ -907,6 +912,7 @@ dwg_ent_ellipse_set_extrusion(dwg_ent_ellipse *ellipse, dwg_point_3d *vector, in
 {
     if (ellipse != 0)
         {
+            *error = 0;
             ellipse->extrusion.x = vector->x;
             ellipse->extrusion.y = vector->y;
             ellipse->extrusion.z = vector->z;
@@ -925,6 +931,7 @@ dwg_ent_ellipse_get_axis_ratio(dwg_ent_ellipse *ellipse, int *error)
 {
     if (ellipse != 0)
         {
+            *error = 0;
             return ellipse->axis_ratio;
         }
     else
@@ -942,6 +949,7 @@ dwg_ent_ellipse_set_axis_ratio(dwg_ent_ellipse *ellipse, double ratio, int *erro
 {
     if (ellipse != 0)
         {
+            *error = 0;
             ellipse->axis_ratio = ratio;
         }
     else
@@ -958,6 +966,7 @@ dwg_ent_ellipse_get_start_angle(dwg_ent_ellipse *ellipse, int *error)
 {
     if (ellipse != 0)
         {
+            *error = 0;
             return ellipse->start_angle;
         }
     else
@@ -975,6 +984,7 @@ dwg_ent_ellipse_set_start_angle(dwg_ent_ellipse *ellipse, double start_angle, in
 {
     if (ellipse != 0)
         {
+            *error = 0;
             ellipse->start_angle = start_angle;
         }
     else
@@ -991,6 +1001,7 @@ dwg_ent_ellipse_get_end_angle(dwg_ent_ellipse *ellipse, int *error)
 {
     if (ellipse != 0)
         {
+            *error = 0;
             return ellipse->end_angle;
         }
     else
@@ -1008,6 +1019,7 @@ dwg_ent_ellipse_set_end_angle(dwg_ent_ellipse *ellipse, double end_angle, int *e
 {
     if (ellipse != 0)
         {
+            *error = 0;
             ellipse->end_angle = end_angle;
         }
     else
@@ -1028,6 +1040,7 @@ dwg_ent_text_set_text(dwg_ent_text *text, char * text_value, int *error)
 {
     if (text != 0)
         {
+            *error = 0;
             text->text_value = text_value;
         }
     else
@@ -1044,6 +1057,7 @@ dwg_ent_text_get_text(dwg_ent_text *text, int *error)
 {
     if (text != 0)
         {
+            *error = 0;
             return text->text_value;
         }
     else
@@ -1062,6 +1076,7 @@ dwg_ent_text_get_insertion_point(dwg_ent_text *text, dwg_point_2d *point, int *e
 {
     if (text != 0)
         {
+            *error = 0;
             point->x = text->insertion_pt.x;
             point->y = text->insertion_pt.y;
         }
@@ -1080,6 +1095,7 @@ dwg_ent_text_set_insertion_point(dwg_ent_text *text, dwg_point_2d *point, int *e
 {
     if (text != 0)
         {
+            *error = 0;
             text->insertion_pt.x = point->x;
             text->insertion_pt.y = point->y;
         }
@@ -1097,6 +1113,7 @@ dwg_ent_text_get_height(dwg_ent_text *text, int *error)
 {
     if (text != 0)
         {
+            *error = 0;
             return text->height;
         }
     else
@@ -1115,6 +1132,7 @@ dwg_ent_text_set_height(dwg_ent_text *text, double height, int *error)
 {
     if (text != 0)
         {
+            *error = 0;
             text->height = height;
         }
     else
@@ -1134,6 +1152,7 @@ dwg_ent_text_get_extrusion(dwg_ent_text *text, dwg_point_3d *vector, int *error)
 {
     if (text != 0)
         {
+            *error = 0;
             vector->x = text->extrusion.x;
             vector->y = text->extrusion.y;
             vector->z = text->extrusion.z;
@@ -1155,6 +1174,7 @@ dwg_ent_text_set_extrusion(dwg_ent_text *text, dwg_point_3d *vector, int *error)
 {
     if (text != 0)
         {
+            *error = 0;
             text->extrusion.x = vector->x;
             text->extrusion.y = vector->y;
             text->extrusion.z = vector->z;
@@ -1173,6 +1193,7 @@ dwg_ent_text_get_thickness(dwg_ent_text *text, int *error)
 {
     if (text != 0)
         {
+            *error = 0;
             return text->thickness;
         }
     else
@@ -1190,6 +1211,7 @@ dwg_ent_text_set_thickness(dwg_ent_text *text, double thickness, int *error)
 {
     if (text != 0)
         {
+            *error = 0;
             text->thickness = thickness;
         }
     else
@@ -1206,6 +1228,7 @@ dwg_ent_text_get_rot_angle(dwg_ent_text *text, int *error)
 {
     if (text != 0)
         {
+            *error = 0;
             return text->rotation_ang;
         }
     else
@@ -1223,6 +1246,7 @@ dwg_ent_text_set_rot_angle(dwg_ent_text *text, double angle, int *error)
 {
     if (text != 0)
         {
+            *error = 0;
             text->rotation_ang = angle;
         }
     else
@@ -1239,6 +1263,7 @@ dwg_ent_text_get_vert_align(dwg_ent_text *text, int *error)
 {
     if (text != 0)
         {
+            *error = 0;
             return text->vert_alignment;
         }
     else
@@ -1256,6 +1281,7 @@ dwg_ent_text_set_vert_align(dwg_ent_text *text, double alignment, int *error)
 {
     if (text != 0)
         {
+            *error = 0;
             text->vert_alignment = alignment;
         }
     else
@@ -1272,6 +1298,7 @@ dwg_ent_text_get_horiz_align(dwg_ent_text *text, int *error)
 {
     if (text != 0)
         {
+            *error = 0;
             return text->horiz_alignment;
         }
     else
@@ -1289,6 +1316,7 @@ dwg_ent_text_set_horiz_align(dwg_ent_text *text, double alignment, int *error)
 {
     if (text != 0)
         {
+            *error = 0;
             text->horiz_alignment = alignment;
         }
     else
@@ -1309,6 +1337,7 @@ dwg_ent_attrib_set_text(dwg_ent_attrib *attrib, char * text_value, int *error)
 {
     if (attrib != 0)
         {
+            *error = 0;
             attrib->text_value = text_value;
         }
     else
@@ -1325,6 +1354,7 @@ dwg_ent_attrib_get_text(dwg_ent_attrib *attrib, int *error)
 {
     if (attrib != 0)
         {
+            *error = 0;
             return attrib->text_value;
         }
     else
@@ -1343,6 +1373,7 @@ dwg_ent_attrib_get_insertion_point(dwg_ent_attrib *attrib, dwg_point_2d *point, 
 {
     if (attrib != 0)
         {
+            *error = 0;
             point->x = attrib->insertion_pt.x;
             point->y = attrib->insertion_pt.y;
         }
@@ -1361,6 +1392,7 @@ dwg_ent_attrib_set_insertion_point(dwg_ent_attrib *attrib, dwg_point_2d *point, 
 {
     if (attrib != 0)
         {
+            *error = 0;
             attrib->insertion_pt.x = point->x;
             attrib->insertion_pt.y = point->y;
         }
@@ -1378,6 +1410,7 @@ dwg_ent_attrib_get_height(dwg_ent_attrib *attrib, int *error)
 {
     if (attrib != 0)
         {
+            *error = 0;
             return attrib->height;
         }
     else
@@ -1396,6 +1429,7 @@ dwg_ent_attrib_set_height(dwg_ent_attrib *attrib, double height, int *error)
 {
     if (attrib != 0)
         {
+            *error = 0;
             attrib->height = height;
         }
     else
@@ -1415,6 +1449,7 @@ dwg_ent_attrib_get_extrusion(dwg_ent_attrib *attrib, dwg_point_3d *vector, int *
 {
     if (attrib != 0)
         {
+            *error = 0;
             vector->x = attrib->extrusion.x;
             vector->y = attrib->extrusion.y;
             vector->z = attrib->extrusion.z;
@@ -1436,6 +1471,7 @@ dwg_ent_attrib_set_extrusion(dwg_ent_attrib *attrib, dwg_point_3d *vector, int *
 {
     if (attrib != 0)
         {
+            *error = 0;
             attrib->extrusion.x = vector->x;
             attrib->extrusion.y = vector->y;
             attrib->extrusion.z = vector->z;
@@ -1454,6 +1490,7 @@ dwg_ent_attrib_get_thickness(dwg_ent_attrib *attrib, int *error)
 {
     if (attrib != 0)
         {
+            *error = 0;
             return attrib->thickness;
         }
     else
@@ -1471,6 +1508,7 @@ dwg_ent_attrib_set_thickness(dwg_ent_attrib *attrib, double thickness, int *erro
 {
     if (attrib != 0)
         {
+            *error = 0;
             attrib->thickness = thickness;
         }
     else
@@ -1487,6 +1525,7 @@ dwg_ent_attrib_get_rot_angle(dwg_ent_attrib *attrib, int *error)
 {
     if (attrib != 0)
         {
+            *error = 0;
             return attrib->rotation_ang;
         }
     else
@@ -1504,6 +1543,7 @@ dwg_ent_attrib_set_rot_angle(dwg_ent_attrib *attrib, double angle, int *error)
 {
     if (attrib != 0)
         {
+            *error = 0;
             attrib->rotation_ang = angle;
         }
     else
@@ -1520,6 +1560,7 @@ dwg_ent_attrib_get_vert_align(dwg_ent_attrib *attrib, int *error)
 {
     if (attrib != 0)
         {
+            *error = 0;
             return attrib->vert_alignment;
         }
     else
@@ -1537,6 +1578,7 @@ dwg_ent_attrib_set_vert_align(dwg_ent_attrib *attrib, double alignment, int *err
 {
     if (attrib != 0)
         {
+            *error = 0;
             attrib->vert_alignment = alignment;
         }
     else
@@ -1553,6 +1595,7 @@ dwg_ent_attrib_get_horiz_align(dwg_ent_attrib *attrib, int *error)
 {
     if (attrib != 0)
         {
+            *error = 0;
             return attrib->horiz_alignment;
         }
     else
@@ -1570,6 +1613,7 @@ dwg_ent_attrib_set_horiz_align(dwg_ent_attrib *attrib, double alignment, int *er
 {
     if (attrib != 0)
         {
+            *error = 0;
             attrib->horiz_alignment = alignment;
         }
     else
@@ -1590,6 +1634,7 @@ dwg_ent_attdef_set_text(dwg_ent_attdef *attdef, char * default_value, int *error
 {
     if (attdef != 0)
         {
+            *error = 0;
             attdef->default_value = default_value;
         }
     else
@@ -1606,6 +1651,7 @@ dwg_ent_attdef_get_text(dwg_ent_attdef *attdef, int *error)
 {
     if (attdef != 0)
         {
+            *error = 0;
             return attdef->default_value;
         }
     else
@@ -1624,6 +1670,7 @@ dwg_ent_attdef_get_insertion_point(dwg_ent_attdef *attdef, dwg_point_2d *point, 
 {
     if (attdef != 0)
         {
+            *error = 0;
             point->x = attdef->insertion_pt.x;
             point->y = attdef->insertion_pt.y;
         }
@@ -1642,6 +1689,7 @@ dwg_ent_attdef_set_insertion_point(dwg_ent_attdef *attdef, dwg_point_2d *point, 
 {
     if (attdef != 0)
         {
+            *error = 0;
             attdef->insertion_pt.x = point->x;
             attdef->insertion_pt.y = point->y;
         }
@@ -1659,6 +1707,7 @@ dwg_ent_attdef_get_height(dwg_ent_attdef *attdef, int *error)
 {
     if (attdef != 0)
         {
+            *error = 0;
             return attdef->height;
         }
     else
@@ -1677,6 +1726,7 @@ dwg_ent_attdef_set_height(dwg_ent_attdef *attdef, double height, int *error)
 {
     if (attdef != 0)
         {
+            *error = 0;
             attdef->height = height;
         }
     else
@@ -1696,6 +1746,7 @@ dwg_ent_attdef_get_extrusion(dwg_ent_attdef *attdef, dwg_point_3d *vector, int *
 {
     if (attdef != 0)
         {
+            *error = 0;
             vector->x = attdef->extrusion.x;
             vector->y = attdef->extrusion.y;
             vector->z = attdef->extrusion.z;
@@ -1717,6 +1768,7 @@ dwg_ent_attdef_set_extrusion(dwg_ent_attdef *attdef, dwg_point_3d *vector, int *
 {
     if (attdef != 0)
         {
+            *error = 0;
             attdef->extrusion.x = vector->x;
             attdef->extrusion.y = vector->y;
             attdef->extrusion.z = vector->z;
@@ -1735,6 +1787,7 @@ dwg_ent_attdef_get_thickness(dwg_ent_attdef *attdef, int *error)
 {
     if (attdef != 0)
         {
+            *error = 0;
             return attdef->thickness;
         }
     else
@@ -1752,6 +1805,7 @@ dwg_ent_attdef_set_thickness(dwg_ent_attdef *attdef, double thickness, int *erro
 {
     if (attdef != 0)
         {
+            *error = 0;
             attdef->thickness = thickness;
         }
     else
@@ -1768,6 +1822,7 @@ dwg_ent_attdef_get_rot_angle(dwg_ent_attdef *attdef, int *error)
 {
     if (attdef != 0)
         {
+            *error = 0;
             return attdef->rotation_ang;
         }
     else
@@ -1785,6 +1840,7 @@ dwg_ent_attdef_set_rot_angle(dwg_ent_attdef *attdef, double angle, int *error)
 {
     if (attdef != 0)
         {
+            *error = 0;
             attdef->rotation_ang = angle;
         }
     else
@@ -1801,6 +1857,7 @@ dwg_ent_attdef_get_vert_align(dwg_ent_attdef *attdef, int *error)
 {
     if (attdef != 0)
         {
+            *error = 0;
             return attdef->vert_alignment;
         }
     else
@@ -1818,6 +1875,7 @@ dwg_ent_attdef_set_vert_align(dwg_ent_attdef *attdef, double alignment, int *err
 {
     if (attdef != 0)
         {
+            *error = 0;
             attdef->vert_alignment = alignment;
         }
     else
@@ -1834,6 +1892,7 @@ dwg_ent_attdef_get_horiz_align(dwg_ent_attdef *attdef, int *error)
 {
     if (attdef != 0)
         {
+            *error = 0;
             return attdef->horiz_alignment;
         }
     else
@@ -1851,6 +1910,7 @@ dwg_ent_attdef_set_horiz_align(dwg_ent_attdef *attdef, double alignment, int *er
 {
     if (attdef != 0)
         {
+            *error = 0;
             attdef->horiz_alignment = alignment;
         }
     else
@@ -1872,6 +1932,7 @@ dwg_ent_point_set_point(dwg_ent_point *point, dwg_point_3d *retpoint, int *error
 {    
     if (point != 0)
         {
+            *error = 0;
             point->x = retpoint->x;
             point->y = retpoint->y;
             point->z = retpoint->z;
@@ -1893,6 +1954,7 @@ dwg_ent_point_get_point(dwg_ent_point *point, dwg_point_3d *retpoint, int *error
 {    
     if (point != 0)
         {
+            *error = 0;
             retpoint->x = point->x;
             retpoint->y = point->y;
             retpoint->z = point->z;
@@ -1911,6 +1973,7 @@ dwg_ent_point_get_thickness(dwg_ent_point *point, int *error)
 {    
     if (point != 0)
         {
+            *error = 0;
             return point->thickness;
         }
     else
@@ -1928,6 +1991,7 @@ dwg_ent_point_set_thickness(dwg_ent_point *point, double thickness, int *error)
 {    
     if (point != 0)
         {
+            *error = 0;
             point->thickness = thickness;
         }
     else
@@ -1947,6 +2011,7 @@ dwg_ent_point_set_extrusion(dwg_ent_point *point, dwg_point_3d *retpoint, int *e
 {    
     if (point != 0)
         {
+            *error = 0;
             point->extrusion.x = retpoint->x;
             point->extrusion.y = retpoint->y;
             point->extrusion.z = retpoint->z;
@@ -1968,6 +2033,7 @@ dwg_ent_point_get_extrusion(dwg_ent_point *point, dwg_point_3d *retpoint, int *e
 {    
     if (point != 0)
         {
+            *error = 0;
             retpoint->x = point->extrusion.x;
             retpoint->y = point->extrusion.y;
             retpoint->z = point->extrusion.z;
@@ -1988,6 +2054,7 @@ dwg_ent_solid_get_thickness(dwg_ent_solid *solid, int *error)
 {    
     if (solid != 0)
         {
+            *error = 0;
             return solid->thickness;
         }
     else
@@ -2006,6 +2073,7 @@ dwg_ent_solid_set_thickness(dwg_ent_solid *solid, double thickness, int *error)
 {    
     if (solid != 0)
         {
+            *error = 0;
             solid->thickness = thickness;
         }
     else
@@ -2022,6 +2090,7 @@ dwg_ent_solid_get_elevation(dwg_ent_solid *solid, int *error)
 {    
     if (solid != 0)
         {
+            *error = 0;
             return solid->elevation;
         }
     else
@@ -2040,6 +2109,7 @@ dwg_ent_solid_set_elevation(dwg_ent_solid *solid, double elevation, int *error)
 {    
     if (solid != 0)
         {
+            *error = 0;
             solid->elevation = elevation;
         }
     else
@@ -2059,6 +2129,7 @@ dwg_ent_solid_get_corner1(dwg_ent_solid *solid, dwg_point_2d *point, int *error)
 {    
     if (solid != 0)
         {
+            *error = 0;
             point->x = solid->corner1.x;
             point->y = solid->corner1.y;
         }
@@ -2079,6 +2150,7 @@ dwg_ent_solid_set_corner1(dwg_ent_solid *solid, dwg_point_2d *point, int *error)
 {    
     if (solid != 0)
         {
+            *error = 0;
             solid->corner1.x = point->x;
             solid->corner1.y = point->y;
         }
@@ -2099,6 +2171,7 @@ dwg_ent_solid_get_corner2(dwg_ent_solid *solid, dwg_point_2d *point, int *error)
 {    
     if (solid != 0)
         {
+            *error = 0;
             point->x = solid->corner2.x;
             point->y = solid->corner2.y;
         }
@@ -2119,6 +2192,7 @@ dwg_ent_solid_set_corner2(dwg_ent_solid *solid, dwg_point_2d *point, int *error)
 {    
     if (solid != 0)
         {
+            *error = 0;
             solid->corner2.x = point->x;
             solid->corner2.y = point->y;
         }
@@ -2139,6 +2213,7 @@ dwg_ent_solid_get_corner3(dwg_ent_solid *solid, dwg_point_2d *point, int *error)
 {    
     if (solid != 0)
         {
+            *error = 0;
             point->x = solid->corner3.x;
             point->y = solid->corner3.y;
         }
@@ -2159,6 +2234,7 @@ dwg_ent_solid_set_corner3(dwg_ent_solid *solid, dwg_point_2d *point, int *error)
 {    
     if (solid != 0)
         {
+            *error = 0;
             solid->corner3.x = point->x;
             solid->corner3.y = point->y;
         }
@@ -2179,6 +2255,7 @@ dwg_ent_solid_get_corner4(dwg_ent_solid *solid, dwg_point_2d *point, int *error)
 {    
     if (solid != 0)
         {
+            *error = 0;
             point->x = solid->corner4.x;
             point->y = solid->corner4.y;
         }
@@ -2199,6 +2276,7 @@ dwg_ent_solid_set_corner4(dwg_ent_solid *solid, dwg_point_2d *point, int *error)
 {    
     if (solid != 0)
         {
+            *error = 0;
             solid->corner4.x = point->x;
             solid->corner4.y = point->y;
         }
@@ -2219,6 +2297,7 @@ dwg_ent_solid_get_extrusion(dwg_ent_solid *solid, dwg_point_3d *vector, int *err
 {    
     if (solid != 0)
         {
+            *error = 0;
             vector->x = solid->extrusion.x;
             vector->y = solid->extrusion.y;
             vector->z = solid->extrusion.z;
@@ -2240,6 +2319,7 @@ dwg_ent_solid_set_extrusion(dwg_ent_solid *solid, dwg_point_3d *vector, int *err
 {    
     if (solid != 0)
         {
+            *error = 0;
             solid->extrusion.x = vector->x;
             solid->extrusion.y = vector->y;
             solid->extrusion.z = vector->z;
@@ -2260,6 +2340,7 @@ dwg_ent_block_set_name(dwg_ent_block *block, char * name, int *error)
 {    
     if (block != 0)
         {
+            *error = 0;
             block->name = name;
         }
     else
@@ -2276,6 +2357,7 @@ dwg_ent_block_get_name(dwg_ent_block *block, int *error)
 {    
     if (block != 0)
         {
+            *error = 0;
             return block->name;
         }
     else
@@ -2291,6 +2373,7 @@ dwg_ent_ray_get_point(dwg_ent_ray *ray, dwg_point_3d *point, int *error)
 {    
     if (ray != 0)
         {
+            *error = 0;
             point->x = ray->point.x;
             point->y = ray->point.y;
             point->z = ray->point.z;
@@ -2306,6 +2389,7 @@ dwg_ent_ray_set_point(dwg_ent_ray *ray, dwg_point_3d *point, int *error)
 {    
     if (ray != 0)
         {
+            *error = 0;
             ray->point.x = point->x;
             ray->point.y = point->y;
             ray->point.z = point->z;
@@ -2321,6 +2405,7 @@ dwg_ent_ray_get_vector(dwg_ent_ray *ray, dwg_point_3d *vector, int *error)
 {    
     if (ray != 0)
         {
+            *error = 0;
             vector->x = ray->vector.x;
             vector->y = ray->vector.y;
             vector->z = ray->vector.z;
@@ -2336,6 +2421,7 @@ dwg_ent_ray_set_vector(dwg_ent_ray *ray, dwg_point_3d *vector, int *error)
 {    
     if (ray != 0)
         {
+            *error = 0;
             ray->vector.x = vector->x;
             ray->vector.y = vector->y;
             ray->vector.z = vector->z;
@@ -2353,6 +2439,7 @@ dwg_ent_xline_get_point(dwg_ent_xline *xline, dwg_point_3d *point, int *error)
 {    
     if (xline != 0)
         {
+            *error = 0;
             point->x = xline->point.x;
             point->y = xline->point.y;
             point->z = xline->point.z;
@@ -2368,6 +2455,7 @@ dwg_ent_xline_set_point(dwg_ent_xline *xline, dwg_point_3d *point, int *error)
 {    
     if (xline != 0)
         {
+            *error = 0;
             xline->point.x = point->x;
             xline->point.y = point->y;
             xline->point.z = point->z;
@@ -2383,6 +2471,7 @@ dwg_ent_xline_get_vector(dwg_ent_xline *xline, dwg_point_3d *vector, int *error)
 {    
     if (xline != 0)
         {
+            *error = 0;
             vector->x = xline->vector.x;
             vector->y = xline->vector.y;
             vector->z = xline->vector.z;
@@ -2398,6 +2487,7 @@ dwg_ent_xline_set_vector(dwg_ent_xline *xline, dwg_point_3d *vector, int *error)
 {    
     if (xline != 0)
         {
+            *error = 0;
             xline->vector.x = vector->x;
             xline->vector.y = vector->y;
             xline->vector.z = vector->z;
@@ -2418,6 +2508,7 @@ dwg_ent_trace_get_thickness(dwg_ent_trace *trace, int *error)
 {    
     if (trace != 0)
         {
+            *error = 0;
             return trace->thickness;
         }
     else
@@ -2436,6 +2527,7 @@ dwg_ent_trace_set_thickness(dwg_ent_trace *trace, double thickness, int *error)
 {    
     if (trace != 0)
         {
+            *error = 0;
             trace->thickness = thickness;
         }
     else
@@ -2452,6 +2544,7 @@ dwg_ent_trace_get_elevation(dwg_ent_trace *trace, int *error)
 {    
     if (trace != 0)
         {
+            *error = 0;
             return trace->elevation;
         }
     else
@@ -2470,6 +2563,7 @@ dwg_ent_trace_set_elevation(dwg_ent_trace *trace, double elevation, int *error)
 {    
     if (trace != 0)
         {
+            *error = 0;
             trace->elevation = elevation;
         }
     else
@@ -2489,6 +2583,7 @@ dwg_ent_trace_get_corner1(dwg_ent_trace *trace, dwg_point_2d *point, int *error)
 {    
     if (trace != 0)
         {
+            *error = 0;
             point->x = trace->corner1.x;
             point->y = trace->corner1.y;
         }
@@ -2509,6 +2604,7 @@ dwg_ent_trace_set_corner1(dwg_ent_trace *trace, dwg_point_2d *point, int *error)
 {    
     if (trace != 0)
         {
+            *error = 0;
             trace->corner1.x = point->x;
             trace->corner1.y = point->y;
         }
@@ -2529,6 +2625,7 @@ dwg_ent_trace_get_corner2(dwg_ent_trace *trace, dwg_point_2d *point, int *error)
 {    
     if (trace != 0)
         {
+            *error = 0;
             point->x = trace->corner2.x;
             point->y = trace->corner2.y;
         }
@@ -2549,6 +2646,7 @@ dwg_ent_trace_set_corner2(dwg_ent_trace *trace, dwg_point_2d *point, int *error)
 {    
     if (trace != 0)
         {
+            *error = 0;
             trace->corner2.x = point->x;
             trace->corner2.y = point->y;
         }
@@ -2569,6 +2667,7 @@ dwg_ent_trace_get_corner3(dwg_ent_trace *trace, dwg_point_2d *point, int *error)
 {    
     if (trace != 0)
         {
+            *error = 0;
             point->x = trace->corner3.x;
             point->y = trace->corner3.y;
         }
@@ -2589,6 +2688,7 @@ dwg_ent_trace_set_corner3(dwg_ent_trace *trace, dwg_point_2d *point, int *error)
 {    
     if (trace != 0)
         {
+            *error = 0;
             trace->corner3.x = point->x;
             trace->corner3.y = point->y;
         }
@@ -2609,6 +2709,7 @@ dwg_ent_trace_get_corner4(dwg_ent_trace *trace, dwg_point_2d *point, int *error)
 {    
     if (trace != 0)
         {
+            *error = 0;
             point->x = trace->corner4.x;
             point->y = trace->corner4.y;
         }
@@ -2629,6 +2730,7 @@ dwg_ent_trace_set_corner4(dwg_ent_trace *trace, dwg_point_2d *point, int *error)
 {    
     if (trace != 0)
         {
+            *error = 0;
             trace->corner4.x = point->x;
             trace->corner4.y = point->y;
         }
@@ -2649,6 +2751,7 @@ dwg_ent_trace_get_extrusion(dwg_ent_trace *trace, dwg_point_3d *vector, int *err
 {    
     if (trace != 0)
         {
+            *error = 0;
             vector->x = trace->extrusion.x;
             vector->y = trace->extrusion.y;
             vector->z = trace->extrusion.z;
@@ -2670,6 +2773,7 @@ dwg_ent_trace_set_extrusion(dwg_ent_trace *trace, dwg_point_3d *vector, int *err
 {    
     if (trace != 0)
         {
+            *error = 0;
             trace->extrusion.x = vector->x;
             trace->extrusion.y = vector->y;
             trace->extrusion.z = vector->z;
@@ -2687,6 +2791,7 @@ dwg_ent_vertex_3d_get_flags(dwg_ent_vertex_3d *vert, int *error)
 {    
     if (vert != 0)
         {
+            *error = 0;
             return vert->flags;
         }
     else
@@ -2700,6 +2805,7 @@ dwg_ent_vertex_3d_set_flags(dwg_ent_vertex_3d *vert, char flags, int *error)
 {    
     if (vert != 0)
         {
+            *error = 0;
             vert->flags = flags;
         }
     else
@@ -2713,6 +2819,7 @@ dwg_ent_vertex_3d_get_point(dwg_ent_vertex_3d *vert, dwg_point_3d *point, int *e
 {    
     if (vert != 0)
         {
+            *error = 0;
             point->x = vert->point.x;
             point->y = vert->point.y;
             point->z = vert->point.z;
@@ -2728,6 +2835,7 @@ dwg_ent_vertex_3d_set_point(dwg_ent_vertex_3d *vert, dwg_point_3d *point, int *e
 {    
     if (vert != 0)
         {
+            *error = 0;
             vert->point.x = point->x;
             vert->point.y = point->y;
             vert->point.z = point->z;
@@ -2745,6 +2853,7 @@ dwg_ent_vertex_mesh_get_flags(dwg_ent_vertex_mesh *vert, int *error)
 {    
     if (vert != 0)
         {
+            *error = 0;
             return vert->flags;
         }
     else
@@ -2758,6 +2867,7 @@ dwg_ent_vertex_mesh_set_flags(dwg_ent_vertex_mesh *vert, char flags, int *error)
 {    
     if (vert != 0)
         {
+            *error = 0;
             vert->flags = flags;
         }
     else
@@ -2771,6 +2881,7 @@ dwg_ent_vertex_mesh_get_point(dwg_ent_vertex_mesh *vert, dwg_point_3d *point, in
 {    
     if (vert != 0)
         {
+            *error = 0;
             point->x = vert->point.x;
             point->y = vert->point.y;
             point->z = vert->point.z;
@@ -2786,6 +2897,7 @@ dwg_ent_vertex_mesh_set_point(dwg_ent_vertex_mesh *vert, dwg_point_3d *point, in
 {    
     if (vert != 0)
         {
+            *error = 0;
             vert->point.x = point->x;
             vert->point.y = point->y;
             vert->point.z = point->z;
@@ -2803,6 +2915,7 @@ dwg_ent_vertex_pface_get_flags(dwg_ent_vertex_pface *vert, int *error)
 {    
     if (vert != 0)
         {
+            *error = 0;
             return vert->flags;
         }
     else
@@ -2816,6 +2929,7 @@ dwg_ent_vertex_pface_set_flags(dwg_ent_vertex_pface *vert, char flags, int *erro
 {    
     if (vert != 0)
         {
+            *error = 0;
             vert->flags = flags;
         }
     else
@@ -2829,6 +2943,7 @@ dwg_ent_vertex_pface_get_point(dwg_ent_vertex_pface *vert, dwg_point_3d *point, 
 {    
     if (vert != 0)
         {
+            *error = 0;
             point->x = vert->point.x;
             point->y = vert->point.y;
             point->z = vert->point.z;
@@ -2844,6 +2959,7 @@ dwg_ent_vertex_pface_set_point(dwg_ent_vertex_pface *vert, dwg_point_3d *point, 
 {    
     if (vert != 0)
         {
+            *error = 0;
             vert->point.x = point->x;
             vert->point.y = point->y;
             vert->point.z = point->z;
@@ -2861,6 +2977,7 @@ dwg_ent_vertex_2d_get_flags(dwg_ent_vertex_2d *vert, int *error)
 {    
     if (vert != 0)
         {
+            *error = 0;
             return vert->flags;
         }
     else
@@ -2874,6 +2991,7 @@ dwg_ent_vertex_2d_set_flags(dwg_ent_vertex_2d *vert, char flags, int *error)
 {    
     if (vert != 0)
         {
+            *error = 0;
             vert->flags = flags;
         }
     else
@@ -2887,9 +3005,10 @@ dwg_ent_vertex_2d_get_point(dwg_ent_vertex_2d *vert, dwg_point_3d *point, int *e
 {    
     if (vert != 0)
         {
+            *error = 0;
             point->x = vert->point.x;
-    point->y = vert->point.y;
-    point->z = vert->point.z;
+            point->y = vert->point.y;
+            point->z = vert->point.z;
         }
     else
         {
@@ -2902,6 +3021,7 @@ dwg_ent_vertex_2d_set_point(dwg_ent_vertex_2d *vert, dwg_point_3d *point, int *e
 {    
     if (vert != 0)
         {
+            *error = 0;
             vert->point.x = point->x;
             vert->point.y = point->y;
             vert->point.z = point->z;
@@ -2917,6 +3037,7 @@ dwg_ent_vertex_2d_get_start_width(dwg_ent_vertex_2d *vert, int *error)
 {    
     if (vert != 0)
         {
+            *error = 0;
             return vert->start_width;
         }
     else
@@ -2930,6 +3051,7 @@ dwg_ent_vertex_2d_set_start_width(dwg_ent_vertex_2d *vert, double start_width, i
 {    
     if (vert != 0)
         {
+            *error = 0;
             vert->start_width = start_width;
         }
     else
@@ -2943,6 +3065,7 @@ dwg_ent_vertex_2d_get_end_width(dwg_ent_vertex_2d *vert, int *error)
 {    
     if (vert != 0)
         {
+            *error = 0;
             return vert->end_width;
         }
     else
@@ -2956,6 +3079,7 @@ dwg_ent_vertex_2d_set_end_width(dwg_ent_vertex_2d *vert, double end_width, int *
 {    
     if (vert != 0)
         {
+            *error = 0;
             vert->end_width = end_width;
         }
     else
@@ -2969,6 +3093,7 @@ dwg_ent_vertex_2d_get_bulge(dwg_ent_vertex_2d *vert, int *error)
 {    
     if (vert != 0)
         {
+            *error = 0;
             return vert->bulge;
         }
     else
@@ -2982,6 +3107,7 @@ dwg_ent_vertex_2d_set_bulge(dwg_ent_vertex_2d *vert, double bulge, int *error)
 {    
     if (vert != 0)
         {
+            *error = 0;
             vert->bulge = bulge;
         }
     else
@@ -2995,6 +3121,7 @@ dwg_ent_vertex_2d_get_tangent_dir(dwg_ent_vertex_2d *vert, int *error)
 {    
     if (vert != 0)
         {
+            *error = 0;
             return vert->tangent_dir;
         }
     else
@@ -3008,6 +3135,7 @@ dwg_ent_vertex_2d_set_tangent_dir(dwg_ent_vertex_2d *vert, double tangent_dir, i
 {    
     if (vert != 0)
         {
+            *error = 0;
             vert->tangent_dir = tangent_dir;
         }
     else
@@ -3023,6 +3151,7 @@ dwg_ent_insert_get_ins_pt(dwg_ent_insert *insert, dwg_point_3d *point, int *erro
 {    
     if (insert != 0)
         {
+            *error = 0;
             point->x = insert->ins_pt.x;
             point->y = insert->ins_pt.y;
             point->z = insert->ins_pt.z;
@@ -3038,6 +3167,7 @@ dwg_ent_insert_set_ins_pt(dwg_ent_insert *insert, dwg_point_3d *point, int *erro
 {    
     if (insert != 0)
         {
+            *error = 0;
             insert->ins_pt.x = point->x;
             insert->ins_pt.y = point->y;
             insert->ins_pt.z = point->z;
@@ -3053,6 +3183,7 @@ dwg_ent_insert_get_scale_flag(dwg_ent_insert *insert, int *error)
 {    
     if (insert != 0)
         {
+            *error = 0;
             return insert->scale_flag;
         }
     else
@@ -3066,6 +3197,7 @@ dwg_ent_insert_set_scale_flag(dwg_ent_insert *insert, char flags, int *error)
 {    
     if (insert != 0)
         {
+            *error = 0;
             insert->scale_flag = flags;
         }
     else
@@ -3079,6 +3211,7 @@ dwg_ent_insert_get_scale(dwg_ent_insert *insert, dwg_point_3d *point, int *error
 {    
     if (insert != 0)
         {
+            *error = 0;
             point->x = insert->scale.x;
             point->y = insert->scale.y;
             point->z = insert->scale.z;
@@ -3094,6 +3227,7 @@ dwg_ent_insert_set_scale(dwg_ent_insert *insert, dwg_point_3d *point, int *error
 {    
     if (insert != 0)
         {
+            *error = 0;
             insert->scale.x = point->x;
             insert->scale.y = point->y;
             insert->scale.z = point->z;
@@ -3109,6 +3243,7 @@ dwg_ent_insert_get_rotation_angle(dwg_ent_insert *insert, int *error)
 {    
     if (insert != 0)
         {
+            *error = 0;
             return insert->rotation_ang;
         }
     else
@@ -3122,6 +3257,7 @@ dwg_ent_insert_set_rotation_angle(dwg_ent_insert *insert, double rot_ang, int *e
 {    
     if (insert != 0)
         {
+            *error = 0;
             insert->rotation_ang = rot_ang;
         }
     else
@@ -3135,6 +3271,7 @@ dwg_ent_insert_get_extrusion(dwg_ent_insert *insert, dwg_point_3d *point, int *e
 {    
     if (insert != 0)
         {
+            *error = 0;
             point->x = insert->extrusion.x;
             point->y = insert->extrusion.y;
             point->z = insert->extrusion.z;
@@ -3150,6 +3287,7 @@ dwg_ent_insert_set_extrusion(dwg_ent_insert *insert, dwg_point_3d *point, int *e
 {    
     if (insert != 0)
         {
+            *error = 0;
             insert->extrusion.x = point->x;
             insert->extrusion.y = point->y;
             insert->extrusion.z = point->z;
@@ -3165,6 +3303,7 @@ dwg_ent_insert_get_has_attribs(dwg_ent_insert *insert, int *error)
 {    
     if (insert != 0)
         {
+            *error = 0;
             return insert->has_attribs;
         }
     else
@@ -3178,6 +3317,7 @@ dwg_ent_insert_set_has_attribs(dwg_ent_insert *insert, char attribs, int *error)
 {    
     if (insert != 0)
         {
+            *error = 0;
             insert->has_attribs = attribs;
         }
     else
@@ -3191,6 +3331,7 @@ dwg_ent_insert_get_owned_obj_count(dwg_ent_insert *insert, int *error)
 {    
     if (insert != 0)
         {
+            *error = 0;
             return insert->owned_obj_count;
         }
     else
@@ -3204,6 +3345,7 @@ dwg_ent_insert_set_owned_obj_count(dwg_ent_insert *insert, long count, int *erro
 {    
     if (insert != 0)
         {
+            *error = 0;
             insert->owned_obj_count = count;
         }
     else
@@ -3219,6 +3361,7 @@ dwg_ent_minsert_get_ins_pt(dwg_ent_minsert *minsert, dwg_point_3d *point, int *e
 {    
     if (minsert != 0)
         {
+            *error = 0;
             point->x = minsert->ins_pt.x;
             point->y = minsert->ins_pt.y;
             point->z = minsert->ins_pt.z;
@@ -3234,6 +3377,7 @@ dwg_ent_minsert_set_ins_pt(dwg_ent_minsert *minsert, dwg_point_3d *point, int *e
 {    
     if (minsert != 0)
         {
+            *error = 0;
             minsert->ins_pt.x = point->x;
             minsert->ins_pt.y = point->y;
             minsert->ins_pt.z = point->z;
@@ -3249,6 +3393,7 @@ dwg_ent_minsert_get_scale_flag(dwg_ent_minsert *minsert, int *error)
 {    
     if (minsert != 0)
         {
+            *error = 0;
             return minsert->scale_flag;
         }
     else
@@ -3262,6 +3407,7 @@ dwg_ent_minsert_set_scale_flag(dwg_ent_minsert *minsert, char  flags, int *error
 {    
     if (minsert != 0)
         {
+            *error = 0;
             minsert->scale_flag = flags;
         }
     else
@@ -3275,6 +3421,7 @@ dwg_ent_minsert_get_scale(dwg_ent_minsert *minsert, dwg_point_3d *point, int *er
 {    
     if (minsert != 0)
         {
+            *error = 0;
             point->x = minsert->scale.x;
             point->y = minsert->scale.y;
             point->z = minsert->scale.z;
@@ -3290,6 +3437,7 @@ dwg_ent_minsert_set_scale(dwg_ent_minsert *minsert, dwg_point_3d *point, int *er
 {    
     if (minsert != 0)
         {
+            *error = 0;
             minsert->scale.x = point->x;
             minsert->scale.y = point->y;
             minsert->scale.z = point->z;
@@ -3305,6 +3453,7 @@ dwg_ent_minsert_get_rotation_angle(dwg_ent_minsert *minsert, int *error)
 {    
     if (minsert != 0)
         {
+            *error = 0;
             return minsert->rotation_ang;
         }
     else
@@ -3318,6 +3467,7 @@ dwg_ent_minsert_set_rotation_angle(dwg_ent_minsert *minsert, double rot_ang, int
 {    
     if (minsert != 0)
         {
+            *error = 0;
             minsert->rotation_ang = rot_ang;
         }
     else
@@ -3331,6 +3481,7 @@ dwg_ent_minsert_get_extrusion(dwg_ent_minsert *minsert, dwg_point_3d *point, int
 {    
     if (minsert != 0)
         {
+            *error = 0;
             point->x = minsert->extrusion.x;
             point->y = minsert->extrusion.y;
             point->z = minsert->extrusion.z;
@@ -3346,6 +3497,7 @@ dwg_ent_minsert_set_extrusion(dwg_ent_minsert *minsert, dwg_point_3d *point, int
 {    
     if (minsert != 0)
         {
+            *error = 0;
             minsert->extrusion.x = point->x;
             minsert->extrusion.y = point->y;
             minsert->extrusion.z = point->z;
@@ -3361,6 +3513,7 @@ dwg_ent_minsert_get_has_attribs(dwg_ent_minsert *minsert, int *error)
 {    
     if (minsert != 0)
         {
+            *error = 0;
             return minsert->has_attribs;
         }
     else
@@ -3374,6 +3527,7 @@ dwg_ent_minsert_set_has_attribs(dwg_ent_minsert *minsert, char  attribs, int *er
 {    
     if (minsert != 0)
         {
+            *error = 0;
             minsert->has_attribs = attribs;
         }
     else
@@ -3387,6 +3541,7 @@ dwg_ent_minsert_get_owned_obj_count(dwg_ent_minsert *minsert, int *error)
 {    
     if (minsert != 0)
         {
+            *error = 0;
             return minsert->owned_obj_count;
         }
     else
@@ -3400,6 +3555,7 @@ dwg_ent_minsert_set_owned_obj_count(dwg_ent_minsert *minsert, long count, int *e
 {    
     if (minsert != 0)
         {
+            *error = 0;
             minsert->owned_obj_count = count;
         }
     else
@@ -3413,6 +3569,7 @@ dwg_ent_minsert_get_numcols(dwg_ent_minsert *minsert, int *error)
 {    
     if (minsert != 0)
         {
+            *error = 0;
             return minsert->numcols;
         }
     else
@@ -3426,6 +3583,7 @@ dwg_ent_minsert_set_numcols(dwg_ent_minsert *minsert, long cols, int *error)
 {    
     if (minsert != 0)
         {
+            *error = 0;
             minsert->numcols = cols;
         }
     else
@@ -3439,6 +3597,7 @@ dwg_ent_minsert_get_numrows(dwg_ent_minsert *minsert, int *error)
 {    
     if (minsert != 0)
         {
+            *error = 0;
             return minsert->numrows;
         }
     else
@@ -3452,6 +3611,7 @@ dwg_ent_minsert_set_numrows(dwg_ent_minsert *minsert, long cols, int *error)
 {    
     if (minsert != 0)
         {
+            *error = 0;
             minsert->numrows = cols;
         }
     else
@@ -3465,6 +3625,7 @@ dwg_ent_minsert_get_col_spacing(dwg_ent_minsert *minsert, int *error)
 {    
     if (minsert != 0)
         {
+            *error = 0;
             return minsert->col_spacing;
         }
     else
@@ -3478,6 +3639,7 @@ dwg_ent_minsert_set_col_spacing(dwg_ent_minsert *minsert, double spacing, int *e
 {    
     if (minsert != 0)
         {
+            *error = 0;
             minsert->col_spacing = spacing;
         }
     else
@@ -3491,6 +3653,7 @@ dwg_ent_minsert_get_row_spacing(dwg_ent_minsert *minsert, int *error)
 {    
     if (minsert != 0)
         {
+            *error = 0;
             return minsert->row_spacing;
         }
     else
@@ -3504,6 +3667,7 @@ dwg_ent_minsert_set_row_spacing(dwg_ent_minsert *minsert, double spacing, int *e
 {    
     if (minsert != 0)
         {
+            *error = 0;
             minsert->row_spacing = spacing;
         }
     else
@@ -3519,6 +3683,7 @@ dwg_obj_mlinstyle_get_name(dwg_obj_mlinestyle *mlinestyle, int *error)
 {    
     if (mlinestyle != 0)
         {
+            *error = 0;
             return mlinestyle->name;
         }
     else
@@ -3532,6 +3697,7 @@ dwg_obj_mlinestyle_set_name(dwg_obj_mlinestyle *mlinestyle, char * name, int *er
 {    
     if (mlinestyle != 0)
         {
+            *error = 0;
             mlinestyle->name = name;
         }
     else
@@ -3545,6 +3711,7 @@ dwg_obj_mlinestyle_get_desc(dwg_obj_mlinestyle *mlinestyle, int *error)
 {    
     if (mlinestyle != 0)
         {
+            *error = 0;
             return mlinestyle->desc;
         }
     else
@@ -3558,6 +3725,7 @@ dwg_obj_mlinestyle_set_desc(dwg_obj_mlinestyle *mlinestyle, char * desc, int *er
 {    
     if (mlinestyle != 0)
         {
+            *error = 0;
             mlinestyle->desc = desc;
         }
     else
@@ -3571,6 +3739,7 @@ dwg_obj_mlinestyle_get_flags(dwg_obj_mlinestyle *mlinestyle, int *error)
 {    
     if (mlinestyle != 0)
         {
+            *error = 0;
             return mlinestyle->flags;
         }
     else
@@ -3584,6 +3753,7 @@ dwg_obj_mlinestyle_set_flags(dwg_obj_mlinestyle *mlinestyle, int flags, int *err
 {    
     if (mlinestyle != 0)
         {
+            *error = 0;
             mlinestyle->flags = flags;
         }
     else
@@ -3596,6 +3766,7 @@ double dwg_obj_mlinestyle_get_start_angle(dwg_obj_mlinestyle *mlinestyle, int *e
 {    
     if (mlinestyle != 0)
         {
+            *error = 0;
             return mlinestyle->startang;
         }
     else
@@ -3609,6 +3780,7 @@ dwg_obj_mlinestyle_set_start_angle(dwg_obj_mlinestyle *mlinestyle, double starta
 {    
     if (mlinestyle != 0)
         {
+            *error = 0;
             mlinestyle->startang = startang;
         }
     else
@@ -3622,6 +3794,7 @@ dwg_obj_mlinestyle_get_end_angle(dwg_obj_mlinestyle *mlinestyle, int *error)
 {    
     if (mlinestyle != 0)
         {
+            *error = 0;
             return mlinestyle->endang;
         }
     else
@@ -3635,6 +3808,7 @@ dwg_obj_mlinestyle_set_end_angle(dwg_obj_mlinestyle *mlinestyle, double endang, 
 {    
     if (mlinestyle != 0)
         {
+            *error = 0;
             mlinestyle->endang = endang;
         }
     else
@@ -3648,6 +3822,7 @@ dwg_obj_mlinestyle_get_linesinstyle(dwg_obj_mlinestyle *mlinestyle, int *error)
 {    
     if (mlinestyle != 0)
         {
+            *error = 0;
             return mlinestyle->linesinstyle;
         }
     else
@@ -3661,6 +3836,7 @@ dwg_obj_mlinestyle_set_linesinstyle(dwg_obj_mlinestyle *mlinestyle, char linesin
 {    
     if (mlinestyle != 0)
         {
+            *error = 0;
             mlinestyle->linesinstyle = linesinstyle;
         }
     else
@@ -3699,6 +3875,7 @@ dwg_obj_appid_control_get_num_entries(dwg_obj_appid_control *appid, int *error)
 {
     if (appid != 0)
         {
+            *error = 0;
             return appid->num_entries;
         }
     else
@@ -3713,6 +3890,7 @@ dwg_obj_appid_control_set_num_entries(dwg_obj_appid_control *appid, int entries,
 {
     if (appid != 0)
         {
+            *error = 0;
             appid->num_entries = entries;
         }
     else
@@ -3729,6 +3907,7 @@ dwg_obj_appid_get_entry_name(dwg_obj_appid *appid, int *error)
 {
     if (appid != 0)
         {
+            *error = 0;
             return appid->entry_name;
         }
     else
@@ -3743,6 +3922,7 @@ dwg_obj_appid_set_entry_name(dwg_obj_appid *appid, char * entry_name, int *error
 {
     if (appid != 0)
         {
+            *error = 0;
             appid->entry_name = entry_name;
         }
     else
@@ -3757,6 +3937,7 @@ dwg_obj_appid_get_flag(dwg_obj_appid *appid, int *error)
 {
     if (appid != 0)
         {
+            *error = 0;
             return appid->_64_flag;
         }
     else
@@ -3771,6 +3952,7 @@ dwg_obj_appid_set_flag(dwg_obj_appid *appid, char flag, int *error)
 {
     if (appid != 0)
         {
+            *error = 0;
             appid->_64_flag = flag;
         }
     else
@@ -3785,6 +3967,7 @@ dwg_obj_get_appid_control(dwg_obj_appid *appid, int *error)
 {
     if (appid != 0)
         {
+            *error = 0;
             appid->app_control->obj->tio.object->tio.APPID_CONTROL;
         }
     else
@@ -3795,12 +3978,207 @@ dwg_obj_get_appid_control(dwg_obj_appid *appid, int *error)
 }
 
 //-------------------------------------------------------------------------------
+/*
+dwg_ent_dimension_ordinate
 
+#define DIMENSION_COMMON \
+    BITCODE_3BD extrusion; \
+    BITCODE_2RD text_midpt; \
+    struct \
+      { \
+        BITCODE_BD ecs_11; \
+        BITCODE_BD ecs_12; \
+      } elevation; \
+    BITCODE_RC flags_1; \
+    BITCODE_TV user_text; \
+    BITCODE_BD text_rot; \
+    BITCODE_BD horiz_dir; \
+    BITCODE_3BD ins_scale; \
+    BITCODE_BD ins_rotation; \
+    BITCODE_BS attachment_point; \
+    BITCODE_BS lspace_style; \
+    BITCODE_BD lspace_factor; \
+    BITCODE_BD act_measurement; \
+    BITCODE_B unknown; \
+    BITCODE_B flip_arrow1; \
+    BITCODE_B flip_arrow2;
 
+/**
+ Struct for ordinate dimension - DIMENSION_ORDINATE (20)
 
+typedef struct _dwg_entity_DIMENSION_ORDINATE
+{
+  DIMENSION_COMMON
+  BITCODE_2RD _12_pt;
+  BITCODE_3BD _10_pt;
+  BITCODE_3BD _13_pt;
+  BITCODE_3BD _14_pt;
+  BITCODE_RC flags_2;
+  BITCODE_H dimstyle;
+  BITCODE_H block;
+} Dwg_Entity_DIMENSION_ORDINATE;
+*/
 //-------------------------------------------------------------------------------
 
+void
+dwg_ent_dim_ordinate_set_extrusion(dwg_ent_dim_ordinate *ord, dwg_point_3d *point, int *error)
+{
+    if (ord != 0)
+        {
+            *error = 0;
+            ord->extrusion.x = point->x;
+            ord->extrusion.y = point->y;
+            ord->extrusion.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
 
+void
+dwg_ent_dim_ordinate_get_extrusion(dwg_ent_dim_ordinate *ord, dwg_point_3d *point, int *error)
+{
+    if (ord != 0)
+        {
+            *error = 0;
+            point->x = ord->extrusion.x;
+            point->y = ord->extrusion.y;
+            point->z = ord->extrusion.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ordinate_set_ins_scale(dwg_ent_dim_ordinate *ord, dwg_point_3d *point, int *error)
+{
+    if (ord != 0)
+        {
+            *error = 0;
+            ord->ins_scale.x = point->x;
+            ord->ins_scale.y = point->y;
+            ord->ins_scale.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ordinate_get_ins_scale(dwg_ent_dim_ordinate *ord, dwg_point_3d *point, int *error)
+{
+    if (ord != 0)
+        {
+            *error = 0;
+            point->x = ord->ins_scale.x;
+            point->y = ord->ins_scale.y;
+            point->z = ord->ins_scale.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ordinate_set_10_pt(dwg_ent_dim_ordinate *ord, dwg_point_3d *point, int *error)
+{
+    if (ord != 0)
+        {
+            *error = 0;
+            ord->_10_pt.x = point->x;
+            ord->_10_pt.y = point->y;
+            ord->_10_pt.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ordinate_get_10_pt(dwg_ent_dim_ordinate *ord, dwg_point_3d *point, int *error)
+{
+    if (ord != 0)
+        {
+            *error = 0;
+            point->x = ord->_10_pt.x;
+            point->y = ord->_10_pt.y;
+            point->z = ord->_10_pt.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ordinate_set_13_pt(dwg_ent_dim_ordinate *ord, dwg_point_3d *point, int *error)
+{
+    if (ord != 0)
+        {
+            *error = 0;
+            ord->_13_pt.x = point->x;
+            ord->_13_pt.y = point->y;
+            ord->_13_pt.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ordinate_get_13_pt(dwg_ent_dim_ordinate *ord, dwg_point_3d *point, int *error)
+{
+    if (ord != 0)
+        {
+            *error = 0;
+            point->x = ord->_13_pt.x;
+            point->y = ord->_13_pt.y;
+            point->z = ord->_13_pt.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ordinate_set_14_pt(dwg_ent_dim_ordinate *ord, dwg_point_3d *point, int *error)
+{
+    if (ord != 0)
+        {
+            *error = 0;
+            ord->_14_pt.x = point->x;
+            ord->_14_pt.y = point->y;
+            ord->_14_pt.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ordinate_get_14_pt(dwg_ent_dim_ordinate *ord, dwg_point_3d *point, int *error)
+{
+    if (ord != 0)
+        {
+            *error = 0;
+            point->x = ord->_14_pt.x;
+            point->y = ord->_14_pt.y;
+            point->z = ord->_14_pt.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
 
 //-------------------------------------------------------------------------------
 
@@ -3815,6 +4193,7 @@ dwg_block_header_get_block_control(dwg_obj_block_header* block_header, int *erro
 {
     if (block_header != 0)
         {
+            *error = 0;
             return block_header->block_control_handle->obj->tio.object->tio.BLOCK_CONTROL;
         }
     else
@@ -3834,6 +4213,7 @@ dwg_obj_layer_get_name(dwg_obj_layer *layer, int *error)
 {
     if (layer != 0)
         {
+            *error = 0;
             return layer->entry_name;
         }
     else
@@ -3853,6 +4233,7 @@ dwg_obj_block_header_get_name(dwg_obj_block_header *hdr, int *error)
 {
     if (hdr != 0)
         {
+            *error = 0;
             return hdr->entry_name;
         }
     else
