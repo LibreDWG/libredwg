@@ -74,6 +74,10 @@ dwg_object_to_##token(Dwg_Object *obj) \
 
 typedef struct _dwg_entity_CIRCLE                 dwg_ent_circle;
 typedef struct _dwg_entity_LINE                   dwg_ent_line;
+typedef struct _dwg_entity_POLYLINE_3D            dwg_ent_polyline_3d;
+typedef struct _dwg_entity_POLYLINE_2D            dwg_ent_polyline_2d;
+typedef struct _dwg_entity_POLYLINE_MESH          dwg_ent_polyline_mesh;
+typedef struct _dwg_entity_POLYLINE_PFACE         dwg_ent_polyline_pface;
 typedef struct _dwg_entity_LWPLINE                dwg_ent_lwpline;
 typedef struct _dwg_entity_ARC                    dwg_ent_arc;
 typedef struct _dwg_entity_ELLIPSE                dwg_ent_ellipse;
@@ -1364,6 +1368,77 @@ dwg_obj_block_header * dwg_get_block_header(Dwg_Data *dwg, int *error);
 //--------------------------------------------------------------------------------
 
 dwg_obj_block_control* dwg_block_header_get_block_control(dwg_obj_block_header* block_header, int *error);
+
+//--------------------------------------------------------------------------------
+
+unsigned int dwg_ent_polyline_pface_get_numverts(dwg_ent_polyline_pface *pface, int *error);
+void   dwg_ent_polyline_pface_set_numverts(dwg_ent_polyline_pface *pface, unsigned int numverts, int *error);
+
+long   dwg_ent_polyline_pface_get_owned_obj_count(dwg_ent_polyline_pface *pface, int *error);
+void   dwg_ent_polyline_pface_set_owned_obj_count(dwg_ent_polyline_pface *pface, long owned_obj_count, int *error);
+
+unsigned int dwg_ent_polyline_pface_get_numfaces(dwg_ent_polyline_pface *pface, int *error);
+void   dwg_ent_polyline_pface_set_numfaces(dwg_ent_polyline_pface *pface, unsigned int numfaces, int *error);
+
+//-----------------------------------------------------------------------------------
+
+unsigned int dwg_ent_polyline_mesh_get_flags(dwg_ent_polyline_mesh *mesh, int *error);
+void   dwg_ent_polyline_mesh_set_flags(dwg_ent_polyline_mesh *mesh, unsigned int flags, int *error);
+
+unsigned int dwg_ent_polyline_mesh_get_curve_type(dwg_ent_polyline_mesh *mesh, int *error);
+void   dwg_ent_polyline_mesh_set_curve_type(dwg_ent_polyline_mesh *mesh, unsigned int curve_type, int *error);
+
+unsigned int dwg_ent_polyline_mesh_get_m_vert_count(dwg_ent_polyline_mesh *mesh, int *error);
+void   dwg_ent_polyline_mesh_set_m_vert_count(dwg_ent_polyline_mesh *mesh, unsigned int m_vert_count, int *error);
+
+unsigned int dwg_ent_polyline_mesh_get_n_vert_count(dwg_ent_polyline_mesh *mesh, int *error);
+void   dwg_ent_polyline_mesh_set_n_vert_count(dwg_ent_polyline_mesh *mesh, unsigned int n_vert_count, int *error);
+
+unsigned int dwg_ent_polyline_mesh_get_m_density(dwg_ent_polyline_mesh *mesh, int *error);
+void   dwg_ent_polyline_mesh_set_m_density(dwg_ent_polyline_mesh *mesh, unsigned int m_density, int *error);
+
+unsigned int dwg_ent_polyline_mesh_get_n_density(dwg_ent_polyline_mesh *mesh, int *error);
+void   dwg_ent_polyline_mesh_set_n_density(dwg_ent_polyline_mesh *mesh, unsigned int n_density, int *error);
+
+long   dwg_ent_polyline_mesh_get_owned_obj_count(dwg_ent_polyline_mesh *mesh, int *error);
+void   dwg_ent_polyline_mesh_set_owned_obj_count(dwg_ent_polyline_mesh *mesh, long owned_obj_count, int *error);
+
+//-----------------------------------------------------------------------------------
+
+void   dwg_ent_polyline_2d_get_extrusion(dwg_ent_polyline_2d *line2d, dwg_point_3d *point, int *error);
+void   dwg_ent_polyline_2d_set_extrusion(dwg_ent_polyline_2d *line2d, dwg_point_3d *point, int *error);
+
+double   dwg_ent_polyline_2d_get_start_width(dwg_ent_polyline_2d *line2d, int *error);
+void   dwg_ent_polyline_2d_set_start_width(dwg_ent_polyline_2d *line2d, double start_width, int *error);
+
+double   dwg_ent_polyline_2d_get_end_width(dwg_ent_polyline_2d *line2d, int *error);
+void   dwg_ent_polyline_2d_set_end_width(dwg_ent_polyline_2d *line2d, double end_width, int *error);
+
+double   dwg_ent_polyline_2d_get_thickness(dwg_ent_polyline_2d *line2d, int *error);
+void   dwg_ent_polyline_2d_set_thickness(dwg_ent_polyline_2d *line2d, double thickness, int *error);
+
+double   dwg_ent_polyline_2d_get_elevation(dwg_ent_polyline_2d *line2d, int *error);
+void   dwg_ent_polyline_2d_set_elevation(dwg_ent_polyline_2d *line2d, double elevation, int *error);
+
+unsigned int dwg_ent_polyline_2d_get_flags(dwg_ent_polyline_2d *line2d, int *error);
+void   dwg_ent_polyline_2d_set_flags(dwg_ent_polyline_2d *line2d, unsigned int flags, int *error);
+
+unsigned int dwg_ent_polyline_2d_get_curve_type(dwg_ent_polyline_2d *line2d, int *error);
+void   dwg_ent_polyline_2d_set_curve_type(dwg_ent_polyline_2d *line2d, unsigned int curve_type, int *error);
+
+long   dwg_ent_polyline_2d_get_owned_obj_count(dwg_ent_polyline_2d *line2d, int *error);
+void   dwg_ent_polyline_2d_set_owned_obj_count(dwg_ent_polyline_2d *line2d, long owned_obj_count, int *error);
+
+//-----------------------------------------------------------------------------------
+
+char   dwg_ent_polyline_3d_get_flags_1(dwg_ent_polyline_3d *line3d, int *error);
+void   dwg_ent_polyline_3d_set_flags_1(dwg_ent_polyline_3d *line3d, char flags_1, int *error);
+
+char   dwg_ent_polyline_3d_get_flags_2(dwg_ent_polyline_3d *line3d, int *error);
+void   dwg_ent_polyline_3d_set_flags_2(dwg_ent_polyline_3d *line3d, char flags_2, int *error);
+
+long   dwg_ent_polyline_3d_get_owned_obj_count(dwg_ent_polyline_3d *line3d, int *error);
+void   dwg_ent_polyline_3d_set_owned_obj_count(dwg_ent_polyline_3d *line3d, long owned_obj_count, int *error);
 
 //--------------------------------------------------------------------------------
 

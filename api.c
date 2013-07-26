@@ -11096,6 +11096,542 @@ dwg_ent_viewport_get_contrast(dwg_ent_viewport *vp, int *error)
 
 //-------------------------------------------------------------------------------
 
+unsigned int dwg_ent_polyline_pface_get_numverts(dwg_ent_polyline_pface *pface, int *error)
+{
+  if (pface != 0)
+    {
+        *error = 0;
+        return pface->numverts;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+void   dwg_ent_polyline_pface_set_numverts(dwg_ent_polyline_pface *pface, unsigned int numverts, int *error)
+{
+  if (pface != 0)
+    {
+        *error = 0;
+        pface->numverts = numverts;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+
+long   dwg_ent_polyline_pface_get_owned_obj_count(dwg_ent_polyline_pface *pface, int *error)
+{
+  if (pface != 0)
+    {
+        *error = 0;
+        return pface->owned_obj_count;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+void   dwg_ent_polyline_pface_set_owned_obj_count(dwg_ent_polyline_pface *pface, long owned_obj_count, int *error)
+{
+  if (pface != 0)
+    {
+        *error = 0;
+        pface->owned_obj_count = owned_obj_count;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+
+unsigned int dwg_ent_polyline_pface_get_numfaces(dwg_ent_polyline_pface *pface, int *error)
+{
+  if (pface != 0)
+    {
+        *error = 0;
+        return pface->numfaces;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+void   dwg_ent_polyline_pface_set_numfaces(dwg_ent_polyline_pface *pface, unsigned int numfaces, int *error)
+{
+  if (pface != 0)
+    {
+        *error = 0;
+        pface->numfaces = numfaces;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+
+//-----------------------------------------------------------------------------------
+
+unsigned int dwg_ent_polyline_mesh_get_flags(dwg_ent_polyline_mesh *mesh, int *error)
+{
+  if (mesh != 0)
+    {
+        *error = 0;
+        return mesh->flags;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+void   dwg_ent_polyline_mesh_set_flags(dwg_ent_polyline_mesh *mesh, unsigned int flags, int *error)
+{
+  if (mesh != 0)
+    {
+        *error = 0;
+        mesh->flags = flags;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+
+unsigned int dwg_ent_polyline_mesh_get_curve_type(dwg_ent_polyline_mesh *mesh, int *error)
+{
+  if (mesh != 0)
+    {
+        *error = 0;
+        return mesh->curve_type;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+void   dwg_ent_polyline_mesh_set_curve_type(dwg_ent_polyline_mesh *mesh, unsigned int curve_type, int *error)
+{
+  if (mesh != 0)
+    {
+        *error = 0;
+        mesh->curve_type = curve_type;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+
+unsigned int dwg_ent_polyline_mesh_get_m_vert_count(dwg_ent_polyline_mesh *mesh, int *error)
+{
+  if (mesh != 0)
+    {
+        *error = 0;
+        return mesh->m_vert_count;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+void   dwg_ent_polyline_mesh_set_m_vert_count(dwg_ent_polyline_mesh *mesh, unsigned int m_vert_count, int *error)
+{
+  if (mesh != 0)
+    {
+        *error = 0;
+        mesh->m_vert_count = m_vert_count;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+
+unsigned int dwg_ent_polyline_mesh_get_n_vert_count(dwg_ent_polyline_mesh *mesh, int *error)
+{
+  if (mesh != 0)
+    {
+        *error = 0;
+        return mesh->n_vert_count;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+void   dwg_ent_polyline_mesh_set_n_vert_count(dwg_ent_polyline_mesh *mesh, unsigned int n_vert_count, int *error)
+{
+  if (mesh != 0)
+    {
+        *error = 0;
+        mesh->n_vert_count = n_vert_count;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+
+unsigned int dwg_ent_polyline_mesh_get_m_density(dwg_ent_polyline_mesh *mesh, int *error)
+{
+  if (mesh != 0)
+    {
+        *error = 0;
+        return mesh->m_density;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+void   dwg_ent_polyline_mesh_set_m_density(dwg_ent_polyline_mesh *mesh, unsigned int m_density, int *error)
+{
+  if (mesh != 0)
+    {
+        *error = 0;
+        mesh->m_density = m_density;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+
+unsigned int dwg_ent_polyline_mesh_get_n_density(dwg_ent_polyline_mesh *mesh, int *error)
+{
+  if (mesh != 0)
+    {
+        *error = 0;
+        return mesh->n_density;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+void   dwg_ent_polyline_mesh_set_n_density(dwg_ent_polyline_mesh *mesh, unsigned int n_density, int *error)
+{
+  if (mesh != 0)
+    {
+        *error = 0;
+        mesh->n_density = n_density;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+
+long   dwg_ent_polyline_mesh_get_owned_obj_count(dwg_ent_polyline_mesh *mesh, int *error)
+{
+  if (mesh != 0)
+    {
+        *error = 0;
+        return mesh->owned_obj_count;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+void   dwg_ent_polyline_mesh_set_owned_obj_count(dwg_ent_polyline_mesh *mesh, long owned_obj_count, int *error)
+{
+  if (mesh != 0)
+    {
+        *error = 0;
+        mesh->owned_obj_count = owned_obj_count;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+
+//-----------------------------------------------------------------------------------
+
+void   dwg_ent_polyline_2d_get_extrusion(dwg_ent_polyline_2d *line2d, dwg_point_3d *point, int *error)
+{
+  if (line2d != 0)
+    {
+        *error = 0;
+        point->x = line2d->extrusion.x;
+        point->y = line2d->extrusion.y;
+        point->z = line2d->extrusion.z;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+void   dwg_ent_polyline_2d_set_extrusion(dwg_ent_polyline_2d *line2d, dwg_point_3d *point, int *error)
+{
+  if (line2d != 0)
+    {
+        *error = 0;
+        line2d->extrusion.x = point->x;
+        line2d->extrusion.y = point->y;
+        line2d->extrusion.z = point->z;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+
+double   dwg_ent_polyline_2d_get_start_width(dwg_ent_polyline_2d *line2d, int *error)
+{
+  if (line2d != 0)
+    {
+        *error = 0;
+        return line2d->start_width;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+void   dwg_ent_polyline_2d_set_start_width(dwg_ent_polyline_2d *line2d, double start_width, int *error)
+{
+  if (line2d != 0)
+    {
+        *error = 0;
+        line2d->start_width = start_width;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+
+double   dwg_ent_polyline_2d_get_end_width(dwg_ent_polyline_2d *line2d, int *error)
+{
+  if (line2d != 0)
+    {
+        *error = 0;
+        return line2d->end_width;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+void   dwg_ent_polyline_2d_set_end_width(dwg_ent_polyline_2d *line2d, double end_width, int *error)
+{
+  if (line2d != 0)
+    {
+        *error = 0;
+        line2d->end_width = end_width;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+
+double   dwg_ent_polyline_2d_get_thickness(dwg_ent_polyline_2d *line2d, int *error)
+{
+  if (line2d != 0)
+    {
+        *error = 0;
+        return line2d->thickness;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+void   dwg_ent_polyline_2d_set_thickness(dwg_ent_polyline_2d *line2d, double thickness, int *error)
+{
+  if (line2d != 0)
+    {
+        *error = 0;
+        line2d->thickness = thickness;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+
+double   dwg_ent_polyline_2d_get_elevation(dwg_ent_polyline_2d *line2d, int *error)
+{
+  if (line2d != 0)
+    {
+        *error = 0;
+        return line2d->elevation;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+void   dwg_ent_polyline_2d_set_elevation(dwg_ent_polyline_2d *line2d, double elevation, int *error)
+{
+  if (line2d != 0)
+    {
+        *error = 0;
+        line2d->elevation = elevation;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+
+unsigned int dwg_ent_polyline_2d_get_flags(dwg_ent_polyline_2d *line2d, int *error)
+{
+  if (line2d != 0)
+    {
+        *error = 0;
+        return line2d->flags;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+void   dwg_ent_polyline_2d_set_flags(dwg_ent_polyline_2d *line2d, unsigned int flags, int *error)
+{
+  if (line2d != 0)
+    {
+        *error = 0;
+        line2d->flags = flags;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+
+unsigned int dwg_ent_polyline_2d_get_curve_type(dwg_ent_polyline_2d *line2d, int *error)
+{
+  if (line2d != 0)
+    {
+        *error = 0;
+        return line2d->curve_type;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+void   dwg_ent_polyline_2d_set_curve_type(dwg_ent_polyline_2d *line2d, unsigned int curve_type, int *error)
+{
+  if (line2d != 0)
+    {
+        *error = 0;
+        line2d->curve_type = curve_type;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+
+long   dwg_ent_polyline_2d_get_owned_obj_count(dwg_ent_polyline_2d *line2d, int *error)
+{
+  if (line2d != 0)
+    {
+        *error = 0;
+        return line2d->owned_obj_count;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+void   dwg_ent_polyline_2d_set_owned_obj_count(dwg_ent_polyline_2d *line2d, long owned_obj_count, int *error)
+{
+  if (line2d != 0)
+    {
+        *error = 0;
+        line2d->owned_obj_count = owned_obj_count;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+
+//-----------------------------------------------------------------------------------
+
+char   dwg_ent_polyline_3d_get_flags_1(dwg_ent_polyline_3d *line3d, int *error)
+{
+  if (line3d != 0)
+    {
+        *error = 0;
+        return line3d->flags_1;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+void   dwg_ent_polyline_3d_set_flags_1(dwg_ent_polyline_3d *line3d, char flags_1, int *error)
+{
+  if (line3d != 0)
+    {
+        *error = 0;
+        line3d->flags_1 = flags_1;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+
+char   dwg_ent_polyline_3d_get_flags_2(dwg_ent_polyline_3d *line3d, int *error)
+{
+  if (line3d != 0)
+    {
+        *error = 0;
+        return line3d->flags_2;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+void   dwg_ent_polyline_3d_set_flags_2(dwg_ent_polyline_3d *line3d, char flags_2, int *error)
+{
+  if (line3d != 0)
+    {
+        *error = 0;
+        line3d->flags_2 = flags_2;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+
+long   dwg_ent_polyline_3d_get_owned_obj_count(dwg_ent_polyline_3d *line3d, int *error)
+{
+  if (line3d != 0)
+    {
+        *error = 0;
+        return line3d->owned_obj_count;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+void   dwg_ent_polyline_3d_set_owned_obj_count(dwg_ent_polyline_3d *line3d, long owned_obj_count, int *error)
+{
+  if (line3d != 0)
+    {
+        *error = 0;
+        line3d->owned_obj_count = owned_obj_count;
+    }
+else
+    {
+        *error = 1;
+    }
+}
+
+//-------------------------------------------------------------------------------
 
 /* Returns block control object from a block header type argument passed 
 to function
