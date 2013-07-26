@@ -96,7 +96,12 @@ typedef struct _dwg_entity_DIMENSION_ANG3PT       dwg_ent_dim_ang3pt;
 typedef struct _dwg_entity_DIMENSION_ANG2LN       dwg_ent_dim_ang2ln;
 typedef struct _dwg_entity_DIMENSION_RADIUS       dwg_ent_dim_radius;
 typedef struct _dwg_entity_DIMENSION_DIAMETER     dwg_ent_dim_diameter;
-
+typedef struct _dwg_entity_LEADER                 dwg_ent_leader;
+typedef struct _dwg_entity_SHAPE                  dwg_ent_shape;
+typedef struct _dwg_entity_MTEXT                  dwg_ent_mtext;
+typedef struct _dwg_entity_TOLERANCE              dwg_ent_tolerance;
+typedef struct _dwg_entity_ENDBLK                 dwg_ent_endblk;
+typedef struct _dwg_entity_SEQEND                 dwg_ent_seqend;
 //-------------------------------------------------------------------------------
 
 typedef struct _dwg_object_LAYER             dwg_obj_layer;
@@ -1002,6 +1007,148 @@ void   dwg_ent_dim_diameter_get_15_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *p
 
 double dwg_ent_dim_diameter_get_leader_len(dwg_ent_dim_diameter *dia, int *error);
 void   dwg_ent_dim_diameter_set_leader_len(dwg_ent_dim_diameter *dia, double leader_len, int *error);
+
+//--------------------------------------------------------------------------------------
+
+char   dwg_ent_endblk_get_dummy(dwg_ent_endblk *endblk, int *error);
+void   dwg_ent_endblk_set_dummy(dwg_ent_endblk *endblk, char dummy, int *error);
+
+char   dwg_ent_seqend_get_dummy(dwg_ent_seqend *seqend, int *error);
+void   dwg_ent_seqend_set_dummy(dwg_ent_seqend *seqend, char dummy, int *error);
+
+//-------------------------------------------------------------------------------------------
+
+void   dwg_ent_shape_get_ins_pt(dwg_ent_shape *shape, dwg_point_3d *point, int *error);
+void   dwg_ent_shape_set_ins_pt(dwg_ent_shape *shape, dwg_point_3d *point, int *error);
+
+double dwg_ent_shape_get_scale(dwg_ent_shape *shape, int *error);
+void   dwg_ent_shape_set_scale(dwg_ent_shape *shape, double scale, int *error);
+
+double dwg_ent_shape_get_rotation(dwg_ent_shape *shape, int *error);
+void   dwg_ent_shape_set_rotation(dwg_ent_shape *shape, double rotation, int *error);
+
+double dwg_ent_shape_get_width_factor(dwg_ent_shape *shape, int *error);
+void   dwg_ent_shape_set_width_factor(dwg_ent_shape *shape, double width_factor, int *error);
+
+double dwg_ent_shape_get_oblique(dwg_ent_shape *shape, int *error);
+void   dwg_ent_shape_set_oblique(dwg_ent_shape *shape, double oblique, int *error);
+
+double dwg_ent_shape_get_thickness(dwg_ent_shape *shape, int *error);
+void   dwg_ent_shape_set_thickness(dwg_ent_shape *shape, double thickness, int *error);
+
+double dwg_ent_shape_get_shape_no(dwg_ent_shape *shape, int *error);
+void   dwg_ent_shape_set_shape_no(dwg_ent_shape *shape, double no, int *error);
+
+void   dwg_ent_shape_get_extrusion(dwg_ent_shape *shape, dwg_point_3d *point, int *error);
+void   dwg_ent_shape_set_extrusion(dwg_ent_shape *shape, dwg_point_3d *point, int *error);
+
+//-------------------------------------------------------------------------------------------
+
+void dwg_ent_mtext_set_insertion_pt(dwg_ent_mtext *mtext, dwg_point_3d *point, int *error);
+void dwg_ent_mtext_get_insertion_pt(dwg_ent_mtext *mtext, dwg_point_3d *point, int *error);
+
+void dwg_ent_mtext_set_extrusion(dwg_ent_mtext *mtext, dwg_point_3d *point, int *error);
+void dwg_ent_mtext_get_extrusion(dwg_ent_mtext *mtext, dwg_point_3d *point, int *error);
+
+void dwg_ent_mtext_set_x_axis_dir(dwg_ent_mtext *mtext, dwg_point_3d *point, int *error);
+void dwg_ent_mtext_get_x_axis_dir(dwg_ent_mtext *mtext, dwg_point_3d *point, int *error);
+
+void dwg_ent_mtext_set_rect_height(dwg_ent_mtext *mtext, double rect_height, int *error);
+double dwg_ent_mtext_get_rect_height(dwg_ent_mtext *mtext, int *error);
+
+void dwg_ent_mtext_set_rect_width(dwg_ent_mtext *mtext, double rect_width, int *error);
+double dwg_ent_mtext_get_rect_width(dwg_ent_mtext *mtext, int *error);
+
+void dwg_ent_mtext_set_text_height(dwg_ent_mtext *mtext, double text_height, int *error);
+double dwg_ent_mtext_get_text_height(dwg_ent_mtext *mtext, int *error);
+
+unsigned int dwg_ent_mtext_get_attachment(dwg_ent_mtext *mtext, int *error);
+void dwg_ent_mtext_set_attachment(dwg_ent_mtext *mtext, unsigned int attachment, int *error);
+
+unsigned int dwg_ent_mtext_get_drawing_dir(dwg_ent_mtext *mtext, int *error);
+void dwg_ent_mtext_set_drawing_dir(dwg_ent_mtext *mtext, unsigned int dir, int *error);
+
+double dwg_ent_mtext_get_extends_ht(dwg_ent_mtext *mtext, int *error);
+void dwg_ent_mtext_set_extends_ht(dwg_ent_mtext *mtext, double ht, int *error);
+
+double dwg_ent_mtext_get_extends_wid(dwg_ent_mtext *mtext, int *error);
+void dwg_ent_mtext_set_extends_wid(dwg_ent_mtext *mtext, double wid, int *error);
+
+char* dwg_ent_mtext_get_text(dwg_ent_mtext *mtext, int *error);
+void dwg_ent_mtext_set_text(dwg_ent_mtext *mtext, char * text, int *error);
+
+unsigned int dwg_ent_mtext_linespace_style(dwg_ent_mtext *mtext, int *error);
+void dwg_ent_mtext_set_linespace_style(dwg_ent_mtext *mtext, unsigned int style, int *error);
+
+double dwg_ent_mtext_get_linespace_factor(dwg_ent_mtext *mtext, int *error);
+void dwg_ent_mtext_set_linespace_factor(dwg_ent_mtext *mtext, double factor, int *error);
+
+//-------------------------------------------------------------------------------------------
+
+void dwg_ent_leader_set_annot_type(dwg_ent_leader *leader, unsigned int type, int *error);
+unsigned int dwg_ent_leader_get_annot_type(dwg_ent_leader *leader, int *error);
+
+void dwg_ent_leader_set_path_type(dwg_ent_leader *leader, unsigned int type, int *error);
+unsigned int dwg_ent_leader_get_path_type(dwg_ent_leader *leader, int *error);
+
+long dwg_ent_leader_get_numpts(dwg_ent_leader *leader, int *error);
+void dwg_ent_leader_set_numpts(dwg_ent_leader *leader, long numpts, int *error);
+
+void dwg_ent_leader_set_end_pt_proj(dwg_ent_leader *leader, dwg_point_3d *point, int *error);
+void dwg_ent_leader_get_end_pt_proj(dwg_ent_leader *leader, dwg_point_3d *point, int *error);
+
+void dwg_ent_leader_set_extrusion(dwg_ent_leader *leader, dwg_point_3d *point, int *error);
+void dwg_ent_leader_get_extrusion(dwg_ent_leader *leader, dwg_point_3d *point, int *error);
+
+void dwg_ent_leader_set_x_direction(dwg_ent_leader *leader, dwg_point_3d *point, int *error);
+void dwg_ent_leader_get_x_direction(dwg_ent_leader *leader, dwg_point_3d *point, int *error);
+
+void dwg_ent_leader_set_offset_to_block_ins_pt(dwg_ent_leader *leader, dwg_point_3d *point, int *error);
+void dwg_ent_leader_get_offset_to_block_ins_pt(dwg_ent_leader *leader, dwg_point_3d *point, int *error);
+
+void dwg_ent_leader_set_dimgap(dwg_ent_leader *leader, double dimgap, int *error);
+double dwg_ent_leader_get_dimgap(dwg_ent_leader *leader, int *error);
+
+void dwg_ent_leader_set_box_height(dwg_ent_leader *leader, double height, int *error);
+double dwg_ent_leader_get_box_height(dwg_ent_leader *leader, int *error);
+
+void dwg_ent_leader_set_box_width(dwg_ent_leader *leader, double width, int *error);
+double dwg_ent_leader_get_box_width(dwg_ent_leader *leader, int *error);
+
+void dwg_ent_leader_set_hook_line_on_x_dir(dwg_ent_leader *leader, char hook, int *error);
+char dwg_ent_leader_get_hook_line_on_x_dir(dwg_ent_leader *leader, int *error);
+
+void dwg_ent_leader_set_arrowhead_on(dwg_ent_leader *leader, char arrow, int *error);
+char dwg_ent_leader_get_arrowhead_on(dwg_ent_leader *leader, int *error);
+
+void dwg_ent_leader_set_arrowhead_type(dwg_ent_leader *leader, unsigned int type, int *error);
+unsigned int dwg_ent_leader_get_arrowhead_type(dwg_ent_leader *leader, int *error);
+
+void dwg_ent_leader_set_dimasz(dwg_ent_leader *leader, double dimasz, int *error);
+double dwg_ent_leader_get_dimasz(dwg_ent_leader *leader, int *error);
+
+void dwg_ent_leader_set_byblock_color(dwg_ent_leader *leader, unsigned int color, int *error);
+unsigned int dwg_ent_leader_get_byblock_color(dwg_ent_leader *leader, int *error);
+
+//-------------------------------------------------------------------------------------------
+
+void dwg_ent_tolerance_set_height(dwg_ent_tolerance *tol, double height, int *error);
+double dwg_ent_tolerance_get_height(dwg_ent_tolerance *tol, int *error);
+
+void dwg_ent_tolerance_set_dimgap(dwg_ent_tolerance *tol, double dimgap, int *error);
+double dwg_ent_tolerance_get_dimgap(dwg_ent_tolerance *tol, int *error);
+
+void dwg_ent_tolerance_set_ins_pt(dwg_ent_tolerance *tol, dwg_point_3d *point, int *error);
+void dwg_ent_tolerance_get_ins_pt(dwg_ent_tolerance *tol, dwg_point_3d *point, int *error);
+
+void dwg_ent_tolerance_set_x_direction(dwg_ent_tolerance *tol, dwg_point_3d *point, int *error);
+void dwg_ent_tolerance_get_x_direction(dwg_ent_tolerance *tol, dwg_point_3d *point, int *error);
+
+void dwg_ent_tolerance_set_extrusion(dwg_ent_tolerance *tol, dwg_point_3d *point, int *error);
+void dwg_ent_tolerance_get_extrusion(dwg_ent_tolerance *tol, dwg_point_3d *point, int *error);
+
+void dwg_ent_tolerance_set_text_string(dwg_ent_tolerance *tol, char * string, int *error);
+char * dwg_ent_tolerance_get_text_string(dwg_ent_tolerance *tol, int *error);
 
 //------------------------------------------------------------------------------------
 
