@@ -3977,58 +3977,20 @@ dwg_obj_get_appid_control(dwg_obj_appid *appid, int *error)
 
 }
 
-//-------------------------------------------------------------------------------
-/*
-dwg_ent_dimension_ordinate
+//-------------------------------------------------------------------------------------------
 
-#define DIMENSION_COMMON \
-    BITCODE_3BD extrusion; \
-    BITCODE_2RD text_midpt; \
-    struct \
-      { \
-        BITCODE_BD ecs_11; \
-        BITCODE_BD ecs_12; \
-      } elevation; \
-    BITCODE_RC flags_1; \
-    BITCODE_TV user_text; \
-    BITCODE_BD text_rot; \
-    BITCODE_BD horiz_dir; \
-    BITCODE_3BD ins_scale; \
-    BITCODE_BD ins_rotation; \
-    BITCODE_BS attachment_point; \
-    BITCODE_BS lspace_style; \
-    BITCODE_BD lspace_factor; \
-    BITCODE_BD act_measurement; \
-    BITCODE_B unknown; \
-    BITCODE_B flip_arrow1; \
-    BITCODE_B flip_arrow2;
-
-/**
- Struct for ordinate dimension - DIMENSION_ORDINATE (20)
-
-typedef struct _dwg_entity_DIMENSION_ORDINATE
+char * dwg_ent_dim_linear_get_block_name(dwg_ent_dim_linear *dim, int *error)
 {
-  DIMENSION_COMMON
-  BITCODE_2RD _12_pt;
-  BITCODE_3BD _10_pt;
-  BITCODE_3BD _13_pt;
-  BITCODE_3BD _14_pt;
-  BITCODE_RC flags_2;
-  BITCODE_H dimstyle;
-  BITCODE_H block;
-} Dwg_Entity_DIMENSION_ORDINATE;
-*/
-//-------------------------------------------------------------------------------
+    return dim->block->obj->tio.object->tio.BLOCK_HEADER->entry_name;
+}
 
-void
-dwg_ent_dim_ordinate_set_extrusion(dwg_ent_dim_ordinate *ord, dwg_point_3d *point, int *error)
+double
+dwg_ent_dim_ordinate_get_elevation_ecs11(dwg_ent_dim_ordinate *dim, int *error)
 {
-    if (ord != 0)
+    if (dim != 0)
         {
             *error = 0;
-            ord->extrusion.x = point->x;
-            ord->extrusion.y = point->y;
-            ord->extrusion.z = point->z;
+            return dim->elevation.ecs_11;
         }
     else
         {
@@ -4037,14 +3999,26 @@ dwg_ent_dim_ordinate_set_extrusion(dwg_ent_dim_ordinate *ord, dwg_point_3d *poin
 }
 
 void
-dwg_ent_dim_ordinate_get_extrusion(dwg_ent_dim_ordinate *ord, dwg_point_3d *point, int *error)
+dwg_ent_dim_ordinate_set_elevation_ecs11(dwg_ent_dim_ordinate *dim, double elevation_ecs11, int *error)
 {
-    if (ord != 0)
+    if (dim != 0)
         {
             *error = 0;
-            point->x = ord->extrusion.x;
-            point->y = ord->extrusion.y;
-            point->z = ord->extrusion.z;
+            dim->elevation.ecs_11 = elevation_ecs11;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_ordinate_get_elevation_ecs12(dwg_ent_dim_ordinate *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->elevation.ecs_12;
         }
     else
         {
@@ -4053,14 +4027,26 @@ dwg_ent_dim_ordinate_get_extrusion(dwg_ent_dim_ordinate *ord, dwg_point_3d *poin
 }
 
 void
-dwg_ent_dim_ordinate_set_ins_scale(dwg_ent_dim_ordinate *ord, dwg_point_3d *point, int *error)
+dwg_ent_dim_ordinate_set_elevation_ecs12(dwg_ent_dim_ordinate *dim, double elevation_ecs12, int *error)
 {
-    if (ord != 0)
+    if (dim != 0)
         {
             *error = 0;
-            ord->ins_scale.x = point->x;
-            ord->ins_scale.y = point->y;
-            ord->ins_scale.z = point->z;
+            dim->elevation.ecs_12 = elevation_ecs12;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char
+dwg_ent_dim_ordinate_get_flags1(dwg_ent_dim_ordinate *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->flags_1;
         }
     else
         {
@@ -4069,14 +4055,26 @@ dwg_ent_dim_ordinate_set_ins_scale(dwg_ent_dim_ordinate *ord, dwg_point_3d *poin
 }
 
 void
-dwg_ent_dim_ordinate_get_ins_scale(dwg_ent_dim_ordinate *ord, dwg_point_3d *point, int *error)
+dwg_ent_dim_ordinate_set_flags1(dwg_ent_dim_ordinate *dim, char flag, int *error)
 {
-    if (ord != 0)
+    if (dim != 0)
         {
             *error = 0;
-            point->x = ord->ins_scale.x;
-            point->y = ord->ins_scale.y;
-            point->z = ord->ins_scale.z;
+            dim->flags_1 = flag;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_ordinate_get_act_measurement(dwg_ent_dim_ordinate *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->act_measurement;
         }
     else
         {
@@ -4085,14 +4083,26 @@ dwg_ent_dim_ordinate_get_ins_scale(dwg_ent_dim_ordinate *ord, dwg_point_3d *poin
 }
 
 void
-dwg_ent_dim_ordinate_set_10_pt(dwg_ent_dim_ordinate *ord, dwg_point_3d *point, int *error)
+dwg_ent_dim_ordinate_set_act_measurement(dwg_ent_dim_ordinate *dim, double act_measurement, int *error)
 {
-    if (ord != 0)
+    if (dim != 0)
         {
             *error = 0;
-            ord->_10_pt.x = point->x;
-            ord->_10_pt.y = point->y;
-            ord->_10_pt.z = point->z;
+            dim->act_measurement = act_measurement;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_ordinate_get_horiz_dir(dwg_ent_dim_ordinate *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->horiz_dir;
         }
     else
         {
@@ -4101,14 +4111,26 @@ dwg_ent_dim_ordinate_set_10_pt(dwg_ent_dim_ordinate *ord, dwg_point_3d *point, i
 }
 
 void
-dwg_ent_dim_ordinate_get_10_pt(dwg_ent_dim_ordinate *ord, dwg_point_3d *point, int *error)
+dwg_ent_dim_ordinate_set_horiz_dir(dwg_ent_dim_ordinate *dim, double horiz_dir, int *error)
 {
-    if (ord != 0)
+    if (dim != 0)
         {
             *error = 0;
-            point->x = ord->_10_pt.x;
-            point->y = ord->_10_pt.y;
-            point->z = ord->_10_pt.z;
+            dim->horiz_dir = horiz_dir;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_ordinate_get_lspace_factor(dwg_ent_dim_ordinate *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->lspace_factor;
         }
     else
         {
@@ -4117,14 +4139,26 @@ dwg_ent_dim_ordinate_get_10_pt(dwg_ent_dim_ordinate *ord, dwg_point_3d *point, i
 }
 
 void
-dwg_ent_dim_ordinate_set_13_pt(dwg_ent_dim_ordinate *ord, dwg_point_3d *point, int *error)
+dwg_ent_dim_ordinate_set_lspace_factor(dwg_ent_dim_ordinate *dim, double factor, int *error)
 {
-    if (ord != 0)
+    if (dim != 0)
         {
             *error = 0;
-            ord->_13_pt.x = point->x;
-            ord->_13_pt.y = point->y;
-            ord->_13_pt.z = point->z;
+            dim->lspace_factor = factor;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+unsigned int
+dwg_ent_dim_ordinate_get_lspace_style(dwg_ent_dim_ordinate *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->lspace_style;
         }
     else
         {
@@ -4133,14 +4167,26 @@ dwg_ent_dim_ordinate_set_13_pt(dwg_ent_dim_ordinate *ord, dwg_point_3d *point, i
 }
 
 void
-dwg_ent_dim_ordinate_get_13_pt(dwg_ent_dim_ordinate *ord, dwg_point_3d *point, int *error)
+dwg_ent_dim_ordinate_set_lspace_style(dwg_ent_dim_ordinate *dim, unsigned int style, int *error)
 {
-    if (ord != 0)
+    if (dim != 0)
         {
             *error = 0;
-            point->x = ord->_13_pt.x;
-            point->y = ord->_13_pt.y;
-            point->z = ord->_13_pt.z;
+            dim->lspace_style = style;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+unsigned int
+dwg_ent_dim_ordinate_get_attachment_point(dwg_ent_dim_ordinate *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->attachment_point;
         }
     else
         {
@@ -4149,14 +4195,12 @@ dwg_ent_dim_ordinate_get_13_pt(dwg_ent_dim_ordinate *ord, dwg_point_3d *point, i
 }
 
 void
-dwg_ent_dim_ordinate_set_14_pt(dwg_ent_dim_ordinate *ord, dwg_point_3d *point, int *error)
+dwg_ent_dim_ordinate_set_attachment_point(dwg_ent_dim_ordinate *dim, unsigned int point, int *error)
 {
-    if (ord != 0)
+    if (dim != 0)
         {
             *error = 0;
-            ord->_14_pt.x = point->x;
-            ord->_14_pt.y = point->y;
-            ord->_14_pt.z = point->z;
+            dim->attachment_point = point;
         }
     else
         {
@@ -4165,14 +4209,14 @@ dwg_ent_dim_ordinate_set_14_pt(dwg_ent_dim_ordinate *ord, dwg_point_3d *point, i
 }
 
 void
-dwg_ent_dim_ordinate_get_14_pt(dwg_ent_dim_ordinate *ord, dwg_point_3d *point, int *error)
+dwg_ent_dim_ordinate_set_extrusion(dwg_ent_dim_ordinate *dim, dwg_point_3d *point, int *error)
 {
-    if (ord != 0)
+    if (dim != 0)
         {
             *error = 0;
-            point->x = ord->_14_pt.x;
-            point->y = ord->_14_pt.y;
-            point->z = ord->_14_pt.z;
+            dim->extrusion.x = point->x;
+            dim->extrusion.y = point->y;
+            dim->extrusion.z = point->z;
         }
     else
         {
@@ -4180,6 +4224,4058 @@ dwg_ent_dim_ordinate_get_14_pt(dwg_ent_dim_ordinate *ord, dwg_point_3d *point, i
         }
 }
 
+void
+dwg_ent_dim_ordinate_get_extrusion(dwg_ent_dim_ordinate *dim, dwg_point_3d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            point->x = dim->extrusion.x;
+            point->y = dim->extrusion.y;
+            point->z = dim->extrusion.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char *
+dwg_ent_dim_ordinate_get_user_text(dwg_ent_dim_ordinate *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->user_text;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ordinate_set_user_text(dwg_ent_dim_ordinate *dim, char * text, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->user_text = text;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_ordinate_get_text_rot(dwg_ent_dim_ordinate *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->text_rot;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ordinate_set_text_rot(dwg_ent_dim_ordinate *dim, double rot, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->text_rot = rot;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_ordinate_get_ins_rotation(dwg_ent_dim_ordinate *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->ins_rotation;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ordinate_set_ins_rotation(dwg_ent_dim_ordinate *dim, double rot, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->ins_rotation = rot;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char
+dwg_ent_dim_ordinate_get_flip_arrow1(dwg_ent_dim_ordinate *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->flip_arrow1;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ordinate_set_flip_arrow1(dwg_ent_dim_ordinate *dim, char flip_arrow, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->flip_arrow1 = flip_arrow;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char
+dwg_ent_dim_ordinate_get_flip_arrow2(dwg_ent_dim_ordinate *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->flip_arrow2;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ordinate_set_flip_arrow2(dwg_ent_dim_ordinate *dim, char flip_arrow, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->flip_arrow2 = flip_arrow;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void dwg_ent_dim_ordinate_set_text_mid_pt(dwg_ent_dim_ordinate *dim, dwg_point_2d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->text_midpt.x = point->x;
+            dim->text_midpt.y = point->y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void dwg_ent_dim_ordinate_get_text_mid_pt(dwg_ent_dim_ordinate *dim, dwg_point_2d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            point->x = dim->text_midpt.x;
+            point->y = dim->text_midpt.y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ordinate_set_ins_scale(dwg_ent_dim_ordinate *dim, dwg_point_3d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->ins_scale.x = point->x;
+            dim->ins_scale.y = point->y;
+            dim->ins_scale.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ordinate_get_ins_scale(dwg_ent_dim_ordinate *dim, dwg_point_3d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            point->x = dim->ins_scale.x;
+            point->y = dim->ins_scale.y;
+            point->z = dim->ins_scale.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char
+dwg_ent_dim_ordinate_get_flags2(dwg_ent_dim_ordinate *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->flags_2;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ordinate_set_flags2(dwg_ent_dim_ordinate *dim, char flag, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->flags_2 = flag;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ordinate_set_12_pt(dwg_ent_dim_ordinate *dim, dwg_point_2d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->_12_pt.x = point->x;
+            dim->_12_pt.y = point->y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ordinate_get_12_pt(dwg_ent_dim_ordinate *dim, dwg_point_2d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            point->x = dim->_12_pt.x;
+            point->y = dim->_12_pt.y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ordinate_set_10_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->_10_pt.x = point->x;
+            dim->_10_pt.y = point->y;
+            dim->_10_pt.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ordinate_get_10_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            point->x = dim->_10_pt.x;
+            point->y = dim->_10_pt.y;
+            point->z = dim->_10_pt.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ordinate_set_13_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->_13_pt.x = point->x;
+            dim->_13_pt.y = point->y;
+            dim->_13_pt.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ordinate_get_13_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            point->x = dim->_13_pt.x;
+            point->y = dim->_13_pt.y;
+            point->z = dim->_13_pt.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ordinate_set_14_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->_14_pt.x = point->x;
+            dim->_14_pt.y = point->y;
+            dim->_14_pt.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ordinate_get_14_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            point->x = dim->_14_pt.x;
+            point->y = dim->_14_pt.y;
+            point->z = dim->_14_pt.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+//-------------------------------------------------------------------------------------------
+
+double
+dwg_ent_dim_linear_get_elevation_ecs11(dwg_ent_dim_linear *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->elevation.ecs_11;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_linear_set_elevation_ecs11(dwg_ent_dim_linear *dim, double elevation_ecs11, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->elevation.ecs_11 = elevation_ecs11;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_linear_get_elevation_ecs12(dwg_ent_dim_linear *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->elevation.ecs_12;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_linear_set_elevation_ecs12(dwg_ent_dim_linear *dim, double elevation_ecs12, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->elevation.ecs_12 = elevation_ecs12;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char
+dwg_ent_dim_linear_get_flags1(dwg_ent_dim_linear *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->flags_1;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_linear_set_flags1(dwg_ent_dim_linear *dim, char flag, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->flags_1 = flag;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_linear_get_act_measurement(dwg_ent_dim_linear *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->act_measurement;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_linear_set_act_measurement(dwg_ent_dim_linear *dim, double act_measurement, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->act_measurement = act_measurement;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_linear_get_horiz_dir(dwg_ent_dim_linear *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->horiz_dir;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_linear_set_horiz_dir(dwg_ent_dim_linear *dim, double horiz_dir, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->horiz_dir = horiz_dir;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_linear_get_lspace_factor(dwg_ent_dim_linear *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->lspace_factor;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_linear_set_lspace_factor(dwg_ent_dim_linear *dim, double factor, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->lspace_factor = factor;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+unsigned int
+dwg_ent_dim_linear_get_lspace_style(dwg_ent_dim_linear *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->lspace_style;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_linear_set_lspace_style(dwg_ent_dim_linear *dim, unsigned int style, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->lspace_style = style;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+unsigned int
+dwg_ent_dim_linear_get_attachment_point(dwg_ent_dim_linear *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->attachment_point;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_linear_set_attachment_point(dwg_ent_dim_linear *dim, unsigned int point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->attachment_point = point;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_linear_set_extrusion(dwg_ent_dim_linear *dim, dwg_point_3d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->extrusion.x = point->x;
+            dim->extrusion.y = point->y;
+            dim->extrusion.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_linear_get_extrusion(dwg_ent_dim_linear *dim, dwg_point_3d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            point->x = dim->extrusion.x;
+            point->y = dim->extrusion.y;
+            point->z = dim->extrusion.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char *
+dwg_ent_dim_linear_get_user_text(dwg_ent_dim_linear *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->user_text;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_linear_set_user_text(dwg_ent_dim_linear *dim, char * text, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->user_text = text;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_linear_get_text_rot(dwg_ent_dim_linear *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->text_rot;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_linear_set_text_rot(dwg_ent_dim_linear *dim, double rot, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->text_rot = rot;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_linear_get_ins_rotation(dwg_ent_dim_linear *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->ins_rotation;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_linear_set_ins_rotation(dwg_ent_dim_linear *dim, double rot, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->ins_rotation = rot;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char
+dwg_ent_dim_linear_get_flip_arrow1(dwg_ent_dim_linear *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->flip_arrow1;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_linear_set_flip_arrow1(dwg_ent_dim_linear *dim, char flip_arrow, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->flip_arrow1 = flip_arrow;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char
+dwg_ent_dim_linear_get_flip_arrow2(dwg_ent_dim_linear *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->flip_arrow2;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_linear_set_flip_arrow2(dwg_ent_dim_linear *dim, char flip_arrow, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->flip_arrow2 = flip_arrow;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void dwg_ent_dim_linear_set_text_mid_pt(dwg_ent_dim_linear *dim, dwg_point_2d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->text_midpt.x = point->x;
+            dim->text_midpt.y = point->y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void dwg_ent_dim_linear_get_text_mid_pt(dwg_ent_dim_linear *dim, dwg_point_2d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            point->x = dim->text_midpt.x;
+            point->y = dim->text_midpt.y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_linear_set_ins_scale(dwg_ent_dim_linear *dim, dwg_point_3d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->ins_scale.x = point->x;
+            dim->ins_scale.y = point->y;
+            dim->ins_scale.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_linear_get_ins_scale(dwg_ent_dim_linear *dim, dwg_point_3d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            point->x = dim->ins_scale.x;
+            point->y = dim->ins_scale.y;
+            point->z = dim->ins_scale.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_linear_set_12_pt(dwg_ent_dim_linear *dim, dwg_point_2d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->_12_pt.x = point->x;
+            dim->_12_pt.y = point->y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_linear_get_12_pt(dwg_ent_dim_linear *dim, dwg_point_2d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            point->x = dim->_12_pt.x;
+            point->y = dim->_12_pt.y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_linear_set_10_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->_10_pt.x = point->x;
+            dim->_10_pt.y = point->y;
+            dim->_10_pt.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_linear_get_10_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            point->x = dim->_10_pt.x;
+            point->y = dim->_10_pt.y;
+            point->z = dim->_10_pt.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_linear_set_13_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->_13_pt.x = point->x;
+            dim->_13_pt.y = point->y;
+            dim->_13_pt.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_linear_get_13_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            point->x = dim->_13_pt.x;
+            point->y = dim->_13_pt.y;
+            point->z = dim->_13_pt.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_linear_set_14_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->_14_pt.x = point->x;
+            dim->_14_pt.y = point->y;
+            dim->_14_pt.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_linear_get_14_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            point->x = dim->_14_pt.x;
+            point->y = dim->_14_pt.y;
+            point->z = dim->_14_pt.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_linear_get_ext_line_rotation(dwg_ent_dim_linear *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->ext_line_rot;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_linear_set_ext_line_rotation(dwg_ent_dim_linear *dim, double rot, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->ext_line_rot = rot;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_linear_get_dim_rot(dwg_ent_dim_linear *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->dim_rot;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_linear_set_dim_rot(dwg_ent_dim_linear *dim, double rot, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->dim_rot = rot;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+//-------------------------------------------------------------------------------------------
+
+
+double
+dwg_ent_dim_aligned_get_elevation_ecs11(dwg_ent_dim_aligned *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->elevation.ecs_11;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_aligned_set_elevation_ecs11(dwg_ent_dim_aligned *dim, double elevation_ecs11, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->elevation.ecs_11 = elevation_ecs11;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_aligned_get_elevation_ecs12(dwg_ent_dim_aligned *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->elevation.ecs_12;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_aligned_set_elevation_ecs12(dwg_ent_dim_aligned *dim, double elevation_ecs12, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->elevation.ecs_12 = elevation_ecs12;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char
+dwg_ent_dim_aligned_get_flags1(dwg_ent_dim_aligned *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->flags_1;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_aligned_set_flags1(dwg_ent_dim_aligned *dim, char flag, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->flags_1 = flag;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_aligned_get_act_measurement(dwg_ent_dim_aligned *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->act_measurement;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_aligned_set_act_measurement(dwg_ent_dim_aligned *dim, double act_measurement, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->act_measurement = act_measurement;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_aligned_get_horiz_dir(dwg_ent_dim_aligned *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->horiz_dir;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_aligned_set_horiz_dir(dwg_ent_dim_aligned *dim, double horiz_dir, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->horiz_dir = horiz_dir;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_aligned_get_lspace_factor(dwg_ent_dim_aligned *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->lspace_factor;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_aligned_set_lspace_factor(dwg_ent_dim_aligned *dim, double factor, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->lspace_factor = factor;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+unsigned int
+dwg_ent_dim_aligned_get_lspace_style(dwg_ent_dim_aligned *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->lspace_style;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_aligned_set_lspace_style(dwg_ent_dim_aligned *dim, unsigned int style, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->lspace_style = style;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+unsigned int
+dwg_ent_dim_aligned_get_attachment_point(dwg_ent_dim_aligned *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->attachment_point;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_aligned_set_attachment_point(dwg_ent_dim_aligned *dim, unsigned int point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->attachment_point = point;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_aligned_set_extrusion(dwg_ent_dim_aligned *dim, dwg_point_3d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->extrusion.x = point->x;
+            dim->extrusion.y = point->y;
+            dim->extrusion.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_aligned_get_extrusion(dwg_ent_dim_aligned *dim, dwg_point_3d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            point->x = dim->extrusion.x;
+            point->y = dim->extrusion.y;
+            point->z = dim->extrusion.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char *
+dwg_ent_dim_aligned_get_user_text(dwg_ent_dim_aligned *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->user_text;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_aligned_set_user_text(dwg_ent_dim_aligned *dim, char * text, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->user_text = text;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_aligned_get_text_rot(dwg_ent_dim_aligned *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->text_rot;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_aligned_set_text_rot(dwg_ent_dim_aligned *dim, double rot, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->text_rot = rot;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_aligned_get_ins_rotation(dwg_ent_dim_aligned *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->ins_rotation;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_aligned_set_ins_rotation(dwg_ent_dim_aligned *dim, double rot, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->ins_rotation = rot;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char
+dwg_ent_dim_aligned_get_flip_arrow1(dwg_ent_dim_aligned *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->flip_arrow1;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_aligned_set_flip_arrow1(dwg_ent_dim_aligned *dim, char flip_arrow, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->flip_arrow1 = flip_arrow;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char
+dwg_ent_dim_aligned_get_flip_arrow2(dwg_ent_dim_aligned *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->flip_arrow2;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_aligned_set_flip_arrow2(dwg_ent_dim_aligned *dim, char flip_arrow, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->flip_arrow2 = flip_arrow;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void dwg_ent_dim_aligned_set_text_mid_pt(dwg_ent_dim_aligned *dim, dwg_point_2d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->text_midpt.x = point->x;
+            dim->text_midpt.y = point->y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void dwg_ent_dim_aligned_get_text_mid_pt(dwg_ent_dim_aligned *dim, dwg_point_2d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            point->x = dim->text_midpt.x;
+            point->y = dim->text_midpt.y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_aligned_set_ins_scale(dwg_ent_dim_aligned *dim, dwg_point_3d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->ins_scale.x = point->x;
+            dim->ins_scale.y = point->y;
+            dim->ins_scale.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_aligned_get_ins_scale(dwg_ent_dim_aligned *dim, dwg_point_3d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            point->x = dim->ins_scale.x;
+            point->y = dim->ins_scale.y;
+            point->z = dim->ins_scale.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_aligned_set_12_pt(dwg_ent_dim_aligned *dim, dwg_point_2d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->_12_pt.x = point->x;
+            dim->_12_pt.y = point->y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_aligned_get_12_pt(dwg_ent_dim_aligned *dim, dwg_point_2d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            point->x = dim->_12_pt.x;
+            point->y = dim->_12_pt.y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_aligned_set_10_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->_10_pt.x = point->x;
+            dim->_10_pt.y = point->y;
+            dim->_10_pt.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_aligned_get_10_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            point->x = dim->_10_pt.x;
+            point->y = dim->_10_pt.y;
+            point->z = dim->_10_pt.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_aligned_set_13_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->_13_pt.x = point->x;
+            dim->_13_pt.y = point->y;
+            dim->_13_pt.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_aligned_get_13_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            point->x = dim->_13_pt.x;
+            point->y = dim->_13_pt.y;
+            point->z = dim->_13_pt.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_aligned_set_14_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->_14_pt.x = point->x;
+            dim->_14_pt.y = point->y;
+            dim->_14_pt.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_aligned_get_14_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            point->x = dim->_14_pt.x;
+            point->y = dim->_14_pt.y;
+            point->z = dim->_14_pt.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_aligned_get_ext_line_rotation(dwg_ent_dim_aligned *dim, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            return dim->ext_line_rot;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_aligned_set_ext_line_rotation(dwg_ent_dim_aligned *dim, double rot, int *error)
+{
+    if (dim != 0)
+        {
+            *error = 0;
+            dim->ext_line_rot = rot;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+//-------------------------------------------------------------------------------------------
+
+double
+dwg_ent_dim_ang3pt_get_elevation_ecs11(dwg_ent_dim_ang3pt *ang, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            return ang->elevation.ecs_11;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang3pt_set_elevation_ecs11(dwg_ent_dim_ang3pt *ang, double elevation_ecs11, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->elevation.ecs_11 = elevation_ecs11;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_ang3pt_get_elevation_ecs12(dwg_ent_dim_ang3pt *ang, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            return ang->elevation.ecs_12;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang3pt_set_elevation_ecs12(dwg_ent_dim_ang3pt *ang, double elevation_ecs12, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->elevation.ecs_12 = elevation_ecs12;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char
+dwg_ent_dim_ang3pt_get_flags1(dwg_ent_dim_ang3pt *ang, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            return ang->flags_1;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang3pt_set_flags1(dwg_ent_dim_ang3pt *ang, char flag, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->flags_1 = flag;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_ang3pt_get_act_measurement(dwg_ent_dim_ang3pt *ang, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            return ang->act_measurement;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang3pt_set_act_measurement(dwg_ent_dim_ang3pt *ang, double act_measurement, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->act_measurement = act_measurement;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_ang3pt_get_horiz_dir(dwg_ent_dim_ang3pt *ang, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            return ang->horiz_dir;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang3pt_set_horiz_dir(dwg_ent_dim_ang3pt *ang, double horiz_dir, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->horiz_dir = horiz_dir;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_ang3pt_get_lspace_factor(dwg_ent_dim_ang3pt *ang, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            return ang->lspace_factor;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang3pt_set_lspace_factor(dwg_ent_dim_ang3pt *ang, double factor, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->lspace_factor = factor;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+unsigned int
+dwg_ent_dim_ang3pt_get_lspace_style(dwg_ent_dim_ang3pt *ang, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            return ang->lspace_style;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang3pt_set_lspace_style(dwg_ent_dim_ang3pt *ang, unsigned int style, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->lspace_style = style;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+unsigned int
+dwg_ent_dim_ang3pt_get_attachment_point(dwg_ent_dim_ang3pt *ang, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            return ang->attachment_point;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang3pt_set_attachment_point(dwg_ent_dim_ang3pt *ang, unsigned int point, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->attachment_point = point;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang3pt_set_extrusion(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->extrusion.x = point->x;
+            ang->extrusion.y = point->y;
+            ang->extrusion.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang3pt_get_extrusion(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            point->x = ang->extrusion.x;
+            point->y = ang->extrusion.y;
+            point->z = ang->extrusion.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char *
+dwg_ent_dim_ang3pt_get_user_text(dwg_ent_dim_ang3pt *ang, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            return ang->user_text;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang3pt_set_user_text(dwg_ent_dim_ang3pt *ang, char * text, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->user_text = text;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_ang3pt_get_text_rot(dwg_ent_dim_ang3pt *ang, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            return ang->text_rot;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang3pt_set_text_rot(dwg_ent_dim_ang3pt *ang, double rot, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->text_rot = rot;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_ang3pt_get_ins_rotation(dwg_ent_dim_ang3pt *ang, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            return ang->ins_rotation;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang3pt_set_ins_rotation(dwg_ent_dim_ang3pt *ang, double rot, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->ins_rotation = rot;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char
+dwg_ent_dim_ang3pt_get_flip_arrow1(dwg_ent_dim_ang3pt *ang, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            return ang->flip_arrow1;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang3pt_set_flip_arrow1(dwg_ent_dim_ang3pt *ang, char flip_arrow, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->flip_arrow1 = flip_arrow;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char
+dwg_ent_dim_ang3pt_get_flip_arrow2(dwg_ent_dim_ang3pt *ang, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            return ang->flip_arrow2;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang3pt_set_flip_arrow2(dwg_ent_dim_ang3pt *ang, char flip_arrow, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->flip_arrow2 = flip_arrow;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void dwg_ent_dim_ang3pt_set_text_mid_pt(dwg_ent_dim_ang3pt *ang, dwg_point_2d *point, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->text_midpt.x = point->x;
+            ang->text_midpt.y = point->y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void dwg_ent_dim_ang3pt_get_text_mid_pt(dwg_ent_dim_ang3pt *ang, dwg_point_2d *point, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            point->x = ang->text_midpt.x;
+            point->y = ang->text_midpt.y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang3pt_set_ins_scale(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->ins_scale.x = point->x;
+            ang->ins_scale.y = point->y;
+            ang->ins_scale.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang3pt_get_ins_scale(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            point->x = ang->ins_scale.x;
+            point->y = ang->ins_scale.y;
+            point->z = ang->ins_scale.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+
+void
+dwg_ent_dim_ang3pt_set_12_pt(dwg_ent_dim_ang3pt *ang, dwg_point_2d *point, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->_12_pt.x = point->x;
+            ang->_12_pt.y = point->y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang3pt_get_12_pt(dwg_ent_dim_ang3pt *ang, dwg_point_2d *point, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            point->x = ang->_12_pt.x;
+            point->y = ang->_12_pt.y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang3pt_set_10_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->_10_pt.x = point->x;
+            ang->_10_pt.y = point->y;
+            ang->_10_pt.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang3pt_get_10_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            point->x = ang->_10_pt.x;
+            point->y = ang->_10_pt.y;
+            point->z = ang->_10_pt.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang3pt_set_13_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->_13_pt.x = point->x;
+            ang->_13_pt.y = point->y;
+            ang->_13_pt.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang3pt_get_13_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            point->x = ang->_13_pt.x;
+            point->y = ang->_13_pt.y;
+            point->z = ang->_13_pt.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang3pt_set_14_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->_14_pt.x = point->x;
+            ang->_14_pt.y = point->y;
+            ang->_14_pt.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang3pt_get_14_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            point->x = ang->_14_pt.x;
+            point->y = ang->_14_pt.y;
+            point->z = ang->_14_pt.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+
+void
+dwg_ent_dim_ang3pt_set_15_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->_15_pt.x = point->x;
+            ang->_15_pt.y = point->y;
+            ang->_15_pt.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang3pt_get_15_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            point->x = ang->_15_pt.x;
+            point->y = ang->_15_pt.y;
+            point->z = ang->_15_pt.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+//-------------------------------------------------------------------------------------------
+
+double
+dwg_ent_dim_ang2ln_get_elevation_ecs11(dwg_ent_dim_ang2ln *ang, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            return ang->elevation.ecs_11;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang2ln_set_elevation_ecs11(dwg_ent_dim_ang2ln *ang, double elevation_ecs11, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->elevation.ecs_11 = elevation_ecs11;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_ang2ln_get_elevation_ecs12(dwg_ent_dim_ang2ln *ang, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            return ang->elevation.ecs_12;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang2ln_set_elevation_ecs12(dwg_ent_dim_ang2ln *ang, double elevation_ecs12, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->elevation.ecs_12 = elevation_ecs12;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char
+dwg_ent_dim_ang2ln_get_flags1(dwg_ent_dim_ang2ln *ang, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            return ang->flags_1;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang2ln_set_flags1(dwg_ent_dim_ang2ln *ang, char flag, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->flags_1 = flag;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_ang2ln_get_act_measurement(dwg_ent_dim_ang2ln *ang, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            return ang->act_measurement;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang2ln_set_act_measurement(dwg_ent_dim_ang2ln *ang, double act_measurement, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->act_measurement = act_measurement;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_ang2ln_get_horiz_dir(dwg_ent_dim_ang2ln *ang, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            return ang->horiz_dir;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang2ln_set_horiz_dir(dwg_ent_dim_ang2ln *ang, double horiz_dir, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->horiz_dir = horiz_dir;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_ang2ln_get_lspace_factor(dwg_ent_dim_ang2ln *ang, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            return ang->lspace_factor;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang2ln_set_lspace_factor(dwg_ent_dim_ang2ln *ang, double factor, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->lspace_factor = factor;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+unsigned int
+dwg_ent_dim_ang2ln_get_lspace_style(dwg_ent_dim_ang2ln *ang, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            return ang->lspace_style;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang2ln_set_lspace_style(dwg_ent_dim_ang2ln *ang, unsigned int style, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->lspace_style = style;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+unsigned int
+dwg_ent_dim_ang2ln_get_attachment_point(dwg_ent_dim_ang2ln *ang, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            return ang->attachment_point;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang2ln_set_attachment_point(dwg_ent_dim_ang2ln *ang, unsigned int point, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->attachment_point = point;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang2ln_set_extrusion(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->extrusion.x = point->x;
+            ang->extrusion.y = point->y;
+            ang->extrusion.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang2ln_get_extrusion(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            point->x = ang->extrusion.x;
+            point->y = ang->extrusion.y;
+            point->z = ang->extrusion.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char *
+dwg_ent_dim_ang2ln_get_user_text(dwg_ent_dim_ang2ln *ang, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            return ang->user_text;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang2ln_set_user_text(dwg_ent_dim_ang2ln *ang, char * text, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->user_text = text;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_ang2ln_get_text_rot(dwg_ent_dim_ang2ln *ang, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            return ang->text_rot;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang2ln_set_text_rot(dwg_ent_dim_ang2ln *ang, double rot, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->text_rot = rot;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_ang2ln_get_ins_rotation(dwg_ent_dim_ang2ln *ang, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            return ang->ins_rotation;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang2ln_set_ins_rotation(dwg_ent_dim_ang2ln *ang, double rot, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->ins_rotation = rot;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char
+dwg_ent_dim_ang2ln_get_flip_arrow1(dwg_ent_dim_ang2ln *ang, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            return ang->flip_arrow1;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang2ln_set_flip_arrow1(dwg_ent_dim_ang2ln *ang, char flip_arrow, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->flip_arrow1 = flip_arrow;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char
+dwg_ent_dim_ang2ln_get_flip_arrow2(dwg_ent_dim_ang2ln *ang, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            return ang->flip_arrow2;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang2ln_set_flip_arrow2(dwg_ent_dim_ang2ln *ang, char flip_arrow, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->flip_arrow2 = flip_arrow;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void dwg_ent_dim_ang2ln_set_text_mid_pt(dwg_ent_dim_ang2ln *ang, dwg_point_2d *point, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->text_midpt.x = point->x;
+            ang->text_midpt.y = point->y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void dwg_ent_dim_ang2ln_get_text_mid_pt(dwg_ent_dim_ang2ln *ang, dwg_point_2d *point, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            point->x = ang->text_midpt.x;
+            point->y = ang->text_midpt.y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang2ln_set_ins_scale(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->ins_scale.x = point->x;
+            ang->ins_scale.y = point->y;
+            ang->ins_scale.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang2ln_get_ins_scale(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            point->x = ang->ins_scale.x;
+            point->y = ang->ins_scale.y;
+            point->z = ang->ins_scale.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+
+void
+dwg_ent_dim_ang2ln_set_12_pt(dwg_ent_dim_ang2ln *ang, dwg_point_2d *point, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->_12_pt.x = point->x;
+            ang->_12_pt.y = point->y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang2ln_get_12_pt(dwg_ent_dim_ang2ln *ang, dwg_point_2d *point, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            point->x = ang->_12_pt.x;
+            point->y = ang->_12_pt.y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang2ln_set_10_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->_10_pt.x = point->x;
+            ang->_10_pt.y = point->y;
+            ang->_10_pt.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang2ln_get_10_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            point->x = ang->_10_pt.x;
+            point->y = ang->_10_pt.y;
+            point->z = ang->_10_pt.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang2ln_set_13_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->_13_pt.x = point->x;
+            ang->_13_pt.y = point->y;
+            ang->_13_pt.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang2ln_get_13_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            point->x = ang->_13_pt.x;
+            point->y = ang->_13_pt.y;
+            point->z = ang->_13_pt.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang2ln_set_14_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->_14_pt.x = point->x;
+            ang->_14_pt.y = point->y;
+            ang->_14_pt.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang2ln_get_14_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            point->x = ang->_14_pt.x;
+            point->y = ang->_14_pt.y;
+            point->z = ang->_14_pt.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+
+void
+dwg_ent_dim_ang2ln_set_15_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->_15_pt.x = point->x;
+            ang->_15_pt.y = point->y;
+            ang->_15_pt.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang2ln_get_15_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            point->x = ang->_15_pt.x;
+            point->y = ang->_15_pt.y;
+            point->z = ang->_15_pt.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+
+void
+dwg_ent_dim_ang2ln_set_16_pt(dwg_ent_dim_ang2ln *ang, dwg_point_2d *point, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            ang->_16_pt.x = point->x;
+            ang->_16_pt.y = point->y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_ang2ln_get_16_pt(dwg_ent_dim_ang2ln *ang, dwg_point_2d *point, int *error)
+{
+    if (ang != 0)
+        {
+            *error = 0;
+            point->x = ang->_16_pt.x;
+            point->y = ang->_16_pt.y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+//-------------------------------------------------------------------------------------------
+
+double
+dwg_ent_dim_radius_get_elevation_ecs11(dwg_ent_dim_radius *radius, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            return radius->elevation.ecs_11;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_radius_set_elevation_ecs11(dwg_ent_dim_radius *radius, double elevation_ecs11, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            radius->elevation.ecs_11 = elevation_ecs11;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_radius_get_elevation_ecs12(dwg_ent_dim_radius *radius, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            return radius->elevation.ecs_12;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_radius_set_elevation_ecs12(dwg_ent_dim_radius *radius, double elevation_ecs12, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            radius->elevation.ecs_12 = elevation_ecs12;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char
+dwg_ent_dim_radius_get_flags1(dwg_ent_dim_radius *radius, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            return radius->flags_1;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_radius_set_flags1(dwg_ent_dim_radius *radius, char flag, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            radius->flags_1 = flag;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_radius_get_act_measurement(dwg_ent_dim_radius *radius, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            return radius->act_measurement;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_radius_set_act_measurement(dwg_ent_dim_radius *radius, double act_measurement, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            radius->act_measurement = act_measurement;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_radius_get_horiz_dir(dwg_ent_dim_radius *radius, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            return radius->horiz_dir;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_radius_set_horiz_dir(dwg_ent_dim_radius *radius, double horiz_dir, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            radius->horiz_dir = horiz_dir;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_radius_get_lspace_factor(dwg_ent_dim_radius *radius, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            return radius->lspace_factor;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_radius_set_lspace_factor(dwg_ent_dim_radius *radius, double factor, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            radius->lspace_factor = factor;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+unsigned int
+dwg_ent_dim_radius_get_lspace_style(dwg_ent_dim_radius *radius, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            return radius->lspace_style;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_radius_set_lspace_style(dwg_ent_dim_radius *radius, unsigned int style, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            radius->lspace_style = style;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+unsigned int
+dwg_ent_dim_radius_get_attachment_point(dwg_ent_dim_radius *radius, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            return radius->attachment_point;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_radius_set_attachment_point(dwg_ent_dim_radius *radius, unsigned int point, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            radius->attachment_point = point;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_radius_set_extrusion(dwg_ent_dim_radius *radius, dwg_point_3d *point, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            radius->extrusion.x = point->x;
+            radius->extrusion.y = point->y;
+            radius->extrusion.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_radius_get_extrusion(dwg_ent_dim_radius *radius, dwg_point_3d *point, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            point->x = radius->extrusion.x;
+            point->y = radius->extrusion.y;
+            point->z = radius->extrusion.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char *
+dwg_ent_dim_radius_get_user_text(dwg_ent_dim_radius *radius, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            return radius->user_text;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_radius_set_user_text(dwg_ent_dim_radius *radius, char * text, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            radius->user_text = text;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_radius_get_text_rot(dwg_ent_dim_radius *radius, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            return radius->text_rot;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_radius_set_text_rot(dwg_ent_dim_radius *radius, double rot, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            radius->text_rot = rot;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_radius_get_ins_rotation(dwg_ent_dim_radius *radius, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            return radius->ins_rotation;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_radius_set_ins_rotation(dwg_ent_dim_radius *radius, double rot, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            radius->ins_rotation = rot;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char
+dwg_ent_dim_radius_get_flip_arrow1(dwg_ent_dim_radius *radius, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            return radius->flip_arrow1;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_radius_set_flip_arrow1(dwg_ent_dim_radius *radius, char flip_arrow, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            radius->flip_arrow1 = flip_arrow;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char
+dwg_ent_dim_radius_get_flip_arrow2(dwg_ent_dim_radius *radius, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            return radius->flip_arrow2;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_radius_set_flip_arrow2(dwg_ent_dim_radius *radius, char flip_arrow, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            radius->flip_arrow2 = flip_arrow;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void dwg_ent_dim_radius_set_text_mid_pt(dwg_ent_dim_radius *radius, dwg_point_2d *point, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            radius->text_midpt.x = point->x;
+            radius->text_midpt.y = point->y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void dwg_ent_dim_radius_get_text_mid_pt(dwg_ent_dim_radius *radius, dwg_point_2d *point, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            point->x = radius->text_midpt.x;
+            point->y = radius->text_midpt.y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_radius_set_ins_scale(dwg_ent_dim_radius *radius, dwg_point_3d *point, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            radius->ins_scale.x = point->x;
+            radius->ins_scale.y = point->y;
+            radius->ins_scale.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_radius_get_ins_scale(dwg_ent_dim_radius *radius, dwg_point_3d *point, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            point->x = radius->ins_scale.x;
+            point->y = radius->ins_scale.y;
+            point->z = radius->ins_scale.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+
+void
+dwg_ent_dim_radius_set_12_pt(dwg_ent_dim_radius *radius, dwg_point_2d *point, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            radius->_12_pt.x = point->x;
+            radius->_12_pt.y = point->y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_radius_get_12_pt(dwg_ent_dim_radius *radius, dwg_point_2d *point, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            point->x = radius->_12_pt.x;
+            point->y = radius->_12_pt.y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_radius_set_10_pt(dwg_ent_dim_radius *radius, dwg_point_3d *point, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            radius->_10_pt.x = point->x;
+            radius->_10_pt.y = point->y;
+            radius->_10_pt.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_radius_get_10_pt(dwg_ent_dim_radius *radius, dwg_point_3d *point, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            point->x = radius->_10_pt.x;
+            point->y = radius->_10_pt.y;
+            point->z = radius->_10_pt.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+
+void
+dwg_ent_dim_radius_set_15_pt(dwg_ent_dim_radius *radius, dwg_point_3d *point, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            radius->_15_pt.x = point->x;
+            radius->_15_pt.y = point->y;
+            radius->_15_pt.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_radius_get_15_pt(dwg_ent_dim_radius *radius, dwg_point_3d *point, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            point->x = radius->_15_pt.x;
+            point->y = radius->_15_pt.y;
+            point->z = radius->_15_pt.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_radius_get_leader_length(dwg_ent_dim_radius *radius, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            return radius->leader_len;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_radius_set_leader_length(dwg_ent_dim_radius *radius, double length, int *error)
+{
+    if (radius != 0)
+        {
+            *error = 0;
+            radius->leader_len = length;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+//-------------------------------------------------------------------------------------------
+
+double
+dwg_ent_dim_diameter_get_elevation_ecs11(dwg_ent_dim_diameter *dia, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            return dia->elevation.ecs_11;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_diameter_set_elevation_ecs11(dwg_ent_dim_diameter *dia, double elevation_ecs11, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            dia->elevation.ecs_11 = elevation_ecs11;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_diameter_get_elevation_ecs12(dwg_ent_dim_diameter *dia, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            return dia->elevation.ecs_12;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_diameter_set_elevation_ecs12(dwg_ent_dim_diameter *dia, double elevation_ecs12, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            dia->elevation.ecs_12 = elevation_ecs12;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char
+dwg_ent_dim_diameter_get_flags1(dwg_ent_dim_diameter *dia, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            return dia->flags_1;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_diameter_set_flags1(dwg_ent_dim_diameter *dia, char flag, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            dia->flags_1 = flag;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_diameter_get_act_measurement(dwg_ent_dim_diameter *dia, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            return dia->act_measurement;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_diameter_set_act_measurement(dwg_ent_dim_diameter *dia, double act_measurement, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            dia->act_measurement = act_measurement;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_diameter_get_horiz_dir(dwg_ent_dim_diameter *dia, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            return dia->horiz_dir;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_diameter_set_horiz_dir(dwg_ent_dim_diameter *dia, double horiz_dir, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            dia->horiz_dir = horiz_dir;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_diameter_get_lspace_factor(dwg_ent_dim_diameter *dia, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            return dia->lspace_factor;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_diameter_set_lspace_factor(dwg_ent_dim_diameter *dia, double factor, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            dia->lspace_factor = factor;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+unsigned int
+dwg_ent_dim_diameter_get_lspace_style(dwg_ent_dim_diameter *dia, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            return dia->lspace_style;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_diameter_set_lspace_style(dwg_ent_dim_diameter *dia, unsigned int style, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            dia->lspace_style = style;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+unsigned int
+dwg_ent_dim_diameter_get_attachment_point(dwg_ent_dim_diameter *dia, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            return dia->attachment_point;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_diameter_set_attachment_point(dwg_ent_dim_diameter *dia, unsigned int point, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            dia->attachment_point = point;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_diameter_set_extrusion(dwg_ent_dim_diameter *dia, dwg_point_3d *point, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            dia->extrusion.x = point->x;
+            dia->extrusion.y = point->y;
+            dia->extrusion.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_diameter_get_extrusion(dwg_ent_dim_diameter *dia, dwg_point_3d *point, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            point->x = dia->extrusion.x;
+            point->y = dia->extrusion.y;
+            point->z = dia->extrusion.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char *
+dwg_ent_dim_diameter_get_user_text(dwg_ent_dim_diameter *dia, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            return dia->user_text;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_diameter_set_user_text(dwg_ent_dim_diameter *dia, char * text, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            dia->user_text = text;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_diameter_get_text_rot(dwg_ent_dim_diameter *dia, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            return dia->text_rot;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_diameter_set_text_rot(dwg_ent_dim_diameter *dia, double rot, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            dia->text_rot = rot;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_diameter_get_ins_rotation(dwg_ent_dim_diameter *dia, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            return dia->ins_rotation;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_diameter_set_ins_rotation(dwg_ent_dim_diameter *dia, double rot, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            dia->ins_rotation = rot;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char
+dwg_ent_dim_diameter_get_flip_arrow1(dwg_ent_dim_diameter *dia, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            return dia->flip_arrow1;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_diameter_set_flip_arrow1(dwg_ent_dim_diameter *dia, char flip_arrow, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            dia->flip_arrow1 = flip_arrow;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char
+dwg_ent_dim_diameter_get_flip_arrow2(dwg_ent_dim_diameter *dia, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            return dia->flip_arrow2;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_diameter_set_flip_arrow2(dwg_ent_dim_diameter *dia, char flip_arrow, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            dia->flip_arrow2 = flip_arrow;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void dwg_ent_dim_diameter_set_text_mid_pt(dwg_ent_dim_diameter *dia, dwg_point_2d *point, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            dia->text_midpt.x = point->x;
+            dia->text_midpt.y = point->y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void dwg_ent_dim_diameter_get_text_mid_pt(dwg_ent_dim_diameter *dia, dwg_point_2d *point, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            point->x = dia->text_midpt.x;
+            point->y = dia->text_midpt.y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_diameter_set_ins_scale(dwg_ent_dim_diameter *dia, dwg_point_3d *point, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            dia->ins_scale.x = point->x;
+            dia->ins_scale.y = point->y;
+            dia->ins_scale.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_diameter_get_ins_scale(dwg_ent_dim_diameter *dia, dwg_point_3d *point, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            point->x = dia->ins_scale.x;
+            point->y = dia->ins_scale.y;
+            point->z = dia->ins_scale.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_diameter_set_12_pt(dwg_ent_dim_diameter *dia, dwg_point_2d *point, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            dia->_12_pt.x = point->x;
+            dia->_12_pt.y = point->y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_diameter_get_12_pt(dwg_ent_dim_diameter *dia, dwg_point_2d *point, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            point->x = dia->_12_pt.x;
+            point->y = dia->_12_pt.y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_diameter_set_10_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *point, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            dia->_10_pt.x = point->x;
+            dia->_10_pt.y = point->y;
+            dia->_10_pt.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_diameter_get_10_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *point, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            point->x = dia->_10_pt.x;
+            point->y = dia->_10_pt.y;
+            point->z = dia->_10_pt.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+
+void
+dwg_ent_dim_diameter_set_15_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *point, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            dia->_15_pt.x = point->x;
+            dia->_15_pt.y = point->y;
+            dia->_15_pt.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_diameter_get_15_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *point, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            point->x = dia->_15_pt.x;
+            point->y = dia->_15_pt.y;
+            point->z = dia->_15_pt.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_dim_diameter_get_leader_length(dwg_ent_dim_diameter *dia, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            return dia->leader_len;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_dim_diameter_set_leader_length(dwg_ent_dim_diameter *dia, double length, int *error)
+{
+    if (dia != 0)
+        {
+            *error = 0;
+            dia->leader_len = length;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
 //-------------------------------------------------------------------------------
 
 /* Returns block control object from a block header type argument passed 
