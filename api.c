@@ -9601,6 +9601,1502 @@ char * dwg_ent_tolerance_get_text_string(dwg_ent_tolerance *tol, int *error)
 
 //-------------------------------------------------------------------------------
 
+char dwg_ent_lwpline_get_flags(dwg_ent_lwpline *lwpline, int *error)
+{
+  if(lwpline != 0)
+    {
+      *error = 0;  
+      return lwpline->flags;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+void dwg_ent_lwpline_set_flags(dwg_ent_lwpline *lwpline, char flags, int *error)
+{
+  if(lwpline != 0)
+    {
+      *error = 0;
+      lwpline->flags = flags;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+
+double dwg_ent_lwpline_get_const_width(dwg_ent_lwpline *lwpline, int *error)
+{
+  if(lwpline != 0)
+    {
+      *error = 0;
+      return lwpline->const_width;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+void dwg_ent_lwpline_set_const_width(dwg_ent_lwpline *lwpline, double const_width, int *error)
+{
+  if(lwpline != 0)
+    {
+      *error = 0;
+      lwpline->const_width = const_width;    
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+
+double dwg_ent_lwpline_get_elevation(dwg_ent_lwpline *lwpline, int *error)
+{
+  if(lwpline != 0)
+    {
+      *error = 0;
+      return lwpline->elevation;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+void dwg_ent_lwpline_set_elevation(dwg_ent_lwpline *lwpline, double elevation, int *error)
+{
+  if(lwpline != 0)
+    {
+      *error = 0;
+      lwpline->elevation = elevation;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+
+double dwg_ent_lwpline_get_thickness(dwg_ent_lwpline *lwpline, int *error)
+{
+  if(lwpline != 0)
+    {
+      *error = 0;
+      return lwpline->thickness;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+void dwg_ent_lwpline_set_thickness(dwg_ent_lwpline *lwpline, double thickness, int *error)
+{
+  if(lwpline != 0)
+    {
+      *error = 0;
+      lwpline->thickness = thickness;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+
+long dwg_ent_lwpline_get_num_points(dwg_ent_lwpline *lwpline, int *error)
+{
+  if(lwpline != 0)
+    {
+      *error = 0;
+      return lwpline->num_points;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+void dwg_ent_lwpline_set_num_points(dwg_ent_lwpline *lwpline, long num_points, int *error)
+{
+  if(lwpline != 0)
+    {
+      *error = 0;
+      lwpline->num_points = num_points;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+
+long dwg_ent_lwpline_get_num_bulges(dwg_ent_lwpline *lwpline, int *error)
+{
+  if(lwpline != 0)
+    {
+      *error = 0;
+      return lwpline->num_bulges;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+void dwg_ent_lwpline_set_num_bulges(dwg_ent_lwpline *lwpline, long num_bulges, int *error)
+{
+  if(lwpline != 0)
+    {
+      *error = 0;
+      lwpline->num_bulges = num_bulges;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+
+long dwg_ent_lwpline_get_num_widths(dwg_ent_lwpline *lwpline, int *error)
+{
+  if(lwpline != 0)
+    {
+      *error = 0;
+      return lwpline->num_widths;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+void dwg_ent_lwpline_set_num_widths(dwg_ent_lwpline *lwpline, long num_widths, int *error)
+{
+  if(lwpline != 0)
+    {
+      *error = 0;
+      lwpline->num_widths = num_widths;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+
+void dwg_ent_lwpline_get_normal(dwg_ent_lwpline *lwpline, dwg_point_3d *points, int *error)
+{
+  if(lwpline != 0)
+    {
+      *error = 0;
+      points->x = lwpline->normal.x;
+      points->y = lwpline->normal.y;
+      points->z = lwpline->normal.z;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+void dwg_ent_lwpline_set_normal(dwg_ent_lwpline *lwpline, dwg_point_3d *points, int *error)
+{
+  if(lwpline != 0)
+    {
+      *error = 0;
+      lwpline->normal.x = points->x;
+      lwpline->normal.y = points->y;
+      lwpline->normal.z = points->z;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+
+double *
+dwg_ent_lwpline_get_bulges(dwg_ent_lwpline *lwpline, int *error)
+{
+  double *ptx = (double*) malloc(sizeof(double)* lwpline->num_bulges);
+  if(ptx != 0)
+    {
+      *error = 0;
+      int i = 0;
+      for (i = 0; i < lwpline->num_bulges ; i++)
+      {
+        ptx[i] = lwpline->bulges[i];
+      }
+      return ptx;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+
+dwg_point_2d *
+dwg_ent_lwpline_get_points(dwg_ent_lwpline *lwpline, int *error)
+{
+  dwg_point_2d *ptx = (dwg_point_2d*) malloc(sizeof(dwg_point_2d)* lwpline->num_points);
+  if(ptx != 0)
+    {
+      *error = 0;
+      int i = 0;
+      for (i = 0; i < lwpline->num_points ; i++)
+      {
+        ptx[i].x = lwpline->points[i].x;
+        ptx[i].y = lwpline->points[i].y;
+      }
+      return ptx;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+
+dwg_lwpline_widths *
+dwg_ent_lwpline_get_widths(dwg_ent_lwpline *lwpline, int *error)
+{
+  dwg_lwpline_widths *ptx = (dwg_lwpline_widths*) malloc(sizeof(dwg_lwpline_widths)* lwpline->num_widths);
+  if(ptx != 0)
+    {
+      *error = 0;
+      int i = 0;
+      for (i = 0; i < lwpline->num_widths ; i++)
+      {
+        ptx[i].start = lwpline->widths[i].start;
+        ptx[i].end = lwpline->widths[i].end;
+      }
+      return ptx;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+
+//-------------------------------------------------------------------------------
+
+unsigned int
+dwg_ent_ole2frame_get_flags(dwg_ent_ole2frame *frame, int *error)
+  {
+    return frame->flags;
+  }
+void
+dwg_ent_ole2frame_set_flags(dwg_ent_ole2frame *frame, unsigned int flags, int *error)
+  {
+    frame->flags = flags;
+  }
+unsigned int
+dwg_ent_ole2frame_get_mode(dwg_ent_ole2frame *frame, int *error)
+  {
+    return frame->mode;
+  }
+void
+dwg_ent_ole2frame_set_mode(dwg_ent_ole2frame *frame, unsigned int mode, int *error)
+  {
+    frame->mode = mode;
+  }
+long
+dwg_ent_ole2frame_get_data_length(dwg_ent_ole2frame *frame, int *error)
+  {
+    return frame->data_length;
+  }
+void
+dwg_ent_ole2frame_set_data_length(dwg_ent_ole2frame *frame, long data_length, int *error)
+  {
+    frame->data_length = data_length;
+  }
+char *
+dwg_ent_ole2frame_get_data(dwg_ent_ole2frame *frame, int *error)
+  {
+    return frame->data;
+  }
+void
+dwg_ent_ole2frame_set_data(dwg_ent_ole2frame *frame, char * data, int *error)
+  {
+    frame->data = data;
+  }
+
+//-------------------------------------------------------------------------------
+
+unsigned int
+dwg_entity_spline_get_scenario(dwg_ent_spline *spline, int *error)
+{
+    return spline->scenario;
+}
+
+void
+dwg_entity_spline_set_scenario(dwg_ent_spline *spline, unsigned int scenario, int *error)
+{
+    spline->scenario = scenario;
+}
+
+unsigned int
+dwg_entity_spline_get_degree(dwg_ent_spline *spline, int *error)
+{
+    return spline->degree;
+}
+
+void
+dwg_entity_spline_set_degree(dwg_ent_spline *spline, unsigned int degree, int *error)
+{
+    spline->degree = degree;
+}
+
+double
+dwg_entity_spline_get_fit_tol(dwg_ent_spline *spline, int *error)
+{
+    return spline->fit_tol;
+}
+
+void
+dwg_entity_spline_set_fit_tol(dwg_ent_spline *spline, int fit_tol, int *error)
+{
+    spline->fit_tol = fit_tol;
+}
+
+void
+dwg_entity_spline_get_begin_tan_vector(dwg_ent_spline *spline, dwg_point_3d *point, int *error)
+{
+    if(spline != 0)
+    {
+      *error = 0;
+      point->x = spline->beg_tan_vec.x;
+      point->y = spline->beg_tan_vec.y;
+      point->z = spline->beg_tan_vec.z;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+
+
+void
+dwg_entity_spline_set_begin_tan_vector(dwg_ent_spline *spline, dwg_point_3d *point, int *error)
+{
+    if(spline != 0)
+    {
+      *error = 0;
+      spline->beg_tan_vec.x = point->x;
+      spline->beg_tan_vec.y = point->y;
+      spline->beg_tan_vec.z = point->z;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+
+void
+dwg_entity_spline_get_end_tan_vector(dwg_ent_spline *spline, dwg_point_3d *point, int *error)
+{
+    if(spline != 0)
+    {
+      *error = 0;
+      point->x = spline->end_tan_vec.x;
+      point->y = spline->end_tan_vec.y;
+      point->z = spline->end_tan_vec.z;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+
+void
+dwg_entity_spline_set_end_tan_vector(dwg_ent_spline *spline, dwg_point_3d *point, int *error)
+{
+  if(spline != 0)
+    {
+      *error = 0;
+      spline->end_tan_vec.x = point->x;
+      spline->end_tan_vec.y = point->y;
+      spline->end_tan_vec.z = point->z;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+
+double
+dwg_entity_spline_get_knot_tol(dwg_ent_spline *spline, int *error)
+{
+    return spline->knot_tol;
+}
+
+void
+dwg_entity_spline_set_knot_tol(dwg_ent_spline *spline, double knot_tol, int *error)
+{
+    spline->knot_tol = knot_tol;
+}
+
+double
+dwg_entity_spline_get_ctrl_tol(dwg_ent_spline *spline, int *error)
+{
+    return spline->ctrl_tol;
+}
+
+void
+dwg_entity_spline_set_ctrl_tol(dwg_ent_spline *spline, double ctrl_tol, int *error)
+{
+    spline->ctrl_tol = ctrl_tol;
+}
+
+unsigned int
+dwg_entity_spline_get_num_fit_pts(dwg_ent_spline *spline, int *error)
+{
+    return spline->num_fit_pts;
+}
+
+void
+dwg_entity_spline_set_num_fit_pts(dwg_ent_spline *spline, int num_fit_pts, int *error)
+{
+    spline->num_fit_pts = num_fit_pts;
+}
+
+char
+dwg_entity_spline_get_rational(dwg_ent_spline *spline, int *error)
+{
+    return spline->rational;
+}
+
+void
+dwg_entity_spline_set_rational(dwg_ent_spline *spline, char rational, int *error)
+{
+    spline->rational = rational;
+}
+
+char
+dwg_entity_spline_get_closed_b(dwg_ent_spline *spline, int *error)
+{
+    return spline->closed_b;
+}
+void
+dwg_entity_spline_set_closed_b(dwg_ent_spline *spline, char closed_b, int *error)
+{
+    spline->closed_b = closed_b;
+}
+
+char
+dwg_entity_spline_get_weighted(dwg_ent_spline *spline, int *error)
+{
+    return spline->weighted;
+}
+
+void
+dwg_entity_spline_set_weighted(dwg_ent_spline *spline, char weighted, int *error)
+{
+    spline->weighted = weighted;
+}
+
+char
+dwg_entity_spline_get_periodic(dwg_ent_spline *spline, int *error)
+{
+    return spline->periodic;
+}
+void
+dwg_entity_spline_set_periodic(dwg_ent_spline *spline, char periodic, int *error)
+{
+    spline->periodic = periodic;
+}
+
+long
+dwg_entity_spline_get_num_knots(dwg_ent_spline *spline, int *error)
+{
+    return spline->num_knots;
+}
+void
+dwg_entity_spline_set_num_knots(dwg_ent_spline *spline, long nums, int *error)
+{
+    spline->num_knots = nums;
+}
+
+long
+dwg_entity_spline_get_num_ctrl_pts(dwg_ent_spline *spline, int *error)
+{
+    return spline->num_ctrl_pts;
+}
+void
+dwg_entity_spline_set_num_ctrl_pts(dwg_ent_spline *spline, long nums, int *error)
+{
+    spline->num_ctrl_pts = nums;
+}
+
+
+dwg_ent_spline_point *
+dwg_ent_spline_get_fit_points(dwg_ent_spline *spline, int *error)
+{
+  dwg_ent_spline_point *ptx = (dwg_ent_spline_point*) malloc(sizeof(dwg_ent_spline_point)* spline->num_fit_pts);
+  if(ptx != 0)
+    {
+      *error = 0;
+      int i;
+      for (i = 0; i < spline->num_fit_pts ; i++)
+      {
+        ptx[i] = spline->fit_pts[i];
+      }
+      return ptx;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+
+
+dwg_ent_spline_control_point *
+dwg_ent_spline_get_ctrl_pts(dwg_ent_spline *spline, int *error)
+{
+  dwg_ent_spline_control_point *ptx = (dwg_ent_spline_control_point*) 
+  malloc(sizeof(dwg_ent_spline_control_point)* spline->num_ctrl_pts);
+  if(ptx != 0)
+    {
+      *error = 0;
+      int i;
+      for (i = 0; i < spline->num_ctrl_pts ; i++)
+      {
+        ptx[i] = spline->ctrl_pts[i];
+      }
+      return ptx;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+
+
+double *
+dwg_ent_spline_get_knots(dwg_ent_spline *spline, int *error)
+{
+  double *ptx = (double*) malloc(sizeof(double)* spline->num_knots);
+  if(ptx != 0)
+    {
+      *error = 0;
+      int i = 0;
+      for (i = 0; i < spline->num_knots ; i++)
+      {
+        ptx[i] = spline->knots[i];
+      }
+      return ptx;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+
+//-------------------------------------------------------------------------------
+
+void
+dwg_ent_viewport_get_center(dwg_ent_viewport *vp, dwg_point_3d *point, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            point->x = vp->center.x;
+            point->y = vp->center.y;
+            point->z = vp->center.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_viewport_set_center(dwg_ent_viewport *vp, dwg_point_3d *point, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            vp->center.x = point->x;
+            vp->center.y = point->y;
+            vp->center.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_viewport_get_width(dwg_ent_viewport *vp, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            return vp->width;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_viewport_set_width(dwg_ent_viewport *vp, double width, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            vp->width = width;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_viewport_get_height(dwg_ent_viewport *vp, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            return vp->height;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_viewport_set_height(dwg_ent_viewport *vp, double height, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            vp->height = height;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+unsigned int dwg_ent_viewport_get_grid_major(dwg_ent_viewport *vp, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            return vp->grid_major;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_viewport_set_grid_major(dwg_ent_viewport *vp, unsigned int major, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            vp->grid_major = major;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+long   dwg_ent_viewport_get_frozen_layer_count(dwg_ent_viewport *vp, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            return vp->frozen_layer_count;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_viewport_set_frozen_layer_count(dwg_ent_viewport *vp, long count, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            vp->frozen_layer_count = count;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char * dwg_ent_viewport_get_style_sheet(dwg_ent_viewport *vp, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            return vp->style_sheet;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_viewport_set_style_sheet(dwg_ent_viewport *vp, char * sheet, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            vp->style_sheet = sheet;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_viewport_set_circle_zoom(dwg_ent_viewport *vp, unsigned int zoom, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            vp->circle_zoom = zoom;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+unsigned int dwg_ent_viewport_get_circle_zoom(dwg_ent_viewport *vp, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            return vp->circle_zoom;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_viewport_set_status_flags(dwg_ent_viewport *vp, long flags, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            vp->status_flags = flags;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+long   dwg_ent_viewport_get_status_flags(dwg_ent_viewport *vp, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            return vp->status_flags;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char   dwg_ent_viewport_get_render_mode(dwg_ent_viewport *vp, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            return vp->render_mode;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_viewport_set_render_mode(dwg_ent_viewport *vp, char mode, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            vp->render_mode = mode;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_viewport_set_ucs_at_origin(dwg_ent_viewport *vp, unsigned char origin, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            vp->ucs_at_origin = origin;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+unsigned char dwg_ent_viewport_get_ucs_at_origin(dwg_ent_viewport *vp, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            return vp->ucs_at_origin;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_viewport_set_ucs_per_viewport(dwg_ent_viewport *vp, unsigned char viewport, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            vp->ucs_per_viewport = viewport;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+unsigned char dwg_ent_viewport_get_ucs_per_viewport(dwg_ent_viewport *vp, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            return vp->ucs_per_viewport;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_viewport_set_view_target(dwg_ent_viewport *vp, dwg_point_3d *point, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            vp->view_target.x = point->x;
+            vp->view_target.y = point->y;
+            vp->view_target.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_viewport_get_view_target(dwg_ent_viewport *vp, dwg_point_3d *point, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            point->x = vp->view_target.x;
+            point->y = vp->view_target.y;
+            point->z = vp->view_target.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_viewport_set_view_direction(dwg_ent_viewport *vp, dwg_point_3d *point, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            vp->view_direction.x = point->x;
+            vp->view_direction.y = point->y;
+            vp->view_direction.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_viewport_get_view_direction(dwg_ent_viewport *vp, dwg_point_3d *point, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            point->x = vp->view_direction.x;
+            point->y = vp->view_direction.y;
+            point->z = vp->view_direction.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_viewport_set_view_twist_angle(dwg_ent_viewport *vp, double angle, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            vp->view_twist_angle = angle;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+double
+dwg_ent_viewport_get_view_twist_angle(dwg_ent_viewport *vp, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            return vp->view_twist_angle;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_viewport_set_view_height(dwg_ent_viewport *vp, double height, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            vp->view_height = height;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+double
+dwg_ent_viewport_get_view_height(dwg_ent_viewport *vp, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            return vp->view_height;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_viewport_set_lens_length(dwg_ent_viewport *vp, double length, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            vp->lens_length = length;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+double
+dwg_ent_viewport_get_lens_length(dwg_ent_viewport *vp, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            return vp->lens_length;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_viewport_set_front_clip_z(dwg_ent_viewport *vp, double front_z, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            vp->front_clip_z = front_z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+double
+dwg_ent_viewport_get_front_clip_z(dwg_ent_viewport *vp, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            return vp->front_clip_z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_viewport_set_back_clip_z(dwg_ent_viewport *vp, double back_z, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            vp->back_clip_z = back_z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+double
+dwg_ent_viewport_get_back_clip_z(dwg_ent_viewport *vp, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            return vp->back_clip_z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_viewport_set_snap_angle(dwg_ent_viewport *vp, double angle, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            vp->snap_angle = angle;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+double
+dwg_ent_viewport_get_snap_angle(dwg_ent_viewport *vp, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            return vp->snap_angle;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_viewport_get_view_center(dwg_ent_viewport *vp,  dwg_point_2d *point,int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            point->x = vp->view_center.x;
+            point->y = vp->view_center.y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_viewport_set_view_center(dwg_ent_viewport *vp, dwg_point_2d *point, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            vp->view_center.x = point->x;
+            vp->view_center.y = point->y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_viewport_get_grid_spacing(dwg_ent_viewport *vp, dwg_point_2d *point, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            point->x = vp->grid_spacing.x;
+            point->y = vp->grid_spacing.y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_viewport_set_grid_spacing(dwg_ent_viewport *vp, dwg_point_2d *point, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            vp->grid_spacing.x = point->x;
+            vp->grid_spacing.y = point->y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_viewport_get_snap_base(dwg_ent_viewport *vp, dwg_point_2d *point, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            point->x = vp->snap_base.x;
+            point->y = vp->snap_base.y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_viewport_set_snap_base(dwg_ent_viewport *vp, dwg_point_2d *point, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            vp->snap_base.x = point->x;
+            vp->snap_base.y = point->y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_viewport_get_snap_spacing(dwg_ent_viewport *vp, dwg_point_2d *point, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            point->x = vp->snap_spacing.x;
+            point->y = vp->snap_spacing.y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_viewport_set_snap_spacing(dwg_ent_viewport *vp, dwg_point_2d *point, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            vp->snap_spacing.x = point->x;
+            vp->snap_spacing.y = point->y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_viewport_set_ucs_origin(dwg_ent_viewport *vp, dwg_point_3d *point, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            vp->ucs_origin.x = point->x;
+            vp->ucs_origin.y = point->y;
+            vp->ucs_origin.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_viewport_get_ucs_origin(dwg_ent_viewport *vp, dwg_point_3d *point, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            point->x = vp->ucs_origin.x;
+            point->y = vp->ucs_origin.y;
+            point->z = vp->ucs_origin.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_viewport_set_ucs_x_axis(dwg_ent_viewport *vp, dwg_point_3d *point, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            vp->ucs_x_axis.x = point->x;
+            vp->ucs_x_axis.y = point->y;
+            vp->ucs_x_axis.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_viewport_get_ucs_x_axis(dwg_ent_viewport *vp, dwg_point_3d *point, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            point->x = vp->ucs_x_axis.x;
+            point->y = vp->ucs_x_axis.y;
+            point->z = vp->ucs_x_axis.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_viewport_set_ucs_y_axis(dwg_ent_viewport *vp, dwg_point_3d *point, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            vp->ucs_y_axis.x = point->x;
+            vp->ucs_y_axis.y = point->y;
+            vp->ucs_y_axis.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_viewport_get_ucs_y_axis(dwg_ent_viewport *vp, dwg_point_3d *point, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            point->x = vp->ucs_y_axis.x;
+            point->y = vp->ucs_y_axis.y;
+            point->z = vp->ucs_y_axis.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_viewport_set_ucs_elevation(dwg_ent_viewport *vp, double elevation, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            vp->ucs_elevation = elevation;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+double
+dwg_ent_viewport_get_ucs_elevation(dwg_ent_viewport *vp, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            return vp->ucs_elevation;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_viewport_set_ucs_ortho_view_type(dwg_ent_viewport *vp, unsigned int type, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            vp->ucs_ortho_view_type = type;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+unsigned int dwg_ent_viewport_get_ucs_ortho_view_type(dwg_ent_viewport *vp, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            return vp->ucs_ortho_view_type;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_viewport_set_shadeplot_mode(dwg_ent_viewport *vp, unsigned int shadeplot, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            vp->shadeplot_mode = shadeplot;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+unsigned int dwg_ent_viewport_get_shadeplot_mode(dwg_ent_viewport *vp, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            return vp->shadeplot_mode;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_viewport_set_use_def_lights(dwg_ent_viewport *vp, unsigned char lights, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            vp->use_def_lights = lights;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+unsigned char dwg_ent_viewport_get_use_def_lights(dwg_ent_viewport *vp, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            return vp->use_def_lights;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_viewport_set_def_lighting_type(dwg_ent_viewport *vp, char type, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            vp->def_lighting_type = type;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+char dwg_ent_viewport_get_def_lighting_type(dwg_ent_viewport *vp, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            return vp->def_lighting_type;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_viewport_set_brightness(dwg_ent_viewport *vp, double brightness, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            vp->brightness = brightness;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+double
+dwg_ent_viewport_get_brightness(dwg_ent_viewport *vp, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            return vp->brightness;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_viewport_set_contrast(dwg_ent_viewport *vp, double contrast, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            vp->contrast = contrast;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+double
+dwg_ent_viewport_get_contrast(dwg_ent_viewport *vp, int *error)
+{
+    if (vp != 0)
+        {
+            *error = 0;
+            return vp->contrast;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+//-------------------------------------------------------------------------------
+
+
 /* Returns block control object from a block header type argument passed 
 to function
 Usage :- 

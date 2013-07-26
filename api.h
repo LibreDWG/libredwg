@@ -18,10 +18,11 @@ typedef struct dwg_point_2d
 	double y;
 } dwg_point_2d;
 
-typedef struct error
+typedef struct dwg_lwpline_widths
 {
-  int evalue;
-} error;
+  double start;
+  double end;
+} dwg_lwpline_widths;
 
 // Extract All Entities of a specific type from a BLOCK
 #define GET_DWG_ENTITY(token) \
@@ -70,8 +71,10 @@ dwg_object_to_##token(Dwg_Object *obj) \
 }
 
 //------------------------------------------------------------------------------
+
 typedef struct _dwg_entity_CIRCLE                 dwg_ent_circle;
 typedef struct _dwg_entity_LINE                   dwg_ent_line;
+typedef struct _dwg_entity_LWPLINE                dwg_ent_lwpline;
 typedef struct _dwg_entity_ARC                    dwg_ent_arc;
 typedef struct _dwg_entity_ELLIPSE                dwg_ent_ellipse;
 typedef struct _dwg_entity_TEXT                   dwg_ent_text;
@@ -102,14 +105,20 @@ typedef struct _dwg_entity_MTEXT                  dwg_ent_mtext;
 typedef struct _dwg_entity_TOLERANCE              dwg_ent_tolerance;
 typedef struct _dwg_entity_ENDBLK                 dwg_ent_endblk;
 typedef struct _dwg_entity_SEQEND                 dwg_ent_seqend;
+typedef struct _dwg_entity_SPLINE_point           dwg_ent_spline_point;
+typedef struct _dwg_entity_SPLINE                 dwg_ent_spline;
+typedef struct _dwg_entity_SPLINE_control_point   dwg_ent_spline_control_point;
+typedef struct _dwg_entity_OLE2FRAME              dwg_ent_ole2frame;
+typedef struct _dwg_entity_VIEWPORT               dwg_ent_viewport;
+
 //-------------------------------------------------------------------------------
 
-typedef struct _dwg_object_LAYER             dwg_obj_layer;
-typedef struct _dwg_object_BLOCK_HEADER      dwg_obj_block_header;
-typedef struct _dwg_object_BLOCK_CONTROL     dwg_obj_block_control;
-typedef struct _dwg_object_MLINESTYLE        dwg_obj_mlinestyle;
-typedef struct _dwg_object_APPID             dwg_obj_appid;
-typedef struct _dwg_object_APPID_CONTROL     dwg_obj_appid_control;
+typedef struct _dwg_object_LAYER                  dwg_obj_layer;
+typedef struct _dwg_object_BLOCK_HEADER           dwg_obj_block_header;
+typedef struct _dwg_object_BLOCK_CONTROL          dwg_obj_block_control;
+typedef struct _dwg_object_MLINESTYLE             dwg_obj_mlinestyle;
+typedef struct _dwg_object_APPID                  dwg_obj_appid;
+typedef struct _dwg_object_APPID_CONTROL          dwg_obj_appid_control;
 
 //-------------------------------------------------------------------------------
 
@@ -1149,6 +1158,204 @@ void dwg_ent_tolerance_get_extrusion(dwg_ent_tolerance *tol, dwg_point_3d *point
 
 void dwg_ent_tolerance_set_text_string(dwg_ent_tolerance *tol, char * string, int *error);
 char * dwg_ent_tolerance_get_text_string(dwg_ent_tolerance *tol, int *error);
+
+//------------------------------------------------------------------------------------
+
+char dwg_ent_lwpline_get_flags(dwg_ent_lwpline *lwpline, int *error);
+void dwg_ent_lwpline_set_flags(dwg_ent_lwpline *lwpline, char flags, int *error);
+
+double dwg_ent_lwpline_get_const_width(dwg_ent_lwpline *lwpline, int *error);
+void dwg_ent_lwpline_set_const_width(dwg_ent_lwpline *lwpline, double const_width, int *error);
+
+double dwg_ent_lwpline_get_elevation(dwg_ent_lwpline *lwpline, int *error);
+void dwg_ent_lwpline_set_elevation(dwg_ent_lwpline *lwpline, double elevation, int *error);
+
+double dwg_ent_lwpline_get_thickness(dwg_ent_lwpline *lwpline, int *error);
+void dwg_ent_lwpline_set_thickness(dwg_ent_lwpline *lwpline, double thickness, int *error);
+
+long dwg_ent_lwpline_get_num_points(dwg_ent_lwpline *lwpline, int *error);
+void dwg_ent_lwpline_set_num_points(dwg_ent_lwpline *lwpline, long num_points, int *error);
+
+long dwg_ent_lwpline_get_num_bulges(dwg_ent_lwpline *lwpline, int *error);
+void dwg_ent_lwpline_set_num_bulges(dwg_ent_lwpline *lwpline, long num_bulges, int *error);
+
+long dwg_ent_lwpline_get_num_widths(dwg_ent_lwpline *lwpline, int *error);
+void dwg_ent_lwpline_set_num_widths(dwg_ent_lwpline *lwpline, long num_widths, int *error);
+
+void dwg_ent_lwpline_get_normal(dwg_ent_lwpline *lwpline, dwg_point_3d *points, int *error);
+void dwg_ent_lwpline_set_normal(dwg_ent_lwpline *lwpline, dwg_point_3d *points, int *error);
+
+double * dwg_ent_lwpline_get_bulges(dwg_ent_lwpline *lwpline, int *error);
+
+dwg_point_2d * dwg_ent_lwpline_get_points(dwg_ent_lwpline *lwpline, int *error);
+
+dwg_lwpline_widths * dwg_ent_lwpline_get_widths(dwg_ent_lwpline *lwpline, int *error);
+
+//------------------------------------------------------------------------------------
+
+unsigned int dwg_ent_ole2frame_get_flags(dwg_ent_ole2frame *frame, int *error);
+void         dwg_ent_ole2frame_set_flags(dwg_ent_ole2frame *frame, unsigned int flags, int *error);
+
+unsigned int dwg_ent_ole2frame_get_mode(dwg_ent_ole2frame *frame, int *error);
+void         dwg_ent_ole2frame_set_mode(dwg_ent_ole2frame *frame, unsigned int mode, int *error);
+
+long         dwg_ent_ole2frame_get_data_length(dwg_ent_ole2frame *frame, int *error);
+void         dwg_ent_ole2frame_set_data_length(dwg_ent_ole2frame *frame, long data_length, int *error);
+
+char *       dwg_ent_ole2frame_get_data(dwg_ent_ole2frame *frame, int *error);
+void         dwg_ent_ole2frame_set_data(dwg_ent_ole2frame *frame, char * data, int *error);
+
+//------------------------------------------------------------------------------------
+
+unsigned int dwg_entity_spline_get_scenario(dwg_ent_spline *spline, int *error);
+void         dwg_entity_spline_set_scenario(dwg_ent_spline *spline, unsigned int scenario, int *error);
+
+unsigned int dwg_entity_spline_get_degree(dwg_ent_spline *spline, int *error);
+void         dwg_entity_spline_set_degree(dwg_ent_spline *spline, unsigned int degree, int *error);
+
+double       dwg_entity_spline_get_fit_tol(dwg_ent_spline *spline, int *error);
+void         dwg_entity_spline_set_fit_tol(dwg_ent_spline *spline, int fit_tol, int *error);
+
+void         dwg_entity_spline_get_begin_tan_vector(dwg_ent_spline *spline, dwg_point_3d *point, int *error);
+void         dwg_entity_spline_set_begin_tan_vector(dwg_ent_spline *spline, dwg_point_3d *point, int *error);
+
+void         dwg_entity_spline_get_end_tan_vector(dwg_ent_spline *spline, dwg_point_3d *point, int *error);
+void         dwg_entity_spline_set_end_tan_vector(dwg_ent_spline *spline, dwg_point_3d *point, int *error);
+
+double       dwg_entity_spline_get_knot_tol(dwg_ent_spline *spline, int *error);
+void         dwg_entity_spline_set_knot_tol(dwg_ent_spline *spline, double knot_tol, int *error);
+
+double       dwg_entity_spline_get_ctrl_tol(dwg_ent_spline *spline, int *error);
+void         dwg_entity_spline_set_ctrl_tol(dwg_ent_spline *spline, double ctrl_tol, int *error);
+
+unsigned int dwg_entity_spline_get_num_fit_pts(dwg_ent_spline *spline, int *error);
+void         dwg_entity_spline_set_num_fit_pts(dwg_ent_spline *spline, int num_fit_pts, int *error);
+
+char         dwg_entity_spline_get_rational(dwg_ent_spline *spline, int *error);
+void         dwg_entity_spline_set_rational(dwg_ent_spline *spline, char rational, int *error);
+
+char         dwg_entity_spline_get_closed_b(dwg_ent_spline *spline, int *error);
+void         dwg_entity_spline_set_closed_b(dwg_ent_spline *spline, char closed_b, int *error);
+
+char         dwg_entity_spline_get_weighted(dwg_ent_spline *spline, int *error);
+void         dwg_entity_spline_set_weighted(dwg_ent_spline *spline, char weighted, int *error);
+
+char         dwg_entity_spline_get_periodic(dwg_ent_spline *spline, int *error);
+void         dwg_entity_spline_set_periodic(dwg_ent_spline *spline, char periodic, int *error);
+
+long         dwg_entity_spline_get_num_knots(dwg_ent_spline *spline, int *error);
+void         dwg_entity_spline_set_num_knots(dwg_ent_spline *spline, long nums, int *error);
+
+long         dwg_entity_spline_get_num_ctrl_pts(dwg_ent_spline *spline, int *error);
+void         dwg_entity_spline_set_num_ctrl_pts(dwg_ent_spline *spline, long nums, int *error);
+
+dwg_ent_spline_point * dwg_ent_spline_get_fit_points(dwg_ent_spline *spline, int *error);
+
+dwg_ent_spline_control_point * dwg_ent_spline_get_ctrl_pts(dwg_ent_spline *spline, int *error);
+
+double * dwg_ent_spline_get_knots(dwg_ent_spline *spline, int *error);
+
+
+//------------------------------------------------------------------------------------
+
+void   dwg_ent_viewport_get_center(dwg_ent_viewport *vp, dwg_point_3d *point, int *error);
+void   dwg_ent_viewport_set_center(dwg_ent_viewport *vp, dwg_point_3d *point, int *error);
+
+double dwg_ent_viewport_get_width(dwg_ent_viewport *vp, int *error);
+void   dwg_ent_viewport_set_width(dwg_ent_viewport *vp, double c, int *error);
+
+double dwg_ent_viewport_get_height(dwg_ent_viewport *vp, int *error);
+void   dwg_ent_viewport_set_height(dwg_ent_viewport *vp, double height, int *error);
+
+unsigned int dwg_ent_viewport_get_grid_major(dwg_ent_viewport *vp, int *error);
+void   dwg_ent_viewport_set_grid_major(dwg_ent_viewport *vp, unsigned int major, int *error);
+
+long   dwg_ent_viewport_get_frozen_layer_count(dwg_ent_viewport *vp, int *error);
+void   dwg_ent_viewport_set_frozen_layer_count(dwg_ent_viewport *vp, long count, int *error);
+
+char * dwg_ent_viewport_get_style_sheet(dwg_ent_viewport *vp, int *error);
+void   dwg_ent_viewport_set_style_sheet(dwg_ent_viewport *vp, char * sheet, int *error);
+
+void   dwg_ent_viewport_set_circle_zoom(dwg_ent_viewport *vp, unsigned int zoom, int *error);
+unsigned int dwg_ent_viewport_get_circle_zoom(dwg_ent_viewport *vp, int *error);
+
+void   dwg_ent_viewport_set_status_flags(dwg_ent_viewport *vp, long flags, int *error);
+long   dwg_ent_viewport_get_status_flags(dwg_ent_viewport *vp, int *error);
+
+char   dwg_ent_viewport_get_render_mode(dwg_ent_viewport *vp, int *error);
+void   dwg_ent_viewport_set_render_mode(dwg_ent_viewport *vp, char mode, int *error);
+
+void   dwg_ent_viewport_set_ucs_at_origin(dwg_ent_viewport *vp, unsigned char origin, int *error);
+unsigned char dwg_ent_viewport_get_ucs_at_origin(dwg_ent_viewport *vp, int *error);
+
+void   dwg_ent_viewport_set_ucs_per_viewport(dwg_ent_viewport *vp, unsigned char viewport, int *error);
+unsigned char dwg_ent_viewport_get_ucs_per_viewport(dwg_ent_viewport *vp, int *error);
+
+void   dwg_ent_viewport_set_view_target(dwg_ent_viewport *vp, dwg_point_3d *point, int *error);
+void   dwg_ent_viewport_get_view_target(dwg_ent_viewport *vp, dwg_point_3d *point, int *error);
+
+void   dwg_ent_viewport_set_view_direction(dwg_ent_viewport *vp, dwg_point_3d *point, int *error);
+void   dwg_ent_viewport_get_view_direction(dwg_ent_viewport *vp, dwg_point_3d *point, int *error);
+
+void   dwg_ent_viewport_set_view_twist_angle(dwg_ent_viewport *vp, double angle, int *error);
+double dwg_ent_viewport_get_view_twist_angle(dwg_ent_viewport *vp, int *error);
+
+void   dwg_ent_viewport_set_view_height(dwg_ent_viewport *vp, double height, int *error);
+double dwg_ent_viewport_get_view_height(dwg_ent_viewport *vp, int *error);
+
+void   dwg_ent_viewport_set_lens_length(dwg_ent_viewport *vp, double length, int *error);
+double dwg_ent_viewport_get_lens_length(dwg_ent_viewport *vp, int *error);
+
+void   dwg_ent_viewport_set_front_clip_z(dwg_ent_viewport *vp, double front_z, int *error);
+double dwg_ent_viewport_get_front_clip_z(dwg_ent_viewport *vp, int *error);
+
+void   dwg_ent_viewport_set_back_clip_z(dwg_ent_viewport *vp, double back_z, int *error);
+double dwg_ent_viewport_get_back_clip_z(dwg_ent_viewport *vp, int *error);
+
+void   dwg_ent_viewport_set_snap_angle(dwg_ent_viewport *vp, double angle, int *error);
+double dwg_ent_viewport_get_snap_angle(dwg_ent_viewport *vp, int *error);
+
+void   dwg_ent_viewport_get_view_center(dwg_ent_viewport *vp,  dwg_point_2d *point,int *error);
+void   dwg_ent_viewport_set_view_center(dwg_ent_viewport *vp, dwg_point_2d *point, int *error);
+
+void   dwg_ent_viewport_get_grid_spacing(dwg_ent_viewport *vp, dwg_point_2d *point, int *error);
+void   dwg_ent_viewport_set_grid_spacing(dwg_ent_viewport *vp, dwg_point_2d *point, int *error);
+
+void   dwg_ent_viewport_get_snap_base(dwg_ent_viewport *vp, dwg_point_2d *point, int *error);
+void   dwg_ent_viewport_set_snap_base(dwg_ent_viewport *vp, dwg_point_2d *point, int *error);
+
+void   dwg_ent_viewport_get_snap_spacing(dwg_ent_viewport *vp, dwg_point_2d *point, int *error);
+void   dwg_ent_viewport_set_snap_spacing(dwg_ent_viewport *vp, dwg_point_2d *point, int *error);
+
+void   dwg_ent_viewport_set_ucs_origin(dwg_ent_viewport *vp, dwg_point_3d *point, int *error);
+void   dwg_ent_viewport_get_ucs_origin(dwg_ent_viewport *vp, dwg_point_3d *point, int *error);
+
+void   dwg_ent_viewport_set_ucs_x_axis(dwg_ent_viewport *vp, dwg_point_3d *point, int *error);
+void   dwg_ent_viewport_get_ucs_x_axis(dwg_ent_viewport *vp, dwg_point_3d *point, int *error);
+
+void   dwg_ent_viewport_set_ucs_y_axis(dwg_ent_viewport *vp, dwg_point_3d *point, int *error);
+void   dwg_ent_viewport_get_ucs_y_axis(dwg_ent_viewport *vp, dwg_point_3d *point, int *error);
+
+void   dwg_ent_viewport_set_ucs_elevation(dwg_ent_viewport *vp, double elevation, int *error);
+double dwg_ent_viewport_get_ucs_elevation(dwg_ent_viewport *vp, int *error);
+
+void   dwg_ent_viewport_set_ucs_ortho_view_type(dwg_ent_viewport *vp, unsigned int type, int *error);
+unsigned int dwg_ent_viewport_get_ucs_ortho_view_type(dwg_ent_viewport *vp, int *error);
+
+void   dwg_ent_viewport_set_shadeplot_mode(dwg_ent_viewport *vp, unsigned int shadeplot, int *error);
+unsigned int dwg_ent_viewport_get_shadeplot_mode(dwg_ent_viewport *vp, int *error);
+
+void   dwg_ent_viewport_set_use_def_lights(dwg_ent_viewport *vp, unsigned char lights, int *error);
+unsigned char dwg_ent_viewport_get_use_def_lights(dwg_ent_viewport *vp, int *error);
+
+void   dwg_ent_viewport_set_def_lighting_type(dwg_ent_viewport *vp, char type, int *error);
+char   dwg_ent_viewport_get_def_lighting_type(dwg_ent_viewport *vp, int *error);
+
+void   dwg_ent_viewport_set_brightness(dwg_ent_viewport *vp, double brightness, int *error);
+double dwg_ent_viewport_get_brightness(dwg_ent_viewport *vp, int *error);
+
+void   dwg_ent_viewport_set_contrast(dwg_ent_viewport *vp, double contrast, int *error);
+double dwg_ent_viewport_get_contrast(dwg_ent_viewport *vp, int *error);
 
 //------------------------------------------------------------------------------------
 
