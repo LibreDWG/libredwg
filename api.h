@@ -87,7 +87,7 @@ typedef struct _dwg_entity_ATTRIB                 dwg_ent_attrib;
 typedef struct _dwg_entity_ATTDEF                 dwg_ent_attdef;
 typedef struct _dwg_entity_SOLID                  dwg_ent_solid;
 typedef struct _dwg_entity_TRACE                  dwg_ent_trace;
-typedef struct _dwg_entity_3D_FACE               dwg_ent_3dface;
+typedef struct _dwg_entity_3D_FACE                dwg_ent_3dface;
 typedef struct _dwg_entity_INSERT                 dwg_ent_insert;
 typedef struct _dwg_entity_MINSERT                dwg_ent_minsert;
 typedef struct _dwg_entity_BLOCK                  dwg_ent_block;
@@ -119,7 +119,14 @@ typedef struct _dwg_entity_SPLINE                 dwg_ent_spline;
 typedef struct _dwg_entity_SPLINE_control_point   dwg_ent_spline_control_point;
 typedef struct _dwg_entity_OLE2FRAME              dwg_ent_ole2frame;
 typedef struct _dwg_entity_VIEWPORT               dwg_ent_viewport;
-
+typedef struct _dwg_entity_3DSOLID                dwg_ent_3dsolid,
+                                                  dwg_ent_region,
+                                                  dwg_ent_body;
+typedef struct _dwg_entity_3DSOLID_wire           dwg_ent_solid_wire;
+typedef struct _dwg_entity_3DSOLID_silhouette     dwg_ent_solid_silhouette;
+typedef struct _dwg_entity_TABLE                  dwg_ent_table;
+typedef struct _dwg_entity_HATCH                  dwg_ent_hatch;
+typedef struct _dwg_entity_VERTEX_PFACE_FACE      dwg_ent_vert_pface_face;
 //-------------------------------------------------------------------------------
 
 typedef struct _dwg_object_LAYER                  dwg_obj_layer;
@@ -1538,8 +1545,138 @@ dwg_ent_mline_vert * dwg_ent_mline_get_verts(dwg_ent_mline *mline, int *error);
 
 //------------------------------------------------------------------------------------
 
+unsigned char dwg_ent_3dsolid_get_acis_empty(dwg_ent_3dsolid *_3dsolid, int *error);
+void          dwg_ent_3dsolid_set_acis_empty(dwg_ent_3dsolid *_3dsolid, unsigned char acis, int *error);
+
+unsigned int dwg_ent_3dsolid_get_version(dwg_ent_3dsolid *_3dsolid, int *error);
+void         dwg_ent_3dsolid_set_version(dwg_ent_3dsolid *_3dsolid, unsigned int version, int *error);
+
+long * dwg_ent_3dsolid_get_block_size(dwg_ent_3dsolid *_3dsolid, int *error);
+
+char * dwg_ent_3dsolid_get_acis_data(dwg_ent_3dsolid *_3dsolid, int *error);
+char * dwg_ent_3dsolid_set_acis_data(dwg_ent_3dsolid *_3dsolid, char * data, int *error);
+
+char dwg_ent_3dsolid_get_wireframe_data_present(dwg_ent_3dsolid *_3dsolid, int *error);
+void dwg_ent_3dsolid_set_wireframe_data_present(dwg_ent_3dsolid *_3dsolid, char data, int *error);
+
+char dwg_ent_3dsolid_get_point_present(dwg_ent_3dsolid *_3dsolid, int *error);
+void dwg_ent_3dsolid_set_point_present(dwg_ent_3dsolid *_3dsolid, char point, int *error);
+
+void dwg_ent_3dsolid_get_point(dwg_ent_3dsolid *_3dsolid, dwg_point_3d *point, int *error);
+void dwg_ent_3dsolid_set_point(dwg_ent_3dsolid *_3dsolid, dwg_point_3d *point, int *error);
+
+long dwg_ent_3dsolid_get_num_isolines(dwg_ent_3dsolid *_3dsolid, int *error);
+void dwg_ent_3dsolid_set_num_isolines(dwg_ent_3dsolid *_3dsolid, long num, int *error);
+
+char dwg_ent_3dsolid_get_isoline_present(dwg_ent_3dsolid *_3dsolid, int *error);
+void dwg_ent_3dsolid_set_isoline_present(dwg_ent_3dsolid *_3dsolid, char iso, int *error);
+
+long dwg_ent_3dsolid_get_num_wires(dwg_ent_3dsolid *_3dsolid, int *error);
+void dwg_ent_3dsolid_set_num_wires(dwg_ent_3dsolid *_3dsolid, long num, int *error);
+
+dwg_ent_solid_wire * dwg_ent_3dsolid_set_wire(dwg_ent_3dsolid *_3dsolid, int *error);
+
+long dwg_ent_3dsolid_get_num_silhouettes(dwg_ent_3dsolid *_3dsolid, int *error);
+void dwg_ent_3dsolid_set_num_silhouettes(dwg_ent_3dsolid *_3dsolid, long silhouettes, int *error);
+
+dwg_ent_solid_silhouette * dwg_ent_3dsolid_get_silhouette(dwg_ent_3dsolid *_3dsolid, int *error);
+
+unsigned char dwg_ent_3dsolid_get_acis_empty2(dwg_ent_3dsolid *_3dsolid, int *error);
+void dwg_ent_3dsolid_set_acis_empty2(dwg_ent_3dsolid *_3dsolid, unsigned char acis, int *error); 
+
+//--------------------------------------------------------------------------------
+
+unsigned char dwg_ent_region_get_acis_empty(dwg_ent_region *region, int *error);
+void          dwg_ent_region_set_acis_empty(dwg_ent_region *region, unsigned char acis, int *error);
+
+unsigned int dwg_ent_region_get_version(dwg_ent_region *region, int *error);
+void         dwg_ent_region_set_version(dwg_ent_region *region, unsigned int version, int *error);
+
+long * dwg_ent_region_get_block_size(dwg_ent_region *region, int *error);
+
+char * dwg_ent_region_get_acis_data(dwg_ent_region *region, int *error);
+char * dwg_ent_region_set_acis_data(dwg_ent_region *region, char * data, int *error);
+
+char dwg_ent_region_get_wireframe_data_present(dwg_ent_region *region, int *error);
+void dwg_ent_region_set_wireframe_data_present(dwg_ent_region *region, char data, int *error);
+
+char dwg_ent_region_get_point_present(dwg_ent_region *region, int *error);
+void dwg_ent_region_set_point_present(dwg_ent_region *region, char point, int *error);
+
+void dwg_ent_region_get_point(dwg_ent_region *region, dwg_point_3d *point, int *error);
+void dwg_ent_region_set_point(dwg_ent_region *region, dwg_point_3d *point, int *error);
+
+long dwg_ent_region_get_num_isolines(dwg_ent_region *region, int *error);
+void dwg_ent_region_set_num_isolines(dwg_ent_region *region, long num, int *error);
+
+char dwg_ent_region_get_isoline_present(dwg_ent_region *region, int *error);
+void dwg_ent_region_set_isoline_present(dwg_ent_region *region, char iso, int *error);
+
+long dwg_ent_region_get_num_wires(dwg_ent_region *region, int *error);
+void dwg_ent_region_set_num_wires(dwg_ent_region *region, long num, int *error);
+
+dwg_ent_solid_wire * dwg_ent_region_set_wire(dwg_ent_region *region, int *error);
+
+long dwg_ent_region_get_num_silhouettes(dwg_ent_region *region, int *error);
+void dwg_ent_region_set_num_silhouettes(dwg_ent_region *region, long silhouettes, int *error);
+
+dwg_ent_solid_silhouette * dwg_ent_region_get_silhouette(dwg_ent_region *region, int *error);
+
+unsigned char dwg_ent_region_get_acis_empty2(dwg_ent_region *region, int *error);
+void dwg_ent_region_set_acis_empty2(dwg_ent_region *region, unsigned char acis, int *error); 
+
+//--------------------------------------------------------------------------------
+
+unsigned char dwg_ent_body_get_acis_empty(dwg_ent_body *body, int *error);
+void          dwg_ent_body_set_acis_empty(dwg_ent_body *body, unsigned char acis, int *error);
+
+unsigned int dwg_ent_body_get_version(dwg_ent_body *body, int *error);
+void         dwg_ent_body_set_version(dwg_ent_body *body, unsigned int version, int *error);
+
+long * dwg_ent_body_get_block_size(dwg_ent_body *body, int *error);
+
+char * dwg_ent_body_get_acis_data(dwg_ent_body *body, int *error);
+char * dwg_ent_body_set_acis_data(dwg_ent_body *body, char * data, int *error);
+
+char dwg_ent_body_get_wireframe_data_present(dwg_ent_body *body, int *error);
+void dwg_ent_body_set_wireframe_data_present(dwg_ent_body *body, char data, int *error);
+
+char dwg_ent_body_get_point_present(dwg_ent_body *body, int *error);
+void dwg_ent_body_set_point_present(dwg_ent_body *body, char point, int *error);
+
+void dwg_ent_body_get_point(dwg_ent_body *body, dwg_point_3d *point, int *error);
+void dwg_ent_body_set_point(dwg_ent_body *body, dwg_point_3d *point, int *error);
+
+long dwg_ent_body_get_num_isolines(dwg_ent_body *body, int *error);
+void dwg_ent_body_set_num_isolines(dwg_ent_body *body, long num, int *error);
+
+char dwg_ent_body_get_isoline_present(dwg_ent_body *body, int *error);
+void dwg_ent_body_set_isoline_present(dwg_ent_body *body, char iso, int *error);
+
+long dwg_ent_body_get_num_wires(dwg_ent_body *body, int *error);
+void dwg_ent_body_set_num_wires(dwg_ent_body *body, long num, int *error);
+
+dwg_ent_solid_wire * dwg_ent_body_set_wire(dwg_ent_body *body, int *error);
+
+long dwg_ent_body_get_num_silhouettes(dwg_ent_body *body, int *error);
+void dwg_ent_body_set_num_silhouettes(dwg_ent_body *body, long silhouettes, int *error);
+
+dwg_ent_solid_silhouette * dwg_ent_body_get_silhouette(dwg_ent_body *body, int *error);
+
+unsigned char dwg_ent_body_get_acis_empty2(dwg_ent_body *body, int *error);
+void dwg_ent_body_set_acis_empty2(dwg_ent_body *body, unsigned char acis, int *error); 
+
+//--------------------------------------------------------------------------------
+
+//--------------------------------------------------------------------------------
+
 // Get Layer Name
 char * dwg_obj_layer_get_name(dwg_obj_layer *layer, int *error);
+
+//--------------------------------------------------------------------------------
+
+unsigned int dwg_ent_vertex_pface_face_set_vertind(dwg_ent_vert_pface_face *face);
+void dwg_ent_vertex_pface_face_get_vertind(dwg_ent_vert_pface_face *face, unsigned int vertind[4]);
 
 //--------------------------------------------------------------------------------
 

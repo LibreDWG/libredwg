@@ -12531,6 +12531,1090 @@ dwg_ent_mline_vert * dwg_ent_mline_get_verts(dwg_ent_mline *mline, int *error)
 
 //--------------------------------------------------------------------------------------
 
+unsigned int  dwg_ent_vertex_pface_face_set_vertind(dwg_ent_vert_pface_face *face)
+{
+    return face->vertind[4];
+}
+
+void dwg_ent_vertex_pface_face_get_vertind(dwg_ent_vert_pface_face *face, unsigned int vertind[4])
+{
+    face->vertind[1] = vertind[1];
+    face->vertind[2] = vertind[2];
+    face->vertind[3] = vertind[3];
+    face->vertind[4] = vertind[4];
+}
+
+//--------------------------------------------------------------------------------------
+
+unsigned char
+dwg_ent_3dsolid_get_acis_empty(dwg_ent_3dsolid *_3dsolid, int *error)
+{
+    if (_3dsolid != 0)
+        {
+            *error = 0;
+            return _3dsolid->acis_empty;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_3dsolid_set_acis_empty(dwg_ent_3dsolid *_3dsolid, unsigned char acis, int *error)
+{
+    if (_3dsolid != 0)
+        {
+            *error = 0;
+            _3dsolid->acis_empty = acis;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+unsigned int
+dwg_ent_3dsolid_get_version(dwg_ent_3dsolid *_3dsolid, int *error)
+{
+    if (_3dsolid != 0)
+        {
+            *error = 0;
+            return _3dsolid->version;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_3dsolid_set_version(dwg_ent_3dsolid *_3dsolid, unsigned int version, int *error)
+{
+    if (_3dsolid != 0)
+        {
+            *error = 0;
+            _3dsolid->version = version;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+long *
+dwg_ent_3dsolid_get_block_size(dwg_ent_3dsolid *_3dsolid, int *error)
+{
+    if (_3dsolid != 0)
+        {
+            *error = 0;
+            return _3dsolid->block_size;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char *dwg_ent_3dsolid_get_acis_data(dwg_ent_3dsolid *_3dsolid, int *error)
+{
+    if (_3dsolid != 0)
+        {
+            *error = 0;
+            return _3dsolid->acis_data;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char * dwg_ent_3dsolid_set_acis_data(dwg_ent_3dsolid *_3dsolid, char * data, int *error)
+{
+    if (_3dsolid != 0)
+        {
+            *error = 0;
+            _3dsolid->acis_data = data;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char
+dwg_ent_3dsolid_get_wireframe_data_present(dwg_ent_3dsolid *_3dsolid, int *error)
+{
+    if (_3dsolid != 0)
+        {
+            *error = 0;
+            return _3dsolid->wireframe_data_present;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_3dsolid_set_wireframe_data_present(dwg_ent_3dsolid *_3dsolid, char data, int *error)
+{
+    if (_3dsolid != 0)
+        {
+            *error = 0;
+            _3dsolid->wireframe_data_present = data;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char
+dwg_ent_3dsolid_get_point_present(dwg_ent_3dsolid *_3dsolid, int *error)
+{
+    if (_3dsolid != 0)
+        {
+            *error = 0;
+            return _3dsolid->point_present;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_3dsolid_set_point_present(dwg_ent_3dsolid *_3dsolid, char point, int *error)
+{
+    if (_3dsolid != 0)
+        {
+            *error = 0;
+            _3dsolid->point_present = point;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_3dsolid_get_point(dwg_ent_3dsolid *_3dsolid, dwg_point_3d *point, int *error)
+{
+    if (_3dsolid != 0)
+        {
+            *error = 0;
+            point->x = _3dsolid->point.x;
+            point->y = _3dsolid->point.y;
+            point->z = _3dsolid->point.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_3dsolid_set_point(dwg_ent_3dsolid *_3dsolid, dwg_point_3d *point, int *error)
+{
+    if (_3dsolid != 0)
+        {
+            *error = 0;
+            _3dsolid->point.x = point->x;
+            _3dsolid->point.y = point->y;
+            _3dsolid->point.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+long
+dwg_ent_3dsolid_get_num_isolines(dwg_ent_3dsolid *_3dsolid, int *error)
+{
+    if (_3dsolid != 0)
+        {
+            *error = 0;
+            return _3dsolid->num_isolines;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_3dsolid_set_num_isolines(dwg_ent_3dsolid *_3dsolid, long num, int *error)
+{
+    if (_3dsolid != 0)
+        {
+            *error = 0;
+            _3dsolid->num_isolines = num;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char
+dwg_ent_3dsolid_get_isoline_present(dwg_ent_3dsolid *_3dsolid, int *error)
+{
+    if (_3dsolid != 0)
+        {
+            *error = 0;
+            return _3dsolid->isoline_present;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_3dsolid_set_isoline_present(dwg_ent_3dsolid *_3dsolid, char iso, int *error)
+{
+    if (_3dsolid != 0)
+        {
+            *error = 0;
+            _3dsolid->isoline_present = iso;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+long
+dwg_ent_3dsolid_get_num_wires(dwg_ent_3dsolid *_3dsolid, int *error)
+{
+    if (_3dsolid != 0)
+        {
+            *error = 0;
+            return _3dsolid->num_wires;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_3dsolid_set_num_wires(dwg_ent_3dsolid *_3dsolid, long num, int *error)
+{
+    if (_3dsolid != 0)
+        {
+            *error = 0;
+            _3dsolid->num_wires = num;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+dwg_ent_solid_wire * dwg_ent_3dsolid_set_wire(dwg_ent_3dsolid *_3dsolid, int *error)
+{
+  dwg_ent_solid_wire *ptx = (dwg_ent_solid_wire*)
+  malloc(sizeof(dwg_ent_solid_wire)* _3dsolid->num_wires);
+  if(ptx != 0)
+    {
+      *error = 0;
+      int i = 0;
+      for (i = 0; i < _3dsolid->num_wires ; i++)
+      {
+        ptx[i] = _3dsolid->wires[i];
+      }
+      return ptx;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+
+long
+dwg_ent_3dsolid_get_num_silhouettes(dwg_ent_3dsolid *_3dsolid, int *error)
+{
+    if (_3dsolid != 0)
+        {
+            *error = 0;
+            return _3dsolid->num_silhouettes;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_3dsolid_set_num_silhouettes(dwg_ent_3dsolid *_3dsolid, long silhouettes, int *error)
+{
+    if (_3dsolid != 0)
+        {
+            *error = 0;
+            _3dsolid->num_silhouettes = silhouettes;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+dwg_ent_solid_silhouette * dwg_ent_3dsolid_get_silhouette(dwg_ent_3dsolid *_3dsolid, int *error)
+{
+  dwg_ent_solid_silhouette *ptx = (dwg_ent_solid_silhouette*) malloc(sizeof(dwg_ent_solid_silhouette)* _3dsolid->num_silhouettes);
+  if(ptx != 0)
+    {
+      *error = 0;
+      int i = 0;
+      for (i = 0; i < _3dsolid->num_silhouettes ; i++)
+      {
+        ptx[i] = _3dsolid->silhouettes[i];
+      }
+      return ptx;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+
+unsigned char
+dwg_ent_3dsolid_get_acis_empty2(dwg_ent_3dsolid *_3dsolid, int *error)
+{
+    if (_3dsolid != 0)
+        {
+            *error = 0;
+            return _3dsolid->acis_empty2;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_3dsolid_set_acis_empty2(dwg_ent_3dsolid *_3dsolid, unsigned char acis, int *error)
+{
+    if (_3dsolid != 0)
+        {
+            *error = 0;
+            _3dsolid->acis_empty2 = acis;
+        }
+    else
+        {
+            *error = 1;
+        }
+} 
+
+//--------------------------------------------------------------------------------
+
+unsigned char
+dwg_ent_region_get_acis_empty(dwg_ent_region *region, int *error)
+{
+    if (region != 0)
+        {
+            *error = 0;
+            return region->acis_empty;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_region_set_acis_empty(dwg_ent_region *region, unsigned char acis, int *error)
+{
+    if (region != 0)
+        {
+            *error = 0;
+            region->acis_empty = acis;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+unsigned int
+dwg_ent_region_get_version(dwg_ent_region *region, int *error)
+{
+    if (region != 0)
+        {
+            *error = 0;
+            return region->version;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_region_set_version(dwg_ent_region *region, unsigned int version, int *error)
+{
+    if (region != 0)
+        {
+            *error = 0;
+            region->version = version;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+long *
+dwg_ent_region_get_block_size(dwg_ent_region *region, int *error)
+{
+    if (region != 0)
+        {
+            *error = 0;
+            return region->block_size;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char *dwg_ent_region_get_acis_data(dwg_ent_region *region, int *error)
+{
+    if (region != 0)
+        {
+            *error = 0;
+            return region->acis_data;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char * dwg_ent_region_set_acis_data(dwg_ent_region *region, char * data, int *error)
+{
+    if (region != 0)
+        {
+            *error = 0;
+            region->acis_data = data;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char
+dwg_ent_region_get_wireframe_data_present(dwg_ent_region *region, int *error)
+{
+    if (region != 0)
+        {
+            *error = 0;
+            return region->wireframe_data_present;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_region_set_wireframe_data_present(dwg_ent_region *region, char data, int *error)
+{
+    if (region != 0)
+        {
+            *error = 0;
+            region->wireframe_data_present = data;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char
+dwg_ent_region_get_point_present(dwg_ent_region *region, int *error)
+{
+    if (region != 0)
+        {
+            *error = 0;
+            return region->point_present;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_region_set_point_present(dwg_ent_region *region, char point, int *error)
+{
+    if (region != 0)
+        {
+            *error = 0;
+            region->point_present = point;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_region_get_point(dwg_ent_region *region, dwg_point_3d *point, int *error)
+{
+    if (region != 0)
+        {
+            *error = 0;
+            point->x = region->point.x;
+            point->y = region->point.y;
+            point->z = region->point.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_region_set_point(dwg_ent_region *region, dwg_point_3d *point, int *error)
+{
+    if (region != 0)
+        {
+            *error = 0;
+            region->point.x = point->x;
+            region->point.y = point->y;
+            region->point.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+long
+dwg_ent_region_get_num_isolines(dwg_ent_region *region, int *error)
+{
+    if (region != 0)
+        {
+            *error = 0;
+            return region->num_isolines;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_region_set_num_isolines(dwg_ent_region *region, long num, int *error)
+{
+    if (region != 0)
+        {
+            *error = 0;
+            region->num_isolines = num;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char
+dwg_ent_region_get_isoline_present(dwg_ent_region *region, int *error)
+{
+    if (region != 0)
+        {
+            *error = 0;
+            return region->isoline_present;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_region_set_isoline_present(dwg_ent_region *region, char iso, int *error)
+{
+    if (region != 0)
+        {
+            *error = 0;
+            region->isoline_present = iso;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+long
+dwg_ent_region_get_num_wires(dwg_ent_region *region, int *error)
+{
+    if (region != 0)
+        {
+            *error = 0;
+            return region->num_wires;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_region_set_num_wires(dwg_ent_region *region, long num, int *error)
+{
+    if (region != 0)
+        {
+            *error = 0;
+            region->num_wires = num;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+dwg_ent_solid_wire * dwg_ent_region_set_wire(dwg_ent_region *region, int *error)
+{
+  dwg_ent_solid_wire *ptx = (dwg_ent_solid_wire*)
+  malloc(sizeof(dwg_ent_solid_wire)* region->num_wires);
+  if(ptx != 0)
+    {
+      *error = 0;
+      int i = 0;
+      for (i = 0; i < region->num_wires ; i++)
+      {
+        ptx[i] = region->wires[i];
+      }
+      return ptx;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+
+long
+dwg_ent_region_get_num_silhouettes(dwg_ent_region *region, int *error)
+{
+    if (region != 0)
+        {
+            *error = 0;
+            return region->num_silhouettes;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_region_set_num_silhouettes(dwg_ent_region *region, long silhouettes, int *error)
+{
+    if (region != 0)
+        {
+            *error = 0;
+            region->num_silhouettes = silhouettes;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+dwg_ent_solid_silhouette * dwg_ent_region_get_silhouette(dwg_ent_region *region, int *error)
+{
+  dwg_ent_solid_silhouette *ptx = (dwg_ent_solid_silhouette*) malloc(sizeof(dwg_ent_solid_silhouette)* region->num_silhouettes);
+  if(ptx != 0)
+    {
+      *error = 0;
+      int i = 0;
+      for (i = 0; i < region->num_silhouettes ; i++)
+      {
+        ptx[i] = region->silhouettes[i];
+      }
+      return ptx;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+
+unsigned char
+dwg_ent_region_get_acis_empty2(dwg_ent_region *region, int *error)
+{
+    if (region != 0)
+        {
+            *error = 0;
+            return region->acis_empty2;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_region_set_acis_empty2(dwg_ent_region *region, unsigned char acis, int *error)
+{
+    if (region != 0)
+        {
+            *error = 0;
+            region->acis_empty2 = acis;
+        }
+    else
+        {
+            *error = 1;
+        }
+} 
+
+//--------------------------------------------------------------------------------
+
+unsigned char
+dwg_ent_body_get_acis_empty(dwg_ent_body *body, int *error)
+{
+    if (body != 0)
+        {
+            *error = 0;
+            return body->acis_empty;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_body_set_acis_empty(dwg_ent_body *body, unsigned char acis, int *error)
+{
+    if (body != 0)
+        {
+            *error = 0;
+            body->acis_empty = acis;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+unsigned int
+dwg_ent_body_get_version(dwg_ent_body *body, int *error)
+{
+    if (body != 0)
+        {
+            *error = 0;
+            return body->version;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_body_set_version(dwg_ent_body *body, unsigned int version, int *error)
+{
+    if (body != 0)
+        {
+            *error = 0;
+            body->version = version;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+long *
+dwg_ent_body_get_block_size(dwg_ent_body *body, int *error)
+{
+    if (body != 0)
+        {
+            *error = 0;
+            return body->block_size;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char *dwg_ent_body_get_acis_data(dwg_ent_body *body, int *error)
+{
+    if (body != 0)
+        {
+            *error = 0;
+            return body->acis_data;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char * dwg_ent_body_set_acis_data(dwg_ent_body *body, char * data, int *error)
+{
+    if (body != 0)
+        {
+            *error = 0;
+            body->acis_data = data;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char
+dwg_ent_body_get_wireframe_data_present(dwg_ent_body *body, int *error)
+{
+    if (body != 0)
+        {
+            *error = 0;
+            return body->wireframe_data_present;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_body_set_wireframe_data_present(dwg_ent_body *body, char data, int *error)
+{
+    if (body != 0)
+        {
+            *error = 0;
+            body->wireframe_data_present = data;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char
+dwg_ent_body_get_point_present(dwg_ent_body *body, int *error)
+{
+    if (body != 0)
+        {
+            *error = 0;
+            return body->point_present;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_body_set_point_present(dwg_ent_body *body, char point, int *error)
+{
+    if (body != 0)
+        {
+            *error = 0;
+            body->point_present = point;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_body_get_point(dwg_ent_body *body, dwg_point_3d *point, int *error)
+{
+    if (body != 0)
+        {
+            *error = 0;
+            point->x = body->point.x;
+            point->y = body->point.y;
+            point->z = body->point.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_body_set_point(dwg_ent_body *body, dwg_point_3d *point, int *error)
+{
+    if (body != 0)
+        {
+            *error = 0;
+            body->point.x = point->x;
+            body->point.y = point->y;
+            body->point.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+long
+dwg_ent_body_get_num_isolines(dwg_ent_body *body, int *error)
+{
+    if (body != 0)
+        {
+            *error = 0;
+            return body->num_isolines;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_body_set_num_isolines(dwg_ent_body *body, long num, int *error)
+{
+    if (body != 0)
+        {
+            *error = 0;
+            body->num_isolines = num;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char
+dwg_ent_body_get_isoline_present(dwg_ent_body *body, int *error)
+{
+    if (body != 0)
+        {
+            *error = 0;
+            return body->isoline_present;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_body_set_isoline_present(dwg_ent_body *body, char iso, int *error)
+{
+    if (body != 0)
+        {
+            *error = 0;
+            body->isoline_present = iso;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+long
+dwg_ent_body_get_num_wires(dwg_ent_body *body, int *error)
+{
+    if (body != 0)
+        {
+            *error = 0;
+            return body->num_wires;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_body_set_num_wires(dwg_ent_body *body, long num, int *error)
+{
+    if (body != 0)
+        {
+            *error = 0;
+            body->num_wires = num;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+dwg_ent_solid_wire * dwg_ent_body_set_wire(dwg_ent_body *body, int *error)
+{
+  dwg_ent_solid_wire *ptx = (dwg_ent_solid_wire*)
+  malloc(sizeof(dwg_ent_solid_wire)* body->num_wires);
+  if(ptx != 0)
+    {
+      *error = 0;
+      int i = 0;
+      for (i = 0; i < body->num_wires ; i++)
+      {
+        ptx[i] = body->wires[i];
+      }
+      return ptx;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+
+long
+dwg_ent_body_get_num_silhouettes(dwg_ent_body *body, int *error)
+{
+    if (body != 0)
+        {
+            *error = 0;
+            return body->num_silhouettes;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_body_set_num_silhouettes(dwg_ent_body *body, long silhouettes, int *error)
+{
+    if (body != 0)
+        {
+            *error = 0;
+            body->num_silhouettes = silhouettes;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+dwg_ent_solid_silhouette * dwg_ent_body_get_silhouette(dwg_ent_body *body, int *error)
+{
+  dwg_ent_solid_silhouette *ptx = (dwg_ent_solid_silhouette*) malloc(sizeof(dwg_ent_solid_silhouette)* body->num_silhouettes);
+  if(ptx != 0)
+    {
+      *error = 0;
+      int i = 0;
+      for (i = 0; i < body->num_silhouettes ; i++)
+      {
+        ptx[i] = body->silhouettes[i];
+      }
+      return ptx;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+
+unsigned char
+dwg_ent_body_get_acis_empty2(dwg_ent_body *body, int *error)
+{
+    if (body != 0)
+        {
+            *error = 0;
+            return body->acis_empty2;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_body_set_acis_empty2(dwg_ent_body *body, unsigned char acis, int *error)
+{
+    if (body != 0)
+        {
+            *error = 0;
+            body->acis_empty2 = acis;
+        }
+    else
+        {
+            *error = 1;
+        }
+} 
+
+//--------------------------------------------------------------------------------
+
+
+
+//--------------------------------------------------------------------------------
+
 /* Returns block control object from a block header type argument passed 
 to function
 Usage :- 
