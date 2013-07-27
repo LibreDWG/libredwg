@@ -87,9 +87,14 @@ typedef struct _dwg_entity_ATTRIB                 dwg_ent_attrib;
 typedef struct _dwg_entity_ATTDEF                 dwg_ent_attdef;
 typedef struct _dwg_entity_SOLID                  dwg_ent_solid;
 typedef struct _dwg_entity_TRACE                  dwg_ent_trace;
+typedef struct _dwg_entity_3D_FACE               dwg_ent_3dface;
 typedef struct _dwg_entity_INSERT                 dwg_ent_insert;
 typedef struct _dwg_entity_MINSERT                dwg_ent_minsert;
 typedef struct _dwg_entity_BLOCK                  dwg_ent_block;
+typedef struct _dwg_entity_IMAGE                  dwg_ent_image;
+typedef struct _dwg_entity_IMAGE_clip_vert        dwg_ent_image_clip_vert;
+typedef struct _dwg_entity_MLINE_vert             dwg_ent_mline_vert;
+typedef struct _dwg_entity_MLINE                  dwg_ent_mline;
 typedef struct _dwg_entity_RAY                    dwg_ent_ray, 
                                                   dwg_ent_xline;
 typedef struct _dwg_entity_VERTEX_3D              dwg_ent_vertex_3d, 
@@ -1441,6 +1446,97 @@ long   dwg_ent_polyline_3d_get_owned_obj_count(dwg_ent_polyline_3d *line3d, int 
 void   dwg_ent_polyline_3d_set_owned_obj_count(dwg_ent_polyline_3d *line3d, long owned_obj_count, int *error);
 
 //--------------------------------------------------------------------------------
+
+unsigned int dwg_ent_3dface_get_invis_flags(dwg_ent_3dface *_3dface, int *error);
+void   dwg_ent_3dface_set_invis_flags(dwg_ent_3dface *_3dface, unsigned int invis_flags, int *error);
+
+void   dwg_ent_3dface_get_corner1(dwg_ent_3dface *_3dface, dwg_point_2d *point, int *error);
+void   dwg_ent_3dface_set_corner1(dwg_ent_3dface *_3dface, dwg_point_2d *point, int *error);
+
+void   dwg_ent_3dface_get_corner2(dwg_ent_3dface *_3dface, dwg_point_2d *point, int *error);
+void   dwg_ent_3dface_set_corner2(dwg_ent_3dface *_3dface, dwg_point_2d *point, int *error);
+
+void   dwg_ent_3dface_get_corner3(dwg_ent_3dface *_3dface, dwg_point_2d *point, int *error);
+void   dwg_ent_3dface_set_corner3(dwg_ent_3dface *_3dface, dwg_point_2d *point, int *error);
+
+void   dwg_ent_3dface_get_corner4(dwg_ent_3dface *_3dface, dwg_point_2d *point, int *error);
+void   dwg_ent_3dface_set_corner4(dwg_ent_3dface *_3dface, dwg_point_2d *point, int *error);
+
+//-----------------------------------------------------------------------------------
+
+long   dwg_ent_image_get_class_version(dwg_ent_image *image, int *error);
+void   dwg_ent_image_set_class_version(dwg_ent_image *image, long class_version, int *error);
+
+void   dwg_ent_image_get_pt0(dwg_ent_image *image, dwg_point_3d *point, int *error);
+void   dwg_ent_image_set_pt0(dwg_ent_image *image, dwg_point_3d *point, int *error);
+
+void   dwg_ent_image_get_u_vector(dwg_ent_image *image, dwg_point_3d *point, int *error);
+void   dwg_ent_image_set_u_vector(dwg_ent_image *image, dwg_point_3d *point, int *error);
+
+void   dwg_ent_image_get_v_vector(dwg_ent_image *image, dwg_point_3d *point, int *error);
+void   dwg_ent_image_set_v_vector(dwg_ent_image *image, dwg_point_3d *point, int *error);
+
+double dwg_ent_image_get_size_height(dwg_ent_image *image, int *error);
+void   dwg_ent_image_set_size_height(dwg_ent_image *image, double size_height, int *error);
+
+double dwg_ent_image_get_size_width(dwg_ent_image *image, int *error);
+void   dwg_ent_image_set_size_width(dwg_ent_image *image, double size_width, int *error);
+
+unsigned int dwg_ent_image_get_display_props(dwg_ent_image *image, int *error);
+void         dwg_ent_image_set_display_props(dwg_ent_image *image, unsigned int display_props, int *error);
+
+unsigned char dwg_ent_image_get_clipping(dwg_ent_image *image, int *error);
+void          dwg_ent_image_set_clipping(dwg_ent_image *image, unsigned char clipping, int *error);
+
+char   dwg_ent_image_get_brightness(dwg_ent_image *image, int *error);
+void   dwg_ent_image_set_brightness(dwg_ent_image *image, char brightness, int *error);
+
+char   dwg_ent_image_get_contrast(dwg_ent_image *image, int *error);
+void   dwg_ent_image_set_contrast(dwg_ent_image *image, char contrast, int *error);
+
+char   dwg_ent_image_get_fade(dwg_ent_image *image, int *error);
+void   dwg_ent_image_set_fade(dwg_ent_image *image, char fade, int *error);
+
+unsigned int dwg_ent_image_get_clip_boundry_type(dwg_ent_image *image, int *error);
+void         dwg_ent_image_set_clip_boundry_type(dwg_ent_image *image, unsigned int type, int *error);
+
+void   dwg_ent_image_get_boundary_pt0(dwg_ent_image *image, dwg_point_2d *point, int *error);
+void   dwg_ent_image_set_boundary_pt0(dwg_ent_image *image, dwg_point_2d *point, int *error);
+
+void   dwg_ent_image_get_boundary_pt1(dwg_ent_image *image, dwg_point_2d *point, int *error);
+void   dwg_ent_image_set_boundary_pt1(dwg_ent_image *image, dwg_point_2d *point, int *error);
+
+double dwg_ent_image_get_num_clip_verts(dwg_ent_image *image, int *error);
+void   dwg_ent_image_set_num_clip_verts(dwg_ent_image *image, double num, int *error);
+
+dwg_ent_image_clip_vert * dwg_ent_image_get_clip_verts(dwg_ent_image *image, int *error);
+
+//--------------------------------------------------------------------------------
+
+void   dwg_ent_mline_set_scale(dwg_ent_mline *mline, double scale, int *error);
+double dwg_ent_mline_get_scale(dwg_ent_mline *mline, int *error);
+
+void   dwg_ent_mline_set_just(dwg_ent_mline *mline, char just, int *error);
+char   dwg_ent_mline_get_just(dwg_ent_mline *mline, int *error);
+
+void   dwg_ent_mline_set_base_point(dwg_ent_mline *mline, dwg_point_3d *point, int *error);
+void   dwg_ent_mline_get_base_point(dwg_ent_mline *mline, dwg_point_3d *point, int *error);
+
+void   dwg_ent_mline_set_extrusion(dwg_ent_mline *mline, dwg_point_3d *point, int *error);
+void   dwg_ent_mline_get_extrusion(dwg_ent_mline *mline, dwg_point_3d *point, int *error);
+
+void   dwg_ent_mline_set_open_closed(dwg_ent_mline *mline, unsigned int oc, int *error);
+unsigned int dwg_ent_mline_get_open_closed(dwg_ent_mline *mline, int *error);
+
+void   dwg_ent_mline_set_num_lines(dwg_ent_mline *mline, char num, int *error);
+char   dwg_ent_mline_get_num_lines(dwg_ent_mline *mline, int *error);
+
+void   dwg_ent_mline_set_num_verts(dwg_ent_mline *mline, unsigned int num, int *error);
+unsigned int dwg_ent_mline_get_num_verts(dwg_ent_mline *mline, int *error);
+
+dwg_ent_mline_vert * dwg_ent_mline_get_verts(dwg_ent_mline *mline, int *error);
+
+//------------------------------------------------------------------------------------
 
 // Get Layer Name
 char * dwg_obj_layer_get_name(dwg_obj_layer *layer, int *error);

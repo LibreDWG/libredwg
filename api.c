@@ -3979,7 +3979,8 @@ dwg_obj_get_appid_control(dwg_obj_appid *appid, int *error)
 
 //-------------------------------------------------------------------------------------------
 
-char * dwg_ent_dim_linear_get_block_name(dwg_ent_dim_linear *dim, int *error)
+char *
+dwg_ent_dim_linear_get_block_name(dwg_ent_dim_linear *dim, int *error)
 {
     return dim->block->obj->tio.object->tio.BLOCK_HEADER->entry_name;
 }
@@ -9585,7 +9586,8 @@ dwg_ent_tolerance_set_text_string(dwg_ent_tolerance *tol, char * string, int *er
         }
 
 }
-char * dwg_ent_tolerance_get_text_string(dwg_ent_tolerance *tol, int *error)
+char *
+dwg_ent_tolerance_get_text_string(dwg_ent_tolerance *tol, int *error)
 {
     if(tol != 0)
         {
@@ -10268,7 +10270,8 @@ dwg_ent_viewport_set_height(dwg_ent_viewport *vp, double height, int *error)
         }
 }
 
-unsigned int dwg_ent_viewport_get_grid_major(dwg_ent_viewport *vp, int *error)
+unsigned int
+dwg_ent_viewport_get_grid_major(dwg_ent_viewport *vp, int *error)
 {
     if (vp != 0)
         {
@@ -10320,7 +10323,8 @@ dwg_ent_viewport_set_frozen_layer_count(dwg_ent_viewport *vp, long count, int *e
         }
 }
 
-char * dwg_ent_viewport_get_style_sheet(dwg_ent_viewport *vp, int *error)
+char *
+dwg_ent_viewport_get_style_sheet(dwg_ent_viewport *vp, int *error)
 {
     if (vp != 0)
         {
@@ -10359,7 +10363,8 @@ dwg_ent_viewport_set_circle_zoom(dwg_ent_viewport *vp, unsigned int zoom, int *e
             *error = 1;
         }
 }
-unsigned int dwg_ent_viewport_get_circle_zoom(dwg_ent_viewport *vp, int *error)
+unsigned int
+dwg_ent_viewport_get_circle_zoom(dwg_ent_viewport *vp, int *error)
 {
     if (vp != 0)
         {
@@ -10949,7 +10954,8 @@ dwg_ent_viewport_set_ucs_ortho_view_type(dwg_ent_viewport *vp, unsigned int type
             *error = 1;
         }
 }
-unsigned int dwg_ent_viewport_get_ucs_ortho_view_type(dwg_ent_viewport *vp, int *error)
+unsigned int
+dwg_ent_viewport_get_ucs_ortho_view_type(dwg_ent_viewport *vp, int *error)
 {
     if (vp != 0)
         {
@@ -10975,7 +10981,8 @@ dwg_ent_viewport_set_shadeplot_mode(dwg_ent_viewport *vp, unsigned int shadeplot
             *error = 1;
         }
 }
-unsigned int dwg_ent_viewport_get_shadeplot_mode(dwg_ent_viewport *vp, int *error)
+unsigned int
+dwg_ent_viewport_get_shadeplot_mode(dwg_ent_viewport *vp, int *error)
 {
     if (vp != 0)
         {
@@ -11096,7 +11103,8 @@ dwg_ent_viewport_get_contrast(dwg_ent_viewport *vp, int *error)
 
 //-------------------------------------------------------------------------------
 
-unsigned int dwg_ent_polyline_pface_get_numverts(dwg_ent_polyline_pface *pface, int *error)
+unsigned int
+dwg_ent_polyline_pface_get_numverts(dwg_ent_polyline_pface *pface, int *error)
 {
   if (pface != 0)
     {
@@ -11108,7 +11116,8 @@ else
         *error = 1;
     }
 }
-void   dwg_ent_polyline_pface_set_numverts(dwg_ent_polyline_pface *pface, unsigned int numverts, int *error)
+void
+dwg_ent_polyline_pface_set_numverts(dwg_ent_polyline_pface *pface, unsigned int numverts, int *error)
 {
   if (pface != 0)
     {
@@ -11133,7 +11142,8 @@ else
         *error = 1;
     }
 }
-void   dwg_ent_polyline_pface_set_owned_obj_count(dwg_ent_polyline_pface *pface, long owned_obj_count, int *error)
+void
+dwg_ent_polyline_pface_set_owned_obj_count(dwg_ent_polyline_pface *pface, long owned_obj_count, int *error)
 {
   if (pface != 0)
     {
@@ -11146,7 +11156,8 @@ else
     }
 }
 
-unsigned int dwg_ent_polyline_pface_get_numfaces(dwg_ent_polyline_pface *pface, int *error)
+unsigned int
+dwg_ent_polyline_pface_get_numfaces(dwg_ent_polyline_pface *pface, int *error)
 {
   if (pface != 0)
     {
@@ -11158,7 +11169,8 @@ else
         *error = 1;
     }
 }
-void   dwg_ent_polyline_pface_set_numfaces(dwg_ent_polyline_pface *pface, unsigned int numfaces, int *error)
+void
+dwg_ent_polyline_pface_set_numfaces(dwg_ent_polyline_pface *pface, unsigned int numfaces, int *error)
 {
   if (pface != 0)
     {
@@ -11173,7 +11185,8 @@ else
 
 //-----------------------------------------------------------------------------------
 
-unsigned int dwg_ent_polyline_mesh_get_flags(dwg_ent_polyline_mesh *mesh, int *error)
+unsigned int
+dwg_ent_polyline_mesh_get_flags(dwg_ent_polyline_mesh *mesh, int *error)
 {
   if (mesh != 0)
     {
@@ -11185,7 +11198,8 @@ else
         *error = 1;
     }
 }
-void   dwg_ent_polyline_mesh_set_flags(dwg_ent_polyline_mesh *mesh, unsigned int flags, int *error)
+void
+dwg_ent_polyline_mesh_set_flags(dwg_ent_polyline_mesh *mesh, unsigned int flags, int *error)
 {
   if (mesh != 0)
     {
@@ -11198,7 +11212,8 @@ else
     }
 }
 
-unsigned int dwg_ent_polyline_mesh_get_curve_type(dwg_ent_polyline_mesh *mesh, int *error)
+unsigned int
+dwg_ent_polyline_mesh_get_curve_type(dwg_ent_polyline_mesh *mesh, int *error)
 {
   if (mesh != 0)
     {
@@ -11210,7 +11225,8 @@ else
         *error = 1;
     }
 }
-void   dwg_ent_polyline_mesh_set_curve_type(dwg_ent_polyline_mesh *mesh, unsigned int curve_type, int *error)
+void
+dwg_ent_polyline_mesh_set_curve_type(dwg_ent_polyline_mesh *mesh, unsigned int curve_type, int *error)
 {
   if (mesh != 0)
     {
@@ -11223,7 +11239,8 @@ else
     }
 }
 
-unsigned int dwg_ent_polyline_mesh_get_m_vert_count(dwg_ent_polyline_mesh *mesh, int *error)
+unsigned int
+dwg_ent_polyline_mesh_get_m_vert_count(dwg_ent_polyline_mesh *mesh, int *error)
 {
   if (mesh != 0)
     {
@@ -11235,7 +11252,8 @@ else
         *error = 1;
     }
 }
-void   dwg_ent_polyline_mesh_set_m_vert_count(dwg_ent_polyline_mesh *mesh, unsigned int m_vert_count, int *error)
+void
+dwg_ent_polyline_mesh_set_m_vert_count(dwg_ent_polyline_mesh *mesh, unsigned int m_vert_count, int *error)
 {
   if (mesh != 0)
     {
@@ -11248,7 +11266,8 @@ else
     }
 }
 
-unsigned int dwg_ent_polyline_mesh_get_n_vert_count(dwg_ent_polyline_mesh *mesh, int *error)
+unsigned int
+dwg_ent_polyline_mesh_get_n_vert_count(dwg_ent_polyline_mesh *mesh, int *error)
 {
   if (mesh != 0)
     {
@@ -11260,7 +11279,8 @@ else
         *error = 1;
     }
 }
-void   dwg_ent_polyline_mesh_set_n_vert_count(dwg_ent_polyline_mesh *mesh, unsigned int n_vert_count, int *error)
+void
+dwg_ent_polyline_mesh_set_n_vert_count(dwg_ent_polyline_mesh *mesh, unsigned int n_vert_count, int *error)
 {
   if (mesh != 0)
     {
@@ -11273,7 +11293,8 @@ else
     }
 }
 
-unsigned int dwg_ent_polyline_mesh_get_m_density(dwg_ent_polyline_mesh *mesh, int *error)
+unsigned int
+dwg_ent_polyline_mesh_get_m_density(dwg_ent_polyline_mesh *mesh, int *error)
 {
   if (mesh != 0)
     {
@@ -11285,7 +11306,8 @@ else
         *error = 1;
     }
 }
-void   dwg_ent_polyline_mesh_set_m_density(dwg_ent_polyline_mesh *mesh, unsigned int m_density, int *error)
+void
+dwg_ent_polyline_mesh_set_m_density(dwg_ent_polyline_mesh *mesh, unsigned int m_density, int *error)
 {
   if (mesh != 0)
     {
@@ -11298,7 +11320,8 @@ else
     }
 }
 
-unsigned int dwg_ent_polyline_mesh_get_n_density(dwg_ent_polyline_mesh *mesh, int *error)
+unsigned int
+dwg_ent_polyline_mesh_get_n_density(dwg_ent_polyline_mesh *mesh, int *error)
 {
   if (mesh != 0)
     {
@@ -11310,7 +11333,8 @@ else
         *error = 1;
     }
 }
-void   dwg_ent_polyline_mesh_set_n_density(dwg_ent_polyline_mesh *mesh, unsigned int n_density, int *error)
+void
+dwg_ent_polyline_mesh_set_n_density(dwg_ent_polyline_mesh *mesh, unsigned int n_density, int *error)
 {
   if (mesh != 0)
     {
@@ -11335,7 +11359,8 @@ else
         *error = 1;
     }
 }
-void   dwg_ent_polyline_mesh_set_owned_obj_count(dwg_ent_polyline_mesh *mesh, long owned_obj_count, int *error)
+void
+dwg_ent_polyline_mesh_set_owned_obj_count(dwg_ent_polyline_mesh *mesh, long owned_obj_count, int *error)
 {
   if (mesh != 0)
     {
@@ -11350,7 +11375,8 @@ else
 
 //-----------------------------------------------------------------------------------
 
-void   dwg_ent_polyline_2d_get_extrusion(dwg_ent_polyline_2d *line2d, dwg_point_3d *point, int *error)
+void
+dwg_ent_polyline_2d_get_extrusion(dwg_ent_polyline_2d *line2d, dwg_point_3d *point, int *error)
 {
   if (line2d != 0)
     {
@@ -11364,7 +11390,8 @@ else
         *error = 1;
     }
 }
-void   dwg_ent_polyline_2d_set_extrusion(dwg_ent_polyline_2d *line2d, dwg_point_3d *point, int *error)
+void
+dwg_ent_polyline_2d_set_extrusion(dwg_ent_polyline_2d *line2d, dwg_point_3d *point, int *error)
 {
   if (line2d != 0)
     {
@@ -11391,7 +11418,8 @@ else
         *error = 1;
     }
 }
-void   dwg_ent_polyline_2d_set_start_width(dwg_ent_polyline_2d *line2d, double start_width, int *error)
+void
+dwg_ent_polyline_2d_set_start_width(dwg_ent_polyline_2d *line2d, double start_width, int *error)
 {
   if (line2d != 0)
     {
@@ -11416,7 +11444,8 @@ else
         *error = 1;
     }
 }
-void   dwg_ent_polyline_2d_set_end_width(dwg_ent_polyline_2d *line2d, double end_width, int *error)
+void
+dwg_ent_polyline_2d_set_end_width(dwg_ent_polyline_2d *line2d, double end_width, int *error)
 {
   if (line2d != 0)
     {
@@ -11441,7 +11470,8 @@ else
         *error = 1;
     }
 }
-void   dwg_ent_polyline_2d_set_thickness(dwg_ent_polyline_2d *line2d, double thickness, int *error)
+void
+dwg_ent_polyline_2d_set_thickness(dwg_ent_polyline_2d *line2d, double thickness, int *error)
 {
   if (line2d != 0)
     {
@@ -11466,7 +11496,8 @@ else
         *error = 1;
     }
 }
-void   dwg_ent_polyline_2d_set_elevation(dwg_ent_polyline_2d *line2d, double elevation, int *error)
+void
+dwg_ent_polyline_2d_set_elevation(dwg_ent_polyline_2d *line2d, double elevation, int *error)
 {
   if (line2d != 0)
     {
@@ -11479,7 +11510,8 @@ else
     }
 }
 
-unsigned int dwg_ent_polyline_2d_get_flags(dwg_ent_polyline_2d *line2d, int *error)
+unsigned int
+dwg_ent_polyline_2d_get_flags(dwg_ent_polyline_2d *line2d, int *error)
 {
   if (line2d != 0)
     {
@@ -11491,7 +11523,8 @@ else
         *error = 1;
     }
 }
-void   dwg_ent_polyline_2d_set_flags(dwg_ent_polyline_2d *line2d, unsigned int flags, int *error)
+void
+dwg_ent_polyline_2d_set_flags(dwg_ent_polyline_2d *line2d, unsigned int flags, int *error)
 {
   if (line2d != 0)
     {
@@ -11504,7 +11537,8 @@ else
     }
 }
 
-unsigned int dwg_ent_polyline_2d_get_curve_type(dwg_ent_polyline_2d *line2d, int *error)
+unsigned int
+dwg_ent_polyline_2d_get_curve_type(dwg_ent_polyline_2d *line2d, int *error)
 {
   if (line2d != 0)
     {
@@ -11516,7 +11550,8 @@ else
         *error = 1;
     }
 }
-void   dwg_ent_polyline_2d_set_curve_type(dwg_ent_polyline_2d *line2d, unsigned int curve_type, int *error)
+void
+dwg_ent_polyline_2d_set_curve_type(dwg_ent_polyline_2d *line2d, unsigned int curve_type, int *error)
 {
   if (line2d != 0)
     {
@@ -11541,7 +11576,8 @@ else
         *error = 1;
     }
 }
-void   dwg_ent_polyline_2d_set_owned_obj_count(dwg_ent_polyline_2d *line2d, long owned_obj_count, int *error)
+void
+dwg_ent_polyline_2d_set_owned_obj_count(dwg_ent_polyline_2d *line2d, long owned_obj_count, int *error)
 {
   if (line2d != 0)
     {
@@ -11568,7 +11604,8 @@ else
         *error = 1;
     }
 }
-void   dwg_ent_polyline_3d_set_flags_1(dwg_ent_polyline_3d *line3d, char flags_1, int *error)
+void
+dwg_ent_polyline_3d_set_flags_1(dwg_ent_polyline_3d *line3d, char flags_1, int *error)
 {
   if (line3d != 0)
     {
@@ -11593,7 +11630,8 @@ else
         *error = 1;
     }
 }
-void   dwg_ent_polyline_3d_set_flags_2(dwg_ent_polyline_3d *line3d, char flags_2, int *error)
+void
+dwg_ent_polyline_3d_set_flags_2(dwg_ent_polyline_3d *line3d, char flags_2, int *error)
 {
   if (line3d != 0)
     {
@@ -11618,7 +11656,8 @@ else
         *error = 1;
     }
 }
-void   dwg_ent_polyline_3d_set_owned_obj_count(dwg_ent_polyline_3d *line3d, long owned_obj_count, int *error)
+void
+dwg_ent_polyline_3d_set_owned_obj_count(dwg_ent_polyline_3d *line3d, long owned_obj_count, int *error)
 {
   if (line3d != 0)
     {
@@ -11632,6 +11671,865 @@ else
 }
 
 //-------------------------------------------------------------------------------
+
+/* This returns the elevation of a _3dface entity.
+Usage :- dwg_ent_3dface_get_invis_flags(_3dface);
+*/
+unsigned int
+dwg_ent_3dface_get_invis_flags(dwg_ent_3dface *_3dface, int *error)
+{    
+    if (_3dface != 0)
+        {
+            *error = 0;
+            return _3dface->invis_flags;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+/* This sets the invis_flags of a _3dface entity equal to 
+value in second argument.
+Usage :- dwg_ent_3dface_set_invis_flags(_3dface, 20);
+Hence invis_flags sets to 20
+*/
+void
+dwg_ent_3dface_set_invis_flags(dwg_ent_3dface *_3dface, unsigned int invis_flags, int *error)
+{    
+    if (_3dface != 0)
+        {
+            *error = 0;
+            _3dface->invis_flags = invis_flags;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+/* Returns the corner1 values of _3dface to second argument.
+Usage :- dwg_ent_3dface_get_corner1(_3dface, point);
+where _3dface is a pointer of dwg_ent_3dface type and point is 
+of dwg_point_3d. point.x will contain x value of corner1,
+point.y will contain y value of corner1
+*/
+void
+dwg_ent_3dface_get_corner1(dwg_ent_3dface *_3dface, dwg_point_2d *point, int *error)
+{    
+    if (_3dface != 0)
+        {
+            *error = 0;
+            point->x = _3dface->corner1.x;
+            point->y = _3dface->corner1.y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+/* Sets the _3dface corner1 values equal to values of second argument.
+Usage :- dwg_ent_3dface_set_corner1(_3dface, point);
+where _3dface is a pointer of dwg_ent_3dface type and point is 
+of dwg_point_3d. point.x will contain x value of corner1,
+point.y will contain y value of corner1
+*/
+void
+dwg_ent_3dface_set_corner1(dwg_ent_3dface *_3dface, dwg_point_2d *point, int *error)
+{    
+    if (_3dface != 0)
+        {
+            *error = 0;
+            _3dface->corner1.x = point->x;
+            _3dface->corner1.y = point->y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+/* Returns the corner2 values of _3dface to second argument.
+Usage :- dwg_ent_3dface_get_corner2(_3dface, point);
+where _3dface is a pointer of dwg_ent_3dface type and point is 
+of dwg_point_3d. point.x will contain x value of corner2,
+point.y will contain y value of corner2
+*/
+void
+dwg_ent_3dface_get_corner2(dwg_ent_3dface *_3dface, dwg_point_2d *point, int *error)
+{    
+    if (_3dface != 0)
+        {
+            *error = 0;
+            point->x = _3dface->corner2.x;
+            point->y = _3dface->corner2.y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+/* Sets the _3dface corner2 values equal to values of second argument.
+Usage :- dwg_ent_3dface_set_corner2(_3dface, point);
+where _3dface is a pointer of dwg_ent_3dface type and point is 
+of dwg_point_3d. point.x will contain x value of corner2,
+point.y will contain y value of corner2
+*/
+void
+dwg_ent_3dface_set_corner2(dwg_ent_3dface *_3dface, dwg_point_2d *point, int *error)
+{    
+    if (_3dface != 0)
+        {
+            *error = 0;
+            _3dface->corner2.x = point->x;
+            _3dface->corner2.y = point->y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+/* Returns the corner3 values of _3dface to second argument.
+Usage :- dwg_ent_3dface_get_corner3(_3dface, point);
+where _3dface is a pointer of dwg_ent_3dface type and point is 
+of dwg_point_3d. point.x will contain x value of corner3,
+point.y will contain y value of corner3
+*/
+void
+dwg_ent_3dface_get_corner3(dwg_ent_3dface *_3dface, dwg_point_2d *point, int *error)
+{    
+    if (_3dface != 0)
+        {
+            *error = 0;
+            point->x = _3dface->corner3.x;
+            point->y = _3dface->corner3.y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+/* Sets the _3dface corner3 values equal to values of second argument.
+Usage :- dwg_ent_3dface_set_corner3(_3dface, point);
+where _3dface is a pointer of dwg_ent_3dface type and point is 
+of dwg_point_3d. point.x will contain x value of corner3,
+point.y will contain y value of corner3
+*/
+void
+dwg_ent_3dface_set_corner3(dwg_ent_3dface *_3dface, dwg_point_2d *point, int *error)
+{    
+    if (_3dface != 0)
+        {
+            *error = 0;
+            _3dface->corner3.x = point->x;
+            _3dface->corner3.y = point->y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+/* Returns the corner4 values of _3dface to second argument.
+Usage :- dwg_ent_3dface_get_corner4(_3dface, point);
+where _3dface is a pointer of dwg_ent_3dface type and point is 
+of dwg_point_3d. point.x will contain x value of corner4,
+point.y will contain y value of corner4
+*/
+void
+dwg_ent_3dface_get_corner4(dwg_ent_3dface *_3dface, dwg_point_2d *point, int *error)
+{    
+    if (_3dface != 0)
+        {
+            *error = 0;
+            point->x = _3dface->corner4.x;
+            point->y = _3dface->corner4.y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+/* Sets the _3dface corner4 values equal to values of second argument.
+Usage :- dwg_ent_3dface_set_corner4(_3dface, point);
+where _3dface is a pointer of dwg_ent_3dface type and point is 
+of dwg_point_3d. point.x will contain x value of corner4,
+point.y will contain y value of corner4
+*/
+void
+dwg_ent_3dface_set_corner4(dwg_ent_3dface *_3dface, dwg_point_2d *point, int *error)
+{    
+    if (_3dface != 0)
+        {
+            *error = 0;
+            _3dface->corner4.x = point->x;
+            _3dface->corner4.y = point->y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+//--------------------------------------------------------------------------------
+
+long
+dwg_ent_image_get_class_version(dwg_ent_image *image, int *error)
+{
+    if (image != 0)
+        {
+            *error = 0;
+            return image->class_version;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_image_set_class_version(dwg_ent_image *image, long class_version, int *error)
+{
+    if (image != 0)
+        {
+            *error = 0;
+            image->class_version = class_version;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_image_get_pt0(dwg_ent_image *image, dwg_point_3d *point, int *error)
+{
+    if (image != 0)
+        {
+            *error = 0;
+            point->x = image->pt0.x;
+            point->y = image->pt0.y;
+            point->z = image->pt0.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_image_set_pt0(dwg_ent_image *image, dwg_point_3d *point, int *error)
+{
+    if (image != 0)
+        {
+            *error = 0;
+            image->pt0.x = point->x;
+            image->pt0.y = point->y;
+            image->pt0.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_image_get_u_vector(dwg_ent_image *image, dwg_point_3d *point, int *error)
+{
+    if (image != 0)
+        {
+            *error = 0;
+            point->x = image->uvec.x;
+            point->y = image->uvec.y;
+            point->z = image->uvec.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_image_set_u_vector(dwg_ent_image *image, dwg_point_3d *point, int *error)
+{
+    if (image != 0)
+        {
+            *error = 0;
+            image->uvec.x = point->x ;
+            image->uvec.y = point->y ;
+            image->uvec.z = point->z ;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_image_get_v_vector(dwg_ent_image *image, dwg_point_3d *point, int *error)
+{
+    if (image != 0)
+        {
+            *error = 0;
+            point->x = image->vvec.x;
+            point->y = image->vvec.y;
+            point->z = image->vvec.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_image_set_v_vector(dwg_ent_image *image, dwg_point_3d *point, int *error)
+{
+    if (image != 0)
+        {
+            *error = 0;
+            image->vvec.x = point->x ;
+            image->vvec.y = point->y ;
+            image->vvec.z = point->z ;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_image_get_size_height(dwg_ent_image *image, int *error)
+{
+    if (image != 0)
+        {
+            *error = 0;
+            return image->size.height;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_image_set_size_height(dwg_ent_image *image, double size_height, int *error)
+{
+    if (image != 0)
+        {
+            *error = 0;
+            image->size.height = size_height;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_image_get_size_width(dwg_ent_image *image, int *error)
+{
+    if (image != 0)
+        {
+            *error = 0;
+            return image->size.width;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_image_set_size_width(dwg_ent_image *image, double size_width, int *error)
+{
+    if (image != 0)
+        {
+            *error = 0;
+            image->size.width = size_width;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+unsigned int
+dwg_ent_image_get_display_props(dwg_ent_image *image, int *error)
+{
+    if (image != 0)
+        {
+            *error = 0;
+            return image->display_props;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void      
+dwg_ent_image_set_display_props(dwg_ent_image *image, unsigned int display_props, int *error)
+{
+    if (image != 0)
+        {
+            *error = 0;
+            image->display_props = display_props;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+unsigned char
+dwg_ent_image_get_clipping(dwg_ent_image *image, int *error)
+{
+    if (image != 0)
+        {
+            *error = 0;
+            return image->clipping;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void       
+dwg_ent_image_set_clipping(dwg_ent_image *image, unsigned char clipping, int *error)
+{
+    if (image != 0)
+        {
+            *error = 0;
+            image->clipping = clipping;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char
+dwg_ent_image_get_brightness(dwg_ent_image *image, int *error)
+{
+    if (image != 0)
+        {
+            *error = 0;
+            return image->brightness;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_image_set_brightness(dwg_ent_image *image, char brightness, int *error)
+{
+    if (image != 0)
+        {
+            *error = 0;
+            image->brightness = brightness;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char
+dwg_ent_image_get_contrast(dwg_ent_image *image, int *error)
+{
+    if (image != 0)
+        {
+            *error = 0;
+            return image->contrast;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_image_set_contrast(dwg_ent_image *image, char contrast, int *error)
+{
+    if (image != 0)
+        {
+            *error = 0;
+            image->contrast = contrast;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+char
+dwg_ent_image_get_fade(dwg_ent_image *image, int *error)
+{
+    if (image != 0)
+        {
+            *error = 0;
+            return image->fade;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_image_set_fade(dwg_ent_image *image, char fade, int *error)
+{
+    if (image != 0)
+        {
+            *error = 0;
+            image->fade = fade;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+unsigned int
+dwg_ent_image_get_clip_boundary_type(dwg_ent_image *image, int *error)
+{
+    if (image != 0)
+        {
+            *error = 0;
+            return image->clip_boundary_type;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void      
+dwg_ent_image_set_clip_boundary_type(dwg_ent_image *image, unsigned int type, int *error)
+{
+    if (image != 0)
+        {
+            *error = 0;
+            image->clip_boundary_type = type;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_image_get_boundary_pt0(dwg_ent_image *image, dwg_point_2d *point, int *error)
+{
+    if (image != 0)
+        {
+            *error = 0;
+            point->x = image->boundary_pt0.x;
+            point->y = image->boundary_pt0.y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_image_set_boundary_pt0(dwg_ent_image *image, dwg_point_2d *point, int *error)
+{
+    if (image != 0)
+        {
+            *error = 0;
+            image->boundary_pt0.x = point->x;
+            image->boundary_pt0.y = point->y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_image_get_boundary_pt1(dwg_ent_image *image, dwg_point_2d *point, int *error)
+{
+    if (image != 0)
+        {
+            *error = 0;
+            point->x = image->boundary_pt1.x;
+            point->y = image->boundary_pt1.y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_image_set_boundary_pt1(dwg_ent_image *image, dwg_point_2d *point, int *error)
+{
+    if (image != 0)
+        {
+            *error = 0;
+            point->x = image->boundary_pt1.x;
+            point->y = image->boundary_pt1.y;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+double
+dwg_ent_image_get_num_clip_verts(dwg_ent_image *image, int *error)
+{
+    if (image != 0)
+        {
+            *error = 0;
+            return image->num_clip_verts;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_image_set_num_clip_verts(dwg_ent_image *image, double num, int *error)
+{
+    if (image != 0)
+        {
+            *error = 0;
+            image->num_clip_verts = num;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+dwg_ent_image_clip_vert *
+dwg_ent_image_get_clip_verts(dwg_ent_image *image, int *error)
+{
+  dwg_ent_image_clip_vert *ptx = (dwg_ent_image_clip_vert*) 
+  malloc(sizeof(dwg_ent_image_clip_vert)* image->num_clip_verts);
+  if(ptx != 0)
+    {
+      *error = 0;
+      int i;
+      for (i = 0; i < image->num_clip_verts ; i++)
+      {
+        ptx[i] = image->clip_verts[i];
+      }
+      return ptx;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+
+//--------------------------------------------------------------------------------
+
+void
+dwg_ent_mline_set_scale(dwg_ent_mline *mline, double scale, int *error)
+{
+    if (mline != 0)
+        {
+            *error = 0;
+            mline->scale = scale;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+double dwg_ent_mline_get_scale(dwg_ent_mline *mline, int *error)
+{
+    if (mline != 0)
+        {
+            *error = 0;
+            return mline->scale;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_mline_set_just(dwg_ent_mline *mline, char just, int *error)
+{
+    if (mline != 0)
+        {
+            *error = 0;
+            mline->just = just;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+char
+dwg_ent_mline_get_just(dwg_ent_mline *mline, int *error)
+{
+    if (mline != 0)
+        {
+            *error = 0;
+            return mline->just;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_mline_set_base_point(dwg_ent_mline *mline, dwg_point_3d *point, int *error)
+{
+    if (mline != 0)
+        {
+            *error = 0;
+            mline->base_point.x = point->x;
+            mline->base_point.y = point->y;
+            mline->base_point.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_mline_get_base_point(dwg_ent_mline *mline, dwg_point_3d *point, int *error)
+{
+    if (mline != 0)
+        {
+            *error = 0;
+            point->x = mline->base_point.x;
+            point->y = mline->base_point.y;
+            point->z = mline->base_point.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_mline_set_extrusion(dwg_ent_mline *mline, dwg_point_3d *point, int *error)
+{
+    if (mline != 0)
+        {
+            *error = 0;
+            mline->extrusion.x = point->x;
+            mline->extrusion.y = point->y;
+            mline->extrusion.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_mline_get_extrusion(dwg_ent_mline *mline, dwg_point_3d *point, int *error)
+{
+    if (mline != 0)
+        {
+            *error = 0;
+            point->x = mline->extrusion.x;
+            point->y = mline->extrusion.y;
+            point->z = mline->extrusion.z;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_mline_set_open_closed(dwg_ent_mline *mline, unsigned int oc, int *error)
+{
+    if (mline != 0)
+        {
+            *error = 0;
+            mline->open_closed = oc;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+unsigned int dwg_ent_mline_get_open_closed(dwg_ent_mline *mline, int *error)
+{
+    if (mline != 0)
+        {
+            *error = 0;
+            return mline->open_closed;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_mline_set_num_lines(dwg_ent_mline *mline, char num, int *error)
+{
+    if (mline != 0)
+        {
+            *error = 0;
+            mline->num_lines = num;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+char
+dwg_ent_mline_get_num_lines(dwg_ent_mline *mline, int *error)
+{
+    if (mline != 0)
+        {
+            *error = 0;
+            return mline->num_lines;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+void
+dwg_ent_mline_set_num_verts(dwg_ent_mline *mline, unsigned int num, int *error)
+{
+    if (mline != 0)
+        {
+            *error = 0;
+            mline->num_verts = num;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+unsigned int dwg_ent_mline_get_num_verts(dwg_ent_mline *mline, int *error)
+{
+    if (mline != 0)
+        {
+            *error = 0;
+            return mline->num_verts;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+dwg_ent_mline_vert * dwg_ent_mline_get_verts(dwg_ent_mline *mline, int *error)
+{
+  dwg_ent_mline_vert *ptx = (dwg_ent_mline_vert*) 
+  malloc(sizeof(dwg_ent_mline_vert)* mline->num_verts);
+  if(ptx != 0)
+    {
+      *error = 0;
+      int i = 0;
+      for (i = 0; i < mline->num_verts ; i++)
+      {
+        ptx[i] = mline->verts[i];
+      }
+      return ptx;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+
+//--------------------------------------------------------------------------------------
 
 /* Returns block control object from a block header type argument passed 
 to function
@@ -11691,5 +12589,4 @@ dwg_obj_block_header_get_name(dwg_obj_block_header *hdr, int *error)
         {
             *error = 1;
         }
-
 }
