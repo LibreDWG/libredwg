@@ -4,6 +4,103 @@
 
 //---------------------------------------------------------------------------
 
+GET_DWG_ENTITY(TEXT);
+GET_DWG_ENTITY(ATTRIB);
+GET_DWG_ENTITY(ATTDEF);
+GET_DWG_ENTITY(BLOCK);
+GET_DWG_ENTITY(ENDBLK);
+GET_DWG_ENTITY(SEQEND);
+GET_DWG_ENTITY(INSERT);
+GET_DWG_ENTITY(MINSERT);
+GET_DWG_ENTITY(VERTEX_2D);
+GET_DWG_ENTITY(VERTEX_3D);
+GET_DWG_ENTITY(VERTEX_MESH);
+GET_DWG_ENTITY(VERTEX_PFACE);
+GET_DWG_ENTITY(VERTEX_PFACE_FACE);
+GET_DWG_ENTITY(POLYLINE_2D);
+GET_DWG_ENTITY(POLYLINE_3D);
+GET_DWG_ENTITY(ARC);
+GET_DWG_ENTITY(CIRCLE);
+GET_DWG_ENTITY(LINE);
+GET_DWG_ENTITY(DIMENSION_ORDINATE);
+GET_DWG_ENTITY(DIMENSION_LINEAR);
+GET_DWG_ENTITY(DIMENSION_ALIGNED);
+GET_DWG_ENTITY(DIMENSION_ANG3PT);
+GET_DWG_ENTITY(DIMENSION_ANG2LN);
+GET_DWG_ENTITY(DIMENSION_RADIUS);
+GET_DWG_ENTITY(DIMENSION_DIAMETER);
+GET_DWG_ENTITY(POINT);
+GET_DWG_ENTITY(_3DFACE);
+GET_DWG_ENTITY(POLYLINE_PFACE);
+GET_DWG_ENTITY(POLYLINE_MESH);
+GET_DWG_ENTITY(SOLID);
+GET_DWG_ENTITY(TRACE);
+GET_DWG_ENTITY(SHAPE);
+GET_DWG_ENTITY(VIEWPORT);
+GET_DWG_ENTITY(ELLIPSE);
+GET_DWG_ENTITY(SPLINE);
+GET_DWG_ENTITY(REGION);
+GET_DWG_ENTITY(BODY);
+GET_DWG_ENTITY(RAY);
+GET_DWG_ENTITY(XLINE);
+GET_DWG_ENTITY(MTEXT);
+GET_DWG_ENTITY(LEADER);
+GET_DWG_ENTITY(TOLERANCE);
+GET_DWG_ENTITY(MLINE);
+GET_DWG_ENTITY(LWPLINE);
+GET_DWG_ENTITY(HATCH);
+
+//---------------------------------------------------------------------------
+
+CAST_DWG_OBJECT_TO_ENTITY(TEXT);
+CAST_DWG_OBJECT_TO_ENTITY(ATTRIB);
+CAST_DWG_OBJECT_TO_ENTITY(ATTDEF);
+CAST_DWG_OBJECT_TO_ENTITY(BLOCK);
+CAST_DWG_OBJECT_TO_ENTITY(ENDBLK);
+CAST_DWG_OBJECT_TO_ENTITY(SEQEND);
+CAST_DWG_OBJECT_TO_ENTITY(INSERT);
+CAST_DWG_OBJECT_TO_ENTITY(MINSERT);
+CAST_DWG_OBJECT_TO_ENTITY(VERTEX_2D);
+CAST_DWG_OBJECT_TO_ENTITY(VERTEX_3D);
+CAST_DWG_OBJECT_TO_ENTITY(VERTEX_MESH);
+CAST_DWG_OBJECT_TO_ENTITY(VERTEX_PFACE);
+CAST_DWG_OBJECT_TO_ENTITY(VERTEX_PFACE_FACE);
+CAST_DWG_OBJECT_TO_ENTITY(POLYLINE_2D);
+CAST_DWG_OBJECT_TO_ENTITY(POLYLINE_3D);
+CAST_DWG_OBJECT_TO_ENTITY(ARC);
+CAST_DWG_OBJECT_TO_ENTITY(CIRCLE);
+CAST_DWG_OBJECT_TO_ENTITY(LINE);
+CAST_DWG_OBJECT_TO_ENTITY(DIMENSION_ORDINATE);
+CAST_DWG_OBJECT_TO_ENTITY(DIMENSION_LINEAR);
+CAST_DWG_OBJECT_TO_ENTITY(DIMENSION_ALIGNED);
+CAST_DWG_OBJECT_TO_ENTITY(DIMENSION_ANG3PT);
+CAST_DWG_OBJECT_TO_ENTITY(DIMENSION_ANG2LN);
+CAST_DWG_OBJECT_TO_ENTITY(DIMENSION_RADIUS);
+CAST_DWG_OBJECT_TO_ENTITY(DIMENSION_DIAMETER);
+CAST_DWG_OBJECT_TO_ENTITY(POINT);
+CAST_DWG_OBJECT_TO_ENTITY(POLYLINE_PFACE);
+CAST_DWG_OBJECT_TO_ENTITY(POLYLINE_MESH);
+CAST_DWG_OBJECT_TO_ENTITY(SOLID);
+CAST_DWG_OBJECT_TO_ENTITY(TRACE);
+CAST_DWG_OBJECT_TO_ENTITY(SHAPE);
+CAST_DWG_OBJECT_TO_ENTITY(VIEWPORT);
+CAST_DWG_OBJECT_TO_ENTITY(ELLIPSE);
+CAST_DWG_OBJECT_TO_ENTITY(SPLINE);
+CAST_DWG_OBJECT_TO_ENTITY(REGION);
+CAST_DWG_OBJECT_TO_ENTITY(BODY);
+CAST_DWG_OBJECT_TO_ENTITY(RAY);
+CAST_DWG_OBJECT_TO_ENTITY(XLINE);
+CAST_DWG_OBJECT_TO_ENTITY(MTEXT);
+CAST_DWG_OBJECT_TO_ENTITY(LEADER);
+CAST_DWG_OBJECT_TO_ENTITY(TOLERANCE);
+CAST_DWG_OBJECT_TO_ENTITY(MLINE);
+CAST_DWG_OBJECT_TO_ENTITY(LWPLINE);
+CAST_DWG_OBJECT_TO_ENTITY(HATCH);
+CAST_DWG_OBJECT_TO_OBJECT(BLOCK_HEADER);
+CAST_DWG_OBJECT_TO_OBJECT(BLOCK_CONTROL);
+CAST_DWG_OBJECT_TO_OBJECT(LAYER);
+//---------------------------------------------------------------------------
+
 /* This function creates and returns a new circle entity with default 
 values.
 Usage : dwg_ent_circle_new();
@@ -15531,4 +15628,95 @@ dwg_obj_block_header_get_name(dwg_obj_block_header *hdr, int *error)
         {
             *error = 1;
         }
+}
+
+dwg_object_ref **
+dwg_obj_block_control_get_block_headers(dwg_obj_block_control *ctrl, int *error)
+{
+  dwg_object_ref **ptx = (dwg_object_ref**) 
+  malloc(ctrl->num_entries * sizeof(Dwg_Object_Ref *));
+  if(ptx != 0)
+    {
+      *error = 0;
+      int i = 0;
+      for (i=0; i<ctrl->num_entries; i++)
+      {
+        ptx[i] = ctrl->block_headers[i];
+      }
+      return ptx;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+
+long
+dwg_obj_block_control_get_num_entries(dwg_obj_block_control *ctrl, int *error)
+{
+  if(ctrl != 0)
+    {
+      *error = 0;
+      return ctrl->num_entries;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+
+dwg_object_ref *
+dwg_obj_block_control_get_model_space(dwg_obj_block_control *ctrl, int *error)
+{
+  if(ctrl != 0)
+    {
+      *error = 0;
+      return ctrl->model_space;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+
+dwg_object_ref *
+dwg_obj_block_control_get_paper_space(dwg_obj_block_control *ctrl, int *error)
+{
+  if(ctrl != 0)
+    {
+      *error = 0;
+      return ctrl->paper_space;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+
+dwg_object *
+dwg_obj_reference_get_object(dwg_object_ref *ref, int *error)
+{
+  if(ref != 0)
+    {
+      *error = 0;
+      return ref->obj;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+
+int
+dwg_obj_object_get_index(dwg_object *obj, int *error)
+{
+  if(obj != 0)
+    {
+      *error = 0;
+      return obj->index;
+    }
+  else
+    {
+      *error = 1;
+    }
 }

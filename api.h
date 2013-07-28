@@ -58,7 +58,7 @@ Dwg_Entity_##token ** \
 }
 
 // Cast a Dwg_Object to Entity
-#define CAST_OBJECT(token) \
+#define CAST_DWG_OBJECT_TO_ENTITY(token) \
 Dwg_Entity_##token * \
 dwg_object_to_##token(Dwg_Object *obj) \
 { \
@@ -66,6 +66,18 @@ dwg_object_to_##token(Dwg_Object *obj) \
   if(obj != 0 && obj->type == DWG_TYPE_##token) \
     { \
       ret_obj = obj->tio.entity->tio.token; \
+    } \
+  return ret_obj; \
+}
+
+#define CAST_DWG_OBJECT_TO_OBJECT(token) \
+Dwg_Object_##token * \
+dwg_object_to_##token(Dwg_Object *obj) \
+{ \
+  Dwg_Object_##token *ret_obj; \
+  if(obj != 0 && obj->type == DWG_TYPE_##token) \
+    { \
+      ret_obj = obj->tio.object->tio.token; \
     } \
   return ret_obj; \
 }
@@ -135,7 +147,8 @@ typedef struct _dwg_object_BLOCK_CONTROL          dwg_obj_block_control;
 typedef struct _dwg_object_MLINESTYLE             dwg_obj_mlinestyle;
 typedef struct _dwg_object_APPID                  dwg_obj_appid;
 typedef struct _dwg_object_APPID_CONTROL          dwg_obj_appid_control;
-
+typedef struct _dwg_object                        dwg_object;
+typedef struct _dwg_object_ref                    dwg_object_ref;
 //-------------------------------------------------------------------------------
 
 // Creates a new circle entity
@@ -1885,7 +1898,22 @@ void dwg_ent_vertex_pface_face_get_vertind(dwg_ent_vert_pface_face *face, unsign
 
 //--------------------------------------------------------------------------------
 
-// Get Block Name
+
+/* Get Block Name of the block header type argument passed in function
+Usage :- char * block_name = dwg_obj_block_header_get_name(hdr);
+*/
 char * dwg_obj_block_header_get_name(dwg_obj_block_header *hdr, int *error);
+
+dwg_object_ref ** dwg_obj_block_control_get_block_headers(dwg_obj_block_control *ctrl, int *error);
+
+long dwg_obj_block_control_get_num_entries(dwg_obj_block_control *ctrl, int *error);
+
+dwg_object_ref * dwg_obj_block_control_get_model_space(dwg_obj_block_control *ctrl, int *error);
+
+dwg_object_ref * dwg_obj_block_control_get_paper_space(dwg_obj_block_control *ctrl, int *error);
+
+dwg_object * dwg_obj_reference_get_object(dwg_object_ref *ref, int *error);
+
+int dwg_obj_object_get_index(dwg_object *obj, int *error);
 
 #endif
