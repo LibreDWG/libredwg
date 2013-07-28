@@ -13611,7 +13611,1865 @@ dwg_ent_body_set_acis_empty2(dwg_ent_body *body, unsigned char acis, int *error)
 
 //--------------------------------------------------------------------------------
 
+void
+dwg_ent_table_set_insertion_point(dwg_ent_table *table, dwg_point_3d *point, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->insertion_point.x = point->x;
+            table->insertion_point.y = point->y;
+            table->insertion_point.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
 
+void
+dwg_ent_table_get_insertion_point(dwg_ent_table *table, dwg_point_3d *point, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            point->x = table->insertion_point.x;
+            point->y = table->insertion_point.y;
+            point->z = table->insertion_point.z;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_scale(dwg_ent_table *table, dwg_point_3d *point, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->scale.x = point->x;
+            table->scale.y = point->y;
+            table->scale.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_get_scale(dwg_ent_table *table, dwg_point_3d *point, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            point->x = table->scale.x;
+            point->y = table->scale.y;
+            point->z = table->scale.z;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_data_flags(dwg_ent_table *table, unsigned char flags, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->data_flags = flags;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned char
+dwg_ent_table_get_data_flags(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->data_flags;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_rotation(dwg_ent_table *table, double rotation, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->rotation = rotation;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+double
+dwg_ent_table_get_rotation(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->rotation;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_extrusion(dwg_ent_table *table, dwg_point_3d *point, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->extrusion.x = point->x;
+            table->extrusion.y = point->y;
+            table->extrusion.z = point->z;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_get_extrusion(dwg_ent_table *table, dwg_point_3d *point, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            point->x = table->extrusion.x;
+            point->y = table->extrusion.y;
+            point->z = table->extrusion.z;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_has_attribs(dwg_ent_table *table, unsigned char attribs, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->has_attribs = attribs;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned char
+dwg_ent_table_get_has_attribs(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->has_attribs;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_owned_object_count(dwg_ent_table *table, long count, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->owned_object_count = count;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+long
+dwg_ent_table_get_owned_object_count(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->owned_object_count;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_flag_for_table_value(dwg_ent_table *table, unsigned int value, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->flag_for_table_value = value;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned int 
+dwg_ent_table_get_flag_for_table_value(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->flag_for_table_value;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_horiz_direction(dwg_ent_table *table, dwg_point_3d *point, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->horiz_direction.x = point->x;
+            table->horiz_direction.y = point->y;
+            table->horiz_direction.z = point->z;
+
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_get_horiz_direction(dwg_ent_table *table, dwg_point_3d *point, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            point->x = table->horiz_direction.x;
+            point->y = table->horiz_direction.y;
+            point->z = table->horiz_direction.z;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_num_cols(dwg_ent_table *table, long num, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->num_cols = num;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+long
+dwg_ent_table_get_num_cols(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->num_cols;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_num_rows(dwg_ent_table *table, long num, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->num_rows = num;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+long
+dwg_ent_table_get_num_rows(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->num_rows;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+double *
+dwg_ent_table_get_col_widths(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->col_widths;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+double *
+dwg_ent_table_get_row_heights(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->row_heights;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_table_overrides_present(dwg_ent_table *table, unsigned char present, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->table_overrides_present = present;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned char
+dwg_ent_table_get_table_overrides_present(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->table_overrides_present;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_table_flag_override(dwg_ent_table *table, long override, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->table_flag_override = override;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+long
+dwg_ent_table_get_table_flag_override(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->table_flag_override;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_title_suppressed(dwg_ent_table *table, unsigned char title, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->title_suppressed = title;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned char
+dwg_ent_table_get_title_suppressed(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->title_suppressed;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_header_suppressed(dwg_ent_table *table, unsigned char header, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->header_suppressed = header;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned char
+dwg_ent_table_get_header_suppressed(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->header_suppressed;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_flow_direction(dwg_ent_table *table, unsigned int dir, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->flow_direction = dir;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned int 
+dwg_ent_table_get_flow_direction(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->flow_direction;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_horiz_cell_margin(dwg_ent_table *table, double margin, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->horiz_cell_margin = margin;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+double
+dwg_ent_table_get_horiz_cell_margin(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->horiz_cell_margin;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_vert_cell_margin(dwg_ent_table *table, double margin, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->vert_cell_margin = margin;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+double
+dwg_ent_table_get_vert_cell_margin(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->vert_cell_margin;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_title_row_fill_none(dwg_ent_table *table, unsigned char fill , int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->title_row_fill_none = fill;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned char
+dwg_ent_table_get_title_row_fill_none(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->title_row_fill_none;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_header_row_fill_none(dwg_ent_table *table, unsigned char fill, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->header_row_fill_none = fill;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned char
+dwg_ent_table_get_header_row_fill_none(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->header_row_fill_none;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_data_row_fill_none(dwg_ent_table *table, unsigned char fill, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->data_row_fill_none = fill;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned char
+dwg_ent_table_get_data_row_fill_none(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->data_row_fill_none;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_title_row_align(dwg_ent_table *table, unsigned char fill, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->title_row_align = fill;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned int 
+dwg_ent_table_get_title_row_align(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->title_row_align;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_header_row_align(dwg_ent_table *table, unsigned int align, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->header_row_align = align;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned int 
+dwg_ent_table_get_header_row_align(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->header_row_align;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_data_row_align(dwg_ent_table *table, unsigned int align, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->data_row_align = align;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned int 
+dwg_ent_table_get_data_row_align(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->data_row_align;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_title_row_height(dwg_ent_table *table, double height, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->title_row_height = height;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+double
+dwg_ent_table_get_title_row_height(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->title_row_height;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_header_row_height(dwg_ent_table *table, double height, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->header_row_height = height;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+double
+dwg_ent_table_get_header_row_height(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->header_row_height;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_data_row_height(dwg_ent_table *table, double height, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->data_row_height = height;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+double
+dwg_ent_table_get_data_row_height(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->data_row_height;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_border_color_overrides_present(dwg_ent_table *table, unsigned char present, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->border_color_overrides_present = present;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned char
+dwg_ent_table_get_border_color_overrides_present(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->border_color_overrides_present;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_border_color_overrides_flag(dwg_ent_table *table, long overrides, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->border_color_overrides_flag = overrides;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+long
+dwg_ent_table_get_border_color_overrides_flag(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->border_color_overrides_flag;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_border_lineweight_overrides_present(dwg_ent_table *table, unsigned char present, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->border_lineweight_overrides_present = present;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned char
+dwg_ent_table_get_border_lineweight_overrides_present(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->border_lineweight_overrides_present;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_border_lineweight_overrides_flag(dwg_ent_table *table, long overrides, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->border_lineweight_overrides_flag = overrides;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+long
+dwg_ent_table_get_border_lineweight_overrides_flag(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->border_lineweight_overrides_flag;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_title_horiz_top_lineweight(dwg_ent_table *table, unsigned int lw, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->title_horiz_top_lineweigh = lw;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned int 
+dwg_ent_table_get_title_horiz_top_lineweight(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->title_horiz_top_lineweigh;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_title_horiz_ins_lineweight(dwg_ent_table *table, unsigned int lw, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->title_horiz_ins_lineweigh = lw;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned int 
+dwg_ent_table_get_title_horiz_ins_lineweight(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->title_horiz_ins_lineweigh;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_title_horiz_bottom_lineweight(dwg_ent_table *table, unsigned int lw, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->title_horiz_bottom_lineweigh = lw;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned int 
+dwg_ent_table_get_title_horiz_bottom_lineweight(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->title_horiz_bottom_lineweigh;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_title_vert_left_lineweight(dwg_ent_table *table, unsigned int lw, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->title_vert_left_lineweigh = lw;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned int 
+dwg_ent_table_get_title_vert_left_lineweight(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->title_vert_left_lineweigh;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_title_vert_ins_lineweight(dwg_ent_table *table, unsigned int lw, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->title_vert_ins_lineweigh = lw;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned int 
+dwg_ent_table_get_title_vert_ins_lineweight(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->title_vert_ins_lineweigh;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_title_vert_right_lineweight(dwg_ent_table *table, unsigned int lw, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->title_vert_right_lineweigh = lw;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+unsigned int 
+dwg_ent_table_get_title_vert_right_lineweight(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->title_vert_right_lineweigh;
+        }
+    else
+        {
+            *error = 1;
+        }
+}
+
+void
+dwg_ent_table_set_header_horiz_top_lineweight(dwg_ent_table *table, unsigned int lw, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->header_horiz_top_lineweigh = lw;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned int 
+dwg_ent_table_get_header_horiz_top_lineweight(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->header_horiz_top_lineweigh;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_header_horiz_ins_lineweight(dwg_ent_table *table, unsigned int lw, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->header_horiz_ins_lineweigh = lw;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned int 
+dwg_ent_table_get_header_horiz_ins_lineweight(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->header_horiz_ins_lineweigh;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_header_horiz_bottom_lineweight(dwg_ent_table *table, unsigned int lw, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->header_horiz_bottom_lineweigh = lw;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned int 
+dwg_ent_table_get_header_horiz_bottom_lineweight(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->header_horiz_bottom_lineweigh;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_header_vert_left_lineweight(dwg_ent_table *table, unsigned int lw, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->header_vert_left_lineweigh = lw;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned int 
+dwg_ent_table_get_header_vert_left_lineweight(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->header_vert_left_lineweigh;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_header_vert_ins_lineweight(dwg_ent_table *table, unsigned int lw, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->header_vert_ins_lineweigh = lw;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned int 
+dwg_ent_table_get_header_vert_ins_lineweight(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->header_vert_ins_lineweigh;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_header_vert_right_lineweight(dwg_ent_table *table, unsigned int lw, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->header_vert_right_lineweigh = lw;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned int 
+dwg_ent_table_get_header_vert_right_lineweight(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->header_vert_right_lineweigh;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_data_horiz_top_lineweight(dwg_ent_table *table, unsigned int lw, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->data_horiz_top_lineweigh = lw;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned int 
+dwg_ent_table_get_data_horiz_top_lineweight(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->data_horiz_top_lineweigh;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_data_horiz_ins_lineweight(dwg_ent_table *table, unsigned int lw, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->data_horiz_ins_lineweigh = lw;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned int 
+dwg_ent_table_get_data_horiz_ins_lineweight(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->data_horiz_ins_lineweigh;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_data_horiz_bottom_lineweight(dwg_ent_table *table, unsigned int lw, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->data_horiz_bottom_lineweigh = lw;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned int 
+dwg_ent_table_get_data_horiz_bottom_lineweight(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->data_horiz_bottom_lineweigh;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_data_vert_ins_lineweight(dwg_ent_table *table, unsigned int lw, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->data_horiz_ins_lineweigh = lw;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned int 
+dwg_ent_table_get_data_vert_ins_lineweight(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->data_horiz_ins_lineweigh;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+
+
+void
+dwg_ent_table_set_border_visibility_overrides_present(dwg_ent_table *table, unsigned char overrides, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->border_visibility_overrides_present = overrides;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned char
+dwg_ent_table_get_border_visibility_overrides_present(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->border_visibility_overrides_present;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_border_visibility_overrides_flag(dwg_ent_table *table, long overrides, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->border_visibility_overrides_flag = overrides;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+long
+dwg_ent_table_get_border_visibility_overrides_flag(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->border_visibility_overrides_flag;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_title_horiz_top_visibility(dwg_ent_table *table, unsigned int visibility, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->title_horiz_top_visibility = visibility;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned int 
+dwg_ent_table_get_title_horiz_top_visibility(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->title_horiz_top_visibility;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_title_horiz_ins_visibility(dwg_ent_table *table, unsigned int visibility, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->title_horiz_ins_visibility = visibility;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned int 
+dwg_ent_table_get_title_horiz_ins_visibility(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->title_horiz_ins_visibility;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_title_horiz_bottom_visibility(dwg_ent_table *table, unsigned int visibility, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->title_horiz_bottom_visibility = visibility;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned int 
+dwg_ent_table_get_title_horiz_bottom_visibility(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->title_horiz_bottom_visibility;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_title_vert_left_visibility(dwg_ent_table *table, unsigned int visibility, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->title_vert_left_visibility = visibility;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned int 
+dwg_ent_table_get_title_vert_left_visibility(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->title_vert_left_visibility;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_title_vert_ins_visibility(dwg_ent_table *table, unsigned int visibility, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->title_vert_ins_visibility = visibility;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned int 
+dwg_ent_table_get_title_vert_ins_visibility(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->title_vert_ins_visibility;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_title_vert_right_visibility(dwg_ent_table *table, unsigned int visibility, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->title_vert_right_visibility = visibility;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned int 
+dwg_ent_table_get_title_vert_right_visibility(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->title_vert_right_visibility;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_header_horiz_top_visibility(dwg_ent_table *table, unsigned int visibility, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->header_horiz_top_visibility = visibility;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned int 
+dwg_ent_table_get_header_horiz_top_visibility(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->header_horiz_top_visibility;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_header_horiz_ins_visibility(dwg_ent_table *table, unsigned int visibility, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->header_horiz_ins_visibility = visibility;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned int 
+dwg_ent_table_get_header_horiz_ins_visibility(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->header_horiz_ins_visibility;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_header_horiz_bottom_visibility(dwg_ent_table *table, unsigned int visibility, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->header_horiz_bottom_visibility = visibility;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned int 
+dwg_ent_table_get_header_vert_left_visibility(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->header_vert_left_visibility;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_header_vert_ins_visibility(dwg_ent_table *table, unsigned int visibility, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->header_vert_ins_visibility = visibility;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned int 
+dwg_ent_table_get_header_vert_ins_visibility(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->header_vert_ins_visibility;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_header_vert_right_visibility(dwg_ent_table *table, unsigned int visibility, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->header_vert_right_visibility = visibility;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned int 
+dwg_ent_table_get_header_vert_right_visibility(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->header_vert_right_visibility;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_data_horiz_top_visibility(dwg_ent_table *table, unsigned int visibility, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->data_horiz_top_visibility = visibility;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned int 
+dwg_ent_table_get_data_horiz_top_visibility(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->data_horiz_top_visibility;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_data_horiz_ins_visibility(dwg_ent_table *table, unsigned int visibility, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->data_horiz_ins_visibility = visibility;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned int 
+dwg_ent_table_get_data_horiz_ins_visibility(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->data_horiz_ins_visibility;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_data_horiz_bottom_visibility(dwg_ent_table *table, unsigned int visibility, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->data_horiz_bottom_visibility = visibility;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned int 
+dwg_ent_table_get_data_horiz_bottom_visibility(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->data_horiz_bottom_visibility;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_data_vert_ins_visibility(dwg_ent_table *table, unsigned int visibility, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->data_horiz_ins_visibility = visibility;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned int 
+dwg_ent_table_get_data_vert_ins_visibility(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->data_horiz_ins_visibility;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+void
+dwg_ent_table_set_data_vert_right_visibility(dwg_ent_table *table, unsigned int visibility, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            table->data_vert_right_visibility = visibility;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
+
+unsigned int 
+dwg_ent_table_get_data_vert_right_visibility(dwg_ent_table *table, int *error)
+{
+    if (table != 0)
+        {
+            *error = 0;
+            return table->data_vert_right_visibility;
+        }
+    else
+        {
+            *error = 1;
+        }   
+}
 
 //--------------------------------------------------------------------------------
 
