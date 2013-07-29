@@ -149,6 +149,9 @@ typedef struct _dwg_object_APPID                  dwg_obj_appid;
 typedef struct _dwg_object_APPID_CONTROL          dwg_obj_appid_control;
 typedef struct _dwg_object                        dwg_object;
 typedef struct _dwg_object_ref                    dwg_object_ref;
+typedef struct _dwg_handle                        dwg_handle;
+typedef struct _dwg_object_entity                 dwg_obj_ent;
+typedef struct _dwg_object_object                 dwg_obj_obj;
 //-------------------------------------------------------------------------------
 
 // Creates a new circle entity
@@ -1915,5 +1918,16 @@ dwg_object_ref * dwg_obj_block_control_get_paper_space(dwg_obj_block_control *ct
 dwg_object * dwg_obj_reference_get_object(dwg_object_ref *ref, int *error);
 
 int dwg_obj_object_get_index(dwg_object *obj, int *error);
+
+dwg_handle dwg_obj_get_handle(dwg_object *obj, int *error);
+
+dwg_handle dwg_ent_insert_get_ref_handle(dwg_ent_insert *insert, int *error);
+
+unsigned long dwg_ent_insert_get_abs_ref(dwg_ent_insert *insert, int *error);
+
+dwg_obj_obj * dwg_object_to_object(dwg_object *obj, int *error);
+
+dwg_obj_ent * dwg_object_to_entity(dwg_object *obj, int *error);
+
 
 #endif

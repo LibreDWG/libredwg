@@ -103,7 +103,8 @@ output_LINE(Dwg_Object* obj)
   dwg_ent_line_get_end_point(line, &end, &error);
   printf(
       "\t<path id=\"dwg-object-%d\" d=\"M %f,%f %f,%f\" style=\"fill:none;stroke:blue;stroke-width:0.1px\" />\n",
-      index, transform_X(start.x), transform_Y(start.y), transform_X(end.x), transform_Y(end.y));
+      index, transform_X(start.x), transform_Y(start.y), transform_X(end.x), 
+      transform_Y(end.y));
 }
 
 void
@@ -150,30 +151,35 @@ void
 output_INSERT(Dwg_Object* obj)
 {
   int index, error;
-  Dwg_Entity_INSERT* insert;
+  unsigned long abs_ref;
+  double rotation_ang;
+  dwg_ent_insert* insert;
+  dwg_point_3d ins_pt, scale;
+  dwg_handle obj_handle, ins_handle; 
   insert = dwg_object_to_INSERT(obj);
   index = dwg_obj_object_get_index(obj, &error);
+  rotation_ang = dwg_ent_insert_get_rotation_angle(insert, &error);
+  dwg_ent_insert_get_ins_pt(insert, &ins_pt, &error);
+  dwg_ent_insert_get_scale(insert, &scale, &error);
+  obj_handle = dwg_obj_get_handle(obj, &error);
+  ins_handle = dwg_ent_insert_get_ref_handle(insert, &error);
+  abs_ref = dwg_ent_insert_get_abs_ref(insert, &error);
   //if (insert->block_header->handleref.code == 5)
   if(42) //XXX did this to test the new handleref.code handling "code"
     {
       printf(
           "\t<use id=\"dwg-object-%d\" transform=\"translate(%f %f) rotate(%f) scale(%f %f)\" xlink:href=\"#symbol-%lu\" /><!-- block_header->handleref: %d.%d.%lu -->\n",
           index,
-          transform_X(insert->ins_pt.x), transform_Y(insert->ins_pt.y), (180.0 / M_PI)
-              * insert->rotation_ang, insert->scale.x, insert->scale.y,
-          insert->block_header->absolute_ref,
-          insert->block_header->handleref.code,
-          insert->block_header->handleref.size,
-          insert->block_header->handleref.value);
+          transform_X(ins_pt.x), transform_Y(ins_pt.y), (180.0 / M_PI)
+            * rotation_ang, scale.x, scale.y, abs_ref, ins_handle.code,
+          ins_handle.size, ins_handle.value);
     }
   else
     {
       printf(
           "\n\n<!-- WRONG INSERT(%d.%d.%lu): handleref = %d.%d.%lu -->\n",
-          obj->handle.code, obj->handle.size, obj->handle.value,
-          insert->block_header->handleref.code,
-          insert->block_header->handleref.size,
-          insert->block_header->handleref.value);
+          obj_handle.code, obj_handle.size, obj_handle.value,
+          ins_handle.code, ins_handle.size, ins_handle.value);
     }
 }
 
@@ -213,11 +219,12 @@ output_object(Dwg_Object* obj){
 
 void output_BLOCK_HEADER(Dwg_Object_Ref* ref)
 {
-  Dwg_Object* obj, *variable_obj;
-  Dwg_Object_BLOCK_HEADER* hdr;
+  dwg_object* obj, *variable_obj;
+  dwg_obj_block_header* hdr;
   int error;
+  unsigned long abs_ref;
   obj = dwg_obj_reference_get_object(ref, &error);
-
+  abs_ref = dwg_obj_ref_get_abs_ref(ref, &error);
   if (!ref)
     {
       fprintf(stderr, "Found null object reference. Could not output an SVG symbol for this BLOCK_HEADER\n");
@@ -231,7 +238,7 @@ void output_BLOCK_HEADER(Dwg_Object_Ref* ref)
 
   /* TODO: Review.  (This check avoids a segfault, but it is
      still unclear whether or not the condition is valid.)  */
-  if (!obj->tio.object)
+  if (!dwg_object_to_object(obj, &error))
     {
       fprintf(stderr, "Found null ref->obj->tio.object\n");
       return;
@@ -239,7 +246,8 @@ void output_BLOCK_HEADER(Dwg_Object_Ref* ref)
 
   hdr = dwg_object_to_BLOCK_HEADER(obj);
   printf(
-      "\t<g id=\"symbol-%lu\" >\n\t\t<!-- %s -->\n", ref->absolute_ref, dwg_obj_block_header_get_name(hdr, &error));
+      "\t<g id=\"symbol-%lu\" >\n\t\t<!-- %s -->\n", abs_ref, 
+      dwg_obj_block_header_get_name(hdr, &error));
 
   variable_obj = get_first_owned_object(obj, hdr);
 
@@ -286,14 +294,14 @@ output_SVG(Dwg_Data* dwg)
   hdr = dwg_get_block_header(dwg, &error);
   ctrl = dwg_block_header_get_block_control(hdr, &error);
   
-hdr_refs = dwg_obj_block_control_get_block_headers(ctrl, &error);
+  hdr_refs = dwg_obj_block_control_get_block_headers(ctrl, &error);
 
-num_hdr_objs = dwg_obj_block_control_get_num_entries(ctrl, &error);
+  num_hdr_objs = dwg_obj_block_control_get_num_entries(ctrl, &error);
   printf("\t<defs>\n");
-  for (i=0; i<num_hdr_objs; i++)
-    {
-      output_BLOCK_HEADER(hdr_refs[i]);
-    }
+    for (i=0; i<num_hdr_objs; i++)
+      {
+        output_BLOCK_HEADER(hdr_refs[i]);
+      }
   printf("\t</defs>\n");
 
   output_BLOCK_HEADER(dwg_obj_block_control_get_model_space(ctrl, &error));

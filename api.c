@@ -30,7 +30,6 @@ GET_DWG_ENTITY(DIMENSION_ANG2LN);
 GET_DWG_ENTITY(DIMENSION_RADIUS);
 GET_DWG_ENTITY(DIMENSION_DIAMETER);
 GET_DWG_ENTITY(POINT);
-GET_DWG_ENTITY(_3DFACE);
 GET_DWG_ENTITY(POLYLINE_PFACE);
 GET_DWG_ENTITY(POLYLINE_MESH);
 GET_DWG_ENTITY(SOLID);
@@ -96,6 +95,9 @@ CAST_DWG_OBJECT_TO_ENTITY(TOLERANCE);
 CAST_DWG_OBJECT_TO_ENTITY(MLINE);
 CAST_DWG_OBJECT_TO_ENTITY(LWPLINE);
 CAST_DWG_OBJECT_TO_ENTITY(HATCH);
+
+//---------------------------------------------------------------------------
+
 CAST_DWG_OBJECT_TO_OBJECT(BLOCK_HEADER);
 CAST_DWG_OBJECT_TO_OBJECT(BLOCK_CONTROL);
 CAST_DWG_OBJECT_TO_OBJECT(LAYER);
@@ -15719,4 +15721,90 @@ dwg_obj_object_get_index(dwg_object *obj, int *error)
     {
       *error = 1;
     }
+}
+
+dwg_handle
+dwg_obj_get_handle(dwg_object *obj, int *error)
+{
+  if(obj != 0)
+    {
+      *error = 0;
+      return obj->handle;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+
+dwg_handle
+dwg_ent_insert_get_ref_handle(dwg_ent_insert *insert, int *error)
+{
+  if(insert != 0)
+    {
+      *error = 0;
+      return insert->block_header->handleref;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+
+unsigned long
+dwg_ent_insert_get_abs_ref(dwg_ent_insert *insert, int *error)
+{
+  if(insert != 0)
+    {
+      *error = 0;
+      return insert->block_header->absolute_ref;
+    }
+  else
+    {
+      *error = 1;
+    }
+}
+
+unsigned long
+dwg_obj_ref_get_abs_ref(dwg_object_ref *ref, int *error)
+{
+  if(ref != 0)
+    {
+      *error = 0;
+      return ref->absolute_ref;
+    }
+  else
+    {
+      *error = 1;
+    }    
+}
+
+dwg_obj_obj *
+dwg_object_to_object(dwg_object *obj, int *error)
+{
+
+  if(obj != 0)
+    {
+      *error = 0;
+      return obj->tio.object;
+    }
+  else
+    {
+      *error = 1;
+    }    
+}
+
+dwg_obj_ent *
+dwg_object_to_entity(dwg_object *obj, int *error)
+{
+    return obj->tio.entity;
+  if(obj != 0)
+    {
+      *error = 0;
+      return obj->tio.entity;
+    }
+  else
+    {
+      *error = 1;
+    }    
 }
