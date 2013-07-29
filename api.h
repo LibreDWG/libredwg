@@ -1921,6 +1921,8 @@ int dwg_obj_object_get_index(dwg_object *obj, int *error);
 
 dwg_handle dwg_obj_get_handle(dwg_object *obj, int *error);
 
+unsigned long dwg_obj_ref_get_abs_ref(dwg_object_ref *ref, int *error);
+
 dwg_handle dwg_ent_insert_get_ref_handle(dwg_ent_insert *insert, int *error);
 
 unsigned long dwg_ent_insert_get_abs_ref(dwg_ent_insert *insert, int *error);
