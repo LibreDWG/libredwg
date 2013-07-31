@@ -8054,6 +8054,7 @@ dwg_ent_mtext_set_insertion_pt(dwg_ent_mtext *mtext, dwg_point_3d *point,
   else
     *error = 1;
 }
+
 void
 dwg_ent_mtext_get_insertion_pt(dwg_ent_mtext *mtext, dwg_point_3d *point,
                                int *error)
@@ -8085,6 +8086,7 @@ dwg_ent_mtext_set_extrusion(dwg_ent_mtext *mtext, dwg_point_3d *point,
     *error = 1;
 
 }
+
 void
 dwg_ent_mtext_get_extrusion(dwg_ent_mtext *mtext, dwg_point_3d *point,
                             int *error)
@@ -8116,6 +8118,7 @@ dwg_ent_mtext_set_x_axis_dir(dwg_ent_mtext *mtext, dwg_point_3d *point,
     *error = 1;
 
 }
+
 void
 dwg_ent_mtext_get_x_axis_dir(dwg_ent_mtext *mtext, dwg_point_3d *point,
                              int *error)
@@ -8145,6 +8148,7 @@ dwg_ent_mtext_set_rect_height(dwg_ent_mtext *mtext, double rect_height,
     *error = 1;
 
 }
+
 double
 dwg_ent_mtext_get_rect_height(dwg_ent_mtext *mtext, int *error)
 {
@@ -8171,6 +8175,7 @@ dwg_ent_mtext_set_rect_width(dwg_ent_mtext *mtext, double rect_width,
     *error = 1;
 
 }
+
 double
 dwg_ent_mtext_get_rect_width(dwg_ent_mtext *mtext, int *error)
 {
@@ -8197,6 +8202,7 @@ dwg_ent_mtext_set_text_height(dwg_ent_mtext *mtext, double text_height,
     *error = 1;
 
 }
+
 double
 dwg_ent_mtext_get_text_height(dwg_ent_mtext *mtext, int *error)
 {
@@ -8222,6 +8228,7 @@ dwg_ent_mtext_get_attachment(dwg_ent_mtext *mtext, int *error)
     *error = 1;
 
 }
+
 void
 dwg_ent_mtext_set_attachment(dwg_ent_mtext *mtext, unsigned int attachment,
                              int *error)
@@ -8248,6 +8255,7 @@ dwg_ent_mtext_get_drawing_dir(dwg_ent_mtext *mtext, int *error)
     *error = 1;
 
 }
+
 void
 dwg_ent_mtext_set_drawing_dir(dwg_ent_mtext *mtext, unsigned int dir,
                               int *error)
@@ -8274,6 +8282,7 @@ dwg_ent_mtext_get_extends_ht(dwg_ent_mtext *mtext, int *error)
     *error = 1;
 
 }
+
 void
 dwg_ent_mtext_set_extends_ht(dwg_ent_mtext *mtext, double ht, int *error)
 {
@@ -8299,6 +8308,7 @@ dwg_ent_mtext_get_extends_wid(dwg_ent_mtext *mtext, int *error)
     *error = 1;
 
 }
+
 void
 dwg_ent_mtext_set_extends_wid(dwg_ent_mtext *mtext, double wid, int *error)
 {
@@ -8324,6 +8334,7 @@ dwg_ent_mtext_get_text(dwg_ent_mtext *mtext, int *error)
     *error = 1;
 
 }
+
 void
 dwg_ent_mtext_set_text(dwg_ent_mtext *mtext, char * text, int *error)
 {
@@ -8349,6 +8360,7 @@ dwg_ent_mtext_linespace_style(dwg_ent_mtext *mtext, int *error)
     *error = 1;
 
 }
+
 void
 dwg_ent_mtext_set_linespace_style(dwg_ent_mtext *mtext, unsigned int style,
                                   int *error)
@@ -8375,6 +8387,7 @@ dwg_ent_mtext_get_linespace_factor(dwg_ent_mtext *mtext, int *error)
     *error = 1;
 
 }
+
 void
 dwg_ent_mtext_set_linespace_factor(dwg_ent_mtext *mtext, double factor,
                                    int *error)
@@ -8406,6 +8419,7 @@ dwg_ent_leader_set_annot_type(dwg_ent_leader *leader, unsigned int type,
     *error = 1;
 
 }
+
 unsigned int
 dwg_ent_leader_get_annot_type(dwg_ent_leader *leader, int *error)
 {
@@ -8432,6 +8446,7 @@ dwg_ent_leader_set_path_type(dwg_ent_leader *leader, unsigned int type,
     *error = 1;
 
 }
+
 unsigned int
 dwg_ent_leader_get_path_type(dwg_ent_leader *leader, int *error)
 {
@@ -8457,6 +8472,7 @@ dwg_ent_leader_get_numpts(dwg_ent_leader *leader, int *error)
     *error = 1;
 
 }
+
 void
 dwg_ent_leader_set_numpts(dwg_ent_leader *leader, long numpts, int *error)
 {
@@ -8485,6 +8501,7 @@ dwg_ent_leader_set_end_pt_proj(dwg_ent_leader *leader, dwg_point_3d *point,
     *error = 1;
 
 }
+
 void
 dwg_ent_leader_get_end_pt_proj(dwg_ent_leader *leader, dwg_point_3d *point,
                                int *error)
@@ -8516,6 +8533,7 @@ dwg_ent_leader_set_extrusion(dwg_ent_leader *leader, dwg_point_3d *point,
     *error = 1;
 
 }
+
 void
 dwg_ent_leader_get_extrusion(dwg_ent_leader *leader, dwg_point_3d *point,
                              int *error)
@@ -8547,6 +8565,7 @@ dwg_ent_leader_set_x_direction(dwg_ent_leader *leader, dwg_point_3d *point,
     *error = 1;
 
 }
+
 void
 dwg_ent_leader_get_x_direction(dwg_ent_leader *leader, dwg_point_3d *point,
                                int *error)
@@ -8578,6 +8597,7 @@ dwg_ent_leader_set_offset_to_block_ins_pt(dwg_ent_leader *leader,
     *error = 1;
 
 }
+
 void
 dwg_ent_leader_get_offset_to_block_ins_pt(dwg_ent_leader *leader,
                                           dwg_point_3d *point, int *error)
@@ -8606,6 +8626,7 @@ dwg_ent_leader_set_dimgap(dwg_ent_leader *leader, double dimgap, int *error)
     *error = 1;
 
 }
+
 double
 dwg_ent_leader_get_dimgap(dwg_ent_leader *leader, int *error)
 {
@@ -8632,6 +8653,7 @@ dwg_ent_leader_set_box_height(dwg_ent_leader *leader, double height,
     *error = 1;
 
 }
+
 double
 dwg_ent_leader_get_box_height(dwg_ent_leader *leader, int *error)
 {
@@ -8657,6 +8679,7 @@ dwg_ent_leader_set_box_width(dwg_ent_leader *leader, double width, int *error)
     *error = 1;
 
 }
+
 double
 dwg_ent_leader_get_box_width(dwg_ent_leader *leader, int *error)
 {
@@ -8683,6 +8706,7 @@ dwg_ent_leader_set_hook_line_on_x_dir(dwg_ent_leader *leader, char hook,
     *error = 1;
 
 }
+
 char
 dwg_ent_leader_get_hook_line_on_x_dir(dwg_ent_leader *leader, int *error)
 {
@@ -8708,6 +8732,7 @@ dwg_ent_leader_set_arrowhead_on(dwg_ent_leader *leader, char arrow, int *error)
     *error = 1;
 
 }
+
 char
 dwg_ent_leader_get_arrowhead_on(dwg_ent_leader *leader, int *error)
 {
@@ -8734,6 +8759,7 @@ dwg_ent_leader_set_arrowhead_type(dwg_ent_leader *leader, unsigned int type,
     *error = 1;
 
 }
+
 unsigned int
 dwg_ent_leader_get_arrowhead_type(dwg_ent_leader *leader, int *error)
 {
@@ -8759,6 +8785,7 @@ dwg_ent_leader_set_dimasz(dwg_ent_leader *leader, double dimasz, int *error)
     *error = 1;
 
 }
+
 double
 dwg_ent_leader_get_dimasz(dwg_ent_leader *leader, int *error)
 {
@@ -8785,6 +8812,7 @@ dwg_ent_leader_set_byblock_color(dwg_ent_leader *leader, unsigned int color,
     *error = 1;
 
 }
+
 unsigned int
 dwg_ent_leader_get_byblock_color(dwg_ent_leader *leader, int *error)
 {
@@ -8815,6 +8843,7 @@ dwg_ent_tolerance_set_height(dwg_ent_tolerance *tol, double height,
     *error = 1;
 
 }
+
 double
 dwg_ent_tolerance_get_height(dwg_ent_tolerance *tol, int *error)
 {
@@ -8841,6 +8870,7 @@ dwg_ent_tolerance_set_dimgap(dwg_ent_tolerance *tol, double dimgap,
     *error = 1;
 
 }
+
 double
 dwg_ent_tolerance_get_dimgap(dwg_ent_tolerance *tol, int *error)
 {
@@ -8869,6 +8899,7 @@ dwg_ent_tolerance_set_ins_pt(dwg_ent_tolerance *tol, dwg_point_3d *point,
     *error = 1;
 
 }
+
 void
 dwg_ent_tolerance_get_ins_pt(dwg_ent_tolerance *tol, dwg_point_3d *point,
                              int *error)
@@ -8900,6 +8931,7 @@ dwg_ent_tolerance_set_x_direction(dwg_ent_tolerance *tol, dwg_point_3d *point,
     *error = 1;
 
 }
+
 void
 dwg_ent_tolerance_get_x_direction(dwg_ent_tolerance *tol, dwg_point_3d *point,
                                   int *error)
@@ -8931,6 +8963,7 @@ dwg_ent_tolerance_set_extrusion(dwg_ent_tolerance *tol, dwg_point_3d *point,
     *error = 1;
 
 }
+
 void
 dwg_ent_tolerance_get_extrusion(dwg_ent_tolerance *tol, dwg_point_3d *point,
                                 int *error)
@@ -8960,6 +8993,7 @@ dwg_ent_tolerance_set_text_string(dwg_ent_tolerance *tol, char * string,
     *error = 1;
 
 }
+
 char *
 dwg_ent_tolerance_get_text_string(dwg_ent_tolerance *tol, int *error)
 {
@@ -8988,6 +9022,7 @@ dwg_ent_lwpline_get_flags(dwg_ent_lwpline *lwpline, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_lwpline_set_flags(dwg_ent_lwpline *lwpline, char flags, int *error)
 {
@@ -9011,6 +9046,7 @@ dwg_ent_lwpline_get_const_width(dwg_ent_lwpline *lwpline, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_lwpline_set_const_width(dwg_ent_lwpline *lwpline, double const_width,
                                 int *error)
@@ -9035,6 +9071,7 @@ dwg_ent_lwpline_get_elevation(dwg_ent_lwpline *lwpline, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_lwpline_set_elevation(dwg_ent_lwpline *lwpline, double elevation,
                               int *error)
@@ -9059,6 +9096,7 @@ dwg_ent_lwpline_get_thickness(dwg_ent_lwpline *lwpline, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_lwpline_set_thickness(dwg_ent_lwpline *lwpline, double thickness,
                               int *error)
@@ -9083,6 +9121,7 @@ dwg_ent_lwpline_get_num_points(dwg_ent_lwpline *lwpline, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_lwpline_set_num_points(dwg_ent_lwpline *lwpline, long num_points,
                                int *error)
@@ -9107,6 +9146,7 @@ dwg_ent_lwpline_get_num_bulges(dwg_ent_lwpline *lwpline, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_lwpline_set_num_bulges(dwg_ent_lwpline *lwpline, long num_bulges,
                                int *error)
@@ -9131,6 +9171,7 @@ dwg_ent_lwpline_get_num_widths(dwg_ent_lwpline *lwpline, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_lwpline_set_num_widths(dwg_ent_lwpline *lwpline, long num_widths,
                                int *error)
@@ -9158,6 +9199,7 @@ dwg_ent_lwpline_get_normal(dwg_ent_lwpline *lwpline, dwg_point_3d *points,
   else
     *error = 1;
 }
+
 void
 dwg_ent_lwpline_set_normal(dwg_ent_lwpline *lwpline, dwg_point_3d *points,
                            int *error)
@@ -9246,6 +9288,7 @@ dwg_ent_ole2frame_get_flags(dwg_ent_ole2frame *frame, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_ole2frame_set_flags(dwg_ent_ole2frame *frame, unsigned int flags,
                             int *error)
@@ -9258,6 +9301,7 @@ dwg_ent_ole2frame_set_flags(dwg_ent_ole2frame *frame, unsigned int flags,
   else
     *error = 1;
 }
+
 unsigned int
 dwg_ent_ole2frame_get_mode(dwg_ent_ole2frame *frame, int *error)
 {
@@ -9269,6 +9313,7 @@ dwg_ent_ole2frame_get_mode(dwg_ent_ole2frame *frame, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_ole2frame_set_mode(dwg_ent_ole2frame *frame, unsigned int mode,
                            int *error)
@@ -9292,6 +9337,7 @@ dwg_ent_ole2frame_get_data_length(dwg_ent_ole2frame *frame, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_ole2frame_set_data_length(dwg_ent_ole2frame *frame, long data_length,
                                   int *error)
@@ -9304,6 +9350,7 @@ dwg_ent_ole2frame_set_data_length(dwg_ent_ole2frame *frame, long data_length,
   else
     *error = 1;
 }
+
 char *
 dwg_ent_ole2frame_get_data(dwg_ent_ole2frame *frame, int *error)
 {
@@ -9315,6 +9362,7 @@ dwg_ent_ole2frame_get_data(dwg_ent_ole2frame *frame, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_ole2frame_set_data(dwg_ent_ole2frame *frame, char * data, int *error)
 {
@@ -9576,6 +9624,7 @@ dwg_entity_spline_get_closed_b(dwg_ent_spline *spline, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_entity_spline_set_closed_b(dwg_ent_spline *spline, char closed_b,
                                int *error)
@@ -9625,6 +9674,7 @@ dwg_entity_spline_get_periodic(dwg_ent_spline *spline, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_entity_spline_set_periodic(dwg_ent_spline *spline, char periodic,
                                int *error)
@@ -9649,6 +9699,7 @@ dwg_entity_spline_get_num_knots(dwg_ent_spline *spline, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_entity_spline_set_num_knots(dwg_ent_spline *spline, long nums, int *error)
 {
@@ -9672,6 +9723,7 @@ dwg_entity_spline_get_num_ctrl_pts(dwg_ent_spline *spline, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_entity_spline_set_num_ctrl_pts(dwg_ent_spline *spline, long nums,
                                    int *error)
@@ -9760,6 +9812,7 @@ dwg_ent_viewport_get_center(dwg_ent_viewport *vp, dwg_point_3d *point,
   else
     *error = 1;
 }
+
 void
 dwg_ent_viewport_set_center(dwg_ent_viewport *vp, dwg_point_3d *point,
                             int *error)
@@ -9786,6 +9839,7 @@ dwg_ent_viewport_get_width(dwg_ent_viewport *vp, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_viewport_set_width(dwg_ent_viewport *vp, double width, int *error)
 {
@@ -9809,6 +9863,7 @@ dwg_ent_viewport_get_height(dwg_ent_viewport *vp, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_viewport_set_height(dwg_ent_viewport *vp, double height, int *error)
 {
@@ -9832,6 +9887,7 @@ dwg_ent_viewport_get_grid_major(dwg_ent_viewport *vp, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_viewport_set_grid_major(dwg_ent_viewport *vp, unsigned int major,
                                 int *error)
@@ -9856,6 +9912,7 @@ dwg_ent_viewport_get_frozen_layer_count(dwg_ent_viewport *vp, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_viewport_set_frozen_layer_count(dwg_ent_viewport *vp, long count,
                                         int *error)
@@ -9880,6 +9937,7 @@ dwg_ent_viewport_get_style_sheet(dwg_ent_viewport *vp, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_viewport_set_style_sheet(dwg_ent_viewport *vp, char * sheet,
                                  int *error)
@@ -9905,6 +9963,7 @@ dwg_ent_viewport_set_circle_zoom(dwg_ent_viewport *vp, unsigned int zoom,
   else
     *error = 1;
 }
+
 unsigned int
 dwg_ent_viewport_get_circle_zoom(dwg_ent_viewport *vp, int *error)
 {
@@ -9951,6 +10010,7 @@ dwg_ent_viewport_get_render_mode(dwg_ent_viewport *vp, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_viewport_set_render_mode(dwg_ent_viewport *vp, char mode, int *error)
 {
@@ -9975,6 +10035,7 @@ dwg_ent_viewport_set_ucs_at_origin(dwg_ent_viewport *vp, unsigned char origin,
   else
     *error = 1;
 }
+
 unsigned char 
 dwg_ent_viewport_get_ucs_at_origin(dwg_ent_viewport *vp, int *error)
 {
@@ -9999,6 +10060,7 @@ dwg_ent_viewport_set_ucs_per_viewport(dwg_ent_viewport *vp,
   else
     *error = 1;
 }
+
 unsigned char 
 dwg_ent_viewport_get_ucs_per_viewport(dwg_ent_viewport *vp, int *error)
 {
@@ -10025,6 +10087,7 @@ dwg_ent_viewport_set_view_target(dwg_ent_viewport *vp, dwg_point_3d *point,
   else
     *error = 1;
 }
+
 void
 dwg_ent_viewport_get_view_target(dwg_ent_viewport *vp, dwg_point_3d *point,
                                  int *error)
@@ -10054,6 +10117,7 @@ dwg_ent_viewport_set_view_direction(dwg_ent_viewport *vp, dwg_point_3d *point,
   else
     *error = 1;
 }
+
 void
 dwg_ent_viewport_get_view_direction(dwg_ent_viewport *vp, dwg_point_3d *point,
                                     int *error)
@@ -10081,6 +10145,7 @@ dwg_ent_viewport_set_view_twist_angle(dwg_ent_viewport *vp, double angle,
   else
     *error = 1;
 }
+
 double
 dwg_ent_viewport_get_view_twist_angle(dwg_ent_viewport *vp, int *error)
 {
@@ -10105,6 +10170,7 @@ dwg_ent_viewport_set_view_height(dwg_ent_viewport *vp, double height,
   else
     *error = 1;
 }
+
 double
 dwg_ent_viewport_get_view_height(dwg_ent_viewport *vp, int *error)
 {
@@ -10129,6 +10195,7 @@ dwg_ent_viewport_set_lens_length(dwg_ent_viewport *vp, double length,
   else
     *error = 1;
 }
+
 double
 dwg_ent_viewport_get_lens_length(dwg_ent_viewport *vp, int *error)
 {
@@ -10153,6 +10220,7 @@ dwg_ent_viewport_set_front_clip_z(dwg_ent_viewport *vp, double front_z,
   else
     *error = 1;
 }
+
 double
 dwg_ent_viewport_get_front_clip_z(dwg_ent_viewport *vp, int *error)
 {
@@ -10177,6 +10245,7 @@ dwg_ent_viewport_set_back_clip_z(dwg_ent_viewport *vp, double back_z,
   else
     *error = 1;
 }
+
 double
 dwg_ent_viewport_get_back_clip_z(dwg_ent_viewport *vp, int *error)
 {
@@ -10200,6 +10269,7 @@ dwg_ent_viewport_set_snap_angle(dwg_ent_viewport *vp, double angle, int *error)
   else
     *error = 1;
 }
+
 double
 dwg_ent_viewport_get_snap_angle(dwg_ent_viewport *vp, int *error)
 {
@@ -10225,6 +10295,7 @@ dwg_ent_viewport_get_view_center(dwg_ent_viewport *vp, dwg_point_2d *point,
   else
     *error = 1;
 }
+
 void
 dwg_ent_viewport_set_view_center(dwg_ent_viewport *vp, dwg_point_2d *point,
                                  int *error)
@@ -10252,6 +10323,7 @@ dwg_ent_viewport_get_grid_spacing(dwg_ent_viewport *vp, dwg_point_2d *point,
   else
     *error = 1;
 }
+
 void
 dwg_ent_viewport_set_grid_spacing(dwg_ent_viewport *vp, dwg_point_2d *point,
                                   int *error)
@@ -10279,6 +10351,7 @@ dwg_ent_viewport_get_snap_base(dwg_ent_viewport *vp, dwg_point_2d *point,
   else
     *error = 1;
 }
+
 void
 dwg_ent_viewport_set_snap_base(dwg_ent_viewport *vp, dwg_point_2d *point,
                                int *error)
@@ -10306,6 +10379,7 @@ dwg_ent_viewport_get_snap_spacing(dwg_ent_viewport *vp, dwg_point_2d *point,
   else
     *error = 1;
 }
+
 void
 dwg_ent_viewport_set_snap_spacing(dwg_ent_viewport *vp, dwg_point_2d *point,
                                   int *error)
@@ -10334,6 +10408,7 @@ dwg_ent_viewport_set_ucs_origin(dwg_ent_viewport *vp, dwg_point_3d *point,
   else
     *error = 1;
 }
+
 void
 dwg_ent_viewport_get_ucs_origin(dwg_ent_viewport *vp, dwg_point_3d *point,
                                 int *error)
@@ -10363,6 +10438,7 @@ dwg_ent_viewport_set_ucs_x_axis(dwg_ent_viewport *vp, dwg_point_3d *point,
   else
     *error = 1;
 }
+
 void
 dwg_ent_viewport_get_ucs_x_axis(dwg_ent_viewport *vp, dwg_point_3d *point,
                                 int *error)
@@ -10392,6 +10468,7 @@ dwg_ent_viewport_set_ucs_y_axis(dwg_ent_viewport *vp, dwg_point_3d *point,
   else
     *error = 1;
 }
+
 void
 dwg_ent_viewport_get_ucs_y_axis(dwg_ent_viewport *vp, dwg_point_3d *point,
                                 int *error)
@@ -10419,6 +10496,7 @@ dwg_ent_viewport_set_ucs_elevation(dwg_ent_viewport *vp, double elevation,
   else
     *error = 1;
 }
+
 double
 dwg_ent_viewport_get_ucs_elevation(dwg_ent_viewport *vp, int *error)
 {
@@ -10443,6 +10521,7 @@ dwg_ent_viewport_set_ucs_ortho_view_type(dwg_ent_viewport *vp,
   else
     *error = 1;
 }
+
 unsigned int
 dwg_ent_viewport_get_ucs_ortho_view_type(dwg_ent_viewport *vp, int *error)
 {
@@ -10467,6 +10546,7 @@ dwg_ent_viewport_set_shadeplot_mode(dwg_ent_viewport *vp,
   else
     *error = 1;
 }
+
 unsigned int
 dwg_ent_viewport_get_shadeplot_mode(dwg_ent_viewport *vp, int *error)
 {
@@ -10491,6 +10571,7 @@ dwg_ent_viewport_set_use_def_lights(dwg_ent_viewport *vp,
   else
     *error = 1;
 }
+
 unsigned char 
 dwg_ent_viewport_get_use_def_lights(dwg_ent_viewport *vp, int *error)
 {
@@ -10515,6 +10596,7 @@ dwg_ent_viewport_set_def_lighting_type(dwg_ent_viewport *vp, char type,
   else
     *error = 1;
 }
+
 char 
 dwg_ent_viewport_get_def_lighting_type(dwg_ent_viewport *vp, int *error)
 {
@@ -10539,6 +10621,7 @@ dwg_ent_viewport_set_brightness(dwg_ent_viewport *vp, double brightness,
   else
     *error = 1;
 }
+
 double
 dwg_ent_viewport_get_brightness(dwg_ent_viewport *vp, int *error)
 {
@@ -10563,6 +10646,7 @@ dwg_ent_viewport_set_contrast(dwg_ent_viewport *vp, double contrast,
   else
     *error = 1;
 }
+
 double
 dwg_ent_viewport_get_contrast(dwg_ent_viewport *vp, int *error)
 {
@@ -10592,6 +10676,7 @@ dwg_ent_polyline_pface_get_numverts(dwg_ent_polyline_pface *pface, int *error)
       *error = 1;
     }
 }
+
 void
 dwg_ent_polyline_pface_set_numverts(dwg_ent_polyline_pface *pface,
                                     unsigned int numverts, int *error)
@@ -10621,6 +10706,7 @@ dwg_ent_polyline_pface_get_owned_obj_count(dwg_ent_polyline_pface *pface,
       *error = 1;
     }
 }
+
 void
 dwg_ent_polyline_pface_set_owned_obj_count(dwg_ent_polyline_pface *pface,
                                            long owned_obj_count, int *error)
@@ -10649,6 +10735,7 @@ dwg_ent_polyline_pface_get_numfaces(dwg_ent_polyline_pface *pface, int *error)
       *error = 1;
     }
 }
+
 void
 dwg_ent_polyline_pface_set_numfaces(dwg_ent_polyline_pface *pface,
                                     unsigned int numfaces, int *error)
@@ -10681,6 +10768,7 @@ dwg_ent_polyline_mesh_get_flags(dwg_ent_polyline_mesh *mesh, int *error)
       *error = 1;
     }
 }
+
 void
 dwg_ent_polyline_mesh_set_flags(dwg_ent_polyline_mesh *mesh,
                                 unsigned int flags, int *error)
@@ -10709,6 +10797,7 @@ dwg_ent_polyline_mesh_get_curve_type(dwg_ent_polyline_mesh *mesh, int *error)
       *error = 1;
     }
 }
+
 void
 dwg_ent_polyline_mesh_set_curve_type(dwg_ent_polyline_mesh *mesh,
                                      unsigned int curve_type, int *error)
@@ -10738,6 +10827,7 @@ dwg_ent_polyline_mesh_get_m_vert_count(dwg_ent_polyline_mesh *mesh,
       *error = 1;
     }
 }
+
 void
 dwg_ent_polyline_mesh_set_m_vert_count(dwg_ent_polyline_mesh *mesh,
                                        unsigned int m_vert_count, int *error)
@@ -10767,6 +10857,7 @@ dwg_ent_polyline_mesh_get_n_vert_count(dwg_ent_polyline_mesh *mesh,
       *error = 1;
     }
 }
+
 void
 dwg_ent_polyline_mesh_set_n_vert_count(dwg_ent_polyline_mesh *mesh,
                                        unsigned int n_vert_count, int *error)
@@ -10795,6 +10886,7 @@ dwg_ent_polyline_mesh_get_m_density(dwg_ent_polyline_mesh *mesh, int *error)
       *error = 1;
     }
 }
+
 void
 dwg_ent_polyline_mesh_set_m_density(dwg_ent_polyline_mesh *mesh,
                                     unsigned int m_density, int *error)
@@ -10823,6 +10915,7 @@ dwg_ent_polyline_mesh_get_n_density(dwg_ent_polyline_mesh *mesh, int *error)
       *error = 1;
     }
 }
+
 void
 dwg_ent_polyline_mesh_set_n_density(dwg_ent_polyline_mesh *mesh,
                                     unsigned int n_density, int *error)
@@ -10852,6 +10945,7 @@ dwg_ent_polyline_mesh_get_owned_obj_count(dwg_ent_polyline_mesh *mesh,
       *error = 1;
     }
 }
+
 void
 dwg_ent_polyline_mesh_set_owned_obj_count(dwg_ent_polyline_mesh *mesh,
                                           long owned_obj_count, int *error)
@@ -10887,6 +10981,7 @@ dwg_ent_polyline_2d_get_extrusion(dwg_ent_polyline_2d *line2d,
       *error = 1;
     }
 }
+
 void
 dwg_ent_polyline_2d_set_extrusion(dwg_ent_polyline_2d *line2d,
                                   dwg_point_3d *point, int *error)
@@ -10917,6 +11012,7 @@ dwg_ent_polyline_2d_get_start_width(dwg_ent_polyline_2d *line2d, int *error)
       *error = 1;
     }
 }
+
 void
 dwg_ent_polyline_2d_set_start_width(dwg_ent_polyline_2d *line2d,
                                     double start_width, int *error)
@@ -10945,6 +11041,7 @@ dwg_ent_polyline_2d_get_end_width(dwg_ent_polyline_2d *line2d, int *error)
       *error = 1;
     }
 }
+
 void
 dwg_ent_polyline_2d_set_end_width(dwg_ent_polyline_2d *line2d,
                                   double end_width, int *error)
@@ -10973,6 +11070,7 @@ dwg_ent_polyline_2d_get_thickness(dwg_ent_polyline_2d *line2d, int *error)
       *error = 1;
     }
 }
+
 void
 dwg_ent_polyline_2d_set_thickness(dwg_ent_polyline_2d *line2d,
                                   double thickness, int *error)
@@ -11001,6 +11099,7 @@ dwg_ent_polyline_2d_get_elevation(dwg_ent_polyline_2d *line2d, int *error)
       *error = 1;
     }
 }
+
 void
 dwg_ent_polyline_2d_set_elevation(dwg_ent_polyline_2d *line2d,
                                   double elevation, int *error)
@@ -11029,6 +11128,7 @@ dwg_ent_polyline_2d_get_flags(dwg_ent_polyline_2d *line2d, int *error)
       *error = 1;
     }
 }
+
 void
 dwg_ent_polyline_2d_set_flags(dwg_ent_polyline_2d *line2d, unsigned int flags,
                               int *error)
@@ -11057,6 +11157,7 @@ dwg_ent_polyline_2d_get_curve_type(dwg_ent_polyline_2d *line2d, int *error)
       *error = 1;
     }
 }
+
 void
 dwg_ent_polyline_2d_set_curve_type(dwg_ent_polyline_2d *line2d,
                                    unsigned int curve_type, int *error)
@@ -11086,6 +11187,7 @@ dwg_ent_polyline_2d_get_owned_obj_count(dwg_ent_polyline_2d *line2d,
       *error = 1;
     }
 }
+
 void
 dwg_ent_polyline_2d_set_owned_obj_count(dwg_ent_polyline_2d *line2d,
                                         long owned_obj_count, int *error)
@@ -11118,6 +11220,7 @@ dwg_ent_polyline_3d_get_flags_1(dwg_ent_polyline_3d *line3d, int *error)
       *error = 1;
     }
 }
+
 void
 dwg_ent_polyline_3d_set_flags_1(dwg_ent_polyline_3d *line3d, char flags_1,
                                 int *error)
@@ -11146,6 +11249,7 @@ dwg_ent_polyline_3d_get_flags_2(dwg_ent_polyline_3d *line3d, int *error)
       *error = 1;
     }
 }
+
 void
 dwg_ent_polyline_3d_set_flags_2(dwg_ent_polyline_3d *line3d, char flags_2,
                                 int *error)
@@ -11175,6 +11279,7 @@ dwg_ent_polyline_3d_get_owned_obj_count(dwg_ent_polyline_3d *line3d,
       *error = 1;
     }
 }
+
 void
 dwg_ent_polyline_3d_set_owned_obj_count(dwg_ent_polyline_3d *line3d,
                                         long owned_obj_count, int *error)
@@ -11402,6 +11507,7 @@ dwg_ent_image_get_class_version(dwg_ent_image *image, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_image_set_class_version(dwg_ent_image *image, long class_version,
                                 int *error)
@@ -11428,6 +11534,7 @@ dwg_ent_image_get_pt0(dwg_ent_image *image, dwg_point_3d *point, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_image_set_pt0(dwg_ent_image *image, dwg_point_3d *point, int *error)
 {
@@ -11456,6 +11563,7 @@ dwg_ent_image_get_u_vector(dwg_ent_image *image, dwg_point_3d *point,
   else
     *error = 1;
 }
+
 void
 dwg_ent_image_set_u_vector(dwg_ent_image *image, dwg_point_3d *point,
                            int *error)
@@ -11485,6 +11593,7 @@ dwg_ent_image_get_v_vector(dwg_ent_image *image, dwg_point_3d *point,
   else
     *error = 1;
 }
+
 void
 dwg_ent_image_set_v_vector(dwg_ent_image *image, dwg_point_3d *point,
                            int *error)
@@ -11511,6 +11620,7 @@ dwg_ent_image_get_size_height(dwg_ent_image *image, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_image_set_size_height(dwg_ent_image *image, double size_height,
                               int *error)
@@ -11535,6 +11645,7 @@ dwg_ent_image_get_size_width(dwg_ent_image *image, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_image_set_size_width(dwg_ent_image *image, double size_width,
                              int *error)
@@ -11559,6 +11670,7 @@ dwg_ent_image_get_display_props(dwg_ent_image *image, int *error)
   else
     *error = 1;
 }
+
 void      
 dwg_ent_image_set_display_props(dwg_ent_image *image,
                                 unsigned int display_props, int *error)
@@ -11583,6 +11695,7 @@ dwg_ent_image_get_clipping(dwg_ent_image *image, int *error)
   else
     *error = 1;
 }
+
 void       
 dwg_ent_image_set_clipping(dwg_ent_image *image, unsigned char clipping,
                            int *error)
@@ -11607,6 +11720,7 @@ dwg_ent_image_get_brightness(dwg_ent_image *image, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_image_set_brightness(dwg_ent_image *image, char brightness, int *error)
 {
@@ -11630,6 +11744,7 @@ dwg_ent_image_get_contrast(dwg_ent_image *image, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_image_set_contrast(dwg_ent_image *image, char contrast, int *error)
 {
@@ -11653,6 +11768,7 @@ dwg_ent_image_get_fade(dwg_ent_image *image, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_image_set_fade(dwg_ent_image *image, char fade, int *error)
 {
@@ -11676,6 +11792,7 @@ dwg_ent_image_get_clip_boundary_type(dwg_ent_image *image, int *error)
   else
     *error = 1;
 }
+
 void      
 dwg_ent_image_set_clip_boundary_type(dwg_ent_image *image, unsigned int type,
                                      int *error)
@@ -11702,6 +11819,7 @@ dwg_ent_image_get_boundary_pt0(dwg_ent_image *image, dwg_point_2d *point,
   else
     *error = 1;
 }
+
 void
 dwg_ent_image_set_boundary_pt0(dwg_ent_image *image, dwg_point_2d *point,
                                int *error)
@@ -11729,6 +11847,7 @@ dwg_ent_image_get_boundary_pt1(dwg_ent_image *image, dwg_point_2d *point,
   else
     *error = 1;
 }
+
 void
 dwg_ent_image_set_boundary_pt1(dwg_ent_image *image, dwg_point_2d *point,
                                int *error)
@@ -11754,6 +11873,7 @@ dwg_ent_image_get_num_clip_verts(dwg_ent_image *image, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_image_set_num_clip_verts(dwg_ent_image *image, double num, int *error)
 {
@@ -11800,6 +11920,7 @@ dwg_ent_mline_set_scale(dwg_ent_mline *mline, double scale, int *error)
   else
     *error = 1;
 }
+
 double
 dwg_ent_mline_get_scale(dwg_ent_mline *mline, int *error)
 {
@@ -11811,6 +11932,7 @@ dwg_ent_mline_get_scale(dwg_ent_mline *mline, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_mline_set_just(dwg_ent_mline *mline, char just, int *error)
 {
@@ -11822,6 +11944,7 @@ dwg_ent_mline_set_just(dwg_ent_mline *mline, char just, int *error)
   else
     *error = 1;
 }
+
 char
 dwg_ent_mline_get_just(dwg_ent_mline *mline, int *error)
 {
@@ -11833,6 +11956,7 @@ dwg_ent_mline_get_just(dwg_ent_mline *mline, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_mline_set_base_point(dwg_ent_mline *mline, dwg_point_3d *point,
                              int *error)
@@ -11847,6 +11971,7 @@ dwg_ent_mline_set_base_point(dwg_ent_mline *mline, dwg_point_3d *point,
   else
     *error = 1;
 }
+
 void
 dwg_ent_mline_get_base_point(dwg_ent_mline *mline, dwg_point_3d *point,
                              int *error)
@@ -11861,6 +11986,7 @@ dwg_ent_mline_get_base_point(dwg_ent_mline *mline, dwg_point_3d *point,
   else
     *error = 1;
 }
+
 void
 dwg_ent_mline_set_extrusion(dwg_ent_mline *mline, dwg_point_3d *point,
                             int *error)
@@ -11875,6 +12001,7 @@ dwg_ent_mline_set_extrusion(dwg_ent_mline *mline, dwg_point_3d *point,
   else
     *error = 1;
 }
+
 void
 dwg_ent_mline_get_extrusion(dwg_ent_mline *mline, dwg_point_3d *point,
                             int *error)
@@ -11889,6 +12016,7 @@ dwg_ent_mline_get_extrusion(dwg_ent_mline *mline, dwg_point_3d *point,
   else
     *error = 1;
 }
+
 void
 dwg_ent_mline_set_open_closed(dwg_ent_mline *mline, unsigned int oc,
                               int *error)
@@ -11901,6 +12029,7 @@ dwg_ent_mline_set_open_closed(dwg_ent_mline *mline, unsigned int oc,
   else
     *error = 1;
 }
+
 unsigned int
 dwg_ent_mline_get_open_closed(dwg_ent_mline *mline, int *error)
 {
@@ -11912,6 +12041,7 @@ dwg_ent_mline_get_open_closed(dwg_ent_mline *mline, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_mline_set_num_lines(dwg_ent_mline *mline, char num, int *error)
 {
@@ -11923,6 +12053,7 @@ dwg_ent_mline_set_num_lines(dwg_ent_mline *mline, char num, int *error)
   else
     *error = 1;
 }
+
 char
 dwg_ent_mline_get_num_lines(dwg_ent_mline *mline, int *error)
 {
@@ -11934,6 +12065,7 @@ dwg_ent_mline_get_num_lines(dwg_ent_mline *mline, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_mline_set_num_verts(dwg_ent_mline *mline, unsigned int num,
                             int *error)
@@ -11946,6 +12078,7 @@ dwg_ent_mline_set_num_verts(dwg_ent_mline *mline, unsigned int num,
   else
     *error = 1;
 }
+
 unsigned int
 dwg_ent_mline_get_num_verts(dwg_ent_mline *mline, int *error)
 {
@@ -12011,6 +12144,7 @@ dwg_ent_3dsolid_get_acis_empty(dwg_ent_3dsolid *_3dsolid, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_3dsolid_set_acis_empty(dwg_ent_3dsolid *_3dsolid, unsigned char acis,
                                int *error)
@@ -12035,6 +12169,7 @@ dwg_ent_3dsolid_get_version(dwg_ent_3dsolid *_3dsolid, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_3dsolid_set_version(dwg_ent_3dsolid *_3dsolid, unsigned int version,
                             int *error)
@@ -12096,6 +12231,7 @@ dwg_ent_3dsolid_get_wireframe_data_present(dwg_ent_3dsolid *_3dsolid,
   else
     *error = 1;
 }
+
 void
 dwg_ent_3dsolid_set_wireframe_data_present(dwg_ent_3dsolid *_3dsolid,
                                            char data, int *error)
@@ -12120,6 +12256,7 @@ dwg_ent_3dsolid_get_point_present(dwg_ent_3dsolid *_3dsolid, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_3dsolid_set_point_present(dwg_ent_3dsolid *_3dsolid, char point,
                                   int *error)
@@ -12147,6 +12284,7 @@ dwg_ent_3dsolid_get_point(dwg_ent_3dsolid *_3dsolid, dwg_point_3d *point,
   else
     *error = 1;
 }
+
 void
 dwg_ent_3dsolid_set_point(dwg_ent_3dsolid *_3dsolid, dwg_point_3d *point,
                           int *error)
@@ -12173,6 +12311,7 @@ dwg_ent_3dsolid_get_num_isolines(dwg_ent_3dsolid *_3dsolid, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_3dsolid_set_num_isolines(dwg_ent_3dsolid *_3dsolid, long num,
                                  int *error)
@@ -12197,6 +12336,7 @@ dwg_ent_3dsolid_get_isoline_present(dwg_ent_3dsolid *_3dsolid, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_3dsolid_set_isoline_present(dwg_ent_3dsolid *_3dsolid, char iso,
                                     int *error)
@@ -12221,6 +12361,7 @@ dwg_ent_3dsolid_get_num_wires(dwg_ent_3dsolid *_3dsolid, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_3dsolid_set_num_wires(dwg_ent_3dsolid *_3dsolid, long num, int *error)
 {
@@ -12263,6 +12404,7 @@ dwg_ent_3dsolid_get_num_silhouettes(dwg_ent_3dsolid *_3dsolid, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_3dsolid_set_num_silhouettes(dwg_ent_3dsolid *_3dsolid,
                                     long silhouettes, int *error)
@@ -12306,6 +12448,7 @@ dwg_ent_3dsolid_get_acis_empty2(dwg_ent_3dsolid *_3dsolid, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_3dsolid_set_acis_empty2(dwg_ent_3dsolid *_3dsolid, unsigned char acis,
                                 int *error)
@@ -12334,6 +12477,7 @@ dwg_ent_region_get_acis_empty(dwg_ent_region *region, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_region_set_acis_empty(dwg_ent_region *region, unsigned char acis,
                               int *error)
@@ -12358,6 +12502,7 @@ dwg_ent_region_get_version(dwg_ent_region *region, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_region_set_version(dwg_ent_region *region, unsigned int version,
                            int *error)
@@ -12418,6 +12563,7 @@ dwg_ent_region_get_wireframe_data_present(dwg_ent_region *region, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_region_set_wireframe_data_present(dwg_ent_region *region, char data,
                                           int *error)
@@ -12442,6 +12588,7 @@ dwg_ent_region_get_point_present(dwg_ent_region *region, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_region_set_point_present(dwg_ent_region *region, char point,
                                  int *error)
@@ -12469,6 +12616,7 @@ dwg_ent_region_get_point(dwg_ent_region *region, dwg_point_3d *point,
   else
     *error = 1;
 }
+
 void
 dwg_ent_region_set_point(dwg_ent_region *region, dwg_point_3d *point,
                          int *error)
@@ -12495,6 +12643,7 @@ dwg_ent_region_get_num_isolines(dwg_ent_region *region, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_region_set_num_isolines(dwg_ent_region *region, long num, int *error)
 {
@@ -12518,6 +12667,7 @@ dwg_ent_region_get_isoline_present(dwg_ent_region *region, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_region_set_isoline_present(dwg_ent_region *region, char iso,
                                    int *error)
@@ -12542,6 +12692,7 @@ dwg_ent_region_get_num_wires(dwg_ent_region *region, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_region_set_num_wires(dwg_ent_region *region, long num, int *error)
 {
@@ -12584,6 +12735,7 @@ dwg_ent_region_get_num_silhouettes(dwg_ent_region *region, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_region_set_num_silhouettes(dwg_ent_region *region, long silhouettes,
                                    int *error)
@@ -12627,6 +12779,7 @@ dwg_ent_region_get_acis_empty2(dwg_ent_region *region, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_region_set_acis_empty2(dwg_ent_region *region, unsigned char acis,
                                int *error)
@@ -12655,6 +12808,7 @@ dwg_ent_body_get_acis_empty(dwg_ent_body *body, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_body_set_acis_empty(dwg_ent_body *body, unsigned char acis,
                             int *error)
@@ -12679,6 +12833,7 @@ dwg_ent_body_get_version(dwg_ent_body *body, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_body_set_version(dwg_ent_body *body, unsigned int version, int *error)
 {
@@ -12737,6 +12892,7 @@ dwg_ent_body_get_wireframe_data_present(dwg_ent_body *body, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_body_set_wireframe_data_present(dwg_ent_body *body, char data,
                                         int *error)
@@ -12761,6 +12917,7 @@ dwg_ent_body_get_point_present(dwg_ent_body *body, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_body_set_point_present(dwg_ent_body *body, char point, int *error)
 {
@@ -12786,6 +12943,7 @@ dwg_ent_body_get_point(dwg_ent_body *body, dwg_point_3d *point, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_body_set_point(dwg_ent_body *body, dwg_point_3d *point, int *error)
 {
@@ -12811,6 +12969,7 @@ dwg_ent_body_get_num_isolines(dwg_ent_body *body, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_body_set_num_isolines(dwg_ent_body *body, long num, int *error)
 {
@@ -12834,6 +12993,7 @@ dwg_ent_body_get_isoline_present(dwg_ent_body *body, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_body_set_isoline_present(dwg_ent_body *body, char iso, int *error)
 {
@@ -12857,6 +13017,7 @@ dwg_ent_body_get_num_wires(dwg_ent_body *body, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_body_set_num_wires(dwg_ent_body *body, long num, int *error)
 {
@@ -12899,6 +13060,7 @@ dwg_ent_body_get_num_silhouettes(dwg_ent_body *body, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_body_set_num_silhouettes(dwg_ent_body *body, long silhouettes,
                                  int *error)
@@ -12943,6 +13105,7 @@ dwg_ent_body_get_acis_empty2(dwg_ent_body *body, int *error)
   else
     *error = 1;
 }
+
 void
 dwg_ent_body_set_acis_empty2(dwg_ent_body *body, unsigned char acis,
                              int *error)
@@ -13054,6 +13217,7 @@ dwg_ent_table_set_rotation(dwg_ent_table *table, double rotation, int *error)
   else
     *error = 1;   
 }
+
 double
 dwg_ent_table_get_rotation(dwg_ent_table *table, int *error)
 {
@@ -13411,6 +13575,7 @@ dwg_ent_table_set_horiz_cell_margin(dwg_ent_table *table, double margin,
   else
     *error = 1;   
 }
+
 double
 dwg_ent_table_get_horiz_cell_margin(dwg_ent_table *table, int *error)
 {
@@ -13435,6 +13600,7 @@ dwg_ent_table_set_vert_cell_margin(dwg_ent_table *table, double margin,
   else
     *error = 1;   
 }
+
 double
 dwg_ent_table_get_vert_cell_margin(dwg_ent_table *table, int *error)
 {
@@ -13609,6 +13775,7 @@ dwg_ent_table_set_title_row_height(dwg_ent_table *table, double height,
   else
     *error = 1;   
 }
+
 double
 dwg_ent_table_get_title_row_height(dwg_ent_table *table, int *error)
 {
@@ -13633,6 +13800,7 @@ dwg_ent_table_set_header_row_height(dwg_ent_table *table, double height,
   else
     *error = 1;   
 }
+
 double
 dwg_ent_table_get_header_row_height(dwg_ent_table *table, int *error)
 {
@@ -13657,6 +13825,7 @@ dwg_ent_table_set_data_row_height(dwg_ent_table *table, double height,
   else
     *error = 1;   
 }
+
 double
 dwg_ent_table_get_data_row_height(dwg_ent_table *table, int *error)
 {
@@ -13912,6 +14081,7 @@ dwg_ent_table_set_title_vert_right_lineweight(dwg_ent_table *table,
   else
     *error = 1;
 }
+
 unsigned int 
 dwg_ent_table_get_title_vert_right_lineweight(dwg_ent_table *table, int *error)
 {
