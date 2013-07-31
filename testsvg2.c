@@ -25,8 +25,8 @@
 #include <dwg.h>
 #include "api.h"
 #include "api.c"
-#include "../src/bits.h"
-#include "suffix.c"
+//#include "../src/bits.h"
+//#include "suffix.c"
 
 double model_xmin, model_ymin;
 double page_width, page_height, scale;
@@ -48,7 +48,7 @@ output_SVG(Dwg_Data* dwg);
 int
 main(int argc, char *argv[])
 {
-  REQUIRE_INPUT_FILE_ARG (argc);
+//  REQUIRE_INPUT_FILE_ARG (argc);
   return test_SVG (argv[1]);
 }
 
