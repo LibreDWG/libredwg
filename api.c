@@ -3810,7 +3810,7 @@ dwg_obj_appid_set_flag(dwg_obj_appid *appid, char flag, int *error)
 }
 
 dwg_obj_appid_control
-dwg_obj_get_appid_control(dwg_obj_appid *appid, int *error)
+dwg_obj_appid_get_appid_control(dwg_obj_appid *appid, int *error)
 {
   if (appid != 0)
     {
