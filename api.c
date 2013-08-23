@@ -1,5 +1,5 @@
 #include "api.h"
-#include <dwg.h>
+#include "dwg.h"
 #include <malloc.h>
 
 /********************************************************************
@@ -3810,7 +3810,7 @@ dwg_obj_appid_set_flag(dwg_obj_appid *appid, char flag, int *error)
 }
 
 dwg_obj_appid_control
-dwg_obj_get_appid_control(dwg_obj_appid *appid, int *error)
+dwg_obj_appid_get_appid_control(dwg_obj_appid *appid, int *error)
 {
   if (appid != 0)
     {
@@ -14945,12 +14945,12 @@ dwg_obj_block_header_get_name(dwg_obj_block_header *hdr, int *error)
     *error = 1;
 }
 
-/* Returns 1st block header present in the dwg file from the Dwg_Data type 
+/* Returns 1st block header present in the dwg file from the dwg_data type 
 argument passed to function.
 Usage :- dwg_get_block_header(dwg);
 */
 dwg_obj_block_header *
-dwg_get_block_header(Dwg_Data *dwg, int *error)
+dwg_get_block_header(dwg_data *dwg, int *error)
 {    
   Dwg_Object *obj;
   Dwg_Object_BLOCK_HEADER *blk;

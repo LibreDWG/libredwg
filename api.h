@@ -153,7 +153,8 @@ typedef struct _dwg_object_ref                    dwg_object_ref;
 typedef struct _dwg_handle                        dwg_handle;
 typedef struct _dwg_object_entity                 dwg_obj_ent;
 typedef struct _dwg_object_object                 dwg_obj_obj;
-
+typedef struct _dwg_struct                        dwg_data;
+typedef struct _dwg_object_ref		          dwg_object_ref;
 ///////////////////////////////////////////////////////////////////////////
 
 
@@ -2140,10 +2141,10 @@ dwg_ent_dim_radius_get_15_pt(dwg_ent_dim_radius *radius, dwg_point_3d *point,
                              int *error);
 
 double
-dwg_ent_dim_radius_get_leader_len(dwg_ent_dim_radius *radius, int *error);
+dwg_ent_dim_radius_get_leader_length(dwg_ent_dim_radius *radius, int *error);
 
 void
-dwg_ent_dim_radius_set_leader_len(dwg_ent_dim_radius *radius, double length,
+dwg_ent_dim_radius_set_leader_length(dwg_ent_dim_radius *radius, double length,
                                   int *error);
 
 
@@ -2296,10 +2297,10 @@ dwg_ent_dim_diameter_get_15_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *point,
                                int *error);
 
 double
-dwg_ent_dim_diameter_get_leader_len(dwg_ent_dim_diameter *dia, int *error);
+dwg_ent_dim_diameter_get_leader_length(dwg_ent_dim_diameter *dia, int *error);
 
 void
-dwg_ent_dim_diameter_set_leader_len(dwg_ent_dim_diameter *dia,
+dwg_ent_dim_diameter_set_leader_length(dwg_ent_dim_diameter *dia,
                                     double leader_len, int *error);
 
 
@@ -4327,7 +4328,7 @@ char *
 dwg_obj_block_header_get_name(dwg_obj_block_header *hdr, int *error);
 
 dwg_obj_block_header *
-dwg_get_block_header(Dwg_Data *dwg, int *error);
+dwg_get_block_header(dwg_data *dwg, int *error);
 
 
 /********************************************************************

@@ -24,7 +24,7 @@
 #include <math.h>
 #include <dwg.h>
 #include "api.h"
-#include "api.c"
+//#include "api.c"
 //#include "../src/bits.h"
 //#include "suffix.c"
 
@@ -43,7 +43,7 @@ int
 test_SVG(char *filename);
 
 void
-output_SVG(Dwg_Data* dwg);
+output_SVG(dwg_data* dwg);
 
 int
 main(int argc, char *argv[])
@@ -56,7 +56,7 @@ int
 test_SVG(char *filename)
 {
   int error;
-  Dwg_Data dwg;
+  dwg_data dwg;
 
   error = dwg_read_file(filename, &dwg);
 
@@ -72,7 +72,7 @@ test_SVG(char *filename)
 }
 
 void
-output_TEXT(Dwg_Object* obj)
+output_TEXT(dwg_object* obj)
 {
   int error, index;
   dwg_point_2d ins_pt;
@@ -92,7 +92,7 @@ output_TEXT(Dwg_Object* obj)
 }
 
 void
-output_LINE(Dwg_Object* obj)
+output_LINE(dwg_object* obj)
 {
   int error, index;
   Dwg_Entity_LINE* line;
@@ -108,7 +108,7 @@ output_LINE(Dwg_Object* obj)
 }
 
 void
-output_CIRCLE(Dwg_Object* obj)
+output_CIRCLE(dwg_object* obj)
 {
   Dwg_Entity_CIRCLE* circle;
   int error, index;
@@ -123,7 +123,7 @@ output_CIRCLE(Dwg_Object* obj)
 }
 
 void
-output_ARC(Dwg_Object* obj)
+output_ARC(dwg_object* obj)
 {
   Dwg_Entity_ARC* arc;
   int error, index;
@@ -148,7 +148,7 @@ output_ARC(Dwg_Object* obj)
 }
 
 void
-output_INSERT(Dwg_Object* obj)
+output_INSERT(dwg_object* obj)
 {
   int index, error;
   unsigned long abs_ref;
@@ -184,7 +184,7 @@ output_INSERT(Dwg_Object* obj)
 }
 
 void
-output_object(Dwg_Object* obj){
+output_object(dwg_object* obj){
   if (!obj)
     {
       fprintf(stderr, "object is NULL\n");
@@ -217,7 +217,7 @@ output_object(Dwg_Object* obj){
     }
 }
 
-void output_BLOCK_HEADER(Dwg_Object_Ref* ref)
+void output_BLOCK_HEADER(dwg_object_ref* ref)
 {
   dwg_object* obj, *variable_obj;
   dwg_obj_block_header* hdr;
@@ -262,10 +262,10 @@ void output_BLOCK_HEADER(Dwg_Object_Ref* ref)
 
 
 void
-output_SVG(Dwg_Data* dwg)
+output_SVG(dwg_data* dwg)
 {
   unsigned int i, num_hdr_objs, error;
-  Dwg_Object *obj;
+  dwg_object *obj;
   dwg_obj_block_header *hdr;
   dwg_obj_block_control *ctrl;
   dwg_object_ref **hdr_refs; 
