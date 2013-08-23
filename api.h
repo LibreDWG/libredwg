@@ -3414,10 +3414,10 @@ void
 dwg_ent_image_set_fade(dwg_ent_image *image, char fade, int *error);
 
 unsigned int
-dwg_ent_image_get_clip_boundry_type(dwg_ent_image *image, int *error);
+dwg_ent_image_get_clip_boundary_type(dwg_ent_image *image, int *error);
 
 void
-dwg_ent_image_set_clip_boundry_type(dwg_ent_image *image, unsigned int type,
+dwg_ent_image_set_clip_boundary_type(dwg_ent_image *image, unsigned int type,
                                     int *error);
 
 void
