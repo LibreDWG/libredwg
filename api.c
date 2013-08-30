@@ -15044,3 +15044,9 @@ dwg_obj_ref_get_abs_ref(dwg_object_ref *ref, int *error)
   else
     *error = 1;    
 }
+
+int 
+dwg_get_type(dwg_object *obj)
+{
+  return obj->type;
+}

@@ -24,7 +24,7 @@
 #include <math.h>
 #include <dwg.h>
 #include "api.h"
-//#include "api.c"
+#include "api.c"
 //#include "../src/bits.h"
 //#include "suffix.c"
 
@@ -191,27 +191,27 @@ output_object(dwg_object* obj){
       return;
     }
 
-  if (obj->type == DWG_TYPE_INSERT)
+  if (dwg_get_type(obj) == DWG_TYPE_INSERT)
     {
       output_INSERT(obj);
     }
 
-  if (obj->type == DWG_TYPE_LINE)
+  if (dwg_get_type(obj)== DWG_TYPE_LINE)
     {
       output_LINE(obj);
     }
 
-  if (obj->type == DWG_TYPE_CIRCLE)
+  if (dwg_get_type(obj)== DWG_TYPE_CIRCLE)
     {
       output_CIRCLE(obj);
     }
 
-  if (obj->type == DWG_TYPE_TEXT)
+  if (dwg_get_type(obj)== DWG_TYPE_TEXT)
     {
       output_TEXT(obj);
     }
 
-  if (obj->type == DWG_TYPE_ARC)
+  if (dwg_get_type(obj)== DWG_TYPE_ARC)
     {
       output_ARC(obj);
     }

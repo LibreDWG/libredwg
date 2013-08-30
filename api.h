@@ -4383,5 +4383,7 @@ dwg_object_to_object(dwg_object *obj, int *error);
 dwg_obj_ent *
 dwg_object_to_entity(dwg_object *obj, int *error);
 
+int 
+dwg_get_type(dwg_object *obj);
 
 #endif
