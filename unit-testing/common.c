@@ -5,7 +5,6 @@
 #include <math.h>
 #include <dwg.h>
 #include <api.h>
-//#include "api.c"
 
 int
 testcode(char *filename);

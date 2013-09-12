@@ -12706,7 +12706,7 @@ dwg_ent_region_set_num_wires(dwg_ent_region *region, long num, int *error)
 }
 
 dwg_ent_solid_wire *
-dwg_ent_region_set_wire(dwg_ent_region *region, int *error)
+dwg_ent_region_get_wire(dwg_ent_region *region, int *error)
 {
   dwg_ent_solid_wire *ptx = (dwg_ent_solid_wire*)
   malloc(sizeof(dwg_ent_solid_wire)* region->num_wires);
@@ -12846,7 +12846,7 @@ dwg_ent_body_set_version(dwg_ent_body *body, unsigned int version, int *error)
     *error = 1;
 }
 
-long *
+long * 
 dwg_ent_body_get_block_size(dwg_ent_body *body, int *error)
 {
   if (body != 0)
@@ -13031,7 +13031,7 @@ dwg_ent_body_set_num_wires(dwg_ent_body *body, long num, int *error)
 }
 
 dwg_ent_solid_wire *
-dwg_ent_body_set_wire(dwg_ent_body *body, int *error)
+dwg_ent_body_get_wire(dwg_ent_body *body, int *error)
 {
   dwg_ent_solid_wire *ptx = (dwg_ent_solid_wire*)
   malloc(sizeof(dwg_ent_solid_wire)* body->num_wires);
