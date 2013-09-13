@@ -6,36 +6,47 @@
 #include <dwg.h>
 #include <api.h>
 
+/// This function Declaration reads DWG file
 int
-testcode(char *filename);
+test_code(char *filename);
 
+/// Declaration of function to iterate over objects of a block
 void
 output_BLOCK_HEADER(dwg_object_ref *ref);
 
+/// Declaration for function that checks the dwg type and calls output_process
 void
 output_object(dwg_object *obj);
 
+/// Function declaration for blocks to be iterated over
 void
 output_test(dwg_data *dwg);
 
+/// Low Level processing function declaration
 void
 low_level_process(dwg_object *obj);
 
+/// API based processing function declaration
 void
 api_process(dwg_object *obj);
 
+/// API based printing function declaration
 void
 print_api(dwg_object *obj);
 
+/// Low level printing function declaration
 void
 print_low_level(dwg_object *obj);
 
+
+/// Main function
 int
 main(int argc, char *argv[])
 {
   return test_code (argv[1]);
 }
 
+/// This function is used to read the DWG file
 int
 test_code(char *filename)
 {
@@ -56,7 +67,7 @@ test_code(char *filename)
 }
 
 
-
+/// This function is used to iterate over the objects in a block
 void output_BLOCK_HEADER(dwg_object_ref* ref)
 {
   dwg_object* obj, *variable_obj;
@@ -100,7 +111,7 @@ void output_BLOCK_HEADER(dwg_object_ref* ref)
 
 }
 
-
+/// Function for blocks to be iterated
 void
 output_test(dwg_data* dwg)
 {
@@ -122,12 +133,14 @@ output_test(dwg_data* dwg)
 
 }
 
+/// Main output function that prints to the terminal
 void output_process(dwg_object *obj)
 {
   print_low_level(obj);
   print_api(obj);
 }
 
+/// Low level printing function
 void
 print_low_level(dwg_object *obj)
 {
@@ -139,6 +152,7 @@ print_low_level(dwg_object *obj)
   printf("\n");
 }
 
+/// API based printing function
 void
 print_api(dwg_object *obj)
 {

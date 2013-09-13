@@ -20,11 +20,18 @@ output_object(dwg_object* obj){
 void
 low_level_process(dwg_object *obj)
 {
+  // casts object to point entity
   dwg_ent_point *point = dwg_object_to_POINT(obj);
+
+  // prints point of point
   printf("points of point : x = %f, y = %f, z = %f\t\n", 
           point->x, point->y, point->z);
+
+  // prints extrusion of point
   printf("extrusion of point : x = %f, y = %f, z = %f\t\n",
           point->extrusion.x, point->extrusion.y, point->extrusion.z);
+
+  // prints thickness
   printf("thickness of point : %f\t\n", point->thickness);
 }
 
@@ -36,8 +43,9 @@ api_process(dwg_object *obj)
   dwg_point_3d ext, points;
   dwg_ent_point *point = dwg_object_to_POINT(obj);
  
+  // returns point values
   dwg_ent_point_get_point(point, &points, &pt_error);
-  if(pt_error == 0 )
+  if(pt_error == 0 ) // error check
     {
       printf("points of point : x = %f, y = %f, z = %f\t\n",
               points.x, points.y, points.z);
@@ -47,8 +55,9 @@ api_process(dwg_object *obj)
       printf("error in reading point \n");
     }
 
+  // returns extrusion
   dwg_ent_point_get_extrusion(point, &ext, &ext_error);
-  if(ext_error == 0 )
+  if(ext_error == 0 ) // error checking
     {
       printf("extrusion of point : x = %f, y = %f, z = %f\t\n",
               ext.x, ext.y, ext.z);
@@ -58,8 +67,9 @@ api_process(dwg_object *obj)
       printf("error in reading extrusion \n");
     }
 
+  // returns thickness
   thickness = dwg_ent_point_get_thickness(point, &thickness_error);
-  if(thickness_error == 0 )
+  if(thickness_error == 0 ) // error check
     {
       printf("thickness of point : %f\t\n", thickness);
     }
@@ -67,5 +77,4 @@ api_process(dwg_object *obj)
     {
       printf("error in reading thickness\n");
     }
-
 }

@@ -20,10 +20,20 @@ output_object(dwg_object* obj){
 void
 low_level_process(dwg_object *obj)
 {
+
+  // casts dwg object to ole2frame entity
   dwg_ent_ole2frame *ole2frame = dwg_object_to_OLE2FRAME(obj);
+
+  // prints flags
   printf("flags of ole2frame : %ud\t\n", ole2frame->flags);
-  printf("get mode of ole2frame : %ud\t\n", ole2frame->mode);
+
+  // prints mode
+  printf("mode of ole2frame : %ud\t\n", ole2frame->mode);
+
+  // prints data length
   printf("data length of ole2frame : %ld\t\n", ole2frame->data_length); 
+
+  // prints data
   printf("data of ole2frame : %s\t\n", ole2frame->data);
 }
 
@@ -36,8 +46,9 @@ api_process(dwg_object *obj)
   char * data;
   dwg_ent_ole2frame *ole2frame = dwg_object_to_OLE2FRAME(obj);
 
+  // returns flags
   flags = dwg_ent_ole2frame_get_flags(ole2frame, &flags_error);
-  if(flags_error == 0 )
+  if(flags_error == 0 ) // error check
     {  
       printf("flags of ole2frame : %ud\t\n", flags);
     }
@@ -46,8 +57,9 @@ api_process(dwg_object *obj)
       printf("error in reading flags  \n");
     }
 
+  // returns mode
   mode = dwg_ent_ole2frame_get_mode(ole2frame, &mode_error);
-  if(mode_error == 0 )
+  if(mode_error == 0 ) // error check
     {
       printf("mode of ole2frame : %ud\t\n", mode);
     }
@@ -55,8 +67,10 @@ api_process(dwg_object *obj)
     {
       printf("error in reading mode \n");
     }
+
+  // returns length of data
   data_length = dwg_ent_ole2frame_get_data_length(ole2frame, &data_length_error);
-  if(data_length_error == 0 )
+  if(data_length_error == 0 ) // error check
     {  
       printf("flags of ole2frame : %ld\t\n", data_length);
     }
@@ -65,8 +79,9 @@ api_process(dwg_object *obj)
       printf("error in data length \n");
     }
 
+  // returns data
   data = dwg_ent_ole2frame_get_data(ole2frame, &data_error);
-  if(data_error == 0 )
+  if(data_error == 0 ) // error check
     {
       printf("data of ole2frame : %s\t\n", data);
     }

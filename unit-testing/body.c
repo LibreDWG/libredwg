@@ -20,24 +20,48 @@ output_object(dwg_object* obj){
 void
 low_level_process(dwg_object *obj)
 {
+  // casts dwg object to body
   dwg_ent_body *body = dwg_object_to_BODY(obj);
-      printf("acis empty of body : %d", body->acis_empty);
 
-      printf("version of body : %d", body->version);
-     printf("acis data of body : %s", body->acis_data);
-     printf("wireframe data of body : %d", body->wireframe_data_present);
-     printf("point present of body : %d", body->point_present);
-     printf("point of body : x = %f, y = %f, z = %f\t\n", body->point.x,
-             body->point.y, body->point.z);
-     printf("num isolines of body : %ld", body->num_isolines);
-     printf("isoline present of body : %d", body->isoline_present);
-     printf("num wires of body : %ld", body->num_wires);
+  // prints acis empty
+  printf("acis empty of body : %d", body->acis_empty);
+
+  // prints version
+  printf("version of body : %d", body->version);
+
+  // prints acis data
+  printf("acis data of body : %s", body->acis_data);
+
+  // prints wireframe
+  printf("wireframe data of body : %d", body->wireframe_data_present);
+
+  // prints point present
+  printf("point present of body : %d", body->point_present);
+
+  // prints point of body
+  printf("point of body : x = %f, y = %f, z = %f\t\n", body->point.x,
+          body->point.y, body->point.z);
+
+  // prints num isolines
+  printf("num isolines of body : %ld", body->num_isolines);
+
+  // prints isolines present
+  printf("isoline present of body : %d", body->isoline_present);
+
+  // prints num wires of body
+  printf("num wires of body : %ld", body->num_wires);
+
+  // prints wire of body
      int i;
       for (i = 0; i < body->num_wires; i++)
         {
            printf("wire of body : %ld", body->wires[i].selection_marker);
         }
-     printf("num sil of body : %ld", body->num_silhouettes);
+
+  // prints num silhouettes of body
+  printf("num sil of body : %ld", body->num_silhouettes);
+
+  // prints silhouettes of body
      for (i = 0; i < body->num_silhouettes; i++)
         {
            printf("silhouette of body : %ld", body->silhouettes[i].vp_id);
@@ -62,8 +86,9 @@ api_process(dwg_object *obj)
   dwg_ent_solid_wire *wire;
   dwg_ent_solid_silhouette *sil;
 
+  // returns acis empty
   acis_empty = dwg_ent_body_get_acis_empty(body, &acis_empty_error);
-  if( acis_empty_error == 0 )
+  if( acis_empty_error == 0 ) // error check
     {
       printf("acis empty of body : %d", acis_empty);
     }
@@ -72,8 +97,9 @@ api_process(dwg_object *obj)
       printf("error in reading acis empty");
     }
 
+  // returns version
   version = dwg_ent_body_get_version(body, &version_error);
-  if( version_error == 0 )
+  if( version_error == 0 ) // error check
     {
       printf("version of body : %d", version);
     }
@@ -82,8 +108,9 @@ api_process(dwg_object *obj)
       printf("error in reading version");
     }
 
+  // returns acus data
   acis_data = dwg_ent_body_get_acis_data(body, &acis_data_error); 
-  if( acis_data_error == 0 )
+  if( acis_data_error == 0 ) // error checks
     {
       printf("acis data of body : %s", acis_data);
     }
@@ -92,9 +119,10 @@ api_process(dwg_object *obj)
       printf("error in reading acis data");
     }
 
+  // returns wireframe data present value
   wireframe_data_present = dwg_ent_body_get_wireframe_data_present(body,
                            &wireframe_data_present_error); 
-  if( wireframe_data_present_error == 0 )
+  if( wireframe_data_present_error == 0 ) // error check
     {
       printf("wireframe data of body : %d", wireframe_data_present);
     }

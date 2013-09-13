@@ -20,8 +20,14 @@ output_object(dwg_object* obj){
 void
 low_level_process(dwg_object *obj)
 {
+
+  // casts object to vertex mesh
   dwg_ent_vertex_mesh *vertex_mesh = dwg_object_to_VERTEX_MESH(obj);
+ 
+  // prints flag of vertex_mesh
   printf("flag of vertex_mesh : %d\t\n", vertex_mesh->flags);
+
+  // prints the point of vertex_mesh
   printf("point of vertex_mesh : x = %f, y = %f, z = %f\t\n",
          vertex_mesh->point.x, vertex_mesh->point.y, vertex_mesh->point.z);
 }
@@ -29,16 +35,14 @@ low_level_process(dwg_object *obj)
 void
 api_process(dwg_object *obj)
 {
-  int flag_error, point_error, end_w_error, start_w_error, bulge_error,
-      dir_error;
-  double start_width, end_width, bulge, tan_dir;
+  int flag_error, point_error;
   char flags;
   dwg_point_3d point;
   dwg_ent_vertex_mesh *vertex_mesh = dwg_object_to_VERTEX_MESH(obj);
 
-
+  // returns flag
   flags = dwg_ent_vertex_mesh_get_flags(vertex_mesh, &flag_error);
-  if(flag_error == 0 )
+  if(flag_error == 0 ) // error checking
     {  
       printf("flag of vertex_mesh : %d\t\n", flags);
     }
@@ -47,8 +51,9 @@ api_process(dwg_object *obj)
       printf("error in reading flag \n");
     }
 
+  // returns vertex_mesh point
   dwg_ent_vertex_mesh_get_point(vertex_mesh, &point, &point_error);
-  if(point_error == 0 )
+  if(point_error == 0 ) // error checking
     {
       printf("point of vertex_mesh : x = %f, y = %f, z = %f\t\n",
 	     point.x, point.y, point.z);

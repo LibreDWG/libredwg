@@ -20,8 +20,14 @@ output_object(dwg_object* obj){
 void
 low_level_process(dwg_object *obj)
 {
+
+  // casts dwg object to vertex_3d entity
   dwg_ent_vertex_3d *vertex_3d = dwg_object_to_VERTEX_3D(obj);
+
+  // prints flag
   printf("flag of vertex_3d : %d\t\n", vertex_3d->flags);
+
+  // prints values of point
   printf("point of vertex_3d : x = %f, y = %f, z = %f\t\n",
          vertex_3d->point.x, vertex_3d->point.y, vertex_3d->point.z);
 }
@@ -36,9 +42,9 @@ api_process(dwg_object *obj)
   dwg_point_3d point;
   dwg_ent_vertex_3d *vertex_3d = dwg_object_to_VERTEX_3D(obj);
 
-
+  // returns flags
   flags = dwg_ent_vertex_3d_get_flags(vertex_3d, &flag_error);
-  if(flag_error == 0 )
+  if(flag_error == 0 ) // error checking
     {  
       printf("flag of vertex_3d : %d\t\n", flags);
     }
@@ -47,8 +53,9 @@ api_process(dwg_object *obj)
       printf("error in reading flag \n");
     }
 
+  // returns point of vertex_3d
   dwg_ent_vertex_3d_get_point(vertex_3d, &point, &point_error);
-  if(point_error == 0 )
+  if(point_error == 0 ) // error check
     {
       printf("point of vertex_3d : x = %f, y = %f, z = %f\t\n",
 	     point.x, point.y, point.z);

@@ -20,7 +20,10 @@ output_object(dwg_object* obj){
 void
 low_level_process(dwg_object *obj)
 {
+  // casts dwg object to block
   dwg_ent_block *block = dwg_object_to_BLOCK(obj);
+
+  // returns block name
   printf("block name : %s\t\n", block->name);
 }
 
@@ -29,8 +32,11 @@ api_process(dwg_object *obj)
 {
   int name_error;
   char * name;
+
+  // casts dwg object to block
   dwg_ent_block *block = dwg_object_to_BLOCK(obj);
 
+  // returns block name
   name = dwg_ent_block_get_name(block, &name_error);
   if(name_error == 0 )
     {
