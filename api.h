@@ -2470,7 +2470,7 @@ void
 dwg_ent_mtext_set_text(dwg_ent_mtext *mtext, char *text, int *error);
 
 unsigned int
-dwg_ent_mtext_linespace_style(dwg_ent_mtext *mtext, int *error);
+dwg_ent_mtext_get_linespace_style(dwg_ent_mtext *mtext, int *error);
 
 void
 dwg_ent_mtext_set_linespace_style(dwg_ent_mtext *mtext, unsigned int style,

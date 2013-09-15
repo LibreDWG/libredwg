@@ -20,16 +20,31 @@ output_object(dwg_object* obj){
 void
 low_level_process(dwg_object *obj)
 {
+  // casts dwg object to insert entity
   dwg_ent_insert *insert = dwg_object_to_INSERT(obj);
+
+  // prints insertion points
   printf("insert points : x = %f, y = %f, z = %f\t\n",
 	  insert->ins_pt.x, insert->ins_pt.y, insert->ins_pt.z);
+
+  // prints scale flag
   printf("scale flag for insert : %d\t\n", insert->scale_flag);
+
+  // prints scale points
   printf("scale points : x = %f, y = %f, z = %f\t\n",
 	  insert->scale.x, insert->scale.y, insert->scale.z);
+
+  // prints angle
   printf("angle for insert : %f\t\n", insert->rotation_ang);
+
+  // prints extrusion points
   printf("extrusion points : x = %f, y = %f, z = %f\t\n",
 	  insert->extrusion.x, insert->extrusion.y, insert->extrusion.z);
+
+  // prints attrib
   printf("attribs for insert : %d\t\n", insert->has_attribs);
+
+  // prints owned object count
   printf("object count for insert : %ld\t\n", insert->owned_obj_count);
 }
 
@@ -44,8 +59,9 @@ api_process(dwg_object *obj)
   long obj_count;
   dwg_ent_insert *insert = dwg_object_to_INSERT(obj);
 
+  // returns insertion point
   dwg_ent_insert_get_ins_pt(insert, &ins_pt, &ins_pt_error);
-  if(ins_pt_error == 0 )
+  if(ins_pt_error == 0 ) // error check
     {
       printf("insert points : x = %f, y = %f, z = %f\t\n",
 	     ins_pt.x, ins_pt.y, ins_pt.z);
@@ -55,8 +71,9 @@ api_process(dwg_object *obj)
       printf("error in reading insertion point\n");
     }
 
+  // returns scale flag
   scale_flag = dwg_ent_insert_get_scale_flag(insert, &flag_error); 
-  if(flag_error == 0)
+  if(flag_error == 0) // error check
     {
       printf("scale flag for insert : %d\t\n", scale_flag);
     }
@@ -65,8 +82,9 @@ api_process(dwg_object *obj)
       printf("error in reading scale flag\n");
     } 
 
+  // returns scale points
   dwg_ent_insert_get_scale(insert, &scale, &scale_error); 
-  if(scale_error == 0)
+  if(scale_error == 0) // error check
     {
       printf("scale points : x = %f, y = %f, z = %f\t\n",
 	     scale.x, scale.y, scale.z);
@@ -75,8 +93,10 @@ api_process(dwg_object *obj)
     {
       printf("error in reading scale \n");
     } 
+
+  // returns rotation angle
   rot_angle = dwg_ent_insert_get_rotation_angle(insert, &ang_error); 
-  if(ang_error == 0)
+  if(ang_error == 0) // error check
     {
       printf("angle for insert : %f\t\n", rot_angle);
     }
@@ -84,8 +104,10 @@ api_process(dwg_object *obj)
     {
       printf("error in reading rotation angle\n");
     } 
+
+  // returns extrusion points
   dwg_ent_insert_get_extrusion(insert, &ext, &ext_error); 
-  if(ext_error == 0)
+  if(ext_error == 0) // error check
     {
       printf("extrusion points : x = %f, y = %f, z = %f\t\n",
 	     ext.x, ext.y, ext.z);
@@ -95,8 +117,9 @@ api_process(dwg_object *obj)
       printf("error in reading extrusion \n");
     } 
 
+  // returns attriute
   attribs = dwg_ent_insert_get_has_attribs(insert, &attr_error); 
-  if(attr_error == 0)
+  if(attr_error == 0) // error check
     {
       printf("attribs for insert : %d\t\n", attribs);
     }
@@ -105,8 +128,9 @@ api_process(dwg_object *obj)
       printf("error in reading attribs\n");
     } 
 
+  // returns owned object count
   obj_count = dwg_ent_insert_get_owned_obj_count(insert, &count_error); 
-  if(count_error == 0)
+  if(count_error == 0) // error check
     {
       printf("object count for insert : %ld\t\n", obj_count);
     }
