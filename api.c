@@ -6,49 +6,93 @@
 *        Functions created from macro to extract entities           *
 ********************************************************************/
 
+/// Macro call to extract all text entities from a block
 GET_DWG_ENTITY(TEXT);
+/// Macro call to extract all attrib entities from a block
 GET_DWG_ENTITY(ATTRIB);
+/// Macro call to extract all attdef entities from a block
 GET_DWG_ENTITY(ATTDEF);
+/// Macro call to extract all block entities from a block
 GET_DWG_ENTITY(BLOCK);
+/// Macro call to extract endblk entity from a block
 GET_DWG_ENTITY(ENDBLK);
+/// Macro call to extract all seqend entities from a block
 GET_DWG_ENTITY(SEQEND);
+/// Macro call to extract all insert entities from a block
 GET_DWG_ENTITY(INSERT);
+/// Macro call to extract all minsert entities from a block
 GET_DWG_ENTITY(MINSERT);
+/// Macro call to extract all vertex_2d entities from a block
 GET_DWG_ENTITY(VERTEX_2D);
+/// Macro call to extract all vertex_3d entities from a block
 GET_DWG_ENTITY(VERTEX_3D);
+/// Macro call to extract all vertex_mesh entities from a block
 GET_DWG_ENTITY(VERTEX_MESH);
+/// Macro call to extract all vertex_pface entities from a block
 GET_DWG_ENTITY(VERTEX_PFACE);
+/// Macro call to extract all vertex_pface_face entities from a block
 GET_DWG_ENTITY(VERTEX_PFACE_FACE);
+/// Macro call to extract all polyline_2d entities from a block
 GET_DWG_ENTITY(POLYLINE_2D);
+/// Macro call to extract all polyline_3d entities from a block
 GET_DWG_ENTITY(POLYLINE_3D);
+/// Macro call to extract all arc entities from a block
 GET_DWG_ENTITY(ARC);
+/// Macro call to extract all circle entities from a block
 GET_DWG_ENTITY(CIRCLE);
+/// Macro call to extract all line entities from a block
 GET_DWG_ENTITY(LINE);
+/// Macro call to extract all dimension ordinate entities from a block
 GET_DWG_ENTITY(DIMENSION_ORDINATE);
+/// Macro call to extract all dimension linear entities from a block
 GET_DWG_ENTITY(DIMENSION_LINEAR);
+/// Macro call to extract all dimension aligned entities from a block
 GET_DWG_ENTITY(DIMENSION_ALIGNED);
+/// Macro call to extract all dimension ang3pt entities from a block
 GET_DWG_ENTITY(DIMENSION_ANG3PT);
+/// Macro call to extract all dimension ang2ln entities from a block
 GET_DWG_ENTITY(DIMENSION_ANG2LN);
+/// Macro call to extract all dimension radius entities from a block
 GET_DWG_ENTITY(DIMENSION_RADIUS);
+/// Macro call to extract all dimension diameter entities from a block
 GET_DWG_ENTITY(DIMENSION_DIAMETER);
+/// Macro call to extract all points entities from a block
 GET_DWG_ENTITY(POINT);
+/// Macro call to extract all polyline_pface entities from a block
 GET_DWG_ENTITY(POLYLINE_PFACE);
+/// Macro call to extract all polyline_mesh entities from a block
 GET_DWG_ENTITY(POLYLINE_MESH);
+/// Macro call to extract all solid entities from a block
 GET_DWG_ENTITY(SOLID);
+/// Macro call to extract all trace entities from a block
 GET_DWG_ENTITY(TRACE);
+/// Macro call to extract all shape entities from a block
 GET_DWG_ENTITY(SHAPE);
+/// Macro call to extract all viewport entities from a block
 GET_DWG_ENTITY(VIEWPORT);
+/// Macro call to extract all ellipse entities from a block
 GET_DWG_ENTITY(ELLIPSE);
+/// Macro call to extract all spline entities from a block
 GET_DWG_ENTITY(SPLINE);
+/// Macro call to extract all region entities from a block
 GET_DWG_ENTITY(REGION);
+/// Macro call to extract all body entities from a block
 GET_DWG_ENTITY(BODY);
+/// Macro call to extract all ray entities from a block
 GET_DWG_ENTITY(RAY);
+/// Macro call to extract all xline entities from a block
 GET_DWG_ENTITY(XLINE);
+/// Macro call to extract all mtext entities from a block
 GET_DWG_ENTITY(MTEXT);
+/// Macro call to extract all leader entities from a block
 GET_DWG_ENTITY(LEADER);
+/// Macro call to extract all tolerance entities from a block
 GET_DWG_ENTITY(TOLERANCE);
+/// Macro call to extract all mline entities from a block
 GET_DWG_ENTITY(MLINE);
+/// Macro call to extract all lwpline entities from a block
 GET_DWG_ENTITY(LWPLINE);
+/// Macro call to extract all hatch entities from a block
 GET_DWG_ENTITY(HATCH);
 
 /********************************************************************
@@ -57,59 +101,106 @@ GET_DWG_ENTITY(HATCH);
 *                where ENTITY can be LINE or CIRCLE                 *
 ********************************************************************/
 
+/// Macro call to cast dwg object to text
 CAST_DWG_OBJECT_TO_ENTITY(TEXT);
+/// Macro call to cast dwg object to attrib
 CAST_DWG_OBJECT_TO_ENTITY(ATTRIB);
+/// Macro call to cast dwg object to attdef
 CAST_DWG_OBJECT_TO_ENTITY(ATTDEF);
+/// Macro call to cast dwg object to block
 CAST_DWG_OBJECT_TO_ENTITY(BLOCK);
+/// Macro call to extract endblk entity from a block
 CAST_DWG_OBJECT_TO_ENTITY(ENDBLK);
+/// Macro call to cast dwg object to seqend
 CAST_DWG_OBJECT_TO_ENTITY(SEQEND);
+/// Macro call to cast dwg object to insert
 CAST_DWG_OBJECT_TO_ENTITY(INSERT);
+/// Macro call to cast dwg object to minsert
 CAST_DWG_OBJECT_TO_ENTITY(MINSERT);
+/// Macro call to cast dwg object to vertex_2d
 CAST_DWG_OBJECT_TO_ENTITY(VERTEX_2D);
+/// Macro call to cast dwg object to vertex_3d
 CAST_DWG_OBJECT_TO_ENTITY(VERTEX_3D);
+/// Macro call to cast dwg object to vertex_mesh
 CAST_DWG_OBJECT_TO_ENTITY(VERTEX_MESH);
+/// Macro call to cast dwg object to vertex_pface
 CAST_DWG_OBJECT_TO_ENTITY(VERTEX_PFACE);
+/// Macro call to cast dwg object to vertex_pface_face
 CAST_DWG_OBJECT_TO_ENTITY(VERTEX_PFACE_FACE);
+/// Macro call to cast dwg object to polyline_2d
 CAST_DWG_OBJECT_TO_ENTITY(POLYLINE_2D);
+/// Macro call to cast dwg object to polyline_3d
 CAST_DWG_OBJECT_TO_ENTITY(POLYLINE_3D);
+/// Macro call to cast dwg object to arc
 CAST_DWG_OBJECT_TO_ENTITY(ARC);
+/// Macro call to cast dwg object to circle
 CAST_DWG_OBJECT_TO_ENTITY(CIRCLE);
+/// Macro call to cast dwg object to line
 CAST_DWG_OBJECT_TO_ENTITY(LINE);
+/// Macro call to cast dwg object to dimension ordinate
 CAST_DWG_OBJECT_TO_ENTITY(DIMENSION_ORDINATE);
+/// Macro call to cast dwg object to dimension linear
 CAST_DWG_OBJECT_TO_ENTITY(DIMENSION_LINEAR);
+/// Macro call to cast dwg object to dimension aligned
 CAST_DWG_OBJECT_TO_ENTITY(DIMENSION_ALIGNED);
+/// Macro call to cast dwg object to dimension ang3pt
 CAST_DWG_OBJECT_TO_ENTITY(DIMENSION_ANG3PT);
+/// Macro call to cast dwg object to dimension ang2ln
 CAST_DWG_OBJECT_TO_ENTITY(DIMENSION_ANG2LN);
+/// Macro call to cast dwg object to dimension radius
 CAST_DWG_OBJECT_TO_ENTITY(DIMENSION_RADIUS);
+/// Macro call to cast dwg object to dimension diameter
 CAST_DWG_OBJECT_TO_ENTITY(DIMENSION_DIAMETER);
+/// Macro call to cast dwg object to points
 CAST_DWG_OBJECT_TO_ENTITY(POINT);
+/// Macro call to cast dwg object to polyline_pface
 CAST_DWG_OBJECT_TO_ENTITY(POLYLINE_PFACE);
+/// Macro call to cast dwg object to polyline_mesh
 CAST_DWG_OBJECT_TO_ENTITY(POLYLINE_MESH);
+/// Macro call to cast dwg object to solid
 CAST_DWG_OBJECT_TO_ENTITY(SOLID);
+/// Macro call to cast dwg object to trace
 CAST_DWG_OBJECT_TO_ENTITY(TRACE);
+/// Macro call to cast dwg object to shape
 CAST_DWG_OBJECT_TO_ENTITY(SHAPE);
+/// Macro call to cast dwg object to viewport
 CAST_DWG_OBJECT_TO_ENTITY(VIEWPORT);
+/// Macro call to cast dwg object to ellipse
 CAST_DWG_OBJECT_TO_ENTITY(ELLIPSE);
+/// Macro call to cast dwg object to spline
 CAST_DWG_OBJECT_TO_ENTITY(SPLINE);
+/// Macro call to cast dwg object to region
 CAST_DWG_OBJECT_TO_ENTITY(REGION);
+/// Macro call to cast dwg object to body
 CAST_DWG_OBJECT_TO_ENTITY(BODY);
+/// Macro call to cast dwg object to ray
 CAST_DWG_OBJECT_TO_ENTITY(RAY);
+/// Macro call to cast dwg object to xline
 CAST_DWG_OBJECT_TO_ENTITY(XLINE);
+/// Macro call to cast dwg object to mtext
 CAST_DWG_OBJECT_TO_ENTITY(MTEXT);
+/// Macro call to cast dwg object to leader
 CAST_DWG_OBJECT_TO_ENTITY(LEADER);
+/// Macro call to cast dwg object to tolerance
 CAST_DWG_OBJECT_TO_ENTITY(TOLERANCE);
+/// Macro call to cast dwg object to mline
 CAST_DWG_OBJECT_TO_ENTITY(MLINE);
+/// Macro call to cast dwg object to lwpline
 CAST_DWG_OBJECT_TO_ENTITY(LWPLINE);
+/// Macro call to cast dwg object to hatch
 CAST_DWG_OBJECT_TO_ENTITY(HATCH);
 
+
 /********************************************************************
-*     Functions created from macro to cast dwg_object to object     *
+*     Functions created from macro to cast dwg object to object     *
 *                 Usage :- dwg_object_to_OBJECT(),                  *
 *            where OBJECT can be LAYER or BLOCK_HEADER              *
 ********************************************************************/
-
+/// Macro call to cast dwg object to block header
 CAST_DWG_OBJECT_TO_OBJECT(BLOCK_HEADER);
+/// Macro call to cast dwg object to block control
 CAST_DWG_OBJECT_TO_OBJECT(BLOCK_CONTROL);
+/// Macro call to cast dwg object to layer
 CAST_DWG_OBJECT_TO_OBJECT(LAYER);
 
 /********************************************************************
@@ -120,7 +211,7 @@ CAST_DWG_OBJECT_TO_OBJECT(LAYER);
 *                    FUNCTIONS FOR CIRCLE ENTITY                    *
 ********************************************************************/
 
-/* This function creates and returns a new circle entity with default 
+/** This function creates and returns a new circle entity with default 
 values.
 Usage : dwg_ent_circle_new();
 */
@@ -138,7 +229,7 @@ dwg_ent_circle_new(int *error)
       *error = 1;
 }
 
-/* This function frees the memory allocated by the dwg_ent_circle_new()
+/** This function frees the memory allocated by the dwg_ent_circle_new()
 function.
 Usage :- dwg_ent_circle_delete();
 */
@@ -153,7 +244,6 @@ dwg_ent_circle_delete(dwg_ent_circle *circle, int *error)
   else
     *error = 1;
 }
-
 
 /* This function initialises a new circle entity with default values.
 Usage :- dwg_ent_circle_init(circle);
@@ -174,10 +264,11 @@ dwg_ent_circle_init(dwg_ent_circle *circle)
   return circle;
 }
 
-/* Returns the center values of circle to second argument.
-Usage :- dwg_ent_circle_get_center(circle, point);
-where circle is a pointer of dwg_ent_circle type and point is 
-of dwg_point_3d
+/** Returns the center values of circle to second argument.
+Usage : dwg_ent_circle_get_center(circle, &point, &error);
+arg 1 : dwg_ent_circle
+arg 2 : dwg_point_3d
+arg 3 : int
 */
 void
 dwg_ent_circle_get_center(dwg_ent_circle *circle, dwg_point_3d *point, 
@@ -194,10 +285,11 @@ dwg_ent_circle_get_center(dwg_ent_circle *circle, dwg_point_3d *point,
     *error = 1;
 }
 
-/* Sets the circle center equal to values from second argument.
-Usage :- dwg_ent_circle_set_center(circle, point);
-where circle is a pointer of dwg_ent_circle type and point is 
-of dwg_point_3d
+/** sets the center values of circle.
+Usage : dwg_ent_circle_set_center(circle, &point, &error);
+arg 1 : dwg_ent_circle
+arg 2 : dwg_point_3d
+arg 3 : int
 */
 void
 dwg_ent_circle_set_center(dwg_ent_circle *circle, dwg_point_3d *point,
@@ -214,10 +306,10 @@ dwg_ent_circle_set_center(dwg_ent_circle *circle, dwg_point_3d *point,
     *error = 1;
 }
 
-/* Returns radius of circle entity passed in argument.
-Usage :- 
-double circle_radius;
-circle_radius = dwg_ent_circle_get_radius(circle); 
+/** returns the circle radius.
+Usage : double radius = dwg_ent_circle_get_radius(circle, &error);
+arg 1 : dwg_ent_circle
+arg 2 : int
 */
 double
 dwg_ent_circle_get_radius(dwg_ent_circle *circle, int *error)
@@ -231,10 +323,11 @@ dwg_ent_circle_get_radius(dwg_ent_circle *circle, int *error)
     *error = 1;
 }
 
-/* Sets radius of a circle entity passed in 
-first argument equal to (radius) value in second argument.
-dwg_ent_circle_set_radius(circle, 50.0);
-so circle radius becomes 50.0 
+/** sets the circle radius.
+Usage : dwg_ent_circle_set_radius(circle, radius, &error);
+arg 1 : dwg_ent_circle
+arg 2 : double
+arg 3 : int
 */
 void
 dwg_ent_circle_set_radius(dwg_ent_circle *circle, double radius, int *error)
@@ -248,10 +341,10 @@ dwg_ent_circle_set_radius(dwg_ent_circle *circle, double radius, int *error)
     *error = 1;
 }
 
-/* Returns thickness of entity passed in argument.
-Usage :- 
-double thickness;
-thickness = dwg_ent_circle_get_thickness(circle);
+/** returns the circle thickness.
+Usage : double thickness = dwg_ent_circle_get_thickness(circle, &error);
+arg 1 : dwg_ent_circle
+arg 2 : int
 */
 double
 dwg_ent_circle_get_thickness(dwg_ent_circle *circle, int *error)
@@ -265,10 +358,10 @@ dwg_ent_circle_get_thickness(dwg_ent_circle *circle, int *error)
     *error = 1;
 }
 
-/* Sets thickness of a circle entity passed in 
-first argument equal to (thickness) value in second argument.
-Usage :- dwg_ent_circle_set_thickness(circle, 50.0);
-circle thickness becomes 50.0 
+/** sets the circle thickness.
+Usage : dwg_ent_circle_set_thickness(circle, thickness, &error);
+arg 1 : dwg_ent_circle
+arg 2 : int
 */
 void
 dwg_ent_circle_set_thickness(dwg_ent_circle *circle, double thickness,
@@ -283,15 +376,11 @@ dwg_ent_circle_set_thickness(dwg_ent_circle *circle, double thickness,
     *error = 1;
 }
 
-/* This function sets the extrusion values of a circle entity equal to 
-values in second argument.
-extrusion_value.x = 10.0;
-extrusion_value.y = 0.0;
-extrusion_value.z = 0.0;
-Usage :- dwg_ent_circle_set_extrusion(circle, extrusion_value);
-where circle is an entity of circle type, and extrusion value contains
-the x, y and z values
-hence circle->extrusion.x = 10.0
+/** returns extrusion value of circle.
+Usage :- dwg_ent_circle_get_extrusion(circle, &point, &error);
+arg 1 : dwg_ent_circle
+arg 2 : dwg_point_3d
+arg 3 : int
 */
 void
 dwg_ent_circle_set_extrusion(dwg_ent_circle *circle, dwg_point_3d *vector,
@@ -308,13 +397,11 @@ dwg_ent_circle_set_extrusion(dwg_ent_circle *circle, dwg_point_3d *vector,
     *error = 1;
 }
 
-/* This function returns the extrusion values of a circle entity 
-into second argument.
-Usage :- dwg_ent_circle_get_extrusion(circle, extrusion_value);
-where circle is an entity of circle type, and extrusion value contains
-the x, y and z values
-if circle->extrusion.x = 50.0 after calling function 
-extrusion_value.x = 50.0
+/** sets extrusion value of circle.
+Usage :- dwg_ent_circle_set_extrusion(circle, &point, &error);
+arg 1 : dwg_ent_circle
+arg 2 : dwg_point_3d
+arg 3 : int
 */
 void
 dwg_ent_circle_get_extrusion(dwg_ent_circle *circle, dwg_point_3d *vector,
@@ -9380,7 +9467,7 @@ dwg_ent_ole2frame_set_data(dwg_ent_ole2frame *frame, char * data, int *error)
 ********************************************************************/
 
 unsigned int
-dwg_entity_spline_get_scenario(dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_scenario(dwg_ent_spline *spline, int *error)
 {
   if(spline != 0)
     {
@@ -9392,7 +9479,7 @@ dwg_entity_spline_get_scenario(dwg_ent_spline *spline, int *error)
 }
 
 void
-dwg_entity_spline_set_scenario(dwg_ent_spline *spline, unsigned int scenario,
+dwg_ent_spline_set_scenario(dwg_ent_spline *spline, unsigned int scenario,
                                int *error)
 {
   if(spline != 0)
@@ -9405,7 +9492,7 @@ dwg_entity_spline_set_scenario(dwg_ent_spline *spline, unsigned int scenario,
 }
 
 unsigned int
-dwg_entity_spline_get_degree(dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_degree(dwg_ent_spline *spline, int *error)
 {
   if(spline != 0)
     {
@@ -9417,7 +9504,7 @@ dwg_entity_spline_get_degree(dwg_ent_spline *spline, int *error)
 }
 
 void
-dwg_entity_spline_set_degree(dwg_ent_spline *spline, unsigned int degree,
+dwg_ent_spline_set_degree(dwg_ent_spline *spline, unsigned int degree,
                              int *error)
 {
   if(spline != 0)
@@ -9430,7 +9517,7 @@ dwg_entity_spline_set_degree(dwg_ent_spline *spline, unsigned int degree,
 }
 
 double
-dwg_entity_spline_get_fit_tol(dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_fit_tol(dwg_ent_spline *spline, int *error)
 {
   if(spline != 0)
     {
@@ -9442,7 +9529,7 @@ dwg_entity_spline_get_fit_tol(dwg_ent_spline *spline, int *error)
 }
 
 void
-dwg_entity_spline_set_fit_tol(dwg_ent_spline *spline, int fit_tol, int *error)
+dwg_ent_spline_set_fit_tol(dwg_ent_spline *spline, int fit_tol, int *error)
 {
   if(spline != 0)
     {
@@ -9454,7 +9541,7 @@ dwg_entity_spline_set_fit_tol(dwg_ent_spline *spline, int fit_tol, int *error)
 }
 
 void
-dwg_entity_spline_get_begin_tan_vector(dwg_ent_spline *spline,
+dwg_ent_spline_get_begin_tan_vector(dwg_ent_spline *spline,
                                        dwg_point_3d *point, int *error)
 {
   if(spline != 0)
@@ -9469,7 +9556,7 @@ dwg_entity_spline_get_begin_tan_vector(dwg_ent_spline *spline,
 }
 
 void
-dwg_entity_spline_set_begin_tan_vector(dwg_ent_spline *spline,
+dwg_ent_spline_set_begin_tan_vector(dwg_ent_spline *spline,
                                        dwg_point_3d *point, int *error)
 {
   if(spline != 0)
@@ -9484,7 +9571,7 @@ dwg_entity_spline_set_begin_tan_vector(dwg_ent_spline *spline,
 }
 
 void
-dwg_entity_spline_get_end_tan_vector(dwg_ent_spline *spline,
+dwg_ent_spline_get_end_tan_vector(dwg_ent_spline *spline,
                                      dwg_point_3d *point, int *error)
 {
   if(spline != 0)
@@ -9499,7 +9586,7 @@ dwg_entity_spline_get_end_tan_vector(dwg_ent_spline *spline,
 }
 
 void
-dwg_entity_spline_set_end_tan_vector(dwg_ent_spline *spline,
+dwg_ent_spline_set_end_tan_vector(dwg_ent_spline *spline,
                                      dwg_point_3d *point, int *error)
 {
   if(spline != 0)
@@ -9514,7 +9601,7 @@ dwg_entity_spline_set_end_tan_vector(dwg_ent_spline *spline,
 }
 
 double
-dwg_entity_spline_get_knot_tol(dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_knot_tol(dwg_ent_spline *spline, int *error)
 {
   if(spline != 0)
     {
@@ -9526,7 +9613,7 @@ dwg_entity_spline_get_knot_tol(dwg_ent_spline *spline, int *error)
 }
 
 void
-dwg_entity_spline_set_knot_tol(dwg_ent_spline *spline, double knot_tol,
+dwg_ent_spline_set_knot_tol(dwg_ent_spline *spline, double knot_tol,
                                int *error)
 {
   if(spline != 0)
@@ -9539,7 +9626,7 @@ dwg_entity_spline_set_knot_tol(dwg_ent_spline *spline, double knot_tol,
 }
 
 double
-dwg_entity_spline_get_ctrl_tol(dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_ctrl_tol(dwg_ent_spline *spline, int *error)
 {
   if(spline != 0)
     {
@@ -9551,7 +9638,7 @@ dwg_entity_spline_get_ctrl_tol(dwg_ent_spline *spline, int *error)
 }
 
 void
-dwg_entity_spline_set_ctrl_tol(dwg_ent_spline *spline, double ctrl_tol,
+dwg_ent_spline_set_ctrl_tol(dwg_ent_spline *spline, double ctrl_tol,
                                int *error)
 {
   if(spline != 0)
@@ -9564,7 +9651,7 @@ dwg_entity_spline_set_ctrl_tol(dwg_ent_spline *spline, double ctrl_tol,
 }
 
 unsigned int
-dwg_entity_spline_get_num_fit_pts(dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_num_fit_pts(dwg_ent_spline *spline, int *error)
 {
   if(spline != 0)
     {
@@ -9576,7 +9663,7 @@ dwg_entity_spline_get_num_fit_pts(dwg_ent_spline *spline, int *error)
 }
 
 void
-dwg_entity_spline_set_num_fit_pts(dwg_ent_spline *spline, int num_fit_pts,
+dwg_ent_spline_set_num_fit_pts(dwg_ent_spline *spline, int num_fit_pts,
                                   int *error)
 {
   if(spline != 0)
@@ -9589,7 +9676,7 @@ dwg_entity_spline_set_num_fit_pts(dwg_ent_spline *spline, int num_fit_pts,
 }
 
 char
-dwg_entity_spline_get_rational(dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_rational(dwg_ent_spline *spline, int *error)
 {
   if(spline != 0)
     {
@@ -9601,7 +9688,7 @@ dwg_entity_spline_get_rational(dwg_ent_spline *spline, int *error)
 }
 
 void
-dwg_entity_spline_set_rational(dwg_ent_spline *spline, char rational,
+dwg_ent_spline_set_rational(dwg_ent_spline *spline, char rational,
                                int *error)
 {
   if(spline != 0)
@@ -9614,7 +9701,7 @@ dwg_entity_spline_set_rational(dwg_ent_spline *spline, char rational,
 }
 
 char
-dwg_entity_spline_get_closed_b(dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_closed_b(dwg_ent_spline *spline, int *error)
 {
   if(spline != 0)
     {
@@ -9626,7 +9713,7 @@ dwg_entity_spline_get_closed_b(dwg_ent_spline *spline, int *error)
 }
 
 void
-dwg_entity_spline_set_closed_b(dwg_ent_spline *spline, char closed_b,
+dwg_ent_spline_set_closed_b(dwg_ent_spline *spline, char closed_b,
                                int *error)
 {
   if(spline != 0)
@@ -9639,7 +9726,7 @@ dwg_entity_spline_set_closed_b(dwg_ent_spline *spline, char closed_b,
 }
 
 char
-dwg_entity_spline_get_weighted(dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_weighted(dwg_ent_spline *spline, int *error)
 {
   if(spline != 0)
     {
@@ -9651,7 +9738,7 @@ dwg_entity_spline_get_weighted(dwg_ent_spline *spline, int *error)
 }
 
 void
-dwg_entity_spline_set_weighted(dwg_ent_spline *spline, char weighted,
+dwg_ent_spline_set_weighted(dwg_ent_spline *spline, char weighted,
                                int *error)
 {
   if(spline != 0)
@@ -9664,7 +9751,7 @@ dwg_entity_spline_set_weighted(dwg_ent_spline *spline, char weighted,
 }
 
 char
-dwg_entity_spline_get_periodic(dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_periodic(dwg_ent_spline *spline, int *error)
 {
   if(spline != 0)
     {
@@ -9676,7 +9763,7 @@ dwg_entity_spline_get_periodic(dwg_ent_spline *spline, int *error)
 }
 
 void
-dwg_entity_spline_set_periodic(dwg_ent_spline *spline, char periodic,
+dwg_ent_spline_set_periodic(dwg_ent_spline *spline, char periodic,
                                int *error)
 {
   if(spline != 0)
@@ -9689,7 +9776,7 @@ dwg_entity_spline_set_periodic(dwg_ent_spline *spline, char periodic,
 }
 
 long
-dwg_entity_spline_get_num_knots(dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_num_knots(dwg_ent_spline *spline, int *error)
 {
   if(spline != 0)
     {
@@ -9701,7 +9788,7 @@ dwg_entity_spline_get_num_knots(dwg_ent_spline *spline, int *error)
 }
 
 void
-dwg_entity_spline_set_num_knots(dwg_ent_spline *spline, long nums, int *error)
+dwg_ent_spline_set_num_knots(dwg_ent_spline *spline, long nums, int *error)
 {
   if(spline != 0)
     {
@@ -9713,7 +9800,7 @@ dwg_entity_spline_set_num_knots(dwg_ent_spline *spline, long nums, int *error)
 }
 
 long
-dwg_entity_spline_get_num_ctrl_pts(dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_num_ctrl_pts(dwg_ent_spline *spline, int *error)
 {
   if(spline != 0)
     {
@@ -9725,7 +9812,7 @@ dwg_entity_spline_get_num_ctrl_pts(dwg_ent_spline *spline, int *error)
 }
 
 void
-dwg_entity_spline_set_num_ctrl_pts(dwg_ent_spline *spline, long nums,
+dwg_ent_spline_set_num_ctrl_pts(dwg_ent_spline *spline, long nums,
                                    int *error)
 {
   if(spline != 0)
@@ -12375,7 +12462,7 @@ dwg_ent_3dsolid_set_num_wires(dwg_ent_3dsolid *_3dsolid, long num, int *error)
 }
 
 dwg_ent_solid_wire *
-dwg_ent_3dsolid_set_wire(dwg_ent_3dsolid *_3dsolid, int *error)
+dwg_ent_3dsolid_get_wire(dwg_ent_3dsolid *_3dsolid, int *error)
 {
   dwg_ent_solid_wire *ptx = (dwg_ent_solid_wire*)
   malloc(sizeof(dwg_ent_solid_wire)* _3dsolid->num_wires);

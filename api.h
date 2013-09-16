@@ -3576,7 +3576,7 @@ void
 dwg_ent_3dsolid_set_num_wires(dwg_ent_3dsolid *_3dsolid, long num, int *error);
 
 dwg_ent_solid_wire *
-dwg_ent_3dsolid_set_wire(dwg_ent_3dsolid *_3dsolid, int *error);
+dwg_ent_3dsolid_get_wire(dwg_ent_3dsolid *_3dsolid, int *error);
 
 long
 dwg_ent_3dsolid_get_num_silhouettes(dwg_ent_3dsolid *_3dsolid, int *error);

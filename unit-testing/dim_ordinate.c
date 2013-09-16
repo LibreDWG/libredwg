@@ -51,7 +51,7 @@ low_level_process(dwg_object *obj)
   // prints extrusion points
   printf("extrusion of dim_ordinate : x = %f, y = %f, z = %f\t\n",
           dim_ordinate->extrusion.x, dim_ordinate->extrusion.y,
-          dim_ordiinate->extrusion.z);
+          dim_ordinate->extrusion.z);
 
   // prints scale
   printf("ins_scale of dim_ordinate : x = %f, y = %f, z = %f\t\n",
