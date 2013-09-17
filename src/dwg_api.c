@@ -1277,6 +1277,8 @@ dwg_ent_text_set_insertion_point(dwg_ent_text *text, dwg_point_2d *point,
 
 /// Returns height of a text.
 /** Usage :- double height = dwg_ent_text_get_height(text);
+\param 1 dwg_ent_text
+\param 2 int
 */
 double
 dwg_ent_text_get_height(dwg_ent_text *text, int *error)
@@ -1292,9 +1294,9 @@ dwg_ent_text_get_height(dwg_ent_text *text, int *error)
 
 /// Sets height of Text
 /** Usage :- dwg_ent_text_set_height(text, 100, &error);
-\param dwg_ent_text
-\param double
-\param int
+\param 1 dwg_ent_text
+\param 2 double
+\param 3 int
 */
 void
 dwg_ent_text_set_height(dwg_ent_text *text, double height, int *error)
@@ -1310,9 +1312,9 @@ dwg_ent_text_set_height(dwg_ent_text *text, double height, int *error)
 
 /// Returns extrusion value
 /** Usage : dwg_ent_text_get_extrusion(text, &point, &error);
-\param dwg_ent_text
-\param dwg_point_2d
-\param int
+\param 1 dwg_ent_text
+\param 2 dwg_point_2d
+\param 3 int
 */
 void
 dwg_ent_text_get_extrusion(dwg_ent_text *text, dwg_point_3d *vector,
@@ -1331,9 +1333,9 @@ dwg_ent_text_get_extrusion(dwg_ent_text *text, dwg_point_3d *vector,
 
 /// Sets the text extrusion value.
 /** Usage :- dwg_ent_text_set_extrusion(text, &point, &error);
-\param dwg_ent_text
-\param dwg_point_2d
-\param int
+\param 1 dwg_ent_text
+\param 2 dwg_point_2d
+\param 3 int
 */
 void
 dwg_ent_text_set_extrusion(dwg_ent_text *text, dwg_point_3d *vector,
@@ -1701,6 +1703,9 @@ dwg_ent_attrib_get_rot_angle(dwg_ent_attrib *attrib, int *error)
 
 /// This sets the rotation angle of a attrib entity equal to value in second argument.
 /** Usage :- dwg_ent_attrib_set_rot_angle(attrib, angle);
+\param dwg_ent_attrib
+
+
 */
 void
 dwg_ent_attrib_set_rot_angle(dwg_ent_attrib *attrib, double angle, int *error)

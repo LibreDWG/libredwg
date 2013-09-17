@@ -1,4 +1,5 @@
-all : 3dsolid arc attdef attrib block body circle dim_aligned dim_ang2ln dim_ang3pt dim_diameter dim_linear dim_ordinate dim_radius ellipse endblk insert line lwpline minsert mline mtext point polyline_2d polyline_3d polyline_mesh polyline_pface ray region seqend shape solid text tolerance trace vertex_2d vertex_3d vertex_mesh vertex_pface xline 
+all :
+check : 3dsolid arc attdef attrib block body circle dim_aligned dim_ang2ln dim_ang3pt dim_diameter dim_linear dim_ordinate dim_radius ellipse endblk insert line lwpline minsert mline mtext point polyline_2d polyline_3d polyline_mesh polyline_pface ray region seqend shape solid text tolerance trace vertex_2d vertex_3d vertex_mesh vertex_pface xline 
 3dsolid : 3dsolid.c
 	gcc -g -o 3dsolid 3dsolid.c -lredwg -lm
 arc : arc.c
