@@ -24,7 +24,6 @@
 #include <math.h>
 #include <dwg.h>
 #include "api.h"
-#include "api.c"
 //#include "../src/bits.h"
 //#include "suffix.c"
 
