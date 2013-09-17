@@ -27,12 +27,12 @@ libredwg_la_SOURCES = \
         decode_r2007.c \
 	encode.c \
         print.c \
-	api.c
+	dwg_api.c
 libredwg_la_LDFLAGS = \
 	-version-info 0:0:0
 
 include_HEADERS = dwg.h \
-		api.h
+		dwg_api.h
 EXTRA_DIST = \
 	dwg.spec \
         header_variables.spec \

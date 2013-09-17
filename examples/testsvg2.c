@@ -23,7 +23,7 @@
 #include <unistd.h>
 #include <math.h>
 #include <dwg.h>
-#include "api.h"
+#include <dwg_api.h>
 //#include "../src/bits.h"
 //#include "suffix.c"
 

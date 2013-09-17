@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <math.h>
 #include <dwg.h>
-#include <api.h>
+#include <dwg_api.h>
 
 /// This function Declaration reads DWG file
 int
