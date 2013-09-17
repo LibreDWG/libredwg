@@ -1,0 +1,1766 @@
+Generating full history
+----------
+2010-07-21  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	[r] Initial R2010 support
+	*common.h: added R_2010 do version enum
+	*common.c: added R2010 version string
+
+2010-07-21  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	[r] Fixing error in file structure decoding
+	* src/decode.c: checking if links are present (now code complies to spec)
+
+2010-07-07  acardoso  <apierre.cardoso@gmail.com>
+
+	added compiling flag for enable write support (--enable-write), uncommented write functions and added a dwg_encoder_header_variables function
+
+2010-06-07  Thien-Thi Nguyen  <ttn@gnuvola.org>
+
+	[admin] Fix Git portability bug: Use ‘--pretty=format:STR’.
+	* build-aux/create-changelog: Use ‘--pretty-format:STR’
+	instead of ‘--format=STR’, which is not yet widely supported.
+
+2010-06-05  Till Heuschmann  <theuschmann@gmail.com>
+
+	[admin] updating copyright notices
+
+2010-04-28  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	[admin] updating file headers and copyright notices
+
+2010-04-28  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	[admin] adding *~ pattern to .gitignore
+
+2010-04-28  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	[admin] Update AUTHORS file
+
+2010-03-15  Thien-Thi Nguyen  <ttn@gnuvola.org>
+
+	[admin] Mention Texinfo in HACKING.
+	* HACKING (other tools): New section.
+
+2010-03-14  Till Heuschmann  <theuschmann@gmail.com>
+
+	[r] decode DICTIONARYWDLFT and PLACEHOLDER * src/decode.c: call decoding functions according to dxf class name * src/dwg.h: complete structs (Dwg_Object_DICTIONARYWDLFT, Dwg_Object_PLACEHOLDE) * src/dwg.spec: add decoding functions
+
+2010-03-14  Till Heuschmann  <theuschmann@gmail.com>
+
+	[r] decode Xrecord * src/decode.c: add function dwg_decode_xdata to decode arbitrary data streams * src/dwg.h: add the struct Dwg_Resbuf which represents a result buffer
+
+2010-03-03  Till Heuschmann  <theuschmann@gmail.com>
+
+	[r] read objects with fixed types
+	* src/decode.c: decode LWPLINE, HATCH, XRECORD, LAYOUT when stored with fixed type
+	* src/dwg.h: added values to Dwg_Object_Type
+	* src/dwg.spec: fixed LAYOUT decoding (2004 only), fixed LWPLINE decoding
+	* src/encode.c: added FIELD_2DD_VECTOR macro
+	* src/print.c: added FIELD_2DD_VECTOR macro
+
+2010-02-23  Till Heuschmann  <theuschmann@gmail.com>
+
+	[r] fix Tolerance, View and Ucs decoding
+	* src/dwg.h: new field origin (Dwg_Object_UCS)
+	  change type of text_string to BITCODE_TV (Dwg_Entity_TOLERANCE)
+	* src/dwg.spec: fixed decoding
+
+2010-02-23  Thien-Thi Nguyen  <ttn@gnuvola.org>
+
+	[dist] Arrange to also distribute file README-alpha.
+	* README-alpha: New file.
+	* Makefile.am (EXTRA_DIST): Add README-alpha.
+	* README: Remove version, which is btw incorrect, from first line.
+
+2010-02-23  Thien-Thi Nguyen  <ttn@gnuvola.org>
+
+	[build] Arrange for automake to *not* AC_DEFINE `VERSION'.
+	* configure.in (AM_INIT_AUTOMAKE): Specify `no-define'.
+	* src/common.h (VERSION): No longer #undef this.
+
+2010-02-23  Thien-Thi Nguyen  <ttn@gnuvola.org>
+
+	[build] In configure.in, use one-arg AM_INIT_AUTOMAKE form.
+	* configure.in (AM_INIT_AUTOMAKE): Use one-arg form.
+
+2010-02-23  Thien-Thi Nguyen  <ttn@gnuvola.org>
+
+	[dist] Update Makefile.am EXTRA_DIST vars.
+	* examples/Makefile.am (EXTRA_DIST): Add example.dwg, suffix.c, $(TESTS).
+	* src/Makefile.am (EXTRA_DIST): Add dwg.spec, logging.h; remove example.dwg.
+
+2010-02-23  Thien-Thi Nguyen  <ttn@gnuvola.org>
+
+	[test] Avoid segfault in testSVG.
+	* examples/testSVG.c (output_BLOCK_HEADER):
+	If `ref->obj->tio.object' is NULL, say so
+	to stderr and skip the "<g>..</g>" output.
+
+2010-02-23  Thien-Thi Nguyen  <ttn@gnuvola.org>
+
+	[build doc] Add texinfo for LibreWDG manual plus infrastructure.
+	* doc/LibreDWG.texi: New file.
+	* doc/fdl.texi: New file.
+	* doc/Makefile.am: New file.
+	* configure.in (AC_CONFIG_FILES): Add doc/Makefile.
+	* Makefile.am (SUBDIRS): Add doc.
+
+2010-02-23  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	[admin] updating TODO file; nfc
+	*TODO: remove tasks already done, added new tasks and updated others
+
+2010-02-23  Felipe Correa da Silva Sanches  <juca@members.fsf.org>
+
+	[r] fix 3dsolid decoding
+	* src/dwg.h: new field for 3dsolid (ACIS_empty_bit)
+	* src/dwg.spec: fixed decoding of fields
+
+2010-02-22  Felipe Correa da Silva Sanches  <juca@members.fsf.org>
+
+	[r] deobfuscate SAT data from 3dsolid objects
+	* src/dwg.spec: de-obfuscation routine
+	* src/dwg.h: a new unsigned char* field for storing the raw SAT data
+
+2010-02-23  Thien-Thi Nguyen  <ttn@gnuvola.org>
+
+	[test] Add "make check" support plus aliveness test.
+	* examples/Makefile.am (TESTS_ENVIRONMENT, TESTS): New vars.
+	* examples/alive.test: New file.
+	* README (Building and installing the library): Mention "make check".
+	* .gitignore: Update ignorance; nfc.
+
+2010-02-23  Thien-Thi Nguyen  <ttn@gnuvola.org>
+
+	[test] Don't hardcode input/output file names; require `argv[1]'.
+	* examples/suffix.c: New file.
+	* examples/dwg_ps.c: #include "suffix.c".
+	(INPUT_FILE, OUTPUT_FILE): Delete #define:s.
+	(main): Use `REQUIRE_INPUT_FILE_ARG', `suffix'.
+	* examples/get_bmp.c: #include "suffix.c".
+	(INPUT_FILE, OUTPUT_FILE): Delete #define:s.
+	(get_bmp): Use `suffix'.
+	(main): Use `REQUIRE_INPUT_FILE_ARG'.
+	* examples/load_dwg.c: #include "suffix.c".
+	(INPUT_FILE): Delete #define.
+	(main): Use `REQUIRE_INPUT_FILE_ARG'.
+	* examples/test.c: #include "suffix.c".
+	(main): Use `REQUIRE_INPUT_FILE_ARG'.
+	(FILENAME): Delete #define.
+	(test_dwg_c): Don't bother with NULL `filename'.
+	* examples/testSVG.c: #include "suffix.c".
+	(main): Use `REQUIRE_INPUT_FILE_ARG'.
+	(FILENAME): Delete #define.
+	(test_SVG): Don't bother with NULL `filename'.
+
+2010-02-23  Thien-Thi Nguyen  <ttn@gnuvola.org>
+
+	[C test] Make sure `main' returns 0 or 1.
+	* examples/dwg_ps.c (main): Specify type of return value.
+	On failure to read dwg file, return 1.
+	* examples/test.c (test_dwg_c): Clamp return value to 0 or 1.
+	* examples/testSVG.c (test_SVG): Likewise.
+
+2010-02-22  Thien-Thi Nguyen  <ttn@gnuvola.org>
+
+	[test build] Check for pslib; build examples/dwg_ps only if present.
+	* configure.in: Add checks for function `PS_open_file'
+	in libps, and header file "libps/pslib.h".
+	(HAVE_LIBPS): New AM_CONDITIONAL.
+	* examples/Makefile.am (check_PROGRAMS): Remove `dwg_ps'.
+	[HAVE_LIBPS] Add `dwg_ps' to `check_PROGRAMS'.
+	[HAVE_LIBPS] (dwg_ps_SOURCES, dwg_ps_LDADD):
+	Move these variables inside this conditional block.
+	* README: Mention pslib non-critical requirement.
+
+2010-02-22  Felipe Correa da Silva Sanches  <juca@members.fsf.org>
+
+	[r] fix 3dsolid parsing segfault
+	* src/dwg.h: block_size is now a vector
+	* src/dwg.spec: store the values of block_size for each sat_data block
+
+2010-02-22  Thien-Thi Nguyen  <ttn@gnuvola.org>
+
+	[test build] Factor common LDFLAGS for examples/.
+	* examples/Makefile.am (AM_LDFLAGS): New var.
+	(test_LDADD, load_dwg_LDADD, get_bmp_LDADD): Delete vars.
+	(testSVG_LDADD, dwg_ps_LDADD): From these vars, remove `-lredwg'.
+
+2010-02-22  Thien-Thi Nguyen  <ttn@gnuvola.org>
+
+	[test build] Enable builddir!=srcdir operation in examples/.
+	* examples/Makefile.am (AM_CFLAGS): Use $(top_srcdir), not "..".
+
+2010-02-22  Thien-Thi Nguyen  <ttn@gnuvola.org>
+
+	[build w] Add runtime tracing support for write (encode) path.
+	* src/encode.c: #include <stdbool.h>.
+	(loglevel): Change type to `unsigned int'.
+	[USE_TRACING] (DWG_LOGLEVEL): New #define.
+	[USE_TRACING] (env_var_checked_p): New static var.
+	(dwg_encode_chains) [USE_TRACING]: Before starting,
+	set the logging level, but only do so once.
+
+2010-02-22  Thien-Thi Nguyen  <ttn@gnuvola.org>
+
+	[build r] Add runtime tracing support for read (decode) path.
+	* src/decode.c: #include <stdbool.h>.
+	(loglevel): Change type to `unsigned int'.
+	[USE_TRACING] (DWG_LOGLEVEL): Move this into conditional
+	block; change definition to be the variable `loglevel'.
+	[USE_TRACING] (env_var_checked_p): New static var.
+	(dwg_decode_data) [USE_TRACING]: Before starting,
+	set the logging level, but only do so once.
+
+2010-02-22  Thien-Thi Nguyen  <ttn@gnuvola.org>
+
+	[build] Add preliminary "configure --enable-trace" support.
+	* configure.in (trace): New AC_ARG_ENABLE.  If specified
+	on the configure command-line, do AC_DEFINE([USE_TRACING]).
+
+2010-02-22  Thien-Thi Nguyen  <ttn@gnuvola.org>
+
+	[build] Make every .c file #include "config.h".
+	* src/common.h (VERSION): #undef it prior to re-#define.
+	* src/bits.c: #include "config.h".
+	* src/common.c: Likewise.
+	* src/decode.c: Likewise.
+	* src/dwg.c: Likewise.
+	* src/encode.c: Likewise.
+	* src/print.c: Likewise.
+
+2010-02-22  Thien-Thi Nguyen  <ttn@gnuvola.org>
+
+	[build] Move config.h into src/.
+	* configure.in (AM_CONFIG_HEADER): Move to src/config.h; m4-quote.
+	* .gitignore: Update ignorance.
+
+2010-02-22  Thien-Thi Nguyen  <ttn@gnuvola.org>
+
+	[admin] Rename directory build/ to build-aux/.
+	* configure.in (AC_CONFIG_AUX_DIR): Change to `build-aux'; m4-quote.
+	* HACKING: Update; nfc.
+	* .gitignore: Update; nfc.
+
+2010-02-22  Thien-Thi Nguyen  <ttn@gnuvola.org>
+
+	[admin] Make create-changelog handle command-line args GNUishly.
+	* build/create-changelog (version): Bump to "1.1";
+	use `defconst'; keep brief history in docstring.
+	<options parsing>: Mention package affiliation in --version output;
+	accept -s to mean --since;
+	throw error on missing arg for --since;
+	no longer accept unadorned arg as output FILENAME;
+	instead recognize --output (-o) FILENAME.
+	Suggested by Rodrigo Rodrigues da Silva.
+
+2010-02-21  Thien-Thi Nguyen  <ttn@gnuvola.org>
+
+	[admin] Rename create-changelog.el to create-changelog.
+	* build/create-changelog: Rename from build/create-changelog.el.
+	  Update help text to be implementation-agnostic.
+	* HACKING: Update.
+
+2010-02-20  Thien-Thi Nguyen  <ttn@gnuvola.org>
+
+	[admin] Add script to create ChangeLog from "git log" output.
+	* build/create-changelog.el: New file.
+	* HACKING (change log maintenance): Update.
+
+2010-02-19  Thien-Thi Nguyen  <ttn@gnuvola.org>
+
+	[admin] Add a program to create/publish pre-regenerated tarballs.
+	* build/snap.GNUmakefile: New file.
+	* build/.placeholder: Delete file -- no longer necessary.
+	* .gitignore: Update ignorance.
+
+2010-02-18  Thien-Thi Nguyen  <ttn@gnuvola.org>
+
+	[build] Add ACLOCAL_AMFLAGS to top-level Makefile.
+	* Makefile.am (ACLOCAL_AMFLAGS): New var.
+
+2010-02-18  Thien-Thi Nguyen  <ttn@gnuvola.org>
+
+	[build] Remove spurious AC_SUBST.
+	* configure.in (VERSION): Delete AC_SUBST.
+
+2010-02-18  Thien-Thi Nguyen  <ttn@gnuvola.org>
+
+	[build] Add autogen.sh; delete generated files.
+	* autogen.sh: New file.
+	* build/.placeholder: Likewise.
+	* m4/.placeholder: Likewise.
+	* INSTALL: Delete file.
+	* Makefile.in: Likewise.
+	* acinclude.m4: Likewise.
+	* aclocal.m4: Likewise.
+	* build/config.guess: Likewise.
+	* build/config.sub: Likewise.
+	* build/depcomp: Likewise.
+	* build/install-sh: Likewise.
+	* build/ltmain.sh: Likewise.
+	* build/missing: Likewise.
+	* config.h.in: Likewise.
+	* configure: Likewise.
+	* examples/Makefile.in: Likewise.
+	* src/Makefile.in: Likewise.
+
+2010-02-15  Felipe Correa da Silva Sanches  <juca@members.fsf.org>
+
+	fixing version detection for iterator methods
+
+2010-02-11  Felipe Correa da Silva Sanches  <juca@members.fsf.org>
+
+	changing my email address on file headers
+
+2010-02-11  Felipe Correa da Silva Sanches  <juca@members.fsf.org>
+
+	implement version dependant iterator for owned obects of a BLOCK_HEADER
+
+2010-02-11  Felipe Correa da Silva Sanches  <juca@members.fsf.org>
+
+	resolve object references after parsing r2004 and r2007 files
+
+2010-02-11  Felipe Correa da Silva Sanches  <juca@members.fsf.org>
+
+	check if some pointers are not null
+
+2010-02-10  Felipe Correa da Silva Sanches  <juca@members.fsf.org>
+
+	fix bugs in description of two objects of the spec: SORTENTSTABLE and LEADER were wrongly described
+
+2010-02-06  Till Heuschmann  <theuschmann@gmail.com>
+
+	Fixed confusions in DIMSTYLE decoding
+
+2010-02-01  unknown  <tiu@.(none)>
+
+	Improved R2004 header parsing. Read variables, handles, objects
+
+2010-01-29  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Partially fixed bug #28681, common entity handle data parsed correctly
+
+2010-01-29  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Added macro created print functions, made some functions private, increased logging trying to fix objectrefs
+
+2010-01-27  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Logging test
+
+2010-01-27  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Refactoring log messages: encode.c
+
+2010-01-27  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Refactoring log messages: dwg.c
+
+2010-01-27  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Refactoring log messages: bits.c and decode.c
+
+2010-01-20  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	New logging infrastructure. printf's still need to be refactored
+	Signed-off-by: Rodrigo Rodrigues da Silva <pitanga@members.fsf.org>
+
+2010-01-19  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Integrating slightly modified patch #7057, file #19482, by James Michael DuPont <JamesMikeDuPont@googlemail.com>: reviewed typecasting to conform with C++ compiler's strict typechecking
+
+2010-01-12  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Updating TODO
+
+2009-12-25  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Created a TODO file, updated README
+
+2009-12-25  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Created a TODO file
+
+2009-12-24  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	renaming_variables_to_meet_GNU_coding_standards (NoCamelCaps\!)
+
+2009-12-24  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Improved R2004 header parsing by Till Heuschmann <theuschmann@googlemail.com> (patch #7046) + Juca's fixes
+
+2009-12-24  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	More API work. Fixed obvious bug in dwg_get_entities, but it still won't work.
+
+2009-12-22  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Keep track of number of entities processed. More API work: dwg_get_entities, dwg_get_entity_count, dwg_get_entity_layer
+
+2009-12-21  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Fixing dwg_get_layers bug found by Juca
+
+2009-12-21  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	New API function, returns LAYER list
+
+2009-12-21  Felipe Correa da Silva Sanches  <juca@members.fsf.org>
+
+	adding NEWS file - required for GNU packages. We must always update this file prior to releases.
+
+2009-12-21  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Fixing unchecked (loglevel) fprintf's (a few fprintf's left though) Keeping track of layers - initial support (new API function)
+
+2009-12-19  Felipe Correa da Silva Sanches  <juca@members.fsf.org>
+
+	yes, I know it is a bit wrong, but it is just a test. I am still trying to figure out how to return a class instance from load_file
+
+2009-12-19  Felipe Correa da Silva Sanches  <juca@members.fsf.org>
+
+	beginning to write a (still very simple) python binding for LibreDWG
+
+2009-12-19  Felipe Correa da Silva Sanches  <juca@members.fsf.org>
+
+	Implement Encoder routine for VERTEX (2D) (10) description.
+
+2009-12-19  Felipe Correa da Silva Sanches  <juca@members.fsf.org>
+
+	Partial implementation of SPATIAL_INDEX description.
+
+2009-12-19  Felipe Correa da Silva Sanches  <juca@members.fsf.org>
+
+	changing name of macro from GET_FIELD to FIELD_VALUE (which makes more sense!)
+
+2009-12-19  Felipe Correa da Silva Sanches  <juca@members.fsf.org>
+
+	Encoder and Decoder routines can be the same in IMAGE description.
+
+2009-12-19  Felipe Correa da Silva Sanches  <juca@members.fsf.org>
+
+	REPEAT macro refactoring in IMAGE description -- by Rafael Moretti
+
+2009-12-19  Felipe Correa da Silva Sanches  <juca@members.fsf.org>
+
+	REPEAT macro refactoring in LTYPE(57)
+
+2009-12-19  Felipe Correa da Silva Sanches  <juca@members.fsf.org>
+
+	third and last iteration of REPEAT macro refactoring on MLINE(47) description. Thanks for support received from Rafael Moretti!
+
+2009-12-19  Felipe Correa da Silva Sanches  <juca@members.fsf.org>
+
+	second iteration of REPEAT macro refactoring in MLINE(47) description
+
+2009-12-19  Felipe Correa da Silva Sanches  <juca@members.fsf.org>
+
+	first iteration of REPEAT macro refactoring in MLINE (47) description
+
+2009-12-15  Felipe Correa da Silva Sanches  <juca@members.fsf.org>
+
+	INSERT encoder
+
+2009-12-15  Felipe Correa da Silva Sanches  <juca@members.fsf.org>
+
+	dataflags handling are a responsibility of the user (client application)
+
+2009-11-28  Felipe Correa da Silva Sanches  <juca@members.fsf.org>
+
+	fix bug in SPLINE description
+
+2009-11-28  Felipe Correa da Silva Sanches  <juca@members.fsf.org>
+
+	using macros in SPLINE description
+
+2009-11-28  Felipe Correa da Silva Sanches  <juca@members.fsf.org>
+
+	using BITCODEs in header file
+
+2009-11-27  Felipe Correa da Silva Sanches  <juca@members.fsf.org>
+
+	_3dface encoder
+
+2009-11-27  Felipe Correa da Silva Sanches  <juca@members.fsf.org>
+
+	boilerplate with TODOs for unimplemented encoders
+
+2009-11-27  Felipe Correa da Silva Sanches  <juca@members.fsf.org>
+
+	LINE encoder
+
+2009-11-26  Felipe Correa da Silva Sanches  <juca@members.fsf.org>
+
+	now it compiles
+
+2009-11-26  Felipe Correa da Silva Sanches  <juca@members.fsf.org>
+
+	broken revision. unfinished refactoring towards write support
+
+2009-11-25  Felipe Correa da Silva Sanches  <juca@members.fsf.org>
+
+	starting to move dwg structures description to a dwg.spec file that can be used by both decode.c and encode.c (to avoid code replication)
+
+2009-11-04  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Becoming a GNU package.
+
+2009-11-04  Felipe Correa da Silva Sanches  <juca@members.fsf.org>
+
+	updating my email to juca@members.fsf.org
+
+2009-11-04  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Adding (C) notices to remaining files
+
+2009-11-04  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Trying do debug XRECORD
+
+2009-10-07  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	[fixed] bug in bit_read_BS which lead to misinterpretation of raw unsigned chars
+
+2009-09-26  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	updating README. Now in English.
+
+2009-09-26  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Updating my e-mail in AUTHORS
+
+2009-09-26  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	updating ChangeLog and removing useless files
+
+2009-09-24  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	completed TABLE decoder. Needs testing.
+
+2009-09-23  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	another chunk of TABLE decoder
+
+2009-09-23  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	one more chunk of TABLE entity decoder
+
+2009-09-23  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	another chunk of TABLE decoder
+
+2009-09-22  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	another chunk of TABLE entity decoder
+
+2009-09-22  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	[new] Decoding of XRECORD object
+
+2009-09-22  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	initial parsing of TABLE entity. Incomplete.
+
+2009-09-22  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Adding missing handles
+
+2009-09-22  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	* [new] adding log call to debug EED parsing * [fixed] adding 3D entities to object type switch
+
+2009-09-22  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Reverting mistaken change from last revision.
+
+2009-09-22  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Refactoring some entities
+
+2009-09-21  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	fix a bug in the DICTIONARYVAR decoder that was due to a typo in the spec, I think.
+	field str should be TV instead of BS
+
+2009-09-21  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	now dwg_decode_object and dwg_decode_entity functions return an error code so that we can avoid decoders when these functions fail but we can try to load the rest of the file.
+
+2009-09-21  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	a list of websites that contain dwg files we are using to test our dwg parser
+
+2009-09-21  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Removing deprecated print.{c,h}
+
+2009-09-21  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	implementing a bit more of HATCH decoder. not everything yet.
+
+2009-09-21  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	a couple fixes for R14 based on parsing of this test file: ftp://geodetic.ncdenr.org/maps/yancey14.zip
+
+2009-09-21  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	decode SPATIAL_FILTER
+
+2009-09-21  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	decode SORTENTSTABLE
+
+2009-09-21  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	decode RASTERVARIABLES
+
+2009-09-21  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	partial implementation of PROXY decoder
+
+2009-09-21  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	decode IDBUFFER
+
+2009-09-21  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	a bit more of HATCH decoding. We need to implement a better REPEAT macro so that complex nested REPEAT structures are easier to decode
+
+2009-09-20  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	partial implementation of decoder for HATCH
+
+2009-09-19  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	decode GROUP(72)
+
+2009-09-19  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	decode VIEWPORT_ENTITY_HEADER_CONTROL
+
+2009-09-19  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	decode DIMSTYLE(69)
+
+2009-09-19  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	decode DIMSTYLE_CONTROL(68) and DIMSTYLE(69)
+
+2009-09-19  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	decode APPID(67) and APPID_CONTROL(66)
+
+2009-09-19  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	* decoding of VPORT(65) * implemented an extra (auxiliar) bitcode: BITCODE_4BITS
+
+2009-09-19  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	* decode VPORT_CONTROL * added case entries for some objects (where their respective decoders are invoked)
+
+2009-09-19  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	decoding of REGION/3DSOLID/BODY
+
+2009-09-19  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	* update DWG_OBJECT and DWG_ENTITY macros so that they now include the function prototype declaration * I have sorted object/entity declarations inthe same order they appear in the spec and I also added comments stating object number or page number (where it is described in the spec) * Added boilerplate for the ones we did not implement yet.
+
+2009-09-19  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	some adjustments in handling of model/page coordinates I am still not sure how does that work.
+
+2009-09-18  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	decode LAYER_INDEX
+
+2009-09-18  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	decode IMAGEDEFREACTOR
+
+2009-09-18  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	decode IMAGEDEF
+
+2009-09-18  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	remove a redundant printf
+
+2009-09-18  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	removing dwg_var_map(...) function which is not used anymore
+
+2009-09-18  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	* removed old header variables parser * replaced it by a call to the new one
+
+2009-09-18  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Refactoring entities ELLIPSE, SHAPE, TRACE, SOLID
+
+2009-09-18  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	bring back FIELD_T
+
+2009-09-18  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Refactoring entities POINT, 3D_FACE, POLYLINE({PFACE,MESH})
+
+2009-09-18  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	implementation of a better header variables parser
+
+2009-09-18  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	* Refactoring DIMENSION entities. * [fixed] issue #8
+
+2009-09-18  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Changed bit_write_CMC to take a Dwg_Color* argument
+
+2009-09-18  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	refactoring MTEXT(44)
+
+2009-09-17  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	suppress warning on FIELD_3DPOINT_VECTOR macro
+
+2009-09-17  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	"absolute_ref" instead of "handle"
+
+2009-09-17  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	* Entities MLINETYPE and VP_ENT_HDR * Correct handleref.value parsing, now considering offset codes
+
+2009-09-17  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	fix BLOCK_HEADER parsing bug due to lack of curly braces around HANDLE_VECTOR macro
+
+2009-09-17  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	fixing bug in FIELD_VECTOR_N macro
+
+2009-09-17  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	* bringging back some more lines of code that were mistakenly removed some revisions ago * use fprintf instead of sprintf
+
+2009-09-17  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Translating: skt -> dwg and CKR -> CRC Fixing some mistakes made in header on previous commit due to tranlation (bitdouble and bitshort)
+
+2009-09-17  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	* decoding UCS and UCS_CONTROL * bringing back code that pitanga mistakenly removed in his prior commit
+
+2009-09-17  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Major translation effort. Seems to have been the last one.
+
+2009-09-17  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	decode VIEW and VIEW_CONTROL
+
+2009-09-17  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	decode LTYPE and LTYPE_CONTROL
+
+2009-09-17  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	decode SHAPEFILE and SHAPEFILE_CONTROL
+
+2009-09-17  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	decode LAYER_CONTROL
+
+2009-09-17  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	decode LAYER
+
+2009-09-17  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	huge refactoring in SVG generator. Now symbols are stored in <defs> (we are using the BLOCK_HEADER handles)
+	But I am still not sure about the correct procedure to select the entities that must be put inside a <g>.
+	I tried to get all objects from first_entity until last_entity as they appear in the file, but that does not seem to be
+	correct. What is the correct way to iterate over entities?
+
+	R_2004+ provides a vector of handles pointing to everything that must go inside a <g>, but prior versions only tell us the
+	1st and last entities.
+
+2009-09-16  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	fixing the issue described on previous commit.
+
+2009-09-16  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	refactoring our code that handles handles. I have noticed that we are probably having leak issues here. But I still didnt detect exactly what is wrong. Handles are correctly parsed, but their values are corrupted before they are used by client code. Something is messing with our object_ref vector.
+
+2009-09-16  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	correct decoding of BLOCK_CONTROL.
+	Now it will be possible to create <defs> section in SVG because BLOCK_CONTROL keeps handles of all BLOCK_HEADERS in the
+	file and so we can loop these and read their BLOCKS and output one <g> for each simbol
+
+	This commit totally ROCKS!!!
+
+	hmmm! And we are in svn revision 256!!!! HAPPY HACKING! :-D
+
+2009-09-16  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	* fix issue in R_2004 where xdicobjhandle might not be present in DICTIONARY * created a new macro XDICOBJHANDLE(code) * moved version macros to common.h
+
+2009-09-16  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	DICTIONARYVAR decoder
+
+2009-09-16  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	LINE
+
+2009-09-16  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	CIRCLE
+
+2009-09-16  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	ARC
+
+2009-09-16  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	POLYLINE 3D
+
+2009-09-16  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	2D_POLYLINE
+
+2009-09-16  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	VERTEX_PFACE_PFACE
+
+2009-09-16  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	macros in VERTEX_*
+
+2009-09-16  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	* disabling print module at all. Our macros are providing a much more consistent way of printing debbuging info. * refactoring VERTEX_2D
+
+2009-09-16  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	fix bugs in INSERT and MINSERT due to typos in the spec
+
+2009-09-16  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	more refactoring on INSERT and MINSERT
+
+2009-09-16  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	* refactoring attdef * boilerplate for dwg_encode_common_entity_handle_data and dwg_encode_handleref
+
+2009-09-15  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	refactored TEXT and ATTRIB
+
+2009-09-15  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	LAYOUT decoding done
+
+2009-09-15  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	using DWG_OBJECT/DWG_ENTITY in the rest of the objects in decode.c
+
+2009-09-15  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	REFACTOR... REFACTOR... REFACTOR... !!!
+
+2009-09-15  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	* fix FIELD_HANDLE macro. * a bit more refactoring
+
+2009-09-15  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	more macro-based refactoring
+
+2009-09-15  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	decoding macros now allow printing of values in verboso mode (loglevel>=2)
+
+2009-09-15  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	using suffix TV instead of T to denote "text value bitcode"
+
+2009-09-14  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	INSERT/MINSERT refactoring using macros
+
+2009-09-14  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	using version macros
+
+2009-09-14  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	more macro usage on decoder
+
+2009-09-14  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	using MACROS on dwg_decode_MLINE. This suggests the need of a LOOP macro...
+
+2009-09-14  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	fix wrong escape code \N due to a typo
+
+2009-09-14  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	* refactoring... * update on AUTHORS list
+
+2009-09-14  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Refactoring to meet GNU code style (thanks to Eclipse's SHIFT+CTRL+F)
+
+2009-09-14  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	using DWG_OBJECT/DWG_ENTITY macros on more objects/entities
+
+2009-09-14  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	HANDLE_VECTOR macro REACTORS macro
+
+2009-09-14  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	fixing segfault from my recent commits
+
+2009-09-14  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Adding binaries and Makefiles to svn:ignore
+
+2009-09-14  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Adding binaries and Makefiles to svn:ignore
+
+2009-09-14  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	HANDLE macro
+
+2009-09-14  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Adding binaries and Makefiles to svn:ignore
+
+2009-09-14  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Some translation
+
+2009-09-14  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	testing some experimental MACROS on decode_DICTIONARY
+
+2009-09-14  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Handle parsing for missing entities (from 0 to 33)
+
+2009-09-14  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	using macro for entity UNUSED
+
+2009-09-14  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	now using the macro I introduced in previous commit
+
+2009-09-14  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	macro for entity decoder init
+
+2009-09-14  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	adding macro to ease handle (Dwg_Object_Ref*) parsing
+
+2009-09-13  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	adding an auxiliar funtion to check valid handle codes. Now we should use dwg_decode_handleref_with_code whenever possible instead of dwg_decode_handleref.
+
+2009-09-13  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	fix parsing of INSERT
+
+2009-09-13  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	cones placement is broken. I am not sure what is the correct order of applying translate, scale and rotate transforms
+
+2009-09-13  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	clones are partially working, but are misplaced and apparently not transformed yet
+
+2009-09-13  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	fix common entity data parsing
+
+2009-09-13  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	* more work towards clones * better organized debugging info output
+
+2009-09-13  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	more work towards clone feature (BLOCK/BLOCK_HEADER/INSERT)
+
+2009-09-12  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	all log and error messages must be written to stderr
+
+2009-09-12  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	The object handle should be stored in a single place: the Dwg_Object structure.
+	Instead of 3 different places: DWG_Object, DWG_Object_Object and
+	DWG_Object_Entity structures.
+
+2009-09-12  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	fixing sprintf(stderr, ... into fprintf
+	initial implementation of compression codes
+
+2009-09-11  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	partial implementation of the new handleref infrastructure with Dwg_Object_Ref pointers instead of a meaningless array of handles. The core work is done, although some segfaults are still annoying me. I haven't commited to trunk, but I wouldn't reccomend working there since it may cause major conflicts. Any help to get this working right will be appreciated.
+
+2009-08-18  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	more verbose output for R2004 header parsing
+
+2009-08-18  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	system section - R2004 header parsing
+
+2009-08-17  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	implementing a bit more of the R_2004 header parsing
+
+2009-08-17  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	sending verbose output to stderr
+
+2009-08-14  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	avoiding a crash
+
+2009-08-14  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	increasing size of vector so that it will be able to store all header variables for R_2007.
+
+2009-08-14  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	number of header variables depends on DWG version...
+
+2009-08-10  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	improving R2007 header parsing
+
+2009-08-10  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	initial R2004 header parsing
+
+2009-08-07  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	starting to implement R2007 header parsing
+
+2009-08-06  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	bolerplate for future implementation of DWG R2004 and R2007 headers
+
+2009-07-03  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	refactor unsupported version message allow it to try parsing versions prior to R_2000 but gives a warning message bout experimental support.
+
+2009-07-03  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	print functions for DIMENSION entities + bug fix in DIMENSION structs
+
+2009-06-26  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Dwg_Encode_DICTIONARY. It's an object, should check common object data encoding
+
+2009-06-26  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	moving testSVG and test to examples. Thanks to Marcos.
+
+2009-06-25  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	removing unecessary (weird and wrong) checks
+
+2009-06-25  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	[fixed] warnings
+
+2009-06-25  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	translation patch wich has been held up for a while due to recently fixed bugs
+
+2009-06-25  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	trying to fix the read_CMC issue that gcc was not able to warn us about... Pitanga will check whether it works for him with gcc 4.3.3. It didnt even break for me in gcc 4.2.4...
+
+2009-06-25  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	[fixed] missing decode_handleref() in dwg_decode_VIEWPORT
+
+2009-06-24  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	decoding of entity common data for all DWG versions
+
+2009-06-23  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	Implemented initial support for blocks ("symbols") and "clones".
+	SVG converter alread correctly group drawing elements of a symbol (those between BLOCK_HEADER and ENDBLK) but cloning
+	them is still not working because our current implementation of dwg_decode_handlerefs is wrong. The
+	block_header_handle in an INSERT object is placed ***after*** "Common Entity Handle Data" section. So, cloning will
+	only work after we fix the parsing of this section.
+
+2009-06-19  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	trying to adjust paper size on exported SVG
+
+2009-06-19  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	fixing a bug in the encoding and decoding of DD (BitDouble with Default) Now we have perfect handling of lines. Yuppiiiiieeee!
+
+2009-06-19  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	make switch consistent with new print (boilerplate) functions
+
+2009-06-19  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	handling arcs in dwg2svg
+
+2009-06-19  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	make switch consistent with new print (boilerplate) functions
+
+2009-06-19  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	boilerplate code for print.c - TODO: complete switch with boilerplate functions
+
+2009-06-19  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	print for VERTEX_{MESH,PFACE} and autoreconf to link math lib to testSVG
+
+2009-06-19  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	adding TEXT support to our DWG2SVG converter
+
+2009-06-15  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	dwg2svg: deal with circles, lines and arcs
+
+2009-06-14  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	variable type-code handling + huge boilerplate code
+
+2009-06-12  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	translating stuff
+
+2009-06-12  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	decode OLE2FRAME + boilerplate code + spreadsheet update
+
+2009-06-12  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	CMC color read/write. Completed VIEWPORT encoding/decoding. (spreadsheet update)
+
+2009-06-12  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	reviewed SPLINE encoding/decoding (and spreadsheet update)
+
+2009-06-12  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	IMAGE encoding (and spreadsheet update)
+
+2009-06-12  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	IMAGE encoding (and spreadsheet update)
+
+2009-06-12  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	LWPLINE encoding (and spreadsheet update)
+
+2009-06-12  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	LWPLINE decoding (and spreadsheet update)
+
+2009-06-12  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	OLE2FRAME struct (and spreadsheet update)
+
+2009-06-11  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	LWPLINE struct (and spreadsheet update)
+
+2009-06-11  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	struct for IMAGE Entity
+
+2009-06-08  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	updating copyright/licensing headers
+
+2009-06-08  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	MLINE(47) encode/decode
+
+2009-06-08  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Updating copyright notice
+
+2009-06-08  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Some decode and encode fixing/cleaning + updated spreadsheet + updated copyright
+
+2009-06-07  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	TOLERANCE(46) decoding and encoding
+
+2009-06-07  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	LEADER (45) encoding
+
+2009-06-07  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	LEADER (45) decoding
+
+2009-06-07  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	LEADER/TOLERANCE/MLINE boilerplate code
+
+2009-06-07  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	LEADER/TOLERANCE/MLINE boilerplate code
+
+2009-06-07  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	BLOCK_CONTROL r/w
+
+2009-06-07  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	fix SPLINE decode segfault
+
+2009-06-07  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	ELLIPSE encode parser
+
+2009-06-07  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	VIEWPORT encode parser
+
+2009-06-07  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	VIEWPORT decode parser
+
+2009-06-06  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	updating spreadsheet and adding some more boilerplate code
+
+2009-06-06  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	MTEXT decoding, encoding and printing
+
+2009-06-06  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	3DFACE encode --- must review this code
+
+2009-06-06  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Structs for LEADER, TOLERANCE and MLINE
+
+2009-06-06  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	encoders for DIMENSION_* and POINT entities
+
+2009-06-06  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	DIMENSION LINEAR encode
+
+2009-06-06  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	do it the smart way. Duh\!
+
+2009-06-06  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	save the correct version code in DWG header
+
+2009-06-06  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	fixing indentation
+
+2009-06-06  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	DIMENSION_ORDINATE encoding
+
+2009-06-06  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	boilerplate code: adding prototypes for every encoding functions (even the ones not implemented yet)
+
+2009-06-06  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	SHAPE(33) encode
+
+2009-06-06  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	SHAPE (32) encode
+
+2009-06-06  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	SOLID (31) encode
+
+2009-06-06  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	POLYLINE (MESH)(30) encode
+
+2009-06-06  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	POLYLINE_PFACE encode
+
+2009-06-06  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	minor translations
+
+2009-06-06  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Adding print labels to new supported entities
+
+2009-06-06  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Read support for SOLID, SHAPE, TRACE and POLYLINE_PFACE/MESH entities. Minor code reviews.
+
+2009-06-06  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Completing read support for DIMENSION entities. Minor code reviews.
+
+2009-06-05  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Adding (draft) read support for 3D_FACE entity
+
+2009-06-05  Diego Rabatone Oliveira  <diraol@polignu.org>
+
+	Dimension Ordinate (pg.70/71) feita
+
+2009-06-05  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	translating and starting to generalize object parsing to more versions of DWG. It needs a code review. It is an initial incomplete implementation.
+
+2009-06-05  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Commenting out SPLINE parser due to segfault
+
+2009-06-05  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Adding (draft) write support for many entities. Still needs some testing. Check "flag conditions" in some entities.
+
+2009-06-05  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	implementation of multiversion LINE parser
+
+2009-06-05  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	partial implementation of multiversion POLYLINE_2D and POLYLINE_3D parsers
+
+2009-06-05  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	Legitaj valuej -> Read values
+
+2009-06-04  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	partial implementation of multiversion MINSERT parser
+
+2009-06-04  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	partial implementation of multiversion INSERT parser
+
+2009-06-04  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	Ooooops! :-P
+
+2009-06-04  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	multi-version parsing for ATTDEF (3)
+
+2009-06-04  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	translate: largxeco -> width (couldn't resist the daily commit)
+
+2009-06-04  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	implemented DWG version dependant parsing for ATTRIB (2)
+
+2009-06-04  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	incorporating print functions for DICTIONARY and BLOCK_CONTROL (ported from libdwg svn revision 26)
+
+2009-06-03  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	adding decoding of Entity_BLOCK_CONTROL and Entity_DICTIONARY based on (ported from) recent libdwg svn commit
+
+2009-06-03  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	added initial SPLINE decode support + identation fix on dwg_decode_TEXT
+
+2009-06-03  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	implemented TEXT entity parsing for DWG R13 and R14
+
+2009-06-03  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	est -> ent
+
+2009-06-03  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	Traktilo -> Handle
+
+2009-06-03  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	*implementing version dependant behaviour for bit-thickness (read and write functions) *also (obviously) translating a bit more from Esperanto
+
+2009-06-03  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	added structs for new entities: DIMENSION_* and SPLINE (no underlying code though)
+
+2009-06-03  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	adding R2000 dependent behaviour to the BitExtrusion write function
+
+2009-06-03  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	more translation
+
+2009-06-03  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	translate and add review fields (R2000 only) of structs - until LINE (19) (addition to last review accidentally not committed)
+
+2009-06-03  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	translate and add review fields (R2000 only) of structs - until LINE (19)
+
+2009-06-03  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Completing enum DWG_OBJECT_TYPE according to spec
+
+2009-06-03  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	more translation
+
+2009-06-02  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	cetero -> remainder
+
+2009-06-02  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	masko -> mask
+
+2009-06-02  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	more translations
+
+2009-06-02  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	skalo -> scale
+
+2009-06-02  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	some translations
+
+2009-06-02  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	duaheader -> second_header
+
+2009-06-02  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	kiom -> size
+
+2009-06-02  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	bito -> bit
+
+2009-06-02  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	* Moving print functions to a separate file * Making all print functions public in the API
+
+2009-06-02  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	* add version field to the Bit_Chain data structure so that bit decoding routines can be aware of the current DWG version. * Used this information to implement the version dependent behaviour of BitExtrusion.
+
+2009-06-02  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	a bunch of translations
+
+2009-06-02  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	NBEGINNATA => UNKNOWN fino => end
+
+2009-06-02  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	DUOHEAD => SECOND_HEADER
+
+2009-06-02  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	translating: ESTAJXO -> ENTITY ORDINARAJXO -> OBJECT
+
+2009-06-02  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	adding dwg_free(Dwg_Structure*); to free the dinamically allocated Dwg_Section vector
+
+2009-06-02  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	translate bajto -> byte
+
+2009-06-02  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	translating some comments. removing the limit of only 6 sections in the file header. Added dynamic allocation of the vector of Dwg_Section structs.
+
+2009-06-01  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	cleaning warnings due to ignored ret-value for fwrite calls
+
+2009-06-01  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	fixing linking of examples => -lredwg instead of -ldwg
+
+2009-06-01  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	[fix] for revision 59 (accidentally deleted aclocal)
+
+2009-06-01  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Changing binary names from libdwg.{a,la,so} to libredwg.{a,la,so} to avoid conflicts between libdwg and libredwg; upgrading libtool macros
+
+2009-06-01  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	[translate] Estajxo -> Entity e Ordinarajxo -> Object
+
+2009-06-01  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	incorporating libdwg recent commits: * an initial postscript generator * a DWG embedded thumbnail fetcher * some new public functions in the API to read document and drawing dimensions
+
+2009-06-01  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	[NEW] Struct for Viewport Entity (34)
+
+2009-06-01  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	* generalized dwg_var_map so that it works for any DWG version. * implemented regression test to assure that it works at least for DWG version R2000
+
+2009-05-31  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	* preparing for broader compatibility of further DWG versions * throwing error messages to stderr instead of stdout
+
+2009-05-31  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	usage of fprintf( stderr, "error message");
+
+2009-05-31  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	add loglevel options for lib output
+
+2009-05-31  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	incorporating patch from issue #1: simple test that outputs SVG content.
+
+2009-05-30  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	translate mesuro -> measurement
+
+2009-05-30  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	translate tipo -> type
+
+2009-05-30  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	a bunch of translations
+
+2009-05-30  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	a bunch of translations
+
+2009-05-30  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	translate grandeco -> size
+
+2009-05-30  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	translate varmapo -> var_map; mapo -> map
+
+2009-05-30  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	translate sentinel related terms
+
+2009-05-30  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	translate klaso -> class
+
+2009-05-30  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	translate numero -> number
+
+2009-05-30  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	a bunch of translations
+
+2009-05-30  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	translate sekcio -> section
+
+2009-05-30  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	translate cxenigi -> chains
+
+2009-05-30  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	translate Objekto -> Object
+
+2009-05-30  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	a bunch of translations
+
+2009-05-30  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	End of a 'coding' session at pitanga's home. (translating: nomo -> name)
+
+2009-05-30  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	translating: kodo -> code
+
+2009-05-30  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	Comment regarding possible translations of 'gxisrandigo': 'snap' or 'trim'
+
+2009-05-30  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Structs for SOLID, TRACE  and SHAPE \n end of coding night for me
+
+2009-05-30  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Structs for POLYLINE PFACE and POLYLINE MESH
+
+2009-05-30  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	translate: teksto -> text
+
+2009-05-30  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	translate: adreso -> address
+
+2009-05-30  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	translate: regximo -> regime
+
+2009-05-30  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	translate: koloro -> colour
+
+2009-05-30  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	translate: alteco -> height
+
+2009-05-30  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Struct for 3DFACE (28)
+
+2009-05-30  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Adding dummy structs
+
+2009-05-30  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	translate: objekto -> object
+
+2009-05-30  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	translate:  radiuso -> radius  dikeco -> thickness
+
+2009-05-30  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	translate forpusxigo -> extrusion
+
+2009-05-30  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	translating comments
+
+2009-05-30  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	removing from repository
+
+2009-05-23  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	... :-)
+
+2009-05-23  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	Cxeno -> Chain
+
+2009-05-23  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	cleaning the last warning!
+
+2009-05-23  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	cleaning warnings
+
+2009-05-23  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	warnings
+
+2009-05-19  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	more translations
+
+2009-05-17  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	translating some comments and messages
+
+2009-05-17  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	OT_ => TYPE_ OST_ => SUPERTYPE_
+
+2009-05-17  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	translating some comments and NEUZATA => UNUSED
+
+2009-05-17  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	* adding encode.c to compile rules (Makefile*) and fixing compile of it. * translating: DVG => DWG
+
+2009-05-17  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	translating: dvg => dwg Dvg => Dwg
+
+2009-05-17  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	fixing 'make check'
+
+2009-05-17  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	translating:  malsukceso => error
+
+2009-05-17  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	translating:  dvg_dek_ => dwg_decode_
+
+2009-05-17  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	translating... :-)
+
+2009-05-16  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	translating:  dwg_read_file  dwg_write_file  Dwg_Structure
+
+2009-05-16  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	removing not needed local files
+
+2009-05-16  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
+
+	initial code based on libdwg (http://libdwg.sourceforge.net/en/index.html)
+
+2009-05-16  (no author)  <(no author)@889af040-426b-11de-998b-8fedbbe774c7>
+
+	Initial directory structure.
+
+

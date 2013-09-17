@@ -1,0 +1,8 @@
+This is a rough TODO file. It might or might not be up to date.
+
+* parse R2007 header (figure out how reed solomon encryption works)
+* finish R2000 encoding implementation
+* incorporate automated testing suite into Makefiles
+* enhance API functions
+* make python bindings optional with --enable-python and --disable-python (default disabled)
+* generate swig wrapper and build python module out of source tree

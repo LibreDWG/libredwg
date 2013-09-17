@@ -1,0 +1,62 @@
+#!/bin/sh
+# alive.test
+#
+# Copyright (C) 2010 Thien-Thi Nguyen
+#
+# This program is free software, licensed under the terms of the GNU
+# General Public License as published by the Free Software Foundation,
+# either version 3 of the License, or (at your option) any later version.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# Author: Thien-Thi Nguyen
+
+# Commentary:
+
+# This is a provisional test (until something better comes along).
+# It checks "aliveness" and not correctness or performance.
+#
+# It relies on the TESTS_ENVIRONMENT Makefile.am variable to set
+# `PROGS'.  Each prog in PROGS is run against each of sample.dwg
+# and example.dwg, and if *not* successful the maximally verbose
+# output (from setting LIBREDWG_TRACE=9) is saved in a file whose
+# name is {sample,example}.PROG.log.
+#
+# If there are no problems, exit successfully.  Otherwise display
+# the count of problem runs, the list of *.log files and finally
+# exit failurefully.
+
+# Code:
+
+test "$PROGS" || { echo ERROR: Env var PROGS not set ; exit 1 ; }
+test "$srcdir" || { echo ERROR: Env var srcdir not set ; exit 1 ; }
+
+problems=0
+
+rm -f *.log
+
+run ()
+{
+    prog=$1
+    dwg=$2
+    log=$dwg.$prog.log
+    if LIBREDWG_TRACE=9 ./$prog "${srcdir}/$dwg.dwg" > $log 2>&1
+    then rm $log
+    else problems=$(expr 1 + $problems)
+    fi
+}
+
+for prog in $PROGS ; do
+    run $prog sample
+    run $prog example
+done
+
+if [ 0 = $problems ] ; then
+    exit 0
+else
+    echo $(basename $0): $problems failures
+    ls -l *.log
+    exit 1
+fi
+
+# alive.test ends here

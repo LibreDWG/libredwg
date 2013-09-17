@@ -1,0 +1,99 @@
+LibreDWG
+
+LibreDWG is a free C library to read and write DWG files.  This program is
+part of the GNU project, released under the aegis of GNU.  It is licensed
+under the terms of the GNU General Public License version 3 (or at you option
+any later version).
+
+DWG is a file format created in the 70's for the emerging CAD applications.
+Currently it is the native file format of AutoCAD, a proprietary CAD program 
+developed by AutoDesk.
+
+LibreDWG is a fork from LibDWG due to its usage of Esperanto, which we think
+is not the best strategy for a free software project which aims to get lots of
+contributors.  LibreDWG is written in English.  Since we forked LibDWG (May
+16, 2009), its development seems to have been inactive.  At the moment
+(September 25, 2009) our decoder is almost done.  We are reaching 100% read
+support in our data structures parser but we still need a test suite.  Among
+the example applications we wrote using LibreDWG is an initial SVG conversion
+tool. Please contact us if you can help.
+
+The program dwg_ps (in examples/) reads DWG and outputs Postscript; it
+depends on pslib: <http://pslib.sourceforge.net>.  In many GNU/Linux
+distributions, this is available by installing the pslib-dev package.
+If the configure script does not find pslib, dwg_ps will not be built.
+
+Sometimes we hang on our IRC channel which is #libredwg at irc.freenode.net
+If you don't find us there, please email the package maintainers:
+
+Felipe Corrêa da Silva Sanches <juca@members.fsf.org>
+Rodrigo Rodrigues da Silva <pitanga@members.fsf.org>
+
+If you are looking for general information about the project, check our website:
+http://www.gnu.org/software/libredwg
+
+== Building and installing the library ==
+
+See INSTALL for generic instructions.  Basically, you do:
+
+$ ./autogen.sh (if you checked out the source code from git)
+$ ./configure [options]
+$ make
+$ make check    # optional but strongly encouraged while LibreDWG is alpha
+$ make install
+
+This builds and installs various files in the "installation dirs":
+  $libdir     ($exec_prefix/lib)   -- library files (libredwg.*)
+  $includedir ($prefix/include)    -- dwg.h
+  $infodir    ($datarootdir/info)  -- LibreDWG.info
+
+Use "./configure --help" to see a full list of options you can use to
+customize the installation dirs.  Other options recognized by configure are:
+
+  --enable-trace
+
+    NB: This is an experimental feature that is not in its final form.
+
+    Enable runtime tracing (default: no).  When enabled, the environment
+    variable LIBREDWG_TRACE is consulted on the first decode/encode attempt.
+    Its value is an integer: 0 (no output) through 9 (full verbosity).
+
+  --enable-write
+  
+    NB: This is an experimental feature that is not in its under construction, so its highly unstable.
+    
+    Enable write support (default: no). When enabled you activate the write
+    support for the dwg format.
+
+== Example usage of the library ==
+
+The examples directory contains some application code that uses our lib:
+
+* load_dwg.c -- This is a skeleton code.  Look there if you want to have a
+  quickly glance on how to use the library.
+
+* dwg_ps.c -- Opens a DWG file and outputs an PostScript file.  This code
+  depends on the PSlib library.  On Debian-based systems this is usually
+  available as a package named pslib-dev
+
+* testSVG.c -- Opens a DWG file and outputs an SVG (Scalable Vector Graphics)
+  file.  SVG is a W3C standard for 2d vector graphics.  You can open these
+  files on several free software tools.  We recomend Inkscape, a free software
+  vector graphics editor.  The testSVG.c program will not handle 3d content
+  from DWG since SVG only supports 2-dimensional images.
+
+* get_bmp.c -- Extracts the bmp thumbnail of a dwg file when it is available.
+
+* rewrite.c -- Load, rewrite and try to re-read a existing dwg file. Just for writing test. Still failing (as in 08/2010) 
+
+/*****************************************************************************/
+/*  LibreDWG - free implementation of the DWG file format                    */
+/*                                                                           */
+/*  Copyright (C) 2009, 2010 Free Software Foundation, Inc.                  */
+/*                                                                           */
+/*  This library is free software, licensed under the terms of the GNU       */
+/*  General Public License as published by the Free Software Foundation,     */
+/*  either version 3 of the License, or (at your option) any later version.  */
+/*  You should have received a copy of the GNU General Public License        */
+/*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
+/*****************************************************************************/

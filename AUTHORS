@@ -1,0 +1,29 @@
+Anderson Pierre Cardoso <apierre.cardoso@gmail.com>
+    Changes to configure.in, dwg.c and encode.c
+
+Thien-Thi Nguyen <ttn@gnuvola.org>
+	First versions and changes to several Makefiles.
+	First version and changes to build-aux/create-changelog.
+
+Till Heuschmann <theuschmann@gmail.com>
+	Substantial changes to dwg.h, dwg.spec and decode.c. R2004
+	read support.
+
+James Michael DuPont <JamesMikeDuPont@googlemail.com>
+	Changes to Makefile.in, Makefile.am, src/bits.c, src/bits.h,
+	src/common.h, src/decode.c, src/dwg.c, src/dwg.h, src/encode.c,
+	examples/testSVG.c to conform to C++ compiler.
+
+Rodrigo Rodrigues da Silva <pitanga@members.fsf.org>
+	First version of logging.c. Substantial changes to several files
+	under src/.
+
+Felipe Corrêa da Silva Sanches <juca@members.fsf.org>
+	First version of testSVG.c and src/dwg.spec. Substantial changes
+	to several files under src/.
+
+Felipe Emmanuel Ferreira de Castro <felipo@users.sourceforge.net>
+	Original author. First version of src/bits.c, src/bits.h,
+	src/common.h, src/common.c, src/decode.h, src/decode.c, src/dwg.h
+	src/dwg.c, src/encode.c, src/encode.h.
+

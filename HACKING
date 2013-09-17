@@ -1,0 +1,104 @@
+HACKING --- a simple -*-outline-*- of libredwg hacking lore
+	    "???" means that there is still some question to resolve;
+	    someone should probably think about and resolve them!
+
+* regen
+
+  To regenerate the configure script and Makefile.in files,
+  change to the top-level directory and do: "sh autogen.sh".
+  Make sure you have recent Autoconf, Automake, Libtool installed.
+  (See comments in autogen.sh for specific versions tested.)
+
+* other tools
+
+  Aside from the the autotools (see "regen", above),
+  you will also need GNU Texinfo to build the manual.
+
+* coding standards
+
+  We try to follow the GNU Coding Standards, with some exceptions.
+  - from Emacs: (info "(standards)")
+  - from shell: $ info standards
+
+  The exceptions are:
+  - change log maintenance
+  - [??? other]
+
+* change log maintenance
+
+  Presently, there is only one top-level ChangeLog file, and commits go
+  in without updating it.  Once we get to (??? SOME-MILESTONE), we plan
+  to generate ChangeLog entries at release time based on the commit logs.
+  We use the script create-changelog (in build-aux/) for that.
+
+  This means that as of (??? START-DATE) the commit logs should follow
+  the GNU Coding Standards.  For example:
+
+  | Add foo, with increased bar.
+  |
+  | Normally, we don't need to foo, but sometimes it is necessary.
+  | In those cases, we might as well use a bigger bar.
+  |
+  | * src/part.h (foo): New decl.
+  |   (bar): Bump value of this #define to 42.
+  | * src/part.c (foo): New func.
+  | * src/main.c (main): In the case of `sometimes', call `foo'.
+  | * test/special.test (normally): Don't test `sometimes'.
+  |   (sometimes): New test case.
+  | * doc/whole.texi (Special Cases): Document `sometimes' handling.
+
+  This example has three parts: a one-line sentence describing the change,
+  followed by two newlines, followed by a short discussion of the change,
+  followed by entries for each of the five changed files.  A template:
+
+  | ONE-LINE SENTENCE
+  |
+  | DISCUSSION
+  |
+  | * CHANGES-TO-FILE
+  | [...]
+
+  For small changes or when the one-line sentence suffices, the discussion
+  (and its following two newlines) can be dropped:
+
+  | ONE-LINE SENTENCE
+  |
+  | * CHANGES-TO-FILE
+  | [...]
+
+  There are some conventions for the one-line sentence:
+
+  - Suffix "; nfc." means no functional change (e.g., changing comments only).
+    This causes create-changelog to omit the entry from its output.
+
+  - Prefix "[TOPIC]" means this change is about some TOPIC.
+    Some topics we use are:
+    - admin  -- administrative stuff (e.g., this file)
+    - build  -- configuration, makefiles, etc
+    - r      -- read path (decoding)
+    - w      -- write path (encoding)
+    - bind   -- language bindings
+    - api    -- user API
+    - doc    -- documentation
+    - [??? more topics here]
+
+* [??? other exceptions]
+
+* trailing whitespace
+
+  Don't be uncool; avoid introducing trailing whitespace!  See:
+  <http://old.nabble.com/Re:-whitespace-cleanup-p6850253.html>
+
+* branch name
+
+  If you want to push a branch that may be "git rebase"d in the future,
+  either use the prefix "wip-" (work in progress), or your Savannah
+  username followed by a slash (e.g., "juca/").
+
+* using gdb with programs in examples/
+
+  The programs in examples are built by libtool and dynamically linked
+  against the pre-installed library by using a wrapper script.  To run
+  them under gdb, use:
+
+  $ libtool --mode=execute gdb PROGRAM

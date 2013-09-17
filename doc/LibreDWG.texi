@@ -1,0 +1,297 @@
+\input texinfo @c -*-texinfo-*-
+@c %**start of header
+@setfilename LibreDWG.info
+@include version.texi
+@settitle LibreDWG @value{VERSION}
+
+@c Combine everything into one index (arbitrarily chosen to be the
+@c concept index).
+@syncodeindex vr cp
+@syncodeindex fn cp
+@c %**end of header
+
+@copying
+This manual is for GNU LibreDWG (version @value{VERSION}, @value{UPDATED}).
+
+Copyright @copyright{} 2010 Free Software Foundation, Inc.
+
+@quotation
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, with no Front-Cover Texts, and with no Back-Cover
+Texts.  A copy of the license is included in the section entitled
+``GNU Free Documentation License''.
+@end quotation
+@end copying
+
+@dircategory Libraries
+@direntry
+* LibreDWG: (LibreDWG).         Free implementation of the DWG file format.
+@end direntry
+
+@titlepage
+@title GNU LibreDWG
+@subtitle for version @value{VERSION}, @value{UPDATED}
+@author Thien-Thi Nguyen
+@c Hey, if you can change this, you can comment in the next line!
+@c @author GNU LibreDWG Developers
+@page
+@vskip 0pt plus 1filll
+@insertcopying
+@end titlepage
+
+@contents
+
+
+@ifnottex
+@node Top
+@top GNU LibreDWG
+
+@insertcopying
+@end ifnottex
+
+@menu
+* Overview::            General purpose and information.
+* Usage::               How to use LibreDWG.
+* Types::               Enums, structs.
+* Constants::           Value macros, invariably.
+* Functions::           Call them.
+
+* Reporting bugs::      Sending bug reports and feature suggestions.
+* GNU Free Documentation License:: Copying and sharing this documentation.
+* Index::
+@end menu
+
+
+@node Overview
+@chapter Overview
+
+@cindex overview
+@cindex dwg file format
+@cindex license
+
+LibreDWG is a free C library to read and write @dfn{DWG files}.
+The DWG file format was created in the 1970s for the then-emerging
+CAD applications.
+
+This library is part of the GNU project, released under the aegis of
+GNU.  It is made available under GPLv3+, i.e., under the terms of the
+GNU General Public License version 3, or (at your option) any later
+version.
+
+@section API/ABI version
+
+@cindex version, API/ABI
+
+LibreDWG @value{VERSION} provides the API/ABI version 1.
+@*[??? libtool version info ???]@*
+We hope that this doesn't need to change much in the future.
+@ignore
+In the past, these were released:
+
+@table @code
+@c [???] For first release, there is no history.  However, might me want
+@c to describe the difference between LibreDWG and LibDWG here?  --ttn
+@item 0
+...
+@end table
+@end ignore
+
+@section Coverage
+
+@cindex coverage
+
+Because the DWG file format is not open, its specification had to be
+reverse-engineered.  To date (@value{UPDATED-MONTH}) this is an ongoing
+process; the specification is approximately [??? percent ???] complete.
+Likewise, LibreDWG implementation of the specification is also an
+ongoing process; as of version @value{VERSION}, coverage is
+approximately [??? percent ???].
+Here is a list of features that are still missing.
+
+@cindex features, still missing
+
+@table @asis
+
+@item FOO[???] variant
+The FOO variant is low priority because no one uses it in the Free
+Software world.  We probably will never get to it.
+
+@end table
+
+@section Related projects
+
+@cindex projects, related
+
+Some projects that use DWG (and specifically LibreDWG) are:
+
+@table @asis
+@item [???]
+This project now uses LibreDWG.
+@end table
+
+
+@node Usage
+@chapter Usage
+
+@cindex header
+@cindex compilation
+@cindex linking
+
+This chapter describes how to compile and link a program against
+LibreDWG.  To access LibreDWG interface elements (@pxref{Types},
+@pxref{Constants}, @pxref{Functions}), include its header file
+in the C code.
+
+@example
+#include <dwg.h>
+@end example
+
+@noindent
+Make sure you specify @samp{-lredwg} when linking,
+such as in this @file{Makefile.am} fragment:
+
+@example
+AM_LDFLAGS += -lredwg
+@end example
+
+@noindent
+Note that the shared object library is named @file{libredwg} (with some
+system-specific extension, e.g., @file{.so}), so you do @strong{not}
+want to specify @code{-llibredwg}, as that would (try to) link against
+@file{liblibredwg} and fail.
+
+
+@node Types
+@chapter Types
+
+@cindex data types
+@cindex enums
+@cindex structs
+
+LibreDWG types map closely to the type system of the DWG file format.
+This chapter describes the enums and structs used to define the constants
+(@pxref{Constants}), and passed around the functions (@pxref{Functions}).
+
+[???]
+
+@cindex return code
+@cindex code, return
+@cindex error code
+@cindex code, error
+
+Two types that do not derive from the type system of the DWG file format
+are the enums for return codes and error codes.
+
+[???]
+
+@node Constants
+@chapter Constants
+
+@cindex constants
+
+This chapter describes the constant objects used in LibreDWG.
+
+@deftypevr {Constant} {(void *)} NULL
+This is the standard value for a pointer that points nowhere.
+You should avoid dereferencing a variable that holds @code{NULL}.
+In fact, that's good advice for LibreDWG, too!
+If you notice LibreDWG segfaulting, that's a bug.
+@xref{Reporting bugs}.
+@end deftypevr
+
+
+@node Functions
+@chapter Functions
+
+@cindex functions
+
+You can use LibreDWG immediately upon loading, without any particular
+initialization.  You usually use one set of functions---either decoding
+or encoding---at a time.  All functions use the common data types
+(@pxref{Types}) and constants (@pxref{Constants}).
+
+@menu
+* Decoding::                    Functions on the read path.
+* Encoding::                    Functions on the write path.
+@end menu
+
+
+@node Decoding
+@section Decoding
+
+@cindex functions, decoding
+@cindex functions, read path
+
+The highest level function for decoding a file is @code{dwg_read_file}.
+
+@deftypefn {Function} int dwg_read_file (char *@var{filename}, Dwg_Data *@var{d})
+Open @var{filename} and decode it, saving information into @var{d}.
+Return 0 if successful.
+@end deftypefn
+
+[???]
+
+
+@node Encoding
+@section Encoding
+
+@cindex functions, encoding
+@cindex functions, write path
+
+The highest level function for encoding a bitstream to a file is [???].
+
+
+@node Reporting bugs
+@chapter Reporting bugs
+
+@cindex bug reporting
+@cindex problems
+@cindex reporting bugs
+
+To report bugs or suggest enhancements for GNU LibreDWG, please
+``submit a bug'' at
+@uref{http://savannah.gnu.org/projects/libredwg, Savannah}
+or send electronic mail to @email{libredwg@@gnu.org}.
+(If you use the web interface, you don't need to also send email,
+since that is done automatically.)
+
+@cindex checklist for bug reports
+For bug reports, please include enough information for the maintainers
+to reproduce the problem.  Generally speaking, that means:
+
+@itemize @bullet
+@item The version numbers of LibreDWG (which you can find by
+[???]) and any other program(s) or manual(s) involved.
+@item Hardware and operating system names and versions.
+@item The contents of any input files necessary to reproduce the bug.
+@item The expected behavior and/or output.
+@item A description of the problem and samples of any erroneous output.
+@item Options you gave to @command{configure} other than specifying
+      installation directories.
+@item Anything else that you think would be helpful.
+@end itemize
+
+When in doubt whether something is needed or not, include it.  It's
+better to include too much than to leave out something important.
+
+@cindex patches, contributing
+Patches are welcome; if possible, please make them with
+@samp{git format-patch} and
+include @file{ChangeLog} entries (@pxref{Change Log,,, emacs, The GNU
+Emacs Manual}).  Please follow the existing coding style.
+
+
+@node GNU Free Documentation License
+@appendix GNU Free Documentation License
+
+@include fdl.texi
+
+
+@node Index
+@unnumbered Index
+
+@printindex cp
+
+@bye

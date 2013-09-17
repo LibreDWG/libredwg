@@ -1,0 +1,178 @@
+":"; exec emacs -batch -l "$0" -- "$@" # -*- emacs-lisp -*-
+;;; create-changelog
+
+;; Copyright (C) 2010 Free Software Foundation, Inc.
+;;
+;; This program is free software, licensed under the terms of the GNU
+;; General Public License as published by the Free Software Foundation,
+;; either version 3 of the License, or (at your option) any later version.
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Author: Thien-Thi Nguyen
+
+;;; Commentary:
+
+;; Usage: create-changelog [OPTIONS]
+;;
+;; Write a suitable ChangeLog made from "git log" output to stdout.
+;;
+;; Options are:
+;;  -o, --output FILENAME  -- write to FILENAME instead of stdout
+;;  -s, --since START      -- earliest entry must be on/after START
+;;  -c, --copyright WHO    -- append copyright notice
+;;
+;; Normally, process all log entries (since the beginning of the repo)
+;; to the present.  Optional arg `--since START' specifies a different
+;; start point.  START can be an ISO date (YYYY-MM-DD) or a reference
+;; (branch or tag).
+;;
+;; Regardless of the selected range, entries whose "subject line"
+;; end with "; nfc." or "; nfc" (no dot) are omitted unconditionally.
+;; Output format:
+;;
+;;  YYYY-MM-DD  AUTHOR  <EMAIL>
+;;
+;;          SUBJECT-LINE
+;;          * FILE (FUNC)...
+;;          [...]
+;;
+;; That is, the "discussion" paragraph and surrounding blank lines,
+;; if any, is omitted.  As a special case for old entries that do
+;; not follow the (at the time not yet specified in) HACKING format,
+;; the entire body of the entry is included.
+;;
+;; Option `--copyright WHO' appends a copyright notice of the form:
+;;
+;;  ^L
+;;  Copyright (C) YEAR WHO
+;;
+;;  Copying and distribution of this file, with or without modification,
+;;  are permitted provided the copyright notice and this notice are preserved.
+;;
+;; where ^L is a formfeed (ASCII 12) and YEAR is the current year.
+;;
+;; Examples:
+;;  $ create-changelog --since master
+;;  $ create-changelog -s v0.3 -o v0.4.ChangeLog
+
+;;; Code:
+
+(require 'cl)
+
+(defun fso (s &rest args)
+  "Format S with ARGS, writing the result to stdout."
+  (princ (apply 'format s args)))
+
+(defconst version "1.2"
+  "Version of create-changelog.
+History:
+1.0   -- initial release
+1.1   -- require -o (--output) for FILENAME
+         accept -s to mean --since
+         add missing-arg check for --since
+         expand help text
+         include package affiliation in --version output
+1.2   -- fix bug: make work with older \"git log\"
+         direct \"Generating...\" message to stderr
+         also filter entries with title ending in \"; nfc\" (no dot)
+         add option --copyright (-c)")
+
+(defvar outfile nil)
+(defvar which nil)
+(defvar copyright-notice nil)
+
+(let ((ls (cdr command-line-args-left))
+      arg)
+  (while (setq arg (pop ls))
+    (case (and (not (zerop (length arg)))
+               (intern arg))
+      ((--version)
+       (fso "create-changelog (LibreDWG) %s\n" version)
+       (kill-emacs))
+      ((--help)
+       (with-temp-buffer
+         (insert-file-contents load-file-name)
+         (search-forward "Usage: ")
+         (beginning-of-line)
+         (while (looking-at ";; \\{0,1\\}")
+           (fso "%s\n" (buffer-substring (match-end 0) (line-end-position)))
+           (forward-line 1)))
+       (kill-emacs))
+      ((-c --copyright)
+       (setq arg (or (pop ls)
+                     (error "ERROR: Missing argument for option `--copyright'"))
+             copyright-notice (format "%c
+Copyright (C) %s %s
+
+Copying and distribution of this file, with or without modification,
+are permitted provided the copyright notice and this notice are preserved."
+                                      ?\f
+                                      (format-time-string "%Y")
+                                      arg)))
+      ((-s --since)
+       (setq arg (pop ls)
+             which (if (not arg)
+                       (error "ERROR: Missing argument for option `--since'")
+                     (format (if (string-match
+                                  "[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]"
+                                  arg)
+                                 "--since=%s"
+                               "%s..")
+                             arg))))
+      ((-o --output)
+       (unless (setq outfile (pop ls))
+         (error "ERROR: Missing file name for option `--output'")))
+      (t
+       (error "ERROR: Unrecognized option: `%s'" arg)))))
+
+(message "Generating %s" (or which "full history"))
+
+(setq vc-handled-backends nil)
+
+(buffer-disable-undo)
+(erase-buffer)
+
+(save-excursion
+  (let ((args `("--no-merges"
+                ;; We used to use ‘--format=STR’ here but that
+                ;; depends on a feature introduced in Git 1.6.3,
+                ;; which is not provided, e.g., by Debian Lenny.
+                "--pretty=format:&B%n%ci%s%n  %an  <%ae>%n%n\t%s%n%b%n&E%n"
+                ,@(when which
+                    (list which)))))
+    (apply 'call-process "git" nil t nil "log" args)))
+
+(let (p (q (make-marker)) r)
+  (while (setq p (search-forward "&B\n" nil t))
+    (set-marker q (save-excursion (search-forward "\n&E")))
+    ;; Handle "; nfc." as described by HACKING, or "; nfc" as found in practice.
+    (if (looking-at ".*; nfc\\.?$")
+        (delete-region p q)
+      (delete-region (+ p 10) (1+ (line-end-position)))
+      (forward-line 3)
+      (setq p (point))
+      (when (setq r (re-search-forward "^*" q t))
+        (delete-region p (1- r))
+        (forward-char -1))
+      (while (< (point) (- q 3))
+        (insert "\t")
+        (forward-line 1)))))
+
+(goto-char (point-min))
+(delete-trailing-whitespace)
+(flush-lines "^&[BE]")
+(while (re-search-forward "\\(\n\n\\)\n+" nil t)
+  (replace-match "\\1"))
+
+(when copyright-notice
+  (goto-char (point-max))
+  (insert copyright-notice "\n"))
+
+(if outfile
+    (write-file outfile)
+  (fso "----------\n%s\n" (buffer-string)))
+
+(kill-emacs)
+
+;;; create-changelog ends here

@@ -2,7 +2,7 @@
 #include "dwg.h"
 #include <malloc.h>
 
-/********************************************************************
+/*******************************************************************
 *        Functions created from macro to extract entities           *
 ********************************************************************/
 
@@ -95,7 +95,7 @@ GET_DWG_ENTITY(LWPLINE);
 /// Macro call to extract all hatch entities from a block
 GET_DWG_ENTITY(HATCH);
 
-/********************************************************************
+/*******************************************************************
 *     Functions created from macro to cast dwg_object to entity     *
 *                 Usage :- dwg_object_to_ENTITY(),                  *
 *                where ENTITY can be LINE or CIRCLE                 *
@@ -191,7 +191,7 @@ CAST_DWG_OBJECT_TO_ENTITY(LWPLINE);
 CAST_DWG_OBJECT_TO_ENTITY(HATCH);
 
 
-/********************************************************************
+/*******************************************************************
 *     Functions created from macro to cast dwg object to object     *
 *                 Usage :- dwg_object_to_OBJECT(),                  *
 *            where OBJECT can be LAYER or BLOCK_HEADER              *
@@ -203,17 +203,16 @@ CAST_DWG_OBJECT_TO_OBJECT(BLOCK_CONTROL);
 /// Macro call to cast dwg object to layer
 CAST_DWG_OBJECT_TO_OBJECT(LAYER);
 
-/********************************************************************
+/*******************************************************************
 *                FUNCTIONS START HERE ENTITY SPECIFIC               *
 ********************************************************************/
 
-/********************************************************************
+/*******************************************************************
 *                    FUNCTIONS FOR CIRCLE ENTITY                    *
 ********************************************************************/
 
-/** This function creates and returns a new circle entity with default 
-values.
-Usage : dwg_ent_circle_new();
+/// This function creates and returns a new circle entity with default  values.
+/** Usage : dwg_ent_circle_new();
 */
 dwg_ent_circle *
 dwg_ent_circle_new(int *error)
@@ -229,9 +228,8 @@ dwg_ent_circle_new(int *error)
       *error = 1;
 }
 
-/** This function frees the memory allocated by the dwg_ent_circle_new()
-function.
-Usage :- dwg_ent_circle_delete();
+/// This function frees the memory allocated by the dwg_ent_circle_new() function.
+/** Usage :- dwg_ent_circle_delete();
 */
 void 
 dwg_ent_circle_delete(dwg_ent_circle *circle, int *error)
@@ -245,8 +243,8 @@ dwg_ent_circle_delete(dwg_ent_circle *circle, int *error)
     *error = 1;
 }
 
-/* This function initialises a new circle entity with default values.
-Usage :- dwg_ent_circle_init(circle);
+/// This function initialises a new circle entity with default values.
+/** Usage :- dwg_ent_circle_init(circle);
 where circle is a pointer of dwg_ent_circle type
 */
 dwg_ent_circle *
@@ -264,11 +262,11 @@ dwg_ent_circle_init(dwg_ent_circle *circle)
   return circle;
 }
 
-/** Returns the center values of circle to second argument.
-Usage : dwg_ent_circle_get_center(circle, &point, &error);
-arg 1 : dwg_ent_circle
-arg 2 : dwg_point_3d
-arg 3 : int
+/// Returns the center values of circle to second argument.
+/** Usage : dwg_ent_circle_get_center(circle, &point, &error);
+\param 1 dwg_ent_circle
+\param 2 dwg_point_3d
+\param 3 int
 */
 void
 dwg_ent_circle_get_center(dwg_ent_circle *circle, dwg_point_3d *point, 
@@ -285,11 +283,11 @@ dwg_ent_circle_get_center(dwg_ent_circle *circle, dwg_point_3d *point,
     *error = 1;
 }
 
-/** sets the center values of circle.
-Usage : dwg_ent_circle_set_center(circle, &point, &error);
-arg 1 : dwg_ent_circle
-arg 2 : dwg_point_3d
-arg 3 : int
+/// sets the center values of circle.
+/** Usage : dwg_ent_circle_set_center(circle, &point, &error);
+\param 1 dwg_ent_circle
+\param 2 dwg_point_3d
+\param 3 int
 */
 void
 dwg_ent_circle_set_center(dwg_ent_circle *circle, dwg_point_3d *point,
@@ -306,10 +304,10 @@ dwg_ent_circle_set_center(dwg_ent_circle *circle, dwg_point_3d *point,
     *error = 1;
 }
 
-/** returns the circle radius.
-Usage : double radius = dwg_ent_circle_get_radius(circle, &error);
-arg 1 : dwg_ent_circle
-arg 2 : int
+/// returns the circle radius.
+/** Usage : double radius = dwg_ent_circle_get_radius(circle, &error);
+\param 1 dwg_ent_circle
+\param 2 int
 */
 double
 dwg_ent_circle_get_radius(dwg_ent_circle *circle, int *error)
@@ -323,11 +321,11 @@ dwg_ent_circle_get_radius(dwg_ent_circle *circle, int *error)
     *error = 1;
 }
 
-/** sets the circle radius.
-Usage : dwg_ent_circle_set_radius(circle, radius, &error);
-arg 1 : dwg_ent_circle
-arg 2 : double
-arg 3 : int
+/// sets the circle radius.
+/** Usage : dwg_ent_circle_set_radius(circle, radius, &error);
+\param 1 dwg_ent_circle
+\param 2 double
+\param 3 int
 */
 void
 dwg_ent_circle_set_radius(dwg_ent_circle *circle, double radius, int *error)
@@ -341,10 +339,10 @@ dwg_ent_circle_set_radius(dwg_ent_circle *circle, double radius, int *error)
     *error = 1;
 }
 
-/** returns the circle thickness.
-Usage : double thickness = dwg_ent_circle_get_thickness(circle, &error);
-arg 1 : dwg_ent_circle
-arg 2 : int
+/// returns the circle thickness.
+/** Usage : double thickness = dwg_ent_circle_get_thickness(circle, &error);
+\param 1 dwg_ent_circle
+\param 2 int
 */
 double
 dwg_ent_circle_get_thickness(dwg_ent_circle *circle, int *error)
@@ -358,10 +356,10 @@ dwg_ent_circle_get_thickness(dwg_ent_circle *circle, int *error)
     *error = 1;
 }
 
-/** sets the circle thickness.
-Usage : dwg_ent_circle_set_thickness(circle, thickness, &error);
-arg 1 : dwg_ent_circle
-arg 2 : int
+/// sets the circle thickness.
+/** Usage : dwg_ent_circle_set_thickness(circle, thickness, &error);
+\param 1 dwg_ent_circle
+\param 2 int
 */
 void
 dwg_ent_circle_set_thickness(dwg_ent_circle *circle, double thickness,
@@ -376,11 +374,11 @@ dwg_ent_circle_set_thickness(dwg_ent_circle *circle, double thickness,
     *error = 1;
 }
 
-/** returns extrusion value of circle.
-Usage :- dwg_ent_circle_get_extrusion(circle, &point, &error);
-arg 1 : dwg_ent_circle
-arg 2 : dwg_point_3d
-arg 3 : int
+/// returns extrusion value of circle.
+/** Usage : dwg_ent_circle_get_extrusion(circle, &point, &error);
+\param 1 dwg_ent_circle
+\param 2 dwg_point_3d
+\param 3 int
 */
 void
 dwg_ent_circle_set_extrusion(dwg_ent_circle *circle, dwg_point_3d *vector,
@@ -397,11 +395,11 @@ dwg_ent_circle_set_extrusion(dwg_ent_circle *circle, dwg_point_3d *vector,
     *error = 1;
 }
 
-/** sets extrusion value of circle.
-Usage :- dwg_ent_circle_set_extrusion(circle, &point, &error);
-arg 1 : dwg_ent_circle
-arg 2 : dwg_point_3d
-arg 3 : int
+/// sets extrusion value of circle.
+/** Usage : dwg_ent_circle_set_extrusion(circle, &point, &error);
+\param 1 dwg_ent_circle
+\param 2 dwg_point_3d
+\param 3 int
 */
 void
 dwg_ent_circle_get_extrusion(dwg_ent_circle *circle, dwg_point_3d *vector,
@@ -418,12 +416,12 @@ dwg_ent_circle_get_extrusion(dwg_ent_circle *circle, dwg_point_3d *vector,
     *error = 1;
 }
 
-/********************************************************************
+/*******************************************************************
 *                    FUNCTIONS FOR LINE ENTITY                      *
 ********************************************************************/
 
-/* This function creates a new entity of line.
-Usage :- dwg_ent_line_new();
+/// This function creates a new entity of line.
+/** Usage :- dwg_ent_line_new();
 */
 dwg_ent_line *
 dwg_ent_line_new(int *error)
@@ -439,9 +437,8 @@ dwg_ent_line_new(int *error)
       *error = 1;
 }
 
-/* This function deletes the entity created using dwg_ent_line_new() 
-function and frees the allocated memory.
-Usage :- dwg_ent_line_delete();
+/// This function deletes the entity created using dwg_ent_line_new() function and frees the allocated memory.
+/** Usage :- dwg_ent_line_delete();
 */
 void 
 dwg_ent_line_delete(dwg_ent_line *line, int *error)
@@ -455,8 +452,8 @@ dwg_ent_line_delete(dwg_ent_line *line, int *error)
     *error = 1;
 }
 
-/* This function initialises a line entity with default or zero values.
-Usage :- dwg_ent_line_init();
+/// This function initialises a line entity with default or zero values.
+/** Usage :- dwg_ent_line_init();
 */
 dwg_ent_line *
 dwg_ent_line_init(dwg_ent_line *line)
@@ -472,10 +469,11 @@ dwg_ent_line_init(dwg_ent_line *line)
   return line;
 }
 
-/* This function returns the line start points to the second argument.
-Usage :- dwg_ent_line_get_start_point(line, point);
-line is entity of line type and point is a dwg_point_3d datatype.
-after calling this point.x will have start x value.
+/// returns line start points.
+/** Usage : dwg_ent_line_get_start_point(line, &start_points, &error);
+\param 1 dwg_ent_line
+\param 2 dwg_point_2d
+\param 3 int
 */
 void
 dwg_ent_line_get_start_point(dwg_ent_line *line, dwg_point_3d *point,
@@ -492,10 +490,11 @@ dwg_ent_line_get_start_point(dwg_ent_line *line, dwg_point_3d *point,
     *error = 1;
 }
 
-/* This function sets the line start points equal to the 
-point values in second argument.
-Usage :- dwg_ent_line_set_start_point(line, point);
-line is entity of line type and point is a dwg_point_3d datatype.
+/// sets line start points.
+/** Usage : dwg_ent_line_set_start_point(line, &start_points, &error);
+\param 1 dwg_ent_line
+\param 2 dwg_point_2d
+\param 3 int
 */
 void
 dwg_ent_line_set_start_point(dwg_ent_line *line, dwg_point_3d *point,
@@ -512,11 +511,11 @@ dwg_ent_line_set_start_point(dwg_ent_line *line, dwg_point_3d *point,
     *error = 1;
 }
 
-/* This function returns the line end points to the second argument.
-Usage :- dwg_ent_line_get_end_point(line, point);
-line is entity of line type and point is a dwg_point_3d datatype.
-after calling this point.x will have end x value and point.y will have
-end y value.
+/// returns line end points.
+/** Usage : dwg_ent_line_get_start_end(line, &end_points, &error);
+\param 1 dwg_ent_line
+\param 2 dwg_point_2d
+\param 3 int
 */
 void
 dwg_ent_line_get_end_point(dwg_ent_line *line, dwg_point_3d *point, 
@@ -533,10 +532,11 @@ dwg_ent_line_get_end_point(dwg_ent_line *line, dwg_point_3d *point,
     *error = 1;
 }
 
-/* This function sets the line end points equal to the 
-point values in second argument.
-Usage :- dwg_ent_line_set_end_point(line, point);
-line is entity of line type and point is a dwg_point_3d datatype.
+/// sets line end points.
+/** Usage : dwg_ent_line_set_start_end(line, &end_points, &error);
+\param 1 dwg_ent_line
+\param 2 dwg_point_2d
+\param 3 int
 */
 void
 dwg_ent_line_set_end_point(dwg_ent_line *line, dwg_point_3d *point, 
@@ -553,8 +553,10 @@ dwg_ent_line_set_end_point(dwg_ent_line *line, dwg_point_3d *point,
     *error = 1;
 }
 
-/* Returns line thickness of line entity passed in argument. 
-Usage :- double thickness = dwg_ent_line_get_thickness(line);
+/// Returns line thickness.
+/** Usage : double thickness = dwg_ent_line_get_thickness(line, &error);
+\param 1 dwg_ent_line
+\param 2 int
 */
 double
 dwg_ent_line_get_thickness(dwg_ent_line *line, int *error)
@@ -568,9 +570,11 @@ dwg_ent_line_get_thickness(dwg_ent_line *line, int *error)
     *error = 1;
 }
 
-/* Sets line thickness equal to (thickness) value passed in second 
-argument.
-Usage :- dwg_ent_line_set_thickness(line, thickness_value);
+/// Sets line thickness.
+/** Usage : dwg_ent_line_get_thickness(line, thickness, &error);
+\param 1 dwg_ent_line
+\param 2 double
+\param 3 int
 */
 void
 dwg_ent_line_set_thickness(dwg_ent_line *line, double thickness, int *error)
@@ -584,11 +588,11 @@ dwg_ent_line_set_thickness(dwg_ent_line *line, double thickness, int *error)
     *error = 1;
 }
 
-/* This function returns the extrusion of a line entity into second 
-argument.
-Usage :- dwg_ent_line_get_extrusion(line, extrusion_value);
-where line is an entity of line type, and extrusion value contains
-the x, y and z values
+/// returns line extrusion.
+/** Usage : dwg_ent_line_get_extrusion(line, &ext_points, &error);
+\param 1 dwg_ent_line
+\param 2 dwg_point_3d
+\param 3 int
 */
 void
 dwg_ent_line_get_extrusion(dwg_ent_line *line, dwg_point_3d *vector,
@@ -605,11 +609,11 @@ dwg_ent_line_get_extrusion(dwg_ent_line *line, dwg_point_3d *vector,
     *error = 1;
 }
 
-/* This function sets the extrusion of a line entity equal to 
-values in second argument.
-Usage :- dwg_ent_line_set_extrusion(line, extrusion_value);
-where line is an entity of line type, and extrusion value contains
-the x, y and z values
+/// sets line extrusion.
+/** Usage : dwg_ent_line_set_extrusion(line, &ext_points, &error);
+\param 1 dwg_ent_line
+\param 2 dwg_point_3d
+\param 3 int
 */
 void
 dwg_ent_line_set_extrusion(dwg_ent_line *line, dwg_point_3d *vector,
@@ -626,12 +630,12 @@ dwg_ent_line_set_extrusion(dwg_ent_line *line, dwg_point_3d *vector,
     *error = 1;
 }
 
-/********************************************************************
+/*******************************************************************
 *                    FUNCTIONS FOR ARC ENTITY                       *
 ********************************************************************/
 
-/* This function creates a new entity of arc type.
-Usage :- dwg_ent_arc_new();
+/// This function creates a new entity of arc type.
+/** Usage :- dwg_ent_arc_new();
 */
 dwg_ent_arc *
 dwg_ent_arc_new(int *error)
@@ -646,9 +650,8 @@ dwg_ent_arc_new(int *error)
       *error = 1;
 }
 
-/* This function deletes entity created by dwg_ent_arc_new() function
-and frees the allocated memory.
-Usage :- dwg_ent_arc_delete();
+/// This function deletes entity created by dwg_ent_arc_new() function and frees the allocated memory.
+/** Usage :- dwg_ent_arc_delete();
 */
 void 
 dwg_ent_arc_delete(dwg_ent_arc *arc, int *error)
@@ -662,8 +665,8 @@ dwg_ent_arc_delete(dwg_ent_arc *arc, int *error)
     *error = 1;
 }
 
-/* This function initialises a arc entity with default/zero values.
-Usage :- dwg_ent_arc_init();
+/// This function initialises a arc entity with default/zero values.
+/** Usage :- dwg_ent_arc_init();
 */
 dwg_ent_arc *
 dwg_ent_arc_init(dwg_ent_arc *arc)
@@ -680,11 +683,11 @@ dwg_ent_arc_init(dwg_ent_arc *arc)
   return arc;
 }
 
-/* Returns the center values of arc to second argument.
-Usage :- dwg_ent_arc_get_center(arc, point);
-where arc is a pointer of dwg_ent_arc type and point is 
-of dwg_point_3d. point.x will contain x value of center,
-point.y will contain y value of center
+/// sets arc center.
+/** Usage : dwg_ent_arc_get_center(arc, &point, &error);
+\param 1 dwg_ent_arc
+\param 2 dwg_point_3d
+\param 3 int
 */
 void
 dwg_ent_arc_get_center(dwg_ent_arc *arc, dwg_point_3d *point,
@@ -701,11 +704,11 @@ dwg_ent_arc_get_center(dwg_ent_arc *arc, dwg_point_3d *point,
     *error = 1;
 }
 
-/* Sets the second argument values equal to the arc center.
-Usage :- dwg_ent_arc_get_center(arc, point);
-where arc is a pointer of dwg_ent_arc type and point is 
-of dwg_point_3d. point.x will contain x value of center,
-point.y will contain y value of center
+/// sets arc center.
+/** Usage : dwg_ent_arc_set_center(arc, &point, &error);
+\param 1 dwg_ent_arc
+\param 2 dwg_point_3d
+\param 3 int
 */
 void
 dwg_ent_arc_set_center(dwg_ent_arc *arc, dwg_point_3d *point,
@@ -722,8 +725,10 @@ dwg_ent_arc_set_center(dwg_ent_arc *arc, dwg_point_3d *point,
     *error = 1;
 }
 
-/* Returns radius of arc entity passed in argument.
-Usage :- double arc_radius = dwg_ent_arc_get_radius(arc);
+/// Returns arc radius.
+/** Usage : double radius = dwg_ent_arc_get_radius(arc, &error);
+\param 1 dwg_ent_arc
+\param 2 int
 */
 double
 dwg_ent_arc_get_radius(dwg_ent_arc *arc, int *error)
@@ -737,10 +742,11 @@ dwg_ent_arc_get_radius(dwg_ent_arc *arc, int *error)
     *error = 1;
 }
 
-/* Sets radius of arc entity equal to (radius) value 
-provided in second argument.
-Usage :- dwg_ent_arc_set_radius(arc, 40.0);
-hence radius of arc sets to 40.0
+/// Sets arc radius
+/** Usage : dwg_ent_arc_set_radius(arc, radius, &error);
+\param 1 dwg_ent_arc
+\param 2 double
+\param 3 int
 */
 void
 dwg_ent_arc_set_radius(dwg_ent_arc *arc, double radius, int *error)
@@ -754,10 +760,10 @@ dwg_ent_arc_set_radius(dwg_ent_arc *arc, double radius, int *error)
     *error = 1;
 }
     
-/* Returns thickness of entity passed in argument.
-Usage :- 
-double thickness;
-thickness = dwg_ent_arc_get_thickness(circle);
+/// Returns arc thickness.
+/** Usage : double thickness = dwg_ent_arc_get_thickness(arc, &error);
+\param 1 dwg_ent_arc
+\param 2 int
 */
 double
 dwg_ent_arc_get_thickness(dwg_ent_arc *arc, int *error)
@@ -771,10 +777,11 @@ dwg_ent_arc_get_thickness(dwg_ent_arc *arc, int *error)
     *error = 1;
 }
 
-/* Sets thickness of a arc entity passed in 
-first argument equal to (thickness) value in second argument.
-Usage :- dwg_ent_circle_set_thickness(circle, 50.0);
-hence circle thickness becomes 50.0 
+/// Sets arc thickness.
+/** Usage : dwg_ent_arc_get_thickness(arc, thickness, &error);
+\param 1 dwg_ent_arc
+\param 2 double
+\param 3 int
 */
 void
 dwg_ent_arc_set_thickness(dwg_ent_arc *arc, double thickness, int *error)
@@ -788,13 +795,13 @@ dwg_ent_arc_set_thickness(dwg_ent_arc *arc, double thickness, int *error)
     *error = 1;
 }
 
-/* This function returns the extrusion of a arc entity into second 
-argument.
-Usage :- dwg_ent_arc_get_extrusion(arc, extrusion_value);
-where arc is an entity of arc type, and extrusion value contains
-the x, y and z values
+/// returns arc extrusion.
+/** Usage : dwg_ent_arc_get_extrusion(arc, &ext_points, &error);
+\param 1 dwg_ent_arc
+\param 2 dwg_point_3d
+\param 3 int
 */
-void 
+void
 dwg_ent_arc_get_extrusion(dwg_ent_arc *arc, dwg_point_3d *vector, int *error)
 {
   if (arc != 0)
@@ -808,11 +815,11 @@ dwg_ent_arc_get_extrusion(dwg_ent_arc *arc, dwg_point_3d *vector, int *error)
     *error = 1;
 }
 
-/* This function sets the extrusion of a arc entity equal to 
-data in second argument.
-Usage :- dwg_ent_arc_set_extrusion(arc, extrusion_value);
-where arc is an entity of arc type, and extrusion value contains
-the x, y and z values
+/// sets arc extrusion.
+/** Usage : dwg_ent_arc_set_extrusion(arc, &ext_points, &error);
+\param 1 dwg_ent_arc
+\param 2 dwg_point_3d
+\param 3 int
 */
 void 
 dwg_ent_arc_set_extrusion(dwg_ent_arc *arc, dwg_point_3d *vector, int *error)
@@ -828,8 +835,10 @@ dwg_ent_arc_set_extrusion(dwg_ent_arc *arc, dwg_point_3d *vector, int *error)
     *error = 1;
 }
 
-/* Returns start angle of arc passed in argument.
-Usage :- double start_angle = dwg_ent_arc_get_start_angle(arc);
+/// Returns arc start angle.
+/** Usage : double start_angle = dwg_ent_arc_get_start_angle(line, &error);
+\param 1 dwg_ent_arc
+\param 2 int
 */
 double
 dwg_ent_arc_get_start_angle(dwg_ent_arc *arc, int *error)
@@ -843,9 +852,11 @@ dwg_ent_arc_get_start_angle(dwg_ent_arc *arc, int *error)
     *error = 1;
 }
 
-/* Sets start angle of arc passed in argument 1 equal to (angle)
-value in argument 2.
-Usage :- double start_angle = dwg_ent_arc_get_start_angle(arc);
+/// Sets arc start angle.
+/** Usage : dwg_ent_arc_set_start_angle(arc, start_angle, &error);
+\param 1 dwg_ent_arc
+\param 2 double
+\param 3 int
 */
 void
 dwg_ent_arc_set_start_angle(dwg_ent_arc *arc, double start_angle, int *error)
@@ -859,8 +870,10 @@ dwg_ent_arc_set_start_angle(dwg_ent_arc *arc, double start_angle, int *error)
     *error = 1;
 }
 
-/* Returns end angle of arc passed in argument.
-Usage :- double end_angle = dwg_ent_arc_get_end_angle(arc);
+/// Returns arc end angle.
+/** Usage : double end_angle = dwg_ent_arc_get_end_angle(arc, &error);
+\param 1 dwg_ent_arc
+\param 2 int
 */
 double
 dwg_ent_arc_get_end_angle(dwg_ent_arc *arc, int *error)
@@ -874,9 +887,11 @@ dwg_ent_arc_get_end_angle(dwg_ent_arc *arc, int *error)
     *error = 1;
 }
 
-/* Sets end angle of arc passed in argument 1 equal to (angle)
-value in argument 2.
-Usage :- double end_angle = dwg_ent_arc_get_end_angle(arc);
+/// Sets arc end angle.
+/** Usage : dwg_ent_arc_set_end_angle(arc, end_angle, &error);
+\param 1 dwg_ent_arc
+\param 2 double
+\param 3 int
 */
 void
 dwg_ent_arc_set_end_angle(dwg_ent_arc *arc, double end_angle, int *error)
@@ -890,12 +905,12 @@ dwg_ent_arc_set_end_angle(dwg_ent_arc *arc, double end_angle, int *error)
     *error = 1;
 }
 
-/********************************************************************
+/*******************************************************************
 *                   FUNCTIONS FOR ELLIPSE ENTITY                    *
 ********************************************************************/
 
-/* This function creates a new entity of ellipse type.
-Usage :- dwg_ent_ellipse_new();
+/// This function creates a new entity of ellipse type.
+/** Usage :- dwg_ent_ellipse_new();
 */
 dwg_ent_ellipse *
 dwg_ent_ellipse_new(int *error)
@@ -911,9 +926,8 @@ dwg_ent_ellipse_new(int *error)
       *error = 1;
 }
 
-/* This function deletes entity created by dwg_ent_ellipse_new() function
-and frees the allocated memory.
-Usage :- dwg_ent_ellipse_delete();
+/// This function deletes entity created by dwg_ent_ellipse_new() function and frees the allocated memory.
+/** Usage :- dwg_ent_ellipse_delete();
 */
 void
 dwg_ent_ellipse_delete(dwg_ent_ellipse *ellipse, int *error)
@@ -927,9 +941,8 @@ dwg_ent_ellipse_delete(dwg_ent_ellipse *ellipse, int *error)
     *error = 1;
 }
 
-/* This function initialises a ellipse entity with default or 
-    zero values.
-Usage :- dwg_ent_ellipse_init();
+/// This function initialises a ellipse entity with default or zero values.
+/** Usage :- dwg_ent_ellipse_init();
 */
 dwg_ent_ellipse *
 dwg_ent_ellipse_init(dwg_ent_ellipse *ellipse)
@@ -949,11 +962,11 @@ dwg_ent_ellipse_init(dwg_ent_ellipse *ellipse)
   return ellipse;
 }
 
-/* Returns the center values of ellipse to second argument.
-Usage :- dwg_ent_ellipse_get_center(ellipse, point);
-where ellipse is a pointer of dwg_ent_ellipse type and point is 
-of dwg_point_3d. point.x will contain x value of center,
-point.y will contain y value of center
+/// returns ellipse center.
+/** Usage : dwg_ent_ellipse_get_center(ellipse, &center, &error);
+\param 1 dwg_ent_ellipse
+\param 2 dwg_point_3d
+\param 3 int
 */
 void
 dwg_ent_ellipse_get_center(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
@@ -970,11 +983,11 @@ dwg_ent_ellipse_get_center(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
     *error = 1;
 }
 
-/* Sets the ellipse center values equal to values of second argument.
-Usage :- dwg_ent_ellipse_get_center(ellipse, point);
-where ellipse is a pointer of dwg_ent_ellipse type and point is 
-of dwg_point_3d. point.x will contain x value of center,
-point.y will contain y value of center
+/// sets ellipse center
+/** Usage : dwg_ent_ellipse_set_center(ellipse, &center &error);
+\param 1 dwg_ent_ellipse
+\param 2 dwg_point_3d
+\param 3 int
 */
 void
 dwg_ent_ellipse_set_center(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
@@ -991,11 +1004,11 @@ dwg_ent_ellipse_set_center(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
     *error = 1;
 }
 
-/* Returns the sm_axis values of ellipse to second argument.
-Usage :- dwg_ent_ellipse_get_sm_axis(ellipse, point);
-where ellipse is a pointer of dwg_ent_ellipse type and point is 
-of dwg_point_3d. point.x will contain x value of sm_axis,
-point.y will contain y value of sm_axis
+/// returns ellipse sm axis.
+/** Usage : dwg_ent_ellipse_get_sm_axis(ellipse, &point, &error);
+\param 1 dwg_ent_ellipse
+\param 2 dwg_point_3d
+\param 3 int
 */
 void
 dwg_ent_ellipse_get_sm_axis(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
@@ -1012,11 +1025,11 @@ dwg_ent_ellipse_get_sm_axis(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
     *error = 1;
 }
 
-/* Sets the ellipse sm_axis values equal to values of second argument.
-Usage :- dwg_ent_ellipse_get_sm_axis(ellipse, point);
-where ellipse is a pointer of dwg_ent_ellipse type and point is 
-of dwg_point_3d. point.x will contain x value of sm_axis,
-point.y will contain y value of sm_axis
+/// sets ellipse sm axis.
+/** Usage : dwg_ent_ellipse_set_sm_axis(ellipse, &point, &error);
+\param 1 dwg_ent_ellipse
+\param 2 dwg_point_3d
+\param 3 int
 */
 void
 dwg_ent_ellipse_set_sm_axis(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
@@ -1033,11 +1046,11 @@ dwg_ent_ellipse_set_sm_axis(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
     *error = 1;
 }
 
-/* Returns the extrusion values of ellipse to second argument.
-Usage :- dwg_ent_ellipse_get_extrusion(ellipse, point);
-where ellipse is a pointer of dwg_ent_ellipse type and point is 
-of dwg_point_3d. point.x will contain x value of extrusion,
-point.y will contain y value of extrusion
+/// returns ellipse extrusion.
+/** Usage : dwg_ent_ellipse_get_extrusion(ellipse, &ext_points, &error);
+\param 1 dwg_ent_ellipse
+\param 2 dwg_point_3d
+\param 3 int
 */
 void
 dwg_ent_ellipse_get_extrusion(dwg_ent_ellipse *ellipse, dwg_point_3d *vector,
@@ -1054,11 +1067,11 @@ dwg_ent_ellipse_get_extrusion(dwg_ent_ellipse *ellipse, dwg_point_3d *vector,
     *error = 1;
 }
 
-/* Sets the ellipse extrusion values equal to values of second argument.
-Usage :- dwg_ent_ellipse_set_extrusion(ellipse, point);
-where ellipse is a pointer of dwg_ent_ellipse type and point is 
-of dwg_point_3d. point.x will contain x value of extrusion,
-point.y will contain y value of extrusion
+/// sets ellipse extrusion.
+/** Usage : dwg_ent_ellipse_set_extrusion(ellipse, &ext_points, &error);
+\param 1 dwg_ent_ellipse
+\param 2 dwg_point_3d
+\param 3 int
 */
 void
 dwg_ent_ellipse_set_extrusion(dwg_ent_ellipse *ellipse, dwg_point_3d *vector, 
@@ -1075,8 +1088,10 @@ dwg_ent_ellipse_set_extrusion(dwg_ent_ellipse *ellipse, dwg_point_3d *vector,
     *error = 1;
 }
 
-/* Returns the axis ratio of an ellipse entity passed in argument.
-Usage :- double axis_ratio = dwg_ent_ellipse_get_axis_ratio(ellipse);
+/// Returns ellipse axis ratio
+/** Usage : double axis_ratio = dwg_ent_ellipse_get_axis_ratio(ellipse, &error);
+\param 1 dwg_ent_ellipse
+\param 2 int
 */
 double
 dwg_ent_ellipse_get_axis_ratio(dwg_ent_ellipse *ellipse, int *error)
@@ -1090,9 +1105,11 @@ dwg_ent_ellipse_get_axis_ratio(dwg_ent_ellipse *ellipse, int *error)
     *error = 1;
 }
 
-/* Sets the axis ratio of an ellipse entity equal to value passed in 2nd argument.
-Usage :- dwg_ent_ellipse_get_axis_ratio(ellipse, 3.0);
-hence axis ratio of ellipse becomes 3.0
+/// Sets ellipse axis ratio.
+/** Usage : dwg_ent_ellipse_set_axis_ratio(ellipse, axis_ratio, &error);
+\param 1 dwg_ent_ellipse
+\param 2 double
+\param 3 int
 */
 void
 dwg_ent_ellipse_set_axis_ratio(dwg_ent_ellipse *ellipse, double ratio,
@@ -1107,8 +1124,10 @@ dwg_ent_ellipse_set_axis_ratio(dwg_ent_ellipse *ellipse, double ratio,
     *error = 1;
 }
 
-/* Returns start angle of ellipse passed in argument.
-Usage :- double start_angle = dwg_ent_ellipse_get_start_angle(ellipse);
+/// Returns ellipse start angle.
+/** Usage : double start_angle = dwg_ent_ellipse_get_start_angle(ellipse, &error);
+\param 1 dwg_ent_ellipse
+\param 2 int
 */
 double
 dwg_ent_ellipse_get_start_angle(dwg_ent_ellipse *ellipse, int *error)
@@ -1122,9 +1141,11 @@ dwg_ent_ellipse_get_start_angle(dwg_ent_ellipse *ellipse, int *error)
     *error = 1;
 }
 
-/* Sets start angle of ellipse passed in argument 1 equal to (angle)
-value in argument 2.
-Usage :- double start_angle = dwg_ent_ellipse_get_start_angle(ellipse);
+/// Sets ellipse start angle.
+/** Usage : dwg_ent_ellipse_set_start_angle(ellipse, start_angle, &error);
+\param 1 dwg_ent_ellipse
+\param 2 double
+\param 3 int
 */
 void
 dwg_ent_ellipse_set_start_angle(dwg_ent_ellipse *ellipse, double start_angle,
@@ -1139,8 +1160,10 @@ dwg_ent_ellipse_set_start_angle(dwg_ent_ellipse *ellipse, double start_angle,
     *error = 1;
 }
 
-/* Returns end angle of ellipse passed in argument.
-Usage :- double end_angle = dwg_ent_ellipse_get_end_angle(ellipse);
+/// Returns ellipse end angle.
+/** Usage : double end_angle = dwg_ent_ellipse_get_end_angle(ellipse, &error);
+\param 1 dwg_ent_ellipse
+\param 2 int
 */
 double
 dwg_ent_ellipse_get_end_angle(dwg_ent_ellipse *ellipse, int *error)
@@ -1154,9 +1177,11 @@ dwg_ent_ellipse_get_end_angle(dwg_ent_ellipse *ellipse, int *error)
     *error = 1;
 }
 
-/* Sets end angle of ellipse passed in argument 1 equal to (angle)
-value in argument 2.
-Usage :- double end_angle = dwg_ent_ellipse_get_end_angle(ellipse);
+/// Sets ellipse end angle.
+/** Usage : dwg_ent_ellipse_set_end_angle(ellipse, end_angle, &error);
+\param 1 dwg_ent_ellipse
+\param 2 double
+\param 3 int
 */
 void
 dwg_ent_ellipse_set_end_angle(dwg_ent_ellipse *ellipse, double end_angle,
@@ -1171,14 +1196,15 @@ dwg_ent_ellipse_set_end_angle(dwg_ent_ellipse *ellipse, double end_angle,
     *error = 1;
 }
 
-/********************************************************************
+/*******************************************************************
 *                    FUNCTIONS FOR TEXT ENTITY                      *
 ********************************************************************/
 
-/* This sets text value of a text entity equal to value provided 
-in second argument.
-Usage :- dwg_ent_text_set_text(text, "Hello world");
-This will set text value to Hello world.
+/// Sets text value of a text entity
+/** Usage : dwg_ent_text_set_text(text, "Hello world", &error);
+\param 1 dwg_ent_text
+\param 2 string ( char * )
+\param 2 int 
 */
 void
 dwg_ent_text_set_text(dwg_ent_text *text, char * text_value, int *error)
@@ -1192,8 +1218,10 @@ dwg_ent_text_set_text(dwg_ent_text *text, char * text_value, int *error)
     *error = 1;
 }
 
-/* This returns the text value of a text entity.
-Usage :- dwg_ent_text_get_text(text);
+/// This returns the text value of a text entity.
+/** Usage : dwg_ent_text_get_text(text, &error);
+\param 1 dwg_ent_text
+\param 2 int
 */
 char *
 dwg_ent_text_get_text(dwg_ent_text *text, int *error)
@@ -1207,10 +1235,11 @@ dwg_ent_text_get_text(dwg_ent_text *text, int *error)
     *error = 1;
 }
 
-/* This returns the insertion point of a text entity 
-into second argument.
-Usage :- dwg_ent_text_get_insertion_point(text, point);
-point.x and point.y contains x and y cordinate data respectively.
+/// This returns the insertion point of a text entity into second argument.
+/** Usage : dwg_ent_text_get_insertion_point(text, &point, &error);
+\param 1 dwg_ent_text
+\param 2 dwg_2d_point
+\param 3 int
 */
 void
 dwg_ent_text_get_insertion_point(dwg_ent_text *text, dwg_point_2d *point,
@@ -1226,9 +1255,11 @@ dwg_ent_text_get_insertion_point(dwg_ent_text *text, dwg_point_2d *point,
     *error = 1;
 }
 
-/* This sets the insertion point of a text entity equal to 
-co-ordinate values in second argument.
-Usage :- dwg_ent_text_set_insertion_point(text, point)
+/// Sets insertion point
+/** Usage :- dwg_ent_text_set_insertion_point(text, &point, &error)
+\param 1 dwg_ent_text
+\param 2 dwg_point_2d
+\param 3 int
 */
 void
 dwg_ent_text_set_insertion_point(dwg_ent_text *text, dwg_point_2d *point,
@@ -1244,8 +1275,8 @@ dwg_ent_text_set_insertion_point(dwg_ent_text *text, dwg_point_2d *point,
     *error = 1;
 }
 
-/* This returns the height of a text entity.
-Usage :- dwg_ent_text_get_height(text);
+/// Returns height of a text.
+/** Usage :- double height = dwg_ent_text_get_height(text);
 */
 double
 dwg_ent_text_get_height(dwg_ent_text *text, int *error)
@@ -1259,10 +1290,11 @@ dwg_ent_text_get_height(dwg_ent_text *text, int *error)
     *error = 1;
 }
 
-/* This sets height of a text entity equal to value provided 
-in second argument.
-Usage :- dwg_ent_text_set_height(text, 100);
-This will set height to 100.
+/// Sets height of Text
+/** Usage :- dwg_ent_text_set_height(text, 100, &error);
+\param dwg_ent_text
+\param double
+\param int
 */
 void
 dwg_ent_text_set_height(dwg_ent_text *text, double height, int *error)
@@ -1276,11 +1308,11 @@ dwg_ent_text_set_height(dwg_ent_text *text, double height, int *error)
     *error = 1;
 }
 
-/* Returns the extrusion values of text to second argument.
-Usage :- dwg_ent_text_get_extrusion(text, point);
-where text is a pointer of dwg_ent_text type and point is 
-of dwg_point_3d. point.x will contain x value of extrusion,
-point.y will contain y value of extrusion
+/// Returns extrusion value
+/** Usage : dwg_ent_text_get_extrusion(text, &point, &error);
+\param dwg_ent_text
+\param dwg_point_2d
+\param int
 */
 void
 dwg_ent_text_get_extrusion(dwg_ent_text *text, dwg_point_3d *vector,
@@ -1297,11 +1329,11 @@ dwg_ent_text_get_extrusion(dwg_ent_text *text, dwg_point_3d *vector,
     *error = 1;
 }
 
-/* Sets the text extrusion values equal to values of second argument.
-Usage :- dwg_ent_text_set_extrusion(text, point);
-where text is a pointer of dwg_ent_text type and point is 
-of dwg_point_3d. point.x will contain x value of extrusion,
-point.y will contain y value of extrusion
+/// Sets the text extrusion value.
+/** Usage :- dwg_ent_text_set_extrusion(text, &point, &error);
+\param dwg_ent_text
+\param dwg_point_2d
+\param int
 */
 void
 dwg_ent_text_set_extrusion(dwg_ent_text *text, dwg_point_3d *vector,
@@ -1318,8 +1350,10 @@ dwg_ent_text_set_extrusion(dwg_ent_text *text, dwg_point_3d *vector,
     *error = 1;
 }
 
-/* This returns the thickness of a text entity.
-Usage :- dwg_ent_text_get_thickness(text);
+/// Returns the thickness of a text entity.
+/** Usage : dwg_ent_text_get_thickness(text, &error);
+\param dwg_ent_text
+\param int
 */
 double
 dwg_ent_text_get_thickness(dwg_ent_text *text, int *error)
@@ -1333,9 +1367,11 @@ dwg_ent_text_get_thickness(dwg_ent_text *text, int *error)
     *error = 1;
 }
 
-/* This sets the thickness of a text entity equal to 
-value in second argument.
-Usage :- dwg_ent_text_set_thickness(text, thickness);
+/// Sets the thickness of text.
+/** Usage :- dwg_ent_text_set_thickness(text, 50, &error);
+\param dwg_ent_text
+\param double
+\param int
 */
 void
 dwg_ent_text_set_thickness(dwg_ent_text *text, double thickness, int *error)
@@ -1349,8 +1385,10 @@ dwg_ent_text_set_thickness(dwg_ent_text *text, double thickness, int *error)
     *error = 1;
 }
 
-/* This returns the rotation angle of a text entity.
-Usage :- dwg_ent_text_get_rot_angle(text);
+/// Returns the rotation angle of a text entity.
+/** Usage :- double rot_ang = dwg_ent_text_get_rot_angle(text, &error);
+\param dwg_ent_text
+\param int
 */
 double
 dwg_ent_text_get_rot_angle(dwg_ent_text *text, int *error)
@@ -1364,9 +1402,11 @@ dwg_ent_text_get_rot_angle(dwg_ent_text *text, int *error)
     *error = 1;
 }
 
-/* This sets the rotation angle of a text entity equal to 
-value in second argument.
-Usage :- dwg_ent_text_set_rot_angle(text, angle);
+/// Sets the rotation angle of a text entity.
+/** Usage : dwg_ent_text_set_rot_angle(text, angle, &error);
+\param dwg_ent_text
+\param double
+\param int
 */
 void
 dwg_ent_text_set_rot_angle(dwg_ent_text *text, double angle, int *error)
@@ -1380,8 +1420,10 @@ dwg_ent_text_set_rot_angle(dwg_ent_text *text, double angle, int *error)
     *error = 1;
 }
 
-/* This returns the vertical alignment of a text entity.
-Usage :- dwg_ent_text_get_vert_align(text);
+/// Returns the vertical alignment of a text entity.
+/** Usage : double align = dwg_ent_text_get_vert_align(text, &error);
+\param dwg_ent_text
+\param int
 */
 double
 dwg_ent_text_get_vert_align(dwg_ent_text *text, int *error)
@@ -1395,9 +1437,11 @@ dwg_ent_text_get_vert_align(dwg_ent_text *text, int *error)
     *error = 1;
 }
 
-/* This sets the vertical alignment of a text entity 
-equal to value in second argument.
-Usage :- dwg_ent_text_set_vert_align(text, angle);
+/// Sets the vertical alignment of a text entity 
+/** Usage : dwg_ent_text_set_vert_align(text, angle, &error);
+\param dwg_ent_text
+\param double
+\param int
 */
 void
 dwg_ent_text_set_vert_align(dwg_ent_text *text, double alignment, int *error)
@@ -1411,8 +1455,10 @@ dwg_ent_text_set_vert_align(dwg_ent_text *text, double alignment, int *error)
     *error = 1;
 }
 
-/* This returns the horizontal alignment of a text entity.
-Usage :- dwg_ent_text_get_horiz_align(text);
+/// Returns the horizontal alignment of a text entity.
+/** Usage : double align = dwg_ent_text_get_horiz_align(text, &error);
+\param dwg_ent_text
+\param int
 */
 double
 dwg_ent_text_get_horiz_align(dwg_ent_text *text, int *error)
@@ -1426,9 +1472,11 @@ dwg_ent_text_get_horiz_align(dwg_ent_text *text, int *error)
     *error = 1;
 }
 
-/* This sets the horizontal alignment of a text entity 
-equal to value in second argument.
-Usage :- dwg_ent_text_set_horiz_align(text, angle);
+/// Sets the horizontal alignment of a text entity.
+/** Usage : dwg_ent_text_set_horiz_align(text, angle, &error);
+\param dwg_ent_text
+\param double
+\param int
 */
 void
 dwg_ent_text_set_horiz_align(dwg_ent_text *text, double alignment, int *error)
@@ -1442,14 +1490,15 @@ dwg_ent_text_set_horiz_align(dwg_ent_text *text, double alignment, int *error)
     *error = 1;
 }
 
-/********************************************************************
+/*******************************************************************
 *                   FUNCTIONS FOR ATTRIB ENTITY                     *
 ********************************************************************/
 
-/* This sets text value of a attrib entity equal to value provided 
-in second argument.
-Usage :- dwg_ent_attrib_set_text(attrib, "Hello world");
-This will set text value to Hello world.
+/// Sets text value of a attrib entity.
+/** Usage : dwg_ent_attrib_set_text(attrib, "Hello world", &error);
+\param dwg_ent_attrib
+\param string (char *)
+\param int
 */
 void
 dwg_ent_attrib_set_text(dwg_ent_attrib *attrib, char * text_value, int *error)
@@ -1463,8 +1512,10 @@ dwg_ent_attrib_set_text(dwg_ent_attrib *attrib, char * text_value, int *error)
     *error = 1;
 }
 
-/* This returns the text value of a attrib entity.
-Usage :- dwg_ent_attrib_get_text(attrib);
+/// Returns the text value of a attrib entity.
+/** Usage : char * text_val = dwg_ent_attrib_get_text(attrib, &error);
+\param dwg_ent_attrib
+\param int
 */
 char *
 dwg_ent_attrib_get_text(dwg_ent_attrib *attrib, int *error)
@@ -1478,10 +1529,11 @@ dwg_ent_attrib_get_text(dwg_ent_attrib *attrib, int *error)
     *error = 1;
 }
 
-/* This returns the insertion point of a attrib entity 
-into second argument.
-Usage :- dwg_ent_attrib_get_insertion_point(attrib, point);
-point.x and point.y contains x and y cordinate data respectively.
+/// Returns the insertion point of a attrib entity.
+/** Usage : dwg_ent_attrib_get_insertion_point(attrib, &point, &error);
+\param dwg_ent_attrib
+\param dwg_point_3d
+\param int
 */
 void
 dwg_ent_attrib_get_insertion_point(dwg_ent_attrib *attrib,
@@ -1497,9 +1549,11 @@ dwg_ent_attrib_get_insertion_point(dwg_ent_attrib *attrib,
     *error = 1;
 }
 
-/* This sets the insertion point of a attrib entity equal to 
-co-ordinate values in second argument.
-Usage :- dwg_ent_attrib_set_insertion_point(attrib, point)
+/// Sets the insertion point of a attrib entity.
+/** Usage : dwg_ent_attrib_set_insertion_point(attrib, &point, &error)
+\param dwg_ent_attrib
+\param dwg_point_3d
+\param int
 */
 void
 dwg_ent_attrib_set_insertion_point(dwg_ent_attrib *attrib,
@@ -1515,8 +1569,10 @@ dwg_ent_attrib_set_insertion_point(dwg_ent_attrib *attrib,
     *error = 1;
 }
 
-/* This returns the height of a attrib entity.
-Usage :- dwg_ent_attrib_get_height(attrib);
+/// This returns the height of a attrib entity.
+/** Usage : double height = dwg_ent_attrib_get_height(attrib, &error);
+\param dwg_ent_attrib
+\param int
 */
 double
 dwg_ent_attrib_get_height(dwg_ent_attrib *attrib, int *error)
@@ -1530,10 +1586,11 @@ dwg_ent_attrib_get_height(dwg_ent_attrib *attrib, int *error)
     *error = 1;
 }
 
-/* This sets height of a attrib entity equal to value provided 
-in second argument.
-Usage :- dwg_ent_attrib_set_height(attrib, 100);
-This will set height to 100.
+/// This sets height of a attrib entity.
+/** Usage : dwg_ent_attrib_set_height(attrib, 100, &error);
+\param dwg_ent_attrib
+\param double
+\param int
 */
 void
 dwg_ent_attrib_set_height(dwg_ent_attrib *attrib, double height, int *error)
@@ -1547,11 +1604,11 @@ dwg_ent_attrib_set_height(dwg_ent_attrib *attrib, double height, int *error)
     *error = 1;
 }
 
-/* Returns the extrusion values of attrib to second argument.
-Usage :- dwg_ent_attrib_get_extrusion(attrib, point);
-where attrib is a pointer of dwg_ent_attrib type and point is 
-of dwg_point_3d. point.x will contain x value of extrusion,
-point.y will contain y value of extrusion
+/// Returns the extrusion values of attrib.
+/** Usage : dwg_ent_attrib_get_extrusion(attrib, &point, &error);
+\param dwg_ent_attrib
+\param dwg_point_3d
+\param int
 */
 void
 dwg_ent_attrib_get_extrusion(dwg_ent_attrib *attrib, dwg_point_3d *vector,
@@ -1568,11 +1625,11 @@ dwg_ent_attrib_get_extrusion(dwg_ent_attrib *attrib, dwg_point_3d *vector,
     *error = 1;
 }
 
-/* Sets the attrib extrusion values equal to values of second argument.
-Usage :- dwg_ent_attrib_set_extrusion(attrib, point);
-where attrib is a pointer of dwg_ent_attrib type and point is 
-of dwg_point_3d. point.x will contain x value of extrusion,
-point.y will contain y value of extrusion
+/// Sets the attrib extrusion values equal to values of second argument.
+/** Usage : dwg_ent_attrib_set_extrusion(attrib, &point, &error);
+\param dwg_ent_attrib
+\param dwg_point_3d
+\param int
 */
 void
 dwg_ent_attrib_set_extrusion(dwg_ent_attrib *attrib, dwg_point_3d *vector,
@@ -1589,8 +1646,10 @@ dwg_ent_attrib_set_extrusion(dwg_ent_attrib *attrib, dwg_point_3d *vector,
     *error = 1;
 }
 
-/* This returns the thickness of a attrib entity.
-Usage :- dwg_ent_attrib_get_thickness(attrib);
+/// Returns the thickness of a attrib entity.
+/** Usage : double thick = dwg_ent_attrib_get_thickness(attrib, &error);
+\param dwg_ent_attrib
+\param int
 */
 double
 dwg_ent_attrib_get_thickness(dwg_ent_attrib *attrib, int *error)
@@ -1604,9 +1663,11 @@ dwg_ent_attrib_get_thickness(dwg_ent_attrib *attrib, int *error)
     *error = 1;
 }
 
-/* This sets the thickness of a attrib entity equal to 
-value in second argument.
-Usage :- dwg_ent_attrib_set_thickness(attrib, thickness);
+/// This sets the thickness of a attrib entity.
+/** Usage : dwg_ent_attrib_set_thickness(attrib, thick, &error);
+\param dwg_ent_attrib
+\param double
+\param int
 */
 void
 dwg_ent_attrib_set_thickness(dwg_ent_attrib *attrib, double thickness,
@@ -1621,8 +1682,10 @@ dwg_ent_attrib_set_thickness(dwg_ent_attrib *attrib, double thickness,
     *error = 1;
 }
 
-/* This returns the rotation angle of a attrib entity.
-Usage :- dwg_ent_attrib_get_rot_angle(attrib);
+/// Returns the rotation angle of a attrib entity.
+/** Usage : double angle = dwg_ent_attrib_get_rot_angle(attrib, &error);
+\param dwg_ent_attrib
+\param int
 */
 double
 dwg_ent_attrib_get_rot_angle(dwg_ent_attrib *attrib, int *error)
@@ -1636,9 +1699,8 @@ dwg_ent_attrib_get_rot_angle(dwg_ent_attrib *attrib, int *error)
     *error = 1;
 }
 
-/* This sets the rotation angle of a attrib entity equal to 
-value in second argument.
-Usage :- dwg_ent_attrib_set_rot_angle(attrib, angle);
+/// This sets the rotation angle of a attrib entity equal to value in second argument.
+/** Usage :- dwg_ent_attrib_set_rot_angle(attrib, angle);
 */
 void
 dwg_ent_attrib_set_rot_angle(dwg_ent_attrib *attrib, double angle, int *error)
@@ -1652,8 +1714,8 @@ dwg_ent_attrib_set_rot_angle(dwg_ent_attrib *attrib, double angle, int *error)
     *error = 1;
 }
 
-/* This returns the vertical alignment of a attrib entity.
-Usage :- dwg_ent_attrib_get_vert_align(attrib);
+/// This returns the vertical alignment of a attrib entity.
+/** Usage :- dwg_ent_attrib_get_vert_align(attrib);
 */
 double
 dwg_ent_attrib_get_vert_align(dwg_ent_attrib *attrib, int *error)
@@ -1667,9 +1729,8 @@ dwg_ent_attrib_get_vert_align(dwg_ent_attrib *attrib, int *error)
     *error = 1;
 }
 
-/* This sets the vertical alignment of a attrib entity 
-equal to value in second argument.
-Usage :- dwg_ent_attrib_set_vert_align(attrib, angle);
+/// This sets the vertical alignment of a attrib entity equal to value in second argument.
+/** Usage :- dwg_ent_attrib_set_vert_align(attrib, angle);
 */
 void
 dwg_ent_attrib_set_vert_align(dwg_ent_attrib *attrib, double alignment,
@@ -1684,8 +1745,8 @@ dwg_ent_attrib_set_vert_align(dwg_ent_attrib *attrib, double alignment,
     *error = 1;
 }
 
-/* This returns the horizontal alignment of a attrib entity.
-Usage :- dwg_ent_attrib_get_horiz_align(attrib);
+/// This returns the horizontal alignment of a attrib entity.
+/** Usage :- dwg_ent_attrib_get_horiz_align(attrib);
 */
 double
 dwg_ent_attrib_get_horiz_align(dwg_ent_attrib *attrib, int *error)
@@ -1699,9 +1760,8 @@ dwg_ent_attrib_get_horiz_align(dwg_ent_attrib *attrib, int *error)
     *error = 1;
 }
 
-/* This sets the horizontal alignment of a attrib entity 
-equal to value in second argument.
-Usage :- dwg_ent_attrib_set_horiz_align(attrib, angle);
+/// This sets the horizontal alignment of a attrib entity equal to value in second argument.
+/** Usage :- dwg_ent_attrib_set_horiz_align(attrib, angle);
 */
 void
 dwg_ent_attrib_set_horiz_align(dwg_ent_attrib *attrib, double alignment,
@@ -1716,13 +1776,12 @@ dwg_ent_attrib_set_horiz_align(dwg_ent_attrib *attrib, double alignment,
     *error = 1;
 }
 
-/********************************************************************
+/*******************************************************************
 *                   FUNCTIONS FOR ATTDEF ENTITY                     *
 ********************************************************************/
 
-/* This sets text value of a attdef entity equal to value provided 
-in second argument.
-Usage :- dwg_ent_attdef_set_text(attdef, "Hello world");
+/// This sets text value of a attdef entity equal to value provided in second argument.
+/** Usage :- dwg_ent_attdef_set_text(attdef, "Hello world");
 This will set text value to Hello world.
 */
 void
@@ -1738,8 +1797,8 @@ dwg_ent_attdef_set_text(dwg_ent_attdef *attdef, char * default_value,
     *error = 1;
 }
 
-/* This returns the text value of a attdef entity.
-Usage :- dwg_ent_attdef_get_text(attdef);
+/// This returns the text value of a attdef entity.
+/** Usage :- dwg_ent_attdef_get_text(attdef);
 */
 char *
 dwg_ent_attdef_get_text(dwg_ent_attdef *attdef, int *error)
@@ -1753,9 +1812,8 @@ dwg_ent_attdef_get_text(dwg_ent_attdef *attdef, int *error)
     *error = 1;
 }
 
-/* This returns the insertion point of a attdef entity 
-into second argument.
-Usage :- dwg_ent_attdef_get_insertion_point(attdef, point);
+/// This returns the insertion point of a attdef entity into second argument.
+/** Usage :- dwg_ent_attdef_get_insertion_point(attdef, point);
 point.x and point.y contains x and y cordinate data respectively.
 */
 void
@@ -1772,9 +1830,8 @@ dwg_ent_attdef_get_insertion_point(dwg_ent_attdef *attdef,
     *error = 1;
 }
 
-/* This sets the insertion point of a attdef entity equal to 
-co-ordinate values in second argument.
-Usage :- dwg_ent_attdef_set_insertion_point(attdef, point)
+/// This sets the insertion point of a attdef entity equal to co-ordinate values in second argument.
+/** Usage :- dwg_ent_attdef_set_insertion_point(attdef, point)
 */
 void
 dwg_ent_attdef_set_insertion_point(dwg_ent_attdef *attdef,
@@ -1790,8 +1847,8 @@ dwg_ent_attdef_set_insertion_point(dwg_ent_attdef *attdef,
     *error = 1;
 }
 
-/* This returns the height of a attdef entity.
-Usage :- dwg_ent_attdef_get_height(attdef);
+/// This returns the height of a attdef entity.
+/** Usage :- dwg_ent_attdef_get_height(attdef);
 */
 double
 dwg_ent_attdef_get_height(dwg_ent_attdef *attdef, int *error)
@@ -1805,9 +1862,8 @@ dwg_ent_attdef_get_height(dwg_ent_attdef *attdef, int *error)
     *error = 1;
 }
 
-/* This sets height of a attdef entity equal to value provided 
-in second argument.
-Usage :- dwg_ent_attdef_set_height(attdef, 100);
+/// This sets height of a attdef entity equal to value provided in second argument.
+/** Usage :- dwg_ent_attdef_set_height(attdef, 100);
 This will set height to 100.
 */
 void
@@ -1822,8 +1878,8 @@ dwg_ent_attdef_set_height(dwg_ent_attdef *attdef, double height, int *error)
     *error = 1;
 }
 
-/* Returns the extrusion values of attdef to second argument.
-Usage :- dwg_ent_attdef_get_extrusion(attdef, point);
+/// Returns the extrusion values of attdef to second argument.
+/** Usage :- dwg_ent_attdef_get_extrusion(attdef, point);
 where attdef is a pointer of dwg_ent_attdef type and point is 
 of dwg_point_3d. point.x will contain x value of extrusion,
 point.y will contain y value of extrusion
@@ -1843,8 +1899,8 @@ dwg_ent_attdef_get_extrusion(dwg_ent_attdef *attdef, dwg_point_3d *vector,
     *error = 1;
 }
 
-/* Sets the attdef extrusion values equal to values of second argument.
-Usage :- dwg_ent_attdef_set_extrusion(attdef, point);
+/// Sets the attdef extrusion values equal to values of second argument.
+/** Usage :- dwg_ent_attdef_set_extrusion(attdef, point);
 where attdef is a pointer of dwg_ent_attdef type and point is 
 of dwg_point_3d. point.x will contain x value of extrusion,
 point.y will contain y value of extrusion
@@ -1864,8 +1920,8 @@ dwg_ent_attdef_set_extrusion(dwg_ent_attdef *attdef, dwg_point_3d *vector,
     *error = 1;
 }
 
-/* This returns the thickness of a attdef entity.
-Usage :- dwg_ent_attdef_get_thickness(attdef);
+/// This returns the thickness of a attdef entity.
+/** Usage :- dwg_ent_attdef_get_thickness(attdef);
 */
 double
 dwg_ent_attdef_get_thickness(dwg_ent_attdef *attdef, int *error)
@@ -1879,9 +1935,8 @@ dwg_ent_attdef_get_thickness(dwg_ent_attdef *attdef, int *error)
     *error = 1;
 }
 
-/* This sets the thickness of a attdef entity equal to 
-value in second argument.
-Usage :- dwg_ent_attdef_set_thickness(attdef, thickness);
+/// This sets the thickness of a attdef entity equal to value in second argument.
+/** Usage :- dwg_ent_attdef_set_thickness(attdef, thickness);
 */
 void
 dwg_ent_attdef_set_thickness(dwg_ent_attdef *attdef, double thickness,
@@ -1896,8 +1951,8 @@ dwg_ent_attdef_set_thickness(dwg_ent_attdef *attdef, double thickness,
     *error = 1;
 }
 
-/* This returns the rotation angle of a attdef entity.
-Usage :- dwg_ent_attdef_get_rot_angle(attdef);
+/// This returns the rotation angle of a attdef entity.
+/** Usage :- dwg_ent_attdef_get_rot_angle(attdef);
 */
 double
 dwg_ent_attdef_get_rot_angle(dwg_ent_attdef *attdef, int *error)
@@ -1911,9 +1966,8 @@ dwg_ent_attdef_get_rot_angle(dwg_ent_attdef *attdef, int *error)
     *error = 1;
 }
 
-/* This sets the rotation angle of a attdef entity equal to 
-value in second argument.
-Usage :- dwg_ent_attdef_set_rot_angle(attdef, angle);
+/// This sets the rotation angle of a attdef entity equal to value in second argument.
+/** Usage :- dwg_ent_attdef_set_rot_angle(attdef, angle);
 */
 void
 dwg_ent_attdef_set_rot_angle(dwg_ent_attdef *attdef, double angle, int *error)
@@ -1927,8 +1981,8 @@ dwg_ent_attdef_set_rot_angle(dwg_ent_attdef *attdef, double angle, int *error)
     *error = 1;
 }
 
-/* This returns the vertical alignment of a attdef entity.
-Usage :- dwg_ent_attdef_get_vert_align(attdef);
+/// This returns the vertical alignment of a attdef entity.
+/** Usage :- dwg_ent_attdef_get_vert_align(attdef);
 */
 double
 dwg_ent_attdef_get_vert_align(dwg_ent_attdef *attdef, int *error)
@@ -1942,9 +1996,8 @@ dwg_ent_attdef_get_vert_align(dwg_ent_attdef *attdef, int *error)
     *error = 1;
 }
 
-/* This sets the vertical alignment of a attdef entity 
-equal to value in second argument.
-Usage :- dwg_ent_attdef_set_vert_align(attdef, angle);
+/// This sets the vertical alignment of a attdef entity equal to value in second argument.
+/** Usage :- dwg_ent_attdef_set_vert_align(attdef, angle);
 */
 void
 dwg_ent_attdef_set_vert_align(dwg_ent_attdef *attdef, double alignment,
@@ -1959,8 +2012,8 @@ dwg_ent_attdef_set_vert_align(dwg_ent_attdef *attdef, double alignment,
     *error = 1;
 }
 
-/* This returns the horizontal alignment of a attdef entity.
-Usage :- dwg_ent_attdef_get_horiz_align(attdef);
+/// This returns the horizontal alignment of a attdef entity.
+/** Usage :- dwg_ent_attdef_get_horiz_align(attdef);
 */
 double
 dwg_ent_attdef_get_horiz_align(dwg_ent_attdef *attdef, int *error)
@@ -1974,9 +2027,8 @@ dwg_ent_attdef_get_horiz_align(dwg_ent_attdef *attdef, int *error)
     *error = 1;
 }
 
-/* This sets the horizontal alignment of a attdef entity 
-equal to value in second argument.
-Usage :- dwg_ent_attdef_set_horiz_align(attdef, angle);
+/// This sets the horizontal alignment of a attdef entity equal to value in second argument.
+/** Usage :- dwg_ent_attdef_set_horiz_align(attdef, angle);
 */
 void
 dwg_ent_attdef_set_horiz_align(dwg_ent_attdef *attdef, double alignment,
@@ -1991,12 +2043,12 @@ dwg_ent_attdef_set_horiz_align(dwg_ent_attdef *attdef, double alignment,
     *error = 1;
 }
 
-/********************************************************************
+/*******************************************************************
 *                   FUNCTIONS FOR POINT ENTITY                      *
 ********************************************************************/
 
-/* Sets the point point values equal to values of second argument.
-Usage :- dwg_ent_point_set_point(point, retpoint);
+/// Sets the point point values equal to values of second argument.
+/** Usage :- dwg_ent_point_set_point(point, retpoint);
 where point is a pointer of dwg_ent_point type and retpoint is 
 of dwg_point_3d. retpoint.x will contain x value of point,
 retpoint.y will contain y value of point
@@ -2016,8 +2068,8 @@ dwg_ent_point_set_point(dwg_ent_point *point, dwg_point_3d *retpoint,
     *error = 1;
 }
 
-/* Returns the point values of point to second argument.
-Usage :- dwg_ent_point_get_point(point, retpoint);
+/// Returns the point values of point to second argument.
+/** Usage :- dwg_ent_point_get_point(point, retpoint);
 where point is a pointer of dwg_ent_point type and retpoint is 
 of dwg_point_3d. retpoint.x will contain x value of point,
 retpoint.y will contain y value of point
@@ -2037,8 +2089,8 @@ dwg_ent_point_get_point(dwg_ent_point *point, dwg_point_3d *retpoint,
     *error = 1;
 }
 
-/* This returns the thickness of a point entity.
-Usage :- dwg_ent_point_get_thickness(point);
+/// This returns the thickness of a point entity.
+/** Usage :- dwg_ent_point_get_thickness(point);
 */
 double
 dwg_ent_point_get_thickness(dwg_ent_point *point, int *error)
@@ -2052,9 +2104,8 @@ dwg_ent_point_get_thickness(dwg_ent_point *point, int *error)
     *error = 1;
 }
 
-/* This sets the thickness of a point entity equal to 
-value in second argument.
-Usage :- dwg_ent_point_set_thickness(point, thickness);
+/// This sets the thickness of a point entity equal to value in second argument.
+/** Usage :- dwg_ent_point_set_thickness(point, thickness);
 */
 void
 dwg_ent_point_set_thickness(dwg_ent_point *point, double thickness,
@@ -2069,8 +2120,8 @@ dwg_ent_point_set_thickness(dwg_ent_point *point, double thickness,
     *error = 1;
 }
 
-/* Sets the point extrusion values equal to values of second argument.
-Usage :- dwg_ent_point_set_extrusion(point, retpoint);
+/// Sets the point extrusion values equal to values of second argument.
+/** Usage :- dwg_ent_point_set_extrusion(point, retpoint);
 where point is a pointer of dwg_ent_point type and retpoint is 
 of dwg_point_3d. retpoint.x will contain x value of extrusion,
 retpoint.y will contain y value of extrusion
@@ -2090,8 +2141,8 @@ dwg_ent_point_set_extrusion(dwg_ent_point *point, dwg_point_3d *retpoint,
     *error = 1;
 }
 
-/* Returns the extrusion values of point to second argument.
-Usage :- dwg_ent_point_get_extrusion(point, retpoint);
+/// Returns the extrusion values of point to second argument.
+/** Usage :- dwg_ent_point_get_extrusion(point, retpoint);
 where point is a pointer of dwg_ent_point type and retpoint is 
 of dwg_point_3d. retpoint.x will contain x value of extrusion,
 retpoint.y will contain y value of extrusion
@@ -2111,12 +2162,12 @@ dwg_ent_point_get_extrusion(dwg_ent_point *point, dwg_point_3d *retpoint,
     *error = 1;
 }
 
-/********************************************************************
+/*******************************************************************
 *                   FUNCTIONS FOR SOLID ENTITY                      *
 ********************************************************************/
 
-/* This returns the thickness of a solid entity.
-Usage :- dwg_ent_solid_get_thickness(solid);
+/// This returns the thickness of a solid entity.
+/** Usage :- dwg_ent_solid_get_thickness(solid);
 */
 double
 dwg_ent_solid_get_thickness(dwg_ent_solid *solid, int *error)
@@ -2130,9 +2181,8 @@ dwg_ent_solid_get_thickness(dwg_ent_solid *solid, int *error)
     *error = 1;
 }
 
-/* This sets the thickness of a solid entity equal to 
-value in second argument.
-Usage :- dwg_ent_solid_set_thickness(solid, 2.0);
+/// This sets the thickness of a solid entity equal to value in second argument.
+/** Usage :- dwg_ent_solid_set_thickness(solid, 2.0);
 Hence thickness sets to 2.0
 */
 void
@@ -2148,8 +2198,8 @@ dwg_ent_solid_set_thickness(dwg_ent_solid *solid, double thickness,
     *error = 1;
 }
 
-/* This returns the elevation of a solid entity.
-Usage :- dwg_ent_solid_get_elevation(solid);
+/// This returns the elevation of a solid entity.
+/** Usage :- dwg_ent_solid_get_elevation(solid);
 */
 double
 dwg_ent_solid_get_elevation(dwg_ent_solid *solid, int *error)
@@ -2163,9 +2213,8 @@ dwg_ent_solid_get_elevation(dwg_ent_solid *solid, int *error)
     *error = 1;
 }
 
-/* This sets the elevation of a solid entity equal to 
-value in second argument.
-Usage :- dwg_ent_solid_set_elevation(solid, 20);
+/// This sets the elevation of a solid entity equal to value in second argument.
+/** Usage :- dwg_ent_solid_set_elevation(solid, 20);
 Hence elevation sets to 20
 */
 void
@@ -2181,8 +2230,8 @@ dwg_ent_solid_set_elevation(dwg_ent_solid *solid, double elevation,
     *error = 1;
 }
 
-/* Returns the corner1 values of solid to second argument.
-Usage :- dwg_ent_solid_get_corner1(solid, point);
+/// Returns the corner1 values of solid to second argument.
+/** Usage :- dwg_ent_solid_get_corner1(solid, point);
 where solid is a pointer of dwg_ent_solid type and point is 
 of dwg_point_3d. point.x will contain x value of corner1,
 point.y will contain y value of corner1
@@ -2201,8 +2250,8 @@ dwg_ent_solid_get_corner1(dwg_ent_solid *solid, dwg_point_2d *point,
     *error = 1;
 }
 
-/* Sets the solid corner1 values equal to values of second argument.
-Usage :- dwg_ent_solid_set_corner1(solid, point);
+/// Sets the solid corner1 values equal to values of second argument.
+/** Usage :- dwg_ent_solid_set_corner1(solid, point);
 where solid is a pointer of dwg_ent_solid type and point is 
 of dwg_point_3d. point.x will contain x value of corner1,
 point.y will contain y value of corner1
@@ -2221,8 +2270,8 @@ dwg_ent_solid_set_corner1(dwg_ent_solid *solid, dwg_point_2d *point,
     *error = 1;
 }
 
-/* Returns the corner2 values of solid to second argument.
-Usage :- dwg_ent_solid_get_corner2(solid, point);
+/// Returns the corner2 values of solid to second argument.
+/** Usage :- dwg_ent_solid_get_corner2(solid, point);
 where solid is a pointer of dwg_ent_solid type and point is 
 of dwg_point_3d. point.x will contain x value of corner2,
 point.y will contain y value of corner2
@@ -2241,8 +2290,8 @@ dwg_ent_solid_get_corner2(dwg_ent_solid *solid, dwg_point_2d *point,
     *error = 1;
 }
 
-/* Sets the solid corner2 values equal to values of second argument.
-Usage :- dwg_ent_solid_set_corner2(solid, point);
+/// Sets the solid corner2 values equal to values of second argument.
+/** Usage :- dwg_ent_solid_set_corner2(solid, point);
 where solid is a pointer of dwg_ent_solid type and point is 
 of dwg_point_3d. point.x will contain x value of corner2,
 point.y will contain y value of corner2
@@ -2261,8 +2310,8 @@ dwg_ent_solid_set_corner2(dwg_ent_solid *solid, dwg_point_2d *point,
     *error = 1;
 }
 
-/* Returns the corner3 values of solid to second argument.
-Usage :- dwg_ent_solid_get_corner3(solid, point);
+/// Returns the corner3 values of solid to second argument.
+/** Usage :- dwg_ent_solid_get_corner3(solid, point);
 where solid is a pointer of dwg_ent_solid type and point is 
 of dwg_point_3d. point.x will contain x value of corner3,
 point.y will contain y value of corner3
@@ -2281,8 +2330,8 @@ dwg_ent_solid_get_corner3(dwg_ent_solid *solid, dwg_point_2d *point,
     *error = 1;
 }
 
-/* Sets the solid corner3 values equal to values of second argument.
-Usage :- dwg_ent_solid_set_corner3(solid, point);
+/// Sets the solid corner3 values equal to values of second argument.
+/** Usage :- dwg_ent_solid_set_corner3(solid, point);
 where solid is a pointer of dwg_ent_solid type and point is 
 of dwg_point_3d. point.x will contain x value of corner3,
 point.y will contain y value of corner3
@@ -2301,8 +2350,8 @@ dwg_ent_solid_set_corner3(dwg_ent_solid *solid, dwg_point_2d *point,
     *error = 1;
 }
 
-/* Returns the corner4 values of solid to second argument.
-Usage :- dwg_ent_solid_get_corner4(solid, point);
+/// Returns the corner4 values of solid to second argument.
+/** Usage :- dwg_ent_solid_get_corner4(solid, point);
 where solid is a pointer of dwg_ent_solid type and point is 
 of dwg_point_3d. point.x will contain x value of corner4,
 point.y will contain y value of corner4
@@ -2321,8 +2370,8 @@ dwg_ent_solid_get_corner4(dwg_ent_solid *solid, dwg_point_2d *point,
     *error = 1;
 }
 
-/* Sets the solid corner4 values equal to values of second argument.
-Usage :- dwg_ent_solid_set_corner4(solid, point);
+/// Sets the solid corner4 values equal to values of second argument.
+/** Usage :- dwg_ent_solid_set_corner4(solid, point);
 where solid is a pointer of dwg_ent_solid type and point is 
 of dwg_point_3d. point.x will contain x value of corner4,
 point.y will contain y value of corner4
@@ -2341,8 +2390,8 @@ dwg_ent_solid_set_corner4(dwg_ent_solid *solid, dwg_point_2d *point,
     *error = 1;
 }
 
-/* Returns the extrusion values of solid to second argument.
-Usage :- dwg_ent_solid_get_extrusion(solid, point);
+/// Returns the extrusion values of solid to second argument.
+/** Usage :- dwg_ent_solid_get_extrusion(solid, point);
 where solid is a pointer of dwg_ent_solid type and point is 
 of dwg_point_3d. point.x will contain x value of extrusion,
 point.y will contain y value of extrusion
@@ -2362,8 +2411,8 @@ dwg_ent_solid_get_extrusion(dwg_ent_solid *solid, dwg_point_3d *vector,
     *error = 1;
 }
 
-/* Sets the solid extrusion values equal to values of second argument.
-Usage :- dwg_ent_solid_set_extrusion(solid, point);
+/// Sets the solid extrusion values equal to values of second argument.
+/** Usage :- dwg_ent_solid_set_extrusion(solid, point);
 where solid is a pointer of dwg_ent_solid type and point is 
 of dwg_point_3d. point.x will contain x value of extrusion,
 point.y will contain y value of extrusion
@@ -2383,12 +2432,12 @@ dwg_ent_solid_set_extrusion(dwg_ent_solid *solid, dwg_point_3d *vector,
     *error = 1;
 }
 
-/********************************************************************
+/*******************************************************************
 *                   FUNCTIONS FOR BLOCk ENTITY                      *
 ********************************************************************/
 
-/* sets name of the block entity equal to value passed in 2nd argument.
-Usage :- dwg_ent_block_get_name(block);
+/// sets name of the block entity equal to value passed in 2nd argument.
+/** Usage :- dwg_ent_block_get_name(block);
 */
 void
 dwg_ent_block_set_name(dwg_ent_block *block, char * name, int *error)
@@ -2402,8 +2451,8 @@ dwg_ent_block_set_name(dwg_ent_block *block, char * name, int *error)
     *error = 1;
 }
 
-/* Returns name of the block entity passed in argument.
-Usage :- dwg_ent_block_get_name(block);
+/// Returns name of the block entity passed in argument.
+/** Usage :- dwg_ent_block_get_name(block);
 */
 char *
 dwg_ent_block_get_name(dwg_ent_block *block, int *error)
@@ -2417,7 +2466,7 @@ dwg_ent_block_get_name(dwg_ent_block *block, int *error)
     *error = 1;
 }
 
-/********************************************************************
+/*******************************************************************
 *                    FUNCTIONS FOR RAY ENTITY                       *
 ********************************************************************/
 
@@ -2477,7 +2526,7 @@ dwg_ent_ray_set_vector(dwg_ent_ray *ray, dwg_point_3d *vector, int *error)
     *error = 1;
 }
 
-/********************************************************************
+/*******************************************************************
 *                   FUNCTIONS FOR XLINE ENTITY                      *
 ********************************************************************/
 
@@ -2539,12 +2588,12 @@ dwg_ent_xline_set_vector(dwg_ent_xline *xline, dwg_point_3d *vector,
     *error = 1;
 }
 
-/********************************************************************
+/*******************************************************************
 *                   FUNCTIONS FOR TRACE ENTITY                      *
 ********************************************************************/
 
-/* This returns the thickness of a trace entity.
-Usage :- dwg_ent_trace_get_thickness(trace);
+/// This returns the thickness of a trace entity.
+/** Usage :- dwg_ent_trace_get_thickness(trace);
 */
 double
 dwg_ent_trace_get_thickness(dwg_ent_trace *trace, int *error)
@@ -2558,9 +2607,8 @@ dwg_ent_trace_get_thickness(dwg_ent_trace *trace, int *error)
     *error = 1;
 }
 
-/* This sets the thickness of a trace entity equal to 
-value in second argument.
-Usage :- dwg_ent_trace_set_thickness(trace, 2.0);
+/// This sets the thickness of a trace entity equal to value in second argument.
+/** Usage :- dwg_ent_trace_set_thickness(trace, 2.0);
 Hence thickness sets to 2.0
 */
 void
@@ -2576,8 +2624,8 @@ dwg_ent_trace_set_thickness(dwg_ent_trace *trace, double thickness,
     *error = 1;
 }
 
-/* This returns the elevation of a trace entity.
-Usage :- dwg_ent_trace_get_elevation(trace);
+/// This returns the elevation of a trace entity.
+/** Usage :- dwg_ent_trace_get_elevation(trace);
 */
 double
 dwg_ent_trace_get_elevation(dwg_ent_trace *trace, int *error)
@@ -2591,9 +2639,8 @@ dwg_ent_trace_get_elevation(dwg_ent_trace *trace, int *error)
     *error = 1;
 }
 
-/* This sets the elevation of a trace entity equal to 
-value in second argument.
-Usage :- dwg_ent_trace_set_elevation(trace, 20);
+/// This sets the elevation of a trace entity equal to value in second argument.
+/** Usage :- dwg_ent_trace_set_elevation(trace, 20);
 Hence elevation sets to 20
 */
 void
@@ -2609,8 +2656,8 @@ dwg_ent_trace_set_elevation(dwg_ent_trace *trace, double elevation,
     *error = 1;
 }
 
-/* Returns the corner1 values of trace to second argument.
-Usage :- dwg_ent_trace_get_corner1(trace, point);
+/// Returns the corner1 values of trace to second argument.
+/** Usage :- dwg_ent_trace_get_corner1(trace, point);
 where trace is a pointer of dwg_ent_trace type and point is 
 of dwg_point_3d. point.x will contain x value of corner1,
 point.y will contain y value of corner1
@@ -2629,8 +2676,8 @@ dwg_ent_trace_get_corner1(dwg_ent_trace *trace, dwg_point_2d *point,
     *error = 1;
 }
 
-/* Sets the trace corner1 values equal to values of second argument.
-Usage :- dwg_ent_trace_set_corner1(trace, point);
+/// Sets the trace corner1 values equal to values of second argument.
+/** Usage :- dwg_ent_trace_set_corner1(trace, point);
 where trace is a pointer of dwg_ent_trace type and point is 
 of dwg_point_3d. point.x will contain x value of corner1,
 point.y will contain y value of corner1
@@ -2649,8 +2696,8 @@ dwg_ent_trace_set_corner1(dwg_ent_trace *trace, dwg_point_2d *point,
     *error = 1;
 }
 
-/* Returns the corner2 values of trace to second argument.
-Usage :- dwg_ent_trace_get_corner2(trace, point);
+/// Returns the corner2 values of trace to second argument.
+/** Usage :- dwg_ent_trace_get_corner2(trace, point);
 where trace is a pointer of dwg_ent_trace type and point is 
 of dwg_point_3d. point.x will contain x value of corner2,
 point.y will contain y value of corner2
@@ -2669,8 +2716,8 @@ dwg_ent_trace_get_corner2(dwg_ent_trace *trace, dwg_point_2d *point,
     *error = 1;
 }
 
-/* Sets the trace corner2 values equal to values of second argument.
-Usage :- dwg_ent_trace_set_corner2(trace, point);
+/// Sets the trace corner2 values equal to values of second argument.
+/** Usage :- dwg_ent_trace_set_corner2(trace, point);
 where trace is a pointer of dwg_ent_trace type and point is 
 of dwg_point_3d. point.x will contain x value of corner2,
 point.y will contain y value of corner2
@@ -2689,8 +2736,8 @@ dwg_ent_trace_set_corner2(dwg_ent_trace *trace, dwg_point_2d *point,
     *error = 1;
 }
 
-/* Returns the corner3 values of trace to second argument.
-Usage :- dwg_ent_trace_get_corner3(trace, point);
+/// Returns the corner3 values of trace to second argument.
+/** Usage :- dwg_ent_trace_get_corner3(trace, point);
 where trace is a pointer of dwg_ent_trace type and point is 
 of dwg_point_3d. point.x will contain x value of corner3,
 point.y will contain y value of corner3
@@ -2709,8 +2756,8 @@ dwg_ent_trace_get_corner3(dwg_ent_trace *trace, dwg_point_2d *point,
     *error = 1;
 }
 
-/* Sets the trace corner3 values equal to values of second argument.
-Usage :- dwg_ent_trace_set_corner3(trace, point);
+/// Sets the trace corner3 values equal to values of second argument.
+/** Usage :- dwg_ent_trace_set_corner3(trace, point);
 where trace is a pointer of dwg_ent_trace type and point is 
 of dwg_point_3d. point.x will contain x value of corner3,
 point.y will contain y value of corner3
@@ -2729,8 +2776,8 @@ dwg_ent_trace_set_corner3(dwg_ent_trace *trace, dwg_point_2d *point,
     *error = 1;
 }
 
-/* Returns the corner4 values of trace to second argument.
-Usage :- dwg_ent_trace_get_corner4(trace, point);
+/// Returns the corner4 values of trace to second argument.
+/** Usage :- dwg_ent_trace_get_corner4(trace, point);
 where trace is a pointer of dwg_ent_trace type and point is 
 of dwg_point_3d. point.x will contain x value of corner4,
 point.y will contain y value of corner4
@@ -2749,8 +2796,8 @@ dwg_ent_trace_get_corner4(dwg_ent_trace *trace, dwg_point_2d *point,
     *error = 1;
 }
 
-/* Sets the trace corner4 values equal to values of second argument.
-Usage :- dwg_ent_trace_set_corner4(trace, point);
+/// Sets the trace corner4 values equal to values of second argument.
+/** Usage :- dwg_ent_trace_set_corner4(trace, point);
 where trace is a pointer of dwg_ent_trace type and point is 
 of dwg_point_3d. point.x will contain x value of corner4,
 point.y will contain y value of corner4
@@ -2769,8 +2816,8 @@ dwg_ent_trace_set_corner4(dwg_ent_trace *trace, dwg_point_2d *point,
     *error = 1;
 }
 
-/* Returns the extrusion values of trace to second argument.
-Usage :- dwg_ent_trace_get_extrusion(trace, point);
+/// Returns the extrusion values of trace to second argument.
+/** Usage :- dwg_ent_trace_get_extrusion(trace, point);
 where trace is a pointer of dwg_ent_trace type and point is 
 of dwg_point_3d. point.x will contain x value of extrusion,
 point.y will contain y value of extrusion
@@ -2790,8 +2837,8 @@ dwg_ent_trace_get_extrusion(dwg_ent_trace *trace, dwg_point_3d *vector,
     *error = 1;
 }
 
-/* Sets the trace extrusion values equal to values of second argument.
-Usage :- dwg_ent_trace_set_extrusion(trace, point);
+/// Sets the trace extrusion values equal to values of second argument.
+/** Usage :- dwg_ent_trace_set_extrusion(trace, point);
 where trace is a pointer of dwg_ent_trace type and point is 
 of dwg_point_3d. point.x will contain x value of extrusion,
 point.y will contain y value of extrusion
@@ -2811,7 +2858,7 @@ dwg_ent_trace_set_extrusion(dwg_ent_trace *trace, dwg_point_3d *vector,
     *error = 1;
 }
 
-/********************************************************************
+/*******************************************************************
 *                 FUNCTIONS FOR VERTEX_3D ENTITY                    *
 ********************************************************************/
 
@@ -2869,7 +2916,7 @@ dwg_ent_vertex_3d_set_point(dwg_ent_vertex_3d *vert,
     *error = 1;
 }
 
-/********************************************************************
+/*******************************************************************
 *               FUNCTIONS FOR VERTEX_MESH ENTITY                    *
 ********************************************************************/
 
@@ -2928,7 +2975,7 @@ dwg_ent_vertex_mesh_set_point(dwg_ent_vertex_mesh *vert, dwg_point_3d *point,
     *error = 1;
 }
 
-/********************************************************************
+/*******************************************************************
 *               FUNCTIONS FOR VERTEX_PFACE ENTITY                   *
 ********************************************************************/
 
@@ -2987,7 +3034,7 @@ dwg_ent_vertex_pface_set_point(dwg_ent_vertex_pface *vert,
     *error = 1;
 }
 
-/********************************************************************
+/*******************************************************************
 *                 FUNCTIONS FOR VERTEX_2D ENTITY                    *
 ********************************************************************/
 
@@ -3144,7 +3191,7 @@ dwg_ent_vertex_2d_set_tangent_dir(dwg_ent_vertex_2d *vert, double tangent_dir,
     *error = 1;
 }
 
-/********************************************************************
+/*******************************************************************
 *                   FUNCTIONS FOR INSERT ENTITY                     *
 ********************************************************************/
 
@@ -3361,7 +3408,7 @@ dwg_ent_insert_get_abs_ref(dwg_ent_insert *insert, int *error)
     *error = 1;
 }
 
-/********************************************************************
+/*******************************************************************
 *                  FUNCTIONS FOR MINSERT ENTITY                     *
 ********************************************************************/
 
@@ -3653,7 +3700,7 @@ dwg_ent_minsert_set_row_spacing(dwg_ent_minsert *minsert, double spacing,
     *error = 1;
 }
 
-/********************************************************************
+/*******************************************************************
 *                FUNCTIONS FOR MLINESTYLE OBJECT                    *
 ********************************************************************/
 
@@ -3808,7 +3855,7 @@ dwg_obj_mlinestyle_set_linesinstyle(dwg_obj_mlinestyle *mlinestyle,
     *error = 1;
 }
 
-/********************************************************************
+/*******************************************************************
 *               FUNCTIONS FOR APPID_CONTROL OBJECT                  *
 ********************************************************************/
 
@@ -3839,7 +3886,7 @@ dwg_obj_appid_control_set_num_entries(dwg_obj_appid_control *appid,
 
 }
 
-/********************************************************************
+/*******************************************************************
 *                    FUNCTIONS FOR APPID OBJECT                     *
 ********************************************************************/
 
@@ -3909,7 +3956,7 @@ dwg_obj_appid_get_appid_control(dwg_obj_appid *appid, int *error)
 
 }
 
-/********************************************************************
+/*******************************************************************
 *            FUNCTIONS FOR ORDINATE DIMENSION ENTITY                *
 ********************************************************************/
 
@@ -4471,7 +4518,7 @@ dwg_ent_dim_ordinate_get_14_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
     *error = 1;
 }
 
-/********************************************************************
+/*******************************************************************
 *              FUNCTIONS FOR LINEAR DIMENSION ENTITY                *
 ********************************************************************/
 
@@ -5069,7 +5116,7 @@ dwg_ent_dim_linear_set_dim_rot(dwg_ent_dim_linear *dim, double rot, int *error)
     *error = 1;
 }
 
-/********************************************************************
+/*******************************************************************
 *             FUNCTIONS FOR ALIGNED DIMENSION ENTITY                *
 ********************************************************************/
 
@@ -5630,7 +5677,7 @@ dwg_ent_dim_aligned_set_ext_line_rotation(dwg_ent_dim_aligned *dim,
     *error = 1;
 }
 
-/********************************************************************
+/*******************************************************************
 *              FUNCTIONS FOR ANG3PT DIMENSION ENTITY                *
 ********************************************************************/
 
@@ -6196,7 +6243,7 @@ dwg_ent_dim_ang3pt_get_15_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
     *error = 1;
 }
 
-/********************************************************************
+/*******************************************************************
 *              FUNCTIONS FOR ANG2LN DIMENSION ENTITY                *
 ********************************************************************/
 
@@ -6794,7 +6841,7 @@ dwg_ent_dim_ang2ln_get_16_pt(dwg_ent_dim_ang2ln *ang, dwg_point_2d *point,
     *error = 1;
 }
 
-/********************************************************************
+/*******************************************************************
 *              FUNCTIONS FOR RADIUS DIMENSION ENTITY                *
 ********************************************************************/
 
@@ -7326,7 +7373,7 @@ dwg_ent_dim_radius_set_leader_length(dwg_ent_dim_radius *radius, double length,
     *error = 1;
 }
 
-/********************************************************************
+/*******************************************************************
 *             FUNCTIONS FOR DIAMETER DIMENSION ENTITY               *
 ********************************************************************/
 
@@ -7858,7 +7905,7 @@ dwg_ent_dim_diameter_set_leader_length(dwg_ent_dim_diameter *dia,
     *error = 1;
 }
 
-/********************************************************************
+/*******************************************************************
 *                   FUNCTIONS FOR ENDBLK ENTITY                     *
 ********************************************************************/
 
@@ -7886,7 +7933,7 @@ dwg_ent_endblk_set_dummy(dwg_ent_endblk *endblk, char dummy, int *error)
     *error = 1;   
 }
 
-/********************************************************************
+/*******************************************************************
 *                   FUNCTIONS FOR SEQEND ENTITY                     *
 ********************************************************************/
 
@@ -7914,7 +7961,7 @@ dwg_ent_seqend_set_dummy(dwg_ent_seqend *seqend, char dummy, int *error)
     *error = 1;   
 }
 
-/********************************************************************
+/*******************************************************************
 *                    FUNCTIONS FOR SHAPE ENTITY                     *
 ********************************************************************/
 
@@ -8123,7 +8170,7 @@ dwg_ent_shape_set_extrusion(dwg_ent_shape *shape, dwg_point_3d *point,
 }
 
 
-/********************************************************************
+/*******************************************************************
 *                    FUNCTIONS FOR MTEXT ENTITY                     *
 ********************************************************************/
 
@@ -8489,7 +8536,7 @@ dwg_ent_mtext_set_linespace_factor(dwg_ent_mtext *mtext, double factor,
 
 }
 
-/********************************************************************
+/*******************************************************************
 *                   FUNCTIONS FOR LEADER ENTITY                     *
 ********************************************************************/
 
@@ -8913,7 +8960,7 @@ dwg_ent_leader_get_byblock_color(dwg_ent_leader *leader, int *error)
 
 }
 
-/********************************************************************
+/*******************************************************************
 *                  FUNCTIONS FOR TOLERANCE ENTITY                   *
 ********************************************************************/
 
@@ -9094,7 +9141,7 @@ dwg_ent_tolerance_get_text_string(dwg_ent_tolerance *tol, int *error)
 
 }
 
-/********************************************************************
+/*******************************************************************
 *                   FUNCTIONS FOR LWPLINE ENTITY                    *
 ********************************************************************/
 
@@ -9360,7 +9407,7 @@ dwg_ent_lwpline_get_widths(dwg_ent_lwpline *lwpline, int *error)
     *error = 1;
 }
 
-/********************************************************************
+/*******************************************************************
 *                  FUNCTIONS FOR OLE2FRAME ENTITY                   *
 ********************************************************************/
 
@@ -9462,7 +9509,7 @@ dwg_ent_ole2frame_set_data(dwg_ent_ole2frame *frame, char * data, int *error)
     *error = 1;
 }
 
-/********************************************************************
+/*******************************************************************
 *                   FUNCTIONS FOR SPLINE ENTITY                     *
 ********************************************************************/
 
@@ -9881,7 +9928,7 @@ dwg_ent_spline_get_knots(dwg_ent_spline *spline, int *error)
       *error = 1;
 }
 
-/********************************************************************
+/*******************************************************************
 *                   FUNCTIONS FOR VIEWPORT ENTITY                   *
 ********************************************************************/
 
@@ -10746,7 +10793,7 @@ dwg_ent_viewport_get_contrast(dwg_ent_viewport *vp, int *error)
     *error = 1;
 }
 
-/********************************************************************
+/*******************************************************************
 *                FUNCTIONS FOR POLYLINE PFACE ENTITY                *
 ********************************************************************/
 
@@ -10838,7 +10885,7 @@ dwg_ent_polyline_pface_set_numfaces(dwg_ent_polyline_pface *pface,
     }
 }
 
-/********************************************************************
+/*******************************************************************
 *                FUNCTIONS FOR POLYLINE_MESH ENTITY                 *
 ********************************************************************/
 
@@ -11048,7 +11095,7 @@ dwg_ent_polyline_mesh_set_owned_obj_count(dwg_ent_polyline_mesh *mesh,
     }
 }
 
-/********************************************************************
+/*******************************************************************
 *                 FUNCTIONS FOR POLYLINE_2D ENTITY                  *
 ********************************************************************/
 
@@ -11290,7 +11337,7 @@ dwg_ent_polyline_2d_set_owned_obj_count(dwg_ent_polyline_2d *line2d,
     }
 }
 
-/********************************************************************
+/*******************************************************************
 *                 FUNCTIONS FOR POLYLINE_3D ENTITY                  *
 ********************************************************************/
 
@@ -11382,12 +11429,12 @@ dwg_ent_polyline_3d_set_owned_obj_count(dwg_ent_polyline_3d *line3d,
     }
 }
 
-/********************************************************************
+/*******************************************************************
 *                   FUNCTIONS FOR 3DFACE ENTITY                     *
 ********************************************************************/
 
-/* This returns the elevation of a _3dface entity.
-Usage :- dwg_ent_3dface_get_invis_flags(_3dface);
+/// This returns the elevation of a _3dface entity.
+/** Usage :- dwg_ent_3dface_get_invis_flags(_3dface);
 */
 unsigned int
 dwg_ent_3dface_get_invis_flags(dwg_ent_3dface *_3dface, int *error)
@@ -11401,9 +11448,8 @@ dwg_ent_3dface_get_invis_flags(dwg_ent_3dface *_3dface, int *error)
     *error = 1;
 }
 
-/* This sets the invis_flags of a _3dface entity equal to 
-value in second argument.
-Usage :- dwg_ent_3dface_set_invis_flags(_3dface, 20);
+/// This sets the invis_flags of a _3dface entity equal to value in second argument.
+/** Usage :- dwg_ent_3dface_set_invis_flags(_3dface, 20);
 Hence invis_flags sets to 20
 */
 void
@@ -11419,8 +11465,8 @@ dwg_ent_3dface_set_invis_flags(dwg_ent_3dface *_3dface,
     *error = 1;
 }
 
-/* Returns the corner1 values of _3dface to second argument.
-Usage :- dwg_ent_3dface_get_corner1(_3dface, point);
+/// Returns the corner1 values of _3dface to second argument.
+/** Usage :- dwg_ent_3dface_get_corner1(_3dface, point);
 where _3dface is a pointer of dwg_ent_3dface type and point is 
 of dwg_point_3d. point.x will contain x value of corner1,
 point.y will contain y value of corner1
@@ -11439,8 +11485,8 @@ dwg_ent_3dface_get_corner1(dwg_ent_3dface *_3dface, dwg_point_2d *point,
     *error = 1;
 }
 
-/* Sets the _3dface corner1 values equal to values of second argument.
-Usage :- dwg_ent_3dface_set_corner1(_3dface, point);
+/// Sets the _3dface corner1 values equal to values of second argument.
+/** Usage :- dwg_ent_3dface_set_corner1(_3dface, point);
 where _3dface is a pointer of dwg_ent_3dface type and point is 
 of dwg_point_3d. point.x will contain x value of corner1,
 point.y will contain y value of corner1
@@ -11459,8 +11505,8 @@ dwg_ent_3dface_set_corner1(dwg_ent_3dface *_3dface, dwg_point_2d *point,
     *error = 1;
 }
 
-/* Returns the corner2 values of _3dface to second argument.
-Usage :- dwg_ent_3dface_get_corner2(_3dface, point);
+/// Returns the corner2 values of _3dface to second argument.
+/** Usage :- dwg_ent_3dface_get_corner2(_3dface, point);
 where _3dface is a pointer of dwg_ent_3dface type and point is 
 of dwg_point_3d. point.x will contain x value of corner2,
 point.y will contain y value of corner2
@@ -11479,8 +11525,8 @@ dwg_ent_3dface_get_corner2(dwg_ent_3dface *_3dface, dwg_point_2d *point,
     *error = 1;
 }
 
-/* Sets the _3dface corner2 values equal to values of second argument.
-Usage :- dwg_ent_3dface_set_corner2(_3dface, point);
+/// Sets the _3dface corner2 values equal to values of second argument.
+/** Usage :- dwg_ent_3dface_set_corner2(_3dface, point);
 where _3dface is a pointer of dwg_ent_3dface type and point is 
 of dwg_point_3d. point.x will contain x value of corner2,
 point.y will contain y value of corner2
@@ -11499,8 +11545,8 @@ dwg_ent_3dface_set_corner2(dwg_ent_3dface *_3dface, dwg_point_2d *point,
     *error = 1;
 }
 
-/* Returns the corner3 values of _3dface to second argument.
-Usage :- dwg_ent_3dface_get_corner3(_3dface, point);
+/// Returns the corner3 values of _3dface to second argument.
+/** Usage :- dwg_ent_3dface_get_corner3(_3dface, point);
 where _3dface is a pointer of dwg_ent_3dface type and point is 
 of dwg_point_3d. point.x will contain x value of corner3,
 point.y will contain y value of corner3
@@ -11519,8 +11565,8 @@ dwg_ent_3dface_get_corner3(dwg_ent_3dface *_3dface, dwg_point_2d *point,
     *error = 1;
 }
 
-/* Sets the _3dface corner3 values equal to values of second argument.
-Usage :- dwg_ent_3dface_set_corner3(_3dface, point);
+/// Sets the _3dface corner3 values equal to values of second argument.
+/** Usage :- dwg_ent_3dface_set_corner3(_3dface, point);
 where _3dface is a pointer of dwg_ent_3dface type and point is 
 of dwg_point_3d. point.x will contain x value of corner3,
 point.y will contain y value of corner3
@@ -11539,8 +11585,8 @@ dwg_ent_3dface_set_corner3(dwg_ent_3dface *_3dface, dwg_point_2d *point,
     *error = 1;
 }
 
-/* Returns the corner4 values of _3dface to second argument.
-Usage :- dwg_ent_3dface_get_corner4(_3dface, point);
+/// Returns the corner4 values of _3dface to second argument.
+/** Usage :- dwg_ent_3dface_get_corner4(_3dface, point);
 where _3dface is a pointer of dwg_ent_3dface type and point is 
 of dwg_point_3d. point.x will contain x value of corner4,
 point.y will contain y value of corner4
@@ -11559,8 +11605,8 @@ dwg_ent_3dface_get_corner4(dwg_ent_3dface *_3dface, dwg_point_2d *point,
     *error = 1;
 }
 
-/* Sets the _3dface corner4 values equal to values of second argument.
-Usage :- dwg_ent_3dface_set_corner4(_3dface, point);
+/// Sets the _3dface corner4 values equal to values of second argument.
+/** Usage :- dwg_ent_3dface_set_corner4(_3dface, point);
 where _3dface is a pointer of dwg_ent_3dface type and point is 
 of dwg_point_3d. point.x will contain x value of corner4,
 point.y will contain y value of corner4
@@ -11579,7 +11625,7 @@ dwg_ent_3dface_set_corner4(dwg_ent_3dface *_3dface, dwg_point_2d *point,
     *error = 1;
 }
 
-/********************************************************************
+/*******************************************************************
 *                    FUNCTIONS FOR IMAGE ENTITY                     *
 ********************************************************************/
 
@@ -11992,7 +12038,7 @@ dwg_ent_image_get_clip_verts(dwg_ent_image *image, int *error)
       *error = 1;
 }
 
-/********************************************************************
+/*******************************************************************
 *                    FUNCTIONS FOR MLINE ENTITY                     *
 ********************************************************************/
 
@@ -12196,7 +12242,7 @@ dwg_ent_mline_get_verts(dwg_ent_mline *mline, int *error)
       *error = 1;
 }
 
-/********************************************************************
+/*******************************************************************
 *              FUNCTIONS FOR VERTEX_PFACE_FACE ENTITY               *
 ********************************************************************/
 
@@ -12216,7 +12262,7 @@ dwg_ent_vertex_pface_face_get_vertind(dwg_ent_vert_pface_face *face,
   face->vertind[4] = vertind[4];
 }
 
-/********************************************************************
+/*******************************************************************
 *                  FUNCTIONS FOR 3DSOLID ENTITY                     *
 ********************************************************************/
 
@@ -12549,7 +12595,7 @@ dwg_ent_3dsolid_set_acis_empty2(dwg_ent_3dsolid *_3dsolid, unsigned char acis,
     *error = 1;
 } 
 
-/********************************************************************
+/*******************************************************************
 *                   FUNCTIONS FOR REGION ENTITY                     *
 ********************************************************************/
 
@@ -12880,7 +12926,7 @@ dwg_ent_region_set_acis_empty2(dwg_ent_region *region, unsigned char acis,
     *error = 1;
 } 
 
-/********************************************************************
+/*******************************************************************
 *                    FUNCTIONS FOR BODY ENTITY                      *
 ********************************************************************/
 
@@ -13206,7 +13252,7 @@ dwg_ent_body_set_acis_empty2(dwg_ent_body *body, unsigned char acis,
     *error = 1;
 } 
 
-/********************************************************************
+/*******************************************************************
 *                    FUNCTIONS FOR TABLE ENTITY                     *
 ********************************************************************/
 
@@ -14913,13 +14959,12 @@ dwg_ent_table_get_data_vert_right_visibility(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
-/********************************************************************
+/*******************************************************************
 *               FUNCTIONS FOR BLOCK_CONTROL OBJECT                  *
 ********************************************************************/
 
-/* Returns block control object from a block header type argument passed 
-to function
-Usage :- 
+/// Returns block control object from a block header type argument passed to function
+/** Usage :- 
 dwg_obj_block_control *blc;
 blc = dwg_block_header_get_block_control(hdr);
 */
@@ -14993,12 +15038,12 @@ dwg_obj_block_control_get_paper_space(dwg_obj_block_control *ctrl, int *error)
     *error = 1;
 }
 
-/********************************************************************
+/*******************************************************************
 *                    FUNCTIONS FOR LAYER OBJECT                     *
 ********************************************************************/
 
-/* Get layer Name of the layer type argument passed in function
-Usage :- char * layer_name = dwg_obj_layer_get_name(layer);
+/// Get layer Name of the layer type argument passed in function
+/** Usage :- char * layer_name = dwg_obj_layer_get_name(layer);
 */
 char *
 dwg_obj_layer_get_name(dwg_obj_layer *layer, int *error)
@@ -15013,12 +15058,12 @@ dwg_obj_layer_get_name(dwg_obj_layer *layer, int *error)
 
 }
 
-/********************************************************************
+/*******************************************************************
 *                FUNCTIONS FOR BLOCK_HEADER OBJECT                  *
 ********************************************************************/
 
-/* Get Block Name of the block header type argument passed in function
-Usage :- char * block_name = dwg_obj_block_header_get_name(hdr);
+/// Get Block Name of the block header type argument passed in function
+/** Usage :- char * block_name = dwg_obj_block_header_get_name(hdr);
 */
 char *
 dwg_obj_block_header_get_name(dwg_obj_block_header *hdr, int *error)
@@ -15032,9 +15077,8 @@ dwg_obj_block_header_get_name(dwg_obj_block_header *hdr, int *error)
     *error = 1;
 }
 
-/* Returns 1st block header present in the dwg file from the dwg_data type 
-argument passed to function.
-Usage :- dwg_get_block_header(dwg);
+/// Returns 1st block header present in the dwg file from the dwg_data type argument passed to function.
+/** Usage :- dwg_get_block_header(dwg);
 */
 dwg_obj_block_header *
 dwg_get_block_header(dwg_data *dwg, int *error)
@@ -15053,7 +15097,7 @@ dwg_get_block_header(dwg_data *dwg, int *error)
   return blk;
 }
 
-/********************************************************************
+/*******************************************************************
 *                    FUNCTIONS FOR DWG OBJECT                       *
 ********************************************************************/
 
