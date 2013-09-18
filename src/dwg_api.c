@@ -1354,8 +1354,8 @@ dwg_ent_text_set_extrusion(dwg_ent_text *text, dwg_point_3d *vector,
 
 /// Returns the thickness of a text entity.
 /** Usage : dwg_ent_text_get_thickness(text, &error);
-\param dwg_ent_text
-\param int
+\param 1 dwg_ent_text
+\param 2 int
 */
 double
 dwg_ent_text_get_thickness(dwg_ent_text *text, int *error)
@@ -1371,9 +1371,9 @@ dwg_ent_text_get_thickness(dwg_ent_text *text, int *error)
 
 /// Sets the thickness of text.
 /** Usage :- dwg_ent_text_set_thickness(text, 50, &error);
-\param dwg_ent_text
-\param double
-\param int
+\param 1 dwg_ent_text
+\param 2 double
+\param 3 int
 */
 void
 dwg_ent_text_set_thickness(dwg_ent_text *text, double thickness, int *error)
@@ -1389,8 +1389,8 @@ dwg_ent_text_set_thickness(dwg_ent_text *text, double thickness, int *error)
 
 /// Returns the rotation angle of a text entity.
 /** Usage :- double rot_ang = dwg_ent_text_get_rot_angle(text, &error);
-\param dwg_ent_text
-\param int
+\param 1 dwg_ent_text
+\param 2 int
 */
 double
 dwg_ent_text_get_rot_angle(dwg_ent_text *text, int *error)
@@ -1406,9 +1406,9 @@ dwg_ent_text_get_rot_angle(dwg_ent_text *text, int *error)
 
 /// Sets the rotation angle of a text entity.
 /** Usage : dwg_ent_text_set_rot_angle(text, angle, &error);
-\param dwg_ent_text
-\param double
-\param int
+\param 1 dwg_ent_text
+\param 2 double
+\param 3 int
 */
 void
 dwg_ent_text_set_rot_angle(dwg_ent_text *text, double angle, int *error)
@@ -1424,8 +1424,8 @@ dwg_ent_text_set_rot_angle(dwg_ent_text *text, double angle, int *error)
 
 /// Returns the vertical alignment of a text entity.
 /** Usage : double align = dwg_ent_text_get_vert_align(text, &error);
-\param dwg_ent_text
-\param int
+\param 1 dwg_ent_text
+\param 2 int
 */
 double
 dwg_ent_text_get_vert_align(dwg_ent_text *text, int *error)
@@ -1441,9 +1441,9 @@ dwg_ent_text_get_vert_align(dwg_ent_text *text, int *error)
 
 /// Sets the vertical alignment of a text entity 
 /** Usage : dwg_ent_text_set_vert_align(text, angle, &error);
-\param dwg_ent_text
-\param double
-\param int
+\param 1 dwg_ent_text
+\param 2 double
+\param 3 int
 */
 void
 dwg_ent_text_set_vert_align(dwg_ent_text *text, double alignment, int *error)
@@ -1459,8 +1459,8 @@ dwg_ent_text_set_vert_align(dwg_ent_text *text, double alignment, int *error)
 
 /// Returns the horizontal alignment of a text entity.
 /** Usage : double align = dwg_ent_text_get_horiz_align(text, &error);
-\param dwg_ent_text
-\param int
+\param 1 dwg_ent_text
+\param 2 int
 */
 double
 dwg_ent_text_get_horiz_align(dwg_ent_text *text, int *error)
@@ -1476,9 +1476,9 @@ dwg_ent_text_get_horiz_align(dwg_ent_text *text, int *error)
 
 /// Sets the horizontal alignment of a text entity.
 /** Usage : dwg_ent_text_set_horiz_align(text, angle, &error);
-\param dwg_ent_text
-\param double
-\param int
+\param 1 dwg_ent_text
+\param 2 double
+\param 3 int
 */
 void
 dwg_ent_text_set_horiz_align(dwg_ent_text *text, double alignment, int *error)
@@ -1498,9 +1498,9 @@ dwg_ent_text_set_horiz_align(dwg_ent_text *text, double alignment, int *error)
 
 /// Sets text value of a attrib entity.
 /** Usage : dwg_ent_attrib_set_text(attrib, "Hello world", &error);
-\param dwg_ent_attrib
-\param string (char *)
-\param int
+\param 1 dwg_ent_attrib
+\param 2 string (char *)
+\param 3 int
 */
 void
 dwg_ent_attrib_set_text(dwg_ent_attrib *attrib, char * text_value, int *error)
@@ -1516,8 +1516,8 @@ dwg_ent_attrib_set_text(dwg_ent_attrib *attrib, char * text_value, int *error)
 
 /// Returns the text value of a attrib entity.
 /** Usage : char * text_val = dwg_ent_attrib_get_text(attrib, &error);
-\param dwg_ent_attrib
-\param int
+\param 1 dwg_ent_attrib
+\param 2 int
 */
 char *
 dwg_ent_attrib_get_text(dwg_ent_attrib *attrib, int *error)
@@ -1533,9 +1533,9 @@ dwg_ent_attrib_get_text(dwg_ent_attrib *attrib, int *error)
 
 /// Returns the insertion point of a attrib entity.
 /** Usage : dwg_ent_attrib_get_insertion_point(attrib, &point, &error);
-\param dwg_ent_attrib
-\param dwg_point_3d
-\param int
+\param 1 dwg_ent_attrib
+\param 2 dwg_point_3d
+\param 3 int
 */
 void
 dwg_ent_attrib_get_insertion_point(dwg_ent_attrib *attrib,
@@ -1553,9 +1553,9 @@ dwg_ent_attrib_get_insertion_point(dwg_ent_attrib *attrib,
 
 /// Sets the insertion point of a attrib entity.
 /** Usage : dwg_ent_attrib_set_insertion_point(attrib, &point, &error)
-\param dwg_ent_attrib
-\param dwg_point_3d
-\param int
+\param 1 dwg_ent_attrib
+\param 2 dwg_point_3d
+\param 3 int
 */
 void
 dwg_ent_attrib_set_insertion_point(dwg_ent_attrib *attrib,
@@ -1573,8 +1573,8 @@ dwg_ent_attrib_set_insertion_point(dwg_ent_attrib *attrib,
 
 /// This returns the height of a attrib entity.
 /** Usage : double height = dwg_ent_attrib_get_height(attrib, &error);
-\param dwg_ent_attrib
-\param int
+\param 1 dwg_ent_attrib
+\param 2 int
 */
 double
 dwg_ent_attrib_get_height(dwg_ent_attrib *attrib, int *error)
@@ -1590,9 +1590,9 @@ dwg_ent_attrib_get_height(dwg_ent_attrib *attrib, int *error)
 
 /// This sets height of a attrib entity.
 /** Usage : dwg_ent_attrib_set_height(attrib, 100, &error);
-\param dwg_ent_attrib
-\param double
-\param int
+\param 1 dwg_ent_attrib
+\param 2 double
+\param 3 int
 */
 void
 dwg_ent_attrib_set_height(dwg_ent_attrib *attrib, double height, int *error)
@@ -1608,9 +1608,9 @@ dwg_ent_attrib_set_height(dwg_ent_attrib *attrib, double height, int *error)
 
 /// Returns the extrusion values of attrib.
 /** Usage : dwg_ent_attrib_get_extrusion(attrib, &point, &error);
-\param dwg_ent_attrib
-\param dwg_point_3d
-\param int
+\param 1 dwg_ent_attrib
+\param 2 dwg_point_3d
+\param 3 int
 */
 void
 dwg_ent_attrib_get_extrusion(dwg_ent_attrib *attrib, dwg_point_3d *vector,
@@ -1629,9 +1629,9 @@ dwg_ent_attrib_get_extrusion(dwg_ent_attrib *attrib, dwg_point_3d *vector,
 
 /// Sets the attrib extrusion values equal to values of second argument.
 /** Usage : dwg_ent_attrib_set_extrusion(attrib, &point, &error);
-\param dwg_ent_attrib
-\param dwg_point_3d
-\param int
+\param 1 dwg_ent_attrib
+\param 2 dwg_point_3d
+\param 3 int
 */
 void
 dwg_ent_attrib_set_extrusion(dwg_ent_attrib *attrib, dwg_point_3d *vector,
@@ -1650,8 +1650,8 @@ dwg_ent_attrib_set_extrusion(dwg_ent_attrib *attrib, dwg_point_3d *vector,
 
 /// Returns the thickness of a attrib entity.
 /** Usage : double thick = dwg_ent_attrib_get_thickness(attrib, &error);
-\param dwg_ent_attrib
-\param int
+\param 1 dwg_ent_attrib
+\param 2 int
 */
 double
 dwg_ent_attrib_get_thickness(dwg_ent_attrib *attrib, int *error)
@@ -1667,9 +1667,9 @@ dwg_ent_attrib_get_thickness(dwg_ent_attrib *attrib, int *error)
 
 /// This sets the thickness of a attrib entity.
 /** Usage : dwg_ent_attrib_set_thickness(attrib, thick, &error);
-\param dwg_ent_attrib
-\param double
-\param int
+\param 1 dwg_ent_attrib
+\param 2 double
+\param 3 int
 */
 void
 dwg_ent_attrib_set_thickness(dwg_ent_attrib *attrib, double thickness,
@@ -1686,8 +1686,8 @@ dwg_ent_attrib_set_thickness(dwg_ent_attrib *attrib, double thickness,
 
 /// Returns the rotation angle of a attrib entity.
 /** Usage : double angle = dwg_ent_attrib_get_rot_angle(attrib, &error);
-\param dwg_ent_attrib
-\param int
+\param 1 dwg_ent_attrib
+\param 2 int
 */
 double
 dwg_ent_attrib_get_rot_angle(dwg_ent_attrib *attrib, int *error)
@@ -1701,11 +1701,11 @@ dwg_ent_attrib_get_rot_angle(dwg_ent_attrib *attrib, int *error)
     *error = 1;
 }
 
-/// This sets the rotation angle of a attrib entity equal to value in second argument.
-/** Usage :- dwg_ent_attrib_set_rot_angle(attrib, angle);
-\param dwg_ent_attrib
-
-
+/// This sets the rotation angle of a attrib entity.
+/** Usage :- dwg_ent_attrib_set_rot_angle(attrib, angle, &error);
+\param 1 dwg_ent_attrib
+\param 2 double
+\param 3 int
 */
 void
 dwg_ent_attrib_set_rot_angle(dwg_ent_attrib *attrib, double angle, int *error)
@@ -1720,7 +1720,9 @@ dwg_ent_attrib_set_rot_angle(dwg_ent_attrib *attrib, double angle, int *error)
 }
 
 /// This returns the vertical alignment of a attrib entity.
-/** Usage :- dwg_ent_attrib_get_vert_align(attrib);
+/** Usage : double vert_align = dwg_ent_attrib_get_vert_align(attrib, &error);
+\param 1 dwg_ent_attrib
+\param 2 int
 */
 double
 dwg_ent_attrib_get_vert_align(dwg_ent_attrib *attrib, int *error)
@@ -1734,8 +1736,11 @@ dwg_ent_attrib_get_vert_align(dwg_ent_attrib *attrib, int *error)
     *error = 1;
 }
 
-/// This sets the vertical alignment of a attrib entity equal to value in second argument.
-/** Usage :- dwg_ent_attrib_set_vert_align(attrib, angle);
+/// This sets the vertical alignment of a attrib entity.
+/** Usage :- dwg_ent_attrib_set_vert_align(attrib, angle, &error);
+\param 1 dwg_ent_attrib
+\param 2 double
+\param 3 int
 */
 void
 dwg_ent_attrib_set_vert_align(dwg_ent_attrib *attrib, double alignment,
@@ -1751,7 +1756,9 @@ dwg_ent_attrib_set_vert_align(dwg_ent_attrib *attrib, double alignment,
 }
 
 /// This returns the horizontal alignment of a attrib entity.
-/** Usage :- dwg_ent_attrib_get_horiz_align(attrib);
+/** Usage : double horiz_align =  dwg_ent_attrib_get_horiz_align(attrib, &error);
+\param 1 dwg_ent_attrib
+\param 2 int
 */
 double
 dwg_ent_attrib_get_horiz_align(dwg_ent_attrib *attrib, int *error)
@@ -1765,8 +1772,11 @@ dwg_ent_attrib_get_horiz_align(dwg_ent_attrib *attrib, int *error)
     *error = 1;
 }
 
-/// This sets the horizontal alignment of a attrib entity equal to value in second argument.
-/** Usage :- dwg_ent_attrib_set_horiz_align(attrib, angle);
+/// This sets the horizontal alignment of a attrib entity.
+/** Usage :- dwg_ent_attrib_set_horiz_align(attrib, angle, &error);
+\param 1 dwg_ent_attrib
+\param 2 double
+\param 3 int
 */
 void
 dwg_ent_attrib_set_horiz_align(dwg_ent_attrib *attrib, double alignment,
@@ -1785,9 +1795,11 @@ dwg_ent_attrib_set_horiz_align(dwg_ent_attrib *attrib, double alignment,
 *                   FUNCTIONS FOR ATTDEF ENTITY                     *
 ********************************************************************/
 
-/// This sets text value of a attdef entity equal to value provided in second argument.
-/** Usage :- dwg_ent_attdef_set_text(attdef, "Hello world");
-This will set text value to Hello world.
+/// This sets text value of a attdef entity equal.
+/** Usage :- dwg_ent_attdef_set_text(attdef, "Hello world", &error);
+\param 1 dwg_ent_attdef
+\param 2 char *
+\param 3 int
 */
 void
 dwg_ent_attdef_set_text(dwg_ent_attdef *attdef, char * default_value,
@@ -1803,7 +1815,9 @@ dwg_ent_attdef_set_text(dwg_ent_attdef *attdef, char * default_value,
 }
 
 /// This returns the text value of a attdef entity.
-/** Usage :- dwg_ent_attdef_get_text(attdef);
+/** Usage : char * text = dwg_ent_attdef_get_text(attdef, &error);
+\param 1 dwg_ent_attdef
+\param 2 int
 */
 char *
 dwg_ent_attdef_get_text(dwg_ent_attdef *attdef, int *error)
@@ -1817,9 +1831,11 @@ dwg_ent_attdef_get_text(dwg_ent_attdef *attdef, int *error)
     *error = 1;
 }
 
-/// This returns the insertion point of a attdef entity into second argument.
-/** Usage :- dwg_ent_attdef_get_insertion_point(attdef, point);
-point.x and point.y contains x and y cordinate data respectively.
+/// This returns the insertion point of a attdef entity.
+/** Usage :- dwg_ent_attdef_get_insertion_point(attdef, &point, &error);
+\param 1 dwg_ent_attdef
+\param 2 dwg_point_2d
+\param 3 int
 */
 void
 dwg_ent_attdef_get_insertion_point(dwg_ent_attdef *attdef,
@@ -1835,8 +1851,11 @@ dwg_ent_attdef_get_insertion_point(dwg_ent_attdef *attdef,
     *error = 1;
 }
 
-/// This sets the insertion point of a attdef entity equal to co-ordinate values in second argument.
-/** Usage :- dwg_ent_attdef_set_insertion_point(attdef, point)
+/// This sets the insertion point of a attdef entity.
+/** Usage :- dwg_ent_attdef_set_insertion_point(attdef, &point, &error)
+\param 1 dwg_ent_attdef
+\param 2 dwg_point_2d
+\param 3 int
 */
 void
 dwg_ent_attdef_set_insertion_point(dwg_ent_attdef *attdef,
@@ -1853,7 +1872,9 @@ dwg_ent_attdef_set_insertion_point(dwg_ent_attdef *attdef,
 }
 
 /// This returns the height of a attdef entity.
-/** Usage :- dwg_ent_attdef_get_height(attdef);
+/** Usage :- dwg_ent_attdef_get_height(attdef, &error);
+\param 1 dwg_ent_attdef
+\param 2 int
 */
 double
 dwg_ent_attdef_get_height(dwg_ent_attdef *attdef, int *error)
@@ -1867,9 +1888,11 @@ dwg_ent_attdef_get_height(dwg_ent_attdef *attdef, int *error)
     *error = 1;
 }
 
-/// This sets height of a attdef entity equal to value provided in second argument.
-/** Usage :- dwg_ent_attdef_set_height(attdef, 100);
-This will set height to 100.
+/// This sets height of a attdef entity.
+/** Usage :- dwg_ent_attdef_set_height(attdef, 100, &error);
+\param 1 dwg_ent_attdef
+\param 2 double
+\param 3 int
 */
 void
 dwg_ent_attdef_set_height(dwg_ent_attdef *attdef, double height, int *error)
@@ -1883,11 +1906,11 @@ dwg_ent_attdef_set_height(dwg_ent_attdef *attdef, double height, int *error)
     *error = 1;
 }
 
-/// Returns the extrusion values of attdef to second argument.
-/** Usage :- dwg_ent_attdef_get_extrusion(attdef, point);
-where attdef is a pointer of dwg_ent_attdef type and point is 
-of dwg_point_3d. point.x will contain x value of extrusion,
-point.y will contain y value of extrusion
+/// Returns the extrusion values of attdef.
+/** Usage : dwg_ent_attdef_get_extrusion(attdef, &point, &error);
+\param 1 dwg_ent_attdef
+\param 2 dwg_point_3d
+\param 3 int
 */
 void
 dwg_ent_attdef_get_extrusion(dwg_ent_attdef *attdef, dwg_point_3d *vector,
@@ -1904,11 +1927,11 @@ dwg_ent_attdef_get_extrusion(dwg_ent_attdef *attdef, dwg_point_3d *vector,
     *error = 1;
 }
 
-/// Sets the attdef extrusion values equal to values of second argument.
-/** Usage :- dwg_ent_attdef_set_extrusion(attdef, point);
-where attdef is a pointer of dwg_ent_attdef type and point is 
-of dwg_point_3d. point.x will contain x value of extrusion,
-point.y will contain y value of extrusion
+/// Sets the attdef extrusion values.
+/** Usage :- dwg_ent_attdef_set_extrusion(attdef, &point, &error);
+\param 1 dwg_ent_attdef
+\param 2 dwg_point_3d
+\param 3 int
 */
 void
 dwg_ent_attdef_set_extrusion(dwg_ent_attdef *attdef, dwg_point_3d *vector,
@@ -1926,7 +1949,9 @@ dwg_ent_attdef_set_extrusion(dwg_ent_attdef *attdef, dwg_point_3d *vector,
 }
 
 /// This returns the thickness of a attdef entity.
-/** Usage :- dwg_ent_attdef_get_thickness(attdef);
+/** Usage :- double thickness = dwg_ent_attdef_get_thickness(attdef, &error);
+\param 1 dwg_ent_attdef
+\param 2 int
 */
 double
 dwg_ent_attdef_get_thickness(dwg_ent_attdef *attdef, int *error)
@@ -1940,8 +1965,11 @@ dwg_ent_attdef_get_thickness(dwg_ent_attdef *attdef, int *error)
     *error = 1;
 }
 
-/// This sets the thickness of a attdef entity equal to value in second argument.
-/** Usage :- dwg_ent_attdef_set_thickness(attdef, thickness);
+/// This sets the thickness of a attdef entity.
+/** Usage :- dwg_ent_attdef_set_thickness(attdef, thickness, &error);
+\param 1 dwg_ent_attdef
+\param 2 double
+\param 3 int
 */
 void
 dwg_ent_attdef_set_thickness(dwg_ent_attdef *attdef, double thickness,
@@ -1957,7 +1985,9 @@ dwg_ent_attdef_set_thickness(dwg_ent_attdef *attdef, double thickness,
 }
 
 /// This returns the rotation angle of a attdef entity.
-/** Usage :- dwg_ent_attdef_get_rot_angle(attdef);
+/** Usage :- double angle = dwg_ent_attdef_get_rot_angle(attdef, &error);
+\param 1 dwg_ent_attdef
+\param 2 int
 */
 double
 dwg_ent_attdef_get_rot_angle(dwg_ent_attdef *attdef, int *error)
@@ -1971,8 +2001,11 @@ dwg_ent_attdef_get_rot_angle(dwg_ent_attdef *attdef, int *error)
     *error = 1;
 }
 
-/// This sets the rotation angle of a attdef entity equal to value in second argument.
-/** Usage :- dwg_ent_attdef_set_rot_angle(attdef, angle);
+/// This sets the rotation angle of a attdef entity.
+/** Usage :- dwg_ent_attdef_set_rot_angle(attdef, angle, &error);
+\param 1 dwg_ent_attdef
+\param 2 double
+\param 3 int
 */
 void
 dwg_ent_attdef_set_rot_angle(dwg_ent_attdef *attdef, double angle, int *error)
@@ -1987,7 +2020,9 @@ dwg_ent_attdef_set_rot_angle(dwg_ent_attdef *attdef, double angle, int *error)
 }
 
 /// This returns the vertical alignment of a attdef entity.
-/** Usage :- dwg_ent_attdef_get_vert_align(attdef);
+/** Usage :- double vert_align = dwg_ent_attdef_get_vert_align(attdef, &error);
+\param 1 dwg_ent_attdef
+\param 2 int
 */
 double
 dwg_ent_attdef_get_vert_align(dwg_ent_attdef *attdef, int *error)
@@ -2001,8 +2036,11 @@ dwg_ent_attdef_get_vert_align(dwg_ent_attdef *attdef, int *error)
     *error = 1;
 }
 
-/// This sets the vertical alignment of a attdef entity equal to value in second argument.
-/** Usage :- dwg_ent_attdef_set_vert_align(attdef, angle);
+/// This sets the vertical alignment of a attdef entity.
+/** Usage :- dwg_ent_attdef_set_vert_align(attdef, angle, &error);
+\param 1 dwg_ent_attdef
+\param 2 double
+\param 3 int
 */
 void
 dwg_ent_attdef_set_vert_align(dwg_ent_attdef *attdef, double alignment,
@@ -2018,7 +2056,9 @@ dwg_ent_attdef_set_vert_align(dwg_ent_attdef *attdef, double alignment,
 }
 
 /// This returns the horizontal alignment of a attdef entity.
-/** Usage :- dwg_ent_attdef_get_horiz_align(attdef);
+/** Usage :- double horiz_align = dwg_ent_attdef_get_horiz_align(attdef, &error);
+\param 1 dwg_ent_attdef
+\param 2 int
 */
 double
 dwg_ent_attdef_get_horiz_align(dwg_ent_attdef *attdef, int *error)
@@ -2032,8 +2072,11 @@ dwg_ent_attdef_get_horiz_align(dwg_ent_attdef *attdef, int *error)
     *error = 1;
 }
 
-/// This sets the horizontal alignment of a attdef entity equal to value in second argument.
-/** Usage :- dwg_ent_attdef_set_horiz_align(attdef, angle);
+/// This sets the horizontal alignment of a attdef entity.
+/** Usage :- dwg_ent_attdef_set_horiz_align(attdef, angle, &error);
+\param 1 dwg_ent_attdef
+\param 2 double
+\param 3 int
 */
 void
 dwg_ent_attdef_set_horiz_align(dwg_ent_attdef *attdef, double alignment,
@@ -2052,11 +2095,11 @@ dwg_ent_attdef_set_horiz_align(dwg_ent_attdef *attdef, double alignment,
 *                   FUNCTIONS FOR POINT ENTITY                      *
 ********************************************************************/
 
-/// Sets the point point values equal to values of second argument.
-/** Usage :- dwg_ent_point_set_point(point, retpoint);
-where point is a pointer of dwg_ent_point type and retpoint is 
-of dwg_point_3d. retpoint.x will contain x value of point,
-retpoint.y will contain y value of point
+/// Sets the point point values.
+/** Usage :- dwg_ent_point_set_point(point, &retpoint, &error);
+\param 1 dwg_ent_point
+\param 2 dwg_point_3d
+\param 3 int
 */
 void
 dwg_ent_point_set_point(dwg_ent_point *point, dwg_point_3d *retpoint,
@@ -2074,10 +2117,10 @@ dwg_ent_point_set_point(dwg_ent_point *point, dwg_point_3d *retpoint,
 }
 
 /// Returns the point values of point to second argument.
-/** Usage :- dwg_ent_point_get_point(point, retpoint);
-where point is a pointer of dwg_ent_point type and retpoint is 
-of dwg_point_3d. retpoint.x will contain x value of point,
-retpoint.y will contain y value of point
+/** Usage :- dwg_ent_point_get_point(point, &retpoint, &error);
+\param 1 dwg_ent_point
+\param 2 dwg_point_3d
+\param 3 int
 */
 void
 dwg_ent_point_get_point(dwg_ent_point *point, dwg_point_3d *retpoint,
@@ -2095,7 +2138,9 @@ dwg_ent_point_get_point(dwg_ent_point *point, dwg_point_3d *retpoint,
 }
 
 /// This returns the thickness of a point entity.
-/** Usage :- dwg_ent_point_get_thickness(point);
+/** Usage :- double thickness = dwg_ent_point_get_thickness(point, &error);
+\param 1 dwg_ent_point
+\param 2 int
 */
 double
 dwg_ent_point_get_thickness(dwg_ent_point *point, int *error)
@@ -2109,8 +2154,11 @@ dwg_ent_point_get_thickness(dwg_ent_point *point, int *error)
     *error = 1;
 }
 
-/// This sets the thickness of a point entity equal to value in second argument.
-/** Usage :- dwg_ent_point_set_thickness(point, thickness);
+/// This sets the thickness of a point entity.
+/** Usage :- dwg_ent_point_set_thickness(point, thickness, &error);
+\param 1 dwg_ent_point
+\param 2 double
+\param 3 int
 */
 void
 dwg_ent_point_set_thickness(dwg_ent_point *point, double thickness,
@@ -2125,11 +2173,11 @@ dwg_ent_point_set_thickness(dwg_ent_point *point, double thickness,
     *error = 1;
 }
 
-/// Sets the point extrusion values equal to values of second argument.
-/** Usage :- dwg_ent_point_set_extrusion(point, retpoint);
-where point is a pointer of dwg_ent_point type and retpoint is 
-of dwg_point_3d. retpoint.x will contain x value of extrusion,
-retpoint.y will contain y value of extrusion
+/// Sets the point extrusion values.
+/** Usage :- dwg_ent_point_set_extrusion(point, &retpoint, &error);
+\param 1 dwg_ent_point
+\param 2 dwg_point_3d
+\param 3 int
 */
 void
 dwg_ent_point_set_extrusion(dwg_ent_point *point, dwg_point_3d *retpoint,
@@ -2146,11 +2194,11 @@ dwg_ent_point_set_extrusion(dwg_ent_point *point, dwg_point_3d *retpoint,
     *error = 1;
 }
 
-/// Returns the extrusion values of point to second argument.
-/** Usage :- dwg_ent_point_get_extrusion(point, retpoint);
-where point is a pointer of dwg_ent_point type and retpoint is 
-of dwg_point_3d. retpoint.x will contain x value of extrusion,
-retpoint.y will contain y value of extrusion
+/// Returns the extrusion values of point entity.
+/** Usage :- dwg_ent_point_get_extrusion(point, &retpoint, &error);
+\param 1 dwg_ent_point
+\param 2 dwg_point_3d
+\param 3 int
 */
 void
 dwg_ent_point_get_extrusion(dwg_ent_point *point, dwg_point_3d *retpoint, 
@@ -2172,7 +2220,9 @@ dwg_ent_point_get_extrusion(dwg_ent_point *point, dwg_point_3d *retpoint,
 ********************************************************************/
 
 /// This returns the thickness of a solid entity.
-/** Usage :- dwg_ent_solid_get_thickness(solid);
+/** Usage :- double thickness = dwg_ent_solid_get_thickness(solid, &error);
+\param 1 dwg_ent_solid
+\param 2 int
 */
 double
 dwg_ent_solid_get_thickness(dwg_ent_solid *solid, int *error)
@@ -2186,9 +2236,11 @@ dwg_ent_solid_get_thickness(dwg_ent_solid *solid, int *error)
     *error = 1;
 }
 
-/// This sets the thickness of a solid entity equal to value in second argument.
-/** Usage :- dwg_ent_solid_set_thickness(solid, 2.0);
-Hence thickness sets to 2.0
+/// This sets the thickness of a solid entity.
+/** Usage :- dwg_ent_solid_set_thickness(solid, 2.0, &error);
+\param 1 dwg_ent_solid
+\param 2 double
+\param 3 int
 */
 void
 dwg_ent_solid_set_thickness(dwg_ent_solid *solid, double thickness,
@@ -2204,7 +2256,9 @@ dwg_ent_solid_set_thickness(dwg_ent_solid *solid, double thickness,
 }
 
 /// This returns the elevation of a solid entity.
-/** Usage :- dwg_ent_solid_get_elevation(solid);
+/** Usage :- double elev = dwg_ent_solid_get_elevation(solid, &error);
+\param 1 dwg_ent_solid
+\param 2 int
 */
 double
 dwg_ent_solid_get_elevation(dwg_ent_solid *solid, int *error)
@@ -2218,9 +2272,11 @@ dwg_ent_solid_get_elevation(dwg_ent_solid *solid, int *error)
     *error = 1;
 }
 
-/// This sets the elevation of a solid entity equal to value in second argument.
-/** Usage :- dwg_ent_solid_set_elevation(solid, 20);
-Hence elevation sets to 20
+/// This sets the elevation of a solid entity.
+/** Usage :- dwg_ent_solid_set_elevation(solid, 20.0, &error);
+\param 1 dwg_ent_solid
+\param 2 double
+\param 3 int
 */
 void
 dwg_ent_solid_set_elevation(dwg_ent_solid *solid, double elevation,
@@ -2235,11 +2291,11 @@ dwg_ent_solid_set_elevation(dwg_ent_solid *solid, double elevation,
     *error = 1;
 }
 
-/// Returns the corner1 values of solid to second argument.
-/** Usage :- dwg_ent_solid_get_corner1(solid, point);
-where solid is a pointer of dwg_ent_solid type and point is 
-of dwg_point_3d. point.x will contain x value of corner1,
-point.y will contain y value of corner1
+/// Returns the corner1 values of solid.
+/** Usage :- dwg_ent_solid_get_corner1(solid, &point, &error);
+\param 1 dwg_ent_solid
+\param 2 dwg_point_2d
+\param 3 int
 */
 void
 dwg_ent_solid_get_corner1(dwg_ent_solid *solid, dwg_point_2d *point,
@@ -2255,11 +2311,11 @@ dwg_ent_solid_get_corner1(dwg_ent_solid *solid, dwg_point_2d *point,
     *error = 1;
 }
 
-/// Sets the solid corner1 values equal to values of second argument.
-/** Usage :- dwg_ent_solid_set_corner1(solid, point);
-where solid is a pointer of dwg_ent_solid type and point is 
-of dwg_point_3d. point.x will contain x value of corner1,
-point.y will contain y value of corner1
+/// Sets the solid corner1 values.
+/** Usage :- dwg_ent_solid_set_corner1(solid, &point, &error);
+\param 1 dwg_ent_solid
+\param 2 dwg_point_2d
+\param 3 int
 */
 void
 dwg_ent_solid_set_corner1(dwg_ent_solid *solid, dwg_point_2d *point,
@@ -2275,11 +2331,11 @@ dwg_ent_solid_set_corner1(dwg_ent_solid *solid, dwg_point_2d *point,
     *error = 1;
 }
 
-/// Returns the corner2 values of solid to second argument.
-/** Usage :- dwg_ent_solid_get_corner2(solid, point);
-where solid is a pointer of dwg_ent_solid type and point is 
-of dwg_point_3d. point.x will contain x value of corner2,
-point.y will contain y value of corner2
+/// Returns the corner2 values.
+/** Usage :- dwg_ent_solid_get_corner2(solid, &point, &error);
+\param 1 dwg_ent_solid
+\param 2 dwg_point_2d
+\param 3 int
 */
 void
 dwg_ent_solid_get_corner2(dwg_ent_solid *solid, dwg_point_2d *point,
@@ -2295,11 +2351,11 @@ dwg_ent_solid_get_corner2(dwg_ent_solid *solid, dwg_point_2d *point,
     *error = 1;
 }
 
-/// Sets the solid corner2 values equal to values of second argument.
-/** Usage :- dwg_ent_solid_set_corner2(solid, point);
-where solid is a pointer of dwg_ent_solid type and point is 
-of dwg_point_3d. point.x will contain x value of corner2,
-point.y will contain y value of corner2
+/// Sets the solid corner2.
+/** Usage :- dwg_ent_solid_set_corner2(solid, &point, &error);
+\param 1 dwg_ent_solid
+\param 2 dwg_point_2d
+\param 3 int
 */
 void
 dwg_ent_solid_set_corner2(dwg_ent_solid *solid, dwg_point_2d *point,
@@ -2315,11 +2371,11 @@ dwg_ent_solid_set_corner2(dwg_ent_solid *solid, dwg_point_2d *point,
     *error = 1;
 }
 
-/// Returns the corner3 values of solid to second argument.
-/** Usage :- dwg_ent_solid_get_corner3(solid, point);
-where solid is a pointer of dwg_ent_solid type and point is 
-of dwg_point_3d. point.x will contain x value of corner3,
-point.y will contain y value of corner3
+/// Returns the corner3 values.
+/** Usage :- dwg_ent_solid_get_corner3(solid, &point, &error);
+\param 1 dwg_ent_solid
+\param 2 dwg_point_2d
+\param 3 int
 */
 void
 dwg_ent_solid_get_corner3(dwg_ent_solid *solid, dwg_point_2d *point,
@@ -2335,11 +2391,11 @@ dwg_ent_solid_get_corner3(dwg_ent_solid *solid, dwg_point_2d *point,
     *error = 1;
 }
 
-/// Sets the solid corner3 values equal to values of second argument.
-/** Usage :- dwg_ent_solid_set_corner3(solid, point);
-where solid is a pointer of dwg_ent_solid type and point is 
-of dwg_point_3d. point.x will contain x value of corner3,
-point.y will contain y value of corner3
+/// Sets the solid corner3 values.
+/** Usage :- dwg_ent_solid_set_corner3(solid, &point, &error);
+\param 1 dwg_ent_solid
+\param 2 dwg_point_2d
+\param 3 int
 */
 void
 dwg_ent_solid_set_corner3(dwg_ent_solid *solid, dwg_point_2d *point,
@@ -2355,11 +2411,11 @@ dwg_ent_solid_set_corner3(dwg_ent_solid *solid, dwg_point_2d *point,
     *error = 1;
 }
 
-/// Returns the corner4 values of solid to second argument.
-/** Usage :- dwg_ent_solid_get_corner4(solid, point);
-where solid is a pointer of dwg_ent_solid type and point is 
-of dwg_point_3d. point.x will contain x value of corner4,
-point.y will contain y value of corner4
+/// Returns the corner4 values.
+/** Usage :- dwg_ent_solid_get_corner4(solid, &point, &error);
+\param 1 dwg_ent_solid
+\param 2 dwg_point_2d
+\param 3 int
 */
 void
 dwg_ent_solid_get_corner4(dwg_ent_solid *solid, dwg_point_2d *point,
@@ -2375,11 +2431,11 @@ dwg_ent_solid_get_corner4(dwg_ent_solid *solid, dwg_point_2d *point,
     *error = 1;
 }
 
-/// Sets the solid corner4 values equal to values of second argument.
-/** Usage :- dwg_ent_solid_set_corner4(solid, point);
-where solid is a pointer of dwg_ent_solid type and point is 
-of dwg_point_3d. point.x will contain x value of corner4,
-point.y will contain y value of corner4
+/// Sets the solid corner4 values.
+/** Usage :- dwg_ent_solid_set_corner4(solid, &point, &error);
+\param 1 dwg_ent_solid
+\param 2 dwg_point_2d
+\param 3 int
 */
 void
 dwg_ent_solid_set_corner4(dwg_ent_solid *solid, dwg_point_2d *point,
@@ -2395,11 +2451,11 @@ dwg_ent_solid_set_corner4(dwg_ent_solid *solid, dwg_point_2d *point,
     *error = 1;
 }
 
-/// Returns the extrusion values of solid to second argument.
-/** Usage :- dwg_ent_solid_get_extrusion(solid, point);
-where solid is a pointer of dwg_ent_solid type and point is 
-of dwg_point_3d. point.x will contain x value of extrusion,
-point.y will contain y value of extrusion
+/// Returns the extrusion values.
+/** Usage :- dwg_ent_solid_get_extrusion(solid, &point, &error);
+\param 1 dwg_ent_solid
+\param 2 dwg_point_3d
+\param 3 int
 */
 void
 dwg_ent_solid_get_extrusion(dwg_ent_solid *solid, dwg_point_3d *vector,
@@ -2416,11 +2472,11 @@ dwg_ent_solid_get_extrusion(dwg_ent_solid *solid, dwg_point_3d *vector,
     *error = 1;
 }
 
-/// Sets the solid extrusion values equal to values of second argument.
-/** Usage :- dwg_ent_solid_set_extrusion(solid, point);
-where solid is a pointer of dwg_ent_solid type and point is 
-of dwg_point_3d. point.x will contain x value of extrusion,
-point.y will contain y value of extrusion
+/// Sets the solid extrusion values.
+/** Usage :- dwg_ent_solid_set_extrusion(solid, &point, &error);
+\param 1 dwg_ent_solid
+\param 2 dwg_point_3d
+\param 3 int
 */
 void
 dwg_ent_solid_set_extrusion(dwg_ent_solid *solid, dwg_point_3d *vector,
@@ -2441,8 +2497,11 @@ dwg_ent_solid_set_extrusion(dwg_ent_solid *solid, dwg_point_3d *vector,
 *                   FUNCTIONS FOR BLOCk ENTITY                      *
 ********************************************************************/
 
-/// sets name of the block entity equal to value passed in 2nd argument.
-/** Usage :- dwg_ent_block_get_name(block);
+/// sets name of the block entity.
+/** Usage :- dwg_ent_block_set_name(block, "blocko", &error);
+\param 1 dwg_ent_block
+\param 2 char *
+\param 3 int
 */
 void
 dwg_ent_block_set_name(dwg_ent_block *block, char * name, int *error)
@@ -2456,8 +2515,10 @@ dwg_ent_block_set_name(dwg_ent_block *block, char * name, int *error)
     *error = 1;
 }
 
-/// Returns name of the block entity passed in argument.
-/** Usage :- dwg_ent_block_get_name(block);
+/// Returns name of the block entity.
+/** Usage :- char * name = dwg_ent_block_get_name(block, &error);
+\param 1 dwg_ent_block
+\param 2 int
 */
 char *
 dwg_ent_block_get_name(dwg_ent_block *block, int *error)
@@ -2475,6 +2536,12 @@ dwg_ent_block_get_name(dwg_ent_block *block, int *error)
 *                    FUNCTIONS FOR RAY ENTITY                       *
 ********************************************************************/
 
+/// Returns points of ray entity.
+/** Usage :- dwg_ent_ray_get_point(ray, &point, &error);
+\param 1 dwg_ent_ray
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_ray_get_point(dwg_ent_ray *ray, dwg_point_3d *point, int *error)
 {    
@@ -2489,6 +2556,12 @@ dwg_ent_ray_get_point(dwg_ent_ray *ray, dwg_point_3d *point, int *error)
     *error = 1;
 }
 
+/// Sets point of ray entity.
+/** Usage :- dwg_ent_ray_set_point(ray, &point, &error);
+\param 1 dwg_ent_ray
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_ray_set_point(dwg_ent_ray *ray, dwg_point_3d *point, int *error)
 {    
@@ -2503,6 +2576,12 @@ dwg_ent_ray_set_point(dwg_ent_ray *ray, dwg_point_3d *point, int *error)
     *error = 1;
 }
 
+/// Returns vector of ray entity.
+/** Usage :- dwg_ent_ray_get_vector(ray, &point, &error);
+\param 1 dwg_ent_ray
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_ray_get_vector(dwg_ent_ray *ray, dwg_point_3d *vector, int *error)
 {    
@@ -2517,6 +2596,12 @@ dwg_ent_ray_get_vector(dwg_ent_ray *ray, dwg_point_3d *vector, int *error)
     *error = 1;
 }
 
+/// Sets vector of ray entity.
+/** Usage :- dwg_ent_ray_set_vector(ray, &point, &error);
+\param 1 dwg_ent_ray
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_ray_set_vector(dwg_ent_ray *ray, dwg_point_3d *vector, int *error)
 {    
@@ -2535,6 +2620,12 @@ dwg_ent_ray_set_vector(dwg_ent_ray *ray, dwg_point_3d *vector, int *error)
 *                   FUNCTIONS FOR XLINE ENTITY                      *
 ********************************************************************/
 
+/// Returns points of xline entity.
+/** Usage :- dwg_ent_xline_get_point(xline, &point, &error);
+\param 1 dwg_ent_xline
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_xline_get_point(dwg_ent_xline *xline, dwg_point_3d *point, int *error)
 {    
@@ -2549,6 +2640,12 @@ dwg_ent_xline_get_point(dwg_ent_xline *xline, dwg_point_3d *point, int *error)
     *error = 1;
 }
 
+/// Sets point of xline entity.
+/** Usage :- dwg_ent_xline_set_point(xline, &point, &error);
+\param 1 dwg_ent_xline
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_xline_set_point(dwg_ent_xline *xline, dwg_point_3d *point, int *error)
 {    
@@ -2563,6 +2660,12 @@ dwg_ent_xline_set_point(dwg_ent_xline *xline, dwg_point_3d *point, int *error)
     *error = 1;
 }
 
+/// Returns vector of xline entity.
+/** Usage :- dwg_ent_xline_get_vector(xline, &point, &error);
+\param 1 dwg_ent_xline
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_xline_get_vector(dwg_ent_xline *xline, dwg_point_3d *vector,
                          int *error)
@@ -2578,6 +2681,12 @@ dwg_ent_xline_get_vector(dwg_ent_xline *xline, dwg_point_3d *vector,
     *error = 1;
 }
 
+/// Sets vector of xline entity.
+/** Usage :- dwg_ent_xline_set_vector(xline, &point, &error);
+\param 1 dwg_ent_xline
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_xline_set_vector(dwg_ent_xline *xline, dwg_point_3d *vector,
                          int *error)
@@ -2598,7 +2707,9 @@ dwg_ent_xline_set_vector(dwg_ent_xline *xline, dwg_point_3d *vector,
 ********************************************************************/
 
 /// This returns the thickness of a trace entity.
-/** Usage :- dwg_ent_trace_get_thickness(trace);
+/** Usage :- double thickness = dwg_ent_trace_get_thickness(trace, &error);
+\param 1 dwg_ent_trace
+\param 2 int
 */
 double
 dwg_ent_trace_get_thickness(dwg_ent_trace *trace, int *error)
@@ -2612,9 +2723,11 @@ dwg_ent_trace_get_thickness(dwg_ent_trace *trace, int *error)
     *error = 1;
 }
 
-/// This sets the thickness of a trace entity equal to value in second argument.
-/** Usage :- dwg_ent_trace_set_thickness(trace, 2.0);
-Hence thickness sets to 2.0
+/// This sets the thickness of a trace entity.
+/** Usage :- dwg_ent_trace_set_thickness(trace, 2.0, &error);
+\param 1 dwg_ent_trace
+\param 2 double
+\param 3 int
 */
 void
 dwg_ent_trace_set_thickness(dwg_ent_trace *trace, double thickness,
@@ -2630,7 +2743,9 @@ dwg_ent_trace_set_thickness(dwg_ent_trace *trace, double thickness,
 }
 
 /// This returns the elevation of a trace entity.
-/** Usage :- dwg_ent_trace_get_elevation(trace);
+/** Usage :- double elev = dwg_ent_trace_get_elevation(trace, &error);
+\param 1 dwg_ent_trace
+\param 2 int
 */
 double
 dwg_ent_trace_get_elevation(dwg_ent_trace *trace, int *error)
@@ -2644,9 +2759,11 @@ dwg_ent_trace_get_elevation(dwg_ent_trace *trace, int *error)
     *error = 1;
 }
 
-/// This sets the elevation of a trace entity equal to value in second argument.
-/** Usage :- dwg_ent_trace_set_elevation(trace, 20);
-Hence elevation sets to 20
+/// This sets the elevation of a trace entity.
+/** Usage :- dwg_ent_trace_set_elevation(trace, 20, &error);
+\param 1 dwg_ent_trace
+\param 2 double
+\param 3 int
 */
 void
 dwg_ent_trace_set_elevation(dwg_ent_trace *trace, double elevation,
@@ -2661,11 +2778,11 @@ dwg_ent_trace_set_elevation(dwg_ent_trace *trace, double elevation,
     *error = 1;
 }
 
-/// Returns the corner1 values of trace to second argument.
-/** Usage :- dwg_ent_trace_get_corner1(trace, point);
-where trace is a pointer of dwg_ent_trace type and point is 
-of dwg_point_3d. point.x will contain x value of corner1,
-point.y will contain y value of corner1
+/// Returns the corner1 values of trace.
+/** Usage :- dwg_ent_trace_get_corner1(trace, &point, &error);
+\param 1 dwg_ent_trace
+\param 2 dwg_point_2d
+\param 3 int
 */
 void
 dwg_ent_trace_get_corner1(dwg_ent_trace *trace, dwg_point_2d *point,
@@ -2681,11 +2798,11 @@ dwg_ent_trace_get_corner1(dwg_ent_trace *trace, dwg_point_2d *point,
     *error = 1;
 }
 
-/// Sets the trace corner1 values equal to values of second argument.
-/** Usage :- dwg_ent_trace_set_corner1(trace, point);
-where trace is a pointer of dwg_ent_trace type and point is 
-of dwg_point_3d. point.x will contain x value of corner1,
-point.y will contain y value of corner1
+/// Sets the corner1 values of trace.
+/** Usage :- dwg_ent_trace_set_corner1(trace, &point, &error);
+\param 1 dwg_ent_trace
+\param 2 dwg_point_2d
+\param 3 int
 */
 void
 dwg_ent_trace_set_corner1(dwg_ent_trace *trace, dwg_point_2d *point,
@@ -2701,11 +2818,11 @@ dwg_ent_trace_set_corner1(dwg_ent_trace *trace, dwg_point_2d *point,
     *error = 1;
 }
 
-/// Returns the corner2 values of trace to second argument.
-/** Usage :- dwg_ent_trace_get_corner2(trace, point);
-where trace is a pointer of dwg_ent_trace type and point is 
-of dwg_point_3d. point.x will contain x value of corner2,
-point.y will contain y value of corner2
+/// Returns the corner2 values of trace.
+/** Usage :- dwg_ent_trace_get_corner2(trace, &point, &error);
+\param 1 dwg_ent_trace
+\param 2 dwg_point_2d
+\param 3 int
 */
 void
 dwg_ent_trace_get_corner2(dwg_ent_trace *trace, dwg_point_2d *point,
@@ -2721,11 +2838,11 @@ dwg_ent_trace_get_corner2(dwg_ent_trace *trace, dwg_point_2d *point,
     *error = 1;
 }
 
-/// Sets the trace corner2 values equal to values of second argument.
-/** Usage :- dwg_ent_trace_set_corner2(trace, point);
-where trace is a pointer of dwg_ent_trace type and point is 
-of dwg_point_3d. point.x will contain x value of corner2,
-point.y will contain y value of corner2
+/// Sets the corner2 values of trace.
+/** Usage :- dwg_ent_trace_set_corner2(trace, &point, &error);
+\param 1 dwg_ent_trace
+\param 2 dwg_point_2d
+\param 3 int
 */
 void
 dwg_ent_trace_set_corner2(dwg_ent_trace *trace, dwg_point_2d *point,
@@ -2741,11 +2858,11 @@ dwg_ent_trace_set_corner2(dwg_ent_trace *trace, dwg_point_2d *point,
     *error = 1;
 }
 
-/// Returns the corner3 values of trace to second argument.
-/** Usage :- dwg_ent_trace_get_corner3(trace, point);
-where trace is a pointer of dwg_ent_trace type and point is 
-of dwg_point_3d. point.x will contain x value of corner3,
-point.y will contain y value of corner3
+/// Returns the corner3 values of trace.
+/** Usage :- dwg_ent_trace_get_corner3(trace, &point, &error);
+\param 1 dwg_ent_trace
+\param 2 dwg_point_2d
+\param 3 int
 */
 void
 dwg_ent_trace_get_corner3(dwg_ent_trace *trace, dwg_point_2d *point,
@@ -2761,11 +2878,11 @@ dwg_ent_trace_get_corner3(dwg_ent_trace *trace, dwg_point_2d *point,
     *error = 1;
 }
 
-/// Sets the trace corner3 values equal to values of second argument.
-/** Usage :- dwg_ent_trace_set_corner3(trace, point);
-where trace is a pointer of dwg_ent_trace type and point is 
-of dwg_point_3d. point.x will contain x value of corner3,
-point.y will contain y value of corner3
+/// Sets the corner3 values of trace.
+/** Usage :- dwg_ent_trace_set_corner3(trace, &point, &error);
+\param 1 dwg_ent_trace
+\param 2 dwg_point_2d
+\param 3 int
 */
 void
 dwg_ent_trace_set_corner3(dwg_ent_trace *trace, dwg_point_2d *point,
@@ -2781,11 +2898,11 @@ dwg_ent_trace_set_corner3(dwg_ent_trace *trace, dwg_point_2d *point,
     *error = 1;
 }
 
-/// Returns the corner4 values of trace to second argument.
-/** Usage :- dwg_ent_trace_get_corner4(trace, point);
-where trace is a pointer of dwg_ent_trace type and point is 
-of dwg_point_3d. point.x will contain x value of corner4,
-point.y will contain y value of corner4
+/// Returns the corner4 values of trace.
+/** Usage :- dwg_ent_trace_get_corner4(trace, &point, &error);
+\param 1 dwg_ent_trace
+\param 2 dwg_point_2d
+\param 3 int
 */
 void
 dwg_ent_trace_get_corner4(dwg_ent_trace *trace, dwg_point_2d *point,
@@ -2801,11 +2918,11 @@ dwg_ent_trace_get_corner4(dwg_ent_trace *trace, dwg_point_2d *point,
     *error = 1;
 }
 
-/// Sets the trace corner4 values equal to values of second argument.
-/** Usage :- dwg_ent_trace_set_corner4(trace, point);
-where trace is a pointer of dwg_ent_trace type and point is 
-of dwg_point_3d. point.x will contain x value of corner4,
-point.y will contain y value of corner4
+/// Sets the corner4 values of trace.
+/** Usage :- dwg_ent_trace_set_corner4(trace, &point, &error);
+\param 1 dwg_ent_trace
+\param 2 dwg_point_2d
+\param 3 int
 */
 void
 dwg_ent_trace_set_corner4(dwg_ent_trace *trace, dwg_point_2d *point,
@@ -2821,11 +2938,11 @@ dwg_ent_trace_set_corner4(dwg_ent_trace *trace, dwg_point_2d *point,
     *error = 1;
 }
 
-/// Returns the extrusion values of trace to second argument.
-/** Usage :- dwg_ent_trace_get_extrusion(trace, point);
-where trace is a pointer of dwg_ent_trace type and point is 
-of dwg_point_3d. point.x will contain x value of extrusion,
-point.y will contain y value of extrusion
+/// Returns the extrusion values of trace.
+/** Usage :- dwg_ent_trace_get_extrusion(trace, &ext, &error);
+\param 1 dwg_ent_trace
+\param 2 dwg_point_3d
+\param 3 int
 */
 void
 dwg_ent_trace_get_extrusion(dwg_ent_trace *trace, dwg_point_3d *vector,
@@ -2842,11 +2959,11 @@ dwg_ent_trace_get_extrusion(dwg_ent_trace *trace, dwg_point_3d *vector,
     *error = 1;
 }
 
-/// Sets the trace extrusion values equal to values of second argument.
-/** Usage :- dwg_ent_trace_set_extrusion(trace, point);
-where trace is a pointer of dwg_ent_trace type and point is 
-of dwg_point_3d. point.x will contain x value of extrusion,
-point.y will contain y value of extrusion
+/// Sets the extrusion values of trace.
+/** Usage :- dwg_ent_trace_set_extrusion(trace, &ext, &error);
+\param 1 dwg_ent_trace
+\param 2 dwg_point_3d
+\param 3 int
 */
 void
 dwg_ent_trace_set_extrusion(dwg_ent_trace *trace, dwg_point_3d *vector,
@@ -2867,6 +2984,11 @@ dwg_ent_trace_set_extrusion(dwg_ent_trace *trace, dwg_point_3d *vector,
 *                 FUNCTIONS FOR VERTEX_3D ENTITY                    *
 ********************************************************************/
 
+/// Returns the flag of vertex_3d.
+/** Usage :- char flag = dwg_ent_vertex_3d_get_flags(vert, &error);
+\param 1 dwg_ent_vertex_3d
+\param 2 int
+*/
 char
 dwg_ent_vertex_3d_get_flags(dwg_ent_vertex_3d *vert, int *error)
 {    
@@ -2879,6 +3001,12 @@ dwg_ent_vertex_3d_get_flags(dwg_ent_vertex_3d *vert, int *error)
     *error = 1;
 }
 
+/// Sets the flag of vertex_3d.
+/** Usage :- dwg_ent_vertex_3d_set_flags(vert, flag, &error);
+\param 1 dwg_ent_vertex_3d
+\param 2 char
+\param 3 int
+*/
 void
 dwg_ent_vertex_3d_set_flags(dwg_ent_vertex_3d *vert, char flags, int *error)
 {    
@@ -2891,6 +3019,12 @@ dwg_ent_vertex_3d_set_flags(dwg_ent_vertex_3d *vert, char flags, int *error)
     *error = 1;
 }
 
+/// Returns the point of vertex_3d.
+/** Usage : dwg_ent_vertex_3d_get_point(vert, &point, &error);
+\param 1 dwg_ent_vertex_3d
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_vertex_3d_get_point(dwg_ent_vertex_3d *vert, dwg_point_3d *point,
                             int *error)
@@ -2906,6 +3040,12 @@ dwg_ent_vertex_3d_get_point(dwg_ent_vertex_3d *vert, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Sets the point of vertex_3d.
+/** Usage : dwg_ent_vertex_3d_set_point(vert, &point, &error);
+\param 1 dwg_ent_vertex_3d
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_vertex_3d_set_point(dwg_ent_vertex_3d *vert,
                             dwg_point_3d *point, int *error)
@@ -2925,6 +3065,11 @@ dwg_ent_vertex_3d_set_point(dwg_ent_vertex_3d *vert,
 *               FUNCTIONS FOR VERTEX_MESH ENTITY                    *
 ********************************************************************/
 
+/// Returns the flag of vertex_mesh.
+/** Usage :- char flag = dwg_ent_vertex_mesh_get_flags(vert, &error);
+\param 1 dwg_ent_vertex_mesh
+\param 2 int
+*/
 char
 dwg_ent_vertex_mesh_get_flags(dwg_ent_vertex_mesh *vert, int *error)
 {    
@@ -2937,6 +3082,12 @@ dwg_ent_vertex_mesh_get_flags(dwg_ent_vertex_mesh *vert, int *error)
     *error = 1;
 }
 
+/// Sets the flag of vertex_mesh.
+/** Usage :- dwg_ent_vertex_mesh_set_flags(vert, flag, &error);
+\param 1 dwg_ent_vertex_mesh
+\param 2 char
+\param 3 int
+*/
 void
 dwg_ent_vertex_mesh_set_flags(dwg_ent_vertex_mesh *vert, char flags,
                               int *error)
@@ -2950,6 +3101,12 @@ dwg_ent_vertex_mesh_set_flags(dwg_ent_vertex_mesh *vert, char flags,
     *error = 1;
 }
 
+/// Returns the point of vertex_mesh.
+/** Usage : dwg_ent_vertex_mesh_get_point(vert, &point, &error);
+\param 1 dwg_ent_vertex_mesh
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_vertex_mesh_get_point(dwg_ent_vertex_mesh *vert, dwg_point_3d *point,
                               int *error)
@@ -2965,6 +3122,12 @@ dwg_ent_vertex_mesh_get_point(dwg_ent_vertex_mesh *vert, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Sets the point of vertex_mesh.
+/** Usage : dwg_ent_vertex_mesh_set_point(vert, &point, &error);
+\param 1 dwg_ent_vertex_mesh
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_vertex_mesh_set_point(dwg_ent_vertex_mesh *vert, dwg_point_3d *point,
                               int *error)
@@ -2984,6 +3147,11 @@ dwg_ent_vertex_mesh_set_point(dwg_ent_vertex_mesh *vert, dwg_point_3d *point,
 *               FUNCTIONS FOR VERTEX_PFACE ENTITY                   *
 ********************************************************************/
 
+/// Returns the flag of vertex_pface.
+/** Usage :- char flag = dwg_ent_vertex_pface_get_flags(vert, &error);
+\param 1 dwg_ent_vertex_pface
+\param 2 int
+*/
 char
 dwg_ent_vertex_pface_get_flags(dwg_ent_vertex_pface *vert, int *error)
 {    
@@ -2996,6 +3164,12 @@ dwg_ent_vertex_pface_get_flags(dwg_ent_vertex_pface *vert, int *error)
     *error = 1;
 }
 
+/// Sets the flag of vertex_pface.
+/** Usage :- dwg_ent_vertex_pface_set_flags(vert, flag, &error);
+\param 1 dwg_ent_vertex_pface
+\param 2 char
+\param 3 int
+*/
 void
 dwg_ent_vertex_pface_set_flags(dwg_ent_vertex_pface *vert, char flags,
                                int *error)
@@ -3009,6 +3183,12 @@ dwg_ent_vertex_pface_set_flags(dwg_ent_vertex_pface *vert, char flags,
     *error = 1;
 }
 
+/// Returns the point of vertex_pface.
+/** Usage : dwg_ent_vertex_pface_get_point(vert, &point, &error);
+\param 1 dwg_ent_vertex_pface
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_vertex_pface_get_point(dwg_ent_vertex_pface *vert,
                                dwg_point_3d *point, int *error)
@@ -3024,6 +3204,12 @@ dwg_ent_vertex_pface_get_point(dwg_ent_vertex_pface *vert,
     *error = 1;
 }
 
+/// Sets the point of vertex_pface.
+/** Usage : dwg_ent_vertex_pface_set_point(vert, &point, &error);
+\param 1 dwg_ent_vertex_pface
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_vertex_pface_set_point(dwg_ent_vertex_pface *vert,
                                dwg_point_3d *point, int *error)
@@ -3043,6 +3229,11 @@ dwg_ent_vertex_pface_set_point(dwg_ent_vertex_pface *vert,
 *                 FUNCTIONS FOR VERTEX_2D ENTITY                    *
 ********************************************************************/
 
+/// Returns the flag of vertex_2d
+/** Usage : dwg_ent_vertex_2d_get_flag(vert, &error);
+\param 1 dwg_ent_vertex_2d
+\param 2 int
+*/
 char
 dwg_ent_vertex_2d_get_flags(dwg_ent_vertex_2d *vert, int *error)
 {    
@@ -3055,6 +3246,12 @@ dwg_ent_vertex_2d_get_flags(dwg_ent_vertex_2d *vert, int *error)
     *error = 1;
 }
 
+/// Sets the flag of vertex_2d.
+/** Usage : dwg_ent_vertex_2d_set_flag(vert, flag, &error);
+\param 1 dwg_ent_vertex_mesh
+\param 2 char
+\param 3 int
+*/
 void
 dwg_ent_vertex_2d_set_flags(dwg_ent_vertex_2d *vert, char flags, int *error)
 {    
@@ -3067,6 +3264,12 @@ dwg_ent_vertex_2d_set_flags(dwg_ent_vertex_2d *vert, char flags, int *error)
     *error = 1;
 }
 
+/// Returns the point of vertex_2d.
+/** Usage : dwg_ent_vertex_2d_get_point(vert, &point, &error);
+\param 1 dwg_ent_vertex_2d
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_vertex_2d_get_point(dwg_ent_vertex_2d *vert, dwg_point_3d *point,
                             int *error)
@@ -3082,6 +3285,12 @@ dwg_ent_vertex_2d_get_point(dwg_ent_vertex_2d *vert, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Sets the point of vertex_2d.
+/** Usage : dwg_ent_vertex_2d_set_point(vert, &point, &error);
+\param 1 dwg_ent_vertex_2d
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_vertex_2d_set_point(dwg_ent_vertex_2d *vert, dwg_point_3d *point,
                             int *error)
@@ -3097,6 +3306,11 @@ dwg_ent_vertex_2d_set_point(dwg_ent_vertex_2d *vert, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Returns the start width of vertex_2d.
+/** Usage : double width = dwg_ent_vertex_2d_get_start_width(vert, &error);
+\param 1 dwg_ent_vertex_2d
+\param 2 int
+*/
 double
 dwg_ent_vertex_2d_get_start_width(dwg_ent_vertex_2d *vert, int *error)
 {    
@@ -3109,6 +3323,12 @@ dwg_ent_vertex_2d_get_start_width(dwg_ent_vertex_2d *vert, int *error)
     *error = 1;
 }
 
+/// Sets the start width of vertex_2d.
+/** Usage : dwg_ent_vertex_2d_set_start_width(vert, 20, &error);
+\param 1 dwg_ent_vertex_2d
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_vertex_2d_set_start_width(dwg_ent_vertex_2d *vert, double start_width,
                                   int *error)
@@ -3122,6 +3342,11 @@ dwg_ent_vertex_2d_set_start_width(dwg_ent_vertex_2d *vert, double start_width,
     *error = 1;
 }
 
+/// Returns the end width of vertex_2d.
+/** Usage : double width = dwg_ent_vertex_2d_get_end_width(vert, &error);
+\param 1 dwg_ent_vertex_2d
+\param 2 int
+*/
 double
 dwg_ent_vertex_2d_get_end_width(dwg_ent_vertex_2d *vert, int *error)
 {    
@@ -3134,6 +3359,12 @@ dwg_ent_vertex_2d_get_end_width(dwg_ent_vertex_2d *vert, int *error)
     *error = 1;
 }
 
+/// Sets the end width of vertex_2d.
+/** Usage : dwg_ent_vertex_2d_set_end_width(vert, 20, &error);
+\param 1 dwg_ent_vertex_2d
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_vertex_2d_set_end_width(dwg_ent_vertex_2d *vert, double end_width,
                                 int *error)
@@ -3147,6 +3378,11 @@ dwg_ent_vertex_2d_set_end_width(dwg_ent_vertex_2d *vert, double end_width,
     *error = 1;
 }
 
+/// Returns the bulge of vertex_2d.
+/** Usage : double bulge = dwg_ent_vertex_2d_get_bulge(vert, &error);
+\param 1 dwg_ent_vertex_2d
+\param 2 int
+*/
 double
 dwg_ent_vertex_2d_get_bulge(dwg_ent_vertex_2d *vert, int *error)
 {    
@@ -3159,6 +3395,12 @@ dwg_ent_vertex_2d_get_bulge(dwg_ent_vertex_2d *vert, int *error)
     *error = 1;
 }
 
+/// Sets the bulge of vertex_2d.
+/** Usage : dwg_ent_vertex_2d_set_bulge(vert, 20, &error);
+\param 1 dwg_ent_vertex_2d
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_vertex_2d_set_bulge(dwg_ent_vertex_2d *vert, double bulge, int *error)
 {    
@@ -3171,6 +3413,11 @@ dwg_ent_vertex_2d_set_bulge(dwg_ent_vertex_2d *vert, double bulge, int *error)
     *error = 1;
 }
 
+/// Returns the tangent_dir of vertex_2d.
+/** Usage : double tangent_dir = dwg_ent_vertex_2d_get_tangent_dir(vert, &error);
+\param 1 dwg_ent_vertex_2d
+\param 2 int
+*/
 double
 dwg_ent_vertex_2d_get_tangent_dir(dwg_ent_vertex_2d *vert, int *error)
 {    
@@ -3183,6 +3430,12 @@ dwg_ent_vertex_2d_get_tangent_dir(dwg_ent_vertex_2d *vert, int *error)
     *error = 1;
 }
 
+/// Sets the tangent_dir of vertex_2d.
+/** Usage : dwg_ent_vertex_2d_set_tangent_dir(vert, 20, &error);
+\param 1 dwg_ent_vertex_2d
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_vertex_2d_set_tangent_dir(dwg_ent_vertex_2d *vert, double tangent_dir,
                                   int *error)
@@ -3200,6 +3453,12 @@ dwg_ent_vertex_2d_set_tangent_dir(dwg_ent_vertex_2d *vert, double tangent_dir,
 *                   FUNCTIONS FOR INSERT ENTITY                     *
 ********************************************************************/
 
+/// Returns the insertion point of insert.
+/** Usage : dwg_ent_insert_get_ins_pt(insert, &point, &error);
+\param 1 dwg_ent_insert
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_insert_get_ins_pt(dwg_ent_insert *insert, dwg_point_3d *point,
                           int *error)
@@ -3215,6 +3474,12 @@ dwg_ent_insert_get_ins_pt(dwg_ent_insert *insert, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Sets the insertion point of insert.
+/** Usage : dwg_ent_insert_set_ins_pt(insert, &point, &error);
+\param 1 dwg_ent_insert
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_insert_set_ins_pt(dwg_ent_insert *insert, dwg_point_3d *point,
                           int *error)
@@ -3230,6 +3495,11 @@ dwg_ent_insert_set_ins_pt(dwg_ent_insert *insert, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Returns the scale flag of insert
+/** Usage : double flag = dwg_ent_insert_get_flag(insert, &error);
+\param 1 dwg_ent_insert
+\param 2 int
+*/
 char
 dwg_ent_insert_get_scale_flag(dwg_ent_insert *insert, int *error)
 {    
@@ -3242,6 +3512,12 @@ dwg_ent_insert_get_scale_flag(dwg_ent_insert *insert, int *error)
     *error = 1;
 }
 
+/// Sets the scale flag of insert.
+/** Usage : dwg_ent_insert_set_scale_flag(insert, flag, &error);
+\param 1 dwg_ent_insert
+\param 2 char
+\param 3 int
+*/
 void
 dwg_ent_insert_set_scale_flag(dwg_ent_insert *insert, char flags, int *error)
 {    
@@ -3254,6 +3530,12 @@ dwg_ent_insert_set_scale_flag(dwg_ent_insert *insert, char flags, int *error)
     *error = 1;
 }
 
+/// Returns the scale of insert.
+/** Usage : dwg_ent_insert_get_scale(insert, &point, &error);
+\param 1 dwg_ent_insert
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_insert_get_scale(dwg_ent_insert *insert, dwg_point_3d *point,
                          int *error)
@@ -3269,6 +3551,12 @@ dwg_ent_insert_get_scale(dwg_ent_insert *insert, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Sets the scale of insert.
+/** Usage : dwg_ent_insert_set_scale(insert, &point, &error);
+\param 1 dwg_ent_insert
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_insert_set_scale(dwg_ent_insert *insert, dwg_point_3d *point,
                          int *error)
@@ -3284,6 +3572,11 @@ dwg_ent_insert_set_scale(dwg_ent_insert *insert, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Returns the rotation angle of insert.
+/** Usage : double angle = dwg_ent_insert_get_rotation_angle(insert, &error);
+\param 1 dwg_ent_insert
+\param 2 int
+*/
 double
 dwg_ent_insert_get_rotation_angle(dwg_ent_insert *insert, int *error)
 {    
@@ -3296,6 +3589,12 @@ dwg_ent_insert_get_rotation_angle(dwg_ent_insert *insert, int *error)
     *error = 1;
 }
 
+/// Sets the rotation angle of insert.
+/** Usage : dwg_ent_insert_set_rotation_angle(insert, angle, &error);
+\param 1 dwg_ent_insert
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_insert_set_rotation_angle(dwg_ent_insert *insert, double rot_ang,
                                   int *error)
@@ -3309,6 +3608,12 @@ dwg_ent_insert_set_rotation_angle(dwg_ent_insert *insert, double rot_ang,
     *error = 1;
 }
 
+/// Returns the extrusion of insert.
+/** Usage : dwg_ent_insert_get_extrusion(insert, &point, &error);
+\param 1 dwg_ent_insert
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_insert_get_extrusion(dwg_ent_insert *insert, dwg_point_3d *point,
                              int *error)
@@ -3324,6 +3629,12 @@ dwg_ent_insert_get_extrusion(dwg_ent_insert *insert, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Sets the extrusion of insert.
+/** Usage : dwg_ent_insert_set_extrusion(insert, &point, &error);
+\param 1 dwg_ent_insert
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_insert_set_extrusion(dwg_ent_insert *insert, dwg_point_3d *point,
                              int *error)
@@ -3339,6 +3650,11 @@ dwg_ent_insert_set_extrusion(dwg_ent_insert *insert, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Returns the has attribs of insert.
+/** Usage : double attribs = dwg_ent_insert_get_has_attribs(intrest, &error);
+\param 1 dwg_ent_insert
+\param 2 int
+*/
 char
 dwg_ent_insert_get_has_attribs(dwg_ent_insert *insert, int *error)
 {    
@@ -3351,6 +3667,12 @@ dwg_ent_insert_get_has_attribs(dwg_ent_insert *insert, int *error)
     *error = 1;
 }
 
+/// Sets the has_attribs of insert.
+/** Usage : dwg_ent_insert_set_tangent_dir(insert, attrib, &error);
+\param 1 dwg_ent_insert
+\param 2 char
+\param 3 int
+*/
 void
 dwg_ent_insert_set_has_attribs(dwg_ent_insert *insert, char attribs,
                                int *error)
@@ -3364,6 +3686,11 @@ dwg_ent_insert_set_has_attribs(dwg_ent_insert *insert, char attribs,
     *error = 1;
 }
 
+/// Returns the owned object count of insert
+/** Usage : long count = dwg_ent_insert_get_owned_obj_count(insert, &error);
+\param 1 dwg_ent_insert
+\param 2 int
+*/
 long
 dwg_ent_insert_get_owned_obj_count(dwg_ent_insert *insert, int *error)
 {    
@@ -3376,6 +3703,12 @@ dwg_ent_insert_get_owned_obj_count(dwg_ent_insert *insert, int *error)
     *error = 1;
 }
 
+/// Sets the owned object count of insert.
+/** Usage : dwg_ent_insert_set_owned_obj_count(insert, 20, &error);
+\param 1 dwg_ent_insert
+\param 2 long
+\param 3 int
+*/
 void
 dwg_ent_insert_set_owned_obj_count(dwg_ent_insert *insert, long count,
                                    int *error)
@@ -3389,6 +3722,11 @@ dwg_ent_insert_set_owned_obj_count(dwg_ent_insert *insert, long count,
     *error = 1;
 }
 
+/// Returns the ref handle.
+/** Usage : dwg_obj_ref handle = dwg_ent_insert_get_ref_handle(insert, &error);
+\param 1 dwg_ent_insert
+\param 2 int
+*/
 dwg_handle
 dwg_ent_insert_get_ref_handle(dwg_ent_insert *insert, int *error)
 {
@@ -3401,6 +3739,11 @@ dwg_ent_insert_get_ref_handle(dwg_ent_insert *insert, int *error)
     *error = 1;
 }
 
+/// Returns the abs reference.
+/** Usage : long ref = dwg_ent_insert_get_abs_ref(insert, &error);
+\param 1 dwg_ent_insert
+\param 2 int
+*/
 unsigned long
 dwg_ent_insert_get_abs_ref(dwg_ent_insert *insert, int *error)
 {
@@ -3417,6 +3760,12 @@ dwg_ent_insert_get_abs_ref(dwg_ent_insert *insert, int *error)
 *                  FUNCTIONS FOR MINSERT ENTITY                     *
 ********************************************************************/
 
+/// Returns the insertion point of minsert.
+/** Usage : dwg_ent_minsert_get_ins_pt(minsert, &point, &error);
+\param 1 dwg_ent_minsert
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_minsert_get_ins_pt(dwg_ent_minsert *minsert, dwg_point_3d *point,
                            int *error)
@@ -3432,6 +3781,12 @@ dwg_ent_minsert_get_ins_pt(dwg_ent_minsert *minsert, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Sets the insertion point of minsert.
+/** Usage : dwg_ent_minsert_set_ins_pt(minsert, &point, &error);
+\param 1 dwg_ent_minsert
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_minsert_set_ins_pt(dwg_ent_minsert *minsert, dwg_point_3d *point,
                            int *error)
@@ -3447,6 +3802,11 @@ dwg_ent_minsert_set_ins_pt(dwg_ent_minsert *minsert, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Returns the scale flag of minsert
+/** Usage : double flag = dwg_ent_minsert_get_flag(minsert, &error);
+\param 1 dwg_ent_minsert
+\param 2 int
+*/
 char 
 dwg_ent_minsert_get_scale_flag(dwg_ent_minsert *minsert, int *error)
 {    
@@ -3459,6 +3819,12 @@ dwg_ent_minsert_get_scale_flag(dwg_ent_minsert *minsert, int *error)
     *error = 1;
 }
 
+/// Sets the scale flag of minsert.
+/** Usage : dwg_ent_minsert_set_scale_flag(minsert, flag, &error);
+\param 1 dwg_ent_minsert
+\param 2 char
+\param 3 int
+*/
 void
 dwg_ent_minsert_set_scale_flag(dwg_ent_minsert *minsert, char flags,
                                int *error)
@@ -3472,6 +3838,12 @@ dwg_ent_minsert_set_scale_flag(dwg_ent_minsert *minsert, char flags,
     *error = 1;
 }
 
+/// Returns the scale of minsert.
+/** Usage : dwg_ent_minsert_get_scale(minsert, &point, &error);
+\param 1 dwg_ent_minsert
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_minsert_get_scale(dwg_ent_minsert *minsert, dwg_point_3d *point,
                           int *error)
@@ -3487,6 +3859,12 @@ dwg_ent_minsert_get_scale(dwg_ent_minsert *minsert, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Sets the scale of minsert.
+/** Usage : dwg_ent_minsert_set_scale(minsert, &point, &error);
+\param 1 dwg_ent_minsert
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_minsert_set_scale(dwg_ent_minsert *minsert, dwg_point_3d *point, 
                           int *error)
@@ -3502,6 +3880,11 @@ dwg_ent_minsert_set_scale(dwg_ent_minsert *minsert, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Returns the rotation angle of minsert.
+/** Usage : double angle = dwg_ent_minsert_get_rotation_angle(minsert, &error);
+\param 1 dwg_ent_minsert
+\param 2 int
+*/
 double
 dwg_ent_minsert_get_rotation_angle(dwg_ent_minsert *minsert, int *error)
 {    
@@ -3514,6 +3897,12 @@ dwg_ent_minsert_get_rotation_angle(dwg_ent_minsert *minsert, int *error)
     *error = 1;
 }
 
+/// Sets the rotation angle of minsert.
+/** Usage : dwg_ent_minsert_set_rotation_angle(minsert, angle, &error);
+\param 1 dwg_ent_minsert
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_minsert_set_rotation_angle(dwg_ent_minsert *minsert, double rot_ang,
                                    int *error)
@@ -3527,6 +3916,12 @@ dwg_ent_minsert_set_rotation_angle(dwg_ent_minsert *minsert, double rot_ang,
     *error = 1;
 }
 
+/// Returns the extrusion of minsert.
+/** Usage : dwg_ent_minsert_get_extrusion(minsert, &point, &error);
+\param 1 dwg_ent_minsert
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_minsert_get_extrusion(dwg_ent_minsert *minsert, dwg_point_3d *point,
                               int *error)
@@ -3542,6 +3937,12 @@ dwg_ent_minsert_get_extrusion(dwg_ent_minsert *minsert, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Sets the extrusion of minsert.
+/** Usage : dwg_ent_minsert_set_extrusion(minsert, &point, &error);
+\param 1 dwg_ent_minsert
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_minsert_set_extrusion(dwg_ent_minsert *minsert, dwg_point_3d *point,
                               int *error)
@@ -3557,6 +3958,11 @@ dwg_ent_minsert_set_extrusion(dwg_ent_minsert *minsert, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Returns the has attribs of minsert.
+/** Usage : double attribs = dwg_ent_minsert_get_has_attribs(mintrest, &error);
+\param 1 dwg_ent_minsert
+\param 2 int
+*/
 char 
 dwg_ent_minsert_get_has_attribs(dwg_ent_minsert *minsert, int *error)
 {    
@@ -3569,6 +3975,12 @@ dwg_ent_minsert_get_has_attribs(dwg_ent_minsert *minsert, int *error)
     *error = 1;
 }
 
+/// Sets the has_attribs of minsert.
+/** Usage : dwg_ent_minsert_set_tangent_dir(minsert, attrib, &error);
+\param 1 dwg_ent_minsert
+\param 2 char
+\param 3 int
+*/
 void
 dwg_ent_minsert_set_has_attribs(dwg_ent_minsert *minsert, char attribs,
                                 int *error)
@@ -3582,6 +3994,11 @@ dwg_ent_minsert_set_has_attribs(dwg_ent_minsert *minsert, char attribs,
     *error = 1;
 }
 
+/// Returns the owned object count of minsert
+/** Usage : long count = dwg_ent_minsert_get_owned_obj_count(minsert, &error);
+\param 1 dwg_ent_minsert
+\param 2 int
+*/
 long
 dwg_ent_minsert_get_owned_obj_count(dwg_ent_minsert *minsert, int *error)
 {    
@@ -3594,6 +4011,12 @@ dwg_ent_minsert_get_owned_obj_count(dwg_ent_minsert *minsert, int *error)
     *error = 1;
 }
 
+/// Sets the owned object count of minsert.
+/** Usage : dwg_ent_minsert_set_owned_obj_count(minsert, 20, &error);
+\param 1 dwg_ent_insert
+\param 2 long
+\param 3 int
+*/
 void
 dwg_ent_minsert_set_owned_obj_count(dwg_ent_minsert *minsert, long count,
                                     int *error)

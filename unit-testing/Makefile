@@ -81,4 +81,6 @@ vertex_mesh : vertex_mesh.c
 vertex_pface : vertex_pface.c
 	gcc -g -o vertex_pface vertex_pface.c -lredwg -lm
 xline : xline.c
-	gcc -g -o xline xline.c -lredwg -lm
+	gcc -g -o xline xline.c -lredwg -lm\
+
+clean : 

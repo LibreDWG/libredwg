@@ -52,7 +52,7 @@ low_level_process(dwg_object *obj)
   int i;
   for ( i = 0;i < lwpline->num_bulges ; i++ )
     {
-      printf("bulges of lwpline : \t\n", lwpline->bulges[i]);
+      printf("bulges of lwpline : %f\t\n", lwpline->bulges[i]);
     }
 
   // prints points
