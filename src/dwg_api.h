@@ -2757,102 +2757,102 @@ dwg_ent_ole2frame_set_data(dwg_ent_ole2frame *frame, char *data, int *error);
 
 
 unsigned int
-dwg_entity_spline_get_scenario(dwg_ent_spline *spline, int *error);
+dwg_ent_spline_get_scenario(dwg_ent_spline *spline, int *error);
 
 void
-dwg_entity_spline_set_scenario(dwg_ent_spline *spline, unsigned int scenario,
+dwg_ent_spline_set_scenario(dwg_ent_spline *spline, unsigned int scenario,
                                int *error);
 
 unsigned int
-dwg_entity_spline_get_degree(dwg_ent_spline *spline, int *error);
+dwg_ent_spline_get_degree(dwg_ent_spline *spline, int *error);
 
 void
-dwg_entity_spline_set_degree(dwg_ent_spline *spline, unsigned int degree,
+dwg_ent_spline_set_degree(dwg_ent_spline *spline, unsigned int degree,
                              int *error);
 
 double
-dwg_entity_spline_get_fit_tol(dwg_ent_spline *spline, int *error);
+dwg_ent_spline_get_fit_tol(dwg_ent_spline *spline, int *error);
 
 void
-dwg_entity_spline_set_fit_tol(dwg_ent_spline *spline, int fit_tol,
+dwg_ent_spline_set_fit_tol(dwg_ent_spline *spline, int fit_tol,
                               int *error);
 
 void
-dwg_entity_spline_get_begin_tan_vector(dwg_ent_spline *spline,
+dwg_ent_spline_get_begin_tan_vector(dwg_ent_spline *spline,
                                        dwg_point_3d *point, int *error);
 
 void
-dwg_entity_spline_set_begin_tan_vector(dwg_ent_spline *spline,
+dwg_ent_spline_set_begin_tan_vector(dwg_ent_spline *spline,
                                        dwg_point_3d *point, int *error);
 
 void
-dwg_entity_spline_get_end_tan_vector(dwg_ent_spline *spline,
+dwg_ent_spline_get_end_tan_vector(dwg_ent_spline *spline,
                                      dwg_point_3d *point, int *error);
 
 void
-dwg_entity_spline_set_end_tan_vector(dwg_ent_spline *spline,
+dwg_ent_spline_set_end_tan_vector(dwg_ent_spline *spline,
                                      dwg_point_3d *point, int *error);
 
 double
-dwg_entity_spline_get_knot_tol(dwg_ent_spline *spline, int *error);
+dwg_ent_spline_get_knot_tol(dwg_ent_spline *spline, int *error);
 
 void
-dwg_entity_spline_set_knot_tol(dwg_ent_spline *spline, double knot_tol,
+dwg_ent_spline_set_knot_tol(dwg_ent_spline *spline, double knot_tol,
                                int *error);
 
 double
-dwg_entity_spline_get_ctrl_tol(dwg_ent_spline *spline, int *error);
+dwg_ent_spline_get_ctrl_tol(dwg_ent_spline *spline, int *error);
 
 void
-dwg_entity_spline_set_ctrl_tol(dwg_ent_spline *spline, double ctrl_tol,
+dwg_ent_spline_set_ctrl_tol(dwg_ent_spline *spline, double ctrl_tol,
                                int *error);
 
 unsigned int
-dwg_entity_spline_get_num_fit_pts(dwg_ent_spline *spline, int *error);
+dwg_ent_spline_get_num_fit_pts(dwg_ent_spline *spline, int *error);
 
 void
-dwg_entity_spline_set_num_fit_pts(dwg_ent_spline *spline, int num_fit_pts,
+dwg_ent_spline_set_num_fit_pts(dwg_ent_spline *spline, int num_fit_pts,
                                   int *error);
 
 char
-dwg_entity_spline_get_rational(dwg_ent_spline *spline, int *error);
+dwg_ent_spline_get_rational(dwg_ent_spline *spline, int *error);
 
 void
-dwg_entity_spline_set_rational(dwg_ent_spline *spline, char rational,
+dwg_ent_spline_set_rational(dwg_ent_spline *spline, char rational,
                                int *error);
 
 char
-dwg_entity_spline_get_closed_b(dwg_ent_spline *spline, int *error);
+dwg_ent_spline_get_closed_b(dwg_ent_spline *spline, int *error);
 
 void
-dwg_entity_spline_set_closed_b(dwg_ent_spline *spline, char closed_b,
+dwg_ent_spline_set_closed_b(dwg_ent_spline *spline, char closed_b,
                                int *error);
 
 char
-dwg_entity_spline_get_weighted(dwg_ent_spline *spline, int *error);
+dwg_ent_spline_get_weighted(dwg_ent_spline *spline, int *error);
 
 void
-dwg_entity_spline_set_weighted(dwg_ent_spline *spline, char weighted,
+dwg_ent_spline_set_weighted(dwg_ent_spline *spline, char weighted,
                                int *error);
 
 char
-dwg_entity_spline_get_periodic(dwg_ent_spline *spline, int *error);
+dwg_ent_spline_get_periodic(dwg_ent_spline *spline, int *error);
 
 void
-dwg_entity_spline_set_periodic(dwg_ent_spline *spline, char periodic,
+dwg_ent_spline_set_periodic(dwg_ent_spline *spline, char periodic,
                                int *error);
 
 long
-dwg_entity_spline_get_num_knots(dwg_ent_spline *spline, int *error);
+dwg_ent_spline_get_num_knots(dwg_ent_spline *spline, int *error);
 
 void
-dwg_entity_spline_set_num_knots(dwg_ent_spline *spline, long nums, int *error);
+dwg_ent_spline_set_num_knots(dwg_ent_spline *spline, long nums, int *error);
 
 long
-dwg_entity_spline_get_num_ctrl_pts(dwg_ent_spline *spline, int *error);
+dwg_ent_spline_get_num_ctrl_pts(dwg_ent_spline *spline, int *error);
 
 void
-dwg_entity_spline_set_num_ctrl_pts(dwg_ent_spline *spline, long nums,
+dwg_ent_spline_set_num_ctrl_pts(dwg_ent_spline *spline, long nums,
                                    int *error);
 
 dwg_ent_spline_point *

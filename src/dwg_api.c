@@ -4030,6 +4030,11 @@ dwg_ent_minsert_set_owned_obj_count(dwg_ent_minsert *minsert, long count,
     *error = 1;
 }
 
+/// Returns the num cols of minsert
+/** Usage : long num_cols = dwg_ent_minsert_get_numcols(minsert, &error);
+\param 1 dwg_ent_minsert
+\param 2 int
+*/
 long
 dwg_ent_minsert_get_numcols(dwg_ent_minsert *minsert, int *error)
 {    
@@ -4042,6 +4047,12 @@ dwg_ent_minsert_get_numcols(dwg_ent_minsert *minsert, int *error)
     *error = 1;
 }
 
+/// Sets the number of columns of minsert.
+/** Usage : dwg_ent_minsert_set_numcols(minsert, 20, &error);
+\param 1 dwg_ent_insert
+\param 2 long
+\param 3 int
+*/
 void
 dwg_ent_minsert_set_numcols(dwg_ent_minsert *minsert, long cols, int *error)
 {    
@@ -4054,6 +4065,11 @@ dwg_ent_minsert_set_numcols(dwg_ent_minsert *minsert, long cols, int *error)
     *error = 1;
 }
 
+/// Returns the number of rows of minsert
+/** Usage : long num_rows = dwg_ent_minsert_get_numrows(minsert, &error);
+\param 1 dwg_ent_minsert
+\param 2 int
+*/
 long
 dwg_ent_minsert_get_numrows(dwg_ent_minsert *minsert, int *error)
 {    
@@ -4066,6 +4082,12 @@ dwg_ent_minsert_get_numrows(dwg_ent_minsert *minsert, int *error)
     *error = 1;
 }
 
+/// Sets the number of rows of minsert.
+/** Usage : dwg_ent_minsert_set_numrows(minsert, 20, &error);
+\param 1 dwg_ent_insert
+\param 2 long
+\param 3 int
+*/
 void
 dwg_ent_minsert_set_numrows(dwg_ent_minsert *minsert, long cols, int *error)
 {    
@@ -4078,6 +4100,11 @@ dwg_ent_minsert_set_numrows(dwg_ent_minsert *minsert, long cols, int *error)
     *error = 1;
 }
 
+/// Returns the column spacing of minsert
+/** Usage : double spacing = dwg_ent_minsert_get_col_spacing(minsert, &error);
+\param 1 dwg_ent_minsert
+\param 2 int
+*/
 double
 dwg_ent_minsert_get_col_spacing(dwg_ent_minsert *minsert, int *error)
 {    
@@ -4090,6 +4117,12 @@ dwg_ent_minsert_get_col_spacing(dwg_ent_minsert *minsert, int *error)
     *error = 1;
 }
 
+/// Sets the column spacing of minsert.
+/** Usage : dwg_ent_minsert_set_col_spacing(minsert, 20, &error);
+\param 1 dwg_ent_insert
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_minsert_set_col_spacing(dwg_ent_minsert *minsert, double spacing,
                                 int *error)
@@ -4103,6 +4136,11 @@ dwg_ent_minsert_set_col_spacing(dwg_ent_minsert *minsert, double spacing,
     *error = 1;
 }
 
+/// Returns the row spacing of minsert
+/** Usage : double spacing = dwg_ent_minsert_get_row_spacing(minsert, &error);
+\param 1 dwg_ent_minsert
+\param 2 int
+*/
 double
 dwg_ent_minsert_get_row_spacing(dwg_ent_minsert *minsert, int *error)
 {    
@@ -4115,6 +4153,12 @@ dwg_ent_minsert_get_row_spacing(dwg_ent_minsert *minsert, int *error)
     *error = 1;
 }
 
+/// Sets the row spacing of minsert.
+/** Usage : dwg_ent_minsert_set_row_spacing(minsert, 20, &error);
+\param 1 dwg_ent_insert
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_minsert_set_row_spacing(dwg_ent_minsert *minsert, double spacing,
                                 int *error)
@@ -4132,6 +4176,11 @@ dwg_ent_minsert_set_row_spacing(dwg_ent_minsert *minsert, double spacing,
 *                FUNCTIONS FOR MLINESTYLE OBJECT                    *
 ********************************************************************/
 
+/// Returns the name of mlinestyle
+/** Usage : char * name = dwg_obj_mlinestyle_get_name(mlinestyle, &error);
+\param 1 dwg_obj_mlinestyle
+\param 2 int
+*/
 char *
 dwg_obj_mlinstyle_get_name(dwg_obj_mlinestyle *mlinestyle, int *error)
 {    
@@ -4144,6 +4193,12 @@ dwg_obj_mlinstyle_get_name(dwg_obj_mlinestyle *mlinestyle, int *error)
     *error = 1;
 }
 
+/// Sets the name of mlinestyle object
+/** Usage : dwg_obj_mlinestyle_set_name(minsert, "mstylename", &error);
+\param 1 dwg_obj_mlinestyle
+\param 2 char *
+\param 3 int
+*/
 void
 dwg_obj_mlinestyle_set_name(dwg_obj_mlinestyle *mlinestyle, char * name,
                             int *error)
@@ -4157,6 +4212,11 @@ dwg_obj_mlinestyle_set_name(dwg_obj_mlinestyle *mlinestyle, char * name,
     *error = 1;
 }
 
+/// Returns the desc of mlinestyle
+/** Usage : char * desc = dwg_obj_mlinestyle_get_desc(mlinestyle, &error);
+\param 1 dwg_obj_mlinestyle
+\param 2 int
+*/
 char *
 dwg_obj_mlinestyle_get_desc(dwg_obj_mlinestyle *mlinestyle, int *error)
 {    
@@ -4169,6 +4229,12 @@ dwg_obj_mlinestyle_get_desc(dwg_obj_mlinestyle *mlinestyle, int *error)
     *error = 1;
 }
 
+/// Sets the desc of mlinestyle.
+/** Usage : dwg_obj_mlinestyle_set_desc(minsert, desc, &error);
+\param 1 dwg_obj_mlinestyle
+\param 2 char *
+\param 3 int
+*/
 void
 dwg_obj_mlinestyle_set_desc(dwg_obj_mlinestyle *mlinestyle, char * desc,
                             int *error)
@@ -4182,6 +4248,11 @@ dwg_obj_mlinestyle_set_desc(dwg_obj_mlinestyle *mlinestyle, char * desc,
     *error = 1;
 }
 
+/// Returns the flags of mlinestyle
+/** Usage : int flag = dwg_obj_mlinestyle_get_flags(minsert, &error);
+\param 1 dwg_obj_mlinestyle
+\param 2 int
+*/
 int
 dwg_obj_mlinestyle_get_flags(dwg_obj_mlinestyle *mlinestyle, int *error)
 {    
@@ -4194,6 +4265,12 @@ dwg_obj_mlinestyle_get_flags(dwg_obj_mlinestyle *mlinestyle, int *error)
     *error = 1;
 }
 
+/// Sets the flag of mlinestyle
+/** Usage : dwg_obj_mlinestyle_set_flags(mlinestyle, 20, &error);
+\param 1 dwg_ent_insert
+\param 2 int
+\param 3 int
+*/
 void
 dwg_obj_mlinestyle_set_flags(dwg_obj_mlinestyle *mlinestyle, int flags,
                              int *error)
@@ -4207,6 +4284,11 @@ dwg_obj_mlinestyle_set_flags(dwg_obj_mlinestyle *mlinestyle, int flags,
     *error = 1;
 }
 
+/// Returns the start angle of mlinestyle
+/** Usage : double start_angle = dwg_obj_mlinestyle_get_start_angle(mlinestyle, &error);
+\param 1 dwg_obj_mlinestyle
+\param 2 int
+*/
 double
 dwg_obj_mlinestyle_get_start_angle(dwg_obj_mlinestyle *mlinestyle, int *error)
 {    
@@ -4219,6 +4301,12 @@ dwg_obj_mlinestyle_get_start_angle(dwg_obj_mlinestyle *mlinestyle, int *error)
     *error = 1;
 }
 
+/// Sets the start angle of mlinestyle
+/** Usage : dwg_obj_mlinestyle_set_start_angle(mlinestyle, 20.00, &error);
+\param 1 dwg_obj_mlinestyle
+\param 2 double
+\param 3 int
+*/
 void
 dwg_obj_mlinestyle_set_start_angle(dwg_obj_mlinestyle *mlinestyle,
                                    double startang, int *error)
@@ -4232,6 +4320,11 @@ dwg_obj_mlinestyle_set_start_angle(dwg_obj_mlinestyle *mlinestyle,
     *error = 1;
 }
 
+/// Returns the end angle of mlinestyle
+/** Usage : double angle = dwg_obj_mlinestyle_get_end_angle(mlinestyle, &error);
+\param 1 dwg_obj_mlinestyle
+\param 2 int
+*/
 double
 dwg_obj_mlinestyle_get_end_angle(dwg_obj_mlinestyle *mlinestyle, int *error)
 {    
@@ -4244,6 +4337,12 @@ dwg_obj_mlinestyle_get_end_angle(dwg_obj_mlinestyle *mlinestyle, int *error)
     *error = 1;
 }
 
+/// Sets the end angle of mlinestyle
+/** Usage : dwg_obj_mlinestyle_set_end_angle(mlinestyle, 20.00, &error);
+\param 1 dwg_obj_mlinestyle
+\param 2 double
+\param 3 int
+*/
 void
 dwg_obj_mlinestyle_set_end_angle(dwg_obj_mlinestyle *mlinestyle, double endang,
                                  int *error)
@@ -4257,6 +4356,11 @@ dwg_obj_mlinestyle_set_end_angle(dwg_obj_mlinestyle *mlinestyle, double endang,
     *error = 1;
 }
 
+/// Returns the lines in style of mlinestyle
+/** Usage : char lines = dwg_obj_mlinestyle_get_linesinstyle(mlinestyle, &error);
+\param 1 dwg_obj_mlinestyle
+\param 2 int
+*/
 char
 dwg_obj_mlinestyle_get_linesinstyle(dwg_obj_mlinestyle *mlinestyle, 
                                     int *error)
@@ -4270,6 +4374,12 @@ dwg_obj_mlinestyle_get_linesinstyle(dwg_obj_mlinestyle *mlinestyle,
     *error = 1;
 }
 
+/// Sets the lines in style of mlinestyle
+/** Usage : dwg_obj_mlinestyle_get_linesinstyle(mlinestyle, linestyle, &error);
+\param 1 dwg_obj_mlinestyle
+\param 2 char
+\param 3 int
+*/
 void
 dwg_obj_mlinestyle_set_linesinstyle(dwg_obj_mlinestyle *mlinestyle,
                                     char linesinstyle, int *error)
@@ -4287,6 +4397,11 @@ dwg_obj_mlinestyle_set_linesinstyle(dwg_obj_mlinestyle *mlinestyle,
 *               FUNCTIONS FOR APPID_CONTROL OBJECT                  *
 ********************************************************************/
 
+/// Returns the num entries of appid_control
+/** Usage : int num = dwg_obj_appid_control_get_num_entries(appcontrol, &error);
+\param 1 dwg_obj_appid_control
+\param 2 int
+*/
 int
 dwg_obj_appid_control_get_num_entries(dwg_obj_appid_control *appid, int *error)
 {
@@ -4300,6 +4415,12 @@ dwg_obj_appid_control_get_num_entries(dwg_obj_appid_control *appid, int *error)
 
 }
 
+/// Sets the num entries of appid control
+/** Usage : dwg_obj_appid_control_set_num_entries(appcontrol, 5, &error);
+\param 1 dwg_obj_appid_control
+\param 2 int
+\param 3 int
+*/
 void
 dwg_obj_appid_control_set_num_entries(dwg_obj_appid_control *appid,
                                       int entries, int *error)
@@ -4318,6 +4439,11 @@ dwg_obj_appid_control_set_num_entries(dwg_obj_appid_control *appid,
 *                    FUNCTIONS FOR APPID OBJECT                     *
 ********************************************************************/
 
+/// Returns the name of appid
+/** Usage : char * name = dwg_obj_appid_get_entry_name(mlinestyle, &error);
+\param 1 dwg_obj_appid
+\param 2 int
+*/
 char *
 dwg_obj_appid_get_entry_name(dwg_obj_appid *appid, int *error)
 {
@@ -4331,6 +4457,12 @@ dwg_obj_appid_get_entry_name(dwg_obj_appid *appid, int *error)
 
 }
 
+/// Sets the name of appid
+/** Usage : dwg_obj_appid_set_name(appid, "appid1", &error);
+\param 1 dwg_obj_appid
+\param 2 char *
+\param 3 int
+*/
 void
 dwg_obj_appid_set_entry_name(dwg_obj_appid *appid, char * entry_name,
                              int *error)
@@ -4345,6 +4477,11 @@ dwg_obj_appid_set_entry_name(dwg_obj_appid *appid, char * entry_name,
 
 }
 
+/// Returns the flag of appid
+/** Usage : char flag = dwg_obj_appid_get_flag(appid, &error);
+\param 1 dwg_obj_appid
+\param 2 int
+*/
 char
 dwg_obj_appid_get_flag(dwg_obj_appid *appid, int *error)
 {
@@ -4358,6 +4495,12 @@ dwg_obj_appid_get_flag(dwg_obj_appid *appid, int *error)
 
 }
 
+/// Sets the flag of appid
+/** Usage : dwg_obj_appid_set_flag(appid, flag, &error);
+\param 1 dwg_obj_appid
+\param 2 int
+\param 3 int
+*/
 void
 dwg_obj_appid_set_flag(dwg_obj_appid *appid, char flag, int *error)
 {
@@ -4371,6 +4514,11 @@ dwg_obj_appid_set_flag(dwg_obj_appid *appid, char flag, int *error)
 
 }
 
+/// Returns the appid control handler
+/** Usage : dwg_obj_appid_control appid = dwg_obj_appid_get_appid_control(appid, &error);
+\param 1 dwg_obj_appid
+\param 2 int
+*/
 dwg_obj_appid_control
 dwg_obj_appid_get_appid_control(dwg_obj_appid *appid, int *error)
 {
@@ -4388,6 +4536,11 @@ dwg_obj_appid_get_appid_control(dwg_obj_appid *appid, int *error)
 *            FUNCTIONS FOR ORDINATE DIMENSION ENTITY                *
 ********************************************************************/
 
+/// Returns the elevation ecs11
+/** Usage : double ecs11 = dwg_ent_dim_ordinate_get_elevation_ecs11(dim, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 int
+*/
 double
 dwg_ent_dim_ordinate_get_elevation_ecs11(dwg_ent_dim_ordinate *dim, int *error)
 {
@@ -4400,6 +4553,12 @@ dwg_ent_dim_ordinate_get_elevation_ecs11(dwg_ent_dim_ordinate *dim, int *error)
     *error = 1;
 }
 
+/// Sets the elevation ecs11
+/** Usage : dwg_ent_dim_ordinate_set_elevation_ecs11(dim, ecs11, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_ordinate_set_elevation_ecs11(dwg_ent_dim_ordinate *dim,
                                          double elevation_ecs11, int *error)
@@ -4413,6 +4572,11 @@ dwg_ent_dim_ordinate_set_elevation_ecs11(dwg_ent_dim_ordinate *dim,
     *error = 1;
 }
 
+/// Returns the elevation ecs12
+/** Usage : double ecs12 = dwg_ent_dim_ordinate_get_elevation_ecs12(dim, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 int
+*/
 double
 dwg_ent_dim_ordinate_get_elevation_ecs12(dwg_ent_dim_ordinate *dim, int *error)
 {
@@ -4425,6 +4589,12 @@ dwg_ent_dim_ordinate_get_elevation_ecs12(dwg_ent_dim_ordinate *dim, int *error)
     *error = 1;
 }
 
+/// Sets the elevation ecs12
+/** Usage : dwg_ent_dim_ordinate_set_elevation_ecs12(dim, ecs12, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_ordinate_set_elevation_ecs12(dwg_ent_dim_ordinate *dim,
                                          double elevation_ecs12, int *error)
@@ -4438,6 +4608,11 @@ dwg_ent_dim_ordinate_set_elevation_ecs12(dwg_ent_dim_ordinate *dim,
     *error = 1;
 }
 
+/// Returns the flags1
+/** Usage : char flags1 = dwg_ent_dim_ordinate_get_flags1(dim, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 int
+*/
 char
 dwg_ent_dim_ordinate_get_flags1(dwg_ent_dim_ordinate *dim, int *error)
 {
@@ -4450,6 +4625,12 @@ dwg_ent_dim_ordinate_get_flags1(dwg_ent_dim_ordinate *dim, int *error)
     *error = 1;
 }
 
+/// Sets the flags1
+/** Usage : dwg_ent_dim_ordinate_set_flags1(dim, flag1, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 char
+\param 3 int
+*/
 void
 dwg_ent_dim_ordinate_set_flags1(dwg_ent_dim_ordinate *dim, char flag,
                                 int *error)
@@ -4463,6 +4644,11 @@ dwg_ent_dim_ordinate_set_flags1(dwg_ent_dim_ordinate *dim, char flag,
     *error = 1;
 }
 
+/// Returns the act measurement
+/** Usage : double measure = dwg_ent_dim_ordinate_get_act_measurement(dim, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 int
+*/
 double
 dwg_ent_dim_ordinate_get_act_measurement(dwg_ent_dim_ordinate *dim, int *error)
 {
@@ -4475,6 +4661,12 @@ dwg_ent_dim_ordinate_get_act_measurement(dwg_ent_dim_ordinate *dim, int *error)
     *error = 1;
 }
 
+/// Sets the act measurement
+/** Usage : dwg_ent_dim_ordinate_set_act_measurement(dim, measure, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_ordinate_set_act_measurement(dwg_ent_dim_ordinate *dim,
                                          double act_measurement, int *error)
@@ -4488,6 +4680,11 @@ dwg_ent_dim_ordinate_set_act_measurement(dwg_ent_dim_ordinate *dim,
     *error = 1;
 }
 
+/// Returns the horiz dir
+/** Usage : double horiz_dir = dwg_ent_dim_ordinate_get_horiz_dir(dim, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 int
+*/
 double
 dwg_ent_dim_ordinate_get_horiz_dir(dwg_ent_dim_ordinate *dim, int *error)
 {
@@ -4500,6 +4697,12 @@ dwg_ent_dim_ordinate_get_horiz_dir(dwg_ent_dim_ordinate *dim, int *error)
     *error = 1;
 }
 
+/// Sets the horiz dir
+/** Usage : dwg_ent_dim_ordinate_set_horiz_dir(dim, horiz_dir, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_ordinate_set_horiz_dir(dwg_ent_dim_ordinate *dim, double horiz_dir,
                                    int *error)
@@ -4513,6 +4716,11 @@ dwg_ent_dim_ordinate_set_horiz_dir(dwg_ent_dim_ordinate *dim, double horiz_dir,
     *error = 1;
 }
 
+/// Returns the lspace_factor
+/** Usage : double lspace_factor = dwg_ent_dim_ordinate_get_lspace_factor(dim, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 int
+*/
 double
 dwg_ent_dim_ordinate_get_lspace_factor(dwg_ent_dim_ordinate *dim, int *error)
 {
@@ -4525,6 +4733,12 @@ dwg_ent_dim_ordinate_get_lspace_factor(dwg_ent_dim_ordinate *dim, int *error)
     *error = 1;
 }
 
+/// Sets the lspace factor
+/** Usage : dwg_ent_dim_ordinate_set_lspace_factor(dim, factor, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_ordinate_set_lspace_factor(dwg_ent_dim_ordinate *dim,
                                        double factor, int *error)
@@ -4538,6 +4752,11 @@ dwg_ent_dim_ordinate_set_lspace_factor(dwg_ent_dim_ordinate *dim,
     *error = 1;
 }
 
+/// Returns the lspace_style
+/** Usage : unsigned int lspace_style = dwg_ent_dim_ordinate_get_lspace_style(dim, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 int
+*/
 unsigned int
 dwg_ent_dim_ordinate_get_lspace_style(dwg_ent_dim_ordinate *dim,
                                       int *error)
@@ -4551,6 +4770,12 @@ dwg_ent_dim_ordinate_get_lspace_style(dwg_ent_dim_ordinate *dim,
     *error = 1;
 }
 
+/// Sets the lspace style
+/** Usage : dwg_ent_dim_ordinate_set_lspace_style(dim, style, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 unsigned int
+\param 3 int
+*/
 void
 dwg_ent_dim_ordinate_set_lspace_style(dwg_ent_dim_ordinate *dim,
                                       unsigned int style, int *error)
@@ -4564,6 +4789,11 @@ dwg_ent_dim_ordinate_set_lspace_style(dwg_ent_dim_ordinate *dim,
     *error = 1;
 }
 
+/// Returns the attachment point
+/** Usage : unsigned int point = dwg_ent_dim_ordinate_get_attachment_point(dim, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 int
+*/
 unsigned int
 dwg_ent_dim_ordinate_get_attachment_point(dwg_ent_dim_ordinate *dim,
                                           int *error)
@@ -4577,6 +4807,12 @@ dwg_ent_dim_ordinate_get_attachment_point(dwg_ent_dim_ordinate *dim,
     *error = 1;
 }
 
+/// Sets the attachment point
+/** Usage : dwg_ent_dim_ordinate_set_attachment_point(dim, point, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 unsigned int
+\param 3 int
+*/
 void
 dwg_ent_dim_ordinate_set_attachment_point(dwg_ent_dim_ordinate *dim,
                                           unsigned int point, int *error)
@@ -4590,6 +4826,12 @@ dwg_ent_dim_ordinate_set_attachment_point(dwg_ent_dim_ordinate *dim,
     *error = 1;
 }
 
+/// Returns the extrusion
+/** Usage : dwg_ent_dim_ordinate_get_extrusion(dim, &point, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_ordinate_set_extrusion(dwg_ent_dim_ordinate *dim,
                                    dwg_point_3d *point, int *error)
@@ -4605,6 +4847,12 @@ dwg_ent_dim_ordinate_set_extrusion(dwg_ent_dim_ordinate *dim,
     *error = 1;
 }
 
+/// Sets the extrusion
+/** Usage : dwg_ent_dim_ordinate_set_extrusion(dim, &point, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_ordinate_get_extrusion(dwg_ent_dim_ordinate *dim,
                                    dwg_point_3d *point, int *error)
@@ -4620,6 +4868,11 @@ dwg_ent_dim_ordinate_get_extrusion(dwg_ent_dim_ordinate *dim,
     *error = 1;
 }
 
+/// Returns the user text
+/** Usage : char * text  = dwg_ent_dim_ordinate_get_user_text(dim, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 int
+*/
 char *
 dwg_ent_dim_ordinate_get_user_text(dwg_ent_dim_ordinate *dim, int *error)
 {
@@ -4632,6 +4885,12 @@ dwg_ent_dim_ordinate_get_user_text(dwg_ent_dim_ordinate *dim, int *error)
     *error = 1;
 }
 
+/// Sets the user text
+/** Usage : dwg_ent_dim_ordinate_set_user_text(dim, "dimension texto", &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 char *
+\param 3 int
+*/
 void
 dwg_ent_dim_ordinate_set_user_text(dwg_ent_dim_ordinate *dim, char * text,
                                    int *error)
@@ -4645,6 +4904,11 @@ dwg_ent_dim_ordinate_set_user_text(dwg_ent_dim_ordinate *dim, char * text,
     *error = 1;
 }
 
+/// Returns text rotation
+/** Usage : double text_rot  = dwg_ent_dim_ordinate_get_text_rot(dim, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 int
+*/
 double
 dwg_ent_dim_ordinate_get_text_rot(dwg_ent_dim_ordinate *dim, int *error)
 {
@@ -4657,6 +4921,12 @@ dwg_ent_dim_ordinate_get_text_rot(dwg_ent_dim_ordinate *dim, int *error)
     *error = 1;
 }
 
+/// Sets the text rotation
+/** Usage : dwg_ent_dim_ordinate_set_text_rot(dim, 10.10, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_ordinate_set_text_rot(dwg_ent_dim_ordinate *dim, double rot,
                                   int *error)
@@ -4670,6 +4940,11 @@ dwg_ent_dim_ordinate_set_text_rot(dwg_ent_dim_ordinate *dim, double rot,
     *error = 1;
 }
 
+/// Returns ins rotation
+/** Usage : double ins_rot  = dwg_ent_dim_ordinate_get_ins_rotation(dim, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 int
+*/
 double
 dwg_ent_dim_ordinate_get_ins_rotation(dwg_ent_dim_ordinate *dim, int *error)
 {
@@ -4682,6 +4957,12 @@ dwg_ent_dim_ordinate_get_ins_rotation(dwg_ent_dim_ordinate *dim, int *error)
     *error = 1;
 }
 
+/// Sets the ins rotation
+/** Usage : dwg_ent_dim_ordinate_set_ins_rotation(dim, 10.10, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_ordinate_set_ins_rotation(dwg_ent_dim_ordinate *dim, double rot,
                                       int *error)
@@ -4695,6 +4976,11 @@ dwg_ent_dim_ordinate_set_ins_rotation(dwg_ent_dim_ordinate *dim, double rot,
     *error = 1;
 }
 
+/// Returns flip arrow1
+/** Usage : char arrow1 = dwg_ent_dim_ordinate_get_flip_arrow1(dim, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 int
+*/
 char
 dwg_ent_dim_ordinate_get_flip_arrow1(dwg_ent_dim_ordinate *dim, int *error)
 {
@@ -4707,6 +4993,12 @@ dwg_ent_dim_ordinate_get_flip_arrow1(dwg_ent_dim_ordinate *dim, int *error)
     *error = 1;
 }
 
+/// Sets the flip arrow1
+/** Usage : dwg_ent_dim_ordinate_set_flip_arrow1(dim, arrow1, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 char
+\param 3 int
+*/
 void
 dwg_ent_dim_ordinate_set_flip_arrow1(dwg_ent_dim_ordinate *dim,
                                      char flip_arrow, int *error)
@@ -4720,6 +5012,11 @@ dwg_ent_dim_ordinate_set_flip_arrow1(dwg_ent_dim_ordinate *dim,
     *error = 1;
 }
 
+/// Returns flip arrow2
+/** Usage : char arrow2 = dwg_ent_dim_ordinate_get_flip_arrow2(dim, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 int
+*/
 char
 dwg_ent_dim_ordinate_get_flip_arrow2(dwg_ent_dim_ordinate *dim, int *error)
 {
@@ -4732,6 +5029,12 @@ dwg_ent_dim_ordinate_get_flip_arrow2(dwg_ent_dim_ordinate *dim, int *error)
     *error = 1;
 }
 
+/// Sets the flip arrow2
+/** Usage : dwg_ent_dim_ordinate_set_flip_arrow2(dim, arrow2, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 char
+\param 3 int
+*/
 void
 dwg_ent_dim_ordinate_set_flip_arrow2(dwg_ent_dim_ordinate *dim,
                                      char flip_arrow, int *error)
@@ -4745,6 +5048,12 @@ dwg_ent_dim_ordinate_set_flip_arrow2(dwg_ent_dim_ordinate *dim,
     *error = 1;
 }
 
+/// Returns the text mid point
+/** Usage : dwg_ent_dim_ordinate_get_text_mid_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 dwg_point_2d
+\param 3 int
+*/
 void
 dwg_ent_dim_ordinate_set_text_mid_pt(dwg_ent_dim_ordinate *dim,
                                           dwg_point_2d *point, int *error)
@@ -4759,6 +5068,12 @@ dwg_ent_dim_ordinate_set_text_mid_pt(dwg_ent_dim_ordinate *dim,
     *error = 1;
 }
 
+/// Sets the text mid point
+/** Usage : dwg_ent_dim_ordinate_set_text_mid_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 dwg_point_2d
+\param 3 int
+*/
 void
 dwg_ent_dim_ordinate_get_text_mid_pt(dwg_ent_dim_ordinate *dim,
                                           dwg_point_2d *point, int *error)
@@ -4773,6 +5088,12 @@ dwg_ent_dim_ordinate_get_text_mid_pt(dwg_ent_dim_ordinate *dim,
     *error = 1;
 }
 
+/// Sets the ins scale
+/** Usage : dwg_ent_dim_ordinate_set_ins_scale(dim, &point, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_ordinate_set_ins_scale(dwg_ent_dim_ordinate *dim,
                                    dwg_point_3d *point, int *error)
@@ -4788,6 +5109,12 @@ dwg_ent_dim_ordinate_set_ins_scale(dwg_ent_dim_ordinate *dim,
     *error = 1;
 }
 
+/// Returns the ins scale
+/** Usage : dwg_ent_dim_ordinate_get_ins_scale(dim, &point, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_ordinate_get_ins_scale(dwg_ent_dim_ordinate *dim,
                                    dwg_point_3d *point, int *error)
@@ -4803,6 +5130,11 @@ dwg_ent_dim_ordinate_get_ins_scale(dwg_ent_dim_ordinate *dim,
     *error = 1;
 }
 
+/// Returns flags2
+/** Usage : char flag2 = dwg_ent_dim_ordinate_get_flags2(dim, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 int
+*/
 char
 dwg_ent_dim_ordinate_get_flags2(dwg_ent_dim_ordinate *dim, int *error)
 {
@@ -4815,6 +5147,12 @@ dwg_ent_dim_ordinate_get_flags2(dwg_ent_dim_ordinate *dim, int *error)
     *error = 1;
 }
 
+/// Sets flags2
+/** Usage : dwg_ent_dim_ordinate_set_flags2(dim, flag2, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 char
+\param 3 int
+*/
 void
 dwg_ent_dim_ordinate_set_flags2(dwg_ent_dim_ordinate *dim, char flag,
                                 int *error)
@@ -4828,6 +5166,12 @@ dwg_ent_dim_ordinate_set_flags2(dwg_ent_dim_ordinate *dim, char flag,
     *error = 1;
 }
 
+/// Sets the 12 point
+/** Usage : dwg_ent_dim_ordinate_set_12_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 dwg_point_2d
+\param 3 int
+*/
 void
 dwg_ent_dim_ordinate_set_12_pt(dwg_ent_dim_ordinate *dim, dwg_point_2d *point,
                                int *error)
@@ -4842,6 +5186,12 @@ dwg_ent_dim_ordinate_set_12_pt(dwg_ent_dim_ordinate *dim, dwg_point_2d *point,
     *error = 1;
 }
 
+/// Returns the 12 point
+/** Usage : dwg_ent_dim_ordinate_get_12_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 dwg_point_2d
+\param 3 int
+*/
 void
 dwg_ent_dim_ordinate_get_12_pt(dwg_ent_dim_ordinate *dim, dwg_point_2d *point,
                                int *error)
@@ -4856,6 +5206,12 @@ dwg_ent_dim_ordinate_get_12_pt(dwg_ent_dim_ordinate *dim, dwg_point_2d *point,
     *error = 1;
 }
 
+/// Sets the 10 point
+/** Usage : dwg_ent_dim_ordinate_set_10_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_ordinate_set_10_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
                                int *error)
@@ -4871,6 +5227,12 @@ dwg_ent_dim_ordinate_set_10_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Returns the 10 point
+/** Usage : dwg_ent_dim_ordinate_get_10_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_ordinate_get_10_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
                                int *error)
@@ -4886,6 +5248,12 @@ dwg_ent_dim_ordinate_get_10_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Sets the 13 point
+/** Usage : dwg_ent_dim_ordinate_set_13_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_ordinate_set_13_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
                                int *error)
@@ -4901,6 +5269,12 @@ dwg_ent_dim_ordinate_set_13_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Returns the 13 point
+/** Usage : dwg_ent_dim_ordinate_get_13_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_ordinate_get_13_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
                                int *error)
@@ -4916,6 +5290,12 @@ dwg_ent_dim_ordinate_get_13_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Sets the 14 point
+/** Usage : dwg_ent_dim_ordinate_set_14_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_ordinate_set_14_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
                                int *error)
@@ -4931,6 +5311,12 @@ dwg_ent_dim_ordinate_set_14_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Returns the 14 point
+/** Usage : dwg_ent_dim_ordinate_get_14_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_ordinate
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_ordinate_get_14_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
                                int *error)
@@ -4962,6 +5348,11 @@ dwg_ent_dim_linear_get_block_name(dwg_ent_dim_linear *dim, int *error)
     *error = 1;
 }
 
+/// Returns the elevation ecs11
+/** Usage : double ecs11 = dwg_ent_dim_linear_get_elevation_ecs11(dim, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 int
+*/
 double
 dwg_ent_dim_linear_get_elevation_ecs11(dwg_ent_dim_linear *dim, int *error)
 {
@@ -4974,6 +5365,12 @@ dwg_ent_dim_linear_get_elevation_ecs11(dwg_ent_dim_linear *dim, int *error)
     *error = 1;
 }
 
+/// Sets the elevation ecs11
+/** Usage : dwg_ent_dim_linear_set_elevation_ecs11(dim, ecs11, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_linear_set_elevation_ecs11(dwg_ent_dim_linear *dim,
                                        double elevation_ecs11, int *error)
@@ -4987,6 +5384,11 @@ dwg_ent_dim_linear_set_elevation_ecs11(dwg_ent_dim_linear *dim,
     *error = 1;
 }
 
+/// Returns the elevation ecs12
+/** Usage : double ecs12 = dwg_ent_dim_linear_get_elevation_ecs12(dim, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 int
+*/
 double
 dwg_ent_dim_linear_get_elevation_ecs12(dwg_ent_dim_linear *dim, int *error)
 {
@@ -4999,6 +5401,12 @@ dwg_ent_dim_linear_get_elevation_ecs12(dwg_ent_dim_linear *dim, int *error)
     *error = 1;
 }
 
+/// Sets the elevation ecs12
+/** Usage : dwg_ent_dim_linear_set_elevation_ecs12(dim, ecs12, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_linear_set_elevation_ecs12(dwg_ent_dim_linear *dim,
                                        double elevation_ecs12, int *error)
@@ -5012,6 +5420,11 @@ dwg_ent_dim_linear_set_elevation_ecs12(dwg_ent_dim_linear *dim,
     *error = 1;
 }
 
+/// Returns the flags1
+/** Usage : char flag1 = dwg_ent_dim_linear_get_flags1(dim, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 int
+*/
 char
 dwg_ent_dim_linear_get_flags1(dwg_ent_dim_linear *dim, int *error)
 {
@@ -5024,6 +5437,12 @@ dwg_ent_dim_linear_get_flags1(dwg_ent_dim_linear *dim, int *error)
     *error = 1;
 }
 
+/// Sets the flag1
+/** Usage : dwg_ent_dim_linear_set_flags1(dim, flag1, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 char
+\param 3 int
+*/
 void
 dwg_ent_dim_linear_set_flags1(dwg_ent_dim_linear *dim, char flag, int *error)
 {
@@ -5036,6 +5455,11 @@ dwg_ent_dim_linear_set_flags1(dwg_ent_dim_linear *dim, char flag, int *error)
     *error = 1;
 }
 
+/// Returns the act measurement
+/** Usage : double measure = dwg_ent_dim_linear_get_act_measurement(dim, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 int
+*/
 double
 dwg_ent_dim_linear_get_act_measurement(dwg_ent_dim_linear *dim, int *error)
 {
@@ -5048,6 +5472,12 @@ dwg_ent_dim_linear_get_act_measurement(dwg_ent_dim_linear *dim, int *error)
     *error = 1;
 }
 
+/// Sets the act measurement
+/** Usage : dwg_ent_dim_linear_set_act_measurement(dim, measure, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_linear_set_act_measurement(dwg_ent_dim_linear *dim,
                                        double act_measurement, int *error)
@@ -5061,6 +5491,11 @@ dwg_ent_dim_linear_set_act_measurement(dwg_ent_dim_linear *dim,
     *error = 1;
 }
 
+/// Returns the horiz dir
+/** Usage : double horiz_dir = dwg_ent_dim_linear_get_horiz_dir(dim, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 int
+*/
 double
 dwg_ent_dim_linear_get_horiz_dir(dwg_ent_dim_linear *dim, int *error)
 {
@@ -5073,6 +5508,12 @@ dwg_ent_dim_linear_get_horiz_dir(dwg_ent_dim_linear *dim, int *error)
     *error = 1;
 }
 
+/// Sets the horiz dir
+/** Usage : dwg_ent_dim_linear_set_horiz_dir(dim, horiz_dir, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_linear_set_horiz_dir(dwg_ent_dim_linear *dim,
                                  double horiz_dir, int *error)
@@ -5086,6 +5527,11 @@ dwg_ent_dim_linear_set_horiz_dir(dwg_ent_dim_linear *dim,
     *error = 1;
 }
 
+/// Returns the lspace factor
+/** Usage : double factor = dwg_ent_dim_linear_get_lspace_factor(dim, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 int
+*/
 double
 dwg_ent_dim_linear_get_lspace_factor(dwg_ent_dim_linear *dim,
                                      int *error)
@@ -5099,6 +5545,12 @@ dwg_ent_dim_linear_get_lspace_factor(dwg_ent_dim_linear *dim,
     *error = 1;
 }
 
+/// Sets the lspace factor
+/** Usage : dwg_ent_dim_linear_set_lspace_factor(dim, factor, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_linear_set_lspace_factor(dwg_ent_dim_linear *dim, double factor,
                                      int *error)
@@ -5112,6 +5564,11 @@ dwg_ent_dim_linear_set_lspace_factor(dwg_ent_dim_linear *dim, double factor,
     *error = 1;
 }
 
+/// Returns the lspace style
+/** Usage : unsigned int style = dwg_ent_dim_linear_get_lspace_style(dim, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 int
+*/
 unsigned int
 dwg_ent_dim_linear_get_lspace_style(dwg_ent_dim_linear *dim, int *error)
 {
@@ -5124,6 +5581,12 @@ dwg_ent_dim_linear_get_lspace_style(dwg_ent_dim_linear *dim, int *error)
     *error = 1;
 }
 
+/// Sets the lspace style
+/** Usage : dwg_ent_dim_linear_set_lspace_style(dim, style, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 unsigned int
+\param 3 int
+*/
 void
 dwg_ent_dim_linear_set_lspace_style(dwg_ent_dim_linear *dim,
                                     unsigned int style, int *error)
@@ -5137,6 +5600,11 @@ dwg_ent_dim_linear_set_lspace_style(dwg_ent_dim_linear *dim,
     *error = 1;
 }
 
+/// Returns the attachment point
+/** Usage : unsigned int point = dwg_ent_dim_linear_get_attachment_point(dim, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 int
+*/
 unsigned int
 dwg_ent_dim_linear_get_attachment_point(dwg_ent_dim_linear *dim, int *error)
 {
@@ -5149,6 +5617,12 @@ dwg_ent_dim_linear_get_attachment_point(dwg_ent_dim_linear *dim, int *error)
     *error = 1;
 }
 
+/// Sets the attachment point
+/** Usage : dwg_ent_dim_linear_set_attachment_point(dim, point, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_linear_set_attachment_point(dwg_ent_dim_linear *dim,
                                         unsigned int point, int *error)
@@ -5162,6 +5636,12 @@ dwg_ent_dim_linear_set_attachment_point(dwg_ent_dim_linear *dim,
     *error = 1;
 }
 
+/// Sets the extrusion
+/** Usage : dwg_ent_dim_linear_set_extrusion(dim, &point, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_linear_set_extrusion(dwg_ent_dim_linear *dim, dwg_point_3d *point,
                                  int *error)
@@ -5177,6 +5657,12 @@ dwg_ent_dim_linear_set_extrusion(dwg_ent_dim_linear *dim, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Sets the extrusion
+/** Usage : dwg_ent_dim_linear_set_extrusion(dim, &point, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_linear_get_extrusion(dwg_ent_dim_linear *dim, dwg_point_3d *point,
                                  int *error)
@@ -5192,6 +5678,11 @@ dwg_ent_dim_linear_get_extrusion(dwg_ent_dim_linear *dim, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Returns the user text
+/** Usage : char * text = dwg_ent_dim_linear_get_user_text(dim, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 int
+*/
 char *
 dwg_ent_dim_linear_get_user_text(dwg_ent_dim_linear *dim, int *error)
 {
@@ -5204,6 +5695,12 @@ dwg_ent_dim_linear_get_user_text(dwg_ent_dim_linear *dim, int *error)
     *error = 1;
 }
 
+/// Sets the user text
+/** Usage : dwg_ent_dim_linear_set_user_text(dim, "texta", &error);
+\param 1 dwg_ent_dim_linear
+\param 2 char *
+\param 3 int
+*/
 void
 dwg_ent_dim_linear_set_user_text(dwg_ent_dim_linear *dim, char * text,
                                  int *error)
@@ -5217,6 +5714,11 @@ dwg_ent_dim_linear_set_user_text(dwg_ent_dim_linear *dim, char * text,
     *error = 1;
 }
 
+/// Returns the text rotation
+/** Usage : double rot = dwg_ent_dim_linear_get_text_rot(dim, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 int
+*/
 double
 dwg_ent_dim_linear_get_text_rot(dwg_ent_dim_linear *dim, int *error)
 {
@@ -5229,6 +5731,12 @@ dwg_ent_dim_linear_get_text_rot(dwg_ent_dim_linear *dim, int *error)
     *error = 1;
 }
 
+/// Sets the text rotation
+/** Usage : dwg_ent_dim_linear_set_text_rot(dim, rot, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_linear_set_text_rot(dwg_ent_dim_linear *dim, double rot,
                                 int *error)
@@ -5242,6 +5750,11 @@ dwg_ent_dim_linear_set_text_rot(dwg_ent_dim_linear *dim, double rot,
     *error = 1;
 }
 
+/// Returns the ins rotation
+/** Usage : double rot = dwg_ent_dim_linear_get_ins_rotation(dim, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 int
+*/
 double
 dwg_ent_dim_linear_get_ins_rotation(dwg_ent_dim_linear *dim, int *error)
 {
@@ -5254,6 +5767,12 @@ dwg_ent_dim_linear_get_ins_rotation(dwg_ent_dim_linear *dim, int *error)
     *error = 1;
 }
 
+/// Sets the ins rotation
+/** Usage : dwg_ent_dim_linear_set_ins_rotation(dim, rot, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_linear_set_ins_rotation(dwg_ent_dim_linear *dim, double rot,
                                     int *error)
@@ -5267,6 +5786,11 @@ dwg_ent_dim_linear_set_ins_rotation(dwg_ent_dim_linear *dim, double rot,
     *error = 1;
 }
 
+/// Returns the flip arrow1
+/** Usage : char arrow1 = dwg_ent_dim_linear_get_flip_arrow1(dim, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 int
+*/
 char
 dwg_ent_dim_linear_get_flip_arrow1(dwg_ent_dim_linear *dim, int *error)
 {
@@ -5279,6 +5803,12 @@ dwg_ent_dim_linear_get_flip_arrow1(dwg_ent_dim_linear *dim, int *error)
     *error = 1;
 }
 
+/// Sets the flip arrow 1
+/** Usage : dwg_ent_dim_linear_set_flip_arrow1(dim, arrow1, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 char
+\param 3 int
+*/
 void
 dwg_ent_dim_linear_set_flip_arrow1(dwg_ent_dim_linear *dim, char flip_arrow,
                                    int *error)
@@ -5292,6 +5822,11 @@ dwg_ent_dim_linear_set_flip_arrow1(dwg_ent_dim_linear *dim, char flip_arrow,
     *error = 1;
 }
 
+/// Returns the flip arrow 2
+/** Usage : char arrow 2 = dwg_ent_dim_linear_get_flip_arrow2(dim, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 int
+*/
 char
 dwg_ent_dim_linear_get_flip_arrow2(dwg_ent_dim_linear *dim, int *error)
 {
@@ -5304,6 +5839,12 @@ dwg_ent_dim_linear_get_flip_arrow2(dwg_ent_dim_linear *dim, int *error)
     *error = 1;
 }
 
+/// Sets the flip arrow 2
+/** Usage : dwg_ent_dim_linear_set_flip_arrow2(dim, arrow2, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_linear_set_flip_arrow2(dwg_ent_dim_linear *dim, char flip_arrow,
                                    int *error)
@@ -5317,6 +5858,12 @@ dwg_ent_dim_linear_set_flip_arrow2(dwg_ent_dim_linear *dim, char flip_arrow,
     *error = 1;
 }
 
+/// Sets the text mid point
+/** Usage : dwg_ent_dim_linear_set_text_mid_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 dwg_point_2d
+\param 3 int
+*/
 void 
 dwg_ent_dim_linear_set_text_mid_pt(dwg_ent_dim_linear *dim,
                                    dwg_point_2d *point, 
@@ -5332,6 +5879,12 @@ dwg_ent_dim_linear_set_text_mid_pt(dwg_ent_dim_linear *dim,
     *error = 1;
 }
 
+/// Sets the text mid point
+/** Usage : dwg_ent_dim_linear_set_text_mid_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 dwg_point_2d
+\param 3 int
+*/
 void
 dwg_ent_dim_linear_get_text_mid_pt(dwg_ent_dim_linear *dim,
                                    dwg_point_2d *point, 
@@ -5347,6 +5900,12 @@ dwg_ent_dim_linear_get_text_mid_pt(dwg_ent_dim_linear *dim,
     *error = 1;
 }
 
+/// Sets the ins scale
+/** Usage : dwg_ent_dim_linear_set_ins_scale(dim, &point, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_linear_set_ins_scale(dwg_ent_dim_linear *dim, dwg_point_3d *point, 
                                  int *error)
@@ -5362,6 +5921,12 @@ dwg_ent_dim_linear_set_ins_scale(dwg_ent_dim_linear *dim, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Sets the ins scale
+/** Usage : dwg_ent_dim_linear_set_ins_scale(dim, &point, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_linear_get_ins_scale(dwg_ent_dim_linear *dim, dwg_point_3d *point, 
                                  int *error)
@@ -5377,6 +5942,12 @@ dwg_ent_dim_linear_get_ins_scale(dwg_ent_dim_linear *dim, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Sets the 12 point
+/** Usage : dwg_ent_dim_linear_set_12_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 dwg_point_2d
+\param 3 int
+*/
 void
 dwg_ent_dim_linear_set_12_pt(dwg_ent_dim_linear *dim, dwg_point_2d *point, 
                              int *error)
@@ -5391,6 +5962,12 @@ dwg_ent_dim_linear_set_12_pt(dwg_ent_dim_linear *dim, dwg_point_2d *point,
     *error = 1;
 }
 
+/// Sets the 12 point
+/** Usage : dwg_ent_dim_linear_set_12_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_linear_get_12_pt(dwg_ent_dim_linear *dim, dwg_point_2d *point, 
                              int *error)
@@ -5405,6 +5982,12 @@ dwg_ent_dim_linear_get_12_pt(dwg_ent_dim_linear *dim, dwg_point_2d *point,
     *error = 1;
 }
 
+/// Sets the 10 point
+/** Usage : dwg_ent_dim_linear_set_10_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_linear_set_10_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point, 
                              int *error)
@@ -5420,6 +6003,12 @@ dwg_ent_dim_linear_set_10_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Sets the 12 point
+/** Usage : dwg_ent_dim_linear_set_12_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_linear_get_10_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point, 
                              int *error)
@@ -5435,6 +6024,12 @@ dwg_ent_dim_linear_get_10_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Sets the 13 point
+/** Usage : dwg_ent_dim_linear_set_13_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_linear_set_13_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point, 
                              int *error)
@@ -5450,6 +6045,12 @@ dwg_ent_dim_linear_set_13_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Sets the 13 point
+/** Usage : dwg_ent_dim_linear_set_13_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_linear_get_13_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
                              int *error)
@@ -5465,6 +6066,12 @@ dwg_ent_dim_linear_get_13_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Sets the 14 point
+/** Usage : dwg_ent_dim_linear_set_14_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_linear_set_14_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
                              int *error)
@@ -5480,6 +6087,12 @@ dwg_ent_dim_linear_set_14_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Returns the 14 point
+/** Usage : dwg_ent_dim_linear_get_14_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_linear_get_14_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
                              int *error)
@@ -5495,6 +6108,11 @@ dwg_ent_dim_linear_get_14_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Returns the ext line rotation
+/** Usage : double rot = dwg_ent_dim_linear_get_ext_line_rotation(dim, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 int
+*/
 double
 dwg_ent_dim_linear_get_ext_line_rotation(dwg_ent_dim_linear *dim, int *error)
 {
@@ -5507,6 +6125,12 @@ dwg_ent_dim_linear_get_ext_line_rotation(dwg_ent_dim_linear *dim, int *error)
     *error = 1;
 }
 
+/// Sets the ext line rotation
+/** Usage : dwg_ent_dim_linear_set_ext_line_rotation(dim, rot, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_linear_set_ext_line_rotation(dwg_ent_dim_linear *dim, double rot,
                                          int *error)
@@ -5520,6 +6144,11 @@ dwg_ent_dim_linear_set_ext_line_rotation(dwg_ent_dim_linear *dim, double rot,
     *error = 1;
 }
 
+/// Returns the dim rotation
+/** Usage : double rot = dwg_ent_dim_linear_get_dim_rot(dim, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 int
+*/
 double
 dwg_ent_dim_linear_get_dim_rot(dwg_ent_dim_linear *dim, int *error)
 {
@@ -5532,6 +6161,12 @@ dwg_ent_dim_linear_get_dim_rot(dwg_ent_dim_linear *dim, int *error)
     *error = 1;
 }
 
+/// Sets the dim rotation
+/** Usage : dwg_ent_dim_linear_set_dim_rot(dim, rot, &error);
+\param 1 dwg_ent_dim_linear
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_linear_set_dim_rot(dwg_ent_dim_linear *dim, double rot, int *error)
 {
@@ -5548,6 +6183,11 @@ dwg_ent_dim_linear_set_dim_rot(dwg_ent_dim_linear *dim, double rot, int *error)
 *             FUNCTIONS FOR ALIGNED DIMENSION ENTITY                *
 ********************************************************************/
 
+/// Returns the elevation ecs11
+/** Usage : double ecs11 = dwg_ent_dim_aligned_get_elevation_ecs11(dim, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 int
+*/
 double
 dwg_ent_dim_aligned_get_elevation_ecs11(dwg_ent_dim_aligned *dim, int *error)
 {
@@ -5560,6 +6200,12 @@ dwg_ent_dim_aligned_get_elevation_ecs11(dwg_ent_dim_aligned *dim, int *error)
     *error = 1;
 }
 
+/// Sets the elevation ecs11
+/** Usage : dwg_ent_dim_aligned_set_elevation_ecs11(dim, ecs11, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_aligned_set_elevation_ecs11(dwg_ent_dim_aligned *dim,
                                         double elevation_ecs11,
@@ -5574,6 +6220,11 @@ dwg_ent_dim_aligned_set_elevation_ecs11(dwg_ent_dim_aligned *dim,
     *error = 1;
 }
 
+/// Returns the elevation ecs12
+/** Usage : double ecs12 = dwg_ent_dim_aligned_get_elevation_ecs12(dim, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 int
+*/
 double
 dwg_ent_dim_aligned_get_elevation_ecs12(dwg_ent_dim_aligned *dim, int *error)
 {
@@ -5586,6 +6237,12 @@ dwg_ent_dim_aligned_get_elevation_ecs12(dwg_ent_dim_aligned *dim, int *error)
     *error = 1;
 }
 
+/// Sets the elevation ecs12
+/** Usage : dwg_ent_dim_aligned_set_elevation_ecs12(dim, ecs12, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_aligned_set_elevation_ecs12(dwg_ent_dim_aligned *dim,
                                         double elevation_ecs12,
@@ -6109,6 +6766,11 @@ dwg_ent_dim_aligned_set_ext_line_rotation(dwg_ent_dim_aligned *dim,
 *              FUNCTIONS FOR ANG3PT DIMENSION ENTITY                *
 ********************************************************************/
 
+/// Returns the elevation ecs11
+/** Usage : double ecs11 = dwg_ent_dim_ang3pt_get_elevation_ecs11(dim, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 int
+*/
 double
 dwg_ent_dim_ang3pt_get_elevation_ecs11(dwg_ent_dim_ang3pt *ang, int *error)
 {
@@ -6121,6 +6783,12 @@ dwg_ent_dim_ang3pt_get_elevation_ecs11(dwg_ent_dim_ang3pt *ang, int *error)
     *error = 1;
 }
 
+/// Sets the elevation ecs11
+/** Usage : dwg_ent_dim_ang3pt_set_elevation_ecs11(dim, ecs11, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_ang3pt_set_elevation_ecs11(dwg_ent_dim_ang3pt *ang,
                                        double elevation_ecs11, int *error)
@@ -6134,6 +6802,11 @@ dwg_ent_dim_ang3pt_set_elevation_ecs11(dwg_ent_dim_ang3pt *ang,
     *error = 1;
 }
 
+/// Returns the elevation ecs12
+/** Usage : double ecs12 = dwg_ent_dim_ang3pt_get_elevation_ecs12(dim, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 int
+*/
 double
 dwg_ent_dim_ang3pt_get_elevation_ecs12(dwg_ent_dim_ang3pt *ang, int *error)
 {
@@ -6146,6 +6819,12 @@ dwg_ent_dim_ang3pt_get_elevation_ecs12(dwg_ent_dim_ang3pt *ang, int *error)
     *error = 1;
 }
 
+/// Sets the elevation ecs12
+/** Usage : dwg_ent_dim_ang3pt_set_elevation_ecs12(dim, ecs12, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_ang3pt_set_elevation_ecs12(dwg_ent_dim_ang3pt *ang,
                                        double elevation_ecs12, int *error)
@@ -6675,6 +7354,11 @@ dwg_ent_dim_ang3pt_get_15_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
 *              FUNCTIONS FOR ANG2LN DIMENSION ENTITY                *
 ********************************************************************/
 
+/// Returns the elevation ecs11
+/** Usage : double ecs11 = dwg_ent_dim_ang2ln_get_elevation_ecs11(dim, &error);
+\param 1 dwg_ent_dim_ang2ln
+\param 2 int
+*/
 double
 dwg_ent_dim_ang2ln_get_elevation_ecs11(dwg_ent_dim_ang2ln *ang, int *error)
 {
@@ -6687,6 +7371,12 @@ dwg_ent_dim_ang2ln_get_elevation_ecs11(dwg_ent_dim_ang2ln *ang, int *error)
     *error = 1;
 }
 
+/// Sets the elevation ecs11
+/** Usage : dwg_ent_dim_ang2ln_set_elevation_ecs11(dim, ecs11, &error);
+\param 1 dwg_ent_dim_ang2ln
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_ang2ln_set_elevation_ecs11(dwg_ent_dim_ang2ln *ang,
                                        double elevation_ecs11, int *error)
@@ -6700,6 +7390,11 @@ dwg_ent_dim_ang2ln_set_elevation_ecs11(dwg_ent_dim_ang2ln *ang,
     *error = 1;
 }
 
+/// Returns the elevation ecs12
+/** Usage : double ecs12 = dwg_ent_dim_ang2ln_get_elevation_ecs12(dim, &error);
+\param 1 dwg_ent_dim_ang2ln
+\param 2 int
+*/
 double
 dwg_ent_dim_ang2ln_get_elevation_ecs12(dwg_ent_dim_ang2ln *ang, int *error)
 {
@@ -6712,6 +7407,12 @@ dwg_ent_dim_ang2ln_get_elevation_ecs12(dwg_ent_dim_ang2ln *ang, int *error)
     *error = 1;
 }
 
+/// Sets the elevation ecs12
+/** Usage : dwg_ent_dim_ang2ln_set_elevation_ecs12(dim, ecs12, &error);
+\param 1 dwg_ent_dim_ang2ln
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_ang2ln_set_elevation_ecs12(dwg_ent_dim_ang2ln *ang,
                                        double elevation_ecs12, int *error)
@@ -7273,6 +7974,11 @@ dwg_ent_dim_ang2ln_get_16_pt(dwg_ent_dim_ang2ln *ang, dwg_point_2d *point,
 *              FUNCTIONS FOR RADIUS DIMENSION ENTITY                *
 ********************************************************************/
 
+/// Returns the elevation ecs11
+/** Usage : double ecs11 = dwg_ent_dim_radius_get_elevation_ecs11(dim, &error);
+\param 1 dwg_ent_dim_radius
+\param 2 int
+*/
 double
 dwg_ent_dim_radius_get_elevation_ecs11(dwg_ent_dim_radius *radius, int *error)
 {
@@ -7285,6 +7991,12 @@ dwg_ent_dim_radius_get_elevation_ecs11(dwg_ent_dim_radius *radius, int *error)
     *error = 1;
 }
 
+/// Sets the elevation ecs11
+/** Usage : dwg_ent_dim_radius_set_elevation_ecs11(dim, ecs11, &error);
+\param 1 dwg_ent_dim_radius
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_radius_set_elevation_ecs11(dwg_ent_dim_radius *radius,
                                        double elevation_ecs11, int *error)
@@ -7298,6 +8010,11 @@ dwg_ent_dim_radius_set_elevation_ecs11(dwg_ent_dim_radius *radius,
     *error = 1;
 }
 
+/// Returns the elevation ecs12
+/** Usage : double ecs12 = dwg_ent_dim_radius_get_elevation_ecs12(dim, &error);
+\param 1 dwg_ent_dim_radius
+\param 2 int
+*/
 double
 dwg_ent_dim_radius_get_elevation_ecs12(dwg_ent_dim_radius *radius, int *error)
 {
@@ -7310,6 +8027,12 @@ dwg_ent_dim_radius_get_elevation_ecs12(dwg_ent_dim_radius *radius, int *error)
     *error = 1;
 }
 
+/// Sets the elevation ecs12
+/** Usage : dwg_ent_dim_radius_set_elevation_ecs12(dim, ecs12, &error);
+\param 1 dwg_ent_dim_radius
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_radius_set_elevation_ecs12(dwg_ent_dim_radius *radius,
                                        double elevation_ecs12, int *error)
@@ -7805,6 +8528,11 @@ dwg_ent_dim_radius_set_leader_length(dwg_ent_dim_radius *radius, double length,
 *             FUNCTIONS FOR DIAMETER DIMENSION ENTITY               *
 ********************************************************************/
 
+/// Returns the elevation ecs11
+/** Usage : double ecs11 = dwg_ent_dim_diameter_get_elevation_ecs11(dim, &error);
+\param 1 dwg_ent_dim_diameter
+\param 2 int
+*/
 double
 dwg_ent_dim_diameter_get_elevation_ecs11(dwg_ent_dim_diameter *dia, int *error)
 {
@@ -7817,6 +8545,12 @@ dwg_ent_dim_diameter_get_elevation_ecs11(dwg_ent_dim_diameter *dia, int *error)
     *error = 1;
 }
 
+/// Sets the elevation ecs11
+/** Usage : dwg_ent_dim_diameter_set_elevation_ecs11(dim, ecs11, &error);
+\param 1 dwg_ent_dim_diameter
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_diameter_set_elevation_ecs11(dwg_ent_dim_diameter *dia,
                                          double elevation_ecs11, int *error)
@@ -7830,6 +8564,11 @@ dwg_ent_dim_diameter_set_elevation_ecs11(dwg_ent_dim_diameter *dia,
     *error = 1;
 }
 
+/// Returns the elevation ecs12
+/** Usage : double ecs12 = dwg_ent_dim_diameter_get_elevation_ecs12(dim, &error);
+\param 1 dwg_ent_dim_diameter
+\param 2 int
+*/
 double
 dwg_ent_dim_diameter_get_elevation_ecs12(dwg_ent_dim_diameter *dia, int *error)
 {
@@ -7842,6 +8581,12 @@ dwg_ent_dim_diameter_get_elevation_ecs12(dwg_ent_dim_diameter *dia, int *error)
     *error = 1;
 }
 
+/// Sets the elevation ecs12
+/** Usage : dwg_ent_dim_diameter_set_elevation_ecs12(dim, ecs12, &error);
+\param 1 dwg_ent_dim_diameter
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_diameter_set_elevation_ecs12(dwg_ent_dim_diameter *dia,
                                          double elevation_ecs12, int *error)
@@ -8337,6 +9082,11 @@ dwg_ent_dim_diameter_set_leader_length(dwg_ent_dim_diameter *dia,
 *                   FUNCTIONS FOR ENDBLK ENTITY                     *
 ********************************************************************/
 
+/// Returns the dummy
+/** Usage : char dummy = dwg_ent_endblk_get_dummy(endblk, &error);
+\param 1 dwg_ent_endblk
+\param 2 int
+*/
 char
 dwg_ent_endblk_get_dummy(dwg_ent_endblk *endblk, int *error)
 {
@@ -8349,6 +9099,12 @@ dwg_ent_endblk_get_dummy(dwg_ent_endblk *endblk, int *error)
     *error = 1;   
 }
 
+/// Sets the dummy
+/** Usage : dwg_ent_endblk_set_dummy(endblk, dummy, &error);
+\param 1 dwg_ent_endblk
+\param 2 char
+\param 3 int
+*/
 void
 dwg_ent_endblk_set_dummy(dwg_ent_endblk *endblk, char dummy, int *error)
 {
@@ -8365,6 +9121,11 @@ dwg_ent_endblk_set_dummy(dwg_ent_endblk *endblk, char dummy, int *error)
 *                   FUNCTIONS FOR SEQEND ENTITY                     *
 ********************************************************************/
 
+/// Returns the dummy
+/** Usage : char dummy = dwg_ent_seqend_get_dummy(seqend, &error);
+\param 1 dwg_ent_seqend
+\param 2 int
+*/
 char
 dwg_ent_seqend_get_dummy(dwg_ent_seqend *seqend, int *error)
 {
@@ -8377,6 +9138,12 @@ dwg_ent_seqend_get_dummy(dwg_ent_seqend *seqend, int *error)
     *error = 1;   
 }
 
+/// Sets the dummy
+/** Usage : dwg_ent_seqend_set_dummy(seqend, dummy, &error);
+\param 1 dwg_ent_seqend
+\param 2 char
+\param 3 int
+*/
 void
 dwg_ent_seqend_set_dummy(dwg_ent_seqend *seqend, char dummy, int *error)
 {
@@ -11861,8 +12628,10 @@ dwg_ent_polyline_3d_set_owned_obj_count(dwg_ent_polyline_3d *line3d,
 *                   FUNCTIONS FOR 3DFACE ENTITY                     *
 ********************************************************************/
 
-/// This returns the elevation of a _3dface entity.
-/** Usage :- dwg_ent_3dface_get_invis_flags(_3dface);
+/// Returns invis flags of a _3dface entity.
+/** Usage :- unsigned int flag = dwg_ent_3dface_get_invis_flags(_face, &error);
+\param 1 dwg_ent_3dface
+\param 2 int
 */
 unsigned int
 dwg_ent_3dface_get_invis_flags(dwg_ent_3dface *_3dface, int *error)
@@ -11876,9 +12645,11 @@ dwg_ent_3dface_get_invis_flags(dwg_ent_3dface *_3dface, int *error)
     *error = 1;
 }
 
-/// This sets the invis_flags of a _3dface entity equal to value in second argument.
-/** Usage :- dwg_ent_3dface_set_invis_flags(_3dface, 20);
-Hence invis_flags sets to 20
+/// This sets the invis_flags of a _3dface entity.
+/** Usage :- dwg_ent_3dface_set_invis_flags(face, flag, &error);
+\param 1 dwg_ent_3dface
+\param 2 unsigned int
+\param 3 int
 */
 void
 dwg_ent_3dface_set_invis_flags(dwg_ent_3dface *_3dface,
@@ -11893,11 +12664,11 @@ dwg_ent_3dface_set_invis_flags(dwg_ent_3dface *_3dface,
     *error = 1;
 }
 
-/// Returns the corner1 values of _3dface to second argument.
-/** Usage :- dwg_ent_3dface_get_corner1(_3dface, point);
-where _3dface is a pointer of dwg_ent_3dface type and point is 
-of dwg_point_3d. point.x will contain x value of corner1,
-point.y will contain y value of corner1
+/// Returns the corner1 values of 3dface.
+/** Usage :- dwg_ent_3dface_get_corner1(face, &point, &error);
+\param 1 dwg_ent_3dface
+\param 2 dwg_point_2d
+\param 3 int
 */
 void
 dwg_ent_3dface_get_corner1(dwg_ent_3dface *_3dface, dwg_point_2d *point,
@@ -11913,11 +12684,11 @@ dwg_ent_3dface_get_corner1(dwg_ent_3dface *_3dface, dwg_point_2d *point,
     *error = 1;
 }
 
-/// Sets the _3dface corner1 values equal to values of second argument.
-/** Usage :- dwg_ent_3dface_set_corner1(_3dface, point);
-where _3dface is a pointer of dwg_ent_3dface type and point is 
-of dwg_point_3d. point.x will contain x value of corner1,
-point.y will contain y value of corner1
+/// Sets the corner1 values of 3dface.
+/** Usage :- dwg_ent_3dface_set_corner1(face, &point, &error);
+\param 1 dwg_ent_3dface
+\param 2 dwg_point_2d
+\param 3 int
 */
 void
 dwg_ent_3dface_set_corner1(dwg_ent_3dface *_3dface, dwg_point_2d *point,
@@ -11933,11 +12704,11 @@ dwg_ent_3dface_set_corner1(dwg_ent_3dface *_3dface, dwg_point_2d *point,
     *error = 1;
 }
 
-/// Returns the corner2 values of _3dface to second argument.
-/** Usage :- dwg_ent_3dface_get_corner2(_3dface, point);
-where _3dface is a pointer of dwg_ent_3dface type and point is 
-of dwg_point_3d. point.x will contain x value of corner2,
-point.y will contain y value of corner2
+/// Returns the corner2 values of 3dface.
+/** Usage :- dwg_ent_3dface_get_corner2(face, &point, &error);
+\param 1 dwg_ent_3dface
+\param 2 dwg_point_2d
+\param 3 int
 */
 void
 dwg_ent_3dface_get_corner2(dwg_ent_3dface *_3dface, dwg_point_2d *point,
@@ -11953,11 +12724,11 @@ dwg_ent_3dface_get_corner2(dwg_ent_3dface *_3dface, dwg_point_2d *point,
     *error = 1;
 }
 
-/// Sets the _3dface corner2 values equal to values of second argument.
-/** Usage :- dwg_ent_3dface_set_corner2(_3dface, point);
-where _3dface is a pointer of dwg_ent_3dface type and point is 
-of dwg_point_3d. point.x will contain x value of corner2,
-point.y will contain y value of corner2
+/// Sets the corner2 values of 3dface.
+/** Usage :- dwg_ent_3dface_set_corner2(face, &point, &error);
+\param 1 dwg_ent_3dface
+\param 2 dwg_point_2d
+\param 3 int
 */
 void
 dwg_ent_3dface_set_corner2(dwg_ent_3dface *_3dface, dwg_point_2d *point,
@@ -11973,11 +12744,11 @@ dwg_ent_3dface_set_corner2(dwg_ent_3dface *_3dface, dwg_point_2d *point,
     *error = 1;
 }
 
-/// Returns the corner3 values of _3dface to second argument.
-/** Usage :- dwg_ent_3dface_get_corner3(_3dface, point);
-where _3dface is a pointer of dwg_ent_3dface type and point is 
-of dwg_point_3d. point.x will contain x value of corner3,
-point.y will contain y value of corner3
+/// Returns the corner3 values of 3dface.
+/** Usage :- dwg_ent_3dface_get_corner3(face, &point, &error);
+\param 1 dwg_ent_3dface
+\param 2 dwg_point_2d
+\param 3 int
 */
 void
 dwg_ent_3dface_get_corner3(dwg_ent_3dface *_3dface, dwg_point_2d *point,
@@ -11993,11 +12764,11 @@ dwg_ent_3dface_get_corner3(dwg_ent_3dface *_3dface, dwg_point_2d *point,
     *error = 1;
 }
 
-/// Sets the _3dface corner3 values equal to values of second argument.
-/** Usage :- dwg_ent_3dface_set_corner3(_3dface, point);
-where _3dface is a pointer of dwg_ent_3dface type and point is 
-of dwg_point_3d. point.x will contain x value of corner3,
-point.y will contain y value of corner3
+/// Sets the corner3 values of 3dface.
+/** Usage :- dwg_ent_3dface_set_corner3(face, &point, &error);
+\param 1 dwg_ent_3dface
+\param 2 dwg_point_2d
+\param 3 int
 */
 void
 dwg_ent_3dface_set_corner3(dwg_ent_3dface *_3dface, dwg_point_2d *point,
@@ -12013,11 +12784,11 @@ dwg_ent_3dface_set_corner3(dwg_ent_3dface *_3dface, dwg_point_2d *point,
     *error = 1;
 }
 
-/// Returns the corner4 values of _3dface to second argument.
-/** Usage :- dwg_ent_3dface_get_corner4(_3dface, point);
-where _3dface is a pointer of dwg_ent_3dface type and point is 
-of dwg_point_3d. point.x will contain x value of corner4,
-point.y will contain y value of corner4
+/// Returns the corner4 values of 3dface.
+/** Usage :- dwg_ent_3dface_get_corner4(face, &point, &error);
+\param 1 dwg_ent_3dface
+\param 2 dwg_point_2d
+\param 3 int
 */
 void
 dwg_ent_3dface_get_corner4(dwg_ent_3dface *_3dface, dwg_point_2d *point,
@@ -12033,11 +12804,11 @@ dwg_ent_3dface_get_corner4(dwg_ent_3dface *_3dface, dwg_point_2d *point,
     *error = 1;
 }
 
-/// Sets the _3dface corner4 values equal to values of second argument.
-/** Usage :- dwg_ent_3dface_set_corner4(_3dface, point);
-where _3dface is a pointer of dwg_ent_3dface type and point is 
-of dwg_point_3d. point.x will contain x value of corner4,
-point.y will contain y value of corner4
+/// Sets the corner4 values of 3dface.
+/** Usage :- dwg_ent_3dface_set_corner4(face, &point, &error);
+\param 1 dwg_ent_3dface
+\param 2 dwg_point_2d
+\param 3 int
 */
 void
 dwg_ent_3dface_set_corner4(dwg_ent_3dface *_3dface, dwg_point_2d *point,
@@ -15505,8 +16276,10 @@ dwg_obj_block_header_get_name(dwg_obj_block_header *hdr, int *error)
     *error = 1;
 }
 
-/// Returns 1st block header present in the dwg file from the dwg_data type argument passed to function.
-/** Usage :- dwg_get_block_header(dwg);
+/// Returns 1st block header present in the dwg file.
+/** Usage :- dwg_obj_block_header = dwg_get_block_header(dwg, &error);
+\param 1 dwg_data
+\param 2 int
 */
 dwg_obj_block_header *
 dwg_get_block_header(dwg_data *dwg, int *error)
@@ -15528,7 +16301,11 @@ dwg_get_block_header(dwg_data *dwg, int *error)
 /*******************************************************************
 *                    FUNCTIONS FOR DWG OBJECT                       *
 ********************************************************************/
-
+/// Returns dwg_object index
+/** Usage : int index = dwg_obj_object_get_index(obj, &error);
+\param 1 dwg_object
+\param 2 int
+*/
 int
 dwg_obj_object_get_index(dwg_object *obj, int *error)
 {
@@ -15541,6 +16318,11 @@ dwg_obj_object_get_index(dwg_object *obj, int *error)
     *error = 1;
 }
 
+/// Returns dwg handle from dwg object
+/** Usage : dwg_handle handle = dwg_object_get_handle(obj, &error);
+\param 1 dwg_object
+\param 2 int
+*/
 dwg_handle
 dwg_obj_get_handle(dwg_object *obj, int *error)
 {
@@ -15553,7 +16335,11 @@ dwg_obj_get_handle(dwg_object *obj, int *error)
     *error = 1;
 }
 
-
+/// returns object from dwg object
+/** Usage : dwg_obj_obj ent = dwg_object_to_object(obj, &error);
+\param 1 dwg_object
+\param 2 int
+*/
 dwg_obj_obj *
 dwg_object_to_object(dwg_object *obj, int *error)
 {
@@ -15567,6 +16353,11 @@ dwg_object_to_object(dwg_object *obj, int *error)
     *error = 1;    
 }
 
+/// returns entity from dwg object
+/** Usage : dwg_obj_ent ent = dwg_object_to_entity(obj, &error);
+\param 1 dwg_object
+\param 2 int
+*/
 dwg_obj_ent *
 dwg_object_to_entity(dwg_object *obj, int *error)
 {
@@ -15580,6 +16371,11 @@ dwg_object_to_entity(dwg_object *obj, int *error)
     *error = 1;    
 }
 
+/// Returns object from reference
+/** Usage : dwg_object obj = dwg_obj_reference_get_object(obj, &error);
+\param 1 dwg_object_ref
+\param 2 int
+*/
 dwg_object *
 dwg_obj_reference_get_object(dwg_object_ref *ref, int *error)
 {
@@ -15592,6 +16388,11 @@ dwg_obj_reference_get_object(dwg_object_ref *ref, int *error)
     *error = 1;
 }
 
+/// Returns absolute reference
+/** Usage : long ref = dwg_obj_ref_get_abs_ref(obj, &error);
+\param 1 dwg_object_ref
+\param 2 int
+*/
 unsigned long
 dwg_obj_ref_get_abs_ref(dwg_object_ref *ref, int *error)
 {
@@ -15604,6 +16405,10 @@ dwg_obj_ref_get_abs_ref(dwg_object_ref *ref, int *error)
     *error = 1;    
 }
 
+/// Returns Dwg object type 
+/** Usage : int type = dwg_get_type(obj);
+\param 1 dwg_object
+*/
 int 
 dwg_get_type(dwg_object *obj)
 {
