@@ -1,0 +1,828 @@
+\hypertarget{decode_8c}{\section{src/decode.c \-File \-Reference}
+\label{decode_8c}\index{src/decode.\-c@{src/decode.\-c}}
+}
+{\ttfamily \#include \char`\"{}config.\-h\char`\"{}}\*
+{\ttfamily \#include $<$stdbool.\-h$>$}\*
+{\ttfamily \#include $<$stdio.\-h$>$}\*
+{\ttfamily \#include $<$stdlib.\-h$>$}\*
+{\ttfamily \#include $<$string.\-h$>$}\*
+{\ttfamily \#include $<$assert.\-h$>$}\*
+{\ttfamily \#include \char`\"{}common.\-h\char`\"{}}\*
+{\ttfamily \#include \char`\"{}bits.\-h\char`\"{}}\*
+{\ttfamily \#include \char`\"{}dwg.\-h\char`\"{}}\*
+{\ttfamily \#include \char`\"{}decode.\-h\char`\"{}}\*
+{\ttfamily \#include \char`\"{}print.\-h\char`\"{}}\*
+{\ttfamily \#include \char`\"{}logging.\-h\char`\"{}}\*
+{\ttfamily \#include \char`\"{}header\-\_\-variables.\-spec\char`\"{}}\*
+{\ttfamily \#include \char`\"{}common\-\_\-entity\-\_\-handle\-\_\-data.\-spec\char`\"{}}\*
+{\ttfamily \#include $<$dwg.\-spec$>$}\*
+\subsection*{\-Data \-Structures}
+\begin{DoxyCompactItemize}
+\item 
+union \hyperlink{union__encrypted__section__header}{\-\_\-encrypted\-\_\-section\-\_\-header}
+\end{DoxyCompactItemize}
+\subsection*{\-Defines}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{decode_8c_a76b490e35f037ca45b759300e910d937}{\-R\-E\-F\-S\-\_\-\-P\-E\-R\-\_\-\-R\-E\-A\-L\-L\-O\-C}~100
+\item 
+\#define \hyperlink{decode_8c_a4b0185b43aabf2c970b10a5072cd1263}{\-I\-S\-\_\-\-D\-E\-C\-O\-D\-E\-R}
+\item 
+\#define \hyperlink{decode_8c_a22a037119f03ec084def583fe931045a}{\-F\-I\-E\-L\-D}(name, type)
+\item 
+\#define \hyperlink{decode_8c_a200a5822964d9c861de390e556bfea0e}{\-F\-I\-E\-L\-D\-\_\-\-V\-A\-L\-U\-E}(name)~\-\_\-obj-\/$>$name
+\item 
+\#define \hyperlink{decode_8c_ab5a4b808a8f2d39fe3562f1aa8d28f34}{\-A\-N\-Y\-C\-O\-D\-E}~-\/1
+\item 
+\#define \hyperlink{decode_8c_a38bd986526836edc930f8fff86a61788}{\-F\-I\-E\-L\-D\-\_\-\-H\-A\-N\-D\-L\-E}(name, handle\-\_\-code)
+\item 
+\#define \hyperlink{decode_8c_a525c6e556c152fff5de524ec3fb48b14}{\-F\-I\-E\-L\-D\-\_\-\-B}(name)~\hyperlink{print_8c_a22a037119f03ec084def583fe931045a}{\-F\-I\-E\-L\-D}(name, \-B);
+\item 
+\#define \hyperlink{decode_8c_a3333f9e17dad4b729da51d1476503e20}{\-F\-I\-E\-L\-D\-\_\-\-B\-B}(name)~\hyperlink{print_8c_a22a037119f03ec084def583fe931045a}{\-F\-I\-E\-L\-D}(name, \-B\-B);
+\item 
+\#define \hyperlink{decode_8c_a56de2a5c5e9b31cf2040b7e232f1d078}{\-F\-I\-E\-L\-D\-\_\-\-B\-S}(name)~\hyperlink{print_8c_a22a037119f03ec084def583fe931045a}{\-F\-I\-E\-L\-D}(name, \-B\-S);
+\item 
+\#define \hyperlink{decode_8c_a09137db4f76b16bc413e303369d1ee08}{\-F\-I\-E\-L\-D\-\_\-\-B\-L}(name)~\hyperlink{print_8c_a22a037119f03ec084def583fe931045a}{\-F\-I\-E\-L\-D}(name, \-B\-L);
+\item 
+\#define \hyperlink{decode_8c_adf87b6c9aec2f2a732363db9512d34b7}{\-F\-I\-E\-L\-D\-\_\-\-B\-D}(name)~\hyperlink{print_8c_a22a037119f03ec084def583fe931045a}{\-F\-I\-E\-L\-D}(name, \-B\-D);
+\item 
+\#define \hyperlink{decode_8c_a0e26fc0356d515181d2a61701604b1ab}{\-F\-I\-E\-L\-D\-\_\-\-R\-C}(name)~\hyperlink{print_8c_a22a037119f03ec084def583fe931045a}{\-F\-I\-E\-L\-D}(name, \-R\-C);
+\item 
+\#define \hyperlink{decode_8c_a3fb20a0a0726db7d3b40b2ea7841683f}{\-F\-I\-E\-L\-D\-\_\-\-R\-S}(name)~\hyperlink{print_8c_a22a037119f03ec084def583fe931045a}{\-F\-I\-E\-L\-D}(name, \-R\-S);
+\item 
+\#define \hyperlink{decode_8c_a1f5949a9f6285b8f872069a43ac43e9d}{\-F\-I\-E\-L\-D\-\_\-\-R\-D}(name)~\hyperlink{print_8c_a22a037119f03ec084def583fe931045a}{\-F\-I\-E\-L\-D}(name, \-R\-D);
+\item 
+\#define \hyperlink{decode_8c_a7e95f44e11cb393e1e613723cc8ec511}{\-F\-I\-E\-L\-D\-\_\-\-R\-L}(name)~\hyperlink{print_8c_a22a037119f03ec084def583fe931045a}{\-F\-I\-E\-L\-D}(name, \-R\-L);
+\item 
+\#define \hyperlink{decode_8c_acd918333b0724246fad5107425257d2e}{\-F\-I\-E\-L\-D\-\_\-\-M\-C}(name)~\hyperlink{print_8c_a22a037119f03ec084def583fe931045a}{\-F\-I\-E\-L\-D}(name, \-M\-C);
+\item 
+\#define \hyperlink{decode_8c_a2e3aa5296ec8c7310480a5b10dbab347}{\-F\-I\-E\-L\-D\-\_\-\-M\-S}(name)~\hyperlink{print_8c_a22a037119f03ec084def583fe931045a}{\-F\-I\-E\-L\-D}(name, \-M\-S);
+\item 
+\#define \hyperlink{decode_8c_ab8f084bc9e8cb26a478424891479705b}{\-F\-I\-E\-L\-D\-\_\-\-T\-V}(name)~\hyperlink{print_8c_a22a037119f03ec084def583fe931045a}{\-F\-I\-E\-L\-D}(name, \-T\-V);
+\item 
+\#define \hyperlink{decode_8c_a183459311864a4c3d8e0e02681f414a8}{\-F\-I\-E\-L\-D\-\_\-\-T}~\hyperlink{print_8c_ab8f084bc9e8cb26a478424891479705b}{\-F\-I\-E\-L\-D\-\_\-\-T\-V} /$\ast$\-T\-O\-D\-O\-: implement version dependant string fields $\ast$/
+\item 
+\#define \hyperlink{decode_8c_a74b9fbfbdd40aa4d48135361156653dc}{\-F\-I\-E\-L\-D\-\_\-\-B\-T}(name)~\hyperlink{print_8c_a22a037119f03ec084def583fe931045a}{\-F\-I\-E\-L\-D}(name, \-B\-T);
+\item 
+\#define \hyperlink{decode_8c_a0c3dc088edfc1ce4c194338d26948c15}{\-F\-I\-E\-L\-D\-\_\-4\-B\-I\-T\-S}(name)~\-\_\-obj-\/$>$name = \hyperlink{bits_8h_a2ec768c75807d09fd2a672d2f7c9053b}{bit\-\_\-read\-\_\-4\-B\-I\-T\-S}(dat);
+\item 
+\#define \hyperlink{decode_8c_a67a183abd9eab747d2d52413073ed6d4}{\-F\-I\-E\-L\-D\-\_\-\-B\-E}(name)~\hyperlink{bits_8h_ab8e671460c7acf3b680b8db71890d6ae}{bit\-\_\-read\-\_\-\-B\-E}(dat, \&\-\_\-obj-\/$>$name.\-x, \&\-\_\-obj-\/$>$name.\-y, \&\-\_\-obj-\/$>$name.\-z);
+\item 
+\#define \hyperlink{decode_8c_adf87e0775fd57d702069e09d35b509a1}{\-F\-I\-E\-L\-D\-\_\-\-D\-D}(name, \-\_\-default)~\hyperlink{print_8c_a200a5822964d9c861de390e556bfea0e}{\-F\-I\-E\-L\-D\-\_\-\-V\-A\-L\-U\-E}(name) = \hyperlink{bits_8h_a1817f319c1f6eec068434d3d470b9ca2}{bit\-\_\-read\-\_\-\-D\-D}(dat, \-\_\-default);
+\item 
+\#define \hyperlink{decode_8c_a075b6d7cbde6d974f8693eaa4489a776}{\-F\-I\-E\-L\-D\-\_\-2\-D\-D}(name, d1, d2)~\hyperlink{print_8c_adf87e0775fd57d702069e09d35b509a1}{\-F\-I\-E\-L\-D\-\_\-\-D\-D}(name.\-x, d1); \hyperlink{print_8c_adf87e0775fd57d702069e09d35b509a1}{\-F\-I\-E\-L\-D\-\_\-\-D\-D}(name.\-y, d2);
+\item 
+\#define \hyperlink{decode_8c_a0c357e982e5f9aa1e280a9f2aabfdecf}{\-F\-I\-E\-L\-D\-\_\-2\-R\-D}(name)~\hyperlink{print_8c_a22a037119f03ec084def583fe931045a}{\-F\-I\-E\-L\-D}(name.\-x, \-R\-D); \hyperlink{print_8c_a22a037119f03ec084def583fe931045a}{\-F\-I\-E\-L\-D}(name.\-y, \-R\-D);
+\item 
+\#define \hyperlink{decode_8c_a505ae4a87538df219e25fe36e55be3e6}{\-F\-I\-E\-L\-D\-\_\-2\-B\-D}(name)~\hyperlink{print_8c_a22a037119f03ec084def583fe931045a}{\-F\-I\-E\-L\-D}(name.\-x, \-B\-D); \hyperlink{print_8c_a22a037119f03ec084def583fe931045a}{\-F\-I\-E\-L\-D}(name.\-y, \-B\-D);
+\item 
+\#define \hyperlink{decode_8c_aee38be35c09a2f6e58e71ba481956cfc}{\-F\-I\-E\-L\-D\-\_\-3\-R\-D}(name)~\hyperlink{print_8c_a22a037119f03ec084def583fe931045a}{\-F\-I\-E\-L\-D}(name.\-x, \-R\-D); \hyperlink{print_8c_a22a037119f03ec084def583fe931045a}{\-F\-I\-E\-L\-D}(name.\-y, \-R\-D); \hyperlink{print_8c_a22a037119f03ec084def583fe931045a}{\-F\-I\-E\-L\-D}(name.\-z, \-R\-D);
+\item 
+\#define \hyperlink{decode_8c_a1af67bfd480ac19ccb6e9576c6ece1db}{\-F\-I\-E\-L\-D\-\_\-3\-B\-D}(name)~\hyperlink{print_8c_a22a037119f03ec084def583fe931045a}{\-F\-I\-E\-L\-D}(name.\-x, \-B\-D); \hyperlink{print_8c_a22a037119f03ec084def583fe931045a}{\-F\-I\-E\-L\-D}(name.\-y, \-B\-D); \hyperlink{print_8c_a22a037119f03ec084def583fe931045a}{\-F\-I\-E\-L\-D}(name.\-z, \-B\-D);
+\item 
+\#define \hyperlink{decode_8c_aac7a8ef4ad290fac4688870f117744ac}{\-F\-I\-E\-L\-D\-\_\-3\-D\-P\-O\-I\-N\-T}(name)~\hyperlink{print_8c_a1af67bfd480ac19ccb6e9576c6ece1db}{\-F\-I\-E\-L\-D\-\_\-3\-B\-D}(name)
+\item 
+\#define \hyperlink{decode_8c_af994b420edb64879d4e16c49a8781c02}{\-F\-I\-E\-L\-D\-\_\-\-C\-M\-C}(name)
+\item 
+\#define \hyperlink{decode_8c_a02eedab60f4b7a01efa8b4a36ce3769b}{\-F\-I\-E\-L\-D\-\_\-\-V\-E\-C\-T\-O\-R\-\_\-\-N}(name, type, size)
+\item 
+\#define \hyperlink{decode_8c_a4984c85f1665f145ea0802ffe911caf6}{\-F\-I\-E\-L\-D\-\_\-\-V\-E\-C\-T\-O\-R}(name, type, size)~\hyperlink{print_8c_a02eedab60f4b7a01efa8b4a36ce3769b}{\-F\-I\-E\-L\-D\-\_\-\-V\-E\-C\-T\-O\-R\-\_\-\-N}(name, type, \-\_\-obj-\/$>$size)
+\item 
+\#define \hyperlink{decode_8c_ac340e8d8bd564fc063de5c9cf7606f7c}{\-F\-I\-E\-L\-D\-\_\-2\-R\-D\-\_\-\-V\-E\-C\-T\-O\-R}(name, size)
+\item 
+\#define \hyperlink{decode_8c_ad397c65302b3dd7105cae0b4472316cc}{\-F\-I\-E\-L\-D\-\_\-2\-D\-D\-\_\-\-V\-E\-C\-T\-O\-R}(name, size)
+\item 
+\#define \hyperlink{decode_8c_a05905616fa011d69620171bdcece549c}{\-F\-I\-E\-L\-D\-\_\-3\-D\-P\-O\-I\-N\-T\-\_\-\-V\-E\-C\-T\-O\-R}(name, size)
+\item 
+\#define \hyperlink{decode_8c_a728d7936ca57ffb02c889f037195b1bf}{\-H\-A\-N\-D\-L\-E\-\_\-\-V\-E\-C\-T\-O\-R\-\_\-\-N}(name, size, code)
+\item 
+\#define \hyperlink{decode_8c_ae4790cc836e6be8d278b7649c7591c6e}{\-H\-A\-N\-D\-L\-E\-\_\-\-V\-E\-C\-T\-O\-R}(name, sizefield, code)~\hyperlink{print_8c_a728d7936ca57ffb02c889f037195b1bf}{\-H\-A\-N\-D\-L\-E\-\_\-\-V\-E\-C\-T\-O\-R\-\_\-\-N}(name, \hyperlink{print_8c_a200a5822964d9c861de390e556bfea0e}{\-F\-I\-E\-L\-D\-\_\-\-V\-A\-L\-U\-E}(sizefield), code)
+\item 
+\#define \hyperlink{decode_8c_a7fbbd2ee796503d97182fac43ee55cc6}{\-F\-I\-E\-L\-D\-\_\-\-X\-D\-A\-T\-A}(name, size)~\-\_\-obj-\/$>$name = \hyperlink{decode_8c_ab029ec1ea460fde23d196b25fee00e1e}{dwg\-\_\-decode\-\_\-xdata}(dat, \-\_\-obj-\/$>$size)
+\item 
+\#define \hyperlink{decode_8c_ad32ae1a6ad7eac802e38777e0d0217fb}{\-R\-E\-A\-C\-T\-O\-R\-S}(code)
+\item 
+\#define \hyperlink{decode_8c_a744bd1b8b8021818ac36947958639eb3}{\-E\-N\-T\-\_\-\-R\-E\-A\-C\-T\-O\-R\-S}(code)
+\item 
+\#define \hyperlink{decode_8c_ad719c9691dba5f8223bd117a46cbc2bf}{\-X\-D\-I\-C\-O\-B\-J\-H\-A\-N\-D\-L\-E}(code)
+\item 
+\#define \hyperlink{decode_8c_a84d0c25f99e020e32024d80c710905af}{\-E\-N\-T\-\_\-\-X\-D\-I\-C\-O\-B\-J\-H\-A\-N\-D\-L\-E}(code)
+\item 
+\#define \hyperlink{decode_8c_a0de244ea6aa6298de3ea09e458786b7e}{\-R\-E\-P\-E\-A\-T\-\_\-\-N}(times, name, type)
+\item 
+\#define \hyperlink{decode_8c_a3fd4b55ff4a61457f9a5da0ad42396b8}{\-R\-E\-P\-E\-A\-T}(times, name, type)
+\item 
+\#define \hyperlink{decode_8c_ad57f42b6bc2a6976c8eda7cff33bcb42}{\-R\-E\-P\-E\-A\-T2}(times, name, type)
+\item 
+\#define \hyperlink{decode_8c_a25430167db754fb3fe8322e151d89d8d}{\-R\-E\-P\-E\-A\-T3}(times, name, type)
+\item 
+\#define \hyperlink{decode_8c_a5baf253c6ef55a7bdfd6761e22930415}{\-C\-O\-M\-M\-O\-N\-\_\-\-E\-N\-T\-I\-T\-Y\-\_\-\-H\-A\-N\-D\-L\-E\-\_\-\-D\-A\-T\-A}~dwg\-\_\-decode\-\_\-common\-\_\-entity\-\_\-handle\-\_\-data(dat, obj)
+\item 
+\#define \hyperlink{decode_8c_afa58d54d8dc3816d599e363948a173c3}{\-D\-W\-G\-\_\-\-E\-N\-T\-I\-T\-Y}(token)
+\item 
+\#define \hyperlink{decode_8c_a8950ea60b6e660752204b587cf7b41d4}{\-D\-W\-G\-\_\-\-E\-N\-T\-I\-T\-Y\-\_\-\-E\-N\-D}~\}
+\item 
+\#define \hyperlink{decode_8c_a0933dfd43fde0e570f9ca8d4f3da993d}{\-D\-W\-G\-\_\-\-O\-B\-J\-E\-C\-T}(token)
+\item 
+\#define \hyperlink{decode_8c_a39f4bbf89849b86cd1deed92c10e2ee7}{\-D\-W\-G\-\_\-\-O\-B\-J\-E\-C\-T\-\_\-\-E\-N\-D}~\}
+\end{DoxyCompactItemize}
+\subsection*{\-Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef union \*
+\hyperlink{union__encrypted__section__header}{\-\_\-encrypted\-\_\-section\-\_\-header} \hyperlink{decode_8c_aecf5248bbb595e7ead2c1e641c34967a}{encrypted\-\_\-section\-\_\-header}
+\end{DoxyCompactItemize}
+\subsection*{\-Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{decode_8c_abe9518ecb14ad0bc20c68e0ab5f2deeb}{\-R\-E\-S\-\_\-\-B\-U\-F\-\_\-\-V\-A\-L\-U\-E\-\_\-\-T\-Y\-P\-E} \{ \*
+\hyperlink{decode_8c_abe9518ecb14ad0bc20c68e0ab5f2deeba93fbddf2c262685d0ea77042113cbd00}{\-V\-T\-\_\-\-I\-N\-V\-A\-L\-I\-D} =  0, 
+\hyperlink{decode_8c_abe9518ecb14ad0bc20c68e0ab5f2deeba7d0ada66d85d8eb695f3bdd2e48b5976}{\-V\-T\-\_\-\-S\-T\-R\-I\-N\-G} =  1, 
+\hyperlink{decode_8c_abe9518ecb14ad0bc20c68e0ab5f2deeba9c2dfffea31efd066f17c0a853070d5e}{\-V\-T\-\_\-\-P\-O\-I\-N\-T3\-D} =  2, 
+\hyperlink{decode_8c_abe9518ecb14ad0bc20c68e0ab5f2deeba22a312760ff3bc1729b0343533d785b6}{\-V\-T\-\_\-\-R\-E\-A\-L} =  3, 
+\*
+\hyperlink{decode_8c_abe9518ecb14ad0bc20c68e0ab5f2deebad44324d8c0044d4d826f099393c66f45}{\-V\-T\-\_\-\-I\-N\-T16} =  4, 
+\hyperlink{decode_8c_abe9518ecb14ad0bc20c68e0ab5f2deebaa9ffdf318dcf4751f7be6cf6fa4440af}{\-V\-T\-\_\-\-I\-N\-T32} =  5, 
+\hyperlink{decode_8c_abe9518ecb14ad0bc20c68e0ab5f2deebad6b06b25640e4a513963030f3e7b883d}{\-V\-T\-\_\-\-I\-N\-T8} =  6, 
+\hyperlink{decode_8c_abe9518ecb14ad0bc20c68e0ab5f2deebab1624ffba451bf91b9ca2d4ac243b9bf}{\-V\-T\-\_\-\-B\-I\-N\-A\-R\-Y} =  7, 
+\*
+\hyperlink{decode_8c_abe9518ecb14ad0bc20c68e0ab5f2deebaf6aea50d05c3e1cd796b70abceff3d42}{\-V\-T\-\_\-\-H\-A\-N\-D\-L\-E} =  8, 
+\hyperlink{decode_8c_abe9518ecb14ad0bc20c68e0ab5f2deeba7c9c97f2f46e8b450c8a329223540931}{\-V\-T\-\_\-\-O\-B\-J\-E\-C\-T\-I\-D} =  9, 
+\hyperlink{decode_8c_abe9518ecb14ad0bc20c68e0ab5f2deebacfbddf80e8955a2e47f2ce7df0d84fb9}{\-V\-T\-\_\-\-B\-O\-O\-L} =  10
+ \}
+\end{DoxyCompactItemize}
+\subsection*{\-Functions}
+\begin{DoxyCompactItemize}
+\item 
+unsigned int \hyperlink{decode_8c_a364df3e51a65461c72e59dc0a407125b}{bit\-\_\-ckr8} (unsigned int dx, unsigned char $\ast$adr, long n)
+\item 
+int \hyperlink{decode_8c_a54099828935f7f15b68c075c00845512}{decode\-\_\-\-R13\-\_\-\-R15} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat, \hyperlink{dwg_8h_aa951e503d5463c38a226b45bea0c2d44}{\-Dwg\-\_\-\-Data} $\ast$dwg)
+\item 
+int \hyperlink{decode_8c_ad95073b1392e500ad70c4bac4450a437}{read\-\_\-r2007\-\_\-meta\-\_\-data} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat, \hyperlink{dwg_8h_aa951e503d5463c38a226b45bea0c2d44}{\-Dwg\-\_\-\-Data} $\ast$dwg)
+\item 
+int \hyperlink{decode_8c_ade78c981d47b683c0d77e63b2d4bdabd}{dwg\-\_\-decode\-\_\-data} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat, \hyperlink{dwg_8h_aa951e503d5463c38a226b45bea0c2d44}{\-Dwg\-\_\-\-Data} $\ast$dwg)
+\item 
+int \hyperlink{decode_8c_a908d2d8d20cb499bb605506b5ea2159a}{decode\-\_\-\-R2004} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat, \hyperlink{dwg_8h_aa951e503d5463c38a226b45bea0c2d44}{\-Dwg\-\_\-\-Data} $\ast$dwg)
+\item 
+int \hyperlink{decode_8c_a147acad33243577181ad27028bbac840}{decode\-\_\-\-R2007} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat, \hyperlink{dwg_8h_aa951e503d5463c38a226b45bea0c2d44}{\-Dwg\-\_\-\-Data} $\ast$dwg)
+\item 
+enum \hyperlink{decode_8c_abe9518ecb14ad0bc20c68e0ab5f2deeb}{\-R\-E\-S\-\_\-\-B\-U\-F\-\_\-\-V\-A\-L\-U\-E\-\_\-\-T\-Y\-P\-E} \hyperlink{decode_8c_a01d0323348944aec52f99cfbbb012a4f}{get\-\_\-base\-\_\-value\-\_\-type} (short gc)
+\item 
+\hyperlink{dwg_8h_a1fa2b1686e82246f6096fa855c4a961b}{\-Dwg\-\_\-\-Resbuf} $\ast$ \hyperlink{decode_8c_ab029ec1ea460fde23d196b25fee00e1e}{dwg\-\_\-decode\-\_\-xdata} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat, int size)
+\end{DoxyCompactItemize}
+\subsection*{\-Variables}
+\begin{DoxyCompactItemize}
+\item 
+long unsigned int \hyperlink{decode_8c_a7eafb03626668038cb8d53c736d6cea7}{ktl\-\_\-lastaddress}
+\end{DoxyCompactItemize}
+
+
+\subsection{\-Define \-Documentation}
+\hypertarget{decode_8c_ab5a4b808a8f2d39fe3562f1aa8d28f34}{\index{decode.\-c@{decode.\-c}!\-A\-N\-Y\-C\-O\-D\-E@{\-A\-N\-Y\-C\-O\-D\-E}}
+\index{\-A\-N\-Y\-C\-O\-D\-E@{\-A\-N\-Y\-C\-O\-D\-E}!decode.c@{decode.\-c}}
+\subsubsection[{\-A\-N\-Y\-C\-O\-D\-E}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-A\-N\-Y\-C\-O\-D\-E}~-\/1}}\label{decode_8c_ab5a4b808a8f2d39fe3562f1aa8d28f34}
+\hypertarget{decode_8c_a5baf253c6ef55a7bdfd6761e22930415}{\index{decode.\-c@{decode.\-c}!\-C\-O\-M\-M\-O\-N\-\_\-\-E\-N\-T\-I\-T\-Y\-\_\-\-H\-A\-N\-D\-L\-E\-\_\-\-D\-A\-T\-A@{\-C\-O\-M\-M\-O\-N\-\_\-\-E\-N\-T\-I\-T\-Y\-\_\-\-H\-A\-N\-D\-L\-E\-\_\-\-D\-A\-T\-A}}
+\index{\-C\-O\-M\-M\-O\-N\-\_\-\-E\-N\-T\-I\-T\-Y\-\_\-\-H\-A\-N\-D\-L\-E\-\_\-\-D\-A\-T\-A@{\-C\-O\-M\-M\-O\-N\-\_\-\-E\-N\-T\-I\-T\-Y\-\_\-\-H\-A\-N\-D\-L\-E\-\_\-\-D\-A\-T\-A}!decode.c@{decode.\-c}}
+\subsubsection[{\-C\-O\-M\-M\-O\-N\-\_\-\-E\-N\-T\-I\-T\-Y\-\_\-\-H\-A\-N\-D\-L\-E\-\_\-\-D\-A\-T\-A}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-C\-O\-M\-M\-O\-N\-\_\-\-E\-N\-T\-I\-T\-Y\-\_\-\-H\-A\-N\-D\-L\-E\-\_\-\-D\-A\-T\-A}~dwg\-\_\-decode\-\_\-common\-\_\-entity\-\_\-handle\-\_\-data(dat, obj)}}\label{decode_8c_a5baf253c6ef55a7bdfd6761e22930415}
+\hypertarget{decode_8c_afa58d54d8dc3816d599e363948a173c3}{\index{decode.\-c@{decode.\-c}!\-D\-W\-G\-\_\-\-E\-N\-T\-I\-T\-Y@{\-D\-W\-G\-\_\-\-E\-N\-T\-I\-T\-Y}}
+\index{\-D\-W\-G\-\_\-\-E\-N\-T\-I\-T\-Y@{\-D\-W\-G\-\_\-\-E\-N\-T\-I\-T\-Y}!decode.c@{decode.\-c}}
+\subsubsection[{\-D\-W\-G\-\_\-\-E\-N\-T\-I\-T\-Y}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-D\-W\-G\-\_\-\-E\-N\-T\-I\-T\-Y}(
+\begin{DoxyParamCaption}
+\item[{}]{token}
+\end{DoxyParamCaption}
+)}}\label{decode_8c_afa58d54d8dc3816d599e363948a173c3}
+{\bfseries \-Value\-:}
+\begin{DoxyCode}
+static void \
+ dwg_decode_##token (Bit_Chain * dat, Dwg_Object * obj)\
+{\
+  int vcount, rcount, rcount2, rcount3;\
+  Dwg_Entity_##token *ent, *_obj;\
+  Dwg_Data* dwg = obj->parent;\
+  LOG_INFO("Entity " #token ":\n")\
+  dwg->num_entities++;\
+  obj->supertype = DWG_SUPERTYPE_ENTITY;\
+  obj->tio.entity = (Dwg_Object_Entity*)malloc (sizeof (Dwg_Object_Entity));  \
+  obj->tio.entity->tio.token = (Dwg_Entity_##token *)calloc (sizeof (
+      Dwg_Entity_##token), 1); \
+  ent = obj->tio.entity->tio.token;\
+  _obj=ent;\
+  obj->tio.entity->object = obj;\
+  if (dwg_decode_entity (dat, obj->tio.entity)) return;\
+  LOG_INFO("Entity handle: %d.%d.%lu\n",\
+    obj->handle.code,\
+    obj->handle.size,\
+    obj->handle.value)
+\end{DoxyCode}
+\hypertarget{decode_8c_a8950ea60b6e660752204b587cf7b41d4}{\index{decode.\-c@{decode.\-c}!\-D\-W\-G\-\_\-\-E\-N\-T\-I\-T\-Y\-\_\-\-E\-N\-D@{\-D\-W\-G\-\_\-\-E\-N\-T\-I\-T\-Y\-\_\-\-E\-N\-D}}
+\index{\-D\-W\-G\-\_\-\-E\-N\-T\-I\-T\-Y\-\_\-\-E\-N\-D@{\-D\-W\-G\-\_\-\-E\-N\-T\-I\-T\-Y\-\_\-\-E\-N\-D}!decode.c@{decode.\-c}}
+\subsubsection[{\-D\-W\-G\-\_\-\-E\-N\-T\-I\-T\-Y\-\_\-\-E\-N\-D}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-D\-W\-G\-\_\-\-E\-N\-T\-I\-T\-Y\-\_\-\-E\-N\-D}~\}}}\label{decode_8c_a8950ea60b6e660752204b587cf7b41d4}
+\hypertarget{decode_8c_a0933dfd43fde0e570f9ca8d4f3da993d}{\index{decode.\-c@{decode.\-c}!\-D\-W\-G\-\_\-\-O\-B\-J\-E\-C\-T@{\-D\-W\-G\-\_\-\-O\-B\-J\-E\-C\-T}}
+\index{\-D\-W\-G\-\_\-\-O\-B\-J\-E\-C\-T@{\-D\-W\-G\-\_\-\-O\-B\-J\-E\-C\-T}!decode.c@{decode.\-c}}
+\subsubsection[{\-D\-W\-G\-\_\-\-O\-B\-J\-E\-C\-T}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-D\-W\-G\-\_\-\-O\-B\-J\-E\-C\-T}(
+\begin{DoxyParamCaption}
+\item[{}]{token}
+\end{DoxyParamCaption}
+)}}\label{decode_8c_a0933dfd43fde0e570f9ca8d4f3da993d}
+{\bfseries \-Value\-:}
+\begin{DoxyCode}
+static void  dwg_decode_ ## token (Bit_Chain * dat, Dwg_Object * obj) {\
+  int vcount, rcount, rcount2, rcount3;\
+  Dwg_Object_##token *_obj;\
+  Dwg_Data* dwg = obj->parent;\
+  LOG_INFO("Object " #token ":\n")\
+  obj->supertype = DWG_SUPERTYPE_OBJECT;\
+  obj->tio.object = (Dwg_Object_Object*)malloc (sizeof (Dwg_Object_Object));  \
+  obj->tio.object->tio.token = (Dwg_Object_##token * ) calloc (sizeof (
+      Dwg_Object_##token), 1); \
+  obj->tio.object->object = obj;\
+  if (dwg_decode_object (dat, obj->tio.object)) return;\
+  _obj = obj->tio.object->tio.token;\
+  LOG_INFO("Object handle: %d.%d.%lu\n",\
+    obj->handle.code,\
+    obj->handle.size,\
+    obj->handle.value)
+\end{DoxyCode}
+\hypertarget{decode_8c_a39f4bbf89849b86cd1deed92c10e2ee7}{\index{decode.\-c@{decode.\-c}!\-D\-W\-G\-\_\-\-O\-B\-J\-E\-C\-T\-\_\-\-E\-N\-D@{\-D\-W\-G\-\_\-\-O\-B\-J\-E\-C\-T\-\_\-\-E\-N\-D}}
+\index{\-D\-W\-G\-\_\-\-O\-B\-J\-E\-C\-T\-\_\-\-E\-N\-D@{\-D\-W\-G\-\_\-\-O\-B\-J\-E\-C\-T\-\_\-\-E\-N\-D}!decode.c@{decode.\-c}}
+\subsubsection[{\-D\-W\-G\-\_\-\-O\-B\-J\-E\-C\-T\-\_\-\-E\-N\-D}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-D\-W\-G\-\_\-\-O\-B\-J\-E\-C\-T\-\_\-\-E\-N\-D}~\}}}\label{decode_8c_a39f4bbf89849b86cd1deed92c10e2ee7}
+\hypertarget{decode_8c_a744bd1b8b8021818ac36947958639eb3}{\index{decode.\-c@{decode.\-c}!\-E\-N\-T\-\_\-\-R\-E\-A\-C\-T\-O\-R\-S@{\-E\-N\-T\-\_\-\-R\-E\-A\-C\-T\-O\-R\-S}}
+\index{\-E\-N\-T\-\_\-\-R\-E\-A\-C\-T\-O\-R\-S@{\-E\-N\-T\-\_\-\-R\-E\-A\-C\-T\-O\-R\-S}!decode.c@{decode.\-c}}
+\subsubsection[{\-E\-N\-T\-\_\-\-R\-E\-A\-C\-T\-O\-R\-S}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-E\-N\-T\-\_\-\-R\-E\-A\-C\-T\-O\-R\-S}(
+\begin{DoxyParamCaption}
+\item[{}]{code}
+\end{DoxyParamCaption}
+)}}\label{decode_8c_a744bd1b8b8021818ac36947958639eb3}
+{\bfseries \-Value\-:}
+\begin{DoxyCode}
+FIELD_VALUE(reactors) = (BITCODE_H*) malloc(sizeof(BITCODE_H) * obj->tio.entity
+      ->num_reactors);\
+  for (vcount=0; vcount<obj->tio.entity->num_reactors; vcount++)\
+    {\
+      FIELD_HANDLE(reactors[vcount], code);\
+    }
+\end{DoxyCode}
+\hypertarget{decode_8c_a84d0c25f99e020e32024d80c710905af}{\index{decode.\-c@{decode.\-c}!\-E\-N\-T\-\_\-\-X\-D\-I\-C\-O\-B\-J\-H\-A\-N\-D\-L\-E@{\-E\-N\-T\-\_\-\-X\-D\-I\-C\-O\-B\-J\-H\-A\-N\-D\-L\-E}}
+\index{\-E\-N\-T\-\_\-\-X\-D\-I\-C\-O\-B\-J\-H\-A\-N\-D\-L\-E@{\-E\-N\-T\-\_\-\-X\-D\-I\-C\-O\-B\-J\-H\-A\-N\-D\-L\-E}!decode.c@{decode.\-c}}
+\subsubsection[{\-E\-N\-T\-\_\-\-X\-D\-I\-C\-O\-B\-J\-H\-A\-N\-D\-L\-E}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-E\-N\-T\-\_\-\-X\-D\-I\-C\-O\-B\-J\-H\-A\-N\-D\-L\-E}(
+\begin{DoxyParamCaption}
+\item[{}]{code}
+\end{DoxyParamCaption}
+)}}\label{decode_8c_a84d0c25f99e020e32024d80c710905af}
+{\bfseries \-Value\-:}
+\begin{DoxyCode}
+SINCE(R_2004)\
+    {\
+      if (!obj->tio.entity->xdic_missing_flag)\
+        {\
+          FIELD_HANDLE(xdicobjhandle, code);\
+        }\
+    }\
+  PRIOR_VERSIONS\
+    {\
+      FIELD_HANDLE(xdicobjhandle, code);\
+    }
+\end{DoxyCode}
+\hypertarget{decode_8c_a22a037119f03ec084def583fe931045a}{\index{decode.\-c@{decode.\-c}!\-F\-I\-E\-L\-D@{\-F\-I\-E\-L\-D}}
+\index{\-F\-I\-E\-L\-D@{\-F\-I\-E\-L\-D}!decode.c@{decode.\-c}}
+\subsubsection[{\-F\-I\-E\-L\-D}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-F\-I\-E\-L\-D}(
+\begin{DoxyParamCaption}
+\item[{}]{name, }
+\item[{}]{type}
+\end{DoxyParamCaption}
+)}}\label{decode_8c_a22a037119f03ec084def583fe931045a}
+{\bfseries \-Value\-:}
+\begin{DoxyCode}
+_obj->name = bit_read_##type(dat);\
+  LOG_TRACE(#name ": " FORMAT_##type "\n", _obj->name)
+\end{DoxyCode}
+\hypertarget{decode_8c_a505ae4a87538df219e25fe36e55be3e6}{\index{decode.\-c@{decode.\-c}!\-F\-I\-E\-L\-D\-\_\-2\-B\-D@{\-F\-I\-E\-L\-D\-\_\-2\-B\-D}}
+\index{\-F\-I\-E\-L\-D\-\_\-2\-B\-D@{\-F\-I\-E\-L\-D\-\_\-2\-B\-D}!decode.c@{decode.\-c}}
+\subsubsection[{\-F\-I\-E\-L\-D\-\_\-2\-B\-D}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-F\-I\-E\-L\-D\-\_\-2\-B\-D}(
+\begin{DoxyParamCaption}
+\item[{}]{name}
+\end{DoxyParamCaption}
+)~{\bf \-F\-I\-E\-L\-D}(name.\-x, \-B\-D); {\bf \-F\-I\-E\-L\-D}(name.\-y, \-B\-D);}}\label{decode_8c_a505ae4a87538df219e25fe36e55be3e6}
+\hypertarget{decode_8c_a075b6d7cbde6d974f8693eaa4489a776}{\index{decode.\-c@{decode.\-c}!\-F\-I\-E\-L\-D\-\_\-2\-D\-D@{\-F\-I\-E\-L\-D\-\_\-2\-D\-D}}
+\index{\-F\-I\-E\-L\-D\-\_\-2\-D\-D@{\-F\-I\-E\-L\-D\-\_\-2\-D\-D}!decode.c@{decode.\-c}}
+\subsubsection[{\-F\-I\-E\-L\-D\-\_\-2\-D\-D}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-F\-I\-E\-L\-D\-\_\-2\-D\-D}(
+\begin{DoxyParamCaption}
+\item[{}]{name, }
+\item[{}]{d1, }
+\item[{}]{d2}
+\end{DoxyParamCaption}
+)~{\bf \-F\-I\-E\-L\-D\-\_\-\-D\-D}(name.\-x, d1); {\bf \-F\-I\-E\-L\-D\-\_\-\-D\-D}(name.\-y, d2);}}\label{decode_8c_a075b6d7cbde6d974f8693eaa4489a776}
+\hypertarget{decode_8c_ad397c65302b3dd7105cae0b4472316cc}{\index{decode.\-c@{decode.\-c}!\-F\-I\-E\-L\-D\-\_\-2\-D\-D\-\_\-\-V\-E\-C\-T\-O\-R@{\-F\-I\-E\-L\-D\-\_\-2\-D\-D\-\_\-\-V\-E\-C\-T\-O\-R}}
+\index{\-F\-I\-E\-L\-D\-\_\-2\-D\-D\-\_\-\-V\-E\-C\-T\-O\-R@{\-F\-I\-E\-L\-D\-\_\-2\-D\-D\-\_\-\-V\-E\-C\-T\-O\-R}!decode.c@{decode.\-c}}
+\subsubsection[{\-F\-I\-E\-L\-D\-\_\-2\-D\-D\-\_\-\-V\-E\-C\-T\-O\-R}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-F\-I\-E\-L\-D\-\_\-2\-D\-D\-\_\-\-V\-E\-C\-T\-O\-R}(
+\begin{DoxyParamCaption}
+\item[{}]{name, }
+\item[{}]{size}
+\end{DoxyParamCaption}
+)}}\label{decode_8c_ad397c65302b3dd7105cae0b4472316cc}
+{\bfseries \-Value\-:}
+\begin{DoxyCode}
+_obj->name = (BITCODE_2RD *) malloc(_obj->size * sizeof(BITCODE_2RD));\
+  FIELD_2RD(name[0]);\
+  for (vcount = 1; vcount < _obj->size; vcount++)\
+    {\
+      FIELD_2DD(name[vcount], FIELD_VALUE(name[vcount - 1].x), FIELD_VALUE(name
+      [vcount - 1].y));\
+    }
+\end{DoxyCode}
+\hypertarget{decode_8c_a0c357e982e5f9aa1e280a9f2aabfdecf}{\index{decode.\-c@{decode.\-c}!\-F\-I\-E\-L\-D\-\_\-2\-R\-D@{\-F\-I\-E\-L\-D\-\_\-2\-R\-D}}
+\index{\-F\-I\-E\-L\-D\-\_\-2\-R\-D@{\-F\-I\-E\-L\-D\-\_\-2\-R\-D}!decode.c@{decode.\-c}}
+\subsubsection[{\-F\-I\-E\-L\-D\-\_\-2\-R\-D}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-F\-I\-E\-L\-D\-\_\-2\-R\-D}(
+\begin{DoxyParamCaption}
+\item[{}]{name}
+\end{DoxyParamCaption}
+)~{\bf \-F\-I\-E\-L\-D}(name.\-x, \-R\-D); {\bf \-F\-I\-E\-L\-D}(name.\-y, \-R\-D);}}\label{decode_8c_a0c357e982e5f9aa1e280a9f2aabfdecf}
+\hypertarget{decode_8c_ac340e8d8bd564fc063de5c9cf7606f7c}{\index{decode.\-c@{decode.\-c}!\-F\-I\-E\-L\-D\-\_\-2\-R\-D\-\_\-\-V\-E\-C\-T\-O\-R@{\-F\-I\-E\-L\-D\-\_\-2\-R\-D\-\_\-\-V\-E\-C\-T\-O\-R}}
+\index{\-F\-I\-E\-L\-D\-\_\-2\-R\-D\-\_\-\-V\-E\-C\-T\-O\-R@{\-F\-I\-E\-L\-D\-\_\-2\-R\-D\-\_\-\-V\-E\-C\-T\-O\-R}!decode.c@{decode.\-c}}
+\subsubsection[{\-F\-I\-E\-L\-D\-\_\-2\-R\-D\-\_\-\-V\-E\-C\-T\-O\-R}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-F\-I\-E\-L\-D\-\_\-2\-R\-D\-\_\-\-V\-E\-C\-T\-O\-R}(
+\begin{DoxyParamCaption}
+\item[{}]{name, }
+\item[{}]{size}
+\end{DoxyParamCaption}
+)}}\label{decode_8c_ac340e8d8bd564fc063de5c9cf7606f7c}
+{\bfseries \-Value\-:}
+\begin{DoxyCode}
+_obj->name = (BITCODE_2RD *) malloc(_obj->size * sizeof(BITCODE_2RD));\
+  for (vcount=0; vcount< _obj->size; vcount++)\
+    {\
+      FIELD_2RD(name[vcount]);\
+    }
+\end{DoxyCode}
+\hypertarget{decode_8c_a1af67bfd480ac19ccb6e9576c6ece1db}{\index{decode.\-c@{decode.\-c}!\-F\-I\-E\-L\-D\-\_\-3\-B\-D@{\-F\-I\-E\-L\-D\-\_\-3\-B\-D}}
+\index{\-F\-I\-E\-L\-D\-\_\-3\-B\-D@{\-F\-I\-E\-L\-D\-\_\-3\-B\-D}!decode.c@{decode.\-c}}
+\subsubsection[{\-F\-I\-E\-L\-D\-\_\-3\-B\-D}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-F\-I\-E\-L\-D\-\_\-3\-B\-D}(
+\begin{DoxyParamCaption}
+\item[{}]{name}
+\end{DoxyParamCaption}
+)~{\bf \-F\-I\-E\-L\-D}(name.\-x, \-B\-D); {\bf \-F\-I\-E\-L\-D}(name.\-y, \-B\-D); {\bf \-F\-I\-E\-L\-D}(name.\-z, \-B\-D);}}\label{decode_8c_a1af67bfd480ac19ccb6e9576c6ece1db}
+\hypertarget{decode_8c_aac7a8ef4ad290fac4688870f117744ac}{\index{decode.\-c@{decode.\-c}!\-F\-I\-E\-L\-D\-\_\-3\-D\-P\-O\-I\-N\-T@{\-F\-I\-E\-L\-D\-\_\-3\-D\-P\-O\-I\-N\-T}}
+\index{\-F\-I\-E\-L\-D\-\_\-3\-D\-P\-O\-I\-N\-T@{\-F\-I\-E\-L\-D\-\_\-3\-D\-P\-O\-I\-N\-T}!decode.c@{decode.\-c}}
+\subsubsection[{\-F\-I\-E\-L\-D\-\_\-3\-D\-P\-O\-I\-N\-T}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-F\-I\-E\-L\-D\-\_\-3\-D\-P\-O\-I\-N\-T}(
+\begin{DoxyParamCaption}
+\item[{}]{name}
+\end{DoxyParamCaption}
+)~{\bf \-F\-I\-E\-L\-D\-\_\-3\-B\-D}(name)}}\label{decode_8c_aac7a8ef4ad290fac4688870f117744ac}
+\hypertarget{decode_8c_a05905616fa011d69620171bdcece549c}{\index{decode.\-c@{decode.\-c}!\-F\-I\-E\-L\-D\-\_\-3\-D\-P\-O\-I\-N\-T\-\_\-\-V\-E\-C\-T\-O\-R@{\-F\-I\-E\-L\-D\-\_\-3\-D\-P\-O\-I\-N\-T\-\_\-\-V\-E\-C\-T\-O\-R}}
+\index{\-F\-I\-E\-L\-D\-\_\-3\-D\-P\-O\-I\-N\-T\-\_\-\-V\-E\-C\-T\-O\-R@{\-F\-I\-E\-L\-D\-\_\-3\-D\-P\-O\-I\-N\-T\-\_\-\-V\-E\-C\-T\-O\-R}!decode.c@{decode.\-c}}
+\subsubsection[{\-F\-I\-E\-L\-D\-\_\-3\-D\-P\-O\-I\-N\-T\-\_\-\-V\-E\-C\-T\-O\-R}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-F\-I\-E\-L\-D\-\_\-3\-D\-P\-O\-I\-N\-T\-\_\-\-V\-E\-C\-T\-O\-R}(
+\begin{DoxyParamCaption}
+\item[{}]{name, }
+\item[{}]{size}
+\end{DoxyParamCaption}
+)}}\label{decode_8c_a05905616fa011d69620171bdcece549c}
+{\bfseries \-Value\-:}
+\begin{DoxyCode}
+_obj->name = (BITCODE_3DPOINT *) malloc(_obj->size * sizeof(BITCODE_3DPOINT));\
+  for (vcount=0; vcount< _obj->size; vcount++)\
+    {\
+      FIELD_3DPOINT(name[vcount]);\
+    }
+\end{DoxyCode}
+\hypertarget{decode_8c_aee38be35c09a2f6e58e71ba481956cfc}{\index{decode.\-c@{decode.\-c}!\-F\-I\-E\-L\-D\-\_\-3\-R\-D@{\-F\-I\-E\-L\-D\-\_\-3\-R\-D}}
+\index{\-F\-I\-E\-L\-D\-\_\-3\-R\-D@{\-F\-I\-E\-L\-D\-\_\-3\-R\-D}!decode.c@{decode.\-c}}
+\subsubsection[{\-F\-I\-E\-L\-D\-\_\-3\-R\-D}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-F\-I\-E\-L\-D\-\_\-3\-R\-D}(
+\begin{DoxyParamCaption}
+\item[{}]{name}
+\end{DoxyParamCaption}
+)~{\bf \-F\-I\-E\-L\-D}(name.\-x, \-R\-D); {\bf \-F\-I\-E\-L\-D}(name.\-y, \-R\-D); {\bf \-F\-I\-E\-L\-D}(name.\-z, \-R\-D);}}\label{decode_8c_aee38be35c09a2f6e58e71ba481956cfc}
+\hypertarget{decode_8c_a0c3dc088edfc1ce4c194338d26948c15}{\index{decode.\-c@{decode.\-c}!\-F\-I\-E\-L\-D\-\_\-4\-B\-I\-T\-S@{\-F\-I\-E\-L\-D\-\_\-4\-B\-I\-T\-S}}
+\index{\-F\-I\-E\-L\-D\-\_\-4\-B\-I\-T\-S@{\-F\-I\-E\-L\-D\-\_\-4\-B\-I\-T\-S}!decode.c@{decode.\-c}}
+\subsubsection[{\-F\-I\-E\-L\-D\-\_\-4\-B\-I\-T\-S}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-F\-I\-E\-L\-D\-\_\-4\-B\-I\-T\-S}(
+\begin{DoxyParamCaption}
+\item[{}]{name}
+\end{DoxyParamCaption}
+)~\-\_\-obj-\/$>$name = {\bf bit\-\_\-read\-\_\-4\-B\-I\-T\-S}(dat);}}\label{decode_8c_a0c3dc088edfc1ce4c194338d26948c15}
+\hypertarget{decode_8c_a525c6e556c152fff5de524ec3fb48b14}{\index{decode.\-c@{decode.\-c}!\-F\-I\-E\-L\-D\-\_\-\-B@{\-F\-I\-E\-L\-D\-\_\-\-B}}
+\index{\-F\-I\-E\-L\-D\-\_\-\-B@{\-F\-I\-E\-L\-D\-\_\-\-B}!decode.c@{decode.\-c}}
+\subsubsection[{\-F\-I\-E\-L\-D\-\_\-\-B}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-F\-I\-E\-L\-D\-\_\-\-B}(
+\begin{DoxyParamCaption}
+\item[{}]{name}
+\end{DoxyParamCaption}
+)~{\bf \-F\-I\-E\-L\-D}(name, \-B);}}\label{decode_8c_a525c6e556c152fff5de524ec3fb48b14}
+\hypertarget{decode_8c_a3333f9e17dad4b729da51d1476503e20}{\index{decode.\-c@{decode.\-c}!\-F\-I\-E\-L\-D\-\_\-\-B\-B@{\-F\-I\-E\-L\-D\-\_\-\-B\-B}}
+\index{\-F\-I\-E\-L\-D\-\_\-\-B\-B@{\-F\-I\-E\-L\-D\-\_\-\-B\-B}!decode.c@{decode.\-c}}
+\subsubsection[{\-F\-I\-E\-L\-D\-\_\-\-B\-B}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-F\-I\-E\-L\-D\-\_\-\-B\-B}(
+\begin{DoxyParamCaption}
+\item[{}]{name}
+\end{DoxyParamCaption}
+)~{\bf \-F\-I\-E\-L\-D}(name, \-B\-B);}}\label{decode_8c_a3333f9e17dad4b729da51d1476503e20}
+\hypertarget{decode_8c_adf87b6c9aec2f2a732363db9512d34b7}{\index{decode.\-c@{decode.\-c}!\-F\-I\-E\-L\-D\-\_\-\-B\-D@{\-F\-I\-E\-L\-D\-\_\-\-B\-D}}
+\index{\-F\-I\-E\-L\-D\-\_\-\-B\-D@{\-F\-I\-E\-L\-D\-\_\-\-B\-D}!decode.c@{decode.\-c}}
+\subsubsection[{\-F\-I\-E\-L\-D\-\_\-\-B\-D}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-F\-I\-E\-L\-D\-\_\-\-B\-D}(
+\begin{DoxyParamCaption}
+\item[{}]{name}
+\end{DoxyParamCaption}
+)~{\bf \-F\-I\-E\-L\-D}(name, \-B\-D);}}\label{decode_8c_adf87b6c9aec2f2a732363db9512d34b7}
+\hypertarget{decode_8c_a67a183abd9eab747d2d52413073ed6d4}{\index{decode.\-c@{decode.\-c}!\-F\-I\-E\-L\-D\-\_\-\-B\-E@{\-F\-I\-E\-L\-D\-\_\-\-B\-E}}
+\index{\-F\-I\-E\-L\-D\-\_\-\-B\-E@{\-F\-I\-E\-L\-D\-\_\-\-B\-E}!decode.c@{decode.\-c}}
+\subsubsection[{\-F\-I\-E\-L\-D\-\_\-\-B\-E}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-F\-I\-E\-L\-D\-\_\-\-B\-E}(
+\begin{DoxyParamCaption}
+\item[{}]{name}
+\end{DoxyParamCaption}
+)~{\bf bit\-\_\-read\-\_\-\-B\-E}(dat, \&\-\_\-obj-\/$>$name.\-x, \&\-\_\-obj-\/$>$name.\-y, \&\-\_\-obj-\/$>$name.\-z);}}\label{decode_8c_a67a183abd9eab747d2d52413073ed6d4}
+\hypertarget{decode_8c_a09137db4f76b16bc413e303369d1ee08}{\index{decode.\-c@{decode.\-c}!\-F\-I\-E\-L\-D\-\_\-\-B\-L@{\-F\-I\-E\-L\-D\-\_\-\-B\-L}}
+\index{\-F\-I\-E\-L\-D\-\_\-\-B\-L@{\-F\-I\-E\-L\-D\-\_\-\-B\-L}!decode.c@{decode.\-c}}
+\subsubsection[{\-F\-I\-E\-L\-D\-\_\-\-B\-L}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-F\-I\-E\-L\-D\-\_\-\-B\-L}(
+\begin{DoxyParamCaption}
+\item[{}]{name}
+\end{DoxyParamCaption}
+)~{\bf \-F\-I\-E\-L\-D}(name, \-B\-L);}}\label{decode_8c_a09137db4f76b16bc413e303369d1ee08}
+\hypertarget{decode_8c_a56de2a5c5e9b31cf2040b7e232f1d078}{\index{decode.\-c@{decode.\-c}!\-F\-I\-E\-L\-D\-\_\-\-B\-S@{\-F\-I\-E\-L\-D\-\_\-\-B\-S}}
+\index{\-F\-I\-E\-L\-D\-\_\-\-B\-S@{\-F\-I\-E\-L\-D\-\_\-\-B\-S}!decode.c@{decode.\-c}}
+\subsubsection[{\-F\-I\-E\-L\-D\-\_\-\-B\-S}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-F\-I\-E\-L\-D\-\_\-\-B\-S}(
+\begin{DoxyParamCaption}
+\item[{}]{name}
+\end{DoxyParamCaption}
+)~{\bf \-F\-I\-E\-L\-D}(name, \-B\-S);}}\label{decode_8c_a56de2a5c5e9b31cf2040b7e232f1d078}
+\hypertarget{decode_8c_a74b9fbfbdd40aa4d48135361156653dc}{\index{decode.\-c@{decode.\-c}!\-F\-I\-E\-L\-D\-\_\-\-B\-T@{\-F\-I\-E\-L\-D\-\_\-\-B\-T}}
+\index{\-F\-I\-E\-L\-D\-\_\-\-B\-T@{\-F\-I\-E\-L\-D\-\_\-\-B\-T}!decode.c@{decode.\-c}}
+\subsubsection[{\-F\-I\-E\-L\-D\-\_\-\-B\-T}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-F\-I\-E\-L\-D\-\_\-\-B\-T}(
+\begin{DoxyParamCaption}
+\item[{}]{name}
+\end{DoxyParamCaption}
+)~{\bf \-F\-I\-E\-L\-D}(name, \-B\-T);}}\label{decode_8c_a74b9fbfbdd40aa4d48135361156653dc}
+\hypertarget{decode_8c_af994b420edb64879d4e16c49a8781c02}{\index{decode.\-c@{decode.\-c}!\-F\-I\-E\-L\-D\-\_\-\-C\-M\-C@{\-F\-I\-E\-L\-D\-\_\-\-C\-M\-C}}
+\index{\-F\-I\-E\-L\-D\-\_\-\-C\-M\-C@{\-F\-I\-E\-L\-D\-\_\-\-C\-M\-C}!decode.c@{decode.\-c}}
+\subsubsection[{\-F\-I\-E\-L\-D\-\_\-\-C\-M\-C}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-F\-I\-E\-L\-D\-\_\-\-C\-M\-C}(
+\begin{DoxyParamCaption}
+\item[{}]{name}
+\end{DoxyParamCaption}
+)}}\label{decode_8c_af994b420edb64879d4e16c49a8781c02}
+{\bfseries \-Value\-:}
+\begin{DoxyCode}
+bit_read_CMC(dat, &_obj->name);\
+    LOG_TRACE(#name ": index %d\n", _obj->name.index)
+\end{DoxyCode}
+\hypertarget{decode_8c_adf87e0775fd57d702069e09d35b509a1}{\index{decode.\-c@{decode.\-c}!\-F\-I\-E\-L\-D\-\_\-\-D\-D@{\-F\-I\-E\-L\-D\-\_\-\-D\-D}}
+\index{\-F\-I\-E\-L\-D\-\_\-\-D\-D@{\-F\-I\-E\-L\-D\-\_\-\-D\-D}!decode.c@{decode.\-c}}
+\subsubsection[{\-F\-I\-E\-L\-D\-\_\-\-D\-D}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-F\-I\-E\-L\-D\-\_\-\-D\-D}(
+\begin{DoxyParamCaption}
+\item[{}]{name, }
+\item[{}]{\-\_\-default}
+\end{DoxyParamCaption}
+)~{\bf \-F\-I\-E\-L\-D\-\_\-\-V\-A\-L\-U\-E}(name) = {\bf bit\-\_\-read\-\_\-\-D\-D}(dat, \-\_\-default);}}\label{decode_8c_adf87e0775fd57d702069e09d35b509a1}
+\hypertarget{decode_8c_a38bd986526836edc930f8fff86a61788}{\index{decode.\-c@{decode.\-c}!\-F\-I\-E\-L\-D\-\_\-\-H\-A\-N\-D\-L\-E@{\-F\-I\-E\-L\-D\-\_\-\-H\-A\-N\-D\-L\-E}}
+\index{\-F\-I\-E\-L\-D\-\_\-\-H\-A\-N\-D\-L\-E@{\-F\-I\-E\-L\-D\-\_\-\-H\-A\-N\-D\-L\-E}!decode.c@{decode.\-c}}
+\subsubsection[{\-F\-I\-E\-L\-D\-\_\-\-H\-A\-N\-D\-L\-E}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-F\-I\-E\-L\-D\-\_\-\-H\-A\-N\-D\-L\-E}(
+\begin{DoxyParamCaption}
+\item[{}]{name, }
+\item[{}]{handle\-\_\-code}
+\end{DoxyParamCaption}
+)}}\label{decode_8c_a38bd986526836edc930f8fff86a61788}
+{\bfseries \-Value\-:}
+\begin{DoxyCode}
+if (handle_code>=0)\
+    {\
+      _obj->name = dwg_decode_handleref_with_code(dat, obj, dwg, handle_code);\
+    }\
+  else\
+    {\
+      _obj->name = dwg_decode_handleref(dat, obj, dwg);\
+    }\
+  LOG_TRACE(#name ": HANDLE(%d.%d.%lu) absolute:%lu\n",\
+        _obj->name->handleref.code,\
+        _obj->name->handleref.size,\
+        _obj->name->handleref.value,\
+        _obj->name->absolute_ref)
+\end{DoxyCode}
+\hypertarget{decode_8c_acd918333b0724246fad5107425257d2e}{\index{decode.\-c@{decode.\-c}!\-F\-I\-E\-L\-D\-\_\-\-M\-C@{\-F\-I\-E\-L\-D\-\_\-\-M\-C}}
+\index{\-F\-I\-E\-L\-D\-\_\-\-M\-C@{\-F\-I\-E\-L\-D\-\_\-\-M\-C}!decode.c@{decode.\-c}}
+\subsubsection[{\-F\-I\-E\-L\-D\-\_\-\-M\-C}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-F\-I\-E\-L\-D\-\_\-\-M\-C}(
+\begin{DoxyParamCaption}
+\item[{}]{name}
+\end{DoxyParamCaption}
+)~{\bf \-F\-I\-E\-L\-D}(name, \-M\-C);}}\label{decode_8c_acd918333b0724246fad5107425257d2e}
+\hypertarget{decode_8c_a2e3aa5296ec8c7310480a5b10dbab347}{\index{decode.\-c@{decode.\-c}!\-F\-I\-E\-L\-D\-\_\-\-M\-S@{\-F\-I\-E\-L\-D\-\_\-\-M\-S}}
+\index{\-F\-I\-E\-L\-D\-\_\-\-M\-S@{\-F\-I\-E\-L\-D\-\_\-\-M\-S}!decode.c@{decode.\-c}}
+\subsubsection[{\-F\-I\-E\-L\-D\-\_\-\-M\-S}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-F\-I\-E\-L\-D\-\_\-\-M\-S}(
+\begin{DoxyParamCaption}
+\item[{}]{name}
+\end{DoxyParamCaption}
+)~{\bf \-F\-I\-E\-L\-D}(name, \-M\-S);}}\label{decode_8c_a2e3aa5296ec8c7310480a5b10dbab347}
+\hypertarget{decode_8c_a0e26fc0356d515181d2a61701604b1ab}{\index{decode.\-c@{decode.\-c}!\-F\-I\-E\-L\-D\-\_\-\-R\-C@{\-F\-I\-E\-L\-D\-\_\-\-R\-C}}
+\index{\-F\-I\-E\-L\-D\-\_\-\-R\-C@{\-F\-I\-E\-L\-D\-\_\-\-R\-C}!decode.c@{decode.\-c}}
+\subsubsection[{\-F\-I\-E\-L\-D\-\_\-\-R\-C}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-F\-I\-E\-L\-D\-\_\-\-R\-C}(
+\begin{DoxyParamCaption}
+\item[{}]{name}
+\end{DoxyParamCaption}
+)~{\bf \-F\-I\-E\-L\-D}(name, \-R\-C);}}\label{decode_8c_a0e26fc0356d515181d2a61701604b1ab}
+\hypertarget{decode_8c_a1f5949a9f6285b8f872069a43ac43e9d}{\index{decode.\-c@{decode.\-c}!\-F\-I\-E\-L\-D\-\_\-\-R\-D@{\-F\-I\-E\-L\-D\-\_\-\-R\-D}}
+\index{\-F\-I\-E\-L\-D\-\_\-\-R\-D@{\-F\-I\-E\-L\-D\-\_\-\-R\-D}!decode.c@{decode.\-c}}
+\subsubsection[{\-F\-I\-E\-L\-D\-\_\-\-R\-D}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-F\-I\-E\-L\-D\-\_\-\-R\-D}(
+\begin{DoxyParamCaption}
+\item[{}]{name}
+\end{DoxyParamCaption}
+)~{\bf \-F\-I\-E\-L\-D}(name, \-R\-D);}}\label{decode_8c_a1f5949a9f6285b8f872069a43ac43e9d}
+\hypertarget{decode_8c_a7e95f44e11cb393e1e613723cc8ec511}{\index{decode.\-c@{decode.\-c}!\-F\-I\-E\-L\-D\-\_\-\-R\-L@{\-F\-I\-E\-L\-D\-\_\-\-R\-L}}
+\index{\-F\-I\-E\-L\-D\-\_\-\-R\-L@{\-F\-I\-E\-L\-D\-\_\-\-R\-L}!decode.c@{decode.\-c}}
+\subsubsection[{\-F\-I\-E\-L\-D\-\_\-\-R\-L}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-F\-I\-E\-L\-D\-\_\-\-R\-L}(
+\begin{DoxyParamCaption}
+\item[{}]{name}
+\end{DoxyParamCaption}
+)~{\bf \-F\-I\-E\-L\-D}(name, \-R\-L);}}\label{decode_8c_a7e95f44e11cb393e1e613723cc8ec511}
+\hypertarget{decode_8c_a3fb20a0a0726db7d3b40b2ea7841683f}{\index{decode.\-c@{decode.\-c}!\-F\-I\-E\-L\-D\-\_\-\-R\-S@{\-F\-I\-E\-L\-D\-\_\-\-R\-S}}
+\index{\-F\-I\-E\-L\-D\-\_\-\-R\-S@{\-F\-I\-E\-L\-D\-\_\-\-R\-S}!decode.c@{decode.\-c}}
+\subsubsection[{\-F\-I\-E\-L\-D\-\_\-\-R\-S}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-F\-I\-E\-L\-D\-\_\-\-R\-S}(
+\begin{DoxyParamCaption}
+\item[{}]{name}
+\end{DoxyParamCaption}
+)~{\bf \-F\-I\-E\-L\-D}(name, \-R\-S);}}\label{decode_8c_a3fb20a0a0726db7d3b40b2ea7841683f}
+\hypertarget{decode_8c_a183459311864a4c3d8e0e02681f414a8}{\index{decode.\-c@{decode.\-c}!\-F\-I\-E\-L\-D\-\_\-\-T@{\-F\-I\-E\-L\-D\-\_\-\-T}}
+\index{\-F\-I\-E\-L\-D\-\_\-\-T@{\-F\-I\-E\-L\-D\-\_\-\-T}!decode.c@{decode.\-c}}
+\subsubsection[{\-F\-I\-E\-L\-D\-\_\-\-T}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-F\-I\-E\-L\-D\-\_\-\-T}~{\bf \-F\-I\-E\-L\-D\-\_\-\-T\-V} /$\ast$\-T\-O\-D\-O\-: implement version dependant string fields $\ast$/}}\label{decode_8c_a183459311864a4c3d8e0e02681f414a8}
+\hypertarget{decode_8c_ab8f084bc9e8cb26a478424891479705b}{\index{decode.\-c@{decode.\-c}!\-F\-I\-E\-L\-D\-\_\-\-T\-V@{\-F\-I\-E\-L\-D\-\_\-\-T\-V}}
+\index{\-F\-I\-E\-L\-D\-\_\-\-T\-V@{\-F\-I\-E\-L\-D\-\_\-\-T\-V}!decode.c@{decode.\-c}}
+\subsubsection[{\-F\-I\-E\-L\-D\-\_\-\-T\-V}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-F\-I\-E\-L\-D\-\_\-\-T\-V}(
+\begin{DoxyParamCaption}
+\item[{}]{name}
+\end{DoxyParamCaption}
+)~{\bf \-F\-I\-E\-L\-D}(name, \-T\-V);}}\label{decode_8c_ab8f084bc9e8cb26a478424891479705b}
+\hypertarget{decode_8c_a200a5822964d9c861de390e556bfea0e}{\index{decode.\-c@{decode.\-c}!\-F\-I\-E\-L\-D\-\_\-\-V\-A\-L\-U\-E@{\-F\-I\-E\-L\-D\-\_\-\-V\-A\-L\-U\-E}}
+\index{\-F\-I\-E\-L\-D\-\_\-\-V\-A\-L\-U\-E@{\-F\-I\-E\-L\-D\-\_\-\-V\-A\-L\-U\-E}!decode.c@{decode.\-c}}
+\subsubsection[{\-F\-I\-E\-L\-D\-\_\-\-V\-A\-L\-U\-E}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-F\-I\-E\-L\-D\-\_\-\-V\-A\-L\-U\-E}(
+\begin{DoxyParamCaption}
+\item[{}]{name}
+\end{DoxyParamCaption}
+)~\-\_\-obj-\/$>$name}}\label{decode_8c_a200a5822964d9c861de390e556bfea0e}
+\hypertarget{decode_8c_a4984c85f1665f145ea0802ffe911caf6}{\index{decode.\-c@{decode.\-c}!\-F\-I\-E\-L\-D\-\_\-\-V\-E\-C\-T\-O\-R@{\-F\-I\-E\-L\-D\-\_\-\-V\-E\-C\-T\-O\-R}}
+\index{\-F\-I\-E\-L\-D\-\_\-\-V\-E\-C\-T\-O\-R@{\-F\-I\-E\-L\-D\-\_\-\-V\-E\-C\-T\-O\-R}!decode.c@{decode.\-c}}
+\subsubsection[{\-F\-I\-E\-L\-D\-\_\-\-V\-E\-C\-T\-O\-R}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-F\-I\-E\-L\-D\-\_\-\-V\-E\-C\-T\-O\-R}(
+\begin{DoxyParamCaption}
+\item[{}]{name, }
+\item[{}]{type, }
+\item[{}]{size}
+\end{DoxyParamCaption}
+)~{\bf \-F\-I\-E\-L\-D\-\_\-\-V\-E\-C\-T\-O\-R\-\_\-\-N}(name, type, \-\_\-obj-\/$>$size)}}\label{decode_8c_a4984c85f1665f145ea0802ffe911caf6}
+\hypertarget{decode_8c_a02eedab60f4b7a01efa8b4a36ce3769b}{\index{decode.\-c@{decode.\-c}!\-F\-I\-E\-L\-D\-\_\-\-V\-E\-C\-T\-O\-R\-\_\-\-N@{\-F\-I\-E\-L\-D\-\_\-\-V\-E\-C\-T\-O\-R\-\_\-\-N}}
+\index{\-F\-I\-E\-L\-D\-\_\-\-V\-E\-C\-T\-O\-R\-\_\-\-N@{\-F\-I\-E\-L\-D\-\_\-\-V\-E\-C\-T\-O\-R\-\_\-\-N}!decode.c@{decode.\-c}}
+\subsubsection[{\-F\-I\-E\-L\-D\-\_\-\-V\-E\-C\-T\-O\-R\-\_\-\-N}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-F\-I\-E\-L\-D\-\_\-\-V\-E\-C\-T\-O\-R\-\_\-\-N}(
+\begin{DoxyParamCaption}
+\item[{}]{name, }
+\item[{}]{type, }
+\item[{}]{size}
+\end{DoxyParamCaption}
+)}}\label{decode_8c_a02eedab60f4b7a01efa8b4a36ce3769b}
+{\bfseries \-Value\-:}
+\begin{DoxyCode}
+if (size>0)\
+    {\
+      _obj->name = (BITCODE_##type*) malloc(size * sizeof(BITCODE_##type));\
+      for (vcount=0; vcount< size; vcount++)\
+        {\
+          _obj->name[vcount] = bit_read_##type(dat);\
+          LOG_TRACE(#name "[%d]: " FORMAT_##type "\n", vcount, _obj->name[
+      vcount])\
+        }\
+    }
+\end{DoxyCode}
+\hypertarget{decode_8c_a7fbbd2ee796503d97182fac43ee55cc6}{\index{decode.\-c@{decode.\-c}!\-F\-I\-E\-L\-D\-\_\-\-X\-D\-A\-T\-A@{\-F\-I\-E\-L\-D\-\_\-\-X\-D\-A\-T\-A}}
+\index{\-F\-I\-E\-L\-D\-\_\-\-X\-D\-A\-T\-A@{\-F\-I\-E\-L\-D\-\_\-\-X\-D\-A\-T\-A}!decode.c@{decode.\-c}}
+\subsubsection[{\-F\-I\-E\-L\-D\-\_\-\-X\-D\-A\-T\-A}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-F\-I\-E\-L\-D\-\_\-\-X\-D\-A\-T\-A}(
+\begin{DoxyParamCaption}
+\item[{}]{name, }
+\item[{}]{size}
+\end{DoxyParamCaption}
+)~\-\_\-obj-\/$>$name = {\bf dwg\-\_\-decode\-\_\-xdata}(dat, \-\_\-obj-\/$>$size)}}\label{decode_8c_a7fbbd2ee796503d97182fac43ee55cc6}
+\hypertarget{decode_8c_ae4790cc836e6be8d278b7649c7591c6e}{\index{decode.\-c@{decode.\-c}!\-H\-A\-N\-D\-L\-E\-\_\-\-V\-E\-C\-T\-O\-R@{\-H\-A\-N\-D\-L\-E\-\_\-\-V\-E\-C\-T\-O\-R}}
+\index{\-H\-A\-N\-D\-L\-E\-\_\-\-V\-E\-C\-T\-O\-R@{\-H\-A\-N\-D\-L\-E\-\_\-\-V\-E\-C\-T\-O\-R}!decode.c@{decode.\-c}}
+\subsubsection[{\-H\-A\-N\-D\-L\-E\-\_\-\-V\-E\-C\-T\-O\-R}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-H\-A\-N\-D\-L\-E\-\_\-\-V\-E\-C\-T\-O\-R}(
+\begin{DoxyParamCaption}
+\item[{}]{name, }
+\item[{}]{sizefield, }
+\item[{}]{code}
+\end{DoxyParamCaption}
+)~{\bf \-H\-A\-N\-D\-L\-E\-\_\-\-V\-E\-C\-T\-O\-R\-\_\-\-N}(name, {\bf \-F\-I\-E\-L\-D\-\_\-\-V\-A\-L\-U\-E}(sizefield), code)}}\label{decode_8c_ae4790cc836e6be8d278b7649c7591c6e}
+\hypertarget{decode_8c_a728d7936ca57ffb02c889f037195b1bf}{\index{decode.\-c@{decode.\-c}!\-H\-A\-N\-D\-L\-E\-\_\-\-V\-E\-C\-T\-O\-R\-\_\-\-N@{\-H\-A\-N\-D\-L\-E\-\_\-\-V\-E\-C\-T\-O\-R\-\_\-\-N}}
+\index{\-H\-A\-N\-D\-L\-E\-\_\-\-V\-E\-C\-T\-O\-R\-\_\-\-N@{\-H\-A\-N\-D\-L\-E\-\_\-\-V\-E\-C\-T\-O\-R\-\_\-\-N}!decode.c@{decode.\-c}}
+\subsubsection[{\-H\-A\-N\-D\-L\-E\-\_\-\-V\-E\-C\-T\-O\-R\-\_\-\-N}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-H\-A\-N\-D\-L\-E\-\_\-\-V\-E\-C\-T\-O\-R\-\_\-\-N}(
+\begin{DoxyParamCaption}
+\item[{}]{name, }
+\item[{}]{size, }
+\item[{}]{code}
+\end{DoxyParamCaption}
+)}}\label{decode_8c_a728d7936ca57ffb02c889f037195b1bf}
+{\bfseries \-Value\-:}
+\begin{DoxyCode}
+FIELD_VALUE(name) = (BITCODE_H*) malloc(sizeof(BITCODE_H) * size);\
+  for (vcount=0; vcount<size; vcount++)\
+    {\
+      FIELD_HANDLE(name[vcount], code);\
+    }
+\end{DoxyCode}
+\hypertarget{decode_8c_a4b0185b43aabf2c970b10a5072cd1263}{\index{decode.\-c@{decode.\-c}!\-I\-S\-\_\-\-D\-E\-C\-O\-D\-E\-R@{\-I\-S\-\_\-\-D\-E\-C\-O\-D\-E\-R}}
+\index{\-I\-S\-\_\-\-D\-E\-C\-O\-D\-E\-R@{\-I\-S\-\_\-\-D\-E\-C\-O\-D\-E\-R}!decode.c@{decode.\-c}}
+\subsubsection[{\-I\-S\-\_\-\-D\-E\-C\-O\-D\-E\-R}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-I\-S\-\_\-\-D\-E\-C\-O\-D\-E\-R}}}\label{decode_8c_a4b0185b43aabf2c970b10a5072cd1263}
+\hypertarget{decode_8c_ad32ae1a6ad7eac802e38777e0d0217fb}{\index{decode.\-c@{decode.\-c}!\-R\-E\-A\-C\-T\-O\-R\-S@{\-R\-E\-A\-C\-T\-O\-R\-S}}
+\index{\-R\-E\-A\-C\-T\-O\-R\-S@{\-R\-E\-A\-C\-T\-O\-R\-S}!decode.c@{decode.\-c}}
+\subsubsection[{\-R\-E\-A\-C\-T\-O\-R\-S}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-R\-E\-A\-C\-T\-O\-R\-S}(
+\begin{DoxyParamCaption}
+\item[{}]{code}
+\end{DoxyParamCaption}
+)}}\label{decode_8c_ad32ae1a6ad7eac802e38777e0d0217fb}
+{\bfseries \-Value\-:}
+\begin{DoxyCode}
+FIELD_VALUE(reactors) = (BITCODE_H*) malloc(sizeof(BITCODE_H) * obj->tio.object
+      ->num_reactors);\
+  for (vcount=0; vcount<obj->tio.object->num_reactors; vcount++)\
+    {\
+      FIELD_HANDLE(reactors[vcount], code);\
+    }
+\end{DoxyCode}
+\hypertarget{decode_8c_a76b490e35f037ca45b759300e910d937}{\index{decode.\-c@{decode.\-c}!\-R\-E\-F\-S\-\_\-\-P\-E\-R\-\_\-\-R\-E\-A\-L\-L\-O\-C@{\-R\-E\-F\-S\-\_\-\-P\-E\-R\-\_\-\-R\-E\-A\-L\-L\-O\-C}}
+\index{\-R\-E\-F\-S\-\_\-\-P\-E\-R\-\_\-\-R\-E\-A\-L\-L\-O\-C@{\-R\-E\-F\-S\-\_\-\-P\-E\-R\-\_\-\-R\-E\-A\-L\-L\-O\-C}!decode.c@{decode.\-c}}
+\subsubsection[{\-R\-E\-F\-S\-\_\-\-P\-E\-R\-\_\-\-R\-E\-A\-L\-L\-O\-C}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-R\-E\-F\-S\-\_\-\-P\-E\-R\-\_\-\-R\-E\-A\-L\-L\-O\-C}~100}}\label{decode_8c_a76b490e35f037ca45b759300e910d937}
+\hypertarget{decode_8c_a3fd4b55ff4a61457f9a5da0ad42396b8}{\index{decode.\-c@{decode.\-c}!\-R\-E\-P\-E\-A\-T@{\-R\-E\-P\-E\-A\-T}}
+\index{\-R\-E\-P\-E\-A\-T@{\-R\-E\-P\-E\-A\-T}!decode.c@{decode.\-c}}
+\subsubsection[{\-R\-E\-P\-E\-A\-T}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-R\-E\-P\-E\-A\-T}(
+\begin{DoxyParamCaption}
+\item[{}]{times, }
+\item[{}]{name, }
+\item[{}]{type}
+\end{DoxyParamCaption}
+)}}\label{decode_8c_a3fd4b55ff4a61457f9a5da0ad42396b8}
+{\bfseries \-Value\-:}
+\begin{DoxyCode}
+_obj->name = (type *) malloc(_obj->times * sizeof(type));\
+  for (rcount=0; rcount<_obj->times; rcount++)
+\end{DoxyCode}
+\hypertarget{decode_8c_ad57f42b6bc2a6976c8eda7cff33bcb42}{\index{decode.\-c@{decode.\-c}!\-R\-E\-P\-E\-A\-T2@{\-R\-E\-P\-E\-A\-T2}}
+\index{\-R\-E\-P\-E\-A\-T2@{\-R\-E\-P\-E\-A\-T2}!decode.c@{decode.\-c}}
+\subsubsection[{\-R\-E\-P\-E\-A\-T2}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-R\-E\-P\-E\-A\-T2}(
+\begin{DoxyParamCaption}
+\item[{}]{times, }
+\item[{}]{name, }
+\item[{}]{type}
+\end{DoxyParamCaption}
+)}}\label{decode_8c_ad57f42b6bc2a6976c8eda7cff33bcb42}
+{\bfseries \-Value\-:}
+\begin{DoxyCode}
+_obj->name = (type *) malloc(_obj->times * sizeof(type));\
+  for (rcount2=0; rcount2<_obj->times; rcount2++)
+\end{DoxyCode}
+\hypertarget{decode_8c_a25430167db754fb3fe8322e151d89d8d}{\index{decode.\-c@{decode.\-c}!\-R\-E\-P\-E\-A\-T3@{\-R\-E\-P\-E\-A\-T3}}
+\index{\-R\-E\-P\-E\-A\-T3@{\-R\-E\-P\-E\-A\-T3}!decode.c@{decode.\-c}}
+\subsubsection[{\-R\-E\-P\-E\-A\-T3}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-R\-E\-P\-E\-A\-T3}(
+\begin{DoxyParamCaption}
+\item[{}]{times, }
+\item[{}]{name, }
+\item[{}]{type}
+\end{DoxyParamCaption}
+)}}\label{decode_8c_a25430167db754fb3fe8322e151d89d8d}
+{\bfseries \-Value\-:}
+\begin{DoxyCode}
+_obj->name = (type *) malloc(_obj->times * sizeof(type));\
+  for (rcount3=0; rcount3<_obj->times; rcount3++)
+\end{DoxyCode}
+\hypertarget{decode_8c_a0de244ea6aa6298de3ea09e458786b7e}{\index{decode.\-c@{decode.\-c}!\-R\-E\-P\-E\-A\-T\-\_\-\-N@{\-R\-E\-P\-E\-A\-T\-\_\-\-N}}
+\index{\-R\-E\-P\-E\-A\-T\-\_\-\-N@{\-R\-E\-P\-E\-A\-T\-\_\-\-N}!decode.c@{decode.\-c}}
+\subsubsection[{\-R\-E\-P\-E\-A\-T\-\_\-\-N}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-R\-E\-P\-E\-A\-T\-\_\-\-N}(
+\begin{DoxyParamCaption}
+\item[{}]{times, }
+\item[{}]{name, }
+\item[{}]{type}
+\end{DoxyParamCaption}
+)}}\label{decode_8c_a0de244ea6aa6298de3ea09e458786b7e}
+{\bfseries \-Value\-:}
+\begin{DoxyCode}
+_obj->name = (type *) malloc(times * sizeof(type));\
+  for (rcount=0; rcount<times; rcount++)
+\end{DoxyCode}
+\hypertarget{decode_8c_ad719c9691dba5f8223bd117a46cbc2bf}{\index{decode.\-c@{decode.\-c}!\-X\-D\-I\-C\-O\-B\-J\-H\-A\-N\-D\-L\-E@{\-X\-D\-I\-C\-O\-B\-J\-H\-A\-N\-D\-L\-E}}
+\index{\-X\-D\-I\-C\-O\-B\-J\-H\-A\-N\-D\-L\-E@{\-X\-D\-I\-C\-O\-B\-J\-H\-A\-N\-D\-L\-E}!decode.c@{decode.\-c}}
+\subsubsection[{\-X\-D\-I\-C\-O\-B\-J\-H\-A\-N\-D\-L\-E}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-X\-D\-I\-C\-O\-B\-J\-H\-A\-N\-D\-L\-E}(
+\begin{DoxyParamCaption}
+\item[{}]{code}
+\end{DoxyParamCaption}
+)}}\label{decode_8c_ad719c9691dba5f8223bd117a46cbc2bf}
+{\bfseries \-Value\-:}
+\begin{DoxyCode}
+SINCE(R_2004)\
+    {\
+      if (!obj->tio.object->xdic_missing_flag)\
+        {\
+          FIELD_HANDLE(xdicobjhandle, code);\
+        }\
+    }\
+  PRIOR_VERSIONS\
+    {\
+      FIELD_HANDLE(xdicobjhandle, code);\
+    }
+\end{DoxyCode}
+
+
+\subsection{\-Typedef \-Documentation}
+\hypertarget{decode_8c_aecf5248bbb595e7ead2c1e641c34967a}{\index{decode.\-c@{decode.\-c}!encrypted\-\_\-section\-\_\-header@{encrypted\-\_\-section\-\_\-header}}
+\index{encrypted\-\_\-section\-\_\-header@{encrypted\-\_\-section\-\_\-header}!decode.c@{decode.\-c}}
+\subsubsection[{encrypted\-\_\-section\-\_\-header}]{\setlength{\rightskip}{0pt plus 5cm}typedef union {\bf \-\_\-encrypted\-\_\-section\-\_\-header}  {\bf encrypted\-\_\-section\-\_\-header}}}\label{decode_8c_aecf5248bbb595e7ead2c1e641c34967a}
+
+
+\subsection{\-Enumeration \-Type \-Documentation}
+\hypertarget{decode_8c_abe9518ecb14ad0bc20c68e0ab5f2deeb}{\index{decode.\-c@{decode.\-c}!\-R\-E\-S\-\_\-\-B\-U\-F\-\_\-\-V\-A\-L\-U\-E\-\_\-\-T\-Y\-P\-E@{\-R\-E\-S\-\_\-\-B\-U\-F\-\_\-\-V\-A\-L\-U\-E\-\_\-\-T\-Y\-P\-E}}
+\index{\-R\-E\-S\-\_\-\-B\-U\-F\-\_\-\-V\-A\-L\-U\-E\-\_\-\-T\-Y\-P\-E@{\-R\-E\-S\-\_\-\-B\-U\-F\-\_\-\-V\-A\-L\-U\-E\-\_\-\-T\-Y\-P\-E}!decode.c@{decode.\-c}}
+\subsubsection[{\-R\-E\-S\-\_\-\-B\-U\-F\-\_\-\-V\-A\-L\-U\-E\-\_\-\-T\-Y\-P\-E}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf \-R\-E\-S\-\_\-\-B\-U\-F\-\_\-\-V\-A\-L\-U\-E\-\_\-\-T\-Y\-P\-E}}}\label{decode_8c_abe9518ecb14ad0bc20c68e0ab5f2deeb}
+\begin{Desc}
+\item[\-Enumerator\-: ]\par
+\begin{description}
+\index{\-V\-T\-\_\-\-I\-N\-V\-A\-L\-I\-D@{\-V\-T\-\_\-\-I\-N\-V\-A\-L\-I\-D}!decode.\-c@{decode.\-c}}\index{decode.\-c@{decode.\-c}!\-V\-T\-\_\-\-I\-N\-V\-A\-L\-I\-D@{\-V\-T\-\_\-\-I\-N\-V\-A\-L\-I\-D}}\item[{\em 
+\hypertarget{decode_8c_abe9518ecb14ad0bc20c68e0ab5f2deeba93fbddf2c262685d0ea77042113cbd00}{\-V\-T\-\_\-\-I\-N\-V\-A\-L\-I\-D}\label{decode_8c_abe9518ecb14ad0bc20c68e0ab5f2deeba93fbddf2c262685d0ea77042113cbd00}
+}]\index{\-V\-T\-\_\-\-S\-T\-R\-I\-N\-G@{\-V\-T\-\_\-\-S\-T\-R\-I\-N\-G}!decode.\-c@{decode.\-c}}\index{decode.\-c@{decode.\-c}!\-V\-T\-\_\-\-S\-T\-R\-I\-N\-G@{\-V\-T\-\_\-\-S\-T\-R\-I\-N\-G}}\item[{\em 
+\hypertarget{decode_8c_abe9518ecb14ad0bc20c68e0ab5f2deeba7d0ada66d85d8eb695f3bdd2e48b5976}{\-V\-T\-\_\-\-S\-T\-R\-I\-N\-G}\label{decode_8c_abe9518ecb14ad0bc20c68e0ab5f2deeba7d0ada66d85d8eb695f3bdd2e48b5976}
+}]\index{\-V\-T\-\_\-\-P\-O\-I\-N\-T3\-D@{\-V\-T\-\_\-\-P\-O\-I\-N\-T3\-D}!decode.\-c@{decode.\-c}}\index{decode.\-c@{decode.\-c}!\-V\-T\-\_\-\-P\-O\-I\-N\-T3\-D@{\-V\-T\-\_\-\-P\-O\-I\-N\-T3\-D}}\item[{\em 
+\hypertarget{decode_8c_abe9518ecb14ad0bc20c68e0ab5f2deeba9c2dfffea31efd066f17c0a853070d5e}{\-V\-T\-\_\-\-P\-O\-I\-N\-T3\-D}\label{decode_8c_abe9518ecb14ad0bc20c68e0ab5f2deeba9c2dfffea31efd066f17c0a853070d5e}
+}]\index{\-V\-T\-\_\-\-R\-E\-A\-L@{\-V\-T\-\_\-\-R\-E\-A\-L}!decode.\-c@{decode.\-c}}\index{decode.\-c@{decode.\-c}!\-V\-T\-\_\-\-R\-E\-A\-L@{\-V\-T\-\_\-\-R\-E\-A\-L}}\item[{\em 
+\hypertarget{decode_8c_abe9518ecb14ad0bc20c68e0ab5f2deeba22a312760ff3bc1729b0343533d785b6}{\-V\-T\-\_\-\-R\-E\-A\-L}\label{decode_8c_abe9518ecb14ad0bc20c68e0ab5f2deeba22a312760ff3bc1729b0343533d785b6}
+}]\index{\-V\-T\-\_\-\-I\-N\-T16@{\-V\-T\-\_\-\-I\-N\-T16}!decode.\-c@{decode.\-c}}\index{decode.\-c@{decode.\-c}!\-V\-T\-\_\-\-I\-N\-T16@{\-V\-T\-\_\-\-I\-N\-T16}}\item[{\em 
+\hypertarget{decode_8c_abe9518ecb14ad0bc20c68e0ab5f2deebad44324d8c0044d4d826f099393c66f45}{\-V\-T\-\_\-\-I\-N\-T16}\label{decode_8c_abe9518ecb14ad0bc20c68e0ab5f2deebad44324d8c0044d4d826f099393c66f45}
+}]\index{\-V\-T\-\_\-\-I\-N\-T32@{\-V\-T\-\_\-\-I\-N\-T32}!decode.\-c@{decode.\-c}}\index{decode.\-c@{decode.\-c}!\-V\-T\-\_\-\-I\-N\-T32@{\-V\-T\-\_\-\-I\-N\-T32}}\item[{\em 
+\hypertarget{decode_8c_abe9518ecb14ad0bc20c68e0ab5f2deebaa9ffdf318dcf4751f7be6cf6fa4440af}{\-V\-T\-\_\-\-I\-N\-T32}\label{decode_8c_abe9518ecb14ad0bc20c68e0ab5f2deebaa9ffdf318dcf4751f7be6cf6fa4440af}
+}]\index{\-V\-T\-\_\-\-I\-N\-T8@{\-V\-T\-\_\-\-I\-N\-T8}!decode.\-c@{decode.\-c}}\index{decode.\-c@{decode.\-c}!\-V\-T\-\_\-\-I\-N\-T8@{\-V\-T\-\_\-\-I\-N\-T8}}\item[{\em 
+\hypertarget{decode_8c_abe9518ecb14ad0bc20c68e0ab5f2deebad6b06b25640e4a513963030f3e7b883d}{\-V\-T\-\_\-\-I\-N\-T8}\label{decode_8c_abe9518ecb14ad0bc20c68e0ab5f2deebad6b06b25640e4a513963030f3e7b883d}
+}]\index{\-V\-T\-\_\-\-B\-I\-N\-A\-R\-Y@{\-V\-T\-\_\-\-B\-I\-N\-A\-R\-Y}!decode.\-c@{decode.\-c}}\index{decode.\-c@{decode.\-c}!\-V\-T\-\_\-\-B\-I\-N\-A\-R\-Y@{\-V\-T\-\_\-\-B\-I\-N\-A\-R\-Y}}\item[{\em 
+\hypertarget{decode_8c_abe9518ecb14ad0bc20c68e0ab5f2deebab1624ffba451bf91b9ca2d4ac243b9bf}{\-V\-T\-\_\-\-B\-I\-N\-A\-R\-Y}\label{decode_8c_abe9518ecb14ad0bc20c68e0ab5f2deebab1624ffba451bf91b9ca2d4ac243b9bf}
+}]\index{\-V\-T\-\_\-\-H\-A\-N\-D\-L\-E@{\-V\-T\-\_\-\-H\-A\-N\-D\-L\-E}!decode.\-c@{decode.\-c}}\index{decode.\-c@{decode.\-c}!\-V\-T\-\_\-\-H\-A\-N\-D\-L\-E@{\-V\-T\-\_\-\-H\-A\-N\-D\-L\-E}}\item[{\em 
+\hypertarget{decode_8c_abe9518ecb14ad0bc20c68e0ab5f2deebaf6aea50d05c3e1cd796b70abceff3d42}{\-V\-T\-\_\-\-H\-A\-N\-D\-L\-E}\label{decode_8c_abe9518ecb14ad0bc20c68e0ab5f2deebaf6aea50d05c3e1cd796b70abceff3d42}
+}]\index{\-V\-T\-\_\-\-O\-B\-J\-E\-C\-T\-I\-D@{\-V\-T\-\_\-\-O\-B\-J\-E\-C\-T\-I\-D}!decode.\-c@{decode.\-c}}\index{decode.\-c@{decode.\-c}!\-V\-T\-\_\-\-O\-B\-J\-E\-C\-T\-I\-D@{\-V\-T\-\_\-\-O\-B\-J\-E\-C\-T\-I\-D}}\item[{\em 
+\hypertarget{decode_8c_abe9518ecb14ad0bc20c68e0ab5f2deeba7c9c97f2f46e8b450c8a329223540931}{\-V\-T\-\_\-\-O\-B\-J\-E\-C\-T\-I\-D}\label{decode_8c_abe9518ecb14ad0bc20c68e0ab5f2deeba7c9c97f2f46e8b450c8a329223540931}
+}]\index{\-V\-T\-\_\-\-B\-O\-O\-L@{\-V\-T\-\_\-\-B\-O\-O\-L}!decode.\-c@{decode.\-c}}\index{decode.\-c@{decode.\-c}!\-V\-T\-\_\-\-B\-O\-O\-L@{\-V\-T\-\_\-\-B\-O\-O\-L}}\item[{\em 
+\hypertarget{decode_8c_abe9518ecb14ad0bc20c68e0ab5f2deebacfbddf80e8955a2e47f2ce7df0d84fb9}{\-V\-T\-\_\-\-B\-O\-O\-L}\label{decode_8c_abe9518ecb14ad0bc20c68e0ab5f2deebacfbddf80e8955a2e47f2ce7df0d84fb9}
+}]\end{description}
+\end{Desc}
+
+
+
+\subsection{\-Function \-Documentation}
+\hypertarget{decode_8c_a364df3e51a65461c72e59dc0a407125b}{\index{decode.\-c@{decode.\-c}!bit\-\_\-ckr8@{bit\-\_\-ckr8}}
+\index{bit\-\_\-ckr8@{bit\-\_\-ckr8}!decode.c@{decode.\-c}}
+\subsubsection[{bit\-\_\-ckr8}]{\setlength{\rightskip}{0pt plus 5cm}unsigned int {\bf bit\-\_\-ckr8} (
+\begin{DoxyParamCaption}
+\item[{unsigned int}]{dx, }
+\item[{unsigned char $\ast$}]{adr, }
+\item[{long}]{n}
+\end{DoxyParamCaption}
+)}}\label{decode_8c_a364df3e51a65461c72e59dc0a407125b}
+\hypertarget{decode_8c_a54099828935f7f15b68c075c00845512}{\index{decode.\-c@{decode.\-c}!decode\-\_\-\-R13\-\_\-\-R15@{decode\-\_\-\-R13\-\_\-\-R15}}
+\index{decode\-\_\-\-R13\-\_\-\-R15@{decode\-\_\-\-R13\-\_\-\-R15}!decode.c@{decode.\-c}}
+\subsubsection[{decode\-\_\-\-R13\-\_\-\-R15}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf decode\-\_\-\-R13\-\_\-\-R15} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat, }
+\item[{{\bf \-Dwg\-\_\-\-Data} $\ast$}]{dwg}
+\end{DoxyParamCaption}
+)}}\label{decode_8c_a54099828935f7f15b68c075c00845512}
+\hypertarget{decode_8c_a908d2d8d20cb499bb605506b5ea2159a}{\index{decode.\-c@{decode.\-c}!decode\-\_\-\-R2004@{decode\-\_\-\-R2004}}
+\index{decode\-\_\-\-R2004@{decode\-\_\-\-R2004}!decode.c@{decode.\-c}}
+\subsubsection[{decode\-\_\-\-R2004}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf decode\-\_\-\-R2004} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat, }
+\item[{{\bf \-Dwg\-\_\-\-Data} $\ast$}]{dwg}
+\end{DoxyParamCaption}
+)}}\label{decode_8c_a908d2d8d20cb499bb605506b5ea2159a}
+\hypertarget{decode_8c_a147acad33243577181ad27028bbac840}{\index{decode.\-c@{decode.\-c}!decode\-\_\-\-R2007@{decode\-\_\-\-R2007}}
+\index{decode\-\_\-\-R2007@{decode\-\_\-\-R2007}!decode.c@{decode.\-c}}
+\subsubsection[{decode\-\_\-\-R2007}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf decode\-\_\-\-R2007} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat, }
+\item[{{\bf \-Dwg\-\_\-\-Data} $\ast$}]{dwg}
+\end{DoxyParamCaption}
+)}}\label{decode_8c_a147acad33243577181ad27028bbac840}
+\hypertarget{decode_8c_ade78c981d47b683c0d77e63b2d4bdabd}{\index{decode.\-c@{decode.\-c}!dwg\-\_\-decode\-\_\-data@{dwg\-\_\-decode\-\_\-data}}
+\index{dwg\-\_\-decode\-\_\-data@{dwg\-\_\-decode\-\_\-data}!decode.c@{decode.\-c}}
+\subsubsection[{dwg\-\_\-decode\-\_\-data}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf dwg\-\_\-decode\-\_\-data} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat, }
+\item[{{\bf \-Dwg\-\_\-\-Data} $\ast$}]{dwg}
+\end{DoxyParamCaption}
+)}}\label{decode_8c_ade78c981d47b683c0d77e63b2d4bdabd}
+\hypertarget{decode_8c_ab029ec1ea460fde23d196b25fee00e1e}{\index{decode.\-c@{decode.\-c}!dwg\-\_\-decode\-\_\-xdata@{dwg\-\_\-decode\-\_\-xdata}}
+\index{dwg\-\_\-decode\-\_\-xdata@{dwg\-\_\-decode\-\_\-xdata}!decode.c@{decode.\-c}}
+\subsubsection[{dwg\-\_\-decode\-\_\-xdata}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-Dwg\-\_\-\-Resbuf}$\ast$ {\bf dwg\-\_\-decode\-\_\-xdata} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat, }
+\item[{int}]{size}
+\end{DoxyParamCaption}
+)}}\label{decode_8c_ab029ec1ea460fde23d196b25fee00e1e}
+\hypertarget{decode_8c_a01d0323348944aec52f99cfbbb012a4f}{\index{decode.\-c@{decode.\-c}!get\-\_\-base\-\_\-value\-\_\-type@{get\-\_\-base\-\_\-value\-\_\-type}}
+\index{get\-\_\-base\-\_\-value\-\_\-type@{get\-\_\-base\-\_\-value\-\_\-type}!decode.c@{decode.\-c}}
+\subsubsection[{get\-\_\-base\-\_\-value\-\_\-type}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf \-R\-E\-S\-\_\-\-B\-U\-F\-\_\-\-V\-A\-L\-U\-E\-\_\-\-T\-Y\-P\-E} {\bf get\-\_\-base\-\_\-value\-\_\-type} (
+\begin{DoxyParamCaption}
+\item[{short}]{gc}
+\end{DoxyParamCaption}
+)}}\label{decode_8c_a01d0323348944aec52f99cfbbb012a4f}
+\hypertarget{decode_8c_ad95073b1392e500ad70c4bac4450a437}{\index{decode.\-c@{decode.\-c}!read\-\_\-r2007\-\_\-meta\-\_\-data@{read\-\_\-r2007\-\_\-meta\-\_\-data}}
+\index{read\-\_\-r2007\-\_\-meta\-\_\-data@{read\-\_\-r2007\-\_\-meta\-\_\-data}!decode.c@{decode.\-c}}
+\subsubsection[{read\-\_\-r2007\-\_\-meta\-\_\-data}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf read\-\_\-r2007\-\_\-meta\-\_\-data} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat, }
+\item[{{\bf \-Dwg\-\_\-\-Data} $\ast$}]{dwg}
+\end{DoxyParamCaption}
+)}}\label{decode_8c_ad95073b1392e500ad70c4bac4450a437}
+
+
+\subsection{\-Variable \-Documentation}
+\hypertarget{decode_8c_a7eafb03626668038cb8d53c736d6cea7}{\index{decode.\-c@{decode.\-c}!ktl\-\_\-lastaddress@{ktl\-\_\-lastaddress}}
+\index{ktl\-\_\-lastaddress@{ktl\-\_\-lastaddress}!decode.c@{decode.\-c}}
+\subsubsection[{ktl\-\_\-lastaddress}]{\setlength{\rightskip}{0pt plus 5cm}long unsigned int {\bf ktl\-\_\-lastaddress}}}\label{decode_8c_a7eafb03626668038cb8d53c736d6cea7}

@@ -1,0 +1,499 @@
+\hypertarget{bits_8c}{\section{src/bits.c \-File \-Reference}
+\label{bits_8c}\index{src/bits.\-c@{src/bits.\-c}}
+}
+{\ttfamily \#include \char`\"{}config.\-h\char`\"{}}\*
+{\ttfamily \#include $<$stdio.\-h$>$}\*
+{\ttfamily \#include $<$stdlib.\-h$>$}\*
+{\ttfamily \#include $<$string.\-h$>$}\*
+{\ttfamily \#include $<$ctype.\-h$>$}\*
+{\ttfamily \#include \char`\"{}bits.\-h\char`\"{}}\*
+{\ttfamily \#include \char`\"{}logging.\-h\char`\"{}}\*
+\subsection*{\-Defines}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{bits_8c_a77356481e6e6cd7cf47551f8cbd24880}{\-C\-H\-A\-I\-N\-\_\-\-B\-L\-O\-C\-K}~40960
+\end{DoxyCompactItemize}
+\subsection*{\-Functions}
+\begin{DoxyCompactItemize}
+\item 
+unsigned int \hyperlink{bits_8c_a364df3e51a65461c72e59dc0a407125b}{bit\-\_\-ckr8} (unsigned int dx, unsigned char $\ast$adr, long n)
+\item 
+void \hyperlink{bits_8c_a4c1d004fe678be2bd1a3677831f39f18}{bit\-\_\-advance\-\_\-position} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat, int advance)
+\item 
+\hyperlink{dwg_8h_ab533b1f62d9086749e3bb5b67e9f224e}{\-B\-I\-T\-C\-O\-D\-E\-\_\-\-B} \hyperlink{bits_8c_a1115019ee20759e77a2c7c2ee20b8990}{bit\-\_\-read\-\_\-\-B} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat)
+\item 
+void \hyperlink{bits_8c_ae2f5bd0e5265c3b2bfd5b67d4ce484ce}{bit\-\_\-write\-\_\-\-B} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat, unsigned char value)
+\item 
+\hyperlink{dwg_8h_a3d492df0a5def6aa68636113e209241f}{\-B\-I\-T\-C\-O\-D\-E\-\_\-\-B\-B} \hyperlink{bits_8c_aaf89fff18ede59af4cdafc0c57be1455}{bit\-\_\-read\-\_\-\-B\-B} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat)
+\item 
+void \hyperlink{bits_8c_a5a264770705dbce3458211115868e6e5}{bit\-\_\-write\-\_\-\-B\-B} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat, unsigned char value)
+\item 
+\hyperlink{dwg_8h_af8c70ca1663aa0dff4a882a751b053de}{\-B\-I\-T\-C\-O\-D\-E\-\_\-4\-B\-I\-T\-S} \hyperlink{bits_8c_a2ec768c75807d09fd2a672d2f7c9053b}{bit\-\_\-read\-\_\-4\-B\-I\-T\-S} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat)
+\item 
+void \hyperlink{bits_8c_aa9243b5b3d2a4d7ade517c43be8db1f4}{bit\-\_\-write\-\_\-4\-B\-I\-T\-S} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat, unsigned char value)
+\item 
+\hyperlink{dwg_8h_a7fd199a8f9c9cc52bdab220f65a2a619}{\-B\-I\-T\-C\-O\-D\-E\-\_\-\-R\-C} \hyperlink{bits_8c_a2167868f3326d6273560114a102ff8b1}{bit\-\_\-read\-\_\-\-R\-C} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat)
+\item 
+void \hyperlink{bits_8c_aa07e873d6f6b8a9faedb7244c40b4ac0}{bit\-\_\-write\-\_\-\-R\-C} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat, unsigned char value)
+\item 
+\hyperlink{dwg_8h_a60c60855ae029a48811f2c787c9be038}{\-B\-I\-T\-C\-O\-D\-E\-\_\-\-R\-S} \hyperlink{bits_8c_ae424ded8778b283205a27e4dbaaa45e0}{bit\-\_\-read\-\_\-\-R\-S} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat)
+\item 
+void \hyperlink{bits_8c_aff73197304114f06e9d1a603f5ef700d}{bit\-\_\-write\-\_\-\-R\-S} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat, unsigned int value)
+\item 
+long unsigned int \hyperlink{bits_8c_aff017ae6e9346e585cb3f1004122e49f}{bit\-\_\-read\-\_\-\-R\-L} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat)
+\item 
+void \hyperlink{bits_8c_aa9c1f7619e3b5f21ef637a84f043eb57}{bit\-\_\-write\-\_\-\-R\-L} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat, long unsigned int value)
+\item 
+\hyperlink{dwg_8h_a309e7e59a4030a89943640d0d327cef7}{\-B\-I\-T\-C\-O\-D\-E\-\_\-\-R\-D} \hyperlink{bits_8c_aa979f8d3a736a8cc7886786897e61b49}{bit\-\_\-read\-\_\-\-R\-D} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat)
+\item 
+void \hyperlink{bits_8c_a7135e7a995edc3fa245ce17908085177}{bit\-\_\-write\-\_\-\-R\-D} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat, double value)
+\item 
+\hyperlink{dwg_8h_a94297606fbd4a4ff97e8add284af0809}{\-B\-I\-T\-C\-O\-D\-E\-\_\-\-B\-S} \hyperlink{bits_8c_a22bb100e1977385db62ab5ece8387cae}{bit\-\_\-read\-\_\-\-B\-S} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat)
+\item 
+void \hyperlink{bits_8c_a784b8d9155dddc237fc5337587f9adec}{bit\-\_\-write\-\_\-\-B\-S} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat, unsigned int value)
+\item 
+\hyperlink{dwg_8h_aebd5f127038868cbabc3d55d91da776c}{\-B\-I\-T\-C\-O\-D\-E\-\_\-\-B\-L} \hyperlink{bits_8c_a094244f3f45266b10d0e7d74fc0e2d3d}{bit\-\_\-read\-\_\-\-B\-L} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat)
+\item 
+void \hyperlink{bits_8c_a8f8019f82e57376c285d6cb02429edc1}{bit\-\_\-write\-\_\-\-B\-L} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat, long unsigned int value)
+\item 
+\hyperlink{dwg_8h_a3c1e6781466b74ba07785d57da70ed97}{\-B\-I\-T\-C\-O\-D\-E\-\_\-\-B\-D} \hyperlink{bits_8c_abfe19985c561e7229d09a0a6b114ff89}{bit\-\_\-read\-\_\-\-B\-D} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat)
+\item 
+void \hyperlink{bits_8c_a5942f20ffa699fa7afafd26e407b718b}{bit\-\_\-write\-\_\-\-B\-D} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat, double value)
+\item 
+\hyperlink{dwg_8h_ae45d09a141ef5dea48e3f4567a6fd2da}{\-B\-I\-T\-C\-O\-D\-E\-\_\-\-M\-C} \hyperlink{bits_8c_a3667f913768a3e5698e4031a5c9b303a}{bit\-\_\-read\-\_\-\-M\-C} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat)
+\item 
+void \hyperlink{bits_8c_a2ceaad7a9a4a729746bd1b8b7ac70603}{bit\-\_\-write\-\_\-\-M\-C} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat, long int val)
+\item 
+\hyperlink{dwg_8h_aeeed2ab93d2eb591c52f794e770626f3}{\-B\-I\-T\-C\-O\-D\-E\-\_\-\-M\-S} \hyperlink{bits_8c_a40f5042e4159ede00c2840bf8ce0b205}{bit\-\_\-read\-\_\-\-M\-S} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat)
+\item 
+void \hyperlink{bits_8c_a9d7501bdace44fe45e5a9f1fcb1314ce}{bit\-\_\-write\-\_\-\-M\-S} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat, long unsigned int value)
+\item 
+void \hyperlink{bits_8c_a40f58394765fffb9c6759f7a5d1da917}{bit\-\_\-read\-\_\-\-B\-E} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat, double $\ast$x, double $\ast$y, double $\ast$z)
+\item 
+void \hyperlink{bits_8c_a168f787f69f5f2f2f2fce1d91104482b}{bit\-\_\-write\-\_\-\-B\-E} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat, double x, double y, double z)
+\item 
+\hyperlink{dwg_8h_a10976b665a30e2582e62cb817071dff0}{\-B\-I\-T\-C\-O\-D\-E\-\_\-\-D\-D} \hyperlink{bits_8c_a2f4d6481357c600a84a5751106b609f3}{bit\-\_\-read\-\_\-\-D\-D} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat, double default\-\_\-value)
+\item 
+void \hyperlink{bits_8c_af91584f150fcb691d2e528c01116a015}{bit\-\_\-write\-\_\-\-D\-D} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat, double value, double default\-\_\-value)
+\item 
+\hyperlink{dwg_8h_afc93a5ddc38aeff965d4e93c71514495}{\-B\-I\-T\-C\-O\-D\-E\-\_\-\-B\-T} \hyperlink{bits_8c_a71dff8703508f51acf60e7e7b11e723b}{bit\-\_\-read\-\_\-\-B\-T} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat)
+\item 
+void \hyperlink{bits_8c_aa2de47840a406013dc42a0c89d237204}{bit\-\_\-write\-\_\-\-B\-T} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat, double value)
+\item 
+int \hyperlink{bits_8c_ad8b32022e47b7a29e4007b01d1c8eb8e}{bit\-\_\-read\-\_\-\-H} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat, \hyperlink{dwg_8h_abeae9f49b46e36263ebcece699cfc8ef}{\-Dwg\-\_\-\-Handle} $\ast$handle)
+\item 
+void \hyperlink{bits_8c_ad6467d707c9c4fc21fa2ae57a3c35670}{bit\-\_\-write\-\_\-\-H} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat, \hyperlink{dwg_8h_abeae9f49b46e36263ebcece699cfc8ef}{\-Dwg\-\_\-\-Handle} $\ast$handle)
+\item 
+unsigned int \hyperlink{bits_8c_a8a207dccebc67d8ac63c671eb2ee248a}{bit\-\_\-read\-\_\-\-C\-R\-C} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat)
+\item 
+int \hyperlink{bits_8c_aca075204d69633aec26326e27d4dddcc}{bit\-\_\-check\-\_\-\-C\-R\-C} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat, long unsigned int start\-\_\-address, unsigned int seed)
+\item 
+unsigned int \hyperlink{bits_8c_a4d71fd04f8a40b9b0467cb2a3caf0ce0}{bit\-\_\-write\-\_\-\-C\-R\-C} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat, long unsigned int start\-\_\-address, unsigned int seed)
+\item 
+\hyperlink{dwg_8h_a2a7e040c6e36ca039b03608679ecaf7c}{\-B\-I\-T\-C\-O\-D\-E\-\_\-\-T\-V} \hyperlink{bits_8c_a03d5b97dd0162513450395b2b3c772ea}{bit\-\_\-read\-\_\-\-T\-V} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat)
+\item 
+void \hyperlink{bits_8c_a2846d45695ed99f09da2a31a6973dceb}{bit\-\_\-write\-\_\-\-T\-V} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat, unsigned char $\ast$chain)
+\item 
+long unsigned int \hyperlink{bits_8c_adb8907cdcf5a08b873ab6a4c0aa7856c}{bit\-\_\-read\-\_\-\-L} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat)
+\item 
+void \hyperlink{bits_8c_a68dc1056c791cf9ed946ea1ac6de04fd}{bit\-\_\-write\-\_\-\-L} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat, long unsigned int value)
+\item 
+void \hyperlink{bits_8c_a8785229f62158ea15f08412efeffc0e6}{bit\-\_\-read\-\_\-\-C\-M\-C} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat, \hyperlink{dwg_8h_a3f1cb767f8f865d1d3c98770033f4d09}{\-Dwg\-\_\-\-Color} $\ast$color)
+\item 
+void \hyperlink{bits_8c_a2b4861a9bac268cb2985c53f9f8ee142}{bit\-\_\-write\-\_\-\-C\-M\-C} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat, \hyperlink{dwg_8h_a3f1cb767f8f865d1d3c98770033f4d09}{\-Dwg\-\_\-\-Color} $\ast$color)
+\item 
+int \hyperlink{bits_8c_a9f9e41a55222ed926e77f95815964c9e}{bit\-\_\-search\-\_\-sentinel} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat, unsigned char sentinel\mbox{[}16\mbox{]})
+\item 
+void \hyperlink{bits_8c_a3621a5dfa681092642d9b6584ed6ec82}{bit\-\_\-write\-\_\-sentinel} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat, unsigned char sentinel\mbox{[}16\mbox{]})
+\item 
+void \hyperlink{bits_8c_a4b9f50273e3671321146f66212f0448b}{bit\-\_\-chain\-\_\-alloc} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat)
+\item 
+void \hyperlink{bits_8c_a80e530e2bbef598ff73d7e8fecc2e261}{bit\-\_\-print} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat, long unsigned int size)
+\item 
+void \hyperlink{bits_8c_ac5d1074e7f8c7a08e443ebfd3d81ba96}{bit\-\_\-explore\-\_\-chain} (\hyperlink{bits_8h_a5a74cf28ff1a7d4cb89409a6ac415b43}{\-Bit\-\_\-\-Chain} $\ast$dat, long unsigned int size)
+\end{DoxyCompactItemize}
+
+
+\subsection{\-Define \-Documentation}
+\hypertarget{bits_8c_a77356481e6e6cd7cf47551f8cbd24880}{\index{bits.\-c@{bits.\-c}!\-C\-H\-A\-I\-N\-\_\-\-B\-L\-O\-C\-K@{\-C\-H\-A\-I\-N\-\_\-\-B\-L\-O\-C\-K}}
+\index{\-C\-H\-A\-I\-N\-\_\-\-B\-L\-O\-C\-K@{\-C\-H\-A\-I\-N\-\_\-\-B\-L\-O\-C\-K}!bits.c@{bits.\-c}}
+\subsubsection[{\-C\-H\-A\-I\-N\-\_\-\-B\-L\-O\-C\-K}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-C\-H\-A\-I\-N\-\_\-\-B\-L\-O\-C\-K}~40960}}\label{bits_8c_a77356481e6e6cd7cf47551f8cbd24880}
+
+
+\subsection{\-Function \-Documentation}
+\hypertarget{bits_8c_a4c1d004fe678be2bd1a3677831f39f18}{\index{bits.\-c@{bits.\-c}!bit\-\_\-advance\-\_\-position@{bit\-\_\-advance\-\_\-position}}
+\index{bit\-\_\-advance\-\_\-position@{bit\-\_\-advance\-\_\-position}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-advance\-\_\-position}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf bit\-\_\-advance\-\_\-position} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat, }
+\item[{int}]{advance}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_a4c1d004fe678be2bd1a3677831f39f18}
+\hypertarget{bits_8c_a4b9f50273e3671321146f66212f0448b}{\index{bits.\-c@{bits.\-c}!bit\-\_\-chain\-\_\-alloc@{bit\-\_\-chain\-\_\-alloc}}
+\index{bit\-\_\-chain\-\_\-alloc@{bit\-\_\-chain\-\_\-alloc}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-chain\-\_\-alloc}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf bit\-\_\-chain\-\_\-alloc} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_a4b9f50273e3671321146f66212f0448b}
+\hypertarget{bits_8c_aca075204d69633aec26326e27d4dddcc}{\index{bits.\-c@{bits.\-c}!bit\-\_\-check\-\_\-\-C\-R\-C@{bit\-\_\-check\-\_\-\-C\-R\-C}}
+\index{bit\-\_\-check\-\_\-\-C\-R\-C@{bit\-\_\-check\-\_\-\-C\-R\-C}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-check\-\_\-\-C\-R\-C}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf bit\-\_\-check\-\_\-\-C\-R\-C} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat, }
+\item[{long unsigned int}]{start\-\_\-address, }
+\item[{unsigned int}]{seed}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_aca075204d69633aec26326e27d4dddcc}
+\-Read and check \-C\-R\-C-\/number. \hypertarget{bits_8c_a364df3e51a65461c72e59dc0a407125b}{\index{bits.\-c@{bits.\-c}!bit\-\_\-ckr8@{bit\-\_\-ckr8}}
+\index{bit\-\_\-ckr8@{bit\-\_\-ckr8}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-ckr8}]{\setlength{\rightskip}{0pt plus 5cm}unsigned int {\bf bit\-\_\-ckr8} (
+\begin{DoxyParamCaption}
+\item[{unsigned int}]{dx, }
+\item[{unsigned char $\ast$}]{adr, }
+\item[{long}]{n}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_a364df3e51a65461c72e59dc0a407125b}
+\hypertarget{bits_8c_ac5d1074e7f8c7a08e443ebfd3d81ba96}{\index{bits.\-c@{bits.\-c}!bit\-\_\-explore\-\_\-chain@{bit\-\_\-explore\-\_\-chain}}
+\index{bit\-\_\-explore\-\_\-chain@{bit\-\_\-explore\-\_\-chain}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-explore\-\_\-chain}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf bit\-\_\-explore\-\_\-chain} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat, }
+\item[{long unsigned int}]{size}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_ac5d1074e7f8c7a08e443ebfd3d81ba96}
+\hypertarget{bits_8c_a80e530e2bbef598ff73d7e8fecc2e261}{\index{bits.\-c@{bits.\-c}!bit\-\_\-print@{bit\-\_\-print}}
+\index{bit\-\_\-print@{bit\-\_\-print}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-print}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf bit\-\_\-print} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat, }
+\item[{long unsigned int}]{size}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_a80e530e2bbef598ff73d7e8fecc2e261}
+\hypertarget{bits_8c_a2ec768c75807d09fd2a672d2f7c9053b}{\index{bits.\-c@{bits.\-c}!bit\-\_\-read\-\_\-4\-B\-I\-T\-S@{bit\-\_\-read\-\_\-4\-B\-I\-T\-S}}
+\index{bit\-\_\-read\-\_\-4\-B\-I\-T\-S@{bit\-\_\-read\-\_\-4\-B\-I\-T\-S}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-read\-\_\-4\-B\-I\-T\-S}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-B\-I\-T\-C\-O\-D\-E\-\_\-4\-B\-I\-T\-S} {\bf bit\-\_\-read\-\_\-4\-B\-I\-T\-S} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_a2ec768c75807d09fd2a672d2f7c9053b}
+\-Read 1 nibble. \hypertarget{bits_8c_a1115019ee20759e77a2c7c2ee20b8990}{\index{bits.\-c@{bits.\-c}!bit\-\_\-read\-\_\-\-B@{bit\-\_\-read\-\_\-\-B}}
+\index{bit\-\_\-read\-\_\-\-B@{bit\-\_\-read\-\_\-\-B}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-read\-\_\-\-B}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-B\-I\-T\-C\-O\-D\-E\-\_\-\-B} {\bf bit\-\_\-read\-\_\-\-B} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_a1115019ee20759e77a2c7c2ee20b8990}
+\-Read 1 bit. \hypertarget{bits_8c_aaf89fff18ede59af4cdafc0c57be1455}{\index{bits.\-c@{bits.\-c}!bit\-\_\-read\-\_\-\-B\-B@{bit\-\_\-read\-\_\-\-B\-B}}
+\index{bit\-\_\-read\-\_\-\-B\-B@{bit\-\_\-read\-\_\-\-B\-B}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-read\-\_\-\-B\-B}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-B\-I\-T\-C\-O\-D\-E\-\_\-\-B\-B} {\bf bit\-\_\-read\-\_\-\-B\-B} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_aaf89fff18ede59af4cdafc0c57be1455}
+\-Read 2 bits. \hypertarget{bits_8c_abfe19985c561e7229d09a0a6b114ff89}{\index{bits.\-c@{bits.\-c}!bit\-\_\-read\-\_\-\-B\-D@{bit\-\_\-read\-\_\-\-B\-D}}
+\index{bit\-\_\-read\-\_\-\-B\-D@{bit\-\_\-read\-\_\-\-B\-D}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-read\-\_\-\-B\-D}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-B\-I\-T\-C\-O\-D\-E\-\_\-\-B\-D} {\bf bit\-\_\-read\-\_\-\-B\-D} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_abfe19985c561e7229d09a0a6b114ff89}
+\-Read 1 bitdouble (compacted data). \hypertarget{bits_8c_a40f58394765fffb9c6759f7a5d1da917}{\index{bits.\-c@{bits.\-c}!bit\-\_\-read\-\_\-\-B\-E@{bit\-\_\-read\-\_\-\-B\-E}}
+\index{bit\-\_\-read\-\_\-\-B\-E@{bit\-\_\-read\-\_\-\-B\-E}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-read\-\_\-\-B\-E}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf bit\-\_\-read\-\_\-\-B\-E} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat, }
+\item[{double $\ast$}]{x, }
+\item[{double $\ast$}]{y, }
+\item[{double $\ast$}]{z}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_a40f58394765fffb9c6759f7a5d1da917}
+\-Read bit-\/extrusionn. \hypertarget{bits_8c_a094244f3f45266b10d0e7d74fc0e2d3d}{\index{bits.\-c@{bits.\-c}!bit\-\_\-read\-\_\-\-B\-L@{bit\-\_\-read\-\_\-\-B\-L}}
+\index{bit\-\_\-read\-\_\-\-B\-L@{bit\-\_\-read\-\_\-\-B\-L}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-read\-\_\-\-B\-L}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-B\-I\-T\-C\-O\-D\-E\-\_\-\-B\-L} {\bf bit\-\_\-read\-\_\-\-B\-L} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_a094244f3f45266b10d0e7d74fc0e2d3d}
+\-Read 1 bitlong (compacted data). \hypertarget{bits_8c_a22bb100e1977385db62ab5ece8387cae}{\index{bits.\-c@{bits.\-c}!bit\-\_\-read\-\_\-\-B\-S@{bit\-\_\-read\-\_\-\-B\-S}}
+\index{bit\-\_\-read\-\_\-\-B\-S@{bit\-\_\-read\-\_\-\-B\-S}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-read\-\_\-\-B\-S}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-B\-I\-T\-C\-O\-D\-E\-\_\-\-B\-S} {\bf bit\-\_\-read\-\_\-\-B\-S} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_a22bb100e1977385db62ab5ece8387cae}
+\-Read 1 bitshort (compacted data). \hypertarget{bits_8c_a71dff8703508f51acf60e7e7b11e723b}{\index{bits.\-c@{bits.\-c}!bit\-\_\-read\-\_\-\-B\-T@{bit\-\_\-read\-\_\-\-B\-T}}
+\index{bit\-\_\-read\-\_\-\-B\-T@{bit\-\_\-read\-\_\-\-B\-T}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-read\-\_\-\-B\-T}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-B\-I\-T\-C\-O\-D\-E\-\_\-\-B\-T} {\bf bit\-\_\-read\-\_\-\-B\-T} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_a71dff8703508f51acf60e7e7b11e723b}
+\-Read bit-\/thickness. \hypertarget{bits_8c_a8785229f62158ea15f08412efeffc0e6}{\index{bits.\-c@{bits.\-c}!bit\-\_\-read\-\_\-\-C\-M\-C@{bit\-\_\-read\-\_\-\-C\-M\-C}}
+\index{bit\-\_\-read\-\_\-\-C\-M\-C@{bit\-\_\-read\-\_\-\-C\-M\-C}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-read\-\_\-\-C\-M\-C}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf bit\-\_\-read\-\_\-\-C\-M\-C} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat, }
+\item[{{\bf \-Dwg\-\_\-\-Color} $\ast$}]{color}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_a8785229f62158ea15f08412efeffc0e6}
+\-Read color \hypertarget{bits_8c_a8a207dccebc67d8ac63c671eb2ee248a}{\index{bits.\-c@{bits.\-c}!bit\-\_\-read\-\_\-\-C\-R\-C@{bit\-\_\-read\-\_\-\-C\-R\-C}}
+\index{bit\-\_\-read\-\_\-\-C\-R\-C@{bit\-\_\-read\-\_\-\-C\-R\-C}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-read\-\_\-\-C\-R\-C}]{\setlength{\rightskip}{0pt plus 5cm}unsigned int {\bf bit\-\_\-read\-\_\-\-C\-R\-C} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_a8a207dccebc67d8ac63c671eb2ee248a}
+\-Only read \-C\-R\-K-\/numbers, without checking, only in order to go to the next byte, while jumping contingent non-\/used bits \hypertarget{bits_8c_a2f4d6481357c600a84a5751106b609f3}{\index{bits.\-c@{bits.\-c}!bit\-\_\-read\-\_\-\-D\-D@{bit\-\_\-read\-\_\-\-D\-D}}
+\index{bit\-\_\-read\-\_\-\-D\-D@{bit\-\_\-read\-\_\-\-D\-D}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-read\-\_\-\-D\-D}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-B\-I\-T\-C\-O\-D\-E\-\_\-\-D\-D} {\bf bit\-\_\-read\-\_\-\-D\-D} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat, }
+\item[{double}]{default\-\_\-value}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_a2f4d6481357c600a84a5751106b609f3}
+\-Read bit-\/double with default. \hypertarget{bits_8c_ad8b32022e47b7a29e4007b01d1c8eb8e}{\index{bits.\-c@{bits.\-c}!bit\-\_\-read\-\_\-\-H@{bit\-\_\-read\-\_\-\-H}}
+\index{bit\-\_\-read\-\_\-\-H@{bit\-\_\-read\-\_\-\-H}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-read\-\_\-\-H}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf bit\-\_\-read\-\_\-\-H} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat, }
+\item[{{\bf \-Dwg\-\_\-\-Handle} $\ast$}]{handle}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_ad8b32022e47b7a29e4007b01d1c8eb8e}
+\-Read handle-\/references. \hypertarget{bits_8c_adb8907cdcf5a08b873ab6a4c0aa7856c}{\index{bits.\-c@{bits.\-c}!bit\-\_\-read\-\_\-\-L@{bit\-\_\-read\-\_\-\-L}}
+\index{bit\-\_\-read\-\_\-\-L@{bit\-\_\-read\-\_\-\-L}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-read\-\_\-\-L}]{\setlength{\rightskip}{0pt plus 5cm}long unsigned int {\bf bit\-\_\-read\-\_\-\-L} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_adb8907cdcf5a08b873ab6a4c0aa7856c}
+\-Read 1 bitlong according to normal order \hypertarget{bits_8c_a3667f913768a3e5698e4031a5c9b303a}{\index{bits.\-c@{bits.\-c}!bit\-\_\-read\-\_\-\-M\-C@{bit\-\_\-read\-\_\-\-M\-C}}
+\index{bit\-\_\-read\-\_\-\-M\-C@{bit\-\_\-read\-\_\-\-M\-C}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-read\-\_\-\-M\-C}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-B\-I\-T\-C\-O\-D\-E\-\_\-\-M\-C} {\bf bit\-\_\-read\-\_\-\-M\-C} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_a3667f913768a3e5698e4031a5c9b303a}
+\-Read 1 modular char (max 4 bytes). \hypertarget{bits_8c_a40f5042e4159ede00c2840bf8ce0b205}{\index{bits.\-c@{bits.\-c}!bit\-\_\-read\-\_\-\-M\-S@{bit\-\_\-read\-\_\-\-M\-S}}
+\index{bit\-\_\-read\-\_\-\-M\-S@{bit\-\_\-read\-\_\-\-M\-S}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-read\-\_\-\-M\-S}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-B\-I\-T\-C\-O\-D\-E\-\_\-\-M\-S} {\bf bit\-\_\-read\-\_\-\-M\-S} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_a40f5042e4159ede00c2840bf8ce0b205}
+\-Read 1 modular short (max 2 words). \hypertarget{bits_8c_a2167868f3326d6273560114a102ff8b1}{\index{bits.\-c@{bits.\-c}!bit\-\_\-read\-\_\-\-R\-C@{bit\-\_\-read\-\_\-\-R\-C}}
+\index{bit\-\_\-read\-\_\-\-R\-C@{bit\-\_\-read\-\_\-\-R\-C}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-read\-\_\-\-R\-C}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-B\-I\-T\-C\-O\-D\-E\-\_\-\-R\-C} {\bf bit\-\_\-read\-\_\-\-R\-C} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_a2167868f3326d6273560114a102ff8b1}
+\-Read 1 byte (raw char). \hypertarget{bits_8c_aa979f8d3a736a8cc7886786897e61b49}{\index{bits.\-c@{bits.\-c}!bit\-\_\-read\-\_\-\-R\-D@{bit\-\_\-read\-\_\-\-R\-D}}
+\index{bit\-\_\-read\-\_\-\-R\-D@{bit\-\_\-read\-\_\-\-R\-D}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-read\-\_\-\-R\-D}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-B\-I\-T\-C\-O\-D\-E\-\_\-\-R\-D} {\bf bit\-\_\-read\-\_\-\-R\-D} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_aa979f8d3a736a8cc7886786897e61b49}
+\-Read 1 raw double (8 bytes). \hypertarget{bits_8c_aff017ae6e9346e585cb3f1004122e49f}{\index{bits.\-c@{bits.\-c}!bit\-\_\-read\-\_\-\-R\-L@{bit\-\_\-read\-\_\-\-R\-L}}
+\index{bit\-\_\-read\-\_\-\-R\-L@{bit\-\_\-read\-\_\-\-R\-L}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-read\-\_\-\-R\-L}]{\setlength{\rightskip}{0pt plus 5cm}long unsigned int {\bf bit\-\_\-read\-\_\-\-R\-L} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_aff017ae6e9346e585cb3f1004122e49f}
+\-Read 1 raw long (2 words). \hypertarget{bits_8c_ae424ded8778b283205a27e4dbaaa45e0}{\index{bits.\-c@{bits.\-c}!bit\-\_\-read\-\_\-\-R\-S@{bit\-\_\-read\-\_\-\-R\-S}}
+\index{bit\-\_\-read\-\_\-\-R\-S@{bit\-\_\-read\-\_\-\-R\-S}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-read\-\_\-\-R\-S}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-B\-I\-T\-C\-O\-D\-E\-\_\-\-R\-S} {\bf bit\-\_\-read\-\_\-\-R\-S} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_ae424ded8778b283205a27e4dbaaa45e0}
+\-Read 1 word (raw short). \hypertarget{bits_8c_a03d5b97dd0162513450395b2b3c772ea}{\index{bits.\-c@{bits.\-c}!bit\-\_\-read\-\_\-\-T\-V@{bit\-\_\-read\-\_\-\-T\-V}}
+\index{bit\-\_\-read\-\_\-\-T\-V@{bit\-\_\-read\-\_\-\-T\-V}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-read\-\_\-\-T\-V}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-B\-I\-T\-C\-O\-D\-E\-\_\-\-T\-V} {\bf bit\-\_\-read\-\_\-\-T\-V} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_a03d5b97dd0162513450395b2b3c772ea}
+\-Read simple text. \-After usage, the allocated memory must be properly freed. \hypertarget{bits_8c_a9f9e41a55222ed926e77f95815964c9e}{\index{bits.\-c@{bits.\-c}!bit\-\_\-search\-\_\-sentinel@{bit\-\_\-search\-\_\-sentinel}}
+\index{bit\-\_\-search\-\_\-sentinel@{bit\-\_\-search\-\_\-sentinel}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-search\-\_\-sentinel}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf bit\-\_\-search\-\_\-sentinel} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat, }
+\item[{unsigned char}]{sentinel\mbox{[}16\mbox{]}}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_a9f9e41a55222ed926e77f95815964c9e}
+\-Search for a sentinel; if found, positions \char`\"{}dat-\/$>$byte\char`\"{} immediately after it. \hypertarget{bits_8c_aa9243b5b3d2a4d7ade517c43be8db1f4}{\index{bits.\-c@{bits.\-c}!bit\-\_\-write\-\_\-4\-B\-I\-T\-S@{bit\-\_\-write\-\_\-4\-B\-I\-T\-S}}
+\index{bit\-\_\-write\-\_\-4\-B\-I\-T\-S@{bit\-\_\-write\-\_\-4\-B\-I\-T\-S}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-write\-\_\-4\-B\-I\-T\-S}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf bit\-\_\-write\-\_\-4\-B\-I\-T\-S} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat, }
+\item[{unsigned char}]{value}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_aa9243b5b3d2a4d7ade517c43be8db1f4}
+\-Write 1 nibble. \hypertarget{bits_8c_ae2f5bd0e5265c3b2bfd5b67d4ce484ce}{\index{bits.\-c@{bits.\-c}!bit\-\_\-write\-\_\-\-B@{bit\-\_\-write\-\_\-\-B}}
+\index{bit\-\_\-write\-\_\-\-B@{bit\-\_\-write\-\_\-\-B}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-write\-\_\-\-B}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf bit\-\_\-write\-\_\-\-B} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat, }
+\item[{unsigned char}]{value}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_ae2f5bd0e5265c3b2bfd5b67d4ce484ce}
+\-Write 1 bit. \hypertarget{bits_8c_a5a264770705dbce3458211115868e6e5}{\index{bits.\-c@{bits.\-c}!bit\-\_\-write\-\_\-\-B\-B@{bit\-\_\-write\-\_\-\-B\-B}}
+\index{bit\-\_\-write\-\_\-\-B\-B@{bit\-\_\-write\-\_\-\-B\-B}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-write\-\_\-\-B\-B}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf bit\-\_\-write\-\_\-\-B\-B} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat, }
+\item[{unsigned char}]{value}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_a5a264770705dbce3458211115868e6e5}
+\-Write 2 bits. \hypertarget{bits_8c_a5942f20ffa699fa7afafd26e407b718b}{\index{bits.\-c@{bits.\-c}!bit\-\_\-write\-\_\-\-B\-D@{bit\-\_\-write\-\_\-\-B\-D}}
+\index{bit\-\_\-write\-\_\-\-B\-D@{bit\-\_\-write\-\_\-\-B\-D}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-write\-\_\-\-B\-D}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf bit\-\_\-write\-\_\-\-B\-D} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat, }
+\item[{double}]{value}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_a5942f20ffa699fa7afafd26e407b718b}
+\-Write 1 bitdouble (compacted data). \hypertarget{bits_8c_a168f787f69f5f2f2f2fce1d91104482b}{\index{bits.\-c@{bits.\-c}!bit\-\_\-write\-\_\-\-B\-E@{bit\-\_\-write\-\_\-\-B\-E}}
+\index{bit\-\_\-write\-\_\-\-B\-E@{bit\-\_\-write\-\_\-\-B\-E}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-write\-\_\-\-B\-E}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf bit\-\_\-write\-\_\-\-B\-E} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat, }
+\item[{double}]{x, }
+\item[{double}]{y, }
+\item[{double}]{z}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_a168f787f69f5f2f2f2fce1d91104482b}
+\-Write bit-\/extrusionn. \hypertarget{bits_8c_a8f8019f82e57376c285d6cb02429edc1}{\index{bits.\-c@{bits.\-c}!bit\-\_\-write\-\_\-\-B\-L@{bit\-\_\-write\-\_\-\-B\-L}}
+\index{bit\-\_\-write\-\_\-\-B\-L@{bit\-\_\-write\-\_\-\-B\-L}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-write\-\_\-\-B\-L}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf bit\-\_\-write\-\_\-\-B\-L} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat, }
+\item[{long unsigned int}]{value}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_a8f8019f82e57376c285d6cb02429edc1}
+\-Write 1 bitlong (compacted data). \hypertarget{bits_8c_a784b8d9155dddc237fc5337587f9adec}{\index{bits.\-c@{bits.\-c}!bit\-\_\-write\-\_\-\-B\-S@{bit\-\_\-write\-\_\-\-B\-S}}
+\index{bit\-\_\-write\-\_\-\-B\-S@{bit\-\_\-write\-\_\-\-B\-S}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-write\-\_\-\-B\-S}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf bit\-\_\-write\-\_\-\-B\-S} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat, }
+\item[{unsigned int}]{value}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_a784b8d9155dddc237fc5337587f9adec}
+\-Write 1 bitshort (compacted data). \hypertarget{bits_8c_aa2de47840a406013dc42a0c89d237204}{\index{bits.\-c@{bits.\-c}!bit\-\_\-write\-\_\-\-B\-T@{bit\-\_\-write\-\_\-\-B\-T}}
+\index{bit\-\_\-write\-\_\-\-B\-T@{bit\-\_\-write\-\_\-\-B\-T}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-write\-\_\-\-B\-T}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf bit\-\_\-write\-\_\-\-B\-T} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat, }
+\item[{double}]{value}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_aa2de47840a406013dc42a0c89d237204}
+\-Write bit-\/thickness. \hypertarget{bits_8c_a2b4861a9bac268cb2985c53f9f8ee142}{\index{bits.\-c@{bits.\-c}!bit\-\_\-write\-\_\-\-C\-M\-C@{bit\-\_\-write\-\_\-\-C\-M\-C}}
+\index{bit\-\_\-write\-\_\-\-C\-M\-C@{bit\-\_\-write\-\_\-\-C\-M\-C}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-write\-\_\-\-C\-M\-C}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf bit\-\_\-write\-\_\-\-C\-M\-C} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat, }
+\item[{{\bf \-Dwg\-\_\-\-Color} $\ast$}]{color}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_a2b4861a9bac268cb2985c53f9f8ee142}
+\-Write color \hypertarget{bits_8c_a4d71fd04f8a40b9b0467cb2a3caf0ce0}{\index{bits.\-c@{bits.\-c}!bit\-\_\-write\-\_\-\-C\-R\-C@{bit\-\_\-write\-\_\-\-C\-R\-C}}
+\index{bit\-\_\-write\-\_\-\-C\-R\-C@{bit\-\_\-write\-\_\-\-C\-R\-C}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-write\-\_\-\-C\-R\-C}]{\setlength{\rightskip}{0pt plus 5cm}unsigned int {\bf bit\-\_\-write\-\_\-\-C\-R\-C} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat, }
+\item[{long unsigned int}]{start\-\_\-address, }
+\item[{unsigned int}]{seed}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_a4d71fd04f8a40b9b0467cb2a3caf0ce0}
+\-Create and write \-C\-R\-C-\/number. \hypertarget{bits_8c_af91584f150fcb691d2e528c01116a015}{\index{bits.\-c@{bits.\-c}!bit\-\_\-write\-\_\-\-D\-D@{bit\-\_\-write\-\_\-\-D\-D}}
+\index{bit\-\_\-write\-\_\-\-D\-D@{bit\-\_\-write\-\_\-\-D\-D}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-write\-\_\-\-D\-D}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf bit\-\_\-write\-\_\-\-D\-D} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat, }
+\item[{double}]{value, }
+\item[{double}]{default\-\_\-value}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_af91584f150fcb691d2e528c01116a015}
+\-Write bit-\/double with default. \hypertarget{bits_8c_ad6467d707c9c4fc21fa2ae57a3c35670}{\index{bits.\-c@{bits.\-c}!bit\-\_\-write\-\_\-\-H@{bit\-\_\-write\-\_\-\-H}}
+\index{bit\-\_\-write\-\_\-\-H@{bit\-\_\-write\-\_\-\-H}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-write\-\_\-\-H}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf bit\-\_\-write\-\_\-\-H} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat, }
+\item[{{\bf \-Dwg\-\_\-\-Handle} $\ast$}]{handle}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_ad6467d707c9c4fc21fa2ae57a3c35670}
+\-Write handle-\/references. \hypertarget{bits_8c_a68dc1056c791cf9ed946ea1ac6de04fd}{\index{bits.\-c@{bits.\-c}!bit\-\_\-write\-\_\-\-L@{bit\-\_\-write\-\_\-\-L}}
+\index{bit\-\_\-write\-\_\-\-L@{bit\-\_\-write\-\_\-\-L}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-write\-\_\-\-L}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf bit\-\_\-write\-\_\-\-L} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat, }
+\item[{long unsigned int}]{value}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_a68dc1056c791cf9ed946ea1ac6de04fd}
+\-Write 1 bitlong according to normal order \hypertarget{bits_8c_a2ceaad7a9a4a729746bd1b8b7ac70603}{\index{bits.\-c@{bits.\-c}!bit\-\_\-write\-\_\-\-M\-C@{bit\-\_\-write\-\_\-\-M\-C}}
+\index{bit\-\_\-write\-\_\-\-M\-C@{bit\-\_\-write\-\_\-\-M\-C}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-write\-\_\-\-M\-C}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf bit\-\_\-write\-\_\-\-M\-C} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat, }
+\item[{long int}]{val}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_a2ceaad7a9a4a729746bd1b8b7ac70603}
+\-Write 1 modular char (max 4 bytes). \hypertarget{bits_8c_a9d7501bdace44fe45e5a9f1fcb1314ce}{\index{bits.\-c@{bits.\-c}!bit\-\_\-write\-\_\-\-M\-S@{bit\-\_\-write\-\_\-\-M\-S}}
+\index{bit\-\_\-write\-\_\-\-M\-S@{bit\-\_\-write\-\_\-\-M\-S}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-write\-\_\-\-M\-S}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf bit\-\_\-write\-\_\-\-M\-S} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat, }
+\item[{long unsigned int}]{value}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_a9d7501bdace44fe45e5a9f1fcb1314ce}
+\-Write 1 modular short (max 2 words). \hypertarget{bits_8c_aa07e873d6f6b8a9faedb7244c40b4ac0}{\index{bits.\-c@{bits.\-c}!bit\-\_\-write\-\_\-\-R\-C@{bit\-\_\-write\-\_\-\-R\-C}}
+\index{bit\-\_\-write\-\_\-\-R\-C@{bit\-\_\-write\-\_\-\-R\-C}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-write\-\_\-\-R\-C}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf bit\-\_\-write\-\_\-\-R\-C} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat, }
+\item[{unsigned char}]{value}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_aa07e873d6f6b8a9faedb7244c40b4ac0}
+\-Write 1 byte (raw char). \hypertarget{bits_8c_a7135e7a995edc3fa245ce17908085177}{\index{bits.\-c@{bits.\-c}!bit\-\_\-write\-\_\-\-R\-D@{bit\-\_\-write\-\_\-\-R\-D}}
+\index{bit\-\_\-write\-\_\-\-R\-D@{bit\-\_\-write\-\_\-\-R\-D}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-write\-\_\-\-R\-D}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf bit\-\_\-write\-\_\-\-R\-D} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat, }
+\item[{double}]{value}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_a7135e7a995edc3fa245ce17908085177}
+\-Write 1 raw double (8 bytes). \hypertarget{bits_8c_aa9c1f7619e3b5f21ef637a84f043eb57}{\index{bits.\-c@{bits.\-c}!bit\-\_\-write\-\_\-\-R\-L@{bit\-\_\-write\-\_\-\-R\-L}}
+\index{bit\-\_\-write\-\_\-\-R\-L@{bit\-\_\-write\-\_\-\-R\-L}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-write\-\_\-\-R\-L}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf bit\-\_\-write\-\_\-\-R\-L} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat, }
+\item[{long unsigned int}]{value}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_aa9c1f7619e3b5f21ef637a84f043eb57}
+\-Write 1 raw long (2 words). \hypertarget{bits_8c_aff73197304114f06e9d1a603f5ef700d}{\index{bits.\-c@{bits.\-c}!bit\-\_\-write\-\_\-\-R\-S@{bit\-\_\-write\-\_\-\-R\-S}}
+\index{bit\-\_\-write\-\_\-\-R\-S@{bit\-\_\-write\-\_\-\-R\-S}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-write\-\_\-\-R\-S}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf bit\-\_\-write\-\_\-\-R\-S} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat, }
+\item[{unsigned int}]{value}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_aff73197304114f06e9d1a603f5ef700d}
+\-Write 1 word (raw short). \hypertarget{bits_8c_a3621a5dfa681092642d9b6584ed6ec82}{\index{bits.\-c@{bits.\-c}!bit\-\_\-write\-\_\-sentinel@{bit\-\_\-write\-\_\-sentinel}}
+\index{bit\-\_\-write\-\_\-sentinel@{bit\-\_\-write\-\_\-sentinel}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-write\-\_\-sentinel}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf bit\-\_\-write\-\_\-sentinel} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat, }
+\item[{unsigned char}]{sentinel\mbox{[}16\mbox{]}}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_a3621a5dfa681092642d9b6584ed6ec82}
+\hypertarget{bits_8c_a2846d45695ed99f09da2a31a6973dceb}{\index{bits.\-c@{bits.\-c}!bit\-\_\-write\-\_\-\-T\-V@{bit\-\_\-write\-\_\-\-T\-V}}
+\index{bit\-\_\-write\-\_\-\-T\-V@{bit\-\_\-write\-\_\-\-T\-V}!bits.c@{bits.\-c}}
+\subsubsection[{bit\-\_\-write\-\_\-\-T\-V}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf bit\-\_\-write\-\_\-\-T\-V} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Bit\-\_\-\-Chain} $\ast$}]{dat, }
+\item[{unsigned char $\ast$}]{chain}
+\end{DoxyParamCaption}
+)}}\label{bits_8c_a2846d45695ed99f09da2a31a6973dceb}
+\-Write simple text. 

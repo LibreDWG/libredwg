@@ -3528,7 +3528,7 @@ dwg_ent_3dsolid_get_block_size(dwg_ent_3dsolid *_3dsolid, int *error);
 char *
 dwg_ent_3dsolid_get_acis_data(dwg_ent_3dsolid *_3dsolid, int *error);
 
-char *
+void
 dwg_ent_3dsolid_set_acis_data(dwg_ent_3dsolid *_3dsolid, char *data,
                               int *error);
 
@@ -3621,7 +3621,7 @@ dwg_ent_region_get_block_size(dwg_ent_region *region, int *error);
 char *
 dwg_ent_region_get_acis_data(dwg_ent_region *region, int *error);
 
-char *
+void
 dwg_ent_region_set_acis_data(dwg_ent_region *region, char *data, int *error);
 
 char
@@ -3710,7 +3710,7 @@ dwg_ent_body_get_block_size(dwg_ent_body *body, int *error);
 char *
 dwg_ent_body_get_acis_data(dwg_ent_body *body, int *error);
 
-char *
+void
 dwg_ent_body_set_acis_data(dwg_ent_body *body, char *data, int *error);
 
 char
@@ -4309,10 +4309,10 @@ dwg_obj_layer_get_name(dwg_obj_layer *layer, int *error);
 
 // Get/Set vertind of a vertex_pface_face entity
 unsigned int
-dwg_ent_vertex_pface_face_set_vertind(dwg_ent_vert_pface_face *face);
+dwg_ent_vertex_pface_face_get_vertind(dwg_ent_vert_pface_face *face);
 
 void
-dwg_ent_vertex_pface_face_get_vertind(dwg_ent_vert_pface_face *face,
+dwg_ent_vertex_pface_face_set_vertind(dwg_ent_vert_pface_face *face,
                                       unsigned int vertind[4]);
 
 

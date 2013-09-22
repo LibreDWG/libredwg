@@ -1,4 +1,4 @@
-#include "api.h"
+#include "dwg_api.h"
 #include "dwg.h"
 #include <malloc.h>
 
@@ -6257,6 +6257,11 @@ dwg_ent_dim_aligned_set_elevation_ecs12(dwg_ent_dim_aligned *dim,
     *error = 1;
 }
 
+/// Returns the flag1
+/** Usage : char flag1 = dwg_ent_dim_aligned_get_flags1(dim, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 int
+*/
 char
 dwg_ent_dim_aligned_get_flags1(dwg_ent_dim_aligned *dim, int *error)
 {
@@ -6269,6 +6274,12 @@ dwg_ent_dim_aligned_get_flags1(dwg_ent_dim_aligned *dim, int *error)
     *error = 1;
 }
 
+/// Sets the flags1
+/** Usage : dwg_ent_dim_aligned_set_flags1(dim, char, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 char
+\param 3 int
+*/
 void
 dwg_ent_dim_aligned_set_flags1(dwg_ent_dim_aligned *dim, char flag, int *error)
 {
@@ -6281,6 +6292,11 @@ dwg_ent_dim_aligned_set_flags1(dwg_ent_dim_aligned *dim, char flag, int *error)
     *error = 1;
 }
 
+/// Returns the act measurement
+/** Usage : double measure = dwg_ent_dim_aligned_get_act_measurement(dim, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 int
+*/
 double
 dwg_ent_dim_aligned_get_act_measurement(dwg_ent_dim_aligned *dim, int *error)
 {
@@ -6293,6 +6309,12 @@ dwg_ent_dim_aligned_get_act_measurement(dwg_ent_dim_aligned *dim, int *error)
     *error = 1;
 }
 
+/// Sets the act measurement
+/** Usage : dwg_ent_dim_aligned_set_act_measurement(dim, measure, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_aligned_set_act_measurement(dwg_ent_dim_aligned *dim,
                                         double act_measurement, int *error)
@@ -6306,6 +6328,11 @@ dwg_ent_dim_aligned_set_act_measurement(dwg_ent_dim_aligned *dim,
     *error = 1;
 }
 
+/// Returns the horiz dir
+/** Usage : double dir = dwg_ent_dim_aligned_get_horiz_dir(dim, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 int
+*/
 double
 dwg_ent_dim_aligned_get_horiz_dir(dwg_ent_dim_aligned *dim, int *error)
 {
@@ -6318,6 +6345,12 @@ dwg_ent_dim_aligned_get_horiz_dir(dwg_ent_dim_aligned *dim, int *error)
     *error = 1;
 }
 
+/// Sets the horiz dir
+/** Usage : dwg_ent_dim_aligned_set_horiz_dir(dim, horiz_dir, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_aligned_set_horiz_dir(dwg_ent_dim_aligned *dim, double horiz_dir,
                                   int *error)
@@ -6331,6 +6364,11 @@ dwg_ent_dim_aligned_set_horiz_dir(dwg_ent_dim_aligned *dim, double horiz_dir,
     *error = 1;
 }
 
+/// Returns the lspace factor
+/** Usage : double lspace_factor = dwg_ent_dim_aligned_get_lspace_factor(dim, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 int
+*/
 double
 dwg_ent_dim_aligned_get_lspace_factor(dwg_ent_dim_aligned *dim, int *error)
 {
@@ -6343,6 +6381,12 @@ dwg_ent_dim_aligned_get_lspace_factor(dwg_ent_dim_aligned *dim, int *error)
     *error = 1;
 }
 
+/// Sets the lspace factor
+/** Usage : dwg_ent_dim_aligned_set_lspace_factor(dim, factor, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_aligned_set_lspace_factor(dwg_ent_dim_aligned *dim, double factor,
                                       int *error)
@@ -6356,6 +6400,11 @@ dwg_ent_dim_aligned_set_lspace_factor(dwg_ent_dim_aligned *dim, double factor,
     *error = 1;
 }
 
+/// Returns the lspace factor
+/** Usage : double lspace_factor = dwg_ent_dim_aligned_get_lspace_factor(dim, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 int
+*/
 unsigned int
 dwg_ent_dim_aligned_get_lspace_style(dwg_ent_dim_aligned *dim, int *error)
 {
@@ -6368,6 +6417,12 @@ dwg_ent_dim_aligned_get_lspace_style(dwg_ent_dim_aligned *dim, int *error)
     *error = 1;
 }
 
+/// Sets the horiz dir
+/** Usage : dwg_ent_dim_aligned_set_horiz_dir(dim, horiz_dir, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_aligned_set_lspace_style(dwg_ent_dim_aligned *dim,
                                      unsigned int style, int *error)
@@ -6381,6 +6436,11 @@ dwg_ent_dim_aligned_set_lspace_style(dwg_ent_dim_aligned *dim,
     *error = 1;
 }
 
+/// Returns the attachment point
+/** Usage : unsigned int point = dwg_ent_dim_aligned_get_attachment_point(dim, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 int
+*/
 unsigned int
 dwg_ent_dim_aligned_get_attachment_point(dwg_ent_dim_aligned *dim, int *error)
 {
@@ -6393,6 +6453,12 @@ dwg_ent_dim_aligned_get_attachment_point(dwg_ent_dim_aligned *dim, int *error)
     *error = 1;
 }
 
+/// Sets the attachment point
+/** Usage : dwg_ent_dim_aligned_set_attachment_point(dim, horiz_dir, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 unsigned int
+\param 3 int
+*/
 void
 dwg_ent_dim_aligned_set_attachment_point(dwg_ent_dim_aligned *dim,
                                          unsigned int point, int *error)
@@ -6406,6 +6472,12 @@ dwg_ent_dim_aligned_set_attachment_point(dwg_ent_dim_aligned *dim,
     *error = 1;
 }
 
+/// Sets the extrusion
+/** Usage : dwg_ent_dim_aligned_set_extrusion(dim, &point, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_aligned_set_extrusion(dwg_ent_dim_aligned *dim,
                                   dwg_point_3d *point, int *error)
@@ -6421,6 +6493,12 @@ dwg_ent_dim_aligned_set_extrusion(dwg_ent_dim_aligned *dim,
     *error = 1;
 }
 
+/// Returns the attachment point
+/** Usage : dwg_ent_dim_aligned_get_extrusion(dim, &point, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_aligned_get_extrusion(dwg_ent_dim_aligned *dim,
                                   dwg_point_3d *point, int *error)
@@ -6436,6 +6514,11 @@ dwg_ent_dim_aligned_get_extrusion(dwg_ent_dim_aligned *dim,
     *error = 1;
 }
 
+/// Returns the user text
+/** Usage : char * text = dwg_ent_dim_aligned_get_user_text(dim, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 int
+*/
 char *
 dwg_ent_dim_aligned_get_user_text(dwg_ent_dim_aligned *dim, int *error)
 {
@@ -6448,6 +6531,12 @@ dwg_ent_dim_aligned_get_user_text(dwg_ent_dim_aligned *dim, int *error)
     *error = 1;
 }
 
+/// Sets the attachment point
+/** Usage : dwg_ent_dim_aligned_set_attachment_point(dim, text_value, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 char *
+\param 3 int
+*/
 void
 dwg_ent_dim_aligned_set_user_text(dwg_ent_dim_aligned *dim, char * text, 
                                   int *error)
@@ -6461,6 +6550,11 @@ dwg_ent_dim_aligned_set_user_text(dwg_ent_dim_aligned *dim, char * text,
     *error = 1;
 }
 
+/// Returns the text rotation
+/** Usage : double text_rot = dwg_ent_dim_aligned_get_text_rot(dim, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 int
+*/
 double
 dwg_ent_dim_aligned_get_text_rot(dwg_ent_dim_aligned *dim, int *error)
 {
@@ -6473,6 +6567,12 @@ dwg_ent_dim_aligned_get_text_rot(dwg_ent_dim_aligned *dim, int *error)
     *error = 1;
 }
 
+/// Sets the text rotation
+/** Usage : dwg_ent_dim_aligned_set_text_rot(dim, text_value, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_aligned_set_text_rot(dwg_ent_dim_aligned *dim, double rot,
                                  int *error)
@@ -6486,6 +6586,11 @@ dwg_ent_dim_aligned_set_text_rot(dwg_ent_dim_aligned *dim, double rot,
     *error = 1;
 }
 
+/// Returns the ins rotation
+/** Usage : double ins_rot = dwg_ent_dim_aligned_get_ins_rotation(dim, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 int
+*/
 double
 dwg_ent_dim_aligned_get_ins_rotation(dwg_ent_dim_aligned *dim, int *error)
 {
@@ -6498,6 +6603,12 @@ dwg_ent_dim_aligned_get_ins_rotation(dwg_ent_dim_aligned *dim, int *error)
     *error = 1;
 }
 
+/// Sets the ins rotation
+/** Usage : dwg_ent_dim_aligned_set_ins_rotation(dim, text_rot, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_aligned_set_ins_rotation(dwg_ent_dim_aligned *dim, double rot,
                                      int *error)
@@ -6511,6 +6622,11 @@ dwg_ent_dim_aligned_set_ins_rotation(dwg_ent_dim_aligned *dim, double rot,
     *error = 1;
 }
 
+/// Returns the flip arrow1
+/** Usage : double arrow1 = dwg_ent_dim_aligned_get_flip_arrow1(dim, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 int
+*/
 char
 dwg_ent_dim_aligned_get_flip_arrow1(dwg_ent_dim_aligned *dim, int *error)
 {
@@ -6523,6 +6639,12 @@ dwg_ent_dim_aligned_get_flip_arrow1(dwg_ent_dim_aligned *dim, int *error)
     *error = 1;
 }
 
+/// Sets the flip arrow1
+/** Usage : dwg_ent_dim_aligned_set_flip_arrow1(dim, arrow1, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 char
+\param 3 int
+*/
 void
 dwg_ent_dim_aligned_set_flip_arrow1(dwg_ent_dim_aligned *dim, char flip_arrow,
                                     int *error)
@@ -6536,6 +6658,11 @@ dwg_ent_dim_aligned_set_flip_arrow1(dwg_ent_dim_aligned *dim, char flip_arrow,
     *error = 1;
 }
 
+/// Returns the flip arrow2
+/** Usage : double arrow2 = dwg_ent_dim_aligned_get_flip_arrow2(dim, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 int
+*/
 char
 dwg_ent_dim_aligned_get_flip_arrow2(dwg_ent_dim_aligned *dim, int *error)
 {
@@ -6548,6 +6675,12 @@ dwg_ent_dim_aligned_get_flip_arrow2(dwg_ent_dim_aligned *dim, int *error)
     *error = 1;
 }
 
+/// Sets the flip arrow2
+/** Usage : dwg_ent_dim_aligned_set_flip_arrow2(dim, arrow2, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 char
+\param 3 int
+*/
 void
 dwg_ent_dim_aligned_set_flip_arrow2(dwg_ent_dim_aligned *dim, char flip_arrow,
                                     int *error)
@@ -6561,6 +6694,12 @@ dwg_ent_dim_aligned_set_flip_arrow2(dwg_ent_dim_aligned *dim, char flip_arrow,
     *error = 1;
 }
 
+/// Sets the text mid point
+/** Usage : dwg_ent_dim_aligned_set_text_mid_point(dim, &point, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 dwg_point_2d
+\param 3 int
+*/
 void 
 dwg_ent_dim_aligned_set_text_mid_pt(dwg_ent_dim_aligned *dim, 
                                     dwg_point_2d *point, int *error)
@@ -6575,6 +6714,12 @@ dwg_ent_dim_aligned_set_text_mid_pt(dwg_ent_dim_aligned *dim,
     *error = 1;
 }
 
+/// Returns the text mid point
+/** Usage : dwg_ent_dim_aligned_get_text_mid_point(dim, &point, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 dwg_point_2d
+\param 3 int
+*/
 void
 dwg_ent_dim_aligned_get_text_mid_pt(dwg_ent_dim_aligned *dim,
                                     dwg_point_2d *point, int *error)
@@ -6589,6 +6734,12 @@ dwg_ent_dim_aligned_get_text_mid_pt(dwg_ent_dim_aligned *dim,
     *error = 1;
 }
 
+/// Sets the ins scale
+/** Usage : dwg_ent_dim_aligned_set_ins_scale(dim, &point, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_aligned_set_ins_scale(dwg_ent_dim_aligned *dim,
                                   dwg_point_3d *point, int *error)
@@ -6604,6 +6755,12 @@ dwg_ent_dim_aligned_set_ins_scale(dwg_ent_dim_aligned *dim,
     *error = 1;
 }
 
+/// Returns the ins scale
+/** Usage : dwg_ent_dim_aligned_get_ins_scale(dim, &point, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_aligned_get_ins_scale(dwg_ent_dim_aligned *dim,
                                   dwg_point_3d *point, int *error)
@@ -6619,6 +6776,12 @@ dwg_ent_dim_aligned_get_ins_scale(dwg_ent_dim_aligned *dim,
     *error = 1;
 }
 
+/// Sets the 12 point
+/** Usage : dwg_ent_dim_aligned_set_12_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 dwg_point_2d
+\param 3 int
+*/
 void
 dwg_ent_dim_aligned_set_12_pt(dwg_ent_dim_aligned *dim, dwg_point_2d *point,
                               int *error)
@@ -6633,6 +6796,12 @@ dwg_ent_dim_aligned_set_12_pt(dwg_ent_dim_aligned *dim, dwg_point_2d *point,
     *error = 1;
 }
 
+/// Returns the 12 point
+/** Usage : dwg_ent_dim_aligned_get_12_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 dwg_point_2d
+\param 3 int
+*/
 void
 dwg_ent_dim_aligned_get_12_pt(dwg_ent_dim_aligned *dim, dwg_point_2d *point,
                               int *error)
@@ -6647,6 +6816,12 @@ dwg_ent_dim_aligned_get_12_pt(dwg_ent_dim_aligned *dim, dwg_point_2d *point,
     *error = 1;
 }
 
+/// Sets the 10 point
+/** Usage : dwg_ent_dim_aligned_set_10_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_aligned_set_10_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
                               int *error)
@@ -6662,6 +6837,12 @@ dwg_ent_dim_aligned_set_10_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Returns the 10 point
+/** Usage : dwg_ent_dim_aligned_get_10_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_aligned_get_10_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
                               int *error)
@@ -6677,6 +6858,12 @@ dwg_ent_dim_aligned_get_10_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Sets the 13 point
+/** Usage : dwg_ent_dim_aligned_set_13_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_aligned_set_13_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
                               int *error)
@@ -6692,6 +6879,12 @@ dwg_ent_dim_aligned_set_13_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Returns the 13 point
+/** Usage : dwg_ent_dim_aligned_get_13_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_aligned_get_13_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
                               int *error)
@@ -6707,6 +6900,12 @@ dwg_ent_dim_aligned_get_13_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Sets the 14 point
+/** Usage : dwg_ent_dim_aligned_set_14_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_aligned_set_14_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
                               int *error)
@@ -6722,6 +6921,12 @@ dwg_ent_dim_aligned_set_14_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Returns the 14 point
+/** Usage : dwg_ent_dim_aligned_get_14_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_aligned_get_14_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
                               int *error)
@@ -6737,6 +6942,11 @@ dwg_ent_dim_aligned_get_14_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Returns the ext line rotation
+/** Usage : double rot = dwg_ent_dim_aligned_get_ext_line_rotation(dim, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 int
+*/
 double
 dwg_ent_dim_aligned_get_ext_line_rotation(dwg_ent_dim_aligned *dim, int *error)
 {
@@ -6749,6 +6959,12 @@ dwg_ent_dim_aligned_get_ext_line_rotation(dwg_ent_dim_aligned *dim, int *error)
     *error = 1;
 }
 
+/// Sets the ext line rotation
+/** Usage : dwg_ent_dim_aligned_set_ext_line_rotation(dim, rot, &error);
+\param 1 dwg_ent_dim_aligned
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_aligned_set_ext_line_rotation(dwg_ent_dim_aligned *dim,
                                           double rot, int *error)
@@ -6838,6 +7054,11 @@ dwg_ent_dim_ang3pt_set_elevation_ecs12(dwg_ent_dim_ang3pt *ang,
     *error = 1;
 }
 
+/// Returns the flags1
+/** Usage : char flags1 = dwg_ent_dim_ang3pt_get_flags1(dim, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 int
+*/
 char
 dwg_ent_dim_ang3pt_get_flags1(dwg_ent_dim_ang3pt *ang, int *error)
 {
@@ -6850,6 +7071,12 @@ dwg_ent_dim_ang3pt_get_flags1(dwg_ent_dim_ang3pt *ang, int *error)
     *error = 1;
 }
 
+/// Sets the flags1
+/** Usage : dwg_ent_dim_ang3pt_set_flags1(dim, flag1, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 char
+\param 3 int
+*/
 void
 dwg_ent_dim_ang3pt_set_flags1(dwg_ent_dim_ang3pt *ang, char flag, int *error)
 {
@@ -6862,6 +7089,11 @@ dwg_ent_dim_ang3pt_set_flags1(dwg_ent_dim_ang3pt *ang, char flag, int *error)
     *error = 1;
 }
 
+/// Returns the act measurement
+/** Usage : double measure = dwg_ent_dim_ang3pt_get_act_measurement(dim, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 int
+*/
 double
 dwg_ent_dim_ang3pt_get_act_measurement(dwg_ent_dim_ang3pt *ang, int *error)
 {
@@ -6874,6 +7106,12 @@ dwg_ent_dim_ang3pt_get_act_measurement(dwg_ent_dim_ang3pt *ang, int *error)
     *error = 1;
 }
 
+/// Sets the act measurement
+/** Usage : dwg_ent_dim_ang3pt_set_act_measurement(dim, measure, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_ang3pt_set_act_measurement(dwg_ent_dim_ang3pt *ang,
                                        double act_measurement, int *error)
@@ -6887,6 +7125,11 @@ dwg_ent_dim_ang3pt_set_act_measurement(dwg_ent_dim_ang3pt *ang,
     *error = 1;
 }
 
+/// Returns the horiz dir
+/** Usage : double horiz_dir = dwg_ent_dim_ang3pt_get_horiz_dir(dim, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 int
+*/
 double
 dwg_ent_dim_ang3pt_get_horiz_dir(dwg_ent_dim_ang3pt *ang, int *error)
 {
@@ -6899,6 +7142,12 @@ dwg_ent_dim_ang3pt_get_horiz_dir(dwg_ent_dim_ang3pt *ang, int *error)
     *error = 1;
 }
 
+/// Sets the horiz dir
+/** Usage : dwg_ent_dim_ang3pt_set_horiz_dir(dim, horiz_dir, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_ang3pt_set_horiz_dir(dwg_ent_dim_ang3pt *ang, double horiz_dir,
                                  int *error)
@@ -6912,6 +7161,11 @@ dwg_ent_dim_ang3pt_set_horiz_dir(dwg_ent_dim_ang3pt *ang, double horiz_dir,
     *error = 1;
 }
 
+/// Returns the lspace factor
+/** Usage : double factor = dwg_ent_dim_ang3pt_get_lspace_factor(dim, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 int
+*/
 double
 dwg_ent_dim_ang3pt_get_lspace_factor(dwg_ent_dim_ang3pt *ang, int *error)
 {
@@ -6924,6 +7178,12 @@ dwg_ent_dim_ang3pt_get_lspace_factor(dwg_ent_dim_ang3pt *ang, int *error)
     *error = 1;
 }
 
+/// Sets the lspace factor
+/** Usage : dwg_ent_dim_ang3pt_set_lspace_factor(dim, factor, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_ang3pt_set_lspace_factor(dwg_ent_dim_ang3pt *ang, double factor,
                                      int *error)
@@ -6937,6 +7197,11 @@ dwg_ent_dim_ang3pt_set_lspace_factor(dwg_ent_dim_ang3pt *ang, double factor,
     *error = 1;
 }
 
+/// Returns the lspace style
+/** Usage : double style = dwg_ent_dim_ang3pt_get_lspace_style(dim, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 int
+*/
 unsigned int
 dwg_ent_dim_ang3pt_get_lspace_style(dwg_ent_dim_ang3pt *ang, int *error)
 {
@@ -6949,6 +7214,12 @@ dwg_ent_dim_ang3pt_get_lspace_style(dwg_ent_dim_ang3pt *ang, int *error)
     *error = 1;
 }
 
+/// Sets the lspace style
+/** Usage : dwg_ent_dim_ang3pt_set_lspace_style(dim, style, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 unsigned int
+\param 3 int
+*/
 void
 dwg_ent_dim_ang3pt_set_lspace_style(dwg_ent_dim_ang3pt *ang,
                                     unsigned int style, int *error)
@@ -6962,6 +7233,11 @@ dwg_ent_dim_ang3pt_set_lspace_style(dwg_ent_dim_ang3pt *ang,
     *error = 1;
 }
 
+/// Returns the attachment point
+/** Usage : unsigned int point = dwg_ent_dim_ang3pt_get_attachment_point(dim, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 int
+*/
 unsigned int
 dwg_ent_dim_ang3pt_get_attachment_point(dwg_ent_dim_ang3pt *ang, int *error)
 {
@@ -6974,6 +7250,12 @@ dwg_ent_dim_ang3pt_get_attachment_point(dwg_ent_dim_ang3pt *ang, int *error)
     *error = 1;
 }
 
+/// Sets the attachment point
+/** Usage : dwg_ent_dim_ang3pt_set_attachment_point(dim, point, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 unsigned int
+\param 3 int
+*/
 void
 dwg_ent_dim_ang3pt_set_attachment_point(dwg_ent_dim_ang3pt *ang,
                                         unsigned int point, int *error)
@@ -6987,6 +7269,12 @@ dwg_ent_dim_ang3pt_set_attachment_point(dwg_ent_dim_ang3pt *ang,
     *error = 1;
 }
 
+/// Sets the extrusion
+/** Usage : dwg_ent_dim_ang3pt_set_extrusion(dim, &extrusion, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_ang3pt_set_extrusion(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
                                  int *error)
@@ -7002,6 +7290,12 @@ dwg_ent_dim_ang3pt_set_extrusion(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
     *error = 1;
 }
 
+/// returns the extrusion
+/** Usage : dwg_ent_dim_ang3pt_get_extrusion(dim, &extrusion, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_ang3pt_get_extrusion(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
                                  int *error)
@@ -7017,6 +7311,11 @@ dwg_ent_dim_ang3pt_get_extrusion(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
     *error = 1;
 }
 
+/// returns the user_text
+/** Usage : char * text = dwg_ent_dim_ang3pt_get_user_text(dim, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 int
+*/
 char *
 dwg_ent_dim_ang3pt_get_user_text(dwg_ent_dim_ang3pt *ang, int *error)
 {
@@ -7029,6 +7328,12 @@ dwg_ent_dim_ang3pt_get_user_text(dwg_ent_dim_ang3pt *ang, int *error)
     *error = 1;
 }
 
+/// Sets the user_text
+/** Usage : dwg_ent_dim_ang3pt_set_user_text(dim, user_text, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 char *
+\param 3 int
+*/
 void
 dwg_ent_dim_ang3pt_set_user_text(dwg_ent_dim_ang3pt *ang, char * text,
                                  int *error)
@@ -7042,6 +7347,11 @@ dwg_ent_dim_ang3pt_set_user_text(dwg_ent_dim_ang3pt *ang, char * text,
     *error = 1;
 }
 
+/// returns the text_rotation
+/** Usage : double rot = dwg_ent_dim_ang3pt_get_text_rot(dim, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 int
+*/
 double
 dwg_ent_dim_ang3pt_get_text_rot(dwg_ent_dim_ang3pt *ang, int *error)
 {
@@ -7054,6 +7364,12 @@ dwg_ent_dim_ang3pt_get_text_rot(dwg_ent_dim_ang3pt *ang, int *error)
     *error = 1;
 }
 
+/// Sets the text_rot
+/** Usage : dwg_ent_dim_ang3pt_set_text_rot(dim, text_rot, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_ang3pt_set_text_rot(dwg_ent_dim_ang3pt *ang, double rot,
                                 int *error)
@@ -7067,6 +7383,11 @@ dwg_ent_dim_ang3pt_set_text_rot(dwg_ent_dim_ang3pt *ang, double rot,
     *error = 1;
 }
 
+/// returns the ins rotation
+/** Usage : double rotation = dwg_ent_dim_ang3pt_get_ins_rotation(dim, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 int
+*/
 double
 dwg_ent_dim_ang3pt_get_ins_rotation(dwg_ent_dim_ang3pt *ang, int *error)
 {
@@ -7079,6 +7400,12 @@ dwg_ent_dim_ang3pt_get_ins_rotation(dwg_ent_dim_ang3pt *ang, int *error)
     *error = 1;
 }
 
+/// Sets the ins_rotation
+/** Usage : dwg_ent_dim_ang3pt_set_ins_rotation(dim, ins_rotation, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 char *
+\param 3 int
+*/
 void
 dwg_ent_dim_ang3pt_set_ins_rotation(dwg_ent_dim_ang3pt *ang, double rot,
                                     int *error)
@@ -7092,6 +7419,11 @@ dwg_ent_dim_ang3pt_set_ins_rotation(dwg_ent_dim_ang3pt *ang, double rot,
     *error = 1;
 }
 
+/// returns the flip arrow 1
+/** Usage : char arrow1 = dwg_ent_dim_ang3pt_get_flip_arrow1(dim, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 int
+*/
 char
 dwg_ent_dim_ang3pt_get_flip_arrow1(dwg_ent_dim_ang3pt *ang, int *error)
 {
@@ -7104,6 +7436,12 @@ dwg_ent_dim_ang3pt_get_flip_arrow1(dwg_ent_dim_ang3pt *ang, int *error)
     *error = 1;
 }
 
+/// Sets the flip_arrow1
+/** Usage : dwg_ent_dim_ang3pt_set_flip_arrow1(dim, arrow, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 char
+\param 3 int
+*/
 void
 dwg_ent_dim_ang3pt_set_flip_arrow1(dwg_ent_dim_ang3pt *ang, char flip_arrow,
                                    int *error)
@@ -7117,6 +7455,11 @@ dwg_ent_dim_ang3pt_set_flip_arrow1(dwg_ent_dim_ang3pt *ang, char flip_arrow,
     *error = 1;
 }
 
+/// returns the flip arrow 2
+/** Usage : char arrow2 = dwg_ent_dim_ang3pt_get_flip_arrow2(dim, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 int
+*/
 char
 dwg_ent_dim_ang3pt_get_flip_arrow2(dwg_ent_dim_ang3pt *ang, int *error)
 {
@@ -7129,6 +7472,12 @@ dwg_ent_dim_ang3pt_get_flip_arrow2(dwg_ent_dim_ang3pt *ang, int *error)
     *error = 1;
 }
 
+/// Sets the flip_arrow2
+/** Usage : dwg_ent_dim_ang3pt_set_flip_arrow2(dim, arrow, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 char
+\param 3 int
+*/
 void
 dwg_ent_dim_ang3pt_set_flip_arrow2(dwg_ent_dim_ang3pt *ang, char flip_arrow,
                                    int *error)
@@ -7142,6 +7491,12 @@ dwg_ent_dim_ang3pt_set_flip_arrow2(dwg_ent_dim_ang3pt *ang, char flip_arrow,
     *error = 1;
 }
 
+/// Sets the text mid point
+/** Usage : dwg_ent_dim_ang3pt_set_text_mid_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 dwg_point_2d
+\param 3 int
+*/
 void
 dwg_ent_dim_ang3pt_set_text_mid_pt(dwg_ent_dim_ang3pt *ang,
                                    dwg_point_2d *point, int *error)
@@ -7156,6 +7511,12 @@ dwg_ent_dim_ang3pt_set_text_mid_pt(dwg_ent_dim_ang3pt *ang,
     *error = 1;
 }
 
+/// Returns the text mid point
+/** Usage : dwg_ent_dim_ang3pt_get_text_mid_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 dwg_point_2d
+\param 3 int
+*/
 void
 dwg_ent_dim_ang3pt_get_text_mid_pt(dwg_ent_dim_ang3pt *ang,
                                    dwg_point_2d *point, int *error)
@@ -7170,6 +7531,12 @@ dwg_ent_dim_ang3pt_get_text_mid_pt(dwg_ent_dim_ang3pt *ang,
     *error = 1;
 }
 
+/// Sets the ins scale
+/** Usage : dwg_ent_dim_ang3pt_set_ins_scale(dim, &point, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 dwg_point_2d
+\param 3 int
+*/
 void
 dwg_ent_dim_ang3pt_set_ins_scale(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
                                  int *error)
@@ -7185,6 +7552,12 @@ dwg_ent_dim_ang3pt_set_ins_scale(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Returns ins scale points
+/* Usage : dwg_ent_dim_ang3pt_get_ins_scale(dim, &point, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_ang3pt_get_ins_scale(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
                                  int *error)
@@ -7201,6 +7574,12 @@ dwg_ent_dim_ang3pt_get_ins_scale(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
 }
 
 
+/// Sets the 12 pt
+/** Usage : dwg_ent_dim_ang3pt_set_12_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 dwg_point_2d
+\param 3 int
+*/
 void
 dwg_ent_dim_ang3pt_set_12_pt(dwg_ent_dim_ang3pt *ang, dwg_point_2d *point,
                              int *error)
@@ -7215,6 +7594,12 @@ dwg_ent_dim_ang3pt_set_12_pt(dwg_ent_dim_ang3pt *ang, dwg_point_2d *point,
     *error = 1;
 }
 
+/// Returns the 12 pt
+/** Usage : dwg_ent_dim_ang3pt_get_12_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 dwg_point_2d
+\param 3 int
+*/
 void
 dwg_ent_dim_ang3pt_get_12_pt(dwg_ent_dim_ang3pt *ang, dwg_point_2d *point,
                              int *error)
@@ -7229,6 +7614,12 @@ dwg_ent_dim_ang3pt_get_12_pt(dwg_ent_dim_ang3pt *ang, dwg_point_2d *point,
     *error = 1;
 }
 
+/// Sets the 10 point
+/** Usage : dwg_ent_dim_ang3pt_set_10_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_ang3pt_set_10_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
                              int *error)
@@ -7244,6 +7635,12 @@ dwg_ent_dim_ang3pt_set_10_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Returns the 10 pt
+/** Usage : dwg_ent_dim_ang3pt_get_10_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_ang3pt_get_10_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
                              int *error)
@@ -7259,6 +7656,12 @@ dwg_ent_dim_ang3pt_get_10_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Sets the 13 point
+/** Usage : dwg_ent_dim_ang3pt_set_13_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_ang3pt_set_13_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
                             int *error)
@@ -7274,6 +7677,12 @@ dwg_ent_dim_ang3pt_set_13_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Returns the 13 pt
+/** Usage : dwg_ent_dim_ang3pt_get_13_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_ang3pt_get_13_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point, 
                              int *error)
@@ -7289,6 +7698,12 @@ dwg_ent_dim_ang3pt_get_13_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Sets the 14 point
+/** Usage : dwg_ent_dim_ang3pt_set_14_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_ang3pt_set_14_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
                              int *error)
@@ -7304,6 +7719,12 @@ dwg_ent_dim_ang3pt_set_14_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Returns the 14 pt
+/** Usage : dwg_ent_dim_ang3pt_get_14_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_ang3pt_get_14_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
                              int *error)
@@ -7320,6 +7741,12 @@ dwg_ent_dim_ang3pt_get_14_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
 }
 
 
+/// Sets the 15 point
+/** Usage : dwg_ent_dim_ang3pt_set_15_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 dwg_point_3d
+\param 3 int
+*/
 void
 dwg_ent_dim_ang3pt_set_15_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
                              int *error)
@@ -7335,6 +7762,12 @@ dwg_ent_dim_ang3pt_set_15_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Returns the text 15 pt
+/** Usage : dwg_ent_dim_ang3pt_get_text_15_pt(dim, &point, &error);
+\param 1 dwg_ent_dim_ang3pt
+\param 2 dwg_point_2d
+\param 3 int
+*/
 void
 dwg_ent_dim_ang3pt_get_15_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
                              int *error)
@@ -7426,6 +7859,11 @@ dwg_ent_dim_ang2ln_set_elevation_ecs12(dwg_ent_dim_ang2ln *ang,
     *error = 1;
 }
 
+/// Returns the flags1
+/** Usage : double flags1 = dwg_ent_dim_ang2ln_get_flags1(dim, &error);
+\param 1 dwg_ent_dim_ang2ln
+\param 2 int
+*/
 char
 dwg_ent_dim_ang2ln_get_flags1(dwg_ent_dim_ang2ln *ang, int *error)
 {
@@ -7438,6 +7876,12 @@ dwg_ent_dim_ang2ln_get_flags1(dwg_ent_dim_ang2ln *ang, int *error)
     *error = 1;
 }
 
+/// sets the flags1
+/** Usage : dwg_ent_dim_ang2ln_set_flags1(dim, flag, &error);
+\param 1 dwg_ent_dim_ang2ln
+\param 2 char
+\param 3 int
+*/
 void
 dwg_ent_dim_ang2ln_set_flags1(dwg_ent_dim_ang2ln *ang, char flag, int *error)
 {
@@ -7450,6 +7894,11 @@ dwg_ent_dim_ang2ln_set_flags1(dwg_ent_dim_ang2ln *ang, char flag, int *error)
     *error = 1;
 }
 
+/// Returns the act_measurement
+/** Usage : double act_measurement = dwg_ent_dim_ang2ln_get_act_measurement(dim, &error);
+\param 1 dwg_ent_dim_ang2ln
+\param 2 int
+*/
 double
 dwg_ent_dim_ang2ln_get_act_measurement(dwg_ent_dim_ang2ln *ang,
                                        int *error)
@@ -7463,6 +7912,12 @@ dwg_ent_dim_ang2ln_get_act_measurement(dwg_ent_dim_ang2ln *ang,
     *error = 1;
 }
 
+/// sets the act_measurement
+/** Usage : dwg_ent_dim_ang2ln_set_act_measurement(dim, measure, &error);
+\param 1 dwg_ent_dim_ang2ln
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_ang2ln_set_act_measurement(dwg_ent_dim_ang2ln *ang,
                                        double act_measurement, int *error)
@@ -7476,6 +7931,11 @@ dwg_ent_dim_ang2ln_set_act_measurement(dwg_ent_dim_ang2ln *ang,
     *error = 1;
 }
 
+/// Returns the horiz_dir
+/** Usage : double horiz_dir = dwg_ent_dim_ang2ln_get_horiz_dir(dim, &error);
+\param 1 dwg_ent_dim_ang2ln
+\param 2 int
+*/
 double
 dwg_ent_dim_ang2ln_get_horiz_dir(dwg_ent_dim_ang2ln *ang,
                                  int *error)
@@ -7489,6 +7949,12 @@ dwg_ent_dim_ang2ln_get_horiz_dir(dwg_ent_dim_ang2ln *ang,
     *error = 1;
 }
 
+/// sets the horiz_dir
+/** Usage : dwg_ent_dim_ang2ln_set_horiz_dir(dim, horiz_dir, &error);
+\param 1 dwg_ent_dim_ang2ln
+\param 2 double
+\param 3 int
+*/
 void
 dwg_ent_dim_ang2ln_set_horiz_dir(dwg_ent_dim_ang2ln *ang,
                                  double horiz_dir, int *error)
@@ -11462,6 +11928,7 @@ dwg_ent_viewport_get_view_direction(dwg_ent_viewport *vp, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Sets view twist angle
 void
 dwg_ent_viewport_set_view_twist_angle(dwg_ent_viewport *vp, double angle,
                                       int *error)
@@ -11475,6 +11942,7 @@ dwg_ent_viewport_set_view_twist_angle(dwg_ent_viewport *vp, double angle,
     *error = 1;
 }
 
+/// Returns view twist angle
 double
 dwg_ent_viewport_get_view_twist_angle(dwg_ent_viewport *vp, int *error)
 {
@@ -11487,6 +11955,7 @@ dwg_ent_viewport_get_view_twist_angle(dwg_ent_viewport *vp, int *error)
     *error = 1;
 }
 
+/// Sets viewport view height
 void
 dwg_ent_viewport_set_view_height(dwg_ent_viewport *vp, double height,
                                  int *error)
@@ -11500,6 +11969,7 @@ dwg_ent_viewport_set_view_height(dwg_ent_viewport *vp, double height,
     *error = 1;
 }
 
+/// Returns viewport view height
 double
 dwg_ent_viewport_get_view_height(dwg_ent_viewport *vp, int *error)
 {
@@ -11512,6 +11982,7 @@ dwg_ent_viewport_get_view_height(dwg_ent_viewport *vp, int *error)
     *error = 1;
 }
 
+/// Sets viewport lens length 
 void
 dwg_ent_viewport_set_lens_length(dwg_ent_viewport *vp, double length,
                                  int *error)
@@ -11525,6 +11996,7 @@ dwg_ent_viewport_set_lens_length(dwg_ent_viewport *vp, double length,
     *error = 1;
 }
 
+/// Returns lens length 
 double
 dwg_ent_viewport_get_lens_length(dwg_ent_viewport *vp, int *error)
 {
@@ -11537,6 +12009,7 @@ dwg_ent_viewport_get_lens_length(dwg_ent_viewport *vp, int *error)
     *error = 1;
 }
 
+/// Sets viewport front clip z value
 void
 dwg_ent_viewport_set_front_clip_z(dwg_ent_viewport *vp, double front_z,
                                   int *error)
@@ -11550,6 +12023,7 @@ dwg_ent_viewport_set_front_clip_z(dwg_ent_viewport *vp, double front_z,
     *error = 1;
 }
 
+/// Returns viewport front clip z value
 double
 dwg_ent_viewport_get_front_clip_z(dwg_ent_viewport *vp, int *error)
 {
@@ -11562,6 +12036,7 @@ dwg_ent_viewport_get_front_clip_z(dwg_ent_viewport *vp, int *error)
     *error = 1;
 }
 
+/// Sets viewport back clip z value
 void
 dwg_ent_viewport_set_back_clip_z(dwg_ent_viewport *vp, double back_z,
                                  int *error)
@@ -11575,6 +12050,7 @@ dwg_ent_viewport_set_back_clip_z(dwg_ent_viewport *vp, double back_z,
     *error = 1;
 }
 
+/// Returns viewport back clip z value
 double
 dwg_ent_viewport_get_back_clip_z(dwg_ent_viewport *vp, int *error)
 {
@@ -11587,6 +12063,7 @@ dwg_ent_viewport_get_back_clip_z(dwg_ent_viewport *vp, int *error)
     *error = 1;
 }
 
+/// Sets viewport snap angle
 void
 dwg_ent_viewport_set_snap_angle(dwg_ent_viewport *vp, double angle, int *error)
 {
@@ -11599,6 +12076,7 @@ dwg_ent_viewport_set_snap_angle(dwg_ent_viewport *vp, double angle, int *error)
     *error = 1;
 }
 
+/// Returns viewport snap angle
 double
 dwg_ent_viewport_get_snap_angle(dwg_ent_viewport *vp, int *error)
 {
@@ -11611,6 +12089,7 @@ dwg_ent_viewport_get_snap_angle(dwg_ent_viewport *vp, int *error)
     *error = 1;
 }
 
+/// Returns viewport view center
 void
 dwg_ent_viewport_get_view_center(dwg_ent_viewport *vp, dwg_point_2d *point,
                                  int *error)
@@ -11625,6 +12104,7 @@ dwg_ent_viewport_get_view_center(dwg_ent_viewport *vp, dwg_point_2d *point,
     *error = 1;
 }
 
+/// Sets viewport view center
 void
 dwg_ent_viewport_set_view_center(dwg_ent_viewport *vp, dwg_point_2d *point,
                                  int *error)
@@ -11639,6 +12119,7 @@ dwg_ent_viewport_set_view_center(dwg_ent_viewport *vp, dwg_point_2d *point,
     *error = 1;
 }
 
+/// Returns grid spacing
 void
 dwg_ent_viewport_get_grid_spacing(dwg_ent_viewport *vp, dwg_point_2d *point,
                                   int *error)
@@ -11653,6 +12134,7 @@ dwg_ent_viewport_get_grid_spacing(dwg_ent_viewport *vp, dwg_point_2d *point,
     *error = 1;
 }
 
+/// Sets grid spacing
 void
 dwg_ent_viewport_set_grid_spacing(dwg_ent_viewport *vp, dwg_point_2d *point,
                                   int *error)
@@ -11667,6 +12149,7 @@ dwg_ent_viewport_set_grid_spacing(dwg_ent_viewport *vp, dwg_point_2d *point,
     *error = 1;
 }
 
+/// Returns viewport snap base
 void
 dwg_ent_viewport_get_snap_base(dwg_ent_viewport *vp, dwg_point_2d *point,
                                int *error)
@@ -11681,6 +12164,7 @@ dwg_ent_viewport_get_snap_base(dwg_ent_viewport *vp, dwg_point_2d *point,
     *error = 1;
 }
 
+/// Sets viewport snap base
 void
 dwg_ent_viewport_set_snap_base(dwg_ent_viewport *vp, dwg_point_2d *point,
                                int *error)
@@ -11695,6 +12179,7 @@ dwg_ent_viewport_set_snap_base(dwg_ent_viewport *vp, dwg_point_2d *point,
     *error = 1;
 }
 
+/// Returns viewport snap spacing
 void
 dwg_ent_viewport_get_snap_spacing(dwg_ent_viewport *vp, dwg_point_2d *point,
                                   int *error)
@@ -11709,6 +12194,7 @@ dwg_ent_viewport_get_snap_spacing(dwg_ent_viewport *vp, dwg_point_2d *point,
     *error = 1;
 }
 
+/// Sets viewport snap spacing
 void
 dwg_ent_viewport_set_snap_spacing(dwg_ent_viewport *vp, dwg_point_2d *point,
                                   int *error)
@@ -11723,6 +12209,7 @@ dwg_ent_viewport_set_snap_spacing(dwg_ent_viewport *vp, dwg_point_2d *point,
     *error = 1;
 }
 
+/// Sets viewport ucs origin
 void
 dwg_ent_viewport_set_ucs_origin(dwg_ent_viewport *vp, dwg_point_3d *point,
                                 int *error)
@@ -11738,6 +12225,7 @@ dwg_ent_viewport_set_ucs_origin(dwg_ent_viewport *vp, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Returns viewport ucs origin
 void
 dwg_ent_viewport_get_ucs_origin(dwg_ent_viewport *vp, dwg_point_3d *point,
                                 int *error)
@@ -11753,6 +12241,7 @@ dwg_ent_viewport_get_ucs_origin(dwg_ent_viewport *vp, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Sets viewport ucs X axis
 void
 dwg_ent_viewport_set_ucs_x_axis(dwg_ent_viewport *vp, dwg_point_3d *point,
                                 int *error)
@@ -11768,6 +12257,7 @@ dwg_ent_viewport_set_ucs_x_axis(dwg_ent_viewport *vp, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Returns viewport ucs X axis
 void
 dwg_ent_viewport_get_ucs_x_axis(dwg_ent_viewport *vp, dwg_point_3d *point,
                                 int *error)
@@ -11783,6 +12273,7 @@ dwg_ent_viewport_get_ucs_x_axis(dwg_ent_viewport *vp, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Sets viewport ucs y axis
 void
 dwg_ent_viewport_set_ucs_y_axis(dwg_ent_viewport *vp, dwg_point_3d *point,
                                 int *error)
@@ -11798,6 +12289,7 @@ dwg_ent_viewport_set_ucs_y_axis(dwg_ent_viewport *vp, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Returns viewport ucs y axis
 void
 dwg_ent_viewport_get_ucs_y_axis(dwg_ent_viewport *vp, dwg_point_3d *point,
                                 int *error)
@@ -11813,6 +12305,7 @@ dwg_ent_viewport_get_ucs_y_axis(dwg_ent_viewport *vp, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Sets viewport ucs elevation
 void
 dwg_ent_viewport_set_ucs_elevation(dwg_ent_viewport *vp, double elevation,
                                    int *error)
@@ -11826,6 +12319,7 @@ dwg_ent_viewport_set_ucs_elevation(dwg_ent_viewport *vp, double elevation,
     *error = 1;
 }
 
+/// Returns ucs elevation
 double
 dwg_ent_viewport_get_ucs_elevation(dwg_ent_viewport *vp, int *error)
 {
@@ -11838,6 +12332,7 @@ dwg_ent_viewport_get_ucs_elevation(dwg_ent_viewport *vp, int *error)
     *error = 1;
 }
 
+/// Sets UCS ortho view type
 void
 dwg_ent_viewport_set_ucs_ortho_view_type(dwg_ent_viewport *vp,
                                          unsigned int type, int *error)
@@ -11851,6 +12346,7 @@ dwg_ent_viewport_set_ucs_ortho_view_type(dwg_ent_viewport *vp,
     *error = 1;
 }
 
+/// Returns UCS ortho view type
 unsigned int
 dwg_ent_viewport_get_ucs_ortho_view_type(dwg_ent_viewport *vp, int *error)
 {
@@ -11863,6 +12359,7 @@ dwg_ent_viewport_get_ucs_ortho_view_type(dwg_ent_viewport *vp, int *error)
     *error = 1;
 }
 
+/// Sets shade plot mode value
 void
 dwg_ent_viewport_set_shadeplot_mode(dwg_ent_viewport *vp,
                                     unsigned int shadeplot, int *error)
@@ -11876,6 +12373,7 @@ dwg_ent_viewport_set_shadeplot_mode(dwg_ent_viewport *vp,
     *error = 1;
 }
 
+/// Returns shade plot mode value
 unsigned int
 dwg_ent_viewport_get_shadeplot_mode(dwg_ent_viewport *vp, int *error)
 {
@@ -11888,6 +12386,7 @@ dwg_ent_viewport_get_shadeplot_mode(dwg_ent_viewport *vp, int *error)
     *error = 1;
 }
 
+/// Sets viewport default lightning usage
 void
 dwg_ent_viewport_set_use_def_lights(dwg_ent_viewport *vp,
                                     unsigned char lights, int *error)
@@ -11901,6 +12400,7 @@ dwg_ent_viewport_set_use_def_lights(dwg_ent_viewport *vp,
     *error = 1;
 }
 
+/// Returns viewport default lightning usage
 unsigned char 
 dwg_ent_viewport_get_use_def_lights(dwg_ent_viewport *vp, int *error)
 {
@@ -11913,6 +12413,7 @@ dwg_ent_viewport_get_use_def_lights(dwg_ent_viewport *vp, int *error)
     *error = 1;
 }
 
+/// Sets viewport default lightning type
 void
 dwg_ent_viewport_set_def_lighting_type(dwg_ent_viewport *vp, char type,
                                        int *error)
@@ -11926,6 +12427,7 @@ dwg_ent_viewport_set_def_lighting_type(dwg_ent_viewport *vp, char type,
     *error = 1;
 }
 
+/// Returns viewport default lightning type
 char 
 dwg_ent_viewport_get_def_lighting_type(dwg_ent_viewport *vp, int *error)
 {
@@ -11938,6 +12440,7 @@ dwg_ent_viewport_get_def_lighting_type(dwg_ent_viewport *vp, int *error)
     *error = 1;
 }
 
+/// Sets viewport brightness
 void
 dwg_ent_viewport_set_brightness(dwg_ent_viewport *vp, double brightness,
                                 int *error)
@@ -11951,6 +12454,7 @@ dwg_ent_viewport_set_brightness(dwg_ent_viewport *vp, double brightness,
     *error = 1;
 }
 
+/// Returns viewport brightness
 double
 dwg_ent_viewport_get_brightness(dwg_ent_viewport *vp, int *error)
 {
@@ -11963,6 +12467,7 @@ dwg_ent_viewport_get_brightness(dwg_ent_viewport *vp, int *error)
     *error = 1;
 }
 
+/// sets viewport contrast
 void
 dwg_ent_viewport_set_contrast(dwg_ent_viewport *vp, double contrast,
                               int *error)
@@ -11976,6 +12481,7 @@ dwg_ent_viewport_set_contrast(dwg_ent_viewport *vp, double contrast,
     *error = 1;
 }
 
+/// Returns viewport contrast
 double
 dwg_ent_viewport_get_contrast(dwg_ent_viewport *vp, int *error)
 {
@@ -11992,6 +12498,7 @@ dwg_ent_viewport_get_contrast(dwg_ent_viewport *vp, int *error)
 *                FUNCTIONS FOR POLYLINE PFACE ENTITY                *
 ********************************************************************/
 
+/// Returns polyline pface num verts
 unsigned int
 dwg_ent_polyline_pface_get_numverts(dwg_ent_polyline_pface *pface, int *error)
 {
@@ -12006,6 +12513,7 @@ dwg_ent_polyline_pface_get_numverts(dwg_ent_polyline_pface *pface, int *error)
     }
 }
 
+/// Sets num verts 
 void
 dwg_ent_polyline_pface_set_numverts(dwg_ent_polyline_pface *pface,
                                     unsigned int numverts, int *error)
@@ -12021,6 +12529,7 @@ dwg_ent_polyline_pface_set_numverts(dwg_ent_polyline_pface *pface,
     }
 }
 
+/// Returns polyline pface owned object count
 long
 dwg_ent_polyline_pface_get_owned_obj_count(dwg_ent_polyline_pface *pface,
                                            int *error)
@@ -12036,6 +12545,7 @@ dwg_ent_polyline_pface_get_owned_obj_count(dwg_ent_polyline_pface *pface,
     }
 }
 
+/// Sets polyline pfadce owned object count 
 void
 dwg_ent_polyline_pface_set_owned_obj_count(dwg_ent_polyline_pface *pface,
                                            long owned_obj_count, int *error)
@@ -12051,6 +12561,7 @@ dwg_ent_polyline_pface_set_owned_obj_count(dwg_ent_polyline_pface *pface,
     }
 }
 
+/// Returns polyline pface numfaces
 unsigned int
 dwg_ent_polyline_pface_get_numfaces(dwg_ent_polyline_pface *pface, int *error)
 {
@@ -12065,6 +12576,7 @@ dwg_ent_polyline_pface_get_numfaces(dwg_ent_polyline_pface *pface, int *error)
     }
 }
 
+/// Sets polyline pface numfaces
 void
 dwg_ent_polyline_pface_set_numfaces(dwg_ent_polyline_pface *pface,
                                     unsigned int numfaces, int *error)
@@ -12084,6 +12596,7 @@ dwg_ent_polyline_pface_set_numfaces(dwg_ent_polyline_pface *pface,
 *                FUNCTIONS FOR POLYLINE_MESH ENTITY                 *
 ********************************************************************/
 
+/// Returns polyline mesh flags
 unsigned int
 dwg_ent_polyline_mesh_get_flags(dwg_ent_polyline_mesh *mesh, int *error)
 {
@@ -12098,6 +12611,7 @@ dwg_ent_polyline_mesh_get_flags(dwg_ent_polyline_mesh *mesh, int *error)
     }
 }
 
+/// Sets polyline mesh flags
 void
 dwg_ent_polyline_mesh_set_flags(dwg_ent_polyline_mesh *mesh,
                                 unsigned int flags, int *error)
@@ -12113,6 +12627,7 @@ dwg_ent_polyline_mesh_set_flags(dwg_ent_polyline_mesh *mesh,
     }
 }
 
+/// Returns polyline mesh curve type
 unsigned int
 dwg_ent_polyline_mesh_get_curve_type(dwg_ent_polyline_mesh *mesh, int *error)
 {
@@ -12127,6 +12642,7 @@ dwg_ent_polyline_mesh_get_curve_type(dwg_ent_polyline_mesh *mesh, int *error)
     }
 }
 
+/// Sets polyline mesh curve type
 void
 dwg_ent_polyline_mesh_set_curve_type(dwg_ent_polyline_mesh *mesh,
                                      unsigned int curve_type, int *error)
@@ -12142,6 +12658,7 @@ dwg_ent_polyline_mesh_set_curve_type(dwg_ent_polyline_mesh *mesh,
     }
 }
 
+/// Returns polyline mesh n vert count
 unsigned int
 dwg_ent_polyline_mesh_get_m_vert_count(dwg_ent_polyline_mesh *mesh,
                                        int *error)
@@ -12157,6 +12674,7 @@ dwg_ent_polyline_mesh_get_m_vert_count(dwg_ent_polyline_mesh *mesh,
     }
 }
 
+/// Sets polyline mesh M vert count
 void
 dwg_ent_polyline_mesh_set_m_vert_count(dwg_ent_polyline_mesh *mesh,
                                        unsigned int m_vert_count, int *error)
@@ -12172,6 +12690,7 @@ dwg_ent_polyline_mesh_set_m_vert_count(dwg_ent_polyline_mesh *mesh,
     }
 }
 
+/// Returns polyline mesh n vert count
 unsigned int
 dwg_ent_polyline_mesh_get_n_vert_count(dwg_ent_polyline_mesh *mesh,
                                        int *error)
@@ -12187,6 +12706,7 @@ dwg_ent_polyline_mesh_get_n_vert_count(dwg_ent_polyline_mesh *mesh,
     }
 }
 
+/// Sets polyline mesh n vert count
 void
 dwg_ent_polyline_mesh_set_n_vert_count(dwg_ent_polyline_mesh *mesh,
                                        unsigned int n_vert_count, int *error)
@@ -12202,6 +12722,7 @@ dwg_ent_polyline_mesh_set_n_vert_count(dwg_ent_polyline_mesh *mesh,
     }
 }
 
+/// Returns polyline mesh n density
 unsigned int
 dwg_ent_polyline_mesh_get_m_density(dwg_ent_polyline_mesh *mesh, int *error)
 {
@@ -12216,6 +12737,7 @@ dwg_ent_polyline_mesh_get_m_density(dwg_ent_polyline_mesh *mesh, int *error)
     }
 }
 
+/// Sets polyline mesh M density
 void
 dwg_ent_polyline_mesh_set_m_density(dwg_ent_polyline_mesh *mesh,
                                     unsigned int m_density, int *error)
@@ -12231,6 +12753,7 @@ dwg_ent_polyline_mesh_set_m_density(dwg_ent_polyline_mesh *mesh,
     }
 }
 
+/// Returns polyline mesh n density
 unsigned int
 dwg_ent_polyline_mesh_get_n_density(dwg_ent_polyline_mesh *mesh, int *error)
 {
@@ -12245,6 +12768,7 @@ dwg_ent_polyline_mesh_get_n_density(dwg_ent_polyline_mesh *mesh, int *error)
     }
 }
 
+/// Sets polyline mesh n density
 void
 dwg_ent_polyline_mesh_set_n_density(dwg_ent_polyline_mesh *mesh,
                                     unsigned int n_density, int *error)
@@ -12260,6 +12784,7 @@ dwg_ent_polyline_mesh_set_n_density(dwg_ent_polyline_mesh *mesh,
     }
 }
 
+/// Returns polyline mesh owned object count
 long
 dwg_ent_polyline_mesh_get_owned_obj_count(dwg_ent_polyline_mesh *mesh,
                                           int *error)
@@ -12275,6 +12800,7 @@ dwg_ent_polyline_mesh_get_owned_obj_count(dwg_ent_polyline_mesh *mesh,
     }
 }
 
+/// Sets polyline mesh owned object count
 void
 dwg_ent_polyline_mesh_set_owned_obj_count(dwg_ent_polyline_mesh *mesh,
                                           long owned_obj_count, int *error)
@@ -12294,6 +12820,7 @@ dwg_ent_polyline_mesh_set_owned_obj_count(dwg_ent_polyline_mesh *mesh,
 *                 FUNCTIONS FOR POLYLINE_2D ENTITY                  *
 ********************************************************************/
 
+/// Returns polyline 2d extrusion
 void
 dwg_ent_polyline_2d_get_extrusion(dwg_ent_polyline_2d *line2d,
                                   dwg_point_3d *point, int *error)
@@ -12311,6 +12838,7 @@ dwg_ent_polyline_2d_get_extrusion(dwg_ent_polyline_2d *line2d,
     }
 }
 
+/// Sets polyline extrusion
 void
 dwg_ent_polyline_2d_set_extrusion(dwg_ent_polyline_2d *line2d,
                                   dwg_point_3d *point, int *error)
@@ -12328,6 +12856,7 @@ dwg_ent_polyline_2d_set_extrusion(dwg_ent_polyline_2d *line2d,
     }
 }
 
+/// Returns polyline 2d start width
 double
 dwg_ent_polyline_2d_get_start_width(dwg_ent_polyline_2d *line2d, int *error)
 {
@@ -12342,6 +12871,7 @@ dwg_ent_polyline_2d_get_start_width(dwg_ent_polyline_2d *line2d, int *error)
     }
 }
 
+/// Sets polyline 2d start width
 void
 dwg_ent_polyline_2d_set_start_width(dwg_ent_polyline_2d *line2d,
                                     double start_width, int *error)
@@ -12357,6 +12887,7 @@ dwg_ent_polyline_2d_set_start_width(dwg_ent_polyline_2d *line2d,
     }
 }
 
+/// Returns polyline 2d end width
 double
 dwg_ent_polyline_2d_get_end_width(dwg_ent_polyline_2d *line2d, int *error)
 {
@@ -12371,6 +12902,7 @@ dwg_ent_polyline_2d_get_end_width(dwg_ent_polyline_2d *line2d, int *error)
     }
 }
 
+/// Sets polyline 2d end width
 void
 dwg_ent_polyline_2d_set_end_width(dwg_ent_polyline_2d *line2d,
                                   double end_width, int *error)
@@ -12386,6 +12918,7 @@ dwg_ent_polyline_2d_set_end_width(dwg_ent_polyline_2d *line2d,
     }
 }
 
+/// Returns polyline 2d thickness
 double
 dwg_ent_polyline_2d_get_thickness(dwg_ent_polyline_2d *line2d, int *error)
 {
@@ -12400,6 +12933,7 @@ dwg_ent_polyline_2d_get_thickness(dwg_ent_polyline_2d *line2d, int *error)
     }
 }
 
+/// Sets polyline 2d thickness
 void
 dwg_ent_polyline_2d_set_thickness(dwg_ent_polyline_2d *line2d,
                                   double thickness, int *error)
@@ -12415,6 +12949,7 @@ dwg_ent_polyline_2d_set_thickness(dwg_ent_polyline_2d *line2d,
     }
 }
 
+/// Returns polyline 2d elevation
 double
 dwg_ent_polyline_2d_get_elevation(dwg_ent_polyline_2d *line2d, int *error)
 {
@@ -12429,6 +12964,7 @@ dwg_ent_polyline_2d_get_elevation(dwg_ent_polyline_2d *line2d, int *error)
     }
 }
 
+/// Sets polyline 2d elevation
 void
 dwg_ent_polyline_2d_set_elevation(dwg_ent_polyline_2d *line2d,
                                   double elevation, int *error)
@@ -12444,6 +12980,7 @@ dwg_ent_polyline_2d_set_elevation(dwg_ent_polyline_2d *line2d,
     }
 }
 
+/// Returns polyline 2d flag
 unsigned int
 dwg_ent_polyline_2d_get_flags(dwg_ent_polyline_2d *line2d, int *error)
 {
@@ -12458,6 +12995,7 @@ dwg_ent_polyline_2d_get_flags(dwg_ent_polyline_2d *line2d, int *error)
     }
 }
 
+/// Sets polyline 2d flags
 void
 dwg_ent_polyline_2d_set_flags(dwg_ent_polyline_2d *line2d, unsigned int flags,
                               int *error)
@@ -12473,6 +13011,7 @@ dwg_ent_polyline_2d_set_flags(dwg_ent_polyline_2d *line2d, unsigned int flags,
     }
 }
 
+/// Returns curve type value
 unsigned int
 dwg_ent_polyline_2d_get_curve_type(dwg_ent_polyline_2d *line2d, int *error)
 {
@@ -12487,6 +13026,7 @@ dwg_ent_polyline_2d_get_curve_type(dwg_ent_polyline_2d *line2d, int *error)
     }
 }
 
+/// Sets curve type value
 void
 dwg_ent_polyline_2d_set_curve_type(dwg_ent_polyline_2d *line2d,
                                    unsigned int curve_type, int *error)
@@ -12502,6 +13042,7 @@ dwg_ent_polyline_2d_set_curve_type(dwg_ent_polyline_2d *line2d,
     }
 }
 
+/// Returns owned object count
 long
 dwg_ent_polyline_2d_get_owned_obj_count(dwg_ent_polyline_2d *line2d,
                                         int *error)
@@ -12517,6 +13058,7 @@ dwg_ent_polyline_2d_get_owned_obj_count(dwg_ent_polyline_2d *line2d,
     }
 }
 
+/// Sets owned object count
 void
 dwg_ent_polyline_2d_set_owned_obj_count(dwg_ent_polyline_2d *line2d,
                                         long owned_obj_count, int *error)
@@ -12536,6 +13078,7 @@ dwg_ent_polyline_2d_set_owned_obj_count(dwg_ent_polyline_2d *line2d,
 *                 FUNCTIONS FOR POLYLINE_3D ENTITY                  *
 ********************************************************************/
 
+/// Returns polyline 3d flags1
 char
 dwg_ent_polyline_3d_get_flags_1(dwg_ent_polyline_3d *line3d, int *error)
 {
@@ -12550,6 +13093,7 @@ dwg_ent_polyline_3d_get_flags_1(dwg_ent_polyline_3d *line3d, int *error)
     }
 }
 
+/// Sets polyline 3d flags1
 void
 dwg_ent_polyline_3d_set_flags_1(dwg_ent_polyline_3d *line3d, char flags_1,
                                 int *error)
@@ -12565,6 +13109,7 @@ dwg_ent_polyline_3d_set_flags_1(dwg_ent_polyline_3d *line3d, char flags_1,
     }
 }
 
+/// Returns polyline 3d flags2
 char
 dwg_ent_polyline_3d_get_flags_2(dwg_ent_polyline_3d *line3d, int *error)
 {
@@ -12579,6 +13124,7 @@ dwg_ent_polyline_3d_get_flags_2(dwg_ent_polyline_3d *line3d, int *error)
     }
 }
 
+/// Sets polyline 3d flags2
 void
 dwg_ent_polyline_3d_set_flags_2(dwg_ent_polyline_3d *line3d, char flags_2,
                                 int *error)
@@ -12594,6 +13140,7 @@ dwg_ent_polyline_3d_set_flags_2(dwg_ent_polyline_3d *line3d, char flags_2,
     }
 }
 
+/// Returns polyline 3d owned object count
 long
 dwg_ent_polyline_3d_get_owned_obj_count(dwg_ent_polyline_3d *line3d,
                                         int *error)
@@ -12609,6 +13156,7 @@ dwg_ent_polyline_3d_get_owned_obj_count(dwg_ent_polyline_3d *line3d,
     }
 }
 
+/// Sets polyline 3d owned object count
 void
 dwg_ent_polyline_3d_set_owned_obj_count(dwg_ent_polyline_3d *line3d,
                                         long owned_obj_count, int *error)
@@ -12828,6 +13376,7 @@ dwg_ent_3dface_set_corner4(dwg_ent_3dface *_3dface, dwg_point_2d *point,
 *                    FUNCTIONS FOR IMAGE ENTITY                     *
 ********************************************************************/
 
+/// Returns image class version
 long
 dwg_ent_image_get_class_version(dwg_ent_image *image, int *error)
 {
@@ -12840,6 +13389,7 @@ dwg_ent_image_get_class_version(dwg_ent_image *image, int *error)
     *error = 1;
 }
 
+/// Sets image class version
 void
 dwg_ent_image_set_class_version(dwg_ent_image *image, long class_version,
                                 int *error)
@@ -12853,6 +13403,7 @@ dwg_ent_image_set_class_version(dwg_ent_image *image, long class_version,
     *error = 1;
 }
 
+/// Returns image point 0 points
 void
 dwg_ent_image_get_pt0(dwg_ent_image *image, dwg_point_3d *point, int *error)
 {
@@ -12867,6 +13418,7 @@ dwg_ent_image_get_pt0(dwg_ent_image *image, dwg_point_3d *point, int *error)
     *error = 1;
 }
 
+/// Sets image point 0 points
 void
 dwg_ent_image_set_pt0(dwg_ent_image *image, dwg_point_3d *point, int *error)
 {
@@ -12881,6 +13433,7 @@ dwg_ent_image_set_pt0(dwg_ent_image *image, dwg_point_3d *point, int *error)
     *error = 1;
 }
 
+/// Returns image U_vector points
 void
 dwg_ent_image_get_u_vector(dwg_ent_image *image, dwg_point_3d *point,
  int *error)
@@ -12896,6 +13449,7 @@ dwg_ent_image_get_u_vector(dwg_ent_image *image, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Sets image U_vector points
 void
 dwg_ent_image_set_u_vector(dwg_ent_image *image, dwg_point_3d *point,
                            int *error)
@@ -12911,6 +13465,7 @@ dwg_ent_image_set_u_vector(dwg_ent_image *image, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Returns image v_vector points
 void
 dwg_ent_image_get_v_vector(dwg_ent_image *image, dwg_point_3d *point,
                            int *error)
@@ -12926,6 +13481,7 @@ dwg_ent_image_get_v_vector(dwg_ent_image *image, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Sets v vector points
 void
 dwg_ent_image_set_v_vector(dwg_ent_image *image, dwg_point_3d *point,
                            int *error)
@@ -12941,6 +13497,7 @@ dwg_ent_image_set_v_vector(dwg_ent_image *image, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Returns image size height
 double
 dwg_ent_image_get_size_height(dwg_ent_image *image, int *error)
 {
@@ -12953,6 +13510,7 @@ dwg_ent_image_get_size_height(dwg_ent_image *image, int *error)
     *error = 1;
 }
 
+/// Sets image size height
 void
 dwg_ent_image_set_size_height(dwg_ent_image *image, double size_height,
                               int *error)
@@ -12966,6 +13524,7 @@ dwg_ent_image_set_size_height(dwg_ent_image *image, double size_height,
     *error = 1;
 }
 
+/// Returns image size width
 double
 dwg_ent_image_get_size_width(dwg_ent_image *image, int *error)
 {
@@ -12978,6 +13537,7 @@ dwg_ent_image_get_size_width(dwg_ent_image *image, int *error)
     *error = 1;
 }
 
+/// Sets image size width
 void
 dwg_ent_image_set_size_width(dwg_ent_image *image, double size_width,
                              int *error)
@@ -12991,6 +13551,7 @@ dwg_ent_image_set_size_width(dwg_ent_image *image, double size_width,
     *error = 1;
 }
 
+/// Returns image display props
 unsigned int
 dwg_ent_image_get_display_props(dwg_ent_image *image, int *error)
 {
@@ -13003,6 +13564,7 @@ dwg_ent_image_get_display_props(dwg_ent_image *image, int *error)
     *error = 1;
 }
 
+/// Sets image display props
 void      
 dwg_ent_image_set_display_props(dwg_ent_image *image,
                                 unsigned int display_props, int *error)
@@ -13016,6 +13578,7 @@ dwg_ent_image_set_display_props(dwg_ent_image *image,
     *error = 1;
 }
 
+/// Returns image clipping
 unsigned char
 dwg_ent_image_get_clipping(dwg_ent_image *image, int *error)
 {
@@ -13028,6 +13591,7 @@ dwg_ent_image_get_clipping(dwg_ent_image *image, int *error)
     *error = 1;
 }
 
+/// Sets image clipping
 void       
 dwg_ent_image_set_clipping(dwg_ent_image *image, unsigned char clipping,
                            int *error)
@@ -13041,6 +13605,7 @@ dwg_ent_image_set_clipping(dwg_ent_image *image, unsigned char clipping,
     *error = 1;
 }
 
+/// Returns image brightness
 char
 dwg_ent_image_get_brightness(dwg_ent_image *image, int *error)
 {
@@ -13053,6 +13618,7 @@ dwg_ent_image_get_brightness(dwg_ent_image *image, int *error)
     *error = 1;
 }
 
+/// Sets image brightness
 void
 dwg_ent_image_set_brightness(dwg_ent_image *image, char brightness, int *error)
 {
@@ -13065,6 +13631,7 @@ dwg_ent_image_set_brightness(dwg_ent_image *image, char brightness, int *error)
     *error = 1;
 }
 
+/// Return image contrast
 char
 dwg_ent_image_get_contrast(dwg_ent_image *image, int *error)
 {
@@ -13077,6 +13644,7 @@ dwg_ent_image_get_contrast(dwg_ent_image *image, int *error)
     *error = 1;
 }
 
+/// Sets image contrast
 void
 dwg_ent_image_set_contrast(dwg_ent_image *image, char contrast, int *error)
 {
@@ -13089,6 +13657,7 @@ dwg_ent_image_set_contrast(dwg_ent_image *image, char contrast, int *error)
     *error = 1;
 }
 
+/// Returns image fade
 char
 dwg_ent_image_get_fade(dwg_ent_image *image, int *error)
 {
@@ -13101,6 +13670,7 @@ dwg_ent_image_get_fade(dwg_ent_image *image, int *error)
     *error = 1;
 }
 
+/// Sets image fade
 void
 dwg_ent_image_set_fade(dwg_ent_image *image, char fade, int *error)
 {
@@ -13113,6 +13683,7 @@ dwg_ent_image_set_fade(dwg_ent_image *image, char fade, int *error)
     *error = 1;
 }
 
+/// Returns image clip boundary type
 unsigned int
 dwg_ent_image_get_clip_boundary_type(dwg_ent_image *image, int *error)
 {
@@ -13125,6 +13696,7 @@ dwg_ent_image_get_clip_boundary_type(dwg_ent_image *image, int *error)
     *error = 1;
 }
 
+/// Sets image clip boundary type
 void      
 dwg_ent_image_set_clip_boundary_type(dwg_ent_image *image, unsigned int type,
                                      int *error)
@@ -13138,6 +13710,7 @@ dwg_ent_image_set_clip_boundary_type(dwg_ent_image *image, unsigned int type,
     *error = 1;
 }
 
+/// Returns image boundary point 0
 void
 dwg_ent_image_get_boundary_pt0(dwg_ent_image *image, dwg_point_2d *point,
                                int *error)
@@ -13152,6 +13725,7 @@ dwg_ent_image_get_boundary_pt0(dwg_ent_image *image, dwg_point_2d *point,
     *error = 1;
 }
 
+/// Sets image boundary point 0
 void
 dwg_ent_image_set_boundary_pt0(dwg_ent_image *image, dwg_point_2d *point,
                                int *error)
@@ -13166,6 +13740,7 @@ dwg_ent_image_set_boundary_pt0(dwg_ent_image *image, dwg_point_2d *point,
     *error = 1;
 }
 
+/// Returns boundary point1
 void
 dwg_ent_image_get_boundary_pt1(dwg_ent_image *image, dwg_point_2d *point,
                                int *error)
@@ -13180,6 +13755,7 @@ dwg_ent_image_get_boundary_pt1(dwg_ent_image *image, dwg_point_2d *point,
     *error = 1;
 }
 
+/// Sets boundary point1
 void
 dwg_ent_image_set_boundary_pt1(dwg_ent_image *image, dwg_point_2d *point,
                                int *error)
@@ -13194,6 +13770,7 @@ dwg_ent_image_set_boundary_pt1(dwg_ent_image *image, dwg_point_2d *point,
     *error = 1;
 }
 
+/// Retuns number of clip verts
 double
 dwg_ent_image_get_num_clip_verts(dwg_ent_image *image, int *error)
 {
@@ -13206,6 +13783,7 @@ dwg_ent_image_get_num_clip_verts(dwg_ent_image *image, int *error)
     *error = 1;
 }
 
+/// Sets number of clip verts
 void
 dwg_ent_image_set_num_clip_verts(dwg_ent_image *image, double num, int *error)
 {
@@ -13218,6 +13796,7 @@ dwg_ent_image_set_num_clip_verts(dwg_ent_image *image, double num, int *error)
     *error = 1;
 }
 
+/// Returns image clip verts
 dwg_ent_image_clip_vert *
 dwg_ent_image_get_clip_verts(dwg_ent_image *image, int *error)
 {
@@ -13241,6 +13820,7 @@ dwg_ent_image_get_clip_verts(dwg_ent_image *image, int *error)
 *                    FUNCTIONS FOR MLINE ENTITY                     *
 ********************************************************************/
 
+/// Sets mline scale value
 void
 dwg_ent_mline_set_scale(dwg_ent_mline *mline, double scale, int *error)
 {
@@ -13253,6 +13833,7 @@ dwg_ent_mline_set_scale(dwg_ent_mline *mline, double scale, int *error)
     *error = 1;
 }
 
+/// Returns scale value
 double
 dwg_ent_mline_get_scale(dwg_ent_mline *mline, int *error)
 {
@@ -13265,6 +13846,7 @@ dwg_ent_mline_get_scale(dwg_ent_mline *mline, int *error)
     *error = 1;
 }
 
+/// sets just value
 void
 dwg_ent_mline_set_just(dwg_ent_mline *mline, char just, int *error)
 {
@@ -13277,6 +13859,7 @@ dwg_ent_mline_set_just(dwg_ent_mline *mline, char just, int *error)
     *error = 1;
 }
 
+/// Returns just value
 char
 dwg_ent_mline_get_just(dwg_ent_mline *mline, int *error)
 {
@@ -13289,6 +13872,7 @@ dwg_ent_mline_get_just(dwg_ent_mline *mline, int *error)
     *error = 1;
 }
 
+/// Sets base point value
 void
 dwg_ent_mline_set_base_point(dwg_ent_mline *mline, dwg_point_3d *point,
                              int *error)
@@ -13304,6 +13888,7 @@ dwg_ent_mline_set_base_point(dwg_ent_mline *mline, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Returns base point value
 void
 dwg_ent_mline_get_base_point(dwg_ent_mline *mline, dwg_point_3d *point,
                              int *error)
@@ -13319,6 +13904,7 @@ dwg_ent_mline_get_base_point(dwg_ent_mline *mline, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Sets extrusion points
 void
 dwg_ent_mline_set_extrusion(dwg_ent_mline *mline, dwg_point_3d *point,
                             int *error)
@@ -13334,6 +13920,7 @@ dwg_ent_mline_set_extrusion(dwg_ent_mline *mline, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Returns extrusion points
 void
 dwg_ent_mline_get_extrusion(dwg_ent_mline *mline, dwg_point_3d *point,
                             int *error)
@@ -13349,6 +13936,7 @@ dwg_ent_mline_get_extrusion(dwg_ent_mline *mline, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Sets open closed value
 void
 dwg_ent_mline_set_open_closed(dwg_ent_mline *mline, unsigned int oc,
                               int *error)
@@ -13362,6 +13950,7 @@ dwg_ent_mline_set_open_closed(dwg_ent_mline *mline, unsigned int oc,
     *error = 1;
 }
 
+/// Returns open/closed value
 unsigned int
 dwg_ent_mline_get_open_closed(dwg_ent_mline *mline, int *error)
 {
@@ -13374,6 +13963,7 @@ dwg_ent_mline_get_open_closed(dwg_ent_mline *mline, int *error)
     *error = 1;
 }
 
+/// Sets number of lines
 void
 dwg_ent_mline_set_num_lines(dwg_ent_mline *mline, char num, int *error)
 {
@@ -13386,6 +13976,7 @@ dwg_ent_mline_set_num_lines(dwg_ent_mline *mline, char num, int *error)
     *error = 1;
 }
 
+/// Returns number of lines
 char
 dwg_ent_mline_get_num_lines(dwg_ent_mline *mline, int *error)
 {
@@ -13398,6 +13989,7 @@ dwg_ent_mline_get_num_lines(dwg_ent_mline *mline, int *error)
     *error = 1;
 }
 
+/// Sets number of vertices
 void
 dwg_ent_mline_set_num_verts(dwg_ent_mline *mline, unsigned int num,
                             int *error)
@@ -13411,6 +14003,7 @@ dwg_ent_mline_set_num_verts(dwg_ent_mline *mline, unsigned int num,
     *error = 1;
 }
 
+/// Returns number of vertices
 unsigned int
 dwg_ent_mline_get_num_verts(dwg_ent_mline *mline, int *error)
 {
@@ -13422,6 +14015,8 @@ dwg_ent_mline_get_num_verts(dwg_ent_mline *mline, int *error)
   else
     *error = 1;
 }
+
+/// Returns mline vertices
 dwg_ent_mline_vert *
 dwg_ent_mline_get_verts(dwg_ent_mline *mline, int *error)
 {
@@ -13445,14 +14040,16 @@ dwg_ent_mline_get_verts(dwg_ent_mline *mline, int *error)
 *              FUNCTIONS FOR VERTEX_PFACE_FACE ENTITY               *
 ********************************************************************/
 
+/// Returns vertex_pface vertind
 unsigned int
-dwg_ent_vertex_pface_face_set_vertind(dwg_ent_vert_pface_face *face)
+dwg_ent_vertex_pface_face_get_vertind(dwg_ent_vert_pface_face *face)
 {
   return face->vertind[4];
 }
 
+/// Sets vertex_pface vertind
 void
-dwg_ent_vertex_pface_face_get_vertind(dwg_ent_vert_pface_face *face,
+dwg_ent_vertex_pface_face_set_vertind(dwg_ent_vert_pface_face *face,
                                            unsigned int vertind[4])
 {
   face->vertind[1] = vertind[1];
@@ -13465,6 +14062,7 @@ dwg_ent_vertex_pface_face_get_vertind(dwg_ent_vert_pface_face *face,
 *                  FUNCTIONS FOR 3DSOLID ENTITY                     *
 ********************************************************************/
 
+/// Returns acis empty value
 unsigned char
 dwg_ent_3dsolid_get_acis_empty(dwg_ent_3dsolid *_3dsolid, int *error)
 {
@@ -13477,6 +14075,7 @@ dwg_ent_3dsolid_get_acis_empty(dwg_ent_3dsolid *_3dsolid, int *error)
     *error = 1;
 }
 
+/// Sets acis empty value
 void
 dwg_ent_3dsolid_set_acis_empty(dwg_ent_3dsolid *_3dsolid, unsigned char acis,
                                int *error)
@@ -13490,6 +14089,7 @@ dwg_ent_3dsolid_set_acis_empty(dwg_ent_3dsolid *_3dsolid, unsigned char acis,
     *error = 1;
 }
 
+/// Returns version value
 unsigned int
 dwg_ent_3dsolid_get_version(dwg_ent_3dsolid *_3dsolid, int *error)
 {
@@ -13502,6 +14102,7 @@ dwg_ent_3dsolid_get_version(dwg_ent_3dsolid *_3dsolid, int *error)
     *error = 1;
 }
 
+/// Sets version value
 void
 dwg_ent_3dsolid_set_version(dwg_ent_3dsolid *_3dsolid, unsigned int version,
                             int *error)
@@ -13515,6 +14116,7 @@ dwg_ent_3dsolid_set_version(dwg_ent_3dsolid *_3dsolid, unsigned int version,
     *error = 1;
 }
 
+/// Returns block size
 long *
 dwg_ent_3dsolid_get_block_size(dwg_ent_3dsolid *_3dsolid, int *error)
 {
@@ -13527,7 +14129,9 @@ dwg_ent_3dsolid_get_block_size(dwg_ent_3dsolid *_3dsolid, int *error)
     *error = 1;
 }
 
-char *dwg_ent_3dsolid_get_acis_data(dwg_ent_3dsolid *_3dsolid, int *error)
+/// Returns acis data
+char *
+dwg_ent_3dsolid_get_acis_data(dwg_ent_3dsolid *_3dsolid, int *error)
 {
   if (_3dsolid != 0)
     {
@@ -13538,7 +14142,8 @@ char *dwg_ent_3dsolid_get_acis_data(dwg_ent_3dsolid *_3dsolid, int *error)
     *error = 1;
 }
 
-char *
+/// Sets acis data
+void
 dwg_ent_3dsolid_set_acis_data(dwg_ent_3dsolid *_3dsolid,
                                      char * data, int *error)
 {
@@ -13551,6 +14156,7 @@ dwg_ent_3dsolid_set_acis_data(dwg_ent_3dsolid *_3dsolid,
     *error = 1;
 }
 
+/// Returns wireframe data present value
 char
 dwg_ent_3dsolid_get_wireframe_data_present(dwg_ent_3dsolid *_3dsolid,
                                            int *error)
@@ -13564,6 +14170,7 @@ dwg_ent_3dsolid_get_wireframe_data_present(dwg_ent_3dsolid *_3dsolid,
     *error = 1;
 }
 
+/// Sets wireframe data present value
 void
 dwg_ent_3dsolid_set_wireframe_data_present(dwg_ent_3dsolid *_3dsolid,
                                            char data, int *error)
@@ -13577,6 +14184,7 @@ dwg_ent_3dsolid_set_wireframe_data_present(dwg_ent_3dsolid *_3dsolid,
     *error = 1;
 }
 
+/// Returns point present value
 char
 dwg_ent_3dsolid_get_point_present(dwg_ent_3dsolid *_3dsolid, int *error)
 {
@@ -13589,6 +14197,7 @@ dwg_ent_3dsolid_get_point_present(dwg_ent_3dsolid *_3dsolid, int *error)
     *error = 1;
 }
 
+/// Sets point present value
 void
 dwg_ent_3dsolid_set_point_present(dwg_ent_3dsolid *_3dsolid, char point,
                                   int *error)
@@ -13602,6 +14211,7 @@ dwg_ent_3dsolid_set_point_present(dwg_ent_3dsolid *_3dsolid, char point,
     *error = 1;
 }
 
+/// Returns point value
 void
 dwg_ent_3dsolid_get_point(dwg_ent_3dsolid *_3dsolid, dwg_point_3d *point, 
                           int *error)
@@ -13617,6 +14227,7 @@ dwg_ent_3dsolid_get_point(dwg_ent_3dsolid *_3dsolid, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Sets point values
 void
 dwg_ent_3dsolid_set_point(dwg_ent_3dsolid *_3dsolid, dwg_point_3d *point,
                           int *error)
@@ -13632,6 +14243,7 @@ dwg_ent_3dsolid_set_point(dwg_ent_3dsolid *_3dsolid, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Returns number of isolines
 long
 dwg_ent_3dsolid_get_num_isolines(dwg_ent_3dsolid *_3dsolid, int *error)
 {
@@ -13644,6 +14256,7 @@ dwg_ent_3dsolid_get_num_isolines(dwg_ent_3dsolid *_3dsolid, int *error)
     *error = 1;
 }
 
+/// Sets number of isolines
 void
 dwg_ent_3dsolid_set_num_isolines(dwg_ent_3dsolid *_3dsolid, long num,
                                  int *error)
@@ -13657,6 +14270,7 @@ dwg_ent_3dsolid_set_num_isolines(dwg_ent_3dsolid *_3dsolid, long num,
     *error = 1;
 }
 
+/// Returns isoline present value
 char
 dwg_ent_3dsolid_get_isoline_present(dwg_ent_3dsolid *_3dsolid, int *error)
 {
@@ -13669,6 +14283,7 @@ dwg_ent_3dsolid_get_isoline_present(dwg_ent_3dsolid *_3dsolid, int *error)
     *error = 1;
 }
 
+/// Sets isoline present value
 void
 dwg_ent_3dsolid_set_isoline_present(dwg_ent_3dsolid *_3dsolid, char iso,
                                     int *error)
@@ -13682,6 +14297,7 @@ dwg_ent_3dsolid_set_isoline_present(dwg_ent_3dsolid *_3dsolid, char iso,
     *error = 1;
 }
 
+/// Returns number of wires
 long
 dwg_ent_3dsolid_get_num_wires(dwg_ent_3dsolid *_3dsolid, int *error)
 {
@@ -13694,6 +14310,7 @@ dwg_ent_3dsolid_get_num_wires(dwg_ent_3dsolid *_3dsolid, int *error)
     *error = 1;
 }
 
+  /// Sets number of wires
 void
 dwg_ent_3dsolid_set_num_wires(dwg_ent_3dsolid *_3dsolid, long num, int *error)
 {
@@ -13703,9 +14320,10 @@ dwg_ent_3dsolid_set_num_wires(dwg_ent_3dsolid *_3dsolid, long num, int *error)
       _3dsolid->num_wires = num;
     }
   else
-    *error = 1;
+  *error = 1;
 }
 
+/// Returns wire
 dwg_ent_solid_wire *
 dwg_ent_3dsolid_get_wire(dwg_ent_3dsolid *_3dsolid, int *error)
 {
@@ -13725,6 +14343,7 @@ dwg_ent_3dsolid_get_wire(dwg_ent_3dsolid *_3dsolid, int *error)
       *error = 1;
 }
 
+/// Returns number of silhouettes
 long
 dwg_ent_3dsolid_get_num_silhouettes(dwg_ent_3dsolid *_3dsolid, int *error)
 {
@@ -13737,6 +14356,7 @@ dwg_ent_3dsolid_get_num_silhouettes(dwg_ent_3dsolid *_3dsolid, int *error)
     *error = 1;
 }
 
+/// Sets number of silhouettes
 void
 dwg_ent_3dsolid_set_num_silhouettes(dwg_ent_3dsolid *_3dsolid,
                                     long silhouettes, int *error)
@@ -13748,8 +14368,9 @@ dwg_ent_3dsolid_set_num_silhouettes(dwg_ent_3dsolid *_3dsolid,
     }
   else
     *error = 1;
-}
+  }
 
+/// Returns silhouette
 dwg_ent_solid_silhouette *
 dwg_ent_3dsolid_get_silhouette(dwg_ent_3dsolid *_3dsolid, int *error)
 {
@@ -13767,8 +14388,10 @@ dwg_ent_3dsolid_get_silhouette(dwg_ent_3dsolid *_3dsolid, int *error)
       }
     else
       *error = 1;
+
 }
 
+/// Returns acis empty 2 value
 unsigned char
 dwg_ent_3dsolid_get_acis_empty2(dwg_ent_3dsolid *_3dsolid, int *error)
 {
@@ -13781,6 +14404,7 @@ dwg_ent_3dsolid_get_acis_empty2(dwg_ent_3dsolid *_3dsolid, int *error)
     *error = 1;
 }
 
+/// Sets acis empty 2 value
 void
 dwg_ent_3dsolid_set_acis_empty2(dwg_ent_3dsolid *_3dsolid, unsigned char acis,
                                 int *error)
@@ -13798,6 +14422,7 @@ dwg_ent_3dsolid_set_acis_empty2(dwg_ent_3dsolid *_3dsolid, unsigned char acis,
 *                   FUNCTIONS FOR REGION ENTITY                     *
 ********************************************************************/
 
+/// Returns acis empty value
 unsigned char
 dwg_ent_region_get_acis_empty(dwg_ent_region *region, int *error)
 {
@@ -13810,6 +14435,7 @@ dwg_ent_region_get_acis_empty(dwg_ent_region *region, int *error)
     *error = 1;
 }
 
+/// Sets acis empty value
 void
 dwg_ent_region_set_acis_empty(dwg_ent_region *region, unsigned char acis,
                               int *error)
@@ -13823,6 +14449,7 @@ dwg_ent_region_set_acis_empty(dwg_ent_region *region, unsigned char acis,
     *error = 1;
 }
 
+/// Returns version value
 unsigned int
 dwg_ent_region_get_version(dwg_ent_region *region, int *error)
 {
@@ -13835,6 +14462,7 @@ dwg_ent_region_get_version(dwg_ent_region *region, int *error)
     *error = 1;
 }
 
+/// Sets version value
 void
 dwg_ent_region_set_version(dwg_ent_region *region, unsigned int version,
                            int *error)
@@ -13848,6 +14476,7 @@ dwg_ent_region_set_version(dwg_ent_region *region, unsigned int version,
     *error = 1;
 }
 
+/// Returns block size
 long *
 dwg_ent_region_get_block_size(dwg_ent_region *region, int *error)
 {
@@ -13860,7 +14489,9 @@ dwg_ent_region_get_block_size(dwg_ent_region *region, int *error)
     *error = 1;
 }
 
-char *dwg_ent_region_get_acis_data(dwg_ent_region *region, int *error)
+/// Returns acis data
+char *
+dwg_ent_region_get_acis_data(dwg_ent_region *region, int *error)
 {
   if (region != 0)
     {
@@ -13871,7 +14502,8 @@ char *dwg_ent_region_get_acis_data(dwg_ent_region *region, int *error)
     *error = 1;
 }
 
-char *
+/// Sets acis data
+void
 dwg_ent_region_set_acis_data(dwg_ent_region *region, char * data,
                                     int *error)
 {
@@ -13884,6 +14516,7 @@ dwg_ent_region_set_acis_data(dwg_ent_region *region, char * data,
     *error = 1;
 }
 
+/// Returns wireframe data present value
 char
 dwg_ent_region_get_wireframe_data_present(dwg_ent_region *region, int *error)
 {
@@ -13896,6 +14529,7 @@ dwg_ent_region_get_wireframe_data_present(dwg_ent_region *region, int *error)
     *error = 1;
 }
 
+/// Sets wireframe data present value
 void
 dwg_ent_region_set_wireframe_data_present(dwg_ent_region *region, char data,
                                           int *error)
@@ -13909,6 +14543,7 @@ dwg_ent_region_set_wireframe_data_present(dwg_ent_region *region, char data,
     *error = 1;
 }
 
+/// Returns point present value
 char
 dwg_ent_region_get_point_present(dwg_ent_region *region, int *error)
 {
@@ -13921,6 +14556,7 @@ dwg_ent_region_get_point_present(dwg_ent_region *region, int *error)
     *error = 1;
 }
 
+/// Sets point present value
 void
 dwg_ent_region_set_point_present(dwg_ent_region *region, char point,
                                  int *error)
@@ -13934,6 +14570,7 @@ dwg_ent_region_set_point_present(dwg_ent_region *region, char point,
     *error = 1;
 }
 
+/// Returns point value
 void
 dwg_ent_region_get_point(dwg_ent_region *region, dwg_point_3d *point,
                          int *error)
@@ -13949,6 +14586,7 @@ dwg_ent_region_get_point(dwg_ent_region *region, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Sets point values
 void
 dwg_ent_region_set_point(dwg_ent_region *region, dwg_point_3d *point,
                          int *error)
@@ -13964,6 +14602,7 @@ dwg_ent_region_set_point(dwg_ent_region *region, dwg_point_3d *point,
     *error = 1;
 }
 
+/// Returns number of isolines
 long
 dwg_ent_region_get_num_isolines(dwg_ent_region *region, int *error)
 {
@@ -13976,6 +14615,7 @@ dwg_ent_region_get_num_isolines(dwg_ent_region *region, int *error)
     *error = 1;
 }
 
+/// Sets number of isolines
 void
 dwg_ent_region_set_num_isolines(dwg_ent_region *region, long num, int *error)
 {
@@ -13988,6 +14628,7 @@ dwg_ent_region_set_num_isolines(dwg_ent_region *region, long num, int *error)
     *error = 1;
 }
 
+/// Returns isoline present value
 char
 dwg_ent_region_get_isoline_present(dwg_ent_region *region, int *error)
 {
@@ -14000,6 +14641,7 @@ dwg_ent_region_get_isoline_present(dwg_ent_region *region, int *error)
     *error = 1;
 }
 
+/// Sets isoline present value
 void
 dwg_ent_region_set_isoline_present(dwg_ent_region *region, char iso,
                                    int *error)
@@ -14013,6 +14655,7 @@ dwg_ent_region_set_isoline_present(dwg_ent_region *region, char iso,
     *error = 1;
 }
 
+/// Returns number of wires
 long
 dwg_ent_region_get_num_wires(dwg_ent_region *region, int *error)
 {
@@ -14025,6 +14668,7 @@ dwg_ent_region_get_num_wires(dwg_ent_region *region, int *error)
     *error = 1;
 }
 
+/// Sets number of wires
 void
 dwg_ent_region_set_num_wires(dwg_ent_region *region, long num, int *error)
 {
@@ -14037,6 +14681,7 @@ dwg_ent_region_set_num_wires(dwg_ent_region *region, long num, int *error)
     *error = 1;
 }
 
+/// Returns wire
 dwg_ent_solid_wire *
 dwg_ent_region_get_wire(dwg_ent_region *region, int *error)
 {
@@ -14056,6 +14701,7 @@ dwg_ent_region_get_wire(dwg_ent_region *region, int *error)
       *error = 1;
 }
 
+/// Returns number of silhouettes
 long
 dwg_ent_region_get_num_silhouettes(dwg_ent_region *region, int *error)
 {
@@ -14068,6 +14714,7 @@ dwg_ent_region_get_num_silhouettes(dwg_ent_region *region, int *error)
     *error = 1;
 }
 
+/// Sets number of silhouettes
 void
 dwg_ent_region_set_num_silhouettes(dwg_ent_region *region, long silhouettes,
                                    int *error)
@@ -14081,6 +14728,7 @@ dwg_ent_region_set_num_silhouettes(dwg_ent_region *region, long silhouettes,
     *error = 1;
 }
 
+/// Returns silhouette
 dwg_ent_solid_silhouette *
 dwg_ent_region_get_silhouette(dwg_ent_region *region, int *error)
 {
@@ -14100,6 +14748,7 @@ dwg_ent_region_get_silhouette(dwg_ent_region *region, int *error)
       *error = 1;
 }
 
+/// Returns acis empty 2 value
 unsigned char
 dwg_ent_region_get_acis_empty2(dwg_ent_region *region, int *error)
 {
@@ -14112,6 +14761,7 @@ dwg_ent_region_get_acis_empty2(dwg_ent_region *region, int *error)
     *error = 1;
 }
 
+/// Sets acis empty 2 value
 void
 dwg_ent_region_set_acis_empty2(dwg_ent_region *region, unsigned char acis,
                                int *error)
@@ -14128,7 +14778,7 @@ dwg_ent_region_set_acis_empty2(dwg_ent_region *region, unsigned char acis,
 /*******************************************************************
 *                    FUNCTIONS FOR BODY ENTITY                      *
 ********************************************************************/
-
+/// Returns acis empty value
 unsigned char
 dwg_ent_body_get_acis_empty(dwg_ent_body *body, int *error)
 {
@@ -14141,6 +14791,7 @@ dwg_ent_body_get_acis_empty(dwg_ent_body *body, int *error)
     *error = 1;
 }
 
+/// Sets acis empty value
 void
 dwg_ent_body_set_acis_empty(dwg_ent_body *body, unsigned char acis,
                             int *error)
@@ -14154,6 +14805,7 @@ dwg_ent_body_set_acis_empty(dwg_ent_body *body, unsigned char acis,
     *error = 1;
 }
 
+/// Returns version value
 unsigned int
 dwg_ent_body_get_version(dwg_ent_body *body, int *error)
 {
@@ -14166,6 +14818,7 @@ dwg_ent_body_get_version(dwg_ent_body *body, int *error)
     *error = 1;
 }
 
+/// Sets version value
 void
 dwg_ent_body_set_version(dwg_ent_body *body, unsigned int version, int *error)
 {
@@ -14178,6 +14831,7 @@ dwg_ent_body_set_version(dwg_ent_body *body, unsigned int version, int *error)
     *error = 1;
 }
 
+/// Returns body block size
 long * 
 dwg_ent_body_get_block_size(dwg_ent_body *body, int *error)
 {
@@ -14190,7 +14844,9 @@ dwg_ent_body_get_block_size(dwg_ent_body *body, int *error)
     *error = 1;
 }
 
-char *dwg_ent_body_get_acis_data(dwg_ent_body *body, int *error)
+/// Returns body acis data value
+char *
+dwg_ent_body_get_acis_data(dwg_ent_body *body, int *error)
 {
   if (body != 0)
     {
@@ -14201,7 +14857,8 @@ char *dwg_ent_body_get_acis_data(dwg_ent_body *body, int *error)
     *error = 1;
 }
 
-char *
+/// Sets acis data of body
+void
 dwg_ent_body_set_acis_data(dwg_ent_body *body, char * data, int *error)
 {
   if (body != 0)
@@ -14213,6 +14870,7 @@ dwg_ent_body_set_acis_data(dwg_ent_body *body, char * data, int *error)
     *error = 1;
 }
 
+/// Returns wireframe data present value
 char
 dwg_ent_body_get_wireframe_data_present(dwg_ent_body *body, int *error)
 {
@@ -14225,6 +14883,7 @@ dwg_ent_body_get_wireframe_data_present(dwg_ent_body *body, int *error)
     *error = 1;
 }
 
+/// Sets wireframe data present value
 void
 dwg_ent_body_set_wireframe_data_present(dwg_ent_body *body, char data,
                                         int *error)
@@ -14238,6 +14897,7 @@ dwg_ent_body_set_wireframe_data_present(dwg_ent_body *body, char data,
     *error = 1;
 }
 
+/// Returns point present value
 char
 dwg_ent_body_get_point_present(dwg_ent_body *body, int *error)
 {
@@ -14250,6 +14910,7 @@ dwg_ent_body_get_point_present(dwg_ent_body *body, int *error)
     *error = 1;
 }
 
+/// Sets point present value
 void
 dwg_ent_body_set_point_present(dwg_ent_body *body, char point, int *error)
 {
@@ -14262,6 +14923,7 @@ dwg_ent_body_set_point_present(dwg_ent_body *body, char point, int *error)
     *error = 1;
 }
 
+/// Returns point values
 void
 dwg_ent_body_get_point(dwg_ent_body *body, dwg_point_3d *point, int *error)
 {
@@ -14276,6 +14938,7 @@ dwg_ent_body_get_point(dwg_ent_body *body, dwg_point_3d *point, int *error)
     *error = 1;
 }
 
+/// Sets point of body entity
 void
 dwg_ent_body_set_point(dwg_ent_body *body, dwg_point_3d *point, int *error)
 {
@@ -14290,6 +14953,7 @@ dwg_ent_body_set_point(dwg_ent_body *body, dwg_point_3d *point, int *error)
     *error = 1;
 }
 
+/// Returns number of isolines
 long
 dwg_ent_body_get_num_isolines(dwg_ent_body *body, int *error)
 {
@@ -14302,6 +14966,7 @@ dwg_ent_body_get_num_isolines(dwg_ent_body *body, int *error)
     *error = 1;
 }
 
+/// Sets number of isolines
 void
 dwg_ent_body_set_num_isolines(dwg_ent_body *body, long num, int *error)
 {
@@ -14314,6 +14979,7 @@ dwg_ent_body_set_num_isolines(dwg_ent_body *body, long num, int *error)
     *error = 1;
 }
 
+/// returns isoline present value
 char
 dwg_ent_body_get_isoline_present(dwg_ent_body *body, int *error)
 {
@@ -14326,6 +14992,7 @@ dwg_ent_body_get_isoline_present(dwg_ent_body *body, int *error)
     *error = 1;
 }
 
+/// Sets isoline present value
 void
 dwg_ent_body_set_isoline_present(dwg_ent_body *body, char iso, int *error)
 {
@@ -14338,6 +15005,7 @@ dwg_ent_body_set_isoline_present(dwg_ent_body *body, char iso, int *error)
     *error = 1;
 }
 
+/// Returns number of wires
 long
 dwg_ent_body_get_num_wires(dwg_ent_body *body, int *error)
 {
@@ -14350,6 +15018,7 @@ dwg_ent_body_get_num_wires(dwg_ent_body *body, int *error)
     *error = 1;
 }
 
+/// Sets number of wires
 void
 dwg_ent_body_set_num_wires(dwg_ent_body *body, long num, int *error)
 {
@@ -14362,6 +15031,7 @@ dwg_ent_body_set_num_wires(dwg_ent_body *body, long num, int *error)
     *error = 1;
 }
 
+/// Returns wire of body
 dwg_ent_solid_wire *
 dwg_ent_body_get_wire(dwg_ent_body *body, int *error)
 {
@@ -14381,6 +15051,7 @@ dwg_ent_body_get_wire(dwg_ent_body *body, int *error)
       *error = 1;
 }
 
+/// Returns number of silhouettes value
 long
 dwg_ent_body_get_num_silhouettes(dwg_ent_body *body, int *error)
 {
@@ -14393,6 +15064,7 @@ dwg_ent_body_get_num_silhouettes(dwg_ent_body *body, int *error)
     *error = 1;
 }
 
+/// Sets number of silhouettes
 void
 dwg_ent_body_set_num_silhouettes(dwg_ent_body *body, long silhouettes,
                                  int *error)
@@ -14406,6 +15078,7 @@ dwg_ent_body_set_num_silhouettes(dwg_ent_body *body, long silhouettes,
     *error = 1;
 }
 
+/// Returns silhouette for body entity
 dwg_ent_solid_silhouette *
 dwg_ent_body_get_silhouette(dwg_ent_body *body,
                             int *error)
@@ -14426,6 +15099,7 @@ dwg_ent_body_get_silhouette(dwg_ent_body *body,
       *error = 1;
 }
 
+/// Returns acis empty2 value
 unsigned char
 dwg_ent_body_get_acis_empty2(dwg_ent_body *body, int *error)
 {
@@ -14438,6 +15112,7 @@ dwg_ent_body_get_acis_empty2(dwg_ent_body *body, int *error)
     *error = 1;
 }
 
+/// Sets body acis empty2 value
 void
 dwg_ent_body_set_acis_empty2(dwg_ent_body *body, unsigned char acis,
                              int *error)
@@ -14455,6 +15130,7 @@ dwg_ent_body_set_acis_empty2(dwg_ent_body *body, unsigned char acis,
 *                    FUNCTIONS FOR TABLE ENTITY                     *
 ********************************************************************/
 
+/// Sets insertion point
 void
 dwg_ent_table_set_insertion_point(dwg_ent_table *table, dwg_point_3d *point,
                                   int *error)
@@ -14470,6 +15146,7 @@ dwg_ent_table_set_insertion_point(dwg_ent_table *table, dwg_point_3d *point,
     *error = 1;   
 }
 
+/// Returns insertion point
 void
 dwg_ent_table_get_insertion_point(dwg_ent_table *table, dwg_point_3d *point,
                                   int *error)
@@ -14485,6 +15162,7 @@ dwg_ent_table_get_insertion_point(dwg_ent_table *table, dwg_point_3d *point,
     *error = 1;   
 }
 
+/// Sets scale points
 void
 dwg_ent_table_set_scale(dwg_ent_table *table, dwg_point_3d *point, int *error)
 {
@@ -14499,6 +15177,7 @@ dwg_ent_table_set_scale(dwg_ent_table *table, dwg_point_3d *point, int *error)
     *error = 1;   
 }
 
+/// Returns scale points
 void
 dwg_ent_table_get_scale(dwg_ent_table *table, dwg_point_3d *point, int *error)
 {
@@ -14513,6 +15192,7 @@ dwg_ent_table_get_scale(dwg_ent_table *table, dwg_point_3d *point, int *error)
     *error = 1;   
 }
 
+/// Sets data flags
 void
 dwg_ent_table_set_data_flags(dwg_ent_table *table, unsigned char flags,
                              int *error)
@@ -14526,6 +15206,7 @@ dwg_ent_table_set_data_flags(dwg_ent_table *table, unsigned char flags,
     *error = 1;   
 }
 
+/// Returns data flags
 unsigned char
 dwg_ent_table_get_data_flags(dwg_ent_table *table, int *error)
 {
@@ -14538,6 +15219,7 @@ dwg_ent_table_get_data_flags(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets rotation
 void
 dwg_ent_table_set_rotation(dwg_ent_table *table, double rotation, int *error)
 {
@@ -14550,6 +15232,7 @@ dwg_ent_table_set_rotation(dwg_ent_table *table, double rotation, int *error)
     *error = 1;   
 }
 
+/// Returns rotation
 double
 dwg_ent_table_get_rotation(dwg_ent_table *table, int *error)
 {
@@ -14562,6 +15245,7 @@ dwg_ent_table_get_rotation(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets extrusion points
 void
 dwg_ent_table_set_extrusion(dwg_ent_table *table, dwg_point_3d *point,
                             int *error)
@@ -14577,6 +15261,7 @@ dwg_ent_table_set_extrusion(dwg_ent_table *table, dwg_point_3d *point,
     *error = 1;   
 }
 
+/// Returns extrusion points
 void
 dwg_ent_table_get_extrusion(dwg_ent_table *table, dwg_point_3d *point,
                             int *error)
@@ -14592,6 +15277,7 @@ dwg_ent_table_get_extrusion(dwg_ent_table *table, dwg_point_3d *point,
     *error = 1;   
 }
 
+/// Sets has attribs
 void
 dwg_ent_table_set_has_attribs(dwg_ent_table *table, unsigned char attribs,
                               int *error)
@@ -14605,6 +15291,7 @@ dwg_ent_table_set_has_attribs(dwg_ent_table *table, unsigned char attribs,
     *error = 1;   
 }
 
+/// Returns has attribs
 unsigned char
 dwg_ent_table_get_has_attribs(dwg_ent_table *table, int *error)
 {
@@ -14617,6 +15304,7 @@ dwg_ent_table_get_has_attribs(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets owned object count
 void
 dwg_ent_table_set_owned_object_count(dwg_ent_table *table, long count,
                                      int *error)
@@ -14630,6 +15318,7 @@ dwg_ent_table_set_owned_object_count(dwg_ent_table *table, long count,
     *error = 1;   
 }
 
+/// Returns owned object count
 long
 dwg_ent_table_get_owned_object_count(dwg_ent_table *table, int *error)
 {
@@ -14642,6 +15331,7 @@ dwg_ent_table_get_owned_object_count(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets flag for table value
 void
 dwg_ent_table_set_flag_for_table_value(dwg_ent_table *table,
                                        unsigned int value, int *error)
@@ -14655,6 +15345,7 @@ dwg_ent_table_set_flag_for_table_value(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns flag for table value
 unsigned int 
 dwg_ent_table_get_flag_for_table_value(dwg_ent_table *table, int *error)
 {
@@ -14667,6 +15358,7 @@ dwg_ent_table_get_flag_for_table_value(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets horiz direction
 void
 dwg_ent_table_set_horiz_direction(dwg_ent_table *table, dwg_point_3d *point,
                                   int *error)
@@ -14683,6 +15375,7 @@ dwg_ent_table_set_horiz_direction(dwg_ent_table *table, dwg_point_3d *point,
     *error = 1;   
 }
 
+/// Returns horiz direction 
 void
 dwg_ent_table_get_horiz_direction(dwg_ent_table *table, dwg_point_3d *point,
                                   int *error)
@@ -14698,6 +15391,7 @@ dwg_ent_table_get_horiz_direction(dwg_ent_table *table, dwg_point_3d *point,
     *error = 1;   
 }
 
+/// Sets number of columns
 void
 dwg_ent_table_set_num_cols(dwg_ent_table *table, long num, int *error)
 {
@@ -14710,6 +15404,7 @@ dwg_ent_table_set_num_cols(dwg_ent_table *table, long num, int *error)
     *error = 1;   
 }
 
+/// Returns number of columns
 long
 dwg_ent_table_get_num_cols(dwg_ent_table *table, int *error)
 {
@@ -14722,6 +15417,7 @@ dwg_ent_table_get_num_cols(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets number of rows
 void
 dwg_ent_table_set_num_rows(dwg_ent_table *table, long num, int *error)
 {
@@ -14734,6 +15430,7 @@ dwg_ent_table_set_num_rows(dwg_ent_table *table, long num, int *error)
     *error = 1;   
 }
 
+/// Returns number of rows
 long
 dwg_ent_table_get_num_rows(dwg_ent_table *table, int *error)
 {
@@ -14746,6 +15443,7 @@ dwg_ent_table_get_num_rows(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Returns column widths
 double *
 dwg_ent_table_get_col_widths(dwg_ent_table *table, int *error)
 {
@@ -14758,6 +15456,7 @@ dwg_ent_table_get_col_widths(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Returns row heights
 double *
 dwg_ent_table_get_row_heights(dwg_ent_table *table, int *error)
 {
@@ -14770,6 +15469,7 @@ dwg_ent_table_get_row_heights(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets table overrides present
 void
 dwg_ent_table_set_table_overrides_present(dwg_ent_table *table,
                                           unsigned char present, int *error)
@@ -14783,6 +15483,7 @@ dwg_ent_table_set_table_overrides_present(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns table overrides present
 unsigned char
 dwg_ent_table_get_table_overrides_present(dwg_ent_table *table, int *error)
 {
@@ -14795,6 +15496,7 @@ dwg_ent_table_get_table_overrides_present(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets flag overrrides
 void
 dwg_ent_table_set_table_flag_override(dwg_ent_table *table, long override,
                                       int *error)
@@ -14808,6 +15510,7 @@ dwg_ent_table_set_table_flag_override(dwg_ent_table *table, long override,
     *error = 1;   
 }
 
+/// returns flag overrides
 long
 dwg_ent_table_get_table_flag_override(dwg_ent_table *table, int *error)
 {
@@ -14820,6 +15523,7 @@ dwg_ent_table_get_table_flag_override(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets title supressed
 void
 dwg_ent_table_set_title_suppressed(dwg_ent_table *table, unsigned char title,
                                    int *error)
@@ -14833,6 +15537,7 @@ dwg_ent_table_set_title_suppressed(dwg_ent_table *table, unsigned char title,
     *error = 1;   
 }
 
+/// Returns title suppressed
 unsigned char
 dwg_ent_table_get_title_suppressed(dwg_ent_table *table, int *error)
 {
@@ -14845,6 +15550,7 @@ dwg_ent_table_get_title_suppressed(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets header suppressed
 void
 dwg_ent_table_set_header_suppressed(dwg_ent_table *table, unsigned char header,
                                     int *error)
@@ -14858,6 +15564,7 @@ dwg_ent_table_set_header_suppressed(dwg_ent_table *table, unsigned char header,
     *error = 1;   
 }
 
+/// Returns header suppressed
 unsigned char
 dwg_ent_table_get_header_suppressed(dwg_ent_table *table, int *error)
 {
@@ -14870,6 +15577,7 @@ dwg_ent_table_get_header_suppressed(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets flow direction
 void
 dwg_ent_table_set_flow_direction(dwg_ent_table *table, unsigned int dir,
                                  int *error)
@@ -14883,6 +15591,7 @@ dwg_ent_table_set_flow_direction(dwg_ent_table *table, unsigned int dir,
     *error = 1;   
 }
 
+/// Returns flow direction
 unsigned int 
 dwg_ent_table_get_flow_direction(dwg_ent_table *table, int *error)
 {
@@ -14895,6 +15604,7 @@ dwg_ent_table_get_flow_direction(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets horiz cell margin
 void
 dwg_ent_table_set_horiz_cell_margin(dwg_ent_table *table, double margin,
                                     int *error)
@@ -14908,6 +15618,7 @@ dwg_ent_table_set_horiz_cell_margin(dwg_ent_table *table, double margin,
     *error = 1;   
 }
 
+/// Returns horiz cell margin
 double
 dwg_ent_table_get_horiz_cell_margin(dwg_ent_table *table, int *error)
 {
@@ -14920,6 +15631,7 @@ dwg_ent_table_get_horiz_cell_margin(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets vert cell margin
 void
 dwg_ent_table_set_vert_cell_margin(dwg_ent_table *table, double margin,
                                    int *error)
@@ -14933,6 +15645,7 @@ dwg_ent_table_set_vert_cell_margin(dwg_ent_table *table, double margin,
     *error = 1;   
 }
 
+/// Returns vert cell margin
 double
 dwg_ent_table_get_vert_cell_margin(dwg_ent_table *table, int *error)
 {
@@ -14945,6 +15658,7 @@ dwg_ent_table_get_vert_cell_margin(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets title row fill none
 void
 dwg_ent_table_set_title_row_fill_none(dwg_ent_table *table, unsigned char fill,
                                       int *error)
@@ -14958,6 +15672,7 @@ dwg_ent_table_set_title_row_fill_none(dwg_ent_table *table, unsigned char fill,
     *error = 1;   
 }
 
+/// Returns title row fill none value
 unsigned char
 dwg_ent_table_get_title_row_fill_none(dwg_ent_table *table, int *error)
 {
@@ -14970,6 +15685,7 @@ dwg_ent_table_get_title_row_fill_none(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets header row fill none value
 void
 dwg_ent_table_set_header_row_fill_none(dwg_ent_table *table,
                                        unsigned char fill, int *error)
@@ -14983,6 +15699,7 @@ dwg_ent_table_set_header_row_fill_none(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns header row fill none value
 unsigned char
 dwg_ent_table_get_header_row_fill_none(dwg_ent_table *table, int *error)
 {
@@ -14995,6 +15712,7 @@ dwg_ent_table_get_header_row_fill_none(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets data row fill none value
 void
 dwg_ent_table_set_data_row_fill_none(dwg_ent_table *table, unsigned char fill,
                                      int *error)
@@ -15008,6 +15726,7 @@ dwg_ent_table_set_data_row_fill_none(dwg_ent_table *table, unsigned char fill,
     *error = 1;   
 }
 
+/// Returns data row fill none value
 unsigned char
 dwg_ent_table_get_data_row_fill_none(dwg_ent_table *table, int *error)
 {
@@ -15020,6 +15739,7 @@ dwg_ent_table_get_data_row_fill_none(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets title row align value
 void
 dwg_ent_table_set_title_row_align(dwg_ent_table *table, unsigned char fill,
                                   int *error)
@@ -15033,6 +15753,7 @@ dwg_ent_table_set_title_row_align(dwg_ent_table *table, unsigned char fill,
     *error = 1;   
 }
 
+/// Returns title row align
 unsigned int 
 dwg_ent_table_get_title_row_align(dwg_ent_table *table, int *error)
 {
@@ -15045,6 +15766,7 @@ dwg_ent_table_get_title_row_align(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets header row align
 void
 dwg_ent_table_set_header_row_align(dwg_ent_table *table, unsigned int align,
                                    int *error)
@@ -15058,6 +15780,7 @@ dwg_ent_table_set_header_row_align(dwg_ent_table *table, unsigned int align,
     *error = 1;   
 }
 
+/// Returns header row align
 unsigned int 
 dwg_ent_table_get_header_row_align(dwg_ent_table *table, int *error)
 {
@@ -15070,6 +15793,7 @@ dwg_ent_table_get_header_row_align(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets data row align
 void
 dwg_ent_table_set_data_row_align(dwg_ent_table *table, unsigned int align,
                                  int *error)
@@ -15083,6 +15807,7 @@ dwg_ent_table_set_data_row_align(dwg_ent_table *table, unsigned int align,
     *error = 1;   
 }
 
+/// Returns data row align
 unsigned int 
 dwg_ent_table_get_data_row_align(dwg_ent_table *table, int *error)
 {
@@ -15095,6 +15820,7 @@ dwg_ent_table_get_data_row_align(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets title row height
 void
 dwg_ent_table_set_title_row_height(dwg_ent_table *table, double height,
                                    int *error)
@@ -15108,6 +15834,7 @@ dwg_ent_table_set_title_row_height(dwg_ent_table *table, double height,
     *error = 1;   
 }
 
+/// Returns title row height
 double
 dwg_ent_table_get_title_row_height(dwg_ent_table *table, int *error)
 {
@@ -15120,6 +15847,7 @@ dwg_ent_table_get_title_row_height(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets header row height
 void
 dwg_ent_table_set_header_row_height(dwg_ent_table *table, double height,
                                     int *error)
@@ -15133,6 +15861,7 @@ dwg_ent_table_set_header_row_height(dwg_ent_table *table, double height,
     *error = 1;   
 }
 
+/// Returns header row height
 double
 dwg_ent_table_get_header_row_height(dwg_ent_table *table, int *error)
 {
@@ -15145,6 +15874,7 @@ dwg_ent_table_get_header_row_height(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets data row height
 void
 dwg_ent_table_set_data_row_height(dwg_ent_table *table, double height,
                                   int *error)
@@ -15158,6 +15888,7 @@ dwg_ent_table_set_data_row_height(dwg_ent_table *table, double height,
     *error = 1;   
 }
 
+/// Returns data row height value
 double
 dwg_ent_table_get_data_row_height(dwg_ent_table *table, int *error)
 {
@@ -15170,6 +15901,7 @@ dwg_ent_table_get_data_row_height(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets border color overrides present value
 void
 dwg_ent_table_set_border_color_overrides_present(dwg_ent_table *table,
                                                  unsigned char present,
@@ -15184,6 +15916,7 @@ dwg_ent_table_set_border_color_overrides_present(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns border color overrides present value
 unsigned char
 dwg_ent_table_get_border_color_overrides_present(dwg_ent_table *table,
                                                  int *error)
@@ -15197,6 +15930,7 @@ dwg_ent_table_get_border_color_overrides_present(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Sets border color overrides flag value
 void
 dwg_ent_table_set_border_color_overrides_flag(dwg_ent_table *table,
                                               long overrides, int *error)
@@ -15210,6 +15944,7 @@ dwg_ent_table_set_border_color_overrides_flag(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns border color overrides flag value
 long
 dwg_ent_table_get_border_color_overrides_flag(dwg_ent_table *table, int *error)
 {
@@ -15222,6 +15957,7 @@ dwg_ent_table_get_border_color_overrides_flag(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets border lineweight overrides present value
 void
 dwg_ent_table_set_border_lineweight_overrides_present(dwg_ent_table *table,
                                                       unsigned char present,
@@ -15236,6 +15972,7 @@ dwg_ent_table_set_border_lineweight_overrides_present(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns border lineweight overrides present value
 unsigned char
 dwg_ent_table_get_border_lineweight_overrides_present(dwg_ent_table *table,
                                                       int *error)
@@ -15249,6 +15986,7 @@ dwg_ent_table_get_border_lineweight_overrides_present(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Sets border lineweight overrides flag
 void
 dwg_ent_table_set_border_lineweight_overrides_flag(dwg_ent_table *table,
                                                    long overrides, int *error)
@@ -15262,6 +16000,7 @@ dwg_ent_table_set_border_lineweight_overrides_flag(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns border lineweight overrides flag value
 long
 dwg_ent_table_get_border_lineweight_overrides_flag(dwg_ent_table *table,
                                                    int *error)
@@ -15275,6 +16014,7 @@ dwg_ent_table_get_border_lineweight_overrides_flag(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Sets title horiz top lineweight value
 void
 dwg_ent_table_set_title_horiz_top_lineweight(dwg_ent_table *table,
                                              unsigned int lw, int *error)
@@ -15288,6 +16028,7 @@ dwg_ent_table_set_title_horiz_top_lineweight(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns title horiz top lineweight value
 unsigned int 
 dwg_ent_table_get_title_horiz_top_lineweight(dwg_ent_table *table, int *error)
 {
@@ -15300,6 +16041,7 @@ dwg_ent_table_get_title_horiz_top_lineweight(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets title horiz ins lineweight value
 void
 dwg_ent_table_set_title_horiz_ins_lineweight(dwg_ent_table *table,
                                              unsigned int lw, int *error)
@@ -15313,6 +16055,7 @@ dwg_ent_table_set_title_horiz_ins_lineweight(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns title horiz ins lineweight value
 unsigned int 
 dwg_ent_table_get_title_horiz_ins_lineweight(dwg_ent_table *table, int *error)
 {
@@ -15325,6 +16068,7 @@ dwg_ent_table_get_title_horiz_ins_lineweight(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets title horiz bottom lineweight value
 void
 dwg_ent_table_set_title_horiz_bottom_lineweight(dwg_ent_table *table,
                                                 unsigned int lw, int *error)
@@ -15338,6 +16082,7 @@ dwg_ent_table_set_title_horiz_bottom_lineweight(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns title horiz bottom lineweight value
 unsigned int 
 dwg_ent_table_get_title_horiz_bottom_lineweight(dwg_ent_table *table,
                                                 int *error)
@@ -15351,6 +16096,7 @@ dwg_ent_table_get_title_horiz_bottom_lineweight(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Sets title vert left lineweight value
 void
 dwg_ent_table_set_title_vert_left_lineweight(dwg_ent_table *table,
                                              unsigned int lw, int *error)
@@ -15364,7 +16110,8 @@ dwg_ent_table_set_title_vert_left_lineweight(dwg_ent_table *table,
     *error = 1;   
 }
 
-unsigned int 
+/// Sets title vert left lineweight value
+unsigned int
 dwg_ent_table_get_title_vert_left_lineweight(dwg_ent_table *table, int *error)
 {
   if (table != 0)
@@ -15376,6 +16123,7 @@ dwg_ent_table_get_title_vert_left_lineweight(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets title vert ins lineweight value
 void
 dwg_ent_table_set_title_vert_ins_lineweight(dwg_ent_table *table,
                                             unsigned int lw, int *error)
@@ -15389,6 +16137,7 @@ dwg_ent_table_set_title_vert_ins_lineweight(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns title vert ins lineweight
 unsigned int 
 dwg_ent_table_get_title_vert_ins_lineweight(dwg_ent_table *table, int *error)
 {
@@ -15401,6 +16150,7 @@ dwg_ent_table_get_title_vert_ins_lineweight(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets title vert right lineweight
 void
 dwg_ent_table_set_title_vert_right_lineweight(dwg_ent_table *table,
                                               unsigned int lw, int *error)
@@ -15414,6 +16164,7 @@ dwg_ent_table_set_title_vert_right_lineweight(dwg_ent_table *table,
     *error = 1;
 }
 
+/// Returns title vert right lineweight value
 unsigned int 
 dwg_ent_table_get_title_vert_right_lineweight(dwg_ent_table *table, int *error)
 {
@@ -15426,6 +16177,7 @@ dwg_ent_table_get_title_vert_right_lineweight(dwg_ent_table *table, int *error)
     *error = 1;
 }
 
+/// Sets header horiz top lineweight
 void
 dwg_ent_table_set_header_horiz_top_lineweight(dwg_ent_table *table,
                                               unsigned int lw, int *error)
@@ -15439,6 +16191,7 @@ dwg_ent_table_set_header_horiz_top_lineweight(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns header horiz top lineweight value
 unsigned int 
 dwg_ent_table_get_header_horiz_top_lineweight(dwg_ent_table *table, int *error)
 {
@@ -15451,6 +16204,7 @@ dwg_ent_table_get_header_horiz_top_lineweight(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets header horiz ins lineweight
 void
 dwg_ent_table_set_header_horiz_ins_lineweight(dwg_ent_table *table,
                                               unsigned int lw, int *error)
@@ -15464,6 +16218,7 @@ dwg_ent_table_set_header_horiz_ins_lineweight(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns header horiz ins lineweight value
 unsigned int 
 dwg_ent_table_get_header_horiz_ins_lineweight(dwg_ent_table *table,
                                               int *error)
@@ -15477,6 +16232,7 @@ dwg_ent_table_get_header_horiz_ins_lineweight(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Sets header horiz bottom lineweight value
 void
 dwg_ent_table_set_header_horiz_bottom_lineweight(dwg_ent_table *table,
                                                  unsigned int lw, int *error)
@@ -15490,6 +16246,7 @@ dwg_ent_table_set_header_horiz_bottom_lineweight(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns header horiz bottom lineweight value 
 unsigned int 
 dwg_ent_table_get_header_horiz_bottom_lineweight(dwg_ent_table *table,
                                                  int *error)
@@ -15503,6 +16260,7 @@ dwg_ent_table_get_header_horiz_bottom_lineweight(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Sets header vert left lineweight value
 void
 dwg_ent_table_set_header_vert_left_lineweight(dwg_ent_table *table,
                                               unsigned int lw, int *error)
@@ -15516,6 +16274,7 @@ dwg_ent_table_set_header_vert_left_lineweight(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns header vert left lineweight value
 unsigned int 
 dwg_ent_table_get_header_vert_left_lineweight(dwg_ent_table *table, int *error)
 {
@@ -15528,6 +16287,7 @@ dwg_ent_table_get_header_vert_left_lineweight(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets header vert ins lineweight
 void
 dwg_ent_table_set_header_vert_ins_lineweight(dwg_ent_table *table,
                                              unsigned int lw, int *error)
@@ -15541,6 +16301,7 @@ dwg_ent_table_set_header_vert_ins_lineweight(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns header vert ins lineweight value
 unsigned int 
 dwg_ent_table_get_header_vert_ins_lineweight(dwg_ent_table *table, int *error)
 {
@@ -15553,6 +16314,7 @@ dwg_ent_table_get_header_vert_ins_lineweight(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets header vert right lineweight value
 void
 dwg_ent_table_set_header_vert_right_lineweight(dwg_ent_table *table,
                                                unsigned int lw, int *error)
@@ -15566,6 +16328,7 @@ dwg_ent_table_set_header_vert_right_lineweight(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns header vert right lineweight value
 unsigned int 
 dwg_ent_table_get_header_vert_right_lineweight(dwg_ent_table *table,
                                                int *error)
@@ -15579,6 +16342,7 @@ dwg_ent_table_get_header_vert_right_lineweight(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Sets data horiz top lineweight value
 void
 dwg_ent_table_set_data_horiz_top_lineweight(dwg_ent_table *table,
                                             unsigned int lw, int *error)
@@ -15592,6 +16356,7 @@ dwg_ent_table_set_data_horiz_top_lineweight(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns data horiz top lineweight value
 unsigned int 
 dwg_ent_table_get_data_horiz_top_lineweight(dwg_ent_table *table, int *error)
 {
@@ -15604,6 +16369,7 @@ dwg_ent_table_get_data_horiz_top_lineweight(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets data horiz ins lineweight value
 void
 dwg_ent_table_set_data_horiz_ins_lineweight(dwg_ent_table *table,
                                             unsigned int lw, int *error)
@@ -15617,6 +16383,7 @@ dwg_ent_table_set_data_horiz_ins_lineweight(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns data horiz ins lineweight value
 unsigned int 
 dwg_ent_table_get_data_horiz_ins_lineweight(dwg_ent_table *table, int *error)
 {
@@ -15629,6 +16396,7 @@ dwg_ent_table_get_data_horiz_ins_lineweight(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets data horiz bottom lineweight
 void
 dwg_ent_table_set_data_horiz_bottom_lineweight(dwg_ent_table *table,
                                                unsigned int lw, int *error)
@@ -15642,6 +16410,7 @@ dwg_ent_table_set_data_horiz_bottom_lineweight(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns data horiz bottom lineweight
 unsigned int 
 dwg_ent_table_get_data_horiz_bottom_lineweight(dwg_ent_table *table,
                                                int *error)
@@ -15655,6 +16424,7 @@ dwg_ent_table_get_data_horiz_bottom_lineweight(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Sets data vert ins lineweight value
 void
 dwg_ent_table_set_data_vert_ins_lineweight(dwg_ent_table *table,
                                            unsigned int lw, int *error)
@@ -15668,6 +16438,7 @@ dwg_ent_table_set_data_vert_ins_lineweight(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns title border visibility overrides flag
 unsigned int 
 dwg_ent_table_get_data_vert_ins_lineweight(dwg_ent_table *table, int *error)
 {
@@ -15680,8 +16451,8 @@ dwg_ent_table_get_data_vert_ins_lineweight(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
-
-
+/// Sets title border visibility overrides flag
+/// Sets 
 void
 dwg_ent_table_set_border_visibility_overrides_present(dwg_ent_table *table,
                                                       unsigned char overrides,
@@ -15696,6 +16467,7 @@ dwg_ent_table_set_border_visibility_overrides_present(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns title border visibility overrides flag
 unsigned char
 dwg_ent_table_get_border_visibility_overrides_present(dwg_ent_table *table,
                                                       int *error)
@@ -15709,6 +16481,7 @@ dwg_ent_table_get_border_visibility_overrides_present(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Sets title border visibility overrides flag
 void
 dwg_ent_table_set_border_visibility_overrides_flag(dwg_ent_table *table,
                                                    long overrides, int *error)
@@ -15722,6 +16495,7 @@ dwg_ent_table_set_border_visibility_overrides_flag(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns title border visibility overrides flag
 long
 dwg_ent_table_get_border_visibility_overrides_flag(dwg_ent_table *table,
                                                    int *error)
@@ -15735,6 +16509,7 @@ dwg_ent_table_get_border_visibility_overrides_flag(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Sets title horiz top visibility
 void
 dwg_ent_table_set_title_horiz_top_visibility(dwg_ent_table *table,
                                              unsigned int visibility,
@@ -15749,6 +16524,7 @@ dwg_ent_table_set_title_horiz_top_visibility(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns title horiz top visibility
 unsigned int 
 dwg_ent_table_get_title_horiz_top_visibility(dwg_ent_table *table, int *error)
 {
@@ -15761,6 +16537,7 @@ dwg_ent_table_get_title_horiz_top_visibility(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets title horiz ins visibility
 void
 dwg_ent_table_set_title_horiz_ins_visibility(dwg_ent_table *table,
                                              unsigned int visibility,
@@ -15775,6 +16552,7 @@ dwg_ent_table_set_title_horiz_ins_visibility(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns title horiz ins visibility
 unsigned int 
 dwg_ent_table_get_title_horiz_ins_visibility(dwg_ent_table *table, int *error)
 {
@@ -15787,6 +16565,7 @@ dwg_ent_table_get_title_horiz_ins_visibility(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets title horiz bottom visibility
 void
 dwg_ent_table_set_title_horiz_bottom_visibility(dwg_ent_table *table,
                                                 unsigned int visibility,
@@ -15801,6 +16580,7 @@ dwg_ent_table_set_title_horiz_bottom_visibility(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns title horiz bottom visibility
 unsigned int 
 dwg_ent_table_get_title_horiz_bottom_visibility(dwg_ent_table *table,
                                                 int *error)
@@ -15814,6 +16594,7 @@ dwg_ent_table_get_title_horiz_bottom_visibility(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Sets title vert left visibility
 void
 dwg_ent_table_set_title_vert_left_visibility(dwg_ent_table *table,
                                              unsigned int visibility,
@@ -15828,6 +16609,7 @@ dwg_ent_table_set_title_vert_left_visibility(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns title vert left visibility
 unsigned int 
 dwg_ent_table_get_title_vert_left_visibility(dwg_ent_table *table, int *error)
 {
@@ -15840,6 +16622,7 @@ dwg_ent_table_get_title_vert_left_visibility(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets title vert ins visibility
 void
 dwg_ent_table_set_title_vert_ins_visibility(dwg_ent_table *table,
                                             unsigned int visibility,
@@ -15854,6 +16637,7 @@ dwg_ent_table_set_title_vert_ins_visibility(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns title vert ins visibility
 unsigned int 
 dwg_ent_table_get_title_vert_ins_visibility(dwg_ent_table *table, int *error)
 {
@@ -15866,6 +16650,7 @@ dwg_ent_table_get_title_vert_ins_visibility(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets title vert right visibility
 void
 dwg_ent_table_set_title_vert_right_visibility(dwg_ent_table *table,
                                               unsigned int visibility,
@@ -15880,6 +16665,7 @@ dwg_ent_table_set_title_vert_right_visibility(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns title vert right visibility
 unsigned int 
 dwg_ent_table_get_title_vert_right_visibility(dwg_ent_table *table,
                                               int *error)
@@ -15893,6 +16679,7 @@ dwg_ent_table_get_title_vert_right_visibility(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Sets data header horiz top visibility
 void
 dwg_ent_table_set_header_horiz_top_visibility(dwg_ent_table *table,
                                               unsigned int visibility,
@@ -15907,6 +16694,7 @@ dwg_ent_table_set_header_horiz_top_visibility(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns data header horiz top visibility
 unsigned int 
 dwg_ent_table_get_header_horiz_top_visibility(dwg_ent_table *table,
                                               int *error)
@@ -15920,6 +16708,7 @@ dwg_ent_table_get_header_horiz_top_visibility(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Sets data header horiz ins visibility
 void
 dwg_ent_table_set_header_horiz_ins_visibility(dwg_ent_table *table,
                                               unsigned int visibility,
@@ -15934,6 +16723,7 @@ dwg_ent_table_set_header_horiz_ins_visibility(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns data header horiz ins visibility
 unsigned int 
 dwg_ent_table_get_header_horiz_ins_visibility(dwg_ent_table *table,
                                               int *error)
@@ -15947,6 +16737,7 @@ dwg_ent_table_get_header_horiz_ins_visibility(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Sets data header vert left visibility
 void
 dwg_ent_table_set_header_horiz_bottom_visibility(dwg_ent_table *table,
                                                  unsigned int visibility,
@@ -15961,6 +16752,7 @@ dwg_ent_table_set_header_horiz_bottom_visibility(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns data header vert left visibility
 unsigned int 
 dwg_ent_table_get_header_vert_left_visibility(dwg_ent_table *table,
                                               int *error)
@@ -15974,6 +16766,7 @@ dwg_ent_table_get_header_vert_left_visibility(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Sets data header vert ins visibility
 void
 dwg_ent_table_set_header_vert_ins_visibility(dwg_ent_table *table,
                                              unsigned int visibility,
@@ -15988,6 +16781,7 @@ dwg_ent_table_set_header_vert_ins_visibility(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns data header vert ins visibility
 unsigned int 
 dwg_ent_table_get_header_vert_ins_visibility(dwg_ent_table *table, int *error)
 {
@@ -16000,6 +16794,7 @@ dwg_ent_table_get_header_vert_ins_visibility(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets data header vert right visibility
 void
 dwg_ent_table_set_header_vert_right_visibility(dwg_ent_table *table,
                                                unsigned int visibility,
@@ -16014,6 +16809,7 @@ dwg_ent_table_set_header_vert_right_visibility(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns data header vert right visibility
 unsigned int 
 dwg_ent_table_get_header_vert_right_visibility(dwg_ent_table *table,
                                                int *error)
@@ -16027,6 +16823,7 @@ dwg_ent_table_get_header_vert_right_visibility(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Sets data horiz top visibility
 void
 dwg_ent_table_set_data_horiz_top_visibility(dwg_ent_table *table,
                                             unsigned int visibility,
@@ -16041,6 +16838,7 @@ dwg_ent_table_set_data_horiz_top_visibility(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns data horiz top visibility
 unsigned int 
 dwg_ent_table_get_data_horiz_top_visibility(dwg_ent_table *table, int *error)
 {
@@ -16053,6 +16851,7 @@ dwg_ent_table_get_data_horiz_top_visibility(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets data horiz ins visibility
 void
 dwg_ent_table_set_data_horiz_ins_visibility(dwg_ent_table *table,
                                             unsigned int visibility,
@@ -16067,6 +16866,7 @@ dwg_ent_table_set_data_horiz_ins_visibility(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns data horiz ins visibility
 unsigned int 
 dwg_ent_table_get_data_horiz_ins_visibility(dwg_ent_table *table, int *error)
 {
@@ -16079,6 +16879,7 @@ dwg_ent_table_get_data_horiz_ins_visibility(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets data horiz bottom visibility
 void
 dwg_ent_table_set_data_horiz_bottom_visibility(dwg_ent_table *table,
                                                unsigned int visibility,
@@ -16093,6 +16894,7 @@ dwg_ent_table_set_data_horiz_bottom_visibility(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns data horiz bottom visibility
 unsigned int 
 dwg_ent_table_get_data_horiz_bottom_visibility(dwg_ent_table *table,
                                                int *error)
@@ -16106,6 +16908,7 @@ dwg_ent_table_get_data_horiz_bottom_visibility(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Sets data vert right visibility
 void
 dwg_ent_table_set_data_vert_ins_visibility(dwg_ent_table *table,
                                            unsigned int visibility,
@@ -16120,6 +16923,7 @@ dwg_ent_table_set_data_vert_ins_visibility(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns data vert ins visibility
 unsigned int 
 dwg_ent_table_get_data_vert_ins_visibility(dwg_ent_table *table, int *error)
 {
@@ -16132,6 +16936,7 @@ dwg_ent_table_get_data_vert_ins_visibility(dwg_ent_table *table, int *error)
     *error = 1;   
 }
 
+/// Sets data vert right visibility
 void
 dwg_ent_table_set_data_vert_right_visibility(dwg_ent_table *table,
                                              unsigned int visibility,
@@ -16146,6 +16951,7 @@ dwg_ent_table_set_data_vert_right_visibility(dwg_ent_table *table,
     *error = 1;   
 }
 
+/// Returns data vert right visibility
 unsigned int 
 dwg_ent_table_get_data_vert_right_visibility(dwg_ent_table *table, int *error)
 {
@@ -16163,9 +16969,7 @@ dwg_ent_table_get_data_vert_right_visibility(dwg_ent_table *table, int *error)
 ********************************************************************/
 
 /// Returns block control object from a block header type argument passed to function
-/** Usage :- 
-dwg_obj_block_control *blc;
-blc = dwg_block_header_get_block_control(hdr);
+/** Usage :- dwg_obj_block_control *blc = dwg_block_header_get_block_control(hdr);
 */
 dwg_obj_block_control *
 dwg_block_header_get_block_control(dwg_obj_block_header* block_header,
@@ -16181,6 +16985,7 @@ dwg_block_header_get_block_control(dwg_obj_block_header* block_header,
 
 }
 
+/// Extracts and returns all block headers
 dwg_object_ref **
 dwg_obj_block_control_get_block_headers(dwg_obj_block_control *ctrl,
                                         int *error)
@@ -16201,6 +17006,7 @@ dwg_obj_block_control_get_block_headers(dwg_obj_block_control *ctrl,
       *error = 1;
 }
 
+/// Returns number of blocks
 long
 dwg_obj_block_control_get_num_entries(dwg_obj_block_control *ctrl, int *error)
 {
@@ -16213,6 +17019,7 @@ dwg_obj_block_control_get_num_entries(dwg_obj_block_control *ctrl, int *error)
     *error = 1;
 }
 
+/// Returns model space block
 dwg_object_ref *
 dwg_obj_block_control_get_model_space(dwg_obj_block_control *ctrl, int *error)
 {
@@ -16225,6 +17032,7 @@ dwg_obj_block_control_get_model_space(dwg_obj_block_control *ctrl, int *error)
     *error = 1;
 }
 
+/// Returns paper space block
 dwg_object_ref *
 dwg_obj_block_control_get_paper_space(dwg_obj_block_control *ctrl, int *error)
 {
