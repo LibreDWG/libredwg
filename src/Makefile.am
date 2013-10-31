@@ -26,6 +26,7 @@ libredwg_la_SOURCES = \
 	bits.c \
 	decode.c \
         decode_r2007.c \
+	reedsolomon.c \
 	encode.c \
         print.c \
 	dwg_api.c \

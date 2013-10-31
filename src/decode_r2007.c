@@ -508,20 +508,21 @@ decode_rs(const char *src, int block_count, int data_size)
   int i, j;
   const char *src_base = src;
   char *dst_base, *dst;  
-  
-  dst_base = dst = (char*)malloc(block_count * data_size);
-  LOG_INFO("TODO reed-solomon %d %d\n", block_count, data_size);
+
+  dst_base = dst = (char*)malloc(block_count * data_size + 16);
+
   for (i = 0; i < block_count; ++i)
     {      
-      for (j = 0; j < data_size; ++j)
+      for (j = 0; j < data_size + 16; ++j)
         {
           *dst++ = *src;
           src += block_count;
         }
-      
+
+      rs_decode_block(dst_base + 239*i, 1);
       src = ++src_base;
     }
-  
+
   return (dst_base);
 }
 
