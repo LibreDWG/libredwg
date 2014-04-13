@@ -744,6 +744,7 @@ bit_read_H(Bit_Chain * dat, Dwg_Handle * handle)
       return (-1);
     }
 
+  //XXX is this code portable?
   val = (unsigned char *) &handle->value;
   for (i = handle->size - 1; i >= 0; i--)
     val[i] = bit_read_RC(dat);

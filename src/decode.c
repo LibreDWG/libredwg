@@ -2158,32 +2158,42 @@ dwg_decode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg)
       return 0;
     }
 
-  //Reserve memory space for object references
-  if (dwg->num_object_refs == 0)
-    dwg->object_ref = (Dwg_Object_Ref **) malloc(REFS_PER_REALLOC * sizeof(Dwg_Object_Ref*));
+  //if the handle size is 0, it is probably a null handle. It
+  //shouldn't be placed in the object ref vector
+  if (ref->handleref.size)
+    {
+      //Reserve memory space for object references
+      if (dwg->num_object_refs == 0)
+        dwg->object_ref = (Dwg_Object_Ref **) malloc(REFS_PER_REALLOC * sizeof(Dwg_Object_Ref*));
+      else
+        if (dwg->num_object_refs % REFS_PER_REALLOC == 0)
+          {
+            dwg->object_ref = (Dwg_Object_Ref **) realloc(dwg->object_ref,
+                                (dwg->num_object_refs + REFS_PER_REALLOC) * sizeof(Dwg_Object_Ref*));
+          }
+      dwg->object_ref[dwg->num_object_refs++] = ref;
+    }
   else
-    if (dwg->num_object_refs % REFS_PER_REALLOC == 0)
-      {
-        dwg->object_ref = (Dwg_Object_Ref **) realloc(dwg->object_ref,
-            (dwg->num_object_refs + REFS_PER_REALLOC) * sizeof(Dwg_Object_Ref*));
-      }
-
-  dwg->object_ref[dwg->num_object_refs++] = ref;
-
-  ref->absolute_ref = ref->handleref.value;
-  ref->obj = 0;
+    {
+      ref->obj = 0;
+      ref->absolute_ref=0;
+      return ref;
+    }
 
   //we receive a null obj when we are reading
   // handles in the header variables section
   if (!obj)
-    return ref;
+    {
+      ref->absolute_ref = ref->handleref.value;
+      ref->obj = 0;
+      return ref;
+    }
 
   /*
    * sometimes the code indicates the type of ownership
    * in other cases the handle is stored as an offset from some other handle
    * how is it determined?
    */
-  ref->absolute_ref = 0;
   switch(ref->handleref.code) //that's right: don't bother the code on the spec.
     {
     case 0x06: //what if 6 means HARD_OWNER?
