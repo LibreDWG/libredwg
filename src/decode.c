@@ -2179,7 +2179,6 @@ dwg_decode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg)
       ref->absolute_ref=0;
       return ref;
     }
-
   //we receive a null obj when we are reading
   // handles in the header variables section
   if (!obj)
@@ -2188,13 +2187,12 @@ dwg_decode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg)
       ref->obj = 0;
       return ref;
     }
-
   /*
    * sometimes the code indicates the type of ownership
    * in other cases the handle is stored as an offset from some other handle
    * how is it determined?
    */
-  switch(ref->handleref.code) //that's right: don't bother the code on the spec.
+ switch(ref->handleref.code) //that's right: don't bother the code on the spec.
     {
     case 0x06: //what if 6 means HARD_OWNER?
       ref->absolute_ref = (obj->handle.value + 1);
