@@ -1,0 +1,28 @@
+[ AutoCAD - Wed Jun 18 12:59:19 2014  ]----------------------------------------
+
+<DwgEntity
+#<VLA-OBJECT IAcadPoint 000000003858b7e8>
+; IAcadPoint: AutoCAD Point Interface
+; Property values:
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 00000001402d2308>
+;   Coordinates = (27.928 8.65308 0.0)
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 0000000037beb728>
+;   EntityTransparency = "ByLayer"
+;   Handle (RO) = "1C0"
+;   HasExtensionDictionary (RO) = 0
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 0000000038489928>
+;   Layer = "0"
+;   Linetype = "ByLayer"
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   Material = "ByLayer"
+;   Normal = (0.0 0.0 1.0)
+;   ObjectID (RO) = 60
+;   ObjectID32 (RO) = 60
+;   ObjectName (RO) = "AcDbPoint"
+;   OwnerID (RO) = 61
+;   OwnerID32 (RO) = 61
+;   PlotStyleName = "ByLayer"
+;   Thickness = 0.0
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 00000000384898c0>
+;   Visible = -1

@@ -1,0 +1,39 @@
+[ AutoCAD - Wed Jun 18 12:38:04 2014  ]----------------------------------------
+
+<DwgEntity
+#<VLA-OBJECT IAcadEllipse 000000002b736eb8>
+; IAcadEllipse: AutoCAD Ellipse Interface
+; Property values:
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 000000013f9c2308>
+;   Area (RO) = 149.024
+;   Center = (11.1433 9.5374 0.0)
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 000000002b75d6e8>
+;   EndAngle = 6.28319
+;   EndParameter = 6.28319
+;   EndPoint (RO) = (2.39246 1.50274 0.0)
+;   EntityTransparency = "ByLayer"
+;   Handle (RO) = "1BE"
+;   HasExtensionDictionary (RO) = 0
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 000000002ec9d138>
+;   Layer = "0"
+;   Linetype = "ByLayer"
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   MajorAxis = (-8.7508 -8.03465 0.0)
+;   MajorRadius = 11.8799
+;   Material = "ByLayer"
+;   MinorAxis (RO) = (2.70052 -2.94122 0.0)
+;   MinorRadius = 3.99294
+;   Normal = (0.0 0.0 1.0)
+;   ObjectID (RO) = 42
+;   ObjectID32 (RO) = 42
+;   ObjectName (RO) = "AcDbEllipse"
+;   OwnerID (RO) = 43
+;   OwnerID32 (RO) = 43
+;   PlotStyleName = "ByLayer"
+;   RadiusRatio = 0.336109
+;   StartAngle = 0.0
+;   StartParameter = 0.0
+;   StartPoint (RO) = (2.39246 1.50274 0.0)
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 000000002ec9d310>
+;   Visible = -1
