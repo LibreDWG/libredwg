@@ -1,32 +1,67 @@
-void
-xml_header(FILE* file)
+char *
+spointprepare(double x, double y, double z)
 {
-	fprintf(file, "<?xml version='1.0' encoding='UTF-8'?>\n<DwgData>\n");
+    char *result;
+
+    result = malloc(100 * sizeof(char));
+    int n = sprintf(result, "(%.4f %.4f %.4f)", x, y, z);
+
+    //Check if it was transfered properly
+    if (n < 0)
+    {
+        strcpy(result, "");
+    }
+    
+    return result;
 }
 
-void
-xml_footer(FILE *file)
+char*
+doubletochar(double x)
 {
-	fprintf(file, "</DwgData>\n" );
+  char *result;
+  int n;
+
+  result = malloc(50 * sizeof(char));
+  n = sprintf(result, "%.4f", x);
+
+  if (n < 0)
+  {
+    strcpy(result, "");
+  }
+
+  return result;
+}
+char*
+spointprepare2(double x, double y)
+{
+    char *result;
+    result = malloc(50 * sizeof(char));
+    int n = sprintf(result, "(%.4f %.4f)", x, y);
+
+    //Check if it was transfered properly
+    if (n < 0)
+    {
+        strcpy(result, "");
+    }
+
+    return result;
+
 }
 
-//Function to start the entity
-void
-entity_header(FILE* file)
+char*
+doubletohex (double handle)
 {
-	fprintf(file, "<DwgEntity ");
-}
+  char *result;
+  result = malloc(20 * sizeof(char));
 
+  int n = sprintf(result, "%03x", handle)
 
-//This won't work right now as we can't store the output of printf
-/*void
-entity_attr(FILE *file, const char* key, const char* value)
-{
-	fprintf(file, "%s='%s' ", key, value);
-}*/
+  //Check if it was transfered properly
 
-void
-entity_footer(FILE *file)
-{
-	fprintf(file,"/>\n");
+  if (n < 0)
+  {
+    strcpy(result, "");
+  }
+
+  return result;
 }

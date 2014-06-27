@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<DwgData>
-<DwgEntity type='IAcadCircle' desc='IAcadCircle: AutoCAD Circle Interface' Center='(23.449320 -1.092391 0.000000)' Handle='445' Radius='13.530414' Thickness='0.000000' />
-<?xml version='1.0' encoding='UTF-8'?>
-<DwgData>
-<DwgEntity type='IAcad3DPolyline' desc='IAcad3DPolyline: AutoCAD 3dPolyline Interface' 
-<?xml version='1.0' encoding='UTF-8'?>
-<DwgData>
-<DwgEntity type='IAcad3DPolyline' desc='IAcad3DPolyline: AutoCAD 3dPolyline Interface' 

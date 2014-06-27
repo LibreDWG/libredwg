@@ -46,7 +46,7 @@ suffix (const char *filename, const char *ext)
 #define REQUIRE_INPUT_FILE_ARG(argc)            \
   do                                            \
     {                                           \
-      if (1 == argc)                            \
+      if (2 == argc)                            \
         {                                       \
           puts ("No input file specified");     \
           return 1;                             \

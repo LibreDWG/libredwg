@@ -22,268 +22,476 @@
 #include <dwg_api.h>
 #include "suffix.c"
 #include "common.c"
+#include <libxml/tree.h>
+#include <libxml/parser.h>
+#include <string.h>
+#include <stdlib.h>
 
 void
-add_line(FILE *file, Dwg_Object dwgobject)
+common_attr(xmlNodePtr node, Dwg_Object dwgobject)
 {
-	Dwg_Entity_LINE *line = dwgobject.tio.entity->tio.LINE;
-	//Some Fixed Variables
-	const char *type = "IAcadLine";
-	const char *desc = "IAcadLine: AutoCAD Line Interface";
+  char* pointprepare;
 
-	//The start of the entity
-  entity_header(file);
-  fprintf(file, "type='%s' desc='%s' EndPoint='(%f %f %f)'",
-   type, desc, line->end.x, line->end.y, line->end.z);
+  //Start adding the common attributes
 
-  fprintf(file, "StartPoint='(%f %f %f)' Handle='%lu'",
-   line->start.x, line->start.y, line->start.z, dwgobject.handle.value);
-  //The end of the entity
+  pointprepare = doubletohex(dwgobject.handle.value);
+  xmlNewProp(node, "Handle", pointprepare);
 
-  entity_footer(file);
+  pointprepare = doubletochar(dwgobject.tio.entity.linetype_scale);
+  xmlNewProp(node, "LinetypeScale", pointprepare);
+
+  pointprepare = doubletochar(dwgobject.tio.entity.lineweight);
+  xmlNewProp(node, "Lineweight", pointprepare);
+
+  
 }
 
 void
-add_circle(FILE *file, Dwg_Object dwgobject)
+add_line(xmlNodePtr rootnode, Dwg_Object dwgobject)
 {
-	Dwg_Entity_CIRCLE *circle = dwgobject.tio.entity->tio.CIRCLE;
+  Dwg_Entity_LINE *line = dwgobject.tio.entity->tio.LINE;
 
-	//Some fixed Variables
-	const char *type = "IAcadCircle";
-	const char *desc = "IAcadCircle: AutoCAD Circle Interface";
+  //Some Fixed Variables
+  const char *type = "IAcadLine";
+  const char *desc = "IAcadLine: AutoCAD Line Interface";
+  char *pointprepare;
 
-	//the start of the entity
-	entity_header(file);
-	fprintf(file, "type='%s' desc='%s' ", type, desc);
-	fprintf(file, "Center='(%f %f %f)' ", circle->center.x, circle->center.y, circle->center.z);
-	fprintf(file, "Handle='%lu' ", dwgobject.handle.value);
-	fprintf(file, "Radius='%f' ", circle->radius);
-	fprintf(file, "Thickness='%f' ", circle->thickness);
+  //The start of the entity
+  xmlNodePtr dwgentity = xmlNewChild(rootnode, NULL, "DwgEntity", NULL);
 
-	entity_footer(file);
+  //Now the attributes
+  xmlNewProp(dwgentity, "type", type);
+  xmlNewProp(dwgentity, "desc", desc);
+
+  pointprepare = spointprepare(line->end.x, line->end.y, line->end.z);
+  xmlNewProp(dwgentity, "EndPoint", pointprepare);
+
+  pointprepare = spointprepare(line->start.x, line->start.y, line->start.z);
+  xmlNewProp(dwgentity, "StartPoint", pointprepare);
+
+  //Add the default attributes common to all
+
+  //Now link the created node to root
+  xmlAddChild(rootnode, dwgentity);
+
+  //Free Dynamically allocated memory
+  free(pointprepare);
+
+}
+
+void
+add_circle(xmlNodePtr rootnode, Dwg_Object dwgobject)
+{
+  Dwg_Entity_CIRCLE *circle = dwgobject.tio.entity->tio.CIRCLE;
+
+  //Some fixed Variables
+  const char *type = "IAcadCircle";
+  const char *desc = "IAcadCircle: AutoCAD Circle Interface";
+  char *pointprepare, *dtostring;
+  //the start of the entity
+  xmlNodePtr dwgentity = xmlNewChild(rootnode, NULL, "DwgEntity", NULL);
+  
+  //Now the attributes
+  xmlNewProp(dwgentity, "type", type);
+  xmlNewProp(dwgentity, "desc", desc);
+
+  pointprepare = spointprepare(circle->center.x, circle->center.y, circle->center.z);
+  xmlNewProp(dwgentity, "Center", pointprepare);
+
+  dtostring = doubletochar(circle->radius);
+  xmlNewProp(dwgentity, "Radius", dtostring);
+
+  dtostring = doubletochar(circle->thickness);
+  xmlNewProp(dwgentity, "Thickness", dtostring);
+
+  //Add the default attributes common to all
+
+  //Now link the created node to root
+  xmlAddChild(rootnode, dwgentity);
+  free(pointprepare);
 
 }
 
 
 //@TODO This is yet to be completed
 void
-add_3dpolyline(FILE *file, Dwg_Object dwgobject)
+add_3dpolyline(xmlNodePtr rootnode, Dwg_Object dwgobject)
 {
-	Dwg_Entity_POLYLINE_3D *polyline3d = dwgobject.tio.entity->tio.POLYLINE_3D;
+  Dwg_Entity_POLYLINE_3D *polyline3d = dwgobject.tio.entity->tio.POLYLINE_3D;
 
-	//Some fixed Variables
-	const char *type = "IAcad3DPolyline";
-	const char *desc = "IAcad3DPolyline: AutoCAD 3dPolyline Interface";
+  //Some fixed Variables
+  const char *type = "IAcad3DPolyline";
+  const char *desc = "IAcad3DPolyline: AutoCAD 3dPolyline Interface";
 
-	//the start of the entity
-	entity_header(file);
-	fprintf(file, "type='%s' desc='%s' ", type, desc);
-	fprintf(file, "\n");
+  //the start of the entity
+  xmlNodePtr dwgentity = xmlNewChild(rootnode, NULL, "DwgEntity", NULL);
+  
+  //Now the attributes
+  xmlNewProp(dwgentity, "type", type);
+  xmlNewProp(dwgentity, "desc", desc);
+
+  //Add the default attributes common to all
+
+  //Now link the created node to root
+  xmlAddChild(rootnode, dwgentity);
 }
 
 void
-add_arc(FILE *file, Dwg_Object dwgobject)
+add_arc(xmlNodePtr rootnode, Dwg_Object dwgobject)
 {
-	Dwg_Entity_ARC *arc = dwgobject.tio.entity->tio.ARC;
-	//Some fixed Variables
-	const char *type = "IAcadArc";
-	const char *desc = "IAcadArc: AutoCAD Arc Interface";
+  Dwg_Entity_ARC *arc = dwgobject.tio.entity->tio.ARC;
+  //Some fixed Variables
+  const char *type = "IAcadArc";
+  const char *desc = "IAcadArc: AutoCAD Arc Interface";
+  char *pointprepare, *dtostring;
 
-	//the start of the entity
-	entity_header(file);
-	fprintf(file, "type='%s' desc='%s' ", type, desc);
-	fprintf(file, "Center='(%f %f %f)' ", arc->center.x, arc->center.y, arc->center.z);
-	fprintf(file, "EndAngle='%f' ", arc->end_angle);
-	fprintf(file, "Handle='%lu' ", dwgobject.handle.value);
-	fprintf(file, "Radius='%f' ", arc->radius);
-	fprintf(file, "StartAngle='%f'", arc->start_angle);
-	fprintf(file, "Thickness='%f' ", arc->thickness);
-	entity_footer(file);
+  //the start of the entity
+  xmlNodePtr dwgentity = xmlNewChild(rootnode, NULL, "DwgEntity", NULL);
+  
+  //Now the attributes
+  xmlNewProp(dwgentity, "type", type);
+  xmlNewProp(dwgentity, "desc", desc);
+
+  pointprepare = spointprepare(arc->center.x, arc->center.y, arc->center.z);
+  xmlNewProp(dwgentity, "Center", pointprepare);
+
+  dtostring = doubletochar(arc->end_angle);
+  xmlNewProp(dwgentity, "EndAngle", dtostring);
+
+  dtostring = doubletochar(arc->radius);
+  xmlNewProp(dwgentity, "Radius", dtostring);
+
+  dtostring = doubletochar(arc->start_angle);
+  xmlNewProp(dwgentity, "StartAngle", dtostring);
+
+  dtostring = doubletochar (arc->thickness);
+  xmlNewProp(dwgentity,"Thickness", dtostring);
+  //Add the default attributes common to all
+
+  //Now link the created node to root
+  xmlAddChild(rootnode, dwgentity);
+  free(pointprepare);
+  free(dtostring);
 }
 
 void
-add_block(FILE *file, Dwg_Object dwgobject)
+add_block(xmlNodePtr rootnode, Dwg_Object dwgobject)
 {
-	Dwg_Entity_BLOCK *block = dwgobject.tio.entity->tio.BLOCK;
-	//Some fixed Variables
-	const char *type = "IAcadBlockReference";
-	const char *desc = "IAcadBlockReference: AutoCAD Block Reference Interface";
+  Dwg_Entity_BLOCK *block = dwgobject.tio.entity->tio.BLOCK;
+  //Some fixed Variables
+  const char *type = "IAcadBlockReference";
+  const char *desc = "IAcadBlockReference: AutoCAD Block Reference Interface";
 
-	//the start of the entity
-	entity_header(file);
-	fprintf(file, "type='%s' desc='%s' ", type, desc);
-	fprintf(file, "EffectiveName='%s' ", block->name);
-	entity_footer(file);
+  //the start of the entity
+  xmlNodePtr dwgentity = xmlNewChild(rootnode, NULL, "DwgEntity", NULL);
+  
+  //Now the attributes
+  xmlNewProp(dwgentity, "type", type);
+  xmlNewProp(dwgentity, "desc", desc);
+
+  xmlNewProp(dwgentity, "EffectiveName", block->name);
+
+  //Add the default attributes common to all
+
+  //Now link the created node to root
+  xmlAddChild(rootnode, dwgentity);
 }
 
 void
-add_ellipse(FILE *file, Dwg_Object dwgobject)
+add_ellipse(xmlNodePtr rootnode, Dwg_Object dwgobject)
 {
-	Dwg_Entity_ELLIPSE *ellipse = dwgobject.tio.entity->tio.ELLIPSE;
+  Dwg_Entity_ELLIPSE *ellipse = dwgobject.tio.entity->tio.ELLIPSE;
 
-	//Some fixed Variables
-	const char *type = "IAcadEllipse";
-	const char *desc = "IAcadEllipse: AutoCAD Ellipse Interface";
+  //Some fixed Variables
+  const char *type = "IAcadEllipse";
+  const char *desc = "IAcadEllipse: AutoCAD Ellipse Interface";
+  char* pointprepare, *dtostring;
+  //the start of the entity
+  xmlNodePtr dwgentity = xmlNewChild(rootnode, NULL, "DwgEntity", NULL);
+  
+  //Now the attributes
+  xmlNewProp(dwgentity, "type", type);
+  xmlNewProp(dwgentity, "desc", desc);
 
-	//the start of the entity
-	entity_header(file);
-	fprintf(file, "type='%s' desc='%s' ", type, desc);
-	fprintf(file, "Center='(%f %f %f)' ", ellipse->center.x, ellipse->center.y, ellipse->center.z);
-	fprintf(file, "EndAngle='%f' ", ellipse->end_angle);
-	fprintf(file, "Handle='%lu' ", dwgobject.handle.value);
-	fprintf(file, "StartAngle='%f' ", ellipse->start_angle);
-	//Axis Ratio and Sm Axis
-	entity_footer(file);
+  pointprepare = spointprepare(ellipse->center.x, ellipse->center.y, ellipse->center.z);
+  xmlNewProp(dwgentity, "Center", pointprepare);
+
+  dtostring = doubletochar(ellipse->end_angle);
+  xmlNewProp(dwgentity, "EndAngle", dtostring);
+
+  dtostring = doubletochar(ellipse->start_angle);
+  xmlNewProp(dwgentity, "StartAngle", dtostring);
+  //Axis Ratio and Sm Axis
+
+
+  //Add the default attributes common to all
+
+  //Now link the created node to root
+  xmlAddChild(rootnode, dwgentity);
+  free(pointprepare);
+  free(dtostring);
 }
 
 // @TODO: This is not proper. Still some attributes are missing
 void
-add_mline(FILE *file, Dwg_Object dwgobject)
+add_mline(xmlNodePtr rootnode, Dwg_Object dwgobject)
 {
-	Dwg_Entity_MLINE *mline = dwgobject.tio.entity->tio.MLINE;
+  Dwg_Entity_MLINE *mline = dwgobject.tio.entity->tio.MLINE;
 
-	//Some fixed Variables
-	const char *type = "IAcadMLine";
-	const char *desc = "IAcadMLine: IAcadMLine Interface";
+  //Some fixed Variables
+  const char *type = "IAcadMLine";
+  const char *desc = "IAcadMLine: IAcadMLine Interface";
 
-	//the start of the entity
-	entity_header(file);
-	fprintf(file, "type='%s' desc='%s' ", type, desc);
-	fprintf(file, "Handle=''%lu", dwgobject.handle.value);
-	entity_footer(file)
+  //the start of the entity
+  xmlNodePtr dwgentity = xmlNewChild(rootnode, NULL, "DwgEntity", NULL);
+  
+  //Now the attributes
+  xmlNewProp(dwgentity, "type", type);
+  xmlNewProp(dwgentity, "desc", desc);
+
+
+  //Add the default attributes common to all
+
+  //Now link the created node to root
+  xmlAddChild(rootnode, dwgentity);
 }
 
 void
-add_point(FILE* file, Dwg_Object dwgobject)
+add_point(xmlNodePtr rootnode, Dwg_Object dwgobject)
 {
-	Dwg_Entity_POINT *point = dwgobject.tio.entity->tio.POINT;
+  Dwg_Entity_POINT *point = dwgobject.tio.entity->tio.POINT;
 
-	//Some fixed Variables
-	const char *type = "IAcadPoint";
-	const char *desc = "IAcadPoint: AutoCAD Point Interface";
+  //Some fixed Variables
+  const char *type = "IAcadPoint";
+  const char *desc = "IAcadPoint: AutoCAD Point Interface";
+  char* pointprepare, *dtostring;
+  //the start of the entity
+  xmlNodePtr dwgentity = xmlNewChild(rootnode, NULL, "DwgEntity", NULL);
+  
+  //Now the attributes
+  xmlNewProp(dwgentity, "type", type);
+  xmlNewProp(dwgentity, "desc", desc);
 
-	//the start of the entity
-	entity_header(file);
-	fprintf(file, "type='%s' desc='%s' ", type, desc);
-	fprintf(file, "Handle='%lu' ", dwgobject.handle.value);
-	fprintf(file, "Coordinates='(%f %f %f)'", point->x, point->y, point->z);
-	fprintf(file, "Thickness='%f'", point->thickness);
-	entity_footer(file)
+  pointprepare = spointprepare(point->x, point->y, point->z);
+  xmlNewProp(dwgentity, "Coordinates", pointprepare);
 
+  dtostring = doubletochar(point->thickness);
+  xmlNewProp(dwgentity, "Thickness", dtostring);
+  //Add the default attributes common to all
+
+  //Now link the created node to root
+  xmlAddChild(rootnode, dwgentity);
+  free(pointprepare);
+  free(dtostring);
 }
 
 void
-add_ray(FILE *file, Dwg_Object dwgobject)
+add_ray(xmlNodePtr rootnode, Dwg_Object dwgobject)
 {
-	Dwg_Entity_RAY *ray = dwgobject.tio.entity->tio.RAY;
+  Dwg_Entity_RAY *ray = dwgobject.tio.entity->tio.RAY;
 
-	//Some fixed Variables
-	const char *type = "IAcadRay";
-	const char *desc = "IAcadRay: AutoCAD Ray Interface";
+  //Some fixed Variables
+  const char *type = "IAcadRay";
+  const char *desc = "IAcadRay: AutoCAD Ray Interface";
+  char *pointprepare;
 
-	//the start of the entity
-	entity_header(file);
-	fprintf(file, "type='%s' desc='%s' ", type, desc);
-	fprintf(file, "Handle='%lu' ", dwgobject.handle.value);
-	fprintf(file, "BasePoint='(%f %f %f)' ", ray->point.x, ray->point.y, ray->point.z);
-	fprintf(file, "DirectionVector='(%f %f %f)' ", ray->vector.x, ray->vector.y, ray->vector.z);
-	entity_footer(file);
+  //the start of the entity
+  xmlNodePtr dwgentity = xmlNewChild(rootnode, NULL, "DwgEntity", NULL);
+  
+  //Now the attributes
+  xmlNewProp(dwgentity, "type", type);
+  xmlNewProp(dwgentity, "desc", desc);
+
+  pointprepare = spointprepare(ray->point.x, ray->point.y, ray->point.z);
+  xmlNewProp(dwgentity, "BasePoint", pointprepare);
+
+  pointprepare = spointprepare(ray->vector.x, ray->vector.y, ray->vector.z);
+  xmlNewProp(dwgentity, "DirectionVector", pointprepare);
+
+//  Add the default attributes common to all
+
+  //Now link the created node to root
+  xmlAddChild(rootnode, dwgentity);
+  free(pointprepare);
+}
+
+
+void
+add_spline(xmlNodePtr rootnode, Dwg_Object dwgobject)
+{
+  Dwg_Entity_SPLINE *spline = dwgobject.tio.entity->tio.SPLINE;
+
+  //Some fixed Variables
+  const char *type = "IAcadSpline";
+  const char *desc = "IAcadSpline: AutoCAD Spline Interface";
+  char *pointprepare, *dtostring;
+  //the start of the entity
+  xmlNodePtr dwgentity = xmlNewChild(rootnode, NULL, "DwgEntity", NULL);
+  
+  //Now the attributes
+  xmlNewProp(dwgentity, "type", type);
+  xmlNewProp(dwgentity, "desc", desc);
+
+  dtostring = doubletochar(spline->closed_b);
+  xmlNewProp(dwgentity, "Closed", dtostring);
+
+  dtostring = doubletochar(spline->degree);
+  xmlNewProp(dwgentity, "Degree", dtostring);
+
+  pointprepare = spointprepare(spline->end_tan_vec.x, spline->end_tan_vec.y, spline->end_tan_vec.z);
+  xmlNewProp(dwgentity, "EndTangent", pointprepare);
+
+  dtostring = doubletochar(spline->fit_tol);
+  xmlNewProp(dwgentity, "FitTolerance", dtostring);
+  
+  //This is for fit points. DO this too
+
+  // @TODO this is an array. Use it properly
+  //fprintf(file, "ControlPoints='(%f %f %f %f)' ", );
+//  Add the default attributes common to all
+
+  //Now link the created node to root
+  xmlAddChild(rootnode, dwgentity);
+  free(dtostring);
+  free(pointprepare);
 
 }
 
 
 void
-add_spline(FILE *file, Dwg_Object dwgobject)
+add_text(xmlNodePtr rootnode, Dwg_Object dwgobject)
 {
-	Dwg_Entity_SPLINE *spline = dwgobject.tio.entity->tio.SPLINE;
+  Dwg_Entity_TEXT *text = dwgobject.tio.entity->tio.TEXT;
 
-	//Some fixed Variables
-	const char *type = "IAcadSpline";
-	const char *desc = "IAcadSpline: AutoCAD Spline Interface";
+  //Some fixed Variables
+  const char *type = "IAcadMText";
+  const char *desc = "IAcadMText: AutoCAD MText Interface";
+  char *pointprepare, *dtostring;
+  //the start of the entity
+  xmlNodePtr dwgentity = xmlNewChild(rootnode, NULL, "DwgEntity", NULL);
+  
+  //Now the attributes
+  xmlNewProp(dwgentity, "type", type);
+  xmlNewProp(dwgentity, "desc", desc);
 
-	//the start of the entity
-	entity_header(file);
-	fprintf(file, "type='%s' desc='%s' ", type, desc);
-	fprintf(file, "Handle='%lu' ", dwgobject.handle.value);
-	fprintf(file, "Closed='%f' ", spline->closed_b);
-	fprintf(file, "Degree='%u' ", spline->degree);
-	fprintf(file, "EndTangent='(%f %f %f)' ", spline->end_tan_vec.x, spline->end_tan_vec.y, spline->end_tan_vec.z);
-	fprintf(file, "FitTolerance='%f'", spline->fit_tol);
-	
-	//This is for fit points. DO this too
-	fprintf(file, "");
+  dtostring = doubletochar(text->height);
+  xmlNewProp(dwgentity, "Height", dtostring);
 
-	// @TODO this is an array. Use it properly
-	//fprintf(file, "ControlPoints='(%f %f %f %f)' ", );
-	entity_footer(file);
+  pointprepare = spointprepare2(text->insertion_pt.x, text->insertion_pt.y);
+  xmlNewProp(dwgentity, "InsertionPoint", pointprepare);
+  xmlNewProp(dwgentity, "TextString", text->text_value);
+  
+  dtostring = doubletochar(text->width_factor);
+  xmlNewProp(dwgentity, "Width", dtostring);
 
+  //@TODO: Lots of attributes were also left. Check this.
+  //Add the default attributes common to all
+
+  //Now link the created node to root
+  xmlAddChild(rootnode, dwgentity);
+  free(pointprepare);
+  free(dtostring);
 }
+
+void
+add_table(xmlNodePtr rootnode, Dwg_Object dwgobject)
+{
+  Dwg_Entity_TABLE * table = dwgobject.tio.entity->tio.TABLE;
+
+  const char *type = "IAcadTable";
+  const char *desc = "IAcadTable: IAcadTable Interface";
+  char *pointprepare, *dtostring;
+
+  //the start of the entity
+  xmlNodePtr dwgentity = xmlNewChild(rootnode, NULL, "DwgEntity", NULL);
+  
+  //Now the attributes
+  xmlNewProp(dwgentity, "type", type);
+  xmlNewProp(dwgentity, "desc", desc);
+
+  pointprepare = spointprepare(table->insertion_point.x, table->insertion_point.y, table->insertion_point.z);
+  xmlNewProp(dwgentity, "InsertionPoint", pointprepare);
+
+  dtostring = doubletochar(table->num_rows);
+  xmlNewProp(dwgentity, "Rows", dtostring);
+
+  //@TODO: Lots of attributes are here. Need to figure out them and match them
+  //Add the default attributes common to all
+
+  //Now link the created node to root
+  xmlAddChild(rootnode, dwgentity);
+  free(pointprepare);
+  free(dtostring);
+}
+
+
 int
-load_dwg(char *filename)
+load_dwg(char *dwgfilename, xmlNodePtr rootnode)
 {
   unsigned int i;
   int success;
   Dwg_Data dwg;
 
   dwg.num_objects = 0;
-  success = dwg_read_file(filename, &dwg);
-  const char *xmlfilename = "Line.xml";
-  FILE *xmlfile;
-  xmlfile = fopen(xmlfilename, "a+");
-  xml_header(xmlfile);
+  success = dwg_read_file(dwgfilename, &dwg);
 
   for (i = 0; i < dwg.num_objects; i++)
-    {
-      switch (dwg.object[i].type)
-        {
-      		case DWG_TYPE_LINE:
-        		//What to do when we have a line
-	        	add_line(xmlfile, dwg.object[i]);
-        	break;
+  {
+  switch (dwg.object[i].type)
+  {
+    case DWG_TYPE_LINE:
+      //What to do when we have a line
+      add_line(rootnode, dwg.object[i]);
+      break;
 
-        	case DWG_TYPE_CIRCLE:
-        	//What to do when we get a cicle
-        	add_circle(xmlfile, dwg.object[i]);
-        	break;
+    case DWG_TYPE_CIRCLE:
+      //What to do when we get a cicle
+      add_circle(rootnode, dwg.object[i]);
+      break;
 
-        	case DWG_TYPE_POLYLINE_3D:
-        	//What to do when we get a 3D Polyline
-        	add_3dpolyline(xmlfile, dwg.object[i]);
-        	break;
+    case DWG_TYPE_POLYLINE_3D:
+      //What to do when we get a 3D Polyline
+      add_3dpolyline(rootnode, dwg.object[i]);
+      break;
 
-        	case DWG_TYPE_BLOCK:
-        	//What to do when we get a block
-        	add_block(xmlfile, dwg.object[i]);
-        	break;
+   /* case DWG_TYPE_BLOCK:
+      //What to do when we get a block
+      add_block(rootnode, dwg.object[i]);
+      break;*/
 
-        	case DWG_TYPE_MLINE:
-        	//What to do when we get a mline
-        	add_mline(xmlfile, dwg.object[i]);
-        	break;
+    case DWG_TYPE_MLINE:
+      //What to do when we get a mline
+      add_mline(rootnode, dwg.object[i]);
+      break;
 
-        	case DWG_TYPE_ELLIPSE:
-        	//What to do when we get a ellipse
-        	add_ellipse(xmlfile, dwg.object[i]);
-        	break;
+    case DWG_TYPE_ELLIPSE:
+      //What to do when we get a ellipse
+      add_ellipse(rootnode, dwg.object[i]);
+      break;
 
-        	case DWG_TYPE_POINT:
-        	//What to do when get a point
-        	add_line(xmlfile, dwg.object[i]);
-        	break;
+    case DWG_TYPE_POINT:
+      //What to do when get a point
+      add_point(rootnode, dwg.object[i]);
+      break;
 
-        	case DWG_TYPE_RAY:
-        	//What to do when we get a ray
-        	add_ray(xmlfile, dwg.object[i]);
-        	break;
+    case DWG_TYPE_RAY:
+      //What to do when we get a ray
+      add_ray(rootnode, dwg.object[i]);
+      break;
 
-        	case DWG_TYPE_SPLINE:
-        	//What to do when we get a spline
-        	add_spline(xmlfile, dwg.object[i]);
-      }
+    case DWG_TYPE_SPLINE:
+      //What to do when we get a spline
+      add_spline(rootnode, dwg.object[i]);
+      break;
+/*    case DWG_TYPE_TABLE:
+        //What to do when we get a table
+        add_table(rootnode, dwg.object[i]);
+        break;*/
+          
+        }
     }
 
-  //Close the file and free the dwg
-  fclose(xmlfile);
+  //free the dwg
   dwg_free(&dwg);
   return success;
 }
@@ -291,10 +499,44 @@ load_dwg(char *filename)
 int
 main (int argc, char *argv[])
 {
-	//Check if we have the filename
+  //Check if we have the filename
   REQUIRE_INPUT_FILE_ARG (argc);
 
+  //Load the XML interface
+  LIBXML_TEST_VERSION
+
+  //Basic Root Entity
+  xmlChar *xml = "<DwgData></DwgData>";
+
+  //Put that in memory
+  xmlDocPtr doc = xmlParseMemory(xml, xmlStrlen(xml));
+
+  //Check if it was able to read it
+  if (doc == NULL)
+  {
+    printf("xmlDoc Creation Failed. Please Check;\n");
+    return 1;
+  }
+
+  //We have xml loaded. Now get handle to root node
+  xmlNodePtr root = xmlDocGetRootElement(doc);
+
+  if (root == NULL)
+  {
+    printf("Cannot get handle to root node. Please Check\n");
+    return 1;
+  }
+
   //Load the DWG file
-  load_dwg (argv[1]);
+  load_dwg (argv[1], root);
+
+
+  //Save the XML and Cleanup
+  xmlSaveFormatFileEnc(argv[2], doc, "UTF-8", 1);
+  xmlFreeDoc(doc);
+  xmlCleanupParser();
+
+  //This would depend if the program is able to
+  //read the dwg file
   return 0;
 }
