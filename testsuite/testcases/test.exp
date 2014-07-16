@@ -1,0 +1,36 @@
+load_lib "dejagnu.exp"
+
+# If tracing has been enabled at the top level, then turn it on here
+# too.
+if $tracelevel {
+    strace $tracelevel
+}
+
+# Execute everything in the bits_test subdir so all the output files go there.
+cd $subdir
+# Get the size of the module being bits_tested.
+#set sizes [exe_size "bits_test"]
+#if {[lindex $sizes 0] == "-1"} {
+#    perror "Couldn't get the object file size" 0
+#}
+#
+## Extract the text section size
+#set textsize [lindex $sizes 0]
+#
+## Extract the data section size
+#set datasize [lindex $sizes 1]
+#
+## FIXME: This ultimately needs to be recorded in the bits_testing database,
+## which doesn't exist yet. Till then it's kinda bogus, but I figured
+## it would be useful having working code to get this data. So we print
+## it out, just for the demo aspects.
+#verbose "Text section size of bits_test is 0x$textsize"
+#verbose "Data section size of bits_test is 0x$datasize"
+
+# Execute the bits_test case, and analyse the output
+if { [host_execute "bits_test"] != "" } {
+    perror "bits_test had an execution error" 0
+} 
+
+# All done, back to the top level bits_test directory
+cd ..

@@ -19,6 +19,6 @@
 
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS = src doc examples bindings unit-testing
+SUBDIRS = src doc examples bindings unit-testing testsuite
 
 EXTRA_DIST = README README-alpha
