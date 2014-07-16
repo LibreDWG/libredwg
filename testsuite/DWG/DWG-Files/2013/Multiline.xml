@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<DwgData>
-<DwgEntity type="IAcadMLine" id="000000002b911ed8" desc="IAcadMLine: IAcadMLine Interface" Application="IAcadApplication 000000013ffe2308" Coordinates="(9.15538 14.989 0.0 18.7947 10.0057 0.0 ... )" Document="IAcadDocument 0000000036a4f118" EntityTransparency="ByLayer" Handle="1BD" HasExtensionDictionary="0" Hyperlinks="IAcadHyperlinks 0000000036f2fb28" Justification="0" Layer="0" Linetype="ByLayer" LinetypeScale="1.0" Lineweight="-1" Material="ByLayer" MLineScale="1.0" ObjectID="82" ObjectID32="82" ObjectName="AcDbMline" OwnerID="83" OwnerID32="83" PlotStyleName="ByLayer" StyleName="STANDARD" TrueColor="IAcadAcCmColor 0000000036f2f880" Visible="-1" />
-</DwgData>

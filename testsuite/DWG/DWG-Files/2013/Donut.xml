@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<DwgData>
-<DwgEntity type="IAcadLWPolyline" id="000000002e8925b8" desc="IAcadLWPolyline: AutoCAD Lightweight Polyline Interface" Application="IAcadApplication 000000013ffc2308" Area="19.635" Closed="-1" ConstantWidth="0.0" Coordinate="...Indexed contents not shown..." Coordinates="(23.3461 3.11167 28.3461 3.11167)" Document="IAcadDocument 000000002e606638" Elevation="0.0" EntityTransparency="ByLayer" Handle="1C2" HasExtensionDictionary="0" Hyperlinks="IAcadHyperlinks 000000002e789038" Layer="0" Length="15.708" Linetype="ByLayer" LinetypeGeneration="0" LinetypeScale="1.0" Lineweight="-1" Material="ByLayer" Normal="(0.0 0.0 1.0)" ObjectID="46" ObjectID32="46" ObjectName="AcDbPolyline" OwnerID="47" OwnerID32="47" PlotStyleName="ByLayer" Thickness="0.0" TrueColor="IAcadAcCmColor 000000002e78cf30" Visible="-1" />
-</DwgData>
