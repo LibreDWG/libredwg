@@ -1,0 +1,28 @@
+[ AutoCAD - Wed Jun 18 13:00:29 2014  ]----------------------------------------
+
+<DwgEntity
+#<VLA-OBJECT IAcadRay 000000002bab2558>
+; IAcadRay: AutoCAD Ray Interface
+; Property values:
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 00000001402d2308>
+;   BasePoint = (10.0931 10.1931 0.0)
+;   DirectionVector = (0.0 -1.0 0.0)
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 0000000038385528>
+;   EntityTransparency = "ByLayer"
+;   Handle (RO) = "1C0"
+;   HasExtensionDictionary (RO) = 0
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 000000003b8bdd08>
+;   Layer = "0"
+;   Linetype = "ByLayer"
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   Material = "ByLayer"
+;   ObjectID (RO) = 68
+;   ObjectID32 (RO) = 68
+;   ObjectName (RO) = "AcDbRay"
+;   OwnerID (RO) = 69
+;   OwnerID32 (RO) = 69
+;   PlotStyleName = "ByLayer"
+;   SecondPoint = (10.0931 9.19308 0.0)
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 000000003b8bdb80>
+;   Visible = -1

@@ -1,0 +1,28 @@
+[ AutoCAD - Wed Jun 18 12:28:10 2014  ]----------------------------------------
+
+<DwgEntity
+#<VLA-OBJECT IAcadXline 000000002b0ed368>
+; IAcadXline: AutoCAD Xline Interface
+; Property values:
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 000000013ffc2308>
+;   BasePoint = (34.684 48.4498 0.0)
+;   DirectionVector = (-0.018621 -0.999827 0.0)
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 000000002e2fcb78>
+;   EntityTransparency = "ByLayer"
+;   Handle (RO) = "1BB"
+;   HasExtensionDictionary (RO) = 0
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 000000002e636228>
+;   Layer = "0"
+;   Linetype = "ByLayer"
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   Material = "ByLayer"
+;   ObjectID (RO) = 44
+;   ObjectID32 (RO) = 44
+;   ObjectName (RO) = "AcDbXline"
+;   OwnerID (RO) = 45
+;   OwnerID32 (RO) = 45
+;   PlotStyleName = "ByLayer"
+;   SecondPoint = (34.6653 47.45 0.0)
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 000000002e636160>
+;   Visible = -1

@@ -1,0 +1,35 @@
+[ AutoCAD - Wed Jun 18 12:31:39 2014  ]----------------------------------------
+
+<DwgEntity
+#<VLA-OBJECT IAcadHelix 000000002b0ef308>
+; IAcadHelix: IAcadSpring Interface
+; Property values:
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 000000013ffc2308>
+;   BaseRadius = 1.36885
+;   Constrain = 1
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 000000002e9cb948>
+;   EntityTransparency = "ByLayer"
+;   Handle (RO) = "1BF"
+;   HasExtensionDictionary (RO) = 0
+;   Height = 1.0
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 000000002ede5628>
+;   Layer = "0"
+;   Linetype = "ByLayer"
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   Material = "ByLayer"
+;   ObjectID (RO) = 48
+;   ObjectID32 (RO) = 48
+;   ObjectName (RO) = "AcDbHelix"
+;   OwnerID (RO) = 49
+;   OwnerID32 (RO) = 49
+;   PlotStyleName = "ByLayer"
+;   Position = (2.25405 13.3778 0.0)
+;   TopRadius = 6.82783
+;   TotalLength (RO) = 77.4916
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 000000002ede6400>
+;   TurnHeight = 0.333333
+;   Turns = 3.0
+;   TurnSlope (RO) = 1.38962
+;   Twist = 0
+;   Visible = -1

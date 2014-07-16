@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DwgData>
+<DwgEntity type="IAcadHelix" id="000000002bab0718" desc="IAcadHelix: IAcadSpring Interface" Application="IAcadApplication 00000001402d2308" BaseRadius="1.36885" Constrain="1" Document="IAcadDocument 000000002f6d9538" EntityTransparency="ByLayer" Handle="1BF" HasExtensionDictionary="0" Height="1.0" Hyperlinks="IAcadHyperlinks 0000000037a0b198" Layer="0" Linetype="ByLayer" LinetypeScale="1.0" Lineweight="-1" Material="ByLayer" ObjectID="54" ObjectID32="54" ObjectName="AcDbHelix" OwnerID="55" OwnerID32="55" PlotStyleName="ByLayer" Position="(2.25405 13.3778 0.0)" TopRadius="6.82783" TotalLength="77.4916" TrueColor="IAcadAcCmColor 0000000037a11130" TurnHeight="0.333333" Turns="3.0" TurnSlope="1.38962" Twist="0" Visible="-1" />
+</DwgData>

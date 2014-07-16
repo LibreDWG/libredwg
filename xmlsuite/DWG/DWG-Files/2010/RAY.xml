@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DwgData>
+<DwgEntity type="IAcadRay" id="000000002bafc0e8" desc="IAcadRay: AutoCAD Ray Interface" Application="IAcadApplication 000000013fdf2308" BasePoint="(10.0931 10.1931 0.0)" DirectionVector="(0.0 -1.0 0.0)" Document="IAcadDocument 0000000036d34218" EntityTransparency="ByLayer" Handle="1C0" HasExtensionDictionary="0" Hyperlinks="IAcadHyperlinks 000000003a066888" Layer="0" Linetype="ByLayer" LinetypeScale="1.0" Lineweight="-1" Material="ByLayer" ObjectID="68" ObjectID32="68" ObjectName="AcDbRay" OwnerID="69" OwnerID32="69" PlotStyleName="ByLayer" SecondPoint="(10.0931 9.19308 0.0)" TrueColor="IAcadAcCmColor 000000003a066e80" Visible="-1" />
+</DwgData>
