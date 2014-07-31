@@ -1,0 +1,103 @@
+Test Run By piyush on Sat Jul 26 14:19:24 2014
+Native configuration is x86_64-unknown-linux-gnu
+
+		=== testcases tests ===
+
+Schedule of variations:
+    unix
+
+Running target unix
+Using /usr/local/share/dejagnu/baseboards/unix.exp as board description file for target.
+Using /usr/local/share/dejagnu/config/unix.exp as generic interface file for target.
+WARNING: Couldn't find tool config file for unix, using default.
+Running ./testcases/site.exp ...
+testcase ./testcases/site.exp completed in 0 seconds
+Running ./testcases/test.exp ...
+8
+	PASSED: bit_write_B is working properly
+	PASSED: bit_advance_position is working properly
+	PASSED: bit_read_B is working
+	PASSED: bit_write_BB is working properly
+	PASSED: bit_read_BB is working properly
+	PASSED: bit_write_4BITS is working properly
+	PASSED: bit_read_4BITS is working properly
+	PASSED: bit_write_RC is working properly
+	FAILED: bit_read_RC is not working properly
+	PASSED: bit_write_RS is working properly
+	PASSED: bit_write_RS is working properly
+	PASSED: bit_write_RL is working properly
+	PASSED: bit_read_RL is working properly
+	PASSED: bit_write_RL is working properly
+	PASSED: bit_read_RD is working properly
+	PASSED: bit_write_BS is working properly
+	PASSED: bit_read_BS is working properly
+	PASSED: bit_write_BL is working properly
+	PASSED: bit_read_BL is working properly
+	PASSED: bit_write_BD is working properly
+	PASSED: bit_read_BD is working properly
+	PASSED: bit_write_MC is working properly
+	PASSED: bit_read_MC is working properly
+	PASSED: bit_write_MS is working properly
+	PASSED: bit_read_MS is working properly
+	PASSED: bit_write_BE is working properly
+	PASSED: bit_read_BE is working properly
+	PASSED: bit_write_DD is working properly
+	FAILED: bit_read_DD is not working properly
+	PASSED: bit_write_BT is working properly
+	PASSED: bit_read_BT is working properly
+	PASSED: bit_write_H is working properly
+	FAILED: bit_read_H is not working properly
+	PASSED: bit_write_CRC is working properly
+	PASSED: bit_check_CRC is working properly
+	PASSED: bit_read_CRC is working properly
+	PASSED: bit_write_TV is working properly
+	PASSED: bit_read_TV is working properly
+	FAILED: bit_write_L is not working properly
+	PASSED: bit_read_L is working properly
+PASS:  bit_write_B is working properly
+PASS:  bit_advance_position is working properly
+PASS:  bit_read_B is working
+PASS:  bit_write_BB is working properly
+PASS:  bit_read_BB is working properly
+PASS:  bit_write_4BITS is working properly
+PASS:  bit_read_4BITS is working properly
+PASS:  bit_write_RC is working properly
+FAIL:  bit_read_RC is not working properly
+PASS:  bit_write_RS is working properly
+PASS:  bit_write_RS is working properly
+PASS:  bit_write_RL is working properly
+PASS:  bit_read_RL is working properly
+PASS:  bit_write_RL is working properly
+PASS:  bit_read_RD is working properly
+PASS:  bit_write_BS is working properly
+PASS:  bit_read_BS is working properly
+PASS:  bit_write_BL is working properly
+PASS:  bit_read_BL is working properly
+PASS:  bit_write_BD is working properly
+PASS:  bit_read_BD is working properly
+PASS:  bit_write_MC is working properly
+PASS:  bit_read_MC is working properly
+PASS:  bit_write_MS is working properly
+PASS:  bit_read_MS is working properly
+PASS:  bit_write_BE is working properly
+PASS:  bit_read_BE is working properly
+PASS:  bit_write_DD is working properly
+FAIL:  bit_read_DD is not working properly
+PASS:  bit_write_BT is working properly
+PASS:  bit_read_BT is working properly
+PASS:  bit_write_H is working properly
+FAIL:  bit_read_H is not working properly
+PASS:  bit_write_CRC is working properly
+PASS:  bit_check_CRC is working properly
+PASS:  bit_read_CRC is working properly
+PASS:  bit_write_TV is working properly
+PASS:  bit_read_TV is working properly
+FAIL:  bit_write_L is not working properly
+PASS:  bit_read_L is working properly
+testcase ./testcases/test.exp completed in 0 seconds
+
+		=== testcases Summary ===
+
+# of expected passes		36
+# of unexpected failures	4
+runtest completed at Sat Jul 26 14:19:24 2014
