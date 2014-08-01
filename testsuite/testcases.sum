@@ -1,4 +1,4 @@
-Test Run By piyush on Sat Jul 26 14:19:24 2014
+Test Run By piyush on Sat Aug  2 00:34:57 2014
 Native configuration is x86_64-unknown-linux-gnu
 
 		=== testcases tests ===
@@ -49,8 +49,13 @@ PASS:  bit_write_TV is working properly
 PASS:  bit_read_TV is working properly
 FAIL:  bit_write_L is not working properly
 PASS:  bit_read_L is working properly
+PASS:  bit_write_CMC is working properly
+FAIL:  bit_read_CMC is not working properly
+PASS:  bit_write_sentinel is working properly
+PASS:  bit_search_sentinel is working properly
+PASS:  bit_chain_alloc is working properly
 
 		=== testcases Summary ===
 
-# of expected passes		36
-# of unexpected failures	4
+# of expected passes		40
+# of unexpected failures	5

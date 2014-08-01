@@ -1,4 +1,4 @@
-Test Run By piyush on Sat Jul 26 14:19:24 2014
+Test Run By piyush on Sat Aug  2 00:34:57 2014
 Native configuration is x86_64-unknown-linux-gnu
 
 		=== libredwg tests ===
@@ -13,4 +13,4 @@ WARNING: Couldn't find tool config file for unix, using default.
 
 		=== libredwg Summary ===
 
-runtest completed at Sat Jul 26 14:19:24 2014
+runtest completed at Sat Aug  2 00:34:57 2014

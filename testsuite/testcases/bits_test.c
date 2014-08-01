@@ -513,6 +513,77 @@ main()
 	color.name = "Some name";
 	color.book_name = "book_name";
 	bit_write_CMC(&bitchain, &color);
+	if (bitchain.bit == 2 && bitchain.byte == 73)
+	{
+		pass("bit_write_CMC is working properly");
+	}
+	else
+	{
+		fail("bit_write_CMC is not working properly");
+	}
+	//End of tests for bit_write_CMC
+
+	//Tests for bit_read_CMC
+	bit_advance_position(&bitchain, -10);
+	Dwg_Color color_read;
+	bit_read_CMC(&bitchain, &color_read);
+
+
+	if (color_read.index == 19 && color_read.rgb == 5190965 && color_read.byte == 1 && !strcmp(color_read.name, "Some name"))
+	{
+		pass("bit_read_CMC is working properly");
+	}
+	else
+	{
+		fail("bit_read_CMC is not working properly");
+	}
+	//End of tests for bit_read_CMC
+
+	//Tests for bit_write_sentinel
+	bitchain.byte++;
+	bitchain.bit = 0;
+	unsigned char sentinel[] = {0xCF,0x7B,0x1F,0x23,0xFD,0xDE,0x38,0xA9,0x5F,0x7C,0x68,0xB8,0x4E,0x6D,0x33,0x5F};
+	bit_write_sentinel(&bitchain, sentinel);
+	
+	if (bitchain.chain[--bitchain.byte] == 0x5F)
+	{
+		pass("bit_write_sentinel is working properly");
+	}
+	else
+	{
+		fail("bit_write_sentinel is not working properly");
+	}
+	//End of tests for bit_write_sentinel
+
+	//Tests for bit_search_sentinel
+	bitchain.bit = 0;
+	bitchain.byte = 0;
+	int ret = bit_search_sentinel(&bitchain, sentinel);
+	if (bitchain.byte == 90)
+	{
+		pass("bit_search_sentinel is working properly");
+	}
+	else
+	{
+		fail("bit_search_sentinel is not working properly");
+	}
+	//End of tests for bit_search_sentinel
+
+
+	//Tests for bit_chain_alloc
+	bit_chain_alloc(&bitchain);
+	if (bitchain.size == 41060)
+	{
+		pass("bit_chain_alloc is working properly");
+	}
+	else
+	{
+		fail("bit_chain_alloc is not working properly");
+	}
+	//End of tests for bit_chain_alloc
+
+	unsigned int check = bit_ckr8(12100, &bitchain.chain, 90);
+	// How do I test this
 
 
 

@@ -8,7 +8,7 @@ if $tracelevel {
 
 # Execute everything in the bits_test subdir so all the output files go there.
 cd $subdir
-# Get the size of the module being bits_tested.
+# Get the size of the module being tested.
 #set sizes [exe_size "bits_test"]
 #if {[lindex $sizes 0] == "-1"} {
 #    perror "Couldn't get the object file size" 0
