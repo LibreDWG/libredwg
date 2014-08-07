@@ -1,4 +1,4 @@
-Test Run By piyush on Sat Aug  2 00:34:57 2014
+Test Run By piyush on Wed Aug  6 17:20:06 2014
 Native configuration is x86_64-unknown-linux-gnu
 
 		=== testcases tests ===
@@ -7,55 +7,377 @@ Schedule of variations:
     unix
 
 Running target unix
+Running ./testcases/3dsolid.exp ...
+Running ./testcases/arc.exp ...
+FAIL:  error in reading radius
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+FAIL:  error in reading start angle
+FAIL:  error in reading end angle
+Running ./testcases/attdef.exp ...
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+Running ./testcases/block.exp ...
+PASS:  Working Properly
+PASS:  Working Properly
+Running ./testcases/body.exp ...
+Running ./testcases/circle.exp ...
+FAIL:  error in reading radius
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+Running ./testcases/dim_aligned.exp ...
+Running ./testcases/dim_ang2ln.exp ...
+Running ./testcases/dim_ang3pt.exp ...
+Running ./testcases/dim_diameter.exp ...
+Running ./testcases/dim_linear.exp ...
+Running ./testcases/dim_ordinate.exp ...
+Running ./testcases/dim_radius.exp ...
+Running ./testcases/ellipse.exp ...
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+FAIL:  error in reading end angle
+Running ./testcases/endblk.exp ...
+FAIL:  dwg_ent_endblk_get_dummy
+FAIL:  dwg_ent_endblk_get_dummy
+Running ./testcases/insert.exp ...
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+Running ./testcases/line.exp ...
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+Running ./testcases/lwpline.exp ...
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+FAIL:  error in reading flag
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+FAIL:  error in reading flag
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+FAIL:  error in reading flag
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+FAIL:  error in reading flag
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+FAIL:  error in reading flag
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+FAIL:  error in reading flag
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+FAIL:  error in reading flag
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+FAIL:  error in reading flag
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+Running ./testcases/minsert.exp ...
+Running ./testcases/mline.exp ...
+Running ./testcases/mtext.exp ...
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+FAIL:  error in reading rect_width
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+Running ./testcases/point.exp ...
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+Running ./testcases/polyline_2d.exp ...
+Running ./testcases/polyline_3d.exp ...
+Running ./testcases/polyline_mesh.exp ...
+Running ./testcases/polyline_pface.exp ...
+Running ./testcases/ray.exp ...
+PASS:  Working Properly
+PASS:  Working Properly
+Running ./testcases/region.exp ...
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+Running ./testcases/seqend.exp ...
+PASS:  Working Properly
+Running ./testcases/shape.exp ...
 Running ./testcases/site.exp ...
+Running ./testcases/solid.exp ...
 Running ./testcases/test.exp ...
-PASS:  bit_write_B is working properly
-PASS:  bit_advance_position is working properly
-PASS:  bit_read_B is working
-PASS:  bit_write_BB is working properly
-PASS:  bit_read_BB is working properly
-PASS:  bit_write_4BITS is working properly
-PASS:  bit_read_4BITS is working properly
-PASS:  bit_write_RC is working properly
-FAIL:  bit_read_RC is not working properly
-PASS:  bit_write_RS is working properly
-PASS:  bit_write_RS is working properly
-PASS:  bit_write_RL is working properly
-PASS:  bit_read_RL is working properly
-PASS:  bit_write_RL is working properly
-PASS:  bit_read_RD is working properly
-PASS:  bit_write_BS is working properly
-PASS:  bit_read_BS is working properly
-PASS:  bit_write_BL is working properly
-PASS:  bit_read_BL is working properly
-PASS:  bit_write_BD is working properly
-PASS:  bit_read_BD is working properly
-PASS:  bit_write_MC is working properly
-PASS:  bit_read_MC is working properly
-PASS:  bit_write_MS is working properly
-PASS:  bit_read_MS is working properly
-PASS:  bit_write_BE is working properly
-PASS:  bit_read_BE is working properly
-PASS:  bit_write_DD is working properly
-FAIL:  bit_read_DD is not working properly
-PASS:  bit_write_BT is working properly
-PASS:  bit_read_BT is working properly
-PASS:  bit_write_H is working properly
-FAIL:  bit_read_H is not working properly
-PASS:  bit_write_CRC is working properly
-PASS:  bit_check_CRC is working properly
-PASS:  bit_read_CRC is working properly
-PASS:  bit_write_TV is working properly
-PASS:  bit_read_TV is working properly
-FAIL:  bit_write_L is not working properly
-PASS:  bit_read_L is working properly
-PASS:  bit_write_CMC is working properly
-FAIL:  bit_read_CMC is not working properly
-PASS:  bit_write_sentinel is working properly
-PASS:  bit_search_sentinel is working properly
-PASS:  bit_chain_alloc is working properly
+Running ./testcases/text.exp ...
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+Running ./testcases/tolerance.exp ...
+Running ./testcases/trace.exp ...
+Running ./testcases/vertex_3d.exp ...
+Running ./testcases/vertex_pface.exp ...
+Running ./testcases/xline.exp ...
+PASS:  Working Properly
+PASS:  Working Properly
 
 		=== testcases Summary ===
 
-# of expected passes		40
-# of unexpected failures	5
+# of expected passes		314
+# of unexpected failures	16

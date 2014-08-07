@@ -9,9 +9,9 @@ if $tracelevel {
 # Execute everything in the  subdir so all the output files go there.
 cd $subdir
 
-# Execute the vertex_mesh case, and analyse the output
-if { [host_execute "vertex_mesh"] != "" } {
-    perror "vertex_mesh had an execution error" 0
+# Execute the mline case, and analyse the output
+if { [host_execute "mline"] != "" } {
+    perror "mline had an execution error" 0
 } 
 
 # All done, back to the top level directory
