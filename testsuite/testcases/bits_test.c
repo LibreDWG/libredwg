@@ -2,12 +2,180 @@
 #include <dejagnu.h>
 #include <string.h>
 #include <stdlib.h>
+#include "tests_common.h"
+
+void bit_write_B_tests()
+{
+	Bit_Chain bitchain = strtobt("0000000");
+	bit_write_B(&bitchain, 1);
+
+	if (bitchain.chain[0] == 0x80)
+	{
+		pass("bit_write_B");
+	}
+	else
+	{
+		fail("bit_write_B");
+	}
+
+}
+
+void
+bit_advance_position_tests()
+{
+	Bit_Chain bitchain = strtobt("10101010");
+	if (bitchain.bit == 0 && bitchain.byte == 0)
+	{
+		pass("bit_advance_position");
+	}
+	else
+	{
+		fail("bit_advance_position");
+	}
+}
+
+void bit_read_B_tests()
+{
+	Bit_Chain bitchain = strtobt("101010");
+	unsigned char result = bit_read_B(&bitchain);
+	if (result == 0x01)
+	{
+		pass("bit_read_B");
+	}
+	else
+	{
+		fail("bit_read_B");
+	}
+}
+
+void bit_write_BB_tests()
+{
+	Bit_Chain bitchain = strtobt("01000000");
+	bit_advance_position(&bitchain, 2);
+	bit_write_BB(&bitchain, 0x2);
+
+	if (bitchain.chain[0] == 0x60)
+	{
+		pass("bit_write_BB");
+	}
+	else
+	{
+		fail("bit_write_BB");
+	}
+}
+
+void bit_read_BB_tests()
+{
+	Bit_Chain bitchain = strtobt("10101010");
+	unsigned char result = bit_read_BB(&bitchain);
+	if (result == 2)
+	{
+		pass("bit_read_BB");
+	}
+	else
+	{
+		fail("bit_read_BB");
+	}
+}
+
+void bit_write_4BITS_tests()
+{
+	Bit_Chain bitchain = strtobt("00000000");
+	bit_write_4BITS(&bitchain, 0xF);
+	printf("%x\n", bitchain.chain[0]);
+
+	if (bitchain.chain[0] == 0xF0)
+	{
+		pass("bit_write_4BITS");
+	}
+	else
+	{
+		fail("bit_write_4BITS");
+	}
+}
+
+void bit_read_4BITS_tests()
+{
+	Bit_Chain bitchain = strtobt("11111111");
+	unsigned char result = bit_read_4BITS(&bitchain);
+	if (result == 0xF)
+	{
+		pass("bit_read_4BITS");
+	}
+	else
+	{
+		fail("bit_read_4BITS");
+	}
+}
+
+void bit_read_RC_tests()
+{
+	Bit_Chain bitchain = strtobt("11111111");
+	unsigned char result = bit_read_RC(&bitchain);
+	if (result == 0xFF)
+	{
+		pass("bit_read_RC");
+	}
+	else
+	{
+		fail("bit_read_RC");
+	}
+}
+
+void bit_write_RC_tests()
+{
+	Bit_Chain bitchain = strtobt("00000000");
+	bit_write_RC(&bitchain, 0xFF);
+	if (bitchain.chain[0] == 0xFF)
+	{
+		pass("bit_write_RC");
+	}
+	else
+	{
+		fail("bit_write_RC");
+	}
+}
+
 
 int
 main()
 {
-	//Lets write some tests
 
+	/* Tests for bit_write_B() */
+	bit_write_B_tests();
+	/* End of tests for bit_write_B() */
+
+	/* Tests fir bit_advance_position() */
+	bit_advance_position_tests();
+	/* End of tests for bit_advance_position() */
+
+	/* Tests for bit_read_B() */
+	bit_read_B_tests();
+	/* End of tests for bit_read_B */
+
+	/* Tests for bit_write_BB() */
+	bit_write_BB_tests();
+	/* End of tests for bit_write_BB() */
+
+	/* Tests for bit_read_BB() */
+	bit_read_BB_tests();
+	/* End of tests for bit_read_BB */
+
+	/* Tests for bit_read_4BITS() */
+	bit_write_4BITS_tests();
+	/* End of tests for bit_read_4BITS */
+
+	/* Tests for bit_read_4BITS */
+	bit_read_4BITS_tests();
+	/* End of tests for bit_read_4BITS */
+
+	/* Tests for bit_write_RC() */
+	bit_read_RC_tests();
+	/* End of bit_read_RC() */
+
+	/* Tests for bit_read_RC */
+	bit_write_RC_tests();
+	/* End of tests for bit_read_RC */
 
 	//Prepare the testcase
 	Bit_Chain bitchain;
@@ -17,115 +185,7 @@ main()
 	bitchain.byte = 0;
 	bitchain.version = R_2000;
 	bitchain.chain = (unsigned char *) malloc(bitchain.size);
-	printf("%lu\n", sizeof(bitchain.chain));
 
-	//Tests for bit_write_B()
-	bit_write_B(&bitchain, 0x01);
-	if (bitchain.bit == 1)
-	{
-		pass("bit_write_B is working properly");
-	}
-	else
-	{
-		fail("bit_write_B is not working properly");
-	}
-	//End of test for bit_write_B()
-
-	//Test for bit_advance_position
-	bit_advance_position(&bitchain, -1);
-	if (bitchain.bit == 0)
-	{
-		pass("bit_advance_position is working properly");
-	}
-	else
-	{
-		fail("bit_advance_position is not working properly");
-	}
-	//End of test for bit_advance_position
-
-	unsigned char result = bit_read_B(&bitchain);
-	if (result == 0x01)
-	{
-		pass("bit_read_B is working");
-	}
-	else
-	{
-		fail("bit_read_B is not working properly");
-	}
-
-	//Tests for bit_write_BB
-	bit_write_BB(&bitchain, 0x02);
-	if (bitchain.bit == 3)
-	{
-		pass("bit_write_BB is working properly");
-	}
-	else
-	{
-		fail("bit_write_BB is not working properly");
-	}
-
-	//Tests for bit_read_BB()
-	bit_advance_position(&bitchain, -2);
-	if (bit_read_BB(&bitchain) == 0x02)
-	{
-		pass("bit_read_BB is working properly");
-	}
-	else
-	{
-		fail("bit_read_BB is not working properly");
-	}
-	//End of test of bit_read_BB()
-
-	//Test for bit_write_4BITS
-	bit_write_4BITS(&bitchain, 0xF);
-	if (bitchain.bit == 7)
-	{
-		pass("bit_write_4BITS is working properly");
-	}
-	else
-	{
-		fail("bit_write_4BITS is not working properly");
-	}
-	//End of tests for bit_write_4BITS
-
-	//Test for bit_read_4BITS
-	bit_advance_position(&bitchain, -7);
-	if (bit_read_4BITS(&bitchain) == 0xC)
-	{
-		pass("bit_read_4BITS is working properly");
-	}
-	else
-	{
-		fail("bit_read_4BITS is not working properly");
-	}
-	//End of test for bit_read_4BITS
-
-	//Tests of bit_write_RC
-	bitchain.bit = 0;
-	bitchain.byte = 1;
-	bit_write_RC(&bitchain, 0xC8);
-	
-	if (bitchain.bit == 0 && bitchain.byte == 2)
-	{
-		pass("bit_write_RC is working properly");
-	}
-	else
-	{
-		fail("bit_write_RC is not working properly");
-	}
-	//End of Tests for bit_write_RC
-
-	//Tests for bit_read_RC
-	bit_advance_position(&bitchain, -8);
-	if (bit_read_RC(&bitchain) == 0xC8)
-	{
-		pass("bit_read_RC is working properly");
-	}
-	else
-	{
-		fail("bit_read_RC is not working properly");
-	}
-	//End of tests for bit_read_RC
 
 	//Tests for bit_write_RS()
 	bit_write_RS(&bitchain, 0x1F4);

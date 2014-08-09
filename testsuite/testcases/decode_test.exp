@@ -9,9 +9,9 @@ if $tracelevel {
 # Execute everything in the  subdir so all the output files go there.
 cd $subdir
 
-# Execute the bits_test case, and analyse the output
-if { [host_execute "bits_test"] != "" } {
-    perror "bits_test had an execution error" 0
+# Execute the decode_test case, and analyse the output
+if { [host_execute "decode_test"] != "" } {
+    perror "decode_test had an execution error" 0
 } 
 
 # All done, back to the top level directory
