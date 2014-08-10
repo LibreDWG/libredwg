@@ -1,0 +1,30 @@
+[ AutoCAD - Wed Jun 18 12:34:13 2014  ]----------------------------------------
+
+<DwgEntity
+#<VLA-OBJECT IAcad3DPolyline 000000002b0ef258>
+; IAcad3DPolyline: AutoCAD 3dPolyline Interface
+; Property values:
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 000000013ffc2308>
+;   Closed = 0
+;   Coordinate = ...Indexed contents not shown...
+;   Coordinates = (21.4409 14.6498 0.0 20.8962 5.65378 0.0 ... )
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 00000000352edf58>
+;   EntityTransparency = "ByLayer"
+;   Handle (RO) = "1C1"
+;   HasExtensionDictionary (RO) = 0
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 0000000035d01f18>
+;   Layer = "0"
+;   Length (RO) = 38.6446
+;   Linetype = "ByLayer"
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   Material = "ByLayer"
+;   ObjectID (RO) = 56
+;   ObjectID32 (RO) = 56
+;   ObjectName (RO) = "AcDb3dPolyline"
+;   OwnerID (RO) = 57
+;   OwnerID32 (RO) = 57
+;   PlotStyleName = "ByLayer"
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 0000000035d01bb0>
+;   Type = 0
+;   Visible = -1

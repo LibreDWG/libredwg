@@ -1,4 +1,4 @@
-Test Run By piyush on Sat Aug  9 16:50:23 2014
+Test Run By piyush on Mon Aug 11 00:42:01 2014
 Native configuration is x86_64-unknown-linux-gnu
 
 		=== testcases tests ===
@@ -31,36 +31,36 @@ Running ./testcases/attdef.exp ...
 	PASSED: Working Properly
 	PASSED: Working Properly
 	PASSED: Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
 	PASSED: Working Properly
 	PASSED: Working Properly
 	PASSED: Working Properly
 	PASSED: Working Properly
 	PASSED: Working Properly
-	PASSED: Working ProperlyPASS:  Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
 PASS:  Working Properly
 PASS:  Working Properly
 PASS:  Working Properly
 PASS:  Working Properly
 PASS:  Working Properly
 PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
 PASS:  Working Properly
 PASS:  Working Properly
 PASS:  Working Properly
@@ -95,8 +95,17 @@ PASS:  Working Properly
 PASS:  Working Properly
 testcase ./testcases/circle.exp completed in 0 seconds
 Running ./testcases/decode_test.exp ...
+---------------------------------------------------------
+[0x0000]: 05 
+---------------------------------------------------------
 	PASSED: read_literal_length
+---------------------------------------------------------
+[0x0000]: DD 
+---------------------------------------------------------
 	PASSED: read_long_compression_offset
+---------------------------------------------------------
+[0x0000]: F0 07 
+---------------------------------------------------------
 	PASSED: read_two_byte_offset
 PASS:  read_literal_length
 PASS:  read_long_compression_offset
@@ -122,12 +131,12 @@ Running ./testcases/ellipse.exp ...
 	PASSED: Working Properly
 	PASSED: Working Properly
 	PASSED: Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
 	FAILED: error in reading end angle
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
 FAIL:  error in reading end angle
 testcase ./testcases/ellipse.exp completed in 0 seconds
 Running ./testcases/endblk.exp ...
@@ -139,15 +148,7 @@ testcase ./testcases/endblk.exp completed in 0 seconds
 Running ./testcases/insert.exp ...
 	PASSED: Working Properly
 	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
 	PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
 PASS:  Working Properly
 PASSED: Working Properly
 	PASSED: Working Properly
@@ -193,6 +194,50 @@ PASSED: Working Properly
 	PASSED: Working Properly
 	PASSED: Working Properly
 	PASSED: Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
 	PASSED: Working Properly
 	PASSED: Working Properly
 	PASSED: Working Properly
@@ -206,46 +251,10 @@ PASSED: Working Properly
 	PASSED: Working Properly
 	PASSED: Working Properly
 	PASSED: Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
 PASS:  Working Properly
 PASS:  Working Properly
 PASS:  Working Properly
@@ -268,16 +277,9 @@ Running ./testcases/line.exp ...
 	PASSED: Working Properly
 	PASSED: Working Properly
 	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
 PASS:  Working Properly
 PASS:  Working Properly
 PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
 	PASSED: Working Properly
 	PASSED: Working Properly
 	PASSED: Working Properly
@@ -356,6 +358,13 @@ PASS:  Working Properly
 PASS:  Working Properly
 PASS:  Working Properly
 PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
 PASS:  Working Properly
 PASS:  Working Properly
 PASS:  Working Properly
@@ -372,19 +381,17 @@ Running ./testcases/lwpline.exp ...
 	PASSED: Working Properly
 	PASSED: Working Properly
 	PASSED: Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
 	PASSED: Working Properly
 	PASSED: Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
 	PASSED: Working Properly
 	PASSED: Working Properly
 	PASSED: Working Properly
@@ -473,6 +480,8 @@ PASS:  Working Properly
 	PASSED: Working Properly
 	PASSED: Working Properly
 	PASSED: Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
 PASS:  Working Properly
 PASS:  Working Properly
 PASS:  Working Properly
@@ -571,21 +580,21 @@ Running ./testcases/mtext.exp ...
 	PASSED: Working Properly
 	PASSED: Working Properly
 	PASSED: Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
 	PASSED: Working Properly
 	PASSED: Working Properly
 	PASSED: Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
 	FAILED: error in reading rect_width
 	PASSED: Working Properly
 	PASSED: Working Properly
 	PASSED: Working Properly
 	PASSED: Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
 FAIL:  error in reading rect_width
 PASS:  Working Properly
 PASS:  Working Properly
@@ -597,45 +606,45 @@ Running ./testcases/point.exp ...
 	PASSED: Working Properly
 	PASSED: Working Properly
 	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
 PASS:  Working Properly
 PASS:  Working Properly
 PASS:  Working Properly
 PASS:  Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
 PASS:  Working Properly
 PASS:  Working Properly
 PASS:  Working Properly
@@ -685,7 +694,7 @@ Running ./testcases/ray.exp ...
 	PASSED: Working Properly
 PASS:  Working Properly
 PASS:  Working Properly
-testcase ./testcases/ray.exp completed in 0 seconds
+testcase ./testcases/ray.exp completed in 1 seconds
 Running ./testcases/region.exp ...
 	PASSED: Working Properly
 	PASSED: Working Properly
@@ -693,18 +702,18 @@ Running ./testcases/region.exp ...
 	PASSED: Working Properly
 	PASSED: Working Properly
 	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
-	PASSED: Working Properly
 PASS:  Working Properly
 PASS:  Working Properly
 PASS:  Working Properly
 PASS:  Working Properly
 PASS:  Working Properly
 PASS:  Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
+	PASSED: Working Properly
 PASS:  Working Properly
 PASS:  Working Properly
 PASS:  Working Properly
@@ -723,38 +732,65 @@ testcase ./testcases/site.exp completed in 0 seconds
 Running ./testcases/solid.exp ...
 testcase ./testcases/solid.exp completed in 0 seconds
 Running ./testcases/test.exp ...
-8
-	PASSED: bit_write_B is working properly
-	PASSED: bit_advance_position is working properly
-	PASSED: bit_read_B is working
-	PASSED: bit_write_BB is working properly
-	PASSED: bit_read_BB is working properly
-	PASSED: bit_write_4BITS is working properly
-	PASSED: bit_read_4BITS is working properly
-	PASSED: bit_write_RC is working properly
-	FAILED: bit_read_RC is not working properly
+---------------------------------------------------------
+[0x0000]: 00 
+---------------------------------------------------------
+	PASSED: bit_write_B
+---------------------------------------------------------
+[0x0000]: AA 
+---------------------------------------------------------
+	PASSED: bit_advance_position
+---------------------------------------------------------
+[0x0000]: A8 
+---------------------------------------------------------
+	PASSED: bit_read_B
+---------------------------------------------------------
+[0x0000]: 40 
+---------------------------------------------------------
+	PASSED: bit_write_BB
+---------------------------------------------------------
+[0x0000]: AA 
+---------------------------------------------------------
+	PASSED: bit_read_BB
+---------------------------------------------------------
+[0x0000]: 00 
+---------------------------------------------------------
+0
+	FAILED: bit_write_4BITS
+---------------------------------------------------------
+[0x0000]: FF 
+---------------------------------------------------------
+	PASSED: bit_read_4BITS
+---------------------------------------------------------
+[0x0000]: FF 
+---------------------------------------------------------
+	PASSED: bit_read_RC
+---------------------------------------------------------
+[0x0000]: 00 
+---------------------------------------------------------
+	PASSED: bit_write_RC
+	FAILED: bit_write_RS is not working properly
 	PASSED: bit_write_RS is working properly
-	PASSED: bit_write_RS is working properly
-	PASSED: bit_write_RL is working properly
+	FAILED: bit_write_RL is not working properly
 	PASSED: bit_read_RL is working properly
-	PASSED: bit_write_RL is working properly
+	FAILED: bit_write_RL is not working properly
 	PASSED: bit_read_RD is working properly
-	PASSED: bit_write_BS is working properly
+	FAILED: bit_write_BS is not working properly
 	PASSED: bit_read_BS is working properly
-	PASSED: bit_write_BL is working properly
+	FAILED: bit_write_BL is working properly
 	PASSED: bit_read_BL is working properly
-	PASSED: bit_write_BD is working properly
+	FAILED: bit_write_BD is not working properly
 	PASSED: bit_read_BD is working properly
-	PASSED: bit_write_MC is working properly
+	FAILED: bit_write_MC is not working properly
 	PASSED: bit_read_MC is working properly
-	PASSED: bit_write_MS is working properly
+	FAILED: bit_write_MS is not working properly
 	PASSED: bit_read_MS is working properly
-	PASSED: bit_write_BE is working properly
+	FAILED: bit_write_BE is not working properly
 	PASSED: bit_read_BE is working properly
-	PASSED: bit_write_DD is working properly
+	FAILED: bit_write_DD is not working properly
 	FAILED: bit_read_DD is not working properly
-	PASSED: bit_write_BT is working properly
-	FAILED: bit_read_BT is not working properly
+	FAILED: bit_write_BT is not working properly
+	PASSED: bit_read_BT is working properly
 	FAILED: bit_write_H is not working properly
 	FAILED: bit_read_H is not working properly
 	FAILED: bit_write_CRC is not working properly
@@ -763,43 +799,43 @@ Running ./testcases/test.exp ...
 	FAILED: bit_write_TV is not working properly
 	PASSED: bit_read_TV is working properly
 	FAILED: bit_write_L is not working properly
-	FAILED: bit_read_L is not working properly
+	PASSED: bit_read_L is working properly
 	FAILED: bit_write_CMC is not working properly
 	FAILED: bit_read_CMC is not working properly
 	PASSED: bit_write_sentinel is working properly
 	FAILED: bit_search_sentinel is not working properly
-	FAILED: bit_chain_alloc is not working properly
-PASS:  bit_write_B is working properly
-PASS:  bit_advance_position is working properly
-PASS:  bit_read_B is working
-PASS:  bit_write_BB is working properly
-PASS:  bit_read_BB is working properly
-PASS:  bit_write_4BITS is working properly
-PASS:  bit_read_4BITS is working properly
-PASS:  bit_write_RC is working properly
-FAIL:  bit_read_RC is not working properly
+	PASSED: bit_chain_alloc is working properly
+PASS:  bit_write_B
+PASS:  bit_advance_position
+PASS:  bit_read_B
+PASS:  bit_write_BB
+PASS:  bit_read_BB
+FAIL:  bit_write_4BITS
+PASS:  bit_read_4BITS
+PASS:  bit_read_RC
+PASS:  bit_write_RC
+FAIL:  bit_write_RS is not working properly
 PASS:  bit_write_RS is working properly
-PASS:  bit_write_RS is working properly
-PASS:  bit_write_RL is working properly
+FAIL:  bit_write_RL is not working properly
 PASS:  bit_read_RL is working properly
-PASS:  bit_write_RL is working properly
+FAIL:  bit_write_RL is not working properly
 PASS:  bit_read_RD is working properly
-PASS:  bit_write_BS is working properly
+FAIL:  bit_write_BS is not working properly
 PASS:  bit_read_BS is working properly
-PASS:  bit_write_BL is working properly
+FAIL:  bit_write_BL is working properly
 PASS:  bit_read_BL is working properly
-PASS:  bit_write_BD is working properly
+FAIL:  bit_write_BD is not working properly
 PASS:  bit_read_BD is working properly
-PASS:  bit_write_MC is working properly
+FAIL:  bit_write_MC is not working properly
 PASS:  bit_read_MC is working properly
-PASS:  bit_write_MS is working properly
+FAIL:  bit_write_MS is not working properly
 PASS:  bit_read_MS is working properly
-PASS:  bit_write_BE is working properly
+FAIL:  bit_write_BE is not working properly
 PASS:  bit_read_BE is working properly
-PASS:  bit_write_DD is working properly
+FAIL:  bit_write_DD is not working properly
 FAIL:  bit_read_DD is not working properly
-PASS:  bit_write_BT is working properly
-FAIL:  bit_read_BT is not working properly
+FAIL:  bit_write_BT is not working properly
+PASS:  bit_read_BT is working properly
 FAIL:  bit_write_H is not working properly
 FAIL:  bit_read_H is not working properly
 FAIL:  bit_write_CRC is not working properly
@@ -808,12 +844,12 @@ FAIL:  bit_read_CRC is not working properly
 FAIL:  bit_write_TV is not working properly
 PASS:  bit_read_TV is working properly
 FAIL:  bit_write_L is not working properly
-FAIL:  bit_read_L is not working properly
+PASS:  bit_read_L is working properly
 FAIL:  bit_write_CMC is not working properly
 FAIL:  bit_read_CMC is not working properly
 PASS:  bit_write_sentinel is working properly
 FAIL:  bit_search_sentinel is not working properly
-FAIL:  bit_chain_alloc is not working properly
+PASS:  bit_chain_alloc is working properly
 testcase ./testcases/test.exp completed in 0 seconds
 Running ./testcases/text.exp ...
 	PASSED: Working Properly
@@ -821,14 +857,14 @@ Running ./testcases/text.exp ...
 	PASSED: Working Properly
 	PASSED: Working Properly
 	PASSED: Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
-PASS:  Working Properly
 	PASSED: Working Properly
 	PASSED: Working Properly
 	PASSED: Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
+PASS:  Working Properly
 PASS:  Working Properly
 PASS:  Working Properly
 PASS:  Working Properly
@@ -850,6 +886,6 @@ testcase ./testcases/xline.exp completed in 0 seconds
 
 		=== testcases Summary ===
 
-# of expected passes		348
-# of unexpected failures	30
-runtest completed at Sat Aug  9 16:50:23 2014
+# of expected passes		340
+# of unexpected failures	38
+runtest completed at Mon Aug 11 00:42:02 2014
