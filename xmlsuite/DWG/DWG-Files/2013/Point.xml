@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<DwgData>
-<DwgEntity type="IAcadPoint" id="0000000035864de8" desc="IAcadPoint: AutoCAD Point Interface" Application="IAcadApplication 000000013ffc2308" Coordinates="(27.928 8.65308 0.0)" Document="IAcadDocument 00000000352ecd18" EntityTransparency="ByLayer" Handle="1C0" HasExtensionDictionary="0" Hyperlinks="IAcadHyperlinks 0000000035539f08" Layer="0" Linetype="ByLayer" LinetypeScale="1.0" Lineweight="-1" Material="ByLayer" Normal="(0.0 0.0 1.0)" ObjectID="52" ObjectID32="52" ObjectName="AcDbPoint" OwnerID="53" OwnerID32="53" PlotStyleName="ByLayer" Thickness="0.0" TrueColor="IAcadAcCmColor 000000003553a140" Visible="-1" />
-</DwgData>

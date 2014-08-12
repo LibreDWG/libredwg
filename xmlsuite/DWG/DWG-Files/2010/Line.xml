@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<DwgData>
-<DwgEntity type="IAcadLine" id="00000000368b47b8" desc="IAcadLine: AutoCAD Line Interface" Angle="2.22385" Application="IAcadApplication 000000013fdf2308" Delta="(-10.577 13.8256 0.0)" Document="IAcadDocument 0000000036570ec8" EndPoint="(11.0307 16.6375 0.0)" EntityTransparency="ByLayer" Handle="1CA" HasExtensionDictionary="0" Hyperlinks="IAcadHyperlinks 00000000367812d8" Layer="0" Length="17.4075" Linetype="ByLayer" LinetypeScale="1.0" Lineweight="-1" Material="ByLayer" Normal="(0.0 0.0 1.0)" ObjectID="56" ObjectID32="56" ObjectName="AcDbLine" OwnerID="57" OwnerID32="57" PlotStyleName="ByLayer" StartPoint="(21.6078 2.81192 0.0)" Thickness="0.0" TrueColor="IAcadAcCmColor 0000000036781270" Visible="-1" />
-</DwgData>

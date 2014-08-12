@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<DwgData>
-<DwgEntity type="IAcadXline" id="000000002baf9a68" desc="IAcadXline: AutoCAD Xline Interface" Application="IAcadApplication 000000013fdf2308" BasePoint="(34.684 48.4498 0.0)" DirectionVector="(-0.018621 -0.999827 0.0)" Document="IAcadDocument 000000002ec65dd8" EntityTransparency="ByLayer" Handle="1BB" HasExtensionDictionary="0" Hyperlinks="IAcadHyperlinks 000000002efc0b38" Layer="0" Linetype="ByLayer" LinetypeScale="1.0" Lineweight="-1" Material="ByLayer" ObjectID="48" ObjectID32="48" ObjectName="AcDbXline" OwnerID="49" OwnerID32="49" PlotStyleName="ByLayer" SecondPoint="(34.6653 47.45 0.0)" TrueColor="IAcadAcCmColor 000000002efc08f0" Visible="-1" />
-</DwgData>

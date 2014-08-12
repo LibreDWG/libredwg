@@ -443,6 +443,7 @@ load_dwg(char *dwgfilename, xmlNodePtr rootnode)
       //What to do when we have an arc
       add_arc(rootnode, dwg.object[i]);
       break;
+
     case DWG_TYPE_LINE:
       //What to do when we have a line
       add_line(rootnode, dwg.object[i]);
@@ -481,6 +482,11 @@ load_dwg(char *dwgfilename, xmlNodePtr rootnode)
     case DWG_TYPE_RAY:
       //What to do when we get a ray
       add_ray(rootnode, dwg.object[i]);
+      break;
+
+    case DWG_TYPE_TEXT:
+      //What to do when get a text
+      add_text(rootnode, dwg.object[i]);
       break;
 
     case DWG_TYPE_SPLINE:

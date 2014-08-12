@@ -7,9 +7,8 @@ import libxml2
 import re
 
 '''
-Fix the first time error
 Get the file with some usage information
-generate html Output
+fix the css
 Generate the time to execute with it if possible
 show the attributes
 '''
@@ -55,23 +54,40 @@ for dir in dirs:
 
 			#Duplicate file has same directory structure
 			if os.path.exists(testoutput_folder+"/"+dir+"/"+file):
-				file_percent = xmlprocess(path_to_dwg+"/"+dir+"/"+file, testoutput_folder+"/"+dir+"/"+file)
+				result = xmlprocess(path_to_dwg+"/"+dir+"/"+file, testoutput_folder+"/"+dir+"/"+file)
 			else:
-				file_percent = 0	
-			final_output.insert(len(final_output), [dir, file, file_percent])
+				result[0] = 0
+				result[1] = []
+			
+			final_output.insert(len(final_output), [dir, file, result[0], result[1]])
 
 
 # Now Generate a pretty report for it
+reporthtm = open("result.htm", "a")
 current_format = ""
 for report in final_output:
 	if current_format != report[0]:
-		print bcolors.HEADER+"\n\n****Output for %s File Format****" % report[0]+ bcolors.ENDC
+		# Print the header of the File Format
+		reporthtm.write("\n<div class='heading'>\n<h3>Output for %s File Format</h3>\n</div>" % report[0])
+		print bcolors.HEADER + "\n\n****Output for %s File Format****" % report[0] + bcolors.ENDC
 
-	if report[2] == 100:
+	if report[2] < 100 and report[2] != 0:
 		print bcolors.OKGREEN + "%s: [%d]" % (report[1], report[2]) + bcolors.ENDC
-	else:
-		print bcolors.WARNING + "%s: [%d]" % (report[1], report[2]) + bcolors.ENDC 
+		reporthtm.write("\n<div class='result_middle'><b>%s</b> was <b>%d</b> percentage matched</div>\n" % (report[1], report[2]))
+	elif report[2] == 0:
+		print bcolors.WARNING + "%s: [%d]" % (report[1], report[2]) + bcolors.ENDC
+		reporthtm.write("\n<div class='result_bad'>%s was not read at all</div>\n" % report[1])
+	reporthtm.write("\n<div class='attributedetail'><h3>Attribute Details</h3>\n")
+	for unmatched in report[3]:
+		if unmatched['duplicate'] == "":
+			reporthtm.write("\n<p><b>%s</b> wasn't found at all. It's value should be <b>%s</b></p>\n" % (unmatched['attrname'], unmatched['original']))
+		else:
+			reporthtm.write("\n<p><b>%s</b> didn't match. It's value should be <b>%s</b>, and it is <b>%s</b></p>\n" %(unmatched['attrname'], 
+								unmatched["original"], unmatched['duplicate']))
+	reporthtm.write("</div>")
 	current_format = report[0]
 
+# All information has been printed. Print the footer
 print bcolors.HEADER + "****End of Report****" + bcolors.ENDC
-
+reporthtm.write("<div><h1>End of Report</h1></div></body></html>");
+reporthtm.close()

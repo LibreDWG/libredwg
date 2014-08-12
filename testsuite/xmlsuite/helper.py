@@ -58,12 +58,14 @@ def xmlprocess(ideal, practical):
 	for original, duplicate in zip(original_entities, duplicate_entities):
 		original_attributes = {}
 		duplicate_attributes = {}
+		excluded_attributes = ["Delta", "id", "Document", "Visible", "text", "Application", "Hyperlinks"]
 
-		#collect original attributes
+		#collect original attributes. Removing the attributes here, so the total length is also set
 		for attr in original.properties:
-			original_attributes[attr.name] = processattr(attr.content)
+			if attr.name not in excluded_attributes:
+				original_attributes[attr.name] = processattr(attr.content)
+			
 		
-
 		for attr in duplicate.properties:
 			duplicate_attributes[attr.name] = processattr(attr.content)
 
@@ -72,17 +74,23 @@ def xmlprocess(ideal, practical):
 		if original_attributes["type"] == duplicate_attributes["type"]:
 			match = 1
 		'''
-
+		unmatched_attr = []
 		#collect duplicate attributes and check if it matches with original ones
-		for attr in duplicate.properties:
+		for key,value in original_attributes.iteritems():
 			try:
-				duplicate_attributes[attr.name] = processattr(attr.content);
-				if original_attributes[attr.name] == duplicate_attributes[attr.name]:
+				if value == duplicate_attributes[key]:
 					match+=1
-				pass
+				else:
+					# The attributes didn't match. Report the unmatched attribute
+					unmatched_attr.append({"attrname" : key, "original" : value,
+										 "duplicate" : duplicate_attributes[key]})
+
 			except Exception:
 				# This exception would occur when
 				# We can't find the given attribute
+
+				unmatched_attr.append({"attrname" : key, "original" : value,
+									 "duplicate" : ""})
 				continue
 		
 
@@ -94,7 +102,7 @@ def xmlprocess(ideal, practical):
 		else:
 			percent_each = 100 / total_attr
 	except NameError:
-		return 0
+		return [0,[]]
 		raise
 
 
@@ -103,4 +111,4 @@ def xmlprocess(ideal, practical):
 	doc.freeDoc()
 	doc2.freeDoc()
 
-	return res_percent
+	return [res_percent, unmatched_attr]
