@@ -136,6 +136,28 @@ void bit_write_RC_tests()
 	}
 }
 
+void
+bit_read_RS_tests()
+{
+	Bit_Chain bitchain = strtobt("1111111100000001");
+	unsigned int result = bit_read_RS(&bitchain);
+
+	if (result == 511)
+	{
+		pass("bit_read_RS");
+	}
+	else
+	{
+		fail("bit_write_RS");
+	}
+}
+
+void
+bit_write_RS_tests()
+{
+	Bit_Chain bitchain = strtobt("1111111111111111");
+}
+
 
 int
 main()
@@ -176,6 +198,11 @@ main()
 	/* Tests for bit_read_RC */
 	bit_write_RC_tests();
 	/* End of tests for bit_read_RC */
+
+	/* Tests for bit_read_RS() */
+	bit_read_RS_tests();
+	/* End of tests for bit_read_RS() */
+
 
 	//Prepare the testcase
 	Bit_Chain bitchain;
