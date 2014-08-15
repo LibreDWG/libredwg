@@ -37,9 +37,14 @@ AC_CHECK_LIB([ps],[PS_open_file],
   libredwg_have_libps=yes,
   libredwg_have_libps=no)
 
+AC_CHECK_LIB([xml2],[xmlParseMemory], ,[AC_MSG_ERROR([Install libxml2 first])])
+
 dnl Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS([stdlib.h string.h unistd.h])
+
+AC_CHECK_HEADER(dejagnu.h, , [AC_MSG_ERROR(
+[Couldn't find dejagnu.h. Install Dejagnu first] )])
 
 # Don't bother testing for libps headers if libps is not available.
 if test yes = "$libredwg_have_libps" ; then
