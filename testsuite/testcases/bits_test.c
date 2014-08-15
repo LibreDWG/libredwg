@@ -156,8 +156,52 @@ void
 bit_write_RS_tests()
 {
 	Bit_Chain bitchain = strtobt("1111111111111111");
+	bit_write_RS(&bitchain, 511);
+
+	if (bitchain.chain[0] == 255 && bitchain.chain[1] == 0x01)
+	{
+		pass("bit_write_RS");
+	}
+	else
+	{
+		fail("bit_write_RS");
+	}
 }
 
+void
+bit_write_RL_tests()
+{
+	Bit_Chain bitchain = strtobt("11111111111111111111111111111111");
+	bit_write_RL(&bitchain, 2147549183);
+	if (bitchain.chain[0] == 255 && bitchain.chain[1] == 255 && bitchain.chain[2] == 0 && bitchain.chain[3] == 128)
+	{
+		pass("bit_write_RL");
+	}
+	else
+	{
+		fail("bit_write_RL");
+	}
+}
+
+void bit_read_RL_tests()
+{
+	Bit_Chain bitchain = strtobt("11111111111111111111111111111111");
+	long unsigned int result = bit_read_RL(&bitchain);
+	if (result == 0xFFFFFFFF)
+	{
+		pass("bit_read_RL");
+	}
+	else
+	{
+		fail("bit_read_RL");
+	}
+}
+
+void
+bit_write_RD_tests()
+{
+	Bit_Chain bitchain = strtobt("1111");
+}
 
 int
 main()
@@ -203,6 +247,17 @@ main()
 	bit_read_RS_tests();
 	/* End of tests for bit_read_RS() */
 
+	/* Tests for bit_write_RS() */
+	bit_write_RS_tests();
+	/* End of tests for bit_write_RS() */
+
+	/* Tests for bit_write_RL() */
+	bit_read_RL_tests();
+	/* End of tests for bit_write_RL() */
+
+	/* Tests for bit_write_RD */
+	bit_write_RL_tests();
+	/* End of tests for bit_write_RD */
 
 	//Prepare the testcase
 	Bit_Chain bitchain;
@@ -214,54 +269,7 @@ main()
 	bitchain.chain = (unsigned char *) malloc(bitchain.size);
 
 
-	//Tests for bit_write_RS()
-	bit_write_RS(&bitchain, 0x1F4);
-	if (bitchain.byte == 4 && bitchain.bit == 0)
-	{
-		pass("bit_write_RS is working properly");
-	}
-	else
-	{
-		fail("bit_write_RS is not working properly");
-	}
-	//end of test for bit_write_RS
-
-	//Tests for bit_read_RS()
-	bit_advance_position(&bitchain, -16);
-	if (bit_read_RS(&bitchain) == 0x1F4)
-	{
-		pass("bit_write_RS is working properly");
-	}
-	else
-	{
-		fail("bit_write_RS is not working properly");
-	}
-	//End of tests for bit_read_RS()
-
-	//Tests for bit_write_RL()
-	bit_write_RL(&bitchain, 0x7A120);
-	if (bitchain.byte == 8 && bitchain.bit == 0)
-	{
-		pass("bit_write_RL is working properly");
-	}
-	else
-	{
-		fail("bit_write_RL is not working properly");
-	}
-	//End of tests for bit_write_RL()
-
-	//Tests for bit_read_RL
-	bit_advance_position(&bitchain, -32);
-	if (bit_read_RL(&bitchain) == 0x7A120)
-	{
-		pass("bit_read_RL is working properly");
-	}
-	else
-	{
-		fail("bit_read_RL is not working properly");
-	}
-	//End of tests for bit_read_RL
-
+/*
 	//Tests for bit_write_RD
 	bit_write_RD(&bitchain, 0xBA43B7400);
 	if (bitchain.byte == 16 && bitchain.bit == 0)
@@ -672,7 +680,7 @@ main()
 	unsigned int check = bit_ckr8(12100, &bitchain.chain, 90);
 	// How do I test this
 
-
+*/
 
 	// Free the allocated memory
 	free(bitchain.chain);

@@ -1,8 +1,7 @@
 
 AUTOMAKE_OPTIONS = dejagnu
 
-TESTS = xmlsuite/check.py
 RUNTESTDEFAULTFLAGS = --tool testcases
-SUBDIRS = testcases
+SUBDIRS = xmlsuite testcases 
 
 CLEANFILES = *.log *.sum site.bak

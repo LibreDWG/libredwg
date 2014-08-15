@@ -92,6 +92,7 @@ AC_CONFIG_FILES([
 	bindings/python/Makefile
     testsuite/Makefile
     testsuite/testcases/Makefile
+    testsuite/xmlsuite/Makefile
 ])
 
 AC_OUTPUT
