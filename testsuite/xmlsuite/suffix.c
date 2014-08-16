@@ -1,13 +1,24 @@
+
 /*****************************************************************************/
+
 /*  LibreDWG - free implementation of the DWG file format                    */
+
 /*                                                                           */
+
 /*  Copyright (C) 2010 Thien-Thi Nguyen                                      */
+
 /*                                                                           */
+
 /*  This library is free software, licensed under the terms of the GNU       */
+
 /*  General Public License as published by the Free Software Foundation,     */
+
 /*  either version 3 of the License, or (at your option) any later version.  */
+
 /*  You should have received a copy of the GNU General Public License        */
+
 /*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
+
 /*****************************************************************************/
 
 /*
@@ -26,20 +37,19 @@
 
    Caller should `free' the returned string when done using it.  */
 char *
-suffix (const char *filename, const char *ext)
+suffix ( const char *filename, const char *ext )
 {
-  char *copy = strdup (filename);
-  char *base = basename (copy);
-  int len = strlen (base) + 1 + strlen (ext) + 1;
-  char *rv = malloc (len);
+  char *copy = strdup ( filename );
+  char *base = basename ( copy );
+  int len = strlen ( base ) + 1 + strlen ( ext ) + 1;
+  char *rv = malloc ( len );
   char *dot;
 
-  if ((dot = strrchr (base, '.'))
-      && dot + 4 < base + len
-      && !strncmp (1 + dot, "dwg", 3))
+  if ( ( dot = strrchr ( base, '.' ) )
+       && dot + 4 < base + len && !strncmp ( 1 + dot, "dwg", 3 ) )
     *dot = '\0';
-  snprintf (rv, len, "%s.%s", base, ext);
-  free (copy);
+  snprintf ( rv, len, "%s.%s", base, ext );
+  free ( copy );
   return rv;
 }
 
