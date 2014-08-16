@@ -17,55 +17,9 @@ output_object(dwg_object* obj){
     }
 }
 
-void
-low_level_process(dwg_object *obj)
-{
-  // casts object to 3d solid entity
-  dwg_ent_3dsolid *_3dsolid = obj->tio.entity->tio._3DSOLID;
-
-  // prints acis empty value
-  printf("acis empty of 3dsolid : %d", _3dsolid->acis_empty);
-
-  // prints version value
-  printf("version of 3dsolid : %d", _3dsolid->version);
-
-  // prints acis data value
-  printf("acis data of 3dsolid : %s", _3dsolid->acis_data);
-
-  // prints wireframe data
-  printf("wireframe data of 3dsolid : %d", _3dsolid->wireframe_data_present);
-
-  // prints point present
-  printf("point present of 3dsolid : %d", _3dsolid->point_present);
-
-  // prints point of 3dsolid
-  printf("point of 3dsolid : x = %f, y = %f, z = %f\t\n", _3dsolid->point.x,
-          _3dsolid->point.y, _3dsolid->point.z);
-
-  // prints num isolines
-  printf("num isolines of 3dsolid : %ld", _3dsolid->num_isolines);
-
-  // prints isoline present
-  printf("isoline present of 3dsolid : %d", _3dsolid->isoline_present);
-
-  // prints num wires 
-  printf("num wires of 3dsolid : %ld", _3dsolid->num_wires);
-  int i;
-    for (i = 0; i < _3dsolid->num_wires; i++)
-      {
-         printf("wire of 3dsolid : %ld", _3dsolid->wires[i].selection_marker);
-      }
-
-  // prints number of siulhouettes
-  printf("num sil of 3dsolid : %ld", _3dsolid->num_silhouettes);
-
-  // returns silhouettes
-   for (i = 0; i < _3dsolid->num_silhouettes; i++)
-     {
-       printf("silhouette of 3dsolid : %ld", _3dsolid->silhouettes[i].vp_id);
-     }
-
-}
+/* This function checks API functions for integrity
+   @params dwg_object* obj 
+ */
 void
 api_process(dwg_object *obj)
 {
@@ -86,7 +40,7 @@ api_process(dwg_object *obj)
 
   // returns acis_empty value
   acis_empty = dwg_ent_3dsolid_get_acis_empty(_3dsolid, &acis_empty_error);
-  if( acis_empty_error == 0 && acis_empty == _3dsolid->acis_empty) // error reporting
+  if (acis_empty_error == 0 && acis_empty == _3dsolid->acis_empty) // error reporting
     {
       pass("Working Properly");
     }
@@ -97,7 +51,7 @@ api_process(dwg_object *obj)
 
   // Returns version value
   version = dwg_ent_3dsolid_get_version(_3dsolid, &version_error);
-  if( version_error == 0 && version == _3dsolid->version) // error reporting
+  if (version_error == 0 && version == _3dsolid->version) // error reporting
     {
       pass("Working Properly");
     }
