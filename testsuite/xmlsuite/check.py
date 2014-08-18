@@ -14,6 +14,9 @@ from helper import *
 # Give here the path where DWG files are present
 path_to_dwg = "DWG/DWG-Files"
 
+#generate xml from txt files
+generatexml(path_to_dwg)
+
 #The name of the output files folder
 testoutput_folder = "test_output"
 

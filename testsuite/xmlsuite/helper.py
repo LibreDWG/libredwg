@@ -1,5 +1,6 @@
 import libxml2
 import re
+import os
 
 
 '''
@@ -15,6 +16,17 @@ class bcolors:
     ENDC = '\033[0m'
 
 
+'''
+This functions uses the script to generate xml which can be used for
+comparison later.
+
+@param strign dwgdir The path to DWG dir
+'''
+def generatexml(dwgdir):
+	current_dir = os.getcwd()
+	os.chdir(dwgdir)
+	os.system("sh txtgenerate.sh")
+	os.chdir(current_dir)
 
 '''
 This functions main aim is to process special types of attributes
