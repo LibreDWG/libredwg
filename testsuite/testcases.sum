@@ -1,4 +1,4 @@
-Test Run By piyush on Mon Aug 18 15:36:56 2014
+Test Run By piyush on Mon Aug 18 23:20:49 2014
 Native configuration is x86_64-unknown-linux-gnu
 
 		=== testcases tests ===
@@ -63,6 +63,8 @@ PASS:  bit_read_RS
 PASS:  bit_write_RS
 PASS:  bit_read_RL
 PASS:  bit_write_RL
+PASS:  bit_write_RD
+PASS:  bit_read_RD
 Running ./testcases/block.exp ...
 PASS:  Working Properly
 PASS:  Working Properly
@@ -405,5 +407,5 @@ PASS:  Working Properly
 
 		=== testcases Summary ===
 
-# of expected passes		337
+# of expected passes		339
 # of unexpected failures	17

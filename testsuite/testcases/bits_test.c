@@ -241,7 +241,50 @@ bit_read_RL_tests ()
 void
 bit_write_RD_tests ()
 {
-  Bit_Chain bitchain = strtobt ("1111");
+  Bit_Chain bitchain;
+  double value = 25.2547841;
+  bitprepare(&bitchain, sizeof(double));
+  bit_write_RD(&bitchain, value);
+  bit_print(&bitchain, sizeof(double));
+
+  double *result = (double *) bitchain.chain;
+
+  if (*result == value)
+  {
+  	pass("bit_write_RD");
+  }
+  else
+  {
+  	fail("bit_write_RD");
+  }
+}
+
+/* This functions calls tests for bit_read_RD()
+ */
+void
+bit_read_RD_tests()
+{
+	Bit_Chain bitchain;
+	double value = 25.21241;
+
+	bitprepare(&bitchain, sizeof(double));
+
+	bitchain.chain = (unsigned char *) &value;
+
+	bit_print(&bitchain, sizeof(double));
+
+	double result = bit_read_RD(&bitchain);
+
+	if (result == value)
+	{
+		pass("bit_read_RD");
+	}
+	else
+	{
+		fail("bit_read_RD");
+	}
+
+
 }
 
 int
@@ -303,6 +346,10 @@ main ()
   /* Tests for bit_write_RD()  */
   bit_write_RD_tests();
   /* End of tests for bit_write_RD  */
+
+  /* Tests for bit_read_RD */
+  bit_read_RD_tests();
+  /* End of tests for bit_read_RD(); */
 
 
   //Prepare the testcase
