@@ -63,7 +63,11 @@ for dir in dirs:
 
 
 # Now Generate a pretty report for it
-reporthtm = open("result.htm", "a")
+
+#read the header
+header = open("header.htm","r")
+reporthtm = open("result.htm", "w")
+reporthtm.write(header.read())
 current_format = ""
 for report in final_output:
 	if current_format != report[0]:
