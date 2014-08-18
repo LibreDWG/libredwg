@@ -3,7 +3,12 @@
 #include <stdlib.h>
 #include <math.h>
 
-//Prepare Bit_Chain
+/*
+ * This functions initializes bitchain and allocates the given
+ * size
+ * @param Bit_Chain* bitchain
+ * @param size_t size
+ */
 void bitprepare(Bit_Chain * bitchain, size_t size)
 {
 	bitchain->bit = 0;
@@ -13,7 +18,14 @@ void bitprepare(Bit_Chain * bitchain, size_t size)
 	bitchain->chain = (unsigned char *) malloc(size);
 
 }
-//This functions prepares the bitchain from given binary string
+
+
+/*
+ * This function converts the given binary string to binary
+ * value
+ * for eg "010101" => 010101
+ * and puts it in bitchain to be examined
+ */
 Bit_Chain strtobt(const char * binarystring)
 {
 	Bit_Chain bitchain;

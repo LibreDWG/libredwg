@@ -1,79 +1,78 @@
 #include "common.c"
 #include <dejagnu.h>
-void output_process ( dwg_object * obj );
+void output_process (dwg_object * obj);
 
 void
-output_object ( dwg_object * obj )
+output_object (dwg_object * obj)
 {
-  if ( !obj )
+  if (!obj)
     {
-      printf ( "object is NULL\n" );
+      printf ("object is NULL\n");
       return;
     }
 
-  if ( dwg_get_type ( obj ) == DWG_TYPE_POLYLINE_3D )
+  if (dwg_get_type (obj) == DWG_TYPE_POLYLINE_3D)
     {
-      output_process ( obj );
+      output_process (obj);
     }
 }
 
 void
-low_level_process ( dwg_object * obj )
+low_level_process (dwg_object * obj)
 {
   // casts dwg object to 3d polyline
-  dwg_ent_polyline_3d *polyline_3d = dwg_object_to_POLYLINE_3D ( obj );
+  dwg_ent_polyline_3d *polyline_3d = dwg_object_to_POLYLINE_3D (obj);
 
   // prints flag 1
-  printf ( "flag1 of polyline : %ud\t\n", polyline_3d->flags_1 );
+  printf ("flag1 of polyline : %ud\t\n", polyline_3d->flags_1);
 
   // prints flag 2
-  printf ( "flag2 of polyline : %ud\t\n", polyline_3d->flags_2 );
+  printf ("flag2 of polyline : %ud\t\n", polyline_3d->flags_2);
 
   // prints owned object count
-  printf ( "owned object of polyline : %ld\t\n",
-	   polyline_3d->owned_obj_count );
+  printf ("owned object of polyline : %ld\t\n", polyline_3d->owned_obj_count);
 }
 
 void
-api_process ( dwg_object * obj )
+api_process (dwg_object * obj)
 {
   int flags1_error, flags2_error, owned_obj_error;
   long owned_obj;
   unsigned int flags1, flags2;
-  dwg_ent_polyline_3d *polyline_3d = dwg_object_to_POLYLINE_3D ( obj );
+  dwg_ent_polyline_3d *polyline_3d = dwg_object_to_POLYLINE_3D (obj);
 
   // returns flag 1
-  flags1 = dwg_ent_polyline_3d_get_flags_1 ( polyline_3d, &flags1_error );
-  if ( flags1_error == 0 && flags1 == polyline_3d->flags_1 )	// error check
+  flags1 = dwg_ent_polyline_3d_get_flags_1 (polyline_3d, &flags1_error);
+  if (flags1_error == 0 && flags1 == polyline_3d->flags_1)	// error check
     {
-      pass ( "Working Properly" );
+      pass ("Working Properly");
     }
   else
     {
-      fail ( "error in reading flag1" );
+      fail ("error in reading flag1");
     }
 
   // returns flag 2
-  flags2 = dwg_ent_polyline_3d_get_flags_2 ( polyline_3d, &flags2_error );
-  if ( flags2_error == 0 && flags2 == polyline_3d->flags_2 )	// error check
+  flags2 = dwg_ent_polyline_3d_get_flags_2 (polyline_3d, &flags2_error);
+  if (flags2_error == 0 && flags2 == polyline_3d->flags_2)	// error check
     {
-      pass ( "Working Properly" );
+      pass ("Working Properly");
     }
   else
     {
-      fail ( "error in reading flag2" );
+      fail ("error in reading flag2");
     }
 
   // returns owned object count
-  owned_obj = dwg_ent_polyline_3d_get_owned_obj_count ( polyline_3d,
-							&owned_obj_error );
-  if ( owned_obj_error == 0 && polyline_3d->owned_obj_count == owned_obj )	// error check
+  owned_obj = dwg_ent_polyline_3d_get_owned_obj_count (polyline_3d,
+						       &owned_obj_error);
+  if (owned_obj_error == 0 && polyline_3d->owned_obj_count == owned_obj)	// error check
     {
-      pass ( "Working Properly" );
+      pass ("Working Properly");
     }
   else
     {
-      fail ( "error in reading owned object count" );
+      fail ("error in reading owned object count");
     }
 
 

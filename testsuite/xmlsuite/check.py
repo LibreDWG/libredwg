@@ -6,18 +6,15 @@ import sys
 import libxml2
 import re
 
-'''
-Get the file with some usage information
-fix the css
-Generate the time to execute with it if possible
-show the attributes
-'''
 
 # Divide the scripts in to files
 sys.path.append(os.getcwd())
 from helper import *
 
+# Give here the path where DWG files are present
 path_to_dwg = "DWG/DWG-Files"
+
+#The name of the output files folder
 testoutput_folder = "test_output"
 
 # Get all the directories
@@ -28,22 +25,22 @@ for dir in dirs:
 	for file in os.listdir(os.path.join(path_to_dwg, dir)):
 		if file.endswith(".dwg"):
 			#First thing will be to make duplicate directory structure
-			if not os.path.exists(testoutput_folder+"/"+dir):
+			if not os.path.exists(testoutput_folder + "/" + dir):
 				#Need to be careful here
 				try:
-					os.makedirs(testoutput_folder+"/"+dir)
+					os.makedirs(testoutput_folder + "/" + dir)
 				except OSError, e:
 					pass
 			pass
 
 
 			#Decide the filename of the XML File
-			dwg_xmlfile = file.rsplit(".", 1)[0]+".xml"
+			dwg_xmlfile = file.rsplit(".", 1)[0] + ".xml"
 
 			#Start running testsuite on every DWG file
-			#print "testsuite "+path_to_dwg+"/"+dir+"/"+file+" "+testoutput_folder+"/"+dir+"/"+dwg_xmlfile
-
-			os.system("./testsuite "+path_to_dwg+"/"+dir+"/"+file+" "+testoutput_folder+"/"+dir+"/"+dwg_xmlfile + " 2> /dev/null")
+			os.system("./testsuite " + path_to_dwg + "/"
+                        + dir + "/" + file + " " + testoutput_folder 
+                        + "/" + dir + "/" + dwg_xmlfile + " 2> /dev/null")
 		pass
 
 #Now we have XML file. Next Up is Comparison
@@ -53,8 +50,8 @@ for dir in dirs:
 		if file.endswith(".xml"):
 
 			#Duplicate file has same directory structure
-			if os.path.exists(testoutput_folder+"/"+dir+"/"+file):
-				result = xmlprocess(path_to_dwg+"/"+dir+"/"+file, testoutput_folder+"/"+dir+"/"+file)
+			if os.path.exists(testoutput_folder + "/" + dir + "/" + file):
+				result = xmlprocess(path_to_dwg+ "/" + dir + "/" + file, testoutput_folder + "/" + dir + "/" + file)
 			else:
 				result[0] = 0
 				result[1] = []

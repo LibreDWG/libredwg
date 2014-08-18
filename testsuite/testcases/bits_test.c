@@ -7,18 +7,18 @@
 /* This functions consists tests for bit_write_B() 
  */
 void
-bit_write_B_tests (  )
+bit_write_B_tests ()
 {
-  Bit_Chain bitchain = strtobt ( "0000000" );
-  bit_write_B ( &bitchain, 1 );
+  Bit_Chain bitchain = strtobt ("0000000");
+  bit_write_B (&bitchain, 1);
 
-  if ( bitchain.chain[0] == 0x80 )
+  if (bitchain.chain[0] == 0x80)
     {
-      pass ( "bit_write_B" );
+      pass ("bit_write_B");
     }
   else
     {
-      fail ( "bit_write_B" );
+      fail ("bit_write_B");
     }
 
 }
@@ -26,16 +26,16 @@ bit_write_B_tests (  )
 /* This function calls tests for bit_advance_position()
 */
 void
-bit_advance_position_tests (  )
+bit_advance_position_tests ()
 {
-  Bit_Chain bitchain = strtobt ( "10101010" );
-  if ( bitchain.bit == 0 && bitchain.byte == 0 )
+  Bit_Chain bitchain = strtobt ("10101010");
+  if (bitchain.bit == 0 && bitchain.byte == 0)
     {
-      pass ( "bit_advance_position" );
+      pass ("bit_advance_position");
     }
   else
     {
-      fail ( "bit_advance_position" );
+      fail ("bit_advance_position");
     }
 }
 
@@ -43,89 +43,89 @@ bit_advance_position_tests (  )
  * This function calls tests for bit_read_B()
  */
 void
-bit_read_B_tests (  )
+bit_read_B_tests ()
 {
-  Bit_Chain bitchain = strtobt ( "101010" );
-  unsigned char result = bit_read_B ( &bitchain );
-  if ( result == 0x01 )
+  Bit_Chain bitchain = strtobt ("101010");
+  unsigned char result = bit_read_B (&bitchain);
+  if (result == 0x01)
     {
-      pass ( "bit_read_B" );
+      pass ("bit_read_B");
     }
   else
     {
-      fail ( "bit_read_B" );
+      fail ("bit_read_B");
     }
 }
 
 /* This functions calls for tests for bit_write_BB()
  */
 void
-bit_write_BB_tests (  )
+bit_write_BB_tests ()
 {
-  Bit_Chain bitchain = strtobt ( "01000000" );
-  bit_advance_position ( &bitchain, 2 );
-  bit_write_BB ( &bitchain, 0x2 );
+  Bit_Chain bitchain = strtobt ("01000000");
+  bit_advance_position (&bitchain, 2);
+  bit_write_BB (&bitchain, 0x2);
 
-  if ( bitchain.chain[0] == 0x60 )
+  if (bitchain.chain[0] == 0x60)
     {
-      pass ( "bit_write_BB" );
+      pass ("bit_write_BB");
     }
   else
     {
-      fail ( "bit_write_BB" );
+      fail ("bit_write_BB");
     }
 }
 
 /* This function executes test for bit_read_BB()
  */
 void
-bit_read_BB_tests (  )
+bit_read_BB_tests ()
 {
-  Bit_Chain bitchain = strtobt ( "10101010" );
-  unsigned char result = bit_read_BB ( &bitchain );
-  if ( result == 2 )
+  Bit_Chain bitchain = strtobt ("10101010");
+  unsigned char result = bit_read_BB (&bitchain);
+  if (result == 2)
     {
-      pass ( "bit_read_BB" );
+      pass ("bit_read_BB");
     }
   else
     {
-      fail ( "bit_read_BB" );
+      fail ("bit_read_BB");
     }
 }
 
 /* This function calls tests for bit_write_4BITS_tests() 
  */
 void
-bit_write_4BITS_tests (  )
+bit_write_4BITS_tests ()
 {
-  Bit_Chain bitchain = strtobt ( "00000000" );
-  bit_write_4BITS ( &bitchain, 0xF );
-  printf ( "%x\n", bitchain.chain[0] );
+  Bit_Chain bitchain = strtobt ("00000000");
+  bit_write_4BITS (&bitchain, 0xF);
+  printf ("%x\n", bitchain.chain[0]);
 
-  if ( bitchain.chain[0] == 0xF0 )
+  if (bitchain.chain[0] == 0xF0)
     {
-      pass ( "bit_write_4BITS" );
+      pass ("bit_write_4BITS");
     }
   else
     {
-      fail ( "bit_write_4BITS" );
+      fail ("bit_write_4BITS");
     }
 }
 
 /* This functions calls tests for bit_write_4BITS_tests()
  */
 void
-bit_read_4BITS_tests (  )
+bit_read_4BITS_tests ()
 {
-  Bit_Chain bitchain = strtobt ( "11111111" );
-  unsigned char result = bit_read_4BITS ( &bitchain );
-  if ( result == 0xF )
+  Bit_Chain bitchain = strtobt ("11111111");
+  unsigned char result = bit_read_4BITS (&bitchain);
+  if (result == 0xF)
     {
-      pass ( "bit_read_4BITS" );
+      pass ("bit_read_4BITS");
     }
   else
     {
-      fail ( "bit_read_4BITS" );
+      fail ("bit_read_4BITS");
     }
 }
 
@@ -133,17 +133,17 @@ bit_read_4BITS_tests (  )
 /* This function calls tests for bit_read_RC()
  */
 void
-bit_read_RC_tests (  )
+bit_read_RC_tests ()
 {
-  Bit_Chain bitchain = strtobt ( "11111111" );
-  unsigned char result = bit_read_RC ( &bitchain );
-  if ( result == 0xFF )
+  Bit_Chain bitchain = strtobt ("11111111");
+  unsigned char result = bit_read_RC (&bitchain);
+  if (result == 0xFF)
     {
-      pass ( "bit_read_RC" );
+      pass ("bit_read_RC");
     }
   else
     {
-      fail ( "bit_read_RC" );
+      fail ("bit_read_RC");
     }
 }
 
@@ -151,154 +151,159 @@ bit_read_RC_tests (  )
 /* This function calls tests for bit_write_RC()
  */
 void
-bit_write_RC_tests (  )
+bit_write_RC_tests ()
 {
-  Bit_Chain bitchain = strtobt ( "00000000" );
-  bit_write_RC ( &bitchain, 0xFF );
-  if ( bitchain.chain[0] == 0xFF )
+  Bit_Chain bitchain = strtobt ("00000000");
+  bit_write_RC (&bitchain, 0xFF);
+  if (bitchain.chain[0] == 0xFF)
     {
-      pass ( "bit_write_RC" );
+      pass ("bit_write_RC");
     }
   else
     {
-      fail ( "bit_write_RC" );
+      fail ("bit_write_RC");
     }
 }
 
 /* This functions calls for bit_read_RS()
  */
 void
-bit_read_RS_tests (  )
+bit_read_RS_tests ()
 {
-  Bit_Chain bitchain = strtobt ( "1111111100000001" );
-  unsigned int result = bit_read_RS ( &bitchain );
+  Bit_Chain bitchain = strtobt ("1111111100000001");
+  unsigned int result = bit_read_RS (&bitchain);
 
-  if ( result == 511 )
+  if (result == 511)
     {
-      pass ( "bit_read_RS" );
+      pass ("bit_read_RS");
     }
   else
     {
-      fail ( "bit_write_RS" );
+      fail ("bit_write_RS");
     }
 }
 
 /* This functions calls tests for bit_write_RS()
  */
 void
-bit_write_RS_tests (  )
+bit_write_RS_tests ()
 {
-  Bit_Chain bitchain = strtobt ( "1111111111111111" );
-  bit_write_RS ( &bitchain, 511 );
+  Bit_Chain bitchain = strtobt ("1111111111111111");
+  bit_write_RS (&bitchain, 511);
 
-  if ( bitchain.chain[0] == 255 && bitchain.chain[1] == 0x01 )
+  if (bitchain.chain[0] == 255 && bitchain.chain[1] == 0x01)
     {
-      pass ( "bit_write_RS" );
+      pass ("bit_write_RS");
     }
   else
     {
-      fail ( "bit_write_RS" );
+      fail ("bit_write_RS");
     }
 }
 
 /* This functions calls for tests for bit_write_RL()
  */
 void
-bit_write_RL_tests (  )
+bit_write_RL_tests ()
 {
-  Bit_Chain bitchain = strtobt ( "11111111111111111111111111111111" );
-  bit_write_RL ( &bitchain, 2147549183 );
-  if ( bitchain.chain[0] == 255 && bitchain.chain[1] == 255
-       && bitchain.chain[2] == 0 && bitchain.chain[3] == 128 )
+  Bit_Chain bitchain = strtobt ("11111111111111111111111111111111");
+  bit_write_RL (&bitchain, 2147549183);
+  if (bitchain.chain[0] == 255 && bitchain.chain[1] == 255
+      && bitchain.chain[2] == 0 && bitchain.chain[3] == 128)
     {
-      pass ( "bit_write_RL" );
+      pass ("bit_write_RL");
     }
   else
     {
-      fail ( "bit_write_RL" );
+      fail ("bit_write_RL");
     }
 }
 
 /* This functions calls tests for bit_read_RL()
  */
 void
-bit_read_RL_tests (  )
+bit_read_RL_tests ()
 {
-  Bit_Chain bitchain = strtobt ( "11111111111111111111111111111111" );
-  long unsigned int result = bit_read_RL ( &bitchain );
-  if ( result == 0xFFFFFFFF )
+  Bit_Chain bitchain = strtobt ("11111111111111111111111111111111");
+  long unsigned int result = bit_read_RL (&bitchain);
+  if (result == 0xFFFFFFFF)
     {
-      pass ( "bit_read_RL" );
+      pass ("bit_read_RL");
     }
   else
     {
-      fail ( "bit_read_RL" );
+      fail ("bit_read_RL");
     }
 }
 
 /* This function calls tests for bit_write_RD()
  */
 void
-bit_write_RD_tests (  )
+bit_write_RD_tests ()
 {
-  Bit_Chain bitchain = strtobt ( "1111" );
+  Bit_Chain bitchain = strtobt ("1111");
 }
 
 int
-main (  )
+main ()
 {
 
   /* Tests for bit_write_B() */
-  bit_write_B_tests (  );
+  bit_write_B_tests ();
   /* End of tests for bit_write_B() */
 
   /* Tests fir bit_advance_position() */
-  bit_advance_position_tests (  );
+  bit_advance_position_tests ();
   /* End of tests for bit_advance_position() */
 
   /* Tests for bit_read_B() */
-  bit_read_B_tests (  );
+  bit_read_B_tests ();
   /* End of tests for bit_read_B */
 
   /* Tests for bit_write_BB() */
-  bit_write_BB_tests (  );
+  bit_write_BB_tests ();
   /* End of tests for bit_write_BB() */
 
   /* Tests for bit_read_BB() */
-  bit_read_BB_tests (  );
+  bit_read_BB_tests ();
   /* End of tests for bit_read_BB */
 
   /* Tests for bit_read_4BITS() */
-  bit_write_4BITS_tests (  );
+  bit_write_4BITS_tests ();
   /* End of tests for bit_read_4BITS */
 
   /* Tests for bit_read_4BITS */
-  bit_read_4BITS_tests (  );
+  bit_read_4BITS_tests ();
   /* End of tests for bit_read_4BITS */
 
   /* Tests for bit_write_RC() */
-  bit_read_RC_tests (  );
+  bit_read_RC_tests ();
   /* End of bit_read_RC() */
 
   /* Tests for bit_read_RC */
-  bit_write_RC_tests (  );
+  bit_write_RC_tests ();
   /* End of tests for bit_read_RC */
 
   /* Tests for bit_read_RS() */
-  bit_read_RS_tests (  );
+  bit_read_RS_tests ();
   /* End of tests for bit_read_RS() */
 
   /* Tests for bit_write_RS() */
-  bit_write_RS_tests (  );
+  bit_write_RS_tests ();
   /* End of tests for bit_write_RS() */
 
   /* Tests for bit_write_RL() */
-  bit_read_RL_tests (  );
+  bit_read_RL_tests ();
   /* End of tests for bit_write_RL() */
 
   /* Tests for bit_write_RD */
-  bit_write_RL_tests (  );
+  bit_write_RL_tests ();
   /* End of tests for bit_write_RD */
+
+  /* Tests for bit_write_RD()  */
+  bit_write_RD_tests();
+  /* End of tests for bit_write_RD  */
+
 
   //Prepare the testcase
   Bit_Chain bitchain;
@@ -307,7 +312,7 @@ main (  )
   bitchain.bit = 0;
   bitchain.byte = 0;
   bitchain.version = R_2000;
-  bitchain.chain = ( unsigned char * ) malloc ( bitchain.size );
+  bitchain.chain = (unsigned char *) malloc (bitchain.size);
 
 
 /*
@@ -724,6 +729,6 @@ main (  )
 */
 
   // Free the allocated memory
-  free ( bitchain.chain );
+  free (bitchain.chain);
   return 0;
 }

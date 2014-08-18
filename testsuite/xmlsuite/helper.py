@@ -1,5 +1,11 @@
 import libxml2
 import re
+
+
+'''
+This class has all the colors to be used with coloured output
+terminal.
+'''
 class bcolors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
@@ -8,6 +14,17 @@ class bcolors:
     FAIL = '\033[91m'
     ENDC = '\033[0m'
 
+
+
+'''
+This functions main aim is to process special types of attributes
+which are difficult to equate to each other. Currently this only
+handles 2D and 3D point. It converts these string in certain format
+so that they can be equated
+
+@param string attr the attribute to be processed
+@return string The processed attribute 
+'''
 def processattr(attr):
 	pattern = re.compile(r"(\d+\.\d{1,})\s{0,1}")
 	if re.search(pattern, attr):
@@ -25,7 +42,22 @@ def processattr(attr):
 	else:
 		return attr
 
+'''
+This function takes handle to both ideal file which came from AutoCAD and
+practical file which came from LibreDWG and compares them to emit out the
+result
 
+@param ideal Name of the ideal file
+@param practical Name of the practical file
+
+return array[2]
+[0] = The percentage of entity that matched
+[1] = The unmacthed attributes with following format
+	{attrname, original, duplicate}
+	attrname =  Name of the attribute
+	original = Value came from AutoCAD
+	duplicate = Value that came from LibreDWG.
+''' 
 def xmlprocess(ideal, practical):
 	doc = libxml2.parseFile(ideal)
 
@@ -69,11 +101,7 @@ def xmlprocess(ideal, practical):
 		for attr in duplicate.properties:
 			duplicate_attributes[attr.name] = processattr(attr.content)
 
-		'''
-		#Now just match the type attribute and leave the rest
-		if original_attributes["type"] == duplicate_attributes["type"]:
-			match = 1
-		'''
+		
 		unmatched_attr = []
 		#collect duplicate attributes and check if it matches with original ones
 		for key,value in original_attributes.iteritems():
