@@ -1,6 +1,7 @@
 
-LIBXML = `pkg-config libxml-2.0 --cflags`
-AM_CFLAGS = $(LIBXML) -g -lredwg -lm -lxml2
+AM_CPPFLAGS = $(XML2_CFLAGS)
+AM_CFLAGS = -g
+AM_LDFLAGS = -lredwg -lm $(XML2_LIBS)
 
 check_PROGRAMS = testsuite
 TESTS = check.py

@@ -38,7 +38,13 @@ AC_CHECK_LIB([ps],[PS_open_file],
   libredwg_have_libps=yes,
   libredwg_have_libps=no)
 
-AC_CHECK_LIB([xml2],[xmlParseMemory], ,[AC_MSG_ERROR([Install libxml2 first])])
+PKG_CHECK_MODULES([LIBXML2],[libxml-2.0],,
+[AC_MSG_ERROR([Install libxml-2.0 first])])
+
+XML2_CFLAGS=`$PKG_CONFIG libxml-2.0 --cflags`
+AC_SUBST([XML2_CFLAGS])
+XML2_LIBS=`$PKG_CONFIG libxml-2.0 --libs`
+AC_SUBST([XML2_LIBS])
 
 dnl Checks for header files.
 AC_HEADER_STDC
