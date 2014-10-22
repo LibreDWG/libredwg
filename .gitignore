@@ -21,6 +21,7 @@ Makefile
 /INSTALL
 /aclocal.m4
 /autom4te.cache/
+/build-aux/compile
 /build-aux/config.guess
 /build-aux/config.sub
 /build-aux/depcomp
@@ -28,7 +29,9 @@ Makefile
 /build-aux/ltmain.sh
 /build-aux/mdate-sh
 /build-aux/missing
+/build-aux/py-compile
 /build-aux/snap.update-policy
+/build-aux/test-driver
 /build-aux/texinfo.tex
 /config.cache
 /config.log
