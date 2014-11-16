@@ -7,7 +7,7 @@ check_PROGRAMS = testsuite
 TESTS = check.py
 CLEANFILES = *.log *.sum site.bak result.htm
 
-EXTRA_DIST = suffix.c
+EXTRA_DIST = suffix.c common.c
 
 clean-local:
 	rm -rf test_output/
