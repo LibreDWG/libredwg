@@ -1,7 +1,7 @@
 
 AM_CPPFLAGS = $(XML2_CFLAGS)
 AM_CFLAGS = -g
-AM_LDFLAGS = -lredwg -lm $(XML2_LIBS)
+LDADD = $(top_builddir)/src/libredwg.la -lm $(XML2_LIBS)
 
 check_PROGRAMS = testsuite
 TESTS = check.py
