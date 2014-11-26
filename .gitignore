@@ -2,7 +2,7 @@
 *.o
 *.lo
 *.la
-
+*.pyc
 *~
 
 # filenames, anywhere
