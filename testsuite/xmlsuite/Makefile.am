@@ -3,7 +3,8 @@ AM_CPPFLAGS = $(XML2_CFLAGS)
 AM_CFLAGS = -g
 LDADD = $(top_builddir)/src/libredwg.la -lm $(XML2_LIBS)
 
-TESTS_ENVIRONMENT = $(PYTHON)
+# Set env var ‘PYTHON’ so that check.py can invoke other .py programs.
+TESTS_ENVIRONMENT = PYTHON='$(PYTHON)' $(PYTHON)
 
 check_PROGRAMS = testsuite
 TESTS = check.py

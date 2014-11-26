@@ -1,6 +1,7 @@
 import libxml2
 import re
 import os
+import glob
 
 
 '''
@@ -23,9 +24,12 @@ comparison later.
 @param strign dwgdir The path to DWG dir
 '''
 def generatexml(dwgdir):
+	# This beats ‘sys.argv[0]’, which is not guaranteed to be set.
+	me = os.getenv ("PYTHON")
 	current_dir = os.getcwd()
 	os.chdir(dwgdir)
-	os.system("sh txtgenerate.sh")
+	for filename in glob.glob ("*/*.txt"):
+		os.system (me + " ./txttoxml.py " + filename)
 	os.chdir(current_dir)
 
 '''
