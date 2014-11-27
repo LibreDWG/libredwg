@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import libxml2
 import re
 import os
