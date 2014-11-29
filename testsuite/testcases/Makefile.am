@@ -4,4 +4,6 @@ AM_CFLAGS = -g -lredwg -lm
 
 check_PROGRAMS = bits_test 3dsolid arc attdef attrib block body circle dim_aligned dim_ang2ln dim_ang3pt dim_diameter dim_linear dim_ordinate dim_radius ellipse endblk insert line lwpline minsert mline mtext point polyline_2d polyline_3d polyline_mesh polyline_pface ray region seqend shape solid text tolerance trace vertex_2d vertex_3d vertex_mesh vertex_pface xline decode_test
 
+EXTRA_DIST = tests_common.h $(check_PROGRAMS:=.exp)
+
 CLEANFILES = *.log *.sum site.bak
