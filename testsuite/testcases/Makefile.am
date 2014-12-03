@@ -2,8 +2,58 @@ AUTOMAKE_OPTIONS = dejagnu
 
 AM_CFLAGS = -g -lredwg -lm
 
-check_PROGRAMS = bits_test 3dsolid arc attdef attrib block body circle dim_aligned dim_ang2ln dim_ang3pt dim_diameter dim_linear dim_ordinate dim_radius ellipse endblk insert line lwpline minsert mline mtext point polyline_2d polyline_3d polyline_mesh polyline_pface ray region seqend shape solid text tolerance trace vertex_2d vertex_3d vertex_mesh vertex_pface xline decode_test
+paired = \
+  3dsolid \
+  arc \
+  attdef \
+  attrib \
+  bits_test \
+  block \
+  body \
+  circle \
+  decode_test \
+  dim_aligned \
+  dim_ang2ln \
+  dim_ang3pt \
+  dim_diameter \
+  dim_linear \
+  dim_ordinate \
+  dim_radius \
+  ellipse \
+  endblk \
+  insert \
+  line \
+  lwpline \
+  minsert \
+  mline \
+  mtext \
+  point \
+  polyline_2d \
+  polyline_3d \
+  polyline_mesh \
+  polyline_pface \
+  ray \
+  region \
+  seqend \
+  shape \
+  solid \
+  text \
+  tolerance \
+  trace \
+  vertex_3d \
+  vertex_pface \
+  xline
 
-EXTRA_DIST = tests_common.h $(check_PROGRAMS:=.exp)
+unpaired = \
+  vertex_2d \
+  vertex_mesh
+
+check_PROGRAMS = $(paired) $(unpaired)
+
+EXTRA_DIST = \
+  example.dwg \
+  vertex.mesh \
+  tests_common.h common.c ole2frame.c \
+  $(paired:=.exp)
 
 CLEANFILES = *.log *.sum site.bak
