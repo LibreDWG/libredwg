@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = dejagnu
 
-AM_CFLAGS = -g -lredwg -lm
+LDADD = $(top_builddir)/src/libredwg.la -lm
 
 paired = \
   3dsolid \
