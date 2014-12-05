@@ -55,8 +55,7 @@ for dir in dirs:
 			if os.path.exists(testoutput_folder + "/" + dir + "/" + file):
 				result = xmlprocess(path_to_dwg+ "/" + dir + "/" + file, testoutput_folder + "/" + dir + "/" + file)
 			else:
-				result[0] = 0
-				result[1] = []
+				result = [0, []]
 			
 			final_output.insert(len(final_output), [dir, file, result[0], result[1]])
 
