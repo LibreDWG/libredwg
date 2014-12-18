@@ -80,6 +80,7 @@ HACKING --- a simple -*-outline-*- of libredwg hacking lore
     - bind   -- language bindings
     - api    -- user API
     - doc    -- documentation
+    - v      -- validation ("make check" stuff)
     - [??? more topics here]
 
 * [??? other exceptions]
