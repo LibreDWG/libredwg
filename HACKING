@@ -1,6 +1,7 @@
-HACKING --- a simple -*-outline-*- of libredwg hacking lore
-	    "???" means that there is still some question to resolve;
-	    someone should probably think about and resolve them!
+HACKING LibreDWG
+
+"???" means that there is still some question to resolve;
+someone should probably think about and resolve them!
 
 * regen
 
@@ -21,7 +22,7 @@ HACKING --- a simple -*-outline-*- of libredwg hacking lore
   - from shell: $ info standards
 
   The exceptions are:
-  - change log maintenance
+  - [[change log maintenance]]
   - [??? other]
 
 * change log maintenance
@@ -103,3 +104,9 @@ HACKING --- a simple -*-outline-*- of libredwg hacking lore
   them under gdb, use:
 
   $ libtool --mode=execute gdb PROGRAM
+
+* etc
+#+STARTUP: odd
+  Local variables:
+  mode: org
+  End:
