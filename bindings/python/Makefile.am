@@ -25,32 +25,32 @@
 ACLOCAL_AMFLAGS = -I m4
 
 BUILT_SOURCES = $(srcdir)/swig_wrap_python.c
-    SWIG_SOURCES = ../dwg.i
+SWIG_SOURCES = ../dwg.i
 
-    pkgpython_PYTHON = libredwg.py
+pkgpython_PYTHON = libredwg.py
 
 ## magic to make _libredwg.la go to right place
 ##    pkgyexec_LTLIBRARIES = _libredwg.la
-    pyexec_LTLIBRARIES = _libredwg.la
+pyexec_LTLIBRARIES = _libredwg.la
 
 ## magic to override pkgpythondir = $(pythondir)/$(PACKAGE)
 ## at least in Ubuntu python wouldn't find the module there
-    pkgpythondir = $(pythondir)
+pkgpythondir = $(pythondir)
 
 # the underscore is correct. the python interpreter looks for _libredwg.so
 # when libredwg module is loaded
-    _libredwg_la_SOURCES = $(BUILT_SOURCES)  $(SWIG_SOURCES)
+_libredwg_la_SOURCES = $(BUILT_SOURCES)  $(SWIG_SOURCES)
 
 ## more magic: SWIG_PYTHON_CPPFLAGS resolves to null and python includes
 ## are not passed to gcc via -I
 ##    _libredwg_la_CPPFLAGS = $(SWIG_PYTHON_CPPFLAGS) -I$(top_srcdir)/src
-    _libredwg_la_CPPFLAGS = -I$(top_srcdir)/src $(AX_SWIG_PYTHON_CPPFLAGS)
+_libredwg_la_CPPFLAGS = -I$(top_srcdir)/src $(AX_SWIG_PYTHON_CPPFLAGS)
 
-    _libredwg_la_LDFLAGS = -module
-    _libredwg_la_LIBADD = ../../src/libredwg.la
+_libredwg_la_LDFLAGS = -module
+_libredwg_la_LIBADD = ../../src/libredwg.la
 
 ## not elegant, but works!
-    $(srcdir)/swig_wrap_python.c : $(SWIG_SOURCES)
+$(srcdir)/swig_wrap_python.c : $(SWIG_SOURCES)
 	swig -python -includeall -I$(top_srcdir)/src -o $@ $<
 
 ## should work out of the box, but $(SWIG) resolves to swig -c++
