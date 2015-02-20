@@ -24,7 +24,7 @@
 
 ACLOCAL_AMFLAGS = -I m4
 
-BUILT_SOURCES = $(srcdir)/swig_wrap_python.c
+BUILT_SOURCES = swig_wrap_python.c
 SWIG_SOURCES = ../dwg.i
 
 pkgpython_PYTHON = libredwg.py
@@ -50,7 +50,7 @@ _libredwg_la_LDFLAGS = -module
 _libredwg_la_LIBADD = ../../src/libredwg.la
 
 ## not elegant, but works!
-$(srcdir)/swig_wrap_python.c : $(SWIG_SOURCES)
+swig_wrap_python.c : $(SWIG_SOURCES)
 	swig -python -includeall -I$(top_srcdir)/src -o $@ $<
 
 ## should work out of the box, but $(SWIG) resolves to swig -c++
