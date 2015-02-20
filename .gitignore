@@ -22,6 +22,8 @@ site.exp
 /INSTALL
 /aclocal.m4
 /autom4te.cache/
+/bindings/python/libredwg.py
+/bindings/python/swig_wrap_python.c
 /build-aux/compile
 /build-aux/config.guess
 /build-aux/config.sub
