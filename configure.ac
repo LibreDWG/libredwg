@@ -105,6 +105,7 @@ AC_CONFIG_FILES([
     testsuite/Makefile
     testsuite/testcases/Makefile
     testsuite/xmlsuite/Makefile
+    unit-testing/Makefile
 ])
 
 AC_OUTPUT
