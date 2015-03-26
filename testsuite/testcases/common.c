@@ -43,9 +43,9 @@ test_code (char *filename)
   if (!error)
     {
       output_test (&dwg);
+      dwg_free (&dwg);
     }
 
-  dwg_free (&dwg);
   /* This value is the return value for `main',
      so clamp it to either 0 or 1.  */
   return error ? 1 : 0;
