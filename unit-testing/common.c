@@ -43,7 +43,15 @@ print_low_level(dwg_object *obj);
 int
 main(int argc, char *argv[])
 {
-  return test_code (argv[1]);
+  char *input = getenv ("INPUT");
+
+  if (! input)
+    {
+      fprintf (stderr, "Env var INPUT not defined\n");
+      return EXIT_FAILURE;
+    }
+
+  return test_code (input);
 }
 
 /// This function is used to read the DWG file

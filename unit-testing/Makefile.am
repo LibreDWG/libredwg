@@ -64,6 +64,8 @@ check_PROGRAMS = \
  xline
 
 TESTS = $(check_PROGRAMS)
+TESTS_ENVIRONMENT = \
+  INPUT=$(srcdir)/example.dwg
 
 update-ignorance:
 	printf '/%s\n' $(check_PROGRAMS) > .gitignore
