@@ -68,4 +68,6 @@ TESTS = $(check_PROGRAMS)
 update-ignorance:
 	printf '/%s\n' $(check_PROGRAMS) > .gitignore
 
+EXTRA_DIST = example.dwg
+
 ## Makefile.am ends here
