@@ -26,7 +26,7 @@ api_process (dwg_object * obj)
 
   // returns dummy value
   dummy = dwg_ent_endblk_get_dummy (endblk, &dummy_error);
-  if (dummy_error == 0 && endblk->dummy)
+  if (dummy_error == 0 && dummy == endblk->dummy)
     {
       pass ("Working Properly");
     }
