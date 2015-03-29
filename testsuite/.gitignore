@@ -1,3 +1,9 @@
+# anywhere
+
+*.xml
+
+# specifically, grouped by directory
+
 /testcases.log
 /testcases.sum
 
@@ -47,5 +53,6 @@
 /testcases/xline
 
 /xmlsuite/testsuite
-/xmlsuite/test_output
 /xmlsuite/result.htm
+
+/xmlsuite/test_output

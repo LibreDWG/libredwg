@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<DwgData>
-<DwgEntity type="IAcadCircle" id="000000002ebe7f88" desc="IAcadCircle: AutoCAD Circle Interface" Application="IAcadApplication 00000001402d2308" Area="575.138" Center="(23.4493 -1.09239 0.0)" Circumference="85.0141" Diameter="27.0608" Document="IAcadDocument 000000002eb27c78" EntityTransparency="ByLayer" Handle="1BD" HasExtensionDictionary="0" Hyperlinks="IAcadHyperlinks 000000002ed4eee8" Layer="0" Linetype="ByLayer" LinetypeScale="1.0" Lineweight="-1" Material="ByLayer" Normal="(0.0 0.0 1.0)" ObjectID="46" ObjectID32="46" ObjectName="AcDbCircle" OwnerID="47" OwnerID32="47" PlotStyleName="ByLayer" Radius="13.5304" Thickness="0.0" TrueColor="IAcadAcCmColor 000000002ed4ee20" Visible="-1" />
-</DwgData>
