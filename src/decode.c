@@ -228,7 +228,7 @@ static void \
   dwg->num_entities++;\
   obj->supertype = DWG_SUPERTYPE_ENTITY;\
   obj->tio.entity = (Dwg_Object_Entity*)malloc (sizeof (Dwg_Object_Entity));	\
-  obj->tio.entity->tio.token = (Dwg_Entity_##token *)calloc (sizeof (Dwg_Entity_##token), 1); \
+  obj->tio.entity->tio.token = (Dwg_Entity_##token *)calloc (1, sizeof (Dwg_Entity_##token)); \
   ent = obj->tio.entity->tio.token;\
   _obj=ent;\
   obj->tio.entity->object = obj;\
@@ -247,7 +247,7 @@ static void \
   LOG_INFO("Object " #token ":\n")\
   obj->supertype = DWG_SUPERTYPE_OBJECT;\
   obj->tio.object = (Dwg_Object_Object*)malloc (sizeof (Dwg_Object_Object));	\
-  obj->tio.object->tio.token = (Dwg_Object_##token * ) calloc (sizeof (Dwg_Object_##token), 1); \
+  obj->tio.object->tio.token = (Dwg_Object_##token * ) calloc (1, sizeof (Dwg_Object_##token)); \
   obj->tio.object->object = obj;\
   if (dwg_decode_object (dat, obj->tio.object)) return;\
   _obj = obj->tio.object->tio.token;\

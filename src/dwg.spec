@@ -1268,8 +1268,8 @@ inline void decode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* 
         {
           do
             {
-              FIELD_VALUE(sat_data) = (BITCODE_RC**) realloc(FIELD_VALUE(sat_data), i * sizeof(BITCODE_RC*));
-              FIELD_VALUE(block_size) = (BITCODE_BL*) realloc(FIELD_VALUE(block_size), i * sizeof(BITCODE_BL));
+              FIELD_VALUE(sat_data) = (BITCODE_RC**) realloc(FIELD_VALUE(sat_data), (i+1) * sizeof(BITCODE_RC*));
+              FIELD_VALUE(block_size) = (BITCODE_BL*) realloc(FIELD_VALUE(block_size), (i+1) * sizeof(BITCODE_BL));
               FIELD_BL (block_size[i]);
               FIELD_VECTOR (sat_data[i], RC, block_size[i]);
               total_size += FIELD_VALUE(block_size[i]);
