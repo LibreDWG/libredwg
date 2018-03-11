@@ -23,11 +23,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <assert.h>
 
 #include "bits.h"
 #include "common.h"
 #include "decode.h"
 #include "dwg.h"
+#include "encode.h"
 
 #include "logging.h"
 
@@ -194,7 +196,7 @@ dwg_bmp(Dwg_Data *stk, long int *size)
       else if (code == 3)
         {
           bit_read_RL(dat);
-          LOG_TRACE("\t\tWMF size: 0x%x\n", bit_read_RL (dat))
+          LOG_TRACE("\t\tWMF size: 0x%lx\n", bit_read_RL (dat))
         }
       else
         {
@@ -364,6 +366,9 @@ Dwg_Object* get_first_owned_object(Dwg_Object* hdr_obj, Dwg_Object_BLOCK_HEADER*
       hdr->__iterator = 0;
       return hdr->entities[0]->obj;
     }
+
+  LOG_ERROR("Unsupported version: %d\n", version);
+  return NULL;
 }
 
 Dwg_Object* get_next_owned_object(Dwg_Object* hdr_obj, Dwg_Object* current, Dwg_Object_BLOCK_HEADER* hdr){
@@ -381,6 +386,9 @@ Dwg_Object* get_next_owned_object(Dwg_Object* hdr_obj, Dwg_Object* current, Dwg_
       if (hdr->__iterator == hdr->owned_object_count) return 0;
       return hdr->entities[hdr->__iterator]->obj;
     }
+
+  LOG_ERROR("Unsupported version: %d\n", version);
+  return NULL;
 }
 
 void

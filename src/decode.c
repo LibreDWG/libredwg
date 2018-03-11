@@ -35,7 +35,7 @@ extern unsigned int
 bit_ckr8(unsigned int dx, unsigned char *adr, long n);
 
 /* The logging level for the read (decode) path.  */
-static unsigned int loglevel;
+unsigned int loglevel;
 
 #ifdef USE_TRACING
 /* This flag means we have checked the environment variable

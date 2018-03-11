@@ -1,6 +1,8 @@
 #include "dwg_api.h"
 #include "dwg.h"
+#ifdef HAVE_MALLOC_H
 #include <malloc.h>
+#endif
 
 /*******************************************************************
 *        Functions created from macro to extract entities           *

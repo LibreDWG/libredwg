@@ -11,6 +11,7 @@ Makefile
 .deps
 .libs
 site.exp
+TAGS
 
 # globs, in specific dirs
 /examples/*.log

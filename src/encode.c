@@ -26,6 +26,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 #include "common.h"
 #include "bits.h"
@@ -240,6 +241,8 @@ static void
 dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat);
 static void
 dwg_encode_object(Dwg_Object * obj, Bit_Chain * dat);
+static void
+dwg_encode_common_entity_handle_data(Bit_Chain * dat, Dwg_Object * obj);
 static void
 dwg_encode_header_variables(Bit_Chain* dat, Dwg_Data * dwg);
 void
@@ -518,7 +521,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
       bit_write_CRC(dat, omap[i].address, 0xC0C1);
     }
     for (i = 0; i < dwg->num_objects; i++) 
-      LOG_INFO ("Object(%i): %6lu / Address: %08X / Idc: %u\n", 
+      LOG_INFO ("Object(%lu): %6lu / Address: %08lX / Idc: %u\n", 
 		 i, omap[i].handle, omap[i].address, omap[i].idc);
 
   /* Unknown bitdouble between objects and object map
@@ -715,7 +718,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
   return 0;
 }
 
-#include<dwg.spec>
+#include <dwg.spec>
 
 void
 dwg_encode_add_object(Dwg_Object * obj, Bit_Chain * dat,
@@ -735,7 +738,7 @@ dwg_encode_add_object(Dwg_Object * obj, Bit_Chain * dat,
   dat->byte = address;
   dat->bit = 0;
 
-      LOG_INFO("\n\n======================\nObject number: %lu",
+      LOG_INFO("\n\n======================\nObject number: %u",
           obj->index)
 
   bit_write_MS(dat, obj->size);
@@ -1085,7 +1088,7 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
 
 }
 
-void
+static void
 dwg_encode_common_entity_handle_data(Bit_Chain * dat, Dwg_Object * obj)
 {
   //XXX: not sure about this
@@ -1109,6 +1112,7 @@ dwg_encode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg, Dwg_Objec
   //this function should receive a Object_Ref without an abs_ref, calculate it and return a Dwg_Handle
   //this should be a higher level function 
   //not sure if the prototype is correct
+  assert(obj);
 }
 
 void 
