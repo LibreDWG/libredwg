@@ -3,8 +3,10 @@
 #include <string.h>
 #include <unistd.h>
 #include <math.h>
-#include <dwg.h>
-#include <dwg_api.h>
+#include <sys/stat.h>
+
+#include "dwg.h"
+#include "dwg_api.h"
 
 /// This function Declaration reads DWG file
 int
@@ -44,11 +46,16 @@ int
 main(int argc, char *argv[])
 {
   char *input = getenv ("INPUT");
+  struct stat attrib;
 
   if (! input)
     {
-      fprintf (stderr, "Env var INPUT not defined\n");
-      return EXIT_FAILURE;
+      strcpy(input, "example.dwg");
+      if (stat(input, &attrib))
+        {
+          fprintf (stderr, "Env var INPUT not defined, %s not found\n", input);
+          return EXIT_FAILURE;
+        }
     }
 
   return test_code (input);
@@ -111,7 +118,7 @@ void output_BLOCK_HEADER(dwg_object_ref* ref)
 */
   variable_obj = get_first_owned_object(obj, hdr);
 
-  while(variable_obj)
+  while (variable_obj)
     {
       output_object(variable_obj);
       variable_obj = get_next_owned_object(obj, variable_obj, hdr);
@@ -123,7 +130,8 @@ void output_BLOCK_HEADER(dwg_object_ref* ref)
 void
 output_test(dwg_data* dwg)
 {
-  unsigned int i, num_hdr_objs, error;
+  unsigned int i, num_hdr_objs;
+  int error;
   dwg_object *obj;
   dwg_obj_block_header *hdr;
   dwg_obj_block_control *ctrl;

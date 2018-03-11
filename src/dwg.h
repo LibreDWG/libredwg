@@ -48,7 +48,7 @@
 #define FORMAT_RD "%f"
 #define BITCODE_BL long unsigned int
 #define FORMAT_BL "%lu"
-#define BITCODE_TV unsigned char *
+#define BITCODE_TV char *
 #define FORMAT_TV "\"%s\""
 #define BITCODE_BT BITCODE_DOUBLE
 #define FORMAT_BT "%f"
@@ -2713,9 +2713,9 @@ typedef struct _dwg_class
 {
   unsigned int number;
   unsigned int version;
-  unsigned char *appname;
-  unsigned char *cppname;
-  unsigned char *dxfname;
+  char *appname;
+  char *cppname;
+  char *dxfname;
   unsigned char wasazombie;
   unsigned int item_class_id;
 } Dwg_Class;

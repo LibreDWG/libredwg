@@ -161,11 +161,11 @@ unsigned int
 bit_write_CRC(Bit_Chain * dat, long unsigned int start_address,
     unsigned int semo);
 
-unsigned char *
+char *
 bit_read_TV(Bit_Chain * dat);
 
 void
-bit_write_TV(Bit_Chain * dat, unsigned char *value);
+bit_write_TV(Bit_Chain * dat, char *value);
 
 long unsigned int
 bit_read_L(Bit_Chain * dat);

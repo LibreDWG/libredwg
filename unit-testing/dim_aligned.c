@@ -103,18 +103,14 @@ low_level_process(dwg_object *obj)
           dim_aligned->act_measurement);
 
   // prints ext line rot
-  printf("ext line rot of dim_aligned : ",dim_aligned->ext_line_rot);
+  printf("ext line rot of dim_aligned : %f\t\n", dim_aligned->ext_line_rot);
 
 }
 
 void
 api_process(dwg_object *obj)
 {
-  int ecs11_error, ecs12_error, flags1_error, act_error, horiz_error, lspace_error,
-      style_error, att_point_error, ext_error, user_text_error, text_rot_error, 
-      ins_rot_error, arrow1_error, arrow2_error, mid_pt_error, ins_scale_error, 
-      flags2_error, pt10_error, pt12_error, pt13_error, pt14_error, 
-      dim_rot_error, ext_line_rot_error;
+  int error;
   double ecs11, ecs12, act_measure, horiz_dir, lspace_factor, text_rot, 
          ins_rot, ext_line_rot, dim_rot;
   unsigned int flags1, lspace_style, attach_pt, flip_arrow1, flip_arrow2, 
@@ -125,8 +121,8 @@ api_process(dwg_object *obj)
   dwg_ent_dim_aligned *dim_aligned = dwg_object_to_DIMENSION_ALIGNED(obj);
 
   // prints horiz direction value
-  horiz_dir = dwg_ent_dim_aligned_get_horiz_dir(dim_aligned, &horiz_error);
-  if(horiz_error == 0 )
+  horiz_dir = dwg_ent_dim_aligned_get_horiz_dir(dim_aligned, &error);
+  if (!error)
     {  
       printf("horiz dir of dim_aligned : %f\t\n", horiz_dir);
     }
@@ -137,8 +133,8 @@ api_process(dwg_object *obj)
 
   // returns lspcae factor
   lspace_factor = dwg_ent_dim_aligned_get_elevation_ecs11(dim_aligned, 
-                  &lspace_error);
-  if(lspace_error == 0 ) // error check
+                  &error);
+  if (!error)
     {  
       printf("lspace factor of dim_aligned : %f\t\n", lspace_factor);
     }
@@ -149,8 +145,8 @@ api_process(dwg_object *obj)
 
   // returns lspace style
   lspace_style = dwg_ent_dim_aligned_get_elevation_ecs11(dim_aligned, 
-                  &style_error);
-  if(style_error == 0 ) // error check
+                  &error);
+  if (!error)
     {  
       printf("lspace style of dim_aligned : %d\t\n", lspace_style);
     }
@@ -161,8 +157,8 @@ api_process(dwg_object *obj)
 
   // returns attachment point 
   attach_pt = dwg_ent_dim_aligned_get_elevation_ecs11(dim_aligned, 
-              &att_point_error);
-  if(att_point_error == 0 ) // error checking
+              &error);
+  if (!error)
     {  
       printf("attach point of dim_aligned : %d\t\n", attach_pt);
     }
@@ -172,8 +168,9 @@ api_process(dwg_object *obj)
     }
 
   // returns ecs 11 of aligned dimension
-  ecs11 = dwg_ent_dim_aligned_get_elevation_ecs11(dim_aligned, &ecs11_error);
-  if(ecs11_error == 0 )
+  ecs11 = dwg_ent_dim_aligned_get_elevation_ecs11(dim_aligned,
+              &error);
+  if (!error)
     {  
       printf("Radius of dim_aligned : %f\t\n",ecs11);
     }
@@ -183,8 +180,9 @@ api_process(dwg_object *obj)
     }
 
   // returns ecs12 of aligned dimension
-  ecs12 = dwg_ent_dim_aligned_get_elevation_ecs12(dim_aligned, &ecs12_error);
-  if(ecs12_error == 0 ) // error checking 
+  ecs12 = dwg_ent_dim_aligned_get_elevation_ecs12(dim_aligned,
+              &error);
+  if (!error)
     {
       printf("Thickness of dim_aligned : %f\t\n",ecs12);
     }
@@ -194,8 +192,9 @@ api_process(dwg_object *obj)
     }
 
   // returns extrusion of aligned dimension
-  dwg_ent_dim_aligned_get_extrusion(dim_aligned, &ext,&ext_error);
-  if(ext_error == 0 )
+  dwg_ent_dim_aligned_get_extrusion(dim_aligned, &ext,
+              &error);
+  if (!error)
     {
       printf("extrusion of dim_aligned : x = %f, y = %f, z = %f\t\n",
               ext.x, ext.y, ext.z);
@@ -206,8 +205,9 @@ api_process(dwg_object *obj)
     }
 
   // returns insertion scale of aligned dimension
-  dwg_ent_dim_aligned_get_ins_scale(dim_aligned, &ins_scale,&ins_scale_error);
-  if(ins_scale_error == 0 ) // error checking
+  dwg_ent_dim_aligned_get_ins_scale(dim_aligned, &ins_scale,
+              &error);
+  if (!error)
     {
       printf("ins_scale of dim_aligned : x = %f, y = %f, z = %f\t\n",
               ins_scale.x, ins_scale.y, ins_scale.z);
@@ -218,8 +218,9 @@ api_process(dwg_object *obj)
     }
 
   // returns 10 point
-  dwg_ent_dim_aligned_get_10_pt(dim_aligned, &pt10,&pt10_error);
-  if(pt10_error == 0 )  // error check
+  dwg_ent_dim_aligned_get_10_pt(dim_aligned, &pt10,
+              &error);
+  if (!error)
     {
       printf("pt10 of dim_aligned : x = %f, y = %f, z = %f\t\n",
               pt10.x, pt10.y, pt10.z);
@@ -230,8 +231,9 @@ api_process(dwg_object *obj)
     }
 
   // returns 13 point 
-  dwg_ent_dim_aligned_get_13_pt(dim_aligned, &pt13,&pt13_error);
-  if(pt13_error == 0 ) //error checking
+  dwg_ent_dim_aligned_get_13_pt(dim_aligned, &pt13,
+              &error);
+  if (!error)
     {
       printf("pt13 of dim_aligned : x = %f, y = %f, z = %f\t\n",
               pt13.x, pt13.y, pt13.z);
@@ -242,8 +244,9 @@ api_process(dwg_object *obj)
     }
 
   // returns 14 point
-  dwg_ent_dim_aligned_get_14_pt(dim_aligned, &pt14,&pt14_error);
-  if(pt14_error == 0 ) // error check
+  dwg_ent_dim_aligned_get_14_pt(dim_aligned, &pt14,
+              &error);
+  if (!error)
     {
       printf("pt14 of dim_aligned : x = %f, y = %f, z = %f\t\n",
               pt14.x, pt14.y, pt14.z);
@@ -254,8 +257,9 @@ api_process(dwg_object *obj)
     }
 
   // returns 12 point
-  dwg_ent_dim_aligned_get_12_pt(dim_aligned, &pt12,&pt12_error);
-  if(pt12_error == 0 ) // error check
+  dwg_ent_dim_aligned_get_12_pt(dim_aligned, &pt12,
+              &error);
+  if (!error)
     {
       printf("pt12 of dim_aligned : x = %f, y = %f\t\n",
               pt12.x, pt12.y);
@@ -267,8 +271,8 @@ api_process(dwg_object *obj)
 
   // returns dimension mid point
   dwg_ent_dim_aligned_get_text_mid_pt(dim_aligned, &text_mid_pt,
-                                          &mid_pt_error);
-  if(mid_pt_error == 0 ) // error checks
+              &error);
+  if (!error)
     {
       printf("text_mid_pt of dim_aligned : x = %f, y = %f\t\n",
               text_mid_pt.x, text_mid_pt.y);
@@ -279,8 +283,9 @@ api_process(dwg_object *obj)
     }
 
   // returns user text of dimension
-  user_text = dwg_ent_dim_aligned_get_user_text(dim_aligned, &user_text_error);
-  if(user_text_error == 0 )
+  user_text = dwg_ent_dim_aligned_get_user_text(dim_aligned,
+              &error);
+  if (!error)
     {  
       printf("user text of dim_aligned : %s\t\n",user_text);
     }
@@ -290,8 +295,9 @@ api_process(dwg_object *obj)
     }
 
   // returns rotation of text
-  text_rot = dwg_ent_dim_aligned_get_text_rot(dim_aligned, &text_rot_error);
-  if(text_rot_error == 0 ) // error check
+  text_rot = dwg_ent_dim_aligned_get_text_rot(dim_aligned,
+              &error);
+  if (!error)
     {  
       printf(" text rotation of dim_aligned : %f\t\n", text_rot);
     }
@@ -301,8 +307,9 @@ api_process(dwg_object *obj)
     }
 
   // returns rotation of insertion of dimension
-  ins_rot = dwg_ent_dim_aligned_get_ins_rotation(dim_aligned, &ins_rot_error);
-  if(ins_rot_error == 0 ) // error check
+  ins_rot = dwg_ent_dim_aligned_get_ins_rotation(dim_aligned,
+              &error);
+  if (!error)
     {  
       printf("ins rotation of dim_aligned : %f\t\n",ins_rot);
     }
@@ -313,8 +320,8 @@ api_process(dwg_object *obj)
   
   // returns flip arrow
   flip_arrow1 = dwg_ent_dim_aligned_get_flip_arrow1(dim_aligned,
-                &arrow1_error);
-  if(arrow1_error == 0 ) // error check
+              &error);
+  if (!error)
     {  
       printf("arrow1 of dim_aligned : %d\t\n",flip_arrow1);
     }
@@ -325,8 +332,8 @@ api_process(dwg_object *obj)
 
   // returns flip arrow2
   flip_arrow2 = dwg_ent_dim_aligned_get_flip_arrow2(dim_aligned,
-                &arrow2_error);
-  if(arrow2_error == 0 ) // error check
+              &error);
+  if (!error)
     {  
       printf("arrow1 of dim_aligned : %d\t\n",flip_arrow2);
     }
@@ -337,8 +344,8 @@ api_process(dwg_object *obj)
 
   // returns flag 
   flags1 = dwg_ent_dim_aligned_get_flags1(dim_aligned,
-                &flags1_error);
-  if(arrow2_error == 0 ) // error check
+              &error);
+  if (!error)
     {  
       printf("flags1 of dim_aligned : %d\t\n",flags1);
     }
@@ -349,8 +356,8 @@ api_process(dwg_object *obj)
 
   // returns act measure
   act_measure = dwg_ent_dim_aligned_get_act_measurement(dim_aligned,
-                &act_error);
-  if(act_error == 0 ) // error check
+              &error);
+  if (!error)
     {  
       printf("act_measurement of dim_aligned : %f\t\n",act_measure);
     }
@@ -361,10 +368,10 @@ api_process(dwg_object *obj)
 
   // returns ext line rotation
   ext_line_rot = dwg_ent_dim_aligned_get_ext_line_rotation(dim_aligned,
-                &ext_line_rot_error);
-  if(ext_line_rot_error == 0 ) // error check
+              &error);
+  if (!error)
     {  
-      printf("ext line rot of dim_aligned : ", ext_line_rot);
+      printf("ext line rot of dim_aligned : %f\t\n", ext_line_rot);
     }
   else
     {

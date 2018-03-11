@@ -25,6 +25,7 @@
 
 static unsigned int loglevel;
 
+#undef DWG_LOGLEVEL
 #define DWG_LOGLEVEL loglevel
 
 typedef struct r2007_file_header

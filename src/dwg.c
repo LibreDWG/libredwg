@@ -103,7 +103,7 @@ dwg_read_file(char *filename, Dwg_Data * dwg_data)
 
 
 /* if write support is enabled */
-#ifdef USE_WRITE 
+#ifdef USE_WRITE
 
 int
 dwg_write_file(char *filename, Dwg_Data * dwg_data)

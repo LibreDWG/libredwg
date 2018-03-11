@@ -40,7 +40,8 @@
 #define DWG_LOGLEVEL_ALL     9
 
 #ifndef DWG_LOGLEVEL
-#define DWG_LOGLEVEL DWG_LOGLEVEL_NONE //default loglevel
+#define DWG_LOGLEVEL DWG_LOGLEVEL_ERROR
+//#define DWG_LOGLEVEL DWG_LOGLEVEL_NONE //default loglevel
 #endif //ifndef LOGLEVEL
 
 #define HANDLER fprintf

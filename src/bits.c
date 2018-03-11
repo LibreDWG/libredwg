@@ -869,13 +869,13 @@ bit_read_TV(Bit_Chain * dat)
     }
   chain[i] = '\0';
 
-  return (chain);
+  return (char *)chain;
 }
 
 /** Write simple text.
  */
 void
-bit_write_TV(Bit_Chain * dat, unsigned char *chain)
+bit_write_TV(Bit_Chain * dat, char *chain)
 {
   int i;
   int length;
@@ -883,7 +883,7 @@ bit_write_TV(Bit_Chain * dat, unsigned char *chain)
   length = strlen((const char *)chain);
   bit_write_BS(dat, length);
   for (i = 0; i < length; i++)
-    bit_write_RC(dat, chain[i]);
+    bit_write_RC(dat, (unsigned char)chain[i]);
 }
 
 /** Read 1 bitlong according to normal order
@@ -943,9 +943,9 @@ bit_write_CMC(Bit_Chain * dat, Dwg_Color* color)
       bit_write_BL(dat, color->rgb);
       bit_write_RC(dat, color->byte);
       if (color->byte & 1)
-        bit_write_TV(dat,(unsigned char*) color->name);
+        bit_write_TV(dat, color->name);
       if (color->byte & 2)
-        bit_write_TV(dat, (unsigned char*)color->book_name);
+        bit_write_TV(dat, color->book_name);
     }
 }
 

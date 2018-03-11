@@ -4,6 +4,8 @@
 *.la
 *.pyc
 *~
+*.dSYM
+*.i
 
 # filenames, anywhere
 Makefile.in
@@ -46,7 +48,8 @@ TAGS
 /doc/version.texi
 /examples/get_bmp
 /examples/load_dwg
-/examples/test
+/examples/rewrite
+/examples/testsvg2
 /examples/testSVG
 /libtool
 /m4

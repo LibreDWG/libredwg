@@ -104,21 +104,17 @@ low_level_process(dwg_object *obj)
            dim_linear->act_measurement);
 
   // prints ext line rotation
-  printf("ext line rot of dim_linear : ",dim_linear->ext_line_rot);
+  printf("ext line rot of dim_linear : %f\t\n",dim_linear->ext_line_rot);
 
   // prints dim rotation
-  printf("dim rot of dim linear : ", dim_linear->dim_rot);
+  printf("dim rot of dim linear : %f\t\n", dim_linear->dim_rot);
 
 }
 
 void
 api_process(dwg_object *obj)
 {
-  int ecs11_error, ecs12_error, flags1_error, act_error, horiz_error, lspace_error,
-      style_error, att_point_error, ext_error, user_text_error, text_rot_error, 
-      ins_rot_error, arrow1_error, arrow2_error, mid_pt_error, ins_scale_error, 
-      flags2_error, pt10_error, pt12_error, pt13_error, pt14_error, 
-      dim_rot_error, ext_line_rot_error;
+  int error;
   double ecs11, ecs12, act_measure, horiz_dir, lspace_factor, text_rot, 
          ins_rot, ext_line_rot, dim_rot;
   unsigned int flags1, lspace_style, attach_pt, flip_arrow1, flip_arrow2, 
@@ -129,8 +125,9 @@ api_process(dwg_object *obj)
   dwg_ent_dim_linear *dim_linear = dwg_object_to_DIMENSION_LINEAR(obj);
 
   // returns horiz dir
-  horiz_dir = dwg_ent_dim_linear_get_horiz_dir(dim_linear, &horiz_error);
-  if(horiz_error == 0 )  // error check
+  horiz_dir = dwg_ent_dim_linear_get_horiz_dir(dim_linear,
+              &error);
+  if (!error)
     {  
       printf("horiz dir of dim_linear : %f\t\n", horiz_dir);
     }
@@ -141,8 +138,8 @@ api_process(dwg_object *obj)
 
   // returns lspace factor
   lspace_factor = dwg_ent_dim_linear_get_elevation_ecs11(dim_linear, 
-                  &lspace_error);
-  if(lspace_error == 0 ) // error check
+              &error);
+  if (!error)
     {  
       printf("lspace factor of dim_linear : %f\t\n", lspace_factor);
     }
@@ -153,8 +150,8 @@ api_process(dwg_object *obj)
 
   // returns lspace style
   lspace_style = dwg_ent_dim_linear_get_elevation_ecs11(dim_linear, 
-                  &style_error);
-  if(style_error == 0 ) // error check
+              &error);
+  if (!error)
     {  
       printf("lspace style of dim_linear : %d\t\n", lspace_style);
     }
@@ -165,8 +162,8 @@ api_process(dwg_object *obj)
 
   // returns attachment point
   attach_pt = dwg_ent_dim_linear_get_elevation_ecs11(dim_linear, 
-              &att_point_error);
-  if(att_point_error == 0 ) // error check
+              &error);
+  if (!error)
     {  
       printf("attach point of dim_linear : %d\t\n", attach_pt);
     }
@@ -176,8 +173,9 @@ api_process(dwg_object *obj)
     }
 
   // returns ecs11 elevation
-  ecs11 = dwg_ent_dim_linear_get_elevation_ecs11(dim_linear, &ecs11_error);
-  if(ecs11_error == 0 ) // error check
+  ecs11 = dwg_ent_dim_linear_get_elevation_ecs11(dim_linear,
+              &error);
+  if (!error)
     {  
       printf("Radius of dim_linear : %f\t\n",ecs11);
     }
@@ -187,8 +185,9 @@ api_process(dwg_object *obj)
     }
 
   // returns ecs 12 elevation
-  ecs12 = dwg_ent_dim_linear_get_elevation_ecs12(dim_linear, &ecs12_error);
-  if(ecs12_error == 0 ) // error check
+  ecs12 = dwg_ent_dim_linear_get_elevation_ecs12(dim_linear,
+              &error);
+  if (!error)
     {
       printf("Thickness of dim_linear : %f\t\n",ecs12);
     }
@@ -198,8 +197,9 @@ api_process(dwg_object *obj)
     }
 
   // returns extrusion points
-  dwg_ent_dim_linear_get_extrusion(dim_linear, &ext,&ext_error);
-  if(ext_error == 0 ) // error check
+  dwg_ent_dim_linear_get_extrusion(dim_linear, &ext,
+              &error);
+  if (!error)
     {
       printf("extrusion of dim_linear : x = %f, y = %f, z = %f\t\n",
               ext.x, ext.y, ext.z);
@@ -210,8 +210,9 @@ api_process(dwg_object *obj)
     }
 
   // returns insert scale
-  dwg_ent_dim_linear_get_ins_scale(dim_linear, &ins_scale, &ins_scale_error);
-  if(ins_scale_error == 0 ) // error check
+  dwg_ent_dim_linear_get_ins_scale(dim_linear, &ins_scale,
+              &error);
+  if (!error)
     {
       printf("ins_scale of dim_linear : x = %f, y = %f, z = %f\t\n",
               ins_scale.x, ins_scale.y, ins_scale.z);
@@ -222,8 +223,9 @@ api_process(dwg_object *obj)
     }
 
   // returns 10 point
-  dwg_ent_dim_linear_get_10_pt(dim_linear, &pt10,&pt10_error);
-  if(pt10_error == 0 ) // error check
+  dwg_ent_dim_linear_get_10_pt(dim_linear, &pt10,
+              &error);
+  if (!error)
     {
       printf("pt10 of dim_linear : x = %f, y = %f, z = %f\t\n",
               pt10.x, pt10.y, pt10.z);
@@ -234,8 +236,9 @@ api_process(dwg_object *obj)
     }
 
   // returns 13 point
-  dwg_ent_dim_linear_get_13_pt(dim_linear, &pt13,&pt13_error);
-  if(pt13_error == 0 ) // error check
+  dwg_ent_dim_linear_get_13_pt(dim_linear, &pt13,
+              &error);
+  if (!error)
     {
       printf("pt13 of dim_linear : x = %f, y = %f, z = %f\t\n",
               pt13.x, pt13.y, pt13.z);
@@ -246,8 +249,9 @@ api_process(dwg_object *obj)
     }
 
   // returns 14 point
-  dwg_ent_dim_linear_get_14_pt(dim_linear, &pt14,&pt14_error);
-  if(pt14_error == 0 ) // error check
+  dwg_ent_dim_linear_get_14_pt(dim_linear, &pt14,
+              &error);
+  if (!error)
     {
       printf("pt14 of dim_linear : x = %f, y = %f, z = %f\t\n",
               pt14.x, pt14.y, pt14.z);
@@ -258,8 +262,9 @@ api_process(dwg_object *obj)
     }
 
   // returns 12 point
-  dwg_ent_dim_linear_get_12_pt(dim_linear, &pt12,&pt12_error);
-  if(pt12_error == 0 ) // error check
+  dwg_ent_dim_linear_get_12_pt(dim_linear, &pt12,
+              &error);
+  if (!error)
     {
       printf("pt12 of dim_linear : x = %f, y = %f\t\n",
               pt12.x, pt12.y);
@@ -271,8 +276,8 @@ api_process(dwg_object *obj)
 
   // returns mid point of text
   dwg_ent_dim_linear_get_text_mid_pt(dim_linear, &text_mid_pt,
-                                          &mid_pt_error);
-  if(mid_pt_error == 0 ) // error check
+              &error);
+  if (!error)
     {
       printf("text_mid_pt of dim_linear : x = %f, y = %f\t\n",
               text_mid_pt.x, text_mid_pt.y);
@@ -283,8 +288,9 @@ api_process(dwg_object *obj)
     }
 
   // returns user text
-  user_text = dwg_ent_dim_linear_get_user_text(dim_linear, &user_text_error);
-  if(user_text_error == 0 ) // error check
+  user_text = dwg_ent_dim_linear_get_user_text(dim_linear,
+              &error);
+  if (!error)
     {  
       printf("user text of dim_linear : %s\t\n",user_text);
     }
@@ -294,8 +300,9 @@ api_process(dwg_object *obj)
     }
 
   // returns text rotation
-  text_rot = dwg_ent_dim_linear_get_text_rot(dim_linear, &text_rot_error);
-  if(text_rot_error == 0 ) // error check
+  text_rot = dwg_ent_dim_linear_get_text_rot(dim_linear,
+              &error);
+  if (!error)
     {  
       printf(" text rotation of dim_linear : %f\t\n", text_rot);
     }
@@ -305,8 +312,9 @@ api_process(dwg_object *obj)
     }
 
   // returns insert rotation
-  ins_rot = dwg_ent_dim_linear_get_ins_rotation(dim_linear, &ins_rot_error);
-  if(ins_rot_error == 0 ) // error check
+  ins_rot = dwg_ent_dim_linear_get_ins_rotation(dim_linear,
+              &error);
+  if (!error)
     {  
       printf("ins rotation of dim_linear : %f\t\n",ins_rot);
     }
@@ -317,8 +325,8 @@ api_process(dwg_object *obj)
 
   // returns flip arrow 1
   flip_arrow1 = dwg_ent_dim_linear_get_flip_arrow1(dim_linear,
-                &arrow1_error);
-  if(arrow1_error == 0 ) // error check
+              &error);
+  if (!error)
     {  
       printf("arrow1 of dim_linear : %d\t\n",flip_arrow1);
     }
@@ -329,8 +337,8 @@ api_process(dwg_object *obj)
  
   // returns flip arrow 2
   flip_arrow2 = dwg_ent_dim_linear_get_flip_arrow2(dim_linear,
-                &arrow2_error);
-  if(arrow2_error == 0 ) // error check
+              &error);
+  if (!error)
     {  
       printf("arrow2 of dim_linear : %d\t\n",flip_arrow2);
     }
@@ -341,8 +349,8 @@ api_process(dwg_object *obj)
 
   // returns flags1
   flags1 = dwg_ent_dim_linear_get_flags1(dim_linear,
-                &flags1_error);
-  if(arrow2_error == 0 ) // error check
+              &error);
+  if (!error)
     {  
       printf("flags1 of dim_linear : %d\t\n",flags1);
     }
@@ -353,8 +361,8 @@ api_process(dwg_object *obj)
 
   // returns act measurement
   act_measure = dwg_ent_dim_linear_get_act_measurement(dim_linear,
-                &act_error);
-  if(act_error == 0 ) // error check
+              &error);
+  if (!error)
     {  
       printf("act_measurement of dim_linear : %f\t\n",act_measure);
     }
@@ -365,10 +373,10 @@ api_process(dwg_object *obj)
 
   // returns ext line rot 
   ext_line_rot = dwg_ent_dim_linear_get_ext_line_rotation(dim_linear,
-                &ext_line_rot_error);
-  if(ext_line_rot_error == 0 ) // error check
+              &error);
+  if (!error)
     {  
-      printf("ext line rot of dim_linear : ", ext_line_rot);
+      printf("ext line rot of dim_linear : %f\t\n", ext_line_rot);
     }
   else
     {
@@ -376,15 +384,15 @@ api_process(dwg_object *obj)
     }
 
   // returns dim rot 
-  dim_rot = dwg_ent_dim_linear_get_dim_rot(dim_linear, &dim_rot_error);
-  if(dim_rot_error == 0 ) // error check
+  dim_rot = dwg_ent_dim_linear_get_dim_rot(dim_linear,
+              &error);
+  if (!error)
     {  
-      printf("dim rot of dim linear : ", dim_rot);
+      printf("dim rot of dim linear : %f\t\n", dim_rot);
     }
   else
     {
       printf("error in reading dim rot \n");
     }
-
 
 }

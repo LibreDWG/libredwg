@@ -1250,8 +1250,9 @@ DWG_ENTITY_END
 
 #define DECODE_3DSOLID decode_3dsolid(dat, obj, _obj);
 
-inline void decode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj){
-	Dwg_Data* dwg = obj->parent;
+void decode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
+{
+  Dwg_Data* dwg = obj->parent;
   int vcount, rcount, rcount2;
   int i=0;
   int j=0;
@@ -1368,8 +1369,11 @@ inline void decode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* 
 
 #define ENCODE_3DSOLID encode_3dsolid(dat, obj, _obj);
 
-inline void encode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj){
+void encode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
+{
   //TODO Implement-me
+  assert(dat);
+  assert(obj);
 }
 #else
 #define ENCODE_3DSOLID {}

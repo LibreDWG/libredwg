@@ -48,10 +48,10 @@ low_level_process(dwg_object *obj)
   printf("object count for minsert : %ld\t\n", minsert->owned_obj_count);
 
   // prints num rows
-  printf("number of rows for minsert : %ld\t\n", minsert->numrows);
+  printf("number of rows for minsert : %u\t\n", minsert->numrows);
 
   // prints num cols
-  printf("number of columns for minsert : %ld\t\n", minsert->numcols);
+  printf("number of columns for minsert : %u\t\n", minsert->numcols);
 
   // prints col space
   printf("col space for minsert : %f\t\n", minsert->row_spacing);

@@ -22,6 +22,7 @@ output_object(dwg_object* obj){
 void
 low_level_process(dwg_object *obj)
 {
+  int i;
   // casting object to mline entity
   dwg_ent_mline *mline = dwg_object_to_MLINE(obj);
 
@@ -45,8 +46,7 @@ low_level_process(dwg_object *obj)
   // prints number of verts
   printf("number of verts : %ud\t\n", mline->num_verts);
 
-  int i = 0;
-  for (i; i < mline->num_verts; i++)
+  for (i=0; i < mline->num_verts; i++)
     {
       printf("vertex of mline : x = %f, y = %f, z = %f\t\n", 
               mline->verts[i].vertex.x, mline->verts[i].vertex.y,
@@ -58,19 +58,18 @@ low_level_process(dwg_object *obj)
 void
 api_process(dwg_object *obj)
 {
-  int scale_error, just_error, ext_error, base_point_error, num_lines_error,
-      num_verts_error, num_lines, verts_error ; // Error reporting
+  int error;
   float scale;
   char just;
-  unsigned int oc, num_verts;
+  unsigned int i, oc, num_verts, num_lines;
   dwg_point_3d base_point, ext;  //3d_points 
   dwg_ent_mline_vert * verts;
   // casting object to mline entity
   dwg_ent_mline *mline = dwg_object_to_MLINE(obj);
 
   // returns mline scale
-  scale = dwg_ent_mline_get_scale(mline, &scale_error);
-  if(scale_error == 0 ) // Error checking
+  scale = dwg_ent_mline_get_scale(mline, &error);
+  if (!error)
     {  
       printf("scale of mline : %f\t\n",scale);
     }
@@ -80,8 +79,8 @@ api_process(dwg_object *obj)
     }
 
   // returns mline just
-  just = dwg_ent_mline_get_just(mline, &just_error);
-  if(just_error == 0 ) // error checking
+  just = dwg_ent_mline_get_just(mline, &error);
+  if (!error)
     {
       printf("just of mline : %d\t\n",just);
     }
@@ -91,8 +90,8 @@ api_process(dwg_object *obj)
     }
 
   // returns mline extrusion
-  dwg_ent_mline_get_extrusion(mline, &ext,&ext_error);
-  if(ext_error == 0 ) // error checking
+  dwg_ent_mline_get_extrusion(mline, &ext, &error);
+  if (!error)
     {
       printf("extrusion of mline : x = %f, y = %f, z = %f\t\n",
               ext.x, ext.y, ext.z);
@@ -103,8 +102,8 @@ api_process(dwg_object *obj)
     }
 
   // return mline base_point points
-  dwg_ent_mline_get_base_point(mline, &base_point,&base_point_error);
-  if(base_point_error == 0 ) // error checking
+  dwg_ent_mline_get_base_point(mline, &base_point, &error);
+  if (!error)
     {
       printf("base_point of mline : x = %f, y = %f, z = %f\t\n",
               base_point.x, base_point.y, base_point.z);
@@ -115,8 +114,8 @@ api_process(dwg_object *obj)
     }
 
   // returns mline num lines
-  num_lines = dwg_ent_mline_get_num_lines(mline, &num_lines_error);
-  if( num_lines_error == 0 ) // error checking
+  num_lines = dwg_ent_mline_get_num_lines(mline, &error);
+  if (!error)
     {
       printf("num lines of mline : %d\t\n", num_lines);
     }
@@ -126,8 +125,8 @@ api_process(dwg_object *obj)
     }
 
   // returns mline num verts
-  num_verts = dwg_ent_mline_get_num_verts(mline, &num_verts_error);
-  if(num_verts_error == 0 ) // error checking
+  num_verts = dwg_ent_mline_get_num_verts(mline, &error);
+  if (!error)
     {
       printf("num verts of mline : %ud\t\n", num_verts);
     }
@@ -136,11 +135,10 @@ api_process(dwg_object *obj)
       printf("error in reading num verts \n");
     }
 
-  verts = dwg_ent_mline_get_verts(mline, &verts_error);
-  int i = 0;
-  if(verts_error == 0)
+  verts = dwg_ent_mline_get_verts(mline, &error);
+  if (!error)
     {
-      for (i; i < num_verts; i++)
+      for (i=0; i < num_verts; i++)
         {
           printf("vertex of mline : x = %f, y = %f, z = %f\t\n", 
                  verts[i].vertex.x, verts[i].vertex.y, verts[i].vertex.z); 

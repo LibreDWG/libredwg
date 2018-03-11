@@ -15,7 +15,9 @@
     {
       FIELD_HANDLE(layer, 5);
       if (!FIELD_VALUE(isbylayerlt))
-        FIELD_HANDLE(ltype, 5);
+        {
+          FIELD_HANDLE(ltype, 5);
+        }
     }
 
   VERSIONS(R_13,R_14)
@@ -60,3 +62,4 @@
           FIELD_HANDLE(material, ANYCODE);
         }
     }
+

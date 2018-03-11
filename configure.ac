@@ -11,7 +11,7 @@ dnl along with this program.  If not, see <http://www.gnu.org/licenses/>.
 AC_PREREQ([2.61])
 AC_INIT([LibreDWG],[0.4-dev],[libredwg@gnu.org])
 AC_CONFIG_AUX_DIR([build-aux])
-AM_INIT_AUTOMAKE([1.12.2 gnu no-define serial-tests])
+AM_INIT_AUTOMAKE([1.12.2 gnu no-define serial-tests dist-xz])
 
 dnl libretoolize asked me for it
 AC_CONFIG_MACRO_DIR([m4])
@@ -50,8 +50,8 @@ dnl Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS([stdlib.h string.h unistd.h malloc.h])
 
-AC_CHECK_HEADER(dejagnu.h, , [AC_MSG_ERROR(
-[Couldn't find dejagnu.h. Install Dejagnu first] )])
+AC_CHECK_HEADER(dejagnu.h, , [AC_MSG_WARN(
+  [Couldn't find dejagnu.h] )])
 
 # Don't bother testing for libps headers if libps is not available.
 if test yes = "$libredwg_have_libps" ; then
@@ -79,6 +79,7 @@ AC_ARG_ENABLE([write],[AS_HELP_STRING([--enable-write],[
     Enable write support (default: no).])],[
   AC_DEFINE([USE_WRITE],1,[Define to 1 to enable write support.])
 ])
+AM_CONDITIONAL([USE_WRITE], [test -n "$enable_write"])
 
 dnl Test support.
 AM_CONDITIONAL([HAVE_LIBPS],[test yes = "$libredwg_have_libps" &&

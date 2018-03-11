@@ -34,6 +34,10 @@ libredwg_la_LDFLAGS = \
 include_HEADERS = dwg.h \
 		dwg_api.h
 
+.c.i:
+	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
+	$(COMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -E -o $@ $<
+
 EXTRA_DIST = \
 	dwg.spec \
         header_variables.spec \
@@ -45,6 +49,12 @@ EXTRA_DIST = \
 	encode.h \
 	logging.h \
         print.h
+
+# emacs flymake-mode
+check-syntax:
+	test -n "$(CHK_SOURCES)" && \
+	  $(COMPILE) -o /dev/null -S $(CHK_SOURCES)
+.PHONY: check-syntax
 
 #check_PROGRAMS = test testsvg
 

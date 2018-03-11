@@ -275,8 +275,17 @@ dwg_decode_header_variables(Bit_Chain* dat, Dwg_Data * dwg);
 static void
 resolve_objectref_vector(Dwg_Data * dwg);
 
-int decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg); // froward
-int read_r2007_meta_data(Bit_Chain *dat, Dwg_Data *dwg);
+static int
+decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg);
+
+static int
+decode_R2004(Bit_Chain* dat, Dwg_Data * dwg);
+
+static int
+decode_R2007(Bit_Chain* dat, Dwg_Data * dwg);
+
+int
+read_r2007_meta_data(Bit_Chain *dat, Dwg_Data *dwg);
 
 /*--------------------------------------------------------------------------------
  * Public variables
@@ -286,6 +295,7 @@ long unsigned int ktl_lastaddress;
 /*--------------------------------------------------------------------------------
  * Public function definitions
  */
+
 int
 dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
 {
@@ -373,7 +383,7 @@ dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
   return -1;
 }
 
-int
+static int
 decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
 {
   unsigned char sig;
@@ -1478,7 +1488,7 @@ read_2004_section_handles(Bit_Chain* dat, Dwg_Data *dwg)
   free(obj_dat.chain);
 }
 
-int
+static int
 decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
 {
   /* Encripted Data */
@@ -1772,7 +1782,7 @@ decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
   return 0;
 }
 
-int
+static int
 decode_R2007(Bit_Chain* dat, Dwg_Data * dwg)
 {
   int i;
@@ -1908,7 +1918,7 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
     }
 
   ent->extended_size = 0;
-  while (size = bit_read_BS(dat))
+  while ((size = bit_read_BS(dat)))
     {
       LOG_TRACE("EED size: %lu\n", (long unsigned int)size)
       if (size > 10210)
@@ -1998,7 +2008,7 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
               if (flags & 0x8000)
                 {
                   unsigned char c1, c2, c3, c4;
-                  char *name=0;
+                  char *name = 0;
               
                   c1 = bit_read_RC(dat);  // rgb color
                   c2 = bit_read_RC(dat);
@@ -2073,7 +2083,7 @@ dwg_decode_object(Bit_Chain * dat, Dwg_Object_Object * ord)
       return -1;
     }
   ord->extended_size = 0;
-  while (size = bit_read_BS(dat))
+  while ((size = bit_read_BS(dat)))
     {
       if (size > 10210)
         {

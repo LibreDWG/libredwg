@@ -1,239 +1,246 @@
-#include "dwg_api.h"
-#include "dwg.h"
+#include <stdlib.h>
+#include <math.h>
 #ifdef HAVE_MALLOC_H
 #include <malloc.h>
 #endif
 
+#include "dwg_api.h"
+#include "dwg.h"
+#include "logging.h"
+
 /*******************************************************************
-*        Functions created from macro to extract entities           *
-********************************************************************/
+ *        Functions created from macro to extract entities           *
+ ********************************************************************/
 
 /// Macro call to extract all text entities from a block
-GET_DWG_ENTITY(TEXT);
+GET_DWG_ENTITY(TEXT)
 /// Macro call to extract all attrib entities from a block
-GET_DWG_ENTITY(ATTRIB);
+GET_DWG_ENTITY(ATTRIB)
 /// Macro call to extract all attdef entities from a block
-GET_DWG_ENTITY(ATTDEF);
+GET_DWG_ENTITY(ATTDEF)
 /// Macro call to extract all block entities from a block
-GET_DWG_ENTITY(BLOCK);
+GET_DWG_ENTITY(BLOCK)
 /// Macro call to extract endblk entity from a block
-GET_DWG_ENTITY(ENDBLK);
+GET_DWG_ENTITY(ENDBLK)
 /// Macro call to extract all seqend entities from a block
-GET_DWG_ENTITY(SEQEND);
+GET_DWG_ENTITY(SEQEND)
 /// Macro call to extract all insert entities from a block
-GET_DWG_ENTITY(INSERT);
+GET_DWG_ENTITY(INSERT)
 /// Macro call to extract all minsert entities from a block
-GET_DWG_ENTITY(MINSERT);
+GET_DWG_ENTITY(MINSERT)
 /// Macro call to extract all vertex_2d entities from a block
-GET_DWG_ENTITY(VERTEX_2D);
+GET_DWG_ENTITY(VERTEX_2D)
 /// Macro call to extract all vertex_3d entities from a block
-GET_DWG_ENTITY(VERTEX_3D);
+GET_DWG_ENTITY(VERTEX_3D)
 /// Macro call to extract all vertex_mesh entities from a block
-GET_DWG_ENTITY(VERTEX_MESH);
+GET_DWG_ENTITY(VERTEX_MESH)
 /// Macro call to extract all vertex_pface entities from a block
-GET_DWG_ENTITY(VERTEX_PFACE);
+GET_DWG_ENTITY(VERTEX_PFACE)
 /// Macro call to extract all vertex_pface_face entities from a block
-GET_DWG_ENTITY(VERTEX_PFACE_FACE);
+GET_DWG_ENTITY(VERTEX_PFACE_FACE)
 /// Macro call to extract all polyline_2d entities from a block
-GET_DWG_ENTITY(POLYLINE_2D);
+GET_DWG_ENTITY(POLYLINE_2D)
 /// Macro call to extract all polyline_3d entities from a block
-GET_DWG_ENTITY(POLYLINE_3D);
+GET_DWG_ENTITY(POLYLINE_3D)
 /// Macro call to extract all arc entities from a block
-GET_DWG_ENTITY(ARC);
+GET_DWG_ENTITY(ARC)
 /// Macro call to extract all circle entities from a block
-GET_DWG_ENTITY(CIRCLE);
+GET_DWG_ENTITY(CIRCLE)
 /// Macro call to extract all line entities from a block
-GET_DWG_ENTITY(LINE);
+  GET_DWG_ENTITY(LINE)
 /// Macro call to extract all dimension ordinate entities from a block
-GET_DWG_ENTITY(DIMENSION_ORDINATE);
+GET_DWG_ENTITY(DIMENSION_ORDINATE)
 /// Macro call to extract all dimension linear entities from a block
-GET_DWG_ENTITY(DIMENSION_LINEAR);
+GET_DWG_ENTITY(DIMENSION_LINEAR)
 /// Macro call to extract all dimension aligned entities from a block
-GET_DWG_ENTITY(DIMENSION_ALIGNED);
+GET_DWG_ENTITY(DIMENSION_ALIGNED)
 /// Macro call to extract all dimension ang3pt entities from a block
-GET_DWG_ENTITY(DIMENSION_ANG3PT);
+GET_DWG_ENTITY(DIMENSION_ANG3PT)
 /// Macro call to extract all dimension ang2ln entities from a block
-GET_DWG_ENTITY(DIMENSION_ANG2LN);
+GET_DWG_ENTITY(DIMENSION_ANG2LN)
 /// Macro call to extract all dimension radius entities from a block
-GET_DWG_ENTITY(DIMENSION_RADIUS);
+GET_DWG_ENTITY(DIMENSION_RADIUS)
 /// Macro call to extract all dimension diameter entities from a block
-GET_DWG_ENTITY(DIMENSION_DIAMETER);
+GET_DWG_ENTITY(DIMENSION_DIAMETER)
 /// Macro call to extract all points entities from a block
-GET_DWG_ENTITY(POINT);
+GET_DWG_ENTITY(POINT)
 /// Macro call to extract all polyline_pface entities from a block
-GET_DWG_ENTITY(POLYLINE_PFACE);
+GET_DWG_ENTITY(POLYLINE_PFACE)
 /// Macro call to extract all polyline_mesh entities from a block
-GET_DWG_ENTITY(POLYLINE_MESH);
+GET_DWG_ENTITY(POLYLINE_MESH)
 /// Macro call to extract all solid entities from a block
-GET_DWG_ENTITY(SOLID);
+GET_DWG_ENTITY(SOLID)
 /// Macro call to extract all trace entities from a block
-GET_DWG_ENTITY(TRACE);
+GET_DWG_ENTITY(TRACE)
 /// Macro call to extract all shape entities from a block
-GET_DWG_ENTITY(SHAPE);
+GET_DWG_ENTITY(SHAPE)
 /// Macro call to extract all viewport entities from a block
-GET_DWG_ENTITY(VIEWPORT);
+GET_DWG_ENTITY(VIEWPORT)
 /// Macro call to extract all ellipse entities from a block
-GET_DWG_ENTITY(ELLIPSE);
+GET_DWG_ENTITY(ELLIPSE)
 /// Macro call to extract all spline entities from a block
-GET_DWG_ENTITY(SPLINE);
+GET_DWG_ENTITY(SPLINE)
 /// Macro call to extract all region entities from a block
-GET_DWG_ENTITY(REGION);
+GET_DWG_ENTITY(REGION)
 /// Macro call to extract all body entities from a block
-GET_DWG_ENTITY(BODY);
+GET_DWG_ENTITY(BODY)
 /// Macro call to extract all ray entities from a block
-GET_DWG_ENTITY(RAY);
+GET_DWG_ENTITY(RAY)
 /// Macro call to extract all xline entities from a block
-GET_DWG_ENTITY(XLINE);
+GET_DWG_ENTITY(XLINE)
 /// Macro call to extract all mtext entities from a block
-GET_DWG_ENTITY(MTEXT);
+GET_DWG_ENTITY(MTEXT)
 /// Macro call to extract all leader entities from a block
-GET_DWG_ENTITY(LEADER);
+GET_DWG_ENTITY(LEADER)
 /// Macro call to extract all tolerance entities from a block
-GET_DWG_ENTITY(TOLERANCE);
+GET_DWG_ENTITY(TOLERANCE)
 /// Macro call to extract all mline entities from a block
-GET_DWG_ENTITY(MLINE);
+GET_DWG_ENTITY(MLINE)
 /// Macro call to extract all lwpline entities from a block
-GET_DWG_ENTITY(LWPLINE);
+GET_DWG_ENTITY(LWPLINE)
 /// Macro call to extract all hatch entities from a block
-GET_DWG_ENTITY(HATCH);
+GET_DWG_ENTITY(HATCH)
 
 /*******************************************************************
-*     Functions created from macro to cast dwg_object to entity     *
-*                 Usage :- dwg_object_to_ENTITY(),                  *
-*                where ENTITY can be LINE or CIRCLE                 *
-********************************************************************/
+ *     Functions created from macro to cast dwg_object to entity     *
+ *                 Usage :- dwg_object_to_ENTITY(),                  *
+ *                where ENTITY can be LINE or CIRCLE                 *
+ ********************************************************************/
 
 /// Macro call to cast dwg object to text
-CAST_DWG_OBJECT_TO_ENTITY(TEXT);
+CAST_DWG_OBJECT_TO_ENTITY(TEXT)
 /// Macro call to cast dwg object to attrib
-CAST_DWG_OBJECT_TO_ENTITY(ATTRIB);
+CAST_DWG_OBJECT_TO_ENTITY(ATTRIB)
 /// Macro call to cast dwg object to attdef
-CAST_DWG_OBJECT_TO_ENTITY(ATTDEF);
+CAST_DWG_OBJECT_TO_ENTITY(ATTDEF)
 /// Macro call to cast dwg object to block
-CAST_DWG_OBJECT_TO_ENTITY(BLOCK);
+CAST_DWG_OBJECT_TO_ENTITY(BLOCK)
 /// Macro call to extract endblk entity from a block
-CAST_DWG_OBJECT_TO_ENTITY(ENDBLK);
+CAST_DWG_OBJECT_TO_ENTITY(ENDBLK)
 /// Macro call to cast dwg object to seqend
-CAST_DWG_OBJECT_TO_ENTITY(SEQEND);
+CAST_DWG_OBJECT_TO_ENTITY(SEQEND)
 /// Macro call to cast dwg object to insert
-CAST_DWG_OBJECT_TO_ENTITY(INSERT);
+CAST_DWG_OBJECT_TO_ENTITY(INSERT)
 /// Macro call to cast dwg object to minsert
-CAST_DWG_OBJECT_TO_ENTITY(MINSERT);
+CAST_DWG_OBJECT_TO_ENTITY(MINSERT)
 /// Macro call to cast dwg object to vertex_2d
-CAST_DWG_OBJECT_TO_ENTITY(VERTEX_2D);
+CAST_DWG_OBJECT_TO_ENTITY(VERTEX_2D)
 /// Macro call to cast dwg object to vertex_3d
-CAST_DWG_OBJECT_TO_ENTITY(VERTEX_3D);
+CAST_DWG_OBJECT_TO_ENTITY(VERTEX_3D)
 /// Macro call to cast dwg object to vertex_mesh
-CAST_DWG_OBJECT_TO_ENTITY(VERTEX_MESH);
+CAST_DWG_OBJECT_TO_ENTITY(VERTEX_MESH)
 /// Macro call to cast dwg object to vertex_pface
-CAST_DWG_OBJECT_TO_ENTITY(VERTEX_PFACE);
+CAST_DWG_OBJECT_TO_ENTITY(VERTEX_PFACE)
 /// Macro call to cast dwg object to vertex_pface_face
-CAST_DWG_OBJECT_TO_ENTITY(VERTEX_PFACE_FACE);
+CAST_DWG_OBJECT_TO_ENTITY(VERTEX_PFACE_FACE)
 /// Macro call to cast dwg object to polyline_2d
-CAST_DWG_OBJECT_TO_ENTITY(POLYLINE_2D);
+CAST_DWG_OBJECT_TO_ENTITY(POLYLINE_2D)
 /// Macro call to cast dwg object to polyline_3d
-CAST_DWG_OBJECT_TO_ENTITY(POLYLINE_3D);
+CAST_DWG_OBJECT_TO_ENTITY(POLYLINE_3D)
 /// Macro call to cast dwg object to arc
-CAST_DWG_OBJECT_TO_ENTITY(ARC);
+CAST_DWG_OBJECT_TO_ENTITY(ARC)
 /// Macro call to cast dwg object to circle
-CAST_DWG_OBJECT_TO_ENTITY(CIRCLE);
+CAST_DWG_OBJECT_TO_ENTITY(CIRCLE)
 /// Macro call to cast dwg object to line
-CAST_DWG_OBJECT_TO_ENTITY(LINE);
+CAST_DWG_OBJECT_TO_ENTITY(LINE)
 /// Macro call to cast dwg object to dimension ordinate
-CAST_DWG_OBJECT_TO_ENTITY(DIMENSION_ORDINATE);
+CAST_DWG_OBJECT_TO_ENTITY(DIMENSION_ORDINATE)
 /// Macro call to cast dwg object to dimension linear
-CAST_DWG_OBJECT_TO_ENTITY(DIMENSION_LINEAR);
+CAST_DWG_OBJECT_TO_ENTITY(DIMENSION_LINEAR)
 /// Macro call to cast dwg object to dimension aligned
-CAST_DWG_OBJECT_TO_ENTITY(DIMENSION_ALIGNED);
+CAST_DWG_OBJECT_TO_ENTITY(DIMENSION_ALIGNED)
 /// Macro call to cast dwg object to dimension ang3pt
-CAST_DWG_OBJECT_TO_ENTITY(DIMENSION_ANG3PT);
+CAST_DWG_OBJECT_TO_ENTITY(DIMENSION_ANG3PT)
 /// Macro call to cast dwg object to dimension ang2ln
-CAST_DWG_OBJECT_TO_ENTITY(DIMENSION_ANG2LN);
+CAST_DWG_OBJECT_TO_ENTITY(DIMENSION_ANG2LN)
 /// Macro call to cast dwg object to dimension radius
-CAST_DWG_OBJECT_TO_ENTITY(DIMENSION_RADIUS);
+CAST_DWG_OBJECT_TO_ENTITY(DIMENSION_RADIUS)
 /// Macro call to cast dwg object to dimension diameter
-CAST_DWG_OBJECT_TO_ENTITY(DIMENSION_DIAMETER);
+CAST_DWG_OBJECT_TO_ENTITY(DIMENSION_DIAMETER)
 /// Macro call to cast dwg object to points
-CAST_DWG_OBJECT_TO_ENTITY(POINT);
+CAST_DWG_OBJECT_TO_ENTITY(POINT)
 /// Macro call to cast dwg object to polyline_pface
-CAST_DWG_OBJECT_TO_ENTITY(POLYLINE_PFACE);
+CAST_DWG_OBJECT_TO_ENTITY(POLYLINE_PFACE)
 /// Macro call to cast dwg object to polyline_mesh
-CAST_DWG_OBJECT_TO_ENTITY(POLYLINE_MESH);
+CAST_DWG_OBJECT_TO_ENTITY(POLYLINE_MESH)
 /// Macro call to cast dwg object to solid
-CAST_DWG_OBJECT_TO_ENTITY(SOLID);
+CAST_DWG_OBJECT_TO_ENTITY(SOLID)
 /// Macro call to cast dwg object to trace
-CAST_DWG_OBJECT_TO_ENTITY(TRACE);
+CAST_DWG_OBJECT_TO_ENTITY(TRACE)
 /// Macro call to cast dwg object to shape
-CAST_DWG_OBJECT_TO_ENTITY(SHAPE);
+CAST_DWG_OBJECT_TO_ENTITY(SHAPE)
 /// Macro call to cast dwg object to viewport
-CAST_DWG_OBJECT_TO_ENTITY(VIEWPORT);
+CAST_DWG_OBJECT_TO_ENTITY(VIEWPORT)
 /// Macro call to cast dwg object to ellipse
-CAST_DWG_OBJECT_TO_ENTITY(ELLIPSE);
+CAST_DWG_OBJECT_TO_ENTITY(ELLIPSE)
 /// Macro call to cast dwg object to spline
-CAST_DWG_OBJECT_TO_ENTITY(SPLINE);
+CAST_DWG_OBJECT_TO_ENTITY(SPLINE)
 /// Macro call to cast dwg object to region
-CAST_DWG_OBJECT_TO_ENTITY(REGION);
+CAST_DWG_OBJECT_TO_ENTITY(REGION)
 /// Macro call to cast dwg object to body
-CAST_DWG_OBJECT_TO_ENTITY(BODY);
+CAST_DWG_OBJECT_TO_ENTITY(BODY)
 /// Macro call to cast dwg object to ray
-CAST_DWG_OBJECT_TO_ENTITY(RAY);
+CAST_DWG_OBJECT_TO_ENTITY(RAY)
 /// Macro call to cast dwg object to xline
-CAST_DWG_OBJECT_TO_ENTITY(XLINE);
+CAST_DWG_OBJECT_TO_ENTITY(XLINE)
 /// Macro call to cast dwg object to mtext
-CAST_DWG_OBJECT_TO_ENTITY(MTEXT);
+CAST_DWG_OBJECT_TO_ENTITY(MTEXT)
 /// Macro call to cast dwg object to leader
-CAST_DWG_OBJECT_TO_ENTITY(LEADER);
+CAST_DWG_OBJECT_TO_ENTITY(LEADER)
 /// Macro call to cast dwg object to tolerance
-CAST_DWG_OBJECT_TO_ENTITY(TOLERANCE);
+CAST_DWG_OBJECT_TO_ENTITY(TOLERANCE)
 /// Macro call to cast dwg object to mline
-CAST_DWG_OBJECT_TO_ENTITY(MLINE);
+CAST_DWG_OBJECT_TO_ENTITY(MLINE)
 /// Macro call to cast dwg object to lwpline
-CAST_DWG_OBJECT_TO_ENTITY(LWPLINE);
+CAST_DWG_OBJECT_TO_ENTITY(LWPLINE)
 /// Macro call to cast dwg object to hatch
-CAST_DWG_OBJECT_TO_ENTITY(HATCH);
+CAST_DWG_OBJECT_TO_ENTITY(HATCH)
 
 
 /*******************************************************************
-*     Functions created from macro to cast dwg object to object     *
-*                 Usage :- dwg_object_to_OBJECT(),                  *
-*            where OBJECT can be LAYER or BLOCK_HEADER              *
-********************************************************************/
+ *     Functions created from macro to cast dwg object to object     *
+ *                 Usage :- dwg_object_to_OBJECT(),                  *
+ *            where OBJECT can be LAYER or BLOCK_HEADER              *
+ ********************************************************************/
 /// Macro call to cast dwg object to block header
-CAST_DWG_OBJECT_TO_OBJECT(BLOCK_HEADER);
+CAST_DWG_OBJECT_TO_OBJECT(BLOCK_HEADER)
 /// Macro call to cast dwg object to block control
-CAST_DWG_OBJECT_TO_OBJECT(BLOCK_CONTROL);
+CAST_DWG_OBJECT_TO_OBJECT(BLOCK_CONTROL)
 /// Macro call to cast dwg object to layer
-CAST_DWG_OBJECT_TO_OBJECT(LAYER);
+CAST_DWG_OBJECT_TO_OBJECT(LAYER)
 
 /*******************************************************************
-*                FUNCTIONS START HERE ENTITY SPECIFIC               *
-********************************************************************/
+ *                FUNCTIONS START HERE ENTITY SPECIFIC               *
+ ********************************************************************/
 
 /*******************************************************************
-*                    FUNCTIONS FOR CIRCLE ENTITY                    *
-********************************************************************/
+ *                    FUNCTIONS FOR CIRCLE ENTITY                    *
+ ********************************************************************/
 
 /// This function creates and returns a new circle entity with default  values.
 /** Usage : dwg_ent_circle_new();
-*/
+ */
 dwg_ent_circle *
 dwg_ent_circle_new(int *error)
 {
-  dwg_ent_circle *circle = (dwg_ent_circle*) 
-  malloc(sizeof(Dwg_Entity_CIRCLE));
-    if(circle != 0)
-      {
-        *error = 0;
-        return dwg_ent_circle_init(circle);        
-      }
-    else
+  dwg_ent_circle *circle = (dwg_ent_circle*)malloc(sizeof(Dwg_Entity_CIRCLE));
+  if (circle != 0)
+    {
+      *error = 0;
+      return dwg_ent_circle_init(circle);
+    }
+  else
+    {
+      LOG_ERROR("%s: empty circle", __FUNCTION__)
       *error = 1;
+      return NULL;
+    }
 }
 
 /// This function frees the memory allocated by the dwg_ent_circle_new() function.
 /** Usage :- dwg_ent_circle_delete();
-*/
-void 
+ */
+void
 dwg_ent_circle_delete(dwg_ent_circle *circle, int *error)
 {
   if (circle != 0)
@@ -242,12 +249,15 @@ dwg_ent_circle_delete(dwg_ent_circle *circle, int *error)
       free(circle);
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty circle", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// This function initialises a new circle entity with default values.
 /** Usage :- dwg_ent_circle_init(circle);
-where circle is a pointer of dwg_ent_circle type
+    where circle is a pointer of dwg_ent_circle type
 */
 dwg_ent_circle *
 dwg_ent_circle_init(dwg_ent_circle *circle)
@@ -261,20 +271,24 @@ dwg_ent_circle_init(dwg_ent_circle *circle)
       circle->extrusion.x = circle->extrusion.y = 0.0;
       circle->extrusion.z = 0.0;
     }
+  else
+    {
+      LOG_ERROR("%s: empty circle", __FUNCTION__)
+        }
   return circle;
 }
 
 /// Returns the center values of circle to second argument.
 /** Usage : dwg_ent_circle_get_center(circle, &point, &error);
-\param 1 dwg_ent_circle
-\param 2 dwg_point_3d
-\param 3 int
+    \param 1 dwg_ent_circle
+    \param 2 dwg_point_3d
+    \param 3 int
 */
 void
-dwg_ent_circle_get_center(dwg_ent_circle *circle, dwg_point_3d *point, 
+dwg_ent_circle_get_center(dwg_ent_circle *circle, dwg_point_3d *point,
                           int *error)
 {
-  if(point != 0 && circle != 0)
+  if (point != 0 && circle != 0)
     {
       *error = 0;
       point->x = circle->center.x;
@@ -282,20 +296,23 @@ dwg_ent_circle_get_center(dwg_ent_circle *circle, dwg_point_3d *point,
       point->z = circle->center.z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty point or circle", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// sets the center values of circle.
 /** Usage : dwg_ent_circle_set_center(circle, &point, &error);
-\param 1 dwg_ent_circle
-\param 2 dwg_point_3d
-\param 3 int
+    \param 1 dwg_ent_circle
+    \param 2 dwg_point_3d
+    \param 3 int
 */
 void
 dwg_ent_circle_set_center(dwg_ent_circle *circle, dwg_point_3d *point,
                           int *error)
 {
-  if(point != 0 && circle != 0)
+  if (point != 0 && circle != 0)
     {
       *error = 0;
       circle->center.x = point->x;
@@ -303,90 +320,107 @@ dwg_ent_circle_set_center(dwg_ent_circle *circle, dwg_point_3d *point,
       circle->center.z = point->z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty point or circle", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// returns the circle radius.
 /** Usage : double radius = dwg_ent_circle_get_radius(circle, &error);
-\param 1 dwg_ent_circle
-\param 2 int
+    \param 1 dwg_ent_circle
+    \param 2 int
 */
 double
 dwg_ent_circle_get_radius(dwg_ent_circle *circle, int *error)
 {
-  if(circle != 0)
+  if (circle != 0)
     {
       *error = 0;
       return circle->radius;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty circle", __FUNCTION__)
+      *error = 1;
+      return nan("");
+    }
 }
 
 /// sets the circle radius.
 /** Usage : dwg_ent_circle_set_radius(circle, radius, &error);
-\param 1 dwg_ent_circle
-\param 2 double
-\param 3 int
+    \param 1 dwg_ent_circle
+    \param 2 double
+    \param 3 int
 */
 void
 dwg_ent_circle_set_radius(dwg_ent_circle *circle, double radius, int *error)
 {
-  if(circle != 0)
+  if (circle != 0)
     {
       *error = 0;
       circle->radius = radius;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty circle", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// returns the circle thickness.
 /** Usage : double thickness = dwg_ent_circle_get_thickness(circle, &error);
-\param 1 dwg_ent_circle
-\param 2 int
+    \param 1 dwg_ent_circle
+    \param 2 int
 */
 double
 dwg_ent_circle_get_thickness(dwg_ent_circle *circle, int *error)
 {
-  if(circle != 0)
+  if (circle != 0)
     {
       *error = 0;
       return circle->thickness;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty circle", __FUNCTION__)
+      *error = 1;
+      return nan("");
+    }
 }
 
 /// sets the circle thickness.
 /** Usage : dwg_ent_circle_set_thickness(circle, thickness, &error);
-\param 1 dwg_ent_circle
-\param 2 int
+    \param 1 dwg_ent_circle
+    \param 2 int
 */
 void
 dwg_ent_circle_set_thickness(dwg_ent_circle *circle, double thickness,
                              int *error)
 {
-  if(circle != 0)
+  if (circle != 0)
     {
       *error = 0;
       circle->thickness = thickness;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty circle", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// returns extrusion value of circle.
 /** Usage : dwg_ent_circle_get_extrusion(circle, &point, &error);
-\param 1 dwg_ent_circle
-\param 2 dwg_point_3d
-\param 3 int
+    \param 1 dwg_ent_circle
+    \param 2 dwg_point_3d
+    \param 3 int
 */
 void
 dwg_ent_circle_set_extrusion(dwg_ent_circle *circle, dwg_point_3d *vector,
                              int *error)
 {
-  if(circle != 0)
+  if (circle != 0 && vector != 0)
     {
       *error = 0;
       circle->extrusion.x = vector->x;
@@ -394,20 +428,23 @@ dwg_ent_circle_set_extrusion(dwg_ent_circle *circle, dwg_point_3d *vector,
       circle->extrusion.z = vector->z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty circle", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// sets extrusion value of circle.
 /** Usage : dwg_ent_circle_set_extrusion(circle, &point, &error);
-\param 1 dwg_ent_circle
-\param 2 dwg_point_3d
-\param 3 int
+    \param 1 dwg_ent_circle
+    \param 2 dwg_point_3d
+    \param 3 int
 */
 void
 dwg_ent_circle_get_extrusion(dwg_ent_circle *circle, dwg_point_3d *vector,
                              int *error)
 {
-  if(circle != 0)
+  if (circle != 0 && vector != 0)
     {
       *error = 0;
       vector->x = circle->extrusion.x;
@@ -415,34 +452,40 @@ dwg_ent_circle_get_extrusion(dwg_ent_circle *circle, dwg_point_3d *vector,
       vector->z = circle->extrusion.z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty circle", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /*******************************************************************
-*                    FUNCTIONS FOR LINE ENTITY                      *
-********************************************************************/
+ *                    FUNCTIONS FOR LINE ENTITY                      *
+ ********************************************************************/
 
 /// This function creates a new entity of line.
 /** Usage :- dwg_ent_line_new();
-*/
+ */
 dwg_ent_line *
 dwg_ent_line_new(int *error)
 {
-  dwg_ent_line *line = (dwg_ent_line*) 
-  malloc(sizeof(Dwg_Entity_LINE));
-    if(line != 0)
-      {
-        *error = 0;
-        return dwg_ent_line_init(line);
-      }
-    else
+  dwg_ent_line *line = (dwg_ent_line*) malloc(sizeof(Dwg_Entity_LINE));
+  if (line != 0)
+    {
+      *error = 0;
+      return dwg_ent_line_init(line);
+    }
+  else
+    {
+      LOG_ERROR("%s: empty line", __FUNCTION__)
       *error = 1;
+      return NULL;
+    }
 }
 
 /// This function deletes the entity created using dwg_ent_line_new() function and frees the allocated memory.
 /** Usage :- dwg_ent_line_delete();
-*/
-void 
+ */
+void
 dwg_ent_line_delete(dwg_ent_line *line, int *error)
 {
   if (line != 0)
@@ -451,12 +494,15 @@ dwg_ent_line_delete(dwg_ent_line *line, int *error)
       free(line);
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty line", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// This function initialises a line entity with default or zero values.
 /** Usage :- dwg_ent_line_init();
-*/
+ */
 dwg_ent_line *
 dwg_ent_line_init(dwg_ent_line *line)
 {
@@ -465,17 +511,21 @@ dwg_ent_line_init(dwg_ent_line *line)
       line->start.x     = line->start.y = line->start.z = 0.0;
       line->end.x       = line->end.y = line->end.z = 0.0;
       line->thickness   = 0.0;
-      line->extrusion.x = line->extrusion.y = 0.0; 
+      line->extrusion.x = line->extrusion.y = 0.0;
       line->extrusion.z = 0.0;
     }
+  else
+    {
+      LOG_ERROR("%s: empty line", __FUNCTION__)
+        }
   return line;
 }
 
 /// returns line start points.
 /** Usage : dwg_ent_line_get_start_point(line, &start_points, &error);
-\param 1 dwg_ent_line
-\param 2 dwg_point_2d
-\param 3 int
+    \param 1 dwg_ent_line
+    \param 2 dwg_point_2d
+    \param 3 int
 */
 void
 dwg_ent_line_get_start_point(dwg_ent_line *line, dwg_point_3d *point,
@@ -489,14 +539,17 @@ dwg_ent_line_get_start_point(dwg_ent_line *line, dwg_point_3d *point,
       point->z = line->start.z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty line", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// sets line start points.
 /** Usage : dwg_ent_line_set_start_point(line, &start_points, &error);
-\param 1 dwg_ent_line
-\param 2 dwg_point_2d
-\param 3 int
+    \param 1 dwg_ent_line
+    \param 2 dwg_point_2d
+    \param 3 int
 */
 void
 dwg_ent_line_set_start_point(dwg_ent_line *line, dwg_point_3d *point,
@@ -510,17 +563,20 @@ dwg_ent_line_set_start_point(dwg_ent_line *line, dwg_point_3d *point,
       line->start.z = point->z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty line", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// returns line end points.
 /** Usage : dwg_ent_line_get_start_end(line, &end_points, &error);
-\param 1 dwg_ent_line
-\param 2 dwg_point_2d
-\param 3 int
+    \param 1 dwg_ent_line
+    \param 2 dwg_point_2d
+    \param 3 int
 */
 void
-dwg_ent_line_get_end_point(dwg_ent_line *line, dwg_point_3d *point, 
+dwg_ent_line_get_end_point(dwg_ent_line *line, dwg_point_3d *point,
                            int *error)
 {
   if (line != 0)
@@ -531,17 +587,20 @@ dwg_ent_line_get_end_point(dwg_ent_line *line, dwg_point_3d *point,
       point->z = line->end.z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty line", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// sets line end points.
 /** Usage : dwg_ent_line_set_start_end(line, &end_points, &error);
-\param 1 dwg_ent_line
-\param 2 dwg_point_2d
-\param 3 int
+    \param 1 dwg_ent_line
+    \param 2 dwg_point_2d
+    \param 3 int
 */
 void
-dwg_ent_line_set_end_point(dwg_ent_line *line, dwg_point_3d *point, 
+dwg_ent_line_set_end_point(dwg_ent_line *line, dwg_point_3d *point,
                            int *error)
 {
   if (line != 0)
@@ -552,13 +611,16 @@ dwg_ent_line_set_end_point(dwg_ent_line *line, dwg_point_3d *point,
       line->end.z = point->z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty line", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns line thickness.
 /** Usage : double thickness = dwg_ent_line_get_thickness(line, &error);
-\param 1 dwg_ent_line
-\param 2 int
+    \param 1 dwg_ent_line
+    \param 2 int
 */
 double
 dwg_ent_line_get_thickness(dwg_ent_line *line, int *error)
@@ -569,14 +631,18 @@ dwg_ent_line_get_thickness(dwg_ent_line *line, int *error)
       return line->thickness;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty line", __FUNCTION__)
+      *error = 1;
+      return nan("");
+    }
 }
 
 /// Sets line thickness.
 /** Usage : dwg_ent_line_get_thickness(line, thickness, &error);
-\param 1 dwg_ent_line
-\param 2 double
-\param 3 int
+    \param 1 dwg_ent_line
+    \param 2 double
+    \param 3 int
 */
 void
 dwg_ent_line_set_thickness(dwg_ent_line *line, double thickness, int *error)
@@ -587,20 +653,23 @@ dwg_ent_line_set_thickness(dwg_ent_line *line, double thickness, int *error)
       line->thickness = thickness;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty line", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// returns line extrusion.
 /** Usage : dwg_ent_line_get_extrusion(line, &ext_points, &error);
-\param 1 dwg_ent_line
-\param 2 dwg_point_3d
-\param 3 int
+    \param 1 dwg_ent_line
+    \param 2 dwg_point_3d
+    \param 3 int
 */
 void
 dwg_ent_line_get_extrusion(dwg_ent_line *line, dwg_point_3d *vector,
                            int *error)
 {
-  if (line != 0)
+  if (line != 0 && vector != 0)
     {
       *error = 0;
       vector->x = line->extrusion.x;
@@ -608,20 +677,23 @@ dwg_ent_line_get_extrusion(dwg_ent_line *line, dwg_point_3d *vector,
       vector->z = line->extrusion.z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty vector or line", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// sets line extrusion.
 /** Usage : dwg_ent_line_set_extrusion(line, &ext_points, &error);
-\param 1 dwg_ent_line
-\param 2 dwg_point_3d
-\param 3 int
+    \param 1 dwg_ent_line
+    \param 2 dwg_point_3d
+    \param 3 int
 */
 void
 dwg_ent_line_set_extrusion(dwg_ent_line *line, dwg_point_3d *vector,
                            int *error)
 {
-  if (line != 0)
+  if (line != 0 && vector != 0)
     {
       *error = 0;
       line->extrusion.x = vector->x;
@@ -629,33 +701,40 @@ dwg_ent_line_set_extrusion(dwg_ent_line *line, dwg_point_3d *vector,
       line->extrusion.z = vector->z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty vector or line", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /*******************************************************************
-*                    FUNCTIONS FOR ARC ENTITY                       *
-********************************************************************/
+ *                    FUNCTIONS FOR ARC ENTITY                       *
+ ********************************************************************/
 
 /// This function creates a new entity of arc type.
 /** Usage :- dwg_ent_arc_new();
-*/
+ */
 dwg_ent_arc *
 dwg_ent_arc_new(int *error)
 {
   dwg_ent_arc *arc = (dwg_ent_arc*) malloc(sizeof(Dwg_Entity_ARC));
-    if (arc != 0)
-      {
-        *error = 0;
-        return dwg_ent_arc_init(arc);
-      }
-    else
+  if (arc != 0)
+    {
+      *error = 0;
+      return dwg_ent_arc_init(arc);
+    }
+  else
+    {
+      LOG_ERROR("%s: empty arc", __FUNCTION__)
       *error = 1;
+      return NULL;
+    }
 }
 
 /// This function deletes entity created by dwg_ent_arc_new() function and frees the allocated memory.
 /** Usage :- dwg_ent_arc_delete();
-*/
-void 
+ */
+void
 dwg_ent_arc_delete(dwg_ent_arc *arc, int *error)
 {
   if (arc != 0)
@@ -664,12 +743,15 @@ dwg_ent_arc_delete(dwg_ent_arc *arc, int *error)
       free(arc);
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty arc", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// This function initialises a arc entity with default/zero values.
 /** Usage :- dwg_ent_arc_init();
-*/
+ */
 dwg_ent_arc *
 dwg_ent_arc_init(dwg_ent_arc *arc)
 {
@@ -682,20 +764,24 @@ dwg_ent_arc_init(dwg_ent_arc *arc)
       arc->start_angle = 0.0;
       arc->end_angle   = 0.0;
     }
+  else
+    {
+      LOG_ERROR("%s: empty arc", __FUNCTION__)
+        }
   return arc;
 }
 
 /// sets arc center.
 /** Usage : dwg_ent_arc_get_center(arc, &point, &error);
-\param 1 dwg_ent_arc
-\param 2 dwg_point_3d
-\param 3 int
+    \param 1 dwg_ent_arc
+    \param 2 dwg_point_3d
+    \param 3 int
 */
 void
 dwg_ent_arc_get_center(dwg_ent_arc *arc, dwg_point_3d *point,
                        int *error)
 {
-  if (arc != 0)
+  if (arc != 0 && point != 0)
     {
       *error = 0;
       point->x = arc->center.x;
@@ -703,20 +789,23 @@ dwg_ent_arc_get_center(dwg_ent_arc *arc, dwg_point_3d *point,
       point->z = arc->center.z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty arc or point", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// sets arc center.
 /** Usage : dwg_ent_arc_set_center(arc, &point, &error);
-\param 1 dwg_ent_arc
-\param 2 dwg_point_3d
-\param 3 int
+    \param 1 dwg_ent_arc
+    \param 2 dwg_point_3d
+    \param 3 int
 */
 void
 dwg_ent_arc_set_center(dwg_ent_arc *arc, dwg_point_3d *point,
                        int *error)
 {
-  if (arc != 0)
+  if (arc != 0 && point != 0)
     {
       *error = 0;
       arc->center.x = point->x;
@@ -724,13 +813,16 @@ dwg_ent_arc_set_center(dwg_ent_arc *arc, dwg_point_3d *point,
       arc->center.z = point->z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty arc or point", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns arc radius.
 /** Usage : double radius = dwg_ent_arc_get_radius(arc, &error);
-\param 1 dwg_ent_arc
-\param 2 int
+    \param 1 dwg_ent_arc
+    \param 2 int
 */
 double
 dwg_ent_arc_get_radius(dwg_ent_arc *arc, int *error)
@@ -741,14 +833,18 @@ dwg_ent_arc_get_radius(dwg_ent_arc *arc, int *error)
       return arc->radius;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty arc", __FUNCTION__)
+      *error = 1;
+      return nan("");
+    }
 }
 
 /// Sets arc radius
 /** Usage : dwg_ent_arc_set_radius(arc, radius, &error);
-\param 1 dwg_ent_arc
-\param 2 double
-\param 3 int
+    \param 1 dwg_ent_arc
+    \param 2 double
+    \param 3 int
 */
 void
 dwg_ent_arc_set_radius(dwg_ent_arc *arc, double radius, int *error)
@@ -759,13 +855,16 @@ dwg_ent_arc_set_radius(dwg_ent_arc *arc, double radius, int *error)
       arc->radius = radius;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty arc", __FUNCTION__)
+      *error = 1;
+    }
 }
-    
+
 /// Returns arc thickness.
 /** Usage : double thickness = dwg_ent_arc_get_thickness(arc, &error);
-\param 1 dwg_ent_arc
-\param 2 int
+    \param 1 dwg_ent_arc
+    \param 2 int
 */
 double
 dwg_ent_arc_get_thickness(dwg_ent_arc *arc, int *error)
@@ -776,14 +875,18 @@ dwg_ent_arc_get_thickness(dwg_ent_arc *arc, int *error)
       return arc->thickness;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty arc", __FUNCTION__)
+      *error = 1;
+      return nan("");
+    }
 }
 
 /// Sets arc thickness.
 /** Usage : dwg_ent_arc_get_thickness(arc, thickness, &error);
-\param 1 dwg_ent_arc
-\param 2 double
-\param 3 int
+    \param 1 dwg_ent_arc
+    \param 2 double
+    \param 3 int
 */
 void
 dwg_ent_arc_set_thickness(dwg_ent_arc *arc, double thickness, int *error)
@@ -794,19 +897,22 @@ dwg_ent_arc_set_thickness(dwg_ent_arc *arc, double thickness, int *error)
       arc->thickness = thickness;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty arc", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// returns arc extrusion.
 /** Usage : dwg_ent_arc_get_extrusion(arc, &ext_points, &error);
-\param 1 dwg_ent_arc
-\param 2 dwg_point_3d
-\param 3 int
+    \param 1 dwg_ent_arc
+    \param 2 dwg_point_3d
+    \param 3 int
 */
 void
 dwg_ent_arc_get_extrusion(dwg_ent_arc *arc, dwg_point_3d *vector, int *error)
 {
-  if (arc != 0)
+  if (arc != 0 && vector != 0)
     {
       *error = 0;
       vector->x = arc->extrusion.x;
@@ -814,33 +920,39 @@ dwg_ent_arc_get_extrusion(dwg_ent_arc *arc, dwg_point_3d *vector, int *error)
       vector->z = arc->extrusion.z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty arc or vector", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// sets arc extrusion.
 /** Usage : dwg_ent_arc_set_extrusion(arc, &ext_points, &error);
-\param 1 dwg_ent_arc
-\param 2 dwg_point_3d
-\param 3 int
+    \param 1 dwg_ent_arc
+    \param 2 dwg_point_3d
+    \param 3 int
 */
-void 
+void
 dwg_ent_arc_set_extrusion(dwg_ent_arc *arc, dwg_point_3d *vector, int *error)
 {
-  if (arc != 0)
+  if (arc != 0 && vector != 0)
     {
       *error = 0;
       arc->extrusion.x = vector->x;
       arc->extrusion.y = vector->y;
-      arc->extrusion.z = vector->z;    
+      arc->extrusion.z = vector->z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty arc or vector", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns arc start angle.
 /** Usage : double start_angle = dwg_ent_arc_get_start_angle(line, &error);
-\param 1 dwg_ent_arc
-\param 2 int
+    \param 1 dwg_ent_arc
+    \param 2 int
 */
 double
 dwg_ent_arc_get_start_angle(dwg_ent_arc *arc, int *error)
@@ -851,14 +963,18 @@ dwg_ent_arc_get_start_angle(dwg_ent_arc *arc, int *error)
       return arc->start_angle;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty arc", __FUNCTION__)
+      *error = 1;
+      return nan("");
+    }
 }
 
 /// Sets arc start angle.
 /** Usage : dwg_ent_arc_set_start_angle(arc, start_angle, &error);
-\param 1 dwg_ent_arc
-\param 2 double
-\param 3 int
+    \param 1 dwg_ent_arc
+    \param 2 double
+    \param 3 int
 */
 void
 dwg_ent_arc_set_start_angle(dwg_ent_arc *arc, double start_angle, int *error)
@@ -869,13 +985,16 @@ dwg_ent_arc_set_start_angle(dwg_ent_arc *arc, double start_angle, int *error)
       arc->start_angle = start_angle;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty arc", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns arc end angle.
 /** Usage : double end_angle = dwg_ent_arc_get_end_angle(arc, &error);
-\param 1 dwg_ent_arc
-\param 2 int
+    \param 1 dwg_ent_arc
+    \param 2 int
 */
 double
 dwg_ent_arc_get_end_angle(dwg_ent_arc *arc, int *error)
@@ -886,14 +1005,18 @@ dwg_ent_arc_get_end_angle(dwg_ent_arc *arc, int *error)
       return arc->end_angle;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty arc", __FUNCTION__)
+      *error = 1;
+      return nan("");
+    }
 }
 
 /// Sets arc end angle.
 /** Usage : dwg_ent_arc_set_end_angle(arc, end_angle, &error);
-\param 1 dwg_ent_arc
-\param 2 double
-\param 3 int
+    \param 1 dwg_ent_arc
+    \param 2 double
+    \param 3 int
 */
 void
 dwg_ent_arc_set_end_angle(dwg_ent_arc *arc, double end_angle, int *error)
@@ -904,33 +1027,39 @@ dwg_ent_arc_set_end_angle(dwg_ent_arc *arc, double end_angle, int *error)
       arc->end_angle = end_angle;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty arc", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /*******************************************************************
-*                   FUNCTIONS FOR ELLIPSE ENTITY                    *
-********************************************************************/
+ *                   FUNCTIONS FOR ELLIPSE ENTITY                    *
+ ********************************************************************/
 
 /// This function creates a new entity of ellipse type.
 /** Usage :- dwg_ent_ellipse_new();
-*/
+ */
 dwg_ent_ellipse *
 dwg_ent_ellipse_new(int *error)
 {
-  dwg_ent_ellipse *ellipse = (dwg_ent_ellipse*)
-  malloc(sizeof(Dwg_Entity_ELLIPSE));
-    if (ellipse != 0)
-      {
-        *error = 0;
-        return dwg_ent_ellipse_init(ellipse);
-      }
-    else
+  dwg_ent_ellipse *ellipse = (dwg_ent_ellipse*)malloc(sizeof(Dwg_Entity_ELLIPSE));
+  if (ellipse != 0)
+    {
+      *error = 0;
+      return dwg_ent_ellipse_init(ellipse);
+    }
+  else
+    {
+      LOG_ERROR("%s: empty ellipse", __FUNCTION__)
       *error = 1;
+      return NULL;
+    }
 }
 
 /// This function deletes entity created by dwg_ent_ellipse_new() function and frees the allocated memory.
 /** Usage :- dwg_ent_ellipse_delete();
-*/
+ */
 void
 dwg_ent_ellipse_delete(dwg_ent_ellipse *ellipse, int *error)
 {
@@ -940,12 +1069,15 @@ dwg_ent_ellipse_delete(dwg_ent_ellipse *ellipse, int *error)
       free(ellipse);
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty ellipse", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// This function initialises a ellipse entity with default or zero values.
 /** Usage :- dwg_ent_ellipse_init();
-*/
+ */
 dwg_ent_ellipse *
 dwg_ent_ellipse_init(dwg_ent_ellipse *ellipse)
 {
@@ -961,20 +1093,24 @@ dwg_ent_ellipse_init(dwg_ent_ellipse *ellipse)
       ellipse->start_angle = 0.0;
       ellipse->end_angle   = 0.0;
     }
+  else
+    {
+      LOG_ERROR("%s: empty ellipse", __FUNCTION__)
+        }
   return ellipse;
 }
 
 /// returns ellipse center.
 /** Usage : dwg_ent_ellipse_get_center(ellipse, &center, &error);
-\param 1 dwg_ent_ellipse
-\param 2 dwg_point_3d
-\param 3 int
+    \param 1 dwg_ent_ellipse
+    \param 2 dwg_point_3d
+    \param 3 int
 */
 void
 dwg_ent_ellipse_get_center(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
                            int *error)
 {
-  if (ellipse != 0)
+  if (ellipse != 0 && point != 0)
     {
       *error = 0;
       point->x = ellipse->center.x;
@@ -982,20 +1118,23 @@ dwg_ent_ellipse_get_center(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
       point->z = ellipse->center.z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty ellipse or point", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// sets ellipse center
 /** Usage : dwg_ent_ellipse_set_center(ellipse, &center &error);
-\param 1 dwg_ent_ellipse
-\param 2 dwg_point_3d
-\param 3 int
+    \param 1 dwg_ent_ellipse
+    \param 2 dwg_point_3d
+    \param 3 int
 */
 void
 dwg_ent_ellipse_set_center(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
                            int *error)
 {
-  if (ellipse != 0)
+  if (ellipse != 0 && point != 0)
     {
       *error = 0;
       ellipse->center.x = point->x;
@@ -1003,20 +1142,23 @@ dwg_ent_ellipse_set_center(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
       ellipse->center.z = point->z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty ellipse or point", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// returns ellipse sm axis.
 /** Usage : dwg_ent_ellipse_get_sm_axis(ellipse, &point, &error);
-\param 1 dwg_ent_ellipse
-\param 2 dwg_point_3d
-\param 3 int
+    \param 1 dwg_ent_ellipse
+    \param 2 dwg_point_3d
+    \param 3 int
 */
 void
 dwg_ent_ellipse_get_sm_axis(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
                             int *error)
 {
-  if (ellipse != 0)
+  if (ellipse != 0 && point != 0)
     {
       *error = 0;
       point->x = ellipse->sm_axis.x;
@@ -1024,20 +1166,23 @@ dwg_ent_ellipse_get_sm_axis(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
       point->z = ellipse->sm_axis.z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty ellipse or point", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// sets ellipse sm axis.
 /** Usage : dwg_ent_ellipse_set_sm_axis(ellipse, &point, &error);
-\param 1 dwg_ent_ellipse
-\param 2 dwg_point_3d
-\param 3 int
+    \param 1 dwg_ent_ellipse
+    \param 2 dwg_point_3d
+    \param 3 int
 */
 void
 dwg_ent_ellipse_set_sm_axis(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
                             int *error)
 {
-  if (ellipse != 0)
+  if (ellipse != 0 && point != 0)
     {
       *error = 0;
       ellipse->sm_axis.x = point->x;
@@ -1045,20 +1190,23 @@ dwg_ent_ellipse_set_sm_axis(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
       ellipse->sm_axis.z = point->z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty ellipse or point", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// returns ellipse extrusion.
 /** Usage : dwg_ent_ellipse_get_extrusion(ellipse, &ext_points, &error);
-\param 1 dwg_ent_ellipse
-\param 2 dwg_point_3d
-\param 3 int
+    \param 1 dwg_ent_ellipse
+    \param 2 dwg_point_3d
+    \param 3 int
 */
 void
 dwg_ent_ellipse_get_extrusion(dwg_ent_ellipse *ellipse, dwg_point_3d *vector,
                               int *error)
 {
-  if (ellipse != 0)
+  if (ellipse != 0 && vector != 0)
     {
       *error = 0;
       vector->x = ellipse->extrusion.x;
@@ -1066,20 +1214,23 @@ dwg_ent_ellipse_get_extrusion(dwg_ent_ellipse *ellipse, dwg_point_3d *vector,
       vector->z = ellipse->extrusion.z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty ellipse or vector", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// sets ellipse extrusion.
 /** Usage : dwg_ent_ellipse_set_extrusion(ellipse, &ext_points, &error);
-\param 1 dwg_ent_ellipse
-\param 2 dwg_point_3d
-\param 3 int
+    \param 1 dwg_ent_ellipse
+    \param 2 dwg_point_3d
+    \param 3 int
 */
 void
-dwg_ent_ellipse_set_extrusion(dwg_ent_ellipse *ellipse, dwg_point_3d *vector, 
+dwg_ent_ellipse_set_extrusion(dwg_ent_ellipse *ellipse, dwg_point_3d *vector,
                               int *error)
 {
-  if (ellipse != 0)
+  if (ellipse != 0 && vector != 0)
     {
       *error = 0;
       ellipse->extrusion.x = vector->x;
@@ -1087,13 +1238,16 @@ dwg_ent_ellipse_set_extrusion(dwg_ent_ellipse *ellipse, dwg_point_3d *vector,
       ellipse->extrusion.z = vector->z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty ellipse or vector", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns ellipse axis ratio
 /** Usage : double axis_ratio = dwg_ent_ellipse_get_axis_ratio(ellipse, &error);
-\param 1 dwg_ent_ellipse
-\param 2 int
+    \param 1 dwg_ent_ellipse
+    \param 2 int
 */
 double
 dwg_ent_ellipse_get_axis_ratio(dwg_ent_ellipse *ellipse, int *error)
@@ -1104,14 +1258,18 @@ dwg_ent_ellipse_get_axis_ratio(dwg_ent_ellipse *ellipse, int *error)
       return ellipse->axis_ratio;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty ellipse", __FUNCTION__)
+        return nan("");
+    }
 }
 
 /// Sets ellipse axis ratio.
 /** Usage : dwg_ent_ellipse_set_axis_ratio(ellipse, axis_ratio, &error);
-\param 1 dwg_ent_ellipse
-\param 2 double
-\param 3 int
+    \param 1 dwg_ent_ellipse
+    \param 2 double
+    \param 3 int
 */
 void
 dwg_ent_ellipse_set_axis_ratio(dwg_ent_ellipse *ellipse, double ratio,
@@ -1123,13 +1281,16 @@ dwg_ent_ellipse_set_axis_ratio(dwg_ent_ellipse *ellipse, double ratio,
       ellipse->axis_ratio = ratio;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty ellipse", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns ellipse start angle.
 /** Usage : double start_angle = dwg_ent_ellipse_get_start_angle(ellipse, &error);
-\param 1 dwg_ent_ellipse
-\param 2 int
+    \param 1 dwg_ent_ellipse
+    \param 2 int
 */
 double
 dwg_ent_ellipse_get_start_angle(dwg_ent_ellipse *ellipse, int *error)
@@ -1140,14 +1301,18 @@ dwg_ent_ellipse_get_start_angle(dwg_ent_ellipse *ellipse, int *error)
       return ellipse->start_angle;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty ellipse", __FUNCTION__)
+      *error = 1;
+      return nan("");
+    }
 }
 
 /// Sets ellipse start angle.
 /** Usage : dwg_ent_ellipse_set_start_angle(ellipse, start_angle, &error);
-\param 1 dwg_ent_ellipse
-\param 2 double
-\param 3 int
+    \param 1 dwg_ent_ellipse
+    \param 2 double
+    \param 3 int
 */
 void
 dwg_ent_ellipse_set_start_angle(dwg_ent_ellipse *ellipse, double start_angle,
@@ -1159,13 +1324,16 @@ dwg_ent_ellipse_set_start_angle(dwg_ent_ellipse *ellipse, double start_angle,
       ellipse->start_angle = start_angle;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty ellipse", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns ellipse end angle.
 /** Usage : double end_angle = dwg_ent_ellipse_get_end_angle(ellipse, &error);
-\param 1 dwg_ent_ellipse
-\param 2 int
+    \param 1 dwg_ent_ellipse
+    \param 2 int
 */
 double
 dwg_ent_ellipse_get_end_angle(dwg_ent_ellipse *ellipse, int *error)
@@ -1176,14 +1344,18 @@ dwg_ent_ellipse_get_end_angle(dwg_ent_ellipse *ellipse, int *error)
       return ellipse->end_angle;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty ellipse", __FUNCTION__)
+      *error = 1;
+      return nan("");
+    }
 }
 
 /// Sets ellipse end angle.
 /** Usage : dwg_ent_ellipse_set_end_angle(ellipse, end_angle, &error);
-\param 1 dwg_ent_ellipse
-\param 2 double
-\param 3 int
+    \param 1 dwg_ent_ellipse
+    \param 2 double
+    \param 3 int
 */
 void
 dwg_ent_ellipse_set_end_angle(dwg_ent_ellipse *ellipse, double end_angle,
@@ -1195,18 +1367,21 @@ dwg_ent_ellipse_set_end_angle(dwg_ent_ellipse *ellipse, double end_angle,
       ellipse->end_angle = end_angle;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty ellipse", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /*******************************************************************
-*                    FUNCTIONS FOR TEXT ENTITY                      *
-********************************************************************/
+ *                    FUNCTIONS FOR TEXT ENTITY                      *
+ ********************************************************************/
 
 /// Sets text value of a text entity
 /** Usage : dwg_ent_text_set_text(text, "Hello world", &error);
-\param 1 dwg_ent_text
-\param 2 string ( char * )
-\param 2 int 
+    \param 1 dwg_ent_text
+    \param 2 string ( char * )
+    \param 2 int
 */
 void
 dwg_ent_text_set_text(dwg_ent_text *text, char * text_value, int *error)
@@ -1217,13 +1392,16 @@ dwg_ent_text_set_text(dwg_ent_text *text, char * text_value, int *error)
       text->text_value = text_value;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty text", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// This returns the text value of a text entity.
 /** Usage : dwg_ent_text_get_text(text, &error);
-\param 1 dwg_ent_text
-\param 2 int
+    \param 1 dwg_ent_text
+    \param 2 int
 */
 char *
 dwg_ent_text_get_text(dwg_ent_text *text, int *error)
@@ -1234,53 +1412,63 @@ dwg_ent_text_get_text(dwg_ent_text *text, int *error)
       return text->text_value;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty text", __FUNCTION__)
+      *error = 1;
+      return NULL;
+    }
 }
 
 /// This returns the insertion point of a text entity into second argument.
 /** Usage : dwg_ent_text_get_insertion_point(text, &point, &error);
-\param 1 dwg_ent_text
-\param 2 dwg_2d_point
-\param 3 int
+    \param 1 dwg_ent_text
+    \param 2 dwg_2d_point
+    \param 3 int
 */
 void
 dwg_ent_text_get_insertion_point(dwg_ent_text *text, dwg_point_2d *point,
                                  int *error)
 {
-  if (text != 0)
+  if (text != 0 && point != 0)
     {
       *error = 0;
       point->x = text->insertion_pt.x;
       point->y = text->insertion_pt.y;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty text or point", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Sets insertion point
 /** Usage :- dwg_ent_text_set_insertion_point(text, &point, &error)
-\param 1 dwg_ent_text
-\param 2 dwg_point_2d
-\param 3 int
+    \param 1 dwg_ent_text
+    \param 2 dwg_point_2d
+    \param 3 int
 */
 void
 dwg_ent_text_set_insertion_point(dwg_ent_text *text, dwg_point_2d *point,
                                  int *error)
 {
-  if (text != 0)
+  if (text != 0 && point != 0)
     {
       *error = 0;
       text->insertion_pt.x = point->x;
       text->insertion_pt.y = point->y;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty text or point", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns height of a text.
 /** Usage :- double height = dwg_ent_text_get_height(text);
-\param 1 dwg_ent_text
-\param 2 int
+    \param 1 dwg_ent_text
+    \param 2 int
 */
 double
 dwg_ent_text_get_height(dwg_ent_text *text, int *error)
@@ -1291,14 +1479,18 @@ dwg_ent_text_get_height(dwg_ent_text *text, int *error)
       return text->height;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty text", __FUNCTION__)
+        return nan("");
+    }
 }
 
 /// Sets height of Text
 /** Usage :- dwg_ent_text_set_height(text, 100, &error);
-\param 1 dwg_ent_text
-\param 2 double
-\param 3 int
+    \param 1 dwg_ent_text
+    \param 2 double
+    \param 3 int
 */
 void
 dwg_ent_text_set_height(dwg_ent_text *text, double height, int *error)
@@ -1309,20 +1501,23 @@ dwg_ent_text_set_height(dwg_ent_text *text, double height, int *error)
       text->height = height;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty text", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns extrusion value
 /** Usage : dwg_ent_text_get_extrusion(text, &point, &error);
-\param 1 dwg_ent_text
-\param 2 dwg_point_2d
-\param 3 int
+    \param 1 dwg_ent_text
+    \param 2 dwg_point_2d
+    \param 3 int
 */
 void
 dwg_ent_text_get_extrusion(dwg_ent_text *text, dwg_point_3d *vector,
                            int *error)
 {
-  if (text != 0)
+  if (text != 0 && vector != 0)
     {
       *error = 0;
       vector->x = text->extrusion.x;
@@ -1330,20 +1525,23 @@ dwg_ent_text_get_extrusion(dwg_ent_text *text, dwg_point_3d *vector,
       vector->z = text->extrusion.z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty text or vector", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Sets the text extrusion value.
 /** Usage :- dwg_ent_text_set_extrusion(text, &point, &error);
-\param 1 dwg_ent_text
-\param 2 dwg_point_2d
-\param 3 int
+    \param 1 dwg_ent_text
+    \param 2 dwg_point_2d
+    \param 3 int
 */
 void
 dwg_ent_text_set_extrusion(dwg_ent_text *text, dwg_point_3d *vector,
                            int *error)
 {
-  if (text != 0)
+  if (text != 0 && vector != 0)
     {
       *error = 0;
       text->extrusion.x = vector->x;
@@ -1351,13 +1549,16 @@ dwg_ent_text_set_extrusion(dwg_ent_text *text, dwg_point_3d *vector,
       text->extrusion.z = vector->z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty text or vector", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns the thickness of a text entity.
 /** Usage : dwg_ent_text_get_thickness(text, &error);
-\param 1 dwg_ent_text
-\param 2 int
+    \param 1 dwg_ent_text
+    \param 2 int
 */
 double
 dwg_ent_text_get_thickness(dwg_ent_text *text, int *error)
@@ -1368,14 +1569,18 @@ dwg_ent_text_get_thickness(dwg_ent_text *text, int *error)
       return text->thickness;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty text", __FUNCTION__)
+      *error = 1;
+      return nan("");
+    }
 }
 
 /// Sets the thickness of text.
 /** Usage :- dwg_ent_text_set_thickness(text, 50, &error);
-\param 1 dwg_ent_text
-\param 2 double
-\param 3 int
+    \param 1 dwg_ent_text
+    \param 2 double
+    \param 3 int
 */
 void
 dwg_ent_text_set_thickness(dwg_ent_text *text, double thickness, int *error)
@@ -1386,13 +1591,16 @@ dwg_ent_text_set_thickness(dwg_ent_text *text, double thickness, int *error)
       text->thickness = thickness;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty text", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns the rotation angle of a text entity.
 /** Usage :- double rot_ang = dwg_ent_text_get_rot_angle(text, &error);
-\param 1 dwg_ent_text
-\param 2 int
+    \param 1 dwg_ent_text
+    \param 2 int
 */
 double
 dwg_ent_text_get_rot_angle(dwg_ent_text *text, int *error)
@@ -1403,14 +1611,18 @@ dwg_ent_text_get_rot_angle(dwg_ent_text *text, int *error)
       return text->rotation_ang;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty text", __FUNCTION__)
+      *error = 1;
+      return nan("");
+    }
 }
 
 /// Sets the rotation angle of a text entity.
 /** Usage : dwg_ent_text_set_rot_angle(text, angle, &error);
-\param 1 dwg_ent_text
-\param 2 double
-\param 3 int
+    \param 1 dwg_ent_text
+    \param 2 double
+    \param 3 int
 */
 void
 dwg_ent_text_set_rot_angle(dwg_ent_text *text, double angle, int *error)
@@ -1421,13 +1633,16 @@ dwg_ent_text_set_rot_angle(dwg_ent_text *text, double angle, int *error)
       text->rotation_ang = angle;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty text", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns the vertical alignment of a text entity.
 /** Usage : double align = dwg_ent_text_get_vert_align(text, &error);
-\param 1 dwg_ent_text
-\param 2 int
+    \param 1 dwg_ent_text
+    \param 2 int
 */
 double
 dwg_ent_text_get_vert_align(dwg_ent_text *text, int *error)
@@ -1438,14 +1653,18 @@ dwg_ent_text_get_vert_align(dwg_ent_text *text, int *error)
       return text->vert_alignment;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty text", __FUNCTION__)
+      *error = 1;
+      return nan("");
+    }
 }
 
-/// Sets the vertical alignment of a text entity 
+/// Sets the vertical alignment of a text entity
 /** Usage : dwg_ent_text_set_vert_align(text, angle, &error);
-\param 1 dwg_ent_text
-\param 2 double
-\param 3 int
+    \param 1 dwg_ent_text
+    \param 2 double
+    \param 3 int
 */
 void
 dwg_ent_text_set_vert_align(dwg_ent_text *text, double alignment, int *error)
@@ -1456,13 +1675,16 @@ dwg_ent_text_set_vert_align(dwg_ent_text *text, double alignment, int *error)
       text->vert_alignment = alignment;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty text", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns the horizontal alignment of a text entity.
 /** Usage : double align = dwg_ent_text_get_horiz_align(text, &error);
-\param 1 dwg_ent_text
-\param 2 int
+    \param 1 dwg_ent_text
+    \param 2 int
 */
 double
 dwg_ent_text_get_horiz_align(dwg_ent_text *text, int *error)
@@ -1473,14 +1695,18 @@ dwg_ent_text_get_horiz_align(dwg_ent_text *text, int *error)
       return text->horiz_alignment;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty text", __FUNCTION__)
+      *error = 1;
+      return nan("");
+    }
 }
 
 /// Sets the horizontal alignment of a text entity.
 /** Usage : dwg_ent_text_set_horiz_align(text, angle, &error);
-\param 1 dwg_ent_text
-\param 2 double
-\param 3 int
+    \param 1 dwg_ent_text
+    \param 2 double
+    \param 3 int
 */
 void
 dwg_ent_text_set_horiz_align(dwg_ent_text *text, double alignment, int *error)
@@ -1491,18 +1717,21 @@ dwg_ent_text_set_horiz_align(dwg_ent_text *text, double alignment, int *error)
       text->horiz_alignment = alignment;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty text", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /*******************************************************************
-*                   FUNCTIONS FOR ATTRIB ENTITY                     *
-********************************************************************/
+ *                   FUNCTIONS FOR ATTRIB ENTITY                     *
+ ********************************************************************/
 
 /// Sets text value of a attrib entity.
 /** Usage : dwg_ent_attrib_set_text(attrib, "Hello world", &error);
-\param 1 dwg_ent_attrib
-\param 2 string (char *)
-\param 3 int
+    \param 1 dwg_ent_attrib
+    \param 2 string (char *)
+    \param 3 int
 */
 void
 dwg_ent_attrib_set_text(dwg_ent_attrib *attrib, char * text_value, int *error)
@@ -1513,13 +1742,16 @@ dwg_ent_attrib_set_text(dwg_ent_attrib *attrib, char * text_value, int *error)
       attrib->text_value = text_value;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty attrib", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns the text value of a attrib entity.
 /** Usage : char * text_val = dwg_ent_attrib_get_text(attrib, &error);
-\param 1 dwg_ent_attrib
-\param 2 int
+    \param 1 dwg_ent_attrib
+    \param 2 int
 */
 char *
 dwg_ent_attrib_get_text(dwg_ent_attrib *attrib, int *error)
@@ -1530,53 +1762,63 @@ dwg_ent_attrib_get_text(dwg_ent_attrib *attrib, int *error)
       return attrib->text_value;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty attrib", __FUNCTION__)
+      *error = 1;
+      return NULL;
+    }
 }
 
 /// Returns the insertion point of a attrib entity.
 /** Usage : dwg_ent_attrib_get_insertion_point(attrib, &point, &error);
-\param 1 dwg_ent_attrib
-\param 2 dwg_point_3d
-\param 3 int
+    \param 1 dwg_ent_attrib
+    \param 2 dwg_point_3d
+    \param 3 int
 */
 void
 dwg_ent_attrib_get_insertion_point(dwg_ent_attrib *attrib,
                                    dwg_point_2d *point, int *error)
 {
-  if (attrib != 0)
+  if (attrib != 0 && point != 0)
     {
       *error = 0;
       point->x = attrib->insertion_pt.x;
       point->y = attrib->insertion_pt.y;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty attrib", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Sets the insertion point of a attrib entity.
 /** Usage : dwg_ent_attrib_set_insertion_point(attrib, &point, &error)
-\param 1 dwg_ent_attrib
-\param 2 dwg_point_3d
-\param 3 int
+    \param 1 dwg_ent_attrib
+    \param 2 dwg_point_3d
+    \param 3 int
 */
 void
 dwg_ent_attrib_set_insertion_point(dwg_ent_attrib *attrib,
                                    dwg_point_2d *point, int *error)
 {
-  if (attrib != 0)
+  if (attrib != 0 && point != 0)
     {
       *error = 0;
       attrib->insertion_pt.x = point->x;
       attrib->insertion_pt.y = point->y;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty attrib", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// This returns the height of a attrib entity.
 /** Usage : double height = dwg_ent_attrib_get_height(attrib, &error);
-\param 1 dwg_ent_attrib
-\param 2 int
+    \param 1 dwg_ent_attrib
+    \param 2 int
 */
 double
 dwg_ent_attrib_get_height(dwg_ent_attrib *attrib, int *error)
@@ -1587,14 +1829,18 @@ dwg_ent_attrib_get_height(dwg_ent_attrib *attrib, int *error)
       return attrib->height;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty attrib", __FUNCTION__)
+      *error = 1;
+      return nan("");
+    }
 }
 
 /// This sets height of a attrib entity.
 /** Usage : dwg_ent_attrib_set_height(attrib, 100, &error);
-\param 1 dwg_ent_attrib
-\param 2 double
-\param 3 int
+    \param 1 dwg_ent_attrib
+    \param 2 double
+    \param 3 int
 */
 void
 dwg_ent_attrib_set_height(dwg_ent_attrib *attrib, double height, int *error)
@@ -1605,20 +1851,23 @@ dwg_ent_attrib_set_height(dwg_ent_attrib *attrib, double height, int *error)
       attrib->height = height;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty attrib", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns the extrusion values of attrib.
 /** Usage : dwg_ent_attrib_get_extrusion(attrib, &point, &error);
-\param 1 dwg_ent_attrib
-\param 2 dwg_point_3d
-\param 3 int
+    \param 1 dwg_ent_attrib
+    \param 2 dwg_point_3d
+    \param 3 int
 */
 void
 dwg_ent_attrib_get_extrusion(dwg_ent_attrib *attrib, dwg_point_3d *vector,
                              int *error)
 {
-  if (attrib != 0)
+  if (attrib != 0 && vector != 0)
     {
       *error = 0;
       vector->x = attrib->extrusion.x;
@@ -1626,20 +1875,23 @@ dwg_ent_attrib_get_extrusion(dwg_ent_attrib *attrib, dwg_point_3d *vector,
       vector->z = attrib->extrusion.z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty attrib or vector", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Sets the attrib extrusion values equal to values of second argument.
 /** Usage : dwg_ent_attrib_set_extrusion(attrib, &point, &error);
-\param 1 dwg_ent_attrib
-\param 2 dwg_point_3d
-\param 3 int
+    \param 1 dwg_ent_attrib
+    \param 2 dwg_point_3d
+    \param 3 int
 */
 void
 dwg_ent_attrib_set_extrusion(dwg_ent_attrib *attrib, dwg_point_3d *vector,
                              int *error)
 {
-  if (attrib != 0)
+  if (attrib != 0 && vector != 0)
     {
       *error = 0;
       attrib->extrusion.x = vector->x;
@@ -1647,13 +1899,16 @@ dwg_ent_attrib_set_extrusion(dwg_ent_attrib *attrib, dwg_point_3d *vector,
       attrib->extrusion.z = vector->z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty attrib or vector", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns the thickness of a attrib entity.
 /** Usage : double thick = dwg_ent_attrib_get_thickness(attrib, &error);
-\param 1 dwg_ent_attrib
-\param 2 int
+    \param 1 dwg_ent_attrib
+    \param 2 int
 */
 double
 dwg_ent_attrib_get_thickness(dwg_ent_attrib *attrib, int *error)
@@ -1664,14 +1919,18 @@ dwg_ent_attrib_get_thickness(dwg_ent_attrib *attrib, int *error)
       return attrib->thickness;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty attrib", __FUNCTION__)
+        return nan("");
+    }
 }
 
 /// This sets the thickness of a attrib entity.
 /** Usage : dwg_ent_attrib_set_thickness(attrib, thick, &error);
-\param 1 dwg_ent_attrib
-\param 2 double
-\param 3 int
+    \param 1 dwg_ent_attrib
+    \param 2 double
+    \param 3 int
 */
 void
 dwg_ent_attrib_set_thickness(dwg_ent_attrib *attrib, double thickness,
@@ -1683,13 +1942,16 @@ dwg_ent_attrib_set_thickness(dwg_ent_attrib *attrib, double thickness,
       attrib->thickness = thickness;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty attrib", __FUNCTION__)
+    }
 }
 
 /// Returns the rotation angle of a attrib entity.
 /** Usage : double angle = dwg_ent_attrib_get_rot_angle(attrib, &error);
-\param 1 dwg_ent_attrib
-\param 2 int
+    \param 1 dwg_ent_attrib
+    \param 2 int
 */
 double
 dwg_ent_attrib_get_rot_angle(dwg_ent_attrib *attrib, int *error)
@@ -1700,14 +1962,18 @@ dwg_ent_attrib_get_rot_angle(dwg_ent_attrib *attrib, int *error)
       return attrib->rotation_ang;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty attrib", __FUNCTION__)
+      *error = 1;
+      return nan("");
+    }
 }
 
 /// This sets the rotation angle of a attrib entity.
 /** Usage :- dwg_ent_attrib_set_rot_angle(attrib, angle, &error);
-\param 1 dwg_ent_attrib
-\param 2 double
-\param 3 int
+    \param 1 dwg_ent_attrib
+    \param 2 double
+    \param 3 int
 */
 void
 dwg_ent_attrib_set_rot_angle(dwg_ent_attrib *attrib, double angle, int *error)
@@ -1718,13 +1984,16 @@ dwg_ent_attrib_set_rot_angle(dwg_ent_attrib *attrib, double angle, int *error)
       attrib->rotation_ang = angle;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// This returns the vertical alignment of a attrib entity.
 /** Usage : double vert_align = dwg_ent_attrib_get_vert_align(attrib, &error);
-\param 1 dwg_ent_attrib
-\param 2 int
+    \param 1 dwg_ent_attrib
+    \param 2 int
 */
 double
 dwg_ent_attrib_get_vert_align(dwg_ent_attrib *attrib, int *error)
@@ -1735,14 +2004,18 @@ dwg_ent_attrib_get_vert_align(dwg_ent_attrib *attrib, int *error)
       return attrib->vert_alignment;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty attrib", __FUNCTION__)
+      *error = 1;
+      return nan("");
+    }
 }
 
 /// This sets the vertical alignment of a attrib entity.
 /** Usage :- dwg_ent_attrib_set_vert_align(attrib, angle, &error);
-\param 1 dwg_ent_attrib
-\param 2 double
-\param 3 int
+    \param 1 dwg_ent_attrib
+    \param 2 double
+    \param 3 int
 */
 void
 dwg_ent_attrib_set_vert_align(dwg_ent_attrib *attrib, double alignment,
@@ -1754,13 +2027,16 @@ dwg_ent_attrib_set_vert_align(dwg_ent_attrib *attrib, double alignment,
       attrib->vert_alignment = alignment;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty attrib", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// This returns the horizontal alignment of a attrib entity.
 /** Usage : double horiz_align =  dwg_ent_attrib_get_horiz_align(attrib, &error);
-\param 1 dwg_ent_attrib
-\param 2 int
+    \param 1 dwg_ent_attrib
+    \param 2 int
 */
 double
 dwg_ent_attrib_get_horiz_align(dwg_ent_attrib *attrib, int *error)
@@ -1771,14 +2047,18 @@ dwg_ent_attrib_get_horiz_align(dwg_ent_attrib *attrib, int *error)
       return attrib->horiz_alignment;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+        return nan("");
+    }
 }
 
 /// This sets the horizontal alignment of a attrib entity.
 /** Usage :- dwg_ent_attrib_set_horiz_align(attrib, angle, &error);
-\param 1 dwg_ent_attrib
-\param 2 double
-\param 3 int
+    \param 1 dwg_ent_attrib
+    \param 2 double
+    \param 3 int
 */
 void
 dwg_ent_attrib_set_horiz_align(dwg_ent_attrib *attrib, double alignment,
@@ -1790,18 +2070,21 @@ dwg_ent_attrib_set_horiz_align(dwg_ent_attrib *attrib, double alignment,
       attrib->horiz_alignment = alignment;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+        }
 }
 
 /*******************************************************************
-*                   FUNCTIONS FOR ATTDEF ENTITY                     *
-********************************************************************/
+ *                   FUNCTIONS FOR ATTDEF ENTITY                     *
+ ********************************************************************/
 
 /// This sets text value of a attdef entity equal.
 /** Usage :- dwg_ent_attdef_set_text(attdef, "Hello world", &error);
-\param 1 dwg_ent_attdef
-\param 2 char *
-\param 3 int
+    \param 1 dwg_ent_attdef
+    \param 2 char *
+    \param 3 int
 */
 void
 dwg_ent_attdef_set_text(dwg_ent_attdef *attdef, char * default_value,
@@ -1813,13 +2096,16 @@ dwg_ent_attdef_set_text(dwg_ent_attdef *attdef, char * default_value,
       attdef->default_value = default_value;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// This returns the text value of a attdef entity.
 /** Usage : char * text = dwg_ent_attdef_get_text(attdef, &error);
-\param 1 dwg_ent_attdef
-\param 2 int
+    \param 1 dwg_ent_attdef
+    \param 2 int
 */
 char *
 dwg_ent_attdef_get_text(dwg_ent_attdef *attdef, int *error)
@@ -1830,53 +2116,63 @@ dwg_ent_attdef_get_text(dwg_ent_attdef *attdef, int *error)
       return attdef->default_value;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty attdef", __FUNCTION__)
+      *error = 1;
+      return NULL;
+    }
 }
 
 /// This returns the insertion point of a attdef entity.
 /** Usage :- dwg_ent_attdef_get_insertion_point(attdef, &point, &error);
-\param 1 dwg_ent_attdef
-\param 2 dwg_point_2d
-\param 3 int
+    \param 1 dwg_ent_attdef
+    \param 2 dwg_point_2d
+    \param 3 int
 */
 void
 dwg_ent_attdef_get_insertion_point(dwg_ent_attdef *attdef,
                                    dwg_point_2d *point, int *error)
 {
-  if (attdef != 0)
+  if (attdef != 0 && point != 0)
     {
       *error = 0;
       point->x = attdef->insertion_pt.x;
       point->y = attdef->insertion_pt.y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+        }
 }
 
 /// This sets the insertion point of a attdef entity.
 /** Usage :- dwg_ent_attdef_set_insertion_point(attdef, &point, &error)
-\param 1 dwg_ent_attdef
-\param 2 dwg_point_2d
-\param 3 int
+    \param 1 dwg_ent_attdef
+    \param 2 dwg_point_2d
+    \param 3 int
 */
 void
 dwg_ent_attdef_set_insertion_point(dwg_ent_attdef *attdef,
                                    dwg_point_2d *point, int *error)
 {
-  if (attdef != 0)
+  if (attdef != 0 && point != 0)
     {
       *error = 0;
       attdef->insertion_pt.x = point->x;
       attdef->insertion_pt.y = point->y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+        }
 }
 
 /// This returns the height of a attdef entity.
 /** Usage :- dwg_ent_attdef_get_height(attdef, &error);
-\param 1 dwg_ent_attdef
-\param 2 int
+    \param 1 dwg_ent_attdef
+    \param 2 int
 */
 double
 dwg_ent_attdef_get_height(dwg_ent_attdef *attdef, int *error)
@@ -1887,14 +2183,18 @@ dwg_ent_attdef_get_height(dwg_ent_attdef *attdef, int *error)
       return attdef->height;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+        return nan("");
+    }
 }
 
 /// This sets height of a attdef entity.
 /** Usage :- dwg_ent_attdef_set_height(attdef, 100, &error);
-\param 1 dwg_ent_attdef
-\param 2 double
-\param 3 int
+    \param 1 dwg_ent_attdef
+    \param 2 double
+    \param 3 int
 */
 void
 dwg_ent_attdef_set_height(dwg_ent_attdef *attdef, double height, int *error)
@@ -1905,20 +2205,23 @@ dwg_ent_attdef_set_height(dwg_ent_attdef *attdef, double height, int *error)
       attdef->height = height;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+        }
 }
 
 /// Returns the extrusion values of attdef.
 /** Usage : dwg_ent_attdef_get_extrusion(attdef, &point, &error);
-\param 1 dwg_ent_attdef
-\param 2 dwg_point_3d
-\param 3 int
+    \param 1 dwg_ent_attdef
+    \param 2 dwg_point_3d
+    \param 3 int
 */
 void
 dwg_ent_attdef_get_extrusion(dwg_ent_attdef *attdef, dwg_point_3d *vector,
                              int *error)
 {
-  if (attdef != 0)
+  if (attdef != 0 && vector != 0)
     {
       *error = 0;
       vector->x = attdef->extrusion.x;
@@ -1926,20 +2229,23 @@ dwg_ent_attdef_get_extrusion(dwg_ent_attdef *attdef, dwg_point_3d *vector,
       vector->z = attdef->extrusion.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+        }
 }
 
 /// Sets the attdef extrusion values.
 /** Usage :- dwg_ent_attdef_set_extrusion(attdef, &point, &error);
-\param 1 dwg_ent_attdef
-\param 2 dwg_point_3d
-\param 3 int
+    \param 1 dwg_ent_attdef
+    \param 2 dwg_point_3d
+    \param 3 int
 */
 void
 dwg_ent_attdef_set_extrusion(dwg_ent_attdef *attdef, dwg_point_3d *vector,
                              int *error)
 {
-  if (attdef != 0)
+  if (attdef != 0 && vector != 0)
     {
       *error = 0;
       attdef->extrusion.x = vector->x;
@@ -1947,13 +2253,16 @@ dwg_ent_attdef_set_extrusion(dwg_ent_attdef *attdef, dwg_point_3d *vector,
       attdef->extrusion.z = vector->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+        }
 }
 
 /// This returns the thickness of a attdef entity.
 /** Usage :- double thickness = dwg_ent_attdef_get_thickness(attdef, &error);
-\param 1 dwg_ent_attdef
-\param 2 int
+    \param 1 dwg_ent_attdef
+    \param 2 int
 */
 double
 dwg_ent_attdef_get_thickness(dwg_ent_attdef *attdef, int *error)
@@ -1964,14 +2273,18 @@ dwg_ent_attdef_get_thickness(dwg_ent_attdef *attdef, int *error)
       return attdef->thickness;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+        return nan("");
+    }
 }
 
 /// This sets the thickness of a attdef entity.
 /** Usage :- dwg_ent_attdef_set_thickness(attdef, thickness, &error);
-\param 1 dwg_ent_attdef
-\param 2 double
-\param 3 int
+    \param 1 dwg_ent_attdef
+    \param 2 double
+    \param 3 int
 */
 void
 dwg_ent_attdef_set_thickness(dwg_ent_attdef *attdef, double thickness,
@@ -1983,13 +2296,16 @@ dwg_ent_attdef_set_thickness(dwg_ent_attdef *attdef, double thickness,
       attdef->thickness = thickness;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+        }
 }
 
 /// This returns the rotation angle of a attdef entity.
 /** Usage :- double angle = dwg_ent_attdef_get_rot_angle(attdef, &error);
-\param 1 dwg_ent_attdef
-\param 2 int
+    \param 1 dwg_ent_attdef
+    \param 2 int
 */
 double
 dwg_ent_attdef_get_rot_angle(dwg_ent_attdef *attdef, int *error)
@@ -2000,14 +2316,18 @@ dwg_ent_attdef_get_rot_angle(dwg_ent_attdef *attdef, int *error)
       return attdef->rotation_ang;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+        return nan("");
+    }
 }
 
 /// This sets the rotation angle of a attdef entity.
 /** Usage :- dwg_ent_attdef_set_rot_angle(attdef, angle, &error);
-\param 1 dwg_ent_attdef
-\param 2 double
-\param 3 int
+    \param 1 dwg_ent_attdef
+    \param 2 double
+    \param 3 int
 */
 void
 dwg_ent_attdef_set_rot_angle(dwg_ent_attdef *attdef, double angle, int *error)
@@ -2018,13 +2338,16 @@ dwg_ent_attdef_set_rot_angle(dwg_ent_attdef *attdef, double angle, int *error)
       attdef->rotation_ang = angle;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+        }
 }
 
 /// This returns the vertical alignment of a attdef entity.
 /** Usage :- double vert_align = dwg_ent_attdef_get_vert_align(attdef, &error);
-\param 1 dwg_ent_attdef
-\param 2 int
+    \param 1 dwg_ent_attdef
+    \param 2 int
 */
 double
 dwg_ent_attdef_get_vert_align(dwg_ent_attdef *attdef, int *error)
@@ -2035,14 +2358,18 @@ dwg_ent_attdef_get_vert_align(dwg_ent_attdef *attdef, int *error)
       return attdef->vert_alignment;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+        return nan("");
+    }
 }
 
 /// This sets the vertical alignment of a attdef entity.
 /** Usage :- dwg_ent_attdef_set_vert_align(attdef, angle, &error);
-\param 1 dwg_ent_attdef
-\param 2 double
-\param 3 int
+    \param 1 dwg_ent_attdef
+    \param 2 double
+    \param 3 int
 */
 void
 dwg_ent_attdef_set_vert_align(dwg_ent_attdef *attdef, double alignment,
@@ -2054,13 +2381,16 @@ dwg_ent_attdef_set_vert_align(dwg_ent_attdef *attdef, double alignment,
       attdef->vert_alignment = alignment;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+        }
 }
 
 /// This returns the horizontal alignment of a attdef entity.
 /** Usage :- double horiz_align = dwg_ent_attdef_get_horiz_align(attdef, &error);
-\param 1 dwg_ent_attdef
-\param 2 int
+    \param 1 dwg_ent_attdef
+    \param 2 int
 */
 double
 dwg_ent_attdef_get_horiz_align(dwg_ent_attdef *attdef, int *error)
@@ -2071,14 +2401,18 @@ dwg_ent_attdef_get_horiz_align(dwg_ent_attdef *attdef, int *error)
       return attdef->horiz_alignment;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+        return nan("");
+    }
 }
 
 /// This sets the horizontal alignment of a attdef entity.
 /** Usage :- dwg_ent_attdef_set_horiz_align(attdef, angle, &error);
-\param 1 dwg_ent_attdef
-\param 2 double
-\param 3 int
+    \param 1 dwg_ent_attdef
+    \param 2 double
+    \param 3 int
 */
 void
 dwg_ent_attdef_set_horiz_align(dwg_ent_attdef *attdef, double alignment,
@@ -2090,7 +2424,10 @@ dwg_ent_attdef_set_horiz_align(dwg_ent_attdef *attdef, double alignment,
       attdef->horiz_alignment = alignment;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /*******************************************************************
@@ -2106,8 +2443,8 @@ dwg_ent_attdef_set_horiz_align(dwg_ent_attdef *attdef, double alignment,
 void
 dwg_ent_point_set_point(dwg_ent_point *point, dwg_point_3d *retpoint,
                         int *error)
-{    
-  if (point != 0)
+{
+  if (point != 0 && retpoint != 0)
     {
       *error = 0;
       point->x = retpoint->x;
@@ -2115,7 +2452,10 @@ dwg_ent_point_set_point(dwg_ent_point *point, dwg_point_3d *retpoint,
       point->z = retpoint->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the point values of point to second argument.
@@ -2127,8 +2467,8 @@ dwg_ent_point_set_point(dwg_ent_point *point, dwg_point_3d *retpoint,
 void
 dwg_ent_point_get_point(dwg_ent_point *point, dwg_point_3d *retpoint,
                         int *error)
-{    
-  if (point != 0)
+{
+  if (point != 0 && retpoint != 0)
     {
       *error = 0;
       retpoint->x = point->x;
@@ -2136,7 +2476,10 @@ dwg_ent_point_get_point(dwg_ent_point *point, dwg_point_3d *retpoint,
       retpoint->z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// This returns the thickness of a point entity.
@@ -2146,14 +2489,18 @@ dwg_ent_point_get_point(dwg_ent_point *point, dwg_point_3d *retpoint,
 */
 double
 dwg_ent_point_get_thickness(dwg_ent_point *point, int *error)
-{    
+{
   if (point != 0)
     {
       *error = 0;
       return point->thickness;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// This sets the thickness of a point entity.
@@ -2165,14 +2512,17 @@ dwg_ent_point_get_thickness(dwg_ent_point *point, int *error)
 void
 dwg_ent_point_set_thickness(dwg_ent_point *point, double thickness,
                             int *error)
-{    
+{
   if (point != 0)
     {
       *error = 0;
       point->thickness = thickness;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the point extrusion values.
@@ -2184,8 +2534,8 @@ dwg_ent_point_set_thickness(dwg_ent_point *point, double thickness,
 void
 dwg_ent_point_set_extrusion(dwg_ent_point *point, dwg_point_3d *retpoint,
                             int *error)
-{    
-  if (point != 0)
+{
+  if (point != 0 && retpoint != 0)
     {
       *error = 0;
       point->extrusion.x = retpoint->x;
@@ -2193,7 +2543,10 @@ dwg_ent_point_set_extrusion(dwg_ent_point *point, dwg_point_3d *retpoint,
       point->extrusion.z = retpoint->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the extrusion values of point entity.
@@ -2203,10 +2556,10 @@ dwg_ent_point_set_extrusion(dwg_ent_point *point, dwg_point_3d *retpoint,
 \param 3 int
 */
 void
-dwg_ent_point_get_extrusion(dwg_ent_point *point, dwg_point_3d *retpoint, 
+dwg_ent_point_get_extrusion(dwg_ent_point *point, dwg_point_3d *retpoint,
                             int *error)
-{    
-  if (point != 0)
+{
+  if (point != 0 && retpoint != 0)
     {
       *error = 0;
       retpoint->x = point->extrusion.x;
@@ -2214,7 +2567,10 @@ dwg_ent_point_get_extrusion(dwg_ent_point *point, dwg_point_3d *retpoint,
       retpoint->z = point->extrusion.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /*******************************************************************
@@ -2228,14 +2584,18 @@ dwg_ent_point_get_extrusion(dwg_ent_point *point, dwg_point_3d *retpoint,
 */
 double
 dwg_ent_solid_get_thickness(dwg_ent_solid *solid, int *error)
-{    
+{
   if (solid != 0)
     {
       *error = 0;
       return solid->thickness;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// This sets the thickness of a solid entity.
@@ -2247,14 +2607,17 @@ dwg_ent_solid_get_thickness(dwg_ent_solid *solid, int *error)
 void
 dwg_ent_solid_set_thickness(dwg_ent_solid *solid, double thickness,
                             int *error)
-{    
+{
   if (solid != 0)
     {
       *error = 0;
       solid->thickness = thickness;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// This returns the elevation of a solid entity.
@@ -2264,14 +2627,18 @@ dwg_ent_solid_set_thickness(dwg_ent_solid *solid, double thickness,
 */
 double
 dwg_ent_solid_get_elevation(dwg_ent_solid *solid, int *error)
-{    
+{
   if (solid != 0)
     {
       *error = 0;
       return solid->elevation;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// This sets the elevation of a solid entity.
@@ -2283,14 +2650,17 @@ dwg_ent_solid_get_elevation(dwg_ent_solid *solid, int *error)
 void
 dwg_ent_solid_set_elevation(dwg_ent_solid *solid, double elevation,
                             int *error)
-{    
+{
   if (solid != 0)
     {
       *error = 0;
       solid->elevation = elevation;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the corner1 values of solid.
@@ -2302,15 +2672,18 @@ dwg_ent_solid_set_elevation(dwg_ent_solid *solid, double elevation,
 void
 dwg_ent_solid_get_corner1(dwg_ent_solid *solid, dwg_point_2d *point,
                           int *error)
-{    
-  if (solid != 0)
+{
+  if (solid != 0 && point != 0)
     {
       *error = 0;
       point->x = solid->corner1.x;
       point->y = solid->corner1.y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the solid corner1 values.
@@ -2322,15 +2695,18 @@ dwg_ent_solid_get_corner1(dwg_ent_solid *solid, dwg_point_2d *point,
 void
 dwg_ent_solid_set_corner1(dwg_ent_solid *solid, dwg_point_2d *point,
                           int *error)
-{    
-  if (solid != 0)
+{
+  if (solid != 0 && point != 0)
     {
       *error = 0;
       solid->corner1.x = point->x;
       solid->corner1.y = point->y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the corner2 values.
@@ -2342,15 +2718,18 @@ dwg_ent_solid_set_corner1(dwg_ent_solid *solid, dwg_point_2d *point,
 void
 dwg_ent_solid_get_corner2(dwg_ent_solid *solid, dwg_point_2d *point,
                           int *error)
-{    
-  if (solid != 0)
+{
+  if (solid != 0 && point != 0)
     {
       *error = 0;
       point->x = solid->corner2.x;
       point->y = solid->corner2.y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the solid corner2.
@@ -2362,15 +2741,18 @@ dwg_ent_solid_get_corner2(dwg_ent_solid *solid, dwg_point_2d *point,
 void
 dwg_ent_solid_set_corner2(dwg_ent_solid *solid, dwg_point_2d *point,
                           int *error)
-{    
-  if (solid != 0)
+{
+  if (solid != 0 && point != 0)
     {
       *error = 0;
       solid->corner2.x = point->x;
       solid->corner2.y = point->y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the corner3 values.
@@ -2382,15 +2764,18 @@ dwg_ent_solid_set_corner2(dwg_ent_solid *solid, dwg_point_2d *point,
 void
 dwg_ent_solid_get_corner3(dwg_ent_solid *solid, dwg_point_2d *point,
                           int *error)
-{    
-  if (solid != 0)
+{
+  if (solid != 0 && point != 0)
     {
       *error = 0;
       point->x = solid->corner3.x;
       point->y = solid->corner3.y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the solid corner3 values.
@@ -2402,15 +2787,18 @@ dwg_ent_solid_get_corner3(dwg_ent_solid *solid, dwg_point_2d *point,
 void
 dwg_ent_solid_set_corner3(dwg_ent_solid *solid, dwg_point_2d *point,
                           int *error)
-{    
-  if (solid != 0)
+{
+  if (solid != 0 && point != 0)
     {
       *error = 0;
       solid->corner3.x = point->x;
       solid->corner3.y = point->y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the corner4 values.
@@ -2422,15 +2810,18 @@ dwg_ent_solid_set_corner3(dwg_ent_solid *solid, dwg_point_2d *point,
 void
 dwg_ent_solid_get_corner4(dwg_ent_solid *solid, dwg_point_2d *point,
                           int *error)
-{    
-  if (solid != 0)
+{
+  if (solid != 0 && point != 0)
     {
       *error = 0;
       point->x = solid->corner4.x;
       point->y = solid->corner4.y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the solid corner4 values.
@@ -2442,15 +2833,18 @@ dwg_ent_solid_get_corner4(dwg_ent_solid *solid, dwg_point_2d *point,
 void
 dwg_ent_solid_set_corner4(dwg_ent_solid *solid, dwg_point_2d *point,
                           int *error)
-{    
-  if (solid != 0)
+{
+  if (solid != 0 && point != 0)
     {
       *error = 0;
       solid->corner4.x = point->x;
       solid->corner4.y = point->y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the extrusion values.
@@ -2462,8 +2856,8 @@ dwg_ent_solid_set_corner4(dwg_ent_solid *solid, dwg_point_2d *point,
 void
 dwg_ent_solid_get_extrusion(dwg_ent_solid *solid, dwg_point_3d *vector,
                             int *error)
-{    
-  if (solid != 0)
+{
+  if (solid != 0 && vector != 0)
     {
       *error = 0;
       vector->x = solid->extrusion.x;
@@ -2471,7 +2865,10 @@ dwg_ent_solid_get_extrusion(dwg_ent_solid *solid, dwg_point_3d *vector,
       vector->z = solid->extrusion.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the solid extrusion values.
@@ -2483,8 +2880,8 @@ dwg_ent_solid_get_extrusion(dwg_ent_solid *solid, dwg_point_3d *vector,
 void
 dwg_ent_solid_set_extrusion(dwg_ent_solid *solid, dwg_point_3d *vector,
                             int *error)
-{    
-  if (solid != 0)
+{
+  if (solid != 0 && vector != 0)
     {
       *error = 0;
       solid->extrusion.x = vector->x;
@@ -2492,7 +2889,10 @@ dwg_ent_solid_set_extrusion(dwg_ent_solid *solid, dwg_point_3d *vector,
       solid->extrusion.z = vector->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /*******************************************************************
@@ -2507,14 +2907,17 @@ dwg_ent_solid_set_extrusion(dwg_ent_solid *solid, dwg_point_3d *vector,
 */
 void
 dwg_ent_block_set_name(dwg_ent_block *block, char * name, int *error)
-{    
+{
   if (block != 0)
     {
       *error = 0;
       block->name = name;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns name of the block entity.
@@ -2524,14 +2927,18 @@ dwg_ent_block_set_name(dwg_ent_block *block, char * name, int *error)
 */
 char *
 dwg_ent_block_get_name(dwg_ent_block *block, int *error)
-{    
+{
   if (block != 0)
     {
       *error = 0;
       return block->name;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty block", __FUNCTION__)
+      *error = 1;
+      return NULL;
+    }
 }
 
 /*******************************************************************
@@ -2546,8 +2953,8 @@ dwg_ent_block_get_name(dwg_ent_block *block, int *error)
 */
 void
 dwg_ent_ray_get_point(dwg_ent_ray *ray, dwg_point_3d *point, int *error)
-{    
-  if (ray != 0)
+{
+  if (ray != 0 && point != 0)
     {
       *error = 0;
       point->x = ray->point.x;
@@ -2555,7 +2962,10 @@ dwg_ent_ray_get_point(dwg_ent_ray *ray, dwg_point_3d *point, int *error)
       point->z = ray->point.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets point of ray entity.
@@ -2566,8 +2976,8 @@ dwg_ent_ray_get_point(dwg_ent_ray *ray, dwg_point_3d *point, int *error)
 */
 void
 dwg_ent_ray_set_point(dwg_ent_ray *ray, dwg_point_3d *point, int *error)
-{    
-  if (ray != 0)
+{
+  if (ray != 0 && point != 0)
     {
       *error = 0;
       ray->point.x = point->x;
@@ -2575,7 +2985,10 @@ dwg_ent_ray_set_point(dwg_ent_ray *ray, dwg_point_3d *point, int *error)
       ray->point.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns vector of ray entity.
@@ -2586,8 +2999,8 @@ dwg_ent_ray_set_point(dwg_ent_ray *ray, dwg_point_3d *point, int *error)
 */
 void
 dwg_ent_ray_get_vector(dwg_ent_ray *ray, dwg_point_3d *vector, int *error)
-{    
-  if (ray != 0)
+{
+  if (ray != 0 && vector != 0)
     {
       *error = 0;
       vector->x = ray->vector.x;
@@ -2595,7 +3008,10 @@ dwg_ent_ray_get_vector(dwg_ent_ray *ray, dwg_point_3d *vector, int *error)
       vector->z = ray->vector.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets vector of ray entity.
@@ -2606,8 +3022,8 @@ dwg_ent_ray_get_vector(dwg_ent_ray *ray, dwg_point_3d *vector, int *error)
 */
 void
 dwg_ent_ray_set_vector(dwg_ent_ray *ray, dwg_point_3d *vector, int *error)
-{    
-  if (ray != 0)
+{
+  if (ray != 0 && vector != 0)
     {
       *error = 0;
       ray->vector.x = vector->x;
@@ -2615,7 +3031,10 @@ dwg_ent_ray_set_vector(dwg_ent_ray *ray, dwg_point_3d *vector, int *error)
       ray->vector.z = vector->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /*******************************************************************
@@ -2630,8 +3049,8 @@ dwg_ent_ray_set_vector(dwg_ent_ray *ray, dwg_point_3d *vector, int *error)
 */
 void
 dwg_ent_xline_get_point(dwg_ent_xline *xline, dwg_point_3d *point, int *error)
-{    
-  if (xline != 0)
+{
+  if (xline != 0 && point != 0)
     {
       *error = 0;
       point->x = xline->point.x;
@@ -2639,7 +3058,10 @@ dwg_ent_xline_get_point(dwg_ent_xline *xline, dwg_point_3d *point, int *error)
       point->z = xline->point.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets point of xline entity.
@@ -2650,8 +3072,8 @@ dwg_ent_xline_get_point(dwg_ent_xline *xline, dwg_point_3d *point, int *error)
 */
 void
 dwg_ent_xline_set_point(dwg_ent_xline *xline, dwg_point_3d *point, int *error)
-{    
-  if (xline != 0)
+{
+  if (xline != 0 && point != 0)
     {
       *error = 0;
       xline->point.x = point->x;
@@ -2659,7 +3081,10 @@ dwg_ent_xline_set_point(dwg_ent_xline *xline, dwg_point_3d *point, int *error)
       xline->point.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns vector of xline entity.
@@ -2671,8 +3096,8 @@ dwg_ent_xline_set_point(dwg_ent_xline *xline, dwg_point_3d *point, int *error)
 void
 dwg_ent_xline_get_vector(dwg_ent_xline *xline, dwg_point_3d *vector,
                          int *error)
-{    
-  if (xline != 0)
+{
+  if (xline != 0 && vector != 0)
     {
       *error = 0;
       vector->x = xline->vector.x;
@@ -2680,7 +3105,10 @@ dwg_ent_xline_get_vector(dwg_ent_xline *xline, dwg_point_3d *vector,
       vector->z = xline->vector.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets vector of xline entity.
@@ -2692,8 +3120,8 @@ dwg_ent_xline_get_vector(dwg_ent_xline *xline, dwg_point_3d *vector,
 void
 dwg_ent_xline_set_vector(dwg_ent_xline *xline, dwg_point_3d *vector,
                          int *error)
-{    
-  if (xline != 0)
+{
+  if (xline != 0 && vector != 0)
     {
       *error = 0;
       xline->vector.x = vector->x;
@@ -2701,7 +3129,10 @@ dwg_ent_xline_set_vector(dwg_ent_xline *xline, dwg_point_3d *vector,
       xline->vector.z = vector->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /*******************************************************************
@@ -2715,14 +3146,18 @@ dwg_ent_xline_set_vector(dwg_ent_xline *xline, dwg_point_3d *vector,
 */
 double
 dwg_ent_trace_get_thickness(dwg_ent_trace *trace, int *error)
-{    
+{
   if (trace != 0)
     {
       *error = 0;
       return trace->thickness;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// This sets the thickness of a trace entity.
@@ -2734,14 +3169,17 @@ dwg_ent_trace_get_thickness(dwg_ent_trace *trace, int *error)
 void
 dwg_ent_trace_set_thickness(dwg_ent_trace *trace, double thickness,
                             int *error)
-{    
+{
   if (trace != 0)
     {
       *error = 0;
       trace->thickness = thickness;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// This returns the elevation of a trace entity.
@@ -2751,14 +3189,18 @@ dwg_ent_trace_set_thickness(dwg_ent_trace *trace, double thickness,
 */
 double
 dwg_ent_trace_get_elevation(dwg_ent_trace *trace, int *error)
-{    
+{
   if (trace != 0)
     {
       *error = 0;
       return trace->elevation;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// This sets the elevation of a trace entity.
@@ -2770,14 +3212,17 @@ dwg_ent_trace_get_elevation(dwg_ent_trace *trace, int *error)
 void
 dwg_ent_trace_set_elevation(dwg_ent_trace *trace, double elevation,
                             int *error)
-{    
+{
   if (trace != 0)
     {
       *error = 0;
       trace->elevation = elevation;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the corner1 values of trace.
@@ -2789,15 +3234,18 @@ dwg_ent_trace_set_elevation(dwg_ent_trace *trace, double elevation,
 void
 dwg_ent_trace_get_corner1(dwg_ent_trace *trace, dwg_point_2d *point,
                           int *error)
-{    
-  if (trace != 0)
+{
+  if (trace != 0 && point != 0)
     {
       *error = 0;
       point->x = trace->corner1.x;
       point->y = trace->corner1.y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the corner1 values of trace.
@@ -2809,15 +3257,18 @@ dwg_ent_trace_get_corner1(dwg_ent_trace *trace, dwg_point_2d *point,
 void
 dwg_ent_trace_set_corner1(dwg_ent_trace *trace, dwg_point_2d *point,
                           int *error)
-{    
-  if (trace != 0)
+{
+  if (trace != 0 && point != 0)
     {
       *error = 0;
       trace->corner1.x = point->x;
       trace->corner1.y = point->y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the corner2 values of trace.
@@ -2829,15 +3280,18 @@ dwg_ent_trace_set_corner1(dwg_ent_trace *trace, dwg_point_2d *point,
 void
 dwg_ent_trace_get_corner2(dwg_ent_trace *trace, dwg_point_2d *point,
                           int *error)
-{    
-  if (trace != 0)
+{
+  if (trace != 0 && point != 0)
     {
       *error = 0;
       point->x = trace->corner2.x;
       point->y = trace->corner2.y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the corner2 values of trace.
@@ -2849,15 +3303,18 @@ dwg_ent_trace_get_corner2(dwg_ent_trace *trace, dwg_point_2d *point,
 void
 dwg_ent_trace_set_corner2(dwg_ent_trace *trace, dwg_point_2d *point,
                           int *error)
-{    
-  if (trace != 0)
+{
+  if (trace != 0 && point != 0)
     {
       *error = 0;
       trace->corner2.x = point->x;
       trace->corner2.y = point->y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the corner3 values of trace.
@@ -2869,15 +3326,18 @@ dwg_ent_trace_set_corner2(dwg_ent_trace *trace, dwg_point_2d *point,
 void
 dwg_ent_trace_get_corner3(dwg_ent_trace *trace, dwg_point_2d *point,
                           int *error)
-{    
-  if (trace != 0)
+{
+  if (trace != 0 && point != 0)
     {
       *error = 0;
       point->x = trace->corner3.x;
       point->y = trace->corner3.y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the corner3 values of trace.
@@ -2889,15 +3349,18 @@ dwg_ent_trace_get_corner3(dwg_ent_trace *trace, dwg_point_2d *point,
 void
 dwg_ent_trace_set_corner3(dwg_ent_trace *trace, dwg_point_2d *point,
                           int *error)
-{    
-  if (trace != 0)
+{
+  if (trace != 0 && point != 0)
     {
       *error = 0;
       trace->corner3.x = point->x;
       trace->corner3.y = point->y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the corner4 values of trace.
@@ -2909,15 +3372,18 @@ dwg_ent_trace_set_corner3(dwg_ent_trace *trace, dwg_point_2d *point,
 void
 dwg_ent_trace_get_corner4(dwg_ent_trace *trace, dwg_point_2d *point,
                           int *error)
-{    
-  if (trace != 0)
+{
+  if (trace != 0 && point != 0)
     {
       *error = 0;
       point->x = trace->corner4.x;
       point->y = trace->corner4.y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the corner4 values of trace.
@@ -2929,15 +3395,18 @@ dwg_ent_trace_get_corner4(dwg_ent_trace *trace, dwg_point_2d *point,
 void
 dwg_ent_trace_set_corner4(dwg_ent_trace *trace, dwg_point_2d *point,
                           int *error)
-{    
-  if (trace != 0)
+{
+  if (trace != 0 && point != 0)
     {
       *error = 0;
       trace->corner4.x = point->x;
       trace->corner4.y = point->y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the extrusion values of trace.
@@ -2949,8 +3418,8 @@ dwg_ent_trace_set_corner4(dwg_ent_trace *trace, dwg_point_2d *point,
 void
 dwg_ent_trace_get_extrusion(dwg_ent_trace *trace, dwg_point_3d *vector,
                             int *error)
-{    
-  if (trace != 0)
+{
+  if (trace != 0 && vector != 0)
     {
       *error = 0;
       vector->x = trace->extrusion.x;
@@ -2958,7 +3427,10 @@ dwg_ent_trace_get_extrusion(dwg_ent_trace *trace, dwg_point_3d *vector,
       vector->z = trace->extrusion.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the extrusion values of trace.
@@ -2970,8 +3442,8 @@ dwg_ent_trace_get_extrusion(dwg_ent_trace *trace, dwg_point_3d *vector,
 void
 dwg_ent_trace_set_extrusion(dwg_ent_trace *trace, dwg_point_3d *vector,
                             int *error)
-{    
-  if (trace != 0)
+{
+  if (trace != 0 && vector != 0)
     {
       *error = 0;
       trace->extrusion.x = vector->x;
@@ -2979,7 +3451,10 @@ dwg_ent_trace_set_extrusion(dwg_ent_trace *trace, dwg_point_3d *vector,
       trace->extrusion.z = vector->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /*******************************************************************
@@ -2993,14 +3468,18 @@ dwg_ent_trace_set_extrusion(dwg_ent_trace *trace, dwg_point_3d *vector,
 */
 char
 dwg_ent_vertex_3d_get_flags(dwg_ent_vertex_3d *vert, int *error)
-{    
+{
   if (vert != 0)
     {
       *error = 0;
       return vert->flags;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets the flag of vertex_3d.
@@ -3011,14 +3490,17 @@ dwg_ent_vertex_3d_get_flags(dwg_ent_vertex_3d *vert, int *error)
 */
 void
 dwg_ent_vertex_3d_set_flags(dwg_ent_vertex_3d *vert, char flags, int *error)
-{    
+{
   if (vert != 0)
     {
       *error = 0;
       vert->flags = flags;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the point of vertex_3d.
@@ -3030,8 +3512,8 @@ dwg_ent_vertex_3d_set_flags(dwg_ent_vertex_3d *vert, char flags, int *error)
 void
 dwg_ent_vertex_3d_get_point(dwg_ent_vertex_3d *vert, dwg_point_3d *point,
                             int *error)
-{    
-  if (vert != 0)
+{
+  if (vert != 0 && point != 0)
     {
       *error = 0;
       point->x = vert->point.x;
@@ -3039,7 +3521,10 @@ dwg_ent_vertex_3d_get_point(dwg_ent_vertex_3d *vert, dwg_point_3d *point,
       point->z = vert->point.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the point of vertex_3d.
@@ -3051,8 +3536,8 @@ dwg_ent_vertex_3d_get_point(dwg_ent_vertex_3d *vert, dwg_point_3d *point,
 void
 dwg_ent_vertex_3d_set_point(dwg_ent_vertex_3d *vert,
                             dwg_point_3d *point, int *error)
-{    
-  if (vert != 0)
+{
+  if (vert != 0 && point != 0)
     {
       *error = 0;
       vert->point.x = point->x;
@@ -3060,7 +3545,10 @@ dwg_ent_vertex_3d_set_point(dwg_ent_vertex_3d *vert,
       vert->point.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /*******************************************************************
@@ -3074,14 +3562,18 @@ dwg_ent_vertex_3d_set_point(dwg_ent_vertex_3d *vert,
 */
 char
 dwg_ent_vertex_mesh_get_flags(dwg_ent_vertex_mesh *vert, int *error)
-{    
+{
   if (vert != 0)
     {
       *error = 0;
       return vert->flags;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets the flag of vertex_mesh.
@@ -3093,14 +3585,17 @@ dwg_ent_vertex_mesh_get_flags(dwg_ent_vertex_mesh *vert, int *error)
 void
 dwg_ent_vertex_mesh_set_flags(dwg_ent_vertex_mesh *vert, char flags,
                               int *error)
-{    
+{
   if (vert != 0)
     {
       *error = 0;
       vert->flags = flags;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the point of vertex_mesh.
@@ -3112,8 +3607,8 @@ dwg_ent_vertex_mesh_set_flags(dwg_ent_vertex_mesh *vert, char flags,
 void
 dwg_ent_vertex_mesh_get_point(dwg_ent_vertex_mesh *vert, dwg_point_3d *point,
                               int *error)
-{    
-  if (vert != 0)
+{
+  if (vert != 0 && point != 0)
     {
       *error = 0;
       point->x = vert->point.x;
@@ -3121,7 +3616,10 @@ dwg_ent_vertex_mesh_get_point(dwg_ent_vertex_mesh *vert, dwg_point_3d *point,
       point->z = vert->point.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the point of vertex_mesh.
@@ -3133,8 +3631,8 @@ dwg_ent_vertex_mesh_get_point(dwg_ent_vertex_mesh *vert, dwg_point_3d *point,
 void
 dwg_ent_vertex_mesh_set_point(dwg_ent_vertex_mesh *vert, dwg_point_3d *point,
                               int *error)
-{    
-  if (vert != 0)
+{
+  if (vert != 0 && point != 0)
     {
       *error = 0;
       vert->point.x = point->x;
@@ -3142,7 +3640,10 @@ dwg_ent_vertex_mesh_set_point(dwg_ent_vertex_mesh *vert, dwg_point_3d *point,
       vert->point.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /*******************************************************************
@@ -3156,14 +3657,18 @@ dwg_ent_vertex_mesh_set_point(dwg_ent_vertex_mesh *vert, dwg_point_3d *point,
 */
 char
 dwg_ent_vertex_pface_get_flags(dwg_ent_vertex_pface *vert, int *error)
-{    
+{
   if (vert != 0)
     {
       *error = 0;
       return vert->flags;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets the flag of vertex_pface.
@@ -3175,14 +3680,17 @@ dwg_ent_vertex_pface_get_flags(dwg_ent_vertex_pface *vert, int *error)
 void
 dwg_ent_vertex_pface_set_flags(dwg_ent_vertex_pface *vert, char flags,
                                int *error)
-{    
+{
   if (vert != 0)
     {
       *error = 0;
       vert->flags = flags;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the point of vertex_pface.
@@ -3194,8 +3702,8 @@ dwg_ent_vertex_pface_set_flags(dwg_ent_vertex_pface *vert, char flags,
 void
 dwg_ent_vertex_pface_get_point(dwg_ent_vertex_pface *vert,
                                dwg_point_3d *point, int *error)
-{    
-  if (vert != 0)
+{
+  if (vert != 0 && point != 0)
     {
       *error = 0;
       point->x = vert->point.x;
@@ -3203,7 +3711,10 @@ dwg_ent_vertex_pface_get_point(dwg_ent_vertex_pface *vert,
       point->z = vert->point.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the point of vertex_pface.
@@ -3215,8 +3726,8 @@ dwg_ent_vertex_pface_get_point(dwg_ent_vertex_pface *vert,
 void
 dwg_ent_vertex_pface_set_point(dwg_ent_vertex_pface *vert,
                                dwg_point_3d *point, int *error)
-{    
-  if (vert != 0)
+{
+  if (vert != 0 && point != 0)
     {
       *error = 0;
       vert->point.x = point->x;
@@ -3224,7 +3735,10 @@ dwg_ent_vertex_pface_set_point(dwg_ent_vertex_pface *vert,
       vert->point.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /*******************************************************************
@@ -3238,14 +3752,18 @@ dwg_ent_vertex_pface_set_point(dwg_ent_vertex_pface *vert,
 */
 char
 dwg_ent_vertex_2d_get_flags(dwg_ent_vertex_2d *vert, int *error)
-{    
+{
   if (vert != 0)
     {
       *error = 0;
       return vert->flags;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets the flag of vertex_2d.
@@ -3256,14 +3774,17 @@ dwg_ent_vertex_2d_get_flags(dwg_ent_vertex_2d *vert, int *error)
 */
 void
 dwg_ent_vertex_2d_set_flags(dwg_ent_vertex_2d *vert, char flags, int *error)
-{    
+{
   if (vert != 0)
     {
       *error = 0;
       vert->flags = flags;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the point of vertex_2d.
@@ -3275,8 +3796,8 @@ dwg_ent_vertex_2d_set_flags(dwg_ent_vertex_2d *vert, char flags, int *error)
 void
 dwg_ent_vertex_2d_get_point(dwg_ent_vertex_2d *vert, dwg_point_3d *point,
                             int *error)
-{    
-  if (vert != 0)
+{
+  if (vert != 0 && point != 0)
     {
       *error = 0;
       point->x = vert->point.x;
@@ -3284,7 +3805,10 @@ dwg_ent_vertex_2d_get_point(dwg_ent_vertex_2d *vert, dwg_point_3d *point,
       point->z = vert->point.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the point of vertex_2d.
@@ -3296,8 +3820,8 @@ dwg_ent_vertex_2d_get_point(dwg_ent_vertex_2d *vert, dwg_point_3d *point,
 void
 dwg_ent_vertex_2d_set_point(dwg_ent_vertex_2d *vert, dwg_point_3d *point,
                             int *error)
-{    
-  if (vert != 0)
+{
+  if (vert != 0 && point != 0)
     {
       *error = 0;
       vert->point.x = point->x;
@@ -3305,7 +3829,10 @@ dwg_ent_vertex_2d_set_point(dwg_ent_vertex_2d *vert, dwg_point_3d *point,
       vert->point.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the start width of vertex_2d.
@@ -3315,14 +3842,18 @@ dwg_ent_vertex_2d_set_point(dwg_ent_vertex_2d *vert, dwg_point_3d *point,
 */
 double
 dwg_ent_vertex_2d_get_start_width(dwg_ent_vertex_2d *vert, int *error)
-{    
+{
   if (vert != 0)
     {
       *error = 0;
       return vert->start_width;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the start width of vertex_2d.
@@ -3334,14 +3865,17 @@ dwg_ent_vertex_2d_get_start_width(dwg_ent_vertex_2d *vert, int *error)
 void
 dwg_ent_vertex_2d_set_start_width(dwg_ent_vertex_2d *vert, double start_width,
                                   int *error)
-{    
+{
   if (vert != 0)
     {
       *error = 0;
       vert->start_width = start_width;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the end width of vertex_2d.
@@ -3351,14 +3885,18 @@ dwg_ent_vertex_2d_set_start_width(dwg_ent_vertex_2d *vert, double start_width,
 */
 double
 dwg_ent_vertex_2d_get_end_width(dwg_ent_vertex_2d *vert, int *error)
-{    
+{
   if (vert != 0)
     {
       *error = 0;
       return vert->end_width;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the end width of vertex_2d.
@@ -3370,14 +3908,17 @@ dwg_ent_vertex_2d_get_end_width(dwg_ent_vertex_2d *vert, int *error)
 void
 dwg_ent_vertex_2d_set_end_width(dwg_ent_vertex_2d *vert, double end_width,
                                 int *error)
-{    
+{
   if (vert != 0)
     {
       *error = 0;
       vert->end_width = end_width;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the bulge of vertex_2d.
@@ -3387,14 +3928,18 @@ dwg_ent_vertex_2d_set_end_width(dwg_ent_vertex_2d *vert, double end_width,
 */
 double
 dwg_ent_vertex_2d_get_bulge(dwg_ent_vertex_2d *vert, int *error)
-{    
+{
   if (vert != 0)
     {
       *error = 0;
       return vert->bulge;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the bulge of vertex_2d.
@@ -3405,14 +3950,17 @@ dwg_ent_vertex_2d_get_bulge(dwg_ent_vertex_2d *vert, int *error)
 */
 void
 dwg_ent_vertex_2d_set_bulge(dwg_ent_vertex_2d *vert, double bulge, int *error)
-{    
+{
   if (vert != 0)
     {
       *error = 0;
       vert->bulge = bulge;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the tangent_dir of vertex_2d.
@@ -3422,14 +3970,18 @@ dwg_ent_vertex_2d_set_bulge(dwg_ent_vertex_2d *vert, double bulge, int *error)
 */
 double
 dwg_ent_vertex_2d_get_tangent_dir(dwg_ent_vertex_2d *vert, int *error)
-{    
+{
   if (vert != 0)
     {
       *error = 0;
       return vert->tangent_dir;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the tangent_dir of vertex_2d.
@@ -3441,14 +3993,17 @@ dwg_ent_vertex_2d_get_tangent_dir(dwg_ent_vertex_2d *vert, int *error)
 void
 dwg_ent_vertex_2d_set_tangent_dir(dwg_ent_vertex_2d *vert, double tangent_dir,
                                   int *error)
-{    
+{
   if (vert != 0)
     {
       *error = 0;
       vert->tangent_dir = tangent_dir;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /*******************************************************************
@@ -3464,8 +4019,8 @@ dwg_ent_vertex_2d_set_tangent_dir(dwg_ent_vertex_2d *vert, double tangent_dir,
 void
 dwg_ent_insert_get_ins_pt(dwg_ent_insert *insert, dwg_point_3d *point,
                           int *error)
-{    
-  if (insert != 0)
+{
+  if (insert != 0 && point != 0)
     {
       *error = 0;
       point->x = insert->ins_pt.x;
@@ -3473,7 +4028,10 @@ dwg_ent_insert_get_ins_pt(dwg_ent_insert *insert, dwg_point_3d *point,
       point->z = insert->ins_pt.z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty insert", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Sets the insertion point of insert.
@@ -3485,8 +4043,8 @@ dwg_ent_insert_get_ins_pt(dwg_ent_insert *insert, dwg_point_3d *point,
 void
 dwg_ent_insert_set_ins_pt(dwg_ent_insert *insert, dwg_point_3d *point,
                           int *error)
-{    
-  if (insert != 0)
+{
+  if (insert != 0 && point != 0)
     {
       *error = 0;
       insert->ins_pt.x = point->x;
@@ -3494,7 +4052,10 @@ dwg_ent_insert_set_ins_pt(dwg_ent_insert *insert, dwg_point_3d *point,
       insert->ins_pt.z = point->z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty insert", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns the scale flag of insert
@@ -3504,14 +4065,18 @@ dwg_ent_insert_set_ins_pt(dwg_ent_insert *insert, dwg_point_3d *point,
 */
 char
 dwg_ent_insert_get_scale_flag(dwg_ent_insert *insert, int *error)
-{    
+{
   if (insert != 0)
     {
       *error = 0;
       return insert->scale_flag;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty insert", __FUNCTION__)
+      *error = 1;
+      return '\0';
+    }
 }
 
 /// Sets the scale flag of insert.
@@ -3522,14 +4087,17 @@ dwg_ent_insert_get_scale_flag(dwg_ent_insert *insert, int *error)
 */
 void
 dwg_ent_insert_set_scale_flag(dwg_ent_insert *insert, char flags, int *error)
-{    
+{
   if (insert != 0)
     {
       *error = 0;
       insert->scale_flag = flags;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty insert", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns the scale of insert.
@@ -3541,8 +4109,8 @@ dwg_ent_insert_set_scale_flag(dwg_ent_insert *insert, char flags, int *error)
 void
 dwg_ent_insert_get_scale(dwg_ent_insert *insert, dwg_point_3d *point,
                          int *error)
-{    
-  if (insert != 0)
+{
+  if (insert != 0 && point != 0)
     {
       *error = 0;
       point->x = insert->scale.x;
@@ -3550,7 +4118,10 @@ dwg_ent_insert_get_scale(dwg_ent_insert *insert, dwg_point_3d *point,
       point->z = insert->scale.z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty insert", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Sets the scale of insert.
@@ -3562,8 +4133,8 @@ dwg_ent_insert_get_scale(dwg_ent_insert *insert, dwg_point_3d *point,
 void
 dwg_ent_insert_set_scale(dwg_ent_insert *insert, dwg_point_3d *point,
                          int *error)
-{    
-  if (insert != 0)
+{
+  if (insert != 0 && point != 0)
     {
       *error = 0;
       insert->scale.x = point->x;
@@ -3571,7 +4142,10 @@ dwg_ent_insert_set_scale(dwg_ent_insert *insert, dwg_point_3d *point,
       insert->scale.z = point->z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty insert", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns the rotation angle of insert.
@@ -3581,14 +4155,18 @@ dwg_ent_insert_set_scale(dwg_ent_insert *insert, dwg_point_3d *point,
 */
 double
 dwg_ent_insert_get_rotation_angle(dwg_ent_insert *insert, int *error)
-{    
+{
   if (insert != 0)
     {
       *error = 0;
       return insert->rotation_ang;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty insert", __FUNCTION__)
+      *error = 1;
+      return nan("");
+    }
 }
 
 /// Sets the rotation angle of insert.
@@ -3600,14 +4178,17 @@ dwg_ent_insert_get_rotation_angle(dwg_ent_insert *insert, int *error)
 void
 dwg_ent_insert_set_rotation_angle(dwg_ent_insert *insert, double rot_ang,
                                   int *error)
-{    
+{
   if (insert != 0)
     {
       *error = 0;
       insert->rotation_ang = rot_ang;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty insert", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns the extrusion of insert.
@@ -3619,8 +4200,8 @@ dwg_ent_insert_set_rotation_angle(dwg_ent_insert *insert, double rot_ang,
 void
 dwg_ent_insert_get_extrusion(dwg_ent_insert *insert, dwg_point_3d *point,
                              int *error)
-{    
-  if (insert != 0)
+{
+  if (insert != 0 && point != 0)
     {
       *error = 0;
       point->x = insert->extrusion.x;
@@ -3628,7 +4209,10 @@ dwg_ent_insert_get_extrusion(dwg_ent_insert *insert, dwg_point_3d *point,
       point->z = insert->extrusion.z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty insert", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Sets the extrusion of insert.
@@ -3640,8 +4224,8 @@ dwg_ent_insert_get_extrusion(dwg_ent_insert *insert, dwg_point_3d *point,
 void
 dwg_ent_insert_set_extrusion(dwg_ent_insert *insert, dwg_point_3d *point,
                              int *error)
-{    
-  if (insert != 0)
+{
+  if (insert != 0 && point != 0)
     {
       *error = 0;
       insert->extrusion.x = point->x;
@@ -3649,7 +4233,10 @@ dwg_ent_insert_set_extrusion(dwg_ent_insert *insert, dwg_point_3d *point,
       insert->extrusion.z = point->z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty insert", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns the has attribs of insert.
@@ -3659,14 +4246,18 @@ dwg_ent_insert_set_extrusion(dwg_ent_insert *insert, dwg_point_3d *point,
 */
 char
 dwg_ent_insert_get_has_attribs(dwg_ent_insert *insert, int *error)
-{    
+{
   if (insert != 0)
     {
       *error = 0;
       return insert->has_attribs;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty insert", __FUNCTION__)
+      *error = 1;
+      return '\0';
+    }
 }
 
 /// Sets the has_attribs of insert.
@@ -3678,14 +4269,17 @@ dwg_ent_insert_get_has_attribs(dwg_ent_insert *insert, int *error)
 void
 dwg_ent_insert_set_has_attribs(dwg_ent_insert *insert, char attribs,
                                int *error)
-{    
+{
   if (insert != 0)
     {
       *error = 0;
       insert->has_attribs = attribs;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty insert", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns the owned object count of insert
@@ -3695,14 +4289,18 @@ dwg_ent_insert_set_has_attribs(dwg_ent_insert *insert, char attribs,
 */
 long
 dwg_ent_insert_get_owned_obj_count(dwg_ent_insert *insert, int *error)
-{    
+{
   if (insert != 0)
     {
       *error = 0;
       return insert->owned_obj_count;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty insert", __FUNCTION__)
+      *error = 1;
+      return 0L;
+    }
 }
 
 /// Sets the owned object count of insert.
@@ -3714,14 +4312,17 @@ dwg_ent_insert_get_owned_obj_count(dwg_ent_insert *insert, int *error)
 void
 dwg_ent_insert_set_owned_obj_count(dwg_ent_insert *insert, long count,
                                    int *error)
-{    
+{
   if (insert != 0)
     {
       *error = 0;
       insert->owned_obj_count = count;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty insert", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns the ref handle.
@@ -3729,16 +4330,20 @@ dwg_ent_insert_set_owned_obj_count(dwg_ent_insert *insert, long count,
 \param 1 dwg_ent_insert
 \param 2 int
 */
-dwg_handle
+dwg_handle *
 dwg_ent_insert_get_ref_handle(dwg_ent_insert *insert, int *error)
 {
-  if(insert != 0)
+  if (insert != 0)
     {
       *error = 0;
-      return insert->block_header->handleref;
+      return &insert->block_header->handleref;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty insert", __FUNCTION__)
+      *error = 1;
+      return NULL;
+    }
 }
 
 /// Returns the abs reference.
@@ -3749,13 +4354,17 @@ dwg_ent_insert_get_ref_handle(dwg_ent_insert *insert, int *error)
 unsigned long
 dwg_ent_insert_get_abs_ref(dwg_ent_insert *insert, int *error)
 {
-  if(insert != 0)
+  if (insert != 0)
     {
       *error = 0;
       return insert->block_header->absolute_ref;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty insert", __FUNCTION__)
+      *error = 1;
+      return (unsigned long)-1L;
+    }
 }
 
 /*******************************************************************
@@ -3771,8 +4380,8 @@ dwg_ent_insert_get_abs_ref(dwg_ent_insert *insert, int *error)
 void
 dwg_ent_minsert_get_ins_pt(dwg_ent_minsert *minsert, dwg_point_3d *point,
                            int *error)
-{    
-  if (minsert != 0)
+{
+  if (minsert != 0 && point != 0)
     {
       *error = 0;
       point->x = minsert->ins_pt.x;
@@ -3780,7 +4389,10 @@ dwg_ent_minsert_get_ins_pt(dwg_ent_minsert *minsert, dwg_point_3d *point,
       point->z = minsert->ins_pt.z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty insert", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Sets the insertion point of minsert.
@@ -3792,8 +4404,8 @@ dwg_ent_minsert_get_ins_pt(dwg_ent_minsert *minsert, dwg_point_3d *point,
 void
 dwg_ent_minsert_set_ins_pt(dwg_ent_minsert *minsert, dwg_point_3d *point,
                            int *error)
-{    
-  if (minsert != 0)
+{
+  if (minsert != 0 && point != 0)
     {
       *error = 0;
       minsert->ins_pt.x = point->x;
@@ -3801,7 +4413,10 @@ dwg_ent_minsert_set_ins_pt(dwg_ent_minsert *minsert, dwg_point_3d *point,
       minsert->ins_pt.z = point->z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty minsert", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns the scale flag of minsert
@@ -3809,16 +4424,20 @@ dwg_ent_minsert_set_ins_pt(dwg_ent_minsert *minsert, dwg_point_3d *point,
 \param 1 dwg_ent_minsert
 \param 2 int
 */
-char 
+char
 dwg_ent_minsert_get_scale_flag(dwg_ent_minsert *minsert, int *error)
-{    
+{
   if (minsert != 0)
     {
       *error = 0;
       return minsert->scale_flag;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty minsert", __FUNCTION__)
+      *error = 1;
+      return '\0';
+    }
 }
 
 /// Sets the scale flag of minsert.
@@ -3830,14 +4449,17 @@ dwg_ent_minsert_get_scale_flag(dwg_ent_minsert *minsert, int *error)
 void
 dwg_ent_minsert_set_scale_flag(dwg_ent_minsert *minsert, char flags,
                                int *error)
-{    
+{
   if (minsert != 0)
     {
       *error = 0;
       minsert->scale_flag = flags;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty minsert", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns the scale of minsert.
@@ -3849,8 +4471,8 @@ dwg_ent_minsert_set_scale_flag(dwg_ent_minsert *minsert, char flags,
 void
 dwg_ent_minsert_get_scale(dwg_ent_minsert *minsert, dwg_point_3d *point,
                           int *error)
-{    
-  if (minsert != 0)
+{
+  if (minsert != 0 && point != 0)
     {
       *error = 0;
       point->x = minsert->scale.x;
@@ -3858,7 +4480,10 @@ dwg_ent_minsert_get_scale(dwg_ent_minsert *minsert, dwg_point_3d *point,
       point->z = minsert->scale.z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty minsert", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Sets the scale of minsert.
@@ -3868,10 +4493,10 @@ dwg_ent_minsert_get_scale(dwg_ent_minsert *minsert, dwg_point_3d *point,
 \param 3 int
 */
 void
-dwg_ent_minsert_set_scale(dwg_ent_minsert *minsert, dwg_point_3d *point, 
+dwg_ent_minsert_set_scale(dwg_ent_minsert *minsert, dwg_point_3d *point,
                           int *error)
-{    
-  if (minsert != 0)
+{
+  if (minsert != 0 && point != 0)
     {
       *error = 0;
       minsert->scale.x = point->x;
@@ -3879,7 +4504,10 @@ dwg_ent_minsert_set_scale(dwg_ent_minsert *minsert, dwg_point_3d *point,
       minsert->scale.z = point->z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty minsert", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns the rotation angle of minsert.
@@ -3889,14 +4517,18 @@ dwg_ent_minsert_set_scale(dwg_ent_minsert *minsert, dwg_point_3d *point,
 */
 double
 dwg_ent_minsert_get_rotation_angle(dwg_ent_minsert *minsert, int *error)
-{    
+{
   if (minsert != 0)
     {
       *error = 0;
       return minsert->rotation_ang;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty minsert", __FUNCTION__)
+      *error = 1;
+      return nan("");
+    }
 }
 
 /// Sets the rotation angle of minsert.
@@ -3908,14 +4540,17 @@ dwg_ent_minsert_get_rotation_angle(dwg_ent_minsert *minsert, int *error)
 void
 dwg_ent_minsert_set_rotation_angle(dwg_ent_minsert *minsert, double rot_ang,
                                    int *error)
-{    
+{
   if (minsert != 0)
     {
       *error = 0;
       minsert->rotation_ang = rot_ang;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty minsert", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns the extrusion of minsert.
@@ -3927,8 +4562,8 @@ dwg_ent_minsert_set_rotation_angle(dwg_ent_minsert *minsert, double rot_ang,
 void
 dwg_ent_minsert_get_extrusion(dwg_ent_minsert *minsert, dwg_point_3d *point,
                               int *error)
-{    
-  if (minsert != 0)
+{
+  if (minsert != 0 && point != 0)
     {
       *error = 0;
       point->x = minsert->extrusion.x;
@@ -3936,7 +4571,10 @@ dwg_ent_minsert_get_extrusion(dwg_ent_minsert *minsert, dwg_point_3d *point,
       point->z = minsert->extrusion.z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty minsert", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Sets the extrusion of minsert.
@@ -3948,8 +4586,8 @@ dwg_ent_minsert_get_extrusion(dwg_ent_minsert *minsert, dwg_point_3d *point,
 void
 dwg_ent_minsert_set_extrusion(dwg_ent_minsert *minsert, dwg_point_3d *point,
                               int *error)
-{    
-  if (minsert != 0)
+{
+  if (minsert != 0 && point != 0)
     {
       *error = 0;
       minsert->extrusion.x = point->x;
@@ -3957,7 +4595,10 @@ dwg_ent_minsert_set_extrusion(dwg_ent_minsert *minsert, dwg_point_3d *point,
       minsert->extrusion.z = point->z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty minsert", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns the has attribs of minsert.
@@ -3965,16 +4606,20 @@ dwg_ent_minsert_set_extrusion(dwg_ent_minsert *minsert, dwg_point_3d *point,
 \param 1 dwg_ent_minsert
 \param 2 int
 */
-char 
+char
 dwg_ent_minsert_get_has_attribs(dwg_ent_minsert *minsert, int *error)
-{    
+{
   if (minsert != 0)
     {
       *error = 0;
       return minsert->has_attribs;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty minsert", __FUNCTION__)
+      *error = 1;
+      return '\0';
+    }
 }
 
 /// Sets the has_attribs of minsert.
@@ -3986,14 +4631,17 @@ dwg_ent_minsert_get_has_attribs(dwg_ent_minsert *minsert, int *error)
 void
 dwg_ent_minsert_set_has_attribs(dwg_ent_minsert *minsert, char attribs,
                                 int *error)
-{    
+{
   if (minsert != 0)
     {
       *error = 0;
       minsert->has_attribs = attribs;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty minsert", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns the owned object count of minsert
@@ -4003,14 +4651,18 @@ dwg_ent_minsert_set_has_attribs(dwg_ent_minsert *minsert, char attribs,
 */
 long
 dwg_ent_minsert_get_owned_obj_count(dwg_ent_minsert *minsert, int *error)
-{    
+{
   if (minsert != 0)
     {
       *error = 0;
       return minsert->owned_obj_count;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0L;
+    }
 }
 
 /// Sets the owned object count of minsert.
@@ -4022,14 +4674,17 @@ dwg_ent_minsert_get_owned_obj_count(dwg_ent_minsert *minsert, int *error)
 void
 dwg_ent_minsert_set_owned_obj_count(dwg_ent_minsert *minsert, long count,
                                     int *error)
-{    
+{
   if (minsert != 0)
     {
       *error = 0;
       minsert->owned_obj_count = count;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the num cols of minsert
@@ -4039,14 +4694,18 @@ dwg_ent_minsert_set_owned_obj_count(dwg_ent_minsert *minsert, long count,
 */
 long
 dwg_ent_minsert_get_numcols(dwg_ent_minsert *minsert, int *error)
-{    
+{
   if (minsert != 0)
     {
       *error = 0;
       return minsert->numcols;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0L;
+    }
 }
 
 /// Sets the number of columns of minsert.
@@ -4057,14 +4716,17 @@ dwg_ent_minsert_get_numcols(dwg_ent_minsert *minsert, int *error)
 */
 void
 dwg_ent_minsert_set_numcols(dwg_ent_minsert *minsert, long cols, int *error)
-{    
+{
   if (minsert != 0)
     {
       *error = 0;
       minsert->numcols = cols;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the number of rows of minsert
@@ -4074,14 +4736,18 @@ dwg_ent_minsert_set_numcols(dwg_ent_minsert *minsert, long cols, int *error)
 */
 long
 dwg_ent_minsert_get_numrows(dwg_ent_minsert *minsert, int *error)
-{    
+{
   if (minsert != 0)
     {
       *error = 0;
       return minsert->numrows;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0L;
+    }
 }
 
 /// Sets the number of rows of minsert.
@@ -4092,14 +4758,17 @@ dwg_ent_minsert_get_numrows(dwg_ent_minsert *minsert, int *error)
 */
 void
 dwg_ent_minsert_set_numrows(dwg_ent_minsert *minsert, long cols, int *error)
-{    
+{
   if (minsert != 0)
     {
       *error = 0;
       minsert->numrows = cols;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the column spacing of minsert
@@ -4109,14 +4778,18 @@ dwg_ent_minsert_set_numrows(dwg_ent_minsert *minsert, long cols, int *error)
 */
 double
 dwg_ent_minsert_get_col_spacing(dwg_ent_minsert *minsert, int *error)
-{    
+{
   if (minsert != 0)
     {
       *error = 0;
       return minsert->col_spacing;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the column spacing of minsert.
@@ -4128,14 +4801,17 @@ dwg_ent_minsert_get_col_spacing(dwg_ent_minsert *minsert, int *error)
 void
 dwg_ent_minsert_set_col_spacing(dwg_ent_minsert *minsert, double spacing,
                                 int *error)
-{    
+{
   if (minsert != 0)
     {
       *error = 0;
       minsert->col_spacing = spacing;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the row spacing of minsert
@@ -4145,14 +4821,18 @@ dwg_ent_minsert_set_col_spacing(dwg_ent_minsert *minsert, double spacing,
 */
 double
 dwg_ent_minsert_get_row_spacing(dwg_ent_minsert *minsert, int *error)
-{    
+{
   if (minsert != 0)
     {
       *error = 0;
       return minsert->row_spacing;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the row spacing of minsert.
@@ -4164,14 +4844,17 @@ dwg_ent_minsert_get_row_spacing(dwg_ent_minsert *minsert, int *error)
 void
 dwg_ent_minsert_set_row_spacing(dwg_ent_minsert *minsert, double spacing,
                                 int *error)
-{    
+{
   if (minsert != 0)
     {
       *error = 0;
       minsert->row_spacing = spacing;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /*******************************************************************
@@ -4185,14 +4868,18 @@ dwg_ent_minsert_set_row_spacing(dwg_ent_minsert *minsert, double spacing,
 */
 char *
 dwg_obj_mlinstyle_get_name(dwg_obj_mlinestyle *mlinestyle, int *error)
-{    
+{
   if (mlinestyle != 0)
     {
       *error = 0;
       return mlinestyle->name;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty mlinestyle", __FUNCTION__)
+      *error = 1;
+      return NULL;
+    }
 }
 
 /// Sets the name of mlinestyle object
@@ -4204,14 +4891,17 @@ dwg_obj_mlinstyle_get_name(dwg_obj_mlinestyle *mlinestyle, int *error)
 void
 dwg_obj_mlinestyle_set_name(dwg_obj_mlinestyle *mlinestyle, char * name,
                             int *error)
-{    
+{
   if (mlinestyle != 0)
     {
       *error = 0;
       mlinestyle->name = name;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the desc of mlinestyle
@@ -4221,14 +4911,18 @@ dwg_obj_mlinestyle_set_name(dwg_obj_mlinestyle *mlinestyle, char * name,
 */
 char *
 dwg_obj_mlinestyle_get_desc(dwg_obj_mlinestyle *mlinestyle, int *error)
-{    
+{
   if (mlinestyle != 0)
     {
       *error = 0;
       return mlinestyle->desc;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty mlinestyle", __FUNCTION__)
+      *error = 1;
+      return NULL;
+    }
 }
 
 /// Sets the desc of mlinestyle.
@@ -4240,14 +4934,17 @@ dwg_obj_mlinestyle_get_desc(dwg_obj_mlinestyle *mlinestyle, int *error)
 void
 dwg_obj_mlinestyle_set_desc(dwg_obj_mlinestyle *mlinestyle, char * desc,
                             int *error)
-{    
+{
   if (mlinestyle != 0)
     {
       *error = 0;
       mlinestyle->desc = desc;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the flags of mlinestyle
@@ -4257,14 +4954,18 @@ dwg_obj_mlinestyle_set_desc(dwg_obj_mlinestyle *mlinestyle, char * desc,
 */
 int
 dwg_obj_mlinestyle_get_flags(dwg_obj_mlinestyle *mlinestyle, int *error)
-{    
+{
   if (mlinestyle != 0)
     {
       *error = 0;
       return mlinestyle->flags;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty mlinestyle", __FUNCTION__)
+      *error = 1;
+      return '\0';
+    }
 }
 
 /// Sets the flag of mlinestyle
@@ -4276,14 +4977,17 @@ dwg_obj_mlinestyle_get_flags(dwg_obj_mlinestyle *mlinestyle, int *error)
 void
 dwg_obj_mlinestyle_set_flags(dwg_obj_mlinestyle *mlinestyle, int flags,
                              int *error)
-{    
+{
   if (mlinestyle != 0)
     {
       *error = 0;
       mlinestyle->flags = flags;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the start angle of mlinestyle
@@ -4293,14 +4997,18 @@ dwg_obj_mlinestyle_set_flags(dwg_obj_mlinestyle *mlinestyle, int flags,
 */
 double
 dwg_obj_mlinestyle_get_start_angle(dwg_obj_mlinestyle *mlinestyle, int *error)
-{    
+{
   if (mlinestyle != 0)
     {
       *error = 0;
       return mlinestyle->startang;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty mlinestyle", __FUNCTION__)
+      *error = 1;
+      return '\0';
+    }
 }
 
 /// Sets the start angle of mlinestyle
@@ -4312,14 +5020,17 @@ dwg_obj_mlinestyle_get_start_angle(dwg_obj_mlinestyle *mlinestyle, int *error)
 void
 dwg_obj_mlinestyle_set_start_angle(dwg_obj_mlinestyle *mlinestyle,
                                    double startang, int *error)
-{    
+{
   if (mlinestyle != 0)
     {
       *error = 0;
       mlinestyle->startang = startang;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty mlinestyle", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns the end angle of mlinestyle
@@ -4329,14 +5040,18 @@ dwg_obj_mlinestyle_set_start_angle(dwg_obj_mlinestyle *mlinestyle,
 */
 double
 dwg_obj_mlinestyle_get_end_angle(dwg_obj_mlinestyle *mlinestyle, int *error)
-{    
+{
   if (mlinestyle != 0)
     {
       *error = 0;
       return mlinestyle->endang;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty mlinestyle", __FUNCTION__)
+      *error = 1;
+      return '\0';
+    }
 }
 
 /// Sets the end angle of mlinestyle
@@ -4348,14 +5063,17 @@ dwg_obj_mlinestyle_get_end_angle(dwg_obj_mlinestyle *mlinestyle, int *error)
 void
 dwg_obj_mlinestyle_set_end_angle(dwg_obj_mlinestyle *mlinestyle, double endang,
                                  int *error)
-{    
+{
   if (mlinestyle != 0)
     {
       *error = 0;
       mlinestyle->endang = endang;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty mlinestyle", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns the lines in style of mlinestyle
@@ -4364,16 +5082,20 @@ dwg_obj_mlinestyle_set_end_angle(dwg_obj_mlinestyle *mlinestyle, double endang,
 \param 2 int
 */
 char
-dwg_obj_mlinestyle_get_linesinstyle(dwg_obj_mlinestyle *mlinestyle, 
+dwg_obj_mlinestyle_get_linesinstyle(dwg_obj_mlinestyle *mlinestyle,
                                     int *error)
-{    
+{
   if (mlinestyle != 0)
     {
       *error = 0;
       return mlinestyle->linesinstyle;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty mlinestyle", __FUNCTION__)
+      *error = 1;
+      return '\0';
+    }
 }
 
 /// Sets the lines in style of mlinestyle
@@ -4385,14 +5107,17 @@ dwg_obj_mlinestyle_get_linesinstyle(dwg_obj_mlinestyle *mlinestyle,
 void
 dwg_obj_mlinestyle_set_linesinstyle(dwg_obj_mlinestyle *mlinestyle,
                                     char linesinstyle, int *error)
-{    
+{
   if (mlinestyle != 0)
     {
       *error = 0;
       mlinestyle->linesinstyle = linesinstyle;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty mlinestyle", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /*******************************************************************
@@ -4413,8 +5138,11 @@ dwg_obj_appid_control_get_num_entries(dwg_obj_appid_control *appid, int *error)
       return appid->num_entries;
     }
   else
-    *error = 1;
-
+    {
+      LOG_ERROR("%s: empty appid", __FUNCTION__)
+      *error = 1;
+      return 0;
+    }
 }
 
 /// Sets the num entries of appid control
@@ -4433,7 +5161,10 @@ dwg_obj_appid_control_set_num_entries(dwg_obj_appid_control *appid,
       appid->num_entries = entries;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 
 }
 
@@ -4455,8 +5186,11 @@ dwg_obj_appid_get_entry_name(dwg_obj_appid *appid, int *error)
       return appid->entry_name;
     }
   else
-    *error = 1;
-
+    {
+      LOG_ERROR("%s: empty appid", __FUNCTION__)
+      *error = 1;
+      return NULL;
+    }
 }
 
 /// Sets the name of appid
@@ -4475,8 +5209,10 @@ dwg_obj_appid_set_entry_name(dwg_obj_appid *appid, char * entry_name,
       appid->entry_name = entry_name;
     }
   else
-    *error = 1;
-
+    {
+      LOG_ERROR("%s: empty appid", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns the flag of appid
@@ -4493,8 +5229,11 @@ dwg_obj_appid_get_flag(dwg_obj_appid *appid, int *error)
       return appid->_64_flag;
     }
   else
-    *error = 1;
-
+    {
+      LOG_ERROR("%s: empty appid", __FUNCTION__)
+      *error = 1;
+      return '\0';
+    }
 }
 
 /// Sets the flag of appid
@@ -4512,26 +5251,31 @@ dwg_obj_appid_set_flag(dwg_obj_appid *appid, char flag, int *error)
       appid->_64_flag = flag;
     }
   else
-    *error = 1;
-
+    {
+      LOG_ERROR("%s: empty appid", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns the appid control handler
-/** Usage : dwg_obj_appid_control appid = dwg_obj_appid_get_appid_control(appid, &error);
-\param 1 dwg_obj_appid
+/** Usage : dwg_obj_appid_control* appid = dwg_obj_appid_get_appid_control(appid, &error);
+\param 1 dwg_obj_appid*
 \param 2 int
 */
-dwg_obj_appid_control
+dwg_obj_appid_control*
 dwg_obj_appid_get_appid_control(dwg_obj_appid *appid, int *error)
 {
   if (appid != 0)
     {
       *error = 0;
-      appid->app_control->obj->tio.object->tio.APPID_CONTROL;
+      return appid->app_control->obj->tio.object->tio.APPID_CONTROL;
     }
   else
-    *error = 1;
-
+    {
+      LOG_ERROR("%s: empty appid", __FUNCTION__)
+      *error = 1;
+      return NULL;
+    }
 }
 
 /*******************************************************************
@@ -4552,7 +5296,11 @@ dwg_ent_dim_ordinate_get_elevation_ecs11(dwg_ent_dim_ordinate *dim, int *error)
       return dim->elevation.ecs_11;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty dim", __FUNCTION__)
+      *error = 1;
+      return nan("");
+    }
 }
 
 /// Sets the elevation ecs11
@@ -4571,7 +5319,10 @@ dwg_ent_dim_ordinate_set_elevation_ecs11(dwg_ent_dim_ordinate *dim,
       dim->elevation.ecs_11 = elevation_ecs11;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the elevation ecs12
@@ -4588,7 +5339,11 @@ dwg_ent_dim_ordinate_get_elevation_ecs12(dwg_ent_dim_ordinate *dim, int *error)
       return dim->elevation.ecs_12;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the elevation ecs12
@@ -4607,7 +5362,10 @@ dwg_ent_dim_ordinate_set_elevation_ecs12(dwg_ent_dim_ordinate *dim,
       dim->elevation.ecs_12 = elevation_ecs12;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the flags1
@@ -4624,7 +5382,11 @@ dwg_ent_dim_ordinate_get_flags1(dwg_ent_dim_ordinate *dim, int *error)
       return dim->flags_1;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets the flags1
@@ -4643,7 +5405,10 @@ dwg_ent_dim_ordinate_set_flags1(dwg_ent_dim_ordinate *dim, char flag,
       dim->flags_1 = flag;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the act measurement
@@ -4660,7 +5425,11 @@ dwg_ent_dim_ordinate_get_act_measurement(dwg_ent_dim_ordinate *dim, int *error)
       return dim->act_measurement;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the act measurement
@@ -4679,7 +5448,10 @@ dwg_ent_dim_ordinate_set_act_measurement(dwg_ent_dim_ordinate *dim,
       dim->act_measurement = act_measurement;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the horiz dir
@@ -4696,7 +5468,11 @@ dwg_ent_dim_ordinate_get_horiz_dir(dwg_ent_dim_ordinate *dim, int *error)
       return dim->horiz_dir;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the horiz dir
@@ -4715,7 +5491,10 @@ dwg_ent_dim_ordinate_set_horiz_dir(dwg_ent_dim_ordinate *dim, double horiz_dir,
       dim->horiz_dir = horiz_dir;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the lspace_factor
@@ -4732,7 +5511,11 @@ dwg_ent_dim_ordinate_get_lspace_factor(dwg_ent_dim_ordinate *dim, int *error)
       return dim->lspace_factor;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the lspace factor
@@ -4751,7 +5534,10 @@ dwg_ent_dim_ordinate_set_lspace_factor(dwg_ent_dim_ordinate *dim,
       dim->lspace_factor = factor;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the lspace_style
@@ -4769,7 +5555,11 @@ dwg_ent_dim_ordinate_get_lspace_style(dwg_ent_dim_ordinate *dim,
       return dim->lspace_style;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets the lspace style
@@ -4788,7 +5578,10 @@ dwg_ent_dim_ordinate_set_lspace_style(dwg_ent_dim_ordinate *dim,
       dim->lspace_style = style;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the attachment point
@@ -4806,7 +5599,11 @@ dwg_ent_dim_ordinate_get_attachment_point(dwg_ent_dim_ordinate *dim,
       return dim->attachment_point;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets the attachment point
@@ -4825,7 +5622,10 @@ dwg_ent_dim_ordinate_set_attachment_point(dwg_ent_dim_ordinate *dim,
       dim->attachment_point = point;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the extrusion
@@ -4838,7 +5638,7 @@ void
 dwg_ent_dim_ordinate_set_extrusion(dwg_ent_dim_ordinate *dim,
                                    dwg_point_3d *point, int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       dim->extrusion.x = point->x;
@@ -4846,7 +5646,10 @@ dwg_ent_dim_ordinate_set_extrusion(dwg_ent_dim_ordinate *dim,
       dim->extrusion.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the extrusion
@@ -4859,7 +5662,7 @@ void
 dwg_ent_dim_ordinate_get_extrusion(dwg_ent_dim_ordinate *dim,
                                    dwg_point_3d *point, int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       point->x = dim->extrusion.x;
@@ -4867,7 +5670,10 @@ dwg_ent_dim_ordinate_get_extrusion(dwg_ent_dim_ordinate *dim,
       point->z = dim->extrusion.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the user text
@@ -4884,7 +5690,11 @@ dwg_ent_dim_ordinate_get_user_text(dwg_ent_dim_ordinate *dim, int *error)
       return dim->user_text;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty dim", __FUNCTION__)
+      *error = 1;
+      return NULL;
+    }
 }
 
 /// Sets the user text
@@ -4903,13 +5713,16 @@ dwg_ent_dim_ordinate_set_user_text(dwg_ent_dim_ordinate *dim, char * text,
       dim->user_text = text;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns text rotation
 /** Usage : double text_rot  = dwg_ent_dim_ordinate_get_text_rot(dim, &error);
-\param 1 dwg_ent_dim_ordinate
-\param 2 int
+    \param 1 dwg_ent_dim_ordinate
+    \param 2 int
 */
 double
 dwg_ent_dim_ordinate_get_text_rot(dwg_ent_dim_ordinate *dim, int *error)
@@ -4920,7 +5733,11 @@ dwg_ent_dim_ordinate_get_text_rot(dwg_ent_dim_ordinate *dim, int *error)
       return dim->text_rot;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the text rotation
@@ -4939,7 +5756,10 @@ dwg_ent_dim_ordinate_set_text_rot(dwg_ent_dim_ordinate *dim, double rot,
       dim->text_rot = rot;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns ins rotation
@@ -4956,7 +5776,11 @@ dwg_ent_dim_ordinate_get_ins_rotation(dwg_ent_dim_ordinate *dim, int *error)
       return dim->ins_rotation;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the ins rotation
@@ -4975,7 +5799,10 @@ dwg_ent_dim_ordinate_set_ins_rotation(dwg_ent_dim_ordinate *dim, double rot,
       dim->ins_rotation = rot;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns flip arrow1
@@ -4992,7 +5819,11 @@ dwg_ent_dim_ordinate_get_flip_arrow1(dwg_ent_dim_ordinate *dim, int *error)
       return dim->flip_arrow1;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets the flip arrow1
@@ -5011,7 +5842,10 @@ dwg_ent_dim_ordinate_set_flip_arrow1(dwg_ent_dim_ordinate *dim,
       dim->flip_arrow1 = flip_arrow;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns flip arrow2
@@ -5028,7 +5862,11 @@ dwg_ent_dim_ordinate_get_flip_arrow2(dwg_ent_dim_ordinate *dim, int *error)
       return dim->flip_arrow2;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets the flip arrow2
@@ -5047,7 +5885,10 @@ dwg_ent_dim_ordinate_set_flip_arrow2(dwg_ent_dim_ordinate *dim,
       dim->flip_arrow2 = flip_arrow;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the text mid point
@@ -5060,14 +5901,17 @@ void
 dwg_ent_dim_ordinate_set_text_mid_pt(dwg_ent_dim_ordinate *dim,
                                           dwg_point_2d *point, int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       dim->text_midpt.x = point->x;
       dim->text_midpt.y = point->y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the text mid point
@@ -5078,16 +5922,19 @@ dwg_ent_dim_ordinate_set_text_mid_pt(dwg_ent_dim_ordinate *dim,
 */
 void
 dwg_ent_dim_ordinate_get_text_mid_pt(dwg_ent_dim_ordinate *dim,
-                                          dwg_point_2d *point, int *error)
+                                     dwg_point_2d *point, int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       point->x = dim->text_midpt.x;
       point->y = dim->text_midpt.y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the ins scale
@@ -5100,7 +5947,7 @@ void
 dwg_ent_dim_ordinate_set_ins_scale(dwg_ent_dim_ordinate *dim,
                                    dwg_point_3d *point, int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       dim->ins_scale.x = point->x;
@@ -5108,7 +5955,10 @@ dwg_ent_dim_ordinate_set_ins_scale(dwg_ent_dim_ordinate *dim,
       dim->ins_scale.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the ins scale
@@ -5121,7 +5971,7 @@ void
 dwg_ent_dim_ordinate_get_ins_scale(dwg_ent_dim_ordinate *dim,
                                    dwg_point_3d *point, int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       point->x = dim->ins_scale.x;
@@ -5129,7 +5979,10 @@ dwg_ent_dim_ordinate_get_ins_scale(dwg_ent_dim_ordinate *dim,
       point->z = dim->ins_scale.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns flags2
@@ -5146,7 +5999,11 @@ dwg_ent_dim_ordinate_get_flags2(dwg_ent_dim_ordinate *dim, int *error)
       return dim->flags_2;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets flags2
@@ -5165,7 +6022,10 @@ dwg_ent_dim_ordinate_set_flags2(dwg_ent_dim_ordinate *dim, char flag,
       dim->flags_2 = flag;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the 12 point
@@ -5178,14 +6038,17 @@ void
 dwg_ent_dim_ordinate_set_12_pt(dwg_ent_dim_ordinate *dim, dwg_point_2d *point,
                                int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       dim->_12_pt.x = point->x;
       dim->_12_pt.y = point->y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the 12 point
@@ -5198,14 +6061,17 @@ void
 dwg_ent_dim_ordinate_get_12_pt(dwg_ent_dim_ordinate *dim, dwg_point_2d *point,
                                int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       point->x = dim->_12_pt.x;
       point->y = dim->_12_pt.y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the 10 point
@@ -5218,7 +6084,7 @@ void
 dwg_ent_dim_ordinate_set_10_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
                                int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       dim->_10_pt.x = point->x;
@@ -5226,7 +6092,10 @@ dwg_ent_dim_ordinate_set_10_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
       dim->_10_pt.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the 10 point
@@ -5239,7 +6108,7 @@ void
 dwg_ent_dim_ordinate_get_10_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
                                int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       point->x = dim->_10_pt.x;
@@ -5247,7 +6116,10 @@ dwg_ent_dim_ordinate_get_10_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
       point->z = dim->_10_pt.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the 13 point
@@ -5260,7 +6132,7 @@ void
 dwg_ent_dim_ordinate_set_13_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
                                int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       dim->_13_pt.x = point->x;
@@ -5268,7 +6140,10 @@ dwg_ent_dim_ordinate_set_13_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
       dim->_13_pt.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the 13 point
@@ -5281,7 +6156,7 @@ void
 dwg_ent_dim_ordinate_get_13_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
                                int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       point->x = dim->_13_pt.x;
@@ -5289,7 +6164,10 @@ dwg_ent_dim_ordinate_get_13_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
       point->z = dim->_13_pt.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the 14 point
@@ -5302,7 +6180,7 @@ void
 dwg_ent_dim_ordinate_set_14_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
                                int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       dim->_14_pt.x = point->x;
@@ -5310,7 +6188,10 @@ dwg_ent_dim_ordinate_set_14_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
       dim->_14_pt.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the 14 point
@@ -5323,7 +6204,7 @@ void
 dwg_ent_dim_ordinate_get_14_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
                                int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       point->x = dim->_14_pt.x;
@@ -5331,7 +6212,10 @@ dwg_ent_dim_ordinate_get_14_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
       point->z = dim->_14_pt.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /*******************************************************************
@@ -5347,7 +6231,11 @@ dwg_ent_dim_linear_get_block_name(dwg_ent_dim_linear *dim, int *error)
       return dim->block->obj->tio.object->tio.BLOCK_HEADER->entry_name;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty dim", __FUNCTION__)
+      *error = 1;
+      return NULL;
+    }
 }
 
 /// Returns the elevation ecs11
@@ -5364,7 +6252,11 @@ dwg_ent_dim_linear_get_elevation_ecs11(dwg_ent_dim_linear *dim, int *error)
       return dim->elevation.ecs_11;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty dim", __FUNCTION__)
+      *error = 1;
+      return nan("");
+    }
 }
 
 /// Sets the elevation ecs11
@@ -5383,7 +6275,10 @@ dwg_ent_dim_linear_set_elevation_ecs11(dwg_ent_dim_linear *dim,
       dim->elevation.ecs_11 = elevation_ecs11;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the elevation ecs12
@@ -5400,7 +6295,11 @@ dwg_ent_dim_linear_get_elevation_ecs12(dwg_ent_dim_linear *dim, int *error)
       return dim->elevation.ecs_12;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the elevation ecs12
@@ -5419,7 +6318,10 @@ dwg_ent_dim_linear_set_elevation_ecs12(dwg_ent_dim_linear *dim,
       dim->elevation.ecs_12 = elevation_ecs12;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the flags1
@@ -5436,7 +6338,11 @@ dwg_ent_dim_linear_get_flags1(dwg_ent_dim_linear *dim, int *error)
       return dim->flags_1;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets the flag1
@@ -5454,7 +6360,10 @@ dwg_ent_dim_linear_set_flags1(dwg_ent_dim_linear *dim, char flag, int *error)
       dim->flags_1 = flag;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the act measurement
@@ -5471,7 +6380,11 @@ dwg_ent_dim_linear_get_act_measurement(dwg_ent_dim_linear *dim, int *error)
       return dim->act_measurement;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the act measurement
@@ -5490,7 +6403,10 @@ dwg_ent_dim_linear_set_act_measurement(dwg_ent_dim_linear *dim,
       dim->act_measurement = act_measurement;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the horiz dir
@@ -5507,7 +6423,11 @@ dwg_ent_dim_linear_get_horiz_dir(dwg_ent_dim_linear *dim, int *error)
       return dim->horiz_dir;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the horiz dir
@@ -5526,7 +6446,10 @@ dwg_ent_dim_linear_set_horiz_dir(dwg_ent_dim_linear *dim,
       dim->horiz_dir = horiz_dir;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the lspace factor
@@ -5544,7 +6467,11 @@ dwg_ent_dim_linear_get_lspace_factor(dwg_ent_dim_linear *dim,
       return dim->lspace_factor;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the lspace factor
@@ -5563,7 +6490,10 @@ dwg_ent_dim_linear_set_lspace_factor(dwg_ent_dim_linear *dim, double factor,
       dim->lspace_factor = factor;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the lspace style
@@ -5580,7 +6510,11 @@ dwg_ent_dim_linear_get_lspace_style(dwg_ent_dim_linear *dim, int *error)
       return dim->lspace_style;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets the lspace style
@@ -5599,7 +6533,10 @@ dwg_ent_dim_linear_set_lspace_style(dwg_ent_dim_linear *dim,
       dim->lspace_style = style;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the attachment point
@@ -5616,7 +6553,11 @@ dwg_ent_dim_linear_get_attachment_point(dwg_ent_dim_linear *dim, int *error)
       return dim->attachment_point;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets the attachment point
@@ -5635,7 +6576,10 @@ dwg_ent_dim_linear_set_attachment_point(dwg_ent_dim_linear *dim,
       dim->attachment_point = point;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the extrusion
@@ -5648,7 +6592,7 @@ void
 dwg_ent_dim_linear_set_extrusion(dwg_ent_dim_linear *dim, dwg_point_3d *point,
                                  int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       dim->extrusion.x = point->x;
@@ -5656,7 +6600,10 @@ dwg_ent_dim_linear_set_extrusion(dwg_ent_dim_linear *dim, dwg_point_3d *point,
       dim->extrusion.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the extrusion
@@ -5669,7 +6616,7 @@ void
 dwg_ent_dim_linear_get_extrusion(dwg_ent_dim_linear *dim, dwg_point_3d *point,
                                  int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       point->x = dim->extrusion.x;
@@ -5677,7 +6624,10 @@ dwg_ent_dim_linear_get_extrusion(dwg_ent_dim_linear *dim, dwg_point_3d *point,
       point->z = dim->extrusion.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the user text
@@ -5694,7 +6644,11 @@ dwg_ent_dim_linear_get_user_text(dwg_ent_dim_linear *dim, int *error)
       return dim->user_text;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty dim", __FUNCTION__)
+      *error = 1;
+      return NULL;
+    }
 }
 
 /// Sets the user text
@@ -5713,7 +6667,10 @@ dwg_ent_dim_linear_set_user_text(dwg_ent_dim_linear *dim, char * text,
       dim->user_text = text;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the text rotation
@@ -5730,7 +6687,11 @@ dwg_ent_dim_linear_get_text_rot(dwg_ent_dim_linear *dim, int *error)
       return dim->text_rot;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the text rotation
@@ -5749,7 +6710,10 @@ dwg_ent_dim_linear_set_text_rot(dwg_ent_dim_linear *dim, double rot,
       dim->text_rot = rot;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the ins rotation
@@ -5766,7 +6730,11 @@ dwg_ent_dim_linear_get_ins_rotation(dwg_ent_dim_linear *dim, int *error)
       return dim->ins_rotation;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the ins rotation
@@ -5785,7 +6753,10 @@ dwg_ent_dim_linear_set_ins_rotation(dwg_ent_dim_linear *dim, double rot,
       dim->ins_rotation = rot;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the flip arrow1
@@ -5802,7 +6773,11 @@ dwg_ent_dim_linear_get_flip_arrow1(dwg_ent_dim_linear *dim, int *error)
       return dim->flip_arrow1;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets the flip arrow 1
@@ -5821,7 +6796,10 @@ dwg_ent_dim_linear_set_flip_arrow1(dwg_ent_dim_linear *dim, char flip_arrow,
       dim->flip_arrow1 = flip_arrow;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the flip arrow 2
@@ -5838,7 +6816,11 @@ dwg_ent_dim_linear_get_flip_arrow2(dwg_ent_dim_linear *dim, int *error)
       return dim->flip_arrow2;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets the flip arrow 2
@@ -5857,7 +6839,10 @@ dwg_ent_dim_linear_set_flip_arrow2(dwg_ent_dim_linear *dim, char flip_arrow,
       dim->flip_arrow2 = flip_arrow;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the text mid point
@@ -5866,19 +6851,22 @@ dwg_ent_dim_linear_set_flip_arrow2(dwg_ent_dim_linear *dim, char flip_arrow,
 \param 2 dwg_point_2d
 \param 3 int
 */
-void 
+void
 dwg_ent_dim_linear_set_text_mid_pt(dwg_ent_dim_linear *dim,
-                                   dwg_point_2d *point, 
+                                   dwg_point_2d *point,
                                    int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       dim->text_midpt.x = point->x;
       dim->text_midpt.y = point->y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the text mid point
@@ -5889,17 +6877,20 @@ dwg_ent_dim_linear_set_text_mid_pt(dwg_ent_dim_linear *dim,
 */
 void
 dwg_ent_dim_linear_get_text_mid_pt(dwg_ent_dim_linear *dim,
-                                   dwg_point_2d *point, 
+                                   dwg_point_2d *point,
                                    int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       point->x = dim->text_midpt.x;
       point->y = dim->text_midpt.y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the ins scale
@@ -5909,10 +6900,10 @@ dwg_ent_dim_linear_get_text_mid_pt(dwg_ent_dim_linear *dim,
 \param 3 int
 */
 void
-dwg_ent_dim_linear_set_ins_scale(dwg_ent_dim_linear *dim, dwg_point_3d *point, 
+dwg_ent_dim_linear_set_ins_scale(dwg_ent_dim_linear *dim, dwg_point_3d *point,
                                  int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       dim->ins_scale.x = point->x;
@@ -5920,7 +6911,10 @@ dwg_ent_dim_linear_set_ins_scale(dwg_ent_dim_linear *dim, dwg_point_3d *point,
       dim->ins_scale.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the ins scale
@@ -5930,10 +6924,10 @@ dwg_ent_dim_linear_set_ins_scale(dwg_ent_dim_linear *dim, dwg_point_3d *point,
 \param 3 int
 */
 void
-dwg_ent_dim_linear_get_ins_scale(dwg_ent_dim_linear *dim, dwg_point_3d *point, 
+dwg_ent_dim_linear_get_ins_scale(dwg_ent_dim_linear *dim, dwg_point_3d *point,
                                  int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       point->x = dim->ins_scale.x;
@@ -5941,7 +6935,10 @@ dwg_ent_dim_linear_get_ins_scale(dwg_ent_dim_linear *dim, dwg_point_3d *point,
       point->z = dim->ins_scale.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the 12 point
@@ -5951,17 +6948,20 @@ dwg_ent_dim_linear_get_ins_scale(dwg_ent_dim_linear *dim, dwg_point_3d *point,
 \param 3 int
 */
 void
-dwg_ent_dim_linear_set_12_pt(dwg_ent_dim_linear *dim, dwg_point_2d *point, 
+dwg_ent_dim_linear_set_12_pt(dwg_ent_dim_linear *dim, dwg_point_2d *point,
                              int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       dim->_12_pt.x = point->x;
       dim->_12_pt.y = point->y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the 12 point
@@ -5971,17 +6971,20 @@ dwg_ent_dim_linear_set_12_pt(dwg_ent_dim_linear *dim, dwg_point_2d *point,
 \param 3 int
 */
 void
-dwg_ent_dim_linear_get_12_pt(dwg_ent_dim_linear *dim, dwg_point_2d *point, 
+dwg_ent_dim_linear_get_12_pt(dwg_ent_dim_linear *dim, dwg_point_2d *point,
                              int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       point->x = dim->_12_pt.x;
       point->y = dim->_12_pt.y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the 10 point
@@ -5991,10 +6994,10 @@ dwg_ent_dim_linear_get_12_pt(dwg_ent_dim_linear *dim, dwg_point_2d *point,
 \param 3 int
 */
 void
-dwg_ent_dim_linear_set_10_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point, 
+dwg_ent_dim_linear_set_10_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
                              int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       dim->_10_pt.x = point->x;
@@ -6002,7 +7005,10 @@ dwg_ent_dim_linear_set_10_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
       dim->_10_pt.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the 12 point
@@ -6012,10 +7018,10 @@ dwg_ent_dim_linear_set_10_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
 \param 3 int
 */
 void
-dwg_ent_dim_linear_get_10_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point, 
+dwg_ent_dim_linear_get_10_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
                              int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       point->x = dim->_10_pt.x;
@@ -6023,7 +7029,10 @@ dwg_ent_dim_linear_get_10_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
       point->z = dim->_10_pt.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the 13 point
@@ -6033,10 +7042,10 @@ dwg_ent_dim_linear_get_10_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
 \param 3 int
 */
 void
-dwg_ent_dim_linear_set_13_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point, 
+dwg_ent_dim_linear_set_13_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
                              int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       dim->_13_pt.x = point->x;
@@ -6044,7 +7053,10 @@ dwg_ent_dim_linear_set_13_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
       dim->_13_pt.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the 13 point
@@ -6057,7 +7069,7 @@ void
 dwg_ent_dim_linear_get_13_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
                              int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       point->x = dim->_13_pt.x;
@@ -6065,7 +7077,10 @@ dwg_ent_dim_linear_get_13_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
       point->z = dim->_13_pt.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the 14 point
@@ -6078,7 +7093,7 @@ void
 dwg_ent_dim_linear_set_14_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
                              int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       dim->_14_pt.x = point->x;
@@ -6086,7 +7101,10 @@ dwg_ent_dim_linear_set_14_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
       dim->_14_pt.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the 14 point
@@ -6099,7 +7117,7 @@ void
 dwg_ent_dim_linear_get_14_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
                              int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       point->x = dim->_14_pt.x;
@@ -6107,7 +7125,10 @@ dwg_ent_dim_linear_get_14_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
       point->z = dim->_14_pt.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the ext line rotation
@@ -6124,7 +7145,11 @@ dwg_ent_dim_linear_get_ext_line_rotation(dwg_ent_dim_linear *dim, int *error)
       return dim->ext_line_rot;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the ext line rotation
@@ -6143,7 +7168,10 @@ dwg_ent_dim_linear_set_ext_line_rotation(dwg_ent_dim_linear *dim, double rot,
       dim->ext_line_rot = rot;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the dim rotation
@@ -6160,7 +7188,11 @@ dwg_ent_dim_linear_get_dim_rot(dwg_ent_dim_linear *dim, int *error)
       return dim->dim_rot;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the dim rotation
@@ -6178,7 +7210,10 @@ dwg_ent_dim_linear_set_dim_rot(dwg_ent_dim_linear *dim, double rot, int *error)
       dim->dim_rot = rot;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /*******************************************************************
@@ -6199,7 +7234,11 @@ dwg_ent_dim_aligned_get_elevation_ecs11(dwg_ent_dim_aligned *dim, int *error)
       return dim->elevation.ecs_11;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the elevation ecs11
@@ -6219,7 +7258,10 @@ dwg_ent_dim_aligned_set_elevation_ecs11(dwg_ent_dim_aligned *dim,
       dim->elevation.ecs_11 = elevation_ecs11;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the elevation ecs12
@@ -6236,7 +7278,11 @@ dwg_ent_dim_aligned_get_elevation_ecs12(dwg_ent_dim_aligned *dim, int *error)
       return dim->elevation.ecs_12;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the elevation ecs12
@@ -6256,7 +7302,10 @@ dwg_ent_dim_aligned_set_elevation_ecs12(dwg_ent_dim_aligned *dim,
       dim->elevation.ecs_12 = elevation_ecs12;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the flag1
@@ -6273,7 +7322,11 @@ dwg_ent_dim_aligned_get_flags1(dwg_ent_dim_aligned *dim, int *error)
       return dim->flags_1;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets the flags1
@@ -6291,7 +7344,10 @@ dwg_ent_dim_aligned_set_flags1(dwg_ent_dim_aligned *dim, char flag, int *error)
       dim->flags_1 = flag;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the act measurement
@@ -6308,7 +7364,11 @@ dwg_ent_dim_aligned_get_act_measurement(dwg_ent_dim_aligned *dim, int *error)
       return dim->act_measurement;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the act measurement
@@ -6327,7 +7387,10 @@ dwg_ent_dim_aligned_set_act_measurement(dwg_ent_dim_aligned *dim,
       dim->act_measurement = act_measurement;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the horiz dir
@@ -6344,7 +7407,11 @@ dwg_ent_dim_aligned_get_horiz_dir(dwg_ent_dim_aligned *dim, int *error)
       return dim->horiz_dir;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the horiz dir
@@ -6363,7 +7430,10 @@ dwg_ent_dim_aligned_set_horiz_dir(dwg_ent_dim_aligned *dim, double horiz_dir,
       dim->horiz_dir = horiz_dir;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the lspace factor
@@ -6380,7 +7450,11 @@ dwg_ent_dim_aligned_get_lspace_factor(dwg_ent_dim_aligned *dim, int *error)
       return dim->lspace_factor;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the lspace factor
@@ -6399,7 +7473,10 @@ dwg_ent_dim_aligned_set_lspace_factor(dwg_ent_dim_aligned *dim, double factor,
       dim->lspace_factor = factor;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the lspace factor
@@ -6416,7 +7493,11 @@ dwg_ent_dim_aligned_get_lspace_style(dwg_ent_dim_aligned *dim, int *error)
       return dim->lspace_style;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets the horiz dir
@@ -6435,7 +7516,10 @@ dwg_ent_dim_aligned_set_lspace_style(dwg_ent_dim_aligned *dim,
       dim->lspace_style = style;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the attachment point
@@ -6452,7 +7536,11 @@ dwg_ent_dim_aligned_get_attachment_point(dwg_ent_dim_aligned *dim, int *error)
       return dim->attachment_point;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets the attachment point
@@ -6471,7 +7559,10 @@ dwg_ent_dim_aligned_set_attachment_point(dwg_ent_dim_aligned *dim,
       dim->attachment_point = point;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the extrusion
@@ -6484,7 +7575,7 @@ void
 dwg_ent_dim_aligned_set_extrusion(dwg_ent_dim_aligned *dim,
                                   dwg_point_3d *point, int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       dim->extrusion.x = point->x;
@@ -6492,7 +7583,10 @@ dwg_ent_dim_aligned_set_extrusion(dwg_ent_dim_aligned *dim,
       dim->extrusion.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the attachment point
@@ -6505,7 +7599,7 @@ void
 dwg_ent_dim_aligned_get_extrusion(dwg_ent_dim_aligned *dim,
                                   dwg_point_3d *point, int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       point->x = dim->extrusion.x;
@@ -6513,7 +7607,10 @@ dwg_ent_dim_aligned_get_extrusion(dwg_ent_dim_aligned *dim,
       point->z = dim->extrusion.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the user text
@@ -6530,7 +7627,11 @@ dwg_ent_dim_aligned_get_user_text(dwg_ent_dim_aligned *dim, int *error)
       return dim->user_text;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty dim", __FUNCTION__)
+      *error = 1;
+      return NULL;
+    }
 }
 
 /// Sets the attachment point
@@ -6540,7 +7641,7 @@ dwg_ent_dim_aligned_get_user_text(dwg_ent_dim_aligned *dim, int *error)
 \param 3 int
 */
 void
-dwg_ent_dim_aligned_set_user_text(dwg_ent_dim_aligned *dim, char * text, 
+dwg_ent_dim_aligned_set_user_text(dwg_ent_dim_aligned *dim, char * text,
                                   int *error)
 {
   if (dim != 0)
@@ -6549,7 +7650,10 @@ dwg_ent_dim_aligned_set_user_text(dwg_ent_dim_aligned *dim, char * text,
       dim->user_text = text;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the text rotation
@@ -6566,7 +7670,11 @@ dwg_ent_dim_aligned_get_text_rot(dwg_ent_dim_aligned *dim, int *error)
       return dim->text_rot;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the text rotation
@@ -6585,7 +7693,10 @@ dwg_ent_dim_aligned_set_text_rot(dwg_ent_dim_aligned *dim, double rot,
       dim->text_rot = rot;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the ins rotation
@@ -6602,7 +7713,11 @@ dwg_ent_dim_aligned_get_ins_rotation(dwg_ent_dim_aligned *dim, int *error)
       return dim->ins_rotation;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the ins rotation
@@ -6621,7 +7736,10 @@ dwg_ent_dim_aligned_set_ins_rotation(dwg_ent_dim_aligned *dim, double rot,
       dim->ins_rotation = rot;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the flip arrow1
@@ -6638,7 +7756,11 @@ dwg_ent_dim_aligned_get_flip_arrow1(dwg_ent_dim_aligned *dim, int *error)
       return dim->flip_arrow1;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets the flip arrow1
@@ -6657,7 +7779,10 @@ dwg_ent_dim_aligned_set_flip_arrow1(dwg_ent_dim_aligned *dim, char flip_arrow,
       dim->flip_arrow1 = flip_arrow;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the flip arrow2
@@ -6674,7 +7799,11 @@ dwg_ent_dim_aligned_get_flip_arrow2(dwg_ent_dim_aligned *dim, int *error)
       return dim->flip_arrow2;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets the flip arrow2
@@ -6693,7 +7822,10 @@ dwg_ent_dim_aligned_set_flip_arrow2(dwg_ent_dim_aligned *dim, char flip_arrow,
       dim->flip_arrow2 = flip_arrow;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the text mid point
@@ -6702,18 +7834,21 @@ dwg_ent_dim_aligned_set_flip_arrow2(dwg_ent_dim_aligned *dim, char flip_arrow,
 \param 2 dwg_point_2d
 \param 3 int
 */
-void 
-dwg_ent_dim_aligned_set_text_mid_pt(dwg_ent_dim_aligned *dim, 
+void
+dwg_ent_dim_aligned_set_text_mid_pt(dwg_ent_dim_aligned *dim,
                                     dwg_point_2d *point, int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       dim->text_midpt.x = point->x;
       dim->text_midpt.y = point->y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the text mid point
@@ -6726,14 +7861,17 @@ void
 dwg_ent_dim_aligned_get_text_mid_pt(dwg_ent_dim_aligned *dim,
                                     dwg_point_2d *point, int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       point->x = dim->text_midpt.x;
       point->y = dim->text_midpt.y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the ins scale
@@ -6754,7 +7892,10 @@ dwg_ent_dim_aligned_set_ins_scale(dwg_ent_dim_aligned *dim,
       dim->ins_scale.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the ins scale
@@ -6767,7 +7908,7 @@ void
 dwg_ent_dim_aligned_get_ins_scale(dwg_ent_dim_aligned *dim,
                                   dwg_point_3d *point, int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       point->x = dim->ins_scale.x;
@@ -6775,7 +7916,10 @@ dwg_ent_dim_aligned_get_ins_scale(dwg_ent_dim_aligned *dim,
       point->z = dim->ins_scale.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the 12 point
@@ -6788,14 +7932,17 @@ void
 dwg_ent_dim_aligned_set_12_pt(dwg_ent_dim_aligned *dim, dwg_point_2d *point,
                               int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       dim->_12_pt.x = point->x;
       dim->_12_pt.y = point->y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the 12 point
@@ -6808,14 +7955,17 @@ void
 dwg_ent_dim_aligned_get_12_pt(dwg_ent_dim_aligned *dim, dwg_point_2d *point,
                               int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       point->x = dim->_12_pt.x;
       point->y = dim->_12_pt.y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the 10 point
@@ -6828,7 +7978,7 @@ void
 dwg_ent_dim_aligned_set_10_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
                               int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       dim->_10_pt.x = point->x;
@@ -6836,7 +7986,10 @@ dwg_ent_dim_aligned_set_10_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
       dim->_10_pt.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the 10 point
@@ -6849,7 +8002,7 @@ void
 dwg_ent_dim_aligned_get_10_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
                               int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       point->x = dim->_10_pt.x;
@@ -6857,7 +8010,10 @@ dwg_ent_dim_aligned_get_10_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
       point->z = dim->_10_pt.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the 13 point
@@ -6870,7 +8026,7 @@ void
 dwg_ent_dim_aligned_set_13_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
                               int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       dim->_13_pt.x = point->x;
@@ -6878,7 +8034,10 @@ dwg_ent_dim_aligned_set_13_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
       dim->_13_pt.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the 13 point
@@ -6891,7 +8050,7 @@ void
 dwg_ent_dim_aligned_get_13_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
                               int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       point->x = dim->_13_pt.x;
@@ -6899,7 +8058,10 @@ dwg_ent_dim_aligned_get_13_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
       point->z = dim->_13_pt.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the 14 point
@@ -6912,7 +8074,7 @@ void
 dwg_ent_dim_aligned_set_14_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
                               int *error)
 {
-  if (dim != 0)
+  if (dim != 0 && point != 0)
     {
       *error = 0;
       dim->_14_pt.x = point->x;
@@ -6920,7 +8082,10 @@ dwg_ent_dim_aligned_set_14_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
       dim->_14_pt.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the 14 point
@@ -6941,7 +8106,10 @@ dwg_ent_dim_aligned_get_14_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
       point->z = dim->_14_pt.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the ext line rotation
@@ -6958,7 +8126,11 @@ dwg_ent_dim_aligned_get_ext_line_rotation(dwg_ent_dim_aligned *dim, int *error)
       return dim->ext_line_rot;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the ext line rotation
@@ -6977,7 +8149,10 @@ dwg_ent_dim_aligned_set_ext_line_rotation(dwg_ent_dim_aligned *dim,
       dim->ext_line_rot = rot;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /*******************************************************************
@@ -6998,7 +8173,11 @@ dwg_ent_dim_ang3pt_get_elevation_ecs11(dwg_ent_dim_ang3pt *ang, int *error)
       return ang->elevation.ecs_11;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the elevation ecs11
@@ -7017,7 +8196,10 @@ dwg_ent_dim_ang3pt_set_elevation_ecs11(dwg_ent_dim_ang3pt *ang,
       ang->elevation.ecs_11 = elevation_ecs11;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the elevation ecs12
@@ -7034,7 +8216,11 @@ dwg_ent_dim_ang3pt_get_elevation_ecs12(dwg_ent_dim_ang3pt *ang, int *error)
       return ang->elevation.ecs_12;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the elevation ecs12
@@ -7053,7 +8239,10 @@ dwg_ent_dim_ang3pt_set_elevation_ecs12(dwg_ent_dim_ang3pt *ang,
       ang->elevation.ecs_12 = elevation_ecs12;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the flags1
@@ -7070,7 +8259,11 @@ dwg_ent_dim_ang3pt_get_flags1(dwg_ent_dim_ang3pt *ang, int *error)
       return ang->flags_1;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets the flags1
@@ -7088,7 +8281,10 @@ dwg_ent_dim_ang3pt_set_flags1(dwg_ent_dim_ang3pt *ang, char flag, int *error)
       ang->flags_1 = flag;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the act measurement
@@ -7105,7 +8301,11 @@ dwg_ent_dim_ang3pt_get_act_measurement(dwg_ent_dim_ang3pt *ang, int *error)
       return ang->act_measurement;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the act measurement
@@ -7124,7 +8324,10 @@ dwg_ent_dim_ang3pt_set_act_measurement(dwg_ent_dim_ang3pt *ang,
       ang->act_measurement = act_measurement;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the horiz dir
@@ -7141,7 +8344,11 @@ dwg_ent_dim_ang3pt_get_horiz_dir(dwg_ent_dim_ang3pt *ang, int *error)
       return ang->horiz_dir;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the horiz dir
@@ -7160,7 +8367,10 @@ dwg_ent_dim_ang3pt_set_horiz_dir(dwg_ent_dim_ang3pt *ang, double horiz_dir,
       ang->horiz_dir = horiz_dir;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the lspace factor
@@ -7177,7 +8387,11 @@ dwg_ent_dim_ang3pt_get_lspace_factor(dwg_ent_dim_ang3pt *ang, int *error)
       return ang->lspace_factor;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the lspace factor
@@ -7196,7 +8410,10 @@ dwg_ent_dim_ang3pt_set_lspace_factor(dwg_ent_dim_ang3pt *ang, double factor,
       ang->lspace_factor = factor;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the lspace style
@@ -7213,7 +8430,11 @@ dwg_ent_dim_ang3pt_get_lspace_style(dwg_ent_dim_ang3pt *ang, int *error)
       return ang->lspace_style;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets the lspace style
@@ -7232,7 +8453,10 @@ dwg_ent_dim_ang3pt_set_lspace_style(dwg_ent_dim_ang3pt *ang,
       ang->lspace_style = style;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the attachment point
@@ -7249,7 +8473,11 @@ dwg_ent_dim_ang3pt_get_attachment_point(dwg_ent_dim_ang3pt *ang, int *error)
       return ang->attachment_point;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets the attachment point
@@ -7268,7 +8496,10 @@ dwg_ent_dim_ang3pt_set_attachment_point(dwg_ent_dim_ang3pt *ang,
       ang->attachment_point = point;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the extrusion
@@ -7281,7 +8512,7 @@ void
 dwg_ent_dim_ang3pt_set_extrusion(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
                                  int *error)
 {
-  if (ang != 0)
+  if (ang != 0 && point != 0)
     {
       *error = 0;
       ang->extrusion.x = point->x;
@@ -7289,7 +8520,10 @@ dwg_ent_dim_ang3pt_set_extrusion(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
       ang->extrusion.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// returns the extrusion
@@ -7302,7 +8536,7 @@ void
 dwg_ent_dim_ang3pt_get_extrusion(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
                                  int *error)
 {
-  if (ang != 0)
+  if (ang != 0 && point != 0)
     {
       *error = 0;
       point->x = ang->extrusion.x;
@@ -7310,7 +8544,10 @@ dwg_ent_dim_ang3pt_get_extrusion(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
       point->z = ang->extrusion.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// returns the user_text
@@ -7327,7 +8564,11 @@ dwg_ent_dim_ang3pt_get_user_text(dwg_ent_dim_ang3pt *ang, int *error)
       return ang->user_text;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty ang", __FUNCTION__)
+      *error = 1;
+      return NULL;
+    }
 }
 
 /// Sets the user_text
@@ -7346,7 +8587,10 @@ dwg_ent_dim_ang3pt_set_user_text(dwg_ent_dim_ang3pt *ang, char * text,
       ang->user_text = text;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// returns the text_rotation
@@ -7363,7 +8607,11 @@ dwg_ent_dim_ang3pt_get_text_rot(dwg_ent_dim_ang3pt *ang, int *error)
       return ang->text_rot;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the text_rot
@@ -7382,7 +8630,10 @@ dwg_ent_dim_ang3pt_set_text_rot(dwg_ent_dim_ang3pt *ang, double rot,
       ang->text_rot = rot;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// returns the ins rotation
@@ -7399,7 +8650,11 @@ dwg_ent_dim_ang3pt_get_ins_rotation(dwg_ent_dim_ang3pt *ang, int *error)
       return ang->ins_rotation;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the ins_rotation
@@ -7418,7 +8673,10 @@ dwg_ent_dim_ang3pt_set_ins_rotation(dwg_ent_dim_ang3pt *ang, double rot,
       ang->ins_rotation = rot;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// returns the flip arrow 1
@@ -7435,7 +8693,11 @@ dwg_ent_dim_ang3pt_get_flip_arrow1(dwg_ent_dim_ang3pt *ang, int *error)
       return ang->flip_arrow1;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets the flip_arrow1
@@ -7454,7 +8716,10 @@ dwg_ent_dim_ang3pt_set_flip_arrow1(dwg_ent_dim_ang3pt *ang, char flip_arrow,
       ang->flip_arrow1 = flip_arrow;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// returns the flip arrow 2
@@ -7471,7 +8736,11 @@ dwg_ent_dim_ang3pt_get_flip_arrow2(dwg_ent_dim_ang3pt *ang, int *error)
       return ang->flip_arrow2;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets the flip_arrow2
@@ -7490,7 +8759,10 @@ dwg_ent_dim_ang3pt_set_flip_arrow2(dwg_ent_dim_ang3pt *ang, char flip_arrow,
       ang->flip_arrow2 = flip_arrow;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the text mid point
@@ -7503,14 +8775,17 @@ void
 dwg_ent_dim_ang3pt_set_text_mid_pt(dwg_ent_dim_ang3pt *ang,
                                    dwg_point_2d *point, int *error)
 {
-  if (ang != 0)
+  if (ang != 0 && point != 0)
     {
       *error = 0;
       ang->text_midpt.x = point->x;
       ang->text_midpt.y = point->y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the text mid point
@@ -7523,14 +8798,17 @@ void
 dwg_ent_dim_ang3pt_get_text_mid_pt(dwg_ent_dim_ang3pt *ang,
                                    dwg_point_2d *point, int *error)
 {
-  if (ang != 0)
+  if (ang != 0 && point != 0)
     {
       *error = 0;
       point->x = ang->text_midpt.x;
       point->y = ang->text_midpt.y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the ins scale
@@ -7543,7 +8821,7 @@ void
 dwg_ent_dim_ang3pt_set_ins_scale(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
                                  int *error)
 {
-  if (ang != 0)
+  if (ang != 0 && point != 0)
     {
       *error = 0;
       ang->ins_scale.x = point->x;
@@ -7551,7 +8829,10 @@ dwg_ent_dim_ang3pt_set_ins_scale(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
       ang->ins_scale.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns ins scale points
@@ -7564,7 +8845,7 @@ void
 dwg_ent_dim_ang3pt_get_ins_scale(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
                                  int *error)
 {
-  if (ang != 0)
+  if (ang != 0 && point != 0)
     {
       *error = 0;
       point->x = ang->ins_scale.x;
@@ -7572,7 +8853,10 @@ dwg_ent_dim_ang3pt_get_ins_scale(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
       point->z = ang->ins_scale.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 
@@ -7586,14 +8870,17 @@ void
 dwg_ent_dim_ang3pt_set_12_pt(dwg_ent_dim_ang3pt *ang, dwg_point_2d *point,
                              int *error)
 {
-  if (ang != 0)
+  if (ang != 0 && point != 0)
     {
       *error = 0;
       ang->_12_pt.x = point->x;
       ang->_12_pt.y = point->y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the 12 pt
@@ -7606,14 +8893,17 @@ void
 dwg_ent_dim_ang3pt_get_12_pt(dwg_ent_dim_ang3pt *ang, dwg_point_2d *point,
                              int *error)
 {
-  if (ang != 0)
+  if (ang != 0 && point != 0)
     {
       *error = 0;
       point->x = ang->_12_pt.x;
       point->y = ang->_12_pt.y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the 10 point
@@ -7626,7 +8916,7 @@ void
 dwg_ent_dim_ang3pt_set_10_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
                              int *error)
 {
-  if (ang != 0)
+  if (ang != 0 && point != 0)
     {
       *error = 0;
       ang->_10_pt.x = point->x;
@@ -7634,7 +8924,10 @@ dwg_ent_dim_ang3pt_set_10_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
       ang->_10_pt.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the 10 pt
@@ -7655,7 +8948,10 @@ dwg_ent_dim_ang3pt_get_10_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
       point->z = ang->_10_pt.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the 13 point
@@ -7668,7 +8964,7 @@ void
 dwg_ent_dim_ang3pt_set_13_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
                             int *error)
 {
-  if (ang != 0)
+  if (ang != 0 && point != 0)
     {
       *error = 0;
       ang->_13_pt.x = point->x;
@@ -7676,7 +8972,10 @@ dwg_ent_dim_ang3pt_set_13_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
       ang->_13_pt.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the 13 pt
@@ -7686,10 +8985,10 @@ dwg_ent_dim_ang3pt_set_13_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
 \param 3 int
 */
 void
-dwg_ent_dim_ang3pt_get_13_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point, 
+dwg_ent_dim_ang3pt_get_13_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
                              int *error)
 {
-  if (ang != 0)
+  if (ang != 0 && point != 0)
     {
       *error = 0;
       point->x = ang->_13_pt.x;
@@ -7697,7 +8996,10 @@ dwg_ent_dim_ang3pt_get_13_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
       point->z = ang->_13_pt.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the 14 point
@@ -7710,7 +9012,7 @@ void
 dwg_ent_dim_ang3pt_set_14_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
                              int *error)
 {
-  if (ang != 0)
+  if (ang != 0 && point != 0)
     {
       *error = 0;
       ang->_14_pt.x = point->x;
@@ -7718,7 +9020,10 @@ dwg_ent_dim_ang3pt_set_14_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
       ang->_14_pt.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the 14 pt
@@ -7731,7 +9036,7 @@ void
 dwg_ent_dim_ang3pt_get_14_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
                              int *error)
 {
-  if (ang != 0)
+  if (ang != 0 && point != 0)
     {
       *error = 0;
       point->x = ang->_14_pt.x;
@@ -7739,7 +9044,10 @@ dwg_ent_dim_ang3pt_get_14_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
       point->z = ang->_14_pt.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 
@@ -7753,7 +9061,7 @@ void
 dwg_ent_dim_ang3pt_set_15_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
                              int *error)
 {
-  if (ang != 0)
+  if (ang != 0 && point != 0)
     {
       *error = 0;
       ang->_15_pt.x = point->x;
@@ -7761,7 +9069,10 @@ dwg_ent_dim_ang3pt_set_15_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
       ang->_15_pt.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the text 15 pt
@@ -7774,7 +9085,7 @@ void
 dwg_ent_dim_ang3pt_get_15_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
                              int *error)
 {
-  if (ang != 0)
+  if (ang != 0 && point != 0)
     {
       *error = 0;
       point->x = ang->_15_pt.x;
@@ -7782,7 +9093,10 @@ dwg_ent_dim_ang3pt_get_15_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
       point->z = ang->_15_pt.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /*******************************************************************
@@ -7803,7 +9117,11 @@ dwg_ent_dim_ang2ln_get_elevation_ecs11(dwg_ent_dim_ang2ln *ang, int *error)
       return ang->elevation.ecs_11;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the elevation ecs11
@@ -7822,7 +9140,10 @@ dwg_ent_dim_ang2ln_set_elevation_ecs11(dwg_ent_dim_ang2ln *ang,
       ang->elevation.ecs_11 = elevation_ecs11;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the elevation ecs12
@@ -7839,7 +9160,11 @@ dwg_ent_dim_ang2ln_get_elevation_ecs12(dwg_ent_dim_ang2ln *ang, int *error)
       return ang->elevation.ecs_12;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the elevation ecs12
@@ -7858,7 +9183,10 @@ dwg_ent_dim_ang2ln_set_elevation_ecs12(dwg_ent_dim_ang2ln *ang,
       ang->elevation.ecs_12 = elevation_ecs12;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the flags1
@@ -7875,7 +9203,11 @@ dwg_ent_dim_ang2ln_get_flags1(dwg_ent_dim_ang2ln *ang, int *error)
       return ang->flags_1;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// sets the flags1
@@ -7893,7 +9225,10 @@ dwg_ent_dim_ang2ln_set_flags1(dwg_ent_dim_ang2ln *ang, char flag, int *error)
       ang->flags_1 = flag;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the act_measurement
@@ -7911,7 +9246,11 @@ dwg_ent_dim_ang2ln_get_act_measurement(dwg_ent_dim_ang2ln *ang,
       return ang->act_measurement;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// sets the act_measurement
@@ -7930,7 +9269,10 @@ dwg_ent_dim_ang2ln_set_act_measurement(dwg_ent_dim_ang2ln *ang,
       ang->act_measurement = act_measurement;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the horiz_dir
@@ -7948,7 +9290,11 @@ dwg_ent_dim_ang2ln_get_horiz_dir(dwg_ent_dim_ang2ln *ang,
       return ang->horiz_dir;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// sets the horiz_dir
@@ -7967,7 +9313,10 @@ dwg_ent_dim_ang2ln_set_horiz_dir(dwg_ent_dim_ang2ln *ang,
       ang->horiz_dir = horiz_dir;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns dim ang2ln lspace factor
@@ -7981,7 +9330,11 @@ dwg_ent_dim_ang2ln_get_lspace_factor(dwg_ent_dim_ang2ln *ang,
       return ang->lspace_factor;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets dim ang2ln lspace factor
@@ -7995,7 +9348,10 @@ dwg_ent_dim_ang2ln_set_lspace_factor(dwg_ent_dim_ang2ln *ang,
       ang->lspace_factor = factor;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns dim ang2ln lspace style
@@ -8008,7 +9364,11 @@ dwg_ent_dim_ang2ln_get_lspace_style(dwg_ent_dim_ang2ln *ang, int *error)
       return ang->lspace_style;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets dim ang2ln lspace style
@@ -8022,7 +9382,10 @@ dwg_ent_dim_ang2ln_set_lspace_style(dwg_ent_dim_ang2ln *ang,
       ang->lspace_style = style;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns dim ang2ln attachment point
@@ -8035,7 +9398,11 @@ dwg_ent_dim_ang2ln_get_attachment_point(dwg_ent_dim_ang2ln *ang, int *error)
       return ang->attachment_point;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets dim ang2ln attachment point
@@ -8049,7 +9416,10 @@ dwg_ent_dim_ang2ln_set_attachment_point(dwg_ent_dim_ang2ln *ang,
       ang->attachment_point = point;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets dim ang2ln extrusion
@@ -8057,7 +9427,7 @@ void
 dwg_ent_dim_ang2ln_set_extrusion(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
                                  int *error)
 {
-  if (ang != 0)
+  if (ang != 0 && point != 0)
     {
       *error = 0;
       ang->extrusion.x = point->x;
@@ -8065,7 +9435,10 @@ dwg_ent_dim_ang2ln_set_extrusion(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
       ang->extrusion.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns dim ang2ln extrusion
@@ -8073,7 +9446,7 @@ void
 dwg_ent_dim_ang2ln_get_extrusion(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
                                  int *error)
 {
-  if (ang != 0)
+  if (ang != 0 && point != 0)
     {
       *error = 0;
       point->x = ang->extrusion.x;
@@ -8081,7 +9454,10 @@ dwg_ent_dim_ang2ln_get_extrusion(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
       point->z = ang->extrusion.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns dim ang2ln user text
@@ -8094,7 +9470,11 @@ dwg_ent_dim_ang2ln_get_user_text(dwg_ent_dim_ang2ln *ang, int *error)
       return ang->user_text;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty ang", __FUNCTION__)
+      *error = 1;
+      return NULL;
+    }
 }
 
 /// Sets dim ang2ln user text
@@ -8108,7 +9488,10 @@ dwg_ent_dim_ang2ln_set_user_text(dwg_ent_dim_ang2ln *ang, char * text,
       ang->user_text = text;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns dim ang2ln text rotation
@@ -8121,7 +9504,11 @@ dwg_ent_dim_ang2ln_get_text_rot(dwg_ent_dim_ang2ln *ang, int *error)
       return ang->text_rot;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets dim ang2ln text rotation
@@ -8135,7 +9522,10 @@ dwg_ent_dim_ang2ln_set_text_rot(dwg_ent_dim_ang2ln *ang, double rot,
       ang->text_rot = rot;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns dim ang2ln ins rotation
@@ -8148,7 +9538,11 @@ dwg_ent_dim_ang2ln_get_ins_rotation(dwg_ent_dim_ang2ln *ang, int *error)
       return ang->ins_rotation;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets dim ang2ln ins rotation
@@ -8162,7 +9556,10 @@ dwg_ent_dim_ang2ln_set_ins_rotation(dwg_ent_dim_ang2ln *ang, double rot,
       ang->ins_rotation = rot;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns dim ang2ln flip arrow 1
@@ -8175,7 +9572,11 @@ dwg_ent_dim_ang2ln_get_flip_arrow1(dwg_ent_dim_ang2ln *ang, int *error)
       return ang->flip_arrow1;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets dim ang2ln point flip arrow 1
@@ -8189,7 +9590,10 @@ dwg_ent_dim_ang2ln_set_flip_arrow1(dwg_ent_dim_ang2ln *ang, char flip_arrow,
       ang->flip_arrow1 = flip_arrow;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns dim ang2ln flip arrow 2
@@ -8202,7 +9606,11 @@ dwg_ent_dim_ang2ln_get_flip_arrow2(dwg_ent_dim_ang2ln *ang, int *error)
       return ang->flip_arrow2;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets dim ang2ln flip arrow 2
@@ -8216,7 +9624,10 @@ dwg_ent_dim_ang2ln_set_flip_arrow2(dwg_ent_dim_ang2ln *ang, char flip_arrow,
       ang->flip_arrow2 = flip_arrow;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets dim ang2ln text midpoint
@@ -8231,7 +9642,10 @@ dwg_ent_dim_ang2ln_set_text_mid_pt(dwg_ent_dim_ang2ln *ang,
       ang->text_midpt.y = point->y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns dim ang2ln text mid point
@@ -8239,14 +9653,17 @@ void
 dwg_ent_dim_ang2ln_get_text_mid_pt(dwg_ent_dim_ang2ln *ang,
                                    dwg_point_2d *point, int *error)
 {
-  if (ang != 0)
+  if (ang != 0 && point != 0)
     {
       *error = 0;
       point->x = ang->text_midpt.x;
       point->y = ang->text_midpt.y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets dim ang2ln ins scale points
@@ -8254,7 +9671,7 @@ void
 dwg_ent_dim_ang2ln_set_ins_scale(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
                                  int *error)
 {
-  if (ang != 0)
+  if (ang != 0 && point != 0)
     {
       *error = 0;
       ang->ins_scale.x = point->x;
@@ -8262,7 +9679,10 @@ dwg_ent_dim_ang2ln_set_ins_scale(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
       ang->ins_scale.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns dim ang2ln ins scale points
@@ -8270,7 +9690,7 @@ void
 dwg_ent_dim_ang2ln_get_ins_scale(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
                                  int *error)
 {
-  if (ang != 0)
+  if (ang != 0 && point != 0)
     {
       *error = 0;
       point->x = ang->ins_scale.x;
@@ -8278,7 +9698,10 @@ dwg_ent_dim_ang2ln_get_ins_scale(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
       point->z = ang->ins_scale.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets dim ang2ln 12 point
@@ -8286,14 +9709,17 @@ void
 dwg_ent_dim_ang2ln_set_12_pt(dwg_ent_dim_ang2ln *ang, dwg_point_2d *point,
                              int *error)
 {
-  if (ang != 0)
+  if (ang != 0 && point != 0)
     {
       *error = 0;
       ang->_12_pt.x = point->x;
       ang->_12_pt.y = point->y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns dim ang2ln 12 point
@@ -8301,14 +9727,17 @@ void
 dwg_ent_dim_ang2ln_get_12_pt(dwg_ent_dim_ang2ln *ang, dwg_point_2d *point,
                              int *error)
 {
-  if (ang != 0)
+  if (ang != 0 && point != 0)
     {
       *error = 0;
       point->x = ang->_12_pt.x;
       point->y = ang->_12_pt.y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets dim ang2ln 10 point
@@ -8316,7 +9745,7 @@ void
 dwg_ent_dim_ang2ln_set_10_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
                              int *error)
 {
-  if (ang != 0)
+  if (ang != 0 && point != 0)
     {
       *error = 0;
       ang->_10_pt.x = point->x;
@@ -8324,7 +9753,10 @@ dwg_ent_dim_ang2ln_set_10_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
       ang->_10_pt.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns dim ang2ln 10 point
@@ -8332,7 +9764,7 @@ void
 dwg_ent_dim_ang2ln_get_10_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
                              int *error)
 {
-  if (ang != 0)
+  if (ang != 0 && point != 0)
     {
       *error = 0;
       point->x = ang->_10_pt.x;
@@ -8340,7 +9772,10 @@ dwg_ent_dim_ang2ln_get_10_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
       point->z = ang->_10_pt.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets dim ang2ln 13 point
@@ -8348,7 +9783,7 @@ void
 dwg_ent_dim_ang2ln_set_13_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
                              int *error)
 {
-  if (ang != 0)
+  if (ang != 0 && point != 0)
     {
       *error = 0;
       ang->_13_pt.x = point->x;
@@ -8356,7 +9791,10 @@ dwg_ent_dim_ang2ln_set_13_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
       ang->_13_pt.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns dim ang2ln 13 point
@@ -8364,7 +9802,7 @@ void
 dwg_ent_dim_ang2ln_get_13_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
                              int *error)
 {
-  if (ang != 0)
+  if (ang != 0 && point != 0)
     {
       *error = 0;
       point->x = ang->_13_pt.x;
@@ -8372,7 +9810,10 @@ dwg_ent_dim_ang2ln_get_13_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
       point->z = ang->_13_pt.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets dim ang2ln 14 point
@@ -8380,7 +9821,7 @@ void
 dwg_ent_dim_ang2ln_set_14_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
                              int *error)
 {
-  if (ang != 0)
+  if (ang != 0 && point != 0)
     {
       *error = 0;
       ang->_14_pt.x = point->x;
@@ -8388,7 +9829,10 @@ dwg_ent_dim_ang2ln_set_14_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
       ang->_14_pt.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns dim ang2ln 14 point
@@ -8396,7 +9840,7 @@ void
 dwg_ent_dim_ang2ln_get_14_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
                              int *error)
 {
-  if (ang != 0)
+  if (ang != 0 && point != 0)
     {
       *error = 0;
       point->x = ang->_14_pt.x;
@@ -8404,7 +9848,10 @@ dwg_ent_dim_ang2ln_get_14_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
       point->z = ang->_14_pt.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 
@@ -8413,7 +9860,7 @@ void
 dwg_ent_dim_ang2ln_set_15_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
                              int *error)
 {
-  if (ang != 0)
+  if (ang != 0 && point != 0)
     {
       *error = 0;
       ang->_15_pt.x = point->x;
@@ -8421,7 +9868,10 @@ dwg_ent_dim_ang2ln_set_15_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
       ang->_15_pt.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns dim ang2ln 15 point
@@ -8429,7 +9879,7 @@ void
 dwg_ent_dim_ang2ln_get_15_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
                              int *error)
 {
-  if (ang != 0)
+  if (ang != 0 && point != 0)
     {
       *error = 0;
       point->x = ang->_15_pt.x;
@@ -8437,7 +9887,10 @@ dwg_ent_dim_ang2ln_get_15_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
       point->z = ang->_15_pt.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 
@@ -8446,14 +9899,17 @@ void
 dwg_ent_dim_ang2ln_set_16_pt(dwg_ent_dim_ang2ln *ang, dwg_point_2d *point,
                              int *error)
 {
-  if (ang != 0)
+  if (ang != 0 && point != 0)
     {
       *error = 0;
       ang->_16_pt.x = point->x;
       ang->_16_pt.y = point->y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns dim ang2ln 16 point
@@ -8461,14 +9917,17 @@ void
 dwg_ent_dim_ang2ln_get_16_pt(dwg_ent_dim_ang2ln *ang, dwg_point_2d *point,
                              int *error)
 {
-  if (ang != 0)
+  if (ang != 0 && point != 0)
     {
       *error = 0;
       point->x = ang->_16_pt.x;
       point->y = ang->_16_pt.y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /*******************************************************************
@@ -8489,7 +9948,11 @@ dwg_ent_dim_radius_get_elevation_ecs11(dwg_ent_dim_radius *radius, int *error)
       return radius->elevation.ecs_11;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the elevation ecs11
@@ -8508,7 +9971,10 @@ dwg_ent_dim_radius_set_elevation_ecs11(dwg_ent_dim_radius *radius,
       radius->elevation.ecs_11 = elevation_ecs11;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the elevation ecs12
@@ -8525,7 +9991,11 @@ dwg_ent_dim_radius_get_elevation_ecs12(dwg_ent_dim_radius *radius, int *error)
       return radius->elevation.ecs_12;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets the elevation ecs12
@@ -8544,7 +10014,10 @@ dwg_ent_dim_radius_set_elevation_ecs12(dwg_ent_dim_radius *radius,
       radius->elevation.ecs_12 = elevation_ecs12;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns dim radius flags 1
@@ -8557,7 +10030,11 @@ dwg_ent_dim_radius_get_flags1(dwg_ent_dim_radius *radius, int *error)
       return radius->flags_1;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets dim radius flags 1
@@ -8571,7 +10048,10 @@ dwg_ent_dim_radius_set_flags1(dwg_ent_dim_radius *radius, char flag,
       radius->flags_1 = flag;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns dim radius act measurement
@@ -8584,7 +10064,11 @@ dwg_ent_dim_radius_get_act_measurement(dwg_ent_dim_radius *radius, int *error)
       return radius->act_measurement;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets dim radius act measurement
@@ -8598,7 +10082,10 @@ dwg_ent_dim_radius_set_act_measurement(dwg_ent_dim_radius *radius,
       radius->act_measurement = act_measurement;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns dim radius horiz dir
@@ -8611,7 +10098,11 @@ dwg_ent_dim_radius_get_horiz_dir(dwg_ent_dim_radius *radius, int *error)
       return radius->horiz_dir;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets dim radius horiz dir
@@ -8625,7 +10116,10 @@ dwg_ent_dim_radius_set_horiz_dir(dwg_ent_dim_radius *radius, double horiz_dir,
       radius->horiz_dir = horiz_dir;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns dim radius lspace factor
@@ -8638,7 +10132,11 @@ dwg_ent_dim_radius_get_lspace_factor(dwg_ent_dim_radius *radius, int *error)
       return radius->lspace_factor;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets dim radius lspace factor
@@ -8652,7 +10150,10 @@ dwg_ent_dim_radius_set_lspace_factor(dwg_ent_dim_radius *radius, double factor,
       radius->lspace_factor = factor;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns dim radius lspace style
@@ -8665,7 +10166,11 @@ dwg_ent_dim_radius_get_lspace_style(dwg_ent_dim_radius *radius, int *error)
       return radius->lspace_style;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets dim radius lspace style
@@ -8679,7 +10184,10 @@ dwg_ent_dim_radius_set_lspace_style(dwg_ent_dim_radius *radius,
       radius->lspace_style = style;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns dim radius attachment point
@@ -8692,7 +10200,11 @@ dwg_ent_dim_radius_get_attachment_point(dwg_ent_dim_radius *radius, int *error)
       return radius->attachment_point;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets dim radius attachment point
@@ -8706,7 +10218,10 @@ dwg_ent_dim_radius_set_attachment_point(dwg_ent_dim_radius *radius,
       radius->attachment_point = point;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets dim radius extrusion
@@ -8714,7 +10229,7 @@ void
 dwg_ent_dim_radius_set_extrusion(dwg_ent_dim_radius *radius,
                                  dwg_point_3d *point, int *error)
 {
-  if (radius != 0)
+  if (radius != 0 && point != 0)
     {
       *error = 0;
       radius->extrusion.x = point->x;
@@ -8722,7 +10237,10 @@ dwg_ent_dim_radius_set_extrusion(dwg_ent_dim_radius *radius,
       radius->extrusion.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns dim radius extrusion
@@ -8730,7 +10248,7 @@ void
 dwg_ent_dim_radius_get_extrusion(dwg_ent_dim_radius *radius,
                                  dwg_point_3d *point, int *error)
 {
-  if (radius != 0)
+  if (radius != 0 && point != 0)
     {
       *error = 0;
       point->x = radius->extrusion.x;
@@ -8738,7 +10256,10 @@ dwg_ent_dim_radius_get_extrusion(dwg_ent_dim_radius *radius,
       point->z = radius->extrusion.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns dim radius user text
@@ -8751,7 +10272,11 @@ dwg_ent_dim_radius_get_user_text(dwg_ent_dim_radius *radius, int *error)
       return radius->user_text;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty radius", __FUNCTION__)
+      *error = 1;
+      return NULL;
+    }
 }
 
 /// Sets dim radius user text
@@ -8765,7 +10290,10 @@ dwg_ent_dim_radius_set_user_text(dwg_ent_dim_radius *radius, char * text,
       radius->user_text = text;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty radius", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns dim radius text rotation
@@ -8778,7 +10306,11 @@ dwg_ent_dim_radius_get_text_rot(dwg_ent_dim_radius *radius, int *error)
       return radius->text_rot;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty radius", __FUNCTION__)
+      *error = 1;
+      return nan("");
+    }
 }
 
 /// Sets dim radius text rotation
@@ -8792,7 +10324,10 @@ dwg_ent_dim_radius_set_text_rot(dwg_ent_dim_radius *radius, double rot,
       radius->text_rot = rot;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty radius", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns dim radius ins rotation
@@ -8805,7 +10340,11 @@ dwg_ent_dim_radius_get_ins_rotation(dwg_ent_dim_radius *radius, int *error)
       return radius->ins_rotation;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty radius", __FUNCTION__)
+      *error = 1;
+      return nan("");
+    }
 }
 
 /// Sets dim radius ins rotation
@@ -8819,7 +10358,10 @@ dwg_ent_dim_radius_set_ins_rotation(dwg_ent_dim_radius *radius, double rot,
       radius->ins_rotation = rot;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty radius", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns dim radius flip arrow 1
@@ -8832,7 +10374,11 @@ dwg_ent_dim_radius_get_flip_arrow1(dwg_ent_dim_radius *radius, int *error)
       return radius->flip_arrow1;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty radius", __FUNCTION__)
+      *error = 1;
+      return '\0';
+    }
 }
 
 /// Sets dim radius flip arrow 1
@@ -8846,7 +10392,10 @@ dwg_ent_dim_radius_set_flip_arrow1(dwg_ent_dim_radius *radius, char flip_arrow,
       radius->flip_arrow1 = flip_arrow;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty radius", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns dim radius flip arrow 2
@@ -8859,7 +10408,11 @@ dwg_ent_dim_radius_get_flip_arrow2(dwg_ent_dim_radius *radius, int *error)
       return radius->flip_arrow2;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty radius", __FUNCTION__)
+      *error = 1;
+      return '\0';
+    }
 }
 
 /// Sets dim radius flip arrow 2
@@ -8873,7 +10426,10 @@ dwg_ent_dim_radius_set_flip_arrow2(dwg_ent_dim_radius *radius, char flip_arrow,
       radius->flip_arrow2 = flip_arrow;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty radius", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Sets dim radius text mid point
@@ -8881,14 +10437,17 @@ void
 dwg_ent_dim_radius_set_text_mid_pt(dwg_ent_dim_radius *radius,
                                    dwg_point_2d *point, int *error)
 {
-  if (radius != 0)
+  if (radius != 0 && point != 0)
     {
       *error = 0;
       radius->text_midpt.x = point->x;
       radius->text_midpt.y = point->y;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty radius", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns dim radius text mid point
@@ -8896,22 +10455,25 @@ void
 dwg_ent_dim_radius_get_text_mid_pt(dwg_ent_dim_radius *radius,
                                    dwg_point_2d *point, int *error)
 {
-  if (radius != 0)
+  if (radius != 0 && point != 0)
     {
       *error = 0;
       point->x = radius->text_midpt.x;
       point->y = radius->text_midpt.y;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty radius", __FUNCTION__)
+      *error = 1;
+    }
 }
 
-/// Sets dim radius ins scale 
+/// Sets dim radius ins scale
 void
 dwg_ent_dim_radius_set_ins_scale(dwg_ent_dim_radius *radius,
                                  dwg_point_3d *point, int *error)
 {
-  if (radius != 0)
+  if (radius != 0 && point != 0)
     {
       *error = 0;
       radius->ins_scale.x = point->x;
@@ -8919,7 +10481,10 @@ dwg_ent_dim_radius_set_ins_scale(dwg_ent_dim_radius *radius,
       radius->ins_scale.z = point->z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty radius", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns dim radius ins scale
@@ -8927,7 +10492,7 @@ void
 dwg_ent_dim_radius_get_ins_scale(dwg_ent_dim_radius *radius,
                                  dwg_point_3d *point, int *error)
 {
-  if (radius != 0)
+  if (radius != 0 && point != 0)
     {
       *error = 0;
       point->x = radius->ins_scale.x;
@@ -8935,7 +10500,10 @@ dwg_ent_dim_radius_get_ins_scale(dwg_ent_dim_radius *radius,
       point->z = radius->ins_scale.z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty radius", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 
@@ -8944,14 +10512,17 @@ void
 dwg_ent_dim_radius_set_12_pt(dwg_ent_dim_radius *radius, dwg_point_2d *point,
                              int *error)
 {
-  if (radius != 0)
+  if (radius != 0 && point != 0)
     {
       *error = 0;
       radius->_12_pt.x = point->x;
       radius->_12_pt.y = point->y;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty radius", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns dim radius 12 point
@@ -8959,14 +10530,17 @@ void
 dwg_ent_dim_radius_get_12_pt(dwg_ent_dim_radius *radius, dwg_point_2d *point,
                              int *error)
 {
-  if (radius != 0)
+  if (radius != 0 && point != 0)
     {
       *error = 0;
       point->x = radius->_12_pt.x;
       point->y = radius->_12_pt.y;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty radius", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Sets dim radius 10 point
@@ -8974,7 +10548,7 @@ void
 dwg_ent_dim_radius_set_10_pt(dwg_ent_dim_radius *radius, dwg_point_3d *point,
                              int *error)
 {
-  if (radius != 0)
+  if (radius != 0 && point != 0)
     {
       *error = 0;
       radius->_10_pt.x = point->x;
@@ -8982,7 +10556,10 @@ dwg_ent_dim_radius_set_10_pt(dwg_ent_dim_radius *radius, dwg_point_3d *point,
       radius->_10_pt.z = point->z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty radius", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns dim radius 10 point
@@ -8990,7 +10567,7 @@ void
 dwg_ent_dim_radius_get_10_pt(dwg_ent_dim_radius *radius, dwg_point_3d *point,
                              int *error)
 {
-  if (radius != 0)
+  if (radius != 0 && point != 0)
     {
       *error = 0;
       point->x = radius->_10_pt.x;
@@ -8998,7 +10575,10 @@ dwg_ent_dim_radius_get_10_pt(dwg_ent_dim_radius *radius, dwg_point_3d *point,
       point->z = radius->_10_pt.z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty radius", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 
@@ -9007,7 +10587,7 @@ void
 dwg_ent_dim_radius_set_15_pt(dwg_ent_dim_radius *radius, dwg_point_3d *point,
                              int *error)
 {
-  if (radius != 0)
+  if (radius != 0 && point != 0)
     {
       *error = 0;
       radius->_15_pt.x = point->x;
@@ -9015,7 +10595,10 @@ dwg_ent_dim_radius_set_15_pt(dwg_ent_dim_radius *radius, dwg_point_3d *point,
       radius->_15_pt.z = point->z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty radius", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns dim radius 15 point
@@ -9023,7 +10606,7 @@ void
 dwg_ent_dim_radius_get_15_pt(dwg_ent_dim_radius *radius, dwg_point_3d *point,
                              int *error)
 {
-  if (radius != 0)
+  if (radius != 0 && point != 0)
     {
       *error = 0;
       point->x = radius->_15_pt.x;
@@ -9031,7 +10614,10 @@ dwg_ent_dim_radius_get_15_pt(dwg_ent_dim_radius *radius, dwg_point_3d *point,
       point->z = radius->_15_pt.z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty radius", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns dim radius leader length
@@ -9044,7 +10630,11 @@ dwg_ent_dim_radius_get_leader_length(dwg_ent_dim_radius *radius, int *error)
       return radius->leader_len;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty radius", __FUNCTION__)
+      *error = 1;
+      return nan("");
+    }
 }
 
 /// Sets dim radius leader length
@@ -9058,7 +10648,10 @@ dwg_ent_dim_radius_set_leader_length(dwg_ent_dim_radius *radius, double length,
       radius->leader_len = length;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty radius", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /*******************************************************************
@@ -9079,7 +10672,11 @@ dwg_ent_dim_diameter_get_elevation_ecs11(dwg_ent_dim_diameter *dia, int *error)
       return dia->elevation.ecs_11;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty dia", __FUNCTION__)
+      *error = 1;
+      return nan("");
+    }
 }
 
 /// Sets the elevation ecs11
@@ -9098,7 +10695,10 @@ dwg_ent_dim_diameter_set_elevation_ecs11(dwg_ent_dim_diameter *dia,
       dia->elevation.ecs_11 = elevation_ecs11;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty dia", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns the elevation ecs12
@@ -9115,7 +10715,11 @@ dwg_ent_dim_diameter_get_elevation_ecs12(dwg_ent_dim_diameter *dia, int *error)
       return dia->elevation.ecs_12;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty dia", __FUNCTION__)
+      *error = 1;
+      return nan("");
+    }
 }
 
 /// Sets the elevation ecs12
@@ -9134,10 +10738,13 @@ dwg_ent_dim_diameter_set_elevation_ecs12(dwg_ent_dim_diameter *dia,
       dia->elevation.ecs_12 = elevation_ecs12;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty dia", __FUNCTION__)
+      *error = 1;
+    }
 }
 
-/// Returns dim diameter flags1 
+/// Returns dim diameter flags1
 char
 dwg_ent_dim_diameter_get_flags1(dwg_ent_dim_diameter *dia, int *error)
 {
@@ -9147,7 +10754,11 @@ dwg_ent_dim_diameter_get_flags1(dwg_ent_dim_diameter *dia, int *error)
       return dia->flags_1;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty dia", __FUNCTION__)
+      *error = 1;
+      return '\0';
+    }
 }
 
 /// Sets dim diameter flags1
@@ -9161,10 +10772,13 @@ dwg_ent_dim_diameter_set_flags1(dwg_ent_dim_diameter *dia, char flag,
       dia->flags_1 = flag;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty dia", __FUNCTION__)
+      *error = 1;
+    }
 }
 
-/// Returns dim diameter act measurement 
+/// Returns dim diameter act measurement
 double
 dwg_ent_dim_diameter_get_act_measurement(dwg_ent_dim_diameter *dia, int *error)
 {
@@ -9174,7 +10788,11 @@ dwg_ent_dim_diameter_get_act_measurement(dwg_ent_dim_diameter *dia, int *error)
       return dia->act_measurement;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty dia", __FUNCTION__)
+      *error = 1;
+      return nan("");
+    }
 }
 
 /// Sets dim diameter act measurement
@@ -9188,10 +10806,13 @@ dwg_ent_dim_diameter_set_act_measurement(dwg_ent_dim_diameter *dia,
       dia->act_measurement = act_measurement;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty dia", __FUNCTION__)
+      *error = 1;
+    }
 }
 
-/// Returns dim diameter horiz dir 
+/// Returns dim diameter horiz dir
 double
 dwg_ent_dim_diameter_get_horiz_dir(dwg_ent_dim_diameter *dia, int *error)
 {
@@ -9201,7 +10822,11 @@ dwg_ent_dim_diameter_get_horiz_dir(dwg_ent_dim_diameter *dia, int *error)
       return dia->horiz_dir;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty dia", __FUNCTION__)
+      *error = 1;
+      return nan("");
+    }
 }
 
 /// Sets dim diameter horiz dir
@@ -9215,7 +10840,10 @@ dwg_ent_dim_diameter_set_horiz_dir(dwg_ent_dim_diameter *dia, double horiz_dir,
       dia->horiz_dir = horiz_dir;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty dia", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns dim diameter lspace factor
@@ -9228,10 +10856,14 @@ dwg_ent_dim_diameter_get_lspace_factor(dwg_ent_dim_diameter *dia, int *error)
       return dia->lspace_factor;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty dia", __FUNCTION__)
+      *error = 1;
+      return nan("");
+    }
 }
 
-/// Sets dim diameter 
+/// Sets dim diameter
 void
 dwg_ent_dim_diameter_set_lspace_factor(dwg_ent_dim_diameter *dia,
                                        double factor, int *error)
@@ -9242,7 +10874,10 @@ dwg_ent_dim_diameter_set_lspace_factor(dwg_ent_dim_diameter *dia,
       dia->lspace_factor = factor;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty dia", __FUNCTION__)
+      *error = 1;
+    }
 }
 /// Returns dim diameter lspace style
 unsigned int
@@ -9254,7 +10889,11 @@ dwg_ent_dim_diameter_get_lspace_style(dwg_ent_dim_diameter *dia, int *error)
       return dia->lspace_style;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty dia", __FUNCTION__)
+      *error = 1;
+      return (unsigned int)-1;
+    }
 }
 
 /// Sets dim diameter lspace style
@@ -9268,7 +10907,10 @@ dwg_ent_dim_diameter_set_lspace_style(dwg_ent_dim_diameter *dia,
       dia->lspace_style = style;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty dia", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns dim diameter attachment point
@@ -9282,7 +10924,11 @@ dwg_ent_dim_diameter_get_attachment_point(dwg_ent_dim_diameter *dia,
       return dia->attachment_point;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty dia", __FUNCTION__)
+      *error = 1;
+      return (unsigned int)-1;
+    }
 }
 
 /// Sets dim diameter attachment point
@@ -9296,7 +10942,10 @@ dwg_ent_dim_diameter_set_attachment_point(dwg_ent_dim_diameter *dia,
       dia->attachment_point = point;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty dia", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Sets dim diameter extrusion
@@ -9304,7 +10953,7 @@ void
 dwg_ent_dim_diameter_set_extrusion(dwg_ent_dim_diameter *dia,
                                    dwg_point_3d *point, int *error)
 {
-  if (dia != 0)
+  if (dia != 0 && point != 0)
     {
       *error = 0;
       dia->extrusion.x = point->x;
@@ -9312,7 +10961,10 @@ dwg_ent_dim_diameter_set_extrusion(dwg_ent_dim_diameter *dia,
       dia->extrusion.z = point->z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty dia", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns dim diameter extrusion
@@ -9320,7 +10972,7 @@ void
 dwg_ent_dim_diameter_get_extrusion(dwg_ent_dim_diameter *dia,
                                    dwg_point_3d *point, int *error)
 {
-  if (dia != 0)
+  if (dia != 0 && point != 0)
     {
       *error = 0;
       point->x = dia->extrusion.x;
@@ -9328,7 +10980,10 @@ dwg_ent_dim_diameter_get_extrusion(dwg_ent_dim_diameter *dia,
       point->z = dia->extrusion.z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty dia", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns dim diameter user text
@@ -9341,7 +10996,11 @@ dwg_ent_dim_diameter_get_user_text(dwg_ent_dim_diameter *dia, int *error)
       return dia->user_text;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty dia", __FUNCTION__)
+      *error = 1;
+      return NULL;
+    }
 }
 
 /// Sets dim diameter user text
@@ -9355,10 +11014,13 @@ dwg_ent_dim_diameter_set_user_text(dwg_ent_dim_diameter *dia, char * text,
       dia->user_text = text;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
-/// Returns dim diameter text rotation 
+/// Returns dim diameter text rotation
 double
 dwg_ent_dim_diameter_get_text_rot(dwg_ent_dim_diameter *dia, int *error)
 {
@@ -9368,7 +11030,11 @@ dwg_ent_dim_diameter_get_text_rot(dwg_ent_dim_diameter *dia, int *error)
       return dia->text_rot;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty dia", __FUNCTION__)
+      *error = 1;
+      return nan("");
+    }
 }
 
 /// Sets dim diameter text rotation
@@ -9382,7 +11048,10 @@ dwg_ent_dim_diameter_set_text_rot(dwg_ent_dim_diameter *dia, double rot,
       dia->text_rot = rot;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns dim diameter ins rotation
@@ -9395,7 +11064,11 @@ dwg_ent_dim_diameter_get_ins_rotation(dwg_ent_dim_diameter *dia, int *error)
       return dia->ins_rotation;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty dia", __FUNCTION__)
+      *error = 1;
+      return nan("");
+    }
 }
 
 /// Sets dim diameter ins rotation
@@ -9409,7 +11082,10 @@ dwg_ent_dim_diameter_set_ins_rotation(dwg_ent_dim_diameter *dia, double rot,
       dia->ins_rotation = rot;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns dim diameter flip arrow 1
@@ -9422,7 +11098,11 @@ dwg_ent_dim_diameter_get_flip_arrow1(dwg_ent_dim_diameter *dia, int *error)
       return dia->flip_arrow1;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets dim diameter flip arrow 1
@@ -9436,7 +11116,10 @@ dwg_ent_dim_diameter_set_flip_arrow1(dwg_ent_dim_diameter *dia,
       dia->flip_arrow1 = flip_arrow;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns dim diameter flip arrow 2
@@ -9449,12 +11132,16 @@ dwg_ent_dim_diameter_get_flip_arrow2(dwg_ent_dim_diameter *dia, int *error)
       return dia->flip_arrow2;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets dim diameter flip arrow 2
 void
-dwg_ent_dim_diameter_set_flip_arrow2(dwg_ent_dim_diameter *dia, 
+dwg_ent_dim_diameter_set_flip_arrow2(dwg_ent_dim_diameter *dia,
                                      char flip_arrow, int *error)
 {
   if (dia != 0)
@@ -9463,7 +11150,10 @@ dwg_ent_dim_diameter_set_flip_arrow2(dwg_ent_dim_diameter *dia,
       dia->flip_arrow2 = flip_arrow;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets dim diameter text mid point
@@ -9471,14 +11161,17 @@ void
 dwg_ent_dim_diameter_set_text_mid_pt(dwg_ent_dim_diameter *dia,
                                      dwg_point_2d *point, int *error)
 {
-  if (dia != 0)
+  if (dia != 0 && point != 0)
     {
       *error = 0;
       dia->text_midpt.x = point->x;
       dia->text_midpt.y = point->y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns dim diameter text mid point
@@ -9486,22 +11179,25 @@ void
 dwg_ent_dim_diameter_get_text_mid_pt(dwg_ent_dim_diameter *dia,
                                      dwg_point_2d *point, int *error)
 {
-  if (dia != 0)
+  if (dia != 0 && point != 0)
     {
       *error = 0;
       point->x = dia->text_midpt.x;
       point->y = dia->text_midpt.y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets dim diameter ins scale
 void
-dwg_ent_dim_diameter_set_ins_scale(dwg_ent_dim_diameter *dia, 
+dwg_ent_dim_diameter_set_ins_scale(dwg_ent_dim_diameter *dia,
                                    dwg_point_3d *point, int *error)
 {
-  if (dia != 0)
+  if (dia != 0 && point != 0)
     {
       *error = 0;
       dia->ins_scale.x = point->x;
@@ -9509,15 +11205,18 @@ dwg_ent_dim_diameter_set_ins_scale(dwg_ent_dim_diameter *dia,
       dia->ins_scale.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns dim diameter ins scale
 void
-dwg_ent_dim_diameter_get_ins_scale(dwg_ent_dim_diameter *dia, 
+dwg_ent_dim_diameter_get_ins_scale(dwg_ent_dim_diameter *dia,
                                    dwg_point_3d *point, int *error)
 {
-  if (dia != 0)
+  if (dia != 0 && point != 0)
     {
       *error = 0;
       point->x = dia->ins_scale.x;
@@ -9525,7 +11224,10 @@ dwg_ent_dim_diameter_get_ins_scale(dwg_ent_dim_diameter *dia,
       point->z = dia->ins_scale.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets dim diameter 12 point
@@ -9533,14 +11235,17 @@ void
 dwg_ent_dim_diameter_set_12_pt(dwg_ent_dim_diameter *dia, dwg_point_2d *point,
                                int *error)
 {
-  if (dia != 0)
+  if (dia != 0 && point != 0)
     {
       *error = 0;
       dia->_12_pt.x = point->x;
       dia->_12_pt.y = point->y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns dim diameter 12 point
@@ -9548,14 +11253,17 @@ void
 dwg_ent_dim_diameter_get_12_pt(dwg_ent_dim_diameter *dia, dwg_point_2d *point,
                                int *error)
 {
-  if (dia != 0)
+  if (dia != 0 && point != 0)
     {
       *error = 0;
       point->x = dia->_12_pt.x;
       point->y = dia->_12_pt.y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets dim diameter 10 point
@@ -9563,7 +11271,7 @@ void
 dwg_ent_dim_diameter_set_10_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *point,
                                int *error)
 {
-  if (dia != 0)
+  if (dia != 0 && point != 0)
     {
       *error = 0;
       dia->_10_pt.x = point->x;
@@ -9571,7 +11279,10 @@ dwg_ent_dim_diameter_set_10_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *point,
       dia->_10_pt.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns dim diameter 10 point
@@ -9579,7 +11290,7 @@ void
 dwg_ent_dim_diameter_get_10_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *point,
                                int *error)
 {
-  if (dia != 0)
+  if (dia != 0 && point != 0)
     {
       *error = 0;
       point->x = dia->_10_pt.x;
@@ -9587,7 +11298,10 @@ dwg_ent_dim_diameter_get_10_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *point,
       point->z = dia->_10_pt.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 
@@ -9596,7 +11310,7 @@ void
 dwg_ent_dim_diameter_set_15_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *point,
                                int *error)
 {
-  if (dia != 0)
+  if (dia != 0 && point != 0)
     {
       *error = 0;
       dia->_15_pt.x = point->x;
@@ -9604,7 +11318,10 @@ dwg_ent_dim_diameter_set_15_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *point,
       dia->_15_pt.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns dim diameter 15 point
@@ -9612,7 +11329,7 @@ void
 dwg_ent_dim_diameter_get_15_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *point,
                                int *error)
 {
-  if (dia != 0)
+  if (dia != 0 && point != 0)
     {
       *error = 0;
       point->x = dia->_15_pt.x;
@@ -9620,7 +11337,10 @@ dwg_ent_dim_diameter_get_15_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *point,
       point->z = dia->_15_pt.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns dim diameter leader length
@@ -9633,7 +11353,11 @@ dwg_ent_dim_diameter_get_leader_length(dwg_ent_dim_diameter *dia, int *error)
       return dia->leader_len;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty dia", __FUNCTION__)
+      *error = 1;
+      return nan("");
+    }
 }
 
 /// Sets dim diameter leader length
@@ -9647,7 +11371,10 @@ dwg_ent_dim_diameter_set_leader_length(dwg_ent_dim_diameter *dia,
       dia->leader_len = length;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty dia", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /*******************************************************************
@@ -9662,13 +11389,17 @@ dwg_ent_dim_diameter_set_leader_length(dwg_ent_dim_diameter *dia,
 char
 dwg_ent_endblk_get_dummy(dwg_ent_endblk *endblk, int *error)
 {
-  if(endblk != 0)
+  if (endblk != 0)
     {
       *error = 0;
       return endblk->dummy;
     }
   else
-    *error = 1;   
+    {
+      LOG_ERROR("%s: empty endblk", __FUNCTION__)
+      *error = 1;
+      return '\0';
+    }
 }
 
 /// Sets the dummy
@@ -9680,13 +11411,16 @@ dwg_ent_endblk_get_dummy(dwg_ent_endblk *endblk, int *error)
 void
 dwg_ent_endblk_set_dummy(dwg_ent_endblk *endblk, char dummy, int *error)
 {
-  if(endblk != 0)
+  if (endblk != 0)
     {
       *error = 0;
       endblk->dummy = dummy;
     }
   else
-    *error = 1;   
+    {
+      LOG_ERROR("%s: empty endblk", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /*******************************************************************
@@ -9701,13 +11435,17 @@ dwg_ent_endblk_set_dummy(dwg_ent_endblk *endblk, char dummy, int *error)
 char
 dwg_ent_seqend_get_dummy(dwg_ent_seqend *seqend, int *error)
 {
-  if(seqend != 0)
+  if (seqend != 0)
     {
       *error = 0;
       return seqend->dummy;
     }
   else
-    *error = 1;   
+    {
+      LOG_ERROR("%s: empty seqend", __FUNCTION__)
+      *error = 1;
+      return '\0';
+    }
 }
 
 /// Sets the dummy
@@ -9719,13 +11457,16 @@ dwg_ent_seqend_get_dummy(dwg_ent_seqend *seqend, int *error)
 void
 dwg_ent_seqend_set_dummy(dwg_ent_seqend *seqend, char dummy, int *error)
 {
-  if(seqend != 0)
+  if (seqend != 0)
     {
       *error = 0;
       seqend->dummy = dummy;
     }
   else
-    *error = 1;   
+    {
+      LOG_ERROR("%s: empty seqend", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /*******************************************************************
@@ -9736,7 +11477,7 @@ dwg_ent_seqend_set_dummy(dwg_ent_seqend *seqend, char dummy, int *error)
 void
 dwg_ent_shape_get_ins_pt(dwg_ent_shape *shape, dwg_point_3d *point, int *error)
 {
-  if(shape != 0)
+  if (shape != 0 && point != 0)
     {
       *error = 0;
       point->x = shape->ins_pt.x;
@@ -9744,14 +11485,17 @@ dwg_ent_shape_get_ins_pt(dwg_ent_shape *shape, dwg_point_3d *point, int *error)
       point->z = shape->ins_pt.z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty shape or point", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Sets shape ins point
 void
 dwg_ent_shape_set_ins_pt(dwg_ent_shape *shape, dwg_point_3d *point, int *error)
 {
-  if(shape != 0)
+  if (shape != 0 && point != 0)
     {
       *error = 0;
       shape->ins_pt.x = point->x;
@@ -9759,72 +11503,93 @@ dwg_ent_shape_set_ins_pt(dwg_ent_shape *shape, dwg_point_3d *point, int *error)
       shape->ins_pt.z = point->z;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty shape or point", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns shape scale
 double
 dwg_ent_shape_get_scale(dwg_ent_shape *shape, int *error)
 {
-  if(shape != 0)
+  if (shape != 0)
     {
       *error = 0;
       return shape->scale;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty shape", __FUNCTION__)
+      *error = 1;
+      return nan("");
+    }
 }
 
 /// Sets shape scale
 void
 dwg_ent_shape_set_scale(dwg_ent_shape *shape, double scale, int *error)
 {
-  if(shape != 0)
+  if (shape != 0)
     {
       *error = 0;
       shape->scale = scale;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty shape", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns shape rotation
 double
 dwg_ent_shape_get_rotation(dwg_ent_shape *shape, int *error)
 {
-  if(shape != 0)
+  if (shape != 0)
     {
       *error = 0;
       return shape->rotation;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty shape", __FUNCTION__)
+      *error = 1;
+      return nan("");
+    }
 }
 
 /// Sets shape rotation
 void
 dwg_ent_shape_set_rotation(dwg_ent_shape *shape, double rotation, int *error)
 {
-  if(shape != 0)
+  if (shape != 0)
     {
       *error = 0;
       shape->rotation = rotation;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty shape", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns shape width factor
 double
 dwg_ent_shape_get_width_factor(dwg_ent_shape *shape, int *error)
 {
-  if(shape != 0)
+  if (shape != 0)
     {
       *error = 0;
       return shape->width_factor;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty shape", __FUNCTION__)
+      *error = 1;
+      return nan("");
+    }
 }
 
 /// Sets shape width factor
@@ -9832,52 +11597,66 @@ void
 dwg_ent_shape_set_width_factor(dwg_ent_shape *shape, double width_factor,
                                int *error)
 {
-  if(shape != 0)
+  if (shape != 0)
     {
       *error = 0;
       shape->width_factor = width_factor;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty shape", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns shape oblique
 double
 dwg_ent_shape_get_oblique(dwg_ent_shape *shape, int *error)
 {
-  if(shape != 0)
+  if (shape != 0)
     {
       *error = 0;
       return shape->oblique;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty shape", __FUNCTION__)
+      *error = 1;
+      return nan("");
+    }
 }
 
 /// Sets shape oblique
 void
 dwg_ent_shape_set_oblique(dwg_ent_shape *shape, double oblique, int *error)
 {
-  if(shape != 0)
+  if (shape != 0)
     {
       *error = 0;
       shape->oblique = oblique;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty shape", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns shape thickness
 double
 dwg_ent_shape_get_thickness(dwg_ent_shape *shape, int *error)
 {
-  if(shape != 0)
+  if (shape != 0)
     {
       *error = 0;
       return shape->thickness;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty shape", __FUNCTION__)
+      *error = 1;
+      return nan("");
+    }
 }
 
 /// Sets shape thickness
@@ -9885,39 +11664,49 @@ void
 dwg_ent_shape_set_thickness(dwg_ent_shape *shape, double thickness,
                             int *error)
 {
-  if(shape != 0)
+  if (shape != 0)
     {
       *error = 0;
       shape->thickness = thickness;
     }
   else
-    *error = 1;
+    {
+      LOG_ERROR("%s: empty shape", __FUNCTION__)
+      *error = 1;
+    }
 }
 
 /// Returns shape shape no
 double
 dwg_ent_shape_get_shape_no(dwg_ent_shape *shape, int *error)
 {
-  if(shape != 0)
+  if (shape != 0)
     {
       *error = 0;
       return shape->shape_no;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets shape shape no
 void
 dwg_ent_shape_set_shape_no(dwg_ent_shape *shape, double no, int *error)
 {
-  if(shape != 0)
+  if (shape != 0)
     {
       *error = 0;
       shape->shape_no = no;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns shape extrusion
@@ -9925,7 +11714,7 @@ void
 dwg_ent_shape_get_extrusion(dwg_ent_shape *shape, dwg_point_3d *point,
                             int *error)
 {
-  if(shape != 0)
+  if (shape != 0 && point != 0)
     {
       *error = 0;
       point->x = shape->extrusion.x;
@@ -9933,7 +11722,10 @@ dwg_ent_shape_get_extrusion(dwg_ent_shape *shape, dwg_point_3d *point,
       point->z = shape->extrusion.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets shape extrusion
@@ -9941,7 +11733,7 @@ void
 dwg_ent_shape_set_extrusion(dwg_ent_shape *shape, dwg_point_3d *point,
                             int *error)
 {
-  if(shape != 0)
+  if (shape != 0 && point != 0)
     {
       *error = 0;
       shape->extrusion.x = point->x;
@@ -9949,7 +11741,10 @@ dwg_ent_shape_set_extrusion(dwg_ent_shape *shape, dwg_point_3d *point,
       shape->extrusion.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 
@@ -9962,7 +11757,7 @@ void
 dwg_ent_mtext_set_insertion_pt(dwg_ent_mtext *mtext, dwg_point_3d *point,
                                int *error)
 {
-  if(mtext != 0)
+  if (mtext != 0 && point != 0)
     {
       *error = 0;
       mtext->insertion_pt.x = point->x;
@@ -9970,7 +11765,10 @@ dwg_ent_mtext_set_insertion_pt(dwg_ent_mtext *mtext, dwg_point_3d *point,
       mtext->insertion_pt.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns mtext insertion point
@@ -9978,7 +11776,7 @@ void
 dwg_ent_mtext_get_insertion_pt(dwg_ent_mtext *mtext, dwg_point_3d *point,
                                int *error)
 {
-  if(mtext != 0)
+  if (mtext != 0 && point != 0)
     {
       *error = 0;
       point->x = mtext->insertion_pt.x;
@@ -9986,7 +11784,10 @@ dwg_ent_mtext_get_insertion_pt(dwg_ent_mtext *mtext, dwg_point_3d *point,
       point->z = mtext->insertion_pt.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 
 }
 
@@ -9995,15 +11796,18 @@ void
 dwg_ent_mtext_set_extrusion(dwg_ent_mtext *mtext, dwg_point_3d *point,
                             int *error)
 {
-  if(mtext != 0)
-    {           
+  if (mtext != 0 && point != 0)
+    {
       *error = 0;
       mtext->extrusion.x = point->x;
       mtext->extrusion.y = point->y;
       mtext->extrusion.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 
 }
 
@@ -10012,7 +11816,7 @@ void
 dwg_ent_mtext_get_extrusion(dwg_ent_mtext *mtext, dwg_point_3d *point,
                             int *error)
 {
-  if(mtext != 0)
+  if (mtext != 0 && point != 0)
     {
       *error = 0;
       point->x = mtext->extrusion.x;
@@ -10020,7 +11824,10 @@ dwg_ent_mtext_get_extrusion(dwg_ent_mtext *mtext, dwg_point_3d *point,
       point->z = mtext->extrusion.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 
 }
 
@@ -10029,7 +11836,7 @@ void
 dwg_ent_mtext_set_x_axis_dir(dwg_ent_mtext *mtext, dwg_point_3d *point,
                              int *error)
 {
-  if(mtext != 0)
+  if (mtext != 0 && point != 0)
     {
       *error = 0;
       mtext->x_axis_dir.x = point->x;
@@ -10037,7 +11844,10 @@ dwg_ent_mtext_set_x_axis_dir(dwg_ent_mtext *mtext, dwg_point_3d *point,
       mtext->x_axis_dir.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 
 }
 
@@ -10046,7 +11856,7 @@ void
 dwg_ent_mtext_get_x_axis_dir(dwg_ent_mtext *mtext, dwg_point_3d *point,
                              int *error)
 {
-  if(mtext != 0)
+  if (mtext != 0 && point != 0)
     {
       *error = 0;
       point->x = mtext->x_axis_dir.x;
@@ -10054,7 +11864,10 @@ dwg_ent_mtext_get_x_axis_dir(dwg_ent_mtext *mtext, dwg_point_3d *point,
       point->z = mtext->x_axis_dir.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 
 }
 
@@ -10063,28 +11876,33 @@ void
 dwg_ent_mtext_set_rect_height(dwg_ent_mtext *mtext, double rect_height,
                               int *error)
 {
-  if(mtext != 0)
+  if (mtext != 0)
     {
       *error = 0;
       mtext->rect_height = rect_height;
     }
   else
-    *error = 1;
-
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns mtext rect height
 double
 dwg_ent_mtext_get_rect_height(dwg_ent_mtext *mtext, int *error)
 {
-  if(mtext != 0)
+  if (mtext != 0)
     {
       *error = 0;
       return mtext->rect_height;
     }
   else
-    *error = 1;
-
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets mtext rect width
@@ -10092,13 +11910,16 @@ void
 dwg_ent_mtext_set_rect_width(dwg_ent_mtext *mtext, double rect_width,
                              int *error)
 {
-  if(mtext != 0)
+  if (mtext != 0)
     {
       *error = 0;
       mtext->rect_width = rect_width;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 
 }
 
@@ -10106,14 +11927,17 @@ dwg_ent_mtext_set_rect_width(dwg_ent_mtext *mtext, double rect_width,
 double
 dwg_ent_mtext_get_rect_width(dwg_ent_mtext *mtext, int *error)
 {
-  if(mtext != 0)
+  if (mtext != 0)
     {
       *error = 0;
       return mtext->rect_width;
     }
   else
-    *error = 1;
-
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets mtext text height
@@ -10121,13 +11945,16 @@ void
 dwg_ent_mtext_set_text_height(dwg_ent_mtext *mtext, double text_height,
                               int *error)
 {
-  if(mtext != 0)
+  if (mtext != 0)
     {
       *error = 0;
       mtext->text_height = text_height;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 
 }
 
@@ -10135,28 +11962,34 @@ dwg_ent_mtext_set_text_height(dwg_ent_mtext *mtext, double text_height,
 double
 dwg_ent_mtext_get_text_height(dwg_ent_mtext *mtext, int *error)
 {
-  if(mtext != 0)
+  if (mtext != 0)
     {
       *error = 0;
       return mtext->text_height;
     }
   else
-    *error = 1;
-
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Returns mtext attachment
 unsigned int
 dwg_ent_mtext_get_attachment(dwg_ent_mtext *mtext, int *error)
 {
-  if(mtext != 0)
+  if (mtext != 0)
     {
       *error = 0;
       return mtext->attachment;
     }
   else
-    *error = 1;
-
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets mtext attachment
@@ -10164,13 +11997,16 @@ void
 dwg_ent_mtext_set_attachment(dwg_ent_mtext *mtext, unsigned int attachment,
                              int *error)
 {
-  if(mtext != 0)
+  if (mtext != 0)
     {
       *error = 0;
       mtext->attachment = attachment;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 
 }
 
@@ -10178,14 +12014,17 @@ dwg_ent_mtext_set_attachment(dwg_ent_mtext *mtext, unsigned int attachment,
 unsigned int
 dwg_ent_mtext_get_drawing_dir(dwg_ent_mtext *mtext, int *error)
 {
-  if(mtext != 0)
+  if (mtext != 0)
     {
       *error = 0;
       return mtext->drawing_dir;
     }
   else
-    *error = 1;
-
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets mtext drawing dir
@@ -10193,13 +12032,16 @@ void
 dwg_ent_mtext_set_drawing_dir(dwg_ent_mtext *mtext, unsigned int dir,
                               int *error)
 {
-  if(mtext != 0)
+  if (mtext != 0)
     {
       *error = 0;
       mtext->drawing_dir = dir;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 
 }
 
@@ -10207,27 +12049,33 @@ dwg_ent_mtext_set_drawing_dir(dwg_ent_mtext *mtext, unsigned int dir,
 double
 dwg_ent_mtext_get_extends_ht(dwg_ent_mtext *mtext, int *error)
 {
-  if(mtext != 0)
+  if (mtext != 0)
     {
       *error = 0;
       return mtext->extends_ht;
     }
   else
-    *error = 1;
-
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets mtext extends ht
 void
 dwg_ent_mtext_set_extends_ht(dwg_ent_mtext *mtext, double ht, int *error)
 {
-  if(mtext != 0)
+  if (mtext != 0)
     {
       *error = 0;
       mtext->extends_ht = ht;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 
 }
 
@@ -10235,27 +12083,33 @@ dwg_ent_mtext_set_extends_ht(dwg_ent_mtext *mtext, double ht, int *error)
 double
 dwg_ent_mtext_get_extends_wid(dwg_ent_mtext *mtext, int *error)
 {
-  if(mtext != 0)
+  if (mtext != 0)
     {
       *error = 0;
       return mtext->extends_wid;
     }
   else
-    *error = 1;
-
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets mtext extends wid
 void
 dwg_ent_mtext_set_extends_wid(dwg_ent_mtext *mtext, double wid, int *error)
 {
-  if(mtext != 0)
+  if (mtext != 0)
     {
       *error = 0;
       mtext->extends_wid = wid;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 
 }
 
@@ -10263,27 +12117,33 @@ dwg_ent_mtext_set_extends_wid(dwg_ent_mtext *mtext, double wid, int *error)
 char *
 dwg_ent_mtext_get_text(dwg_ent_mtext *mtext, int *error)
 {
-  if(mtext != 0)
+  if (mtext != 0)
     {
       *error = 0;
       return mtext->text;
     }
   else
-    *error = 1;
-
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return NULL;
+    }
 }
 
 /// Sets mtext text
 void
 dwg_ent_mtext_set_text(dwg_ent_mtext *mtext, char * text, int *error)
 {
-  if(mtext != 0)
+  if (mtext != 0)
     {
       *error = 0;
       mtext->text = text;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 
 }
 
@@ -10291,14 +12151,17 @@ dwg_ent_mtext_set_text(dwg_ent_mtext *mtext, char * text, int *error)
 unsigned int
 dwg_ent_mtext_get_linespace_style(dwg_ent_mtext *mtext, int *error)
 {
-  if(mtext != 0)
+  if (mtext != 0)
     {
       *error = 0;
       return mtext->linespace_style;
     }
   else
-    *error = 1;
-
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets mtext linespace style
@@ -10306,13 +12169,16 @@ void
 dwg_ent_mtext_set_linespace_style(dwg_ent_mtext *mtext, unsigned int style,
                                   int *error)
 {
-  if(mtext != 0)
+  if (mtext != 0)
     {
       *error = 0;
       mtext->linespace_style = style;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 
 }
 
@@ -10320,14 +12186,17 @@ dwg_ent_mtext_set_linespace_style(dwg_ent_mtext *mtext, unsigned int style,
 double
 dwg_ent_mtext_get_linespace_factor(dwg_ent_mtext *mtext, int *error)
 {
-  if(mtext != 0)
+  if (mtext != 0)
     {
       *error = 0;
       return mtext->linespace_factor;
     }
   else
-    *error = 1;
-
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets mtext linespace factor
@@ -10335,14 +12204,16 @@ void
 dwg_ent_mtext_set_linespace_factor(dwg_ent_mtext *mtext, double factor,
                                    int *error)
 {
-  if(mtext != 0)
+  if (mtext != 0)
     {
       *error = 0;
       mtext->linespace_factor = factor;
     }
   else
-    *error = 1;
-
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /*******************************************************************
@@ -10354,28 +12225,33 @@ void
 dwg_ent_leader_set_annot_type(dwg_ent_leader *leader, unsigned int type,
                               int *error)
 {
-  if(leader != 0)
+  if (leader != 0)
     {
       *error = 0;
       leader->annot_type = type;
     }
   else
-    *error = 1;
-
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns leader annot type
 unsigned int
 dwg_ent_leader_get_annot_type(dwg_ent_leader *leader, int *error)
 {
-  if(leader != 0)
+  if (leader != 0)
     {
       *error = 0;
       return leader->annot_type;
     }
   else
-    *error = 1;
-
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets leader path type
@@ -10383,55 +12259,66 @@ void
 dwg_ent_leader_set_path_type(dwg_ent_leader *leader, unsigned int type,
                              int *error)
 {
-  if(leader != 0)
+  if (leader != 0)
     {
       *error = 0;
       leader->path_type = type;
     }
   else
-    *error = 1;
-
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns leader path type
 unsigned int
 dwg_ent_leader_get_path_type(dwg_ent_leader *leader, int *error)
 {
-  if(leader != 0)
+  if (leader != 0)
     {
       *error = 0;
       return leader->path_type;
     }
   else
-    *error = 1;
-
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Returns leader numpts
 long
 dwg_ent_leader_get_numpts(dwg_ent_leader *leader, int *error)
 {
-  if(leader != 0)
+  if (leader != 0)
     {
       *error = 0;
       return leader->numpts;
     }
   else
-    *error = 1;
-
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0L;
+    }
 }
 
 /// Sets leader numpts
 void
 dwg_ent_leader_set_numpts(dwg_ent_leader *leader, long numpts, int *error)
 {
-  if(leader != 0)
+  if (leader != 0)
     {
       *error = 0;
       leader->numpts = numpts;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 
 }
 
@@ -10440,7 +12327,7 @@ void
 dwg_ent_leader_set_end_pt_proj(dwg_ent_leader *leader, dwg_point_3d *point,
                                int *error)
 {
-  if(leader != 0)
+  if (leader != 0 && point != 0)
     {
       *error = 0;
       leader->end_pt_proj.x = point->x;
@@ -10448,7 +12335,10 @@ dwg_ent_leader_set_end_pt_proj(dwg_ent_leader *leader, dwg_point_3d *point,
       leader->end_pt_proj.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 
 }
 
@@ -10457,7 +12347,7 @@ void
 dwg_ent_leader_get_end_pt_proj(dwg_ent_leader *leader, dwg_point_3d *point,
                                int *error)
 {
-  if(leader != 0)
+  if (leader != 0 && point != 0)
     {
       *error = 0;
       point->x = leader->end_pt_proj.x;
@@ -10465,7 +12355,10 @@ dwg_ent_leader_get_end_pt_proj(dwg_ent_leader *leader, dwg_point_3d *point,
       point->z = leader->end_pt_proj.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 
 }
 
@@ -10474,7 +12367,7 @@ void
 dwg_ent_leader_set_extrusion(dwg_ent_leader *leader, dwg_point_3d *point,
                              int *error)
 {
-  if(leader != 0)
+  if (leader != 0 && point != 0)
     {
       *error = 0;
       leader->extrusion.x = point->x;
@@ -10482,7 +12375,10 @@ dwg_ent_leader_set_extrusion(dwg_ent_leader *leader, dwg_point_3d *point,
       leader->extrusion.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 
 }
 
@@ -10491,7 +12387,7 @@ void
 dwg_ent_leader_get_extrusion(dwg_ent_leader *leader, dwg_point_3d *point,
                              int *error)
 {
-  if(leader != 0)
+  if (leader != 0 && point != 0)
     {
       *error = 0;
       point->x = leader->extrusion.x;
@@ -10499,7 +12395,10 @@ dwg_ent_leader_get_extrusion(dwg_ent_leader *leader, dwg_point_3d *point,
       point->z = leader->extrusion.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 
 }
 
@@ -10508,7 +12407,7 @@ void
 dwg_ent_leader_set_x_direction(dwg_ent_leader *leader, dwg_point_3d *point,
                                int *error)
 {
-  if(leader != 0)
+  if (leader != 0 && point != 0)
     {
       *error = 0;
       leader->x_direction.x = point->x;
@@ -10516,7 +12415,10 @@ dwg_ent_leader_set_x_direction(dwg_ent_leader *leader, dwg_point_3d *point,
       leader->x_direction.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 
 }
 
@@ -10525,7 +12427,7 @@ void
 dwg_ent_leader_get_x_direction(dwg_ent_leader *leader, dwg_point_3d *point,
                                int *error)
 {
-  if(leader != 0)
+  if (leader != 0 && point != 0)
     {
       *error = 0;
       point->x = leader->x_direction.x;
@@ -10533,7 +12435,10 @@ dwg_ent_leader_get_x_direction(dwg_ent_leader *leader, dwg_point_3d *point,
       point->z = leader->x_direction.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 
 }
 
@@ -10542,7 +12447,7 @@ void
 dwg_ent_leader_set_offset_to_block_ins_pt(dwg_ent_leader *leader,
                                           dwg_point_3d *point, int *error)
 {
-  if(leader != 0)
+  if (leader != 0 && point != 0)
     {
       *error = 0;
       leader->offset_to_block_ins_pt.x = point->x;
@@ -10550,7 +12455,10 @@ dwg_ent_leader_set_offset_to_block_ins_pt(dwg_ent_leader *leader,
       leader->offset_to_block_ins_pt.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 
 }
 
@@ -10559,7 +12467,7 @@ void
 dwg_ent_leader_get_offset_to_block_ins_pt(dwg_ent_leader *leader,
                                           dwg_point_3d *point, int *error)
 {
-  if(leader != 0)
+  if (leader != 0 && point != 0)
     {
       *error = 0;
       point->x = leader->offset_to_block_ins_pt.x;
@@ -10567,7 +12475,10 @@ dwg_ent_leader_get_offset_to_block_ins_pt(dwg_ent_leader *leader,
       point->z = leader->offset_to_block_ins_pt.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 
 }
 
@@ -10575,13 +12486,16 @@ dwg_ent_leader_get_offset_to_block_ins_pt(dwg_ent_leader *leader,
 void
 dwg_ent_leader_set_dimgap(dwg_ent_leader *leader, double dimgap, int *error)
 {
-  if(leader != 0)
+  if (leader != 0)
     {
       *error = 0;
       leader->dimgap = dimgap;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 
 }
 
@@ -10589,14 +12503,17 @@ dwg_ent_leader_set_dimgap(dwg_ent_leader *leader, double dimgap, int *error)
 double
 dwg_ent_leader_get_dimgap(dwg_ent_leader *leader, int *error)
 {
-  if(leader != 0)
+  if (leader != 0)
     {
       *error = 0;
       return leader->dimgap;
     }
   else
-    *error = 1;
-
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets leader box height
@@ -10604,13 +12521,16 @@ void
 dwg_ent_leader_set_box_height(dwg_ent_leader *leader, double height,
                               int *error)
 {
-  if(leader != 0)
+  if (leader != 0)
     {
       *error = 0;
       leader->box_height = height;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 
 }
 
@@ -10618,27 +12538,33 @@ dwg_ent_leader_set_box_height(dwg_ent_leader *leader, double height,
 double
 dwg_ent_leader_get_box_height(dwg_ent_leader *leader, int *error)
 {
-  if(leader != 0)
+  if (leader != 0)
     {
       *error = 0;
       return leader->box_height;
     }
   else
-    *error = 1;
-
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets leader box width
 void
 dwg_ent_leader_set_box_width(dwg_ent_leader *leader, double width, int *error)
 {
-  if(leader != 0)
+  if (leader != 0)
     {
       *error = 0;
       leader->box_width = width;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 
 }
 
@@ -10646,14 +12572,17 @@ dwg_ent_leader_set_box_width(dwg_ent_leader *leader, double width, int *error)
 double
 dwg_ent_leader_get_box_width(dwg_ent_leader *leader, int *error)
 {
-  if(leader != 0)
+  if (leader != 0)
     {
       *error = 0;
       return leader->box_width;
     }
   else
-    *error = 1;
-
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets leader hook line on x dir value
@@ -10661,13 +12590,16 @@ void
 dwg_ent_leader_set_hook_line_on_x_dir(dwg_ent_leader *leader, char hook,
                                       int *error)
 {
-  if(leader != 0)
+  if (leader != 0)
     {
       *error = 0;
       leader->hooklineonxdir = hook;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 
 }
 
@@ -10675,27 +12607,33 @@ dwg_ent_leader_set_hook_line_on_x_dir(dwg_ent_leader *leader, char hook,
 char
 dwg_ent_leader_get_hook_line_on_x_dir(dwg_ent_leader *leader, int *error)
 {
-  if(leader != 0)
+  if (leader != 0)
     {
       *error = 0;
       return leader->hooklineonxdir;
     }
   else
-    *error = 1;
-
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets leader arrowhead on
 void
 dwg_ent_leader_set_arrowhead_on(dwg_ent_leader *leader, char arrow, int *error)
 {
-  if(leader != 0)
+  if (leader != 0)
     {
       *error = 0;
       leader->arrowhead_on = arrow;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 
 }
 
@@ -10703,14 +12641,17 @@ dwg_ent_leader_set_arrowhead_on(dwg_ent_leader *leader, char arrow, int *error)
 char
 dwg_ent_leader_get_arrowhead_on(dwg_ent_leader *leader, int *error)
 {
-  if(leader != 0)
+  if (leader != 0)
     {
       *error = 0;
       return leader->arrowhead_on;
     }
   else
-    *error = 1;
-
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets leader arrow head type
@@ -10718,13 +12659,16 @@ void
 dwg_ent_leader_set_arrowhead_type(dwg_ent_leader *leader, unsigned int type,
                                   int *error)
 {
-  if(leader != 0)
+  if (leader != 0)
     {
       leader->arrowhead_type = type;
       *error = 0;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 
 }
 
@@ -10732,42 +12676,50 @@ dwg_ent_leader_set_arrowhead_type(dwg_ent_leader *leader, unsigned int type,
 unsigned int
 dwg_ent_leader_get_arrowhead_type(dwg_ent_leader *leader, int *error)
 {
-  if(leader != 0)
+  if (leader != 0)
     {
       *error = 0;
       return leader->arrowhead_type;
     }
   else
-    *error = 1;
-
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets leader dimasz
 void
 dwg_ent_leader_set_dimasz(dwg_ent_leader *leader, double dimasz, int *error)
 {
-  if(leader != 0)
+  if (leader != 0)
     {
       *error = 0;
       leader->dimasz = dimasz;
     }
   else
-    *error = 1;
-
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns leader dimasz
 double
 dwg_ent_leader_get_dimasz(dwg_ent_leader *leader, int *error)
 {
-  if(leader != 0)
+  if (leader != 0)
     {
       *error = 0;
       return leader->dimasz;
     }
   else
-    *error = 1;
-
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets leader byblock color
@@ -10775,28 +12727,33 @@ void
 dwg_ent_leader_set_byblock_color(dwg_ent_leader *leader, unsigned int color,
                                  int *error)
 {
-  if(leader != 0)
+  if (leader != 0)
     {
       *error = 0;
       leader->byblock_color = color;
     }
   else
-    *error = 1;
-
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns leader byblock color
 unsigned int
 dwg_ent_leader_get_byblock_color(dwg_ent_leader *leader, int *error)
 {
-  if(leader != 0)
+  if (leader != 0)
     {
       *error = 0;
       return leader->byblock_color;
     }
   else
-    *error = 1;
-
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /*******************************************************************
@@ -10808,28 +12765,33 @@ void
 dwg_ent_tolerance_set_height(dwg_ent_tolerance *tol, double height,
                              int *error)
 {
-  if(tol != 0)
+  if (tol != 0)
     {
       *error = 0;
       tol->height = height;
     }
   else
-    *error = 1;
-
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns tolerance height
 double
 dwg_ent_tolerance_get_height(dwg_ent_tolerance *tol, int *error)
 {
-  if(tol != 0)
+  if (tol != 0)
     {
       *error = 0;
       return tol->height;
     }
   else
-    *error = 1;
-
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets tolerance dimgap
@@ -10837,13 +12799,16 @@ void
 dwg_ent_tolerance_set_dimgap(dwg_ent_tolerance *tol, double dimgap,
                              int *error)
 {
-  if(tol != 0)
+  if (tol != 0)
     {
       *error = 0;
       tol->dimgap = dimgap;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 
 }
 
@@ -10851,14 +12816,17 @@ dwg_ent_tolerance_set_dimgap(dwg_ent_tolerance *tol, double dimgap,
 double
 dwg_ent_tolerance_get_dimgap(dwg_ent_tolerance *tol, int *error)
 {
-  if(tol != 0)
+  if (tol != 0)
     {
       *error = 0;
       return tol->dimgap;
     }
   else
-    *error = 1;
-
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets tolerance insertion point
@@ -10866,7 +12834,7 @@ void
 dwg_ent_tolerance_set_ins_pt(dwg_ent_tolerance *tol, dwg_point_3d *point,
                              int *error)
 {
-  if(tol != 0)
+  if (tol != 0 && point != 0)
     {
       *error = 0;
       tol->ins_pt.x = point->x;
@@ -10874,7 +12842,10 @@ dwg_ent_tolerance_set_ins_pt(dwg_ent_tolerance *tol, dwg_point_3d *point,
       tol->ins_pt.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 
 }
 
@@ -10883,7 +12854,7 @@ void
 dwg_ent_tolerance_get_ins_pt(dwg_ent_tolerance *tol, dwg_point_3d *point,
                              int *error)
 {
-  if(tol != 0)
+  if (tol != 0 && point != 0)
     {
       *error = 0;
       point->x = tol->ins_pt.x;
@@ -10891,7 +12862,10 @@ dwg_ent_tolerance_get_ins_pt(dwg_ent_tolerance *tol, dwg_point_3d *point,
       point->z = tol->ins_pt.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 
 }
 
@@ -10900,7 +12874,7 @@ void
 dwg_ent_tolerance_set_x_direction(dwg_ent_tolerance *tol, dwg_point_3d *point,
                                   int *error)
 {
-  if(tol != 0)
+  if (tol != 0 && point != 0)
     {
       *error = 0;
       tol->x_direction.x = point->x;
@@ -10908,7 +12882,10 @@ dwg_ent_tolerance_set_x_direction(dwg_ent_tolerance *tol, dwg_point_3d *point,
       tol->x_direction.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 
 }
 
@@ -10917,7 +12894,7 @@ void
 dwg_ent_tolerance_get_x_direction(dwg_ent_tolerance *tol, dwg_point_3d *point,
                                   int *error)
 {
-  if(tol != 0)
+  if (tol != 0 && point != 0)
     {
       *error = 0;
       point->x = tol->x_direction.x;
@@ -10925,7 +12902,10 @@ dwg_ent_tolerance_get_x_direction(dwg_ent_tolerance *tol, dwg_point_3d *point,
       point->z = tol->x_direction.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 
 }
 
@@ -10934,7 +12914,7 @@ void
 dwg_ent_tolerance_set_extrusion(dwg_ent_tolerance *tol, dwg_point_3d *point,
                                 int *error)
 {
-  if(tol != 0)
+  if (tol != 0 && point != 0)
     {
       *error = 0;
       tol->extrusion.x = point->x;
@@ -10942,7 +12922,10 @@ dwg_ent_tolerance_set_extrusion(dwg_ent_tolerance *tol, dwg_point_3d *point,
       tol->extrusion.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 
 }
 
@@ -10951,7 +12934,7 @@ void
 dwg_ent_tolerance_get_extrusion(dwg_ent_tolerance *tol, dwg_point_3d *point,
                                 int *error)
 {
-  if(tol != 0)
+  if (tol != 0 && point != 0)
     {
       *error = 0;
       point->x = tol->extrusion.x;
@@ -10959,7 +12942,10 @@ dwg_ent_tolerance_get_extrusion(dwg_ent_tolerance *tol, dwg_point_3d *point,
       point->z = tol->extrusion.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 
 }
 
@@ -10968,13 +12954,16 @@ void
 dwg_ent_tolerance_set_text_string(dwg_ent_tolerance *tol, char * string,
                                   int *error)
 {
-  if(tol != 0)
+  if (tol != 0)
     {
       *error = 0;
       tol->text_string = string;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 
 }
 
@@ -10982,56 +12971,70 @@ dwg_ent_tolerance_set_text_string(dwg_ent_tolerance *tol, char * string,
 char *
 dwg_ent_tolerance_get_text_string(dwg_ent_tolerance *tol, int *error)
 {
-  if(tol != 0)
+  if (tol != 0)
     {
       *error = 0;
       return tol->text_string;
     }
   else
-    *error = 1;
-
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return NULL;
+    }
 }
 
 /*******************************************************************
 *                   FUNCTIONS FOR LWPLINE ENTITY                    *
 ********************************************************************/
 /// Returns lwpline flags
-char 
+char
 dwg_ent_lwpline_get_flags(dwg_ent_lwpline *lwpline, int *error)
 {
-  if(lwpline != 0)
+  if (lwpline != 0)
     {
-      *error = 0;  
+      *error = 0;
       return lwpline->flags;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets lwpline flags
 void
 dwg_ent_lwpline_set_flags(dwg_ent_lwpline *lwpline, char flags, int *error)
 {
-  if(lwpline != 0)
+  if (lwpline != 0)
     {
       *error = 0;
       lwpline->flags = flags;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns lwpline const width
 double
 dwg_ent_lwpline_get_const_width(dwg_ent_lwpline *lwpline, int *error)
 {
-  if(lwpline != 0)
+  if (lwpline != 0)
     {
       *error = 0;
       return lwpline->const_width;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets lwpline const width
@@ -11039,25 +13042,32 @@ void
 dwg_ent_lwpline_set_const_width(dwg_ent_lwpline *lwpline, double const_width,
                                 int *error)
 {
-  if(lwpline != 0)
+  if (lwpline != 0)
     {
       *error = 0;
-      lwpline->const_width = const_width;    
+      lwpline->const_width = const_width;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 /// Returns lwpline elevation
 double
 dwg_ent_lwpline_get_elevation(dwg_ent_lwpline *lwpline, int *error)
 {
-  if(lwpline != 0)
+  if (lwpline != 0)
     {
       *error = 0;
       return lwpline->elevation;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets lwpline elevation
@@ -11065,25 +13075,32 @@ void
 dwg_ent_lwpline_set_elevation(dwg_ent_lwpline *lwpline, double elevation,
                               int *error)
 {
-  if(lwpline != 0)
+  if (lwpline != 0)
     {
       *error = 0;
       lwpline->elevation = elevation;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 /// Returns lwpline thickness
 double
 dwg_ent_lwpline_get_thickness(dwg_ent_lwpline *lwpline, int *error)
 {
-  if(lwpline != 0)
+  if (lwpline != 0)
     {
       *error = 0;
       return lwpline->thickness;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets lwpline thickness
@@ -11091,25 +13108,32 @@ void
 dwg_ent_lwpline_set_thickness(dwg_ent_lwpline *lwpline, double thickness,
                               int *error)
 {
-  if(lwpline != 0)
+  if (lwpline != 0)
     {
       *error = 0;
       lwpline->thickness = thickness;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 /// Returns lwpline point count
 long
 dwg_ent_lwpline_get_num_points(dwg_ent_lwpline *lwpline, int *error)
 {
-  if(lwpline != 0)
+  if (lwpline != 0)
     {
       *error = 0;
       return lwpline->num_points;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0L;
+    }
 }
 
 /// Sets lwpline points count
@@ -11117,25 +13141,32 @@ void
 dwg_ent_lwpline_set_num_points(dwg_ent_lwpline *lwpline, long num_points,
                                int *error)
 {
-  if(lwpline != 0)
+  if (lwpline != 0)
     {
       *error = 0;
       lwpline->num_points = num_points;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 /// Returns lwpline bulges count
 long
 dwg_ent_lwpline_get_num_bulges(dwg_ent_lwpline *lwpline, int *error)
 {
-  if(lwpline != 0)
+  if (lwpline != 0)
     {
       *error = 0;
       return lwpline->num_bulges;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0L;
+    }
 }
 
 /// Sets lwpline bulges count
@@ -11143,25 +13174,32 @@ void
 dwg_ent_lwpline_set_num_bulges(dwg_ent_lwpline *lwpline, long num_bulges,
                                int *error)
 {
-  if(lwpline != 0)
+  if (lwpline != 0)
     {
       *error = 0;
       lwpline->num_bulges = num_bulges;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 /// Returns lwpline width count
 long
 dwg_ent_lwpline_get_num_widths(dwg_ent_lwpline *lwpline, int *error)
 {
-  if(lwpline != 0)
+  if (lwpline != 0)
     {
       *error = 0;
       return lwpline->num_widths;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0L;
+    }
 }
 
 /// Sets lwpline width count
@@ -11169,51 +13207,60 @@ void
 dwg_ent_lwpline_set_num_widths(dwg_ent_lwpline *lwpline, long num_widths,
                                int *error)
 {
-  if(lwpline != 0)
+  if (lwpline != 0)
     {
       *error = 0;
       lwpline->num_widths = num_widths;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 /// Returns lwpline normal
 void
-dwg_ent_lwpline_get_normal(dwg_ent_lwpline *lwpline, dwg_point_3d *points,
+dwg_ent_lwpline_get_normal(dwg_ent_lwpline *lwpline, dwg_point_3d *point,
                            int *error)
 {
-  if(lwpline != 0)
+  if (lwpline != 0 && point != 0)
     {
       *error = 0;
-      points->x = lwpline->normal.x;
-      points->y = lwpline->normal.y;
-      points->z = lwpline->normal.z;
+      point->x = lwpline->normal.x;
+      point->y = lwpline->normal.y;
+      point->z = lwpline->normal.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets lwpline normal
 void
-dwg_ent_lwpline_set_normal(dwg_ent_lwpline *lwpline, dwg_point_3d *points,
+dwg_ent_lwpline_set_normal(dwg_ent_lwpline *lwpline, dwg_point_3d *point,
                            int *error)
 {
-  if(lwpline != 0)
+  if (lwpline != 0 && point != 0)
     {
       *error = 0;
-      lwpline->normal.x = points->x;
-      lwpline->normal.y = points->y;
-      lwpline->normal.z = points->z;
+      lwpline->normal.x = point->x;
+      lwpline->normal.y = point->y;
+      lwpline->normal.z = point->z;
   }
-  else
-    *error = 1;
+    else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 /// Returns lwpline bulges
 double *
 dwg_ent_lwpline_get_bulges(dwg_ent_lwpline *lwpline, int *error)
 {
   double *ptx = (double*) malloc(sizeof(double)* lwpline->num_bulges);
-  if(ptx != 0)
+  if (ptx != 0)
     {
       *error = 0;
       int i = 0;
@@ -11224,20 +13271,22 @@ dwg_ent_lwpline_get_bulges(dwg_ent_lwpline *lwpline, int *error)
       return ptx;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      return NULL;
+    }
 }
 
 /// Returns lwpline points
 dwg_point_2d *
 dwg_ent_lwpline_get_points(dwg_ent_lwpline *lwpline, int *error)
 {
-  dwg_point_2d *ptx = (dwg_point_2d*) 
-  malloc(sizeof(dwg_point_2d)* lwpline->num_points);
-  if(ptx != 0)
+  dwg_point_2d *ptx = (dwg_point_2d*) malloc(sizeof(dwg_point_2d)* lwpline->num_points);
+  if (ptx != 0)
     {
       *error = 0;
       int i = 0;
-        for (i = 0; i < lwpline->num_points ; i++)
+      for (i = 0; i < lwpline->num_points ; i++)
         {
           ptx[i].x = lwpline->points[i].x;
           ptx[i].y = lwpline->points[i].y;
@@ -11245,7 +13294,10 @@ dwg_ent_lwpline_get_points(dwg_ent_lwpline *lwpline, int *error)
       return ptx;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      return NULL;
+    }
 }
 
 /// Returns lwpline widths
@@ -11254,19 +13306,22 @@ dwg_ent_lwpline_get_widths(dwg_ent_lwpline *lwpline, int *error)
 {
   dwg_lwpline_widths *ptx = (dwg_lwpline_widths*)
     malloc(sizeof(dwg_lwpline_widths)* lwpline->num_widths);
-  if(ptx != 0)
+  if (ptx != 0)
     {
       *error = 0;
       int i = 0;
-        for (i = 0; i < lwpline->num_widths ; i++)
-          {
-            ptx[i].start = lwpline->widths[i].start;
-            ptx[i].end = lwpline->widths[i].end;
-          }
+      for (i = 0; i < lwpline->num_widths ; i++)
+        {
+          ptx[i].start = lwpline->widths[i].start;
+          ptx[i].end = lwpline->widths[i].end;
+        }
       return ptx;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      return NULL;
+    }
 }
 
 /*******************************************************************
@@ -11277,13 +13332,16 @@ dwg_ent_lwpline_get_widths(dwg_ent_lwpline *lwpline, int *error)
 unsigned int
 dwg_ent_ole2frame_get_flags(dwg_ent_ole2frame *frame, int *error)
 {
-  if(frame != 0)
+  if (frame != 0)
     {
       *error = 0;
       return frame->flags;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      return (unsigned int)-1;
+    }
 }
 
 /// Sets ole2frame flags
@@ -11291,26 +13349,32 @@ void
 dwg_ent_ole2frame_set_flags(dwg_ent_ole2frame *frame, unsigned int flags,
                             int *error)
 {
-  if(frame != 0)
+  if (frame != 0)
     {
       *error = 0;
       frame->flags = flags;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns ole2frame mode
 unsigned int
 dwg_ent_ole2frame_get_mode(dwg_ent_ole2frame *frame, int *error)
 {
-  if(frame != 0)
+  if (frame != 0)
     {
       *error = 0;
       return frame->mode;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      return (unsigned int)-1;
+    }
 }
 
 /// set ole2frame mode
@@ -11318,26 +13382,32 @@ void
 dwg_ent_ole2frame_set_mode(dwg_ent_ole2frame *frame, unsigned int mode,
                            int *error)
 {
-  if(frame != 0)
+  if (frame != 0)
     {
       *error = 0;
       frame->mode = mode;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns ole2frame data length
 long
 dwg_ent_ole2frame_get_data_length(dwg_ent_ole2frame *frame, int *error)
 {
-  if(frame != 0)
+  if (frame != 0)
     {
       *error = 0;
       return frame->data_length;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      return 0L;
+    }
 }
 
 /// Sets ole2frame data length
@@ -11345,39 +13415,49 @@ void
 dwg_ent_ole2frame_set_data_length(dwg_ent_ole2frame *frame, long data_length,
                                   int *error)
 {
-  if(frame != 0)
+  if (frame != 0)
     {
       *error = 0;
       frame->data_length = data_length;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns ole2frame data
 char *
 dwg_ent_ole2frame_get_data(dwg_ent_ole2frame *frame, int *error)
 {
-  if(frame != 0)
+  if (frame != 0)
     {
       *error = 0;
       return frame->data;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return NULL;
+    }
 }
 
 /// Sets ole2frame data
 void
 dwg_ent_ole2frame_set_data(dwg_ent_ole2frame *frame, char * data, int *error)
 {
-  if(frame != 0)
+  if (frame != 0)
     {
       *error = 0;
       frame->data = data;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /*******************************************************************
@@ -11388,13 +13468,17 @@ dwg_ent_ole2frame_set_data(dwg_ent_ole2frame *frame, char * data, int *error)
 unsigned int
 dwg_ent_spline_get_scenario(dwg_ent_spline *spline, int *error)
 {
-  if(spline != 0)
+  if (spline != 0)
     {
       *error = 0;
       return spline->scenario;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets spline scenario
@@ -11402,26 +13486,33 @@ void
 dwg_ent_spline_set_scenario(dwg_ent_spline *spline, unsigned int scenario,
                                int *error)
 {
-  if(spline != 0)
+  if (spline != 0)
     {
       *error = 0;
       spline->scenario = scenario;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns spline degree
 unsigned int
 dwg_ent_spline_get_degree(dwg_ent_spline *spline, int *error)
 {
-  if(spline != 0)
+  if (spline != 0)
     {
       *error = 0;
       return spline->degree;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets spline degree
@@ -11429,87 +13520,106 @@ void
 dwg_ent_spline_set_degree(dwg_ent_spline *spline, unsigned int degree,
                              int *error)
 {
-  if(spline != 0)
+  if (spline != 0)
     {
       *error = 0;
       spline->degree = degree;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns spline fit tol
 double
 dwg_ent_spline_get_fit_tol(dwg_ent_spline *spline, int *error)
 {
-  if(spline != 0)
+  if (spline != 0)
     {
       *error = 0;
       return spline->fit_tol;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets spline fit tol
 void
 dwg_ent_spline_set_fit_tol(dwg_ent_spline *spline, int fit_tol, int *error)
 {
-  if(spline != 0)
+  if (spline != 0)
     {
       *error = 0;
       spline->fit_tol = fit_tol;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns spline begin tan vector
 void
 dwg_ent_spline_get_begin_tan_vector(dwg_ent_spline *spline,
-                                       dwg_point_3d *point, int *error)
+                                    dwg_point_3d *point, int *error)
 {
-  if(spline != 0)
+  if (spline != 0 && point != 0)
     {
       *error = 0;
       point->x = spline->beg_tan_vec.x;
       point->y = spline->beg_tan_vec.y;
       point->z = spline->beg_tan_vec.z;
   }
-  else
-    *error = 1;
+    else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets spline begin tan vector
 void
 dwg_ent_spline_set_begin_tan_vector(dwg_ent_spline *spline,
-                                       dwg_point_3d *point, int *error)
+                                    dwg_point_3d *point, int *error)
 {
-  if(spline != 0)
+  if (spline != 0 && point != 0)
     {
       *error = 0;
       spline->beg_tan_vec.x = point->x;
       spline->beg_tan_vec.y = point->y;
       spline->beg_tan_vec.z = point->z;
   }
-  else
-    *error = 1;
+    else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns spline end tan vector points
 void
 dwg_ent_spline_get_end_tan_vector(dwg_ent_spline *spline,
-                                     dwg_point_3d *point, int *error)
+                                  dwg_point_3d *point, int *error)
 {
-  if(spline != 0)
+  if (spline != 0 && point != 0)
     {
       *error = 0;
       point->x = spline->end_tan_vec.x;
       point->y = spline->end_tan_vec.y;
-    point->z = spline->end_tan_vec.z;
+      point->z = spline->end_tan_vec.z;
   }
-  else
-    *error = 1;
+    else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets spline end tan vector
@@ -11517,257 +13627,323 @@ void
 dwg_ent_spline_set_end_tan_vector(dwg_ent_spline *spline,
                                      dwg_point_3d *point, int *error)
 {
-  if(spline != 0)
+  if (spline != 0 && point != 0)
     {
       *error = 0;
       spline->end_tan_vec.x = point->x;
       spline->end_tan_vec.y = point->y;
       spline->end_tan_vec.z = point->z;
   }
-  else
-    *error = 1;
+    else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns spline knot tol value
 double
 dwg_ent_spline_get_knot_tol(dwg_ent_spline *spline, int *error)
 {
-  if(spline != 0)
+  if (spline != 0)
     {
       *error = 0;
       return spline->knot_tol;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets spline knot tol value
 void
 dwg_ent_spline_set_knot_tol(dwg_ent_spline *spline, double knot_tol,
-                               int *error)
+                            int *error)
 {
-  if(spline != 0)
+  if (spline != 0)
     {
       *error = 0;
       spline->knot_tol = knot_tol;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns spline control tol value
 double
 dwg_ent_spline_get_ctrl_tol(dwg_ent_spline *spline, int *error)
 {
-  if(spline != 0)
+  if (spline != 0)
     {
       *error = 0;
       return spline->ctrl_tol;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets spline control tol
 void
 dwg_ent_spline_set_ctrl_tol(dwg_ent_spline *spline, double ctrl_tol,
-                               int *error)
+                            int *error)
 {
-  if(spline != 0)
+  if (spline != 0)
     {
       *error = 0;
       spline->ctrl_tol = ctrl_tol;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
-/// Returns spline  number of fit points 
+/// Returns spline  number of fit points
 unsigned int
 dwg_ent_spline_get_num_fit_pts(dwg_ent_spline *spline, int *error)
 {
-  if(spline != 0)
+  if (spline != 0)
     {
       *error = 0;
       return spline->num_fit_pts;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets number of fit points
 void
 dwg_ent_spline_set_num_fit_pts(dwg_ent_spline *spline, int num_fit_pts,
-                                  int *error)
+                               int *error)
 {
-  if(spline != 0)
+  if (spline != 0)
     {
       *error = 0;
       spline->num_fit_pts = num_fit_pts;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns spline rational
 char
 dwg_ent_spline_get_rational(dwg_ent_spline *spline, int *error)
 {
-  if(spline != 0)
+  if (spline != 0)
     {
       *error = 0;
       return spline->rational;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets rational value
 void
 dwg_ent_spline_set_rational(dwg_ent_spline *spline, char rational,
-                               int *error)
+                            int *error)
 {
-  if(spline != 0)
+  if (spline != 0)
     {
       *error = 0;
       spline->rational = rational;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns spline closed_b
 char
 dwg_ent_spline_get_closed_b(dwg_ent_spline *spline, int *error)
 {
-  if(spline != 0)
+  if (spline != 0)
     {
       *error = 0;
       return spline->closed_b;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets spline closed_b
 void
 dwg_ent_spline_set_closed_b(dwg_ent_spline *spline, char closed_b,
-                               int *error)
+                            int *error)
 {
-  if(spline != 0)
+  if (spline != 0)
     {
       *error = 0;
       spline->closed_b = closed_b;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns spline weighted value
 char
 dwg_ent_spline_get_weighted(dwg_ent_spline *spline, int *error)
 {
-  if(spline != 0)
+  if (spline != 0)
     {
       *error = 0;
       return spline->weighted;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets spline weighted
 void
 dwg_ent_spline_set_weighted(dwg_ent_spline *spline, char weighted,
-                               int *error)
+                            int *error)
 {
-  if(spline != 0)
+  if (spline != 0)
     {
       *error = 0;
       spline->weighted = weighted;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns spline periodic
 char
 dwg_ent_spline_get_periodic(dwg_ent_spline *spline, int *error)
 {
-  if(spline != 0)
+  if (spline != 0)
     {
       *error = 0;
       return spline->periodic;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets spline periodic
 void
 dwg_ent_spline_set_periodic(dwg_ent_spline *spline, char periodic,
-                               int *error)
+                            int *error)
 {
-  if(spline != 0)
+  if (spline != 0)
     {
       *error = 0;
       spline->periodic = periodic;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns spline knots number
 long
 dwg_ent_spline_get_num_knots(dwg_ent_spline *spline, int *error)
 {
-  if(spline != 0)
+  if (spline != 0)
     {
       *error = 0;
       return spline->num_knots;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0L;
+    }
 }
 
 /// Sets spline knots number
 void
 dwg_ent_spline_set_num_knots(dwg_ent_spline *spline, long nums, int *error)
 {
-  if(spline != 0)
+  if (spline != 0)
     {
       *error = 0;
       spline->num_knots = nums;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns spline control points number
 long
 dwg_ent_spline_get_num_ctrl_pts(dwg_ent_spline *spline, int *error)
 {
-  if(spline != 0)
+  if (spline != 0)
     {
       *error = 0;
       return spline->num_ctrl_pts;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0L;
+    }
 }
 
 /// Sets spline control points number
 void
 dwg_ent_spline_set_num_ctrl_pts(dwg_ent_spline *spline, long nums,
-                                   int *error)
+                                int *error)
 {
-  if(spline != 0)
+  if (spline != 0)
     {
       *error = 0;
       spline->num_ctrl_pts = nums;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns spline fit points
@@ -11775,39 +13951,47 @@ dwg_ent_spline_point *
 dwg_ent_spline_get_fit_points(dwg_ent_spline *spline, int *error)
 {
   dwg_ent_spline_point *ptx = (dwg_ent_spline_point*)
-  malloc(sizeof(dwg_ent_spline_point)* spline->num_fit_pts);
-    if(ptx != 0)
-      {
-        *error = 0;
-        int i;
-        for (i = 0; i < spline->num_fit_pts ; i++)
-          {
-            ptx[i] = spline->fit_pts[i];
-          }
-        return ptx;
-      }
+    malloc(sizeof(dwg_ent_spline_point)* spline->num_fit_pts);
+  if (ptx != 0)
+    {
+      *error = 0;
+      int i;
+      for (i = 0; i < spline->num_fit_pts ; i++)
+        {
+          ptx[i] = spline->fit_pts[i];
+        }
+      return ptx;
+    }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return NULL;
+    }
 }
 
 /// Returns spline control points
 dwg_ent_spline_control_point *
 dwg_ent_spline_get_ctrl_pts(dwg_ent_spline *spline, int *error)
 {
-  dwg_ent_spline_control_point *ptx = (dwg_ent_spline_control_point*) 
-  malloc(sizeof(dwg_ent_spline_control_point)* spline->num_ctrl_pts);
-    if(ptx != 0)
-      {
-        *error = 0;
-        int i;
-          for (i = 0; i < spline->num_ctrl_pts ; i++)
-            {
-              ptx[i] = spline->ctrl_pts[i];
-            }
-        return ptx;
-      }
-    else
+  dwg_ent_spline_control_point *ptx = (dwg_ent_spline_control_point*)
+    malloc(sizeof(dwg_ent_spline_control_point)* spline->num_ctrl_pts);
+  if (ptx != 0)
+    {
+      *error = 0;
+      int i;
+      for (i = 0; i < spline->num_ctrl_pts ; i++)
+        {
+          ptx[i] = spline->ctrl_pts[i];
+        }
+      return ptx;
+    }
+  else
+    {
       *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return NULL;
+    }
 }
 
 /// Returns spline knots
@@ -11815,18 +13999,22 @@ double *
 dwg_ent_spline_get_knots(dwg_ent_spline *spline, int *error)
 {
   double *ptx = (double*) malloc(sizeof(double)* spline->num_knots);
-    if(ptx != 0)
-      {
-        *error = 0;
-        int i = 0;
-          for (i = 0; i < spline->num_knots ; i++)
-            {
-              ptx[i] = spline->knots[i];
-            }
-        return ptx;
-      }
-    else
+  if (ptx != 0)
+    {
+      *error = 0;
+      int i = 0;
+      for (i = 0; i < spline->num_knots ; i++)
+        {
+          ptx[i] = spline->knots[i];
+        }
+      return ptx;
+    }
+  else
+    {
       *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return NULL;
+    }
 }
 
 /*******************************************************************
@@ -11838,7 +14026,7 @@ void
 dwg_ent_viewport_get_center(dwg_ent_viewport *vp, dwg_point_3d *point,
                             int *error)
 {
-  if (vp != 0)
+  if (vp != 0 && point != 0)
     {
       *error = 0;
       point->x = vp->center.x;
@@ -11846,7 +14034,10 @@ dwg_ent_viewport_get_center(dwg_ent_viewport *vp, dwg_point_3d *point,
       point->z = vp->center.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets viewport center
@@ -11854,7 +14045,7 @@ void
 dwg_ent_viewport_set_center(dwg_ent_viewport *vp, dwg_point_3d *point,
                             int *error)
 {
-  if (vp != 0)
+  if (vp != 0 && point != 0)
     {
       *error = 0;
       vp->center.x = point->x;
@@ -11862,7 +14053,10 @@ dwg_ent_viewport_set_center(dwg_ent_viewport *vp, dwg_point_3d *point,
       vp->center.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns viewport width
@@ -11875,7 +14069,11 @@ dwg_ent_viewport_get_width(dwg_ent_viewport *vp, int *error)
       return vp->width;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets viewport width
@@ -11888,7 +14086,10 @@ dwg_ent_viewport_set_width(dwg_ent_viewport *vp, double width, int *error)
       vp->width = width;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns viewport height
@@ -11901,7 +14102,11 @@ dwg_ent_viewport_get_height(dwg_ent_viewport *vp, int *error)
       return vp->height;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets viewport height
@@ -11914,7 +14119,10 @@ dwg_ent_viewport_set_height(dwg_ent_viewport *vp, double height, int *error)
       vp->height = height;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns viewport grid major
@@ -11927,7 +14135,11 @@ dwg_ent_viewport_get_grid_major(dwg_ent_viewport *vp, int *error)
       return vp->grid_major;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets viewport grid major
@@ -11941,7 +14153,10 @@ dwg_ent_viewport_set_grid_major(dwg_ent_viewport *vp, unsigned int major,
       vp->grid_major = major;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns viewport frozen layer count
@@ -11954,7 +14169,11 @@ dwg_ent_viewport_get_frozen_layer_count(dwg_ent_viewport *vp, int *error)
       return vp->frozen_layer_count;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0L;
+    }
 }
 
 /// Sets viewport frozen layer count
@@ -11968,7 +14187,10 @@ dwg_ent_viewport_set_frozen_layer_count(dwg_ent_viewport *vp, long count,
       vp->frozen_layer_count = count;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns viewport style sheet
@@ -11981,7 +14203,11 @@ dwg_ent_viewport_get_style_sheet(dwg_ent_viewport *vp, int *error)
       return vp->style_sheet;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return NULL;
+    }
 }
 
 /// Sets viewport style sheet
@@ -11995,7 +14221,10 @@ dwg_ent_viewport_set_style_sheet(dwg_ent_viewport *vp, char * sheet,
       vp->style_sheet = sheet;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets circle zoom value
@@ -12009,7 +14238,10 @@ dwg_ent_viewport_set_circle_zoom(dwg_ent_viewport *vp, unsigned int zoom,
       vp->circle_zoom = zoom;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns circle zoom value
@@ -12022,7 +14254,11 @@ dwg_ent_viewport_get_circle_zoom(dwg_ent_viewport *vp, int *error)
       return vp->circle_zoom;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets viewport status flags
@@ -12035,7 +14271,10 @@ dwg_ent_viewport_set_status_flags(dwg_ent_viewport *vp, long flags, int *error)
       vp->status_flags = flags;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns viewport status flags
@@ -12048,7 +14287,11 @@ dwg_ent_viewport_get_status_flags(dwg_ent_viewport *vp, int *error)
       return vp->status_flags;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0L;
+    }
 }
 
 /// Returns viewport render mode
@@ -12061,7 +14304,11 @@ dwg_ent_viewport_get_render_mode(dwg_ent_viewport *vp, int *error)
       return vp->render_mode;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets viewport render mode
@@ -12074,7 +14321,10 @@ dwg_ent_viewport_set_render_mode(dwg_ent_viewport *vp, char mode, int *error)
       vp->render_mode = mode;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets viewport ucs at origin
@@ -12088,11 +14338,14 @@ dwg_ent_viewport_set_ucs_at_origin(dwg_ent_viewport *vp, unsigned char origin,
       vp->ucs_at_origin = origin;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns viewport ucs at origini value
-unsigned char 
+unsigned char
 dwg_ent_viewport_get_ucs_at_origin(dwg_ent_viewport *vp, int *error)
 {
   if (vp != 0)
@@ -12101,7 +14354,11 @@ dwg_ent_viewport_get_ucs_at_origin(dwg_ent_viewport *vp, int *error)
       return vp->ucs_at_origin;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets viewport ucs per viewport
@@ -12115,11 +14372,14 @@ dwg_ent_viewport_set_ucs_per_viewport(dwg_ent_viewport *vp,
       vp->ucs_per_viewport = viewport;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns viewport ucs per viewport
-unsigned char 
+unsigned char
 dwg_ent_viewport_get_ucs_per_viewport(dwg_ent_viewport *vp, int *error)
 {
   if (vp != 0)
@@ -12128,7 +14388,11 @@ dwg_ent_viewport_get_ucs_per_viewport(dwg_ent_viewport *vp, int *error)
       return vp->ucs_per_viewport;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets viewport view target
@@ -12136,7 +14400,7 @@ void
 dwg_ent_viewport_set_view_target(dwg_ent_viewport *vp, dwg_point_3d *point,
                                  int *error)
 {
-  if (vp != 0)
+  if (vp != 0 && point != 0)
     {
       *error = 0;
       vp->view_target.x = point->x;
@@ -12144,7 +14408,10 @@ dwg_ent_viewport_set_view_target(dwg_ent_viewport *vp, dwg_point_3d *point,
       vp->view_target.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns viewport view target
@@ -12152,7 +14419,7 @@ void
 dwg_ent_viewport_get_view_target(dwg_ent_viewport *vp, dwg_point_3d *point,
                                  int *error)
 {
-  if (vp != 0)
+  if (vp != 0 && point != 0)
     {
       *error = 0;
       point->x = vp->view_target.x;
@@ -12160,7 +14427,10 @@ dwg_ent_viewport_get_view_target(dwg_ent_viewport *vp, dwg_point_3d *point,
       point->z = vp->view_target.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets viewport view direction
@@ -12168,7 +14438,7 @@ void
 dwg_ent_viewport_set_view_direction(dwg_ent_viewport *vp, dwg_point_3d *point,
                                     int *error)
 {
-  if (vp != 0)
+  if (vp != 0 && point != 0)
     {
       *error = 0;
       vp->view_direction.x = point->x;
@@ -12176,7 +14446,10 @@ dwg_ent_viewport_set_view_direction(dwg_ent_viewport *vp, dwg_point_3d *point,
       vp->view_direction.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns viewport view direction
@@ -12184,7 +14457,7 @@ void
 dwg_ent_viewport_get_view_direction(dwg_ent_viewport *vp, dwg_point_3d *point,
                                     int *error)
 {
-  if (vp != 0)
+  if (vp != 0 && point != 0)
     {
       *error = 0;
       point->x = vp->view_direction.x;
@@ -12192,7 +14465,10 @@ dwg_ent_viewport_get_view_direction(dwg_ent_viewport *vp, dwg_point_3d *point,
       point->z = vp->view_direction.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets view twist angle
@@ -12206,7 +14482,10 @@ dwg_ent_viewport_set_view_twist_angle(dwg_ent_viewport *vp, double angle,
       vp->view_twist_angle = angle;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns view twist angle
@@ -12219,7 +14498,11 @@ dwg_ent_viewport_get_view_twist_angle(dwg_ent_viewport *vp, int *error)
       return vp->view_twist_angle;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets viewport view height
@@ -12233,7 +14516,10 @@ dwg_ent_viewport_set_view_height(dwg_ent_viewport *vp, double height,
       vp->view_height = height;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns viewport view height
@@ -12246,10 +14532,14 @@ dwg_ent_viewport_get_view_height(dwg_ent_viewport *vp, int *error)
       return vp->view_height;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
-/// Sets viewport lens length 
+/// Sets viewport lens length
 void
 dwg_ent_viewport_set_lens_length(dwg_ent_viewport *vp, double length,
                                  int *error)
@@ -12260,10 +14550,13 @@ dwg_ent_viewport_set_lens_length(dwg_ent_viewport *vp, double length,
       vp->lens_length = length;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
-/// Returns lens length 
+/// Returns lens length
 double
 dwg_ent_viewport_get_lens_length(dwg_ent_viewport *vp, int *error)
 {
@@ -12273,7 +14566,11 @@ dwg_ent_viewport_get_lens_length(dwg_ent_viewport *vp, int *error)
       return vp->lens_length;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets viewport front clip z value
@@ -12287,7 +14584,10 @@ dwg_ent_viewport_set_front_clip_z(dwg_ent_viewport *vp, double front_z,
       vp->front_clip_z = front_z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns viewport front clip z value
@@ -12300,7 +14600,11 @@ dwg_ent_viewport_get_front_clip_z(dwg_ent_viewport *vp, int *error)
       return vp->front_clip_z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets viewport back clip z value
@@ -12314,7 +14618,10 @@ dwg_ent_viewport_set_back_clip_z(dwg_ent_viewport *vp, double back_z,
       vp->back_clip_z = back_z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns viewport back clip z value
@@ -12327,7 +14634,11 @@ dwg_ent_viewport_get_back_clip_z(dwg_ent_viewport *vp, int *error)
       return vp->back_clip_z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets viewport snap angle
@@ -12340,7 +14651,10 @@ dwg_ent_viewport_set_snap_angle(dwg_ent_viewport *vp, double angle, int *error)
       vp->snap_angle = angle;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns viewport snap angle
@@ -12353,7 +14667,11 @@ dwg_ent_viewport_get_snap_angle(dwg_ent_viewport *vp, int *error)
       return vp->snap_angle;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Returns viewport view center
@@ -12361,14 +14679,17 @@ void
 dwg_ent_viewport_get_view_center(dwg_ent_viewport *vp, dwg_point_2d *point,
                                  int *error)
 {
-  if (vp != 0)
+  if (vp != 0 && point != 0)
     {
       *error = 0;
       point->x = vp->view_center.x;
       point->y = vp->view_center.y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets viewport view center
@@ -12383,7 +14704,10 @@ dwg_ent_viewport_set_view_center(dwg_ent_viewport *vp, dwg_point_2d *point,
       vp->view_center.y = point->y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns grid spacing
@@ -12391,14 +14715,17 @@ void
 dwg_ent_viewport_get_grid_spacing(dwg_ent_viewport *vp, dwg_point_2d *point,
                                   int *error)
 {
-  if (vp != 0)
+  if (vp != 0 && point != 0)
     {
       *error = 0;
       point->x = vp->grid_spacing.x;
       point->y = vp->grid_spacing.y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets grid spacing
@@ -12406,14 +14733,17 @@ void
 dwg_ent_viewport_set_grid_spacing(dwg_ent_viewport *vp, dwg_point_2d *point,
                                   int *error)
 {
-  if (vp != 0)
+  if (vp != 0 && point != 0)
     {
       *error = 0;
       vp->grid_spacing.x = point->x;
       vp->grid_spacing.y = point->y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns viewport snap base
@@ -12421,14 +14751,17 @@ void
 dwg_ent_viewport_get_snap_base(dwg_ent_viewport *vp, dwg_point_2d *point,
                                int *error)
 {
-  if (vp != 0)
+  if (vp != 0 && point != 0)
     {
       *error = 0;
       point->x = vp->snap_base.x;
       point->y = vp->snap_base.y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets viewport snap base
@@ -12436,14 +14769,17 @@ void
 dwg_ent_viewport_set_snap_base(dwg_ent_viewport *vp, dwg_point_2d *point,
                                int *error)
 {
-  if (vp != 0)
+  if (vp != 0 && point != 0)
     {
       *error = 0;
       vp->snap_base.x = point->x;
       vp->snap_base.y = point->y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns viewport snap spacing
@@ -12451,14 +14787,17 @@ void
 dwg_ent_viewport_get_snap_spacing(dwg_ent_viewport *vp, dwg_point_2d *point,
                                   int *error)
 {
-  if (vp != 0)
+  if (vp != 0 && point != 0)
     {
       *error = 0;
       point->x = vp->snap_spacing.x;
       point->y = vp->snap_spacing.y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets viewport snap spacing
@@ -12466,14 +14805,17 @@ void
 dwg_ent_viewport_set_snap_spacing(dwg_ent_viewport *vp, dwg_point_2d *point,
                                   int *error)
 {
-  if (vp != 0)
+  if (vp != 0 && point != 0)
     {
       *error = 0;
       vp->snap_spacing.x = point->x;
       vp->snap_spacing.y = point->y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets viewport ucs origin
@@ -12481,7 +14823,7 @@ void
 dwg_ent_viewport_set_ucs_origin(dwg_ent_viewport *vp, dwg_point_3d *point,
                                 int *error)
 {
-  if (vp != 0)
+  if (vp != 0 && point != 0)
     {
       *error = 0;
       vp->ucs_origin.x = point->x;
@@ -12489,7 +14831,10 @@ dwg_ent_viewport_set_ucs_origin(dwg_ent_viewport *vp, dwg_point_3d *point,
       vp->ucs_origin.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns viewport ucs origin
@@ -12497,7 +14842,7 @@ void
 dwg_ent_viewport_get_ucs_origin(dwg_ent_viewport *vp, dwg_point_3d *point,
                                 int *error)
 {
-  if (vp != 0)
+  if (vp != 0 && point != 0)
     {
       *error = 0;
       point->x = vp->ucs_origin.x;
@@ -12505,7 +14850,10 @@ dwg_ent_viewport_get_ucs_origin(dwg_ent_viewport *vp, dwg_point_3d *point,
       point->z = vp->ucs_origin.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets viewport ucs X axis
@@ -12513,7 +14861,7 @@ void
 dwg_ent_viewport_set_ucs_x_axis(dwg_ent_viewport *vp, dwg_point_3d *point,
                                 int *error)
 {
-  if (vp != 0)
+  if (vp != 0 && point != 0)
     {
       *error = 0;
       vp->ucs_x_axis.x = point->x;
@@ -12521,7 +14869,10 @@ dwg_ent_viewport_set_ucs_x_axis(dwg_ent_viewport *vp, dwg_point_3d *point,
       vp->ucs_x_axis.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns viewport ucs X axis
@@ -12529,7 +14880,7 @@ void
 dwg_ent_viewport_get_ucs_x_axis(dwg_ent_viewport *vp, dwg_point_3d *point,
                                 int *error)
 {
-  if (vp != 0)
+  if (vp != 0 && point != 0)
     {
       *error = 0;
       point->x = vp->ucs_x_axis.x;
@@ -12537,7 +14888,10 @@ dwg_ent_viewport_get_ucs_x_axis(dwg_ent_viewport *vp, dwg_point_3d *point,
       point->z = vp->ucs_x_axis.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets viewport ucs y axis
@@ -12545,7 +14899,7 @@ void
 dwg_ent_viewport_set_ucs_y_axis(dwg_ent_viewport *vp, dwg_point_3d *point,
                                 int *error)
 {
-  if (vp != 0)
+  if (vp != 0 && point != 0)
     {
       *error = 0;
       vp->ucs_y_axis.x = point->x;
@@ -12553,7 +14907,10 @@ dwg_ent_viewport_set_ucs_y_axis(dwg_ent_viewport *vp, dwg_point_3d *point,
       vp->ucs_y_axis.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns viewport ucs y axis
@@ -12561,7 +14918,7 @@ void
 dwg_ent_viewport_get_ucs_y_axis(dwg_ent_viewport *vp, dwg_point_3d *point,
                                 int *error)
 {
-  if (vp != 0)
+  if (vp != 0 && point != 0)
     {
       *error = 0;
       point->x = vp->ucs_y_axis.x;
@@ -12569,7 +14926,10 @@ dwg_ent_viewport_get_ucs_y_axis(dwg_ent_viewport *vp, dwg_point_3d *point,
       point->z = vp->ucs_y_axis.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets viewport ucs elevation
@@ -12583,7 +14943,10 @@ dwg_ent_viewport_set_ucs_elevation(dwg_ent_viewport *vp, double elevation,
       vp->ucs_elevation = elevation;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns ucs elevation
@@ -12596,7 +14959,11 @@ dwg_ent_viewport_get_ucs_elevation(dwg_ent_viewport *vp, int *error)
       return vp->ucs_elevation;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets UCS ortho view type
@@ -12610,7 +14977,10 @@ dwg_ent_viewport_set_ucs_ortho_view_type(dwg_ent_viewport *vp,
       vp->ucs_ortho_view_type = type;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns UCS ortho view type
@@ -12623,7 +14993,11 @@ dwg_ent_viewport_get_ucs_ortho_view_type(dwg_ent_viewport *vp, int *error)
       return vp->ucs_ortho_view_type;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets shade plot mode value
@@ -12637,7 +15011,10 @@ dwg_ent_viewport_set_shadeplot_mode(dwg_ent_viewport *vp,
       vp->shadeplot_mode = shadeplot;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns shade plot mode value
@@ -12650,7 +15027,11 @@ dwg_ent_viewport_get_shadeplot_mode(dwg_ent_viewport *vp, int *error)
       return vp->shadeplot_mode;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets viewport default lightning usage
@@ -12664,11 +15045,14 @@ dwg_ent_viewport_set_use_def_lights(dwg_ent_viewport *vp,
       vp->use_def_lights = lights;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns viewport default lightning usage
-unsigned char 
+unsigned char
 dwg_ent_viewport_get_use_def_lights(dwg_ent_viewport *vp, int *error)
 {
   if (vp != 0)
@@ -12677,7 +15061,11 @@ dwg_ent_viewport_get_use_def_lights(dwg_ent_viewport *vp, int *error)
       return vp->use_def_lights;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets viewport default lightning type
@@ -12691,11 +15079,14 @@ dwg_ent_viewport_set_def_lighting_type(dwg_ent_viewport *vp, char type,
       vp->def_lighting_type = type;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns viewport default lightning type
-char 
+char
 dwg_ent_viewport_get_def_lighting_type(dwg_ent_viewport *vp, int *error)
 {
   if (vp != 0)
@@ -12704,7 +15095,11 @@ dwg_ent_viewport_get_def_lighting_type(dwg_ent_viewport *vp, int *error)
       return vp->def_lighting_type;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets viewport brightness
@@ -12718,7 +15113,10 @@ dwg_ent_viewport_set_brightness(dwg_ent_viewport *vp, double brightness,
       vp->brightness = brightness;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns viewport brightness
@@ -12731,7 +15129,11 @@ dwg_ent_viewport_get_brightness(dwg_ent_viewport *vp, int *error)
       return vp->brightness;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// sets viewport contrast
@@ -12745,7 +15147,10 @@ dwg_ent_viewport_set_contrast(dwg_ent_viewport *vp, double contrast,
       vp->contrast = contrast;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns viewport contrast
@@ -12758,7 +15163,11 @@ dwg_ent_viewport_get_contrast(dwg_ent_viewport *vp, int *error)
       return vp->contrast;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /*******************************************************************
@@ -12776,11 +15185,13 @@ dwg_ent_polyline_pface_get_numverts(dwg_ent_polyline_pface *pface, int *error)
     }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
+      return 0;
     }
 }
 
-/// Sets num verts 
+/// Sets num verts
 void
 dwg_ent_polyline_pface_set_numverts(dwg_ent_polyline_pface *pface,
                                     unsigned int numverts, int *error)
@@ -12792,6 +15203,7 @@ dwg_ent_polyline_pface_set_numverts(dwg_ent_polyline_pface *pface,
     }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
     }
 }
@@ -12808,11 +15220,13 @@ dwg_ent_polyline_pface_get_owned_obj_count(dwg_ent_polyline_pface *pface,
     }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
+      return 0L;
     }
 }
 
-/// Sets polyline pfadce owned object count 
+/// Sets polyline pfadce owned object count
 void
 dwg_ent_polyline_pface_set_owned_obj_count(dwg_ent_polyline_pface *pface,
                                            long owned_obj_count, int *error)
@@ -12824,6 +15238,7 @@ dwg_ent_polyline_pface_set_owned_obj_count(dwg_ent_polyline_pface *pface,
     }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
     }
 }
@@ -12839,7 +15254,9 @@ dwg_ent_polyline_pface_get_numfaces(dwg_ent_polyline_pface *pface, int *error)
     }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
+      return 0;
     }
 }
 
@@ -12855,6 +15272,7 @@ dwg_ent_polyline_pface_set_numfaces(dwg_ent_polyline_pface *pface,
     }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
     }
 }
@@ -12874,7 +15292,9 @@ dwg_ent_polyline_mesh_get_flags(dwg_ent_polyline_mesh *mesh, int *error)
     }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
+      return 0;
     }
 }
 
@@ -12890,6 +15310,7 @@ dwg_ent_polyline_mesh_set_flags(dwg_ent_polyline_mesh *mesh,
     }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
     }
 }
@@ -12905,7 +15326,9 @@ dwg_ent_polyline_mesh_get_curve_type(dwg_ent_polyline_mesh *mesh, int *error)
     }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
+      return 0;
     }
 }
 
@@ -12921,6 +15344,7 @@ dwg_ent_polyline_mesh_set_curve_type(dwg_ent_polyline_mesh *mesh,
     }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
     }
 }
@@ -12937,7 +15361,9 @@ dwg_ent_polyline_mesh_get_m_vert_count(dwg_ent_polyline_mesh *mesh,
     }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
+      return 0;
     }
 }
 
@@ -12953,6 +15379,7 @@ dwg_ent_polyline_mesh_set_m_vert_count(dwg_ent_polyline_mesh *mesh,
     }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
     }
 }
@@ -12969,7 +15396,9 @@ dwg_ent_polyline_mesh_get_n_vert_count(dwg_ent_polyline_mesh *mesh,
     }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
+      return 0;
     }
 }
 
@@ -12985,6 +15414,7 @@ dwg_ent_polyline_mesh_set_n_vert_count(dwg_ent_polyline_mesh *mesh,
     }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
     }
 }
@@ -13000,7 +15430,9 @@ dwg_ent_polyline_mesh_get_m_density(dwg_ent_polyline_mesh *mesh, int *error)
     }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
+      return 0;
     }
 }
 
@@ -13016,6 +15448,7 @@ dwg_ent_polyline_mesh_set_m_density(dwg_ent_polyline_mesh *mesh,
     }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
     }
 }
@@ -13031,7 +15464,9 @@ dwg_ent_polyline_mesh_get_n_density(dwg_ent_polyline_mesh *mesh, int *error)
     }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
+      return 0;
     }
 }
 
@@ -13047,6 +15482,7 @@ dwg_ent_polyline_mesh_set_n_density(dwg_ent_polyline_mesh *mesh,
     }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
     }
 }
@@ -13063,7 +15499,9 @@ dwg_ent_polyline_mesh_get_owned_obj_count(dwg_ent_polyline_mesh *mesh,
     }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
+      return 0L;
     }
 }
 
@@ -13079,6 +15517,7 @@ dwg_ent_polyline_mesh_set_owned_obj_count(dwg_ent_polyline_mesh *mesh,
     }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
     }
 }
@@ -13092,7 +15531,7 @@ void
 dwg_ent_polyline_2d_get_extrusion(dwg_ent_polyline_2d *line2d,
                                   dwg_point_3d *point, int *error)
 {
-  if (line2d != 0)
+  if (line2d != 0 && point != 0)
     {
       *error = 0;
       point->x = line2d->extrusion.x;
@@ -13101,6 +15540,7 @@ dwg_ent_polyline_2d_get_extrusion(dwg_ent_polyline_2d *line2d,
   }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
     }
 }
@@ -13110,7 +15550,7 @@ void
 dwg_ent_polyline_2d_set_extrusion(dwg_ent_polyline_2d *line2d,
                                   dwg_point_3d *point, int *error)
 {
-  if (line2d != 0)
+  if (line2d != 0 && point != 0)
     {
       *error = 0;
       line2d->extrusion.x = point->x;
@@ -13119,6 +15559,7 @@ dwg_ent_polyline_2d_set_extrusion(dwg_ent_polyline_2d *line2d,
   }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
     }
 }
@@ -13135,6 +15576,8 @@ dwg_ent_polyline_2d_get_start_width(dwg_ent_polyline_2d *line2d, int *error)
   else
     {
       *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
     }
 }
 
@@ -13150,6 +15593,7 @@ dwg_ent_polyline_2d_set_start_width(dwg_ent_polyline_2d *line2d,
     }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
     }
 }
@@ -13166,6 +15610,8 @@ dwg_ent_polyline_2d_get_end_width(dwg_ent_polyline_2d *line2d, int *error)
   else
     {
       *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
     }
 }
 
@@ -13181,6 +15627,7 @@ dwg_ent_polyline_2d_set_end_width(dwg_ent_polyline_2d *line2d,
     }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
     }
 }
@@ -13197,6 +15644,8 @@ dwg_ent_polyline_2d_get_thickness(dwg_ent_polyline_2d *line2d, int *error)
   else
     {
       *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
     }
 }
 
@@ -13212,6 +15661,7 @@ dwg_ent_polyline_2d_set_thickness(dwg_ent_polyline_2d *line2d,
     }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
     }
 }
@@ -13228,6 +15678,8 @@ dwg_ent_polyline_2d_get_elevation(dwg_ent_polyline_2d *line2d, int *error)
   else
     {
       *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
     }
 }
 
@@ -13243,6 +15695,7 @@ dwg_ent_polyline_2d_set_elevation(dwg_ent_polyline_2d *line2d,
     }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
     }
 }
@@ -13258,7 +15711,9 @@ dwg_ent_polyline_2d_get_flags(dwg_ent_polyline_2d *line2d, int *error)
     }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
+      return 0;
     }
 }
 
@@ -13274,6 +15729,7 @@ dwg_ent_polyline_2d_set_flags(dwg_ent_polyline_2d *line2d, unsigned int flags,
     }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
     }
 }
@@ -13289,7 +15745,9 @@ dwg_ent_polyline_2d_get_curve_type(dwg_ent_polyline_2d *line2d, int *error)
     }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
+      return 0;
     }
 }
 
@@ -13305,6 +15763,7 @@ dwg_ent_polyline_2d_set_curve_type(dwg_ent_polyline_2d *line2d,
     }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
     }
 }
@@ -13321,7 +15780,9 @@ dwg_ent_polyline_2d_get_owned_obj_count(dwg_ent_polyline_2d *line2d,
     }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
+      return 0L;
     }
 }
 
@@ -13337,6 +15798,7 @@ dwg_ent_polyline_2d_set_owned_obj_count(dwg_ent_polyline_2d *line2d,
     }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
     }
 }
@@ -13356,7 +15818,9 @@ dwg_ent_polyline_3d_get_flags_1(dwg_ent_polyline_3d *line3d, int *error)
     }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
+      return '\0';
     }
 }
 
@@ -13372,6 +15836,7 @@ dwg_ent_polyline_3d_set_flags_1(dwg_ent_polyline_3d *line3d, char flags_1,
     }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
     }
 }
@@ -13387,7 +15852,9 @@ dwg_ent_polyline_3d_get_flags_2(dwg_ent_polyline_3d *line3d, int *error)
     }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
+      return '\0';
     }
 }
 
@@ -13403,6 +15870,7 @@ dwg_ent_polyline_3d_set_flags_2(dwg_ent_polyline_3d *line3d, char flags_2,
     }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
     }
 }
@@ -13419,7 +15887,9 @@ dwg_ent_polyline_3d_get_owned_obj_count(dwg_ent_polyline_3d *line3d,
     }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
+      return 0L;
     }
 }
 
@@ -13435,6 +15905,7 @@ dwg_ent_polyline_3d_set_owned_obj_count(dwg_ent_polyline_3d *line3d,
     }
   else
     {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
     }
 }
@@ -13450,14 +15921,18 @@ dwg_ent_polyline_3d_set_owned_obj_count(dwg_ent_polyline_3d *line3d,
 */
 unsigned int
 dwg_ent_3dface_get_invis_flags(dwg_ent_3dface *_3dface, int *error)
-{    
+{
   if (_3dface != 0)
     {
       *error = 0;
       return _3dface->invis_flags;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// This sets the invis_flags of a _3dface entity.
@@ -13469,14 +15944,17 @@ dwg_ent_3dface_get_invis_flags(dwg_ent_3dface *_3dface, int *error)
 void
 dwg_ent_3dface_set_invis_flags(dwg_ent_3dface *_3dface,
                                unsigned int invis_flags, int *error)
-{    
+{
   if (_3dface != 0)
     {
       *error = 0;
       _3dface->invis_flags = invis_flags;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the corner1 values of 3dface.
@@ -13488,15 +15966,18 @@ dwg_ent_3dface_set_invis_flags(dwg_ent_3dface *_3dface,
 void
 dwg_ent_3dface_get_corner1(dwg_ent_3dface *_3dface, dwg_point_2d *point,
                            int *error)
-{    
-  if (_3dface != 0)
+{
+  if (_3dface != 0 && point != 0)
     {
       *error = 0;
       point->x = _3dface->corner1.x;
       point->y = _3dface->corner1.y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the corner1 values of 3dface.
@@ -13508,15 +15989,18 @@ dwg_ent_3dface_get_corner1(dwg_ent_3dface *_3dface, dwg_point_2d *point,
 void
 dwg_ent_3dface_set_corner1(dwg_ent_3dface *_3dface, dwg_point_2d *point,
                            int *error)
-{    
-  if (_3dface != 0)
+{
+  if (_3dface != 0 && point != 0)
     {
       *error = 0;
       _3dface->corner1.x = point->x;
       _3dface->corner1.y = point->y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the corner2 values of 3dface.
@@ -13528,15 +16012,18 @@ dwg_ent_3dface_set_corner1(dwg_ent_3dface *_3dface, dwg_point_2d *point,
 void
 dwg_ent_3dface_get_corner2(dwg_ent_3dface *_3dface, dwg_point_2d *point,
                            int *error)
-{    
-  if (_3dface != 0)
+{
+  if (_3dface != 0 && point != 0)
     {
       *error = 0;
       point->x = _3dface->corner2.x;
       point->y = _3dface->corner2.y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the corner2 values of 3dface.
@@ -13548,15 +16035,18 @@ dwg_ent_3dface_get_corner2(dwg_ent_3dface *_3dface, dwg_point_2d *point,
 void
 dwg_ent_3dface_set_corner2(dwg_ent_3dface *_3dface, dwg_point_2d *point,
                            int *error)
-{    
-  if (_3dface != 0)
+{
+  if (_3dface != 0 && point != 0)
     {
       *error = 0;
       _3dface->corner2.x = point->x;
       _3dface->corner2.y = point->y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the corner3 values of 3dface.
@@ -13568,15 +16058,18 @@ dwg_ent_3dface_set_corner2(dwg_ent_3dface *_3dface, dwg_point_2d *point,
 void
 dwg_ent_3dface_get_corner3(dwg_ent_3dface *_3dface, dwg_point_2d *point,
                            int *error)
-{    
-  if (_3dface != 0)
+{
+  if (_3dface != 0 && point != 0)
     {
       *error = 0;
       point->x = _3dface->corner3.x;
       point->y = _3dface->corner3.y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the corner3 values of 3dface.
@@ -13588,15 +16081,18 @@ dwg_ent_3dface_get_corner3(dwg_ent_3dface *_3dface, dwg_point_2d *point,
 void
 dwg_ent_3dface_set_corner3(dwg_ent_3dface *_3dface, dwg_point_2d *point,
                            int *error)
-{    
-  if (_3dface != 0)
+{
+  if (_3dface != 0 && point != 0)
     {
       *error = 0;
       _3dface->corner3.x = point->x;
       _3dface->corner3.y = point->y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns the corner4 values of 3dface.
@@ -13608,15 +16104,18 @@ dwg_ent_3dface_set_corner3(dwg_ent_3dface *_3dface, dwg_point_2d *point,
 void
 dwg_ent_3dface_get_corner4(dwg_ent_3dface *_3dface, dwg_point_2d *point,
                            int *error)
-{    
-  if (_3dface != 0)
+{
+  if (_3dface != 0 && point != 0)
     {
       *error = 0;
       point->x = _3dface->corner4.x;
       point->y = _3dface->corner4.y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets the corner4 values of 3dface.
@@ -13628,15 +16127,18 @@ dwg_ent_3dface_get_corner4(dwg_ent_3dface *_3dface, dwg_point_2d *point,
 void
 dwg_ent_3dface_set_corner4(dwg_ent_3dface *_3dface, dwg_point_2d *point,
                            int *error)
-{    
-  if (_3dface != 0)
+{
+  if (_3dface != 0 && point != 0)
     {
       *error = 0;
       _3dface->corner4.x = point->x;
       _3dface->corner4.y = point->y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /*******************************************************************
@@ -13653,7 +16155,11 @@ dwg_ent_image_get_class_version(dwg_ent_image *image, int *error)
       return image->class_version;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0L;
+    }
 }
 
 /// Sets image class version
@@ -13667,14 +16173,17 @@ dwg_ent_image_set_class_version(dwg_ent_image *image, long class_version,
       image->class_version = class_version;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns image point 0 points
 void
 dwg_ent_image_get_pt0(dwg_ent_image *image, dwg_point_3d *point, int *error)
 {
-  if (image != 0)
+  if (image != 0 && point != 0)
     {
       *error = 0;
       point->x = image->pt0.x;
@@ -13682,14 +16191,17 @@ dwg_ent_image_get_pt0(dwg_ent_image *image, dwg_point_3d *point, int *error)
       point->z = image->pt0.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets image point 0 points
 void
 dwg_ent_image_set_pt0(dwg_ent_image *image, dwg_point_3d *point, int *error)
 {
-  if (image != 0)
+  if (image != 0 && point != 0)
     {
       *error = 0;
       image->pt0.x = point->x;
@@ -13697,15 +16209,18 @@ dwg_ent_image_set_pt0(dwg_ent_image *image, dwg_point_3d *point, int *error)
       image->pt0.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns image U_vector points
 void
 dwg_ent_image_get_u_vector(dwg_ent_image *image, dwg_point_3d *point,
- int *error)
+                           int *error)
 {
-  if (image != 0)
+  if (image != 0 && point != 0)
     {
       *error = 0;
       point->x = image->uvec.x;
@@ -13713,7 +16228,10 @@ dwg_ent_image_get_u_vector(dwg_ent_image *image, dwg_point_3d *point,
       point->z = image->uvec.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets image U_vector points
@@ -13721,7 +16239,7 @@ void
 dwg_ent_image_set_u_vector(dwg_ent_image *image, dwg_point_3d *point,
                            int *error)
 {
-  if (image != 0)
+  if (image != 0 && point != 0)
     {
       *error = 0;
       image->uvec.x = point->x ;
@@ -13729,7 +16247,10 @@ dwg_ent_image_set_u_vector(dwg_ent_image *image, dwg_point_3d *point,
       image->uvec.z = point->z ;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns image v_vector points
@@ -13737,7 +16258,7 @@ void
 dwg_ent_image_get_v_vector(dwg_ent_image *image, dwg_point_3d *point,
                            int *error)
 {
-  if (image != 0)
+  if (image != 0 && point != 0)
     {
       *error = 0;
       point->x = image->vvec.x;
@@ -13745,7 +16266,10 @@ dwg_ent_image_get_v_vector(dwg_ent_image *image, dwg_point_3d *point,
       point->z = image->vvec.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets v vector points
@@ -13753,7 +16277,7 @@ void
 dwg_ent_image_set_v_vector(dwg_ent_image *image, dwg_point_3d *point,
                            int *error)
 {
-  if (image != 0)
+  if (image != 0 && point != 0)
     {
       *error = 0;
       image->vvec.x = point->x ;
@@ -13761,7 +16285,10 @@ dwg_ent_image_set_v_vector(dwg_ent_image *image, dwg_point_3d *point,
       image->vvec.z = point->z ;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns image size height
@@ -13774,7 +16301,11 @@ dwg_ent_image_get_size_height(dwg_ent_image *image, int *error)
       return image->size.height;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets image size height
@@ -13788,7 +16319,10 @@ dwg_ent_image_set_size_height(dwg_ent_image *image, double size_height,
       image->size.height = size_height;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns image size width
@@ -13801,7 +16335,11 @@ dwg_ent_image_get_size_width(dwg_ent_image *image, int *error)
       return image->size.width;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets image size width
@@ -13815,7 +16353,10 @@ dwg_ent_image_set_size_width(dwg_ent_image *image, double size_width,
       image->size.width = size_width;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns image display props
@@ -13828,11 +16369,15 @@ dwg_ent_image_get_display_props(dwg_ent_image *image, int *error)
       return image->display_props;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets image display props
-void      
+void
 dwg_ent_image_set_display_props(dwg_ent_image *image,
                                 unsigned int display_props, int *error)
 {
@@ -13842,7 +16387,10 @@ dwg_ent_image_set_display_props(dwg_ent_image *image,
       image->display_props = display_props;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns image clipping
@@ -13855,11 +16403,15 @@ dwg_ent_image_get_clipping(dwg_ent_image *image, int *error)
       return image->clipping;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets image clipping
-void       
+void
 dwg_ent_image_set_clipping(dwg_ent_image *image, unsigned char clipping,
                            int *error)
 {
@@ -13869,7 +16421,10 @@ dwg_ent_image_set_clipping(dwg_ent_image *image, unsigned char clipping,
       image->clipping = clipping;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns image brightness
@@ -13882,7 +16437,11 @@ dwg_ent_image_get_brightness(dwg_ent_image *image, int *error)
       return image->brightness;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets image brightness
@@ -13895,7 +16454,10 @@ dwg_ent_image_set_brightness(dwg_ent_image *image, char brightness, int *error)
       image->brightness = brightness;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Return image contrast
@@ -13908,7 +16470,11 @@ dwg_ent_image_get_contrast(dwg_ent_image *image, int *error)
       return image->contrast;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets image contrast
@@ -13921,7 +16487,10 @@ dwg_ent_image_set_contrast(dwg_ent_image *image, char contrast, int *error)
       image->contrast = contrast;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns image fade
@@ -13934,7 +16503,11 @@ dwg_ent_image_get_fade(dwg_ent_image *image, int *error)
       return image->fade;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets image fade
@@ -13947,7 +16520,10 @@ dwg_ent_image_set_fade(dwg_ent_image *image, char fade, int *error)
       image->fade = fade;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns image clip boundary type
@@ -13960,11 +16536,15 @@ dwg_ent_image_get_clip_boundary_type(dwg_ent_image *image, int *error)
       return image->clip_boundary_type;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets image clip boundary type
-void      
+void
 dwg_ent_image_set_clip_boundary_type(dwg_ent_image *image, unsigned int type,
                                      int *error)
 {
@@ -13974,7 +16554,10 @@ dwg_ent_image_set_clip_boundary_type(dwg_ent_image *image, unsigned int type,
       image->clip_boundary_type = type;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns image boundary point 0
@@ -13982,14 +16565,17 @@ void
 dwg_ent_image_get_boundary_pt0(dwg_ent_image *image, dwg_point_2d *point,
                                int *error)
 {
-  if (image != 0)
+  if (image != 0 && point != 0)
     {
       *error = 0;
       point->x = image->boundary_pt0.x;
       point->y = image->boundary_pt0.y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets image boundary point 0
@@ -13997,14 +16583,17 @@ void
 dwg_ent_image_set_boundary_pt0(dwg_ent_image *image, dwg_point_2d *point,
                                int *error)
 {
-  if (image != 0)
+  if (image != 0 && point != 0)
     {
       *error = 0;
       image->boundary_pt0.x = point->x;
       image->boundary_pt0.y = point->y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns boundary point1
@@ -14012,14 +16601,17 @@ void
 dwg_ent_image_get_boundary_pt1(dwg_ent_image *image, dwg_point_2d *point,
                                int *error)
 {
-  if (image != 0)
+  if (image != 0 && point != 0)
     {
       *error = 0;
       point->x = image->boundary_pt1.x;
       point->y = image->boundary_pt1.y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets boundary point1
@@ -14027,14 +16619,17 @@ void
 dwg_ent_image_set_boundary_pt1(dwg_ent_image *image, dwg_point_2d *point,
                                int *error)
 {
-  if (image != 0)
+  if (image != 0 && point != 0)
     {
       *error = 0;
       point->x = image->boundary_pt1.x;
       point->y = image->boundary_pt1.y;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Retuns number of clip verts
@@ -14047,7 +16642,11 @@ dwg_ent_image_get_num_clip_verts(dwg_ent_image *image, int *error)
       return image->num_clip_verts;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets number of clip verts
@@ -14060,27 +16659,34 @@ dwg_ent_image_set_num_clip_verts(dwg_ent_image *image, double num, int *error)
       image->num_clip_verts = num;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns image clip verts
 dwg_ent_image_clip_vert *
 dwg_ent_image_get_clip_verts(dwg_ent_image *image, int *error)
 {
-  dwg_ent_image_clip_vert *ptx = (dwg_ent_image_clip_vert*) 
-  malloc(sizeof(dwg_ent_image_clip_vert)* image->num_clip_verts);
-    if(ptx != 0)
-      {
-        *error = 0;
-        int i;
-          for (i = 0; i < image->num_clip_verts ; i++)
-            {
-              ptx[i] = image->clip_verts[i];
-            }
-        return ptx;
-      }
-    else
+  dwg_ent_image_clip_vert *ptx = (dwg_ent_image_clip_vert*)
+    malloc(sizeof(dwg_ent_image_clip_vert)* image->num_clip_verts);
+  if (ptx != 0)
+    {
+      *error = 0;
+      int i;
+      for (i = 0; i < image->num_clip_verts ; i++)
+        {
+          ptx[i] = image->clip_verts[i];
+        }
+      return ptx;
+    }
+  else
+    {
       *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return NULL;
+    }
 }
 
 /*******************************************************************
@@ -14097,7 +16703,10 @@ dwg_ent_mline_set_scale(dwg_ent_mline *mline, double scale, int *error)
       mline->scale = scale;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns scale value
@@ -14110,7 +16719,11 @@ dwg_ent_mline_get_scale(dwg_ent_mline *mline, int *error)
       return mline->scale;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// sets just value
@@ -14123,7 +16736,10 @@ dwg_ent_mline_set_just(dwg_ent_mline *mline, char just, int *error)
       mline->just = just;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns just value
@@ -14136,7 +16752,11 @@ dwg_ent_mline_get_just(dwg_ent_mline *mline, int *error)
       return mline->just;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets base point value
@@ -14144,7 +16764,7 @@ void
 dwg_ent_mline_set_base_point(dwg_ent_mline *mline, dwg_point_3d *point,
                              int *error)
 {
-  if (mline != 0)
+  if (mline != 0 && point != 0)
     {
       *error = 0;
       mline->base_point.x = point->x;
@@ -14152,7 +16772,10 @@ dwg_ent_mline_set_base_point(dwg_ent_mline *mline, dwg_point_3d *point,
       mline->base_point.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns base point value
@@ -14160,7 +16783,7 @@ void
 dwg_ent_mline_get_base_point(dwg_ent_mline *mline, dwg_point_3d *point,
                              int *error)
 {
-  if (mline != 0)
+  if (mline != 0 && point != 0)
     {
       *error = 0;
       point->x = mline->base_point.x;
@@ -14168,7 +16791,10 @@ dwg_ent_mline_get_base_point(dwg_ent_mline *mline, dwg_point_3d *point,
       point->z = mline->base_point.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets extrusion points
@@ -14176,7 +16802,7 @@ void
 dwg_ent_mline_set_extrusion(dwg_ent_mline *mline, dwg_point_3d *point,
                             int *error)
 {
-  if (mline != 0)
+  if (mline != 0 && point != 0)
     {
       *error = 0;
       mline->extrusion.x = point->x;
@@ -14184,7 +16810,10 @@ dwg_ent_mline_set_extrusion(dwg_ent_mline *mline, dwg_point_3d *point,
       mline->extrusion.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns extrusion points
@@ -14192,7 +16821,7 @@ void
 dwg_ent_mline_get_extrusion(dwg_ent_mline *mline, dwg_point_3d *point,
                             int *error)
 {
-  if (mline != 0)
+  if (mline != 0 && point != 0)
     {
       *error = 0;
       point->x = mline->extrusion.x;
@@ -14200,7 +16829,10 @@ dwg_ent_mline_get_extrusion(dwg_ent_mline *mline, dwg_point_3d *point,
       point->z = mline->extrusion.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets open closed value
@@ -14214,7 +16846,10 @@ dwg_ent_mline_set_open_closed(dwg_ent_mline *mline, unsigned int oc,
       mline->open_closed = oc;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns open/closed value
@@ -14227,7 +16862,11 @@ dwg_ent_mline_get_open_closed(dwg_ent_mline *mline, int *error)
       return mline->open_closed;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets number of lines
@@ -14240,7 +16879,10 @@ dwg_ent_mline_set_num_lines(dwg_ent_mline *mline, char num, int *error)
       mline->num_lines = num;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns number of lines
@@ -14253,7 +16895,11 @@ dwg_ent_mline_get_num_lines(dwg_ent_mline *mline, int *error)
       return mline->num_lines;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets number of vertices
@@ -14267,7 +16913,10 @@ dwg_ent_mline_set_num_verts(dwg_ent_mline *mline, unsigned int num,
       mline->num_verts = num;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns number of vertices
@@ -14280,27 +16929,35 @@ dwg_ent_mline_get_num_verts(dwg_ent_mline *mline, int *error)
       return mline->num_verts;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Returns mline vertices
 dwg_ent_mline_vert *
 dwg_ent_mline_get_verts(dwg_ent_mline *mline, int *error)
 {
-  dwg_ent_mline_vert *ptx = (dwg_ent_mline_vert*) 
-  malloc(sizeof(dwg_ent_mline_vert)* mline->num_verts);
-    if(ptx != 0)
-      {
-        *error = 0;
-        int i = 0;
-        for (i = 0; i < mline->num_verts ; i++)
-          {
+  dwg_ent_mline_vert *ptx = (dwg_ent_mline_vert*)
+    malloc(sizeof(dwg_ent_mline_vert)* mline->num_verts);
+  if (ptx != 0)
+    {
+      *error = 0;
+      int i = 0;
+      for (i = 0; i < mline->num_verts ; i++)
+        {
           ptx[i] = mline->verts[i];
-          }
-        return ptx;
-      }
-    else
+        }
+      return ptx;
+    }
+  else
+    {
       *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return NULL;
+    }
 }
 
 /*******************************************************************
@@ -14311,18 +16968,33 @@ dwg_ent_mline_get_verts(dwg_ent_mline *mline, int *error)
 unsigned int
 dwg_ent_vertex_pface_face_get_vertind(dwg_ent_vert_pface_face *face)
 {
-  return face->vertind[4];
+  if (face != 0)
+    {
+      return face->vertind[3];
+    }
+  else
+    {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return (unsigned int)-1;
+    }
 }
 
 /// Sets vertex_pface vertind
 void
 dwg_ent_vertex_pface_face_set_vertind(dwg_ent_vert_pface_face *face,
-                                           unsigned int vertind[4])
+                                      unsigned int vertind[4])
 {
-  face->vertind[1] = vertind[1];
-  face->vertind[2] = vertind[2];
-  face->vertind[3] = vertind[3];
-  face->vertind[4] = vertind[4];
+  if (face != 0 && vertind != 0)
+    {
+      face->vertind[0] = vertind[0];
+      face->vertind[1] = vertind[1];
+      face->vertind[2] = vertind[2];
+      face->vertind[3] = vertind[3];
+    }
+  else
+    {
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /*******************************************************************
@@ -14339,7 +17011,11 @@ dwg_ent_3dsolid_get_acis_empty(dwg_ent_3dsolid *_3dsolid, int *error)
       return _3dsolid->acis_empty;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets acis empty value
@@ -14353,7 +17029,10 @@ dwg_ent_3dsolid_set_acis_empty(dwg_ent_3dsolid *_3dsolid, unsigned char acis,
       _3dsolid->acis_empty = acis;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns version value
@@ -14366,7 +17045,11 @@ dwg_ent_3dsolid_get_version(dwg_ent_3dsolid *_3dsolid, int *error)
       return _3dsolid->version;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets version value
@@ -14380,11 +17063,14 @@ dwg_ent_3dsolid_set_version(dwg_ent_3dsolid *_3dsolid, unsigned int version,
       _3dsolid->version = version;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
-/// Returns block size
-long *
+/// Returns pointer to block size
+unsigned long *
 dwg_ent_3dsolid_get_block_size(dwg_ent_3dsolid *_3dsolid, int *error)
 {
   if (_3dsolid != 0)
@@ -14393,7 +17079,11 @@ dwg_ent_3dsolid_get_block_size(dwg_ent_3dsolid *_3dsolid, int *error)
       return _3dsolid->block_size;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return NULL;
+    }
 }
 
 /// Returns acis data
@@ -14406,13 +17096,17 @@ dwg_ent_3dsolid_get_acis_data(dwg_ent_3dsolid *_3dsolid, int *error)
       return _3dsolid->acis_data;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return NULL;
+    }
 }
 
 /// Sets acis data
 void
 dwg_ent_3dsolid_set_acis_data(dwg_ent_3dsolid *_3dsolid,
-                                     char * data, int *error)
+                              char * data, int *error)
 {
   if (_3dsolid != 0)
     {
@@ -14420,7 +17114,10 @@ dwg_ent_3dsolid_set_acis_data(dwg_ent_3dsolid *_3dsolid,
       _3dsolid->acis_data = data;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns wireframe data present value
@@ -14434,7 +17131,11 @@ dwg_ent_3dsolid_get_wireframe_data_present(dwg_ent_3dsolid *_3dsolid,
       return _3dsolid->wireframe_data_present;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets wireframe data present value
@@ -14448,7 +17149,10 @@ dwg_ent_3dsolid_set_wireframe_data_present(dwg_ent_3dsolid *_3dsolid,
       _3dsolid->wireframe_data_present = data;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns point present value
@@ -14461,7 +17165,11 @@ dwg_ent_3dsolid_get_point_present(dwg_ent_3dsolid *_3dsolid, int *error)
       return _3dsolid->point_present;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets point present value
@@ -14475,15 +17183,18 @@ dwg_ent_3dsolid_set_point_present(dwg_ent_3dsolid *_3dsolid, char point,
       _3dsolid->point_present = point;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns point value
 void
-dwg_ent_3dsolid_get_point(dwg_ent_3dsolid *_3dsolid, dwg_point_3d *point, 
+dwg_ent_3dsolid_get_point(dwg_ent_3dsolid *_3dsolid, dwg_point_3d *point,
                           int *error)
 {
-  if (_3dsolid != 0)
+  if (_3dsolid != 0 && point != 0)
     {
       *error = 0;
       point->x = _3dsolid->point.x;
@@ -14491,7 +17202,10 @@ dwg_ent_3dsolid_get_point(dwg_ent_3dsolid *_3dsolid, dwg_point_3d *point,
       point->z = _3dsolid->point.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets point values
@@ -14499,7 +17213,7 @@ void
 dwg_ent_3dsolid_set_point(dwg_ent_3dsolid *_3dsolid, dwg_point_3d *point,
                           int *error)
 {
-  if (_3dsolid != 0)
+  if (_3dsolid != 0 && point != 0)
     {
       *error = 0;
       _3dsolid->point.x = point->x;
@@ -14507,7 +17221,10 @@ dwg_ent_3dsolid_set_point(dwg_ent_3dsolid *_3dsolid, dwg_point_3d *point,
       _3dsolid->point.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns number of isolines
@@ -14520,7 +17237,11 @@ dwg_ent_3dsolid_get_num_isolines(dwg_ent_3dsolid *_3dsolid, int *error)
       return _3dsolid->num_isolines;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0L;
+    }
 }
 
 /// Sets number of isolines
@@ -14534,7 +17255,10 @@ dwg_ent_3dsolid_set_num_isolines(dwg_ent_3dsolid *_3dsolid, long num,
       _3dsolid->num_isolines = num;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns isoline present value
@@ -14547,7 +17271,11 @@ dwg_ent_3dsolid_get_isoline_present(dwg_ent_3dsolid *_3dsolid, int *error)
       return _3dsolid->isoline_present;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets isoline present value
@@ -14561,7 +17289,10 @@ dwg_ent_3dsolid_set_isoline_present(dwg_ent_3dsolid *_3dsolid, char iso,
       _3dsolid->isoline_present = iso;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns number of wires
@@ -14574,7 +17305,11 @@ dwg_ent_3dsolid_get_num_wires(dwg_ent_3dsolid *_3dsolid, int *error)
       return _3dsolid->num_wires;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0L;
+    }
 }
 
   /// Sets number of wires
@@ -14587,7 +17322,10 @@ dwg_ent_3dsolid_set_num_wires(dwg_ent_3dsolid *_3dsolid, long num, int *error)
       _3dsolid->num_wires = num;
     }
   else
-  *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns wire
@@ -14595,19 +17333,23 @@ dwg_ent_solid_wire *
 dwg_ent_3dsolid_get_wire(dwg_ent_3dsolid *_3dsolid, int *error)
 {
   dwg_ent_solid_wire *ptx = (dwg_ent_solid_wire*)
-  malloc(sizeof(dwg_ent_solid_wire)* _3dsolid->num_wires);
-    if(ptx != 0)
-      {
-        *error = 0;
-        int i = 0;
-        for (i = 0; i < _3dsolid->num_wires ; i++)
-          {
-            ptx[i] = _3dsolid->wires[i];
-          }
-        return ptx;
-      }
-    else
+    malloc(sizeof(dwg_ent_solid_wire)* _3dsolid->num_wires);
+  if (ptx != 0)
+    {
+      *error = 0;
+      int i = 0;
+      for (i = 0; i < _3dsolid->num_wires ; i++)
+        {
+          ptx[i] = _3dsolid->wires[i];
+        }
+      return ptx;
+    }
+  else
+    {
       *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return NULL;
+    }
 }
 
 /// Returns number of silhouettes
@@ -14620,7 +17362,11 @@ dwg_ent_3dsolid_get_num_silhouettes(dwg_ent_3dsolid *_3dsolid, int *error)
       return _3dsolid->num_silhouettes;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0L;
+    }
 }
 
 /// Sets number of silhouettes
@@ -14634,7 +17380,10 @@ dwg_ent_3dsolid_set_num_silhouettes(dwg_ent_3dsolid *_3dsolid,
       _3dsolid->num_silhouettes = silhouettes;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
   }
 
 /// Returns silhouette
@@ -14642,20 +17391,23 @@ dwg_ent_solid_silhouette *
 dwg_ent_3dsolid_get_silhouette(dwg_ent_3dsolid *_3dsolid, int *error)
 {
   dwg_ent_solid_silhouette *ptx = (dwg_ent_solid_silhouette*)
-  malloc(sizeof(dwg_ent_solid_silhouette)* _3dsolid->num_silhouettes);
-    if(ptx != 0)
-      {
-        *error = 0;
-        int i = 0;
-          for (i = 0; i < _3dsolid->num_silhouettes ; i++)
-            {
-              ptx[i] = _3dsolid->silhouettes[i];
-            }
-        return ptx;
-      }
-    else
+    malloc(sizeof(dwg_ent_solid_silhouette)* _3dsolid->num_silhouettes);
+  if (ptx != 0)
+    {
+      *error = 0;
+      int i = 0;
+      for (i = 0; i < _3dsolid->num_silhouettes ; i++)
+        {
+          ptx[i] = _3dsolid->silhouettes[i];
+        }
+      return ptx;
+    }
+  else
+    {
       *error = 1;
-
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return NULL;
+    }
 }
 
 /// Returns acis empty 2 value
@@ -14668,7 +17420,11 @@ dwg_ent_3dsolid_get_acis_empty2(dwg_ent_3dsolid *_3dsolid, int *error)
       return _3dsolid->acis_empty2;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets acis empty 2 value
@@ -14682,8 +17438,11 @@ dwg_ent_3dsolid_set_acis_empty2(dwg_ent_3dsolid *_3dsolid, unsigned char acis,
       _3dsolid->acis_empty2 = acis;
     }
   else
-    *error = 1;
-} 
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
+}
 
 /*******************************************************************
 *                   FUNCTIONS FOR REGION ENTITY                     *
@@ -14699,7 +17458,11 @@ dwg_ent_region_get_acis_empty(dwg_ent_region *region, int *error)
       return region->acis_empty;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets acis empty value
@@ -14713,7 +17476,10 @@ dwg_ent_region_set_acis_empty(dwg_ent_region *region, unsigned char acis,
       region->acis_empty = acis;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns version value
@@ -14726,7 +17492,11 @@ dwg_ent_region_get_version(dwg_ent_region *region, int *error)
       return region->version;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets version value
@@ -14740,11 +17510,14 @@ dwg_ent_region_set_version(dwg_ent_region *region, unsigned int version,
       region->version = version;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
-/// Returns block size
-long *
+/// Returns pointer to block size
+unsigned long *
 dwg_ent_region_get_block_size(dwg_ent_region *region, int *error)
 {
   if (region != 0)
@@ -14753,7 +17526,11 @@ dwg_ent_region_get_block_size(dwg_ent_region *region, int *error)
       return region->block_size;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return NULL;
+    }
 }
 
 /// Returns acis data
@@ -14766,13 +17543,17 @@ dwg_ent_region_get_acis_data(dwg_ent_region *region, int *error)
       return region->acis_data;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return NULL;
+    }
 }
 
 /// Sets acis data
 void
 dwg_ent_region_set_acis_data(dwg_ent_region *region, char * data,
-                                    int *error)
+                             int *error)
 {
   if (region != 0)
     {
@@ -14780,7 +17561,10 @@ dwg_ent_region_set_acis_data(dwg_ent_region *region, char * data,
       region->acis_data = data;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns wireframe data present value
@@ -14793,7 +17577,11 @@ dwg_ent_region_get_wireframe_data_present(dwg_ent_region *region, int *error)
       return region->wireframe_data_present;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets wireframe data present value
@@ -14807,7 +17595,10 @@ dwg_ent_region_set_wireframe_data_present(dwg_ent_region *region, char data,
       region->wireframe_data_present = data;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns point present value
@@ -14820,7 +17611,11 @@ dwg_ent_region_get_point_present(dwg_ent_region *region, int *error)
       return region->point_present;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets point present value
@@ -14834,7 +17629,10 @@ dwg_ent_region_set_point_present(dwg_ent_region *region, char point,
       region->point_present = point;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns point value
@@ -14842,7 +17640,7 @@ void
 dwg_ent_region_get_point(dwg_ent_region *region, dwg_point_3d *point,
                          int *error)
 {
-  if (region != 0)
+  if (region != 0 && point != 0)
     {
       *error = 0;
       point->x = region->point.x;
@@ -14850,7 +17648,10 @@ dwg_ent_region_get_point(dwg_ent_region *region, dwg_point_3d *point,
       point->z = region->point.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets point values
@@ -14858,7 +17659,7 @@ void
 dwg_ent_region_set_point(dwg_ent_region *region, dwg_point_3d *point,
                          int *error)
 {
-  if (region != 0)
+  if (region != 0 && point != 0)
     {
       *error = 0;
       region->point.x = point->x;
@@ -14866,7 +17667,10 @@ dwg_ent_region_set_point(dwg_ent_region *region, dwg_point_3d *point,
       region->point.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns number of isolines
@@ -14879,7 +17683,11 @@ dwg_ent_region_get_num_isolines(dwg_ent_region *region, int *error)
       return region->num_isolines;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0L;
+    }
 }
 
 /// Sets number of isolines
@@ -14892,7 +17700,10 @@ dwg_ent_region_set_num_isolines(dwg_ent_region *region, long num, int *error)
       region->num_isolines = num;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns isoline present value
@@ -14905,7 +17716,11 @@ dwg_ent_region_get_isoline_present(dwg_ent_region *region, int *error)
       return region->isoline_present;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets isoline present value
@@ -14919,7 +17734,10 @@ dwg_ent_region_set_isoline_present(dwg_ent_region *region, char iso,
       region->isoline_present = iso;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns number of wires
@@ -14932,7 +17750,11 @@ dwg_ent_region_get_num_wires(dwg_ent_region *region, int *error)
       return region->num_wires;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0L;
+    }
 }
 
 /// Sets number of wires
@@ -14945,7 +17767,10 @@ dwg_ent_region_set_num_wires(dwg_ent_region *region, long num, int *error)
       region->num_wires = num;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns wire
@@ -14953,19 +17778,23 @@ dwg_ent_solid_wire *
 dwg_ent_region_get_wire(dwg_ent_region *region, int *error)
 {
   dwg_ent_solid_wire *ptx = (dwg_ent_solid_wire*)
-  malloc(sizeof(dwg_ent_solid_wire)* region->num_wires);
-    if(ptx != 0)
-      {
-        *error = 0;
-        int i = 0;
-          for (i = 0; i < region->num_wires ; i++)
-            {
-              ptx[i] = region->wires[i];
-            }
-        return ptx;
-      }
-    else
+    malloc(sizeof(dwg_ent_solid_wire)* region->num_wires);
+  if (ptx != 0)
+    {
+      *error = 0;
+      int i = 0;
+      for (i = 0; i < region->num_wires ; i++)
+        {
+          ptx[i] = region->wires[i];
+        }
+      return ptx;
+    }
+  else
+    {
       *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return NULL;
+    }
 }
 
 /// Returns number of silhouettes
@@ -14978,7 +17807,11 @@ dwg_ent_region_get_num_silhouettes(dwg_ent_region *region, int *error)
       return region->num_silhouettes;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0L;
+    }
 }
 
 /// Sets number of silhouettes
@@ -14992,7 +17825,10 @@ dwg_ent_region_set_num_silhouettes(dwg_ent_region *region, long silhouettes,
       region->num_silhouettes = silhouettes;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns silhouette
@@ -15000,19 +17836,23 @@ dwg_ent_solid_silhouette *
 dwg_ent_region_get_silhouette(dwg_ent_region *region, int *error)
 {
   dwg_ent_solid_silhouette *ptx = (dwg_ent_solid_silhouette*)
-  malloc(sizeof(dwg_ent_solid_silhouette)* region->num_silhouettes);
-    if(ptx != 0)
-      {
-        *error = 0;
-        int i = 0;
-          for (i = 0; i < region->num_silhouettes ; i++)
-            {
-              ptx[i] = region->silhouettes[i];
-            }
-        return ptx;
-      }
-    else
+    malloc(sizeof(dwg_ent_solid_silhouette)* region->num_silhouettes);
+  if (ptx != 0)
+    {
+      *error = 0;
+      int i = 0;
+      for (i = 0; i < region->num_silhouettes ; i++)
+        {
+          ptx[i] = region->silhouettes[i];
+        }
+      return ptx;
+    }
+  else
+    {
       *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return NULL;
+    }
 }
 
 /// Returns acis empty 2 value
@@ -15025,7 +17865,11 @@ dwg_ent_region_get_acis_empty2(dwg_ent_region *region, int *error)
       return region->acis_empty2;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets acis empty 2 value
@@ -15039,8 +17883,11 @@ dwg_ent_region_set_acis_empty2(dwg_ent_region *region, unsigned char acis,
       region->acis_empty2 = acis;
     }
   else
-    *error = 1;
-} 
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
+}
 
 /*******************************************************************
 *                    FUNCTIONS FOR BODY ENTITY                      *
@@ -15055,7 +17902,11 @@ dwg_ent_body_get_acis_empty(dwg_ent_body *body, int *error)
       return body->acis_empty;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets acis empty value
@@ -15069,7 +17920,10 @@ dwg_ent_body_set_acis_empty(dwg_ent_body *body, unsigned char acis,
       body->acis_empty = acis;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns version value
@@ -15082,7 +17936,11 @@ dwg_ent_body_get_version(dwg_ent_body *body, int *error)
       return body->version;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets version value
@@ -15095,11 +17953,14 @@ dwg_ent_body_set_version(dwg_ent_body *body, unsigned int version, int *error)
       body->version = version;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
-/// Returns body block size
-long * 
+/// Returns pointer to body block size
+unsigned long *
 dwg_ent_body_get_block_size(dwg_ent_body *body, int *error)
 {
   if (body != 0)
@@ -15108,7 +17969,11 @@ dwg_ent_body_get_block_size(dwg_ent_body *body, int *error)
       return body->block_size;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return NULL;
+    }
 }
 
 /// Returns body acis data value
@@ -15121,7 +17986,11 @@ dwg_ent_body_get_acis_data(dwg_ent_body *body, int *error)
       return body->acis_data;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return NULL;
+    }
 }
 
 /// Sets acis data of body
@@ -15134,7 +18003,10 @@ dwg_ent_body_set_acis_data(dwg_ent_body *body, char * data, int *error)
       body->acis_data = data;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns wireframe data present value
@@ -15147,7 +18019,11 @@ dwg_ent_body_get_wireframe_data_present(dwg_ent_body *body, int *error)
       return body->wireframe_data_present;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets wireframe data present value
@@ -15161,7 +18037,10 @@ dwg_ent_body_set_wireframe_data_present(dwg_ent_body *body, char data,
       body->wireframe_data_present = data;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns point present value
@@ -15174,7 +18053,11 @@ dwg_ent_body_get_point_present(dwg_ent_body *body, int *error)
       return body->point_present;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets point present value
@@ -15187,7 +18070,10 @@ dwg_ent_body_set_point_present(dwg_ent_body *body, char point, int *error)
       body->point_present = point;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns point values
@@ -15202,7 +18088,10 @@ dwg_ent_body_get_point(dwg_ent_body *body, dwg_point_3d *point, int *error)
       point->z = body->point.z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets point of body entity
@@ -15217,7 +18106,10 @@ dwg_ent_body_set_point(dwg_ent_body *body, dwg_point_3d *point, int *error)
       body->point.z = point->z;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns number of isolines
@@ -15230,7 +18122,11 @@ dwg_ent_body_get_num_isolines(dwg_ent_body *body, int *error)
       return body->num_isolines;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0L;
+    }
 }
 
 /// Sets number of isolines
@@ -15243,7 +18139,10 @@ dwg_ent_body_set_num_isolines(dwg_ent_body *body, long num, int *error)
       body->num_isolines = num;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// returns isoline present value
@@ -15256,7 +18155,11 @@ dwg_ent_body_get_isoline_present(dwg_ent_body *body, int *error)
       return body->isoline_present;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets isoline present value
@@ -15269,7 +18172,10 @@ dwg_ent_body_set_isoline_present(dwg_ent_body *body, char iso, int *error)
       body->isoline_present = iso;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns number of wires
@@ -15282,7 +18188,11 @@ dwg_ent_body_get_num_wires(dwg_ent_body *body, int *error)
       return body->num_wires;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0L;
+    }
 }
 
 /// Sets number of wires
@@ -15295,7 +18205,10 @@ dwg_ent_body_set_num_wires(dwg_ent_body *body, long num, int *error)
       body->num_wires = num;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns wire of body
@@ -15303,19 +18216,23 @@ dwg_ent_solid_wire *
 dwg_ent_body_get_wire(dwg_ent_body *body, int *error)
 {
   dwg_ent_solid_wire *ptx = (dwg_ent_solid_wire*)
-  malloc(sizeof(dwg_ent_solid_wire)* body->num_wires);
-    if(ptx != 0)
-      {
-        *error = 0;
-        int i = 0;
-          for (i = 0; i < body->num_wires ; i++)
-            {
-              ptx[i] = body->wires[i];
-            }
-        return ptx;
-      }
-    else
+    malloc(sizeof(dwg_ent_solid_wire)* body->num_wires);
+  if (ptx != 0)
+    {
+      *error = 0;
+      int i = 0;
+      for (i = 0; i < body->num_wires ; i++)
+        {
+          ptx[i] = body->wires[i];
+        }
+      return ptx;
+    }
+  else
+    {
       *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return NULL;
+    }
 }
 
 /// Returns number of silhouettes value
@@ -15328,7 +18245,11 @@ dwg_ent_body_get_num_silhouettes(dwg_ent_body *body, int *error)
       return body->num_silhouettes;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0L;
+    }
 }
 
 /// Sets number of silhouettes
@@ -15342,7 +18263,10 @@ dwg_ent_body_set_num_silhouettes(dwg_ent_body *body, long silhouettes,
       body->num_silhouettes = silhouettes;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns silhouette for body entity
@@ -15350,20 +18274,24 @@ dwg_ent_solid_silhouette *
 dwg_ent_body_get_silhouette(dwg_ent_body *body,
                             int *error)
 {
-  dwg_ent_solid_silhouette *ptx = (dwg_ent_solid_silhouette*) 
-  malloc(sizeof(dwg_ent_solid_silhouette)* body->num_silhouettes);
-    if(ptx != 0)
-      {
-        *error = 0;
-        int i = 0;
-          for (i = 0; i < body->num_silhouettes ; i++)
-            {
-              ptx[i] = body->silhouettes[i];
-            }
-        return ptx;
-      }
-    else
+  dwg_ent_solid_silhouette *ptx = (dwg_ent_solid_silhouette*)
+    malloc(sizeof(dwg_ent_solid_silhouette)* body->num_silhouettes);
+  if (ptx != 0)
+    {
+      *error = 0;
+      int i = 0;
+      for (i = 0; i < body->num_silhouettes ; i++)
+        {
+          ptx[i] = body->silhouettes[i];
+        }
+      return ptx;
+    }
+  else
+    {
       *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return NULL;
+    }
 }
 
 /// Returns acis empty2 value
@@ -15376,7 +18304,11 @@ dwg_ent_body_get_acis_empty2(dwg_ent_body *body, int *error)
       return body->acis_empty2;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets body acis empty2 value
@@ -15390,8 +18322,11 @@ dwg_ent_body_set_acis_empty2(dwg_ent_body *body, unsigned char acis,
       body->acis_empty2 = acis;
     }
   else
-    *error = 1;
-} 
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
+}
 
 /*******************************************************************
 *                    FUNCTIONS FOR TABLE ENTITY                     *
@@ -15402,7 +18337,7 @@ void
 dwg_ent_table_set_insertion_point(dwg_ent_table *table, dwg_point_3d *point,
                                   int *error)
 {
-  if (table != 0)
+  if (table != 0 && point != 0)
     {
       *error = 0;
       table->insertion_point.x = point->x;
@@ -15410,7 +18345,10 @@ dwg_ent_table_set_insertion_point(dwg_ent_table *table, dwg_point_3d *point,
       table->insertion_point.z = point->z;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns insertion point
@@ -15418,7 +18356,7 @@ void
 dwg_ent_table_get_insertion_point(dwg_ent_table *table, dwg_point_3d *point,
                                   int *error)
 {
-  if (table != 0)
+  if (table != 0 && point != 0)
     {
       *error = 0;
       point->x = table->insertion_point.x;
@@ -15426,14 +18364,17 @@ dwg_ent_table_get_insertion_point(dwg_ent_table *table, dwg_point_3d *point,
       point->z = table->insertion_point.z;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets scale points
 void
 dwg_ent_table_set_scale(dwg_ent_table *table, dwg_point_3d *point, int *error)
 {
-  if (table != 0)
+  if (table != 0 && point != 0)
     {
       *error = 0;
       table->scale.x = point->x;
@@ -15441,14 +18382,17 @@ dwg_ent_table_set_scale(dwg_ent_table *table, dwg_point_3d *point, int *error)
       table->scale.z = point->z;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns scale points
 void
 dwg_ent_table_get_scale(dwg_ent_table *table, dwg_point_3d *point, int *error)
 {
-  if (table != 0)
+  if (table != 0 && point != 0)
     {
       *error = 0;
       point->x = table->scale.x;
@@ -15456,7 +18400,10 @@ dwg_ent_table_get_scale(dwg_ent_table *table, dwg_point_3d *point, int *error)
       point->z = table->scale.z;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets data flags
@@ -15470,7 +18417,10 @@ dwg_ent_table_set_data_flags(dwg_ent_table *table, unsigned char flags,
       table->data_flags = flags;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns data flags
@@ -15483,7 +18433,11 @@ dwg_ent_table_get_data_flags(dwg_ent_table *table, int *error)
       return table->data_flags;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets rotation
@@ -15496,7 +18450,10 @@ dwg_ent_table_set_rotation(dwg_ent_table *table, double rotation, int *error)
       table->rotation = rotation;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns rotation
@@ -15509,7 +18466,11 @@ dwg_ent_table_get_rotation(dwg_ent_table *table, int *error)
       return table->rotation;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets extrusion points
@@ -15517,7 +18478,7 @@ void
 dwg_ent_table_set_extrusion(dwg_ent_table *table, dwg_point_3d *point,
                             int *error)
 {
-  if (table != 0)
+  if (table != 0 && point != 0)
     {
       *error = 0;
       table->extrusion.x = point->x;
@@ -15525,7 +18486,10 @@ dwg_ent_table_set_extrusion(dwg_ent_table *table, dwg_point_3d *point,
       table->extrusion.z = point->z;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns extrusion points
@@ -15533,7 +18497,7 @@ void
 dwg_ent_table_get_extrusion(dwg_ent_table *table, dwg_point_3d *point,
                             int *error)
 {
-  if (table != 0)
+  if (table != 0 && point != 0)
     {
       *error = 0;
       point->x = table->extrusion.x;
@@ -15541,7 +18505,10 @@ dwg_ent_table_get_extrusion(dwg_ent_table *table, dwg_point_3d *point,
       point->z = table->extrusion.z;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets has attribs
@@ -15555,7 +18522,10 @@ dwg_ent_table_set_has_attribs(dwg_ent_table *table, unsigned char attribs,
       table->has_attribs = attribs;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns has attribs
@@ -15568,7 +18538,11 @@ dwg_ent_table_get_has_attribs(dwg_ent_table *table, int *error)
       return table->has_attribs;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets owned object count
@@ -15582,7 +18556,10 @@ dwg_ent_table_set_owned_object_count(dwg_ent_table *table, long count,
       table->owned_object_count = count;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns owned object count
@@ -15595,7 +18572,11 @@ dwg_ent_table_get_owned_object_count(dwg_ent_table *table, int *error)
       return table->owned_object_count;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0L;
+    }
 }
 
 /// Sets flag for table value
@@ -15609,11 +18590,14 @@ dwg_ent_table_set_flag_for_table_value(dwg_ent_table *table,
       table->flag_for_table_value = value;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns flag for table value
-unsigned int 
+unsigned int
 dwg_ent_table_get_flag_for_table_value(dwg_ent_table *table, int *error)
 {
   if (table != 0)
@@ -15622,7 +18606,11 @@ dwg_ent_table_get_flag_for_table_value(dwg_ent_table *table, int *error)
       return table->flag_for_table_value;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets horiz direction
@@ -15630,7 +18618,7 @@ void
 dwg_ent_table_set_horiz_direction(dwg_ent_table *table, dwg_point_3d *point,
                                   int *error)
 {
-  if (table != 0)
+  if (table != 0 && point != 0)
     {
       *error = 0;
       table->horiz_direction.x = point->x;
@@ -15639,15 +18627,18 @@ dwg_ent_table_set_horiz_direction(dwg_ent_table *table, dwg_point_3d *point,
 
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
-/// Returns horiz direction 
+/// Returns horiz direction
 void
 dwg_ent_table_get_horiz_direction(dwg_ent_table *table, dwg_point_3d *point,
                                   int *error)
 {
-  if (table != 0)
+  if (table != 0 && point != 0)
     {
       *error = 0;
       point->x = table->horiz_direction.x;
@@ -15655,7 +18646,10 @@ dwg_ent_table_get_horiz_direction(dwg_ent_table *table, dwg_point_3d *point,
       point->z = table->horiz_direction.z;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets number of columns
@@ -15668,7 +18662,10 @@ dwg_ent_table_set_num_cols(dwg_ent_table *table, long num, int *error)
       table->num_cols = num;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns number of columns
@@ -15681,7 +18678,11 @@ dwg_ent_table_get_num_cols(dwg_ent_table *table, int *error)
       return table->num_cols;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0L;
+    }
 }
 
 /// Sets number of rows
@@ -15694,7 +18695,10 @@ dwg_ent_table_set_num_rows(dwg_ent_table *table, long num, int *error)
       table->num_rows = num;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns number of rows
@@ -15707,7 +18711,11 @@ dwg_ent_table_get_num_rows(dwg_ent_table *table, int *error)
       return table->num_rows;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0L;
+    }
 }
 
 /// Returns column widths
@@ -15720,7 +18728,11 @@ dwg_ent_table_get_col_widths(dwg_ent_table *table, int *error)
       return table->col_widths;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return NULL;
+    }
 }
 
 /// Returns row heights
@@ -15733,7 +18745,11 @@ dwg_ent_table_get_row_heights(dwg_ent_table *table, int *error)
       return table->row_heights;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return NULL;
+    }
 }
 
 /// Sets table overrides present
@@ -15747,7 +18763,10 @@ dwg_ent_table_set_table_overrides_present(dwg_ent_table *table,
       table->table_overrides_present = present;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns table overrides present
@@ -15760,7 +18779,11 @@ dwg_ent_table_get_table_overrides_present(dwg_ent_table *table, int *error)
       return table->table_overrides_present;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets flag overrrides
@@ -15774,7 +18797,10 @@ dwg_ent_table_set_table_flag_override(dwg_ent_table *table, long override,
       table->table_flag_override = override;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// returns flag overrides
@@ -15787,7 +18813,11 @@ dwg_ent_table_get_table_flag_override(dwg_ent_table *table, int *error)
       return table->table_flag_override;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0L;
+    }
 }
 
 /// Sets title supressed
@@ -15801,7 +18831,10 @@ dwg_ent_table_set_title_suppressed(dwg_ent_table *table, unsigned char title,
       table->title_suppressed = title;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns title suppressed
@@ -15814,7 +18847,11 @@ dwg_ent_table_get_title_suppressed(dwg_ent_table *table, int *error)
       return table->title_suppressed;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets header suppressed
@@ -15828,7 +18865,10 @@ dwg_ent_table_set_header_suppressed(dwg_ent_table *table, unsigned char header,
       table->header_suppressed = header;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns header suppressed
@@ -15841,7 +18881,11 @@ dwg_ent_table_get_header_suppressed(dwg_ent_table *table, int *error)
       return table->header_suppressed;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets flow direction
@@ -15855,11 +18899,14 @@ dwg_ent_table_set_flow_direction(dwg_ent_table *table, unsigned int dir,
       table->flow_direction = dir;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns flow direction
-unsigned int 
+unsigned int
 dwg_ent_table_get_flow_direction(dwg_ent_table *table, int *error)
 {
   if (table != 0)
@@ -15868,7 +18915,11 @@ dwg_ent_table_get_flow_direction(dwg_ent_table *table, int *error)
       return table->flow_direction;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets horiz cell margin
@@ -15882,7 +18933,10 @@ dwg_ent_table_set_horiz_cell_margin(dwg_ent_table *table, double margin,
       table->horiz_cell_margin = margin;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns horiz cell margin
@@ -15895,7 +18949,11 @@ dwg_ent_table_get_horiz_cell_margin(dwg_ent_table *table, int *error)
       return table->horiz_cell_margin;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets vert cell margin
@@ -15909,7 +18967,10 @@ dwg_ent_table_set_vert_cell_margin(dwg_ent_table *table, double margin,
       table->vert_cell_margin = margin;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns vert cell margin
@@ -15922,7 +18983,11 @@ dwg_ent_table_get_vert_cell_margin(dwg_ent_table *table, int *error)
       return table->vert_cell_margin;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets title row fill none
@@ -15936,7 +19001,10 @@ dwg_ent_table_set_title_row_fill_none(dwg_ent_table *table, unsigned char fill,
       table->title_row_fill_none = fill;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns title row fill none value
@@ -15949,7 +19017,11 @@ dwg_ent_table_get_title_row_fill_none(dwg_ent_table *table, int *error)
       return table->title_row_fill_none;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets header row fill none value
@@ -15963,7 +19035,10 @@ dwg_ent_table_set_header_row_fill_none(dwg_ent_table *table,
       table->header_row_fill_none = fill;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns header row fill none value
@@ -15976,7 +19051,11 @@ dwg_ent_table_get_header_row_fill_none(dwg_ent_table *table, int *error)
       return table->header_row_fill_none;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets data row fill none value
@@ -15990,7 +19069,10 @@ dwg_ent_table_set_data_row_fill_none(dwg_ent_table *table, unsigned char fill,
       table->data_row_fill_none = fill;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns data row fill none value
@@ -16003,7 +19085,11 @@ dwg_ent_table_get_data_row_fill_none(dwg_ent_table *table, int *error)
       return table->data_row_fill_none;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets title row align value
@@ -16017,11 +19103,14 @@ dwg_ent_table_set_title_row_align(dwg_ent_table *table, unsigned char fill,
       table->title_row_align = fill;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns title row align
-unsigned int 
+unsigned int
 dwg_ent_table_get_title_row_align(dwg_ent_table *table, int *error)
 {
   if (table != 0)
@@ -16030,7 +19119,11 @@ dwg_ent_table_get_title_row_align(dwg_ent_table *table, int *error)
       return table->title_row_align;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets header row align
@@ -16044,11 +19137,14 @@ dwg_ent_table_set_header_row_align(dwg_ent_table *table, unsigned int align,
       table->header_row_align = align;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns header row align
-unsigned int 
+unsigned int
 dwg_ent_table_get_header_row_align(dwg_ent_table *table, int *error)
 {
   if (table != 0)
@@ -16057,7 +19153,11 @@ dwg_ent_table_get_header_row_align(dwg_ent_table *table, int *error)
       return table->header_row_align;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets data row align
@@ -16071,11 +19171,14 @@ dwg_ent_table_set_data_row_align(dwg_ent_table *table, unsigned int align,
       table->data_row_align = align;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns data row align
-unsigned int 
+unsigned int
 dwg_ent_table_get_data_row_align(dwg_ent_table *table, int *error)
 {
   if (table != 0)
@@ -16084,7 +19187,11 @@ dwg_ent_table_get_data_row_align(dwg_ent_table *table, int *error)
       return table->data_row_align;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets title row height
@@ -16098,7 +19205,10 @@ dwg_ent_table_set_title_row_height(dwg_ent_table *table, double height,
       table->title_row_height = height;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns title row height
@@ -16111,7 +19221,11 @@ dwg_ent_table_get_title_row_height(dwg_ent_table *table, int *error)
       return table->title_row_height;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets header row height
@@ -16125,7 +19239,10 @@ dwg_ent_table_set_header_row_height(dwg_ent_table *table, double height,
       table->header_row_height = height;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns header row height
@@ -16138,7 +19255,11 @@ dwg_ent_table_get_header_row_height(dwg_ent_table *table, int *error)
       return table->header_row_height;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets data row height
@@ -16152,7 +19273,10 @@ dwg_ent_table_set_data_row_height(dwg_ent_table *table, double height,
       table->data_row_height = height;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns data row height value
@@ -16165,7 +19289,11 @@ dwg_ent_table_get_data_row_height(dwg_ent_table *table, int *error)
       return table->data_row_height;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return nan("");
+    }
 }
 
 /// Sets border color overrides present value
@@ -16180,7 +19308,10 @@ dwg_ent_table_set_border_color_overrides_present(dwg_ent_table *table,
       table->border_color_overrides_present = present;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns border color overrides present value
@@ -16194,7 +19325,11 @@ dwg_ent_table_get_border_color_overrides_present(dwg_ent_table *table,
       return table->border_color_overrides_present;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets border color overrides flag value
@@ -16208,7 +19343,10 @@ dwg_ent_table_set_border_color_overrides_flag(dwg_ent_table *table,
       table->border_color_overrides_flag = overrides;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns border color overrides flag value
@@ -16221,7 +19359,11 @@ dwg_ent_table_get_border_color_overrides_flag(dwg_ent_table *table, int *error)
       return table->border_color_overrides_flag;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0L;
+    }
 }
 
 /// Sets border lineweight overrides present value
@@ -16236,7 +19378,10 @@ dwg_ent_table_set_border_lineweight_overrides_present(dwg_ent_table *table,
       table->border_lineweight_overrides_present = present;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns border lineweight overrides present value
@@ -16250,7 +19395,11 @@ dwg_ent_table_get_border_lineweight_overrides_present(dwg_ent_table *table,
       return table->border_lineweight_overrides_present;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets border lineweight overrides flag
@@ -16264,7 +19413,10 @@ dwg_ent_table_set_border_lineweight_overrides_flag(dwg_ent_table *table,
       table->border_lineweight_overrides_flag = overrides;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns border lineweight overrides flag value
@@ -16278,7 +19430,11 @@ dwg_ent_table_get_border_lineweight_overrides_flag(dwg_ent_table *table,
       return table->border_lineweight_overrides_flag;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0L;
+    }
 }
 
 /// Sets title horiz top lineweight value
@@ -16292,11 +19448,14 @@ dwg_ent_table_set_title_horiz_top_lineweight(dwg_ent_table *table,
       table->title_horiz_top_lineweigh = lw;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns title horiz top lineweight value
-unsigned int 
+unsigned int
 dwg_ent_table_get_title_horiz_top_lineweight(dwg_ent_table *table, int *error)
 {
   if (table != 0)
@@ -16305,7 +19464,11 @@ dwg_ent_table_get_title_horiz_top_lineweight(dwg_ent_table *table, int *error)
       return table->title_horiz_top_lineweigh;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets title horiz ins lineweight value
@@ -16319,11 +19482,14 @@ dwg_ent_table_set_title_horiz_ins_lineweight(dwg_ent_table *table,
       table->title_horiz_ins_lineweigh = lw;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns title horiz ins lineweight value
-unsigned int 
+unsigned int
 dwg_ent_table_get_title_horiz_ins_lineweight(dwg_ent_table *table, int *error)
 {
   if (table != 0)
@@ -16332,7 +19498,11 @@ dwg_ent_table_get_title_horiz_ins_lineweight(dwg_ent_table *table, int *error)
       return table->title_horiz_ins_lineweigh;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets title horiz bottom lineweight value
@@ -16346,11 +19516,14 @@ dwg_ent_table_set_title_horiz_bottom_lineweight(dwg_ent_table *table,
       table->title_horiz_bottom_lineweigh = lw;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns title horiz bottom lineweight value
-unsigned int 
+unsigned int
 dwg_ent_table_get_title_horiz_bottom_lineweight(dwg_ent_table *table,
                                                 int *error)
 {
@@ -16360,7 +19533,11 @@ dwg_ent_table_get_title_horiz_bottom_lineweight(dwg_ent_table *table,
       return table->title_horiz_bottom_lineweigh;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets title vert left lineweight value
@@ -16374,7 +19551,10 @@ dwg_ent_table_set_title_vert_left_lineweight(dwg_ent_table *table,
       table->title_vert_left_lineweigh = lw;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Sets title vert left lineweight value
@@ -16387,7 +19567,11 @@ dwg_ent_table_get_title_vert_left_lineweight(dwg_ent_table *table, int *error)
       return table->title_vert_left_lineweigh;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets title vert ins lineweight value
@@ -16401,11 +19585,14 @@ dwg_ent_table_set_title_vert_ins_lineweight(dwg_ent_table *table,
       table->title_vert_ins_lineweigh = lw;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns title vert ins lineweight
-unsigned int 
+unsigned int
 dwg_ent_table_get_title_vert_ins_lineweight(dwg_ent_table *table, int *error)
 {
   if (table != 0)
@@ -16414,7 +19601,11 @@ dwg_ent_table_get_title_vert_ins_lineweight(dwg_ent_table *table, int *error)
       return table->title_vert_ins_lineweigh;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets title vert right lineweight
@@ -16428,11 +19619,14 @@ dwg_ent_table_set_title_vert_right_lineweight(dwg_ent_table *table,
       table->title_vert_right_lineweigh = lw;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns title vert right lineweight value
-unsigned int 
+unsigned int
 dwg_ent_table_get_title_vert_right_lineweight(dwg_ent_table *table, int *error)
 {
   if (table != 0)
@@ -16441,7 +19635,11 @@ dwg_ent_table_get_title_vert_right_lineweight(dwg_ent_table *table, int *error)
       return table->title_vert_right_lineweigh;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets header horiz top lineweight
@@ -16455,11 +19653,14 @@ dwg_ent_table_set_header_horiz_top_lineweight(dwg_ent_table *table,
       table->header_horiz_top_lineweigh = lw;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns header horiz top lineweight value
-unsigned int 
+unsigned int
 dwg_ent_table_get_header_horiz_top_lineweight(dwg_ent_table *table, int *error)
 {
   if (table != 0)
@@ -16468,7 +19669,11 @@ dwg_ent_table_get_header_horiz_top_lineweight(dwg_ent_table *table, int *error)
       return table->header_horiz_top_lineweigh;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets header horiz ins lineweight
@@ -16482,11 +19687,14 @@ dwg_ent_table_set_header_horiz_ins_lineweight(dwg_ent_table *table,
       table->header_horiz_ins_lineweigh = lw;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns header horiz ins lineweight value
-unsigned int 
+unsigned int
 dwg_ent_table_get_header_horiz_ins_lineweight(dwg_ent_table *table,
                                               int *error)
 {
@@ -16496,7 +19704,11 @@ dwg_ent_table_get_header_horiz_ins_lineweight(dwg_ent_table *table,
       return table->header_horiz_ins_lineweigh;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets header horiz bottom lineweight value
@@ -16510,11 +19722,14 @@ dwg_ent_table_set_header_horiz_bottom_lineweight(dwg_ent_table *table,
       table->header_horiz_bottom_lineweigh = lw;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
-/// Returns header horiz bottom lineweight value 
-unsigned int 
+/// Returns header horiz bottom lineweight value
+unsigned int
 dwg_ent_table_get_header_horiz_bottom_lineweight(dwg_ent_table *table,
                                                  int *error)
 {
@@ -16524,7 +19739,11 @@ dwg_ent_table_get_header_horiz_bottom_lineweight(dwg_ent_table *table,
       return table->header_horiz_bottom_lineweigh;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets header vert left lineweight value
@@ -16538,11 +19757,14 @@ dwg_ent_table_set_header_vert_left_lineweight(dwg_ent_table *table,
       table->header_vert_left_lineweigh = lw;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns header vert left lineweight value
-unsigned int 
+unsigned int
 dwg_ent_table_get_header_vert_left_lineweight(dwg_ent_table *table, int *error)
 {
   if (table != 0)
@@ -16551,7 +19773,11 @@ dwg_ent_table_get_header_vert_left_lineweight(dwg_ent_table *table, int *error)
       return table->header_vert_left_lineweigh;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets header vert ins lineweight
@@ -16565,11 +19791,14 @@ dwg_ent_table_set_header_vert_ins_lineweight(dwg_ent_table *table,
       table->header_vert_ins_lineweigh = lw;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns header vert ins lineweight value
-unsigned int 
+unsigned int
 dwg_ent_table_get_header_vert_ins_lineweight(dwg_ent_table *table, int *error)
 {
   if (table != 0)
@@ -16578,7 +19807,11 @@ dwg_ent_table_get_header_vert_ins_lineweight(dwg_ent_table *table, int *error)
       return table->header_vert_ins_lineweigh;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets header vert right lineweight value
@@ -16592,11 +19825,14 @@ dwg_ent_table_set_header_vert_right_lineweight(dwg_ent_table *table,
       table->header_vert_right_lineweigh = lw;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns header vert right lineweight value
-unsigned int 
+unsigned int
 dwg_ent_table_get_header_vert_right_lineweight(dwg_ent_table *table,
                                                int *error)
 {
@@ -16606,7 +19842,11 @@ dwg_ent_table_get_header_vert_right_lineweight(dwg_ent_table *table,
       return table->header_vert_right_lineweigh;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets data horiz top lineweight value
@@ -16620,11 +19860,14 @@ dwg_ent_table_set_data_horiz_top_lineweight(dwg_ent_table *table,
       table->data_horiz_top_lineweigh = lw;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns data horiz top lineweight value
-unsigned int 
+unsigned int
 dwg_ent_table_get_data_horiz_top_lineweight(dwg_ent_table *table, int *error)
 {
   if (table != 0)
@@ -16633,7 +19876,11 @@ dwg_ent_table_get_data_horiz_top_lineweight(dwg_ent_table *table, int *error)
       return table->data_horiz_top_lineweigh;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets data horiz ins lineweight value
@@ -16647,11 +19894,14 @@ dwg_ent_table_set_data_horiz_ins_lineweight(dwg_ent_table *table,
       table->data_horiz_ins_lineweigh = lw;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns data horiz ins lineweight value
-unsigned int 
+unsigned int
 dwg_ent_table_get_data_horiz_ins_lineweight(dwg_ent_table *table, int *error)
 {
   if (table != 0)
@@ -16660,7 +19910,11 @@ dwg_ent_table_get_data_horiz_ins_lineweight(dwg_ent_table *table, int *error)
       return table->data_horiz_ins_lineweigh;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets data horiz bottom lineweight
@@ -16674,11 +19928,14 @@ dwg_ent_table_set_data_horiz_bottom_lineweight(dwg_ent_table *table,
       table->data_horiz_bottom_lineweigh = lw;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns data horiz bottom lineweight
-unsigned int 
+unsigned int
 dwg_ent_table_get_data_horiz_bottom_lineweight(dwg_ent_table *table,
                                                int *error)
 {
@@ -16688,7 +19945,11 @@ dwg_ent_table_get_data_horiz_bottom_lineweight(dwg_ent_table *table,
       return table->data_horiz_bottom_lineweigh;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets data vert ins lineweight value
@@ -16702,11 +19963,14 @@ dwg_ent_table_set_data_vert_ins_lineweight(dwg_ent_table *table,
       table->data_horiz_ins_lineweigh = lw;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns title border visibility overrides flag
-unsigned int 
+unsigned int
 dwg_ent_table_get_data_vert_ins_lineweight(dwg_ent_table *table, int *error)
 {
   if (table != 0)
@@ -16715,11 +19979,15 @@ dwg_ent_table_get_data_vert_ins_lineweight(dwg_ent_table *table, int *error)
       return table->data_horiz_ins_lineweigh;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets title border visibility overrides flag
-/// Sets 
+/// Sets
 void
 dwg_ent_table_set_border_visibility_overrides_present(dwg_ent_table *table,
                                                       unsigned char overrides,
@@ -16731,7 +19999,10 @@ dwg_ent_table_set_border_visibility_overrides_present(dwg_ent_table *table,
       table->border_visibility_overrides_present = overrides;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns title border visibility overrides flag
@@ -16745,7 +20016,11 @@ dwg_ent_table_get_border_visibility_overrides_present(dwg_ent_table *table,
       return table->border_visibility_overrides_present;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return '\0';
+    }
 }
 
 /// Sets title border visibility overrides flag
@@ -16759,7 +20034,10 @@ dwg_ent_table_set_border_visibility_overrides_flag(dwg_ent_table *table,
       table->border_visibility_overrides_flag = overrides;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns title border visibility overrides flag
@@ -16773,7 +20051,11 @@ dwg_ent_table_get_border_visibility_overrides_flag(dwg_ent_table *table,
       return table->border_visibility_overrides_flag;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0L;
+    }
 }
 
 /// Sets title horiz top visibility
@@ -16788,11 +20070,14 @@ dwg_ent_table_set_title_horiz_top_visibility(dwg_ent_table *table,
       table->title_horiz_top_visibility = visibility;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns title horiz top visibility
-unsigned int 
+unsigned int
 dwg_ent_table_get_title_horiz_top_visibility(dwg_ent_table *table, int *error)
 {
   if (table != 0)
@@ -16801,7 +20086,11 @@ dwg_ent_table_get_title_horiz_top_visibility(dwg_ent_table *table, int *error)
       return table->title_horiz_top_visibility;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets title horiz ins visibility
@@ -16816,11 +20105,14 @@ dwg_ent_table_set_title_horiz_ins_visibility(dwg_ent_table *table,
       table->title_horiz_ins_visibility = visibility;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns title horiz ins visibility
-unsigned int 
+unsigned int
 dwg_ent_table_get_title_horiz_ins_visibility(dwg_ent_table *table, int *error)
 {
   if (table != 0)
@@ -16829,7 +20121,11 @@ dwg_ent_table_get_title_horiz_ins_visibility(dwg_ent_table *table, int *error)
       return table->title_horiz_ins_visibility;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets title horiz bottom visibility
@@ -16844,11 +20140,14 @@ dwg_ent_table_set_title_horiz_bottom_visibility(dwg_ent_table *table,
       table->title_horiz_bottom_visibility = visibility;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns title horiz bottom visibility
-unsigned int 
+unsigned int
 dwg_ent_table_get_title_horiz_bottom_visibility(dwg_ent_table *table,
                                                 int *error)
 {
@@ -16858,7 +20157,11 @@ dwg_ent_table_get_title_horiz_bottom_visibility(dwg_ent_table *table,
       return table->title_horiz_bottom_visibility;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets title vert left visibility
@@ -16873,11 +20176,14 @@ dwg_ent_table_set_title_vert_left_visibility(dwg_ent_table *table,
       table->title_vert_left_visibility = visibility;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns title vert left visibility
-unsigned int 
+unsigned int
 dwg_ent_table_get_title_vert_left_visibility(dwg_ent_table *table, int *error)
 {
   if (table != 0)
@@ -16886,7 +20192,11 @@ dwg_ent_table_get_title_vert_left_visibility(dwg_ent_table *table, int *error)
       return table->title_vert_left_visibility;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets title vert ins visibility
@@ -16901,11 +20211,14 @@ dwg_ent_table_set_title_vert_ins_visibility(dwg_ent_table *table,
       table->title_vert_ins_visibility = visibility;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns title vert ins visibility
-unsigned int 
+unsigned int
 dwg_ent_table_get_title_vert_ins_visibility(dwg_ent_table *table, int *error)
 {
   if (table != 0)
@@ -16914,7 +20227,11 @@ dwg_ent_table_get_title_vert_ins_visibility(dwg_ent_table *table, int *error)
       return table->title_vert_ins_visibility;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets title vert right visibility
@@ -16929,11 +20246,14 @@ dwg_ent_table_set_title_vert_right_visibility(dwg_ent_table *table,
       table->title_vert_right_visibility = visibility;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns title vert right visibility
-unsigned int 
+unsigned int
 dwg_ent_table_get_title_vert_right_visibility(dwg_ent_table *table,
                                               int *error)
 {
@@ -16943,7 +20263,11 @@ dwg_ent_table_get_title_vert_right_visibility(dwg_ent_table *table,
       return table->title_vert_right_visibility;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets data header horiz top visibility
@@ -16958,11 +20282,14 @@ dwg_ent_table_set_header_horiz_top_visibility(dwg_ent_table *table,
       table->header_horiz_top_visibility = visibility;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns data header horiz top visibility
-unsigned int 
+unsigned int
 dwg_ent_table_get_header_horiz_top_visibility(dwg_ent_table *table,
                                               int *error)
 {
@@ -16972,7 +20299,11 @@ dwg_ent_table_get_header_horiz_top_visibility(dwg_ent_table *table,
       return table->header_horiz_top_visibility;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets data header horiz ins visibility
@@ -16987,11 +20318,14 @@ dwg_ent_table_set_header_horiz_ins_visibility(dwg_ent_table *table,
       table->header_horiz_ins_visibility = visibility;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns data header horiz ins visibility
-unsigned int 
+unsigned int
 dwg_ent_table_get_header_horiz_ins_visibility(dwg_ent_table *table,
                                               int *error)
 {
@@ -17001,7 +20335,11 @@ dwg_ent_table_get_header_horiz_ins_visibility(dwg_ent_table *table,
       return table->header_horiz_ins_visibility;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets data header vert left visibility
@@ -17016,11 +20354,14 @@ dwg_ent_table_set_header_horiz_bottom_visibility(dwg_ent_table *table,
       table->header_horiz_bottom_visibility = visibility;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns data header vert left visibility
-unsigned int 
+unsigned int
 dwg_ent_table_get_header_vert_left_visibility(dwg_ent_table *table,
                                               int *error)
 {
@@ -17030,7 +20371,11 @@ dwg_ent_table_get_header_vert_left_visibility(dwg_ent_table *table,
       return table->header_vert_left_visibility;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets data header vert ins visibility
@@ -17045,11 +20390,14 @@ dwg_ent_table_set_header_vert_ins_visibility(dwg_ent_table *table,
       table->header_vert_ins_visibility = visibility;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns data header vert ins visibility
-unsigned int 
+unsigned int
 dwg_ent_table_get_header_vert_ins_visibility(dwg_ent_table *table, int *error)
 {
   if (table != 0)
@@ -17058,7 +20406,11 @@ dwg_ent_table_get_header_vert_ins_visibility(dwg_ent_table *table, int *error)
       return table->header_vert_ins_visibility;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets data header vert right visibility
@@ -17073,11 +20425,14 @@ dwg_ent_table_set_header_vert_right_visibility(dwg_ent_table *table,
       table->header_vert_right_visibility = visibility;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns data header vert right visibility
-unsigned int 
+unsigned int
 dwg_ent_table_get_header_vert_right_visibility(dwg_ent_table *table,
                                                int *error)
 {
@@ -17087,7 +20442,11 @@ dwg_ent_table_get_header_vert_right_visibility(dwg_ent_table *table,
       return table->header_vert_right_visibility;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets data horiz top visibility
@@ -17102,11 +20461,14 @@ dwg_ent_table_set_data_horiz_top_visibility(dwg_ent_table *table,
       table->data_horiz_top_visibility = visibility;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns data horiz top visibility
-unsigned int 
+unsigned int
 dwg_ent_table_get_data_horiz_top_visibility(dwg_ent_table *table, int *error)
 {
   if (table != 0)
@@ -17115,7 +20477,11 @@ dwg_ent_table_get_data_horiz_top_visibility(dwg_ent_table *table, int *error)
       return table->data_horiz_top_visibility;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets data horiz ins visibility
@@ -17130,11 +20496,14 @@ dwg_ent_table_set_data_horiz_ins_visibility(dwg_ent_table *table,
       table->data_horiz_ins_visibility = visibility;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns data horiz ins visibility
-unsigned int 
+unsigned int
 dwg_ent_table_get_data_horiz_ins_visibility(dwg_ent_table *table, int *error)
 {
   if (table != 0)
@@ -17143,7 +20512,11 @@ dwg_ent_table_get_data_horiz_ins_visibility(dwg_ent_table *table, int *error)
       return table->data_horiz_ins_visibility;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets data horiz bottom visibility
@@ -17158,11 +20531,14 @@ dwg_ent_table_set_data_horiz_bottom_visibility(dwg_ent_table *table,
       table->data_horiz_bottom_visibility = visibility;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns data horiz bottom visibility
-unsigned int 
+unsigned int
 dwg_ent_table_get_data_horiz_bottom_visibility(dwg_ent_table *table,
                                                int *error)
 {
@@ -17172,7 +20548,11 @@ dwg_ent_table_get_data_horiz_bottom_visibility(dwg_ent_table *table,
       return table->data_horiz_bottom_visibility;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets data vert right visibility
@@ -17187,11 +20567,14 @@ dwg_ent_table_set_data_vert_ins_visibility(dwg_ent_table *table,
       table->data_horiz_ins_visibility = visibility;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns data vert ins visibility
-unsigned int 
+unsigned int
 dwg_ent_table_get_data_vert_ins_visibility(dwg_ent_table *table, int *error)
 {
   if (table != 0)
@@ -17200,7 +20583,11 @@ dwg_ent_table_get_data_vert_ins_visibility(dwg_ent_table *table, int *error)
       return table->data_horiz_ins_visibility;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Sets data vert right visibility
@@ -17215,11 +20602,14 @@ dwg_ent_table_set_data_vert_right_visibility(dwg_ent_table *table,
       table->data_vert_right_visibility = visibility;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
 }
 
 /// Returns data vert right visibility
-unsigned int 
+unsigned int
 dwg_ent_table_get_data_vert_right_visibility(dwg_ent_table *table, int *error)
 {
   if (table != 0)
@@ -17228,7 +20618,11 @@ dwg_ent_table_get_data_vert_right_visibility(dwg_ent_table *table, int *error)
       return table->data_vert_right_visibility;
     }
   else
-    *error = 1;   
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
 }
 
 /*******************************************************************
@@ -17248,8 +20642,11 @@ dwg_block_header_get_block_control(dwg_obj_block_header* block_header,
       return block_header->block_control_handle->obj->tio.object->tio.BLOCK_CONTROL;
     }
   else
-    *error = 1;
-
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return NULL;
+    }
 }
 
 /// Extracts and returns all block headers
@@ -17257,9 +20654,9 @@ dwg_object_ref **
 dwg_obj_block_control_get_block_headers(dwg_obj_block_control *ctrl,
                                         int *error)
 {
-  dwg_object_ref **ptx = (dwg_object_ref**) 
+  dwg_object_ref **ptx = (dwg_object_ref**)
   malloc(ctrl->num_entries * sizeof(Dwg_Object_Ref *));
-    if(ptx != 0)
+    if (ptx != 0)
       {
         *error = 0;
         int i = 0;
@@ -17270,46 +20667,62 @@ dwg_obj_block_control_get_block_headers(dwg_obj_block_control *ctrl,
         return ptx;
       }
     else
+    {
       *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return NULL;
+    }
 }
 
 /// Returns number of blocks
 long
 dwg_obj_block_control_get_num_entries(dwg_obj_block_control *ctrl, int *error)
 {
-  if(ctrl != 0)
+  if (ctrl != 0)
     {
       *error = 0;
       return ctrl->num_entries;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0L;
+    }
 }
 
 /// Returns model space block
 dwg_object_ref *
 dwg_obj_block_control_get_model_space(dwg_obj_block_control *ctrl, int *error)
 {
-  if(ctrl != 0)
+  if (ctrl != 0)
     {
       *error = 0;
       return ctrl->model_space;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return NULL;
+    }
 }
 
 /// Returns paper space block
 dwg_object_ref *
 dwg_obj_block_control_get_paper_space(dwg_obj_block_control *ctrl, int *error)
 {
-  if(ctrl != 0)
+  if (ctrl != 0)
     {
       *error = 0;
       return ctrl->paper_space;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return NULL;
+    }
 }
 
 /*******************************************************************
@@ -17328,7 +20741,11 @@ dwg_obj_layer_get_name(dwg_obj_layer *layer, int *error)
       return layer->entry_name;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return NULL;
+    }
 
 }
 
@@ -17348,7 +20765,11 @@ dwg_obj_block_header_get_name(dwg_obj_block_header *hdr, int *error)
       return hdr->entry_name;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return NULL;
+    }
 }
 
 /// Returns 1st block header present in the dwg file.
@@ -17358,7 +20779,7 @@ dwg_obj_block_header_get_name(dwg_obj_block_header *hdr, int *error)
 */
 dwg_obj_block_header *
 dwg_get_block_header(dwg_data *dwg, int *error)
-{    
+{
   Dwg_Object *obj;
   Dwg_Object_BLOCK_HEADER *blk;
   obj = &dwg->object[0];
@@ -17384,13 +20805,17 @@ dwg_get_block_header(dwg_data *dwg, int *error)
 int
 dwg_obj_object_get_index(dwg_object *obj, int *error)
 {
-  if(obj != 0)
+  if (obj != 0)
     {
       *error = 0;
       return obj->index;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty obj", __FUNCTION__)
+      return 0;
+    }
 }
 
 /// Returns dwg handle from dwg object
@@ -17398,16 +20823,20 @@ dwg_obj_object_get_index(dwg_object *obj, int *error)
 \param 1 dwg_object
 \param 2 int
 */
-dwg_handle
+dwg_handle *
 dwg_obj_get_handle(dwg_object *obj, int *error)
 {
-  if(obj != 0)
+  if (obj != 0)
     {
       *error = 0;
-      return obj->handle;
+      return &obj->handle;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty obj", __FUNCTION__)
+      return NULL;
+    }
 }
 
 /// returns object from dwg object
@@ -17419,13 +20848,17 @@ dwg_obj_obj *
 dwg_object_to_object(dwg_object *obj, int *error)
 {
 
-  if(obj != 0)
+  if (obj != 0)
     {
       *error = 0;
       return obj->tio.object;
     }
   else
-    *error = 1;    
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty obj", __FUNCTION__)
+      return NULL;
+    }
 }
 
 /// returns entity from dwg object
@@ -17437,13 +20870,17 @@ dwg_obj_ent *
 dwg_object_to_entity(dwg_object *obj, int *error)
 {
   return obj->tio.entity;
-  if(obj != 0)
+  if (obj != 0)
     {
       *error = 0;
       return obj->tio.entity;
     }
   else
-    *error = 1;    
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty obj", __FUNCTION__)
+      return NULL;
+    }
 }
 
 /// Returns object from reference
@@ -17454,13 +20891,17 @@ dwg_object_to_entity(dwg_object *obj, int *error)
 dwg_object *
 dwg_obj_reference_get_object(dwg_object_ref *ref, int *error)
 {
-  if(ref != 0)
+  if (ref != 0)
     {
       *error = 0;
       return ref->obj;
     }
   else
-    *error = 1;
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty ref", __FUNCTION__)
+      return NULL;
+    }
 }
 
 /// Returns absolute reference
@@ -17471,21 +20912,33 @@ dwg_obj_reference_get_object(dwg_object_ref *ref, int *error)
 unsigned long
 dwg_obj_ref_get_abs_ref(dwg_object_ref *ref, int *error)
 {
-  if(ref != 0)
+  if (ref != 0)
     {
       *error = 0;
       return ref->absolute_ref;
     }
   else
-    *error = 1;    
+    {
+      LOG_ERROR("%s: empty ref", __FUNCTION__)
+      *error = 1;
+      return (unsigned long)-1;
+    }
 }
 
-/// Returns Dwg object type 
+/// Returns Dwg object type
 /** Usage : int type = dwg_get_type(obj);
 \param 1 dwg_object
 */
-int 
+int
 dwg_get_type(dwg_object *obj)
 {
-  return obj->type;
+  if (obj != 0)
+    {
+      return obj->type;
+    }
+  else
+    {
+      LOG_ERROR("%s: empty ref", __FUNCTION__)
+      return -1;
+    }
 }
