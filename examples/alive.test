@@ -40,7 +40,11 @@ run ()
     prog=$1
     dwg=$2
     log=$dwg.$prog.log
-    if LIBREDWG_TRACE=9 ./$prog "${srcdir}/$dwg.dwg" > $log 2>&1
+    arg="${srcdir}/$dwg.dwg"
+    if test $prog = rewrite; then
+        arg="$arg ${srcdir}/$dwg-out.dwg"
+    fi
+    if LIBREDWG_TRACE=9 ./$prog $arg > $log 2>&1
     then rm $log
     else problems=$(expr 1 + $problems)
     fi

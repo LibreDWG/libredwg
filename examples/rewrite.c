@@ -16,31 +16,32 @@
  */
 
 #include <stdio.h>
-#include <dwg.h>
-#include "suffix.c"
-#include "../src/common.h"
 #include <string.h>
 
+#include "suffix.c"
+#include "../src/config.h"
+#include "dwg.h"
+#include "../src/common.h"
 
 int
 main (int argc, char *argv[])
 {
- // check entry
- if (argc <= 2 || strcmp(argv[1],argv[2]) == 0 )
-   {
-    printf("\n\nUsage: \t ./rewrite <dwg_input_file>.dwg <dwg_output_file>.dwg \n \t  Do not subscribe the input file! Avoid subscribe the output file either (it will probably cause an error!\n\n");
-    return 1;
-  }
-  
-  
   int error;
   Dwg_Data dwg_struct;
   char* filename_in = argv[1];
   char* filename_out = argv[2];
+
+  // check entry
+  if (argc <= 2 || strcmp(argv[1],argv[2]) == 0 )
+    {
+      printf("\n\nUsage:\t./rewrite <dwg_input_file.dwg> <dwg_output_file.dwg>\n"
+             "\t<dwg_input_file.dwg> must be different from <dwg_output_file.dwg>\n\n");
+      return 1;
+    }
+
   /*
    * some very simple testing
    */
-
   // reads the file
   printf("\n ===== \n Reading original file \n =====\n");
   error = dwg_read_file(filename_in, &dwg_struct);
@@ -82,11 +83,5 @@ main (int argc, char *argv[])
       printf("\nre-READ SUCCESS!\n\n");
     }
 
-
-  /* This value is the return value for `main',
-     so clamp it to either 0 or 1.  */
-  return error ? 1 : 0;
- // dwg_free(&dwg);
- 
-  //return 0;
+  return error;
 }

@@ -1,6 +1,6 @@
 ## Makefile.am
 ##
-## Copyright (C) 2010 Free Software Foundation, Inc.
+## Copyright (C) 2010,2018 Free Software Foundation, Inc.
 ##
 ## This file is part of LibreDWG.
 ##
@@ -17,12 +17,17 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-check_PROGRAMS = load_dwg get_bmp test testSVG
+check_PROGRAMS = load_dwg get_bmp test testSVG  testsvg2
 
 if HAVE_LIBPS
 check_PROGRAMS += dwg_ps
 dwg_ps_SOURCES = dwg_ps.c
 dwg_ps_LDADD = -lps
+endif
+
+if USE_WRITE
+check_PROGRAMS += rewrite
+rewrite_SOURCES = rewrite.c
 endif
 
 AM_LDFLAGS = -L../src -lredwg
@@ -33,8 +38,9 @@ testSVG_SOURCES = testSVG.c
 testSVG_LDADD   = -lm
 
 load_dwg_SOURCES = load_dwg.c
-
-get_bmp_SOURCES = get_bmp.c
+get_bmp_SOURCES  = get_bmp.c
+testsvg2_SOURCES = testsvg2.c
+testsvg2_LDADD   = -lm
 
 AM_CFLAGS = -Wextra -I$(top_srcdir)/src
 

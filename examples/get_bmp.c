@@ -20,14 +20,14 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <dwg.h>
+#include "dwg.h"
 #include "suffix.c"
 
 int
 get_bmp(char *filename)
 {
   char *outfile;
-  char *data;
+  unsigned char *data;
   int success;
   long size;
   long tmp;

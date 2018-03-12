@@ -22,10 +22,14 @@
 #include <string.h>
 #include <unistd.h>
 #include <math.h>
-#include <dwg.h>
-#include <dwg_api.h>
-//#include "../src/bits.h"
+
+#include "dwg.h"
+#include "dwg_api.h"
+
 //#include "suffix.c"
+
+#define log_if_error(msg) \
+  if (error) fprintf(stderr, "ERROR: %s", msg)
 
 double model_xmin, model_ymin;
 double page_width, page_height, scale;
@@ -47,8 +51,8 @@ output_SVG(dwg_data* dwg);
 int
 main(int argc, char *argv[])
 {
-//  REQUIRE_INPUT_FILE_ARG (argc);
-  return test_SVG (argv[1]);
+  if (argc >= 1)
+    return test_SVG(argv[1]);
 }
 
 int
@@ -58,7 +62,6 @@ test_SVG(char *filename)
   dwg_data dwg;
 
   error = dwg_read_file(filename, &dwg);
-
   if (!error)
     {
       output_SVG(&dwg);
@@ -77,17 +80,25 @@ output_TEXT(dwg_object* obj)
   dwg_point_2d ins_pt;
   Dwg_Entity_TEXT* text;
   char * text_value;
+  double fontsize;
+
   index = dwg_obj_object_get_index(obj, &error);
+  log_if_error("object_get_index");
   text = dwg_object_to_TEXT(obj);
   text_value = dwg_ent_text_get_text(text, &error);
+  log_if_error("text_get_text");
   dwg_ent_text_get_insertion_point(text, &ins_pt, &error);
+  log_if_error("text_get_insertion_point");
+  fontsize = dwg_ent_text_get_height(text, &error);
+  log_if_error("text_get_height");
+
   /*TODO: Juca, fix it properly: */
   if (text_value[0] == '&') return;
 
   printf(
       "\t<text id=\"dwg-object-%d\" x=\"%f\" y=\"%f\" font-family=\"Verdana\" font-size=\"%f\" fill=\"blue\">%s</text>\n",
       index, transform_X(ins_pt.x), transform_Y(ins_pt.y),
-      dwg_ent_text_get_height(text, &error) /* fontsize */, text_value);
+      fontsize, text_value);
 }
 
 void
@@ -96,10 +107,14 @@ output_LINE(dwg_object* obj)
   int error, index;
   Dwg_Entity_LINE* line;
   dwg_point_3d start, end;
+  
   index = dwg_obj_object_get_index(obj, &error);
+  log_if_error("object_get_index");
   line = dwg_object_to_LINE(obj);
   dwg_ent_line_get_start_point(line, &start, &error);
+  log_if_error("line_get_start_point");
   dwg_ent_line_get_end_point(line, &end, &error);
+  log_if_error("line_get_end_point");
   printf(
       "\t<path id=\"dwg-object-%d\" d=\"M %f,%f %f,%f\" style=\"fill:none;stroke:blue;stroke-width:0.1px\" />\n",
       index, transform_X(start.x), transform_Y(start.y), transform_X(end.x), 
@@ -113,9 +128,12 @@ output_CIRCLE(dwg_object* obj)
   int error, index;
   float radius;
   dwg_point_3d center;
+  
   index = dwg_obj_object_get_index(obj, &error);
+  log_if_error("object_get_index");
   circle = dwg_object_to_CIRCLE(obj);
   radius = dwg_ent_circle_get_radius(circle, &error);
+  log_if_error("circle_get_radius");
   printf(
       "\t<circle id=\"dwg-object-%d\" cx=\"%f\" cy=\"%f\" r=\"%f\" fill=\"none\" stroke=\"blue\" stroke-width=\"0.1px\" />\n",
       index, transform_X(center.x), transform_Y(center.y), radius);
@@ -128,18 +146,28 @@ output_ARC(dwg_object* obj)
   int error, index;
   float radius, start_angle, end_angle;
   dwg_point_3d center;
+  double x_start, y_start, x_end, y_end;
+  int large_arc;
+  
   index = dwg_obj_object_get_index(obj, &error);
+  log_if_error("object_get_index");
   arc = dwg_object_to_ARC(obj);
+  log_if_error("object_to_ARC");
   radius = dwg_ent_arc_get_radius(arc, &error);
+  log_if_error("arc_get_radius");
   start_angle = dwg_ent_arc_get_start_angle(arc, &error);
+  log_if_error("arc_get_start_angle");
   end_angle = dwg_ent_arc_get_end_angle(arc, &error);
+  log_if_error("arc_get_end_angle");
   dwg_ent_arc_get_center(arc, &center, &error);
-  double x_start = center.x + radius * cos(start_angle);
-  double y_start = center.y + radius * sin(start_angle);
-  double x_end = center.x + radius * cos(end_angle);
-  double y_end = center.y + radius * sin(end_angle);
+  log_if_error("arc_get_center");
+      
+  x_start = center.x + radius * cos(start_angle);
+  y_start = center.y + radius * sin(start_angle);
+  x_end = center.x + radius * cos(end_angle);
+  y_end = center.y + radius * sin(end_angle);
   //Assuming clockwise arcs.
-  int large_arc = (end_angle - start_angle < 3.1415) ? 0 : 1;
+  large_arc = (end_angle - start_angle < 3.1415) ? 0 : 1;
   printf(
       "\t<path id=\"dwg-object-%d\" d=\"M %f,%f A %f,%f 0 %d 0 %f,%f\" fill=\"none\" stroke=\"blue\" stroke-width=\"%f\" />\n",
       index, transform_X(x_start), transform_Y(y_start), radius, radius,
@@ -154,31 +182,40 @@ output_INSERT(dwg_object* obj)
   double rotation_ang;
   dwg_ent_insert* insert;
   dwg_point_3d ins_pt, scale;
-  dwg_handle obj_handle, ins_handle; 
+  dwg_handle *obj_handle, *ins_handle;
+
   insert = dwg_object_to_INSERT(obj);
   index = dwg_obj_object_get_index(obj, &error);
+  log_if_error("object_get_index");
   rotation_ang = dwg_ent_insert_get_rotation_angle(insert, &error);
+  log_if_error("insert_get_rotation_angle");
   dwg_ent_insert_get_ins_pt(insert, &ins_pt, &error);
+  log_if_error("insert_get_ins_pt");
   dwg_ent_insert_get_scale(insert, &scale, &error);
+  log_if_error("insert_get_scale");
   obj_handle = dwg_obj_get_handle(obj, &error);
+  log_if_error("get_handle");
   ins_handle = dwg_ent_insert_get_ref_handle(insert, &error);
+  log_if_error("insert_get_ref_handle");
   abs_ref = dwg_ent_insert_get_abs_ref(insert, &error);
+  log_if_error("insert_get_abs_ref");
+  
   //if (insert->block_header->handleref.code == 5)
   if(42) //XXX did this to test the new handleref.code handling "code"
     {
       printf(
           "\t<use id=\"dwg-object-%d\" transform=\"translate(%f %f) rotate(%f) scale(%f %f)\" xlink:href=\"#symbol-%lu\" /><!-- block_header->handleref: %d.%d.%lu -->\n",
           index,
-          transform_X(ins_pt.x), transform_Y(ins_pt.y), (180.0 / M_PI)
-            * rotation_ang, scale.x, scale.y, abs_ref, ins_handle.code,
-          ins_handle.size, ins_handle.value);
+          transform_X(ins_pt.x), transform_Y(ins_pt.y),
+          (180.0 / M_PI) * rotation_ang, scale.x, scale.y, abs_ref,
+          ins_handle->code, ins_handle->size, ins_handle->value);
     }
   else
     {
       printf(
           "\n\n<!-- WRONG INSERT(%d.%d.%lu): handleref = %d.%d.%lu -->\n",
-          obj_handle.code, obj_handle.size, obj_handle.value,
-          ins_handle.code, ins_handle.size, ins_handle.value);
+          obj_handle->code, obj_handle->size, obj_handle->value,
+          ins_handle->code, ins_handle->size, ins_handle->value);
     }
 }
 
@@ -222,8 +259,12 @@ void output_BLOCK_HEADER(dwg_object_ref* ref)
   dwg_obj_block_header* hdr;
   int error;
   unsigned long abs_ref;
+  char *name;
+  
   obj = dwg_obj_reference_get_object(ref, &error);
+  log_if_error("reference_get_object");
   abs_ref = dwg_obj_ref_get_abs_ref(ref, &error);
+  log_if_error("ref_get_abs_ref");
   if (!ref)
     {
       fprintf(stderr, "Found null object reference. Could not output an SVG symbol for this BLOCK_HEADER\n");
@@ -242,11 +283,13 @@ void output_BLOCK_HEADER(dwg_object_ref* ref)
       fprintf(stderr, "Found null ref->obj->tio.object\n");
       return;
     }
+  log_if_error("object_to_object");
 
   hdr = dwg_object_to_BLOCK_HEADER(obj);
+  name = dwg_obj_block_header_get_name(hdr, &error);
+  log_if_error("block_header_get_name");
   printf(
-      "\t<g id=\"symbol-%lu\" >\n\t\t<!-- %s -->\n", abs_ref, 
-      dwg_obj_block_header_get_name(hdr, &error));
+      "\t<g id=\"symbol-%lu\" >\n\t\t<!-- %s -->\n", abs_ref, name);
 
   variable_obj = get_first_owned_object(obj, hdr);
 
@@ -263,18 +306,20 @@ void output_BLOCK_HEADER(dwg_object_ref* ref)
 void
 output_SVG(dwg_data* dwg)
 {
-  unsigned int i, num_hdr_objs, error;
+  unsigned int i, num_hdr_objs;
+  int error;
   dwg_object *obj;
   dwg_obj_block_header *hdr;
   dwg_obj_block_control *ctrl;
   dwg_object_ref **hdr_refs; 
-  model_xmin = dwg_model_x_min(dwg);
-  model_ymin = dwg_model_y_min(dwg);
 
   double dx = (dwg_model_x_max(dwg) - dwg_model_x_min(dwg));
   double dy = (dwg_model_y_max(dwg) - dwg_model_y_min(dwg));
   double scale_x = dx / (dwg_page_x_max(dwg) - dwg_page_x_min(dwg));
   double scale_y = dy / (dwg_page_y_max(dwg) - dwg_page_y_min(dwg));
+  
+  model_xmin = dwg_model_x_min(dwg);
+  model_ymin = dwg_model_y_min(dwg);
   //scale = 25.4 / 72; // pt:mm
   page_width = dx;
   page_height = dy;
@@ -291,11 +336,15 @@ output_SVG(dwg_data* dwg)
     ">\n", page_width, page_height);
 
   hdr = dwg_get_block_header(dwg, &error);
+  log_if_error("get_block_header");
   ctrl = dwg_block_header_get_block_control(hdr, &error);
+  log_if_error("block_header_get_block_control");
   
   hdr_refs = dwg_obj_block_control_get_block_headers(ctrl, &error);
+  log_if_error("block_control_get_block_headers");
 
   num_hdr_objs = dwg_obj_block_control_get_num_entries(ctrl, &error);
+  log_if_error("block_control_get_num_entries");
   printf("\t<defs>\n");
     for (i=0; i<num_hdr_objs; i++)
       {
@@ -304,7 +353,10 @@ output_SVG(dwg_data* dwg)
   printf("\t</defs>\n");
 
   output_BLOCK_HEADER(dwg_obj_block_control_get_model_space(ctrl, &error));
+  log_if_error("block_control_get_model_space");
+
   output_BLOCK_HEADER(dwg_obj_block_control_get_paper_space(ctrl, &error));
+  log_if_error("block_control_get_paper_space");
 
   printf("</svg>\n");
 }
