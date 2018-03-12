@@ -1740,7 +1740,7 @@ DWG_OBJECT(BLOCK_HEADER);
   SINCE(R_2000)
     {
       HANDLE_VECTOR(insert_handles, insert_count, ANYCODE)
-      FIELD_HANDLE(layout_handle, ANYCODE);
+      FIELD_HANDLE(layout_handle, 5);
     }
 
 DWG_OBJECT_END
@@ -3531,4 +3531,5 @@ DWG_OBJECT_END
 // WIPEOUTVARIABLE
 // VBA_PROJECT
 //
+
 
