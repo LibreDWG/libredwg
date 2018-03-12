@@ -3491,20 +3491,20 @@ DWG_OBJECT(XRECORD);
 
   DECODER
     {
-	  FIELD_BL(numdatabytes);  	    
-	  FIELD_XDATA(rbuf, numdatabytes);
-	  
-	  SINCE(R_2000)
-		{
-		  FIELD_BS(cloning_flags);
-		}
-	  
-	  FIELD_HANDLE(parent, 3);
-	  REACTORS(4);
-	  XDICOBJHANDLE(3);
-	  
-	  //XXX how to known when I run out of data?
-	  //BITCODE_H* objid_handles;
+	FIELD_BL(numdatabytes);
+	FIELD_XDATA(rbuf, numdatabytes);
+
+	SINCE(R_2000)
+	  {
+	      FIELD_BS(cloning_flags);
+	  }
+
+	FIELD_HANDLE(parent, ANYCODE); // 3 or 8
+	REACTORS(4);
+	XDICOBJHANDLE(3);
+
+	//XXX how to known when I run out of data?
+	//BITCODE_H* objid_handles;
     }
     
 DWG_OBJECT_END

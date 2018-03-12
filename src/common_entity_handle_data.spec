@@ -25,8 +25,8 @@
       if (!FIELD_VALUE(nolinks))
         { //TODO: in R13, R14 these are optional. Look at page 53 in the spec
           //      for condition.
-          FIELD_HANDLE(prev_entity, 4);
-          FIELD_HANDLE(next_entity, 4);
+          FIELD_HANDLE(prev_entity, ANYCODE); // 4 or 8
+          FIELD_HANDLE(next_entity, ANYCODE); // 4 or 6
         }
     }
 
@@ -36,8 +36,8 @@
         {
           if (!FIELD_VALUE(nolinks))
             { //TODO: these are optional. see page 52
-              FIELD_HANDLE(prev_entity, 4);
-              FIELD_HANDLE(next_entity, 4);
+              FIELD_HANDLE(prev_entity, ANYCODE); // 4 or 8
+              FIELD_HANDLE(next_entity, ANYCODE); // 4 or 6
             }
         }
     }
