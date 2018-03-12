@@ -58,12 +58,15 @@ static bool env_var_checked_p;
 
 #define FIELD(name,type)\
   _obj->name = bit_read_##type(dat);\
+  FIELD_TRACE(name,type)
+
+#define FIELD_TRACE(name,type)\
   LOG_TRACE(#name ": " FORMAT_##type "\n", _obj->name)
 
 #define FIELD_VALUE(name) _obj->name
 
 #define ANYCODE -1
-#define FIELD_HANDLE(name, handle_code)\
+#define FIELD_HANDLE(name, handle_code)  \
   if (handle_code>=0)\
     {\
       _obj->name = dwg_decode_handleref_with_code(dat, obj, dwg, handle_code);\
@@ -73,6 +76,21 @@ static bool env_var_checked_p;
       _obj->name = dwg_decode_handleref(dat, obj, dwg);\
     }\
   LOG_TRACE(#name ": HANDLE(%d.%d.%lu) absolute:%lu\n",\
+        _obj->name->handleref.code,\
+        _obj->name->handleref.size,\
+        _obj->name->handleref.value,\
+        _obj->name->absolute_ref)
+#define FIELD_HANDLE_N(name, vcount, handle_code)  \
+  if (handle_code>=0)\
+    {\
+      _obj->name = dwg_decode_handleref_with_code(dat, obj, dwg, handle_code);\
+    }\
+  else\
+    {\
+      _obj->name = dwg_decode_handleref(dat, obj, dwg);\
+    }\
+  LOG_TRACE(#name "[%d]: HANDLE(%d.%d.%lu) absolute:%lu\n",\
+        (int)vcount,\
         _obj->name->handleref.code,\
         _obj->name->handleref.size,\
         _obj->name->handleref.value,\
@@ -148,10 +166,19 @@ static bool env_var_checked_p;
   FIELD_VALUE(name) = (BITCODE_H*) malloc(sizeof(BITCODE_H) * size);\
   for (vcount=0; vcount<size; vcount++)\
     {\
-      FIELD_HANDLE(name[vcount], code);\
+      FIELD_HANDLE_N(name[vcount], vcount, code);  \
     }
 
 #define HANDLE_VECTOR(name, sizefield, code) HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code)
+
+//skip non-zero bytes and a terminating zero
+#define FIELD_INSERT_COUNT(insert_count, type)   \
+      FIELD_VALUE(insert_count)=0; \
+      while (bit_read_RC(dat)) \
+        {\
+          FIELD_VALUE(insert_count)++;\
+        }\
+      FIELD_TRACE(insert_count, type)
 
 #define FIELD_XDATA(name, size)\
   _obj->name = dwg_decode_xdata(dat, _obj->size)
@@ -160,14 +187,14 @@ static bool env_var_checked_p;
   FIELD_VALUE(reactors) = (BITCODE_H*) malloc(sizeof(BITCODE_H) * obj->tio.object->num_reactors);\
   for (vcount=0; vcount<obj->tio.object->num_reactors; vcount++)\
     {\
-      FIELD_HANDLE(reactors[vcount], code);\
+      FIELD_HANDLE_N(reactors[vcount], vcount, code);      \
     }
 
 #define ENT_REACTORS(code)\
   FIELD_VALUE(reactors) = (BITCODE_H*) malloc(sizeof(BITCODE_H) * obj->tio.entity->num_reactors);\
   for (vcount=0; vcount<obj->tio.entity->num_reactors; vcount++)\
     {\
-      FIELD_HANDLE(reactors[vcount], code);\
+      FIELD_HANDLE_N(reactors[vcount], vcount, code);\
     }
 
 #define XDICOBJHANDLE(code)\
@@ -175,12 +202,12 @@ static bool env_var_checked_p;
     {\
       if (!obj->tio.object->xdic_missing_flag)\
         {\
-          FIELD_HANDLE(xdicobjhandle, code);\
+          FIELD_HANDLE(xdicobjhandle, code);  \
         }\
     }\
   PRIOR_VERSIONS\
     {\
-      FIELD_HANDLE(xdicobjhandle, code);\
+      FIELD_HANDLE(xdicobjhandle, code);      \
     }
 
 #define ENT_XDICOBJHANDLE(code)\
@@ -188,12 +215,12 @@ static bool env_var_checked_p;
     {\
       if (!obj->tio.entity->xdic_missing_flag)\
         {\
-          FIELD_HANDLE(xdicobjhandle, code);\
+          FIELD_HANDLE(xdicobjhandle, code);  \
         }\
     }\
   PRIOR_VERSIONS\
     {\
-      FIELD_HANDLE(xdicobjhandle, code);\
+      FIELD_HANDLE(xdicobjhandle, code);      \
     }
 
 #define REPEAT_N(times, name, type) \

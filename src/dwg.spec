@@ -1694,14 +1694,7 @@ DWG_OBJECT(BLOCK_HEADER);
 
   SINCE(R_2000)
     {
-
-      //skip non-zero bytes and a terminating zero:
-      FIELD_VALUE(insert_count)=0;
-      while (bit_read_RC(dat))
-        {
-          FIELD_VALUE(insert_count)++;
-        }
-
+      FIELD_INSERT_COUNT(insert_count, RL);
       FIELD(block_description, TV);
 
       FIELD(size_of_preview_data, BL);
@@ -1739,7 +1732,8 @@ DWG_OBJECT(BLOCK_HEADER);
 
   SINCE(R_2000)
     {
-      HANDLE_VECTOR(insert_handles, insert_count, ANYCODE)
+      if (FIELD_VALUE(insert_count))
+        HANDLE_VECTOR(insert_handles, insert_count, 7)
       FIELD_HANDLE(layout_handle, 5);
     }
 
@@ -1959,11 +1953,11 @@ DWG_OBJECT(VIEW);
 
   SINCE(R_2000)
     {
-	  if (FIELD_VALUE(associated_ucs) & 1)
-	    {
+      if (FIELD_VALUE(associated_ucs) & 1)
+        {
           FIELD_HANDLE(base_ucs_handle, ANYCODE);
           FIELD_HANDLE(named_ucs_handle, ANYCODE);
-		}
+	}
     }
 
   SINCE(R_2007)

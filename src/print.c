@@ -35,6 +35,8 @@
 #define IS_PRINT
 
 #define FIELD(name,type)\
+  FIELD_TRACE(name,type)
+#define FIELD_TRACE(name,type)\
   LOG_TRACE(#name ": " FORMAT_##type "\n", _obj->name)
 
 #define FIELD_VALUE(name) _obj->name
@@ -42,6 +44,13 @@
 #define ANYCODE -1
 #define FIELD_HANDLE(name, handle_code)\
   LOG_TRACE(#name ": HANDLE(%d.%d.%lu) absolute:%lu\n",\
+        _obj->name->handleref.code,\
+        _obj->name->handleref.size,\
+        _obj->name->handleref.value,\
+        _obj->name->absolute_ref)
+#define FIELD_HANDLE_N(name, vcount, handle_code)\
+  LOG_TRACE(#name "[%d]: HANDLE(%d.%d.%lu) absolute:%lu\n",\
+        (int)vcount,\
         _obj->name->handleref.code,\
         _obj->name->handleref.size,\
         _obj->name->handleref.value,\
@@ -109,17 +118,21 @@
 #define HANDLE_VECTOR_N(name, size, code)\
   for (vcount=0; vcount<size; vcount++)\
     {\
-      FIELD_HANDLE(name[vcount], code);\
+      FIELD_HANDLE_N(name[vcount], vcount, code);\
     }
 
-#define HANDLE_VECTOR(name, sizefield, code) HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code)
+#define HANDLE_VECTOR(name, sizefield, code) \
+  HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code)
+
+#define FIELD_INSERT_COUNT(insert_count, type)   \
+      FIELD_TRACE(insert_count, type)
 
 #define FIELD_XDATA(name, size)
 
 #define REACTORS(code)\
   for (vcount=0; vcount<obj->tio.object->num_reactors; vcount++)\
     {\
-      FIELD_HANDLE(reactors[vcount], code);\
+      FIELD_HANDLE_N(reactors[vcount], vcount, code);\
     }
 
 #define XDICOBJHANDLE(code)\

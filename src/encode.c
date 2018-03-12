@@ -19,6 +19,7 @@
  * modified by Thien-Thi Nguyen
  * modified by Till Heuschmann
  * modified by Anderson Pierre Cardoso
+ * modified by Reini Urban
  */
 
 #include "config.h"
@@ -58,6 +59,8 @@ static bool env_var_checked_p;
 
 #define FIELD(name,type)\
   bit_write_##type(dat, _obj->name);\
+  FIELD_TRACE(name,type)
+#define FIELD_TRACE(name,type)\
   if (loglevel>=2)\
     {\
         LOG_TRACE(#name ": " FORMAT_##type "\n", _obj->name)\
@@ -96,7 +99,7 @@ static bool env_var_checked_p;
   }
 
 #define FIELD_BE(name)\
-bit_write_BE(dat, FIELD_VALUE(name.x), FIELD_VALUE(name.y), FIELD_VALUE(name.z));
+  bit_write_BE(dat, FIELD_VALUE(name.x), FIELD_VALUE(name.y), FIELD_VALUE(name.z));
 
 #define FIELD_2RD_VECTOR(name, size)\
   for (vcount=0; vcount< _obj->size; vcount++)\
@@ -120,14 +123,16 @@ bit_write_BE(dat, FIELD_VALUE(name.x), FIELD_VALUE(name.y), FIELD_VALUE(name.z))
 #define REACTORS(code)\
   for (vcount=0; vcount<obj->tio.object->num_reactors; vcount++)\
     {\
-      FIELD_HANDLE(reactors[vcount], code);\
+      FIELD_HANDLE_N(reactors[vcount], vcount, code);    \
     }
     
 #define XDICOBJHANDLE(code)\
   SINCE(R_2004)\
     {\
-      if (!obj->tio.object->xdic_missing_flag)\
-        FIELD_HANDLE(xdicobjhandle, code);\
+      if (!obj->tio.object->xdic_missing_flag) \
+        {\
+          FIELD_HANDLE(xdicobjhandle, code);\
+        }\
     }\
   PRIOR_VERSIONS\
     {\
@@ -164,19 +169,35 @@ bit_write_BE(dat, FIELD_VALUE(name.x), FIELD_VALUE(name.y), FIELD_VALUE(name.z))
         }\
     }
 
-#define FIELD_VECTOR(name, type, size) FIELD_VECTOR_N(name, type, _obj->size)
+#define FIELD_VECTOR(name, type, size) \
+  FIELD_VECTOR_N(name, type, _obj->size)
 
-// XXX need a review
 #define FIELD_HANDLE(name, handle_code) \
-    bit_write_H(dat, &_obj->name->handleref)
+  assert(_obj->name); \
+  if (handle_code != ANYCODE && _obj->name->handleref.code != handle_code) \
+    { \
+      LOG_ERROR("Expected a CODE %d handle, got a %d\n", \
+                handle_code, _obj->name->handleref.code); \
+    } \
+  bit_write_H(dat, &_obj->name->handleref)
+
+#define FIELD_HANDLE_N(name, vcount, handle_code)\
+  FIELD_HANDLE(name, handle_code)
 
 #define HANDLE_VECTOR_N(name, size, code)\
+  if (size>0) \
+    assert(_obj->name); \
   for (vcount=0; vcount<size; vcount++)\
     {\
-      FIELD_HANDLE(name[vcount], code);\
+      assert(_obj->name[vcount]); \
+      FIELD_HANDLE_N(name[vcount], vcount, code);   \
     }
 
-#define HANDLE_VECTOR(name, sizefield, code) HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code)
+#define FIELD_INSERT_COUNT(insert_count, type)   \
+      FIELD_RL(insert_count)
+
+#define HANDLE_VECTOR(name, sizefield, code) \
+  HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code)
 
 #define FIELD_XDATA(name, size)
 
@@ -221,7 +242,7 @@ bit_write_BE(dat, FIELD_VALUE(name.x), FIELD_VALUE(name.y), FIELD_VALUE(name.z))
   FIELD_VALUE(reactors) = (BITCODE_H*) malloc(sizeof(BITCODE_H) * obj->tio.entity->num_reactors);\
   for (vcount=0; vcount<obj->tio.entity->num_reactors; vcount++)\
     {\
-      FIELD_HANDLE(reactors[vcount], code);\
+      FIELD_HANDLE_N(reactors[vcount], vcount, code);      \
     }
 
 
@@ -250,7 +271,7 @@ dwg_encode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg, Dwg_Objec
 void 
 dwg_encode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj,Dwg_Data* dwg, Dwg_Object_Ref* ref, int code);
 void
-dwg_encode_add_object(Dwg_Object * obj, Bit_Chain * dat, long unsigned int address);
+dwg_encode_add_object(Dwg_Object * obj, Bit_Chain * dat, unsigned long address);
 
 /*--------------------------------------------------------------------------------
  * Public variables
@@ -722,7 +743,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
 
 void
 dwg_encode_add_object(Dwg_Object * obj, Bit_Chain * dat,
-    long unsigned int address)
+    unsigned long address)
 {
   long unsigned int previous_address;
   long unsigned int object_address;
