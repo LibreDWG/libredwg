@@ -1,11 +1,11 @@
-#include <dwg.h>
-#include <dwg_api.h>
-#include "suffix.c"
-#include "common.c"
-#include <libxml/tree.h>
-#include <libxml/parser.h>
 #include <string.h>
 #include <stdlib.h>
+#include "dwg.h"
+#include "dwg_api.h"
+#include "suffix.c"
+#include <libxml/tree.h>
+#include <libxml/parser.h>
+#include "common.c"
 
 /*
  * This functions creates all the common attributes that are common to every object
@@ -16,18 +16,18 @@
 void
 common_attr (xmlNodePtr node, Dwg_Object dwgobject)
 {
-  char *pointprepare;
+  const xmlChar *pointprepare;
 
   //Start adding the common attributes
 
   pointprepare = doubletohex (dwgobject.handle.value);
-  xmlNewProp (node, "Handle", pointprepare);
+  xmlNewProp (node, (const xmlChar *)"Handle", pointprepare);
 
   pointprepare = doubletochar (dwgobject.tio.entity->linetype_scale);
-  xmlNewProp (node, "LinetypeScale", pointprepare);
+  xmlNewProp (node, (const xmlChar *)"LinetypeScale", pointprepare);
 
   pointprepare = doubletochar (dwgobject.tio.entity->lineweight);
-  xmlNewProp (node, "Lineweight", pointprepare);
+  xmlNewProp (node, (const xmlChar *)"Lineweight", pointprepare);
 
 
 }
@@ -45,7 +45,7 @@ add_line (xmlNodePtr rootnode, Dwg_Object dwgobject)
   //Some Fixed Variables
   const char *type = "IAcadLine";
   const char *desc = "IAcadLine: AutoCAD Line Interface";
-  char *pointprepare;
+  xmlChar *pointprepare;
 
   //The start of the entity
   xmlNodePtr dwgentity = xmlNewChild (rootnode, NULL, "DwgEntity", NULL);
@@ -83,7 +83,7 @@ add_circle (xmlNodePtr rootnode, Dwg_Object dwgobject)
   //Some fixed Variables
   const char *type = "IAcadCircle";
   const char *desc = "IAcadCircle: AutoCAD Circle Interface";
-  char *pointprepare, *dtostring;
+  xmlChar *pointprepare, *dtostring;
   //the start of the entity
   xmlNodePtr dwgentity = xmlNewChild (rootnode, NULL, "DwgEntity", NULL);
 
@@ -150,7 +150,7 @@ add_arc (xmlNodePtr rootnode, Dwg_Object dwgobject)
   //Some fixed Variables
   const char *type = "IAcadArc";
   const char *desc = "IAcadArc: AutoCAD Arc Interface";
-  char *pointprepare, *dtostring;
+  xmlChar *pointprepare, *dtostring;
 
   //the start of the entity
   xmlNodePtr dwgentity = xmlNewChild (rootnode, NULL, "DwgEntity", NULL);
@@ -409,7 +409,7 @@ add_text (xmlNodePtr rootnode, Dwg_Object dwgobject)
   //Some fixed Variables
   const char *type = "IAcadMText";
   const char *desc = "IAcadMText: AutoCAD MText Interface";
-  char *pointprepare, *dtostring;
+  unsigned char *pointprepare, *dtostring;
   //the start of the entity
   xmlNodePtr dwgentity = xmlNewChild (rootnode, NULL, "DwgEntity", NULL);
 

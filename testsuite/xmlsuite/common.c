@@ -12,21 +12,22 @@
  *  @param double y The Y Co-ordinate
  *  @param double z The Z Co-ordinate
  *
- *  @return char* Converted string in the specified pattern
+ *  @return xmlChar* Converted string in the specified pattern
  */
-char *
+xmlChar *
 spointprepare (double x, double y, double z)
 {
-  char *result;
+  xmlChar *result;
+  int n;
 
   // Allocating memory for the string
-  result = malloc (100 * sizeof (char));
-  int n = sprintf (result, "(%.4f %.4f %.4f)", x, y, z);
+  result = malloc (100 * sizeof (xmlChar));
+  n = sprintf ((char*)result, "(%.4f %.4f %.4f)", x, y, z);
 
   //Check if it was transfered properly
   if (n < 0)
     {
-      strcpy (result, ""); /* return empty string on error */
+      strcpy ((char*)result, ""); /* return empty string on error */
     }
 
   return result;
@@ -38,19 +39,19 @@ spointprepare (double x, double y, double z)
  *
  * @return char* Return the converted double in string. Return empty string if error
  */
-char *
+xmlChar *
 doubletochar (double x)
 {
-  char *result;
+  xmlChar *result;
   int n;
 
   /* Allocate memory for the string */
-  result = malloc (50 * sizeof (char));
-  n = sprintf (result, "%.4f", x);
+  result = malloc (50 * sizeof (xmlChar));
+  n = sprintf ((char*)result, "%.4f", x);
 
   if (n < 0)
     {
-      strcpy (result, ""); /* Return empty string on error */
+      strcpy ((char*)result, ""); /* Return empty string on error */
     }
 
   return result;
@@ -65,21 +66,22 @@ doubletochar (double x)
  * @param double x The x co-ordinate of the point
  * @param doubel y The y co-ordinate of the point
  *
- * @return char* Returns the string in the given format. Return empty string on error
+ * @return xmlChar* Returns the string in the given format. Return empty string on error
  */
-char *
+xmlChar *
 spointprepare2 (double x, double y)
 {
-  char *result;
+  xmlChar *result;
+  int n;
 
   /* allocate memory for the string */
-  result = malloc (50 * sizeof (char));
-  int n = sprintf (result, "(%.4f %.4f)", x, y);
+  result = malloc (50 * sizeof (xmlChar));
+  n = sprintf ((char*)result, "(%.4f %.4f)", x, y);
 
   //Check if it was transfered properly
   if (n < 0)
     {
-      strcpy (result, ""); /* return empty string on error */
+      strcpy ((char*)result, ""); /* return empty string on error */
     }
 
   return result;
@@ -93,21 +95,21 @@ spointprepare2 (double x, double y)
  *
  * @return char* The converted hex in string
  */
-char *
+xmlChar *
 doubletohex (double handle)
 {
-  char *result;
+  xmlChar *result;
+  int n;
 
   /* allocate memory for the string */
-  result = malloc (20 * sizeof (char));
-
-  int n = sprintf (result, "%03x", handle);
+  result = malloc (20 * sizeof (xmlChar));
+  n = sprintf ((char*)result, "%03x", (unsigned int)handle);
 
   //Check if it was transfered properly
 
   if (n < 0)
     {
-      strcpy (result, ""); /* return empty string on error */
+      strcpy ((char*)result, ""); /* return empty string on error */
     }
 
   return result;
