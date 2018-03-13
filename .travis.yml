@@ -1,0 +1,42 @@
+language: c
+sudo: false
+os:
+  - linux
+#  - osx
+addons:
+  apt:
+    packages:
+      - libxml2
+      - texinfo
+matrix:
+  fast_finish: true
+  include:
+    - compiler: gcc
+      env: CONF="--enable-trace --enable-write"
+      #addons:
+      #  apt:
+      #    packages:
+      #      - valgrind
+    - compiler: gcc
+      env: DISTCHECK=1
+    - compiler: clang
+      #env: ASAN=1
+      #addons:
+      #  apt:
+      #    packages:
+      #      - clang-3.8
+
+branches:
+  except:
+    - /^v[0-9]+/
+    - appveyor
+
+install:
+  - sh autogen.sh
+
+script:
+  #- if [ $ASAN = "1" ]; then CC="clang-3.8 -fsanitize=address"; fi
+  - ./configure $CONF
+  - make -j4
+  - make check
+  - if [ "$DISTCHECK" = "1" ]; then make distcheck; fi
