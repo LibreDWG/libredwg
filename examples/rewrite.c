@@ -11,8 +11,11 @@
 /*****************************************************************************/
 
 /*
- * Rewrite.c: load a DWG file and rewrite it
+ * rewrite.c: load a DWG file and rewrite it,
+ * optionally as a different version.
+ *
  * written by Anderson Pierre Cardoso
+ * modified by Reini Urban
  */
 
 #include <stdio.h>
@@ -23,65 +26,114 @@
 #include "dwg.h"
 #include "../src/common.h"
 
+int usage() {
+  printf("\nUsage:\trewrite [-as-rxxxx] <dwg_input_file.dwg> [<dwg_output_file.dwg>]\n");
+  return 1;
+}
+
 int
 main (int argc, char *argv[])
 {
   int error;
-  Dwg_Data dwg_struct;
-  char* filename_in = argv[1];
-  char* filename_out = argv[2];
+  Dwg_Data dwg;
+  char* filename_in;
+  const char *version = NULL;
+  char* filename_out = NULL;
+  Dwg_Version_Type dwg_version;
 
-  // check entry
-  if (argc <= 2 || strcmp(argv[1],argv[2]) == 0 )
+  // check args
+  if (argc < 2)
+    return usage();
+  filename_in = argv[1];
+
+  if (argc > 2 && !strncmp(argv[1], "-as-r", 5))
     {
-      printf("\n\nUsage:\t./rewrite <dwg_input_file.dwg> <dwg_output_file.dwg>\n"
-             "\t<dwg_input_file.dwg> must be different from <dwg_output_file.dwg>\n\n");
-      return 1;
+      const char *opt = argv[1];
+      if (!strcmp(opt, "-as-r13") ||
+          !strcmp(opt, "-as-r14") ||
+          !strcmp(opt, "-as-r2000") ||
+          !strcmp(opt, "-as-r2004") ||
+          !strcmp(opt, "-as-r2007") ||
+          !strcmp(opt, "-as-r2010") ||
+          !strcmp(opt, "-as-r2013") ||
+          !strcmp(opt, "-as-r2018"))
+        {
+          version = &opt[4];
+          if (!strcmp(version, "r13"))
+            dwg_version = R_13;
+          else if (!strcmp(version, "r14"))
+            dwg_version = R_14;
+          else if (!strcmp(version, "r2000"))
+            dwg_version = R_2000;
+          else if (!strcmp(version, "r2004"))
+            dwg_version = R_2004;
+          else if (!strcmp(version, "r2007"))
+            dwg_version = R_2007;
+          else if (!strcmp(version, "r2010"))
+            dwg_version = R_2010;
+          else if (!strcmp(version, "r2013"))
+            dwg_version = R_2013;
+          else if (!strcmp(version, "r2018"))
+            dwg_version = R_2018;
+          filename_in = argv[2];
+          argc--;
+        }
+      else
+        {
+          fprintf(stderr, "Invalid option %s\n", opt);
+          return usage();
+        }
     }
+  if (argc > 2)
+    filename_out = argv[2];
+  else
+    {
+      filename_out = strdup(filename_in);
+      filename_out = strcat(filename_out, "-rewrite.dwg\0");
+    }
+  
+  if (strcmp(filename_in, filename_out) == 0)
+    return usage();
 
   /*
    * some very simple testing
    */
   // reads the file
-  printf("\n ===== \n Reading original file \n =====\n");
-  error = dwg_read_file(filename_in, &dwg_struct);
+  printf("Reading DWG file %s\n", filename_in);
+  error = dwg_read_file(filename_in, &dwg);
 
   if (error)
-    {
-      printf("\nREAD ERROR!\n\n");
-    }
+      printf("READ ERROR\n");
   else
-    {
-      printf("\nREAD SUCCESS!\n\n");
-    }
+      printf("READ SUCCESS\n");
 
   // rewrite it
-  printf("\n ===== \n Writing new file \n =====\n");
-  error = dwg_write_file(filename_out, &dwg_struct);
+  printf("Writing DWG file %s", filename_out);
+  if (version) {
+    printf(" as %s\n", version);
+    if (dwg.header.from_version != dwg.header.version)
+      dwg.header.from_version = dwg.header.version;
+    //else keep from_version = 0
+    dwg.header.version = dwg_version;
+  } else {
+    printf("\n");
+  }
+  error = dwg_write_file(filename_out, &dwg);
 
   if (error)
-    {
-      printf("\nWRITE ERROR!\n\n");
-    }
+      printf("WRITE ERROR\n");
   else
-    {
-      printf("\nWRITE SUCCESS!\n\n");
-    }
+      printf("WRITE SUCCESS\n");
   
-  dwg_free(&dwg_struct);
+  dwg_free(&dwg);
 
   // try to read again
-  printf("\n ===== \n Reading created file \n =====\n");
-  error = dwg_read_file(filename_out, &dwg_struct);
-
+  printf("Re-reading created file %s\n", filename_out);
+  error = dwg_read_file(filename_out, &dwg);
   if (error)
-    {
-      printf("\nre-READ ERROR!\n\n");
-    }
+      printf("re-READ ERROR\n");
   else
-    {
-      printf("\nre-READ SUCCESS!\n\n");
-    }
+      printf("re-READ SUCCESS\n");
 
   return error;
 }

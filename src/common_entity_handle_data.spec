@@ -1,3 +1,6 @@
+#undef IF_ENCODE_FROM_EARLIER
+#define IF_ENCODE_FROM_EARLIER if (0)
+
 #ifdef IS_DECODER
   if (FIELD_VALUE(entity_mode)==0)
     {

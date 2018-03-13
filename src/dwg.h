@@ -2808,7 +2808,8 @@ typedef struct _dwg_struct
 {
   struct
   {
-    unsigned int version;
+    unsigned int version; /* see Dwg_Version_Type */
+    unsigned int from_version;
     unsigned int codepage;
     unsigned int num_sections;
     Dwg_Section* section;
@@ -2816,7 +2817,7 @@ typedef struct _dwg_struct
     Dwg_Section_Info* section_info;
   } header;
 
-#		define DWG_UNKNOWN1_SIZE 123
+#define DWG_UNKNOWN1_SIZE 123
   Dwg_Chain unknown1;
 
   Dwg_Chain picture;

@@ -111,6 +111,7 @@ dwg_write_file(char *filename, Dwg_Data * dwg_data)
   struct stat atrib;
   Bit_Chain bit_chain;
   bit_chain.version = (Dwg_Version_Type)dwg_data->header.version;
+  bit_chain.from_version = (Dwg_Version_Type)dwg_data->header.from_version;
 
   // Encode the DWG struct
    bit_chain.size = 0;
@@ -356,7 +357,8 @@ dwg_get_object(Dwg_Object* obj, Dwg_Object_Ref* ref)
   return -1;
 }
 
-Dwg_Object* get_first_owned_object(Dwg_Object* hdr_obj, Dwg_Object_BLOCK_HEADER* hdr){
+Dwg_Object* get_first_owned_object(Dwg_Object* hdr_obj, Dwg_Object_BLOCK_HEADER* hdr)
+{
   unsigned int version = hdr_obj->parent->header.version;
 
   if (R_13 <= version && version <= R_2000)

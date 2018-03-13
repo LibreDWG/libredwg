@@ -28,6 +28,9 @@
 #define DWG_LOGLEVEL DWG_LOGLEVEL_TRACE
 #include "logging.h"
 
+/* the current version per spec block */
+static unsigned int cur_ver = 0;
+
 /*--------------------------------------------------------------------------------
  * MACROS
  */

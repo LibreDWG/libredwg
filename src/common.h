@@ -20,14 +20,21 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-#define VERSION(v) if (dat->version == v)
-#define VERSIONS(v1,v2) if (dat->version >= v1 && dat->version <= v2)
+#define TODO_ENCODER fprintf(stderr, "TODO: Encoder\n");
+#define TODO_DECODER fprintf(stderr, "TODO: Decoder\n");
+
+#define VERSION(v) cur_ver = v; if (dat->version == v)
+#define VERSIONS(v1,v2) cur_ver = v2; if (dat->version >= v1 && dat->version <= v2)
 #define OTHER_VERSIONS else
-#define PRE(v) if (dat->version < v)
-#define SINCE(v) if (dat->version >= v)
+#define PRE(v) cur_ver = v; if (dat->version < v)
+#define SINCE(v) cur_ver = v; if (dat->version >= v)
 #define PRIOR_VERSIONS else
-#define UNTIL(v) if (dat->version <= v)
+#define UNTIL(v) cur_ver = v; if (dat->version <= v)
 #define LATER_VERSIONS else
+
+// when writing, check also rewriting from an earlier version and fill in a default then
+#define IF_ENCODE_FROM_EARLIER \
+  if (dat->from_version && dat->from_version < cur_ver)
 
 typedef enum DWG_VERSION_TYPE
 {

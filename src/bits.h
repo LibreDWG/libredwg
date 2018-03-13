@@ -45,6 +45,7 @@ typedef struct _bit_chain
   long unsigned int byte;
   unsigned char bit;
   Dwg_Version_Type version;
+  Dwg_Version_Type from_version;
 } Bit_Chain;
 
 /* Functions for raw data manipulations.

@@ -37,6 +37,8 @@
 
 /* The logging level for the write (encode) path.  */
 static unsigned int loglevel;
+/* the current version per spec block */
+static unsigned int cur_ver = 0;
 
 #ifdef USE_TRACING
 /* This flag means we have checked the environment variable
@@ -82,7 +84,8 @@ static bool env_var_checked_p;
 #define FIELD_RL(name) FIELD(name, RL);
 #define FIELD_MC(name) FIELD(name, MC);
 #define FIELD_MS(name) FIELD(name, MS);
-#define FIELD_TV(name) FIELD(name, TV);
+#define FIELD_TV(name) \
+  IF_ENCODE_FROM_EARLIER { _obj->name = strdup(""); } FIELD(name, TV);
 #define FIELD_T FIELD_TV /*TODO: implement version dependant string fields */
 #define FIELD_BT(name) FIELD(name, BT);
 
@@ -176,13 +179,15 @@ static bool env_var_checked_p;
   FIELD_VECTOR_N(name, type, _obj->size)
 
 #define FIELD_HANDLE(name, handle_code) \
+  IF_ENCODE_FROM_EARLIER { ; } else {   \
   assert(_obj->name); \
   if (handle_code != ANYCODE && _obj->name->handleref.code != handle_code) \
     { \
       LOG_ERROR("Expected a CODE %d handle, got a %d\n", \
                 handle_code, _obj->name->handleref.code); \
     } \
-  bit_write_H(dat, &_obj->name->handleref)
+  bit_write_H(dat, &_obj->name->handleref); \
+  }
 
 #define FIELD_HANDLE_N(name, vcount, handle_code)\
   FIELD_HANDLE(name, handle_code)
@@ -748,7 +753,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
   return 0;
 }
 
-#include <dwg.spec>
+#include "dwg.spec"
 
 /* returns 1 if object could be decoded and 0 otherwise
  */
@@ -1338,7 +1343,7 @@ static void
 dwg_encode_header_variables(Bit_Chain* dat, Dwg_Data * dwg)
 {
   Dwg_Header_Variables* _obj = &dwg->header_vars;
-  Dwg_Object* obj=0;
+  Dwg_Object* obj = 0;
 
   #include "header_variables.spec"
 }

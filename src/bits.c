@@ -869,17 +869,19 @@ bit_read_CRC(Bit_Chain * dat)
 {
   unsigned int result;
   unsigned char res[2];
+  long unsigned int start_address;
 
   if (dat->bit > 0)
     {
       dat->byte++;
       dat->bit = 0;
     }
-
+  start_address = dat->byte;
   res[0] = bit_read_RC(dat);
   res[1] = bit_read_RC(dat);
 
   result = (unsigned int) (res[0] << 8 | res[1]);
+  LOG_TRACE("read CRC at %lx: 0x%x\n", start_address, result)
 
   return result;
 }
@@ -888,7 +890,7 @@ bit_read_CRC(Bit_Chain * dat)
  */
 int
 bit_check_CRC(Bit_Chain * dat, long unsigned int start_address,
-    unsigned int seed)
+              unsigned int seed)
 {
   unsigned int calculated;
   unsigned int read;
@@ -898,13 +900,14 @@ bit_check_CRC(Bit_Chain * dat, long unsigned int start_address,
     dat->byte++;
   dat->bit = 0;
 
-  calculated = bit_ckr8(seed, &(dat->chain[start_address]), dat->byte
-      - start_address);
+  calculated = bit_ckr8(seed, &(dat->chain[start_address]),
+                        dat->byte - start_address);
 
   res[0] = bit_read_RC(dat);
   res[1] = bit_read_RC(dat);
 
   read = (unsigned int) (res[0] << 8 | res[1]);
+  LOG_TRACE("check CRC at %lx: 0x%x <=> 0x%x\n", start_address, calculated, read)
 
   return (calculated == read);
 }
@@ -913,7 +916,7 @@ bit_check_CRC(Bit_Chain * dat, long unsigned int start_address,
  */
 unsigned int
 bit_write_CRC(Bit_Chain * dat, long unsigned int start_address,
-    unsigned int seed)
+              unsigned int seed)
 {
   unsigned int crc;
 
@@ -924,7 +927,7 @@ bit_write_CRC(Bit_Chain * dat, long unsigned int start_address,
 
   bit_write_RC(dat, (unsigned char) (crc >> 8));
   bit_write_RC(dat, (unsigned char) (crc & 0xFF));
-
+  LOG_TRACE("write CRC at %lx: 0x%x\n", start_address, crc)
   return (crc);
 }
 

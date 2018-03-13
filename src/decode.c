@@ -37,6 +37,8 @@ bit_ckr8(unsigned int dx, unsigned char *adr, long n);
 
 /* The logging level for the read (decode) path.  */
 unsigned int loglevel;
+/* the current version per spec block */
+static unsigned int cur_ver = 0;
 
 #ifdef USE_TRACING
 /* This flag means we have checked the environment variable
@@ -402,9 +404,11 @@ dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
         "This file's version code is: %s\n", version)
       return -1;
     }
-  dat->version = (Dwg_Version_Type)dwg->header.version;
+  dat->version = dwg->header.version;
   LOG_INFO("This file's version code is: %s\n", version)
-
+  dwg->header.from_version = 0;
+  dat->from_version = 0;
+    
   PRE(R_2000)
     {
       LOG_INFO(
@@ -513,7 +517,7 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
   ckr2 = bit_read_RS(dat);
   if (ckr != ckr2)
     {
-      printf("header crc todo ckr:%x ckr2:%x\n", ckr, ckr2);
+      printf("header crc todo ckr:%d ckr2:%d\n", ckr, ckr2);
       return 1;
     }
 
@@ -585,25 +589,30 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
   // Check CRC-on
   dat->byte = dwg->header.section[0].address + dwg->header.section[0].size - 18;
   dat->bit = 0;
-
+  if (!bit_check_CRC(dat, dat->byte, 0xc0c1))
+    {
+      printf("Warning: section %d crc failed\n", dwg->header.section[0].number);
+      /*return -1;*/
+    }
+  
+  /*
   ckr = bit_read_RS(dat);
   ckr2 = bit_ckr8(0xc0c1, dat->chain + dwg->header.section[0].address + 16,
-          dwg->header.section[0].size - 34);
-
+                  dwg->header.section[0].size - 34);
   if (ckr != ckr2)
     {
-      printf("section %d crc todo ckr:%x ckr2:%x\n",
+      printf("section %d crc todo ckr:%d ckr2:%d\n",
               dwg->header.section[0].number, ckr, ckr2);
       return -1;
     }
-
+  */
   /*-------------------------------------------------------------------------
    * Classes
    */
-  LOG_INFO("\n=======> CLASS: %8X\n",
-          (unsigned int) dwg->header.section[1].address)
-  LOG_INFO("         CLASS (end): %8X\n",
-          (unsigned int) (dwg->header.section[1].address
+  LOG_INFO("\n=======> CLASS: %8lX\n",
+           (long)dwg->header.section[1].address)
+  LOG_INFO("         CLASS (end): %8lX\n",
+           (long)(dwg->header.section[1].address
               + dwg->header.section[1].size))
   dat->byte = dwg->header.section[1].address + 16;
   dat->bit = 0;
@@ -1385,6 +1394,7 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *dwg,
   sec_dat->chain   = (unsigned char *)decomp;
   sec_dat->size    = max_decomp_size;
   sec_dat->version = dat->version;
+  sec_dat->from_version = dat->from_version;
 
   return 0;
 }
@@ -2319,7 +2329,7 @@ static void
 dwg_decode_header_variables(Bit_Chain* dat, Dwg_Data * dwg)
 {
   Dwg_Header_Variables* _obj = &dwg->header_vars;
-  Dwg_Object* obj=0;
+  Dwg_Object* obj = 0;
 
   #include "header_variables.spec"
 }

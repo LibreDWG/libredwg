@@ -25,15 +25,16 @@
 #ifdef IS_DECODER
 #define ENCODER if (0)
 #define DECODER if (1)
+#undef IF_ENCODE_FROM_EARLIER
+#define IF_ENCODE_FROM_EARLIER if (0)
 #endif
 
 #ifdef IS_PRINT
 #define ENCODER if (0)
 #define DECODER if (0)
+#undef IF_ENCODE_FROM_EARLIER
+#define IF_ENCODE_FROM_EARLIER if (0)
 #endif
-
-#define TODO_ENCODER fprintf(stderr, "TODO: Encoder\n");
-#define TODO_DECODER fprintf(stderr, "TODO: Decoder\n");
 
 DWG_ENTITY(UNUSED);
 
