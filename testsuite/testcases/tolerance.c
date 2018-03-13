@@ -55,7 +55,7 @@ api_process (dwg_object * obj)
 {
   int height_error, dimgap_error, ext_error, ins_pt_error, x_dir_error,
     text_error;
-  float height, dimgap;
+  BITCODE_BD height, dimgap;
   dwg_point_3d ins_pt, x_dir, ext;	//3d_points 
   char *text_string;
 

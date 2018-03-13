@@ -30,7 +30,7 @@ api_process (dwg_object * obj)
 {
   int start_w_error, end_w_error, ext_error, thickness_error, elevation_error,
     curve_type_error, flags_error, owned_obj_error;
-  float start_width, end_width, elevation, thickness;
+  BITCODE_BD start_width, end_width, elevation, thickness;
   long owned_obj;
   unsigned int flags, curve_type;
   dwg_point_3d ext;

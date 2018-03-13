@@ -39,7 +39,7 @@ void
 api_process (dwg_object * obj)
 {
   int pt_error, ext_error, thickness_error;
-  float thickness;
+  BITCODE_BD thickness;
   dwg_point_3d ext, points;
   dwg_ent_point *point = dwg_object_to_POINT (obj);
 

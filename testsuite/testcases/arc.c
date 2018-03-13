@@ -24,77 +24,83 @@ output_object (dwg_object * obj)
 void
 api_process (dwg_object * obj)
 {
-  int radius_error, thickness_error, ext_error, center_error, start_error,
-    end_error;
-  float radius, thickness, start_angle, end_angle;
+  int error;
+  BITCODE_BD radius, thickness, start_angle, end_angle;
   dwg_point_3d center, ext;
 
   // casts an object to arc entity 
   dwg_ent_arc *arc = dwg_object_to_ARC (obj);
 
   // returns radius of arc
-  radius = dwg_ent_arc_get_radius (arc, &radius_error);
-  if (radius_error == 0 && radius == arc->radius)	// error checking 
+  radius = dwg_ent_arc_get_radius (arc, &error);
+  if (error == 0 && radius == arc->radius)
     {
-      pass ("Working Properly");
+      pass ("arc_get_radius");
     }
   else
     {
-      fail ("error in reading radius");
+      fail ("arc_get_radius error=%d radius=%f arc->radius=%f",
+            error, radius, arc->radius);
     }
 
   // returns thickness of arc
-  thickness = dwg_ent_arc_get_thickness (arc, &thickness_error);
-  if (thickness_error == 0 && thickness == arc->thickness)	// error checking
+  thickness = dwg_ent_arc_get_thickness (arc, &error);
+  if (error == 0 && thickness == arc->thickness)
     {
-      pass ("Working Properly");
+      pass ("arc_get_thickness");
     }
   else
     {
-      fail ("error in reading thickness");
+      fail ("arc_get_thickness");
     }
 
   // Returns arc extrusion
-  dwg_ent_arc_get_extrusion (arc, &ext, &ext_error);
-  if (ext_error == 0 && ext.x == arc->extrusion.x && ext.y == arc->extrusion.y && ext.z == arc->extrusion.z)	// error checking 
+  dwg_ent_arc_get_extrusion (arc, &ext, &error);
+  if (error == 0 && ext.x == arc->extrusion.x &&
+      ext.y == arc->extrusion.y && ext.z == arc->extrusion.z)
     {
-      pass ("Working Properly");
+      pass ("arc_get_extrusion");
     }
   else
     {
-      fail ("error in reading extrusion");
+      fail ("arc_get_extrusion error=%d ext.x=%f arc->extrusion.x=%f",
+            error, ext.x, arc->extrusion.x);
     }
 
   // returns center of arc
-  dwg_ent_arc_get_center (arc, &center, &center_error);
-  if (center_error == 0 && center.x == arc->center.x && center.y == arc->center.y && center.z == arc->center.z)	// arc checking
+  dwg_ent_arc_get_center (arc, &center, &error);
+  if (error == 0 && center.x == arc->center.x &&
+      center.y == arc->center.y && center.z == arc->center.z)	// arc checking
     {
-      pass ("Working Properly");
+      pass ("arc_get_center");
     }
   else
     {
-      fail ("error in reading center");
+      fail ("arc_get_center error=%d center.x=%f arc->center.x=%f",
+            error, center.x, arc->center.x);
     }
 
   // returns start angle  
-  start_angle = dwg_ent_arc_get_start_angle (arc, &start_error);
-  if (start_error == 0 && start_angle == arc->start_angle)	// error checking
+  start_angle = dwg_ent_arc_get_start_angle (arc, &error);
+  if (error == 0 && start_angle == arc->start_angle)
     {
-      pass ("Working Properly");
+      pass ("arc_get_start_angle");
     }
   else
     {
-      fail ("error in reading start angle");
+      fail ("arc_get_start_angle error=%d start_angle=%f arc->start_angle=%f",
+            error, start_angle, arc->start_angle);
     }
 
-  // returns thickness angle
-  thickness = dwg_ent_arc_get_end_angle (arc, &end_error);
-  if (end_error == 0 && thickness == arc->thickness)
+  // returns end_angle
+  end_angle = dwg_ent_arc_get_end_angle (arc, &error);
+  if (error == 0 && end_angle == arc->end_angle)
     {
-      pass ("Working Properly");
+      pass ("arc_get_end_angle");
     }
   else
     {
-      fail ("error in reading end angle");
+      fail ("arc_get_end_angle error=%d end_angle=%f arc->end_angle=%f",
+            error, end_angle, arc->end_angle);
     }
 }

@@ -59,7 +59,7 @@ void
 api_process (dwg_object * obj)
 {
   int scale_error, just_error, ext_error, base_point_error, num_lines_error, num_verts_error, num_lines, verts_error;	// Error reporting
-  float scale;
+  BITCODE_BD scale;
   char just;
   unsigned int oc, num_verts;
   dwg_point_3d base_point, ext;	//3d_points 

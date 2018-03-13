@@ -26,7 +26,7 @@ api_process (dwg_object * obj)
 {
   int value_error, ins_pt_error, ext_error, thickness_error, rot_error,
     vert_error, horiz_error, height_error;
-  float thickness, rotation, vert_align, horiz_align, height;
+  BITCODE_BD thickness, rotation, vert_align, horiz_align, height;
   char *attdef_value;
   dwg_point_3d ext;
   dwg_point_2d ins_pt;

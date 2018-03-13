@@ -69,7 +69,7 @@ api_process (dwg_object * obj)
   dwg_point_3d ins_pt, ext, scale;
   double rot_angle;
   char scale_flag, attribs;
-  float col_space, row_space;
+  BITCODE_BD col_space, row_space;
   long obj_count, num_rows, num_cols;
   dwg_ent_minsert *minsert = dwg_object_to_MINSERT (obj);
 

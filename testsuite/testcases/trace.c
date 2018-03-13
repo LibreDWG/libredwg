@@ -56,7 +56,7 @@ api_process (dwg_object * obj)
 {
   int elevation_error, ext_error, thickness_error, c1_error, c2_error,
     c3_error, c4_error;
-  float thickness, elevation;
+  BITCODE_BD thickness, elevation;
   dwg_point_3d ext;
   dwg_point_2d c1, c2, c3, c4;
   dwg_ent_trace *trace = dwg_object_to_TRACE (obj);
