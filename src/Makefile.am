@@ -29,11 +29,13 @@ libredwg_la_SOURCES = \
 	encode.c \
         print.c \
 	dwg_api.c
+#       encode_r2007.c
 libredwg_la_LDFLAGS = \
 	-version-info 0:0:0
 
-include_HEADERS = dwg.h \
-		dwg_api.h
+include_HEADERS = \
+	dwg.h \
+	dwg_api.h
 
 .c.i:
 	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -56,17 +58,3 @@ check-syntax:
 	test -n "$(CHK_SOURCES)" && \
 	  $(COMPILE) -o /dev/null -S $(CHK_SOURCES)
 .PHONY: check-syntax
-
-#check_PROGRAMS = test testsvg
-
-#test_SOURCES = \
-#	test.c
-
-#test_LDADD = libredwg.la
-
-#testsvg_SOURCES = \
-#	testSVG.c
-
-#testsvg_LDADD = libredwg.la
-
-#testsvg_LDFLAGS = -lm
