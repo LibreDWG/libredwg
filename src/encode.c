@@ -26,6 +26,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <string.h>
 #include <assert.h>
 
@@ -70,8 +71,10 @@ static bool env_var_checked_p;
 
 #define FIELD_B(name) FIELD(name, B);
 #define FIELD_BB(name) FIELD(name, BB);
+#define FIELD_3B(name) FIELD(name, 3B);
 #define FIELD_BS(name) FIELD(name, BS);
 #define FIELD_BL(name) FIELD(name, BL);
+#define FIELD_BLL(name) FIELD(name, BLL);
 #define FIELD_BD(name) FIELD(name, BD);
 #define FIELD_RC(name) FIELD(name, RC);
 #define FIELD_RS(name) FIELD(name, RS);
@@ -102,26 +105,26 @@ static bool env_var_checked_p;
   bit_write_BE(dat, FIELD_VALUE(name.x), FIELD_VALUE(name.y), FIELD_VALUE(name.z));
 
 #define FIELD_2RD_VECTOR(name, size)\
-  for (vcount=0; vcount< _obj->size; vcount++)\
+  for (vcount=0; vcount < (long)_obj->size; vcount++)\
     {\
       FIELD_2RD(name[vcount]);\
     }
 
 #define FIELD_2DD_VECTOR(name, size)\
   FIELD_2RD(name[0]);\
-  for (vcount = 1; vcount < _obj->size; vcount++)\
+  for (vcount = 1; vcount < (long)_obj->size; vcount++)\
     {\
       FIELD_2DD(name[vcount], FIELD_VALUE(name[vcount - 1].x), FIELD_VALUE(name[vcount - 1].y));\
     }
 
 #define FIELD_3DPOINT_VECTOR(name, size)\
-  for (vcount=0; vcount< _obj->size; vcount++)\
+  for (vcount=0; vcount < (long)_obj->size; vcount++)   \
     {\
       FIELD_3DPOINT(name[vcount]);\
     }
 
 #define REACTORS(code)\
-  for (vcount=0; vcount<obj->tio.object->num_reactors; vcount++)\
+  for (vcount=0; vcount < (long)obj->tio.object->num_reactors; vcount++) \
     {\
       FIELD_HANDLE_N(reactors[vcount], vcount, code);    \
     }
@@ -159,12 +162,12 @@ static bool env_var_checked_p;
 #define FIELD_VECTOR_N(name, type, size)\
   if (size>0)\
     {\
-      for (vcount=0; vcount< size; vcount++)\
+      for (vcount=0; vcount < (long)size; vcount++)\
         {\
           bit_write_##type(dat, _obj->name[vcount]);\
           if (loglevel>=2)\
             {\
-                LOG_TRACE(#name "[%d]: " FORMAT_##type "\n", vcount, _obj->name[vcount])\
+              LOG_TRACE(#name "[%ld]: " FORMAT_##type "\n", (long)vcount, _obj->name[vcount]) \
             }\
         }\
     }
@@ -187,7 +190,7 @@ static bool env_var_checked_p;
 #define HANDLE_VECTOR_N(name, size, code)\
   if (size>0) \
     assert(_obj->name); \
-  for (vcount=0; vcount<size; vcount++)\
+  for (vcount=0; vcount < (long)size; vcount++)\
     {\
       assert(_obj->name[vcount]); \
       FIELD_HANDLE_N(name[vcount], vcount, code);   \
@@ -205,23 +208,23 @@ static bool env_var_checked_p;
  dwg_encode_common_entity_handle_data(dat, obj);
 
 #define REPEAT_N(times, name, type) \
-  for (rcount=0; rcount<times; rcount++)
+  for (rcount=0; (long)rcount<(long)times; rcount++)
 
 #define REPEAT(times, name, type) \
-  for (rcount=0; rcount<_obj->times; rcount++)
+  for (rcount=0; (long)rcount<(long)_obj->times; rcount++)
 
 #define REPEAT2(times, name, type) \
-  for (rcount2=0; rcount2<_obj->times; rcount2++)
+  for (rcount2=0; (long)rcount2<(long)_obj->times; rcount2++)
 
 #define REPEAT3(times, name, type) \
-  for (rcount3=0; rcount3<_obj->times; rcount3++)
+  for (rcount3=0; (long)rcount3<(long)_obj->times; rcount3++)
 
 //TODO unify REPEAT macros!
 
 #define DWG_ENTITY(token) \
   static void dwg_encode_##token (Bit_Chain * dat, Dwg_Object* obj)	\
 {\
-  int vcount, rcount, rcount2, rcount3;\
+  long vcount, rcount, rcount2, rcount3;\
   Dwg_Data* dwg = obj->parent;\
   Dwg_Entity_##token * _obj = obj->tio.entity->tio.token;\
   LOG_INFO("Entity " #token ":\n")\
@@ -231,7 +234,7 @@ static bool env_var_checked_p;
 #define DWG_OBJECT(token) \
   static void dwg_encode_##token (Bit_Chain * dat, Dwg_Object* obj) \
 {\
-  int vcount, rcount, rcount2, rcount3;\
+  long vcount, rcount, rcount2, rcount3;\
   Dwg_Data* dwg = obj->parent; \
   Dwg_Object_##token * _obj = obj->tio.object->tio.token; \
   LOG_INFO("Entity " #token ":\n")\
@@ -266,6 +269,8 @@ static void
 dwg_encode_common_entity_handle_data(Bit_Chain * dat, Dwg_Object * obj);
 static void
 dwg_encode_header_variables(Bit_Chain* dat, Dwg_Data * dwg);
+static int
+dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj);
 void
 dwg_encode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg, Dwg_Object_Ref* ref);
 void 
@@ -284,7 +289,8 @@ int
 dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
 {
   int ckr_missing;
-  long unsigned int i, j;
+  int i;
+  long unsigned int j;
   long unsigned int section_address;
   unsigned char pvzbit;
   long unsigned int pvzadr;
@@ -370,8 +376,8 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
   //dwg->picture.size = 0; // If one desires not to copy pictures,
                            // should un-comment this line
   bit_write_sentinel(dat, dwg_sentinel(DWG_SENTINEL_PICTURE_BEGIN));
-  for (i = 0; i < dwg->picture.size; i++)
-    bit_write_RC(dat, dwg->picture.chain[i]);
+  for (j = 0; j < dwg->picture.size; j++)
+    bit_write_RC(dat, dwg->picture.chain[j]);
   if (dwg->picture.size == 0)
     {
       bit_write_RL(dat, 5);
@@ -423,15 +429,15 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
   pvzadr = dat->byte; // Afterwards one must rewrite the correct values of size here
   bit_write_RL(dat, 0); // Size of the section
 
-  for (i = 0; i < dwg->num_classes; i++)
+  for (j = 0; j < dwg->num_classes; j++)
     {
-      bit_write_BS(dat, dwg->dwg_class[i].number);
-      bit_write_BS(dat, dwg->dwg_class[i].version);
-      bit_write_TV(dat, dwg->dwg_class[i].appname);
-      bit_write_TV(dat, dwg->dwg_class[i].cppname);
-      bit_write_TV(dat, dwg->dwg_class[i].dxfname);
-      bit_write_B(dat, dwg->dwg_class[i].wasazombie);
-      bit_write_BS(dat, dwg->dwg_class[i].item_class_id);
+      bit_write_BS(dat, dwg->dwg_class[j].number);
+      bit_write_BS(dat, dwg->dwg_class[j].version);
+      bit_write_TV(dat, dwg->dwg_class[j].appname);
+      bit_write_TV(dat, dwg->dwg_class[j].cppname);
+      bit_write_TV(dat, dwg->dwg_class[j].dxfname);
+      bit_write_B(dat,  dwg->dwg_class[j].wasazombie);
+      bit_write_BS(dat, dwg->dwg_class[j].item_class_id);
     }
 
   /* Write the size of the section at its beginning
@@ -463,46 +469,46 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
   /* Define object-map
    */
   omap = (Object_Map *) malloc(dwg->num_objects * sizeof(Object_Map));
-  for (i = 0; i < dwg->num_objects; i++)
+  for (j = 0; j < dwg->num_objects; j++)
     {
       Bit_Chain nkn;
       Dwg_Handle tkt;
 
       /* Define the handle of each object, including unknown */
-      omap[i].idc = i;
-      if (dwg->object[i].supertype == DWG_SUPERTYPE_ENTITY)
-        omap[i].handle = dwg->object[i].handle.value;
-      else if (dwg->object[i].supertype == DWG_SUPERTYPE_OBJECT)
-        omap[i].handle = dwg->object[i].handle.value;
-      else if (dwg->object[i].supertype == DWG_SUPERTYPE_UNKNOWN)
+      omap[j].idc = j;
+      if (dwg->object[j].supertype == DWG_SUPERTYPE_ENTITY)
+        omap[j].handle = dwg->object[j].handle.value;
+      else if (dwg->object[j].supertype == DWG_SUPERTYPE_OBJECT)
+        omap[j].handle = dwg->object[j].handle.value;
+      else if (dwg->object[j].supertype == DWG_SUPERTYPE_UNKNOWN)
         {
-          nkn.chain = dwg->object[i].tio.unknown;
-          nkn.size = dwg->object[i].size;
+          nkn.chain = dwg->object[j].tio.unknown;
+          nkn.size = dwg->object[j].size;
           nkn.byte = nkn.bit = 0;
           bit_read_BS(&nkn);
           bit_read_RL(&nkn);
           bit_read_H(&nkn, &tkt);
-          omap[i].handle = tkt.value;
+          omap[j].handle = tkt.value;
         }
       else
-        omap[i].handle = 0x7FFFFFFF; /* Error! */
+        omap[j].handle = 0x7FFFFFFF; /* Error! */
 
       /* Arrange the sequence of handles according to a growing order  */
-      if (i > 0)
+      if (j > 0)
         {
-          j = i;
-          while (omap[j].handle < omap[j - 1].handle)
+          unsigned long k = j;
+          while (omap[k].handle < omap[k - 1].handle)
             {
-              omap[j - 1].handle = pvzmap.handle;
-              omap[j - 1].idc = pvzmap.idc;
+              omap[k - 1].handle = pvzmap.handle;
+              omap[k - 1].idc = pvzmap.idc;
 
-              omap[j - 1].handle = omap[j].handle;
-              omap[j - 1].idc = omap[j].idc;
+              omap[k - 1].handle = omap[k].handle;
+              omap[k - 1].idc = omap[k].idc;
 
-              omap[j].handle = pvzmap.handle;
-              omap[j].idc = pvzmap.idc;
-              j--;
-              if (j == 0)
+              omap[k].handle = pvzmap.handle;
+              omap[k].idc = pvzmap.idc;
+              k--;
+              if (k == 0)
                 break;
             }
         }
@@ -511,10 +517,10 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
 
   /* Write the objects
    */
-  for (i = 0; i < dwg->num_objects; i++)
+  for (j = 0; j < dwg->num_objects; j++)
     {
-      omap[i].address = dat->byte;
-      obj = &dwg->object[omap[i].idc];
+      omap[j].address = dat->byte;
+      obj = &dwg->object[omap[j].idc];
       if (obj->supertype == DWG_SUPERTYPE_UNKNOWN)
         {
           bit_write_MS(dat, obj->size);
@@ -525,7 +531,8 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
         }
       else
         {
-	  if (obj->supertype == DWG_SUPERTYPE_ENTITY || obj->supertype == DWG_SUPERTYPE_OBJECT)
+	  if (obj->supertype == DWG_SUPERTYPE_ENTITY ||
+              obj->supertype == DWG_SUPERTYPE_OBJECT)
 	    dwg_encode_add_object(obj, dat, dat->byte);
 	  /*
           if (obj->supertype == DWG_SUPERTYPE_ENTITY)
@@ -539,11 +546,11 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
               exit(-1);
             }
         }
-      bit_write_CRC(dat, omap[i].address, 0xC0C1);
+      bit_write_CRC(dat, omap[j].address, 0xC0C1);
     }
-    for (i = 0; i < dwg->num_objects; i++) 
+    for (j = 0; j < dwg->num_objects; j++) 
       LOG_INFO ("Object(%lu): %6lu / Address: %08lX / Idc: %u\n", 
-		 i, omap[i].handle, omap[i].address, omap[i].idc);
+		 j, omap[j].handle, omap[j].address, omap[j].idc);
 
   /* Unknown bitdouble between objects and object map
    */
@@ -561,16 +568,16 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
   dat->byte += 2;
   last_address = 0;
   last_handle = 0;
-  for (i = 0; i < dwg->num_objects; i++)
+  for (j = 0; j < dwg->num_objects; j++)
     {
       unsigned int idc;
       long int pvz;
 
-      idc = omap[i].idc;
+      idc = omap[j].idc;
 
       pvz = omap[idc].handle - last_handle;
       bit_write_MC(dat, pvz);
-      //printf ("Handle(%i): %6lu / ", i, pvz);
+      //printf ("Handle(%i): %6lu / ", j, pvz);
       last_handle = omap[idc].handle;
 
       pvz = omap[idc].address - last_address;
@@ -579,7 +586,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
       last_address = omap[idc].address;
 
 
-      //dwg dwg_encode_add_object(dwg->object[i], dat, last_address);
+      //dwg dwg_encode_add_object(dwg->object[j], dat, last_address);
 
       ckr_missing = 1;
       if (dat->byte - pvzadr > 2030) // 2029
@@ -662,10 +669,12 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
   bit_write_BS(dat, 14);
   for (i = 0; i < 14; i++)
     {
-      bit_write_RC(dat, dwg->second_header.handlerik[i].size);
+      int i2;
+      struct _handlerik *handle = &dwg->second_header.handlerik[i];
+      bit_write_RC(dat, handle->size);
       bit_write_RC(dat, i);
-      for (j = 0; j < dwg->second_header.handlerik[i].size; j++)
-        bit_write_RC(dat, dwg->second_header.handlerik[i].chain[j]);
+      for (i2 = 0; i2 < handle->size; i2++)
+        bit_write_RC(dat, handle->chain[i2]);
     }
 
   /* Go back to begin to write the size
@@ -705,11 +714,11 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
    */
   dat->byte = section_address;
   dat->bit = 0;
-  for (i = 0; i < dwg->header.num_sections; i++)
+  for (j = 0; j < dwg->header.num_sections; j++)
     {
-      bit_write_RC(dat, dwg->header.section[i].number);
-      bit_write_RL(dat, dwg->header.section[i].address);
-      bit_write_RL(dat, dwg->header.section[i].size);
+      bit_write_RC(dat, dwg->header.section[j].number);
+      bit_write_RL(dat, dwg->header.section[j].address);
+      bit_write_RL(dat, dwg->header.section[j].size);
     }
 
   /* Write CRC's
@@ -720,20 +729,20 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
   dat->byte -= 2;
   switch (dwg->header.num_sections)
     {
-  case 3:
-    bit_write_RS(dat, ckr ^ 0xA598);
-    break;
-  case 4:
-    bit_write_RS(dat, ckr ^ 0x8101);
-    break;
-  case 5:
-    bit_write_RS(dat, ckr ^ 0x3CC4);
-    break;
-  case 6:
-    bit_write_RS(dat, ckr ^ 0x8461);
-    break;
-  default:
-    bit_write_RS(dat, ckr);
+    case 3:
+      bit_write_RS(dat, ckr ^ 0xA598);
+      break;
+    case 4:
+      bit_write_RS(dat, ckr ^ 0x8101);
+      break;
+    case 5:
+      bit_write_RS(dat, ckr ^ 0x3CC4);
+      break;
+    case 6:
+      bit_write_RS(dat, ckr ^ 0x8461);
+      break;
+    default:
+      bit_write_RS(dat, ckr);
     }
 
   return 0;
@@ -741,12 +750,143 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
 
 #include <dwg.spec>
 
+/* returns 1 if object could be decoded and 0 otherwise
+ */
+static int
+dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
+{
+  int i;
+
+  if ((obj->type - 500) > dwg->num_classes)
+    return 0;
+
+  i = obj->type - 500;
+
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "DICTIONARYVAR"))
+    {
+      dwg_encode_DICTIONARYVAR(dat, obj);
+      return 1;
+    }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "ACDBDICTIONARYWDFLT"))
+    {
+      dwg_encode_DICTIONARYWDLFT(dat, obj);
+      return 1;
+    }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "HATCH"))
+    {
+      dwg_encode_HATCH(dat, obj);
+      return 1;
+    }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "IDBUFFER"))
+    {
+      dwg_encode_IDBUFFER(dat, obj);
+      return 1;
+    }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "IMAGE"))
+    {
+      dwg_encode_IMAGE(dat, obj);
+      return 1;
+    }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "IMAGEDEF"))
+    {
+      dwg_encode_IMAGEDEF(dat, obj);
+      return 1;
+    }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "IMAGEDEF_REACTOR"))
+    {
+      dwg_encode_IMAGEDEFREACTOR(dat, obj);
+      return 1;
+    }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "LAYER_INDEX"))
+    {
+      dwg_encode_LAYER_INDEX(dat, obj);
+      return 1;
+    }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "LAYOUT"))
+    {
+      dwg_encode_LAYOUT(dat, obj);
+      return 1;
+    }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "LWPLINE"))
+    {
+      dwg_encode_LWPLINE(dat, obj);
+      return 1;
+    }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "OLE2FRAME"))
+    {
+      dwg_encode_OLE2FRAME(dat, obj);
+      return 1;
+    }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "ACDBPLACEHOLDER"))
+    {
+      dwg_encode_PLACEHOLDER(dat, obj);
+      return 1;
+    }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "PROXY"))
+    {
+      dwg_encode_PROXY(dat, obj);
+      return 1;
+    }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "RASTERVARIABLES"))
+    {
+      dwg_encode_RASTERVARIABLES(dat, obj);
+      return 1;
+    }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "SORTENTSTABLE"))
+    {
+      dwg_encode_SORTENTSTABLE(dat, obj);
+      return 1;
+    }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "SPATIAL_FILTER"))
+    {
+      dwg_encode_SPATIAL_FILTER(dat, obj);
+      return 1;
+    }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "SPATIAL_INDEX"))
+    {
+      dwg_encode_SPATIAL_INDEX(dat, obj);
+      return 1;
+    }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "TABLE"))
+    {
+      dwg_encode_TABLE(dat, obj);
+      return 1;
+    }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "VBA_PROJECT"))
+    {
+//TODO:      dwg_encode_VBA_PROJECT(dat, obj);
+      return 0;
+    }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "WIPEOUTVARIABLE"))
+    {
+//TODO:      dwg_encode_WIPEOUTVARIABLE(dat, obj);
+      return 0;
+    }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "XRECORD"))
+    {
+      dwg_encode_XRECORD(dat, obj);
+      return 1;
+    }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "DIMASSOC"))
+    {
+//TODO:      dwg_encode_DIMASSOC(dat, obj);
+      return 0;
+    }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "MATERIAL"))
+    {
+//TODO:      dwg_encode_MATERIAL(dat, obj);
+      return 0;
+    }
+
+  return 0;
+}
+
 void
 dwg_encode_add_object(Dwg_Object * obj, Bit_Chain * dat,
-    unsigned long address)
+                      unsigned long address)
 {
-  long unsigned int previous_address;
-  long unsigned int object_address;
+  unsigned long previous_address;
+  unsigned long object_address;
   unsigned char previous_bit;
 
   /* Keep the previous address
@@ -759,8 +899,8 @@ dwg_encode_add_object(Dwg_Object * obj, Bit_Chain * dat,
   dat->byte = address;
   dat->bit = 0;
 
-      LOG_INFO("\n\n======================\nObject number: %u",
-          obj->index)
+  LOG_INFO("\n\n======================\nObject number: %u",
+           obj->index)
 
   bit_write_MS(dat, obj->size);
   object_address = dat->byte;
@@ -991,7 +1131,16 @@ dwg_encode_add_object(Dwg_Object * obj, Bit_Chain * dat,
     dwg_encode_LAYOUT(dat, obj);
     break;
   default:
-    if (0)//!dwg_encode_variable_type(dwg, dat, obj))
+      if (obj->type == obj->parent->dwg_ot_layout)
+        {
+          dwg_encode_LAYOUT(dat, obj);
+        }
+      /* > 500:
+         TABLE, DICTIONARYWDLFT, IDBUFFER, IMAGE, IMAGEDEF, IMAGEDEFREACTOR,
+         LAYER_INDEX, OLE2FRAME, PROXY, RASTERVARIABLES, SORTENTSTABLE, SPATIAL_FILTER,
+         SPATIAL_INDEX
+      */
+      else if (!dwg_encode_variable_type(obj->parent, dat, obj))
       {
         LOG_INFO("Object UNKNOWN:\n")
 
@@ -1027,13 +1176,14 @@ dwg_encode_add_object(Dwg_Object * obj, Bit_Chain * dat,
   dat->bit = previous_bit;
 }
 
+/* unused. see DWG_SUPERTYPE_ENTITY in dwg_encode_chains */
 static void
 dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
 {
   //XXX not sure about this, someone should review
   unsigned int size;
   unsigned int extended_size;
-  int i;
+  unsigned int i;
   
   size =  obj->tio.entity->bitsize;
   bit_write_RL(dat, size);
@@ -1042,16 +1192,16 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
   bit_write_BS(dat, extended_size);
   bit_write_H(dat, &(obj->tio.entity->extended_handle));
   
-  for(i = extended_size - size; i< extended_size; i++)
+  for (i = extended_size - size; i< extended_size; i++)
     bit_write_RC(dat, obj->tio.entity->extended[i]);
     
   bit_write_B(dat, obj->tio.entity->picture_exists);
   if (obj->tio.entity->picture_exists)
     {
       bit_write_RL(dat, obj->tio.entity->picture_size);
-      if(obj->tio.entity->picture_size < 210210)
+      if (obj->tio.entity->picture_size < 210210)
         {
-          for(i=0; i< obj->tio.entity->picture_size; i++)
+          for (i=0; i< obj->tio.entity->picture_size; i++)
             bit_write_RC(dat, obj->tio.entity->picture[i]);
         }
       else 
@@ -1064,7 +1214,7 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
      }
   
   Dwg_Object_Entity* ent = obj->tio.entity;
-   VERSIONS(R_13,R_14)
+  VERSIONS(R_13,R_14)
     {
       bit_write_RL(dat, ent->bitsize);
     }
@@ -1137,21 +1287,25 @@ dwg_encode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg, Dwg_Objec
 }
 
 void 
-dwg_encode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj,Dwg_Data* dwg, Dwg_Object_Ref* ref, int code){
+dwg_encode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj,Dwg_Data* dwg, Dwg_Object_Ref* ref, int code)
+{
   //XXX fixme. will this function be necessary?
   //create the handle, then check the code. will it be necessary?
   dwg_encode_handleref(dat, obj, dwg, ref);
-  if (ref->handleref.code != code){
-    LOG_INFO("warning: trying to write handle with wrong code. Expected code=%d, got %d.\n", code, ref->handleref.code)
-  }
-};
+  if (ref->handleref.code != code)
+    {
+      LOG_INFO("Warning: trying to write handle with wrong code.\n"
+               "Expected code=%d, got %d.\n", code, ref->handleref.code)
+    }
+}
 
+/* unused. see DWG_SUPERTYPE_OBJECT in dwg_encode_chains */
 static void
 dwg_encode_object(Dwg_Object * obj, Bit_Chain * dat)
 {
- //XXX need a review
+  //XXX need a review
   Dwg_Object_Object* ord = obj->tio.object;
-  int i;
+  unsigned int i;
   
    SINCE(R_2000)
     {

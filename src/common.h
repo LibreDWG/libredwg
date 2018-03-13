@@ -31,9 +31,10 @@
 
 typedef enum DWG_VERSION_TYPE
 {
-  R_BEFORE, R_13, R_14, R_2000, R_2004, R_2007, R_2010, R_AFTER
+  R_BEFORE, R_13,  R_14,  R_2000, R_2004, R_2007, R_2010, R_2013, R_2018, R_AFTER
+  /*        AC1012,AC1014,AC1015, AC1018, AC1021, AC1024, AC1027, AC1032 */
 } Dwg_Version_Type;
-extern char version_codes[8][7];
+extern char version_codes[10][7];
 
 /**
  Data types (including compressed forms) used trough the file
@@ -65,6 +66,8 @@ typedef enum DWG_DATA_TYPE
   DWG_DT_3RD, /** 3 raw doubles **/
   DWG_DT_2BD, /** 2D point (2 bitdoubles) **/
   DWG_DT_3BD, /** 3D point (3 bitdoubles) **/
+  DWG_DT_3B,  /** special 3-bit code R24+ */
+  DWG_DT_BLL, /** bitlonglong R24+ */
   DWG_END_OF_HEADER_VARIABLES
 } Dwg_Data_Type;
 

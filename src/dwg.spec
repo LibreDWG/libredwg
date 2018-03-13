@@ -79,7 +79,7 @@ DWG_ENTITY (TEXT);
 
       if (!(FIELD_VALUE(dataflags) & 0x02))
         {
-          FIELD_2DD(alignment_pt, 10, 20);
+          FIELD_2DD(alignment_pt, 10.0, 20.0);
         }
 
       FIELD_BE(extrusion);
@@ -160,7 +160,7 @@ DWG_ENTITY(ATTRIB);
       FIELD_2RD(insertion_pt);
       if (!(FIELD_VALUE(dataflags) & 0x02))
         {
-          FIELD_2DD(alignment_pt, 10, 20);
+          FIELD_2DD(alignment_pt, 10.0, 20.0);
         }
       FIELD_BE(extrusion);
       FIELD(thickness, BT);
@@ -242,7 +242,7 @@ DWG_ENTITY(ATTDEF);
       FIELD_2RD(insertion_pt);
       if (!(FIELD_VALUE(dataflags) & 0x02))
         {
-          FIELD_2DD(alignment_pt, 10, 20);
+          FIELD_2DD(alignment_pt, 10.0, 20.0);
         }
       FIELD_BE(extrusion);
       FIELD(thickness, BT);
@@ -1249,13 +1249,14 @@ DWG_ENTITY_END
 #ifdef IS_DECODER
 
 #define DECODE_3DSOLID decode_3dsolid(dat, obj, _obj);
+void decode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj);
 
 void decode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
 {
   Dwg_Data* dwg = obj->parent;
   int vcount, rcount, rcount2;
   int i=0;
-  int j=0;
+  unsigned long j;
   int index;
   int total_size=0;
   int num_blocks=0;
@@ -1368,6 +1369,7 @@ void decode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
 #ifdef IS_ENCODER
 
 #define ENCODE_3DSOLID encode_3dsolid(dat, obj, _obj);
+void encode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj);
 
 void encode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
 {
@@ -2371,7 +2373,7 @@ DWG_OBJECT(GROUP);
   XDICOBJHANDLE(3);
   HANDLE_VECTOR(group_entries, num_handles, 5);
 
-DWG_OBJECT_END;
+DWG_OBJECT_END
 
 /*(73)*/
 DWG_OBJECT(MLINESTYLE);
@@ -2896,7 +2898,7 @@ DWG_ENTITY(TABLE);
   FIELD_BL (num_rows);
   FIELD_VECTOR(col_widths, BD, num_cols);
   FIELD_VECTOR(row_heights, BD, num_rows);
-  REPEAT_N(FIELD_VALUE(num_rows)*FIELD_VALUE(num_cols), cells, Dwg_Entity_TABLE_Cell)
+  REPEAT_N((long)(FIELD_VALUE(num_rows)*FIELD_VALUE(num_cols)), cells, Dwg_Entity_TABLE_Cell)
     {
       FIELD_BS(cells[rcount].type);
       FIELD_RC(cells[rcount].flags);
@@ -3463,7 +3465,7 @@ DWG_ENTITY(TABLE);
 
   FIELD_HANDLE(table_style_id, ANYCODE);
 
-  REPEAT_N(FIELD_VALUE(num_rows)*FIELD_VALUE(num_cols), cells, Dwg_Entity_TABLE_Cell)
+  REPEAT_N((long)(FIELD_VALUE(num_rows)*FIELD_VALUE(num_cols)), cells, Dwg_Entity_TABLE_Cell)
     {
       FIELD_HANDLE(cells[rcount].cell_handle, ANYCODE);
 

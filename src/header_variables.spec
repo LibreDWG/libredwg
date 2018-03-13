@@ -18,14 +18,14 @@
 
 
 
-/*
   VERSION(R_2007)
     {
       FIELD_RL(bitsize);
     }
-
-  FIELD_RL (bitsize);
-*/
+  SINCE(R_2013)
+    {
+      FIELD_BLL(requiredversions);
+    }
 
   FIELD_BD (unknown_0);
   FIELD_BD (unknown_1);
@@ -410,6 +410,15 @@
       FIELD_B (DIMFXLON);
     }
 
+  SINCE(R_2010)
+    {
+      FIELD_B (DIMTXTDIRECTION);
+      FIELD_BD (DIMALTMZF);
+      FIELD_T (DIMALTMZS);
+      FIELD_BD (DIMMZF);
+      FIELD_T (DIMMZS);
+    }
+
   SINCE(R_2000)
     {
       FIELD_HANDLE (DIMTXTSTY, ANYCODE);
@@ -473,6 +482,10 @@
       FIELD_HANDLE (DICTIONARY_VISUALSTYLE, ANYCODE);
     }
 
+  SINCE(R_2013)
+    {
+      FIELD_HANDLE (unknown_20, ANYCODE);
+    }
   SINCE(R_2000)
     {
       FIELD_BL (FLAGS);
@@ -509,48 +522,49 @@
 
   SINCE(R_2007)
     {
-      FIELD_B (unknown_20);
+      FIELD_B (CAMERADISPLAY);
       FIELD_BL (unknown_21);
       FIELD_BL (unknown_22);
       FIELD_BD (unknown_23);
-      FIELD_BD (unknown_24);
-      FIELD_BD (unknown_25);
-      FIELD_BD (unknown_26);
-      FIELD_BD (unknown_27);
-      FIELD_BD (unknown_28);
-      FIELD_RC (unknown_29);
-      FIELD_RC (unknown_30);
-      FIELD_BD (unknown_31);
-      FIELD_BD (unknown_32);
-      FIELD_BD (unknown_33);
-      FIELD_BD (unknown_34);
-      FIELD_BD (unknown_35);
-      FIELD_BD (unknown_36);
-      FIELD_BS (unknown_37);
-      FIELD_RC (unknown_38);
-      FIELD_BD (unknown_39);
-      FIELD_BD (unknown_40);
-      FIELD_BD (unknown_41);
-      FIELD_BL (unknown_42);
-      FIELD_RC (unknown_43);
-      FIELD_RC (unknown_44);
-      FIELD_RC (unknown_45);
-      FIELD_RC (unknown_46);
+      FIELD_BD (STEPSPERSEC);
+      FIELD_BD (STEPSIZE);
+      FIELD_BD (_3DDWFPREC);
+      FIELD_BD (LENSLENGTH);
+      FIELD_BD (CAMERAHEIGHT);
+      FIELD_RC (SOLIDHIST);
+      FIELD_RC (SHOWHIST);
+      FIELD_BD (PSOLWIDTH);
+      FIELD_BD (PSOLHEIGHT);
+      FIELD_BD (LOFTANG1);
+      FIELD_BD (LOFTANG2);
+      FIELD_BD (LOFTMAG1);
+      FIELD_BD (LOFTMAG2);
+      FIELD_BS (LOFTPARAM);
+      FIELD_RC (LOFTNORMALS);
+      FIELD_BD (LATITUDE);
+      FIELD_BD (LONGITUDE);
+      FIELD_BD (NORTHDIRECTION);
+      FIELD_BL (TIMEZONE);
+      FIELD_RC (LIGHTGLYPHDISPLAY);
+      FIELD_RC (TILEMODELIGHTSYNCH);
+      FIELD_RC (DWFFRAME);
+      FIELD_RC (DGNFRAME);
       FIELD_B (unknown_47);
-      FIELD_CMC (unknown_48);
-      FIELD_HANDLE (unknown_49, ANYCODE);
-      FIELD_HANDLE (unknown_50, ANYCODE);
-      FIELD_HANDLE (unknown_51, ANYCODE);
-      FIELD_RC (unknown_52);
+      FIELD_CMC (INTERFERECOLOR);
+      FIELD_HANDLE (INTERFEREOBJVS, ANYCODE);
+      FIELD_HANDLE (INTERFEREVPVS, ANYCODE);
+      FIELD_HANDLE (DRAGVS, ANYCODE);
+      FIELD_RC (CSHADOW);
       FIELD_BD (unknown_53);
     }
 
   SINCE(R_14)
     {
-      FIELD_BS (unknown_54);
+      FIELD_BS (unknown_54); /* (type 5/6 only) these do not seem to be required */
       FIELD_BS (unknown_55);
       FIELD_BS (unknown_56);
       FIELD_BS (unknown_57);
     }
 
   FIELD_RS (CRC);
+

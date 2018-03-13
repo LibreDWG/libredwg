@@ -141,6 +141,49 @@ bit_write_BB(Bit_Chain * dat, unsigned char value)
   bit_advance_position(dat, 2);
 }
 
+/** Read 1-3 bits
+ *  Keep reading bits until a zero bit is encountered, => 0-7.
+ */
+BITCODE_3B
+bit_read_3B(Bit_Chain * dat)
+{
+  BITCODE_3B next;
+  BITCODE_3B result = bit_read_B(dat);
+  if (result) {
+    next = bit_read_B(dat);
+    if (next) {
+      result <<= 1;
+      result |= next;
+      next = bit_read_B(dat);
+      if (next) {
+        result <<= 1;
+        next = bit_read_B(dat);
+        result |= next;
+      }
+    }
+  }
+  return result;
+}
+
+/** Write 1-3 bits
+ */
+void
+bit_write_3B(Bit_Chain * dat, unsigned char value)
+{
+  unsigned char mask;
+  unsigned char byte;
+
+  bit_write_B(dat, value & 1);
+  if (value) {
+    value >>= 1;
+    bit_write_B(dat, value & 1);
+    if (value) {
+      value >>= 1;
+      bit_write_B(dat, value & 1);
+    }
+  }
+}
+
 /** Read 1 nibble.
  */
 BITCODE_4BITS
@@ -166,8 +209,9 @@ bit_write_4BITS(Bit_Chain * dat, unsigned char value)
   remainder1 = byte & (0xff << (8 - dat->bit));
   remainder2 = byte & (0xff >> (dat->bit+4));
 
-//TODO: implement me.
-
+  //TODO: correct?
+  bit_write_RC(dat, (unsigned char)remainder1 | (value << 16));
+  bit_write_RC(dat, (unsigned char)remainder2 | (value & 0xff));
 }
 
 /** Read 1 byte (raw char).
@@ -398,6 +442,52 @@ bit_write_BL(Bit_Chain * dat, long unsigned int value)
     {
       bit_write_BB(dat, 1);
       bit_write_RC(dat, value);
+    }
+}
+
+/** Read 1 bitlonglong (compacted data). TODO
+ *  The first 1-3 bits indicate the length l (see paragraph 2.1). Then
+ *  l bytes follow, which represent the number (the least significant
+ *  byte is first).
+ */
+BITCODE_BLL
+bit_read_BLL(Bit_Chain * dat)
+{
+  unsigned int i, len;
+  BITCODE_BLL result = 0ULL;
+
+  len = bit_read_BB(dat) << 2 | bit_read_B(dat);
+
+  for (i=0; i < len; i++)
+    {
+      result <<= 8;
+      result |= bit_read_RC(dat);
+    }
+  return result;
+}
+
+/** Write 1 bitlonglong (compacted data).
+ */
+void
+bit_write_BLL(Bit_Chain * dat, BITCODE_BLL value)
+{
+  // 64bit into how many bytes?
+  int i;
+  int len = 0;
+  BITCODE_BLL umax = 0xf000000000000000ULL;
+  for (i=16; i; i--, umax >>= 8) {
+    if (value & umax) {
+      len = i; break;
+    }
+  }
+
+  bit_write_BB(dat, len << 8);
+  bit_write_B(dat,  len & 0xf);
+  for (i=0; i < len; i++)
+    {
+      //least significant byte first
+      bit_write_RC(dat, value & 0xFF);
+      value >>= 8;
     }
 }
 
@@ -757,7 +847,7 @@ bit_read_H(Bit_Chain * dat, Dwg_Handle * handle)
 void
 bit_write_H(Bit_Chain * dat, Dwg_Handle * handle)
 {
-  int i, j;
+  int i;
   unsigned char *val;
   unsigned char code_counter;
 
@@ -1007,7 +1097,7 @@ void
 bit_print(Bit_Chain * dat, long unsigned int size)
 {
   unsigned char sig;
-  long unsigned int i, j, k;
+  long unsigned int i, j;
 
   printf("---------------------------------------------------------");
   if (size > dat->size)
@@ -1032,7 +1122,7 @@ void
 bit_explore_chain(Bit_Chain * dat, long unsigned int size)
 {
   unsigned char sig;
-  long unsigned int i, j, k;
+  long unsigned int i, k;
 
   if (size > dat->size)
     size = dat->size;

@@ -30,7 +30,8 @@ check_PROGRAMS += rewrite
 rewrite_SOURCES = rewrite.c
 endif
 
-AM_LDFLAGS = -L../src -lredwg
+AM_CFLAGS = -Wextra -I$(top_srcdir)/src
+AM_LDFLAGS = -L../src $(top_builddir)/src/libredwg.la
 
 test_SOURCES = test.c
 
@@ -41,8 +42,6 @@ load_dwg_SOURCES = load_dwg.c
 get_bmp_SOURCES  = get_bmp.c
 testsvg2_SOURCES = testsvg2.c
 testsvg2_LDADD   = -lm
-
-AM_CFLAGS = -Wextra -I$(top_srcdir)/src
 
 TESTS_ENVIRONMENT = \
  PROGS='$(check_PROGRAMS)' \

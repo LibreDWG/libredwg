@@ -48,7 +48,11 @@ dwg_sentinel(Dwg_Sentinel s)
   return (sentinels[s]);
 }
 
-/* TODO: update with new codes */
-char version_codes[8][7] =
-  { "------", "AC1012", "AC1014", "AC1015", "AC1018", "AC1021", "AC1024", "------" };
+char version_codes[10][7] =
+  { "------", /* R_BEFORE */
+    /* R_13,   R_14,    R_2000,   R_2004,   R_2007, */
+    "AC1012", "AC1014", "AC1015", "AC1018", "AC1021",
+    /* R2010, R_2013,   R_2018,   R_AFTER */
+    "AC1024", "AC1027", "AC1032", "------"
+  };
 

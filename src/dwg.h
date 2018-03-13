@@ -16,10 +16,13 @@
  * modified by Felipe Corrêa da Silva Sances
  * modified by Rodrigo Rodrigues da Silva
  * modified by Till Heuschmann
+ * modified by Reini Urban
  */
 
 #ifndef DWG_H
 #define DWG_H
+
+#include <stdint.h>
 
 #ifdef __cplusplus
 //extern "C"
@@ -38,6 +41,9 @@
 #define FORMAT_B "%d"
 #define BITCODE_BB unsigned char
 #define FORMAT_BB "%d"
+/* Since R24 */
+#define BITCODE_3B unsigned char
+#define FORMAT_3B "%d"
 #define BITCODE_BS unsigned int
 #define FORMAT_BS "%d"
 #define BITCODE_RS unsigned int
@@ -48,6 +54,9 @@
 #define FORMAT_RD "%f"
 #define BITCODE_BL long unsigned int
 #define FORMAT_BL "%lu"
+/* Since R24 */
+#define BITCODE_BLL uint64_t
+#define FORMAT_BLL "%llu"
 #define BITCODE_TV char *
 #define FORMAT_TV "\"%s\""
 #define BITCODE_BT BITCODE_DOUBLE
@@ -188,13 +197,18 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_MLINESTYLE = 0x49,
   //DWG_TYPE_<UNKNOWN> = 0x4a
   //DWG_TYPE_<UNKNOWN> = 0x4b
-  //DWG_TYPE_<UNKNOWN> = 0x4c
+  //DWG_TYPE_<UNKNOWN> = 0x4c, /* TABLE? */ 
   DWG_TYPE_LWPLINE = 0x4d,
   DWG_TYPE_HATCH = 0x4e,
   DWG_TYPE_XRECORD = 0x4f,
   DWG_TYPE_PLACEHOLDER = 0x50,
-  //DWG_TYPE_<UNKNOWN> = 0x51,
+  //DWG_TYPE_<UNKNOWN> = 0x51, /* PROXY? */
   DWG_TYPE_LAYOUT = 0x52
+  /* > 500:
+     TABLE, DICTIONARYWDLFT, IDBUFFER, IMAGE, IMAGEDEF, IMAGEDEFREACTOR,
+     LAYER_INDEX, OLE2FRAME, PROXY, RASTERVARIABLES, SORTENTSTABLE, SPATIAL_FILTER,
+     SPATIAL_INDEX
+   */
 } Dwg_Object_Type;
 
 /**
@@ -220,13 +234,14 @@ typedef struct _dwg_object_ref
 /**
  Struct for CMC colors.
  */
-typedef struct _dwg_color
+typedef struct _dwg_color /* CmColor: R15 and earlier */
 {
   unsigned int index;
   long unsigned int rgb;
-  unsigned char byte;
+  unsigned char byte;    /* &1 name follows, &2 book name follows */
   char* name;
   char* book_name;
+  unsigned char transparency_type; /* 0 BYLAYER, 1 BYBLOCK, 3 alpha in the last byte */
 } Dwg_Color;
 
 struct _dwg_binary_chunk
@@ -261,17 +276,18 @@ typedef struct _dwg_resbuf
 
 typedef struct _dwg_header_variables {
   BITCODE_RL bitsize;
-  BITCODE_BD unknown_0;
-  BITCODE_BD unknown_1;
-  BITCODE_BD unknown_2;
-  BITCODE_BD unknown_3;
-  BITCODE_TV unknown_4;
-  BITCODE_TV unknown_5;
-  BITCODE_TV unknown_6;
-  BITCODE_TV unknown_7;
-  BITCODE_BL unknown_8;
-  BITCODE_BL unknown_9;
-  BITCODE_BS unknown_10;
+  BITCODE_BLL requiredversions;
+  BITCODE_BD unknown_0; /* 412148564080.0 */
+  BITCODE_BD unknown_1; /* 1.0 */
+  BITCODE_BD unknown_2; /* 1.0 */
+  BITCODE_BD unknown_3; /* 1.0 */
+  BITCODE_TV unknown_4; /* "" */
+  BITCODE_TV unknown_5; /* "" */
+  BITCODE_TV unknown_6; /* "" */
+  BITCODE_TV unknown_7; /* "" */
+  BITCODE_BL unknown_8; /* 24L */
+  BITCODE_BL unknown_9; /* 0L */
+  BITCODE_BS unknown_10; /* 0 */
   BITCODE_H current_viewport_entity_header;
   BITCODE_B DIMASO;
   BITCODE_B DIMSHO;
@@ -488,7 +504,12 @@ typedef struct _dwg_header_variables {
   BITCODE_BS DIMALTZ;
   BITCODE_BS DIMALTTZ;
   BITCODE_BS DIMATFIT;
-  BITCODE_B DIMFXLON;
+  BITCODE_B  DIMFXLON;
+  BITCODE_B  DIMTXTDIRECTION;
+  BITCODE_BD DIMALTMZF;
+  BITCODE_T  DIMALTMZS;
+  BITCODE_BD DIMMZF;
+  BITCODE_T  DIMMZS;
   BITCODE_H DIMTXTSTY;
   BITCODE_H DIMLDRBLK;
   BITCODE_H DIMBLK;
@@ -522,6 +543,7 @@ typedef struct _dwg_header_variables {
   BITCODE_H DICTIONARY_MATERIALS;
   BITCODE_H DICTIONARY_COLORS;
   BITCODE_H DICTIONARY_VISUALSTYLE;
+  BITCODE_H unknown_20;
   BITCODE_BL FLAGS;
   BITCODE_BS INSUNITS;
   BITCODE_BS CEPSNTYPE;
@@ -544,39 +566,39 @@ typedef struct _dwg_header_variables {
   BITCODE_H LTYPE_BYLAYER;
   BITCODE_H LTYPE_BYBLOCK;
   BITCODE_H LTYPE_CONTINUOUS;
-  BITCODE_B unknown_20;
+  BITCODE_B CAMERADISPLAY;
   BITCODE_BL unknown_21;
   BITCODE_BL unknown_22;
   BITCODE_BD unknown_23;
-  BITCODE_BD unknown_24;
-  BITCODE_BD unknown_25;
-  BITCODE_BD unknown_26;
-  BITCODE_BD unknown_27;
-  BITCODE_BD unknown_28;
-  BITCODE_RC unknown_29;
-  BITCODE_RC unknown_30;
-  BITCODE_BD unknown_31;
-  BITCODE_BD unknown_32;
-  BITCODE_BD unknown_33;
-  BITCODE_BD unknown_34;
-  BITCODE_BD unknown_35;
-  BITCODE_BD unknown_36;
-  BITCODE_BS unknown_37;
-  BITCODE_RC unknown_38;
-  BITCODE_BD unknown_39;
-  BITCODE_BD unknown_40;
-  BITCODE_BD unknown_41;
-  BITCODE_BL unknown_42;
-  BITCODE_RC unknown_43;
-  BITCODE_RC unknown_44;
-  BITCODE_RC unknown_45;
-  BITCODE_RC unknown_46;
+  BITCODE_BD STEPSPERSEC;
+  BITCODE_BD STEPSIZE;
+  BITCODE_BD _3DDWFPREC;
+  BITCODE_BD LENSLENGTH;
+  BITCODE_BD CAMERAHEIGHT;
+  BITCODE_RC SOLIDHIST;
+  BITCODE_RC SHOWHIST;
+  BITCODE_BD PSOLWIDTH;
+  BITCODE_BD PSOLHEIGHT;
+  BITCODE_BD LOFTANG1;
+  BITCODE_BD LOFTANG2;
+  BITCODE_BD LOFTMAG1;
+  BITCODE_BD LOFTMAG2;
+  BITCODE_BS LOFTPARAM;
+  BITCODE_RC LOFTNORMALS;
+  BITCODE_BD LATITUDE;
+  BITCODE_BD LONGITUDE;
+  BITCODE_BD NORTHDIRECTION;
+  BITCODE_BL TIMEZONE;
+  BITCODE_RC LIGHTGLYPHDISPLAY;
+  BITCODE_RC TILEMODELIGHTSYNCH;
+  BITCODE_RC DWFFRAME;
+  BITCODE_RC DGNFRAME;
   BITCODE_B unknown_47;
-  BITCODE_CMC unknown_48;
-  BITCODE_H unknown_49;
-  BITCODE_H unknown_50;
-  BITCODE_H unknown_51;
-  BITCODE_RC unknown_52;
+  BITCODE_CMC INTERFERECOLOR;
+  BITCODE_H INTERFEREOBJVS;
+  BITCODE_H INTERFEREVPVS;
+  BITCODE_H DRAGVS;
+  BITCODE_RC CSHADOW;
   BITCODE_BD unknown_53;
   BITCODE_BS unknown_54;
   BITCODE_BS unknown_55;
@@ -1410,7 +1432,7 @@ typedef struct _dwg_object_BLOCK_CONTROL
  */
 typedef struct _dwg_object_BLOCK_HEADER
 {
-  int __iterator;
+  BITCODE_BL __iterator;
   BITCODE_TV entry_name;
   BITCODE_B _64_flag;
   BITCODE_BS xrefindex_plus1;
@@ -2673,10 +2695,10 @@ typedef struct _dwg_object_object
   Dwg_Handle extended_handle;
   unsigned char *extended;
 
-//TODO: should these be removed?
+  //TODO: should these be removed?
   long unsigned int num_reactors;
   unsigned char xdic_missing_flag;
-  //		unsigned char picture_exists;
+  // unsigned char picture_exists;
 
   unsigned int num_handles;
   Dwg_Handle *handleref;
@@ -2815,7 +2837,7 @@ typedef struct _dwg_struct
   struct
   {
     unsigned char unknown[6];
-    struct
+    struct _handlerik
     {
       int size;
       unsigned char chain[4];
@@ -2844,8 +2866,9 @@ dwg_write_file(char *filename, Dwg_Data * dwg_data);
 
 void
 dwg_free(Dwg_Data * dwg);
+
 unsigned char*
-dwg_bmp(Dwg_Data *, long *);
+dwg_bmp(Dwg_Data *, BITCODE_RL *);
 
 double
 dwg_model_x_min(Dwg_Data *);
@@ -2873,6 +2896,12 @@ dwg_get_layer_count(Dwg_Data *);
 
 Dwg_Object_LAYER**
 dwg_get_layers(Dwg_Data *);
+
+long unsigned int
+dwg_get_object_count(Dwg_Data *dwg);
+
+long unsigned int
+dwg_get_object_object_count(Dwg_Data *dwg);
 
 long unsigned int
 dwg_get_entity_count(Dwg_Data *);

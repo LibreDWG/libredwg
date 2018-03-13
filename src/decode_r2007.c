@@ -918,14 +918,14 @@ read_r2007_meta_data(Bit_Chain *dat, Dwg_Data *dwg)
 
   read_file_header(dat, &file_header);
   
-    // Pages Map
+  // Pages Map
   dat->byte += 0x28;  // overread check data
   dat->byte += file_header.pages_map_offset;
   
   pages_map = read_pages_map(dat, file_header.pages_map_size_comp,
     file_header.pages_map_size_uncomp, file_header.pages_map_correction);  
   
-    // Sections Map
+  // Sections Map
   page = get_page(pages_map, file_header.sections_map_id);
   
   if (page != NULL)

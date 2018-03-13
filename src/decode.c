@@ -16,6 +16,7 @@
  * modified by Felipe Corrêa da Silva Sances
  * modified by Rodrigo Rodrigues da Silva
  * modified by Till Heuschmann
+ * modified by Reini Urban
  */
 
 #include "config.h"
@@ -98,8 +99,10 @@ static bool env_var_checked_p;
 
 #define FIELD_B(name) FIELD(name, B);
 #define FIELD_BB(name) FIELD(name, BB);
+#define FIELD_3B(name) FIELD(name, 3B);
 #define FIELD_BS(name) FIELD(name, BS);
 #define FIELD_BL(name) FIELD(name, BL);
+#define FIELD_BLL(name) FIELD(name, BLL);
 #define FIELD_BD(name) FIELD(name, BD);
 #define FIELD_RC(name) FIELD(name, RC);
 #define FIELD_RS(name) FIELD(name, RS);
@@ -131,10 +134,10 @@ static bool env_var_checked_p;
   if (size>0)\
     {\
       _obj->name = (BITCODE_##type*) malloc(size * sizeof(BITCODE_##type));\
-      for (vcount=0; vcount< size; vcount++)\
+      for (vcount=0; vcount<(long)size; vcount++) \
         {\
           _obj->name[vcount] = bit_read_##type(dat);\
-          LOG_TRACE(#name "[%d]: " FORMAT_##type "\n", vcount, _obj->name[vcount])\
+          LOG_TRACE(#name "[%ld]: " FORMAT_##type "\n", (long)vcount, _obj->name[vcount]) \
         }\
     }
 
@@ -142,7 +145,7 @@ static bool env_var_checked_p;
 
 #define FIELD_2RD_VECTOR(name, size)\
   _obj->name = (BITCODE_2RD *) malloc(_obj->size * sizeof(BITCODE_2RD));\
-  for (vcount=0; vcount< _obj->size; vcount++)\
+  for (vcount=0; vcount< (long)_obj->size; vcount++)\
     {\
       FIELD_2RD(name[vcount]);\
     }
@@ -150,23 +153,23 @@ static bool env_var_checked_p;
 #define FIELD_2DD_VECTOR(name, size)\
   _obj->name = (BITCODE_2RD *) malloc(_obj->size * sizeof(BITCODE_2RD));\
   FIELD_2RD(name[0]);\
-  for (vcount = 1; vcount < _obj->size; vcount++)\
+  for (vcount = 1; vcount < (long)_obj->size; vcount++)\
     {\
       FIELD_2DD(name[vcount], FIELD_VALUE(name[vcount - 1].x), FIELD_VALUE(name[vcount - 1].y));\
     }
 
 #define FIELD_3DPOINT_VECTOR(name, size)\
   _obj->name = (BITCODE_3DPOINT *) malloc(_obj->size * sizeof(BITCODE_3DPOINT));\
-  for (vcount=0; vcount< _obj->size; vcount++)\
+  for (vcount=0; vcount < (long)_obj->size; vcount++) \
     {\
       FIELD_3DPOINT(name[vcount]);\
     }
 
 #define HANDLE_VECTOR_N(name, size, code)\
   FIELD_VALUE(name) = (BITCODE_H*) malloc(sizeof(BITCODE_H) * size);\
-  for (vcount=0; vcount<size; vcount++)\
+  for (vcount=0; vcount < (long)size; vcount++) \
     {\
-      FIELD_HANDLE_N(name[vcount], vcount, code);  \
+      FIELD_HANDLE_N(name[vcount], vcount, code); \
     }
 
 #define HANDLE_VECTOR(name, sizefield, code) HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code)
@@ -185,14 +188,14 @@ static bool env_var_checked_p;
 
 #define REACTORS(code)\
   FIELD_VALUE(reactors) = (BITCODE_H*) malloc(sizeof(BITCODE_H) * obj->tio.object->num_reactors);\
-  for (vcount=0; vcount<obj->tio.object->num_reactors; vcount++)\
+  for (vcount=0; vcount < (long)obj->tio.object->num_reactors; vcount++) \
     {\
       FIELD_HANDLE_N(reactors[vcount], vcount, code);      \
     }
 
 #define ENT_REACTORS(code)\
   FIELD_VALUE(reactors) = (BITCODE_H*) malloc(sizeof(BITCODE_H) * obj->tio.entity->num_reactors);\
-  for (vcount=0; vcount<obj->tio.entity->num_reactors; vcount++)\
+  for (vcount=0; vcount < obj->tio.entity->num_reactors; vcount++)\
     {\
       FIELD_HANDLE_N(reactors[vcount], vcount, code);\
     }
@@ -225,19 +228,19 @@ static bool env_var_checked_p;
 
 #define REPEAT_N(times, name, type) \
   _obj->name = (type *) malloc(times * sizeof(type));\
-  for (rcount=0; rcount<times; rcount++)
+  for (rcount=0; rcount<(long)times; rcount++)
 
 #define REPEAT(times, name, type) \
   _obj->name = (type *) malloc(_obj->times * sizeof(type));\
-  for (rcount=0; rcount<_obj->times; rcount++)
+  for (rcount=0; rcount<(long)_obj->times; rcount++)
 
 #define REPEAT2(times, name, type) \
   _obj->name = (type *) malloc(_obj->times * sizeof(type));\
-  for (rcount2=0; rcount2<_obj->times; rcount2++)
+  for (rcount2=0; rcount2<(long)_obj->times; rcount2++)
 
 #define REPEAT3(times, name, type) \
   _obj->name = (type *) malloc(_obj->times * sizeof(type));\
-  for (rcount3=0; rcount3<_obj->times; rcount3++)
+  for (rcount3=0; rcount3<(long)_obj->times; rcount3++)
 
 //TODO unify REPEAT macros!
 
@@ -248,7 +251,7 @@ static bool env_var_checked_p;
 static void \
  dwg_decode_##token (Bit_Chain * dat, Dwg_Object * obj)\
 {\
-  int vcount, rcount, rcount2, rcount3;\
+  long vcount, rcount, rcount2, rcount3;\
   Dwg_Entity_##token *ent, *_obj;\
   Dwg_Data* dwg = obj->parent;\
   LOG_INFO("Entity " #token ":\n")\
@@ -268,7 +271,7 @@ static void \
 #define DWG_ENTITY_END }
 
 #define DWG_OBJECT(token) static void  dwg_decode_ ## token (Bit_Chain * dat, Dwg_Object * obj) {\
-  int vcount, rcount, rcount2, rcount3;\
+  long vcount, rcount, rcount2, rcount3;\
   Dwg_Object_##token *_obj;\
   Dwg_Data* dwg = obj->parent;\
   LOG_INFO("Object " #token ":\n")\
@@ -288,6 +291,24 @@ static void \
 /*--------------------------------------------------------------------------------
  * Private functions
  */
+
+enum RES_BUF_VALUE_TYPE
+{
+  VT_INVALID = 0,
+  VT_STRING = 1,
+  VT_POINT3D = 2,
+  VT_REAL = 3,
+  VT_INT16 = 4,
+  VT_INT32 = 5,
+  VT_INT8 = 6,
+  VT_BINARY = 7,
+  VT_HANDLE = 8,
+  VT_OBJECTID = 9,
+  VT_BOOL = 10
+};
+
+static enum RES_BUF_VALUE_TYPE
+get_base_value_type(short gc);
 
 static void
 dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
@@ -310,6 +331,13 @@ decode_R2004(Bit_Chain* dat, Dwg_Data * dwg);
 
 static int
 decode_R2007(Bit_Chain* dat, Dwg_Data * dwg);
+
+static Dwg_Resbuf*
+dwg_decode_xdata(Bit_Chain * dat, int size);
+
+/*--------------------------------------------------------------------------------
+ * Imported functions
+ */
 
 int
 read_r2007_meta_data(Bit_Chain *dat, Dwg_Data *dwg);
@@ -354,15 +382,21 @@ dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
   dwg->header.version = 0;
   if (!strcmp(version, version_codes[R_13]))
     dwg->header.version = R_13;
-  if (!strcmp(version, version_codes[R_14]))
+  else if (!strcmp(version, version_codes[R_14]))
     dwg->header.version = R_14;
-  if (!strcmp(version, version_codes[R_2000]))
+  else if (!strcmp(version, version_codes[R_2000]))
     dwg->header.version = R_2000;
-  if (!strcmp(version, version_codes[R_2004]))
+  else if (!strcmp(version, version_codes[R_2004]))
     dwg->header.version = R_2004;
-  if (!strcmp(version, version_codes[R_2007]))
+  else if (!strcmp(version, version_codes[R_2007]))
     dwg->header.version = R_2007;
-  if (dwg->header.version == 0)
+  else if (!strcmp(version, version_codes[R_2010]))
+    dwg->header.version = R_2010;
+  else if (!strcmp(version, version_codes[R_2013]))
+    dwg->header.version = R_2013;
+  else if (!strcmp(version, version_codes[R_2018]))
+    dwg->header.version = R_2018;
+  else if (dwg->header.version == 0)
     {
       LOG_ERROR("Invalid or unimplemented version code! "
         "This file's version code is: %s\n", version)
@@ -375,8 +409,9 @@ dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
     {
       LOG_INFO(
           "WARNING: This version of LibreDWG is only capable of safely decoding version R2000 (code: AC1015) dwg-files.\n"
-            "This file's version code is: %s Support for this version is still experimental."
-            "It might crash or give you invalid output.\n", version)
+          "This file's version code is: %s\n"
+          "Support for this version is still experimental.\n"
+          "It might crash or give you invalid output.\n", version)
       return decode_R13_R15(dat, dwg);
     }
 
@@ -389,17 +424,19 @@ dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
     {
       LOG_INFO(
           "WARNING: This version of LibreDWG is only capable of properly decoding version R2000 (code: AC1015) dwg-files.\n"
-            "This file's version code is: %s\n This version is not yet actively developed."
-            "It will probably crash and/or give you invalid output.\n", version)
+          "This file's version code is: %s\n"
+          "This version is not yet actively developed.\n"
+          "It will probably crash and/or give you invalid output.\n", version)
       return decode_R2004(dat, dwg);
     }
 
-  VERSION(R_2007)
+  SINCE(R_2007)
     {
       LOG_INFO(
           "WARNING: This version of LibreDWG is only capable of properly decoding version R2000 (code: AC1015) dwg-files.\n"
-            "This file's version code is: %s\n This version is not yet actively developed."
-            "It will probably crash and/or give you invalid output.\n", version)
+          "This file's version code is: %s\n"
+          "This version is not yet actively developed.\n"
+          "It will probably crash and/or give you invalid output.\n", version)
       return decode_R2007(dat, dwg);
     }
 
@@ -416,7 +453,7 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
   unsigned char sig;
   unsigned int section_size = 0;
   unsigned char sgdc[2];
-  unsigned int ckr, ckr2, antckr;
+  unsigned int ckr, ckr2;
   long unsigned int size;
   long unsigned int lasta;
   long unsigned int maplasta;
@@ -426,9 +463,9 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
   long unsigned int pvz;
   unsigned int i, j;
 
-  // Still unknown values: 6 'zeroes' and a 'one'
   dat->byte = 0x06;
-  LOG_TRACE("Still unknown values: 6 'zeroes' and a 'one': ")
+ // rather 5 zeros + ACADMAINTVER and 0/1/3
+  LOG_TRACE("Unknown values: 5 'zeroes', ACADMAINTVER and a 0/1/3: ")
   for (i = 0; i < 7; i++)
     {
       sig = bit_read_RC(dat);
@@ -436,15 +473,14 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
     }
   LOG_TRACE("\n")
 
-  /* Image Seeker */
+  /* Image Seeker/Preview */
   pvz = bit_read_RL(dat);
   LOG_TRACE("Image seeker: 0x%08X\n", (unsigned int) pvz)
 
-  // unknown
   sig = bit_read_RC(dat);
-  LOG_INFO("Version: %u\n", sig);
+  LOG_INFO("DWG Version: %u\n", sig);
   sig = bit_read_RC(dat);
-  LOG_INFO("Release: %u\n", sig);
+  LOG_INFO("Maintainance Release: %u\n", sig);
 
   /* Codepage */
   dat->byte = 0x13;
@@ -454,16 +490,14 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
   /* Section Locator Records */
   dat->byte = 0x15;
   dwg->header.num_sections = bit_read_RL(dat);
+  if (!dwg->header.num_sections) //ODA writes zeros
+    dwg->header.num_sections = 6;
 
   //  why do we have this limit to only 6 sections?
   //  It seems to be a bug, so I'll comment it out and will add dynamic
   //  allocation of the sections vector.
   //  OpenDWG spec speaks of 6 possible values for the record number
   //  Maybe the original libdwg author got confused about that.
-  /*
-   if (dwg->header.num_sections > 6)
-   dwg->header.num_sections = 6;
-   */
   dwg->header.section = (Dwg_Section*) malloc(sizeof(Dwg_Section)
       * dwg->header.num_sections);
 
@@ -768,8 +802,7 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
   if (bit_search_sentinel(dat, dwg_sentinel(DWG_SENTINEL_SECOND_HEADER_BEGIN)))
     {
       long unsigned int pvzadr;
-      long unsigned int pvz;
-      unsigned char sig, sig2;
+      unsigned char sig2;
 
       LOG_INFO("\n=======> Second Header: %8X\n",
           (unsigned int) dat->byte-16)
@@ -1162,12 +1195,12 @@ read_R2004_section_map(Bit_Chain* dat, Dwg_Data * dwg,
 static Dwg_Section*
 find_section(Dwg_Data *dwg, unsigned long int index)
 {
-  int i;
+  long unsigned int i;
   if (dwg->header.section == 0 || index == 0)
     return 0;
   for (i = 0; i < dwg->header.num_sections; ++i)
     {
-      if (dwg->header.section[i].number == index)
+      if ((unsigned long int)dwg->header.section[i].number == index)
         return (&dwg->header.section[i]);
     }
   return 0;
@@ -1181,7 +1214,7 @@ read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
                         unsigned long int decomp_data_size)
 {
   char *decomp, *ptr;
-  int i, j;
+  unsigned int i, j;
   int section_number;
   int data_size;
   int start_offset;
@@ -1298,7 +1331,7 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *dwg,
   Dwg_Section_Info *info = 0;
   encrypted_section_header es;
   char *decomp;
-  int i, j;
+  unsigned int i, j;
 
   for (i = 0; i < dwg->header.num_descriptions && info == 0; ++i)
     if (dwg->header.section_info[i].type == section_type)
@@ -1572,6 +1605,7 @@ decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
   Dwg_Section *section;
 
   int i;
+  unsigned int u;
   unsigned long int preview_address, security_type, unknown_long,
       dwg_property_address, vba_proj_address;
   unsigned char sig, dwg_ver, maint_release_ver;
@@ -1794,9 +1828,9 @@ decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
   /* Clean up */
   if (dwg->header.section_info != 0)
     {
-      for (i = 0; i < dwg->header.num_descriptions; ++i)
-        if (dwg->header.section_info[i].sections != 0)
-          free(dwg->header.section_info[i].sections);
+      for (u = 0; u < dwg->header.num_descriptions; ++u)
+        if (dwg->header.section_info[u].sections != 0)
+          free(dwg->header.section_info[u].sections);
 
       free(dwg->header.section_info);
       dwg->header.num_descriptions = 0;
@@ -1828,39 +1862,39 @@ decode_R2007(Bit_Chain* dat, Dwg_Data * dwg)
     }
   LOG_TRACE("\n")
 
-  /* Unknown */
+  /* ACADMAINTVER (0 or 1) */
   dat->byte = 0x0B;
   sig = bit_read_RC(dat);
-  LOG_TRACE("Unknown: 0x%02X\n", sig)
+  LOG_TRACE("@0b ACADMAINTVER: 0x%02X\n", sig)
 
-  /* Byte 0x00, 0x01, or 0x03 */
+  /* Byte 0, 1, or 3 */
   dat->byte = 0x0C;
   sig = bit_read_RC(dat);
-  LOG_TRACE("Byte 0x00, 0x01, or 0x03: 0x%02X\n", sig)
+  LOG_TRACE("@0c Byte 0x00, 0x01, or 0x03: 0x%02X\n", sig)
 
   /* Preview Address */
   dat->byte = 0x0D;
   preview_address = bit_read_RL(dat);
-  LOG_TRACE("Preview Address: 0x%08X\n", (unsigned int) preview_address)
+  LOG_TRACE("@0d Preview Address: 0x%08X\n", (unsigned int) preview_address)
 
   /* DwgVer */
   dat->byte = 0x11;
   DwgVer = bit_read_RC(dat);
-  LOG_INFO("DwgVer: %u\n", DwgVer)
+  LOG_INFO("@11 DwgVer: %u\n", DwgVer)
 
   /* MaintReleaseVer */
   dat->byte = 0x12;
   MaintReleaseVer = bit_read_RC(dat);
-  LOG_INFO("MaintRelease: %u\n", MaintReleaseVer)
+  LOG_INFO("@12 MaintRelease: %u\n", MaintReleaseVer)
 
   /* Codepage */
   dat->byte = 0x13;
   dwg->header.codepage = bit_read_RS(dat);
-  LOG_TRACE("Codepage: %u\n", dwg->header.codepage)
+  LOG_TRACE("@13 Codepage: %u\n", dwg->header.codepage)
 
   /* Unknown */
   dat->byte = 0x15;
-  LOG_TRACE("Unknown: ")
+  LOG_TRACE("@15 Unknown: ")
   for (i = 0; i < 3; i++)
     {
       sig = bit_read_RC(dat);
@@ -1871,34 +1905,34 @@ decode_R2007(Bit_Chain* dat, Dwg_Data * dwg)
   /* SecurityType */
   dat->byte = 0x18;
   security_type = bit_read_RL(dat);
-  LOG_TRACE("SecurityType: 0x%08X\n", (unsigned int) security_type)
+  LOG_TRACE("@18 SecurityType: 0x%08X\n", (unsigned int) security_type)
 
   /* Unknown long */
   dat->byte = 0x1C;
   unknown_long = bit_read_RL(dat);
-  LOG_TRACE("Unknown long: 0x%08X\n", (unsigned int) unknown_long)
+  LOG_TRACE("@1c Unknown long: 0x%08X\n", (unsigned int) unknown_long)
 
   /* DWG Property Addr */
   dat->byte = 0x20;
   dwg_property_address = bit_read_RL(dat);
-  LOG_TRACE("DWG Property Addr: 0x%08X\n",
+  LOG_TRACE("@20 DWG Property Addr: 0x%08X\n",
         (unsigned int) dwg_property_address)
 
   /* VBA Project Addr */
   dat->byte = 0x24;
   vba_proj_address = bit_read_RL(dat);
-  LOG_TRACE("VBA Project Addr: 0x%08X\n",
+  LOG_TRACE("@24 VBA Project Addr: 0x%08X\n",
         (unsigned int) vba_proj_address)
 
   /* 0x00000080 */
   dat->byte = 0x28;
   unknown_long = bit_read_RL(dat);
-  LOG_TRACE("0x00000080: 0x%08X\n", (unsigned int) unknown_long)
+  LOG_TRACE("@28 0x00000080: 0x%08X\n", (unsigned int) unknown_long)
 
   /* Application Info Address */
   dat->byte = 0x2C;
   app_info_address = bit_read_RL(dat);
-  LOG_TRACE("Application Info Address: 0x%08X\n",
+  LOG_TRACE("@2c Application Info Address: 0x%08X\n",
         (unsigned int) app_info_address)
 
   read_r2007_meta_data(dat, dwg);
@@ -1911,7 +1945,8 @@ decode_R2007(Bit_Chain* dat, Dwg_Data * dwg)
   resolve_objectref_vector(dwg);
 
   LOG_ERROR(
-      "Decoding of DWG version R2007 header is not fully implemented yet. we are going to try\n")
+      "Decoding of DWG version R2007+ header is not fully implemented yet.\n"
+      "We are going to try\n")
   return 0;
 }
 
@@ -1980,7 +2015,9 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
   ent->picture_exists = bit_read_B(dat);
   if (ent->picture_exists)
     {
+      LOG_TRACE("picture_exists: 1\n")
       ent->picture_size = bit_read_RL(dat);
+      LOG_TRACE("picture_size: %lu\n", ent->picture_size)
       if (ent->picture_size < 210210)
         {
           ent->picture = (char *)malloc(ent->picture_size);
@@ -2018,16 +2055,18 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
 
   SINCE(R_2004)
     {
-      char color_mode = 0;
-      unsigned char index;
+      BITCODE_B color_mode = 0;
       unsigned int flags;
-    
+
       if (ent->nolinks == 0)
         {        
           color_mode = bit_read_B(dat);
         
           if (color_mode == 1)
-            index = bit_read_RC(dat);  // color index
+            {
+              ent->color.index = bit_read_RC(dat);  // color index
+              ent->color.rgb = 0L;
+            }
           else
             {              
               flags = bit_read_RS(dat);
@@ -2035,28 +2074,31 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
               if (flags & 0x8000)
                 {
                   unsigned char c1, c2, c3, c4;
-                  char *name = 0;
+                  char *name;
               
                   c1 = bit_read_RC(dat);  // rgb color
                   c2 = bit_read_RC(dat);
                   c3 = bit_read_RC(dat);
                   c4 = bit_read_RC(dat);
-              
                   name = bit_read_TV(dat);
+                  ent->color.index = 0;
+                  ent->color.rgb   = c1 << 24 | c2 << 16 | c3 << 8 | c4;
+                  strcpy(ent->color.name, name);
                 }
             
-              if (flags & 0x4000)
+              /*if (flags & 0x4000)
                 flags = flags;   // has AcDbColor reference (handle)
-            
+              */
               if (flags & 0x2000)
-                {
-                  int transparency = bit_read_BL(dat);
+                { 
+                  ent->color.transparency_type = bit_read_BL(dat);
                 }
             }
         }
       else
         {
           char color = bit_read_B(dat);
+          ent->color.index = color;
         }
     }
   OTHER_VERSIONS
@@ -2213,7 +2255,7 @@ dwg_decode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg)
   else
     {
       ref->obj = 0;
-      ref->absolute_ref=0;
+      ref->absolute_ref = 0;
       return ref;
     }
   //we receive a null obj when we are reading
@@ -2289,7 +2331,6 @@ dwg_decode_common_entity_handle_data(Bit_Chain * dat, Dwg_Object * obj)
   //XXX setup required to use macros
   Dwg_Object_Entity *ent;
   Dwg_Data *dwg = obj->parent;
-  int i;
   long unsigned int vcount;
   Dwg_Object_Entity *_obj;
   ent = obj->tio.entity;
@@ -2299,22 +2340,7 @@ dwg_decode_common_entity_handle_data(Bit_Chain * dat, Dwg_Object * obj)
 
 }
 
-enum RES_BUF_VALUE_TYPE
-{
-  VT_INVALID = 0,
-  VT_STRING = 1,
-  VT_POINT3D = 2,
-  VT_REAL = 3,
-  VT_INT16 = 4,
-  VT_INT32 = 5,
-  VT_INT8 = 6,
-  VT_BINARY = 7,
-  VT_HANDLE = 8,
-  VT_OBJECTID = 9,
-  VT_BOOL = 10
-};
-
-enum RES_BUF_VALUE_TYPE
+static enum RES_BUF_VALUE_TYPE
 get_base_value_type(short gc)
 {
   if (gc >= 300)
@@ -2400,14 +2426,12 @@ get_base_value_type(short gc)
   return VT_INVALID;
 }
 
-Dwg_Resbuf*
+static Dwg_Resbuf*
 dwg_decode_xdata(Bit_Chain * dat, int size)
 {
-  char group_code;
   Dwg_Resbuf *rbuf, *root=0, *curr=0;
   unsigned char codepage;
   long unsigned int end_address;
-  char hdl[8];
   int i, length;
 
   static int cnt = 0;
@@ -2466,6 +2490,7 @@ dwg_decode_xdata(Bit_Chain * dat, int size)
           for (i = 0; i < 8; i++)
              rbuf->value.hdl[i] = bit_read_RC(dat);
           break;
+        case VT_INVALID:
         default:
           LOG_ERROR("Invalid group code in xdata: %d!\n", rbuf->type)
           free(rbuf);
@@ -2566,6 +2591,11 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       dwg_decode_PLACEHOLDER(dat, obj);
       return 1;
     }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "PROXY"))
+    {
+      dwg_decode_PROXY(dat, obj);
+      return 1;
+    }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "RASTERVARIABLES"))
     {
       dwg_decode_RASTERVARIABLES(dat, obj);
@@ -2584,6 +2614,11 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "SPATIAL_INDEX"))
     {
       dwg_decode_SPATIAL_INDEX(dat, obj);
+      return 1;
+    }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "TABLE"))
+    {
+      dwg_decode_TABLE(dat, obj);
       return 1;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "VBA_PROJECT"))
@@ -2667,253 +2702,263 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
    */
   switch (obj->type)
     {
-  case DWG_TYPE_TEXT:
-    dwg_decode_TEXT(dat, obj);
-    break;
-  case DWG_TYPE_ATTRIB:
-    dwg_decode_ATTRIB(dat, obj);
-    break;
-  case DWG_TYPE_ATTDEF:
-    dwg_decode_ATTDEF(dat, obj);
-    break;
-  case DWG_TYPE_BLOCK:
-    dwg_decode_BLOCK(dat, obj);
-    break;
-  case DWG_TYPE_ENDBLK:
-    dwg_decode_ENDBLK(dat, obj);
-    break;
-  case DWG_TYPE_SEQEND:
-    dwg_decode_SEQEND(dat, obj);
-    break;
-  case DWG_TYPE_INSERT:
-    dwg_decode_INSERT(dat, obj);
-    break;
-  case DWG_TYPE_MINSERT:
-    dwg_decode_MINSERT(dat, obj);
-    break;
-  case DWG_TYPE_VERTEX_2D:
-    dwg_decode_VERTEX_2D(dat, obj);
-    break;
-  case DWG_TYPE_VERTEX_3D:
-    dwg_decode_VERTEX_3D(dat, obj);
-    break;
-  case DWG_TYPE_VERTEX_MESH:
-    dwg_decode_VERTEX_MESH(dat, obj);
-    break;
-  case DWG_TYPE_VERTEX_PFACE:
-    dwg_decode_VERTEX_PFACE(dat, obj);
-    break;
-  case DWG_TYPE_VERTEX_PFACE_FACE:
-    dwg_decode_VERTEX_PFACE_FACE(dat, obj);
-    break;
-  case DWG_TYPE_POLYLINE_2D:
-    dwg_decode_POLYLINE_2D(dat, obj);
-    break;
-  case DWG_TYPE_POLYLINE_3D:
-    dwg_decode_POLYLINE_3D(dat, obj);
-    break;
-  case DWG_TYPE_ARC:
-    dwg_decode_ARC(dat, obj);
-    break;
-  case DWG_TYPE_CIRCLE:
-    dwg_decode_CIRCLE(dat, obj);
-    break;
-  case DWG_TYPE_LINE:
-    dwg_decode_LINE(dat, obj);
-    break;
-  case DWG_TYPE_DIMENSION_ORDINATE:
-    dwg_decode_DIMENSION_ORDINATE(dat, obj);
-    break;
-  case DWG_TYPE_DIMENSION_LINEAR:
-    dwg_decode_DIMENSION_LINEAR(dat, obj);
-    break;
-  case DWG_TYPE_DIMENSION_ALIGNED:
-    dwg_decode_DIMENSION_ALIGNED(dat, obj);
-    break;
-  case DWG_TYPE_DIMENSION_ANG3PT:
-    dwg_decode_DIMENSION_ANG3PT(dat, obj);
-    break;
-  case DWG_TYPE_DIMENSION_ANG2LN:
-    dwg_decode_DIMENSION_ANG2LN(dat, obj);
-    break;
-  case DWG_TYPE_DIMENSION_RADIUS:
-    dwg_decode_DIMENSION_RADIUS(dat, obj);
-    break;
-  case DWG_TYPE_DIMENSION_DIAMETER:
-    dwg_decode_DIMENSION_DIAMETER(dat, obj);
-    break;
-  case DWG_TYPE_POINT:
-    dwg_decode_POINT(dat, obj);
-    break;
-  case DWG_TYPE__3DFACE:
-    dwg_decode__3DFACE(dat, obj);
-    break;
-  case DWG_TYPE_POLYLINE_PFACE:
-    dwg_decode_POLYLINE_PFACE(dat, obj);
-    break;
-  case DWG_TYPE_POLYLINE_MESH:
-    dwg_decode_POLYLINE_MESH(dat, obj);
-    break;
-  case DWG_TYPE_SOLID:
-    dwg_decode_SOLID(dat, obj);
-    break;
-  case DWG_TYPE_TRACE:
-    dwg_decode_TRACE(dat, obj);
-    break;
-  case DWG_TYPE_SHAPE:
-    dwg_decode_SHAPE(dat, obj);
-    break;
-  case DWG_TYPE_VIEWPORT:
-    dwg_decode_VIEWPORT(dat, obj);
-    break;
-  case DWG_TYPE_ELLIPSE:
-    dwg_decode_ELLIPSE(dat, obj);
-    break;
-  case DWG_TYPE_SPLINE:
-    dwg_decode_SPLINE(dat, obj);
-    break;
-  case DWG_TYPE_REGION:
-    dwg_decode_REGION(dat, obj);
-    break;
-  case DWG_TYPE_3DSOLID:
-    dwg_decode__3DSOLID(dat, obj);
-    break;
-  case DWG_TYPE_BODY:
-    dwg_decode_BODY(dat, obj);
-    break;
-  case DWG_TYPE_RAY:
-    dwg_decode_RAY(dat, obj);
-    break;
-  case DWG_TYPE_XLINE:
-    dwg_decode_XLINE(dat, obj);
-    break;
-  case DWG_TYPE_DICTIONARY:
-    dwg_decode_DICTIONARY(dat, obj);
-    break;
-  case DWG_TYPE_MTEXT:
-    dwg_decode_MTEXT(dat, obj);
-    break;
-  case DWG_TYPE_LEADER:
-    dwg_decode_LEADER(dat, obj);
-    break;
-  case DWG_TYPE_TOLERANCE:
-    dwg_decode_TOLERANCE(dat, obj);
-    break;
-  case DWG_TYPE_MLINE:
-    dwg_decode_MLINE(dat, obj);
-    break;
-  case DWG_TYPE_BLOCK_CONTROL:
-    dwg_decode_BLOCK_CONTROL(dat, obj);
-    break;
-  case DWG_TYPE_BLOCK_HEADER:
-    dwg_decode_BLOCK_HEADER(dat, obj);
-    break;
-  case DWG_TYPE_LAYER_CONTROL:
-    //set LAYER_CONTROL object - helps keep track of layers
-    obj->parent->layer_control = obj;
-    dwg_decode_LAYER_CONTROL(dat, obj);
-    break;
-  case DWG_TYPE_LAYER:
-    dwg_decode_LAYER(dat, obj);
-    break;
-  case DWG_TYPE_SHAPEFILE_CONTROL:
-    dwg_decode_SHAPEFILE_CONTROL(dat, obj);
-    break;
-  case DWG_TYPE_SHAPEFILE:
-    dwg_decode_SHAPEFILE(dat, obj);
-    break;
-  case DWG_TYPE_LTYPE_CONTROL:
-    dwg_decode_LTYPE_CONTROL(dat, obj);
-    break;
-  case DWG_TYPE_LTYPE:
-    dwg_decode_LTYPE(dat, obj);
-    break;
-  case DWG_TYPE_VIEW_CONTROL:
-    dwg_decode_VIEW_CONTROL(dat, obj);
-    break;
-  case DWG_TYPE_VIEW:
-    dwg_decode_VIEW(dat, obj);
-    break;
-  case DWG_TYPE_UCS_CONTROL:
-    dwg_decode_UCS_CONTROL(dat, obj);
-    break;
-  case DWG_TYPE_UCS:
-    dwg_decode_UCS(dat, obj);
-    break;
-  case DWG_TYPE_VPORT_CONTROL:
-    dwg_decode_VPORT_CONTROL(dat, obj);
-    break;
-  case DWG_TYPE_VPORT:
-    dwg_decode_VPORT(dat, obj);
-    break;
-  case DWG_TYPE_APPID_CONTROL:
-    dwg_decode_APPID_CONTROL(dat, obj);
-    break;
-  case DWG_TYPE_APPID:
-    dwg_decode_APPID(dat, obj);
-    break;
-  case DWG_TYPE_DIMSTYLE_CONTROL:
-    dwg_decode_DIMSTYLE_CONTROL(dat, obj);
-    break;
-  case DWG_TYPE_DIMSTYLE:
-    dwg_decode_DIMSTYLE(dat, obj);
-    break;
-  case DWG_TYPE_VP_ENT_HDR_CONTROL:
-    dwg_decode_VP_ENT_HDR_CONTROL(dat, obj);
-    break;
-  case DWG_TYPE_VP_ENT_HDR:
-    dwg_decode_VP_ENT_HDR(dat, obj);
-    break;
-  case DWG_TYPE_GROUP:
-    dwg_decode_GROUP(dat, obj);
-    break;
-  case DWG_TYPE_MLINESTYLE:
-    dwg_decode_MLINESTYLE(dat, obj);
-    break;
-  case DWG_TYPE_LWPLINE:
-    dwg_decode_LWPLINE(dat, obj);
-    break;
-  case DWG_TYPE_HATCH:
-    dwg_decode_HATCH(dat, obj);
-    break;
-  case DWG_TYPE_XRECORD:
-    dwg_decode_XRECORD(dat, obj);
-    break;
-  case DWG_TYPE_PLACEHOLDER:
-    dwg_decode_PLACEHOLDER(dat, obj);
-    break;
-  case DWG_TYPE_LAYOUT:
-    dwg_decode_LAYOUT(dat, obj);
-    break;
-  default:
-    if (!dwg_decode_variable_type(dwg, dat, obj))
-      {
-        LOG_INFO("Object UNKNOWN:\n")
+    case DWG_TYPE_TEXT:
+      dwg_decode_TEXT(dat, obj);
+      break;
+    case DWG_TYPE_ATTRIB:
+      dwg_decode_ATTRIB(dat, obj);
+      break;
+    case DWG_TYPE_ATTDEF:
+      dwg_decode_ATTDEF(dat, obj);
+      break;
+    case DWG_TYPE_BLOCK:
+      dwg_decode_BLOCK(dat, obj);
+      break;
+    case DWG_TYPE_ENDBLK:
+      dwg_decode_ENDBLK(dat, obj);
+      break;
+    case DWG_TYPE_SEQEND:
+      dwg_decode_SEQEND(dat, obj);
+      break;
+    case DWG_TYPE_INSERT:
+      dwg_decode_INSERT(dat, obj);
+      break;
+    case DWG_TYPE_MINSERT:
+      dwg_decode_MINSERT(dat, obj);
+      break;
+    case DWG_TYPE_VERTEX_2D:
+      dwg_decode_VERTEX_2D(dat, obj);
+      break;
+    case DWG_TYPE_VERTEX_3D:
+      dwg_decode_VERTEX_3D(dat, obj);
+      break;
+    case DWG_TYPE_VERTEX_MESH:
+      dwg_decode_VERTEX_MESH(dat, obj);
+      break;
+    case DWG_TYPE_VERTEX_PFACE:
+      dwg_decode_VERTEX_PFACE(dat, obj);
+      break;
+    case DWG_TYPE_VERTEX_PFACE_FACE:
+      dwg_decode_VERTEX_PFACE_FACE(dat, obj);
+      break;
+    case DWG_TYPE_POLYLINE_2D:
+      dwg_decode_POLYLINE_2D(dat, obj);
+      break;
+    case DWG_TYPE_POLYLINE_3D:
+      dwg_decode_POLYLINE_3D(dat, obj);
+      break;
+    case DWG_TYPE_ARC:
+      dwg_decode_ARC(dat, obj);
+      break;
+    case DWG_TYPE_CIRCLE:
+      dwg_decode_CIRCLE(dat, obj);
+      break;
+    case DWG_TYPE_LINE:
+      dwg_decode_LINE(dat, obj);
+      break;
+    case DWG_TYPE_DIMENSION_ORDINATE:
+      dwg_decode_DIMENSION_ORDINATE(dat, obj);
+      break;
+    case DWG_TYPE_DIMENSION_LINEAR:
+      dwg_decode_DIMENSION_LINEAR(dat, obj);
+      break;
+    case DWG_TYPE_DIMENSION_ALIGNED:
+      dwg_decode_DIMENSION_ALIGNED(dat, obj);
+      break;
+    case DWG_TYPE_DIMENSION_ANG3PT:
+      dwg_decode_DIMENSION_ANG3PT(dat, obj);
+      break;
+    case DWG_TYPE_DIMENSION_ANG2LN:
+      dwg_decode_DIMENSION_ANG2LN(dat, obj);
+      break;
+    case DWG_TYPE_DIMENSION_RADIUS:
+      dwg_decode_DIMENSION_RADIUS(dat, obj);
+      break;
+    case DWG_TYPE_DIMENSION_DIAMETER:
+      dwg_decode_DIMENSION_DIAMETER(dat, obj);
+      break;
+    case DWG_TYPE_POINT:
+      dwg_decode_POINT(dat, obj);
+      break;
+    case DWG_TYPE__3DFACE:
+      dwg_decode__3DFACE(dat, obj);
+      break;
+    case DWG_TYPE_POLYLINE_PFACE:
+      dwg_decode_POLYLINE_PFACE(dat, obj);
+      break;
+    case DWG_TYPE_POLYLINE_MESH:
+      dwg_decode_POLYLINE_MESH(dat, obj);
+      break;
+    case DWG_TYPE_SOLID:
+      dwg_decode_SOLID(dat, obj);
+      break;
+    case DWG_TYPE_TRACE:
+      dwg_decode_TRACE(dat, obj);
+      break;
+    case DWG_TYPE_SHAPE:
+      dwg_decode_SHAPE(dat, obj);
+      break;
+    case DWG_TYPE_VIEWPORT:
+      dwg_decode_VIEWPORT(dat, obj);
+      break;
+    case DWG_TYPE_ELLIPSE:
+      dwg_decode_ELLIPSE(dat, obj);
+      break;
+    case DWG_TYPE_SPLINE:
+      dwg_decode_SPLINE(dat, obj);
+      break;
+    case DWG_TYPE_REGION:
+      dwg_decode_REGION(dat, obj);
+      break;
+    case DWG_TYPE_3DSOLID:
+      dwg_decode__3DSOLID(dat, obj);
+      break;
+    case DWG_TYPE_BODY:
+      dwg_decode_BODY(dat, obj);
+      break;
+    case DWG_TYPE_RAY:
+      dwg_decode_RAY(dat, obj);
+      break;
+    case DWG_TYPE_XLINE:
+      dwg_decode_XLINE(dat, obj);
+      break;
+    case DWG_TYPE_DICTIONARY:
+      dwg_decode_DICTIONARY(dat, obj);
+      break;
+    case DWG_TYPE_MTEXT:
+      dwg_decode_MTEXT(dat, obj);
+      break;
+    case DWG_TYPE_LEADER:
+      dwg_decode_LEADER(dat, obj);
+      break;
+    case DWG_TYPE_TOLERANCE:
+      dwg_decode_TOLERANCE(dat, obj);
+      break;
+    case DWG_TYPE_MLINE:
+      dwg_decode_MLINE(dat, obj);
+      break;
+    case DWG_TYPE_BLOCK_CONTROL:
+      dwg_decode_BLOCK_CONTROL(dat, obj);
+      break;
+    case DWG_TYPE_BLOCK_HEADER:
+      dwg_decode_BLOCK_HEADER(dat, obj);
+      break;
+    case DWG_TYPE_LAYER_CONTROL:
+      //set LAYER_CONTROL object - helps keep track of layers
+      obj->parent->layer_control = obj;
+      dwg_decode_LAYER_CONTROL(dat, obj);
+      break;
+    case DWG_TYPE_LAYER:
+      dwg_decode_LAYER(dat, obj);
+      break;
+    case DWG_TYPE_SHAPEFILE_CONTROL:
+      dwg_decode_SHAPEFILE_CONTROL(dat, obj);
+      break;
+    case DWG_TYPE_SHAPEFILE:
+      dwg_decode_SHAPEFILE(dat, obj);
+      break;
+    case DWG_TYPE_LTYPE_CONTROL:
+      dwg_decode_LTYPE_CONTROL(dat, obj);
+      break;
+    case DWG_TYPE_LTYPE:
+      dwg_decode_LTYPE(dat, obj);
+      break;
+    case DWG_TYPE_VIEW_CONTROL:
+      dwg_decode_VIEW_CONTROL(dat, obj);
+      break;
+    case DWG_TYPE_VIEW:
+      dwg_decode_VIEW(dat, obj);
+      break;
+    case DWG_TYPE_UCS_CONTROL:
+      dwg_decode_UCS_CONTROL(dat, obj);
+      break;
+    case DWG_TYPE_UCS:
+      dwg_decode_UCS(dat, obj);
+      break;
+    case DWG_TYPE_VPORT_CONTROL:
+      dwg_decode_VPORT_CONTROL(dat, obj);
+      break;
+    case DWG_TYPE_VPORT:
+      dwg_decode_VPORT(dat, obj);
+      break;
+    case DWG_TYPE_APPID_CONTROL:
+      dwg_decode_APPID_CONTROL(dat, obj);
+      break;
+    case DWG_TYPE_APPID:
+      dwg_decode_APPID(dat, obj);
+      break;
+    case DWG_TYPE_DIMSTYLE_CONTROL:
+      dwg_decode_DIMSTYLE_CONTROL(dat, obj);
+      break;
+    case DWG_TYPE_DIMSTYLE:
+      dwg_decode_DIMSTYLE(dat, obj);
+      break;
+    case DWG_TYPE_VP_ENT_HDR_CONTROL:
+      dwg_decode_VP_ENT_HDR_CONTROL(dat, obj);
+      break;
+    case DWG_TYPE_VP_ENT_HDR:
+      dwg_decode_VP_ENT_HDR(dat, obj);
+      break;
+    case DWG_TYPE_GROUP:
+      dwg_decode_GROUP(dat, obj);
+      break;
+    case DWG_TYPE_MLINESTYLE:
+      dwg_decode_MLINESTYLE(dat, obj);
+      break;
+    case DWG_TYPE_LWPLINE:
+      dwg_decode_LWPLINE(dat, obj);
+      break;
+    case DWG_TYPE_HATCH:
+      dwg_decode_HATCH(dat, obj);
+      break;
+    case DWG_TYPE_XRECORD:
+      dwg_decode_XRECORD(dat, obj);
+      break;
+    case DWG_TYPE_PLACEHOLDER:
+      dwg_decode_PLACEHOLDER(dat, obj);
+      break;
+    case DWG_TYPE_LAYOUT:
+      dwg_decode_LAYOUT(dat, obj);
+      break;
+    default:
+      if (obj->type == obj->parent->dwg_ot_layout)
+        {
+          dwg_decode_LAYOUT(dat, obj);
+        }
+      /* > 500:
+         TABLE, DICTIONARYWDLFT, IDBUFFER, IMAGE, IMAGEDEF, IMAGEDEFREACTOR,
+         LAYER_INDEX, OLE2FRAME, PROXY, RASTERVARIABLES, SORTENTSTABLE, SPATIAL_FILTER,
+         SPATIAL_INDEX
+      */
+      else if (!dwg_decode_variable_type(dwg, dat, obj))
+        {
+          LOG_INFO("Object UNKNOWN:\n")
 
-        SINCE(R_2000)
-          {
-            bit_read_RL(dat);  // skip bitsize
-          }
+          SINCE(R_2000)
+            {
+              BITCODE_RL bitsize = bit_read_RL(dat);  // skip bitsize
+              LOG_INFO("Object bitsize: %lu\n", bitsize)
+            }
 
-        if (!bit_read_H(dat, &obj->handle))
-          {
-            LOG_INFO("Object handle: %x.%x.%lx\n", 
-              obj->handle.code, obj->handle.size, obj->handle.value)
-          }
+          if (!bit_read_H(dat, &obj->handle))
+            {
+              LOG_INFO("Object handle: %d.%d.%lu\n",
+                       obj->handle.code, obj->handle.size, obj->handle.value)
+            }
 
-        obj->supertype = DWG_SUPERTYPE_UNKNOWN;
-        obj->tio.unknown = (unsigned char*)malloc(obj->size);
-        memcpy(obj->tio.unknown, &dat->chain[object_address], obj->size);
-      }
+          obj->supertype = DWG_SUPERTYPE_UNKNOWN;
+          obj->tio.unknown = (unsigned char*)malloc(obj->size);
+          memcpy(obj->tio.unknown, &dat->chain[object_address], obj->size);
+        }
     }
 
   /*
    if (obj->supertype != DWG_SUPERTYPE_UNKNOWN)
-   {
-   fprintf (stderr, " Begin address:\t%10lu\n", address);
-   fprintf (stderr, " Last address:\t%10lu\tSize: %10lu\n", dat->byte, obj->size);
-   fprintf (stderr, "End address:\t%10lu (calculated)\n", address + 2 + obj->size);
-   }
+     {
+       fprintf (stderr, " Begin address:\t%10lu\n", address);
+       fprintf (stderr, " Last address:\t%10lu\tSize: %10lu\n", dat->byte, obj->size);
+       fprintf (stderr, "End address:\t%10lu (calculated)\n", address + 2 + obj->size);
+     }
    */
 
   /* Register the previous addresses for return

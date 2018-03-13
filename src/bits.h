@@ -64,6 +64,12 @@ bit_read_BB(Bit_Chain * bit_datenaro);
 void
 bit_write_BB(Bit_Chain * bit_datenaro, unsigned char value);
 
+BITCODE_3B
+bit_read_3B(Bit_Chain * dat);
+
+void
+bit_write_3B(Bit_Chain * dat, unsigned char value);
+
 BITCODE_4BITS
 bit_read_4BITS(Bit_Chain * dat);
 
@@ -107,6 +113,12 @@ bit_read_BL(Bit_Chain * bit_datenaro);
 
 void
 bit_write_BL(Bit_Chain * bit_datenaro, long unsigned int value);
+
+BITCODE_BLL
+bit_read_BLL(Bit_Chain * bit_datenaro);
+
+void
+bit_write_BLL(Bit_Chain * bit_datenaro, BITCODE_BLL value);
 
 BITCODE_BD
 bit_read_BD(Bit_Chain * bit_datenaro);

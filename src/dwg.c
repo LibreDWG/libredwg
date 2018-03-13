@@ -39,7 +39,6 @@
 int
 dwg_read_file(char *filename, Dwg_Data * dwg_data)
 {
-  int sign;
   FILE *fp;
   struct stat attrib;
   size_t size;
@@ -155,37 +154,41 @@ dwg_write_file(char *filename, Dwg_Data * dwg_data)
 }
 #endif /* USE_WRITE */ 
 
+/* IMAGE DATA (R13C3+) */
 unsigned char *
-dwg_bmp(Dwg_Data *stk, long int *size)
+dwg_bmp(Dwg_Data *stk, BITCODE_RL *size)
 {
-  char num_pictures;
-  char code;
-  unsigned i;
+  BITCODE_RC i, num_pictures, code;
   int plene;
-  long int header_size;
+  BITCODE_RL header_size, address, osize;
   Bit_Chain *dat;
 
+  *size = 0;
   dat = (Bit_Chain*) &stk->picture;
+  if (!dat) {
+    LOG_TRACE("no IMAGE DATA\n")
+    return NULL;
+  }
   dat->bit = 0;
   dat->byte = 0;
 
-  bit_read_RL(dat);
+  osize = bit_read_RL(dat); /* overall size of all images */
+  LOG_TRACE("overall size: %li\n", osize)
   num_pictures = bit_read_RC(dat);
   LOG_INFO("num_pictures: %i\n", num_pictures)
 
-  *size = 0;
   plene = 0;
   header_size = 0;
   for (i = 0; i < num_pictures; i++)
     {
       code = bit_read_RC(dat);
-      LOG_TRACE("\t%i - Code: %i\n", i, code)
-      LOG_TRACE("\t\tAdress: 0x%lx\n", bit_read_RL (dat))
-      bit_read_RL(dat);
+      LOG_TRACE("\t[%i] Code: %i\n", i, code)
+      address = bit_read_RL(dat);
+      LOG_TRACE("\t\tHeader data start: 0x%lx\n", address)
       if (code == 1)
         {
           header_size += bit_read_RL(dat);
-          LOG_TRACE("\t\tHeader size: %li\n", header_size)
+          LOG_TRACE("\t\tHeader data size: %li\n", header_size)
         }
       else if (code == 2 && plene == 0)
         {
@@ -195,13 +198,13 @@ dwg_bmp(Dwg_Data *stk, long int *size)
         }
       else if (code == 3)
         {
-          bit_read_RL(dat);
-          LOG_TRACE("\t\tWMF size: 0x%lx\n", bit_read_RL (dat))
+          osize = bit_read_RL(dat);
+          LOG_TRACE("\t\tWMF size: 0x%lx\n", osize)
         }
       else
         {
-          bit_read_RL(dat);
-          LOG_TRACE("\t\tSize: 0x%lx\n", bit_read_RL (dat))
+          osize = bit_read_RL(dat);
+          LOG_TRACE("\t\tSize of unknown code %d: 0x%lx\n", code, osize)
         }
     }
   dat->byte += header_size;
@@ -282,7 +285,7 @@ dwg_get_layer_count(Dwg_Data *dwg)
 Dwg_Object_LAYER **
 dwg_get_layers(Dwg_Data *dwg)
 {
-  int i;
+  unsigned int i;
   Dwg_Object_LAYER ** layers = (Dwg_Object_LAYER **) malloc(
 		dwg_get_layer_count(dwg) * sizeof (Dwg_Object_LAYER*));
   for (i=0; i<dwg_get_layer_count(dwg); i++)
