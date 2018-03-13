@@ -25,7 +25,7 @@
 ACLOCAL_AMFLAGS = -I m4
 
 BUILT_SOURCES = swig_wrap_python.c
-SWIG_SOURCES = ../dwg.i
+SWIG_SOURCES = ../dwg.i ../../src/dwg.h
 
 pkgpython_PYTHON = libredwg.py
 
@@ -50,8 +50,9 @@ _libredwg_la_LDFLAGS = -module
 _libredwg_la_LIBADD = ../../src/libredwg.la
 
 ## not elegant, but works!
+## With macports gcc you need -I/opt/local/lib/gcc6/gcc/x86_64-apple-darwin15/6.4.0/include
 swig_wrap_python.c : $(SWIG_SOURCES)
-	swig -python -includeall -I$(top_srcdir)/src -o $@ $<
+	swig -python -includeall -I/usr/include -I$(top_srcdir)/src -o $@ ../dwg.i
 
 ## should work out of the box, but $(SWIG) resolves to swig -c++
 ## which we don't want, and SWIG_PYTHON_OPT resolves to null,
