@@ -53,7 +53,7 @@ bit_read_B_tests ()
     }
   else
     {
-      fail ("bit_read_B");
+      fail ("bit_read_B %c", result);
     }
 }
 
@@ -72,7 +72,7 @@ bit_write_BB_tests ()
     }
   else
     {
-      fail ("bit_write_BB");
+      fail ("bit_write_BB %d", bitchain.chain[0]);
     }
 }
 
@@ -89,7 +89,7 @@ bit_read_BB_tests ()
     }
   else
     {
-      fail ("bit_read_BB");
+      fail ("bit_read_BB %d", result);
     }
 }
 
@@ -108,8 +108,7 @@ bit_write_3B_tests ()
     }
   else
     {
-      fprintf(stderr, "got %d\n", bitchain.chain[0]);
-      fail ("bit_write_3B");
+      fail ("bit_write_3B %d", bitchain.chain[0]);
     }
 }
 
@@ -126,8 +125,7 @@ bit_read_3B_tests ()
     }
   else
     {
-      fprintf(stderr, "got %d\n", result);
-      fail ("bit_read_3B");
+      fail ("bit_read_3B %d", result);
     }
   result = bit_read_3B (&bitchain);
   if (result == 1)
@@ -136,8 +134,7 @@ bit_read_3B_tests ()
     }
   else
     {
-      fprintf(stderr, "got %d\n", result);
-      fail ("bit_read_3B");
+      fail ("bit_read_3B %d", result);
     }
   result = bit_read_3B (&bitchain);
   if (result == 1)
@@ -146,18 +143,18 @@ bit_read_3B_tests ()
     }
   else
     {
-      fprintf(stderr, "got %d\n", result);
-      fail ("bit_read_3B");
+      fail ("bit_read_3B %d", result);
     }
 }
 
 /* This function calls tests for bit_write_4BITS_tests() 
+   Used in VIEW view_mode, type 71
  */
 void
 bit_write_4BITS_tests ()
 {
   Bit_Chain bitchain = strtobt ("00000000");
-  bit_write_4BITS (&bitchain, 0xF);
+  bit_write_4BITS (&bitchain, 0x0F);
   printf ("%x\n", bitchain.chain[0]);
 
   if (bitchain.chain[0] == 0xF0)
@@ -166,7 +163,7 @@ bit_write_4BITS_tests ()
     }
   else
     {
-      fail ("bit_write_4BITS");
+      fail ("bit_write_4BITS %x", bitchain.chain[0]);
     }
 }
 

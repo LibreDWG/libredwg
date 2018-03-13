@@ -170,9 +170,6 @@ bit_read_3B(Bit_Chain * dat)
 void
 bit_write_3B(Bit_Chain * dat, unsigned char value)
 {
-  unsigned char mask;
-  unsigned char byte;
-
   bit_write_B(dat, value & 1);
   if (value) {
     value >>= 1;
@@ -201,17 +198,10 @@ bit_read_4BITS(Bit_Chain * dat)
 void
 bit_write_4BITS(Bit_Chain * dat, unsigned char value)
 {
-  unsigned char byte;
-  unsigned char remainder1, remainder2;
-
-  bit_advance_position(dat, 4);
-  byte = dat->chain[dat->byte];
-  remainder1 = byte & (0xff << (8 - dat->bit));
-  remainder2 = byte & (0xff >> (dat->bit+4));
-
-  //TODO: correct?
-  bit_write_RC(dat, (unsigned char)remainder1 | (value << 16));
-  bit_write_RC(dat, (unsigned char)remainder2 | (value & 0xff));
+  bit_write_B(dat, value & 1);
+  bit_write_B(dat, value & 2);
+  bit_write_B(dat, value & 4);
+  bit_write_B(dat, value & 8);
 }
 
 /** Read 1 byte (raw char).
