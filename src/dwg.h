@@ -22,7 +22,10 @@
 #ifndef DWG_H
 #define DWG_H
 
+// for uint64_t, but not in swig
+#ifndef SWIGIMPORTED
 #include <stdint.h>
+#endif
 
 #ifdef __cplusplus
 //extern "C"
