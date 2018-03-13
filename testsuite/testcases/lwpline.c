@@ -74,108 +74,108 @@ void
 api_process (dwg_object * obj)
 {
   dwg_ent_lwpline *lwpline = dwg_object_to_LWPLINE (obj);
-  int flag_error, const_width_error, elevation_error, thickness_error,
-    num_points_error, num_bulges_error, num_widths_error, normal_error,
-    points_error, bulges_error, widths_error;
-  long num_points, num_bulges, num_widths;
+  int error;
+  BITCODE_BL num_points, num_bulges, num_widths;
   dwg_point_3d normal;
-  char flags;
-  double const_width, elevation, thickness;
-  double *bulges;
+  BITCODE_BS flags;
+  BITCODE_BD const_width, elevation, thickness;
+  BITCODE_BD *bulges;
   dwg_point_2d *points;
   dwg_lwpline_widths *width;
 
   // returns normal points
-  dwg_ent_lwpline_get_normal (lwpline, &normal, &normal_error);
-  if (normal_error == 0 && lwpline->normal.x == normal.x && lwpline->normal.y == normal.y && lwpline->normal.z == normal.z)	// error check
+  dwg_ent_lwpline_get_normal (lwpline, &normal, &error);
+  if (error == 0 && lwpline->normal.x == normal.x &&
+      lwpline->normal.y == normal.y && lwpline->normal.z == normal.z)
     {
-      pass ("Working Properly");
+      pass ("lwpline_get_normal");
     }
   else
     {
-      fail ("error in reading normal");
+      fail ("lwpline_get_normal");
     }
 
   // returns constant width
-  const_width = dwg_ent_lwpline_get_const_width (lwpline, &const_width_error);
-  if (const_width_error == 0 && const_width == lwpline->const_width)	// error checking
+  const_width = dwg_ent_lwpline_get_const_width (lwpline, &error);
+  if (error == 0 && const_width == lwpline->const_width)
     {
-      pass ("Working Properly");
+      pass ("lwpline_get_const_width");
     }
   else
     {
-      fail ("error in reading const width");
+      fail ("lwpline_get_const_width");
     }
 
   // returns elevation
-  elevation = dwg_ent_lwpline_get_elevation (lwpline, &elevation_error);
-  if (elevation_error == 0 && elevation == lwpline->elevation)	// error check
+  elevation = dwg_ent_lwpline_get_elevation (lwpline, &error);
+  if (error == 0 && elevation == lwpline->elevation)
     {
-      pass ("Working Properly");
+      pass ("lwpline_get_elevation");
     }
   else
     {
-      fail ("error in reading elevation");
+      fail ("lwpline_get_elevation");
     }
 
   // returns thickness
-  thickness = dwg_ent_lwpline_get_thickness (lwpline, &thickness_error);
-  if (thickness_error == 0 && lwpline->thickness == thickness)	// error check
+  thickness = dwg_ent_lwpline_get_thickness (lwpline, &error);
+  if (error == 0 && lwpline->thickness == thickness)
     {
-      pass ("Working Properly");
+      pass ("lwpline_get_thickness");
     }
   else
     {
-      fail ("error in reading thickness");
+      fail ("lwpline_get_thickness");
     }
 
   // returns number of widths
-  num_widths = dwg_ent_lwpline_get_num_widths (lwpline, &num_widths_error);
-  if (num_widths_error == 0 && num_widths == lwpline->num_widths)	// error check
+  num_widths = dwg_ent_lwpline_get_num_widths (lwpline, &error);
+  if (error == 0 && num_widths == lwpline->num_widths)
     {
-      pass ("Working Properly");
+      pass ("lwpline_get_num_widths");
     }
   else
     {
-      fail ("error in reading num width");
+      fail ("lwpline_get_num_widths");
     }
 
   // returns number of bulges
-  num_bulges = dwg_ent_lwpline_get_num_bulges (lwpline, &num_bulges_error);
-  if (num_bulges_error == 0 && num_bulges == lwpline->num_bulges)	// error checking
+  num_bulges = dwg_ent_lwpline_get_num_bulges (lwpline, &error);
+  if (error == 0 && num_bulges == lwpline->num_bulges)
     {
-      pass ("Working Properly");
+      pass ("lwpline_get_num_bulges");
     }
   else
     {
-      fail ("error in reading num bulge");
+      fail ("lwpline_get_num_bulges");
     }
 
   // returns number of points
-  num_points = dwg_ent_lwpline_get_num_points (lwpline, &num_points_error);
-  if (num_points_error == 0 && num_points == lwpline->num_points)	// error check
+  num_points = dwg_ent_lwpline_get_num_points (lwpline, &error);
+  if (error == 0 && num_points == lwpline->num_points)
     {
-      pass ("Working Properly");
+      pass ("lwpline_get_num_points");
     }
   else
     {
-      fail ("error in reading num points");
+      fail ("lwpline_get_num_points");
     }
 
   // returns flags
-  flags = dwg_ent_lwpline_get_flags (lwpline, &flag_error);
-  if (flag_error == 0 && flags == lwpline->flags)	// error check
+  flags = dwg_ent_lwpline_get_flags (lwpline, &error);
+  if (error == 0 && flags == lwpline->flags)	// error check
     {
-      pass ("Working Properly");
+      pass ("lwpline_get_flags");
     }
   else
     {
-      fail ("error in reading flag");
+      fail ("lwpline_get_flags error=%d flags=%x lwpline->flags=%x",
+            error, flags, lwpline->flags);
     }
 
   // returns bulges
-  bulges = dwg_ent_lwpline_get_bulges (lwpline, &bulges_error);
-  if (bulges_error == 0)	// error check
+  bulges = dwg_ent_lwpline_get_bulges (lwpline, &error);
+  if (error == 0)
     {
       int i, matches = 1;
       for (i = 0; i < lwpline->num_bulges; i++)
@@ -187,21 +187,21 @@ api_process (dwg_object * obj)
 	}
       if (matches)
 	{
-	  pass ("Working Properly");
+	  pass ("lwpline_get_bulges");
 	}
       else
 	{
-	  fail ("error in reading bulges");
+	  fail ("lwpline_get_bulges match");
 	}
     }
   else
     {
-      fail ("error in reading bulges");
+      fail ("lwpline_get_bulges error=1");
     }
 
   // returns points
-  points = dwg_ent_lwpline_get_points (lwpline, &points_error);
-  if (points_error == 0)	// error check
+  points = dwg_ent_lwpline_get_points (lwpline, &error);
+  if (error == 0)	// error check
     {
       int i, matches = 1;
       for (i = 0; i < lwpline->num_points; i++)
@@ -214,21 +214,21 @@ api_process (dwg_object * obj)
 	}
       if (matches)
 	{
-	  pass ("Working Properly");
+	  pass ("lwpline_get_points");
 	}
       else
 	{
-	  fail ("error in reading points");
+	  fail ("lwpline_get_points match");
 	}
     }
   else
     {
-      fail ("error in reading points");
+      fail ("lwpline_get_points error=1");
     }
 
   // returns width
-  width = dwg_ent_lwpline_get_widths (lwpline, &widths_error);
-  if (widths_error == 0)	// error check
+  width = dwg_ent_lwpline_get_widths (lwpline, &error);
+  if (error == 0)
     {
       int i, matches = 1;
       for (i = 0; i < lwpline->num_widths; i++)
@@ -241,15 +241,15 @@ api_process (dwg_object * obj)
 	}
       if (matches)
 	{
-	  pass ("Working Properly");
+	  pass ("lwpline_get_widths");
 	}
       else
 	{
-	  fail ("error in reading widths");
+	  fail ("lwpline_get_widths matches");
 	}
     }
   else
     {
-      fail ("error in reading widths");
+      fail ("lwpline_get_widths error=1");
     }
 }
