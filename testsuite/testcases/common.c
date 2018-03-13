@@ -3,8 +3,9 @@
 #include <string.h>
 #include <unistd.h>
 #include <math.h>
-#include <dwg.h>
-#include <dwg_api.h>
+
+#include "dwg.h"
+#include "dwg_api.h"
 
 /// This function Declaration reads DWG file
 int test_code (char *filename);

@@ -1,6 +1,6 @@
 
 AM_CPPFLAGS = $(XML2_CFLAGS)
-AM_CFLAGS = -g
+CFLAGS = -g
 LDADD = $(top_builddir)/src/libredwg.la -lm $(XML2_LIBS)
 
 # Set env var ‘PYTHON’ so that check.py can invoke other .py programs.

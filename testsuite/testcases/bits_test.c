@@ -93,6 +93,64 @@ bit_read_BB_tests ()
     }
 }
 
+/* This functions calls for tests for bit_write_3B()
+ */
+void
+bit_write_3B_tests ()
+{
+  Bit_Chain bitchain = strtobt ("01000000");
+  bit_advance_position (&bitchain, 2);
+  bit_write_3B (&bitchain, 0x2);
+
+  if (bitchain.chain[0] == 80)
+    {
+      pass ("bit_write_3B");
+    }
+  else
+    {
+      fprintf(stderr, "got %d\n", bitchain.chain[0]);
+      fail ("bit_write_3B");
+    }
+}
+
+/* This function executes test for bit_read_3B()
+ */
+void
+bit_read_3B_tests ()
+{
+  Bit_Chain bitchain = strtobt ("10101010");
+  unsigned char result = bit_read_3B (&bitchain);
+  if (result == 1)
+    {
+      pass ("bit_read_3B");
+    }
+  else
+    {
+      fprintf(stderr, "got %d\n", result);
+      fail ("bit_read_3B");
+    }
+  result = bit_read_3B (&bitchain);
+  if (result == 1)
+    {
+      pass ("bit_read_3B");
+    }
+  else
+    {
+      fprintf(stderr, "got %d\n", result);
+      fail ("bit_read_3B");
+    }
+  result = bit_read_3B (&bitchain);
+  if (result == 1)
+    {
+      pass ("bit_read_3B");
+    }
+  else
+    {
+      fprintf(stderr, "got %d\n", result);
+      fail ("bit_read_3B");
+    }
+}
+
 /* This function calls tests for bit_write_4BITS_tests() 
  */
 void
@@ -310,6 +368,9 @@ main ()
   /* Tests for bit_read_BB() */
   bit_read_BB_tests ();
   /* End of tests for bit_read_BB */
+
+  bit_write_3B_tests ();
+  bit_read_3B_tests ();
 
   /* Tests for bit_read_4BITS() */
   bit_write_4BITS_tests ();

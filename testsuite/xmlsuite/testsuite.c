@@ -512,10 +512,10 @@ load_dwg (char *dwgfilename, xmlNodePtr rootnode)
 	  add_3dpolyline (rootnode, dwg.object[i]);
 	  break;
 
-	  /* case DWG_TYPE_BLOCK:
-	     //What to do when we get a block
-	     add_block(rootnode, dwg.object[i]);
-	     break; */
+     /* case DWG_TYPE_BLOCK:
+          //What to do when we get a block
+          add_block(rootnode, dwg.object[i]);
+          break; */
 
 	case DWG_TYPE_MLINE:
 	  //What to do when we get a mline
@@ -547,10 +547,10 @@ load_dwg (char *dwgfilename, xmlNodePtr rootnode)
 	  add_spline (rootnode, dwg.object[i]);
 	  break;
 
-/*    case DWG_TYPE_TABLE:
-        //What to do when we get a table
-        add_table(rootnode, dwg.object[i]);
-        break;*/
+/*      case DWG_TYPE_TABLE:
+          //What to do when we get a table
+          add_table(rootnode, dwg.object[i]);
+          break;*/
 
 	}
     }
@@ -568,8 +568,9 @@ main (int argc, char *argv[])
 
   //Load the XML interface
   LIBXML_TEST_VERSION
-    //Basic Root Entity
-    xmlChar * xml = "<DwgData></DwgData>";
+
+  //Basic Root Entity
+  xmlChar * xml = "<DwgData></DwgData>";
 
   //Put that in memory
   xmlDocPtr doc = xmlParseMemory (xml, xmlStrlen (xml));
