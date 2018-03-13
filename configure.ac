@@ -102,10 +102,10 @@ AC_CONFIG_FILES([
 	examples/Makefile
 	bindings/Makefile
 	bindings/python/Makefile
-    testsuite/Makefile
-    testsuite/testcases/Makefile
-    testsuite/xmlsuite/Makefile
-    unit-testing/Makefile
+	testsuite/Makefile
+	testsuite/testcases/Makefile
+	testsuite/xmlsuite/Makefile
+	unit-testing/Makefile
 ])
 
 AC_OUTPUT
