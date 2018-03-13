@@ -19,6 +19,12 @@
 
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS = src unit-testing doc examples bindings testsuite
+SUBDIRS = src unit-testing doc examples
+if HAVE_SWIG_PYTHON
+SUBDIRS += bindings
+endif
+if HAVE_DEJAGNU
+SUBDIRS += testsuite
+endif
 
 EXTRA_DIST = README README-alpha

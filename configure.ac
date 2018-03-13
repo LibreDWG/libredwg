@@ -50,8 +50,9 @@ dnl Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS([stdlib.h string.h unistd.h malloc.h])
 
-AC_CHECK_HEADER(dejagnu.h, , [AC_MSG_WARN(
-  [Couldn't find dejagnu.h] )])
+AC_CHECK_HEADER(dejagnu.h, ,
+  [AC_MSG_WARN([Couldn't find dejagnu.h])])
+AM_CONDITIONAL([HAVE_DEJAGNU], [test "x$ac_cv_header_dejagnu_h" = xyes])
 
 # Don't bother testing for libps headers if libps is not available.
 if test yes = "$libredwg_have_libps" ; then
@@ -86,16 +87,14 @@ AM_CONDITIONAL([HAVE_LIBPS],[test yes = "$libredwg_have_libps" &&
                              test yes = "$ac_cv_header_libps_pslib_h"])
 
 dnl for SWIG - should be optional
-AM_PATH_PYTHON([2.3])
-AX_PKG_SWIG([1.3.17], [], [ AC_MSG_ERROR([SWIG is required to build..]) ])
+AM_PATH_PYTHON([2.7])
+AX_PKG_SWIG([1.3.17], [], [ AC_MSG_WARN([SWIG is required for python bindings]) ])
 dnl AX_SWIG_ENABLE_CXX
 dnl SWIG_MULTI_MODULE_SUPPORT
 SWIG_PYTHON
+AM_CONDITIONAL([HAVE_SWIG_PYTHON], [test -n "$SWIG" && test -n "$PYTHON_VERSION"])
 
-
-
-dnl Write it out!
-
+dnl Write it out
 AC_CONFIG_FILES([
 	Makefile
 	src/Makefile
