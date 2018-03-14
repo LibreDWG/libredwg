@@ -196,7 +196,70 @@ LibreDWG types map closely to the type system of the DWG file format.
 This chapter describes the enums and structs used to define the constants
 (@pxref{Constants}), and passed around the functions (@pxref{Functions}).
 
-[??? TODO]
+@deftypevr {define} BITCODE_RC char
+1 raw signed char
+@end deftypevr
+@deftypevr {define} BITCODE_RS short
+1 raw unsigned short int
+@end deftypevr
+@deftypevr {define} BITCODE_RL long
+1 raw unsigned long int
+@end deftypevr
+@deftypevr {define} BITCODE_RD double
+1 raw IEEE-754 double
+@end deftypevr
+@deftypevr {define} BITCODE_B byte
+1 bit
+@end deftypevr
+@deftypevr {define} BITCODE_BB byte
+2 bits
+@end deftypevr
+@deftypevr {define} BITCODE_3B byte
+1-3 bits
+@end deftypevr
+@deftypevr {define} BITCODE_4BITS byte
+4 bits (for VIEW view_mode)
+@end deftypevr
+@deftypevr {define} BITCODE_BS short
+1 bit-encoded unsigned short
+@end deftypevr
+@deftypevr {define} BITCODE_BL long
+1 bit-encoded unsigned long
+@end deftypevr
+@deftypevr {define} BITCODE_BLL uint64_t
+1 bit-encoded unsigned 64bit long
+@end deftypevr
+@deftypevr {define} BITCODE_BD double
+1 bit-encoded double
+@end deftypevr
+@deftypevr {define} BITCODE_DD double
+1 bit-encoded double with default
+@end deftypevr
+@deftypevr {define} BITCODE_MC long int
+1 modular char, max 4 bytes
+@end deftypevr
+@deftypevr {define} BITCODE_MS long unsigned int
+1 modular short, max 2 words
+@end deftypevr
+@deftypevr {define} BITCODE_BE double[3]
+1 bitencoded extrusion vector
+@end deftypevr
+@deftypevr {define} BITCODE_BT double
+1 bitencoded thickness value
+@end deftypevr
+@deftypevr {define} BITCODE_TV char*
+length + ASCIIZ string
+@end deftypevr
+@deftypevr {define} BITCODE_H void*
+handle-references
+@end deftypevr
+@deftypevr {define} BITCODE_L long int
+1 raw LE-encoded long
+@end deftypevr
+@deftypevr {define} BITCODE_CMC double[4]
+1 encoded Dwg_Color struct
+@end deftypevr
+[and some more]
 
 @cindex return code
 @cindex code, return
@@ -223,6 +286,7 @@ If you notice LibreDWG segfaulting, that's a bug.
 @xref{Reporting bugs}.
 @end deftypevr
 
+[??? TODO]
 
 @node Functions
 @chapter Functions

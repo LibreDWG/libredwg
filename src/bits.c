@@ -657,7 +657,7 @@ bit_write_MS(Bit_Chain * dat, long unsigned int value)
     bit_write_RS(dat, word[j]);
 }
 
-/** Read bit-extrusionn.
+/** Read bit-extrusion.
  */
 void
 bit_read_BE(Bit_Chain * dat, double *x, double *y, double *z)
@@ -676,7 +676,7 @@ bit_read_BE(Bit_Chain * dat, double *x, double *y, double *z)
     }
 }
 
-/** Write bit-extrusionn.
+/** Write bit-extrusion.
  */
 void
 bit_write_BE(Bit_Chain * dat, double x, double y, double z)
