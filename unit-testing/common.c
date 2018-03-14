@@ -159,6 +159,22 @@ void output_process(dwg_object *obj)
   print_api(obj);
 }
 
+#ifdef DWG_TYPE
+void
+output_object(dwg_object* obj){
+  if (!obj)
+    {
+      printf("object is NULL\n");
+      return;
+    }
+
+  if (dwg_get_type(obj) == DWG_TYPE)
+    {
+      output_process(obj);
+    }
+}
+#endif
+
 /// Low level printing function
 void
 print_low_level(dwg_object *obj)

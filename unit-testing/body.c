@@ -1,10 +1,8 @@
 #include "common.c"
 
 void
-output_process(dwg_object *obj);
-
-void
-output_object(dwg_object* obj){
+output_object(dwg_object* obj)
+{
   if (!obj)
     {
       printf("object is NULL\n");
@@ -183,7 +181,7 @@ api_process(dwg_object *obj)
   wire = dwg_ent_body_get_wire(body, &wire_error);
   if( wire_error == 0 )
     {
-      int i;
+      unsigned long i;
       for (i = 0; i < num_wires; i++)
         {
            printf("wire of body : %ld", wire[i].selection_marker);
@@ -206,7 +204,7 @@ api_process(dwg_object *obj)
   sil = dwg_ent_body_get_silhouette(body, &sil_error);
   if( sil_error == 0 )
     {
-      int i;
+      unsigned long i;
       for (i = 0; i < num_sil; i++)
         {
            printf("silhouette of body : %ld", sil[i].vp_id);

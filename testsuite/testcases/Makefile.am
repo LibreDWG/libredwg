@@ -62,3 +62,9 @@ CLEANFILES = *.log *.sum site.bak
 @VALGRIND_CHECK_RULES@
 #VALGRIND_SUPPRESSIONS_FILES = $(PACKAGE).supp
 #EXTRA_DIST = $(PACKAGE).supp
+
+# emacs flymake-mode
+check-syntax:
+	test -n "$(CHK_SOURCES)" && \
+	  $(COMPILE) -o /dev/null -S $(CHK_SOURCES)
+.PHONY: check-syntax

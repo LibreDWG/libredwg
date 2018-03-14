@@ -1,10 +1,8 @@
 #include "common.c"
 
 void
-output_process(dwg_object *obj);
-
-void
-output_object(dwg_object* obj){
+output_object(dwg_object* obj)
+{
   if (!obj)
     {
       printf("object is NULL\n");
@@ -39,7 +37,7 @@ void
 api_process(dwg_object *obj)
 {
   int thickness_error,ins_pt_error, ext_error;
-  float thickness;
+  double thickness;
   dwg_point_3d ins_pt, ext;
   dwg_ent_shape *shape = dwg_object_to_SHAPE(obj);
 

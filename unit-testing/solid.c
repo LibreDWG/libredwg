@@ -1,10 +1,8 @@
 #include "common.c"
 
 void
-output_process(dwg_object *obj);
-
-void
-output_object(dwg_object* obj){
+output_object(dwg_object* obj)
+{
   if (!obj)
     {
       printf("object is NULL\n");
@@ -56,7 +54,7 @@ api_process(dwg_object *obj)
 {
   int elevation_error, ext_error, thickness_error, c1_error, c2_error, c3_error,
       c4_error;
-  float thickness, elevation;
+  double thickness, elevation;
   dwg_point_3d ext;
   dwg_point_2d c1,c2,c3,c4;
   dwg_ent_solid *solid = dwg_object_to_SOLID(obj);

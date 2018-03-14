@@ -1,10 +1,8 @@
 #include "common.c"
 
 void
-output_process(dwg_object *obj);
-
-void
-output_object(dwg_object* obj){
+output_object(dwg_object* obj)
+{
   if (!obj)
     {
       printf("object is NULL\n");
@@ -55,7 +53,7 @@ void
 api_process(dwg_object *obj)
 {
   int error;
-  float thickness, rotation, vert_align, horiz_align, height;
+  double thickness, rotation, vert_align, horiz_align, height;
   char * text_value;
   dwg_point_3d ext;
   dwg_point_2d ins_pt;

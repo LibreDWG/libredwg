@@ -1,20 +1,6 @@
+#define DWG_TYPE DWG_TYPE_3DSOLID
 #include "common.c"
 #include <dejagnu.h>
-
-void
-output_object (dwg_object * obj)
-{
-  if (!obj)
-    {
-      printf ("object is NULL\n");
-      return;
-    }
-
-  if (dwg_get_type (obj) == DWG_TYPE_3DSOLID)
-    {
-      output_process (obj);
-    }
-}
 
 /* This function checks API functions for integrity
    @params dwg_object* obj 

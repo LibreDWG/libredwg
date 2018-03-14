@@ -1,10 +1,8 @@
 #include "common.c"
 
 void
-output_process(dwg_object *obj);
-
-void
-output_object(dwg_object* obj){
+output_object(dwg_object* obj)
+{
   if (!obj)
     {
       printf("object is NULL\n");
@@ -69,7 +67,7 @@ api_process(dwg_object *obj)
   dwg_point_3d ins_pt, ext, scale;
   double rot_angle;
   char scale_flag, attribs;
-  float col_space, row_space;
+  double col_space, row_space;
   long obj_count, num_rows, num_cols;
   dwg_ent_minsert *minsert = dwg_object_to_MINSERT(obj);
 

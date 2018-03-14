@@ -1,12 +1,9 @@
 #include "common.c"
 
-/// Output processing function
-void
-output_process(dwg_object *obj);
-
 /// Checks the respective DWG entity/object type and then calls the output_process()
 void
-output_object(dwg_object* obj){
+output_object(dwg_object* obj)
+{
   if (!obj)
     {
       printf("object is NULL\n");
@@ -73,7 +70,7 @@ api_process(dwg_object *obj)
       extends_ht_error, extends_wid_error, linespace_factor_error,
       drawing_dir_error, ext_error, x_axis_dir_error, ins_pt_error,
       linespace_style_error, text_error; // Error reporting
-  float rect_height, rect_width, text_height, extends_ht, extends_wid,
+  double rect_height, rect_width, text_height, extends_ht, extends_wid,
         linespace_factor;
   unsigned int attachment, drawing_dir, linespace_style;
   char * text;

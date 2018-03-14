@@ -1,21 +1,6 @@
+#define DWG_TYPE DWG_TYPE_ENDBLK
 #include "common.c"
 #include <dejagnu.h>
-void output_process (dwg_object * obj);
-
-void
-output_object (dwg_object * obj)
-{
-  if (!obj)
-    {
-      printf ("object is NULL\n");
-      return;
-    }
-
-  if (dwg_get_type (obj) == DWG_TYPE_ENDBLK)
-    {
-      output_process (obj);
-    }
-}
 
 void
 api_process (dwg_object * obj)

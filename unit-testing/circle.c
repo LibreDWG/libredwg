@@ -1,23 +1,5 @@
+#define DWG_TYPE DWG_TYPE_CIRCLE
 #include "common.c"
-
-/// Output processing function
-void
-output_process(dwg_object *obj);
-
-/// Checks the respective DWG entity/object type and then calls the output_process()
-void
-output_object(dwg_object* obj){
-  if (!obj)
-    {
-      printf("object is NULL\n");
-      return;
-    }
-
-  if (dwg_get_type(obj)== DWG_TYPE_CIRCLE)
-    {
-      output_process(obj);
-    }
-}
 
 void
 low_level_process(dwg_object *obj)

@@ -1,12 +1,9 @@
 #include "common.c"
 
-// Output processing function
-void
-output_process(dwg_object *obj);
-
 // Checks the respective DWG entity/object type and then calls the output_process()
 void
-output_object(dwg_object* obj){
+output_object(dwg_object* obj)
+{
   if (!obj)
     {
       printf("object is NULL\n");
@@ -52,7 +49,7 @@ void
 api_process(dwg_object *obj)
 {
   int height_error, dimgap_error, ext_error, ins_pt_error, x_dir_error, text_error;
-  float height, dimgap;
+  double height, dimgap;
   dwg_point_3d ins_pt, x_dir, ext;  //3d_points 
   char * text_string;
 

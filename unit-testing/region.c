@@ -1,10 +1,8 @@
 #include "common.c"
 
 void
-output_process(dwg_object *obj);
-
-void
-output_object(dwg_object* obj){
+output_object(dwg_object* obj)
+{
   if (!obj)
     {
       printf("object is NULL\n");
@@ -20,6 +18,7 @@ output_object(dwg_object* obj){
 void
 low_level_process(dwg_object *obj)
 {
+  unsigned long i;
   // casts dwg object to region entity
   dwg_ent_region *region = dwg_object_to_REGION(obj);
 
@@ -52,7 +51,6 @@ low_level_process(dwg_object *obj)
   printf("num wires of region : %ld", region->num_wires);
 
   // prints wires
-  int i;
   for (i = 0; i < region->num_wires; i++)
     {
       printf("wire of region : %ld", region->wires[i].selection_marker);

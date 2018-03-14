@@ -1,21 +1,6 @@
+#define DWG_TYPE DWG_TYPE_OLE2FRAME
 #include "common.c"
-
-void output_process (dwg_object * obj);
-
-void
-output_object (dwg_object * obj)
-{
-  if (!obj)
-    {
-      printf ("object is NULL\n");
-      return;
-    }
-
-  if (dwg_get_type (obj) == DWG_TYPE_OLE2FRAME)
-    {
-      output_process (obj);
-    }
-}
+#include <dejagnu.h>
 
 void
 low_level_process (dwg_object * obj)

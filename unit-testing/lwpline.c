@@ -1,10 +1,8 @@
 #include "common.c"
 
 void
-output_process(dwg_object *obj);
-
-void
-output_object(dwg_object* obj){
+output_object(dwg_object* obj)
+{
   if (!obj)
     {
       printf("object is NULL\n");
@@ -20,6 +18,7 @@ output_object(dwg_object* obj){
 void
 low_level_process(dwg_object *obj)
 {
+  unsigned long i;
   // casts dwg object to lwpline entity
   dwg_ent_lwpline *lwpline = dwg_object_to_LWPLINE(obj);
 
@@ -49,21 +48,20 @@ low_level_process(dwg_object *obj)
   printf("flag of lwpline : %d\t\n", lwpline->flags);
 
   // prints bulges
-  int i;
-  for ( i = 0;i < lwpline->num_bulges ; i++ )
+  for ( i = 0; i < lwpline->num_bulges; i++ )
     {
       printf("bulges of lwpline : %f\t\n", lwpline->bulges[i]);
     }
 
   // prints points
-  for ( i = 0;i < lwpline->num_points ; i++ )
+  for ( i = 0; i < lwpline->num_points; i++ )
     {
       printf("points of lwpline : x =%f\ty = %f\t\n",
               lwpline->points[i].x, lwpline->points[i].y);
     }
 
   // prints widths
-  for ( i = 0;i < lwpline->num_widths ; i++ )
+  for ( i = 0; i < lwpline->num_widths; i++ )
     {
       printf("points of lwpline : x =%f\ty = %f\t\n",
               lwpline->widths[i].start, lwpline->widths[i].end);
@@ -179,7 +177,7 @@ api_process(dwg_object *obj)
   bulges = dwg_ent_lwpline_get_bulges(lwpline, &bulges_error);
   if ( bulges_error == 0 ) // error check
    {
-     int i;
+     unsigned long i;
      for ( i = 0;i < lwpline->num_bulges; i++ )
        {
          printf("bulges of lwpline : %f\t\n", bulges[i]);
@@ -194,7 +192,7 @@ api_process(dwg_object *obj)
   points = dwg_ent_lwpline_get_points(lwpline, &points_error);
   if ( points_error == 0 ) // error check
    {
-     int i;
+     unsigned long i;
      for ( i = 0;i < lwpline->num_points ; i++ )
        {
          printf("points of lwpline : x =%f\ty = %f\t\n", points[i].x, points[i].y);
@@ -209,7 +207,7 @@ api_process(dwg_object *obj)
   width = dwg_ent_lwpline_get_widths(lwpline, &widths_error);
   if ( widths_error == 0 ) // error check
    {
-     int i;
+     unsigned long i;
      for ( i = 0;i < lwpline->num_widths ; i++ )
        {
          printf("widths of lwpline : x =%f\ty = %f\t\n",

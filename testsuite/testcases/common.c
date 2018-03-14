@@ -7,20 +7,23 @@
 #include "dwg.h"
 #include "dwg_api.h"
 
-/// This function Declaration reads DWG file
+/// read DWG file
 int test_code (char *filename);
 
-/// Declaration of function to iterate over objects of a block
+/// iterate over objects of a block
 void output_BLOCK_HEADER (dwg_object_ref * ref);
 
-/// Declaration for function that checks the dwg type and calls output_process
+/// checks the dwg type and calls output_process
 void output_object (dwg_object * obj);
 
-/// Function declaration for blocks to be iterated over
+/// blocks to be iterated over
 void output_test (dwg_data * dwg);
 
 /// Main output function that prints to the terminal
 void output_process (dwg_object * obj);
+
+// optional callback
+void low_level_process (dwg_object * obj);
 
 /// API based processing function declaration
 void api_process (dwg_object * obj);
@@ -122,6 +125,23 @@ output_test (dwg_data * dwg)
   output_BLOCK_HEADER (dwg_obj_block_control_get_paper_space (ctrl, &error));
 
 }
+
+#ifdef DWG_TYPE
+/// drive output_process
+void
+output_object(dwg_object* obj){
+  if (!obj)
+    {
+      printf("object is NULL\n");
+      return;
+    }
+
+  if (dwg_get_type(obj) == DWG_TYPE)
+    {
+      output_process(obj);
+    }
+}
+#endif
 
 /// Main output function that prints to the terminal
 void

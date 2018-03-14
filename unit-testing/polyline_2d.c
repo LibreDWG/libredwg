@@ -1,10 +1,8 @@
 #include "common.c"
 
 void
-output_process(dwg_object *obj);
-
-void
-output_object(dwg_object* obj){
+output_object(dwg_object* obj)
+{
   if (!obj)
     {
       printf("object is NULL\n");
@@ -30,7 +28,7 @@ api_process(dwg_object *obj)
 {
   int start_w_error, end_w_error, ext_error, thickness_error, elevation_error,
       curve_type_error, flags_error, owned_obj_error;
-  float start_width, end_width, elevation, thickness;
+  double start_width, end_width, elevation, thickness;
   long owned_obj;
   unsigned int flags, curve_type;
   dwg_point_3d ext;

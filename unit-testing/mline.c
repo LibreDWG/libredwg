@@ -1,12 +1,9 @@
 #include "common.c"
 
-/// Output processing function
-void
-output_process(dwg_object *obj);
-
 /// Checks the respective DWG entity/object type and then calls the output_process()
 void
-output_object(dwg_object* obj){
+output_object(dwg_object* obj)
+{
   if (!obj)
     {
       printf("object is NULL\n");
@@ -22,7 +19,7 @@ output_object(dwg_object* obj){
 void
 low_level_process(dwg_object *obj)
 {
-  int i;
+  unsigned int i;
   // casting object to mline entity
   dwg_ent_mline *mline = dwg_object_to_MLINE(obj);
 
@@ -59,7 +56,7 @@ void
 api_process(dwg_object *obj)
 {
   int error;
-  float scale;
+  double scale;
   char just;
   unsigned int i, oc, num_verts, num_lines;
   dwg_point_3d base_point, ext;  //3d_points 

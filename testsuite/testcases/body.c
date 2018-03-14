@@ -1,23 +1,6 @@
+#define DWG_TYPE DWG_TYPE_BODY
 #include "common.c"
 #include <dejagnu.h>
-
-void output_process (dwg_object * obj);
-
-void
-output_object (dwg_object * obj)
-{
-  if (!obj)
-    {
-      printf ("object is NULL\n");
-      return;
-    }
-
-  if (dwg_get_type (obj) == DWG_TYPE_BODY)
-    {
-      output_process (obj);
-    }
-}
-
 
 void
 api_process (dwg_object * obj)
@@ -28,7 +11,8 @@ api_process (dwg_object * obj)
     sil_error, wire_error, num_sil_error;
 
   unsigned int version;
-  long block_size, num_isolines, num_wires, num_sil;
+  long block_size, num_wires;
+  unsigned long num_isolines, num_sil;
   char *acis_data;
   char wireframe_data_present, point_present, isoline_present;
   unsigned char acis_empty, acis2_empty;
