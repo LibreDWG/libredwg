@@ -2919,8 +2919,8 @@ dwg_get_entity_layer(Dwg_Object_Entity *);
 Dwg_Object*
 dwg_next_object(Dwg_Object* obj);
 
-int
-dwg_get_object(Dwg_Object* obj, Dwg_Object_Ref* ref);
+Dwg_Object*
+dwg_ref_get_object(Dwg_Object_Ref* ref);
 
 Dwg_Object*
 get_first_owned_object(Dwg_Object* hdr_obj, Dwg_Object_BLOCK_HEADER* hdr);
@@ -2930,12 +2930,6 @@ get_next_owned_object(Dwg_Object* hdr_obj, Dwg_Object* current, Dwg_Object_BLOCK
 
 void
 dwg_print_object(Dwg_Object *obj);
-
-
-double dwg_page_x_min(Dwg_Data *dwg);
-double dwg_page_x_max(Dwg_Data *dwg);
-double dwg_page_y_min(Dwg_Data *dwg);
-double dwg_page_y_max(Dwg_Data *dwg);
 
 #ifdef __cplusplus
 //}

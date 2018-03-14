@@ -19,6 +19,9 @@ void output_object (dwg_object * obj);
 /// Function declaration for blocks to be iterated over
 void output_test (dwg_data * dwg);
 
+/// Main output function that prints to the terminal
+void output_process (dwg_object * obj);
+
 /// API based processing function declaration
 void api_process (dwg_object * obj);
 
@@ -29,7 +32,7 @@ void print_api (dwg_object * obj);
 int
 main (int argc, char *argv[])
 {
-  return test_code ("example.dwg");
+  return test_code ((char*)"example.dwg");
 }
 
 /// This function is used to read the DWG file
@@ -103,8 +106,8 @@ output_BLOCK_HEADER (dwg_object_ref * ref)
 void
 output_test (dwg_data * dwg)
 {
-  unsigned int i, num_hdr_objs, error;
-  dwg_object *obj;
+  unsigned int num_hdr_objs;
+  int error;
   dwg_obj_block_header *hdr;
   dwg_obj_block_control *ctrl;
   dwg_object_ref **hdr_refs;
@@ -113,7 +116,6 @@ output_test (dwg_data * dwg)
   ctrl = dwg_block_header_get_block_control (hdr, &error);
 
   hdr_refs = dwg_obj_block_control_get_block_headers (ctrl, &error);
-
   num_hdr_objs = dwg_obj_block_control_get_num_entries (ctrl, &error);
 
   output_BLOCK_HEADER (dwg_obj_block_control_get_model_space (ctrl, &error));

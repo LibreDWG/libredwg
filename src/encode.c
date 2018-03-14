@@ -1189,7 +1189,8 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
   unsigned int size;
   unsigned int extended_size;
   unsigned int i;
-  
+  Dwg_Object_Entity* ent;
+
   size =  obj->tio.entity->bitsize;
   bit_write_RL(dat, size);
   bit_write_H(dat, &(obj->handle));
@@ -1218,7 +1219,7 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
         }
      }
   
-  Dwg_Object_Entity* ent = obj->tio.entity;
+  ent = obj->tio.entity;
   VERSIONS(R_13,R_14)
     {
       bit_write_RL(dat, ent->bitsize);

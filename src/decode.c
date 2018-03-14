@@ -711,17 +711,18 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
       last_address = 0;
       while (dat->byte - duabyte < section_size)
         {
+#if 0
           long unsigned int kobj;
+#endif
           long int pvztkt;
           long int pvzadr;
-
           previous_address = dat->byte;
           pvztkt = bit_read_MC(dat);
           last_handle += pvztkt;
           pvzadr = bit_read_MC(dat);
           last_address += pvzadr;
-          // LOG_TRACE("Idc: %li\t", dwg->num_objects)
-          // LOG_TRACE("Handle: %li\tAddress: %li", pvztkt, pvzadr)
+          LOG_TRACE("Idc: %li\t", dwg->num_objects)
+          LOG_TRACE("Handle: %li\tAddress: %li", pvztkt, pvzadr)
           //}
           if (dat->byte == previous_address)
             break;
@@ -733,11 +734,13 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
           if (object_begin > last_address)
             object_begin = last_address;
 
-          kobj = dwg->num_objects;
           dwg_decode_add_object(dwg, dat, last_address);
-          //if (dwg->num_objects > kobj)
-          //dwg->object[dwg->num_objects - 1].handle.value = lastahandle;
+#if 0
+          kobj = dwg->num_objects;
+          if (dwg->num_objects > kobj)
+            dwg->object[dwg->num_objects - 1].handle.value = lastahandle;
           //TODO: blame Juca
+#endif
         }
       if (dat->byte == previous_address)
         break;
@@ -816,12 +819,13 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
       LOG_INFO("\n=======> Second Header: %8X\n",
           (unsigned int) dat->byte-16)
       pvzadr = dat->byte;
+      LOG_TRACE("pvzadr: %lx\n", pvzadr)
 
       pvz = bit_read_RL(dat);
-      //LOG_TRACE("Size: %lu\n", pvz)
+      LOG_TRACE("Size: %lu\n", pvz)
 
       pvz = bit_read_BL(dat);
-      //LOG_TRACE("Begin address: %8X\n", pvz)
+      LOG_TRACE("Begin address: %8lX\n", pvz)
 
       //LOG_TRACE("AC1015?: ")
       for (i = 0; i < 6; i++)
@@ -886,7 +890,7 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
 
       // Check CRC-on
       ckr = bit_read_CRC(dat);
-      /*
+#if 0
        puts ("");
        for (i = 0; i != 0xFFFF; i++)
        {
@@ -904,7 +908,7 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
        fprintf (stderr, " Garbage 1: %08X\n", bit_read_RL (dat));
        fprintf (stderr, " Garbage 2: %08X\n", bit_read_RL (dat));
        }
-       */
+#endif
 
       if (bit_search_sentinel(dat, dwg_sentinel(
           DWG_SENTINEL_SECOND_HEADER_END)))
@@ -1416,7 +1420,7 @@ read_2004_section_classes(Bit_Chain* dat, Dwg_Data *dwg)
   if (bit_search_sentinel(&sec_dat, dwg_sentinel(DWG_SENTINEL_CLASS_BEGIN)))
     {
       size    = bit_read_RL(&sec_dat);  // size of class data area
-      max_num = bit_read_BS(&sec_dat);  // Maxiumum class number
+      max_num = bit_read_BS(&sec_dat);  // Maximum class number
       c = bit_read_RC(&sec_dat);        // 0x00
       c = bit_read_RC(&sec_dat);        // 0x00
       c = bit_read_B(&sec_dat);         // 1

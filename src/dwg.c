@@ -346,15 +346,14 @@ dwg_next_object(Dwg_Object* obj)
   return &obj->parent->object[obj->index+1];
 }
 
-int
-dwg_get_object(Dwg_Object* obj, Dwg_Object_Ref* ref)
+Dwg_Object*
+dwg_ref_get_object(Dwg_Object_Ref* ref)
 {
   if (ref->obj)
     {
-      obj = ref->obj;
-      return 0;
+      return ref->obj;
     }
-  return -1;
+  return NULL;
 }
 
 Dwg_Object* get_first_owned_object(Dwg_Object* hdr_obj, Dwg_Object_BLOCK_HEADER* hdr)

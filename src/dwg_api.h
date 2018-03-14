@@ -35,29 +35,25 @@ Dwg_Entity_##token **dwg_get_##token (Dwg_Object_Ref * ref);
 Dwg_Entity_##token **dwg_get_##token (Dwg_Object_Ref * ref) \
 { \
   int x=0, counts=0; \
-  Dwg_Object * obj; \
-  Dwg_Object_BLOCK_HEADER *hdr; \
-  hdr = ref->obj->tio.object->tio.BLOCK_HEADER; \
+  Dwg_Entity_##token ** ret_##token; \
+  Dwg_Object_BLOCK_HEADER *hdr = ref->obj->tio.object->tio.BLOCK_HEADER; \
+  Dwg_Object * obj = get_first_owned_object(ref->obj, hdr); \
+  while (obj) \
+    { \
+      if (obj->type == DWG_TYPE_##token) \
+        counts++; \
+      obj = get_next_owned_object(ref->obj, obj, hdr); \
+    } \
+  ret_##token = (Dwg_Entity_##token **)malloc (counts * sizeof(Dwg_Entity_##token *));\
   obj = get_first_owned_object(ref->obj, hdr); \
-  while(obj) \
-      { \
+  while (obj) \
+    { \
       if(obj->type == DWG_TYPE_##token) \
         { \
-          counts++; \
-        } \
-      obj = get_next_owned_object(ref->obj, obj, hdr); \
-      } \
-  Dwg_Entity_##token ** ret_##token = (Dwg_Entity_##token **)malloc ( \
-    counts * sizeof ( Dwg_Entity_##token *)); \
-  obj = get_first_owned_object(ref->obj, hdr); \
-  while(obj) \
-     { \
-       if(obj->type == DWG_TYPE_##token) \
-        { \
-          ret_##token[x] = obj->tio.entity->tio.token;        \
+          ret_##token[x] = obj->tio.entity->tio.token; \
           x++; \
         } \
-      obj = get_next_owned_object(ref->obj, obj, hdr); \
+        obj = get_next_owned_object(ref->obj, obj, hdr); \
     } \
   return ret_##token; \
 }
@@ -3832,7 +3828,7 @@ void
 dwg_ent_3dsolid_set_isoline_present(dwg_ent_3dsolid *_3dsolid, char iso,
                                     int *error);
 
-long
+unsigned long
 dwg_ent_3dsolid_get_num_wires(dwg_ent_3dsolid *_3dsolid, int *error);
 
 void
@@ -3841,7 +3837,7 @@ dwg_ent_3dsolid_set_num_wires(dwg_ent_3dsolid *_3dsolid, long num, int *error);
 dwg_ent_solid_wire *
 dwg_ent_3dsolid_get_wire(dwg_ent_3dsolid *_3dsolid, int *error);
 
-long
+unsigned long
 dwg_ent_3dsolid_get_num_silhouettes(dwg_ent_3dsolid *_3dsolid, int *error);
 
 void

@@ -1,6 +1,5 @@
 #include "common.c"
 #include <dejagnu.h>
-void output_process (dwg_object * obj);
 
 void
 output_object (dwg_object * obj)
@@ -23,194 +22,148 @@ output_object (dwg_object * obj)
 void
 api_process (dwg_object * obj)
 {
-  int block_size_error, num_isolines_error, num_wires_error, acis_data_error,
-    isoline_present_error, point_present_error, wireframe_data_present_error,
-    version_error, acis_empty_error, point_error, acis2_empty_error,
-    sil_error, wire_error, num_sil_error;
-
+  int error;
   unsigned int version;
-  long block_size, num_isolines, num_wires, num_sil;
+  unsigned long *block_size;
+  unsigned long num_wires, num_isolines, num_sil;
   char *acis_data;
   char wireframe_data_present, point_present, isoline_present;
-  unsigned char acis_empty, acis2_empty;
+  unsigned char acis_empty;
   dwg_point_3d point;
   dwg_ent_3dsolid *_3dsolid = obj->tio.entity->tio._3DSOLID;
   dwg_ent_solid_wire *wire;
   dwg_ent_solid_silhouette *sil;
 
   // returns acis_empty value
-  acis_empty = dwg_ent_3dsolid_get_acis_empty (_3dsolid, &acis_empty_error);
-  if (acis_empty_error == 0 && acis_empty == _3dsolid->acis_empty)	// error reporting
-    {
-      pass ("Working Properly");
-    }
+  acis_empty = dwg_ent_3dsolid_get_acis_empty (_3dsolid, &error);
+  if (error == 0 && acis_empty == _3dsolid->acis_empty)
+    pass ("3dsolid_get_acis_empty");
   else
-    {
-      fail
-	("error in reading acis empty. dwg_ent_3dsolid_get_acis_empty not working");
-    }
+    fail ("3dsolid_get_acis_empty %d %uc <=> %uc",
+          error, acis_empty, _3dsolid->acis_empty);
 
   // Returns version value
-  version = dwg_ent_3dsolid_get_version (_3dsolid, &version_error);
-  if (version_error == 0 && version == _3dsolid->version)	// error reporting
-    {
-      pass ("Working Properly");
-    }
+  version = dwg_ent_3dsolid_get_version (_3dsolid, &error);
+  if (error == 0 && version == _3dsolid->version)
+    pass ("3dsolid_get_version");
   else
-    {
-      fail
-	("error in reading version. dwg_ent_3dsolid_get_version is not working");
-    }
+    fail ("3dsolid_get_version %d %u <=> %u",
+          error, version, version);
 
   // returns acis data value
-  acis_data = dwg_ent_3dsolid_get_acis_data (_3dsolid, &acis_data_error);
-  if (acis_data_error == 0 && acis_data == _3dsolid->acis_data)	// error reporting
-    {
-      pass ("Working Properly");
-    }
+  acis_data = dwg_ent_3dsolid_get_acis_data (_3dsolid, &error);
+  if (error == 0 && !strcmp(acis_data, _3dsolid->acis_data))
+    pass ("3dsolid_get_acis_data");
   else
-    {
-      fail
-	("error in reading acis data. dwg_ent_3dsolid_get_acis_data not working");
-    }
+    fail ("3dsolid_get_acis_data %d \"%s\" <=> \"%s\"",
+          error, acis_data, _3dsolid->acis_data);
 
   // Returns wireframe_data_present value
   wireframe_data_present =
-    dwg_ent_3dsolid_get_wireframe_data_present (_3dsolid,
-						&wireframe_data_present_error);
-  if (wireframe_data_present_error == 0 && wireframe_data_present == _3dsolid->wireframe_data_present)	// error reporting
-    {
-      pass ("Working Properly");
-    }
+    dwg_ent_3dsolid_get_wireframe_data_present (_3dsolid, &error);
+  if (error == 0 && wireframe_data_present == _3dsolid->wireframe_data_present)
+    pass ("3dsolid_get_wireframe_data_present");
   else
-    {
-      fail
-	("error in reading wireframe data present. dwg_ent_3dsolid_get_wireframe_data_present is not working");
-    }
+    fail ("3dsolid_get_wireframe_data_present %d %c <=> %c",
+          error, wireframe_data_present, _3dsolid->wireframe_data_present);
 
   // returns point present value
   point_present =
-    dwg_ent_3dsolid_get_point_present (_3dsolid, &point_present_error);
-  if (point_present_error == 0 && point_present == _3dsolid->point_present)	// error reporting
+    dwg_ent_3dsolid_get_point_present (_3dsolid, &error);
+  if (error == 0 && point_present == _3dsolid->point_present)
+    pass ("3dsolid_get_point_present");
+  else
+    fail ("3dsolid_get_point_present %d %c <=> %c",
+          error, point_present, _3dsolid->point_present);
+  
+  // Returns point values 
+  dwg_ent_3dsolid_get_point (_3dsolid, &point, &error);
+  if (error == 0 &&
+      point.x == _3dsolid->point.x &&
+      point.y == _3dsolid->point.y &&
+      point.z == _3dsolid->point.z)
     {
-      pass ("Working Properly");
+      pass ("3dsolid_get_point");
     }
   else
     {
-      fail
-	("error in reading point present. dwg_ent_3dsolid_get_point is not working");
+      fail ("3dsolid_get_point %d", error);
     }
 
-  // Returns point values 
-  dwg_ent_3dsolid_get_point (_3dsolid, &point, &point_error);
-  if (point_error == 0 && point.x == _3dsolid->point.x && point.y == _3dsolid->point.y && point.z == _3dsolid->point.z)	// error reporting
-    {
-      pass ("Working properly");
-    }
+  // returns pointer to block_size
+  block_size = dwg_ent_3dsolid_get_block_size (_3dsolid, &error);
+  if (error == 0 && _3dsolid->block_size == block_size)
+    pass ("3dsolid_get_block_size");
   else
-    {
-      fail
-	("error in reading point. dwg_ent_3dsolid_get_point is not working properly");
-    }
+    fail ("3dsolid_get_block_size %d", error);
 
   // returns num_isolines
-  num_isolines =
-    dwg_ent_3dsolid_get_num_isolines (_3dsolid, &num_isolines_error);
-  if (num_isolines_error == 0 && _3dsolid->num_isolines == num_isolines)
-    {
-      pass ("Working Properly");
-    }
+  num_isolines = dwg_ent_3dsolid_get_num_isolines (_3dsolid, &error);
+  if (error == 0 && _3dsolid->num_isolines == num_isolines)
+    pass ("3dsolid_get_num_isolines");
   else
-    {
-      fail ("error in reading num isolines");
-    }
+    fail ("3dsolid_get_num_isolines %d", error);
 
   // returns isolines_present value
-  isoline_present =
-    dwg_ent_3dsolid_get_isoline_present (_3dsolid, &isoline_present_error);
-  if (isoline_present_error == 0
-      && _3dsolid->isoline_present == isoline_present)
-    {
-      pass ("Working Properly");
-    }
+  isoline_present = dwg_ent_3dsolid_get_isoline_present (_3dsolid, &error);
+  if (error == 0 && _3dsolid->isoline_present == isoline_present)
+    pass ("3dsolid_get_isoline_present");
   else
-    {
-      fail ("error in reading isoline present");
-    }
+    fail ("3dsolid_get_isoline_present %d", error);
 
   // returns number of wires
-  num_wires = dwg_ent_3dsolid_get_num_wires (_3dsolid, &num_wires_error);
-  if (num_wires_error == 0 && _3dsolid->num_wires)
-    {
-      pass ("Working Properly");
-    }
+  num_wires = dwg_ent_3dsolid_get_num_wires (_3dsolid, &error);
+  if (error == 0 && num_wires == _3dsolid->num_wires)
+    pass ("3dsolid_get_num_wires");
   else
-    {
-      fail ("error in reading num wires");
-    }
+    fail ("3dsolid_get_num_wires %d", error);
 
   // returns wire value
-  wire = dwg_ent_3dsolid_get_wire (_3dsolid, &wire_error);
-  if (wire_error == 0)		// error checking
+  wire = dwg_ent_3dsolid_get_wire (_3dsolid, &error);
+  if (error == 0)
     {
-      int i, matches = 1;
+      unsigned long i, matches = 1;
       for (i = 0; i < num_wires; i++)
 	{
 	  if (_3dsolid->wires[i].selection_marker != wire[i].selection_marker)
 	    {
-	      matches = 0;
+	      matches = 0; break;
 	    }
 	}
 
       if (matches)
-	{
-	  pass ("Working Properly");
-	}
+        pass ("3dsolid_get_wire matches [%ld]", i);
       else
-	{
-	  fail ("error in reading num wires");
-	}
+        fail ("3dsolid_get_wire matches");
     }
   else
-    {
-      fail ("error in reading num wires");
-    }
-
-  // returns number of silhpuettes
-  num_sil = dwg_ent_3dsolid_get_num_silhouettes (_3dsolid, &num_sil_error);
-  if (num_sil_error == 0 && _3dsolid->num_silhouettes == num_sil)	// error check
-    {
-      pass ("Working Properly");
-    }
+    fail ("3dsolid_get_wire matches error %d", error);
+  
+  // returns number of silhouettes
+  num_sil = dwg_ent_3dsolid_get_num_silhouettes (_3dsolid, &error);
+  if (error == 0 && _3dsolid->num_silhouettes == num_sil)
+    pass ("get_num_silhouettes");
   else
-    {
-      fail ("error in reading num silhouette");
-    }
+    fail ("get_num_silhouettes %d", error);
 
   // returns silhouette value
-  sil = dwg_ent_3dsolid_get_silhouette (_3dsolid, &sil_error);
-  if (sil_error == 0)		// error checking
+  sil = dwg_ent_3dsolid_get_silhouette (_3dsolid, &error);
+  if (error == 0)
     {
-      int i, matches = 1;
+      unsigned long i, matches = 1;
       for (i = 0; i < num_sil; i++)
 	{
 	  if (_3dsolid->silhouettes[i].vp_id != sil[i].vp_id)
 	    {
-	      matches = 0;
+	      matches = 0; break;
 	    }
 	}
       if (matches)
-	{
-	  pass ("Working Properly");
-	}
+        pass ("3dsolid_get_silhouette matches");
       else
-	{
-	  fail ("error in reading silhouette");
-	}
+        fail ("3dsolid_get_silhouette matches [%d]", i);
     }
   else
-    {
-      fail ("error in reading silhouette");
-    }
-
+    fail ("error in reading silhouette");
+  
 }

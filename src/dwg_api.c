@@ -17484,7 +17484,7 @@ dwg_ent_3dsolid_set_isoline_present(dwg_ent_3dsolid *_3dsolid, char iso,
 }
 
 /// Returns number of wires
-long
+unsigned long
 dwg_ent_3dsolid_get_num_wires(dwg_ent_3dsolid *_3dsolid, int *error)
 {
   if (_3dsolid != 0)
@@ -17541,7 +17541,7 @@ dwg_ent_3dsolid_get_wire(dwg_ent_3dsolid *_3dsolid, int *error)
 }
 
 /// Returns number of silhouettes
-long
+unsigned long
 dwg_ent_3dsolid_get_num_silhouettes(dwg_ent_3dsolid *_3dsolid, int *error)
 {
   if (_3dsolid != 0)
