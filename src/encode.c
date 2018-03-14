@@ -293,7 +293,7 @@ dwg_encode_add_object(Dwg_Object * obj, Bit_Chain * dat, unsigned long address);
 int
 dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
 {
-  int ckr_missing;
+  int ckr_missing = 1;
   int i;
   long unsigned int j;
   long unsigned int section_address;
