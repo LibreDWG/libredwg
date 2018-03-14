@@ -1,0 +1,67 @@
+version: 0.4.{build}
+max_jobs: 4
+environment:
+  matrix:
+    - MINGW: 1
+      MSYS2_ARCH: x86_64
+      MSYSTEM: MINGW64
+      PLATFORM: x64
+    - MINGW: 1
+      MSYS2_ARCH: i686
+      MSYSTEM: MINGW32
+      PLATFORM: x86
+    - CYGWIN: 1
+      PLATFORM: x86
+      ISETUP: setup-x86
+    - CYGWIN: 1
+      PLATFORM: x64
+      ISETUP: setup-x86_64
+  global:
+    CYG_MIRROR: http://mirrors.kernel.org/sourceware/cygwin/
+#matrix:
+#  allow_failures:
+#    - MINGW: 1
+clone_depth: 1
+#branches:
+#  only:
+#    - master
+#    - /^smoke/
+#    - /^maint-/
+#    - /^win/
+
+init:
+  - git config --global core.autocrlf input
+  # Disable popups as they hang the build as there is nobody to click on the OK button...
+  # Hanging the build is a lot less user friendly than reporting a build failure.
+  #
+  # Disable of system hard error popup
+  # See: https://msdn.microsoft.com/en-us/library/bb513638%28VS.85%29.aspx
+  - reg add "HKLM\SYSTEM\CurrentControlSet\Control\Windows" /f /v ErrorMode /d 2
+  # Disable the following popup on program failure:
+  #     |       ** <program name> has stopped working **        |
+  #     | Windows can check online for a solution to the problem|
+  #     |  - Check online for a solution and close the program  |
+  #     |  - Close the program                                  |
+  # See: https://msdn.microsoft.com/en-us/library/bb513638%28VS.85%29.aspx
+  - reg add "HKLM\Software\Microsoft\Windows\Windows Error Reporting" /f /v DontShowUI /d 1  
+  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+  # git bash conflicts with MinGW makefiles, esp. the space in 'Program Files'
+  - set "PATH=%PATH:C:\Program Files\Git\usr\bin;=%"
+  - if "%MINGW%"=="1" set PROCESSOR_ARCHITECTURE=%PLATFORM%
+  - if "%PLATFORM%"=="x64" set PROCESSOR_ARCHITECTURE=AMD64
+  - set P=
+  - if "%PLATFORM%"=="x64" set P=64
+  - if "%CYGWIN%"=="1" set CYG_ROOT=c:\cygwin%P%
+  - if "%CYGWIN%"=="1" appveyor DownloadFile http://cygwin.com/%ISETUP%.exe -FileName %CYG_ROOT%\setup.exe
+  - if "%CYGWIN%"=="1" %CYG_ROOT%\setup.exe -qnNdO -R "%CYG_ROOT%" -s "%CYG_MIRROR%" -l "%CYG_ROOT%\var\cache\setup" -P libxml2,libxml2-devel,libiconv-devel,python2-devel,python2-libxml2,swig,dejagnu
+
+build_script:
+  - if "%CYGWIN%"=="1" set PATH=%CYG_ROOT%\bin;c:\Windows\system32;c:\Windows;c:\Windows\system32\Wbem
+  - if "%CYGWIN%"=="1" %CYG_ROOT%\bin\sh -lc "cygcheck -dc cygwin"
+  - if "%MINGW%"=="1" call build-aux\msys2.bat
+  - bash -c "sh ./autogen.sh"
+  - bash -c "./configure --enable-write --enable-trace || (cat config.log; false)"
+  - bash -c "make || (cat Makefile; false)"
+
+test_script:
+  - bash -c "make check"
