@@ -18,3 +18,4 @@
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 info_TEXINFOS = LibreDWG.texi
+LibreDWG_TEXINFOS = fdl.texi
