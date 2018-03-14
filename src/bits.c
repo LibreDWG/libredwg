@@ -29,12 +29,6 @@
 #include "logging.h"
 
 /*------------------------------------------------------------------------------
- * Private functions prototypes
- */
-unsigned int
-bit_ckr8(unsigned int dx, unsigned char *adr, long n);
-
-/*------------------------------------------------------------------------------
  * Public functions
  */
 
@@ -864,10 +858,10 @@ bit_write_H(Bit_Chain * dat, Dwg_Handle * handle)
 /** Only read CRK-numbers, without checking, only in order to go to
  * the next byte, while jumping contingent non-used bits
  */
-unsigned int
+uint16_t
 bit_read_CRC(Bit_Chain * dat)
 {
-  unsigned int result;
+  uint16_t result;
   unsigned char res[2];
   long unsigned int start_address;
 
@@ -880,7 +874,7 @@ bit_read_CRC(Bit_Chain * dat)
   res[0] = bit_read_RC(dat);
   res[1] = bit_read_RC(dat);
 
-  result = (unsigned int) (res[0] << 8 | res[1]);
+  result = (res[0] << 8 | res[1]);
   LOG_TRACE("read CRC at %lx: 0x%x\n", start_address, result)
 
   return result;
@@ -890,7 +884,7 @@ bit_read_CRC(Bit_Chain * dat)
  */
 int
 bit_check_CRC(Bit_Chain * dat, long unsigned int start_address,
-              unsigned int seed)
+              uint16_t seed)
 {
   unsigned int calculated;
   unsigned int read;
@@ -900,8 +894,8 @@ bit_check_CRC(Bit_Chain * dat, long unsigned int start_address,
     dat->byte++;
   dat->bit = 0;
 
-  calculated = bit_ckr8(seed, &(dat->chain[start_address]),
-                        dat->byte - start_address);
+  calculated = bit_calc_CRC(seed, &(dat->chain[start_address]),
+                            dat->byte - start_address);
 
   res[0] = bit_read_RC(dat);
   res[1] = bit_read_RC(dat);
@@ -914,16 +908,16 @@ bit_check_CRC(Bit_Chain * dat, long unsigned int start_address,
 
 /** Create and write CRC-number.
  */
-unsigned int
+uint16_t
 bit_write_CRC(Bit_Chain * dat, long unsigned int start_address,
-              unsigned int seed)
+              uint16_t seed)
 {
-  unsigned int crc;
+  uint16_t crc;
 
   while (dat->bit > 0)
     bit_write_B(dat, 0);
 
-  crc = bit_ckr8(seed, &(dat->chain[start_address]), dat->byte - start_address);
+  crc = bit_calc_CRC(seed, &(dat->chain[start_address]), dat->byte - start_address);
 
   bit_write_RC(dat, (unsigned char) (crc >> 8));
   bit_write_RC(dat, (unsigned char) (crc & 0xFF));
@@ -1137,17 +1131,13 @@ bit_explore_chain(Bit_Chain * dat, long unsigned int size)
   puts("---------------------------------------------------------");
 }
 
-/*------------------------------------------------------------------------------
- * Private functions
- */
-
-unsigned int
-bit_ckr8(unsigned int dx, unsigned char *adr, long n)
+uint16_t
+bit_calc_CRC(uint16_t dx, unsigned char *adr, long len)
 {
   register unsigned char al;
 
-  static unsigned int ckrtable[256] =
-    { 0x0000, 0xC0C1, 0xC181, 0x0140, 0xC301, 0x03C0, 0x0280, 0xC241, 0xC601,
+  static uint16_t ckrtable[256] =
+      { 0x0000, 0xC0C1, 0xC181, 0x0140, 0xC301, 0x03C0, 0x0280, 0xC241, 0xC601,
         0x06C0, 0x0780, 0xC741, 0x0500, 0xC5C1, 0xC481, 0x0440, 0xCC01, 0x0CC0,
         0x0D80, 0xCD41, 0x0F00, 0xCFC1, 0xCE81, 0x0E40, 0x0A00, 0xCAC1, 0xCB81,
         0x0B40, 0xC901, 0x09C0, 0x0880, 0xC841, 0xD801, 0x18C0, 0x1980, 0xD941,
@@ -1177,11 +1167,11 @@ bit_ckr8(unsigned int dx, unsigned char *adr, long n)
         0x4540, 0x8701, 0x47C0, 0x4680, 0x8641, 0x8201, 0x42C0, 0x4380, 0x8341,
         0x4100, 0x81C1, 0x8081, 0x4040 };
 
-  for (; n > 0; n--)
+  for (; len > 0; len--)
     {
       al = (unsigned char) ((*adr) ^ ((unsigned char) (dx & 0xFF)));
       dx = (dx >> 8) & 0xFF;
-      dx = dx ^ ckrtable[al & 0xFF];
+      dx = dx ^ ckrtable[al];
       adr++;
     }
   return (dx);

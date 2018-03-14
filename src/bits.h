@@ -54,16 +54,16 @@ void
 bit_advance_position(Bit_Chain * dat, int salto);
 
 BITCODE_B
-bit_read_B(Bit_Chain * bit_datenaro);
+bit_read_B(Bit_Chain * dat);
 
 void
-bit_write_B(Bit_Chain * bit_datenaro, unsigned char value);
+bit_write_B(Bit_Chain * dat, unsigned char value);
 
 BITCODE_BB
-bit_read_BB(Bit_Chain * bit_datenaro);
+bit_read_BB(Bit_Chain * dat);
 
 void
-bit_write_BB(Bit_Chain * bit_datenaro, unsigned char value);
+bit_write_BB(Bit_Chain * dat, unsigned char value);
 
 BITCODE_3B
 bit_read_3B(Bit_Chain * dat);
@@ -78,101 +78,104 @@ void
 bit_write_4BITS(Bit_Chain * dat, unsigned char value);
 
 BITCODE_RC
-bit_read_RC(Bit_Chain * bit_datenaro);
+bit_read_RC(Bit_Chain * dat);
 
 void
-bit_write_RC(Bit_Chain * bit_datenaro, unsigned char value);
+bit_write_RC(Bit_Chain * dat, unsigned char value);
 
 BITCODE_RS
-bit_read_RS(Bit_Chain * bit_datenaro);
+bit_read_RS(Bit_Chain * dat);
 
 void
-bit_write_RS(Bit_Chain * bit_datenaro, unsigned int value);
+bit_write_RS(Bit_Chain * dat, unsigned int value);
 
 BITCODE_RL
-bit_read_RL(Bit_Chain * bit_datenaro);
+bit_read_RL(Bit_Chain * dat);
 
 void
-bit_write_RL(Bit_Chain * bit_datenaro, long unsigned int value);
+bit_write_RL(Bit_Chain * dat, long unsigned int value);
 
 BITCODE_RD
-bit_read_RD(Bit_Chain * bit_datenaro);
+bit_read_RD(Bit_Chain * dat);
 
 void
-bit_write_RD(Bit_Chain * bit_datenaro, double value);
+bit_write_RD(Bit_Chain * dat, double value);
 
 /* Functions for manipulating compacted data
  */
 BITCODE_BS
-bit_read_BS(Bit_Chain * bit_datenaro);
+bit_read_BS(Bit_Chain * dat);
 
 void
-bit_write_BS(Bit_Chain * bit_datenaro, unsigned int value);
+bit_write_BS(Bit_Chain * dat, unsigned int value);
 
 BITCODE_BL
-bit_read_BL(Bit_Chain * bit_datenaro);
+bit_read_BL(Bit_Chain * dat);
 
 void
-bit_write_BL(Bit_Chain * bit_datenaro, long unsigned int value);
+bit_write_BL(Bit_Chain * dat, long unsigned int value);
 
 BITCODE_BLL
-bit_read_BLL(Bit_Chain * bit_datenaro);
+bit_read_BLL(Bit_Chain * dat);
 
 void
-bit_write_BLL(Bit_Chain * bit_datenaro, BITCODE_BLL value);
+bit_write_BLL(Bit_Chain * dat, BITCODE_BLL value);
 
 BITCODE_BD
-bit_read_BD(Bit_Chain * bit_datenaro);
+bit_read_BD(Bit_Chain * dat);
 
 void
-bit_write_BD(Bit_Chain * bit_datenaro, double value);
+bit_write_BD(Bit_Chain * dat, double value);
 
 BITCODE_MC
-bit_read_MC(Bit_Chain * bit_datenaro);
+bit_read_MC(Bit_Chain * dat);
 
 void
-bit_write_MC(Bit_Chain * bit_datenaro, long int value);
+bit_write_MC(Bit_Chain * dat, long int value);
 
 BITCODE_MS
-bit_read_MS(Bit_Chain * bit_datenaro);
+bit_read_MS(Bit_Chain * dat);
 
 void
-bit_write_MS(Bit_Chain * bit_datenaro, long unsigned int value);
+bit_write_MS(Bit_Chain * dat, long unsigned int value);
 
 void
-bit_read_BE(Bit_Chain * bit_datenaro, double *x, double *y, double *z);
+bit_read_BE(Bit_Chain * dat, double *x, double *y, double *z);
 
 void
-bit_write_BE(Bit_Chain * bit_datenaro, double x, double y, double z);
+bit_write_BE(Bit_Chain * dat, double x, double y, double z);
 
 BITCODE_DD
-bit_read_DD(Bit_Chain * bit_datenaro, double antauxdifinajxo);
+bit_read_DD(Bit_Chain * dat, double antauxdifinajxo);
 
 void
-bit_write_DD(Bit_Chain * bit_datenaro, double value, double antauxdifinajxo);
+bit_write_DD(Bit_Chain * dat, double value, double antauxdifinajxo);
 
 BITCODE_BT
-bit_read_BT(Bit_Chain * bit_datenaro);
+bit_read_BT(Bit_Chain * dat);
 
 void
-bit_write_BT(Bit_Chain * bit_datenaro, double value);
+bit_write_BT(Bit_Chain * dat, double value);
 
 int
-bit_read_H(Bit_Chain * bit_datenaro, Dwg_Handle * handle);
+bit_read_H(Bit_Chain * dat, Dwg_Handle * handle);
 
 void
 bit_write_H(Bit_Chain * dat, Dwg_Handle * handle);
 
-unsigned int
-bit_read_CRC(Bit_Chain * bit_datenaro);
+uint16_t
+bit_read_CRC(Bit_Chain * dat);
 
 int
-bit_check_CRC(Bit_Chain * bit_datenaro, long unsigned int start_address,
-    unsigned int semo);
+bit_check_CRC(Bit_Chain * dat, long unsigned int start_address,
+    uint16_t seed);
 
-unsigned int
+uint16_t
 bit_write_CRC(Bit_Chain * dat, long unsigned int start_address,
-    unsigned int semo);
+    uint16_t seed);
+
+uint16_t
+bit_calc_CRC(uint16_t seed, unsigned char *adr, long len);
 
 char *
 bit_read_TV(Bit_Chain * dat);

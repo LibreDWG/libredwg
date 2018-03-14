@@ -32,9 +32,6 @@
 #include "decode.h"
 #include "print.h"
 
-extern unsigned int
-bit_ckr8(unsigned int dx, unsigned char *adr, long n);
-
 /* The logging level for the read (decode) path.  */
 unsigned int loglevel;
 /* the current version per spec block */
@@ -513,7 +510,7 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
     }
 
   // Check CRC-on
-  ckr = bit_ckr8(0xc0c1, dat->chain, dat->byte);
+  ckr = bit_calc_CRC(0xc0c1, dat->chain, dat->byte);
   ckr2 = bit_read_RS(dat);
   if (ckr != ckr2)
     {
@@ -595,17 +592,17 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
       /*return -1;*/
     }
   
-  /*
+#if 0
   ckr = bit_read_RS(dat);
-  ckr2 = bit_ckr8(0xc0c1, dat->chain + dwg->header.section[0].address + 16,
-                  dwg->header.section[0].size - 34);
+  ckr2 = bit_0xc0c1(0xc0c1, dat->chain + dwg->header.section[0].address + 16,
+                    dwg->header.section[0].size - 34);
   if (ckr != ckr2)
     {
       printf("section %d crc todo ckr:%d ckr2:%d\n",
               dwg->header.section[0].number, ckr, ckr2);
       return -1;
     }
-  */
+#endif
   /*-------------------------------------------------------------------------
    * Classes
    */
@@ -664,12 +661,12 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
   dat->bit = 0;
 
   ckr = bit_read_RS(dat);
-  ckr2 = bit_ckr8(0xc0c1, dat->chain + dwg->header.section[1].address + 16,
-          dwg->header.section[1].size - 34);
+  ckr2 = bit_calc_CRC(0xc0c1, dat->chain + dwg->header.section[1].address + 16,
+                      dwg->header.section[1].size - 34);
 
   if (ckr != ckr2)
     {
-      printf("section %d crc todo ckr:%x ckr2:%x\n",
+      printf("Warning: section %d crc todo ckr:%x ckr2:%x\n",
               dwg->header.section[1].number, ckr, ckr2);
       return -1;
     }
@@ -756,11 +753,11 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
       sgdc[1] = bit_read_RC(dat);
       ckr = (sgdc[0] << 8) | sgdc[1];
 
-      ckr2 = bit_ckr8(0xc0c1, dat->chain + duabyte, section_size);
+      ckr2 = bit_calc_CRC(0xc0c1, dat->chain + duabyte, section_size);
 
       if (ckr != ckr2)
         {
-          printf("section %d crc todo ckr:%x ckr2:%x\n",
+          printf("Warning: section %d crc todo ckr:%x ckr2:%x\n",
                   dwg->header.section[2].number, ckr, ckr2);
           return -1;
         }

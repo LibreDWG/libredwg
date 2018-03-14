@@ -774,7 +774,10 @@ main ()
   bit_read_CMC(&bitchain, &color_read);
 
 
-  if (color_read.index == 19 && color_read.rgb == 5190965 && color_read.byte == 1 && !strcmp(color_read.name, "Some name"))
+  if (color_read.index == 19 &&
+      color_read.rgb == 5190965 &&
+      color_read.byte == 1 &&
+      !strcmp(color_read.name, "Some name"))
     {
       pass("bit_read_CMC is working properly");
     }
@@ -827,7 +830,7 @@ main ()
     }
   //End of tests for bit_chain_alloc
 
-  unsigned int check = bit_ckr8(12100, &bitchain.chain, 90);
+  unsigned int check = bit_calc_CRC(12100, &bitchain.chain, 90);
   // How do I test this
 #endif
 

@@ -62,6 +62,7 @@ fi
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_PROG_CC_C99
 AC_TYPE_SIZE_T
+AC_TYPE_UINT16_T
 AC_TYPE_INT64_T
 AC_TYPE_UINT64_T
 AC_CHECK_SIZEOF(size_t)
