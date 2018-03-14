@@ -2815,9 +2815,12 @@ typedef struct _dwg_struct
     BITCODE_RC   dwg_version;
     BITCODE_RC   maint_version;
     BITCODE_RS   codepage;
-    BITCODE_RC   zero_3[3];
-    BITCODE_RL   security_flags;
-    BITCODE_RL   rl_1c;
+    BITCODE_RC   zero_3[3];            /* R2004+ */
+    BITCODE_RL   security_type;        /* R2004+ */
+    BITCODE_RL   rl_1c_address;        /* R2004+ */
+    BITCODE_RL   summary_info_address; /* R2004+ */
+    BITCODE_RL   vba_proj_address;     /* R2004+ */
+    BITCODE_RL   rl_28_80;             /* R2004+ */
     unsigned int num_sections;
     Dwg_Section* section;
     unsigned int num_descriptions;

@@ -1026,7 +1026,7 @@ read_two_byte_offset(Bit_Chain* dat, int* lit_length)
   return offset;
 }
 
-/* Decompresses a system section of a 2004 DWG flie
+/* Decompresses a system section of a 2004 DWG file
  */
 static int
 decompress_R2004_section(Bit_Chain* dat, char *decomp,
@@ -1612,82 +1612,53 @@ decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
 
   int i;
   unsigned int u;
-  unsigned long int preview_address, security_type, unknown_long,
-      dwg_property_address, vba_proj_address;
-  unsigned char sig, dwg_ver, maint_release_ver;
+  unsigned char sig = 0;
 
-  //6 bytes of 0x00
   dat->byte = 0x06;
-  LOG_INFO("6 bytes of 0x00: ")
-  for (i = 0; i < 6; i++)
-    {
-      sig = bit_read_RC(dat);
-      LOG_INFO( "0x%02X ", sig)
+  LOG_INFO("first 7 bytes: ")
+  for (i = 0; i < 7; i++)
+    { // 5th bit if is maint release
+      dwg->header.zero_7[i] = bit_read_RC(dat);
+      LOG_INFO( "0x%02X ", dwg->header.zero_7[i])
     }
   LOG_INFO("\n")
 
-  /* Byte 0x00, 0x01, or 0x03 */
-  dat->byte = 0x0C;
-  sig = bit_read_RC(dat);
-  LOG_INFO("Byte 0x00, 0x01, or 0x03: 0x%02X\n", sig)
-
   /* Preview Address */
-  dat->byte = 0x0D;
-  preview_address = bit_read_RL(dat);
-  LOG_INFO("Preview Address: 0x%08X\n", (unsigned int) preview_address)
-
-  /* DwgVer */
-  dat->byte = 0x11;
-  dwg_ver = bit_read_RC(dat);
-  LOG_INFO("DwgVer: %u\n", dwg_ver)
-
-  /* MaintReleaseVer */
-  dat->byte = 0x12;
-  maint_release_ver = bit_read_RC(dat);
-  LOG_INFO("MaintRelease: %u\n", maint_release_ver)
-
-  /* Codepage */
-  dat->byte = 0x13;
+  assert(dat->byte == 0x0D);
+  dwg->header.preview_addr = bit_read_RL(dat);
+  LOG_INFO("Preview Address: 0x%08lX\n", dwg->header.preview_addr)
+  assert(dat->byte == 0x11);
+  dwg->header.dwg_version = bit_read_RC(dat);
+  LOG_INFO("DwgVer: %u\n", dwg->header.dwg_version)
+  assert(dat->byte == 0x12);
+  dwg->header.maint_version = bit_read_RC(dat);
+  LOG_INFO("MaintRelease: %u\n", dwg->header.maint_version)
+  assert(dat->byte == 0x13);
   dwg->header.codepage = bit_read_RS(dat);
   LOG_INFO("Codepage: %u\n", dwg->header.codepage)
-
-  /* 3 0x00 bytes */
-  dat->byte = 0x15;
+  assert(dat->byte == 0x15);
   LOG_INFO("3 0x00 bytes: ")
   for (i = 0; i < 3; i++)
     {
-      sig = bit_read_RC(dat);
+      dwg->header.zero_3[i] = bit_read_RC(dat);
       LOG_INFO("0x%02X ", sig)
     }
   LOG_INFO("\n")
-
-  /* SecurityType */
-  dat->byte = 0x18;
-  security_type = bit_read_RL(dat);
-  LOG_INFO("SecurityType: 0x%08X\n", (unsigned int) security_type)
-
-  /* Unknown long */
-  dat->byte = 0x1C;
-  unknown_long = bit_read_RL(dat);
-  LOG_INFO("Unknown long: 0x%08X\n", (unsigned int) unknown_long)
-
-  /* DWG Property Addr */
-  dat->byte = 0x20;
-  dwg_property_address = bit_read_RL(dat);
-  LOG_INFO("DWG Property Addr: 0x%08X\n",
-        (unsigned int) dwg_property_address)
-
-  /* VBA Project Addr */
-  dat->byte = 0x24;
-  vba_proj_address = bit_read_RL(dat);
-  LOG_INFO("VBA Project Addr: 0x%08X\n",
-        (unsigned int) vba_proj_address)
-
-  /* 0x00000080 */
-  dat->byte = 0x28;
-  unknown_long = bit_read_RL(dat);
-  LOG_INFO("0x00000080: 0x%08X\n", (unsigned int) unknown_long)
-
+  assert(dat->byte == 0x18);
+  dwg->header.security_type = bit_read_RL(dat);
+  LOG_INFO("SecurityType: 0x%04lX\n", dwg->header.security_type)
+  assert(dat->byte == 0x1C);
+  dwg->header.rl_1c_address = bit_read_RL(dat);
+  LOG_INFO("0x1C address: 0x%08lX\n", dwg->header.rl_1c_address)
+  assert(dat->byte == 0x20);
+  dwg->header.summary_info_address = bit_read_RL(dat);
+  LOG_INFO("0x1C Summary info address: 0x%08lX\n", dwg->header.summary_info_address)
+  assert(dat->byte == 0x24);
+  dwg->header.vba_proj_address = bit_read_RL(dat);
+  LOG_INFO("VBA Project Addr: 0x%08lX\n",dwg->header.vba_proj_address)
+  assert(dat->byte == 0x28);
+  dwg->header.rl_28_80 = bit_read_RL(dat);
+  LOG_INFO("0x00000080: 0x%08lX\n", dwg->header.rl_28_80)
   /* 0x00 bytes (length = 0x54 bytes) */
   dat->byte = 0x2C;
   for (i = 0; i < 0x54; i++)

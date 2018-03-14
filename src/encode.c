@@ -329,11 +329,28 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
   dat->byte += 6;
 
   for (i = 0; i < 7; i++)
-    bit_write_RC(dat, dwg->header.zero_7[i]);    // 6 * 0
+    bit_write_RC(dat, dwg->header.zero_7[i]);    // 7 * 0
   bit_write_RL(dat, dwg->header.preview_addr);   // Picture address
   bit_write_RC(dat, dwg->header.dwg_version);    // DWG Version
   bit_write_RC(dat, dwg->header.maint_version);  // Maintainance Release
   bit_write_RS(dat, dwg->header.codepage);       // Codepage
+
+  SINCE(R_2004) {
+    cur_ver = R_2004;
+    IF_ENCODE_FROM_EARLIER {
+      dwg->header.rl_28_80 = 0x80;
+    }
+    for (i = 0; i < 3; i++)
+      bit_write_RC(dat, dwg->header.zero_3[i]);
+    bit_write_RL(dat, dwg->header.security_type);
+    bit_write_RL(dat, dwg->header.rl_1c_address);
+    bit_write_RL(dat, dwg->header.summary_info_address);
+    bit_write_RL(dat, dwg->header.vba_proj_address);
+    bit_write_RL(dat, dwg->header.rl_28_80);
+    for (i = 0; i < 54; i++)
+      bit_write_RC(dat, 0);
+    /* TODO now at 0x80 follows the encrypted data */
+  }
 
   PRE(R_2004) {
     if (!dwg->header.num_sections)
