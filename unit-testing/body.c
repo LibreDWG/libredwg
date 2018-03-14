@@ -20,6 +20,7 @@ output_object(dwg_object* obj){
 void
 low_level_process(dwg_object *obj)
 {
+  unsigned long i;
   // casts dwg object to body
   dwg_ent_body *body = dwg_object_to_BODY(obj);
 
@@ -52,20 +53,19 @@ low_level_process(dwg_object *obj)
   printf("num wires of body : %ld", body->num_wires);
 
   // prints wire of body
-     int i;
-      for (i = 0; i < body->num_wires; i++)
-        {
-           printf("wire of body : %ld", body->wires[i].selection_marker);
-        }
+  for (i = 0; i < body->num_wires; i++)
+    {
+      printf("wire of body : %ld", body->wires[i].selection_marker);
+    }
 
   // prints num silhouettes of body
   printf("num sil of body : %ld", body->num_silhouettes);
 
   // prints silhouettes of body
-     for (i = 0; i < body->num_silhouettes; i++)
-        {
-           printf("silhouette of body : %ld", body->silhouettes[i].vp_id);
-        }
+  for (i = 0; i < body->num_silhouettes; i++)
+    {
+      printf("silhouette of body : %ld", body->silhouettes[i].vp_id);
+    }
 
 }
 void
@@ -77,7 +77,7 @@ api_process(dwg_object *obj)
       wire_error, num_sil_error;
 
   unsigned int version;
-  long block_size, num_isolines, num_wires, num_sil;
+  unsigned long block_size, num_isolines, num_wires, num_sil;
   char * acis_data;
   char wireframe_data_present, point_present, isoline_present; 
   unsigned char acis_empty, acis2_empty;

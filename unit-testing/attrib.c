@@ -54,7 +54,7 @@ void
 api_process(dwg_object *obj)
 {
   int error;
-  float thickness, rotation, vert_align, horiz_align, height;
+  double thickness, rotation, vert_align, horiz_align, height;
   char * attrib_value;
   dwg_point_3d ext;
   dwg_point_2d ins_pt;

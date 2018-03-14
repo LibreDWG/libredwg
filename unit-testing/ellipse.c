@@ -49,7 +49,7 @@ void
 api_process(dwg_object *obj)
 {
   int ratio_error, sm_error, ext_error, center_error, start_error, end_error;
-  float axis_ratio, start_angle, end_angle;
+  double axis_ratio, start_angle, end_angle;
   dwg_point_3d center, sm, ext;
   dwg_ent_ellipse *ellipse = dwg_object_to_ELLIPSE(obj);
 

@@ -44,7 +44,7 @@ void
 api_process(dwg_object *obj)
 {
   int start_error, thickness_error, ext_error, end_error;
-  float thickness;
+  double thickness;
   dwg_point_3d ext, start, end;
   dwg_ent_line *line = dwg_object_to_LINE(obj);
 

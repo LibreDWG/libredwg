@@ -20,6 +20,7 @@ output_object(dwg_object* obj){
 void
 low_level_process(dwg_object *obj)
 {
+  unsigned long i;
   // casts object to 3d solid entity
   dwg_ent_3dsolid *_3dsolid = obj->tio.entity->tio._3DSOLID;
 
@@ -50,11 +51,10 @@ low_level_process(dwg_object *obj)
 
   // prints num wires 
   printf("num wires of 3dsolid : %ld", _3dsolid->num_wires);
-  int i;
-    for (i = 0; i < _3dsolid->num_wires; i++)
-      {
-         printf("wire of 3dsolid : %ld", _3dsolid->wires[i].selection_marker);
-      }
+  for (i = 0; i < _3dsolid->num_wires; i++)
+    {
+      printf("wire of 3dsolid : %ld", _3dsolid->wires[i].selection_marker);
+    }
 
   // prints number of siulhouettes
   printf("num sil of 3dsolid : %ld", _3dsolid->num_silhouettes);
@@ -75,7 +75,7 @@ api_process(dwg_object *obj)
       wire_error, num_sil_error;
 
   unsigned int version;
-  long block_size, num_isolines, num_wires, num_sil;
+  unsigned long block_size, num_isolines, num_wires, num_sil;
   char * acis_data;
   char wireframe_data_present, point_present, isoline_present; 
   unsigned char acis_empty, acis2_empty;
@@ -189,7 +189,7 @@ api_process(dwg_object *obj)
   wire = dwg_ent_3dsolid_get_wire(_3dsolid, &wire_error);
   if( wire_error == 0 ) // error checking
     {
-      int i;
+      unsigned long i;
       for (i = 0; i < num_wires; i++)
         {
            printf("wire of 3dsolid : %ld", wire[i].selection_marker);
@@ -215,7 +215,7 @@ api_process(dwg_object *obj)
   sil = dwg_ent_3dsolid_get_silhouette(_3dsolid, &sil_error);
   if( sil_error == 0 ) // error checking
     {
-      int i;
+      unsigned long i;
       for (i = 0; i < num_sil; i++)
         {
            printf("silhouette of 3dsolid : %ld", sil[i].vp_id);

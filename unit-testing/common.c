@@ -24,6 +24,9 @@ output_object(dwg_object *obj);
 void
 output_test(dwg_data *dwg);
 
+void
+output_process(dwg_object *obj);
+
 /// Low Level processing function declaration
 void
 low_level_process(dwg_object *obj);

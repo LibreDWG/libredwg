@@ -49,7 +49,7 @@ void
 api_process(dwg_object *obj)
 {
   int radius_error, thickness_error, ext_error, center_error,start_error, end_error;
-  float radius, thickness, start_angle, end_angle;
+  double radius, thickness, start_angle, end_angle;
   dwg_point_3d center, ext;
 
   // casts an object to arc entity 
@@ -59,7 +59,7 @@ api_process(dwg_object *obj)
   radius = dwg_ent_arc_get_radius(arc, &radius_error);
   if(radius_error == 0 ) // error checking 
     {  
-      printf("Radius of arc : %f\t\n",radius);
+      printf("Radius of arc : %f\t\n", radius);
     }
   else
     {

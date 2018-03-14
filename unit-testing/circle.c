@@ -44,7 +44,7 @@ void
 api_process(dwg_object *obj)
 {
   int radius_error, thickness_error, ext_error, center_error; // Error reporting
-  float radius, thickness;
+  double radius, thickness;
   dwg_point_3d center, ext;  //3d_points 
 
   // casting object to circle entity
