@@ -19,7 +19,7 @@
 
 check_PROGRAMS = load_dwg get_bmp test testSVG testsvg2
 AM_CFLAGS = -Wall -Wextra -I$(top_srcdir)/src
-LDADD = $(top_builddir)/src/libredwg.la
+LDADD = $(top_builddir)/src/libredwg.la -lm
 
 if HAVE_LIBPS
 check_PROGRAMS += dwg_ps
@@ -47,3 +47,10 @@ TESTS_ENVIRONMENT = \
 TESTS = alive.test
 
 EXTRA_DIST = example.dwg sample.dwg suffix.c load_dwg.py $(TESTS)
+CLEANFILES = {example,sample}.{bmp,ps,svg} {example,sample}.dwg-rewrite.dwg
+
+# emacs flymake-mode
+check-syntax:
+	test -n "$(CHK_SOURCES)" && \
+	  $(COMPILE) -o /dev/null -S $(CHK_SOURCES)
+.PHONY: check-syntax
