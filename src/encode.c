@@ -504,14 +504,15 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
           unsigned long k = j;
           while (omap[k].handle < omap[k - 1].handle)
             {
+              pvzmap.handle = omap[k].handle;
+              pvzmap.idc    = omap[k].handle;
+
               omap[k - 1].handle = pvzmap.handle;
-              omap[k - 1].idc = pvzmap.idc;
+              omap[k - 1].idc    = pvzmap.idc;
 
-              omap[k - 1].handle = omap[k].handle;
-              omap[k - 1].idc = omap[k].idc;
+              omap[k].handle = omap[k - 1].handle;
+              omap[k].idc    = omap[k - 1].idc;
 
-              omap[k].handle = pvzmap.handle;
-              omap[k].idc = pvzmap.idc;
               k--;
               if (k == 0)
                 break;
