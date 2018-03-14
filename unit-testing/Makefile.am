@@ -17,6 +17,7 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+AM_CFLAGS = -I$(srcdir)/../src
 LDADD = ../src/libredwg.la
 
 # NB: After you modify ‘check_PROGRAMS’, do "make update-ignorance"
@@ -70,6 +71,6 @@ TESTS_ENVIRONMENT = \
 update-ignorance:
 	printf '/%s\n' $(check_PROGRAMS) > .gitignore
 
-EXTRA_DIST = example.dwg
+EXTRA_DIST = common.c example.dwg
 
 ## Makefile.am ends here
