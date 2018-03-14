@@ -34,8 +34,9 @@
 #define DWG_LOGLEVEL_NONE    0 //no log
 #define DWG_LOGLEVEL_ERROR   1 //only error messages
 #define DWG_LOGLEVEL_INFO    2 //only general info and object codes/names
-#define DWG_LOGLEVEL_TRACE   3 //eg for each value parsed
-#define DWG_LOGLEVEL_INSANE  4 //print all referenced objects (handles)
+#define DWG_LOGLEVEL_TRACE   3 //eg for each field value parsed
+#define DWG_LOGLEVEL_HANDLE  4 //print all referenced objects (handles)
+#define DWG_LOGLEVEL_INSANE  5 //print all vector data (string content)
 // #define LOGLEVEL_FOO .. //if more codes are necessary
 #define DWG_LOGLEVEL_ALL     9
 
@@ -60,6 +61,8 @@
 
 #define LOG_INFO(args...) LOG(INFO, args)
 #define LOG_TRACE(args...) LOG(TRACE, args)
+#define LOG_HANDLE(args...) LOG(HANDLE, args)
+#define LOG_INSANE(args...) LOG(INSANE, args)
 #define LOG_ALL(args...) LOG(ALL, args)
 
 

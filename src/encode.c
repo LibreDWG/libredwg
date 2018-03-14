@@ -1345,7 +1345,7 @@ static void
 dwg_encode_header_variables(Bit_Chain* dat, Dwg_Data * dwg)
 {
   Dwg_Header_Variables* _obj = &dwg->header_vars;
-  Dwg_Object* obj = 0;
+  Dwg_Object* obj = NULL;
 
   #include "header_variables.spec"
 }

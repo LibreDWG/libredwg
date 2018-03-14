@@ -136,7 +136,7 @@ static bool env_var_checked_p;
       for (vcount=0; vcount<(long)size; vcount++) \
         {\
           _obj->name[vcount] = bit_read_##type(dat);\
-          LOG_TRACE(#name "[%ld]: " FORMAT_##type "\n", (long)vcount, _obj->name[vcount]) \
+          LOG_INSANE(#name "[%ld]: " FORMAT_##type "\n", (long)vcount, _obj->name[vcount]) \
         }\
     }
 
@@ -580,29 +580,19 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
   LOG_TRACE("         Length: %lu\n", pvz)
 
   dat->bit = 0;
-
   dwg_decode_header_variables(dat, dwg);
 
   // Check CRC-on
-  dat->byte = dwg->header.section[0].address + dwg->header.section[0].size - 18;
   dat->bit = 0;
-  if (!bit_check_CRC(dat, dat->byte, 0xc0c1))
-    {
-      printf("Warning: section %d crc failed\n", dwg->header.section[0].number);
-      /*return -1;*/
-    }
-  
-#if 0
-  ckr = bit_read_RS(dat);
-  ckr2 = bit_0xc0c1(0xc0c1, dat->chain + dwg->header.section[0].address + 16,
-                    dwg->header.section[0].size - 34);
+  ckr = dwg->header_vars.CRC;
+  ckr2 = bit_calc_CRC(0xc0c1, dat->chain + dwg->header.section[0].address + 16,
+                      dwg->header.section[0].size - 34);
   if (ckr != ckr2)
     {
-      printf("section %d crc todo ckr:%d ckr2:%d\n",
-              dwg->header.section[0].number, ckr, ckr2);
+      printf("Error: section %d crc failed\n", dwg->header.section[0].number);
       return -1;
     }
-#endif
+
   /*-------------------------------------------------------------------------
    * Classes
    */
@@ -663,10 +653,9 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
   ckr = bit_read_RS(dat);
   ckr2 = bit_calc_CRC(0xc0c1, dat->chain + dwg->header.section[1].address + 16,
                       dwg->header.section[1].size - 34);
-
   if (ckr != ckr2)
     {
-      printf("Warning: section %d crc todo ckr:%x ckr2:%x\n",
+      printf("Error: section %d crc todo ckr:%x ckr2:%x\n",
               dwg->header.section[1].number, ckr, ckr2);
       return -1;
     }
@@ -783,19 +772,19 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
    antckr = 0xC0C1;
    do
    {
-   duabyte = dat->byte;
-   sgdc[0] = bit_read_RC (dat);
-   sgdc[1] = bit_read_RC (dat);
-   section_size = (sgdc[0] << 8) | sgdc[1];
-   section_size -= 2;
-   dat->byte += section_size;
-   ckr = bit_read_CRC (dat);
-   dat->byte -= 2;
-   bit_write_CRC (dat, duabyte, antckr);
-   dat->byte -= 2;
-   ckr2 = bit_read_CRC (dat);
-   if (loglevel) fprintf (stderr, "Read: %X\nCreated: %X\t SEMO: %X\n", ckr, ckr2, antckr);
-   //antckr = ckr;
+     duabyte = dat->byte;
+     sgdc[0] = bit_read_RC (dat);
+     sgdc[1] = bit_read_RC (dat);
+     section_size = (sgdc[0] << 8) | sgdc[1];
+     section_size -= 2;
+     dat->byte += section_size;
+     ckr = bit_read_CRC (dat);
+     dat->byte -= 2;
+     bit_write_CRC (dat, duabyte, antckr);
+     dat->byte -= 2;
+     ckr2 = bit_read_CRC (dat);
+     if (loglevel) fprintf (stderr, "Read: %X\nCreated: %X\t SEMO: %X\n", ckr, ckr2, antckr);
+     //antckr = ckr;
    } while (section_size > 0);
    */
   LOG_INFO("\n=======> Object Map: %8X\n",
@@ -953,7 +942,7 @@ resolve_objectref_vector(Dwg_Data * dwg)
       //look for object
       obj = dwg_resolve_handle(dwg, dwg->object_ref[i]->absolute_ref);
 
-      if(obj)
+      if (obj)
         {
           LOG_TRACE("-found:  HANDLE(%d.%d.%lu)\n",
               obj->handle.code,
@@ -964,8 +953,7 @@ resolve_objectref_vector(Dwg_Data * dwg)
       //assign found pointer to objectref vector
       dwg->object_ref[i]->obj = obj;
 
-
-      if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE)
+      if (DWG_LOGLEVEL >= DWG_LOGLEVEL_HANDLE)
         {
           if (obj)
             dwg_print_object(obj);
@@ -2222,8 +2210,8 @@ dwg_resolve_handle(Dwg_Data* dwg, long unsigned int absref)
           return &dwg->object[i];
         }
     }
-  LOG_ERROR("Object not found: %lu\n", absref)
-  return 0;
+  LOG_ERROR("Object not found: %lu in %ld objects\n", absref, dwg->num_objects)
+  return NULL;
 }
 
 static Dwg_Object_Ref *
@@ -2330,7 +2318,7 @@ static void
 dwg_decode_header_variables(Bit_Chain* dat, Dwg_Data * dwg)
 {
   Dwg_Header_Variables* _obj = &dwg->header_vars;
-  Dwg_Object* obj = 0;
+  Dwg_Object* obj = NULL;
 
   #include "header_variables.spec"
 }
