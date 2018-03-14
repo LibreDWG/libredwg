@@ -1132,7 +1132,7 @@ bit_explore_chain(Bit_Chain * dat, long unsigned int size)
 }
 
 uint16_t
-bit_calc_CRC(uint16_t dx, unsigned char *adr, long len)
+bit_calc_CRC(uint16_t dx, unsigned char *addr, long len)
 {
   register unsigned char al;
 
@@ -1169,10 +1169,10 @@ bit_calc_CRC(uint16_t dx, unsigned char *adr, long len)
 
   for (; len > 0; len--)
     {
-      al = (unsigned char) ((*adr) ^ ((unsigned char) (dx & 0xFF)));
+      al = (unsigned char) ((*addr) ^ ((unsigned char) (dx & 0xFF)));
       dx = (dx >> 8) & 0xFF;
       dx = dx ^ ckrtable[al];
-      adr++;
+      addr++;
     }
   return (dx);
 }

@@ -2770,10 +2770,10 @@ typedef struct _dwg_section
 typedef struct
 { 
   long unsigned int size;
-  long unsigned int unknown1;	   
-  long unsigned int num_sections;  
-  long unsigned int max_decomp_size;  
-  long unsigned int unknown2;	   
+  long unsigned int unknown1;
+  long unsigned int num_sections;
+  long unsigned int max_decomp_size;
+  long unsigned int unknown2;
   long unsigned int compressed;
   long unsigned int type;
   long unsigned int encrypted;
@@ -2810,15 +2810,22 @@ typedef struct _dwg_struct
   {
     unsigned int version; /* see Dwg_Version_Type */
     unsigned int from_version;
-    unsigned int codepage;
+    BITCODE_RC   zero_7[7];
+    BITCODE_RL   preview_addr;
+    BITCODE_RC   dwg_version;
+    BITCODE_RC   maint_version;
+    BITCODE_RS   codepage;
+    BITCODE_RC   zero_3[3];
+    BITCODE_RL   security_flags;
+    BITCODE_RL   rl_1c;
     unsigned int num_sections;
     Dwg_Section* section;
     unsigned int num_descriptions;
     Dwg_Section_Info* section_info;
   } header;
 
-#define DWG_UNKNOWN1_SIZE 123
-  Dwg_Chain unknown1;
+#define DWG_UNKNOWN5_SIZE 123
+  Dwg_Chain unknown5;
 
   Dwg_Chain picture;
 

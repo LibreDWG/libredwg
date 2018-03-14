@@ -426,7 +426,7 @@ dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
       LOG_INFO(
           "WARNING: This version of LibreDWG is only capable of properly decoding version R2000 (code: AC1015) dwg-files.\n"
           "This file's version code is: %s\n"
-          "This version is not yet actively developed.\n"
+          "Support for this version is still experimental.\n"
           "It will probably crash and/or give you invalid output.\n", version)
       return decode_R2004(dat, dwg);
     }
@@ -436,7 +436,7 @@ dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
       LOG_INFO(
           "WARNING: This version of LibreDWG is only capable of properly decoding version R2000 (code: AC1015) dwg-files.\n"
           "This file's version code is: %s\n"
-          "This version is not yet actively developed.\n"
+          "Support for this version is still experimental.\n"
           "It will probably crash and/or give you invalid output.\n", version)
       return decode_R2007(dat, dwg);
     }
@@ -451,7 +451,6 @@ dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
 static int
 decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
 {
-  unsigned char sig;
   unsigned int section_size = 0;
   unsigned char sgdc[2];
   unsigned int ckr, ckr2;
@@ -469,44 +468,46 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
   LOG_TRACE("Unknown values: 5 'zeroes', ACADMAINTVER and a 0/1/3: ")
   for (i = 0; i < 7; i++)
     {
-      sig = bit_read_RC(dat);
-      LOG_TRACE("0x%02X ", sig)
+      // in r13_r15 zero_7[5] is ACADMAINTVER
+      dwg->header.zero_7[i] = bit_read_RC(dat);
+      LOG_TRACE("0x%02X ", dwg->header.zero_7[i])
     }
   LOG_TRACE("\n")
 
   /* Image Seeker/Preview */
-  pvz = bit_read_RL(dat);
-  LOG_TRACE("Image seeker: 0x%08X\n", (unsigned int) pvz)
+  dwg->header.preview_addr = bit_read_RL(dat);
+  LOG_TRACE("Image seeker: 0x%08X\n", (unsigned int) dwg->header.preview_addr)
 
-  sig = bit_read_RC(dat);
-  LOG_INFO("DWG Version: %u\n", sig);
-  sig = bit_read_RC(dat);
-  LOG_INFO("Maintainance Release: %u\n", sig);
+  dwg->header.dwg_version = bit_read_RC(dat);
+  LOG_INFO("dwg_version: %u\n", dwg->header.dwg_version);
+  dwg->header.maint_version = bit_read_RC(dat);
+  LOG_INFO("maint_version: %u\n", dwg->header.maint_version);
 
   /* Codepage */
-  dat->byte = 0x13;
+  assert(dat->byte == 0x13);
   dwg->header.codepage = bit_read_RS(dat);
   LOG_INFO("Codepage: %u\n", dwg->header.codepage);
 
-  /* Section Locator Records */
-  dat->byte = 0x15;
+  /* Section Locator Records 0x15 */
+  assert(dat->byte == 0x15);
   dwg->header.num_sections = bit_read_RL(dat);
-  if (!dwg->header.num_sections) //ODA writes zeros
+  if (!dwg->header.num_sections) //ODA writes zeros.
     dwg->header.num_sections = 6;
 
-  //  why do we have this limit to only 6 sections?
-  //  It seems to be a bug, so I'll comment it out and will add dynamic
-  //  allocation of the sections vector.
-  //  OpenDWG spec speaks of 6 possible values for the record number.
-  //  Maybe the original libdwg author got confused about that.
+  // So far seen 3-6 sections. Most emit only 3-5 sections.
   dwg->header.section = (Dwg_Section*) malloc(sizeof(Dwg_Section)
       * dwg->header.num_sections);
-
+  /* section 0: header vars
+   *         1: class section
+   *         2: object map
+   *         3: (R13 c3 and later): 2nd header (special table no sentinels)
+   *         4: optional: MEASUREMENT
+   */
   for (i = 0; i < dwg->header.num_sections; i++)
     {
-      dwg->header.section[i].number = bit_read_RC(dat);
+      dwg->header.section[i].number  = bit_read_RC(dat);
       dwg->header.section[i].address = bit_read_RL(dat);
-      dwg->header.section[i].size = bit_read_RL(dat);
+      dwg->header.section[i].size    = bit_read_RL(dat);
     }
 
   // Check CRC-on
@@ -515,28 +516,34 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
   if (ckr != ckr2)
     {
       printf("Error: Header CRC mismatch %d <=> %d\n", ckr, ckr2);
-      return 1;
+      /*return 1;*/
+      /* The CRC depends on num_sections. XOR result with
+         3: 0xa598
+         4: 0x8101
+         5: 0x3cc4
+         6: 0x8461
+      */
     }
 
   if (bit_search_sentinel(dat, dwg_sentinel(DWG_SENTINEL_HEADER_END)))
     LOG_TRACE("\n=======> HEADER (end): %8X\n", (unsigned int) dat->byte)
 
   /*-------------------------------------------------------------------------
-   * Unknown section 1
+   * unknown section 5
    */
 
   if (dwg->header.num_sections == 6)
     {
-      LOG_TRACE("\n=======> UNKNOWN 1: %8X\n",
+      LOG_TRACE("\n=======> UNKNOWN 5: %8X\n",
               (unsigned int) dwg->header.section[5].address)
-      LOG_TRACE("         UNKNOWN 1 (end): %8X\n",
+      LOG_TRACE("         UNKNOWN 5 (end): %8X\n",
               (unsigned int) (dwg->header.section[5].address
                   + dwg->header.section[5].size))
       dat->byte = dwg->header.section[5].address;
-      dwg->unknown1.size = DWG_UNKNOWN1_SIZE;
-      dwg->unknown1.byte = dwg->unknown1.bit = 0;
-      dwg->unknown1.chain = (unsigned char*)malloc(dwg->unknown1.size);
-      memcpy(dwg->unknown1.chain, &dat->chain[dat->byte], dwg->unknown1.size);
+      dwg->unknown5.size = DWG_UNKNOWN5_SIZE;
+      dwg->unknown5.byte = dwg->unknown5.bit = 0;
+      dwg->unknown5.chain = (unsigned char*)malloc(dwg->unknown5.size);
+      memcpy(dwg->unknown5.chain, &dat->chain[dat->byte], dwg->unknown5.size);
       //bit_explore_chain ((Bit_Chain *) &dwg->unknown1, dwg->unknown1.size);
       //bit_print ((Bit_Chain *) &dwg->unknown1, dwg->unknown1.size);
     }
@@ -567,7 +574,7 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
     }
 
   /*-------------------------------------------------------------------------
-   * Header Variables
+   * Header Variables, section 0
    */
 
   LOG_INFO("\n=======> Header Variables: %8X\n",
@@ -595,7 +602,7 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
     }
 
   /*-------------------------------------------------------------------------
-   * Classes
+   * Classes, section 1
    */
   LOG_INFO("\n=======> CLASS: %8lX\n",
            (long)dwg->header.section[1].address)
@@ -650,7 +657,6 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
   // Check CRC-on
   dat->byte = dwg->header.section[1].address + dwg->header.section[1].size - 18;
   dat->bit = 0;
-
   ckr = bit_read_RS(dat);
   ckr2 = bit_calc_CRC(0xc0c1, dat->chain + dwg->header.section[1].address + 16,
                       dwg->header.section[1].size - 34);
@@ -663,11 +669,11 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
 
   dat->byte += 16;
   pvz = bit_read_RL(dat); // Unknown bitlong inter class and object
-  LOG_TRACE("Address: %lu / Content: 0x%#lX\n", dat->byte - 4, pvz)
+  LOG_TRACE("@ %lu RL: 0x%#lX\n", dat->byte - 4, pvz)
   LOG_INFO("Number of classes read: %u\n", dwg->num_classes)
 
   /*-------------------------------------------------------------------------
-   * Object-map
+   * Object-map, section 2
    */
 
   dat->byte = dwg->header.section[2].address;
@@ -793,11 +799,12 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
               + dwg->header.section[2].size))
 
   /*-------------------------------------------------------------------------
-   * Second header
+   * Second header, section 3?
    */
 
   if (bit_search_sentinel(dat, dwg_sentinel(DWG_SENTINEL_SECOND_HEADER_BEGIN)))
     {
+      BITCODE_RC sig;
       long unsigned int pvzadr;
       unsigned char sig2;
 
@@ -902,12 +909,12 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
     }
 
   /*-------------------------------------------------------------------------
-   * Section MEASUREMENT
+   * Section 4: MEASUREMENT
    */
 
-  LOG_INFO("\n=======> Unknown 2: %8X\n",
+  LOG_INFO("\n=======> Unknown 4: %8X\n",
           (unsigned int) dwg->header.section[4].address)
-  LOG_INFO("         Unknown 2 (end): %8X\n",
+  LOG_INFO("         Unknown 4 (end): %8X\n",
           (unsigned int) (dwg->header.section[4].address
               + dwg->header.section[4].size))
   dat->byte = dwg->header.section[4].address;
@@ -1550,10 +1557,10 @@ read_2004_section_handles(Bit_Chain* dat, Dwg_Data *dwg)
 static int
 decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
 {
-  /* Encripted Data */
+  /* Encrypted Data */
   union
   {
-    unsigned char encripted_data[0x6c];
+    unsigned char encrypted_data[0x6c];
     struct
     {
       unsigned char file_ID_string[12];
@@ -1697,7 +1704,7 @@ decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
     {
       rseed *= 0x343fd;
       rseed += 0x269ec3;
-      _2004_header_data.encripted_data[i] = bit_read_RC(dat) ^ (rseed >> 0x10);
+      _2004_header_data.encrypted_data[i] = bit_read_RC(dat) ^ (rseed >> 0x10);
     }
 
   if (loglevel)

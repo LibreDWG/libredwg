@@ -328,72 +328,65 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
   strcpy ((char *)dat->chain, version_codes[dwg->header.version]); // Chain version
   dat->byte += 6;
 
-  for (i = 0; i < 5; i++)
-    bit_write_RC(dat, 0); // Unknown section
-  bit_write_RC(dat, 0x0F); // Unknown
-  bit_write_RC(dat, 0x01); // Unknown
-  bit_write_RL(dat, 0); // Picture address
-  bit_write_RC(dat, 25); // Version
-  bit_write_RC(dat, 0); // ?
-  bit_write_RS(dat, dwg->header.codepage); // Codepage
+  for (i = 0; i < 7; i++)
+    bit_write_RC(dat, dwg->header.zero_7[i]);    // 6 * 0
+  bit_write_RL(dat, dwg->header.preview_addr);   // Picture address
+  bit_write_RC(dat, dwg->header.dwg_version);    // DWG Version
+  bit_write_RC(dat, dwg->header.maint_version);  // Maintainance Release
+  bit_write_RS(dat, dwg->header.codepage);       // Codepage
 
-  dwg->header.num_sections = 6; // hide unknownn sectionn 1 ? 
-  bit_write_RL(dat, dwg->header.num_sections);
-  section_address = dat->byte; // Jump to section address
-  dat->byte += (dwg->header.num_sections * 9);
-  bit_read_CRC(dat); // Check crc
+  PRE(R_2004) {
+    if (!dwg->header.num_sections)
+      dwg->header.num_sections = 6;
+    bit_write_RL(dat, dwg->header.num_sections);
+    section_address = dat->byte; // Jump to section address
+    dat->byte += (dwg->header.num_sections * 9);
+    bit_read_CRC(dat); // Check crc
 
-  bit_write_sentinel(dat, dwg_sentinel(DWG_SENTINEL_HEADER_END));
+    bit_write_sentinel(dat, dwg_sentinel(DWG_SENTINEL_HEADER_END));
 
-  /*------------------------------------------------------------
-   * Unknown section 1 
-   */ 
-  dwg->header.section[5].number = 5;
-  dwg->header.section[5].address = 0;
-  dwg->header.section[5].size = 0;
-  if (dwg->header.num_sections == 6)
-    {
-      dwg->header.section[5].address = dat->byte;
-      dwg->header.section[5].size = DWG_UNKNOWN1_SIZE;
+    /*------------------------------------------------------------
+     * Unknown section 5
+     */
+    dwg->header.section[5].number = 5;
+    dwg->header.section[5].address = 0;
+    dwg->header.section[5].size = 0;
+    if (dwg->header.num_sections == 6)
+      {
+        dwg->header.section[5].address = dat->byte;
+        dwg->header.section[5].size = DWG_UNKNOWN5_SIZE;
 
-      dwg->unknown1.size = dwg->header.section[5].size;
-      dwg->unknown1.byte = dwg->unknown1.bit = 0;
-      while (dat->byte + dwg->unknown1.size >= dat->size)
-        bit_chain_alloc(dat);
-      memcpy(&dat->chain[dat->byte], dwg->unknown1.chain, dwg->unknown1.size);
-      dat->byte += dwg->unknown1.size;
-
-    }
+        dwg->unknown5.size = dwg->header.section[5].size;
+        dwg->unknown5.byte = dwg->unknown5.bit = 0;
+        while (dat->byte + dwg->unknown5.size >= dat->size)
+          bit_chain_alloc(dat);
+        memcpy(&dat->chain[dat->byte], dwg->unknown5.chain, dwg->unknown5.size);
+        dat->byte += dwg->unknown5.size;
+      }
+  }
 
   /*------------------------------------------------------------
    * Picture (Pre-R13C3?)
    */
-
-  /* Write the address of the picture
-   */
-  pvzadr = dat->byte;
-  dat->byte = 0x0D;
-  bit_write_RL(dat, pvzadr);
-  dat->byte = pvzadr;
-
-  /* Copy picture
-   */
-  //dwg->picture.size = 0; // If one desires not to copy pictures,
-                           // should un-comment this line
-  bit_write_sentinel(dat, dwg_sentinel(DWG_SENTINEL_PICTURE_BEGIN));
-  for (j = 0; j < dwg->picture.size; j++)
-    bit_write_RC(dat, dwg->picture.chain[j]);
-  if (dwg->picture.size == 0)
+  if (dwg->header.preview_addr)
     {
-      bit_write_RL(dat, 5);
-      bit_write_RC(dat, 0);
+      dat->byte = dwg->header.preview_addr;
+      //dwg->picture.size = 0; // If one desires not to copy pictures,
+      // should un-comment this line
+      bit_write_sentinel(dat, dwg_sentinel(DWG_SENTINEL_PICTURE_BEGIN));
+      for (j = 0; j < dwg->picture.size; j++)
+        bit_write_RC(dat, dwg->picture.chain[j]);
+      if (dwg->picture.size == 0)
+        {
+          bit_write_RL(dat, 5);
+          bit_write_RC(dat, 0);
+        }
+      bit_write_sentinel(dat, dwg_sentinel(DWG_SENTINEL_PICTURE_END));
     }
-  bit_write_sentinel(dat, dwg_sentinel(DWG_SENTINEL_PICTURE_END));
 
   /*------------------------------------------------------------
    * Header Variables
    */
-
   dwg->header.section[0].number = 0;
   dwg->header.section[0].address = dat->byte;
   bit_write_sentinel(dat, dwg_sentinel(DWG_SENTINEL_VARIABLE_BEGIN));
