@@ -17,7 +17,7 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-LDADD = ../src/libredwg.la -lm
+LDADD = ../src/libredwg.la
 
 # NB: After you modify ‘check_PROGRAMS’, do "make update-ignorance"
 #     and include this directory's .gitignore in the commit.
