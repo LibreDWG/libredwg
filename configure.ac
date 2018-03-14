@@ -78,6 +78,9 @@ dnl fi
 dnl if test x$ax_cv_check_cflags__Wunused_variable = xyes; then
 dnl   WARN_CFLAGS="$WARN_CFLAGS -Wno-unused-variable"
 dnl fi
+dnl until we can make a release, favor no optims.
+dnl it's fast enough and better for debugging.
+CFLAGS="-g"
 
 if test "x$ac_cv_prog_cc_c99" = "xno"; then
    AC_MSG_WARN([This compiler ${CC} has no c99 support])
