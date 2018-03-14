@@ -39,4 +39,5 @@ script:
   - ./configure $CONF
   - make -j4
   - make check
-  - if [ "$DISTCHECK" = "1" ]; then make distcheck; fi
+  - if [ "$DISTCHECK" = "1" ]; then
+      make distcheck || cat bindings/python/Makefile; fi
