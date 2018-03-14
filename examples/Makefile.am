@@ -17,21 +17,20 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-check_PROGRAMS = load_dwg get_bmp test testSVG  testsvg2
+check_PROGRAMS = load_dwg get_bmp test testSVG testsvg2
+AM_CFLAGS = -Wall -Wextra -I$(top_srcdir)/src
+LDADD = $(top_builddir)/src/libredwg.la
 
 if HAVE_LIBPS
 check_PROGRAMS += dwg_ps
 dwg_ps_SOURCES = dwg_ps.c
-dwg_ps_LDADD = -lps
+dwg_ps_LDADD = $(LDADD) -lps
 endif
 
 if USE_WRITE
 check_PROGRAMS += rewrite
 rewrite_SOURCES = rewrite.c
 endif
-
-AM_CFLAGS = -Wall -Wextra -I$(top_srcdir)/src
-LDADD = $(top_builddir)/src/libredwg.la
 
 test_SOURCES = test.c
 

@@ -19,9 +19,9 @@
  */
 
 #include <stdio.h>
-#include <dwg.h>
 #include <libps/pslib.h>
 #include "suffix.c"
+#include "dwg.h"
 
 void
 create_postscript(Dwg_Data *dwg, char *output)
@@ -32,7 +32,7 @@ create_postscript(Dwg_Data *dwg, char *output)
   float scale_y;
   float scale;
   long unsigned i;
-  FILE *fh;
+  //FILE *fh;
   PSDoc *ps;
 
   /* Initialization
@@ -79,9 +79,9 @@ create_postscript(Dwg_Data *dwg, char *output)
   for (i = 0; i < dwg->num_objects; i++)
     {
       obj = &dwg->object[i];
-      if (obj->supertype = DWG_SUPERTYPE_UNKNOWN) // unknown
+      if (obj->supertype == DWG_SUPERTYPE_UNKNOWN) // unknown
         continue;
-      if (obj->type = DWG_SUPERTYPE_OBJECT) // not entity
+      if (obj->type == DWG_SUPERTYPE_OBJECT) // not entity
         continue;
       if (obj->tio.entity->entity_mode == 0) // belongs to block
         continue;
