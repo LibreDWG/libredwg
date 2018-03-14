@@ -1355,13 +1355,13 @@ dwg_obj_mlinestyle_set_linesinstyle(dwg_obj_mlinestyle *mlinestyle,
 ********************************************************************/
 
 
-int
+BITCODE_BS
 dwg_obj_appid_control_get_num_entries(dwg_obj_appid_control *appid,
                                       int *error);
 
 void
 dwg_obj_appid_control_set_num_entries(dwg_obj_appid_control *appid,
-                                      int entries, int *error);
+                                      BITCODE_BS entries, int *error);
 
 
 /********************************************************************
@@ -3101,17 +3101,17 @@ void
 dwg_ent_spline_set_periodic(dwg_ent_spline *spline, char periodic,
                                int *error);
 
-long
+BITCODE_BL
 dwg_ent_spline_get_num_knots(dwg_ent_spline *spline, int *error);
 
 void
-dwg_ent_spline_set_num_knots(dwg_ent_spline *spline, long nums, int *error);
+dwg_ent_spline_set_num_knots(dwg_ent_spline *spline, BITCODE_BL nums, int *error);
 
-long
+BITCODE_BL
 dwg_ent_spline_get_num_ctrl_pts(dwg_ent_spline *spline, int *error);
 
 void
-dwg_ent_spline_set_num_ctrl_pts(dwg_ent_spline *spline, long nums,
+dwg_ent_spline_set_num_ctrl_pts(dwg_ent_spline *spline, BITCODE_BL nums,
                                    int *error);
 
 dwg_ent_spline_point *
@@ -3380,13 +3380,13 @@ void
 dwg_ent_polyline_pface_set_numverts(dwg_ent_polyline_pface *pface,
                                     unsigned int numverts, int *error);
 
-long
+BITCODE_BL
 dwg_ent_polyline_pface_get_owned_obj_count(dwg_ent_polyline_pface *pface,
                                            int *error);
 
 void
 dwg_ent_polyline_pface_set_owned_obj_count(dwg_ent_polyline_pface *pface,
-                                           long owned_obj_count, int *error);
+                                           BITCODE_BL owned_obj_count, int *error);
 
 unsigned int
 dwg_ent_polyline_pface_get_numfaces(dwg_ent_polyline_pface *pface, int *error);
@@ -3401,29 +3401,29 @@ dwg_ent_polyline_pface_set_numfaces(dwg_ent_polyline_pface *pface,
 ********************************************************************/
 
 
-unsigned int
+BITCODE_BS
 dwg_ent_polyline_mesh_get_flags(dwg_ent_polyline_mesh *mesh, int *error);
 
 void
 dwg_ent_polyline_mesh_set_flags(dwg_ent_polyline_mesh *mesh,
-                                unsigned int flags, int *error);
+                                BITCODE_BS flags, int *error);
 
-unsigned int
+BITCODE_BS
 dwg_ent_polyline_mesh_get_curve_type(dwg_ent_polyline_mesh *mesh, int *error);
 
 void
 dwg_ent_polyline_mesh_set_curve_type(dwg_ent_polyline_mesh *mesh,
-                                     unsigned int curve_type, int *error);
+                                     BITCODE_BS curve_type, int *error);
 
-unsigned int
+BITCODE_BS
 dwg_ent_polyline_mesh_get_m_vert_count(dwg_ent_polyline_mesh *mesh,
                                        int *error);
 
 void
 dwg_ent_polyline_mesh_set_m_vert_count(dwg_ent_polyline_mesh *mesh,
-                                       unsigned int m_vert_count, int *error);
+                                       BITCODE_BS m_vert_count, int *error);
 
-unsigned int
+BITCODE_BS
 dwg_ent_polyline_mesh_get_n_vert_count(dwg_ent_polyline_mesh *mesh,
                                        int *error);
 
@@ -3431,27 +3431,27 @@ void
 dwg_ent_polyline_mesh_set_n_vert_count(dwg_ent_polyline_mesh *mesh,
                                        unsigned int n_vert_count, int *error);
 
-unsigned int
+BITCODE_BS
 dwg_ent_polyline_mesh_get_m_density(dwg_ent_polyline_mesh *mesh, int *error);
 
 void
 dwg_ent_polyline_mesh_set_m_density(dwg_ent_polyline_mesh *mesh,
-                                    unsigned int m_density, int *error);
+                                    BITCODE_BS m_density, int *error);
 
-unsigned int
+BITCODE_BS
 dwg_ent_polyline_mesh_get_n_density(dwg_ent_polyline_mesh *mesh, int *error);
 
 void
 dwg_ent_polyline_mesh_set_n_density(dwg_ent_polyline_mesh *mesh,
-                                    unsigned int n_density, int *error);
+                                    BITCODE_BS n_density, int *error);
 
-long
+BITCODE_BL
 dwg_ent_polyline_mesh_get_owned_obj_count(dwg_ent_polyline_mesh *mesh,
                                           int *error);
 
 void
 dwg_ent_polyline_mesh_set_owned_obj_count(dwg_ent_polyline_mesh *mesh,
-                                          long owned_obj_count, int *error);
+                                          BITCODE_BL owned_obj_count, int *error);
 
 
 /********************************************************************
@@ -3509,13 +3509,13 @@ void
 dwg_ent_polyline_2d_set_curve_type(dwg_ent_polyline_2d *line2d,
                                    unsigned int curve_type, int *error);
 
-long
+BITCODE_BL
 dwg_ent_polyline_2d_get_owned_obj_count(dwg_ent_polyline_2d *line2d,
                                         int *error);
 
 void
 dwg_ent_polyline_2d_set_owned_obj_count(dwg_ent_polyline_2d *line2d,
-                                        long owned_obj_count, int *error);
+                                        BITCODE_BL owned_obj_count, int *error);
 
 
 /********************************************************************
@@ -3537,13 +3537,13 @@ void
 dwg_ent_polyline_3d_set_flags_2(dwg_ent_polyline_3d *line3d, char flags_2,
                                 int *error);
 
-long
+BITCODE_BL
 dwg_ent_polyline_3d_get_owned_obj_count(dwg_ent_polyline_3d *line3d,
                                         int *error);
 
 void
 dwg_ent_polyline_3d_set_owned_obj_count(dwg_ent_polyline_3d *line3d,
-                                        long owned_obj_count, int *error);
+                                        BITCODE_BL owned_obj_count, int *error);
 
 
 /********************************************************************
@@ -3672,11 +3672,11 @@ dwg_ent_image_get_fade(dwg_ent_image *image, int *error);
 void
 dwg_ent_image_set_fade(dwg_ent_image *image, char fade, int *error);
 
-unsigned int
+BITCODE_BS
 dwg_ent_image_get_clip_boundary_type(dwg_ent_image *image, int *error);
 
 void
-dwg_ent_image_set_clip_boundary_type(dwg_ent_image *image, unsigned int type,
+dwg_ent_image_set_clip_boundary_type(dwg_ent_image *image, BITCODE_BS type,
                                     int *error);
 
 void
@@ -3717,9 +3717,9 @@ BITCODE_BD
 dwg_ent_mline_get_scale(dwg_ent_mline *mline, int *error);
 
 void
-dwg_ent_mline_set_just(dwg_ent_mline *mline, char just, int *error);
+dwg_ent_mline_set_just(dwg_ent_mline *mline, BITCODE_RC just, int *error);
 
-char
+BITCODE_RC
 dwg_ent_mline_get_just(dwg_ent_mline *mline, int *error);
 
 void
@@ -3739,23 +3739,23 @@ dwg_ent_mline_get_extrusion(dwg_ent_mline *mline, dwg_point_3d *point,
                             int *error);
 
 void
-dwg_ent_mline_set_open_closed(dwg_ent_mline *mline, unsigned int oc,
+dwg_ent_mline_set_open_closed(dwg_ent_mline *mline, BITCODE_BS oc,
                               int *error);
 
-unsigned int
+BITCODE_BS
 dwg_ent_mline_get_open_closed(dwg_ent_mline *mline, int *error);
 
 void
-dwg_ent_mline_set_num_lines(dwg_ent_mline *mline, char num, int *error);
+dwg_ent_mline_set_num_lines(dwg_ent_mline *mline, BITCODE_RC num, int *error);
 
-char
+BITCODE_RC
 dwg_ent_mline_get_num_lines(dwg_ent_mline *mline, int *error);
 
 void
-dwg_ent_mline_set_num_verts(dwg_ent_mline *mline, unsigned int num,
+dwg_ent_mline_set_num_verts(dwg_ent_mline *mline, BITCODE_BS num,
                             int *error);
 
-unsigned int
+BITCODE_BS
 dwg_ent_mline_get_num_verts(dwg_ent_mline *mline, int *error);
 
 dwg_ent_mline_vert *
@@ -3991,11 +3991,11 @@ dwg_ent_body_get_point(dwg_ent_body *body, dwg_point_3d *point, int *error);
 void
 dwg_ent_body_set_point(dwg_ent_body *body, dwg_point_3d *point, int *error);
 
-long
+BITCODE_BL
 dwg_ent_body_get_num_isolines(dwg_ent_body *body, int *error);
 
 void
-dwg_ent_body_set_num_isolines(dwg_ent_body *body, long num, int *error);
+dwg_ent_body_set_num_isolines(dwg_ent_body *body, BITCODE_BL num, int *error);
 
 char
 dwg_ent_body_get_isoline_present(dwg_ent_body *body, int *error);
@@ -4003,20 +4003,20 @@ dwg_ent_body_get_isoline_present(dwg_ent_body *body, int *error);
 void
 dwg_ent_body_set_isoline_present(dwg_ent_body *body, char iso, int *error);
 
-long
+BITCODE_BL
 dwg_ent_body_get_num_wires(dwg_ent_body *body, int *error);
 
 void
-dwg_ent_body_set_num_wires(dwg_ent_body *body, long num, int *error);
+dwg_ent_body_set_num_wires(dwg_ent_body *body, BITCODE_BL num, int *error);
 
 dwg_ent_solid_wire *
 dwg_ent_body_get_wire(dwg_ent_body *body, int *error);
 
-long
+BITCODE_BL
 dwg_ent_body_get_num_silhouettes(dwg_ent_body *body, int *error);
 
 void
-dwg_ent_body_set_num_silhouettes(dwg_ent_body *body, long silhouettes,
+dwg_ent_body_set_num_silhouettes(dwg_ent_body *body, BITCODE_BL silhouettes,
                                  int *error);
 
 dwg_ent_solid_silhouette *
@@ -4102,15 +4102,15 @@ dwg_ent_table_get_horiz_direction(dwg_ent_table *table, dwg_point_3d *point,
                                   int *error);
 
 void
-dwg_ent_table_set_num_cols(dwg_ent_table *table, long num, int *error);
+dwg_ent_table_set_num_cols(dwg_ent_table *table, BITCODE_BL num, int *error);
 
-long
+BITCODE_BL
 dwg_ent_table_get_num_cols(dwg_ent_table *table, int *error);
 
 void
-dwg_ent_table_set_num_rows(dwg_ent_table *table, long num, int *error);
+dwg_ent_table_set_num_rows(dwg_ent_table *table, BITCODE_BL num, int *error);
 
-long
+BITCODE_BL
 dwg_ent_table_get_num_rows(dwg_ent_table *table, int *error);
 
 double *
@@ -4121,16 +4121,16 @@ dwg_ent_table_get_row_heights(dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_table_overrides_present(dwg_ent_table *table,
-                                          unsigned char present, int *error);
+                                          BITCODE_B present, int *error);
 
-unsigned char
+BITCODE_B
 dwg_ent_table_get_table_overrides_present(dwg_ent_table *table, int *error);
 
 void
-dwg_ent_table_set_table_flag_override(dwg_ent_table *table, long override,
+dwg_ent_table_set_table_flag_override(dwg_ent_table *table, BITCODE_BL override,
                                       int *error);
 
-long
+BITCODE_BL
 dwg_ent_table_get_table_flag_override(dwg_ent_table *table, int *error);
 
 void
@@ -4598,7 +4598,7 @@ dwg_get_block_header(dwg_data *dwg, int *error);
 ********************************************************************/
 
 
-long
+BITCODE_BL
 dwg_obj_block_control_get_num_entries(dwg_obj_block_control *ctrl, int *error);
 
 dwg_object_ref **

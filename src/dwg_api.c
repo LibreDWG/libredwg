@@ -5129,7 +5129,7 @@ dwg_obj_mlinestyle_set_linesinstyle(dwg_obj_mlinestyle *mlinestyle,
 \param 1 dwg_obj_appid_control
 \param 2 int
 */
-int
+BITCODE_BS
 dwg_obj_appid_control_get_num_entries(dwg_obj_appid_control *appid, int *error)
 {
   if (appid != 0)
@@ -5153,7 +5153,7 @@ dwg_obj_appid_control_get_num_entries(dwg_obj_appid_control *appid, int *error)
 */
 void
 dwg_obj_appid_control_set_num_entries(dwg_obj_appid_control *appid,
-                                      int entries, int *error)
+                                      BITCODE_BS entries, int *error)
 {
   if (appid != 0)
     {
@@ -13898,7 +13898,7 @@ dwg_ent_spline_set_ctrl_tol(dwg_ent_spline *spline, BITCODE_BD ctrl_tol,
 }
 
 /// Returns spline  number of fit points
-unsigned int
+BITCODE_BS
 dwg_ent_spline_get_num_fit_pts(dwg_ent_spline *spline, int *error)
 {
   if (spline != 0)
@@ -14068,7 +14068,7 @@ dwg_ent_spline_set_periodic(dwg_ent_spline *spline, char periodic,
 }
 
 /// Returns spline knots number
-long
+BITCODE_BL
 dwg_ent_spline_get_num_knots(dwg_ent_spline *spline, int *error)
 {
   if (spline != 0)
@@ -14086,7 +14086,7 @@ dwg_ent_spline_get_num_knots(dwg_ent_spline *spline, int *error)
 
 /// Sets spline knots number
 void
-dwg_ent_spline_set_num_knots(dwg_ent_spline *spline, long nums, int *error)
+dwg_ent_spline_set_num_knots(dwg_ent_spline *spline, BITCODE_BL nums, int *error)
 {
   if (spline != 0)
     {
@@ -14101,7 +14101,7 @@ dwg_ent_spline_set_num_knots(dwg_ent_spline *spline, long nums, int *error)
 }
 
 /// Returns spline control points number
-long
+BITCODE_BL
 dwg_ent_spline_get_num_ctrl_pts(dwg_ent_spline *spline, int *error)
 {
   if (spline != 0)
@@ -14119,7 +14119,7 @@ dwg_ent_spline_get_num_ctrl_pts(dwg_ent_spline *spline, int *error)
 
 /// Sets spline control points number
 void
-dwg_ent_spline_set_num_ctrl_pts(dwg_ent_spline *spline, long nums,
+dwg_ent_spline_set_num_ctrl_pts(dwg_ent_spline *spline, BITCODE_BL nums,
                                 int *error)
 {
   if (spline != 0)
@@ -15363,7 +15363,7 @@ dwg_ent_viewport_get_contrast(dwg_ent_viewport *vp, int *error)
 ********************************************************************/
 
 /// Returns polyline pface num verts
-unsigned int
+BITCODE_BS
 dwg_ent_polyline_pface_get_numverts(dwg_ent_polyline_pface *pface, int *error)
 {
   if (pface != 0)
@@ -15382,7 +15382,7 @@ dwg_ent_polyline_pface_get_numverts(dwg_ent_polyline_pface *pface, int *error)
 /// Sets num verts
 void
 dwg_ent_polyline_pface_set_numverts(dwg_ent_polyline_pface *pface,
-                                    unsigned int numverts, int *error)
+                                    BITCODE_BS numverts, int *error)
 {
   if (pface != 0)
     {
@@ -15397,7 +15397,7 @@ dwg_ent_polyline_pface_set_numverts(dwg_ent_polyline_pface *pface,
 }
 
 /// Returns polyline pface owned object count
-long
+BITCODE_BL
 dwg_ent_polyline_pface_get_owned_obj_count(dwg_ent_polyline_pface *pface,
                                            int *error)
 {
@@ -15417,7 +15417,7 @@ dwg_ent_polyline_pface_get_owned_obj_count(dwg_ent_polyline_pface *pface,
 /// Sets polyline pfadce owned object count
 void
 dwg_ent_polyline_pface_set_owned_obj_count(dwg_ent_polyline_pface *pface,
-                                           long owned_obj_count, int *error)
+                                           BITCODE_BL owned_obj_count, int *error)
 {
   if (pface != 0)
     {
@@ -15432,7 +15432,7 @@ dwg_ent_polyline_pface_set_owned_obj_count(dwg_ent_polyline_pface *pface,
 }
 
 /// Returns polyline pface numfaces
-unsigned int
+BITCODE_BS
 dwg_ent_polyline_pface_get_numfaces(dwg_ent_polyline_pface *pface, int *error)
 {
   if (pface != 0)
@@ -15451,7 +15451,7 @@ dwg_ent_polyline_pface_get_numfaces(dwg_ent_polyline_pface *pface, int *error)
 /// Sets polyline pface numfaces
 void
 dwg_ent_polyline_pface_set_numfaces(dwg_ent_polyline_pface *pface,
-                                    unsigned int numfaces, int *error)
+                                    BITCODE_BS numfaces, int *error)
 {
   if (pface != 0)
     {
@@ -15470,7 +15470,7 @@ dwg_ent_polyline_pface_set_numfaces(dwg_ent_polyline_pface *pface,
 ********************************************************************/
 
 /// Returns polyline mesh flags
-unsigned int
+BITCODE_BS
 dwg_ent_polyline_mesh_get_flags(dwg_ent_polyline_mesh *mesh, int *error)
 {
   if (mesh != 0)
@@ -15489,7 +15489,7 @@ dwg_ent_polyline_mesh_get_flags(dwg_ent_polyline_mesh *mesh, int *error)
 /// Sets polyline mesh flags
 void
 dwg_ent_polyline_mesh_set_flags(dwg_ent_polyline_mesh *mesh,
-                                unsigned int flags, int *error)
+                                BITCODE_BS flags, int *error)
 {
   if (mesh != 0)
     {
@@ -15504,7 +15504,7 @@ dwg_ent_polyline_mesh_set_flags(dwg_ent_polyline_mesh *mesh,
 }
 
 /// Returns polyline mesh curve type
-unsigned int
+BITCODE_BS
 dwg_ent_polyline_mesh_get_curve_type(dwg_ent_polyline_mesh *mesh, int *error)
 {
   if (mesh != 0)
@@ -15523,7 +15523,7 @@ dwg_ent_polyline_mesh_get_curve_type(dwg_ent_polyline_mesh *mesh, int *error)
 /// Sets polyline mesh curve type
 void
 dwg_ent_polyline_mesh_set_curve_type(dwg_ent_polyline_mesh *mesh,
-                                     unsigned int curve_type, int *error)
+                                     BITCODE_BS curve_type, int *error)
 {
   if (mesh != 0)
     {
@@ -15538,7 +15538,7 @@ dwg_ent_polyline_mesh_set_curve_type(dwg_ent_polyline_mesh *mesh,
 }
 
 /// Returns polyline mesh n vert count
-unsigned int
+BITCODE_BS
 dwg_ent_polyline_mesh_get_m_vert_count(dwg_ent_polyline_mesh *mesh,
                                        int *error)
 {
@@ -15558,7 +15558,7 @@ dwg_ent_polyline_mesh_get_m_vert_count(dwg_ent_polyline_mesh *mesh,
 /// Sets polyline mesh M vert count
 void
 dwg_ent_polyline_mesh_set_m_vert_count(dwg_ent_polyline_mesh *mesh,
-                                       unsigned int m_vert_count, int *error)
+                                       BITCODE_BS m_vert_count, int *error)
 {
   if (mesh != 0)
     {
@@ -15573,7 +15573,7 @@ dwg_ent_polyline_mesh_set_m_vert_count(dwg_ent_polyline_mesh *mesh,
 }
 
 /// Returns polyline mesh n vert count
-unsigned int
+BITCODE_BS
 dwg_ent_polyline_mesh_get_n_vert_count(dwg_ent_polyline_mesh *mesh,
                                        int *error)
 {
@@ -15593,7 +15593,7 @@ dwg_ent_polyline_mesh_get_n_vert_count(dwg_ent_polyline_mesh *mesh,
 /// Sets polyline mesh n vert count
 void
 dwg_ent_polyline_mesh_set_n_vert_count(dwg_ent_polyline_mesh *mesh,
-                                       unsigned int n_vert_count, int *error)
+                                       BITCODE_BS n_vert_count, int *error)
 {
   if (mesh != 0)
     {
@@ -15608,7 +15608,7 @@ dwg_ent_polyline_mesh_set_n_vert_count(dwg_ent_polyline_mesh *mesh,
 }
 
 /// Returns polyline mesh n density
-unsigned int
+BITCODE_BS
 dwg_ent_polyline_mesh_get_m_density(dwg_ent_polyline_mesh *mesh, int *error)
 {
   if (mesh != 0)
@@ -15627,7 +15627,7 @@ dwg_ent_polyline_mesh_get_m_density(dwg_ent_polyline_mesh *mesh, int *error)
 /// Sets polyline mesh M density
 void
 dwg_ent_polyline_mesh_set_m_density(dwg_ent_polyline_mesh *mesh,
-                                    unsigned int m_density, int *error)
+                                    BITCODE_BS m_density, int *error)
 {
   if (mesh != 0)
     {
@@ -15642,7 +15642,7 @@ dwg_ent_polyline_mesh_set_m_density(dwg_ent_polyline_mesh *mesh,
 }
 
 /// Returns polyline mesh n density
-unsigned int
+BITCODE_BS
 dwg_ent_polyline_mesh_get_n_density(dwg_ent_polyline_mesh *mesh, int *error)
 {
   if (mesh != 0)
@@ -15661,7 +15661,7 @@ dwg_ent_polyline_mesh_get_n_density(dwg_ent_polyline_mesh *mesh, int *error)
 /// Sets polyline mesh n density
 void
 dwg_ent_polyline_mesh_set_n_density(dwg_ent_polyline_mesh *mesh,
-                                    unsigned int n_density, int *error)
+                                    BITCODE_BS n_density, int *error)
 {
   if (mesh != 0)
     {
@@ -15676,7 +15676,7 @@ dwg_ent_polyline_mesh_set_n_density(dwg_ent_polyline_mesh *mesh,
 }
 
 /// Returns polyline mesh owned object count
-long
+BITCODE_BL
 dwg_ent_polyline_mesh_get_owned_obj_count(dwg_ent_polyline_mesh *mesh,
                                           int *error)
 {
@@ -15696,7 +15696,7 @@ dwg_ent_polyline_mesh_get_owned_obj_count(dwg_ent_polyline_mesh *mesh,
 /// Sets polyline mesh owned object count
 void
 dwg_ent_polyline_mesh_set_owned_obj_count(dwg_ent_polyline_mesh *mesh,
-                                          long owned_obj_count, int *error)
+                                          BITCODE_BL owned_obj_count, int *error)
 {
   if (mesh != 0)
     {
@@ -15889,7 +15889,7 @@ dwg_ent_polyline_2d_set_elevation(dwg_ent_polyline_2d *line2d,
 }
 
 /// Returns polyline 2d flag
-unsigned int
+BITCODE_BS
 dwg_ent_polyline_2d_get_flags(dwg_ent_polyline_2d *line2d, int *error)
 {
   if (line2d != 0)
@@ -15907,7 +15907,7 @@ dwg_ent_polyline_2d_get_flags(dwg_ent_polyline_2d *line2d, int *error)
 
 /// Sets polyline 2d flags
 void
-dwg_ent_polyline_2d_set_flags(dwg_ent_polyline_2d *line2d, unsigned int flags,
+dwg_ent_polyline_2d_set_flags(dwg_ent_polyline_2d *line2d, BITCODE_BS flags,
                               int *error)
 {
   if (line2d != 0)
@@ -15923,7 +15923,7 @@ dwg_ent_polyline_2d_set_flags(dwg_ent_polyline_2d *line2d, unsigned int flags,
 }
 
 /// Returns curve type value
-unsigned int
+BITCODE_BS
 dwg_ent_polyline_2d_get_curve_type(dwg_ent_polyline_2d *line2d, int *error)
 {
   if (line2d != 0)
@@ -15942,7 +15942,7 @@ dwg_ent_polyline_2d_get_curve_type(dwg_ent_polyline_2d *line2d, int *error)
 /// Sets curve type value
 void
 dwg_ent_polyline_2d_set_curve_type(dwg_ent_polyline_2d *line2d,
-                                   unsigned int curve_type, int *error)
+                                   BITCODE_BS curve_type, int *error)
 {
   if (line2d != 0)
     {
@@ -15957,7 +15957,7 @@ dwg_ent_polyline_2d_set_curve_type(dwg_ent_polyline_2d *line2d,
 }
 
 /// Returns owned object count
-long
+BITCODE_BL
 dwg_ent_polyline_2d_get_owned_obj_count(dwg_ent_polyline_2d *line2d,
                                         int *error)
 {
@@ -15977,7 +15977,7 @@ dwg_ent_polyline_2d_get_owned_obj_count(dwg_ent_polyline_2d *line2d,
 /// Sets owned object count
 void
 dwg_ent_polyline_2d_set_owned_obj_count(dwg_ent_polyline_2d *line2d,
-                                        long owned_obj_count, int *error)
+                                        BITCODE_BL owned_obj_count, int *error)
 {
   if (line2d != 0)
     {
@@ -15996,7 +15996,7 @@ dwg_ent_polyline_2d_set_owned_obj_count(dwg_ent_polyline_2d *line2d,
 ********************************************************************/
 
 /// Returns polyline 3d flags1
-char
+BITCODE_RC
 dwg_ent_polyline_3d_get_flags_1(dwg_ent_polyline_3d *line3d, int *error)
 {
   if (line3d != 0)
@@ -16014,7 +16014,7 @@ dwg_ent_polyline_3d_get_flags_1(dwg_ent_polyline_3d *line3d, int *error)
 
 /// Sets polyline 3d flags1
 void
-dwg_ent_polyline_3d_set_flags_1(dwg_ent_polyline_3d *line3d, char flags_1,
+dwg_ent_polyline_3d_set_flags_1(dwg_ent_polyline_3d *line3d, BITCODE_RC flags_1,
                                 int *error)
 {
   if (line3d != 0)
@@ -16030,7 +16030,7 @@ dwg_ent_polyline_3d_set_flags_1(dwg_ent_polyline_3d *line3d, char flags_1,
 }
 
 /// Returns polyline 3d flags2
-char
+BITCODE_RC
 dwg_ent_polyline_3d_get_flags_2(dwg_ent_polyline_3d *line3d, int *error)
 {
   if (line3d != 0)
@@ -16048,7 +16048,7 @@ dwg_ent_polyline_3d_get_flags_2(dwg_ent_polyline_3d *line3d, int *error)
 
 /// Sets polyline 3d flags2
 void
-dwg_ent_polyline_3d_set_flags_2(dwg_ent_polyline_3d *line3d, char flags_2,
+dwg_ent_polyline_3d_set_flags_2(dwg_ent_polyline_3d *line3d, BITCODE_RC flags_2,
                                 int *error)
 {
   if (line3d != 0)
@@ -16064,7 +16064,7 @@ dwg_ent_polyline_3d_set_flags_2(dwg_ent_polyline_3d *line3d, char flags_2,
 }
 
 /// Returns polyline 3d owned object count
-long
+BITCODE_BL
 dwg_ent_polyline_3d_get_owned_obj_count(dwg_ent_polyline_3d *line3d,
                                         int *error)
 {
@@ -16084,7 +16084,7 @@ dwg_ent_polyline_3d_get_owned_obj_count(dwg_ent_polyline_3d *line3d,
 /// Sets polyline 3d owned object count
 void
 dwg_ent_polyline_3d_set_owned_obj_count(dwg_ent_polyline_3d *line3d,
-                                        long owned_obj_count, int *error)
+                                        BITCODE_BL owned_obj_count, int *error)
 {
   if (line3d != 0)
     {
@@ -16715,7 +16715,7 @@ dwg_ent_image_set_fade(dwg_ent_image *image, char fade, int *error)
 }
 
 /// Returns image clip boundary type
-unsigned int
+BITCODE_BS
 dwg_ent_image_get_clip_boundary_type(dwg_ent_image *image, int *error)
 {
   if (image != 0)
@@ -16733,7 +16733,7 @@ dwg_ent_image_get_clip_boundary_type(dwg_ent_image *image, int *error)
 
 /// Sets image clip boundary type
 void
-dwg_ent_image_set_clip_boundary_type(dwg_ent_image *image, unsigned int type,
+dwg_ent_image_set_clip_boundary_type(dwg_ent_image *image, BITCODE_BS type,
                                      int *error)
 {
   if (image != 0)
@@ -17025,7 +17025,7 @@ dwg_ent_mline_get_extrusion(dwg_ent_mline *mline, dwg_point_3d *point,
 
 /// Sets open closed value
 void
-dwg_ent_mline_set_open_closed(dwg_ent_mline *mline, unsigned int oc,
+dwg_ent_mline_set_open_closed(dwg_ent_mline *mline, BITCODE_BS oc,
                               int *error)
 {
   if (mline != 0)
@@ -17041,7 +17041,7 @@ dwg_ent_mline_set_open_closed(dwg_ent_mline *mline, unsigned int oc,
 }
 
 /// Returns open/closed value
-unsigned int
+BITCODE_BS
 dwg_ent_mline_get_open_closed(dwg_ent_mline *mline, int *error)
 {
   if (mline != 0)
@@ -17059,7 +17059,7 @@ dwg_ent_mline_get_open_closed(dwg_ent_mline *mline, int *error)
 
 /// Sets number of lines
 void
-dwg_ent_mline_set_num_lines(dwg_ent_mline *mline, char num, int *error)
+dwg_ent_mline_set_num_lines(dwg_ent_mline *mline, BITCODE_RC num, int *error)
 {
   if (mline != 0)
     {
@@ -17074,7 +17074,7 @@ dwg_ent_mline_set_num_lines(dwg_ent_mline *mline, char num, int *error)
 }
 
 /// Returns number of lines
-char
+BITCODE_RC
 dwg_ent_mline_get_num_lines(dwg_ent_mline *mline, int *error)
 {
   if (mline != 0)
@@ -17092,7 +17092,7 @@ dwg_ent_mline_get_num_lines(dwg_ent_mline *mline, int *error)
 
 /// Sets number of vertices
 void
-dwg_ent_mline_set_num_verts(dwg_ent_mline *mline, unsigned int num,
+dwg_ent_mline_set_num_verts(dwg_ent_mline *mline, BITCODE_BS num,
                             int *error)
 {
   if (mline != 0)
@@ -17108,7 +17108,7 @@ dwg_ent_mline_set_num_verts(dwg_ent_mline *mline, unsigned int num,
 }
 
 /// Returns number of vertices
-unsigned int
+BITCODE_BS
 dwg_ent_mline_get_num_verts(dwg_ent_mline *mline, int *error)
 {
   if (mline != 0)
@@ -18301,7 +18301,7 @@ dwg_ent_body_set_point(dwg_ent_body *body, dwg_point_3d *point, int *error)
 }
 
 /// Returns number of isolines
-long
+unsigned long
 dwg_ent_body_get_num_isolines(dwg_ent_body *body, int *error)
 {
   if (body != 0)
@@ -18319,7 +18319,7 @@ dwg_ent_body_get_num_isolines(dwg_ent_body *body, int *error)
 
 /// Sets number of isolines
 void
-dwg_ent_body_set_num_isolines(dwg_ent_body *body, long num, int *error)
+dwg_ent_body_set_num_isolines(dwg_ent_body *body, BITCODE_BL num, int *error)
 {
   if (body != 0)
     {
@@ -18367,7 +18367,7 @@ dwg_ent_body_set_isoline_present(dwg_ent_body *body, char iso, int *error)
 }
 
 /// Returns number of wires
-long
+unsigned long
 dwg_ent_body_get_num_wires(dwg_ent_body *body, int *error)
 {
   if (body != 0)
@@ -18385,7 +18385,7 @@ dwg_ent_body_get_num_wires(dwg_ent_body *body, int *error)
 
 /// Sets number of wires
 void
-dwg_ent_body_set_num_wires(dwg_ent_body *body, long num, int *error)
+dwg_ent_body_set_num_wires(dwg_ent_body *body, BITCODE_BL num, int *error)
 {
   if (body != 0)
     {
@@ -18424,7 +18424,7 @@ dwg_ent_body_get_wire(dwg_ent_body *body, int *error)
 }
 
 /// Returns number of silhouettes value
-long
+unsigned long
 dwg_ent_body_get_num_silhouettes(dwg_ent_body *body, int *error)
 {
   if (body != 0)
@@ -18442,7 +18442,7 @@ dwg_ent_body_get_num_silhouettes(dwg_ent_body *body, int *error)
 
 /// Sets number of silhouettes
 void
-dwg_ent_body_set_num_silhouettes(dwg_ent_body *body, long silhouettes,
+dwg_ent_body_set_num_silhouettes(dwg_ent_body *body, BITCODE_BL silhouettes,
                                  int *error)
 {
   if (body != 0)
@@ -18842,7 +18842,7 @@ dwg_ent_table_get_horiz_direction(dwg_ent_table *table, dwg_point_3d *point,
 
 /// Sets number of columns
 void
-dwg_ent_table_set_num_cols(dwg_ent_table *table, long num, int *error)
+dwg_ent_table_set_num_cols(dwg_ent_table *table, BITCODE_BL num, int *error)
 {
   if (table != 0)
     {
@@ -18857,7 +18857,7 @@ dwg_ent_table_set_num_cols(dwg_ent_table *table, long num, int *error)
 }
 
 /// Returns number of columns
-long
+BITCODE_BL
 dwg_ent_table_get_num_cols(dwg_ent_table *table, int *error)
 {
   if (table != 0)
@@ -18875,7 +18875,7 @@ dwg_ent_table_get_num_cols(dwg_ent_table *table, int *error)
 
 /// Sets number of rows
 void
-dwg_ent_table_set_num_rows(dwg_ent_table *table, long num, int *error)
+dwg_ent_table_set_num_rows(dwg_ent_table *table, BITCODE_BL num, int *error)
 {
   if (table != 0)
     {
@@ -18890,7 +18890,7 @@ dwg_ent_table_set_num_rows(dwg_ent_table *table, long num, int *error)
 }
 
 /// Returns number of rows
-long
+BITCODE_BL
 dwg_ent_table_get_num_rows(dwg_ent_table *table, int *error)
 {
   if (table != 0)
@@ -18943,7 +18943,7 @@ dwg_ent_table_get_row_heights(dwg_ent_table *table, int *error)
 /// Sets table overrides present
 void
 dwg_ent_table_set_table_overrides_present(dwg_ent_table *table,
-                                          unsigned char present, int *error)
+                                          BITCODE_B present, int *error)
 {
   if (table != 0)
     {
@@ -18958,7 +18958,7 @@ dwg_ent_table_set_table_overrides_present(dwg_ent_table *table,
 }
 
 /// Returns table overrides present
-unsigned char
+BITCODE_B
 dwg_ent_table_get_table_overrides_present(dwg_ent_table *table, int *error)
 {
   if (table != 0)
@@ -18976,7 +18976,7 @@ dwg_ent_table_get_table_overrides_present(dwg_ent_table *table, int *error)
 
 /// Sets flag overrrides
 void
-dwg_ent_table_set_table_flag_override(dwg_ent_table *table, long override,
+dwg_ent_table_set_table_flag_override(dwg_ent_table *table, BITCODE_BL override,
                                       int *error)
 {
   if (table != 0)
@@ -18992,7 +18992,7 @@ dwg_ent_table_set_table_flag_override(dwg_ent_table *table, long override,
 }
 
 /// returns flag overrides
-long
+BITCODE_BL
 dwg_ent_table_get_table_flag_override(dwg_ent_table *table, int *error)
 {
   if (table != 0)
@@ -20881,7 +20881,7 @@ dwg_obj_block_control_get_block_headers(dwg_obj_block_control *ctrl,
 }
 
 /// Returns number of blocks
-long
+BITCODE_BL
 dwg_obj_block_control_get_num_entries(dwg_obj_block_control *ctrl, int *error)
 {
   if (ctrl != 0)
