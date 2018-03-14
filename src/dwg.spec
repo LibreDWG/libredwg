@@ -447,9 +447,12 @@ DWG_ENTITY(MINSERT);
       DECODER
         {
           FIELD(scale_flag, BB);
-          if (FIELD_VALUE(scale_flag) == 3){
-            FIELD_VALUE(scale.x) = FIELD_VALUE(scale.y) = FIELD_VALUE(scale.y) = 1.0;
-          }
+          if (FIELD_VALUE(scale_flag) == 3)
+            {
+              FIELD_VALUE(scale.x) = 1.0;
+              FIELD_VALUE(scale.y) = 1.0;
+              FIELD_VALUE(scale.z) = 1.0;
+            }
           else if (FIELD_VALUE(scale_flag) == 1)
             {
               FIELD_VALUE(scale.x) = 1.0;
@@ -462,8 +465,9 @@ DWG_ENTITY(MINSERT);
               FIELD_VALUE(scale.y) = FIELD_VALUE(scale.x);
               FIELD_VALUE(scale.z) = FIELD_VALUE(scale.x);
             }
-          else //if (FIELD_VALUE(scale_flag) == 0)
+          else
             {
+              assert(FIELD_VALUE(scale_flag) == 0);
               FIELD(scale.x, RD);
               FIELD_DD(scale.y, FIELD_VALUE(scale.x));
               FIELD_DD(scale.z, FIELD_VALUE(scale.x));
@@ -472,7 +476,9 @@ DWG_ENTITY(MINSERT);
 
       ENCODER
         {
-          if (FIELD_VALUE(scale.x) == FIELD_VALUE(scale.y) == FIELD_VALUE(scale.z) == 1.0)
+          if (FIELD_VALUE(scale.x) == 1.0 &&
+              FIELD_VALUE(scale.y) == 1.0 &&
+              FIELD_VALUE(scale.z) == 1.0)
             {
               FIELD_VALUE(scale_flag) = 3;
               FIELD_BB(scale_flag);
@@ -484,20 +490,21 @@ DWG_ENTITY(MINSERT);
               FIELD_DD(scale.y, 1.0);
               FIELD_DD(scale.z, 1.0);
              }
-           else if (FIELD_VALUE(scale.x) == FIELD_VALUE(scale.y) == FIELD_VALUE(scale.z))
-             {
+          else if (FIELD_VALUE(scale.x) == FIELD_VALUE(scale.y) &&
+                   FIELD_VALUE(scale.x) == FIELD_VALUE(scale.z))
+            {
               FIELD_VALUE(scale_flag) = 2;
               FIELD_BB(scale_flag);
               FIELD_RD(scale.x);
-             }
-           else
-             {
+            }
+          else
+            {
               FIELD_VALUE(scale_flag) = 0;
               FIELD_BB(scale_flag);
               FIELD_RD(scale.x);
               FIELD_DD(scale.y, FIELD_VALUE(scale.x));
               FIELD_DD(scale.z, FIELD_VALUE(scale.x));
-             }
+            }
         }
     }
 
@@ -2487,6 +2494,9 @@ DWG_ENTITY(HATCH);
                             }
                         }                      
                       break;
+                    default:
+                      LOG_ERROR("Invalid type_status in HATCH entity\n")
+                      break;
                 }
             }
         }
@@ -2862,12 +2872,12 @@ DWG_ENTITY(TABLE);
       switch (FIELD_VALUE(data_flags))
         {
           case 0:
-            FIELD_VALUE(scale.x)=1.0;
+            FIELD_VALUE(scale.x) = 1.0;
             FIELD_DD(scale.y, FIELD_VALUE(scale.x));
             FIELD_DD(scale.z, FIELD_VALUE(scale.x));
             break;
           case 1:
-            FIELD_VALUE(scale.x)=1.0;
+            FIELD_VALUE(scale.x) = 1.0;
             FIELD_DD(scale.y, 1.0);
             FIELD_DD(scale.z, 1.0);
             break;
@@ -2877,9 +2887,12 @@ DWG_ENTITY(TABLE);
             FIELD_VALUE(scale.z) = FIELD_VALUE(scale.x);
             break;
           case 3:
-            FIELD_VALUE(scale.x)=1.0;
-            FIELD_VALUE(scale.y)=1.0;
-            FIELD_VALUE(scale.z)=1.0;
+            FIELD_VALUE(scale.x) = 1.0;
+            FIELD_VALUE(scale.y) = 1.0;
+            FIELD_VALUE(scale.z) = 1.0;
+            break;
+          default:
+            LOG_ERROR("Invalid data_flags in TABLE entity\n")
             break;
         }
     }
@@ -3034,13 +3047,13 @@ DWG_ENTITY(TABLE);
                         //read from appropriate place in handles section
                         break;
                       case 64: /* kBuffer */
-                        LOG_ERROR("Unknwon data type in TABLE entity: \"kBuffer\".\n")
+                        LOG_ERROR("Unknown data type in TABLE entity: \"kBuffer\".\n")
                         break;
                       case 128: /* kResBuf */
-                        LOG_ERROR("Unknwon data type in TABLE entity: \"kResBuf\".\n")
+                        LOG_ERROR("Unknown data type in TABLE entity: \"kResBuf\".\n")
                         break;
                       case 256: /* kGeneral */
-                        LOG_ERROR("Unknwon data type in TABLE entity: \"kGeneral\".\n")
+                        LOG_ERROR("Unknown data type in TABLE entity: \"kGeneral\".\n")
                         break;
                       default:
                         LOG_ERROR("Invalid data type in TABLE entity\n")
@@ -3528,5 +3541,7 @@ DWG_OBJECT_END
 // WIPEOUTVARIABLE
 // VBA_PROJECT
 //
+
+
 
 
