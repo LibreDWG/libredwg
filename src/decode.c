@@ -497,7 +497,7 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
   //  why do we have this limit to only 6 sections?
   //  It seems to be a bug, so I'll comment it out and will add dynamic
   //  allocation of the sections vector.
-  //  OpenDWG spec speaks of 6 possible values for the record number
+  //  OpenDWG spec speaks of 6 possible values for the record number.
   //  Maybe the original libdwg author got confused about that.
   dwg->header.section = (Dwg_Section*) malloc(sizeof(Dwg_Section)
       * dwg->header.num_sections);
@@ -514,7 +514,7 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
   ckr2 = bit_read_RS(dat);
   if (ckr != ckr2)
     {
-      printf("header crc todo ckr:%d ckr2:%d\n", ckr, ckr2);
+      printf("Error: Header CRC mismatch %d <=> %d\n", ckr, ckr2);
       return 1;
     }
 
@@ -589,7 +589,8 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
                       dwg->header.section[0].size - 34);
   if (ckr != ckr2)
     {
-      printf("Error: section %d crc failed\n", dwg->header.section[0].number);
+      printf("Error: Section[%d] CRC mismatch %d <=> %d\n",
+             dwg->header.section[0].number, ckr, ckr2);
       return -1;
     }
 
@@ -655,8 +656,8 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
                       dwg->header.section[1].size - 34);
   if (ckr != ckr2)
     {
-      printf("Error: section %d crc todo ckr:%x ckr2:%x\n",
-              dwg->header.section[1].number, ckr, ckr2);
+      printf("Error: Section[%d] CRC mismatch %d <=> %d\n",
+             dwg->header.section[1].number, ckr, ckr2);
       return -1;
     }
 
@@ -743,11 +744,9 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
       ckr = (sgdc[0] << 8) | sgdc[1];
 
       ckr2 = bit_calc_CRC(0xc0c1, dat->chain + duabyte, section_size);
-
       if (ckr != ckr2)
         {
-          printf("Warning: section %d crc todo ckr:%x ckr2:%x\n",
-                  dwg->header.section[2].number, ckr, ckr2);
+          printf("Error: Section CRC mismatch %d <=> %d\n", ckr, ckr2);
           return -1;
         }
 
@@ -877,23 +876,24 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
       // Check CRC-on
       ckr = bit_read_CRC(dat);
 #if 0
-       puts ("");
-       for (i = 0; i != 0xFFFF; i++)
-       {
-       dat->byte -= 2;
-       bit_write_CRC (dat, pvzadr, i);
-       dat->byte -= 2;
-       ckr2 = bit_read_CRC (dat);
-       if (ckr == ckr2)
-       {
-       if (loglevel) fprintf (stderr, "Read: %X\nCreated: %X\t SEMO: %02X\n", ckr, ckr2, i);
-       break;
-       }
-       }
-       if (loglevel) {
-       fprintf (stderr, " Garbage 1: %08X\n", bit_read_RL (dat));
-       fprintf (stderr, " Garbage 2: %08X\n", bit_read_RL (dat));
-       }
+      puts ("");
+      for (i = 0; i != 0xFFFF; i++)
+        {
+          dat->byte -= 2;
+          bit_write_CRC (dat, pvzadr, i);
+          dat->byte -= 2;
+          ckr2 = bit_read_CRC (dat);
+          if (ckr == ckr2)
+            {
+              printf("Warning: CRC mismatch %d <=> %d\n",
+                     ckr, ckr2);
+              break;
+            }
+          if (loglevel) {
+            fprintf (stderr, " Unknown RL 1: %08X\n", bit_read_RL (dat));
+            fprintf (stderr, " Unknown RL 2: %08X\n", bit_read_RL (dat));
+          }
+        }
 #endif
 
       if (bit_search_sentinel(dat, dwg_sentinel(
