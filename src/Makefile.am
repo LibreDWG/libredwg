@@ -18,7 +18,7 @@
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 lib_LTLIBRARIES = libredwg.la
-AM_CFLAGS = -Wall -Wextra
+AM_CFLAGS = @WARN_CFLAGS@
 
 libredwg_la_SOURCES = \
 	dwg.c \
@@ -30,8 +30,8 @@ libredwg_la_SOURCES = \
         print.c \
 	dwg_api.c
 #       encode_r2007.c
-libredwg_la_LDFLAGS = \
-	-version-info 0:0:0 -lm
+libredwg_la_LIBADD = -lm
+libredwg_la_LDFLAGS = -version-info 0:0:0
 
 include_HEADERS = \
 	dwg.h \

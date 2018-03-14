@@ -60,7 +60,35 @@ if test yes = "$libredwg_have_libps" ; then
 fi
 
 dnl Checks for typedefs, structures, and compiler characteristics.
+AC_PROG_CC_C99
 AC_TYPE_SIZE_T
+AC_TYPE_INT64_T
+AC_TYPE_UINT64_T
+AC_CHECK_SIZEOF(size_t)
+
+AX_IS_RELEASE([git-directory])
+dnl disable unwanted warnings here. These should be fixed before 1.0
+enable_Werror=no
+ax_enable_compile_warnings=yes
+AX_COMPILER_FLAGS([WARN_CFLAGS],[WARN_LDFLAGS])
+dnl if test x$ax_cv_check_cflags__Wunused_but_set_variable = xyes; then
+dnl   WARN_CFLAGS="$WARN_CFLAGS -Wno-unused-but-set-variable"
+dnl fi
+dnl if test x$ax_cv_check_cflags__Wunused_variable = xyes; then
+dnl   WARN_CFLAGS="$WARN_CFLAGS -Wno-unused-variable"
+dnl fi
+
+if test "x$ac_cv_prog_cc_c99" = "xno"; then
+   AC_MSG_WARN([This compiler ${CC} has no c99 support])
+else
+   AC_DEFINE([HAVE_C99], 1,
+        [Defined to 1 when the compiler supports c99, mostly (...) macros])
+   if test "x$ac_cv_prog_cc_c99" != "x"; then
+      AC_MSG_RESULT([added $ac_cv_prog_cc_c99 to CFLAGS])
+      AM_CFLAGS="$AM_CFLAGS $ac_cv_prog_cc_c99"
+   fi
+fi
+AC_SUBST(HAVE_C99)
 
 dnl Checks for library functions.
 AC_FUNC_MALLOC
@@ -93,6 +121,31 @@ dnl AX_SWIG_ENABLE_CXX
 dnl SWIG_MULTI_MODULE_SUPPORT
 SWIG_PYTHON
 AM_CONDITIONAL([HAVE_SWIG_PYTHON], [test -n "$SWIG" && test -n "$PYTHON_VERSION"])
+
+dnl check for mingw, cross and wine
+AM_CONDITIONAL([HAVE_MINGW], [test "x$host_os" = "xmingw32"])
+AM_CONDITIONAL([HAVE_MINGW_CROSS],
+        [test "x$host_os" = "xmingw32" -a "x$build_os" != "xmingw32"])
+if test "x$host_os" = "xmingw32" -a "x$build_os" != "xmingw32"; then
+   AC_CHECK_PROGS([WINE], [wine])
+   if test -z "$WINE"; then
+      AC_MSG_WARN([wine not found - cannot check cross-compiled executables])
+   else
+      AC_MSG_RESULT([wine found - test with make check-wine])
+      AM_CFLAGS="$AM_CFLAGS -D_WINE_MSVCRT"
+   fi
+fi
+
+dnl check for valgrind
+case $host_os in
+  darwin*)
+    enable_valgrind_helgrind=no
+    enable_valgrind_drd=no
+    ;;
+esac
+dnl passes only on some systems. --enable-valgrind-sgcheck
+AX_VALGRIND_DFLT([sgcheck], [off])
+AX_VALGRIND_CHECK()
 
 dnl Write it out
 AC_CONFIG_FILES([

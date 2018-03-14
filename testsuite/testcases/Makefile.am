@@ -1,5 +1,6 @@
 AUTOMAKE_OPTIONS = dejagnu
 
+AM_CFLAGS = @WARN_CFLAGS@
 LDADD = $(top_builddir)/src/libredwg.la
 
 paired = \
@@ -57,3 +58,7 @@ EXTRA_DIST = \
   $(paired:=.exp)
 
 CLEANFILES = *.log *.sum site.bak
+
+@VALGRIND_CHECK_RULES@
+#VALGRIND_SUPPRESSIONS_FILES = $(PACKAGE).supp
+#EXTRA_DIST = $(PACKAGE).supp

@@ -17,7 +17,7 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-AM_CFLAGS = -I$(srcdir)/../src
+AM_CFLAGS = -I$(srcdir)/../src @WARN_CFLAGS@
 LDADD = ../src/libredwg.la
 
 # NB: After you modify ‘check_PROGRAMS’, do "make update-ignorance"
@@ -72,5 +72,13 @@ update-ignorance:
 	printf '/%s\n' $(check_PROGRAMS) > .gitignore
 
 EXTRA_DIST = common.c example.dwg
+
+@VALGRIND_CHECK_RULES@
+
+# emacs flymake-mode
+check-syntax:
+	test -n "$(CHK_SOURCES)" && \
+	  $(COMPILE) -o /dev/null -S $(CHK_SOURCES)
+.PHONY: check-syntax
 
 ## Makefile.am ends here

@@ -9,11 +9,15 @@ TESTS_ENVIRONMENT = PYTHON='$(PYTHON)' $(PYTHON)
 
 check_PROGRAMS = testsuite
 TESTS = check.py
+
+@VALGRIND_CHECK_RULES@
+
 CLEANFILES = *.log *.sum site.bak result.htm
 
 EXTRA_DIST = suffix.c common.c
 EXTRA_DIST += DWG
 EXTRA_DIST += header.htm helper.py $(TESTS)
+
 
 clean-local:
 	rm -rf test_output/
