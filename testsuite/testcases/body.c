@@ -153,7 +153,7 @@ api_process (dwg_object * obj)
   sil = dwg_ent_body_get_silhouette (body, &sil_error);
   if (sil_error == 0)
     {
-      int i, matches = 1;
+      BITCODE_BL i, matches = 1;
       for (i = 0; i < num_sil; i++)
 	{
 	  if (body->silhouettes[i].vp_id != sil[i].vp_id)

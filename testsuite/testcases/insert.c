@@ -41,7 +41,7 @@ api_process (dwg_object * obj)
   dwg_point_3d ins_pt, ext, scale;
   double rot_angle;
   char scale_flag, attribs;
-  long obj_count;
+  unsigned long obj_count;
   dwg_ent_insert *insert = dwg_object_to_INSERT (obj);
 
   // returns insertion point

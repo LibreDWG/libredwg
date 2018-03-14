@@ -5,6 +5,7 @@
 void
 low_level_process (dwg_object * obj)
 {
+  BITCODE_BS i;
   // casting object to mline entity
   dwg_ent_mline *mline = dwg_object_to_MLINE (obj);
 
@@ -28,8 +29,7 @@ low_level_process (dwg_object * obj)
   // prints number of verts
   printf ("number of verts : %ud\t\n", mline->num_verts);
 
-  int i = 0;
-  for (i; i < mline->num_verts; i++)
+  for (i = 0; i < mline->num_verts; i++)
     {
       printf ("vertex of mline : x = %f, y = %f, z = %f\t\n",
 	      mline->verts[i].vertex.x, mline->verts[i].vertex.y,
@@ -44,7 +44,7 @@ api_process (dwg_object * obj)
   int scale_error, just_error, ext_error, base_point_error, num_lines_error, num_verts_error, num_lines, verts_error;	// Error reporting
   BITCODE_BD scale;
   char just;
-  unsigned int oc, num_verts;
+  BITCODE_BS oc, num_verts;
   dwg_point_3d base_point, ext;	//3d_points 
   dwg_ent_mline_vert *verts;
   // casting object to mline entity
@@ -117,10 +117,11 @@ api_process (dwg_object * obj)
     }
 
   verts = dwg_ent_mline_get_verts (mline, &verts_error);
-  int i = 0, matches = 1;
+
   if (verts_error == 0)
     {
-      for (i; i < num_verts; i++)
+      BITCODE_BS i, matches = 1;
+      for (i=0; i < num_verts; i++)
 	{
 	  if (mline->verts[i].vertex.x != verts[i].vertex.x
 	      || mline->verts[i].vertex.y != verts[i].vertex.y

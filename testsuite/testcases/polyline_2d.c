@@ -6,8 +6,6 @@ void
 low_level_process (dwg_object * obj)
 {
   dwg_ent_polyline_2d *polyline_2d = dwg_object_to_POLYLINE_2D (obj);
-
-
 }
 
 void
@@ -16,7 +14,7 @@ api_process (dwg_object * obj)
   int start_w_error, end_w_error, ext_error, thickness_error, elevation_error,
     curve_type_error, flags_error, owned_obj_error;
   BITCODE_BD start_width, end_width, elevation, thickness;
-  long owned_obj;
+  BITCODE_BL owned_obj;
   unsigned int flags, curve_type;
   dwg_point_3d ext;
   dwg_ent_polyline_2d *polyline_2d = dwg_object_to_POLYLINE_2D (obj);
@@ -105,7 +103,8 @@ api_process (dwg_object * obj)
   // returns owned object count
   owned_obj = dwg_ent_polyline_2d_get_owned_obj_count (polyline_2d,
 						       &owned_obj_error);
-  if (owned_obj_error == 0 && owned_obj == polyline_2d->owned_obj_count)	// error check
+  if (owned_obj_error == 0 &&
+      owned_obj == polyline_2d->owned_obj_count)	// error check
     {
       pass ("Working Properly");
     }

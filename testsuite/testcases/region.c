@@ -7,6 +7,7 @@ low_level_process (dwg_object * obj)
 {
   // casts dwg object to region entity
   dwg_ent_region *region = dwg_object_to_REGION (obj);
+  BITCODE_BL i;
 
   // prints acis empty
   printf ("acis empty of region : %d", region->acis_empty);
@@ -37,7 +38,6 @@ low_level_process (dwg_object * obj)
   printf ("num wires of region : %ld", region->num_wires);
 
   // prints wires
-  int i;
   for (i = 0; i < region->num_wires; i++)
     {
       printf ("wire of region : %ld", region->wires[i].selection_marker);
@@ -59,8 +59,8 @@ api_process (dwg_object * obj)
     isoline_present_error, point_present_error, wireframe_data_present_error,
     version_error, acis_empty_error, point_error, acis2_empty_error,
     sil_error, wire_error, num_sil_error;
-  unsigned int version;
-  long block_size, num_isolines, num_wires, num_sil;
+  BITCODE_BS version;
+  BITCODE_BL block_size, num_isolines, num_wires, num_sil;
   char *acis_data;
   char wireframe_data_present, point_present, isoline_present;
   unsigned char acis_empty, acis2_empty;
@@ -68,6 +68,7 @@ api_process (dwg_object * obj)
   dwg_ent_region *region = dwg_object_to_REGION (obj);
   dwg_ent_solid_wire *wire;
   dwg_ent_solid_silhouette *sil;
+  BITCODE_BL i;
 
   // returns acis empty
   acis_empty = dwg_ent_region_get_acis_empty (region, &acis_empty_error);
@@ -170,7 +171,7 @@ api_process (dwg_object * obj)
   wire = dwg_ent_region_get_wire (region, &wire_error);
   if (wire_error == 0)
     {
-      int i, matches = 1;
+      int matches = 1;
       for (i = 0; i < num_wires; i++)
 	{
 	  if (wire[i].selection_marker != region->wires[i].selection_marker)
@@ -204,7 +205,7 @@ api_process (dwg_object * obj)
   sil = dwg_ent_region_get_silhouette (region, &sil_error);
   if (sil_error == 0)
     {
-      int i, matches = 1;
+      int matches = 1;
       for (i = 0; i < num_sil; i++)
 	{
 	  if (region->silhouettes[i].vp_id != sil[i].vp_id)

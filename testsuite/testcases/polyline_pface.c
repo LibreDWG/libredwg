@@ -25,8 +25,8 @@ void
 api_process (dwg_object * obj)
 {
   int num_verts_error, owned_obj_error, num_faces_error;
-  unsigned int num_verts, num_faces;
-  long owned_obj_count;
+  BITCODE_BS num_verts, num_faces;
+  BITCODE_BL owned_obj_count;
   dwg_ent_polyline_pface *polyline_pface = dwg_object_to_POLYLINE_PFACE (obj);
 
   // returns num verts

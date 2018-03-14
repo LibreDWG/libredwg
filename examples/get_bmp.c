@@ -29,8 +29,7 @@ get_bmp(char *filename)
   char *outfile;
   unsigned char *data;
   int success;
-  long size;
-  long tmp;
+  unsigned long size;
   FILE *fh;
   size_t retval;
   Dwg_Data dwg;

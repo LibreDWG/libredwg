@@ -102,8 +102,9 @@ api_process (dwg_object * obj)
     pt14_error;
   double ecs11, ecs12, act_measure, horiz_dir, lspace_factor, text_rot,
     ins_rot;
-  unsigned int flags1, lspace_style, attach_pt, flip_arrow1, flip_arrow2,
-    flags2;
+  BITCODE_RC flags1, flags2;
+  BITCODE_BS lspace_style, attach_pt;
+  BITCODE_B flip_arrow1, flip_arrow2;
   char *user_text;
   dwg_point_2d text_mid_pt, pt12;
   dwg_point_3d pt10, pt13, pt14, ext, ins_scale;

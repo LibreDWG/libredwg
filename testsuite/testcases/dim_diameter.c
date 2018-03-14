@@ -15,8 +15,9 @@ api_process (dwg_object * obj)
     ext_line_rot_error, pt15_error, length_error;
   double ecs11, ecs12, act_measure, horiz_dir, lspace_factor, text_rot,
     ins_rot, ext_line_rot, dim_rot, length;
-  unsigned int flags1, lspace_style, attach_pt, flip_arrow1, flip_arrow2,
-    flags2;
+  BITCODE_RC flags1, flags2;
+  BITCODE_BS lspace_style, attach_pt;
+  BITCODE_B flip_arrow1, flip_arrow2;
   char *user_text;
   dwg_point_2d text_mid_pt, pt12, pt16;
   dwg_point_3d pt10, pt15, ext, ins_scale;

@@ -39,9 +39,9 @@ api_process (dwg_object * obj)
 {
   int flags_error, owned_obj_error, curve_type_error, nvert_error,
     mvert_error, m_density_error, n_density_error;
-  unsigned int flags, curve_type, mvert_count, nvert_count, m_density,
+  BITCODE_BS flags, curve_type, mvert_count, nvert_count, m_density,
     n_density;
-  long owned_obj_count;
+  BITCODE_BL owned_obj_count;
   dwg_ent_polyline_mesh *polyline_mesh = dwg_object_to_POLYLINE_MESH (obj);
 
   // returns flags

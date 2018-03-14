@@ -22,8 +22,8 @@ void
 api_process (dwg_object * obj)
 {
   int flags1_error, flags2_error, owned_obj_error;
-  long owned_obj;
-  unsigned int flags1, flags2;
+  BITCODE_BL owned_obj;
+  BITCODE_RC flags1, flags2;
   dwg_ent_polyline_3d *polyline_3d = dwg_object_to_POLYLINE_3D (obj);
 
   // returns flag 1

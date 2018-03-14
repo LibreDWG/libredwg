@@ -5,6 +5,7 @@
 void
 low_level_process (dwg_object * obj)
 {
+  BITCODE_BL i;
   // casts dwg object to lwpline entity
   dwg_ent_lwpline *lwpline = dwg_object_to_LWPLINE (obj);
 
@@ -34,7 +35,6 @@ low_level_process (dwg_object * obj)
   printf ("flag of lwpline : %d\t\n", lwpline->flags);
 
   // prints bulges
-  int i;
   for (i = 0; i < lwpline->num_bulges; i++)
     {
       printf ("bulges of lwpline : %f\t\n", lwpline->bulges[i]);
@@ -162,7 +162,7 @@ api_process (dwg_object * obj)
   bulges = dwg_ent_lwpline_get_bulges (lwpline, &error);
   if (error == 0)
     {
-      int i, matches = 1;
+      unsigned int i, matches = 1;
       for (i = 0; i < lwpline->num_bulges; i++)
 	{
 	  if (lwpline->bulges[i] != bulges[i])
@@ -188,7 +188,7 @@ api_process (dwg_object * obj)
   points = dwg_ent_lwpline_get_points (lwpline, &error);
   if (error == 0)	// error check
     {
-      int i, matches = 1;
+      unsigned int i, matches = 1;
       for (i = 0; i < lwpline->num_points; i++)
 	{
 	  if (lwpline->points[i].x != points[i].x
@@ -215,7 +215,7 @@ api_process (dwg_object * obj)
   width = dwg_ent_lwpline_get_widths (lwpline, &error);
   if (error == 0)
     {
-      int i, matches = 1;
+      unsigned int i, matches = 1;
       for (i = 0; i < lwpline->num_widths; i++)
 	{
 	  if (lwpline->widths[i].start != width[i].start
