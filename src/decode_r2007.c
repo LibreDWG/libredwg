@@ -103,11 +103,35 @@ typedef struct _r2007_section
   struct _r2007_section *next;
 } r2007_section;
 
-
-r2007_section* get_section(r2007_section *sections_map, int64_t hashcode);
-r2007_page* get_page(r2007_page *pages_map, int64_t id);
-void pages_destroy(r2007_page *page);
-void sections_destroy(r2007_section *section);
+/* exported */
+int read_r2007_meta_data(Bit_Chain *dat, Dwg_Data *dwg);
+  
+/* private */
+static r2007_section* get_section(r2007_section *sections_map, int64_t hashcode);
+static r2007_page* get_page(r2007_page *pages_map, int64_t id);
+static void pages_destroy(r2007_page *page);
+static void sections_destroy(r2007_section *section);
+static r2007_section* read_sections_map(Bit_Chain* dat, int64_t size_comp, 
+                                 int64_t size_uncomp, int64_t correction);
+//static r2007_section* read_r2007_section_classes(Bit_Chain* dat,
+//           Dwg_Data *dwg, r2007_section *sections_map, r2007_page *pages_map);
+//static r2007_section* read_r2007_section_header(Bit_Chain* dat,
+//           Dwg_Data *dwg, r2007_section *sections_map, r2007_page *pages_map);
+static r2007_page* read_pages_map(Bit_Chain* dat, int64_t size_comp,
+                           int64_t size_uncomp, int64_t correction);
+static void  read_file_header(Bit_Chain* dat, r2007_file_header *file_header);
+static void read_instructions(unsigned char **src, unsigned char *opcode,
+                              uint32_t *offset, uint32_t *length);
+static char* copy_bytes_2(char *dst, char *src);
+static char* copy_bytes_3(char *dst, char *src);
+static char* copy_bytes_16(char *dst, char *src);
+static void  copy_bytes(char *dst, uint32_t length, uint32_t offset);
+static uint32_t read_literal_length(unsigned char **src, unsigned char opcode);
+static void copy_compressed_bytes(char *dst, char *src, int length);
+static void  bfr_read(void *dst, char **src, size_t size);
+static DWGCHAR* bfr_read_string(char **src);
+static char* decode_rs(const char *src, int block_count, int data_size);
+static int  decompress_r2007(char *dst, int dst_size, char *src, int src_size);
 
 #define copy_1(offset) \
 *dst++ = *(src + offset);
@@ -130,7 +154,7 @@ dst += 8;
 dst = copy_bytes_16(dst, src + offset);
 
 
-char* 
+static char* 
 copy_bytes_2(char *dst, char *src)
 {
   dst[0] = src[1];
@@ -138,7 +162,7 @@ copy_bytes_2(char *dst, char *src)
   return dst + 2;
 }
 
-char* 
+static char* 
 copy_bytes_3(char *dst, char *src)
 {
   dst[0] = src[2];
@@ -147,7 +171,7 @@ copy_bytes_3(char *dst, char *src)
   return dst + 3;
 }
 
-char* 
+static char* 
 copy_bytes_16(char *dst, char *src)
 {
   *(uint64_t*)dst = *(uint64_t*)(src + 8);
@@ -155,7 +179,7 @@ copy_bytes_16(char *dst, char *src)
   return dst + 16;
 }
 
-void 
+static void 
 copy_bytes(char *dst, uint32_t length, uint32_t offset)
 {
   char *src = dst - offset;
@@ -166,7 +190,7 @@ copy_bytes(char *dst, uint32_t length, uint32_t offset)
 
 
 /* See spec version 5.0 page 30 */
-void
+static void
 copy_compressed_bytes(char *dst, char *src, int length)
 {
   while (length >= 32)
@@ -325,13 +349,13 @@ copy_compressed_bytes(char *dst, char *src, int length)
       copy_16(2);
       copy_2(0);
     break;
-      //default:
-      //nop
+    default:
+      LOG_ERROR("Wrong length %d", length);
   }
 }
 
 /* See spec version 5.1 page 50 */
-uint32_t
+static uint32_t
 read_literal_length(unsigned char **src, unsigned char opcode)
 {
   uint32_t length = opcode + 8;
@@ -359,7 +383,7 @@ read_literal_length(unsigned char **src, unsigned char opcode)
 }
 
 /* See spec version 5.1 page 53 */
-void 
+static void 
 read_instructions(unsigned char **src, unsigned char *opcode, uint32_t *offset,
                   uint32_t *length) 
 {
@@ -409,7 +433,7 @@ read_instructions(unsigned char **src, unsigned char *opcode, uint32_t *offset,
 }
 
 /* See spec version 5.0 pp. 29 */
-int 
+static int 
 decompress_r2007(char *dst, int dst_size, char *src, int src_size)
 {
   uint32_t length = 0;
@@ -477,7 +501,7 @@ decompress_r2007(char *dst, int dst_size, char *src, int src_size)
 }
 
 
-char*
+static char*
 decode_rs(const char *src, int block_count, int data_size)
 {
   int i, j;
@@ -500,7 +524,7 @@ decode_rs(const char *src, int block_count, int data_size)
   return (dst_base);
 }
 
-char*
+static char*
 read_system_page(Bit_Chain* dat, int64_t size_comp, int64_t size_uncomp,
                  int64_t repeat_count)
 {
@@ -548,7 +572,7 @@ read_system_page(Bit_Chain* dat, int64_t size_comp, int64_t size_uncomp,
   return data;
 }
 
-int
+static int
 read_data_page(Bit_Chain* dat, unsigned char *decomp, int64_t page_size, 
                int64_t size_comp, int64_t size_uncomp)
 {
@@ -584,7 +608,8 @@ read_data_page(Bit_Chain* dat, unsigned char *decomp, int64_t page_size,
   return 0;
 }
 
-int
+/* yet unused */
+static int
 read_data_section(Bit_Chain *sec_dat, Bit_Chain *dat, r2007_section *sections_map, 
                   r2007_page *pages_map, int64_t hashcode)
 {
@@ -634,14 +659,14 @@ read_data_section(Bit_Chain *sec_dat, Bit_Chain *dat, r2007_section *sections_ma
 #define bfr_read_int16(_p)   *((int16_t*)_p);  _p += 2;
 #define bfr_read_int64(_p)   *((int64_t*)_p);  _p += 8;
 
-void
+static void
 bfr_read(void *dst, char **src, size_t size)
 {
   memcpy(dst, *src, size);
   *src += size;
 }
 
-DWGCHAR*
+static DWGCHAR*
 bfr_read_string(char **src)
 {
   uint16_t *ptr = (uint16_t*)*src;  
@@ -671,7 +696,7 @@ bfr_read_string(char **src)
   return str_base;
 }
 
-r2007_section*
+static r2007_section*
 read_sections_map(Bit_Chain* dat, int64_t size_comp, 
                   int64_t size_uncomp, int64_t correction)
 {
@@ -748,7 +773,7 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
   return sections;
 }
 
-r2007_page*
+static r2007_page*
 read_pages_map(Bit_Chain* dat, int64_t size_comp,
                int64_t size_uncomp, int64_t correction)
 {
@@ -808,7 +833,7 @@ read_pages_map(Bit_Chain* dat, int64_t size_comp,
 
 /* Lookup a page in the page map. The page is identified by its id.
  */
-r2007_page*
+static r2007_page*
 get_page(r2007_page *pages_map, int64_t id)
 {
   r2007_page *page = pages_map;
@@ -823,7 +848,7 @@ get_page(r2007_page *pages_map, int64_t id)
   return page;
 }
 
-void
+static void
 pages_destroy(r2007_page *page)
 {
   r2007_page *next;
@@ -838,7 +863,7 @@ pages_destroy(r2007_page *page)
 
 /* Lookup a section in the section map. The section is identified by its hashcode.
  */
-r2007_section*
+static r2007_section*
 get_section(r2007_section *sections_map, int64_t hashcode)
 {
   r2007_section *section = sections_map;
@@ -853,7 +878,7 @@ get_section(r2007_section *sections_map, int64_t hashcode)
   return section;
 }
 
-void
+static void
 sections_destroy(r2007_section *section)
 {
   r2007_section *next;
@@ -877,7 +902,7 @@ sections_destroy(r2007_section *section)
     }
 }
 
-void 
+static void 
 read_file_header(Bit_Chain* dat, r2007_file_header *file_header)
 {
   char data[0x3d8];
@@ -907,6 +932,23 @@ read_file_header(Bit_Chain* dat, r2007_file_header *file_header)
   free(pedata);
 }
 
+/* TODO */
+#if 0
+static r2007_section*
+read_r2007_section_classes(Bit_Chain* dat, Dwg_Data *dwg,
+                           r2007_section *sections_map, r2007_page *pages_map)
+{
+}
+
+static r2007_section*
+read_r2007_section_header(Bit_Chain* dat, Dwg_Data *dwg,
+                           r2007_section *sections_map, r2007_page *pages_map)
+{
+}
+#endif
+
+
+/* exported */
 int
 read_r2007_meta_data(Bit_Chain *dat, Dwg_Data *dwg)
 {
@@ -928,21 +970,23 @@ read_r2007_meta_data(Bit_Chain *dat, Dwg_Data *dwg)
   // Sections Map
   page = get_page(pages_map, file_header.sections_map_id);
   
-  if (page != NULL)
+  if (page)
     {
       dat->byte = page->offset;
       sections_map = read_sections_map(dat, file_header.sections_map_size_comp,
         file_header.sections_map_size_uncomp, file_header.sections_map_correction);
     }
-  
+
+#if 0
   // Section Classes
-  //read_r2007_section_classes(dat, dwg, sections_map, pages_map);
-  
+  read_r2007_section_classes(dat, dwg, sections_map, pages_map);
   // Section Header
-  //read_r2007_section_header(dat, dwg, sections_map, pages_map);
-  
+  read_r2007_section_header(dat, dwg, sections_map, pages_map);
+#endif
+
   pages_destroy(pages_map);
-  sections_destroy(sections_map);   
+  if (page)
+    sections_destroy(sections_map);
 
   return 0;
 }
