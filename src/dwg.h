@@ -291,10 +291,10 @@ typedef struct _dwg_header_variables {
   BITCODE_BD unknown_1; /* 1.0 */
   BITCODE_BD unknown_2; /* 1.0 */
   BITCODE_BD unknown_3; /* 1.0 */
-  BITCODE_TV unknown_4; /* "" */
-  BITCODE_TV unknown_5; /* "" */
-  BITCODE_TV unknown_6; /* "" */
-  BITCODE_TV unknown_7; /* "" */
+  BITCODE_TV unknown_text1; /* "" 4x pre 2007... */
+  BITCODE_TV unknown_text2; /* "" */
+  BITCODE_TV unknown_text3; /* "" */
+  BITCODE_TV unknown_text4; /* "" */
   BITCODE_BL unknown_8; /* 24L */
   BITCODE_BL unknown_9; /* 0L */
   BITCODE_BS unknown_10; /* 0 */
@@ -555,6 +555,14 @@ typedef struct _dwg_header_variables {
   BITCODE_H DICTIONARY_VISUALSTYLE; /* r2007+ */
   BITCODE_H unknown_20;             /* r2013+ */
   BITCODE_BL FLAGS;
+  BITCODE_B  CELWEIGHT; //= FLAGS & 0x1f
+  BITCODE_B  ENDCAPS;   //= FLAGS & 0x60
+  BITCODE_B  JOINSTYLE; //= FLAGS & 0x180
+  BITCODE_B  LWDISPLAY; //= !(FLAGS & 0x200)
+  BITCODE_B  XEDIT;     //= !(FLAGS & 0x400)
+  BITCODE_B  EXTNAMES;  //= FLAGS & 0x800
+  BITCODE_B  PSTYLEMODE; //= FLAGS & 0x2000
+  BITCODE_B  OLESTARTUP; //= FLAGS & 0x4000
   BITCODE_BS INSUNITS;
   BITCODE_BS CEPSNTYPE;
   BITCODE_H CPSNID;

@@ -50,18 +50,19 @@
   FIELD_BD (unknown_1); // default extrusion.x? 1.0
   FIELD_BD (unknown_2); // default extrusion.y? 1.0
   FIELD_BD (unknown_3); // default extrusion.z? 1.0
-  FIELD_TV (unknown_4); // ""
-  FIELD_TV (unknown_5); // ""
-  FIELD_TV (unknown_6); // ""
-  FIELD_TV (unknown_7); // ""
+  PRE(R_2007) { // undocumented as such in the ODA spec
+      FIELD_TV (unknown_text1); // ""
+      FIELD_TV (unknown_text2); // ""
+      FIELD_TV (unknown_text3); // ""
+      FIELD_TV (unknown_text4); // ""
+  }
   FIELD_BL (unknown_8); // 24
   FIELD_BL (unknown_9); // 0
 
-  VERSIONS(R_13, R_14)
+  VERSIONS(R_13, R_14) // or maybe UNTIL(R_14)
     {
       FIELD_BS(unknown_10);
     }
-
   PRE(R_2004)
     {
       FIELD_HANDLE (current_viewport_entity_header, ANYCODE);
@@ -70,7 +71,7 @@
   FIELD_B (DIMASO);
   FIELD_B (DIMSHO);
 
-  VERSIONS(R_13, R_14)
+  UNTIL(R_14)
     {
       FIELD_B (DIMSAV); //undocumented
     }
@@ -83,7 +84,7 @@
   FIELD_B (PSLTSCALE);
   FIELD_B (LIMCHECK);
 
-  VERSIONS(R_13, R_14)
+  UNTIL(R_14)
     {
       FIELD_B (BLIPMODE);
     }
@@ -481,6 +482,10 @@
 
   SINCE(R_2000)
     {
+      IF_ENCODE_FROM_EARLIER {
+         FIELD_VALUE(TSTACKALIGN) = 1;
+         FIELD_VALUE(TSTACKSIZE) = 70;
+      }
       FIELD_BS (TSTACKALIGN);
       FIELD_BS (TSTACKSIZE);
       FIELD_TV (HYPERLINKBASE);
@@ -508,6 +513,16 @@
   SINCE(R_2000)
     {
       FIELD_BL (FLAGS);
+      DECODER {
+          FIELD_VALUE(CELWEIGHT) = FIELD_VALUE(FLAGS) & 0x1f;
+          FIELD_VALUE(ENDCAPS)   = FIELD_VALUE(FLAGS) & 0x60 ? 1 : 0;
+          FIELD_VALUE(JOINSTYLE) = FIELD_VALUE(FLAGS) & 0x180 ? 1 : 0;
+          FIELD_VALUE(LWDISPLAY) = FIELD_VALUE(FLAGS) & 0x200 ? 0 : 1;
+          FIELD_VALUE(XEDIT)     = FIELD_VALUE(FLAGS) & 0x400 ? 0 : 1;
+          FIELD_VALUE(EXTNAMES)  = FIELD_VALUE(FLAGS) & 0x800 ? 1 : 0;
+          FIELD_VALUE(PSTYLEMODE) = FIELD_VALUE(FLAGS) & 0x2000 ? 1 : 0;
+          FIELD_VALUE(OLESTARTUP) = FIELD_VALUE(FLAGS) & 0x4000 ? 1 : 0;
+      }
       FIELD_BS (INSUNITS);
       FIELD_BS (CEPSNTYPE);
       if (FIELD_VALUE(CEPSNTYPE) == 3)
