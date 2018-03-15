@@ -1,5 +1,1441 @@
 Generating full history
 ----------
+2018-03-15  Reini Urban  <rurban@cpan.org>
+
+	cygwin libtools -no-undefined
+	* src/Makefile.am (libredwg_la_LDFLAGS): add -no-undefined for cygwin.
+
+2018-03-15  Reini Urban  <rurban@cpan.org>
+
+	abstract common file header into header.spec
+	* src/header.spec: added.
+	* src/decode.c (decode_R13_R15,decode_R2004,decode_R2007): use header.spec.
+	* src/encode.c: use header.spec.
+	* src/dwg.c: fix indentation, rename stk to dwg
+	* src/dwg.h: named struct Dwg_Header, add header.spec variables
+
+2018-03-15  Reini Urban  <rurban@cpan.org>
+
+	add read+write r2004 header
+	until the encryption at 0x80
+
+2018-03-15  Reini Urban  <rurban@cpan.org>
+
+        * src/dwg.h: rework file header <=r15,
+        fill in the missing file header bits, for encode
+	to be byte equal.
+        * src/decode.c (decode_R13_R15): rename unknown 1 section to 5
+        (which it is).
+	* src/bits.c: style
+
+2018-03-15  Reini Urban  <rurban@cpan.org>
+
+	configure.ac: set CFLAGS=-g
+	no optimization yet needed. turn it on later
+
+2018-03-15  Reini Urban  <rurban@cpan.org>
+
+	.travis.yml: debug make distcheck
+	* .travis.yml: fixup make distcheck
+
+2018-03-15  Reini Urban  <rurban@cpan.org>
+
+	Cleanup the CRC error messages
+
+2018-03-15  Reini Urban  <rurban@cpan.org>
+
+	Fix the section 0 crc comparison, add HANDLE logging
+	CRC was already read by header_vars.spec into the CRC field.
+	Don't read it again. The initial crc check passes now.
+
+	Seperate HANDLE from INSANE logging levels. INSANE for the individual
+	VECTOR values, i.e. string and binary content.
+
+2018-03-15  Reini Urban  <rurban@cpan.org>
+
+	fix crc, rename bit_ckr8 to bit_calc_CRC
+	* src/bits.c, src/bits.h: use uint16_t for the seed and crc,
+	  rename bit_ckr8 to bit_calc_CRC.
+	* configure.ac: add AC_TYPE_UINT16_T
+	* src/decode.c, testsuite/testcases/bits_test.c: use renamed
+	  bit_calc_CRC function
+
+2018-03-15  Reini Urban  <rurban@cpan.org>
+
+	doc: add basic types
+
+2018-03-15  Reini Urban  <rurban@cpan.org>
+
+	rewrite.exe alive.test fix
+
+2018-03-15  Reini Urban  <rurban@cpan.org>
+
+	testcases: fix more wrong types
+
+2018-03-15  Reini Urban  <rurban@cpan.org>
+
+	refactor both unit tests
+	extract the common function output_object
+	into common.c via the arg DWG_TYPE.
+
+	fix some wrong leftover float and int types.
+
+2018-03-15  Reini Urban  <rurban@cpan.org>
+
+	fix more dwg_api int types
+	to the BITCODE types.
+	There were still several errors, found out in the
+	unit tests.
+
+2018-03-15  Reini Urban  <rurban@cpan.org>
+
+	unit-testing: fix wrong float variables
+	to double
+
+2018-03-15  Reini Urban  <rurban@cpan.org>
+
+	decode_r2007: add missing function declarations
+	* src/decode_r2007.c: add missing function declarations.
+
+2018-03-15  Reini Urban  <rurban@cpan.org>
+
+	examples/Makefile.am: add CLEANFILES
+	* examples/Makefile.am: add CLEANFILES, check-syntax
+
+2018-03-15  Reini Urban  <rurban@cpan.org>
+
+	fix examples/dwg_ps
+	* examples/Makefile.am: fix dwg_ps_LDADD.
+	* examples/dwg_ps.c: various fixes.
+
+2018-03-15  Reini Urban  <rurban@cpan.org>
+
+	print.c: declare assert.h
+	used in dwg.spec: assert(FIELD_VALUE(scale_flag) == 0)
+
+2018-03-15  Reini Urban  <rurban@cpan.org>
+
+	dwg_encode_chains: initialize ckr_missing
+	at the beginning, not just in the loop.
+
+2018-03-15  Reini Urban  <rurban@cpan.org>
+
+	MINSERT spec
+	* src/dwg.spec (MINSERT):
+	  fix check logic: no multiple x == y == z expr,
+	  avoid sequence point problems when initializing:
+	  x=y=z=1.0
+
+2018-03-15  Reini Urban  <rurban@cpan.org>
+
+	dwg_encode_chains: fix handle swap code
+	* src/encode (dwg_encode_chains): fixed the handle swap code
+
+2018-03-15  Reini Urban  <rurban@cpan.org>
+
+	fix detected warnings
+	duplicate decarations, unused variables,
+	declaration after statement, ...
+
+2018-03-15  Reini Urban  <rurban@cpan.org>
+
+	fix SWIG_LIB windows newline
+	* m4/ax_pkg_swig.m4: strip \r\n in SWIG_LIB
+
+2018-03-15  Reini Urban  <rurban@cpan.org>
+
+	probe for warn, mingw and valgrind
+	* configure.ac: add many probes
+	* src/Makefile.am: add @WARN_CFLAGS@
+	* testsuite/testcases/Makefile.am: add @WARN_CFLAGS@, @VALGRIND_CHECK_RULES@
+	* testsuite/xmlsuite/Makefile.am: add @VALGRIND_CHECK_RULES@
+	* unit-testing/Makefile.am: add @WARN_CFLAGS@, @VALGRIND_CHECK_RULES@
+	* .gitignore: adjust for m4 changes
+	* m4/.placeholder: not longer needed.
+	* m4/ax_append_compile_flags.m4: added.
+	* m4/ax_append_flag.m4: added.
+	* m4/ax_append_link_flags.m4: added.
+	* m4/ax_check_compile_flag.m4: added.
+	* m4/ax_check_link_flag.m4: added.
+	* m4/ax_compile_check_sizeof.m4: added.
+	* m4/ax_compiler_flags.m4: added.
+	* m4/ax_compiler_flags_cflags.m4: added.
+	* m4/ax_compiler_flags_gir.m4: added.
+	* m4/ax_compiler_flags_ldflags.m4: added.
+	* m4/ax_is_release.m4: added.
+	* m4/ax_require_defined.m4: added.
+	* m4/ax_valgrind_check.m4: added.
+
+2018-03-15  Reini Urban  <rurban@cpan.org>
+
+	add .appveyor.yml
+	Tested at https://ci.appveyor.com/project/rurban/libredwg.
+	This is optional, but can be used to create binary releases
+	for windows/cygwin
+
+2018-03-14  Reini Urban  <rurban@cpan.org>
+
+	fix make distcheck
+	* unit-testing/Makefile.am: add common.c to EXTRA_DIST,
+	  fix AM_CFLAGS for make distcheck.
+
+2018-03-14  Reini Urban  <rurban@cpan.org>
+
+	doc: fill in some basics
+
+2018-03-14  Reini Urban  <rurban@cpan.org>
+
+	libredwg.la: direct -lm dependency
+	* src/Makefile.am: add -lm to libredwg_la_LDFLAGS.
+	* examples/Makefile.am: remove -lm from LDADD,
+	  use LDADD not AM_LDFLAGS,
+	  add -Wall to AM_CFLAGS.
+	* testsuite/testcases/Makefile.am: remove -lm from LDADD.
+	* testsuite/xmlsuite/Makefile.am: remove -lm from LDADD.
+	* unit-testing/Makefile.am: remove -lm from LDADD.
+
+2018-03-14  Reini Urban  <rurban@cpan.org>
+
+	unit-testing/Makefile.am: add -lm
+	for nan(). clang does not have it, only gcc
+
+2018-03-14  Reini Urban  <rurban@cpan.org>
+
+	configure.ac: whitespace
+
+2018-03-14  Reini Urban  <rurban@cpan.org>
+
+	use python_PYTHON.
+        fixed make distcheck. See
+        https://www.gnu.org/software/automake/manual/html_node/Python.html
+
+2018-03-14  Reini Urban  <rurban@cpan.org>
+
+	add a .travis.yml
+	configured at https://travis-ci.org/rurban/libredwg/
+	but you can clone and configure your own. it's optional.
+
+2018-03-13  Reini Urban  <rurban@cpan.org>
+
+	support rewrite as other version
+	when encoding into another version than the original
+	dwg version, check and ignore empty handles, and
+	use empty strings, and numbers as default.
+
+2018-03-13  Reini Urban  <rurban@cpan.org>
+
+	build: make swig and dejagnu optional
+	* Makefile.am: optional bindings and testsuite SUBDIRS.
+	* testsuite/Makefile.am: optional testcases SUBDIRS.
+	* configure.ac: export HAVE_DEJAGNU and HAVE_SWIG_PYTHON to automake.
+
+2018-03-13  Reini Urban  <rurban@cpan.org>
+
+	fix swig with stdint.h
+	* src/dwg.h: no SWIGIMPORTED for stdint.h.
+	* bindings/python/Makefile.am (swig_wrap_python.c): remove
+	  -I/usr/include.
+
+2018-03-13  Reini Urban  <rurban@cpan.org>
+
+	src/Makefile.am: cleanup
+	* src/Makefile.am: minor cleanup, no changes.
+
+2018-03-13  Reini Urban  <rurban@cpan.org>
+
+	Fix bit_write_4BITS
+	* src/bits.c (bit_write_4BITS): fix implementation.
+	* testsuite/testcases/bits_test.c: enhance tests a bit, print the
+	  failing result, no functional changes.
+
+2018-03-13  Reini Urban  <rurban@cpan.org>
+
+	fix testcases/lwpline
+	* testsuite/testcases/lwpline.c: fix flags type
+
+2018-03-13  Reini Urban  <rurban@cpan.org>
+
+	testcases: fix wrong float
+	* testsuite/testcases/arc.c,
+	  testsuite/testcases/attdef.c,
+	  testsuite/testcases/attrib.c,
+	  testsuite/testcases/circle.c,
+	  testsuite/testcases/ellipse.c,
+	  testsuite/testcases/line.c,
+	  testsuite/testcases/minsert.c,
+	  testsuite/testcases/mline.c,
+	  testsuite/testcases/mtext.c,
+	  testsuite/testcases/point.c,
+	  testsuite/testcases/polyline_2d.c,
+	  testsuite/testcases/shape.c,
+	  testsuite/testcases/solid.c,
+	  testsuite/testcases/text.c,
+	  testsuite/testcases/tolerance.c,
+	  testsuite/testcases/trace.c: change float to  BITCODE_BD
+
+2018-03-13  Reini Urban  <rurban@cpan.org>
+
+	work on testsuites
+	on macports with make check PYTHON=/opt/local/bin/python2.7
+
+2018-03-13  Reini Urban  <rurban@cpan.org>
+
+	examples/alive.test: TODO the rewrite tests
+	until we can fix them
+
+2018-03-13  Reini Urban  <rurban@cpan.org>
+
+	python: depend on src/dwg.h
+	* bindings/python/Makefile.am: depend on src/dwg.h, add
+	  -I/usr/include for stdint.h
+
+2018-03-13  Reini Urban  <rurban@cpan.org>
+
+	WIP Start R_2013, R_2018 support, stricter types, ...
+	add missing types, header variables, ...
+	read and write  3B and BLL types, BLL: 64bit only.
+	(this drops support for 32bit only, without uin64_t.
+	maybe probe for that)
+
+2018-03-12  Pero Brbora  <pbrbora@stud.unidu.hr>
+
+	testsuite/testcases/endblk.c (api_process): Compare test values.
+
+2018-03-12  Reini Urban  <rurban@cpan.org>
+
+	dwg.spec: ANYCODE for parent, next, prev
+	* src/common_entity_handle_data.spec: prev_entity may be 4 or 8,
+	  prev_entity may be 4 or 6, change to ANYCODE.
+	* src/dwg.spec: XRECORD whitespace
+
+2018-03-12  Reini Urban  <rurban@cpan.org>
+
+	dwg.spec: handle insert_count
+	* src/decode.c, src/encode.c, src/print.c, src/dwg.spec:
+	  add FIELD_INSERT_COUNT fixing print and encode of insert_count.
+	  add FIELD_TRACE as seperate helper.
+	  add FIELD_HANDLE_N helper to print the actual vcount index.
+	* src/encode.c (FIELD_HANDLE): add assertions and LOG_ERROR
+	  when handle_code deviates
+	  (HANDLE_VECTOR_N): add assertions.
+	  (dwg_encode_add_object): change long unsigned int to unsigned long
+
+2018-03-12  Reini Urban  <rurban@cpan.org>
+
+	dwg.spec: layout_handle in BLOCK_HEADER is code 5
+
+2018-03-12  Reini Urban  <rurban@cpan.org>
+
+	xmlsuite: unsigned char* conversion
+	* testsuite/xmlsuite/common.c: replace char with xmlChar as used in libxml2
+	* testsuite/xmlsuite/testsuite.c: ditto
+
+2018-03-12  Reini Urban  <rurban@cpan.org>
+
+	fixup examples
+	* examples/alive.test: rewrite needs two args
+	* examples/rewrite.c: need USE_WRITE, fixup error message
+	* examples/testsvg2.c: add log_if_error checks, add argv[1] check,
+	    fix c99 block decl, fix handle returning a handle, not struct.
+	* get_bmp.c: unsigned char* dwg_bmp
+
+2018-03-12  Reini Urban  <rurban@cpan.org>
+
+	fix dwg_api
+	* src/dwg_api.{c,h}:
+	  add missing checks for an empty 2nd arg
+	  add missing return values in the error case.
+	  LOG_ERROR
+
+	  declare all accessors, fixing x86_64
+	  E.g. fixing http://lists.gnu.org/archive/html/libredwg/2017-07/msg00000.html
+	  caused by the wrong default type being added for the undeclared functions,
+          capping pointers at 32bit.
+
+	  change TV from unsigned char* to char*, only the internal
+	  methods need to use unsigned char*. harmonized with the external field types.
+
+	  changed *get_block_size accessors to return the natural unsigned
+          long * type, not long *.
+
+	  change API to return pointers, not structs for:
+          dwg_obj_appid_get_appid_control, dwg_obj_get_handle,
+          dwg_ent_insert_get_ref_handle
+
+	* src/api.h, src/api.c: deleted
+	* Makefile.am: add .c.i: and check-syntax emacs flymake targets
+
+2018-03-11  Reini Urban  <rurban@cpan.org>
+
+	[maint] Fix compilation errors and warnings
+	* configure.ac: probe for malloc.h.
+	* src/decode.c: global loglevel, static variable 'loglevel' is used in
+	    an inline function with external linkage [-Wstatic-in-inline].
+	  dwg_decode_handleref_with_code make global: [-Wstatic-in-inline].
+	* src/encode.c: declare dwg_encode_handleref,
+	  dwg_encode_handleref_with_code, dwg_encode_common_entity_handle_data,
+	  dwg_encode_common_entity_handle_data: declare it as static.
+	* src/dwg.c: fix various integer fmt types.
+	  get_first_owned_object: error with Unsupported version.
+	  get_next_owned_object: error with Unsupported version.
+	  declare dwg_encode_chains.
+	* src/dwg_api.c: check HAVE_MALLOC_H.
+	* .gitignore: add TAGS.
+
+2015-12-11  gaganjyot  <thegaganx@gmail.com>
+
+	[Fix] Memory Errors
+
+2015-03-29  Thien-Thi Nguyen  <ttn@gnu.org>
+
+	[v] Remove "make-check"-generated .xml files from repo.
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Arc.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/ConstructionLine.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Donut.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Ellipse.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Helix.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Line.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Multiline.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Point.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/PolyLine3D.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Polygon.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Polyline.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/RAY.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Spline.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Text.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/circle.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Arc.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/ConstructionLine.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Donut.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Ellipse.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Helix.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Line.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Multiline.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Point.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/PolyLine3D.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Polygon.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Polyline.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/RAY.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Spline.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Text.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/circle.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Arc.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/ConstructionLine.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Donut.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Ellipse.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Helix.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Line.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Multiline.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Point.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/PolyLine3D.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Polygon.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Polyline.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/RAY.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Spline.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Text.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/circle.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Arc.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/ConstructionLine.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Donut.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Ellipse.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Helix.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Line.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Multiline.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Point.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/PolyLine3D.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Polygon.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Polyline.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/RAY.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Spline.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Text.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/circle.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Arc.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/ConstructionLine.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Donut.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Ellipse.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Helix.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Line.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Multiline.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Point.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/PolyLine3D.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Polygon.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Polyline.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/RAY.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Spline.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Text.xml
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/circle.xml: Delete file.
+
+2015-03-29  Thien-Thi Nguyen  <ttn@gnu.org>
+
+	[v] Remove another xmlsuite "make check"-generated file.
+	* testsuite/xmlsuite/result.htm: Delete file.
+
+2015-03-29  Thien-Thi Nguyen  <ttn@gnu.org>
+
+	[v] Remove xmlsuite "make check"-generated files from repo.
+	* testsuite/xmlsuite/test_output/2000/ConstructionLine.xml
+	* testsuite/xmlsuite/test_output/2000/Donut.xml
+	* testsuite/xmlsuite/test_output/2000/Ellipse.xml
+	* testsuite/xmlsuite/test_output/2000/Helix.xml
+	* testsuite/xmlsuite/test_output/2000/Line.xml
+	* testsuite/xmlsuite/test_output/2000/Multiline.xml
+	* testsuite/xmlsuite/test_output/2000/Point.xml
+	* testsuite/xmlsuite/test_output/2000/PolyLine3D.xml
+	* testsuite/xmlsuite/test_output/2000/Polygon.xml
+	* testsuite/xmlsuite/test_output/2000/Polyline.xml
+	* testsuite/xmlsuite/test_output/2000/RAY.xml
+	* testsuite/xmlsuite/test_output/2000/Spline.xml
+	* testsuite/xmlsuite/test_output/2000/Text.xml
+	* testsuite/xmlsuite/test_output/2000/circle.xml
+	* testsuite/xmlsuite/test_output/2004/Arc.xml
+	* testsuite/xmlsuite/test_output/2004/ConstructionLine.xml
+	* testsuite/xmlsuite/test_output/2004/Donut.xml
+	* testsuite/xmlsuite/test_output/2004/Ellipse.xml
+	* testsuite/xmlsuite/test_output/2004/Helix.xml
+	* testsuite/xmlsuite/test_output/2004/Line.xml
+	* testsuite/xmlsuite/test_output/2004/Multiline.xml
+	* testsuite/xmlsuite/test_output/2004/Point.xml
+	* testsuite/xmlsuite/test_output/2004/PolyLine3D.xml
+	* testsuite/xmlsuite/test_output/2004/Polygon.xml
+	* testsuite/xmlsuite/test_output/2004/Polyline.xml
+	* testsuite/xmlsuite/test_output/2004/RAY.xml
+	* testsuite/xmlsuite/test_output/2004/Spline.xml
+	* testsuite/xmlsuite/test_output/2004/Text.xml
+	* testsuite/xmlsuite/test_output/2004/circle.xml: Delete files.
+
+2015-03-27  Thien-Thi Nguyen  <ttn@gnu.org>
+
+	[v unit] Fix bug: Handle program invocation w/o args.
+	* unit-testing/Makefile.am (TESTS_ENVIRONMENT): New var.
+	* unit-testing/common.c (main): Don't blindly operate
+	on úÙÚ¯argv[1]úÙÚ˘; instead, use the value of env var úÙÚ¯INPUTúÙÚ˘, if
+	available, else print error message and exit failurefully.
+
+2015-03-27  Thien-Thi Nguyen  <ttn@gnu.org>
+
+	[dist] Fix bug: Also distribute example.dwg.
+	* unit-testing/Makefile.am (EXTRA_DIST): New target.
+
+2015-03-26  Pero Brbora  <pbrbora@stud.unidu.hr>
+
+	[v xml] Fix bug: Avoid segfault: free only in non-error path.
+	* testsuite/testcases/common.c (test_code):
+	Don't call úÙÚ¯dwg_freeúÙÚ˘ unconditionally; instead, call
+	it only in the case where there are no errors.
+
+2015-02-21  Thien-Thi Nguyen  <ttn@gnu.org>
+
+	[boot] Bump minimal version of Automake to 1.12.2.
+	* configure.ac (AM_INIT_AUTOMAKE): ...here.
+
+2015-02-20  Thien-Thi Nguyen  <ttn@gnu.org>
+
+	[boot] Don't specify $(srcdir) explicitly.
+	* bindings/python/Makefile.am (BUILT_SOURCES): Remove úÙÚ¯$(srcdir)/úÙÚ˘.
+	(swig_wrap_python.c): Rename target from úÙÚ¯$(srcdir)/swig_wrap_python.cúÙÚ˘.
+
+2015-02-20  Thien-Thi Nguyen  <ttn@gnu.org>
+
+	[v] Add unit-testing/ to "make check" flow.
+	* Makefile.am (SUBDIRS): Add unit-testing, immediately after src.
+	* configure.ac (AC_CONFIG_FILES): Add unit-testing/Makefile.
+	* unit-testing/Makefile: Delete file.
+	* unit-testing/Makefile.am: New file.
+	* unit-testing/.gitignore: New file.
+
+2015-02-20  Thien-Thi Nguyen  <ttn@gnu.org>
+
+	[v] Do testing serially.
+	* configure.ac (AM_INIT_AUTOMAKE): Add option úÙÚ¯serial-testsúÙÚ˘.
+
+2014-12-10  Thien-Thi Nguyen  <ttn@gnu.org>
+
+	[maint] Remove site.exp files from repo.
+	* testsuite/site.exp: Delete file.
+	* testsuite/testcases/site.exp: Delete file.
+
+2014-12-05  Thien-Thi Nguyen  <ttn@gnu.org>
+
+	[v] Fix bug: Collapse individual tuple-item assignments.
+	* testsuite/xmlsuite/check.py <top-level>:
+	  Don't assign to úÙÚ¯result[0]úÙÚ˘ and úÙÚ¯result[1]úÙÚ˘ separately;
+	  instead, assign a literal 2-tuple to úÙÚ¯resultúÙÚ˘, once.
+
+2014-12-04  Thien-Thi Nguyen  <ttn@gnu.org>
+
+	[v] Make testsuite/testcases progs link against in-tree libredwg.la.
+	* testsuite/testcases/Makefile.am
+	  (LDADD): New var.
+	  (AM_CFLAGS): Delete var.
+
+2014-12-03  Thien-Thi Nguyen  <ttn@gnu.org>
+
+	[v] Explicitly name testsuite/testcases support files.
+	* testsuite/testcases/Makefile.am
+	  (paired, unpaired): New vars.
+	  (check_PROGRAMS): Use $(paired) and $(unpaired).
+	  (EXTRA_DIST): Add example.dwg, vertex.mesh, common.c,
+	  ole2frame.c; replace úÙÚ¯check_PROGRAMSúÙÚ˘ ref w/ úÙÚ¯pairedúÙÚ˘.
+
+2014-11-29  Thien-Thi Nguyen  <ttn@gnu.org>
+
+	[v] Distribute testsuite/testcases support files.
+	* testsuite/testcases/Makefile.am (EXTRA_DIST): New var.
+
+2014-11-27  Thien-Thi Nguyen  <ttn@gnu.org>
+
+	[v] Declare helper.py encoding.
+	* testsuite/xmlsuite/helper.py:
+	  Add Emacs-style úÙÚ¯coding:úÙÚ˘ comment as first line.
+
+2014-11-26  Thien-Thi Nguyen  <ttn@gnu.org>
+
+	[maint] Remove *.pyc files from repo.
+	* testsuite/xmlsuite/check.pyc: Delete file.
+	* testsuite/xmlsuite/helper.pyc: Delete file.
+
+2014-11-26  Thien-Thi Nguyen  <ttn@gnu.org>
+
+	[v] Streamline invocation of sub-program txttoxml.py.
+	* testsuite/xmlsuite/Makefile.am (TESTS_ENVIRONMENT):
+	  Also set env var úÙÚ¯PYTHONúÙÚ˘.
+	* testsuite/xmlsuite/helper.py: Import úÙÚ¯globúÙÚ˘.
+	  (generatexml): Don't invoke txtgenerate.sh; instead, iterate the
+	  invocation of program txttoxml.py over the list of */*.txt files.
+	* testsuite/xmlsuite/DWG/DWG-Files/txttoxml.py: Do úÙÚ¯chmod -xúÙÚ˘.
+	* testsuite/xmlsuite/DWG/DWG-Files/txtgenerate.sh: Delete file.
+
+2014-11-23  Thien-Thi Nguyen  <ttn@gnu.org>
+
+	[v] Use Python interpreter discovered by configure script.
+	* testsuite/xmlsuite/Makefile.am (TESTS_ENVIRONMENT): New var.
+	* testsuite/xmlsuite/check.py: Remove shebang; chmod -x.
+
+2014-11-21  Thien-Thi Nguyen  <ttn@gnu.org>
+
+	[v] Make xmlsuite data files non-executable.
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Arc.bak:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Arc.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Arc.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Arc.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/ConstructionLine.bak:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/ConstructionLine.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/ConstructionLine.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/ConstructionLine.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Donut.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Donut.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Donut.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Ellipse.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Ellipse.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Ellipse.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Helix.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Helix.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Helix.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Line.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Line.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Line.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Multiline.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Multiline.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Multiline.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Point.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Point.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Point.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/PolyLine3D.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/PolyLine3D.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/PolyLine3D.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Polygon.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Polygon.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Polygon.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Polyline.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Polyline.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Polyline.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/RAY.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/RAY.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/RAY.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Spline.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Spline.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Spline.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Text.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Text.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/Text.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/circle.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/circle.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2000/circle.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Arc.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Arc.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Arc.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/ConstructionLine.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/ConstructionLine.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/ConstructionLine.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Donut.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Donut.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Donut.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Ellipse.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Ellipse.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Ellipse.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Helix.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Helix.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Helix.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Line.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Line.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Line.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Multiline.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Multiline.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Multiline.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Point.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Point.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Point.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/PolyLine3D.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/PolyLine3D.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/PolyLine3D.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Polygon.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Polygon.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Polygon.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Polyline.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Polyline.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Polyline.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/RAY.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/RAY.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/RAY.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Spline.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Spline.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Spline.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Text.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Text.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/Text.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/circle.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/circle.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2004/circle.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Arc.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Arc.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Arc.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/ConstructionLine.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/ConstructionLine.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/ConstructionLine.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Donut.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Donut.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Donut.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Ellipse.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Ellipse.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Ellipse.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Helix.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Helix.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Helix.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Line.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Line.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Line.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Multiline.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Multiline.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Multiline.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Point.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Point.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Point.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/PolyLine3D.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/PolyLine3D.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/PolyLine3D.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Polygon.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Polygon.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Polygon.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Polyline.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Polyline.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Polyline.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/RAY.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/RAY.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/RAY.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Spline.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Spline.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Spline.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Text.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Text.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/Text.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/circle.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/circle.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2007/circle.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Arc.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Arc.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Arc.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/ConstructionLine.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/ConstructionLine.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/ConstructionLine.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Donut.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Donut.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Donut.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Ellipse.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Ellipse.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Ellipse.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Helix.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Helix.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Helix.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Line.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Line.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Line.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Multiline.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Multiline.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Multiline.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Point.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Point.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Point.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/PolyLine3D.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/PolyLine3D.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/PolyLine3D.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Polygon.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Polygon.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Polygon.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Polyline.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Polyline.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Polyline.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/RAY.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/RAY.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/RAY.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Spline.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Spline.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Spline.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Text.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Text.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/Text.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/circle.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/circle.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2010/circle.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Arc.bak:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Arc.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Arc.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Arc.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/ConstructionLine.bak:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/ConstructionLine.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/ConstructionLine.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/ConstructionLine.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Donut.bak:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Donut.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Donut.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Donut.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Ellipse.bak:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Ellipse.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Ellipse.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Ellipse.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Helix.bak:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Helix.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Helix.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Helix.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Line.bak:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Line.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Line.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Line.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Multiline.bak:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Multiline.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Multiline.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Multiline.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Point.bak:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Point.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Point.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Point.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/PolyLine3D.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/PolyLine3D.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/PolyLine3D.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Polygon.bak:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Polygon.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Polygon.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Polygon.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Polyline.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Polyline.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Polyline.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/RAY.bak:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/RAY.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/RAY.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/RAY.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Spline.bak:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Spline.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Spline.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Spline.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Text.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Text.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/Text.txt:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/circle.bak:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/circle.dwg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/circle.jpg:
+	* testsuite/xmlsuite/DWG/DWG-Files/2013/circle.txt: Do úÙÚ¯chmod -xúÙÚ˘.
+
+2014-11-21  Thien-Thi Nguyen  <ttn@gnu.org>
+
+	[v] Distribute xmlsuite support files.
+	* testsuite/xmlsuite/Makefile.am (EXTRA_DIST):
+	Add DWG, header.htm, helper.py, $(TESTS).
+
+2014-11-19  Thien-Thi Nguyen  <ttn@gnu.org>
+
+	[v] Use úÙÚ¯LDADDúÙÚ˘ and full libredwg.la filename.
+	* testsuite/xmlsuite/Makefile.am (LDADD): Rename from
+	  úÙÚ¯AM_LDFLAGSúÙÚ˘; specify explicit location of libredwg.la.
+
+2014-11-16  Thien-Thi Nguyen  <ttn@gnu.org>
+
+	[v] Don't forget to distribute common.c.
+	* testsuite/xmlsuite/Makefile.am (EXTRA_DIST): Add common.c.
+
+2014-11-16  Thien-Thi Nguyen  <ttn@gnu.org>
+
+	[v] Don't forget to distribute suffix.c.
+	* testsuite/xmlsuite/Makefile.am (EXTRA_DIST): New var.
+
+2014-10-22  Thien-Thi Nguyen  <ttn@gnu.org>
+
+	[build] Determine libxml2 flags at configure time.
+	* configure.ac <checks for libraries>:
+	  Don't use úÙÚ¯AC_CHECK_LIBúÙÚ˘; instead, call úÙÚ¯PKG_CHECK_MODULESúÙÚ˘
+	  for úÙÚ¯libxml-2.0úÙÚ˘ and update error message to mention that directly.
+	  (XML2_CFLAGS, XML2_LIBS): New AC_SUBST.
+	* testsuite/xmlsuite/Makefile.am (LIBXML): Delete var.
+	  (AM_CPPFLAGS): New var.
+	  (AM_CFLAGS): Move everything except úÙÚ¯-gúÙÚ˘ to...
+	  (AM_LDFLAGS): ...this new var, and use $(XML2_LIBS).
+
+2014-10-22  Thien-Thi Nguyen  <ttn@gnu.org>
+
+	[build] Make configure script check for pkg-config(1).
+	* configure.ac <checks for programs>: Call úÙÚ¯PKG_PROG_PKG_CONFIGúÙÚ˘.
+
+2014-08-18  Piyush  <achyutapiyush@gmail.com>
+
+	Tweaking
+
+2014-08-18  Piyush  <achyutapiyush@gmail.com>
+
+	Removing binaries
+
+2014-08-18  Piyush  <achyutapiyush@gmail.com>
+
+	Final Commit
+
+2014-08-18  Piyush  <achyutapiyush@gmail.com>
+
+	Tweaking
+
+2014-08-18  Piyush  <achyutapiyush@gmail.com>
+
+	Tweaking
+
+2014-08-18  Piyush  <achyutapiyush@gmail.com>
+
+	Updating Doxygen File
+
+2014-08-18  Piyush  <achyutapiyush@gmail.com>
+
+	DOcumentation Updated
+
+2014-08-16  Piyush  <achyutapiyush@gmail.com>
+
+	Improved code formatting
+
+2014-08-16  Piyush  <achyutapiyush@gmail.com>
+
+	DOcumentation Updated
+
+2014-08-16  Piyush  <achyutapiyush@gmail.com>
+
+	Added dependencies. Integrated everthing
+
+2014-08-15  Piyush  <achyutapiyush@gmail.com>
+
+	CLeaning
+
+2014-08-14  Piyush  <achyutapiyush@gmail.com>
+
+	Updated Tests
+
+2014-08-13  Piyush  <achyutapiyush@gmail.com>
+
+	Moved to testsuite folder
+
+2014-08-11  Piyush  <achyutapiyush@gmail.com>
+
+	Intregating xmlsuite
+
+2014-08-10  Piyush  <achyutapiyush@gmail.com>
+
+	Updating testsuite
+
+2014-08-09  Piyush  <achyutapiyush@gmail.com>
+
+	Removing unit tests folder
+
+2014-08-07  Piyush  <achyutapiyush@gmail.com>
+
+	Updating files
+
+2014-08-02  Piyush  <achyutapiyush@gmail.com>
+
+	Updated tests
+
+2014-07-31  Piyush  <achyutapiyush@gmail.com>
+
+	Tests for bits.c
+
+2014-07-17  Piyush  <achyutapiyush@gmail.com>
+
+	Moved it to xmlsuite folder for now
+
+2014-07-17  Piyush  <achyutapiyush@gmail.com>
+
+	Test suite with first unit test
+
+2014-07-17  Piyush  <achyutapiyush@gmail.com>
+
+	Moving the XML suite to different folder for now
+
+2014-06-27  Piyush  <achyutapiyush@gmail.com>
+
+	Commit the sample DWG files needed for test suite
+
+2014-06-27  Piyush  <achyutapiyush@gmail.com>
+
+	Removed the Previous DWG Files
+	The files were not completely commited and there was error in it. So removed and will add the same files in the next commit
+
+2014-06-27  Piyush  <achyutapiyush@gmail.com>
+
+	Adding the dependent files
+
+2014-06-27  Piyush  <achyutapiyush@gmail.com>
+
+	Adding python script which will generate %age
+
+2014-06-13  Piyush  <achyutapiyush@gmail.com>
+
+	Adding Initial Files
+
+2014-04-13  gaganjyot  <thegaganx@gmail.com>
+
+	API Merge with clean doc folder
+
+2014-04-12  Rodrigo Rodrigues da Silva  <rsilva@metamaquina.com.br>
+
+	[r] ignore Object_Ref resolving when handle is null
+
+2013-09-24  gaganjyot  <thegaganx@gmail.com>
+
+	Documentation updated, Comments added
+
+2013-09-24  gaganjyot  <thegaganx@gmail.com>
+
+	Documentation updated, Comments added
+
+2013-09-23  gaganjyot  <thegaganx@gmail.com>
+
+	Documentation added
+
+2013-09-20  gaganjyot  <thegaganx@gmail.com>
+
+	Comments added, Make clean target for unit testing
+
+2013-09-19  gaganjyot  <thegaganx@gmail.com>
+
+	Comments added
+
+2013-09-18  gaganjyot  <thegaganx@gmail.com>
+
+	check target for unit tests
+
+2013-09-18  gaganjyot  <thegaganx@gmail.com>
+
+	api -> dwg_api
+
+2013-09-18  gaganjyot  <thegaganx@gmail.com>
+
+	removed api.c error from testsvg2.c
+
+2013-09-18  gaganjyot  <thegaganx@gmail.com>
+
+	library with unit-testing
+
+2013-09-17  gaganjyot  <thegaganx@gmail.com>
+
+	complete unit testing with makefile
+
+2013-09-16  gaganjyot  <thegaganx@gmail.com>
+
+	entity functions uncommented
+
+2013-09-15  gaganjyot  <thegaganx@gmail.com>
+
+	unit tests added with comments
+
+2013-09-14  gaganjyot  <thegaganx@gmail.com>
+
+	updated comments for unit tests
+
+2013-09-13  gaganjyot  <thegaganx@gmail.com>
+
+	unit tests added
+
+2013-09-11  gaganjyot  <thegaganx@gmail.com>
+
+	More unit tests added
+
+2013-09-01  gaganjyot  <thegaganx@gmail.com>
+
+	added more unit tests
+
+2013-08-31  gaganjyot  <thegaganx@gmail.com>
+
+	added unit testing, improved testsvg
+
+2013-08-24  gaganjyot  <thegaganx@gmail.com>
+
+	Bugs fixed
+
+2013-08-24  gaganjyot  <thegaganx@gmail.com>
+
+	Bugs removed
+
+2013-08-13  gaganjyot  <thegaganx@gmail.com>
+
+	error in appid fixed
+
+2013-08-01  gaganjyot  <thegaganx@gmail.com>
+
+	Updated code and some comments,Removed un-necassary code
+
+2013-07-31  gaganjyot  <thegaganx@gmail.com>
+
+	code formatted, Minor bug fixes
+
+2013-07-29  gaganjyot  <thegaganx@gmail.com>
+
+	New SVG Converter, Without low level access
+
+2013-07-29  gaganjyot  <thegaganx@gmail.com>
+
+	New SVG converter using the API, Added extra functions for objects and reference object
+
+2013-07-29  gaganjyot  <thegaganx@gmail.com>
+
+	Added extra functions for object, reference and block_header, New SVG converter
+
+2013-07-28  gaganjyot  <thegaganx@gmail.com>
+
+	Table entity support added
+
+2013-07-27  gaganjyot  <thegaganx@gmail.com>
+
+	added support for body, regon, 3dsolid and vertex_pface_face with error reporting
+
+2013-07-27  gaganjyot  <thegaganx@gmail.com>
+
+	added support for mline, 3dface
+
+2013-07-27  gaganjyot  <thegaganx@gmail.com>
+
+	Added support for polyline2d, polyline3d, polyline_mesh and polyline_pface
+
+2013-07-27  gaganjyot  <thegaganx@gmail.com>
+
+	Added support for spline, lwpline, ole2frame and viewport
+
+2013-07-26  gaganjyot  <thegaganx@gmail.com>
+
+	added functions for leader, mtext, leader, shape, endblk
+
+2013-07-26  gaganjyot  <thegaganx@gmail.com>
+
+	Total Support For Dimensions with error reporting
+
+2013-07-25  gaganjyot  <thegaganx@gmail.com>
+
+	Updated error handling, added few functions for dimension ordinate
+
+2013-07-24  gaganjyot  <thegaganx@gmail.com>
+
+	Error reporting for all functions added
+
+2013-07-24  gaganjyot  <thegaganx@gmail.com>
+
+	support for error reporting in line,circle,arc
+
+2013-07-23  gaganjyot  <thegaganx@gmail.com>
+
+	More functions for entiies and objects, Comments updated
+
+2013-07-22  gaganjyot  <thegaganx@gmail.com>
+
+	Initial commit
+
+2011-01-20  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	[bind] Wrap Object_Data *object as array. Fixes #32186
+	* bindings/dwg.i: use carrays.i to generate helper functions
+	* examples/load_dwg.py: updated python example with correct usage of array
+
+2011-01-20  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	Added missing #ifdef switch to dwg_write_file()'s prototype
+
+2011-01-19  Rob Vermaas  <rob.vermaas@gmail.com>
+
+	use AX_SWIG_PYTHON_CPPFLAGS variable in stead of hardcoded /usr/include/python2.6
+
+2011-01-05  Till Heuschmann  <theuschmann@gmail.com>
+
+	[build] applied patch from Rob Vermaas <rob.vermaas@gmail.com>
+	Thanks also to Timo VJ LÅ‰hde <timovj.lahde@gmail.com> for reporting this error.
+
+	decode_r2007.c: Do not use sys/malloc.h include
+
+2010-12-28  Till Heuschmann  <theuschmann@gmail.com>
+
+	[r] Decode R2007 Metadata
+	Decode Metadata including file header, page map, section map
+
+	dwg.h: Add type for wide character strings
+	decode_r2007.c: Decode Metadata
+
+2010-12-27  Till Heuschmann  <theuschmann@gmail.com>
+
+	[build] Add R2007 decoder
+
+2010-12-27  Till Heuschmann  <theuschmann@gmail.com>
+
+	[build] Add R2007 decoder
+	decode_r2007.c: Source file for all functions that are only needed to decode R2007 files.
+
+2010-10-30  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	[r,w] Fixed typo in sentinel
+	* common.c: second byte of DWG_SENTINEL_CLASS_END was typed "5L" instead of "5E"
+
+2010-10-30  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	[w] fixed header variables overflow
+	* src/encode.c: fixed two-byte overflow after Header Variables section's CRC.
+
+2010-10-30  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	[w] Writing objects to bitstream correctly - or at least almost.
+	* encode.c: fixed dwg_encode_chains() to call dwg_encode_add_objects() at the correct point, plus various fixes.
+
+	It seems that some files are now written correctly to the bitstream. Although, unknown object types and objects with variable type (>500) are still skipped.
+	I have also detected various situations in which the Header Variables and Classes sections of the new file are 2 bytes longer than the original file. Comparing both original and re-written files, I suspect that bit_write_CRC() is writing these two extra bogus bytes.
+
+2010-10-30  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	[api] fixed missing prototype in header
+	* dwg.h: added missing dwg_write_file() function prototype
+
+2010-10-30  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	[w] Adding debug info to rewrite.c
+	* rewrite.c: added debug messages
+
+2010-10-05  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	[admin] Improve m4 quoting
+	* configure.ac: according to Thien-Thi's suggestion at the mailing list, macro
+	arguments are sorrounded by brackets to avoid confusion in case they become
+	macros themselves.
+
+2010-10-05  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	[doc] Explain use of underscore
+	* bindings/python/Makefile.am: explain _libredwg_la
+
+2010-10-05  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	[bind] Enhanced python example
+	* examples/load_dwg.py: read file version and print object list.
+
+2010-09-28  Ivan Radic  <ivnrdc@gmail.com>
+
+	crc check on
+
+2010-09-28  Ivan Radic  <ivnrdc@gmail.com>
+
+	add return keyword
+
+2010-09-28  Ivan Radic  <ivnrdc@gmail.com>
+
+	correct function name
+
+2010-09-28  Ivan Radic  <ivnrdc@gmail.com>
+
+	correct field macros
+
+2010-09-23  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	added missing .m4 file
+	*m4/ax_python_devel.m4: required by AX_SWIG_PYTHON
+
+2010-09-22  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	[admin] updated TODO list
+
+2010-09-22  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	[admin] initial autotoolization of python bindings
+	*configure.ac: add SWIG and Python macros
+	*bindings/Makefile.am: new file, only points to bindings/python, don't know if
+	 it is really necessary, but one day we'll have other bindings and it might be useful
+	*bindings/python/Makefile.am: new file, generate wrapper and build python module
+	*autogen.sh: add -I m4 flag
+	*m4/ax*.m4: swig macros from Autotools archive
+
+2010-09-20  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	added python example
+	*examples/load_dwg.py: load a DWG file and print some data
+
+2010-09-20  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	[w] added dwg_add_object function
+	*src/encode.c: added function that will call delegate object/entity encoding
+	 function based on object type. Not sure if works yet since dwg_encode_chains
+	 needs to be reviewed to call it at the correct point. Don't merge to trunk,
+	 it barely builds.
+
+2010-09-20  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	fixed wrong function prototypes
+	*dwg.h: wrong function prototypes - detected by SWIG
+
+2010-09-20  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	[b] added python language bindings
+	*bindings/dwg.i: SWIG interface to libredwg
+	*bindings/python/Makefile: Makefile updated with target to generate wrapper
+	 and build Python module (to be removed soon when I will integrate SWIG with
+	 Autotools.
+	*bindings/python/libredwgmodule.c: removed unnecessary wrapper. Wrapper is
+	 automatically generated by SWIG.
+
+2010-08-30  Anderson Pierre Cardoso  <apierre.cardoso@gmail.com>
+
+	applied the patch from Rob Vermaas <rob.vermaas@gmail.com>
+	* src/Makefile.am
+
+2010-08-19  Anderson Pierre Cardoso  <apierre.cardoso@gmail.com>
+
+	[w] encode_object now encode non-null stuff
+	* src/encode.c
+
+2010-08-18  Anderson Pierre Cardoso  <apierre.cardoso@gmail.com>
+
+	[w] worked more on the dwg_encode_entity function
+	* src/encode.c
+
+2010-08-17  Anderson Pierre Cardoso  <apierre.cardoso@gmail.com>
+
+	[w]quick fix in encode_entitys
+	* src/encode.c
+
+2010-08-16  Anderson Pierre Cardoso  <apierre.cardoso@gmail.com>
+
+	encoding null objects (OxOO), for validate the file structure
+	* src/encode.c
+
+2010-08-13  Anderson Pierre Cardoso  <apierre.cardoso@gmail.com>
+
+	[w]added common_entity_handle in encode.c
+	* src/decode.c
+	* src/encode.c
+	* src/common_entity_handle_data.spec; new
+
+2010-08-13  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	[w] fixing handle encoding macros
+	*src/encode.c: rewrote FIELD_HANDLE macro, removed dwg_encode_handleref*()
+
+2010-08-10  Anderson Pierre Cardoso  <apierre.cardoso@gmail.com>
+
+	[w] added some entry checking and usage warning for the rewrite.c test
+	* examples/rewrite.c
+
+2010-08-10  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	[w] cleaning up handle encoding
+	*src/encode.c: cleaned up dwg_encode_handleref, write supposedly existing ref->handleref
+
+2010-08-10  Anderson Pierre Cardoso  <apierre.cardoso@gmail.com>
+
+	cleaned the warnings during compiling
+	* src/enode.c
+	* src/decode.c
+	* src/dwg.c
+
+2010-08-09  Anderson Pierre Cardoso  <apierre.cardoso@gmail.com>
+
+	cleaned a duplicated macro (XDICOBJHANDLE)
+	* src/encode.c : 125
+
+2010-08-09  Anderson Pierre Cardoso  <apierre.cardoso@gmail.com>
+
+	added some macros and the encode_commom_entity_handle function
+	* src/encode.c
+
+2010-08-09  Anderson Pierre Cardoso  <apierre.cardoso@gmail.com>
+
+	cleaned duplicated header
+	* src/bits.c
+
+2010-08-09  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
+
+	[admin] Fixed missing file header
+	*src/header_variables.spec: added missing copyright header
+
+2010-08-07  Anderson Pierre Cardoso  <apierre.cardoso@gmail.com>
+
+	started to add some handle functions in encode (not fully working yet)
+	* src/encode.c; func: macro FIELD_HANDLE,  dwg_encode_handleref_with_code,  dwg_encode_handleref
+
+2010-08-02  Anderson Pierre Cardoso  <apierre.cardoso@gmail.com>
+
+	minor changes in encode.c and rewrite.c
+	* src/encode.c
+	* examples/rewrite.c
+
+2010-07-23  Anderson Pierre Cardoso  <apierre.cardoso@gmail.com>
+
+	copy and pasted the header_variables spec on a header file and included it on the encode.c and decode.c
+	*  src/encode.c;  changed
+	*  src/decode.c;  changed
+	*  src/header_variables.spec; added
+
+2010-07-23  Thien-Thi Nguyen  <ttn@gnuvola.org>
+
+	[r] Fix typo in version codes array shape.
+	* common.h (version_codes): Say "[8][7]", not "[7][8]".
+	* common.c (version_codes): Likewise.
+
+2010-07-23  Thien-Thi Nguyen  <ttn@gnuvola.org>
+
+	[admin] Rename configure.in to configure.ac.
+	* configure.ac: Rename from configure.in.
+
+2010-07-23  Thien-Thi Nguyen  <ttn@gnuvola.org>
+
+	[admin] Bump create-changelog version to "1.2".
+	* build-aux/create-changelog (version): Bump to "1.2"; augment history.
+
+2010-07-23  Thien-Thi Nguyen  <ttn@gnuvola.org>
+
+	[admin] Add create-changelog option úÙÚ¯--copyright WHOúÙÚ˘.
+	* build-aux/create-changelog (copyright-notice): New defvar.
+	<option parsing>: Set úÙÚ¯copyright-noticeúÙÚ˘ if given úÙÚ¯-cúÙÚ˘ or úÙÚ¯--copyrightúÙÚ˘.
+	<output>: If set, append úÙÚ¯copyright-noticeúÙÚ˘.
+
+2010-07-23  Thien-Thi Nguyen  <ttn@gnuvola.org>
+
+	[admin] Direct create-changelog "Generating..." message to stderr.
+	* build-aux/create-changelog (fso): Add docstring.
+	Use úÙÚ¯messageúÙÚ˘ to output "Generating...".
+
+2010-07-23  Thien-Thi Nguyen  <ttn@gnuvola.org>
+
+	[admin] Filter ChangeLog entries with titles ending in "; nfc" (no dot).
+	* build-aux/create-changelog: Filter entries with titles
+	ending in "; nfc" (no dot) in addition to "; nfc." (with dot).
+
+2010-07-21  Anderson Pierre Cardoso  <apierre.cardoso@gmail.com>
+
+	added a test program for the write support. It loads a dwg file and try to rewrite it
+	*  examples/rewrite.c
+
 2010-07-21  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
 
 	[r] Initial R2010 support
@@ -1297,7 +2733,8 @@ Generating full history
 
 2009-06-06  Felipe Corr√™a da Silva Sanches  <juca@members.fsf.org>
 
-	boilerplate code: adding prototypes for every encoding functions (even the ones not implemented yet)
+	boilerplate code: adding prototypes for every encoding functions,
+        even the ones not implemented yet.
 
 2009-06-06  Felipe Corr√™a da Silva Sanches  <juca@members.fsf.org>
 
@@ -1329,7 +2766,8 @@ Generating full history
 
 2009-06-06  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
 
-	Read support for SOLID, SHAPE, TRACE and POLYLINE_PFACE/MESH entities. Minor code reviews.
+	Read support for SOLID, SHAPE, TRACE and POLYLINE_PFACE/MESH
+        entities. Minor code reviews.
 
 2009-06-06  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
 
@@ -1345,7 +2783,9 @@ Generating full history
 
 2009-06-05  Felipe Corr√™a da Silva Sanches  <juca@members.fsf.org>
 
-	translating and starting to generalize object parsing to more versions of DWG. It needs a code review. It is an initial incomplete implementation.
+	translating and starting to generalize object parsing to more
+        versions of DWG. It needs a code review. It is an initial
+        incomplete implementation.
 
 2009-06-05  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
 
@@ -1353,7 +2793,8 @@ Generating full history
 
 2009-06-05  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
 
-	Adding (draft) write support for many entities. Still needs some testing. Check "flag conditions" in some entities.
+	Adding (draft) write support for many entities. Still needs some
+        testing. Check "flag conditions" in some entities.
 
 2009-06-05  Felipe Corr√™a da Silva Sanches  <juca@members.fsf.org>
 
@@ -1393,11 +2834,13 @@ Generating full history
 
 2009-06-04  Felipe Corr√™a da Silva Sanches  <juca@members.fsf.org>
 
-	incorporating print functions for DICTIONARY and BLOCK_CONTROL (ported from libdwg svn revision 26)
+	incorporating print functions for DICTIONARY and BLOCK_CONTROL
+        (ported from libdwg svn revision 26)
 
 2009-06-03  Felipe Corr√™a da Silva Sanches  <juca@members.fsf.org>
 
-	adding decoding of Entity_BLOCK_CONTROL and Entity_DICTIONARY based on (ported from) recent libdwg svn commit
+	adding decoding of Entity_BLOCK_CONTROL and Entity_DICTIONARY
+        based on (ported from) recent libdwg svn commit
 
 2009-06-03  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
 
@@ -1417,11 +2860,14 @@ Generating full history
 
 2009-06-03  Felipe Corr√™a da Silva Sanches  <juca@members.fsf.org>
 
-	*implementing version dependant behaviour for bit-thickness (read and write functions) *also (obviously) translating a bit more from Esperanto
+	*implementing version dependant behaviour for bit-thickness (read
+        and write functions) *also (obviously) translating a bit more from
+        Esperanto
 
 2009-06-03  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
 
-	added structs for new entities: DIMENSION_* and SPLINE (no underlying code though)
+	added structs for new entities: DIMENSION_* and SPLINE (no
+        underlying code though)
 
 2009-06-03  Felipe Corr√™a da Silva Sanches  <juca@members.fsf.org>
 
@@ -1433,11 +2879,13 @@ Generating full history
 
 2009-06-03  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
 
-	translate and add review fields (R2000 only) of structs - until LINE (19) (addition to last review accidentally not committed)
+	translate and add review fields (R2000 only) of structs - until
+        LINE (19) (addition to last review accidentally not committed)
 
 2009-06-03  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
 
-	translate and add review fields (R2000 only) of structs - until LINE (19)
+	translate and add review fields (R2000 only) of structs - until
+        LINE (19)
 
 2009-06-03  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
 
@@ -1481,11 +2929,15 @@ Generating full history
 
 2009-06-02  Felipe Corr√™a da Silva Sanches  <juca@members.fsf.org>
 
-	* Moving print functions to a separate file * Making all print functions public in the API
+	* Moving print functions to a separate file
+        * Making all print functions public in the API
 
 2009-06-02  Felipe Corr√™a da Silva Sanches  <juca@members.fsf.org>
 
-	* add version field to the Bit_Chain data structure so that bit decoding routines can be aware of the current DWG version. * Used this information to implement the version dependent behaviour of BitExtrusion.
+	* add version field to the Bit_Chain data structure so that bit
+        decoding routines can be aware of the current DWG version.
+        * Used this information to implement the version dependent
+        behaviour of BitExtrusion.
 
 2009-06-02  Felipe Corr√™a da Silva Sanches  <juca@members.fsf.org>
 
@@ -1505,7 +2957,8 @@ Generating full history
 
 2009-06-02  Felipe Corr√™a da Silva Sanches  <juca@members.fsf.org>
 
-	adding dwg_free(Dwg_Structure*); to free the dinamically allocated Dwg_Section vector
+	adding dwg_free(Dwg_Structure*); to free the dynamically allocated
+        Dwg_Section vector
 
 2009-06-02  Felipe Corr√™a da Silva Sanches  <juca@members.fsf.org>
 
@@ -1513,7 +2966,9 @@ Generating full history
 
 2009-06-02  Felipe Corr√™a da Silva Sanches  <juca@members.fsf.org>
 
-	translating some comments. removing the limit of only 6 sections in the file header. Added dynamic allocation of the vector of Dwg_Section structs.
+	translating some comments. removing the limit of only 6 sections
+        in the file header. Added dynamic allocation of the vector of
+        Dwg_Section structs.
 
 2009-06-01  Felipe Corr√™a da Silva Sanches  <juca@members.fsf.org>
 
@@ -1529,7 +2984,9 @@ Generating full history
 
 2009-06-01  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
 
-	Changing binary names from libdwg.{a,la,so} to libredwg.{a,la,so} to avoid conflicts between libdwg and libredwg; upgrading libtool macros
+	Changing binary names from libdwg.{a,la,so} to libredwg.{a,la,so}
+        to avoid conflicts between libdwg and libredwg; upgrading libtool
+        macros
 
 2009-06-01  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
 
@@ -1537,7 +2994,11 @@ Generating full history
 
 2009-06-01  Felipe Corr√™a da Silva Sanches  <juca@members.fsf.org>
 
-	incorporating libdwg recent commits: * an initial postscript generator * a DWG embedded thumbnail fetcher * some new public functions in the API to read document and drawing dimensions
+	incorporating libdwg recent commits:
+        * an initial postscript generator
+        * a DWG embedded thumbnail fetcher
+        * some new public functions in the API to read document and
+        drawing dimensions
 
 2009-06-01  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
 
@@ -1545,11 +3006,14 @@ Generating full history
 
 2009-06-01  Felipe Corr√™a da Silva Sanches  <juca@members.fsf.org>
 
-	* generalized dwg_var_map so that it works for any DWG version. * implemented regression test to assure that it works at least for DWG version R2000
+	* generalized dwg_var_map so that it works for any DWG version.
+        * implemented regression test to assure that it works at least for
+        DWG version R2000
 
 2009-05-31  Felipe Corr√™a da Silva Sanches  <juca@members.fsf.org>
 
-	* preparing for broader compatibility of further DWG versions * throwing error messages to stderr instead of stdout
+	* preparing for broader compatibility of further DWG versions
+        * throwing error messages to stderr instead of stdout
 
 2009-05-31  Felipe Corr√™a da Silva Sanches  <juca@members.fsf.org>
 
@@ -1561,7 +3025,8 @@ Generating full history
 
 2009-05-31  Felipe Corr√™a da Silva Sanches  <juca@members.fsf.org>
 
-	incorporating patch from issue #1: simple test that outputs SVG content.
+	incorporating patch from issue #1: simple test that outputs SVG
+        content.
 
 2009-05-30  Felipe Corr√™a da Silva Sanches  <juca@members.fsf.org>
 
@@ -1621,7 +3086,8 @@ Generating full history
 
 2009-05-30  Felipe Corr√™a da Silva Sanches  <juca@members.fsf.org>
 
-	End of a 'coding' session at pitanga's home. (translating: nomo -> name)
+	End of a 'coding' session at pitanga's home. (translating: nomo ->
+        name)
 
 2009-05-30  Felipe Corr√™a da Silva Sanches  <juca@members.fsf.org>
 
@@ -1629,7 +3095,8 @@ Generating full history
 
 2009-05-30  Felipe Corr√™a da Silva Sanches  <juca@members.fsf.org>
 
-	Comment regarding possible translations of 'gxisrandigo': 'snap' or 'trim'
+	Comment regarding possible translations of 'gxisrandigo': 'snap'
+        or 'trim'
 
 2009-05-30  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
 
@@ -1725,7 +3192,9 @@ Generating full history
 
 2009-05-17  Felipe Corr√™a da Silva Sanches  <juca@members.fsf.org>
 
-	* adding encode.c to compile rules (Makefile*) and fixing compile of it. * translating: DVG => DWG
+	* adding encode.c to compile rules (Makefile*) and fixing compile
+        of it.
+        * translating: DVG => DWG
 
 2009-05-17  Felipe Corr√™a da Silva Sanches  <juca@members.fsf.org>
 
@@ -1759,8 +3228,8 @@ Generating full history
 
 	initial code based on libdwg (http://libdwg.sourceforge.net/en/index.html)
 
-2009-05-16  (no author)  <(no author)@889af040-426b-11de-998b-8fedbbe774c7>
+2009-05-16  Felipe Corr√™a da Silva Sanches <juca@members.fsf.org>
 
 	Initial directory structure.
 
-
+----------
