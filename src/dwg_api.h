@@ -1,12 +1,25 @@
+/* libredwg API example */
+/* This is the only file an user of the API needs to include */
+/*                                                                           */
+/*  Copyright (C) 2009, 2010 Free Software Foundation, Inc.                  */
+/*                                                                           */
+/*  This library is free software, licensed under the terms of the GNU       */
+/*  General Public License as published by the Free Software Foundation,     */
+/*  either version 3 of the License, or (at your option) any later version.  */
+/*  You should have received a copy of the GNU General Public License        */
+/*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
+/*****************************************************************************/
 
-// libredwg API example
-// This is the only file an user of the API needs to include
+#ifndef _DWG_API_H_
+#define _DWG_API_H_
 
-#ifndef _API_H_
-#define _API_H_
-
+#include <stdio.h>
 #include "dwg.h"
-#include "logging.h"
+
+#ifndef LOG_ERROR
+# define LOG_ERROR(msg,name,type) \
+   fprintf(stderr, msg, name, (type))
+#endif
 
 typedef struct dwg_point_3d
 {
@@ -72,7 +85,7 @@ Dwg_Entity_##token *dwg_object_to_##token(Dwg_Object *obj) \
       } \
     else \
       { \
-        LOG_ERROR("invalid %s type: got 0x%x", #token, obj ? obj->type : 0) \
+        LOG_ERROR("invalid %s type: got 0x%x", #token, obj ? obj->type : 0); \
       } \
   return ret_obj; \
 }
@@ -90,7 +103,7 @@ Dwg_Object_##token *dwg_object_to_##token(Dwg_Object *obj) \
       } \
     else \
       { \
-        LOG_ERROR("invalid %s type: got 0x%x", #token, obj ? obj->type : 0) \
+        LOG_ERROR("invalid %s type: got 0x%x", #token, obj ? obj->type : 0); \
       } \
   return ret_obj; \
 }
