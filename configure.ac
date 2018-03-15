@@ -16,6 +16,9 @@ AM_INIT_AUTOMAKE([1.12.2 gnu no-define serial-tests dist-xz])
 dnl libretoolize asked me for it
 AC_CONFIG_MACRO_DIR([m4])
 
+# Check if automake supports 'pretty' builds, if so enable them by default
+m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+
 dnl create a config.h file (Automake will add -DHAVE_CONFIG_H)
 AM_CONFIG_HEADER([src/config.h])
 

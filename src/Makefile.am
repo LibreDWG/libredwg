@@ -28,30 +28,36 @@ libredwg_la_SOURCES = \
         decode_r2007.c \
 	encode.c \
         print.c \
-	dwg_api.c
+	dwg_api.c \
+	$(EXTRA_HEADERS)
 #       encode_r2007.c
+
 libredwg_la_LIBADD = -lm
 libredwg_la_LDFLAGS = -version-info 0:0:0 -no-undefined
 
 include_HEADERS = \
 	dwg.h \
 	dwg_api.h
-
-.c.i:
-	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
-	$(COMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -E -o $@ $<
-
-EXTRA_DIST = \
+EXTRA_HEADERS = \
 	dwg.spec \
         header_variables.spec \
         common_entity_handle_data.spec \
-	$(include_HEADERS) \
+        header.spec \
+        auxheader.spec \
 	common.h \
 	bits.h \
 	decode.h \
 	encode.h \
 	logging.h \
         print.h
+
+EXTRA_DIST = \
+	$(include_HEADERS) \
+	$(EXTRA_HEADERS)
+
+.c.i:
+	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
+	$(COMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -E -o $@ $<
 
 # emacs flymake-mode
 check-syntax:
