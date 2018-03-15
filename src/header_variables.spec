@@ -46,16 +46,16 @@
       FIELD_BLL(requiredversions);
     }
 
-  FIELD_BD (unknown_0);
-  FIELD_BD (unknown_1);
-  FIELD_BD (unknown_2);
-  FIELD_BD (unknown_3);
-  FIELD_TV (unknown_4);
-  FIELD_TV (unknown_5);
-  FIELD_TV (unknown_6);
-  FIELD_TV (unknown_7);
-  FIELD_BL (unknown_8);
-  FIELD_BL (unknown_9);
+  FIELD_BD (unknown_0); // max double number? 412148564080.0
+  FIELD_BD (unknown_1); // default extrusion.x? 1.0
+  FIELD_BD (unknown_2); // default extrusion.y? 1.0
+  FIELD_BD (unknown_3); // default extrusion.z? 1.0
+  FIELD_TV (unknown_4); // ""
+  FIELD_TV (unknown_5); // ""
+  FIELD_TV (unknown_6); // ""
+  FIELD_TV (unknown_7); // ""
+  FIELD_BL (unknown_8); // 24
+  FIELD_BL (unknown_9); // 0
 
   VERSIONS(R_13, R_14)
     {
@@ -405,6 +405,7 @@
     {
       FIELD_BS (DIMADEC);
       FIELD_BS (DIMDEC);
+      FIELD_BS (DIMTDEC);
       FIELD_BS (DIMALTU);
       FIELD_BS (DIMALTTD);
       FIELD_BS (DIMAUNIT);
@@ -413,7 +414,6 @@
       FIELD_BS (DIMDSEP);
       FIELD_BS (DIMTMOVE);
       FIELD_BS (DIMJUST);
-      /*FIELD_BS (DIMJUST); */ //TESTE?
       FIELD_B (DIMSD1);
       FIELD_B (DIMSD2);
       FIELD_BS (DIMTOLJ);
@@ -587,4 +587,5 @@
 
   /* TODO: This really is the section[0] CRC not related to the header */
   FIELD_RS (CRC);
+
 
