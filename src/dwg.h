@@ -240,7 +240,7 @@ typedef enum DWG_OBJECT_TYPE
      LAYER_INDEX, LAYOUT, LWPLINE, MATERIAL, MLEADER, MLEADERSTYLE,
      OLE2FRAME, PLACEHOLDER, PLOTSETTINGS, RASTERVARIABLES, SCALE,
      SORTENTSTABLE, SPATIAL_FILTER, SPATIAL_INDEX, TABLEGEOMETRY,
-     TABLESTYLE, VBA_PROJECT, VISUALSTYLE, WIPEOUTVARIABLE, XRECORD
+     TABLESTYLE, VBA_PROJECT, VISUALSTYLE, WIPEOUT, WIPEOUTVARIABLE, XRECORD
    */
 } Dwg_Object_Type;
 
@@ -2707,18 +2707,8 @@ typedef struct _dwg_object_SPATIAL_INDEX
   BITCODE_H xdicobjhandle;
 } Dwg_Object_SPATIAL_INDEX;
 
-/* NOT SURE ABOUT THIS ONE (IS IT OBJECT OR ENTITY?): */
 /**
- Class WIPEOUTVARIABLE (varies)
- */
-typedef struct _dwg_object_WIPEOUTVARIABLE
-{
-  char dummy;
-  /* TODO */
-} Dwg_Object_WIPEOUTVARIABLE;
-
-/**
- Class WIPEOUT (varies)
+ Class WIPEOUT (varies, 504)
  undocumented
  */
 typedef struct _dwg_object_WIPEOUT
@@ -2726,6 +2716,15 @@ typedef struct _dwg_object_WIPEOUT
   char dummy;
   /* TODO */
 } Dwg_Object_WIPEOUT;
+
+/**
+ Class WIPEOUTVARIABLE (varies, 505)
+ */
+typedef struct _dwg_object_WIPEOUTVARIABLE
+{
+  char dummy;
+  /* TODO */
+} Dwg_Object_WIPEOUTVARIABLE;
 
 /**
  Class VISUALSTYLE (varies)
@@ -2895,6 +2894,7 @@ typedef struct _dwg_object_object
     Dwg_Object_XRECORD *XRECORD;
     Dwg_Object_PLACEHOLDER *PLACEHOLDER;
     Dwg_Object_VBA_PROJECT *VBA_PROJECT;
+    Dwg_Object_WIPEOUT *WIPEOUT;
     Dwg_Object_WIPEOUTVARIABLE *WIPEOUTVARIABLE;
     Dwg_Object_VISUALSTYLE *VISUALSTYLE;
   } tio;
@@ -3024,7 +3024,7 @@ typedef struct _dwg_struct
     BITCODE_RC   dwg_version;
     BITCODE_RC   maint_version;
     BITCODE_RS   codepage;
-    BITCODE_RC   zero_3[3];            /* R2004+ */
+    BITCODE_RC   unknown_3[3];         /* 0 1f 8, R2004+ */
     BITCODE_RL   security_type;        /* R2004+ */
     BITCODE_RL   rl_1c_address;        /* R2004+ */
     BITCODE_RL   summary_info_address; /* R2004+ */

@@ -2478,6 +2478,13 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       dwg_decode_WIPEOUTVARIABLE(dat, obj);
       return 0;
     }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "WIPEOUT"))
+    {
+      // TODO
+      LOG_WARN("Unhandled Object/Class %s\n", dwg->dwg_class[i].dxfname);
+      dwg_decode_WIPEOUT(dat, obj);
+      return 0;
+    }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "CELLSTYLEMAP"))
     {
       // TODO
