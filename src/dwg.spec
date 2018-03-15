@@ -65,7 +65,7 @@ DWG_ENTITY (TEXT);
   SINCE(R_2000)
     {
       /* We assume that the user (the client application)
-      is responsible for taking care of properly updating the dataflags field 
+      is responsible for taking care of properly updating the dataflags field
       which indicates which fields in the data structures are valid and which are
       undefined */
 
@@ -110,7 +110,7 @@ DWG_ENTITY (TEXT);
           FIELD(generation, BS);
         }
 
-      if (!(FIELD_VALUE(dataflags) & 0x40)) 
+      if (!(FIELD_VALUE(dataflags) & 0x40))
         {
           FIELD(horiz_alignment, BS);
         }
@@ -149,7 +149,7 @@ DWG_ENTITY(ATTRIB);
   SINCE(R_2000)
     {
       /* We assume that the user (the client application)
-      is responsible for taking care of properly updating the dataflags field 
+      is responsible for taking care of properly updating the dataflags field
       which indicates which fields in the data structures are valid and which are
       undefined */
 
@@ -231,7 +231,7 @@ DWG_ENTITY(ATTDEF);
   SINCE(R_2000)
     {
       /* We assume that the user (the client application)
-      is responsible for taking care of properly updating the dataflags field 
+      is responsible for taking care of properly updating the dataflags field
       which indicates which fields in the data structures are valid and which are
       undefined */
 
@@ -344,7 +344,7 @@ DWG_ENTITY(INSERT);
             }
           else if (FIELD_VALUE(scale_flag) == 2)
             {
-              FIELD(scale.x, RD); 
+              FIELD(scale.x, RD);
               FIELD_VALUE(scale.y) = FIELD_VALUE(scale.x);
               FIELD_VALUE(scale.z) = FIELD_VALUE(scale.x);
             }
@@ -563,7 +563,7 @@ compression technique described in the spec. --Juca */
   DECODER
     {
       FIELD(start_width, BD);
- 
+
       if (FIELD_VALUE(start_width) < 0)
         {
           FIELD_VALUE(start_width) = -FIELD_VALUE(start_width);
@@ -1269,7 +1269,7 @@ void decode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
   int total_size=0;
   int num_blocks=0;
   FIELD_B(acis_empty);
-  
+
   if (!FIELD_VALUE(acis_empty))
     {
       FIELD_B (unknown);
@@ -1480,7 +1480,7 @@ DWG_OBJECT(DICTIONARY);
 DWG_ENTITY_END
 
 DWG_OBJECT(DICTIONARYWDLFT);
-	  
+
   FIELD(numitems, BL);
 
   VERSION(R_14)
@@ -1495,18 +1495,33 @@ DWG_OBJECT(DICTIONARYWDLFT);
     }
 
   FIELD_VECTOR(text, TV, numitems);
-  
+
   FIELD_HANDLE(parenthandle, 4);
   REACTORS(4);
   XDICOBJHANDLE(3);
-  
-  HANDLE_VECTOR(itemhandles, numitems, 2); 
-  
+
+  HANDLE_VECTOR(itemhandles, numitems, 2);
+
   FIELD_HANDLE(defaultid, 5); // DXF:340 - default object id (one of the itemhandles)
-    
+
 DWG_OBJECT_END
 
-//(43): Unknown
+/*(43) not seen */
+DWG_ENTITY(OLEFRAME);
+
+  FIELD_BS(flags);
+
+  SINCE(R_2000)
+    {
+      FIELD_BS(mode);
+    }
+
+  FIELD_BL(data_length);
+  FIELD_VECTOR(data, RC, data_length);
+
+  COMMON_ENTITY_HANDLE_DATA;
+
+DWG_ENTITY_END
 
 /*(44)*/
 DWG_ENTITY(MTEXT);
@@ -1705,9 +1720,9 @@ DWG_OBJECT(BLOCK_HEADER);
   SINCE(R_2000)
     {
       FIELD_INSERT_COUNT(insert_count, RL);
-      FIELD(block_description, TV);
+      FIELD_TV(block_description);
 
-      FIELD(size_of_preview_data, BL);
+      FIELD_BL(size_of_preview_data);
       FIELD_VECTOR(binary_preview_data, RC, size_of_preview_data);
     }
 
@@ -1776,7 +1791,7 @@ DWG_OBJECT(LAYER);
 
   SINCE(R_2000)
     {
-      FIELD(values, BS);      
+      FIELD(values, BS);
     }
 
   FIELD_CMC(color);
@@ -1850,7 +1865,6 @@ DWG_OBJECT_END
 
 /*(57)*/
 DWG_OBJECT(LTYPE);
-  char R2007plus_text_area_is_present = 0;
 
   FIELD(entry_name, TV);
   FIELD(_64_flag, B);
@@ -1870,8 +1884,8 @@ DWG_OBJECT(LTYPE);
       FIELD(dash[rcount].scale, BD);
       FIELD(dash[rcount].rotation, BD);
       FIELD(dash[rcount].shape_flag, BS);
-      if (FIELD_VALUE(dash[rcount].shape_flag) & 0x02)
-        R2007plus_text_area_is_present = 1;
+      if (FIELD_VALUE(dash[rcount].shape_flag) & 0x2)
+        FIELD_VALUE(text_area_is_present) = 1;
     }
 
   UNTIL(R_2004)
@@ -1880,7 +1894,7 @@ DWG_OBJECT(LTYPE);
     }
   LATER_VERSIONS
     {
-      if (R2007plus_text_area_is_present)
+      if (FIELD_VALUE(text_area_is_present))
         {
           FIELD_VECTOR_N(strings_area, RC, 512);
         }
@@ -1923,12 +1937,7 @@ DWG_OBJECT(VIEW);
   FIELD(lens_legth, BD);
   FIELD(front_clip, BD);
   FIELD(back_clip, BD);
-  
-  //FIELD(view_mode, RC); //??? 4bits
-  bit_read_B(dat);
-  bit_read_B(dat);
-  bit_read_B(dat);
-  bit_read_B(dat);
+  FIELD(view_mode, 4BITS);
 
   SINCE(R_2000)
     {
@@ -1940,7 +1949,7 @@ DWG_OBJECT(VIEW);
   SINCE(R_2000)
     {
       FIELD(associated_ucs, B);
-      
+
       if (FIELD_VALUE(associated_ucs) & 1)
         {
           FIELD_3BD(origin);
@@ -1948,7 +1957,7 @@ DWG_OBJECT(VIEW);
           FIELD_3BD(y_direction);
           FIELD(elevation, BD);
           FIELD(orthographic_view_type, BS);
-        }      
+        }
     }
 
   SINCE(R_2007)
@@ -2013,7 +2022,7 @@ DWG_OBJECT(UCS);
   SINCE(R_2000)
     {
       FIELD_HANDLE(base_ucs_handle, ANYCODE);
-      FIELD_HANDLE(unknown, ANYCODE); 
+      FIELD_HANDLE(unknown, ANYCODE);
     }
 DWG_OBJECT_END
 
@@ -2023,7 +2032,7 @@ DWG_OBJECT(VPORT_CONTROL);
   FIELD_BS (num_entries);
   FIELD_HANDLE (null_handle, 4);
   XDICOBJHANDLE(3);
-  HANDLE_VECTOR(vports, num_entries, 2); 
+  HANDLE_VECTOR(vports, num_entries, 2);
 
 DWG_OBJECT_END
 
@@ -2284,7 +2293,7 @@ DWG_OBJECT(DIMSTYLE);
       FIELD_B (DIMTOFL);
       FIELD_B (DIMSAH);
       FIELD_B (DIMTIX);
-      FIELD_B (DIMSOXD);	  
+      FIELD_B (DIMSOXD);
       FIELD_CMC (DIMCLRD);
       FIELD_CMC (DIMCLRE);
       FIELD_CMC (DIMCLRT);
@@ -2322,10 +2331,10 @@ DWG_OBJECT(DIMSTYLE);
 
   FIELD_B (unknown);
 
-  FIELD_HANDLE(dimstyle_control, 4);  
+  FIELD_HANDLE(dimstyle_control, 4);
   REACTORS(4);
   XDICOBJHANDLE(3);
-  FIELD_HANDLE(null_handle, 5);  
+  FIELD_HANDLE(null_handle, 5);
   FIELD_HANDLE(shapefile, 5); /* Text style (DIMTXSTY) */
 
   SINCE(R_2000)
@@ -2340,7 +2349,7 @@ DWG_OBJECT(DIMSTYLE);
     {
       FIELD_HANDLE(dimltype, ANYCODE);
       FIELD_HANDLE(dimltex1, ANYCODE);
-      FIELD_HANDLE(dimltex2, ANYCODE);     
+      FIELD_HANDLE(dimltex2, ANYCODE);
     }
 
 DWG_OBJECT_END
@@ -2420,7 +2429,7 @@ DWG_OBJECT(DICTIONARYVAR);
 
 DWG_OBJECT_END
 
-//pg.136
+//(78 + varies) pg.136
 DWG_ENTITY(HATCH);
 
   SINCE(R_2004)
@@ -2492,7 +2501,7 @@ DWG_ENTITY(HATCH);
                             {
                               FIELD_BD(paths[rcount].segs[rcount2].control_points[rcount3].weigth);
                             }
-                        }                      
+                        }
                       break;
                     default:
                       LOG_ERROR("Invalid type_status in HATCH entity\n")
@@ -2517,7 +2526,7 @@ DWG_ENTITY(HATCH);
       FIELD_BL(paths[rcount].num_boundary_obj_handles);
     }
 
-// TODO: incomplete parsing. check spec. 
+// TODO: incomplete parsing. check spec.
 
 DWG_OBJECT_END
 
@@ -2557,7 +2566,7 @@ DWG_ENTITY(IMAGE);
   else
     {
       FIELD(num_clip_verts, BL);
-      REPEAT(num_clip_verts, clip_verts, Dwg_Entity_IMAGE_clip_vert) 
+      REPEAT(num_clip_verts, clip_verts, Dwg_Entity_IMAGE_clip_vert)
         {
           FIELD_2RD(clip_verts[rcount]);
         }
@@ -2585,7 +2594,7 @@ DWG_OBJECT(IMAGEDEF);
 DWG_OBJECT_END
 
 //PG.143
-DWG_OBJECT(IMAGEDEFREACTOR);
+DWG_OBJECT(IMAGEDEF_REACTOR);
 
   FIELD_BL (class_version);
   FIELD_HANDLE (parent_handle, 4);
@@ -2704,7 +2713,7 @@ DWG_ENTITY(LWPLINE);
   if (FIELD_VALUE(flags) & 4)
     {
       FIELD_BD(const_width);
-    }    
+    }
   if (FIELD_VALUE(flags) & 8)
     {
       FIELD_BD(elevation);
@@ -2712,12 +2721,12 @@ DWG_ENTITY(LWPLINE);
   if (FIELD_VALUE(flags) & 2)
     {
       FIELD_BD(thickness);
-    }    
+    }
   if (FIELD_VALUE(flags) & 1)
     {
       FIELD_3BD(normal);
     }
-    
+
   FIELD_BL(num_points);
 
   if (FIELD_VALUE(flags) & 16)
@@ -2750,7 +2759,7 @@ DWG_ENTITY(LWPLINE);
 
 DWG_ENTITY_END
 
-//pg.149
+//(74+varies) pg.149
 DWG_ENTITY(OLE2FRAME);
 
   FIELD_BS(flags);
@@ -2772,8 +2781,103 @@ DWG_ENTITY(OLE2FRAME);
 
 DWG_ENTITY_END
 
+DWG_ENTITY(DUMMY);
+  FIELD_BS(flags);
+  LOG_INFO("TODO DUMMY\n");
+  COMMON_ENTITY_HANDLE_DATA;
 
-//pg.149
+DWG_ENTITY_END
+
+DWG_ENTITY(LONG_TRANSACTION);
+  FIELD_BS(flags);
+  LOG_INFO("TODO LONG_TRANSACTION\n");
+  COMMON_ENTITY_HANDLE_DATA;
+
+DWG_ENTITY_END
+
+//pg.276
+DWG_ENTITY(PROXY_LWPOLYLINE);
+
+  FIELD_RL(size);
+  FIELD_BS(flags);
+
+  if (FIELD_VALUE(flags) & 4)
+    {
+      FIELD_BD(const_width);
+    }
+  if (FIELD_VALUE(flags) & 8)
+    {
+      FIELD_BD(elevation);
+    }
+  if (FIELD_VALUE(flags) & 2)
+    {
+      FIELD_BD(thickness);
+    }
+  if (FIELD_VALUE(flags) & 1)
+    {
+      FIELD_3BD(normal);
+    }
+
+  FIELD_BL(num_points);
+
+  if (FIELD_VALUE(flags) & 16)
+    {
+      FIELD_BL(num_bulges);
+    }
+  if (FIELD_VALUE(flags) & 32)
+    {
+      FIELD_BL(num_widths);
+    }
+
+  VERSIONS(R_13,R_14)
+    {
+      FIELD_2RD_VECTOR(points, num_points);
+    }
+
+  SINCE(R_2000)
+    {
+      FIELD_2DD_VECTOR(points, num_points);
+    }
+
+  FIELD_VECTOR(bulges, BD, num_bulges);
+  REPEAT(num_widths, widths, Dwg_Entity_LWPLINE_width)
+    {
+      FIELD_BD(widths[rcount].start);
+      FIELD_BD(widths[rcount].end);
+    }
+
+  FIELD_RC(unknown_1);
+  FIELD_RC(unknown_2);
+  FIELD_RC(unknown_3);
+
+  COMMON_ENTITY_HANDLE_DATA;
+
+DWG_ENTITY_END
+
+//(498) pg.149
+DWG_ENTITY(PROXY_ENTITY);
+
+  SINCE(R_2000)
+    {
+      FIELD_BL (class_id);
+      FIELD_BL (object_drawing_format);
+      FIELD_B (original_data_format);
+
+      LOG_INFO("TODO PROXY_ENTITY data\n");
+      /*
+      FIELD_RC(*data);
+      FIELD_H(parenthandle);
+      FIELD_H(*reactors);
+      FIELD_H(*objid_object_handles);
+      FIELD_MS(size);
+      */
+    }
+
+  //TODO: figure out how to deal with the arbitrary size vector databits described on the spec
+
+DWG_ENTITY_END
+
+//(499) pg.149
 DWG_OBJECT(PROXY);
 
   SINCE(R_2000)
@@ -2781,12 +2885,71 @@ DWG_OBJECT(PROXY);
       FIELD_BL (class_id);
       FIELD_BL (object_drawing_format);
       FIELD_B (original_data_format);
+
+      LOG_INFO("TODO PROXY_OBJECT data\n");
+      /*
+      FIELD_RC(*data);
+      FIELD_H(parenthandle);
+      FIELD_H(*reactors);
+      FIELD_H(*objid_object_handles);
+      */
     }
 
   //TODO: figure out how to deal with the arbitrary size vector databits described on the spec
-
 DWG_OBJECT_END
 
+DWG_OBJECT(CELLSTYLEMAP);
+
+  SINCE(R_2007)
+    {
+        FIELD_BL(num_cells);
+        REPEAT_N((long)FIELD_VALUE(num_cells), cells, Dwg_Object_CELLSTYLEMAP_Cell)
+          {
+            LOG_INFO("TODO CELLSTYLEMAP TABLE_Cell struct\n");
+            // TODO read the TABLE_Cell struct
+            FIELD_BL(cells[rcount].id);
+            FIELD_BL(cells[rcount].class);
+            FIELD_TV(cells[rcount].name);
+          }
+    }
+DWG_OBJECT_END
+
+DWG_OBJECT(FIELD);
+
+  SINCE(R_2004)
+    {
+        LOG_INFO("TODO FIELD\n");
+        FIELD_TV(id);
+        FIELD_TV(code);
+
+        FIELD_BL(num_childhdl);
+        HANDLE_VECTOR(childhdl, num_childhdl, 360);
+        FIELD_BL(num_objects);
+        HANDLE_VECTOR(objects, num_objects, 331);
+
+        UNTIL(R_2004)
+        {
+            BITCODE_TV format;
+        }
+
+        FIELD_BL(evaluation_option);
+        FIELD_BL(filing_option);
+        FIELD_BL(field_state);
+        FIELD_BL(evaluation_status);
+        FIELD_BL(evaluation_error_code);
+        FIELD_TV(evaluation_error_msg);
+        FIELD(value, BL); /* TODO value p20.4.99 */
+        FIELD_TV(value_string);
+        FIELD_TV(value_string_length);
+
+        FIELD_BL(num_childval);
+        REPEAT_N((long)FIELD_VALUE(num_childval), childval, Dwg_Object_FIELD_ChildValue)
+        {
+            FIELD_TV(childval[rcount].key);
+            FIELD(childval[rcount].value, BL); /* TODO value p20.4.99 */
+        }
+    }
+DWG_OBJECT_END
 
 //pg.150
 DWG_OBJECT(RASTERVARIABLES);
@@ -3502,7 +3665,7 @@ DWG_ENTITY(TABLE);
 
 DWG_ENTITY_END
 
-//pg.164
+//(79 + varies) pg.164
 DWG_OBJECT(XRECORD);
 
   DECODER
@@ -3522,22 +3685,41 @@ DWG_OBJECT(XRECORD);
 	//XXX how to known when I run out of data?
 	//BITCODE_H* objid_handles;
     }
-    
+
 DWG_OBJECT_END
 
+//(80 + varies)
 DWG_OBJECT(PLACEHOLDER);
 
   // no own data members
-  
+
   FIELD_HANDLE(parenthandle, 4);
   REACTORS(4);
   XDICOBJHANDLE(3);
-    
+
 DWG_OBJECT_END
+
+// guessing:
+// VBA_PROJECT (81 + varies)
+// in its own section DWG_OBJECT(VBA_PROJECT);
 
 ////////////////////
 // These objects are not described in the spec:
 //
-// WIPEOUTVARIABLE
-// VBA_PROJECT
-//
+
+DWG_OBJECT(WIPEOUTVARIABLE);
+
+  SINCE(R_2004)
+    {
+        LOG_INFO("TODO WIPEOUTVARIABLE\n");
+    }
+DWG_OBJECT_END
+
+DWG_OBJECT(VISUALSTYLE);
+
+  SINCE(R_2007)
+    {
+        LOG_INFO("TODO VISUALSTYLE (hard-pointer to H DICTIONARY_VISUALSTYLE)\n");
+    }
+DWG_OBJECT_END
+

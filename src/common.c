@@ -48,9 +48,18 @@ dwg_sentinel(Dwg_Sentinel s)
   return (sentinels[s]);
 }
 
-char version_codes[10][7] =
-  { "------", /* R_BEFORE */
-    /* R_13,   R_14,    R_2000,   R_2004,   R_2007, */
+char version_codes[DWG_VERSIONS][7] =
+  { "MC0.0",   /* DWG Release 1.1 */
+    "AC1.2",   /* DWG Release 1.2 */
+    "AC1.4",   /* DWG Release 1.4 */
+    "AC1.50",  /* DWG Release 2.0 */
+    "AC2.10",  /* DWG Release 2.10 */
+    "AC1002",  /* DWG Release 2.5 */
+    "AC1003",  /* DWG Release 2.6 */
+    "AC1004",  /* DWG Release 9 */
+    "AC1006",  /* DWG Release 10 */
+    "AC1009",  /* DWG Release 11/12 (LT R1/R2) */
+    /* R_13,   R_14,    R_2000,   R_2004,   R_2007 */
     "AC1012", "AC1014", "AC1015", "AC1018", "AC1021",
     /* R2010, R_2013,   R_2018,   R_AFTER */
     "AC1024", "AC1027", "AC1032", "------"

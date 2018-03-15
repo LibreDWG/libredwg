@@ -244,7 +244,7 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "IMAGEDEF_REACTOR"))
     {
-      dwg_print_IMAGEDEFREACTOR(dat, obj);
+      dwg_print_IMAGEDEF_REACTOR(dat, obj);
       return 1;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "LAYER_INDEX"))
@@ -302,15 +302,39 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       dwg_print_TABLE(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "VBA_PROJECT"))
-    {
-//TODO:      dwg_print_VBA_PROJECT(dat, obj);
-      return 0;
-    }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "WIPEOUTVARIABLE"))
     {
-//TODO:      dwg_print_WIPEOUTVARIABLE(dat, obj);
+      // TODO
+      LOG_WARN("Unhandled Object/Class %s\n", dwg->dwg_class[i].dxfname);
+      dwg_print_WIPEOUTVARIABLE(dat, obj);
       return 0;
+    }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "VBA_PROJECT"))
+    {
+      LOG_ERROR("Unhandled Object VBA_PROJECT. Has its own section\n");
+      //dwg_print_VBA_PROJECT(dat, obj);
+      return 0;
+    }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "CELLSTYLEMAP"))
+    {
+      // TODO
+      LOG_WARN("Unhandled Object/Class %s\n", dwg->dwg_class[i].dxfname);
+      dwg_print_CELLSTYLEMAP(dat, obj);
+      return 0;
+    }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "VISUALSTYLE"))
+    {
+      // TODO
+      LOG_WARN("Unhandled Object/Class %s\n", dwg->dwg_class[i].dxfname);
+      dwg_print_VISUALSTYLE(dat, obj);
+      return 0;
+    }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "AcDbField")) //?
+    {
+      // TODO
+      LOG_WARN("Untested Object/Class %s\n", dwg->dwg_class[i].dxfname);
+      dwg_print_FIELD(dat, obj);
+      return 1;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "XRECORD"))
     {
@@ -540,6 +564,15 @@ dwg_print_object(Dwg_Object *obj)
     case DWG_TYPE_MLINESTYLE:
       dwg_print_MLINESTYLE(dat, obj);
       break;
+    case DWG_TYPE_OLE2FRAME:
+      dwg_print_OLE2FRAME(dat, obj);
+      break;
+    case DWG_TYPE_DUMMY:
+      dwg_print_DUMMY(dat, obj);
+      break;
+    case DWG_TYPE_LONG_TRANSACTION:
+      dwg_print_LONG_TRANSACTION(dat, obj);
+      break;
     case DWG_TYPE_LWPLINE:
       dwg_print_LWPLINE(dat, obj);
       break;
@@ -552,6 +585,16 @@ dwg_print_object(Dwg_Object *obj)
     case DWG_TYPE_PLACEHOLDER:
       dwg_print_PLACEHOLDER(dat, obj);
       break;
+    case DWG_TYPE_PROXY_ENTITY:
+      dwg_print_PROXY_ENTITY(dat, obj);
+      break;
+    case DWG_TYPE_OLEFRAME:
+      dwg_print_OLEFRAME(dat, obj);
+      break;
+    case DWG_TYPE_VBA_PROJECT:
+      LOG_ERROR("Unhandled Object VBA_PROJECT. Has its own section\n");
+      //dwg_print_VBA_PROJECT(dat, obj);
+      break;
     case DWG_TYPE_LAYOUT:
       dwg_print_LAYOUT(dat, obj);
       break;
@@ -561,7 +604,7 @@ dwg_print_object(Dwg_Object *obj)
           dwg_print_LAYOUT(dat, obj);
         }
       /* > 500:
-         TABLE, DICTIONARYWDLFT, IDBUFFER, IMAGE, IMAGEDEF, IMAGEDEFREACTOR,
+         TABLE, DICTIONARYWDLFT, IDBUFFER, IMAGE, IMAGEDEF, IMAGEDEF_REACTOR,
          LAYER_INDEX, OLE2FRAME, PROXY, RASTERVARIABLES, SORTENTSTABLE, SPATIAL_FILTER,
          SPATIAL_INDEX
       */

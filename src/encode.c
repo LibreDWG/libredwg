@@ -789,7 +789,7 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "IMAGEDEF_REACTOR"))
     {
-      dwg_encode_IMAGEDEFREACTOR(dat, obj);
+      dwg_encode_IMAGEDEF_REACTOR(dat, obj);
       return 1;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "LAYER_INDEX"))
@@ -815,6 +815,13 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "ACDBPLACEHOLDER"))
     {
       dwg_encode_PLACEHOLDER(dat, obj);
+      return 1;
+    }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "AcDbField"))
+    {
+      // TODO
+      LOG_WARN("Untested Object/Class %s\n", dwg->dwg_class[i].dxfname);
+      dwg_encode_FIELD(dat, obj);
       return 1;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "PROXY"))
@@ -849,12 +856,29 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "VBA_PROJECT"))
     {
-//TODO:      dwg_encode_VBA_PROJECT(dat, obj);
+      LOG_ERROR("Unhandled Object VBA_PROJECT. Has its own section\n");
+      //TODO:      dwg_encode_VBA_PROJECT(dat, obj);
       return 0;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "WIPEOUTVARIABLE"))
     {
-//TODO:      dwg_encode_WIPEOUTVARIABLE(dat, obj);
+      //TODO
+      LOG_WARN("Unhandled Object/Class %s\n", dwg->dwg_class[i].dxfname);
+      dwg_encode_WIPEOUTVARIABLE(dat, obj);
+      return 0;
+    }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "CELLSTYLEMAP"))
+    {
+      // TODO
+      LOG_WARN("Unhandled Object/Class %s\n", dwg->dwg_class[i].dxfname);
+      dwg_encode_CELLSTYLEMAP(dat, obj);
+      return 0;
+    }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "VISUALSTYLE"))
+    {
+      // TODO
+      LOG_WARN("Unhandled Object/Class %s\n", dwg->dwg_class[i].dxfname);
+      dwg_encode_VISUALSTYLE(dat, obj);
       return 0;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "XRECORD"))
@@ -864,11 +888,13 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "DIMASSOC"))
     {
+      LOG_WARN("Unhandled Object/Class %s\n", dwg->dwg_class[i].dxfname);
 //TODO:      dwg_encode_DIMASSOC(dat, obj);
       return 0;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "MATERIAL"))
     {
+      LOG_WARN("Unhandled Object/Class %s\n", dwg->dwg_class[i].dxfname);
 //TODO:      dwg_encode_MATERIAL(dat, obj);
       return 0;
     }
@@ -1110,6 +1136,15 @@ dwg_encode_add_object(Dwg_Object * obj, Bit_Chain * dat,
   case DWG_TYPE_MLINESTYLE:
     dwg_encode_MLINESTYLE(dat, obj);
     break;
+  case DWG_TYPE_OLE2FRAME:
+    dwg_encode_OLE2FRAME(dat, obj);
+    break;
+  case DWG_TYPE_DUMMY:
+    dwg_encode_DUMMY(dat, obj);
+    break;
+  case DWG_TYPE_LONG_TRANSACTION:
+    dwg_encode_LONG_TRANSACTION(dat, obj);
+    break;
   case DWG_TYPE_LWPLINE:
     dwg_encode_LWPLINE(dat, obj);
     break;
@@ -1121,6 +1156,16 @@ dwg_encode_add_object(Dwg_Object * obj, Bit_Chain * dat,
     break;
   case DWG_TYPE_PLACEHOLDER:
     dwg_encode_PLACEHOLDER(dat, obj);
+    break;
+  case DWG_TYPE_PROXY_ENTITY:
+    dwg_encode_PROXY_ENTITY(dat, obj);
+    break;
+  case DWG_TYPE_OLEFRAME:
+    dwg_encode_OLEFRAME(dat, obj);
+    break;
+  case DWG_TYPE_VBA_PROJECT:
+    LOG_ERROR("Unhandled Object VBA_PROJECT. Has its own section\n");
+    //dwg_encode_VBA_PROJECT(dat, obj);
     break;
   case DWG_TYPE_LAYOUT:
     dwg_encode_LAYOUT(dat, obj);

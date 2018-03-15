@@ -811,9 +811,8 @@ bit_read_H(Bit_Chain * dat, Dwg_Handle * handle)
   handle->value = 0;
   if (handle->size > 4)
     {
-      LOG_ERROR(
-          "handle-reference is longer than 4 bytes: %i.%i.%lu",
-          handle->code, handle->size, handle->value)
+      LOG_ERROR("handle-reference is longer than 4 bytes: %i.%i.%lu\n",
+                handle->code, handle->size, handle->value)
       handle->size = 0;
       return (-1);
     }
