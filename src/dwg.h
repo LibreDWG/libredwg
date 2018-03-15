@@ -2427,8 +2427,9 @@ typedef struct _dwg_entity_TABLE
 typedef struct _dwg_object_CELLSTYLEMAP_Cell
 {
   Dwg_Entity_TABLE_Cell cell;
-  BITCODE_BL id;
-  BITCODE_BL class;
+  BITCODE_BL id;   // 1=title, 2=header, 3=data, 4=table.
+                   // ref TABLESTYLE. custom IDs > 100
+  BITCODE_BL type; // 1=data, 2=label
   BITCODE_TV name;
 } Dwg_Object_CELLSTYLEMAP_Cell;
 

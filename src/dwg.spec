@@ -2908,7 +2908,7 @@ DWG_OBJECT(CELLSTYLEMAP);
             LOG_INFO("TODO CELLSTYLEMAP TABLE_Cell struct\n");
             // TODO read the TABLE_Cell struct
             FIELD_BL(cells[rcount].id);
-            FIELD_BL(cells[rcount].class);
+            FIELD_BL(cells[rcount].type);
             FIELD_TV(cells[rcount].name);
           }
     }
@@ -3722,4 +3722,5 @@ DWG_OBJECT(VISUALSTYLE);
         LOG_INFO("TODO VISUALSTYLE (hard-pointer to H DICTIONARY_VISUALSTYLE)\n");
     }
 DWG_OBJECT_END
+
 
