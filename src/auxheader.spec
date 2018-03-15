@@ -67,7 +67,7 @@
   FIELD_RS(dwg_version_2);
   FIELD_RS(maint_version_2);
   for (i=0; i<10; i++) {
-    FIELD_RS(unknown[i]); /* 5 893 5 893 0 1 0 0 0 0 */
+    FIELD_RS(unknown[i]); /* 5 0x893 5 0x893 0 1 0 0 0 0 */
   }
   FIELD_BL(TDCREATE_JULIAN_DAY);
   FIELD_BL(TDCREATE_MILLISECONDS);

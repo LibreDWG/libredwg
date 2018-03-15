@@ -46,11 +46,11 @@
 #define FORMAT_BB "%d"
 /* Since R24 */
 #define BITCODE_3B unsigned char
-#define FORMAT_3B "%d"
-#define BITCODE_BS unsigned int
-#define FORMAT_BS "%d"
-#define BITCODE_RS unsigned int
-#define FORMAT_RS "%d"
+#define FORMAT_3B "%uc"
+#define BITCODE_BS uint16_t
+#define FORMAT_BS "%hu"
+#define BITCODE_RS uint16_t
+#define FORMAT_RS "%hu"
 #define BITCODE_RL long unsigned int
 #define FORMAT_RL "%lu"
 #define BITCODE_RD BITCODE_DOUBLE

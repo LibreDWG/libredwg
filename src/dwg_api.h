@@ -3373,12 +3373,12 @@ dwg_ent_viewport_get_contrast(dwg_ent_viewport *vp, int *error);
 ********************************************************************/
 
 
-unsigned int
+BITCODE_BS
 dwg_ent_polyline_pface_get_numverts(dwg_ent_polyline_pface *pface, int *error);
 
 void
 dwg_ent_polyline_pface_set_numverts(dwg_ent_polyline_pface *pface,
-                                    unsigned int numverts, int *error);
+                                    BITCODE_BS numverts, int *error);
 
 BITCODE_BL
 dwg_ent_polyline_pface_get_owned_obj_count(dwg_ent_polyline_pface *pface,
@@ -3388,12 +3388,12 @@ void
 dwg_ent_polyline_pface_set_owned_obj_count(dwg_ent_polyline_pface *pface,
                                            BITCODE_BL owned_obj_count, int *error);
 
-unsigned int
+BITCODE_BS
 dwg_ent_polyline_pface_get_numfaces(dwg_ent_polyline_pface *pface, int *error);
 
 void
 dwg_ent_polyline_pface_set_numfaces(dwg_ent_polyline_pface *pface,
-                                    unsigned int numfaces, int *error);
+                                    BITCODE_BS numfaces, int *error);
 
 
 /********************************************************************
@@ -3429,7 +3429,7 @@ dwg_ent_polyline_mesh_get_n_vert_count(dwg_ent_polyline_mesh *mesh,
 
 void
 dwg_ent_polyline_mesh_set_n_vert_count(dwg_ent_polyline_mesh *mesh,
-                                       unsigned int n_vert_count, int *error);
+                                       BITCODE_BS n_vert_count, int *error);
 
 BITCODE_BS
 dwg_ent_polyline_mesh_get_m_density(dwg_ent_polyline_mesh *mesh, int *error);
@@ -3495,19 +3495,19 @@ void
 dwg_ent_polyline_2d_set_elevation(dwg_ent_polyline_2d *line2d,
                                   double elevation, int *error);
 
-unsigned int
+BITCODE_BS
 dwg_ent_polyline_2d_get_flags(dwg_ent_polyline_2d *line2d, int *error);
 
 void
-dwg_ent_polyline_2d_set_flags(dwg_ent_polyline_2d *line2d, unsigned int flags,
+dwg_ent_polyline_2d_set_flags(dwg_ent_polyline_2d *line2d, BITCODE_BS flags,
                               int *error);
 
-unsigned int
+BITCODE_BS
 dwg_ent_polyline_2d_get_curve_type(dwg_ent_polyline_2d *line2d, int *error);
 
 void
 dwg_ent_polyline_2d_set_curve_type(dwg_ent_polyline_2d *line2d,
-                                   unsigned int curve_type, int *error);
+                                   BITCODE_BS curve_type, int *error);
 
 BITCODE_BL
 dwg_ent_polyline_2d_get_owned_obj_count(dwg_ent_polyline_2d *line2d,
