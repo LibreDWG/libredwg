@@ -53,7 +53,8 @@ init:
   - if "%PLATFORM%"=="x64" set P=64
   - if "%CYGWIN%"=="1" set CYG_ROOT=c:\cygwin%P%
   - if "%CYGWIN%"=="1" appveyor DownloadFile http://cygwin.com/%ISETUP%.exe -FileName %CYG_ROOT%\setup.exe
-  - if "%CYGWIN%"=="1" %CYG_ROOT%\setup.exe -qnNdO -R "%CYG_ROOT%" -s "%CYG_MIRROR%" -l "%CYG_ROOT%\var\cache\setup" -P libxml2,libxml2-devel,libiconv-devel,python2-devel,python2-libxml2,swig,dejagnu
+  - if "%CYGWIN%"=="1" %CYG_ROOT%\setup.exe -qnNdO -R "%CYG_ROOT%" -s "%CYG_MIRROR%" -l "%CYG_ROOT%\var\cache\setup" -P libxml2,libxml2-devel,libiconv-devel,python2-devel,python2-libxml2,swig
+  # skip dejagnu. fails to link
 
 build_script:
   - if "%CYGWIN%"=="1" set PATH=%CYG_ROOT%\bin;c:\Windows\system32;c:\Windows;c:\Windows\system32\Wbem
