@@ -21,10 +21,10 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "suffix.c"
 #include "../src/config.h"
-#include "dwg.h"
+#include <dwg.h>
 #include "../src/common.h"
+#include "suffix.c"
 
 int usage() {
   printf("\nUsage:\trewrite [-as-rxxxx] <dwg_input_file.dwg> [<dwg_output_file.dwg>]\n");

@@ -22,6 +22,8 @@
 #include <string.h>
 #include <unistd.h>
 #include <math.h>
+
+#include "../src/config.h"
 #include <dwg.h>
 #include "../src/bits.h"
 #include "suffix.c"

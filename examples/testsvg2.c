@@ -23,8 +23,9 @@
 #include <unistd.h>
 #include <math.h>
 
-#include "dwg.h"
-#include "dwg_api.h"
+#include "../src/config.h"
+#include <dwg.h>
+#include <dwg_api.h>
 
 //#include "suffix.c"
 

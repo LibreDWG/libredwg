@@ -19,6 +19,7 @@
  */
 
 #include <stdio.h>
+#include "../src/config.h"
 #include <dwg.h>
 #include "suffix.c"
 

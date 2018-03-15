@@ -20,8 +20,10 @@
 
 #include <stdio.h>
 #include <libps/pslib.h>
+
+#include "../src/config.h"
+#include <dwg.h>
 #include "suffix.c"
-#include "dwg.h"
 
 void
 create_postscript(Dwg_Data *dwg, char *output)

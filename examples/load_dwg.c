@@ -18,6 +18,7 @@
  * modified by Thien-Thi Nguyen
  */
 
+#include "config.h"
 #include <dwg.h>
 #include "suffix.c"
 
