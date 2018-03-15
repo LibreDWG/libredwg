@@ -20,6 +20,10 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#include "config.h"
+#include <stdint.h>
+#include <inttypes.h>
+
 #define TODO_ENCODER fprintf(stderr, "TODO: Encoder\n");
 #define TODO_DECODER fprintf(stderr, "TODO: Decoder\n");
 

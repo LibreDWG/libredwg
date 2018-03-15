@@ -24,6 +24,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdint.h>
+#include <inttypes.h>
 
 #include "bits.h"
 #include "logging.h"
