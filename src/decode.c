@@ -253,7 +253,7 @@ static void \
   long vcount, rcount, rcount2, rcount3;\
   Dwg_Entity_##token *ent, *_obj;\
   Dwg_Data* dwg = obj->parent;\
-  LOG_INFO("Entity " #token ":\n")\
+  LOG_INFO("Entity " #token "\n")\
   dwg->num_entities++;\
   obj->supertype = DWG_SUPERTYPE_ENTITY;\
   obj->tio.entity = (Dwg_Object_Entity*)malloc (sizeof (Dwg_Object_Entity));	\
@@ -273,7 +273,7 @@ static void \
   long vcount, rcount, rcount2, rcount3;\
   Dwg_Object_##token *_obj;\
   Dwg_Data* dwg = obj->parent;\
-  LOG_INFO("Object " #token ":\n")\
+  LOG_INFO("Object " #token "\n")\
   obj->supertype = DWG_SUPERTYPE_OBJECT;\
   obj->tio.object = (Dwg_Object_Object*)malloc (sizeof (Dwg_Object_Object));	\
   obj->tio.object->tio.token = (Dwg_Object_##token * ) calloc (1, sizeof (Dwg_Object_##token)); \

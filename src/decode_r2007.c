@@ -501,6 +501,7 @@ decompress_r2007(char *dst, int dst_size, char *src, int src_size)
 }
 
 
+// TODO reed-solomon (255, 239) encoding with factor 3
 static char*
 decode_rs(const char *src, int block_count, int data_size)
 {
@@ -509,7 +510,7 @@ decode_rs(const char *src, int block_count, int data_size)
   char *dst_base, *dst;  
   
   dst_base = dst = (char*)malloc(block_count * data_size);
-  
+  LOG_INFO("TODO reed-solomon %d %d\n", block_count, data_size);
   for (i = 0; i < block_count; ++i)
     {      
       for (j = 0; j < data_size; ++j)
@@ -958,6 +959,7 @@ read_r2007_meta_data(Bit_Chain *dat, Dwg_Data *dwg)
    
   loglevel = 9;
 
+  // @ 0x62
   read_file_header(dat, &file_header);
   
   // Pages Map

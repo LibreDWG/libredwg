@@ -45,26 +45,26 @@ low_level_process(dwg_object *obj)
   printf("num points of lwpline : %ld\t\n", lwpline->num_points);
 
   // prints flag
-  printf("flag of lwpline : %d\t\n", lwpline->flags);
+  printf("flag of lwpline : %x\t\n", lwpline->flags);
 
   // prints bulges
   for ( i = 0; i < lwpline->num_bulges; i++ )
     {
-      printf("bulges of lwpline : %f\t\n", lwpline->bulges[i]);
+      printf("bulge[%d] of lwpline : %f\t\n", (int)i, lwpline->bulges[i]);
     }
 
   // prints points
   for ( i = 0; i < lwpline->num_points; i++ )
     {
-      printf("points of lwpline : x =%f\ty = %f\t\n",
-              lwpline->points[i].x, lwpline->points[i].y);
+      printf("point[%d] of lwpline : x =%f\ty = %f\t\n",
+             (int)i, lwpline->points[i].x, lwpline->points[i].y);
     }
 
   // prints widths
   for ( i = 0; i < lwpline->num_widths; i++ )
     {
-      printf("points of lwpline : x =%f\ty = %f\t\n",
-              lwpline->widths[i].start, lwpline->widths[i].end);
+      printf("widths[%d] of lwpline : x =%f\ty = %f\t\n",
+             (int)i, lwpline->widths[i].start, lwpline->widths[i].end);
     }
 }
 
@@ -166,7 +166,7 @@ api_process(dwg_object *obj)
   flags = dwg_ent_lwpline_get_flags(lwpline, &flag_error);
   if (flag_error == 0) // error check
    {
-     printf("flag of lwpline : %d\t\n", flags);
+     printf("flag of lwpline : %x\t\n", flags);
    }
   else
    {
@@ -180,7 +180,7 @@ api_process(dwg_object *obj)
      unsigned long i;
      for ( i = 0;i < lwpline->num_bulges; i++ )
        {
-         printf("bulges of lwpline : %f\t\n", bulges[i]);
+         printf("bulge[%d] of lwpline : %f\t\n", (int)i, bulges[i]);
        }
    }
   else
@@ -195,7 +195,7 @@ api_process(dwg_object *obj)
      unsigned long i;
      for ( i = 0;i < lwpline->num_points ; i++ )
        {
-         printf("points of lwpline : x =%f\ty = %f\t\n", points[i].x, points[i].y);
+         printf("point[%d] of lwpline : x =%f\ty = %f\t\n", (int)i, points[i].x, points[i].y);
        }
    }
   else
@@ -210,8 +210,8 @@ api_process(dwg_object *obj)
      unsigned long i;
      for ( i = 0;i < lwpline->num_widths ; i++ )
        {
-         printf("widths of lwpline : x =%f\ty = %f\t\n",
-                 width[i].start, width[i].end);
+         printf("widths[%d] of lwpline : x =%f\ty = %f\t\n",
+                 (int)i, width[i].start, width[i].end);
        }
    }
   else
