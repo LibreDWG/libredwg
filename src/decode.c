@@ -451,6 +451,8 @@ dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
 static int
 decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
 {
+  struct Dwg_Header *_obj = &dwg->header;
+  Dwg_Object *obj = NULL;
   unsigned int section_size = 0;
   unsigned char sgdc[2];
   unsigned int ckr, ckr2;
@@ -464,29 +466,8 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
   unsigned int i, j;
 
   dat->byte = 0x06;
- // rather 5 zeros + ACADMAINTVER and 0/1/3
-  LOG_TRACE("Unknown values: 5 'zeroes', ACADMAINTVER and a 0/1/3: ")
-  for (i = 0; i < 7; i++)
-    {
-      // in r13_r15 zero_7[5] is ACADMAINTVER
-      dwg->header.zero_7[i] = bit_read_RC(dat);
-      LOG_TRACE("0x%02X ", dwg->header.zero_7[i])
-    }
-  LOG_TRACE("\n")
 
-  /* Image Seeker/Preview */
-  dwg->header.preview_addr = bit_read_RL(dat);
-  LOG_TRACE("Image seeker: 0x%08X\n", (unsigned int) dwg->header.preview_addr)
-
-  dwg->header.dwg_version = bit_read_RC(dat);
-  LOG_INFO("dwg_version: %u\n", dwg->header.dwg_version);
-  dwg->header.maint_version = bit_read_RC(dat);
-  LOG_INFO("maint_version: %u\n", dwg->header.maint_version);
-
-  /* Codepage */
-  assert(dat->byte == 0x13);
-  dwg->header.codepage = bit_read_RS(dat);
-  LOG_INFO("Codepage: %u\n", dwg->header.codepage);
+  #include "header.spec"
 
   /* Section Locator Records 0x15 */
   assert(dat->byte == 0x15);
@@ -1613,62 +1594,12 @@ decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
   int i;
   unsigned int u;
   unsigned char sig = 0;
+  struct Dwg_Header* _obj = &dwg->header;
+  Dwg_Object *obj = NULL;
 
   dat->byte = 0x06;
-  LOG_INFO("first 7 bytes: ")
-  for (i = 0; i < 7; i++)
-    { // 5th bit if is maint release
-      dwg->header.zero_7[i] = bit_read_RC(dat);
-      LOG_INFO( "0x%02X ", dwg->header.zero_7[i])
-    }
-  LOG_INFO("\n")
 
-  /* Preview Address */
-  assert(dat->byte == 0x0D);
-  dwg->header.preview_addr = bit_read_RL(dat);
-  LOG_INFO("Preview Address: 0x%08lX\n", dwg->header.preview_addr)
-  assert(dat->byte == 0x11);
-  dwg->header.dwg_version = bit_read_RC(dat);
-  LOG_INFO("DwgVer: %u\n", dwg->header.dwg_version)
-  assert(dat->byte == 0x12);
-  dwg->header.maint_version = bit_read_RC(dat);
-  LOG_INFO("MaintRelease: %u\n", dwg->header.maint_version)
-  assert(dat->byte == 0x13);
-  dwg->header.codepage = bit_read_RS(dat);
-  LOG_INFO("Codepage: %u\n", dwg->header.codepage)
-  assert(dat->byte == 0x15);
-  LOG_INFO("3 0x00 bytes: ")
-  for (i = 0; i < 3; i++)
-    {
-      dwg->header.zero_3[i] = bit_read_RC(dat);
-      LOG_INFO("0x%02X ", sig)
-    }
-  LOG_INFO("\n")
-  assert(dat->byte == 0x18);
-  dwg->header.security_type = bit_read_RL(dat);
-  LOG_INFO("SecurityType: 0x%04lX\n", dwg->header.security_type)
-  assert(dat->byte == 0x1C);
-  dwg->header.rl_1c_address = bit_read_RL(dat);
-  LOG_INFO("0x1C address: 0x%08lX\n", dwg->header.rl_1c_address)
-  assert(dat->byte == 0x20);
-  dwg->header.summary_info_address = bit_read_RL(dat);
-  LOG_INFO("0x1C Summary info address: 0x%08lX\n", dwg->header.summary_info_address)
-  assert(dat->byte == 0x24);
-  dwg->header.vba_proj_address = bit_read_RL(dat);
-  LOG_INFO("VBA Project Addr: 0x%08lX\n",dwg->header.vba_proj_address)
-  assert(dat->byte == 0x28);
-  dwg->header.rl_28_80 = bit_read_RL(dat);
-  LOG_INFO("0x00000080: 0x%08lX\n", dwg->header.rl_28_80)
-  /* 0x00 bytes (length = 0x54 bytes) */
-  dat->byte = 0x2C;
-  for (i = 0; i < 0x54; i++)
-    {
-      sig = bit_read_RC(dat);
-      if (sig != 0 && loglevel)
-        LOG_ERROR(
-            "Warning: Byte should be zero! But a value=%x was read instead.\n",
-            sig)
-    }
+  #include "header.spec"
 
   dat->byte = 0x80;
   for (i = 0; i < 0x6c; i++)
@@ -1824,93 +1755,14 @@ static int
 decode_R2007(Bit_Chain* dat, Dwg_Data * dwg)
 {
   int i;
-  unsigned long int preview_address, security_type, unknown_long,
-      dwg_property_address, vba_proj_address, app_info_address;
-  unsigned char sig, DwgVer, MaintReleaseVer;
+  unsigned char sig;
+  struct Dwg_Header *_obj = &dwg->header;
+  Dwg_Object *obj = NULL;
 
   /* 5 bytes of 0x00 */
   dat->byte = 0x06;
-  LOG_TRACE("5 bytes of 0x00: ")
-  for (i = 0; i < 5; i++)
-    {
-      sig = bit_read_RC(dat);
-      if (loglevel)
-        LOG_TRACE("0x%02X ", sig)
-    }
-  LOG_TRACE("\n")
 
-  /* ACADMAINTVER (0 or 1) */
-  dat->byte = 0x0B;
-  sig = bit_read_RC(dat);
-  LOG_TRACE("@0b ACADMAINTVER: 0x%02X\n", sig)
-
-  /* Byte 0, 1, or 3 */
-  dat->byte = 0x0C;
-  sig = bit_read_RC(dat);
-  LOG_TRACE("@0c Byte 0x00, 0x01, or 0x03: 0x%02X\n", sig)
-
-  /* Preview Address */
-  dat->byte = 0x0D;
-  preview_address = bit_read_RL(dat);
-  LOG_TRACE("@0d Preview Address: 0x%08X\n", (unsigned int) preview_address)
-
-  /* DwgVer */
-  dat->byte = 0x11;
-  DwgVer = bit_read_RC(dat);
-  LOG_INFO("@11 DwgVer: %u\n", DwgVer)
-
-  /* MaintReleaseVer */
-  dat->byte = 0x12;
-  MaintReleaseVer = bit_read_RC(dat);
-  LOG_INFO("@12 MaintRelease: %u\n", MaintReleaseVer)
-
-  /* Codepage */
-  dat->byte = 0x13;
-  dwg->header.codepage = bit_read_RS(dat);
-  LOG_TRACE("@13 Codepage: %u\n", dwg->header.codepage)
-
-  /* Unknown */
-  dat->byte = 0x15;
-  LOG_TRACE("@15 Unknown: ")
-  for (i = 0; i < 3; i++)
-    {
-      sig = bit_read_RC(dat);
-      LOG_TRACE("0x%02X ", sig)
-    }
-  LOG_TRACE("\n")
-
-  /* SecurityType */
-  dat->byte = 0x18;
-  security_type = bit_read_RL(dat);
-  LOG_TRACE("@18 SecurityType: 0x%08X\n", (unsigned int) security_type)
-
-  /* Unknown long */
-  dat->byte = 0x1C;
-  unknown_long = bit_read_RL(dat);
-  LOG_TRACE("@1c Unknown long: 0x%08X\n", (unsigned int) unknown_long)
-
-  /* DWG Property Addr */
-  dat->byte = 0x20;
-  dwg_property_address = bit_read_RL(dat);
-  LOG_TRACE("@20 DWG Property Addr: 0x%08X\n",
-        (unsigned int) dwg_property_address)
-
-  /* VBA Project Addr */
-  dat->byte = 0x24;
-  vba_proj_address = bit_read_RL(dat);
-  LOG_TRACE("@24 VBA Project Addr: 0x%08X\n",
-        (unsigned int) vba_proj_address)
-
-  /* 0x00000080 */
-  dat->byte = 0x28;
-  unknown_long = bit_read_RL(dat);
-  LOG_TRACE("@28 0x00000080: 0x%08X\n", (unsigned int) unknown_long)
-
-  /* Application Info Address */
-  dat->byte = 0x2C;
-  app_info_address = bit_read_RL(dat);
-  LOG_TRACE("@2c Application Info Address: 0x%08X\n",
-        (unsigned int) app_info_address)
+  #include "header.spec"
 
   read_r2007_meta_data(dat, dwg);
   

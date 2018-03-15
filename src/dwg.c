@@ -114,42 +114,41 @@ dwg_write_file(char *filename, Dwg_Data * dwg_data)
   bit_chain.from_version = (Dwg_Version_Type)dwg_data->header.from_version;
 
   // Encode the DWG struct
-   bit_chain.size = 0;
-   if (dwg_encode_chains (dwg_data, &bit_chain))
-   {
-   LOG_ERROR("Failed to encode datastructure.\n")
-   if (bit_chain.size > 0)
-   free (bit_chain.chain);
-   return -1;
-   }
+  bit_chain.size = 0;
+  if (dwg_encode_chains (dwg_data, &bit_chain))
+    {
+      LOG_ERROR("Failed to encode datastructure.\n")
+      if (bit_chain.size > 0)
+        free (bit_chain.chain);
+      return -1;
+    }
  
-
   // try opening the output file in write mode
-   if (!stat (filename, &atrib))
-   {
-   LOG_ERROR("The file already exists. We won't overwrite it.")
-   return -1;
-   }
-   dt = fopen (filename, "w");
-   if (!dt)
-   {
-   LOG_ERROR("Failed to create the file: %s\n", filename)
-   return -1;
-   }
+  if (!stat (filename, &atrib))
+    {
+      LOG_ERROR("The file already exists. We won't overwrite it.")
+      return -1;
+    }
+  dt = fopen (filename, "w");
+  if (!dt)
+    {
+      LOG_ERROR("Failed to create the file: %s\n", filename)
+      return -1;
+    }
    
 
   // Write the data into the file
-   if (fwrite (bit_chain.chain, sizeof (char), bit_chain.size, dt) != bit_chain.size)
-   {
-   LOG_ERROR("Failed to write data into the file: %s\n", filename)
-   fclose (dt);
-   free (bit_chain.chain);
-   return -1;
-   }
-   fclose (dt);
+  if (fwrite (bit_chain.chain, sizeof (char), bit_chain.size, dt) != bit_chain.size)
+    {
+      LOG_ERROR("Failed to write data into the file: %s\n", filename)
+      fclose (dt);
+      free (bit_chain.chain);
+      return -1;
+    }
+  fclose (dt);
 
-   if (bit_chain.size > 0)
-   free (bit_chain.chain);
+  if (bit_chain.size > 0)
+    free (bit_chain.chain);
 
   return 0;
 }
@@ -157,7 +156,7 @@ dwg_write_file(char *filename, Dwg_Data * dwg_data)
 
 /* IMAGE DATA (R13C3+) */
 unsigned char *
-dwg_bmp(Dwg_Data *stk, BITCODE_RL *size)
+dwg_bmp(Dwg_Data *dwg, BITCODE_RL *size)
 {
   BITCODE_RC i, num_pictures, code;
   int plene;
@@ -165,11 +164,12 @@ dwg_bmp(Dwg_Data *stk, BITCODE_RL *size)
   Bit_Chain *dat;
 
   *size = 0;
-  dat = (Bit_Chain*) &stk->picture;
-  if (!dat) {
-    LOG_TRACE("no IMAGE DATA\n")
-    return NULL;
-  }
+  dat = (Bit_Chain*) &dwg->picture;
+  if (!dat)
+    {
+      LOG_TRACE("no IMAGE DATA\n")
+        return NULL;
+    }
   dat->bit = 0;
   dat->byte = 0;
 
@@ -356,7 +356,8 @@ dwg_ref_get_object(Dwg_Object_Ref* ref)
   return NULL;
 }
 
-Dwg_Object* get_first_owned_object(Dwg_Object* hdr_obj, Dwg_Object_BLOCK_HEADER* hdr)
+Dwg_Object*
+get_first_owned_object(Dwg_Object* hdr_obj, Dwg_Object_BLOCK_HEADER* hdr)
 {
   unsigned int version = hdr_obj->parent->header.version;
 
@@ -375,7 +376,10 @@ Dwg_Object* get_first_owned_object(Dwg_Object* hdr_obj, Dwg_Object_BLOCK_HEADER*
   return NULL;
 }
 
-Dwg_Object* get_next_owned_object(Dwg_Object* hdr_obj, Dwg_Object* current, Dwg_Object_BLOCK_HEADER* hdr){
+Dwg_Object*
+get_next_owned_object(Dwg_Object* hdr_obj, Dwg_Object* current,
+                      Dwg_Object_BLOCK_HEADER* hdr)
+{
   unsigned int version = hdr_obj->parent->header.version;
 
   if (R_13 <= version && version <= R_2000)

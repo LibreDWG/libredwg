@@ -2806,11 +2806,13 @@ typedef enum DWG_SECTION_TYPE
  */
 typedef struct _dwg_struct
 {
-  struct
+  struct Dwg_Header
   {
     unsigned int version; /* see Dwg_Version_Type */
     unsigned int from_version;
-    BITCODE_RC   zero_7[7];
+    BITCODE_RC   zero_5[5];
+    BITCODE_RC   is_maint;
+    BITCODE_RC   zero_one_or_three;
     BITCODE_RL   preview_addr;
     BITCODE_RC   dwg_version;
     BITCODE_RC   maint_version;
