@@ -105,6 +105,8 @@ typedef struct _r2007_section
 
 /* exported */
 int read_r2007_meta_data(Bit_Chain *dat, Dwg_Data *dwg);
+/* imported */
+extern int rs_decode_block(unsigned char *blk, int fix);
   
 /* private */
 static r2007_section* get_section(r2007_section *sections_map, int64_t hashcode);
@@ -501,7 +503,7 @@ decompress_r2007(char *dst, int dst_size, char *src, int src_size)
 }
 
 
-// TODO reed-solomon (255, 239) encoding with factor 3
+// reed-solomon (255, 239) encoding with factor 3
 static char*
 decode_rs(const char *src, int block_count, int data_size)
 {
@@ -512,14 +514,14 @@ decode_rs(const char *src, int block_count, int data_size)
   dst_base = dst = (char*)malloc(block_count * data_size + 16);
 
   for (i = 0; i < block_count; ++i)
-    {      
+    {
       for (j = 0; j < data_size + 16; ++j)
         {
           *dst++ = *src;
           src += block_count;
         }
 
-      rs_decode_block(dst_base + 239*i, 1);
+      rs_decode_block((unsigned char*)(dst_base + 239*i), 1);
       src = ++src_base;
     }
 

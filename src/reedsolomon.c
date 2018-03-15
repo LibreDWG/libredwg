@@ -9,7 +9,8 @@
 #include <malloc.h>
 #endif
 
-#define debug(fmt,...)   fprintf(stderr, "%s:%d:%s() - " fmt, __FILE__, __LINE__, __func__, ##__VA_ARGS__)
+#define debug(fmt,...)  \
+  fprintf(stderr, "%s:%d: %s() - " fmt, __FILE__, __LINE__, __func__, ##__VA_ARGS__)
 #define POLY_LENGTH     32
 
 typedef unsigned char *Poly;
@@ -22,7 +23,7 @@ typedef PolyRow *PolyMatrix;
 static int degree(Poly);
 static void rowop(PolyMatrix, int, int);
 static int fix_errors(unsigned char *, unsigned char *, unsigned char *);
-static int solve_key_equation(unsigned char *, unsigned char *, unsigned char *);
+static void solve_key_equation(unsigned char *, unsigned char *, unsigned char *);
 static unsigned char evaluate(Poly, int, unsigned char);
 static void free_matrix(PolyMatrix);
 static PolyMatrix initialize_matrix(unsigned char *);
@@ -199,13 +200,14 @@ static unsigned char f256_multiply(unsigned char a, unsigned char b)
   unsigned int prod = 0;
   unsigned int A = a, B = b;
 
-  while (B != 0) {
-    if (B & 1)
-      prod ^= A;
+  while (B != 0)
+    {
+      if (B & 1)
+        prod ^= A;
 
-    B >>= 1;
-    A <<= 1;
-  }
+      B >>= 1;
+      A <<= 1;
+    }
 
   prod ^= f256_residue[prod >> 8];
   return prod & 0xff;
@@ -226,20 +228,22 @@ rs_encode_block(unsigned char *parity, unsigned char *src, int count)
 
   i = count;
   /* Horner's method / long division */
-  while (i--) {
-    leader = parity[15];
-    for (j=15;j>0;j--)
-      parity[j] = parity[j-1] ^ f256_multiply(leader, rsgen[j]);
+  while (i--)
+    {
+      leader = parity[15];
+      for (j=15; j>0; j--)
+        parity[j] = parity[j-1] ^ f256_multiply(leader, rsgen[j]);
 
-    parity[0] = src[i] ^ f256_multiply(leader, rsgen[0]);
-  }
+      parity[0] = src[i] ^ f256_multiply(leader, rsgen[0]);
+    }
 
-  for (i=16;i>0;i--) {
-    leader = parity[15];
-    for (j=15;j>0;j--)
-      parity[j] = parity[j-1] ^ f256_multiply(leader, rsgen[j]);
-    parity[0] = f256_multiply(leader, rsgen[0]);
-  }
+  for (i=16;i>0;i--)
+    {
+      leader = parity[15];
+      for (j=15;j>0;j--)
+        parity[j] = parity[j-1] ^ f256_multiply(leader, rsgen[j]);
+      parity[0] = f256_multiply(leader, rsgen[0]);
+    }
 }
 
 /*
@@ -258,16 +262,18 @@ rs_decode_block(unsigned char *blk, int fix)
 
   memset(synbuf, 0 , 16);
 
-  for (j=0;j<16;j++) {
-    synbuf[j] = evaluate(blk, 255, f256_power[j+1]);
-    if (synbuf[j] != 0)
-      errflag = 1;
-  }
+  for (j=0; j<16; j++)
+    {
+      synbuf[j] = evaluate(blk, 255, f256_power[j+1]);
+      if (synbuf[j] != 0)
+        errflag = 1;
+    }
 
-  if (!errflag) {
-      debug("No error in block\n");
-    return 0;
-  }
+  if (!errflag)
+    {
+      debug("No error in Reed-Solomon block\n");
+      return 0;
+    }
 
   debug("Errors detected in Reed-Solomon block\n");
   dump_syndrome(synbuf);
@@ -287,6 +293,10 @@ rs_decode_block(unsigned char *blk, int fix)
   free(sigma);
   free(omega);
   free(synbuf);
+  if (i < 0)
+    debug("Errors in Reed-Solomon block are not recoverable\n");
+  else
+    debug("Fixed errors in Reed-Solomon block: %d\n", i);
 
   return i;
 }
@@ -319,12 +329,14 @@ rowop(PolyMatrix matrix, int dst, int src)
   coeff = f256_multiply(coeff, matrix[dst][2][dstd]);
 
   /* row operation */
-  for (j=0;j<3;j++) {
-    limit = 17-power;
-    for (i=0;i<limit;i++) {
-      matrix[dst][j][i+power] ^= f256_multiply(coeff, matrix[src][j][i]);
+  for (j=0; j<3; j++)
+    {
+      limit = 17-power;
+      for (i=0; i<limit; i++)
+        {
+          matrix[dst][j][i+power] ^= f256_multiply(coeff, matrix[src][j][i]);
+        }
     }
-  }
 }
 
 static PolyMatrix
@@ -335,13 +347,15 @@ initialize_matrix(unsigned char *s)
   int i,j;
     
   matrix = malloc(sizeof(PolyRow)*2);
-  for (i=0;i<2;i++) {
-    matrix[i] = malloc(sizeof(Poly)*3);
-    for (j=0;j<3;j++) {
-      matrix[i][j] = malloc(POLY_LENGTH);
-      memset(matrix[i][j], 0, POLY_LENGTH);
+  for (i=0; i<2; i++)
+    {
+      matrix[i] = malloc(sizeof(Poly)*3);
+      for (j=0; j<3; j++)
+        {
+          matrix[i][j] = malloc(POLY_LENGTH);
+          memset(matrix[i][j], 0, POLY_LENGTH);
+        }
     }
-  }
     
   /* Initialize matrix */
   matrix[0][0][0] = 1;
@@ -358,12 +372,14 @@ free_matrix(PolyMatrix matrix)
 {
   int i,j;
 
-  for (i=0;i<2;i++) {
-    for (j=0;j<2;j++) {
-      free(matrix[i][j]);
+  for (i=0; i<2; i++)
+    {
+      for (j=0; j<2; j++)
+        {
+          free(matrix[i][j]);
+        }
+      free(matrix[i]);
     }
-    free(matrix[i]);
-  }
 }
 
 static unsigned char
@@ -372,14 +388,15 @@ evaluate(Poly poly, int deg, unsigned char x)
   unsigned char y;
 
   y = poly[deg];
-  while (deg >= 0) {
-    y = f256_multiply(x, y) ^ poly[deg];
-    deg--;
-  }
+  while (deg >= 0)
+    {
+      y = f256_multiply(x, y) ^ poly[deg];
+      deg--;
+    }
   return y;
 }
 
-static int
+static void
 solve_key_equation(unsigned char *s, unsigned char *sigma, unsigned char *omega)
 {
   int fixed_row;
@@ -391,15 +408,19 @@ solve_key_equation(unsigned char *s, unsigned char *sigma, unsigned char *omega)
   matrix = initialize_matrix(s);
   fixed_row = 0;
 
-  while (degree(matrix[fixed_row][0]) > 8 || degree(matrix[fixed_row][2]) > 7) {
-    if (degree(matrix[0][2]) < degree(matrix[1][2])) {
-      fixed_row = 0;
-      rowop(matrix, 1, 0);
-    } else {
-      fixed_row = 1;
-      rowop(matrix, 0, 1);
+  while (degree(matrix[fixed_row][0]) > 8 || degree(matrix[fixed_row][2]) > 7)
+    {
+      if (degree(matrix[0][2]) < degree(matrix[1][2]))
+        {
+          fixed_row = 0;
+          rowop(matrix, 1, 0);
+        }
+      else
+        {
+          fixed_row = 1;
+          rowop(matrix, 0, 1);
+        }
     }
-  }
 
   memcpy(sigma, matrix[fixed_row][0], POLY_LENGTH);
   memcpy(omega, matrix[fixed_row][2], POLY_LENGTH);
@@ -416,35 +437,37 @@ fix_errors(unsigned char *blk, unsigned char *sigma, unsigned char *omega)
   unsigned char roots[8];
   unsigned char chaff;
 
-  nerr=0;
+  nerr = 0;
 
-  for (x=0;x<256;x++) {
-    if (evaluate(sigma, 8, x) == 0)
-      roots[nerr++] = x;
-  }    
+  for (x=0; x<256; x++)
+    {
+      if (evaluate(sigma, 8, x) == 0)
+        roots[nerr++] = x;
+    }
 
   d = degree(sigma);
   if (nerr != d)
     return -1;	      /* if sigma doesn't split, the error is not recoverable */
 
   /* differentiate sigma in place*/
-  for (i=0;i<8;i++) {
-    sigma[2*i] = sigma[2*i+1];
-    sigma[2*i+1] = 0;
-  }
+  for (i=0; i<8; i++)
+    {
+      sigma[2*i] = sigma[2*i+1];
+      sigma[2*i+1] = 0;
+    }
 
-  for (i=0;i<nerr;i++) {
-    int pos;
-    unsigned char sigmaval = evaluate(sigma, 16, roots[i]);
-    unsigned char omegaval = evaluate(omega, 16, roots[i]);
+  for (i=0; i<nerr; i++)
+    {
+      int pos;
+      unsigned char sigmaval = evaluate(sigma, 16, roots[i]);
+      unsigned char omegaval = evaluate(omega, 16, roots[i]);
 
-    chaff = f256_inverse[sigmaval];
-    errorval = f256_multiply(chaff, omegaval);
-    pos = f256_logarithm[f256_inverse[roots[i]]];
+      chaff = f256_inverse[sigmaval];
+      errorval = f256_multiply(chaff, omegaval);
+      pos = f256_logarithm[f256_inverse[roots[i]]];
 
-    blk[pos] ^= errorval;
-  }
-  fputc('\n', stderr);    
+      blk[pos] ^= errorval;
+    }
   return nerr;
 }
 
@@ -456,37 +479,43 @@ fix_errors(unsigned char *blk, unsigned char *sigma, unsigned char *omega)
 static void
 debug_row(PolyRow row)
 {
-    int j, k;
-    for (j=0;j<4;j++) {
-	for (k=0;k<3;k++) {
-	    fprintf(stderr, " %02x %02x %02x %02x ", row[k][4*j+0], row[k][4*j+1], row[k][4*j+2], row[k][4*j+3]);
-	    if (k!=2) {
-		fprintf(stderr, " | ");
-	    }
-	}
-	fputc('\n', stderr);
+  int j, k;
+  for (j=0; j<4; j++)
+    {
+      for (k=0;k<3;k++)
+        {
+          fprintf(stderr, " %02x %02x %02x %02x ",
+                  row[k][4*j+0], row[k][4*j+1], row[k][4*j+2], row[k][4*j+3]);
+          if (k!=2)
+            {
+              fprintf(stderr, " | ");
+            }
+        }
+      fputc('\n', stderr);
     }
-    fprintf(stderr, " %02x           |  %02x           |  %02x \n", row[0][16], row[1][16], row[2][16]);
+  fprintf(stderr, " %02x           |  %02x           |  %02x \n",
+          row[0][16], row[1][16], row[2][16]);
 }
 
 static void
 dump_matrix(PolyMatrix matrix)
 {
-    debug("Matrix:\n");
-    debug_row(matrix[0]);
-    fputc('\n', stderr);
-    debug_row(matrix[1]);
+  debug("Matrix:\n");
+  debug_row(matrix[0]);
+  fputc('\n', stderr);
+  debug_row(matrix[1]);
 }
 
 static void
 dump_syndrome(unsigned char *s)
 {
-    int i;
-    debug("Syndrome: ");
-    for (i=0;i<16;i++) {
-	if (i)
-	    fputc('-',stderr);
-	fprintf (stderr,"%02x",s[i]);
+  int i;
+  debug("Syndrome: ");
+  for (i=0; i<16; i++)
+    {
+      if (i)
+        fputc('-',stderr);
+      fprintf (stderr,"%02x",s[i]);
     }
-    fputc('\n',stderr);
+  fputc('\n',stderr);
 }
