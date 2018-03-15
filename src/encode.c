@@ -342,22 +342,28 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
     bit_write_sentinel(dat, dwg_sentinel(DWG_SENTINEL_HEADER_END));
 
     /*------------------------------------------------------------
-     * Unknown section 5
+     * AuxHeader section 5
+     * R2000+, mostly redundant file header information
      */
     dwg->header.section[5].number = 5;
-    dwg->header.section[5].address = 0;
-    dwg->header.section[5].size = 0;
+    dwg->header.section[5].address = dat->byte;
+    //dwg->header.section[5].size = 0;
     if (dwg->header.num_sections == 6)
       {
-        dwg->header.section[5].address = dat->byte;
-        dwg->header.section[5].size = DWG_UNKNOWN5_SIZE;
+        struct Dwg_AuxHeader* _obj = &dwg->auxheader;
+        obj = NULL;
 
+        #include "auxheader.spec"
+
+        /*
+        dwg->header.section[5].size = DWG_UNKNOWN5_SIZE;
         dwg->unknown5.size = dwg->header.section[5].size;
         dwg->unknown5.byte = dwg->unknown5.bit = 0;
         while (dat->byte + dwg->unknown5.size >= dat->size)
           bit_chain_alloc(dat);
         memcpy(&dat->chain[dat->byte], dwg->unknown5.chain, dwg->unknown5.size);
         dat->byte += dwg->unknown5.size;
+        */
       }
   }
 

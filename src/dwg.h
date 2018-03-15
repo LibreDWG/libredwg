@@ -2994,8 +2994,39 @@ typedef struct _dwg_struct
     Dwg_Section_Info* section_info;
   } header;
 
-#define DWG_UNKNOWN5_SIZE 123
-  Dwg_Chain unknown5;
+  //#define DWG_AUXHEADER_SIZE 123
+  struct Dwg_AuxHeader
+  {
+    BITCODE_RC   aux_intro[3]; /* ff 77 01 */
+    BITCODE_RS   dwg_version;
+    BITCODE_RS   maint_version;
+    BITCODE_RL   num_saves;
+    BITCODE_RL   minus_1;
+    BITCODE_RS   num_saves_1;
+    BITCODE_RS   num_saves_2;
+    BITCODE_RL   zero;
+    BITCODE_RS   dwg_version_1;
+    BITCODE_RS   maint_version_1;
+    BITCODE_RS   dwg_version_2;
+    BITCODE_RS   maint_version_2;
+    BITCODE_RS   unknown[10];
+    BITCODE_BL   TDCREATE_JULIAN_DAY;
+    BITCODE_BL   TDCREATE_MILLISECONDS;
+    BITCODE_BL   TDUPDATE_JULIAN_DAY;
+    BITCODE_BL   TDUPDATE_MILLISECONDS;
+    BITCODE_RL   HANDSEED;
+    BITCODE_RL   plot_stamp;
+    BITCODE_RS   zero_1;
+    BITCODE_RS   num_saves_3;
+    BITCODE_RL   zero_2;
+    BITCODE_RL   zero_3;
+    BITCODE_RL   zero_4;
+    BITCODE_RL   num_saves_4;
+    BITCODE_RL   zero_5;
+    BITCODE_RL   zero_6;
+    BITCODE_RL   zero_7;
+    BITCODE_RS   zero_18[3]; // R2018+
+  } auxheader;
 
   Dwg_Chain picture;
 

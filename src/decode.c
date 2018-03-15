@@ -510,21 +510,30 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
     LOG_TRACE("\n=======> HEADER (end): %8X\n", (unsigned int) dat->byte)
 
   /*-------------------------------------------------------------------------
-   * unknown section 5
+   * Section 5 AuxHeader
+   * R2000+, mostly redundant file header information
    */
 
   if (dwg->header.num_sections == 6)
     {
-      LOG_TRACE("\n=======> UNKNOWN 5: %8X\n",
+      struct Dwg_AuxHeader* _obj = &dwg->auxheader;
+      obj = NULL;
+
+      LOG_TRACE("\n=======> AuxHeader: %8X\n",
               (unsigned int) dwg->header.section[5].address)
-      LOG_TRACE("         UNKNOWN 5 (end): %8X\n",
+      LOG_TRACE("         AuxHeader (end): %8X\n",
               (unsigned int) (dwg->header.section[5].address
                   + dwg->header.section[5].size))
       dat->byte = dwg->header.section[5].address;
-      dwg->unknown5.size = DWG_UNKNOWN5_SIZE;
-      dwg->unknown5.byte = dwg->unknown5.bit = 0;
-      dwg->unknown5.chain = (unsigned char*)malloc(dwg->unknown5.size);
-      memcpy(dwg->unknown5.chain, &dat->chain[dat->byte], dwg->unknown5.size);
+
+      #include "auxheader.spec"
+
+      /*
+      dwg->AuxHeader.size = DWG_AUXHEADER_SIZE;
+      dwg->AuxHeader.byte = dwg->AuxHeader.bit = 0;
+      dwg->AuxHeader.chain = (unsigned char*)malloc(dwg->AuxHeader.size);
+      memcpy(dwg->AuxHeader.chain, &dat->chain[dat->byte], dwg->AuxHeader.size);
+      */
       //bit_explore_chain ((Bit_Chain *) &dwg->unknown1, dwg->unknown1.size);
       //bit_print ((Bit_Chain *) &dwg->unknown1, dwg->unknown1.size);
     }
@@ -780,14 +789,13 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
               + dwg->header.section[2].size))
 
   /*-------------------------------------------------------------------------
-   * Second header, section 3?
+   * Second header, section 3
    */
 
   if (bit_search_sentinel(dat, dwg_sentinel(DWG_SENTINEL_SECOND_HEADER_BEGIN)))
     {
-      BITCODE_RC sig;
+      BITCODE_RC sig, sig2;
       long unsigned int pvzadr;
-      unsigned char sig2;
 
       LOG_INFO("\n=======> Second Header: %8X\n",
           (unsigned int) dat->byte-16)
@@ -800,11 +808,13 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
       pvz = bit_read_BL(dat);
       LOG_TRACE("Begin address: %8lX\n", pvz)
 
-      //LOG_TRACE("AC1015?: ")
+      //AC1012, AC1014 or AC1015
       for (i = 0; i < 6; i++)
         {
+          unsigned char c;
           sig = bit_read_RC(dat);
-          //LOG_TRACE("%c", sig >= ' ' && sig < 128 ? sig : '.')
+          c = (sig >= ' ' && (unsigned char)sig < 128) ? sig : '.';
+          LOG_TRACE("%c", c)
         }
 
       //LOG_TRACE("Null?:")
@@ -853,7 +863,7 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
           sig = bit_read_RC(dat);
           //if (loglevel) fprintf (stderr, "\t[%u]\n", sig);
           //if (loglevel) fprintf (stderr, "\tChain:");
-          for (j = 0; j < sig2; j++)
+          for (j = 0; j < (unsigned)sig2; j++)
             {
               sig = bit_read_RC(dat);
               dwg->second_header.handlerik[i].chain[j] = sig;
