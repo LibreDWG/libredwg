@@ -1472,7 +1472,7 @@ DWG_OBJECT(DICTIONARY);
     }
 
   FIELD_VECTOR(text, TV, numitems);
-  FIELD_HANDLE(parenthandle, 4);
+  FIELD_HANDLE(parenthandle, 8); // 8 with 2000, was 4
   REACTORS(4);
   XDICOBJHANDLE(3);
   HANDLE_VECTOR(itemhandles, numitems, 2);
@@ -2410,7 +2410,7 @@ DWG_OBJECT(MLINESTYLE);
     FIELD_CMC(lines[rcount].color);
     FIELD(lines[rcount].ltindex, BS);
   }
-  FIELD_HANDLE(parenthandle, 4);
+  FIELD_HANDLE(parenthandle, 8); // was 4
   REACTORS(4);
   XDICOBJHANDLE(3);
 
@@ -3730,5 +3730,6 @@ DWG_OBJECT(VISUALSTYLE);
         LOG_INFO("TODO VISUALSTYLE (hard-pointer to H DICTIONARY_VISUALSTYLE)\n");
     }
 DWG_OBJECT_END
+
 
 
