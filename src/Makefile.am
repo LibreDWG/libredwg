@@ -31,7 +31,7 @@ libredwg_la_SOURCES = \
 	dwg_api.c
 #       encode_r2007.c
 libredwg_la_LIBADD = -lm
-libredwg_la_LDFLAGS = -version-info 0:0:0
+libredwg_la_LDFLAGS = -version-info 0:0:0 -no-undefined
 
 include_HEADERS = \
 	dwg.h \
