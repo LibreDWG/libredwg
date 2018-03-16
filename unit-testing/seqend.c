@@ -15,11 +15,11 @@ low_level_process(dwg_object *obj)
 void
 api_process(dwg_object *obj)
 {
-  int dummy_error;
+  int error;
   char dummy;
   dwg_ent_seqend *seqend = dwg_object_to_SEQEND(obj);
 
   // returns dummy value
-  dummy = dwg_ent_seqend_get_dummy(seqend, &dummy_error);
+  dummy = dwg_ent_seqend_get_dummy(seqend, &error);
   printf("dummy value of seqend : %d", dummy);
 }

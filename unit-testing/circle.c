@@ -8,24 +8,24 @@ low_level_process(dwg_object *obj)
   dwg_ent_circle *circle = dwg_object_to_CIRCLE(obj);
 
   // prints circle radius
-  printf("Radius of circle : %f\t\n",circle->radius);
+  printf("Radius of circle : %f\n",circle->radius);
 
   // prints circle thickness
-  printf("Thickness of circle : %f\t\n",circle->thickness);
+  printf("Thickness of circle : %f\n",circle->thickness);
 
   // prints circle extrusion
-  printf("extrusion of circle : x = %f, y = %f, z = %f\t\n", 
+  printf("extrusion of circle : x = %f, y = %f, z = %f\n", 
           circle->extrusion.x, circle->extrusion.y, circle->extrusion.z);
 
   // prints circle center
-  printf("center of circle : x = %f,y = %f,z = %f\t\n",
+  printf("center of circle : x = %f,y = %f,z = %f\n",
           circle->center.x, circle->center.y, circle->center.z);
 }
 
 void
 api_process(dwg_object *obj)
 {
-  int radius_error, thickness_error, ext_error, center_error; // Error reporting
+  int error; // Error reporting
   double radius, thickness;
   dwg_point_3d center, ext;  //3d_points 
 
@@ -33,10 +33,10 @@ api_process(dwg_object *obj)
   dwg_ent_circle *circle = dwg_object_to_CIRCLE(obj);
 
   // returns circle radius
-  radius = dwg_ent_circle_get_radius(circle, &radius_error);
-  if(radius_error == 0 ) // Error checking
+  radius = dwg_ent_circle_get_radius(circle, &error);
+  if ( !error )
     {  
-      printf("Radius of circle : %f\t\n",radius);
+      printf("Radius of circle : %f\n",radius);
     }
   else
     {
@@ -44,10 +44,10 @@ api_process(dwg_object *obj)
     }
 
   // returns circle thickness
-  thickness = dwg_ent_circle_get_thickness(circle, &thickness_error);
-  if(thickness_error == 0 ) // error checking
+  thickness = dwg_ent_circle_get_thickness(circle, &error);
+  if ( !error )
     {
-      printf("Thickness of circle : %f\t\n",thickness);
+      printf("Thickness of circle : %f\n",thickness);
     }
   else
     {
@@ -55,10 +55,11 @@ api_process(dwg_object *obj)
     }
 
   // returns circle extrusion
-  dwg_ent_circle_get_extrusion(circle, &ext,&ext_error);
-  if(ext_error == 0 ) // error checking
+  dwg_ent_circle_get_extrusion(circle, &ext,
+                               &error);
+  if ( !error )
     {
-      printf("extrusion of circle : x = %f, y = %f, z = %f\t\n",
+      printf("extrusion of circle : x = %f, y = %f, z = %f\n",
               ext.x, ext.y, ext.z);
     }
   else
@@ -67,10 +68,11 @@ api_process(dwg_object *obj)
     }
 
   // return circle center points
-  dwg_ent_circle_get_center(circle, &center,&center_error);
-  if(center_error == 0 ) // error checking
+  dwg_ent_circle_get_center(circle, &center,
+                            &error);
+  if ( !error )
     {
-      printf("center of circle : x = %f, y = %f, z = %f\t\n",
+      printf("center of circle : x = %f, y = %f, z = %f\n",
               center.x, center.y, center.z);
     }
   else

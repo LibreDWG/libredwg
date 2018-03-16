@@ -9,85 +9,85 @@ low_level_process(dwg_object *obj)
   dwg_ent_dim_ordinate *dim_ordinate = dwg_object_to_DIMENSION_ORDINATE(obj);
 
   // prints horiz dir
-  printf("horiz dir of dim_ordinate : %f\t\n",
+  printf("horiz dir of dim_ordinate : %f\n",
           dim_ordinate->horiz_dir);
  
   // prints lspace factor
-  printf("lspace factor of dim_ordinate : %f\t\n", 
+  printf("lspace factor of dim_ordinate : %f\n", 
           dim_ordinate->lspace_factor);
 
   // prints lspace styke
-  printf("lspace style of dim_ordinate : %d\t\n",
+  printf("lspace style of dim_ordinate : " FORMAT_BS "\n",
           dim_ordinate->lspace_style);
 
   // prints attach point
-  printf("attach point of dim_ordinate : %d\t\n",
+  printf("attach point of dim_ordinate : " FORMAT_BS "\n",
           dim_ordinate->attachment_point);
 
   // prints radius
-  printf("Radius of dim_ordinate : %f\t\n",
+  printf("Radius of dim_ordinate : %f\n",
           dim_ordinate->elevation.ecs_11);
 
   // prints thickness
-  printf("Thickness of dim_ordinate : %f\t\n",
+  printf("Thickness of dim_ordinate : %f\n",
           dim_ordinate->elevation.ecs_12);
 
   // prints extrusion points
-  printf("extrusion of dim_ordinate : x = %f, y = %f, z = %f\t\n",
+  printf("extrusion of dim_ordinate : x = %f, y = %f, z = %f\n",
           dim_ordinate->extrusion.x, dim_ordinate->extrusion.y,
           dim_ordinate->extrusion.z);
 
   // prints scale
-  printf("ins_scale of dim_ordinate : x = %f, y = %f, z = %f\t\n",
+  printf("ins_scale of dim_ordinate : x = %f, y = %f, z = %f\n",
           dim_ordinate->ins_scale.x, dim_ordinate->ins_scale.y,
           dim_ordinate->ins_scale.z);
 
   // prints 10 point
-  printf("pt10 of dim_ordinate : x = %f, y = %f, z = %f\t\n",
+  printf("pt10 of dim_ordinate : x = %f, y = %f, z = %f\n",
           dim_ordinate->_10_pt.x, dim_ordinate->_10_pt.y,
           dim_ordinate->_10_pt.z);
 
   // prints 13point
-  printf("pt13 of dim_ordinate : x = %f, y = %f, z = %f\t\n",
+  printf("pt13 of dim_ordinate : x = %f, y = %f, z = %f\n",
           dim_ordinate->_13_pt.x, dim_ordinate->_13_pt.y,
           dim_ordinate->_13_pt.z);
 
   // prints 14 point
-  printf("pt14 of dim_ordinate : x = %f, y = %f, z = %f\t\n",
+  printf("pt14 of dim_ordinate : x = %f, y = %f, z = %f\n",
           dim_ordinate->_14_pt.x, dim_ordinate->_14_pt.y,
           dim_ordinate->_14_pt.z);
 
   // prints 12 point
-  printf("pt12 of dim_ordinate : x = %f, y = %f\t\n",
+  printf("pt12 of dim_ordinate : x = %f, y = %f\n",
           dim_ordinate->_12_pt.x, dim_ordinate->_12_pt.y);
 
   // prints mid point
-  printf("text_mid_pt of dim_ordinate : x = %f, y = %f\t\n",
+  printf("text_mid_pt of dim_ordinate : x = %f, y = %f\n",
           dim_ordinate->text_midpt.x, dim_ordinate->text_midpt.y);
 
   // prints user text
-  printf("user text of dim_ordinate : %s\t\n", dim_ordinate->user_text);
+  printf("user text of dim_ordinate : %s\n", dim_ordinate->user_text);
 
   // prints text rotation
-  printf("text rotation of dim_ordinate : %f\t\n", dim_ordinate->text_rot);
+  printf("text rotation of dim_ordinate : %f\n", dim_ordinate->text_rot);
 
   // prints insert rotation
-  printf("ins rotation of dim_ordinate : %f\t\n", dim_ordinate->ins_rotation);
+  printf("ins rotation of dim_ordinate : %f\n", dim_ordinate->ins_rotation);
 
   // prints dimension arrow1
-  printf("arrow1 of dim_ordinate : %d\t\n", dim_ordinate->flip_arrow1);
+  printf("arrow1 of dim_ordinate : " FORMAT_BS "\n", dim_ordinate->flip_arrow1);
 
   // prints dimension arrow 2
-  printf("arrow1 of dim_ordinate : %d\t\n", dim_ordinate->flip_arrow2);
+  printf("arrow1 of dim_ordinate : " FORMAT_BS "\n", dim_ordinate->flip_arrow2);
 
   // prints flags 2
-  printf("flags2 of dim_ordinate : %d\t\n", dim_ordinate->flags_2);
+  printf("flags2 of dim_ordinate : " FORMAT_BS "\n", dim_ordinate->flags_2);
 
   // prints flag 1
-  printf("flags1 of dim_ordinate : %d\t\n", dim_ordinate->flags_1);
+  printf("flags1 of dim_ordinate : " FORMAT_BS "\n", dim_ordinate->flags_1);
 
   // prints act measurement
-  printf("act_measurement of dim_ordinate : %f\t\n",
+  printf("act_measurement of dim_ordinate : %f\n",
           dim_ordinate->act_measurement);
 
 }
@@ -95,24 +95,21 @@ low_level_process(dwg_object *obj)
 void
 api_process(dwg_object *obj)
 {
-  int ecs11_error, ecs12_error, flags1_error, act_error, horiz_error, lspace_error,
-      style_error, att_point_error, ext_error, user_text_error, text_rot_error, 
-      ins_rot_error, arrow1_error, arrow2_error, mid_pt_error, ins_scale_error, 
-      flags2_error, pt10_error, pt12_error, pt13_error, pt14_error;
+  int error;
   double ecs11, ecs12, act_measure, horiz_dir, lspace_factor, text_rot, 
          ins_rot;
-  unsigned int flags1, lspace_style, attach_pt, flip_arrow1, flip_arrow2, 
-               flags2;
+  BITCODE_RC flags1, flags2, flip_arrow1, flip_arrow2;
+  BITCODE_BS lspace_style, attach_pt;
   char * user_text;
   dwg_point_2d text_mid_pt, pt12;
   dwg_point_3d pt10, pt13, pt14, ext, ins_scale;
   dwg_ent_dim_ordinate *dim_ordinate = dwg_object_to_DIMENSION_ORDINATE(obj);
 
   // returns horiz dir
-  horiz_dir = dwg_ent_dim_ordinate_get_horiz_dir(dim_ordinate, &horiz_error);
-  if(horiz_error == 0 ) // error check
+  horiz_dir = dwg_ent_dim_ordinate_get_horiz_dir(dim_ordinate, &error);
+  if ( !error )
     {  
-      printf("horiz dir of dim_ordinate : %f\t\n", horiz_dir);
+      printf("horiz dir of dim_ordinate : %f\n", horiz_dir);
     }
   else
     {
@@ -121,10 +118,10 @@ api_process(dwg_object *obj)
 
   // returns lspace factor
   lspace_factor = dwg_ent_dim_ordinate_get_elevation_ecs11(dim_ordinate, 
-                  &lspace_error);
-  if(lspace_error == 0 ) // error checks
+                  &error);
+  if ( !error )
     {  
-      printf("lspace factor of dim_ordinate : %f\t\n", lspace_factor);
+      printf("lspace factor of dim_ordinate : %f\n", lspace_factor);
     }
   else	
     {
@@ -133,10 +130,10 @@ api_process(dwg_object *obj)
 
   // returns lspace style
   lspace_style = dwg_ent_dim_ordinate_get_elevation_ecs11(dim_ordinate, 
-                  &style_error);
-  if(style_error == 0 ) // error check
+                  &error);
+  if ( !error )
     {  
-      printf("lspace style of dim_ordinate : %d\t\n", lspace_style);
+      printf("lspace style of dim_ordinate : " FORMAT_BS "\n", lspace_style);
     }
   else
     {
@@ -145,10 +142,10 @@ api_process(dwg_object *obj)
 
   // returns attachment point
   attach_pt = dwg_ent_dim_ordinate_get_elevation_ecs11(dim_ordinate, 
-              &att_point_error);
-  if(att_point_error == 0 ) // error check
+              &error);
+  if ( !error )
     {  
-      printf("attach point of dim_ordinate : %d\t\n", attach_pt);
+      printf("attach point of dim_ordinate : " FORMAT_BS "\n", attach_pt);
     }
   else
     {
@@ -156,10 +153,10 @@ api_process(dwg_object *obj)
     }
 
   // returns ecs11 elevation
-  ecs11 = dwg_ent_dim_ordinate_get_elevation_ecs11(dim_ordinate, &ecs11_error);
-  if(ecs11_error == 0 ) // error check
+  ecs11 = dwg_ent_dim_ordinate_get_elevation_ecs11(dim_ordinate, &error);
+  if ( !error )
     {  
-      printf("Radius of dim_ordinate : %f\t\n",ecs11);
+      printf("Radius of dim_ordinate : %f\n",ecs11);
     }
   else
     {
@@ -167,10 +164,10 @@ api_process(dwg_object *obj)
     }
 
   // returns ecs12 elevation
-  ecs12 = dwg_ent_dim_ordinate_get_elevation_ecs12(dim_ordinate, &ecs12_error);
-  if(ecs12_error == 0 ) // error check
+  ecs12 = dwg_ent_dim_ordinate_get_elevation_ecs12(dim_ordinate, &error);
+  if ( !error )
     {
-      printf("Thickness of dim_ordinate : %f\t\n",ecs12);
+      printf("Thickness of dim_ordinate : %f\n",ecs12);
     }
   else
     {
@@ -178,10 +175,11 @@ api_process(dwg_object *obj)
     }
 
   // returns extrusion points
-  dwg_ent_dim_ordinate_get_extrusion(dim_ordinate, &ext,&ext_error);
-  if(ext_error == 0 ) // error check
+  dwg_ent_dim_ordinate_get_extrusion(dim_ordinate, &ext,
+                                     &error);
+  if ( !error )
     {
-      printf("extrusion of dim_ordinate : x = %f, y = %f, z = %f\t\n",
+      printf("extrusion of dim_ordinate : x = %f, y = %f, z = %f\n",
               ext.x, ext.y, ext.z);
     }
   else
@@ -190,10 +188,11 @@ api_process(dwg_object *obj)
     }
 
   // returns insert scale 
-  dwg_ent_dim_ordinate_get_ins_scale(dim_ordinate, &ins_scale,&ins_scale_error);
-  if(ins_scale_error == 0 ) // error check
+  dwg_ent_dim_ordinate_get_ins_scale(dim_ordinate, &ins_scale,
+                                     &error);
+  if ( !error )
     {
-      printf("ins_scale of dim_ordinate : x = %f, y = %f, z = %f\t\n",
+      printf("ins_scale of dim_ordinate : x = %f, y = %f, z = %f\n",
               ins_scale.x, ins_scale.y, ins_scale.z);
     }
   else
@@ -202,10 +201,11 @@ api_process(dwg_object *obj)
     }
 
   // returns 10 point
-  dwg_ent_dim_ordinate_get_10_pt(dim_ordinate, &pt10,&pt10_error);
-  if(pt10_error == 0 ) // error check
+  dwg_ent_dim_ordinate_get_10_pt(dim_ordinate, &pt10,
+                                 &error);
+  if ( !error )
     {
-      printf("pt10 of dim_ordinate : x = %f, y = %f, z = %f\t\n",
+      printf("pt10 of dim_ordinate : x = %f, y = %f, z = %f\n",
               pt10.x, pt10.y, pt10.z);
     }
   else
@@ -214,10 +214,11 @@ api_process(dwg_object *obj)
     }
 
   // returns point 13
-  dwg_ent_dim_ordinate_get_13_pt(dim_ordinate, &pt13,&pt13_error);
-  if(pt13_error == 0 ) // error check
+  dwg_ent_dim_ordinate_get_13_pt(dim_ordinate, &pt13,
+                                 &error);
+  if ( !error )
     {
-      printf("pt13 of dim_ordinate : x = %f, y = %f, z = %f\t\n",
+      printf("pt13 of dim_ordinate : x = %f, y = %f, z = %f\n",
               pt13.x, pt13.y, pt13.z);
     }
   else
@@ -226,10 +227,11 @@ api_process(dwg_object *obj)
     }
 
   // returns 14 point
-  dwg_ent_dim_ordinate_get_14_pt(dim_ordinate, &pt14,&pt14_error);
-  if(pt14_error == 0 ) // error check
+  dwg_ent_dim_ordinate_get_14_pt(dim_ordinate, &pt14,
+                                 &error);
+  if ( !error )
     {
-      printf("pt14 of dim_ordinate : x = %f, y = %f, z = %f\t\n",
+      printf("pt14 of dim_ordinate : x = %f, y = %f, z = %f\n",
               pt14.x, pt14.y, pt14.z);
     }
   else
@@ -238,10 +240,11 @@ api_process(dwg_object *obj)
     }
 
   // returns 12 point
-  dwg_ent_dim_ordinate_get_12_pt(dim_ordinate, &pt12,&pt12_error);
-  if(pt12_error == 0 ) // error check
+  dwg_ent_dim_ordinate_get_12_pt(dim_ordinate, &pt12,
+                                 &error);
+  if ( !error )
     {
-      printf("pt12 of dim_ordinate : x = %f, y = %f\t\n",
+      printf("pt12 of dim_ordinate : x = %f, y = %f\n",
               pt12.x, pt12.y);
     }
   else
@@ -251,10 +254,10 @@ api_process(dwg_object *obj)
 
   // returns text mid point
   dwg_ent_dim_ordinate_get_text_mid_pt(dim_ordinate, &text_mid_pt,
-                                          &mid_pt_error);
-  if(mid_pt_error == 0 ) // error check
+                                          &error);
+  if ( !error )
     {
-      printf("text_mid_pt of dim_ordinate : x = %f, y = %f\t\n",
+      printf("text_mid_pt of dim_ordinate : x = %f, y = %f\n",
               text_mid_pt.x, text_mid_pt.y);
     }
   else
@@ -263,10 +266,10 @@ api_process(dwg_object *obj)
     }
 
   // returns user text
-  user_text = dwg_ent_dim_ordinate_get_user_text(dim_ordinate, &user_text_error);
-  if(user_text_error == 0 ) // error checking
+  user_text = dwg_ent_dim_ordinate_get_user_text(dim_ordinate, &error);
+  if ( !error )
     {  
-      printf("user text of dim_ordinate : %s\t\n",user_text);
+      printf("user text of dim_ordinate : %s\n",user_text);
     }
   else
     {
@@ -274,10 +277,10 @@ api_process(dwg_object *obj)
     }
 
   // returns text rotation
-  text_rot = dwg_ent_dim_ordinate_get_text_rot(dim_ordinate, &text_rot_error);
-  if(text_rot_error == 0 ) // error check
+  text_rot = dwg_ent_dim_ordinate_get_text_rot(dim_ordinate, &error);
+  if ( !error )
     {  
-      printf(" text rotation of dim_ordinate : %f\t\n", text_rot);
+      printf(" text rotation of dim_ordinate : %f\n", text_rot);
     }
   else
     {
@@ -285,10 +288,10 @@ api_process(dwg_object *obj)
     }
 
   // returns insert rotation
-  ins_rot = dwg_ent_dim_ordinate_get_ins_rotation(dim_ordinate, &ins_rot_error);
-  if(ins_rot_error == 0 ) // error check
+  ins_rot = dwg_ent_dim_ordinate_get_ins_rotation(dim_ordinate, &error);
+  if ( !error )
     {  
-      printf("ins rotation of dim_ordinate : %f\t\n",ins_rot);
+      printf("ins rotation of dim_ordinate : %f\n",ins_rot);
     }
   else
     {
@@ -297,10 +300,10 @@ api_process(dwg_object *obj)
 
   // returns flip arrow 1
   flip_arrow1 = dwg_ent_dim_ordinate_get_flip_arrow1(dim_ordinate,
-                &arrow1_error);
-  if(arrow1_error == 0 ) // error check
+                &error);
+  if ( !error )
     {  
-      printf("arrow1 of dim_ordinate : %d\t\n",flip_arrow1);
+      printf("arrow1 of dim_ordinate : " FORMAT_BS "\n",flip_arrow1);
     }
   else
     {
@@ -309,10 +312,10 @@ api_process(dwg_object *obj)
 
   // returns flip arrow 2
   flip_arrow2 = dwg_ent_dim_ordinate_get_flip_arrow2(dim_ordinate,
-                &arrow2_error);
-  if(arrow2_error == 0 ) // error check
+                &error);
+  if ( !error )
     {  
-      printf("arrow1 of dim_ordinate : %d\t\n",flip_arrow2);
+      printf("arrow1 of dim_ordinate : " FORMAT_BS "\n",flip_arrow2);
     }
   else
     {
@@ -321,10 +324,10 @@ api_process(dwg_object *obj)
 
   // returns flags2
   flags2 = dwg_ent_dim_ordinate_get_flags2(dim_ordinate,
-                &flags2_error);
-  if(flags2_error == 0 ) // error check
+                &error);
+  if ( !error )
     {  
-      printf("flags2 of dim_ordinate : %d\t\n",flags2);
+      printf("flags2 of dim_ordinate : " FORMAT_BS "\n",flags2);
     }
   else
     {
@@ -333,10 +336,10 @@ api_process(dwg_object *obj)
 
   // returns flags1 
   flags1 = dwg_ent_dim_ordinate_get_flags1(dim_ordinate,
-                &flags1_error);
-  if(arrow2_error == 0 ) // error check
+                &error);
+  if ( !error )
     {  
-      printf("flags1 of dim_ordinate : %d\t\n",flags1);
+      printf("flags1 of dim_ordinate : " FORMAT_BS "\n",flags1);
     }
   else
     {
@@ -345,10 +348,10 @@ api_process(dwg_object *obj)
 
   // returns actual measurement
   act_measure = dwg_ent_dim_ordinate_get_act_measurement(dim_ordinate,
-                &act_error);
-  if(act_error == 0 )
+                &error);
+  if ( !error )
     {  
-      printf("act_measurement of dim_ordinate : %f\t\n",act_measure);
+      printf("act_measurement of dim_ordinate : %f\n",act_measure);
     }
   else
     {

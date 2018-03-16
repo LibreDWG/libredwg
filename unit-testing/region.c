@@ -22,49 +22,47 @@ low_level_process(dwg_object *obj)
   // casts dwg object to region entity
   dwg_ent_region *region = dwg_object_to_REGION(obj);
 
-  printf("acis empty of region : %d\n", region->acis_empty);
-  printf("version of region : %d\n", region->version);
+  printf("acis empty of region :" FORMAT_BS "\n", region->acis_empty);
+  printf("version of region :" FORMAT_BS "\n", region->version);
   printf("acis data of region : %s\n", region->acis_data);
-  printf("wireframe data of region : %d\n", region->wireframe_data_present);
-  printf("point present of region : %d\n", region->point_present);
+  printf("wireframe data of region :" FORMAT_BS "\n", region->wireframe_data_present);
+  printf("point present of region :" FORMAT_BS "\n", region->point_present);
   printf("point of region : x = %f, y = %f, z = %f\n", region->point.x,
           region->point.y, region->point.z);
-  printf("num isolines of region : %ld\n", region->num_isolines);
-  printf("isoline present of region : %d\n", region->isoline_present);
-  printf("num wires of region : %ld\n", region->num_wires);
+  printf("num isolines of region :" FORMAT_BL "\n", region->num_isolines);
+  printf("isoline present of region :" FORMAT_BS "\n", region->isoline_present);
+  printf("num wires of region :" FORMAT_BL "\n", region->num_wires);
   for (i = 0; i < region->num_wires; i++)
     {
-      printf("wire of region : %ld\n", region->wires[i].selection_marker);
+      printf("wire of region :" FORMAT_BL "\n", region->wires[i].selection_marker);
     }
-  printf("num_silhouettes of region : %ld\n", region->num_silhouettes);
+  printf("num_silhouettes of region :" FORMAT_BL "\n", region->num_silhouettes);
   for (i = 0; i < region->num_silhouettes; i++)
     {
-      printf("silhouette of region : %ld\n", region->silhouettes[i].vp_id);
+      printf("silhouette of region :" FORMAT_BL "\n", region->silhouettes[i].vp_id);
     }
 }
 
 void
 api_process(dwg_object *obj)
 {
-  int block_size_error, num_isolines_error, num_wires_error, acis_data_error,
-      isoline_present_error, point_present_error, wireframe_data_present_error,
-      version_error, acis_empty_error, point_error, acis2_empty_error, sil_error,
-      wire_error, num_sil_error;
-  unsigned int version;
-  long block_size, num_isolines, num_wires, num_sil;
+  int error;
+  BITCODE_BL i;
+  BITCODE_BS version;
+  BITCODE_BL block_size, num_isolines, num_wires, num_sil;
   char * acis_data;
-  char wireframe_data_present, point_present, isoline_present; 
-  unsigned char acis_empty, acis2_empty;
+  BITCODE_B wireframe_data_present, point_present, isoline_present; 
+  BITCODE_B acis_empty, acis2_empty;
   dwg_point_3d point;
   dwg_ent_region *region = dwg_object_to_REGION(obj);
   dwg_ent_solid_wire *wire;
   dwg_ent_solid_silhouette *sil;
 
   // returns acis empty
-  acis_empty = dwg_ent_region_get_acis_empty(region, &acis_empty_error);
-  if( acis_empty_error == 0 ) // error check
+  acis_empty = dwg_ent_region_get_acis_empty(region, &error);
+  if ( !error )
     {
-      printf("acis empty of region : %d\n", acis_empty);
+      printf("acis empty of region :" FORMAT_BS "\n", acis_empty);
     }
   else
     {
@@ -72,10 +70,10 @@ api_process(dwg_object *obj)
     }
 
   // returns version
-  version = dwg_ent_region_get_version(region, &version_error);
-  if( version_error == 0 ) // error check
+  version = dwg_ent_region_get_version(region, &error);
+  if ( !error )
     {
-      printf("version of region : %d\n", version);
+      printf("version of region :" FORMAT_BS "\n", version);
     }
   else
     {
@@ -83,8 +81,8 @@ api_process(dwg_object *obj)
     }
 
   // returns acis data
-  acis_data = dwg_ent_region_get_acis_data(region, &acis_data_error); 
-  if( acis_data_error == 0 ) // error check
+  acis_data = dwg_ent_region_get_acis_data(region, &error); 
+  if ( !error )
     {
       printf("acis data of region : %s\n", acis_data);
     }
@@ -95,10 +93,10 @@ api_process(dwg_object *obj)
 
   // returns wireframe data
   wireframe_data_present = dwg_ent_region_get_wireframe_data_present(region,
-                           &wireframe_data_present_error); 
-  if( wireframe_data_present_error == 0 ) // error check
+                           &error); 
+  if ( !error )
     {
-      printf("wireframe data of region : %d\n", wireframe_data_present);
+      printf("wireframe data of region :" FORMAT_BS "\n", wireframe_data_present);
     }
   else
     {
@@ -106,10 +104,10 @@ api_process(dwg_object *obj)
     }
 
   // returns point present
-  point_present = dwg_ent_region_get_point_present(region, &point_present_error); 
-  if( point_present_error == 0 ) // error check
+  point_present = dwg_ent_region_get_point_present(region, &error); 
+  if ( !error )
     {
-      printf("point present of region : %d\n", point_present);
+      printf("point present of region :" FORMAT_BS "\n", point_present);
     }
   else
     {
@@ -117,10 +115,10 @@ api_process(dwg_object *obj)
     } 
 
   // returns point values
-  dwg_ent_region_get_point(region, &point, &point_error); 
-  if( point_error == 0 ) // error check
+  dwg_ent_region_get_point(region, &point, &error); 
+  if ( !error )
     {
-      printf("point of region : x = %f, y = %f, z = %f\t\n", point.x, point.y,
+      printf("point of region : x = %f, y = %f, z = %f\n", point.x, point.y,
               point.z);
     }
   else
@@ -129,10 +127,10 @@ api_process(dwg_object *obj)
     } 
 
   // returns num isolines
-  num_isolines = dwg_ent_region_get_num_isolines(region, &num_isolines_error);
-  if( num_isolines_error == 0 ) // error check
+  num_isolines = dwg_ent_region_get_num_isolines(region, &error);
+  if ( !error )
     {
-      printf("num isolines of region : %ld\n", num_isolines);
+      printf("num isolines of region :" FORMAT_BL "\n", num_isolines);
     }
   else
     {
@@ -140,10 +138,10 @@ api_process(dwg_object *obj)
     }
 
   // returns isoline present
-  isoline_present = dwg_ent_region_get_isoline_present(region, &isoline_present_error);
-  if( isoline_present_error == 0 ) // error check
+  isoline_present = dwg_ent_region_get_isoline_present(region, &error);
+  if ( !error )
     {
-      printf("isoline present of region : %d\n", isoline_present);
+      printf("isoline present of region :" FORMAT_BS "\n", isoline_present);
     }
   else
     {
@@ -151,10 +149,10 @@ api_process(dwg_object *obj)
     } 
 
   // returns num wires
-  num_wires = dwg_ent_region_get_num_wires(region, &num_wires_error);
-  if( num_wires_error == 0 ) // error check
+  num_wires = dwg_ent_region_get_num_wires(region, &error);
+  if ( !error )
     {
-      printf("num wires of region : %ld\n", num_wires);
+      printf("num wires of region :" FORMAT_BL "\n", num_wires);
     }
   else
     {
@@ -162,14 +160,11 @@ api_process(dwg_object *obj)
     } 
 
   // returns wire
-  wire = dwg_ent_region_get_wire(region, &wire_error);
-  if( wire_error == 0 ) // error check
+  wire = dwg_ent_region_get_wire(region, &error);
+  if ( !error )
     {
-      int i;
       for (i = 0; i < num_wires; i++)
-        {
-           printf("wire of region : %ld\n", wire[i].selection_marker);
-        }
+        printf("wire of region :" FORMAT_BL "\n", wire[i].selection_marker);
     }
   else
     {
@@ -177,10 +172,10 @@ api_process(dwg_object *obj)
     } 
 
   // returns num sil houettes
-  num_sil = dwg_ent_region_get_num_silhouettes(region, &num_sil_error);
-  if( num_sil_error == 0 ) // error checking
+  num_sil = dwg_ent_region_get_num_silhouettes(region, &error);
+  if ( !error )
     {
-      printf("num_silhouettes of region : %ld\n", num_sil);
+      printf("num_silhouettes of region :" FORMAT_BL "\n", num_sil);
     }
   else
     {
@@ -188,14 +183,11 @@ api_process(dwg_object *obj)
     } 
 
   // returns sil houettes
-  sil = dwg_ent_region_get_silhouette(region, &sil_error);
-  if( sil_error == 0 )
+  sil = dwg_ent_region_get_silhouette(region, &error);
+  if ( !error )
     {
-      int i;
       for (i = 0; i < num_sil; i++)
-        {
-           printf("silhouette of region : %ld\n", sil[i].vp_id);
-        }
+        printf("silhouette of region :" FORMAT_BL "\n", sil[i].vp_id);
     }
   else
     {

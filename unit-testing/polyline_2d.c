@@ -26,19 +26,19 @@ low_level_process(dwg_object *obj)
 void
 api_process(dwg_object *obj)
 {
-  int start_w_error, end_w_error, ext_error, thickness_error, elevation_error,
-      curve_type_error, flags_error, owned_obj_error;
+  int error;
   double start_width, end_width, elevation, thickness;
-  long owned_obj;
+  BITCODE_BL owned_obj;
   unsigned int flags, curve_type;
   dwg_point_3d ext;
   dwg_ent_polyline_2d *polyline_2d = dwg_object_to_POLYLINE_2D(obj);
 
   // returns extrusion points
-  dwg_ent_polyline_2d_get_extrusion(polyline_2d, &ext, &ext_error);
-  if( ext_error == 0 ) // error check
+  dwg_ent_polyline_2d_get_extrusion(polyline_2d, &ext,
+                                    &error);
+  if ( !error )
   {
-     printf("extrusion : x = %f, y = %f, z = %f\t\n",ext.x, ext.y, ext.z);
+     printf("extrusion : x = %f, y = %f, z = %f\n",ext.x, ext.y, ext.z);
   }
   else
   {
@@ -46,10 +46,10 @@ api_process(dwg_object *obj)
   }
 
   // returns start width
-  start_width = dwg_ent_polyline_2d_get_start_width(polyline_2d, &start_w_error);
-  if( start_w_error == 0 ) // error check
+  start_width = dwg_ent_polyline_2d_get_start_width(polyline_2d, &error);
+  if ( !error )
   {
-     printf("start width of polyline : %f\t\n", start_width);
+     printf("start width of polyline : %f\n", start_width);
   }
   else
   {
@@ -57,10 +57,10 @@ api_process(dwg_object *obj)
   }
 
   // returns end width
-  end_width = dwg_ent_polyline_2d_get_end_width(polyline_2d, &end_w_error);
-  if( end_w_error == 0 ) // error check
+  end_width = dwg_ent_polyline_2d_get_end_width(polyline_2d, &error);
+  if ( !error )
   {
-     printf("end width of polyline : %f\t\n", end_width);
+     printf("end width of polyline : %f\n", end_width);
   }
   else
   {
@@ -68,10 +68,10 @@ api_process(dwg_object *obj)
   }
 
   // returns thickness
-  thickness = dwg_ent_polyline_2d_get_thickness(polyline_2d, &thickness_error);
-  if( thickness_error == 0 ) // error check
+  thickness = dwg_ent_polyline_2d_get_thickness(polyline_2d, &error);
+  if ( !error )
   {
-     printf("thickness of polyline : %f\t\n", thickness);
+     printf("thickness of polyline : %f\n", thickness);
   }
   else
   {
@@ -79,10 +79,10 @@ api_process(dwg_object *obj)
   }
 
   // returns elevation
-  elevation = dwg_ent_polyline_2d_get_elevation(polyline_2d, &elevation_error);
-  if( elevation_error == 0 ) // error check
+  elevation = dwg_ent_polyline_2d_get_elevation(polyline_2d, &error);
+  if ( !error )
   {
-     printf("elevation of polyline : %f\t\n", elevation);
+     printf("elevation of polyline : %f\n", elevation);
   }
   else
   {
@@ -90,10 +90,10 @@ api_process(dwg_object *obj)
   }
 
   // returns flags
-  flags = dwg_ent_polyline_2d_get_flags(polyline_2d, &flags_error);
-  if( flags_error == 0 ) // error check
+  flags = dwg_ent_polyline_2d_get_flags(polyline_2d, &error);
+  if ( !error )
   {
-     printf("flag of polyline : %ud\t\n", flags);
+     printf("flag of polyline : %ud\n", flags);
   }
   else
   {
@@ -101,10 +101,10 @@ api_process(dwg_object *obj)
   }
 
   // returns curve type
-  curve_type = dwg_ent_polyline_2d_get_curve_type(polyline_2d, &curve_type_error);
-  if( curve_type_error == 0 ) // error check
+  curve_type = dwg_ent_polyline_2d_get_curve_type(polyline_2d, &error);
+  if ( !error )
   {
-     printf("curve type of polyline : %ud\t\n", curve_type);
+     printf("curve type of polyline : %ud\n", curve_type);
   }
   else
   {
@@ -113,10 +113,10 @@ api_process(dwg_object *obj)
 
   // returns owned object count
   owned_obj = dwg_ent_polyline_2d_get_owned_obj_count(polyline_2d,
-               &owned_obj_error);
-  if( owned_obj_error == 0 ) // error check
+               &error);
+  if ( !error )
   {
-     printf("owned object of polyline : %ld\t\n", owned_obj);
+     printf("owned object of polyline : " FORMAT_BL "\n", owned_obj);
   }
   else
   {

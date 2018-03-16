@@ -1,52 +1,37 @@
+#define DWG_TYPE DWG_TYPE_TOLERANCE
 #include "common.c"
-
-void
-output_object(dwg_object* obj)
-{
-  if (!obj)
-    {
-      printf("object is NULL\n");
-      return;
-    }
-
-  if (dwg_get_type(obj)== DWG_TYPE_TEXT)
-    {
-      output_process(obj);
-    }
-}
 
 void
 low_level_process(dwg_object *obj)
 {
-
   // casts a dwg object of text
   dwg_ent_text *text = dwg_object_to_TEXT(obj);
 
   // prints text value of text
-  printf("text of text : %s\t\n", text->text_value);
+  printf("text of text : %s\n", text->text_value);
 
   // prints insertion point of text
-  printf("insertion point of text : x = %f, y = %f\t\n", 
+  printf("insertion point of text : x = %f, y = %f\n", 
           text->insertion_pt.x, text->insertion_pt.y);
 
   // prints extrusion
-  printf("extrusion of text : x = %f, y = %f, z = %f\t\n",
+  printf("extrusion of text : x = %f, y = %f, z = %f\n",
           text->extrusion.x, text->extrusion.y, text->extrusion.z);
 
   // prints height of text
-  printf("height of text : %f\t\n", text->height);
+  printf("height of text : %f\n", text->height);
 
   // prints thickness of text
-  printf("thickness of text : %f\t\n", text->thickness);
+  printf("thickness of text : %f\n", text->thickness);
 
   // prints rotation of text
-  printf("rotation of text : %f\t\n", text->rotation_ang);
+  printf("rotation of text : %f\n", text->rotation_ang);
 
   // prints vertical alignment
-  printf("vertical align of text : %u\t\n", text->vert_alignment);
+  printf("vertical align of text : %u\n", text->vert_alignment);
 
   // prints horizontal alignment
-  printf("horizontal align of text : %u\t\n", text->horiz_alignment);
+  printf("horizontal align of text : %u\n", text->horiz_alignment);
 }
 
 void
@@ -63,7 +48,7 @@ api_process(dwg_object *obj)
   text_value = dwg_ent_text_get_text(text, &error);
   if (!error)
     {  
-      printf("text value : %s\t\n",text_value);
+      printf("text value : %s\n",text_value);
     }
   else
     {
@@ -74,7 +59,7 @@ api_process(dwg_object *obj)
   dwg_ent_text_get_insertion_point(text, &ins_pt, &error);
   if (!error)
     {
-      printf("insertion point of text : x = %f, y = %f\t\n",
+      printf("insertion point of text : x = %f, y = %f\n",
               ins_pt.x, ins_pt.y);
     }
   else
@@ -86,7 +71,7 @@ api_process(dwg_object *obj)
   dwg_ent_text_get_extrusion(text, &ext, &error);
   if (!error)
     {
-      printf("extrusion of text : x = %f, y = %f, z = %f\t\n",
+      printf("extrusion of text : x = %f, y = %f, z = %f\n",
               ext.x, ext.y, ext.z);
     }
   else
@@ -98,7 +83,7 @@ api_process(dwg_object *obj)
   height = dwg_ent_text_get_height(text, &error);
   if (!error)
     {
-      printf("height of text : %f\t\n", height);
+      printf("height of text : %f\n", height);
     }
   else
     {
@@ -109,7 +94,7 @@ api_process(dwg_object *obj)
   thickness = dwg_ent_text_get_thickness(text, &error);
   if (!error)
     {
-      printf("thickness of text : %f\t\n", thickness);
+      printf("thickness of text : %f\n", thickness);
     }
   else
     {
@@ -120,7 +105,7 @@ api_process(dwg_object *obj)
   rotation = dwg_ent_text_get_rot_angle(text, &error);
   if (!error)
     {
-      printf("rotation of text : %f\t\n", rotation);
+      printf("rotation of text : %f\n", rotation);
     }
   else
     {
@@ -131,7 +116,7 @@ api_process(dwg_object *obj)
   vert_align = dwg_ent_text_get_vert_align(text, &error);
   if (!error)
     {
-      printf("Vertical alignment of text : %f\t\n", vert_align);
+      printf("Vertical alignment of text : %f\n", vert_align);
     }
   else
     {
@@ -142,7 +127,7 @@ api_process(dwg_object *obj)
   horiz_align = dwg_ent_text_get_horiz_align(text, &error);
   if (!error)
     {
-      printf("Horizontal alignment of text : %f\t\n", horiz_align);
+      printf("Horizontal alignment of text : %f\n", horiz_align);
     }
   else
     {

@@ -22,61 +22,61 @@ low_level_process(dwg_object *obj)
   dwg_ent_minsert *minsert = dwg_object_to_MINSERT(obj);
 
   // prints inserion points
-  printf("minsert points : x = %f, y = %f, z = %f\t\n",
+  printf("minsert points : x = %f, y = %f, z = %f\n",
 	  minsert->ins_pt.x, minsert->ins_pt.y, minsert->ins_pt.z);
 
   // prints scale flag
-  printf("scale flag for minsert : %d\t\n", minsert->scale_flag);
+  printf("scale flag for minsert : " FORMAT_BS "\n", minsert->scale_flag);
 
   // prints scale points
-  printf("scale points : x = %f, y = %f, z = %f\t\n",
+  printf("scale points : x = %f, y = %f, z = %f\n",
 	  minsert->scale.x, minsert->scale.y, minsert->scale.z);
 
   // prints rotation angle
-  printf("angle for minsert : %f\t\n", minsert->rotation_ang);
+  printf("angle for minsert : %f\n", minsert->rotation_ang);
 
   // prints extrusion point
-  printf("extrusion points : x = %f, y = %f, z = %f\t\n",
+  printf("extrusion points : x = %f, y = %f, z = %f\n",
 	  minsert->extrusion.x, minsert->extrusion.y, minsert->extrusion.z);
 
   // prints has_attributes
-  printf("attribs for minsert : %d\t\n", minsert->has_attribs);
+  printf("attribs for minsert : " FORMAT_BS "\n", minsert->has_attribs);
 
   // prints owned object counts
-  printf("object count for minsert : %ld\t\n", minsert->owned_obj_count);
+  printf("object count for minsert : " FORMAT_BL "\n", minsert->owned_obj_count);
 
   // prints num rows
-  printf("number of rows for minsert : %u\t\n", minsert->numrows);
+  printf("number of rows for minsert : %u\n", minsert->numrows);
 
   // prints num cols
-  printf("number of columns for minsert : %u\t\n", minsert->numcols);
+  printf("number of columns for minsert : %u\n", minsert->numcols);
 
   // prints col space
-  printf("col space for minsert : %f\t\n", minsert->row_spacing);
+  printf("col space for minsert : %f\n", minsert->row_spacing);
 
   // prints rows space
-  printf("row space for minsert : %f\t\n", minsert->col_spacing);
+  printf("row space for minsert : %f\n", minsert->col_spacing);
  
 }
 
 void
 api_process(dwg_object *obj)
 {
-  int ins_pt_error, ext_error, scale_error, ang_error, flag_error, attr_error,
-  count_error, num_col_error, num_row_error, colspace_error, rowspace_error;
+  int error;
   dwg_point_3d ins_pt, ext, scale;
   double rot_angle;
   char scale_flag, attribs;
   double col_space, row_space;
-  long obj_count, num_rows, num_cols;
+  BITCODE_BL obj_count, num_rows, num_cols;
+
   dwg_ent_minsert *minsert = dwg_object_to_MINSERT(obj);
 
- 
   // returns insertion point
-  dwg_ent_minsert_get_ins_pt(minsert, &ins_pt, &ins_pt_error);
-  if(ins_pt_error == 0 ) // error check
+  dwg_ent_minsert_get_ins_pt(minsert, &ins_pt,
+                             &error);
+  if ( !error )
     {
-      printf("minsert points : x = %f, y = %f, z = %f\t\n",
+      printf("minsert points : x = %f, y = %f, z = %f\n",
 	     ins_pt.x, ins_pt.y, ins_pt.z);
     }
   else
@@ -85,10 +85,10 @@ api_process(dwg_object *obj)
     }
 
   // returns scale flag
-  scale_flag = dwg_ent_minsert_get_scale_flag(minsert, &flag_error); 
-  if(flag_error == 0) // error check
+  scale_flag = dwg_ent_minsert_get_scale_flag(minsert, &error); 
+  if ( !error )
     {
-      printf("scale flag for minsert : %d\t\n", scale_flag);
+      printf("scale flag for minsert : " FORMAT_BS "\n", scale_flag);
     }
   else
     {
@@ -96,10 +96,11 @@ api_process(dwg_object *obj)
     } 
 
   // returns scale
-  dwg_ent_minsert_get_scale(minsert, &scale, &scale_error); 
-  if(scale_error == 0) // error check
+  dwg_ent_minsert_get_scale(minsert, &scale,
+                            &error); 
+  if ( !error )
     {
-      printf("scale points : x = %f, y = %f, z = %f\t\n",
+      printf("scale points : x = %f, y = %f, z = %f\n",
 	     scale.x, scale.y, scale.z);
     }
   else
@@ -108,10 +109,10 @@ api_process(dwg_object *obj)
     }
 
   // returns rotation angle
-  rot_angle = dwg_ent_minsert_get_rotation_angle(minsert, &ang_error); 
-  if(ang_error == 0) // error check
+  rot_angle = dwg_ent_minsert_get_rotation_angle(minsert, &error); 
+  if ( !error )
     {
-      printf("angle for minsert : %f\t\n", rot_angle);
+      printf("angle for minsert : %f\n", rot_angle);
     }
   else
     {
@@ -119,10 +120,11 @@ api_process(dwg_object *obj)
     } 
 
   // returns extrusion
-  dwg_ent_minsert_get_extrusion(minsert, &ext, &ext_error); 
-  if(ext_error == 0) // error check
+  dwg_ent_minsert_get_extrusion(minsert, &ext,
+                                &error); 
+  if ( !error )
     {
-      printf("extrusion points : x = %f, y = %f, z = %f\t\n",
+      printf("extrusion points : x = %f, y = %f, z = %f\n",
 	     ext.x, ext.y, ext.z);
     }
   else
@@ -131,10 +133,10 @@ api_process(dwg_object *obj)
     } 
 
   // returns attribute
-  attribs = dwg_ent_minsert_get_has_attribs(minsert, &attr_error); 
-  if(attr_error == 0) // error check
+  attribs = dwg_ent_minsert_get_has_attribs(minsert, &error); 
+  if ( !error )
     {
-      printf("attribs for minsert : %d\t\n", attribs);
+      printf("attribs for minsert : " FORMAT_BS "\n", attribs);
     }
   else
     {
@@ -142,10 +144,10 @@ api_process(dwg_object *obj)
     } 
 
   // returns owned object counts
-  obj_count = dwg_ent_minsert_get_owned_obj_count(minsert, &count_error); 
-  if(count_error == 0) // error check
+  obj_count = dwg_ent_minsert_get_owned_obj_count(minsert, &error); 
+  if ( !error )
     {
-      printf("object count for minsert : %ld\t\n", obj_count);
+      printf("object count for minsert : " FORMAT_BL "\n", obj_count);
     }
   else
     {
@@ -153,10 +155,10 @@ api_process(dwg_object *obj)
     } 
 
   // returns num rows
-  num_rows = dwg_ent_minsert_get_numrows(minsert, &num_row_error); 
-  if(num_row_error == 0) // error checks
+  num_rows = dwg_ent_minsert_get_numrows(minsert, &error); 
+  if ( !error )
     {
-      printf("number of rows for minsert : %ld\t\n", num_rows);
+      printf("number of rows for minsert : " FORMAT_BL "\n", num_rows);
     }
   else
     {
@@ -164,10 +166,10 @@ api_process(dwg_object *obj)
     } 
 
   // returns number of columns
-  num_cols = dwg_ent_minsert_get_numcols(minsert, &num_col_error); 
-  if(num_col_error == 0) // error checking
+  num_cols = dwg_ent_minsert_get_numcols(minsert, &error); 
+  if ( !error )
     {
-      printf("number of columns for minsert : %ld\t\n", num_cols);
+      printf("number of columns for minsert : " FORMAT_BL "\n", num_cols);
     }
   else
     {
@@ -175,10 +177,10 @@ api_process(dwg_object *obj)
     } 
 
   // returns row space
-  row_space= dwg_ent_minsert_get_row_spacing(minsert, &rowspace_error); 
-  if(rowspace_error == 0) // error check
+  row_space= dwg_ent_minsert_get_row_spacing(minsert, &error); 
+  if ( !error )
     {
-      printf("row space for minsert : %f\t\n", row_space);
+      printf("row space for minsert : %f\n", row_space);
     }
   else
     {
@@ -186,10 +188,10 @@ api_process(dwg_object *obj)
     } 
 
   // returns col space
-  col_space = dwg_ent_minsert_get_col_spacing(minsert, &colspace_error); 
-  if(colspace_error == 0) // error checking
+  col_space = dwg_ent_minsert_get_col_spacing(minsert, &error); 
+  if ( !error )
     {
-      printf("col space for minsert : %f\t\n", col_space);
+      printf("col space for minsert : %f\n", col_space);
     }
   else
     {

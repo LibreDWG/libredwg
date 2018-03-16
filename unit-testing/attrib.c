@@ -8,30 +8,30 @@ low_level_process(dwg_object *obj)
   dwg_ent_attrib *attrib = dwg_object_to_ATTRIB(obj);
 
   // print text value of attrib
-  printf("attrib of attrib : %s\t\n", attrib->text_value);
+  printf("attrib of attrib : %s\n", attrib->text_value);
 
   // print insertion point of attrib
-  printf("insertion point of attrib : x = %f, y = %f\t\n", 
+  printf("insertion point of attrib : x = %f, y = %f\n", 
           attrib->insertion_pt.x, attrib->insertion_pt.y);
 
   // print extrusion of attrib
-  printf("extrusion of attrib : x = %f, y = %f, z = %f\t\n",
+  printf("extrusion of attrib : x = %f, y = %f, z = %f\n",
           attrib->extrusion.x, attrib->extrusion.y, attrib->extrusion.z);
 
   // print height of attrib
-  printf("height of attrib : %f\t\n", attrib->height);
+  printf("height of attrib : %f\n", attrib->height);
 
   // print thickness of attrib
-  printf("thickness of attrib : %f\t\n", attrib->thickness);
+  printf("thickness of attrib : %f\n", attrib->thickness);
 
   // print rotation of attrib
-  printf("rotation of attrib : %f\t\n", attrib->rotation_ang);
+  printf("rotation of attrib : %f\n", attrib->rotation_ang);
 
   // print vertical alignment of attrib
-  printf("vertical align of attrib : %u\t\n", attrib->vert_alignment);
+  printf("vertical align of attrib : %u\n", attrib->vert_alignment);
 
   // prints horizontal alignment of attrib
-  printf("horizontal align of attrib : %u\t\n", attrib->horiz_alignment);
+  printf("horizontal align of attrib : %u\n", attrib->horiz_alignment);
 }
 
 void
@@ -48,7 +48,7 @@ api_process(dwg_object *obj)
   attrib_value = dwg_ent_attrib_get_text(attrib, &error);
   if (!error)
     {  
-      printf("attrib value : \"%s\"\t\n",attrib_value);
+      printf("attrib value : \"%s\"\n",attrib_value);
     }
   else
     {
@@ -59,7 +59,7 @@ api_process(dwg_object *obj)
   dwg_ent_attrib_get_insertion_point(attrib, &ins_pt, &error);
   if (!error)
     {
-      printf("insertion point of attrib : x = %f, y = %f\t\n",
+      printf("insertion point of attrib : x = %f, y = %f\n",
               ins_pt.x, ins_pt.y);
     }
   else
@@ -71,7 +71,7 @@ api_process(dwg_object *obj)
   dwg_ent_attrib_get_extrusion(attrib, &ext, &error);
   if (!error)
     {
-      printf("extrusion of attrib : x = %f, y = %f, z = %f\t\n",
+      printf("extrusion of attrib : x = %f, y = %f, z = %f\n",
               ext.x, ext.y, ext.z);
     }
   else
@@ -83,7 +83,7 @@ api_process(dwg_object *obj)
   height = dwg_ent_attrib_get_height(attrib, &error);
   if (!error)
     {
-      printf("height of attrib : %f\t\n", height);
+      printf("height of attrib : %f\n", height);
     }
   else
     {
@@ -94,7 +94,7 @@ api_process(dwg_object *obj)
   thickness = dwg_ent_attrib_get_thickness(attrib, &error);
   if (!error)
     {
-      printf("thickness of attrib : %f\t\n", thickness);
+      printf("thickness of attrib : %f\n", thickness);
     }
   else
     {
@@ -105,7 +105,7 @@ api_process(dwg_object *obj)
   rotation = dwg_ent_attrib_get_rot_angle(attrib, &error);
   if (!error)
     {
-      printf("rotation of attrib : %f\t\n", rotation);
+      printf("rotation of attrib : %f\n", rotation);
     }
   else
     {
@@ -116,7 +116,7 @@ api_process(dwg_object *obj)
   vert_align = dwg_ent_attrib_get_vert_align(attrib, &error);
   if (!error)
     {
-      printf("Vertical alignment of attrib : %f\t\n", vert_align);
+      printf("Vertical alignment of attrib : %f\n", vert_align);
     }
   else
     {
@@ -127,7 +127,7 @@ api_process(dwg_object *obj)
   horiz_align = dwg_ent_attrib_get_horiz_align(attrib, &error);
   if (!error)
     {
-      printf("Horizontal alignment of attrib : %f\t\n", horiz_align);
+      printf("Horizontal alignment of attrib : %f\n", horiz_align);
     }
   else
     {

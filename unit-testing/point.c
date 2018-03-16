@@ -22,30 +22,31 @@ low_level_process(dwg_object *obj)
   dwg_ent_point *point = dwg_object_to_POINT(obj);
 
   // prints point of point
-  printf("points of point : x = %f, y = %f, z = %f\t\n", 
+  printf("points of point : x = %f, y = %f, z = %f\n", 
           point->x, point->y, point->z);
 
   // prints extrusion of point
-  printf("extrusion of point : x = %f, y = %f, z = %f\t\n",
+  printf("extrusion of point : x = %f, y = %f, z = %f\n",
           point->extrusion.x, point->extrusion.y, point->extrusion.z);
 
   // prints thickness
-  printf("thickness of point : %f\t\n", point->thickness);
+  printf("thickness of point : %f\n", point->thickness);
 }
 
 void
 api_process(dwg_object *obj)
 {
-  int pt_error, ext_error, thickness_error;
+  int error;
   double thickness;
   dwg_point_3d ext, points;
   dwg_ent_point *point = dwg_object_to_POINT(obj);
  
   // returns point values
-  dwg_ent_point_get_point(point, &points, &pt_error);
-  if(pt_error == 0 ) // error check
+  dwg_ent_point_get_point(point, &points,
+                          &error);
+  if ( !error )
     {
-      printf("points of point : x = %f, y = %f, z = %f\t\n",
+      printf("points of point : x = %f, y = %f, z = %f\n",
               points.x, points.y, points.z);
     }
   else
@@ -54,10 +55,11 @@ api_process(dwg_object *obj)
     }
 
   // returns extrusion
-  dwg_ent_point_get_extrusion(point, &ext, &ext_error);
-  if(ext_error == 0 ) // error checking
+  dwg_ent_point_get_extrusion(point, &ext,
+                              &error);
+  if ( !error )
     {
-      printf("extrusion of point : x = %f, y = %f, z = %f\t\n",
+      printf("extrusion of point : x = %f, y = %f, z = %f\n",
               ext.x, ext.y, ext.z);
     }
   else
@@ -66,10 +68,10 @@ api_process(dwg_object *obj)
     }
 
   // returns thickness
-  thickness = dwg_ent_point_get_thickness(point, &thickness_error);
-  if(thickness_error == 0 ) // error check
+  thickness = dwg_ent_point_get_thickness(point, &error);
+  if ( !error )
     {
-      printf("thickness of point : %f\t\n", thickness);
+      printf("thickness of point : %f\n", thickness);
     }
   else
     {
