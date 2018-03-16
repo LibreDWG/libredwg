@@ -87,19 +87,25 @@ BITCODE_RS
 bit_read_RS(Bit_Chain * dat);
 
 void
-bit_write_RS(Bit_Chain * dat, unsigned int value);
+bit_write_RS(Bit_Chain * dat, BITCODE_RS value);
 
 BITCODE_RL
 bit_read_RL(Bit_Chain * dat);
 
 void
-bit_write_RL(Bit_Chain * dat, long unsigned int value);
+bit_write_RL(Bit_Chain * dat, BITCODE_RL value);
+
+BITCODE_RLL
+bit_read_RLL(Bit_Chain * dat);
+
+void
+bit_write_RLL(Bit_Chain * dat, BITCODE_RLL value);
 
 BITCODE_RD
 bit_read_RD(Bit_Chain * dat);
 
 void
-bit_write_RD(Bit_Chain * dat, double value);
+bit_write_RD(Bit_Chain * dat, BITCODE_RD value);
 
 /* Functions for manipulating compacted data
  */
@@ -107,13 +113,13 @@ BITCODE_BS
 bit_read_BS(Bit_Chain * dat);
 
 void
-bit_write_BS(Bit_Chain * dat, unsigned int value);
+bit_write_BS(Bit_Chain * dat, BITCODE_BS value);
 
 BITCODE_BL
 bit_read_BL(Bit_Chain * dat);
 
 void
-bit_write_BL(Bit_Chain * dat, long unsigned int value);
+bit_write_BL(Bit_Chain * dat, BITCODE_BL value);
 
 BITCODE_BLL
 bit_read_BLL(Bit_Chain * dat);
@@ -125,19 +131,19 @@ BITCODE_BD
 bit_read_BD(Bit_Chain * dat);
 
 void
-bit_write_BD(Bit_Chain * dat, double value);
+bit_write_BD(Bit_Chain * dat, BITCODE_BD value);
 
 BITCODE_MC
 bit_read_MC(Bit_Chain * dat);
 
 void
-bit_write_MC(Bit_Chain * dat, long int value);
+bit_write_MC(Bit_Chain * dat, BITCODE_MC value);
 
 BITCODE_MS
 bit_read_MS(Bit_Chain * dat);
 
 void
-bit_write_MS(Bit_Chain * dat, long unsigned int value);
+bit_write_MS(Bit_Chain * dat, BITCODE_MS value);
 
 void
 bit_read_BE(Bit_Chain * dat, double *x, double *y, double *z);
@@ -146,10 +152,10 @@ void
 bit_write_BE(Bit_Chain * dat, double x, double y, double z);
 
 BITCODE_DD
-bit_read_DD(Bit_Chain * dat, double antauxdifinajxo);
+bit_read_DD(Bit_Chain * dat, double);
 
 void
-bit_write_DD(Bit_Chain * dat, double value, double antauxdifinajxo);
+bit_write_DD(Bit_Chain * dat, double value, double);
 
 BITCODE_BT
 bit_read_BT(Bit_Chain * dat);

@@ -82,6 +82,7 @@ static bool env_var_checked_p;
 #define FIELD_RS(name) FIELD(name, RS);
 #define FIELD_RD(name) FIELD(name, RD);
 #define FIELD_RL(name) FIELD(name, RL);
+#define FIELD_RLL(name) FIELD(name, RLL);
 #define FIELD_MC(name) FIELD(name, MC);
 #define FIELD_MS(name) FIELD(name, MS);
 #define FIELD_TV(name) \

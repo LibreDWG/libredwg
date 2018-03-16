@@ -53,7 +53,7 @@ main(int argc, char *argv[])
 
   if (! input)
     {
-      strcpy(input, "example.dwg");
+      strcpy(input, "example.dwg"); //todo: testdata/example_r2000.dwg
       if (stat(input, &attrib))
         {
           fprintf (stderr, "Env var INPUT not defined, %s not found\n", input);

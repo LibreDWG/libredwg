@@ -143,10 +143,9 @@ bit_write_BB(Bit_Chain * dat, unsigned char value)
 BITCODE_3B
 bit_read_3B(Bit_Chain * dat)
 {
-  BITCODE_3B next;
   BITCODE_3B result = bit_read_B(dat);
   if (result) {
-    next = bit_read_B(dat);
+    BITCODE_3B next = bit_read_B(dat);
     if (next) {
       result <<= 1;
       result |= next;
@@ -266,13 +265,13 @@ bit_read_RS(Bit_Chain * dat)
   //least significant byte first:
   byte1 = bit_read_RC(dat);
   byte2 = bit_read_RC(dat);
-  return ((unsigned int) ((byte2 << 8) | byte1));
+  return ((uint16_t) ((byte2 << 8) | byte1));
 }
 
 /** Write 1 word (raw short).
  */
 void
-bit_write_RS(Bit_Chain * dat, unsigned int value)
+bit_write_RS(Bit_Chain * dat, BITCODE_RS value)
 {
   //least significant byte first:
   bit_write_RC(dat, value & 0xFF);
@@ -281,25 +280,48 @@ bit_write_RS(Bit_Chain * dat, unsigned int value)
 
 /** Read 1 raw long (2 words).
  */
-long unsigned int
+BITCODE_RL
 bit_read_RL(Bit_Chain * dat)
 {
-  unsigned int word1, word2;
+  BITCODE_RS word1, word2;
 
-  //least significant word first:
+  //least significant word first
   word1 = bit_read_RS(dat);
   word2 = bit_read_RS(dat);
-  return ((((long unsigned int) word2) << 16) | ((long unsigned int) word1));
+  return ((((uint32_t) word2) << 16) | ((uint32_t) word1));
 }
 
 /** Write 1 raw long (2 words).
  */
 void
-bit_write_RL(Bit_Chain * dat, long unsigned int value)
+bit_write_RL(Bit_Chain * dat, BITCODE_RL value)
 {
   //least significant word first:
   bit_write_RS(dat, value & 0xFFFF);
   bit_write_RS(dat, value >> 16);
+}
+
+/** Read 1 raw 64bit long (4 words).
+ */
+BITCODE_RLL
+bit_read_RLL(Bit_Chain * dat)
+{
+  BITCODE_RL word1, word2;
+
+  //least significant word first
+  word1 = bit_read_RL(dat);
+  word2 = bit_read_RL(dat);
+  return ((((uint64_t) word2) << 32) | ((uint64_t) word1));
+}
+
+/** Write 1 raw 64bit long (4 words).
+ */
+void
+bit_write_RLL(Bit_Chain * dat, BITCODE_RLL value)
+{
+  //least significant word first
+  bit_write_RL(dat, value & 0xFFFFFFFF);
+  bit_write_RL(dat, value >> 32);
 }
 
 /** Read 1 raw double (8 bytes).
@@ -364,7 +386,7 @@ bit_read_BS(Bit_Chain * dat)
 /** Write 1 bitshort (compacted data).
  */
 void
-bit_write_BS(Bit_Chain * dat, unsigned int value)
+bit_write_BS(Bit_Chain * dat, BITCODE_BS value)
 {
 
   if (value > 256)
@@ -389,7 +411,7 @@ BITCODE_BL
 bit_read_BL(Bit_Chain * dat)
 {
   unsigned char two_bit_code;
-  long unsigned int result;
+  BITCODE_BL result;
 
   two_bit_code = bit_read_BB(dat);
 
@@ -415,7 +437,7 @@ bit_read_BL(Bit_Chain * dat)
 /** Write 1 bitlong (compacted data).
  */
 void
-bit_write_BL(Bit_Chain * dat, long unsigned int value)
+bit_write_BL(Bit_Chain * dat, BITCODE_BL value)
 {
   if (value > 255)
     {
