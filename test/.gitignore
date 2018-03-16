@@ -56,3 +56,13 @@
 /xmlsuite/result.htm
 
 /xmlsuite/test_output
+
+/test-data/20*/*.svg
+/test-data/20*/*.bmp
+/test-data/20*/*.log
+/test-data/20*/*.test
+/test-data/20*/*.load_dwg
+/test-data/20*/*.dxflog
+/test-data/20*/*.dxf
+
+/unit-testing/*.log
