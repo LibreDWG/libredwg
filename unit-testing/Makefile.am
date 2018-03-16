@@ -17,8 +17,9 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-AM_CFLAGS = -I$(srcdir)/../src @WARN_CFLAGS@
-LDADD = ../src/libredwg.la
+AM_CFLAGS = -I$(top_srcdir)/src @WARN_CFLAGS@
+LDADD    = $(top_builddir)/src/libredwg.la -lm
+#SOURCES = $(top_builddir)/src/libredwg.la
 
 # NB: After you modify ‘check_PROGRAMS’, do "make update-ignorance"
 #     and include this directory's .gitignore in the commit.
@@ -67,6 +68,7 @@ check_PROGRAMS = \
 TESTS = $(check_PROGRAMS)
 TESTS_ENVIRONMENT = \
   INPUT=$(srcdir)/example.dwg
+# todo: more dwg versions, in /testdata
 
 update-ignorance:
 	printf '/%s\n' $(check_PROGRAMS) > .gitignore

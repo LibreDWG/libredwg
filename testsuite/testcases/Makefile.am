@@ -1,7 +1,8 @@
 AUTOMAKE_OPTIONS = dejagnu
 
 AM_CFLAGS = -I$(top_srcdir)/src @WARN_CFLAGS@
-LDADD = $(top_builddir)/src/libredwg.la -lm
+LDADD   = $(top_builddir)/src/libredwg.la -lm
+#SOURCES = $(top_builddir)/src/libredwg.la
 
 paired = \
   3dsolid \
@@ -51,6 +52,7 @@ unpaired = \
 
 check_PROGRAMS = $(paired) $(unpaired)
 
+# todo: more dwg versions, in /testdata
 EXTRA_DIST = \
   example.dwg \
   vertex.mesh \
