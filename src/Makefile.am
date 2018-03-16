@@ -45,12 +45,15 @@ EXTRA_HEADERS = \
         common_entity_handle_data.spec \
         header.spec \
         auxheader.spec \
+	r2004_file_header.spec \
 	common.h \
 	bits.h \
 	decode.h \
+	dec_macros.h \
 	encode.h \
+        print.h \
 	logging.h \
-        print.h
+	spec.h
 
 EXTRA_DIST = \
 	$(include_HEADERS) \

@@ -16,24 +16,7 @@
  * written by Reini Urban
  */
 
-#ifdef IS_ENCODER
-#define ENCODER if (1)
-#define DECODER if (0)
-#endif
-
-#ifdef IS_DECODER
-#define ENCODER if (0)
-#define DECODER if (1)
-#undef IF_ENCODE_FROM_EARLIER
-#define IF_ENCODE_FROM_EARLIER if (0)
-#endif
-
-#ifdef IS_PRINT
-#define ENCODER if (0)
-#define DECODER if (0)
-#undef IF_ENCODE_FROM_EARLIER
-#define IF_ENCODE_FROM_EARLIER if (0)
-#endif
+#include "spec.h"
 
   SINCE(R_2000) {
     IF_ENCODE_FROM_EARLIER {
@@ -90,5 +73,6 @@
       FIELD_RS(zero_18[i]);
     }
   }
+
 
 

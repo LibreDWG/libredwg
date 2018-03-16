@@ -1,3 +1,4 @@
+/* -*- c -*- */
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -17,24 +18,7 @@
  * modified by Till Heuschmann
  */
 
-#ifdef IS_ENCODER
-#define ENCODER if (1)
-#define DECODER if (0)
-#endif
-
-#ifdef IS_DECODER
-#define ENCODER if (0)
-#define DECODER if (1)
-#undef IF_ENCODE_FROM_EARLIER
-#define IF_ENCODE_FROM_EARLIER if (0)
-#endif
-
-#ifdef IS_PRINT
-#define ENCODER if (0)
-#define DECODER if (0)
-#undef IF_ENCODE_FROM_EARLIER
-#define IF_ENCODE_FROM_EARLIER if (0)
-#endif
+#include "spec.h"
 
 DWG_ENTITY(UNUSED);
 
@@ -3730,6 +3714,7 @@ DWG_OBJECT(VISUALSTYLE);
         LOG_INFO("TODO VISUALSTYLE (hard-pointer to H DICTIONARY_VISUALSTYLE)\n");
     }
 DWG_OBJECT_END
+
 
 
 

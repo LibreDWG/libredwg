@@ -16,25 +16,7 @@
  * written by Reini Urban
  */
 
-#ifdef IS_ENCODER
-#define ENCODER if (1)
-#define DECODER if (0)
-#endif
-
-#ifdef IS_DECODER
-#define ENCODER if (0)
-#define DECODER if (1)
-#undef IF_ENCODE_FROM_EARLIER
-#define IF_ENCODE_FROM_EARLIER if (0)
-#endif
-
-#ifdef IS_PRINT
-#define ENCODER if (0)
-#define DECODER if (0)
-#undef IF_ENCODE_FROM_EARLIER
-#define IF_ENCODE_FROM_EARLIER if (0)
-#endif
-
+#include "spec.h"
 
   // char version[6] handled seperately
   for (i=0; i<5; i++) {
@@ -42,22 +24,22 @@
   }
   FIELD_RC(is_maint);
   FIELD_RC(zero_one_or_three);
-  FIELD_RL(preview_addr);
+  FIELD_RL(preview_addr); //@0x0d
   FIELD_RC(dwg_version);
   FIELD_RC(maint_version);
-  FIELD_RS(codepage);
+  FIELD_RS(codepage); //@0x13: 29/30 for ANSI_1252, since r2007 UTF-16
 
   /* Until R_2004 here follows the sections */
 
   SINCE(R_2004) {
     IF_ENCODE_FROM_EARLIER {
-      dwg->header.unknown_3[1] = 0x1f; /* dwg_version */
-      dwg->header.unknown_3[2] = 0x8;  /* maint_version */
+      FIELD_VALUE(app_dwg_version) = FIELD_VALUE(dwg_version);
+      FIELD_VALUE(app_maint_version) = FIELD_VALUE(maint_version);
       dwg->header.rl_28_80 = 0x80;
     }
-    for (i = 0; i < 3; i++) {
-      FIELD_RC(unknown_3[i]);
-    }
+    FIELD_RC(unknown_0);
+    FIELD_RC(app_dwg_version);
+    FIELD_RC(app_maint_version);
     FIELD_RL(security_type);
     FIELD_RL(rl_1c_address);
     FIELD_RL(summary_info_address);
@@ -72,8 +54,3 @@
     }
     /* now at 0x80 follows the encrypted header data */
   }
-
-
-
-
-
