@@ -255,7 +255,7 @@ bit_write_RC(Bit_Chain * dat, unsigned char value)
   bit_advance_position(dat, 8);
 }
 
-/** Read 1 word (raw short).
+/** Read 1 raw short (BE short).
  */
 BITCODE_RS
 bit_read_RS(Bit_Chain * dat)
@@ -268,7 +268,7 @@ bit_read_RS(Bit_Chain * dat)
   return ((uint16_t) ((byte2 << 8) | byte1));
 }
 
-/** Write 1 word (raw short).
+/** Write 1 raw short (BE short).
  */
 void
 bit_write_RS(Bit_Chain * dat, BITCODE_RS value)
@@ -278,7 +278,7 @@ bit_write_RS(Bit_Chain * dat, BITCODE_RS value)
   bit_write_RC(dat, value >> 8);
 }
 
-/** Read 1 raw long (2 words).
+/** Read 1 raw long (4 byte, BE).
  */
 BITCODE_RL
 bit_read_RL(Bit_Chain * dat)
@@ -291,7 +291,7 @@ bit_read_RL(Bit_Chain * dat)
   return ((((uint32_t) word2) << 16) | ((uint32_t) word1));
 }
 
-/** Write 1 raw long (2 words).
+/** Write 1 raw long (4 byte, BE).
  */
 void
 bit_write_RL(Bit_Chain * dat, BITCODE_RL value)
@@ -301,7 +301,7 @@ bit_write_RL(Bit_Chain * dat, BITCODE_RL value)
   bit_write_RS(dat, value >> 16);
 }
 
-/** Read 1 raw 64bit long (4 words).
+/** Read 1 raw 64bit long (8 byte, BE).
  */
 BITCODE_RLL
 bit_read_RLL(Bit_Chain * dat)
@@ -314,7 +314,7 @@ bit_read_RLL(Bit_Chain * dat)
   return ((((uint64_t) word2) << 32) | ((uint64_t) word1));
 }
 
-/** Write 1 raw 64bit long (4 words).
+/** Write 1 raw 64bit long  (8 byte, BE).
  */
 void
 bit_write_RLL(Bit_Chain * dat, BITCODE_RLL value)
@@ -324,7 +324,7 @@ bit_write_RLL(Bit_Chain * dat, BITCODE_RLL value)
   bit_write_RL(dat, value >> 32);
 }
 
-/** Read 1 raw double (8 bytes).
+/** Read 1 raw double (8 bytes, IEEE-754).
  */
 BITCODE_RD
 bit_read_RD(Bit_Chain * dat)
@@ -341,7 +341,7 @@ bit_read_RD(Bit_Chain * dat)
   return (*result);
 }
 
-/** Write 1 raw double (8 bytes).
+/** Write 1 raw double (8 bytes, IEEE-754).
  */
 void
 bit_write_RD(Bit_Chain * dat, double value)
@@ -453,7 +453,7 @@ bit_write_BL(Bit_Chain * dat, BITCODE_BL value)
     }
 }
 
-/** Read 1 bitlonglong (compacted data). TODO
+/** Read 1 bitlonglong (compacted data).
  *  The first 1-3 bits indicate the length l (see paragraph 2.1). Then
  *  l bytes follow, which represent the number (the least significant
  *  byte is first).

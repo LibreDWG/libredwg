@@ -106,7 +106,9 @@
 #define BITCODE_4BITS BITCODE_RC
 #define FORMAT_4BITS "%1x"
 
-#define BITCODE_T BITCODE_TV /* TODO: implement version dependant string parsing */
+/* TODO: implement version dependant string parsing */
+/* encode codepages/utf8 */
+#define BITCODE_T BITCODE_TV
 
 #define DWGCHAR wchar_t
 
