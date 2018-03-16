@@ -55,33 +55,42 @@
 #ifdef HAVE_STDINT_H
 # define BITCODE_BS uint16_t
 # define BITCODE_RS uint16_t
+# define BITCODE_BL uint32_t
+# define BITCODE_RL uint32_t
 #else
 # define BITCODE_BS unsigned short int
 # define BITCODE_RS unsigned short int
+# define BITCODE_BL unsigned int
+# define BITCODE_RL unsigned int
 #endif
 #ifdef HAVE_INTTYPES_H
 # define FORMAT_BS "%" PRIu16
 # define FORMAT_RS "%" PRIu16
+# define FORMAT_BL "%" PRIu32
+# define FORMAT_RL "%" PRIu32
 #else
 # define FORMAT_BS "%hu"
 # define FORMAT_RS "%hu"
+# define FORMAT_BL "%u"
+# define FORMAT_RL "%u"
 #endif
-#define BITCODE_RL long unsigned int
-#define FORMAT_RL "%lu"
 #define BITCODE_RD BITCODE_DOUBLE
 #define FORMAT_RD "%f"
-#define BITCODE_BL long unsigned int
-#define FORMAT_BL "%lu"
-/* Since R24 */
 #ifdef HAVE_STDINT_H
+# define BITCODE_RLL uint64_t
+/* Since R2004 */
 # define BITCODE_BLL uint64_t
 #else
-# define BITCODE_BLL unsigned long long
+/* on 64bit just long */
+# define BITCODE_RLL unsigned long
+# define BITCODE_BLL unsigned long
 #endif
 #ifdef HAVE_INTTYPES_H
+# define FORMAT_RLL "%" PRIu64
 # define FORMAT_BLL "%" PRIu64
 #else
-# define FORMAT_BLL "%llu"
+# define FORMAT_RLL "%lu"
+# define FORMAT_BLL "%lu"
 #endif
 #define BITCODE_TV char *
 #define FORMAT_TV "\"%s\""
@@ -2932,6 +2941,7 @@ typedef struct _dwg_object
     unsigned char *unknown;
   } tio;
 
+  BITCODE_RL bitsize;
   Dwg_Handle handle;
 
   struct _dwg_struct *parent;
@@ -3024,7 +3034,9 @@ typedef struct _dwg_struct
     BITCODE_RC   dwg_version;
     BITCODE_RC   maint_version;
     BITCODE_RS   codepage;
-    BITCODE_RC   unknown_3[3];         /* 0 1f 8, R2004+ */
+    BITCODE_RC   unknown_0;            /* R2004+ */
+    BITCODE_RC   app_dwg_version;      /* R2004+ */
+    BITCODE_RC   app_maint_version;    /* R2004+ */
     BITCODE_RL   security_type;        /* R2004+ */
     BITCODE_RL   rl_1c_address;        /* R2004+ */
     BITCODE_RL   summary_info_address; /* R2004+ */
@@ -3035,6 +3047,33 @@ typedef struct _dwg_struct
     unsigned int num_descriptions;
     Dwg_Section_Info* section_info;
   } header;
+
+  struct Dwg_R2004_Header /* encrypted */
+    {
+      char file_ID_string[12];
+      BITCODE_RL header_offset;
+      BITCODE_RL header_size;
+      BITCODE_RL x04;
+      BITCODE_RL root_tree_node_gap;
+      BITCODE_RL lowermost_left_tree_node_gap;
+      BITCODE_RL lowermost_right_tree_node_gap;
+      BITCODE_RL unknown_long;
+      BITCODE_RL last_section_id;
+      BITCODE_RLL last_section_address;
+      BITCODE_RLL second_header_address;
+      BITCODE_RL gap_amount;
+      BITCODE_RL section_amount;
+      BITCODE_RL x20;
+      BITCODE_RL x80;
+      BITCODE_RL x40;
+      BITCODE_RL section_map_id;
+      BITCODE_RLL section_map_address;
+      BITCODE_RL section_info_id;
+      BITCODE_RL section_array_size;
+      BITCODE_RL gap_array_size;
+      BITCODE_RL CRC;
+      char padding[12];
+  } r2004_header;
 
   /* #define DWG_AUXHEADER_SIZE 123 */
   struct Dwg_AuxHeader

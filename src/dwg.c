@@ -174,9 +174,9 @@ dwg_bmp(Dwg_Data *dwg, BITCODE_RL *size)
   dat->byte = 0;
 
   osize = bit_read_RL(dat); /* overall size of all images */
-  LOG_TRACE("overall size: %li\n", osize)
+  LOG_TRACE("overall size: " FORMAT_RL "\n", osize)
   num_pictures = bit_read_RC(dat);
-  LOG_INFO("num_pictures: %i\n", num_pictures)
+  LOG_INFO("num_pictures: " FORMAT_RC "\n", num_pictures)
 
   plene = 0;
   header_size = 0;
@@ -402,6 +402,6 @@ get_next_owned_object(Dwg_Object* hdr_obj, Dwg_Object* current,
 void
 dwg_free(Dwg_Data * dwg)
 {
-  if (dwg->header.section)
+  if (dwg && dwg->header.section)
     free(dwg->header.section);
 }

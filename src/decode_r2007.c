@@ -20,6 +20,7 @@
 #include <stdint.h>
 #include <sys/types.h>
 #include <stdbool.h>
+#include <assert.h>
 #include "bits.h"
 #include "logging.h"
 
@@ -458,7 +459,7 @@ decompress_r2007(char *dst, int dst_size, char *src, int src_size)
   while (src < src_end)
     {   
       if (length == 0)
-	      length = read_literal_length((unsigned char**)&src, opcode);
+        length = read_literal_length((unsigned char**)&src, opcode);
       
       if ((dst + length) > dst_end)
         return 1;
@@ -504,14 +505,16 @@ decompress_r2007(char *dst, int dst_size, char *src, int src_size)
 
 
 // reed-solomon (255, 239) encoding with factor 3
+// TODO: for now disabled, until we get proper data
 static char*
 decode_rs(const char *src, int block_count, int data_size)
 {
   int i, j;
   const char *src_base = src;
-  char *dst_base, *dst;  
+  char *dst_base, *dst;
+  //TODO: round up data_size from 239 to 255
 
-  dst_base = dst = (char*)malloc(block_count * data_size + 16);
+  dst_base = dst = (char*)malloc(block_count * (data_size + 16));
 
   for (i = 0; i < block_count; ++i)
     {
@@ -521,7 +524,7 @@ decode_rs(const char *src, int block_count, int data_size)
           src += block_count;
         }
 
-      rs_decode_block((unsigned char*)(dst_base + 239*i), 1);
+      //rs_decode_block((unsigned char*)(dst_base + 239*i), 1);
       src = ++src_base;
     }
 
@@ -550,7 +553,6 @@ read_system_page(Bit_Chain* dat, int64_t size_comp, int64_t size_uncomp,
   
   // Multiply with codeword size (255) and round to a multiple of 8
   page_size = (block_count * 255 + 7) & ~7;
-  
   
   data = (char*)malloc(size_uncomp + page_size);
   if (data == 0)
@@ -909,7 +911,7 @@ sections_destroy(r2007_section *section)
 static void 
 read_file_header(Bit_Chain* dat, r2007_file_header *file_header)
 {
-  char data[0x3d8];
+  char data[0x3d8]; //0x400 - 5 long
   char *pedata;
   int64_t seqence_crc;
   int64_t seqence_key;
@@ -918,11 +920,11 @@ read_file_header(Bit_Chain* dat, r2007_file_header *file_header)
   int i;
   
   dat->byte = 0x80;
-  for (i = 0; i < 0x3d8; i++)
+  for (i=0; i < 0x3d8; i++)
     data[i] = bit_read_RC(dat);
-  
+
   pedata = decode_rs(data, 3, 239);
-  
+
   seqence_crc = *((int64_t*)pedata);
   seqence_key = *((int64_t*)&pedata[8]);
   compr_crc   = *((int64_t*)&pedata[16]);
@@ -932,7 +934,7 @@ read_file_header(Bit_Chain* dat, r2007_file_header *file_header)
     decompress_r2007((char*)file_header, 0x110, &pedata[32], compr_len);
   else
     memcpy(file_header, &pedata[32], sizeof(r2007_file_header));
-  
+
   free(pedata);
 }
 

@@ -198,7 +198,8 @@ static const unsigned char rsgen[] = {
 static unsigned char f256_multiply(unsigned char a, unsigned char b)
 {
   unsigned int prod = 0;
-  unsigned int A = a, B = b;
+  unsigned int A = a;
+  unsigned int B = b;
 
   while (B != 0)
     {
