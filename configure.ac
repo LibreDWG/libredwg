@@ -162,10 +162,10 @@ AC_CONFIG_FILES([
 	examples/Makefile
 	bindings/Makefile
 	bindings/python/Makefile
-	testsuite/Makefile
-	testsuite/testcases/Makefile
-	testsuite/xmlsuite/Makefile
-	unit-testing/Makefile
+	test/Makefile
+	test/testcases/Makefile
+	test/xmlsuite/Makefile
+	test/unit-testing/Makefile
 ])
 
 AC_OUTPUT

@@ -1,10 +1,9 @@
-
 AUTOMAKE_OPTIONS = dejagnu
 
-RUNTESTDEFAULTFLAGS = --tool testcases
-SUBDIRS = xmlsuite
+SUBDIRS = unit-testing
 if HAVE_DEJAGNU
 SUBDIRS += testcases
 endif
+SUBDIRS += xmlsuite
 
 CLEANFILES = *.log *.sum site.bak
