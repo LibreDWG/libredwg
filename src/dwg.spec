@@ -2552,9 +2552,9 @@ DWG_ENTITY(IMAGE);
     {
       FIELD(num_clip_verts, BL);
       REPEAT(num_clip_verts, clip_verts, Dwg_Entity_IMAGE_clip_vert)
-        {
-          FIELD_2RD(clip_verts[rcount]);
-        }
+      {
+        FIELD_2RD(clip_verts[rcount]);
+      }
     }
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -3692,27 +3692,56 @@ DWG_OBJECT_END
 // These objects are not described in the spec:
 //
 
-DWG_OBJECT(WIPEOUTVARIABLE);
+//DWG_OBJECT(WIPEOUTVARIABLE);
+//
+//  SINCE(R_2000)
+//    {
+//        LOG_INFO("TODO WIPEOUTVARIABLE\n");
+//    }
+//DWG_OBJECT_END
 
-  SINCE(R_2004)
+// R2000+ picture. undocumented
+DWG_ENTITY(WIPEOUT);
+
+  FIELD(class_version, BL);
+  FIELD_3DPOINT(pt0);
+  FIELD_3DPOINT(uvec);
+  FIELD_3DPOINT(vvec);
+  FIELD(size.width, RD);
+  FIELD(size.height, RD);
+  FIELD(display_props, BS);
+  FIELD(clipping, B);
+  FIELD(brightness, RC);
+  FIELD(contrast, RC);
+  FIELD(fade, RC);
+
+  FIELD(clip_boundary_type, BS);
+  if (FIELD_VALUE(clip_boundary_type) == 1)
     {
-        LOG_INFO("TODO WIPEOUTVARIABLE\n");
+      FIELD_2RD(boundary_pt0);
+      FIELD_2RD(boundary_pt1);
     }
-DWG_OBJECT_END
-
-DWG_OBJECT(WIPEOUT);
-
-  SINCE(R_2004)
+  else
     {
-        LOG_INFO("TODO WIPEOUT\n");
+      FIELD(num_clip_verts, BL);
+      REPEAT(num_clip_verts, clip_verts, Dwg_Entity_IMAGE_clip_vert)
+        {
+          FIELD_2RD(clip_verts[rcount]);
+        }
     }
-DWG_OBJECT_END
 
-DWG_OBJECT(VISUALSTYLE);
+  COMMON_ENTITY_HANDLE_DATA;
+  FIELD_HANDLE(imagedef,5);
+  FIELD_HANDLE(imagedefreactor,3);
 
-  SINCE(R_2007)
-    {
-        LOG_INFO("TODO VISUALSTYLE (hard-pointer to H DICTIONARY_VISUALSTYLE)\n");
-    }
-DWG_OBJECT_END
+DWG_ENTITY_END
+
+//DWG_OBJECT(VISUALSTYLE);
+//
+//  SINCE(R_2007)
+//    {
+//        LOG_INFO("TODO VISUALSTYLE (hard-pointer to H DICTIONARY_VISUALSTYLE)\n");
+//    }
+//DWG_OBJECT_END
+
 

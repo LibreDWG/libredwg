@@ -62,7 +62,7 @@
   //end of encrypted 0x6c header
 
   //well, the padding is also encrypted, but ODA didnt grok that
-  for (i=0; i<sizeof(FIELD_VALUE(padding)); i++) {
+  for (i=0; i<(int)sizeof(FIELD_VALUE(padding)); i++) {
     FIELD_RC(padding[i]); // encrypted via 0
   }
 

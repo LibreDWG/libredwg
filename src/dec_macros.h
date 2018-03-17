@@ -209,7 +209,7 @@ static void \
   obj->tio.entity = (Dwg_Object_Entity*)malloc (sizeof (Dwg_Object_Entity));	\
   obj->tio.entity->tio.token = (Dwg_Entity_##token *)calloc (1, sizeof (Dwg_Entity_##token)); \
   ent = obj->tio.entity->tio.token;\
-  _obj=ent;\
+  _obj = ent;\
   obj->tio.entity->object = obj;\
   if (dwg_decode_entity (dat, obj->tio.entity)) return;\
   LOG_INFO("Entity handle: %d.%d.%lu\n",\

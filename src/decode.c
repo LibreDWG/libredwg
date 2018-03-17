@@ -97,6 +97,9 @@ decode_R2007(Bit_Chain* dat, Dwg_Data * dwg);
 static Dwg_Resbuf*
 dwg_decode_xdata(Bit_Chain * dat, int size);
 
+static int
+dwg_decode_object(Bit_Chain * dat, Dwg_Object_Object * obj);
+
 /*--------------------------------------------------------------------------------
  * Imported functions
  */
@@ -1762,7 +1765,7 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
 }
 
 static int
-dwg_decode_object(Bit_Chain * dat, Dwg_Object_Object * ord)
+dwg_decode_object(Bit_Chain * dat, Dwg_Object_Object * obj)
 {
   unsigned int i;
   unsigned int size;
@@ -1770,60 +1773,61 @@ dwg_decode_object(Bit_Chain * dat, Dwg_Object_Object * ord)
 
   SINCE(R_2000)
     {
-      ord->bitsize = bit_read_RL(dat);
+      obj->bitsize = bit_read_RL(dat);
+      LOG_INFO("Object bitsize: " FORMAT_RL "\n", obj->bitsize);
     }
 
-  error = bit_read_H(dat, &ord->object->handle);
+  error = bit_read_H(dat, &obj->object->handle);
   if (error)
     {
       LOG_ERROR(
           "\tError in object handle! Bit_Chain current address: 0x%0x\n",
           (unsigned int) dat->byte)
-      ord->bitsize = 0;
-      ord->extended_size = 0;
-      ord->num_handles = 0;
+      obj->bitsize = 0;
+      obj->extended_size = 0;
+      obj->num_handles = 0;
       return -1;
     }
-  ord->extended_size = 0;
+  obj->extended_size = 0;
   while ((size = bit_read_BS(dat)))
     {
       if (size > 10210)
         {
           LOG_ERROR(
               "dwg_decode_object: Absurd! Extended object data size: %lu. Object: %lu (handle).\n",
-              (long unsigned int) size, ord->object->handle.value)
-          ord->bitsize = 0;
-          ord->extended_size = 0;
-          ord->num_handles = 0;
+              (long unsigned int) size, obj->object->handle.value)
+          obj->bitsize = 0;
+          obj->extended_size = 0;
+          obj->num_handles = 0;
           return 0;
         }
-      if (ord->extended_size == 0)
+      if (obj->extended_size == 0)
         {
-          ord->extended = (unsigned char *)malloc(size);
-          ord->extended_size = size;
+          obj->extended = (unsigned char *)malloc(size);
+          obj->extended_size = size;
         }
       else
         {
-          ord->extended_size += size;
-          ord->extended = (unsigned char *)realloc(ord->extended, ord->extended_size);
+          obj->extended_size += size;
+          obj->extended = (unsigned char *)realloc(obj->extended, obj->extended_size);
         }
-      error = bit_read_H(dat, &ord->extended_handle);
+      error = bit_read_H(dat, &obj->extended_handle);
       if (error)
         LOG_ERROR("Error reading extended handle!\n")
-      for (i = ord->extended_size - size; i < ord->extended_size; i++)
-        ord->extended[i] = bit_read_RC(dat);
+      for (i = obj->extended_size - size; i < obj->extended_size; i++)
+        obj->extended[i] = bit_read_RC(dat);
     }
 
   VERSIONS(R_13,R_14)
     {
-      ord->bitsize = bit_read_RL(dat);
+      obj->bitsize = bit_read_RL(dat);
     }
 
-  ord->num_reactors = bit_read_BL(dat);
+  obj->num_reactors = bit_read_BL(dat);
 
   SINCE(R_2004)
     {
-      ord->xdic_missing_flag = bit_read_B(dat);
+      obj->xdic_missing_flag = bit_read_B(dat);
     }
 
   return 0;
@@ -2269,15 +2273,15 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     {
       // TODO
       LOG_WARN("Unhandled Object/Class %s\n", dwg->dwg_class[i].dxfname);
-      dwg_decode_WIPEOUTVARIABLE(dat, obj);
+      //dwg_decode_WIPEOUTVARIABLE(dat, obj);
       return 0;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "WIPEOUT"))
     {
-      // TODO
-      LOG_WARN("Unhandled Object/Class %s\n", dwg->dwg_class[i].dxfname);
+      // TODO Entity? obj->bitsize: 4783
+      //LOG_WARN("Unhandled Object/Class %s\n", dwg->dwg_class[i].dxfname);
       dwg_decode_WIPEOUT(dat, obj);
-      return 0;
+      return 1;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "CELLSTYLEMAP"))
     {
@@ -2290,7 +2294,7 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     {
       // TODO
       LOG_WARN("Unhandled Object/Class %s\n", dwg->dwg_class[i].dxfname);
-      dwg_decode_VISUALSTYLE(dat, obj);
+      //dwg_decode_VISUALSTYLE(dat, obj);
       return 0;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "AcDbField")) //??
@@ -2622,12 +2626,15 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
       /* > 500:
          TABLE, DICTIONARYWDLFT, IDBUFFER, IMAGE, IMAGEDEF, IMAGEDEFREACTOR,
          LAYER_INDEX, OLE2FRAME, PROXY, RASTERVARIABLES, SORTENTSTABLE, SPATIAL_FILTER,
-         SPATIAL_INDEX
+         SPATIAL_INDEX, WIPEOUTVARIABLES
       */
       else if (!dwg_decode_variable_type(dwg, dat, obj))
         {
           LOG_INFO("Object UNKNOWN:\n")
 
+#if 0
+          dwg_decode_object(dat, obj->tio.object);
+#else
           SINCE(R_2000)
             {
               BITCODE_RL bitsize = bit_read_RL(dat);
@@ -2640,7 +2647,7 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
               LOG_INFO("Object handle: %d.%d.%lu\n",
                        obj->handle.code, obj->handle.size, obj->handle.value)
             }
-
+#endif
           obj->supertype = DWG_SUPERTYPE_UNKNOWN;
           /* neither object nor entity, at least we don't know yet */
           obj->tio.unknown = (unsigned char*)malloc(obj->size);

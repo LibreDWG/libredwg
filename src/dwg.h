@@ -2719,17 +2719,38 @@ typedef struct _dwg_object_SPATIAL_INDEX
 } Dwg_Object_SPATIAL_INDEX;
 
 /**
- Class WIPEOUT (varies, 504)
- undocumented
+ WIPEOUT (varies, 504)
+ R2000+, undocumented = IMAGE layover
  */
-typedef struct _dwg_object_WIPEOUT
+typedef struct _dwg_entity_WIPEOUT
 {
-  char dummy;
   /* TODO */
-} Dwg_Object_WIPEOUT;
+  BITCODE_BL class_version;
+  BITCODE_3BD pt0;
+  BITCODE_3BD uvec;
+  BITCODE_3BD vvec;
+  struct
+  {
+    BITCODE_RD width;
+    BITCODE_RD height;
+  } size;
+  BITCODE_BS display_props;
+  BITCODE_B clipping;
+  BITCODE_RC brightness;
+  BITCODE_RC contrast;
+  BITCODE_RC fade;
+  BITCODE_BS clip_boundary_type;
+  BITCODE_2RD boundary_pt0;
+  BITCODE_2RD boundary_pt1;
+  BITCODE_BL num_clip_verts;
+  Dwg_Entity_IMAGE_clip_vert* clip_verts;
+  BITCODE_H imagedef;
+  BITCODE_H imagedefreactor;
+} Dwg_Entity_WIPEOUT;
 
 /**
  Class WIPEOUTVARIABLE (varies, 505)
+ R2000+, Object bitsize: 96
  */
 typedef struct _dwg_object_WIPEOUTVARIABLE
 {
@@ -2813,6 +2834,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_HATCH *HATCH;
     Dwg_Entity_TABLE *TABLE;
     Dwg_Entity_IMAGE *IMAGE;
+    Dwg_Entity_WIPEOUT *WIPEOUT;
   } tio;
 
   BITCODE_RL bitsize;
@@ -2905,12 +2927,11 @@ typedef struct _dwg_object_object
     Dwg_Object_XRECORD *XRECORD;
     Dwg_Object_PLACEHOLDER *PLACEHOLDER;
     Dwg_Object_VBA_PROJECT *VBA_PROJECT;
-    Dwg_Object_WIPEOUT *WIPEOUT;
     Dwg_Object_WIPEOUTVARIABLE *WIPEOUTVARIABLE;
     Dwg_Object_VISUALSTYLE *VISUALSTYLE;
   } tio;
 
-  long unsigned int bitsize;
+  BITCODE_RL bitsize;
   /* Dwg_Handle handle; */
   unsigned int extended_size;
   Dwg_Handle extended_handle;

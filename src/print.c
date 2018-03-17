@@ -307,15 +307,15 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     {
       // TODO
       LOG_WARN("Unhandled Object/Class %s\n", dwg->dwg_class[i].dxfname);
-      dwg_print_WIPEOUTVARIABLE(dat, obj);
+      //dwg_print_WIPEOUTVARIABLE(dat, obj);
       return 0;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "WIPEOUT"))
     {
       // TODO
-      LOG_WARN("Unhandled Object/Class %s\n", dwg->dwg_class[i].dxfname);
+      //LOG_WARN("Unhandled Object/Class %s\n", dwg->dwg_class[i].dxfname);
       dwg_print_WIPEOUT(dat, obj);
-      return 0;
+      return 1;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "VBA_PROJECT"))
     {
@@ -334,7 +334,7 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     {
       // TODO
       LOG_WARN("Unhandled Object/Class %s\n", dwg->dwg_class[i].dxfname);
-      dwg_print_VISUALSTYLE(dat, obj);
+      //dwg_print_VISUALSTYLE(dat, obj);
       return 0;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "AcDbField")) //?

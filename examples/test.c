@@ -45,11 +45,11 @@ test_dwg_c(char *filename)
 
   if (error)
     {
-      printf("\nERROR!\n\n");
+      printf("\nERROR\n");
     }
   else
     {
-      printf("\nSUCCESS!\n\n");
+      printf("\nSUCCESS\n");
     }
 
   /* This value is the return value for `main',
