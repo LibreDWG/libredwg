@@ -40,7 +40,7 @@
 #define BITCODE_DOUBLE double
 
 #define BITCODE_RC char
-#define FORMAT_RC "%2x"
+#define FORMAT_RC "0x%hhx"
 #define BITCODE_MC long int
 #define FORMAT_MC "%l"
 #define BITCODE_MS long unsigned int
@@ -48,7 +48,7 @@
 #define BITCODE_B unsigned char
 #define FORMAT_B "%d"
 #define BITCODE_BB unsigned char
-#define FORMAT_BB "%d"
+#define FORMAT_BB "%uc"
 /* Since R24 */
 #define BITCODE_3B unsigned char
 #define FORMAT_3B "%uc"
@@ -3113,7 +3113,8 @@ typedef struct _dwg_struct
     BITCODE_RS   maint_version_1;
     BITCODE_RS   dwg_version_2;
     BITCODE_RS   maint_version_2;
-    BITCODE_RS   unknown[10];
+    BITCODE_RS   unknown_rs[6];
+    BITCODE_RL   zero_l[5];
     BITCODE_BL   TDCREATE_JULIAN_DAY;
     BITCODE_BL   TDCREATE_MILLISECONDS;
     BITCODE_BL   TDUPDATE_JULIAN_DAY;

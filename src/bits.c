@@ -27,8 +27,8 @@
 #include <stdint.h>
 #include <inttypes.h>
 
-#include "bits.h"
 #include "logging.h"
+#include "bits.h"
 
 /*------------------------------------------------------------------------------
  * Public functions

@@ -57,11 +57,13 @@
           if (DWG_LOGLEVEL >= DWG_LOGLEVEL_ERROR) { \
               HANDLER(OUTPUT, "ERROR: "); \
               LOG(ERROR, args) \
+              HANDLER(OUTPUT, "\n");          \
           }
 #define LOG_WARN(args...) \
           if (DWG_LOGLEVEL >= DWG_LOGLEVEL_ERROR) { \
               HANDLER(OUTPUT, "Warning: "); \
               LOG(ERROR, args) \
+              HANDLER(OUTPUT, "\n"); \
           }
 
 #define LOG_INFO(args...) LOG(INFO, args)

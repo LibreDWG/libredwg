@@ -20,14 +20,14 @@
 
   SINCE(R_2000) {
     IF_ENCODE_FROM_EARLIER {
-      BITCODE_RS tmpunknown[] = {5, 0x893, 5, 0x893, 0, 1, 0, 0, 0, 0};
+      BITCODE_RS tmpunknown[] = {5, 0x893, 5, 0x893, 0, 1};
       FIELD_VALUE(aux_intro[0]) = 0xff;
       FIELD_VALUE(aux_intro[1]) = 0x77;
       FIELD_VALUE(aux_intro[2]) = 0x01;
       FIELD_VALUE(minus_1) = -1;
       FIELD_VALUE(dwg_version) = dwg->header.dwg_version;
       FIELD_VALUE(maint_version) = dwg->header.maint_version;
-      memcpy(FIELD_VALUE(unknown),tmpunknown,sizeof(tmpunknown));
+      memcpy(FIELD_VALUE(unknown_rs),tmpunknown,sizeof(tmpunknown));
       FIELD_VALUE(TDCREATE_JULIAN_DAY)   = dwg->header_vars.TDCREATE_JULIAN_DAY;
       FIELD_VALUE(TDCREATE_MILLISECONDS) = dwg->header_vars.TDCREATE_MILLISECONDS;
       FIELD_VALUE(TDUPDATE_JULIAN_DAY)   = dwg->header_vars.TDUPDATE_JULIAN_DAY;
@@ -49,8 +49,14 @@
   FIELD_RS(maint_version_1);
   FIELD_RS(dwg_version_2);
   FIELD_RS(maint_version_2);
-  for (i=0; i<10; i++) {
-    FIELD_RS(unknown[i]); /* 5 0x893 5 0x893 0 1 0 0 0 0 */
+  for (i=0; i<6; i++) {
+    #undef FORMAT_RS
+    #define FORMAT_RS "0x%" PRIx16
+    FIELD_RS(unknown_rs[i]); /* 5 0x893 5 0x893 0 1 0 0 0 0 */
+    #define FORMAT_RS "%" PRIu16
+  }
+  for (i=0; i<5; i++) {
+    FIELD_RS(zero_l[i]);
   }
   FIELD_BL(TDCREATE_JULIAN_DAY);
   FIELD_BL(TDCREATE_MILLISECONDS);
@@ -73,6 +79,7 @@
       FIELD_RS(zero_18[i]);
     }
   }
+
 
 
 

@@ -10,7 +10,7 @@
   FIELD_TRACE(name,type)
 
 #define FIELD_TRACE(name,type)\
-  LOG_TRACE(#name ": " FORMAT_##type "\n", _obj->name)
+  LOG_TRACE(#name ": " FORMAT_##type " " #type "\n", _obj->name)
 
 #define FIELD_VALUE(name) _obj->name
 
