@@ -10,9 +10,9 @@ import re
 sys.path.append(os.getcwd())
 from helper import *
 
+srcdir = os.path.dirname(__file__)
 # Give here the path where DWG files are present
-# srcdir?
-path_to_dwg = "../test-data"
+path_to_dwg = srcdir + "/../test-data"
 
 #generate xml from txt files
 generatexml(path_to_dwg)
@@ -64,7 +64,7 @@ for dir in dirs:
 # Now Generate a pretty report for it
 
 #read the header
-header = open("header.htm","r")
+header = open(srcdir + "/header.htm","r")
 reporthtm = open("result.htm", "w")
 reporthtm.write(header.read())
 current_format = ""

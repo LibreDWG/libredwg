@@ -48,23 +48,25 @@ def processData(strTemp):
 		strTemp2=strTemp2.strip("\"")
 		strTemp=strTemp1+ "=\"" + strTemp2 + "\" "
 
-	elif strTemp=="/>":
-		strTemp=strTemp+"\n"
+	elif strTemp == "/>":
+		strTemp = strTemp+"\n"
 
 	return strTemp
 
-DwgTxtFileName=sys.argv[1]
+DwgTxtFileName = sys.argv[1]
 if not os.path.exists(DwgTxtFileName):
 	sys.exit("File not found.")
 
-Extension=DwgTxtFileName.split('.')
-if Extension[-1]=='txt':
-	XMLFileName=DwgTxtFileName.rstrip('txt')+"xml"
+Extension = DwgTxtFileName.split('.')
+if Extension[-1] == 'txt':
+	XMLFileName = DwgTxtFileName.rstrip('txt')+"xml"
 else:
-	XMLFileName=DwgTxtFileName+"xml"
+	XMLFileName = DwgTxtFileName+"xml"
 
-FW=open(XMLFileName,'w')
-FR=open(DwgTxtFileName,'r')
+FR = open(DwgTxtFileName,'r')
+# TODO if built from a non-writable srcdir this will fail. eg make distcheck.
+# Writing to test_output would solve this, or creating a builddir for test-data.
+FW = open(XMLFileName,'w')
 
 for Line in FR:
 	FW.write(processData(Line))

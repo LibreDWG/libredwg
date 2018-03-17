@@ -27,11 +27,12 @@ comparison later.
 def generatexml(dwgdir):
 	# This beats ‘sys.argv[0]’, which is not guaranteed to be set.
 	me = os.getenv ("PYTHON")
+        srcdir = os.path.dirname(__file__)
 	current_dir = os.getcwd()
 	os.chdir(dwgdir)
 	for filename in glob.glob ("*/*.txt"):
 		# maybe add double-quotes for the script?
-		os.system (me + " " + current_dir + "/txttoxml.py " + filename)
+		os.system (me + " " + srcdir + "/txttoxml.py " + filename)
 	os.chdir(current_dir)
 
 '''

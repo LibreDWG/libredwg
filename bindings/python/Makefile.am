@@ -27,7 +27,7 @@ ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 BUILT_SOURCES = swig_wrap_python.c
 SWIG_SOURCES = $(srcdir)/../dwg.i $(top_srcdir)/src/dwg.h
 
-python_PYTHON = libredwg.py
+dist_python_PYTHON = libredwg.py
 pyexec_LTLIBRARIES = _libredwg.la
 
 ## magic to override pkgpythondir = $(pythondir)/$(PACKAGE)

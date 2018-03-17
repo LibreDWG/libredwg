@@ -5,5 +5,6 @@ if HAVE_DEJAGNU
 SUBDIRS += testcases
 endif
 SUBDIRS += xmlsuite
+EXTRA_DIST = test-data
 
 CLEANFILES = *.log *.sum site.bak
