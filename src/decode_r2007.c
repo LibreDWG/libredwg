@@ -725,14 +725,14 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
       bfr_read(section, &ptr, 64);
     
       LOG_TRACE("\n--- Section ---\n")
-      LOG_TRACE("data size:     %lld\n", section->data_size)
-      LOG_TRACE("max size:      %lld\n", section->max_size)
-      LOG_TRACE("encryption:    %lld\n", section->encrypted)
-      LOG_TRACE("hashcode:      %llx\n", section->hashcode)
-      LOG_TRACE("name length:   %lld\n", section->name_length)
-      LOG_TRACE("unknown:       %lld\n", section->unknown)
-      LOG_TRACE("encoding:      %lld\n", section->encoded)
-      LOG_TRACE("num pages:     %lld\n", section->num_pages)      
+      LOG_TRACE("data size:     %"PRIu64"\n", section->data_size)
+      LOG_TRACE("max size:      %"PRIu64"\n", section->max_size)
+      LOG_TRACE("encryption:    %"PRIu64"\n", section->encrypted)
+      LOG_TRACE("hashcode:      %"PRIx64"\n", section->hashcode)
+      LOG_TRACE("name length:   %"PRIu64"\n", section->name_length)
+      LOG_TRACE("unknown:       %"PRIu64"\n", section->unknown)
+      LOG_TRACE("encoding:      %"PRIu64"\n", section->encoded)
+      LOG_TRACE("num pages:     %"PRIu64"\n", section->num_pages)
     
       section->next  = 0;
       section->pages = 0;
@@ -764,13 +764,13 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
           bfr_read(section->pages[i], &ptr, 56);
       
           LOG_TRACE("\n   --- Page ---\n")
-          LOG_TRACE("   offset:        %lld\n", section->pages[i]->offset);
-          LOG_TRACE("   size:          %lld\n", section->pages[i]->size);
-          LOG_TRACE("   id:            %lld\n", section->pages[i]->id);
-          LOG_TRACE("   uncomp_size:   %lld\n", section->pages[i]->uncomp_size);
-          LOG_TRACE("   comp_size:     %lld\n", section->pages[i]->comp_size);
-          LOG_TRACE("   checksum:      %llx\n", section->pages[i]->checksum);
-          LOG_TRACE("   crc:           %llx\n\n", section->pages[i]->crc);
+          LOG_TRACE("   offset:        %"PRIu64"\n", section->pages[i]->offset);
+          LOG_TRACE("   size:          %"PRIu64"\n", section->pages[i]->size);
+          LOG_TRACE("   id:            %"PRIu64"\n", section->pages[i]->id);
+          LOG_TRACE("   uncomp_size:   %"PRIu64"\n", section->pages[i]->uncomp_size);
+          LOG_TRACE("   comp_size:     %"PRIu64"\n", section->pages[i]->comp_size);
+          LOG_TRACE("   checksum:      %"PRIx64"\n", section->pages[i]->checksum);
+          LOG_TRACE("   crc:           %"PRIx64"\n\n", section->pages[i]->crc);
         }
     }
   
@@ -817,9 +817,9 @@ read_pages_map(Bit_Chain* dat, int64_t size_comp,
       index = page->id > 0 ? page->id : -page->id;
     
       LOG_TRACE("\n--- Page ---\n")
-      LOG_TRACE("size:    0x%llx\n", page->size)
-      LOG_TRACE("id:      0x%llx\n", page->id)
-      LOG_TRACE("offset:  0x%llx\n\n", page->offset)
+      LOG_TRACE("size:    0x%"PRIx64"\n", page->size)
+      LOG_TRACE("id:      0x%"PRIx64"\n", page->id)
+      LOG_TRACE("offset:  0x%"PRIx64"\n\n", page->offset)
     
       page->next = 0;      
     
