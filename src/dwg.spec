@@ -16,6 +16,7 @@
  * written by Felipe Corrêa da Silva Sances
  * modified by Rodrigo Rodrigues da Silva
  * modified by Till Heuschmann
+ * modified by Reini Urban
  */
 
 #include "spec.h"
@@ -3714,7 +3715,4 @@ DWG_OBJECT(VISUALSTYLE);
         LOG_INFO("TODO VISUALSTYLE (hard-pointer to H DICTIONARY_VISUALSTYLE)\n");
     }
 DWG_OBJECT_END
-
-
-
 

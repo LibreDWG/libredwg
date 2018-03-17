@@ -1,8 +1,29 @@
-This is a rough TODO file. It might or might not be up to date.
+This is a rough TODO file.
 
-* parse R2007 header (figure out how reed solomon encryption works)
-* finish R2000 encoding implementation
-* incorporate automated testing suite into Makefiles
-* enhance API functions
-* make python bindings optional with --enable-python and --disable-python (default disabled)
-* generate swig wrapper and build python module out of source tree
+* fix segfaults when reading some newer DWG files.
+* ACIS: parse encrypted ACIS data, implement parsing of SAT file (version==2)
+  in entities 37, 38 and 39
+* SPATIAL_INDEX
+* PROXY subentities, PROXY_ENTITY
+* CELLSTYLEMAP TABLE_Cell struct
+* HATCH: some parts are missing
+* DIMSTYLE_CONTROL: one R2000+ RC missing
+* LEADER: associated_annotation, dimstyle handles
+* undocumented and apparently unused: LONG_TRANSACTION, DUMMY
+* SPLINE: ctrl_pts
+* FIELD: value p20.4.99
+* TABLE: unknown kBuffer, kResBuf, kGeneral types
+* VISUALSTYLE: hard-pointer to H DICTIONARY_VISUALSTYLE
+* WIPEOUT and WIPEOUTVARIABLE objects
+* link VBA_PROJECT object to its section, and vice versa
+* XRECORD: BITCODE_H* objid_handles
+
+* fix the remaining compiler warnings.
+* add all DWG versions for one simple common decode test.
+* check 32bit/64bit strictness with the public headers (internally we can handle it)
+* enhance and document the API functions
+* add more defaults when encoding from older to newer versions.
+* make python bindings optional, no hard error by default.
+* automate windows nightlies and binary releases via appveyor,
+  POSIX releases via travis => github (savannah?)
+* support testsuite when cross-compiled under wine
