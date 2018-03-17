@@ -30,7 +30,8 @@ def generatexml(dwgdir):
 	current_dir = os.getcwd()
 	os.chdir(dwgdir)
 	for filename in glob.glob ("*/*.txt"):
-		os.system (me + " ./txttoxml.py " + filename)
+		# maybe add double-quotes for the script?
+		os.system (me + " " + current_dir + "/txttoxml.py " + filename)
 	os.chdir(current_dir)
 
 '''

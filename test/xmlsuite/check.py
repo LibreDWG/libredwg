@@ -6,11 +6,12 @@ import libxml2
 import re
 
 
-# Divide the scripts in to files
+# Divide the scripts into two files
 sys.path.append(os.getcwd())
 from helper import *
 
 # Give here the path where DWG files are present
+# srcdir?
 path_to_dwg = "../test-data"
 
 #generate xml from txt files

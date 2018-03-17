@@ -16,6 +16,7 @@ TESTS = check.py
 CLEANFILES = *.log *.sum site.bak result.htm
 
 EXTRA_DIST = suffix.c common.c
+EXTRA_DIST += newxml.py txttoxml.py
 EXTRA_DIST += header.htm helper.py $(TESTS)
 
 clean-local:
