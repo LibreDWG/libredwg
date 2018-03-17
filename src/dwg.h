@@ -3114,7 +3114,7 @@ typedef struct _dwg_struct
     BITCODE_RS   dwg_version_2;
     BITCODE_RS   maint_version_2;
     BITCODE_RS   unknown_rs[6];
-    BITCODE_RL   zero_l[5];
+    BITCODE_RL   zero_l[8];
     BITCODE_BL   TDCREATE_JULIAN_DAY;
     BITCODE_BL   TDCREATE_MILLISECONDS;
     BITCODE_BL   TDUPDATE_JULIAN_DAY;

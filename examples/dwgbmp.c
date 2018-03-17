@@ -31,9 +31,9 @@ get_bmp(char *filename)
   char *outfile;
   unsigned char *data;
   int success;
-  unsigned long size;
-  FILE *fh;
+  BITCODE_RL size;
   size_t retval;
+  FILE *fh;
   Dwg_Data dwg;
   struct _BITMAP_HEADER
   {

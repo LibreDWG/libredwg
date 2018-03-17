@@ -71,24 +71,24 @@ x
 
 The examples directory contains some application code that uses our lib:
 
-* test.c -- A simple DWG reader.
+* dwgread -- A simple DWG reader.
 
-* load_dwg.c -- This is a skeleton code, reading the DWG and adding an entity.
+* load_dwg -- This is a skeleton code, reading the DWG and adding an entity.
   Look there if you want to have a quickly glance on how to use the library.
 
-* dwg_ps.c -- Opens a DWG file and outputs an PostScript file.  This code
+* dwg_ps -- Opens a DWG file and outputs an PostScript file.  This code
   depends on the PSlib library.  On Debian-based systems this is usually
   available as a package named pslib-dev
 
-* testSVG.c -- Opens a DWG file and outputs an SVG (Scalable Vector Graphics)
+* dwg2SVG -- Opens a DWG file and outputs an SVG (Scalable Vector Graphics)
   file.  SVG is a W3C standard for 2d vector graphics.  You can open these
   files on several free software tools.  We recomend Inkscape, a free software
-  vector graphics editor.  The testSVG.c program will not handle 3d content
+  vector graphics editor.  The dwg2SVG program will not handle 3d content
   from DWG since SVG only supports 2-dimensional images.
 
-* get_bmp.c -- Extracts the bmp thumbnail of a dwg file when it is available.
+* dwgbmp -- Extracts the bmp thumbnail of a dwg file when it is available.
 
-* rewrite.c -- Load, rewrite and try to re-read a existing dwg file. Currently
+* dwgrewrite -- Load, rewrite and try to re-read a existing dwg file. Currently
   fails when re-reading the written DWG.
 
 * xmlsuite -- an extensive example library to use the SWIG python bindings

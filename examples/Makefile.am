@@ -19,31 +19,31 @@
 
 AM_CFLAGS = -I$(top_srcdir)/src -Wall -Wextra
 LDADD   = $(top_builddir)/src/libredwg.la -lm
-#SOURCES = $(top_builddir)/src/libredwg.la
 
-check_PROGRAMS = load_dwg get_bmp test testSVG testsvg2
+bin_PROGRAMS = dwgread dwgbmp
+check_PROGRAMS = load_dwg dwg2SVG dwg2svg2
 
 if HAVE_LIBPS
-check_PROGRAMS += dwg_ps
+bin_PROGRAMS += dwg_ps
 dwg_ps_SOURCES = dwg_ps.c
 dwg_ps_LDADD = $(LDADD) -lps
 endif
 
 if USE_WRITE
-check_PROGRAMS += rewrite
-rewrite_SOURCES = rewrite.c
+bin_PROGRAMS += dwgrewrite
+dwgrewrite_SOURCES = dwgrewrite.c
 endif
 
-test_SOURCES = test.c
+dwgread_SOURCES = dwgread.c
 
-testSVG_SOURCES = testSVG.c
+dwg2SVG_SOURCES = dwg2SVG.c
 
 load_dwg_SOURCES = load_dwg.c
-get_bmp_SOURCES  = get_bmp.c
-testsvg2_SOURCES = testsvg2.c
+dwgbmp_SOURCES  = dwgbmp.c
+dwg2svg2_SOURCES = dwg2svg2.c
 
 TESTS_ENVIRONMENT = \
- PROGS='$(check_PROGRAMS)' \
+ PROGS='$(bin_PROGRAMS) $(check_PROGRAMS)' \
  srcdir='$(srcdir)'
 
 TESTS = alive.test

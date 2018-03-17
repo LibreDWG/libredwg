@@ -55,7 +55,7 @@
     FIELD_RS(unknown_rs[i]); /* 5 0x893 5 0x893 0 1 0 0 0 0 */
     #define FORMAT_RS "%" PRIu16
   }
-  for (i=0; i<5; i++) {
+for (i=0; i<5; i++) { // or 8
     FIELD_RS(zero_l[i]);
   }
   FIELD_BL(TDCREATE_JULIAN_DAY);
