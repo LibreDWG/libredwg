@@ -307,8 +307,6 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
   long unsigned int last_handle;
   Object_Map *omap;
   Object_Map pvzmap;
-  struct Dwg_Header* _obj = &dwg->header;
-  Dwg_Object *obj = NULL;
 
 #ifdef USE_TRACING
   /* Before starting, set the logging level, but only do so once.  */
@@ -330,7 +328,12 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
   strcpy ((char *)dat->chain, version_codes[dwg->header.version]); // Chain version
   dat->byte += 6;
 
-  #include "header.spec"
+  {
+    struct Dwg_Header* _obj = &dwg->header;
+    Dwg_Object *obj = NULL;
+
+    #include "header.spec"
+  }
 
   PRE(R_2004) {
     if (!dwg->header.num_sections) /* Usually 3-5, max 6 */
@@ -352,7 +355,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
     if (dwg->header.num_sections == 6)
       {
         struct Dwg_AuxHeader* _obj = &dwg->auxheader;
-        obj = NULL;
+        Dwg_Object *obj = NULL;
 
         #include "auxheader.spec"
 
@@ -521,6 +524,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
    */
   for (j = 0; j < dwg->num_objects; j++)
     {
+      Dwg_Object *obj;
       omap[j].address = dat->byte;
       obj = &dwg->object[omap[j].idc];
       if (obj->supertype == DWG_SUPERTYPE_UNKNOWN)
