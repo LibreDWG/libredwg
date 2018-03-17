@@ -6,119 +6,81 @@ void
 low_level_process (dwg_object * obj)
 {
   BITCODE_BS i;
-  // casting object to mline entity
+
   dwg_ent_mline *mline = dwg_object_to_MLINE (obj);
 
-  // prints mline scale
-  printf ("scale of mline : %f\t\n", mline->scale);
-
-  // prints mline just
-  printf ("just of mline : %d\t\n", mline->just);
-
-  // prints mline extrusion
-  printf ("extrusion of mline : x = %f, y = %f, z = %f\t\n",
+  printf ("scale of mline : %f\n", mline->scale);
+  printf ("just of mline : " FORMAT_BS "\n", mline->just);
+  printf ("extrusion of mline : x = %f, y = %f, z = %f\n",
 	  mline->extrusion.x, mline->extrusion.y, mline->extrusion.z);
-
-  // prints mline base_point
-  printf ("base_point of mline : x = %f,y = %f,z = %f\t\n",
+  printf ("base_point of mline : x = %f, y = %f, z = %f\n",
 	  mline->base_point.x, mline->base_point.y, mline->base_point.z);
-
-  // prints number of lines
-  printf ("number of lines : %d\t\n", mline->num_lines);
-
-  // prints number of verts
-  printf ("number of verts : %ud\t\n", mline->num_verts);
+  printf ("number of lines : " FORMAT_BS "\n", mline->num_lines);
+  printf ("number of verts : " FORMAT_BS "\n", mline->num_verts);
 
   for (i = 0; i < mline->num_verts; i++)
-    {
-      printf ("vertex of mline : x = %f, y = %f, z = %f\t\n",
-	      mline->verts[i].vertex.x, mline->verts[i].vertex.y,
-	      mline->verts[i].vertex.z);
-    }
-
+    printf ("vertex of mline : x = %f, y = %f, z = %f\n",
+            mline->verts[i].vertex.x, mline->verts[i].vertex.y,
+            mline->verts[i].vertex.z);
 }
 
 void
 api_process (dwg_object * obj)
 {
-  int scale_error, just_error, ext_error, base_point_error, num_lines_error, num_verts_error, num_lines, verts_error;	// Error reporting
+  int error;
   BITCODE_BD scale;
   char just;
-  BITCODE_BS oc, num_verts;
-  dwg_point_3d base_point, ext;	//3d_points 
+  BITCODE_BS oc, num_verts, num_lines;
+  dwg_point_3d base_point, ext;
   dwg_ent_mline_vert *verts;
-  // casting object to mline entity
+
   dwg_ent_mline *mline = dwg_object_to_MLINE (obj);
 
-  // returns mline scale
-  scale = dwg_ent_mline_get_scale (mline, &scale_error);
-  if (scale_error == 0 && scale == mline->scale)	// Error checking
-    {
-      pass ("Working Properly");
-    }
-  else
-    {
-      fail ("error in reading scale");
-    }
 
-  // returns mline just
-  just = dwg_ent_mline_get_just (mline, &just_error);
-  if (just_error == 0 && just == mline->just)	// error checking
-    {
-      pass ("Working Properly");
-    }
+  scale = dwg_ent_mline_get_scale (mline, &error);
+  if (!error  && scale == mline->scale)	// Error checking
+    pass ("Working Properly");
   else
-    {
-      fail ("error in reading just");
-    }
+    fail ("error in reading scale");
 
-  // returns mline extrusion
-  dwg_ent_mline_get_extrusion (mline, &ext, &ext_error);
-  if (ext_error == 0 && ext.x == mline->extrusion.x && ext.y == mline->extrusion.y && ext.z == mline->extrusion.z)	// error checking
-    {
-      pass ("Working Properly");
-    }
+
+  just = dwg_ent_mline_get_just (mline, &error);
+  if (!error  && just == mline->just)	// error checking
+    pass ("Working Properly");
   else
-    {
-      fail ("error in reading extrusion");
-    }
+    fail ("error in reading just");
+
+
+  dwg_ent_mline_get_extrusion (mline, &ext, &error);
+  if (!error  && ext.x == mline->extrusion.x && ext.y == mline->extrusion.y && ext.z == mline->extrusion.z)	// error checking
+    pass ("Working Properly");
+  else
+    fail ("error in reading extrusion");
 
   // return mline base_point points
-  dwg_ent_mline_get_base_point (mline, &base_point, &base_point_error);
-  if (base_point_error == 0 && mline->base_point.x == base_point.x && mline->base_point.y == base_point.y && mline->base_point.z == base_point.z)	// error checking
-    {
-      pass ("Working Properly");
-    }
+  dwg_ent_mline_get_base_point (mline, &base_point, &error);
+  if (!error  && mline->base_point.x == base_point.x && mline->base_point.y == base_point.y && mline->base_point.z == base_point.z)	// error checking
+    pass ("Working Properly");
   else
-    {
-      fail ("error in reading base_point");
-    }
+    fail ("error in reading base_point");
 
-  // returns mline num lines
-  num_lines = dwg_ent_mline_get_num_lines (mline, &num_lines_error);
-  if (num_lines_error == 0 && num_lines == mline->num_lines)	// error checking
-    {
-      pass ("Working Properly");
-    }
+
+  num_lines = dwg_ent_mline_get_num_lines (mline, &error);
+  if (!error  && num_lines == mline->num_lines)	// error checking
+    pass ("Working Properly");
   else
-    {
-      fail ("error in reading num lines");
-    }
+    fail ("error in reading num lines");
 
-  // returns mline num verts
-  num_verts = dwg_ent_mline_get_num_verts (mline, &num_verts_error);
-  if (num_verts_error == 0 && num_verts == mline->num_verts)	// error checking
-    {
-      pass ("Working Properly");
-    }
+
+  num_verts = dwg_ent_mline_get_num_verts (mline, &error);
+  if (!error  && num_verts == mline->num_verts)	// error checking
+    pass ("Working Properly");
   else
-    {
-      fail ("error in reading num verts");
-    }
+    fail ("error in reading num verts");
 
-  verts = dwg_ent_mline_get_verts (mline, &verts_error);
+  verts = dwg_ent_mline_get_verts (mline, &error);
 
-  if (verts_error == 0)
+  if (!error )
     {
       BITCODE_BS i, matches = 1;
       for (i=0; i < num_verts; i++)

@@ -61,11 +61,11 @@ api_process(dwg_object *obj)
   BITCODE_B wireframe_data_present, point_present, isoline_present; 
   BITCODE_B acis_empty, acis2_empty;
   dwg_point_3d point;
-  dwg_ent_3dsolid *_3dsolid =  obj->tio.entity->tio._3DSOLID;
   dwg_ent_solid_wire *wire;
   dwg_ent_solid_silhouette *sil;
 
-  // returns acis_empty value
+  dwg_ent_3dsolid *_3dsolid =  obj->tio.entity->tio._3DSOLID;
+
   acis_empty = dwg_ent_3dsolid_get_acis_empty(_3dsolid, &error);
   if ( !error )
       printf("acis empty of 3dsolid : " FORMAT_B "\n", acis_empty);

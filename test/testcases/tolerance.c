@@ -5,29 +5,17 @@
 void
 low_level_process (dwg_object * obj)
 {
-  // casting object to tolerance entity
   dwg_ent_tolerance *tolerance = dwg_object_to_TOLERANCE (obj);
 
-  // prints tolerance radius
-  printf ("Radius of tolerance : %f\t\n", tolerance->height);
-
-  // prints tolerance thickness
-  printf ("Thickness of tolerance : %f\t\n", tolerance->dimgap);
-
-  // prints text string
-  printf ("text string of tolerance : %s\t\n", tolerance->text_string);
-
-  // prints tolerance extrusion
-  printf ("extrusion of tolerance : x = %f, y = %f, z = %f\t\n",
+  printf ("Radius of tolerance : %f\n", tolerance->height);
+  printf ("Thickness of tolerance : %f\n", tolerance->dimgap);
+  printf ("text string of tolerance : %s\n", tolerance->text_string);
+  printf ("extrusion of tolerance : x = %f, y = %f, z = %f\n",
 	  tolerance->extrusion.x, tolerance->extrusion.y,
 	  tolerance->extrusion.z);
-
-  // prints tolerance ins_pt
-  printf ("ins_pt of tolerance : x = %f, y = %f, z = %f\t\n",
+  printf ("ins_pt of tolerance : x = %f, y = %f, z = %f\n",
 	  tolerance->ins_pt.x, tolerance->ins_pt.y, tolerance->ins_pt.z);
-
-  // prints tolerance center
-  printf ("center of tolerance : x = %f,y = %f,z = %f\t\n",
+  printf ("center of tolerance : x = %f, y = %f, z = %f\n",
 	  tolerance->x_direction.x, tolerance->x_direction.y,
 	  tolerance->x_direction.z);
 }
@@ -35,8 +23,7 @@ low_level_process (dwg_object * obj)
 void
 api_process (dwg_object * obj)
 {
-  int height_error, dimgap_error, ext_error, ins_pt_error, x_dir_error,
-    text_error;
+  int error;
   BITCODE_BD height, dimgap;
   dwg_point_3d ins_pt, x_dir, ext;	//3d_points 
   char *text_string;
@@ -44,59 +31,39 @@ api_process (dwg_object * obj)
   // casting object to tolerance entity
   dwg_ent_tolerance *tolerance = dwg_object_to_TOLERANCE (obj);
 
-  // returns tolerance height
-  height = dwg_ent_tolerance_get_height (tolerance, &height_error);
-  if (height_error == 0 && height == tolerance->height)	// Error checking
-    {
-      pass ("Working Properly");
-    }
-  else
-    {
-      fail ("error in reading height");
-    }
 
-  // returns tolerance dimgap
-  dimgap = dwg_ent_tolerance_get_dimgap (tolerance, &dimgap_error);
-  if (dimgap_error == 0 && dimgap == tolerance->dimgap)	// error checking
-    {
-      pass ("Working Properly");
-    }
+  height = dwg_ent_tolerance_get_height (tolerance, &error);
+  if (!error  && height == tolerance->height)	// Error checking
+    pass ("Working Properly");
   else
-    {
-      fail ("error in reading dimgao");
-    }
+    fail ("error in reading height");
 
-  // returns tolerance text
-  text_string = dwg_ent_tolerance_get_text_string (tolerance, &text_error);
-  if (text_error == 0 && !strcmp (text_string, tolerance->text_string))	// error checking
-    {
-      pass ("Working Properly");
-    }
-  else
-    {
-      fail ("error in reading text");
-    }
 
-  // returns tolerance extrusion
-  dwg_ent_tolerance_get_ins_pt (tolerance, &ins_pt, &ins_pt_error);
-  if (ins_pt_error == 0 && ins_pt.x == tolerance->ins_pt.x && tolerance->extrusion.y == ext.y && tolerance->extrusion.z == ext.z)	// error checking
-    {
-      pass ("Working Properly");
-    }
+  dimgap = dwg_ent_tolerance_get_dimgap (tolerance, &error);
+  if (!error  && dimgap == tolerance->dimgap)	// error checking
+    pass ("Working Properly");
   else
-    {
-      fail ("error in reading extrusion");
-    }
+    fail ("error in reading dimgao");
+
+
+  text_string = dwg_ent_tolerance_get_text_string (tolerance, &error);
+  if (!error  && !strcmp (text_string, tolerance->text_string))	// error checking
+    pass ("Working Properly");
+  else
+    fail ("error in reading text");
+
+
+  dwg_ent_tolerance_get_ins_pt (tolerance, &ins_pt, &error);
+  if (!error  && ins_pt.x == tolerance->ins_pt.x && tolerance->extrusion.y == ext.y && tolerance->extrusion.z == ext.z)	// error checking
+    pass ("Working Properly");
+  else
+    fail ("error in reading extrusion");
 
   // return tolerance center points
-  dwg_ent_tolerance_get_x_direction (tolerance, &x_dir, &x_dir_error);
-  if (x_dir_error == 0 && tolerance->x_direction.x == x_dir.x && tolerance->x_direction.y == x_dir.y && tolerance->x_direction.z == x_dir.z)	// error checking
-    {
-      pass ("Working Properly");
-    }
+  dwg_ent_tolerance_get_x_direction (tolerance, &x_dir, &error);
+  if (!error  && tolerance->x_direction.x == x_dir.x && tolerance->x_direction.y == x_dir.y && tolerance->x_direction.z == x_dir.z)	// error checking
+    pass ("Working Properly");
   else
-    {
-      fail ("error in reading x direction");
-    }
+    fail ("error in reading x direction");
 
 }

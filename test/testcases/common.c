@@ -3,6 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <math.h>
+#include <sys/stat.h>
 
 #include "dwg.h"
 #include "dwg_api.h"
@@ -35,7 +36,19 @@ void print_api (dwg_object * obj);
 int
 main (int argc, char *argv[])
 {
-  return test_code ((char*)"example.dwg");
+  char *input = getenv ("INPUT");
+  struct stat attrib;
+
+  if (! input)
+    {
+      strcpy(input, "example.dwg"); //todo: testdata/example_r2000.dwg
+      if (stat(input, &attrib))
+        {
+          fprintf (stderr, "Env var INPUT not defined, %s not found\n", input);
+          return EXIT_FAILURE;
+        }
+    }
+  return test_code (input);
 }
 
 /// This function is used to read the DWG file

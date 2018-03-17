@@ -9,56 +9,32 @@ low_level_process (dwg_object * obj)
   // casts dwg object to lwpline entity
   dwg_ent_lwpline *lwpline = dwg_object_to_LWPLINE (obj);
 
-  // prints normal points
-  printf ("normal of lwpline : x = %f, y = %f, z = %f\t\n",
+
+  printf ("normal of lwpline : x = %f, y = %f, z = %f\n",
 	  lwpline->normal.x, lwpline->normal.y, lwpline->normal.z);
+  printf ("const width of lwpline : %f\n", lwpline->const_width);
+  printf ("elevation of lwpline : %f\n", lwpline->elevation);
+  printf ("thickness of lwpline : %f\n", lwpline->thickness);
+  printf ("num width of lwpline : " FORMAT_BL "\n", lwpline->num_widths);
+  printf ("num bulges of lwpline : " FORMAT_BL "\n", lwpline->num_bulges);
+  printf ("num points of lwpline : " FORMAT_BL "\n", lwpline->num_points);
+  printf ("flag of lwpline : " FORMAT_BS "\n", lwpline->flags);
 
-  // prints constant width
-  printf ("const width of lwpline : %f\t\n", lwpline->const_width);
-
-  // prints elevation
-  printf ("elevation of lwpline : %f\t\n", lwpline->elevation);
-
-  // prints thickness
-  printf ("thickness of lwpline : %f\t\n", lwpline->thickness);
-
-  // prints width number
-  printf ("num width of lwpline : %ld\t\n", lwpline->num_widths);
-
-  // prints number of bulges
-  printf ("num bulges of lwpline : %ld\t\n", lwpline->num_bulges);
-
-  // prints number of points
-  printf ("num points of lwpline : %ld\t\n", lwpline->num_points);
-
-  // prints flag
-  printf ("flag of lwpline : %d\t\n", lwpline->flags);
-
-  // prints bulges
   for (i = 0; i < lwpline->num_bulges; i++)
-    {
-      printf ("bulges of lwpline : %f\t\n", lwpline->bulges[i]);
-    }
+    printf ("bulges[%u] of lwpline : %f\n", i, lwpline->bulges[i]);
 
-  // prints points
   for (i = 0; i < lwpline->num_points; i++)
-    {
-      printf ("points of lwpline : x =%f\ty = %f\t\n",
-	      lwpline->points[i].x, lwpline->points[i].y);
-    }
+    printf ("points[%u] of lwpline : x =%f\ty = %f\n",
+            i, lwpline->points[i].x, lwpline->points[i].y);
 
-  // prints widths
   for (i = 0; i < lwpline->num_widths; i++)
-    {
-      printf ("points of lwpline : x =%f\ty = %f\t\n",
-	      lwpline->widths[i].start, lwpline->widths[i].end);
-    }
+    printf ("points[%u] of lwpline : x =%f\ty = %f\n",
+            i, lwpline->widths[i].start, lwpline->widths[i].end);
 }
 
 void
 api_process (dwg_object * obj)
 {
-  dwg_ent_lwpline *lwpline = dwg_object_to_LWPLINE (obj);
   int error;
   BITCODE_BL num_points, num_bulges, num_widths;
   dwg_point_3d normal;
@@ -68,7 +44,8 @@ api_process (dwg_object * obj)
   dwg_point_2d *points;
   dwg_lwpline_widths *width;
 
-  // returns normal points
+  dwg_ent_lwpline *lwpline = dwg_object_to_LWPLINE (obj);
+
   dwg_ent_lwpline_get_normal (lwpline, &normal, &error);
   if (error == 0 && lwpline->normal.x == normal.x &&
       lwpline->normal.y == normal.y && lwpline->normal.z == normal.z)
@@ -80,7 +57,7 @@ api_process (dwg_object * obj)
       fail ("lwpline_get_normal");
     }
 
-  // returns constant width
+
   const_width = dwg_ent_lwpline_get_const_width (lwpline, &error);
   if (error == 0 && const_width == lwpline->const_width)
     {
@@ -91,7 +68,7 @@ api_process (dwg_object * obj)
       fail ("lwpline_get_const_width");
     }
 
-  // returns elevation
+
   elevation = dwg_ent_lwpline_get_elevation (lwpline, &error);
   if (error == 0 && elevation == lwpline->elevation)
     {
@@ -102,7 +79,7 @@ api_process (dwg_object * obj)
       fail ("lwpline_get_elevation");
     }
 
-  // returns thickness
+
   thickness = dwg_ent_lwpline_get_thickness (lwpline, &error);
   if (error == 0 && lwpline->thickness == thickness)
     {
@@ -113,7 +90,7 @@ api_process (dwg_object * obj)
       fail ("lwpline_get_thickness");
     }
 
-  // returns number of widths
+
   num_widths = dwg_ent_lwpline_get_num_widths (lwpline, &error);
   if (error == 0 && num_widths == lwpline->num_widths)
     {
@@ -124,7 +101,7 @@ api_process (dwg_object * obj)
       fail ("lwpline_get_num_widths");
     }
 
-  // returns number of bulges
+
   num_bulges = dwg_ent_lwpline_get_num_bulges (lwpline, &error);
   if (error == 0 && num_bulges == lwpline->num_bulges)
     {
@@ -135,7 +112,7 @@ api_process (dwg_object * obj)
       fail ("lwpline_get_num_bulges");
     }
 
-  // returns number of points
+
   num_points = dwg_ent_lwpline_get_num_points (lwpline, &error);
   if (error == 0 && num_points == lwpline->num_points)
     {
@@ -146,7 +123,7 @@ api_process (dwg_object * obj)
       fail ("lwpline_get_num_points");
     }
 
-  // returns flags
+
   flags = dwg_ent_lwpline_get_flags (lwpline, &error);
   if (error == 0 && flags == lwpline->flags)	// error check
     {
@@ -158,7 +135,7 @@ api_process (dwg_object * obj)
             error, flags, lwpline->flags);
     }
 
-  // returns bulges
+
   bulges = dwg_ent_lwpline_get_bulges (lwpline, &error);
   if (error == 0)
     {
@@ -184,7 +161,7 @@ api_process (dwg_object * obj)
       fail ("lwpline_get_bulges error=1");
     }
 
-  // returns points
+
   points = dwg_ent_lwpline_get_points (lwpline, &error);
   if (error == 0)	// error check
     {
@@ -211,7 +188,7 @@ api_process (dwg_object * obj)
       fail ("lwpline_get_points error=1");
     }
 
-  // returns width
+
   width = dwg_ent_lwpline_get_widths (lwpline, &error);
   if (error == 0)
     {
