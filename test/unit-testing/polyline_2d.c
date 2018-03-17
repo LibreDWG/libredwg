@@ -1,26 +1,10 @@
+#define DWG_TYPE DWG_TYPE_POLYLINE_2D
 #include "common.c"
-
-void
-output_object(dwg_object* obj)
-{
-  if (!obj)
-    {
-      printf("object is NULL\n");
-      return;
-    }
-
-  if (dwg_get_type(obj)== DWG_TYPE_POLYLINE_2D)
-    {
-      output_process(obj);
-    }
-}
 
 void
 low_level_process(dwg_object *obj)
 {
   dwg_ent_polyline_2d *polyline_2d = dwg_object_to_POLYLINE_2D(obj);
-
-
 }
 
 void
@@ -33,7 +17,7 @@ api_process(dwg_object *obj)
   dwg_point_3d ext;
   dwg_ent_polyline_2d *polyline_2d = dwg_object_to_POLYLINE_2D(obj);
 
-  // returns extrusion points
+
   dwg_ent_polyline_2d_get_extrusion(polyline_2d, &ext,
                                     &error);
   if ( !error )
@@ -45,7 +29,7 @@ api_process(dwg_object *obj)
     printf("error in reading extrusion");
   }
 
-  // returns start width
+
   start_width = dwg_ent_polyline_2d_get_start_width(polyline_2d, &error);
   if ( !error )
   {
@@ -56,7 +40,7 @@ api_process(dwg_object *obj)
     printf("error in reading start width");
   }
 
-  // returns end width
+
   end_width = dwg_ent_polyline_2d_get_end_width(polyline_2d, &error);
   if ( !error )
   {
@@ -67,7 +51,7 @@ api_process(dwg_object *obj)
     printf("error in reading end width");
   }
 
-  // returns thickness
+
   thickness = dwg_ent_polyline_2d_get_thickness(polyline_2d, &error);
   if ( !error )
   {
@@ -78,7 +62,7 @@ api_process(dwg_object *obj)
     printf("error in reading thickness");
   }
 
-  // returns elevation
+
   elevation = dwg_ent_polyline_2d_get_elevation(polyline_2d, &error);
   if ( !error )
   {
@@ -89,7 +73,7 @@ api_process(dwg_object *obj)
     printf("error in reading elevation");
   }
 
-  // returns flags
+
   flags = dwg_ent_polyline_2d_get_flags(polyline_2d, &error);
   if ( !error )
   {
@@ -100,7 +84,7 @@ api_process(dwg_object *obj)
     printf("error in reading flag");
   }
 
-  // returns curve type
+
   curve_type = dwg_ent_polyline_2d_get_curve_type(polyline_2d, &error);
   if ( !error )
   {
@@ -111,7 +95,7 @@ api_process(dwg_object *obj)
     printf("error in reading curve type");
   }
 
-  // returns owned object count
+
   owned_obj = dwg_ent_polyline_2d_get_owned_obj_count(polyline_2d,
                &error);
   if ( !error )

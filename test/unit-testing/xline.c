@@ -5,6 +5,7 @@ void
 low_level_process(dwg_object *obj)
 {
   dwg_ent_xline *xline = dwg_object_to_XLINE(obj);
+
   printf("points of xline : x = %f, y = %f, z = %f\n", xline->point.x,
           xline->point.y, xline->point.z);
   printf("vector of xline : x = %f, y = %f, z = %f\n", xline->vector.x,
@@ -27,7 +28,7 @@ api_process(dwg_object *obj)
   else
       printf("error in reading extrusion \n");
 
-  // returns xline vectors
+
   dwg_ent_xline_get_vector(xline, &vector,
                            &error);
   if ( !error )

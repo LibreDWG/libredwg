@@ -4,27 +4,15 @@
 void
 low_level_process(dwg_object *obj)
 {
-  // casting object to tolerance entity
   dwg_ent_tolerance *tolerance = dwg_object_to_TOLERANCE(obj);
 
-  // prints tolerance radius
   printf("Radius of tolerance : %f\n",tolerance->height);
-
-  // prints tolerance thickness
   printf("Thickness of tolerance : %f\n",tolerance->dimgap);
-
-  // prints text string
   printf("text string of tolerance : %s\n",tolerance->text_string);
-
-  // prints tolerance extrusion
   printf("extrusion of tolerance : x = %f, y = %f, z = %f\n", 
           tolerance->extrusion.x, tolerance->extrusion.y, tolerance->extrusion.z);
-
-  // prints tolerance ins_pt
   printf("ins_pt of tolerance : x = %f, y = %f, z = %f\n", 
           tolerance->ins_pt.x, tolerance->ins_pt.y, tolerance->ins_pt.z);
-
-  // prints tolerance center
   printf("center of tolerance : x = %f,y = %f,z = %f\n",
           tolerance->x_direction.x, tolerance->x_direction.y, 
           tolerance->x_direction.z);
@@ -38,43 +26,29 @@ api_process(dwg_object *obj)
   dwg_point_3d ins_pt, x_dir, ext;  //3d_points 
   char * text_string;
 
-  // casting object to tolerance entity
   dwg_ent_tolerance *tolerance = dwg_object_to_TOLERANCE(obj);
 
-  // returns tolerance height
   height = dwg_ent_tolerance_get_height(tolerance, &error);
   if ( !error )
-    {  
-      printf("height of tolerance : %f\n", height);
-    }
+    printf("height of tolerance : %f\n", height);
   else
-    {
-      printf("error in reading height \n");
-    }
+    printf("in reading height \n");
 
-  // returns tolerance dimgap
+
   dimgap = dwg_ent_tolerance_get_dimgap(tolerance, &error);
   if ( !error )
-    {
-      printf("dimgap of tolerance : %f\n", dimgap);
-    }
+    printf("dimgap of tolerance : %f\n", dimgap);
   else
-    {
-      printf("error in reading dimgao \n");
-    }
+    printf("in reading dimgao \n");
 
-  // returns tolerance text
+
   text_string = dwg_ent_tolerance_get_text_string(tolerance, &error);
   if ( !error )
-    {
-      printf("text of tolerance : %s\n", text_string);
-    }
+    printf("text of tolerance : %s\n", text_string);
   else
-    {
-      printf("error in reading text \n");
-    }
+    printf("in reading text \n");
 
-  // returns tolerance extrusion
+
   dwg_ent_tolerance_get_ins_pt(tolerance, &ins_pt,
                                &error);
   if ( !error )

@@ -1,50 +1,21 @@
+#define DWG_TYPE DWG_TYPE_TRACE
 #include "common.c"
-
-void
-output_object(dwg_object* obj)
-{
-  if (!obj)
-    {
-      printf("object is NULL\n");
-      return;
-    }
-
-  if (dwg_get_type(obj)== DWG_TYPE_TRACE)
-    {
-      output_process(obj);
-    }
-}
 
 void
 low_level_process(dwg_object *obj)
 {
-
-  // casts dwg object to trace entity
   dwg_ent_trace *trace = dwg_object_to_TRACE(obj);
 
-  // prints elevation
   printf("elevation of trace : %f\n", trace->elevation);
-
-  // prints thickness
   printf("thickness of trace : %f\n", trace->thickness);
-
-  // prints extrusion
   printf("extrusion of trace : x = %f, y = %f, z = %f\n",
           trace->extrusion.x, trace->extrusion.y, trace->extrusion.z);
-
-  // prints corner 1
   printf("corner1 of trace : x = %f, y = %f\n", trace->corner1.x,
           trace->corner1.y);
-
-  // prints corner 2
   printf("corner2 of trace : x = %f, y = %f\n", trace->corner2.x,
           trace->corner2.y);
-
-  // prints corner 3
   printf("corner3 of trace : x = %f, y = %f\n", trace->corner3.x,
           trace->corner3.y);
-
-  // prints corner 4
   printf("corner4 of trace : x = %f, y = %f\n", trace->corner4.x,
           trace->corner4.y);
 }
@@ -95,7 +66,7 @@ api_process(dwg_object *obj)
   else
       printf("error in reading corner 2 \n");
 
-  // returns corner 3
+
   dwg_ent_trace_get_corner3(trace, &c3,
                             &error);
   if ( !error )
@@ -103,7 +74,7 @@ api_process(dwg_object *obj)
   else
       printf("error in reading corner 3 \n");
 
-  // returns corner 4
+
   dwg_ent_trace_get_corner4(trace, &c4,
                             &error);
   if ( !error )

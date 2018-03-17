@@ -5,45 +5,22 @@ void
 low_level_process(dwg_object *obj)
 {
   BITCODE_BL i;
-  // casts dwg object to body
   dwg_ent_body *body = dwg_object_to_BODY(obj);
 
-  // prints acis empty
   printf("acis empty of body : " FORMAT_B "\n", body->acis_empty);
-
-  // prints version
   printf("version of body : " FORMAT_BS "\n", body->version);
-
-  // prints acis data
   printf("acis data of body : %s", body->acis_data);
-
-  // prints wireframe
   printf("wireframe data of body : " FORMAT_B "\n", body->wireframe_data_present);
-
-  // prints point present
   printf("point present of body : " FORMAT_B "\n", body->point_present);
-
-  // prints point of body
   printf("point of body : x = %f, y = %f, z = %f\n", body->point.x,
           body->point.y, body->point.z);
-
-  // prints num isolines
   printf("num isolines of body : " FORMAT_BL "\n", body->num_isolines);
-
-  // prints isolines present
   printf("isoline present of body : " FORMAT_B "\n", body->isoline_present);
-
-  // prints num wires of body
   printf("num wires of body : " FORMAT_BL "\n", body->num_wires);
-
-  // prints wire of body
   for (i = 0; i < body->num_wires; i++)
     printf("wire[%u] of body : " FORMAT_BL "\n", i, body->wires[i].selection_marker);
 
-  // prints num silhouettes of body
   printf("num sil of body : " FORMAT_BL "\n", body->num_silhouettes);
-
-  // prints silhouettes of body
   for (i = 0; i < body->num_silhouettes; i++)
     printf("silhouette[%u] of body : " FORMAT_BL "\n", i, body->silhouettes[i].vp_id);
 
@@ -63,32 +40,25 @@ api_process(dwg_object *obj)
   dwg_ent_solid_wire *wire;
   dwg_ent_solid_silhouette *sil;
 
-  // returns acis empty
+
   acis_empty = dwg_ent_body_get_acis_empty(body, &error);
   if ( !error )
-    {
-      printf("acis empty of body : " FORMAT_B "\n", acis_empty);
-    }
+    printf("acis empty of body : " FORMAT_B "\n", acis_empty);
   else
-    {
-      printf("error in reading acis empty");
-    }
+    printf("error in reading acis empty");
 
-  // returns version
   version = dwg_ent_body_get_version(body, &error);
   if ( !error )
       printf("version of body : " FORMAT_B "\n", version);
   else
       printf("error in reading version");
 
-  // returns acis data
   acis_data = dwg_ent_body_get_acis_data(body, &error); 
   if ( !error )
       printf("acis data of body : %s", acis_data);
   else
       printf("error in reading acis data");
 
-  // returns wireframe data present value
   wireframe_data_present = dwg_ent_body_get_wireframe_data_present(body,
                            &error); 
   if ( !error )

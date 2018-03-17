@@ -4,95 +4,50 @@
 void
 low_level_process(dwg_object *obj)
 {
-
-  // casts dwg object to ang2ln dimension entity
   dwg_ent_dim_ang2ln *dim_ang2ln = dwg_object_to_DIMENSION_ANG2LN(obj);
 
-  // prints horiz dir
   printf("horiz dir of dim_ang2ln : %f\n",
           dim_ang2ln->horiz_dir);
-
-  // prints lspace factor 
   printf("lspace factor of dim_ang2ln : %f\n", 
           dim_ang2ln->lspace_factor);
-
-  // prints lspace style
   printf("lspace style of dim_ang2ln : " FORMAT_BS "\n",
           dim_ang2ln->lspace_style);
-
-  // prints attach point
   printf("attach point of dim_ang2ln : " FORMAT_BS "\n",
           dim_ang2ln->attachment_point);
-
-  // print radius of ang2ln dimension
   printf("Radius of dim_ang2ln : %f\n",
           dim_ang2ln->elevation.ecs_11);
-
-  // prints thickness
   printf("Thickness of dim_ang2ln : %f\n",
           dim_ang2ln->elevation.ecs_12);
-
-  // prints extrusion point
   printf("extrusion of dim_ang2ln : x = %f, y = %f, z = %f\n",
           dim_ang2ln->extrusion.x, dim_ang2ln->extrusion.y,
           dim_ang2ln->extrusion.z);
-
-  // prints insertion scale
   printf("ins_scale of dim_ang2ln : x = %f, y = %f, z = %f\n",
          dim_ang2ln->ins_scale.x, dim_ang2ln->ins_scale.y,
          dim_ang2ln->ins_scale.z);
-
-  // prints 10 point 
   printf("pt10 of dim_ang2ln : x = %f, y = %f, z = %f\n",
           dim_ang2ln->_10_pt.x, dim_ang2ln->_10_pt.y,
           dim_ang2ln->_10_pt.z);
-
-  // prints  13 point
   printf("pt13 of dim_ang2ln : x = %f, y = %f, z = %f\n",
           dim_ang2ln->_13_pt.x, dim_ang2ln->_13_pt.y,
           dim_ang2ln->_13_pt.z);
-
-  // prints 14 point
   printf("pt14 of dim_ang2ln : x = %f, y = %f, z = %f\n",
           dim_ang2ln->_14_pt.x, dim_ang2ln->_14_pt.y,
           dim_ang2ln->_14_pt.z);
-
-  // prints 15 point
   printf("pt15 of dim_ang2ln : x = %f, y = %f, z = %f\n",
           dim_ang2ln->_15_pt.x, dim_ang2ln->_15_pt.y,
           dim_ang2ln->_15_pt.z);
-
-  // print 12 point
   printf("pt12 of dim_ang2ln : x = %f, y = %f\n",
           dim_ang2ln->_12_pt.x, dim_ang2ln->_12_pt.y);
-
-  // print 16 point
   printf("pt16 of dim_ang2ln : x = %f, y = %f\n",
           dim_ang2ln->_16_pt.x, dim_ang2ln->_16_pt.y);
-
-  // prints mid point of text
   printf("text_mid_pt of dim_ang2ln : x = %f, y = %f\n",
           dim_ang2ln->text_midpt.x, dim_ang2ln->text_midpt.y);
-
-  // prints text
   printf("user text of dim_ang2ln : %s\n", dim_ang2ln->user_text);
-
-  // prints text rotation 
   printf("text rotation of dim_ang2ln : %f\n", dim_ang2ln->text_rot);
-
-  // prints insert rotation
   printf("ins rotation of dim_ang2ln : %f\n", dim_ang2ln->ins_rotation);
-
-  // prints arrow1
   printf("arrow1 of dim_ang2ln : " FORMAT_BS "\n", dim_ang2ln->flip_arrow1);
-
-  // prints arrow2
   printf("arrow2 of dim_ang2ln : " FORMAT_BS "\n", dim_ang2ln->flip_arrow2);
-
-  // prints flag2
   printf("flags2 of dim_ang2ln : " FORMAT_BS "\n", dim_ang2ln->flags_1);
-
-  // prints actual measurement
   printf("act_measurement of dim_ang2ln : %f\n",
             dim_ang2ln->act_measurement); 
 }
@@ -238,7 +193,7 @@ api_process(dwg_object *obj)
   else
       printf("error in reading ins rotation \n");
 
-  // returns flip arrow 1
+
   flip_arrow1 = dwg_ent_dim_ang2ln_get_flip_arrow1(dim_ang2ln,
                 &error);
   if ( !error )
@@ -246,7 +201,7 @@ api_process(dwg_object *obj)
   else
       printf("error in reading arrow1 \n");
 
-  // returns flip arrow 2
+
   flip_arrow2 = dwg_ent_dim_ang2ln_get_flip_arrow2(dim_ang2ln,
                 &error);
   if ( !error ) 
@@ -254,7 +209,7 @@ api_process(dwg_object *obj)
   else
     printf("error in reading arrow1 \n");
 
-  // returns flags 1
+
   flags1 = dwg_ent_dim_ang2ln_get_flags1(dim_ang2ln,
                                          &error);
   if ( !error )

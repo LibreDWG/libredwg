@@ -4,22 +4,13 @@
 void
 low_level_process(dwg_object *obj)
 {
-
-  // casts dwg object to line entity
   dwg_ent_line *line = dwg_object_to_LINE(obj);
 
-  // prints start points
-  printf("start points of line : x = %f,y = %f\n",line->start.x,
+  printf("start points of line : x = %f,y = %f\n", line->start.x,
           line->start.y);
-
-  // prints end points
   printf("end of line : x = %f,y = %f\n",
           line->end.x, line->end.y);
-
-  // prints thickness
-  printf("Thickness of line : %f\n",line->thickness);
-
-  // prints extrusion
+  printf("Thickness of line : %f\n", line->thickness);
   printf("extrusion of line : x = %f, y = %f, z = %f\n", 
           line->extrusion.x, line->extrusion.y, line->extrusion.z);
 }
@@ -32,8 +23,6 @@ api_process(dwg_object *obj)
   dwg_point_3d ext, start, end;
   dwg_ent_line *line = dwg_object_to_LINE(obj);
 
-
-  // returns start point
   dwg_ent_line_get_start_point(line, &start,
                                &error);
   if ( !error )
@@ -46,7 +35,7 @@ api_process(dwg_object *obj)
       printf("error in reading start points \n");
     }
 
-  // returns end point
+
   dwg_ent_line_get_end_point(line, &end,
                              &error);
   if ( !error )
@@ -59,18 +48,14 @@ api_process(dwg_object *obj)
       printf("error in reading end points \n");
     }
 
-  // returns thickness
+
   thickness = dwg_ent_line_get_thickness(line, &error);
   if ( !error )
-    {
-      printf("Thickness of line : %f\n",thickness);
-    }
+    printf("Thickness of line : %f\n",thickness);
   else
-    {
-      printf("error in reading thickness \n");
-    }
+    printf("in reading thickness \n");
 
-  // returns extrusion
+
   dwg_ent_line_get_extrusion(line, &ext,
                              &error);
   if ( !error )

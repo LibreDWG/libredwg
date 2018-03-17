@@ -4,41 +4,26 @@
 void
 low_level_process(dwg_object *obj)
 {
-  // casts a dwg object to attdef
   dwg_ent_attdef *attdef = dwg_object_to_ATTDEF(obj);
 
-  // prints attdef of attdef
   printf("attdef of attdef : %s\n", attdef->default_value);
-
-  // prints insertion point of attdef
   printf("insertion point of attdef : x = %f, y = %f\n", 
           attdef->insertion_pt.x, attdef->insertion_pt.y);
-
-  // prints extrusion of attdef
   printf("extrusion of attdef : x = %f, y = %f, z = %f\n",
           attdef->extrusion.x, attdef->extrusion.y, attdef->extrusion.z);
-  
-  // prints height of attdef
   printf("height of attdef : %f\n", attdef->height);
-
-  // prints thickness of attdef
   printf("thickness of attdef : %f\n", attdef->thickness);
-
-  // prints rotation of attef
   printf("rotation of attdef : %f\n", attdef->rotation_ang);
-
-  // prints vertical alignment
-  printf("vertical align of attdef : %u\n", attdef->vert_alignment);
-
-  // prints horizontal align
-  printf("horizontal align of attdef : %u\n", attdef->horiz_alignment);
+  printf("vertical align of attdef : " FORMAT_BS "\n", attdef->vert_alignment);
+  printf("horizontal align of attdef : " FORMAT_BS "\n", attdef->horiz_alignment);
 }
 
 void
 api_process(dwg_object *obj)
 {
   int error;
-  double thickness, rotation, vert_align, horiz_align, height;
+  double thickness, rotation, height;
+  BITCODE_BS vert_align, horiz_align;
   char * attdef_value;
   dwg_point_3d ext;
   dwg_point_2d ins_pt;
@@ -84,13 +69,13 @@ api_process(dwg_object *obj)
 
   vert_align = dwg_ent_attdef_get_vert_align(attdef, &error);
   if (!error)
-    printf("vertical alignment of attdef : %f\n", vert_align);
+    printf("vertical alignment of attdef : " FORMAT_BS "\n", vert_align);
   else
     printf("error in reading vertical alignment");
 
   horiz_align = dwg_ent_attdef_get_horiz_align(attdef, &error);
   if (!error)
-      printf("horizontal alignment of attdef : %f\n", horiz_align);
+      printf("horizontal alignment of attdef : " FORMAT_BS "\n", horiz_align);
   else
       printf("error in reading horizontal alignment");
 }

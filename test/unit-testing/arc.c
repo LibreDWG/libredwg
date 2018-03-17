@@ -4,8 +4,6 @@
 void
 low_level_process(dwg_object *obj)
 {
-
-  // casts a dwg object to arc entity
   dwg_ent_arc *arc = dwg_object_to_ARC(obj);
 
   printf("Radius of arc : %f\n",arc->radius);
@@ -35,7 +33,7 @@ api_process(dwg_object *obj)
   else
       printf("error in reading radius \n");
 
-  // returns thickness of arc
+
   thickness = dwg_ent_arc_get_thickness(arc, &error);
   if ( !error )
       printf("Thickness of arc : %f\n", thickness);
@@ -55,7 +53,7 @@ api_process(dwg_object *obj)
       printf("error in reading extrusion \n");
     }
 
-  // returns center of arc
+
   dwg_ent_arc_get_center(arc, &center,
                          &error);
   if ( !error )
@@ -68,7 +66,7 @@ api_process(dwg_object *obj)
       printf("error in reading center \n");
     }
 
-  // returns start angle  
+
   start_angle = dwg_ent_arc_get_start_angle(arc, &error);
   if ( !error )
     {
@@ -79,7 +77,7 @@ api_process(dwg_object *obj)
       printf("error in reading start angle\n");
     }
 
-  // returns thickness angle
+
   thickness = dwg_ent_arc_get_end_angle(arc, &error);
   if ( !error )
     {
