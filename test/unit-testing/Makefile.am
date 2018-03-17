@@ -67,13 +67,13 @@ check_PROGRAMS = \
 
 TESTS = $(check_PROGRAMS)
 TESTS_ENVIRONMENT = \
-  INPUT=$(srcdir)/example.dwg
-# todo: more dwg versions, in /testdata
+  INPUT=$(srcdir)/example_2000.dwg
+# todo: more dwg versions, in test/test-data
 
 update-ignorance:
 	printf '/%s\n' $(check_PROGRAMS) > .gitignore
 
-EXTRA_DIST = common.c example.dwg
+EXTRA_DIST = common.c example_2000.dwg
 
 @VALGRIND_CHECK_RULES@
 

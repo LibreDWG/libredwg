@@ -60,8 +60,8 @@ run ()
 }
 
 for prog in $PROGS ; do
-    run $prog sample
-    run $prog example
+    run $prog sample_2000
+    run $prog example_2000
 done
 
 if [ 0 = $problems ] ; then

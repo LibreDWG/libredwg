@@ -54,9 +54,9 @@ unpaired = \
 
 check_PROGRAMS = $(paired) $(unpaired)
 
-# todo: more dwg versions, in /testdata
+# todo: more dwg versions, in test/test-data
 EXTRA_DIST = \
-	example.dwg \
+	example_2000.dwg \
 	vertex.mesh \
 	tests_common.h common.c ole2frame.c \
 	$(paired:=.exp)

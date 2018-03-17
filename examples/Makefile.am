@@ -48,8 +48,8 @@ TESTS_ENVIRONMENT = \
 
 TESTS = alive.test
 
-EXTRA_DIST = example.dwg sample.dwg suffix.c load_dwg.py $(TESTS)
-CLEANFILES = {example,sample}.{bmp,ps,svg} {example,sample}.dwg-rewrite.dwg
+EXTRA_DIST = example_2000.dwg sample_2000.dwg suffix.c load_dwg.py $(TESTS)
+CLEANFILES = {example,sample}_2000.{bmp,ps,svg} {example,sample}_2000.dwg-rewrite.dwg
 
 # emacs flymake-mode
 check-syntax:
