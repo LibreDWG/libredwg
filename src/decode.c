@@ -727,7 +727,7 @@ resolve_objectref_vector(Dwg_Data * dwg)
           if (obj)
             dwg_print_object(obj);
           else
-            LOG_ERROR("Null object pointer: object_ref[%lu]", i)
+            LOG_WARN("Null object pointer: object_ref[%lu]", i)
         }
     }
 }
@@ -1848,7 +1848,7 @@ dwg_resolve_handle(Dwg_Data* dwg, long unsigned int absref)
           return &dwg->object[i];
         }
     }
-  LOG_ERROR("Object not found: %lu in %ld objects", absref, dwg->num_objects)
+  LOG_WARN("Object not found: %lu in %ld objects", absref, dwg->num_objects)
   return NULL;
 }
 
@@ -1943,7 +1943,7 @@ dwg_decode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg,
 
   if (ref->absolute_ref == 0 && ref->handleref.code != code)
     {
-      LOG_ERROR("Expected a CODE %d handle, got a %d", code, ref->handleref.code)
+      LOG_WARN("Expected a CODE %d handle, got a %d", code, ref->handleref.code)
       //TODO: At the moment we are tolerating wrong codes in handles.
       // in the future we might want to get strict and return 0 here so that code will crash
       // whenever it reaches the first handle parsing error. This might make debugging easier.
