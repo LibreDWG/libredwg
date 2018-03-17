@@ -673,18 +673,18 @@ void
 dwg_ent_text_set_rot_angle(dwg_ent_text *text, BITCODE_BD angle, int *error);
 
 //Get/Set horizontal alignment angle of text
-BITCODE_BD
+BITCODE_BS
 dwg_ent_text_get_vert_align(dwg_ent_text *text, int *error);
 
 void
-dwg_ent_text_set_vert_align(dwg_ent_text *text, BITCODE_BD alignment, int *error);
+dwg_ent_text_set_vert_align(dwg_ent_text *text, BITCODE_BS alignment, int *error);
 
 //Get/Set vertical alignment of text
-BITCODE_BD
+BITCODE_BS
 dwg_ent_text_get_horiz_align(dwg_ent_text *text, int *error);
 
 void
-dwg_ent_text_set_horiz_align(dwg_ent_text *text, BITCODE_BD alignment, int *error);
+dwg_ent_text_set_horiz_align(dwg_ent_text *text, BITCODE_BS alignment, int *error);
 
 
 /********************************************************************
@@ -741,19 +741,19 @@ dwg_ent_attrib_set_rot_angle(dwg_ent_attrib *attrib, BITCODE_BD angle,
                              int *error);
 
 //Get/Set horizontal alignment angle of attrib
-BITCODE_BD
+BITCODE_BS
 dwg_ent_attrib_get_vert_align(dwg_ent_attrib *attrib, int *error);
 
 void
-dwg_ent_attrib_set_vert_align(dwg_ent_attrib *attrib, BITCODE_BD alignment,
+dwg_ent_attrib_set_vert_align(dwg_ent_attrib *attrib, BITCODE_BS alignment,
                               int *error);
 
 //Get/Set vertical alignment of attrib
-BITCODE_BD
+BITCODE_BS
 dwg_ent_attrib_get_horiz_align(dwg_ent_attrib *attrib, int *error);
 
 void
-dwg_ent_attrib_set_horiz_align(dwg_ent_attrib *attrib, BITCODE_BD alignment,
+dwg_ent_attrib_set_horiz_align(dwg_ent_attrib *attrib, BITCODE_BS alignment,
                                int *error);
 
 
@@ -812,19 +812,19 @@ dwg_ent_attdef_set_rot_angle(dwg_ent_attdef *attdef, BITCODE_BD angle,
                              int *error);
 
 //Get/Set horizontal alignment angle of attdef
-BITCODE_BD
+BITCODE_BS
 dwg_ent_attdef_get_vert_align(dwg_ent_attdef *attdef, int *error);
 
 void
-dwg_ent_attdef_set_vert_align(dwg_ent_attdef *attdef, BITCODE_BD alignment,
+dwg_ent_attdef_set_vert_align(dwg_ent_attdef *attdef, BITCODE_BS alignment,
                               int *error);
 
 //Get/Set vertical alignment of attdef
-BITCODE_BD
+BITCODE_BS
 dwg_ent_attdef_get_horiz_align(dwg_ent_attdef *attdef, int *error);
 
 void
-dwg_ent_attdef_set_horiz_align(dwg_ent_attdef *attdef, BITCODE_BD alignment,
+dwg_ent_attdef_set_horiz_align(dwg_ent_attdef *attdef, BITCODE_BS alignment,
                                int *error);
 
 

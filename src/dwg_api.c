@@ -282,7 +282,7 @@ dwg_ent_circle_init(dwg_ent_circle *circle)
 /** Usage : dwg_ent_circle_get_center(circle, &point, &error);
     \param 1 dwg_ent_circle
     \param 2 dwg_point_3d
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_circle_get_center(dwg_ent_circle *circle, dwg_point_3d *point,
@@ -306,7 +306,7 @@ dwg_ent_circle_get_center(dwg_ent_circle *circle, dwg_point_3d *point,
 /** Usage : dwg_ent_circle_set_center(circle, &point, &error);
     \param 1 dwg_ent_circle
     \param 2 dwg_point_3d
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_circle_set_center(dwg_ent_circle *circle, dwg_point_3d *point,
@@ -329,7 +329,7 @@ dwg_ent_circle_set_center(dwg_ent_circle *circle, dwg_point_3d *point,
 /// returns the circle radius.
 /** Usage : double radius = dwg_ent_circle_get_radius(circle, &error);
     \param 1 dwg_ent_circle
-    \param 2 int
+    \param 2 int ptr &error
 */
 BITCODE_BD
 dwg_ent_circle_get_radius(dwg_ent_circle *circle, int *error)
@@ -351,7 +351,7 @@ dwg_ent_circle_get_radius(dwg_ent_circle *circle, int *error)
 /** Usage : dwg_ent_circle_set_radius(circle, radius, &error);
     \param 1 dwg_ent_circle
     \param 2 double
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_circle_set_radius(dwg_ent_circle *circle, BITCODE_BD radius, int *error)
@@ -371,7 +371,7 @@ dwg_ent_circle_set_radius(dwg_ent_circle *circle, BITCODE_BD radius, int *error)
 /// returns the circle thickness.
 /** Usage : double thickness = dwg_ent_circle_get_thickness(circle, &error);
     \param 1 dwg_ent_circle
-    \param 2 int
+    \param 2 int ptr &error
 */
 BITCODE_BD
 dwg_ent_circle_get_thickness(dwg_ent_circle *circle, int *error)
@@ -392,7 +392,7 @@ dwg_ent_circle_get_thickness(dwg_ent_circle *circle, int *error)
 /// sets the circle thickness.
 /** Usage : dwg_ent_circle_set_thickness(circle, thickness, &error);
     \param 1 dwg_ent_circle
-    \param 2 int
+    \param 2 int ptr &error
 */
 void
 dwg_ent_circle_set_thickness(dwg_ent_circle *circle, BITCODE_BD thickness,
@@ -414,7 +414,7 @@ dwg_ent_circle_set_thickness(dwg_ent_circle *circle, BITCODE_BD thickness,
 /** Usage : dwg_ent_circle_get_extrusion(circle, &point, &error);
     \param 1 dwg_ent_circle
     \param 2 dwg_point_3d
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_circle_set_extrusion(dwg_ent_circle *circle, dwg_point_3d *vector,
@@ -438,7 +438,7 @@ dwg_ent_circle_set_extrusion(dwg_ent_circle *circle, dwg_point_3d *vector,
 /** Usage : dwg_ent_circle_set_extrusion(circle, &point, &error);
     \param 1 dwg_ent_circle
     \param 2 dwg_point_3d
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_circle_get_extrusion(dwg_ent_circle *circle, dwg_point_3d *vector,
@@ -525,7 +525,7 @@ dwg_ent_line_init(dwg_ent_line *line)
 /** Usage : dwg_ent_line_get_start_point(line, &start_points, &error);
     \param 1 dwg_ent_line
     \param 2 dwg_point_2d
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_line_get_start_point(dwg_ent_line *line, dwg_point_3d *point,
@@ -549,7 +549,7 @@ dwg_ent_line_get_start_point(dwg_ent_line *line, dwg_point_3d *point,
 /** Usage : dwg_ent_line_set_start_point(line, &start_points, &error);
     \param 1 dwg_ent_line
     \param 2 dwg_point_2d
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_line_set_start_point(dwg_ent_line *line, dwg_point_3d *point,
@@ -573,7 +573,7 @@ dwg_ent_line_set_start_point(dwg_ent_line *line, dwg_point_3d *point,
 /** Usage : dwg_ent_line_get_start_end(line, &end_points, &error);
     \param 1 dwg_ent_line
     \param 2 dwg_point_2d
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_line_get_end_point(dwg_ent_line *line, dwg_point_3d *point,
@@ -597,7 +597,7 @@ dwg_ent_line_get_end_point(dwg_ent_line *line, dwg_point_3d *point,
 /** Usage : dwg_ent_line_set_start_end(line, &end_points, &error);
     \param 1 dwg_ent_line
     \param 2 dwg_point_2d
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_line_set_end_point(dwg_ent_line *line, dwg_point_3d *point,
@@ -620,7 +620,7 @@ dwg_ent_line_set_end_point(dwg_ent_line *line, dwg_point_3d *point,
 /// Returns line thickness.
 /** Usage : double thickness = dwg_ent_line_get_thickness(line, &error);
     \param 1 dwg_ent_line
-    \param 2 int
+    \param 2 int ptr &error
 */
 BITCODE_BD
 dwg_ent_line_get_thickness(dwg_ent_line *line, int *error)
@@ -642,7 +642,7 @@ dwg_ent_line_get_thickness(dwg_ent_line *line, int *error)
 /** Usage : dwg_ent_line_get_thickness(line, thickness, &error);
     \param 1 dwg_ent_line
     \param 2 double
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_line_set_thickness(dwg_ent_line *line, BITCODE_BD thickness, int *error)
@@ -663,7 +663,7 @@ dwg_ent_line_set_thickness(dwg_ent_line *line, BITCODE_BD thickness, int *error)
 /** Usage : dwg_ent_line_get_extrusion(line, &ext_points, &error);
     \param 1 dwg_ent_line
     \param 2 dwg_point_3d
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_line_get_extrusion(dwg_ent_line *line, dwg_point_3d *vector,
@@ -687,7 +687,7 @@ dwg_ent_line_get_extrusion(dwg_ent_line *line, dwg_point_3d *vector,
 /** Usage : dwg_ent_line_set_extrusion(line, &ext_points, &error);
     \param 1 dwg_ent_line
     \param 2 dwg_point_3d
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_line_set_extrusion(dwg_ent_line *line, dwg_point_3d *vector,
@@ -767,7 +767,7 @@ dwg_ent_arc_init(dwg_ent_arc *arc)
   else
     {
       LOG_ERROR("%s: empty arc", __FUNCTION__)
-        }
+    }
   return arc;
 }
 
@@ -775,7 +775,7 @@ dwg_ent_arc_init(dwg_ent_arc *arc)
 /** Usage : dwg_ent_arc_get_center(arc, &point, &error);
     \param 1 dwg_ent_arc
     \param 2 dwg_point_3d
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_arc_get_center(dwg_ent_arc *arc, dwg_point_3d *point,
@@ -799,7 +799,7 @@ dwg_ent_arc_get_center(dwg_ent_arc *arc, dwg_point_3d *point,
 /** Usage : dwg_ent_arc_set_center(arc, &point, &error);
     \param 1 dwg_ent_arc
     \param 2 dwg_point_3d
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_arc_set_center(dwg_ent_arc *arc, dwg_point_3d *point,
@@ -822,7 +822,7 @@ dwg_ent_arc_set_center(dwg_ent_arc *arc, dwg_point_3d *point,
 /// Returns arc radius.
 /** Usage : double radius = dwg_ent_arc_get_radius(arc, &error);
     \param 1 dwg_ent_arc
-    \param 2 int
+    \param 2 int ptr &error
 */
 BITCODE_BD
 dwg_ent_arc_get_radius(dwg_ent_arc *arc, int *error)
@@ -844,7 +844,7 @@ dwg_ent_arc_get_radius(dwg_ent_arc *arc, int *error)
 /** Usage : dwg_ent_arc_set_radius(arc, radius, &error);
     \param 1 dwg_ent_arc
     \param 2 double
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_arc_set_radius(dwg_ent_arc *arc, BITCODE_BD radius, int *error)
@@ -864,7 +864,7 @@ dwg_ent_arc_set_radius(dwg_ent_arc *arc, BITCODE_BD radius, int *error)
 /// Returns arc thickness.
 /** Usage : double thickness = dwg_ent_arc_get_thickness(arc, &error);
     \param 1 dwg_ent_arc
-    \param 2 int
+    \param 2 int ptr &error
 */
 BITCODE_BD
 dwg_ent_arc_get_thickness(dwg_ent_arc *arc, int *error)
@@ -886,7 +886,7 @@ dwg_ent_arc_get_thickness(dwg_ent_arc *arc, int *error)
 /** Usage : dwg_ent_arc_get_thickness(arc, thickness, &error);
     \param 1 dwg_ent_arc
     \param 2 double
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_arc_set_thickness(dwg_ent_arc *arc, BITCODE_BD thickness, int *error)
@@ -907,7 +907,7 @@ dwg_ent_arc_set_thickness(dwg_ent_arc *arc, BITCODE_BD thickness, int *error)
 /** Usage : dwg_ent_arc_get_extrusion(arc, &ext_points, &error);
     \param 1 dwg_ent_arc
     \param 2 dwg_point_3d
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_arc_get_extrusion(dwg_ent_arc *arc, dwg_point_3d *vector, int *error)
@@ -930,7 +930,7 @@ dwg_ent_arc_get_extrusion(dwg_ent_arc *arc, dwg_point_3d *vector, int *error)
 /** Usage : dwg_ent_arc_set_extrusion(arc, &ext_points, &error);
     \param 1 dwg_ent_arc
     \param 2 dwg_point_3d
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_arc_set_extrusion(dwg_ent_arc *arc, dwg_point_3d *vector, int *error)
@@ -952,7 +952,7 @@ dwg_ent_arc_set_extrusion(dwg_ent_arc *arc, dwg_point_3d *vector, int *error)
 /// Returns arc start angle.
 /** Usage : double start_angle = dwg_ent_arc_get_start_angle(line, &error);
     \param 1 dwg_ent_arc
-    \param 2 int
+    \param 2 int ptr &error
 */
 BITCODE_BD
 dwg_ent_arc_get_start_angle(dwg_ent_arc *arc, int *error)
@@ -974,7 +974,7 @@ dwg_ent_arc_get_start_angle(dwg_ent_arc *arc, int *error)
 /** Usage : dwg_ent_arc_set_start_angle(arc, start_angle, &error);
     \param 1 dwg_ent_arc
     \param 2 double
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_arc_set_start_angle(dwg_ent_arc *arc, BITCODE_BD start_angle, int *error)
@@ -994,7 +994,7 @@ dwg_ent_arc_set_start_angle(dwg_ent_arc *arc, BITCODE_BD start_angle, int *error
 /// Returns arc end angle.
 /** Usage : double end_angle = dwg_ent_arc_get_end_angle(arc, &error);
     \param 1 dwg_ent_arc
-    \param 2 int
+    \param 2 int ptr &error
 */
 BITCODE_BD
 dwg_ent_arc_get_end_angle(dwg_ent_arc *arc, int *error)
@@ -1016,7 +1016,7 @@ dwg_ent_arc_get_end_angle(dwg_ent_arc *arc, int *error)
 /** Usage : dwg_ent_arc_set_end_angle(arc, end_angle, &error);
     \param 1 dwg_ent_arc
     \param 2 double
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_arc_set_end_angle(dwg_ent_arc *arc, BITCODE_BD end_angle, int *error)
@@ -1096,7 +1096,7 @@ dwg_ent_ellipse_init(dwg_ent_ellipse *ellipse)
   else
     {
       LOG_ERROR("%s: empty ellipse", __FUNCTION__)
-        }
+    }
   return ellipse;
 }
 
@@ -1104,7 +1104,7 @@ dwg_ent_ellipse_init(dwg_ent_ellipse *ellipse)
 /** Usage : dwg_ent_ellipse_get_center(ellipse, &center, &error);
     \param 1 dwg_ent_ellipse
     \param 2 dwg_point_3d
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_ellipse_get_center(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
@@ -1128,7 +1128,7 @@ dwg_ent_ellipse_get_center(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
 /** Usage : dwg_ent_ellipse_set_center(ellipse, &center &error);
     \param 1 dwg_ent_ellipse
     \param 2 dwg_point_3d
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_ellipse_set_center(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
@@ -1152,7 +1152,7 @@ dwg_ent_ellipse_set_center(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
 /** Usage : dwg_ent_ellipse_get_sm_axis(ellipse, &point, &error);
     \param 1 dwg_ent_ellipse
     \param 2 dwg_point_3d
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_ellipse_get_sm_axis(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
@@ -1176,7 +1176,7 @@ dwg_ent_ellipse_get_sm_axis(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
 /** Usage : dwg_ent_ellipse_set_sm_axis(ellipse, &point, &error);
     \param 1 dwg_ent_ellipse
     \param 2 dwg_point_3d
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_ellipse_set_sm_axis(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
@@ -1200,7 +1200,7 @@ dwg_ent_ellipse_set_sm_axis(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
 /** Usage : dwg_ent_ellipse_get_extrusion(ellipse, &ext_points, &error);
     \param 1 dwg_ent_ellipse
     \param 2 dwg_point_3d
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_ellipse_get_extrusion(dwg_ent_ellipse *ellipse, dwg_point_3d *vector,
@@ -1224,7 +1224,7 @@ dwg_ent_ellipse_get_extrusion(dwg_ent_ellipse *ellipse, dwg_point_3d *vector,
 /** Usage : dwg_ent_ellipse_set_extrusion(ellipse, &ext_points, &error);
     \param 1 dwg_ent_ellipse
     \param 2 dwg_point_3d
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_ellipse_set_extrusion(dwg_ent_ellipse *ellipse, dwg_point_3d *vector,
@@ -1247,7 +1247,7 @@ dwg_ent_ellipse_set_extrusion(dwg_ent_ellipse *ellipse, dwg_point_3d *vector,
 /// Returns ellipse axis ratio
 /** Usage : double axis_ratio = dwg_ent_ellipse_get_axis_ratio(ellipse, &error);
     \param 1 dwg_ent_ellipse
-    \param 2 int
+    \param 2 int ptr &error
 */
 BITCODE_BD
 dwg_ent_ellipse_get_axis_ratio(dwg_ent_ellipse *ellipse, int *error)
@@ -1261,7 +1261,7 @@ dwg_ent_ellipse_get_axis_ratio(dwg_ent_ellipse *ellipse, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty ellipse", __FUNCTION__)
-        return nan("");
+      return nan("");
     }
 }
 
@@ -1269,7 +1269,7 @@ dwg_ent_ellipse_get_axis_ratio(dwg_ent_ellipse *ellipse, int *error)
 /** Usage : dwg_ent_ellipse_set_axis_ratio(ellipse, axis_ratio, &error);
     \param 1 dwg_ent_ellipse
     \param 2 double
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_ellipse_set_axis_ratio(dwg_ent_ellipse *ellipse, BITCODE_BD ratio,
@@ -1290,7 +1290,7 @@ dwg_ent_ellipse_set_axis_ratio(dwg_ent_ellipse *ellipse, BITCODE_BD ratio,
 /// Returns ellipse start angle.
 /** Usage : double start_angle = dwg_ent_ellipse_get_start_angle(ellipse, &error);
     \param 1 dwg_ent_ellipse
-    \param 2 int
+    \param 2 int ptr &error
 */
 BITCODE_BD
 dwg_ent_ellipse_get_start_angle(dwg_ent_ellipse *ellipse, int *error)
@@ -1312,7 +1312,7 @@ dwg_ent_ellipse_get_start_angle(dwg_ent_ellipse *ellipse, int *error)
 /** Usage : dwg_ent_ellipse_set_start_angle(ellipse, start_angle, &error);
     \param 1 dwg_ent_ellipse
     \param 2 double
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_ellipse_set_start_angle(dwg_ent_ellipse *ellipse, BITCODE_BD start_angle,
@@ -1333,7 +1333,7 @@ dwg_ent_ellipse_set_start_angle(dwg_ent_ellipse *ellipse, BITCODE_BD start_angle
 /// Returns ellipse end angle.
 /** Usage : double end_angle = dwg_ent_ellipse_get_end_angle(ellipse, &error);
     \param 1 dwg_ent_ellipse
-    \param 2 int
+    \param 2 int ptr &error
 */
 BITCODE_BD
 dwg_ent_ellipse_get_end_angle(dwg_ent_ellipse *ellipse, int *error)
@@ -1355,7 +1355,7 @@ dwg_ent_ellipse_get_end_angle(dwg_ent_ellipse *ellipse, int *error)
 /** Usage : dwg_ent_ellipse_set_end_angle(ellipse, end_angle, &error);
     \param 1 dwg_ent_ellipse
     \param 2 double
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_ellipse_set_end_angle(dwg_ent_ellipse *ellipse, BITCODE_BD end_angle,
@@ -1381,7 +1381,7 @@ dwg_ent_ellipse_set_end_angle(dwg_ent_ellipse *ellipse, BITCODE_BD end_angle,
 /** Usage : dwg_ent_text_set_text(text, "Hello world", &error);
     \param 1 dwg_ent_text
     \param 2 string ( char * )
-    \param 2 int
+    \param 2 int ptr &error
 */
 void
 dwg_ent_text_set_text(dwg_ent_text *text, char * text_value, int *error)
@@ -1401,7 +1401,7 @@ dwg_ent_text_set_text(dwg_ent_text *text, char * text_value, int *error)
 /// This returns the text value of a text entity.
 /** Usage : dwg_ent_text_get_text(text, &error);
     \param 1 dwg_ent_text
-    \param 2 int
+    \param 2 int ptr &error
 */
 char *
 dwg_ent_text_get_text(dwg_ent_text *text, int *error)
@@ -1423,7 +1423,7 @@ dwg_ent_text_get_text(dwg_ent_text *text, int *error)
 /** Usage : dwg_ent_text_get_insertion_point(text, &point, &error);
     \param 1 dwg_ent_text
     \param 2 dwg_2d_point
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_text_get_insertion_point(dwg_ent_text *text, dwg_point_2d *point,
@@ -1446,7 +1446,7 @@ dwg_ent_text_get_insertion_point(dwg_ent_text *text, dwg_point_2d *point,
 /** Usage :- dwg_ent_text_set_insertion_point(text, &point, &error)
     \param 1 dwg_ent_text
     \param 2 dwg_point_2d
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_text_set_insertion_point(dwg_ent_text *text, dwg_point_2d *point,
@@ -1468,7 +1468,7 @@ dwg_ent_text_set_insertion_point(dwg_ent_text *text, dwg_point_2d *point,
 /// Returns height of a text.
 /** Usage :- double height = dwg_ent_text_get_height(text);
     \param 1 dwg_ent_text
-    \param 2 int
+    \param 2 int ptr &error
 */
 BITCODE_BD
 dwg_ent_text_get_height(dwg_ent_text *text, int *error)
@@ -1482,7 +1482,7 @@ dwg_ent_text_get_height(dwg_ent_text *text, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty text", __FUNCTION__)
-        return nan("");
+      return nan("");
     }
 }
 
@@ -1490,7 +1490,7 @@ dwg_ent_text_get_height(dwg_ent_text *text, int *error)
 /** Usage :- dwg_ent_text_set_height(text, 100, &error);
     \param 1 dwg_ent_text
     \param 2 double
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_text_set_height(dwg_ent_text *text, BITCODE_BD height, int *error)
@@ -1511,7 +1511,7 @@ dwg_ent_text_set_height(dwg_ent_text *text, BITCODE_BD height, int *error)
 /** Usage : dwg_ent_text_get_extrusion(text, &point, &error);
     \param 1 dwg_ent_text
     \param 2 dwg_point_2d
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_text_get_extrusion(dwg_ent_text *text, dwg_point_3d *vector,
@@ -1535,7 +1535,7 @@ dwg_ent_text_get_extrusion(dwg_ent_text *text, dwg_point_3d *vector,
 /** Usage :- dwg_ent_text_set_extrusion(text, &point, &error);
     \param 1 dwg_ent_text
     \param 2 dwg_point_2d
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_text_set_extrusion(dwg_ent_text *text, dwg_point_3d *vector,
@@ -1558,7 +1558,7 @@ dwg_ent_text_set_extrusion(dwg_ent_text *text, dwg_point_3d *vector,
 /// Returns the thickness of a text entity.
 /** Usage : dwg_ent_text_get_thickness(text, &error);
     \param 1 dwg_ent_text
-    \param 2 int
+    \param 2 int ptr &error
 */
 BITCODE_BD
 dwg_ent_text_get_thickness(dwg_ent_text *text, int *error)
@@ -1580,7 +1580,7 @@ dwg_ent_text_get_thickness(dwg_ent_text *text, int *error)
 /** Usage :- dwg_ent_text_set_thickness(text, 50, &error);
     \param 1 dwg_ent_text
     \param 2 double
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_text_set_thickness(dwg_ent_text *text, BITCODE_BD thickness, int *error)
@@ -1600,7 +1600,7 @@ dwg_ent_text_set_thickness(dwg_ent_text *text, BITCODE_BD thickness, int *error)
 /// Returns the rotation angle of a text entity.
 /** Usage :- double rot_ang = dwg_ent_text_get_rot_angle(text, &error);
     \param 1 dwg_ent_text
-    \param 2 int
+    \param 2 int ptr &error
 */
 BITCODE_BD
 dwg_ent_text_get_rot_angle(dwg_ent_text *text, int *error)
@@ -1622,7 +1622,7 @@ dwg_ent_text_get_rot_angle(dwg_ent_text *text, int *error)
 /** Usage : dwg_ent_text_set_rot_angle(text, angle, &error);
     \param 1 dwg_ent_text
     \param 2 BITCODE_BD
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_text_set_rot_angle(dwg_ent_text *text, BITCODE_BD angle, int *error)
@@ -1640,11 +1640,12 @@ dwg_ent_text_set_rot_angle(dwg_ent_text *text, BITCODE_BD angle, int *error)
 }
 
 /// Returns the vertical alignment of a text entity.
-/** Usage : double align = dwg_ent_text_get_vert_align(text, &error);
+/** Usage : short align = dwg_ent_text_get_vert_align(text, &error);
     \param 1 dwg_ent_text
-    \param 2 int
+    \param 2 int ptr &error
+    \return short(1 = bottom, 2 = middle, 3 = top)
 */
-BITCODE_BD
+BITCODE_BS
 dwg_ent_text_get_vert_align(dwg_ent_text *text, int *error)
 {
   if (text != 0)
@@ -1656,18 +1657,18 @@ dwg_ent_text_get_vert_align(dwg_ent_text *text, int *error)
     {
       LOG_ERROR("%s: empty text", __FUNCTION__)
       *error = 1;
-      return nan("");
+      return -1;
     }
 }
 
 /// Sets the vertical alignment of a text entity
 /** Usage : dwg_ent_text_set_vert_align(text, angle, &error);
     \param 1 dwg_ent_text
-    \param 2 double
-    \param 3 int
+    \param 2 short (1 = bottom, 2 = middle, 3 = top)
+    \param 3 int ptr &error
 */
 void
-dwg_ent_text_set_vert_align(dwg_ent_text *text, BITCODE_BD alignment, int *error)
+dwg_ent_text_set_vert_align(dwg_ent_text *text, BITCODE_BS alignment, int *error)
 {
   if (text != 0)
     {
@@ -1682,11 +1683,12 @@ dwg_ent_text_set_vert_align(dwg_ent_text *text, BITCODE_BD alignment, int *error
 }
 
 /// Returns the horizontal alignment of a text entity.
-/** Usage : double align = dwg_ent_text_get_horiz_align(text, &error);
+/** Usage : short align = dwg_ent_text_get_horiz_align(text, &error);
     \param 1 dwg_ent_text
-    \param 2 int
+    \param 2 int ptr &error
+    \return (1 = left, 2 = center, 3 = right)
 */
-BITCODE_BD
+BITCODE_BS
 dwg_ent_text_get_horiz_align(dwg_ent_text *text, int *error)
 {
   if (text != 0)
@@ -1698,18 +1700,18 @@ dwg_ent_text_get_horiz_align(dwg_ent_text *text, int *error)
     {
       LOG_ERROR("%s: empty text", __FUNCTION__)
       *error = 1;
-      return nan("");
+      return 0;
     }
 }
 
 /// Sets the horizontal alignment of a text entity.
 /** Usage : dwg_ent_text_set_horiz_align(text, angle, &error);
     \param 1 dwg_ent_text
-    \param 2 BITCODE_BD
-    \param 3 int
+    \param 2 short (1 = left, 2 = center, 3 = right)
+    \param 3 int ptr &error
 */
 void
-dwg_ent_text_set_horiz_align(dwg_ent_text *text, BITCODE_BD alignment, int *error)
+dwg_ent_text_set_horiz_align(dwg_ent_text *text, BITCODE_BS alignment, int *error)
 {
   if (text != 0)
     {
@@ -1731,7 +1733,7 @@ dwg_ent_text_set_horiz_align(dwg_ent_text *text, BITCODE_BD alignment, int *erro
 /** Usage : dwg_ent_attrib_set_text(attrib, "Hello world", &error);
     \param 1 dwg_ent_attrib
     \param 2 string (char *)
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_attrib_set_text(dwg_ent_attrib *attrib, char * text_value, int *error)
@@ -1751,7 +1753,7 @@ dwg_ent_attrib_set_text(dwg_ent_attrib *attrib, char * text_value, int *error)
 /// Returns the text value of a attrib entity.
 /** Usage : char * text_val = dwg_ent_attrib_get_text(attrib, &error);
     \param 1 dwg_ent_attrib
-    \param 2 int
+    \param 2 int ptr &error
 */
 char *
 dwg_ent_attrib_get_text(dwg_ent_attrib *attrib, int *error)
@@ -1773,7 +1775,7 @@ dwg_ent_attrib_get_text(dwg_ent_attrib *attrib, int *error)
 /** Usage : dwg_ent_attrib_get_insertion_point(attrib, &point, &error);
     \param 1 dwg_ent_attrib
     \param 2 dwg_point_3d
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_attrib_get_insertion_point(dwg_ent_attrib *attrib,
@@ -1796,7 +1798,7 @@ dwg_ent_attrib_get_insertion_point(dwg_ent_attrib *attrib,
 /** Usage : dwg_ent_attrib_set_insertion_point(attrib, &point, &error)
     \param 1 dwg_ent_attrib
     \param 2 dwg_point_3d
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_attrib_set_insertion_point(dwg_ent_attrib *attrib,
@@ -1818,7 +1820,7 @@ dwg_ent_attrib_set_insertion_point(dwg_ent_attrib *attrib,
 /// This returns the height of a attrib entity.
 /** Usage : double height = dwg_ent_attrib_get_height(attrib, &error);
     \param 1 dwg_ent_attrib
-    \param 2 int
+    \param 2 int ptr &error
 */
 BITCODE_BD
 dwg_ent_attrib_get_height(dwg_ent_attrib *attrib, int *error)
@@ -1840,7 +1842,7 @@ dwg_ent_attrib_get_height(dwg_ent_attrib *attrib, int *error)
 /** Usage : dwg_ent_attrib_set_height(attrib, 100, &error);
     \param 1 dwg_ent_attrib
     \param 2 double
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_attrib_set_height(dwg_ent_attrib *attrib, BITCODE_BD height, int *error)
@@ -1861,7 +1863,7 @@ dwg_ent_attrib_set_height(dwg_ent_attrib *attrib, BITCODE_BD height, int *error)
 /** Usage : dwg_ent_attrib_get_extrusion(attrib, &point, &error);
     \param 1 dwg_ent_attrib
     \param 2 dwg_point_3d
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_attrib_get_extrusion(dwg_ent_attrib *attrib, dwg_point_3d *vector,
@@ -1885,7 +1887,7 @@ dwg_ent_attrib_get_extrusion(dwg_ent_attrib *attrib, dwg_point_3d *vector,
 /** Usage : dwg_ent_attrib_set_extrusion(attrib, &point, &error);
     \param 1 dwg_ent_attrib
     \param 2 dwg_point_3d
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_attrib_set_extrusion(dwg_ent_attrib *attrib, dwg_point_3d *vector,
@@ -1908,7 +1910,7 @@ dwg_ent_attrib_set_extrusion(dwg_ent_attrib *attrib, dwg_point_3d *vector,
 /// Returns the thickness of a attrib entity.
 /** Usage : double thick = dwg_ent_attrib_get_thickness(attrib, &error);
     \param 1 dwg_ent_attrib
-    \param 2 int
+    \param 2 int ptr &error
 */
 BITCODE_BD
 dwg_ent_attrib_get_thickness(dwg_ent_attrib *attrib, int *error)
@@ -1922,7 +1924,7 @@ dwg_ent_attrib_get_thickness(dwg_ent_attrib *attrib, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty attrib", __FUNCTION__)
-        return nan("");
+      return nan("");
     }
 }
 
@@ -1930,7 +1932,7 @@ dwg_ent_attrib_get_thickness(dwg_ent_attrib *attrib, int *error)
 /** Usage : dwg_ent_attrib_set_thickness(attrib, thick, &error);
     \param 1 dwg_ent_attrib
     \param 2 double
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_attrib_set_thickness(dwg_ent_attrib *attrib, BITCODE_BD thickness,
@@ -1951,7 +1953,7 @@ dwg_ent_attrib_set_thickness(dwg_ent_attrib *attrib, BITCODE_BD thickness,
 /// Returns the rotation angle of a attrib entity.
 /** Usage : double angle = dwg_ent_attrib_get_rot_angle(attrib, &error);
     \param 1 dwg_ent_attrib
-    \param 2 int
+    \param 2 int ptr &error
 */
 BITCODE_BD
 dwg_ent_attrib_get_rot_angle(dwg_ent_attrib *attrib, int *error)
@@ -1973,7 +1975,7 @@ dwg_ent_attrib_get_rot_angle(dwg_ent_attrib *attrib, int *error)
 /** Usage :- dwg_ent_attrib_set_rot_angle(attrib, angle, &error);
     \param 1 dwg_ent_attrib
     \param 2 double
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_attrib_set_rot_angle(dwg_ent_attrib *attrib, BITCODE_BD angle, int *error)
@@ -1991,11 +1993,12 @@ dwg_ent_attrib_set_rot_angle(dwg_ent_attrib *attrib, BITCODE_BD angle, int *erro
 }
 
 /// This returns the vertical alignment of a attrib entity.
-/** Usage : double vert_align = dwg_ent_attrib_get_vert_align(attrib, &error);
+/** Usage : short vert_align = dwg_ent_attrib_get_vert_align(attrib, &error);
     \param 1 dwg_ent_attrib
-    \param 2 int
+    \param 2 int ptr &error
+    \return short(1 = bottom, 2 = middle, 3 = top)
 */
-BITCODE_BD
+BITCODE_BS
 dwg_ent_attrib_get_vert_align(dwg_ent_attrib *attrib, int *error)
 {
   if (attrib != 0)
@@ -2007,18 +2010,18 @@ dwg_ent_attrib_get_vert_align(dwg_ent_attrib *attrib, int *error)
     {
       LOG_ERROR("%s: empty attrib", __FUNCTION__)
       *error = 1;
-      return nan("");
+      return -1;
     }
 }
 
 /// This sets the vertical alignment of a attrib entity.
 /** Usage :- dwg_ent_attrib_set_vert_align(attrib, angle, &error);
     \param 1 dwg_ent_attrib
-    \param 2 double
-    \param 3 int
+    \param 2 short (1 = bottom, 2 = middle, 3 = top)
+    \param 3 int ptr &error
 */
 void
-dwg_ent_attrib_set_vert_align(dwg_ent_attrib *attrib, BITCODE_BD alignment,
+dwg_ent_attrib_set_vert_align(dwg_ent_attrib *attrib, BITCODE_BS alignment,
                               int *error)
 {
   if (attrib != 0)
@@ -2034,11 +2037,12 @@ dwg_ent_attrib_set_vert_align(dwg_ent_attrib *attrib, BITCODE_BD alignment,
 }
 
 /// This returns the horizontal alignment of a attrib entity.
-/** Usage : double horiz_align =  dwg_ent_attrib_get_horiz_align(attrib, &error);
+/** Usage : short horiz_align =  dwg_ent_attrib_get_horiz_align(attrib, &error);
     \param 1 dwg_ent_attrib
-    \param 2 int
+    \param 2 int ptr &error
+    \return (1 = left, 2 = center, 3 = right)
 */
-BITCODE_BD
+BITCODE_BS
 dwg_ent_attrib_get_horiz_align(dwg_ent_attrib *attrib, int *error)
 {
   if (attrib != 0)
@@ -2050,18 +2054,18 @@ dwg_ent_attrib_get_horiz_align(dwg_ent_attrib *attrib, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-        return nan("");
+      return -1;
     }
 }
 
 /// This sets the horizontal alignment of a attrib entity.
 /** Usage :- dwg_ent_attrib_set_horiz_align(attrib, angle, &error);
     \param 1 dwg_ent_attrib
-    \param 2 double
-    \param 3 int
+    \param 2 short (1 = left, 2 = center, 3 = right)
+    \param 3 int ptr &error
 */
 void
-dwg_ent_attrib_set_horiz_align(dwg_ent_attrib *attrib, BITCODE_BD alignment,
+dwg_ent_attrib_set_horiz_align(dwg_ent_attrib *attrib, BITCODE_BS alignment,
                                int *error)
 {
   if (attrib != 0)
@@ -2073,7 +2077,7 @@ dwg_ent_attrib_set_horiz_align(dwg_ent_attrib *attrib, BITCODE_BD alignment,
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-        }
+    }
 }
 
 /*******************************************************************
@@ -2084,7 +2088,7 @@ dwg_ent_attrib_set_horiz_align(dwg_ent_attrib *attrib, BITCODE_BD alignment,
 /** Usage :- dwg_ent_attdef_set_text(attdef, "Hello world", &error);
     \param 1 dwg_ent_attdef
     \param 2 char *
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_attdef_set_text(dwg_ent_attdef *attdef, char * default_value,
@@ -2105,7 +2109,7 @@ dwg_ent_attdef_set_text(dwg_ent_attdef *attdef, char * default_value,
 /// This returns the text value of a attdef entity.
 /** Usage : char * text = dwg_ent_attdef_get_text(attdef, &error);
     \param 1 dwg_ent_attdef
-    \param 2 int
+    \param 2 int ptr &error
 */
 char *
 dwg_ent_attdef_get_text(dwg_ent_attdef *attdef, int *error)
@@ -2127,7 +2131,7 @@ dwg_ent_attdef_get_text(dwg_ent_attdef *attdef, int *error)
 /** Usage :- dwg_ent_attdef_get_insertion_point(attdef, &point, &error);
     \param 1 dwg_ent_attdef
     \param 2 dwg_point_2d
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_attdef_get_insertion_point(dwg_ent_attdef *attdef,
@@ -2143,14 +2147,14 @@ dwg_ent_attdef_get_insertion_point(dwg_ent_attdef *attdef,
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-        }
+    }
 }
 
 /// This sets the insertion point of a attdef entity.
 /** Usage :- dwg_ent_attdef_set_insertion_point(attdef, &point, &error)
     \param 1 dwg_ent_attdef
     \param 2 dwg_point_2d
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_attdef_set_insertion_point(dwg_ent_attdef *attdef,
@@ -2166,13 +2170,13 @@ dwg_ent_attdef_set_insertion_point(dwg_ent_attdef *attdef,
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-        }
+    }
 }
 
 /// This returns the height of a attdef entity.
 /** Usage :- dwg_ent_attdef_get_height(attdef, &error);
     \param 1 dwg_ent_attdef
-    \param 2 int
+    \param 2 int ptr &error
 */
 BITCODE_BD
 dwg_ent_attdef_get_height(dwg_ent_attdef *attdef, int *error)
@@ -2186,7 +2190,7 @@ dwg_ent_attdef_get_height(dwg_ent_attdef *attdef, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-        return nan("");
+      return nan("");
     }
 }
 
@@ -2194,7 +2198,7 @@ dwg_ent_attdef_get_height(dwg_ent_attdef *attdef, int *error)
 /** Usage :- dwg_ent_attdef_set_height(attdef, 100, &error);
     \param 1 dwg_ent_attdef
     \param 2 double
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_attdef_set_height(dwg_ent_attdef *attdef, BITCODE_BD height, int *error)
@@ -2208,14 +2212,14 @@ dwg_ent_attdef_set_height(dwg_ent_attdef *attdef, BITCODE_BD height, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-        }
+    }
 }
 
 /// Returns the extrusion values of attdef.
 /** Usage : dwg_ent_attdef_get_extrusion(attdef, &point, &error);
     \param 1 dwg_ent_attdef
     \param 2 dwg_point_3d
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_attdef_get_extrusion(dwg_ent_attdef *attdef, dwg_point_3d *vector,
@@ -2232,14 +2236,14 @@ dwg_ent_attdef_get_extrusion(dwg_ent_attdef *attdef, dwg_point_3d *vector,
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-        }
+    }
 }
 
 /// Sets the attdef extrusion values.
 /** Usage :- dwg_ent_attdef_set_extrusion(attdef, &point, &error);
     \param 1 dwg_ent_attdef
     \param 2 dwg_point_3d
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_attdef_set_extrusion(dwg_ent_attdef *attdef, dwg_point_3d *vector,
@@ -2256,13 +2260,13 @@ dwg_ent_attdef_set_extrusion(dwg_ent_attdef *attdef, dwg_point_3d *vector,
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-        }
+    }
 }
 
 /// This returns the thickness of a attdef entity.
 /** Usage :- double thickness = dwg_ent_attdef_get_thickness(attdef, &error);
     \param 1 dwg_ent_attdef
-    \param 2 int
+    \param 2 int ptr &error
 */
 BITCODE_BD
 dwg_ent_attdef_get_thickness(dwg_ent_attdef *attdef, int *error)
@@ -2276,7 +2280,7 @@ dwg_ent_attdef_get_thickness(dwg_ent_attdef *attdef, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-        return nan("");
+      return nan("");
     }
 }
 
@@ -2284,7 +2288,7 @@ dwg_ent_attdef_get_thickness(dwg_ent_attdef *attdef, int *error)
 /** Usage :- dwg_ent_attdef_set_thickness(attdef, thickness, &error);
     \param 1 dwg_ent_attdef
     \param 2 double
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_attdef_set_thickness(dwg_ent_attdef *attdef, BITCODE_BD thickness,
@@ -2299,13 +2303,13 @@ dwg_ent_attdef_set_thickness(dwg_ent_attdef *attdef, BITCODE_BD thickness,
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-        }
+    }
 }
 
 /// This returns the rotation angle of a attdef entity.
 /** Usage :- double angle = dwg_ent_attdef_get_rot_angle(attdef, &error);
     \param 1 dwg_ent_attdef
-    \param 2 int
+    \param 2 int ptr &error
 */
 BITCODE_BD
 dwg_ent_attdef_get_rot_angle(dwg_ent_attdef *attdef, int *error)
@@ -2319,7 +2323,7 @@ dwg_ent_attdef_get_rot_angle(dwg_ent_attdef *attdef, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-        return nan("");
+      return nan("");
     }
 }
 
@@ -2327,7 +2331,7 @@ dwg_ent_attdef_get_rot_angle(dwg_ent_attdef *attdef, int *error)
 /** Usage :- dwg_ent_attdef_set_rot_angle(attdef, angle, &error);
     \param 1 dwg_ent_attdef
     \param 2 double
-    \param 3 int
+    \param 3 int ptr &error
 */
 void
 dwg_ent_attdef_set_rot_angle(dwg_ent_attdef *attdef, BITCODE_BD angle, int *error)
@@ -2341,15 +2345,16 @@ dwg_ent_attdef_set_rot_angle(dwg_ent_attdef *attdef, BITCODE_BD angle, int *erro
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-        }
+    }
 }
 
 /// This returns the vertical alignment of a attdef entity.
-/** Usage :- double vert_align = dwg_ent_attdef_get_vert_align(attdef, &error);
+/** Usage :- short vert_align = dwg_ent_attdef_get_vert_align(attdef, &error);
     \param 1 dwg_ent_attdef
-    \param 2 int
+    \param 2 int ptr &error
+    \return (1 = bottom, 2 = middle, 3 = top)
 */
-BITCODE_BD
+BITCODE_BS
 dwg_ent_attdef_get_vert_align(dwg_ent_attdef *attdef, int *error)
 {
   if (attdef != 0)
@@ -2361,18 +2366,18 @@ dwg_ent_attdef_get_vert_align(dwg_ent_attdef *attdef, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-        return nan("");
+      return -1;
     }
 }
 
 /// This sets the vertical alignment of a attdef entity.
 /** Usage :- dwg_ent_attdef_set_vert_align(attdef, angle, &error);
     \param 1 dwg_ent_attdef
-    \param 2 double
-    \param 3 int
+    \param 2 short (1 = bottom, 2 = middle, 3 = top)
+    \param 3 int ptr &error
 */
 void
-dwg_ent_attdef_set_vert_align(dwg_ent_attdef *attdef, BITCODE_BD alignment,
+dwg_ent_attdef_set_vert_align(dwg_ent_attdef *attdef, BITCODE_BS alignment,
                               int *error)
 {
   if (attdef != 0)
@@ -2384,15 +2389,16 @@ dwg_ent_attdef_set_vert_align(dwg_ent_attdef *attdef, BITCODE_BD alignment,
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-        }
+    }
 }
 
 /// This returns the horizontal alignment of a attdef entity.
-/** Usage :- double horiz_align = dwg_ent_attdef_get_horiz_align(attdef, &error);
+/** Usage :- short horiz_align = dwg_ent_attdef_get_horiz_align(attdef, &error);
     \param 1 dwg_ent_attdef
-    \param 2 int
+    \param 2 int ptr &error
+    \return (1 = left, 2 = center, 3 = right)
 */
-BITCODE_BD
+BITCODE_BS
 dwg_ent_attdef_get_horiz_align(dwg_ent_attdef *attdef, int *error)
 {
   if (attdef != 0)
@@ -2404,18 +2410,18 @@ dwg_ent_attdef_get_horiz_align(dwg_ent_attdef *attdef, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-        return nan("");
+      return -1;
     }
 }
 
 /// This sets the horizontal alignment of a attdef entity.
-/** Usage :- dwg_ent_attdef_set_horiz_align(attdef, angle, &error);
+/** Usage :- dwg_ent_attdef_set_horiz_align(attdef, alignment, &error);
     \param 1 dwg_ent_attdef
-    \param 2 double
-    \param 3 int
+    \param 2 short (1 = left, 2 = center, 3 = right)
+    \param 3 int ptr &error
 */
 void
-dwg_ent_attdef_set_horiz_align(dwg_ent_attdef *attdef, BITCODE_BD alignment,
+dwg_ent_attdef_set_horiz_align(dwg_ent_attdef *attdef, BITCODE_BS alignment,
                                int *error)
 {
   if (attdef != 0)
@@ -5608,9 +5614,9 @@ dwg_ent_dim_ordinate_get_attachment_point(dwg_ent_dim_ordinate *dim,
 
 /// Sets the attachment point
 /** Usage : dwg_ent_dim_ordinate_set_attachment_point(dim, point, &error);
-\param 1 dwg_ent_dim_ordinate
-\param 2 BITCODE_BS
-\param 3 int
+    \param 1 dwg_ent_dim_ordinate
+    \param 2 BITCODE_BS point index
+    \param 3 int ptr &error
 */
 void
 dwg_ent_dim_ordinate_set_attachment_point(dwg_ent_dim_ordinate *dim,
@@ -5630,9 +5636,9 @@ dwg_ent_dim_ordinate_set_attachment_point(dwg_ent_dim_ordinate *dim,
 
 /// Returns the extrusion
 /** Usage : dwg_ent_dim_ordinate_get_extrusion(dim, &point, &error);
-\param 1 dwg_ent_dim_ordinate
-\param 2 dwg_point_3d
-\param 3 int
+    \param 1 dwg_ent_dim_ordinate
+    \param 2 dwg_point_3d
+    \param 3 int ptr &error
 */
 void
 dwg_ent_dim_ordinate_set_extrusion(dwg_ent_dim_ordinate *dim,
@@ -5654,9 +5660,9 @@ dwg_ent_dim_ordinate_set_extrusion(dwg_ent_dim_ordinate *dim,
 
 /// Sets the extrusion
 /** Usage : dwg_ent_dim_ordinate_set_extrusion(dim, &point, &error);
-\param 1 dwg_ent_dim_ordinate
-\param 2 dwg_point_3d
-\param 3 int
+    \param 1 dwg_ent_dim_ordinate
+    \param 2 dwg_point_3d
+    \param 3 int ptr &error
 */
 void
 dwg_ent_dim_ordinate_get_extrusion(dwg_ent_dim_ordinate *dim,
@@ -5678,8 +5684,8 @@ dwg_ent_dim_ordinate_get_extrusion(dwg_ent_dim_ordinate *dim,
 
 /// Returns the user text
 /** Usage : char * text  = dwg_ent_dim_ordinate_get_user_text(dim, &error);
-\param 1 dwg_ent_dim_ordinate
-\param 2 int
+    \param 1 dwg_ent_dim_ordinate
+    \param 2 int ptr &error
 */
 char *
 dwg_ent_dim_ordinate_get_user_text(dwg_ent_dim_ordinate *dim, int *error)
@@ -5699,9 +5705,9 @@ dwg_ent_dim_ordinate_get_user_text(dwg_ent_dim_ordinate *dim, int *error)
 
 /// Sets the user text
 /** Usage : dwg_ent_dim_ordinate_set_user_text(dim, "dimension texto", &error);
-\param 1 dwg_ent_dim_ordinate
-\param 2 char *
-\param 3 int
+    \param 1 dwg_ent_dim_ordinate
+    \param 2 char *
+    \param 3 int ptr &error
 */
 void
 dwg_ent_dim_ordinate_set_user_text(dwg_ent_dim_ordinate *dim, char * text,
@@ -5722,7 +5728,7 @@ dwg_ent_dim_ordinate_set_user_text(dwg_ent_dim_ordinate *dim, char * text,
 /// Returns text rotation
 /** Usage : double text_rot  = dwg_ent_dim_ordinate_get_text_rot(dim, &error);
     \param 1 dwg_ent_dim_ordinate
-    \param 2 int
+    \param 2 int ptr &error
 */
 BITCODE_BD
 dwg_ent_dim_ordinate_get_text_rot(dwg_ent_dim_ordinate *dim, int *error)
@@ -5742,9 +5748,9 @@ dwg_ent_dim_ordinate_get_text_rot(dwg_ent_dim_ordinate *dim, int *error)
 
 /// Sets the text rotation
 /** Usage : dwg_ent_dim_ordinate_set_text_rot(dim, 10.10, &error);
-\param 1 dwg_ent_dim_ordinate
-\param 2 double
-\param 3 int
+    \param 1 dwg_ent_dim_ordinate
+    \param 2 double rot
+    \param 3 int ptr &error
 */
 void
 dwg_ent_dim_ordinate_set_text_rot(dwg_ent_dim_ordinate *dim, BITCODE_BD rot,
@@ -5764,8 +5770,8 @@ dwg_ent_dim_ordinate_set_text_rot(dwg_ent_dim_ordinate *dim, BITCODE_BD rot,
 
 /// Returns ins rotation
 /** Usage : double ins_rot  = dwg_ent_dim_ordinate_get_ins_rotation(dim, &error);
-\param 1 dwg_ent_dim_ordinate
-\param 2 int
+    \param 1 dwg_ent_dim_ordinate
+    \param 2 int ptr &error
 */
 BITCODE_BD
 dwg_ent_dim_ordinate_get_ins_rotation(dwg_ent_dim_ordinate *dim, int *error)
@@ -5785,9 +5791,9 @@ dwg_ent_dim_ordinate_get_ins_rotation(dwg_ent_dim_ordinate *dim, int *error)
 
 /// Sets the ins rotation
 /** Usage : dwg_ent_dim_ordinate_set_ins_rotation(dim, 10.10, &error);
-\param 1 dwg_ent_dim_ordinate
-\param 2 double
-\param 3 int
+    \param 1 dwg_ent_dim_ordinate
+    \param 2 double
+    \param 3 int ptr &error
 */
 void
 dwg_ent_dim_ordinate_set_ins_rotation(dwg_ent_dim_ordinate *dim, BITCODE_BD rot,
@@ -5830,7 +5836,7 @@ dwg_ent_dim_ordinate_get_flip_arrow1(dwg_ent_dim_ordinate *dim, int *error)
 /** Usage : dwg_ent_dim_ordinate_set_flip_arrow1(dim, arrow1, &error);
 \param 1 dwg_ent_dim_ordinate
 \param 2 char
-\param 3 int
+    \param 2 int ptr &error
 */
 void
 dwg_ent_dim_ordinate_set_flip_arrow1(dwg_ent_dim_ordinate *dim,
@@ -6564,7 +6570,7 @@ dwg_ent_dim_linear_get_attachment_point(dwg_ent_dim_linear *dim, int *error)
 /** Usage : dwg_ent_dim_linear_set_attachment_point(dim, point, &error);
 \param 1 dwg_ent_dim_linear
 \param 2 double
-\param 3 int
+\param 3 int ptr &error
 */
 void
 dwg_ent_dim_linear_set_attachment_point(dwg_ent_dim_linear *dim,
