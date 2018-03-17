@@ -7,6 +7,7 @@ addons:
   apt:
     packages:
       - libxml2
+      - python-libxml2
       - texinfo
 matrix:
   fast_finish: true
