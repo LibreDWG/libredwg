@@ -185,27 +185,27 @@ dwg_bmp(Dwg_Data *dwg, BITCODE_RL *size)
       code = bit_read_RC(dat);
       LOG_TRACE("\t[%i] Code: %i\n", i, code)
       address = bit_read_RL(dat);
-      LOG_TRACE("\t\tHeader data start: 0x%lx\n", address)
+      LOG_TRACE("\t\tHeader data start: 0x%x\n", address)
       if (code == 1)
         {
           header_size += bit_read_RL(dat);
-          LOG_TRACE("\t\tHeader data size: %li\n", header_size)
+          LOG_TRACE("\t\tHeader data size: %i\n", header_size)
         }
       else if (code == 2 && plene == 0)
         {
           *size = bit_read_RL(dat);
           plene = 1;
-          LOG_TRACE("\t\tBMP size: %li\n", *size)
+          LOG_TRACE("\t\tBMP size: %i\n", *size)
         }
       else if (code == 3)
         {
           osize = bit_read_RL(dat);
-          LOG_TRACE("\t\tWMF size: 0x%lx\n", osize)
+          LOG_TRACE("\t\tWMF size: 0x%x\n", osize)
         }
       else
         {
           osize = bit_read_RL(dat);
-          LOG_TRACE("\t\tSize of unknown code %d: 0x%lx\n", code, osize)
+          LOG_TRACE("\t\tSize of unknown code %d: 0x%x\n", code, osize)
         }
     }
   dat->byte += header_size;

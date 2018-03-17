@@ -1262,7 +1262,7 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
       else 
         {
           LOG_ERROR(
-              "dwg_encode_entity:  Absurd! Picture-size: %lu kB. Object: %lu (handle).\n",
+              "dwg_encode_entity:  Absurd! Picture-size: %u kB. Object: %lu (handle).\n",
               obj->tio.entity->picture_size / 1000, obj->handle.value)
           bit_advance_position(dat, -(4 * 8 + 1));
         }

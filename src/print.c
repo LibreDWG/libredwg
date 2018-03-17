@@ -623,7 +623,7 @@ dwg_print_object(Dwg_Object *obj)
           SINCE(R_2000)
             {
               BITCODE_RL bitsize = bit_read_RL(dat);  // skip bitsize
-              LOG_INFO("Object bitsize: %lu\n", bitsize)
+              LOG_INFO("Object bitsize: %u\n", bitsize)
             }
           if (!bit_read_H(dat, &obj->handle))
             {
