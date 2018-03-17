@@ -1064,7 +1064,7 @@ typedef struct _dwg_entity_POINT
 /**
  Struct for:  3D FACE (28)
  */
-typedef struct _dwg_entity_3D_FACE
+typedef struct _dwg_entity_3DFACE
 {
   BITCODE_B has_no_flags;
   BITCODE_B z_is_zero;

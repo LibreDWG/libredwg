@@ -47,7 +47,7 @@ GET_DWG_ENTITY(ARC)
 /// Macro call to extract all circle entities from a block
 GET_DWG_ENTITY(CIRCLE)
 /// Macro call to extract all line entities from a block
-  GET_DWG_ENTITY(LINE)
+GET_DWG_ENTITY(LINE)
 /// Macro call to extract all dimension ordinate entities from a block
 GET_DWG_ENTITY(DIMENSION_ORDINATE)
 /// Macro call to extract all dimension linear entities from a block
