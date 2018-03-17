@@ -962,10 +962,11 @@ bit_read_TV(Bit_Chain * dat)
   for (i = 0; i < length; i++)
     {
       chain[i] = bit_read_RC(dat);
-      if (chain[i] == 0)
-        chain[i] = '*';
-      else if (!isprint (chain[i]))
+#if 0
+      /* we support encode and codepages */
+      if (!isprint (chain[i]))
         chain[i] = '~';
+#endif
     }
   chain[i] = '\0';
 

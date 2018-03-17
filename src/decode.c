@@ -456,7 +456,7 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
       //LOG_TRACE("section_size: %u\n", section_size)
       if (section_size > 2035)
         {
-          LOG_ERROR("Object-map section size greater than 2035!\n")
+          LOG_ERROR("Object-map section size greater than 2035!")
           return -1;
         }
 
@@ -727,7 +727,7 @@ resolve_objectref_vector(Dwg_Data * dwg)
           if (obj)
             dwg_print_object(obj);
           else
-            LOG_ERROR("Null object pointer: object_ref[%lu]\n", i)
+            LOG_ERROR("Null object pointer: object_ref[%lu]", i)
         }
     }
 }
@@ -1064,7 +1064,7 @@ read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
 	}// sanity check
       else
 	{
-	  LOG_ERROR("section count %ld in area %d too high! skipping\n",dwg->header.section_info[i].num_sections,i)
+	  LOG_ERROR("section count %ld in area %d too high! skipping",dwg->header.section_info[i].num_sections,i)
 	}
     }
   free(decomp);
@@ -1502,7 +1502,7 @@ decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
 
   if (dwg->header.section == 0)
     {
-      LOG_ERROR("Failed to read R2004 Section Map.\n")
+      LOG_ERROR("Failed to read R2004 Section Map.")
       return -1;
     }
 
@@ -1582,7 +1582,7 @@ decode_R2007(Bit_Chain* dat, Dwg_Data * dwg)
 
   LOG_ERROR(
       "Decoding of DWG version R2007+ header is not fully implemented yet.\n"
-      "We are going to try\n")
+      "We are going to try")
   return 0;
 }
 
@@ -1606,7 +1606,7 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
   if (error)
     {
       LOG_ERROR(
-          "dwg_decode_entity:\tError in object handle! Current Bit_Chain address: 0x%0x\n",
+          "dwg_decode_entity:\tError in object handle! Current Bit_Chain address: 0x%0x",
           (unsigned int) dat->byte)
       ent->bitsize = 0;
       ent->extended_size = 0;
@@ -1622,7 +1622,7 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
       if (size > 10210)
         {
           LOG_ERROR(
-              "dwg_decode_entity: Absurd! Extended object data size: %lu. Object: %lu (handle).\n",
+              "dwg_decode_entity: Absurd! Extended object data size: %lu. Object: %lu (handle)",
               (long unsigned int) size, ent->object->handle.value)
           ent->bitsize = 0;
           ent->extended_size = 0;
@@ -1644,7 +1644,7 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
         }
       error = bit_read_H(dat, &ent->extended_handle);
       if (error)
-        LOG_ERROR("Error reading extended handle!\n");
+        LOG_ERROR("Error reading extended handle!");
       for (i = ent->extended_size - size; i < ent->extended_size; i++)
         ent->extended[i] = bit_read_RC(dat);
     }
@@ -1663,7 +1663,7 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
       else
         {
           LOG_ERROR(
-              "dwg_decode_entity:  Absurd! Picture-size: %u kB. Object: %lu (handle).\n",
+              "dwg_decode_entity:  Absurd! Picture-size: %u kB. Object: %lu (handle)",
               ent->picture_size / 1000, ent->object->handle.value)
           bit_advance_position(dat, -(4 * 8 + 1));
         }
@@ -1781,7 +1781,7 @@ dwg_decode_object(Bit_Chain * dat, Dwg_Object_Object * obj)
   if (error)
     {
       LOG_ERROR(
-          "\tError in object handle! Bit_Chain current address: 0x%0x\n",
+          "\tError in object handle! Bit_Chain current address: 0x%0x",
           (unsigned int) dat->byte)
       obj->bitsize = 0;
       obj->extended_size = 0;
@@ -1794,7 +1794,7 @@ dwg_decode_object(Bit_Chain * dat, Dwg_Object_Object * obj)
       if (size > 10210)
         {
           LOG_ERROR(
-              "dwg_decode_object: Absurd! Extended object data size: %lu. Object: %lu (handle).\n",
+              "dwg_decode_object: Absurd! Extended object data size: %lu. Object: %lu (handle)",
               (long unsigned int) size, obj->object->handle.value)
           obj->bitsize = 0;
           obj->extended_size = 0;
@@ -1813,7 +1813,7 @@ dwg_decode_object(Bit_Chain * dat, Dwg_Object_Object * obj)
         }
       error = bit_read_H(dat, &obj->extended_handle);
       if (error)
-        LOG_ERROR("Error reading extended handle!\n")
+        LOG_ERROR("Error reading extended handle!")
       for (i = obj->extended_size - size; i < obj->extended_size; i++)
         obj->extended[i] = bit_read_RC(dat);
     }
@@ -1848,7 +1848,7 @@ dwg_resolve_handle(Dwg_Data* dwg, long unsigned int absref)
           return &dwg->object[i];
         }
     }
-  LOG_ERROR("Object not found: %lu in %ld objects\n", absref, dwg->num_objects)
+  LOG_ERROR("Object not found: %lu in %ld objects", absref, dwg->num_objects)
   return NULL;
 }
 
@@ -1863,12 +1863,12 @@ dwg_decode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg)
       if (obj)
         {
           LOG_ERROR(
-            "Could not read handleref in object whose handle is: %d.%d.%lu\n",
+            "Could not read handleref in object whose handle is: %d.%d.%lu",
             obj->handle.code, obj->handle.size, obj->handle.value)
         }
       else
         {
-          LOG_ERROR("Could not read handleref in the header variables section\n")
+          LOG_ERROR("Could not read handleref in the header variables section")
         }
       free(ref);
       return 0;
@@ -1937,13 +1937,13 @@ dwg_decode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg,
 
   if (!ref)
     {
-      LOG_ERROR("dwg_decode_handleref_with_code: ref is a null pointer\n");
+      LOG_ERROR("dwg_decode_handleref_with_code: ref is a null pointer");
       return 0;
     }
 
   if (ref->absolute_ref == 0 && ref->handleref.code != code)
     {
-      LOG_ERROR("Expected a CODE %d handle, got a %d\n", code, ref->handleref.code)
+      LOG_ERROR("Expected a CODE %d handle, got a %d", code, ref->handleref.code)
       //TODO: At the moment we are tolerating wrong codes in handles.
       // in the future we might want to get strict and return 0 here so that code will crash
       // whenever it reaches the first handle parsing error. This might make debugging easier.
@@ -2129,7 +2129,7 @@ dwg_decode_xdata(Bit_Chain * dat, int size)
           break;
         case VT_INVALID:
         default:
-          LOG_ERROR("Invalid group code in xdata: %d!\n", rbuf->type)
+          LOG_ERROR("Invalid group code in xdata: %d", rbuf->type)
           free(rbuf);
           dat->byte = end_address;
           return root;
@@ -2260,7 +2260,7 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "VBA_PROJECT"))
     {
-      LOG_ERROR("Unhandled Object VBA_PROJECT. Has its own section\n");
+      LOG_ERROR("Unhandled Object VBA_PROJECT. Has its own section");
       //dwg_decode_VBA_PROJECT(dat, obj);
       return 0;
     }
@@ -2612,7 +2612,7 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
       dwg_decode_OLEFRAME(dat, obj);
       break;
     case DWG_TYPE_VBA_PROJECT:
-      LOG_ERROR("Unhandled Object VBA_PROJECT. Has its own section\n");
+      LOG_ERROR("Unhandled Object VBA_PROJECT. Has its own section");
       //dwg_decode_VBA_PROJECT(dat, obj);
       break;
     case DWG_TYPE_LAYOUT:
