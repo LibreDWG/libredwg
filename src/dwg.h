@@ -112,26 +112,26 @@
 
 #define DWGCHAR wchar_t
 
-typedef struct _dwg_bitecode_2rd
+typedef struct _dwg_bitcode_2rd
 {
   BITCODE_RD x;
   BITCODE_RD y;
 } Dwg_Bitcode_2RD;
 
-typedef struct _dwg_bitecode_2bd
+typedef struct _dwg_bitcode_2bd
 {
   BITCODE_BD x;
   BITCODE_BD y;
 } Dwg_Bitcode_2BD;
 
-typedef struct _dwg_bitecode_3rd
+typedef struct _dwg_bitcode_3rd
 {
   BITCODE_RD x;
   BITCODE_RD y;
   BITCODE_RD z;
 } Dwg_Bitcode_3RD;
 
-typedef struct _dwg_bitecode_3bd
+typedef struct _dwg_bitcode_3bd
 {
   BITCODE_BD x;
   BITCODE_BD y;
