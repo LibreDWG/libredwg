@@ -6,7 +6,7 @@ from libredwg import *
 import sys
 
 if (len(sys.argv) != 2):
-        print "Usage: read_num_layers.py <filename>"
+        print "Usage: load_dwg.py <filename>"
         exit()
 
 filename = sys.argv[1]
@@ -20,11 +20,12 @@ if (error != 0):
 
 print ".dwg version: %s" % a.header.version
 print "Num objects: %d " % a.num_objects
-#XXX for some reason I get a segfault when I try to read the LAYER_CONTROL in python (not in C)
+
+#XXX TODO segfault when reading the LAYER_CONTROL in python (not in C)
 #print "Num layers: %d" % a.layer_control.tio.object.tio.LAYER_CONTROL.num_entries
 
-for i in range(0,a.num_objects):
-    #XXX ugly, but works
-    obj = Dwg_Object_Array_getitem(a.object,i)
+#XXX ugly, but works
+for i in range(0, a.num_objects):
+    obj = Dwg_Object_Array_getitem(a.object, i)
     print " Supertype: " ,   obj.supertype
     print "      Type: " ,   obj.type
