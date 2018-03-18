@@ -53,6 +53,7 @@
     #undef FORMAT_RS
     #define FORMAT_RS "0x%" PRIx16
     FIELD_RS(unknown_rs[i]); /* 5 0x893 5 0x893 0 1 0 0 0 0 */
+    #undef FORMAT_RS
     #define FORMAT_RS "%" PRIu16
   }
 for (i=0; i<5; i++) { // or 8
@@ -79,6 +80,7 @@ for (i=0; i<5; i++) { // or 8
       FIELD_RS(zero_18[i]);
     }
   }
+
 
 
 

@@ -2,10 +2,12 @@
 #include <dejagnu.h>
 #include "tests_common.h"
 
-/* This functions calls tests for read_literal_length()
- */
+void read_literal_length_tests (void);
+void read_long_compression_offset_tests (void);
+void read_two_byte_offset_tests (void);
+
 void
-read_literal_length_tests ()
+read_literal_length_tests (void)
 {
   //Prepare the sample data
   Bit_Chain bitchain = strtobt ("00000101");
@@ -20,10 +22,8 @@ read_literal_length_tests ()
     }
 }
 
-/* This functions calls tests for read_long_compression_offset()
- */
 void
-read_long_compression_offset_tests ()
+read_long_compression_offset_tests (void)
 {
   Bit_Chain bitchain = strtobt ("11011101");
   if (read_long_compression_offset (&bitchain) == 0xDD)
@@ -39,7 +39,7 @@ read_long_compression_offset_tests ()
 /* This functions calls tests for read_two_byte_offset()
  */
 void
-read_two_byte_offset_tests ()
+read_two_byte_offset_tests (void)
 {
   Bit_Chain bitchain = strtobt ("1111000000000111");
   int litlength = 0x03;
@@ -57,17 +57,9 @@ read_two_byte_offset_tests ()
 int
 main (int argc, char const *argv[])
 {
-  /* Tests for read_literal_ength */
   read_literal_length_tests ();
-  /* End of tests for read_literal_length */
-
-  /* Tests for read_long_compression_offset */
   read_long_compression_offset_tests ();
-  /* End of tests for read_long_compression_offset */
-
-  /* Tests for read_two_byte_offset() */
   read_two_byte_offset_tests ();
-  /* End of tests for read_two_byte_offset() */
 
   return 0;
 }
