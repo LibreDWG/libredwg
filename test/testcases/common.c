@@ -41,6 +41,7 @@ main (int argc, char *argv[])
 
   if (! input)
     {
+      input = malloc(sizeof("example_2000.dwg"));
       strcpy(input, "example_2000.dwg");
       if (stat(input, &attrib))
         {
