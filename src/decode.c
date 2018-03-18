@@ -1512,7 +1512,11 @@ decode_R2007(Bit_Chain* dat, Dwg_Data * dwg)
  * Private functions
  */
 
-/* TODO: This really should be src/common_entity_handle_data.spec */
+/* The first common part of every entity.
+
+   The last common part is common_entity_handle_data.spec
+   called by COMMON_ENTITY_HANDLE_DATA in dwg.spec
+ */
 static int
 dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
 {
@@ -1710,6 +1714,10 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
   return 0;
 }
 
+/* The first common part of every object.
+
+   There is no COMMON_ENTITY_HANDLE_DATA for objects.
+ */
 static int
 dwg_decode_object(Bit_Chain * dat, Dwg_Object_Object * obj)
 {
@@ -1773,37 +1781,6 @@ dwg_decode_object(Bit_Chain * dat, Dwg_Object_Object * obj)
       obj->num_eed++;
     }
 
-#if 0  /* old code, no eed array support */
-  while ((size = bit_read_BS(dat)))
-    {
-      int j;
-      if (size > 10210)
-        {
-          LOG_ERROR(
-              "dwg_decode_object: Absurd! Extended object data size: %lu. Object: %lu (handle)",
-              (long unsigned int) size, obj->object->handle.value)
-          obj->bitsize = 0;
-          obj->num_eed = 0;
-          obj->num_handles = 0;
-          return 0;
-        }
-      if (obj->extended_size == 0)
-        {
-          obj->extended = (unsigned char *)malloc(size);
-          obj->extended_size = size;
-        }
-      else
-        {
-          obj->extended_size += size;
-          obj->extended = (unsigned char *)realloc(obj->extended, obj->extended_size);
-        }
-      error = bit_read_H(dat, &obj->extended_handle);
-      if (error)
-        LOG_ERROR("Error reading extended handle!")
-      for (i = obj->extended_size - size; i < obj->extended_size; i++)
-        obj->extended[i] = bit_read_RC(dat);
-    }
-#endif
 
   VERSIONS(R_13,R_14)
     {
@@ -2620,6 +2597,7 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
           LOG_INFO("Object UNKNOWN:\n")
 
 #if 0
+          // TODO: EED for unknown objects
           dwg_decode_object(dat, obj->tio.object);
 #else
           SINCE(R_2000)

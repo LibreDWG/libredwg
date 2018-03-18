@@ -213,6 +213,7 @@ static bool env_var_checked_p;
 #define COMMON_ENTITY_HANDLE_DATA  \
  dwg_encode_common_entity_handle_data(dat, obj);
 
+//TODO unify REPEAT macros
 #define REPEAT_N(times, name, type) \
   for (rcount=0; (long)rcount<(long)times; rcount++)
 
@@ -225,25 +226,28 @@ static bool env_var_checked_p;
 #define REPEAT3(times, name, type) \
   for (rcount3=0; (long)rcount3<(long)_obj->times; rcount3++)
 
-//TODO unify REPEAT macros!
-
 #define DWG_ENTITY(token) \
   static void dwg_encode_##token (Bit_Chain * dat, Dwg_Object* obj)	\
-{\
-  long vcount, rcount, rcount2, rcount3;\
-  Dwg_Data* dwg = obj->parent;\
-  Dwg_Entity_##token * _obj = obj->tio.entity->tio.token;\
-  LOG_INFO("Entity " #token ":\n")\
+{ \
+  long vcount, rcount, rcount2, rcount3; \
+  Dwg_Data* dwg = obj->parent; \
+  Dwg_Entity_##token * _obj = obj->tio.entity->tio.token; \
+  if (dwg_encode_entity (obj, dat)) return;       \
+  LOG_INFO("Entity " #token ":\n") \
 
 #define DWG_ENTITY_END }
 
 #define DWG_OBJECT(token) \
   static void dwg_encode_##token (Bit_Chain * dat, Dwg_Object* obj) \
-{\
-  long vcount, rcount, rcount2, rcount3;\
+{ \
+  long vcount, rcount, rcount2, rcount3; \
   Dwg_Data* dwg = obj->parent; \
   Dwg_Object_##token * _obj = obj->tio.object->tio.token; \
-  LOG_INFO("Entity " #token ":\n")\
+  if (dwg_encode_object (obj, dat)) return;  \
+  LOG_INFO("Object " #token " handle: %d.%d.%lu\n",\
+    obj->handle.code, \
+    obj->handle.size, \
+    obj->handle.value)
 
 #define DWG_OBJECT_END }
 
@@ -267,9 +271,9 @@ typedef struct
  * Private functions prototypes
  */
 
-static void
+static int
 dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat);
-static void
+static int
 dwg_encode_object(Dwg_Object * obj, Bit_Chain * dat);
 static void
 dwg_encode_common_entity_handle_data(Bit_Chain * dat, Dwg_Object * obj);
@@ -703,7 +707,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
   bit_write_sentinel(dat, dwg_sentinel(DWG_SENTINEL_SECOND_HEADER_END));
 
   /*------------------------------------------------------------
-   * MEASUREMENT
+   * MEASUREMENT Section 3
    */
   dwg->header.section[3].number = 3;
   dwg->header.section[3].address = 0;
@@ -1235,8 +1239,13 @@ dwg_encode_add_object(Dwg_Object * obj, Bit_Chain * dat,
   dat->bit = previous_bit;
 }
 
-/* see DWG_SUPERTYPE_ENTITY in dwg_encode_chains */
-static void
+/* The first common part of every entity.
+
+   The last common part is common_entity_handle_data.spec
+   called by COMMON_ENTITY_HANDLE_DATA in dwg.spec
+   See DWG_SUPERTYPE_ENTITY in dwg_encode_chains.
+ */
+static int
 dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
 {
   BITCODE_BS i, num_eed;
@@ -1264,6 +1273,7 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
         LOG_TRACE("EED code: " FORMAT_RC "\n", ent->eed[i].data.code)
         for (j=1; j < ent->eed[i].size; j++)
           bit_write_RC(dat, ent->eed[i].data.u.raw[j]);
+
         if (i+1 < num_eed)
           bit_write_BS(dat, ent->eed[i+1].size);
         else
@@ -1339,14 +1349,12 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
     {
        bit_write_RC(dat, ent->lineweight);
     }
+  return 0;
 }
 
 static void
 dwg_encode_common_entity_handle_data(Bit_Chain * dat, Dwg_Object * obj)
 {
-  //XXX: not sure about this
-  
-  //setup required to use macros
   Dwg_Object_Entity *ent;
   Dwg_Data *dwg = obj->parent;
   int i;
@@ -1355,7 +1363,7 @@ dwg_encode_common_entity_handle_data(Bit_Chain * dat, Dwg_Object * obj)
   ent = obj->tio.entity;
   _obj = ent;
 
-  //#include "common_entity_handle_data.spec"
+  #include "common_entity_handle_data.spec"
   
 }
 
@@ -1381,8 +1389,12 @@ dwg_encode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj,Dwg_Data* dwg, 
     }
 }
 
-/* unused. see DWG_SUPERTYPE_OBJECT in dwg_encode_chains */
-static void
+/* The first common part of every object.
+
+   There is no COMMON_ENTITY_HANDLE_DATA for objects.
+   See DWG_SUPERTYPE_OBJECT in dwg_encode_chains.
+*/
+static int
 dwg_encode_object(Dwg_Object * obj, Bit_Chain * dat)
 {
   BITCODE_BS i, num_eed;
@@ -1409,6 +1421,7 @@ dwg_encode_object(Dwg_Object * obj, Bit_Chain * dat)
         LOG_TRACE("EED code: " FORMAT_RC "\n", ord->eed[i].data.code)
         for (j=1; j < ord->eed[i].size; j++)
           bit_write_RC(dat, ord->eed[i].data.u.raw[j]);
+
         if (i+1 < num_eed)
           bit_write_BS(dat, ord->eed[i+1].size);
         else
@@ -1428,6 +1441,7 @@ dwg_encode_object(Dwg_Object * obj, Bit_Chain * dat)
     {
        bit_write_B(dat, ord->xdic_missing_flag);
     }
+  return 0;
 }
 
 static void

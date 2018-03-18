@@ -21,11 +21,13 @@
 
 #include "spec.h"
 
+/*
 DWG_ENTITY(UNUSED);
 
   COMMON_ENTITY_HANDLE_DATA;
 
 DWG_ENTITY_END
+*/
 
 /*(1)*/
 DWG_ENTITY (TEXT);
@@ -2817,6 +2819,7 @@ DWG_ENTITY(LONG_TRANSACTION);
 DWG_ENTITY_END
 
 //pg.276
+#if 0 /* no proxy subtypes yet */
 DWG_ENTITY(PROXY_LWPOLYLINE);
 
   FIELD_RL(size);
@@ -2874,6 +2877,7 @@ DWG_ENTITY(PROXY_LWPOLYLINE);
   COMMON_ENTITY_HANDLE_DATA;
 
 DWG_ENTITY_END
+#endif /* no proxy subtypes yet */
 
 //(498) pg.149
 DWG_ENTITY(PROXY_ENTITY);
@@ -3780,6 +3784,7 @@ DWG_ENTITY_END
 //        LOG_INFO("TODO VISUALSTYLE (hard-pointer to H DICTIONARY_VISUALSTYLE)\n");
 //    }
 //DWG_OBJECT_END
+
 
 
 

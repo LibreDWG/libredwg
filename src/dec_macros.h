@@ -175,6 +175,7 @@
       FIELD_HANDLE(xdicobjhandle, code);      \
     }
 
+//TODO unify REPEAT macros
 #define REPEAT_N(times, name, type) \
   _obj->name = (type *) malloc(times * sizeof(type));\
   for (rcount=0; rcount<(long)times; rcount++)
@@ -190,8 +191,6 @@
 #define REPEAT3(times, name, type) \
   _obj->name = (type *) malloc(_obj->times * sizeof(type));\
   for (rcount3=0; rcount3<(long)_obj->times; rcount3++)
-
-//TODO unify REPEAT macros!
 
 #define COMMON_ENTITY_HANDLE_DATA \
   dwg_decode_common_entity_handle_data(dat, obj)
