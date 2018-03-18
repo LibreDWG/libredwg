@@ -40,7 +40,11 @@
 #define BITCODE_DOUBLE double
 
 #define BITCODE_RC char
-#define FORMAT_RC "0x%hhx"
+#ifdef _WIN32
+# define FORMAT_RC "0x%2x"
+#else
+# define FORMAT_RC "0x%hhx"
+# endif
 #define BITCODE_MC long int
 #define FORMAT_MC "%l"
 #define BITCODE_MS long unsigned int
