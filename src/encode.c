@@ -518,7 +518,8 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
             }
         }
     }
-  //for (i = 0; i < dwg->num_objects; i++) printf ("Handle(%i): %lu / Idc: %u\n", i, omap[i].handle, omap[i].idc);
+  //for (i = 0; i < dwg->num_objects; i++)
+  //  printf ("Handle(%i): %lu / Idc: %u\n", i, omap[i].handle, omap[i].idc);
 
   /* Write the objects
    */
@@ -647,7 +648,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
   for (i = 0; i < 5; i++) // 6 if is older
     bit_write_RC(dat, 0);
 
-  /* 4 nulll bits
+  /* 4 null bits
    */
   bit_write_BB(dat, 0);
   bit_write_BB(dat, 0);

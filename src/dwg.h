@@ -706,11 +706,18 @@ typedef struct _dwg_entity_ATTRIB
   BITCODE_BS horiz_alignment;
   BITCODE_BS vert_alignment;
   BITCODE_RC dataflags;
+  BITCODE_RC version; //R2010+
+  BITCODE_RC type;    //R2018+
   BITCODE_TV tag;
   BITCODE_BS field_length;
   BITCODE_RC flags;
   BITCODE_B lock_position_flag;
   BITCODE_H style;
+  BITCODE_H mtext_handles; //R2018+ TODO
+  BITCODE_BS annotative_data_size; //R2018+
+  BITCODE_RC annotative_data_bytes;
+  BITCODE_H  annotative_app;
+  BITCODE_BS annotative_short;
 } Dwg_Entity_ATTRIB;
 
 /**
@@ -736,6 +743,7 @@ typedef struct _dwg_entity_ATTDEF
   BITCODE_BS field_length;
   BITCODE_RC flags;
   BITCODE_B lock_position_flag;
+  BITCODE_RC version; //R2010+
   BITCODE_TV prompt;
   BITCODE_H style;
 } Dwg_Entity_ATTDEF;
@@ -818,6 +826,7 @@ typedef struct _dwg_entity_VERTEX_2D
   BITCODE_3BD point;
   BITCODE_BD start_width;
   BITCODE_BD end_width;
+  BITCODE_BL id; // R2010+
   BITCODE_BD bulge;
   BITCODE_BD tangent_dir;
 } Dwg_Entity_VERTEX_2D;
@@ -922,6 +931,7 @@ typedef struct _dwg_entity_LINE
  * Macro for common DIMENSION declaration
  */
 #define DIMENSION_COMMON \
+    BITCODE_RC version; /* R2010+ */ \
     BITCODE_3BD extrusion; \
     BITCODE_2RD text_midpt; \
     struct \
@@ -1502,7 +1512,7 @@ typedef struct _dwg_object_BLOCK_HEADER
   BITCODE_H block_control_handle;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
-  BITCODE_H NULL_handle;
+  BITCODE_H null_handle;
   BITCODE_H block_entity;
   BITCODE_H first_entity;
   BITCODE_H last_entity;

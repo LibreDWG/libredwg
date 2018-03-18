@@ -82,7 +82,7 @@ dwg_resolve_handle(Dwg_Data* dwg, unsigned long int handle);
 static void
 dwg_decode_header_variables(Bit_Chain* dat, Dwg_Data * dwg);
 
-static void
+static int
 resolve_objectref_vector(Dwg_Data * dwg);
 
 static int
@@ -116,9 +116,11 @@ long unsigned int ktl_lastaddress;
  * Public function definitions
  */
 
+// returns 0 on success
 int
 dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
 {
+  int i;
   char version[7];
   dwg->num_object_refs = 0;
   dwg->num_layers = 0;
@@ -145,23 +147,14 @@ dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
   version[6] = '\0';
 
   dwg->header.version = 0;
-  if (!strcmp(version, version_codes[R_13]))
-    dwg->header.version = R_13;
-  else if (!strcmp(version, version_codes[R_14]))
-    dwg->header.version = R_14;
-  else if (!strcmp(version, version_codes[R_2000]))
-    dwg->header.version = R_2000;
-  else if (!strcmp(version, version_codes[R_2004]))
-    dwg->header.version = R_2004;
-  else if (!strcmp(version, version_codes[R_2007]))
-    dwg->header.version = R_2007;
-  else if (!strcmp(version, version_codes[R_2010]))
-    dwg->header.version = R_2010;
-  else if (!strcmp(version, version_codes[R_2013]))
-    dwg->header.version = R_2013;
-  else if (!strcmp(version, version_codes[R_2018]))
-    dwg->header.version = R_2018;
-  else if (dwg->header.version == 0)
+  for (i=0; i<R_AFTER; i++)
+    {
+      if (!strcmp(version, version_codes[(Dwg_Version_Type)i])) {
+        dwg->header.version = (Dwg_Version_Type)i;
+        break;
+      }
+    }
+  if (dwg->header.version == 0)
     {
       LOG_ERROR("Invalid or unimplemented version code! "
         "This file's version code is: %s\n", version)
@@ -172,14 +165,13 @@ dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
   dwg->header.from_version = 0;
   dat->from_version = 0;
 
-  PRE(R_2000)
+#define WE_CAN "This version of LibreDWG is only capable of safely decoding version R13-R2000 (code: AC1012-AC1015) dwg-files.\n"
+
+  PRE(R_13)
     {
-      LOG_INFO(
-          "WARNING: This version of LibreDWG is only capable of safely decoding version R2000 (code: AC1015) dwg-files.\n"
-          "This file's version code is: %s\n"
-          "Support for this version is still experimental.\n"
-          "It might crash or give you invalid output.\n", version)
-      return decode_R13_R15(dat, dwg);
+      LOG_ERROR(WE_CAN "This file's version code is: %s", version)
+      //return decode_preR13(dat, dwg); //TODO rurban: search my old hard drives
+      return -1;
     }
 
   VERSION(R_2000)
@@ -189,28 +181,22 @@ dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
 
   VERSION(R_2004)
     {
-      LOG_INFO(
-          "WARNING: This version of LibreDWG is only capable of properly decoding version R2000 (code: AC1015) dwg-files.\n"
-          "This file's version code is: %s\n"
-          "Support for this version is still experimental.\n"
-          "It will probably crash and/or give you invalid output.\n", version)
+      LOG_WARN(WE_CAN "This file's version code is: %s\n"
+          "Support for this version is still experimental.", version)
       return decode_R2004(dat, dwg);
     }
 
   SINCE(R_2007)
     {
-      LOG_INFO(
-          "WARNING: This version of LibreDWG is only capable of properly decoding version R2000 (code: AC1015) dwg-files.\n"
-          "This file's version code is: %s\n"
-          "Support for this version is still experimental.\n"
-          "It will probably crash and/or give you invalid output.\n", version)
+      LOG_WARN(WE_CAN "This file's version code is: %s\n"
+               "Support for this version is still experimental.\n"
+               "It will probably crash and/or give you invalid output.", version)
       return decode_R2007(dat, dwg);
     }
 
   //This line should not be reached!
   LOG_ERROR(
-      "ERROR: LibreDWG does not support this version: %s.\n",
-      version)
+      "LibreDWG does not support this version: %s.", version)
   return -1;
 }
 
@@ -688,17 +674,15 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
   //step II of handles parsing: resolve pointers from handle value
   //XXX: move this somewhere else
   LOG_TRACE("\n\nResolving pointers from ObjectRef vector.\n")
-  resolve_objectref_vector(dwg);
-  LOG_TRACE("\n")
-
-  return 0;
+  return resolve_objectref_vector(dwg);
 }
 
-static void
+static int
 resolve_objectref_vector(Dwg_Data * dwg)
 {
   long unsigned int i;
   Dwg_Object * obj;
+
   for (i = 0; i < dwg->num_object_refs; i++)
     {
       LOG_TRACE("\n==========\n")
@@ -730,6 +714,7 @@ resolve_objectref_vector(Dwg_Data * dwg)
             LOG_WARN("Null object pointer: object_ref[%lu]", i)
         }
     }
+  return dwg->num_object_refs ? 0 : 1;
 }
 
 /* R2004 Literal Length
@@ -1414,66 +1399,6 @@ decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
 
   }
 
-#if 0
-  if (0 && loglevel)
-    {
-      LOG_TRACE("\n#### 2004 File Header Data fields ####\n")
-      LOG_TRACE("File ID string (must be AcFssFcAJMB): ");
-      for (i = 0; i < 12; i++)
-        {
-          LOG_TRACE("%c", _2004_header_data.fields.file_ID_string[i])
-        }
-      LOG_TRACE("\n")
-      LOG_TRACE("header_offset: %x\n",
-          (unsigned int) _2004_header_data.fields.header_offset)
-      LOG_TRACE("header_size: %x\n",
-          (unsigned int) _2004_header_data.fields.header_size)
-      LOG_TRACE("0x04 (long): %x\n",
-          (unsigned int) _2004_header_data.fields.x04)
-      LOG_TRACE("Root tree node gap: %x\n",
-          (unsigned int) _2004_header_data.fields.root_tree_node_gap)
-      LOG_TRACE("Lowermost left tree node gap: %x\n",
-          (unsigned int) _2004_header_data.fields.lowermost_left_tree_node_gap)
-      LOG_TRACE("Lowermost right tree node gap: %x\n",
-          (unsigned int) _2004_header_data.fields.lowermost_right_tree_node_gap)
-      LOG_TRACE("Unknown long: %x\n",
-          (unsigned int) _2004_header_data.fields.unknown_long)
-      LOG_TRACE("Last section id: %x\n",
-          (unsigned int) _2004_header_data.fields.last_section_id)
-      LOG_TRACE("Last section address: %x\n",
-          (unsigned int) _2004_header_data.fields.last_section_address)
-      LOG_TRACE("0x00 (long): %x\n",
-          (unsigned int) _2004_header_data.fields.x00_2)
-      LOG_TRACE("Second header address: %x\n",
-          (unsigned int) _2004_header_data.fields.second_header_address)
-      LOG_TRACE("0x00 (long): %x\n",
-          (unsigned int) _2004_header_data.fields.x00_3)
-      LOG_TRACE("Gap amount: %x\n",
-          (unsigned int) _2004_header_data.fields.gap_amount)
-      LOG_TRACE("Section amount: %x\n",
-          (unsigned int) _2004_header_data.fields.section_amount)
-      LOG_TRACE("0x20 (long): %x\n",
-          (unsigned int) _2004_header_data.fields.x20)
-      LOG_TRACE("0x80 (long): %x\n",
-          (unsigned int) _2004_header_data.fields.x80)
-      LOG_TRACE("0x40 (long): %x\n",
-          (unsigned int) _2004_header_data.fields.x40)
-      LOG_TRACE("Section map id: %x\n",
-          (unsigned int) _2004_header_data.fields.section_map_id)
-      LOG_TRACE("Section map address: %x\n",
-          (unsigned int) _2004_header_data.fields.section_map_address + 0x100)
-      LOG_TRACE("0x00 (long): %x\n",
-          (unsigned int) _2004_header_data.fields.x00_4)
-      LOG_TRACE("Section Info id: %x\n",
-          (unsigned int) _2004_header_data.fields.section_info_id)
-      LOG_TRACE("Section array size: %x\n",
-          (unsigned int) _2004_header_data.fields.section_array_size)
-      LOG_TRACE("Gap array size: %x\n",
-          (unsigned int) _2004_header_data.fields.gap_array_size)
-      LOG_TRACE("CRC: %x\n", (unsigned int) _2004_header_data.fields.CRC)
-    }
-#endif
-
   /*-------------------------------------------------------------------------
    * Section Map
    */
@@ -1555,7 +1480,6 @@ decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
 
   resolve_objectref_vector(dwg);
 
-  //LOG_ERROR("Decoding of DWG version R2004 header is not fully implemented yet. We are going to try\n")
   return 0;
 }
 
@@ -1573,17 +1497,15 @@ decode_R2007(Bit_Chain* dat, Dwg_Data * dwg)
 
   read_r2007_meta_data(dat, dwg);
 
-  LOG_TRACE("\n\n")
+  LOG_TRACE("\n")
 
   /////////////////////////////////////////
   //	incomplete implementation!
   /////////////////////////////////////////
-  resolve_objectref_vector(dwg);
-
-  LOG_ERROR(
-      "Decoding of DWG version R2007+ header is not fully implemented yet.\n"
-      "We are going to try")
-  return 0;
+  LOG_INFO(
+      "Decoding of DWG version R2007+ objectrefs is not fully implemented yet.\n"
+      "We are going to try\n")
+  return resolve_objectref_vector(dwg);
 }
 
 /*--------------------------------------------------------------------------------
@@ -1965,11 +1887,11 @@ static void
 dwg_decode_common_entity_handle_data(Bit_Chain * dat, Dwg_Object * obj)
 {
 
-  //XXX setup required to use macros
   Dwg_Object_Entity *ent;
   Dwg_Data *dwg = obj->parent;
   long unsigned int vcount;
   Dwg_Object_Entity *_obj;
+
   ent = obj->tio.entity;
   _obj = ent;
 

@@ -4,15 +4,15 @@
 #define IF_ENCODE_FROM_EARLIER if (0)
 
 #ifdef IS_DECODER
-  if (FIELD_VALUE(entity_mode)==0)
+  if (FIELD_VALUE(entity_mode) == 0)
     {
       FIELD_HANDLE(subentity, 3);
     }
-#endif //IS_DECODER
-
+#endif
 #ifdef IS_ENCODER
   FIELD_HANDLE(subentity, 3);
-#endif  //IS_ENCODER
+#endif
+
   ENT_REACTORS(4)
   ENT_XDICOBJHANDLE(3)
 
@@ -67,5 +67,6 @@
           FIELD_HANDLE(material, ANYCODE);
         }
     }
+
 
 

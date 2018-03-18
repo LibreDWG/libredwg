@@ -178,6 +178,30 @@ DWG_ENTITY(ATTRIB);
         }
     }
 
+  SINCE(R_2010)
+    {
+      FIELD(version, RC);
+    }
+  SINCE(R_2018)
+    {
+      FIELD(type, RC); // 1=single line, 2=multi line attrib, 4=multi line attdef
+
+      if (FIELD_VALUE(type) > 1)
+        {
+          LOG_WARN("MTEXT fields")
+          // TODO fields handles to MTEXT entities. how many?
+          FIELD_HANDLE(mtext_handles, 0); //TODO
+
+          FIELD(annotative_data_size, BS);
+          if (FIELD_VALUE(annotative_data_size) > 1)
+            {
+              FIELD(annotative_data_bytes, RC);
+              FIELD_HANDLE(annotative_app, 0); //TODO
+              FIELD(annotative_short, BS);
+            }
+        }
+    }
+
   FIELD(tag, TV);
   FIELD(field_length, BS);
   FIELD(flags, RC);
@@ -269,6 +293,10 @@ DWG_ENTITY(ATTDEF);
       FIELD(lock_position_flag, B);
     }
 
+  SINCE(R_2010)
+    {
+      FIELD(version, RC);
+    }
   FIELD(prompt, TV);
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -576,6 +604,10 @@ compression technique described in the spec. --Juca */
         }
     }
 
+  SINCE(R_2010)
+    {
+      FIELD(id, BL);
+    }
   FIELD(bulge, BD);
   FIELD(tangent_dir, BD);
 
@@ -771,6 +803,10 @@ DWG_ENTITY_END
  */
 /*FIELD_BD(elevation.ecs_11); \ */
 #define DIMENSION_COMMON_DECODE \
+    SINCE(R_2010) \
+      { \
+        FIELD(version, RC); \
+      } \
     FIELD_3BD(extrusion); \
     FIELD_2RD(text_midpt); \
     FIELD_BD(elevation.ecs_12); \
@@ -1721,7 +1757,7 @@ DWG_OBJECT(BLOCK_HEADER);
   FIELD_HANDLE(block_control_handle, 4);
   REACTORS(4);
   XDICOBJHANDLE(3);
-  FIELD_HANDLE(NULL_handle, 5);
+  FIELD_HANDLE(null_handle, 5);
   FIELD_HANDLE(block_entity, 3);
 
   VERSIONS(R_13,R_2000)
@@ -3731,6 +3767,7 @@ DWG_ENTITY(WIPEOUT);
     }
 
   COMMON_ENTITY_HANDLE_DATA;
+
   FIELD_HANDLE(imagedef,5);
   FIELD_HANDLE(imagedefreactor,3);
 
@@ -3743,5 +3780,6 @@ DWG_ENTITY_END
 //        LOG_INFO("TODO VISUALSTYLE (hard-pointer to H DICTIONARY_VISUALSTYLE)\n");
 //    }
 //DWG_OBJECT_END
+
 
 

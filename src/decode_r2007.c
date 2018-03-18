@@ -26,6 +26,11 @@
 
 static unsigned int loglevel;
 
+// only for temp. debugging, to abort on obviously wrong sizes.
+// should be a bit larger then the filesize.
+#define DBG_MAX_COUNT 0x10000
+#define DBG_MAX_SIZE  0xf00000
+
 #undef DWG_LOGLEVEL
 #define DWG_LOGLEVEL loglevel
 
@@ -122,7 +127,7 @@ static r2007_section* read_sections_map(Bit_Chain* dat, int64_t size_comp,
 //           Dwg_Data *dwg, r2007_section *sections_map, r2007_page *pages_map);
 static r2007_page* read_pages_map(Bit_Chain* dat, int64_t size_comp,
                            int64_t size_uncomp, int64_t correction);
-static void  read_file_header(Bit_Chain* dat, r2007_file_header *file_header);
+static void read_file_header(Bit_Chain* dat, r2007_file_header *file_header);
 static void read_instructions(unsigned char **src, unsigned char *opcode,
                               uint32_t *offset, uint32_t *length);
 static char* copy_bytes_2(char *dst, char *src);
@@ -514,11 +519,11 @@ decode_rs(const char *src, int block_count, int data_size)
   char *dst_base, *dst;
   //TODO: round up data_size from 239 to 255
 
-  dst_base = dst = (char*)malloc(block_count * (data_size + 16));
+  dst_base = dst = (char*)malloc(block_count * data_size);
 
   for (i = 0; i < block_count; ++i)
     {
-      for (j = 0; j < data_size + 16; ++j)
+      for (j = 0; j < data_size; ++j)
         {
           *dst++ = *src;
           src += block_count;
@@ -547,13 +552,16 @@ read_system_page(Bit_Chain* dat, int64_t size_comp, int64_t size_uncomp,
   
   // Round to a multiple of 8
   pesize = ((size_comp + 7) & ~7) * repeat_count;
-  
   // Devide pre encoded size by RS k-value (239)
   block_count = (pesize + 238) / 239;
-  
   // Multiply with codeword size (255) and round to a multiple of 8
   page_size = (block_count * 255 + 7) & ~7;
-  
+
+  assert((uint64_t)size_comp < DBG_MAX_SIZE);
+  assert((uint64_t)size_uncomp < DBG_MAX_SIZE);
+  assert((uint64_t)repeat_count < DBG_MAX_COUNT);
+  assert((uint64_t)page_size < DBG_MAX_COUNT);
+
   data = (char*)malloc(size_uncomp + page_size);
   if (data == 0)
     {
@@ -733,6 +741,12 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
       LOG_TRACE("unknown:       %"PRIu64"\n", section->unknown)
       LOG_TRACE("encoding:      %"PRIu64"\n", section->encoded)
       LOG_TRACE("num pages:     %"PRIu64"\n", section->num_pages)
+
+      //debugging sanity
+      assert(section->data_size <  DBG_MAX_SIZE);
+      assert(section->max_size  <  DBG_MAX_SIZE);
+      assert(section->name_length <  DBG_MAX_SIZE);
+      assert(section->num_pages < 0x10000);
     
       section->next  = 0;
       section->pages = 0;
@@ -763,7 +777,7 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
       
           bfr_read(section->pages[i], &ptr, 56);
       
-          LOG_TRACE("\n   --- Page ---\n")
+          LOG_TRACE("\n   --- Page[%d] ---\n", i)
           LOG_TRACE("   offset:        %"PRIu64"\n", section->pages[i]->offset);
           LOG_TRACE("   size:          %"PRIu64"\n", section->pages[i]->size);
           LOG_TRACE("   id:            %"PRIu64"\n", section->pages[i]->id);
@@ -771,6 +785,10 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
           LOG_TRACE("   comp_size:     %"PRIu64"\n", section->pages[i]->comp_size);
           LOG_TRACE("   checksum:      %"PRIx64"\n", section->pages[i]->checksum);
           LOG_TRACE("   crc:           %"PRIx64"\n\n", section->pages[i]->crc);
+          //debugging sanity
+          assert(section->pages[i]->size < DBG_MAX_SIZE);
+          assert(section->pages[i]->uncomp_size < DBG_MAX_SIZE);
+          assert(section->pages[i]->comp_size < DBG_MAX_SIZE);
         }
     }
   
@@ -935,11 +953,28 @@ read_file_header(Bit_Chain* dat, r2007_file_header *file_header)
   else
     memcpy(file_header, &pedata[32], sizeof(r2007_file_header));
 
+  // check validity, for debugging only
+  assert((uint64_t)file_header->header_size < DBG_MAX_SIZE);
+  assert((uint64_t)file_header->file_size < DBG_MAX_SIZE);
+  assert((uint64_t)file_header->pages_map_offset < DBG_MAX_SIZE);
+  assert((uint64_t)file_header->header2_offset < DBG_MAX_SIZE);
+  assert((uint64_t)file_header->pages_map_offset < DBG_MAX_SIZE);
+  assert((uint64_t)file_header->pages_map_size_comp < DBG_MAX_SIZE);
+  assert((uint64_t)file_header->pages_map_size_uncomp < DBG_MAX_SIZE);
+  assert((uint64_t)file_header->header2_offset < DBG_MAX_SIZE);
+  assert((uint64_t)file_header->sections_map_crc_uncomp < DBG_MAX_SIZE);
+  assert((uint64_t)file_header->sections_map_crc_comp < DBG_MAX_SIZE);
+
+  assert((uint64_t)file_header->pages_maxid < DBG_MAX_COUNT);
+  assert((uint64_t)file_header->pages_amount < DBG_MAX_COUNT);
+  assert((uint64_t)file_header->sections_amount < DBG_MAX_COUNT);
+  
   free(pedata);
 }
 
 /* TODO */
 #if 0
+// Data section AcDb:Classes p86
 static r2007_section*
 read_r2007_section_classes(Bit_Chain* dat, Dwg_Data *dwg,
                            r2007_section *sections_map, r2007_page *pages_map)
