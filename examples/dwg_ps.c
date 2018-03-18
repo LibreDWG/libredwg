@@ -28,11 +28,11 @@
 void
 create_postscript(Dwg_Data *dwg, char *output)
 {
-  float dx;
-  float dy;
-  float scale_x;
-  float scale_y;
-  float scale;
+  double dx;
+  double dy;
+  double scale_x;
+  double scale_y;
+  double scale;
   long unsigned i;
   //FILE *fh;
   PSDoc *ps;
