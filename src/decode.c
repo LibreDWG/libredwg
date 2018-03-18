@@ -1512,12 +1512,12 @@ decode_R2007(Bit_Chain* dat, Dwg_Data * dwg)
  * Private functions
  */
 
+/* TODO: This really should be src/common_entity_handle_data.spec */
 static int
 dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
 {
-  unsigned int i;
-  unsigned int size;
-  int error = 2;
+  BITCODE_BS i, size;
+  int error;
 
   SINCE(R_2000)
     {
@@ -1527,66 +1527,81 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
   error = bit_read_H(dat, &(ent->object->handle));
   if (error)
     {
-      LOG_ERROR(
-          "dwg_decode_entity:\tError in object handle! Current Bit_Chain address: 0x%0x",
+      LOG_WARN(
+          "dwg_decode_entity read ent->object->handle:\tCurrent Bit_Chain address: 0x%0x",
           (unsigned int) dat->byte)
       ent->bitsize = 0;
-      ent->extended_size = 0;
+      ent->num_eed = 0;
       ent->picture_exists = 0;
       ent->num_handles = 0;
       return 0;
     }
 
-  ent->extended_size = 0;
+  i = ent->num_eed = 0;
   while ((size = bit_read_BS(dat)))
     {
-      LOG_TRACE("EED size: %lu\n", (long unsigned int)size)
+      BITCODE_BS j;
+      LOG_TRACE("EED size: " FORMAT_BS "\n", size)
       if (size > 10210)
         {
           LOG_ERROR(
-              "dwg_decode_entity: Absurd! Extended object data size: %lu. Object: %lu (handle)",
+              "dwg_decode_entity: Absurd! Extended object data size: %lu."
+              " Object: %lu (handle)",
               (long unsigned int) size, ent->object->handle.value)
           ent->bitsize = 0;
-          ent->extended_size = 0;
+          ent->num_eed = 0;
           ent->picture_exists = 0;
           ent->num_handles = 0;
-          //XXX
-          return -1;
-          //break;
+          return -1; // XXX
         }
-      if (ent->extended_size == 0)
+
+      if (i)
         {
-          ent->extended = (char *)malloc(size);
-          ent->extended_size = size;
+          ent->eed = (Dwg_Eed*)realloc(ent->eed, i+1 * sizeof(Dwg_Eed));
         }
       else
         {
-          ent->extended_size += size;
-          ent->extended = (char *)realloc(ent->extended, ent->extended_size);
+          ent->eed = (Dwg_Eed*)malloc(sizeof(Dwg_Eed));
         }
-      error = bit_read_H(dat, &ent->extended_handle);
+      //XXX
+      ent->eed[i].size = size;
+      ent->eed[i].data.u.raw = (char*)malloc(size);
+      error = bit_read_H(dat, &ent->eed[i].handle);
       if (error)
-        LOG_ERROR("Error reading extended handle!");
-      for (i = ent->extended_size - size; i < ent->extended_size; i++)
-        ent->extended[i] = bit_read_RC(dat);
+        LOG_ERROR("No eed[%d].handle", i);
+      ent->eed[i].data.code = bit_read_RC(dat);
+      for (j=1; j < size; j++)
+        ent->eed[i].data.u.raw[j] = bit_read_RC(dat);
+      LOG_TRACE("EED code: " FORMAT_RC "\n", ent->eed[i].data.code)
+      ent->num_eed++;
+      i++;
     }
+
   ent->picture_exists = bit_read_B(dat);
   if (ent->picture_exists)
     {
       LOG_TRACE("picture_exists: 1\n")
-      ent->picture_size = bit_read_RL(dat);
-      LOG_TRACE("picture_size: " FORMAT_RS " \n", ent->picture_size)
+      VERSIONS(R_13,R_2007)
+        {
+          ent->picture_size = (BITCODE_BLL)bit_read_RL(dat);
+        }
+      SINCE(R_2007)
+        {
+          ent->picture_size = bit_read_BLL(dat);
+        }
+      LOG_TRACE("picture_size: " FORMAT_BLL " \n", ent->picture_size)
       if (ent->picture_size < 210210)
         {
+          BITCODE_BLL l;
           ent->picture = (char *)malloc(ent->picture_size);
-          for (i = 0; i < ent->picture_size; i++)
-            ent->picture[i] = bit_read_RC(dat);
+          for (l = 0; l < ent->picture_size; l++)
+            ent->picture[l] = bit_read_RC(dat);
         }
       else
         {
           LOG_ERROR(
-              "dwg_decode_entity:  Absurd! Picture-size: %u kB. Object: %lu (handle)",
-              ent->picture_size / 1000, ent->object->handle.value)
+              "dwg_decode_entity:  Absurd! Picture-size: %lu kB. Object: %lu (handle)",
+              (unsigned long)(ent->picture_size / 1000), ent->object->handle.value)
           bit_advance_position(dat, -(4 * 8 + 1));
         }
     }
@@ -1676,12 +1691,21 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
       ent->shadow_flags = bit_read_RC(dat);
     }
 
+  SINCE(R_2010)
+    {
+      ent->has_full_visualstyle = bit_read_B(dat);
+      ent->has_face_visualstyle = bit_read_B(dat);
+      ent->has_edge_visualstyle = bit_read_B(dat);
+    }
+
   ent->invisible = bit_read_BS(dat);
 
   SINCE(R_2000)
     {
       ent->lineweight = bit_read_RC(dat);
     }
+  
+  // elsewhere: object data, handles, padding bits, crc
 
   return 0;
 }
@@ -1706,20 +1730,60 @@ dwg_decode_object(Bit_Chain * dat, Dwg_Object_Object * obj)
           "\tError in object handle! Bit_Chain current address: 0x%0x",
           (unsigned int) dat->byte)
       obj->bitsize = 0;
-      obj->extended_size = 0;
+      obj->num_eed = 0;
       obj->num_handles = 0;
       return -1;
     }
-  obj->extended_size = 0;
+
+  i = obj->num_eed = 0;
   while ((size = bit_read_BS(dat)))
     {
+      BITCODE_BS j;
+      LOG_TRACE("EED size: " FORMAT_BS "\n", size)
+      if (size > 10210)
+        {
+          LOG_ERROR(
+              "dwg_decode_objity: Absurd! Extended object data size: %lu."
+              " Object: %lu (handle)",
+              (long unsigned int) size, obj->object->handle.value)
+          obj->bitsize = 0;
+          obj->num_eed = 0;
+          obj->num_handles = 0;
+          return -1; //XXX
+        }
+
+      if (i)
+        {
+          obj->eed = (Dwg_Eed*)realloc(obj->eed, i+1 * sizeof(Dwg_Eed));
+        }
+      else
+        {
+          obj->eed = (Dwg_Eed*)malloc(sizeof(Dwg_Eed));
+        }
+      obj->eed[i].size = size;
+      obj->eed[i].data.u.raw = (char*)malloc(size);
+      error = bit_read_H(dat, &obj->eed[i].handle);
+      if (error)
+        LOG_ERROR("No eed[%d].handle", i);
+      obj->eed[i].data.code = bit_read_RC(dat);
+      for (j=1; j < size; j++)
+        obj->eed[i].data.u.raw[j] = bit_read_RC(dat);
+      LOG_TRACE("EED code: " FORMAT_RC "\n", obj->eed[i].data.code)
+      i++;
+      obj->num_eed++;
+    }
+
+#if 0  /* old code, no eed array support */
+  while ((size = bit_read_BS(dat)))
+    {
+      int j;
       if (size > 10210)
         {
           LOG_ERROR(
               "dwg_decode_object: Absurd! Extended object data size: %lu. Object: %lu (handle)",
               (long unsigned int) size, obj->object->handle.value)
           obj->bitsize = 0;
-          obj->extended_size = 0;
+          obj->num_eed = 0;
           obj->num_handles = 0;
           return 0;
         }
@@ -1739,6 +1803,7 @@ dwg_decode_object(Bit_Chain * dat, Dwg_Object_Object * obj)
       for (i = obj->extended_size - size; i < obj->extended_size; i++)
         obj->extended[i] = bit_read_RC(dat);
     }
+#endif
 
   VERSIONS(R_13,R_14)
     {

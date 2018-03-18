@@ -2785,6 +2785,54 @@ typedef struct _dwg_object_VISUALSTYLE
 
 /* OBJECTS - END ************************************************************/
 
+typedef struct _dwg_entity_eed_data
+{
+  BITCODE_RC code;
+  union eed_data_t {
+    char *raw;
+    struct { /* 0 (1000) string */
+      BITCODE_RC length;
+      BITCODE_RS codepage;
+      char *string;
+    } eed_0;
+    struct { /* 1 (1001) invalid */
+      char *invalid;
+    } eed_1;
+    struct { /* 2 (1002) { or } */
+      BITCODE_RC byte;
+    } eed_2;
+    struct { /* 3 (1003) layer */
+      BITCODE_RL layer;
+    } eed_3;
+    struct { /* 4 (1004) binary */
+      BITCODE_RC length;
+      char *data;
+    } eed_4;
+    struct { /* 5 (1005) entity */
+      BITCODE_RL entity;
+    } eed_5;
+    struct { /* 10-13 point */
+      BITCODE_3RD point;
+    } eed_10;
+    struct { /* 40-42 real */
+      BITCODE_RD real;
+    } eed_40;
+    struct { /* 70 short int */
+      BITCODE_RS rs;
+    } eed_70;
+    struct { /* 71 long int */
+      BITCODE_RL rl;
+    } eed_71;
+  } u;
+} Dwg_Eed_Data;
+
+typedef struct _dwg_entity_eed
+{
+  BITCODE_BS size;
+  Dwg_Handle handle;
+  Dwg_Eed_Data data;
+} Dwg_Eed;
+
 /**
  Structure for common entity attributes
  */
@@ -2854,12 +2902,11 @@ typedef struct _dwg_object_entity
   BITCODE_RL bitsize;
   /* Dwg_Handle handle; */
 
-  BITCODE_BS extended_size;
-  Dwg_Handle extended_handle;
-  BITCODE_RC *extended;
+  unsigned int num_eed;
+  Dwg_Eed *eed; /* a linked list */
 
   BITCODE_B picture_exists;
-  BITCODE_BL picture_size;
+  BITCODE_BLL picture_size; // before r2007 only RL
   BITCODE_RC *picture;
 
   BITCODE_BB entity_mode;
@@ -2873,6 +2920,9 @@ typedef struct _dwg_object_entity
   BITCODE_BB plotstyle_flags;
   BITCODE_BB material_flags;
   BITCODE_RC shadow_flags;
+  BITCODE_B has_full_visualstyle;
+  BITCODE_B has_face_visualstyle;
+  BITCODE_B has_edge_visualstyle;
   BITCODE_BS invisible;
   BITCODE_RC lineweight;
 
@@ -2884,14 +2934,17 @@ typedef struct _dwg_object_entity
   BITCODE_H subentity;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
-  BITCODE_H prev_entity;
-  BITCODE_H next_entity;
+  BITCODE_H prev_entity;  //r13-r2000
+  BITCODE_H next_entity;  //r13-r2000
+  BITCODE_H color_handle; //r2004+
   BITCODE_H layer;
   BITCODE_H ltype;
-  BITCODE_H plotstyle;
-  BITCODE_H material;
-
-} Dwg_Object_Entity;
+  BITCODE_H material;     //r2007+
+  BITCODE_H plotstyle;    //r2000+
+  BITCODE_H full_visualstyle; //r2010+
+  BITCODE_H face_visualstyle;
+  BITCODE_H edge_visualstyle;
+  } Dwg_Object_Entity;
 
 /**
  Structure for ordinary object attributes
@@ -2947,9 +3000,8 @@ typedef struct _dwg_object_object
 
   BITCODE_RL bitsize;
   /* Dwg_Handle handle; */
-  unsigned int extended_size;
-  Dwg_Handle extended_handle;
-  unsigned char *extended;
+  unsigned int num_eed;
+  Dwg_Eed *eed;
 
   /* TODO: should these be removed? */
   long unsigned int num_reactors;

@@ -1235,45 +1235,68 @@ dwg_encode_add_object(Dwg_Object * obj, Bit_Chain * dat,
   dat->bit = previous_bit;
 }
 
-/* unused. see DWG_SUPERTYPE_ENTITY in dwg_encode_chains */
+/* see DWG_SUPERTYPE_ENTITY in dwg_encode_chains */
 static void
 dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
 {
-  //XXX not sure about this, someone should review
-  unsigned int size;
-  unsigned int extended_size;
-  unsigned int i;
-  Dwg_Object_Entity* ent;
+  BITCODE_BS i, num_eed;
+  BITCODE_BL bitsize;
+  Dwg_Object_Entity* ent = obj->tio.entity;
 
-  size =  obj->tio.entity->bitsize;
-  bit_write_RL(dat, size);
-  bit_write_H(dat, &(obj->handle));
-  extended_size = obj->tio.entity->extended_size;
-  bit_write_BS(dat, extended_size);
-  bit_write_H(dat, &(obj->tio.entity->extended_handle));
-  
-  for (i = extended_size - size; i< extended_size; i++)
-    bit_write_RC(dat, obj->tio.entity->extended[i]);
-    
-  bit_write_B(dat, obj->tio.entity->picture_exists);
-  if (obj->tio.entity->picture_exists)
+  SINCE(R_2000)
     {
-      bit_write_RL(dat, obj->tio.entity->picture_size);
-      if (obj->tio.entity->picture_size < 210210)
+      bitsize = ent->bitsize;
+      bit_write_RL(dat, bitsize);
+    }
+  bit_write_H(dat, &(obj->handle));
+
+  num_eed = ent->num_eed;
+  if (!num_eed) {
+    bit_write_BS(dat, 0);
+  } else {
+    bit_write_BS(dat, ent->eed[0].size);
+    for (i = 0; i < num_eed; i++)
+      {
+        BITCODE_BS j;
+        LOG_TRACE("EED size: " FORMAT_BS "\n", ent->eed[i].size)
+        bit_write_H(dat, &(ent->eed[i].handle));
+        bit_write_RC(dat, ent->eed[i].data.code);
+        LOG_TRACE("EED code: " FORMAT_RC "\n", ent->eed[i].data.code)
+        for (j=1; j < ent->eed[i].size; j++)
+          bit_write_RC(dat, ent->eed[i].data.u.raw[j]);
+        if (i+1 < num_eed)
+          bit_write_BS(dat, ent->eed[i+1].size);
+        else
+          bit_write_BS(dat, 0);
+      }
+  }
+
+  bit_write_B(dat, ent->picture_exists);
+  if (ent->picture_exists)
+    {
+      VERSIONS(R_13,R_2007)
         {
-          for (i=0; i< obj->tio.entity->picture_size; i++)
-            bit_write_RC(dat, obj->tio.entity->picture[i]);
+          bit_write_RL(dat, (BITCODE_RL)ent->picture_size);
+        }
+      SINCE(R_2007)
+        {
+          bit_write_BLL(dat, ent->picture_size);
+        }
+      if (ent->picture_size < 210210)
+        {
+          for (i=0; i< ent->picture_size; i++)
+            bit_write_RC(dat, ent->picture[i]);
         }
       else 
         {
           LOG_ERROR(
-              "dwg_encode_entity:  Absurd! Picture-size: %u kB. Object: %lu (handle).\n",
-              obj->tio.entity->picture_size / 1000, obj->handle.value)
+              "dwg_encode_entity:  Absurd! Picture-size: %ld kB. "
+              "Object: %lu (handle).\n",
+              (long)(ent->picture_size / 1000), obj->handle.value)
           bit_advance_position(dat, -(4 * 8 + 1));
         }
      }
   
-  ent = obj->tio.entity;
   VERSIONS(R_13,R_14)
     {
       bit_write_RL(dat, ent->bitsize);
@@ -1316,7 +1339,6 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
     {
        bit_write_RC(dat, ent->lineweight);
     }
-
 }
 
 static void
@@ -1363,22 +1385,36 @@ dwg_encode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj,Dwg_Data* dwg, 
 static void
 dwg_encode_object(Dwg_Object * obj, Bit_Chain * dat)
 {
-  //XXX need a review
+  BITCODE_BS i, num_eed;
   Dwg_Object_Object* ord = obj->tio.object;
-  unsigned int i;
   
-   SINCE(R_2000)
+  SINCE(R_2000)
     {
        bit_write_RL(dat, ord->bitsize);
     }
 
   bit_write_H(dat, &ord->object->handle);
-  
-  bit_write_BS(dat, obj->size);
-  bit_write_H(dat, &ord->extended_handle);
-  
-  for (i = ord->extended_size - obj->size; i < ord->extended_size; i++)
-         bit_write_RC(dat, ord->extended[i]);
+
+  num_eed = ord->num_eed;
+  if (!num_eed) {
+    bit_write_BS(dat, 0);
+  } else {
+    bit_write_BS(dat, ord->eed[0].size);
+    for (i = 0; i < num_eed; i++)
+      {
+        BITCODE_BS j;
+        LOG_TRACE("EED size: " FORMAT_BS "\n", ord->eed[i].size)
+        bit_write_H(dat, &(ord->eed[i].handle));
+        bit_write_RC(dat, ord->eed[i].data.code);
+        LOG_TRACE("EED code: " FORMAT_RC "\n", ord->eed[i].data.code)
+        for (j=1; j < ord->eed[i].size; j++)
+          bit_write_RC(dat, ord->eed[i].data.u.raw[j]);
+        if (i+1 < num_eed)
+          bit_write_BS(dat, ord->eed[i+1].size);
+        else
+          bit_write_BS(dat, 0);
+      }
+  }
     
 
   VERSIONS(R_13,R_14)
