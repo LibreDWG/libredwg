@@ -2230,6 +2230,11 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       dwg_decode_HATCH(dat, obj);
       return 1;
     }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "GROUP"))
+    {
+      dwg_decode_GROUP(dat, obj);
+      return 1;
+    }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "IDBUFFER"))
     {
       dwg_decode_IDBUFFER(dat, obj);
@@ -2325,8 +2330,6 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "WIPEOUT"))
     {
-      // TODO Entity? obj->bitsize: 4783
-      //LOG_WARN("Unhandled Object/Class %s\n", dwg->dwg_class[i].dxfname);
       dwg_decode_WIPEOUT(dat, obj);
       return 1;
     }
@@ -2365,12 +2368,11 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
 
   LOG_WARN("Unknown Object/Class %s\n", dwg->dwg_class[i].dxfname);
-  /* TABLE, CELLSTYLEMAP, DBCOLOR, DICTIONARYVAR, DICTIONARYWDFLT,
-     FIELD, GROUP, HATCH, IDBUFFER, IMAGE, IMAGEDEF, IMAGEDEFREACTOR,
-     LAYER_INDEX, LAYOUT, LWPLINE, MATERIAL, MLEADER, MLEADERSTYLE,
-     OLE2FRAME, PLACEHOLDER, PLOTSETTINGS, RASTERVARIABLES, SCALE,
-     SORTENTSTABLE, SPATIAL_FILTER, SPATIAL_INDEX, TABLEGEOMETRY,
-     TABLESTYLE, VBA_PROJECT, VISUALSTYLE, WIPEOUTVARIABLE, XRECORD
+
+  /* TODO: CELLSTYLEMAP, DBCOLOR, MATERIAL, MLEADER, MLEADERSTYLE,
+     PLOTSETTINGS, SCALE, TABLEGEOMETRY,
+     TABLESTYLE, VBA_PROJECT, VISUALSTYLE, WIPEOUTVARIABLE,
+     ACDBSECTIONVIEWSTYLE, ACDBDETAILVIEWSTYLE
   */
 
   return 0;
