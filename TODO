@@ -1,7 +1,7 @@
 This is a rough TODO file.
 
 * fix segfaults when reading some newer DWG files.
-* ACIS: parse encrypted ACIS data, implement parsing of SAT file (version==2)
+* ACIS: implement parsing of SAT file (version==2)
   in entities 37, 38 and 39
 * PROXY subentities, PROXY_ENTITY
 * CELLSTYLEMAP TABLE_Cell struct

@@ -1532,6 +1532,7 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
   SINCE(R_2000)
     {
       ent->bitsize = bit_read_RL(dat);
+      LOG_TRACE("Entity bitsize: " FORMAT_BL "\n", ent->bitsize)
     }
 
   error = bit_read_H(dat, &(ent->object->handle));
@@ -1546,6 +1547,8 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
       ent->num_handles = 0;
       return 0;
     }
+  LOG_INFO("Entity handle: %d.%d.%lu\n",
+           ent->object->handle.code, ent->object->handle.size, ent->object->handle.value)
 
   i = ent->num_eed = 0;
   while ((size = bit_read_BS(dat)))
@@ -1784,6 +1787,8 @@ dwg_decode_object(Bit_Chain * dat, Dwg_Object_Object * obj)
       obj->num_reactors = 0;
       return -1;
     }
+  LOG_INFO("Object handle: %d.%d.%lu\n",
+           obj->object->handle.code, obj->object->handle.size, obj->object->handle.value)
 
   i = obj->num_eed = 0;
   while ((size = bit_read_BS(dat)))

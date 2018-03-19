@@ -210,11 +210,7 @@ static void \
   ent = obj->tio.entity->tio.token;\
   _obj = ent;\
   obj->tio.entity->object = obj;\
-  if (dwg_decode_entity (dat, obj->tio.entity)) return;\
-  LOG_INFO("Entity handle: %d.%d.%lu\n",\
-    obj->handle.code,\
-    obj->handle.size,\
-    obj->handle.value)
+  if (dwg_decode_entity (dat, obj->tio.entity)) return;
 
 #define DWG_ENTITY_END }
 
@@ -228,11 +224,7 @@ static void \
   obj->tio.object->tio.token = (Dwg_Object_##token * ) calloc (1, sizeof (Dwg_Object_##token)); \
   obj->tio.object->object = obj;\
   if (dwg_decode_object (dat, obj->tio.object)) return;\
-  _obj = obj->tio.object->tio.token;\
-  LOG_INFO("Object handle: %d.%d.%lu\n",\
-    obj->handle.code,\
-    obj->handle.size,\
-    obj->handle.value)
+  _obj = obj->tio.object->tio.token;
 
 #define DWG_OBJECT_END }
 
