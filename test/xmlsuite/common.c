@@ -1,5 +1,10 @@
-//This file cotains the helper function which are used in the XML Suite
+//This file contains the helper function which are used in the XML Suite
 //to prepare the result
+
+xmlChar *spointprepare (double x, double y, double z);
+xmlChar *doubletochar (double x);
+xmlChar *spointprepare2 (double x, double y);
+xmlChar *doubletohex (double handle);
 
 /*
  * This functions contverts 3D Point to the following format
