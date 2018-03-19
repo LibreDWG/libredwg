@@ -16,6 +16,7 @@
  * written by Felipe Castro
  * modified by Felipe Corrêa da Silva Sances
  * modified by Thien-Thi Nguyen
+ * modified by Reini Urban
  */
 
 #include <stdio.h>
@@ -45,35 +46,31 @@ get_bmp(char *filename)
 
   /* Read dwg data */
   success = dwg_read_file(filename, &dwg);
-  if (success != 0)
-    {
-      puts("Unable to read sample file");
-      return success;
-    }
+  if (success != 0) {
+    fprintf(stderr, "Unable to read file %s\n", filename);
+    return success;
+  }
 
   /* Get DIB bitmap data */
   data = dwg_bmp(&dwg, &size);
   dwg_free(&dwg);
 
-  if (!data)
-    {
-      puts("No thumb in dwg file");
-      return -2;
-    }
-  if (size < 1)
-    {
-      puts("No thumb data in dwg file");
-      return -3;
-    }
+  if (!data) {
+    fprintf(stderr, "No thumb in dwg file\n");
+    return -2;
+  }
+  if (size < 1) {
+    fprintf(stderr, "No thumb data in dwg file\n");
+    return -3;
+  }
 
   outfile = suffix (filename, "bmp");
   fh = fopen (outfile, "w");
-  if (!fh)
-    {
-      printf ("Unable to write file '%s'\n", outfile);
-      free (outfile);
-      return -4;
-    }
+  if (!fh) {
+    fprintf(stderr, "Unable to write BMP file '%s'\n", outfile);
+    free (outfile);
+    return -4;
+  }
 
   /* Write bmp file header */
   bmp_h.magic[0] = 'B';
@@ -82,13 +79,22 @@ get_bmp(char *filename)
   bmp_h.reserved = 0;
   bmp_h.offset = 14 + 40 + 4 * 256; // file header + DIB header + color table
   retval = fwrite(&bmp_h.magic[0], 2, sizeof(char), fh);
+  if (!retval) {
+    perror("writing BMP magic"); return 1;
+  }
   retval = fwrite(&bmp_h.file_size, 3, sizeof(long), fh);
+  if (!retval) {
+    perror("writing BMP file_size"); return 1;
+  }
 
   /* Write data (DIB header + bitmap) */
   retval = fwrite(data, 1, size, fh);
+  if (!retval) {
+    perror("writing BMP header"); return 1;
+  }
   fclose(fh);
 
-  printf ("Success! See the file '%s'\n", outfile);
+  printf ("Success. Written preview image to '%s'\n", outfile);
   free (outfile);
   return success;
 }
@@ -97,7 +103,6 @@ int
 main (int argc, char *argv[])
 {
   REQUIRE_INPUT_FILE_ARG (argc);
-  get_bmp (argv[1]);
-  return 0;
+  return get_bmp (argv[1]);
 }
 
