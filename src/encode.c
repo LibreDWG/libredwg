@@ -184,7 +184,7 @@ static bool env_var_checked_p;
   assert(_obj->name); \
   if (handle_code != ANYCODE && _obj->name->handleref.code != handle_code) \
     { \
-      LOG_ERROR("Expected a CODE %d handle, got a %d\n", \
+      LOG_WARN("Expected a CODE %d handle, got a %d", \
                 handle_code, _obj->name->handleref.code); \
     } \
   bit_write_H(dat, &_obj->name->handleref); \
@@ -553,7 +553,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
 	  */
           else
             {
-              LOG_ERROR("Error: undefined (super)type of object\n");
+              LOG_ERROR("Error: undefined (super)type of object");
               exit(-1);
             }
         }
@@ -836,7 +836,7 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "AcDbField"))
     {
       // TODO
-      LOG_WARN("Untested Object/Class %s\n", dwg->dwg_class[i].dxfname);
+      LOG_WARN("Untested Object/Class %s", dwg->dwg_class[i].dxfname);
       dwg_encode_FIELD(dat, obj);
       return 1;
     }
@@ -872,35 +872,35 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "VBA_PROJECT"))
     {
-      LOG_ERROR("Unhandled Object VBA_PROJECT. Has its own section\n");
+      LOG_ERROR("Unhandled Object VBA_PROJECT. Has its own section");
       //TODO:      dwg_encode_VBA_PROJECT(dat, obj);
       return 0;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "WIPEOUTVARIABLE"))
     {
       //TODO
-      LOG_WARN("Unhandled Object/Class %s\n", dwg->dwg_class[i].dxfname);
+      LOG_WARN("Unhandled Object/Class %s", dwg->dwg_class[i].dxfname);
       //dwg_encode_WIPEOUTVARIABLE(dat, obj);
       return 0;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "WIPEOUT"))
     {
       //TODO
-      //LOG_WARN("Unhandled Object/Class %s\n", dwg->dwg_class[i].dxfname);
+      //LOG_WARN("Unhandled Object/Class %s", dwg->dwg_class[i].dxfname);
       dwg_encode_WIPEOUT(dat, obj);
       return 1;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "CELLSTYLEMAP"))
     {
       // TODO
-      LOG_WARN("Unhandled Object/Class %s\n", dwg->dwg_class[i].dxfname);
+      LOG_WARN("Unhandled Object/Class %s", dwg->dwg_class[i].dxfname);
       dwg_encode_CELLSTYLEMAP(dat, obj);
       return 0;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "VISUALSTYLE"))
     {
       // TODO
-      LOG_WARN("Unhandled Object/Class %s\n", dwg->dwg_class[i].dxfname);
+      LOG_WARN("Unhandled Object/Class %s", dwg->dwg_class[i].dxfname);
       //dwg_encode_VISUALSTYLE(dat, obj);
       return 0;
     }
@@ -911,13 +911,13 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "DIMASSOC"))
     {
-      LOG_WARN("Unhandled Object/Class %s\n", dwg->dwg_class[i].dxfname);
+      LOG_WARN("Unhandled Object/Class %s", dwg->dwg_class[i].dxfname);
 //TODO:      dwg_encode_DIMASSOC(dat, obj);
       return 0;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "MATERIAL"))
     {
-      LOG_WARN("Unhandled Object/Class %s\n", dwg->dwg_class[i].dxfname);
+      LOG_WARN("Unhandled Object/Class %s", dwg->dwg_class[i].dxfname);
 //TODO:      dwg_encode_MATERIAL(dat, obj);
       return 0;
     }
@@ -1187,7 +1187,7 @@ dwg_encode_add_object(Dwg_Object * obj, Bit_Chain * dat,
     dwg_encode_OLEFRAME(dat, obj);
     break;
   case DWG_TYPE_VBA_PROJECT:
-    LOG_ERROR("Unhandled Object VBA_PROJECT. Has its own section\n");
+    LOG_ERROR("Unhandled Object VBA_PROJECT. Has its own section");
     //dwg_encode_VBA_PROJECT(dat, obj);
     break;
   case DWG_TYPE_LAYOUT:
@@ -1301,7 +1301,7 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
         {
           LOG_ERROR(
               "dwg_encode_entity:  Absurd! Picture-size: %ld kB. "
-              "Object: %lu (handle).\n",
+              "Object: %lu (handle).",
               (long)(ent->picture_size / 1000), obj->handle.value)
           bit_advance_position(dat, -(4 * 8 + 1));
         }

@@ -2324,7 +2324,7 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "WIPEOUTVARIABLE"))
     {
       // TODO
-      LOG_WARN("Unhandled Object/Class %s\n", dwg->dwg_class[i].dxfname);
+      LOG_WARN("Unhandled Object/Class %s", dwg->dwg_class[i].dxfname);
       //dwg_decode_WIPEOUTVARIABLE(dat, obj);
       return 0;
     }
@@ -2336,38 +2336,38 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "CELLSTYLEMAP"))
     {
       // TODO
-      LOG_WARN("Unhandled Object/Class %s\n", dwg->dwg_class[i].dxfname);
+      LOG_WARN("Unhandled Object/Class %s", dwg->dwg_class[i].dxfname);
       dwg_decode_CELLSTYLEMAP(dat, obj);
       return 0;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "VISUALSTYLE"))
     {
       // TODO
-      LOG_WARN("Unhandled Object/Class %s\n", dwg->dwg_class[i].dxfname);
+      LOG_WARN("Unhandled Object/Class %s", dwg->dwg_class[i].dxfname);
       //dwg_decode_VISUALSTYLE(dat, obj);
       return 0;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "AcDbField")) //??
     {
       // TODO
-      LOG_WARN("Untested Object/Class %s\n", dwg->dwg_class[i].dxfname);
+      LOG_WARN("Untested Object/Class %s", dwg->dwg_class[i].dxfname);
       dwg_decode_FIELD(dat, obj);
       return 1;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "DIMASSOC"))
     {
-      LOG_WARN("Unhandled Object/Class %s\n", dwg->dwg_class[i].dxfname);
+      LOG_WARN("Unhandled Object/Class %s", dwg->dwg_class[i].dxfname);
 //TODO:      dwg_decode_DIMASSOC(dat, obj);
       return 0;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "MATERIAL"))
     {
-      LOG_WARN("Unhandled Object/Class %s\n", dwg->dwg_class[i].dxfname);
+      LOG_WARN("Unhandled Object/Class %s", dwg->dwg_class[i].dxfname);
 //TODO:      dwg_decode_MATERIAL(dat, obj);
       return 0;
     }
 
-  LOG_WARN("Unknown Object/Class %s\n", dwg->dwg_class[i].dxfname);
+  LOG_WARN("Unknown Object/Class %s", dwg->dwg_class[i].dxfname);
 
   /* TODO: CELLSTYLEMAP, DBCOLOR, MATERIAL, MLEADER, MLEADERSTYLE,
      PLOTSETTINGS, SCALE, TABLEGEOMETRY,
