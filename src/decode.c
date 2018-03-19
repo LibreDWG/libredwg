@@ -25,6 +25,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#ifdef HAVE_WCHAR_H
+# include <wchar.h>
+#endif
 
 #include "common.h"
 #include "bits.h"
@@ -1516,11 +1519,14 @@ decode_R2007(Bit_Chain* dat, Dwg_Data * dwg)
 
    The last common part is common_entity_handle_data.spec
    called by COMMON_ENTITY_HANDLE_DATA in dwg.spec
+
+   For EED check page 269, par 28 (Extended Object Data)
  */
 static int
 dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
 {
-  BITCODE_BS i, size;
+  unsigned int i;
+  BITCODE_BS size;
   int error;
 
   SINCE(R_2000)
@@ -1545,7 +1551,9 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
   while ((size = bit_read_BS(dat)))
     {
       BITCODE_BS j;
-      LOG_TRACE("EED size: " FORMAT_BS "\n", size)
+      BITCODE_RC code;
+      long unsigned int offset;
+      LOG_TRACE("EED[%u] size: " FORMAT_BS "\n", i, size)
       if (size > 10210)
         {
           LOG_ERROR(
@@ -1560,25 +1568,57 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
         }
 
       if (i)
-        {
-          ent->eed = (Dwg_Eed*)realloc(ent->eed, i+1 * sizeof(Dwg_Eed));
-        }
+        ent->eed = (Dwg_Eed*)realloc(ent->eed, i+1 * sizeof(Dwg_Eed));
       else
-        {
-          ent->eed = (Dwg_Eed*)malloc(sizeof(Dwg_Eed));
-        }
-      //XXX
+        ent->eed = (Dwg_Eed*)calloc(1, sizeof(Dwg_Eed));
       ent->eed[i].size = size;
-      ent->eed[i].data.u.raw = (char*)malloc(size);
+      ent->eed[i].data = (Dwg_Eed_Data*)calloc(size, 1);
       error = bit_read_H(dat, &ent->eed[i].handle);
-      if (error)
-        LOG_ERROR("No eed[%d].handle", i);
-      ent->eed[i].data.code = bit_read_RC(dat);
-      for (j=1; j < size; j++)
-        ent->eed[i].data.u.raw[j] = bit_read_RC(dat);
-      LOG_TRACE("EED code: " FORMAT_RC "\n", ent->eed[i].data.code)
-      ent->num_eed++;
+      if (error) {
+        LOG_ERROR("No EED[%u].handle", i);
+      } else {
+        LOG_TRACE("EED[%u] handle: %d.%d.%lu\n", i,
+                  ent->eed[i].handle.code, ent->eed[i].handle.size,
+                  ent->eed[i].handle.value)
+      }
+      offset = dat->byte;
+      if (size >= 1)
+        {
+          ent->eed[i].data->code = code = bit_read_RC(dat);
+          LOG_TRACE("EED[%u] code: " FORMAT_RC "\n", i, code);
+          if (code == 0)
+            {
+#define MIN(X,Y) ((X) < (Y) ? (X) : (Y))
+              BITCODE_RC len = bit_read_RC(dat);
+              ent->eed[i].data->u.eed_0.length = len;
+              ent->eed[i].data->u.eed_0.codepage = bit_read_RS_LE(dat);
+              /* code:1 + len:1 + cp:2 */
+              for (j=0; j < MIN(len,size-4); j++)
+                ent->eed[i].data->u.eed_0.string[j] = bit_read_RC(dat);
+              LOG_TRACE("EED[%u] string: %s len=%c, cp=%hu\n", i,
+                        ent->eed[i].data->u.eed_0.string, len,
+                        ent->eed[i].data->u.eed_0.codepage);
+#undef MIN
+            }
+          else
+            {
+              for (j=0; j < size-2; j++)
+                ent->eed[i].data->u.raw[j] = bit_read_RC(dat);
+            }
+#ifdef DEBUG
+          // sanity checks
+          if (code == 0 || code == 4)
+            assert((unsigned int)ent->eed[i].data->u.eed_0.length != size-1);
+          if (code == 10) // 3 double
+            assert(size != 1 + 3*8);
+#endif
+        }
       i++;
+      ent->num_eed++;
+      if (dat->byte != offset + size) {
+        LOG_WARN("EED[%u] size offset: %ld", i, (long)(dat->byte - offset + size))
+      }
+      dat->byte = offset + size;
     }
 
   ent->picture_exists = bit_read_B(dat);
@@ -1717,12 +1757,13 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
 /* The first common part of every object.
 
    There is no COMMON_ENTITY_HANDLE_DATA for objects.
+   Check page 269, par 28 (Extended Object Data)
  */
 static int
 dwg_decode_object(Bit_Chain * dat, Dwg_Object_Object * obj)
 {
   unsigned int i;
-  unsigned int size;
+  BITCODE_BS size;
   int error = 2;
 
   SINCE(R_2000)
@@ -1740,6 +1781,7 @@ dwg_decode_object(Bit_Chain * dat, Dwg_Object_Object * obj)
       obj->bitsize = 0;
       obj->num_eed = 0;
       obj->num_handles = 0;
+      obj->num_reactors = 0;
       return -1;
     }
 
@@ -1747,7 +1789,9 @@ dwg_decode_object(Bit_Chain * dat, Dwg_Object_Object * obj)
   while ((size = bit_read_BS(dat)))
     {
       BITCODE_BS j;
-      LOG_TRACE("EED size: " FORMAT_BS "\n", size)
+      BITCODE_RC code;
+      long unsigned int offset;
+      LOG_TRACE("EED[%u] size: " FORMAT_BS "\n", i, size)
       if (size > 10210)
         {
           LOG_ERROR(
@@ -1757,28 +1801,62 @@ dwg_decode_object(Bit_Chain * dat, Dwg_Object_Object * obj)
           obj->bitsize = 0;
           obj->num_eed = 0;
           obj->num_handles = 0;
+          obj->num_reactors = 0;
           return -1; //XXX
         }
 
       if (i)
-        {
-          obj->eed = (Dwg_Eed*)realloc(obj->eed, i+1 * sizeof(Dwg_Eed));
-        }
+        obj->eed = (Dwg_Eed*)realloc(obj->eed, i+1 * sizeof(Dwg_Eed));
       else
-        {
-          obj->eed = (Dwg_Eed*)malloc(sizeof(Dwg_Eed));
-        }
-      obj->eed[i].size = size;
-      obj->eed[i].data.u.raw = (char*)malloc(size);
+        obj->eed = (Dwg_Eed*)calloc(1, sizeof(Dwg_Eed));
       error = bit_read_H(dat, &obj->eed[i].handle);
-      if (error)
-        LOG_ERROR("No eed[%d].handle", i);
-      obj->eed[i].data.code = bit_read_RC(dat);
-      for (j=1; j < size; j++)
-        obj->eed[i].data.u.raw[j] = bit_read_RC(dat);
-      LOG_TRACE("EED code: " FORMAT_RC "\n", obj->eed[i].data.code)
+      if (error) {
+        LOG_ERROR("No EED[%d].handle", i);
+      } else {
+        LOG_TRACE("EED[%u] handle: %d.%d.%lu\n", i,
+                  obj->eed[i].handle.code, obj->eed[i].handle.size,
+                  obj->eed[i].handle.value)
+      }
+      obj->eed[i].size = size;
+      obj->eed[i].data = (Dwg_Eed_Data*)calloc(size, 1);
+      offset = dat->byte;
+      if (size >= 1)
+        {
+          obj->eed[i].data->code = code = bit_read_RC(dat);
+          LOG_TRACE("EED[%u] code: " FORMAT_RC "\n", i, code);
+          if (code == 0)
+            {
+#define MIN(X,Y) ((X) < (Y) ? (X) : (Y))
+              BITCODE_RC len = bit_read_RC(dat);
+              obj->eed[i].data->u.eed_0.length = len;
+              obj->eed[i].data->u.eed_0.codepage = bit_read_RS_LE(dat);
+              /* code:1 + len:1 + cp:2 */
+              for (j=0; j < MIN(len,size-4); j++)
+                obj->eed[i].data->u.eed_0.string[j] = bit_read_RC(dat);
+              LOG_TRACE("EED[%u] string: %s len=%c cp=%hu\n", i,
+                        obj->eed[i].data->u.eed_0.string, len,
+                        obj->eed[i].data->u.eed_0.codepage);
+#undef MIN
+            }
+          else
+            {
+              for (j=0; j < size-2; j++)
+                obj->eed[i].data->u.raw[j] = bit_read_RC(dat);
+            }
+#ifdef DEBUG
+          // sanity checks
+          if (code == 0 || code == 4)
+            assert((unsigned int)obj->eed[i].data->u.eed_0.length != size-1);
+          if (code == 10) // 3 double
+            assert(size != 1 + 3*8);
+#endif
+        }
       i++;
       obj->num_eed++;
+      if (dat->byte != offset + size) {
+        LOG_WARN("EED[%u] size offset: %ld", i, (long)(dat->byte - offset + size))
+      }
+      dat->byte = offset + size;
     }
 
 

@@ -29,10 +29,13 @@
 #ifndef BITS_H
 #define BITS_H
 
-#ifndef DWG_H
-#include "dwg.h"
+#include "config.h"
+#ifdef HAVE_WCHAR_H
+# include <wchar.h>
 #endif
-
+#ifndef DWG_H
+# include "dwg.h"
+#endif
 #include "common.h"
 
 /**

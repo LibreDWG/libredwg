@@ -24,13 +24,17 @@
 
 /* for uint64_t, but not in swig */
 #ifndef SWIGIMPORTED
-/* with autotools you get better int types */
-#ifdef HAVE_STDINT_H
-#include <stdint.h>
-#endif
-#ifdef HAVE_INTTYPES_H
-#include <inttypes.h>
-#endif
+/* with autotools you get better int types, esp. on 64bit */
+# ifdef HAVE_STDINT_H
+#  include <stdint.h>
+# endif
+# ifdef HAVE_INTTYPES_H
+#  include <inttypes.h>
+# endif
+/* for R2007+ support */
+# ifdef HAVE_WCHAR_H
+#  include <wchar.h>
+# endif
 #endif
 
 #ifdef __cplusplus
@@ -2789,27 +2793,31 @@ typedef struct _dwg_entity_eed_data
 {
   BITCODE_RC code;
   union eed_data_t {
-    char *raw;
+    char raw[0];           //inlined
     struct { /* 0 (1000) string */
       BITCODE_RC length;
-      BITCODE_RS codepage;
-      char *string;
+      BITCODE_RS codepage; //need to swap via ntohs()
+      char string[0];      //inlined
     } eed_0;
+    struct { /* R2007+ 0 (1000) string */
+      BITCODE_RS length;
+      wchar_t string[0]; //inlined
+    } eed_0_r2007;
     struct { /* 1 (1001) invalid */
-      char *invalid;
+      char invalid[0];
     } eed_1;
     struct { /* 2 (1002) { or } */
       BITCODE_RC byte;
     } eed_2;
     struct { /* 3 (1003) layer */
-      BITCODE_RL layer;
+      BITCODE_RL layer; // need to ntohl()
     } eed_3;
     struct { /* 4 (1004) binary */
       BITCODE_RC length;
-      char *data;
+      char data[0];
     } eed_4;
     struct { /* 5 (1005) entity */
-      BITCODE_RL entity;
+      BITCODE_RL entity; // need to ntohl()
     } eed_5;
     struct { /* 10-13 point */
       BITCODE_3RD point;
@@ -2818,10 +2826,10 @@ typedef struct _dwg_entity_eed_data
       BITCODE_RD real;
     } eed_40;
     struct { /* 70 short int */
-      BITCODE_RS rs;
+      BITCODE_RS rs; // need to ntohs()
     } eed_70;
     struct { /* 71 long int */
-      BITCODE_RL rl;
+      BITCODE_RL rl; // need to ntohl()
     } eed_71;
   } u;
 } Dwg_Eed_Data;
@@ -2830,7 +2838,7 @@ typedef struct _dwg_entity_eed
 {
   BITCODE_BS size;
   Dwg_Handle handle;
-  Dwg_Eed_Data data;
+  Dwg_Eed_Data *data;
 } Dwg_Eed;
 
 /**

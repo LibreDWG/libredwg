@@ -51,7 +51,7 @@ AC_SUBST([XML2_LIBS])
 
 dnl Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS([stdlib.h string.h unistd.h malloc.h])
+AC_CHECK_HEADERS([stdlib.h string.h unistd.h malloc.h wchar.h])
 
 AC_CHECK_HEADER(dejagnu.h, ,
   [AC_MSG_WARN([Couldn't find dejagnu.h])])

@@ -5,7 +5,7 @@
 
 #define IS_DECODER
 
-#define FIELD(name,type)\
+#define FIELD(name,type) \
   _obj->name = bit_read_##type(dat);\
   FIELD_TRACE(name,type)
 
