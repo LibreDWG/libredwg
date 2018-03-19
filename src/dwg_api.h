@@ -183,6 +183,9 @@ typedef struct _dwg_object_entity                 dwg_obj_ent;
 typedef struct _dwg_object_object                 dwg_obj_obj;
 typedef struct _dwg_struct                        dwg_data;
 typedef struct _dwg_object_ref		          dwg_object_ref;
+typedef struct _dwg_entity_eed_data		  dwg_entity_eed_data;
+typedef struct _dwg_entity_eed			  dwg_entity_eed;
+
 ///////////////////////////////////////////////////////////////////////////
 
 /*******************************************************************
@@ -4655,9 +4658,153 @@ dwg_obj_block_control_get_paper_space(dwg_obj_block_control *ctrl, int *error);
 
 
 /********************************************************************
+*                    COMMON FUNCTIONS FOR DWG ENTITY                *
+********************************************************************/
+
+BITCODE_RL
+dwg_ent_get_bitsize(dwg_obj_ent *ent, int *error);
+
+unsigned int
+dwg_ent_get_num_eed(dwg_obj_ent *ent, int *error);
+
+dwg_entity_eed *
+dwg_ent_get_eed(dwg_obj_ent *ent, int index, int *error);
+
+dwg_entity_eed_data *
+dwg_ent_get_eed_data(dwg_obj_ent *ent, int index, int *error);
+
+BITCODE_B
+dwg_ent_get_picture_exists(dwg_obj_ent *ent, int *error);
+
+BITCODE_BLL
+dwg_ent_get_picture_size(dwg_obj_ent *ent, int *error); // before r2007 only RL
+
+BITCODE_RC *
+dwg_ent_get_picture(dwg_obj_ent *ent, int *error);
+
+BITCODE_BB
+dwg_ent_get_entity_mode(dwg_obj_ent *ent, int *error);
+
+BITCODE_BL
+dwg_ent_get_num_reactors(dwg_obj_ent *ent, int *error);
+
+BITCODE_B
+dwg_ent_get_xdic_missing_flag(dwg_obj_ent *ent, int *error); //r2004+
+
+BITCODE_B
+dwg_ent_get_isbylayerlt(dwg_obj_ent *ent, int *error); //r13-r14 only
+
+BITCODE_B
+dwg_ent_get_nolinks(dwg_obj_ent *ent, int *error);
+
+BITCODE_CMC
+dwg_ent_get_color(dwg_obj_ent *ent, int *error);
+
+BITCODE_BD
+dwg_ent_get_linetype_scale(dwg_obj_ent *ent, int *error);
+
+BITCODE_BB
+dwg_ent_get_linetype_flags(dwg_obj_ent *ent, int *error); //r2000+
+
+BITCODE_BB
+dwg_ent_get_plotstyle_flags(dwg_obj_ent *ent, int *error); //r2000+
+
+BITCODE_BB
+dwg_ent_get_material_flags(dwg_obj_ent *ent, int *error); //r2007+
+
+BITCODE_RC
+dwg_ent_get_shadow_flags(dwg_obj_ent *ent, int *error); //r2007+
+
+BITCODE_B
+dwg_ent_get_has_full_visualstyle(dwg_obj_ent *ent, int *error); //r2010+
+
+BITCODE_B
+dwg_ent_get_has_face_visualstyle(dwg_obj_ent *ent, int *error); //r2010+
+
+BITCODE_B
+dwg_ent_get_has_edge_visualstyle(dwg_obj_ent *ent, int *error); //r2010+
+
+BITCODE_BS
+dwg_ent_get_invisible(dwg_obj_ent *ent, int *error);
+
+BITCODE_RC
+dwg_ent_get_lineweight(dwg_obj_ent *ent, int *error); //r2000+
+
+/*unsigned int
+dwg_ent_get_num_handles(dwg_obj_ent *ent, int *error);*/
+
+BITCODE_H
+dwg_ent_get_subentity(dwg_obj_ent *ent, int *error);
+
+BITCODE_H*
+dwg_ent_get_reactors(dwg_obj_ent *ent, int *error);
+
+BITCODE_H
+dwg_ent_get_xdicobjhandle(dwg_obj_ent *ent, int *error);
+
+BITCODE_H
+dwg_ent_get_prev_entity(dwg_obj_ent *ent, int *error);  //r13-r2000
+
+BITCODE_H
+dwg_ent_get_next_entity(dwg_obj_ent *ent, int *error);  //r13-r2000
+
+BITCODE_H
+dwg_ent_get_color_handle(dwg_obj_ent *ent, int *error); //r2004+
+
+BITCODE_H
+dwg_ent_get_layer(dwg_obj_ent *ent, int *error);
+
+BITCODE_H
+dwg_ent_get_ltype(dwg_obj_ent *ent, int *error);
+
+BITCODE_H
+dwg_ent_get_material(dwg_obj_ent *ent, int *error);     //r2007+
+
+BITCODE_H
+dwg_ent_get_plotstyle(dwg_obj_ent *ent, int *error);    //r2000+
+
+BITCODE_H
+dwg_ent_get_full_visualstyle(dwg_obj_ent *ent, int *error); //r2010+
+
+BITCODE_H
+dwg_ent_get_face_visualstyle(dwg_obj_ent *ent, int *error); //r2010+
+
+BITCODE_H
+dwg_ent_get_edge_visualstyle(dwg_obj_ent *ent, int *error); //r2010+
+
+/********************************************************************
 *                    FUNCTIONS FOR DWG OBJECT                       *
 ********************************************************************/
 
+BITCODE_RL
+dwg_obj_get_bitsize(dwg_object *obj, int *error);
+
+unsigned int
+dwg_obj_get_num_eed(dwg_object *obj, int *error);
+
+dwg_entity_eed *
+dwg_obj_get_eed(dwg_object *obj, int index, int *error);
+
+dwg_entity_eed_data *
+dwg_obj_get_eed_data(dwg_object *obj, int index, int *error);
+
+BITCODE_B
+dwg_obj_get_picture_exists(dwg_object *obj, int *error);
+
+BITCODE_BLL
+dwg_obj_get_picture_size(dwg_object *obj, int *error); // before r2007 only RL
+
+BITCODE_RC *
+dwg_obj_get_picture(dwg_object *obj, int *error);
+
+BITCODE_BB
+dwg_obj_get_entity_mode(dwg_object *obj, int *error);
+
+BITCODE_BL
+dwg_obj_get_num_reactors(dwg_object *obj, int *error);
+
+BITCODE_B
+dwg_obj_get_xdic_missing_flag(dwg_object *obj, int *error); //r2004+
 
 int 
 dwg_obj_object_get_index(dwg_object *obj, int *error);
@@ -4671,11 +4818,11 @@ dwg_obj_ref_get_abs_ref(dwg_object_ref *ref, int *error);
 dwg_handle *
 dwg_ent_insert_get_ref_handle(dwg_ent_insert *insert, int *error);
 
-dwg_object *
-dwg_obj_reference_get_object(dwg_object_ref *ref, int *error);
-
 BITCODE_BL
 dwg_ent_insert_get_abs_ref(dwg_ent_insert *insert, int *error);
+
+dwg_object *
+dwg_obj_reference_get_object(dwg_object_ref *ref, int *error);
 
 dwg_obj_obj *
 dwg_object_to_object(dwg_object *obj, int *error);
