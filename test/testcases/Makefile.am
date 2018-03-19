@@ -62,7 +62,8 @@ EXTRA_DIST = \
 	tests_common.h common.c \
 	$(paired:=.exp)
 
-CLEANFILES = *.log *.sum site.bak *_flymake.[ch]
+CLEANFILES = *.log *.sum site.bak 
+MAINTAINERCLEANFILES = *_flymake.[ch] *~ *.i
 
 @VALGRIND_CHECK_RULES@
 #VALGRIND_SUPPRESSIONS_FILES = $(PACKAGE).supp
@@ -73,3 +74,17 @@ check-syntax:
 	test -n "$(CHK_SOURCES)" && \
 	  $(COMPILE) -o /dev/null -S $(CHK_SOURCES)
 .PHONY: check-syntax
+
+if ENABLE_GCOV
+AM_CFLAGS += @GCOV_CFLAGS@
+LIBS      += @GCOV_LIBS@
+#  -e's,$(EXEEXT),,'
+gcov: $(check_PROGRAMS) check
+	-test -f gcov.log && rm gcov.log
+	for f in $(check_PROGRAMS); do \
+	  c="`echo $$f|sed -e's,.exe,,'`.c"; \
+	  echo $(GCOV) $$c; test -e $$c && $(GCOV) $$c >>gcov.log; done
+endif
+if ENABLE_GCOV
+CLEANFILES  += *.gcov *.gcno *.gcda gcov.log
+endif

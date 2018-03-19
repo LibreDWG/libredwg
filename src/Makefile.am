@@ -68,3 +68,15 @@ check-syntax:
 	test -n "$(CHK_SOURCES)" && \
 	  $(COMPILE) -o /dev/null -S $(CHK_SOURCES)
 .PHONY: check-syntax
+
+if ENABLE_GCOV
+AM_CFLAGS += @GCOV_CFLAGS@
+LIBS      += @GCOV_LIBS@
+gcov:
+	-test -f $(builddir)/gcov.log && rm $(builddir)/gcov.log
+	$(GCOV) *.gcno; | tee -a $(builddir)/gcov.log
+endif
+MAINTAINERCLEANFILES = *~ *.i *_flymake.[ch]
+if ENABLE_GCOV
+CLEANFILES  = *.gcov *.gcno *.gcda gcov.log
+endif

@@ -14,11 +14,23 @@ Makefile
 .libs
 site.exp
 TAGS
+gcov.log
 
 # globs, in specific dirs
 /examples/*.log
 /examples/*.bmp
 /examples/*-rewrite.dwg
+/src/*.gcno
+/src/*.gcov
+/test/testcases/*.gcov
+/test/testcases/*.gcno
+/test/testcases/*.gcda
+/test/xmlsuite/testsuite.gcov
+/test/xmlsuite/testsuite.gcno
+/test/xmlsuite/testsuite.gcda
+/test/unit-testing/*.gcov
+/test/unit-testing/*.gcno
+/test/unit-testing/*.gcda
 
 # specific filenames
 /.cproject
@@ -44,7 +56,9 @@ TAGS
 /config.log
 /config.status
 /configure
+/cover_db
 /doc/LibreDWG.info
+/doc/LibreDWG.pdf
 /doc/stamp-vti
 /doc/version.texi
 /examples/get_bmp

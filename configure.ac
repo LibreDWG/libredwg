@@ -117,7 +117,40 @@ AC_ARG_ENABLE([write],[AS_HELP_STRING([--enable-write],[
 ])
 AM_CONDITIONAL([USE_WRITE], [test -n "$enable_write"])
 
-dnl Test support.
+
+AC_ARG_ENABLE(gcov,
+	AS_HELP_STRING([--enable-gcov],
+		       [turn on test coverage @<:@default=no@:>@]),
+	[case "${enableval}" in
+	yes) enable_gcov=true ; gcov=gcov ;;
+	no)  enable_gcov=false ;;
+	*)   enable_gcov=true ; gcov="${enableval}" ;;
+	esac], [enable_gcov=false ])
+
+AC_MSG_CHECKING([for --enable-gcov])
+if test "x$enable_gcov" = "xtrue" ; then
+	dnl if test "$GCC" = yes; then
+	dnl 	AC_MSG_ERROR([gcov only works if gcc is used])
+	dnl fi
+
+        dnl You might need the compiler-specific gcov: e.g. gcov-mp-6
+	GCOV="$gcov"
+	AC_MSG_RESULT([gcov=$gcov])
+	AC_SUBST(GCOV)
+
+	GCOV_CFLAGS="-fprofile-arcs -ftest-coverage"
+	AC_SUBST(GCOV_CFLAGS)
+
+	dnl libtool 1.5.22 and lower strip -fprofile-arcs from the flags
+	dnl passed to the linker, which is a bug; -fprofile-arcs implicitly
+	dnl links in -lgcov, so we do it explicitly here for the same effect
+	GCOV_LIBS=-lgcov
+	AC_SUBST(GCOV_LIBS)
+else
+	AC_MSG_RESULT([no (default)])
+fi
+AM_CONDITIONAL(ENABLE_GCOV, test "x$enable_gcov" = "xtrue")
+
 AM_CONDITIONAL([HAVE_LIBPS],[test yes = "$libredwg_have_libps" &&
                              test yes = "$ac_cv_header_libps_pslib_h"])
 
@@ -142,6 +175,7 @@ if test "x$host_os" = "xmingw32" -a "x$build_os" != "xmingw32"; then
       AM_CFLAGS="$AM_CFLAGS -D_WINE_MSVCRT"
    fi
 fi
+AM_CONDITIONAL([HAVE_WINE], [test -n "$WINE"])
 
 dnl check for valgrind
 case $host_os in

@@ -24,7 +24,26 @@ if HAVE_SWIG_PYTHON
 SUBDIRS += bindings
 endif
 
+
+if ENABLE_GCOV
+gcov: check
+	$(MAKE) -C test gcov
+	$(MAKE) -C src gcov
+	gcov2perl test/*/*.gcov src/*.gcov
+	cover -no-gcov
+endif
+
+if HAVE_WINE
+check-wine:
+	$(MAKE) -C test check-wine
+#	for t in test/testcases/*.exe; do b="`basename $$t .exe`"; \
+#	    $(WINE) $$t | tee tests/$$b.log; done
+endif
+
 EXTRA_DIST = README README-alpha
+
+maintainer-clean-local:
+	-rm -rf cover_db
 LIBTOOL_DISTCLEAN_FILES = \
 	m4/libtool.m4 m4/ltoptions.m4 m4/ltsugar.m4 m4/ltversion.m4 m4/lt~obsolete.m4 \
 	build-aux/compile \

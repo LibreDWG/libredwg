@@ -7,4 +7,9 @@ endif
 SUBDIRS += xmlsuite
 EXTRA_DIST = test-data
 
+if ENABLE_GCOV
+gcov:
+	for d in $(SUBDIRS); do $(MAKE) -C $$d gcov; done
+endif
+
 CLEANFILES = *.log *.sum site.bak
