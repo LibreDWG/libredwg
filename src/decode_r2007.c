@@ -457,8 +457,10 @@ decompress_r2007(char *dst, int dst_size, char *src, int src_size)
       src += 2;
       length = *src++ & 0x07;
     
-      if (length == 0)
-        return 1;   
+      if (length == 0) {
+        LOG_ERROR("Decompression error: zero length")
+        return 1;
+      }
     } 
   
   while (src < src_end)
@@ -466,8 +468,10 @@ decompress_r2007(char *dst, int dst_size, char *src, int src_size)
       if (length == 0)
         length = read_literal_length((unsigned char**)&src, opcode);
       
-      if ((dst + length) > dst_end)
+      if ((dst + length) > dst_end) {
+        LOG_ERROR("Decompression error: length overflow")
         return 1;
+      }
       
       copy_compressed_bytes(dst, src, length);
       
@@ -478,7 +482,7 @@ decompress_r2007(char *dst, int dst_size, char *src, int src_size)
       
       if (src >= src_end)
         return 0;
-      
+
       opcode = *src++;
       
       read_instructions((unsigned char**)&src, &opcode, &offset, &length);
@@ -520,6 +524,11 @@ decode_rs(const char *src, int block_count, int data_size)
   //TODO: round up data_size from 239 to 255
 
   dst_base = dst = (char*)malloc(block_count * data_size);
+  if (!dst)
+    {
+      LOG_ERROR("Out of memory")
+      return NULL;
+    }
 
   for (i = 0; i < block_count; ++i)
     {
@@ -563,11 +572,10 @@ read_system_page(Bit_Chain* dat, int64_t size_comp, int64_t size_uncomp,
   assert((uint64_t)page_size < DBG_MAX_COUNT);
 
   data = (char*)malloc(size_uncomp + page_size);
-  if (data == 0)
-    {
-      //TODO: report error
-      return 0;
-    }
+  if (!data) {
+    LOG_ERROR("Out of memory")
+    return NULL;
+  }
   
   rsdata = &data[size_uncomp];
   
@@ -604,8 +612,10 @@ read_data_page(Bit_Chain* dat, unsigned char *decomp, int64_t page_size,
   block_count = (pesize + 0xFB - 1) / 0xFB;
   
   rsdata = (char*)malloc(page_size * sizeof(char));
-  if (rsdata == NULL)
+  if (rsdata == NULL) {
+    LOG_ERROR("Out of memory")
     return 1;
+  }
   
   for (i = 0; i < page_size; i++)
     rsdata[i] = bit_read_RC(dat);  
@@ -634,14 +644,18 @@ read_data_section(Bit_Chain *sec_dat, Bit_Chain *dat, r2007_section *sections_ma
   int i;
   
   section = get_section(sections_map, hashcode);
-  if (section == NULL)
-    return 1;   // Failed to find section
+  if (section == NULL) {
+    LOG_ERROR("Failed to find section")
+    return 1;
+  }
   
   max_decomp_size = section->data_size;
   
   decomp = (unsigned char *)malloc(max_decomp_size * sizeof(char));
-  if (decomp == NULL)
-    return 2;   // No memory  
+  if (decomp == NULL) {
+    LOG_ERROR("Out of memory")
+    return 2;
+  }
   
   for (i = 0; i < (int)section->num_pages; i++)
     {
@@ -649,7 +663,8 @@ read_data_section(Bit_Chain *sec_dat, Bit_Chain *dat, r2007_section *sections_ma
       if (page == NULL)
         {
           free(decomp);
-          return 3;   // Failed to find page
+          LOG_ERROR("Failed to find page")
+          return 3;
         }
     
       dat->byte = page->offset; 
@@ -657,7 +672,8 @@ read_data_section(Bit_Chain *sec_dat, Bit_Chain *dat, r2007_section *sections_ma
                          section->pages[i]->comp_size, section->pages[i]->uncomp_size) != 0)
         {
           free(decomp);
-          return 4;   // Failed to read page
+          LOG_ERROR("Failed to read page")
+          return 4;
         }
     }
   
@@ -720,6 +736,10 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
   int i;
   
   data = read_system_page(dat, size_comp, size_uncomp, correction);
+  if (!data) {
+    LOG_ERROR("Failed to read system page")
+    return NULL;
+  }
   
   ptr = data;
   ptr_end = data + size_uncomp;
@@ -807,9 +827,10 @@ read_pages_map(Bit_Chain* dat, int64_t size_comp,
   int64_t index;
   
   data = read_system_page(dat, size_comp, size_uncomp, correction);
-  
-  if (data == NULL)
-    return NULL;  
+  if (!data) {
+    LOG_ERROR("Failed to read system page")
+    return NULL;
+  }
   
   ptr = data;
   ptr_end = data + size_uncomp;
@@ -821,7 +842,7 @@ read_pages_map(Bit_Chain* dat, int64_t size_comp,
       page = (r2007_page*) malloc(sizeof(r2007_page));
       if (page == NULL)
         {
-          //TODO: report error
+          LOG_ERROR("Out of memory")
           free(data);
           pages_destroy(pages);
           return NULL;
@@ -974,13 +995,14 @@ read_file_header(Bit_Chain* dat, r2007_file_header *file_header)
 
 /* TODO */
 #if 0
-// Data section AcDb:Classes p86
+// TODO Data section AcDb:Classes p86
 static r2007_section*
 read_r2007_section_classes(Bit_Chain* dat, Dwg_Data *dwg,
                            r2007_section *sections_map, r2007_page *pages_map)
 {
 }
 
+// TODO
 static r2007_section*
 read_r2007_section_header(Bit_Chain* dat, Dwg_Data *dwg,
                            r2007_section *sections_map, r2007_page *pages_map)
