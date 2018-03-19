@@ -51,6 +51,10 @@ AC_SUBST([XML2_LIBS])
 
 dnl Checks for header files.
 AC_HEADER_STDC
+dnl avoid rpl_malloc when cross-compiling. we don't need malloc.h
+dnl we just want to know if it's needed
+ac_cv_func_malloc_0_nonnull=yes
+ac_cv_func_realloc_0_nonnull=yes
 AC_CHECK_HEADERS([stdlib.h string.h unistd.h malloc.h wchar.h])
 
 AC_CHECK_HEADER(dejagnu.h, ,
@@ -154,19 +158,12 @@ AM_CONDITIONAL(ENABLE_GCOV, test "x$enable_gcov" = "xtrue")
 AM_CONDITIONAL([HAVE_LIBPS],[test yes = "$libredwg_have_libps" &&
                              test yes = "$ac_cv_header_libps_pslib_h"])
 
-dnl for SWIG - should be optional
-AM_PATH_PYTHON([2.7])
-AX_PKG_SWIG([1.3.17], [], [ AC_MSG_WARN([SWIG is required for python bindings]) ])
-dnl AX_SWIG_ENABLE_CXX
-dnl SWIG_MULTI_MODULE_SUPPORT
-SWIG_PYTHON
-AM_CONDITIONAL([HAVE_SWIG_PYTHON], [test -n "$SWIG" && test -n "$PYTHON_VERSION"])
-
 dnl check for mingw, cross and wine
 AM_CONDITIONAL([HAVE_MINGW], [test "x$host_os" = "xmingw32"])
 AM_CONDITIONAL([HAVE_MINGW_CROSS],
         [test "x$host_os" = "xmingw32" -a "x$build_os" != "xmingw32"])
 if test "x$host_os" = "xmingw32" -a "x$build_os" != "xmingw32"; then
+   cross_compiling=yes
    AC_CHECK_PROGS([WINE], [wine])
    if test -z "$WINE"; then
       AC_MSG_WARN([wine not found - cannot check cross-compiled executables])
@@ -176,6 +173,18 @@ if test "x$host_os" = "xmingw32" -a "x$build_os" != "xmingw32"; then
    fi
 fi
 AM_CONDITIONAL([HAVE_WINE], [test -n "$WINE"])
+
+dnl for SWIG - should be optional
+if test x$cross_compiling = xno; then
+    AM_PATH_PYTHON([2.7])
+    AX_PKG_SWIG([1.3.17], [], [ AC_MSG_WARN([SWIG is required for python bindings]) ])
+    dnl AX_SWIG_ENABLE_CXX
+    dnl SWIG_MULTI_MODULE_SUPPORT
+    SWIG_PYTHON
+else
+    AC_MSG_WARN([disabled swig bindings: cross-compiled])
+fi
+AM_CONDITIONAL([HAVE_SWIG_PYTHON], [test -n "$SWIG" && test -n "$PYTHON_VERSION"])
 
 dnl check for valgrind
 case $host_os in
