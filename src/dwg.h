@@ -498,7 +498,7 @@ typedef struct _dwg_header_variables {
   BITCODE_B DIMTIX;
   BITCODE_B DIMSOXD;
   BITCODE_RC DIMALTD;
-  BITCODE_RC DIMZIN;
+  BITCODE_BS DIMZIN; /* r13-r14 only RC */
   BITCODE_B DIMSD1;
   BITCODE_B DIMSD2;
   BITCODE_RC DIMTOLJ;
@@ -508,7 +508,7 @@ typedef struct _dwg_header_variables {
   BITCODE_RC DIMTZIN;
   BITCODE_RC DIMMALTZ;
   BITCODE_RC DIMMALTTZ;
-  BITCODE_RC DIMTAD;
+  BITCODE_BS DIMTAD; /* r13-r14 only RC */
   BITCODE_BS DIMUNIT;
   BITCODE_BS DIMAUNIT;
   BITCODE_BS DIMDEC;
@@ -1865,7 +1865,7 @@ typedef struct _dwg_object_DIMSTYLE
   BITCODE_B DIMTIX;
   BITCODE_B DIMSOXD;
   BITCODE_RC DIMALTD;
-  BITCODE_RC DIMZIN;
+  BITCODE_BS DIMZIN; /* r13-r14 only RC */
   BITCODE_B DIMSD1;
   BITCODE_B DIMSD2;
   BITCODE_RC DIMTOLJ;
@@ -1875,7 +1875,7 @@ typedef struct _dwg_object_DIMSTYLE
   BITCODE_RC DIMTZIN;
   BITCODE_RC DIMMALTZ;
   BITCODE_RC DIMMALTTZ;
-  BITCODE_RC DIMTAD;
+  BITCODE_BS DIMTAD; /* r13-r14 only RC */
   BITCODE_BS DIMUNIT;
   BITCODE_BS DIMAUNIT;
   BITCODE_BS DIMDEC;
@@ -2799,10 +2799,12 @@ typedef struct _dwg_entity_eed_data
       BITCODE_RS codepage; //need to swap via ntohs()
       char string[0];      //inlined
     } eed_0;
+#ifdef HAVE_WCHAR_H
     struct { /* R2007+ 0 (1000) string */
       BITCODE_RS length;
-      wchar_t string[0]; //inlined
+      DWGCHAR string[0]; //inlined
     } eed_0_r2007;
+#endif
     struct { /* 1 (1001) invalid */
       char invalid[0];
     } eed_1;
