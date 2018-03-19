@@ -195,6 +195,10 @@ CAST_DWG_OBJECT_TO_ENTITY(MLINE)
 CAST_DWG_OBJECT_TO_ENTITY(LWPLINE)
 /// Macro call to cast dwg object to hatch
 CAST_DWG_OBJECT_TO_ENTITY(HATCH)
+/// Macro call to cast dwg object to image
+//CAST_DWG_OBJECT_TO_ENTITY(IMAGE)
+/// Macro call to cast dwg object to ole2frame
+CAST_DWG_OBJECT_TO_ENTITY(OLE2FRAME)
 
 
 /*******************************************************************

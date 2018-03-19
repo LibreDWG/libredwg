@@ -398,8 +398,7 @@ CAST_DWG_OBJECT_TO_ENTITY_DECL(PROXY_ENTITY)
 /// Macro call to cast dwg object to hatch
 CAST_DWG_OBJECT_TO_ENTITY_DECL(HATCH)
 /// Macro call to cast dwg object to image
-CAST_DWG_OBJECT_TO_ENTITY_DECL(IMAGE)
-
+//CAST_DWG_OBJECT_TO_ENTITY_DECL(IMAGE)
 
 /*******************************************************************
 *     Functions created from macro to cast dwg object to object     *

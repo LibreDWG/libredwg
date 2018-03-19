@@ -31,6 +31,7 @@ paired = \
 	minsert \
 	mline \
 	mtext \
+	ole2frame \
 	point \
 	polyline_2d \
 	polyline_3d \
@@ -58,10 +59,10 @@ check_PROGRAMS = $(paired) $(unpaired)
 EXTRA_DIST = \
 	example_2000.dwg \
 	vertex.mesh \
-	tests_common.h common.c ole2frame.c \
+	tests_common.h common.c \
 	$(paired:=.exp)
 
-CLEANFILES = *.log *.sum site.bak
+CLEANFILES = *.log *.sum site.bak *_flymake.[ch]
 
 @VALGRIND_CHECK_RULES@
 #VALGRIND_SUPPRESSIONS_FILES = $(PACKAGE).supp
