@@ -16,6 +16,7 @@
  * written by Felipe Castro
  * modified by Felipe Corrêa da Silva Sances
  * modified by Thien-Thi Nguyen
+ * modified by Reini Urban
  */
 
 #include <stdio.h>
@@ -85,8 +86,8 @@ create_postscript(Dwg_Data *dwg, char *output)
         continue;
       if (obj->type == DWG_SUPERTYPE_OBJECT) // not entity
         continue;
-      if (obj->tio.entity->entity_mode == 0) // belongs to block
-        continue;
+      //if (obj->tio.entity->entity_mode == 0) // belongs to block
+      //  continue;
       if (obj->type == DWG_TYPE_LINE)
         {
           Dwg_Entity_LINE* line;
