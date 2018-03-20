@@ -287,7 +287,8 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj);
 void
 dwg_encode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg, Dwg_Object_Ref* ref);
 void 
-dwg_encode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj,Dwg_Data* dwg, Dwg_Object_Ref* ref, int code);
+dwg_encode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg,
+                               Dwg_Object_Ref* ref, unsigned int code);
 void
 dwg_encode_add_object(Dwg_Object * obj, Bit_Chain * dat, unsigned long address);
 
@@ -1270,10 +1271,10 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
     for (i = 0; i < num_eed; i++)
       {
         BITCODE_BS j;
-        LOG_TRACE("EED size: " FORMAT_BS "\n", ent->eed[i].size)
+        LOG_TRACE("EED[%u] size: " FORMAT_BS "\n", i, ent->eed[i].size)
         bit_write_H(dat, &(ent->eed[i].handle));
         bit_write_RC(dat, ent->eed[i].data->code);
-        LOG_TRACE("EED code: " FORMAT_RC "\n", ent->eed[i].data->code)
+        LOG_TRACE("EED[%u] code: " FORMAT_RC "\n", i, ent->eed[i].data->code)
         for (j=0; j < ent->eed[i].size-2; j++)
           bit_write_RC(dat, ent->eed[i].data->u.raw[j]);
 
@@ -1381,7 +1382,7 @@ dwg_encode_common_entity_handle_data(Bit_Chain * dat, Dwg_Object * obj)
 }
 
 void
-dwg_encode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg, Dwg_Object_Ref* ref)
+dwg_encode_handleref(Bit_Chain* dat, Dwg_Object* obj, Dwg_Data* dwg, Dwg_Object_Ref* ref)
 {
   //this function should receive a Object_Ref without an abs_ref, calculate it and return a Dwg_Handle
   //this should be a higher level function 
@@ -1390,7 +1391,8 @@ dwg_encode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg, Dwg_Objec
 }
 
 void 
-dwg_encode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj,Dwg_Data* dwg, Dwg_Object_Ref* ref, int code)
+dwg_encode_handleref_with_code(Bit_Chain* dat, Dwg_Object* obj, Dwg_Data* dwg,
+                               Dwg_Object_Ref* ref, unsigned int code)
 {
   //XXX fixme. will this function be necessary?
   //create the handle, then check the code. will it be necessary?
@@ -1428,10 +1430,10 @@ dwg_encode_object(Dwg_Object * obj, Bit_Chain * dat)
     for (i = 0; i < num_eed; i++)
       {
         BITCODE_BS j;
-        LOG_TRACE("EED size: " FORMAT_BS "\n", ord->eed[i].size)
+        LOG_TRACE("EED[%u] size: " FORMAT_BS "\n", i, ord->eed[i].size)
         bit_write_H(dat, &(ord->eed[i].handle));
         bit_write_RC(dat, ord->eed[i].data->code);
-        LOG_TRACE("EED code: " FORMAT_RC "\n", ord->eed[i].data->code)
+        LOG_TRACE("EED[%u] code: " FORMAT_RC "\n", i, ord->eed[i].data->code)
         for (j=0; j < ord->eed[i].size-2; j++)
           bit_write_RC(dat, ord->eed[i].data->u.raw[j]);
 
@@ -1441,7 +1443,6 @@ dwg_encode_object(Dwg_Object * obj, Bit_Chain * dat)
           bit_write_BS(dat, 0);
       }
   }
-    
 
   VERSIONS(R_13,R_14)
     {
@@ -1465,4 +1466,5 @@ dwg_encode_header_variables(Bit_Chain* dat, Dwg_Data * dwg)
 
   #include "header_variables.spec"
 }
+
 #undef IS_ENCODER

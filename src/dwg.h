@@ -268,8 +268,8 @@ typedef enum DWG_OBJECT_TYPE
  */
 typedef struct _dwg_handle
 {
-  unsigned char code;
-  unsigned char size;
+  unsigned int code;
+  unsigned int size;
   long unsigned int value;
 } Dwg_Handle;
 
