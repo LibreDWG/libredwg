@@ -38,7 +38,7 @@
 
 #define ANYCODE -1
 #define FIELD_HANDLE(name, handle_code)  \
-  if (handle_code>=0)\
+  if (handle_code >= 0)\
     {\
       _obj->name = dwg_decode_handleref_with_code(dat, obj, dwg, handle_code);\
     }\

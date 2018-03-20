@@ -3695,20 +3695,27 @@ DWG_OBJECT(XRECORD);
 
   DECODER
     {
-	FIELD_BL(numdatabytes);
-	FIELD_XDATA(rbuf, numdatabytes);
+      FIELD_BL(numdatabytes);
+      FIELD_XDATA(rbuf, numdatabytes);
 
-	SINCE(R_2000)
-	  {
-	      FIELD_BS(cloning_flags);
-	  }
+      SINCE(R_2000)
+      {
+        FIELD_BS(cloning_flags);
+      }
 
-	FIELD_HANDLE(parent, ANYCODE); // 3 or 8
-	REACTORS(4);
-	XDICOBJHANDLE(3);
+      FIELD_HANDLE(parent, ANYCODE); // 3 or 8
+      REACTORS(4);
+      XDICOBJHANDLE(3);
 
-	//XXX how to known when I run out of data?
-	//BITCODE_H* objid_handles;
+      for (vcount=0;
+           dat->byte < obj->tio.object->datbyte + (obj->tio.object->bitsize/8);
+           vcount++)
+        {
+          FIELD_VALUE(objid_handles) = vcount
+            ? (BITCODE_H*) realloc(FIELD_VALUE(objid_handles), sizeof(Dwg_Object_Ref) * (vcount+1))
+            : (BITCODE_H*) malloc(sizeof(Dwg_Object_Ref));
+          FIELD_HANDLE_N(objid_handles[vcount], vcount, ANYCODE);
+        }
     }
 
 DWG_OBJECT_END
@@ -3784,6 +3791,7 @@ DWG_ENTITY_END
 //        LOG_INFO("TODO VISUALSTYLE (hard-pointer to H DICTIONARY_VISUALSTYLE)\n");
 //    }
 //DWG_OBJECT_END
+
 
 
 

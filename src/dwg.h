@@ -3010,6 +3010,7 @@ typedef struct _dwg_object_object
   } tio;
 
   BITCODE_RL bitsize;
+  long unsigned int datbyte;
   /* Dwg_Handle handle; */
   unsigned int num_eed;
   Dwg_Eed *eed;
