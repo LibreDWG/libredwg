@@ -40,10 +40,10 @@ low_level_process(dwg_object *obj)
   printf("user text of dim_ordinate : %s\n", dim_ordinate->user_text);
   printf("text rotation of dim_ordinate : %f\n", dim_ordinate->text_rot);
   printf("ins rotation of dim_ordinate : %f\n", dim_ordinate->ins_rotation);
-  printf("arrow1 of dim_ordinate : " FORMAT_BS "\n", dim_ordinate->flip_arrow1);
-  printf("arrow1 of dim_ordinate : " FORMAT_BS "\n", dim_ordinate->flip_arrow2);
-  printf("flags2 of dim_ordinate : " FORMAT_BS "\n", dim_ordinate->flags_2);
-  printf("flags1 of dim_ordinate : " FORMAT_BS "\n", dim_ordinate->flags_1);
+  printf("arrow1 of dim_ordinate : " FORMAT_B "\n", dim_ordinate->flip_arrow1);
+  printf("arrow2 of dim_ordinate : " FORMAT_B "\n", dim_ordinate->flip_arrow2);
+  printf("flags1 of dim_ordinate : " FORMAT_RC "\n", dim_ordinate->flags_1);
+  printf("flags2 of dim_ordinate : " FORMAT_RC "\n", dim_ordinate->flags_2);
   printf("act_measurement of dim_ordinate : %f\n",
           dim_ordinate->act_measurement);
 
@@ -54,8 +54,9 @@ api_process(dwg_object *obj)
 {
   int error;
   double ecs11, ecs12, act_measure, horiz_dir, lspace_factor, text_rot, 
-         ins_rot;
-  BITCODE_RC flags1, flags2, flip_arrow1, flip_arrow2;
+    ins_rot;
+  BITCODE_B flip_arrow1, flip_arrow2;
+  BITCODE_RC flags1, flags2;
   BITCODE_BS lspace_style, attach_pt;
   char * user_text;
   dwg_point_2d text_mid_pt, pt12;
@@ -70,7 +71,7 @@ api_process(dwg_object *obj)
     printf("error in reading horiz dir \n");
 
   lspace_factor = dwg_ent_dim_ordinate_get_elevation_ecs11(dim_ordinate, 
-                  &error);
+                                                           &error);
   if ( !error )
     printf("lspace factor of dim_ordinate : %f\n", lspace_factor);
   else	
@@ -78,14 +79,14 @@ api_process(dwg_object *obj)
 
 
   lspace_style = dwg_ent_dim_ordinate_get_elevation_ecs11(dim_ordinate, 
-                  &error);
+                                                          &error);
   if ( !error )
     printf("lspace style of dim_ordinate : " FORMAT_BS "\n", lspace_style);
   else
     printf("error in reading lspace style \n");
 
   attach_pt = dwg_ent_dim_ordinate_get_elevation_ecs11(dim_ordinate, 
-              &error);
+                                                       &error);
   if ( !error )
     printf("attach point of dim_ordinate : " FORMAT_BS "\n", attach_pt);
   else
@@ -93,7 +94,7 @@ api_process(dwg_object *obj)
 
   ecs11 = dwg_ent_dim_ordinate_get_elevation_ecs11(dim_ordinate, &error);
   if ( !error )
-    printf("Radius of dim_ordinate : %f\n",ecs11);
+    printf("Radius of dim_ordinate : %f\n", ecs11);
   else
     printf("error in reading ecs11 \n");
 
@@ -153,7 +154,7 @@ api_process(dwg_object *obj)
     printf("error in reading pt12 \n");
 
   dwg_ent_dim_ordinate_get_text_mid_pt(dim_ordinate, &text_mid_pt,
-                                          &error);
+                                       &error);
   if ( !error )
     printf("text_mid_pt of dim_ordinate : x = %f, y = %f\n",
            text_mid_pt.x, text_mid_pt.y);
@@ -162,7 +163,7 @@ api_process(dwg_object *obj)
 
   user_text = dwg_ent_dim_ordinate_get_user_text(dim_ordinate, &error);
   if ( !error )
-    printf("user text of dim_ordinate : %s\n",user_text);
+    printf("user text of dim_ordinate : %s\n", user_text);
   else
     printf("error in reading user_text \n");
 
@@ -174,72 +175,43 @@ api_process(dwg_object *obj)
 
   ins_rot = dwg_ent_dim_ordinate_get_ins_rotation(dim_ordinate, &error);
   if ( !error )
-    {
-      printf("ins rotation of dim_ordinate : %f\n",ins_rot);
-    }
+    printf("ins rotation of dim_ordinate : %f\n", ins_rot);
   else
-    {
-      printf("in reading ins rotation \n");
-    }
-
+    printf("in reading ins rotation \n");
 
   flip_arrow1 = dwg_ent_dim_ordinate_get_flip_arrow1(dim_ordinate,
-                &error);
+                                                     &error);
   if ( !error )
-    {
-      printf("arrow1 of dim_ordinate : " FORMAT_BS "\n",flip_arrow1);
-    }
+    printf("arrow1 of dim_ordinate : " FORMAT_B "\n", flip_arrow1);
   else
-    {
-      printf("in reading arrow1 \n");
-    }
-
+    printf("in reading arrow1 \n");
 
   flip_arrow2 = dwg_ent_dim_ordinate_get_flip_arrow2(dim_ordinate,
-                &error);
+                                                     &error);
   if ( !error )
-    {
-      printf("arrow1 of dim_ordinate : " FORMAT_BS "\n",flip_arrow2);
-    }
+    printf("arrow1 of dim_ordinate : " FORMAT_B "\n", flip_arrow2);
   else
-    {
-      printf("in reading arrow1 \n");
-    }
-
-
-  flags2 = dwg_ent_dim_ordinate_get_flags2(dim_ordinate,
-                &error);
-  if ( !error )
-    {
-      printf("flags2 of dim_ordinate : " FORMAT_BS "\n",flags2);
-    }
-  else
-    {
-      printf("in reading flags2 \n");
-    }
-
+    printf("in reading arrow1 \n");
 
   flags1 = dwg_ent_dim_ordinate_get_flags1(dim_ordinate,
-                &error);
+                                           &error);
   if ( !error )
-    {
-      printf("flags1 of dim_ordinate : " FORMAT_BS "\n",flags1);
-    }
+    printf("flags1 of dim_ordinate : " FORMAT_RC "\n", flags1);
   else
-    {
-      printf("in reading flags1 \n");
-    }
+    printf("in reading flags1 \n");
 
+  flags2 = dwg_ent_dim_ordinate_get_flags2(dim_ordinate,
+                                           &error);
+  if ( !error )
+    printf("flags2 of dim_ordinate : " FORMAT_RC "\n", flags2);
+  else
+    printf("in reading flags2 \n");
 
   act_measure = dwg_ent_dim_ordinate_get_act_measurement(dim_ordinate,
-                &error);
+                                                         &error);
   if ( !error )
-    {
-      printf("act_measurement of dim_ordinate : %f\n",act_measure);
-    }
+    printf("act_measurement of dim_ordinate : %f\n", act_measure);
   else
-    {
-      printf("in reading act_measurement \n");
-    }
-
+    printf("in reading act_measurement \n");
+ 
 }

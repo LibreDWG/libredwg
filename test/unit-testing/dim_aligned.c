@@ -43,7 +43,7 @@ low_level_process(dwg_object *obj)
   printf("ins rotation of dim_aligned : %f\n", dim_aligned->ins_rotation);
   printf("arrow1 of dim_aligned : " FORMAT_B "\n", dim_aligned->flip_arrow1);
   printf("arrow2 of dim_aligned : " FORMAT_B "\n", dim_aligned->flip_arrow2);
-  printf("flags2 of dim_aligned : " FORMAT_RC "\n", dim_aligned->flags_1);
+  printf("flags1 of dim_aligned : " FORMAT_RC "\n", dim_aligned->flags_1);
   printf("act_measurement of dim_aligned : %f\n",
           dim_aligned->act_measurement);
   printf("ext line rot of dim_aligned : %f\n", dim_aligned->ext_line_rot);
@@ -55,7 +55,8 @@ api_process(dwg_object *obj)
   int error;
   double ecs11, ecs12, act_measure, horiz_dir, lspace_factor, text_rot, 
          ins_rot, ext_line_rot, dim_rot;
-  BITCODE_RC flags1, flags2, flip_arrow1, flip_arrow2;
+  BITCODE_B flip_arrow1, flip_arrow2;
+  BITCODE_RC flags1, flags2;
   BITCODE_BS lspace_style, attach_pt;
   char * user_text;
   dwg_point_2d text_mid_pt, pt12;
@@ -167,25 +168,25 @@ api_process(dwg_object *obj)
   
   flip_arrow1 = dwg_ent_dim_aligned_get_flip_arrow1(dim_aligned, &error);
   if (!error)
-    printf("arrow1 of dim_aligned : " FORMAT_BS "\n", flip_arrow1);
+    printf("arrow1 of dim_aligned : " FORMAT_B "\n", flip_arrow1);
   else
     printf("error in reading arrow1 \n");
 
   flip_arrow2 = dwg_ent_dim_aligned_get_flip_arrow2(dim_aligned, &error);
   if (!error)
-    printf("arrow1 of dim_aligned : " FORMAT_BS "\n",flip_arrow2);
+    printf("arrow1 of dim_aligned : " FORMAT_B "\n", flip_arrow2);
   else
     printf("error in reading arrow1 \n");
 
   flags1 = dwg_ent_dim_aligned_get_flags1(dim_aligned, &error);
   if (!error)
-    printf("flags1 of dim_aligned : " FORMAT_BS "\n", flags1);
+    printf("flags1 of dim_aligned : " FORMAT_RC "\n", flags1);
   else
     printf("error in reading flags1 \n");
 
   act_measure = dwg_ent_dim_aligned_get_act_measurement(dim_aligned, &error);
   if (!error)
-    printf("act_measurement of dim_aligned : %f\n",act_measure);
+    printf("act_measurement of dim_aligned : %f\n", act_measure);
   else
     printf("error in reading act_measurement \n");
 

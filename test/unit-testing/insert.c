@@ -8,13 +8,13 @@ low_level_process(dwg_object *obj)
 
   printf("insert points : x = %f, y = %f, z = %f\n",
 	  insert->ins_pt.x, insert->ins_pt.y, insert->ins_pt.z);
-  printf("scale flag for insert : " FORMAT_BS "\n", insert->scale_flag);
+  printf("scale flag for insert : " FORMAT_BB "\n", insert->scale_flag);
   printf("scale points : x = %f, y = %f, z = %f\n",
 	  insert->scale.x, insert->scale.y, insert->scale.z);
   printf("angle for insert : %f\n", insert->rotation_ang);
   printf("extrusion points : x = %f, y = %f, z = %f\n",
 	  insert->extrusion.x, insert->extrusion.y, insert->extrusion.z);
-  printf("attribs for insert : " FORMAT_BS "\n", insert->has_attribs);
+  printf("attribs for insert : " FORMAT_B "\n", insert->has_attribs);
   printf("object count for insert : " FORMAT_BL "\n", insert->owned_obj_count);
 }
 
@@ -24,7 +24,7 @@ api_process(dwg_object *obj)
   int error;
   dwg_point_3d ins_pt, ext, scale;
   double rot_angle;
-  char scale_flag, attribs;
+  char scale_flag, has_attribs;
   BITCODE_BL obj_count;
   dwg_ent_insert *insert = dwg_object_to_INSERT(obj);
 
@@ -43,7 +43,7 @@ api_process(dwg_object *obj)
 
   scale_flag = dwg_ent_insert_get_scale_flag(insert, &error); 
   if ( !error )
-    printf("scale flag for insert : " FORMAT_BS "\n", scale_flag);
+    printf("scale flag for insert : " FORMAT_BB "\n", scale_flag);
   else
     printf("in reading scale flag\n"); 
 
@@ -81,9 +81,9 @@ api_process(dwg_object *obj)
     } 
 
 
-  attribs = dwg_ent_insert_get_has_attribs(insert, &error); 
+  has_attribs = dwg_ent_insert_get_has_attribs(insert, &error); 
   if ( !error )
-    printf("attribs for insert : " FORMAT_BS "\n", attribs);
+    printf("attribs for insert : " FORMAT_B "\n", has_attribs);
   else
     printf("in reading attribs\n"); 
 

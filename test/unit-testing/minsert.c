@@ -8,13 +8,13 @@ low_level_process(dwg_object *obj)
 
   printf("minsert points : x = %f, y = %f, z = %f\n",
 	  minsert->ins_pt.x, minsert->ins_pt.y, minsert->ins_pt.z);
-  printf("scale flag for minsert : " FORMAT_BS "\n", minsert->scale_flag);
+  printf("scale flag for minsert : " FORMAT_BB "\n", minsert->scale_flag);
   printf("scale points : x = %f, y = %f, z = %f\n",
 	  minsert->scale.x, minsert->scale.y, minsert->scale.z);
   printf("angle for minsert : %f\n", minsert->rotation_ang);
   printf("extrusion points : x = %f, y = %f, z = %f\n",
 	  minsert->extrusion.x, minsert->extrusion.y, minsert->extrusion.z);
-  printf("attribs for minsert : " FORMAT_BS "\n", minsert->has_attribs);
+  printf("attribs for minsert : " FORMAT_B "\n", minsert->has_attribs);
   printf("object count for minsert : " FORMAT_BL "\n", minsert->owned_obj_count);
   printf("number of rows for minsert : %u\n", minsert->numrows);
   printf("number of columns for minsert : %u\n", minsert->numcols);
@@ -28,7 +28,8 @@ api_process(dwg_object *obj)
   int error;
   dwg_point_3d ins_pt, ext, scale;
   double rot_angle;
-  char scale_flag, attribs;
+  BITCODE_BB scale_flag;
+  BITCODE_B  has_attribs;
   double col_space, row_space;
   BITCODE_BL obj_count, num_rows, num_cols;
 
@@ -38,19 +39,15 @@ api_process(dwg_object *obj)
   dwg_ent_minsert_get_ins_pt(minsert, &ins_pt,
                              &error);
   if ( !error )
-    {
-      printf("minsert points : x = %f, y = %f, z = %f\n",
-	     ins_pt.x, ins_pt.y, ins_pt.z);
-    }
+    printf("minsert points : x = %f, y = %f, z = %f\n",
+           ins_pt.x, ins_pt.y, ins_pt.z);
   else
-    {
-      printf("error in reading minsertion point\n");
-    }
+    printf("error in reading minsertion point\n");
 
 
   scale_flag = dwg_ent_minsert_get_scale_flag(minsert, &error); 
   if ( !error )
-    printf("scale flag for minsert : " FORMAT_BS "\n", scale_flag);
+    printf("scale flag for minsert : " FORMAT_BB "\n", scale_flag);
   else
     printf("in reading scale flag\n"); 
 
@@ -58,14 +55,10 @@ api_process(dwg_object *obj)
   dwg_ent_minsert_get_scale(minsert, &scale,
                             &error); 
   if ( !error )
-    {
-      printf("scale points : x = %f, y = %f, z = %f\n",
-	     scale.x, scale.y, scale.z);
-    }
+    printf("scale points : x = %f, y = %f, z = %f\n",
+           scale.x, scale.y, scale.z);
   else
-    {
-      printf("error in reading scale \n");
-    }
+    printf("error in reading scale \n");
 
 
   rot_angle = dwg_ent_minsert_get_rotation_angle(minsert, &error); 
@@ -78,19 +71,15 @@ api_process(dwg_object *obj)
   dwg_ent_minsert_get_extrusion(minsert, &ext,
                                 &error); 
   if ( !error )
-    {
-      printf("extrusion points : x = %f, y = %f, z = %f\n",
-	     ext.x, ext.y, ext.z);
-    }
+    printf("extrusion points : x = %f, y = %f, z = %f\n",
+           ext.x, ext.y, ext.z);
   else
-    {
-      printf("error in reading extrusion \n");
-    } 
+    printf("error in reading extrusion \n");
 
 
-  attribs = dwg_ent_minsert_get_has_attribs(minsert, &error); 
+  has_attribs = dwg_ent_minsert_get_has_attribs(minsert, &error); 
   if ( !error )
-    printf("attribs for minsert : " FORMAT_BS "\n", attribs);
+    printf("attribs for minsert : " FORMAT_B "\n", has_attribs);
   else
     printf("in reading attribs\n"); 
 
