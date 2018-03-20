@@ -5,11 +5,17 @@
 
 #define IS_DECODER
 
+#define FIELDG(name,type,dxfgroup) \
+  _obj->name = bit_read_##type(dat);\
+  FIELD_G_TRACE(name,type,dxfgroup)
+
 #define FIELD(name,type) \
   _obj->name = bit_read_##type(dat);\
   FIELD_TRACE(name,type)
 
-#define FIELD_TRACE(name,type)\
+#define FIELD_G_TRACE(name,type,dxfgroup) \
+  LOG_TRACE(#name ": " FORMAT_##type " " #type " " #dxfgroup "\n", _obj->name)
+#define FIELD_TRACE(name,type) \
   LOG_TRACE(#name ": " FORMAT_##type " " #type "\n", _obj->name)
 
 #define FIELD_VALUE(name) _obj->name

@@ -267,6 +267,17 @@ bit_read_RS(Bit_Chain * dat)
   return ((uint16_t) ((byte2 << 8) | byte1));
 }
 
+/** Read 1 raw short little-endian.
+ */
+BITCODE_RS
+bit_read_RS_LE(Bit_Chain * dat)
+{
+  unsigned char byte1, byte2;
+  byte1 = bit_read_RC(dat);
+  byte2 = bit_read_RC(dat);
+  return ((uint16_t) ((byte1 << 8) | byte2));
+}
+
 /** Write 1 raw short (BE short).
  */
 void

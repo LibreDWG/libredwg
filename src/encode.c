@@ -1271,7 +1271,7 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
         bit_write_H(dat, &(ent->eed[i].handle));
         bit_write_RC(dat, ent->eed[i].data->code);
         LOG_TRACE("EED code: " FORMAT_RC "\n", ent->eed[i].data->code)
-        for (j=1; j < ent->eed[i].size; j++)
+        for (j=0; j < ent->eed[i].size-2; j++)
           bit_write_RC(dat, ent->eed[i].data->u.raw[j]);
 
         if (i+1 < num_eed)
@@ -1317,7 +1317,12 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
 
   SINCE(R_2004)
     {
-     bit_write_B(dat,  ent->xdic_missing_flag );
+     bit_write_B(dat, ent->xdic_missing_flag);
+    }
+
+  SINCE(R_2013)
+    {
+      bit_write_B(dat, ent->has_ds_binary_data);
     }
 
   VERSIONS(R_13,R_14)
@@ -1326,9 +1331,7 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
     }
 
   bit_write_B(dat, ent->nolinks );
-
   bit_write_CMC(dat, &ent->color);
-
   bit_write_BD(dat, ent->linetype_scale);
 
   SINCE(R_2000)
@@ -1341,6 +1344,13 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
     {
        bit_write_BB(dat, ent->material_flags);
        bit_write_RC(dat, ent->shadow_flags);
+    }
+
+  SINCE(R_2010)
+    {
+      bit_write_B(dat, ent->has_full_visualstyle);
+      bit_write_B(dat, ent->has_face_visualstyle);
+      bit_write_B(dat, ent->has_edge_visualstyle);
     }
 
    bit_write_BS(dat, ent->invisible);
@@ -1419,7 +1429,7 @@ dwg_encode_object(Dwg_Object * obj, Bit_Chain * dat)
         bit_write_H(dat, &(ord->eed[i].handle));
         bit_write_RC(dat, ord->eed[i].data->code);
         LOG_TRACE("EED code: " FORMAT_RC "\n", ord->eed[i].data->code)
-        for (j=1; j < ord->eed[i].size; j++)
+        for (j=0; j < ord->eed[i].size-2; j++)
           bit_write_RC(dat, ord->eed[i].data->u.raw[j]);
 
         if (i+1 < num_eed)

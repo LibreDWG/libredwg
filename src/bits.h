@@ -89,6 +89,9 @@ bit_write_RC(Bit_Chain * dat, unsigned char value);
 BITCODE_RS
 bit_read_RS(Bit_Chain * dat);
 
+BITCODE_RS
+bit_read_RS_LE(Bit_Chain * dat);
+
 void
 bit_write_RS(Bit_Chain * dat, BITCODE_RS value);
 

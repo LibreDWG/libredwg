@@ -46,6 +46,7 @@ run ()
     if test $prog = dwgrewrite; then
         arg="$arg ${srcdir}/$dwg-$prog.dwg"
     fi
+    echo LIBREDWG_TRACE=9 ./$prog $arg
     if LIBREDWG_TRACE=9 ./$prog $arg > $log 2>&1
     then
         rm $log

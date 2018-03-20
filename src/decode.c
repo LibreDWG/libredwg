@@ -1666,6 +1666,11 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
       ent->xdic_missing_flag = bit_read_B(dat);
     }
 
+  SINCE(R_2013)
+    {
+      ent->has_ds_binary_data = bit_read_B(dat);
+    }
+
   VERSIONS(R_13,R_14)
     {
       ent->isbylayerlt = bit_read_B(dat);

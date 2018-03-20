@@ -1851,17 +1851,17 @@ DWG_OBJECT_END
 /*(53)*/
 DWG_OBJECT(SHAPEFILE);
 
-  FIELD(entry_name, TV);
-  FIELD(_64_flag, B);
-  FIELD(xrefindex_plus1, BS);
-  FIELD(xrefdep, B);
-  FIELD(vertical, B);
-  FIELD(shape_file, B);
-  FIELD(fixed_height, BD);
-  FIELD(width_factor, BD);
-  FIELD(oblique_ang, BD);
-  FIELD(generation, RC);
-  FIELD(last_height, BD);
+  FIELD(entry_name, TV);  //2
+  FIELD(_64_flag, B);     //70
+  FIELD(xrefindex_plus1, BS); //70
+  FIELD(xrefdep, B);      //70
+  FIELD(vertical, B);     //1
+  FIELD(shape_file, B);   //1
+  FIELD(fixed_height, BD); //40
+  FIELD(width_factor, BD); //41
+  FIELD(oblique_ang, BD);  //50
+  FIELD(generation, RC);   //71
+  FIELD(last_height, BD);  //42
   FIELD(font_name, TV);
   FIELD(bigfont_name, TV);
   FIELD_HANDLE(shapefile_control, 4);
@@ -3784,6 +3784,7 @@ DWG_ENTITY_END
 //        LOG_INFO("TODO VISUALSTYLE (hard-pointer to H DICTIONARY_VISUALSTYLE)\n");
 //    }
 //DWG_OBJECT_END
+
 
 
 

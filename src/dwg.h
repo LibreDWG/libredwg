@@ -2921,20 +2921,21 @@ typedef struct _dwg_object_entity
 
   BITCODE_BB entity_mode;
   BITCODE_BL num_reactors;
-  BITCODE_B xdic_missing_flag;
-  BITCODE_B isbylayerlt;
+  BITCODE_B xdic_missing_flag;  //r2004+
+  BITCODE_B has_ds_binary_data; //r2013+
+  BITCODE_B isbylayerlt;        //r13-r14
   BITCODE_B nolinks;
   BITCODE_CMC color;
   BITCODE_BD linetype_scale;
-  BITCODE_BB linetype_flags;
-  BITCODE_BB plotstyle_flags;
-  BITCODE_BB material_flags;
-  BITCODE_RC shadow_flags;
-  BITCODE_B has_full_visualstyle;
-  BITCODE_B has_face_visualstyle;
-  BITCODE_B has_edge_visualstyle;
+  BITCODE_BB linetype_flags;    //r2000+
+  BITCODE_BB plotstyle_flags;   //r2000+
+  BITCODE_BB material_flags;    //r2007+
+  BITCODE_RC shadow_flags;      //r2007+
+  BITCODE_B has_full_visualstyle; //r2010+
+  BITCODE_B has_face_visualstyle; //r2010+
+  BITCODE_B has_edge_visualstyle; //r2010+
   BITCODE_BS invisible;
-  BITCODE_RC lineweight;
+  BITCODE_RC lineweight;        //r2000+
 
   /* XXX I think this field is deprecated due to
      the new handle parsing functions */
