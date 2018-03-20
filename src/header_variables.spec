@@ -295,18 +295,18 @@
       FIELD_B (DIMSAH);
       FIELD_B (DIMTIX);
       FIELD_B (DIMSOXD);
-      FIELD_RC (DIMALTD);
-      FIELD_RC (DIMZIN);
+      FIELD_CAST (DIMALTD, RC, BS);
+      FIELD_CAST (DIMZIN, RC, BS);
       FIELD_B (DIMSD1);
       FIELD_B (DIMSD2);
-      FIELD_RC (DIMTOLJ);
-      FIELD_RC (DIMJUST);
-      FIELD_RC (DIMFIT);
+      FIELD_CAST (DIMTOLJ, RC, BS);
+      FIELD_CAST (DIMJUST, RC, BS);
+      FIELD_CAST (DIMFIT, RC, BS);
       FIELD_B (DIMUPT);
-      FIELD_RC (DIMTZIN);
-      FIELD_RC (DIMMALTZ);
-      FIELD_RC (DIMMALTTZ);
-      FIELD_RC (DIMTAD);
+      FIELD_CAST (DIMTZIN, RC, BS);
+      FIELD_CAST (DIMMALTZ, RC, BS);
+      FIELD_CAST (DIMMALTTZ, RC, BS);
+      FIELD_CAST (DIMTAD, RC, BS);
       FIELD_BS (DIMUNIT);
       FIELD_BS (DIMAUNIT);
       FIELD_BS (DIMDEC);
@@ -585,6 +585,5 @@
 
   /* TODO: This really is the section[0] CRC not related to the header */
   FIELD_RS (CRC);
-
 
 

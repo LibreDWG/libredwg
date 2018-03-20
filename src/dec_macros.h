@@ -3,6 +3,18 @@
  * MACROS
  */
 
+#if defined(__clang__) || defined(__clang) || \
+       (defined( __GNUC__) && ((__GNUC__ * 100) + __GNUC_MINOR__) >= 406)
+#  define GCC_DIAG_PRAGMA(x) _Pragma (#x)
+/* clang has "clang diagnostic" pragmas, but also understands gcc. */
+#  define GCC_DIAG_IGNORE(x) _Pragma("GCC diagnostic push") \
+                             GCC_DIAG_PRAGMA(GCC diagnostic ignored #x)
+#  define GCC_DIAG_RESTORE   _Pragma("GCC diagnostic pop")
+#else
+#  define GCC_DIAG_IGNORE(w)
+#  define GCC_DIAG_RESTORE
+#endif
+
 #define IS_DECODER
 
 #define FIELDG(name,type,dxfgroup) \
@@ -13,7 +25,11 @@
   _obj->name = bit_read_##type(dat);\
   FIELD_TRACE(name,type)
 
-#define FIELD_G_TRACE(name,type,dxfgroup) \
+#define FIELD_CAST(name,type,cast) \
+  _obj->name = (BITCODE_##cast)bit_read_##type(dat); \
+  FIELD_TRACE(name,cast)\
+
+#define FIELD_G_TRACE(name,type,dxfgroup)                               \
   LOG_TRACE(#name ": " FORMAT_##type " " #type " " #dxfgroup "\n", _obj->name)
 #define FIELD_TRACE(name,type) \
   LOG_TRACE(#name ": " FORMAT_##type " " #type "\n", _obj->name)

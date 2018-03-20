@@ -42,6 +42,8 @@ static unsigned int cur_ver = 0;
   FIELD_TRACE(name,type)
 #define FIELD_TRACE(name,type)\
   LOG_TRACE(#name ": " FORMAT_##type "\n", _obj->name)
+#define FIELD_CAST(name,type,cast)\
+  FIELD_TRACE(name,cast)
 
 #define FIELD_VALUE(name) _obj->name
 

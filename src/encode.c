@@ -68,6 +68,9 @@ static bool env_var_checked_p;
     {\
         LOG_TRACE(#name ": " FORMAT_##type "\n", _obj->name)\
     }
+#define FIELD_CAST(name,type,cast)\
+  bit_write_##type(dat, (BITCODE_##type)_obj->name);\
+  FIELD_TRACE(name,cast)
 
 #define FIELD_VALUE(name) _obj->name
 
