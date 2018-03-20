@@ -1480,11 +1480,17 @@ Generating full history
 
 2010-03-14  Till Heuschmann  <theuschmann@gmail.com>
 
-	[r] decode DICTIONARYWDLFT and PLACEHOLDER * src/decode.c: call decoding functions according to dxf class name * src/dwg.h: complete structs (Dwg_Object_DICTIONARYWDLFT, Dwg_Object_PLACEHOLDE) * src/dwg.spec: add decoding functions
+	[r] decode DICTIONARYWDLFT and PLACEHOLDER
+        * src/decode.c: call decoding functions according to dxf class name
+        * src/dwg.h: complete structs (Dwg_Object_DICTIONARYWDLFT,
+        Dwg_Object_PLACEHOLDER)
+        * src/dwg.spec: add decoding functions
 
 2010-03-14  Till Heuschmann  <theuschmann@gmail.com>
 
-	[r] decode Xrecord * src/decode.c: add function dwg_decode_xdata to decode arbitrary data streams * src/dwg.h: add the struct Dwg_Resbuf which represents a result buffer
+	[r] decode Xrecord
+        * src/decode.c: add function dwg_decode_xdata to decode arbitrary data streams
+        * src/dwg.h: add the struct Dwg_Resbuf which represents a result buffer
 
 2010-03-03  Till Heuschmann  <theuschmann@gmail.com>
 
