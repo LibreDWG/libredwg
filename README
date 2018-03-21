@@ -37,13 +37,19 @@ http://www.gnu.org/software/libredwg
 
 == Building and installing the library ==
 
+You need the following dependencies:
+- Basic development tools (gcc/clang, autoconf, automake and libtool)
+- SWIG 1.7+
+- Python development headers (debian: python-dev; yum: python-devel)
+- TeXinfo for building the docs
+
 See INSTALL for generic instructions.  Basically, you do:
 
 $ ./autogen.sh (if you checked out the source code from git)
-$ ./configure [options]
+$ ./configure [--enable-trace] [--enable--write]
 $ make
 $ make check    # optional but strongly encouraged while LibreDWG is alpha
-$ make install
+$ sudo make install
 
 This builds and installs various files in the "installation dirs":
   $libdir     ($exec_prefix/lib)   -- library files (libredwg.*)
