@@ -38,7 +38,7 @@
 #endif
 
 #ifdef __cplusplus
-/* extern "C" { */
+extern "C" {
 #endif
 
 #define BITCODE_DOUBLE double
@@ -3323,7 +3323,7 @@ void
 dwg_print_object(Dwg_Object *obj);
 
 #ifdef __cplusplus
-/* } */
+}
 #endif
 
 #endif

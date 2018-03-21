@@ -16,6 +16,10 @@
 #include <stdio.h>
 #include "dwg.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef LOG_ERROR
 # define LOG_ERROR(msg,name,type) \
    fprintf(stderr, msg, name, (type))
@@ -4831,5 +4835,9 @@ dwg_object_to_entity(dwg_object *obj, int *error);
 
 int 
 dwg_get_type(dwg_object *obj);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
