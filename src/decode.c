@@ -2378,6 +2378,7 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
   object_address = dat->byte;
   ktl_lastaddress = dat->byte + obj->size; /* (calculate the bitsize) */
   obj->type = bit_read_BS(dat);
+  obj->bitsize = 0;
 
   LOG_INFO(" Type: %d\n", obj->type)
 
