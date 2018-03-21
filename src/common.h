@@ -52,39 +52,36 @@ typedef enum DWG_VERSION_TYPE
 extern char version_codes[DWG_VERSIONS][7];
 
 /**
- Data types (including compressed forms) used trough the file
- */
-typedef enum DWG_DATA_TYPE
-{
-  DWG_DT_B,   /** bit (1 or 0) */
-  DWG_DT_BB,  /** special 2-bit code (entmode in entities, for instance) */
-  DWG_DT_RC,  /** raw char (not compressed) */
-  DWG_DT_RS,  /** raw short (not compressed) */
-  DWG_DT_RD,  /** raw double (not compressed) */
-  DWG_DT_RL,  /** raw long (not compressed) */
-  DWG_DT_BS,  /** bitshort */
-  DWG_DT_BL,  /** bitlong */
-  DWG_DT_BD,  /** bitdouble */
-  DWG_DT_MC,  /** modular char  */
-  DWG_DT_MS,  /** modular short  */
-  DWG_DT_BE,  /** BitExtrusion */
-  DWG_DT_DD,  /** BitDouble With Default */
-  DWG_DT_BT,  /** BitThickness */
-  DWG_DT_H,   /** handle reference (see the HANDLE REFERENCES section) */
-  DWG_DT_CMC, /** CmColor value */
-  DWG_DT_T,   /** text (bitshort length, followed by the string) */
-  DWG_DT_TU,  /** Unicode text (bitshort character length, followed by
-                 Unicode string, 2 bytes per character). Unicode text is read from the
-                 “string stream” within the object data, see the main Object description
-                 section for details. */
-  DWG_DT_2RD, /** 2 raw doubles **/
-  DWG_DT_3RD, /** 3 raw doubles **/
-  DWG_DT_2BD, /** 2D point (2 bitdoubles) **/
-  DWG_DT_3BD, /** 3D point (3 bitdoubles) **/
-  DWG_DT_3B,  /** special 3-bit code R24+ */
-  DWG_DT_BLL, /** bitlonglong R24+ */
-  DWG_END_OF_HEADER_VARIABLES
-} Dwg_Data_Type;
+ Data types (including compressed forms) used through the project
+*/
+#if 0
+  B,   /** bit (1 or 0) */
+  BB,  /** special 2-bit code (entmode in entities, for instance) */
+  RC,  /** raw char (not compressed) */
+  RS,  /** raw short (not compressed, big-endian) */
+  RD,  /** raw double (not compressed, big-endian) */
+  RL,  /** raw long (not compressed, big-endian) */
+  BS,  /** bitshort */
+  BL,  /** bitlong */
+  BD,  /** bitdouble */
+  MC,  /** modular char  */
+  MS,  /** modular short  */
+  BE,  /** BitExtrusion */
+  DD,  /** BitDouble With Default */
+  BT,  /** BitThickness */
+  H,   /** handle reference (see the HANDLE REFERENCES section) */
+  CMC, /** CmColor value */
+  T,   /** text (bitshort length, followed by the string) */
+  TU,  /** Unicode text (bitshort character length, followed by
+           Unicode string, 2 bytes per character). Unicode text is read from the
+           “string stream” within the object data. */
+  2RD, /** 2 raw doubles **/
+  3RD, /** 3 raw doubles **/
+  2BD, /** 2D point (2 bitdoubles) **/
+  3BD, /** 3D point (3 bitdoubles) **/
+  3B,  /** special 3-bit code R24+ */
+  BLL, /** bitlonglong R24+ */
+#endif
 
 /**
  * References of sentinels
@@ -101,9 +98,6 @@ typedef enum DWG_SENTINEL
   DWG_SENTINEL_SECOND_HEADER_BEGIN,
   DWG_SENTINEL_SECOND_HEADER_END
 } Dwg_Sentinel;
-
-Dwg_Data_Type
-dwg_var_map(Dwg_Version_Type version, int index);
 
 unsigned char *
 dwg_sentinel(Dwg_Sentinel sentinel);
