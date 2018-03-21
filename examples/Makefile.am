@@ -20,7 +20,7 @@
 AM_CFLAGS = -I$(top_srcdir)/src -Wall -Wextra
 LDADD   = $(top_builddir)/src/libredwg.la -lm
 
-bin_PROGRAMS = dwgread dwgbmp
+bin_PROGRAMS = dwgread dwgbmp dwg2dxf
 check_PROGRAMS = load_dwg dwg2SVG dwg2svg2
 
 if HAVE_LIBPS
@@ -34,12 +34,11 @@ bin_PROGRAMS += dwgrewrite
 dwgrewrite_SOURCES = dwgrewrite.c
 endif
 
-dwgread_SOURCES = dwgread.c
-
-dwg2SVG_SOURCES = dwg2SVG.c
-
+dwgread_SOURCES  = dwgread.c
+dwgbmp_SOURCES   = dwgbmp.c
+dwg2dxf_SOURCES  = dwg2dxf.c
 load_dwg_SOURCES = load_dwg.c
-dwgbmp_SOURCES  = dwgbmp.c
+dwg2SVG_SOURCES  = dwg2SVG.c
 dwg2svg2_SOURCES = dwg2svg2.c
 
 TESTS_ENVIRONMENT = \
@@ -49,7 +48,7 @@ TESTS_ENVIRONMENT = \
 TESTS = alive.test
 
 EXTRA_DIST = example_2000.dwg sample_2000.dwg suffix.c load_dwg.py $(TESTS)
-CLEANFILES = {example,sample}_2000.{bmp,ps,svg} {example,sample}_2000.dwg-rewrite.dwg
+CLEANFILES = {example,sample}_2000.{bmp,ps,svg,dxf} {example,sample}_2000.dwg-rewrite.dwg
 
 # emacs flymake-mode
 check-syntax:

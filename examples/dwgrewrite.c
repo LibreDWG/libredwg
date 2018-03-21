@@ -11,7 +11,7 @@
 /*****************************************************************************/
 
 /*
- * rewrite.c: load a DWG file and rewrite it,
+ * dwgrewrite.c: load a DWG file and rewrite it,
  * optionally as a different version.
  *
  * written by Anderson Pierre Cardoso
@@ -87,13 +87,7 @@ main (int argc, char *argv[])
   if (argc > 2)
     filename_out = argv[2];
   else
-    {
-      size_t len = strlen(filename_in);
-      filename_out = malloc(len - 4 + sizeof("-rewrite.dwg\0"));
-      strncpy(filename_out, filename_in, len - 4);
-      filename_out[len-4] = '\0';
-      strcat(filename_out, "-rewrite.dwg\0");
-    }
+    filename_out = suffix (filename_in, "-rewrite.dwg");
   
   if (strcmp(filename_in, filename_out) == 0)
     return usage();
@@ -104,11 +98,8 @@ main (int argc, char *argv[])
   // reads the file
   printf("Reading DWG file %s\n", filename_in);
   error = dwg_read_file(filename_in, &dwg);
-
   if (error)
       printf("READ ERROR\n");
-  else
-      printf("READ SUCCESS\n");
 
   // rewrite it
   printf("Writing DWG file %s", filename_out);
@@ -116,17 +107,14 @@ main (int argc, char *argv[])
     printf(" as %s\n", version);
     if (dwg.header.from_version != dwg.header.version)
       dwg.header.from_version = dwg.header.version;
-    //else keep from_version = 0
+    //else keep from_version
     dwg.header.version = dwg_version;
   } else {
     printf("\n");
   }
   error = dwg_write_file(filename_out, &dwg);
-
   if (error)
       printf("WRITE ERROR\n");
-  else
-      printf("WRITE SUCCESS\n");
   
   dwg_free(&dwg);
 
@@ -135,8 +123,5 @@ main (int argc, char *argv[])
   error = dwg_read_file(filename_out, &dwg);
   if (error)
       printf("re-READ ERROR\n");
-  else
-      printf("re-READ SUCCESS\n");
-
   return error;
 }
