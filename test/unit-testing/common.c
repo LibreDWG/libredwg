@@ -53,7 +53,7 @@ main(int argc, char *argv[])
 
   if (! input)
     {
-      strcpy(input, "example_2000.dwg"); //todo: test-data/2000/example.dwg
+      input = (char *)"example_2000.dwg"; //todo: ../test-data/2000/example.dwg
       if (stat(input, &attrib))
         {
           fprintf (stderr, "Env var INPUT not defined, %s not found\n", input);
@@ -64,7 +64,7 @@ main(int argc, char *argv[])
   return test_code (input);
 }
 
-/// This function is used to read the DWG file
+/// read the DWG file
 int
 test_code(char *filename)
 {
@@ -91,19 +91,20 @@ void output_BLOCK_HEADER(dwg_object_ref* ref)
   dwg_object* obj, *variable_obj;
   dwg_obj_block_header* hdr;
   int error;
-  unsigned long abs_ref;
-  obj = dwg_obj_reference_get_object(ref, &error);
-  abs_ref = dwg_obj_ref_get_abs_ref(ref, &error);
+  //unsigned long abs_ref;
+
   if (!ref)
     {
       fprintf(stderr, "Found null object reference for BLOCK_HEADER\n");
       return;
     }
+  obj = dwg_obj_reference_get_object(ref, &error);
   if (!obj)
     {
       fprintf(stderr, "Found null ref->obj\n");
       return;
     }
+  //abs_ref = dwg_obj_ref_get_abs_ref(ref, &error);
 
   /* TODO: Review.  (This check avoids a segfault, but it is
      still unclear whether or not the condition is valid.)  */
@@ -114,11 +115,6 @@ void output_BLOCK_HEADER(dwg_object_ref* ref)
     }
 
   hdr = dwg_object_to_BLOCK_HEADER(obj);
-
-/*  printf(
-      "\t<g id=\"symbol-%lu\" >\n\t\t<!-- %s -->\n", abs_ref, 
-      dwg_obj_block_header_get_name(hdr, &error));
-*/
   variable_obj = get_first_owned_object(obj, hdr);
 
   while (variable_obj)
@@ -126,10 +122,9 @@ void output_BLOCK_HEADER(dwg_object_ref* ref)
       output_object(variable_obj);
       variable_obj = get_next_owned_object(obj, variable_obj, hdr);
     }
-
 }
 
-/// Function for blocks to be iterated
+/// Iterate over both modelspace and paperspace blocks
 void
 output_test(dwg_data* dwg)
 {
@@ -142,11 +137,10 @@ output_test(dwg_data* dwg)
 
   hdr = dwg_get_block_header(dwg, &error);
   ctrl = dwg_block_header_get_block_control(hdr, &error);
-  
+  /*
   hdr_refs = dwg_obj_block_control_get_block_headers(ctrl, &error);
-
   num_hdr_objs = dwg_obj_block_control_get_num_entries(ctrl, &error);
-
+  */
   output_BLOCK_HEADER(dwg_obj_block_control_get_model_space(ctrl, &error));
   output_BLOCK_HEADER(dwg_obj_block_control_get_paper_space(ctrl, &error));
 
@@ -180,9 +174,7 @@ void
 print_low_level(dwg_object *obj)
 {
   printf("\n");
-  printf("*******************************************\n");
-  printf("        PRINTED VIA LOW LEVEL ACCESS       \n");
-  printf("*******************************************\n");
+  printf("PRINTED VIA LOW LEVEL ACCESS:\n");
   low_level_process(obj);
   printf("\n");
 }
@@ -191,9 +183,7 @@ print_low_level(dwg_object *obj)
 void
 print_api(dwg_object *obj)
 {
-  printf("*******************************************\n");
-  printf("               PRINTED VIA API             \n");
-  printf("*******************************************\n");
+  printf("PRINTED VIA API:\n");
   api_process(obj);
   printf("\n");
 }

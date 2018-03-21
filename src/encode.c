@@ -256,6 +256,7 @@ static bool env_var_checked_p;
 
 #define ENT_REACTORS(code)\
   FIELD_VALUE(reactors) = (BITCODE_H*) malloc(sizeof(BITCODE_H) * obj->tio.entity->num_reactors);\
+  if (!FIELD_VALUE(reactors)) { LOG_ERROR("Out of memory"); } \
   for (vcount=0; vcount<obj->tio.entity->num_reactors; vcount++)\
     {\
       FIELD_HANDLE_N(reactors[vcount], vcount, code);      \
@@ -481,6 +482,9 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
   /* Define object-map
    */
   omap = (Object_Map *) malloc(dwg->num_objects * sizeof(Object_Map));
+  if (!omap) {
+    LOG_ERROR("Out of memory"); return 2;
+  }
   for (j = 0; j < dwg->num_objects; j++)
     {
       Bit_Chain nkn;
@@ -1224,6 +1228,9 @@ dwg_encode_add_object(Dwg_Object * obj, Bit_Chain * dat,
 
         obj->supertype = DWG_SUPERTYPE_UNKNOWN;
         obj->tio.unknown = (unsigned char*)malloc(obj->size);
+        if (!obj->tio.unknown) {
+          LOG_ERROR("Out of memory"); return;
+        }
         memcpy(obj->tio.unknown, &dat->chain[object_address], obj->size);
       }
     }
@@ -1231,9 +1238,9 @@ dwg_encode_add_object(Dwg_Object * obj, Bit_Chain * dat,
   /*
    if (obj->supertype != DWG_SUPERTYPE_UNKNOWN)
    {
-   fprintf (stderr, " Begin address:\t%10lu\n", address);
-   fprintf (stderr, " Last address:\t%10lu\tSize: %10lu\n", dat->byte, obj->size);
-   fprintf (stderr, "End address:\t%10lu (calculated)\n", address + 2 + obj->size);
+     fprintf (stderr, "Begin address:\t%10lu\n", address);
+     fprintf (stderr, "Last address:\t%10lu\tSize: %10lu\n", dat->byte, obj->size);
+     fprintf (stderr, "End address:\t%10lu (calculated)\n", address + 2 + obj->size);
    }
    */
 

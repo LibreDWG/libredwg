@@ -88,6 +88,8 @@ GET_DWG_ENTITY(BODY)
 GET_DWG_ENTITY(RAY)
 /// Macro call to extract all xline entities from a block
 GET_DWG_ENTITY(XLINE)
+/// Macro call to extract all OLEFRAME entities from a block
+GET_DWG_ENTITY(OLEFRAME)
 /// Macro call to extract all mtext entities from a block
 GET_DWG_ENTITY(MTEXT)
 /// Macro call to extract all leader entities from a block
@@ -96,10 +98,22 @@ GET_DWG_ENTITY(LEADER)
 GET_DWG_ENTITY(TOLERANCE)
 /// Macro call to extract all mline entities from a block
 GET_DWG_ENTITY(MLINE)
+/// Macro call to cast dwg object to ole2frame
+GET_DWG_ENTITY(OLE2FRAME)
+/// Macro call to extract all DUMMY entities from a block
+GET_DWG_ENTITY(DUMMY)
+/// Macro call to extract all LONG_TRANSACTION entities from a block
+GET_DWG_ENTITY(LONG_TRANSACTION)
 /// Macro call to extract all lwpline entities from a block
 GET_DWG_ENTITY(LWPLINE)
+/// Macro call to extract all PROXY_ENTITY entities from a block
+GET_DWG_ENTITY(PROXY_ENTITY)
 /// Macro call to extract all hatch entities from a block
 GET_DWG_ENTITY(HATCH)
+
+//untyped >1000:
+/// Macro call to extract all image entities from a block
+//GET_DWG_ENTITY(IMAGE)
 
 /*******************************************************************
  *     Functions created from macro to cast dwg_object to entity     *
@@ -183,6 +197,8 @@ CAST_DWG_OBJECT_TO_ENTITY(BODY)
 CAST_DWG_OBJECT_TO_ENTITY(RAY)
 /// Macro call to cast dwg object to xline
 CAST_DWG_OBJECT_TO_ENTITY(XLINE)
+/// Macro call to cast dwg object to oleframe
+CAST_DWG_OBJECT_TO_ENTITY(OLEFRAME)
 /// Macro call to cast dwg object to mtext
 CAST_DWG_OBJECT_TO_ENTITY(MTEXT)
 /// Macro call to cast dwg object to leader
@@ -191,14 +207,20 @@ CAST_DWG_OBJECT_TO_ENTITY(LEADER)
 CAST_DWG_OBJECT_TO_ENTITY(TOLERANCE)
 /// Macro call to cast dwg object to mline
 CAST_DWG_OBJECT_TO_ENTITY(MLINE)
+/// Macro call to cast dwg object to ole2frame
+CAST_DWG_OBJECT_TO_ENTITY(OLE2FRAME)
+/// Macro call to cast dwg object to dummy
+CAST_DWG_OBJECT_TO_ENTITY(DUMMY)
+/// Macro call to cast dwg object to long_transaction
+CAST_DWG_OBJECT_TO_ENTITY(LONG_TRANSACTION)
 /// Macro call to cast dwg object to lwpline
 CAST_DWG_OBJECT_TO_ENTITY(LWPLINE)
 /// Macro call to cast dwg object to hatch
 CAST_DWG_OBJECT_TO_ENTITY(HATCH)
+
+//untyped >1000:
 /// Macro call to cast dwg object to image
 //CAST_DWG_OBJECT_TO_ENTITY(IMAGE)
-/// Macro call to cast dwg object to ole2frame
-CAST_DWG_OBJECT_TO_ENTITY(OLE2FRAME)
 
 
 /*******************************************************************
@@ -212,6 +234,8 @@ CAST_DWG_OBJECT_TO_OBJECT(BLOCK_HEADER)
 CAST_DWG_OBJECT_TO_OBJECT(BLOCK_CONTROL)
 /// Macro call to cast dwg object to layer
 CAST_DWG_OBJECT_TO_OBJECT(LAYER)
+/// Macro call to cast dwg object to xrecord
+CAST_DWG_OBJECT_TO_OBJECT(XRECORD)
 
 /*******************************************************************
  *                FUNCTIONS START HERE ENTITY SPECIFIC               *
@@ -21163,5 +21187,23 @@ dwg_get_type(dwg_object *obj)
     {
       LOG_ERROR("%s: empty ref", __FUNCTION__)
       return -1;
+    }
+}
+
+/// Returns Dwg object dxfname
+/** Usage : int type = dwg_get_dxfname(obj);
+\param 1 dwg_object
+*/
+char*
+dwg_get_dxfname(dwg_object *obj)
+{
+  if (obj)
+    {
+      return obj->dxfname;
+    }
+  else
+    {
+      LOG_ERROR("%s: empty ref", __FUNCTION__)
+      return NULL;
     }
 }

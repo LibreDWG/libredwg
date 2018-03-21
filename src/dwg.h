@@ -2208,12 +2208,14 @@ typedef struct _dwg_entity_HATCH
  */
 typedef struct _dwg_object_XRECORD
 {
-  BITCODE_BL numdatabytes;
+  BITCODE_BL num_databytes;
   BITCODE_BS cloning_flags;
-  Dwg_Resbuf* rbuf;
+  unsigned int num_eed;
+  Dwg_Resbuf* xdata;
   BITCODE_H parent;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
+  BITCODE_BL num_objid_handles;
   BITCODE_H* objid_handles;
 } Dwg_Object_XRECORD;
 
@@ -2913,7 +2915,7 @@ typedef struct _dwg_object_entity
   /* Dwg_Handle handle; */
 
   unsigned int num_eed;
-  Dwg_Eed *eed; /* a linked list */
+  Dwg_Eed *eed; /* see also Dwg_Resbuf* xdata */
 
   BITCODE_B picture_exists;
   BITCODE_BLL picture_size; // before r2007 only RL
@@ -3042,6 +3044,7 @@ typedef struct _dwg_object
     unsigned char *unknown;
   } tio;
 
+  char *dxfname;
   BITCODE_RL bitsize;
   Dwg_Handle handle;
 
@@ -3078,23 +3081,23 @@ typedef struct _dwg_section
 {
   int number;
   unsigned int address;
-  unsigned int size;
-  int parent;
-  int left;
-  int right;
-  int x00;
+  BITCODE_RL size;
+  BITCODE_RL parent;
+  BITCODE_RL left;
+  BITCODE_RL right;
+  BITCODE_RL x00;
 } Dwg_Section;
 
 typedef struct
 {
-  long unsigned int size;
-  long unsigned int unknown1;
-  long unsigned int num_sections;
-  long unsigned int max_decomp_size;
-  long unsigned int unknown2;
-  long unsigned int compressed;
-  long unsigned int type;
-  long unsigned int encrypted;
+  BITCODE_RL size;
+  BITCODE_RL pagecount;
+  BITCODE_RL num_sections;
+  BITCODE_RL max_decomp_size;
+  BITCODE_RL unknown2;
+  BITCODE_RL compressed; /* Compressed (1 = no, 2 = yes, normally 2) */
+  BITCODE_RL type;
+  BITCODE_RL encrypted; /* (0 = no, 1 = yes, 2 = unknown) */
   char name[64];
   Dwg_Section **sections;
 } Dwg_Section_Info;

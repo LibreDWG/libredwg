@@ -112,6 +112,21 @@ Dwg_Object_##token *dwg_object_to_##token(Dwg_Object *obj) \
   return ret_obj; \
 }
 
+#define CAST_DWG_OBJECT_TO_OBJECT_BYNAME(token, dxfname) \
+Dwg_Object_##token *dwg_object_to_##token(Dwg_Object *obj) \
+{ \
+    Dwg_Object_##token *ret_obj = NULL; \
+    if (obj && obj->dxfname && !strcmp(obj->dxfname, dxfname)) \
+      { \
+        ret_obj = obj->tio.object->tio.token; \
+      } \
+    else \
+      { \
+        LOG_ERROR("invalid %s type: got 0x%x", #token, obj ? obj->type : 0); \
+      } \
+  return ret_obj; \
+}
+
 ///////////////////////////////////////////////////////////////////////////
 
 typedef struct _dwg_entity_CIRCLE                 dwg_ent_circle;
@@ -180,6 +195,7 @@ typedef struct _dwg_object_MLINESTYLE             dwg_obj_mlinestyle;
 typedef struct _dwg_object_APPID                  dwg_obj_appid;
 typedef struct _dwg_object_APPID_CONTROL          dwg_obj_appid_control;
 typedef struct _dwg_object_PROXY                  dwg_obj_proxy;
+typedef struct _dwg_object_XRECORD                dwg_obj_xrecord;
 typedef struct _dwg_object                        dwg_object;
 typedef struct _dwg_object_ref                    dwg_object_ref;
 typedef struct _dwg_handle                        dwg_handle;
@@ -402,7 +418,7 @@ CAST_DWG_OBJECT_TO_ENTITY_DECL(PROXY_ENTITY)
 /// Macro call to cast dwg object to hatch
 CAST_DWG_OBJECT_TO_ENTITY_DECL(HATCH)
 /// Macro call to cast dwg object to image
-//CAST_DWG_OBJECT_TO_ENTITY_DECL(IMAGE)
+CAST_DWG_OBJECT_TO_ENTITY_DECL(IMAGE)
 
 /*******************************************************************
 *     Functions created from macro to cast dwg object to object     *
@@ -415,6 +431,8 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL(BLOCK_HEADER)
 CAST_DWG_OBJECT_TO_OBJECT_DECL(BLOCK_CONTROL)
 /// Macro call to cast dwg object to layer
 CAST_DWG_OBJECT_TO_OBJECT_DECL(LAYER)
+/// Macro call to cast dwg object to xrecord
+CAST_DWG_OBJECT_TO_OBJECT_DECL(XRECORD)
 
 /********************************************************************
 *                FUNCTIONS START HERE ENTITY SPECIFIC               *
@@ -4661,6 +4679,28 @@ dwg_obj_block_control_get_paper_space(dwg_obj_block_control *ctrl, int *error);
 
 
 /********************************************************************
+*                    FUNCTIONS FOR XRECORD OBJECT                     *
+********************************************************************/
+
+//TODO: not yet implemented
+BITCODE_BL
+dwg_obj_xrecord_get_num_databytes(dwg_obj_xrecord *xrecord, int *error);
+
+BITCODE_BL
+dwg_obj_xrecord_get_num_eed(dwg_obj_xrecord *xrecord, int *error);
+
+Dwg_Resbuf*
+dwg_obj_xrecord_get_xdata(dwg_obj_xrecord *xrecord, int *error);
+
+BITCODE_BL
+dwg_obj_xrecord_get_num_objid_handles(dwg_obj_xrecord *xrecord, int *error);
+
+//TODO: dwg_object_ref* or dwg_handle*, not handle
+BITCODE_H*
+dwg_obj_xrecord_get_objid_handles(dwg_obj_xrecord *xrecord, int *error);
+
+
+/********************************************************************
 *                    COMMON FUNCTIONS FOR DWG ENTITY                *
 ********************************************************************/
 
@@ -4736,6 +4776,7 @@ dwg_ent_get_lineweight(dwg_obj_ent *ent, int *error); //r2000+
 /*unsigned int
 dwg_ent_get_num_handles(dwg_obj_ent *ent, int *error);*/
 
+//TODO: dwg_object_ref* or dwg_handle*, not handle
 BITCODE_H
 dwg_ent_get_subentity(dwg_obj_ent *ent, int *error);
 
@@ -4833,8 +4874,11 @@ dwg_object_to_object(dwg_object *obj, int *error);
 dwg_obj_ent *
 dwg_object_to_entity(dwg_object *obj, int *error);
 
-int 
+int
 dwg_get_type(dwg_object *obj);
+
+char*
+dwg_get_dxfname(dwg_object *obj);
 
 #ifdef __cplusplus
 }

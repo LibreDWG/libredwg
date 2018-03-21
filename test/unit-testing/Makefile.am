@@ -63,7 +63,8 @@ check_PROGRAMS = \
 	vertex_3d \
 	vertex_mesh \
 	vertex_pface \
-	xline
+	xline \
+	xrecord
 
 TESTS = $(check_PROGRAMS)
 TESTS_ENVIRONMENT = \

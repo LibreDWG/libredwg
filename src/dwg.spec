@@ -3693,20 +3693,20 @@ DWG_ENTITY_END
 //(79 + varies) pg.164
 DWG_OBJECT(XRECORD);
 
+  FIELD_BL(num_databytes);
+  FIELD_XDATA(xdata, num_databytes);
+
+  SINCE(R_2000)
+  {
+    FIELD_BS(cloning_flags);
+  }
+
+  FIELD_HANDLE(parent, ANYCODE); // 3 or 8
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+
   DECODER
     {
-      FIELD_BL(numdatabytes);
-      FIELD_XDATA(rbuf, numdatabytes);
-
-      SINCE(R_2000)
-      {
-        FIELD_BS(cloning_flags);
-      }
-
-      FIELD_HANDLE(parent, ANYCODE); // 3 or 8
-      REACTORS(4);
-      XDICOBJHANDLE(3);
-
       for (vcount=0;
            dat->byte < obj->tio.object->datbyte + (obj->tio.object->bitsize/8);
            vcount++)
@@ -3716,6 +3716,7 @@ DWG_OBJECT(XRECORD);
             : (BITCODE_H*) malloc(sizeof(Dwg_Object_Ref));
           FIELD_HANDLE_N(objid_handles[vcount], vcount, ANYCODE);
         }
+      FIELD_VALUE(num_objid_handles) = vcount;
     }
 
 DWG_OBJECT_END

@@ -713,7 +713,11 @@ bfr_read_string(char **src)
   wsize = length * sizeof(DWGCHAR) + sizeof(DWGCHAR);
   
   str = str_base = (DWGCHAR*) malloc(wsize);
-  
+  if (!str)
+    {
+      LOG_ERROR("Out of memory");
+      return NULL;
+    }
   ptr = (uint16_t*)*src;
   for (i = 0; i < length; i++)
     {
@@ -749,6 +753,11 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
   while (ptr < ptr_end)
     {
       section = (r2007_section*) malloc(sizeof(r2007_section));
+      if (!section)
+        {
+          LOG_ERROR("Out of memory");
+          return NULL;
+        }
     
       bfr_read(section, &ptr, 64);
     
@@ -789,12 +798,22 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
     
       section->pages = (r2007_section_page**) malloc(
         (size_t)section->num_pages * sizeof(r2007_section_page*));
+      if (!section->pages)
+        {
+          LOG_ERROR("Out of memory");
+          return NULL;
+        }
     
       for (i = 0; i < section->num_pages; i++)
         {
           section->pages[i] = (r2007_section_page*) malloc(
                                                        sizeof(r2007_section_page));
-      
+          if (!section->pages[i])
+            {
+              LOG_ERROR("Out of memory");
+              return NULL;
+            }
+
           bfr_read(section->pages[i], &ptr, 56);
       
           LOG_TRACE("\n   --- Page[%d] ---\n", i)
