@@ -20,8 +20,8 @@
 AM_CFLAGS = -I$(top_srcdir)/src -Wall -Wextra
 LDADD   = $(top_builddir)/src/libredwg.la -lm
 
-bin_PROGRAMS = dwgread dwgbmp dwg2dxf
-check_PROGRAMS = load_dwg dwg2SVG dwg2svg2
+bin_PROGRAMS = dwgread dwgbmp dwg2dxf dwg2SVG
+check_PROGRAMS = load_dwg dwg2svg2
 
 if HAVE_LIBPS
 bin_PROGRAMS += dwg_ps
@@ -37,8 +37,9 @@ endif
 dwgread_SOURCES  = dwgread.c
 dwgbmp_SOURCES   = dwgbmp.c
 dwg2dxf_SOURCES  = dwg2dxf.c
-load_dwg_SOURCES = load_dwg.c
 dwg2SVG_SOURCES  = dwg2SVG.c
+
+load_dwg_SOURCES = load_dwg.c
 dwg2svg2_SOURCES = dwg2svg2.c
 
 TESTS_ENVIRONMENT = \
@@ -49,6 +50,10 @@ TESTS = alive.test
 
 EXTRA_DIST = example_2000.dwg sample_2000.dwg suffix.c load_dwg.py $(TESTS)
 CLEANFILES = {example,sample}_2000.{bmp,ps,svg,dxf} {example,sample}_2000.dwg-rewrite.dwg
+
+.c.i:
+	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
+	$(COMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -E -o $@ $<
 
 # emacs flymake-mode
 check-syntax:

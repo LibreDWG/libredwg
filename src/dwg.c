@@ -220,61 +220,61 @@ dwg_bmp(Dwg_Data *dwg, BITCODE_RL *size)
 double
 dwg_model_x_min(Dwg_Data *dwg)
 {
-  return dwg->header_vars.EXTMIN_MSPACE.x;
+  return dwg->header_vars.EXTMIN.x;
 }
 
 double
 dwg_model_x_max(Dwg_Data *dwg)
 {
-  return dwg->header_vars.EXTMAX_MSPACE.x;
+  return dwg->header_vars.EXTMAX.x;
 }
 
 double
 dwg_model_y_min(Dwg_Data *dwg)
 {
-  return dwg->header_vars.EXTMIN_MSPACE.y;
+  return dwg->header_vars.EXTMIN.y;
 }
 
 double
 dwg_model_y_max(Dwg_Data *dwg)
 {
-  return dwg->header_vars.EXTMAX_MSPACE.y;
+  return dwg->header_vars.EXTMAX.y;
 }
 
 double
 dwg_model_z_min(Dwg_Data *dwg)
 {
-  return dwg->header_vars.EXTMIN_MSPACE.z;
+  return dwg->header_vars.EXTMIN.z;
 }
 
 double
 dwg_model_z_max(Dwg_Data *dwg)
 {
-  return dwg->header_vars.EXTMAX_MSPACE.z;
+  return dwg->header_vars.EXTMAX.z;
 }
 
 double
 dwg_page_x_min(Dwg_Data *dwg)
 {
-  return dwg->header_vars.EXTMIN_PSPACE.x;
+  return dwg->header_vars.EXTMIN.x;
 }
 
 double
 dwg_page_x_max(Dwg_Data *dwg)
 {
-  return dwg->header_vars.EXTMAX_PSPACE.x;
+  return dwg->header_vars.PEXTMAX.x;
 }
 
 double
 dwg_page_y_min(Dwg_Data *dwg)
 {
-  return dwg->header_vars.EXTMIN_PSPACE.y;
+  return dwg->header_vars.PEXTMIN.y;
 }
 
 double
 dwg_page_y_max(Dwg_Data *dwg)
 {
-  return dwg->header_vars.EXTMAX_PSPACE.y;
+  return dwg->header_vars.PEXTMAX.y;
 }
 
 unsigned int

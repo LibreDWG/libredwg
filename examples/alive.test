@@ -62,6 +62,10 @@ run ()
     fi
 }
 
+rm *_2000.dxf 2>/dev/null
+rm *_2000.svg 2>/dev/null
+rm *_2000.ps 2>/dev/null
+rm *_2000.bmp 2>/dev/null
 for prog in $PROGS ; do
     run $prog sample_2000
     run $prog example_2000

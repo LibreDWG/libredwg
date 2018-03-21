@@ -331,8 +331,8 @@ output_SVG(dwg_data* dwg)
 
   double dx = dwg_model_x_max(dwg) - dwg_model_x_min(dwg);
   double dy = dwg_model_y_max(dwg) - dwg_model_y_min(dwg);
-  double pdx = dwg->header_vars.LIMMAX_PSPACE.x - dwg->header_vars.LIMMIN_PSPACE.x;
-  double pdy = dwg->header_vars.LIMMAX_PSPACE.y - dwg->header_vars.LIMMIN_PSPACE.y;
+  double pdx = dwg->header_vars.PLIMMAX.x - dwg->header_vars.PLIMMIN.x;
+  double pdy = dwg->header_vars.PLIMMAX.y - dwg->header_vars.PLIMMIN.y;
   double scale_x = dx / (pdx == 0.0 ? 1.0 : pdx);
   double scale_y = dy / (pdy == 0.0 ? 1.0 : pdy);
   scale = 25.4 / 72.0; // pt:mm TODO
