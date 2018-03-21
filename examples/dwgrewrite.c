@@ -88,8 +88,11 @@ main (int argc, char *argv[])
     filename_out = argv[2];
   else
     {
-      filename_out = strdup(filename_in);
-      filename_out = strcat(filename_out, "-rewrite.dwg\0");
+      size_t len = strlen(filename_in);
+      filename_out = malloc(len - 4 + sizeof("-rewrite.dwg\0"));
+      strncpy(filename_out, filename_in, len - 4);
+      filename_out[len-4] = '\0';
+      strcat(filename_out, "-rewrite.dwg\0");
     }
   
   if (strcmp(filename_in, filename_out) == 0)
