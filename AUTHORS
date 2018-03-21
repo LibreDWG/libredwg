@@ -1,12 +1,16 @@
+Reini Urban <rurban@cpan.org>
+	Many fixes and enhancements everywhere. Start with support for all
+        DWG versions, and adding the missing bits. The current maintainer.
+
 Anderson Pierre Cardoso <apierre.cardoso@gmail.com>
-    Changes to configure.in, dwg.c and encode.c
+	Changes to configure.in, dwg.c and encode.c
 
 Thien-Thi Nguyen <ttn@gnuvola.org>
 	First versions and changes to several Makefiles.
 	First version and changes to build-aux/create-changelog.
 
 Till Heuschmann <theuschmann@gmail.com>
-	Substantial changes to dwg.h, dwg.spec and decode.c. R2004
+	Substantial changes to dwg.h, dwg.spec and decode.c. R2004 + R2007
 	read support.
 
 James Michael DuPont <JamesMikeDuPont@googlemail.com>
