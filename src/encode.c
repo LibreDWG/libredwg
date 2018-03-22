@@ -604,7 +604,6 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
       //printf ("Address: %08X\n", pvz);
       last_address = omap[idc].address;
 
-
       //dwg dwg_encode_add_object(dwg->object[j], dat, last_address);
 
       ckr_missing = 1;
@@ -689,7 +688,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
   for (i = 0; i < 14; i++)
     {
       int i2;
-      struct _handlerik *handle = &dwg->second_header.handlerik[i];
+      struct _handler *handle = &dwg->second_header.handler[i];
       bit_write_RC(dat, handle->size);
       bit_write_RC(dat, i);
       for (i2 = 0; i2 < handle->size; i2++)
@@ -1202,7 +1201,7 @@ dwg_encode_add_object(Dwg_Object * obj, Bit_Chain * dat,
     dwg_encode_LAYOUT(dat, obj);
     break;
   default:
-      if (obj->type == obj->parent->dwg_ot_layout)
+      if (obj->type == obj->parent->layout_number)
         {
           dwg_encode_LAYOUT(dat, obj);
         }

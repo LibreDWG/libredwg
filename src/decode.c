@@ -372,7 +372,7 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
 
   /* read the classes
    */
-  dwg->dwg_ot_layout = 0;
+  dwg->layout_number = 0;
   dwg->num_classes = 0;
   j = 0;
   do
@@ -402,7 +402,7 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
       klass->item_class_id = bit_read_BS(dat);
 
       if (strcmp((const char *)klass->dxfname, "LAYOUT") == 0)
-        dwg->dwg_ot_layout = klass->number;
+        dwg->layout_number = klass->number;
 
       dwg->num_classes++;
       if (dwg->num_classes > 100)
@@ -628,7 +628,7 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
       for (i = 0; i < 14; i++)
         {
           sig2 = bit_read_RC(dat);
-          dwg->second_header.handlerik[i].size = sig2;
+          dwg->second_header.handler[i].size = sig2;
           //if (loglevel) fprintf (stderr, "\nSize: %u\n", sig2);
           sig = bit_read_RC(dat);
           //if (loglevel) fprintf (stderr, "\t[%u]\n", sig);
@@ -636,7 +636,7 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
           for (j = 0; j < (unsigned)sig2; j++)
             {
               sig = bit_read_RC(dat);
-              dwg->second_header.handlerik[i].chain[j] = sig;
+              dwg->second_header.handler[i].chain[j] = sig;
               //if (loglevel) fprintf (stderr, " %02X", sig);
             }
         }
@@ -1207,7 +1207,7 @@ read_2004_section_classes(Bit_Chain* dat, Dwg_Data *dwg)
       c = bit_read_RC(&sec_dat);        // 0x00
       c = bit_read_B(&sec_dat);         // 1
 
-      dwg->dwg_ot_layout = 0;
+      dwg->layout_number = 0;
       dwg->num_classes = 0;
 
       do
@@ -1248,7 +1248,7 @@ read_2004_section_classes(Bit_Chain* dat, Dwg_Data *dwg)
           LOG_TRACE("DXF record name:  %s\n", dwg->dwg_class[idc].dxfname)
 
           if (strcmp((const char *)dwg->dwg_class[idc].dxfname, "LAYOUT") == 0)
-            dwg->dwg_ot_layout = dwg->dwg_class[idc].number;
+            dwg->layout_number = dwg->dwg_class[idc].number;
 
           dwg->num_classes++;
 
@@ -2721,7 +2721,7 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
       dwg_decode_LAYOUT(dat, obj);
       break;
     default:
-      if (obj->type == obj->parent->dwg_ot_layout)
+      if (obj->type == obj->parent->layout_number)
         {
           dwg_decode_LAYOUT(dat, obj);
         }

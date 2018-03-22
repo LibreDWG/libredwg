@@ -609,7 +609,7 @@ dwg_print_object(Dwg_Object *obj)
       dwg_print_LAYOUT(dat, obj);
       break;
     default:
-      if (obj->type == obj->parent->dwg_ot_layout)
+      if (obj->type == obj->parent->layout_number)
         {
           dwg_print_LAYOUT(dat, obj);
         }

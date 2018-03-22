@@ -423,6 +423,25 @@ get_next_owned_object(Dwg_Object* hdr_obj, Dwg_Object* current,
 void
 dwg_free(Dwg_Data * dwg)
 {
-  if (dwg && dwg->header.section)
-    free(dwg->header.section);
+  unsigned int i;
+  if (dwg)
+    {
+      if (dwg->bit_chain->size)
+        free(dwg->bit_chain->chain);
+#define FREE_IF(ptr) if (ptr) free(ptr)
+      FREE_IF(dwg->header.section);
+      FREE_IF(dwg->picture.chain);
+      FREE_IF(dwg->dwg_class);
+      for (i=0; i < dwg->header.num_descriptions; ++i)
+        {
+          FREE_IF(dwg->header.section_info[i].sections);
+        }
+      FREE_IF(dwg->header.section_info);
+      // TODO: per object and entity
+      // all handles, vectors, obj->tio.entity|object
+      //FREE_IF(obj->dwg_eed); 
+      FREE_IF(dwg->object_ref);
+      FREE_IF(dwg->object);
+#undef FREE_IF
+    }
 }

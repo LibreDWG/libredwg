@@ -3217,36 +3217,33 @@ typedef struct _dwg_struct
   Dwg_Chain picture;
 
   Dwg_Header_Variables header_vars;
+
   unsigned int num_classes;
   Dwg_Class * dwg_class;
 
   long unsigned int num_objects;
   Dwg_Object * object;
 
-  long unsigned int num_layers;
   long unsigned int num_entities;
-  /* Dwg_Object *layer; */
-
   long unsigned int num_object_refs;
   Dwg_Object_Ref ** object_ref;
 
+  long unsigned int num_layers;
   Dwg_Object * layer_control;
   Dwg_Object * mspace_block;
   Dwg_Object * pspace_block;
 
-  struct
-  {
+  struct {
     unsigned char unknown[6];
-    struct _handlerik
+    struct _handler
     {
       int size;
       unsigned char chain[4];
-    } handlerik[14];
+    } handler[14];
   } second_header;
 
   long unsigned int measurement;
-
-  unsigned int dwg_ot_layout;
+  unsigned int layout_number;
 
   struct _bit_chain *bit_chain;
 
