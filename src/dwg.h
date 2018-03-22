@@ -3221,7 +3221,7 @@ typedef struct _dwg_struct
   Dwg_Class * dwg_class;
 
   long unsigned int num_objects;
-  Dwg_Object *object;
+  Dwg_Object * object;
 
   long unsigned int num_layers;
   long unsigned int num_entities;
@@ -3231,6 +3231,8 @@ typedef struct _dwg_struct
   Dwg_Object_Ref ** object_ref;
 
   Dwg_Object * layer_control;
+  Dwg_Object * mspace_block;
+  Dwg_Object * pspace_block;
 
   struct
   {

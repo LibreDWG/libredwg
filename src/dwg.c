@@ -95,7 +95,7 @@ dwg_read_file(char *filename, Dwg_Data * dwg_data)
       free(bit_chain.chain);
       return -1;
     }
-  free(bit_chain.chain);
+  //free(bit_chain.chain);
 
   return 0;
 }
@@ -366,19 +366,15 @@ dwg_get_entity_layer(Dwg_Object_Entity * ent)
 Dwg_Object*
 dwg_next_object(Dwg_Object* obj)
 {
-  if ((obj->index+1) > obj->parent->num_objects-1)
-    return 0;
+  if ((obj->index+1) > (obj->parent->num_objects-1))
+    return NULL;
   return &obj->parent->object[obj->index+1];
 }
 
 Dwg_Object*
 dwg_ref_get_object(Dwg_Object_Ref* ref)
 {
-  if (ref->obj)
-    {
-      return ref->obj;
-    }
-  return NULL;
+  return ref->obj ? ref->obj : NULL;
 }
 
 Dwg_Object*
@@ -409,7 +405,7 @@ get_next_owned_object(Dwg_Object* hdr_obj, Dwg_Object* current,
 
   if (R_13 <= version && version <= R_2000)
     {
-      if (current==hdr->last_entity->obj) return 0;
+      if (current == hdr->last_entity->obj) return 0;
       return dwg_next_object(current);
     }
 

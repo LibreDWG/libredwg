@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <math.h>
+#include <assert.h>
 #ifdef HAVE_MALLOC_H
 #include <malloc.h>
 #endif
@@ -21012,8 +21013,9 @@ dwg_obj_block_header_get_name(dwg_obj_block_header *hdr, int *error)
     }
 }
 
-/// Returns 1st block header present in the dwg file.
+/// Returns 1st block header present in the dwg file
 /** Usage :- dwg_obj_block_header = dwg_get_block_header(dwg, &error);
+Usually the model space block.
 \param 1 dwg_data
 \param 2 int
 */
@@ -21022,15 +21024,30 @@ dwg_get_block_header(dwg_data *dwg, int *error)
 {
   Dwg_Object *obj;
   Dwg_Object_BLOCK_HEADER *blk;
+
+  *error = 0;
+  assert(dwg->num_classes < 1000);
+  assert(dwg->num_objects < 0xfffffff); // 0x4fa463eb
+  // cached?
+  if (dwg->mspace_block)
+    return dwg->mspace_block->tio.object->tio.BLOCK_HEADER;
+  else if (dwg->pspace_block)
+    return dwg->pspace_block->tio.object->tio.BLOCK_HEADER;
+
   obj = &dwg->object[0];
   while (obj && obj->type != DWG_TYPE_BLOCK_HEADER)
     {
+      assert(obj->size < 0xffff);
       obj = dwg_next_object(obj);
     }
   if (obj && DWG_TYPE_BLOCK_HEADER == obj->type)
     {
+      assert(obj->size < 0xffff);
       blk = obj->tio.object->tio.BLOCK_HEADER;
-      *error = 0;
+      if (!strcmp(blk->entry_name, "*Paper_Space"))
+        dwg->pspace_block = obj;
+      else if (!strcmp(blk->entry_name, "*Model_Space"))
+        dwg->mspace_block = obj;
       return blk;
     }
   else

@@ -116,7 +116,7 @@ read_r2007_meta_data(Bit_Chain *dat, Dwg_Data *dwg);
 /*--------------------------------------------------------------------------------
  * Public variables
  */
-long unsigned int ktl_lastaddress;
+//long unsigned int ktl_lastaddress;
 
 /*--------------------------------------------------------------------------------
  * Public function definitions
@@ -280,7 +280,7 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
    * R2000+, mostly redundant file header information
    */
 
-  if (dwg->header.num_sections == 6)
+  if (dwg->header.num_sections == 6 && dwg->header.version >= R_2000)
     {
       int i;
       struct Dwg_AuxHeader* _obj = &dwg->auxheader;
@@ -295,14 +295,6 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
 
       #include "auxheader.spec"
 
-      /*
-      dwg->AuxHeader.size = DWG_AUXHEADER_SIZE;
-      dwg->AuxHeader.byte = dwg->AuxHeader.bit = 0;
-      dwg->AuxHeader.chain = (unsigned char*)calloc(dwg->AuxHeader.size, 1);
-      memcpy(dwg->AuxHeader.chain, &dat->chain[dat->byte], dwg->AuxHeader.size);
-      */
-      //bit_explore_chain ((Bit_Chain *) &dwg->unknown1, dwg->unknown1.size);
-      //bit_print ((Bit_Chain *) &dwg->unknown1, dwg->unknown1.size);
     }
 
   /*-------------------------------------------------------------------------
@@ -385,39 +377,39 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
   j = 0;
   do
     {
-      unsigned int idc;
+      unsigned int i;
+      Dwg_Class *klass;
 
-      idc = dwg->num_classes;
-      if (idc == 0)
-        dwg->dwg_class = (Dwg_Class *) calloc(1, sizeof(Dwg_Class));
+      i = dwg->num_classes;
+      if (i == 0)
+        dwg->dwg_class = (Dwg_Class *) malloc(sizeof(Dwg_Class));
       else
-        dwg->dwg_class = (Dwg_Class *) realloc(dwg->dwg_class, (idc + 1)
+        dwg->dwg_class = (Dwg_Class *) realloc(dwg->dwg_class, (i + 1)
             * sizeof(Dwg_Class));
       if (!dwg->dwg_class)
         {
           LOG_ERROR("Out of memory");
           return -2;
         }
+      klass = &dwg->dwg_class[i];
+      memset(klass, 0, sizeof(Dwg_Class));
+      klass->number  = bit_read_BS(dat);
+      klass->version = bit_read_BS(dat);
+      klass->appname = bit_read_TV(dat);
+      klass->cppname = bit_read_TV(dat);
+      klass->dxfname = bit_read_TV(dat);
+      klass->wasazombie = bit_read_B(dat);
+      klass->item_class_id = bit_read_BS(dat);
 
-      dwg->dwg_class[idc].number = bit_read_BS(dat);
-      dwg->dwg_class[idc].version = bit_read_BS(dat);
-      dwg->dwg_class[idc].appname = bit_read_TV(dat);
-      dwg->dwg_class[idc].cppname = bit_read_TV(dat);
-      dwg->dwg_class[idc].dxfname = bit_read_TV(dat);
-      dwg->dwg_class[idc].wasazombie = bit_read_B(dat);
-      dwg->dwg_class[idc].item_class_id = bit_read_BS(dat);
-
-      if (strcmp((const char *)dwg->dwg_class[idc].dxfname, "LAYOUT") == 0)
-        dwg->dwg_ot_layout = dwg->dwg_class[idc].number;
+      if (strcmp((const char *)klass->dxfname, "LAYOUT") == 0)
+        dwg->dwg_ot_layout = klass->number;
 
       dwg->num_classes++;
-      /*
       if (dwg->num_classes > 100)
 	{
-	  fprintf(stderr, "number of classes is greater than 100. TODO: Why should we stop here?\n");
-	  break;//TODO: Why?!
+	  LOG_ERROR("number of classes is greater than 100");
+	  break;
 	}
-      */
     }
   while (dat->byte < (lasta - 1));
 
@@ -694,7 +686,7 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
 
   //step II of handles parsing: resolve pointers from handle value
   //XXX: move this somewhere else
-  LOG_TRACE("\n\nResolving pointers from ObjectRef vector.\n")
+  LOG_TRACE("\nResolving pointers from ObjectRef vector.\n")
   return resolve_objectref_vector(dwg);
 }
 
@@ -2430,12 +2422,13 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
 
 static void
 dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
-    long unsigned int address)
+                      long unsigned int address)
 {
   long unsigned int previous_address;
   long unsigned int object_address;
   unsigned char previous_bit;
   Dwg_Object *obj;
+  long unsigned int num = dwg->num_objects;
 
   /* Keep the previous address
    */
@@ -2450,10 +2443,10 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
   /*
    * Reserve memory space for objects
    */
-  if (!dwg->num_objects)
-    dwg->object = (Dwg_Object *) calloc(1, sizeof(Dwg_Object));
+  if (!num)
+    dwg->object = (Dwg_Object *) malloc(sizeof(Dwg_Object));
   else
-    dwg->object = (Dwg_Object *) realloc(dwg->object, (dwg->num_objects + 1)
+    dwg->object = (Dwg_Object *) realloc(dwg->object, (num + 1)
         * sizeof(Dwg_Object));
   if (!dwg->object)
     {
@@ -2463,22 +2456,23 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
 
   if (loglevel)
       LOG_INFO("\n\n======================\nObject number: %lu",
-          dwg->num_objects)
+               num)
 
-  obj = &dwg->object[dwg->num_objects];
-  obj->index = dwg->num_objects;
+  obj = &dwg->object[num];
+  memset(obj, 0, sizeof(Dwg_Object));
+  obj->index = num;
   dwg->num_objects++;
-
+  /*
   obj->handle.code = 0;
   obj->handle.size = 0;
   obj->handle.value = 0;
-
+  */
   obj->parent = dwg;
   obj->size = bit_read_MS(dat);
   object_address = dat->byte;
-  ktl_lastaddress = dat->byte + obj->size; /* (calculate the bitsize) */
+  //ktl_lastaddress = dat->byte + obj->size; /* (calculate the bitsize) */
   obj->type = bit_read_BS(dat);
-  obj->bitsize = 0;
+  //obj->bitsize = 0;
 
   LOG_INFO(" Type: %d/0x%x\n", obj->type, obj->type)
 
@@ -2626,6 +2620,9 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
       break;
     case DWG_TYPE_BLOCK_HEADER:
       dwg_decode_BLOCK_HEADER(dat, obj);
+      /* XXX 
+       * We cannot cache dwg->*space_block here as dwg->objects might get realloc'ed
+       */
       break;
     case DWG_TYPE_LAYER_CONTROL:
       //set LAYER_CONTROL object - helps keep track of layers
