@@ -66,7 +66,7 @@ dwg_read_file(char *filename, Dwg_Data * dwg_data)
   bit_chain.bit = 0;
   bit_chain.byte = 0;
   bit_chain.size = attrib.st_size;
-  bit_chain.chain = (unsigned char *) malloc(bit_chain.size);
+  bit_chain.chain = (unsigned char *) calloc(1, bit_chain.size);
   if (!bit_chain.chain)
     {
       LOG_ERROR("Not enough memory.\n")
@@ -110,6 +110,9 @@ dwg_write_file(char *filename, Dwg_Data * dwg_data)
   FILE *dt;
   struct stat atrib;
   Bit_Chain bit_chain;
+
+  assert(filename);
+  assert(dwg_data);
   bit_chain.version = (Dwg_Version_Type)dwg_data->header.version;
   bit_chain.from_version = (Dwg_Version_Type)dwg_data->header.from_version;
 
@@ -164,6 +167,7 @@ dwg_bmp(Dwg_Data *dwg, BITCODE_RL *size)
   Bit_Chain *dat;
 
   *size = 0;
+  assert(dwg);
   dat = (Bit_Chain*) &dwg->picture;
   if (!dat)
     {
@@ -220,66 +224,78 @@ dwg_bmp(Dwg_Data *dwg, BITCODE_RL *size)
 double
 dwg_model_x_min(Dwg_Data *dwg)
 {
+  assert(dwg);
   return dwg->header_vars.EXTMIN.x;
 }
 
 double
 dwg_model_x_max(Dwg_Data *dwg)
 {
+  assert(dwg);
   return dwg->header_vars.EXTMAX.x;
 }
 
 double
 dwg_model_y_min(Dwg_Data *dwg)
 {
+  assert(dwg);
   return dwg->header_vars.EXTMIN.y;
 }
 
 double
 dwg_model_y_max(Dwg_Data *dwg)
 {
+  assert(dwg);
   return dwg->header_vars.EXTMAX.y;
 }
 
 double
 dwg_model_z_min(Dwg_Data *dwg)
 {
+  assert(dwg);
   return dwg->header_vars.EXTMIN.z;
 }
 
 double
 dwg_model_z_max(Dwg_Data *dwg)
 {
+  assert(dwg);
   return dwg->header_vars.EXTMAX.z;
 }
 
 double
 dwg_page_x_min(Dwg_Data *dwg)
 {
+  assert(dwg);
   return dwg->header_vars.EXTMIN.x;
 }
 
 double
 dwg_page_x_max(Dwg_Data *dwg)
 {
+  assert(dwg);
   return dwg->header_vars.PEXTMAX.x;
 }
 
 double
 dwg_page_y_min(Dwg_Data *dwg)
 {
+  assert(dwg);
   return dwg->header_vars.PEXTMIN.y;
 }
 
 double
 dwg_page_y_max(Dwg_Data *dwg)
 {
+  assert(dwg);
   return dwg->header_vars.PEXTMAX.y;
 }
 
 unsigned int
 dwg_get_layer_count(Dwg_Data *dwg)
 {
+  assert(dwg);
+  assert(dwg->layer_control->tio.object);
   return dwg->layer_control->tio.object->tio.LAYER_CONTROL->num_entries;
 }
 
@@ -287,8 +303,11 @@ Dwg_Object_LAYER **
 dwg_get_layers(Dwg_Data *dwg)
 {
   unsigned int i;
-  Dwg_Object_LAYER ** layers = (Dwg_Object_LAYER **) malloc(
-		dwg_get_layer_count(dwg) * sizeof (Dwg_Object_LAYER*));
+  Dwg_Object_LAYER ** layers;
+  
+  assert(dwg);
+  layers = (Dwg_Object_LAYER **) calloc(dwg_get_layer_count(dwg),
+                                        sizeof (Dwg_Object_LAYER*));
   for (i=0; i<dwg_get_layer_count(dwg); i++)
     {
       layers[i] = dwg->layer_control->tio.object->tio.LAYER_CONTROL->
@@ -300,18 +319,21 @@ dwg_get_layers(Dwg_Data *dwg)
 long unsigned int
 dwg_get_object_count(Dwg_Data *dwg)
 {
+  assert(dwg);
   return dwg->num_objects;
 }
 
 long unsigned int
 dwg_get_object_object_count(Dwg_Data *dwg)
 {
+  assert(dwg);
   return dwg->num_objects - dwg->num_entities;
 }
 
 long unsigned int
 dwg_get_entity_count(Dwg_Data *dwg)
 {
+  assert(dwg);
   return dwg->num_entities;
 }
 
@@ -319,8 +341,11 @@ Dwg_Object_Entity **
 dwg_get_entities(Dwg_Data *dwg)
 {
   long unsigned int i, ent_count = 0;
-  Dwg_Object_Entity ** entities = (Dwg_Object_Entity **) malloc(
-                dwg_get_entity_count(dwg) * sizeof (Dwg_Object_Entity*));
+  Dwg_Object_Entity ** entities;
+
+  assert(dwg);
+  entities = (Dwg_Object_Entity **) calloc(dwg_get_entity_count(dwg),
+                                           sizeof (Dwg_Object_Entity*));
   for (i=0; i<dwg->num_objects; i++)
     {
       if (dwg->object[i].supertype == DWG_SUPERTYPE_ENTITY)

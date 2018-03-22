@@ -237,7 +237,7 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
     dwg->header.num_sections = 6;
 
   // So far seen 3-6 sections. Most emit only 3-5 sections.
-  dwg->header.section = (Dwg_Section*) malloc(sizeof(Dwg_Section)
+  dwg->header.section = (Dwg_Section*) calloc(1, sizeof(Dwg_Section)
       * dwg->header.num_sections);
   if (!dwg->header.section)
     {
@@ -298,7 +298,7 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
       /*
       dwg->AuxHeader.size = DWG_AUXHEADER_SIZE;
       dwg->AuxHeader.byte = dwg->AuxHeader.bit = 0;
-      dwg->AuxHeader.chain = (unsigned char*)malloc(dwg->AuxHeader.size);
+      dwg->AuxHeader.chain = (unsigned char*)calloc(dwg->AuxHeader.size, 1);
       memcpy(dwg->AuxHeader.chain, &dat->chain[dat->byte], dwg->AuxHeader.size);
       */
       //bit_explore_chain ((Bit_Chain *) &dwg->unknown1, dwg->unknown1.size);
@@ -322,7 +322,7 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
           LOG_TRACE("         PICTURE (end): %8X\n",
                 (unsigned int) dat->byte)
           dwg->picture.size = (dat->byte - 16) - start_address;
-          dwg->picture.chain = (unsigned char *) malloc(dwg->picture.size);
+          dwg->picture.chain = (unsigned char *) calloc(1, dwg->picture.size);
           if (!dwg->picture.chain)
             {
               LOG_ERROR("Out of memory");
@@ -389,7 +389,7 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
 
       idc = dwg->num_classes;
       if (idc == 0)
-        dwg->dwg_class = (Dwg_Class *) malloc(sizeof(Dwg_Class));
+        dwg->dwg_class = (Dwg_Class *) calloc(1, sizeof(Dwg_Class));
       else
         dwg->dwg_class = (Dwg_Class *) realloc(dwg->dwg_class, (idc + 1)
             * sizeof(Dwg_Class));
@@ -911,7 +911,7 @@ read_R2004_section_map(Bit_Chain* dat, Dwg_Data * dwg,
   dwg->header.section = 0;
 
   // decompressed data
-  decomp = (char *)malloc(decomp_data_size * sizeof(char));
+  decomp = (char *)calloc(decomp_data_size, sizeof(char));
   if (!decomp)
     {
       LOG_ERROR("Out of memory");
@@ -931,7 +931,7 @@ read_R2004_section_map(Bit_Chain* dat, Dwg_Data * dwg,
   while(bytes_remaining)
     {
       if (dwg->header.num_sections==0)
-        dwg->header.section = (Dwg_Section*) malloc(sizeof(Dwg_Section));
+        dwg->header.section = (Dwg_Section*) calloc(1, sizeof(Dwg_Section));
       else
         dwg->header.section = (Dwg_Section*) realloc(dwg->header.section,
                        sizeof(Dwg_Section) * (dwg->header.num_sections+1));
@@ -1000,7 +1000,7 @@ read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
   uint32_t data_size;
   uint64_t start_offset;
 
-  decomp = (char *)malloc(decomp_data_size * sizeof(char));
+  decomp = (char *)calloc(decomp_data_size, sizeof(char));
   if (!decomp)
     {
       LOG_ERROR("Out of memory");
@@ -1011,7 +1011,7 @@ read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
 
   memcpy(&dwg->header.num_descriptions, decomp, 4);
   dwg->header.section_info = (Dwg_Section_Info*)
-    malloc(sizeof(Dwg_Section_Info) * dwg->header.num_descriptions);
+    calloc(dwg->header.num_descriptions, sizeof(Dwg_Section_Info));
   if (!dwg->header.section_info)
     {
       LOG_ERROR("Out of memory");
@@ -1063,7 +1063,7 @@ read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
             dwg->header.section_info[i].name)
 
       dwg->header.section_info[i].sections = (Dwg_Section**)
-        malloc(dwg->header.section_info[i].num_sections * sizeof(Dwg_Section*));
+        calloc(dwg->header.section_info[i].num_sections, sizeof(Dwg_Section*));
       if (!dwg->header.section_info[i].sections)
         {
           LOG_ERROR("Out of memory");
@@ -1084,9 +1084,9 @@ read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
 
 	      dwg->header.section_info[i].sections[j] = find_section(dwg, section_number);
 
-	      LOG_TRACE("Section Number: %u\n", section_number)
-              LOG_TRACE("Data size:      %u\n", data_size) //compressed
-	      LOG_TRACE("Start offset:   0x%llx\n", start_offset)
+	      LOG_TRACE("Section Number: %d\n", section_number)
+              LOG_TRACE("Data size:      %d\n", data_size) //compressed
+	      LOG_TRACE("Start offset:   0x%" PRIx64 "\n", start_offset)
 	    }
 	}// sanity check
       else
@@ -1140,7 +1140,7 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *dwg,
 
   max_decomp_size = info->num_sections * info->max_decomp_size;
 
-  decomp = (char *)malloc(max_decomp_size * sizeof(char));
+  decomp = (char *)calloc(max_decomp_size, sizeof(char));
   if (!decomp)
     {
       LOG_ERROR("Out of memory");
@@ -1224,7 +1224,7 @@ read_2004_section_classes(Bit_Chain* dat, Dwg_Data *dwg)
 
           idc = dwg->num_classes;
           if (idc == 0)
-            dwg->dwg_class = (Dwg_Class *) malloc(sizeof(Dwg_Class));
+            dwg->dwg_class = (Dwg_Class *) calloc(1, sizeof(Dwg_Class));
           else
             dwg->dwg_class = (Dwg_Class *) realloc(dwg->dwg_class, (idc + 1)
                 * sizeof(Dwg_Class));
@@ -1689,7 +1689,7 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
       if (ent->picture_size < 210210)
         {
           BITCODE_BLL l;
-          ent->picture = (char *)malloc(ent->picture_size);
+          ent->picture = (char *)calloc(ent->picture_size, 1);
           if (!ent->picture)
             {
               LOG_ERROR("Out of memory");
@@ -1875,7 +1875,7 @@ dwg_decode_object(Bit_Chain * dat, Dwg_Object_Object * obj)
 static Dwg_Object *
 dwg_resolve_handle(Dwg_Data* dwg, long unsigned int absref)
 {
-  //FIXME find a faster algorithm
+  //FIXME find a faster algorithm. this is linear search, absref's are unsorted.
   long unsigned int i;
   for (i = 0; i < dwg->num_objects; i++)
     {
@@ -1891,8 +1891,8 @@ dwg_resolve_handle(Dwg_Data* dwg, long unsigned int absref)
 static Dwg_Object_Ref *
 dwg_decode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg)
 {
-  // Welcome to the house of evil code!
-  Dwg_Object_Ref* ref = (Dwg_Object_Ref *) malloc(sizeof(Dwg_Object_Ref));
+  // Welcome to the house of evil code
+  Dwg_Object_Ref* ref = (Dwg_Object_Ref *) calloc(1, sizeof(Dwg_Object_Ref));
   if (!ref)
     {
       LOG_ERROR("Out of memory");
@@ -1912,16 +1912,16 @@ dwg_decode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg)
           LOG_ERROR("Could not read handleref in the header variables section")
         }
       free(ref);
-      return 0;
+      return NULL;
     }
 
-  //if the handle size is 0, it is probably a null handle. It
-  //shouldn't be placed in the object ref vector
+  // if the handle size is 0, it is probably a null handle. It
+  // shouldn't be placed in the object ref vector
   if (ref->handleref.size)
     {
-      //Reserve memory space for object references
+      // Reserve memory space for object references
       if (!dwg->num_object_refs)
-        dwg->object_ref = (Dwg_Object_Ref **) malloc(REFS_PER_REALLOC * sizeof(Dwg_Object_Ref*));
+        dwg->object_ref = (Dwg_Object_Ref **) calloc(REFS_PER_REALLOC, sizeof(Dwg_Object_Ref*));
       else
         if (dwg->num_object_refs % REFS_PER_REALLOC == 0)
           {
@@ -1938,24 +1938,26 @@ dwg_decode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg)
     }
   else
     {
-      ref->obj = 0;
+      ref->obj = NULL;
       ref->absolute_ref = 0;
       return ref;
     }
-  //we receive a null obj when we are reading
+
+  // we receive a null obj when we are reading
   // handles in the header variables section
   if (!obj)
     {
       ref->absolute_ref = ref->handleref.value;
-      ref->obj = 0;
+      ref->obj = NULL;
       return ref;
     }
+
   /*
    * sometimes the code indicates the type of ownership
    * in other cases the handle is stored as an offset from some other handle
    * how is it determined?
    */
- switch(ref->handleref.code) //that's right: don't bother the code on the spec.
+ switch (ref->handleref.code) //that's right: don't bother the code on the spec.
     {
     case 0x06: //what if 6 means HARD_OWNER?
       ref->absolute_ref = (obj->handle.value + 1);
@@ -2125,7 +2127,7 @@ dwg_decode_xdata(Bit_Chain * dat, int size)
 
   while (dat->byte < end_address)
     {
-      rbuf = (Dwg_Resbuf *) malloc(sizeof(Dwg_Resbuf));
+      rbuf = (Dwg_Resbuf *) calloc(1, sizeof(Dwg_Resbuf));
       if (!rbuf)
         {
           LOG_ERROR("Out of memory");
@@ -2141,7 +2143,7 @@ dwg_decode_xdata(Bit_Chain * dat, int size)
           codepage = bit_read_RC(dat);
           if (length > 0)
             {
-              rbuf->value.str = (char *)malloc((length + 1) * sizeof(char));
+              rbuf->value.str = (char *)calloc(length + 1, sizeof(char));
               if (!rbuf->value.str)
                 {
                   LOG_ERROR("Out of memory");
@@ -2174,7 +2176,7 @@ dwg_decode_xdata(Bit_Chain * dat, int size)
           rbuf->value.chunk.size = bit_read_RC(dat);
           if (rbuf->value.chunk.size > 0)
             {
-              rbuf->value.chunk.data = (char *)malloc(rbuf->value.chunk.size * sizeof(char));
+              rbuf->value.chunk.data = (char *)calloc(rbuf->value.chunk.size, sizeof(char));
               if (!rbuf->value.chunk.data)
                 {
                   LOG_ERROR("Out of memory");
@@ -2449,7 +2451,7 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
    * Reserve memory space for objects
    */
   if (!dwg->num_objects)
-    dwg->object = (Dwg_Object *) malloc(sizeof(Dwg_Object));
+    dwg->object = (Dwg_Object *) calloc(1, sizeof(Dwg_Object));
   else
     dwg->object = (Dwg_Object *) realloc(dwg->object, (dwg->num_objects + 1)
         * sizeof(Dwg_Object));
@@ -2754,7 +2756,7 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
 #endif
           obj->supertype = DWG_SUPERTYPE_UNKNOWN;
           /* neither object nor entity, at least we don't know yet */
-          obj->tio.unknown = (unsigned char*)malloc(obj->size);
+          obj->tio.unknown = (unsigned char*)calloc(obj->size, 1);
           if (!obj->tio.unknown)
             {
               LOG_ERROR("Out of memory");
