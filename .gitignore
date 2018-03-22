@@ -19,7 +19,7 @@ gcov.log
 # globs, in specific dirs
 /examples/*.log
 /examples/*.bmp
-/examples/*-rewrite.dwg
+/examples/*-dwgrewrite.dwg
 /src/*.gcno
 /src/*.gcov
 /test/testcases/*.gcov
@@ -61,12 +61,14 @@ gcov.log
 /doc/LibreDWG.pdf
 /doc/stamp-vti
 /doc/version.texi
-/examples/get_bmp
+/examples/dwgbmp
 /examples/load_dwg
-/examples/rewrite
-/examples/test
-/examples/testsvg2
-/examples/testSVG
+/examples/dwgrewrite
+/examples/dwgread
+/examples/dwg2svg2
+/examples/dwg2SVG
+/examples/dwg2dxf
+/examples/dwg_ps
 /libtool
 /m4/libtool.m4
 /m4/ltoptions.m4
