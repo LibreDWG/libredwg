@@ -32,6 +32,7 @@
 #define log_if_error(msg) \
   if (error) { fprintf(stderr, "ERROR: %s", msg); exit(1); }
 
+dwg_data dwg;
 double model_xmin, model_ymin;
 double page_width, page_height, scale;
 
@@ -60,8 +61,8 @@ int
 test_SVG(char *filename)
 {
   int error;
-  dwg_data dwg;
 
+  memset(&dwg, 0, sizeof(dwg_data));
   error = dwg_read_file(filename, &dwg);
   if (!error)
     {
@@ -343,6 +344,16 @@ output_SVG(dwg_data* dwg)
   page_height = dy;
   scale *= (scale_x > scale_y ? scale_x : scale_y);
 
+  hdr = dwg_get_block_header(dwg, &error);
+  log_if_error("get_block_header");
+  ctrl = dwg_block_header_get_block_control(hdr, &error);
+  log_if_error("block_header_get_block_control");
+  
+  hdr_refs = dwg_obj_block_control_get_block_headers(ctrl, &error);
+  log_if_error("block_control_get_block_headers");
+  num_hdr_objs = dwg_obj_block_control_get_num_entries(ctrl, &error);
+  log_if_error("block_control_get_num_entries");
+
   printf("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
     "<svg\n"
     "   xmlns:svg=\"http://www.w3.org/2000/svg\"\n"
@@ -352,22 +363,11 @@ output_SVG(dwg_data* dwg)
     "   width=\"%f\"\n"
     "   height=\"%f\"\n"
     ">\n", page_width, page_height);
-
-  hdr = dwg_get_block_header(dwg, &error);
-  log_if_error("get_block_header");
-  ctrl = dwg_block_header_get_block_control(hdr, &error);
-  log_if_error("block_header_get_block_control");
-  
-  hdr_refs = dwg_obj_block_control_get_block_headers(ctrl, &error);
-  log_if_error("block_control_get_block_headers");
-
-  num_hdr_objs = dwg_obj_block_control_get_num_entries(ctrl, &error);
-  log_if_error("block_control_get_num_entries");
   printf("\t<defs>\n");
-    for (i=0; i<num_hdr_objs; i++)
-      {
-        output_BLOCK_HEADER(hdr_refs[i]);
-      }
+  for (i=0; i<num_hdr_objs; i++)
+    {
+      output_BLOCK_HEADER(hdr_refs[i]);
+    }
   printf("\t</defs>\n");
 
   output_BLOCK_HEADER(dwg_obj_block_control_get_model_space(ctrl, &error));
