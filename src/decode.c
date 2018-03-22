@@ -354,8 +354,8 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
   // Check CRC-on
   dat->bit = 0;
   ckr = dwg->header_vars.CRC;
-  ckr2 = bit_calc_CRC(0xc0c1, dat->chain + dwg->header.section[0].address + 16,
-                      dwg->header.section[0].size - 34);
+  pvz = dwg->header.section[0].address + 16;
+  ckr2 = bit_calc_CRC(0xc0c1, &(dat->chain[pvz]), dwg->header.section[0].size - 34);
   if (ckr != ckr2)
     {
       printf("Error: Section[%d] CRC mismatch %d <=> %d\n",
@@ -425,8 +425,8 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
   dat->byte = dwg->header.section[1].address + dwg->header.section[1].size - 18;
   dat->bit = 0;
   ckr = bit_read_RS(dat);
-  ckr2 = bit_calc_CRC(0xc0c1, dat->chain + dwg->header.section[1].address + 16,
-                      dwg->header.section[1].size - 34);
+  pvz = dwg->header.section[1].address + 16;
+  ckr2 = bit_calc_CRC(0xc0c1, &(dat->chain[pvz]), dwg->header.section[1].size - 34);
   if (ckr != ckr2)
     {
       printf("Error: Section[%d] CRC mismatch %d <=> %d\n",

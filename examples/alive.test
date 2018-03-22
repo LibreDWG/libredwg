@@ -40,18 +40,18 @@ run ()
     prog=$1
     dwg=$2
 
-    prog=`basename $prog .exe`
-    log=$dwg-$prog.log
+    bprog=`basename $prog .exe`
+    log=$dwg-$bprog.log
     arg="${srcdir}/$dwg.dwg"
-    if test $prog = dwgrewrite; then
-        arg="$arg ${srcdir}/$dwg-$prog.dwg"
+    if test $bprog = dwgrewrite; then
+        arg="$arg ${srcdir}/$dwg-$bprog.dwg"
     fi
-    echo LIBREDWG_TRACE=9 ./$prog $arg
-    if LIBREDWG_TRACE=9 ./$prog $arg > $log 2>&1
+    echo LIBREDWG_TRACE=9 $TESTPROG ./$prog $arg
+    if LIBREDWG_TRACE=9 $TESTPROG ./$prog $arg > $log 2>&1
     then
         rm $log
     else
-        if test $prog = dwgrewrite
+        if test $bprog = dwgrewrite
         then
            tmpnum=$(expr 1 + $problems)
            echo $(basename $0): TODO $prog $tmpnum failures

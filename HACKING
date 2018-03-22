@@ -105,6 +105,16 @@ someone should probably think about and resolve them!
 
   $ libtool --mode=execute gdb PROGRAM
 
+* mingw cross-compilation
+
+  If you have 32-bit wine use the i686-w64-mingw32 target,
+  add CFLAGS="-g -gdwarf-2" for debugging with winedbg.
+
+  Recommended for debugging:
+
+  $ ./configure --enable-trace --enable-write --host=i686-w64-mingw32 --disable-shared
+  $ make CFLAGS="-g -gdwarf-2"
+
 * etc
 #+STARTUP: odd
   Local variables:

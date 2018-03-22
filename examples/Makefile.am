@@ -42,9 +42,17 @@ dwg2SVG_SOURCES  = dwg2SVG.c
 load_dwg_SOURCES = load_dwg.c
 dwg2svg2_SOURCES = dwg2svg2.c
 
+if HAVE_WINE
 TESTS_ENVIRONMENT = \
  PROGS='$(bin_PROGRAMS) $(check_PROGRAMS)' \
- srcdir='$(srcdir)'
+ srcdir='$(srcdir)' \
+ TESTPROG='wine'
+else
+TESTS_ENVIRONMENT = \
+ PROGS='$(bin_PROGRAMS) $(check_PROGRAMS)' \
+ srcdir='$(srcdir)' \
+ TESTPROG=''
+endif
 
 TESTS = alive.test
 
