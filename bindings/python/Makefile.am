@@ -24,15 +24,17 @@
 
 ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 
+## magic to override pkgpythondir = $(pythondir)/$(PACKAGE)
+## at least in Ubuntu python wouldn't find the module there
+pkgpythondir = $(pythondir)
+
+if HAVE_SWIG_PYTHON
+
 BUILT_SOURCES = swig_wrap_python.c
 SWIG_SOURCES = $(srcdir)/../dwg.i $(top_srcdir)/src/dwg.h
 
 dist_python_PYTHON = libredwg.py
 pyexec_LTLIBRARIES = _libredwg.la
-
-## magic to override pkgpythondir = $(pythondir)/$(PACKAGE)
-## at least in Ubuntu python wouldn't find the module there
-pkgpythondir = $(pythondir)
 
 # the underscore is correct. the python interpreter looks for _libredwg.so
 # when libredwg module is loaded
@@ -56,3 +58,5 @@ swig_wrap_python.c : $(SWIG_SOURCES) Makefile.am
 ##
 ##    $(srcdir)/swig_wrap_python.c : $(SWIG_SOURCES)
 ##	$(SWIG) $(SWIG_PYTHON_OPT) -I$(top_srcdir)/src -o $@ $<
+
+endif

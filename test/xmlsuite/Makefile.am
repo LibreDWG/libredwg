@@ -5,6 +5,8 @@ AM_CPPFLAGS = $(XML2_CFLAGS)
 AM_CFLAGS = -I$(top_srcdir)/src @WARN_CFLAGS@
 LDADD = $(top_builddir)/src/libredwg.la $(XML2_LIBS)
 
+if HAVE_SWIG_PYTHON
+
 # Set env var ‘PYTHON’ so that check.py can invoke other .py programs.
 TESTS_ENVIRONMENT = PYTHON='$(PYTHON)' $(PYTHON)
 
@@ -27,6 +29,8 @@ endif
 CLEANFILES = *.log *.sum site.bak result.htm
 if ENABLE_GCOV
 CLEANFILES  += *.gcov *.gcno *.gcda gcov.log
+endif
+
 endif
 
 EXTRA_DIST = suffix.c common.c

@@ -11,9 +11,10 @@ dnl along with this program.  If not, see <http://www.gnu.org/licenses/>.
 AC_PREREQ([2.61])
 AC_INIT([LibreDWG],[0.4-dev],[libredwg@gnu.org])
 AC_CONFIG_AUX_DIR([build-aux])
+dnl for older systems use this:
+dnl AM_INIT_AUTOMAKE([1.11.6 gnu no-define])
 AM_INIT_AUTOMAKE([1.12.2 gnu no-define serial-tests dist-xz])
 
-dnl libretoolize asked me for it
 AC_CONFIG_MACRO_DIR([m4])
 
 # Check if automake supports 'pretty' builds, if so enable them by default
@@ -41,12 +42,13 @@ AC_CHECK_LIB([ps],[PS_open_file],
   libredwg_have_libps=yes,
   libredwg_have_libps=no)
 
-PKG_CHECK_MODULES([LIBXML2],[libxml-2.0],,
-[AC_MSG_ERROR([Install libxml-2.0 first])])
-
-XML2_CFLAGS=`$PKG_CONFIG libxml-2.0 --cflags`
+dnl PKG_CHECK_MODULES([LIBXML2], [libxml-2.0], [],
+dnl    AC_MSG_ERROR([Install libxml-2.0 first]))
+if pkg-config --exists libxml-2.0; then
+  XML2_CFLAGS=`pkg-config libxml-2.0 --cflags`
+  XML2_LIBS=`pkg-config libxml-2.0 --libs`
+fi
 AC_SUBST([XML2_CFLAGS])
-XML2_LIBS=`$PKG_CONFIG libxml-2.0 --libs`
 AC_SUBST([XML2_LIBS])
 
 dnl Checks for header files.
@@ -89,7 +91,11 @@ dnl   WARN_CFLAGS="$WARN_CFLAGS -Wno-unused-variable"
 dnl fi
 dnl until we can make a release, favor no optims.
 dnl it's fast enough and better for debugging.
-CFLAGS="-g"
+if test x$ac_compiler_gnu = xyes; then
+  CFLAGS="-g -fno-omit-frame-pointer"
+else
+  CFLAGS="-g"
+fi
 
 if test "x$ac_cv_prog_cc_c99" = "xno"; then
    AC_MSG_WARN([This compiler ${CC} has no c99 support])
@@ -176,17 +182,21 @@ if test "x$host_os" = "xmingw32" -a "x$build_os" != "xmingw32"; then
 fi
 AM_CONDITIONAL([HAVE_WINE], [test -n "$WINE"])
 
-dnl for SWIG - should be optional
+dnl optional SWIG + python bindings
 if test x$cross_compiling = xno; then
-    AM_PATH_PYTHON([2.7])
-    AX_PKG_SWIG([1.3.17], [], [ AC_MSG_WARN([SWIG is required for python bindings]) ])
+    AX_PKG_SWIG([1.3.17], [],
+      AC_MSG_WARN([SWIG is required for python bindings. disabled]))
+    if test -n "$SWIG"; then
+      AM_PATH_PYTHON([2.7])
+      SWIG_PYTHON
+    fi
     dnl AX_SWIG_ENABLE_CXX
     dnl SWIG_MULTI_MODULE_SUPPORT
-    SWIG_PYTHON
 else
     AC_MSG_WARN([disabled swig bindings: cross-compiled])
 fi
-AM_CONDITIONAL([HAVE_SWIG_PYTHON], [test -n "$SWIG" && test -n "$PYTHON_VERSION"])
+AM_CONDITIONAL([HAVE_SWIG_PYTHON],
+  [test -n "$SWIG" && test -n "$PYTHON_VERSION"])
 
 dnl check for valgrind
 case $host_os in
