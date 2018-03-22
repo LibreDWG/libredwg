@@ -26,18 +26,28 @@ void
 add_line(double x1, double y1, double x2, double y2)
 {
   // Make something with that
+  (void)x1;
+  (void)y1;
+  (void)x2;
+  (void)y2;
 }
 
 void
 add_circle(double x, double y, double R)
 {
   // Make something with that
+  (void)x;
+  (void)y;
+  (void)R;
 }
 
 void
 add_text(double x, double y, char *txt)
 {
   // Make something with that
+  (void)x;
+  (void)y;
+  (void)txt;
 }
 
 int
