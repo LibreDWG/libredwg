@@ -3261,9 +3261,6 @@ int
 dwg_write_file(char *filename, Dwg_Data * dwg_data);
 #endif
 
-void
-dwg_free(Dwg_Data * dwg);
-
 unsigned char*
 dwg_bmp(Dwg_Data *, BITCODE_RL *);
 
@@ -3323,6 +3320,12 @@ get_next_owned_object(Dwg_Object* hdr_obj, Dwg_Object* current, Dwg_Object_BLOCK
 
 void
 dwg_print_object(Dwg_Object *obj);
+
+void
+dwg_object_free(Dwg_Object* obj);
+
+void
+dwg_free(Dwg_Data * dwg);
 
 #ifdef __cplusplus
 }

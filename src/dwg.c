@@ -81,6 +81,8 @@ dwg_read_file(char *filename, Dwg_Data * dwg_data)
           (long unsigned int) size, bit_chain.size, filename)
       fclose(fp);
       free(bit_chain.chain);
+      bit_chain.chain = NULL;
+      bit_chain.size = 0;
       return -1;
     }
   fclose(fp);
@@ -93,9 +95,14 @@ dwg_read_file(char *filename, Dwg_Data * dwg_data)
     {
       LOG_ERROR("Failed to decode file: %s\n", filename)
       free(bit_chain.chain);
+      bit_chain.chain = NULL;
+      bit_chain.size = 0;
       return -1;
     }
-  //free(bit_chain.chain);
+  //TODO: does dwg hold any char* pointers to the bit_chain?
+  free(bit_chain.chain);
+  bit_chain.chain = NULL;
+  bit_chain.size = 0;
 
   return 0;
 }
@@ -121,8 +128,11 @@ dwg_write_file(char *filename, Dwg_Data * dwg_data)
   if (dwg_encode_chains (dwg_data, &bit_chain))
     {
       LOG_ERROR("Failed to encode datastructure.\n")
-      if (bit_chain.size > 0)
+      if (bit_chain.size > 0) {
         free (bit_chain.chain);
+        bit_chain.chain = NULL;
+        bit_chain.size = 0;
+      }
       return -1;
     }
  
@@ -146,12 +156,17 @@ dwg_write_file(char *filename, Dwg_Data * dwg_data)
       LOG_ERROR("Failed to write data into the file: %s\n", filename)
       fclose (dt);
       free (bit_chain.chain);
+      bit_chain.chain = NULL;
+      bit_chain.size = 0;
       return -1;
     }
   fclose (dt);
 
-  if (bit_chain.size > 0)
+  if (bit_chain.size > 0) {
     free (bit_chain.chain);
+    bit_chain.chain = NULL;
+    bit_chain.size = 0;
+  }
 
   return 0;
 }
@@ -308,7 +323,7 @@ dwg_get_layers(Dwg_Data *dwg)
   assert(dwg);
   layers = (Dwg_Object_LAYER **) calloc(dwg_get_layer_count(dwg),
                                         sizeof (Dwg_Object_LAYER*));
-  for (i=0; i<dwg_get_layer_count(dwg); i++)
+  for (i=0; i < dwg_get_layer_count(dwg); i++)
     {
       layers[i] = dwg->layer_control->tio.object->tio.LAYER_CONTROL->
             layers[i]->obj->tio.object->tio.LAYER;
@@ -346,7 +361,7 @@ dwg_get_entities(Dwg_Data *dwg)
   assert(dwg);
   entities = (Dwg_Object_Entity **) calloc(dwg_get_entity_count(dwg),
                                            sizeof (Dwg_Object_Entity*));
-  for (i=0; i<dwg->num_objects; i++)
+  for (i=0; i < dwg->num_objects; i++)
     {
       if (dwg->object[i].supertype == DWG_SUPERTYPE_ENTITY)
         {
@@ -421,25 +436,43 @@ get_next_owned_object(Dwg_Object* hdr_obj, Dwg_Object* current,
 }
 
 void
+dwg_object_free(Dwg_Object* obj)
+{
+  // TODO: per object and entity
+  // all handles, vectors, strings, eed, obj->tio.entity|object
+  //FREE_IF(obj->dwg_eed);
+  LOG_TRACE("dwg_object_free %p\n", obj)
+  return;
+}
+
+void
 dwg_free(Dwg_Data * dwg)
 {
   unsigned int i;
   if (dwg)
     {
-      if (dwg->bit_chain->size)
-        free(dwg->bit_chain->chain);
+      LOG_TRACE("dwg_free %p\n", dwg)
+      /*if (dwg->bit_chain && dwg->bit_chain->size)
+        free (dwg->bit_chain->chain);*/
 #define FREE_IF(ptr) if (ptr) free(ptr)
       FREE_IF(dwg->header.section);
       FREE_IF(dwg->picture.chain);
+      for (i=0; i < dwg->num_classes; ++i)
+        {
+          FREE_IF(dwg->dwg_class[i].appname);
+          FREE_IF(dwg->dwg_class[i].cppname);
+          FREE_IF(dwg->dwg_class[i].dxfname);
+        }
       FREE_IF(dwg->dwg_class);
       for (i=0; i < dwg->header.num_descriptions; ++i)
         {
           FREE_IF(dwg->header.section_info[i].sections);
         }
       FREE_IF(dwg->header.section_info);
-      // TODO: per object and entity
-      // all handles, vectors, obj->tio.entity|object
-      //FREE_IF(obj->dwg_eed); 
+      for (i=0; i < dwg->num_objects; ++i)
+        {
+          dwg_object_free(&dwg->object[i]);
+        }
       FREE_IF(dwg->object_ref);
       FREE_IF(dwg->object);
 #undef FREE_IF
