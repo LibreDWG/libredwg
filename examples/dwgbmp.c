@@ -53,7 +53,6 @@ get_bmp(char *filename)
 
   /* Get DIB bitmap data */
   data = dwg_bmp(&dwg, &size);
-  dwg_free(&dwg);
 
   if (!data) {
     fprintf(stderr, "No thumb in dwg file\n");
@@ -96,6 +95,7 @@ get_bmp(char *filename)
 
   printf ("Success. Written preview image to '%s'\n", outfile);
   free (outfile);
+  dwg_free(&dwg);
   return success;
 }
 
