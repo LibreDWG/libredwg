@@ -8,6 +8,8 @@
 #include "dwg.h"
 #include "dwg_api.h"
 
+dwg_data g_dwg;
+
 /// This function Declaration reads DWG file
 int
 test_code(char *filename);
@@ -69,16 +71,14 @@ int
 test_code(char *filename)
 {
   int error;
-  dwg_data dwg;
 
-  error = dwg_read_file(filename, &dwg);
-
+  error = dwg_read_file(filename, &g_dwg);
   if (!error)
     {
-      output_test(&dwg);
+      output_test(&g_dwg);
     }
 
-  dwg_free(&dwg);
+  dwg_free(&g_dwg);
   /* This value is the return value for `main',
      so clamp it to either 0 or 1.  */
   return error ? 1 : 0;
