@@ -201,6 +201,7 @@ typedef struct _dwg_object_ref                    dwg_object_ref;
 typedef struct _dwg_handle                        dwg_handle;
 typedef struct _dwg_object_entity                 dwg_obj_ent;
 typedef struct _dwg_object_object                 dwg_obj_obj;
+typedef struct _dwg_class                         dwg_class;
 typedef struct _dwg_struct                        dwg_data;
 typedef struct _dwg_object_ref		          dwg_object_ref;
 typedef struct _dwg_entity_eed_data		  dwg_entity_eed_data;
@@ -4711,10 +4712,10 @@ unsigned int
 dwg_ent_get_num_eed(dwg_obj_ent *ent, int *error);
 
 dwg_entity_eed *
-dwg_ent_get_eed(dwg_obj_ent *ent, int index, int *error);
+dwg_ent_get_eed(dwg_obj_ent *ent, unsigned int index, int *error);
 
 dwg_entity_eed_data *
-dwg_ent_get_eed_data(dwg_obj_ent *ent, int index, int *error);
+dwg_ent_get_eed_data(dwg_obj_ent *ent, unsigned int index, int *error);
 
 BITCODE_B
 dwg_ent_get_picture_exists(dwg_obj_ent *ent, int *error);
@@ -4820,17 +4821,31 @@ dwg_ent_get_edge_visualstyle(dwg_obj_ent *ent, int *error); //r2010+
 *                    FUNCTIONS FOR DWG OBJECT                       *
 ********************************************************************/
 
+unsigned int
+dwg_get_num_classes(dwg_data *dwg);
+
+dwg_class *
+dwg_get_class(dwg_data *dwg, unsigned int index);
+
+long unsigned int
+dwg_get_num_objects(dwg_data *dwg);
+long unsigned int
+dwg_get_num_entities(dwg_data *dwg);
+
+dwg_object *
+dwg_get_object(dwg_data *dwg, long unsigned int index);
+
 BITCODE_RL
-dwg_obj_get_bitsize(dwg_object *obj, int *error);
+dwg_obj_get_bitsize(dwg_object *obj);
 
 unsigned int
-dwg_obj_get_num_eed(dwg_object *obj, int *error);
+dwg_obj_get_num_eed(dwg_obj_obj *obj, int *error);
 
 dwg_entity_eed *
-dwg_obj_get_eed(dwg_object *obj, int index, int *error);
+dwg_obj_get_eed(dwg_obj_obj *obj, int index, int *error);
 
 dwg_entity_eed_data *
-dwg_obj_get_eed_data(dwg_object *obj, int index, int *error);
+dwg_obj_get_eed_data(dwg_obj_obj *obj, int index, int *error);
 
 BITCODE_B
 dwg_obj_get_picture_exists(dwg_object *obj, int *error);

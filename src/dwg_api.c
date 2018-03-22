@@ -21061,6 +21061,71 @@ dwg_get_block_header(dwg_data *dwg, int *error)
 /*******************************************************************
 *                    FUNCTIONS FOR DWG OBJECT                       *
 ********************************************************************/
+
+unsigned int
+dwg_get_num_classes(dwg_data *dwg)
+{
+  return dwg->num_classes;
+}
+long unsigned int
+dwg_get_num_objects(dwg_data *dwg)
+{
+  return dwg->num_objects;
+}
+long unsigned int
+dwg_get_num_entities(dwg_data *dwg)
+{
+  return dwg->num_entities;
+}
+
+dwg_class *
+dwg_get_class(dwg_data *dwg, unsigned int index)
+{
+  return (index < dwg->num_classes) ? &dwg->dwg_class[index] : NULL;
+}
+
+dwg_object *
+dwg_get_object(dwg_data *dwg, long unsigned int index)
+{
+  return (index < dwg->num_objects) ? &dwg->object[index] : NULL;
+}
+
+BITCODE_RL
+dwg_obj_get_bitsize(dwg_object *obj)
+{
+  return obj->bitsize;
+}
+BITCODE_RL
+dwg_ent_get_bitsize(dwg_obj_ent *obj, int *error)
+{
+  *error = 0;
+  return obj->bitsize;
+}
+unsigned int
+dwg_obj_get_num_eed(dwg_obj_obj *obj, int *error)
+{
+  *error = 0;
+  return obj->num_eed;
+}
+unsigned int
+dwg_ent_get_num_eed(dwg_obj_ent *ent, int *error)
+{
+  *error = 0;
+  return ent->num_eed;
+}
+dwg_entity_eed *
+dwg_ent_get_eed(dwg_obj_ent *ent, unsigned int index, int *error)
+{
+  *error = 0;
+  return (index < ent->num_eed) ? &ent->eed[index] : NULL;
+}
+dwg_entity_eed_data *
+dwg_ent_get_eed_data(dwg_obj_ent *ent, unsigned int index, int *error)
+{
+  *error = 0;
+  return (index < ent->num_eed) ? ent->eed[index].data : NULL;
+}
+
 /// Returns dwg_object index
 /** Usage : int index = dwg_obj_object_get_index(obj, &error);
 \param 1 dwg_object
