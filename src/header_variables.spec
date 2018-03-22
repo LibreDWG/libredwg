@@ -424,7 +424,7 @@
 
   SINCE(R_2000)
     {
-      FIELD_HANDLE (DIMTXTSTY, ANYCODE);
+      FIELD_HANDLE (DIMTXSTY, ANYCODE);
       FIELD_HANDLE (DIMLDRBLK, ANYCODE);
       FIELD_HANDLE (DIMBLK, ANYCODE);
       FIELD_HANDLE (DIMBLK1, ANYCODE);
@@ -585,6 +585,7 @@
 
   /* TODO: This really is the section[0] CRC not related to the header */
   FIELD_RS (CRC);
+
 
 
 

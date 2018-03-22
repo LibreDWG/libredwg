@@ -32,6 +32,8 @@ int minimal = 0;
 FILE *fh;
 char buf[4096];
 
+char *dxf_format (int code);
+
 int usage() {
   // -as-r2014 for saveas
   // -m for minimal
@@ -76,14 +78,14 @@ int usage() {
     snprintf (buf, 4096, "%3i\n%s\n", code, dxf_format (code));\
     fprintf(fh, buf, value);\
   }
-#define HANDLE_NAME(name, code, section)\
+#define HANDLE_NAME(name, code, section) \
   {\
     Dwg_Object_Ref *ref = dwg->header_vars.name;\
     snprintf (buf, 4096, "  9\n$" #name "\n%3i\n%s\n", code, dxf_format (code));\
     /*if (ref && !ref->obj) ref->obj = dwg_resolve_handle(dwg, ref->absolute_ref); */ \
     fprintf(fh, buf, ref && ref->obj \
       ? ref->obj->tio.object->tio.section->entry_name : ""); \
-}
+  }
 
 char *
 dxf_format (int code)
