@@ -673,16 +673,19 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
    * Section 4: MEASUREMENT
    */
 
-  LOG_INFO("\n=======> Unknown 4: %8X\n",
-          (unsigned int) dwg->header.section[4].address)
-  LOG_INFO("         Unknown 4 (end): %8X\n",
-          (unsigned int) (dwg->header.section[4].address
-              + dwg->header.section[4].size))
-  dat->byte = dwg->header.section[4].address;
-  dat->bit = 0;
-  dwg->measurement = bit_read_RL(dat);
+  if (dwg->header.num_sections >= 4)
+    {
+      LOG_INFO("\n=======> Unknown 4: %8X\n",
+               (unsigned int) dwg->header.section[4].address)
+      LOG_INFO("         Unknown 4 (end): %8X\n",
+               (unsigned int) (dwg->header.section[4].address
+                               + dwg->header.section[4].size))
+      dat->byte = dwg->header.section[4].address;
+      dat->bit = 0;
+      dwg->measurement = bit_read_RL(dat);
 
-  LOG_TRACE("         Size bytes :\t%lu\n", dat->size)
+      LOG_TRACE("         Size bytes :\t%lu\n", dat->size)
+    }
 
   //step II of handles parsing: resolve pointers from handle value
   //XXX: move this somewhere else
