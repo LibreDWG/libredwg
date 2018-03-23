@@ -5,6 +5,7 @@
 #include <malloc.h>
 #endif
 
+#include "config.h"
 #include "dwg.h"
 #include "logging.h"
 #include "dwg_api.h"
@@ -20877,7 +20878,10 @@ dwg_obj_block_control *
 dwg_block_header_get_block_control(dwg_obj_block_header* block_header,
                                    int *error)
 {
-  if (block_header != 0)
+  if (block_header &&
+      block_header->block_control_handle &&
+      block_header->block_control_handle->obj &&
+      block_header->block_control_handle->obj->tio.object)
     {
       *error = 0;
       return block_header->block_control_handle->obj->tio.object->tio.BLOCK_CONTROL;

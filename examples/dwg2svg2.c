@@ -344,8 +344,12 @@ output_SVG(dwg_data* dwg)
   page_height = dy;
   scale *= (scale_x > scale_y ? scale_x : scale_y);
 
-  hdr = dwg_get_block_header(dwg, &error);
+#if 0
+  hdr = dwg->object[0].tio.object->tio.BLOCK_HEADER;
+#else
+  hdr = dwg_get_block_header(dwg, &error); // TODO: fails with 32bit
   log_if_error("get_block_header");
+#endif
   ctrl = dwg_block_header_get_block_control(hdr, &error);
   log_if_error("block_header_get_block_control");
   
