@@ -294,14 +294,13 @@ If you notice LibreDWG segfaulting, that's a bug.
 @cindex functions
 
 You can use LibreDWG immediately upon loading, without any particular
-initialization.  You usually use one set of functions---either decoding, printing
-or encoding---at a time.  All functions use the common data types
+initialization.  You usually use one set of functions - either decoding
+or encoding - at a time.  All functions use the common data types
 (@pxref{Types}) and constants (@pxref{Constants}).
 
 @menu
 * Decoding::                    Functions on the read path.
 * Encoding::                    Functions on the write path.
-* Printing::                    Functions on the read path.
 @end menu
 
 
@@ -311,14 +310,67 @@ or encoding---at a time.  All functions use the common data types
 @cindex functions, decoding
 @cindex functions, read path
 
-The highest level function for decoding a file is @code{dwg_read_file}.
+The highest level function for decoding a file is @strong{@code{dwg_read_file}}.
 
 @deftypefn {Function} int dwg_read_file (char *@var{filename}, Dwg_Data *@var{dwg})
 Open @var{filename} and decode it, saving information into @var{dwg}.
 Return 0 if successful.
 @end deftypefn
 
-[???]
+You can then iterate over the entities in model space or paper space
+via two ways:
+
+1. by using the @file{dwg.h} data structures, via @code{dwg->object[0]}, which is of
+   type @code{DWG_TYPE_BLOCK_CONTROL},
+   and a custom @code{void process_BLOCK_HEADER((Dwg_Object_Ref* ref)}:
+
+@verbatim
+  Dwg_Object_BLOCK_CONTROL* block_control = dwg->object[0]->tio.object->tio.BLOCK_CONTROL;
+
+  // optional
+  for (i=0; i < block_control->num_entries; i++)
+    {
+      process_BLOCK_HEADER(block_control->block_headers[i]);
+    }
+
+  process_BLOCK_HEADER(block_control->model_space);
+  process_BLOCK_HEADER(block_control->paper_space);
+@end verbatim
+
+or 2. by using the API functions from @file{dwg_api.h}:
+
+@verbatim
+  int error;
+  dwg_obj_block_header *hdr = dwg_get_block_header(dwg, &error);
+  dwg_obj_block_control *ctrl = dwg_block_header_get_block_control(hdr, &error);
+
+  // optional
+  dwg_object_ref **hdr_refs = dwg_obj_block_control_get_block_headers(ctrl, &error);
+  long num_hdr_objs = dwg_obj_block_control_get_num_entries(ctrl, &error);
+  for (i=0; i < num_hdr_objs; i++)
+    {
+      process_BLOCK_HEADER(hdr_refs[i]);
+    }
+
+  process_BLOCK_HEADER(dwg_obj_block_control_get_model_space(ctrl, &error));
+  process_BLOCK_HEADER(dwg_obj_block_control_get_paper_space(ctrl, &error));
+@end verbatim
+
+and inside the @code{process_BLOCK_HEADER} function, you iterate over the objects
+from the header ref via:
+
+@verbatim
+  Dwg_Object_BLOCK_HEADER* hdr = ref->obj->tio.object->tio.BLOCK_HEADER;
+  Dwg_Object* obj = get_first_owned_object(ref->obj, hdr);
+  while (obj)
+    {
+      process_object(obj);
+      obj = get_next_owned_object(ref->obj, obj, hdr);
+    }
+@end verbatim
+
+where @code{process_object} checks the type of each object or entity under the
+@var{Dwg_Object* obj}.
 
 @node Encoding
 @section Encoding
@@ -336,17 +388,8 @@ Open @var{filename} and write the @var{dwg} to it.
 Return 0 if successful.
 @end deftypefn
 
-@node Printing
-@section Printing
-
-@cindex functions, printing
-@cindex functions, read path
-
-The highest level function for printing DWG objects is @code{dwg_print_object}.
-
-@deftypefn {Function} void dwg_print_object (Dwg_Object *@var{obj}, Bit_Chain *@var{dat})
-@end deftypefn
-
+The iterator is similar to above, but you want to encode all data structures, not just the
+entities.
 
 @node Reporting bugs
 @chapter Reporting bugs

@@ -364,7 +364,7 @@ output_SVG(dwg_data* dwg)
     "   height=\"%f\"\n"
     ">\n", page_width, page_height);
   printf("\t<defs>\n");
-  for (i=0; i<num_hdr_objs; i++)
+  for (i=0; i < num_hdr_objs; i++)
     {
       output_BLOCK_HEADER(hdr_refs[i]);
     }

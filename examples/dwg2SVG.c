@@ -217,7 +217,7 @@ void output_BLOCK_HEADER(Dwg_Object_Ref* ref)
 
   obj = get_first_owned_object(ref->obj, hdr);
 
-  while(obj)
+  while (obj)
     {
       output_object(obj);
       obj = get_next_owned_object(ref->obj, obj, hdr);
@@ -265,7 +265,7 @@ output_SVG(Dwg_Data* dwg)
   Dwg_Object_BLOCK_CONTROL* block_control;
   block_control = obj->tio.object->tio.BLOCK_CONTROL;
   printf("\t<defs>\n");
-  for (i=0; i<block_control->num_entries; i++)
+  for (i=0; i < block_control->num_entries; i++)
     {
       output_BLOCK_HEADER(block_control->block_headers[i]);
     }
