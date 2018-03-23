@@ -4,6 +4,8 @@
 #ifdef HAVE_MALLOC_H
 #include <malloc.h>
 #endif
+#include <stdint.h>
+#include <inttypes.h>
 
 #include "config.h"
 #include "dwg.h"
