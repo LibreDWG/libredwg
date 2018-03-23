@@ -46,6 +46,7 @@ check_PROGRAMS = \
 	minsert \
 	mline \
 	mtext \
+	ole2frame \
 	point \
 	polyline_2d \
 	polyline_3d \
