@@ -98,11 +98,14 @@ static int
 decode_R2007(Bit_Chain* dat, Dwg_Data * dwg);
 
 static Dwg_Resbuf*
-dwg_decode_xdata(Bit_Chain * dat, int size);
+dwg_decode_xdata(Bit_Chain * dat, Dwg_Object_XRECORD * obj, int size);
+
 static int
 dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj);
+
 static int
 dwg_decode_object(Bit_Chain * dat, Dwg_Object_Object * obj);
+
 static int
 dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent);
 
@@ -1542,7 +1545,7 @@ decode_R2007(Bit_Chain* dat, Dwg_Data * dwg)
  */
 
 /* for objects and entities.
-   TODO: use dwg_decode_xdata instead.
+   TODO: use dwg_decode_xdata instead, but into an array, not a linked list.
  */
 static int
 dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
@@ -2107,13 +2110,14 @@ get_base_value_type(short gc)
   return VT_INVALID;
 }
 
+// TODO: unify with eed[], use an array not linked list.
 static Dwg_Resbuf*
-dwg_decode_xdata(Bit_Chain * dat, int size)
+dwg_decode_xdata(Bit_Chain * dat, Dwg_Object_XRECORD *obj, int size)
 {
   Dwg_Resbuf *rbuf, *root=0, *curr=0;
   unsigned char codepage;
   long unsigned int end_address;
-  int i, length;
+  int i, length, num_xdata = 0;
 
   static int cnt = 0;
   cnt++;
@@ -2128,6 +2132,7 @@ dwg_decode_xdata(Bit_Chain * dat, int size)
           LOG_ERROR("Out of memory");
           return NULL;
         }
+      num_xdata++;
       rbuf->next = 0;
       rbuf->type = bit_read_RS(dat);
 
@@ -2191,6 +2196,7 @@ dwg_decode_xdata(Bit_Chain * dat, int size)
           LOG_ERROR("Invalid group code in xdata: %d", rbuf->type)
           free(rbuf);
           dat->byte = end_address;
+          obj->num_eed = num_xdata;
           return root;
           break;
         }
@@ -2203,6 +2209,7 @@ dwg_decode_xdata(Bit_Chain * dat, int size)
           curr = rbuf;
         }
     }
+    obj->num_eed = num_xdata;
     return root;
 }
 

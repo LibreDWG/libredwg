@@ -52,6 +52,7 @@
 /testcases/vertex_mesh
 /testcases/vertex_pface
 /testcases/xline
+/testcases/xrecord
 
 /xmlsuite/testsuite
 /xmlsuite/result.htm

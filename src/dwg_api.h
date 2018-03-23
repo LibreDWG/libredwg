@@ -4683,21 +4683,40 @@ dwg_obj_block_control_get_paper_space(dwg_obj_block_control *ctrl, int *error);
 *                    FUNCTIONS FOR XRECORD OBJECT                     *
 ********************************************************************/
 
-//TODO: not yet implemented
 BITCODE_BL
 dwg_obj_xrecord_get_num_databytes(dwg_obj_xrecord *xrecord, int *error);
+void
+dwg_obj_xrecord_set_num_databytes(dwg_obj_xrecord *xrecord, BITCODE_BL num_databytes,
+                                  int *error);
 
+BITCODE_BS
+dwg_obj_xrecord_get_cloning_flags(dwg_obj_xrecord *xrecord, int *error);
+void
+dwg_obj_xrecord_set_cloning_flags(dwg_obj_xrecord *xrecord, BITCODE_BS cloning_flags,
+                                  int *error);
 BITCODE_BL
 dwg_obj_xrecord_get_num_eed(dwg_obj_xrecord *xrecord, int *error);
+void
+dwg_obj_xrecord_set_num_eed(dwg_obj_xrecord *xrecord, unsigned int num_eed,
+                            int *error);
+
+//Dwg_Eed*
+//dwg_obj_xrecord_get_eed(dwg_obj_xrecord *xrecord, BITCODE_BL index, int *error);
 
 Dwg_Resbuf*
 dwg_obj_xrecord_get_xdata(dwg_obj_xrecord *xrecord, int *error);
+void
+dwg_obj_xrecord_set_xdata(dwg_obj_xrecord *xrecord, Dwg_Resbuf* xdata, int *error);
+
+dwg_object_ref*
+dwg_obj_xrecord_get_parent(dwg_obj_xrecord *xrecord, int *error);
+dwg_object_ref**
+dwg_obj_xrecord_get_reactors(dwg_obj_xrecord *xrecord, int *error);
 
 BITCODE_BL
 dwg_obj_xrecord_get_num_objid_handles(dwg_obj_xrecord *xrecord, int *error);
 
-//TODO: dwg_object_ref* or dwg_handle*, not handle
-BITCODE_H*
+dwg_object_ref**
 dwg_obj_xrecord_get_objid_handles(dwg_obj_xrecord *xrecord, int *error);
 
 

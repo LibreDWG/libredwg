@@ -155,7 +155,7 @@
       FIELD_TRACE(insert_count, type)
 
 #define FIELD_XDATA(name, size)\
-  _obj->name = dwg_decode_xdata(dat, _obj->size)
+  _obj->name = dwg_decode_xdata(dat, obj->tio.object->tio.XRECORD, _obj->size)
 
 #define REACTORS(code)\
   FIELD_VALUE(reactors) = (BITCODE_H*) malloc(sizeof(BITCODE_H) * obj->tio.object->num_reactors);\

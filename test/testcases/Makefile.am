@@ -45,7 +45,8 @@ paired = \
 	trace \
 	vertex_3d \
 	vertex_pface \
-	xline
+	xline \
+	xrecord
 
 unpaired = \
 	vertex_2d \

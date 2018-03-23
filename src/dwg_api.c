@@ -13686,6 +13686,204 @@ dwg_obj_proxy_get_objid_object_handles(dwg_obj_proxy *proxy, int *error)
     }
 }
 
+/********************************************************************
+*                  FUNCTIONS FOR XRECORD OBJECT                       *
+********************************************************************/
+
+
+BITCODE_BL
+dwg_obj_xrecord_get_num_databytes(dwg_obj_xrecord *xrecord, int *error)
+{
+  if (xrecord != 0)
+    {
+      *error = 0;
+      return xrecord->num_databytes;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0L;
+    }
+}
+
+void
+dwg_obj_xrecord_set_num_databytes(dwg_obj_xrecord *xrecord, BITCODE_BL num_databytes,
+                                  int *error)
+{
+  if (xrecord != 0)
+    {
+      *error = 0;
+      xrecord->num_databytes = num_databytes;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
+}
+
+BITCODE_BS
+dwg_obj_xrecord_get_cloning_flags(dwg_obj_xrecord *xrecord, int *error)
+{
+  if (xrecord != 0)
+    {
+      *error = 0;
+      return xrecord->cloning_flags;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0L;
+    }
+}
+
+void
+dwg_obj_xrecord_set_cloning_flags(dwg_obj_xrecord *xrecord, BITCODE_BS cloning_flags,
+                                  int *error)
+{
+  if (xrecord != 0)
+    {
+      *error = 0;
+      xrecord->cloning_flags = cloning_flags;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
+}
+
+unsigned int
+dwg_obj_xrecord_get_num_eed(dwg_obj_xrecord *xrecord, int *error)
+{
+  if (xrecord != 0)
+    {
+      *error = 0;
+      return xrecord->num_eed;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0U;
+    }
+}
+
+void
+dwg_obj_xrecord_set_num_eed(dwg_obj_xrecord *xrecord,
+                            unsigned int num_eed,
+                            int *error)
+{
+  if (xrecord != 0)
+    {
+      *error = 0;
+      xrecord->num_eed = num_eed;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
+}
+
+Dwg_Resbuf*
+dwg_obj_xrecord_get_xdata(dwg_obj_xrecord *xrecord, int *error)
+{
+  if (xrecord != 0)
+    {
+      *error = 0;
+      return xrecord->xdata;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return NULL;
+    }
+}
+
+void
+dwg_obj_xrecord_set_xdata(dwg_obj_xrecord *xrecord, Dwg_Resbuf* xdata,
+                       int *error)
+{
+  if (xrecord != 0)
+    {
+      *error = 0;
+      xrecord->xdata = xdata;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
+}
+
+dwg_object_ref*
+dwg_obj_xrecord_get_parent(dwg_obj_xrecord *xrecord, int *error)
+{
+  if (xrecord != 0)
+    {
+      *error = 0;
+      return xrecord->parent;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return NULL;
+    }
+}
+
+dwg_object_ref**
+dwg_obj_xrecord_get_reactors(dwg_obj_xrecord *xrecord, int *error)
+{
+  if (xrecord != 0)
+    {
+      *error = 0;
+      return xrecord->reactors;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return NULL;
+    }
+}
+
+BITCODE_BL
+dwg_obj_xrecord_get_num_objid_handles(dwg_obj_xrecord *xrecord, int *error)
+{
+  if (xrecord != 0)
+    {
+      *error = 0;
+      return xrecord->num_objid_handles;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
+}
+
+dwg_object_ref**
+dwg_obj_xrecord_get_objid_handles(dwg_obj_xrecord *xrecord, int *error)
+{
+  if (xrecord != 0)
+    {
+      *error = 0;
+      return xrecord->objid_handles;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return NULL;
+    }
+}
+
 /*******************************************************************
 *                   FUNCTIONS FOR SPLINE ENTITY                     *
 ********************************************************************/
