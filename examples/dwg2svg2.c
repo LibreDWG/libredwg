@@ -285,7 +285,8 @@ void output_BLOCK_HEADER(dwg_object_ref* ref)
   log_if_error("ref_get_abs_ref");
   if (!ref)
     {
-      fprintf(stderr, "Found null object reference. Could not output an SVG symbol for this BLOCK_HEADER\n");
+      fprintf(stderr, "Found null object reference."
+              " Could not output an SVG symbol for this BLOCK_HEADER\n");
       return;
     }
   if (!obj)
@@ -310,8 +311,7 @@ void output_BLOCK_HEADER(dwg_object_ref* ref)
       "\t<g id=\"symbol-%lu\" >\n\t\t<!-- %s -->\n", abs_ref, name);
 
   variable_obj = get_first_owned_object(obj, hdr);
-
-  while(variable_obj)
+  while (variable_obj)
     {
       output_object(variable_obj);
       variable_obj = get_next_owned_object(obj, variable_obj, hdr);
@@ -344,12 +344,8 @@ output_SVG(dwg_data* dwg)
   page_height = dy;
   scale *= (scale_x > scale_y ? scale_x : scale_y);
 
-#if 0
-  hdr = dwg->object[0].tio.object->tio.BLOCK_HEADER;
-#else
-  hdr = dwg_get_block_header(dwg, &error); // TODO: fails with 32bit
+  hdr = dwg_get_block_header(dwg, &error);
   log_if_error("get_block_header");
-#endif
   ctrl = dwg_block_header_get_block_control(hdr, &error);
   log_if_error("block_header_get_block_control");
   

@@ -31,7 +31,9 @@
 # ifdef HAVE_INTTYPES_H
 #  include <inttypes.h>
 # endif
-/* for R2007+ support */
+/* For R2007+ support.
+ * But we need the WIN32 UTF-16 variant, not UTF-32.
+ */
 # ifdef HAVE_WCHAR_H
 #  include <wchar.h>
 # endif
