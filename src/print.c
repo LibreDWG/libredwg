@@ -366,10 +366,9 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
 }
 
 void
-dwg_print_object(Dwg_Object *obj)
+dwg_print_object(Bit_Chain* dat, Dwg_Object *obj)
 {
-  Bit_Chain * dat = (Bit_Chain *)obj->parent->bit_chain;
-
+  //Bit_Chain * dat = (Bit_Chain *)obj->parent->bit_chain;
   switch (obj->type)
     {
     case DWG_TYPE_TEXT:

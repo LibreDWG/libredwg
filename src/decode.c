@@ -86,7 +86,7 @@ static void
 dwg_decode_header_variables(Bit_Chain* dat, Dwg_Data * dwg);
 
 static int
-resolve_objectref_vector(Dwg_Data * dwg);
+resolve_objectref_vector(Bit_Chain* dat, Dwg_Data * dwg);
 
 static int
 decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg);
@@ -687,11 +687,11 @@ decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
   //step II of handles parsing: resolve pointers from handle value
   //XXX: move this somewhere else
   LOG_TRACE("\nResolving pointers from ObjectRef vector.\n")
-  return resolve_objectref_vector(dwg);
+  return resolve_objectref_vector(dat, dwg);
 }
 
 static int
-resolve_objectref_vector(Dwg_Data * dwg)
+resolve_objectref_vector(Bit_Chain* dat, Dwg_Data * dwg)
 {
   long unsigned int i;
   Dwg_Object * obj;
@@ -722,7 +722,7 @@ resolve_objectref_vector(Dwg_Data * dwg)
       if (DWG_LOGLEVEL >= DWG_LOGLEVEL_HANDLE)
         {
           if (obj)
-            dwg_print_object(obj);
+            dwg_print_object(dat, obj);
           else
             LOG_WARN("Null object pointer: object_ref[%lu]", i)
         }
@@ -1502,7 +1502,7 @@ decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
       dwg->header.num_descriptions = 0;
     }
 
-  resolve_objectref_vector(dwg);
+  resolve_objectref_vector(dat, dwg);
 
   return 0;
 }
@@ -1531,7 +1531,7 @@ decode_R2007(Bit_Chain* dat, Dwg_Data * dwg)
   LOG_INFO(
       "Decoding of DWG version R2007+ objectrefs is not fully implemented yet.\n"
       "We are going to try\n")
-  return resolve_objectref_vector(dwg);
+  return resolve_objectref_vector(dat, dwg);
 }
 
 /*--------------------------------------------------------------------------------

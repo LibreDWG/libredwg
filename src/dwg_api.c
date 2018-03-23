@@ -21029,10 +21029,12 @@ dwg_get_block_header(dwg_data *dwg, int *error)
   assert(dwg->num_classes < 1000);
   assert(dwg->num_objects < 0xfffffff); // 0x4fa463eb
   // cached?
+#if 0
   if (dwg->mspace_block)
     return dwg->mspace_block->tio.object->tio.BLOCK_HEADER;
   else if (dwg->pspace_block)
     return dwg->pspace_block->tio.object->tio.BLOCK_HEADER;
+#endif
 
   obj = &dwg->object[0];
   while (obj && obj->type != DWG_TYPE_BLOCK_HEADER)

@@ -13,11 +13,16 @@
 /*
  * print.h: print helper function prototypes
  * written by Rodrigo Rodrigues da Silva
+ * modified by Reini Urban
  */
 
 #ifndef PRINT_H
 #define PRINT_H
 
 #include "dwg.h"
+#include "bits.h"
+
+void
+dwg_print_object(Bit_Chain* dat, Dwg_Object *obj);
 
 #endif

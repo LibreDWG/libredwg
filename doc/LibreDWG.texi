@@ -344,7 +344,7 @@ Return 0 if successful.
 
 The highest level function for printing DWG objects is @code{dwg_print_object}.
 
-@deftypefn {Function} void dwg_print_object (Dwg_Object *@var{obj})
+@deftypefn {Function} void dwg_print_object (Dwg_Object *@var{obj}, Bit_Chain *@var{dat})
 @end deftypefn
 
 

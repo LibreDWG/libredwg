@@ -61,7 +61,7 @@ dwg_read_file(char *filename, Dwg_Data * dwg_data)
       return -1;
     }
 
-  /* Load file to memory
+  /* Load whole file into memory
    */
   bit_chain.bit = 0;
   bit_chain.byte = 0;
@@ -73,7 +73,7 @@ dwg_read_file(char *filename, Dwg_Data * dwg_data)
       fclose(fp);
       return -1;
     }
-  size = 0;
+
   size = fread(bit_chain.chain, sizeof(char), bit_chain.size, fp);
   if (size != bit_chain.size)
     {
@@ -89,7 +89,7 @@ dwg_read_file(char *filename, Dwg_Data * dwg_data)
 
   /* Decode the dwg structure
    */
-  dwg_data->bit_chain = &bit_chain;
+  //dwg_data->bit_chain = &bit_chain;
 
   if (dwg_decode_data(&bit_chain, dwg_data))
     {
@@ -99,7 +99,8 @@ dwg_read_file(char *filename, Dwg_Data * dwg_data)
       bit_chain.size = 0;
       return -1;
     }
-  //TODO: does dwg hold any char* pointers to the bit_chain?
+
+  //TODO: does dwg hold any char* pointers to the bit_chain or are they all copied?
   free(bit_chain.chain);
   bit_chain.chain = NULL;
   bit_chain.size = 0;

@@ -3245,7 +3245,7 @@ typedef struct _dwg_struct
   long unsigned int measurement;
   unsigned int layout_number;
 
-  struct _bit_chain *bit_chain;
+  //struct _bit_chain *bit_chain;
 
 } Dwg_Data;
 
@@ -3317,9 +3317,6 @@ get_first_owned_object(Dwg_Object* hdr_obj, Dwg_Object_BLOCK_HEADER* hdr);
 
 Dwg_Object*
 get_next_owned_object(Dwg_Object* hdr_obj, Dwg_Object* current, Dwg_Object_BLOCK_HEADER* hdr);
-
-void
-dwg_print_object(Dwg_Object *obj);
 
 void
 dwg_object_free(Dwg_Object* obj);
