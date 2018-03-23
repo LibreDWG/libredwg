@@ -28,14 +28,17 @@
 #include "../src/bits.h"
 #include "suffix.c"
 
+Dwg_Data g_dwg;
 double model_xmin, model_ymin;
 double page_width, page_height, scale;
 
-double transform_X(double x){
+double transform_X(double x)
+{
   return x - model_xmin;
 }
 
-double transform_Y(double y){
+double transform_Y(double y)
+{
   return page_height - (y - model_ymin);
 }
 
@@ -55,17 +58,11 @@ main(int argc, char *argv[])
 int
 test_SVG(char *filename)
 {
-  int error;
-  Dwg_Data dwg;
-
-  error = dwg_read_file(filename, &dwg);
-
+  int error = dwg_read_file(filename, &g_dwg);
   if (!error)
-    {
-      output_SVG(&dwg);
-    }
+    output_SVG(&g_dwg);
 
-  dwg_free(&dwg);
+  dwg_free(&g_dwg);
   /* This value is the return value for `main',
      so clamp it to either 0 or 1.  */
   return error ? 1 : 0;
@@ -74,8 +71,7 @@ test_SVG(char *filename)
 void
 output_TEXT(Dwg_Object* obj)
 {
-  Dwg_Entity_TEXT* text;
-  text = obj->tio.entity->tio.TEXT;
+  Dwg_Entity_TEXT* text = obj->tio.entity->tio.TEXT;
 
   /*TODO: Juca, fix it properly: */
   if (text->text_value[0] == '&') return;
@@ -90,8 +86,7 @@ output_TEXT(Dwg_Object* obj)
 void
 output_LINE(Dwg_Object* obj)
 {
-  Dwg_Entity_LINE* line;
-  line = obj->tio.entity->tio.LINE;
+  Dwg_Entity_LINE* line = obj->tio.entity->tio.LINE;
   printf(
       "\t<path id=\"dwg-object-%d\" d=\"M %f,%f %f,%f\" style=\"fill:none;stroke:blue;stroke-width:0.1px\" />\n",
       obj->index, transform_X(line->start.x), transform_Y(line->start.y), transform_X(line->end.x), transform_Y(line->end.y));
@@ -100,8 +95,7 @@ output_LINE(Dwg_Object* obj)
 void
 output_CIRCLE(Dwg_Object* obj)
 {
-  Dwg_Entity_CIRCLE* circle;
-  circle = obj->tio.entity->tio.CIRCLE;
+  Dwg_Entity_CIRCLE* circle = obj->tio.entity->tio.CIRCLE;
   printf(
       "\t<circle id=\"dwg-object-%d\" cx=\"%f\" cy=\"%f\" r=\"%f\" fill=\"none\" stroke=\"blue\" stroke-width=\"0.1px\" />\n",
       obj->index, transform_X(circle->center.x), transform_Y(circle->center.y), circle->radius);
@@ -110,14 +104,14 @@ output_CIRCLE(Dwg_Object* obj)
 void
 output_ARC(Dwg_Object* obj)
 {
-  Dwg_Entity_ARC* arc;
-  arc = obj->tio.entity->tio.ARC;
+  Dwg_Entity_ARC* arc = obj->tio.entity->tio.ARC;
   double x_start = arc->center.x + arc->radius * cos(arc->start_angle);
   double y_start = arc->center.y + arc->radius * sin(arc->start_angle);
   double x_end = arc->center.x + arc->radius * cos(arc->end_angle);
   double y_end = arc->center.y + arc->radius * sin(arc->end_angle);
   //Assuming clockwise arcs.
   int large_arc = (arc->end_angle - arc->start_angle < 3.1415) ? 0 : 1;
+
   printf(
       "\t<path id=\"dwg-object-%d\" d=\"M %f,%f A %f,%f 0 %d 0 %f,%f\" fill=\"none\" stroke=\"blue\" stroke-width=\"%f\" />\n",
       obj->index, transform_X(x_start), transform_Y(y_start), arc->radius, arc->radius,
@@ -127,8 +121,7 @@ output_ARC(Dwg_Object* obj)
 void
 output_INSERT(Dwg_Object* obj)
 {
-  Dwg_Entity_INSERT* insert;
-  insert = obj->tio.entity->tio.INSERT;
+  Dwg_Entity_INSERT* insert = obj->tio.entity->tio.INSERT;
   //if (insert->block_header->handleref.code == 5)
   if(42) //XXX did this to test the new handleref.code handling "code"
     {
@@ -162,29 +155,15 @@ output_object(Dwg_Object* obj){
     }
 
   if (obj->type == DWG_TYPE_INSERT)
-    {
-      output_INSERT(obj);
-    }
-
-  if (obj->type == DWG_TYPE_LINE)
-    {
-      output_LINE(obj);
-    }
-
-  if (obj->type == DWG_TYPE_CIRCLE)
-    {
-      output_CIRCLE(obj);
-    }
-
-  if (obj->type == DWG_TYPE_TEXT)
-    {
-      output_TEXT(obj);
-    }
-
-  if (obj->type == DWG_TYPE_ARC)
-    {
-      output_ARC(obj);
-    }
+    output_INSERT(obj);
+  else if (obj->type == DWG_TYPE_LINE)
+    output_LINE(obj);
+  else if (obj->type == DWG_TYPE_CIRCLE)
+    output_CIRCLE(obj);
+  else if (obj->type == DWG_TYPE_TEXT)
+    output_TEXT(obj);
+  else if (obj->type == DWG_TYPE_ARC)
+    output_ARC(obj);
 }
 
 void output_BLOCK_HEADER(Dwg_Object_Ref* ref)
@@ -232,14 +211,16 @@ output_SVG(Dwg_Data* dwg)
 {
   unsigned int i;
   Dwg_Object *obj;
+  Dwg_Object_BLOCK_CONTROL* block_control;
+  double dx, dy;
 
   model_xmin = dwg_model_x_min(dwg);
   model_ymin = dwg_model_y_min(dwg);
 
-  double dx = (dwg_model_x_max(dwg) - dwg_model_x_min(dwg));
-  double dy = (dwg_model_y_max(dwg) - dwg_model_y_min(dwg));
-  double scale_x = dx / (dwg_page_x_max(dwg) - dwg_page_x_min(dwg));
-  double scale_y = dy / (dwg_page_y_max(dwg) - dwg_page_y_min(dwg));
+  dx = (dwg_model_x_max(dwg) - dwg_model_x_min(dwg));
+  dy = (dwg_model_y_max(dwg) - dwg_model_y_min(dwg));
+  //double scale_x = dx / (dwg_page_x_max(dwg) - dwg_page_x_min(dwg));
+  //double scale_y = dy / (dwg_page_y_max(dwg) - dwg_page_y_min(dwg));
   //scale = 25.4 / 72; // pt:mm
   page_width = dx;
   page_height = dy;
@@ -262,7 +243,6 @@ output_SVG(Dwg_Data* dwg)
       return;
     }
 
-  Dwg_Object_BLOCK_CONTROL* block_control;
   block_control = obj->tio.object->tio.BLOCK_CONTROL;
   printf("\t<defs>\n");
   for (i=0; i < block_control->num_entries; i++)
