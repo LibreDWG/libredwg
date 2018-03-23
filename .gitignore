@@ -22,6 +22,7 @@ gcov.log
 /examples/*-dwgrewrite.dwg
 /src/*.gcno
 /src/*.gcov
+/src/*.gcda
 /test/testcases/*.gcov
 /test/testcases/*.gcno
 /test/testcases/*.gcda
@@ -35,6 +36,9 @@ gcov.log
 # specific filenames
 /.cproject
 /.project
+/GPATH
+/GRTAGS
+/GTAGS
 /INSTALL
 /aclocal.m4
 /autom4te.cache/

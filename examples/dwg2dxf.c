@@ -31,13 +31,15 @@
 int minimal = 0;
 FILE *fh;
 char buf[4096];
+/* the current version per spec block */
+static unsigned int cur_ver = 0;
 
 char *dxf_format (int code);
 
 int usage() {
   // -as-r2014 for saveas
   // -m for minimal
-  printf("\nUsage:\tdwg2dxf [-as-rxxxx] [-m] <input_file.dwg> [<output_file.dxf>]\n");
+  printf("\nUsage:\tdwg2dxf [-as-rVER] [-m|--minimal] <input_file.dwg> [<output_file.dxf>]\n");
   return 1;
 }
 
@@ -145,6 +147,7 @@ static int
 dxf_header_write (FILE *fh, Dwg_Data * dwg)
 {
   double ms;
+  struct Dwg_Header *dat = &dwg->header;
 
   SECTION(HEADER);
 
@@ -180,6 +183,10 @@ dxf_header_write (FILE *fh, Dwg_Data * dwg)
   HEADER_VALUE (QTEXTMODE, 70);
   HEADER_VALUE (MIRRTEXT, 70);
   HEADER_VALUE (LTSCALE, 40);
+  VERSIONS(R_13, R_14)
+    {
+      HEADER_VALUE (OSMODE, 70);
+    }
   HEADER_VALUE (ATTMODE, 70);
   VAR (TEXTSIZE, 40, dwg->header_vars.VTEXTSIZE);
   HEADER_VALUE (TRACEWID, 40);
@@ -216,6 +223,10 @@ dxf_header_write (FILE *fh, Dwg_Data * dwg)
   HANDLE_NAME (DIMBLK, 1, BLOCK_HEADER);
   HEADER_VALUE (DIMASO, 70);
   HEADER_VALUE (DIMSHO, 70);
+  UNTIL(R_14)
+    {
+      HEADER_VALUE (DIMSAV, 70); //?
+    }
   HEADER_VALUE (DIMPOST, 1);
   HEADER_VALUE (DIMAPOST, 1);
   HEADER_VALUE (DIMALT, 70);
@@ -272,6 +283,10 @@ dxf_header_write (FILE *fh, Dwg_Data * dwg)
   HEADER_VALUE (PELEVATION, 40);
   HEADER_VALUE (THICKNESS, 40);
   HEADER_VALUE (LIMCHECK, 70);
+  UNTIL(R_14)
+    {
+      HEADER_VALUE (BLIPMODE, 70);
+    }
   HEADER_VALUE (CHAMFERA, 40);
   HEADER_VALUE (CHAMFERB, 40);
   HEADER_VALUE (CHAMFERC, 40);
@@ -295,11 +310,22 @@ dxf_header_write (FILE *fh, Dwg_Data * dwg)
   HEADER_VALUE (PDMODE, 70);
   HEADER_VALUE (PDSIZE, 40);
   HEADER_VALUE (PLINEWID, 40);
+  VERSIONS(R_13, R_14)
+    {
+      //default 2
+      HEADER_VALUE (COORDS, 70);
+    }
   HEADER_VALUE (SPLFRAME, 70);
   HEADER_VALUE (SPLINETYPE, 70);
   HEADER_VALUE (SPLINESEGS, 70);
+  VERSIONS(R_13, R_14)
+    {
+      HEADER_VALUE (ATTDIA, 70); //default 1
+      HEADER_VALUE (ATTREQ, 70); //default 1
+      HEADER_VALUE (HANDLING, 70); //default 1
+    }
 
-  HEADER_VALUE (HANDSEED, 5);
+  HEADER_VALUE (HANDSEED, 5); //default 20000
 
   HEADER_VALUE (SURFTAB1, 70);
   HEADER_VALUE (SURFTAB2, 70);
@@ -347,6 +373,10 @@ dxf_header_write (FILE *fh, Dwg_Data * dwg)
   HEADER_VALUE (USERR5, 40);
 
   HEADER_VALUE (WORLDVIEW, 70);
+  VERSIONS(R_13, R_14)
+    {
+      HEADER_VALUE (WIREFRAME, 70); //Undocumented
+    }
   HEADER_VALUE (SHADEDGE, 70);
   HEADER_VALUE (SHADEDIF, 70);
   HEADER_VALUE (TILEMODE, 70);
@@ -361,12 +391,28 @@ dxf_header_write (FILE *fh, Dwg_Data * dwg)
 
   HEADER_VALUE (UNITMODE, 70);
   HEADER_VALUE (VISRETAIN, 70);
+  VERSIONS(R_13, R_14)
+    {
+      HEADER_VALUE (DELOBJ, 70);
+    }
   HEADER_VALUE (PLINEGEN, 70);
   HEADER_VALUE (PSLTSCALE, 70);
+  VERSION(R_13)
+    {
+      HEADER_VALUE (SAVEIMAGES, 70);
+    }
+  VERSIONS(R_14, R_2000)
+    {
+      HEADER_VALUE (PROXYGRAPHICS, 70);
+    }
+  VERSIONS(R_13, R_14)
+    {
+      HEADER_VALUE (DRAGMODE, 70);
+    }
   HEADER_VALUE (TREEDEPTH, 70);
-  //HANDLE_NAME (CMLSTYLE, 2, MLINESTYLE);
+  //HANDLE_NAME (CMLSTYLE, 2, MLINESTYLE); //default: Standard
   HEADER_VALUE (CMLJUST, 70);
-  HEADER_VALUE (CMLSCALE, 40);
+  HEADER_VALUE (CMLSCALE, 40); //default: 20
   HEADER_VALUE (PROXYGRAPHICS, 70);
   //HEADER_VALUE (MEASUREMENT, 70, (dwg->header_vars.MEASUREMENT ? 1 : 0));
 
@@ -472,6 +518,7 @@ dwg_write_dxf(char *filename, Dwg_Data * dwg)
 {
   FILE *fh;
   struct stat attrib;
+  struct Dwg_Header *dat = &dwg->header;
 
   if (!stat (filename, &attrib))
     {
@@ -488,12 +535,12 @@ dwg_write_dxf(char *filename, Dwg_Data * dwg)
 
   // a minimal header requires only $ACADVER, $HANDSEED, and then ENTITIES
   // see https://pythonhosted.org/ezdxf/dxfinternals/filestructure.html
-  if (dwg->header.version >= R_13) {
-
+  SINCE(R_13)
+  {
     if (dxf_header_write (fh, dwg))
       goto fail;
 
-    if (dwg->header.version >= R_2000) {
+    SINCE(R_2000) {
       if (dxf_classes_write (fh, dwg))
         goto fail;
     }
@@ -508,7 +555,7 @@ dwg_write_dxf(char *filename, Dwg_Data * dwg)
   if (dxf_entities_write (fh, dwg))
     goto fail;
 
-  if (dwg->header.version >= R_13) {
+  SINCE(R_13) {
     if (dxf_objects_write (fh, dwg))
       goto fail;
   }
@@ -543,42 +590,38 @@ main (int argc, char *argv[])
   if (argc > 2 && !strncmp(argv[1], "-as-r", 5))
     {
       const char *opt = argv[1];
-      if (!strcmp(opt, "-as-r13") ||
-          !strcmp(opt, "-as-r14") ||
-          !strcmp(opt, "-as-r2000") ||
-          !strcmp(opt, "-as-r2004") ||
-          !strcmp(opt, "-as-r2007") ||
-          !strcmp(opt, "-as-r2010") ||
-          !strcmp(opt, "-as-r2013") ||
-          !strcmp(opt, "-as-r2018"))
-        {
-          version = &opt[4];
-          if (!strcmp(version, "r13"))
-            dwg_version = R_13;
-          else if (!strcmp(version, "r14"))
-            dwg_version = R_14;
-          else if (!strcmp(version, "r2000"))
-            dwg_version = R_2000;
-          else if (!strcmp(version, "r2004"))
-            dwg_version = R_2004;
-          else if (!strcmp(version, "r2007"))
-            dwg_version = R_2007;
-          else if (!strcmp(version, "r2010"))
-            dwg_version = R_2010;
-          else if (!strcmp(version, "r2013"))
-            dwg_version = R_2013;
-          else if (!strcmp(version, "r2018"))
-            dwg_version = R_2018;
-          filename_in = argv[2];
-          argc--;
-        }
+      version = &opt[4];
+      if (!strcmp(version, "r13"))
+        dwg_version = R_13;
+      else if (!strcmp(version, "r9"))
+        dwg_version = R_9;
+      else if (!strcmp(version, "r10"))
+        dwg_version = R_10;
+      else if (!strcmp(version, "r11"))
+        dwg_version = R_11;
+      else if (!strcmp(version, "r14"))
+        dwg_version = R_14;
+      else if (!strcmp(version, "r2000"))
+        dwg_version = R_2000;
+      else if (!strcmp(version, "r2004"))
+        dwg_version = R_2004;
+      else if (!strcmp(version, "r2007"))
+        dwg_version = R_2007;
+      else if (!strcmp(version, "r2010"))
+        dwg_version = R_2010;
+      else if (!strcmp(version, "r2013"))
+        dwg_version = R_2013;
+      else if (!strcmp(version, "r2018"))
+        dwg_version = R_2018;
       else
         {
-          fprintf(stderr, "Invalid option %s\n", opt);
+          fprintf(stderr, "Invalid option %s\n", argv[1]);
           return usage();
         }
+      filename_in = argv[2];
+      argc--;
     }
-  if (argc > 2 && !strcmp(argv[1], "-m"))
+  if (argc > 2 && (!strcmp(argv[1], "-m") || !strcmp(argv[1], "--minimal")))
     {
       minimal = 1;
       argc--;
@@ -587,7 +630,7 @@ main (int argc, char *argv[])
     filename_out = argv[2];
   else
     {
-      filename_out = suffix (argv[1], "dxf");
+      filename_out = suffix (filename_in, "dxf");
     }
   
   if (strcmp(filename_in, filename_out) == 0)

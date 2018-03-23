@@ -22,7 +22,6 @@ LDADD   = $(top_builddir)/src/libredwg.la -lm
 
 bin_PROGRAMS = dwgread dwgbmp dwg2dxf dwg2SVG
 check_PROGRAMS = load_dwg dwg2svg2
-# dwg2svg2 fails on 32bit
 
 if HAVE_LIBPS
 bin_PROGRAMS += dwg_ps
