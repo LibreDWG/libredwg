@@ -40,17 +40,12 @@ test_dwg_c(char *filename)
   Dwg_Data dwg_struct;
 
   error = dwg_read_file(filename, &dwg_struct);
+  if (error)
+      printf("\nERROR\n");
+  else
+      printf("\nSUCCESS\n");
 
   dwg_free(&dwg_struct);
-
-  if (error)
-    {
-      printf("\nERROR\n");
-    }
-  else
-    {
-      printf("\nSUCCESS\n");
-    }
 
   /* This value is the return value for `main',
      so clamp it to either 0 or 1.  */
