@@ -4,8 +4,6 @@ AM_CFLAGS = -I$(top_srcdir)/src @WARN_CFLAGS@
 LDADD   = $(top_builddir)/src/libredwg.la -lm
 #SOURCES = $(top_builddir)/src/libredwg.la
 
-RUNTESTDEFAULTFLAGS = --tool testcases
-
 paired = \
 	3dsolid \
 	arc \

@@ -1,4 +1,5 @@
 AUTOMAKE_OPTIONS = dejagnu
+DEJATOOL = testcases
 
 SUBDIRS = unit-testing
 if HAVE_DEJAGNU

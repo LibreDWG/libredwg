@@ -81,6 +81,7 @@ output_BLOCK_HEADER (dwg_object_ref * ref)
   dwg_obj_block_header *hdr;
   int error;
   unsigned long abs_ref;
+
   obj = dwg_obj_reference_get_object (ref, &error);
   abs_ref = dwg_obj_ref_get_abs_ref (ref, &error);
   if (!ref)
@@ -104,11 +105,6 @@ output_BLOCK_HEADER (dwg_object_ref * ref)
     }
 
   hdr = dwg_object_to_BLOCK_HEADER (obj);
-
-/*  printf(
-      "\t<g id=\"symbol-%lu\" >\n\t\t<!-- %s -->\n", abs_ref, 
-      dwg_obj_block_header_get_name(hdr, &error));
-*/
   variable_obj = get_first_owned_object (obj, hdr);
 
   while (variable_obj)
@@ -132,8 +128,8 @@ output_test (dwg_data * dwg)
   hdr = dwg_get_block_header (dwg, &error);
   ctrl = dwg_block_header_get_block_control (hdr, &error);
 
-  hdr_refs = dwg_obj_block_control_get_block_headers (ctrl, &error);
-  num_hdr_objs = dwg_obj_block_control_get_num_entries (ctrl, &error);
+  //hdr_refs = dwg_obj_block_control_get_block_headers (ctrl, &error);
+  //num_hdr_objs = dwg_obj_block_control_get_num_entries (ctrl, &error);
 
   output_BLOCK_HEADER (dwg_obj_block_control_get_model_space (ctrl, &error));
   output_BLOCK_HEADER (dwg_obj_block_control_get_paper_space (ctrl, &error));
