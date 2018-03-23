@@ -59,9 +59,9 @@ ac_cv_func_malloc_0_nonnull=yes
 ac_cv_func_realloc_0_nonnull=yes
 AC_CHECK_HEADERS([stdlib.h string.h unistd.h malloc.h wchar.h])
 
-AC_CHECK_HEADER(dejagnu.h, ,
-  [AC_MSG_WARN([Couldn't find dejagnu.h])])
-AM_CONDITIONAL([HAVE_DEJAGNU], [test "x$ac_cv_header_dejagnu_h" = xyes])
+AC_CHECK_HEADER([dejagnu.h], [],
+  AC_MSG_WARN([Couldn't find dejagnu.h]))
+AM_CONDITIONAL([HAVE_DEJAGNU], [test x$ac_cv_header_dejagnu_h = xyes])
 
 # Don't bother testing for libps headers if libps is not available.
 if test yes = "$libredwg_have_libps" ; then
