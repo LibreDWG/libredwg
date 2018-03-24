@@ -445,7 +445,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
   for (j = 0; j < dwg->num_classes; j++)
     {
       bit_write_BS(dat, dwg->dwg_class[j].number);
-      bit_write_BS(dat, dwg->dwg_class[j].version);
+      bit_write_BS(dat, dwg->dwg_class[j].proxyflag);
       bit_write_TV(dat, dwg->dwg_class[j].appname);
       bit_write_TV(dat, dwg->dwg_class[j].cppname);
       bit_write_TV(dat, dwg->dwg_class[j].dxfname);

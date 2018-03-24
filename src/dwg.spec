@@ -2066,11 +2066,11 @@ DWG_OBJECT(VPORT);
   FIELD_B (_64_flag);
   FIELD_BS (xrefindex_plus1);
   FIELD_B (xrefdep);
-  FIELD_BD (view_height);
+  FIELD_BD (VIEWSIZE);
   FIELD_BD (aspect_ratio);
-  FIELD_2RD (view_center);
+  FIELD_2RD (VIEWCTR);
   FIELD_3BD (view_target);
-  FIELD_3BD (view_dir);
+  FIELD_3BD (VIEWDIR);
   FIELD_BD (view_twist);
   FIELD_BD (lens_length);
   FIELD_BD (front_clip);
@@ -2095,17 +2095,17 @@ DWG_OBJECT(VPORT);
   FIELD_2RD (upper_right);
   FIELD_B (UCSFOLLOW);
   FIELD_BS (circle_zoom);
-  FIELD_B (fast_zoom);
+  FIELD_B (FASTZOOM);
   FIELD_B (UCSICON_0);
   FIELD_B (UCSICON_1);
-  FIELD_B (grid_on_off);
-  FIELD_2RD (grid_spacing);
-  FIELD_B (snap_on_off);
-  FIELD_B (snap_style);
-  FIELD_BS (snap_isopair);
-  FIELD_BD (snap_rot);
-  FIELD_2RD (snap_base);
-  FIELD_2RD (snap_spacing);
+  FIELD_B (GRIDMODE);
+  FIELD_2RD (GRIDUNIT);
+  FIELD_B (SNAPMODE);
+  FIELD_B (SNAPSTYLE);
+  FIELD_BS (SNAPISOPAIR);
+  FIELD_BD (SNAPANG);
+  FIELD_2RD (SNAPBASE);
+  FIELD_2RD (SNAPUNIT);
 
   SINCE(R_2000)
     {
@@ -3792,6 +3792,7 @@ DWG_ENTITY_END
 //        LOG_INFO("TODO VISUALSTYLE (hard-pointer to H DICTIONARY_VISUALSTYLE)\n");
 //    }
 //DWG_OBJECT_END
+
 
 
 

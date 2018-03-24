@@ -544,12 +544,17 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
       klass = &dwg->dwg_class[i];
       memset(klass, 0, sizeof(Dwg_Class));
       klass->number  = bit_read_BS(dat);
-      klass->version = bit_read_BS(dat);
+      klass->proxyflag = bit_read_BS(dat);
       klass->appname = bit_read_TV(dat);
       klass->cppname = bit_read_TV(dat);
       klass->dxfname = bit_read_TV(dat);
       klass->wasazombie = bit_read_B(dat);
-      klass->item_class_id = bit_read_BS(dat);
+      klass->item_class_id = bit_read_BS(dat); //1f2 for entities, 1f3 for objects
+      LOG_TRACE("Class %d 0x%x %s\n"
+                "%s \"%s\" %d 0x%x\n",
+                klass->number, klass->proxyflag, klass->dxfname,
+                klass->cppname, klass->appname,
+                klass->wasazombie, klass->item_class_id)
 
       if (strcmp((const char *)klass->dxfname, "LAYOUT") == 0)
         dwg->layout_number = klass->number;
@@ -1380,7 +1385,7 @@ read_2004_section_classes(Bit_Chain* dat, Dwg_Data *dwg)
             }
 
           dwg->dwg_class[idc].number        = bit_read_BS(&sec_dat);
-          dwg->dwg_class[idc].version       = bit_read_BS(&sec_dat);
+          dwg->dwg_class[idc].proxyflag     = bit_read_BS(&sec_dat);
           dwg->dwg_class[idc].appname       = bit_read_TV(&sec_dat);
           dwg->dwg_class[idc].cppname       = bit_read_TV(&sec_dat);
           dwg->dwg_class[idc].dxfname       = bit_read_TV(&sec_dat);
@@ -1395,7 +1400,7 @@ read_2004_section_classes(Bit_Chain* dat, Dwg_Data *dwg)
 
           LOG_TRACE("-------------------\n")
           LOG_TRACE("Number:           %d\n", dwg->dwg_class[idc].number)
-          LOG_TRACE("Version:          %x\n", dwg->dwg_class[idc].version)
+          LOG_TRACE("Proxyflag:        %x\n", dwg->dwg_class[idc].proxyflag)
           LOG_TRACE("Application name: %s\n", dwg->dwg_class[idc].appname)
           LOG_TRACE("C++ class name:   %s\n", dwg->dwg_class[idc].cppname)
           LOG_TRACE("DXF record name:  %s\n", dwg->dwg_class[idc].dxfname)
@@ -2413,21 +2418,18 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       dwg_decode_IDBUFFER(dat, obj);
       return 1;
     }
-  // AcDbRasterImage
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "IMAGE"))
     {
       set_name(obj, dwg);
       dwg_decode_IMAGE(dat, obj);
       return 1;
     }
-  // AcDbRasterImageDef
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "IMAGEDEF"))
     {
       set_name(obj, dwg);
       dwg_decode_IMAGEDEF(dat, obj);
       return 1;
     }
-  // AcDbRasterImageDefReactor
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "IMAGEDEF_REACTOR"))
     {
       set_name(obj, dwg);
@@ -2575,7 +2577,8 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
   /* TODO: CELLSTYLEMAP, DBCOLOR, MATERIAL, MLEADER, MLEADERSTYLE,
      PLOTSETTINGS, SCALE, TABLEGEOMETRY,
      TABLESTYLE, VBA_PROJECT, VISUALSTYLE, WIPEOUTVARIABLE,
-     ACDBSECTIONVIEWSTYLE, ACDBDETAILVIEWSTYLE
+     ACDBSECTIONVIEWSTYLE, ACDBDETAILVIEWSTYLE,
+     NPOCOLLECTION, EXACXREFPANELOBJECT
   */
 
   return 0;
@@ -2894,7 +2897,6 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
       else if (!dwg_decode_variable_type(dwg, dat, obj))
         {
           LOG_INFO("Object UNKNOWN:\n")
-
 #if 0
           // TODO: EED for unknown objects. crashes with asan
           dwg_decode_object(dat, obj->tio.object);

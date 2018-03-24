@@ -1767,11 +1767,11 @@ typedef struct _dwg_object_VPORT
   BITCODE_B _64_flag;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
-  BITCODE_BD view_height;
+  BITCODE_BD VIEWSIZE;
   BITCODE_BD aspect_ratio;
-  BITCODE_2RD view_center;
+  BITCODE_2RD VIEWCTR;
   BITCODE_3BD view_target;
-  BITCODE_3BD view_dir;
+  BITCODE_3BD VIEWDIR;
   BITCODE_BD view_twist;
   BITCODE_BD lens_length;
   BITCODE_BD front_clip;
@@ -1787,17 +1787,17 @@ typedef struct _dwg_object_VPORT
   BITCODE_2RD upper_right;
   BITCODE_B UCSFOLLOW;
   BITCODE_BS circle_zoom;
-  BITCODE_B fast_zoom;
+  BITCODE_B FASTZOOM;
   BITCODE_B UCSICON_0;
   BITCODE_B UCSICON_1;
-  BITCODE_B grid_on_off;
-  BITCODE_2RD grid_spacing;
-  BITCODE_B snap_on_off;
-  BITCODE_B snap_style;
-  BITCODE_BS snap_isopair;
-  BITCODE_BD snap_rot;
-  BITCODE_2RD snap_base;
-  BITCODE_2RD snap_spacing;
+  BITCODE_B GRIDMODE;
+  BITCODE_2RD GRIDUNIT;
+  BITCODE_B SNAPMODE;
+  BITCODE_B SNAPSTYLE;
+  BITCODE_BS SNAPISOPAIR;
+  BITCODE_BD SNAPANG;
+  BITCODE_2RD SNAPBASE;
+  BITCODE_2RD SNAPUNIT;
   BITCODE_B unknown;
   BITCODE_B ucs_pre_viewport;
   BITCODE_3BD ucs_origin;
@@ -3071,13 +3071,14 @@ typedef struct _dwg_object
  */
 typedef struct _dwg_class
 {
-  unsigned int number;
-  unsigned int version;
+  BITCODE_BS number;
+  BITCODE_BS proxyflag; /* see http://images.autodesk.com/adsk/files/autocad_2012_pdf_dxf-reference_enu.pdf */
   char *appname;
   char *cppname;
   char *dxfname;
-  unsigned char wasazombie;
-  unsigned int item_class_id;
+  BITCODE_B wasazombie; /* really Was-a-proxy flag */
+  /* missing 91 Instance count for a custom class */
+  BITCODE_BS item_class_id; /* Is-an-entity. 1f2 for entities, 1f3 for objects */
 } Dwg_Class;
 
 /**

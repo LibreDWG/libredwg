@@ -462,9 +462,10 @@ dxf_classes_write (FILE *fh, Dwg_Data * dwg)
       VALUE (1, dwg->dwg_class[i].dxfname);
       VALUE (2, dwg->dwg_class[i].cppname);
       VALUE (3, dwg->dwg_class[i].appname);
-      VALUE (90, dwg->dwg_class[i].version);
+      VALUE (90, dwg->dwg_class[i].proxyflag);
       VALUE (280, dwg->dwg_class[i].wasazombie);
-      VALUE (281, dwg->dwg_class[i].item_class_id);
+      // Is-an-entity. 1f2 for entities, 1f3 for objects
+      VALUE (281, dwg->dwg_class[i].item_class_id == 0x1F2 ? 1 : 0);
     }
   ENDSEC();
   return 0;
