@@ -205,7 +205,7 @@ dxf_header_write (FILE *fh, Dwg_Data * dwg)
     UNTIL(R_14) {
       HEADER_VALUE (DELOBJ, 70);
     }
-    HEADER_VALUE (DISPSILH, 70);
+    HEADER_VALUE (DISPSILH, 70); // this is WIREFRAME
     HEADER_VALUE (DIMSCALE, 40);
   }
   HEADER_VALUE (DIMASZ, 40);
@@ -385,9 +385,9 @@ dxf_header_write (FILE *fh, Dwg_Data * dwg)
   HEADER_VALUE (USERR5, 40);
 
   HEADER_VALUE (WORLDVIEW, 70);
-  VERSION(R_13) { // ?
-    HEADER_VALUE (WIREFRAME, 70); //Undocumented
-  }
+  //VERSION(R_13) {
+  //  HEADER_VALUE (WIREFRAME, 70); //Undocumented
+  //}
   HEADER_VALUE (SHADEDGE, 70);
   HEADER_VALUE (SHADEDIF, 70);
   HEADER_VALUE (TILEMODE, 70);
