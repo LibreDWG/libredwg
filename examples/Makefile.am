@@ -30,8 +30,9 @@ dwg_ps_LDADD = $(LDADD) -lps
 endif
 
 if USE_WRITE
-bin_PROGRAMS += dwgrewrite
+bin_PROGRAMS += dwgrewrite dxf2dwg
 dwgrewrite_SOURCES = dwgrewrite.c
+dxf2dwg_SOURCES    = dxf2dwg.c
 endif
 
 dwgread_SOURCES  = dwgread.c

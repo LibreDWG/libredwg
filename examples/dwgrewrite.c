@@ -76,6 +76,9 @@ main (int argc, char *argv[])
       printf("READ ERROR\n");
 
   printf("Writing DWG file %s", filename_out);
+#ifndef USE_WRITE
+  error = 1;
+#else
   if (version) {
     printf(" as %s\n", version);
     if (dwg.header.from_version != dwg.header.version)
@@ -86,15 +89,17 @@ main (int argc, char *argv[])
     printf("\n");
   }
   error = dwg_write_file(filename_out, &dwg);
+#endif
   if (error)
       printf("WRITE ERROR\n");
-  
   dwg_free(&dwg);
 
+#ifdef USE_WRITE
   // try to read again
   printf("Re-reading created file %s\n", filename_out);
   error = dwg_read_file(filename_out, &dwg);
   if (error)
       printf("re-READ ERROR\n");
+#endif
   return error;
 }
