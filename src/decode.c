@@ -2266,18 +2266,21 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       dwg_decode_IDBUFFER(dat, obj);
       return 1;
     }
+  // AcDbRasterImage
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "IMAGE"))
     {
       set_name(obj, dwg);
       dwg_decode_IMAGE(dat, obj);
       return 1;
     }
+  // AcDbRasterImageDef
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "IMAGEDEF"))
     {
       set_name(obj, dwg);
       dwg_decode_IMAGEDEF(dat, obj);
       return 1;
     }
+  // AcDbRasterImageDefReactor
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "IMAGEDEF_REACTOR"))
     {
       set_name(obj, dwg);
@@ -2371,6 +2374,7 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       //dwg_decode_WIPEOUTVARIABLE(dat, obj);
       return 0;
     }
+  // AcDbWipeout
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "WIPEOUT"))
     {
       set_name(obj, dwg);
