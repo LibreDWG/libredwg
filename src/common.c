@@ -19,7 +19,8 @@
 
 #include "config.h"
 #include "common.h"
-#include "stdio.h"
+//#include <stdio.h>
+#include <string.h>
 
 unsigned char *
 dwg_sentinel(Dwg_Sentinel s)
@@ -49,7 +50,9 @@ dwg_sentinel(Dwg_Sentinel s)
 }
 
 char version_codes[DWG_VERSIONS][7] =
-  { "MC0.0",   /* DWG Release 1.1 */
+  {
+    "INVALI",  // R_INVALID
+    "MC0.0",   /* DWG Release 1.1 */
     "AC1.2",   /* DWG Release 1.2 */
     "AC1.4",   /* DWG Release 1.4 */
     "AC1.50",  /* DWG Release 2.0 */
@@ -59,7 +62,6 @@ char version_codes[DWG_VERSIONS][7] =
     "AC1004", // R_9  DWG Release 9
     "AC1006", // R_10 DWG Release 10
     "AC1009", // R_11 DWG Release 11/12 (LT R1/R2)
-    "AC1009", // R_12
     "AC1012", // R_13
     "AC1014", // R_14
     "AC1015", // R_2000 = R15
@@ -71,3 +73,47 @@ char version_codes[DWG_VERSIONS][7] =
     "------"  // R_AFTER
   };
 
+// map [rVER] to our enum number, not the dwg->header.dwgversion
+// Acad 2013 offers Saveas DWG: 2013,2010,2007,2004,2004,2000,r14
+//                         DXF: 2013,2010,2007,2004,2004,2000,r12
+Dwg_Version_Type dwg_version_as(const char *version)
+{
+  if (!strcmp(version, "r2000"))
+    return R_2000;
+  else if (!strcmp(version, "r11") || !strcmp(version, "r12"))
+    return R_11;
+  else if (!strcmp(version, "r13"))
+    return R_13;
+  else if (!strcmp(version, "r14"))
+    return R_14;
+  else if (!strcmp(version, "r2004"))
+    return R_2004;
+  else if (!strcmp(version, "r2007"))
+    return R_2007;
+  else if (!strcmp(version, "r2010"))
+    return R_2010;
+  else if (!strcmp(version, "r2013"))
+    return R_2013;
+  else if (!strcmp(version, "r2018"))
+    return R_2018;
+  else if (!strcmp(version, "r1.1"))
+    return R_1_1;
+  else if (!strcmp(version, "r1.2"))
+    return R_1_2;
+  else if (!strcmp(version, "r1.4"))
+    return R_1_4;
+  else if (!strcmp(version, "r2.0"))
+    return R_2_0;
+  else if (!strcmp(version, "r2.1"))
+    return R_2_1;
+  else if (!strcmp(version, "r2.5"))
+    return R_2_5;
+  else if (!strcmp(version, "r2.6"))
+    return R_2_6;
+  else if (!strcmp(version, "r9"))
+    return R_9;
+  else if (!strcmp(version, "r10"))
+    return R_10;
+  else
+    return R_INVALID;
+}

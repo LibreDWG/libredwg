@@ -49,40 +49,15 @@ main (int argc, char *argv[])
   if (argc > 2 && !strncmp(argv[1], "-as-r", 5))
     {
       const char *opt = argv[1];
-      if (!strcmp(opt, "-as-r13") ||
-          !strcmp(opt, "-as-r14") ||
-          !strcmp(opt, "-as-r2000") ||
-          !strcmp(opt, "-as-r2004") ||
-          !strcmp(opt, "-as-r2007") ||
-          !strcmp(opt, "-as-r2010") ||
-          !strcmp(opt, "-as-r2013") ||
-          !strcmp(opt, "-as-r2018"))
+      dwg_version = dwg_version_as(&opt[4]);
+      if (dwg_version == R_INVALID)
         {
-          version = &opt[4];
-          if (!strcmp(version, "r13"))
-            dwg_version = R_13;
-          else if (!strcmp(version, "r14"))
-            dwg_version = R_14;
-          else if (!strcmp(version, "r2000"))
-            dwg_version = R_2000;
-          else if (!strcmp(version, "r2004"))
-            dwg_version = R_2004;
-          else if (!strcmp(version, "r2007"))
-            dwg_version = R_2007;
-          else if (!strcmp(version, "r2010"))
-            dwg_version = R_2010;
-          else if (!strcmp(version, "r2013"))
-            dwg_version = R_2013;
-          else if (!strcmp(version, "r2018"))
-            dwg_version = R_2018;
-          filename_in = argv[2];
-          argc--;
-        }
-      else
-        {
-          fprintf(stderr, "Invalid option %s\n", opt);
+          fprintf(stderr, "Invalid option %s\n", argv[1]);
           return usage();
         }
+      version = &opt[4];
+      filename_in = argv[2];
+      argc--;
     }
   if (argc > 2)
     filename_out = argv[2];
@@ -95,13 +70,11 @@ main (int argc, char *argv[])
   /*
    * some very simple testing
    */
-  // reads the file
   printf("Reading DWG file %s\n", filename_in);
   error = dwg_read_file(filename_in, &dwg);
   if (error)
       printf("READ ERROR\n");
 
-  // rewrite it
   printf("Writing DWG file %s", filename_out);
   if (version) {
     printf(" as %s\n", version);

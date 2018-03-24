@@ -590,34 +590,13 @@ main (int argc, char *argv[])
   if (argc > 2 && !strncmp(argv[1], "-as-r", 5))
     {
       const char *opt = argv[1];
-      version = &opt[4];
-      if (!strcmp(version, "r13"))
-        dwg_version = R_13;
-      else if (!strcmp(version, "r9"))
-        dwg_version = R_9;
-      else if (!strcmp(version, "r10"))
-        dwg_version = R_10;
-      else if (!strcmp(version, "r11"))
-        dwg_version = R_11;
-      else if (!strcmp(version, "r14"))
-        dwg_version = R_14;
-      else if (!strcmp(version, "r2000"))
-        dwg_version = R_2000;
-      else if (!strcmp(version, "r2004"))
-        dwg_version = R_2004;
-      else if (!strcmp(version, "r2007"))
-        dwg_version = R_2007;
-      else if (!strcmp(version, "r2010"))
-        dwg_version = R_2010;
-      else if (!strcmp(version, "r2013"))
-        dwg_version = R_2013;
-      else if (!strcmp(version, "r2018"))
-        dwg_version = R_2018;
-      else
+      dwg_version = dwg_version_as(&opt[4]);
+      if (dwg_version == R_INVALID)
         {
           fprintf(stderr, "Invalid option %s\n", argv[1]);
           return usage();
         }
+      version = &opt[4];
       filename_in = argv[2];
       argc--;
     }
