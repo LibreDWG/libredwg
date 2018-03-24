@@ -25,7 +25,7 @@
 #include <ctype.h>
 #include <stdint.h>
 #include <inttypes.h>
-#if defined(SIZEOF_WCHAR_T) && SIZEOF_WCHAR_T == 2
+#if defined(HAVE_WCHAR_H) && defined(SIZEOF_WCHAR_T) && SIZEOF_WCHAR_T == 2
 # include <wchar.h>
 #endif
 // else we roll our own
@@ -1079,7 +1079,7 @@ bit_write_TU(Bit_Chain * dat, BITCODE_TU chain)
 
   if (chain)
     {
-#if defined(SIZEOF_WCHAR_T) && SIZEOF_WCHAR_T == 2
+#if defined(HAVE_WCHAR_H) && defined(SIZEOF_WCHAR_T) && SIZEOF_WCHAR_T == 2
       length = wcslen(chain);
 #else
       for (length=0; chain[length]; length++) ;

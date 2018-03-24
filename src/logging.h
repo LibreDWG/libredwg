@@ -71,7 +71,7 @@
 #define LOG_INSANE(args...) LOG(INSANE, args)
 #define LOG_ALL(args...) LOG(ALL, args)
 
-#if defined(SIZEOF_WCHAR_T) && SIZEOF_WCHAR_T == 2
+#ifdef HAVE_NATIVE_WCHAR2
 #  define LOG_TEXT_UNICODE(level, args) LOG(level, args)
 #else
 #  define LOG_TEXT_UNICODE(level, wstr) \

@@ -31,11 +31,13 @@
 # ifdef HAVE_INTTYPES_H
 #  include <inttypes.h>
 # endif
-/* For R2007+ support.
+/* wchar for R2007+ support.
  * But we need the WIN32 UTF-16 variant, not UTF-32.
  */
-# ifdef HAVE_WCHAR_H
+# if defined(HAVE_WCHAR_H) && defined(SIZEOF_WCHAR_T) && SIZEOF_WCHAR_T == 2
 #  include <wchar.h>
+#  define HAVE_NATIVE_WCHAR2
+#  define DWGCHAR wchar_t
 # endif
 #endif
 
@@ -102,6 +104,10 @@ extern "C" {
 # define FORMAT_RLL "%lu"
 # define FORMAT_BLL "%lu"
 #endif
+#ifndef HAVE_NATIVE_WCHAR2
+  typedef BITCODE_RS dwg_wchar_t;
+# define DWGCHAR dwg_wchar_t
+#endif
 #define BITCODE_TF char *
 #define FORMAT_TF "\"%s\""
 #define BITCODE_TV char *
@@ -121,19 +127,18 @@ extern "C" {
 /* TODO: implement version dependant string parsing */
 /* encode codepages/utf8 */
 #define BITCODE_T  BITCODE_TV
-#define DWGCHAR    BITCODE_RS    /* wchar_t for windows only */
 #define BITCODE_TU BITCODE_RS*   /* UCS-2 unicode text */
-#if defined(SIZEOF_WCHAR_T) && SIZEOF_WCHAR_T == 2
-#define FORMAT_TU "\"%S\""
+#ifdef HAVE_NATIVE_WCHAR2
+# define FORMAT_TU "\"%S\""
 #else
-#define FORMAT_TU "\"%hn\""       /* will print garbage */
+# define FORMAT_TU "\"%hn\""     /* will print garbage */
 #endif
 
 typedef struct _dwg_time_bll {
   BITCODE_BL days;
   BITCODE_BL ms;
 } Dwg_Bitcode_TimeBLL;
-  
+
 typedef struct _dwg_bitcode_2rd
 {
   BITCODE_RD x;

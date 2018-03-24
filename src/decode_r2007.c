@@ -798,7 +798,7 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
     
       // Section Name
       section->name = bfr_read_string(&ptr);
-#if defined(SIZEOF_WCHAR_T) && SIZEOF_WCHAR_T == 2
+#ifdef HAVE_NATIVE_WCHAR2
       LOG_TRACE("  name:          " FORMAT_TU "\n", (BITCODE_TU)section->name)
 #else
       LOG_TRACE("  name:          ")
