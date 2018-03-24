@@ -29,45 +29,52 @@
       FIELD_BLL(requiredversions);
     }
 
-  FIELD_BD (unknown_0); // max double number? 412148564080.0
-  FIELD_BD (unknown_1); // default extrusion.x? 1.0
-  FIELD_BD (unknown_2); // default extrusion.y? 1.0
-  FIELD_BD (unknown_3); // default extrusion.z? 1.0
-  PRE(R_2007) { // undocumented as such in the ODA spec
+  SINCE(R_13)
+    {
+      FIELD_BD (unknown_0); // max double number? 412148564080.0
+      FIELD_BD (unknown_1); // default extrusion.x? 1.0
+      FIELD_BD (unknown_2); // default extrusion.y? 1.0
+      FIELD_BD (unknown_3); // default extrusion.z? 1.0
+    }
+  VERSIONS(R_13, R_2007) { // undocumented as such in the ODA spec
       FIELD_TV (unknown_text1); // ""
       FIELD_TV (unknown_text2); // ""
       FIELD_TV (unknown_text3); // ""
       FIELD_TV (unknown_text4); // ""
   }
-  FIELD_BL (unknown_8); // 24
-  FIELD_BL (unknown_9); // 0
-
+  SINCE(R_13)
+    {
+      FIELD_BL (unknown_8); // 24
+      FIELD_BL (unknown_9); // 0
+    }
   VERSIONS(R_13, R_14) // or maybe UNTIL(R_14)
     {
       FIELD_BS(unknown_10);
     }
-  PRE(R_2004)
+  VERSIONS(R_13, R_2004)
     {
       FIELD_HANDLE (current_viewport_entity_header, ANYCODE);
     }
-
-  FIELD_B (DIMASO);
-  FIELD_B (DIMSHO);
-
-  UNTIL(R_14)
+  SINCE(R_13)
+    {
+      FIELD_B (DIMASO);
+      FIELD_B (DIMSHO);
+    }
+  VERSIONS(R_13, R_14)
     {
       FIELD_B (DIMSAV); // Name of the dimensioning style?
     }
-
-  FIELD_B (PLINEGEN);
-  FIELD_B (ORTHOMODE);
-  FIELD_B (REGENMODE);
-  FIELD_B (FILLMODE);
-  FIELD_B (QTEXTMODE);
-  FIELD_B (PSLTSCALE);
-  FIELD_B (LIMCHECK);
-
-  UNTIL(R_14)
+  SINCE(R_13)
+    {
+      FIELD_B (PLINEGEN);
+      FIELD_B (ORTHOMODE);
+      FIELD_B (REGENMODE);
+      FIELD_B (FILLMODE);
+      FIELD_B (QTEXTMODE);
+      FIELD_B (PSLTSCALE);
+      FIELD_B (LIMCHECK);
+    }
+  VERSIONS(R_13, R_14)
     {
       FIELD_B (BLIPMODE);
     }
@@ -605,7 +612,5 @@
 
   /* TODO: This really is the section[0] CRC not related to the header */
   FIELD_RS (CRC);
-
-
 
 

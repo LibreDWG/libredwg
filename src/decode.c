@@ -89,7 +89,14 @@ static int
 resolve_objectref_vector(Bit_Chain* dat, Dwg_Data * dwg);
 
 static int
-decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg);
+decode_preR13(Bit_Chain* dat, Dwg_Data * dwg);
+static void
+decode_preR13_table(const char* name, int id, Bit_Chain* dat, Dwg_Data * dwg);
+static void
+decode_preR13_table_chk(const char* name, int id, Bit_Chain* dat, Dwg_Data * dwg);
+
+static int
+decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg);
 
 static int
 decode_R2004(Bit_Chain* dat, Dwg_Data * dwg);
@@ -179,13 +186,12 @@ dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
   PRE(R_13)
     {
       LOG_ERROR(WE_CAN "This file's version code is: %s", version)
-      //return decode_preR13(dat, dwg); //TODO rurban: search my old hard drives
-      return -1;
+      return decode_preR13(dat, dwg);
     }
 
-  VERSION(R_2000)
+  VERSIONS(R_13, R_2000)
     {
-      return decode_R13_R15(dat, dwg);
+      return decode_R13_R2000(dat, dwg);
     }
 
   VERSION(R_2004)
@@ -209,8 +215,149 @@ dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
   return -1;
 }
 
+// we put the three table nums into sections.
+// number is the number of elements in the table.
+static void
+decode_preR13_table(const char* name, int id, Bit_Chain* dat, Dwg_Data * dwg)
+{
+  Dwg_Section *tbl = &dwg->header.section[id];
+  tbl->size    = bit_read_RS(dat);
+  tbl->number  = bit_read_RL(dat);
+  tbl->address = bit_read_RL(dat);
+  LOG_TRACE("table %-8s %2d: size:%-4u nr:%-3u (0x%x-0x%x)\n",
+            name, id, tbl->size, tbl->number, tbl->address,
+            tbl->address + tbl->number * tbl->size)
+}
+
+static void
+decode_preR13_table_chk(const char* name, int id, Bit_Chain* dat, Dwg_Data * dwg)
+{
+  Dwg_Section *tbl = &dwg->header.section[id];
+  BITCODE_RS t = bit_read_RS(dat);
+  tbl->size    = bit_read_RS(dat);
+  tbl->number  = bit_read_RS(dat);
+  tbl->address = bit_read_RL(dat);
+  LOG_TRACE("table %-8s %2d: size:%-4u nr:%-3u (0x%x-0x%x) table:%d\n",
+            name, id, tbl->size, tbl->number, tbl->address,
+            tbl->address + tbl->number * tbl->size, t)
+}
+
 static int
-decode_R13_R15(Bit_Chain* dat, Dwg_Data * dwg)
+decode_preR13(Bit_Chain* dat, Dwg_Data * dwg)
+{
+  BITCODE_RL entities_start, entities_end, blocks_start, blocks_end;
+  BITCODE_RL rl1, rl2;
+  BITCODE_RS rs2;
+  int tbl_id;
+  Dwg_Object *obj = NULL;
+  {
+    int i;
+    struct Dwg_Header *_obj = &dwg->header;
+    dat->byte = 0x06;
+
+    #include "header.spec"
+  }
+  LOG_INFO("@0x%lx\n", dat->byte); //0x14
+
+  // section[0] header_vars
+  // blocks   (start-end)
+  // entities (start-end)
+  // section[1] BLOCK table (size, nr, start)
+  // section[2] LAYER
+  // section[3] STYLE
+  // section[4] LTYPE
+  // section[5] VIEW
+  // header_vars
+  // section[6] UCS
+  // section[7] VPORT
+  // section[8] APPID
+  // section[9] DIMSTYLE
+  // section[10] P13
+  // entities
+  // sections/tables
+  // block entities
+
+  // tables really
+  dwg->header.num_sections = 12;
+  dwg->header.section = (Dwg_Section*) calloc(1, sizeof(Dwg_Section)
+      * dwg->header.num_sections);
+  if (!dwg->header.section)
+    {
+      LOG_ERROR("Out of memory");
+      return -2;
+    }
+
+  entities_start  = bit_read_RL(dat);
+  entities_end    = bit_read_RL(dat);
+  LOG_TRACE("entities 0x%x - 0x%x\n",
+            entities_start, entities_end);
+  blocks_start  = bit_read_RL(dat);
+  rl1           = bit_read_RL(dat); //0x40
+  blocks_end    = bit_read_RL(dat);
+  rl2           = bit_read_RL(dat); //0x80
+  LOG_TRACE("blocks   0x%x (0x%x) - 0x%x (0x%x)\n",
+            blocks_start, rl1, blocks_end, rl2);
+
+  tbl_id = 0;
+  dwg->header.section[0].number = tbl_id;
+  dwg->header.section[0].type  = SECTION_HEADER;
+
+  decode_preR13_table("BLOCK", ++tbl_id, dat, dwg);
+  decode_preR13_table("LAYER", ++tbl_id, dat, dwg);
+  decode_preR13_table("STYLE", ++tbl_id, dat, dwg);
+  tbl_id++; // skip one
+  decode_preR13_table("LTYPE", ++tbl_id, dat, dwg);
+  decode_preR13_table("VIEW", ++tbl_id, dat, dwg);
+
+  LOG_INFO("@0x%lx\n", dat->byte);       //0x5e
+  {
+    Dwg_Header_Variables* _obj = &dwg->header_vars;
+    #include "header_variables_r11.spec"
+  }
+  LOG_INFO("@0x%lx\n", dat->byte);       //0x23a
+
+  dat->byte = 0x3ef;
+  LOG_INFO("@0x%lx\n", dat->byte);
+  decode_preR13_table("UCS", ++tbl_id, dat, dwg);
+  // skip: 0x500 - dat->bytes
+  dat->byte = 0x500;
+  LOG_INFO("@0x%lx\n", dat->byte); //0x23a
+  decode_preR13_table("VPORT", ++tbl_id, dat, dwg);
+  rl1 = bit_read_RL(dat);
+  rl2 = bit_read_RL(dat);
+  LOG_TRACE("0x%x 0x%x\n", rl1, rl2);
+  decode_preR13_table("APPID", ++tbl_id, dat, dwg);
+  rl1 = bit_read_RL(dat);
+  rs2 = bit_read_RS(dat);
+  LOG_TRACE("0x%x 0x%x\n", rl1, rs2);
+  decode_preR13_table("DIMSTYLE", ++tbl_id, dat, dwg);
+  // skip: 0x69f - dat->bytes
+  dat->byte = 0x69f;
+  decode_preR13_table("P13", ++tbl_id, dat, dwg);
+
+  // entities
+  // blocks
+  // 36 byte
+  // 4long again: entities_start, entities_end, blocks_start, blocks_end
+  // 12 byte
+  decode_preR13_table_chk("BLOCK", 1, dat, dwg);
+  decode_preR13_table_chk("LAYER", 2, dat, dwg);
+  decode_preR13_table_chk("STYLE", 3, dat, dwg);
+  decode_preR13_table_chk("LTYPE", 5, dat, dwg);
+  decode_preR13_table_chk("VIEW", 6, dat, dwg);
+  decode_preR13_table_chk("UCS", 7, dat, dwg);
+  decode_preR13_table_chk("VPORT", 8, dat, dwg);
+  decode_preR13_table_chk("APPID", 9, dat, dwg);
+  decode_preR13_table_chk("DIMSTYLE", 10, dat, dwg);
+  decode_preR13_table_chk("P13", 11, dat, dwg);
+  rl1 = bit_read_RL(dat);
+  LOG_TRACE("0x%x\n", rl1);
+
+  return 0;
+}
+
+static int
+decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
 {
   Dwg_Object *obj = NULL;
   unsigned int section_size = 0;

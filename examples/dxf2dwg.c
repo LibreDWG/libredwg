@@ -149,8 +149,9 @@ dxf_format (int code)
 static int
 dxf_header_read (FILE *fh, Dwg_Data * dwg)
 {
-  double ms;
-  struct Dwg_Header *dat = &dwg->header;
+  //double ms;
+  //struct Dwg_Header *dat = &dwg->header;
+  (void)fh; (void)dwg;
 
 /*  
   SECTION(HEADER);
@@ -444,8 +445,9 @@ dxf_header_read (FILE *fh, Dwg_Data * dwg)
 static int
 dxf_classes_read (FILE *fh, Dwg_Data * dwg)
 {
-  unsigned int i;
+  (void)fh; (void)dwg;
   /*
+  unsigned int i;
   SECTION(HEADER);
   for (i=0; i < dwg->num_classes; i++)
     {
@@ -465,26 +467,31 @@ dxf_classes_read (FILE *fh, Dwg_Data * dwg)
 static int
 dxf_tables_read (FILE *fh, Dwg_Data * dwg)
 {
+  (void)fh; (void)dwg;
   return 0;
 }
 static int
 dxf_blocks_read (FILE *fh, Dwg_Data * dwg)
 {
+  (void)fh; (void)dwg;
   return 0;
 }
 static int
 dxf_entities_read (FILE *fh, Dwg_Data * dwg)
 {
+  (void)fh; (void)dwg;
   return 0;
 }
 static int
 dxf_objects_read (FILE *fh, Dwg_Data * dwg)
 {
+  (void)fh; (void)dwg;
   return 0;
 }
 static int
 dxf_preview_read (FILE *fh, Dwg_Data * dwg)
 {
+  (void)fh; (void)dwg;
   return 0;
 }
 

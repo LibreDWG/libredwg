@@ -18,16 +18,25 @@
 
 #include "spec.h"
 
-  // char version[6] handled seperately
+  // char version[6] handled seperately. older releases just had a version[12]
   for (i=0; i<5; i++) {
     FIELD_RC(zero_5[i]);
   }
   FIELD_RC(is_maint);
-  FIELD_RC(zero_one_or_three);
-  FIELD_RL(preview_addr); //@0x0d
-  FIELD_RC(dwg_version);
-  FIELD_RC(maint_version);
-  FIELD_RS(codepage); //@0x13: 29/30 for ANSI_1252, since r2007 UTF-16
+
+  PRE(R_13) {
+    FIELD_RC(zero_one_or_three); // 1
+    for (i=0; i<3; i++) { // 3, 5, 205
+      FIELD_RS(unknown_s[i]);
+    }
+    FIELD_RC(maint_version); // 0
+  } LATER_VERSIONS {
+    FIELD_RC(zero_one_or_three);
+    FIELD_RL(preview_addr); //@0x0d
+    FIELD_RC(dwg_version);
+    FIELD_RC(maint_version);
+    FIELD_RS(codepage); //@0x13: 29/30 for ANSI_1252, since r2007 UTF-16
+  }
 
   /* Until R_2004 here follows the sections */
 
@@ -54,3 +63,4 @@
     }
     /* now at 0x80 follows the encrypted header data */
   }
+

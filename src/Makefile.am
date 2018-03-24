@@ -42,6 +42,7 @@ include_HEADERS = \
 EXTRA_HEADERS = \
 	dwg.spec \
         header_variables.spec \
+        header_variables_r11.spec \
         common_entity_handle_data.spec \
         header.spec \
         auxheader.spec \

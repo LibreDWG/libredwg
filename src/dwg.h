@@ -441,6 +441,7 @@ typedef struct _dwg_header_variables {
   BITCODE_BL TDUSRTIMER_MILLISECONDS;
   BITCODE_CMC CECOLOR;
   BITCODE_BS HANDLING; /* <r14: default 1 */
+  BITCODE_RS HANDSEED_R11;
   BITCODE_H HANDSEED;
   BITCODE_H CLAYER;
   BITCODE_H TEXTSTYLE;
@@ -473,7 +474,10 @@ typedef struct _dwg_header_variables {
   BITCODE_3BD EXTMAX;
   BITCODE_2RD LIMMIN;
   BITCODE_2RD LIMMAX;
+  BITCODE_2RD VIEWCTR; //-r11
   BITCODE_BD ELEVATION;
+  BITCODE_RD VIEWSIZE;  //-r11
+  BITCODE_2RD SNAPUNIT; //-r11
   BITCODE_3BD UCSORG;
   BITCODE_3BD UCSXDIR;
   BITCODE_3BD UCSYDIR;
@@ -3080,31 +3084,6 @@ typedef struct _dwg_chain
   unsigned char bit;
 } Dwg_Chain;
 
-typedef struct _dwg_section
-{
-  int number;
-  unsigned int address;
-  BITCODE_RL size;
-  BITCODE_RL parent;
-  BITCODE_RL left;
-  BITCODE_RL right;
-  BITCODE_RL x00;
-} Dwg_Section;
-
-typedef struct
-{
-  BITCODE_RL size;
-  BITCODE_RL pagecount;
-  BITCODE_RL num_sections;
-  BITCODE_RL max_decomp_size;
-  BITCODE_RL unknown2;
-  BITCODE_RL compressed; /* Compressed (1 = no, 2 = yes, normally 2) */
-  BITCODE_RL type;
-  BITCODE_RL encrypted; /* (0 = no, 1 = yes, 2 = unknown) */
-  char name[64];
-  Dwg_Section **sections;
-} Dwg_Section_Info;
-
 typedef enum DWG_SECTION_TYPE
 {
   SECTION_HEADER = 0x01,
@@ -3125,6 +3104,32 @@ typedef enum DWG_SECTION_TYPE
   SECTION_SIGNATURE      /* .. */
 } Dwg_Section_Type;
 
+typedef struct _dwg_section
+{
+  int number;
+  BITCODE_RL address;
+  BITCODE_RL size;
+  BITCODE_RL parent;
+  BITCODE_RL left;
+  BITCODE_RL right;
+  BITCODE_RL x00;
+  Dwg_Section_Type type;
+} Dwg_Section;
+
+typedef struct
+{
+  BITCODE_RL size;
+  BITCODE_RL pagecount;
+  BITCODE_RL num_sections;
+  BITCODE_RL max_decomp_size;
+  BITCODE_RL unknown2;
+  BITCODE_RL compressed; /* Compressed (1 = no, 2 = yes, normally 2) */
+  BITCODE_RL type;
+  BITCODE_RL encrypted; /* (0 = no, 1 = yes, 2 = unknown) */
+  char name[64];
+  Dwg_Section **sections;
+} Dwg_Section_Info;
+
 /**
  Main DWG struct
  */
@@ -3137,6 +3142,7 @@ typedef struct _dwg_struct
     BITCODE_RC   zero_5[5];
     BITCODE_RC   is_maint;
     BITCODE_RC   zero_one_or_three;
+    BITCODE_RS   unknown_s[3];         /* <R13 */
     BITCODE_RL   preview_addr;
     BITCODE_RC   dwg_version;
     BITCODE_RC   maint_version;
@@ -3247,8 +3253,6 @@ typedef struct _dwg_struct
 
   long unsigned int measurement;
   unsigned int layout_number;
-
-  //struct _bit_chain *bit_chain;
 
 } Dwg_Data;
 
