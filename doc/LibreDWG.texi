@@ -57,6 +57,7 @@ Texts.  A copy of the license is included in the section entitled
 * Types::               Enums, structs.
 * Constants::           Value macros, invariably.
 * Functions::           Call them.
+* Examples::            Useful binaries.
 
 * Reporting bugs::      Sending bug reports and feature suggestions.
 * GNU Free Documentation License:: Copying and sharing this documentation.
@@ -105,7 +106,7 @@ In the past, these were released:
 @cindex coverage
 
 Because the DWG file format is not open, its specification had to be
-reverse-engineered.  The specification is complete.
+reverse-engineered.  The specification is almost complete.
 The LibreDWG implementation of the specification is an ongoing process;
 as of version @value{VERSION}, coverage is approximately 99%.
 
@@ -118,15 +119,17 @@ Here is a list of features that are still missing.
 
 @table @asis
 
-@item Reading R2007+
+@item Reading R2007+ DWG
 Reading DWG formats for R2007 and later: R2010, R2013, R2018 is an ongoing effort, and about halfway implemented.
 
-Reading DWG formats for earlier than R13 is not our target, but can be added eventually.
+Reading DWG formats for earlier than R13 is not our target, but will be added eventually as soon as we find proper docs and samples.
 
-@item Writing R2007+
+@item Writing R2007+ DWG
 Writing DWG formats for R2007 and later: R2010, R2013, R2018 is an ongoing effort and not yet implemented.
 
 @end table
+
+See also the @file{TODO} file in the source distribution.
 
 @section Related projects
 
@@ -144,6 +147,7 @@ Related libraries:
 @table @asis
 @item libdwg
 The old abandoned version (documented in Esperanto) which was forked to LibreDWG in 2009.
+But in the meantime it got a DXF reader.
 @item libdxfrw
 Read the DWG format for all versions, written in C++, under the GPLv2 license.
 @item OpenDWG
@@ -153,6 +157,9 @@ The OpenDWG's license does not allow the usage in free software projects.
 The 2009 license update of LibreDWG to the version 3 of the GNU GPL
 made it impossible for the free software projects LibreCAD and FreeCAD
 to use LibreDWG.
+
+Compared to libdwg and libdxfrw, LibreDWG can read and write much more details,
+but still fails to read many DWG's.
 
 @node Usage
 @chapter Usage
@@ -169,6 +176,12 @@ in the C code.
 @example
 #include <dwg.h>
 @end example
+
+Optionally you can also use the 
+@example
+#include <dwg_api.h>
+@end example
+API.
 
 @noindent
 Make sure you specify @samp{-lredwg} when linking,
@@ -269,7 +282,13 @@ handle-references
 Two types that do not derive from the type system of the DWG file format
 are the enums for return codes and error codes.
 
-[??? TODO]
+Esp. on 32-bit and windows systems ensure that you define
+@code{HAVE_STDINT_H} and @code{HAVE_INTTYPES_H} before including
+@file{dwg.h} to use the proper C99 @code{int32_t},... types, and not
+just the native fallback types int/long, which are different across
+platforms.  Or include @file{<stdint.h>} and @file{<inttypes.h>} by
+your own before @file{dwg.h}.
+With the GNU autotools this usually happens automatically.
 
 @node Constants
 @chapter Constants
@@ -390,6 +409,52 @@ Return 0 if successful.
 
 The iterator is similar to above, but you want to encode all data structures, not just the
 entities.
+
+@node Examples
+@chapter Examples
+
+@cindex examples
+
+LibreDWG installs some binary programs to read or write DWG files.
+
+@table @asis
+
+@item @file{dwgread}
+
+This is mostly used with @code{--enable-trace} and @code{LIBREDWG_TRACE=n} to debug
+the read contents of the DWG.
+
+@item @file{dwgrewrite}
+
+Read and write the DWG, optionally via @code{--as-rVER} as another
+version, an earlier or later version.
+
+@item @file{dwg2SVG}
+Convert a DWG to a limited SVG. All paperspace and modelspace enties of type:
+TEXT, LINE, CIRCLE, ARC, INSERT.
+
+@item @file{dwg2dxf}
+
+Convert a DWG to DXF, optionally via @code{--as-rVER} as another
+version, an earlier or later version, or via @code{-m} or
+@code{--minimal} as a minimal DWF version, skipping most headers vars,
+classes, tables and objects.
+Some parts of the DXF writers are not yet implemented.
+
+@item @file{dxf2dwg}
+
+Convert a DXF to DWG, optionally via @code{--as-rVER} as another
+version, an earlier or later version.
+The DXF reader is not yet implemented.
+
+@end table
+
+There are also some more examples in the source distribution:
+
+@file{load_dwg} loads a DWG and adds some entities.
+
+@file{dwg2svg2} converts a DWG to SVG similar to @file{dwg2SVG},
+but via the @file{dwg_api.h} only.
 
 @node Reporting bugs
 @chapter Reporting bugs
