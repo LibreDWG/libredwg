@@ -2536,7 +2536,7 @@ typedef struct _dwg_object_DICTIONARYVAR
 typedef struct _dwg_object_DICTIONARYWDLFT
 {
   BITCODE_BL numitems;
-  BITCODE_RC unknown_r14;
+  BITCODE_RL unknown_r14;
   BITCODE_BS cloning;
   BITCODE_RC hard_owner;
   BITCODE_TV* text;

@@ -1476,12 +1476,11 @@ DWG_OBJECT(DICTIONARY);
 
   VERSION(R_14)
     {
-      FIELD(unknown_r14, RC);
+      FIELD(hard_owner, RC); //?
     }
-
   SINCE(R_2000)
     {
-      FIELD(cloning, BS);
+      FIELD(cloning, BS); // 281
       FIELD(hard_owner, RC);
     }
 
@@ -1508,9 +1507,8 @@ DWG_OBJECT(DICTIONARYWDLFT);
 
   VERSION(R_14)
     {
-      FIELD(unknown_r14, RC);
+      FIELD(unknown_r14, RL); // cloning+hard_owner+?
     }
-
   SINCE(R_2000)
     {
       FIELD(cloning, BS);

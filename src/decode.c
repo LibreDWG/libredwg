@@ -404,6 +404,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
   /* Section Locator Records 0x15 */
   assert(dat->byte == 0x15);
   dwg->header.num_sections = bit_read_RL(dat);
+  LOG_TRACE("\nNum sections: " FORMAT_RL "\n", dwg->header.num_sections)
   if (!dwg->header.num_sections) //ODA writes zeros.
     dwg->header.num_sections = 6;
 
@@ -426,15 +427,20 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
       dwg->header.section[j].number  = bit_read_RC(dat);
       dwg->header.section[j].address = bit_read_RL(dat);
       dwg->header.section[j].size    = bit_read_RL(dat);
+      LOG_TRACE("section[%u]: number=%2d address=0x%8x size=%4d\n",
+                j, (int)dwg->header.section[j].number,
+                (unsigned)dwg->header.section[j].address,
+                (int)dwg->header.section[j].size)
     }
 
-  // Check CRC-on
+  // Check CRC
   ckr = bit_calc_CRC(0xc0c1, dat->chain, dat->byte);
   ckr2 = bit_read_RS(dat);
   if (ckr != ckr2)
     {
       printf("Error: Header CRC mismatch %d <=> %d\n", ckr, ckr2);
-      /*return 1;*/
+      if (dwg->header.version == R_2000)
+        return -1;
       /* The CRC depends on num_sections. XOR result with
          3: 0xa598
          4: 0x8101
@@ -521,7 +527,9 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
     {
       printf("Error: Section[%d] CRC mismatch %d <=> %d\n",
              dwg->header.section[0].number, ckr, ckr2);
-      return -1;
+      // TODO: xor with num_sections
+      if (dwg->header.version == R_2000)
+        return -1;
     }
 
   /*-------------------------------------------------------------------------
@@ -539,7 +547,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
   lasta = dat->byte + size;
   LOG_TRACE("         Length: %lu\n", size);
 
-  /* read the classes
+  /* Read the classes
    */
   dwg->layout_number = 0;
   dwg->num_classes = 0;
@@ -597,12 +605,13 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
     {
       printf("Error: Section[%d] CRC mismatch %d <=> %d\n",
              dwg->header.section[1].number, ckr, ckr2);
-      return -1;
+      if (dwg->header.version == R_2000)
+        return -1;
     }
 
   dat->byte += 16;
   pvz = bit_read_RL(dat); // Unknown bitlong inter class and object
-  LOG_TRACE("@ %lu RL: 0x%#lX\n", dat->byte - 4, pvz)
+  LOG_TRACE("@ %lu RL: 0x%lx\n", dat->byte - 4, pvz)
   LOG_INFO("Number of classes read: %u\n", dwg->num_classes)
 
   /*-------------------------------------------------------------------------
@@ -626,7 +635,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
       sgdc[0] = bit_read_RC(dat);
       sgdc[1] = bit_read_RC(dat);
       section_size = (sgdc[0] << 8) | sgdc[1];
-      //LOG_TRACE("section_size: %u\n", section_size)
+      LOG_TRACE("section_size: %u\n", section_size)
       if (section_size > 2035)
         {
           LOG_ERROR("Object-map section size greater than 2035!")
@@ -686,7 +695,9 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
       if (ckr != ckr2)
         {
           printf("Error: Section CRC mismatch %d <=> %d\n", ckr, ckr2);
-          return -1;
+          // fails with r14
+          if (dwg->header.version == R_2000)
+            return -1;
         }
 
       if (dat->byte >= lastmap)
