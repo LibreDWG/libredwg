@@ -43,11 +43,12 @@ bit_advance_position(Bit_Chain * dat, int advance)
   endpos = dat->bit + advance;
   if (dat->byte >= dat->size - 1 && endpos > 7)
     {
-      dat->bit = 7;
+      dat->byte = dat->size - 1;
+      dat->bit = 0;
       return;
     }
-  dat->bit = endpos % 8;
   dat->byte += endpos / 8;
+  dat->bit = endpos % 8;
 }
 
 /** Read 1 bit.
@@ -58,6 +59,11 @@ bit_read_B(Bit_Chain * dat)
   unsigned char result;
   unsigned char byte;
 
+  if (dat->byte >= dat->size)
+    {
+      LOG_ERROR("buffer overflow at %lu", dat->byte)
+      return (-1);
+    }
   byte = dat->chain[dat->byte];
   result = (byte & (0x80 >> dat->bit)) >> (7 - dat->bit);
 
@@ -89,6 +95,11 @@ bit_read_BB(Bit_Chain * dat)
   unsigned char result;
   unsigned char byte;
 
+  if (dat->byte >= dat->size)
+    {
+      LOG_ERROR("buffer overflow at %lu", dat->byte)
+      return (-1);
+    }
   byte = dat->chain[dat->byte];
   if (dat->bit < 7)
     result = (byte & (0xc0 >> dat->bit)) >> (6 - dat->bit);
@@ -206,6 +217,11 @@ bit_read_RC(Bit_Chain * dat)
   unsigned char result;
   unsigned char byte;
 
+  if (dat->byte >= dat->size)
+    {
+      LOG_ERROR("buffer overflow at %lu", dat->byte)
+      return (-1);
+    }
   byte = dat->chain[dat->byte];
   if (dat->bit == 0)
     result = byte;
