@@ -1212,26 +1212,47 @@ dwg_encode_add_object(Dwg_Object * obj, Bit_Chain * dat,
          SPATIAL_INDEX
       */
       else if (!dwg_encode_variable_type(obj->parent, dat, obj))
-      {
-        unsigned int i;
-        LOG_INFO("Object unknown\n")
+        {
+          Dwg_Data *dwg = obj->parent;
+          int is_entity;
+          int i = obj->type - 500;
+          Dwg_Class *klass = NULL;
 
-        SINCE(R_2000)
-          {
-            bit_write_RL(dat, obj->bitsize);
-          }
-        bit_write_H(dat, &obj->handle);
-
-        obj->supertype = DWG_SUPERTYPE_UNKNOWN;
-        obj->tio.unknown = (unsigned char*)malloc(obj->size);
-        if (!obj->tio.unknown) {
-          LOG_ERROR("Out of memory"); return;
+          if (i <= (int)dwg->num_classes)
+            {
+              klass = &dwg->dwg_class[i];
+              is_entity = dwg_class_is_entity(klass);
+            }
+          // properly dwg_decode_object/_entity for eed, reactors, xdic
+          if (klass && !is_entity)
+            {
+              dwg_encode_UNKNOWN_OBJ(dat, obj);
+            }
+          else if (klass)
+            {
+              dwg_encode_UNKNOWN_ENT(dat, obj);
+            }
+          else // not a class
+            {
+              LOG_WARN("Unknown object, skipping eed/reactors/xdic");
+              SINCE(R_2000)
+              {
+                bit_write_RL(dat, obj->bitsize);
+                LOG_INFO("Object bitsize: " FORMAT_RL " @%lu.%u\n", obj->bitsize,
+                         dat->byte, dat->bit);
+              }
+              bit_write_H(dat, &(obj->handle));
+              LOG_INFO("Object handle: %d.%d.%lu\n",
+                       obj->handle.code, obj->handle.size, obj->handle.value);
+              object_address = dat->byte;
+              // write obj->size bytes, excl. bitsize and handle
+              // overshoot the bitsize and handle size
+              for (i=0; i<(int)obj->size; i++) {
+                bit_write_RC(dat, obj->tio.unknown[i]);
+              }
+              dat->byte = object_address;
+            }
         }
-        // write obj->size bytes, excl. bitsize and handle
-        for (i=0; i<obj->size; i++) {
-          bit_write_RC(dat, obj->tio.unknown[i]);
-        }
-      }
     }
 
   /*

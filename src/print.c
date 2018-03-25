@@ -619,15 +619,32 @@ dwg_print_object(Bit_Chain* dat, Dwg_Object *obj)
       */
       else if (!dwg_print_variable_type(obj->parent, dat, obj))
         {
-          LOG_INFO("Object UNKNOWN:\n")
+          Dwg_Data *dwg = obj->parent;
+          int is_entity;
+          int i = obj->type - 500;
+          Dwg_Class *klass = NULL;
 
-          SINCE(R_2000)
+          if (i <= (int)dwg->num_classes)
             {
-              BITCODE_RL bitsize = bit_read_RL(dat);  // skip bitsize
-              LOG_INFO("Object bitsize: %u\n", bitsize)
+              klass = &dwg->dwg_class[i];
+              is_entity = dwg_class_is_entity(klass);
             }
-          if (!bit_read_H(dat, &obj->handle))
+          // properly dwg_decode_object/_entity for eed, reactors, xdic
+          if (klass && !is_entity)
             {
+              dwg_print_UNKNOWN_OBJ(dat, obj);
+            }
+          else if (klass)
+            {
+              dwg_print_UNKNOWN_ENT(dat, obj);
+            }
+          else // not a class
+            {
+              LOG_WARN("Unknown object, skipping eed/reactors/xdic");
+              SINCE(R_2000)
+                {
+                  LOG_INFO("Object bitsize: %u\n", obj->bitsize)
+                }
               LOG_INFO("Object handle: %d.%d.%lu\n",
                        obj->handle.code, obj->handle.size, obj->handle.value);
             }

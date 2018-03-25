@@ -2825,7 +2825,10 @@ typedef struct _dwg_object_LIGHTLIST
  */
 typedef struct _dwg_entity_UNKNOWN_ENT
 {
-  char *raw; // var-length field
+  int num_bytes;
+  BITCODE_RC *bytes;
+  int num_bits;
+  BITCODE_B *bits;
 } Dwg_Entity_UNKNOWN_ENT;
 
 /**
@@ -2833,7 +2836,10 @@ typedef struct _dwg_entity_UNKNOWN_ENT
  */
 typedef struct _dwg_object_UNKNOWN_OBJ
 {
-  char *raw; // var-length field
+  int num_bytes;
+  BITCODE_RC *bytes;
+  int num_bits;
+  BITCODE_B *bits;
 } Dwg_Object_UNKNOWN_OBJ;
 
 /* OBJECTS - END ************************************************************/
@@ -3348,6 +3354,9 @@ dwg_get_object_count(Dwg_Data *dwg);
 
 long unsigned int
 dwg_get_object_object_count(Dwg_Data *dwg);
+
+int
+dwg_class_is_entity(Dwg_Class *klass);
 
 long unsigned int
 dwg_get_entity_count(Dwg_Data *);

@@ -441,6 +441,12 @@ get_next_owned_object(Dwg_Object* hdr_obj, Dwg_Object* current,
   return NULL;
 }
 
+int
+dwg_class_is_entity(Dwg_Class *klass)
+{
+  return klass->item_class_id == 0x1f2;
+}
+
 void
 dwg_object_free(Dwg_Object* obj)
 {

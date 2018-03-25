@@ -117,9 +117,6 @@ dwg_decode_object(Bit_Chain * dat, Dwg_Object_Object * obj);
 static int
 dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent);
 
-static int
-dwg_class_is_entity(Dwg_Class *klass);
-
 /*--------------------------------------------------------------------------------
  * Imported functions
  */
@@ -2395,12 +2392,6 @@ dwg_decode_xdata(Bit_Chain * dat, Dwg_Object_XRECORD *obj, int size)
  * Private functions which depend on the preceding
  */
 
-static int
-dwg_class_is_entity(Dwg_Class *klass)
-{
-  return klass->item_class_id == 0x1f2;
-}
-
 /** dwg_decode_variable_type
  * decode object by class name, not type. if type > 500.
  * returns 1 if object could be decoded and 0 otherwise.
@@ -2982,56 +2973,24 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
           int is_entity;
           int i = obj->type - 500;
           Dwg_Class *klass = NULL;
+
           if (i <= (int)dwg->num_classes)
             {
               klass = &dwg->dwg_class[i];
               is_entity = dwg_class_is_entity(klass);
             }
-          //TODO properly dwg_decode_object/entity for eed, reactors, xdic
+          // properly dwg_decode_object/_entity for eed, reactors, xdic
           if (klass && !is_entity)
             {
               dwg_decode_UNKNOWN_OBJ(dat, obj);
-              /*              
-              Dwg_Object_UNKNOWN* _obj;
-              obj->supertype = DWG_SUPERTYPE_OBJECT;
-              obj->tio.object = (Dwg_Object_Object*)calloc(obj->size, 1);
-              if (!obj->tio.object) {
-                LOG_ERROR("Out of memory"); return;
-              }
-              _obj = obj->tio.object->tio.UNKNOWN_OBJ = (Dwg_Object_UNKNOWN*)
-                  calloc(1, obj->size);
-              if (!obj) {
-                LOG_ERROR("Out of memory"); return;
-              }
-              obj->tio.object->object = obj;
-              dwg_decode_object(dat, obj->tio.object);
-              //read obj->bitsize bits, not obj->size bytes
-              */
-             //FIELD_VECTOR_N(raw, RC, obj->bitsize/8);
-             //memcpy(obj->tio.object->tio.UNKNOWN_OBJ, &dat->chain[dat->byte], obj->bitsize/8);
             }
           else if (klass)
             {
               dwg_decode_UNKNOWN_ENT(dat, obj);
-              /*
-              obj->supertype = DWG_SUPERTYPE_ENTITY;
-              dwg->num_entities++;
-              obj->tio.entity = (Dwg_Object_Entity*)calloc(1, sizeof(Dwg_Object_Entity));
-              if (!obj->tio.entity) {
-                LOG_ERROR("Out of memory"); return;
-              }
-              obj->tio.entity->tio.UNKNOWN_ENT = (Dwg_Entity_UNKNOWN*)
-                  calloc(1, obj->size);
-              if (!obj->tio.entity->tio.UNKNOWN_ENT) {
-                LOG_ERROR("Out of memory"); return;
-              }
-              obj->tio.entity->object = obj;
-              memcpy(obj->tio.entity->tio.UNKNOWN_ENT, &dat->chain[object_address], obj->size);
-              dwg_decode_entity(dat, obj->tio.entity);
-              */
             }
           else // not a class
             {
+              LOG_WARN("Unknown object, skipping eed/reactors/xdic");
               SINCE(R_2000)
               {
                 obj->bitsize = bit_read_RL(dat);
@@ -3043,6 +3002,7 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
                   LOG_INFO("Object handle: %d.%d.%lu\n",
                            obj->handle.code, obj->handle.size, obj->handle.value)
                 }
+              object_address = dat->byte;
               obj->supertype = DWG_SUPERTYPE_UNKNOWN;
               obj->tio.unknown = (unsigned char*)calloc(obj->size, 1);
               if (!obj->tio.unknown)
@@ -3050,7 +3010,13 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
                   LOG_ERROR("Out of memory");
                   return;
                 }
-              memcpy(obj->tio.unknown, &dat->chain[object_address], obj->size);
+              // write obj->size bytes, excl. bitsize and handle
+              // overshoot the bitsize and handle size
+              for (i=0; i<(int)obj->size; i++) {
+                obj->tio.unknown[i] = bit_read_RC(dat);
+              }
+              dat->byte = object_address;
+              //memcpy(obj->tio.unknown, &dat->chain[object_address], obj->size);
             }
         }
     }

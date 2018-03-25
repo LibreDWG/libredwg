@@ -3786,11 +3786,21 @@ DWG_ENTITY(WIPEOUT);
 DWG_ENTITY_END
 
 DWG_ENTITY(UNKNOWN_ENT);
-  FIELD_VECTOR_N(raw, RC, obj->bitsize/8);
+  DECODER {
+    FIELD_VALUE(num_bytes) = obj->bitsize / 8;
+    FIELD_VALUE(num_bits)  = obj->bitsize % 8;
+  }
+  FIELD_VECTOR(bytes, RC, num_bytes);
+  FIELD_VECTOR(bits, B, num_bits);
 DWG_ENTITY_END
 
 DWG_OBJECT(UNKNOWN_OBJ);
-  FIELD_VECTOR_N(raw, RC, obj->bitsize/8);
+  DECODER {
+    FIELD_VALUE(num_bytes) = obj->bitsize / 8;
+    FIELD_VALUE(num_bits)  = obj->bitsize % 8;
+  }
+  FIELD_VECTOR(bytes, RC, num_bytes);
+  FIELD_VECTOR(bits, B, num_bits);
 DWG_OBJECT_END
 
 /*
