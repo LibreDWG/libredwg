@@ -75,7 +75,7 @@ AM_CFLAGS += @GCOV_CFLAGS@
 LIBS      += @GCOV_LIBS@
 gcov:
 	-test -f $(builddir)/gcov.log && rm $(builddir)/gcov.log
-	$(GCOV) *.gcno; | tee -a $(builddir)/gcov.log
+	$(GCOV) *.gcno | tee -a $(builddir)/gcov.log
 endif
 MAINTAINERCLEANFILES = *~ *.i *_flymake.[ch]
 if ENABLE_GCOV

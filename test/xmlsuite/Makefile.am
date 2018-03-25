@@ -21,9 +21,11 @@ LIBS      += @GCOV_LIBS@
 #  -e's,$(EXEEXT),,'
 gcov: $(check_PROGRAMS) check
 	-test -f gcov.log && rm gcov.log
-	for f in $(check_PROGRAMS); do \
-	  c="`echo $$f|sed -e's,.exe,,'`.c"; \
-	  echo $(GCOV) $$c; test -e $$c && $(GCOV) $$c >>gcov.log; done
+	-for f in $(check_PROGRAMS); do \
+	  c="`echo $$f|sed -e's,.exe,,'`"; \
+	  test -e $$c.c -a -e $$c.gcda && \
+	    echo $(GCOV) $$c.c && $(GCOV) $$c.c >>gcov.log; \
+	 done
 endif
 
 CLEANFILES = *.log *.sum site.bak result.htm
@@ -31,6 +33,8 @@ if ENABLE_GCOV
 CLEANFILES  += *.gcov *.gcno *.gcda gcov.log
 endif
 
+else
+gcov:
 endif
 
 EXTRA_DIST = suffix.c common.c
