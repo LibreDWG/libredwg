@@ -871,8 +871,8 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
   if (!strcmp(dxfname, "MLEADERSTYLE"))
     {
       UNTESTED_CLASS;
-      dwg_encode_MLEADERSTYLE(dat, obj);
-      return 1;
+      //dwg_encode_MLEADERSTYLE(dat, obj);
+      return 0;
     }
   if (!strcmp(dxfname, "OLE2FRAME"))
     {

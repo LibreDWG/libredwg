@@ -272,8 +272,8 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "MLEADERSTYLE"))
     {
-      dwg_print_MLEADERSTYLE(dat, obj);
-      return 1;
+      //dwg_print_MLEADERSTYLE(dat, obj);
+      return 0;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "OLE2FRAME"))
     {

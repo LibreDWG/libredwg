@@ -1038,8 +1038,7 @@ read_r2007_meta_data(Bit_Chain *dat, Dwg_Data *dwg)
   r2007_page *pages_map, *page;
   r2007_section *sections_map;
    
-  loglevel = 9;
-
+  //loglevel = 9;
   // @ 0x62
   read_file_header(dat, &file_header);
   

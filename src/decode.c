@@ -2571,8 +2571,8 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     {
       UNTESTED_CLASS;
       assert(!is_entity);
-      dwg_decode_MLEADERSTYLE(dat, obj);
-      return 1;
+      //dwg_decode_MLEADERSTYLE(dat, obj);
+      return 0;
     }
   if (!strcmp(dxfname, "AcDbField")) //??
     {
