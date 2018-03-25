@@ -1321,6 +1321,11 @@ dwg_encode_add_object(Dwg_Object * obj, Bit_Chain * dat,
           int i = obj->type - 500;
           Dwg_Class *klass = NULL;
 
+          dat->byte = address;   // restart and write into the UNKNOWN_OBJ object
+          dat->bit = 0;
+          bit_write_MS(dat, obj->size); // size
+          bit_write_BS(dat, obj->type); // type
+
           if (i <= (int)dwg->num_classes)
             {
               klass = &dwg->dwg_class[i];

@@ -2923,7 +2923,7 @@ DWG_OBJECT_END
 
 DWG_OBJECT(CELLSTYLEMAP);
 
-  SINCE(R_2007)
+  SINCE(R_2000)
     {
         FIELD_BL(num_cells);
         REPEAT_N((long)FIELD_VALUE(num_cells), cells, Dwg_Object_CELLSTYLEMAP_Cell)
@@ -3730,9 +3730,18 @@ DWG_OBJECT(PLACEHOLDER);
 
 DWG_OBJECT_END
 
-// guessing:
+// just guessing:
 // VBA_PROJECT (81 + varies)
-// in its own section DWG_OBJECT(VBA_PROJECT);
+DWG_OBJECT(VBA_PROJECT);
+
+  FIELD_RL(num_bytes)
+  FIELD_VECTOR(bytes, RC, num_bytes)
+
+  FIELD_HANDLE(parenthandle, 4);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+
+DWG_OBJECT_END
 
 ////////////////////
 // These objects are not described in the spec:
@@ -3822,4 +3831,5 @@ DWG_OBJECT_END
 DWG_OBJECT(MATERIAL);
 DWG_OBJECT_END
 */
+
 

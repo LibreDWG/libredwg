@@ -2662,7 +2662,7 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
      TABLESTYLE, VBA_PROJECT, VISUALSTYLE, WIPEOUTVARIABLE,
      ACDBSECTIONVIEWSTYLE, ACDBDETAILVIEWSTYLE,
      NPOCOLLECTION, EXACXREFPANELOBJECT,
-     ARCALIGNEDTEXT (2000+)
+     ARCALIGNEDTEXT (2000+), UNDERLAYDEFINITION (2 strings)
   */
 #undef UNHANDLED_CLASS
 #undef UNTESTED_CLASS
@@ -2675,7 +2675,7 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
                       long unsigned int address)
 {
   long unsigned int previous_address;
-  long unsigned int object_address;
+  long unsigned int object_address, end_address;
   unsigned char previous_bit;
   Dwg_Object *obj;
   long unsigned int num = dwg->num_objects;
@@ -2712,17 +2712,11 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
   memset(obj, 0, sizeof(Dwg_Object));
   obj->index = num;
   dwg->num_objects++;
-  /*
-  obj->handle.code = 0;
-  obj->handle.size = 0;
-  obj->handle.value = 0;
-  */
   obj->parent = dwg;
   obj->size = bit_read_MS(dat);
   object_address = dat->byte;
-  //ktl_lastaddress = dat->byte + obj->size; /* (calculate the bitsize) */
+  end_address = object_address + obj->size; /* (calculate the bitsize) */
   obj->type = bit_read_BS(dat);
-  //obj->bitsize = 0;
 
   LOG_INFO(" Type: %d/0x%x\n", obj->type, obj->type)
 
@@ -2987,6 +2981,16 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
           int i = obj->type - 500;
           Dwg_Class *klass = NULL;
 
+          if (dat->byte != end_address)
+            {
+              LOG_TRACE("wrong offset: %lu, got %lu (%ld/%d)\n",
+                        end_address, dat->byte, end_address - dat->byte,
+                        obj->bitsize/8)
+            }
+          dat->byte = address;   // restart and read into the UNKNOWN_OBJ object
+          dat->bit = 0;
+          bit_read_MS(dat); // size
+          bit_read_BS(dat); // type
           if (i <= (int)dwg->num_classes)
             {
               klass = &dwg->dwg_class[i];

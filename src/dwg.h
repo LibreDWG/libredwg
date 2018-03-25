@@ -2246,15 +2246,17 @@ typedef struct _dwg_object_PLACEHOLDER
   BITCODE_H xdicobjhandle;
 } Dwg_Object_PLACEHOLDER;
 
-/* NOT SURE ABOUT THIS ONE (IS IT OBJECT OR ENTITY?): */
 /**
  Struct for VBA_PROJECT (81 + varies)
  Has its own optional section (probably section[5])
  */
 typedef struct _dwg_object_VBA_PROJECT
 {
-  char *project_data;
-  BITCODE_RL zero;
+  BITCODE_RL num_bytes;
+  char *bytes;
+  BITCODE_H parenthandle;
+  BITCODE_H* reactors;
+  BITCODE_H xdicobjhandle;
 } Dwg_Object_VBA_PROJECT;
 
 
@@ -2491,6 +2493,34 @@ typedef struct _dwg_entity_TABLE
 } Dwg_Entity_TABLE;
 
 /**
+ Class TABLESTYLE (varies)
+ R2002+ TODO (just guessing)
+ */
+
+typedef struct _dwg_object_TABLESTYLE_Cell
+{
+  Dwg_Entity_TABLE_Cell cell;
+  BITCODE_BL id;   /* 1=title, 2=header, 3=data, 4=table.
+                      ref TABLESTYLE. custom IDs > 100 */
+  BITCODE_BL type; /* 1=data, 2=label */
+  BITCODE_TV name;
+} Dwg_Object_TABLESTYLE_Cell;
+
+typedef struct _dwg_object_TABLESTYLE
+{
+  BITCODE_BS version_number;
+  BITCODE_TV name;
+  BITCODE_BL flags;
+  BITCODE_B title_suppressed;
+  BITCODE_B header_suppressed;
+  BITCODE_BS flow_direction;
+  BITCODE_BD horiz_cell_margin;
+  BITCODE_BD vert_cell_margin;
+  BITCODE_BL num_cells;
+  Dwg_Object_TABLESTYLE_Cell* cells;
+} Dwg_Object_TABLESTYLE;
+
+/**
  Class CELLSTYLEMAP (varies)
  R2008+ TABLESTYLE extension class
  */
@@ -2508,6 +2538,16 @@ typedef struct _dwg_object_CELLSTYLEMAP
   BITCODE_BL num_cells;
   Dwg_Object_CELLSTYLEMAP_Cell* cells;
 } Dwg_Object_CELLSTYLEMAP;
+
+/**
+ Class UNDERLAYDEFINITION (varies)
+ */
+typedef struct _dwg_object_UNDERLAYDEFINITION
+{
+  /* TODO */
+  BITCODE_TV filename;
+  BITCODE_TV name;
+} Dwg_Object_UNDERLAYDEFINITION;
 
 /**
  Class DBCOLOR (varies)
