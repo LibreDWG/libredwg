@@ -1806,8 +1806,8 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
       obj->num_eed++;
       if (dat->byte != offset + size) {
         LOG_WARN("EED[%u] size offset: %ld", i, (long)(dat->byte - offset + size))
+        dat->byte = offset + size;
       }
-      dat->byte = offset + size;
     }
   return error;
 }
@@ -2553,6 +2553,27 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       dwg_decode_WIPEOUT(dat, obj);
       return 1;
     }
+  if (!strcmp(dxfname, "FIELDLIST"))
+    {
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      dwg_decode_FIELDLIST(dat, obj);
+      return 1;
+    }
+  if (!strcmp(dxfname, "SCALE"))
+    {
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      dwg_decode_SCALE(dat, obj);
+      return 1;
+    }
+  if (!strcmp(dxfname, "MLEADERSTYLE"))
+    {
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      dwg_decode_MLEADERSTYLE(dat, obj);
+      return 1;
+    }
   if (!strcmp(dxfname, "AcDbField")) //??
     {
       UNTESTED_CLASS;
@@ -2599,21 +2620,6 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       UNHANDLED_CLASS;
       assert(!is_entity);
       //dwg_decode_MATERIAL(dat, obj);
-      return 0;
-    }
-  if (!strcmp(dxfname, "SCALE"))
-    {
-      UNTESTED_CLASS;
-      assert(!is_entity);
-      //SCALE has a name, bitsizes: 199,207,215,343,335,351,319
-      dwg_decode_SCALE(dat, obj);
-      return 1;
-    }
-  if (!strcmp(dxfname, "MLEADERSTYLE"))
-    {
-      UNHANDLED_CLASS;
-      assert(!is_entity);
-      //dwg_decode_MLEADERSTYLE(dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "TABLESTYLE"))

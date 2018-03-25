@@ -230,6 +230,11 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       dwg_print_HATCH(dat, obj);
       return 1;
     }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "FIELDLIST"))
+    {
+      dwg_print_FIELDLIST(dat, obj);
+      return 1;
+    }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "IDBUFFER"))
     {
       dwg_print_IDBUFFER(dat, obj);
@@ -263,6 +268,11 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "LWPLINE"))
     {
       dwg_print_LWPLINE(dat, obj);
+      return 1;
+    }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "MLEADERSTYLE"))
+    {
+      dwg_print_MLEADERSTYLE(dat, obj);
       return 1;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "OLE2FRAME"))

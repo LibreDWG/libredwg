@@ -2247,6 +2247,59 @@ typedef struct _dwg_object_PLACEHOLDER
 } Dwg_Object_PLACEHOLDER;
 
 /**
+ * Object MLEADERSTYLE (varies)
+ * R2000+
+ */
+typedef struct
+{
+  BITCODE_BS version; //r2010+ =2
+
+  BITCODE_BS content_type;
+  BITCODE_BS mleader_order;
+  BITCODE_BS leader_order;
+  BITCODE_BL max_points;
+  BITCODE_BD first_seg_angle;
+  BITCODE_BD second_seg_angle;
+  BITCODE_BS type;
+  BITCODE_CMC line_color;
+  BITCODE_H line_type;
+  BITCODE_BL line_weight;
+  BITCODE_B landing;
+  BITCODE_BD landing_gap;
+  BITCODE_B dog_leg;
+  BITCODE_BD landing_dist;
+  BITCODE_TV description;
+  BITCODE_H arrow_head;
+  BITCODE_BD arrow_head_size;
+  BITCODE_TV text_default;
+  BITCODE_H text_style;
+  BITCODE_BS attach_left;
+  BITCODE_BS attach_right;
+  BITCODE_BS text_angle_type;
+  BITCODE_BS text_align_type;
+  BITCODE_CMC text_color;
+  BITCODE_BD text_heigth;
+  BITCODE_B text_frame;
+  BITCODE_B text_always_left;
+  BITCODE_BD align_space;
+  BITCODE_H block;
+  BITCODE_CMC block_color;
+  BITCODE_3BD block_scale;
+  BITCODE_B use_block_scale;
+  BITCODE_BD block_rotation;
+  BITCODE_B use_block_rotation;
+  BITCODE_BS block_connection;
+  BITCODE_BD scale;
+  BITCODE_B changed;
+  BITCODE_B is_annotative;
+  BITCODE_BD break_size;
+
+  BITCODE_BS attach_dir; //r2010+ (0 = horizontal, 1 = vertical)
+  BITCODE_BS attach_top; //r2010+
+  BITCODE_BS attach_bottom; //r2010+
+} Dwg_Object_MLEADERSTYLE;
+
+/**
  Struct for VBA_PROJECT (81 + varies)
  Has its own optional section (probably section[5])
  */
@@ -2588,7 +2641,7 @@ typedef struct _dwg_object_DICTIONARYWDLFT
 } Dwg_Object_DICTIONARYWDLFT;
 
 /**
- Class FIELD (varies)
+ Class FIELDLIST AcDbField (varies)
  R18+
  */
 typedef struct _dwg_object_FIELD_ChildValue
@@ -2618,6 +2671,16 @@ typedef struct _dwg_object_FIELD
   BITCODE_BL num_childval;      /* 93 */
   Dwg_Object_FIELD_ChildValue *childval;
 } Dwg_Object_FIELD;
+
+/**
+ * Object FIELDLIST (varies)
+ */
+typedef struct
+{
+  BITCODE_BL num_fields;
+  BITCODE_B unknown;
+  BITCODE_H * field_handles;
+} Dwg_Object_FIELDLIST;
 
 /**
  Class IDBUFFER (varies)
@@ -3105,9 +3168,12 @@ typedef struct _dwg_object_object
     Dwg_Object_PROXY *PROXY;
     Dwg_Object_CELLSTYLEMAP *CELLSTYLEMAP;
     Dwg_Object_FIELD *FIELD;
+    Dwg_Object_FIELDLIST *FIELDLIST;
     Dwg_Object_IDBUFFER *IDBUFFER;
     Dwg_Object_IMAGEDEF *IMAGEDEF;
     Dwg_Object_IMAGEDEF_REACTOR *IMAGEDEF_REACTOR;
+    Dwg_Object_LIGHTLIST *LIGHTLIST;
+    Dwg_Object_MLEADERSTYLE *MLEADERSTYLE;
     Dwg_Object_RASTERVARIABLES *RASTERVARIABLES;
     Dwg_Object_SCALE *SCALE;
     Dwg_Object_SORTENTSTABLE *SORTENTSTABLE;
@@ -3118,7 +3184,6 @@ typedef struct _dwg_object_object
     Dwg_Object_VBA_PROJECT *VBA_PROJECT;
     Dwg_Object_WIPEOUTVARIABLE *WIPEOUTVARIABLE;
     Dwg_Object_VISUALSTYLE *VISUALSTYLE;
-    Dwg_Object_LIGHTLIST *LIGHTLIST;
     Dwg_Object_UNKNOWN_OBJ *UNKNOWN_OBJ;
   } tio;
 

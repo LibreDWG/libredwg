@@ -868,6 +868,12 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       dwg_encode_LWPLINE(dat, obj);
       return 1;
     }
+  if (!strcmp(dxfname, "MLEADERSTYLE"))
+    {
+      UNTESTED_CLASS;
+      dwg_encode_MLEADERSTYLE(dat, obj);
+      return 1;
+    }
   if (!strcmp(dxfname, "OLE2FRAME"))
     {
       assert(!is_entity);
@@ -917,6 +923,12 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
   if (!strcmp(dxfname, "WIPEOUT"))
     {
       dwg_encode_WIPEOUT(dat, obj);
+      return 1;
+    }
+  if (!strcmp(dxfname, "FIELDLIST"))
+    {
+      UNTESTED_CLASS;
+      dwg_encode_FIELDLIST(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "AcDbField")) //???

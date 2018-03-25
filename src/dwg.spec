@@ -2974,6 +2974,16 @@ DWG_OBJECT(FIELD);
     }
 DWG_OBJECT_END
 
+DWG_OBJECT(FIELDLIST);
+
+  SINCE(R_2018) {
+    FIELD_BL (num_fields);
+    FIELD_B (unknown);
+    HANDLE_VECTOR (field_handles, num_fields, 0);
+  }
+
+DWG_OBJECT_END
+
 //pg.150
 DWG_OBJECT(RASTERVARIABLES);
 
@@ -2992,10 +3002,16 @@ DWG_OBJECT(SORTENTSTABLE);
 
   FIELD_BL (num_entries);
   HANDLE_VECTOR (sort_handles, num_entries, 0);
-  FIELD_HANDLE (parenthandle, 4);
+  UNTIL(R_2007)
+    {
+      FIELD_HANDLE (parenthandle, 4);
+    }
   REACTORS(4);
   XDICOBJHANDLE(3);
-  FIELD_HANDLE (owner_handle, 4);
+  UNTIL(R_2007)
+    {
+      FIELD_HANDLE (owner_handle, 4);
+    }
   HANDLE_VECTOR (object_handles, num_entries, 4);
 
 DWG_OBJECT_END
@@ -3748,16 +3764,77 @@ DWG_OBJECT(SCALE);
 
   SINCE(R_2000)
     {
-      FIELD_BS (unknown);
-      FIELD_TV (name);
-      FIELD_BD (paper);
-      FIELD_BD (drawing);
-      FIELD_B (has_unit_scale);
+      FIELD_BS(unknown);
+      FIELD_TV(name);
+      FIELD_BD(paper);
+      FIELD_BD(drawing);
+      FIELD_B(has_unit_scale);
       REACTORS(ANYCODE);
       XDICOBJHANDLE(3);
     }
 
 DWG_OBJECT_END
+
+/* par 20.4.87 */
+DWG_OBJECT(MLEADERSTYLE);
+
+  SINCE (R_2010)
+    {
+      IF_ENCODE_FROM_EARLIER {
+        FIELD_VALUE(version) = 2;
+      }
+      FIELD_BS (version);
+    }
+
+  FIELD_BS (content_type);
+  FIELD_BS (mleader_order);
+  FIELD_BS (leader_order);
+  FIELD_BL (max_points);
+  FIELD_BD (first_seg_angle);
+  FIELD_BD (second_seg_angle);
+  FIELD_BS (type);
+  FIELD_CMC (line_color);
+  FIELD_HANDLE (line_type, 4);
+  FIELD_BL (line_weight);
+  FIELD_B (landing);
+  FIELD_BD (landing_gap);
+  FIELD_B (dog_leg);
+  FIELD_BD (landing_dist);
+  FIELD_TV (description);
+  FIELD_HANDLE (arrow_head, 4);
+  FIELD_BD (arrow_head_size);
+  FIELD_TV (text_default);
+  FIELD_HANDLE (text_style, 4);
+  FIELD_BS (attach_left);
+  FIELD_BS (attach_right);
+  FIELD_BS (text_angle_type);
+  FIELD_BS (text_align_type);
+  FIELD_CMC (text_color);
+  FIELD_BD (text_heigth);
+  FIELD_B (text_frame);
+  FIELD_B (text_always_left);
+  FIELD_BD (align_space);
+  FIELD_HANDLE (block, 4);
+  FIELD_CMC (block_color);
+  FIELD_3BD (block_scale);
+  FIELD_B (use_block_scale);
+  FIELD_BD (block_rotation);
+  FIELD_B (use_block_rotation);
+  FIELD_BS (block_connection);
+  FIELD_BD (scale);
+  FIELD_B (changed);
+  FIELD_B (is_annotative);
+  FIELD_BD (break_size);
+
+  SINCE (R_2010)
+    {
+      FIELD_BS (attach_dir);
+      FIELD_BS (attach_top);
+      FIELD_BS (attach_bottom);
+    }
+
+DWG_OBJECT_END
+
 
 ////////////////////
 // These objects are not described in the spec:
