@@ -217,9 +217,8 @@
 #define COMMON_ENTITY_HANDLE_DATA \
   dwg_decode_common_entity_handle_data(dat, obj)
 
-#define DWG_ENTITY(token) \
-static void \
- dwg_decode_##token (Bit_Chain * dat, Dwg_Object * obj)\
+#define DWG_ENTITY(token) static void \
+dwg_decode_##token (Bit_Chain * dat, Dwg_Object * obj)\
 {\
   long vcount, rcount, rcount2, rcount3;\
   Dwg_Entity_##token *ent, *_obj;\
@@ -236,7 +235,9 @@ static void \
 
 #define DWG_ENTITY_END }
 
-#define DWG_OBJECT(token) static void  dwg_decode_ ## token (Bit_Chain * dat, Dwg_Object * obj) {\
+#define DWG_OBJECT(token) static void \
+dwg_decode_ ## token (Bit_Chain * dat, Dwg_Object * obj) \
+{ \
   long vcount, rcount, rcount2, rcount3;\
   Dwg_Object_##token *_obj;\
   Dwg_Data* dwg = obj->parent;\

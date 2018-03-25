@@ -1827,10 +1827,14 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
   BITCODE_BS size;
   int error;
 
-  SINCE(R_2000)
+  VERSIONS(R_2000, R_2004) //ODA says 2000 only
     {
       ent->bitsize = bit_read_RL(dat);
       LOG_TRACE("Entity bitsize: " FORMAT_BL " @%lu.%u\n", ent->bitsize, dat->byte, dat->bit)
+    }
+  SINCE(R_2007)
+    {
+      // table handle
     }
 
   error = bit_read_H(dat, &(ent->object->handle));
@@ -1856,11 +1860,11 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
   if (ent->picture_exists)
     {
       LOG_TRACE("picture_exists: 1\n")
-      VERSIONS(R_13,R_2007)
+      VERSIONS(R_13, R_2007)
         {
           ent->picture_size = (BITCODE_BLL)bit_read_RL(dat);
         }
-      SINCE(R_2007)
+      SINCE(R_2010)
         {
           ent->picture_size = bit_read_BLL(dat);
         }
@@ -1892,20 +1896,18 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
       ent->bitsize = bit_read_RL(dat);
     }
 
-  ent->entity_mode = bit_read_BB(dat);
+  ent->entity_mode  = bit_read_BB(dat);
   ent->num_reactors = bit_read_BL(dat);
 
   SINCE(R_2004)
     {
       ent->xdic_missing_flag = bit_read_B(dat);
     }
-
   SINCE(R_2013)
     {
       ent->has_ds_binary_data = bit_read_B(dat);
     }
-
-  VERSIONS(R_13,R_14)
+  VERSIONS(R_13, R_14)
     {
       ent->isbylayerlt = bit_read_B(dat);
     }
@@ -2012,7 +2014,8 @@ dwg_decode_object(Bit_Chain * dat, Dwg_Object_Object * obj)
   SINCE(R_2000)
     {
       obj->bitsize = bit_read_RL(dat);
-      LOG_INFO("Object bitsize: " FORMAT_RL " @%lu.%u\n", obj->bitsize, dat->byte, dat->bit);
+      LOG_INFO("Object bitsize: " FORMAT_RL " @%lu.%u\n", obj->bitsize,
+               dat->byte, dat->bit);
     }
 
   error = bit_read_H(dat, &obj->object->handle);
@@ -2028,7 +2031,8 @@ dwg_decode_object(Bit_Chain * dat, Dwg_Object_Object * obj)
       return -1;
     }
   LOG_INFO("Object handle: %d.%d.%lu\n",
-           obj->object->handle.code, obj->object->handle.size, obj->object->handle.value)
+           obj->object->handle.code, obj->object->handle.size,
+           obj->object->handle.value)
 
   error = dwg_decode_eed(dat, obj);
   if (error)
@@ -2038,12 +2042,15 @@ dwg_decode_object(Bit_Chain * dat, Dwg_Object_Object * obj)
     {
       obj->bitsize = bit_read_RL(dat);
     }
-
+  // documentation bug
   obj->num_reactors = bit_read_BL(dat);
-
   SINCE(R_2004)
     {
       obj->xdic_missing_flag = bit_read_B(dat);
+    }
+  SINCE(R_2013)
+    {
+      obj->has_ds_binary_data = bit_read_B(dat);
     }
 
   return 0;
@@ -2722,6 +2729,11 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
   obj->size = bit_read_MS(dat);
   object_address = dat->byte;
   end_address = object_address + obj->size; /* (calculate the bitsize) */
+
+  SINCE(R_2010)
+  {
+    obj->handlestream_size = bit_read_MC(dat);
+  }
   obj->type = bit_read_BS(dat);
 
   LOG_INFO(" Type: %d/0x%x\n", obj->type, obj->type)

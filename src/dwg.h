@@ -3195,9 +3195,9 @@ typedef struct _dwg_object_object
   Dwg_Eed *eed;
 
   /* TODO: should these be removed? */
-  long unsigned int num_reactors;
-  unsigned char xdic_missing_flag;
-  /* unsigned char picture_exists; */
+  BITCODE_BL num_reactors;      //r13-r14
+  BITCODE_B xdic_missing_flag;  //r2004+
+  BITCODE_B has_ds_binary_data; //r2013+
 
   unsigned int num_handles;
   Dwg_Handle *handleref;
@@ -3212,6 +3212,7 @@ typedef struct _dwg_object
   unsigned int type;
   unsigned int ckr;
   unsigned int index;
+  BITCODE_MC handlestream_size; // r2010+ in bits
 
   Dwg_Object_Supertype supertype;
   union
