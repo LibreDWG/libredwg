@@ -24,6 +24,12 @@ if HAVE_SWIG_PYTHON
 SUBDIRS += bindings
 endif
 
+check-dwg: all
+	-rm check-dwg.log
+	for d in `find test/test-data -iname \*.dwg`; do \
+	  echo examples/dwgread $$d | tee -a check-dwg.log; \
+	  LIBREDWG_TRACE=4 examples/dwgread $$d >> check-dwg.log 2>&1; \
+	done
 
 if ENABLE_GCOV
 gcov: check
@@ -41,6 +47,7 @@ check-wine:
 endif
 
 EXTRA_DIST = README README-alpha
+CLEANFILES = check-dwg.log
 
 maintainer-clean-local:
 	-rm -rf cover_db

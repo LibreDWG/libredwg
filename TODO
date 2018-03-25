@@ -22,12 +22,12 @@
 * finish DXF writing (easy)
 * add DXF reading (easy)
 
+* move installed binary sources into a seperate dir (bin, progs)
+  and the 2 public headers ditto.
 * fix the remaining compiler warnings.
-* add all DWG versions for one simple common decode test.
 * check 32bit/64bit strictness with the public headers (internally we can handle it).
 * enhance and document the API functions.
 * add more defaults when encoding from older to newer versions.
-* fix the latest Windows regressions, see appveyor.
 * automate windows nightlies and binary releases via appveyor,
   POSIX releases via travis => github (savannah?).
 * check testsuite errors when cross-compiled under wine.

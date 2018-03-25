@@ -31,7 +31,7 @@ gcov.log
 /test/xmlsuite/testsuite.gcda
 /test/unit-testing/*.gcov
 /test/unit-testing/*.gcno
-/test/unit-testing/*.gcda
+/test/unit-testing/*.gcdax
 
 # specific filenames
 /.cproject
@@ -56,6 +56,7 @@ gcov.log
 /build-aux/snap.update-policy
 /build-aux/test-driver
 /build-aux/texinfo.tex
+/check-dwg.log
 /config.cache
 /config.log
 /config.status
@@ -73,6 +74,7 @@ gcov.log
 /examples/dwg2SVG
 /examples/dwg2dxf
 /examples/dwg_ps
+/examples/dxf2dwg
 /libtool
 /m4/libtool.m4
 /m4/ltoptions.m4
