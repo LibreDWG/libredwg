@@ -1734,18 +1734,18 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
   unsigned int i;
   BITCODE_BS size;
   int error = 0;
+  long unsigned int offset = dat->byte;
 
   i = obj->num_eed = 0;
   while ((size = bit_read_BS(dat)))
     {
       BITCODE_BS j;
       BITCODE_RC code;
-      long unsigned int offset;
       LOG_TRACE("EED[%u] size: " FORMAT_BS "\n", i, size)
-      if (size > 10210)
+      if (size > 1024)
         {
           LOG_ERROR(
-              "dwg_decode_eed: Absurd! Extended object data size: %lu."
+              "dwg_decode_eed: Absurd extended object data size: %lu ignored."
               " Object: %lu (handle)",
               (long unsigned int) size, obj->object->handle.value)
           obj->bitsize = 0;
@@ -1756,7 +1756,7 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
         }
 
       if (i)
-        obj->eed = (Dwg_Eed*)realloc(obj->eed, i+1 * sizeof(Dwg_Eed));
+        obj->eed = (Dwg_Eed*)realloc(obj->eed, (i+1) * sizeof(Dwg_Eed));
       else
         obj->eed = (Dwg_Eed*)calloc(1, sizeof(Dwg_Eed));
       error = bit_read_H(dat, &obj->eed[i].handle);
@@ -1768,13 +1768,13 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
                   obj->eed[i].handle.code, obj->eed[i].handle.size,
                   obj->eed[i].handle.value)
       }
-      obj->eed[i].size = size;
-      obj->eed[i].data = (Dwg_Eed_Data*)calloc(size, 1);
       offset = dat->byte;
+      obj->eed[i].size = size;
+      obj->eed[i].data = (Dwg_Eed_Data*)calloc(size + 3, 1);
       if (size >= 1)
         {
           obj->eed[i].data->code = code = bit_read_RC(dat);
-          LOG_TRACE("EED[%u] code: " FORMAT_RC "\n", i, code);
+          LOG_TRACE("EED[%u] code: %d\n", i, (int)code);
           if (code == 0)
             {
 #define MIN(X,Y) ((X) < (Y) ? (X) : (Y))
@@ -1805,9 +1805,10 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
       i++;
       obj->num_eed++;
       if (dat->byte != offset + size) {
-        LOG_WARN("EED[%u] size offset: %ld", i, (long)(dat->byte - offset + size))
+        LOG_INFO("EED[%u] size padding: %ld\n", i, (long)(offset + size - dat->byte))
         dat->byte = offset + size;
       }
+      offset = dat->byte;
     }
   return error;
 }
