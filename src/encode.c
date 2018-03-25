@@ -935,8 +935,8 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
   if (!strcmp(dxfname, "VBA_PROJECT"))
     {
       // Has its own section?
-      UNHANDLED_CLASS;
-      //dwg_encode_VBA_PROJECT(dat, obj);
+      UNTESTED_CLASS;
+      dwg_encode_VBA_PROJECT(dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "WIPEOUTVARIABLE"))
@@ -969,11 +969,10 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "SCALE"))
     {
-      UNHANDLED_CLASS;
+      UNTESTED_CLASS;
       assert(!is_entity);
       //SCALE has a name, bitsizes: 199,207,215,343,335,351,319
-      //CMLSCALE? (multiline scale)
-      //dwg_decode_SCALE(dat, obj);
+      dwg_encode_SCALE(dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "MLEADERSTYLE"))

@@ -285,6 +285,11 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       dwg_print_RASTERVARIABLES(dat, obj);
       return 1;
     }
+  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "SCALE"))
+    {
+      dwg_print_SCALE(dat, obj);
+      return 1;
+    }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "SORTENTSTABLE"))
     {
       dwg_print_SORTENTSTABLE(dat, obj);
@@ -321,8 +326,8 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "VBA_PROJECT"))
     {
-      LOG_ERROR("Unhandled Object VBA_PROJECT. Has its own section\n");
-      //dwg_print_VBA_PROJECT(dat, obj);
+      LOG_ERROR("Unhandled Object VBA_PROJECT. Has its own section?\n");
+      dwg_print_VBA_PROJECT(dat, obj);
       return 0;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "CELLSTYLEMAP"))

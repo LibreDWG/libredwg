@@ -3743,6 +3743,22 @@ DWG_OBJECT(VBA_PROJECT);
 
 DWG_OBJECT_END
 
+// SCALE (varies)
+DWG_OBJECT(SCALE);
+
+  SINCE(R_2000)
+    {
+      FIELD_BS (unknown);
+      FIELD_TV (name);
+      FIELD_BD (paper);
+      FIELD_BD (drawing);
+      FIELD_B (has_unit_scale);
+      REACTORS(ANYCODE);
+      XDICOBJHANDLE(3);
+    }
+
+DWG_OBJECT_END
+
 ////////////////////
 // These objects are not described in the spec:
 //

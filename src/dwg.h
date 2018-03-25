@@ -2733,6 +2733,20 @@ typedef struct _dwg_entity_LWPLINE
 } Dwg_Entity_LWPLINE;
 
 /**
+ Class SORTENTSTABLE (varies)
+ */
+typedef struct _dwg_object_SCALE
+{
+  BITCODE_BS unknown;
+  BITCODE_TV name;
+  BITCODE_BD paper;
+  BITCODE_BD drawing;
+  BITCODE_B has_unit_scale;
+  BITCODE_H* reactors;
+  BITCODE_H xdicobjhandle;
+} Dwg_Object_SCALE;
+
+/**
  Class RASTERVARIABLES (varies)
  */
 typedef struct _dwg_object_RASTERVARIABLES
@@ -3095,6 +3109,7 @@ typedef struct _dwg_object_object
     Dwg_Object_IMAGEDEF *IMAGEDEF;
     Dwg_Object_IMAGEDEF_REACTOR *IMAGEDEF_REACTOR;
     Dwg_Object_RASTERVARIABLES *RASTERVARIABLES;
+    Dwg_Object_SCALE *SCALE;
     Dwg_Object_SORTENTSTABLE *SORTENTSTABLE;
     Dwg_Object_SPATIAL_FILTER *SPATIAL_FILTER;
     Dwg_Object_SPATIAL_INDEX *SPATIAL_INDEX;
