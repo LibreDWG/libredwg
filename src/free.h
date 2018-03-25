@@ -10,21 +10,18 @@
 /*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
 /*****************************************************************************/
 
-#ifdef IS_ENCODER
-#define ENCODER if (1)
-#define DECODER if (0)
-#endif
+/*
+ * free.h: helper functions to free all spec fields
+ * written by Reini Urban
+ */
 
-#ifdef IS_DECODER
-#define ENCODER if (0)
-#define DECODER if (1)
-#undef IF_ENCODE_FROM_EARLIER
-#define IF_ENCODE_FROM_EARLIER if (0)
-#endif
+#ifndef FREE_H
+#define FREE_H
 
-#if defined(IS_PRINT) || defined(IS_FREE)
-#define ENCODER if (0)
-#define DECODER if (0)
-#undef IF_ENCODE_FROM_EARLIER
-#define IF_ENCODE_FROM_EARLIER if (0)
+#include "dwg.h"
+#include "bits.h"
+
+void
+dwg_free_object(Dwg_Object *obj);
+
 #endif

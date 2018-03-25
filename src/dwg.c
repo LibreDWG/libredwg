@@ -30,6 +30,7 @@
 #include "decode.h"
 #include "dwg.h"
 #include "encode.h"
+#include "free.h"
 
 #include "logging.h"
 
@@ -445,53 +446,4 @@ int
 dwg_class_is_entity(Dwg_Class *klass)
 {
   return klass->item_class_id == 0x1f2;
-}
-
-void
-dwg_object_free(Dwg_Object* obj)
-{
-  // TODO: per object and entity
-  // all handles, vectors, strings, eed, obj->tio.entity|object
-  //FREE_IF(obj->dwg_eed);
-  LOG_TRACE("dwg_object_free %p\n", obj)
-  return;
-}
-
-void
-dwg_free(Dwg_Data * dwg)
-{
-  unsigned int i;
-  if (dwg)
-    {
-      LOG_TRACE("dwg_free %p\n", dwg)
-      /*if (dwg->bit_chain && dwg->bit_chain->size)
-        free (dwg->bit_chain->chain);*/
-#define FREE_IF(ptr) if (ptr) free(ptr)
-      FREE_IF(dwg->header.section);
-      if (dwg->picture.size && dwg->picture.chain)
-        free(dwg->picture.chain);
-      for (i=0; i < dwg->num_classes; ++i)
-        {
-          FREE_IF(dwg->dwg_class[i].appname);
-          FREE_IF(dwg->dwg_class[i].cppname);
-          FREE_IF(dwg->dwg_class[i].dxfname);
-        }
-      if (dwg->num_classes) {
-        FREE_IF(dwg->dwg_class);
-      }
-      for (i=0; i < dwg->header.num_descriptions; ++i)
-        {
-          FREE_IF(dwg->header.section_info[i].sections);
-        }
-      if (dwg->header.num_descriptions) {
-        FREE_IF(dwg->header.section_info);
-      }
-      for (i=0; i < dwg->num_objects; ++i)
-        {
-          dwg_object_free(&dwg->object[i]);
-        }
-      FREE_IF(dwg->object_ref);
-      FREE_IF(dwg->object);
-#undef FREE_IF
-    }
 }

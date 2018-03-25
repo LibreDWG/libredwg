@@ -29,6 +29,7 @@ libredwg_la_SOURCES = \
 	reedsolomon.c \
 	encode.c \
         print.c \
+        free.c \
 	dwg_api.c \
 	$(EXTRA_HEADERS)
 #       encode_r2007.c

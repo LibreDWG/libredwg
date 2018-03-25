@@ -1320,6 +1320,7 @@ typedef struct _dwg_entity_3DSOLID
   BITCODE_B acis_empty;
   BITCODE_B unknown;
   BITCODE_BS version;
+  BITCODE_BL num_blocks;
   BITCODE_BL* block_size;
   BITCODE_RC** sat_data;
   BITCODE_RC* acis_data;
@@ -3498,9 +3499,6 @@ get_first_owned_object(Dwg_Object* hdr_obj, Dwg_Object_BLOCK_HEADER* hdr);
 
 Dwg_Object*
 get_next_owned_object(Dwg_Object* hdr_obj, Dwg_Object* current, Dwg_Object_BLOCK_HEADER* hdr);
-
-void
-dwg_object_free(Dwg_Object* obj);
 
 void
 dwg_free(Dwg_Data * dwg);

@@ -22,9 +22,10 @@
 * finish DXF writing (easy)
 * add DXF reading (easy)
 
-* move installed binary sources into a seperate dir (bin, progs)
+* move installed binary sources into a seperate dir (bin or progs)
   and the 2 public headers ditto.
 * fix the remaining compiler warnings.
+* fix the remaining leaks.
 * check 32bit/64bit strictness with the public headers (internally we can handle it).
 * enhance and document the API functions.
 * add more defaults when encoding from older to newer versions.

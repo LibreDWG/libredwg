@@ -1235,7 +1235,7 @@ DWG_ENTITY(SPLINE);
 
   REPEAT(num_ctrl_pts, ctrl_pts, Dwg_Entity_SPLINE_control_point)
     {
-//TODO: does it work both for encoder and decoder routines?
+      //TODO: does it work both for encoder and decoder routines?
       FIELD_3BD(ctrl_pts[rcount]);
       if (!FIELD_VALUE(weighted))
         {
@@ -1262,10 +1262,10 @@ DWG_ENTITY_END
   FIELD_BL(name.selection_marker);                    \
   FIELD_BS(name.color);                               \
   FIELD_BL(name.acis_index);                          \
-  FIELD_BL(name.num_points);                             \
+  FIELD_BL(name.num_points);                          \
   FIELD_3DPOINT_VECTOR(name.points, name.num_points); \
-  FIELD_B(name.transform_present);                      \
-  if (FIELD_VALUE(name.transform_present))              \
+  FIELD_B(name.transform_present);                    \
+  if (FIELD_VALUE(name.transform_present))            \
     {                                                 \
       FIELD_3BD(name.axis_x);                         \
       FIELD_3BD(name.axis_y);                         \
@@ -1273,7 +1273,7 @@ DWG_ENTITY_END
       FIELD_3BD(name.translation);                    \
       FIELD_BD(name.scale);                           \
       FIELD_B(name.has_rotation);                     \
-      FIELD_B(name.has_reflection);                    \
+      FIELD_B(name.has_reflection);                   \
       FIELD_B(name.has_shear);                        \
     }
 
@@ -1289,40 +1289,44 @@ void decode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
   int i=0;
   unsigned long j;
   int index;
-  int total_size=0;
-  int num_blocks=0;
-  FIELD_B(acis_empty);
+  int total_size = 0;
+  int num_blocks = 0;
 
+  FIELD_B(acis_empty);
   if (!FIELD_VALUE(acis_empty))
     {
       FIELD_B (unknown);
       FIELD_BS (version);
-      if (FIELD_VALUE(version)==1)
+      if (FIELD_VALUE(version) == 1)
         {
           do
             {
-              FIELD_VALUE(sat_data) = (BITCODE_RC**) realloc(FIELD_VALUE(sat_data), (i+1) * sizeof(BITCODE_RC*));
-              FIELD_VALUE(block_size) = (BITCODE_BL*) realloc(FIELD_VALUE(block_size), (i+1) * sizeof(BITCODE_BL));
+              FIELD_VALUE(sat_data) = (BITCODE_RC**)
+                realloc(FIELD_VALUE(sat_data), (i+1) * sizeof(BITCODE_RC*));
+              FIELD_VALUE(block_size) = (BITCODE_BL*)
+                realloc(FIELD_VALUE(block_size), (i+1) * sizeof(BITCODE_BL));
               FIELD_BL (block_size[i]);
               FIELD_VECTOR (sat_data[i], RC, block_size[i]);
               total_size += FIELD_VALUE(block_size[i]);
             } while(FIELD_VALUE(block_size[i++]));
 
-          //de-obfuscate SAT data
-          FIELD_VALUE(raw_sat_data) = (unsigned char*) malloc (total_size * sizeof(unsigned char*));
-          num_blocks=i-1;
-          index=0;
-          for (i=0;i<num_blocks;i++)
+          // de-obfuscate SAT data
+          FIELD_VALUE(raw_sat_data) = (unsigned char*)
+            malloc (total_size * sizeof(unsigned char*));
+          num_blocks = i-1;
+          FIELD_VALUE(num_blocks) = num_blocks;
+          index = 0;
+          for (i=0; i<num_blocks; i++)
             {
-              for (j=0;j<FIELD_VALUE(block_size[i]);j++)
+              for (j=0; j<FIELD_VALUE(block_size[i]); j++)
                 {
-                  if (FIELD_VALUE(sat_data[i][j]<=32))
+                  if (FIELD_VALUE(sat_data[i][j] <= 32))
                     {
                       FIELD_VALUE(raw_sat_data)[index++] = FIELD_VALUE(sat_data[i][j]);
                     }
                   else
                     {
-                      FIELD_VALUE(raw_sat_data)[index++] = 159-FIELD_VALUE(sat_data[i][j]);
+                      FIELD_VALUE(raw_sat_data)[index++] = 159 - FIELD_VALUE(sat_data[i][j]);
                     }
                 }
             }
@@ -1331,7 +1335,7 @@ void decode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
       else //if (FIELD_VALUE(version)==2)
         {
           //TODO
-          LOG_ERROR("TODO: Implement parsing of SAT file (version==2) in entities 37,38 and 39.\n");
+          LOG_ERROR("TODO: Implement parsing of SAT file (version 2) in entities 37,38 and 39.\n");
         }
 
       FIELD_B (wireframe_data_present);
@@ -1395,6 +1399,7 @@ void decode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
 }
 #else
 #define DECODE_3DSOLID {}
+#define FREE_3DSOLID {}
 #endif //#if IS_DECODER
 
 #ifdef IS_ENCODER
@@ -1410,7 +1415,29 @@ void encode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
 }
 #else
 #define ENCODE_3DSOLID {}
+#define FREE_3DSOLID {}
 #endif //#if IS_ENCODER
+
+#ifdef IS_FREE
+void free_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj);
+
+void free_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
+{
+  unsigned int i;
+  if (FIELD_VALUE(version) == 1)
+    {
+      for (i=0; i<FIELD_VALUE(num_blocks); i++)
+        {
+          FIELD_VECTOR (sat_data[i], RC, block_size[i]);
+        }
+      free(_obj->sat_data);
+      free(_obj->block_size);
+      free(_obj->raw_sat_data);
+    }
+}
+#undef FREE_3DSOLID
+#define FREE_3DSOLID free_3dsolid(dat, obj, _obj)
+#endif
 
 
 /*(37)*/
@@ -1423,6 +1450,7 @@ DWG_ENTITY(REGION);
     {
       ENCODE_3DSOLID;
     }
+  FREE_3DSOLID;
 DWG_ENTITY_END
 
 /*(38)*/
@@ -1435,6 +1463,7 @@ DWG_ENTITY(_3DSOLID);
     {
       ENCODE_3DSOLID;
     }
+  FREE_3DSOLID;
 DWG_ENTITY_END
 
 /*(39)*/
@@ -1447,6 +1476,7 @@ DWG_ENTITY(BODY);
     {
       ENCODE_3DSOLID;
     }
+  FREE_3DSOLID;
 DWG_ENTITY_END
 
 /*(40)*/
@@ -2172,7 +2202,8 @@ DWG_OBJECT_END
 DWG_OBJECT(DIMSTYLE_CONTROL);
 
   FIELD_BS (num_entries);
-  SINCE(R_2000)
+  DECODER {
+    SINCE(R_2000)
     {
       /*
       This is not stated in the spec.
@@ -2184,6 +2215,7 @@ DWG_OBJECT(DIMSTYLE_CONTROL);
       //FIELD_HANDLE (unknown_handle, ANYCODE);
       bit_read_RC(dat);  // I think it's just one byte
     }
+  }
 
   FIELD_HANDLE (null_handle, 4);
   XDICOBJHANDLE(3);
@@ -2428,7 +2460,9 @@ DWG_OBJECT(MLINESTYLE);
   REPEAT(linesinstyle, lines, Dwg_Object_MLINESTYLE_line)
   {
     FIELD(lines[rcount].offset, BD);
+#ifndef IS_FREE
     FIELD_CMC(lines[rcount].color);
+#endif
     FIELD(lines[rcount].ltindex, BS);
   }
   FIELD_HANDLE(parenthandle, 8); // was 4
@@ -3924,5 +3958,6 @@ DWG_OBJECT_END
 DWG_OBJECT(MATERIAL);
 DWG_OBJECT_END
 */
+
 
 
