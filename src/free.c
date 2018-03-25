@@ -26,7 +26,13 @@
 #include "dwg.h"
 #include "free.h"
 
+unsigned int loglevel;
+#ifdef USE_TRACING
+static int env_var_checked_p;
+#define DWG_LOGLEVEL loglevel
+#else
 #define DWG_LOGLEVEL DWG_LOGLEVEL_TRACE
+#endif
 #include "logging.h"
 
 /* the current version per spec block */
@@ -90,13 +96,13 @@ static Bit_Chain *dat = &pdat;
 //FIELD_VECTOR_N(name, type, size):
 // reads data of the type indicated by 'type' 'size' times and stores
 // it all in the vector called 'name'.
-#define FIELD_VECTOR_N(name, type, size) FIELD_TV(name)
-#define FIELD_VECTOR(name, type, size) FIELD_TV(name)
+#define FIELD_VECTOR_N(name, type, size) if (size) { FIELD_TV(name) }
+#define FIELD_VECTOR(name, type, size) if (_obj->size) { FIELD_TV(name) }
 #define FIELD_2RD_VECTOR(name, size) FIELD_TV(name)
 #define FIELD_2DD_VECTOR(name, size) FIELD_TV(name)
 #define FIELD_3DPOINT_VECTOR(name, size) FIELD_TV(name)
-#define HANDLE_VECTOR_N(name, size, code) FIELD_TV(name)
-#define HANDLE_VECTOR(name, sizefield, code) FIELD_TV(name)
+#define HANDLE_VECTOR_N(name, size, code) if (size) { FIELD_TV(name) }
+#define HANDLE_VECTOR(name, sizefield, code) if (_obj->sizefield) { FIELD_TV(name) }
 #define FIELD_INSERT_COUNT(insert_count, type)
 #define FIELD_XDATA(name, size)
 
@@ -153,8 +159,8 @@ dwg_free_ ##token (Dwg_Object * obj)\
   _obj = ent;
 
 #define DWG_ENTITY_END \
-    free(_obj);\
-    free(obj->tio.entity);\
+    free(_obj); obj->tio.entity->tio.UNKNOWN_ENT = NULL; \
+    free(obj->tio.entity); obj->tio.object = NULL;\
 }
 
 #define DWG_OBJECT(token) \
@@ -163,12 +169,12 @@ dwg_free_ ##token (Dwg_Object * obj) \
 { \
   int vcount, rcount, rcount2, rcount3;\
   Dwg_Object_##token *_obj;\
-  LOG_HANDLE("Free object " #token "\n")\
+  LOG_HANDLE("Free object " #token " %p\n", obj)    \
   _obj = obj->tio.object->tio.token;
 
 #define DWG_OBJECT_END \
-    free(_obj);\
-    free(obj->tio.object);\
+    free(_obj); obj->tio.object->tio.UNKNOWN_OBJ = NULL; \
+    free(obj->tio.object); obj->tio.object = NULL; \
 }
 
 #include "dwg.spec"
@@ -303,12 +309,12 @@ dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "VBA_PROJECT"))
     {
       dwg_free_VBA_PROJECT(obj);
-      return 0;
+      return 1;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "CELLSTYLEMAP"))
     {
       dwg_free_CELLSTYLEMAP(obj);
-      return 0;
+      return 1;
     }
   if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "VISUALSTYLE"))
     {
@@ -626,6 +632,16 @@ dwg_free(Dwg_Data * dwg)
   unsigned int i;
   if (dwg)
     {
+#ifdef USE_TRACING
+      /* Before starting, set the logging level, but only do so once.  */
+      if (! env_var_checked_p)
+        {
+          char *probe = getenv ("LIBREDWG_TRACE");
+          if (probe)
+            loglevel = atoi (probe);
+          env_var_checked_p = 1;
+        }
+#endif  /* USE_TRACING */
       LOG_TRACE("dwg_free %p\n", dwg)
       /*if (dwg->bit_chain && dwg->bit_chain->size)
         free (dwg->bit_chain->chain);*/
