@@ -2546,7 +2546,7 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     {
       UNTESTED_CLASS;
       dwg_decode_FIELD(dat, obj);
-      return 1;
+      return 0;
     }
   if (!strcmp(dxfname, "CELLSTYLEMAP"))
     {
@@ -2642,7 +2642,9 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       return 0;
     }
 
-  LOG_WARN("Unknown Class %s %s", is_entity ? "entity": "object", dxfname);
+  LOG_WARN("Unknown Class %s %d %s (0x%x%s)", is_entity ? "entity" : "object", \
+           klass->number, dxfname, klass->proxyflag,                    \
+           klass->wasazombie ? " was proxy" : "")
 
   /* TODO: CELLSTYLEMAP, DBCOLOR, MATERIAL, MLEADER, MLEADERSTYLE,
      PLOTSETTINGS, SCALE, TABLEGEOMETRY,

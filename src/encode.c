@@ -769,166 +769,269 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
 
 #include "dwg.spec"
 
-/* returns 1 if object could be encoded and 0 otherwise
+/** dwg_encode_variable_type
+ * encode object by class name, not type. if type > 500.
+ * returns 1 if object could be encoded and 0 otherwise.
  */
 static int
 dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
 {
   int i;
+  char *dxfname;
+  int is_entity;
+  Dwg_Class *klass;
 
   if ((obj->type - 500) > dwg->num_classes)
-    return 0;
+    {
+      LOG_WARN("Invalid object type %d, only %d classes", obj->type, dwg->num_classes);
+      return 0;
+    }
 
   i = obj->type - 500;
+  klass = &dwg->dwg_class[i];
+  dxfname = obj->dxfname = klass->dxfname;
+  // almost always false
+  is_entity = dwg_class_is_entity(klass);
 
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "DICTIONARYVAR"))
+#define UNHANDLED_CLASS \
+      LOG_WARN("Unhandled Class %s %d %s (0x%x%s)", is_entity ? "entity" : "object",\
+               klass->number, dxfname, klass->proxyflag,\
+               klass->wasazombie ? " was proxy" : "")
+#define UNTESTED_CLASS \
+      LOG_WARN("Untested Class %s %d %s (0x%x%s)", is_entity ? "entity" : "object",\
+               klass->number, dxfname, klass->proxyflag,\
+               klass->wasazombie ? " was proxy" : "")
+
+  if (!strcmp(dxfname, "ACDBDICTIONARYWDFLT"))
     {
-      dwg_encode_DICTIONARYVAR(dat, obj);
-      return 1;
-    }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "ACDBDICTIONARYWDFLT"))
-    {
+      assert(!is_entity);
       dwg_encode_DICTIONARYWDLFT(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "HATCH"))
+  if (!strcmp(dxfname, "DICTIONARYVAR"))
     {
+      assert(!is_entity);
+      dwg_encode_DICTIONARYVAR(dat, obj);
+      return 1;
+    }
+  if (!strcmp(dxfname, "HATCH"))
+    {
+      assert(!is_entity);
       dwg_encode_HATCH(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "IDBUFFER"))
+  if (!strcmp(dxfname, "GROUP"))
     {
+      assert(!is_entity);
+      dwg_encode_GROUP(dat, obj);
+      return 1;
+    }
+  if (!strcmp(dxfname, "IDBUFFER"))
+    {
+      assert(!is_entity);
       dwg_encode_IDBUFFER(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "IMAGE"))
+  if (!strcmp(dxfname, "IMAGE"))
     {
+      assert(!is_entity);
       dwg_encode_IMAGE(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "IMAGEDEF"))
+  if (!strcmp(dxfname, "IMAGEDEF"))
     {
+      assert(!is_entity);
       dwg_encode_IMAGEDEF(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "IMAGEDEF_REACTOR"))
+  if (!strcmp(dxfname, "IMAGEDEF_REACTOR"))
     {
+      assert(!is_entity);
       dwg_encode_IMAGEDEF_REACTOR(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "LAYER_INDEX"))
+  if (!strcmp(dxfname, "LAYER_INDEX"))
     {
+      assert(!is_entity);
       dwg_encode_LAYER_INDEX(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "LAYOUT"))
+  if (!strcmp(dxfname, "LAYOUT"))
     {
+      assert(!is_entity);
       dwg_encode_LAYOUT(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "LWPLINE"))
+  if (!strcmp(dxfname, "LWPLINE"))
     {
+      assert(!is_entity);
       dwg_encode_LWPLINE(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "OLE2FRAME"))
+  if (!strcmp(dxfname, "OLE2FRAME"))
     {
+      assert(!is_entity);
       dwg_encode_OLE2FRAME(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "ACDBPLACEHOLDER"))
+  if (!strcmp(dxfname, "ACDBPLACEHOLDER"))
     {
       dwg_encode_PLACEHOLDER(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "AcDbField"))
-    {
-      // TODO
-      LOG_WARN("Untested Object/Class %s", dwg->dwg_class[i].dxfname);
-      dwg_encode_FIELD(dat, obj);
-      return 1;
-    }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "PROXY"))
+  if (!strcmp(dxfname, "PROXY"))
     {
       dwg_encode_PROXY(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "RASTERVARIABLES"))
+  if (!strcmp(dxfname, "RASTERVARIABLES"))
     {
       dwg_encode_RASTERVARIABLES(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "SORTENTSTABLE"))
+  if (!strcmp(dxfname, "SORTENTSTABLE"))
     {
       dwg_encode_SORTENTSTABLE(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "SPATIAL_FILTER"))
+  if (!strcmp(dxfname, "SPATIAL_FILTER"))
     {
       dwg_encode_SPATIAL_FILTER(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "SPATIAL_INDEX"))
+  if (!strcmp(dxfname, "SPATIAL_INDEX"))
     {
       dwg_encode_SPATIAL_INDEX(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "TABLE"))
+  if (!strcmp(dxfname, "TABLE"))
     {
       dwg_encode_TABLE(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "VBA_PROJECT"))
-    {
-      LOG_ERROR("Unhandled Object VBA_PROJECT. Has its own section");
-      //TODO:      dwg_encode_VBA_PROJECT(dat, obj);
-      return 0;
-    }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "WIPEOUTVARIABLE"))
-    {
-      //TODO
-      LOG_WARN("Unhandled Object/Class %s", dwg->dwg_class[i].dxfname);
-      //dwg_encode_WIPEOUTVARIABLE(dat, obj);
-      return 0;
-    }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "WIPEOUT"))
-    {
-      //TODO
-      //LOG_WARN("Unhandled Object/Class %s", dwg->dwg_class[i].dxfname);
-      dwg_encode_WIPEOUT(dat, obj);
-      return 1;
-    }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "CELLSTYLEMAP"))
-    {
-      // TODO
-      LOG_WARN("Unhandled Object/Class %s", dwg->dwg_class[i].dxfname);
-      dwg_encode_CELLSTYLEMAP(dat, obj);
-      return 0;
-    }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "VISUALSTYLE"))
-    {
-      // TODO
-      LOG_WARN("Unhandled Object/Class %s", dwg->dwg_class[i].dxfname);
-      //dwg_encode_VISUALSTYLE(dat, obj);
-      return 0;
-    }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "XRECORD"))
+  if (!strcmp(dxfname, "XRECORD"))
     {
       dwg_encode_XRECORD(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "DIMASSOC"))
+  if (!strcmp(dxfname, "WIPEOUT"))
     {
-      LOG_WARN("Unhandled Object/Class %s", dwg->dwg_class[i].dxfname);
-//TODO:      dwg_encode_DIMASSOC(dat, obj);
+      dwg_encode_WIPEOUT(dat, obj);
+      return 1;
+    }
+  if (!strcmp(dxfname, "AcDbField")) //???
+    {
+      UNTESTED_CLASS;
+      dwg_encode_FIELD(dat, obj);
       return 0;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "MATERIAL"))
+  if (!strcmp(dxfname, "CELLSTYLEMAP"))
     {
-      LOG_WARN("Unhandled Object/Class %s", dwg->dwg_class[i].dxfname);
-//TODO:      dwg_encode_MATERIAL(dat, obj);
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      dwg_encode_CELLSTYLEMAP(dat, obj);
       return 0;
     }
+  if (!strcmp(dxfname, "VBA_PROJECT"))
+    {
+      // Has its own section?
+      UNHANDLED_CLASS;
+      //dwg_encode_VBA_PROJECT(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "WIPEOUTVARIABLE"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_encode_WIPEOUTVARIABLE(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "VISUALSTYLE"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_encode_VISUALSTYLE(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "DIMASSOC"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_encode_DIMASSOC(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "MATERIAL"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_encode_MATERIAL(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "SCALE"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //SCALE has a name, bitsizes: 199,207,215,343,335,351,319
+      //CMLSCALE? (multiline scale)
+      //dwg_decode_SCALE(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "MLEADERSTYLE"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_decode_MLEADERSTYLE(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "TABLESTYLE"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_decode_TABLESTYLE(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "ACDBSECTIONVIEWSTYLE"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_decode_SECTIONVIEWSTYLE(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "ACDBDETAILVIEWSTYLE"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_decode_DETAILVIEWSTYLE(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "DBCOLOR"))
+    {
+      UNHANDLED_CLASS;
+      //assert(!is_entity);
+      //dwg_decode_DBCOLOR(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "MLEADER"))
+    {
+      UNHANDLED_CLASS;
+      //assert(!is_entity);
+      //dwg_decode_MLEADER(dat, obj);
+      return 0;
+    }
+
+  LOG_WARN("Unknown Class %s %d %s (0x%x%s)", is_entity ? "entity" : "object", \
+           klass->number, dxfname, klass->proxyflag,                    \
+           klass->wasazombie ? " was proxy" : "")
+
+  /* TODO: CELLSTYLEMAP, DBCOLOR, MATERIAL, MLEADER, MLEADERSTYLE,
+     PLOTSETTINGS, SCALE, TABLEGEOMETRY,
+     TABLESTYLE, VBA_PROJECT, VISUALSTYLE, WIPEOUTVARIABLE,
+     ACDBSECTIONVIEWSTYLE, ACDBDETAILVIEWSTYLE,
+     NPOCOLLECTION, EXACXREFPANELOBJECT,
+     ARCALIGNEDTEXT (2000+)
+  */
+#undef UNHANDLED_CLASS
+#undef UNTESTED_CLASS
 
   return 0;
 }
