@@ -258,10 +258,11 @@ typedef enum DWG_OBJECT_TYPE
   /* non-fixed types > 500:
      TABLE, CELLSTYLEMAP, DBCOLOR, DICTIONARYVAR, DICTIONARYWDFLT ,
      FIELD, GROUP, HATCH, IDBUFFER, IMAGE, IMAGEDEF, IMAGEDEF_REACTOR,
-     LAYER_INDEX, LAYOUT, LWPLINE, MATERIAL, MLEADER, MLEADERSTYLE,
-     OLE2FRAME, PLACEHOLDER, PLOTSETTINGS, RASTERVARIABLES, SCALE,
-     SORTENTSTABLE, SPATIAL_FILTER, SPATIAL_INDEX, TABLEGEOMETRY,
-     TABLESTYLE, VBA_PROJECT, VISUALSTYLE, WIPEOUT, WIPEOUTVARIABLE, XRECORD
+     LAYER_INDEX, LAYER_FILTER, LAYOUT, LIGHTLIST, LWPLINE, MATERIAL,
+     MLEADER, MLEADERSTYLE, OLE2FRAME, PLACEHOLDER, PLOTSETTINGS,
+     RASTERVARIABLES, SCALE, SORTENTSTABLE, SPATIAL_FILTER,
+     SPATIAL_INDEX, TABLEGEOMETRY, TABLESTYLE, VBA_PROJECT,
+     VISUALSTYLE, WIPEOUT, WIPEOUTVARIABLE, XRECORD
    */
 } Dwg_Object_Type;
 
@@ -609,6 +610,7 @@ typedef struct _dwg_header_variables {
   BITCODE_H DICTIONARY_MATERIALS;   /* r2004+ */
   BITCODE_H DICTIONARY_COLORS;      /* r2004+ */
   BITCODE_H DICTIONARY_VISUALSTYLE; /* r2007+ */
+  BITCODE_H DICTIONARY_LIGHTLIST;   /* r2010+ ?? */
   BITCODE_H unknown_20;             /* r2013+ */
   BITCODE_BL FLAGS;
   BITCODE_B  CELWEIGHT; /* = FLAGS & 0x1f */
@@ -2788,7 +2790,7 @@ typedef struct _dwg_entity_WIPEOUT
  */
 typedef struct _dwg_object_WIPEOUTVARIABLE
 {
-  char dummy;
+  char dummy[1]; // var-length array
   /* TODO */
 } Dwg_Object_WIPEOUTVARIABLE;
 
@@ -2802,6 +2804,37 @@ typedef struct _dwg_object_VISUALSTYLE
   /* TODO */
 } Dwg_Object_VISUALSTYLE;
 
+
+/**
+ Object LIGHTLIST (varies)
+ R2010+
+ */
+typedef struct _dwg_object_LIGHTLIST
+{
+  BITCODE_H* dictionary; /* (hard-pointer to ACAD_LIGHT dictionary entry) */
+  /* TODO */
+  BITCODE_BS version_number;
+  BITCODE_BS num_lights;
+  BITCODE_H  light_handle; /* one for each light */
+  BITCODE_TV light_name;   /* one for each light */
+} Dwg_Object_LIGHTLIST;
+
+
+/**
+ Unknown Class entity (unused)
+ */
+typedef struct _dwg_entity_UNKNOWN_ENT
+{
+  char *raw; // var-length field
+} Dwg_Entity_UNKNOWN_ENT;
+
+/**
+ Unknown Class object
+ */
+typedef struct _dwg_object_UNKNOWN_OBJ
+{
+  char *raw; // var-length field
+} Dwg_Object_UNKNOWN_OBJ;
 
 /* OBJECTS - END ************************************************************/
 
@@ -2923,6 +2956,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_TABLE *TABLE;
     Dwg_Entity_IMAGE *IMAGE;
     Dwg_Entity_WIPEOUT *WIPEOUT;
+    Dwg_Entity_UNKNOWN_ENT *UNKNOWN_ENT;
   } tio;
 
   BITCODE_RL bitsize;
@@ -3023,6 +3057,8 @@ typedef struct _dwg_object_object
     Dwg_Object_VBA_PROJECT *VBA_PROJECT;
     Dwg_Object_WIPEOUTVARIABLE *WIPEOUTVARIABLE;
     Dwg_Object_VISUALSTYLE *VISUALSTYLE;
+    Dwg_Object_LIGHTLIST *LIGHTLIST;
+    Dwg_Object_UNKNOWN_OBJ *UNKNOWN_OBJ;
   } tio;
 
   BITCODE_RL bitsize;
@@ -3055,7 +3091,7 @@ typedef struct _dwg_object
   {
     Dwg_Object_Entity *entity;
     Dwg_Object_Object *object;
-    unsigned char *unknown;
+    unsigned char *unknown; // i.e. unhandled class as raw bits
   } tio;
 
   char *dxfname;
@@ -3072,7 +3108,8 @@ typedef struct _dwg_object
 typedef struct _dwg_class
 {
   BITCODE_BS number;
-  BITCODE_BS proxyflag; /* see http://images.autodesk.com/adsk/files/autocad_2012_pdf_dxf-reference_enu.pdf */
+  /* see http://images.autodesk.com/adsk/files/autocad_2012_pdf_dxf-reference_enu.pdf */
+  BITCODE_BS proxyflag;
   char *appname;
   char *cppname;
   char *dxfname;

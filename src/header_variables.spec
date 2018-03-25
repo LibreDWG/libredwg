@@ -518,7 +518,7 @@
 
   SINCE(R_2013)
     {
-      FIELD_HANDLE (unknown_20, ANYCODE);
+      FIELD_HANDLE (unknown_20, ANYCODE); //  DICTIONARY_LIGHTLIST? since 2010
     }
   SINCE(R_2000)
     {
@@ -612,5 +612,6 @@
 
   /* TODO: This really is the section[0] CRC not related to the header */
   FIELD_RS (CRC);
+
 
 

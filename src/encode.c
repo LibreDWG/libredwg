@@ -501,6 +501,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
           nkn.chain = dwg->object[j].tio.unknown;
           nkn.size = dwg->object[j].size;
           nkn.byte = nkn.bit = 0;
+          //FIXME read?? should write
           bit_read_BS(&nkn);
           bit_read_RL(&nkn);
           bit_read_H(&nkn, &tkt);
@@ -768,7 +769,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
 
 #include "dwg.spec"
 
-/* returns 1 if object could be decoded and 0 otherwise
+/* returns 1 if object could be encoded and 0 otherwise
  */
 static int
 dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
@@ -1212,25 +1213,24 @@ dwg_encode_add_object(Dwg_Object * obj, Bit_Chain * dat,
       */
       else if (!dwg_encode_variable_type(obj->parent, dat, obj))
       {
-        LOG_INFO("Object UNKNOWN:\n")
+        unsigned int i;
+        LOG_INFO("Object unknown\n")
 
         SINCE(R_2000)
           {
-            bit_read_RL(dat);  // skip bitsize
+            bit_write_RL(dat, obj->bitsize);
           }
-
-        if (!bit_read_H(dat, &obj->handle))
-          {
-            LOG_INFO("Object handle: %x.%x.%lx\n", 
-              obj->handle.code, obj->handle.size, obj->handle.value)
-          }
+        bit_write_H(dat, &obj->handle);
 
         obj->supertype = DWG_SUPERTYPE_UNKNOWN;
         obj->tio.unknown = (unsigned char*)malloc(obj->size);
         if (!obj->tio.unknown) {
           LOG_ERROR("Out of memory"); return;
         }
-        memcpy(obj->tio.unknown, &dat->chain[object_address], obj->size);
+        // write obj->size bytes, excl. bitsize and handle
+        for (i=0; i<obj->size; i++) {
+          bit_write_RC(dat, obj->tio.unknown[i]);
+        }
       }
     }
 

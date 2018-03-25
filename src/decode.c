@@ -117,6 +117,9 @@ dwg_decode_object(Bit_Chain * dat, Dwg_Object_Object * obj);
 static int
 dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent);
 
+static int
+dwg_class_is_entity(Dwg_Class *klass);
+
 /*--------------------------------------------------------------------------------
  * Imported functions
  */
@@ -2392,212 +2395,273 @@ dwg_decode_xdata(Bit_Chain * dat, Dwg_Object_XRECORD *obj, int size)
  * Private functions which depend on the preceding
  */
 
-/* returns 1 if object could be decoded and 0 otherwise
+static int
+dwg_class_is_entity(Dwg_Class *klass)
+{
+  return klass->item_class_id == 0x1f2;
+}
+
+/** dwg_decode_variable_type
+ * decode object by class name, not type. if type > 500.
+ * returns 1 if object could be decoded and 0 otherwise.
  */
 static int
 dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
 {
   int i;
+  char *dxfname;
+  int is_entity;
+  Dwg_Class *klass;
 
   if ((obj->type - 500) > dwg->num_classes)
-    return 0;
-#define set_name(obj, dwg) \
-      obj->dxfname = dwg->dwg_class[i].dxfname
+    {
+      LOG_WARN("Invalid object type %d, only %d classes", obj->type, dwg->num_classes);
+      return 0;
+    }
 
   i = obj->type - 500;
+  klass = &dwg->dwg_class[i];
+  dxfname = obj->dxfname = klass->dxfname;
+  // almost always false
+  is_entity = dwg_class_is_entity(klass);
 
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "ACDBDICTIONARYWDFLT"))
+#define UNHANDLED_CLASS \
+      LOG_WARN("Unhandled Class %s %d %s (0x%x%s)", is_entity ? "entity" : "object",\
+               klass->number, dxfname, klass->proxyflag,\
+               klass->wasazombie ? " was proxy" : "")
+#define UNTESTED_CLASS \
+      LOG_WARN("Untested Class %s %d %s (0x%x%s)", is_entity ? "entity" : "object",\
+               klass->number, dxfname, klass->proxyflag,\
+               klass->wasazombie ? " was proxy" : "")
+
+  if (!strcmp(dxfname, "ACDBDICTIONARYWDFLT"))
     {
-      set_name(obj, dwg);
+      assert(!is_entity);
       dwg_decode_DICTIONARYWDLFT(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "DICTIONARYVAR"))
+  if (!strcmp(dxfname, "DICTIONARYVAR"))
     {
-      set_name(obj, dwg);
+      assert(!is_entity);
       dwg_decode_DICTIONARYVAR(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "HATCH"))
+  if (!strcmp(dxfname, "HATCH"))
     {
-      set_name(obj, dwg);
+      assert(!is_entity);
       dwg_decode_HATCH(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "GROUP"))
+  if (!strcmp(dxfname, "GROUP"))
     {
-      set_name(obj, dwg);
+      assert(!is_entity);
       dwg_decode_GROUP(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "IDBUFFER"))
+  if (!strcmp(dxfname, "IDBUFFER"))
     {
-      set_name(obj, dwg);
+      assert(!is_entity);
       dwg_decode_IDBUFFER(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "IMAGE"))
+  if (!strcmp(dxfname, "IMAGE"))
     {
-      set_name(obj, dwg);
+      assert(!is_entity);
       dwg_decode_IMAGE(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "IMAGEDEF"))
+  if (!strcmp(dxfname, "IMAGEDEF"))
     {
-      set_name(obj, dwg);
+      assert(!is_entity);
       dwg_decode_IMAGEDEF(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "IMAGEDEF_REACTOR"))
+  if (!strcmp(dxfname, "IMAGEDEF_REACTOR"))
     {
-      set_name(obj, dwg);
+      assert(!is_entity);
       dwg_decode_IMAGEDEF_REACTOR(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "LAYER_INDEX"))
+  if (!strcmp(dxfname, "LAYER_INDEX"))
     {
-      set_name(obj, dwg);
+      assert(!is_entity);
       dwg_decode_LAYER_INDEX(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "LAYOUT"))
+  if (!strcmp(dxfname, "LAYOUT"))
     {
-      set_name(obj, dwg);
+      assert(!is_entity);
       dwg_decode_LAYOUT(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "LWPLINE"))
+  if (!strcmp(dxfname, "LWPLINE"))
     {
-      set_name(obj, dwg);
+      assert(is_entity);
       dwg_decode_LWPLINE(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "OLE2FRAME"))
+  if (!strcmp(dxfname, "OLE2FRAME"))
     {
-      set_name(obj, dwg);
+      assert(!is_entity);
       dwg_decode_OLE2FRAME(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "ACDBPLACEHOLDER"))
+  if (!strcmp(dxfname, "ACDBPLACEHOLDER"))
     {
-      set_name(obj, dwg);
       dwg_decode_PLACEHOLDER(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "PROXY"))
+  if (!strcmp(dxfname, "PROXY"))
     {
-      set_name(obj, dwg);
       dwg_decode_PROXY(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "RASTERVARIABLES"))
+  if (!strcmp(dxfname, "RASTERVARIABLES"))
     {
-      set_name(obj, dwg);
       dwg_decode_RASTERVARIABLES(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "SORTENTSTABLE"))
+  if (!strcmp(dxfname, "SORTENTSTABLE"))
     {
-      set_name(obj, dwg);
       dwg_decode_SORTENTSTABLE(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "SPATIAL_FILTER"))
+  if (!strcmp(dxfname, "SPATIAL_FILTER"))
     {
-      set_name(obj, dwg);
       dwg_decode_SPATIAL_FILTER(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "SPATIAL_INDEX"))
+  if (!strcmp(dxfname, "SPATIAL_INDEX"))
     {
-      set_name(obj, dwg);
       dwg_decode_SPATIAL_INDEX(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "TABLE"))
+  if (!strcmp(dxfname, "TABLE"))
     {
-      set_name(obj, dwg);
       dwg_decode_TABLE(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "VBA_PROJECT"))
+  if (!strcmp(dxfname, "XRECORD"))
     {
-      set_name(obj, dwg);
-      LOG_ERROR("Unhandled Object VBA_PROJECT. Has its own section");
-      //dwg_decode_VBA_PROJECT(dat, obj);
-      return 0;
-    }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "XRECORD"))
-    {
-      set_name(obj, dwg);
       dwg_decode_XRECORD(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "WIPEOUTVARIABLE"))
+  if (!strcmp(dxfname, "WIPEOUT"))
     {
-      set_name(obj, dwg);
-      // TODO
-      LOG_WARN("Unhandled Object/Class %s", dwg->dwg_class[i].dxfname);
-      //dwg_decode_WIPEOUTVARIABLE(dat, obj);
-      return 0;
-    }
-  // AcDbWipeout
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "WIPEOUT"))
-    {
-      set_name(obj, dwg);
       dwg_decode_WIPEOUT(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "CELLSTYLEMAP"))
+  if (!strcmp(dxfname, "AcDbField")) //??
     {
-      set_name(obj, dwg);
-      // TODO
-      LOG_WARN("Unhandled Object/Class %s", dwg->dwg_class[i].dxfname);
-      dwg_decode_CELLSTYLEMAP(dat, obj);
-      return 0;
-    }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "VISUALSTYLE"))
-    {
-      set_name(obj, dwg);
-      // TODO
-      LOG_WARN("Unhandled Object/Class %s", dwg->dwg_class[i].dxfname);
-      //dwg_decode_VISUALSTYLE(dat, obj);
-      return 0;
-    }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "AcDbField")) //??
-    {
-      set_name(obj, dwg);
-      // TODO
-      LOG_WARN("Untested Object/Class %s", dwg->dwg_class[i].dxfname);
+      UNTESTED_CLASS;
       dwg_decode_FIELD(dat, obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "DIMASSOC"))
+  if (!strcmp(dxfname, "CELLSTYLEMAP"))
     {
-      set_name(obj, dwg);
-      LOG_WARN("Unhandled Object/Class %s", dwg->dwg_class[i].dxfname);
-//TODO:      dwg_decode_DIMASSOC(dat, obj);
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      dwg_decode_CELLSTYLEMAP(dat, obj);
       return 0;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "MATERIAL"))
+  if (!strcmp(dxfname, "VBA_PROJECT"))
     {
-      set_name(obj, dwg);
-      LOG_WARN("Unhandled Object/Class %s", dwg->dwg_class[i].dxfname);
-//TODO:      dwg_decode_MATERIAL(dat, obj);
+      // Has its own section?
+      UNHANDLED_CLASS;
+      //dwg_decode_VBA_PROJECT(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "WIPEOUTVARIABLE"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_decode_WIPEOUTVARIABLE(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "VISUALSTYLE"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_decode_VISUALSTYLE(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "DIMASSOC"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_decode_DIMASSOC(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "MATERIAL"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_decode_MATERIAL(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "SCALE"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //SCALE has a name, bitsizes: 199,207,215,343,335,351,319
+      //CMLSCALE? (multiline scale)
+      //dwg_decode_SCALE(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "MLEADERSTYLE"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_decode_MLEADERSTYLE(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "TABLESTYLE"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_decode_TABLESTYLE(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "ACDBSECTIONVIEWSTYLE"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_decode_SECTIONVIEWSTYLE(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "ACDBDETAILVIEWSTYLE"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_decode_DETAILVIEWSTYLE(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "DBCOLOR"))
+    {
+      UNHANDLED_CLASS;
+      //assert(!is_entity);
+      //dwg_decode_DBCOLOR(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "MLEADER"))
+    {
+      UNHANDLED_CLASS;
+      //assert(!is_entity);
+      //dwg_decode_MLEADER(dat, obj);
       return 0;
     }
 
-  LOG_WARN("Unknown Object/Class %s", dwg->dwg_class[i].dxfname);
-  set_name(obj, dwg);
-
-#undef set_name
+  LOG_WARN("Unknown Class %s %s", is_entity ? "entity": "object", dxfname);
 
   /* TODO: CELLSTYLEMAP, DBCOLOR, MATERIAL, MLEADER, MLEADERSTYLE,
      PLOTSETTINGS, SCALE, TABLEGEOMETRY,
      TABLESTYLE, VBA_PROJECT, VISUALSTYLE, WIPEOUTVARIABLE,
      ACDBSECTIONVIEWSTYLE, ACDBDETAILVIEWSTYLE,
-     NPOCOLLECTION, EXACXREFPANELOBJECT
+     NPOCOLLECTION, EXACXREFPANELOBJECT,
+     ARCALIGNEDTEXT (2000+)
   */
+#undef UNHANDLED_CLASS
+#undef UNTESTED_CLASS
 
   return 0;
 }
@@ -2907,40 +2971,87 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
         {
           dwg_decode_LAYOUT(dat, obj);
         }
+
       /* > 500:
-         TABLE, DICTIONARYWDLFT, IDBUFFER, IMAGE, IMAGEDEF, IMAGEDEFREACTOR,
-         LAYER_INDEX, OLE2FRAME, PROXY, RASTERVARIABLES, SORTENTSTABLE, SPATIAL_FILTER,
-         SPATIAL_INDEX, WIPEOUTVARIABLES
-      */
+       *  TABLE, DICTIONARYWDLFT, IDBUFFER, IMAGE, IMAGEDEF, IMAGEDEFREACTOR,
+       *  LAYER_INDEX, OLE2FRAME, PROXY, RASTERVARIABLES, SORTENTSTABLE, SPATIAL_FILTER,
+       *  SPATIAL_INDEX, WIPEOUTVARIABLES
+       */
       else if (!dwg_decode_variable_type(dwg, dat, obj))
         {
-          LOG_INFO("Object UNKNOWN:\n")
-#if 0
-          // TODO: EED for unknown objects. crashes with asan
-          dwg_decode_object(dat, obj->tio.object);
-#else
-          SINCE(R_2000)
+          int is_entity;
+          int i = obj->type - 500;
+          Dwg_Class *klass = NULL;
+          if (i <= (int)dwg->num_classes)
             {
-              obj->bitsize = bit_read_RL(dat);
-              LOG_INFO("Object bitsize: " FORMAT_RL " @%lu.%u\n", obj->bitsize,
-                       dat->byte, dat->bit);
+              klass = &dwg->dwg_class[i];
+              is_entity = dwg_class_is_entity(klass);
             }
-
-          if (!bit_read_H(dat, &obj->handle))
+          //TODO properly dwg_decode_object/entity for eed, reactors, xdic
+          if (klass && !is_entity)
             {
-              LOG_INFO("Object handle: %d.%d.%lu\n",
-                       obj->handle.code, obj->handle.size, obj->handle.value)
+              dwg_decode_UNKNOWN_OBJ(dat, obj);
+              /*              
+              Dwg_Object_UNKNOWN* _obj;
+              obj->supertype = DWG_SUPERTYPE_OBJECT;
+              obj->tio.object = (Dwg_Object_Object*)calloc(obj->size, 1);
+              if (!obj->tio.object) {
+                LOG_ERROR("Out of memory"); return;
+              }
+              _obj = obj->tio.object->tio.UNKNOWN_OBJ = (Dwg_Object_UNKNOWN*)
+                  calloc(1, obj->size);
+              if (!obj) {
+                LOG_ERROR("Out of memory"); return;
+              }
+              obj->tio.object->object = obj;
+              dwg_decode_object(dat, obj->tio.object);
+              //read obj->bitsize bits, not obj->size bytes
+              */
+             //FIELD_VECTOR_N(raw, RC, obj->bitsize/8);
+             //memcpy(obj->tio.object->tio.UNKNOWN_OBJ, &dat->chain[dat->byte], obj->bitsize/8);
             }
-#endif
-          obj->supertype = DWG_SUPERTYPE_UNKNOWN;
-          /* neither object nor entity, at least we don't know yet */
-          obj->tio.unknown = (unsigned char*)calloc(obj->size, 1);
-          if (!obj->tio.unknown)
+          else if (klass)
             {
-              LOG_ERROR("Out of memory");
-              return;
+              dwg_decode_UNKNOWN_ENT(dat, obj);
+              /*
+              obj->supertype = DWG_SUPERTYPE_ENTITY;
+              dwg->num_entities++;
+              obj->tio.entity = (Dwg_Object_Entity*)calloc(1, sizeof(Dwg_Object_Entity));
+              if (!obj->tio.entity) {
+                LOG_ERROR("Out of memory"); return;
+              }
+              obj->tio.entity->tio.UNKNOWN_ENT = (Dwg_Entity_UNKNOWN*)
+                  calloc(1, obj->size);
+              if (!obj->tio.entity->tio.UNKNOWN_ENT) {
+                LOG_ERROR("Out of memory"); return;
+              }
+              obj->tio.entity->object = obj;
+              memcpy(obj->tio.entity->tio.UNKNOWN_ENT, &dat->chain[object_address], obj->size);
+              dwg_decode_entity(dat, obj->tio.entity);
+              */
             }
-          memcpy(obj->tio.unknown, &dat->chain[object_address], obj->size);
+          else // not a class
+            {
+              SINCE(R_2000)
+              {
+                obj->bitsize = bit_read_RL(dat);
+                LOG_INFO("Object bitsize: " FORMAT_RL " @%lu.%u\n", obj->bitsize,
+                         dat->byte, dat->bit);
+              }
+              if (!bit_read_H(dat, &obj->handle))
+                {
+                  LOG_INFO("Object handle: %d.%d.%lu\n",
+                           obj->handle.code, obj->handle.size, obj->handle.value)
+                }
+              obj->supertype = DWG_SUPERTYPE_UNKNOWN;
+              obj->tio.unknown = (unsigned char*)calloc(obj->size, 1);
+              if (!obj->tio.unknown)
+                {
+                  LOG_ERROR("Out of memory");
+                  return;
+                }
+              memcpy(obj->tio.unknown, &dat->chain[object_address], obj->size);
+            }
         }
     }
 
