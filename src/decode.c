@@ -88,12 +88,13 @@ dwg_decode_header_variables(Bit_Chain* dat, Dwg_Data * dwg);
 static int
 resolve_objectref_vector(Bit_Chain* dat, Dwg_Data * dwg);
 
-static int
-decode_preR13(Bit_Chain* dat, Dwg_Data * dwg);
 static void
 decode_preR13_table(const char* name, int id, Bit_Chain* dat, Dwg_Data * dwg);
 static void
 decode_preR13_table_chk(const char* name, int id, Bit_Chain* dat, Dwg_Data * dwg);
+
+static int
+decode_preR13(Bit_Chain* dat, Dwg_Data * dwg);
 
 static int
 decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg);
@@ -132,17 +133,36 @@ read_r2007_meta_data(Bit_Chain *dat, Dwg_Data *dwg);
  * Public function definitions
  */
 
-// returns 0 on success
+/** dwg_decode_data
+ * returns 0 on success.
+ *
+ * everything in dwg is cleared
+ * and then either read from dat, or set to a default.
+ */
 int
 dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
 {
   int i;
   char version[7];
+
   dwg->num_object_refs = 0;
   dwg->num_layers = 0;
   dwg->num_entities = 0;
   dwg->num_objects = 0;
   dwg->num_classes = 0;
+  dwg->picture.size = 0;
+  dwg->picture.chain = NULL;
+  dwg->header.num_sections = 0;
+  dwg->header.num_descriptions = 0;
+  dwg->measurement = 0;
+  dwg->dwg_class = NULL;
+  dwg->object_ref = NULL;
+  dwg->object = NULL;
+
+  memset(&dwg->header_vars, 0, sizeof(Dwg_Header_Variables));
+  memset(&dwg->r2004_header.file_ID_string[0], 0, sizeof(dwg->r2004_header));
+  memset(&dwg->auxheader.aux_intro[0], 0, sizeof(dwg->auxheader));
+  memset(&dwg->second_header.unknown[0], 0, sizeof(dwg->second_header));
 
 #ifdef USE_TRACING
   /* Before starting, set the logging level, but only do so once.  */
@@ -250,6 +270,7 @@ decode_preR13(Bit_Chain* dat, Dwg_Data * dwg)
   BITCODE_RS rs2;
   int tbl_id;
   Dwg_Object *obj = NULL;
+  
   {
     int i;
     struct Dwg_Header *_obj = &dwg->header;
@@ -473,8 +494,6 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
           memcpy(dwg->picture.chain, &dat->chain[start_address],
               dwg->picture.size);
         }
-      else
-        dwg->picture.size = 0;
     }
 
   /*-------------------------------------------------------------------------
@@ -1159,7 +1178,7 @@ read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
 
   decompress_R2004_section(dat, decomp, comp_data_size);
 
-  memcpy(&dwg->header.num_descriptions, decomp, 4);
+  dwg->header.num_descriptions = *(uint32_t*)decomp;
   dwg->header.section_info = (Dwg_Section_Info*)
     calloc(dwg->header.num_descriptions, sizeof(Dwg_Section_Info));
   if (!dwg->header.section_info)
@@ -1537,7 +1556,6 @@ decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
   } system_section;
 
   system_section ss;
-
   Dwg_Section *section;
 
   {

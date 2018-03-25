@@ -3163,9 +3163,9 @@ typedef struct _dwg_struct
     BITCODE_RL   summary_info_address; /* R2004+ */
     BITCODE_RL   vba_proj_address;     /* R2004+ */
     BITCODE_RL   rl_28_80;             /* R2004+ */
-    unsigned int num_sections;
+    BITCODE_RL   num_sections;
     Dwg_Section* section;
-    unsigned int num_descriptions;
+    BITCODE_RL   num_descriptions;
     Dwg_Section_Info* section_info;
   } header;
 

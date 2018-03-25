@@ -36,6 +36,13 @@
 /*------------------------------------------------------------------------------
  * Public functions
  */
+
+/** dwg_read_file
+ * returns 0 on success.
+ *
+ * everything in dwg is cleared
+ * and then either read from dat, or set to a default.
+ */
 int
 dwg_read_file(char *filename, Dwg_Data * dwg_data)
 {
@@ -89,8 +96,6 @@ dwg_read_file(char *filename, Dwg_Data * dwg_data)
 
   /* Decode the dwg structure
    */
-  //dwg_data->bit_chain = &bit_chain;
-
   if (dwg_decode_data(&bit_chain, dwg_data))
     {
       LOG_ERROR("Failed to decode file: %s\n", filename)
@@ -457,19 +462,24 @@ dwg_free(Dwg_Data * dwg)
         free (dwg->bit_chain->chain);*/
 #define FREE_IF(ptr) if (ptr) free(ptr)
       FREE_IF(dwg->header.section);
-      FREE_IF(dwg->picture.chain);
+      if (dwg->picture.size && dwg->picture.chain)
+        free(dwg->picture.chain);
       for (i=0; i < dwg->num_classes; ++i)
         {
           FREE_IF(dwg->dwg_class[i].appname);
           FREE_IF(dwg->dwg_class[i].cppname);
           FREE_IF(dwg->dwg_class[i].dxfname);
         }
-      FREE_IF(dwg->dwg_class);
+      if (dwg->num_classes) {
+        FREE_IF(dwg->dwg_class);
+      }
       for (i=0; i < dwg->header.num_descriptions; ++i)
         {
           FREE_IF(dwg->header.section_info[i].sections);
         }
-      FREE_IF(dwg->header.section_info);
+      if (dwg->header.num_descriptions) {
+        FREE_IF(dwg->header.section_info);
+      }
       for (i=0; i < dwg->num_objects; ++i)
         {
           dwg_object_free(&dwg->object[i]);
