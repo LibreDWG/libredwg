@@ -12362,15 +12362,15 @@ dwg_ent_leader_set_numpts(dwg_ent_leader *leader, BITCODE_BL numpts, int *error)
 
 /// Sets leader end point proj
 void
-dwg_ent_leader_set_end_pt_proj(dwg_ent_leader *leader, dwg_point_3d *point,
+dwg_ent_leader_set_origin(dwg_ent_leader *leader, dwg_point_3d *point,
                                int *error)
 {
   if (leader != 0 && point != 0)
     {
       *error = 0;
-      leader->end_pt_proj.x = point->x;
-      leader->end_pt_proj.y = point->y;
-      leader->end_pt_proj.z = point->z;
+      leader->origin.x = point->x;
+      leader->origin.y = point->y;
+      leader->origin.z = point->z;
     }
   else
     {
@@ -12380,17 +12380,17 @@ dwg_ent_leader_set_end_pt_proj(dwg_ent_leader *leader, dwg_point_3d *point,
 
 }
 
-/// Returns leader end point
+/// Returns leader origin
 void
-dwg_ent_leader_get_end_pt_proj(dwg_ent_leader *leader, dwg_point_3d *point,
-                               int *error)
+dwg_ent_leader_get_origin(dwg_ent_leader *leader, dwg_point_3d *point,
+                          int *error)
 {
   if (leader != 0 && point != 0)
     {
       *error = 0;
-      point->x = leader->end_pt_proj.x;
-      point->y = leader->end_pt_proj.y;
-      point->z = leader->end_pt_proj.z;
+      point->x = leader->origin.x;
+      point->y = leader->origin.y;
+      point->z = leader->origin.z;
     }
   else
     {

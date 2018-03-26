@@ -185,158 +185,168 @@ static int
 dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
 {
   int i;
+  char *dxfname;
+  Dwg_Class *klass;
 
   if ((obj->type - 500) > dwg->num_classes)
     return 0;
 
   i = obj->type - 500;
+  klass = &dwg->dwg_class[i];
+  dxfname = klass->dxfname;
 
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "DICTIONARYVAR"))
+  if (!strcmp(dxfname, "DICTIONARYVAR"))
     {
       dwg_free_DICTIONARYVAR(obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "ACDBDICTIONARYWDFLT"))
+  if (!strcmp(dxfname, "ACDBDICTIONARYWDFLT"))
     {
       dwg_free_DICTIONARYWDLFT(obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "HATCH"))
+  if (!strcmp(dxfname, "HATCH"))
     {
       dwg_free_HATCH(obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "FIELDLIST"))
+  if (!strcmp(dxfname, "FIELDLIST"))
     {
       dwg_free_FIELDLIST(obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "IDBUFFER"))
+  if (!strcmp(dxfname, "IDBUFFER"))
     {
       dwg_free_IDBUFFER(obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "IMAGE"))
+  if (!strcmp(dxfname, "IMAGE"))
     {
       dwg_free_IMAGE(obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "IMAGEDEF"))
+  if (!strcmp(dxfname, "IMAGEDEF"))
     {
       dwg_free_IMAGEDEF(obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "IMAGEDEF_REACTOR"))
+  if (!strcmp(dxfname, "IMAGEDEF_REACTOR"))
     {
       dwg_free_IMAGEDEF_REACTOR(obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "LAYER_INDEX"))
+  if (!strcmp(dxfname, "LAYER_INDEX"))
     {
       dwg_free_LAYER_INDEX(obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "LAYOUT"))
+  if (!strcmp(dxfname, "LAYOUT"))
     {
       dwg_free_LAYOUT(obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "LWPLINE"))
+  if (!strcmp(dxfname, "LWPLINE"))
     {
       dwg_free_LWPLINE(obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "MLEADERSTYLE"))
+  if (!strcmp(dxfname, "MLEADERSTYLE"))
     {
       //dwg_free_MLEADERSTYLE(obj);
       return 0;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "OLE2FRAME"))
+  if (!strcmp(dxfname, "OLE2FRAME"))
     {
       dwg_free_OLE2FRAME(obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "ACDBPLACEHOLDER"))
+  if (!strcmp(dxfname, "OBJECTCONTEXTDATA")
+      || strcmp(klass->cppname, "AcDbObjectContextData"))
+    {
+      dwg_free_OBJECTCONTEXTDATA(obj);
+      return 1;
+    }
+  if (!strcmp(dxfname, "ACDBPLACEHOLDER"))
     {
       dwg_free_PLACEHOLDER(obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "PROXY"))
+  if (!strcmp(dxfname, "PROXY"))
     {
       dwg_free_PROXY(obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "RASTERVARIABLES"))
+  if (!strcmp(dxfname, "RASTERVARIABLES"))
     {
       dwg_free_RASTERVARIABLES(obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "SCALE"))
+  if (!strcmp(dxfname, "SCALE"))
     {
       dwg_free_SCALE(obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "SORTENTSTABLE"))
+  if (!strcmp(dxfname, "SORTENTSTABLE"))
     {
       dwg_free_SORTENTSTABLE(obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "SPATIAL_FILTER"))
+  if (!strcmp(dxfname, "SPATIAL_FILTER"))
     {
       dwg_free_SPATIAL_FILTER(obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "SPATIAL_INDEX"))
+  if (!strcmp(dxfname, "SPATIAL_INDEX"))
     {
       dwg_free_SPATIAL_INDEX(obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "TABLE"))
+  if (!strcmp(dxfname, "TABLE"))
     {
       dwg_free_TABLE(obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "WIPEOUTVARIABLE"))
+  if (!strcmp(dxfname, "WIPEOUTVARIABLE"))
     {
       //dwg_free_WIPEOUTVARIABLE(obj);
       return 0;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "WIPEOUT"))
+  if (!strcmp(dxfname, "WIPEOUT"))
     {
       dwg_free_WIPEOUT(obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "VBA_PROJECT"))
+  if (!strcmp(dxfname, "VBA_PROJECT"))
     {
       dwg_free_VBA_PROJECT(obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "CELLSTYLEMAP"))
+  if (!strcmp(dxfname, "CELLSTYLEMAP"))
     {
       dwg_free_CELLSTYLEMAP(obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "VISUALSTYLE"))
+  if (!strcmp(dxfname, "VISUALSTYLE"))
     {
       //dwg_free_VISUALSTYLE(obj);
       return 0;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "AcDbField")) //?
+  if (!strcmp(dxfname, "AcDbField")) //?
     {
       dwg_free_FIELD(obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "XRECORD"))
+  if (!strcmp(dxfname, "XRECORD"))
     {
       dwg_free_XRECORD(obj);
       return 1;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "DIMASSOC"))
+  if (!strcmp(dxfname, "DIMASSOC"))
     {
 //TODO:      dwg_free_DIMASSOC(obj);
       return 0;
     }
-  if (!strcmp((const char *)dwg->dwg_class[i].dxfname, "MATERIAL"))
+  if (!strcmp(dxfname, "MATERIAL"))
     {
 //TODO:      dwg_free_MATERIAL(obj);
       return 0;

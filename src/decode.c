@@ -2442,7 +2442,7 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "IMAGE"))
     {
-      assert(!is_entity);
+      assert(is_entity);
       dwg_decode_IMAGE(dat, obj);
       return 1;
     }
@@ -2478,52 +2478,68 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "OLE2FRAME"))
     {
-      assert(!is_entity);
+      assert(is_entity);
       dwg_decode_OLE2FRAME(dat, obj);
+      return 1;
+    }
+  if (!strcmp(dxfname, "OBJECTCONTEXTDATA") ||
+      !strcmp(klass->cppname, "AcDbObjectContextData"))
+    {
+      assert(!is_entity);
+      dwg_decode_OBJECTCONTEXTDATA(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "ACDBPLACEHOLDER"))
     {
+      assert(!is_entity);
       dwg_decode_PLACEHOLDER(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "PROXY"))
     {
+      assert(!is_entity);
       dwg_decode_PROXY(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "RASTERVARIABLES"))
     {
+      assert(!is_entity);
       dwg_decode_RASTERVARIABLES(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "SORTENTSTABLE"))
     {
+      assert(!is_entity);
       dwg_decode_SORTENTSTABLE(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "SPATIAL_FILTER"))
     {
+      assert(!is_entity);
       dwg_decode_SPATIAL_FILTER(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "SPATIAL_INDEX"))
     {
+      assert(!is_entity);
       dwg_decode_SPATIAL_INDEX(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "TABLE"))
     {
+      assert(is_entity);
       dwg_decode_TABLE(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "XRECORD"))
     {
+      assert(!is_entity);
       dwg_decode_XRECORD(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "WIPEOUT"))
     {
+      assert(is_entity);
       dwg_decode_WIPEOUT(dat, obj);
       return 1;
     }
@@ -2541,6 +2557,13 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       dwg_decode_SCALE(dat, obj);
       return 1;
     }
+  if (!strcmp(dxfname, "MLEADER"))
+    {
+      UNTESTED_CLASS;
+      assert(is_entity);
+      dwg_decode_MLEADER(dat, obj);
+      return 1;
+    }
   if (!strcmp(dxfname, "MLEADERSTYLE"))
     {
       UNTESTED_CLASS;
@@ -2548,12 +2571,13 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       //dwg_decode_MLEADERSTYLE(dat, obj);
       return 0;
     }
-  if (!strcmp(dxfname, "AcDbField")) //??
+  /*if (!strcmp(dxfname, "AcDbField"))
     {
       UNTESTED_CLASS;
       dwg_decode_FIELD(dat, obj);
       return 0;
     }
+  */
   if (!strcmp(dxfname, "CELLSTYLEMAP"))
     {
       UNTESTED_CLASS;
@@ -2565,6 +2589,7 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     {
       // Has its own section?
       UNTESTED_CLASS;
+      assert(!is_entity);
       dwg_decode_VBA_PROJECT(dat, obj);
       return 0;
     }
@@ -2620,14 +2645,14 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
   if (!strcmp(dxfname, "DBCOLOR"))
     {
       UNHANDLED_CLASS;
-      //assert(!is_entity);
+      assert(!is_entity);
       //dwg_decode_DBCOLOR(dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "MLEADER"))
     {
       UNHANDLED_CLASS;
-      //assert(!is_entity);
+      assert(is_entity);
       //dwg_decode_MLEADER(dat, obj);
       return 0;
     }

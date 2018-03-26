@@ -921,6 +921,12 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       dwg_encode_LWPLINE(dat, obj);
       return 1;
     }
+  if (!strcmp(dxfname, "MLEADER"))
+    {
+      UNTESTED_CLASS;
+      dwg_encode_MLEADER(dat, obj);
+      return 0;
+    }
   if (!strcmp(dxfname, "MLEADERSTYLE"))
     {
       UNTESTED_CLASS;
@@ -931,6 +937,12 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     {
       assert(!is_entity);
       dwg_encode_OLE2FRAME(dat, obj);
+      return 1;
+    }
+  if (!strcmp(dxfname, "OBJECTCONTEXTDATA")
+      || strcmp(klass->cppname, "AcDbObjectContextData"))
+    {
+      dwg_encode_OBJECTCONTEXTDATA(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "ACDBPLACEHOLDER"))

@@ -2787,12 +2787,12 @@ void
 dwg_ent_leader_set_numpts(dwg_ent_leader *leader, BITCODE_BL numpts, int *error);
 
 void
-dwg_ent_leader_set_end_pt_proj(dwg_ent_leader *leader, dwg_point_3d *point,
-                               int *error);
+dwg_ent_leader_set_origin(dwg_ent_leader *leader, dwg_point_3d *point,
+                          int *error);
 
 void
-dwg_ent_leader_get_end_pt_proj(dwg_ent_leader *leader, dwg_point_3d *point,
-                               int *error);
+dwg_ent_leader_get_origin(dwg_ent_leader *leader, dwg_point_3d *point,
+                          int *error);
 
 void
 dwg_ent_leader_set_extrusion(dwg_ent_leader *leader, dwg_point_3d *point,

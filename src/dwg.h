@@ -1432,11 +1432,11 @@ typedef struct _dwg_entity_LEADER
   BITCODE_BS path_type;
   BITCODE_BL numpts;
   BITCODE_3DPOINT* points;
-  BITCODE_3DPOINT end_pt_proj;
+  BITCODE_3DPOINT origin;
   BITCODE_3DPOINT extrusion;
   BITCODE_3DPOINT x_direction;
   BITCODE_3DPOINT offset_to_block_ins_pt;
-  BITCODE_3DPOINT unknown_pt;
+  BITCODE_3DPOINT endptproj;
   BITCODE_BD dimgap;
   BITCODE_BD box_height;
   BITCODE_BD box_width;
@@ -2253,6 +2253,178 @@ typedef struct _dwg_object_PLACEHOLDER
 } Dwg_Object_PLACEHOLDER;
 
 /**
+ * Entity MLEADER (varies)
+ * R2000+
+ */
+typedef struct
+{
+  BITCODE_BL num_points;
+  BITCODE_3BD * points;
+  BITCODE_BL unknown;
+  BITCODE_BL index;
+
+  BITCODE_BS type;
+  BITCODE_CMC color;
+  BITCODE_H type_handle;
+  BITCODE_BL weight;
+  BITCODE_BD arrow_size;
+  BITCODE_H arrow_handle;
+  BITCODE_BL flags;
+} Leader_Line;
+
+typedef struct
+{
+  BITCODE_BL is_default;
+  BITCODE_H arrowhead;
+} Leader_ArrowHead;
+
+typedef struct
+{
+  BITCODE_H attdef;
+  BITCODE_TV label_text;
+  BITCODE_BS ui_index;
+  BITCODE_BD width;
+} Leader_BlockLabel;
+
+typedef struct
+{
+  BITCODE_B unknown1;
+  BITCODE_B unknown2;
+  BITCODE_3BD connection;
+  BITCODE_3BD direction;
+  BITCODE_BL unknown3;
+  BITCODE_BL index;
+  BITCODE_BL num_lines;
+  Leader_Line * lines;
+
+  BITCODE_BS attach_dir;
+} Dwg_Leader;
+
+/* The MLEADERAnnotContext object (par 20.4.86), embedded into an MLEADER */
+typedef struct
+{
+  BITCODE_BS version;
+  BITCODE_B has_xdic_file;
+  BITCODE_B is_default;;
+
+  BITCODE_H scale_handle;
+
+  BITCODE_BL num_leaders;
+  Dwg_Leader * leaders;
+
+  BITCODE_BS attach_dir;
+
+  BITCODE_BD scale;
+  BITCODE_3BD content_base;
+  BITCODE_BD text_heigth;
+  BITCODE_BD arrow_size;
+  BITCODE_BD landing_gap;
+  BITCODE_BS text_left;
+  BITCODE_BS text_right;
+  BITCODE_BS text_align;
+  BITCODE_BS attach_type;
+
+  BITCODE_B has_text_content;
+  struct _text_content
+    {
+      BITCODE_TV label;
+      BITCODE_3BD normal;
+      BITCODE_H style;
+      BITCODE_3BD location;
+      BITCODE_3BD direction;
+      BITCODE_BD rotation;
+      BITCODE_BD width;
+      BITCODE_BD heigth;
+      BITCODE_BD spacing_factor;
+      BITCODE_H spacing_style;
+      BITCODE_CMC color;
+      BITCODE_BS align;
+      BITCODE_BS flow;
+      BITCODE_CMC bg_color;
+      BITCODE_BD bg_scale;
+      BITCODE_BL bg_transparency;
+      BITCODE_B is_bg_fill;
+      BITCODE_B is_bg_mask_fill;
+      BITCODE_BS col_type;
+      BITCODE_B is_heigth_auto;
+      BITCODE_BD unknown1;
+      BITCODE_BD unknown2;
+      BITCODE_B is_col_flow_reversed;
+      BITCODE_BL unknown3;
+      BITCODE_B word_break1;
+      BITCODE_B word_break2;
+    } txt;
+
+  BITCODE_B has_content_block;
+  struct _content_block
+    {
+      BITCODE_H block_table;
+      BITCODE_3BD normal;
+      BITCODE_3BD location;
+      BITCODE_3BD scale;
+      BITCODE_BD rotation;
+      BITCODE_CMC color;
+      BITCODE_BD transform[16];
+    } blk;
+  
+  BITCODE_3BD base;
+  BITCODE_3BD base_dir;
+  BITCODE_3BD base_vert;
+  BITCODE_B is_normal_reversed;
+
+  BITCODE_BS text_top;
+  BITCODE_BS text_bottom;
+
+} Dwg_MLEADERAnnotContext;
+
+typedef struct
+{
+  BITCODE_BS version; //r2010+ =2
+  Dwg_MLEADERAnnotContext ctx;
+  BITCODE_H leaderstyle;
+  BITCODE_BL flags; // override
+  BITCODE_BS type;
+  BITCODE_CMC color;
+  BITCODE_H ltype;
+  BITCODE_BL line_weigth;
+  BITCODE_B landing;
+  BITCODE_B dog_leg;
+  BITCODE_BD landing_dist;
+  BITCODE_H arrow_head;
+  BITCODE_BD arrow_head_size; // the default
+  BITCODE_BS style_content;
+  BITCODE_H text_style;
+  BITCODE_BS text_left;
+  BITCODE_BS text_rigth;
+  BITCODE_BS text_angle;
+  BITCODE_BS attach_type;
+  BITCODE_CMC text_color;
+  BITCODE_B text_frame;
+  BITCODE_H block_style;
+  BITCODE_CMC block_color;
+  BITCODE_3BD block_scale;
+  BITCODE_BD block_rotation;
+  BITCODE_BS style_attachment;
+  BITCODE_B is_annotative;
+
+  // until r2007:
+  BITCODE_BL num_arrowheads;
+  Leader_ArrowHead *arrowheads;
+  BITCODE_BL num_blocklabels;
+  Leader_BlockLabel *blocklabels;
+  BITCODE_B neg_textdir;
+  BITCODE_BS ipe_align;
+  BITCODE_BS justification;
+  BITCODE_BD scale_factor;
+  
+  BITCODE_BS attach_dir; //r2010+ (0 = horizontal, 1 = vertical)
+  BITCODE_BS attach_top; //r2010+
+  BITCODE_BS attach_bottom; //r2010+
+
+  BITCODE_B text_extended; //r2013+
+} Dwg_Entity_MLEADER;
+
+/**
  * Object MLEADERSTYLE (varies)
  * R2000+
  */
@@ -2303,6 +2475,8 @@ typedef struct
   BITCODE_BS attach_dir; //r2010+ (0 = horizontal, 1 = vertical)
   BITCODE_BS attach_top; //r2010+
   BITCODE_BS attach_bottom; //r2010+
+  
+  BITCODE_B text_extended; //r2013+
 } Dwg_Object_MLEADERSTYLE;
 
 /**
@@ -2802,7 +2976,33 @@ typedef struct _dwg_entity_LWPLINE
 } Dwg_Entity_LWPLINE;
 
 /**
- Class SORTENTSTABLE (varies)
+ * 20.4.89 Class AcDbObjectContextData (varies)
+ * R2010+
+ */
+typedef struct
+{
+  BITCODE_BS version; //r2010+ =3
+  BITCODE_B has_file;
+  BITCODE_B defaultflag;
+} Dwg_Object_OBJECTCONTEXTDATA;
+
+/**
+ Class RASTERVARIABLES (varies)
+ (used in conjunction with IMAGE entities)
+ */
+typedef struct _dwg_object_RASTERVARIABLES
+{
+  BITCODE_BL version;
+  BITCODE_BS display_frame;
+  BITCODE_BS display_quality;
+  BITCODE_BS units;
+  BITCODE_H parenthandle;
+  BITCODE_H* reactors;
+  BITCODE_H xdicobjhandle;
+} Dwg_Object_RASTERVARIABLES;
+
+/**
+ Object SCALE (varies)
  */
 typedef struct _dwg_object_SCALE
 {
@@ -2814,20 +3014,6 @@ typedef struct _dwg_object_SCALE
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
 } Dwg_Object_SCALE;
-
-/**
- Class RASTERVARIABLES (varies)
- */
-typedef struct _dwg_object_RASTERVARIABLES
-{
-  BITCODE_BL class_version;
-  BITCODE_BS display_frame;
-  BITCODE_BS display_quality;
-  BITCODE_BS units;
-  BITCODE_H parenthandle;
-  BITCODE_H* reactors;
-  BITCODE_H xdicobjhandle;
-} Dwg_Object_RASTERVARIABLES;
 
 /**
  Class SORTENTSTABLE (varies)
@@ -3079,6 +3265,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_DUMMY *DUMMY;
     Dwg_Entity_LONG_TRANSACTION *LONG_TRANSACTION;
     Dwg_Entity_LWPLINE *LWPLINE;
+    Dwg_Entity_MLEADER *MLEADER;
     Dwg_Entity_PROXY_LWPOLYLINE *PROXY_LWPOLYLINE;
     Dwg_Entity_PROXY_ENTITY *PROXY_ENTITY;
     Dwg_Entity_HATCH *HATCH;
@@ -3180,6 +3367,7 @@ typedef struct _dwg_object_object
     Dwg_Object_IMAGEDEF_REACTOR *IMAGEDEF_REACTOR;
     Dwg_Object_LIGHTLIST *LIGHTLIST;
     Dwg_Object_MLEADERSTYLE *MLEADERSTYLE;
+    Dwg_Object_OBJECTCONTEXTDATA *OBJECTCONTEXTDATA;
     Dwg_Object_RASTERVARIABLES *RASTERVARIABLES;
     Dwg_Object_SCALE *SCALE;
     Dwg_Object_SORTENTSTABLE *SORTENTSTABLE;

@@ -1621,14 +1621,14 @@ DWG_ENTITY(LEADER);
   FIELD(path_type, BS);
   FIELD(numpts, BL);
   FIELD_3DPOINT_VECTOR(points, numpts);
-  FIELD_3DPOINT(end_pt_proj);
+  FIELD_3DPOINT(origin);
   FIELD_3DPOINT(extrusion);
   FIELD_3DPOINT(x_direction);
   FIELD_3DPOINT(offset_to_block_ins_pt);
 
   SINCE(R_14)
     {
-      FIELD_3DPOINT(unknown_pt);
+      FIELD_3DPOINT(endptproj);
     }
 
   VERSIONS(R_13,R_14)
@@ -1662,14 +1662,14 @@ DWG_ENTITY(LEADER);
 
   COMMON_ENTITY_HANDLE_DATA;
 
-  //FIXME reading these handles leaded to a segfault
-  //SINCE(R_14)
-  //{
-  //TODO check if field is present in R_13.
-  //Juca thinks it is present but inactive/not used.
-  //FIELD_HANDLE(associated_annotation, 5);
-  //}
-  //FIELD_HANDLE(dimstyle, 5);
+  //FIXME reading these handles lead to a segfault
+  SINCE(R_14)
+  {
+    //TODO check if field is present in R_13.
+    //Juca thinks it is present but inactive/not used.
+    FIELD_HANDLE(associated_annotation, 2);
+  }
+  FIELD_HANDLE(dimstyle, 5);
 
 DWG_ENTITY_END
 
@@ -2955,19 +2955,32 @@ DWG_OBJECT(PROXY);
   //TODO: figure out how to deal with the arbitrary size vector databits described on the spec
 DWG_OBJECT_END
 
+DWG_OBJECT(OBJECTCONTEXTDATA);
+
+  SINCE(R_2010) {
+    IF_ENCODE_FROM_EARLIER {
+      FIELD_VALUE(version) = 3;
+    }
+    FIELD_BS (version);
+  }
+  FIELD_B (has_file);
+  FIELD_B (defaultflag);
+
+DWG_OBJECT_END
+
 DWG_OBJECT(CELLSTYLEMAP);
 
   SINCE(R_2000)
     {
-        FIELD_BL(num_cells);
-        REPEAT_N((long)FIELD_VALUE(num_cells), cells, Dwg_Object_CELLSTYLEMAP_Cell)
-          {
-            LOG_INFO("TODO CELLSTYLEMAP TABLE_Cell struct\n");
-            // TODO read the TABLE_Cell struct
-            FIELD_BL(cells[rcount].id);
-            FIELD_BL(cells[rcount].type);
-            FIELD_TV(cells[rcount].name);
-          }
+      FIELD_BL(num_cells);
+      REPEAT_N((long)FIELD_VALUE(num_cells), cells, Dwg_Object_CELLSTYLEMAP_Cell)
+        {
+          LOG_INFO("TODO CELLSTYLEMAP TABLE_Cell struct\n");
+          // TODO read the TABLE_Cell struct
+          FIELD_BL(cells[rcount].id);
+          FIELD_BL(cells[rcount].type);
+          FIELD_TV(cells[rcount].name);
+        }
     }
 DWG_OBJECT_END
 
@@ -2975,35 +2988,35 @@ DWG_OBJECT(FIELD);
 
   SINCE(R_2004)
     {
-        LOG_INFO("TODO FIELD\n");
-        FIELD_TV(id);
-        FIELD_TV(code);
+      LOG_INFO("TODO FIELD\n");
+      FIELD_TV(id);
+      FIELD_TV(code);
 
-        FIELD_BL(num_childhdl);
-        HANDLE_VECTOR(childhdl, num_childhdl, 360);
-        FIELD_BL(num_objects);
-        HANDLE_VECTOR(objects, num_objects, 331);
+      FIELD_BL(num_childhdl);
+      HANDLE_VECTOR(childhdl, num_childhdl, 360);
+      FIELD_BL(num_objects);
+      HANDLE_VECTOR(objects, num_objects, 331);
 
-        UNTIL(R_2004)
+      UNTIL(R_2004)
+      {
+        BITCODE_TV format;
+      }
+
+      FIELD_BL(evaluation_option);
+      FIELD_BL(filing_option);
+      FIELD_BL(field_state);
+      FIELD_BL(evaluation_status);
+      FIELD_BL(evaluation_error_code);
+      FIELD_TV(evaluation_error_msg);
+      FIELD(value, BL); /* TODO value p20.4.99 */
+      FIELD_TV(value_string);
+      FIELD_TV(value_string_length);
+
+      FIELD_BL(num_childval);
+      REPEAT_N((long)FIELD_VALUE(num_childval), childval, Dwg_Object_FIELD_ChildValue)
         {
-            BITCODE_TV format;
-        }
-
-        FIELD_BL(evaluation_option);
-        FIELD_BL(filing_option);
-        FIELD_BL(field_state);
-        FIELD_BL(evaluation_status);
-        FIELD_BL(evaluation_error_code);
-        FIELD_TV(evaluation_error_msg);
-        FIELD(value, BL); /* TODO value p20.4.99 */
-        FIELD_TV(value_string);
-        FIELD_TV(value_string_length);
-
-        FIELD_BL(num_childval);
-        REPEAT_N((long)FIELD_VALUE(num_childval), childval, Dwg_Object_FIELD_ChildValue)
-        {
-            FIELD_TV(childval[rcount].key);
-            FIELD(childval[rcount].value, BL); /* TODO value p20.4.99 */
+          FIELD_TV(childval[rcount].key);
+          FIELD(childval[rcount].value, BL); /* TODO value p20.4.99 */
         }
     }
 DWG_OBJECT_END
@@ -3021,7 +3034,7 @@ DWG_OBJECT_END
 //pg.150
 DWG_OBJECT(RASTERVARIABLES);
 
-  FIELD_BL (class_version);
+  FIELD_BL (version);
   FIELD_BS (display_frame);
   FIELD_BS (display_quality);
   FIELD_BS (units);
@@ -3808,6 +3821,191 @@ DWG_OBJECT(SCALE);
     }
 
 DWG_OBJECT_END
+
+/* par 20.4.48 */
+DWG_ENTITY(MLEADER);
+
+  SINCE(R_2010)
+    {
+      FIELD_BS (version);
+      FIELD_BS (ctx.version);
+      FIELD_B (ctx.has_xdic_file);
+      FIELD_B (ctx.is_default);
+      FIELD_HANDLE (ctx.scale_handle, ANYCODE);
+    }
+
+  FIELD_BL (ctx.num_leaders);
+  REPEAT(ctx.num_leaders, ctx.leaders, Dwg_Leader)
+    {
+#     define lev1 ctx.leaders[rcount]
+      FIELD_B (lev1.unknown1);
+      FIELD_B (lev1.unknown2);
+      FIELD_3BD (lev1.connection);
+      FIELD_3BD (lev1.direction);
+      FIELD_BL (lev1.unknown3);
+      FIELD_BL (lev1.index);
+      FIELD_BL (lev1.num_lines);
+      REPEAT2(lev1.num_lines, lev1.lines, Leader_Line)
+        {
+#         define lev2 lev1.lines[rcount2]
+          FIELD_BL (lev2.num_points);
+          REPEAT3(lev2.num_points, lev2.points, BITCODE_3BD)
+            {
+              FIELD_3BD (lev2.points[rcount3]);
+            }
+          //VECTOR_FREE (lev2.points);
+
+          FIELD_BL (lev2.unknown);
+          FIELD_BL (lev2.index);
+
+	  SINCE (R_2010)
+            {
+              FIELD_BS (lev2.type);
+              FIELD_CMC (lev2.color);
+              FIELD_HANDLE (lev2.type_handle, ANYCODE);
+              FIELD_BL (lev2.weight);
+              FIELD_BD (lev2.arrow_size);
+              FIELD_HANDLE (lev2.arrow_handle, ANYCODE);
+              FIELD_BL (lev2.flags);
+            }
+#         undef lev2
+        }
+      //VECTOR_FREE (lev1.lines);
+      SINCE (R_2010)
+        {
+          FIELD_BS (lev1.attach_dir);
+        }
+#     undef lev1
+    }
+  //VECTOR_FREE (ctx.leaders);
+
+  FIELD_BD (ctx.scale);
+  FIELD_3BD (ctx.content_base);
+  FIELD_BD (ctx.text_heigth);
+  FIELD_BD (ctx.arrow_size);
+  FIELD_BD (ctx.landing_gap);
+  FIELD_BS (ctx.text_left);
+  FIELD_BS (ctx.text_right);
+  FIELD_BS (ctx.text_align);
+  FIELD_BS (ctx.attach_type);
+
+  FIELD_B (ctx.has_text_content);
+  if (FIELD_VALUE (ctx.has_text_content))
+    {
+      FIELD_TV (ctx.txt.label);
+      FIELD_3BD (ctx.txt.normal);
+      FIELD_HANDLE (ctx.txt.style, ANYCODE);
+      FIELD_3BD (ctx.txt.location);
+      FIELD_3BD (ctx.txt.direction);
+      FIELD_BD (ctx.txt.rotation);
+      FIELD_BD (ctx.txt.width);
+      FIELD_BD (ctx.txt.heigth);
+      FIELD_BD (ctx.txt.spacing_factor);
+      FIELD_HANDLE (ctx.txt.spacing_style, ANYCODE);
+      FIELD_CMC (ctx.txt.color);
+      FIELD_BS (ctx.txt.align);
+      FIELD_BS (ctx.txt.flow);
+      FIELD_CMC (ctx.txt.bg_color);
+      FIELD_BD (ctx.txt.bg_scale);
+      FIELD_BL (ctx.txt.bg_transparency);
+      FIELD_B (ctx.txt.is_bg_fill);
+      FIELD_B (ctx.txt.is_bg_mask_fill);
+      FIELD_BS (ctx.txt.col_type);
+      FIELD_B (ctx.txt.is_heigth_auto);
+      FIELD_BD (ctx.txt.unknown1);
+      FIELD_BD (ctx.txt.unknown2);
+      FIELD_B (ctx.txt.is_col_flow_reversed);
+      FIELD_BL (ctx.txt.unknown3);
+      FIELD_B (ctx.txt.word_break1);
+      FIELD_B (ctx.txt.word_break2);
+    }
+
+  FIELD_B (ctx.has_content_block);
+  if (FIELD_VALUE (ctx.has_content_block))
+    {
+      FIELD_HANDLE (ctx.blk.block_table, ANYCODE);
+      FIELD_3BD (ctx.blk.normal);
+      FIELD_3BD (ctx.blk.location);
+      FIELD_3BD (ctx.blk.scale);
+      FIELD_BD (ctx.blk.rotation);
+      FIELD_CMC (ctx.blk.color);
+      for (rcount = 0; rcount < 16; rcount++)
+        {
+          FIELD_BD (ctx.blk.transform[rcount]);
+        }
+    }
+
+  FIELD_3BD (ctx.base);
+  FIELD_3BD (ctx.base_dir);
+  FIELD_3BD (ctx.base_vert);
+  FIELD_B (ctx.is_normal_reversed);
+
+  SINCE (R_2010)
+    {
+      FIELD_BS (ctx.text_top);
+      FIELD_BS (ctx.text_bottom);
+    }
+
+  FIELD_HANDLE (leaderstyle, ANYCODE);
+  FIELD_BL (flags);
+  FIELD_BS (type);
+  FIELD_CMC (color);
+  FIELD_HANDLE (ltype, ANYCODE);
+  FIELD_BL (line_weigth);
+  FIELD_B (landing);
+  FIELD_B (dog_leg);
+  FIELD_BD (landing_dist);
+  FIELD_HANDLE (arrow_head, ANYCODE);
+  FIELD_BD (arrow_head_size);
+  FIELD_BS (style_content);
+  FIELD_HANDLE (text_style, ANYCODE);
+  FIELD_BS (text_left);
+  FIELD_BS (text_rigth);
+  FIELD_BS (text_angle);
+  FIELD_BS (attach_type);
+  FIELD_CMC (text_color);
+  FIELD_B (text_frame);
+  FIELD_HANDLE (block_style, ANYCODE);
+  FIELD_CMC (block_color);
+  FIELD_3BD (block_scale);
+  FIELD_BD (block_rotation);
+  FIELD_BS (style_attachment);
+  FIELD_B (is_annotative);
+
+  VERSIONS (R_2000, R_2007)
+    {
+      FIELD_BL (num_arrowheads);
+      REPEAT(num_arrowheads, arrowheads, Leader_ArrowHead)
+        {
+          FIELD_BL(arrowheads->is_default);
+          FIELD_HANDLE(arrowheads->arrowhead, ANYCODE);
+        }
+      FIELD_BL (num_blocklabels);
+      REPEAT(num_blocklabels, blocklabels, Leader_BlockLabel)
+        {
+          FIELD_HANDLE (blocklabels->attdef, ANYCODE);
+          FIELD_TV (blocklabels->label_text);
+          FIELD_BS (blocklabels->ui_index);
+          FIELD_BD (blocklabels->width);
+        }
+      FIELD_B (neg_textdir);
+      FIELD_BS (ipe_align);
+      FIELD_BS (justification);
+      FIELD_BD (scale_factor);
+    }
+
+  SINCE (R_2010)
+    {
+      FIELD_BS (attach_dir);
+      FIELD_BS (attach_top);
+      FIELD_BS (attach_bottom);
+    }
+  SINCE (R_2013)
+    {
+      FIELD_B (text_extended);
+    }
+
+DWG_ENTITY_END
 
 /* par 20.4.87 */
 DWG_OBJECT(MLEADERSTYLE);
