@@ -76,7 +76,11 @@ AC_TYPE_INT32_T
 AC_TYPE_UINT32_T
 AC_TYPE_INT64_T
 AC_TYPE_UINT64_T
-AC_CHECK_SIZEOF(size_t)
+AC_CHECK_SIZEOF([size_t])
+dnl AC_CHECK_TYPE([wchar_t],[],[],[[#include <wchar.h>]])
+if test x$ac_cv_header_wchar_h = xyes; then
+   AX_COMPILE_CHECK_SIZEOF([wchar_t], [#include <wchar.h>])
+fi
 
 AX_IS_RELEASE([git-directory])
 dnl disable unwanted warnings here. These should be fixed before 1.0

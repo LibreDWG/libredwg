@@ -104,7 +104,7 @@ typedef struct _r2007_section
   int64_t  unknown;      // 0x00
   int64_t  encoded;
   int64_t  num_pages;
-  wchar_t *name;
+  DWGCHAR *name;
   r2007_section_page **pages;
   struct _r2007_section *next;
 } r2007_section;
@@ -709,9 +709,9 @@ bfr_read_string(char **src)
       ptr++;
       length++;
     }
-  
+
   wsize = length * sizeof(DWGCHAR) + sizeof(DWGCHAR);
-  
+
   str = str_base = (DWGCHAR*) malloc(wsize);
   if (!str)
     {
@@ -793,8 +793,7 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
     
       // Section Name
       section->name = bfr_read_string(&ptr);
-    
-      LOG_TRACE("Section name:  %ls\n", (DWGCHAR*)section->name)      
+      LOG_TRACE("Section name:  " FORMAT_TU "\n", (BITCODE_TU)section->name)
     
       section->pages = (r2007_section_page**) malloc(
         (size_t)section->num_pages * sizeof(r2007_section_page*));

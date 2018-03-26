@@ -118,9 +118,14 @@ extern "C" {
 
 /* TODO: implement version dependant string parsing */
 /* encode codepages/utf8 */
-#define BITCODE_T BITCODE_TV
-
-#define DWGCHAR wchar_t
+#define BITCODE_T  BITCODE_TV
+#define DWGCHAR    BITCODE_RS    // wchar_t for windows only
+#define BITCODE_TU BITCODE_RS*   // UCS-2 unicode text
+#if defined(SIZEOF_WCHAR_T) && SIZEOF_WCHAR_T == 2
+#define FORMAT_TU "\"%S\""
+#else
+#define FORMAT_TU "\"%hn\""       // will print garbage
+#endif
 
 typedef struct _dwg_bitcode_2rd
 {

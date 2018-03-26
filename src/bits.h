@@ -189,11 +189,17 @@ bit_write_CRC(Bit_Chain * dat, long unsigned int start_address,
 uint16_t
 bit_calc_CRC(uint16_t seed, unsigned char *adr, long len);
 
-char *
+BITCODE_TV
 bit_read_TV(Bit_Chain * dat);
 
 void
-bit_write_TV(Bit_Chain * dat, char *value);
+bit_write_TV(Bit_Chain * dat, BITCODE_TV value);
+
+BITCODE_TU
+bit_read_TU(Bit_Chain * dat);
+
+void
+bit_write_TU(Bit_Chain * dat, BITCODE_TU value);
 
 long unsigned int
 bit_read_L(Bit_Chain * dat);

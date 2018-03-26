@@ -25,6 +25,10 @@
 #include <ctype.h>
 #include <stdint.h>
 #include <inttypes.h>
+#if defined(SIZEOF_WCHAR_T) && SIZEOF_WCHAR_T == 2
+# include <wchar.h>
+#endif
+// else we roll our own
 
 #include "logging.h"
 #include "bits.h"
@@ -1011,6 +1015,48 @@ bit_write_TV(Bit_Chain * dat, char *chain)
   bit_write_BS(dat, length);
   for (i = 0; i < length; i++)
     bit_write_RC(dat, (unsigned char)chain[i]);
+}
+
+/** Read UCS-2 unicode text. no supplementary planes
+ * See also bfr_read_string()
+ */
+BITCODE_TU
+bit_read_TU(Bit_Chain * dat)
+{
+  unsigned int i;
+  unsigned int length;
+  BITCODE_TU chain;
+
+  length = bit_read_BS(dat);
+  chain = (BITCODE_TU) malloc((length + 1) * 2);
+  for (i = 0; i < length; i++)
+    {
+      chain[i] = bit_read_RS(dat); // probably without byte swapping
+    }
+  chain[length] = 0;
+
+  return chain;
+}
+
+/** Write UCS-2 unicode text. Must be zero-delimited.
+ */
+void
+bit_write_TU(Bit_Chain * dat, BITCODE_TU chain)
+{
+  unsigned int i;
+  unsigned int length;
+#if defined(SIZEOF_WCHAR_T) && SIZEOF_WCHAR_T == 2
+  length = wcslen(chain);
+#else
+  for (length=0; chain[length]; length++) ;
+#endif
+
+  bit_write_BS(dat, length);
+  for (i=0; i < length; i++)
+    {
+      bit_write_RS(dat, chain[i]); // probably without byte swapping
+    }
+  bit_write_RS(dat, 0); //?? unsure about that
 }
 
 /** Read 1 bitlong according to normal order
