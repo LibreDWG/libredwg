@@ -53,6 +53,8 @@ static bool env_var_checked_p;
 
 #define REFS_PER_REALLOC 100
 
+#define MAX(X,Y) ((X) > (Y) ? (X) : (Y))
+
 /*--------------------------------------------------------------------------------
  * Private functions
  */
@@ -162,7 +164,7 @@ dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
   memset(&dwg->header_vars, 0, sizeof(Dwg_Header_Variables));
   memset(&dwg->r2004_header.file_ID_string[0], 0, sizeof(dwg->r2004_header));
   memset(&dwg->auxheader.aux_intro[0], 0, sizeof(dwg->auxheader));
-  memset(&dwg->second_header.unknown[0], 0, sizeof(dwg->second_header));
+  memset(&dwg->second_header.size, 0, sizeof(dwg->second_header));
 
 #ifdef USE_TRACING
   /* Before starting, set the logging level, but only do so once.  */
@@ -535,9 +537,10 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
   /*-------------------------------------------------------------------------
    * Classes, section 1
    */
-  LOG_INFO("\n=======> CLASS: %8lX\n",
+  LOG_INFO("\n"
+           "=======> CLASS 1 (start): %8lX\n",
            (long)dwg->header.section[1].address)
-  LOG_INFO("         CLASS (end): %8lX\n",
+  LOG_INFO("         CLASS 1 (end)  : %8lX\n",
            (long)(dwg->header.section[1].address
               + dwg->header.section[1].size))
   dat->byte = dwg->header.section[1].address + 16;
@@ -706,10 +709,11 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
   while (section_size > 2);
 
   LOG_INFO("Num objects: %lu\n", dwg->num_objects)
-  LOG_INFO("\n=======> Object Data: %8X\n", (unsigned int) object_begin)
+  LOG_INFO("\n"
+           "=======> Object Data 2 (start)  : %8X\n", (unsigned int) object_begin)
   dat->byte = object_end;
   object_begin = bit_read_MS(dat);
-  LOG_INFO("         Object Data (end): %8X\n",
+  LOG_INFO("         Object Data 2 (end)    : %8X\n",
       (unsigned int) (object_end + object_begin+ 2))
 
   /*
@@ -736,122 +740,83 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
      //antckr = ckr;
    } while (section_size > 0);
    */
-  LOG_INFO("\n=======> Object Map: %8X\n",
+  LOG_INFO("\n"
+           "=======> Object Map (start)     : %8X\n",
           (unsigned int) dwg->header.section[2].address)
-  LOG_INFO("         Object Map (end): %8X\n",
+  LOG_INFO("         Object Map (end)       : %8X\n",
           (unsigned int) (dwg->header.section[2].address
               + dwg->header.section[2].size))
 
   /*-------------------------------------------------------------------------
-   * Second header, section 3
+   * Second header, section 3. R13-R2000 only
    */
 
   if (bit_search_sentinel(dat, dwg_sentinel(DWG_SENTINEL_SECOND_HEADER_BEGIN)))
     {
       int i;
       BITCODE_RC sig, sig2;
+      long vcount;
       long unsigned int pvzadr;
+      struct _dwg_second_header* _obj = &dwg->second_header;
+      obj = NULL;
 
-      LOG_INFO("\n=======> Second Header: %8X\n",
-          (unsigned int) dat->byte-16)
+      LOG_INFO("\n"
+               "=======> Second Header 3 (start): %8X\n", (unsigned int) dat->byte - 16)
       pvzadr = dat->byte;
       LOG_TRACE("pvzadr: %lx\n", pvzadr)
 
-      pvz = bit_read_RL(dat);
-      LOG_TRACE("Size: %lu\n", pvz)
+      FIELD_RL(size);
+      FIELD_BL(address);
 
-      pvz = bit_read_BL(dat);
-      LOG_TRACE("Begin address: %8lX\n", pvz)
-
-      //AC1012, AC1014 or AC1015
-      for (i = 0; i < 6; i++)
-        {
-          unsigned char c;
-          sig = bit_read_RC(dat);
-          c = (sig >= ' ' && (unsigned char)sig < 128) ? sig : '.';
-          LOG_TRACE("%c", c)
-        }
-
-      //LOG_TRACE("Null?:")
-      for (i = 0; i < 5; i++) // 6 if is older...
-        {
-          sig = bit_read_RC(dat);
-          //LOG_TRACE(" 0x%02X", sig)
-        }
-
-      //LOG_TRACE"4 null bits?: ")
+      // AC1012, AC1014 or AC1015. This is a char[11], zero padded.
+      // with \n at 12.
+      for (i = 0; i < 12; i++)
+        _obj->version[i] = bit_read_RC(dat);
+      LOG_TRACE("version: %s\n", _obj->version)
       for (i = 0; i < 4; i++)
         {
-          sig = bit_read_B(dat);
-          //LOG_TRACE(" %c", sig ? '1' : '0')
+          FIELD_B(null_b[i]);
         }
 
-      //LOG_TRACE(stderr, "Chain?: ")
-      for (i = 0; i < 6; i++)
+      // documented as 0x18,0x78,0x01,0x04 for R13, 0x18,0x78,0x01,0x05 for R14
+      // but it is 0x10,0x7d,0xf4,0x78 on r14
+      for (i = 0; i < 4; i++)
         {
-          dwg->second_header.unknown[i] = bit_read_RC(dat);
-          //LOG_TRACE(" 0x%02X", dwg->second_header.unknown[i])
+          FIELD_RC(unknown_rc4[i]);
         }
-      if (dwg->second_header.unknown[3] != 0x78
-          || dwg->second_header.unknown[5] != 0x06)
-        sig = bit_read_RC(dat); // To compensate in the event of a contingent
-                                // additional zero not read previously
-
-      //puts("");
-      for (i = 0; i < 6; i++)
+      //FIELD_RS(unknown_rs);
+      //FIELD_RC(unknown_rc);
+      // the last 4/5 would have beeen nice as num_sections
+      //FIELD_RC(num_sections);
+      _obj->num_sections = 4;
+      for (i = 0; i < _obj->num_sections; i++)
         {
-          sig = bit_read_RC(dat);
-          //if (loglevel) fprintf (stderr, "[%u]\n", sig);
-          pvz = bit_read_BL(dat);
-          //if (loglevel) fprintf (stderr, " Address: %8X\n", pvz);
-          pvz = bit_read_BL(dat);
-          //if (loglevel) fprintf (stderr, "  Size: %8X\n", pvz);
+          FIELD_RC(sections[i].nr);
+          FIELD_BL(sections[i].address);
+          FIELD_BL(sections[i].size);
         }
 
-      bit_read_BS(dat);
-      //if (loglevel) fprintf (stderr, "\n14 --------------");
-      for (i = 0; i < 14; i++)
+      FIELD_BS(num_handlers); // 14, resp. 16 in r14
+      if (FIELD_VALUE(num_handlers) > 16) {
+        LOG_ERROR("Second header num_handlers > 16: %d\n", FIELD_VALUE(num_handlers));
+        FIELD_VALUE(num_handlers) = 14;
+      }
+      for (i = 0; i < FIELD_VALUE(num_handlers); i++)
         {
-          sig2 = bit_read_RC(dat);
-          dwg->second_header.handler[i].size = sig2;
-          //if (loglevel) fprintf (stderr, "\nSize: %u\n", sig2);
-          sig = bit_read_RC(dat);
-          //if (loglevel) fprintf (stderr, "\t[%u]\n", sig);
-          //if (loglevel) fprintf (stderr, "\tChain:");
-          for (j = 0; j < (unsigned)sig2; j++)
-            {
-              sig = bit_read_RC(dat);
-              dwg->second_header.handler[i].chain[j] = sig;
-              //if (loglevel) fprintf (stderr, " %02X", sig);
-            }
+          FIELD_RC(handlers[i].size);
+          FIELD_RC(handlers[i].nr);
+          FIELD_VECTOR(handlers[i].data, RC, handlers[i].size);
         }
 
       // Check CRC-on
       ckr = bit_read_CRC(dat);
-#if 0
-      puts ("");
-      for (i = 0; i != 0xFFFF; i++)
-        {
-          dat->byte -= 2;
-          bit_write_CRC (dat, pvzadr, i);
-          dat->byte -= 2;
-          ckr2 = bit_read_CRC (dat);
-          if (ckr == ckr2)
-            {
-              printf("Warning: CRC mismatch %d <=> %d\n",
-                     ckr, ckr2);
-              break;
-            }
-          if (loglevel) {
-            fprintf (stderr, " Unknown RL 1: %08X\n", bit_read_RL (dat));
-            fprintf (stderr, " Unknown RL 2: %08X\n", bit_read_RL (dat));
-          }
-        }
-#endif
 
-      if (bit_search_sentinel(dat, dwg_sentinel(
-          DWG_SENTINEL_SECOND_HEADER_END)))
-        LOG_INFO("         Second Header (end): %8X\n", (unsigned int) dat->byte)
+      VERSION(R_14) {
+        FIELD_RL(junk_r14_1);
+        FIELD_RL(junk_r14_2);
+      }
+      if (bit_search_sentinel(dat, dwg_sentinel(DWG_SENTINEL_SECOND_HEADER_END)))
+        LOG_INFO("         Second Header 3 (end)  : %8X\n", (unsigned int) dat->byte)
     }
 
   /*-------------------------------------------------------------------------
@@ -860,9 +825,10 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
 
   if (dwg->header.num_sections >= 4)
     {
-      LOG_INFO("\n=======> Unknown 4: %8X\n",
+      LOG_INFO("\n"
+               "=======> MEASUREMENT 4 (start)  : %8X\n",
                (unsigned int) dwg->header.section[4].address)
-      LOG_INFO("         Unknown 4 (end): %8X\n",
+      LOG_INFO("         MEASUREMENT 4 (end)    : %8X\n",
                (unsigned int) (dwg->header.section[4].address
                                + dwg->header.section[4].size))
       dat->byte = dwg->header.section[4].address;

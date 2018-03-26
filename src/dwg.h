@@ -3415,14 +3415,29 @@ typedef struct _dwg_struct
   Dwg_Object * mspace_block;
   Dwg_Object * pspace_block;
 
-  struct {
-    unsigned char unknown[6];
+  struct _dwg_second_header {
+    BITCODE_RL size;
+    BITCODE_RL address;
+    char version[12];
+    BITCODE_B null_b[4];
+    BITCODE_RC unknown_rc4[4];
+    BITCODE_RC num_sections;
+    struct _sections
+    {
+      BITCODE_RC nr;
+      BITCODE_BL address;
+      BITCODE_BL size;
+    } sections[3];
+    BITCODE_BS num_handlers;
     struct _handler
     {
-      int size;
-      unsigned char chain[4];
-    } handler[14];
-  } second_header;
+      BITCODE_RC size;
+      BITCODE_RC nr;
+      BITCODE_RC *data;
+    } handlers[16];
+    BITCODE_RL junk_r14_1; //r14 only
+    BITCODE_RL junk_r14_2; //r14 only
+  } second_header; //r13-r2000 only
 
   long unsigned int measurement;
   unsigned int layout_number;
