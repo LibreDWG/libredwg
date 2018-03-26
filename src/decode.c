@@ -1023,15 +1023,15 @@ decompress_R2004_section(Bit_Chain* dat, char *decomp,
       else
           return 1;  // error in input stream
 
-      //LOG_TRACE("got compressed data %d\n",comp_bytes)
+      LOG_HANDLE("got compressed data %d: %p > %p\n", comp_bytes, src, decomp)
       // copy "compressed data"
       src = dst - comp_offset - 1;
-      assert(src > decomp);
+      assert(src >= decomp);
       for (i = 0; i < comp_bytes; ++i)
         *dst++ = *src++;
 
       // copy "literal data"
-      //LOG_TRACE("got literal data %d\n",lit_length)
+      LOG_HANDLE("got literal data %d\n", lit_length)
       for (i = 0; i < lit_length; ++i)
         *dst++ = bit_read_RC(dat);
     }
