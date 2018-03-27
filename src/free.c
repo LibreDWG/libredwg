@@ -49,8 +49,7 @@ static Bit_Chain *dat = &pdat;
 #define FIELD(name,type)
 #define FIELD_TRACE(name,type)\
   LOG_TRACE(#name ": " FORMAT_##type "\n", _obj->name)
-#define FIELD_CAST(name,type,cast)\
-  FIELD_TRACE(name,cast)
+#define FIELD_CAST(name,type,cast)
 #define FIELD_VALUE(name) _obj->name
 
 #define ANYCODE -1
