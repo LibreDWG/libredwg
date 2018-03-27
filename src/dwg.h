@@ -2229,7 +2229,7 @@ typedef struct _dwg_entity_HATCH
   BITCODE_BL num_colors;
   Dwg_Entity_HATCH_Color* colors;
   BITCODE_TV gradient_name;
-  BITCODE_BD z_coord; /* x,y always 0.0 */
+  BITCODE_BD elevation;
   BITCODE_3BD extrusion;
   BITCODE_TV name;
   BITCODE_B solid_fill;

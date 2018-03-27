@@ -2712,7 +2712,7 @@ DWG_ENTITY(HATCH);
       FIELD_TV (gradient_name);
     }
 
-  FIELD_BD (z_coord); /* x,y always 0.0 */
+  FIELD_BD (elevation);
   FIELD_3BD (extrusion);
   FIELD_TV (name);
   FIELD_B (solid_fill);
