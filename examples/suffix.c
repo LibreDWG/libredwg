@@ -38,7 +38,10 @@ suffix (const char *filename, const char *ext)
       && dot + 4 < base + len
       && !strncmp (1 + dot, "dwg", 3))
     *dot = '\0';
-  snprintf (rv, len, "%s.%s", base, ext);
+  if (strchr(ext, '.'))
+    snprintf (rv, len, "%s%s", base, ext);
+  else
+    snprintf (rv, len, "%s.%s", base, ext);
   free (copy);
   return rv;
 }
