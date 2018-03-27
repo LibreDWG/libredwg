@@ -1294,7 +1294,7 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *dwg,
     }
   else
     {
-      LOG_TRACE("Found section %s %lu with %d sections\n",
+      LOG_TRACE("\nFound section %s %lu with %d sections\n",
                 info->name, section_type, info->num_sections);
     }
 
@@ -1422,6 +1422,7 @@ read_2004_section_classes(Bit_Chain* dat, Dwg_Data *dwg)
           LOG_TRACE("Application name: %s\n", dwg->dwg_class[idc].appname)
           LOG_TRACE("C++ class name:   %s\n", dwg->dwg_class[idc].cppname)
           LOG_TRACE("DXF record name:  %s\n", dwg->dwg_class[idc].dxfname)
+          LOG_TRACE("Class ID:         %x\n", dwg->dwg_class[idc].item_class_id)
 
           if (strcmp((const char *)dwg->dwg_class[idc].dxfname, "LAYOUT") == 0)
             dwg->layout_number = dwg->dwg_class[idc].number;
@@ -2621,6 +2622,13 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       dwg_decode_VBA_PROJECT(dat, obj);
       return 0;
     }
+  if (!strcmp(dxfname, "MLEADER"))
+    {
+      UNTESTED_CLASS;
+      assert(is_entity);
+      //dwg_decode_MLEADER(dat, obj);
+      return 0;
+    }
   if (!strcmp(dxfname, "WIPEOUTVARIABLE"))
     {
       UNHANDLED_CLASS;
@@ -2670,18 +2678,32 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       //dwg_decode_DETAILVIEWSTYLE(dat, obj);
       return 0;
     }
+  if (!strcmp(dxfname, "ACDBASSOCNETWORK"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_decode_ASSOCNETWORK(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "ACDBASSOC2DCONSTRAINTGROUP"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_decode_ASSOC2DCONSTRAINTGROUP(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "ACDBASSOCGEOMDEPENDENCY"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_decode_ASSOCGEOMDEPENDENCY(dat, obj);
+      return 0;
+    }
   if (!strcmp(dxfname, "DBCOLOR"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
       //dwg_decode_DBCOLOR(dat, obj);
-      return 0;
-    }
-  if (!strcmp(dxfname, "MLEADER"))
-    {
-      UNHANDLED_CLASS;
-      assert(is_entity);
-      //dwg_decode_MLEADER(dat, obj);
       return 0;
     }
 

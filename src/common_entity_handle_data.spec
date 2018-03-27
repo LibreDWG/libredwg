@@ -43,7 +43,7 @@
       FIELD_HANDLE(color_handle, ANYCODE);
     }
 
-  SINCE(R_2000)
+  SINCE(R_2000) //?
     {
       FIELD_HANDLE(layer, 5);
       if (FIELD_VALUE(linetype_flags)==3)

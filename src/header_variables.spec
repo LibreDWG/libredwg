@@ -51,7 +51,7 @@
     {
       FIELD_BS(unknown_10);
     }
-  VERSIONS(R_13, R_2004)
+  VERSIONS(R_13, R_2000)
     {
       FIELD_HANDLE (current_viewport_entity_header, ANYCODE);
     }
