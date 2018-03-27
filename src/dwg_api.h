@@ -4709,7 +4709,7 @@ void
 dwg_obj_xrecord_set_xdata(dwg_obj_xrecord *xrecord, Dwg_Resbuf* xdata, int *error);
 
 dwg_object_ref*
-dwg_obj_xrecord_get_parent(dwg_obj_xrecord *xrecord, int *error);
+dwg_obj_xrecord_get_parenthandle(dwg_obj_xrecord *xrecord, int *error);
 dwg_object_ref**
 dwg_obj_xrecord_get_reactors(dwg_obj_xrecord *xrecord, int *error);
 

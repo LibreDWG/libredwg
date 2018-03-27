@@ -56,11 +56,11 @@ api_process (dwg_object * obj)
   else
     fail ("error in reading num_objid_handles");
 
-  parent = dwg_obj_xrecord_get_parent (xrecord, &error);
-  if (!error  && parent == xrecord->parent)
+  parent = dwg_obj_xrecord_get_parenthandle (xrecord, &error);
+  if (!error  && parent == xrecord->parenthandle)
     pass ("Working Properly");
   else
-    fail ("error in reading parent");
+    fail ("error in reading parenthandle");
   
   reactors = dwg_obj_xrecord_get_reactors (xrecord, &error);
   if (!error  && reactors == xrecord->reactors)

@@ -2886,7 +2886,7 @@ DWG_OBJECT(IMAGEDEF);
   FIELD_B (is_loaded);
   FIELD_RC (resunits);
   FIELD_2RD (pixel_size);
-  FIELD_HANDLE (parent_handle, 3);
+  FIELD_HANDLE (parenthandle, 3);
   SINCE(R_2010)
     {
       FIELD_HANDLE(null_handle, 5);
@@ -2900,7 +2900,7 @@ DWG_OBJECT_END
 DWG_OBJECT(IMAGEDEF_REACTOR);
 
   FIELD_BL (class_version);
-  FIELD_HANDLE (parent_handle, 4);
+  FIELD_HANDLE (parenthandle, 4);
   REACTORS(4);
   XDICOBJHANDLE(3);
 
@@ -2917,7 +2917,7 @@ DWG_OBJECT(LAYER_INDEX);
       FIELD_BL (entries[rcount].index_long);
       FIELD_TV (entries[rcount].index_str);
     }
-  FIELD_HANDLE (parent_handle, 4);
+  FIELD_HANDLE (parenthandle, 4);
   REACTORS(4);
   XDICOBJHANDLE(3);
   HANDLE_VECTOR(entry_handles, num_entries, ANYCODE);
@@ -4012,7 +4012,7 @@ DWG_OBJECT(XRECORD);
     FIELD_BS(cloning_flags);
   }
 
-  FIELD_HANDLE(parent, ANYCODE); // 3 or 8
+  FIELD_HANDLE(parenthandle, ANYCODE); // 3 or 8
   REACTORS(4);
   XDICOBJHANDLE(3);
 
@@ -4331,7 +4331,7 @@ DWG_OBJECT(WIPEOUTVARIABLE);
 
   UNTIL(R_2007)
     {
-      FIELD_HANDLE (parent_handle, 3);
+      FIELD_HANDLE (parenthandle, 3);
     }
   REACTORS(4);
   XDICOBJHANDLE(3);

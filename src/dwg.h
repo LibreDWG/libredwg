@@ -2260,7 +2260,7 @@ typedef struct _dwg_object_XRECORD
   BITCODE_BS cloning_flags;
   unsigned int num_eed;
   Dwg_Resbuf* xdata;
-  BITCODE_H parent;
+  BITCODE_H parenthandle;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
   BITCODE_BL num_objid_handles;
@@ -2946,7 +2946,7 @@ typedef struct _dwg_object_IMAGEDEF
   BITCODE_B is_loaded;
   BITCODE_RC resunits;
   BITCODE_2RD pixel_size;
-  BITCODE_H parent_handle;
+  BITCODE_H parenthandle;
   BITCODE_H null_handle; /* r2010+ */
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
@@ -2958,7 +2958,7 @@ typedef struct _dwg_object_IMAGEDEF
 typedef struct _dwg_object_IMAGEDEF_REACTOR
 {
   BITCODE_BL class_version;
-  BITCODE_H parent_handle;
+  BITCODE_H parenthandle;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
 } Dwg_Object_IMAGEDEF_REACTOR;
@@ -2978,7 +2978,7 @@ typedef struct _dwg_object_LAYER_INDEX
   BITCODE_BL timestamp2;
   BITCODE_BL num_entries;
   Dwg_LAYER_entry* entries;
-  BITCODE_H parent_handle;
+  BITCODE_H parenthandle;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
   BITCODE_H* entry_handles;
@@ -3127,7 +3127,7 @@ typedef struct _dwg_entity_WIPEOUT
 typedef struct _dwg_object_WIPEOUTVARIABLE
 {
   BITCODE_BS display_frame;
-  BITCODE_H parent_handle;
+  BITCODE_H parenthandle;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
 } Dwg_Object_WIPEOUTVARIABLE;

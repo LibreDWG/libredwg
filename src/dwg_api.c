@@ -13821,12 +13821,12 @@ dwg_obj_xrecord_set_xdata(dwg_obj_xrecord *xrecord, Dwg_Resbuf* xdata,
 }
 
 dwg_object_ref*
-dwg_obj_xrecord_get_parent(dwg_obj_xrecord *xrecord, int *error)
+dwg_obj_xrecord_get_parenthandle(dwg_obj_xrecord *xrecord, int *error)
 {
   if (xrecord != 0)
     {
       *error = 0;
-      return xrecord->parent;
+      return xrecord->parenthandle;
     }
   else
     {
