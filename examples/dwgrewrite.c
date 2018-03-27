@@ -65,8 +65,11 @@ main (int argc, char *argv[])
   else
     filename_out = suffix (filename_in, "-rewrite.dwg");
   
-  if (strcmp(filename_in, filename_out) == 0)
+  if (strcmp(filename_in, filename_out) == 0) {
+    if (filename_out != argv[2])
+      free (filename_out);
     return usage();
+  }
 
   /*
    * some very simple testing
@@ -107,5 +110,7 @@ main (int argc, char *argv[])
   if (num_objects && (num_objects != dwg.num_objects))
     printf("re-READ num_objects: %lu, should be %lu\n", dwg.num_objects, num_objects);
 #endif
+  if (filename_out != argv[2])
+    free (filename_out);
   return error;
 }

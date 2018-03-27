@@ -83,12 +83,14 @@ get_bmp(char *filename)
   }
   retval = fwrite(&bmp_h.file_size, 3, sizeof(long), fh);
   if (!retval) {
+    free (outfile);
     perror("writing BMP file_size"); return 1;
   }
 
   /* Write data (DIB header + bitmap) */
   retval = fwrite(data, 1, size, fh);
   if (!retval) {
+    free (outfile);
     perror("writing BMP header"); return 1;
   }
   fclose(fh);

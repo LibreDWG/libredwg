@@ -587,12 +587,13 @@ main (int argc, char *argv[])
   if (argc > 2)
     filename_out = argv[2];
   else
-    {
-      filename_out = suffix (filename_in, "dwg");
-    }
+    filename_out = suffix (filename_in, "dwg");
   
-  if (strcmp(filename_in, filename_out) == 0)
+  if (strcmp(filename_in, filename_out) == 0) {
+    if (filename_out != argv[2])
+      free (filename_out);
     return usage();
+  }
 
   printf("Reading DXF file %s\n", filename_in);
   printf("TODO: reading DXF not yet done\n");
@@ -600,6 +601,9 @@ main (int argc, char *argv[])
   if (error)
     {
       printf("READ ERROR\n");
+      if (filename_out != argv[2])
+        free (filename_out);
+      dwg_free(&dwg);
       exit(error);
     }
 
@@ -620,6 +624,9 @@ main (int argc, char *argv[])
 #endif  
   if (error)
       printf("WRITE ERROR\n");
+
+  if (filename_out != argv[2])
+    free (filename_out);
   dwg_free(&dwg);
   return error;
 }

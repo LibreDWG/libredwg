@@ -27,8 +27,6 @@
 #include <dwg.h>
 #include <dwg_api.h>
 
-//#include "suffix.c"
-
 #define log_if_error(msg) \
   if (error) { fprintf(stderr, "ERROR: %s", msg); exit(1); }
 

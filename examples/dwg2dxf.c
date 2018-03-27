@@ -618,12 +618,13 @@ main (int argc, char *argv[])
   if (argc > 2)
     filename_out = argv[2];
   else
-    {
-      filename_out = suffix (filename_in, "dxf");
-    }
+    filename_out = suffix (filename_in, "dxf");
   
-  if (strcmp(filename_in, filename_out) == 0)
+  if (strcmp(filename_in, filename_out) == 0) {
+    if (filename_out != argv[2])
+      free (filename_out);
     return usage();
+  }
 
   printf("Reading DWG file %s\n", filename_in);
   error = dwg_read_file(filename_in, &dwg);
@@ -645,6 +646,9 @@ main (int argc, char *argv[])
   error = dwg_write_dxf(filename_out, &dwg);
   if (error)
       printf("WRITE ERROR\n");
+
+  if (filename_out != argv[2])
+    free (filename_out);
   dwg_free(&dwg);
   return error;
 }

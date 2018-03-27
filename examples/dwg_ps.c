@@ -119,15 +119,16 @@ main(int argc, char *argv[])
   if (success)
     {
       puts("Not able to read dwg file!");
+      dwg_free(&dwg);
       return 1;
     }
 
   outfile = suffix (argv[1], "ps");
   create_postscript(&dwg, outfile);
-  dwg_free(&dwg);
 
   printf ("Success! See the file '%s'\n", outfile);
   free (outfile);
+  dwg_free(&dwg);
   return 0;
 }
 
