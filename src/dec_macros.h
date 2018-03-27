@@ -199,19 +199,19 @@
 
 //TODO unify REPEAT macros
 #define REPEAT_N(times, name, type) \
-  _obj->name = (type *) malloc(times * sizeof(type));\
+  _obj->name = (type *) calloc(times, sizeof(type));     \
   for (rcount=0; rcount<(long)times; rcount++)
 
 #define REPEAT(times, name, type) \
-  _obj->name = (type *) malloc(_obj->times * sizeof(type));\
+  _obj->name = (type *) calloc(_obj->times, sizeof(type));       \
   for (rcount=0; rcount<(long)_obj->times; rcount++)
 
 #define REPEAT2(times, name, type) \
-  _obj->name = (type *) malloc(_obj->times * sizeof(type));\
+  _obj->name = (type *) calloc(_obj->times, sizeof(type));       \
   for (rcount2=0; rcount2<(long)_obj->times; rcount2++)
 
 #define REPEAT3(times, name, type) \
-  _obj->name = (type *) malloc(_obj->times * sizeof(type));\
+  _obj->name = (type *) calloc(_obj->times, sizeof(type));       \
   for (rcount3=0; rcount3<(long)_obj->times; rcount3++)
 
 #define COMMON_ENTITY_HANDLE_DATA \

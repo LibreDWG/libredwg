@@ -2723,8 +2723,8 @@ DWG_ENTITY(HATCH);
       FIELD_BL(paths[rcount].flag);
       if (!(FIELD_VALUE(paths[rcount].flag) & 2))
         {
-          FIELD_BL(paths[rcount].num_path_segs);
-          REPEAT2(paths[rcount].num_path_segs, paths[rcount].segs,
+          FIELD_BL(paths[rcount].num_segs_or_paths);
+          REPEAT2(paths[rcount].num_segs_or_paths, paths[rcount].segs,
                   Dwg_Entity_HATCH_PathSeg)
             {
               FIELD_RC(paths[rcount].segs[rcount2].type_status);
@@ -2778,8 +2778,8 @@ DWG_ENTITY(HATCH);
         { /* POLYLINE PATH */
           FIELD_B(paths[rcount].bulges_present);
           FIELD_B(paths[rcount].closed);
-          FIELD_BL(paths[rcount].num_path_segs);
-          REPEAT2(paths[rcount].num_path_segs, paths[rcount].polyline_paths,
+          FIELD_BL(paths[rcount].num_segs_or_paths);
+          REPEAT2(paths[rcount].num_segs_or_paths, paths[rcount].polyline_paths,
                   Dwg_Entity_HATCH_PolylinePath)
             {
               FIELD_2RD (paths[rcount].polyline_paths[rcount2].point);
@@ -2790,8 +2790,11 @@ DWG_ENTITY(HATCH);
             }
         }
       FIELD_BL(paths[rcount].num_boundary_handles);
-      FIELD_VALUE (num_boundary_handles) += FIELD_VALUE(paths[rcount].num_boundary_handles);
-      FIELD_VALUE (has_derived) = FIELD_VALUE (has_derived) || (FIELD_VALUE (paths[rcount].flag) & 0x4);
+      DECODER {
+        FIELD_VALUE (num_boundary_handles) += FIELD_VALUE(paths[rcount].num_boundary_handles);
+        FIELD_VALUE (has_derived) =
+          FIELD_VALUE (has_derived) || (FIELD_VALUE (paths[rcount].flag) & 0x4);
+      }
     }
   FIELD_BS(style);
   FIELD_BS(pattern_type);

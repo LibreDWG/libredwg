@@ -2198,7 +2198,7 @@ typedef struct _dwg_entity_HATCH_path
 {
   /* Segment path */
   BITCODE_BL flag;
-  BITCODE_BL num_path_segs;
+  BITCODE_BL num_segs_or_paths;
   Dwg_Entity_HATCH_PathSeg* segs;
 
   /* Polyline path */

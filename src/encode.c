@@ -51,8 +51,7 @@ static bool env_var_checked_p;
 #include "logging.h"
 
 /*--------------------------------------------------------------------------------
- * Welcome to the dark side of the moon...
- * MACROS
+ * spec MACROS
  */
 
 #define IS_ENCODER
