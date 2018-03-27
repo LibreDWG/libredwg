@@ -2631,10 +2631,10 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "WIPEOUTVARIABLE"))
     {
-      UNHANDLED_CLASS;
+      UNTESTED_CLASS;
       assert(!is_entity);
-      //dwg_decode_WIPEOUTVARIABLE(dat, obj);
-      return 0;
+      dwg_decode_WIPEOUTVARIABLE(dat, obj);
+      return 1;
     }
   if (!strcmp(dxfname, "VISUALSTYLE"))
     {

@@ -1862,7 +1862,7 @@ typedef struct _dwg_object_APPID
 typedef struct _dwg_object_DIMSTYLE_CONTROL
 {
   BITCODE_BS num_entries;
-  BITCODE_H unknown_handle;  /*This is not stated in the spec*/
+  BITCODE_RC unknown; /* undocumented */
   BITCODE_H null_handle;
   BITCODE_H xdicobjhandle;
   BITCODE_H* dimstyles;
@@ -2196,17 +2196,27 @@ typedef struct _dwg_entity_HATCH_polylinepath
 
 typedef struct _dwg_entity_HATCH_path
 {
+  /* Segment path */
   BITCODE_BL flag;
   BITCODE_BL num_path_segs;
   Dwg_Entity_HATCH_PathSeg* segs;
 
-  /*POLYLINE PATH:*/
+  /* Polyline path */
   BITCODE_B bulges_present;
   BITCODE_B closed;
-  /* BITCODE_BL num_path_segs; */
   Dwg_Entity_HATCH_PolylinePath* polyline_paths;
-  BITCODE_BL num_boundary_obj_handles;
+
+  BITCODE_BL num_boundary_handles;
 } Dwg_Entity_HATCH_Path;
+
+typedef struct _dwg_entity_HATCH_DefLine
+{
+  BITCODE_BD  angle;
+  BITCODE_2BD pt0;
+  BITCODE_2BD offset;
+  BITCODE_BS  num_dashes;
+  BITCODE_BD * dashes;
+} Dwg_Entity_HATCH_DefLine;
 
 typedef struct _dwg_entity_HATCH
 {
@@ -2226,6 +2236,19 @@ typedef struct _dwg_entity_HATCH
   BITCODE_B associative;
   BITCODE_BL num_paths;
   Dwg_Entity_HATCH_Path* paths;
+  BITCODE_BS style;
+  BITCODE_BS pattern_type;
+  BITCODE_BD angle;
+  BITCODE_BD scale_spacing;
+  BITCODE_B double_flag;
+  BITCODE_BS num_deflines;
+  Dwg_Entity_HATCH_DefLine * deflines;
+  BITCODE_B has_derived;
+  BITCODE_BD pixel_size;
+  BITCODE_BL num_seeds;
+  BITCODE_2RD * seeds;
+  BITCODE_BL num_boundary_handles;
+  BITCODE_H* boundary_handles;
 } Dwg_Entity_HATCH;
 
 /**
@@ -2924,6 +2947,7 @@ typedef struct _dwg_object_IMAGEDEF
   BITCODE_RC resunits;
   BITCODE_2RD pixel_size;
   BITCODE_H parent_handle;
+  BITCODE_H null_handle; /* r2010+ */
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
 } Dwg_Object_IMAGEDEF;
@@ -3102,8 +3126,10 @@ typedef struct _dwg_entity_WIPEOUT
  */
 typedef struct _dwg_object_WIPEOUTVARIABLE
 {
-  char dummy[1]; /* var-length array */
-  /* TODO */
+  BITCODE_BS display_frame;
+  BITCODE_H parent_handle;
+  BITCODE_H* reactors;
+  BITCODE_H xdicobjhandle;
 } Dwg_Object_WIPEOUTVARIABLE;
 
 /**
