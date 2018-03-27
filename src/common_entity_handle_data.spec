@@ -43,9 +43,11 @@
       FIELD_HANDLE(color_handle, ANYCODE);
     }
 
-  SINCE(R_2000) //?
+  VERSION(R_2000)
     {
+      // is there no layer_flags with 3 for a handle?
       FIELD_HANDLE(layer, 5);
+
       if (FIELD_VALUE(linetype_flags)==3)
         {
           FIELD_HANDLE(ltype, 5);
@@ -57,6 +59,10 @@
       if (FIELD_VALUE(material_flags)==3)
         {
           FIELD_HANDLE(material, ANYCODE);
+        }
+      if (FIELD_VALUE(shadow_flags)==3)
+        {
+          FIELD_HANDLE(shadow, ANYCODE);
         }
     }
 

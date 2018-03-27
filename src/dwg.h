@@ -3346,6 +3346,7 @@ typedef struct _dwg_object_entity
   BITCODE_H layer;
   BITCODE_H ltype;
   BITCODE_H material;     /* r2007+ */
+  BITCODE_H shadow;       /* r2007+ */
   BITCODE_H plotstyle;    /* r2000+ */
   BITCODE_H full_visualstyle; /* r2010+ */
   BITCODE_H face_visualstyle;

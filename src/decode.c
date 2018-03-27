@@ -1827,10 +1827,6 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
       ent->bitsize = bit_read_RL(dat);
       LOG_TRACE("Entity bitsize: " FORMAT_BL " @%lu.%u\n", ent->bitsize, dat->byte, dat->bit)
     }
-  SINCE(R_2007)
-    {
-      // table handle
-    }
 
   error = bit_read_H(dat, &(ent->object->handle));
   if (error)
