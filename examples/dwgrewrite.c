@@ -40,6 +40,7 @@ main (int argc, char *argv[])
   const char *version = NULL;
   char* filename_out = NULL;
   Dwg_Version_Type dwg_version;
+  long unsigned int num_objects;
 
   // check args
   if (argc < 2)
@@ -74,6 +75,9 @@ main (int argc, char *argv[])
   error = dwg_read_file(filename_in, &dwg);
   if (error)
       printf("READ ERROR\n");
+  num_objects = dwg.num_objects;
+  if (!num_objects)
+    printf("Read 0 objects\n");
 
   printf("Writing DWG file %s", filename_out);
 #ifndef USE_WRITE
@@ -100,6 +104,8 @@ main (int argc, char *argv[])
   error = dwg_read_file(filename_out, &dwg);
   if (error)
       printf("re-READ ERROR\n");
+  if (num_objects && (num_objects != dwg.num_objects))
+    printf("re-READ num_objects: %lu, should be %lu\n", dwg.num_objects, num_objects);
 #endif
   return error;
 }
