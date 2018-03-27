@@ -1011,7 +1011,7 @@ bit_write_TV(Bit_Chain * dat, char *chain)
   int i;
   int length;
 
-  length = strlen((const char *)chain);
+  length = chain ? strlen((const char *)chain) : 0;
   bit_write_BS(dat, length);
   for (i = 0; i < length; i++)
     bit_write_RC(dat, (unsigned char)chain[i]);
@@ -1045,11 +1045,17 @@ bit_write_TU(Bit_Chain * dat, BITCODE_TU chain)
 {
   unsigned int i;
   unsigned int length;
+
+  if (chain)
+    {
 #if defined(SIZEOF_WCHAR_T) && SIZEOF_WCHAR_T == 2
-  length = wcslen(chain);
+      length = wcslen(chain);
 #else
-  for (length=0; chain[length]; length++) ;
+      for (length=0; chain[length]; length++) ;
 #endif
+    }
+  else
+    length = 0;
 
   bit_write_BS(dat, length);
   for (i=0; i < length; i++)
