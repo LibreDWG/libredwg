@@ -748,7 +748,8 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
               + dwg->header.section[2].size))
 
   /*-------------------------------------------------------------------------
-   * Second header, section 3. R13-R2000 only
+   * Second header, section 3. R13-R2000 only.
+   * But partially also since r2004.
    */
 
   if (bit_search_sentinel(dat, dwg_sentinel(DWG_SENTINEL_SECOND_HEADER_BEGIN)))
@@ -780,40 +781,44 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
 
       // documented as 0x18,0x78,0x01,0x04 for R13, 0x18,0x78,0x01,0x05 for R14
       // but it is 0x10,0x7d,0xf4,0x78 on r14
+      // also: 10 7d f4 78 on 2004
       for (i = 0; i < 4; i++)
         {
           FIELD_RC(unknown_rc4[i]);
         }
-      //FIELD_RS(unknown_rs);
-      //FIELD_RC(unknown_rc);
-      // the last 4/5 would have beeen nice as num_sections
-      //FIELD_RC(num_sections);
-      _obj->num_sections = 4;
-      for (i = 0; i < _obj->num_sections; i++)
-        {
-          FIELD_RC(sections[i].nr);
-          FIELD_BL(sections[i].address);
-          FIELD_BL(sections[i].size);
+
+      UNTIL (R_2000) {
+        //FIELD_RS(unknown_rs);
+        //FIELD_RC(unknown_rc);
+        // the last 4/5 would have beeen nice as num_sections
+        //FIELD_RC(num_sections);
+        _obj->num_sections = 4;
+        for (i = 0; i < _obj->num_sections; i++)
+          {
+            FIELD_RC(sections[i].nr);
+            FIELD_BL(sections[i].address);
+            FIELD_BL(sections[i].size);
+          }
+
+        FIELD_BS(num_handlers); // 14, resp. 16 in r14
+        if (FIELD_VALUE(num_handlers) > 16) {
+          LOG_ERROR("Second header num_handlers > 16: %d\n", FIELD_VALUE(num_handlers));
+          FIELD_VALUE(num_handlers) = 14;
         }
+        for (i = 0; i < FIELD_VALUE(num_handlers); i++)
+          {
+            FIELD_RC(handlers[i].size);
+            FIELD_RC(handlers[i].nr);
+            FIELD_VECTOR(handlers[i].data, RC, handlers[i].size);
+          }
 
-      FIELD_BS(num_handlers); // 14, resp. 16 in r14
-      if (FIELD_VALUE(num_handlers) > 16) {
-        LOG_ERROR("Second header num_handlers > 16: %d\n", FIELD_VALUE(num_handlers));
-        FIELD_VALUE(num_handlers) = 14;
-      }
-      for (i = 0; i < FIELD_VALUE(num_handlers); i++)
-        {
-          FIELD_RC(handlers[i].size);
-          FIELD_RC(handlers[i].nr);
-          FIELD_VECTOR(handlers[i].data, RC, handlers[i].size);
+        // Check CRC-on
+        ckr = bit_read_CRC(dat);
+
+        VERSION(R_14) {
+          FIELD_RL(junk_r14_1);
+          FIELD_RL(junk_r14_2);
         }
-
-      // Check CRC-on
-      ckr = bit_read_CRC(dat);
-
-      VERSION(R_14) {
-        FIELD_RL(junk_r14_1);
-        FIELD_RL(junk_r14_2);
       }
       if (bit_search_sentinel(dat, dwg_sentinel(DWG_SENTINEL_SECOND_HEADER_END)))
         LOG_INFO("         Second Header 3 (end)  : %8X\n", (unsigned int) dat->byte)
