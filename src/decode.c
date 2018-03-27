@@ -945,7 +945,7 @@ read_two_byte_offset(Bit_Chain* dat, int* lit_length)
   return offset;
 }
 
-/* Decompresses a system section of a 2004 DWG file
+/* Decompresses a system section of a 2004+ DWG file
  */
 static int
 decompress_R2004_section(Bit_Chain* dat, char *decomp,
@@ -1279,18 +1279,26 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *dwg,
   char *decomp;
   unsigned int i, j;
 
-  for (i = 0; i < dwg->header.num_descriptions && info == 0; ++i)
-    if (dwg->header.section_info[i].type == section_type)
-      info = &dwg->header.section_info[i];
-
+  for (i=0; i < dwg->header.num_descriptions && info == 0; ++i)
+    {
+      if (dwg->header.section_info[i].type == section_type)
+        {
+          info = &dwg->header.section_info[i];
+          break;
+        }
+    }
   if (!info)
     {
-      LOG_INFO("Failed to find section %lu", section_type);
+      LOG_WARN("Failed to find section %lu", section_type);
       return 1;
+    }
+  else
+    {
+      LOG_TRACE("Found section %s %lu with %d sections\n",
+                info->name, section_type, info->num_sections);
     }
 
   max_decomp_size = info->num_sections * info->max_decomp_size;
-
   decomp = (char *)calloc(max_decomp_size, sizeof(char));
   if (!decomp)
     {
@@ -1298,7 +1306,7 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *dwg,
       return 2;
     }
 
-  for (i = 0; i < info->num_sections; ++i)
+  for (i=0; i < info->num_sections; ++i)
     {
       address = info->sections[i]->address;
       dat->byte = address;
@@ -1310,23 +1318,24 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *dwg,
       for (j = 0; j < 8; ++j)
         es.long_data[j] ^= sec_mask;
 
-  LOG_INFO("\n=== Section (Class) ===\n")
-  LOG_INFO("Section Tag:      0x%x (should be 0x4163043b)\n",
-          (unsigned int) es.fields.tag)
-  LOG_INFO("Section Type:     0x%x\n",
-          (unsigned int) es.fields.section_type)
-  LOG_INFO("Data size:        0x%x\n",
-          (unsigned int) es.fields.data_size)   // this is the number of bytes that is read in decompress_R2004_section (+ 2bytes)
-  LOG_INFO("Comp data size:   0x%x\n",
-          (unsigned int) es.fields.section_size)
-  LOG_INFO("StartOffset:      0x%x\n",
-          (unsigned int) es.fields.start_offset)
-  LOG_INFO("Unknown:          0x%x\n",
-          (unsigned int) es.fields.unknown);
-  LOG_INFO("Checksum1:        0x%x\n",
-        (unsigned int) es.fields.checksum_1)
-  LOG_INFO("Checksum2:        0x%x\n\n",
-        (unsigned int) es.fields.checksum_2)
+      LOG_INFO("\n=== Section (Class) ===\n")
+      LOG_INFO("Section Tag:      0x%x (should be 0x4163043b)\n",
+              (unsigned int) es.fields.tag)
+      LOG_INFO("Section Type:     0x%x\n",
+              (unsigned int) es.fields.section_type)
+      // this is the number of bytes that is read in decompress_R2004_section (+ 2bytes)
+      LOG_INFO("Data size:        0x%x\n",
+              (unsigned int) es.fields.data_size)
+      LOG_INFO("Comp data size:   0x%x\n",
+              (unsigned int) es.fields.section_size)
+      LOG_INFO("StartOffset:      0x%x\n",
+              (unsigned int) es.fields.start_offset)
+      LOG_INFO("Unknown:          0x%x\n",
+              (unsigned int) es.fields.unknown);
+      LOG_INFO("Checksum1:        0x%x\n",
+            (unsigned int) es.fields.checksum_1)
+      LOG_INFO("Checksum2:        0x%x\n\n",
+            (unsigned int) es.fields.checksum_2)
 
       decompress_R2004_section(dat, &decomp[i * info->max_decomp_size],
         es.fields.data_size);
@@ -1354,9 +1363,15 @@ read_2004_section_classes(Bit_Chain* dat, Dwg_Data *dwg)
   int error;
   Bit_Chain sec_dat;
 
+  sec_dat.chain = NULL;
   error = read_2004_compressed_section(dat, dwg, &sec_dat, SECTION_CLASSES);
   if (error)
-    return error;
+    {
+      LOG_ERROR("Failed to read compressed class section");
+      if (sec_dat.chain)
+        free(sec_dat.chain);
+      return error;
+    }
 
   if (bit_search_sentinel(&sec_dat, dwg_sentinel(DWG_SENTINEL_CLASS_BEGIN)))
     {
@@ -1382,6 +1397,8 @@ read_2004_section_classes(Bit_Chain* dat, Dwg_Data *dwg)
           if (!dwg->dwg_class)
             {
               LOG_ERROR("Out of memory");
+              if (sec_dat.chain)
+                free(sec_dat.chain);
               return 2;
             }
 
@@ -1413,8 +1430,14 @@ read_2004_section_classes(Bit_Chain* dat, Dwg_Data *dwg)
 
         } while (sec_dat.byte < (size - 1));
     }
-    free(sec_dat.chain);
-    return 0;
+  else
+    {
+      LOG_ERROR("Failed to find class section sentinel");
+      free(sec_dat.chain);
+      return 1;
+    }
+  free(sec_dat.chain);
+  return 0;
 }
 
 /* R2004 Header Section
