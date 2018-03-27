@@ -62,7 +62,7 @@ static bool env_var_checked_p;
 
 #define FIELD(name,type)\
   bit_write_##type(dat, _obj->name);\
-  FIELD_TRACE(name,type)
+  FIELD_TRACE(name, type)
 #define FIELD_TRACE(name,type)\
   if (loglevel>=2)\
     {\
@@ -184,13 +184,13 @@ static bool env_var_checked_p;
 
 #define FIELD_HANDLE(name, handle_code) \
   IF_ENCODE_FROM_EARLIER { ; } else {   \
-  assert(_obj->name); \
-  if (handle_code != ANYCODE && _obj->name->handleref.code != handle_code) \
-    { \
-      LOG_WARN("Expected a CODE %d handle, got a %d", \
-                handle_code, _obj->name->handleref.code); \
-    } \
-  bit_write_H(dat, &_obj->name->handleref); \
+    assert(_obj->name); \
+    if (handle_code != ANYCODE && _obj->name->handleref.code != handle_code) \
+      { \
+        LOG_WARN("Expected a CODE %d handle, got a %d", \
+                  handle_code, _obj->name->handleref.code); \
+      } \
+    bit_write_H(dat, &_obj->name->handleref); \
   }
 
 #define FIELD_HANDLE_N(name, vcount, handle_code)\
@@ -255,9 +255,7 @@ static bool env_var_checked_p;
 #define DWG_OBJECT_END }
 
 #define ENT_REACTORS(code)\
-  FIELD_VALUE(reactors) = (BITCODE_H*) malloc(sizeof(BITCODE_H) * obj->tio.entity->num_reactors);\
-  if (!FIELD_VALUE(reactors)) { LOG_ERROR("Out of memory"); } \
-  for (vcount=0; vcount<obj->tio.entity->num_reactors; vcount++)\
+  for (vcount=0; vcount < _obj->num_reactors; vcount++)\
     {\
       FIELD_HANDLE_N(reactors[vcount], vcount, code);      \
     }
