@@ -2880,7 +2880,7 @@ DWG_ENTITY(IMAGE);
 
 DWG_ENTITY_END
 
-//pg.142
+//pg.142 test-data/*/Leader_*.dwg
 DWG_OBJECT(IMAGEDEF);
 
   FIELD_BL (class_version);
@@ -2889,7 +2889,10 @@ DWG_OBJECT(IMAGEDEF);
   FIELD_B (is_loaded);
   FIELD_RC (resunits);
   FIELD_2RD (pixel_size);
-  FIELD_HANDLE (parenthandle, 3);
+  UNTIL(R_2007) //?
+    {
+      FIELD_HANDLE (parenthandle, 3);
+    }
   SINCE(R_2010)
     {
       FIELD_HANDLE(null_handle, 5);
@@ -2903,7 +2906,10 @@ DWG_OBJECT_END
 DWG_OBJECT(IMAGEDEF_REACTOR);
 
   FIELD_BL (class_version);
-  FIELD_HANDLE (parenthandle, 4);
+  UNTIL(R_2007)
+    {
+      FIELD_HANDLE (parenthandle, 4);
+    }
   REACTORS(4);
   XDICOBJHANDLE(3);
 
@@ -2920,7 +2926,10 @@ DWG_OBJECT(LAYER_INDEX);
       FIELD_BL (entries[rcount].index_long);
       FIELD_TV (entries[rcount].index_str);
     }
-  FIELD_HANDLE (parenthandle, 4);
+  UNTIL(R_2007)
+    {
+      FIELD_HANDLE (parenthandle, 4);
+    }
   REACTORS(4);
   XDICOBJHANDLE(3);
   HANDLE_VECTOR(entry_handles, num_entries, ANYCODE);
@@ -3089,20 +3098,6 @@ DWG_ENTITY(OLE2FRAME);
 
 DWG_ENTITY_END
 
-DWG_ENTITY(DUMMY);
-  FIELD_BS(flags);
-  LOG_INFO("TODO DUMMY\n");
-  COMMON_ENTITY_HANDLE_DATA;
-
-DWG_ENTITY_END
-
-DWG_ENTITY(LONG_TRANSACTION);
-  FIELD_BS(flags);
-  LOG_INFO("TODO LONG_TRANSACTION\n");
-  COMMON_ENTITY_HANDLE_DATA;
-
-DWG_ENTITY_END
-
 //pg.276
 #if 0 /* no proxy subtypes yet */
 DWG_ENTITY(PROXY_LWPOLYLINE);
@@ -3164,48 +3159,50 @@ DWG_ENTITY(PROXY_LWPOLYLINE);
 DWG_ENTITY_END
 #endif /* no proxy subtypes yet */
 
-//(498) pg.149
+//(498) pg.149 r2000+
 DWG_ENTITY(PROXY_ENTITY);
 
-  SINCE(R_2000)
-    {
-      FIELD_BL (class_id);
-      FIELD_BL (object_drawing_format);
-      FIELD_B (original_data_format);
+  FIELD_BL (class_id);
+  FIELD_BL (object_drawing_format);
+  FIELD_B (original_data_format);
 
-      LOG_INFO("TODO PROXY_ENTITY data\n");
-      /*
-      FIELD_RC(*data);
-      FIELD_H(parenthandle);
-      FIELD_H(*reactors);
-      FIELD_H(*objid_object_handles);
-      FIELD_MS(size);
-      */
-    }
-
+  LOG_INFO("TODO PROXY_ENTITY data\n");
+  /*
   //TODO: figure out how to deal with the arbitrary size vector databits described on the spec
+  FIELD_RC(*data);
+  UNTIL(R_2007)
+  {
+    FIELD_HANDLE (parenthandle, 4);
+  }
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+  FIELD_MS(size);
+
+  COMMON_ENTITY_HANDLE_DATA;
+
+  */
 
 DWG_ENTITY_END
 
-//(499) pg.149
+//(499) pg.149 r2000+
 DWG_OBJECT(PROXY);
 
-  SINCE(R_2000)
-    {
-      FIELD_BL (class_id);
-      FIELD_BL (object_drawing_format);
-      FIELD_B (original_data_format);
+  FIELD_BL (class_id);
+  FIELD_BL (object_drawing_format);
+  FIELD_B (original_data_format);
 
-      LOG_INFO("TODO PROXY_OBJECT data\n");
-      /*
-      FIELD_RC(*data);
-      FIELD_H(parenthandle);
-      FIELD_H(*reactors);
-      FIELD_H(*objid_object_handles);
-      */
-    }
+  LOG_INFO("TODO PROXY_OBJECT data\n");
+  /*
+  //TODO: figure out how to deal with the arbitrary size vector databits
+  FIELD_RC(*data);
+  UNTIL(R_2007)
+  {
+    FIELD_HANDLE (parenthandle, 4);
+  }
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+  */
 
-  //TODO: figure out how to deal with the arbitrary size vector databits described on the spec
 DWG_OBJECT_END
 
 DWG_OBJECT(OBJECTCONTEXTDATA);
@@ -3291,7 +3288,10 @@ DWG_OBJECT(RASTERVARIABLES);
   FIELD_BS (display_frame);
   FIELD_BS (display_quality);
   FIELD_BS (units);
-  FIELD_HANDLE (parenthandle, 4);
+  UNTIL(R_2007)
+    {
+      FIELD_HANDLE (parenthandle, 4);
+    }
   REACTORS(4);
   XDICOBJHANDLE(3);
 
@@ -3338,7 +3338,10 @@ DWG_OBJECT(SPATIAL_FILTER);
 
   FIELD_VECTOR_N (inverse_block_transform, BD, 12);
   FIELD_VECTOR_N (clip_bound_transform, BD, 12);
-  FIELD_HANDLE (parenthandle, 4);
+  UNTIL(R_2007)
+    {
+      FIELD_HANDLE (parenthandle, 4);
+    }
   REACTORS(4);
   XDICOBJHANDLE(3);
 
@@ -3351,7 +3354,10 @@ DWG_OBJECT(SPATIAL_INDEX);
   FIELD(timestamp2, BL);
   //TODO: parse this: "unknown X rest of bits to handles"
 /*
-  FIELD_HANDLE (parenthandle, 4);
+  UNTIL(R_2007)
+    {
+      FIELD_HANDLE (parenthandle, 4);
+    }
   REACTORS(4);
   XDICOBJHANDLE(3);
 */
@@ -4015,7 +4021,10 @@ DWG_OBJECT(XRECORD);
     FIELD_BS(cloning_flags);
   }
 
-  FIELD_HANDLE(parenthandle, ANYCODE); // 3 or 8
+  UNTIL(R_2007)
+    {
+      FIELD_HANDLE(parenthandle, ANYCODE); // 3 or 8
+    }
   REACTORS(4);
   XDICOBJHANDLE(3);
 
@@ -4039,7 +4048,6 @@ DWG_OBJECT_END
 DWG_OBJECT(PLACEHOLDER);
 
   // no own data members
-
   UNTIL(R_2007)
     {
       FIELD_HANDLE(parenthandle, 4);
@@ -4056,7 +4064,10 @@ DWG_OBJECT(VBA_PROJECT);
   FIELD_RL(num_bytes)
   FIELD_VECTOR(bytes, RC, num_bytes)
 
-  FIELD_HANDLE(parenthandle, 4);
+  UNTIL(R_2007)
+    {
+      FIELD_HANDLE(parenthandle, 4);
+    }
   REACTORS(4);
   XDICOBJHANDLE(3);
 
@@ -4078,7 +4089,7 @@ DWG_OBJECT(SCALE);
 
 DWG_OBJECT_END
 
-/* par 20.4.48 */
+/* par 20.4.48 (varies) */
 DWG_ENTITY(MLEADER);
 
   SINCE(R_2010)
@@ -4261,9 +4272,11 @@ DWG_ENTITY(MLEADER);
       FIELD_B (text_extended);
     }
 
+  //COMMON_ENTITY_HANDLE_DATA; //??
+
 DWG_ENTITY_END
 
-/* par 20.4.87 */
+/* par 20.4.87 (varies) */
 DWG_OBJECT(MLEADERSTYLE);
 
   SINCE (R_2010)
@@ -4323,9 +4336,8 @@ DWG_OBJECT(MLEADERSTYLE);
 
 DWG_OBJECT_END
 
-
 ////////////////////
-// These objects are not described in the spec:
+// These variable objects are not described in the spec:
 //
 
 DWG_OBJECT(WIPEOUTVARIABLE);
@@ -4341,7 +4353,7 @@ DWG_OBJECT(WIPEOUTVARIABLE);
 
 DWG_OBJECT_END
 
-// R2000+ picture. undocumented
+// R2000+ picture. undocumented (varies)
 DWG_ENTITY(WIPEOUT);
 
   FIELD(class_version, BL);
@@ -4378,14 +4390,19 @@ DWG_ENTITY(WIPEOUT);
 
 DWG_ENTITY_END
 
+/* (varies) container to hold a raw class entity (none observed in the wild) */
 DWG_ENTITY(UNKNOWN_ENT);
+
   FIELD_VALUE(num_bytes) = obj->bitsize / 8;
   FIELD_VALUE(num_bits)  = obj->bitsize % 8;
 
   FIELD_VECTOR(bytes, RC, num_bytes);
   FIELD_VECTOR(bits, B, num_bits);
+  //COMMON_ENTITY_HANDLE_DATA; // including this
+
 DWG_ENTITY_END
 
+/* container to hold a raw class object (varies) */
 DWG_OBJECT(UNKNOWN_OBJ);
 
   FIELD_VALUE(num_bytes) = obj->bitsize / 8;
@@ -4395,26 +4412,64 @@ DWG_OBJECT(UNKNOWN_OBJ);
   FIELD_VECTOR(bits, B, num_bits);
 DWG_OBJECT_END
 
+DWG_ENTITY(DUMMY);
+
+  FIELD_BS(flags);
+  LOG_INFO("TODO DUMMY\n");
+  COMMON_ENTITY_HANDLE_DATA;
+
+DWG_ENTITY_END
+
+DWG_ENTITY(LONG_TRANSACTION);
+
+  FIELD_BS(flags);
+  LOG_INFO("TODO LONG_TRANSACTION\n");
+  COMMON_ENTITY_HANDLE_DATA;
+
+DWG_ENTITY_END
+
 /*
+// r2007+
 DWG_OBJECT(VISUALSTYLE);
 
-  SINCE(R_2007)
-    {
-        LOG_INFO("TODO VISUALSTYLE (hard-pointer to H DICTIONARY_VISUALSTYLE)\n");
-    }
+  // hard-pointer to H DICTIONARY_VISUALSTYLE
+  FIELD_HANDLE(visualstyle, 5);
+
 DWG_OBJECT_END
 
+// r2000+
 DWG_OBJECT(ARCALIGNEDTEXT);
 
-  SINCE(R_2000)
-    {
-        LOG_INFO("TODO ARCALIGNEDTEXT\n");
-    }
+  LOG_INFO("TODO ARCALIGNEDTEXT\n");
+
 DWG_OBJECT_END
 
 //(varies)
 DWG_OBJECT(MATERIAL);
 DWG_OBJECT_END
-*/
 
+DWG_OBJECT(DIMASSOC);
+DWG_OBJECT_END
+
+DWG_OBJECT(DBCOLOR);
+DWG_OBJECT_END
+
+DWG_OBJECT(TABLESTYLE);
+DWG_OBJECT_END
+
+DWG_OBJECT(SECTIONVIEWSTYLE);
+DWG_OBJECT_END
+
+DWG_OBJECT(DETAILVIEWSTYLE);
+DWG_OBJECT_END
+
+DWG_OBJECT(ASSOC2DCONSTRAINTGROUP);
+DWG_OBJECT_END
+
+DWG_OBJECT(ASSOCGEOMDEPENDENCY);
+DWG_OBJECT_END
+
+DWG_OBJECT(LEADEROBJECTCONTEXTDATA);
+DWG_OBJECT_END
+*/
 

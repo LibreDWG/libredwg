@@ -2660,6 +2660,13 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       //dwg_decode_TABLESTYLE(dat, obj);
       return 0;
     }
+  if (!strcmp(dxfname, "DBCOLOR"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_decode_DBCOLOR(dat, obj);
+      return 0;
+    }
   if (!strcmp(dxfname, "ACDBSECTIONVIEWSTYLE"))
     {
       UNHANDLED_CLASS;
@@ -2695,11 +2702,11 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       //dwg_decode_ASSOCGEOMDEPENDENCY(dat, obj);
       return 0;
     }
-  if (!strcmp(dxfname, "DBCOLOR"))
+  if (!strcmp(dxfname, "ACDB_LEADEROBJECTCONTEXTDATA_CLASS"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
-      //dwg_decode_DBCOLOR(dat, obj);
+      //dwg_decode_LEADEROBJECTCONTEXTDATA(dat, obj);
       return 0;
     }
 
