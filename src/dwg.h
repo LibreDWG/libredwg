@@ -3508,18 +3508,18 @@ typedef enum DWG_SECTION_TYPE_R11
   SECTION_BLOCK = 1,
   SECTION_LAYER = 2,
   SECTION_STYLE = 3,
-  SECTION_LTYPE = 4,
-  SECTION_VIEW  = 5,
-  SECTION_UCS   = 6,
-  SECTION_VPORT = 7,
-  SECTION_APPID = 8,
-  SECTION_DIMSTYLE = 9,
-  SECTION_P13   = 10,
+  SECTION_LTYPE = 5,
+  SECTION_VIEW  = 6,
+  SECTION_UCS   = 7,
+  SECTION_VPORT = 8,
+  SECTION_APPID = 9,
+  SECTION_DIMSTYLE = 10,
+  SECTION_P13   = 11,
 } Dwg_Section_Type_r11;
 
 typedef struct _dwg_section
 {
-  long number;
+  long number; // preR11: count of entries
   BITCODE_RL address;
   BITCODE_RL size;
   BITCODE_RL parent;

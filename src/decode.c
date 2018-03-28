@@ -239,7 +239,7 @@ dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
   return -1;
 }
 
-// we put the three table nums into sections.
+// we put the 3x 10 table nums into sections.
 // number is the number of elements in the table.
 static void
 decode_preR13_section_ptr(const char* name, Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
@@ -249,7 +249,7 @@ decode_preR13_section_ptr(const char* name, Dwg_Section_Type_r11 id, Bit_Chain* 
   tbl->number  = (long)bit_read_RL(dat);
   tbl->address = bit_read_RL(dat);
   tbl->name    = (BITCODE_TV)name;
-  LOG_TRACE("ptr table %-8s [%2d]: size:%-4u nr:%-3ld (0x%5x-0x%5lx)\n",
+  LOG_TRACE("ptr table %-8s [%2d]: size:%-4u nr:%-2ld (0x%x-0x%lx)\n",
             tbl->name, id, tbl->size, tbl->number, tbl->address,
             (long)(tbl->address + tbl->number * tbl->size))
 }
@@ -267,7 +267,7 @@ decode_preR13_section_chk(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dw
   tbl->number = (BITCODE_RL)bit_read_RS(dat); CMP(size, RL)
   address = bit_read_RL(dat); CMP(address, RL)
 #undef CMP
-  LOG_TRACE("chk table %-8s [%2d]: size:%-4u nr:%-3ld (0x%5x-0x%5lx)\n",
+  LOG_TRACE("chk table %-8s [%2d]: size:%-4u nr:%-3ld (0x%x-0x%lx)\n",
             tbl->name, id, tbl->size, tbl->number, tbl->address,
             (long)(tbl->address + tbl->number * tbl->size))
 }
@@ -276,16 +276,19 @@ static void
 decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
 {
   Dwg_Section *tbl = &dwg->header.section[id];
-  LOG_TRACE("contents table %-8s [%2d]: size:%-4u nr:%-3ld (0x%5x-0x%5lx)\n",
+  LOG_TRACE("contents table %-8s [%2d]: size:%-4u nr:%-3ld (0x%x-0x%lx)\n",
             tbl->name, id, tbl->size, tbl->number, tbl->address,
             (long)(tbl->address + tbl->number * tbl->size))
 }
 
 static void
-decode_preR13_entities(unsigned long start, unsigned long end,
+decode_preR13_entities(unsigned long start, unsigned long end, unsigned long offset,
                        Bit_Chain* dat, Dwg_Data * dwg)
 {
-  LOG_TRACE("entities: (0x%lx-0x%lx)\n", start, end)
+  LOG_TRACE("entities: (0x%lx-0x%lx) TODO\n", start, end)
+  //_obj, obj
+  //#include "dwg.spec"
+  dat->byte = end;
 }
 
 static int
@@ -305,24 +308,6 @@ decode_preR13(Bit_Chain* dat, Dwg_Data * dwg)
     #include "header.spec"
   }
   LOG_INFO("@0x%lx\n", dat->byte); //0x14
-
-  // section[0] header_vars
-  // blocks   (start-end)
-  // entities (start-end)
-  // section[1] BLOCK table (size, nr, start)
-  // section[2] LAYER
-  // section[3] STYLE
-  // section[4] LTYPE
-  // section[5] VIEW
-  // header_vars
-  // section[6] UCS
-  // section[7] VPORT
-  // section[8] APPID
-  // section[9] DIMSTYLE
-  // section[10] P13
-  // entities
-  // sections/tables
-  // block entities
 
   // tables really
   dwg->header.num_sections = 12;
@@ -346,7 +331,7 @@ decode_preR13(Bit_Chain* dat, Dwg_Data * dwg)
             blocks_start, rl1, blocks_end, rl2);
 
   tbl_id = 0;
-  dwg->header.section[0].number = tbl_id;
+  dwg->header.section[0].number = 0;
   dwg->header.section[0].type  = SECTION_HEADER;
 
   decode_preR13_section_ptr("BLOCK", SECTION_BLOCK, dat, dwg);
@@ -356,37 +341,87 @@ decode_preR13(Bit_Chain* dat, Dwg_Data * dwg)
   decode_preR13_section_ptr("LTYPE", SECTION_LTYPE, dat, dwg);
   decode_preR13_section_ptr("VIEW", SECTION_VIEW, dat, dwg);
 
-  LOG_INFO("@0x%lx\n", dat->byte);       //0x5e
+  LOG_TRACE("@0x%lx\n", dat->byte);       //0x5e
   {
     Dwg_Header_Variables* _obj = &dwg->header_vars;
     #include "header_variables_r11.spec"
   }
-  LOG_INFO("@0x%lx\n", dat->byte);       //0x23a
+  LOG_TRACE("@0x%lx\n", dat->byte);       //0x23a
 
   dat->byte = 0x3ef;
-  LOG_INFO("@0x%lx\n", dat->byte);
+  LOG_TRACE("@0x%lx\n", dat->byte);
   decode_preR13_section_ptr("UCS", SECTION_UCS, dat, dwg);
   // skip: 0x500 - dat->bytes
   dat->byte = 0x500;
-  LOG_INFO("@0x%lx\n", dat->byte); //0x23a
+  LOG_TRACE("@0x%lx\n", dat->byte); //0x23a
   decode_preR13_section_ptr("VPORT", SECTION_VPORT, dat, dwg);
   rl1 = bit_read_RL(dat);
   rl2 = bit_read_RL(dat);
-  LOG_TRACE("0x%x 0x%x\n", rl1, rl2);
+  LOG_TRACE("?2 long: 0x%x 0x%x\n", rl1, rl2);
   decode_preR13_section_ptr("APPID", SECTION_APPID, dat, dwg);
   rl1 = bit_read_RL(dat);
   rs2 = bit_read_RS(dat);
-  LOG_TRACE("0x%x 0x%x\n", rl1, rs2);
+  LOG_TRACE("?long+short: 0x%x 0x%x\n", rl1, rs2);
   decode_preR13_section_ptr("DIMSTYLE", SECTION_DIMSTYLE, dat, dwg);
   // skip: 0x69f - dat->bytes
   dat->byte = 0x69f;
   decode_preR13_section_ptr("P13", SECTION_P13, dat, dwg);
-
+  dat->byte += 38;
   // entities
+  decode_preR13_entities(entities_start, entities_end, 0, dat, dwg);
+  dat->byte += 19;
+  decode_preR13_section(SECTION_BLOCK, dat, dwg);
+  decode_preR13_section(SECTION_LAYER, dat, dwg);
+  decode_preR13_section(SECTION_STYLE, dat, dwg);
+  decode_preR13_section(SECTION_LTYPE, dat, dwg);
+  decode_preR13_section(SECTION_VIEW, dat, dwg);
+  decode_preR13_section(SECTION_UCS, dat, dwg);
+  decode_preR13_section(SECTION_VPORT, dat, dwg);
+  decode_preR13_section(SECTION_APPID, dat, dwg);
+  decode_preR13_section(SECTION_DIMSTYLE, dat, dwg);
+  decode_preR13_section(SECTION_P13, dat, dwg);
   // blocks
-  // 36 byte
-  // 4long again: entities_start, entities_end, blocks_start, blocks_end
+  decode_preR13_entities(blocks_start, blocks_end, blocks_start - 0x40000000, dat, dwg);
+  LOG_TRACE("@0x%lx\n", dat->byte);
+  // 36 byte: 9x long
+  rl1 = bit_read_RL(dat);
+  rl2 = bit_read_RL(dat);
+  LOG_TRACE("?2long: 0x%x 0x%x %f\n", rl1, rl2, (double)dat->chain[dat->byte-8]);
+  rl1 = bit_read_RL(dat);
+  rl2 = bit_read_RL(dat);
+  LOG_TRACE("?2long: 0x%x 0x%x %f\n", rl1, rl2, (double)dat->chain[dat->byte-8]);
+  rl1 = bit_read_RL(dat);
+  rl2 = bit_read_RL(dat);
+  LOG_TRACE("?2long: 0x%x 0x%x %f\n", rl1, rl2, (double)dat->chain[dat->byte-8]);
+  rl1 = bit_read_RL(dat);
+  rl2 = bit_read_RL(dat);
+  LOG_TRACE("?2long: 0x%x 0x%x %f\n", rl1, rl2, (double)dat->chain[dat->byte-8]);
+  rl1 = bit_read_RL(dat);
+  LOG_TRACE("?1long: 0x%x\n", rl1);
+
+  LOG_TRACE("@0x%lx: 4 block ptrs chk\n", dat->byte);
+  if ((rl1 = bit_read_RL(dat)) != entities_start) {
+    LOG_WARN("entities_start %x/%x", rl1, entities_start);
+  }
+  if ((rl1 = bit_read_RL(dat)) != entities_end) {
+    LOG_WARN("entities_end %x/%x", rl1, entities_end);
+  }
+  if ((rl1 = bit_read_RL(dat)) != blocks_start) {
+    LOG_WARN("blocks_start %x/%x", rl1, blocks_start);
+  }
+  if ((rl1 = bit_read_RL(dat)) != blocks_end) {
+    LOG_WARN("blocks_end %x/%x", rl1, blocks_end);
+  }
   // 12 byte
+  LOG_INFO("@0x%lx\n", dat->byte);
+  rl1 = bit_read_RL(dat);
+  rl2 = bit_read_RL(dat);
+  LOG_TRACE("?2long: 0x%x 0x%x\n", rl1, rl2);
+  rl1 = bit_read_RL(dat);
+  LOG_TRACE("?1long: 0x%x\n", rl1);
+
+  dat->byte = blocks_end + 36 + 4*4 + 12;
+  LOG_INFO("@0x%lx\n", dat->byte);
   decode_preR13_section_chk(SECTION_BLOCK, dat, dwg);
   decode_preR13_section_chk(SECTION_LAYER, dat, dwg);
   decode_preR13_section_chk(SECTION_STYLE, dat, dwg);
@@ -398,7 +433,7 @@ decode_preR13(Bit_Chain* dat, Dwg_Data * dwg)
   decode_preR13_section_chk(SECTION_DIMSTYLE, dat, dwg);
   decode_preR13_section_chk(SECTION_P13, dat, dwg);
   rl1 = bit_read_RL(dat);
-  LOG_TRACE("0x%x\n", rl1);
+  LOG_TRACE("long 0x%x\n", rl1); // address
 
   return 0;
 }
