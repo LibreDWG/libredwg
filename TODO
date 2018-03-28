@@ -2,6 +2,7 @@
 * add object_refs for 2007
 * add string and handle streams since 2007
 * add bit_read_MCU type for 2010 bitsize
+* BITCODE_TIMELL type for TDCREATE, ...
 * pre-R13: tables, entities, block entities
 * PROXY subentities, PROXY_ENTITY
 * CELLSTYLEMAP TABLE_Cell struct

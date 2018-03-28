@@ -207,6 +207,12 @@ bit_read_L(Bit_Chain * dat);
 void
 bit_write_L(Bit_Chain * dat, long unsigned int value);
 
+BITCODE_TIMEBLL
+bit_read_TIMEBLL(Bit_Chain * dat);
+
+void
+bit_write_TIMEBLL(Bit_Chain * dat, BITCODE_TIMEBLL value);
+
 void
 bit_read_CMC(Bit_Chain * dat, Dwg_Color* color);
 

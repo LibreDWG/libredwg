@@ -91,6 +91,8 @@ static unsigned int cur_ver = 0;
 #define FIELD_3DPOINT(name) FIELD_3BD(name)
 #define FIELD_CMC(name)\
     LOG_TRACE(#name ": index %d\n", _obj->name.index)
+#define FIELD_TIMEBLL(name) \
+  LOG_TRACE(#name ": " FORMAT_BL "." FORMAT_BL "\n", _obj->name.days, _obj->name.ms)
 
 //FIELD_VECTOR_N(name, type, size):
 // reads data of the type indicated by 'type' 'size' times and stores

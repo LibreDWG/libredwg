@@ -1094,6 +1094,29 @@ bit_write_L(Bit_Chain * dat, long unsigned int value)
   bit_write_RC(dat, btk[0]);
 }
 
+/** Read 2 time BL bitlong (compacted data).
+ *  used for TDCREATE, TDUPDATE
+ */
+BITCODE_TIMEBLL
+bit_read_TIMEBLL(Bit_Chain * dat)
+{
+  BITCODE_TIMEBLL date;
+
+  date.days =  bit_read_BL(dat);
+  date.ms   =  bit_read_BL(dat);
+  return date;
+}
+
+/** Write 2 time BL bitlong (compacted data).
+ *  used for TDCREATE, TDUPDATE
+ */
+void
+bit_write_TIMEBLL(Bit_Chain * dat, BITCODE_TIMEBLL date)
+{
+  bit_write_BL(dat, date.days);
+  bit_write_BL(dat, date.ms);
+}
+
 /** Read color
  */
 void

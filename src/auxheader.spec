@@ -28,10 +28,8 @@
       FIELD_VALUE(dwg_version) = dwg->header.dwg_version;
       FIELD_VALUE(maint_version) = dwg->header.maint_version;
       memcpy(FIELD_VALUE(unknown_rs),tmpunknown,sizeof(tmpunknown));
-      FIELD_VALUE(TDCREATE_JULIAN_DAY)   = dwg->header_vars.TDCREATE_JULIAN_DAY;
-      FIELD_VALUE(TDCREATE_MILLISECONDS) = dwg->header_vars.TDCREATE_MILLISECONDS;
-      FIELD_VALUE(TDUPDATE_JULIAN_DAY)   = dwg->header_vars.TDUPDATE_JULIAN_DAY;
-      FIELD_VALUE(TDUPDATE_MILLISECONDS) = dwg->header_vars.TDUPDATE_MILLISECONDS;
+      FIELD_VALUE(TDCREATE)   = dwg->header_vars.TDCREATE;
+      FIELD_VALUE(TDUPDATE)   = dwg->header_vars.TDUPDATE;
     }
   }
 
@@ -59,10 +57,8 @@
 for (i=0; i<5; i++) { // or 8
     FIELD_RS(zero_l[i]);
   }
-  FIELD_BL(TDCREATE_JULIAN_DAY);
-  FIELD_BL(TDCREATE_MILLISECONDS);
-  FIELD_BL(TDUPDATE_JULIAN_DAY);
-  FIELD_BL(TDUPDATE_MILLISECONDS);
+  FIELD_TIMEBLL(TDCREATE);
+  FIELD_TIMEBLL(TDUPDATE);
   FIELD_RL(HANDSEED);
   FIELD_RL(plot_stamp);
   FIELD_RS(zero_1);

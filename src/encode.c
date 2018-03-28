@@ -101,6 +101,9 @@ static bool env_var_checked_p;
 #define FIELD_3BD(name) FIELD(name.x, BD); FIELD(name.y, BD); FIELD(name.z, BD);
 #define FIELD_3DPOINT(name) FIELD_3BD(name)
 #define FIELD_4BITS(name) bit_write_4BITS(dat,_obj->name);
+#define FIELD_TIMEBLL(name) \
+  bit_write_TIMEBLL(dat, (BITCODE_TIMEBLL)_obj->name);\
+  LOG_TRACE(#name ": " FORMAT_BL "." FORMAT_BL "\n", _obj->name.days, _obj->name.ms)
 
 #define FIELD_CMC(name)\
   {\

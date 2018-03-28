@@ -127,6 +127,11 @@ extern "C" {
 #define FORMAT_TU "\"%hn\""       /* will print garbage */
 #endif
 
+typedef struct _dwg_time_bll {
+  BITCODE_BL days;
+  BITCODE_BL ms;
+} Dwg_Bitcode_TimeBLL;
+  
 typedef struct _dwg_bitcode_2rd
 {
   BITCODE_RD x;
@@ -153,6 +158,8 @@ typedef struct _dwg_bitcode_3bd
   BITCODE_BD z;
 } Dwg_Bitcode_3BD;
 
+#define BITCODE_TIMEBLL Dwg_Bitcode_TimeBLL
+/* #define FORMAT_TIMEBLL FORMAT_BL "." FORMAT_BL */
 #define BITCODE_2RD Dwg_Bitcode_2RD
 #define BITCODE_2BD Dwg_Bitcode_2BD
 #define BITCODE_2DPOINT BITCODE_2RD
@@ -434,17 +441,13 @@ typedef struct _dwg_header_variables {
   BITCODE_BD CMLSCALE;
   BITCODE_BD CELTSCALE;
   BITCODE_TV MENU;
-  BITCODE_BL TDCREATE_JULIAN_DAY;
-  BITCODE_BL TDCREATE_MILLISECONDS;
-  BITCODE_BL TDUPDATE_JULIAN_DAY;
-  BITCODE_BL TDUPDATE_MILLISECONDS;
+  BITCODE_TIMEBLL TDCREATE;
+  BITCODE_TIMEBLL TDUPDATE;
   BITCODE_BL unknown_15;
   BITCODE_BL unknown_16;
   BITCODE_BL unknown_17;
-  BITCODE_BL TDINDWG_DAYS;
-  BITCODE_BL TDINDWG_MILLISECONDS;
-  BITCODE_BL TDUSRTIMER_DAYS;
-  BITCODE_BL TDUSRTIMER_MILLISECONDS;
+  BITCODE_TIMEBLL TDINDWG;
+  BITCODE_TIMEBLL TDUSRTIMER;
   BITCODE_CMC CECOLOR;
   BITCODE_BS HANDLING; /* <r14: default 1 */
   BITCODE_RS HANDSEED_R11;
@@ -3500,17 +3503,46 @@ typedef enum DWG_SECTION_TYPE
   SECTION_SIGNATURE      /* .. */
 } Dwg_Section_Type;
 
+typedef enum DWG_SECTION_TYPE_R11
+{
+  SECTION_BLOCK = 1,
+  SECTION_LAYER = 2,
+  SECTION_STYLE = 3,
+  SECTION_LTYPE = 4,
+  SECTION_VIEW  = 5,
+  SECTION_UCS   = 6,
+  SECTION_VPORT = 7,
+  SECTION_APPID = 8,
+  SECTION_DIMSTYLE = 9,
+  SECTION_P13   = 10,
+} Dwg_Section_Type_r11;
+
 typedef struct _dwg_section
 {
-  int number;
+  long number;
   BITCODE_RL address;
   BITCODE_RL size;
   BITCODE_RL parent;
   BITCODE_RL left;
   BITCODE_RL right;
   BITCODE_RL x00;
-  Dwg_Section_Type type;
+  BITCODE_TV name;
+  Dwg_Section_Type type; /* to be casted to Dwg_Section_Type_r11 preR13 */
 } Dwg_Section;
+
+/* Dwg_Section_r2007:
+  int64_t  data_size;    // max size of page
+  int64_t  max_size;
+  int64_t  encrypted;
+  int64_t  hashcode;
+  int64_t  name_length;  // 0x22
+  int64_t  unknown;      // 0x00
+  int64_t  encoded;
+  int64_t  num_pages;
+  DWGCHAR *name;
+  r2007_section_page **pages;
+  struct _r2007_section *next;
+ */
 
 typedef struct
 {
@@ -3601,10 +3633,8 @@ typedef struct _dwg_struct
     BITCODE_RS   maint_version_2;
     BITCODE_RS   unknown_rs[6];
     BITCODE_RL   zero_l[8];
-    BITCODE_BL   TDCREATE_JULIAN_DAY;
-    BITCODE_BL   TDCREATE_MILLISECONDS;
-    BITCODE_BL   TDUPDATE_JULIAN_DAY;
-    BITCODE_BL   TDUPDATE_MILLISECONDS;
+    BITCODE_TIMEBLL TDCREATE;
+    BITCODE_TIMEBLL TDUPDATE;
     BITCODE_RL   HANDSEED;
     BITCODE_RL   plot_stamp;
     BITCODE_RS   zero_1;

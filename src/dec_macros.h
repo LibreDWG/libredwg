@@ -94,7 +94,10 @@
 #define FIELD_3RD(name) FIELD(name.x, RD); FIELD(name.y, RD); FIELD(name.z, RD);
 #define FIELD_3BD(name) FIELD(name.x, BD); FIELD(name.y, BD); FIELD(name.z, BD);
 #define FIELD_3DPOINT(name) FIELD_3BD(name)
-#define FIELD_CMC(name)\
+#define FIELD_TIMEBLL(name) \
+  _obj->name = bit_read_TIMEBLL(dat);\
+  LOG_TRACE(#name ": " FORMAT_BL "." FORMAT_BL "\n", _obj->name.days, _obj->name.ms)
+#define FIELD_CMC(name)                         \
     bit_read_CMC(dat, &_obj->name);\
     LOG_TRACE(#name ": index %d\n", _obj->name.index)
 

@@ -88,6 +88,7 @@ static Bit_Chain *dat = &pdat;
 #define FIELD_3RD(name)
 #define FIELD_3BD(name)
 #define FIELD_3DPOINT(name)
+#define FIELD_TIMEBLL(name)
 #define FIELD_CMC(token)\
 	FIELD_TV(token.name); \
 	FIELD_TV(token.book_name);

@@ -303,20 +303,20 @@ dxf_header_write (FILE *fh, Dwg_Data * dwg)
   }
   HEADER_VALUE (SKPOLY, 70);
 
-  ms = (double)dwg->header_vars.TDCREATE_MILLISECONDS;
-  VAR (TDCREATE, 40, dwg->header_vars.TDCREATE_JULIAN_DAY + ms);
+  ms = (double)dwg->header_vars.TDCREATE.ms;
+  VAR (TDCREATE, 40, dwg->header_vars.TDCREATE.days + ms);
   SINCE(R_13) {
-    VAR (TDUCREATE, 40, dwg->header_vars.TDCREATE_JULIAN_DAY + ms);
+    VAR (TDUCREATE, 40, dwg->header_vars.TDCREATE.days + ms);
   }
-  ms = (double)dwg->header_vars.TDUPDATE_MILLISECONDS;
-  VAR (TDUPDATE, 40, dwg->header_vars.TDUPDATE_JULIAN_DAY + ms);
+  ms = (double)dwg->header_vars.TDUPDATE.ms;
+  VAR (TDUPDATE, 40, dwg->header_vars.TDUPDATE.days + ms);
   SINCE(R_13) {
-    VAR (TDUUPDATE, 40, dwg->header_vars.TDUPDATE_JULIAN_DAY + ms);
+    VAR (TDUUPDATE, 40, dwg->header_vars.TDUPDATE.days + ms);
   }
-  ms = (double)dwg->header_vars.TDINDWG_MILLISECONDS;
-  VAR (TDINDWG, 40, dwg->header_vars.TDINDWG_DAYS + ms);
-  ms = (double)dwg->header_vars.TDUSRTIMER_MILLISECONDS;
-  VAR (TDUSRTIMER, 40, dwg->header_vars.TDUSRTIMER_DAYS + ms);
+  ms = (double)dwg->header_vars.TDINDWG.ms;
+  VAR (TDINDWG, 40, dwg->header_vars.TDINDWG.days + ms);
+  ms = (double)dwg->header_vars.TDUSRTIMER.ms;
+  VAR (TDUSRTIMER, 40, dwg->header_vars.TDUSRTIMER.days + ms);
 
   //HEADER_VALUE (USRTIMER, 70); // 1
   HEADER_VALUE (ANGBASE, 50);
