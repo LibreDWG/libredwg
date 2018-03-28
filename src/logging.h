@@ -72,5 +72,17 @@
 #define LOG_INSANE(args...) LOG(INSANE, args)
 #define LOG_ALL(args...) LOG(ALL, args)
 
+#if defined(SIZEOF_WCHAR_T) && SIZEOF_WCHAR_T == 2
+#  define LOG_TEXT_UNICODE(level, args) LOG(level, args)
+#else
+#  define LOG_TEXT_UNICODE(level, wstr) \
+	if (DWG_LOGLEVEL >= DWG_LOGLEVEL_##level) { \
+            BITCODE_TU ws = wstr; \
+            uint16_t c; \
+            while ((c = *ws++)) { \
+              HANDLER(OUTPUT, "%c", (char)(c & 0xff)); \
+            } \
+        }
+#endif
 
 #endif //#ifndef LOGGING_H

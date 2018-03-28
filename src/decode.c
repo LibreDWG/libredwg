@@ -44,7 +44,6 @@ static unsigned int cur_ver = 0;
 /* This flag means we have checked the environment variable
    LIBREDWG_TRACE and set `loglevel' appropriately.  */
 static bool env_var_checked_p;
-
 #define DWG_LOGLEVEL loglevel
 #endif  /* USE_TRACING */
 
@@ -1704,16 +1703,18 @@ decode_R2007(Bit_Chain* dat, Dwg_Data * dwg)
   }
 
   error = read_r2007_meta_data(dat, dwg);
-  if (error) return error;
-
-  LOG_TRACE("\n")
+  if (error)
+    {
+      LOG_ERROR("Failed to read 2007 meta data")
+      return error;
+    }
 
   /////////////////////////////////////////
   //	incomplete implementation!
   /////////////////////////////////////////
-  LOG_INFO(
-      "Decoding of DWG version R2007+ objectrefs is not fully implemented yet.\n"
-      "We are going to try\n")
+  LOG_INFO("\nDecoding of DWG version R2007+ objectrefs is not implemented yet.\n")
+  LOG_TRACE("  num objects: %lu\n", dwg->num_objects)
+  LOG_TRACE("  num object_refs: %lu\n", dwg->num_object_refs)
   return resolve_objectref_vector(dat, dwg);
 }
 

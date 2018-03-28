@@ -31,8 +31,12 @@ static unsigned int loglevel;
 #define DBG_MAX_COUNT 0x10000
 #define DBG_MAX_SIZE  0xf00000
 
-#undef DWG_LOGLEVEL
-#define DWG_LOGLEVEL loglevel
+#ifdef USE_TRACING
+# undef DWG_LOGLEVEL
+# define DWG_LOGLEVEL loglevel
+#else
+# define DWG_LOGLEVEL DWG_LOGLEVEL_TRACE
+#endif
 
 typedef struct r2007_file_header
 {
@@ -737,7 +741,7 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
   char *data;
   r2007_section *sections = 0, *last_section = 0, *section;
   char *ptr, *ptr_end;
-  int i;
+  int i, j = 0;
   
   data = read_system_page(dat, size_comp, size_uncomp, correction);
   if (!data) {
@@ -761,15 +765,15 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
     
       bfr_read(section, &ptr, 64);
     
-      LOG_TRACE("\n--- Section ---\n")
-      LOG_TRACE("data size:     %"PRIu64"\n", section->data_size)
-      LOG_TRACE("max size:      %"PRIu64"\n", section->max_size)
-      LOG_TRACE("encryption:    %"PRIu64"\n", section->encrypted)
-      LOG_TRACE("hashcode:      %"PRIx64"\n", section->hashcode)
-      LOG_TRACE("name length:   %"PRIu64"\n", section->name_length)
-      LOG_TRACE("unknown:       %"PRIu64"\n", section->unknown)
-      LOG_TRACE("encoding:      %"PRIu64"\n", section->encoded)
-      LOG_TRACE("num pages:     %"PRIu64"\n", section->num_pages)
+      LOG_TRACE("Section [%d]:\n", j)
+      LOG_TRACE("  data size:     %"PRIu64"\n", section->data_size)
+      LOG_TRACE("  max size:      %"PRIu64"\n", section->max_size)
+      LOG_TRACE("  encryption:    %"PRIu64"\n", section->encrypted)
+      LOG_TRACE("  hashcode:      %"PRIx64"\n", section->hashcode)
+      LOG_TRACE("  name length:   %"PRIu64"\n", section->name_length)
+      LOG_TRACE("  unknown:       %"PRIu64"\n", section->unknown)
+      LOG_TRACE("  encoding:      %"PRIu64"\n", section->encoded)
+      LOG_TRACE("  num pages:     %"PRIu64"\n", section->num_pages)
 
       //debugging sanity
       assert(section->data_size <  DBG_MAX_SIZE);
@@ -788,12 +792,19 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
           last_section = section;
         } 
     
+      j++;
       if (ptr >= ptr_end)
         break;
     
       // Section Name
       section->name = bfr_read_string(&ptr);
-      LOG_TRACE("Section name:  " FORMAT_TU "\n", (BITCODE_TU)section->name)
+#if defined(SIZEOF_WCHAR_T) && SIZEOF_WCHAR_T == 2
+      LOG_TRACE("  name:          " FORMAT_TU "\n", (BITCODE_TU)section->name)
+#else
+      LOG_TRACE("  name:          ")
+      LOG_TEXT_UNICODE(TRACE, section->name)
+      LOG_TRACE("\n")
+#endif
     
       section->pages = (r2007_section_page**) malloc(
         (size_t)section->num_pages * sizeof(r2007_section_page*));
@@ -806,7 +817,7 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
       for (i = 0; i < section->num_pages; i++)
         {
           section->pages[i] = (r2007_section_page*) malloc(
-                                                       sizeof(r2007_section_page));
+                                  sizeof(r2007_section_page));
           if (!section->pages[i])
             {
               LOG_ERROR("Out of memory");
@@ -815,7 +826,7 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
 
           bfr_read(section->pages[i], &ptr, 56);
       
-          LOG_TRACE("\n   --- Page[%d] ---\n", i)
+          LOG_TRACE("\n  Page[%d]:\n", i)
           LOG_TRACE("   offset:        %"PRIu64"\n", section->pages[i]->offset);
           LOG_TRACE("   size:          %"PRIu64"\n", section->pages[i]->size);
           LOG_TRACE("   id:            %"PRIu64"\n", section->pages[i]->id);
@@ -873,10 +884,10 @@ read_pages_map(Bit_Chain* dat, int64_t size_comp,
     
       index = page->id > 0 ? page->id : -page->id;
     
-      LOG_TRACE("\n--- Page ---\n")
-      LOG_TRACE("size:    0x%"PRIx64"\n", page->size)
-      LOG_TRACE("id:      0x%"PRIx64"\n", page->id)
-      LOG_TRACE("offset:  0x%"PRIx64"\n\n", page->offset)
+      LOG_TRACE("Page [%2"PRId64"]: ", page->id)
+      LOG_TRACE("size: 0x%05"PRIx64" ", page->size)
+      //LOG_TRACE("id:      0x%"PRId64" ", page->id)
+      LOG_TRACE("offset: 0x6%"PRIx64" \n", page->offset)
     
       page->next = 0;      
     
@@ -1034,8 +1045,12 @@ read_r2007_meta_data(Bit_Chain *dat, Dwg_Data *dwg)
   r2007_file_header file_header;
   r2007_page *pages_map, *page;
   r2007_section *sections_map;
-   
-  //loglevel = 9;
+
+#ifdef USE_TRACING
+  char *probe = getenv ("LIBREDWG_TRACE");
+  if (probe)
+    loglevel = atoi (probe);
+#endif
   // @ 0x62
   read_file_header(dat, &file_header);
   

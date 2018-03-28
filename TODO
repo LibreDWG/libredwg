@@ -1,33 +1,37 @@
 
-* fix segfaults when reading some newer DWG files.
+* add object_refs for 2007
+* add string and handle streams since 2007
+* add bit_read_MCU type for 2010 bitsize
+* pre-R13: tables, entities, block entities
 * PROXY subentities, PROXY_ENTITY
 * CELLSTYLEMAP TABLE_Cell struct
-* HATCH: some parts are missing
 * DIMSTYLE_CONTROL: one R2000+ RC missing
-* LEADER: associated_annotation, dimstyle handles,
+* LEADER: associated_annotation, dimstyle handles (untested)
 * undocumented and apparently unused: LONG_TRANSACTION, DUMMY
-* SPLINE: ctrl_pts
 * FIELD: value p20.4.99
 * TABLE: unknown kBuffer, kResBuf, kGeneral types
 * VISUALSTYLE: hard-pointer to H DICTIONARY_VISUALSTYLE
-* SPATIAL_INDEX class/object
-* WIPEOUTVARIABLE class/object
+* SPATIAL_INDEX class/object untested
+* WIPEOUTVARIABLE class/object untested
 * link VBA_PROJECT object to its section, and vice versa
-* ACIS: implement parsing of SAT file (version==2)
-  in entities 37, 38 and 39
+* ACIS: implement parsing of SAT file version 2
+  in ACIS entities 37, 38 and 39
 * convert XRECORD xdata linked-list ResBuf to array of eed[],
   same structure as common EED.
-* check r2013 Parametric objects/constraints
+  seperate the eed raw from the union. read it twice.
+* check r2013 Parametric objects/constraints (eed and classes)
 
+* encode_2007 (move the local structs to the dwg, as union)
 * finish DXF writing (easy)
 * add DXF reading (easy)
 
-* move installed binary sources into a seperate dir (bin or progs)
+* move installed binary sources into a seperate dir: programs
   and the 2 public headers ditto.
 * fix the remaining compiler warnings.
 * fix the remaining leaks.
 * check 32bit/64bit strictness with the public headers (internally we can handle it).
 * enhance and document the API functions.
+* add the basic DWG layout and API to the docs.
 * add more defaults when encoding from older to newer versions.
 * automate windows nightlies and binary releases via appveyor,
   POSIX releases via travis => github (savannah?).
