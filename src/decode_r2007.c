@@ -1001,13 +1001,11 @@ read_file_header(Bit_Chain* dat, r2007_file_header *file_header)
   assert((uint64_t)file_header->pages_map_size_comp < DBG_MAX_SIZE);
   assert((uint64_t)file_header->pages_map_size_uncomp < DBG_MAX_SIZE);
   assert((uint64_t)file_header->header2_offset < DBG_MAX_SIZE);
-  assert((uint64_t)file_header->sections_map_crc_uncomp < DBG_MAX_SIZE);
-  assert((uint64_t)file_header->sections_map_crc_comp < DBG_MAX_SIZE);
 
   assert((uint64_t)file_header->pages_maxid < DBG_MAX_COUNT);
   assert((uint64_t)file_header->pages_amount < DBG_MAX_COUNT);
   assert((uint64_t)file_header->sections_amount < DBG_MAX_COUNT);
-  
+
   free(pedata);
 }
 

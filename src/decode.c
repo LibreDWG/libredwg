@@ -203,10 +203,11 @@ dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
   dat->from_version = dat->version;
   LOG_INFO("This file's version code is: %s\n", version)
 
-#define WE_CAN "This version of LibreDWG is only capable of safely decoding version R13-R2000 (code: AC1012-AC1015) dwg-files.\n"
+#define WE_CAN "This version of LibreDWG is only capable of safely decoding version R13-R2004 (code: AC1012-AC1018) dwg-files.\n"
 
   PRE(R_13)
     {
+      // TODO: tables, entities, block entities
       LOG_ERROR(WE_CAN "This file's version code is: %s", version)
       return decode_preR13(dat, dwg);
     }
@@ -218,8 +219,8 @@ dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
 
   VERSION(R_2004)
     {
-      LOG_WARN(WE_CAN "This file's version code is: %s\n"
-          "Support for this version is still experimental.", version)
+      //LOG_WARN(WE_CAN "This file's version code is: %s\n"
+      //    "Support for this version is still experimental.", version)
       return decode_R2004(dat, dwg);
     }
 
@@ -231,7 +232,7 @@ dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
       return decode_R2007(dat, dwg);
     }
 
-  //This line should not be reached!
+  // This line should not be reached
   LOG_ERROR(
       "LibreDWG does not support this version: %s.", version)
   return -1;
