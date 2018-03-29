@@ -20,6 +20,8 @@
 #define DECODER if (1)
 #undef IF_ENCODE_FROM_EARLIER
 #define IF_ENCODE_FROM_EARLIER if (0)
+#undef IF_ENCODE_FROM_PRE_R13
+#define IF_ENCODE_FROM_PRE_R13 if (0)
 #endif
 
 #if defined(IS_PRINT) || defined(IS_FREE)
@@ -27,4 +29,6 @@
 #define DECODER if (0)
 #undef IF_ENCODE_FROM_EARLIER
 #define IF_ENCODE_FROM_EARLIER if (0)
+#undef IF_ENCODE_FROM_PRE_R13
+#define IF_ENCODE_FROM_PRE_R13 if (0)
 #endif

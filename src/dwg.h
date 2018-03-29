@@ -1591,8 +1591,8 @@ typedef struct _dwg_object_LAYER
   BITCODE_B locked;
   BITCODE_BS values;
   BITCODE_CMC color;
-  BITCODE_RS color_rs; /* preR13 */
-  BITCODE_RS style_rs; /* preR13 */
+  BITCODE_RS color_rs;    /* preR13 */
+  BITCODE_RS linetype_rs; /* preR13 */
   BITCODE_H layer_control;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
@@ -2865,8 +2865,8 @@ typedef struct _dwg_object_DICTIONARYVAR
 typedef struct _dwg_object_DICTIONARYWDLFT
 {
   BITCODE_BL numitems;
-  BITCODE_RL unknown_r14;
-  BITCODE_BS cloning;
+  BITCODE_RL cloning_rl; /* r14 only */
+  BITCODE_BS cloning;    /* r2000+ */
   BITCODE_RC hard_owner;
   BITCODE_TV* text;
   BITCODE_H parenthandle;

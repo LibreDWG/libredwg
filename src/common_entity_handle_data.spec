@@ -2,6 +2,8 @@
 
 #undef IF_ENCODE_FROM_EARLIER
 #define IF_ENCODE_FROM_EARLIER if (0)
+#undef IF_ENCODE_FROM_PRE_R13
+#define IF_ENCODE_FROM_PRE_R13 if (0)
 #ifdef IS_DECODER
 # define IF_IS_DECODER 1
 # define IF_IS_ENCODER 0
@@ -23,9 +25,7 @@
     {
       FIELD_HANDLE(layer, 5);
       if (!FIELD_VALUE(isbylayerlt))
-        {
           FIELD_HANDLE(ltype, 5);
-        }
     }
 
   VERSIONS(R_13,R_2000)
@@ -48,45 +48,31 @@
       // is there no layer_flags with 3 for a handle?
       FIELD_HANDLE(layer, 5);
 
-      if (FIELD_VALUE(linetype_flags)==3)
-        {
+      if (FIELD_VALUE(linetype_flags) == 3)
           FIELD_HANDLE(ltype, 5);
-        }
     }
 
   SINCE(R_2007)
     {
-      if (FIELD_VALUE(material_flags)==3)
-        {
+      if (FIELD_VALUE(material_flags) == 3)
           FIELD_HANDLE(material, ANYCODE);
-        }
-      if (FIELD_VALUE(shadow_flags)==3)
-        {
+      if (FIELD_VALUE(shadow_flags) == 3)
           FIELD_HANDLE(shadow, ANYCODE);
-        }
     }
 
   SINCE(R_2000)
     {
       if (FIELD_VALUE(plotstyle_flags)==3)
-        {
           FIELD_HANDLE(plotstyle, 5);
-        }
     }
 
   SINCE(R_2010)
     {
       if (FIELD_VALUE(has_full_visualstyle))
-        {
           FIELD_HANDLE(full_visualstyle, ANYCODE);
-        }
       if (FIELD_VALUE(has_face_visualstyle))
-        {
           FIELD_HANDLE(face_visualstyle, ANYCODE);
-        }
       if (FIELD_VALUE(has_edge_visualstyle))
-        {
           FIELD_HANDLE(edge_visualstyle, ANYCODE);
-        }
     }
 

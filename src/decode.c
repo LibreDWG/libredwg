@@ -334,8 +334,8 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
           FIELD_RC (flag);
           FIELD_TF (entry_name, 32);
           FIELD_RS (used);
-          FIELD_RS (color_rs);   // color
-          FIELD_RS (style_rs);   // style
+          FIELD_RS (color_rs);   // color, off if negative
+          FIELD_RS (linetype_rs); // style
           CHK_ENDPOS;
         }
       break;

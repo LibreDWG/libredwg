@@ -18,16 +18,16 @@
 #define IS_DECODER
 
 #define FIELDG(name,type,dxfgroup) \
-  _obj->name = bit_read_##type(dat);\
-  FIELD_G_TRACE(name,type,dxfgroup)
+  { _obj->name = bit_read_##type(dat); \
+    FIELD_G_TRACE(name,type,dxfgroup); }
 
 #define FIELD(name,type) \
-  _obj->name = bit_read_##type(dat);\
-  FIELD_TRACE(name,type)
+  { _obj->name = bit_read_##type(dat); \
+    FIELD_TRACE(name,type); }
 
 #define FIELD_CAST(name,type,cast) \
-  _obj->name = (BITCODE_##cast)bit_read_##type(dat); \
-  FIELD_TRACE(name,cast)\
+  { _obj->name = (BITCODE_##cast)bit_read_##type(dat); \
+    FIELD_TRACE(name,cast); }
 
 #define FIELD_G_TRACE(name,type,dxfgroup)                               \
   LOG_TRACE(#name ": " FORMAT_##type " " #type " " #dxfgroup "\n", _obj->name)
@@ -38,49 +38,53 @@
 
 #define ANYCODE -1
 #define FIELD_HANDLE(name, handle_code)  \
-  if (handle_code >= 0)\
-    {\
-      _obj->name = dwg_decode_handleref_with_code(dat, obj, dwg, handle_code);\
-    }\
-  else\
-    {\
-      _obj->name = dwg_decode_handleref(dat, obj, dwg);\
-    }\
-  LOG_TRACE(#name ": HANDLE(%d.%d.%lu) absolute:%lu\n",\
-        _obj->name->handleref.code,\
-        _obj->name->handleref.size,\
-        _obj->name->handleref.value,\
-        _obj->name->absolute_ref)
+  { \
+    if (handle_code >= 0) \
+      {\
+        _obj->name = dwg_decode_handleref_with_code(dat, obj, dwg, handle_code);\
+      }\
+    else\
+      {\
+        _obj->name = dwg_decode_handleref(dat, obj, dwg);\
+      }\
+    LOG_TRACE(#name ": HANDLE(%d.%d.%lu) absolute:%lu\n",\
+          _obj->name->handleref.code,\
+          _obj->name->handleref.size,\
+          _obj->name->handleref.value,\
+              _obj->name->absolute_ref);\
+  }
 #define FIELD_HANDLE_N(name, vcount, handle_code)  \
-  if (handle_code>=0)\
-    {\
-      _obj->name = dwg_decode_handleref_with_code(dat, obj, dwg, handle_code);\
-    }\
-  else\
-    {\
-      _obj->name = dwg_decode_handleref(dat, obj, dwg);\
-    }\
-  LOG_TRACE(#name "[%d]: HANDLE(%d.%d.%lu) absolute:%lu\n",\
-        (int)vcount,\
-        _obj->name->handleref.code,\
-        _obj->name->handleref.size,\
-        _obj->name->handleref.value,\
-        _obj->name->absolute_ref)
+  {\
+    if (handle_code>=0) \
+      {\
+        _obj->name = dwg_decode_handleref_with_code(dat, obj, dwg, handle_code);\
+      }\
+    else\
+      {\
+        _obj->name = dwg_decode_handleref(dat, obj, dwg);\
+      }\
+    LOG_TRACE(#name "[%d]: HANDLE(%d.%d.%lu) absolute:%lu\n",\
+          (int)vcount,\
+          _obj->name->handleref.code,\
+          _obj->name->handleref.size,\
+          _obj->name->handleref.value,\
+          _obj->name->absolute_ref);\
+  }
 
-#define FIELD_B(name) FIELD(name, B);
-#define FIELD_BB(name) FIELD(name, BB);
-#define FIELD_3B(name) FIELD(name, 3B);
-#define FIELD_BS(name) FIELD(name, BS);
-#define FIELD_BL(name) FIELD(name, BL);
-#define FIELD_BLL(name) FIELD(name, BLL);
-#define FIELD_BD(name) FIELD(name, BD);
-#define FIELD_RC(name) FIELD(name, RC);
-#define FIELD_RS(name) FIELD(name, RS);
-#define FIELD_RD(name) FIELD(name, RD);
-#define FIELD_RL(name) FIELD(name, RL);
-#define FIELD_RLL(name) FIELD(name, RLL);
-#define FIELD_MC(name) FIELD(name, MC);
-#define FIELD_MS(name) FIELD(name, MS);
+#define FIELD_B(name) FIELD(name, B)
+#define FIELD_BB(name) FIELD(name, BB)
+#define FIELD_3B(name) FIELD(name, 3B)
+#define FIELD_BS(name) FIELD(name, BS)
+#define FIELD_BL(name) FIELD(name, BL)
+#define FIELD_BLL(name) FIELD(name, BLL)
+#define FIELD_BD(name) FIELD(name, BD)
+#define FIELD_RC(name) FIELD(name, RC)
+#define FIELD_RS(name) FIELD(name, RS)
+#define FIELD_RD(name) FIELD(name, RD)
+#define FIELD_RL(name) FIELD(name, RL)
+#define FIELD_RLL(name) FIELD(name, RLL)
+#define FIELD_MC(name) FIELD(name, MC)
+#define FIELD_MS(name) FIELD(name, MS)
 #define FIELD_TF(name,len) \
   _obj->name = bit_read_TF(dat,len); \
   FIELD_TRACE(name, TF)
@@ -91,18 +95,18 @@
 
 #define FIELD_BE(name) bit_read_BE(dat, &_obj->name.x, &_obj->name.y, &_obj->name.z);
 #define FIELD_DD(name, _default) FIELD_VALUE(name) = bit_read_DD(dat, _default);
-#define FIELD_2DD(name, d1, d2) FIELD_DD(name.x, d1); FIELD_DD(name.y, d2);
-#define FIELD_2RD(name) FIELD(name.x, RD); FIELD(name.y, RD);
-#define FIELD_2BD(name) FIELD(name.x, BD); FIELD(name.y, BD);
-#define FIELD_3RD(name) FIELD(name.x, RD); FIELD(name.y, RD); FIELD(name.z, RD);
-#define FIELD_3BD(name) FIELD(name.x, BD); FIELD(name.y, BD); FIELD(name.z, BD);
+#define FIELD_2DD(name, d1, d2) { FIELD_DD(name.x, d1); FIELD_DD(name.y, d2); }
+#define FIELD_2RD(name) { FIELD(name.x, RD); FIELD(name.y, RD); }
+#define FIELD_2BD(name) { FIELD(name.x, BD); FIELD(name.y, BD); }
+#define FIELD_3RD(name) { FIELD(name.x, RD); FIELD(name.y, RD); FIELD(name.z, RD); }
+#define FIELD_3BD(name) { FIELD(name.x, BD); FIELD(name.y, BD); FIELD(name.z, BD); }
 #define FIELD_3DPOINT(name) FIELD_3BD(name)
 #define FIELD_TIMEBLL(name) \
-  _obj->name = bit_read_TIMEBLL(dat);\
-  LOG_TRACE(#name ": " FORMAT_BL "." FORMAT_BL "\n", _obj->name.days, _obj->name.ms)
-#define FIELD_CMC(name)                         \
-    bit_read_CMC(dat, &_obj->name);\
-    LOG_TRACE(#name ": index %d\n", _obj->name.index)
+  { _obj->name = bit_read_TIMEBLL(dat);                                  \
+    LOG_TRACE(#name ": " FORMAT_BL "." FORMAT_BL "\n", _obj->name.days, _obj->name.ms); }
+#define FIELD_CMC(name) \
+  { bit_read_CMC(dat, &_obj->name); \
+    LOG_TRACE(#name ": index %d\n", _obj->name.index); }
 
 //FIELD_VECTOR_N(name, type, size):
 // reads data of the type indicated by 'type' 'size' times and stores

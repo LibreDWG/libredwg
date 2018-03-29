@@ -91,7 +91,7 @@ static unsigned int cur_ver = 0;
 #define FIELD_3BD(name) FIELD(name.x, BD); FIELD(name.y, BD); FIELD(name.z, BD);
 #define FIELD_3DPOINT(name) FIELD_3BD(name)
 #define FIELD_CMC(name)\
-    LOG_TRACE(#name ": index %d\n", _obj->name.index)
+  LOG_TRACE(#name ": index %d\n", _obj->name.index)
 #define FIELD_TIMEBLL(name) \
   LOG_TRACE(#name ": " FORMAT_BL "." FORMAT_BL "\n", _obj->name.days, _obj->name.ms)
 

@@ -40,6 +40,8 @@
 // when writing, check also rewriting from an earlier version and fill in a default then
 #define IF_ENCODE_FROM_EARLIER \
   if (dat->from_version && dat->from_version < cur_ver)
+#define IF_ENCODE_FROM_PRE_R13 \
+  if (dat->from_version && dat->from_version < R_13)
 
 #define DWG_VERSIONS 20
 typedef enum DWG_VERSION_TYPE

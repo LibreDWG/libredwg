@@ -60,16 +60,16 @@ static bool env_var_checked_p;
 #define REFS_PER_REALLOC 100
 
 #define FIELD(name,type)\
-  bit_write_##type(dat, _obj->name);\
-  FIELD_TRACE(name, type)
+  { bit_write_##type(dat, _obj->name); \
+    FIELD_TRACE(name, type); }
 #define FIELD_TRACE(name,type)\
   if (loglevel>=2)\
     {\
         LOG_TRACE(#name ": " FORMAT_##type "\n", _obj->name)\
     }
 #define FIELD_CAST(name,type,cast)\
-  bit_write_##type(dat, (BITCODE_##type)_obj->name);\
-  FIELD_TRACE(name,cast)
+  { bit_write_##type(dat, (BITCODE_##type)_obj->name); \
+    FIELD_TRACE(name,cast); }
 
 #define FIELD_VALUE(name) _obj->name
 
@@ -88,11 +88,11 @@ static bool env_var_checked_p;
 #define FIELD_MC(name) FIELD(name, MC);
 #define FIELD_MS(name) FIELD(name, MS);
 #define FIELD_TV(name) \
-  IF_ENCODE_FROM_EARLIER { _obj->name = strdup(""); } FIELD(name, TV);
+  { IF_ENCODE_FROM_EARLIER { _obj->name = strdup(""); } FIELD(name, TV); }
 #define FIELD_T FIELD_TV /*TODO: implement version dependant string fields */
 #define FIELD_TF(name,len) \
-  bit_write_TF(dat, _obj->name, len); \
-  FIELD_TRACE(name, type)
+  { bit_write_TF(dat, _obj->name, len); \
+    FIELD_TRACE(name, TF); }
 #define FIELD_BT(name) FIELD(name, BT);
 
 #define FIELD_DD(name, _default) bit_write_DD(dat, FIELD_VALUE(name), _default);
@@ -105,8 +105,8 @@ static bool env_var_checked_p;
 #define FIELD_3DPOINT(name) FIELD_3BD(name)
 #define FIELD_4BITS(name) bit_write_4BITS(dat,_obj->name);
 #define FIELD_TIMEBLL(name) \
-  bit_write_TIMEBLL(dat, (BITCODE_TIMEBLL)_obj->name);\
-  LOG_TRACE(#name ": " FORMAT_BL "." FORMAT_BL "\n", _obj->name.days, _obj->name.ms)
+  { bit_write_TIMEBLL(dat, (BITCODE_TIMEBLL)_obj->name); \
+    LOG_TRACE(#name ": " FORMAT_BL "." FORMAT_BL "\n", _obj->name.days, _obj->name.ms); }
 
 #define FIELD_CMC(name)\
   {\
@@ -188,14 +188,17 @@ static bool env_var_checked_p;
   FIELD_VECTOR_N(name, type, _obj->size)
 
 #define FIELD_HANDLE(name, handle_code) \
-  IF_ENCODE_FROM_EARLIER { ; } else {   \
-    assert(_obj->name); \
-    if (handle_code != ANYCODE && _obj->name->handleref.code != handle_code) \
-      { \
-        LOG_WARN("Expected a CODE %d handle, got a %d", \
-                  handle_code, _obj->name->handleref.code); \
-      } \
-    bit_write_H(dat, &_obj->name->handleref); \
+  {\
+    IF_ENCODE_FROM_EARLIER { ; } \
+    else { \
+      assert(_obj->name); \
+      if (handle_code != ANYCODE && _obj->name->handleref.code != handle_code) \
+        { \
+          LOG_WARN("Expected a CODE %d handle, got a %d", \
+                    handle_code, _obj->name->handleref.code); \
+        } \
+      bit_write_H(dat, &_obj->name->handleref); \
+    }\
   }
 
 #define FIELD_HANDLE_N(name, vcount, handle_code)\
@@ -211,7 +214,7 @@ static bool env_var_checked_p;
     }
 
 #define FIELD_INSERT_COUNT(insert_count, type)   \
-      FIELD_RL(insert_count)
+  FIELD_RL(insert_count)
 
 #define HANDLE_VECTOR(name, sizefield, code) \
   HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code)
