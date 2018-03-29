@@ -2190,7 +2190,7 @@ DWG_OBJECT(VPORT);
   SINCE(R_2007)
     {
       FIELD_B (use_default_lights);
-      FIELD_RC (default_lightining_type);
+      FIELD_RC (default_lightning_type);
       FIELD_BD (brightness);
       FIELD_BD (contrast);
       FIELD_CMC (ambient_color);

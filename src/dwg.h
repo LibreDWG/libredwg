@@ -1815,7 +1815,7 @@ typedef struct _dwg_object_VPORT
   BITCODE_4BITS view_mode;
   BITCODE_RC render_mode;
   BITCODE_B use_default_lights;
-  BITCODE_RC default_lightining_type;
+  BITCODE_RC default_lightning_type;
   BITCODE_BD brightness;
   BITCODE_BD contrast;
   BITCODE_CMC ambient_color;
