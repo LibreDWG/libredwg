@@ -62,47 +62,52 @@ static bool env_var_checked_p;
 #define FIELD(name,type)\
   { bit_write_##type(dat, _obj->name); \
     FIELD_TRACE(name, type); }
+#define FIELDG(name,type,dxf) \
+  { bit_write_##type(dat, _obj->name); \
+    FIELD_G_TRACE(name, type, dxf); }
 #define FIELD_TRACE(name,type)\
-  if (loglevel>=2)\
-    {\
-        LOG_TRACE(#name ": " FORMAT_##type "\n", _obj->name)\
-    }
+  LOG_TRACE(#name ": " FORMAT_##type "\n", _obj->name)  \
+#define FIELD_G_TRACE(name,type,dxfgroup)                               \
+  LOG_TRACE(#name ": " FORMAT_##type " " #type " " #dxfgroup "\n", _obj->name)
 #define FIELD_CAST(name,type,cast)\
   { bit_write_##type(dat, (BITCODE_##type)_obj->name); \
     FIELD_TRACE(name,cast); }
 
 #define FIELD_VALUE(name) _obj->name
 
-#define FIELD_B(name) FIELD(name, B);
-#define FIELD_BB(name) FIELD(name, BB);
-#define FIELD_3B(name) FIELD(name, 3B);
-#define FIELD_BS(name) FIELD(name, BS);
-#define FIELD_BL(name) FIELD(name, BL);
-#define FIELD_BLL(name) FIELD(name, BLL);
-#define FIELD_BD(name) FIELD(name, BD);
-#define FIELD_RC(name) FIELD(name, RC);
-#define FIELD_RS(name) FIELD(name, RS);
-#define FIELD_RD(name) FIELD(name, RD);
-#define FIELD_RL(name) FIELD(name, RL);
-#define FIELD_RLL(name) FIELD(name, RLL);
-#define FIELD_MC(name) FIELD(name, MC);
-#define FIELD_MS(name) FIELD(name, MS);
-#define FIELD_TV(name) \
-  { IF_ENCODE_FROM_EARLIER { _obj->name = strdup(""); } FIELD(name, TV); }
+#define FIELD_B(name,dxf) FIELDG(name, B, dxf)
+#define FIELD_BB(name,dxf) FIELDG(name, BB, dxf)
+#define FIELD_3B(name,dxf) FIELDG(name, 3B, dxf)
+#define FIELD_BS(name,dxf) FIELDG(name, BS, dxf)
+#define FIELD_BL(name,dxf) FIELDG(name, BL, dxf)
+#define FIELD_BLL(name,dxf) FIELDG(name, BLL, dxf)
+#define FIELD_BD(name,dxf) FIELDG(name, BD, dxf)
+#define FIELD_RC(name,dxf) FIELDG(name, RC, dxf)
+#define FIELD_RS(name,dxf) FIELDG(name, RS, dxf)
+#define FIELD_RD(name,dxf) FIELDG(name, RD, dxf)
+#define FIELD_RL(name,dxf) FIELDG(name, RL, dxf)
+#define FIELD_RLL(name,dxf) FIELDG(name, RLL, dxf)
+#define FIELD_MC(name,dxf) FIELDG(name, MC, dxf)
+#define FIELD_MS(name,dxf) FIELDG(name, MS, dxf)
+#define FIELD_TV(name,dxf) \
+  { IF_ENCODE_FROM_EARLIER { _obj->name = strdup(""); } FIELDG(name, TV, dxf); }
 #define FIELD_T FIELD_TV /*TODO: implement version dependant string fields */
-#define FIELD_TF(name,len) \
+#define FIELD_TF(name,len,dxf)             \
   { bit_write_TF(dat, _obj->name, len); \
-    FIELD_TRACE(name, TF); }
-#define FIELD_BT(name) FIELD(name, BT);
+    FIELD_G_TRACE(name, TF, dxf); }
+#define FIELD_BT(name, dxf) FIELDG(name, BT, dxf);
 
-#define FIELD_DD(name, _default) bit_write_DD(dat, FIELD_VALUE(name), _default);
-#define FIELD_2DD(name, d1, d2) FIELD_DD(name.x, d1); FIELD_DD(name.y, d2);
-
-#define FIELD_2RD(name) FIELD(name.x, RD); FIELD(name.y, RD);
-#define FIELD_2BD(name) FIELD(name.x, BD); FIELD(name.y, BD);
-#define FIELD_3RD(name) FIELD(name.x, RD); FIELD(name.y, RD); FIELD(name.z, RD);
-#define FIELD_3BD(name) FIELD(name.x, BD); FIELD(name.y, BD); FIELD(name.z, BD);
-#define FIELD_3DPOINT(name) FIELD_3BD(name)
+#define FIELD_DD(name, _default, dxf) bit_write_DD(dat, FIELD_VALUE(name), _default);
+#define FIELD_2DD(name, d1, d2, dxf) { FIELD_DD(name.x, d1, dxf); FIELD_DD(name.y, d2, dxf+10); }
+#define FIELD_2RD(name,dxf) { FIELDG(name.x, RD, dxf); FIELDG(name.y, RD, dxf+10); }
+#define FIELD_2BD(name,dxf) { FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+10); }
+#define FIELD_3RD(name,dxf) { FIELDG(name.x, RD, dxf); FIELDG(name.y, RD, dxf+10); \
+                              FIELDG(name.z, RD,dxf+20); }
+#define FIELD_3BD(name,dxf) { FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+10); \
+                              FIELDG(name.z, BD, dxf+20); }
+#define FIELD_3BD_1(name,dxf) { FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+1); \
+                                FIELDG(name.z, BD, dxf+2); }
+#define FIELD_3DPOINT(name,dxf) FIELD_3BD(name,dxf)
 #define FIELD_4BITS(name) bit_write_4BITS(dat,_obj->name);
 #define FIELD_TIMEBLL(name) \
   { bit_write_TIMEBLL(dat, (BITCODE_TIMEBLL)_obj->name); \
@@ -113,32 +118,32 @@ static bool env_var_checked_p;
     bit_write_CMC(dat, &_obj->name);\
   }
 
-#define FIELD_BE(name)\
+#define FIELD_BE(name, dxf)\
   bit_write_BE(dat, FIELD_VALUE(name.x), FIELD_VALUE(name.y), FIELD_VALUE(name.z));
 
-#define FIELD_2RD_VECTOR(name, size)\
+#define FIELD_2RD_VECTOR(name, size, dxf)                   \
   for (vcount=0; vcount < (long)_obj->size; vcount++)\
     {\
-      FIELD_2RD(name[vcount]);\
+      FIELD_2RD(name[vcount], dxf);\
     }
 
-#define FIELD_2DD_VECTOR(name, size)\
+#define FIELD_2DD_VECTOR(name, size, dxf)\
   FIELD_2RD(name[0]);\
   for (vcount = 1; vcount < (long)_obj->size; vcount++)\
     {\
-      FIELD_2DD(name[vcount], FIELD_VALUE(name[vcount - 1].x), FIELD_VALUE(name[vcount - 1].y));\
+      FIELD_2DD(name[vcount], FIELD_VALUE(name[vcount - 1].x), FIELD_VALUE(name[vcount - 1].y), dxf);\
     }
 
-#define FIELD_3DPOINT_VECTOR(name, size)\
+#define FIELD_3DPOINT_VECTOR(name, size, dxf)\
   for (vcount=0; vcount < (long)_obj->size; vcount++)   \
     {\
-      FIELD_3DPOINT(name[vcount]);\
+      FIELD_3DPOINT(name[vcount], dxf);\
     }
 
 #define REACTORS(code)\
   for (vcount=0; vcount < (long)obj->tio.object->num_reactors; vcount++) \
     {\
-      FIELD_HANDLE_N(reactors[vcount], vcount, code);    \
+      FIELD_HANDLE_N(reactors[vcount], vcount, code, 5);    \
     }
     
 #define XDICOBJHANDLE(code)\
@@ -146,12 +151,12 @@ static bool env_var_checked_p;
     {\
       if (!obj->tio.object->xdic_missing_flag) \
         {\
-          FIELD_HANDLE(xdicobjhandle, code);\
+          FIELD_HANDLE(xdicobjhandle, code, 0);   \
         }\
     }\
   PRIOR_VERSIONS\
     {\
-      FIELD_HANDLE(xdicobjhandle, code);\
+      FIELD_HANDLE(xdicobjhandle, code, 0);       \
     }
 
 //XXX need a review
@@ -160,18 +165,18 @@ static bool env_var_checked_p;
     {\
       if (!obj->tio.entity->xdic_missing_flag)\
         {\
-          FIELD_HANDLE(xdicobjhandle, code);\
+          FIELD_HANDLE(xdicobjhandle, code, 0);   \
         }\
     }\
   PRIOR_VERSIONS\
     {\
-      FIELD_HANDLE(xdicobjhandle, code);\
+      FIELD_HANDLE(xdicobjhandle, code, 0); \
     }
 
 
 //FIELD_VECTOR_N(name, type, size):
 // writes a 'size' elements vector of data of the type indicated by 'type'
-#define FIELD_VECTOR_N(name, type, size)\
+#define FIELD_VECTOR_N(name, type, size, dxf)\
   if (size>0)\
     {\
       for (vcount=0; vcount < (long)size; vcount++)\
@@ -184,10 +189,10 @@ static bool env_var_checked_p;
         }\
     }
 
-#define FIELD_VECTOR(name, type, size) \
-  FIELD_VECTOR_N(name, type, _obj->size)
+#define FIELD_VECTOR(name, type, size, dxf) \
+  FIELD_VECTOR_N(name, type, _obj->size, dxf)
 
-#define FIELD_HANDLE(name, handle_code) \
+#define FIELD_HANDLE(name, handle_code, dxf) \
   {\
     IF_ENCODE_FROM_EARLIER { ; } \
     else { \
@@ -201,23 +206,23 @@ static bool env_var_checked_p;
     }\
   }
 
-#define FIELD_HANDLE_N(name, vcount, handle_code)\
-  FIELD_HANDLE(name, handle_code)
+#define FIELD_HANDLE_N(name, vcount, handle_code, dxf)\
+  FIELD_HANDLE(name, handle_code, dxf)
 
-#define HANDLE_VECTOR_N(name, size, code)\
+#define HANDLE_VECTOR_N(name, size, code, dxf)\
   if (size>0) \
     assert(_obj->name); \
   for (vcount=0; vcount < (long)size; vcount++)\
     {\
       assert(_obj->name[vcount]); \
-      FIELD_HANDLE_N(name[vcount], vcount, code);   \
+      FIELD_HANDLE_N(name[vcount], vcount, code, dxf);   \
     }
 
-#define FIELD_INSERT_COUNT(insert_count, type)   \
-  FIELD_RL(insert_count)
+#define FIELD_INSERT_COUNT(insert_count, type, dxf)   \
+  FIELD_RL(insert_count, dxf)
 
-#define HANDLE_VECTOR(name, sizefield, code) \
-  HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code)
+#define HANDLE_VECTOR(name, sizefield, code, dxf) \
+  HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code, dxf)
 
 #define FIELD_XDATA(name, size)
 

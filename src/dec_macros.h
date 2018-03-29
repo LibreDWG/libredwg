@@ -37,7 +37,7 @@
 #define FIELD_VALUE(name) _obj->name
 
 #define ANYCODE -1
-#define FIELD_HANDLE(name, handle_code)  \
+#define FIELD_HANDLE(name, handle_code, dxf) \
   { \
     if (handle_code >= 0) \
       {\
@@ -51,9 +51,9 @@
           _obj->name->handleref.code,\
           _obj->name->handleref.size,\
           _obj->name->handleref.value,\
-              _obj->name->absolute_ref);\
+          _obj->name->absolute_ref);\
   }
-#define FIELD_HANDLE_N(name, vcount, handle_code)  \
+#define FIELD_HANDLE_N(name, vcount, handle_code, dxf)  \
   {\
     if (handle_code>=0) \
       {\
@@ -71,47 +71,51 @@
           _obj->name->absolute_ref);\
   }
 
-#define FIELD_B(name) FIELD(name, B)
-#define FIELD_BB(name) FIELD(name, BB)
-#define FIELD_3B(name) FIELD(name, 3B)
-#define FIELD_BS(name) FIELD(name, BS)
-#define FIELD_BL(name) FIELD(name, BL)
-#define FIELD_BLL(name) FIELD(name, BLL)
-#define FIELD_BD(name) FIELD(name, BD)
-#define FIELD_RC(name) FIELD(name, RC)
-#define FIELD_RS(name) FIELD(name, RS)
-#define FIELD_RD(name) FIELD(name, RD)
-#define FIELD_RL(name) FIELD(name, RL)
-#define FIELD_RLL(name) FIELD(name, RLL)
-#define FIELD_MC(name) FIELD(name, MC)
-#define FIELD_MS(name) FIELD(name, MS)
-#define FIELD_TF(name,len) \
-  _obj->name = bit_read_TF(dat,len); \
-  FIELD_TRACE(name, TF)
-#define FIELD_TV(name) FIELD(name, TV);
+#define FIELD_B(name,dxf) FIELDG(name, B, dxf)
+#define FIELD_BB(name,dxf) FIELDG(name, BB, dxf)
+#define FIELD_3B(name,dxf) FIELDG(name, 3B)
+#define FIELD_BS(name,dxf) FIELDG(name, BS)
+#define FIELD_BL(name,dxf) FIELDG(name, BL)
+#define FIELD_BLL(name,dxf) FIELDG(name, BLL)
+#define FIELD_BD(name,dxf) FIELDG(name, BD)
+#define FIELD_RC(name,dxf) FIELDG(name, RC)
+#define FIELD_RS(name,dxf) FIELDG(name, RS)
+#define FIELD_RD(name,dxf) FIELDG(name, RD)
+#define FIELD_RL(name,dxf) FIELDG(name, RL)
+#define FIELD_RLL(name,dxf) FIELDG(name, RLL)
+#define FIELD_MC(name,dxf) FIELDG(name, MC)
+#define FIELD_MS(name,dxf) FIELDG(name, MS)
+#define FIELD_TF(name,len,dxf)       \
+  { _obj->name = bit_read_TF(dat,len); \
+    FIELD_G_TRACE(name, TF, dxf); }
+#define FIELD_TV(name,dxf) FIELDG(name, TV);
 #define FIELD_T FIELD_TV /*TODO: implement version dependant string fields */
-#define FIELD_BT(name) FIELD(name, BT);
-#define FIELD_4BITS(name) _obj->name = bit_read_4BITS(dat);
+#define FIELD_BT(name,dxf) FIELDG(name, BT);
+#define FIELD_4BITS(name,dxf) _obj->name = bit_read_4BITS(dat);
 
-#define FIELD_BE(name) bit_read_BE(dat, &_obj->name.x, &_obj->name.y, &_obj->name.z);
-#define FIELD_DD(name, _default) FIELD_VALUE(name) = bit_read_DD(dat, _default);
-#define FIELD_2DD(name, d1, d2) { FIELD_DD(name.x, d1); FIELD_DD(name.y, d2); }
-#define FIELD_2RD(name) { FIELD(name.x, RD); FIELD(name.y, RD); }
-#define FIELD_2BD(name) { FIELD(name.x, BD); FIELD(name.y, BD); }
-#define FIELD_3RD(name) { FIELD(name.x, RD); FIELD(name.y, RD); FIELD(name.z, RD); }
-#define FIELD_3BD(name) { FIELD(name.x, BD); FIELD(name.y, BD); FIELD(name.z, BD); }
-#define FIELD_3DPOINT(name) FIELD_3BD(name)
-#define FIELD_TIMEBLL(name) \
+#define FIELD_BE(name,dxf) bit_read_BE(dat, &_obj->name.x, &_obj->name.y, &_obj->name.z);
+#define FIELD_DD(name, _default, dxf) FIELD_VALUE(name,dxf) = bit_read_DD(dat, _default);
+#define FIELD_2DD(name, d1, d2, dxf) { FIELD_DD(name.x, d1, dxf); FIELD_DD(name.y, d2, dxf+10); }
+#define FIELD_2RD(name,dxf) { FIELDG(name.x, RD, dxf); FIELDG(name.y, RD, dxf+10); }
+#define FIELD_2BD(name,dxf) { FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+10); }
+#define FIELD_3RD(name,dxf) { FIELDG(name.x, RD, dxf); FIELDG(name.y, RD, dxf+10); \
+                              FIELDG(name.z, RD,dxf+20); }
+#define FIELD_3BD(name,dxf) { FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+10); \
+                              FIELDG(name.z, BD, dxf+20); }
+#define FIELD_3BD_1(name,dxf) { FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+1); \
+                              FIELDG(name.z, BD, dxf+2); }
+#define FIELD_3DPOINT(name,dxf) FIELD_3BD(name,dxf)
+#define FIELD_TIMEBLL(name,dxf) \
   { _obj->name = bit_read_TIMEBLL(dat);                                  \
     LOG_TRACE(#name ": " FORMAT_BL "." FORMAT_BL "\n", _obj->name.days, _obj->name.ms); }
-#define FIELD_CMC(name) \
+#define FIELD_CMC(name,dxf) \
   { bit_read_CMC(dat, &_obj->name); \
     LOG_TRACE(#name ": index %d\n", _obj->name.index); }
 
 //FIELD_VECTOR_N(name, type, size):
 // reads data of the type indicated by 'type' 'size' times and stores
 // it all in the vector called 'name'.
-#define FIELD_VECTOR_N(name, type, size)\
+#define FIELD_VECTOR_N(name, type, size, dxf) \
   if (size>0)\
     {\
       _obj->name = (BITCODE_##type*) malloc(size * sizeof(BITCODE_##type));\
@@ -122,41 +126,42 @@
         }\
     }
 
-#define FIELD_VECTOR(name, type, size) FIELD_VECTOR_N(name, type, _obj->size)
+#define FIELD_VECTOR(name, type, size, dxf) FIELD_VECTOR_N(name, type, _obj->size, dxf)
 
-#define FIELD_2RD_VECTOR(name, size)\
+#define FIELD_2RD_VECTOR(name, size, dxf)                                   \
   _obj->name = (BITCODE_2RD *) malloc(_obj->size * sizeof(BITCODE_2RD));\
   for (vcount=0; vcount< (long)_obj->size; vcount++)\
     {\
-      FIELD_2RD(name[vcount]);\
+      FIELD_2RD(name[vcount], dxf); \
     }
 
-#define FIELD_2DD_VECTOR(name, size)\
+#define FIELD_2DD_VECTOR(name, size, dxf)                                   \
   _obj->name = (BITCODE_2RD *) malloc(_obj->size * sizeof(BITCODE_2RD));\
   FIELD_2RD(name[0]);\
   for (vcount = 1; vcount < (long)_obj->size; vcount++)\
     {\
-      FIELD_2DD(name[vcount], FIELD_VALUE(name[vcount - 1].x), FIELD_VALUE(name[vcount - 1].y));\
+      FIELD_2DD(name[vcount], FIELD_VALUE(name[vcount - 1].x), FIELD_VALUE(name[vcount - 1].y), dxf); \
     }
 
-#define FIELD_3DPOINT_VECTOR(name, size)\
+#define FIELD_3DPOINT_VECTOR(name, size, dxf)                               \
   _obj->name = (BITCODE_3DPOINT *) malloc(_obj->size * sizeof(BITCODE_3DPOINT));\
   for (vcount=0; vcount < (long)_obj->size; vcount++) \
     {\
-      FIELD_3DPOINT(name[vcount]);\
+      FIELD_3DPOINT(name[vcount], dxf); \
     }
 
-#define HANDLE_VECTOR_N(name, size, code)\
+#define HANDLE_VECTOR_N(name, size, code, dxf) \
   FIELD_VALUE(name) = (BITCODE_H*) malloc(sizeof(BITCODE_H) * size);\
   for (vcount=0; vcount < (long)size; vcount++) \
     {\
-      FIELD_HANDLE_N(name[vcount], vcount, code); \
+      FIELD_HANDLE_N(name[vcount], vcount, code, dxf);  \
     }
 
-#define HANDLE_VECTOR(name, sizefield, code) HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code)
+#define HANDLE_VECTOR(name, sizefield, code, dxf) \
+  HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code, dxf)
 
 //skip non-zero bytes and a terminating zero
-#define FIELD_INSERT_COUNT(insert_count, type)   \
+#define FIELD_INSERT_COUNT(insert_count, type, dxf) \
       FIELD_VALUE(insert_count)=0; \
       while (bit_read_RC(dat)) \
         {\
@@ -171,14 +176,14 @@
   FIELD_VALUE(reactors) = (BITCODE_H*) malloc(sizeof(BITCODE_H) * obj->tio.object->num_reactors);\
   for (vcount=0; vcount < (long)obj->tio.object->num_reactors; vcount++) \
     {\
-      FIELD_HANDLE_N(reactors[vcount], vcount, code);      \
+      FIELD_HANDLE_N(reactors[vcount], vcount, code, -5);  \
     }
 
 #define ENT_REACTORS(code)\
   FIELD_VALUE(reactors) = (BITCODE_H*) malloc(sizeof(BITCODE_H) * obj->tio.entity->num_reactors);\
   for (vcount=0; vcount < obj->tio.entity->num_reactors; vcount++)\
     {\
-      FIELD_HANDLE_N(reactors[vcount], vcount, code);\
+      FIELD_HANDLE_N(reactors[vcount], vcount, code, -5);  \
     }
 
 #define XDICOBJHANDLE(code)\
@@ -186,12 +191,12 @@
     {\
       if (!obj->tio.object->xdic_missing_flag)\
         {\
-          FIELD_HANDLE(xdicobjhandle, code);  \
+          FIELD_HANDLE(xdicobjhandle, code, 0);\
         }\
     }\
   PRIOR_VERSIONS\
     {\
-      FIELD_HANDLE(xdicobjhandle, code);      \
+      FIELD_HANDLE(xdicobjhandle, code, 0); \
     }
 
 #define ENT_XDICOBJHANDLE(code)\
