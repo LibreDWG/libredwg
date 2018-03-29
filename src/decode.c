@@ -239,8 +239,8 @@ dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
   return -1;
 }
 
-// we put the 3x 10 table nums into sections.
-// number is the number of elements in the table.
+// We put the 3x 10 table fields into sections.
+// number is the number of elements in the table. >=r13 it is not.
 static void
 decode_preR13_section_ptr(const char* name, Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
 {
@@ -261,24 +261,230 @@ decode_preR13_section_chk(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dw
 #define CMP(f,type) if (tbl->f != f) LOG_ERROR("decode_preR13_section_chk %s %s", tbl->name, #f);
   //LOG_ERROR(name "->" #f " " FORMAT_##type " != " #f " " FORMAT_##type)
   BITCODE_RS id1, size;
-  BITCODE_RL address;
+  BITCODE_RL address, number;
   id1 = bit_read_RS(dat);
   size = bit_read_RS(dat); CMP(size, RS)
-  tbl->number = (BITCODE_RL)bit_read_RS(dat); CMP(size, RL)
+  number = (BITCODE_RL)bit_read_RS(dat); CMP(number, RL)
   address = bit_read_RL(dat); CMP(address, RL)
 #undef CMP
-  LOG_TRACE("chk table %-8s [%2d]: size:%-4u nr:%-3ld (0x%x-0x%lx)\n",
-            tbl->name, id, tbl->size, tbl->number, tbl->address,
-            (long)(tbl->address + tbl->number * tbl->size))
+  LOG_TRACE("chk table %-8s [%2d]: size:%-4u nr:%-3ld (0x%x)\n",
+            tbl->name, id, size, tbl->number, address)
 }
 
+// TABLES really
 static void
 decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
 {
   Dwg_Section *tbl = &dwg->header.section[id];
-  LOG_TRACE("contents table %-8s [%2d]: size:%-4u nr:%-3ld (0x%x-0x%lx)\n",
+  int i; long vcount;
+  long unsigned int num = dwg->num_objects;
+  long unsigned int old_size = num * sizeof(Dwg_Object);
+  long unsigned int size = tbl->number * sizeof(Dwg_Object);
+  long unsigned int pos;
+
+  LOG_TRACE("\ncontents table %-8s [%2d]: size:%-4u nr:%-3ld (0x%x-0x%lx)\n",
             tbl->name, id, tbl->size, tbl->number, tbl->address,
             (long)(tbl->address + tbl->number * tbl->size))
+  dat->byte = tbl->address;
+  dwg->object = realloc(dwg->object, old_size + size);
+
+  // TODO: move to a spec dwg_r11.spec, and dwg_decode_r11_NAME
+#define PREP_TABLE(name)\
+  Dwg_Object *obj = &dwg->object[num + i];                              \
+  Dwg_Object_##name *_obj = calloc (1, sizeof(Dwg_Object_##name));      \
+  obj->tio.object = calloc (1, sizeof(Dwg_Object_Object));              \
+  obj->tio.object->tio.name = _obj;                                     \
+  obj->tio.object->object = obj;                                        \
+  obj->parent = dwg;                                                    \
+  LOG_TRACE("\n-- table entry " #name " [%d]:\n", i)
+
+#define CHK_ENDPOS \
+  pos = tbl->address + (i+1) * tbl->size;\
+  if ((long)(pos - dat->byte) != 2) \
+    {\
+      LOG_WARN("offset %ld", pos - dat->byte);\
+    }\
+  dat->byte = pos
+
+  switch (id)
+    {
+
+    case SECTION_BLOCK:
+      for (i=0; i < tbl->number; i++)
+        {
+          PREP_TABLE (BLOCK_HEADER);
+
+          FIELD_RC (flag);
+          FIELD_TF (entry_name, 32);
+          FIELD_RS (used);
+          FIELD_RC (block_scaling);
+          FIELD_RS (owned_object_count);
+          FIELD_RC (flag2);
+          FIELD_RS (insert_count);
+          FIELD_RS (flag3);
+          CHK_ENDPOS;
+        }
+      break;
+
+    case SECTION_LAYER:
+      for (i=0; i < tbl->number; i++)
+        {
+          PREP_TABLE (LAYER);
+
+          FIELD_RC (flag);
+          FIELD_TF (entry_name, 32);
+          FIELD_RS (used);
+          FIELD_RS (color_rs);   // color
+          FIELD_RS (style_rs);   // style
+          CHK_ENDPOS;
+        }
+      break;
+
+    // was a text STYLE table, became a SHAPEFILE object
+    case SECTION_STYLE:
+      for (i=0; i < tbl->number; i++)
+        {
+          PREP_TABLE (SHAPEFILE);
+
+          FIELD_RC (flag);
+          FIELD_TF (entry_name, 32);
+          FIELD_RS (used);
+          FIELD_RD (fixed_height);
+          FIELD_RD (width_factor);
+          FIELD_RD (oblique_ang);
+          FIELD_RC (generation);
+          FIELD_RD (last_height);
+          FIELD_TF (font_name, 128);
+          CHK_ENDPOS;
+        }
+      break;
+
+    case SECTION_LTYPE:
+      for (i=0; i < tbl->number; i++)
+        {
+          PREP_TABLE (LTYPE);
+
+          FIELD_RC (flag);
+          FIELD_TF (entry_name, 32);
+          FIELD_RS (used);
+          FIELD_TF (description, 48);
+          FIELD_RC (alignment);
+          FIELD_RC (num_dashes);
+          FIELD_VECTOR (dashes_r11, RD, num_dashes);
+          // ... 106 byte
+
+          CHK_ENDPOS;
+        }
+      break;
+
+    case SECTION_VIEW:
+      for (i=0; i< tbl->number; i++)
+        {
+          PREP_TABLE (VIEW);
+
+          FIELD_RC (flag);
+          FIELD_TF (entry_name, 32);
+          FIELD_RS (used);
+          FIELD_RD (height);
+          FIELD_2RD (center);
+          FIELD_RD (width);
+          FIELD_2RD (target);
+          FIELD_2RD (direction);
+          FIELD_RS (view_mode);   // 71
+          FIELD_RD (lens_length); // 42
+          FIELD_RD (front_clip);  // 43
+          FIELD_RD (back_clip);   // 44
+          FIELD_RD (twist_angle); // 50
+          CHK_ENDPOS;
+        }
+      break;
+
+    case SECTION_UCS:
+      for (i=0; i< tbl->number; i++)
+        {
+          PREP_TABLE (UCS);
+
+          FIELD_RC (flag);
+          FIELD_TF (entry_name, 32);
+          FIELD_RS (used);
+          FIELD_2RD (origin);      // 10
+          FIELD_2RD (x_direction); // 11
+          FIELD_2RD (y_direction); // 12
+
+          CHK_ENDPOS;
+        }
+      break;
+
+    case SECTION_VPORT:
+      for (i=0; i< tbl->number; i++)
+        {
+          PREP_TABLE (VPORT);
+
+          FIELD_RC (flag);
+          FIELD_TF (entry_name, 32);
+          FIELD_RS (used);
+          FIELD_2RD (lower_left); // 10
+          FIELD_2RD (upper_right);// 11
+          FIELD_2RD (view_target);// 17
+          FIELD_2RD (VIEWDIR);    // 16 FIXME
+          FIELD_RD (SNAPANG);     // 50
+          FIELD_RD (VIEWSIZE);    // 40
+          FIELD_2RD (VIEWCTR);    // 12
+          FIELD_RD (aspect_ratio);// 41
+          FIELD_RD (lens_length); // 42
+          FIELD_RD (front_clip);  // 43
+          FIELD_RD (back_clip);   // 44
+          FIELD_RS (view_mode);   // 71
+          FIELD_RS (circle_zoom); // 72
+          FIELD_RS (FASTZOOM);    // 73
+          FIELD_RS (UCSICON);     // 74
+          FIELD_RS (SNAPMODE);    // 75
+          FIELD_RS (GRIDMODE);    // 76
+          FIELD_RS (SNAPSTYLE);   // 77
+          FIELD_RS (SNAPISOPAIR); // 78
+          // ... 74 byte
+
+          CHK_ENDPOS;
+        }
+      break;
+
+    case SECTION_APPID:
+      for (i=0; i< tbl->number; i++)
+        {
+          PREP_TABLE (APPID);
+
+          FIELD_RC (flag);
+          FIELD_TF (entry_name, 32);
+          FIELD_RS (used);
+          CHK_ENDPOS;
+        }
+      break;
+
+    case SECTION_DIMSTYLE:
+      for (i=0; i< tbl->number; i++)
+        {
+          PREP_TABLE (DIMSTYLE);
+
+          FIELD_RC (flag);
+          FIELD_TF (entry_name, 32);
+          FIELD_RS (used);
+          //...
+          CHK_ENDPOS;
+        }
+      break;
+
+    case SECTION_P13:
+      if (tbl->number) {
+        LOG_WARN("Unknown P13 table");
+      }
+      break;
+
+    default:
+      LOG_ERROR("Invalid table id %d", id);
+      break;
+    }
+  dwg->num_objects += tbl->number;
+  dat->byte = tbl->address + (tbl->number * tbl->size);
 }
 
 static void

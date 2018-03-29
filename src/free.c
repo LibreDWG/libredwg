@@ -77,6 +77,7 @@ static Bit_Chain *dat = &pdat;
       FIELD_VALUE(name) = NULL; \
     }
 
+#define FIELD_TF(name,len) FIELD_TV(name)
 #define FIELD_T FIELD_TV /*TODO: implement version dependant string fields */
 #define FIELD_BT(name)
 #define FIELD_4BITS(name)

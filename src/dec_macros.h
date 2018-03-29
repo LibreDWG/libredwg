@@ -81,6 +81,9 @@
 #define FIELD_RLL(name) FIELD(name, RLL);
 #define FIELD_MC(name) FIELD(name, MC);
 #define FIELD_MS(name) FIELD(name, MS);
+#define FIELD_TF(name,len) \
+  _obj->name = bit_read_TF(dat,len); \
+  FIELD_TRACE(name, TF)
 #define FIELD_TV(name) FIELD(name, TV);
 #define FIELD_T FIELD_TV /*TODO: implement version dependant string fields */
 #define FIELD_BT(name) FIELD(name, BT);

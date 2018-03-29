@@ -978,6 +978,35 @@ bit_write_CRC(Bit_Chain * dat, long unsigned int start_address,
   return (crc);
 }
 
+/** Read fixed text. After usage, the allocated memory must be properly freed.
+ *  preR11
+ */
+BITCODE_TF
+bit_read_TF(Bit_Chain * dat, int length)
+{
+  int i;
+  unsigned char *chain;
+
+  chain = malloc(length+1);
+  for (i = 0; i < length; i++)
+    {
+      chain[i] = bit_read_RC(dat);
+    }
+  chain[i] = '\0';
+
+  return (char*)chain;
+}
+
+/** Write fixed text.
+ */
+void
+bit_write_TF(Bit_Chain * dat, char *chain, int length)
+{
+  int i;
+  for (i = 0; i < length; i++)
+    bit_write_RC(dat, (unsigned char)chain[i]);
+}
+
 /** Read simple text. After usage, the allocated memory must be properly freed.
  */
 BITCODE_TV

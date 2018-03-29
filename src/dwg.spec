@@ -2113,7 +2113,7 @@ DWG_OBJECT(VIEW);
   FIELD_3BD(target);
   FIELD_3BD(direction);
   FIELD_BD(twist_angle);
-  FIELD_BD(lens_legth);
+  FIELD_BD(lens_length);
   FIELD_BD(front_clip);
   FIELD_BD(back_clip);
   FIELD(view_mode, 4BITS);
@@ -4148,7 +4148,7 @@ DWG_ENTITY(MLEADER);
 
   FIELD_BD (ctx.scale);
   FIELD_3BD (ctx.content_base);
-  FIELD_BD (ctx.text_heigth);
+  FIELD_BD (ctx.text_height);
   FIELD_BD (ctx.arrow_size);
   FIELD_BD (ctx.landing_gap);
   FIELD_BS (ctx.text_left);

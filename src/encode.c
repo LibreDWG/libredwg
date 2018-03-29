@@ -90,6 +90,9 @@ static bool env_var_checked_p;
 #define FIELD_TV(name) \
   IF_ENCODE_FROM_EARLIER { _obj->name = strdup(""); } FIELD(name, TV);
 #define FIELD_T FIELD_TV /*TODO: implement version dependant string fields */
+#define FIELD_TF(name,len) \
+  bit_write_TF(dat, _obj->name, len); \
+  FIELD_TRACE(name, type)
 #define FIELD_BT(name) FIELD(name, BT);
 
 #define FIELD_DD(name, _default) bit_write_DD(dat, FIELD_VALUE(name), _default);

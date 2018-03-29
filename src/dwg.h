@@ -102,6 +102,8 @@ extern "C" {
 # define FORMAT_RLL "%lu"
 # define FORMAT_BLL "%lu"
 #endif
+#define BITCODE_TF char *
+#define FORMAT_TF "\"%s\""
 #define BITCODE_TV char *
 #define FORMAT_TV "\"%s\""
 #define BITCODE_BT BITCODE_DOUBLE
@@ -1525,7 +1527,11 @@ typedef struct _dwg_object_BLOCK_CONTROL
 typedef struct _dwg_object_BLOCK_HEADER
 {
   BITCODE_BL __iterator;
+  BITCODE_RC flag;  /* preR13 */
   BITCODE_TV entry_name;
+  BITCODE_RC used;  /* preR13 */
+  BITCODE_RC flag2; /* preR13 */
+  BITCODE_RC flag3; /* preR13 */
   BITCODE_B _64_flag;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
@@ -1573,7 +1579,9 @@ typedef struct _dwg_object_LAYER_CONTROL
  */
 typedef struct _dwg_object_LAYER
 {
+  BITCODE_RC flag; /* preR13 */
   BITCODE_TV entry_name;
+  BITCODE_RC used; /* preR13 */
   BITCODE_B _64_flag;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
@@ -1583,6 +1591,8 @@ typedef struct _dwg_object_LAYER
   BITCODE_B locked;
   BITCODE_BS values;
   BITCODE_CMC color;
+  BITCODE_RS color_rs; /* preR13 */
+  BITCODE_RS style_rs; /* preR13 */
   BITCODE_H layer_control;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
@@ -1606,10 +1616,13 @@ typedef struct _dwg_object_SHAPEFILE_CONTROL
 
 /**
  Struct for SHAPEFILE (53)
+ preR13 this was called the STYLE table. In R14 DXF still as STYLE
  */
 typedef struct _dwg_object_SHAPEFILE
 {
+  BITCODE_RC flag; /* preR13 */
   BITCODE_TV entry_name;
+  BITCODE_RC used; /* preR13 */
   BITCODE_B _64_flag;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
@@ -1659,7 +1672,9 @@ typedef struct _ltype_dash{
 
 typedef struct _dwg_object_LTYPE
 {
+  BITCODE_RC flag; /* preR13 */
   BITCODE_TV entry_name;
+  BITCODE_RC used; /* preR13 */
   BITCODE_B _64_flag;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
@@ -1668,6 +1683,7 @@ typedef struct _dwg_object_LTYPE
   BITCODE_RC alignment;
   BITCODE_RC num_dashes;
   LTYPE_dash* dash;
+  BITCODE_RD* dashes_r11;
   BITCODE_RC* strings_area;
   BITCODE_H linetype_control;
   BITCODE_H* reactors;
@@ -1695,7 +1711,9 @@ typedef struct _dwg_object_VIEW_CONTROL
  */
 typedef struct _dwg_object_VIEW
 {
+  BITCODE_RC flag; /* preR13 */
   BITCODE_TV entry_name;
+  BITCODE_RC used; /* preR13 */
   BITCODE_B _64_flag;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
@@ -1705,7 +1723,7 @@ typedef struct _dwg_object_VIEW
   BITCODE_3BD target;
   BITCODE_3BD direction;
   BITCODE_BD twist_angle;
-  BITCODE_BD lens_legth;
+  BITCODE_BD lens_length;
   BITCODE_BD front_clip;
   BITCODE_BD back_clip;
   BITCODE_4BITS view_mode;
@@ -1743,7 +1761,9 @@ typedef struct _dwg_object_UCS_CONTROL
  */
 typedef struct _dwg_object_UCS
 {
+  BITCODE_RC flag; /* preR13 */
   BITCODE_TV entry_name;
+  BITCODE_RC used; /* preR13 */
   BITCODE_B _64_flag;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
@@ -1777,7 +1797,9 @@ typedef struct _dwg_object_VPORT_CONTROL
  */
 typedef struct _dwg_object_VPORT
 {
+  BITCODE_RC flag; /* preR13 */
   BITCODE_TV entry_name;
+  BITCODE_RC used; /* preR13 */
   BITCODE_B _64_flag;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
@@ -1802,6 +1824,7 @@ typedef struct _dwg_object_VPORT
   BITCODE_B UCSFOLLOW;
   BITCODE_BS circle_zoom;
   BITCODE_B FASTZOOM;
+  BITCODE_RS UCSICON; /* preR13 */
   BITCODE_B UCSICON_0;
   BITCODE_B UCSICON_1;
   BITCODE_B GRIDMODE;
@@ -1848,7 +1871,9 @@ typedef struct _dwg_object_APPID_CONTROL
  */
 typedef struct _dwg_object_APPID
 {
+  BITCODE_RC flag; /* preR13 */
   BITCODE_TV entry_name;
+  BITCODE_RC used; /* preR13 */
   BITCODE_B _64_flag;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
@@ -1876,7 +1901,9 @@ typedef struct _dwg_object_DIMSTYLE_CONTROL
  */
 typedef struct _dwg_object_DIMSTYLE
 {
+  BITCODE_RC flag; /* preR13 */
   BITCODE_TV entry_name;
+  BITCODE_RC used; /* preR13 */
   BITCODE_B _64_flag;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
@@ -2345,7 +2372,7 @@ typedef struct
 
   BITCODE_BD scale;
   BITCODE_3BD content_base;
-  BITCODE_BD text_heigth;
+  BITCODE_BD text_height;
   BITCODE_BD arrow_size;
   BITCODE_BD landing_gap;
   BITCODE_BS text_left;
@@ -3519,7 +3546,7 @@ typedef enum DWG_SECTION_TYPE_R11
 
 typedef struct _dwg_section
 {
-  long number; // preR11: count of entries
+  long number; /* preR13: count of entries */
   BITCODE_RL address;
   BITCODE_RL size;
   BITCODE_RL parent;
