@@ -359,7 +359,10 @@ dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
 void
 dwg_free_object(Dwg_Object *obj)
 {
-  dat->version = obj->parent->header.version;
+  if (obj->parent)
+    dat->version = obj->parent->header.version;
+  else
+    return;
   dat->from_version = dat->version;
   switch (obj->type)
     {
@@ -601,7 +604,9 @@ dwg_free_object(Dwg_Object *obj)
     default:
       if (obj->type == obj->parent->layout_number)
         {
-          dwg_free_LAYOUT(obj);
+          SINCE(R_13) {
+            dwg_free_LAYOUT(obj);
+          }
         }
       /* > 500:
          TABLE, DICTIONARYWDLFT, IDBUFFER, IMAGE, IMAGEDEF, IMAGEDEF_REACTOR,
