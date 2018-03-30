@@ -142,7 +142,7 @@
 
 #define FIELD_2DD_VECTOR(name, size, dxf)                                   \
   _obj->name = (BITCODE_2RD *) malloc(_obj->size * sizeof(BITCODE_2RD));\
-  FIELD_2RD(name[0]);\
+  FIELD_2RD(name[0], dxf);                                                  \
   for (vcount = 1; vcount < (long)_obj->size; vcount++)\
     {\
       FIELD_2DD(name[vcount], FIELD_VALUE(name[vcount - 1].x), FIELD_VALUE(name[vcount - 1].y), dxf); \

@@ -33,6 +33,10 @@
 #define IF_ENCODE_FROM_PRE_R13 if (0)
 #endif
 
+#ifndef IS_FREE
+#define VECTOR_FREE(field)
+#endif
+
 #define COMMON_TABLE_FLAGS \
   PRE(R_13) \
   { \

@@ -77,7 +77,7 @@ static Bit_Chain *dat = &pdat;
       FIELD_VALUE(name) = NULL; \
     }
 
-#define FIELD_TF(name,len) FIELD_TV(name,dxf)
+#define FIELD_TF(name,len,dxf) FIELD_TV(name,dxf)
 #define FIELD_T FIELD_TV /*TODO: implement version dependant string fields */
 #define FIELD_BT(name,dxf) FIELD(name, BT);
 #define FIELD_4BITS(name,dxf) {}
@@ -107,8 +107,11 @@ static Bit_Chain *dat = &pdat;
 #define FIELD_3DPOINT_VECTOR(name, size, dxf) FIELD_TV(name,dxf)
 #define HANDLE_VECTOR_N(name, size, code, dxf) if (size) { FIELD_TV(name,dxf) }
 #define HANDLE_VECTOR(name, sizefield, code, dxf) if (_obj->sizefield) { FIELD_TV(name,dxf) }
-#define FIELD_INSERT_COUNT(insert_count, type)
+#define FIELD_INSERT_COUNT(insert_count, type, dxf)
 #define FIELD_XDATA(name, size)
+
+//#undef VECTOR_FREE
+#define VECTOR_FREE(field) FIELD_TV(field,0)
 
 #define REACTORS(code) FIELD_TV(reactors,0)
 #define ENT_REACTORS(code) FIELD_TV(reactors,0)
@@ -117,24 +120,24 @@ static Bit_Chain *dat = &pdat;
     {\
       if (!obj->tio.object->xdic_missing_flag)\
         {\
-          FIELD_HANDLE(xdicobjhandle, code);  \
+          FIELD_HANDLE(xdicobjhandle, code, 0); \
         }\
     }\
   PRIOR_VERSIONS\
     {\
-      FIELD_HANDLE(xdicobjhandle, code);      \
+      FIELD_HANDLE(xdicobjhandle, code, 0); \
     }
 #define ENT_XDICOBJHANDLE(code)\
   SINCE(R_2004)\
     {\
       if (!obj->tio.entity->xdic_missing_flag)\
         {\
-          FIELD_HANDLE(xdicobjhandle, code);  \
+          FIELD_HANDLE(xdicobjhandle, code, 0); \
         }\
     }\
   PRIOR_VERSIONS\
     {\
-      FIELD_HANDLE(xdicobjhandle, code);      \
+      FIELD_HANDLE(xdicobjhandle, code, 0); \
     }
 
 #define REPEAT_N(times, name, type) \

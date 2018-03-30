@@ -1995,7 +1995,12 @@ typedef struct _dwg_object_DIMSTYLE
   BITCODE_BS DIMALTZ;
   BITCODE_BS DIMALTTZ;
   BITCODE_BS DIMATFIT;
-  BITCODE_B DIMFXLON;
+  BITCODE_B DIMFXLON;	/* r2007+ */
+  BITCODE_B  DIMTXTDIRECTION; /* r2010+ */
+  BITCODE_BD DIMALTMZF;	/* r2010+ */
+  BITCODE_T  DIMALTMZS;	/* r2010+ */
+  BITCODE_BD DIMMZF;	/* r2010+ */
+  BITCODE_T  DIMMZS;	/* r2010+ */
   BITCODE_BS DIMLWD;
   BITCODE_BS DIMLWE;
 
@@ -2037,7 +2042,7 @@ typedef struct _dwg_object_VP_ENT_HDR
   BITCODE_B _64_flag;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
-  BITCODE_B one_flag;
+  BITCODE_B flag1;
   BITCODE_H vp_ent_ctrl;
   BITCODE_H xdicobjhandle;
   BITCODE_H xref_handle;
@@ -2103,8 +2108,7 @@ typedef struct _dwg_entity_OLE2FRAME
  */
 typedef struct _dwg_entity_DUMMY
 {
-  BITCODE_BS flags;
-  /* ??? not seen */
+  ; /* ??? not seen */
 } Dwg_Entity_DUMMY;
 
 /**
@@ -2112,8 +2116,7 @@ typedef struct _dwg_entity_DUMMY
  */
 typedef struct _dwg_entity_LONG_TRANSACTION
 {
-  BITCODE_BS flags;
-  /* ??? not seen */
+  ; /* ??? not seen */
 } Dwg_Entity_LONG_TRANSACTION;
 
 /* NOT SURE ABOUT THIS ONE (IS IT OBJECT OR ENTITY?): */
@@ -2168,8 +2171,9 @@ typedef struct _dwg_entity_PROXY_ENTITY
 typedef struct _dwg_object_PROXY
 {
   BITCODE_BL class_id;
-  BITCODE_BL object_drawing_format;
-  BITCODE_B original_data_format;
+  BITCODE_BL version;
+  BITCODE_BL maint_version;
+  BITCODE_B from_dxf;
   BITCODE_RC* data;
   BITCODE_H parenthandle;
   BITCODE_H* reactors;
@@ -2225,8 +2229,11 @@ typedef struct _dwg_entity_HATCH_pathseg
   BITCODE_BL num_control_points;
   BITCODE_BD* knots;
   Dwg_Entity_HATCH_ControlPoint* control_points;
+  BITCODE_BL num_fitpts;
+  BITCODE_2RD *fitpts;
+  BITCODE_2RD start_tangent;
+  BITCODE_2RD end_tangent;
 } Dwg_Entity_HATCH_PathSeg;
-
 
 typedef struct _dwg_entity_HATCH_polylinepath
 {
@@ -2324,9 +2331,17 @@ typedef struct _dwg_object_PLACEHOLDER
  */
 typedef struct
 {
+  BITCODE_3BD start;
+  BITCODE_3BD end;
+} Leader_Break;
+
+typedef struct
+{
   BITCODE_BL num_points;
   BITCODE_3BD * points;
-  BITCODE_BL unknown;
+  BITCODE_BL num_breaks;
+  Leader_Break * breaks;
+  BITCODE_BL segment_index;
   BITCODE_BL index;
 
   BITCODE_BS type;
@@ -2354,15 +2369,17 @@ typedef struct
 
 typedef struct
 {
-  BITCODE_B unknown1;
-  BITCODE_B unknown2;
+  BITCODE_B is_valid;
+  BITCODE_B unknown;
   BITCODE_3BD connection;
   BITCODE_3BD direction;
-  BITCODE_BL unknown3;
-  BITCODE_BL index;
+  BITCODE_BL num_breaks;
+  Leader_Break * breaks;
   BITCODE_BL num_lines;
   Leader_Line * lines;
-
+  BITCODE_BL index;
+  BITCODE_BD landing_distance;
+  /* ... */
   BITCODE_BS attach_dir;
 } Dwg_Leader;
 
@@ -2400,9 +2417,9 @@ typedef struct
       BITCODE_3BD direction;
       BITCODE_BD rotation;
       BITCODE_BD width;
-      BITCODE_BD heigth;
-      BITCODE_BD spacing_factor;
-      BITCODE_H spacing_style;
+      BITCODE_BD height;
+      BITCODE_BD line_spacing_factor;
+      BITCODE_BS line_spacing_style;
       BITCODE_CMC color;
       BITCODE_BS align;
       BITCODE_BS flow;
@@ -2412,13 +2429,14 @@ typedef struct
       BITCODE_B is_bg_fill;
       BITCODE_B is_bg_mask_fill;
       BITCODE_BS col_type;
-      BITCODE_B is_heigth_auto;
-      BITCODE_BD unknown1;
-      BITCODE_BD unknown2;
+      BITCODE_B is_height_auto;
+      BITCODE_BD col_width;
+      BITCODE_BD col_gutter;
       BITCODE_B is_col_flow_reversed;
-      BITCODE_BL unknown3;
-      BITCODE_B word_break1;
-      BITCODE_B word_break2;
+      BITCODE_BL num_col_sizes;
+      BITCODE_BD *col_sizes;
+      BITCODE_B word_break;
+      BITCODE_B unknown;
     } txt;
 
   BITCODE_B has_content_block;
@@ -2695,6 +2713,11 @@ typedef struct _dwg_entity_TABLE_BreakRow
 
 typedef struct _dwg_entity_TABLE
 {
+  BITCODE_RC unknown_rc;
+  BITCODE_H unknown_h;
+  BITCODE_BL unknown_bl;
+  BITCODE_B unknown_b;
+  BITCODE_BL unknown_bl1;
   BITCODE_3BD insertion_point;
   BITCODE_3BD scale;
   BITCODE_BB data_flags;
@@ -2810,6 +2833,19 @@ typedef struct _dwg_entity_TABLE
   BITCODE_H title_row_style_override;
   BITCODE_H header_row_style_override;
   BITCODE_H data_row_style_override;
+
+  BITCODE_BS unknown_bs;
+  BITCODE_3BD hor_dir;
+  BITCODE_BL has_break_data;
+  BITCODE_BL break_flag;
+  BITCODE_BL break_flow_direction;
+  BITCODE_BD break_spacing;
+  BITCODE_BL break_unknown1;
+  BITCODE_BL break_unknown2;
+  BITCODE_BL num_break_heights;
+  Dwg_Entity_TABLE_BreakHeight *break_heights;
+  BITCODE_BL num_break_rows;
+  Dwg_Entity_TABLE_BreakRow *break_rows;
 } Dwg_Entity_TABLE;
 
 typedef struct _dwg_object_LinkedData
@@ -2871,8 +2907,8 @@ typedef struct _dwg_object_TableCell
   BITCODE_BL custom_data;
   BITCODE_BL has_linked_data;
   BITCODE_H  data_link;
-  BITCODE_BL row;
-  BITCODE_BL col;
+  BITCODE_BL num_rows;
+  BITCODE_BL num_cols;
   BITCODE_BL unknown;
   BITCODE_BL num_cell_contents;
   Dwg_Object_TableCellContent *cell_contents;

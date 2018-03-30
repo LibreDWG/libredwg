@@ -69,9 +69,9 @@ static bool env_var_checked_p;
   LOG_TRACE(#name ": " FORMAT_##type "\n", _obj->name)
 #define FIELD_G_TRACE(name,type,dxfgroup) \
   LOG_TRACE(#name ": " FORMAT_##type " " #type " " #dxfgroup "\n", _obj->name)
-#define FIELD_CAST(name,type,cast) \
+#define FIELD_CAST(name,type,cast,dxf)                    \
   { bit_write_##type(dat, (BITCODE_##type)_obj->name); \
-    FIELD_TRACE(name,cast); }
+    FIELD_G_TRACE(name,cast,dxf); }
 
 #define FIELD_VALUE(name) _obj->name
 
@@ -118,7 +118,7 @@ static bool env_var_checked_p;
   { bit_write_TIMEBLL(dat, (BITCODE_TIMEBLL)_obj->name); \
     LOG_TRACE(#name ": " FORMAT_BL "." FORMAT_BL "\n", _obj->name.days, _obj->name.ms); }
 
-#define FIELD_CMC(name)\
+#define FIELD_CMC(name, dxf) \
   {\
     bit_write_CMC(dat, &_obj->name);\
   }
@@ -133,7 +133,7 @@ static bool env_var_checked_p;
     }
 
 #define FIELD_2DD_VECTOR(name, size, dxf)\
-  FIELD_2RD(name[0]);\
+  FIELD_2RD(name[0], dxf); \
   for (vcount = 1; vcount < (long)_obj->size; vcount++)\
     {\
       FIELD_2DD(name[vcount], FIELD_VALUE(name[vcount - 1].x), FIELD_VALUE(name[vcount - 1].y), dxf);\
@@ -277,7 +277,7 @@ static bool env_var_checked_p;
 #define ENT_REACTORS(code)\
   for (vcount=0; vcount < _obj->num_reactors; vcount++)\
     {\
-      FIELD_HANDLE_N(reactors[vcount], vcount, code);      \
+      FIELD_HANDLE_N(reactors[vcount], vcount, code, -5); \
     }
 
 

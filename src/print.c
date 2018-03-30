@@ -76,11 +76,11 @@ static unsigned int cur_ver = 0;
 #define FIELD_RLL(name,dxf) FIELD(name, RLL, dxf);
 #define FIELD_MC(name,dxf) FIELD(name, MC, dxf);
 #define FIELD_MS(name,dxf) FIELD(name, MS, dxf);
-#define FIELD_TF(name,len) FIELD_TRACE(name, TF, dxf)
+#define FIELD_TF(name,len,dxf) FIELD_TRACE(name, TF, dxf)
 #define FIELD_TV(name,dxf) FIELD(name, TV, dxf);
 #define FIELD_T FIELD_TV /*TODO: implement version dependant string fields */
 #define FIELD_BT(name,dxf) FIELD(name, BT, dxf);
-#define FIELD_4BITS(name,dxf) FIELD_TRACE(name,4BITS)
+#define FIELD_4BITS(name,dxf) FIELD_TRACE(name,4BITS,dxf)
 #define FIELD_BE(name,dxf) FIELD_3RD(name,dxf)
 #define FIELD_DD(name, _default, dxf)                                       \
   LOG_TRACE(#name " " #dxf ": " FORMAT_DD ", default: " FORMAT_DD "\n", _obj->name, _default)
@@ -142,8 +142,8 @@ static unsigned int cur_ver = 0;
 #define HANDLE_VECTOR(name, sizefield, code, dxf) \
   HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code, dxf)
 
-#define FIELD_INSERT_COUNT(insert_count, type)   \
-  FIELD_TRACE(insert_count, typex)
+#define FIELD_INSERT_COUNT(insert_count, type, dxf) \
+  FIELD_TRACE(insert_count, type, dxf)
 
 #define FIELD_XDATA(name, size)
 
