@@ -371,7 +371,7 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
           FIELD_RC (flag, 70);
           FIELD_TF (entry_name, 32, 2);
           FIELD_RS (used, 0);
-          FIELD_TF (description, 48);
+          FIELD_TF (description, 48, 3);
           FIELD_RC (alignment, 72);
           FIELD_RC (num_dashes, 73);
           FIELD_VECTOR (dashes_r11, RD, num_dashes, 340);
@@ -413,9 +413,9 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
           FIELD_RC (flag, 70);
           FIELD_TF (entry_name, 32, 2);
           FIELD_RS (used, 0);
-          FIELD_2RD (origin);      // 10
-          FIELD_2RD (x_direction); // 11
-          FIELD_2RD (y_direction); // 12
+          FIELD_2RD (origin, 10);
+          FIELD_2RD (x_direction, 11);
+          FIELD_2RD (y_direction, 12);
 
           CHK_ENDPOS;
         }
@@ -481,7 +481,63 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
           FIELD_RC (flag, 70);
           FIELD_TF (entry_name, 32, 2);
           FIELD_RS (used, 0);
-          //...
+
+          FIELD_RC (DIMTOL, 71);
+          FIELD_RC (DIMLIM, 72);
+          FIELD_RC (DIMTIH, 73);
+          FIELD_RC (DIMTOH, 74);
+          FIELD_RC (DIMSE1, 75);
+          FIELD_RC (DIMSE2, 76);
+          FIELD_RC (DIMALT, 170);
+          FIELD_RC (DIMTOFL, 172);
+          FIELD_RC (DIMSAH, 173);
+          FIELD_RC (DIMTIX, 174);
+          FIELD_RC (DIMSOXD, 175);
+          FIELD_CAST (DIMALTD, RC, BS, 171);
+          FIELD_CAST (DIMZIN, RC, BS, 78);
+          FIELD_RC (DIMSD1, 281);
+          FIELD_RC (DIMSD2, 282);
+          FIELD_CAST (DIMTOLJ, RC, BS, 283);
+          FIELD_CAST (DIMJUST, RC, BS, 280);
+          FIELD_CAST (DIMFIT, RC, BS, 287);
+          FIELD_RC (DIMUPT, 288);
+          FIELD_CAST (DIMTZIN, RC, BS, 284);
+          FIELD_CAST (DIMMALTZ, RC, BS, 285);
+          FIELD_CAST (DIMMALTTZ, RC, BS, 286);
+          FIELD_CAST (DIMTAD, RC, BS, 77);
+          FIELD_RS (DIMUNIT, 270);
+          FIELD_RS (DIMAUNIT, 275);
+          FIELD_RS (DIMDEC, 271);
+          FIELD_RS (DIMTDEC, 272);
+          FIELD_RS (DIMALTU, 273);
+          FIELD_RS (DIMALTTD, 274);
+          FIELD_RD (DIMSCALE, 40);
+          FIELD_RD (DIMASZ, 41);
+          FIELD_RD (DIMEXO, 42);
+          FIELD_RD (DIMDLI, 43);
+          FIELD_RD (DIMEXE, 44);
+          FIELD_RD (DIMRND, 45);
+          FIELD_RD (DIMDLE, 46);
+          FIELD_RD (DIMTP, 47);
+          FIELD_RD (DIMTM, 48);
+          FIELD_RD (DIMTXT, 140);
+          FIELD_RD (DIMCEN, 141);
+          FIELD_RD (DIMTSZ, 142);
+          FIELD_RD (DIMALTF, 143);
+          FIELD_RD (DIMLFAC, 144);
+          FIELD_RD (DIMTVP, 145);
+          FIELD_RD (DIMTFAC, 146);
+          FIELD_RD (DIMGAP, 147);
+          FIELD_T (DIMPOST, 3);
+          FIELD_T (DIMAPOST, 4); //??
+          FIELD_T (DIMBLK_T, 5);
+          FIELD_T (DIMBLK1_T, 6);
+          FIELD_T (DIMBLK2_T, 7);
+          FIELD_RC (DIMCLRD_C, 176);
+          FIELD_RC (DIMCLRE_C, 177);
+          FIELD_RC (DIMCLRT_C, 178);
+
+          //??
           CHK_ENDPOS;
         }
       break;
@@ -506,7 +562,32 @@ decode_preR13_entities(unsigned long start, unsigned long end, unsigned long off
 {
   LOG_TRACE("entities: (0x%lx-0x%lx) TODO\n", start, end)
   //_obj, obj
+
+  /* TODO Common entity preR13 header:
+    FIELD_RC (flag, 70);
+    FIELD_RS (size, 0);
+    FIELD_RS (layer, 0);
+    FIELD_RS (opts, 0);
+    if (FIELD_VALUE(flag) & 1)
+      FIELD_RC (color, 60);
+    if (FIELD_VALUE(flag) & 0x40)
+      FIELD_RC (extra, 0);
+    if (FIELD_VALUE(extra) & 2)
+      decode_eed();
+    if (FIELD_VALUE(flag) & 2)
+      FIELD_RS (type, 0);
+    if (FIELD_VALUE(flag) & 4 && kind > 2 && kind != 22)
+      FIELD_RD (elevation/pt.z, 30);
+    if (FIELD_VALUE(flag) & 8)
+      FIELD_RD (thickness, 39);
+    if (FIELD_VALUE(flag) & 0x20)
+      FIELD_HANDLE (handle, 0, 0);
+    if (FIELD_VALUE(extra) & 4)
+      FIELD_RS (paper, 0);
+    */
+    
   //#include "dwg.spec"
+
   dat->byte = end;
 }
 
@@ -1044,8 +1125,8 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
       pvzadr = dat->byte;
       LOG_TRACE("pvzadr: %lx\n", pvzadr)
 
-      FIELD_RL(size);
-      FIELD_BL(address);
+      FIELD_RL(size, 0);
+      FIELD_BL(address, 0);
 
       // AC1012, AC1014 or AC1015. This is a char[11], zero padded.
       // with \n at 12.
@@ -1054,7 +1135,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
       LOG_TRACE("version: %s\n", _obj->version)
       for (i = 0; i < 4; i++)
         {
-          FIELD_B(null_b[i]);
+          FIELD_B(null_b[i], 0);
         }
 
       // documented as 0x18,0x78,0x01,0x04 for R13, 0x18,0x78,0x01,0x05 for R14
@@ -1062,7 +1143,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
       // also: 10 7d f4 78 on 2004
       for (i = 0; i < 4; i++)
         {
-          FIELD_RC(unknown_rc4[i]);
+          FIELD_RC(unknown_rc4[i], 0);
         }
 
       UNTIL (R_2000) {
@@ -1073,29 +1154,29 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
         _obj->num_sections = 4;
         for (i = 0; i < _obj->num_sections; i++)
           {
-            FIELD_RC(sections[i].nr);
-            FIELD_BL(sections[i].address);
-            FIELD_BL(sections[i].size);
+            FIELD_RC(sections[i].nr, 0);
+            FIELD_BL(sections[i].address, 0);
+            FIELD_BL(sections[i].size, 0);
           }
 
-        FIELD_BS(num_handlers); // 14, resp. 16 in r14
+        FIELD_BS(num_handlers, 0); // 14, resp. 16 in r14
         if (FIELD_VALUE(num_handlers) > 16) {
           LOG_ERROR("Second header num_handlers > 16: %d\n", FIELD_VALUE(num_handlers));
           FIELD_VALUE(num_handlers) = 14;
         }
         for (i = 0; i < FIELD_VALUE(num_handlers); i++)
           {
-            FIELD_RC(handlers[i].size);
-            FIELD_RC(handlers[i].nr);
-            FIELD_VECTOR(handlers[i].data, RC, handlers[i].size);
+            FIELD_RC(handlers[i].size, 0);
+            FIELD_RC(handlers[i].nr, 0);
+            FIELD_VECTOR(handlers[i].data, RC, handlers[i].size, 0);
           }
 
         // Check CRC-on
         ckr = bit_read_CRC(dat);
 
         VERSION(R_14) {
-          FIELD_RL(junk_r14_1);
-          FIELD_RL(junk_r14_2);
+          FIELD_RL(junk_r14_1, 0);
+          FIELD_RL(junk_r14_2, 0);
         }
       }
       if (bit_search_sentinel(dat, dwg_sentinel(DWG_SENTINEL_SECOND_HEADER_END)))
@@ -2362,7 +2443,7 @@ dwg_decode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg)
       if (obj)
         {
           LOG_ERROR(
-            "Could not read handleref in object whose handle is: %d.%d.%lu",
+            "Could not read handleref from object whose handle is: %d.%d.%lu",
             obj->handle.code, obj->handle.size, obj->handle.value)
         }
       else
@@ -2373,8 +2454,8 @@ dwg_decode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg)
       return NULL;
     }
 
-  // if the handle size is 0, it is probably a null handle. It
-  // shouldn't be placed in the object ref vector
+  // If the handle size is 0, it is probably a null handle.
+  // It shouldn't be placed in the object ref vector
   if (ref->handleref.size)
     {
       // Reserve memory space for object references
@@ -2411,13 +2492,12 @@ dwg_decode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg)
     }
 
   /*
-   * sometimes the code indicates the type of ownership
-   * in other cases the handle is stored as an offset from some other handle
-   * how is it determined?
+   * With TYPEDOBJHANDLE 2-5 the code indicates the type of ownership.
+   * With OFFSETOBJHANDLE >5 the handle is stored as an offset from some other handle.
    */
- switch (ref->handleref.code) //that's right: don't bother the code on the spec.
+ switch (ref->handleref.code)
     {
-    case 0x06: //what if 6 means HARD_OWNER?
+    case 0x06:
       ref->absolute_ref = (obj->handle.value + 1);
       break;
     case 0x08:
@@ -2429,8 +2509,12 @@ dwg_decode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg)
     case 0x0C:
       ref->absolute_ref = (obj->handle.value - ref->handleref.value);
       break;
-    default: //0x02, 0x03, 0x04, 0x05 or none
+    case 2: case 3: case 4: case 5:
       ref->absolute_ref = ref->handleref.value;
+    case 0: // ignore?
+      ref->absolute_ref = ref->handleref.value;
+    default:
+      LOG_WARN("Invalid handle pointer code %d", ref->handleref.code);
       break;
     }
   return ref;
@@ -2445,7 +2529,7 @@ dwg_decode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg)
  *   5 Hard pointer
  *  OFFSETOBJHANDLE for soft owners or pointers:
  *   6 ref + 1
- *   8 ref - 1 
+ *   8 ref - 1
  *   a ref + offset
  *   c ref - offset
  */
@@ -2463,9 +2547,32 @@ dwg_decode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg,
 
   if (ref->absolute_ref == 0 && ref->handleref.code != code)
     {
-      if (code != 2 && code != 4) { // allow OFFSETOBJHANDLE
-        LOG_WARN("Expected a CODE %d handle, got a %d", code, ref->handleref.code)
-      }
+      /*
+       * With TYPEDOBJHANDLE 2-5 the code indicates the type of ownership.
+       * With OFFSETOBJHANDLE >5 the handle is stored as an offset from some other handle.
+       */
+      switch (ref->handleref.code)
+        {
+        case 0x06:
+          ref->absolute_ref = (obj->handle.value + 1);
+          break;
+        case 0x08:
+          ref->absolute_ref = (obj->handle.value - 1);
+          break;
+        case 0x0A:
+          ref->absolute_ref = (obj->handle.value + ref->handleref.value);
+          break;
+        case 0x0C:
+          ref->absolute_ref = (obj->handle.value - ref->handleref.value);
+          break;
+        case 2: case 3: case 4: case 5:
+          ref->absolute_ref = ref->handleref.value;
+        case 0: // ignore (ANYCODE)
+          ref->absolute_ref = ref->handleref.value;
+        default:
+          LOG_WARN("Invalid handle pointer code %d", ref->handleref.code);
+          break;
+        }
     }
   return ref;
 }

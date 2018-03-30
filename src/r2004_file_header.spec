@@ -35,34 +35,34 @@
   }
 
   for (i=0; i<12; i++) {
-    FIELD_RC(file_ID_string[i]);
+    FIELD_RC(file_ID_string[i], 0);
   }
-  FIELD_RL(header_offset);
-  FIELD_RL(header_size);
-  FIELD_RL(x04);
+  FIELD_RL(header_offset, 0);
+  FIELD_RL(header_size, 0);
+  FIELD_RL(x04, 0);
 
-  FIELD_RL(root_tree_node_gap);   // @0x18 - compr_len?
-  FIELD_RL(lowermost_left_tree_node_gap);   // @0x1c
-  FIELD_RL(lowermost_right_tree_node_gap);  // @0x20 - start of 2007_file_header
-  FIELD_RL(unknown_long);         // =1
-  FIELD_RL(last_section_id);      // @0x28 =0x13
-  FIELD_RLL(last_section_address);// @0x2c =0x9c80
-  FIELD_RLL(second_header_address);// @0x34 =0x984b
-  FIELD_RL(gap_amount);           // @0x3c =0
-  FIELD_RL(section_amount);       // @0x40 =0x11
-  FIELD_RL(x20);        // @0x44 =0x20
-  FIELD_RL(x80);        // @0x48 =0x80
-  FIELD_RL(x40);        // @0x4c =0x40
-  FIELD_RL(section_map_id);       // @0x50 =0x13
-  FIELD_RLL(section_map_address); // @0x54 (+ 0x100) =0x97a0
-  FIELD_RL(section_info_id);      // @0x5c
-  FIELD_RL(section_array_size);   // @0x60 =0x13
-  FIELD_RL(gap_array_size);       // @0x64 =0
-  FIELD_RL(CRC);                  // @0x68
+  FIELD_RL(root_tree_node_gap, 0);   // @0x18 - compr_len?
+  FIELD_RL(lowermost_left_tree_node_gap, 0);   // @0x1c
+  FIELD_RL(lowermost_right_tree_node_gap, 0);  // @0x20 - start of 2007_file_header
+  FIELD_RL(unknown_long, 0);         // =1
+  FIELD_RL(last_section_id, 0);      // @0x28 =0x13
+  FIELD_RLL(last_section_address, 0);// @0x2c =0x9c80
+  FIELD_RLL(second_header_address, 0);// @0x34 =0x984b
+  FIELD_RL(gap_amount, 0);           // @0x3c =0
+  FIELD_RL(section_amount, 0);       // @0x40 =0x11
+  FIELD_RL(x20, 0);        // @0x44 =0x20
+  FIELD_RL(x80, 0);        // @0x48 =0x80
+  FIELD_RL(x40, 0);        // @0x4c =0x40
+  FIELD_RL(section_map_id, 0);       // @0x50 =0x13
+  FIELD_RLL(section_map_address, 0); // @0x54 (+ 0x100) =0x97a0
+  FIELD_RL(section_info_id, 0);      // @0x5c
+  FIELD_RL(section_array_size, 0);   // @0x60 =0x13
+  FIELD_RL(gap_array_size, 0);       // @0x64 =0
+  FIELD_RL(CRC, 0);                  // @0x68
   //end of encrypted 0x6c header
 
   //well, the padding is also encrypted, but ODA didnt grok that
   for (i=0; i<(int)sizeof(FIELD_VALUE(padding)); i++) {
-    FIELD_RC(padding[i]); // encrypted via 0
+    FIELD_RC(padding[i], 0); // encrypted via 0
   }
 

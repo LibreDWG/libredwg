@@ -25,9 +25,9 @@
   { _obj->name = bit_read_##type(dat); \
     FIELD_TRACE(name,type); }
 
-#define FIELD_CAST(name,type,cast) \
+#define FIELD_CAST(name,type,cast,dxf)\
   { _obj->name = (BITCODE_##cast)bit_read_##type(dat); \
-    FIELD_TRACE(name,cast); }
+    FIELD_G_TRACE(name,cast,dxf); }
 
 #define FIELD_G_TRACE(name,type,dxfgroup)                               \
   LOG_TRACE(#name ": " FORMAT_##type " " #type " " #dxfgroup "\n", _obj->name)
@@ -73,29 +73,33 @@
 
 #define FIELD_B(name,dxf) FIELDG(name, B, dxf)
 #define FIELD_BB(name,dxf) FIELDG(name, BB, dxf)
-#define FIELD_3B(name,dxf) FIELDG(name, 3B)
-#define FIELD_BS(name,dxf) FIELDG(name, BS)
-#define FIELD_BL(name,dxf) FIELDG(name, BL)
-#define FIELD_BLL(name,dxf) FIELDG(name, BLL)
-#define FIELD_BD(name,dxf) FIELDG(name, BD)
-#define FIELD_RC(name,dxf) FIELDG(name, RC)
-#define FIELD_RS(name,dxf) FIELDG(name, RS)
-#define FIELD_RD(name,dxf) FIELDG(name, RD)
-#define FIELD_RL(name,dxf) FIELDG(name, RL)
-#define FIELD_RLL(name,dxf) FIELDG(name, RLL)
-#define FIELD_MC(name,dxf) FIELDG(name, MC)
-#define FIELD_MS(name,dxf) FIELDG(name, MS)
+#define FIELD_3B(name,dxf) FIELDG(name, 3B, dxf)
+#define FIELD_BS(name,dxf) FIELDG(name, BS, dxf)
+#define FIELD_BL(name,dxf) FIELDG(name, BL, dxf)
+#define FIELD_BLL(name,dxf) FIELDG(name, BLL, dxf)
+#define FIELD_BD(name,dxf) FIELDG(name, BD, dxf)
+#define FIELD_RC(name,dxf) FIELDG(name, RC, dxf)
+#define FIELD_RS(name,dxf) FIELDG(name, RS, dxf)
+#define FIELD_RD(name,dxf) FIELDG(name, RD, dxf)
+#define FIELD_RL(name,dxf) FIELDG(name, RL, dxf)
+#define FIELD_RLL(name,dxf) FIELDG(name, RLL, dxf)
+#define FIELD_MC(name,dxf) FIELDG(name, MC, dxf)
+#define FIELD_MS(name,dxf) FIELDG(name, MS, dxf)
 #define FIELD_TF(name,len,dxf)       \
   { _obj->name = bit_read_TF(dat,len); \
     FIELD_G_TRACE(name, TF, dxf); }
-#define FIELD_TV(name,dxf) FIELDG(name, TV);
+#define FIELD_TV(name,dxf) FIELDG(name, TV, dxf);
 #define FIELD_T FIELD_TV /*TODO: implement version dependant string fields */
-#define FIELD_BT(name,dxf) FIELDG(name, BT);
+#define FIELD_BT(name,dxf) FIELDG(name, BT, dxf);
 #define FIELD_4BITS(name,dxf) _obj->name = bit_read_4BITS(dat);
 
 #define FIELD_BE(name,dxf) bit_read_BE(dat, &_obj->name.x, &_obj->name.y, &_obj->name.z);
-#define FIELD_DD(name, _default, dxf) FIELD_VALUE(name,dxf) = bit_read_DD(dat, _default);
+#define FIELD_DD(name, _default, dxf) FIELD_VALUE(name) = bit_read_DD(dat, _default);
 #define FIELD_2DD(name, d1, d2, dxf) { FIELD_DD(name.x, d1, dxf); FIELD_DD(name.y, d2, dxf+10); }
+#define FIELD_3DD(name, def, dxf) { \
+    FIELD_DD(name.x, FIELD_VALUE(def.x), dxf); \
+    FIELD_DD(name.y, FIELD_VALUE(def.y), dxf+10); \
+    FIELD_DD(name.z, FIELD_VALUE(def.z), dxf+20); }
 #define FIELD_2RD(name,dxf) { FIELDG(name.x, RD, dxf); FIELDG(name.y, RD, dxf+10); }
 #define FIELD_2BD(name,dxf) { FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+10); }
 #define FIELD_2BD_1(name,dxf) { FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+1); }
@@ -104,7 +108,7 @@
 #define FIELD_3BD(name,dxf) { FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+10); \
                               FIELDG(name.z, BD, dxf+20); }
 #define FIELD_3BD_1(name,dxf) { FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+1); \
-                              FIELDG(name.z, BD, dxf+2); }
+                                FIELDG(name.z, BD, dxf+2); }
 #define FIELD_3DPOINT(name,dxf) FIELD_3BD(name,dxf)
 #define FIELD_TIMEBLL(name,dxf) \
   { _obj->name = bit_read_TIMEBLL(dat);                                  \
@@ -205,33 +209,35 @@
     {\
       if (!obj->tio.entity->xdic_missing_flag)\
         {\
-          FIELD_HANDLE(xdicobjhandle, code);  \
+          FIELD_HANDLE(xdicobjhandle, code, 0); \
         }\
     }\
   PRIOR_VERSIONS\
     {\
-      FIELD_HANDLE(xdicobjhandle, code);      \
+      FIELD_HANDLE(xdicobjhandle, code, 0); \
     }
 
 //TODO unify REPEAT macros
 #define REPEAT_N(times, name, type) \
-  _obj->name = (type *) calloc(times, sizeof(type));     \
+  _obj->name = (type *) calloc(times, sizeof(type)); \
   for (rcount=0; rcount<(long)times; rcount++)
 
 #define REPEAT(times, name, type) \
-  _obj->name = (type *) calloc(_obj->times, sizeof(type));       \
+  _obj->name = (type *) calloc(_obj->times, sizeof(type)); \
   for (rcount=0; rcount<(long)_obj->times; rcount++)
 
 #define REPEAT2(times, name, type) \
-  _obj->name = (type *) calloc(_obj->times, sizeof(type));       \
+  _obj->name = (type *) calloc(_obj->times, sizeof(type)); \
   for (rcount2=0; rcount2<(long)_obj->times; rcount2++)
 
 #define REPEAT3(times, name, type) \
-  _obj->name = (type *) calloc(_obj->times, sizeof(type));       \
+  _obj->name = (type *) calloc(_obj->times, sizeof(type)); \
   for (rcount3=0; rcount3<(long)_obj->times; rcount3++)
 
 #define COMMON_ENTITY_HANDLE_DATA \
-  dwg_decode_common_entity_handle_data(dat, obj)
+  SINCE(R_13) {\
+    dwg_decode_common_entity_handle_data(dat, obj);\
+  }
 
 #define DWG_ENTITY(token) static void \
 dwg_decode_##token (Bit_Chain * dat, Dwg_Object * obj)\

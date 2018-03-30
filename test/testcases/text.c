@@ -14,7 +14,7 @@ low_level_process (dwg_object * obj)
 	  text->extrusion.x, text->extrusion.y, text->extrusion.z);
   printf ("height of text : %f\n", text->height);
   printf ("thickness of text : %f\n", text->thickness);
-  printf ("rotation of text : %f\n", text->rotation_ang);
+  printf ("rotation of text : %f\n", text->rotation);
   printf ("vertical align of text : %du\n", text->vert_alignment);
   printf ("horizontal align of text : %du\n", text->horiz_alignment);
 }
@@ -32,56 +32,56 @@ api_process (dwg_object * obj)
 
 
   text_value = dwg_ent_text_get_text (text, &error);
-  if (!error  && !strcmp (text_value, text->text_value))	// error check
+  if (!error  && !strcmp (text_value, text->text_value))
     pass ("Working Properly");
   else
     fail ("error in reading text_value");
 
 
   dwg_ent_text_get_insertion_point (text, &ins_pt, &error);
-  if (!error  && ins_pt.x == text->insertion_pt.x && ins_pt.y == text->insertion_pt.y)	// error checks
+  if (!error  && ins_pt.x == text->insertion_pt.x && ins_pt.y == text->insertion_pt.y)
     pass ("Working Properly");
   else
     fail ("error in reading insertion");
 
 
   dwg_ent_text_get_extrusion (text, &ext, &error);
-  if (!error  && text->extrusion.x == ext.x && text->extrusion.y == ext.y && text->extrusion.z == ext.z)	// error checking
+  if (!error  && text->extrusion.x == ext.x && text->extrusion.y == ext.y && text->extrusion.z == ext.z)
     pass ("Working Properly");
   else
     fail ("error in reading extrusion");
 
   // retruns height of text
   height = dwg_ent_text_get_height (text, &error);
-  if (!error  && text->height == height)	// error checking
+  if (!error  && text->height == height)
     pass ("Working Properly");
   else
     fail ("error in reading height");
 
 
   thickness = dwg_ent_text_get_thickness (text, &error);
-  if (!error  && thickness == text->thickness)	// error checking
+  if (!error  && thickness == text->thickness)
     pass ("Working Properly");
   else
     fail ("error in reading thickness");
 
 
   rotation = dwg_ent_text_get_rot_angle (text, &error);
-  if (!error  && rotation == text->rotation_ang)	// error check
+  if (!error  && rotation == text->rotation)
     pass ("Working Properly");
   else
     fail ("error in reading rotation");
 
 
   vert_align = dwg_ent_text_get_vert_align (text, &error);
-  if (!error  && vert_align == text->vert_alignment)	// error check
+  if (!error  && vert_align == text->vert_alignment)
     pass ("Working Properly");
   else
     fail ("error in reading vertical alignment");
 
 
   horiz_align = dwg_ent_text_get_horiz_align (text, &error);
-  if (!error  && horiz_align == text->horiz_alignment)	// error checks
+  if (!error  && horiz_align == text->horiz_alignment)
     pass ("Working Properly");
   else
     fail ("error in reading horizontal alignment");

@@ -1630,17 +1630,17 @@ dwg_ent_text_set_thickness(dwg_ent_text *text, BITCODE_BD thickness, int *error)
 }
 
 /// Returns the rotation angle of a text entity.
-/** Usage :- double rot_ang = dwg_ent_text_get_rot_angle(text, &error);
+/** Usage :- double rot_ang = dwg_ent_text_get_rotation(text, &error);
     \param 1 dwg_ent_text
     \param 2 int ptr &error
 */
 BITCODE_BD
-dwg_ent_text_get_rot_angle(dwg_ent_text *text, int *error)
+dwg_ent_text_get_rotation(dwg_ent_text *text, int *error)
 {
   if (text != 0)
     {
       *error = 0;
-      return text->rotation_ang;
+      return text->rotation;
     }
   else
     {
@@ -1651,18 +1651,18 @@ dwg_ent_text_get_rot_angle(dwg_ent_text *text, int *error)
 }
 
 /// Sets the rotation angle of a text entity.
-/** Usage : dwg_ent_text_set_rot_angle(text, angle, &error);
+/** Usage : dwg_ent_text_set_rotation(text, angle, &error);
     \param 1 dwg_ent_text
     \param 2 BITCODE_BD
     \param 3 int ptr &error
 */
 void
-dwg_ent_text_set_rot_angle(dwg_ent_text *text, BITCODE_BD angle, int *error)
+dwg_ent_text_set_rotation(dwg_ent_text *text, BITCODE_BD angle, int *error)
 {
   if (text != 0)
     {
       *error = 0;
-      text->rotation_ang = angle;
+      text->rotation = angle;
     }
   else
     {
@@ -1993,7 +1993,7 @@ dwg_ent_attrib_get_rot_angle(dwg_ent_attrib *attrib, int *error)
   if (attrib != 0)
     {
       *error = 0;
-      return attrib->rotation_ang;
+      return attrib->rotation;
     }
   else
     {
@@ -2015,7 +2015,7 @@ dwg_ent_attrib_set_rot_angle(dwg_ent_attrib *attrib, BITCODE_BD angle, int *erro
   if (attrib != 0)
     {
       *error = 0;
-      attrib->rotation_ang = angle;
+      attrib->rotation = angle;
     }
   else
     {
@@ -2349,7 +2349,7 @@ dwg_ent_attdef_get_rot_angle(dwg_ent_attdef *attdef, int *error)
   if (attdef != 0)
     {
       *error = 0;
-      return attdef->rotation_ang;
+      return attdef->rotation;
     }
   else
     {
@@ -2371,7 +2371,7 @@ dwg_ent_attdef_set_rot_angle(dwg_ent_attdef *attdef, BITCODE_BD angle, int *erro
   if (attdef != 0)
     {
       *error = 0;
-      attdef->rotation_ang = angle;
+      attdef->rotation = angle;
     }
   else
     {
@@ -4187,17 +4187,17 @@ dwg_ent_insert_set_scale(dwg_ent_insert *insert, dwg_point_3d *point,
 }
 
 /// Returns the rotation angle of insert.
-/** Usage : double angle = dwg_ent_insert_get_rotation_angle(insert, &error);
+/** Usage : double angle = dwg_ent_insert_get_rotation(insert, &error);
 \param 1 dwg_ent_insert
 \param 2 int
 */
 BITCODE_BD
-dwg_ent_insert_get_rotation_angle(dwg_ent_insert *insert, int *error)
+dwg_ent_insert_get_rotation(dwg_ent_insert *insert, int *error)
 {
   if (insert != 0)
     {
       *error = 0;
-      return insert->rotation_ang;
+      return insert->rotation;
     }
   else
     {
@@ -4208,19 +4208,19 @@ dwg_ent_insert_get_rotation_angle(dwg_ent_insert *insert, int *error)
 }
 
 /// Sets the rotation angle of insert.
-/** Usage : dwg_ent_insert_set_rotation_angle(insert, angle, &error);
+/** Usage : dwg_ent_insert_set_rotation(insert, angle, &error);
 \param 1 dwg_ent_insert
 \param 2 double
 \param 3 int
 */
 void
-dwg_ent_insert_set_rotation_angle(dwg_ent_insert *insert, BITCODE_BD rot_ang,
+dwg_ent_insert_set_rotation(dwg_ent_insert *insert, BITCODE_BD rot_ang,
                                   int *error)
 {
   if (insert != 0)
     {
       *error = 0;
-      insert->rotation_ang = rot_ang;
+      insert->rotation = rot_ang;
     }
   else
     {
@@ -4549,17 +4549,17 @@ dwg_ent_minsert_set_scale(dwg_ent_minsert *minsert, dwg_point_3d *point,
 }
 
 /// Returns the rotation angle of minsert.
-/** Usage : double angle = dwg_ent_minsert_get_rotation_angle(minsert, &error);
+/** Usage : double angle = dwg_ent_minsert_get_rotation(minsert, &error);
 \param 1 dwg_ent_minsert
 \param 2 int
 */
 BITCODE_BD
-dwg_ent_minsert_get_rotation_angle(dwg_ent_minsert *minsert, int *error)
+dwg_ent_minsert_get_rotation(dwg_ent_minsert *minsert, int *error)
 {
   if (minsert != 0)
     {
       *error = 0;
-      return minsert->rotation_ang;
+      return minsert->rotation;
     }
   else
     {
@@ -4570,19 +4570,19 @@ dwg_ent_minsert_get_rotation_angle(dwg_ent_minsert *minsert, int *error)
 }
 
 /// Sets the rotation angle of minsert.
-/** Usage : dwg_ent_minsert_set_rotation_angle(minsert, angle, &error);
+/** Usage : dwg_ent_minsert_set_rotation(minsert, angle, &error);
 \param 1 dwg_ent_minsert
 \param 2 double
 \param 3 int
 */
 void
-dwg_ent_minsert_set_rotation_angle(dwg_ent_minsert *minsert, BITCODE_BD rot_ang,
-                                   int *error)
+dwg_ent_minsert_set_rotation(dwg_ent_minsert *minsert, BITCODE_BD rot_ang,
+                             int *error)
 {
   if (minsert != 0)
     {
       *error = 0;
-      minsert->rotation_ang = rot_ang;
+      minsert->rotation = rot_ang;
     }
   else
     {

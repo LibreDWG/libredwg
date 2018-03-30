@@ -32,3 +32,28 @@
 #undef IF_ENCODE_FROM_PRE_R13
 #define IF_ENCODE_FROM_PRE_R13 if (0)
 #endif
+
+#define COMMON_TABLE_FLAGS \
+  PRE(R_13) \
+  { \
+    FIELD_RC (flag, 70); \
+    FIELD_TF (entry_name, 32, 2); \
+    FIELD_RS (used, 0); \
+  } \
+  LATER_VERSIONS \
+  { \
+    FIELD_TV (entry_name, 2); \
+    FIELD_B (_64_flag, 0); \
+    PRE(R_2010) \
+    { \
+      FIELD_BS (xrefindex_plus1, 0); \
+      FIELD_B (xrefdep, 0); \
+    } \
+    LATER_VERSIONS \
+    { \
+      FIELD_B (xrefdep, 0); \
+      if (FIELD_VALUE(xrefdep)) { \
+        FIELD_BS (xrefindex_plus1, 0); \
+      } \
+    } \
+  }

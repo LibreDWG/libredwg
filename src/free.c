@@ -47,68 +47,71 @@ static Bit_Chain *dat = &pdat;
 #define IS_FREE
 
 #define FIELD(name,type) {}
-#define FIELD_TRACE(name,type)\
+#define FIELD_TRACE(name,type) \
   LOG_TRACE(#name ": " FORMAT_##type "\n", _obj->name)
-#define FIELD_CAST(name,type,cast) {}
+#define FIELD_CAST(name,type,cast,dxf) {}
 #define FIELD_VALUE(name) _obj->name
 
 #define ANYCODE -1
-#define FIELD_HANDLE(name, handle_code) {}
-#define FIELD_HANDLE_N(name, vcount, handle_code) {}
+#define FIELD_HANDLE(name, code, dxf) {}
+#define FIELD_HANDLE_N(name, vcount, code, dxf) {}
 
-#define FIELD_B(name) FIELD(name, B)
-#define FIELD_BB(name) FIELD(name, BB)
-#define FIELD_3B(name) FIELD(name, 3B)
-#define FIELD_BS(name) FIELD(name, BS)
-#define FIELD_BL(name) FIELD(name, BL)
-#define FIELD_BLL(name) FIELD(name, BLL)
-#define FIELD_BD(name) FIELD(name, BD)
-#define FIELD_RC(name) FIELD(name, RC)
-#define FIELD_RS(name) FIELD(name, RS)
-#define FIELD_RD(name) FIELD(name, RD)
-#define FIELD_RL(name) FIELD(name, RL)
-#define FIELD_RLL(name) FIELD(name, RLL)
-#define FIELD_MC(name) FIELD(name, MC)
-#define FIELD_MS(name) FIELD(name, MS)
-#define FIELD_TV(name) \
+#define FIELD_B(name,dxf) FIELD(name, B)
+#define FIELD_BB(name,dxf) FIELD(name, BB)
+#define FIELD_3B(name,dxf) FIELD(name, 3B)
+#define FIELD_BS(name,dxf) FIELD(name, BS)
+#define FIELD_BL(name,dxf) FIELD(name, BL)
+#define FIELD_BLL(name,dxf) FIELD(name, BLL)
+#define FIELD_BD(name,dxf) FIELD(name, BD)
+#define FIELD_RC(name,dxf) FIELD(name, RC)
+#define FIELD_RS(name,dxf) FIELD(name, RS)
+#define FIELD_RD(name,dxf) FIELD(name, RD)
+#define FIELD_RL(name,dxf) FIELD(name, RL)
+#define FIELD_RLL(name,dxf) FIELD(name, RLL)
+#define FIELD_MC(name,dxf) FIELD(name, MC)
+#define FIELD_MS(name,dxf) FIELD(name, MS)
+#define FIELD_TV(name,dxf) \
   if (FIELD_VALUE(name))\
     {\
       free (FIELD_VALUE(name)); \
       FIELD_VALUE(name) = NULL; \
     }
 
-#define FIELD_TF(name,len) FIELD_TV(name)
+#define FIELD_TF(name,len) FIELD_TV(name,dxf)
 #define FIELD_T FIELD_TV /*TODO: implement version dependant string fields */
-#define FIELD_BT(name) FIELD(name, BT);
-#define FIELD_4BITS(name)
-#define FIELD_BE(name)
-#define FIELD_DD(name, _default)
-#define FIELD_2DD(name, d1, d2)
-#define FIELD_2RD(name)
-#define FIELD_2BD(name)
-#define FIELD_3RD(name)
-#define FIELD_3BD(name) {}
-#define FIELD_3DPOINT(name) {}
-#define FIELD_TIMEBLL(name)
-#define FIELD_CMC(token)\
-  { FIELD_TV(token.name); \
-    FIELD_TV(token.book_name); }
+#define FIELD_BT(name,dxf) FIELD(name, BT);
+#define FIELD_4BITS(name,dxf) {}
+#define FIELD_BE(name,dxf) {}
+#define FIELD_DD(name, _default, dxf) {}
+#define FIELD_2DD(name, d1, d2, dxf) {}
+#define FIELD_3DD(name, def, dxf) {}
+#define FIELD_2RD(name,dxf) {}
+#define FIELD_2BD(name,dxf) {}
+#define FIELD_2BD_1(name,dxf) {}
+#define FIELD_3RD(name,dxf) {}
+#define FIELD_3BD(name,dxf) {}
+#define FIELD_3BD_1(name,dxf) {}
+#define FIELD_3DPOINT(name,dxf) {}
+#define FIELD_TIMEBLL(name,dxf)
+#define FIELD_CMC(token, dxf)\
+  { FIELD_TV(token.name, dxf); \
+    FIELD_TV(token.book_name, dxf+1); }
 
 //FIELD_VECTOR_N(name, type, size):
 // reads data of the type indicated by 'type' 'size' times and stores
 // it all in the vector called 'name'.
-#define FIELD_VECTOR_N(name, type, size) if (size) { FIELD_TV(name) }
-#define FIELD_VECTOR(name, type, size) if (_obj->size) { FIELD_TV(name) }
-#define FIELD_2RD_VECTOR(name, size) FIELD_TV(name)
-#define FIELD_2DD_VECTOR(name, size) FIELD_TV(name)
-#define FIELD_3DPOINT_VECTOR(name, size) FIELD_TV(name)
-#define HANDLE_VECTOR_N(name, size, code) if (size) { FIELD_TV(name) }
-#define HANDLE_VECTOR(name, sizefield, code) if (_obj->sizefield) { FIELD_TV(name) }
+#define FIELD_VECTOR_N(name, type, size, dxf) if (size) { FIELD_TV(name,dxf) }
+#define FIELD_VECTOR(name, type, size, dxf) if (_obj->size) { FIELD_TV(name,dxf) }
+#define FIELD_2RD_VECTOR(name, size, dxf) FIELD_TV(name,dxf)
+#define FIELD_2DD_VECTOR(name, size, dxf) FIELD_TV(name,dxf)
+#define FIELD_3DPOINT_VECTOR(name, size, dxf) FIELD_TV(name,dxf)
+#define HANDLE_VECTOR_N(name, size, code, dxf) if (size) { FIELD_TV(name,dxf) }
+#define HANDLE_VECTOR(name, sizefield, code, dxf) if (_obj->sizefield) { FIELD_TV(name,dxf) }
 #define FIELD_INSERT_COUNT(insert_count, type)
 #define FIELD_XDATA(name, size)
 
-#define REACTORS(code) FIELD_TV(reactors)
-#define ENT_REACTORS(code) FIELD_TV(reactors)
+#define REACTORS(code) FIELD_TV(reactors,0)
+#define ENT_REACTORS(code) FIELD_TV(reactors,0)
 #define XDICOBJHANDLE(code)\
   SINCE(R_2004)\
     {\

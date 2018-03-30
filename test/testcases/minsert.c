@@ -13,7 +13,7 @@ low_level_process (dwg_object * obj)
   printf ("scale flag for minsert : " FORMAT_BS "\n", minsert->scale_flag);
   printf ("scale points : x = %f, y = %f, z = %f\n",
 	  minsert->scale.x, minsert->scale.y, minsert->scale.z);
-  printf ("angle for minsert : %f\n", minsert->rotation_ang);
+  printf ("angle for minsert : %f\n", minsert->rotation);
   printf ("extrusion points : x = %f, y = %f, z = %f\n",
 	  minsert->extrusion.x, minsert->extrusion.y, minsert->extrusion.z);
   printf ("attribs for minsert : " FORMAT_BS "\n", minsert->has_attribs);
@@ -38,77 +38,78 @@ api_process (dwg_object * obj)
 
 
   dwg_ent_minsert_get_ins_pt (minsert, &ins_pt, &error);
-  if (!error  && ins_pt.x == minsert->ins_pt.x && ins_pt.y == minsert->ins_pt.y && ins_pt.z == minsert->ins_pt.z)	// error check
+  if (!error  && ins_pt.x == minsert->ins_pt.x &&
+      ins_pt.y == minsert->ins_pt.y && ins_pt.z == minsert->ins_pt.z)
     pass ("Working Properly");
   else
     fail ("error in reading insertion point");
 
 
   scale_flag = dwg_ent_minsert_get_scale_flag (minsert, &error);
-  if (!error  && scale_flag == minsert->scale_flag)	// error check
+  if (!error  && scale_flag == minsert->scale_flag)
     pass ("Working Properly");
   else
     fail ("error in reading scale flag");
 
 
   dwg_ent_minsert_get_scale (minsert, &scale, &error);
-  if (!error  && scale.x == minsert->scale.x && scale.y == minsert->scale.y && scale.z == minsert->scale.z)	// error check
+  if (!error  && scale.x == minsert->scale.x && scale.y == minsert->scale.y && scale.z == minsert->scale.z)
     pass ("Working Properly");
   else
     fail ("error in reading scale");
 
 
-  rot_angle = dwg_ent_minsert_get_rotation_angle (minsert, &error);
-  if (!error  && rot_angle == minsert->rotation_ang)	// error check
+  rot_angle = dwg_ent_minsert_get_rotation (minsert, &error);
+  if (!error  && rot_angle == minsert->rotation)
     pass ("Working Properly");
   else
     fail ("error in reading rotation angle");
 
 
   dwg_ent_minsert_get_extrusion (minsert, &ext, &error);
-  if (!error  && ext.x == minsert->extrusion.x && ext.y == minsert->extrusion.y && ext.z == minsert->extrusion.z)	// error check
+  if (!error  && ext.x == minsert->extrusion.x && ext.y == minsert->extrusion.y && ext.z == minsert->extrusion.z)
     pass ("Working Properly");
   else
     fail ("error in reading extrusion");
 
 
   attribs = dwg_ent_minsert_get_has_attribs (minsert, &error);
-  if (!error  && attribs == minsert->has_attribs)	// error check
+  if (!error  && attribs == minsert->has_attribs)
     pass ("Working Properly");
   else
     fail ("error in reading attribs");
 
 
   obj_count = dwg_ent_minsert_get_owned_obj_count (minsert, &error);
-  if (!error  && obj_count == minsert->owned_obj_count)	// error check
+  if (!error  && obj_count == minsert->owned_obj_count)
     pass ("Working Properly");
   else
     fail ("error in reading object counts");
 
 
   num_rows = dwg_ent_minsert_get_numrows (minsert, &error);
-  if (!error  && num_rows == minsert->numrows)	// error checks
+  if (!error  && num_rows == minsert->numrows)
     pass ("Working Properly");
   else
     fail ("error in reading number of rows");
 
 
   num_cols = dwg_ent_minsert_get_numcols (minsert, &error);
-  if (!error  && num_cols == minsert->numcols)	// error checking
+  if (!error  && num_cols == minsert->numcols)
     pass ("Working Properly");
   else
     fail ("error in reading number of columns");
 
 
   row_space = dwg_ent_minsert_get_row_spacing (minsert, &error);
-  if (!error  && row_space == minsert->row_spacing)	// error check
+  if (!error  && row_space == minsert->row_spacing)
     pass ("Working Properly");
   else
     fail ("error in reading numspace");
 
 
   col_space = dwg_ent_minsert_get_col_spacing (minsert, &error);
-  if (!error  && col_space == minsert->col_spacing)	// error checking
+  if (!error  && col_space == minsert->col_spacing)
     pass ("Working Properly");
   else
     fail ("error in reading col_space");

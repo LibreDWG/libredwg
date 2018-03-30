@@ -717,10 +717,10 @@ dwg_ent_text_set_thickness(dwg_ent_text *text, BITCODE_BD thickness, int *error)
 
 //Get/Set rotation angle of text
 BITCODE_BD
-dwg_ent_text_get_rot_angle(dwg_ent_text *text, int *error);
+dwg_ent_text_get_rotation(dwg_ent_text *text, int *error);
 
 void
-dwg_ent_text_set_rot_angle(dwg_ent_text *text, BITCODE_BD angle, int *error);
+dwg_ent_text_set_rotation(dwg_ent_text *text, BITCODE_BD angle, int *error);
 
 //Get/Set horizontal alignment angle of text
 BITCODE_BS
@@ -1249,10 +1249,10 @@ dwg_ent_insert_set_scale(dwg_ent_insert *insert, dwg_point_3d *point,
                          int *error);
 
 BITCODE_BD
-dwg_ent_insert_get_rotation_angle(dwg_ent_insert *insert, int *error);
+dwg_ent_insert_get_rotation(dwg_ent_insert *insert, int *error);
 
 void
-dwg_ent_insert_set_rotation_angle(dwg_ent_insert *insert, BITCODE_BD rot_ang,
+dwg_ent_insert_set_rotation(dwg_ent_insert *insert, BITCODE_BD rot_ang,
                                   int *error);
 
 void
@@ -1307,10 +1307,10 @@ dwg_ent_minsert_set_scale(dwg_ent_minsert *minsert, dwg_point_3d *point,
                           int *error);
 
 BITCODE_BD
-dwg_ent_minsert_get_rotation_angle(dwg_ent_minsert *minsert, int *error);
+dwg_ent_minsert_get_rotation(dwg_ent_minsert *minsert, int *error);
 
 void
-dwg_ent_minsert_set_rotation_angle(dwg_ent_minsert *minsert, BITCODE_BD rot_ang,
+dwg_ent_minsert_set_rotation(dwg_ent_minsert *minsert, BITCODE_BD rot_ang,
                                    int *error);
 
 void

@@ -13,7 +13,7 @@ low_level_process(dwg_object *obj)
           attrib->extrusion.x, attrib->extrusion.y, attrib->extrusion.z);
   printf("height of attrib : %f\n", attrib->height);
   printf("thickness of attrib : %f\n", attrib->thickness);
-  printf("rotation of attrib : %f\n", attrib->rotation_ang);
+  printf("rotation of attrib : %f\n", attrib->rotation);
   printf("vertical align of attrib : " FORMAT_BS "\n", attrib->vert_alignment);
   printf("horizontal align of attrib : " FORMAT_BS "\n", attrib->horiz_alignment);
 }

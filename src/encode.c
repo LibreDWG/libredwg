@@ -65,11 +65,11 @@ static bool env_var_checked_p;
 #define FIELDG(name,type,dxf) \
   { bit_write_##type(dat, _obj->name); \
     FIELD_G_TRACE(name, type, dxf); }
-#define FIELD_TRACE(name,type)\
-  LOG_TRACE(#name ": " FORMAT_##type "\n", _obj->name)  \
-#define FIELD_G_TRACE(name,type,dxfgroup)                               \
+#define FIELD_TRACE(name,type) \
+  LOG_TRACE(#name ": " FORMAT_##type "\n", _obj->name)
+#define FIELD_G_TRACE(name,type,dxfgroup) \
   LOG_TRACE(#name ": " FORMAT_##type " " #type " " #dxfgroup "\n", _obj->name)
-#define FIELD_CAST(name,type,cast)\
+#define FIELD_CAST(name,type,cast) \
   { bit_write_##type(dat, (BITCODE_##type)_obj->name); \
     FIELD_TRACE(name,cast); }
 
@@ -99,6 +99,10 @@ static bool env_var_checked_p;
 
 #define FIELD_DD(name, _default, dxf) bit_write_DD(dat, FIELD_VALUE(name), _default);
 #define FIELD_2DD(name, d1, d2, dxf) { FIELD_DD(name.x, d1, dxf); FIELD_DD(name.y, d2, dxf+10); }
+#define FIELD_3DD(name, def, dxf) { \
+    FIELD_DD(name.x, FIELD_VALUE(def.x), dxf); \
+    FIELD_DD(name.y, FIELD_VALUE(def.y), dxf+10); \
+    FIELD_DD(name.z, FIELD_VALUE(def.z), dxf+20); }
 #define FIELD_2RD(name,dxf) { FIELDG(name.x, RD, dxf); FIELDG(name.y, RD, dxf+10); }
 #define FIELD_2BD(name,dxf) { FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+10); }
 #define FIELD_2BD_1(name,dxf) { FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+1); }
@@ -109,8 +113,8 @@ static bool env_var_checked_p;
 #define FIELD_3BD_1(name,dxf) { FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+1); \
                                 FIELDG(name.z, BD, dxf+2); }
 #define FIELD_3DPOINT(name,dxf) FIELD_3BD(name,dxf)
-#define FIELD_4BITS(name) bit_write_4BITS(dat,_obj->name);
-#define FIELD_TIMEBLL(name) \
+#define FIELD_4BITS(name,dxf) bit_write_4BITS(dat,_obj->name);
+#define FIELD_TIMEBLL(name,dxf) \
   { bit_write_TIMEBLL(dat, (BITCODE_TIMEBLL)_obj->name); \
     LOG_TRACE(#name ": " FORMAT_BL "." FORMAT_BL "\n", _obj->name.days, _obj->name.ms); }
 
@@ -228,7 +232,9 @@ static bool env_var_checked_p;
 #define FIELD_XDATA(name, size)
 
 #define COMMON_ENTITY_HANDLE_DATA  \
- dwg_encode_common_entity_handle_data(dat, obj);
+  SINCE(R_13) {\
+    dwg_encode_common_entity_handle_data(dat, obj);\
+  }
 
 //TODO unify REPEAT macros
 #define REPEAT_N(times, name, type) \
@@ -671,14 +677,14 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
     pvzadr = dat->byte; // Keep the first address of the section to write its size later
     LOG_TRACE("pvzadr: %lx\n", pvzadr)
 
-    FIELD_RL(size);
+      FIELD_RL(size, 0);
     if (FIELD_VALUE(address) != (BITCODE_RL)(pvzadr - 16))
       {
         LOG_WARN("second_header->address %x != %x",
                  FIELD_VALUE(address), (unsigned)(pvzadr - 16));
         FIELD_VALUE(address) = pvzadr - 16;
       }
-    FIELD_BL(address);
+    FIELD_BL(address, 0);
 
     // AC1012, AC1014 or AC1015. This is a char[11], zero padded.
     // with \n at 12.
@@ -688,14 +694,14 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
 
     for (i = 0; i < 4; i++)
       {
-        FIELD_B(null_b[i]);
+        FIELD_B(null_b[i], 0);
       }
     // documented as 0x18,0x78,0x01,0x04 for R13, 0x18,0x78,0x01,0x05 for R14
     // but it is 0x10,0x7d,0xf4,0x78 on r14
     // also: 10 7d f4 78 on 2004
     for (i = 0; i < 4; i++)
       {
-        FIELD_RC(unknown_rc4[i]);
+        FIELD_RC(unknown_rc4[i], 0);
       }
 
     UNTIL (R_2000) {
@@ -713,9 +719,9 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
        */
       for (i = 0; i < _obj->num_sections; i++)
         {
-          FIELD_RC(sections[i].nr);
-          FIELD_BL(sections[i].address);
-          FIELD_BL(sections[i].size);
+          FIELD_RC(sections[i].nr, 0);
+          FIELD_BL(sections[i].address, 0);
+          FIELD_BL(sections[i].size, 0);
         }
       /*
         for (i = 0; i < 6; i++)
@@ -726,7 +732,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
         }
       */
       /* Handles */
-      FIELD_BS(num_handlers); // 14, resp. 16 in r14
+      FIELD_BS(num_handlers, 0); // 14, resp. 16 in r14
 
       if (FIELD_VALUE(num_handlers) != 14) {
         LOG_ERROR("Second header num_handlers != 14: %d\n", FIELD_VALUE(num_handlers));
@@ -735,9 +741,9 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
       }
       for (i = 0; i < FIELD_VALUE(num_handlers); i++)
         {
-          FIELD_RC(handlers[i].size);
-          FIELD_RC(handlers[i].nr);
-          FIELD_VECTOR(handlers[i].data, RC, handlers[i].size);
+          FIELD_RC(handlers[i].size, 0);
+          FIELD_RC(handlers[i].nr, 0);
+          FIELD_VECTOR(handlers[i].data, RC, handlers[i].size, 0);
         }
       /*
         bit_write_BS(dat, 14);
@@ -762,8 +768,8 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
       bit_write_CRC(dat, pvzadr, 0xC0C1);
 
       VERSION(R_14) {
-        FIELD_RL(junk_r14_1);
-        FIELD_RL(junk_r14_2);
+        FIELD_RL(junk_r14_1, 0);
+        FIELD_RL(junk_r14_2, 0);
       }
     }
     bit_write_sentinel(dat, dwg_sentinel(DWG_SENTINEL_SECOND_HEADER_END));

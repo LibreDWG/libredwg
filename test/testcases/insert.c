@@ -14,7 +14,7 @@ low_level_process (dwg_object * obj)
   printf ("scale flag for insert : " FORMAT_BS "\n", insert->scale_flag);
   printf ("scale points : x = %f, y = %f, z = %f\n",
 	  insert->scale.x, insert->scale.y, insert->scale.z);
-  printf ("angle for insert : %f\n", insert->rotation_ang);
+  printf ("angle for insert : %f\n", insert->rotation);
   printf ("extrusion points : x = %f, y = %f, z = %f\n",
 	  insert->extrusion.x, insert->extrusion.y, insert->extrusion.z);
   printf ("attribs for insert : " FORMAT_BS "\n", insert->has_attribs);
@@ -53,8 +53,8 @@ api_process (dwg_object * obj)
     fail ("error in reading scale");
 
 
-  rot_angle = dwg_ent_insert_get_rotation_angle (insert, &error);
-  if (!error  && rot_angle == insert->rotation_ang)	// error check
+  rot_angle = dwg_ent_insert_get_rotation (insert, &error);
+  if (!error  && rot_angle == insert->rotation)	// error check
     pass ("Working Properly");
   else
     fail ("error in reading rotation angle");

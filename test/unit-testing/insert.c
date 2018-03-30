@@ -11,7 +11,7 @@ low_level_process(dwg_object *obj)
   printf("scale flag for insert : " FORMAT_BB "\n", insert->scale_flag);
   printf("scale points : x = %f, y = %f, z = %f\n",
 	  insert->scale.x, insert->scale.y, insert->scale.z);
-  printf("angle for insert : %f\n", insert->rotation_ang);
+  printf("angle for insert : %f\n", insert->rotation);
   printf("extrusion points : x = %f, y = %f, z = %f\n",
 	  insert->extrusion.x, insert->extrusion.y, insert->extrusion.z);
   printf("attribs for insert : " FORMAT_B "\n", insert->has_attribs);
@@ -61,7 +61,7 @@ api_process(dwg_object *obj)
     } 
 
 
-  rot_angle = dwg_ent_insert_get_rotation_angle(insert, &error); 
+  rot_angle = dwg_ent_insert_get_rotation(insert, &error); 
   if ( !error )
     printf("angle for insert : %f\n", rot_angle);
   else

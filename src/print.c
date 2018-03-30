@@ -41,7 +41,7 @@ static unsigned int cur_ver = 0;
 #define FIELD(name,type,dxf) \
   FIELD_TRACE(name,type,dxf)
 #define FIELD_TRACE(name,type,dxf) \
-  LOG_TRACE(#name ": " FORMAT_##type " " #type " " #dxfgroup "\n", _obj->name)
+  LOG_TRACE(#name ": " FORMAT_##type " " #type " " #dxf "\n", _obj->name)
 #define FIELD_CAST(name,type,cast,dxf)             \
   FIELD_TRACE(name,cast,dxf)
 
@@ -82,9 +82,13 @@ static unsigned int cur_ver = 0;
 #define FIELD_BT(name,dxf) FIELD(name, BT, dxf);
 #define FIELD_4BITS(name,dxf) FIELD_TRACE(name,4BITS)
 #define FIELD_BE(name,dxf) FIELD_3RD(name,dxf)
-#define FIELD_DD(name, _default) \
-  LOG_TRACE(#name ": " FORMAT_DD ", default: " FORMAT_DD "\n", _obj->name, _default)
-#define FIELD_2DD(name, d1, d2) FIELD_DD(name.x, d1, dxf); FIELD_DD(name.y, d2, dxf+10);
+#define FIELD_DD(name, _default, dxf)                                       \
+  LOG_TRACE(#name " " #dxf ": " FORMAT_DD ", default: " FORMAT_DD "\n", _obj->name, _default)
+#define FIELD_2DD(name, d1, d2, dxf) FIELD_DD(name.x, d1, dxf); FIELD_DD(name.y, d2, dxf+10);
+#define FIELD_3DD(name, def, dxf) { \
+    FIELD_DD(name.x, FIELD_VALUE(def.x), dxf); \
+    FIELD_DD(name.y, FIELD_VALUE(def.y), dxf+10); \
+    FIELD_DD(name.z, FIELD_VALUE(def.z), dxf+20); }
 #define FIELD_2RD(name,dxf) {FIELD(name.x, RD, dxf); FIELD(name.y, RD, dxf+10);}
 #define FIELD_2BD(name,dxf) {FIELD(name.x, BD, dxf); FIELD(name.y, BD, dxf+10);}
 #define FIELD_3RD(name,dxf) {FIELD(name.x, RD, dxf); FIELD(name.y, RD, dxf+10); FIELD(name.z, RD, dxf+20);}
@@ -94,7 +98,7 @@ static unsigned int cur_ver = 0;
 #define FIELD_CMC(name,dxf)\
   LOG_TRACE(#name ": index %d\n", _obj->name.index)
 #define FIELD_TIMEBLL(name,dxf) \
-  LOG_TRACE(#name ": " FORMAT_BL "." FORMAT_BL "\n", _obj->name.days, _obj->name.ms)
+  LOG_TRACE(#name " " #dxf ": " FORMAT_BL "." FORMAT_BL "\n", _obj->name.days, _obj->name.ms)
 
 //FIELD_VECTOR_N(name, type, size):
 // reads data of the type indicated by 'type' 'size' times and stores
@@ -110,36 +114,36 @@ static unsigned int cur_ver = 0;
 
 #define FIELD_VECTOR(name, type, size, dxf) FIELD_VECTOR_N(name, type, _obj->size, dxf)
 
-#define FIELD_2RD_VECTOR(name, size)\
+#define FIELD_2RD_VECTOR(name, size, dxf)\
   for (vcount=0; vcount < (int)_obj->size; vcount++)\
     {\
       FIELD_2RD(name[vcount], dxf);\
     }
 
-#define FIELD_2DD_VECTOR(name, size)\
+#define FIELD_2DD_VECTOR(name, size, dxf)\
   FIELD_2RD(name[0], 0);\
   for (vcount = 1; vcount < (int)_obj->size; vcount++)\
     {\
       FIELD_2DD(name[vcount], FIELD_VALUE(name[vcount - 1].x), FIELD_VALUE(name[vcount - 1].y), dxf);\
     }
 
-#define FIELD_3DPOINT_VECTOR(name, size)\
+#define FIELD_3DPOINT_VECTOR(name, size, dxf)\
   for (vcount=0; vcount < (int)_obj->size; vcount++)\
     {\
       FIELD_3DPOINT(name[vcount], dxf);\
     }
 
-#define HANDLE_VECTOR_N(name, size, code)\
+#define HANDLE_VECTOR_N(name, size, code, dxf) \
   for (vcount=0; vcount < (int)size; vcount++)\
     {\
       FIELD_HANDLE_N(name[vcount], vcount, code, dxf);\
     }
 
-#define HANDLE_VECTOR(name, sizefield, code) \
-  HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code)
+#define HANDLE_VECTOR(name, sizefield, code, dxf) \
+  HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code, dxf)
 
 #define FIELD_INSERT_COUNT(insert_count, type)   \
-      FIELD_TRACE(insert_count, type)
+  FIELD_TRACE(insert_count, typex)
 
 #define FIELD_XDATA(name, size)
 
