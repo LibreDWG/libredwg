@@ -6,8 +6,7 @@ low_level_process(dwg_object *obj)
 {
   dwg_ent_polyline_mesh *polyline_mesh = dwg_object_to_POLYLINE_MESH(obj);
 
-  printf("flags of polyline_mesh : %ud\n",
-          polyline_mesh->flags);
+  printf("flags of polyline_mesh : %ud\n", polyline_mesh->flag);
   printf("owned obj count of polyline_mesh : " FORMAT_BL "\n",
           polyline_mesh->owned_obj_count);
   printf("curve type of polyline_mesh : %ud\n", polyline_mesh->curve_type);
@@ -27,7 +26,7 @@ api_process(dwg_object *obj)
   dwg_ent_polyline_mesh *polyline_mesh = dwg_object_to_POLYLINE_MESH(obj);
 
 
-  flags = dwg_ent_polyline_mesh_get_flags(polyline_mesh, &error);
+  flags = dwg_ent_polyline_mesh_get_flag(polyline_mesh, &error);
   if ( !error )
     printf("flags of polyline_mesh : %ud\n",flags);
   else

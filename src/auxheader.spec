@@ -34,46 +34,46 @@
   }
 
   for (i=0; i<3; i++) {
-    FIELD_RC(aux_intro[i]); /* ff 77 01 */
+    FIELD_RC(aux_intro[i], 0); /* ff 77 01 */
   }
-  FIELD_RS(dwg_version); /* AC1010 = 17 ... AC1032 = 33 */
-  FIELD_RS(maint_version);
-  FIELD_RL(num_saves);
-  FIELD_RL(minus_1);
-  FIELD_RS(num_saves_1);
-  FIELD_RS(num_saves_2);
-  FIELD_RL(zero);
-  FIELD_RS(dwg_version_1);
-  FIELD_RS(maint_version_1);
-  FIELD_RS(dwg_version_2);
-  FIELD_RS(maint_version_2);
+  FIELD_RS (dwg_version, 0); /* AC1010 = 17 ... AC1032 = 33 */
+  FIELD_RS (maint_version, 0);
+  FIELD_RL (num_saves, 0);
+  FIELD_RL (minus_1, 0);
+  FIELD_RS (num_saves_1, 0);
+  FIELD_RS (num_saves_2, 0);
+  FIELD_RL (zero, 0);
+  FIELD_RS (dwg_version_1, 0);
+  FIELD_RS (maint_version_1, 0);
+  FIELD_RS (dwg_version_2, 0);
+  FIELD_RS (maint_version_2, 0);
   for (i=0; i<6; i++) {
     #undef FORMAT_RS
     #define FORMAT_RS "0x%" PRIx16
-    FIELD_RS(unknown_rs[i]); /* 5 0x893 5 0x893 0 1 0 0 0 0 */
+    FIELD_RS(unknown_rs[i], 0); /* 5 0x893 5 0x893 0 1 0 0 0 0 */
     #undef FORMAT_RS
     #define FORMAT_RS "%" PRIu16
   }
 for (i=0; i<5; i++) { // or 8
-    FIELD_RS(zero_l[i]);
+    FIELD_RS(zero_l[i], 0);
   }
-  FIELD_TIMEBLL(TDCREATE);
-  FIELD_TIMEBLL(TDUPDATE);
-  FIELD_RL(HANDSEED);
-  FIELD_RL(plot_stamp);
-  FIELD_RS(zero_1);
-  FIELD_RS(num_saves_3);
-  FIELD_RL(zero_2);
-  FIELD_RL(zero_3);
-  FIELD_RL(zero_4);
-  FIELD_RL(num_saves_4);
-  FIELD_RL(zero_5);
-  FIELD_RL(zero_6);
-  FIELD_RL(zero_7);
+  FIELD_TIMEBLL(TDCREATE, 0);
+  FIELD_TIMEBLL(TDUPDATE, 0);
+  FIELD_RL(HANDSEED, 0);
+  FIELD_RL(plot_stamp, 0);
+  FIELD_RS(zero_1, 0);
+  FIELD_RS(num_saves_3, 0);
+  FIELD_RL(zero_2, 0);
+  FIELD_RL(zero_3, 0);
+  FIELD_RL(zero_4, 0);
+  FIELD_RL(num_saves_4, 0);
+  FIELD_RL(zero_5, 0);
+  FIELD_RL(zero_6, 0);
+  FIELD_RL(zero_7, 0);
 
   SINCE(R_2018) {
     for (i = 0; i < 3; i++) {
-      FIELD_RS(zero_18[i]);
+      FIELD_RS(zero_18[i], 0);
     }
   }
 

@@ -6,9 +6,7 @@ void
 low_level_process (dwg_object * obj)
 {
   BITCODE_BL i;
-  // casts dwg object to lwpline entity
   dwg_ent_lwpline *lwpline = dwg_object_to_LWPLINE (obj);
-
 
   printf ("normal of lwpline : x = %f, y = %f, z = %f\n",
 	  lwpline->normal.x, lwpline->normal.y, lwpline->normal.z);
@@ -18,7 +16,7 @@ low_level_process (dwg_object * obj)
   printf ("num width of lwpline : " FORMAT_BL "\n", lwpline->num_widths);
   printf ("num bulges of lwpline : " FORMAT_BL "\n", lwpline->num_bulges);
   printf ("num points of lwpline : " FORMAT_BL "\n", lwpline->num_points);
-  printf ("flag of lwpline : " FORMAT_BS "\n", lwpline->flags);
+  printf ("flag of lwpline : " FORMAT_BS "\n", lwpline->flag);
 
   for (i = 0; i < lwpline->num_bulges; i++)
     printf ("bulges[%u] of lwpline : %f\n", i, lwpline->bulges[i]);
@@ -124,15 +122,15 @@ api_process (dwg_object * obj)
     }
 
 
-  flags = dwg_ent_lwpline_get_flags (lwpline, &error);
-  if (error == 0 && flags == lwpline->flags)	// error check
+  flags = dwg_ent_lwpline_get_flag (lwpline, &error);
+  if (error == 0 && flags == lwpline->flag)	// error check
     {
       pass ("lwpline_get_flags");
     }
   else
     {
       fail ("lwpline_get_flags error=%d flags=%x lwpline->flags=%x",
-            error, flags, lwpline->flags);
+            error, flags, lwpline->flag);
     }
 
 

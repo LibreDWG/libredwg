@@ -13,7 +13,7 @@ low_level_process(dwg_object *obj)
           text->extrusion.x, text->extrusion.y, text->extrusion.z);
   printf("height of text : %f\n", text->height);
   printf("thickness of text : %f\n", text->thickness);
-  printf("rotation of text : %f\n", text->rotation_ang);
+  printf("rotation of text : %f\n", text->rotation);
   printf("vertical align of text : %u\n", text->vert_alignment);
   printf("horizontal align of text : %u\n", text->horiz_alignment);
 }
@@ -62,7 +62,7 @@ api_process(dwg_object *obj)
   else
     printf("error in reading thickness\n");
 
-  rotation = dwg_ent_text_get_rot_angle(text, &error);
+  rotation = dwg_ent_text_get_rotation(text, &error);
   if (!error)
     printf("rotation of text : %f\n", rotation);
   else

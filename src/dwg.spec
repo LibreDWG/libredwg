@@ -21,291 +21,318 @@
 
 #include "spec.h"
 
-/*(1)*/
-DWG_ENTITY (TEXT);
+/* (1/7) */
+DWG_ENTITY (TEXT)
 
+  PRE(R_13) {
+    FIELD_2RD (insertion_pt, 10);
+    FIELD_RD (height, 40);
+    FIELD_TV (text_value, 1);
+    if (obj->opts & 1)
+      FIELD_RD (rotation, 50)
+    if (obj->opts & 2)
+      FIELD_RD (width_factor, 41)
+    if (obj->opts & 4)
+      FIELD_RD (oblique_ang, 51)
+    if (obj->opts & 8) {
+      ENCODER { bit_write_RC(dat, obj->linetype_rs); }
+      DECODER { obj->linetype_rs = bit_read_RC(dat); }
+    }
+    if (obj->opts & 16)
+      FIELD_RC (generation, 71)
+    if (obj->opts & 32)
+      FIELD_RC (horiz_alignment, 72)
+    if (obj->opts & 64)
+      FIELD_2RD (alignment_pt, 11)
+    if (obj->opts & 256)
+      FIELD_RC (vert_alignment, 73);
+  }
   VERSIONS(R_13,R_14)
     {
-      FIELD_BD (elevation);
-      FIELD_2RD (insertion_pt);
-      FIELD_2RD (alignment_pt);
-      FIELD_3BD (extrusion);
-      FIELD_BD (thickness);
-      FIELD_BD (oblique_ang);
-      FIELD_BD (rotation_ang);
-      FIELD_BD (height);
-      FIELD_BD (width_factor);
-      FIELD_TV (text_value);
-      FIELD_BS (generation);
-      FIELD_BS (horiz_alignment);
-      FIELD_BS (vert_alignment);
+      FIELD_BD (elevation, 30);
+      FIELD_2RD (insertion_pt, 10);
+      FIELD_2RD (alignment_pt, 11);
+      FIELD_3BD (extrusion, 210);
+      FIELD_BD (thickness, 39);
+      FIELD_BD (oblique_ang, 51);
+      FIELD_BD (rotation, 50);
+      FIELD_BD (height, 40);
+      FIELD_BD (width_factor, 41);
+      FIELD_TV (text_value, 1);
+      FIELD_BS (generation, 71);
+      FIELD_BS (horiz_alignment, 72);
+      FIELD_BS (vert_alignment, 73);
     }
 
   SINCE(R_2000)
     {
       /* We assume that the user (the client application)
-      is responsible for taking care of properly updating the dataflags field
-      which indicates which fields in the data structures are valid and which are
-      undefined */
+         is responsible for taking care of properly updating the dataflags field
+         which indicates which fields in the data structures are valid and which are
+         undefined */
       BITCODE_RC dataflags;
-      FIELD_RC (dataflags);
+      FIELD_RC (dataflags, 0);
       dataflags = FIELD_VALUE(dataflags);
 
       if (!(dataflags & 0x01))
-        FIELD_RD (elevation);
-
-      FIELD_2RD (insertion_pt);
+        FIELD_RD (elevation, 30);
+      FIELD_2RD (insertion_pt, 10);
 
       if (!(dataflags & 0x02))
-        FIELD_2DD (alignment_pt, 10.0, 20.0);
+        FIELD_2DD (alignment_pt, 10.0, 20.0, 11);
 
-      FIELD_BE (extrusion);
-      FIELD_BT (thickness);
+      FIELD_BE (extrusion, 210);
+      FIELD_BT (thickness, 39);
 
       if (!(dataflags & 0x04))
-        FIELD_RD (oblique_ang);
+        FIELD_RD (oblique_ang, 51);
       if (!(dataflags & 0x08))
-        FIELD_RD (rotation_ang);
+        FIELD_RD (rotation, 50);
 
-      FIELD_RD (height);
+      FIELD_RD (height, 40);
 
       if (!(dataflags & 0x10))
-        FIELD_RD (width_factor);
+        FIELD_RD (width_factor, 41);
 
-      FIELD_TV (text_value);
+      FIELD_TV (text_value, 1);
 
       if (!(dataflags & 0x20))
-        FIELD_BS (generation);
+        FIELD_BS (generation, 71);
       if (!(dataflags & 0x40))
-        FIELD_BS (horiz_alignment);
+        FIELD_BS (horiz_alignment, 72);
       if (!(dataflags & 0x80))
-        FIELD_BS (vert_alignment);
+        FIELD_BS (vert_alignment, 73);
     }
 
   COMMON_ENTITY_HANDLE_DATA;
 
-  UNTIL(R_2007) {
-    FIELD_HANDLE (style, ANYCODE);
-  }
+  VERSIONS(R_13, R_2007)
+    {
+      IF_ENCODE_FROM_PRE_R13 {
+        //FIXME: should really just lookup the style table; style is the index.
+        FIELD_VALUE(style) = 0; //dwg_resolve_handle(obj->parent, obj->linetype_rs);
+      }
+      FIELD_HANDLE (style, 5, 7);
+    }
 
 DWG_ENTITY_END
 
-/*(2)*/
-DWG_ENTITY(ATTRIB);
+/* (2/16) */
+DWG_ENTITY(ATTRIB)
 
-  VERSIONS(R_13,R_14)
+  // TODO PRE(R_R13)
+  VERSIONS(R_13, R_14)
     {
-      FIELD_BD (elevation);
-      FIELD_2RD (insertion_pt);
-      FIELD_2RD (alignment_pt);
-      FIELD_3BD (extrusion);
-      FIELD_BD (thickness);
-      FIELD_BD (oblique_ang);
-      FIELD_BD (rotation_ang);
-      FIELD_BD (height);
-      FIELD_BD (width_factor);
-      FIELD_TV (text_value);
-      FIELD_BS (generation);
-      FIELD_BS (horiz_alignment);
-      FIELD_BS (vert_alignment);
+      FIELD_BD (elevation, 30);
+      FIELD_2RD (insertion_pt, 10);
+      FIELD_2RD (alignment_pt, 11);
+      FIELD_3BD (extrusion, 210);
+      FIELD_BD (thickness, 39);
+      FIELD_BD (oblique_ang, 51);
+      FIELD_BD (rotation, 50);
+      FIELD_BD (height, 40);
+      FIELD_BD (width_factor, 41);
+      FIELD_TV (text_value, 1);
+      FIELD_BS (generation, 71);
+      FIELD_BS (horiz_alignment, 72);
+      FIELD_BS (vert_alignment, 73);
     }
 
   SINCE(R_2000)
     {
       /* We assume that the user (the client application)
-      is responsible for taking care of properly updating the dataflags field
-      which indicates which fields in the data structures are valid and which are
-      undefined */
+         is responsible for taking care of properly updating the dataflags field
+         which indicates which fields in the data structures are valid and which are
+         undefined */
       BITCODE_RC dataflags;
-      FIELD_RC (dataflags);
+      FIELD_RC (dataflags, 0);
       dataflags = FIELD_VALUE(dataflags);
 
       if (!(dataflags & 0x01))
-        FIELD_RD (elevation);
-
-      FIELD_2RD (insertion_pt);
+        FIELD_RD (elevation, 30);
+      FIELD_2RD (insertion_pt, 10);
 
       if (!(dataflags & 0x02))
-        FIELD_2DD (alignment_pt, 10.0, 20.0);
+        FIELD_2DD (alignment_pt, 10.0, 20.0, 11);
 
-      FIELD_BE (extrusion);
-      FIELD_BT (thickness);
+      FIELD_BE (extrusion, 210);
+      FIELD_BT (thickness, 39);
 
       if (!(dataflags & 0x04))
-        FIELD_RD (oblique_ang);
+        FIELD_RD (oblique_ang, 51);
       if (!(dataflags & 0x08))
-        FIELD_RD (rotation_ang);
+        FIELD_RD (rotation, 50);
 
-      FIELD_RD (height);
+      FIELD_RD (height, 40);
 
       if (!(dataflags & 0x10))
-        FIELD_RD (width_factor);
+        FIELD_RD (width_factor, 41);
 
-      FIELD_TV (text_value);
+      FIELD_TV (text_value, 1);
 
       if (!(dataflags & 0x20))
-        FIELD_BS (generation);
+        FIELD_BS (generation, 71);
       if (!(dataflags & 0x40))
-        FIELD_BS (horiz_alignment);
+        FIELD_BS (horiz_alignment, 72);
       if (!(dataflags & 0x80))
-        FIELD_BS (vert_alignment);
+        FIELD_BS (vert_alignment, 74);
     }
 
   SINCE(R_2010)
     {
-      FIELD_RC (version);
+      FIELD_RC (class_version, 280); // 0 = r2010
     }
   SINCE(R_2018)
     {
-      FIELD_RC (type); // 1=single line, 2=multi line attrib, 4=multi line attdef
+      FIELD_RC (type, 70); // 1=single line, 2=multi line attrib, 4=multi line attdef
 
       if (FIELD_VALUE(type) > 1)
         {
           LOG_WARN("MTEXT fields")
           // TODO fields handles to MTEXT entities. how many?
-          FIELD_HANDLE (mtext_handles, 0); //TODO
+          FIELD_HANDLE (mtext_handles, 0, 340); //TODO
 
-          FIELD_BS (annotative_data_size);
+          FIELD_BS (annotative_data_size, 70);
           if (FIELD_VALUE(annotative_data_size) > 1)
             {
-              FIELD_RC (annotative_data_bytes);
-              FIELD_HANDLE (annotative_app, 0); //TODO
-              FIELD_BS (annotative_short);
+              FIELD_RC (annotative_data_bytes, 0);
+              FIELD_HANDLE (annotative_app, 0, 0); //TODO
+              FIELD_BS (annotative_short, 0);
             }
         }
     }
 
-  FIELD_TV (tag);
-  FIELD_BS (field_length);
-  FIELD_RC (flags); // 1 invisible, 2 constant, 4 verify, 8 preset
+  FIELD_TV (tag, 2);
+  FIELD_BS (field_length, 73);
+  FIELD_RC (flags, 70); // 1 invisible, 2 constant, 4 verify, 8 preset
 
   SINCE(R_2007) {
-    FIELD_B (lock_position_flag);
+    FIELD_B (lock_position_flag, 70);
   }
 
   COMMON_ENTITY_HANDLE_DATA;
 
-  FIELD_HANDLE (style, 5);
+  FIELD_HANDLE (style, 5, 7);
 
 DWG_ENTITY_END
 
-/*(3)*/
-DWG_ENTITY(ATTDEF);
+/* (3/15) */
+DWG_ENTITY(ATTDEF)
 
-  VERSIONS(R_13,R_14)
+  // TODO PRE(R_R13)
+  VERSIONS(R_13, R_14)
     {
-      FIELD_BD (elevation);
-      FIELD_2RD (insertion_pt);
-      FIELD_2RD (alignment_pt);
-      FIELD_3BD (extrusion);
-      FIELD_BD (thickness);
-      FIELD_BD (oblique_ang);
-      FIELD_BD (rotation_ang);
-      FIELD_BD (height);
-      FIELD_BD (width_factor);
-      FIELD_TV (default_value);
-      FIELD_BS (generation);
-      FIELD_BS (horiz_alignment);
-      FIELD_BS (vert_alignment);
+      FIELD_BD (elevation, 30);
+      FIELD_2RD (insertion_pt, 10);
+      FIELD_2RD (alignment_pt, 11);
+      FIELD_3BD (extrusion, 210);
+      FIELD_BD (thickness, 39);
+      FIELD_BD (oblique_ang, 51);
+      FIELD_BD (rotation, 50);
+      FIELD_BD (height, 40);
+      FIELD_BD (width_factor, 41);
+      FIELD_TV (default_value, 1);
+      FIELD_BS (generation, 71);
+      FIELD_BS (horiz_alignment, 72);
+      FIELD_BS (vert_alignment, 73);
     }
 
   SINCE(R_2000)
     {
       /* We assume that the user (the client application)
-      is responsible for taking care of properly updating the dataflags field
-      which indicates which fields in the data structures are valid and which are
-      undefined */
+         is responsible for taking care of properly updating the dataflags field
+         which indicates which fields in the data structures are valid and which are
+         undefined */
       BITCODE_RC dataflags;
-      FIELD_RC (dataflags);
+      FIELD_RC (dataflags, 0);
       dataflags = FIELD_VALUE(dataflags);
 
       if (!(dataflags & 0x01))
-        FIELD_RD (elevation);
-
-      FIELD_2RD (insertion_pt);
+        FIELD_RD (elevation, 30);
+      FIELD_2RD (insertion_pt, 10);
 
       if (!(dataflags & 0x02))
-        FIELD_2DD (alignment_pt, 10.0, 20.0);
+        FIELD_2DD (alignment_pt, 10.0, 20.0, 11);
 
-      FIELD_BE (extrusion);
-      FIELD_BT (thickness);
+      FIELD_BE (extrusion, 210);
+      FIELD_BT (thickness, 39);
 
       if (!(dataflags & 0x04))
-        FIELD_RD (oblique_ang);
+        FIELD_RD (oblique_ang, 51);
       if (!(dataflags & 0x08))
-        FIELD_RD (rotation_ang);
+        FIELD_RD (rotation, 50);
 
-      FIELD_RD (height);
+      FIELD_RD (height, 40);
 
       if (!(dataflags & 0x10))
-        FIELD_RD (width_factor);
+        FIELD_RD (width_factor, 41);
 
-      FIELD_TV (default_value);
+      FIELD_TV (default_value, 1);
 
       if (!(dataflags & 0x20))
-        FIELD_BS (generation);
+        FIELD_BS (generation, 71);
       if (!(dataflags & 0x40))
-        FIELD_BS (horiz_alignment);
+        FIELD_BS (horiz_alignment, 72);
       if (!(dataflags & 0x80))
-        FIELD_BS (vert_alignment);
+        FIELD_BS (vert_alignment, 74);
     }
 
-  FIELD_TV (tag);
-  FIELD_BS (field_length);
-  FIELD_RC (flags);
+  FIELD_TV (tag, 2);
+  FIELD_BS (field_length, 73);
+  FIELD_RC (flags, 70); // 1 invisible, 2 constant, 4 verify, 8 preset
 
   SINCE(R_2007) {
-    FIELD_B (lock_position_flag);
+    FIELD_B (lock_position_flag, 70);
   }
   SINCE(R_2010) {
-    FIELD_RC (version);
+    FIELD_RC (class_version, 280);
   }
-  FIELD_TV (prompt);
+  FIELD_TV (prompt, 3);
 
   COMMON_ENTITY_HANDLE_DATA;
 
-  FIELD_HANDLE (style, 5);
+  //FIELD_HANDLE (style, 5, 7);
 
 DWG_ENTITY_END
 
-/*(4)*/
-DWG_ENTITY(BLOCK);
+/* (4/12) */
+DWG_ENTITY(BLOCK)
 
-  FIELD_TV (name);
-
-  COMMON_ENTITY_HANDLE_DATA;
-
-DWG_ENTITY_END
-
-/*(5)*/
-DWG_ENTITY(ENDBLK);
+  FIELD_TV (name, 2);
 
   COMMON_ENTITY_HANDLE_DATA;
 
 DWG_ENTITY_END
 
-/*(6)*/
-DWG_ENTITY(SEQEND);
+/* (5/13) */
+DWG_ENTITY(ENDBLK)
 
   COMMON_ENTITY_HANDLE_DATA;
 
 DWG_ENTITY_END
 
-/*(7)*/
-DWG_ENTITY(INSERT);
+/* (6) */
+DWG_ENTITY(SEQEND)
 
-  FIELD_3BD (ins_pt);
+  COMMON_ENTITY_HANDLE_DATA;
+
+DWG_ENTITY_END
+
+/* (7/14) */
+DWG_ENTITY(INSERT)
+
+  FIELD_3DPOINT (ins_pt, 10);
 
   VERSIONS(R_13, R_14)
     {
-      FIELD_3BD (scale);
+      FIELD_3BD_1 (scale, 41); // 42,43
     }
 
   SINCE(R_2000)
     {
       DECODER
         {
-          FIELD_BB (scale_flag);
+          FIELD_BB (scale_flag, 0);
           if (FIELD_VALUE(scale_flag) == 3)
             {
               FIELD_VALUE(scale.x) = 1.0;
@@ -315,20 +342,20 @@ DWG_ENTITY(INSERT);
           else if (FIELD_VALUE(scale_flag) == 1)
             {
               FIELD_VALUE(scale.x) = 1.0;
-              FIELD_DD (scale.y, 1.0);
-              FIELD_DD (scale.z, 1.0);
+              FIELD_DD (scale.y, 1.0, 42);
+              FIELD_DD (scale.z, 1.0, 43);
             }
           else if (FIELD_VALUE(scale_flag) == 2)
             {
-              FIELD_RD (scale.x); 
+              FIELD_RD (scale.x, 41); 
               FIELD_VALUE(scale.y) = FIELD_VALUE (scale.x);
               FIELD_VALUE(scale.z) = FIELD_VALUE (scale.x);
             }
           else //if (FIELD_VALUE(scale_flag) == 0)
             {
-              FIELD_RD (scale.x);
-              FIELD_DD (scale.y, FIELD_VALUE (scale.x));
-              FIELD_DD (scale.z, FIELD_VALUE (scale.x));
+              FIELD_RD (scale.x, 41);
+              FIELD_DD (scale.y, FIELD_VALUE (scale.x), 42);
+              FIELD_DD (scale.z, FIELD_VALUE (scale.x), 43);
             }
         }
 
@@ -337,48 +364,48 @@ DWG_ENTITY(INSERT);
           if (FIELD_VALUE(scale.x)==1.0 && FIELD_VALUE(scale.y)==1.0 && FIELD_VALUE(scale.z)==1.0)
             {
               FIELD_VALUE(scale_flag) = 3;
-              FIELD_BB (scale_flag);
+              FIELD_BB (scale_flag, 0);
             }
           else if (FIELD_VALUE(scale.x)==FIELD_VALUE(scale.y) && FIELD_VALUE(scale.x)==FIELD_VALUE(scale.z))
             {
               FIELD_VALUE(scale_flag) = 2;
-              FIELD_BB (scale_flag);
-              FIELD_RD (scale.x);
+              FIELD_BB (scale_flag, 0);
+              FIELD_RD (scale.x, 41);
             }
           else if (FIELD_VALUE(scale.x)==1.0)
             {
               FIELD_VALUE(scale_flag) = 1;
-              FIELD_BB (scale_flag);
-              FIELD_RD (scale.x);
-              FIELD_DD (scale.y, 1.0);
-              FIELD_DD (scale.z, 1.0);
+              FIELD_BB (scale_flag, 0);
+              FIELD_RD (scale.x, 41);
+              FIELD_DD (scale.y, 1.0, 42);
+              FIELD_DD (scale.z, 1.0, 43);
             }
           else
             {
               FIELD_VALUE(scale_flag) = 0;
-              FIELD_BB (scale_flag);
-              FIELD_RD (scale.x);
-              FIELD_DD (scale.y, FIELD_VALUE (scale.x));
-              FIELD_DD (scale.z, FIELD_VALUE (scale.x));
+              FIELD_BB (scale_flag, 0);
+              FIELD_RD (scale.x, 41);
+              FIELD_DD (scale.y, FIELD_VALUE (scale.x), 42);
+              FIELD_DD (scale.z, FIELD_VALUE (scale.x), 43);
             }
         }
     }
 
-  FIELD_BD (rotation_ang);
-  FIELD_3DPOINT (extrusion);
-  FIELD_B (has_attribs);
+  FIELD_BD (rotation, 50);
+  FIELD_3DPOINT (extrusion, 210);
+  FIELD_B (has_attribs, 66);
 
   SINCE(R_2004)
     {
       if (FIELD_VALUE(has_attribs))
         {
-          FIELD_BL (owned_obj_count);
+          FIELD_BL (owned_obj_count, 0);
         }
     }
 
   COMMON_ENTITY_HANDLE_DATA;
 
-  FIELD_HANDLE (block_header, 5);
+  FIELD_HANDLE (block_header, 5, 2);
 
   //There is a typo in the spec. it says "R13-R200:".
   //I guess it means "R13-R2000:" (just like in MINSERT)
@@ -386,8 +413,8 @@ DWG_ENTITY(INSERT);
     {
       if (FIELD_VALUE(has_attribs))
         {
-          FIELD_HANDLE (first_attrib, 4);
-          FIELD_HANDLE (last_attrib, 4);
+          FIELD_HANDLE (first_attrib, 4, 0);
+          FIELD_HANDLE (last_attrib, 4, 0);
         }
     }
 
@@ -397,28 +424,29 @@ DWG_ENTITY(INSERT);
     {
       if (FIELD_VALUE(has_attribs))
         {
-          HANDLE_VECTOR(attrib_handles, owned_obj_count, 4);
+          HANDLE_VECTOR(attrib_handles, owned_obj_count, 4, 0);
         }
     }
 
   if (FIELD_VALUE(has_attribs))
-      FIELD_HANDLE (seqend, 3);
+    FIELD_HANDLE (seqend, 3, 0);
 
 DWG_ENTITY_END
 
-/*(8)*/
-DWG_ENTITY(MINSERT);
+/* (8) 20.4.10*/
+DWG_ENTITY(MINSERT)
 
-  FIELD_3BD (ins_pt);
+  FIELD_3BD (ins_pt, 10);
 
-  VERSIONS(R_13, R_14)
-    FIELD_3BD (scale);
+  VERSIONS(R_13, R_14) {
+    FIELD_3BD_1 (scale, 41);
+  }
 
   SINCE(R_2000)
     {
       DECODER
         {
-          FIELD_BB (scale_flag);
+          FIELD_BB (scale_flag, 0);
           if (FIELD_VALUE(scale_flag) == 3)
             {
               FIELD_VALUE(scale.x) = 1.0;
@@ -428,21 +456,21 @@ DWG_ENTITY(MINSERT);
           else if (FIELD_VALUE(scale_flag) == 1)
             {
               FIELD_VALUE(scale.x) = 1.0;
-              FIELD_DD (scale.y, 1.0);
-              FIELD_DD (scale.z, 1.0);
+              FIELD_DD (scale.y, 1.0, 42);
+              FIELD_DD (scale.z, 1.0, 43);
             }
           else if (FIELD_VALUE(scale_flag) == 2)
             {
-              FIELD_RD (scale.x);
-              FIELD_VALUE(scale.y) = FIELD_VALUE (scale.x);
-              FIELD_VALUE(scale.z) = FIELD_VALUE (scale.x);
+              FIELD_RD (scale.x, 41);
+              FIELD_VALUE(scale.y) = FIELD_VALUE(scale.x);
+              FIELD_VALUE(scale.z) = FIELD_VALUE(scale.x);
             }
           else
             {
               assert(FIELD_VALUE (scale_flag) == 0);
-              FIELD_RD (scale.x);
-              FIELD_DD (scale.y, FIELD_VALUE (scale.x));
-              FIELD_DD (scale.z, FIELD_VALUE (scale.x));
+              FIELD_RD (scale.x, 41);
+              FIELD_DD (scale.y, FIELD_VALUE(scale.x), 42);
+              FIELD_DD (scale.z, FIELD_VALUE(scale.x), 43);
             }
         }
 
@@ -453,84 +481,87 @@ DWG_ENTITY(MINSERT);
               FIELD_VALUE(scale.z) == 1.0)
             {
               FIELD_VALUE(scale_flag) = 3;
-              FIELD_BB (scale_flag);
+              FIELD_BB (scale_flag, 0);
             }
           else if (FIELD_VALUE(scale.x) == 1.0)
              {
               FIELD_VALUE(scale_flag) = 1;
-              FIELD_BB (scale_flag);
-              FIELD_DD (scale.y, 1.0);
-              FIELD_DD (scale.z, 1.0);
+              FIELD_BB (scale_flag, 0);
+              FIELD_DD (scale.y, 1.0, 42);
+              FIELD_DD (scale.z, 1.0, 43);
              }
           else if (FIELD_VALUE(scale.x) == FIELD_VALUE(scale.y) &&
                    FIELD_VALUE(scale.x) == FIELD_VALUE(scale.z))
             {
               FIELD_VALUE(scale_flag) = 2;
-              FIELD_BB (scale_flag);
-              FIELD_RD (scale.x);
+              FIELD_BB (scale_flag, 0);
+              FIELD_RD (scale.x, 41);
             }
           else
             {
               FIELD_VALUE(scale_flag) = 0;
-              FIELD_BB (scale_flag);
-              FIELD_RD (scale.x);
-              FIELD_DD (scale.y, FIELD_VALUE (scale.x));
-              FIELD_DD (scale.z, FIELD_VALUE (scale.x));
+              FIELD_BB (scale_flag, 0);
+              FIELD_RD (scale.x, 41);
+              FIELD_DD (scale.y, FIELD_VALUE(scale.x), 42);
+              FIELD_DD (scale.z, FIELD_VALUE(scale.x), 43);
             }
         }
     }
 
-  FIELD_BD (rotation_ang);
-  FIELD_3BD (extrusion);
-  FIELD_B (has_attribs);
+  FIELD_BD (rotation, 50);
+  FIELD_3BD (extrusion, 210);
+  FIELD_B (has_attribs, 66);
 
   SINCE(R_2004)
     {
       if (FIELD_VALUE(has_attribs))
-        FIELD_BL (owned_obj_count);
+        FIELD_BL (owned_obj_count, 0);
     }
 
-  FIELD_BS (numcols);
-  FIELD_BS (numrows);
-  FIELD_BD (col_spacing);
-  FIELD_BD (row_spacing);
+  FIELD_BS (numcols, 70);
+  FIELD_BS (numrows, 71);
+  FIELD_BD (col_spacing, 44);
+  FIELD_BD (row_spacing, 45);
 
   COMMON_ENTITY_HANDLE_DATA;
 
-  FIELD_HANDLE (block_header, 5);
+  FIELD_HANDLE (block_header, 5, 2);
 
   VERSIONS(R_13, R_2000)
+  {
     if (FIELD_VALUE(has_attribs))
       {
-        FIELD_HANDLE (first_attrib, 4);
-        FIELD_HANDLE (last_attrib, 4);
+        FIELD_HANDLE (first_attrib, 4, 0);
+        FIELD_HANDLE (last_attrib, 4, 0);
       }
+  }
 
   SINCE(R_2004)
     {
-      HANDLE_VECTOR(attrib_handles, owned_obj_count, 4);
+      HANDLE_VECTOR(attrib_handles, owned_obj_count, 4, 0);
     }
 
   if (FIELD_VALUE(has_attribs))
-      FIELD_HANDLE (seqend, 3);
+    FIELD_HANDLE (seqend, 3, 0);
 
 DWG_ENTITY_END
 
 //(9) Unknown
 
-/*(10)*/
-DWG_ENTITY(VERTEX_2D);
+/* (10/20) */
+DWG_ENTITY(VERTEX_2D)
 
-  FIELD_RC (flags);
-  FIELD_3BD (point);
+  // TODO PRE(R_R13)
+  FIELD_RC (flag, 70);
+  FIELD_3BD (point, 10);
 
-/* Decoder and Encoder routines could be the same but then we wouldn't compress
-data when saving. So we explicitely implemented the encoder routine with the
-compression technique described in the spec. --Juca */
-
+  /* Decoder and Encoder routines could be the same but then we
+     wouldn't compress data when saving. So we explicitely implemented
+     the encoder routine with the compression technique described in
+     the spec. --Juca */
   DECODER
     {
-      FIELD_BD (start_width);
+      FIELD_BD (start_width, 40);
 
       if (FIELD_VALUE(start_width) < 0)
         {
@@ -539,7 +570,7 @@ compression technique described in the spec. --Juca */
         }
       else
         {
-          FIELD_BD (end_width);
+          FIELD_BD (end_width, 41);
         }
     }
 
@@ -549,171 +580,209 @@ compression technique described in the spec. --Juca */
         {
           //TODO: This is ugly! We should have a better way of doing such things
           FIELD_VALUE(start_width) = -FIELD_VALUE (start_width);
-          FIELD_BD (start_width);
+          FIELD_BD (start_width, 40);
           FIELD_VALUE(start_width) = -FIELD_VALUE (start_width);
         }
       else
         {
-          FIELD_BD (start_width);
-          FIELD_BD (end_width);
+          FIELD_BD (start_width, 40);
+          FIELD_BD (end_width, 41);
         }
     }
 
+  FIELD_BD (bulge, 42);
   SINCE(R_2010) {
-    FIELD_BL (id);
+    FIELD_BL (id, 91);
   }
-  FIELD_BD (bulge);
-  FIELD_BD (tangent_dir);
+  FIELD_BD (tangent_dir, 50);
 
   COMMON_ENTITY_HANDLE_DATA;
 
 DWG_ENTITY_END
 
 /*(11)*/
-DWG_ENTITY(VERTEX_3D);
+DWG_ENTITY(VERTEX_3D)
 
-  FIELD_RC (flags);
-  FIELD_3BD (point);
+  FIELD_RC (flag, 70);
+  FIELD_3BD (point, 10);
 
   COMMON_ENTITY_HANDLE_DATA;
 
 DWG_ENTITY_END
 
 /*(12)*/
-DWG_ENTITY(VERTEX_MESH);
+DWG_ENTITY(VERTEX_MESH)
 
-  FIELD_RC (flags);
-  FIELD_3BD (point);
+  FIELD_RC (flag, 70);
+  FIELD_3BD (point, 10);
 
   COMMON_ENTITY_HANDLE_DATA;
 
 DWG_ENTITY_END
 
 /*(13)*/
-DWG_ENTITY(VERTEX_PFACE);
+DWG_ENTITY(VERTEX_PFACE)
 
-  FIELD_RC (flags);
-  FIELD_3BD (point);
+  FIELD_RC (flag, 70);
+  FIELD_3BD (point, 10);
 
   COMMON_ENTITY_HANDLE_DATA;
 
 DWG_ENTITY_END
 
 /*(14)*/
-DWG_ENTITY(VERTEX_PFACE_FACE);
+DWG_ENTITY(VERTEX_PFACE_FACE)
 
-  FIELD_BS (vertind[0]);
-  FIELD_BS (vertind[1]);
-  FIELD_BS (vertind[2]);
-  FIELD_BS (vertind[3]);
+  FIELD_BS (vertind[0], 71);
+  FIELD_BS (vertind[1], 72);
+  FIELD_BS (vertind[2], 73);
+  FIELD_BS (vertind[3], 74);
+  //TODO R13 has color_rs and linetype_rs for all vertices, not in DXF
 
   COMMON_ENTITY_HANDLE_DATA;
 
 DWG_ENTITY_END
 
 /*(15)*/
-DWG_ENTITY(POLYLINE_2D);
+DWG_ENTITY(POLYLINE_2D)
 
-  FIELD_BS (flags);
-  FIELD_BS (curve_type);
-  FIELD_BD (start_width);
-  FIELD_BD (end_width);
-  FIELD_BT (thickness);
-  FIELD_BD (elevation);
-  FIELD_BE (extrusion);
+  FIELD_BS (flag, 70);
+  FIELD_BS (curve_type, 75);
+  FIELD_BD (start_width, 40);
+  FIELD_BD (end_width, 41);
+  FIELD_BT (thickness, 39);
+  FIELD_BD (elevation, 30);
+  FIELD_BE (extrusion, 210);
 
   SINCE(R_2004) {
-    FIELD_BL (owned_obj_count);
+    FIELD_BL (owned_obj_count, 0);
   }
 
   COMMON_ENTITY_HANDLE_DATA;
 
   VERSIONS(R_13, R_2000)
     {
-      FIELD_HANDLE (first_vertex, 4);
-      FIELD_HANDLE (last_vertex, 4);
+      FIELD_HANDLE (first_vertex, 4, 0);
+      FIELD_HANDLE (last_vertex, 4, 0);
     }
 
   SINCE(R_2004)
     {
-      HANDLE_VECTOR(vertex, owned_obj_count, 4);
+      HANDLE_VECTOR(vertex, owned_obj_count, 3, 0);
     }
 
-  FIELD_HANDLE (seqend, 3);
+  FIELD_HANDLE (seqend, 3, 0);
 
 DWG_ENTITY_END
 
 /*(16)*/
-DWG_ENTITY(POLYLINE_3D);
+DWG_ENTITY(POLYLINE_3D)
 
-  FIELD_RC (flags_1);
-  FIELD_RC (flags_2);
+  FIELD_RC (flag, 0); // => 70, 75 TODO for dxf
+  FIELD_RC (flag2, 0);
 
   SINCE(R_2004) {
-    FIELD_BL (owned_obj_count);
+    FIELD_BL (owned_obj_count, 0);
   }
 
   COMMON_ENTITY_HANDLE_DATA;
 
   VERSIONS(R_13, R_2000)
     {
-      FIELD_HANDLE (first_vertex, 4);
-      FIELD_HANDLE (last_vertex, 4);
+      FIELD_HANDLE (first_vertex, 4, 0);
+      FIELD_HANDLE (last_vertex, 4, 0);
     }
 
   SINCE(R_2004)
     {
-      HANDLE_VECTOR(vertex, owned_obj_count, 4);  //code 3
+      HANDLE_VECTOR(vertex, owned_obj_count, 3, 0);
     }
 
-  FIELD_HANDLE (seqend, 3);
+  FIELD_HANDLE (seqend, 3, 0);
 
 DWG_ENTITY_END
 
-/*(17)*/
-DWG_ENTITY(ARC);
+/* (17/8) */
+DWG_ENTITY(ARC)
 
-  FIELD_3BD (center);
-  FIELD_BD (radius);
-  FIELD_BT (thickness);
-  FIELD_BE (extrusion);
-  FIELD_BD (start_angle);
-  FIELD_BD (end_angle);
+  PRE(R_13) {
+    FIELD_2RD (center, 10);
+    FIELD_RD (radius, 40);
+    FIELD_RD (start_angle, 50);
+    FIELD_RD (end_angle, 51);
+    if (obj->opts & 1)
+      FIELD_3RD (extrusion, 210)
+    if (obj->opts & 2)
+      FIELD_RD (center.z, 30)
+  }
+  LATER_VERSIONS {
+    FIELD_3BD (center, 10);
+    FIELD_BD (radius, 40);
+    FIELD_BT (thickness, 39);
+    FIELD_BE (extrusion, 210);
+    FIELD_BD (start_angle, 50);
+    FIELD_BD (end_angle, 51);
+  }
 
   COMMON_ENTITY_HANDLE_DATA;
 
 DWG_ENTITY_END
 
-/*(18)*/
-DWG_ENTITY(CIRCLE);
+/* (18/3) */
+DWG_ENTITY(CIRCLE)
 
-  FIELD_3BD (center);
-  FIELD_BD (radius);
-  FIELD_BT (thickness);
-  FIELD_BE (extrusion);
+  PRE(R_13) {
+    FIELD_2RD (center, 10);
+    FIELD_RD (radius, 40);
+    if (obj->opts & 1)
+      FIELD_3RD (extrusion, 210)
+    if (obj->opts & 2)
+      FIELD_RD (center.z, 38)
+  }
+  LATER_VERSIONS {
+    FIELD_3BD (center, 10);
+    FIELD_BD (radius, 40);
+    FIELD_BT (thickness, 39);
+    FIELD_BE (extrusion, 210);
+  }
 
   COMMON_ENTITY_HANDLE_DATA;
 
 DWG_ENTITY_END
 
-/*(19)*/
-DWG_ENTITY(LINE);
+/* (19/1) */
+DWG_ENTITY(LINE)
 
+  PRE(R_13) {
+    if (obj->flag & 4)
+      FIELD_3RD (start, 10)
+    else
+      FIELD_2RD (start, 10)
+
+    if (obj->flag & 4)
+      FIELD_3RD (end, 11)
+    else
+      FIELD_2RD (end, 11)
+
+    if (obj->opts & 1)
+      FIELD_3RD (extrusion, 210)
+    if (obj->opts & 2)
+      FIELD_RD (thickness, 39)
+  }
   VERSIONS(R_13, R_14)
     {
-      FIELD_3BD (start);
-      FIELD_3BD (end);
+      FIELD_3BD (start, 10);
+      FIELD_3BD (end, 11);
     }
-
   SINCE(R_2000)
     {
       DECODER
         {
-          FIELD_B (Zs_are_zero);
-          FIELD_RD (start.x);
-          FIELD_DD (end.x, FIELD_VALUE (start.x));
-          FIELD_RD (start.y);
-          FIELD_DD (end.y, FIELD_VALUE (start.y));
+          FIELD_B (Zs_are_zero, 0);
+          FIELD_RD (start.x, 10);
+          FIELD_DD (end.x, FIELD_VALUE(start.x), 11);
+          FIELD_RD (start.y, 20);
+          FIELD_DD (end.y, FIELD_VALUE(start.y), 21);
 
           if (FIELD_VALUE(Zs_are_zero))
             {
@@ -722,29 +791,31 @@ DWG_ENTITY(LINE);
             }
           else
             {
-              FIELD_RD (start.z);
-              FIELD_DD (end.z, FIELD_VALUE (start.z));
+              FIELD_RD (start.z, 30);
+              FIELD_DD (end.z, FIELD_VALUE(start.z), 31);
             }
         }
 
       ENCODER
         {
           FIELD_VALUE(Zs_are_zero) = (FIELD_VALUE(start.z) == 0.0 && FIELD_VALUE (end.z) == 0.0);
-          FIELD_B (Zs_are_zero);
-          FIELD_RD (start.x);
-          FIELD_DD (end.x, FIELD_VALUE (start.x));
-          FIELD_RD (start.y);
-          FIELD_DD (end.y, FIELD_VALUE (start.y));
+          FIELD_B (Zs_are_zero, 0);
+          FIELD_RD (start.x, 10);
+          FIELD_DD (end.x, FIELD_VALUE(start.x), 11);
+          FIELD_RD (start.y, 20);
+          FIELD_DD (end.y, FIELD_VALUE(start.y), 21);
           if (!FIELD_VALUE(Zs_are_zero))
             {
-              FIELD_RD (start.z);
-              FIELD_DD (end.z, FIELD_VALUE (start.z));
+              FIELD_RD (start.z, 30);
+              FIELD_DD (end.z, FIELD_VALUE(start.z), 31);
             }
         }
     }
 
-  FIELD_BT (thickness);
-  FIELD_BE (extrusion);
+  SINCE(R_13) {
+    FIELD_BT (thickness, 39);
+    FIELD_BE (extrusion, 210);
+  }
 
   COMMON_ENTITY_HANDLE_DATA;
 
@@ -753,229 +824,219 @@ DWG_ENTITY_END
 /**
  * Macro for common DIMENSION declaration
  */
-/*FIELD_BD (elevation.ecs_11); \ */
 #define DIMENSION_COMMON_DECODE \
     SINCE(R_2010) \
       { \
-        FIELD_RC (version); \
+        FIELD_RC (class_version, 280); /* 0=r2010 */ \
       } \
-    FIELD_3BD (extrusion); \
-    FIELD_2RD (text_midpt); \
-    FIELD_BD (elevation.ecs_12); \
-    FIELD_RC (flags_1); \
-    FIELD_TV (user_text); \
-    FIELD_BD (text_rot); \
-    FIELD_BD (horiz_dir); \
-    FIELD_3BD (ins_scale); \
-    FIELD_BD (ins_rotation); \
+    FIELD_3BD (extrusion, 210); \
+    FIELD_2RD (text_midpt, 11); \
+    FIELD_BD (elevation, 31); \
+    FIELD_RC (flags_1, 70); \
+    FIELD_TV (user_text, 1); \
+    FIELD_BD (text_rot, 53); \
+    FIELD_BD (horiz_dir, 51); \
+    FIELD_3BD (ins_scale, 41); \
+    FIELD_BD (ins_rotation, 54); \
     SINCE(R_2000) \
       { \
-        FIELD_BS (attachment_point); \
-        FIELD_BS (lspace_style); \
-        FIELD_BD (lspace_factor); \
-        FIELD_BD (act_measurement); \
+        FIELD_BS (attachment, 71); \
+        FIELD_BS (lspace_style, 72); \
+        FIELD_BD (lspace_factor, 41); \
+        FIELD_BD (act_measurement, 42); \
       } \
     SINCE(R_2007) \
       { \
-        FIELD_B (unknown); \
-        FIELD_B (flip_arrow1); \
-        FIELD_B (flip_arrow2); \
-      }
+        FIELD_B (unknown, 73); \
+        FIELD_B (flip_arrow1, 74); \
+        FIELD_B (flip_arrow2, 75); \
+      } \
+    FIELD_2RD (clone_ins_pt, 12);
 
 
 /*(20)*/
-DWG_ENTITY(DIMENSION_ORDINATE);
+DWG_ENTITY(DIMENSION_ORDINATE)
 
   DIMENSION_COMMON_DECODE;
-  FIELD_2RD (_12_pt);
-  FIELD_3BD (_10_pt);
-  FIELD_3BD (_13_pt);
-  FIELD_3BD (_14_pt);
-  FIELD_RC (flags_2);
+  FIELD_3BD (ucsorigin_pt, 10);
+  FIELD_3BD (feature_location_pt, 13);
+  FIELD_3BD (leader_endpt, 14);
+  FIELD_RC (flags_2, 70);
 
   COMMON_ENTITY_HANDLE_DATA;
   UNTIL(R_2007)
     {
-      FIELD_HANDLE (dimstyle, 5);
-      FIELD_HANDLE (block, 5);
+      FIELD_HANDLE (dimstyle, 5, 3);
+      FIELD_HANDLE (block, 5, 2);
     }
 
 DWG_ENTITY_END
 
-/*(21)*/
-DWG_ENTITY(DIMENSION_LINEAR);
+/* (21/23) */
+DWG_ENTITY(DIMENSION_LINEAR)
 
+  // TODO PRE(R_R13)
   DIMENSION_COMMON_DECODE;
-  FIELD_2RD (_12_pt);
-  FIELD_3BD (_13_pt);
-  FIELD_3BD (_14_pt);
-  FIELD_3BD (_10_pt);
-  FIELD_BD (ext_line_rot);
-  FIELD_BD (dim_rot);
+  FIELD_3BD (_13_pt, 13);
+  FIELD_3BD (_14_pt, 14);
+  FIELD_3BD (def_pt, 10);
+  FIELD_BD (ext_line_rot, 52);
+  FIELD_BD (dim_rot, 50);
 
   COMMON_ENTITY_HANDLE_DATA;
   UNTIL(R_2007)
     {
-      FIELD_HANDLE (dimstyle, 5);
-      FIELD_HANDLE (block, 5);
+      FIELD_HANDLE (dimstyle, 5, 3);
+      FIELD_HANDLE (block, 5, 2);
     }
 
 DWG_ENTITY_END
 
 /*(22)*/
-DWG_ENTITY(DIMENSION_ALIGNED);
+DWG_ENTITY(DIMENSION_ALIGNED)
 
   DIMENSION_COMMON_DECODE;
-  FIELD_2RD (_12_pt);
-  FIELD_3BD (_13_pt);
-  FIELD_3BD (_14_pt);
-  FIELD_3BD (_10_pt);
-  FIELD_BD (ext_line_rot);
+  FIELD_3BD (_13_pt, 13);
+  FIELD_3BD (_14_pt, 14);
+  FIELD_3BD (def_pt, 10);
+  FIELD_BD (ext_line_rot, 52);
 
   COMMON_ENTITY_HANDLE_DATA;
   UNTIL(R_2007)
     {
-      FIELD_HANDLE (dimstyle, 5);
-      FIELD_HANDLE (block, 5);
+      FIELD_HANDLE (dimstyle, 5, 3);
+      FIELD_HANDLE (block, 5, 2);
     }
 
 DWG_ENTITY_END
 
 /*(23)*/
-DWG_ENTITY(DIMENSION_ANG3PT);
+DWG_ENTITY(DIMENSION_ANG3PT)
 
   DIMENSION_COMMON_DECODE;
-  FIELD_2RD (_12_pt);
-  FIELD_3BD (_10_pt);
-  FIELD_3BD (_13_pt);
-  FIELD_3BD (_14_pt);
-  FIELD_3BD (_15_pt);
+  FIELD_3BD (def_pt, 10);
+  FIELD_3BD (_13_pt, 13);
+  FIELD_3BD (_14_pt, 14);
+  FIELD_3BD (first_arc_pt, 15);
 
   COMMON_ENTITY_HANDLE_DATA;
   UNTIL(R_2007)
     {
-      FIELD_HANDLE (dimstyle, 5);
-      FIELD_HANDLE (block, 5);
+      FIELD_HANDLE (dimstyle, 5, 3);
+      FIELD_HANDLE (block, 5, 2);
     }
 
 DWG_ENTITY_END
 
 /*(24)*/
-DWG_ENTITY(DIMENSION_ANG2LN);
+DWG_ENTITY(DIMENSION_ANG2LN)
 
   DIMENSION_COMMON_DECODE;
-  FIELD_2RD (_12_pt);
-  FIELD_2RD (_16_pt);
-  FIELD_3BD (_13_pt);
-  FIELD_3BD (_14_pt);
-  FIELD_3BD (_15_pt);
-  FIELD_3BD (_10_pt);
+  FIELD_2RD (_16_pt, 16);
+  FIELD_3BD (_13_pt, 13);
+  FIELD_3BD (_14_pt, 14);
+  FIELD_3BD (first_arc_pt, 15);
+  FIELD_3BD (def_pt, 10);
 
   COMMON_ENTITY_HANDLE_DATA;
   UNTIL(R_2007)
     {
-      FIELD_HANDLE (dimstyle, 5);
-      FIELD_HANDLE (block, 5);
+      FIELD_HANDLE (dimstyle, 5, 3);
+      FIELD_HANDLE (block, 5, 2);
     }
 
 DWG_ENTITY_END
 
 /*(25)*/
-DWG_ENTITY(DIMENSION_RADIUS);
+DWG_ENTITY(DIMENSION_RADIUS)
 
   DIMENSION_COMMON_DECODE;
-  FIELD_2RD (_12_pt);
-  FIELD_3BD (_10_pt);
-  FIELD_3BD (_15_pt);
-  FIELD_BD (leader_len);
+  FIELD_3BD (def_pt, 10);
+  FIELD_3BD (first_arc_pt, 15);
+  FIELD_BD (leader_len, 40);
 
   COMMON_ENTITY_HANDLE_DATA;
   UNTIL(R_2007)
     {
-      FIELD_HANDLE (dimstyle, 5);
-      FIELD_HANDLE (block, 5);
+      FIELD_HANDLE (dimstyle, 5, 3);
+      FIELD_HANDLE (block, 5, 2);
     }
 
 DWG_ENTITY_END
 
 /*(26)*/
-DWG_ENTITY(DIMENSION_DIAMETER);
+DWG_ENTITY(DIMENSION_DIAMETER)
 
   DIMENSION_COMMON_DECODE;
-  FIELD_2RD (_12_pt);
-  FIELD_3BD (_15_pt);
-  FIELD_3BD (_10_pt);
-  FIELD_BD (leader_len);
+  FIELD_3BD (first_arc_pt, 15);
+  FIELD_3BD (def_pt, 10);
+  FIELD_BD (leader_len, 40);
 
   COMMON_ENTITY_HANDLE_DATA;
   UNTIL(R_2007)
     {
-      FIELD_HANDLE (dimstyle, 5);
-      FIELD_HANDLE (block, 5);
+      FIELD_HANDLE (dimstyle, 5, 3);
+      FIELD_HANDLE (block, 5, 2);
     }
 
 DWG_ENTITY_END
 
-/*(27)*/
-DWG_ENTITY(POINT);
+/* (27/2) */
+DWG_ENTITY(POINT)
 
-  FIELD_BD (x);
-  FIELD_BD (y);
-  FIELD_BD (z);
-  FIELD_BT (thickness);
-  FIELD_BE (extrusion);
-  FIELD_BD (x_ang);
+  //TODO PRE(R_13)
+  FIELD_BD (x, 10);
+  FIELD_BD (y, 20);
+  FIELD_BD (z, 30);
+  FIELD_BT (thickness, 39);
+  FIELD_BE (extrusion, 210);
+  FIELD_BD (x_ang, 50);
 
   COMMON_ENTITY_HANDLE_DATA;
 
 DWG_ENTITY_END
 
-/*(28)*/
-DWG_ENTITY(_3DFACE);
+/* (28/22) */
+DWG_ENTITY(_3DFACE)
 
+  // TODO PRE(R_R13)
   VERSIONS(R_13, R_14)
     {
-      FIELD_3BD (corner1);
-      FIELD_3BD (corner2);
-      FIELD_3BD (corner3);
-      FIELD_3BD (corner4);
-      FIELD_BS (invis_flags);
+      FIELD_3BD (corner1, 10);
+      FIELD_3BD (corner2, 11);
+      FIELD_3BD (corner3, 12);
+      FIELD_3BD (corner4, 13);
+      FIELD_BS (invis_flags, 70);
     }
 
   SINCE(R_2000)
     {
-      FIELD_B (has_no_flags);
+      FIELD_B (has_no_flags, 0);
 
       DECODER
         {
-          FIELD_B (z_is_zero);
-          FIELD_RD (corner1.x);
-          FIELD_RD (corner1.y);
+          FIELD_B (z_is_zero, 0);
+          FIELD_RD (corner1.x, 10);
+          FIELD_RD (corner1.y, 20);
           if (FIELD_VALUE(z_is_zero))
               FIELD_VALUE(corner1.z) = 0;
           else
-              FIELD_RD (corner1.z);
+            FIELD_RD (corner1.z, 30);
         }
 
       ENCODER
         {
           FIELD_VALUE(z_is_zero) = (FIELD_VALUE (corner1.z) == 0);
-          FIELD_B (z_is_zero);
-          FIELD_RD (corner1.x);
-          FIELD_RD (corner1.y);
+          FIELD_B (z_is_zero, 0);
+          FIELD_RD (corner1.x, 10);
+          FIELD_RD (corner1.y, 20);
           if (!FIELD_VALUE(z_is_zero))
-              FIELD_RD (corner1.z);
+            FIELD_RD (corner1.z, 30);
         }
 
-      FIELD_DD (corner2.x, FIELD_VALUE (corner1.x));
-      FIELD_DD (corner2.y, FIELD_VALUE (corner1.y));
-      FIELD_DD (corner2.z, FIELD_VALUE (corner1.z));
-      FIELD_DD (corner3.x, FIELD_VALUE (corner2.x));
-      FIELD_DD (corner3.y, FIELD_VALUE (corner2.y));
-      FIELD_DD (corner3.z, FIELD_VALUE (corner2.z));
-      FIELD_DD (corner4.x, FIELD_VALUE (corner3.x));
-      FIELD_DD (corner4.y, FIELD_VALUE (corner3.y));
-      FIELD_DD (corner4.z, FIELD_VALUE (corner3.z));
+      FIELD_3DD (corner2, corner1, 11);
+      FIELD_3DD (corner3, corner2, 11);
+      FIELD_3DD (corner4, corner3, 11);
     }
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -983,160 +1044,203 @@ DWG_ENTITY(_3DFACE);
 DWG_ENTITY_END
 
 /*(29)*/
-DWG_ENTITY(POLYLINE_PFACE);
+DWG_ENTITY(POLYLINE_PFACE)
 
-  FIELD_BS (numverts);
-  FIELD_BS (numfaces);
+  FIELD_BS (numverts, 71);
+  FIELD_BS (numfaces, 72);
 
   SINCE(R_2004) {
-    FIELD_BL (owned_obj_count);
+    FIELD_BL (owned_obj_count, 0);
   }
 
   COMMON_ENTITY_HANDLE_DATA;
 
   VERSIONS(R_13, R_2000)
     {
-      FIELD_HANDLE (first_vertex, 4);
-      FIELD_HANDLE (last_vertex, 4);
+      FIELD_HANDLE (first_vertex, 4, 0);
+      FIELD_HANDLE (last_vertex, 4, 0);
     }
   SINCE(R_2004)
     {
-      HANDLE_VECTOR(vertex, owned_obj_count, 4);
+      HANDLE_VECTOR(vertex, owned_obj_count, 4, 0);
     }
-  FIELD_HANDLE (seqend, 3);
+  FIELD_HANDLE (seqend, 3, 0);
 
 DWG_ENTITY_END
 
 /*(30)*/
-DWG_ENTITY(POLYLINE_MESH);
+DWG_ENTITY(POLYLINE_MESH)
 
-  FIELD_BS (flags);
-  FIELD_BS (curve_type);
-  FIELD_BS (m_vert_count);
-  FIELD_BS (n_vert_count);
-  FIELD_BS (m_density);
-  FIELD_BS (n_density);
+  FIELD_BS (flag, 70);
+  FIELD_BS (curve_type, 75);
+  FIELD_BS (m_vert_count, 71);
+  FIELD_BS (n_vert_count, 72);
+  FIELD_BS (m_density, 73);
+  FIELD_BS (n_density, 74);
 
   SINCE(R_2004) {
-    FIELD_BL (owned_obj_count);
+    FIELD_BL (owned_obj_count, 0);
   }
 
   COMMON_ENTITY_HANDLE_DATA;
 
   VERSIONS(R_13, R_2000)
     {
-      FIELD_HANDLE (first_vertex, 4);
-      FIELD_HANDLE (last_vertex, 4);
+      FIELD_HANDLE (first_vertex, 4, 0);
+      FIELD_HANDLE (last_vertex, 4, 0);
     }
   SINCE(R_2004)
     {
-      HANDLE_VECTOR(vertex, owned_obj_count, 4);
+      HANDLE_VECTOR(vertex, owned_obj_count, 4, 0);
     }
-  FIELD_HANDLE (seqend, 3);
+  FIELD_HANDLE (seqend, 3, 0);
 
 DWG_ENTITY_END
 
-/*(31)*/
-DWG_ENTITY(SOLID);
+/* (31/11) */
+DWG_ENTITY(SOLID)
 
-  FIELD_BT (thickness);
-  FIELD_BD (elevation);
-  FIELD_2RD (corner1);
-  FIELD_2RD (corner2);
-  FIELD_2RD (corner3);
-  FIELD_2RD (corner4);
-  FIELD_BE (extrusion);
+  PRE(R_13) {
+    FIELD_2RD (corner1, 11);
+    FIELD_2RD (corner2, 12);
+    FIELD_2RD (corner3, 13);
+    FIELD_2RD (corner4, 14);
+    if (obj->opts & 1)
+      FIELD_3RD (extrusion, 210)
+    if (obj->opts & 2)
+      FIELD_RD (elevation, 38)
+  }
+  LATER_VERSIONS {
+    FIELD_BT (thickness, 39);
+    FIELD_BD (elevation, 38);
+    FIELD_2RD (corner1, 11);
+    FIELD_2RD (corner2, 12);
+    FIELD_2RD (corner3, 13);
+    FIELD_2RD (corner4, 14);
+    FIELD_BE (extrusion, 210);
 
-  COMMON_ENTITY_HANDLE_DATA;
-
-DWG_ENTITY_END
-
-/*(32)*/
-DWG_ENTITY(TRACE);
-
-  FIELD_BT (thickness);
-  FIELD_BD (elevation);
-  FIELD_2RD (corner1);
-  FIELD_2RD (corner2);
-  FIELD_2RD (corner3);
-  FIELD_2RD (corner4);
-  FIELD_BE (extrusion);
-
-  COMMON_ENTITY_HANDLE_DATA;
+    COMMON_ENTITY_HANDLE_DATA;
+  }
 
 DWG_ENTITY_END
 
-/*(33)*/
-DWG_ENTITY(SHAPE);
+/* (32/9) */
+DWG_ENTITY(TRACE)
 
-  FIELD_3BD (ins_pt);
-  FIELD_BD (scale);
-  FIELD_BD (rotation);
-  FIELD_BD (width_factor);
-  FIELD_BD (oblique);
-  FIELD_BD (thickness);
-  FIELD_BS (shape_no);
-  FIELD_3BD (extrusion);
+  PRE(R_13) {
+    FIELD_2RD (corner1, 10);
+    FIELD_2RD (corner2, 11);
+    FIELD_2RD (corner3, 12);
+    FIELD_2RD (corner4, 13);
+    if (obj->opts & 1)
+      FIELD_3RD (extrusion, 210)
+    if (obj->opts & 2)
+      FIELD_RD (elevation, 38)
+  }
+  LATER_VERSIONS {
+    FIELD_BT (thickness, 39);
+    FIELD_BD (elevation, 38);
+    FIELD_2RD (corner1, 10);
+    FIELD_2RD (corner2, 11);
+    FIELD_2RD (corner3, 12);
+    FIELD_2RD (corner4, 13);
+    FIELD_BE (extrusion, 210);
 
-  COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (shapefile, 5);
+    COMMON_ENTITY_HANDLE_DATA;
+  }
 
 DWG_ENTITY_END
 
-/*(34)*/
-DWG_ENTITY(VIEWPORT);
+/* (33/4) */
+DWG_ENTITY(SHAPE)
 
-  FIELD_3BD (center);
-  FIELD_BD (width);
-  FIELD_BD (height);
+  PRE(R_13) {
+    FIELD_HANDLE (shapefile, 5, 0);
+    FIELD_2RD (ins_pt, 10);
+    FIELD_RS (shape_no, 2);
+    if (obj->opts & 1)
+      FIELD_3RD (extrusion, 210)
+    if (obj->opts & 2)
+      FIELD_RD (ins_pt.z, 38)
+  }
+  LATER_VERSIONS {
+    FIELD_3BD (ins_pt, 10);
+    FIELD_BD (scale, 40);
+    FIELD_BD (rotation, 50);
+    FIELD_BD (width_factor, 41);
+    FIELD_BD (oblique, 51);
+    FIELD_BD (thickness, 39);
+    FIELD_BS (shape_no, 2);
+    FIELD_3BD (extrusion, 210);
 
-  SINCE(R_2000)
-    {
-      FIELD_3BD (view_target);
-      FIELD_3BD (view_direction);
-      FIELD_BD (view_twist_angle);
-      FIELD_BD (view_height);
-      FIELD_BD (lens_length);
-      FIELD_BD (front_clip_z);
-      FIELD_BD (back_clip_z);
-      FIELD_BD (snap_angle);
-      FIELD_2RD (view_center);
-      FIELD_2RD (snap_base);
-      FIELD_2RD (snap_spacing);
-      FIELD_2RD (grid_spacing);
-      FIELD_BS (circle_zoom);
-    }
+    COMMON_ENTITY_HANDLE_DATA;
+    FIELD_HANDLE (shapefile, 5, 0);
+  }
 
-  SINCE(R_2007) {
-      FIELD_BS (grid_major);
+DWG_ENTITY_END
+
+/* (34/24) */
+DWG_ENTITY(VIEWPORT)
+
+  PRE(R_13) {
+    FIELD_3RD (center, 10);
+    FIELD_RD (width, 40);
+    FIELD_RD (height, 41);
+    FIELD_RS (unknown, 68);
+  }
+  LATER_VERSIONS {
+    FIELD_3BD (center, 10);
+    FIELD_BD (width, 40);
+    FIELD_BD (height, 41);
   }
 
   SINCE(R_2000)
     {
-      FIELD_BL (frozen_layer_count);
-      FIELD_BL (status_flags);
-      FIELD_TV (style_sheet);
-      FIELD_RC (render_mode);
-      FIELD_B (ucs_at_origin);
-      FIELD_B (ucs_per_viewport);
-      FIELD_3BD (ucs_origin);
-      FIELD_3BD (ucs_x_axis);
-      FIELD_3BD (ucs_y_axis);
-      FIELD_BD (ucs_elevation);
-      FIELD_BS (ucs_ortho_view_type);
+      FIELD_3BD (view_target, 17);
+      FIELD_3BD (view_direction, 16);
+      FIELD_BD (view_twist_angle, 51);
+      FIELD_BD (view_height, 45);
+      FIELD_BD (lens_length, 42);
+      FIELD_BD (front_clip_z, 43);
+      FIELD_BD (back_clip_z, 44);
+      FIELD_BD (snap_angle, 50);
+      FIELD_2RD (view_center, 12);
+      FIELD_2RD (snap_base, 13);
+      FIELD_2RD (snap_spacing, 14);
+      FIELD_2RD (grid_spacing, 15);
+      FIELD_BS (circle_zoom, 72);
+    }
+
+  SINCE(R_2007) {
+    FIELD_BS (grid_major, 61);
+  }
+
+  SINCE(R_2000)
+    {
+      FIELD_BL (frozen_layer_count, 0);
+      FIELD_BL (status_flag, 90);
+      FIELD_TV (style_sheet, 1);
+      FIELD_RC (render_mode, 281);
+      FIELD_B (ucs_at_origin, 74);
+      FIELD_B (ucs_per_viewport, 71);
+      FIELD_3BD (ucs_origin, 110);
+      FIELD_3BD (ucs_x_axis, 111);
+      FIELD_3BD (ucs_y_axis, 112);
+      FIELD_BD (ucs_elevation, 146);
+      FIELD_BS (ucs_ortho_view_type, 79);
     }
 
   SINCE(R_2004) {
-      FIELD_BS (shadeplot_mode);
+    FIELD_BS (shadeplot_mode, 170);
   }
 
   SINCE(R_2007)
     {
-      FIELD_B (use_def_lights);
-      FIELD_RC (def_lighting_type);
-      FIELD_BD (brightness);
-      FIELD_BD (contrast);
-      FIELD_CMC (ambient_light_color);
+      FIELD_B (use_def_lights, 292);
+      FIELD_RC (def_lighting_type, 282);
+      FIELD_BD (brightness, 141);
+      FIELD_BD (contrast, 142);
+      FIELD_CMC (ambient_light_color, 63);
     }
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -1144,72 +1248,81 @@ DWG_ENTITY(VIEWPORT);
 DWG_ENTITY_END
 
 /*(35)*/
-DWG_ENTITY(ELLIPSE);
+DWG_ENTITY(ELLIPSE)
 
-  FIELD_3BD (center);
-  FIELD_3BD (sm_axis);
-  FIELD_3BD (extrusion);
-  FIELD_BD (axis_ratio);
-  FIELD_BD (start_angle);
-  FIELD_BD (end_angle);
+  FIELD_3BD (center, 10);
+  FIELD_3BD (sm_axis, 11);
+  FIELD_3BD (extrusion, 210);
+  FIELD_BD (axis_ratio, 40);
+  FIELD_BD (start_angle, 41);
+  FIELD_BD (end_angle, 42);
 
   COMMON_ENTITY_HANDLE_DATA;
 
 DWG_ENTITY_END
 
 /*(36)*/
-DWG_ENTITY(SPLINE);
+DWG_ENTITY(SPLINE)
 
-  FIELD_BL (scenario);
+  FIELD_BL (scenario, 0);
   UNTIL(R_2013) {
     if (FIELD_VALUE(scenario) != 1 && FIELD_VALUE(scenario) != 2)
       fprintf(stderr, "Error: unknown scenario %d", FIELD_VALUE (scenario));
   }
   SINCE(R_2013) {
-    FIELD_BL (splineflags1);
-    FIELD_BL (knotparam);
+    FIELD_BL (splineflags1, 0);
+    FIELD_BL (knotparam, 0);
   }
 
-  FIELD_BL (degree);
+  FIELD_BL (degree, 71);
 
-  if (FIELD_VALUE(scenario) & 2)
+  if (FIELD_VALUE(scenario) & 2) // bezier spline
     {
-      FIELD_BD (fit_tol);
-      FIELD_3BD (beg_tan_vec);
-      FIELD_3BD (end_tan_vec);
-      FIELD_BL (num_fit_pts);
+      FIELD_BD (fit_tol, 44); // def: 0.0000001
+      FIELD_3BD (beg_tan_vec, 12);
+      FIELD_3BD (end_tan_vec, 13);
+      FIELD_BL (num_fit_pts, 74);
     }
-  if (FIELD_VALUE(scenario) & 1)
+  if (FIELD_VALUE(scenario) & 1) // spline
     {
-      FIELD_B (rational);
-      FIELD_B (closed_b);
-      FIELD_B (periodic);
-      FIELD_BD (knot_tol);
-      FIELD_BD (ctrl_tol);
-      FIELD_BL (num_knots);
-      FIELD_BL (num_ctrl_pts);
-      FIELD_B (weighted);
+      FIELD_B (rational, 0); // flag bit 2
+      FIELD_B (closed_b, 0); // flag bit 0
+      FIELD_B (periodic, 0); // flag bit 1
+      FIELD_BD (knot_tol, 42); // def: 0.0000001
+      FIELD_BD (ctrl_tol, 43); // def: 0.0000001
+      FIELD_BL (num_knots, 72);
+      FIELD_BL (num_ctrl_pts, 73);
+      FIELD_B (weighted, 0);
+      
+      FIELD_VALUE(flag) = FIELD_VALUE(closed_b) +
+        (FIELD_VALUE(periodic) << 1) +
+        (FIELD_VALUE(rational) << 2) +
+        (FIELD_VALUE(weighted) << 3);
+      // planar, linear
     }
-
+  
   if (FIELD_VALUE(scenario) & 1) {
     REPEAT(num_knots, knots, BITCODE_BD)
       {
-        FIELD_BD (knots[rcount]);
+        FIELD_BD (knots[rcount], 40);
       }
+    END_REPEAT(knots);
     REPEAT(num_ctrl_pts, ctrl_pts, Dwg_Entity_SPLINE_control_point)
       {
-        FIELD_3BD (ctrl_pts[rcount]);
+        FIELD_3BD (ctrl_pts[rcount], 10);
         if (!FIELD_VALUE(weighted))
             FIELD_VALUE(ctrl_pts[rcount].w) = 0; // skipped when encoding
         else
-            FIELD_BD (ctrl_pts[rcount].w);
+          FIELD_BD (ctrl_pts[rcount].w, 41);
       }
+    END_REPEAT(ctrl_pts);
   }
   if (FIELD_VALUE(scenario) & 2) {
     REPEAT(num_fit_pts, fit_pts, Dwg_Entity_SPLINE_point)
       {
-        FIELD_3BD (fit_pts[rcount]);
+        FIELD_3BD (fit_pts[rcount], 11);
       }
+    END_REPEAT(fit_pts);
   }
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -1218,23 +1331,23 @@ DWG_ENTITY_END
 //TODO: 37, 38 and 39 are ACIS entities
 
 #define PARSE_WIRE_STRUCT(name)                       \
-  FIELD_RC (name.type);                                \
-  FIELD_BL (name.selection_marker);                    \
-  FIELD_BS (name.color);                               \
-  FIELD_BL (name.acis_index);                          \
-  FIELD_BL (name.num_points);                          \
-  FIELD_3DPOINT_VECTOR (name.points, name.num_points); \
-  FIELD_B (name.transform_present);                    \
+  FIELD_RC (name.type, 0);                            \
+  FIELD_BL (name.selection_marker, 0);                \
+  FIELD_BS (name.color, 0);                           \
+  FIELD_BL (name.acis_index, 0);                      \
+  FIELD_BL (name.num_points, 0);                      \
+  FIELD_3DPOINT_VECTOR (name.points, name.num_points, 0); \
+  FIELD_B (name.transform_present, 0);                \
   if (FIELD_VALUE(name.transform_present))            \
     {                                                 \
-      FIELD_3BD (name.axis_x);                         \
-      FIELD_3BD (name.axis_y);                         \
-      FIELD_3BD (name.axis_z);                         \
-      FIELD_3BD (name.translation);                    \
-      FIELD_BD (name.scale);                           \
-      FIELD_B (name.has_rotation);                     \
-      FIELD_B (name.has_reflection);                   \
-      FIELD_B (name.has_shear);                        \
+      FIELD_3BD (name.axis_x, 0);                     \
+      FIELD_3BD (name.axis_y, 0);                     \
+      FIELD_3BD (name.axis_z, 0);                     \
+      FIELD_3BD (name.translation, 0);                \
+      FIELD_BD (name.scale, 0);                       \
+      FIELD_B (name.has_rotation, 0);                 \
+      FIELD_B (name.has_reflection, 0);               \
+      FIELD_B (name.has_shear, 0);                    \
     }
 
 #ifdef IS_DECODER
@@ -1252,11 +1365,11 @@ void decode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
   int total_size = 0;
   int num_blocks = 0;
 
-  FIELD_B (acis_empty);
+  FIELD_B (acis_empty, 0);
   if (!FIELD_VALUE(acis_empty))
     {
-      FIELD_B (unknown);
-      FIELD_BS (version);
+      FIELD_B (unknown, 0);
+      FIELD_BS (version, 70);
       if (FIELD_VALUE(version) == 1)
         {
           do
@@ -1265,8 +1378,8 @@ void decode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
                 realloc(FIELD_VALUE(sat_data), (i+1) * sizeof (BITCODE_RC*));
               FIELD_VALUE(block_size) = (BITCODE_BL*)
                 realloc(FIELD_VALUE(block_size), (i+1) * sizeof (BITCODE_BL));
-              FIELD_BL (block_size[i]);
-              FIELD_VECTOR (sat_data[i], RC, block_size[i]);
+              FIELD_BL (block_size[i], 0);
+              FIELD_VECTOR (sat_data[i], RC, block_size[i], 0);
               total_size += FIELD_VALUE (block_size[i]);
             } while(FIELD_VALUE (block_size[i++]));
 
@@ -1290,7 +1403,7 @@ void decode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
                     }
                 }
             }
-          LOG_TRACE("Raw SAT data:\n%s\n", FIELD_VALUE (raw_sat_data));
+          LOG_TRACE("Raw SAT data:\n%s\n", FIELD_VALUE (raw_sat_data)); // DXF 1 + 3 if >255
         }
       else //if (FIELD_VALUE(version)==2)
         {
@@ -1298,13 +1411,13 @@ void decode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
           LOG_ERROR("TODO: Implement parsing of SAT file (version 2) in entities 37,38 and 39.\n");
         }
 
-      FIELD_B (wireframe_data_present);
+      FIELD_B (wireframe_data_present, 0);
       if (FIELD_VALUE(wireframe_data_present))
         {
-          FIELD_B (point_present);
+          FIELD_B (point_present, 0);
           if (FIELD_VALUE(point_present))
             {
-              FIELD_3BD (point);
+              FIELD_3BD (point, 0);
             }
           else
             {
@@ -1312,46 +1425,50 @@ void decode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
               FIELD_VALUE(point.y) = 0;
               FIELD_VALUE(point.z) = 0;
             }
-          FIELD_BL (num_isolines);
-          FIELD_B (isoline_present);
+          FIELD_BL (num_isolines, 0);
+          FIELD_B (isoline_present, 0);
           if (FIELD_VALUE(isoline_present))
             {
-              FIELD_BL (num_wires);
+              FIELD_BL (num_wires, 0);
               REPEAT(num_wires, wires, Dwg_Entity_3DSOLID_wire)
                 {
                   PARSE_WIRE_STRUCT(wires[rcount])
                 }
-              FIELD_BL (num_silhouettes);
+              END_REPEAT(wires);
+              FIELD_BL (num_silhouettes, 0);
               REPEAT(num_silhouettes, silhouettes, Dwg_Entity_3DSOLID_silhouette)
                 {
-                  FIELD_BL (silhouettes[rcount].vp_id);
-                  FIELD_3BD (silhouettes[rcount].vp_target);
-                  FIELD_3BD (silhouettes[rcount].vp_dir_from_target);
-                  FIELD_3BD (silhouettes[rcount].vp_up_dir);
-                  FIELD_B (silhouettes[rcount].vp_perspective);
-                  FIELD_BL (silhouettes[rcount].num_wires);
-                  REPEAT2(silhouettes[rcount].num_wires, silhouettes[rcount].wires, Dwg_Entity_3DSOLID_wire)
+                  FIELD_BL (silhouettes[rcount].vp_id, 0);
+                  FIELD_3BD (silhouettes[rcount].vp_target, 0);
+                  FIELD_3BD (silhouettes[rcount].vp_dir_from_target, 0);
+                  FIELD_3BD (silhouettes[rcount].vp_up_dir, 0);
+                  FIELD_B (silhouettes[rcount].vp_perspective, 0);
+                  FIELD_BL (silhouettes[rcount].num_wires, 0);
+                  REPEAT2(silhouettes[rcount].num_wires, silhouettes[rcount].wires,
+                          Dwg_Entity_3DSOLID_wire)
                     {
                       PARSE_WIRE_STRUCT(silhouettes[rcount].wires[rcount2])
                     }
+                  END_REPEAT(silhouettes[rcount].wires);
                 }
+              END_REPEAT(silhouettes);
             }
         }
 
-      FIELD_B (ACIS_empty_bit);
+      FIELD_B (ACIS_empty_bit, 0);
       if (!FIELD_VALUE(ACIS_empty_bit))
         {
           LOG_ERROR("TODO: Implement parsing of ACIS data in the end of 3dsolid object parsing (ACIS_empty_bit==0).\n");
         }
 
       SINCE(R_2007) {
-          FIELD_BL (unknown_2007);
+          FIELD_BL (unknown_2007, 0);
       }
 
       COMMON_ENTITY_HANDLE_DATA;
 
       SINCE(R_2007) {
-          FIELD_HANDLE (history_id, ANYCODE);
+          FIELD_HANDLE (history_id, ANYCODE, 350);
       }
     }
 }
@@ -1386,7 +1503,7 @@ void free_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
     {
       for (i=0; i<FIELD_VALUE (num_blocks); i++)
         {
-          FIELD_VECTOR (sat_data[i], RC, block_size[i]);
+          FIELD_VECTOR (sat_data[i], RC, block_size[i], 0);
         }
       free(_obj->sat_data);
       free(_obj->block_size);
@@ -1399,7 +1516,7 @@ void free_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
 
 
 /*(37)*/
-DWG_ENTITY(REGION);
+DWG_ENTITY(REGION)
   DECODER
     {
       DECODE_3DSOLID;
@@ -1412,7 +1529,7 @@ DWG_ENTITY(REGION);
 DWG_ENTITY_END
 
 /*(38)*/
-DWG_ENTITY(_3DSOLID);
+DWG_ENTITY(_3DSOLID)
   DECODER
     {
       DECODE_3DSOLID;
@@ -1425,7 +1542,7 @@ DWG_ENTITY(_3DSOLID);
 DWG_ENTITY_END
 
 /*(39)*/
-DWG_ENTITY(BODY);
+DWG_ENTITY(BODY)
   DECODER
     {
       DECODE_3DSOLID;
@@ -1438,36 +1555,39 @@ DWG_ENTITY(BODY);
 DWG_ENTITY_END
 
 /*(40)*/
-DWG_ENTITY(RAY);
+DWG_ENTITY(RAY)
 
-  FIELD_3BD (point);
-  FIELD_3BD (vector);
+  FIELD_3BD (point, 10);
+  FIELD_3BD (vector, 11);
 
   COMMON_ENTITY_HANDLE_DATA;
 
 DWG_ENTITY_END
 
 /*(41)*/
-DWG_ENTITY(XLINE);
+DWG_ENTITY(XLINE)
 
-  FIELD_3BD (point);
-  FIELD_3BD (vector);
+  FIELD_3BD (point, 10);
+  FIELD_3BD (vector, 11);
 
   COMMON_ENTITY_HANDLE_DATA;
 
 DWG_ENTITY_END
 
 /*(42)*/
-DWG_OBJECT(DICTIONARY);
+DWG_OBJECT(DICTIONARY)
 
-  FIELD_BL (numitems);
+  FIELD_BL (numitems, 0);
 
   VERSION(R_14)
-      FIELD_RC (hard_owner); //?
+    FIELD_RC (hard_owner, 0); // always 0
   SINCE(R_2000)
     {
-      FIELD_BS (cloning); // 281
-      FIELD_RC (hard_owner);
+      IF_ENCODE_FROM_EARLIER {
+        FIELD_VALUE(cloning) = FIELD_VALUE(hard_owner) & 0xffff;
+      }
+      FIELD_BS (cloning, 281);
+      FIELD_RC (hard_owner, 0);
     }
 
   if (FIELD_VALUE(numitems) > 10000)
@@ -1479,146 +1599,196 @@ DWG_OBJECT(DICTIONARY);
       return;
     }
 
-  FIELD_VECTOR (text, TV, numitems);
+  FIELD_VECTOR (text, TV, numitems, 0);
   UNTIL(R_2007) {
-    FIELD_HANDLE (parenthandle, 8); // 8 with 2000, was 4
+    FIELD_HANDLE (parenthandle, 4, 0);
   }
   REACTORS(4);
   XDICOBJHANDLE(3);
   SINCE(R_2000)
     {
-      HANDLE_VECTOR(itemhandles, numitems, 2);
+      HANDLE_VECTOR(itemhandles, numitems, 2, 0);
     }
 
 DWG_ENTITY_END
 
-DWG_OBJECT(DICTIONARYWDLFT);
+DWG_OBJECT(DICTIONARYWDLFT)
 
-  FIELD_BL (numitems);
+  FIELD_BL (numitems, 0);
 
-  VERSION(R_14) {
-    FIELD_RL (cloning_rl); // cloning+hard_owner?
-  }
+  VERSION(R_14)
+    FIELD_RL (cloning_rl, 0); // always 0
   SINCE(R_2000)
     {
       IF_ENCODE_FROM_EARLIER {
         FIELD_VALUE(cloning) = FIELD_VALUE(cloning_rl) & 0xffff;
       }
-      FIELD_BS (cloning);
-      FIELD_RC (hard_owner);
+      FIELD_BS (cloning, 281);
+      FIELD_RC (hard_owner, 0);
     }
 
-  FIELD_VECTOR (text, TV, numitems);
+  if (FIELD_VALUE(numitems) > 10000)
+    {
+      fprintf(
+          stderr,
+          "Strange: dictionary with more than 10 thousand entries! Handle: %lu\n",
+          obj->handle.value);
+      return;
+    }
 
+  FIELD_VECTOR (text, TV, numitems, 0);
   UNTIL(R_2007) {
-    FIELD_HANDLE (parenthandle, 4);
+    FIELD_HANDLE (parenthandle, 4, 0);
   }
   REACTORS(4);
   XDICOBJHANDLE(3);
+  SINCE(R_2000)
+    {
+      HANDLE_VECTOR(itemhandles, numitems, 2, 0);
+    }
 
-  HANDLE_VECTOR(itemhandles, numitems, 2);
-
-  FIELD_HANDLE (defaultid, 5); // DXF:340 - default object id (one of the itemhandles)
+  FIELD_HANDLE (defaultid, 5, 7);
 
 DWG_OBJECT_END
 
 /*(43) not seen */
-DWG_ENTITY(OLEFRAME);
+DWG_ENTITY(OLEFRAME)
 
-  FIELD_BS (flags);
-
+  FIELD_BS (flag, 70);
   SINCE(R_2000) {
-    FIELD_BS (mode);
+    FIELD_BS (mode, 0);
   }
 
-  FIELD_BL (data_length);
-  FIELD_VECTOR (data, RC, data_length);
+  FIELD_BL (data_length, 0);
+  FIELD_VECTOR (data, RC, data_length, 0);
 
   COMMON_ENTITY_HANDLE_DATA;
 
 DWG_ENTITY_END
 
 /*(44)*/
-DWG_ENTITY(MTEXT);
+DWG_ENTITY(MTEXT)
 
-  //spec-typo ? Spec says BD but we think it might be 3BD:
-  FIELD_3BD (insertion_pt);
-  FIELD_3BD (extrusion);
-  FIELD_3BD (x_axis_dir);
+  FIELD_3BD (insertion_pt, 10);
+  FIELD_3BD (extrusion, 210);
+  FIELD_3BD (x_axis_dir, 11);
 
-  FIELD_BD (rect_width);
+  FIELD_BD (rect_width, 41);
   SINCE(R_2007) {
-    FIELD_BD (rect_height);
+    FIELD_BD (rect_height, 46);
   }
 
-  FIELD_BD (text_height);
-  FIELD_BS (attachment);
-  FIELD_BS (drawing_dir);
-  FIELD_BD (extends_ht); //not documented
-  FIELD_BD (extends_wid);
-  FIELD_TV (text);
+  FIELD_BD (text_height, 40);
+  FIELD_BS (attachment, 71);
+  FIELD_BS (drawing_dir, 72);
+  FIELD_BD (extents_height, 0); //not documented
+  FIELD_BD (extents_width, 0);
+  FIELD_TV (text, 1); // or 3
+  /* doc error:
+  UNTIL(R_2007) {
+    FIELD_HANDLE (style, 5, 7);
+  }
+  */
 
   SINCE(R_2000)
     {
-      FIELD_BS (linespace_style);
-      FIELD_BD (linespace_factor);
-      FIELD_B (unknown_bit);
+      FIELD_BS (linespace_style, 73);
+      FIELD_BD (linespace_factor, 44);
+      FIELD_B (unknown_bit, 0);
     }
 
-  SINCE(R_2004) {
-    FIELD_BL (bg_flag);
-  }
+  SINCE(R_2004)
+    {
+      FIELD_BL (bg_flag, 90);
+      if (FIELD_VALUE(bg_flag) & (dat->version <= R_2018 ? 1 : 0x10))
+        {
+          FIELD_BL (bg_scale_factor, 45); // def: 1.5
+          FIELD_CMC (bg_color, 63);
+          FIELD_BL (bg_transparent, 441);
+        }
+    }
+  SINCE(R_2018)
+    {
+      FIELD_B(annotative, 0);
+      if (!FIELD_VALUE(annotative))
+        {
+          FIELD_BS (class_version, 0); // def: 0
+          FIELD_B (default_flag, 0);   // def: 1
+        }
+      // redundant fields
+      FIELD_HANDLE (reg_app, 5, 0);
+      FIELD_BL (attachment, 0);
+      FIELD_3BD (x_axis_dir, 10);
+      FIELD_3BD (insertion_pt, 11);
+      FIELD_BD (rect_width, 40);
+      FIELD_BD (rect_height, 41);
+      FIELD_BD (extents_width, 42);
+      FIELD_BD (extents_height, 43);
+      // end redundant fields
+      FIELD_BL (column_type, 71);
+      if (FIELD_VALUE(column_type))
+        {
+          FIELD_BL (num_column_heights, 72);
+          FIELD_BD (column_width, 44);
+          FIELD_BD (gutter, 45);
+          FIELD_B (auto_height, 73);
+          FIELD_B (flow_reversed, 74);
+          if (!FIELD_VALUE(auto_height) && FIELD_VALUE(column_type) == 2)
+            {
+              FIELD_VECTOR(column_heights, BD, num_column_heights, 46);
+            }
+        }
+    }
 
   COMMON_ENTITY_HANDLE_DATA;
-
   UNTIL(R_2007) {
-    FIELD_HANDLE (style, 5);
+    FIELD_HANDLE (style, 5, 7);
   }
 
 DWG_ENTITY_END
 
 /*(45)*/
-DWG_ENTITY(LEADER);
+DWG_ENTITY(LEADER)
 
-  FIELD_B (unknown_bit_1);
-  FIELD_BS (annot_type);
-  FIELD_BS (path_type);
-  FIELD_BL (numpts);
-  FIELD_3DPOINT_VECTOR (points, numpts);
-  FIELD_3DPOINT (origin);
-  FIELD_3DPOINT (extrusion);
-  FIELD_3DPOINT (x_direction);
-  FIELD_3DPOINT (offset_to_block_ins_pt);
+  FIELD_B (unknown_bit_1, 0);
+  FIELD_BS (annot_type, 0);
+  FIELD_BS (path_type, 0);
+  FIELD_BL (numpts, 0);
+  FIELD_3DPOINT_VECTOR (points, numpts, 10);
+  FIELD_3DPOINT (origin, 0);
+  FIELD_3DPOINT (extrusion, 210);
+  FIELD_3DPOINT (x_direction, 211);
+  FIELD_3DPOINT (offset_to_block_ins_pt, 212);
 
   SINCE(R_14) {
-    FIELD_3DPOINT (endptproj);
+    FIELD_3DPOINT (endptproj, 0);
   }
   VERSIONS(R_13, R_14) {
-    FIELD_BD (dimgap);
+    FIELD_BD (dimgap, 0);
   }
 
-  FIELD_BD (box_height);
-  FIELD_BD (box_width);
-  FIELD_B (hooklineonxdir);
-  FIELD_B (arrowhead_on);
+  FIELD_BD (box_height, 40);
+  FIELD_BD (box_width , 41);
+  FIELD_B (hooklineonxdir, 0);
+  FIELD_B (arrowhead_on, 0);
 
   VERSIONS(R_13, R_14)
     {
-      FIELD_BS (arrowhead_type);
-      FIELD_BD (dimasz);
-      FIELD_B (unknown_bit_2);
-      FIELD_B (unknown_bit_3);
-      FIELD_BS (unknown_short_1);
-      FIELD_BS (byblock_color);
-      FIELD_B (unknown_bit_4);
-      FIELD_B (unknown_bit_5);
+      FIELD_BS (arrowhead_type, 0);
+      FIELD_BD (dimasz, 0);
+      FIELD_B (unknown_bit_2, 0);
+      FIELD_B (unknown_bit_3, 0);
+      FIELD_BS (unknown_short_1, 0);
+      FIELD_BS (byblock_color, 0);
+      FIELD_B (unknown_bit_4, 0);
+      FIELD_B (unknown_bit_5, 0);
     }
 
   SINCE(R_2000)
     {
-      FIELD_BS (unknown_short_1);
-      FIELD_B (unknown_bit_4);
-      FIELD_B (unknown_bit_5);
+      FIELD_BS (unknown_short_1, 0);
+      FIELD_B (unknown_bit_4, 0);
+      FIELD_B (unknown_bit_5, 0);
     }
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -1627,306 +1797,300 @@ DWG_ENTITY(LEADER);
   //TODO check if field is present in R_13.
   //Juca thinks it is present but inactive/not used.
   SINCE(R_13) { // TODO until 2007?
-    FIELD_HANDLE (associated_annotation, 2);
+    FIELD_HANDLE (associated_annotation, 2, 340);
   }
 
   //UNTIL(R_2007) // TODO until 2007?
   {
-    FIELD_HANDLE (dimstyle, 5);
+    FIELD_HANDLE (dimstyle, 5, 2);
   }
 
 DWG_ENTITY_END
 
 /*(46)*/
-DWG_ENTITY(TOLERANCE);
+DWG_ENTITY(TOLERANCE)
 
   VERSIONS(R_13, R_14)
     {
-      FIELD_BS (unknown_short); //spec-typo? Spec says S instead of BS.
-      FIELD_BD (height);
-      FIELD_BD (dimgap);
+      FIELD_BS (unknown_short, 0); //spec-typo? Spec says S instead of BS.
+      FIELD_BD (height, 0);
+      FIELD_BD (dimgap, 0);
     }
 
-  FIELD_3DPOINT (ins_pt);
-  FIELD_3DPOINT (x_direction);
-  FIELD_3DPOINT (extrusion);
-  FIELD_TV (text_string);
+  FIELD_3DPOINT (ins_pt, 10);
+  FIELD_3DPOINT (x_direction, 11);
+  FIELD_3DPOINT (extrusion, 210);
+  FIELD_TV (text_string, 1);
 
   COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (dimstyle, 5);
+  FIELD_HANDLE (dimstyle, 5, 0);
 
 DWG_ENTITY_END
 
 /*(47)*/
-DWG_ENTITY(MLINE);
+DWG_ENTITY(MLINE)
 
-  FIELD_BD (scale);
-  FIELD_RC (just); /*spec-typo? Spec says EC instead of RC...*/
-  FIELD_3DPOINT (base_point);
-  FIELD_3DPOINT (extrusion);
-  FIELD_BS (open_closed);
-  FIELD_RC (num_lines);
-  FIELD_BS (num_verts);
+  FIELD_BD (scale, 40);
+  FIELD_RC (justification, 70); /* spec-typo? Spec says EC instead of RC */
+  FIELD_3DPOINT (base_point, 10);
+  FIELD_3DPOINT (extrusion, 210);
+  FIELD_BS (flags, 71);
+  FIELD_RC (num_lines, 73); //aka linesinstyle
+  FIELD_BS (num_verts, 72);
 
-  REPEAT(num_verts, verts, Dwg_Entity_MLINE_vert)
+  REPEAT(num_verts, verts, Dwg_MLINE_vertex)
     {
-      FIELD_3DPOINT (verts[rcount].vertex);
-      FIELD_3DPOINT (verts[rcount].vertex_direction);
-      FIELD_3DPOINT (verts[rcount].miter_direction);
+      FIELD_3DPOINT (verts[rcount].vertex, 10);
+      FIELD_3DPOINT (verts[rcount].vertex_direction, 210);
+      FIELD_3DPOINT (verts[rcount].miter_direction, 11);
 
-      REPEAT2(num_lines, verts[rcount].lines, Dwg_Entity_MLINE_line)
+      REPEAT2(num_lines, verts[rcount].lines, Dwg_MLINE_line)
         {
-          FIELD_BS (verts[rcount].lines[rcount2].num_segparms);
-          REPEAT3(verts[rcount].lines[rcount2].num_segparms, verts[rcount].lines[rcount2].segparms, BITCODE_BD)
+          FIELD_BS (verts[rcount].lines[rcount2].num_segparms, 74);
+          REPEAT3(verts[rcount].lines[rcount2].num_segparms,
+                  verts[rcount].lines[rcount2].segparms,
+                  BITCODE_BD)
             {
-              FIELD_BD (verts[rcount].lines[rcount2].segparms[rcount3]);
+              FIELD_BD (verts[rcount].lines[rcount2].segparms[rcount3], 41);
             }
+          END_REPEAT(verts[rcount].lines[rcount2].segparms);
 
-          FIELD_BS (verts[rcount].lines[rcount2].num_areafillparms);
-          REPEAT3(verts[rcount].lines[rcount2].num_areafillparms, verts[rcount].lines[rcount2].areafillparms, BITCODE_BD)
+          FIELD_BS (verts[rcount].lines[rcount2].num_areafillparms, 75);
+          REPEAT3(verts[rcount].lines[rcount2].num_areafillparms,
+                  verts[rcount].lines[rcount2].areafillparms,
+                  BITCODE_BD)
             {
-              FIELD_BD (verts[rcount].lines[rcount2].areafillparms[rcount3]);
+              FIELD_BD (verts[rcount].lines[rcount2].areafillparms[rcount3], 42);
             }
+          END_REPEAT(verts[rcount].lines[rcount2].areafillparms);
         }
+      END_REPEAT(verts[rcount].lines);
     }
+  END_REPEAT(verts);
 
   COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (mline_style, 5);
+  FIELD_HANDLE (mlinestyle, 5, 340);
 
 DWG_ENTITY_END
 
 /*(48)*/
-DWG_OBJECT(BLOCK_CONTROL);
+DWG_OBJECT(BLOCK_CONTROL)
 
-  FIELD_BL (num_entries);
-  FIELD_HANDLE (null_handle, 4);
+  FIELD_BL (num_entries, 70);
+
+  FIELD_HANDLE (null_handle, 4, 0);
   XDICOBJHANDLE(3);
-  HANDLE_VECTOR(block_headers, num_entries, 2);
-  FIELD_HANDLE (model_space,3);
+  HANDLE_VECTOR(block_headers, num_entries, 2, 0);
+  FIELD_HANDLE (model_space, 3, 0);
   UNTIL(R_2007) {
-    FIELD_HANDLE (paper_space,3);
+    FIELD_HANDLE (paper_space, 3, 0);
   }
 
 DWG_OBJECT_END
 
-/*(49)*/
-DWG_OBJECT(BLOCK_HEADER);
+/* (49/1) */
+DWG_OBJECT(BLOCK_HEADER)
 
-  FIELD_TV (entry_name);
-  FIELD_B (_64_flag);
-  PRE(R_2010)
-    {
-      FIELD_BS (xrefindex_plus1);
-      FIELD_B (xrefdep);
-    }
-  LATER_VERSIONS
-    {
-      FIELD_B (xrefdep);
-      if (FIELD_VALUE(xrefdep))
-        FIELD_BS (xrefindex_plus1);
-    }
-  FIELD_B (anonymous);
-  FIELD_B (hasattrs);
-  FIELD_B (blkisxref);
-  FIELD_B (xrefoverlaid);
+  COMMON_TABLE_FLAGS
+
+  PRE(R_13)
+  {
+    FIELD_RD (base_pt.z, 30);
+    FIELD_2RD (base_pt, 10);
+    FIELD_RC (block_scaling, 0);
+    FIELD_RS (owned_object_count, 0);
+    FIELD_RC (flag2, 0);
+    FIELD_RS (insert_count, 0);
+    FIELD_RS (flag3, 0);
+  }
+  SINCE(R_13) {
+    FIELD_B (anonymous, 0); // bit 1
+    FIELD_B (hasattrs, 0);  // bit 2
+    FIELD_B (blkisxref, 0); // bit 4
+    FIELD_B (xrefoverlaid, 0); // bit 8
+  }
 
   SINCE(R_2000) {
-    FIELD_B (loaded_bit);
+    FIELD_B (loaded_bit, 0);
   }
-
+  SINCE(R_13) {
+    FIELD_VALUE(flag) = FIELD_VALUE(anonymous) |
+                        FIELD_VALUE(hasattrs) << 1 |
+                        FIELD_VALUE(blkisxref) << 2 |
+                        FIELD_VALUE(xrefoverlaid) << 3 |
+                        FIELD_VALUE(xrefdep) << 4 |
+                        FIELD_VALUE(_64_flag) << 6;
+  }
   SINCE(R_2004) {
-    FIELD_BL (owned_object_count);
+    FIELD_BL (owned_object_count, 0);
   }
 
-  FIELD_3DPOINT (base_pt);
-  FIELD_TV (xref_pname);
+  SINCE(R_13) {
+    FIELD_3DPOINT (base_pt, 10);
+    FIELD_TV (xref_pname, 1); // and 3
+  }
 
   SINCE(R_2000)
     {
-      FIELD_INSERT_COUNT (insert_count, RL);
-      FIELD_TV (block_description);
+      FIELD_INSERT_COUNT (insert_count, RL, 0);
+      FIELD_TV (description, 4);
 
-      FIELD_BL (preview_data_size);
-      FIELD_VECTOR (preview_data, RC, preview_data_size);
+      FIELD_BL (preview_data_size, 0);
+      FIELD_VECTOR (preview_data, RC, preview_data_size, 310);
     }
 
   SINCE(R_2007)
     {
-      FIELD_BS (insert_units);
-      FIELD_B (explodable);
-      FIELD_RC (block_scaling);
+      FIELD_BS (insert_units, 70);
+      FIELD_B (explodable, 280);
+      FIELD_RC (block_scaling, 281);
     }
 
-  FIELD_HANDLE (block_control_handle, 4);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
-  FIELD_HANDLE (null_handle, 5);
-  FIELD_HANDLE (block_entity, 3);
+  SINCE(R_13) {
+    FIELD_HANDLE (block_control_handle, 4, 0);
+    REACTORS(4);
+    XDICOBJHANDLE(3);
+    FIELD_HANDLE (null_handle, 5, 0);
+    FIELD_HANDLE (block_entity, 3, 0);
+  }
 
   VERSIONS(R_13, R_2000)
     {
       if (!FIELD_VALUE(blkisxref) && !FIELD_VALUE(xrefoverlaid))
         {
-          FIELD_HANDLE (first_entity, 4);
-          FIELD_HANDLE (last_entity, 4);
+          FIELD_HANDLE (first_entity, 4, 0);
+          FIELD_HANDLE (last_entity, 4, 0);
         }
     }
 
   SINCE(R_2004)
     {
-      HANDLE_VECTOR(entities, owned_object_count, 4);
+      HANDLE_VECTOR(entities, owned_object_count, 4, 0);
     }
 
-  FIELD_HANDLE (endblk_entity, 3);
+  SINCE(R_13) {
+    FIELD_HANDLE (endblk_entity, 3, 0);
+  }
 
   SINCE(R_2000)
     {
-      if (FIELD_VALUE(insert_count))
-        HANDLE_VECTOR(insert_handles, insert_count, 7)
-      FIELD_HANDLE (layout_handle, 5);
+      if (FIELD_VALUE(insert_count)) {
+        HANDLE_VECTOR(insert_handles, insert_count, ANYCODE, 0);
+      }
+      FIELD_HANDLE (layout_handle, 5, 0);
     }
 
 DWG_OBJECT_END
 
 /*(50)*/
-DWG_OBJECT(LAYER_CONTROL);
+DWG_OBJECT(LAYER_CONTROL)
 
-  FIELD_BL (num_entries);
+  FIELD_BL (num_entries, 70);
   UNTIL(R_2007) {
-    FIELD_HANDLE (null_handle, 4);
+    FIELD_HANDLE (null_handle, 4, 0);
   }
   XDICOBJHANDLE(3);
-  HANDLE_VECTOR(layers, num_entries, 2);
+  HANDLE_VECTOR(layers, num_entries, 2, 0);
 
 DWG_OBJECT_END
 
-/*(51)*/
-DWG_OBJECT(LAYER);
+/* (51/2) */
+DWG_OBJECT(LAYER)
+
+  COMMON_TABLE_FLAGS
 
   PRE(R_13)
   {
-    FIELD_RC (flag);        // 70 (1 frozen/thawed, 2 frozen_in_new, 4 locked)
-    FIELD_TF (entry_name, 32);
-    FIELD_RS (used);
-
-    FIELD_RS (color_rs);   // color
-    FIELD_RS (linetype_rs);   // style
+    FIELD_RS (color_rs, 62);     // color
+    FIELD_RS (linetype_rs, 7);   // style
   }
-  LATER_VERSIONS
+  VERSIONS(R_13, R_14)
   {
-    FIELD_TV (entry_name);
-    FIELD_B (_64_flag);
-    PRE(R_2010)
-    {
-      FIELD_BS (xrefindex_plus1);
-      FIELD_B (xrefdep);
-    }
-    LATER_VERSIONS
-    {
-      FIELD_B (xrefdep);
-      if (FIELD_VALUE(xrefdep)) {
-        FIELD_BS (xrefindex_plus1);
-      }
-    }
-    VERSIONS(R_13, R_14)
-    {
-      FIELD_B (frozen);
-      FIELD_B (on);
-      FIELD_B (frozen_in_new);
-      FIELD_B (locked);
-    }
+    FIELD_B (frozen, 0); // bit 1
+    FIELD_B (on, 0);
+    FIELD_B (frozen_in_new, 0);
+    FIELD_B (locked, 0);
+    FIELD_VALUE(flag) = FIELD_VALUE(frozen) |
+      (FIELD_VALUE(frozen_in_new) << 1) |
+      (FIELD_VALUE(locked) << 2) |
+      (FIELD_VALUE(color_rs) < 0 ? 32 : 0) |
+      (FIELD_VALUE(xrefdep) << 4) |
+      (FIELD_VALUE(_64_flag) << 6);
+  }
+  SINCE(R_2000) {
+    FIELD_BS (flag_s, 70); // 70,290,370
+    // contains frozen (1 bit), on (2 bit), frozen by default in new viewports (4 bit),
+    // locked (8 bit), plotting flag (16 bit), and lineweight (mask with 0x03E0)
+    FIELD_VALUE(flag) = (BITCODE_RC)FIELD_VALUE(flag_s) & 0xff;
+  }
+  FIELD_CMC (color, 62);
 
-    SINCE(R_2000) {
-      FIELD_BS (values);
-    }
-
-    FIELD_CMC (color);
-
-    UNTIL(R_2007)
+  UNTIL(R_2007)
     {
-      FIELD_HANDLE (layer_control, 4);
+      FIELD_HANDLE (layer_control, 4, 0);
       REACTORS(4);
       XDICOBJHANDLE(3);
-      FIELD_HANDLE (null_handle, 5);
+      FIELD_HANDLE (xref, 5, 0);
     }
-    VERSIONS(R_2000, R_2007) {
-      FIELD_HANDLE (plotstyle, 5);
-    }
-    SINCE(R_2007) {
-      FIELD_HANDLE (material, ANYCODE);
-    }
-    UNTIL(R_2007) {
-      FIELD_HANDLE (linetype, 5);
-    }
-
-    //FIELD_HANDLE (null_handle2, 5); // doc error
+  VERSIONS(R_2000, R_2007) {
+    FIELD_HANDLE (plotstyle, 5, 390);
   }
+  SINCE(R_2007) {
+    FIELD_HANDLE (material, ANYCODE, 347);
+  }
+  UNTIL(R_2007) {
+    FIELD_HANDLE (linetype, 5, 6);
+  }
+  //FIELD_HANDLE (null_handle, 5); // doc error?
 
 DWG_OBJECT_END
 
 /*(52)*/
-DWG_OBJECT(SHAPEFILE_CONTROL);
+DWG_OBJECT(SHAPEFILE_CONTROL)
 
-  FIELD_BL (num_entries);
-  FIELD_HANDLE (null_handle, 4);
+  FIELD_BL (num_entries, 70);
+
+  FIELD_HANDLE (null_handle, 4, 0);
   XDICOBJHANDLE(3);
-  HANDLE_VECTOR(shapefiles, num_entries, 2);
+  HANDLE_VECTOR(shapefiles, num_entries, 2, 0);
 
 DWG_OBJECT_END
 
-/*(53)*/
-DWG_OBJECT(SHAPEFILE);
+/* (53/3) preR13: STYLE */
+DWG_OBJECT(SHAPEFILE)
 
-  PRE(R_13)
+  COMMON_TABLE_FLAGS
+
+  SINCE(R_13)
   {
-    FIELD_RC (flag);        //70
-    FIELD_TF (entry_name, 32);
-    FIELD_RS (used);
-  }
-  LATER_VERSIONS
-  {
-    FIELD_TV (entry_name);  //2
-    FIELD_B (_64_flag);     //70
-    PRE(R_2010)
-      {
-        FIELD_BS (xrefindex_plus1);
-        FIELD_B (xrefdep);
-      }
-    LATER_VERSIONS
-      {
-        FIELD_B (xrefdep);
-        if (FIELD_VALUE(xrefdep)) {
-          FIELD_BS (xrefindex_plus1);
-        }
-      }
-    FIELD_B (vertical);     //1
-    FIELD_B (shape_file);   //1
+    FIELD_B (vertical, 0);     //1
+    FIELD_B (shape_file, 0);   //1
   }
   PRE(R_13)
   {
-    FIELD_RD (fixed_height); //40
-    FIELD_RD (width_factor); //41
-    FIELD_RD (oblique_ang);
-    FIELD_RC (generation);
-    FIELD_RD (last_height);
-    FIELD_TF (font_name, 128);
+    FIELD_RD (fixed_height, 40);
+    FIELD_RD (width_factor, 41);
+    FIELD_RD (oblique_ang, 50);
+    FIELD_RC (generation, 71);
+    FIELD_RD (last_height, 42);
+    FIELD_TF (font_name, 128, 3);
   }
   LATER_VERSIONS
   {
-    FIELD_BD (fixed_height); //40
-    FIELD_BD (width_factor); //41
-    FIELD_BD (oblique_ang);  //50
-    FIELD_RC (generation);   //71
-    FIELD_BD (last_height);  //42
-    FIELD_TV (font_name);
+    FIELD_BD (fixed_height, 40);
+    FIELD_BD (width_factor, 41);
+    FIELD_BD (oblique_ang, 50);
+    FIELD_RC (generation, 71);
+    FIELD_BD (last_height, 42);
+    FIELD_TV (font_name, 3);
 
-    FIELD_TV (bigfont_name);
-    FIELD_HANDLE (shapefile_control, 4);
-
+    FIELD_TV (bigfont_name, 4);
+    //TODO 1071  long truetype font’s pitch and family, charset, and italic and bold flags
+    FIELD_HANDLE (shapefile_control, 4, 0);
     REACTORS(4);
     XDICOBJHANDLE(3);
     UNTIL(R_2007) {
-      FIELD_HANDLE (null_handle, 5);
+      FIELD_HANDLE (null_handle, 5, 0);
     }
   }
 
@@ -1936,69 +2100,85 @@ DWG_OBJECT_END
 //(55): Unknown
 
 /*(56)*/
-DWG_OBJECT(LTYPE_CONTROL);
+DWG_OBJECT(LTYPE_CONTROL)
 
-  FIELD_BS (num_entries);
+  FIELD_BS (num_entries, 70);
+
   UNTIL(R_2007) {
-    FIELD_HANDLE (null_handle, 4);
+    FIELD_HANDLE (null_handle, 4, 0);
   }
   XDICOBJHANDLE(3);
-  HANDLE_VECTOR(linetypes, num_entries, 2);
-  FIELD_HANDLE (bylayer, 3);
-  FIELD_HANDLE (byblock, 3);
+  HANDLE_VECTOR(linetypes, num_entries, 2, 0);
+  FIELD_HANDLE (bylayer, 3, 0);
+  FIELD_HANDLE (byblock, 3, 0);
 
 DWG_OBJECT_END
 
-/*(57)*/
-DWG_OBJECT(LTYPE);
+/* (57/5) */
+DWG_OBJECT(LTYPE)
 
-  FIELD_TV (entry_name);
-  FIELD_B (_64_flag);
-  PRE(R_2010)
-    {
-      FIELD_BS (xrefindex_plus1);
-      FIELD_B (xrefdep);
-    }
+  COMMON_TABLE_FLAGS
+
+  PRE(R_13)
+  {
+    FIELD_TF (description, 48, 3);
+    FIELD_RC (alignment, 72);
+  }
   LATER_VERSIONS
-    {
-      FIELD_B (xrefdep);
-      if (FIELD_VALUE(xrefdep)) {
-        FIELD_BS (xrefindex_plus1);
-      }
-    }
-  FIELD_TV (description);
-  FIELD_BD (pattern_len);
-  FIELD_RC (alignment);
-  FIELD_RC (num_dashes);
+  {
+    FIELD_TV (description, 48);
+    FIELD_BD (pattern_len, 40); // total length
+    FIELD_RC (alignment, 72);
+  }
+  FIELD_RC (num_dashes, 73);
   REPEAT(num_dashes, dash, LTYPE_dash)
     {
-      FIELD_BD (dash[rcount].length);
-      FIELD_BS (dash[rcount].complex_shapecode);
-      FIELD_RD (dash[rcount].x_offset);
-      FIELD_RD (dash[rcount].y_offset);
-      FIELD_BD (dash[rcount].scale);
-      FIELD_BD (dash[rcount].rotation);
-      FIELD_BS (dash[rcount].shape_flag);
-      if (FIELD_VALUE(dash[rcount].shape_flag) & 0x2)
-        FIELD_VALUE(text_area_is_present) = 1;
+      PRE(R_13)
+      {
+        FIELD_RD (dash[rcount].length, 49);
+#ifndef IS_PRINT        
+        FIELD_VALUE(pattern_len) += FIELD_VALUE(dash[rcount].length);
+#endif
+        FIELD_RS (dash[rcount].complex_shapecode, 74);
+        FIELD_RD (dash[rcount].x_offset, 44);
+        FIELD_RD (dash[rcount].y_offset, 45);
+        FIELD_RD (dash[rcount].scale, 46);
+        FIELD_RD (dash[rcount].rotation, 50);
+        FIELD_RS (dash[rcount].shape_flag, 75);
+        if (FIELD_VALUE(dash[rcount].shape_flag) & 0x2)
+          FIELD_VALUE(text_area_is_present) = 1;
+      }
+      LATER_VERSIONS
+      {
+        FIELD_BD (dash[rcount].length, 49);
+        FIELD_BS (dash[rcount].complex_shapecode, 74);
+        FIELD_RD (dash[rcount].x_offset, 44);
+        FIELD_RD (dash[rcount].y_offset, 45);
+        FIELD_BD (dash[rcount].scale, 46);
+        FIELD_BD (dash[rcount].rotation, 50);
+        FIELD_BS (dash[rcount].shape_flag, 75);
+        if (FIELD_VALUE(dash[rcount].shape_flag) & 0x2)
+          FIELD_VALUE(text_area_is_present) = 1;
+      }
     }
+  END_REPEAT(dash);
 
   UNTIL(R_2004) {
-    FIELD_VECTOR_N (strings_area, RC, 256);
+    FIELD_VECTOR_N (strings_area, RC, 256, 3);
   }
   LATER_VERSIONS
     {
       if (FIELD_VALUE(text_area_is_present))
         {
-          FIELD_VECTOR_N (strings_area, RC, 512);
+          FIELD_VECTOR_N (strings_area, RC, 512, 3);
         }
     }
 
-  FIELD_HANDLE (linetype_control, 4);
+  FIELD_HANDLE (linetype_control, 4, 0);
   REACTORS(4);
   XDICOBJHANDLE(3);
-  FIELD_HANDLE (null_handle, 5);
-  HANDLE_VECTOR(shapefiles, num_dashes, 5);
+  FIELD_HANDLE (null_handle, 5, 0);
+  HANDLE_VECTOR(shapefiles, num_dashes, 5, 340);
 
 DWG_OBJECT_END
 
@@ -2006,294 +2186,306 @@ DWG_OBJECT_END
 //(59): Unknown
 
 /*(60)*/
-DWG_OBJECT(VIEW_CONTROL);
+DWG_OBJECT(VIEW_CONTROL)
 
-  FIELD_BL (num_entries);
+  FIELD_BL (num_entries, 70);
+
   UNTIL(R_2007) {
-    FIELD_HANDLE (null_handle, 4);
+    FIELD_HANDLE (null_handle, 4, 0);
   }
   XDICOBJHANDLE(3);
-  HANDLE_VECTOR(views, num_entries, 2);
+  HANDLE_VECTOR(views, num_entries, 2, 0);
 
 DWG_OBJECT_END
 
-/*(61)*/
-DWG_OBJECT(VIEW);
+/* (61/6) */
+DWG_OBJECT(VIEW)
 
-  FIELD_TV (entry_name);
-  FIELD_B (_64_flag);
-  PRE(R_2010)
-    {
-      FIELD_BS (xrefindex_plus1);
-      FIELD_B (xrefdep);
-    }
-  LATER_VERSIONS
-    {
-      FIELD_B (xrefdep);
-      if (FIELD_VALUE(xrefdep)) {
-        FIELD_BS (xrefindex_plus1);
-      }
-    }
-  FIELD_BD (height);
-  FIELD_BD (width);
-  FIELD_2RD (center);
-  FIELD_3BD (target);
-  FIELD_3BD (direction);
-  FIELD_BD (twist_angle);
-  FIELD_BD (lens_length);
-  FIELD_BD (front_clip);
-  FIELD_BD (back_clip);
-  FIELD(view_mode, 4BITS);
+  COMMON_TABLE_FLAGS
 
-  SINCE(R_2000) {
-    FIELD_RC (render_mode);
+  PRE(R_13)
+  {
+    FIELD_RD (height, 40);
+    FIELD_2RD (center, 10);
+    FIELD_RD (width, 41);
+    FIELD_3RD (target, 12);
+    FIELD_3RD (direction, 11);
+    FIELD_RS (view_mode, 71);
+    FIELD_RD (lens_length, 42);
+    FIELD_RD (front_clip, 43);
+    FIELD_RD (back_clip, 44);
+    FIELD_RD (twist_angle, 50);
   }
-
-  FIELD_B (pspace_flag);
-
+  LATER_VERSIONS
+  {
+    FIELD_BD (height, 40);
+    FIELD_BD (width, 41);
+    FIELD_2RD (center, 20);
+    FIELD_3BD (target, 12);
+    FIELD_3BD (direction, 11);
+    FIELD_BD (twist_angle, 50);
+    FIELD_BD (lens_length, 42);
+    FIELD_BD (front_clip, 43);
+    FIELD_BD (back_clip, 44);
+    FIELD_4BITS(view_mode, 71);
+  }
+  SINCE(R_2000) {
+    FIELD_RC (render_mode, 281);
+  }
+  SINCE(R_13) {
+    FIELD_B (pspace_flag, 0);
+    FIELD_VALUE(flag) =
+      FIELD_VALUE(pspace_flag) |
+      FIELD_VALUE(xrefdep) << 4 |
+      (FIELD_VALUE(xrefindex_plus1)>0 ? 32 : 0) |
+      FIELD_VALUE(_64_flag) << 6;
+  }
   SINCE(R_2000)
     {
-      FIELD_B (associated_ucs);
+      FIELD_B (associated_ucs, 72);
 
       if (FIELD_VALUE(associated_ucs) & 1)
         {
-          FIELD_3BD (origin);
-          FIELD_3BD (x_direction);
-          FIELD_3BD (y_direction);
-          FIELD_BD (elevation);
-          FIELD_BS (orthographic_view_type);
+          FIELD_3BD (origin, 110);
+          FIELD_3BD (x_direction, 111);
+          FIELD_3BD (y_direction, 112);
+          FIELD_BD (elevation, 146);
+          FIELD_BS (orthographic_view_type, 79);
         }
     }
 
   SINCE(R_2007) {
-    FIELD_B (camera_plottable);
+    FIELD_B (camera_plottable, 73);
   }
-
-  FIELD_HANDLE (view_control_handle, 4);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
-  FIELD_HANDLE (null_handle, 5);
-
+  SINCE(R_13) {
+    FIELD_HANDLE (view_control_handle, 4, 0);
+    REACTORS(4);
+    XDICOBJHANDLE(3);
+    FIELD_HANDLE (null_handle, 5, 0);
+  }
   SINCE(R_2000)
     {
       if (FIELD_VALUE(associated_ucs) & 1)
         {
-          FIELD_HANDLE (base_ucs_handle, ANYCODE);
-          FIELD_HANDLE (named_ucs_handle, ANYCODE);
+          FIELD_HANDLE (base_ucs_handle, ANYCODE, 346);
+          FIELD_HANDLE (named_ucs_handle, ANYCODE, 345);
 	}
     }
-
   SINCE(R_2007) {
-    FIELD_HANDLE (live_section, ANYCODE);
+    FIELD_HANDLE (live_section, ANYCODE, 334);
   }
 
 DWG_OBJECT_END
 
 /*(62)*/
-DWG_OBJECT(UCS_CONTROL);
+DWG_OBJECT(UCS_CONTROL)
 
-  FIELD_BS (num_entries);
+  FIELD_BS (num_entries, 70);
 
   UNTIL(R_2007) {
-    FIELD_HANDLE (null_handle, 4);
+    FIELD_HANDLE (null_handle, 4, 0);
   }
   XDICOBJHANDLE(3);
-  HANDLE_VECTOR(ucs, num_entries, 2);
+  HANDLE_VECTOR(ucs, num_entries, 2, 0);
 
 DWG_OBJECT_END
 
-/*(63)*/
-DWG_OBJECT(UCS);
+/* (63/7) */
+DWG_OBJECT(UCS)
 
-  FIELD_TV (entry_name);
-  FIELD_B (_64_flag);
-  PRE(R_2010)
-    {
-      FIELD_BS (xrefindex_plus1);
-      FIELD_B (xrefdep);
-    }
+  COMMON_TABLE_FLAGS
+
+  PRE(R_13)
+  {
+    FIELD_3RD (origin, 10);
+    FIELD_3RD (x_direction, 11);
+    FIELD_3RD (y_direction, 12);
+  }
   LATER_VERSIONS
-    {
-      FIELD_B (xrefdep);
-      if (FIELD_VALUE(xrefdep)) {
-        FIELD_BS (xrefindex_plus1);
-      }
-    }
-  FIELD_3BD (origin);
-  FIELD_3BD (x_direction);
-  FIELD_3BD (y_direction);
+  {
+    FIELD_3BD (origin, 10);
+    FIELD_3BD (x_direction, 11);
+    FIELD_3BD (y_direction, 12);
+  }
 
   SINCE(R_2000)
-    {
-      FIELD_BD (elevation);
-      FIELD_BS (orthographic_view_type);
-      FIELD_BS (orthographic_type);
-    }
+  {
+    FIELD_BD (elevation, 146);
+    FIELD_BS (orthographic_view_type, 71);
+    FIELD_BS (orthographic_type, 71); // on pairs with 13?
+  }
 
-  FIELD_HANDLE (ucs_control_handle, 4);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
-  FIELD_HANDLE (null_handle, 5);
-
+  SINCE(R_13)
+  {
+    FIELD_HANDLE (ucs_control_handle, 4, 0);
+    REACTORS(4);
+    XDICOBJHANDLE(3);
+    FIELD_HANDLE (null_handle, 5, 0);
+  }
   SINCE(R_2000)
     {
-      FIELD_HANDLE (base_ucs_handle, ANYCODE);
-      FIELD_HANDLE (unknown, ANYCODE);
+      FIELD_HANDLE (base_ucs_handle, ANYCODE, 346);
+      FIELD_HANDLE (unknown, ANYCODE, 0);
     }
 DWG_OBJECT_END
 
 /*(64)*/
-DWG_OBJECT(VPORT_CONTROL);
+DWG_OBJECT(VPORT_CONTROL)
 
-  FIELD_BS (num_entries);
+  FIELD_BS (num_entries, 70);
 
-  UNTIL(R_2007) {
-    FIELD_HANDLE (null_handle, 4);
-  }
+  FIELD_HANDLE (null_handle, 4, 0);
   XDICOBJHANDLE(3);
-  HANDLE_VECTOR(vports, num_entries, 2);
+  HANDLE_VECTOR(vports, num_entries, 2, 0);
 
 DWG_OBJECT_END
 
-/*(65)*/
-DWG_OBJECT(VPORT);
+/* (65/8) */
+DWG_OBJECT(VPORT)
 
-  FIELD_TV (entry_name);
-  FIELD_B (_64_flag);
-  PRE(R_2010)
-    {
-      FIELD_BS (xrefindex_plus1);
-      FIELD_B (xrefdep);
-    }
-  LATER_VERSIONS
-    {
-      FIELD_B (xrefdep);
-      if (FIELD_VALUE(xrefdep)) {
-        FIELD_BS (xrefindex_plus1);
-      }
-    }
-  FIELD_BD (VIEWSIZE);
-  FIELD_BD (aspect_ratio);
-  FIELD_2RD (VIEWCTR);
-  FIELD_3BD (view_target);
-  FIELD_3BD (VIEWDIR);
-  FIELD_BD (view_twist);
-  FIELD_BD (lens_length);
-  FIELD_BD (front_clip);
-  FIELD_BD (back_clip);
-  FIELD_4BITS (view_mode);
+  COMMON_TABLE_FLAGS
 
-  SINCE(R_2000) {
-    FIELD_RC (render_mode);
+  PRE(R_13)
+  { // TODO verify
+    FIELD_RD (VIEWSIZE, 40);
+    FIELD_RD (aspect_ratio, 41);
+    FIELD_2RD (VIEWCTR, 12);
+    FIELD_3RD (view_target, 17);
+    FIELD_3RD (VIEWDIR, 16);
+    FIELD_RD (view_twist, 50);
+    FIELD_RD (lens_length, 42);
+    FIELD_RD (front_clip, 43);
+    FIELD_RD (back_clip, 33);
+    FIELD_RS (view_mode, 71);
+
+    FIELD_2RD (lower_left, 10);
+    FIELD_2RD (upper_right, 11);
+    FIELD_RC (UCSFOLLOW, 71);
+    FIELD_RS (circle_zoom, 72);
+    FIELD_RC (FASTZOOM, 73);
+    FIELD_RC (UCSICON, 74);
+    FIELD_RC (GRIDMODE, 76);
+    FIELD_2RD (GRIDUNIT, 15);
+    FIELD_RS (SNAPMODE, 75);
+    FIELD_RC (SNAPSTYLE, 77);
+    FIELD_RS (SNAPISOPAIR, 78);
+    FIELD_RD (SNAPANG, 50);
+    FIELD_2RD (SNAPBASE, 13);
+    FIELD_2RD (SNAPUNIT, 14);
+  }
+  else
+  {
+    FIELD_BD (VIEWSIZE, 40);
+    FIELD_BD (aspect_ratio, 41);
+    FIELD_2RD (VIEWCTR, 12);
+    FIELD_3BD (view_target, 17);
+    FIELD_3BD (VIEWDIR, 16);
+    FIELD_BD (view_twist, 50);
+    FIELD_BD (lens_length, 42);
+    FIELD_BD (front_clip, 43);
+    FIELD_BD (back_clip, 33);
+    FIELD_4BITS (view_mode, 71);
+
+    SINCE(R_2000) {
+      FIELD_RC (render_mode, 281);
+    }
+    SINCE(R_2007)
+    {
+      FIELD_B (use_default_lights, 292);
+      FIELD_RC (default_lightning_type, 282);
+      FIELD_BD (brightness, 141);
+      FIELD_BD (contrast, 142);
+      FIELD_CMC (ambient_color, 63);
+    }
+    
+    FIELD_2RD (lower_left, 10);
+    FIELD_2RD (upper_right, 11);
+    FIELD_B (UCSFOLLOW, 0); // bit 3 of 71
+    FIELD_BS (circle_zoom, 72);
+    FIELD_B (FASTZOOM, 73);
+    FIELD_BB (UCSICON, 74);
+    FIELD_B (GRIDMODE, 76);
+    FIELD_2RD (GRIDUNIT, 15);
+    FIELD_B (SNAPMODE, 75);
+    FIELD_B (SNAPSTYLE, 77);
+    FIELD_BS (SNAPISOPAIR, 78);
+    FIELD_BD (SNAPANG, 50);
+    FIELD_2RD (SNAPBASE, 13);
+    FIELD_2RD (SNAPUNIT, 14);
+
+    SINCE(R_2000)
+    {
+      FIELD_B (unknown, 0);
+      FIELD_B (ucs_pre_viewport, 71); // bit 0 of 71
+      FIELD_3BD (ucs_origin, 110);
+      FIELD_3BD (ucs_x_axis, 111);
+      FIELD_3BD (ucs_y_axis, 112);
+      FIELD_BD (ucs_elevation, 146);
+      FIELD_BS (ucs_orthografic_type, 79);
+    }
+
+    SINCE(R_2007)
+    {
+      FIELD_BS (grid_flags, 60);
+      FIELD_BS (grid_major, 61);
+    }
+
+    FIELD_HANDLE (vport_control, 4, 0);
+    REACTORS(4);
+    XDICOBJHANDLE(3);
+    FIELD_HANDLE (null_handle, 5, 0);
   }
 
   SINCE(R_2007)
     {
-      FIELD_B (use_default_lights);
-      FIELD_RC (default_lightning_type);
-      FIELD_BD (brightness);
-      FIELD_BD (contrast);
-      FIELD_CMC (ambient_color);
-    }
-
-  FIELD_2RD (lower_left);
-  FIELD_2RD (upper_right);
-  FIELD_B (UCSFOLLOW);
-  FIELD_BS (circle_zoom);
-  FIELD_B (FASTZOOM);
-  FIELD_BB (UCSICON);
-  FIELD_B (GRIDMODE);
-  FIELD_2RD (GRIDUNIT);
-  FIELD_B (SNAPMODE);
-  FIELD_B (SNAPSTYLE);
-  FIELD_BS (SNAPISOPAIR);
-  FIELD_BD (SNAPANG);
-  FIELD_2RD (SNAPBASE);
-  FIELD_2RD (SNAPUNIT);
-
-  SINCE(R_2000)
-    {
-      FIELD_B (unknown);
-      FIELD_B (ucs_pre_viewport);
-      FIELD_3BD (ucs_origin);
-      FIELD_3BD (ucs_x_axis);
-      FIELD_3BD (ucs_y_axis);
-      FIELD_BD (ucs_elevation);
-      FIELD_BS (ucs_orthografic_type);
-    }
-
-  SINCE(R_2007)
-    {
-      FIELD_BS (grid_flags);
-      FIELD_BS (grid_major);
-    }
-
-  FIELD_HANDLE (vport_control, 4);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
-  FIELD_HANDLE (null_handle, 5);
-
-  SINCE(R_2007)
-    {
-      FIELD_HANDLE (background_handle, ANYCODE);
-      FIELD_HANDLE (visual_style_handle, ANYCODE);
-      FIELD_HANDLE (sun_handle, ANYCODE);
+      FIELD_HANDLE (background_handle, ANYCODE, 332);
+      FIELD_HANDLE (visual_style_handle, ANYCODE, 348);
+      FIELD_HANDLE (sun_handle, ANYCODE, 361);
     }
 
   SINCE(R_2000)
     {
-      FIELD_HANDLE (named_ucs_handle, ANYCODE);
-      FIELD_HANDLE (base_ucs_handle, ANYCODE);
+      FIELD_HANDLE (named_ucs_handle, ANYCODE, 345);
+      FIELD_HANDLE (base_ucs_handle, ANYCODE, 346);
     }
 
 DWG_OBJECT_END
 
 /*(66)*/
-DWG_OBJECT(APPID_CONTROL);
+DWG_OBJECT(APPID_CONTROL)
 
-  FIELD_BS (num_entries);
+  FIELD_BS (num_entries, 70);
 
-  UNTIL(R_2007) {
-    FIELD_HANDLE (null_handle, 4);
-  }
+  //UNTIL(R_2007) {
+  FIELD_HANDLE (null_handle, 4, 0);
+  //}
   XDICOBJHANDLE(3);
-  HANDLE_VECTOR(apps, num_entries, 2);
+  HANDLE_VECTOR(apps, num_entries, 2, 0);
 
 DWG_OBJECT_END
 
-/*(67)*/
-DWG_OBJECT(APPID);
+/* (67/9) */
+DWG_OBJECT(APPID)
 
-  FIELD_TV (entry_name);
-  FIELD_B (_64_flag);
-  PRE(R_2010)
-    {
-      FIELD_BS (xrefindex_plus1);
-      FIELD_B (xrefdep);
-    }
-  LATER_VERSIONS
-    {
-      FIELD_B (xrefdep);
-      if (FIELD_VALUE(xrefdep)) {
-        FIELD_BS (xrefindex_plus1);
-      }
-    }
-  FIELD_RC (unknown);
+  COMMON_TABLE_FLAGS
 
-  UNTIL(R_2007)
+  SINCE(R_13) {
+    FIELD_RC (unknown, 71); // not in DXF if 0. has_something
+  }
+  VERSIONS(R_13, R_2007)
     {
-      FIELD_HANDLE (app_control, 4);
+      FIELD_HANDLE (app_control, 4, 0);
       REACTORS(4);
       XDICOBJHANDLE(3);
-      FIELD_HANDLE (null_handle, 5);
+      FIELD_HANDLE (null_handle, 5, 0);
     }
 
 DWG_OBJECT_END
 
 /*(68)*/
-DWG_OBJECT(DIMSTYLE_CONTROL);
+DWG_OBJECT(DIMSTYLE_CONTROL)
 
-  FIELD_BS (num_entries);
+  FIELD_BS (num_entries, 70);
   SINCE(R_2000)
     {
       /*
@@ -2303,302 +2495,348 @@ DWG_OBJECT(DIMSTYLE_CONTROL);
       TODO: this should be checked with more sample files from various DWG versions.
         ~Juca
       */
-      FIELD_RC (unknown);
+      FIELD_RC (unknown, 0);
     }
 
-  FIELD_HANDLE (null_handle, 4);
+  FIELD_HANDLE (null_handle, 4, 0);
   XDICOBJHANDLE(3);
-  HANDLE_VECTOR (dimstyles, num_entries, 2);
+  HANDLE_VECTOR (dimstyles, num_entries, 2, 0);
 
 DWG_OBJECT_END
 
-/*(69)*/
-DWG_OBJECT(DIMSTYLE);
+/* (69/10) */
+DWG_OBJECT(DIMSTYLE)
 
-  FIELD_TV (entry_name);
-  FIELD_B (_64_flag);
-  PRE(R_2010)
-    {
-      FIELD_BS (xrefindex_plus1);
-      FIELD_B (xrefdep);
-    }
-  LATER_VERSIONS
-    {
-      FIELD_B (xrefdep);
-      if (FIELD_VALUE(xrefdep)) {
-        FIELD_BS (xrefindex_plus1);
-      }
-    }
+  COMMON_TABLE_FLAGS
 
+  PRE(R_13)
+    {
+      FIELD_RC (DIMTOL, 71);
+      FIELD_RC (DIMLIM, 72);
+      FIELD_RC (DIMTIH, 73);
+      FIELD_RC (DIMTOH, 74);
+      FIELD_RC (DIMSE1, 75);
+      FIELD_RC (DIMSE2, 76);
+      FIELD_RC (DIMALT, 170);
+      FIELD_RC (DIMTOFL, 172);
+      FIELD_RC (DIMSAH, 173);
+      FIELD_RC (DIMTIX, 174);
+      FIELD_RC (DIMSOXD, 175);
+      FIELD_CAST (DIMALTD, RC, BS, 171);
+      FIELD_CAST (DIMZIN, RC, BS, 78);
+      FIELD_RC (DIMSD1, 281);
+      FIELD_RC (DIMSD2, 282);
+      FIELD_CAST (DIMTOLJ, RC, BS, 283);
+      FIELD_CAST (DIMJUST, RC, BS, 280);
+      FIELD_CAST (DIMFIT, RC, BS, 287);
+      FIELD_RC (DIMUPT, 288);
+      FIELD_CAST (DIMTZIN, RC, BS, 284);
+      FIELD_CAST (DIMMALTZ, RC, BS, 285);
+      FIELD_CAST (DIMMALTTZ, RC, BS, 286);
+      FIELD_CAST (DIMTAD, RC, BS, 77);
+      FIELD_RS (DIMUNIT, 270);
+      FIELD_RS (DIMAUNIT, 275);
+      FIELD_RS (DIMDEC, 271);
+      FIELD_RS (DIMTDEC, 272);
+      FIELD_RS (DIMALTU, 273);
+      FIELD_RS (DIMALTTD, 274);
+      FIELD_RD (DIMSCALE, 40);
+      FIELD_RD (DIMASZ, 41);
+      FIELD_RD (DIMEXO, 42);
+      FIELD_RD (DIMDLI, 43);
+      FIELD_RD (DIMEXE, 44);
+      FIELD_RD (DIMRND, 45);
+      FIELD_RD (DIMDLE, 46);
+      FIELD_RD (DIMTP, 47);
+      FIELD_RD (DIMTM, 48);
+      FIELD_RD (DIMTXT, 140);
+      FIELD_RD (DIMCEN, 141);
+      FIELD_RD (DIMTSZ, 142);
+      FIELD_RD (DIMALTF, 143);
+      FIELD_RD (DIMLFAC, 144);
+      FIELD_RD (DIMTVP, 145);
+      FIELD_RD (DIMTFAC, 146);
+      FIELD_RD (DIMGAP, 147);
+      FIELD_T (DIMPOST, 3);
+      FIELD_T (DIMAPOST, 4); //??
+      FIELD_T (DIMBLK_T, 5);
+      FIELD_T (DIMBLK1_T, 6);
+      FIELD_T (DIMBLK2_T, 7);
+      FIELD_RC (DIMCLRD_N, 176);
+      FIELD_RC (DIMCLRE_N, 177);
+      FIELD_RC (DIMCLRT_N, 178);
+    }
   VERSIONS(R_13, R_14)
     {
-      FIELD_B (DIMTOL);
-      FIELD_B (DIMLIM);
-      FIELD_B (DIMTIH);
-      FIELD_B (DIMTOH);
-      FIELD_B (DIMSE1);
-      FIELD_B (DIMSE2);
-      FIELD_B (DIMALT);
-      FIELD_B (DIMTOFL);
-      FIELD_B (DIMSAH);
-      FIELD_B (DIMTIX);
-      FIELD_B (DIMSOXD);
-      FIELD_CAST (DIMALTD, RC, BS);
-      FIELD_CAST (DIMZIN, RC, BS);
-      FIELD_B (DIMSD1);
-      FIELD_B (DIMSD2);
-      FIELD_CAST (DIMTOLJ, RC, BS);
-      FIELD_CAST (DIMJUST, RC, BS);
-      FIELD_CAST (DIMFIT, RC, BS);
-      FIELD_B (DIMUPT);
-      FIELD_CAST (DIMTZIN, RC, BS);
-      FIELD_CAST (DIMMALTZ, RC, BS);
-      FIELD_CAST (DIMMALTTZ, RC, BS);
-      FIELD_CAST (DIMTAD, RC, BS);
-      FIELD_BS (DIMUNIT);
-      FIELD_BS (DIMAUNIT);
-      FIELD_BS (DIMDEC);
-      FIELD_BS (DIMTDEC);
-      FIELD_BS (DIMALTU);
-      FIELD_BS (DIMALTTD);
-      FIELD_BD (DIMSCALE);
-      FIELD_BD (DIMASZ);
-      FIELD_BD (DIMEXO);
-      FIELD_BD (DIMDLI);
-      FIELD_BD (DIMEXE);
-      FIELD_BD (DIMRND);
-      FIELD_BD (DIMDLE);
-      FIELD_BD (DIMTP);
-      FIELD_BD (DIMTM);
-      FIELD_BD (DIMTXT);
-      FIELD_BD (DIMCEN);
-      FIELD_BD (DIMTSZ);
-      FIELD_BD (DIMALTF);
-      FIELD_BD (DIMLFAC);
-      FIELD_BD (DIMTVP);
-      FIELD_BD (DIMTFAC);
-      FIELD_BD (DIMGAP);
-      FIELD_T (DIMPOST_T);
-      FIELD_T (DIMAPOST_T);
-      FIELD_T (DIMBLK_T);
-      FIELD_T (DIMBLK1_T);
-      FIELD_T (DIMBLK2_T);
-      FIELD_CMC (DIMCLRD);
-      FIELD_CMC (DIMCLRE);
-      FIELD_CMC (DIMCLRT);
+      FIELD_B (DIMTOL, 71);
+      FIELD_B (DIMLIM, 72);
+      FIELD_B (DIMTIH, 73);
+      FIELD_B (DIMTOH, 74);
+      FIELD_B (DIMSE1, 75);
+      FIELD_B (DIMSE2, 76);
+      FIELD_B (DIMALT, 170);
+      FIELD_B (DIMTOFL, 172);
+      FIELD_B (DIMSAH, 173);
+      FIELD_B (DIMTIX, 174);
+      FIELD_B (DIMSOXD, 175);
+      FIELD_CAST (DIMALTD, RC, BS, 171);
+      FIELD_CAST (DIMZIN, RC, BS, 78);
+      FIELD_B (DIMSD1, 281);
+      FIELD_B (DIMSD2, 282);
+      FIELD_CAST (DIMTOLJ, RC, BS, 283);
+      FIELD_CAST (DIMJUST, RC, BS, 280);
+      FIELD_CAST (DIMFIT, RC, BS, 287);
+      FIELD_B (DIMUPT, 288);
+      FIELD_CAST (DIMTZIN, RC, BS, 284);
+      FIELD_CAST (DIMMALTZ, RC, BS, 285);
+      FIELD_CAST (DIMMALTTZ, RC, BS, 286);
+      FIELD_CAST (DIMTAD, RC, BS, 77);
+      FIELD_BS (DIMUNIT, 270);
+      FIELD_BS (DIMAUNIT, 275);
+      FIELD_BS (DIMDEC, 271);
+      FIELD_BS (DIMTDEC, 272);
+      FIELD_BS (DIMALTU, 273);
+      FIELD_BS (DIMALTTD, 274);
+      FIELD_BD (DIMSCALE, 40);
+      FIELD_BD (DIMASZ, 41);
+      FIELD_BD (DIMEXO, 42);
+      FIELD_BD (DIMDLI, 43);
+      FIELD_BD (DIMEXE, 44);
+      FIELD_BD (DIMRND, 45);
+      FIELD_BD (DIMDLE, 46);
+      FIELD_BD (DIMTP, 47);
+      FIELD_BD (DIMTM, 48);
+      FIELD_BD (DIMTXT, 140);
+      FIELD_BD (DIMCEN, 141);
+      FIELD_BD (DIMTSZ, 142);
+      FIELD_BD (DIMALTF, 143);
+      FIELD_BD (DIMLFAC, 144);
+      FIELD_BD (DIMTVP, 145);
+      FIELD_BD (DIMTFAC, 146);
+      FIELD_BD (DIMGAP, 147);
+      FIELD_T (DIMPOST, 3);
+      FIELD_T (DIMAPOST, 4);
+      FIELD_T (DIMBLK_T, 5);
+      FIELD_T (DIMBLK1_T, 6);
+      FIELD_T (DIMBLK2_T, 7);
+      FIELD_CMC (DIMCLRD, 176);
+      FIELD_CMC (DIMCLRE, 177);
+      FIELD_CMC (DIMCLRT, 178);
     }
 
   SINCE(R_2000)
     {
-      FIELD_TV (DIMPOST);
-      FIELD_TV (DIMAPOST);
-      FIELD_BD (DIMSCALE);
-      FIELD_BD (DIMASZ);
-      FIELD_BD (DIMEXO);
-      FIELD_BD (DIMDLI);
-      FIELD_BD (DIMEXE);
-      FIELD_BD (DIMRND);
-      FIELD_BD (DIMDLE);
-      FIELD_BD (DIMTP);//
-      FIELD_BD (DIMTM);//
+      FIELD_TV (DIMPOST, 3);
+      FIELD_TV (DIMAPOST, 4);
+      FIELD_BD (DIMSCALE, 40);
+      FIELD_BD (DIMASZ, 41);
+      FIELD_BD (DIMEXO, 42);
+      FIELD_BD (DIMDLI, 43);
+      FIELD_BD (DIMEXE, 44);
+      FIELD_BD (DIMRND, 45);
+      FIELD_BD (DIMDLE, 46);
+      FIELD_BD (DIMTP, 47);
+      FIELD_BD (DIMTM, 48);
     }
 
   SINCE(R_2007)
     {
-      FIELD_BD (DIMFXL);
-      FIELD_BD (DIMJOGANG);
-      FIELD_BS (DIMTFILL);
-      FIELD_CMC (DIMTFILLCLR);
+      FIELD_BD (DIMFXL, 49);
+      FIELD_BD (DIMJOGANG, 50);
+      FIELD_BS (DIMTFILL, 69);
+      FIELD_CMC (DIMTFILLCLR, 70);
     }
 
   SINCE(R_2000)
     {
-      FIELD_B (DIMTOL);
-      FIELD_B (DIMLIM);
-      FIELD_B (DIMTIH);
-      FIELD_B (DIMTOH);
-      FIELD_B (DIMSE1);
-      FIELD_B (DIMSE2);
-      FIELD_BS (DIMTAD);
-      FIELD_BS (DIMZIN);
-      FIELD_BS (DIMAZIN);
+      FIELD_B (DIMTOL, 71);
+      FIELD_B (DIMLIM, 72);
+      FIELD_B (DIMTIH, 73);
+      FIELD_B (DIMTOH, 74);
+      FIELD_B (DIMSE1, 75);
+      FIELD_B (DIMSE2, 76);
+      FIELD_BS (DIMTAD, 77);
+      FIELD_BS (DIMZIN, 78);
+      FIELD_BS (DIMAZIN, 79);
     }
 
   SINCE(R_2007)
     {
-      FIELD_BS (DIMARCSYM);
+      FIELD_BS (DIMARCSYM, 90);
     }
 
   SINCE(R_2000)
     {
-      FIELD_BD (DIMTXT);
-      FIELD_BD (DIMCEN);
-      FIELD_BD (DIMTSZ);
-      FIELD_BD (DIMALTF);
-      FIELD_BD (DIMLFAC);
-      FIELD_BD (DIMTVP);
-      FIELD_BD (DIMTFAC);
-      FIELD_BD (DIMGAP);
-      FIELD_BD (DIMALTRND);
-      FIELD_B (DIMALT);
-      FIELD_BS (DIMALTD);
-      FIELD_B (DIMTOFL);
-      FIELD_B (DIMSAH);
-      FIELD_B (DIMTIX);
-      FIELD_B (DIMSOXD);
-      FIELD_CMC (DIMCLRD);
-      FIELD_CMC (DIMCLRE);
-      FIELD_CMC (DIMCLRT);
-      FIELD_BS (DIMADEC);
-      FIELD_BS (DIMDEC);
-      FIELD_BS (DIMTDEC);
-      FIELD_BS (DIMALTU);
-      FIELD_BS (DIMALTTD);
-      FIELD_BS (DIMAUNIT);
-      FIELD_BS (DIMFRAC);
-      FIELD_BS (DIMLUNIT);
-      FIELD_BS (DIMDSEP);
-      FIELD_BS (DIMTMOVE);
-      FIELD_BS (DIMJUST);
-      FIELD_B (DIMSD1);
-      FIELD_B (DIMSD2);
-      FIELD_BS (DIMTOLJ);
-      FIELD_BS (DIMTZIN);
-      FIELD_BS (DIMALTZ);
-      FIELD_BS (DIMALTTZ);
-      FIELD_B (DIMUPT);
-      FIELD_BS (DIMFIT);
+      FIELD_BD (DIMTXT, 140);
+      FIELD_BD (DIMCEN, 141);
+      FIELD_BD (DIMTSZ, 142);
+      FIELD_BD (DIMALTF, 143);
+      FIELD_BD (DIMLFAC, 144);
+      FIELD_BD (DIMTVP, 145);
+      FIELD_BD (DIMTFAC, 146);
+      FIELD_BD (DIMGAP, 147);
+      FIELD_BD (DIMALTRND, 148);
+      FIELD_B (DIMALT, 170);
+      FIELD_BS (DIMALTD, 171);
+      FIELD_B (DIMTOFL, 172);
+      FIELD_B (DIMSAH, 173);
+      FIELD_B (DIMTIX, 174);
+      FIELD_B (DIMSOXD, 175);
+      FIELD_CMC (DIMCLRD, 176);
+      FIELD_CMC (DIMCLRE, 177);
+      FIELD_CMC (DIMCLRT, 178);
+      FIELD_BS (DIMADEC, 179);
+      FIELD_BS (DIMDEC, 271);
+      FIELD_BS (DIMTDEC, 272);
+      FIELD_BS (DIMALTU, 273);
+      FIELD_BS (DIMALTTD, 274);
+      FIELD_BS (DIMAUNIT, 275);
+      FIELD_BS (DIMFRAC, 276);
+      FIELD_BS (DIMLUNIT, 277);
+      FIELD_BS (DIMDSEP, 278);
+      FIELD_BS (DIMTMOVE, 279);
+      FIELD_BS (DIMJUST, 280);
+      FIELD_B (DIMSD1, 281);
+      FIELD_B (DIMSD2, 282);
+      FIELD_BS (DIMTOLJ, 283);
+      FIELD_BS (DIMTZIN, 284);
+      FIELD_BS (DIMALTZ, 285);
+      FIELD_BS (DIMALTTZ, 286);
+      FIELD_B (DIMUPT, 288);
+      FIELD_BS (DIMFIT, 289);
     }
 
   SINCE(R_2007)
     {
-      FIELD_B (DIMFXLON);
+      FIELD_B (DIMFXLON, 290);
+    }
+
+  SINCE(R_2010)
+    {
+      FIELD_B (DIMTXTDIRECTION, 295);
+      FIELD_BD (DIMALTMZF, 0); // undocumented
+      FIELD_T (DIMALTMZS, 0); // undocumented
+      FIELD_BD (DIMMZF, 0); // undocumented
+      FIELD_T (DIMMZS, 0); // undocumented
     }
 
   SINCE(R_2000)
     {
-      FIELD_BS (DIMLWD);
-      FIELD_BS (DIMLWE);
+      FIELD_BS (DIMLWD, 371);
+      FIELD_BS (DIMLWE, 372);
     }
 
-  FIELD_B (unknown);
+  SINCE(R_13)
+  {
+    FIELD_B (flag, 70); // Bit 0 of 70
 
-  FIELD_HANDLE (dimstyle_control, 4);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
-  UNTIL(R_2007) {
-    FIELD_HANDLE (null_handle, 5);
+    FIELD_HANDLE (dimstyle_control, 4, 0);
+    REACTORS(4);
+    XDICOBJHANDLE(3);
+    FIELD_HANDLE (extref_handle, 5, 0);
+    FIELD_HANDLE (DIMTXSTY, 5, 340); /* Text style (DIMTXSTY) */
   }
-  FIELD_HANDLE (shapefile, 5); /* Text style (DIMTXSTY) */
 
   SINCE(R_2000)
     {
-      FIELD_HANDLE (leader_block,5); /* Leader arrow	(DIMLDRBLK)*/
-      FIELD_HANDLE (dimblk,5); /* Arrow */
-      FIELD_HANDLE (dimblk1,5); /* Arrow 1 */
-      FIELD_HANDLE (dimblk2,5); /* Arrow 2 */
+      FIELD_HANDLE (DIMLDRBLK, 5, 341); /* Leader arrow	(DIMLDRBLK)*/
+      FIELD_HANDLE (DIMBLK, 5, 342);  /* Arrow */
+      FIELD_HANDLE (DIMBLK1, 5, 343); /* Arrow 1 */
+      FIELD_HANDLE (DIMBLK2, 5, 344); /* Arrow 2 */
     }
 
   SINCE(R_2007)
     {
-      FIELD_HANDLE (dimltype, ANYCODE);
-      FIELD_HANDLE (dimltex1, ANYCODE);
-      FIELD_HANDLE (dimltex2, ANYCODE);
+      FIELD_HANDLE (DIMLTYPE, ANYCODE, 345);
+      FIELD_HANDLE (DIMLTEX1, ANYCODE, 346);
+      FIELD_HANDLE (DIMLTEX2, ANYCODE, 347);
     }
 
 DWG_OBJECT_END
 
-/*(70)*/
-DWG_OBJECT(VP_ENT_HDR_CONTROL);
+/* VIEWPORT ENTITY CONTROL (70)*/
+DWG_OBJECT(VP_ENT_HDR_CONTROL)
 
-  FIELD_BS (num_entries);
+  FIELD_BS (num_entries, 70);
 
-  UNTIL(R_2007) {
-    FIELD_HANDLE (null_handle, 4);
-  }
+  FIELD_HANDLE (null_handle, 4, 0);
   XDICOBJHANDLE(3);
-  HANDLE_VECTOR(viewport_entity_headers, num_entries, 2);
+  HANDLE_VECTOR (vp_ent_headers, num_entries, 4, 0);
 
 DWG_OBJECT_END
 
-/*(71)*/
-DWG_OBJECT(VP_ENT_HDR);
+/* VIEWPORT ENTITY HEADER (71/11) */
+DWG_OBJECT(VP_ENT_HDR)
 
-  FIELD_TV (entry_name);
-  FIELD_B (_64_flag);
-  PRE(R_2010)
-    {
-      FIELD_BS (xrefindex_plus1);
-      FIELD_B (xrefdep);
-    }
-  LATER_VERSIONS
-    {
-      FIELD_B (xrefdep);
-      if (FIELD_VALUE(xrefdep)) {
-        FIELD_BS (xrefindex_plus1);
-      }
-    }
-  FIELD_B (one_flag);
-  FIELD_HANDLE (vp_ent_ctrl, ANYCODE);
-  XDICOBJHANDLE(3);
-  FIELD_HANDLE (null, 5);
+  COMMON_TABLE_FLAGS
+
+  SINCE(R_13) {
+    FIELD_B (flag1, 70); // bit 1 of 70
+    FIELD_VALUE(flag) =
+      (FIELD_VALUE(flag1) << 1) |
+      (FIELD_VALUE(xrefdep) << 4) |
+      (FIELD_VALUE(_64_flag) << 6);
+
+    FIELD_HANDLE (vp_ent_ctrl, ANYCODE, 0);
+    XDICOBJHANDLE(3);
+    FIELD_HANDLE (vp_ent, 5, 0);
+  }
 
 DWG_OBJECT_END
 
 /*(72)*/
-DWG_OBJECT(GROUP);
+DWG_OBJECT(GROUP)
 
-  FIELD_TV (str);
-  FIELD_BS (unnamed);
-  FIELD_BS (selectable);
-  FIELD_BL (num_handles);
+  FIELD_TV (name, 300);
+  FIELD_BS (unnamed, 70);
+  FIELD_BS (selectable, 71);
+  FIELD_BL (num_handles, 0);
 
   UNTIL(R_2007) {
-    FIELD_HANDLE (parenthandle, 4);
+    FIELD_HANDLE (parenthandle, 4, 330);
   }
   REACTORS(4);
   XDICOBJHANDLE(3);
-  HANDLE_VECTOR(group_entries, num_handles, 5);
+  HANDLE_VECTOR(group_entries, num_handles, 5, 340);
 
 DWG_OBJECT_END
 
-/*(73)*/
-DWG_OBJECT(MLINESTYLE);
+/* (73) undocumented DXF codes */
+DWG_OBJECT(MLINESTYLE)
 
-  FIELD_TV (name);
-  FIELD_TV (desc);
-  FIELD_BS (flags);
-  FIELD_CMC (fillcolor);
-  FIELD_BD (startang);
-  FIELD_BD (endang);
-  FIELD_RC (linesinstyle);
-
-  REPEAT(linesinstyle, lines, Dwg_Object_MLINESTYLE_line)
+  FIELD_TV (name, 2);
+  FIELD_TV (desc, 3);
+  FIELD_BS (flag, 70);
+  FIELD_CMC (fill_color, 62);
+  FIELD_BD (start_angle, 51);
+  FIELD_BD (end_angle, 52);
+  FIELD_RC (num_lines, 71);
+  REPEAT(num_lines, lines, Dwg_MLINESTYLE_line)
   {
-    FIELD_BD (lines[rcount].offset);
+    FIELD_BD (lines[rcount].offset, 49);
 #ifndef IS_FREE
-    FIELD_CMC (lines[rcount].color);
+    FIELD_CMC (lines[rcount].color, 62);
 #endif
-    FIELD_BS (lines[rcount].ltindex);
+    FIELD_BS (lines[rcount].ltindex, 6);
   }
+  END_REPEAT(lines);
 
   UNTIL(R_2007) {
-    FIELD_HANDLE (parenthandle, 8); // was 4
+    FIELD_HANDLE (parenthandle, 4, 0);
   }
   REACTORS(4);
   XDICOBJHANDLE(3);
 
 DWG_OBJECT_END
-
 
 //pg.135
-DWG_OBJECT(DICTIONARYVAR);
+DWG_OBJECT(DICTIONARYVAR)
 
-  FIELD_RC (intval);
-  FIELD_TV (str);
+  FIELD_RC (intval, 0);
+  FIELD_TV (str, 0);
 
   UNTIL(R_2007) {
-    FIELD_HANDLE (parenthandle, 4);
+    FIELD_HANDLE (parenthandle, 4, 0);
   }
   REACTORS(4);
   XDICOBJHANDLE(3);
@@ -2606,81 +2844,89 @@ DWG_OBJECT(DICTIONARYVAR);
 DWG_OBJECT_END
 
 //(78 + varies) pg.136
-DWG_ENTITY(HATCH);
+DWG_ENTITY(HATCH)
 
   SINCE(R_2004)
     {
-      FIELD_BL (is_gradient_fill);
-      FIELD_BL (reserved);
-      FIELD_BD (gradient_angle);
-      FIELD_BD (gradient_shift);
-      FIELD_BL (single_color_gradient);
-      FIELD_BD (gradient_tint);
-      FIELD_BL (num_colors);
+      FIELD_BL (is_gradient_fill, 450);
+      FIELD_BL (reserved, 451);
+      FIELD_BD (gradient_angle, 460);
+      FIELD_BD (gradient_shift, 461);
+      FIELD_BL (single_color_gradient, 452);
+      FIELD_BD (gradient_tint, 462);
+      FIELD_BL (num_colors, 453);
       REPEAT(num_colors, colors, Dwg_Entity_HATCH_Color)
         {
-          FIELD_BD (colors[rcount].unknown_double);
-          FIELD_BS (colors[rcount].unknown_short);
-          FIELD_BL (colors[rcount].rgb_color);
-          FIELD_RC (colors[rcount].ignored_color_byte);
+          FIELD_BD (colors[rcount].unknown_double, 463);
+          FIELD_BS (colors[rcount].unknown_short, 0);
+          FIELD_BL (colors[rcount].rgb_color, 63); // and 421
+          FIELD_RC (colors[rcount].ignored_color_byte, 0);
         }
-      FIELD_TV (gradient_name);
+      END_REPEAT(colors);
+      FIELD_TV (gradient_name, 470);
     }
 
-  FIELD_BD (elevation);
-  FIELD_3BD (extrusion);
-  FIELD_TV (name);
-  FIELD_B (solid_fill);
-  FIELD_B (associative);
-  FIELD_BL (num_paths);
+  FIELD_BD (elevation, 30);
+  FIELD_3BD (extrusion, 210);
+  FIELD_TV (name, 2);
+  FIELD_B (solid_fill, 70);
+  FIELD_B (associative, 71);
+  FIELD_BL (num_paths, 91);
   REPEAT(num_paths, paths, Dwg_Entity_HATCH_Path)
     {
-      FIELD_BL (paths[rcount].flag);
+      FIELD_BL (paths[rcount].flag, 92);
       if (!(FIELD_VALUE(paths[rcount].flag) & 2))
         {
-          FIELD_BL (paths[rcount].num_segs_or_paths);
+          FIELD_BL (paths[rcount].num_segs_or_paths, 93);
           REPEAT2(paths[rcount].num_segs_or_paths, paths[rcount].segs,
                   Dwg_Entity_HATCH_PathSeg)
             {
-              FIELD_RC (paths[rcount].segs[rcount2].type_status);
+              FIELD_RC (paths[rcount].segs[rcount2].type_status, 72);
               switch (FIELD_VALUE(paths[rcount].segs[rcount2].type_status))
                 {
                     case 1: /* LINE */
-                      FIELD_2RD (paths[rcount].segs[rcount2].first_endpoint);
-                      FIELD_2RD (paths[rcount].segs[rcount2].second_endpoint);
+                      FIELD_2RD (paths[rcount].segs[rcount2].first_endpoint, 10);
+                      FIELD_2RD (paths[rcount].segs[rcount2].second_endpoint, 11);
                       break;
                     case 2: /* CIRCULAR ARC */
-                      FIELD_2RD (paths[rcount].segs[rcount2].center);
-                      FIELD_BD (paths[rcount].segs[rcount2].radius);
-                      FIELD_BD (paths[rcount].segs[rcount2].start_angle);
-                      FIELD_BD (paths[rcount].segs[rcount2].end_angle);
-                      FIELD_B (paths[rcount].segs[rcount2].is_ccw);
+                      FIELD_2RD (paths[rcount].segs[rcount2].center, 10);
+                      FIELD_BD (paths[rcount].segs[rcount2].radius, 40);
+                      FIELD_BD (paths[rcount].segs[rcount2].start_angle, 50);
+                      FIELD_BD (paths[rcount].segs[rcount2].end_angle, 51);
+                      FIELD_B (paths[rcount].segs[rcount2].is_ccw, 73);
                       break;
                     case 3: /* ELLIPTICAL ARC */
-                      FIELD_2RD (paths[rcount].segs[rcount2].center);
-                      FIELD_2RD (paths[rcount].segs[rcount2].endpoint);
-                      FIELD_BD (paths[rcount].segs[rcount2].minor_major_ratio);
-                      FIELD_BD (paths[rcount].segs[rcount2].start_angle);
-                      FIELD_BD (paths[rcount].segs[rcount2].end_angle);
-                      FIELD_B (paths[rcount].segs[rcount2].is_ccw);
+                      FIELD_2RD (paths[rcount].segs[rcount2].center, 10);
+                      FIELD_2RD (paths[rcount].segs[rcount2].endpoint, 11);
+                      FIELD_BD (paths[rcount].segs[rcount2].minor_major_ratio, 40);
+                      FIELD_BD (paths[rcount].segs[rcount2].start_angle, 50);
+                      FIELD_BD (paths[rcount].segs[rcount2].end_angle, 51);
+                      FIELD_B (paths[rcount].segs[rcount2].is_ccw, 73);
                       break;
                     case 4: /* SPLINE */
-                      FIELD_BL (paths[rcount].segs[rcount2].degree);
-                      FIELD_B (paths[rcount].segs[rcount2].is_rational);
-                      FIELD_B (paths[rcount].segs[rcount2].is_periodic);
-                      FIELD_BL (paths[rcount].segs[rcount2].num_knots);
-                      FIELD_BL (paths[rcount].segs[rcount2].num_control_points);
+                      FIELD_BL (paths[rcount].segs[rcount2].degree, 94);
+                      FIELD_B (paths[rcount].segs[rcount2].is_rational, 73);
+                      FIELD_B (paths[rcount].segs[rcount2].is_periodic, 74);
+                      FIELD_BL (paths[rcount].segs[rcount2].num_knots, 95);
+                      FIELD_BL (paths[rcount].segs[rcount2].num_control_points, 96);
                       FIELD_VECTOR(paths[rcount].segs[rcount2].knots, BD,
-                                   paths[rcount].segs[rcount2].num_knots)
+                                   paths[rcount].segs[rcount2].num_knots, 40)
                       REPEAT3(paths[rcount].segs[rcount2].num_control_points,
                               paths[rcount].segs[rcount2].control_points,
                               Dwg_Entity_HATCH_ControlPoint)
                         {
-                          FIELD_2RD (paths[rcount].segs[rcount2].control_points[rcount3].point);
+                          FIELD_2RD (paths[rcount].segs[rcount2].control_points[rcount3].point, 10);
                           if (FIELD_VALUE(paths[rcount].segs[rcount2].is_rational))
                             {
-                              FIELD_BD (paths[rcount].segs[rcount2].control_points[rcount3].weigth);
+                              FIELD_BD (paths[rcount].segs[rcount2].control_points[rcount3].weigth, 40);
                             }
+                        }
+                      END_REPEAT(paths[rcount].segs[rcount2].control_points);
+                      SINCE(R_2013) // r2014 really
+                        {
+                          FIELD_BL(paths[rcount].segs[rcount2].num_fitpts, 97);
+                          FIELD_2RD_VECTOR(paths[rcount].segs[rcount2].fitpts,
+                                           paths[rcount].segs[rcount2].num_fitpts, 11);
                         }
                       break;
                     default:
@@ -2688,135 +2934,137 @@ DWG_ENTITY(HATCH);
                       break;
                 }
             }
+          END_REPEAT(paths[rcount].segs);
         }
       else
         { /* POLYLINE PATH */
-          FIELD_B (paths[rcount].bulges_present);
-          FIELD_B (paths[rcount].closed);
-          FIELD_BL (paths[rcount].num_segs_or_paths);
+          FIELD_B (paths[rcount].bulges_present, 72);
+          FIELD_B (paths[rcount].closed, 73);
+          FIELD_BL (paths[rcount].num_segs_or_paths, 91);
           REPEAT2(paths[rcount].num_segs_or_paths, paths[rcount].polyline_paths,
                   Dwg_Entity_HATCH_PolylinePath)
             {
-              FIELD_2RD (paths[rcount].polyline_paths[rcount2].point);
+              FIELD_2RD (paths[rcount].polyline_paths[rcount2].point, 10);
               if (FIELD_VALUE(paths[rcount].bulges_present))
                 {
-                  FIELD_BD (paths[rcount].polyline_paths[rcount2].bulge);
+                  FIELD_BD (paths[rcount].polyline_paths[rcount2].bulge, 42);
                 }
             }
+          END_REPEAT(paths[rcount].polyline_paths);
         }
-      FIELD_BL (paths[rcount].num_boundary_handles);
+      FIELD_BL (paths[rcount].num_boundary_handles, 97);
       DECODER {
         FIELD_VALUE (num_boundary_handles) += FIELD_VALUE (paths[rcount].num_boundary_handles);
         FIELD_VALUE (has_derived) =
           FIELD_VALUE (has_derived) || (FIELD_VALUE (paths[rcount].flag) & 0x4);
       }
     }
-  FIELD_BS (style);
-  FIELD_BS (pattern_type);
+  END_REPEAT(paths);
+  FIELD_BS (style, 75);
+  FIELD_BS (pattern_type, 76);
   if (!FIELD_VALUE(solid_fill))
     {
-      FIELD_BD (angle);
-      FIELD_BD (scale_spacing);
-      FIELD_B (double_flag);
-      FIELD_BS (num_deflines);
-      REPEAT (num_deflines, deflines, Dwg_Entity_HATCH_DefLine)
+      FIELD_BD (angle, 52);
+      FIELD_BD (scale_spacing, 41);
+      FIELD_B (double_flag, 77);
+      FIELD_BS (num_deflines, 78);
+      REPEAT(num_deflines, deflines, Dwg_Entity_HATCH_DefLine)
         {
-          FIELD_BD (deflines[rcount].angle);
-          FIELD_2BD (deflines[rcount].pt0);
-          FIELD_2BD (deflines[rcount].offset);
-          FIELD_BS (deflines[rcount].num_dashes);
+          FIELD_BD (deflines[rcount].angle, 53);
+          FIELD_2BD_1 (deflines[rcount].pt0, 43);
+          FIELD_2BD_1 (deflines[rcount].offset, 45);
+          FIELD_BS (deflines[rcount].num_dashes, 79);
           REPEAT2 (deflines[rcount].num_dashes, deflines[rcount].dashes, BITCODE_BD)
             {
-              FIELD_BD (deflines[rcount].dashes[rcount2]);
+              FIELD_BD (deflines[rcount].dashes[rcount2], 49);
             }
+          END_REPEAT(deflines[rcount].dashes);
         }
+      END_REPEAT(deflines);
     }
 
   if (FIELD_VALUE (has_derived))
-    {
-      FIELD_BD (pixel_size);
-    }
-  FIELD_BL (num_seeds);
-  FIELD_2RD_VECTOR (seeds, num_seeds)
+      FIELD_BD (pixel_size, 47);
+  FIELD_BL (num_seeds, 98);
+  FIELD_2RD_VECTOR (seeds, num_seeds, 10);
 
   COMMON_ENTITY_HANDLE_DATA;
-  HANDLE_VECTOR (boundary_handles, num_boundary_handles, ANYCODE);
+  HANDLE_VECTOR (boundary_handles, num_boundary_handles, ANYCODE, 0);
 
 DWG_OBJECT_END
 
 //pg.139
-DWG_OBJECT(IDBUFFER);
+DWG_OBJECT(IDBUFFER)
 
-  FIELD_RC (unknown);
-  FIELD_BL (num_ids);
+  FIELD_RC (unknown, 0);
+  FIELD_BL (num_obj_ids, 0);
 
   UNTIL(R_2007) {
-    FIELD_HANDLE (parenthandle, 4);
+    FIELD_HANDLE (parenthandle, 4, 0);
   }
   REACTORS(4);
   XDICOBJHANDLE(3);
-  HANDLE_VECTOR(obj_ids, num_ids, 4);
+  HANDLE_VECTOR(obj_ids, num_obj_ids, 4, 330);
 
 DWG_OBJECT_END
 
-//pg.140
-DWG_ENTITY(IMAGE);
+//pg.204 20.4.80
+DWG_ENTITY(IMAGE)
 
-  FIELD_BL (class_version);
-  FIELD_3DPOINT (pt0);
-  FIELD_3DPOINT (uvec);
-  FIELD_3DPOINT (vvec);
-  FIELD_RD (size.width);
-  FIELD_RD (size.height);
-  FIELD_BS (display_props);
-  FIELD_B (clipping);
-  FIELD_RC (brightness);
-  FIELD_RC (contrast);
-  FIELD_RC (fade);
-
-  FIELD_BS (clip_boundary_type);
-  if (FIELD_VALUE(clip_boundary_type) == 1)
+  FIELD_BL (class_version, 90);
+  FIELD_3DPOINT (pt0, 10);
+  FIELD_3DPOINT (uvec, 11);
+  FIELD_3DPOINT (vvec, 12);
+  FIELD_RD (size.width, 13);
+  FIELD_RD (size.height, 14);
+  FIELD_BS (display_props, 70);
+  FIELD_B (clipping, 280);
+  FIELD_RC (brightness, 281);
+  FIELD_RC (contrast, 282);
+  FIELD_RC (fade, 283);
+  SINCE(R_2010) {
+    FIELD_BS (clip_mode, 290); // 0 outside, 1 inside
+  }
+  FIELD_BS (clip_boundary_type, 71); // 1 rect, 2 polygon
+  if (FIELD_VALUE(clip_mode) == 1)
     {
-      FIELD_2RD (boundary_pt0);
-      FIELD_2RD (boundary_pt1);
+      FIELD_2RD (boundary_pt0, 14);
+      FIELD_2RD (boundary_pt1, 14);
     }
   else
     {
-      FIELD_BL (num_clip_verts);
-      REPEAT(num_clip_verts, clip_verts, Dwg_Entity_IMAGE_clip_vert)
-      {
-        FIELD_2RD (clip_verts[rcount]);
-      }
+      FIELD_BL (num_clip_verts, 91);
+      FIELD_2RD_VECTOR(clip_verts, num_clip_verts, 14);
     }
 
   COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (imagedef,5);
-  FIELD_HANDLE (imagedefreactor,3);
+  FIELD_HANDLE (imagedef, 5, 0); // hard pointer
+  FIELD_HANDLE (imagedefreactor, 3, 0); // hard owner
 
 DWG_ENTITY_END
 
 //pg.142 test-data/*/Leader_*.dwg
-DWG_OBJECT(IMAGEDEF);
+DWG_OBJECT(IMAGEDEF)
 
-  FIELD_BL (class_version);
-  FIELD_2RD (image_size);
-  FIELD_TV (file_path);
-  FIELD_B (is_loaded);
-  FIELD_RC (resunits);
-  FIELD_2RD (pixel_size);
+  FIELD_BL (class_version, 90);
+  FIELD_2RD (image_size, 10);
+  FIELD_TV (file_path, 1);
+  FIELD_B (is_loaded, 280);
+  FIELD_RC (resunits, 281);
+  FIELD_2RD (pixel_size, 11);
 
-  FIELD_HANDLE (parenthandle, ANYCODE);
+  FIELD_HANDLE (parenthandle, 3, 0);
   REACTORS(4);
   XDICOBJHANDLE(3);
 
 DWG_OBJECT_END
 
 //PG.143
-DWG_OBJECT(IMAGEDEF_REACTOR);
+DWG_OBJECT(IMAGEDEF_REACTOR)
 
-  FIELD_BL (class_version);
+  FIELD_BL (class_version, 90);
   UNTIL(R_2007) {
-    FIELD_HANDLE (parenthandle, 4);
+    FIELD_HANDLE (parenthandle, 4, 0);
   }
   REACTORS(4);
   XDICOBJHANDLE(3);
@@ -2824,158 +3072,159 @@ DWG_OBJECT(IMAGEDEF_REACTOR);
 DWG_OBJECT_END
 
 //pg.144
-DWG_OBJECT(LAYER_INDEX);
+DWG_OBJECT(LAYER_INDEX)
 
-  FIELD_BL (timestamp1);
-  FIELD_BL (timestamp2);
-  FIELD_BL (num_entries);
+  FIELD_BL (timestamp1, 40);
+  FIELD_BL (timestamp2, 40);
+  FIELD_BL (num_entries, 0);
   REPEAT (num_entries, entries, Dwg_LAYER_entry)
     {
-      FIELD_BL (entries[rcount].index_long);
-      FIELD_TV (entries[rcount].index_str);
+      FIELD_BL (entries[rcount].idxlong, 0);
+      FIELD_TV (entries[rcount].layer, 8);
     }
+  END_REPEAT(entries)
 
   UNTIL(R_2007) {
-    FIELD_HANDLE (parenthandle, 4);
+    FIELD_HANDLE (parenthandle, 4, 0);
   }
   REACTORS(4);
   XDICOBJHANDLE(3);
-  HANDLE_VECTOR(entry_handles, num_entries, ANYCODE);
+  HANDLE_VECTOR(entry_handles, num_entries, ANYCODE, 0);
 
 DWG_OBJECT_END
 
 //pg.145
-DWG_OBJECT(LAYOUT);
+DWG_OBJECT(LAYOUT)
 
-  FIELD_TV (page_setup_name);
-  FIELD_TV (printer_or_config);
-  FIELD_BS (plot_layout_flags);
-  FIELD_BD (left_margin);
-  FIELD_BD (bottom_margin);
-  FIELD_BD (right_margin);
-  FIELD_BD (top_margin);
-  FIELD_BD (paper_width);
-  FIELD_BD (paper_height);
-  FIELD_TV (paper_size);
-  FIELD_2BD (plot_origin);
-  FIELD_BS (paper_units);
-  FIELD_BS (plot_rotation);
-  FIELD_BS (plot_type);
-  FIELD_2BD (window_min);
-  FIELD_2BD (window_max);
+  FIELD_TV (page_setup_name, 1);
+  FIELD_TV (printer_or_config, 2);
+  FIELD_BS (plot_layout_flags, 70);
+  FIELD_BD (left_margin, 40);
+  FIELD_BD (bottom_margin, 41);
+  FIELD_BD (right_margin, 42);
+  FIELD_BD (top_margin, 43);
+  FIELD_BD (paper_width, 44);
+  FIELD_BD (paper_height, 45);
+  FIELD_TV (paper_size, 4);
+  FIELD_2BD_1 (plot_origin, 46);
+  FIELD_BS (paper_units, 72);
+  FIELD_BS (plot_rotation, 73);
+  FIELD_BS (plot_type, 74);
+  FIELD_2BD_1 (window_min, 48);
+  FIELD_2BD_1 (window_max, 140);
 
   VERSIONS(R_13, R_2000) {
-    FIELD_TV (plot_view_name);
+    FIELD_TV (plot_view_name, 6);
   }
 
-  FIELD_BD (real_world_units);
-  FIELD_BD (drawing_units);
-  FIELD_TV (current_style_sheet);
-  FIELD_BS (scale_type);
-  FIELD_BD (scale_factor);
-  FIELD_2BD (paper_image_origin);
+  FIELD_BD (real_world_units, 142);
+  FIELD_BD (drawing_units, 143);
+  FIELD_TV (current_style_sheet, 7);
+  FIELD_BS (scale_type, 75);
+  FIELD_BD (scale_factor, 147);
+  FIELD_2BD_1 (paper_image_origin, 148);
 
   SINCE(R_2004)
     {
-      FIELD_BS (shade_plot_mode);
-      FIELD_BS (shade_plot_res_level);
-      FIELD_BS (shade_plot_custom_dpi);
+      FIELD_BS (shade_plot_mode, 76);
+      FIELD_BS (shade_plot_res_level, 77);
+      FIELD_BS (shade_plot_custom_dpi, 78);
     }
 
-  FIELD_TV (layout_name);
-  FIELD_BS (tab_order);
-  FIELD_BS (flags);
-  FIELD_3DPOINT (ucs_origin);
-  FIELD_2RD (minimum_limits);
-  FIELD_2RD (maximum_limits);
-  FIELD_3DPOINT (ins_point);
-  FIELD_3DPOINT (ucs_x_axis);
-  FIELD_3DPOINT (ucs_y_axis);
-  FIELD_BD (elevation);
-  FIELD_BS (orthoview_type);
-  FIELD_3DPOINT (extent_min);
-  FIELD_3DPOINT (extent_max);
+  FIELD_TV (layout_name, 1);
+  FIELD_BS (tab_order, 71);
+  FIELD_BS (flag, 70);
+  FIELD_3DPOINT (ucs_origin, 13);
+  FIELD_2RD (minimum_limits, 10);
+  FIELD_2RD (maximum_limits, 11);
+  FIELD_3DPOINT (ins_point, 12);
+  FIELD_3DPOINT (ucs_x_axis, 16);
+  FIELD_3DPOINT (ucs_y_axis, 17);
+  FIELD_BD (elevation, 146);
+  FIELD_BS (orthoview_type, 76);
+  FIELD_3DPOINT (extent_min, 14);
+  FIELD_3DPOINT (extent_max, 15);
 
   SINCE(R_2004) {
-    FIELD_BL (viewport_count);
+    FIELD_BL (num_viewports, 0);
   }
 
   UNTIL(R_2007) {
-    FIELD_HANDLE (parenthandle, 4);
+    FIELD_HANDLE (parenthandle, 4, 0);
   }
   REACTORS(4);
   XDICOBJHANDLE(3);
 
   SINCE(R_2004) {
-    FIELD_HANDLE (plot_view_handle, ANYCODE);
+    FIELD_HANDLE (plot_view, 5, 6);
   }
   SINCE(R_2007) {
-    FIELD_HANDLE (visual_style_handle, ANYCODE);
+    FIELD_HANDLE (visual_style, 4, 0);
   }
-  FIELD_HANDLE (associated_paperspace_block_record_handle, ANYCODE);
-  FIELD_HANDLE (last_active_viewport_handle, ANYCODE);
-  FIELD_HANDLE (base_ucs_handle, ANYCODE);
-  FIELD_HANDLE (named_ucs_handle, ANYCODE);
+  FIELD_HANDLE (pspace_block_record, 4, 330);
+  FIELD_HANDLE (last_viewport, 4, 331);
+  FIELD_HANDLE (base_ucs, 5, 346);
+  FIELD_HANDLE (named_ucs, 5, 345);
 
   SINCE(R_2004) {
-    HANDLE_VECTOR(viewport_handles, viewport_count, ANYCODE);
+    HANDLE_VECTOR(viewports, num_viewports, 4, 0);
   }
 
 DWG_OBJECT_END
 
 //pg.147
-DWG_ENTITY(LWPLINE);
+DWG_ENTITY(LWPLINE)
 
-  FIELD_BS (flags);
+  FIELD_BS (flag, 70);
 
-  if (FIELD_VALUE(flags) & 4)
-    FIELD_BD (const_width);
-  if (FIELD_VALUE(flags) & 8)
-    FIELD_BD (elevation);
-  if (FIELD_VALUE(flags) & 2)
-    FIELD_BD (thickness);
-  if (FIELD_VALUE(flags) & 1)
-    FIELD_3BD (normal);
+  if (FIELD_VALUE(flag) & 4)
+    FIELD_BD (const_width, 43);
+  if (FIELD_VALUE(flag) & 8)
+    FIELD_BD (elevation, 38);
+  if (FIELD_VALUE(flag) & 2)
+    FIELD_BD (thickness, 39);
+  if (FIELD_VALUE(flag) & 1)
+    FIELD_3BD (normal, 210);
 
-  FIELD_BL (num_points);
+  FIELD_BL (num_points, 90);
 
-  if (FIELD_VALUE(flags) & 16)
-    FIELD_BL (num_bulges);
-  if (FIELD_VALUE(flags) & 32)
-    FIELD_BL (num_widths);
+  if (FIELD_VALUE(flag) & 16)
+    FIELD_BL (num_bulges, 0);
+  if (FIELD_VALUE(flag) & 32)
+    FIELD_BL (num_widths, 0);
 
   VERSIONS(R_13, R_14) {
-    FIELD_2RD_VECTOR (points, num_points);
+    FIELD_2RD_VECTOR (points, num_points, 10);
   }
   SINCE(R_2000) {
-    FIELD_2DD_VECTOR (points, num_points);
+    FIELD_2DD_VECTOR (points, num_points, 10);
   }
 
-  FIELD_VECTOR (bulges, BD, num_bulges);
+  FIELD_VECTOR (bulges, BD, num_bulges, 42);
   REPEAT(num_widths, widths, Dwg_Entity_LWPLINE_width)
     {
-      FIELD_BD (widths[rcount].start);
-      FIELD_BD (widths[rcount].end);
+      FIELD_BD (widths[rcount].start, 40);
+      FIELD_BD (widths[rcount].end, 41);
     }
+  END_REPEAT(widths)
 
   COMMON_ENTITY_HANDLE_DATA;
 
 DWG_ENTITY_END
 
 //(74+varies) pg.149
-DWG_ENTITY(OLE2FRAME);
+DWG_ENTITY(OLE2FRAME)
 
-  FIELD_BS (flags);
-
+  FIELD_BS (flag, 70);
   SINCE(R_2000) {
-    FIELD_BS (mode);
+    FIELD_BS (mode, 0);
   }
 
-  FIELD_BL (data_length);
-  FIELD_VECTOR (data, RC, data_length);
+  FIELD_BL (data_length, 0);
+  FIELD_VECTOR (data, RC, data_length, 0);
 
   SINCE(R_2000) {
-    FIELD_RC (unknown);
+    FIELD_RC (unknown, 0);
   }
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -2984,25 +3233,25 @@ DWG_ENTITY_END
 
 //pg.276
 #if 0 /* no proxy subtypes yet */
-DWG_ENTITY(PROXY_LWPOLYLINE);
+DWG_ENTITY(PROXY_LWPOLYLINE)
 
   FIELD_RL (size);
-  FIELD_BS (flags);
+  FIELD_BS (flag);
 
-  if (FIELD_VALUE(flags) & 4)
+  if (FIELD_VALUE(flag) & 4)
     FIELD_BD (const_width);
-  if (FIELD_VALUE(flags) & 8)
+  if (FIELD_VALUE(flag) & 8)
     FIELD_BD (elevation);
-  if (FIELD_VALUE(flags) & 2)
+  if (FIELD_VALUE(flag) & 2)
     FIELD_BD (thickness);
-  if (FIELD_VALUE(flags) & 1)
+  if (FIELD_VALUE(flag) & 1)
     FIELD_3BD (normal);
 
   FIELD_BL (num_points);
 
-  if (FIELD_VALUE(flags) & 16)
+  if (FIELD_VALUE(flag) & 16)
     FIELD_BL (num_bulges);
-  if (FIELD_VALUE(flags) & 32)
+  if (FIELD_VALUE(flag) & 32)
     FIELD_BL (num_widths);
 
   VERSIONS(R_13, R_14) {
@@ -3019,6 +3268,7 @@ DWG_ENTITY(PROXY_LWPOLYLINE);
       FIELD_BD (widths[rcount].start);
       FIELD_BD (widths[rcount].end);
     }
+  END_REPEAT(widths)
 
   FIELD_RC (unknown_1);
   FIELD_RC (unknown_2);
@@ -3030,11 +3280,22 @@ DWG_ENTITY_END
 #endif /* no proxy subtypes yet */
 
 //(498) pg.149 r2000+
-DWG_ENTITY(PROXY_ENTITY);
+DWG_ENTITY(PROXY_ENTITY)
 
-  FIELD_BL (class_id);
-  FIELD_BL (object_drawing_format);
-  FIELD_B (original_data_format);
+  FIELD_BL (class_id, 91);
+  PRE(R_2018)
+  {
+    FIELD_BL (version, 95);
+  }
+  SINCE(R_2018)
+  { // if encode from earlier: maint_version = version<<16 + acad version
+    FIELD_BL (version, 71);
+    FIELD_BL (maint_version, 97);
+  }
+  SINCE(R_2000)
+  {
+    FIELD_B (from_dxf, 70); // Original Data Format: 0 dwg, 1 dxf
+  }
 
   LOG_INFO("TODO PROXY_ENTITY data\n");
   /*
@@ -3048,17 +3309,27 @@ DWG_ENTITY(PROXY_ENTITY);
   FIELD_MS (size);
 
   COMMON_ENTITY_HANDLE_DATA;
-
   */
 
 DWG_ENTITY_END
 
 //(499) pg.149 r2000+
-DWG_OBJECT(PROXY);
+DWG_OBJECT(PROXY)
 
-  FIELD_BL (class_id);
-  FIELD_BL (object_drawing_format);
-  FIELD_B (original_data_format);
+  FIELD_BL (class_id, 91);
+  PRE(R_2018)
+  {
+    FIELD_BL (version, 95);
+  }
+  SINCE(R_2018)
+  { // if encode from earlier: maint_version = version<<16 + acad version
+    FIELD_BL (version, 71);
+    FIELD_BL (maint_version, 97);
+  }
+  SINCE(R_2000)
+  {
+    FIELD_B (from_dxf, 70); // Original Data Format: 0 dwg, 1 dxf
+  }
 
   LOG_INFO("TODO PROXY_OBJECT data\n");
   /*
@@ -3073,147 +3344,256 @@ DWG_OBJECT(PROXY);
 
 DWG_OBJECT_END
 
-DWG_OBJECT(OBJECTCONTEXTDATA);
+DWG_OBJECT(OBJECTCONTEXTDATA)
 
   SINCE(R_2010) {
     IF_ENCODE_FROM_EARLIER {
-      FIELD_VALUE(version) = 3;
+      FIELD_VALUE(class_version) = 3;
     }
-    FIELD_BS (version);
+    FIELD_BS (class_version, 0);
   }
-  FIELD_B (has_file);
-  FIELD_B (defaultflag);
+  FIELD_B (has_file, 0);
+  FIELD_B (defaultflag, 0);
 
 DWG_OBJECT_END
 
-DWG_OBJECT(CELLSTYLEMAP);
-
-  SINCE(R_2000)
-    {
-      FIELD_BL (num_cells);
-      REPEAT_N((long)FIELD_VALUE(num_cells), cells, Dwg_Object_CELLSTYLEMAP_Cell)
-        {
-          LOG_INFO("TODO CELLSTYLEMAP TABLE_Cell struct\n");
-          // TODO read the TABLE_Cell struct
-          FIELD_BL (cells[rcount].id);
-          FIELD_BL (cells[rcount].type);
-          FIELD_TV (cells[rcount].name);
-        }
+// 20.4.99 Value, page 241. for FIELD and TABLE
+#define Table_Value(value) \
+  SINCE(R_2007) \
+    { \
+      FIELD_BL (value.flags, 93); \
+    } \
+  FIELD_BL (value.data_type, 90); \
+  switch (FIELD_VALUE(value.data_type)) \
+    { \
+    case 0: /* kUnknown */ \
+      FIELD_BL (value.data_long, 0); \
+      break; \
+    case 1: /* kLong */ \
+      FIELD_BL (value.data_long, 0); \
+      break; \
+    case 2: /* kDouble */ \
+      FIELD_BD (value.data_double, 0); \
+      break; \
+    case 4: /* kString */ \
+      FIELD_TV (value.data_string, 0); \
+      break; \
+    case 8: /* kDate */ \
+      FIELD_BL (value.data_size, 0); \
+      FIELD_VECTOR (value.data_date, RC, value.data_size, 0); \
+      break; \
+    case 16: /* kPoint */ \
+      FIELD_BL (value.data_size, 0); \
+      FIELD_2RD (value.data_point, 0); \
+      break; \
+    case 32: /* k3dPoint */ \
+      FIELD_BL (value.data_size, 0); \
+      FIELD_3RD (value.data_3dpoint, 0); \
+      break; \
+    case 64: /* kObjectId */ \
+      /* data is a HANDLE */ \
+      /* read from appropriate place in handles section */ \
+      break; \
+    case 128: /* kBuffer */ \
+      LOG_ERROR("Unknown data type in TABLE entity: \"kBuffer\".\n") \
+        break; \
+    case 256: /* kResBuf */ \
+      LOG_ERROR("Unknown data type in TABLE entity: \"kResBuf\".\n") \
+        break; \
+    case 512: /* kGeneral since r2007*/ \
+      LOG_ERROR("Unknown data type in TABLE entity: \"kGeneral\".\n") \
+        break; \
+    default: \
+      LOG_ERROR("Invalid data type in TABLE entity\n") \
+        break; \
+    } \
+  SINCE(R_2007) \
+    { \
+      FIELD_BL (value.unit_type, 94); \
+      FIELD_TV (value.format_string, 300); \
+      FIELD_TV (value.value_string, 302); \
     }
-DWG_OBJECT_END
 
-DWG_OBJECT(FIELD);
+DWG_OBJECT(FIELD)
 
-  SINCE(R_2004)
+  //LOG_INFO("TODO FIELD\n");
+  FIELD_TV (id, 0);
+  FIELD_TV (code, 0);
+
+  FIELD_BL (num_childhdl, 0);
+  HANDLE_VECTOR (childhdl, num_childhdl, 360, 0);
+  FIELD_BL (num_objects, 0);
+  HANDLE_VECTOR (objects, num_objects, 331, 0);
+
+  UNTIL(R_2004) {
+    FIELD_TV (format, 0);
+  }
+
+  FIELD_BL (evaluation_option, 0);
+  FIELD_BL (filing_option, 0);
+  FIELD_BL (field_state, 0);
+  FIELD_BL (evaluation_status, 0);
+  FIELD_BL (evaluation_error_code, 0);
+  FIELD_TV (evaluation_error_msg, 0);
+  Table_Value(value)
+  FIELD_TV (value_string, 0);
+  FIELD_TV (value_string_length, 0);
+
+  FIELD_BL (num_childval, 0);
+  REPEAT_N((long)FIELD_VALUE(num_childval), childval, Dwg_FIELD_ChildValue)
     {
-      LOG_INFO("TODO FIELD\n");
-      FIELD_TV (id);
-      FIELD_TV (code);
-
-      FIELD_BL (num_childhdl);
-      HANDLE_VECTOR(childhdl, num_childhdl, 360);
-      FIELD_BL (num_objects);
-      HANDLE_VECTOR(objects, num_objects, 331);
-
-      UNTIL(R_2004) {
-        FIELD_TV (format);
-      }
-
-      FIELD_BL (evaluation_option);
-      FIELD_BL (filing_option);
-      FIELD_BL (field_state);
-      FIELD_BL (evaluation_status);
-      FIELD_BL (evaluation_error_code);
-      FIELD_TV (evaluation_error_msg);
-      FIELD_BL (value); /* TODO value p20.4.99 */
-      FIELD_TV (value_string);
-      FIELD_TV (value_string_length);
-
-      FIELD_BL (num_childval);
-      REPEAT_N((long)FIELD_VALUE(num_childval), childval, Dwg_Object_FIELD_ChildValue)
-        {
-          FIELD_TV (childval[rcount].key);
-          FIELD_BL (childval[rcount].value); /* TODO value p20.4.99 */
-        }
+      FIELD_TV (childval[rcount].key, 0);
+      Table_Value(childval[rcount].value)
     }
+  END_REPEAT(childval)
+
 DWG_OBJECT_END
 
-DWG_OBJECT(FIELDLIST);
+DWG_OBJECT(FIELDLIST)
 
   SINCE(R_2018) {
-    FIELD_BL (num_fields);
-    FIELD_B (unknown);
-    HANDLE_VECTOR (field_handles, num_fields, 0);
+    FIELD_BL (num_fields, 0);
+    FIELD_B (unknown, 0);
+    HANDLE_VECTOR (field_handles, num_fields, 0, 330);
   }
 
 DWG_OBJECT_END
 
-//pg.150
-DWG_OBJECT(RASTERVARIABLES);
+DWG_OBJECT(GEODATA)
 
-  FIELD_BL (version);
-  FIELD_BS (display_frame);
-  FIELD_BS (display_quality);
-  FIELD_BS (units);
+  FIELD_BL (class_version, 0);
+  FIELD_HANDLE (host_block, 4, 0);
+  FIELD_BS (coord_type, 0); // 0 unknown, local grid 1, projected grid 2, geographic (defined by latitude/longitude) = 3
+  SINCE(R_2010)
+    {
+      FIELD_3BD (design_pt, 0);
+      FIELD_3BD (ref_pt, 0);
+      FIELD_BD (unit_scale_horiz, 0);
+      FIELD_BL (units_value_horiz, 0);
+      FIELD_BD (unit_scale_vert, 0);
+      FIELD_BL (units_value_vert, 0);
+      FIELD_3BD (up_dir, 0);
+      FIELD_3BD (north_dir, 0);
+      FIELD_BL (scale_est, 0); // None = 1, User specified scale factor = 2, Grid scale at reference point = 3, Prismodial = 4
+      FIELD_BD (user_scale_factor, 0);
+      FIELD_B (sea_level_corr, 0);
+      FIELD_BD (sea_level_elev, 0);
+      FIELD_BD (coord_proj_radius, 0);
+      FIELD_T (coord_system_def, 0);
+      FIELD_T (geo_rss_tag, 0);
+    }
+    VERSIONS(R_2007, R_2010)// r2009-2010 really
+    {
+      FIELD_3BD (ref_pt, 0);
+      FIELD_BL (units_value_horiz, 0);
+      FIELD_3BD (design_pt, 0);
+      FIELD_3BD (obs_pt, 0); // 0,0,0
+      FIELD_3BD (up_dir, 0);
+      FIELD_BD (north_dir_angle_deg, 0);
+      FIELD_3BD (north_dir, 0); // obsolete: 1,1,1
+      FIELD_T (coord_system_def, 0);
+      FIELD_T (geo_rss_tag, 0);
+      FIELD_BD (unit_scale_horiz, 0);
+      FIELD_T (coord_system_datum, 0); //obsolete
+      FIELD_T (coord_system_wkt, 0); //obsolete
+    }
+  FIELD_T (observation_from_tag, 0);
+  FIELD_T (observation_to_tag, 0);
+  FIELD_T (observation_coverage_tag, 0);
+  FIELD_BL (num_geomesh_pts, 0);
+  REPEAT_N(FIELD_VALUE(num_geomesh_pts), geomesh_pts, Dwg_GEODATA_meshpt)
+    {
+      FIELD_2RD (geomesh_pts[rcount].source_pt, 0);
+      FIELD_2RD (geomesh_pts[rcount].dest_pt, 0);
+    }
+  END_REPEAT(geomesh_pts);
+  FIELD_BL (num_geomesh_faces, 0);
+  REPEAT_N(FIELD_VALUE(num_geomesh_faces), geomesh_faces, Dwg_GEODATA_meshface)
+    {
+      FIELD_BL (geomesh_faces[rcount].face1, 0);
+      FIELD_BL (geomesh_faces[rcount].face2, 0);
+      FIELD_BL (geomesh_faces[rcount].face3, 0);
+      FIELD_BL (geomesh_faces[rcount].face4, 0);
+    }
+  END_REPEAT(geomesh_faces);
+  UNTIL(R_2007)
+    {
+      FIELD_BL (scale_est, 0);
+      FIELD_BD (user_scale_factor, 0);
+      FIELD_B (sea_level_corr, 0);
+      FIELD_BD (sea_level_elev, 0);
+      FIELD_BD (coord_proj_radius, 0);
+    }
+
+DWG_OBJECT_END
+
+//pg.220, 20.4.91
+DWG_OBJECT(RASTERVARIABLES)
+
+  FIELD_BL (class_version, 90);
+  FIELD_BS (display_frame, 70);
+  FIELD_BS (display_quality, 71);
+  FIELD_BS (units, 72);
 
   UNTIL(R_2007) {
-    FIELD_HANDLE (parenthandle, 4);
+    FIELD_HANDLE (parenthandle, 4, 0);
   }
   REACTORS(4);
   XDICOBJHANDLE(3);
 
 DWG_OBJECT_END
 
-//pg.151
-DWG_OBJECT(SORTENTSTABLE);
+// 20.4.93 page 221
+DWG_OBJECT(SORTENTSTABLE)
 
-  FIELD_BL (num_entries);
-  HANDLE_VECTOR (sort_handles, num_entries, 0);
+  FIELD_BL (num_ents, 0);
+  HANDLE_VECTOR (sort_handles, num_ents, ANYCODE, 0);
 
   UNTIL(R_2007) {
-    FIELD_HANDLE (parenthandle, 4);
+    FIELD_HANDLE (parenthandle, 4, 0);
   }
   REACTORS(4);
   XDICOBJHANDLE(3);
   UNTIL(R_2007) {
-    FIELD_HANDLE (owner_handle, 4);
+    FIELD_HANDLE (owner_handle, 4, 0);
   }
-  HANDLE_VECTOR (object_handles, num_entries, 4);
+  HANDLE_VECTOR (ents, num_ents, 4, 0);
 
 DWG_OBJECT_END
 
-//pg.152
-DWG_OBJECT(SPATIAL_FILTER);
+//pg.222, 20.4.94 to clip external references
+DWG_OBJECT(SPATIAL_FILTER)
 
-  FIELD_BS (num_points);
-  FIELD_2RD_VECTOR (points, num_points);
-  FIELD_3BD (extrusion);
-  FIELD_3BD (clip_bound_origin);
-  FIELD_BS (display_boundary);
-  FIELD_BS (front_clip_on);
+  FIELD_BS (num_points, 70);
+  FIELD_2RD_VECTOR (points, num_points, 10);
+  FIELD_3BD (extrusion, 210);
+  FIELD_3BD (clip_bound_origin, 10);
+  FIELD_BS (display_boundary, 71);
+  FIELD_BS (front_clip_on, 72);
   if (FIELD_VALUE(front_clip_on) == 1)
-      FIELD_BD (front_clip_dist);
+    FIELD_BD (front_clip_dist, 40);
 
-  FIELD_BS (back_clip_on);
+  FIELD_BS (back_clip_on, 73);
   if (FIELD_VALUE(back_clip_on) == 1)
-      FIELD_BD (back_clip_dist);
+    FIELD_BD (back_clip_dist, 41);
 
-  FIELD_VECTOR_N (inverse_block_transform, BD, 12);
-  FIELD_VECTOR_N (clip_bound_transform, BD, 12);
+  FIELD_VECTOR_N (inverse_block_transform, BD, 12, 40);
+  FIELD_VECTOR_N (clip_bound_transform, BD, 12, 40);
 
   UNTIL(R_2007) {
-    FIELD_HANDLE (parenthandle, 4);
+    FIELD_HANDLE (parenthandle, 4, 0);
   }
   REACTORS(4);
   XDICOBJHANDLE(3);
 
 DWG_OBJECT_END
 
-//pg.153
-DWG_OBJECT(SPATIAL_INDEX);
+//pg.153 TODO (Unhandled)
+DWG_OBJECT(SPATIAL_INDEX)
 
-  FIELD_BL (timestamp1);
-  FIELD_BL (timestamp2);
+  FIELD_BL (timestamp1, 0);
+  FIELD_BL (timestamp2, 0);
+
   //TODO: parse this: "unknown X rest of bits to handles"
 /*
   UNTIL(R_2007) {
@@ -3224,32 +3604,45 @@ DWG_OBJECT(SPATIAL_INDEX);
 */
 DWG_OBJECT_END
 
-//pg.158
-DWG_ENTITY(TABLE);
+//pg.229 20.4.96
+DWG_ENTITY(TABLE)
 
-  FIELD_3BD (insertion_point);
+  SINCE(R_2010)
+    {
+      FIELD_RC (unknown_rc, 0);
+      FIELD_HANDLE (unknown_h, 5, 0);
+      FIELD_BL (unknown_bl, 0);
+      VERSION(R_2010)
+        FIELD_B (unknown_b, 0); // default 1
+      VERSION(R_2013)
+        FIELD_BL (unknown_bl1, 0);
 
+      //below as 20.4.96.2 AcDbTableContent: 20.4.97
+    }
+
+  FIELD_3BD (insertion_point, 10);
+    
   VERSIONS(R_13, R_14) {
-    FIELD_3BD (scale);
+    FIELD_3BD_1 (scale, 41);
   }
-
+  
   SINCE(R_2000)
     {
-      FIELD_BB (data_flags);
+      FIELD_BB (data_flags, 0);
       switch (FIELD_VALUE(data_flags))
         {
           case 0:
             FIELD_VALUE(scale.x) = 1.0;
-            FIELD_DD (scale.y, FIELD_VALUE (scale.x));
-            FIELD_DD (scale.z, FIELD_VALUE (scale.x));
+            FIELD_DD (scale.y, FIELD_VALUE (scale.x), 42);
+            FIELD_DD (scale.z, FIELD_VALUE (scale.x), 43);
             break;
           case 1:
             FIELD_VALUE(scale.x) = 1.0;
-            FIELD_DD (scale.y, 1.0);
-            FIELD_DD (scale.z, 1.0);
+            FIELD_DD (scale.y, 1.0, 42);
+            FIELD_DD (scale.z, 1.0, 43);
             break;
           case 2:
-            FIELD_RD (scale.x);
+            FIELD_RD (scale.x, 41);
             FIELD_VALUE(scale.y) = FIELD_VALUE (scale.x);
             FIELD_VALUE(scale.z) = FIELD_VALUE (scale.x);
             break;
@@ -3263,382 +3656,625 @@ DWG_ENTITY(TABLE);
             break;
         }
     }
-
-  FIELD_BD (rotation);
-  FIELD_3BD (extrusion);
-  FIELD_B (has_attribs);
-
+  
+  FIELD_BD (rotation, 50);
+  FIELD_3BD (extrusion, 210);
+  FIELD_B (has_attribs, 66);
+  
   SINCE(R_2004) {
-    FIELD_BL (owned_object_count);
+    FIELD_BL (owned_object_count, 0);
   }
-
-  FIELD_BS (flag_for_table_value);
-  FIELD_3BD (horiz_direction);
-  FIELD_BL (num_cols);
-  FIELD_BL (num_rows);
-  FIELD_VECTOR (col_widths, BD, num_cols);
-  FIELD_VECTOR (row_heights, BD, num_rows);
-  REPEAT_N((long)(FIELD_VALUE(num_rows)*FIELD_VALUE(num_cols)), cells, Dwg_Entity_TABLE_Cell)
+  
+  FIELD_BS (flag_for_table_value, 90);
+  FIELD_3BD (horiz_direction, 11);
+  FIELD_BL (num_cols, 92);
+  FIELD_BL (num_rows, 91);
+  FIELD_VECTOR (col_widths, BD, num_cols, 142);
+  FIELD_VECTOR (row_heights, BD, num_rows, 141);
+  REPEAT_N((long)(FIELD_VALUE(num_rows)*FIELD_VALUE(num_cols)), cells, Dwg_TABLE_Cell)
     {
-      FIELD_BS (cells[rcount].type);
-      FIELD_RC (cells[rcount].flags);
-      FIELD_B (cells[rcount].merged_value);
-      FIELD_B (cells[rcount].autofit_flag);
-      FIELD_BL (cells[rcount].merged_width_flag);
-      FIELD_BL (cells[rcount].merged_height_flag);
-      FIELD_BD (cells[rcount].rotation_value);
-
-      if (FIELD_VALUE(cells[rcount].type)==1)
+      FIELD_BS (cells[rcount].type, 171);
+      FIELD_RC (cells[rcount].flags, 172);
+      FIELD_B (cells[rcount].merged_value, 173);
+      FIELD_B (cells[rcount].autofit_flag, 174);
+      FIELD_BL (cells[rcount].merged_width_flag, 175);
+      FIELD_BL (cells[rcount].merged_height_flag, 176);
+      FIELD_BD (cells[rcount].rotation_value, 145);
+  
+      if (FIELD_VALUE(cells[rcount].type) == 1)
         { /* text cell */
-          FIELD_TV (cells[rcount].text_string);
+          FIELD_TV (cells[rcount].text_string, 1);
         }
-      if (FIELD_VALUE(cells[rcount].type)==2)
+      if (FIELD_VALUE(cells[rcount].type) == 2)
         { /* block cell */
-          FIELD_BD (cells[rcount].block_scale);
-          FIELD_B (cells[rcount].additional_data_flag);
+          FIELD_BD (cells[rcount].block_scale, 144);
+          FIELD_B (cells[rcount].additional_data_flag, 0);
           if (FIELD_VALUE(cells[rcount].additional_data_flag) == 1)
             {
-              FIELD_BS (cells[rcount].attr_def_count);
-              FIELD_BS (cells[rcount].attr_def_index);
-              FIELD_TV (cells[rcount].attr_def_text);
+              FIELD_BS (cells[rcount].attr_def_count, 179);
+              FIELD_BS (cells[rcount].attr_def_index, 0);
+              FIELD_TV (cells[rcount].attr_def_text, 300);
               //total_attr_def_count += FIELD_VALUE (cells[rcount].attr_def_count);
             }
         }
-      if (FIELD_VALUE(cells[rcount].type)==1 || FIELD_VALUE(cells[rcount].type)==2)
+      if (FIELD_VALUE(cells[rcount].type) == 1 ||
+          FIELD_VALUE(cells[rcount].type) == 2)
         { /* common to both text and block cells */
-          FIELD_B (cells[rcount].additional_data_flag);
+          FIELD_B (cells[rcount].additional_data_flag, 0);
           if (FIELD_VALUE(cells[rcount].additional_data_flag) == 1)
             {
               BITCODE_BL cell_flag;
-              FIELD_BL (cells[rcount].cell_flag_override);
+              FIELD_BL (cells[rcount].cell_flag_override, 177);
               cell_flag = FIELD_VALUE(cells[rcount].cell_flag_override);
-              FIELD_RC (cells[rcount].virtual_edge_flag);
-
+              FIELD_RC (cells[rcount].virtual_edge_flag, 178);
+  
               if (cell_flag & 0x01)
-                FIELD_RS (cells[rcount].cell_alignment);
+                FIELD_RS (cells[rcount].cell_alignment, 170);
               if (cell_flag & 0x02)
-                FIELD_B (cells[rcount].background_fill_none);
+                FIELD_B (cells[rcount].background_fill_none, 283);
               if (cell_flag & 0x04)
-                FIELD_CMC (cells[rcount].background_color);
+                FIELD_CMC (cells[rcount].background_color, 63);
               if (cell_flag & 0x08)
-                FIELD_CMC (cells[rcount].content_color);
+                FIELD_CMC (cells[rcount].content_color, 64);
+              if (cell_flag & 0x10)
+                FIELD_HANDLE (cells[rcount].text_style, 5, 7);
               if (cell_flag & 0x20)
-                FIELD_BD (cells[rcount].text_height);
+                FIELD_BD (cells[rcount].text_height, 140);
               if (cell_flag & 0x00040)
-                FIELD_CMC (cells[rcount].top_grid_color);
+                FIELD_CMC (cells[rcount].top_grid_color, 69);
               if (cell_flag & 0x00400)
-                FIELD_BS (cells[rcount].top_grid_linewt);
+                FIELD_BS (cells[rcount].top_grid_linewt, 279);
               if (cell_flag & 0x04000)
-                FIELD_BS (cells[rcount].top_visibility);
+                FIELD_BS (cells[rcount].top_visibility, 289);
               if (cell_flag & 0x00080)
-                FIELD_CMC (cells[rcount].right_grid_color);
+                FIELD_CMC (cells[rcount].right_grid_color, 65);
               if (cell_flag & 0x00800)
-                FIELD_BS (cells[rcount].right_grid_linewt);
+                FIELD_BS (cells[rcount].right_grid_linewt, 275);
               if (cell_flag & 0x08000)
-                FIELD_BS (cells[rcount].right_visibility);
+                FIELD_BS (cells[rcount].right_visibility, 285);
               if (cell_flag & 0x00100)
-                FIELD_CMC (cells[rcount].bottom_grid_color);
+                FIELD_CMC (cells[rcount].bottom_grid_color, 66);
               if (cell_flag & 0x01000)
-                FIELD_BS (cells[rcount].bottom_grid_linewt);
+                FIELD_BS (cells[rcount].bottom_grid_linewt, 276);
               if (cell_flag & 0x10000)
-                FIELD_BS (cells[rcount].bottom_visibility);
+                FIELD_BS (cells[rcount].bottom_visibility, 286);
               if (cell_flag & 0x00200)
-                FIELD_CMC (cells[rcount].left_grid_color);
+                FIELD_CMC (cells[rcount].left_grid_color, 68);
               if (cell_flag & 0x02000)
-                FIELD_BS (cells[rcount].left_grid_linewt);
+                FIELD_BS (cells[rcount].left_grid_linewt, 278);
               if (cell_flag & 0x20000)
-                FIELD_BS (cells[rcount].left_visibility);
+                FIELD_BS (cells[rcount].left_visibility, 288);
+  
+              FIELD_BL (cells[rcount].unknown, 0);
 
-              SINCE(R_2007)
-                {
-                  FIELD_BL (cells[rcount].unknown);
-                  FIELD_BL (cells[rcount].flags_2007);
-                  FIELD_BL (cells[rcount].data_type);
-                  switch (FIELD_VALUE(cells[rcount].data_type))
-                    {
-                      case 0: /* kLong */
-                        FIELD_BL (cells[rcount].data_long);
-                        break;
-                      case 1: /* kDouble */
-                        FIELD_BD (cells[rcount].data_double);
-                        break;
-                      case 2: /* kString */
-                        FIELD_TV (cells[rcount].data_string);
-                        break;
-                      case 4: /* kDate */
-                        FIELD_BL (cells[rcount].data_size);
-                        FIELD_VECTOR (cells[rcount].data_date, RC, cells[rcount].data_size);
-                        break;
-                      case 8: /* kPoint */
-                        FIELD_BL (cells[rcount].data_size);
-                        FIELD_2RD (cells[rcount].data_point);
-                        break;
-                      case 16: /* k3dPoint */
-                        FIELD_BL (cells[rcount].data_size);
-                        FIELD_3RD (cells[rcount].data_3dpoint);
-                        break;
-                      case 32: /* kObjectId */
-                        //data is a HANDLE
-                        //read from appropriate place in handles section
-                        break;
-                      case 64: /* kBuffer */
-                        LOG_ERROR("Unknown data type in TABLE entity: \"kBuffer\".\n")
-                        break;
-                      case 128: /* kResBuf */
-                        LOG_ERROR("Unknown data type in TABLE entity: \"kResBuf\".\n")
-                        break;
-                      case 256: /* kGeneral */
-                        LOG_ERROR("Unknown data type in TABLE entity: \"kGeneral\".\n")
-                        break;
-                      default:
-                        LOG_ERROR("Invalid data type in TABLE entity\n")
-                        break;
-                    }
-                  FIELD_BL (cells[rcount].unknown2);
-                  FIELD_TV (cells[rcount].format_string);
-                  FIELD_TV (cells[rcount].value_string);
-                } /* end SINCE(2007)*/
+              // 20.4.99 Value, page 241
+              Table_Value(cells[rcount].value)
             }
         }
-    } /* End Cell Data (remaining data applies to entire table)*/
-
-/* COMMON: */
-
-  FIELD_B (table_overrides_present);
-  if (FIELD_VALUE(table_overrides_present) == 1)
+    }
+  END_REPEAT(cells);
+  /* End Cell Data (remaining data applies to entire table)*/
+  
+  /* COMMON: */
+  
+  FIELD_B (has_table_overrides, 0);
+  if (FIELD_VALUE(has_table_overrides))
     {
       BITCODE_BL table_flag;
-      FIELD_BL (table_flag_override);
+      FIELD_BL (table_flag_override, 93);
       table_flag = FIELD_VALUE(table_flag_override);
       if (table_flag & 0x0001)
-        FIELD_B (title_suppressed);
-      FIELD_B (header_suppressed); // flag unchecked for 2?
+        FIELD_B (title_suppressed, 280);
+      FIELD_B (header_suppressed, 281); // yes, unchecked. always true
       if (table_flag & 0x0004)
-          FIELD_BS (flow_direction);
+        FIELD_BS (flow_direction, 70);
       if (table_flag & 0x0008)
-        FIELD_BD (horiz_cell_margin);
+        FIELD_BD (horiz_cell_margin, 40);
       if (table_flag & 0x0010)
-        FIELD_BD (vert_cell_margin);
+        FIELD_BD (vert_cell_margin, 41);
       if (table_flag & 0x0020)
-        FIELD_CMC (title_row_color);
+        FIELD_CMC (title_row_color, 64);
       if (table_flag & 0x0040)
-        FIELD_CMC (header_row_color);
+        FIELD_CMC (header_row_color, 64);
       if (table_flag & 0x0080)
-        FIELD_CMC (data_row_color);
+        FIELD_CMC (data_row_color, 64);
       if (table_flag & 0x0100)
-        FIELD_B (title_row_fill_none);
+        FIELD_B (title_row_fill_none, 283);
       if (table_flag & 0x0200)
-        FIELD_B (header_row_fill_none);
+        FIELD_B (header_row_fill_none, 283);
       if (table_flag & 0x0400)
-        FIELD_B (data_row_fill_none);
+        FIELD_B (data_row_fill_none, 283);
       if (table_flag & 0x0800)
-        FIELD_CMC (title_row_fill_color);
+        FIELD_CMC (title_row_fill_color, 63);
       if (table_flag & 0x1000)
-        FIELD_CMC (header_row_fill_color);
+        FIELD_CMC (header_row_fill_color, 63);
       if (table_flag & 0x2000)
-        FIELD_CMC (data_row_fill_color);
+        FIELD_CMC (data_row_fill_color, 63);
       if (table_flag & 0x4000)
-        FIELD_BS (title_row_align);
+        FIELD_BS (title_row_align, 170);
       if (table_flag & 0x8000)
-        FIELD_BS (header_row_align);
+        FIELD_BS (header_row_align, 170);
       if (table_flag & 0x10000)
-        FIELD_BS (data_row_align);
+        FIELD_BS (data_row_align, 170);
+      if (table_flag & 0x20000)
+        FIELD_HANDLE (title_text_style, 5, 7);
+      if (table_flag & 0x40000)
+        FIELD_HANDLE (header_text_style, 5, 7); // doc error
+      if (table_flag & 0x80000)
+        FIELD_HANDLE (data_text_style, 5, 7); // doc error
       if (table_flag & 0x100000)
-        FIELD_BD (title_row_height);
+        FIELD_BD (title_row_height, 140);
       if (table_flag & 0x200000)
-        FIELD_BD (header_row_height);
+        FIELD_BD (header_row_height, 140);
       if (table_flag & 0x400000)
-        FIELD_BD (data_row_height);
+        FIELD_BD (data_row_height, 140);
     }
-
-  FIELD_B (border_color_overrides_present);
-  if (FIELD_VALUE(border_color_overrides_present)==1)
+  
+  FIELD_B (has_border_color_overrides, 0);
+  if (FIELD_VALUE(has_border_color_overrides))
     {
       BITCODE_BL border_color;
-      FIELD_BL (border_color_overrides_flag);
+      FIELD_BL (border_color_overrides_flag, 94);
       border_color = FIELD_VALUE(border_color_overrides_flag);
       if (border_color & 0x0001)
-        FIELD_CMC (title_horiz_top_color);
+        FIELD_CMC (title_horiz_top_color, 64);
       if (border_color & 0x0002)
-        FIELD_CMC (title_horiz_ins_color);
+        FIELD_CMC (title_horiz_ins_color, 65);
       if (border_color & 0x0004)
-        FIELD_CMC (title_horiz_bottom_color);
+        FIELD_CMC (title_horiz_bottom_color, 66);
       if (border_color & 0x0008)
-        FIELD_CMC (title_vert_left_color);
+        FIELD_CMC (title_vert_left_color, 63);
       if (border_color & 0x0010)
-        FIELD_CMC (title_vert_ins_color);
+        FIELD_CMC (title_vert_ins_color, 68);
       if (border_color & 0x0020)
-        FIELD_CMC (title_vert_right_color);
+        FIELD_CMC (title_vert_right_color, 69);
       if (border_color & 0x0040)
-        FIELD_CMC (header_horiz_top_color);
+        FIELD_CMC (header_horiz_top_color, 64);
       if (border_color & 0x0080)
-        FIELD_CMC (header_horiz_ins_color);
+        FIELD_CMC (header_horiz_ins_color, 65);
       if (border_color & 0x0100)
-        FIELD_CMC (header_horiz_bottom_color);
+        FIELD_CMC (header_horiz_bottom_color, 66);
       if (border_color & 0x0200)
-        FIELD_CMC (header_vert_left_color);
+        FIELD_CMC (header_vert_left_color, 63);
       if (border_color & 0x0400)
-        FIELD_CMC (header_vert_ins_color);
+        FIELD_CMC (header_vert_ins_color, 68);
       if (border_color & 0x0800)
-        FIELD_CMC (header_vert_right_color);
+        FIELD_CMC (header_vert_right_color, 69);
       if (border_color & 0x1000)
-        FIELD_CMC (data_horiz_top_color);
+        FIELD_CMC (data_horiz_top_color, 64);
       if (border_color & 0x2000)
-        FIELD_CMC (data_horiz_ins_color);
+        FIELD_CMC (data_horiz_ins_color, 65);
       if (border_color & 0x4000)
-        FIELD_CMC (data_horiz_bottom_color);
+        FIELD_CMC (data_horiz_bottom_color, 66);
       if (border_color & 0x8000)
-        FIELD_CMC (data_vert_left_color);
+        FIELD_CMC (data_vert_left_color, 63);
       if (border_color & 0x10000)
-        FIELD_CMC (data_vert_ins_color);
+        FIELD_CMC (data_vert_ins_color, 68);
       if (border_color & 0x20000)
-        FIELD_CMC (data_vert_right_color);
+        FIELD_CMC (data_vert_right_color, 69);
     }
-
-  FIELD_B (border_lineweight_overrides_present);
-  if (FIELD_VALUE(border_lineweight_overrides_present) == 1)
+  
+  FIELD_B (has_border_lineweight_overrides, 0);
+  if (FIELD_VALUE(has_border_lineweight_overrides))
     {
-      BITCODE_BL border_lineweight;
-      FIELD_BL (border_lineweight_overrides_flag);
-      border_lineweight = FIELD_VALUE(border_lineweight_overrides_flag);
-      if (border_lineweight & 0x0001)
-        FIELD_BS (title_horiz_top_lineweigh);
-      if (border_lineweight & 0x0002)
-        FIELD_BS (title_horiz_ins_lineweigh);
-      if (border_lineweight & 0x0004)
-        FIELD_BS (title_horiz_bottom_lineweigh);
-      if (border_lineweight & 0x0008)
-        FIELD_BS (title_vert_left_lineweigh);
-      if (border_lineweight & 0x0010)
-        FIELD_BS (title_vert_ins_lineweigh);
-      if (border_lineweight & 0x0020)
-        FIELD_BS (title_vert_right_lineweigh);
-      if (border_lineweight & 0x0040)
-        FIELD_BS (header_horiz_top_lineweigh);
-      if (border_lineweight & 0x0080)
-        FIELD_BS (header_horiz_ins_lineweigh);
-      if (border_lineweight & 0x0100)
-        FIELD_BS (header_horiz_bottom_lineweigh);
-      if (border_lineweight & 0x0200)
-        FIELD_BS (header_vert_left_lineweigh);
-      if (border_lineweight & 0x0400)
-        FIELD_BS (header_vert_ins_lineweigh);
-      if (border_lineweight & 0x0800)
-        FIELD_BS (header_vert_right_lineweigh);
-      if (border_lineweight & 0x1000)
-        FIELD_BS (data_horiz_top_lineweigh);
-      if (border_lineweight & 0x2000)
-        FIELD_BS (data_horiz_ins_lineweigh);
-      if (border_lineweight & 0x4000)
-        FIELD_BS (data_horiz_bottom_lineweigh);
-      if (border_lineweight & 0x8000)
-        FIELD_BS (data_vert_left_lineweigh);
-      if (border_lineweight & 0x10000)
-        FIELD_BS (data_vert_ins_lineweigh);
-      if (border_lineweight & 0x20000)
-        FIELD_BS (data_vert_right_lineweigh);
+      BITCODE_BL border_linewt;
+      FIELD_BL (border_lineweight_overrides_flag, 95);
+      border_linewt = FIELD_VALUE(border_lineweight_overrides_flag);
+      if (border_linewt & 0x0001)
+        FIELD_BS (title_horiz_top_linewt, 0);
+      if (border_linewt & 0x0002)
+        FIELD_BS (title_horiz_ins_linewt, 0);
+      if (border_linewt & 0x0004)
+        FIELD_BS (title_horiz_bottom_linewt, 0);
+      if (border_linewt & 0x0008)
+        FIELD_BS (title_vert_left_linewt, 0);
+      if (border_linewt & 0x0010)
+        FIELD_BS (title_vert_ins_linewt, 0);
+      if (border_linewt & 0x0020)
+        FIELD_BS (title_vert_right_linewt, 0);
+      if (border_linewt & 0x0040)
+        FIELD_BS (header_horiz_top_linewt, 0);
+      if (border_linewt & 0x0080)
+        FIELD_BS (header_horiz_ins_linewt, 0);
+      if (border_linewt & 0x0100)
+        FIELD_BS (header_horiz_bottom_linewt, 0);
+      if (border_linewt & 0x0200)
+        FIELD_BS (header_vert_left_linewt, 0);
+      if (border_linewt & 0x0400)
+        FIELD_BS (header_vert_ins_linewt, 0);
+      if (border_linewt & 0x0800)
+        FIELD_BS (header_vert_right_linewt, 0);
+      if (border_linewt & 0x1000)
+        FIELD_BS (data_horiz_top_linewt, 0);
+      if (border_linewt & 0x2000)
+        FIELD_BS (data_horiz_ins_linewt, 0);
+      if (border_linewt & 0x4000)
+        FIELD_BS (data_horiz_bottom_linewt, 0);
+      if (border_linewt & 0x8000)
+        FIELD_BS (data_vert_left_linewt, 0);
+      if (border_linewt & 0x10000)
+        FIELD_BS (data_vert_ins_linewt, 0);
+      if (border_linewt & 0x20000)
+        FIELD_BS (data_vert_right_linewt, 0);
     }
-
-  FIELD_B (border_visibility_overrides_present);
-  if (FIELD_VALUE(border_visibility_overrides_present) == 1)
+  
+  FIELD_B (has_border_visibility_overrides, 0);
+  if (FIELD_VALUE(has_border_visibility_overrides))
     {
       BITCODE_BL border_visibility;
-      FIELD_BL (border_visibility_overrides_flag);
+      FIELD_BL (border_visibility_overrides_flag, 96);
       border_visibility = FIELD_VALUE(border_visibility_overrides_flag);
       if (border_visibility & 0x0001)
-        FIELD_BS (title_horiz_top_visibility);
+        FIELD_BS (title_horiz_top_visibility, 0);
       if (border_visibility & 0x0002)
-        FIELD_BS (title_horiz_ins_visibility);
+        FIELD_BS (title_horiz_ins_visibility, 0);
       if (border_visibility & 0x0004)
-        FIELD_BS (title_horiz_bottom_visibility);
+        FIELD_BS (title_horiz_bottom_visibility, 0);
       if (border_visibility & 0x0008)
-        FIELD_BS (title_vert_left_visibility);
+        FIELD_BS (title_vert_left_visibility, 0);
       if (border_visibility & 0x0010)
-        FIELD_BS (title_vert_ins_visibility);
+        FIELD_BS (title_vert_ins_visibility, 0);
       if (border_visibility & 0x0020)
-        FIELD_BS (title_vert_right_visibility);
+        FIELD_BS (title_vert_right_visibility, 0);
       if (border_visibility & 0x0040)
-        FIELD_BS (header_horiz_top_visibility);
+        FIELD_BS (header_horiz_top_visibility, 0);
       if (border_visibility & 0x0080)
-        FIELD_BS (header_horiz_ins_visibility);
+        FIELD_BS (header_horiz_ins_visibility, 0);
       if (border_visibility & 0x0100)
-        FIELD_BS (header_horiz_bottom_visibility);
+        FIELD_BS (header_horiz_bottom_visibility, 0);
       if (border_visibility & 0x0200)
-        FIELD_BS (header_vert_left_visibility);
+        FIELD_BS (header_vert_left_visibility, 0);
       if (border_visibility & 0x0400)
-        FIELD_BS (header_vert_ins_visibility);
+        FIELD_BS (header_vert_ins_visibility, 0);
       if (border_visibility & 0x0800)
-        FIELD_BS (header_vert_right_visibility);
+        FIELD_BS (header_vert_right_visibility, 0);
       if (border_visibility & 0x1000)
-        FIELD_BS (data_horiz_top_visibility);
+        FIELD_BS (data_horiz_top_visibility, 0);
       if (border_visibility & 0x2000)
-        FIELD_BS (data_horiz_ins_visibility);
+        FIELD_BS (data_horiz_ins_visibility, 0);
       if (border_visibility & 0x4000)
-        FIELD_BS (data_horiz_bottom_visibility);
+        FIELD_BS (data_horiz_bottom_visibility, 0);
       if (border_visibility & 0x8000)
-        FIELD_BS (data_vert_left_visibility);
+        FIELD_BS (data_vert_left_visibility, 0);
       if (border_visibility & 0x10000)
-        FIELD_BS (data_vert_ins_visibility);
+        FIELD_BS (data_vert_ins_visibility, 0);
       if (border_visibility & 0x20000)
-        FIELD_BS (data_vert_right_visibility);
+        FIELD_BS (data_vert_right_visibility, 0);
     }
-
-  FIELD_HANDLE (block_header, 5);
-
+  
+  FIELD_HANDLE (block_header, 5, 2);
+  
   VERSIONS(R_13, R_2000)
     {
       if (FIELD_VALUE(has_attribs))
         {
-          FIELD_HANDLE (first_attrib, 4);
-          FIELD_HANDLE (last_attrib, 4);
+          FIELD_HANDLE (first_attrib, 4, 0);
+          FIELD_HANDLE (last_attrib, 4, 0);
         }
     }
-
+  
   SINCE(R_2004)
     {
-      HANDLE_VECTOR(attribs, owned_object_count, 4)
+      HANDLE_VECTOR (attribs, owned_object_count, 4, 0)
     }
-
+  
   if (FIELD_VALUE(has_attribs))
-      FIELD_HANDLE (seqend, 3);
-
-  FIELD_HANDLE (table_style_id, ANYCODE);
-
-  REPEAT_N((long)(FIELD_VALUE(num_rows)*FIELD_VALUE(num_cols)), cells, Dwg_Entity_TABLE_Cell)
+    FIELD_HANDLE (seqend, 3, 0);
+  
+  FIELD_HANDLE (table_style_id, 5, 342);
+  
+  REPEAT_N((long)(FIELD_VALUE(num_rows)*FIELD_VALUE(num_cols)), cells, Dwg_TABLE_Cell)
     {
-      FIELD_HANDLE (cells[rcount].cell_handle, ANYCODE);
-
+      if (FIELD_VALUE(cells[rcount].type) == 1)
+        { /* text cell */
+          FIELD_HANDLE (cells[rcount].cell_handle, 5, 344);
+        }
+      else
+        { /* block cell */
+          FIELD_HANDLE (cells[rcount].cell_handle, 5, 340);
+        }
+  
       if (FIELD_VALUE(cells[rcount].type) == 2 &&
           FIELD_VALUE(cells[rcount].additional_data_flag) == 1)
         {
-          HANDLE_VECTOR(cells[rcount].attr_def_id, cells[rcount].attr_def_count, ANYCODE);
+          HANDLE_VECTOR (cells[rcount].attr_def_id, cells[rcount].attr_def_count, 4, 331);
         }
-
+  
       if (FIELD_VALUE(cells[rcount].additional_data_flag2) == 1 &&
           FIELD_VALUE(cells[rcount].cell_flag_override) & 0x08)
         {
-          FIELD_HANDLE (cells[rcount].text_style_override, ANYCODE);
+          FIELD_HANDLE (cells[rcount].text_style_override, ANYCODE, 7);
         }
     }
+  END_REPEAT(cells);
+  
+  if (FIELD_VALUE(has_table_overrides))
+    {
+      BITCODE_BL table_flag;
+      table_flag = FIELD_VALUE(table_flag_override);
+      if (table_flag & 0x20000)
+        FIELD_HANDLE (title_row_style_override, ANYCODE, 7);
+      if (table_flag & 0x40000)
+        FIELD_HANDLE (header_row_style_override, ANYCODE, 7);
+      if (table_flag & 0x80000)
+        FIELD_HANDLE (data_row_style_override, ANYCODE, 7);
+    }
 
-  FIELD_HANDLE (title_row_style_override, ANYCODE);
-  FIELD_HANDLE (header_row_style_override, ANYCODE);
-  FIELD_HANDLE (data_row_style_override, ANYCODE);
+  SINCE(R_2010)
+    {
+      //... p237
+      LOG_WARN("TODO TABLE r2010+")
+
+      FIELD_BS (unknown_bs, 0); //default 38
+      FIELD_3BD (hor_dir, 11);
+      FIELD_BL (has_break_data, 0); //BL or B?
+      if (FIELD_VALUE(has_break_data))
+        {
+          FIELD_BL (break_flag, 0);
+          FIELD_BL (break_flow_direction, 0);
+          FIELD_BD (break_spacing, 0);
+          FIELD_BL (break_unknown1, 0);
+          FIELD_BL (break_unknown2, 0);
+          FIELD_BL (num_break_heights, 0);
+          REPEAT(num_break_heights, break_heights, Dwg_TABLE_BreakHeight)
+            {
+              FIELD_3BD (break_heights[rcount].position, 0);
+              FIELD_BD (break_heights[rcount].height, 0);
+              FIELD_BL (break_heights[rcount].flag, 0);
+            }
+          END_REPEAT(break_heights);
+        }
+      FIELD_BL (num_break_rows, 0);
+      REPEAT(num_break_rows, break_rows, Dwg_TABLE_BreakRow)
+        {
+          FIELD_3BD (break_rows[rcount].position, 0);
+          FIELD_BL (break_rows[rcount].start, 0);
+          FIELD_BL (break_rows[rcount].end, 0);
+        }
+      END_REPEAT(break_rows);
+    }
 
 DWG_ENTITY_END
 
-//(79 + varies) pg.164
-DWG_OBJECT(XRECORD);
+// 20.4.101.3 Content format for TABLECONTENT and Cell_Style_Field
+#define Content_Format(fmt) \
+      FIELD_BL (fmt.property_override_flags, 90); \
+      FIELD_BL (fmt.property_flags, 91); \
+      FIELD_BL (fmt.value_data_type, 92); \
+      FIELD_BL (fmt.value_unit_type, 93); \
+      FIELD_TV (fmt.value_format_string, 300); \
+      FIELD_BD (fmt.rotation, 40); \
+      FIELD_BD (fmt.block_scale, 140); \
+      FIELD_BL (fmt.cell_align, 94); \
+      FIELD_CMC (fmt.content_color, 62); \
+      FIELD_HANDLE (fmt.text_style, 3, 92); \
+      FIELD_BD (fmt.text_height, 92)
 
-  FIELD_BL (num_databytes);
+// Cell style 20.4.101.4 for TABLE, TABLECONTENT and CELLSTYLEMAP
+#define Cell_Style_Fields(sty) \
+      FIELD_BL (sty.type, 90); \
+      FIELD_BS (sty.data_flags, 170); \
+      FIELD_BL (sty.property_override_flags, 91); \
+      FIELD_BL (sty.merge_flags, 92); \
+      FIELD_CMC (sty.background_color, 62); \
+      FIELD_BL (sty.content_layout, 93); \
+      Content_Format(sty.content_format); \
+      FIELD_BS (sty.margin_override_flags, 171); \
+      FIELD_BD (sty.vert_margin, 40); \
+      FIELD_BD (sty.horiz_margin, 40); \
+      FIELD_BD (sty.bottom_margin, 40); \
+      FIELD_BD (sty.right_margin, 40); \
+      FIELD_BD (sty.margin_horiz_spacing, 40); \
+      FIELD_BD (sty.margin_vert_spacing, 40); \
+      FIELD_BL (sty.num_borders, 94); /* 0-6 */ \
+      REPEAT2(sty.num_borders, sty.border, Dwg_BorderStyle) \
+        { \
+          FIELD_BL (sty.border[rcount2].edge_flags, 95); \
+          FIELD_BL (sty.border[rcount2].border_property_overrides_flag, 90); \
+          FIELD_BL (sty.border[rcount2].border_type, 91); \
+          FIELD_CMC (sty.border[rcount2].color, 62); \
+          FIELD_BL (sty.border[rcount2].linewt, 92); \
+          FIELD_HANDLE (sty.border[rcount2].line_type, 3, 340); \
+          FIELD_BL (sty.border[rcount2].invisible, 93); \
+          FIELD_BD (sty.border[rcount2].double_line_spacing, 93); \
+        } \
+      END_REPEAT (sty.border)
+
+//pg.237 20.4.97
+DWG_OBJECT(TABLECONTENT)
+
+  FIELD_TV (ldata.name, 1);
+  FIELD_TV (ldata.desc, 300);
+
+  FIELD_BL (tdata.num_cols, 90);
+  REPEAT(tdata.num_cols, tdata.cols, Dwg_TableDataColumn)
+    {
+      FIELD_TV (tdata.cols[rcount].name, 300);
+      FIELD_BL (tdata.cols[rcount].custom_data, 91);
+      Cell_Style_Fields(tdata.cols[rcount].cell_style);
+    }
+  END_REPEAT(tdata.cols);
+  FIELD_BL (tdata.num_rows, 90);
+  REPEAT(tdata.num_rows, tdata.rows, Dwg_TableRow)
+    {
+      #define row tdata.rows[rcount]
+      FIELD_BL (row.num_cells, 90);
+      REPEAT2(row.num_cells, row.cells, Dwg_TableCell)
+        {
+          #define cell row.cells[rcount2]
+          FIELD_BL (cell.flag, 90);
+          FIELD_TV (cell.tooltip, 300);
+          FIELD_BL (cell.customdata, 91);
+          FIELD_BL (cell.num_customdata_items, 90);
+          REPEAT3(cell.num_customdata_items, cell.customdata_items, Dwg_TABLE_CustomDataItem)
+            {
+              FIELD_TV(cell.customdata_items[rcount3].name, 300);
+              Table_Value(cell.customdata_items[rcount3].value);
+            }
+          END_REPEAT(cell.customdata_items);
+          FIELD_BL (cell.has_linked_data, 92);
+          if (FIELD_VALUE(cell.has_linked_data))
+            {
+              FIELD_HANDLE (cell.data_link, 5, 340);
+              FIELD_BL (cell.num_rows, 93);
+              FIELD_BL (cell.num_cols, 94);
+              FIELD_BL (cell.unknown, 96);
+            }
+          FIELD_BL (cell.num_cell_contents, 95);
+          REPEAT3(cell.num_cell_contents, cell.cell_contents, Dwg_TableCellContent)
+            {
+              #define content tdata.rows[rcount].cells[rcount2].cell_contents[rcount3]
+
+              FIELD_BL(content.type, 90);
+              if (FIELD_VALUE(content.type) == 1)
+                {
+                  // 20.4.99 Value, page 241
+                  Table_Value(content.value)
+                }
+              else if (FIELD_VALUE(content.type) == 2) { // Field
+                FIELD_HANDLE (content.handle, 3, 340);
+              }
+              else if (FIELD_VALUE(content.type) == 4) { // Block
+                FIELD_HANDLE (content.handle, 3, 340);
+              }
+              FIELD_BL (content.num_attrs, 91);
+              REPEAT4(content.num_attrs, content.attrs, Dwg_TableCellContentAttr)
+                {
+                  #define attr content.attrs[rcount4]
+                  FIELD_HANDLE (attr.attdef, 5, 330);
+                  FIELD_TV (attr.value, 301);
+                  FIELD_BL (attr.index, 92);
+                  #undef attr
+                }
+              END_REPEAT(content.attrs);
+              if (FIELD_VALUE(content.has_content_format_overrides))
+                {
+                  Content_Format(content.content_format);
+                }
+              #undef content
+            }
+          END_REPEAT(cell.cell_contents);
+          FIELD_BL (cell.style_id, 90);
+          FIELD_BL (cell.has_geom_data, 91);
+          if (FIELD_VALUE(cell.has_geom_data))
+            {
+              FIELD_BL (cell.geom_data_flag, 91);
+              FIELD_BD (cell.unknown_d40, 40);
+              FIELD_BD (cell.unknown_d41, 41);
+              FIELD_BL (cell.has_cell_geom, 0);
+              FIELD_HANDLE (cell.cell_geom_handle, ANYCODE, 0);
+              if (FIELD_VALUE(cell.has_cell_geom))
+                {
+                  REPEAT_N(1, cell.geom_data, Dwg_CellContentGeometry)
+                    {
+#define geom cell.geom_data[0]
+                      FIELD_3BD (geom.dist_top_left, 0); 
+                      FIELD_3BD (geom.dist_center, 0); 
+                      FIELD_BD (geom.content_width, 0); 
+                      FIELD_BD (geom.width, 0); 
+                      FIELD_BD (geom.height, 0); 
+                      FIELD_BD (geom.unknown, 0);
+#undef geom
+                    }
+                  END_REPEAT (cell.geom_data);
+                }
+            }
+          #undef cell
+        }
+      END_REPEAT(row.cells);
+      FIELD_BL (row.custom_data, 91);
+      FIELD_BL (row.num_customdata_items, 90);
+      REPEAT3(row.num_customdata_items, row.customdata_items, Dwg_TABLE_CustomDataItem)
+        {
+          FIELD_TV(row.customdata_items[rcount3].name, 300);
+          Table_Value(row.customdata_items[rcount3].value);
+        }
+      END_REPEAT(row.customdata_items);
+      {
+        Cell_Style_Fields(row.cell_style);
+        FIELD_BL (row.style_id, 90);
+        FIELD_BL (row.height, 40);
+      }
+      #undef row
+    }
+  END_REPEAT(tdata.rows);
+  FIELD_BL (tdata.num_field_refs, 0);
+  HANDLE_VECTOR (tdata.field_refs, tdata.num_field_refs, 3, 0);
+
+  FIELD_BL (fdata.num_merged_cells, 90);
+  REPEAT(fdata.num_merged_cells, fdata.merged_cells, Dwg_FormattedTableMerged)
+    {
+      #define merged fdata.merged_cells[rcount]
+      FIELD_BL (merged.top_row, 91);
+      FIELD_BL (merged.left_col, 92);
+      FIELD_BL (merged.bottom_row, 93);
+      FIELD_BL (merged.right_col, 94);
+      #undef merged
+    }
+  END_REPEAT(fdata.merged_cells);
+  FIELD_HANDLE (table_style, 3, 340);
+  
+DWG_OBJECT_END
+
+// pg.246 20.4.102
+// added with r2008, backcompat with r2007
+DWG_OBJECT(CELLSTYLEMAP)
+
+  FIELD_BL (num_cells, 90);
+  REPEAT(num_cells, cells, Dwg_CELLSTYLEMAP_Cell)
+    {
+      Cell_Style_Fields(cells[rcount].style);
+      FIELD_BL (cells[rcount].id, 90);
+      FIELD_BL (cells[rcount].type, 91);
+      FIELD_TV (cells[rcount].name, 300);
+    }
+  END_REPEAT (cells);
+
+DWG_OBJECT_END
+  
+//pg.246 20.4.103
+DWG_OBJECT(TABLEGEOMETRY)
+
+  FIELD_BL (num_rows, 90);
+  FIELD_BL (num_cols, 91);
+  FIELD_BL (num_cells, 92);
+  REPEAT(num_cells, cells, Dwg_TABLEGEOMETRY_Cell)
+    {
+      #define cell cells[rcount]
+      FIELD_BL (cell.flag, 93);
+      FIELD_BD (cell.width_w_gap, 40);
+      FIELD_BD (cell.height_w_gap, 41);
+      FIELD_HANDLE (cell.unknown, 3, 330);
+      FIELD_BL (cell.num_geom_data, 94);
+      REPEAT2(cell.num_geom_data, cell.geom_data, Dwg_CellContentGeometry)
+        {
+          #define geom cell.geom_data[rcount2]
+          FIELD_3BD (geom.dist_top_left, 0); 
+          FIELD_3BD (geom.dist_center, 0); 
+          FIELD_BD (geom.content_width, 0); 
+          FIELD_BD (geom.width, 0); 
+          FIELD_BD (geom.height, 0); 
+          FIELD_BD (geom.unknown, 0);
+          #undef geom
+        }
+      END_REPEAT(cell.geom_data);
+    }
+  END_REPEAT(cells);
+
+DWG_OBJECT_END
+
+//(79 + varies) pg.247 20.4.104
+DWG_OBJECT(XRECORD)
+
+  FIELD_BL (num_databytes, 0);
   FIELD_XDATA (xdata, num_databytes);
 
   SINCE(R_2000) {
-    FIELD_BS (cloning_flags);
+    FIELD_BS (cloning_flags, 280);
   }
 
   UNTIL(R_2007) {
-    FIELD_HANDLE (parenthandle, ANYCODE); // 3 or 8
+    FIELD_HANDLE (parenthandle, 4, 0); // 3 or 8
   }
   REACTORS(4);
   XDICOBJHANDLE(3);
@@ -3652,7 +4288,7 @@ DWG_OBJECT(XRECORD);
           FIELD_VALUE(objid_handles) = vcount
             ? (BITCODE_H*) realloc(FIELD_VALUE(objid_handles), sizeof(Dwg_Object_Ref) * (vcount+1))
             : (BITCODE_H*) malloc(sizeof(Dwg_Object_Ref));
-          FIELD_HANDLE_N (objid_handles[vcount], vcount, ANYCODE);
+          FIELD_HANDLE_N (objid_handles[vcount], vcount, ANYCODE, 0);
         }
       FIELD_VALUE(num_objid_handles) = vcount;
     }
@@ -3660,11 +4296,11 @@ DWG_OBJECT(XRECORD);
 DWG_OBJECT_END
 
 //(80 + varies)
-DWG_OBJECT(PLACEHOLDER);
+DWG_OBJECT(PLACEHOLDER)
 
   // no own data members
   UNTIL(R_2007) {
-    FIELD_HANDLE (parenthandle, 4);
+    FIELD_HANDLE (parenthandle, 4, 0);
   }
   REACTORS(4);
   XDICOBJHANDLE(3);
@@ -3673,13 +4309,13 @@ DWG_OBJECT_END
 
 // just guessing:
 // VBA_PROJECT (81 + varies)
-DWG_OBJECT(VBA_PROJECT);
+DWG_OBJECT(VBA_PROJECT)
 
-  FIELD_RL(num_bytes)
-  FIELD_VECTOR(bytes, RC, num_bytes)
+  FIELD_RL(num_bytes, 0)
+  FIELD_VECTOR(bytes, RC, num_bytes, 0)
 
   UNTIL(R_2007) {
-    FIELD_HANDLE (parenthandle, 4);
+    FIELD_HANDLE (parenthandle, 4, 0);
   }
   REACTORS(4);
   XDICOBJHANDLE(3);
@@ -3687,201 +4323,220 @@ DWG_OBJECT(VBA_PROJECT);
 DWG_OBJECT_END
 
 // SCALE (varies)
-DWG_OBJECT(SCALE);
+// 20.4.92 page 221
+DWG_OBJECT(SCALE)
 
-  SINCE(R_2000)
-    {
-      FIELD_BS (unknown);
-      FIELD_TV (name);
-      FIELD_BD (paper);
-      FIELD_BD (drawing);
-      FIELD_B (has_unit_scale);
-      REACTORS(ANYCODE);
-      XDICOBJHANDLE(3);
-    }
+  FIELD_BS (flag, 70);
+  FIELD_TV (name, 300);
+  FIELD_BD (paper_units, 140);
+  FIELD_BD (drawing_units, 141);
+  FIELD_B (has_unit_scale, 290);
+      
+  UNTIL(R_2007) {
+    FIELD_HANDLE (parenthandle, 4, 0);
+  }
+  REACTORS(4);
+  XDICOBJHANDLE(3);
 
 DWG_OBJECT_END
 
-/* par 20.4.48 (varies) */
-DWG_ENTITY(MLEADER);
+/* pg. 157, 20.4.48 (varies) */
+DWG_ENTITY(MLEADER)
 
   SINCE(R_2010)
     {
-      FIELD_BS (version);
-      FIELD_BS (ctx.version);
-      FIELD_B (ctx.has_xdic_file);
-      FIELD_B (ctx.is_default);
-      FIELD_HANDLE (ctx.scale_handle, ANYCODE);
+      IF_ENCODE_FROM_EARLIER {
+        FIELD_VALUE(class_version) = 2;
+      }
+      FIELD_BS (class_version, 270); // default 2
+      FIELD_BS (ctx.class_version, 70); // default 3
+      FIELD_B (ctx.has_xdic_file, 0);
+      FIELD_B (ctx.is_default, 290);
+      FIELD_HANDLE (ctx.scale_handle, 5, 340);
     }
 
-  FIELD_BL (ctx.num_leaders);
+  FIELD_BL (ctx.num_leaders, 0);
   REPEAT(ctx.num_leaders, ctx.leaders, Dwg_Leader)
     {
 #     define lev1 ctx.leaders[rcount]
-      FIELD_B (lev1.unknown1);
-      FIELD_B (lev1.unknown2);
-      FIELD_3BD (lev1.connection);
-      FIELD_3BD (lev1.direction);
-      FIELD_BL (lev1.unknown3);
-      FIELD_BL (lev1.index);
-      FIELD_BL (lev1.num_lines);
+      FIELD_B (lev1.is_valid, 290);
+      FIELD_B (lev1.unknown, 291);
+      FIELD_3BD (lev1.connection, 10);
+      FIELD_3BD (lev1.direction, 11);
+      FIELD_BL (lev1.num_breaks, 0);
+      REPEAT2(lev1.num_breaks, lev1.breaks, Leader_Break)
+        {
+          FIELD_3BD (lev1.breaks[rcount2].start, 12);
+          FIELD_3BD (lev1.breaks[rcount2].end, 13);
+        }
+      END_REPEAT (lev1.breaks);
+      FIELD_BL (lev1.index, 90);
+      FIELD_BD (lev1.landing_distance, 40);
       REPEAT2(lev1.num_lines, lev1.lines, Leader_Line)
         {
 #         define lev2 lev1.lines[rcount2]
-          FIELD_BL (lev2.num_points);
+          FIELD_BL (lev2.num_points, 0);
           REPEAT3(lev2.num_points, lev2.points, BITCODE_3BD)
             {
-              FIELD_3BD (lev2.points[rcount3]);
+              FIELD_3BD (lev2.points[rcount3], 10);
             }
-          //VECTOR_FREE (lev2.points);
-
-          FIELD_BL (lev2.unknown);
-          FIELD_BL (lev2.index);
-
+          END_REPEAT (lev2.points);
+          FIELD_BL (lev2.num_breaks, 0);
+          FIELD_BL (lev2.segment_index, 90);
+          REPEAT2(lev2.num_breaks, lev2.breaks, Leader_Break)
+            {
+              FIELD_3BD (lev2.breaks[rcount2].start, 11);
+              FIELD_3BD (lev2.breaks[rcount2].end, 12);
+            }
+          END_REPEAT(lev2.breaks);
+          FIELD_BL (lev2.index, 91);
 	  SINCE (R_2010)
             {
-              FIELD_BS (lev2.type);
-              FIELD_CMC (lev2.color);
-              FIELD_HANDLE (lev2.type_handle, ANYCODE);
-              FIELD_BL (lev2.weight);
-              FIELD_BD (lev2.arrow_size);
-              FIELD_HANDLE (lev2.arrow_handle, ANYCODE);
-              FIELD_BL (lev2.flags);
+              FIELD_BS (lev2.type, 170);
+              FIELD_CMC (lev2.color, 92);
+              FIELD_HANDLE (lev2.type_handle, 5, 340);
+              FIELD_BL (lev2.weight, 171);
+              FIELD_BD (lev2.arrow_size, 40);
+              FIELD_HANDLE (lev2.arrow_handle, 5, 341);
+              FIELD_BL (lev2.flags, 93);
             }
 #         undef lev2
         }
-      //VECTOR_FREE (lev1.lines);
+      END_REPEAT (lev1.lines);
       SINCE (R_2010)
         {
-          FIELD_BS (lev1.attach_dir);
+          FIELD_BS (lev1.attach_dir, 271);
         }
 #     undef lev1
     }
-  //VECTOR_FREE (ctx.leaders);
+  END_REPEAT (ctx.leaders);
 
-  FIELD_BD (ctx.scale);
-  FIELD_3BD (ctx.content_base);
-  FIELD_BD (ctx.text_height);
-  FIELD_BD (ctx.arrow_size);
-  FIELD_BD (ctx.landing_gap);
-  FIELD_BS (ctx.text_left);
-  FIELD_BS (ctx.text_right);
-  FIELD_BS (ctx.text_align);
-  FIELD_BS (ctx.attach_type);
+  FIELD_BD (ctx.scale, 40);
+  FIELD_3BD (ctx.content_base, 10);
+  FIELD_BD (ctx.text_height, 41);
+  FIELD_BD (ctx.arrow_size, 140);
+  FIELD_BD (ctx.landing_gap, 145);
+  FIELD_BS (ctx.text_left, 174);
+  FIELD_BS (ctx.text_right, 175);
+  FIELD_BS (ctx.text_align, 176);
+  FIELD_BS (ctx.attach_type, 177);
 
-  FIELD_B (ctx.has_text_content);
+  FIELD_B (ctx.has_text_content, 290);
   if (FIELD_VALUE (ctx.has_text_content))
     {
-      FIELD_TV (ctx.txt.label);
-      FIELD_3BD (ctx.txt.normal);
-      FIELD_HANDLE (ctx.txt.style, ANYCODE);
-      FIELD_3BD (ctx.txt.location);
-      FIELD_3BD (ctx.txt.direction);
-      FIELD_BD (ctx.txt.rotation);
-      FIELD_BD (ctx.txt.width);
-      FIELD_BD (ctx.txt.heigth);
-      FIELD_BD (ctx.txt.spacing_factor);
-      FIELD_HANDLE (ctx.txt.spacing_style, ANYCODE);
-      FIELD_CMC (ctx.txt.color);
-      FIELD_BS (ctx.txt.align);
-      FIELD_BS (ctx.txt.flow);
-      FIELD_CMC (ctx.txt.bg_color);
-      FIELD_BD (ctx.txt.bg_scale);
-      FIELD_BL (ctx.txt.bg_transparency);
-      FIELD_B (ctx.txt.is_bg_fill);
-      FIELD_B (ctx.txt.is_bg_mask_fill);
-      FIELD_BS (ctx.txt.col_type);
-      FIELD_B (ctx.txt.is_heigth_auto);
-      FIELD_BD (ctx.txt.unknown1);
-      FIELD_BD (ctx.txt.unknown2);
-      FIELD_B (ctx.txt.is_col_flow_reversed);
-      FIELD_BL (ctx.txt.unknown3);
-      FIELD_B (ctx.txt.word_break1);
-      FIELD_B (ctx.txt.word_break2);
+      FIELD_TV (ctx.txt.label, 304);
+      FIELD_3BD (ctx.txt.normal, 11);
+      FIELD_HANDLE (ctx.txt.style, 5, 340);
+      FIELD_3BD (ctx.txt.location, 12);
+      FIELD_3BD (ctx.txt.direction, 13);
+      FIELD_BD (ctx.txt.rotation, 42);
+      FIELD_BD (ctx.txt.width, 43);
+      FIELD_BD (ctx.txt.height, 44);
+      FIELD_BD (ctx.txt.line_spacing_factor, 45);
+      FIELD_BS (ctx.txt.line_spacing_style, 170);
+      FIELD_CMC (ctx.txt.color, 90);
+      FIELD_BS (ctx.txt.align, 171);
+      FIELD_BS (ctx.txt.flow, 172);
+      FIELD_CMC (ctx.txt.bg_color, 91);
+      FIELD_BD (ctx.txt.bg_scale, 141);
+      FIELD_BL (ctx.txt.bg_transparency, 92);
+      FIELD_B (ctx.txt.is_bg_fill, 291);
+      FIELD_B (ctx.txt.is_bg_mask_fill, 292);
+      FIELD_BS (ctx.txt.col_type, 173);
+      FIELD_B (ctx.txt.is_height_auto, 293);
+      FIELD_BD (ctx.txt.col_width, 142);
+      FIELD_BD (ctx.txt.col_gutter, 143);
+      FIELD_B (ctx.txt.is_col_flow_reversed, 294);
+      FIELD_BL (ctx.txt.num_col_sizes, 0);
+      FIELD_VECTOR(ctx.txt.col_sizes, BD, ctx.txt.num_col_sizes, 144);
+      FIELD_B (ctx.txt.word_break, 295);
+      FIELD_B (ctx.txt.unknown, 0);
     }
 
-  FIELD_B (ctx.has_content_block);
+  FIELD_B (ctx.has_content_block, 0);
   if (FIELD_VALUE (ctx.has_content_block))
     {
-      FIELD_HANDLE (ctx.blk.block_table, ANYCODE);
-      FIELD_3BD (ctx.blk.normal);
-      FIELD_3BD (ctx.blk.location);
-      FIELD_3BD (ctx.blk.scale);
-      FIELD_BD (ctx.blk.rotation);
-      FIELD_CMC (ctx.blk.color);
+      FIELD_HANDLE (ctx.blk.block_table, 4, 341);
+      FIELD_3BD (ctx.blk.normal, 14);
+      FIELD_3BD (ctx.blk.location, 15);
+      FIELD_3BD (ctx.blk.scale, 16);
+      FIELD_BD (ctx.blk.rotation, 46);
+      FIELD_CMC (ctx.blk.color, 93);
       for (rcount = 0; rcount < 16; rcount++)
         {
-          FIELD_BD (ctx.blk.transform[rcount]);
+          FIELD_BD (ctx.blk.transform[rcount], 47);
         }
     }
 
-  FIELD_3BD (ctx.base);
-  FIELD_3BD (ctx.base_dir);
-  FIELD_3BD (ctx.base_vert);
-  FIELD_B (ctx.is_normal_reversed);
+  FIELD_3BD (ctx.base, 110);
+  FIELD_3BD (ctx.base_dir, 111);
+  FIELD_3BD (ctx.base_vert, 112);
+  FIELD_B (ctx.is_normal_reversed, 297);
 
   SINCE (R_2010)
     {
-      FIELD_BS (ctx.text_top);
-      FIELD_BS (ctx.text_bottom);
+      FIELD_BS (ctx.text_top, 273);
+      FIELD_BS (ctx.text_bottom, 272);
     }
 
-  FIELD_HANDLE (leaderstyle, ANYCODE);
-  FIELD_BL (flags);
-  FIELD_BS (type);
-  FIELD_CMC (color);
-  FIELD_HANDLE (ltype, ANYCODE);
-  FIELD_BL (line_weigth);
-  FIELD_B (landing);
-  FIELD_B (dog_leg);
-  FIELD_BD (landing_dist);
-  FIELD_HANDLE (arrow_head, ANYCODE);
-  FIELD_BD (arrow_head_size);
-  FIELD_BS (style_content);
-  FIELD_HANDLE (text_style, ANYCODE);
-  FIELD_BS (text_left);
-  FIELD_BS (text_rigth);
-  FIELD_BS (text_angle);
-  FIELD_BS (attach_type);
-  FIELD_CMC (text_color);
-  FIELD_B (text_frame);
-  FIELD_HANDLE (block_style, ANYCODE);
-  FIELD_CMC (block_color);
-  FIELD_3BD (block_scale);
-  FIELD_BD (block_rotation);
-  FIELD_BS (style_attachment);
-  FIELD_B (is_annotative);
+  FIELD_HANDLE (leaderstyle, 5, 340);
+  FIELD_BL (flags, 90); // override flags
+  FIELD_BS (type, 170);
+  FIELD_CMC (color, 91);
+  FIELD_HANDLE (ltype, 5, 341);
+  FIELD_BL (linewt, 171);
+  FIELD_B (landing, 290);
+  FIELD_B (dog_leg, 291);
+  FIELD_BD (landing_dist, 41);
+  FIELD_HANDLE (arrow_head, 5, 342);
+  FIELD_BD (arrow_head_size, 42);
+  FIELD_BS (style_content, 172);
+  FIELD_HANDLE (text_style, 5, 343);
+  FIELD_BS (text_left, 95);
+  FIELD_BS (text_right, 95);
+  FIELD_BS (text_angletype, 174);
+  FIELD_BS (attach_type, 175);
+  FIELD_CMC (text_color, 92);
+  FIELD_B (text_frame, 292);
+  FIELD_HANDLE (block_style, 5, 344);
+  FIELD_CMC (block_color, 93);
+  FIELD_3BD (block_scale, 10);
+  FIELD_BD (block_rotation, 43);
+  FIELD_BS (style_attachment, 176);
+  FIELD_B (is_annotative, 293);
 
   VERSIONS (R_2000, R_2007)
     {
-      FIELD_BL (num_arrowheads);
+      FIELD_BL (num_arrowheads, 0);
       REPEAT(num_arrowheads, arrowheads, Leader_ArrowHead)
         {
-          FIELD_BL (arrowheads->is_default);
-          FIELD_HANDLE (arrowheads->arrowhead, ANYCODE);
+          FIELD_BL (arrowheads->is_default, 94);
+          FIELD_HANDLE (arrowheads->arrowhead, 5, 345);
         }
-      FIELD_BL (num_blocklabels);
+      END_REPEAT(arrowheads);
+      FIELD_BL (num_blocklabels, 0);
       REPEAT(num_blocklabels, blocklabels, Leader_BlockLabel)
         {
-          FIELD_HANDLE (blocklabels->attdef, ANYCODE);
-          FIELD_TV (blocklabels->label_text);
-          FIELD_BS (blocklabels->ui_index);
-          FIELD_BD (blocklabels->width);
+          FIELD_HANDLE (blocklabels->attdef, 4, 330);
+          FIELD_TV (blocklabels->label_text, 302);
+          FIELD_BS (blocklabels->ui_index, 177);
+          FIELD_BD (blocklabels->width, 44);
         }
-      FIELD_B (neg_textdir);
-      FIELD_BS (ipe_align);
-      FIELD_BS (justification);
-      FIELD_BD (scale_factor);
+      END_REPEAT(blocklabels);
+      FIELD_B (neg_textdir, 294);
+      FIELD_BS (ipe_align, 178);
+      FIELD_BS (justification, 179);
+      FIELD_BD (scale_factor, 45);
     }
 
   SINCE (R_2010)
     {
-      FIELD_BS (attach_dir);
-      FIELD_BS (attach_top);
-      FIELD_BS (attach_bottom);
+      FIELD_BS (attach_dir, 271);
+      FIELD_BS (attach_top, 273);
+      FIELD_BS (attach_bottom, 272);
     }
   SINCE (R_2013) {
-    FIELD_B (text_extended);
+    FIELD_B (text_extended, 295);
   }
 
   //COMMON_ENTITY_HANDLE_DATA; //??
@@ -3889,61 +4544,65 @@ DWG_ENTITY(MLEADER);
 DWG_ENTITY_END
 
 /* par 20.4.87 (varies) */
-DWG_OBJECT(MLEADERSTYLE);
+DWG_OBJECT(MLEADERSTYLE)
 
   SINCE (R_2010)
     {
       IF_ENCODE_FROM_EARLIER {
-        FIELD_VALUE(version) = 2;
+        FIELD_VALUE(class_version) = 2;
       }
-      FIELD_BS (version);
+      FIELD_BS (class_version, 179);
     }
 
-  FIELD_BS (content_type);
-  FIELD_BS (mleader_order);
-  FIELD_BS (leader_order);
-  FIELD_BL (max_points);
-  FIELD_BD (first_seg_angle);
-  FIELD_BD (second_seg_angle);
-  FIELD_BS (type);
-  FIELD_CMC (line_color);
-  FIELD_HANDLE (line_type, 4);
-  FIELD_BL (line_weight);
-  FIELD_B (landing);
-  FIELD_BD (landing_gap);
-  FIELD_B (dog_leg);
-  FIELD_BD (landing_dist);
-  FIELD_TV (description);
-  FIELD_HANDLE (arrow_head, 4);
-  FIELD_BD (arrow_head_size);
-  FIELD_TV (text_default);
-  FIELD_HANDLE (text_style, 4);
-  FIELD_BS (attach_left);
-  FIELD_BS (attach_right);
-  FIELD_BS (text_angle_type);
-  FIELD_BS (text_align_type);
-  FIELD_CMC (text_color);
-  FIELD_BD (text_heigth);
-  FIELD_B (text_frame);
-  FIELD_B (text_always_left);
-  FIELD_BD (align_space);
-  FIELD_HANDLE (block, 4);
-  FIELD_CMC (block_color);
-  FIELD_3BD (block_scale);
-  FIELD_B (use_block_scale);
-  FIELD_BD (block_rotation);
-  FIELD_B (use_block_rotation);
-  FIELD_BS (block_connection);
-  FIELD_BD (scale);
-  FIELD_B (changed);
-  FIELD_B (is_annotative);
-  FIELD_BD (break_size);
+  FIELD_BS (content_type, 170);
+  FIELD_BS (mleader_order, 171);
+  FIELD_BS (leader_order, 172);
+  FIELD_BL (max_points, 90);
+  FIELD_BD (first_seg_angle, 40);
+  FIELD_BD (second_seg_angle, 41);
+  FIELD_BS (type, 173);
+  FIELD_CMC (line_color, 91);
+  FIELD_HANDLE (line_type, 5, 340);
+  FIELD_BL (linewt, 92);
+  FIELD_B (landing, 290);
+  FIELD_BD (landing_gap, 42);
+  FIELD_B (dog_leg, 291);
+  FIELD_BD (landing_dist, 43);
+  FIELD_TV (description, 3);
+  FIELD_HANDLE (arrow_head, 5, 341);
+  FIELD_BD (arrow_head_size, 444);
+  FIELD_TV (text_default, 300);
+  FIELD_HANDLE (text_style, 5, 342);
+  FIELD_BS (attach_left, 174);
+  FIELD_BS (attach_right, 178);
+  FIELD_BS (text_angle_type, 175);
+  FIELD_BS (text_align_type, 176);
+  FIELD_CMC (text_color, 93);
+  FIELD_BD (text_height, 45);
+  FIELD_B (text_frame, 292);
+  SINCE (R_2010) {  //IF IsNewFormat OR DXF file
+    FIELD_B (text_always_left, 297);
+  }
+  FIELD_BD (align_space, 46);
+  FIELD_HANDLE (block, 5, 343);
+  FIELD_CMC (block_color, 94);
+  FIELD_BD (block_scale.x, 47);
+  FIELD_BD (block_scale.y, 49);
+  FIELD_BD (block_scale.z, 140);
+  FIELD_B (use_block_scale, 293);
+  FIELD_BD (block_rotation, 141);
+  FIELD_B (use_block_rotation, 294);
+  FIELD_BS (block_connection, 177);
+  FIELD_BD (scale, 142);
+  FIELD_B (changed, 295);
+  FIELD_B (is_annotative, 296);
+  FIELD_BD (break_size, 143);
 
   SINCE (R_2010)
     {
-      FIELD_BS (attach_dir);
-      FIELD_BS (attach_top);
-      FIELD_BS (attach_bottom);
+      FIELD_BS (attach_dir, 271);
+      FIELD_BS (attach_top, 273);
+      FIELD_BS (attach_bottom, 272);
     }
 
 DWG_OBJECT_END
@@ -3952,12 +4611,12 @@ DWG_OBJECT_END
 // These variable objects are not described in the spec:
 //
 
-DWG_OBJECT(WIPEOUTVARIABLE);
+DWG_OBJECT(WIPEOUTVARIABLE)
 
-  FIELD_BS (display_frame);
+  FIELD_BS (display_frame, 0);
 
   UNTIL(R_2007) {
-    FIELD_HANDLE (parenthandle, 3);
+    FIELD_HANDLE (parenthandle, 3, 0);
   }
   REACTORS(4);
   XDICOBJHANDLE(3);
@@ -3965,75 +4624,74 @@ DWG_OBJECT(WIPEOUTVARIABLE);
 DWG_OBJECT_END
 
 // R2000+ picture. undocumented (varies)
-DWG_ENTITY(WIPEOUT);
+DWG_ENTITY(WIPEOUT)
 
-  FIELD_BL (class_version);
-  FIELD_3DPOINT (pt0);
-  FIELD_3DPOINT (uvec);
-  FIELD_3DPOINT (vvec);
-  FIELD_RD (size.width);
-  FIELD_RD (size.height);
-  FIELD_BS (display_props);
-  FIELD_B (clipping);
-  FIELD_RC (brightness);
-  FIELD_RC (contrast);
-  FIELD_RC (fade);
+  FIELD_BL (class_version, 90);
+  FIELD_3DPOINT (pt0, 10);
+  FIELD_3DPOINT (uvec, 11);
+  FIELD_3DPOINT (vvec, 12);
+  FIELD_RD (size.width, 13);
+  FIELD_RD (size.height, 23);
+  FIELD_BS (display_props, 70);
+  FIELD_B (clipping, 280);
+  FIELD_RC (brightness, 281);
+  FIELD_RC (contrast, 282);
+  FIELD_RC (fade, 283);
 
-  FIELD_BS (clip_boundary_type);
-  if (FIELD_VALUE(clip_boundary_type) == 1)
+  SINCE(R_2010)
+  {
+    FIELD_B (clip_mode, 290);
+  }
+  FIELD_BS (clip_boundary_type, 71); // 1 rect, 2 polygon
+  if (FIELD_VALUE(clip_mode))
     {
-      FIELD_2RD (boundary_pt0);
-      FIELD_2RD (boundary_pt1);
+      FIELD_2RD (boundary_pt0, 14);
+      FIELD_2RD (boundary_pt1, 14);
     }
   else
     {
-      FIELD_BL (num_clip_verts);
-      REPEAT(num_clip_verts, clip_verts, Dwg_Entity_IMAGE_clip_vert)
-        {
-          FIELD_2RD (clip_verts[rcount]);
-        }
+      FIELD_BL (num_clip_verts, 91);
+      FIELD_2RD_VECTOR(clip_verts, num_clip_verts, 14);
     }
-
   COMMON_ENTITY_HANDLE_DATA;
 
-  FIELD_HANDLE (imagedef,5);
-  FIELD_HANDLE (imagedefreactor,3);
+  FIELD_HANDLE (imagedef, 5, 0);
+  FIELD_HANDLE (imagedefreactor, 3, 0);
 
 DWG_ENTITY_END
 
 /* (varies) container to hold a raw class entity (none observed in the wild) */
-DWG_ENTITY(UNKNOWN_ENT);
+DWG_ENTITY(UNKNOWN_ENT)
 
   FIELD_VALUE(num_bytes) = obj->bitsize / 8;
   FIELD_VALUE(num_bits)  = obj->bitsize % 8;
 
-  FIELD_VECTOR (bytes, RC, num_bytes);
-  FIELD_VECTOR (bits, B, num_bits);
+  FIELD_VECTOR (bytes, RC, num_bytes, 0);
+  FIELD_VECTOR (bits, B, num_bits, 0);
   //COMMON_ENTITY_HANDLE_DATA; // including this
 
 DWG_ENTITY_END
 
 /* container to hold a raw class object (varies) */
-DWG_OBJECT(UNKNOWN_OBJ);
+DWG_OBJECT(UNKNOWN_OBJ)
 
   FIELD_VALUE(num_bytes) = obj->bitsize / 8;
   FIELD_VALUE(num_bits)  = obj->bitsize % 8;
 
-  FIELD_VECTOR (bytes, RC, num_bytes);
-  FIELD_VECTOR (bits, B, num_bits);
+  FIELD_VECTOR (bytes, RC, num_bytes, 0);
+  FIELD_VECTOR (bits, B, num_bits, 0);
+
 DWG_OBJECT_END
 
-DWG_ENTITY(DUMMY);
+DWG_ENTITY(DUMMY)
 
-  FIELD_BS (flags);
   LOG_INFO("TODO DUMMY\n");
   COMMON_ENTITY_HANDLE_DATA;
 
 DWG_ENTITY_END
 
-DWG_ENTITY(LONG_TRANSACTION);
+DWG_ENTITY(LONG_TRANSACTION)
 
-  FIELD_BS (flags);
   LOG_INFO("TODO LONG_TRANSACTION\n");
   COMMON_ENTITY_HANDLE_DATA;
 
@@ -4041,7 +4699,7 @@ DWG_ENTITY_END
 
 /*
 // r2007+
-DWG_OBJECT(VISUALSTYLE);
+DWG_OBJECT(VISUALSTYLE)
 
   // hard-pointer to H DICTIONARY_VISUALSTYLE
   FIELD_HANDLE (visualstyle, 5);
@@ -4049,40 +4707,44 @@ DWG_OBJECT(VISUALSTYLE);
 DWG_OBJECT_END
 
 // r2000+
-DWG_OBJECT(ARCALIGNEDTEXT);
+DWG_OBJECT(ARCALIGNEDTEXT)
 
   LOG_INFO("TODO ARCALIGNEDTEXT\n");
 
 DWG_OBJECT_END
 
 //(varies)
-DWG_OBJECT(MATERIAL);
+DWG_OBJECT(MATERIAL)
 DWG_OBJECT_END
 
-DWG_OBJECT(DIMASSOC);
+DWG_OBJECT(DIMASSOC)
 DWG_OBJECT_END
 
-DWG_OBJECT(DBCOLOR);
+DWG_OBJECT(DBCOLOR)
 DWG_OBJECT_END
 
-DWG_OBJECT(TABLESTYLE);
+DWG_OBJECT(TABLESTYLE)
 DWG_OBJECT_END
 
-DWG_OBJECT(SECTIONVIEWSTYLE);
+DWG_OBJECT(SECTIONVIEWSTYLE)
 DWG_OBJECT_END
 
-DWG_OBJECT(DETAILVIEWSTYLE);
+DWG_OBJECT(DETAILVIEWSTYLE)
 DWG_OBJECT_END
 
-DWG_OBJECT(ASSOC2DCONSTRAINTGROUP);
+DWG_OBJECT(ASSOC2DCONSTRAINTGROUP)
 DWG_OBJECT_END
 
-DWG_OBJECT(ASSOCGEOMDEPENDENCY);
+DWG_OBJECT(ASSOCGEOMDEPENDENCY)
 DWG_OBJECT_END
 
-DWG_OBJECT(LEADEROBJECTCONTEXTDATA);
+DWG_OBJECT(LEADEROBJECTCONTEXTDATA)
 DWG_OBJECT_END
 */
+
+
+
+
 
 
 

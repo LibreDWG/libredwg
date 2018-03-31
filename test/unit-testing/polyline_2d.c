@@ -74,7 +74,7 @@ api_process(dwg_object *obj)
   }
 
 
-  flags = dwg_ent_polyline_2d_get_flags(polyline_2d, &error);
+  flags = dwg_ent_polyline_2d_get_flag(polyline_2d, &error);
   if ( !error )
   {
      printf("flag of polyline : %ud\n", flags);

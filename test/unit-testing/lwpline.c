@@ -16,7 +16,7 @@ low_level_process(dwg_object *obj)
   printf("num width of lwpline : " FORMAT_BL "\n", lwpline->num_widths);
   printf("num bulges of lwpline : " FORMAT_BL "\n", lwpline->num_bulges);
   printf("num points of lwpline : " FORMAT_BL "\n", lwpline->num_points);
-  printf("flag of lwpline : %x\n", lwpline->flags);
+  printf("flag of lwpline : %x\n", lwpline->flag);
   for ( i = 0; i < lwpline->num_bulges; i++ )
     {
       printf("bulge[%d] of lwpline : %f\n", (int)i, lwpline->bulges[i]);
@@ -51,92 +51,52 @@ api_process(dwg_object *obj)
   dwg_ent_lwpline_get_normal(lwpline, &normal,
                              &error);
   if ( !error )
-    {
       printf("normal of lwpline : x = %f, y = %f, z = %f\n",
               normal.x, normal.y, normal.z);
-    }
   else
-    {
       printf("error in reading normal");
-    }
-
 
   const_width = dwg_ent_lwpline_get_const_width(lwpline, &error);
   if ( !error )
-   {
      printf("const width of lwpline : %f\n", const_width);
-   }
   else
-   {
      printf("error in reading const width");
-   }
-
 
   elevation = dwg_ent_lwpline_get_elevation(lwpline, &error);
   if ( !error )
-   {
      printf("elevation of lwpline : %f\n", elevation);
-   }
   else
-   {
      printf("error in reading elevation");
-   }
-
 
   thickness = dwg_ent_lwpline_get_thickness(lwpline, &error);
   if ( !error )
-   {
      printf("thickness of lwpline : %f\n", thickness);
-   }
   else
-   {
      printf("error in reading thickness");
-   }
-
 
   num_widths = dwg_ent_lwpline_get_num_widths(lwpline, &error);
   if ( !error )
-   {
      printf("num width of lwpline : " FORMAT_BL "\n", num_widths);
-   }
   else
-   {
      printf("error in reading num width");
-   }
-
 
   num_bulges = dwg_ent_lwpline_get_num_bulges(lwpline, &error);
   if ( !error )
-   {
      printf("num bulges of lwpline : " FORMAT_BL "\n", num_bulges);
-   }
   else
-   {
      printf("error in reading num bulge");
-   }
-
 
   num_points = dwg_ent_lwpline_get_num_points(lwpline, &error);
   if ( !error )
-   {
      printf("num points of lwpline : " FORMAT_BL "\n", num_points);
-   }
   else
-   {
      printf("error in reading num points");
-   }
 
-
-  flags = dwg_ent_lwpline_get_flags(lwpline, &error);
+  flags = dwg_ent_lwpline_get_flag(lwpline, &error);
   if ( !error )
-   {
      printf("flag of lwpline : %x\n", flags);
-   }
   else
-   {
-     printf("error in reading flag");
-   }
-  
+     printf("error in reading flag");  
 
   bulges = dwg_ent_lwpline_get_bulges(lwpline, &error);
   if ( !error )

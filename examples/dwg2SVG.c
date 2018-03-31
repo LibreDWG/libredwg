@@ -129,7 +129,7 @@ output_INSERT(Dwg_Object* obj)
           "\t<use id=\"dwg-object-%d\" transform=\"translate(%f %f) rotate(%f) scale(%f %f)\" xlink:href=\"#symbol-%lu\" /><!-- block_header->handleref: %d.%d.%lu -->\n",
           obj->index,
           transform_X(insert->ins_pt.x), transform_Y(insert->ins_pt.y), (180.0 / M_PI)
-              * insert->rotation_ang, insert->scale.x, insert->scale.y,
+              * insert->rotation, insert->scale.x, insert->scale.y,
           insert->block_header->absolute_ref,
           insert->block_header->handleref.code,
           insert->block_header->handleref.size,

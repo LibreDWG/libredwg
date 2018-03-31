@@ -7,7 +7,7 @@ low_level_process (dwg_object * obj)
 {
   dwg_ent_vertex_mesh *vertex_mesh = dwg_object_to_VERTEX_MESH (obj);
 
-  printf ("flag of vertex_mesh : " FORMAT_BS "\n", vertex_mesh->flags);
+  printf ("flag of vertex_mesh : " FORMAT_BS "\n", vertex_mesh->flag);
   printf ("point of vertex_mesh : x = %f, y = %f, z = %f\n",
 	  vertex_mesh->point.x, vertex_mesh->point.y, vertex_mesh->point.z);
 }
@@ -21,8 +21,8 @@ api_process (dwg_object * obj)
   dwg_ent_vertex_mesh *vertex_mesh = dwg_object_to_VERTEX_MESH (obj);
 
 
-  flags = dwg_ent_vertex_mesh_get_flags (vertex_mesh, &error);
-  if (!error  && flags == vertex_mesh->flags)	// error checking
+  flags = dwg_ent_vertex_mesh_get_flag (vertex_mesh, &error);
+  if (!error  && flags == vertex_mesh->flag)	// error checking
     pass ("Working Properly");
   else
     fail ("error in reading flag");

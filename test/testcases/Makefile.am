@@ -14,6 +14,7 @@ paired = \
 	body \
 	circle \
 	decode_test \
+	dim_common \
 	dim_aligned \
 	dim_ang2ln \
 	dim_ang3pt \

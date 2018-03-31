@@ -53,7 +53,7 @@ api_process (dwg_object * obj)
 
 
   rotation = dwg_ent_attdef_get_rot_angle (attdef, &error);
-  if (!error  && attdef->rotation_ang == rotation)
+  if (!error  && attdef->rotation == rotation)
     pass ("Working Properly");
   else
     fail ("error in reading rotation");

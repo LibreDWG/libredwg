@@ -42,6 +42,8 @@
   if (dat->from_version && dat->from_version < cur_ver)
 #define IF_ENCODE_FROM_PRE_R13 \
   if (dat->from_version && dat->from_version < R_13)
+#define IF_ENCODE_SINCE_R13 \
+  if (dat->from_version && dat->from_version >= R_13)
 
 #define DWG_VERSIONS 20
 typedef enum DWG_VERSION_TYPE

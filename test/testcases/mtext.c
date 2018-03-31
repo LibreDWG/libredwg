@@ -9,8 +9,8 @@ low_level_process (dwg_object * obj)
   dwg_ent_mtext *mtext = dwg_object_to_MTEXT (obj);
 
 
-  printf ("extends ht of mtext : %f\n", mtext->extends_ht);
-  printf ("extends wid of mtext : %f\n", mtext->extends_wid);
+  printf ("extends ht of mtext : %f\n", mtext->extents_height);
+  printf ("extends wid of mtext : %f\n", mtext->extents_width);
   printf ("drawing dir of mtext : " FORMAT_BS "\n", mtext->drawing_dir);
   printf ("linespace style of mtext : " FORMAT_BS "\n", mtext->linespace_style);
   printf ("attachment of mtext : " FORMAT_BS "\n", mtext->attachment);
@@ -41,15 +41,15 @@ api_process (dwg_object * obj)
   dwg_ent_mtext *mtext = dwg_object_to_MTEXT (obj);
 
 
-  extends_ht = dwg_ent_mtext_get_extends_ht (mtext, &error);
-  if (!error  && extends_ht == mtext->extends_ht)	// Error checking
+  extends_ht = dwg_ent_mtext_get_extents_height (mtext, &error);
+  if (!error  && extends_ht == mtext->extents_height)
     pass ("Working Properly");
   else
     fail ("error in reading extends ht");
 
 
-  extends_wid = dwg_ent_mtext_get_extends_wid (mtext, &error);
-  if (!error  && extends_wid == mtext->extends_wid)	// Error checking
+  extends_wid = dwg_ent_mtext_get_extents_width (mtext, &error);
+  if (!error  && extends_wid == mtext->extents_width)
     pass ("Working Properly");
   else
     fail ("error in reading extends wid");

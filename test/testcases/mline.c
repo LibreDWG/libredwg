@@ -10,7 +10,7 @@ low_level_process (dwg_object * obj)
   dwg_ent_mline *mline = dwg_object_to_MLINE (obj);
 
   printf ("scale of mline : %f\n", mline->scale);
-  printf ("just of mline : " FORMAT_BS "\n", mline->just);
+  printf ("just of mline : " FORMAT_BS "\n", mline->justification);
   printf ("extrusion of mline : x = %f, y = %f, z = %f\n",
 	  mline->extrusion.x, mline->extrusion.y, mline->extrusion.z);
   printf ("base_point of mline : x = %f, y = %f, z = %f\n",
@@ -32,10 +32,9 @@ api_process (dwg_object * obj)
   char just;
   BITCODE_BS oc, num_verts, num_lines;
   dwg_point_3d base_point, ext;
-  dwg_ent_mline_vert *verts;
+  dwg_ent_mline_vertex *verts;
 
   dwg_ent_mline *mline = dwg_object_to_MLINE (obj);
-
 
   scale = dwg_ent_mline_get_scale (mline, &error);
   if (!error  && scale == mline->scale)	// Error checking
@@ -44,15 +43,15 @@ api_process (dwg_object * obj)
     fail ("error in reading scale");
 
 
-  just = dwg_ent_mline_get_just (mline, &error);
-  if (!error  && just == mline->just)	// error checking
+  just = dwg_ent_mline_get_justification (mline, &error);
+  if (!error  && just == mline->justification)
     pass ("Working Properly");
   else
     fail ("error in reading just");
 
 
   dwg_ent_mline_get_extrusion (mline, &ext, &error);
-  if (!error  && ext.x == mline->extrusion.x && ext.y == mline->extrusion.y && ext.z == mline->extrusion.z)	// error checking
+  if (!error  && ext.x == mline->extrusion.x && ext.y == mline->extrusion.y && ext.z == mline->extrusion.z)
     pass ("Working Properly");
   else
     fail ("error in reading extrusion");

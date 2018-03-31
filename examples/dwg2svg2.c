@@ -192,7 +192,7 @@ output_INSERT(dwg_object* obj)
 {
   int index, error;
   unsigned long abs_ref;
-  double rotation_ang;
+  double rotation;
   dwg_ent_insert* insert;
   dwg_point_3d ins_pt, _scale;
   dwg_handle *obj_handle, *ins_handle;
@@ -203,8 +203,8 @@ output_INSERT(dwg_object* obj)
   }
   index = dwg_obj_object_get_index(obj, &error);
   log_if_error("object_get_index");
-  rotation_ang = dwg_ent_insert_get_rotation_angle(insert, &error);
-  log_if_error("insert_get_rotation_angle");
+  rotation = dwg_ent_insert_get_rotation(insert, &error);
+  log_if_error("insert_get_rotation");
   dwg_ent_insert_get_ins_pt(insert, &ins_pt, &error);
   log_if_error("insert_get_ins_pt");
   dwg_ent_insert_get_scale(insert, &_scale, &error);
@@ -223,7 +223,7 @@ output_INSERT(dwg_object* obj)
           "\t<use id=\"dwg-object-%d\" transform=\"translate(%f %f) rotate(%f) scale(%f %f)\" xlink:href=\"#symbol-%lu\" /><!-- block_header->handleref: %d.%d.%lu -->\n",
           index,
           transform_X(ins_pt.x), transform_Y(ins_pt.y),
-          (180.0 / M_PI) * rotation_ang, _scale.x, _scale.y, abs_ref,
+          (180.0 / M_PI) * rotation, _scale.x, _scale.y, abs_ref,
           ins_handle->code, ins_handle->size, ins_handle->value);
     }
   else

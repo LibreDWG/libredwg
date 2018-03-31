@@ -314,14 +314,16 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
         {
           PREP_TABLE (BLOCK_HEADER);
 
-          FIELD_RC (flag);
-          FIELD_TF (entry_name, 32);
-          FIELD_RS (used);
-          FIELD_RC (block_scaling);
-          FIELD_RS (owned_object_count);
-          FIELD_RC (flag2);
-          FIELD_RS (insert_count);
-          FIELD_RS (flag3);
+          FIELD_RC (flag, 70);
+          FIELD_TF (entry_name, 32, 2);
+          FIELD_RS (used, 0);
+
+          //TODO RD elevation 30, 2RD base_pt 10: 24
+          FIELD_RC (block_scaling, 0);
+          FIELD_RS (owned_object_count, 0);
+          FIELD_RC (flag2, 0);
+          FIELD_RS (insert_count, 0);
+          FIELD_RS (flag3, 0);
           CHK_ENDPOS;
         }
       break;
@@ -331,11 +333,12 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
         {
           PREP_TABLE (LAYER);
 
-          FIELD_RC (flag);
-          FIELD_TF (entry_name, 32);
-          FIELD_RS (used);
-          FIELD_RS (color_rs);   // color, off if negative
-          FIELD_RS (linetype_rs); // style
+          FIELD_RC (flag, 70);
+          FIELD_TF (entry_name, 32, 2);
+          FIELD_RS (used, 0);
+
+          FIELD_RS (color_rs, 62);   // color, off if negative
+          FIELD_RS (linetype_rs, 6); // style
           CHK_ENDPOS;
         }
       break;
@@ -346,15 +349,16 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
         {
           PREP_TABLE (SHAPEFILE);
 
-          FIELD_RC (flag);
-          FIELD_TF (entry_name, 32);
-          FIELD_RS (used);
-          FIELD_RD (fixed_height);
-          FIELD_RD (width_factor);
-          FIELD_RD (oblique_ang);
-          FIELD_RC (generation);
-          FIELD_RD (last_height);
-          FIELD_TF (font_name, 128);
+          FIELD_RC (flag, 70);
+          FIELD_TF (entry_name, 32, 2);
+          FIELD_RS (used, 0);
+
+          FIELD_RD (fixed_height, 40);
+          FIELD_RD (width_factor, 41);
+          FIELD_RD (oblique_ang, 50);
+          FIELD_RC (generation, 71);
+          FIELD_RD (last_height, 42);
+          FIELD_TF (font_name, 128, 3);
           CHK_ENDPOS;
         }
       break;
@@ -364,14 +368,15 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
         {
           PREP_TABLE (LTYPE);
 
-          FIELD_RC (flag);
-          FIELD_TF (entry_name, 32);
-          FIELD_RS (used);
-          FIELD_TF (description, 48);
-          FIELD_RC (alignment);
-          FIELD_RC (num_dashes);
-          FIELD_VECTOR (dashes_r11, RD, num_dashes);
+          FIELD_RC (flag, 70);
+          FIELD_TF (entry_name, 32, 2);
+          FIELD_RS (used, 0);
+          FIELD_TF (description, 48, 3);
+          FIELD_RC (alignment, 72);
+          FIELD_RC (num_dashes, 73);
+          FIELD_VECTOR (dashes_r11, RD, num_dashes, 340);
           // ... 106 byte
+          // 3, 40, 49, 74, 75, 340, 46, 50, 44, 45, 9
 
           CHK_ENDPOS;
         }
@@ -382,19 +387,20 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
         {
           PREP_TABLE (VIEW);
 
-          FIELD_RC (flag);
-          FIELD_TF (entry_name, 32);
-          FIELD_RS (used);
-          FIELD_RD (height);
-          FIELD_2RD (center);
-          FIELD_RD (width);
-          FIELD_2RD (target);
-          FIELD_2RD (direction);
-          FIELD_RS (view_mode);   // 71
-          FIELD_RD (lens_length); // 42
-          FIELD_RD (front_clip);  // 43
-          FIELD_RD (back_clip);   // 44
-          FIELD_RD (twist_angle); // 50
+          FIELD_RC (flag, 70);
+          FIELD_TF (entry_name, 32, 2);
+          FIELD_RS (used, 0);
+
+          FIELD_RD (height, 40);
+          FIELD_2RD (center, 10);
+          FIELD_RD (width, 41);
+          FIELD_3RD (target, 12);
+          FIELD_3RD (direction, 11);
+          FIELD_RS (view_mode, 71);
+          FIELD_RD (lens_length, 42);
+          FIELD_RD (front_clip, 43);
+          FIELD_RD (back_clip, 44);
+          FIELD_RD (twist_angle, 50);
           CHK_ENDPOS;
         }
       break;
@@ -404,12 +410,12 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
         {
           PREP_TABLE (UCS);
 
-          FIELD_RC (flag);
-          FIELD_TF (entry_name, 32);
-          FIELD_RS (used);
-          FIELD_2RD (origin);      // 10
-          FIELD_2RD (x_direction); // 11
-          FIELD_2RD (y_direction); // 12
+          FIELD_RC (flag, 70);
+          FIELD_TF (entry_name, 32, 2);
+          FIELD_RS (used, 0);
+          FIELD_2RD (origin, 10);
+          FIELD_2RD (x_direction, 11);
+          FIELD_2RD (y_direction, 12);
 
           CHK_ENDPOS;
         }
@@ -420,28 +426,35 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
         {
           PREP_TABLE (VPORT);
 
-          FIELD_RC (flag);
-          FIELD_TF (entry_name, 32);
-          FIELD_RS (used);
-          FIELD_2RD (lower_left); // 10
-          FIELD_2RD (upper_right);// 11
-          FIELD_2RD (view_target);// 17
-          FIELD_2RD (VIEWDIR);    // 16 FIXME
-          FIELD_RD (SNAPANG);     // 50
-          FIELD_RD (VIEWSIZE);    // 40
-          FIELD_2RD (VIEWCTR);    // 12
-          FIELD_RD (aspect_ratio);// 41
-          FIELD_RD (lens_length); // 42
-          FIELD_RD (front_clip);  // 43
-          FIELD_RD (back_clip);   // 44
-          FIELD_RS (view_mode);   // 71
-          FIELD_RS (circle_zoom); // 72
-          FIELD_RS (FASTZOOM);    // 73
-          FIELD_RS (UCSICON);     // 74
-          FIELD_RS (SNAPMODE);    // 75
-          FIELD_RS (GRIDMODE);    // 76
-          FIELD_RS (SNAPSTYLE);   // 77
-          FIELD_RS (SNAPISOPAIR); // 78
+          FIELD_RC (flag, 70);
+          FIELD_TF (entry_name, 32, 2);
+          FIELD_RS (used, 0);
+
+          FIELD_RD (VIEWSIZE, 40);
+          FIELD_RD (aspect_ratio, 41);
+          FIELD_2RD (VIEWCTR, 12);
+          FIELD_3RD (view_target, 17);
+          FIELD_3RD (VIEWDIR, 16);
+          FIELD_RD (view_twist, 50);
+          FIELD_RD (lens_length, 42);
+          FIELD_RD (front_clip, 43);
+          FIELD_RD (back_clip, 33);
+          FIELD_RS (view_mode, 71);
+
+          FIELD_2RD (lower_left, 10);
+          FIELD_2RD (upper_right, 11);
+          FIELD_RC (UCSFOLLOW, 71);
+          FIELD_RS (circle_zoom, 72);
+          FIELD_RC (FASTZOOM, 73);
+          FIELD_RC (UCSICON, 74);
+          FIELD_RC (GRIDMODE, 76);
+          FIELD_2RD (GRIDUNIT, 15);
+          FIELD_RS (SNAPMODE, 75);
+          FIELD_RC (SNAPSTYLE, 77);
+          FIELD_RS (SNAPISOPAIR, 78);
+          FIELD_RD (SNAPANG, 50);
+          FIELD_2RD (SNAPBASE, 13);
+          FIELD_2RD (SNAPUNIT, 14);
           // ... 74 byte
 
           CHK_ENDPOS;
@@ -453,9 +466,9 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
         {
           PREP_TABLE (APPID);
 
-          FIELD_RC (flag);
-          FIELD_TF (entry_name, 32);
-          FIELD_RS (used);
+          FIELD_RC (flag, 70);
+          FIELD_TF (entry_name, 32, 2);
+          FIELD_RS (used, 0);
           CHK_ENDPOS;
         }
       break;
@@ -465,17 +478,73 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
         {
           PREP_TABLE (DIMSTYLE);
 
-          FIELD_RC (flag);
-          FIELD_TF (entry_name, 32);
-          FIELD_RS (used);
-          //...
+          FIELD_RC (flag, 70);
+          FIELD_TF (entry_name, 32, 2);
+          FIELD_RS (used, 0);
+
+          FIELD_RC (DIMTOL, 71);
+          FIELD_RC (DIMLIM, 72);
+          FIELD_RC (DIMTIH, 73);
+          FIELD_RC (DIMTOH, 74);
+          FIELD_RC (DIMSE1, 75);
+          FIELD_RC (DIMSE2, 76);
+          FIELD_RC (DIMALT, 170);
+          FIELD_RC (DIMTOFL, 172);
+          FIELD_RC (DIMSAH, 173);
+          FIELD_RC (DIMTIX, 174);
+          FIELD_RC (DIMSOXD, 175);
+          FIELD_CAST (DIMALTD, RC, BS, 171);
+          FIELD_CAST (DIMZIN, RC, BS, 78);
+          FIELD_RC (DIMSD1, 281);
+          FIELD_RC (DIMSD2, 282);
+          FIELD_CAST (DIMTOLJ, RC, BS, 283);
+          FIELD_CAST (DIMJUST, RC, BS, 280);
+          FIELD_CAST (DIMFIT, RC, BS, 287);
+          FIELD_RC (DIMUPT, 288);
+          FIELD_CAST (DIMTZIN, RC, BS, 284);
+          FIELD_CAST (DIMMALTZ, RC, BS, 285);
+          FIELD_CAST (DIMMALTTZ, RC, BS, 286);
+          FIELD_CAST (DIMTAD, RC, BS, 77);
+          FIELD_RS (DIMUNIT, 270);
+          FIELD_RS (DIMAUNIT, 275);
+          FIELD_RS (DIMDEC, 271);
+          FIELD_RS (DIMTDEC, 272);
+          FIELD_RS (DIMALTU, 273);
+          FIELD_RS (DIMALTTD, 274);
+          FIELD_RD (DIMSCALE, 40);
+          FIELD_RD (DIMASZ, 41);
+          FIELD_RD (DIMEXO, 42);
+          FIELD_RD (DIMDLI, 43);
+          FIELD_RD (DIMEXE, 44);
+          FIELD_RD (DIMRND, 45);
+          FIELD_RD (DIMDLE, 46);
+          FIELD_RD (DIMTP, 47);
+          FIELD_RD (DIMTM, 48);
+          FIELD_RD (DIMTXT, 140);
+          FIELD_RD (DIMCEN, 141);
+          FIELD_RD (DIMTSZ, 142);
+          FIELD_RD (DIMALTF, 143);
+          FIELD_RD (DIMLFAC, 144);
+          FIELD_RD (DIMTVP, 145);
+          FIELD_RD (DIMTFAC, 146);
+          FIELD_RD (DIMGAP, 147);
+          FIELD_T (DIMPOST, 3);
+          FIELD_T (DIMAPOST, 4); //??
+          FIELD_T (DIMBLK_T, 5);
+          FIELD_T (DIMBLK1_T, 6);
+          FIELD_T (DIMBLK2_T, 7);
+          FIELD_RC (DIMCLRD_N, 176);
+          FIELD_RC (DIMCLRE_N, 177);
+          FIELD_RC (DIMCLRT_N, 178);
+
+          //??
           CHK_ENDPOS;
         }
       break;
 
-    case SECTION_P13:
+    case SECTION_VP_ENT_HDR:
       if (tbl->number) {
-        LOG_WARN("Unknown P13 table");
+        LOG_WARN("VP_ENT_HDR table");
       }
       break;
 
@@ -493,7 +562,32 @@ decode_preR13_entities(unsigned long start, unsigned long end, unsigned long off
 {
   LOG_TRACE("entities: (0x%lx-0x%lx) TODO\n", start, end)
   //_obj, obj
+
+  /* TODO Common entity preR13 header:
+    FIELD_RC (flag, 70);
+    FIELD_RS (size, 0);
+    FIELD_RS (layer, 0);
+    FIELD_RS (opts, 0);
+    if (FIELD_VALUE(flag) & 1)
+      FIELD_RC (color, 60);
+    if (FIELD_VALUE(flag) & 0x40)
+      FIELD_RC (extra, 0);
+    if (FIELD_VALUE(extra) & 2)
+      decode_eed();
+    if (FIELD_VALUE(flag) & 2)
+      FIELD_RS (type, 0);
+    if (FIELD_VALUE(flag) & 4 && kind > 2 && kind != 22)
+      FIELD_RD (elevation/pt.z, 30);
+    if (FIELD_VALUE(flag) & 8)
+      FIELD_RD (thickness, 39);
+    if (FIELD_VALUE(flag) & 0x20)
+      FIELD_HANDLE (handle, 0, 0);
+    if (FIELD_VALUE(extra) & 4)
+      FIELD_RS (paper, 0);
+    */
+    
   //#include "dwg.spec"
+
   dat->byte = end;
 }
 
@@ -571,7 +665,7 @@ decode_preR13(Bit_Chain* dat, Dwg_Data * dwg)
   decode_preR13_section_ptr("DIMSTYLE", SECTION_DIMSTYLE, dat, dwg);
   // skip: 0x69f - dat->bytes
   dat->byte = 0x69f;
-  decode_preR13_section_ptr("P13", SECTION_P13, dat, dwg);
+  decode_preR13_section_ptr("VP_ENT_HDR", SECTION_VP_ENT_HDR, dat, dwg);
   dat->byte += 38;
   // entities
   decode_preR13_entities(entities_start, entities_end, 0, dat, dwg);
@@ -585,7 +679,7 @@ decode_preR13(Bit_Chain* dat, Dwg_Data * dwg)
   decode_preR13_section(SECTION_VPORT, dat, dwg);
   decode_preR13_section(SECTION_APPID, dat, dwg);
   decode_preR13_section(SECTION_DIMSTYLE, dat, dwg);
-  decode_preR13_section(SECTION_P13, dat, dwg);
+  decode_preR13_section(SECTION_VP_ENT_HDR, dat, dwg);
   // blocks
   decode_preR13_entities(blocks_start, blocks_end, blocks_start - 0x40000000, dat, dwg);
   LOG_TRACE("@0x%lx\n", dat->byte);
@@ -637,7 +731,7 @@ decode_preR13(Bit_Chain* dat, Dwg_Data * dwg)
   decode_preR13_section_chk(SECTION_VPORT, dat, dwg);
   decode_preR13_section_chk(SECTION_APPID, dat, dwg);
   decode_preR13_section_chk(SECTION_DIMSTYLE, dat, dwg);
-  decode_preR13_section_chk(SECTION_P13, dat, dwg);
+  decode_preR13_section_chk(SECTION_VP_ENT_HDR, dat, dwg);
   rl1 = bit_read_RL(dat);
   LOG_TRACE("long 0x%x\n", rl1); // address
 
@@ -1031,8 +1125,8 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
       pvzadr = dat->byte;
       LOG_TRACE("pvzadr: %lx\n", pvzadr)
 
-      FIELD_RL(size);
-      FIELD_BL(address);
+      FIELD_RL(size, 0);
+      FIELD_BL(address, 0);
 
       // AC1012, AC1014 or AC1015. This is a char[11], zero padded.
       // with \n at 12.
@@ -1041,7 +1135,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
       LOG_TRACE("version: %s\n", _obj->version)
       for (i = 0; i < 4; i++)
         {
-          FIELD_B(null_b[i]);
+          FIELD_B(null_b[i], 0);
         }
 
       // documented as 0x18,0x78,0x01,0x04 for R13, 0x18,0x78,0x01,0x05 for R14
@@ -1049,7 +1143,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
       // also: 10 7d f4 78 on 2004
       for (i = 0; i < 4; i++)
         {
-          FIELD_RC(unknown_rc4[i]);
+          FIELD_RC(unknown_rc4[i], 0);
         }
 
       UNTIL (R_2000) {
@@ -1060,29 +1154,29 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
         _obj->num_sections = 4;
         for (i = 0; i < _obj->num_sections; i++)
           {
-            FIELD_RC(sections[i].nr);
-            FIELD_BL(sections[i].address);
-            FIELD_BL(sections[i].size);
+            FIELD_RC(sections[i].nr, 0);
+            FIELD_BL(sections[i].address, 0);
+            FIELD_BL(sections[i].size, 0);
           }
 
-        FIELD_BS(num_handlers); // 14, resp. 16 in r14
+        FIELD_BS(num_handlers, 0); // 14, resp. 16 in r14
         if (FIELD_VALUE(num_handlers) > 16) {
           LOG_ERROR("Second header num_handlers > 16: %d\n", FIELD_VALUE(num_handlers));
           FIELD_VALUE(num_handlers) = 14;
         }
         for (i = 0; i < FIELD_VALUE(num_handlers); i++)
           {
-            FIELD_RC(handlers[i].size);
-            FIELD_RC(handlers[i].nr);
-            FIELD_VECTOR(handlers[i].data, RC, handlers[i].size);
+            FIELD_RC(handlers[i].size, 0);
+            FIELD_RC(handlers[i].nr, 0);
+            FIELD_VECTOR(handlers[i].data, RC, handlers[i].size, 0);
           }
 
         // Check CRC-on
         ckr = bit_read_CRC(dat);
 
         VERSION(R_14) {
-          FIELD_RL(junk_r14_1);
-          FIELD_RL(junk_r14_2);
+          FIELD_RL(junk_r14_1, 0);
+          FIELD_RL(junk_r14_2, 0);
         }
       }
       if (bit_search_sentinel(dat, dwg_sentinel(DWG_SENTINEL_SECOND_HEADER_END)))
@@ -1143,7 +1237,7 @@ resolve_objectref_vector(Bit_Chain* dat, Dwg_Data * dwg)
       //assign found pointer to objectref vector
       dwg->object_ref[i]->obj = obj;
 
-      if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)
+      if (DWG_LOGLEVEL >= DWG_LOGLEVEL_HANDLE)
         {
           if (obj)
             dwg_print_object(dat, obj);
@@ -2349,7 +2443,7 @@ dwg_decode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg)
       if (obj)
         {
           LOG_ERROR(
-            "Could not read handleref in object whose handle is: %d.%d.%lu",
+            "Could not read handleref from object whose handle is: %d.%d.%lu",
             obj->handle.code, obj->handle.size, obj->handle.value)
         }
       else
@@ -2360,8 +2454,8 @@ dwg_decode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg)
       return NULL;
     }
 
-  // if the handle size is 0, it is probably a null handle. It
-  // shouldn't be placed in the object ref vector
+  // If the handle size is 0, it is probably a null handle.
+  // It shouldn't be placed in the object ref vector
   if (ref->handleref.size)
     {
       // Reserve memory space for object references
@@ -2398,13 +2492,12 @@ dwg_decode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg)
     }
 
   /*
-   * sometimes the code indicates the type of ownership
-   * in other cases the handle is stored as an offset from some other handle
-   * how is it determined?
+   * With TYPEDOBJHANDLE 2-5 the code indicates the type of ownership.
+   * With OFFSETOBJHANDLE >5 the handle is stored as an offset from some other handle.
    */
- switch (ref->handleref.code) //that's right: don't bother the code on the spec.
+ switch (ref->handleref.code)
     {
-    case 0x06: //what if 6 means HARD_OWNER?
+    case 0x06:
       ref->absolute_ref = (obj->handle.value + 1);
       break;
     case 0x08:
@@ -2416,19 +2509,39 @@ dwg_decode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg)
     case 0x0C:
       ref->absolute_ref = (obj->handle.value - ref->handleref.value);
       break;
-    default: //0x02, 0x03, 0x04, 0x05 or none
+    case 2: case 3: case 4: case 5:
       ref->absolute_ref = ref->handleref.value;
+      break;
+    case 0: // ignore?
+      ref->absolute_ref = ref->handleref.value;
+      break;
+    default:
+      ref->absolute_ref = ref->handleref.value;
+      LOG_WARN("Invalid handle pointer code %d", ref->handleref.code);
       break;
     }
   return ref;
 }
 
+/**
+ * code:
+ *  TYPEDOBJHANDLE:
+ *   2 Soft owner
+ *   3 Hard owner
+ *   4 Soft pointer
+ *   5 Hard pointer
+ *  OFFSETOBJHANDLE for soft owners or pointers:
+ *   6 ref + 1
+ *   8 ref - 1
+ *   a ref + offset
+ *   c ref - offset
+ */
 static Dwg_Object_Ref *
-dwg_decode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg, unsigned int code)
+dwg_decode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg,
+                               unsigned int code)
 {
   Dwg_Object_Ref * ref;
   ref = dwg_decode_handleref(dat, obj, dwg);
-
   if (!ref)
     {
       LOG_ERROR("dwg_decode_handleref_with_code: ref is a null pointer");
@@ -2437,11 +2550,34 @@ dwg_decode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg,
 
   if (ref->absolute_ref == 0 && ref->handleref.code != code)
     {
-      LOG_WARN("Expected a CODE %d handle, got a %d", code, ref->handleref.code)
-      //TODO: At the moment we are tolerating wrong codes in handles.
-      // in the future we might want to get strict and return 0 here so that code will crash
-      // whenever it reaches the first handle parsing error. This might make debugging easier.
-      //return 0;
+      /*
+       * With TYPEDOBJHANDLE 2-5 the code indicates the type of ownership.
+       * With OFFSETOBJHANDLE >5 the handle is stored as an offset from some other handle.
+       */
+      switch (ref->handleref.code)
+        {
+        case 0x06:
+          ref->absolute_ref = (obj->handle.value + 1);
+          break;
+        case 0x08:
+          ref->absolute_ref = (obj->handle.value - 1);
+          break;
+        case 0x0A:
+          ref->absolute_ref = (obj->handle.value + ref->handleref.value);
+          break;
+        case 0x0C:
+          ref->absolute_ref = (obj->handle.value - ref->handleref.value);
+          break;
+        case 2: case 3: case 4: case 5:
+          ref->absolute_ref = ref->handleref.value;
+          break;
+        case 0: // ignore (ANYCODE)
+          ref->absolute_ref = ref->handleref.value;
+          break;
+        default:
+          LOG_WARN("Invalid handle pointer code %d", ref->handleref.code);
+          break;
+        }
     }
   return ref;
 }
@@ -2704,6 +2840,7 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
 
   if (!strcmp(dxfname, "ACDBDICTIONARYWDFLT"))
     {
+      //UNTESTED_CLASS;
       assert(!is_entity);
       dwg_decode_DICTIONARYWDLFT(dat, obj);
       return 1;
@@ -2849,32 +2986,31 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       dwg_decode_SCALE(dat, obj);
       return 1;
     }
-  if (!strcmp(dxfname, "MLEADER"))
-    {
-      UNTESTED_CLASS;
-      assert(is_entity);
-      dwg_decode_MLEADER(dat, obj);
-      return 1;
-    }
-  if (!strcmp(dxfname, "MLEADERSTYLE"))
-    {
-      UNTESTED_CLASS;
-      assert(!is_entity);
-      //dwg_decode_MLEADERSTYLE(dat, obj);
-      return 0;
-    }
-  /*if (!strcmp(dxfname, "AcDbField"))
+  if (!strcmp(dxfname, "AcDbField"))
     {
       UNTESTED_CLASS;
       dwg_decode_FIELD(dat, obj);
       return 0;
     }
-  */
-  if (!strcmp(dxfname, "CELLSTYLEMAP"))
+  if (!strcmp(dxfname, "TABLECONTENT"))
     {
       UNTESTED_CLASS;
       assert(!is_entity);
-      dwg_decode_CELLSTYLEMAP(dat, obj);
+      dwg_decode_TABLECONTENT(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "TABLEGEOMETRY"))
+    {
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      dwg_decode_TABLEGEOMETRY(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "GEODATA"))
+    {
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      dwg_decode_GEODATA(dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "VBA_PROJECT"))
@@ -2889,7 +3025,14 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     {
       UNTESTED_CLASS;
       assert(is_entity);
-      //dwg_decode_MLEADER(dat, obj);
+      dwg_decode_MLEADER(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "MLEADERSTYLE"))
+    {
+      UNTESTED_CLASS; //broken
+      assert(!is_entity);
+      //dwg_decode_MLEADERSTYLE(dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "WIPEOUTVARIABLE"))
@@ -2899,11 +3042,25 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       dwg_decode_WIPEOUTVARIABLE(dat, obj);
       return 1;
     }
+  if (!strcmp(dxfname, "CELLSTYLEMAP"))
+    {
+      UNHANDLED_CLASS; //broken
+      assert(!is_entity);
+      //dwg_decode_CELLSTYLEMAP(dat, obj);
+      return 0;
+    }
   if (!strcmp(dxfname, "VISUALSTYLE"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
       //dwg_decode_VISUALSTYLE(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "ARCALIGNEDTEXT"))
+    {
+      UNHANDLED_CLASS;
+      //assert(!is_entity);
+      //dwg_decode_ARCALIGNEDTEXT(dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "DIMASSOC"))
@@ -2986,7 +3143,9 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
      TABLESTYLE, VBA_PROJECT, VISUALSTYLE, WIPEOUTVARIABLE,
      ACDBSECTIONVIEWSTYLE, ACDBDETAILVIEWSTYLE,
      NPOCOLLECTION, EXACXREFPANELOBJECT,
-     ARCALIGNEDTEXT (2000+), UNDERLAYDEFINITION (2 strings)
+     ARCALIGNEDTEXT (2000+), UNDERLAYDEFINITION (2 strings),
+     AcDbObjectContextData,
+     AcDbAnnotScaleObjectContextData (H 340)
   */
 #undef UNHANDLED_CLASS
 #undef UNTESTED_CLASS

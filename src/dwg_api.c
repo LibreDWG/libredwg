@@ -245,6 +245,32 @@ CAST_DWG_OBJECT_TO_OBJECT(XRECORD)
  *                FUNCTIONS START HERE ENTITY SPECIFIC               *
  ********************************************************************/
 
+/* There is no generic call dwg_get_DIMENSION, for this you have to
+   specify the exact DIMENSION_* type. */
+
+/* To access the common DIMENSION fields (only) */
+dwg_ent_dim *
+dwg_object_to_DIMENSION(dwg_object *obj)
+{
+    dwg_ent_dim *ret_obj = NULL;
+    if(obj != 0 &&
+       (obj->type == DWG_TYPE_DIMENSION_ORDINATE ||
+        obj->type == DWG_TYPE_DIMENSION_LINEAR ||
+        obj->type == DWG_TYPE_DIMENSION_ALIGNED ||
+        obj->type == DWG_TYPE_DIMENSION_ANG3PT ||
+        obj->type == DWG_TYPE_DIMENSION_ANG2LN ||
+        obj->type == DWG_TYPE_DIMENSION_RADIUS ||
+        obj->type == DWG_TYPE_DIMENSION_DIAMETER))
+      {
+        ret_obj = obj->tio.entity->tio.DIMENSION_common;
+      }
+    else
+      {
+        LOG_ERROR("invalid %s type: got 0x%x", "DIMENSION", obj ? obj->type : 0);
+      }
+    return (dwg_ent_dim *)ret_obj;  
+}
+
 /*******************************************************************
  *                    FUNCTIONS FOR CIRCLE ENTITY                    *
  ********************************************************************/
@@ -1630,17 +1656,17 @@ dwg_ent_text_set_thickness(dwg_ent_text *text, BITCODE_BD thickness, int *error)
 }
 
 /// Returns the rotation angle of a text entity.
-/** Usage :- double rot_ang = dwg_ent_text_get_rot_angle(text, &error);
+/** Usage :- double rot_ang = dwg_ent_text_get_rotation(text, &error);
     \param 1 dwg_ent_text
     \param 2 int ptr &error
 */
 BITCODE_BD
-dwg_ent_text_get_rot_angle(dwg_ent_text *text, int *error)
+dwg_ent_text_get_rotation(dwg_ent_text *text, int *error)
 {
   if (text != 0)
     {
       *error = 0;
-      return text->rotation_ang;
+      return text->rotation;
     }
   else
     {
@@ -1651,18 +1677,18 @@ dwg_ent_text_get_rot_angle(dwg_ent_text *text, int *error)
 }
 
 /// Sets the rotation angle of a text entity.
-/** Usage : dwg_ent_text_set_rot_angle(text, angle, &error);
+/** Usage : dwg_ent_text_set_rotation(text, angle, &error);
     \param 1 dwg_ent_text
     \param 2 BITCODE_BD
     \param 3 int ptr &error
 */
 void
-dwg_ent_text_set_rot_angle(dwg_ent_text *text, BITCODE_BD angle, int *error)
+dwg_ent_text_set_rotation(dwg_ent_text *text, BITCODE_BD angle, int *error)
 {
   if (text != 0)
     {
       *error = 0;
-      text->rotation_ang = angle;
+      text->rotation = angle;
     }
   else
     {
@@ -1993,7 +2019,7 @@ dwg_ent_attrib_get_rot_angle(dwg_ent_attrib *attrib, int *error)
   if (attrib != 0)
     {
       *error = 0;
-      return attrib->rotation_ang;
+      return attrib->rotation;
     }
   else
     {
@@ -2015,7 +2041,7 @@ dwg_ent_attrib_set_rot_angle(dwg_ent_attrib *attrib, BITCODE_BD angle, int *erro
   if (attrib != 0)
     {
       *error = 0;
-      attrib->rotation_ang = angle;
+      attrib->rotation = angle;
     }
   else
     {
@@ -2349,7 +2375,7 @@ dwg_ent_attdef_get_rot_angle(dwg_ent_attdef *attdef, int *error)
   if (attdef != 0)
     {
       *error = 0;
-      return attdef->rotation_ang;
+      return attdef->rotation;
     }
   else
     {
@@ -2371,7 +2397,7 @@ dwg_ent_attdef_set_rot_angle(dwg_ent_attdef *attdef, BITCODE_BD angle, int *erro
   if (attdef != 0)
     {
       *error = 0;
-      attdef->rotation_ang = angle;
+      attdef->rotation = angle;
     }
   else
     {
@@ -3500,17 +3526,17 @@ dwg_ent_trace_set_extrusion(dwg_ent_trace *trace, dwg_point_3d *vector,
 ********************************************************************/
 
 /// Returns the flag of vertex_3d.
-/** Usage :- char flag = dwg_ent_vertex_3d_get_flags(vert, &error);
+/** Usage :- char flag = dwg_ent_vertex_3d_get_flag(vert, &error);
 \param 1 dwg_ent_vertex_3d
 \param 2 int
 */
 char
-dwg_ent_vertex_3d_get_flags(dwg_ent_vertex_3d *vert, int *error)
+dwg_ent_vertex_3d_get_flag(dwg_ent_vertex_3d *vert, int *error)
 {
   if (vert != 0)
     {
       *error = 0;
-      return vert->flags;
+      return vert->flag;
     }
   else
     {
@@ -3521,18 +3547,18 @@ dwg_ent_vertex_3d_get_flags(dwg_ent_vertex_3d *vert, int *error)
 }
 
 /// Sets the flag of vertex_3d.
-/** Usage :- dwg_ent_vertex_3d_set_flags(vert, flag, &error);
+/** Usage :- dwg_ent_vertex_3d_set_flag(vert, flag, &error);
 \param 1 dwg_ent_vertex_3d
 \param 2 char
 \param 3 int
 */
 void
-dwg_ent_vertex_3d_set_flags(dwg_ent_vertex_3d *vert, char flags, int *error)
+dwg_ent_vertex_3d_set_flag(dwg_ent_vertex_3d *vert, char flag, int *error)
 {
   if (vert != 0)
     {
       *error = 0;
-      vert->flags = flags;
+      vert->flag = flag;
     }
   else
     {
@@ -3594,17 +3620,17 @@ dwg_ent_vertex_3d_set_point(dwg_ent_vertex_3d *vert,
 ********************************************************************/
 
 /// Returns the flag of vertex_mesh.
-/** Usage :- char flag = dwg_ent_vertex_mesh_get_flags(vert, &error);
+/** Usage :- char flag = dwg_ent_vertex_mesh_get_flag(vert, &error);
 \param 1 dwg_ent_vertex_mesh
 \param 2 int
 */
 char
-dwg_ent_vertex_mesh_get_flags(dwg_ent_vertex_mesh *vert, int *error)
+dwg_ent_vertex_mesh_get_flag(dwg_ent_vertex_mesh *vert, int *error)
 {
   if (vert != 0)
     {
       *error = 0;
-      return vert->flags;
+      return vert->flag;
     }
   else
     {
@@ -3615,19 +3641,19 @@ dwg_ent_vertex_mesh_get_flags(dwg_ent_vertex_mesh *vert, int *error)
 }
 
 /// Sets the flag of vertex_mesh.
-/** Usage :- dwg_ent_vertex_mesh_set_flags(vert, flag, &error);
+/** Usage :- dwg_ent_vertex_mesh_set_flag(vert, flag, &error);
 \param 1 dwg_ent_vertex_mesh
 \param 2 char
 \param 3 int
 */
 void
-dwg_ent_vertex_mesh_set_flags(dwg_ent_vertex_mesh *vert, char flags,
+dwg_ent_vertex_mesh_set_flag(dwg_ent_vertex_mesh *vert, char flags,
                               int *error)
 {
   if (vert != 0)
     {
       *error = 0;
-      vert->flags = flags;
+      vert->flag = flags;
     }
   else
     {
@@ -3689,17 +3715,17 @@ dwg_ent_vertex_mesh_set_point(dwg_ent_vertex_mesh *vert, dwg_point_3d *point,
 ********************************************************************/
 
 /// Returns the flag of vertex_pface.
-/** Usage :- char flag = dwg_ent_vertex_pface_get_flags(vert, &error);
+/** Usage :- char flag = dwg_ent_vertex_pface_get_flag(vert, &error);
 \param 1 dwg_ent_vertex_pface
 \param 2 int
 */
 char
-dwg_ent_vertex_pface_get_flags(dwg_ent_vertex_pface *vert, int *error)
+dwg_ent_vertex_pface_get_flag(dwg_ent_vertex_pface *vert, int *error)
 {
   if (vert != 0)
     {
       *error = 0;
-      return vert->flags;
+      return vert->flag;
     }
   else
     {
@@ -3710,19 +3736,19 @@ dwg_ent_vertex_pface_get_flags(dwg_ent_vertex_pface *vert, int *error)
 }
 
 /// Sets the flag of vertex_pface.
-/** Usage :- dwg_ent_vertex_pface_set_flags(vert, flag, &error);
+/** Usage :- dwg_ent_vertex_pface_set_flag(vert, flag, &error);
 \param 1 dwg_ent_vertex_pface
 \param 2 char
 \param 3 int
 */
 void
-dwg_ent_vertex_pface_set_flags(dwg_ent_vertex_pface *vert, char flags,
+dwg_ent_vertex_pface_set_flag(dwg_ent_vertex_pface *vert, char flags,
                                int *error)
 {
   if (vert != 0)
     {
       *error = 0;
-      vert->flags = flags;
+      vert->flag = flags;
     }
   else
     {
@@ -3789,12 +3815,12 @@ dwg_ent_vertex_pface_set_point(dwg_ent_vertex_pface *vert,
 \param 2 int
 */
 char
-dwg_ent_vertex_2d_get_flags(dwg_ent_vertex_2d *vert, int *error)
+dwg_ent_vertex_2d_get_flag(dwg_ent_vertex_2d *vert, int *error)
 {
   if (vert != 0)
     {
       *error = 0;
-      return vert->flags;
+      return vert->flag;
     }
   else
     {
@@ -3811,12 +3837,12 @@ dwg_ent_vertex_2d_get_flags(dwg_ent_vertex_2d *vert, int *error)
 \param 3 int
 */
 void
-dwg_ent_vertex_2d_set_flags(dwg_ent_vertex_2d *vert, char flags, int *error)
+dwg_ent_vertex_2d_set_flag(dwg_ent_vertex_2d *vert, char flags, int *error)
 {
   if (vert != 0)
     {
       *error = 0;
-      vert->flags = flags;
+      vert->flag = flags;
     }
   else
     {
@@ -4187,17 +4213,17 @@ dwg_ent_insert_set_scale(dwg_ent_insert *insert, dwg_point_3d *point,
 }
 
 /// Returns the rotation angle of insert.
-/** Usage : double angle = dwg_ent_insert_get_rotation_angle(insert, &error);
+/** Usage : double angle = dwg_ent_insert_get_rotation(insert, &error);
 \param 1 dwg_ent_insert
 \param 2 int
 */
 BITCODE_BD
-dwg_ent_insert_get_rotation_angle(dwg_ent_insert *insert, int *error)
+dwg_ent_insert_get_rotation(dwg_ent_insert *insert, int *error)
 {
   if (insert != 0)
     {
       *error = 0;
-      return insert->rotation_ang;
+      return insert->rotation;
     }
   else
     {
@@ -4208,19 +4234,19 @@ dwg_ent_insert_get_rotation_angle(dwg_ent_insert *insert, int *error)
 }
 
 /// Sets the rotation angle of insert.
-/** Usage : dwg_ent_insert_set_rotation_angle(insert, angle, &error);
+/** Usage : dwg_ent_insert_set_rotation(insert, angle, &error);
 \param 1 dwg_ent_insert
 \param 2 double
 \param 3 int
 */
 void
-dwg_ent_insert_set_rotation_angle(dwg_ent_insert *insert, BITCODE_BD rot_ang,
+dwg_ent_insert_set_rotation(dwg_ent_insert *insert, BITCODE_BD rot_ang,
                                   int *error)
 {
   if (insert != 0)
     {
       *error = 0;
-      insert->rotation_ang = rot_ang;
+      insert->rotation = rot_ang;
     }
   else
     {
@@ -4278,12 +4304,12 @@ dwg_ent_insert_set_extrusion(dwg_ent_insert *insert, dwg_point_3d *point,
 }
 
 /// Returns the has attribs of insert.
-/** Usage : double attribs = dwg_ent_insert_get_has_attribs(intrest, &error);
+/** Usage : double attribs = dwg_ent_insert_has_attribs(intrest, &error);
 \param 1 dwg_ent_insert
 \param 2 int
 */
 char
-dwg_ent_insert_get_has_attribs(dwg_ent_insert *insert, int *error)
+dwg_ent_insert_has_attribs(dwg_ent_insert *insert, int *error)
 {
   if (insert != 0)
     {
@@ -4295,28 +4321,6 @@ dwg_ent_insert_get_has_attribs(dwg_ent_insert *insert, int *error)
       LOG_ERROR("%s: empty insert", __FUNCTION__)
       *error = 1;
       return '\0';
-    }
-}
-
-/// Sets the has_attribs of insert.
-/** Usage : dwg_ent_insert_set_tangent_dir(insert, attrib, &error);
-\param 1 dwg_ent_insert
-\param 2 char
-\param 3 int
-*/
-void
-dwg_ent_insert_set_has_attribs(dwg_ent_insert *insert, char attribs,
-                               int *error)
-{
-  if (insert != 0)
-    {
-      *error = 0;
-      insert->has_attribs = attribs;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty insert", __FUNCTION__)
-      *error = 1;
     }
 }
 
@@ -4549,17 +4553,17 @@ dwg_ent_minsert_set_scale(dwg_ent_minsert *minsert, dwg_point_3d *point,
 }
 
 /// Returns the rotation angle of minsert.
-/** Usage : double angle = dwg_ent_minsert_get_rotation_angle(minsert, &error);
+/** Usage : double angle = dwg_ent_minsert_get_rotation(minsert, &error);
 \param 1 dwg_ent_minsert
 \param 2 int
 */
 BITCODE_BD
-dwg_ent_minsert_get_rotation_angle(dwg_ent_minsert *minsert, int *error)
+dwg_ent_minsert_get_rotation(dwg_ent_minsert *minsert, int *error)
 {
   if (minsert != 0)
     {
       *error = 0;
-      return minsert->rotation_ang;
+      return minsert->rotation;
     }
   else
     {
@@ -4570,19 +4574,19 @@ dwg_ent_minsert_get_rotation_angle(dwg_ent_minsert *minsert, int *error)
 }
 
 /// Sets the rotation angle of minsert.
-/** Usage : dwg_ent_minsert_set_rotation_angle(minsert, angle, &error);
+/** Usage : dwg_ent_minsert_set_rotation(minsert, angle, &error);
 \param 1 dwg_ent_minsert
 \param 2 double
 \param 3 int
 */
 void
-dwg_ent_minsert_set_rotation_angle(dwg_ent_minsert *minsert, BITCODE_BD rot_ang,
-                                   int *error)
+dwg_ent_minsert_set_rotation(dwg_ent_minsert *minsert, BITCODE_BD rot_ang,
+                             int *error)
 {
   if (minsert != 0)
     {
       *error = 0;
-      minsert->rotation_ang = rot_ang;
+      minsert->rotation = rot_ang;
     }
   else
     {
@@ -4640,12 +4644,12 @@ dwg_ent_minsert_set_extrusion(dwg_ent_minsert *minsert, dwg_point_3d *point,
 }
 
 /// Returns the has attribs of minsert.
-/** Usage : double attribs = dwg_ent_minsert_get_has_attribs(mintrest, &error);
+/** Usage : double attribs = dwg_ent_minsert_has_attribs(mintrest, &error);
 \param 1 dwg_ent_minsert
 \param 2 int
 */
 char
-dwg_ent_minsert_get_has_attribs(dwg_ent_minsert *minsert, int *error)
+dwg_ent_minsert_has_attribs(dwg_ent_minsert *minsert, int *error)
 {
   if (minsert != 0)
     {
@@ -4660,27 +4664,6 @@ dwg_ent_minsert_get_has_attribs(dwg_ent_minsert *minsert, int *error)
     }
 }
 
-/// Sets the has_attribs of minsert.
-/** Usage : dwg_ent_minsert_set_tangent_dir(minsert, attrib, &error);
-\param 1 dwg_ent_minsert
-\param 2 char
-\param 3 int
-*/
-void
-dwg_ent_minsert_set_has_attribs(dwg_ent_minsert *minsert, char attribs,
-                                int *error)
-{
-  if (minsert != 0)
-    {
-      *error = 0;
-      minsert->has_attribs = attribs;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty minsert", __FUNCTION__)
-      *error = 1;
-    }
-}
 
 /// Returns the owned object count of minsert
 /** Usage : BITCODE_BL count = dwg_ent_minsert_get_owned_obj_count(minsert, &error);
@@ -4905,7 +4888,7 @@ dwg_ent_minsert_set_row_spacing(dwg_ent_minsert *minsert, BITCODE_BD spacing,
 \param 2 int
 */
 char *
-dwg_obj_mlinstyle_get_name(dwg_obj_mlinestyle *mlinestyle, int *error)
+dwg_obj_mlinestyle_get_name(dwg_obj_mlinestyle *mlinestyle, int *error)
 {
   if (mlinestyle != 0)
     {
@@ -4986,17 +4969,17 @@ dwg_obj_mlinestyle_set_desc(dwg_obj_mlinestyle *mlinestyle, char * desc,
 }
 
 /// Returns the flags of mlinestyle
-/** Usage : int flag = dwg_obj_mlinestyle_get_flags(minsert, &error);
+/** Usage : int flag = dwg_obj_mlinestyle_get_flag(minsert, &error);
 \param 1 dwg_obj_mlinestyle
 \param 2 int
 */
 int
-dwg_obj_mlinestyle_get_flags(dwg_obj_mlinestyle *mlinestyle, int *error)
+dwg_obj_mlinestyle_get_flag(dwg_obj_mlinestyle *mlinestyle, int *error)
 {
   if (mlinestyle != 0)
     {
       *error = 0;
-      return mlinestyle->flags;
+      return mlinestyle->flag;
     }
   else
     {
@@ -5007,19 +4990,19 @@ dwg_obj_mlinestyle_get_flags(dwg_obj_mlinestyle *mlinestyle, int *error)
 }
 
 /// Sets the flag of mlinestyle
-/** Usage : dwg_obj_mlinestyle_set_flags(mlinestyle, 20, &error);
+/** Usage : dwg_obj_mlinestyle_set_flag(mlinestyle, 20, &error);
 \param 1 dwg_ent_insert
 \param 2 int
 \param 3 int
 */
 void
-dwg_obj_mlinestyle_set_flags(dwg_obj_mlinestyle *mlinestyle, int flags,
+dwg_obj_mlinestyle_set_flag(dwg_obj_mlinestyle *mlinestyle, int flags,
                              int *error)
 {
   if (mlinestyle != 0)
     {
       *error = 0;
-      mlinestyle->flags = flags;
+      mlinestyle->flag = flags;
     }
   else
     {
@@ -5039,7 +5022,7 @@ dwg_obj_mlinestyle_get_start_angle(dwg_obj_mlinestyle *mlinestyle, int *error)
   if (mlinestyle != 0)
     {
       *error = 0;
-      return mlinestyle->startang;
+      return mlinestyle->start_angle;
     }
   else
     {
@@ -5057,12 +5040,12 @@ dwg_obj_mlinestyle_get_start_angle(dwg_obj_mlinestyle *mlinestyle, int *error)
 */
 void
 dwg_obj_mlinestyle_set_start_angle(dwg_obj_mlinestyle *mlinestyle,
-                                   double startang, int *error)
+                                   double start_angle, int *error)
 {
   if (mlinestyle != 0)
     {
       *error = 0;
-      mlinestyle->startang = startang;
+      mlinestyle->start_angle = start_angle;
     }
   else
     {
@@ -5082,7 +5065,7 @@ dwg_obj_mlinestyle_get_end_angle(dwg_obj_mlinestyle *mlinestyle, int *error)
   if (mlinestyle != 0)
     {
       *error = 0;
-      return mlinestyle->endang;
+      return mlinestyle->end_angle;
     }
   else
     {
@@ -5099,13 +5082,13 @@ dwg_obj_mlinestyle_get_end_angle(dwg_obj_mlinestyle *mlinestyle, int *error)
 \param 3 int
 */
 void
-dwg_obj_mlinestyle_set_end_angle(dwg_obj_mlinestyle *mlinestyle, BITCODE_BD endang,
+dwg_obj_mlinestyle_set_end_angle(dwg_obj_mlinestyle *mlinestyle, BITCODE_BD end_angle,
                                  int *error)
 {
   if (mlinestyle != 0)
     {
       *error = 0;
-      mlinestyle->endang = endang;
+      mlinestyle->end_angle = end_angle;
     }
   else
     {
@@ -5115,18 +5098,18 @@ dwg_obj_mlinestyle_set_end_angle(dwg_obj_mlinestyle *mlinestyle, BITCODE_BD enda
 }
 
 /// Returns the lines in style of mlinestyle
-/** Usage : char lines = dwg_obj_mlinestyle_get_linesinstyle(mlinestyle, &error);
+/** Usage : char lines = dwg_obj_mlinestyle_get_num_lines(mlinestyle, &error);
 \param 1 dwg_obj_mlinestyle
 \param 2 int
 */
 char
-dwg_obj_mlinestyle_get_linesinstyle(dwg_obj_mlinestyle *mlinestyle,
-                                    int *error)
+dwg_obj_mlinestyle_get_num_lines(dwg_obj_mlinestyle *mlinestyle,
+                                 int *error)
 {
   if (mlinestyle != 0)
     {
       *error = 0;
-      return mlinestyle->linesinstyle;
+      return mlinestyle->num_lines;
     }
   else
     {
@@ -5137,19 +5120,19 @@ dwg_obj_mlinestyle_get_linesinstyle(dwg_obj_mlinestyle *mlinestyle,
 }
 
 /// Sets the lines in style of mlinestyle
-/** Usage : dwg_obj_mlinestyle_get_linesinstyle(mlinestyle, linestyle, &error);
+/** Usage : dwg_obj_mlinestyle_get_num_lines(mlinestyle, linestyle, &error);
 \param 1 dwg_obj_mlinestyle
 \param 2 char
 \param 3 int
 */
 void
-dwg_obj_mlinestyle_set_linesinstyle(dwg_obj_mlinestyle *mlinestyle,
-                                    char linesinstyle, int *error)
+dwg_obj_mlinestyle_set_num_lines(dwg_obj_mlinestyle *mlinestyle,
+                                 char num_lines, int *error)
 {
   if (mlinestyle != 0)
     {
       *error = 0;
-      mlinestyle->linesinstyle = linesinstyle;
+      mlinestyle->num_lines = num_lines;
     }
   else
     {
@@ -5317,21 +5300,37 @@ dwg_obj_appid_get_appid_control(dwg_obj_appid *appid, int *error)
 }
 
 /*******************************************************************
-*            FUNCTIONS FOR ORDINATE DIMENSION ENTITY                *
+*            FUNCTIONS FOR ALL DIMENSION ENTITIES                *
 ********************************************************************/
 
-/// Returns the elevation ecs11
-/** Usage : double ecs11 = dwg_ent_dim_ordinate_get_elevation_ecs11(dim, &error);
-\param 1 dwg_ent_dim_ordinate
-\param 2 int
-*/
-BITCODE_BD
-dwg_ent_dim_ordinate_get_elevation_ecs11(dwg_ent_dim_ordinate *dim, int *error)
+char *
+dwg_ent_dim_get_block_name(dwg_ent_dim *dim, int *error)
 {
   if (dim != 0)
     {
       *error = 0;
-      return dim->elevation.ecs_11;
+      return ((dwg_ent_dim_linear *)dim)->block->obj->tio.object->tio.BLOCK_HEADER->entry_name;
+    }
+  else
+    {
+      LOG_ERROR("%s: empty dim", __FUNCTION__)
+      *error = 1;
+      return NULL;
+    }
+}
+
+/// Returns the elevation, the z-coord for all 11,12, 16 ECS points
+/** Usage : double elevation = dwg_ent_dim_get_elevation(dim, &error);
+\param 1 dwg_ent_dim
+\param 2 int
+*/
+BITCODE_BD
+dwg_ent_dim_get_elevation(dwg_ent_dim *dim, int *error)
+{
+  if (dim != 0)
+    {
+      *error = 0;
+      return dim->elevation;
     }
   else
     {
@@ -5341,20 +5340,19 @@ dwg_ent_dim_ordinate_get_elevation_ecs11(dwg_ent_dim_ordinate *dim, int *error)
     }
 }
 
-/// Sets the elevation ecs11
-/** Usage : dwg_ent_dim_ordinate_set_elevation_ecs11(dim, ecs11, &error);
-\param 1 dwg_ent_dim_ordinate
+/// Sets the elevation for the 11, 12, 16 ECS points
+/** Usage : dwg_ent_dim_set_elevation(dim, z, &error);
+\param 1 dwg_ent_dim
 \param 2 double
 \param 3 int
 */
 void
-dwg_ent_dim_ordinate_set_elevation_ecs11(dwg_ent_dim_ordinate *dim,
-                                         double elevation_ecs11, int *error)
+dwg_ent_dim_set_elevation(dwg_ent_dim *dim, double elevation, int *error)
 {
   if (dim != 0)
     {
       *error = 0;
-      dim->elevation.ecs_11 = elevation_ecs11;
+      dim->elevation = elevation;
     }
   else
     {
@@ -5363,56 +5361,13 @@ dwg_ent_dim_ordinate_set_elevation_ecs11(dwg_ent_dim_ordinate *dim,
     }
 }
 
-/// Returns the elevation ecs12
-/** Usage : double ecs12 = dwg_ent_dim_ordinate_get_elevation_ecs12(dim, &error);
-\param 1 dwg_ent_dim_ordinate
-\param 2 int
-*/
-BITCODE_BD
-dwg_ent_dim_ordinate_get_elevation_ecs12(dwg_ent_dim_ordinate *dim, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      return dim->elevation.ecs_12;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
-    }
-}
-
-/// Sets the elevation ecs12
-/** Usage : dwg_ent_dim_ordinate_set_elevation_ecs12(dim, ecs12, &error);
-\param 1 dwg_ent_dim_ordinate
-\param 2 double
-\param 3 int
-*/
-void
-dwg_ent_dim_ordinate_set_elevation_ecs12(dwg_ent_dim_ordinate *dim,
-                                         double elevation_ecs12, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      dim->elevation.ecs_12 = elevation_ecs12;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the flags1
-/** Usage : char flags1 = dwg_ent_dim_ordinate_get_flags1(dim, &error);
-\param 1 dwg_ent_dim_ordinate
+/// Returns the flag1
+/** Usage : char flags1 = dwg_ent_dim_get_flag1(dim, &error);
+\param 1 dwg_ent_dim
 \param 2 int
 */
 char
-dwg_ent_dim_ordinate_get_flags1(dwg_ent_dim_ordinate *dim, int *error)
+dwg_ent_dim_get_flag1(dwg_ent_dim *dim, int *error)
 {
   if (dim != 0)
     {
@@ -5427,15 +5382,15 @@ dwg_ent_dim_ordinate_get_flags1(dwg_ent_dim_ordinate *dim, int *error)
     }
 }
 
-/// Sets the flags1
-/** Usage : dwg_ent_dim_ordinate_set_flags1(dim, flag1, &error);
-\param 1 dwg_ent_dim_ordinate
+/// Sets the flag1
+/** Usage : dwg_ent_dim_set_flag1(dim, flag1, &error);
+\param 1 dwg_ent_dim
 \param 2 char
 \param 3 int
 */
 void
-dwg_ent_dim_ordinate_set_flags1(dwg_ent_dim_ordinate *dim, char flag,
-                                int *error)
+dwg_ent_dim_set_flag1(dwg_ent_dim *dim, char flag,
+                      int *error)
 {
   if (dim != 0)
     {
@@ -5450,12 +5405,12 @@ dwg_ent_dim_ordinate_set_flags1(dwg_ent_dim_ordinate *dim, char flag,
 }
 
 /// Returns the act measurement
-/** Usage : double measure = dwg_ent_dim_ordinate_get_act_measurement(dim, &error);
-\param 1 dwg_ent_dim_ordinate
+/** Usage : double measure = dwg_ent_dim_get_act_measurement(dim, &error);
+\param 1 dwg_ent_dim
 \param 2 int
 */
 BITCODE_BD
-dwg_ent_dim_ordinate_get_act_measurement(dwg_ent_dim_ordinate *dim, int *error)
+dwg_ent_dim_get_act_measurement(dwg_ent_dim *dim, int *error)
 {
   if (dim != 0)
     {
@@ -5471,14 +5426,14 @@ dwg_ent_dim_ordinate_get_act_measurement(dwg_ent_dim_ordinate *dim, int *error)
 }
 
 /// Sets the act measurement
-/** Usage : dwg_ent_dim_ordinate_set_act_measurement(dim, measure, &error);
-\param 1 dwg_ent_dim_ordinate
+/** Usage : dwg_ent_dim_set_act_measurement(dim, measure, &error);
+\param 1 dwg_ent_dim
 \param 2 double
 \param 3 int
 */
 void
-dwg_ent_dim_ordinate_set_act_measurement(dwg_ent_dim_ordinate *dim,
-                                         double act_measurement, int *error)
+dwg_ent_dim_set_act_measurement(dwg_ent_dim *dim,
+                                double act_measurement, int *error)
 {
   if (dim != 0)
     {
@@ -5493,12 +5448,12 @@ dwg_ent_dim_ordinate_set_act_measurement(dwg_ent_dim_ordinate *dim,
 }
 
 /// Returns the horiz dir
-/** Usage : double horiz_dir = dwg_ent_dim_ordinate_get_horiz_dir(dim, &error);
-\param 1 dwg_ent_dim_ordinate
+/** Usage : double horiz_dir = dwg_ent_dim_get_horiz_dir(dim, &error);
+\param 1 dwg_ent_dim
 \param 2 int
 */
 BITCODE_BD
-dwg_ent_dim_ordinate_get_horiz_dir(dwg_ent_dim_ordinate *dim, int *error)
+dwg_ent_dim_get_horiz_dir(dwg_ent_dim *dim, int *error)
 {
   if (dim != 0)
     {
@@ -5514,14 +5469,14 @@ dwg_ent_dim_ordinate_get_horiz_dir(dwg_ent_dim_ordinate *dim, int *error)
 }
 
 /// Sets the horiz dir
-/** Usage : dwg_ent_dim_ordinate_set_horiz_dir(dim, horiz_dir, &error);
-\param 1 dwg_ent_dim_ordinate
+/** Usage : dwg_ent_dim_set_horiz_dir(dim, horiz_dir, &error);
+\param 1 dwg_ent_dim
 \param 2 double
 \param 3 int
 */
 void
-dwg_ent_dim_ordinate_set_horiz_dir(dwg_ent_dim_ordinate *dim, BITCODE_BD horiz_dir,
-                                   int *error)
+dwg_ent_dim_set_horiz_dir(dwg_ent_dim *dim, BITCODE_BD horiz_dir,
+                          int *error)
 {
   if (dim != 0)
     {
@@ -5536,12 +5491,12 @@ dwg_ent_dim_ordinate_set_horiz_dir(dwg_ent_dim_ordinate *dim, BITCODE_BD horiz_d
 }
 
 /// Returns the lspace_factor
-/** Usage : double lspace_factor = dwg_ent_dim_ordinate_get_lspace_factor(dim, &error);
-\param 1 dwg_ent_dim_ordinate
+/** Usage : double lspace_factor = dwg_ent_dim_get_lspace_factor(dim, &error);
+\param 1 dwg_ent_dim
 \param 2 int
 */
 BITCODE_BD
-dwg_ent_dim_ordinate_get_lspace_factor(dwg_ent_dim_ordinate *dim, int *error)
+dwg_ent_dim_get_lspace_factor(dwg_ent_dim *dim, int *error)
 {
   if (dim != 0)
     {
@@ -5557,14 +5512,14 @@ dwg_ent_dim_ordinate_get_lspace_factor(dwg_ent_dim_ordinate *dim, int *error)
 }
 
 /// Sets the lspace factor
-/** Usage : dwg_ent_dim_ordinate_set_lspace_factor(dim, factor, &error);
-\param 1 dwg_ent_dim_ordinate
+/** Usage : dwg_ent_dim_set_lspace_factor(dim, factor, &error);
+\param 1 dwg_ent_dim
 \param 2 double
 \param 3 int
 */
 void
-dwg_ent_dim_ordinate_set_lspace_factor(dwg_ent_dim_ordinate *dim,
-                                       double factor, int *error)
+dwg_ent_dim_set_lspace_factor(dwg_ent_dim *dim,
+                              double factor, int *error)
 {
   if (dim != 0)
     {
@@ -5579,13 +5534,13 @@ dwg_ent_dim_ordinate_set_lspace_factor(dwg_ent_dim_ordinate *dim,
 }
 
 /// Returns the lspace_style
-/** Usage : BITCODE_BS lspace_style = dwg_ent_dim_ordinate_get_lspace_style(dim, &error);
-\param 1 dwg_ent_dim_ordinate
+/** Usage : BITCODE_BS lspace_style = dwg_ent_dim_get_lspace_style(dim, &error);
+\param 1 dwg_ent_dim
 \param 2 int
 */
 BITCODE_BS
-dwg_ent_dim_ordinate_get_lspace_style(dwg_ent_dim_ordinate *dim,
-                                      int *error)
+dwg_ent_dim_get_lspace_style(dwg_ent_dim *dim,
+                             int *error)
 {
   if (dim != 0)
     {
@@ -5601,14 +5556,14 @@ dwg_ent_dim_ordinate_get_lspace_style(dwg_ent_dim_ordinate *dim,
 }
 
 /// Sets the lspace style
-/** Usage : dwg_ent_dim_ordinate_set_lspace_style(dim, style, &error);
-\param 1 dwg_ent_dim_ordinate
+/** Usage : dwg_ent_dim_set_lspace_style(dim, style, &error);
+\param 1 dwg_ent_dim
 \param 2 BITCODE_BS
 \param 3 int
 */
 void
-dwg_ent_dim_ordinate_set_lspace_style(dwg_ent_dim_ordinate *dim,
-                                      BITCODE_BS style, int *error)
+dwg_ent_dim_set_lspace_style(dwg_ent_dim *dim,
+                             BITCODE_BS style, int *error)
 {
   if (dim != 0)
     {
@@ -5622,19 +5577,19 @@ dwg_ent_dim_ordinate_set_lspace_style(dwg_ent_dim_ordinate *dim,
     }
 }
 
-/// Returns the attachment point
-/** Usage : BITCODE_BS point = dwg_ent_dim_ordinate_get_attachment_point(dim, &error);
-\param 1 dwg_ent_dim_ordinate
+/// Returns the attachment index
+/** Usage : BITCODE_BS attachment = dwg_ent_dim_get_attachment_pt(dim, &error);
+\param 1 dwg_ent_dim
 \param 2 int
 */
 BITCODE_BS
-dwg_ent_dim_ordinate_get_attachment_point(dwg_ent_dim_ordinate *dim,
-                                          int *error)
+dwg_ent_dim_get_attachment(dwg_ent_dim *dim,
+                           int *error)
 {
   if (dim != 0)
     {
       *error = 0;
-      return dim->attachment_point;
+      return dim->attachment;
     }
   else
     {
@@ -5644,20 +5599,20 @@ dwg_ent_dim_ordinate_get_attachment_point(dwg_ent_dim_ordinate *dim,
     }
 }
 
-/// Sets the attachment point
-/** Usage : dwg_ent_dim_ordinate_set_attachment_point(dim, point, &error);
-    \param 1 dwg_ent_dim_ordinate
+/// Sets the attachment index
+/** Usage : dwg_ent_dim_set_attachment(dim, attachment, &error);
+    \param 1 dwg_ent_dim
     \param 2 BITCODE_BS point index
     \param 3 int ptr &error
 */
 void
-dwg_ent_dim_ordinate_set_attachment_point(dwg_ent_dim_ordinate *dim,
-                                          BITCODE_BS point, int *error)
+dwg_ent_dim_set_attachment(dwg_ent_dim *dim,
+                           BITCODE_BS attachment, int *error)
 {
   if (dim != 0)
     {
       *error = 0;
-      dim->attachment_point = point;
+      dim->attachment = attachment;
     }
   else
     {
@@ -5667,14 +5622,14 @@ dwg_ent_dim_ordinate_set_attachment_point(dwg_ent_dim_ordinate *dim,
 }
 
 /// Returns the extrusion
-/** Usage : dwg_ent_dim_ordinate_get_extrusion(dim, &point, &error);
-    \param 1 dwg_ent_dim_ordinate
+/** Usage : dwg_ent_dim_get_extrusion(dim, &point, &error);
+    \param 1 dwg_ent_dim
     \param 2 dwg_point_3d
     \param 3 int ptr &error
 */
 void
-dwg_ent_dim_ordinate_set_extrusion(dwg_ent_dim_ordinate *dim,
-                                   dwg_point_3d *point, int *error)
+dwg_ent_dim_set_extrusion(dwg_ent_dim *dim,
+                          dwg_point_3d *point, int *error)
 {
   if (dim != 0 && point != 0)
     {
@@ -5691,14 +5646,14 @@ dwg_ent_dim_ordinate_set_extrusion(dwg_ent_dim_ordinate *dim,
 }
 
 /// Sets the extrusion
-/** Usage : dwg_ent_dim_ordinate_set_extrusion(dim, &point, &error);
-    \param 1 dwg_ent_dim_ordinate
+/** Usage : dwg_ent_dim_set_extrusion(dim, &point, &error);
+    \param 1 dwg_ent_dim
     \param 2 dwg_point_3d
     \param 3 int ptr &error
 */
 void
-dwg_ent_dim_ordinate_get_extrusion(dwg_ent_dim_ordinate *dim,
-                                   dwg_point_3d *point, int *error)
+dwg_ent_dim_get_extrusion(dwg_ent_dim *dim,
+                          dwg_point_3d *point, int *error)
 {
   if (dim != 0 && point != 0)
     {
@@ -5715,12 +5670,12 @@ dwg_ent_dim_ordinate_get_extrusion(dwg_ent_dim_ordinate *dim,
 }
 
 /// Returns the user text
-/** Usage : char * text  = dwg_ent_dim_ordinate_get_user_text(dim, &error);
-    \param 1 dwg_ent_dim_ordinate
+/** Usage : char * text  = dwg_ent_dim_get_user_text(dim, &error);
+    \param 1 dwg_ent_dim
     \param 2 int ptr &error
 */
 char *
-dwg_ent_dim_ordinate_get_user_text(dwg_ent_dim_ordinate *dim, int *error)
+dwg_ent_dim_get_user_text(dwg_ent_dim *dim, int *error)
 {
   if (dim != 0)
     {
@@ -5736,14 +5691,14 @@ dwg_ent_dim_ordinate_get_user_text(dwg_ent_dim_ordinate *dim, int *error)
 }
 
 /// Sets the user text
-/** Usage : dwg_ent_dim_ordinate_set_user_text(dim, "dimension texto", &error);
-    \param 1 dwg_ent_dim_ordinate
+/** Usage : dwg_ent_dim_set_user_text(dim, "dimension texto", &error);
+    \param 1 dwg_ent_dim
     \param 2 char *
     \param 3 int ptr &error
 */
 void
-dwg_ent_dim_ordinate_set_user_text(dwg_ent_dim_ordinate *dim, char * text,
-                                   int *error)
+dwg_ent_dim_set_user_text(dwg_ent_dim *dim, char * text,
+                          int *error)
 {
   if (dim != 0)
     {
@@ -5758,12 +5713,12 @@ dwg_ent_dim_ordinate_set_user_text(dwg_ent_dim_ordinate *dim, char * text,
 }
 
 /// Returns text rotation
-/** Usage : double text_rot  = dwg_ent_dim_ordinate_get_text_rot(dim, &error);
-    \param 1 dwg_ent_dim_ordinate
+/** Usage : double text_rot  = dwg_ent_dim_get_text_rot(dim, &error);
+    \param 1 dwg_ent_dim
     \param 2 int ptr &error
 */
 BITCODE_BD
-dwg_ent_dim_ordinate_get_text_rot(dwg_ent_dim_ordinate *dim, int *error)
+dwg_ent_dim_get_text_rot(dwg_ent_dim *dim, int *error)
 {
   if (dim != 0)
     {
@@ -5779,14 +5734,14 @@ dwg_ent_dim_ordinate_get_text_rot(dwg_ent_dim_ordinate *dim, int *error)
 }
 
 /// Sets the text rotation
-/** Usage : dwg_ent_dim_ordinate_set_text_rot(dim, 10.10, &error);
-    \param 1 dwg_ent_dim_ordinate
+/** Usage : dwg_ent_dim_set_text_rot(dim, 10.10, &error);
+    \param 1 dwg_ent_dim
     \param 2 double rot
     \param 3 int ptr &error
 */
 void
-dwg_ent_dim_ordinate_set_text_rot(dwg_ent_dim_ordinate *dim, BITCODE_BD rot,
-                                  int *error)
+dwg_ent_dim_set_text_rot(dwg_ent_dim *dim, BITCODE_BD rot,
+                         int *error)
 {
   if (dim != 0)
     {
@@ -5801,12 +5756,12 @@ dwg_ent_dim_ordinate_set_text_rot(dwg_ent_dim_ordinate *dim, BITCODE_BD rot,
 }
 
 /// Returns ins rotation
-/** Usage : double ins_rot  = dwg_ent_dim_ordinate_get_ins_rotation(dim, &error);
-    \param 1 dwg_ent_dim_ordinate
+/** Usage : double ins_rot  = dwg_ent_dim_get_ins_rotation(dim, &error);
+    \param 1 dwg_ent_dim
     \param 2 int ptr &error
 */
 BITCODE_BD
-dwg_ent_dim_ordinate_get_ins_rotation(dwg_ent_dim_ordinate *dim, int *error)
+dwg_ent_dim_get_ins_rotation(dwg_ent_dim *dim, int *error)
 {
   if (dim != 0)
     {
@@ -5822,14 +5777,14 @@ dwg_ent_dim_ordinate_get_ins_rotation(dwg_ent_dim_ordinate *dim, int *error)
 }
 
 /// Sets the ins rotation
-/** Usage : dwg_ent_dim_ordinate_set_ins_rotation(dim, 10.10, &error);
-    \param 1 dwg_ent_dim_ordinate
+/** Usage : dwg_ent_dim_set_ins_rotation(dim, 10.10, &error);
+    \param 1 dwg_ent_dim
     \param 2 double
     \param 3 int ptr &error
 */
 void
-dwg_ent_dim_ordinate_set_ins_rotation(dwg_ent_dim_ordinate *dim, BITCODE_BD rot,
-                                      int *error)
+dwg_ent_dim_set_ins_rotation(dwg_ent_dim *dim, BITCODE_BD rot,
+                             int *error)
 {
   if (dim != 0)
     {
@@ -5844,12 +5799,12 @@ dwg_ent_dim_ordinate_set_ins_rotation(dwg_ent_dim_ordinate *dim, BITCODE_BD rot,
 }
 
 /// Returns flip arrow1
-/** Usage : char arrow1 = dwg_ent_dim_ordinate_get_flip_arrow1(dim, &error);
-\param 1 dwg_ent_dim_ordinate
+/** Usage : char arrow1 = dwg_ent_dim_get_flip_arrow1(dim, &error);
+\param 1 dwg_ent_dim
 \param 2 int
 */
 char
-dwg_ent_dim_ordinate_get_flip_arrow1(dwg_ent_dim_ordinate *dim, int *error)
+dwg_ent_dim_get_flip_arrow1(dwg_ent_dim *dim, int *error)
 {
   if (dim != 0)
     {
@@ -5865,14 +5820,14 @@ dwg_ent_dim_ordinate_get_flip_arrow1(dwg_ent_dim_ordinate *dim, int *error)
 }
 
 /// Sets the flip arrow1
-/** Usage : dwg_ent_dim_ordinate_set_flip_arrow1(dim, arrow1, &error);
-\param 1 dwg_ent_dim_ordinate
+/** Usage : dwg_ent_dim_set_flip_arrow1(dim, arrow1, &error);
+\param 1 dwg_ent_dim
 \param 2 char
     \param 2 int ptr &error
 */
 void
-dwg_ent_dim_ordinate_set_flip_arrow1(dwg_ent_dim_ordinate *dim,
-                                     char flip_arrow, int *error)
+dwg_ent_dim_set_flip_arrow1(dwg_ent_dim *dim,
+                            char flip_arrow, int *error)
 {
   if (dim != 0)
     {
@@ -5887,12 +5842,12 @@ dwg_ent_dim_ordinate_set_flip_arrow1(dwg_ent_dim_ordinate *dim,
 }
 
 /// Returns flip arrow2
-/** Usage : char arrow2 = dwg_ent_dim_ordinate_get_flip_arrow2(dim, &error);
-\param 1 dwg_ent_dim_ordinate
+/** Usage : char arrow2 = dwg_ent_dim_get_flip_arrow2(dim, &error);
+\param 1 dwg_ent_dim
 \param 2 int
 */
 char
-dwg_ent_dim_ordinate_get_flip_arrow2(dwg_ent_dim_ordinate *dim, int *error)
+dwg_ent_dim_get_flip_arrow2(dwg_ent_dim *dim, int *error)
 {
   if (dim != 0)
     {
@@ -5908,14 +5863,14 @@ dwg_ent_dim_ordinate_get_flip_arrow2(dwg_ent_dim_ordinate *dim, int *error)
 }
 
 /// Sets the flip arrow2
-/** Usage : dwg_ent_dim_ordinate_set_flip_arrow2(dim, arrow2, &error);
-\param 1 dwg_ent_dim_ordinate
+/** Usage : dwg_ent_dim_set_flip_arrow2(dim, arrow2, &error);
+\param 1 dwg_ent_dim
 \param 2 char
 \param 3 int
 */
 void
-dwg_ent_dim_ordinate_set_flip_arrow2(dwg_ent_dim_ordinate *dim,
-                                     char flip_arrow, int *error)
+dwg_ent_dim_set_flip_arrow2(dwg_ent_dim *dim,
+                            char flip_arrow, int *error)
 {
   if (dim != 0)
     {
@@ -5930,14 +5885,14 @@ dwg_ent_dim_ordinate_set_flip_arrow2(dwg_ent_dim_ordinate *dim,
 }
 
 /// Returns the text mid point
-/** Usage : dwg_ent_dim_ordinate_get_text_mid_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_ordinate
+/** Usage : dwg_ent_dim_get_text_mid_pt(dim, &point, &error);
+\param 1 dwg_ent_dim
 \param 2 dwg_point_2d
 \param 3 int
 */
 void
-dwg_ent_dim_ordinate_set_text_mid_pt(dwg_ent_dim_ordinate *dim,
-                                          dwg_point_2d *point, int *error)
+dwg_ent_dim_set_text_mid_pt(dwg_ent_dim *dim,
+                            dwg_point_2d *point, int *error)
 {
   if (dim != 0 && point != 0)
     {
@@ -5953,14 +5908,14 @@ dwg_ent_dim_ordinate_set_text_mid_pt(dwg_ent_dim_ordinate *dim,
 }
 
 /// Sets the text mid point
-/** Usage : dwg_ent_dim_ordinate_set_text_mid_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_ordinate
+/** Usage : dwg_ent_dim_set_text_mid_pt(dim, &point, &error);
+\param 1 dwg_ent_dim
 \param 2 dwg_point_2d
 \param 3 int
 */
 void
-dwg_ent_dim_ordinate_get_text_mid_pt(dwg_ent_dim_ordinate *dim,
-                                     dwg_point_2d *point, int *error)
+dwg_ent_dim_get_text_mid_pt(dwg_ent_dim *dim,
+                            dwg_point_2d *point, int *error)
 {
   if (dim != 0 && point != 0)
     {
@@ -5976,14 +5931,14 @@ dwg_ent_dim_ordinate_get_text_mid_pt(dwg_ent_dim_ordinate *dim,
 }
 
 /// Sets the ins scale
-/** Usage : dwg_ent_dim_ordinate_set_ins_scale(dim, &point, &error);
-\param 1 dwg_ent_dim_ordinate
+/** Usage : dwg_ent_dim_set_ins_scale(dim, &point, &error);
+\param 1 dwg_ent_dim
 \param 2 dwg_point_3d
 \param 3 int
 */
 void
-dwg_ent_dim_ordinate_set_ins_scale(dwg_ent_dim_ordinate *dim,
-                                   dwg_point_3d *point, int *error)
+dwg_ent_dim_set_ins_scale(dwg_ent_dim *dim,
+                          dwg_point_3d *point, int *error)
 {
   if (dim != 0 && point != 0)
     {
@@ -6000,14 +5955,14 @@ dwg_ent_dim_ordinate_set_ins_scale(dwg_ent_dim_ordinate *dim,
 }
 
 /// Returns the ins scale
-/** Usage : dwg_ent_dim_ordinate_get_ins_scale(dim, &point, &error);
-\param 1 dwg_ent_dim_ordinate
+/** Usage : dwg_ent_dim_get_ins_scale(dim, &point, &error);
+\param 1 dwg_ent_dim
 \param 2 dwg_point_3d
 \param 3 int
 */
 void
-dwg_ent_dim_ordinate_get_ins_scale(dwg_ent_dim_ordinate *dim,
-                                   dwg_point_3d *point, int *error)
+dwg_ent_dim_get_ins_scale(dwg_ent_dim *dim,
+                          dwg_point_3d *point, int *error)
 {
   if (dim != 0 && point != 0)
     {
@@ -6023,13 +5978,63 @@ dwg_ent_dim_ordinate_get_ins_scale(dwg_ent_dim_ordinate *dim,
     }
 }
 
+/// Sets the clone_ins point 12
+/** Usage : dwg_ent_dim_set_clone_ins_pt(dim, &point, &error);
+\param 1 dwg_ent_dim
+\param 2 dwg_point_2d
+\param 3 int
+*/
+void
+dwg_ent_dim_set_clone_ins_pt(dwg_ent_dim *dim, dwg_point_2d *point,
+                             int *error)
+{
+  if (dim != 0 && point != 0)
+    {
+      *error = 0;
+      dim->clone_ins_pt.x = point->x;
+      dim->clone_ins_pt.y = point->y;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
+}
+
+/// Returns the clone_ins point
+/** Usage : dwg_ent_dim_get_clone_ins_pt(dim, &point, &error);
+\param 1 dwg_ent_dim
+\param 2 dwg_point_2d
+\param 3 int
+*/
+void
+dwg_ent_dim_get_clone_ins_pt(dwg_ent_dim *dim, dwg_point_2d *point,
+                               int *error)
+{
+  if (dim != 0 && point != 0)
+    {
+      *error = 0;
+      point->x = dim->clone_ins_pt.x;
+      point->y = dim->clone_ins_pt.y;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
+}
+
+/*******************************************************************
+*              FUNCTIONS FOR ORDINATE DIMENSION ENTITY             *
+********************************************************************/
+
 /// Returns flags2
-/** Usage : char flag2 = dwg_ent_dim_ordinate_get_flags2(dim, &error);
+/** Usage : char flag2 = dwg_ent_dim_ordinate_get_flag2(dim, &error);
 \param 1 dwg_ent_dim_ordinate
 \param 2 int
 */
 char
-dwg_ent_dim_ordinate_get_flags2(dwg_ent_dim_ordinate *dim, int *error)
+dwg_ent_dim_ordinate_get_flag2(dwg_ent_dim_ordinate *dim, int *error)
 {
   if (dim != 0)
     {
@@ -6045,13 +6050,13 @@ dwg_ent_dim_ordinate_get_flags2(dwg_ent_dim_ordinate *dim, int *error)
 }
 
 /// Sets flags2
-/** Usage : dwg_ent_dim_ordinate_set_flags2(dim, flag2, &error);
+/** Usage : dwg_ent_dim_ordinate_set_flag2(dim, flag2, &error);
 \param 1 dwg_ent_dim_ordinate
 \param 2 char
 \param 3 int
 */
 void
-dwg_ent_dim_ordinate_set_flags2(dwg_ent_dim_ordinate *dim, char flag,
+dwg_ent_dim_ordinate_set_flag2(dwg_ent_dim_ordinate *dim, char flag,
                                 int *error)
 {
   if (dim != 0)
@@ -6066,68 +6071,22 @@ dwg_ent_dim_ordinate_set_flags2(dwg_ent_dim_ordinate *dim, char flag,
     }
 }
 
-/// Sets the 12 point
-/** Usage : dwg_ent_dim_ordinate_set_12_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_ordinate
-\param 2 dwg_point_2d
-\param 3 int
-*/
-void
-dwg_ent_dim_ordinate_set_12_pt(dwg_ent_dim_ordinate *dim, dwg_point_2d *point,
-                               int *error)
-{
-  if (dim != 0 && point != 0)
-    {
-      *error = 0;
-      dim->_12_pt.x = point->x;
-      dim->_12_pt.y = point->y;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the 12 point
-/** Usage : dwg_ent_dim_ordinate_get_12_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_ordinate
-\param 2 dwg_point_2d
-\param 3 int
-*/
-void
-dwg_ent_dim_ordinate_get_12_pt(dwg_ent_dim_ordinate *dim, dwg_point_2d *point,
-                               int *error)
-{
-  if (dim != 0 && point != 0)
-    {
-      *error = 0;
-      point->x = dim->_12_pt.x;
-      point->y = dim->_12_pt.y;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Sets the 10 point
-/** Usage : dwg_ent_dim_ordinate_set_10_pt(dim, &point, &error);
+/// Sets the 10 ucsorigin point
+/** Usage : dwg_ent_dim_ordinate_set_ucsorigin_pt(dim, &point, &error);
 \param 1 dwg_ent_dim_ordinate
 \param 2 dwg_point_3d
 \param 3 int
 */
 void
-dwg_ent_dim_ordinate_set_10_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
+dwg_ent_dim_ordinate_set_ucsorigin_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
                                int *error)
 {
   if (dim != 0 && point != 0)
     {
       *error = 0;
-      dim->_10_pt.x = point->x;
-      dim->_10_pt.y = point->y;
-      dim->_10_pt.z = point->z;
+      dim->ucsorigin_pt.x = point->x;
+      dim->ucsorigin_pt.y = point->y;
+      dim->ucsorigin_pt.z = point->z;
     }
   else
     {
@@ -6136,22 +6095,22 @@ dwg_ent_dim_ordinate_set_10_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
     }
 }
 
-/// Returns the 10 point
-/** Usage : dwg_ent_dim_ordinate_get_10_pt(dim, &point, &error);
+/// Returns the 10 ucsorigin point
+/** Usage : dwg_ent_dim_ordinate_get_ucsorigin_pt(dim, &point, &error);
 \param 1 dwg_ent_dim_ordinate
 \param 2 dwg_point_3d
 \param 3 int
 */
 void
-dwg_ent_dim_ordinate_get_10_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
+dwg_ent_dim_ordinate_get_ucsorigin_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
                                int *error)
 {
   if (dim != 0 && point != 0)
     {
       *error = 0;
-      point->x = dim->_10_pt.x;
-      point->y = dim->_10_pt.y;
-      point->z = dim->_10_pt.z;
+      point->x = dim->ucsorigin_pt.x;
+      point->y = dim->ucsorigin_pt.y;
+      point->z = dim->ucsorigin_pt.z;
     }
   else
     {
@@ -6160,22 +6119,22 @@ dwg_ent_dim_ordinate_get_10_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
     }
 }
 
-/// Sets the 13 point
-/** Usage : dwg_ent_dim_ordinate_set_13_pt(dim, &point, &error);
+/// Sets the 13 feature_location point
+/** Usage : dwg_ent_dim_ordinate_set_feature_location_pt(dim, &point, &error);
 \param 1 dwg_ent_dim_ordinate
 \param 2 dwg_point_3d
 \param 3 int
 */
 void
-dwg_ent_dim_ordinate_set_13_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
+dwg_ent_dim_ordinate_set_feature_location_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
                                int *error)
 {
   if (dim != 0 && point != 0)
     {
       *error = 0;
-      dim->_13_pt.x = point->x;
-      dim->_13_pt.y = point->y;
-      dim->_13_pt.z = point->z;
+      dim->feature_location_pt.x = point->x;
+      dim->feature_location_pt.y = point->y;
+      dim->feature_location_pt.z = point->z;
     }
   else
     {
@@ -6184,22 +6143,22 @@ dwg_ent_dim_ordinate_set_13_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
     }
 }
 
-/// Returns the 13 point
-/** Usage : dwg_ent_dim_ordinate_get_13_pt(dim, &point, &error);
+/// Returns the 13 feature_location point
+/** Usage : dwg_ent_dim_ordinate_get_feature_location_pt(dim, &point, &error);
 \param 1 dwg_ent_dim_ordinate
 \param 2 dwg_point_3d
 \param 3 int
 */
 void
-dwg_ent_dim_ordinate_get_13_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
+dwg_ent_dim_ordinate_get_feature_location_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
                                int *error)
 {
   if (dim != 0 && point != 0)
     {
       *error = 0;
-      point->x = dim->_13_pt.x;
-      point->y = dim->_13_pt.y;
-      point->z = dim->_13_pt.z;
+      point->x = dim->feature_location_pt.x;
+      point->y = dim->feature_location_pt.y;
+      point->z = dim->feature_location_pt.z;
     }
   else
     {
@@ -6208,22 +6167,22 @@ dwg_ent_dim_ordinate_get_13_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
     }
 }
 
-/// Sets the 14 point
-/** Usage : dwg_ent_dim_ordinate_set_14_pt(dim, &point, &error);
+/// Sets the 14 leader_endpt
+/** Usage : dwg_ent_dim_ordinate_set_leader_endpt(dim, &point, &error);
 \param 1 dwg_ent_dim_ordinate
 \param 2 dwg_point_3d
 \param 3 int
 */
 void
-dwg_ent_dim_ordinate_set_14_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
+dwg_ent_dim_ordinate_set_leader_endpt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
                                int *error)
 {
   if (dim != 0 && point != 0)
     {
       *error = 0;
-      dim->_14_pt.x = point->x;
-      dim->_14_pt.y = point->y;
-      dim->_14_pt.z = point->z;
+      dim->leader_endpt.x = point->x;
+      dim->leader_endpt.y = point->y;
+      dim->leader_endpt.z = point->z;
     }
   else
     {
@@ -6232,22 +6191,22 @@ dwg_ent_dim_ordinate_set_14_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
     }
 }
 
-/// Returns the 14 point
-/** Usage : dwg_ent_dim_ordinate_get_14_pt(dim, &point, &error);
+/// Returns the 14 leader_endpoint point
+/** Usage : dwg_ent_dim_ordinate_get_leader_endpt(dim, &point, &error);
 \param 1 dwg_ent_dim_ordinate
 \param 2 dwg_point_3d
 \param 3 int
 */
 void
-dwg_ent_dim_ordinate_get_14_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
+dwg_ent_dim_ordinate_get_leader_endpt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
                                int *error)
 {
   if (dim != 0 && point != 0)
     {
       *error = 0;
-      point->x = dim->_14_pt.x;
-      point->y = dim->_14_pt.y;
-      point->z = dim->_14_pt.z;
+      point->x = dim->leader_endpt.x;
+      point->y = dim->leader_endpt.y;
+      point->z = dim->leader_endpt.z;
     }
   else
     {
@@ -6260,740 +6219,22 @@ dwg_ent_dim_ordinate_get_14_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
 *              FUNCTIONS FOR LINEAR DIMENSION ENTITY                *
 ********************************************************************/
 
-char *
-dwg_ent_dim_linear_get_block_name(dwg_ent_dim_linear *dim, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      return dim->block->obj->tio.object->tio.BLOCK_HEADER->entry_name;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty dim", __FUNCTION__)
-      *error = 1;
-      return NULL;
-    }
-}
-
-/// Returns the elevation ecs11
-/** Usage : double ecs11 = dwg_ent_dim_linear_get_elevation_ecs11(dim, &error);
-\param 1 dwg_ent_dim_linear
-\param 2 int
-*/
-BITCODE_BD
-dwg_ent_dim_linear_get_elevation_ecs11(dwg_ent_dim_linear *dim, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      return dim->elevation.ecs_11;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty dim", __FUNCTION__)
-      *error = 1;
-      return nan("");
-    }
-}
-
-/// Sets the elevation ecs11
-/** Usage : dwg_ent_dim_linear_set_elevation_ecs11(dim, ecs11, &error);
-\param 1 dwg_ent_dim_linear
-\param 2 double
-\param 3 int
-*/
-void
-dwg_ent_dim_linear_set_elevation_ecs11(dwg_ent_dim_linear *dim,
-                                       double elevation_ecs11, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      dim->elevation.ecs_11 = elevation_ecs11;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the elevation ecs12
-/** Usage : double ecs12 = dwg_ent_dim_linear_get_elevation_ecs12(dim, &error);
-\param 1 dwg_ent_dim_linear
-\param 2 int
-*/
-BITCODE_BD
-dwg_ent_dim_linear_get_elevation_ecs12(dwg_ent_dim_linear *dim, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      return dim->elevation.ecs_12;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
-    }
-}
-
-/// Sets the elevation ecs12
-/** Usage : dwg_ent_dim_linear_set_elevation_ecs12(dim, ecs12, &error);
-\param 1 dwg_ent_dim_linear
-\param 2 double
-\param 3 int
-*/
-void
-dwg_ent_dim_linear_set_elevation_ecs12(dwg_ent_dim_linear *dim,
-                                       double elevation_ecs12, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      dim->elevation.ecs_12 = elevation_ecs12;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the flags1
-/** Usage : char flag1 = dwg_ent_dim_linear_get_flags1(dim, &error);
-\param 1 dwg_ent_dim_linear
-\param 2 int
-*/
-char
-dwg_ent_dim_linear_get_flags1(dwg_ent_dim_linear *dim, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      return dim->flags_1;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return '\0';
-    }
-}
-
-/// Sets the flag1
-/** Usage : dwg_ent_dim_linear_set_flags1(dim, flag1, &error);
-\param 1 dwg_ent_dim_linear
-\param 2 char
-\param 3 int
-*/
-void
-dwg_ent_dim_linear_set_flags1(dwg_ent_dim_linear *dim, char flag, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      dim->flags_1 = flag;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the act measurement
-/** Usage : double measure = dwg_ent_dim_linear_get_act_measurement(dim, &error);
-\param 1 dwg_ent_dim_linear
-\param 2 int
-*/
-BITCODE_BD
-dwg_ent_dim_linear_get_act_measurement(dwg_ent_dim_linear *dim, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      return dim->act_measurement;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
-    }
-}
-
-/// Sets the act measurement
-/** Usage : dwg_ent_dim_linear_set_act_measurement(dim, measure, &error);
-\param 1 dwg_ent_dim_linear
-\param 2 double
-\param 3 int
-*/
-void
-dwg_ent_dim_linear_set_act_measurement(dwg_ent_dim_linear *dim,
-                                       double act_measurement, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      dim->act_measurement = act_measurement;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the horiz dir
-/** Usage : double horiz_dir = dwg_ent_dim_linear_get_horiz_dir(dim, &error);
-\param 1 dwg_ent_dim_linear
-\param 2 int
-*/
-BITCODE_BD
-dwg_ent_dim_linear_get_horiz_dir(dwg_ent_dim_linear *dim, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      return dim->horiz_dir;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
-    }
-}
-
-/// Sets the horiz dir
-/** Usage : dwg_ent_dim_linear_set_horiz_dir(dim, horiz_dir, &error);
-\param 1 dwg_ent_dim_linear
-\param 2 double
-\param 3 int
-*/
-void
-dwg_ent_dim_linear_set_horiz_dir(dwg_ent_dim_linear *dim,
-                                 double horiz_dir, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      dim->horiz_dir = horiz_dir;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the lspace factor
-/** Usage : double factor = dwg_ent_dim_linear_get_lspace_factor(dim, &error);
-\param 1 dwg_ent_dim_linear
-\param 2 int
-*/
-BITCODE_BD
-dwg_ent_dim_linear_get_lspace_factor(dwg_ent_dim_linear *dim,
-                                     int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      return dim->lspace_factor;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
-    }
-}
-
-/// Sets the lspace factor
-/** Usage : dwg_ent_dim_linear_set_lspace_factor(dim, factor, &error);
-\param 1 dwg_ent_dim_linear
-\param 2 double
-\param 3 int
-*/
-void
-dwg_ent_dim_linear_set_lspace_factor(dwg_ent_dim_linear *dim, BITCODE_BD factor,
-                                     int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      dim->lspace_factor = factor;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the lspace style
-/** Usage : BITCODE_BS style = dwg_ent_dim_linear_get_lspace_style(dim, &error);
-\param 1 dwg_ent_dim_linear
-\param 2 int
-*/
-BITCODE_BS
-dwg_ent_dim_linear_get_lspace_style(dwg_ent_dim_linear *dim, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      return dim->lspace_style;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return '\0';
-    }
-}
-
-/// Sets the lspace style
-/** Usage : dwg_ent_dim_linear_set_lspace_style(dim, style, &error);
-\param 1 dwg_ent_dim_linear
-\param 2 BITCODE_BS
-\param 3 int
-*/
-void
-dwg_ent_dim_linear_set_lspace_style(dwg_ent_dim_linear *dim,
-                                    BITCODE_BS style, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      dim->lspace_style = style;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the attachment point
-/** Usage : BITCODE_BS point = dwg_ent_dim_linear_get_attachment_point(dim, &error);
-\param 1 dwg_ent_dim_linear
-\param 2 int
-*/
-BITCODE_BS
-dwg_ent_dim_linear_get_attachment_point(dwg_ent_dim_linear *dim, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      return dim->attachment_point;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return 0;
-    }
-}
-
-/// Sets the attachment point
-/** Usage : dwg_ent_dim_linear_set_attachment_point(dim, point, &error);
-\param 1 dwg_ent_dim_linear
-\param 2 double
-\param 3 int ptr &error
-*/
-void
-dwg_ent_dim_linear_set_attachment_point(dwg_ent_dim_linear *dim,
-                                        BITCODE_BS point, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      dim->attachment_point = point;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Sets the extrusion
-/** Usage : dwg_ent_dim_linear_set_extrusion(dim, &point, &error);
+/// Sets the 10 def point
+/** Usage : dwg_ent_dim_linear_set_def_pt(dim, &point, &error);
 \param 1 dwg_ent_dim_linear
 \param 2 dwg_point_3d
 \param 3 int
 */
 void
-dwg_ent_dim_linear_set_extrusion(dwg_ent_dim_linear *dim, dwg_point_3d *point,
-                                 int *error)
-{
-  if (dim != 0 && point != 0)
-    {
-      *error = 0;
-      dim->extrusion.x = point->x;
-      dim->extrusion.y = point->y;
-      dim->extrusion.z = point->z;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Sets the extrusion
-/** Usage : dwg_ent_dim_linear_set_extrusion(dim, &point, &error);
-\param 1 dwg_ent_dim_linear
-\param 2 dwg_point_3d
-\param 3 int
-*/
-void
-dwg_ent_dim_linear_get_extrusion(dwg_ent_dim_linear *dim, dwg_point_3d *point,
-                                 int *error)
-{
-  if (dim != 0 && point != 0)
-    {
-      *error = 0;
-      point->x = dim->extrusion.x;
-      point->y = dim->extrusion.y;
-      point->z = dim->extrusion.z;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the user text
-/** Usage : char * text = dwg_ent_dim_linear_get_user_text(dim, &error);
-\param 1 dwg_ent_dim_linear
-\param 2 int
-*/
-char *
-dwg_ent_dim_linear_get_user_text(dwg_ent_dim_linear *dim, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      return dim->user_text;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty dim", __FUNCTION__)
-      *error = 1;
-      return NULL;
-    }
-}
-
-/// Sets the user text
-/** Usage : dwg_ent_dim_linear_set_user_text(dim, "texta", &error);
-\param 1 dwg_ent_dim_linear
-\param 2 char *
-\param 3 int
-*/
-void
-dwg_ent_dim_linear_set_user_text(dwg_ent_dim_linear *dim, char * text,
-                                 int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      dim->user_text = text;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the text rotation
-/** Usage : double rot = dwg_ent_dim_linear_get_text_rot(dim, &error);
-\param 1 dwg_ent_dim_linear
-\param 2 int
-*/
-BITCODE_BD
-dwg_ent_dim_linear_get_text_rot(dwg_ent_dim_linear *dim, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      return dim->text_rot;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
-    }
-}
-
-/// Sets the text rotation
-/** Usage : dwg_ent_dim_linear_set_text_rot(dim, rot, &error);
-\param 1 dwg_ent_dim_linear
-\param 2 double
-\param 3 int
-*/
-void
-dwg_ent_dim_linear_set_text_rot(dwg_ent_dim_linear *dim, BITCODE_BD rot,
-                                int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      dim->text_rot = rot;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the ins rotation
-/** Usage : double rot = dwg_ent_dim_linear_get_ins_rotation(dim, &error);
-\param 1 dwg_ent_dim_linear
-\param 2 int
-*/
-BITCODE_BD
-dwg_ent_dim_linear_get_ins_rotation(dwg_ent_dim_linear *dim, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      return dim->ins_rotation;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
-    }
-}
-
-/// Sets the ins rotation
-/** Usage : dwg_ent_dim_linear_set_ins_rotation(dim, rot, &error);
-\param 1 dwg_ent_dim_linear
-\param 2 double
-\param 3 int
-*/
-void
-dwg_ent_dim_linear_set_ins_rotation(dwg_ent_dim_linear *dim, BITCODE_BD rot,
-                                    int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      dim->ins_rotation = rot;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the flip arrow1
-/** Usage : char arrow1 = dwg_ent_dim_linear_get_flip_arrow1(dim, &error);
-\param 1 dwg_ent_dim_linear
-\param 2 int
-*/
-char
-dwg_ent_dim_linear_get_flip_arrow1(dwg_ent_dim_linear *dim, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      return dim->flip_arrow1;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return '\0';
-    }
-}
-
-/// Sets the flip arrow 1
-/** Usage : dwg_ent_dim_linear_set_flip_arrow1(dim, arrow1, &error);
-\param 1 dwg_ent_dim_linear
-\param 2 char
-\param 3 int
-*/
-void
-dwg_ent_dim_linear_set_flip_arrow1(dwg_ent_dim_linear *dim, char flip_arrow,
-                                   int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      dim->flip_arrow1 = flip_arrow;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the flip arrow 2
-/** Usage : char arrow 2 = dwg_ent_dim_linear_get_flip_arrow2(dim, &error);
-\param 1 dwg_ent_dim_linear
-\param 2 int
-*/
-char
-dwg_ent_dim_linear_get_flip_arrow2(dwg_ent_dim_linear *dim, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      return dim->flip_arrow2;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return '\0';
-    }
-}
-
-/// Sets the flip arrow 2
-/** Usage : dwg_ent_dim_linear_set_flip_arrow2(dim, arrow2, &error);
-\param 1 dwg_ent_dim_linear
-\param 2 double
-\param 3 int
-*/
-void
-dwg_ent_dim_linear_set_flip_arrow2(dwg_ent_dim_linear *dim, char flip_arrow,
-                                   int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      dim->flip_arrow2 = flip_arrow;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Sets the text mid point
-/** Usage : dwg_ent_dim_linear_set_text_mid_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_linear
-\param 2 dwg_point_2d
-\param 3 int
-*/
-void
-dwg_ent_dim_linear_set_text_mid_pt(dwg_ent_dim_linear *dim,
-                                   dwg_point_2d *point,
-                                   int *error)
-{
-  if (dim != 0 && point != 0)
-    {
-      *error = 0;
-      dim->text_midpt.x = point->x;
-      dim->text_midpt.y = point->y;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Sets the text mid point
-/** Usage : dwg_ent_dim_linear_set_text_mid_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_linear
-\param 2 dwg_point_2d
-\param 3 int
-*/
-void
-dwg_ent_dim_linear_get_text_mid_pt(dwg_ent_dim_linear *dim,
-                                   dwg_point_2d *point,
-                                   int *error)
-{
-  if (dim != 0 && point != 0)
-    {
-      *error = 0;
-      point->x = dim->text_midpt.x;
-      point->y = dim->text_midpt.y;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Sets the ins scale
-/** Usage : dwg_ent_dim_linear_set_ins_scale(dim, &point, &error);
-\param 1 dwg_ent_dim_linear
-\param 2 dwg_point_3d
-\param 3 int
-*/
-void
-dwg_ent_dim_linear_set_ins_scale(dwg_ent_dim_linear *dim, dwg_point_3d *point,
-                                 int *error)
-{
-  if (dim != 0 && point != 0)
-    {
-      *error = 0;
-      dim->ins_scale.x = point->x;
-      dim->ins_scale.y = point->y;
-      dim->ins_scale.z = point->z;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Sets the ins scale
-/** Usage : dwg_ent_dim_linear_set_ins_scale(dim, &point, &error);
-\param 1 dwg_ent_dim_linear
-\param 2 dwg_point_3d
-\param 3 int
-*/
-void
-dwg_ent_dim_linear_get_ins_scale(dwg_ent_dim_linear *dim, dwg_point_3d *point,
-                                 int *error)
-{
-  if (dim != 0 && point != 0)
-    {
-      *error = 0;
-      point->x = dim->ins_scale.x;
-      point->y = dim->ins_scale.y;
-      point->z = dim->ins_scale.z;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Sets the 12 point
-/** Usage : dwg_ent_dim_linear_set_12_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_linear
-\param 2 dwg_point_2d
-\param 3 int
-*/
-void
-dwg_ent_dim_linear_set_12_pt(dwg_ent_dim_linear *dim, dwg_point_2d *point,
+dwg_ent_dim_linear_set_def_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
                              int *error)
 {
   if (dim != 0 && point != 0)
     {
       *error = 0;
-      dim->_12_pt.x = point->x;
-      dim->_12_pt.y = point->y;
+      dim->def_pt.x = point->x;
+      dim->def_pt.y = point->y;
+      dim->def_pt.z = point->z;
     }
   else
     {
@@ -7002,69 +6243,22 @@ dwg_ent_dim_linear_set_12_pt(dwg_ent_dim_linear *dim, dwg_point_2d *point,
     }
 }
 
-/// Sets the 12 point
-/** Usage : dwg_ent_dim_linear_set_12_pt(dim, &point, &error);
+/// Sets the 10 def point
+/** Usage : dwg_ent_dim_linear_set_def_pt(dim, &point, &error);
 \param 1 dwg_ent_dim_linear
 \param 2 dwg_point_3d
 \param 3 int
 */
 void
-dwg_ent_dim_linear_get_12_pt(dwg_ent_dim_linear *dim, dwg_point_2d *point,
+dwg_ent_dim_linear_get_def_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
                              int *error)
 {
   if (dim != 0 && point != 0)
     {
       *error = 0;
-      point->x = dim->_12_pt.x;
-      point->y = dim->_12_pt.y;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Sets the 10 point
-/** Usage : dwg_ent_dim_linear_set_10_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_linear
-\param 2 dwg_point_3d
-\param 3 int
-*/
-void
-dwg_ent_dim_linear_set_10_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
-                             int *error)
-{
-  if (dim != 0 && point != 0)
-    {
-      *error = 0;
-      dim->_10_pt.x = point->x;
-      dim->_10_pt.y = point->y;
-      dim->_10_pt.z = point->z;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Sets the 12 point
-/** Usage : dwg_ent_dim_linear_set_12_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_linear
-\param 2 dwg_point_3d
-\param 3 int
-*/
-void
-dwg_ent_dim_linear_get_10_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
-                             int *error)
-{
-  if (dim != 0 && point != 0)
-    {
-      *error = 0;
-      point->x = dim->_10_pt.x;
-      point->y = dim->_10_pt.y;
-      point->z = dim->_10_pt.z;
+      point->x = dim->def_pt.x;
+      point->y = dim->def_pt.y;
+      point->z = dim->def_pt.z;
     }
   else
     {
@@ -7258,723 +6452,22 @@ dwg_ent_dim_linear_set_dim_rot(dwg_ent_dim_linear *dim, BITCODE_BD rot, int *err
 *             FUNCTIONS FOR ALIGNED DIMENSION ENTITY                *
 ********************************************************************/
 
-/// Returns the elevation ecs11
-/** Usage : double ecs11 = dwg_ent_dim_aligned_get_elevation_ecs11(dim, &error);
-\param 1 dwg_ent_dim_aligned
-\param 2 int
-*/
-BITCODE_BD
-dwg_ent_dim_aligned_get_elevation_ecs11(dwg_ent_dim_aligned *dim, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      return dim->elevation.ecs_11;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
-    }
-}
-
-/// Sets the elevation ecs11
-/** Usage : dwg_ent_dim_aligned_set_elevation_ecs11(dim, ecs11, &error);
-\param 1 dwg_ent_dim_aligned
-\param 2 double
-\param 3 int
-*/
-void
-dwg_ent_dim_aligned_set_elevation_ecs11(dwg_ent_dim_aligned *dim,
-                                        double elevation_ecs11,
-                                        int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      dim->elevation.ecs_11 = elevation_ecs11;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the elevation ecs12
-/** Usage : double ecs12 = dwg_ent_dim_aligned_get_elevation_ecs12(dim, &error);
-\param 1 dwg_ent_dim_aligned
-\param 2 int
-*/
-BITCODE_BD
-dwg_ent_dim_aligned_get_elevation_ecs12(dwg_ent_dim_aligned *dim, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      return dim->elevation.ecs_12;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
-    }
-}
-
-/// Sets the elevation ecs12
-/** Usage : dwg_ent_dim_aligned_set_elevation_ecs12(dim, ecs12, &error);
-\param 1 dwg_ent_dim_aligned
-\param 2 double
-\param 3 int
-*/
-void
-dwg_ent_dim_aligned_set_elevation_ecs12(dwg_ent_dim_aligned *dim,
-                                        double elevation_ecs12,
-                                        int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      dim->elevation.ecs_12 = elevation_ecs12;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the flag1
-/** Usage : char flag1 = dwg_ent_dim_aligned_get_flags1(dim, &error);
-\param 1 dwg_ent_dim_aligned
-\param 2 int
-*/
-char
-dwg_ent_dim_aligned_get_flags1(dwg_ent_dim_aligned *dim, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      return dim->flags_1;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return '\0';
-    }
-}
-
-/// Sets the flags1
-/** Usage : dwg_ent_dim_aligned_set_flags1(dim, char, &error);
-\param 1 dwg_ent_dim_aligned
-\param 2 char
-\param 3 int
-*/
-void
-dwg_ent_dim_aligned_set_flags1(dwg_ent_dim_aligned *dim, char flag, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      dim->flags_1 = flag;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the act measurement
-/** Usage : double measure = dwg_ent_dim_aligned_get_act_measurement(dim, &error);
-\param 1 dwg_ent_dim_aligned
-\param 2 int
-*/
-BITCODE_BD
-dwg_ent_dim_aligned_get_act_measurement(dwg_ent_dim_aligned *dim, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      return dim->act_measurement;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
-    }
-}
-
-/// Sets the act measurement
-/** Usage : dwg_ent_dim_aligned_set_act_measurement(dim, measure, &error);
-\param 1 dwg_ent_dim_aligned
-\param 2 double
-\param 3 int
-*/
-void
-dwg_ent_dim_aligned_set_act_measurement(dwg_ent_dim_aligned *dim,
-                                        double act_measurement, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      dim->act_measurement = act_measurement;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the horiz dir
-/** Usage : double dir = dwg_ent_dim_aligned_get_horiz_dir(dim, &error);
-\param 1 dwg_ent_dim_aligned
-\param 2 int
-*/
-BITCODE_BD
-dwg_ent_dim_aligned_get_horiz_dir(dwg_ent_dim_aligned *dim, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      return dim->horiz_dir;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
-    }
-}
-
-/// Sets the horiz dir
-/** Usage : dwg_ent_dim_aligned_set_horiz_dir(dim, horiz_dir, &error);
-\param 1 dwg_ent_dim_aligned
-\param 2 double
-\param 3 int
-*/
-void
-dwg_ent_dim_aligned_set_horiz_dir(dwg_ent_dim_aligned *dim, BITCODE_BD horiz_dir,
-                                  int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      dim->horiz_dir = horiz_dir;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the lspace factor
-/** Usage : double lspace_factor = dwg_ent_dim_aligned_get_lspace_factor(dim, &error);
-\param 1 dwg_ent_dim_aligned
-\param 2 int
-*/
-BITCODE_BD
-dwg_ent_dim_aligned_get_lspace_factor(dwg_ent_dim_aligned *dim, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      return dim->lspace_factor;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
-    }
-}
-
-/// Sets the lspace factor
-/** Usage : dwg_ent_dim_aligned_set_lspace_factor(dim, factor, &error);
-\param 1 dwg_ent_dim_aligned
-\param 2 double
-\param 3 int
-*/
-void
-dwg_ent_dim_aligned_set_lspace_factor(dwg_ent_dim_aligned *dim, BITCODE_BD factor,
-                                      int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      dim->lspace_factor = factor;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the lspace factor
-/** Usage : double lspace_factor = dwg_ent_dim_aligned_get_lspace_factor(dim, &error);
-\param 1 dwg_ent_dim_aligned
-\param 2 int
-*/
-BITCODE_BS
-dwg_ent_dim_aligned_get_lspace_style(dwg_ent_dim_aligned *dim, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      return dim->lspace_style;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return 0;
-    }
-}
-
-/// Sets the horiz dir
-/** Usage : dwg_ent_dim_aligned_set_horiz_dir(dim, horiz_dir, &error);
-\param 1 dwg_ent_dim_aligned
-\param 2 double
-\param 3 int
-*/
-void
-dwg_ent_dim_aligned_set_lspace_style(dwg_ent_dim_aligned *dim,
-                                     BITCODE_BS style, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      dim->lspace_style = style;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the attachment point
-/** Usage : BITCODE_BS point = dwg_ent_dim_aligned_get_attachment_point(dim, &error);
-\param 1 dwg_ent_dim_aligned
-\param 2 int
-*/
-BITCODE_BS
-dwg_ent_dim_aligned_get_attachment_point(dwg_ent_dim_aligned *dim, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      return dim->attachment_point;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return 0;
-    }
-}
-
-/// Sets the attachment point
-/** Usage : dwg_ent_dim_aligned_set_attachment_point(dim, horiz_dir, &error);
-\param 1 dwg_ent_dim_aligned
-\param 2 BITCODE_BS
-\param 3 int
-*/
-void
-dwg_ent_dim_aligned_set_attachment_point(dwg_ent_dim_aligned *dim,
-                                         BITCODE_BS point, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      dim->attachment_point = point;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Sets the extrusion
-/** Usage : dwg_ent_dim_aligned_set_extrusion(dim, &point, &error);
+/// Sets the 10 def point
+/** Usage : dwg_ent_dim_aligned_set_def_pt(dim, &point, &error);
 \param 1 dwg_ent_dim_aligned
 \param 2 dwg_point_3d
 \param 3 int
 */
 void
-dwg_ent_dim_aligned_set_extrusion(dwg_ent_dim_aligned *dim,
-                                  dwg_point_3d *point, int *error)
-{
-  if (dim != 0 && point != 0)
-    {
-      *error = 0;
-      dim->extrusion.x = point->x;
-      dim->extrusion.y = point->y;
-      dim->extrusion.z = point->z;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the attachment point
-/** Usage : dwg_ent_dim_aligned_get_extrusion(dim, &point, &error);
-\param 1 dwg_ent_dim_aligned
-\param 2 dwg_point_3d
-\param 3 int
-*/
-void
-dwg_ent_dim_aligned_get_extrusion(dwg_ent_dim_aligned *dim,
-                                  dwg_point_3d *point, int *error)
-{
-  if (dim != 0 && point != 0)
-    {
-      *error = 0;
-      point->x = dim->extrusion.x;
-      point->y = dim->extrusion.y;
-      point->z = dim->extrusion.z;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the user text
-/** Usage : char * text = dwg_ent_dim_aligned_get_user_text(dim, &error);
-\param 1 dwg_ent_dim_aligned
-\param 2 int
-*/
-char *
-dwg_ent_dim_aligned_get_user_text(dwg_ent_dim_aligned *dim, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      return dim->user_text;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty dim", __FUNCTION__)
-      *error = 1;
-      return NULL;
-    }
-}
-
-/// Sets the attachment point
-/** Usage : dwg_ent_dim_aligned_set_attachment_point(dim, text_value, &error);
-\param 1 dwg_ent_dim_aligned
-\param 2 char *
-\param 3 int
-*/
-void
-dwg_ent_dim_aligned_set_user_text(dwg_ent_dim_aligned *dim, char * text,
-                                  int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      dim->user_text = text;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the text rotation
-/** Usage : double text_rot = dwg_ent_dim_aligned_get_text_rot(dim, &error);
-\param 1 dwg_ent_dim_aligned
-\param 2 int
-*/
-BITCODE_BD
-dwg_ent_dim_aligned_get_text_rot(dwg_ent_dim_aligned *dim, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      return dim->text_rot;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
-    }
-}
-
-/// Sets the text rotation
-/** Usage : dwg_ent_dim_aligned_set_text_rot(dim, text_value, &error);
-\param 1 dwg_ent_dim_aligned
-\param 2 double
-\param 3 int
-*/
-void
-dwg_ent_dim_aligned_set_text_rot(dwg_ent_dim_aligned *dim, BITCODE_BD rot,
-                                 int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      dim->text_rot = rot;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the ins rotation
-/** Usage : double ins_rot = dwg_ent_dim_aligned_get_ins_rotation(dim, &error);
-\param 1 dwg_ent_dim_aligned
-\param 2 int
-*/
-BITCODE_BD
-dwg_ent_dim_aligned_get_ins_rotation(dwg_ent_dim_aligned *dim, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      return dim->ins_rotation;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
-    }
-}
-
-/// Sets the ins rotation
-/** Usage : dwg_ent_dim_aligned_set_ins_rotation(dim, text_rot, &error);
-\param 1 dwg_ent_dim_aligned
-\param 2 double
-\param 3 int
-*/
-void
-dwg_ent_dim_aligned_set_ins_rotation(dwg_ent_dim_aligned *dim, BITCODE_BD rot,
-                                     int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      dim->ins_rotation = rot;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the flip arrow1
-/** Usage : double arrow1 = dwg_ent_dim_aligned_get_flip_arrow1(dim, &error);
-\param 1 dwg_ent_dim_aligned
-\param 2 int
-*/
-char
-dwg_ent_dim_aligned_get_flip_arrow1(dwg_ent_dim_aligned *dim, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      return dim->flip_arrow1;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return '\0';
-    }
-}
-
-/// Sets the flip arrow1
-/** Usage : dwg_ent_dim_aligned_set_flip_arrow1(dim, arrow1, &error);
-\param 1 dwg_ent_dim_aligned
-\param 2 char
-\param 3 int
-*/
-void
-dwg_ent_dim_aligned_set_flip_arrow1(dwg_ent_dim_aligned *dim, char flip_arrow,
-                                    int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      dim->flip_arrow1 = flip_arrow;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the flip arrow2
-/** Usage : double arrow2 = dwg_ent_dim_aligned_get_flip_arrow2(dim, &error);
-\param 1 dwg_ent_dim_aligned
-\param 2 int
-*/
-char
-dwg_ent_dim_aligned_get_flip_arrow2(dwg_ent_dim_aligned *dim, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      return dim->flip_arrow2;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return '\0';
-    }
-}
-
-/// Sets the flip arrow2
-/** Usage : dwg_ent_dim_aligned_set_flip_arrow2(dim, arrow2, &error);
-\param 1 dwg_ent_dim_aligned
-\param 2 char
-\param 3 int
-*/
-void
-dwg_ent_dim_aligned_set_flip_arrow2(dwg_ent_dim_aligned *dim, char flip_arrow,
-                                    int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      dim->flip_arrow2 = flip_arrow;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Sets the text mid point
-/** Usage : dwg_ent_dim_aligned_set_text_mid_point(dim, &point, &error);
-\param 1 dwg_ent_dim_aligned
-\param 2 dwg_point_2d
-\param 3 int
-*/
-void
-dwg_ent_dim_aligned_set_text_mid_pt(dwg_ent_dim_aligned *dim,
-                                    dwg_point_2d *point, int *error)
-{
-  if (dim != 0 && point != 0)
-    {
-      *error = 0;
-      dim->text_midpt.x = point->x;
-      dim->text_midpt.y = point->y;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the text mid point
-/** Usage : dwg_ent_dim_aligned_get_text_mid_point(dim, &point, &error);
-\param 1 dwg_ent_dim_aligned
-\param 2 dwg_point_2d
-\param 3 int
-*/
-void
-dwg_ent_dim_aligned_get_text_mid_pt(dwg_ent_dim_aligned *dim,
-                                    dwg_point_2d *point, int *error)
-{
-  if (dim != 0 && point != 0)
-    {
-      *error = 0;
-      point->x = dim->text_midpt.x;
-      point->y = dim->text_midpt.y;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Sets the ins scale
-/** Usage : dwg_ent_dim_aligned_set_ins_scale(dim, &point, &error);
-\param 1 dwg_ent_dim_aligned
-\param 2 dwg_point_3d
-\param 3 int
-*/
-void
-dwg_ent_dim_aligned_set_ins_scale(dwg_ent_dim_aligned *dim,
-                                  dwg_point_3d *point, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      dim->ins_scale.x = point->x;
-      dim->ins_scale.y = point->y;
-      dim->ins_scale.z = point->z;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the ins scale
-/** Usage : dwg_ent_dim_aligned_get_ins_scale(dim, &point, &error);
-\param 1 dwg_ent_dim_aligned
-\param 2 dwg_point_3d
-\param 3 int
-*/
-void
-dwg_ent_dim_aligned_get_ins_scale(dwg_ent_dim_aligned *dim,
-                                  dwg_point_3d *point, int *error)
-{
-  if (dim != 0 && point != 0)
-    {
-      *error = 0;
-      point->x = dim->ins_scale.x;
-      point->y = dim->ins_scale.y;
-      point->z = dim->ins_scale.z;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Sets the 12 point
-/** Usage : dwg_ent_dim_aligned_set_12_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_aligned
-\param 2 dwg_point_2d
-\param 3 int
-*/
-void
-dwg_ent_dim_aligned_set_12_pt(dwg_ent_dim_aligned *dim, dwg_point_2d *point,
+dwg_ent_dim_aligned_set_def_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
                               int *error)
 {
   if (dim != 0 && point != 0)
     {
       *error = 0;
-      dim->_12_pt.x = point->x;
-      dim->_12_pt.y = point->y;
+      dim->def_pt.x = point->x;
+      dim->def_pt.y = point->y;
+      dim->def_pt.z = point->z;
     }
   else
     {
@@ -7983,69 +6476,22 @@ dwg_ent_dim_aligned_set_12_pt(dwg_ent_dim_aligned *dim, dwg_point_2d *point,
     }
 }
 
-/// Returns the 12 point
-/** Usage : dwg_ent_dim_aligned_get_12_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_aligned
-\param 2 dwg_point_2d
-\param 3 int
-*/
-void
-dwg_ent_dim_aligned_get_12_pt(dwg_ent_dim_aligned *dim, dwg_point_2d *point,
-                              int *error)
-{
-  if (dim != 0 && point != 0)
-    {
-      *error = 0;
-      point->x = dim->_12_pt.x;
-      point->y = dim->_12_pt.y;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Sets the 10 point
-/** Usage : dwg_ent_dim_aligned_set_10_pt(dim, &point, &error);
+/// Returns the 10 def point
+/** Usage : dwg_ent_dim_aligned_get_def_pt(dim, &point, &error);
 \param 1 dwg_ent_dim_aligned
 \param 2 dwg_point_3d
 \param 3 int
 */
 void
-dwg_ent_dim_aligned_set_10_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
+dwg_ent_dim_aligned_get_def_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
                               int *error)
 {
   if (dim != 0 && point != 0)
     {
       *error = 0;
-      dim->_10_pt.x = point->x;
-      dim->_10_pt.y = point->y;
-      dim->_10_pt.z = point->z;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the 10 point
-/** Usage : dwg_ent_dim_aligned_get_10_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_aligned
-\param 2 dwg_point_3d
-\param 3 int
-*/
-void
-dwg_ent_dim_aligned_get_10_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
-                              int *error)
-{
-  if (dim != 0 && point != 0)
-    {
-      *error = 0;
-      point->x = dim->_10_pt.x;
-      point->y = dim->_10_pt.y;
-      point->z = dim->_10_pt.z;
+      point->x = dim->def_pt.x;
+      point->y = dim->def_pt.y;
+      point->z = dim->def_pt.z;
     }
   else
     {
@@ -8197,753 +6643,6 @@ dwg_ent_dim_aligned_set_ext_line_rotation(dwg_ent_dim_aligned *dim,
 *              FUNCTIONS FOR ANG3PT DIMENSION ENTITY                *
 ********************************************************************/
 
-/// Returns the elevation ecs11
-/** Usage : double ecs11 = dwg_ent_dim_ang3pt_get_elevation_ecs11(dim, &error);
-\param 1 dwg_ent_dim_ang3pt
-\param 2 int
-*/
-BITCODE_BD
-dwg_ent_dim_ang3pt_get_elevation_ecs11(dwg_ent_dim_ang3pt *ang, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      return ang->elevation.ecs_11;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
-    }
-}
-
-/// Sets the elevation ecs11
-/** Usage : dwg_ent_dim_ang3pt_set_elevation_ecs11(dim, ecs11, &error);
-\param 1 dwg_ent_dim_ang3pt
-\param 2 double
-\param 3 int
-*/
-void
-dwg_ent_dim_ang3pt_set_elevation_ecs11(dwg_ent_dim_ang3pt *ang,
-                                       double elevation_ecs11, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      ang->elevation.ecs_11 = elevation_ecs11;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the elevation ecs12
-/** Usage : double ecs12 = dwg_ent_dim_ang3pt_get_elevation_ecs12(dim, &error);
-\param 1 dwg_ent_dim_ang3pt
-\param 2 int
-*/
-BITCODE_BD
-dwg_ent_dim_ang3pt_get_elevation_ecs12(dwg_ent_dim_ang3pt *ang, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      return ang->elevation.ecs_12;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
-    }
-}
-
-/// Sets the elevation ecs12
-/** Usage : dwg_ent_dim_ang3pt_set_elevation_ecs12(dim, ecs12, &error);
-\param 1 dwg_ent_dim_ang3pt
-\param 2 double
-\param 3 int
-*/
-void
-dwg_ent_dim_ang3pt_set_elevation_ecs12(dwg_ent_dim_ang3pt *ang,
-                                       double elevation_ecs12, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      ang->elevation.ecs_12 = elevation_ecs12;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the flags1
-/** Usage : char flags1 = dwg_ent_dim_ang3pt_get_flags1(dim, &error);
-\param 1 dwg_ent_dim_ang3pt
-\param 2 int
-*/
-char
-dwg_ent_dim_ang3pt_get_flags1(dwg_ent_dim_ang3pt *ang, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      return ang->flags_1;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return '\0';
-    }
-}
-
-/// Sets the flags1
-/** Usage : dwg_ent_dim_ang3pt_set_flags1(dim, flag1, &error);
-\param 1 dwg_ent_dim_ang3pt
-\param 2 char
-\param 3 int
-*/
-void
-dwg_ent_dim_ang3pt_set_flags1(dwg_ent_dim_ang3pt *ang, char flag, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      ang->flags_1 = flag;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the act measurement
-/** Usage : double measure = dwg_ent_dim_ang3pt_get_act_measurement(dim, &error);
-\param 1 dwg_ent_dim_ang3pt
-\param 2 int
-*/
-BITCODE_BD
-dwg_ent_dim_ang3pt_get_act_measurement(dwg_ent_dim_ang3pt *ang, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      return ang->act_measurement;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
-    }
-}
-
-/// Sets the act measurement
-/** Usage : dwg_ent_dim_ang3pt_set_act_measurement(dim, measure, &error);
-\param 1 dwg_ent_dim_ang3pt
-\param 2 double
-\param 3 int
-*/
-void
-dwg_ent_dim_ang3pt_set_act_measurement(dwg_ent_dim_ang3pt *ang,
-                                       double act_measurement, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      ang->act_measurement = act_measurement;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the horiz dir
-/** Usage : double horiz_dir = dwg_ent_dim_ang3pt_get_horiz_dir(dim, &error);
-\param 1 dwg_ent_dim_ang3pt
-\param 2 int
-*/
-BITCODE_BD
-dwg_ent_dim_ang3pt_get_horiz_dir(dwg_ent_dim_ang3pt *ang, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      return ang->horiz_dir;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
-    }
-}
-
-/// Sets the horiz dir
-/** Usage : dwg_ent_dim_ang3pt_set_horiz_dir(dim, horiz_dir, &error);
-\param 1 dwg_ent_dim_ang3pt
-\param 2 double
-\param 3 int
-*/
-void
-dwg_ent_dim_ang3pt_set_horiz_dir(dwg_ent_dim_ang3pt *ang, BITCODE_BD horiz_dir,
-                                 int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      ang->horiz_dir = horiz_dir;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the lspace factor
-/** Usage : double factor = dwg_ent_dim_ang3pt_get_lspace_factor(dim, &error);
-\param 1 dwg_ent_dim_ang3pt
-\param 2 int
-*/
-BITCODE_BD
-dwg_ent_dim_ang3pt_get_lspace_factor(dwg_ent_dim_ang3pt *ang, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      return ang->lspace_factor;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
-    }
-}
-
-/// Sets the lspace factor
-/** Usage : dwg_ent_dim_ang3pt_set_lspace_factor(dim, factor, &error);
-\param 1 dwg_ent_dim_ang3pt
-\param 2 double
-\param 3 int
-*/
-void
-dwg_ent_dim_ang3pt_set_lspace_factor(dwg_ent_dim_ang3pt *ang, BITCODE_BD factor,
-                                     int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      ang->lspace_factor = factor;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the lspace style
-/** Usage : double style = dwg_ent_dim_ang3pt_get_lspace_style(dim, &error);
-\param 1 dwg_ent_dim_ang3pt
-\param 2 int
-*/
-BITCODE_BS
-dwg_ent_dim_ang3pt_get_lspace_style(dwg_ent_dim_ang3pt *ang, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      return ang->lspace_style;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return 0;
-    }
-}
-
-/// Sets the lspace style
-/** Usage : dwg_ent_dim_ang3pt_set_lspace_style(dim, style, &error);
-\param 1 dwg_ent_dim_ang3pt
-\param 2 BITCODE_BS
-\param 3 int
-*/
-void
-dwg_ent_dim_ang3pt_set_lspace_style(dwg_ent_dim_ang3pt *ang,
-                                    BITCODE_BS style, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      ang->lspace_style = style;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the attachment point
-/** Usage : BITCODE_BS point = dwg_ent_dim_ang3pt_get_attachment_point(dim, &error);
-\param 1 dwg_ent_dim_ang3pt
-\param 2 int
-*/
-BITCODE_BS
-dwg_ent_dim_ang3pt_get_attachment_point(dwg_ent_dim_ang3pt *ang, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      return ang->attachment_point;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return 0;
-    }
-}
-
-/// Sets the attachment point
-/** Usage : dwg_ent_dim_ang3pt_set_attachment_point(dim, point, &error);
-\param 1 dwg_ent_dim_ang3pt
-\param 2 BITCODE_BS
-\param 3 int
-*/
-void
-dwg_ent_dim_ang3pt_set_attachment_point(dwg_ent_dim_ang3pt *ang,
-                                        BITCODE_BS point, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      ang->attachment_point = point;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Sets the extrusion
-/** Usage : dwg_ent_dim_ang3pt_set_extrusion(dim, &extrusion, &error);
-\param 1 dwg_ent_dim_ang3pt
-\param 2 dwg_point_3d
-\param 3 int
-*/
-void
-dwg_ent_dim_ang3pt_set_extrusion(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
-                                 int *error)
-{
-  if (ang != 0 && point != 0)
-    {
-      *error = 0;
-      ang->extrusion.x = point->x;
-      ang->extrusion.y = point->y;
-      ang->extrusion.z = point->z;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// returns the extrusion
-/** Usage : dwg_ent_dim_ang3pt_get_extrusion(dim, &extrusion, &error);
-\param 1 dwg_ent_dim_ang3pt
-\param 2 dwg_point_3d
-\param 3 int
-*/
-void
-dwg_ent_dim_ang3pt_get_extrusion(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
-                                 int *error)
-{
-  if (ang != 0 && point != 0)
-    {
-      *error = 0;
-      point->x = ang->extrusion.x;
-      point->y = ang->extrusion.y;
-      point->z = ang->extrusion.z;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// returns the user_text
-/** Usage : char * text = dwg_ent_dim_ang3pt_get_user_text(dim, &error);
-\param 1 dwg_ent_dim_ang3pt
-\param 2 int
-*/
-char *
-dwg_ent_dim_ang3pt_get_user_text(dwg_ent_dim_ang3pt *ang, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      return ang->user_text;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty ang", __FUNCTION__)
-      *error = 1;
-      return NULL;
-    }
-}
-
-/// Sets the user_text
-/** Usage : dwg_ent_dim_ang3pt_set_user_text(dim, user_text, &error);
-\param 1 dwg_ent_dim_ang3pt
-\param 2 char *
-\param 3 int
-*/
-void
-dwg_ent_dim_ang3pt_set_user_text(dwg_ent_dim_ang3pt *ang, char * text,
-                                 int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      ang->user_text = text;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// returns the text_rotation
-/** Usage : double rot = dwg_ent_dim_ang3pt_get_text_rot(dim, &error);
-\param 1 dwg_ent_dim_ang3pt
-\param 2 int
-*/
-BITCODE_BD
-dwg_ent_dim_ang3pt_get_text_rot(dwg_ent_dim_ang3pt *ang, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      return ang->text_rot;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
-    }
-}
-
-/// Sets the text_rot
-/** Usage : dwg_ent_dim_ang3pt_set_text_rot(dim, text_rot, &error);
-\param 1 dwg_ent_dim_ang3pt
-\param 2 double
-\param 3 int
-*/
-void
-dwg_ent_dim_ang3pt_set_text_rot(dwg_ent_dim_ang3pt *ang, BITCODE_BD rot,
-                                int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      ang->text_rot = rot;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// returns the ins rotation
-/** Usage : double rotation = dwg_ent_dim_ang3pt_get_ins_rotation(dim, &error);
-\param 1 dwg_ent_dim_ang3pt
-\param 2 int
-*/
-BITCODE_BD
-dwg_ent_dim_ang3pt_get_ins_rotation(dwg_ent_dim_ang3pt *ang, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      return ang->ins_rotation;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
-    }
-}
-
-/// Sets the ins_rotation
-/** Usage : dwg_ent_dim_ang3pt_set_ins_rotation(dim, ins_rotation, &error);
-\param 1 dwg_ent_dim_ang3pt
-\param 2 char *
-\param 3 int
-*/
-void
-dwg_ent_dim_ang3pt_set_ins_rotation(dwg_ent_dim_ang3pt *ang, BITCODE_BD rot,
-                                    int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      ang->ins_rotation = rot;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// returns the flip arrow 1
-/** Usage : char arrow1 = dwg_ent_dim_ang3pt_get_flip_arrow1(dim, &error);
-\param 1 dwg_ent_dim_ang3pt
-\param 2 int
-*/
-char
-dwg_ent_dim_ang3pt_get_flip_arrow1(dwg_ent_dim_ang3pt *ang, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      return ang->flip_arrow1;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return '\0';
-    }
-}
-
-/// Sets the flip_arrow1
-/** Usage : dwg_ent_dim_ang3pt_set_flip_arrow1(dim, arrow, &error);
-\param 1 dwg_ent_dim_ang3pt
-\param 2 char
-\param 3 int
-*/
-void
-dwg_ent_dim_ang3pt_set_flip_arrow1(dwg_ent_dim_ang3pt *ang, char flip_arrow,
-                                   int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      ang->flip_arrow1 = flip_arrow;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// returns the flip arrow 2
-/** Usage : char arrow2 = dwg_ent_dim_ang3pt_get_flip_arrow2(dim, &error);
-\param 1 dwg_ent_dim_ang3pt
-\param 2 int
-*/
-char
-dwg_ent_dim_ang3pt_get_flip_arrow2(dwg_ent_dim_ang3pt *ang, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      return ang->flip_arrow2;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return '\0';
-    }
-}
-
-/// Sets the flip_arrow2
-/** Usage : dwg_ent_dim_ang3pt_set_flip_arrow2(dim, arrow, &error);
-\param 1 dwg_ent_dim_ang3pt
-\param 2 char
-\param 3 int
-*/
-void
-dwg_ent_dim_ang3pt_set_flip_arrow2(dwg_ent_dim_ang3pt *ang, char flip_arrow,
-                                   int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      ang->flip_arrow2 = flip_arrow;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Sets the text mid point
-/** Usage : dwg_ent_dim_ang3pt_set_text_mid_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_ang3pt
-\param 2 dwg_point_2d
-\param 3 int
-*/
-void
-dwg_ent_dim_ang3pt_set_text_mid_pt(dwg_ent_dim_ang3pt *ang,
-                                   dwg_point_2d *point, int *error)
-{
-  if (ang != 0 && point != 0)
-    {
-      *error = 0;
-      ang->text_midpt.x = point->x;
-      ang->text_midpt.y = point->y;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the text mid point
-/** Usage : dwg_ent_dim_ang3pt_get_text_mid_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_ang3pt
-\param 2 dwg_point_2d
-\param 3 int
-*/
-void
-dwg_ent_dim_ang3pt_get_text_mid_pt(dwg_ent_dim_ang3pt *ang,
-                                   dwg_point_2d *point, int *error)
-{
-  if (ang != 0 && point != 0)
-    {
-      *error = 0;
-      point->x = ang->text_midpt.x;
-      point->y = ang->text_midpt.y;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Sets the ins scale
-/** Usage : dwg_ent_dim_ang3pt_set_ins_scale(dim, &point, &error);
-\param 1 dwg_ent_dim_ang3pt
-\param 2 dwg_point_2d
-\param 3 int
-*/
-void
-dwg_ent_dim_ang3pt_set_ins_scale(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
-                                 int *error)
-{
-  if (ang != 0 && point != 0)
-    {
-      *error = 0;
-      ang->ins_scale.x = point->x;
-      ang->ins_scale.y = point->y;
-      ang->ins_scale.z = point->z;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns ins scale points
-/* Usage : dwg_ent_dim_ang3pt_get_ins_scale(dim, &point, &error);
-\param 1 dwg_ent_dim_ang3pt
-\param 2 dwg_point_3d
-\param 3 int
-*/
-void
-dwg_ent_dim_ang3pt_get_ins_scale(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
-                                 int *error)
-{
-  if (ang != 0 && point != 0)
-    {
-      *error = 0;
-      point->x = ang->ins_scale.x;
-      point->y = ang->ins_scale.y;
-      point->z = ang->ins_scale.z;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-
-/// Sets the 12 pt
-/** Usage : dwg_ent_dim_ang3pt_set_12_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_ang3pt
-\param 2 dwg_point_2d
-\param 3 int
-*/
-void
-dwg_ent_dim_ang3pt_set_12_pt(dwg_ent_dim_ang3pt *ang, dwg_point_2d *point,
-                             int *error)
-{
-  if (ang != 0 && point != 0)
-    {
-      *error = 0;
-      ang->_12_pt.x = point->x;
-      ang->_12_pt.y = point->y;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the 12 pt
-/** Usage : dwg_ent_dim_ang3pt_get_12_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_ang3pt
-\param 2 dwg_point_2d
-\param 3 int
-*/
-void
-dwg_ent_dim_ang3pt_get_12_pt(dwg_ent_dim_ang3pt *ang, dwg_point_2d *point,
-                             int *error)
-{
-  if (ang != 0 && point != 0)
-    {
-      *error = 0;
-      point->x = ang->_12_pt.x;
-      point->y = ang->_12_pt.y;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
 /// Sets the 10 point
 /** Usage : dwg_ent_dim_ang3pt_set_10_pt(dim, &point, &error);
 \param 1 dwg_ent_dim_ang3pt
@@ -8951,15 +6650,15 @@ dwg_ent_dim_ang3pt_get_12_pt(dwg_ent_dim_ang3pt *ang, dwg_point_2d *point,
 \param 3 int
 */
 void
-dwg_ent_dim_ang3pt_set_10_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
+dwg_ent_dim_ang3pt_set_def_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
                              int *error)
 {
   if (ang != 0 && point != 0)
     {
       *error = 0;
-      ang->_10_pt.x = point->x;
-      ang->_10_pt.y = point->y;
-      ang->_10_pt.z = point->z;
+      ang->def_pt.x = point->x;
+      ang->def_pt.y = point->y;
+      ang->def_pt.z = point->z;
     }
   else
     {
@@ -8968,22 +6667,22 @@ dwg_ent_dim_ang3pt_set_10_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
     }
 }
 
-/// Returns the 10 pt
-/** Usage : dwg_ent_dim_ang3pt_get_10_pt(dim, &point, &error);
+/// Returns the 10 def pt
+/** Usage : dwg_ent_dim_ang3pt_get_def_pt(dim, &point, &error);
 \param 1 dwg_ent_dim_ang3pt
 \param 2 dwg_point_3d
 \param 3 int
 */
 void
-dwg_ent_dim_ang3pt_get_10_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
+dwg_ent_dim_ang3pt_get_def_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
                              int *error)
 {
   if (ang != 0)
     {
       *error = 0;
-      point->x = ang->_10_pt.x;
-      point->y = ang->_10_pt.y;
-      point->z = ang->_10_pt.z;
+      point->x = ang->def_pt.x;
+      point->y = ang->def_pt.y;
+      point->z = ang->def_pt.z;
     }
   else
     {
@@ -9089,22 +6788,22 @@ dwg_ent_dim_ang3pt_get_14_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
 }
 
 
-/// Sets the 15 point
-/** Usage : dwg_ent_dim_ang3pt_set_15_pt(dim, &point, &error);
+/// Sets the 15 first_arc point
+/** Usage : dwg_ent_dim_ang3pt_set_first_arc_pt(dim, &point, &error);
 \param 1 dwg_ent_dim_ang3pt
 \param 2 dwg_point_3d
 \param 3 int
 */
 void
-dwg_ent_dim_ang3pt_set_15_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
+dwg_ent_dim_ang3pt_set_first_arc_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
                              int *error)
 {
   if (ang != 0 && point != 0)
     {
       *error = 0;
-      ang->_15_pt.x = point->x;
-      ang->_15_pt.y = point->y;
-      ang->_15_pt.z = point->z;
+      ang->first_arc_pt.x = point->x;
+      ang->first_arc_pt.y = point->y;
+      ang->first_arc_pt.z = point->z;
     }
   else
     {
@@ -9113,22 +6812,22 @@ dwg_ent_dim_ang3pt_set_15_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
     }
 }
 
-/// Returns the text 15 pt
-/** Usage : dwg_ent_dim_ang3pt_get_text_15_pt(dim, &point, &error);
+/// Returns the text 15 first_arc pt
+/** Usage : dwg_ent_dim_ang3pt_get_text_first_arc_pt(dim, &point, &error);
 \param 1 dwg_ent_dim_ang3pt
 \param 2 dwg_point_2d
 \param 3 int
 */
 void
-dwg_ent_dim_ang3pt_get_15_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
+dwg_ent_dim_ang3pt_get_first_arc_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
                              int *error)
 {
   if (ang != 0 && point != 0)
     {
       *error = 0;
-      point->x = ang->_15_pt.x;
-      point->y = ang->_15_pt.y;
-      point->z = ang->_15_pt.z;
+      point->x = ang->first_arc_pt.x;
+      point->y = ang->first_arc_pt.y;
+      point->z = ang->first_arc_pt.z;
     }
   else
     {
@@ -9141,617 +6840,18 @@ dwg_ent_dim_ang3pt_get_15_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
 *              FUNCTIONS FOR ANG2LN DIMENSION ENTITY                *
 ********************************************************************/
 
-/// Returns the elevation ecs11
-/** Usage : double ecs11 = dwg_ent_dim_ang2ln_get_elevation_ecs11(dim, &error);
-\param 1 dwg_ent_dim_ang2ln
-\param 2 int
-*/
-BITCODE_BD
-dwg_ent_dim_ang2ln_get_elevation_ecs11(dwg_ent_dim_ang2ln *ang, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      return ang->elevation.ecs_11;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
-    }
-}
 
-/// Sets the elevation ecs11
-/** Usage : dwg_ent_dim_ang2ln_set_elevation_ecs11(dim, ecs11, &error);
-\param 1 dwg_ent_dim_ang2ln
-\param 2 double
-\param 3 int
-*/
+/// Sets dim ang2ln 10 def point
 void
-dwg_ent_dim_ang2ln_set_elevation_ecs11(dwg_ent_dim_ang2ln *ang,
-                                       double elevation_ecs11, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      ang->elevation.ecs_11 = elevation_ecs11;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the elevation ecs12
-/** Usage : double ecs12 = dwg_ent_dim_ang2ln_get_elevation_ecs12(dim, &error);
-\param 1 dwg_ent_dim_ang2ln
-\param 2 int
-*/
-BITCODE_BD
-dwg_ent_dim_ang2ln_get_elevation_ecs12(dwg_ent_dim_ang2ln *ang, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      return ang->elevation.ecs_12;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
-    }
-}
-
-/// Sets the elevation ecs12
-/** Usage : dwg_ent_dim_ang2ln_set_elevation_ecs12(dim, ecs12, &error);
-\param 1 dwg_ent_dim_ang2ln
-\param 2 double
-\param 3 int
-*/
-void
-dwg_ent_dim_ang2ln_set_elevation_ecs12(dwg_ent_dim_ang2ln *ang,
-                                       double elevation_ecs12, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      ang->elevation.ecs_12 = elevation_ecs12;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the flags1
-/** Usage : double flags1 = dwg_ent_dim_ang2ln_get_flags1(dim, &error);
-\param 1 dwg_ent_dim_ang2ln
-\param 2 int
-*/
-char
-dwg_ent_dim_ang2ln_get_flags1(dwg_ent_dim_ang2ln *ang, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      return ang->flags_1;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return '\0';
-    }
-}
-
-/// sets the flags1
-/** Usage : dwg_ent_dim_ang2ln_set_flags1(dim, flag, &error);
-\param 1 dwg_ent_dim_ang2ln
-\param 2 char
-\param 3 int
-*/
-void
-dwg_ent_dim_ang2ln_set_flags1(dwg_ent_dim_ang2ln *ang, char flag, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      ang->flags_1 = flag;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the act_measurement
-/** Usage : double act_measurement = dwg_ent_dim_ang2ln_get_act_measurement(dim, &error);
-\param 1 dwg_ent_dim_ang2ln
-\param 2 int
-*/
-BITCODE_BD
-dwg_ent_dim_ang2ln_get_act_measurement(dwg_ent_dim_ang2ln *ang,
-                                       int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      return ang->act_measurement;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
-    }
-}
-
-/// sets the act_measurement
-/** Usage : dwg_ent_dim_ang2ln_set_act_measurement(dim, measure, &error);
-\param 1 dwg_ent_dim_ang2ln
-\param 2 double
-\param 3 int
-*/
-void
-dwg_ent_dim_ang2ln_set_act_measurement(dwg_ent_dim_ang2ln *ang,
-                                       double act_measurement, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      ang->act_measurement = act_measurement;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the horiz_dir
-/** Usage : double horiz_dir = dwg_ent_dim_ang2ln_get_horiz_dir(dim, &error);
-\param 1 dwg_ent_dim_ang2ln
-\param 2 int
-*/
-BITCODE_BD
-dwg_ent_dim_ang2ln_get_horiz_dir(dwg_ent_dim_ang2ln *ang,
-                                 int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      return ang->horiz_dir;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
-    }
-}
-
-/// sets the horiz_dir
-/** Usage : dwg_ent_dim_ang2ln_set_horiz_dir(dim, horiz_dir, &error);
-\param 1 dwg_ent_dim_ang2ln
-\param 2 double
-\param 3 int
-*/
-void
-dwg_ent_dim_ang2ln_set_horiz_dir(dwg_ent_dim_ang2ln *ang,
-                                 double horiz_dir, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      ang->horiz_dir = horiz_dir;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns dim ang2ln lspace factor
-BITCODE_BD
-dwg_ent_dim_ang2ln_get_lspace_factor(dwg_ent_dim_ang2ln *ang,
-                                     int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      return ang->lspace_factor;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
-    }
-}
-
-/// Sets dim ang2ln lspace factor
-void
-dwg_ent_dim_ang2ln_set_lspace_factor(dwg_ent_dim_ang2ln *ang,
-                                     double factor, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      ang->lspace_factor = factor;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns dim ang2ln lspace style
-BITCODE_BS
-dwg_ent_dim_ang2ln_get_lspace_style(dwg_ent_dim_ang2ln *ang, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      return ang->lspace_style;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return 0;
-    }
-}
-
-/// Sets dim ang2ln lspace style
-void
-dwg_ent_dim_ang2ln_set_lspace_style(dwg_ent_dim_ang2ln *ang,
-                                    BITCODE_BS style, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      ang->lspace_style = style;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns dim ang2ln attachment point
-BITCODE_BS
-dwg_ent_dim_ang2ln_get_attachment_point(dwg_ent_dim_ang2ln *ang, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      return ang->attachment_point;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return 0;
-    }
-}
-
-/// Sets dim ang2ln attachment point
-void
-dwg_ent_dim_ang2ln_set_attachment_point(dwg_ent_dim_ang2ln *ang,
-                                        BITCODE_BS point, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      ang->attachment_point = point;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Sets dim ang2ln extrusion
-void
-dwg_ent_dim_ang2ln_set_extrusion(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
-                                 int *error)
-{
-  if (ang != 0 && point != 0)
-    {
-      *error = 0;
-      ang->extrusion.x = point->x;
-      ang->extrusion.y = point->y;
-      ang->extrusion.z = point->z;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns dim ang2ln extrusion
-void
-dwg_ent_dim_ang2ln_get_extrusion(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
-                                 int *error)
-{
-  if (ang != 0 && point != 0)
-    {
-      *error = 0;
-      point->x = ang->extrusion.x;
-      point->y = ang->extrusion.y;
-      point->z = ang->extrusion.z;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns dim ang2ln user text
-char *
-dwg_ent_dim_ang2ln_get_user_text(dwg_ent_dim_ang2ln *ang, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      return ang->user_text;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty ang", __FUNCTION__)
-      *error = 1;
-      return NULL;
-    }
-}
-
-/// Sets dim ang2ln user text
-void
-dwg_ent_dim_ang2ln_set_user_text(dwg_ent_dim_ang2ln *ang, char * text,
-                                 int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      ang->user_text = text;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns dim ang2ln text rotation
-BITCODE_BD
-dwg_ent_dim_ang2ln_get_text_rot(dwg_ent_dim_ang2ln *ang, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      return ang->text_rot;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
-    }
-}
-
-/// Sets dim ang2ln text rotation
-void
-dwg_ent_dim_ang2ln_set_text_rot(dwg_ent_dim_ang2ln *ang, BITCODE_BD rot,
-                                int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      ang->text_rot = rot;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns dim ang2ln ins rotation
-BITCODE_BD
-dwg_ent_dim_ang2ln_get_ins_rotation(dwg_ent_dim_ang2ln *ang, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      return ang->ins_rotation;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
-    }
-}
-
-/// Sets dim ang2ln ins rotation
-void
-dwg_ent_dim_ang2ln_set_ins_rotation(dwg_ent_dim_ang2ln *ang, BITCODE_BD rot,
-                                int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      ang->ins_rotation = rot;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns dim ang2ln flip arrow 1
-char
-dwg_ent_dim_ang2ln_get_flip_arrow1(dwg_ent_dim_ang2ln *ang, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      return ang->flip_arrow1;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return '\0';
-    }
-}
-
-/// Sets dim ang2ln point flip arrow 1
-void
-dwg_ent_dim_ang2ln_set_flip_arrow1(dwg_ent_dim_ang2ln *ang, char flip_arrow,
-                                   int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      ang->flip_arrow1 = flip_arrow;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns dim ang2ln flip arrow 2
-char
-dwg_ent_dim_ang2ln_get_flip_arrow2(dwg_ent_dim_ang2ln *ang, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      return ang->flip_arrow2;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return '\0';
-    }
-}
-
-/// Sets dim ang2ln flip arrow 2
-void
-dwg_ent_dim_ang2ln_set_flip_arrow2(dwg_ent_dim_ang2ln *ang, char flip_arrow,
-                                   int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      ang->flip_arrow2 = flip_arrow;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Sets dim ang2ln text midpoint
-void
-dwg_ent_dim_ang2ln_set_text_mid_pt(dwg_ent_dim_ang2ln *ang,
-                                   dwg_point_2d *point, int *error)
-{
-  if (ang != 0)
-    {
-      *error = 0;
-      ang->text_midpt.x = point->x;
-      ang->text_midpt.y = point->y;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns dim ang2ln text mid point
-void
-dwg_ent_dim_ang2ln_get_text_mid_pt(dwg_ent_dim_ang2ln *ang,
-                                   dwg_point_2d *point, int *error)
-{
-  if (ang != 0 && point != 0)
-    {
-      *error = 0;
-      point->x = ang->text_midpt.x;
-      point->y = ang->text_midpt.y;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Sets dim ang2ln ins scale points
-void
-dwg_ent_dim_ang2ln_set_ins_scale(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
-                                 int *error)
-{
-  if (ang != 0 && point != 0)
-    {
-      *error = 0;
-      ang->ins_scale.x = point->x;
-      ang->ins_scale.y = point->y;
-      ang->ins_scale.z = point->z;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns dim ang2ln ins scale points
-void
-dwg_ent_dim_ang2ln_get_ins_scale(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
-                                 int *error)
-{
-  if (ang != 0 && point != 0)
-    {
-      *error = 0;
-      point->x = ang->ins_scale.x;
-      point->y = ang->ins_scale.y;
-      point->z = ang->ins_scale.z;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Sets dim ang2ln 12 point
-void
-dwg_ent_dim_ang2ln_set_12_pt(dwg_ent_dim_ang2ln *ang, dwg_point_2d *point,
+dwg_ent_dim_ang2ln_set_def_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
                              int *error)
 {
   if (ang != 0 && point != 0)
     {
       *error = 0;
-      ang->_12_pt.x = point->x;
-      ang->_12_pt.y = point->y;
+      ang->def_pt.x = point->x;
+      ang->def_pt.y = point->y;
+      ang->def_pt.z = point->z;
     }
   else
     {
@@ -9760,54 +6860,17 @@ dwg_ent_dim_ang2ln_set_12_pt(dwg_ent_dim_ang2ln *ang, dwg_point_2d *point,
     }
 }
 
-/// Returns dim ang2ln 12 point
+/// Returns dim ang2ln 10 def point
 void
-dwg_ent_dim_ang2ln_get_12_pt(dwg_ent_dim_ang2ln *ang, dwg_point_2d *point,
+dwg_ent_dim_ang2ln_get_def_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
                              int *error)
 {
   if (ang != 0 && point != 0)
     {
       *error = 0;
-      point->x = ang->_12_pt.x;
-      point->y = ang->_12_pt.y;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Sets dim ang2ln 10 point
-void
-dwg_ent_dim_ang2ln_set_10_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
-                             int *error)
-{
-  if (ang != 0 && point != 0)
-    {
-      *error = 0;
-      ang->_10_pt.x = point->x;
-      ang->_10_pt.y = point->y;
-      ang->_10_pt.z = point->z;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns dim ang2ln 10 point
-void
-dwg_ent_dim_ang2ln_get_10_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
-                             int *error)
-{
-  if (ang != 0 && point != 0)
-    {
-      *error = 0;
-      point->x = ang->_10_pt.x;
-      point->y = ang->_10_pt.y;
-      point->z = ang->_10_pt.z;
+      point->x = ang->def_pt.x;
+      point->y = ang->def_pt.y;
+      point->z = ang->def_pt.z;
     }
   else
     {
@@ -9893,17 +6956,17 @@ dwg_ent_dim_ang2ln_get_14_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
 }
 
 
-/// Sets dim ang2ln 15 point
+/// Sets dim ang2ln first_arc 15 point
 void
-dwg_ent_dim_ang2ln_set_15_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
+dwg_ent_dim_ang2ln_set_first_arc_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
                              int *error)
 {
   if (ang != 0 && point != 0)
     {
       *error = 0;
-      ang->_15_pt.x = point->x;
-      ang->_15_pt.y = point->y;
-      ang->_15_pt.z = point->z;
+      ang->first_arc_pt.x = point->x;
+      ang->first_arc_pt.y = point->y;
+      ang->first_arc_pt.z = point->z;
     }
   else
     {
@@ -9912,17 +6975,17 @@ dwg_ent_dim_ang2ln_set_15_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
     }
 }
 
-/// Returns dim ang2ln 15 point
+/// Returns dim ang2ln first_arc 15 point
 void
-dwg_ent_dim_ang2ln_get_15_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
+dwg_ent_dim_ang2ln_get_first_arc_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
                              int *error)
 {
   if (ang != 0 && point != 0)
     {
       *error = 0;
-      point->x = ang->_15_pt.x;
-      point->y = ang->_15_pt.y;
-      point->z = ang->_15_pt.z;
+      point->x = ang->first_arc_pt.x;
+      point->y = ang->first_arc_pt.y;
+      point->z = ang->first_arc_pt.z;
     }
   else
     {
@@ -9972,589 +7035,18 @@ dwg_ent_dim_ang2ln_get_16_pt(dwg_ent_dim_ang2ln *ang, dwg_point_2d *point,
 *              FUNCTIONS FOR RADIUS DIMENSION ENTITY                *
 ********************************************************************/
 
-/// Returns the elevation ecs11
-/** Usage : double ecs11 = dwg_ent_dim_radius_get_elevation_ecs11(dim, &error);
-\param 1 dwg_ent_dim_radius
-\param 2 int
-*/
-BITCODE_BD
-dwg_ent_dim_radius_get_elevation_ecs11(dwg_ent_dim_radius *radius, int *error)
-{
-  if (radius != 0)
-    {
-      *error = 0;
-      return radius->elevation.ecs_11;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
-    }
-}
 
-/// Sets the elevation ecs11
-/** Usage : dwg_ent_dim_radius_set_elevation_ecs11(dim, ecs11, &error);
-\param 1 dwg_ent_dim_radius
-\param 2 double
-\param 3 int
-*/
+/// Sets dim radius def 10 point
 void
-dwg_ent_dim_radius_set_elevation_ecs11(dwg_ent_dim_radius *radius,
-                                       double elevation_ecs11, int *error)
-{
-  if (radius != 0)
-    {
-      *error = 0;
-      radius->elevation.ecs_11 = elevation_ecs11;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the elevation ecs12
-/** Usage : double ecs12 = dwg_ent_dim_radius_get_elevation_ecs12(dim, &error);
-\param 1 dwg_ent_dim_radius
-\param 2 int
-*/
-BITCODE_BD
-dwg_ent_dim_radius_get_elevation_ecs12(dwg_ent_dim_radius *radius, int *error)
-{
-  if (radius != 0)
-    {
-      *error = 0;
-      return radius->elevation.ecs_12;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
-    }
-}
-
-/// Sets the elevation ecs12
-/** Usage : dwg_ent_dim_radius_set_elevation_ecs12(dim, ecs12, &error);
-\param 1 dwg_ent_dim_radius
-\param 2 double
-\param 3 int
-*/
-void
-dwg_ent_dim_radius_set_elevation_ecs12(dwg_ent_dim_radius *radius,
-                                       double elevation_ecs12, int *error)
-{
-  if (radius != 0)
-    {
-      *error = 0;
-      radius->elevation.ecs_12 = elevation_ecs12;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns dim radius flags 1
-char
-dwg_ent_dim_radius_get_flags1(dwg_ent_dim_radius *radius, int *error)
-{
-  if (radius != 0)
-    {
-      *error = 0;
-      return radius->flags_1;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return '\0';
-    }
-}
-
-/// Sets dim radius flags 1
-void
-dwg_ent_dim_radius_set_flags1(dwg_ent_dim_radius *radius, char flag,
-                              int *error)
-{
-  if (radius != 0)
-    {
-      *error = 0;
-      radius->flags_1 = flag;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns dim radius act measurement
-BITCODE_BD
-dwg_ent_dim_radius_get_act_measurement(dwg_ent_dim_radius *radius, int *error)
-{
-  if (radius != 0)
-    {
-      *error = 0;
-      return radius->act_measurement;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
-    }
-}
-
-/// Sets dim radius act measurement
-void
-dwg_ent_dim_radius_set_act_measurement(dwg_ent_dim_radius *radius,
-                                       double act_measurement, int *error)
-{
-  if (radius != 0)
-    {
-      *error = 0;
-      radius->act_measurement = act_measurement;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns dim radius horiz dir
-BITCODE_BD
-dwg_ent_dim_radius_get_horiz_dir(dwg_ent_dim_radius *radius, int *error)
-{
-  if (radius != 0)
-    {
-      *error = 0;
-      return radius->horiz_dir;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
-    }
-}
-
-/// Sets dim radius horiz dir
-void
-dwg_ent_dim_radius_set_horiz_dir(dwg_ent_dim_radius *radius, BITCODE_BD horiz_dir,
-                                 int *error)
-{
-  if (radius != 0)
-    {
-      *error = 0;
-      radius->horiz_dir = horiz_dir;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns dim radius lspace factor
-BITCODE_BD
-dwg_ent_dim_radius_get_lspace_factor(dwg_ent_dim_radius *radius, int *error)
-{
-  if (radius != 0)
-    {
-      *error = 0;
-      return radius->lspace_factor;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
-    }
-}
-
-/// Sets dim radius lspace factor
-void
-dwg_ent_dim_radius_set_lspace_factor(dwg_ent_dim_radius *radius, BITCODE_BD factor,
-                                     int *error)
-{
-  if (radius != 0)
-    {
-      *error = 0;
-      radius->lspace_factor = factor;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns dim radius lspace style
-BITCODE_BS
-dwg_ent_dim_radius_get_lspace_style(dwg_ent_dim_radius *radius, int *error)
-{
-  if (radius != 0)
-    {
-      *error = 0;
-      return radius->lspace_style;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return 0;
-    }
-}
-
-/// Sets dim radius lspace style
-void
-dwg_ent_dim_radius_set_lspace_style(dwg_ent_dim_radius *radius,
-                                    BITCODE_BS style, int *error)
-{
-  if (radius != 0)
-    {
-      *error = 0;
-      radius->lspace_style = style;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns dim radius attachment point
-BITCODE_BS
-dwg_ent_dim_radius_get_attachment_point(dwg_ent_dim_radius *radius, int *error)
-{
-  if (radius != 0)
-    {
-      *error = 0;
-      return radius->attachment_point;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return 0;
-    }
-}
-
-/// Sets dim radius attachment point
-void
-dwg_ent_dim_radius_set_attachment_point(dwg_ent_dim_radius *radius,
-                                        BITCODE_BS point, int *error)
-{
-  if (radius != 0)
-    {
-      *error = 0;
-      radius->attachment_point = point;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Sets dim radius extrusion
-void
-dwg_ent_dim_radius_set_extrusion(dwg_ent_dim_radius *radius,
-                                 dwg_point_3d *point, int *error)
-{
-  if (radius != 0 && point != 0)
-    {
-      *error = 0;
-      radius->extrusion.x = point->x;
-      radius->extrusion.y = point->y;
-      radius->extrusion.z = point->z;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns dim radius extrusion
-void
-dwg_ent_dim_radius_get_extrusion(dwg_ent_dim_radius *radius,
-                                 dwg_point_3d *point, int *error)
-{
-  if (radius != 0 && point != 0)
-    {
-      *error = 0;
-      point->x = radius->extrusion.x;
-      point->y = radius->extrusion.y;
-      point->z = radius->extrusion.z;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns dim radius user text
-char *
-dwg_ent_dim_radius_get_user_text(dwg_ent_dim_radius *radius, int *error)
-{
-  if (radius != 0)
-    {
-      *error = 0;
-      return radius->user_text;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty radius", __FUNCTION__)
-      *error = 1;
-      return NULL;
-    }
-}
-
-/// Sets dim radius user text
-void
-dwg_ent_dim_radius_set_user_text(dwg_ent_dim_radius *radius, char * text,
-                                 int *error)
-{
-  if (radius != 0)
-    {
-      *error = 0;
-      radius->user_text = text;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty radius", __FUNCTION__)
-      *error = 1;
-    }
-}
-
-/// Returns dim radius text rotation
-BITCODE_BD
-dwg_ent_dim_radius_get_text_rot(dwg_ent_dim_radius *radius, int *error)
-{
-  if (radius != 0)
-    {
-      *error = 0;
-      return radius->text_rot;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty radius", __FUNCTION__)
-      *error = 1;
-      return nan("");
-    }
-}
-
-/// Sets dim radius text rotation
-void
-dwg_ent_dim_radius_set_text_rot(dwg_ent_dim_radius *radius, BITCODE_BD rot,
-                                int *error)
-{
-  if (radius != 0)
-    {
-      *error = 0;
-      radius->text_rot = rot;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty radius", __FUNCTION__)
-      *error = 1;
-    }
-}
-
-/// Returns dim radius ins rotation
-BITCODE_BD
-dwg_ent_dim_radius_get_ins_rotation(dwg_ent_dim_radius *radius, int *error)
-{
-  if (radius != 0)
-    {
-      *error = 0;
-      return radius->ins_rotation;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty radius", __FUNCTION__)
-      *error = 1;
-      return nan("");
-    }
-}
-
-/// Sets dim radius ins rotation
-void
-dwg_ent_dim_radius_set_ins_rotation(dwg_ent_dim_radius *radius, BITCODE_BD rot,
-                                    int *error)
-{
-  if (radius != 0)
-    {
-      *error = 0;
-      radius->ins_rotation = rot;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty radius", __FUNCTION__)
-      *error = 1;
-    }
-}
-
-/// Returns dim radius flip arrow 1
-char
-dwg_ent_dim_radius_get_flip_arrow1(dwg_ent_dim_radius *radius, int *error)
-{
-  if (radius != 0)
-    {
-      *error = 0;
-      return radius->flip_arrow1;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty radius", __FUNCTION__)
-      *error = 1;
-      return '\0';
-    }
-}
-
-/// Sets dim radius flip arrow 1
-void
-dwg_ent_dim_radius_set_flip_arrow1(dwg_ent_dim_radius *radius, char flip_arrow,
-                                   int *error)
-{
-  if (radius != 0)
-    {
-      *error = 0;
-      radius->flip_arrow1 = flip_arrow;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty radius", __FUNCTION__)
-      *error = 1;
-    }
-}
-
-/// Returns dim radius flip arrow 2
-char
-dwg_ent_dim_radius_get_flip_arrow2(dwg_ent_dim_radius *radius, int *error)
-{
-  if (radius != 0)
-    {
-      *error = 0;
-      return radius->flip_arrow2;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty radius", __FUNCTION__)
-      *error = 1;
-      return '\0';
-    }
-}
-
-/// Sets dim radius flip arrow 2
-void
-dwg_ent_dim_radius_set_flip_arrow2(dwg_ent_dim_radius *radius, char flip_arrow,
-                                   int *error)
-{
-  if (radius != 0)
-    {
-      *error = 0;
-      radius->flip_arrow2 = flip_arrow;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty radius", __FUNCTION__)
-      *error = 1;
-    }
-}
-
-/// Sets dim radius text mid point
-void
-dwg_ent_dim_radius_set_text_mid_pt(dwg_ent_dim_radius *radius,
-                                   dwg_point_2d *point, int *error)
-{
-  if (radius != 0 && point != 0)
-    {
-      *error = 0;
-      radius->text_midpt.x = point->x;
-      radius->text_midpt.y = point->y;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty radius", __FUNCTION__)
-      *error = 1;
-    }
-}
-
-/// Returns dim radius text mid point
-void
-dwg_ent_dim_radius_get_text_mid_pt(dwg_ent_dim_radius *radius,
-                                   dwg_point_2d *point, int *error)
-{
-  if (radius != 0 && point != 0)
-    {
-      *error = 0;
-      point->x = radius->text_midpt.x;
-      point->y = radius->text_midpt.y;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty radius", __FUNCTION__)
-      *error = 1;
-    }
-}
-
-/// Sets dim radius ins scale
-void
-dwg_ent_dim_radius_set_ins_scale(dwg_ent_dim_radius *radius,
-                                 dwg_point_3d *point, int *error)
-{
-  if (radius != 0 && point != 0)
-    {
-      *error = 0;
-      radius->ins_scale.x = point->x;
-      radius->ins_scale.y = point->y;
-      radius->ins_scale.z = point->z;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty radius", __FUNCTION__)
-      *error = 1;
-    }
-}
-
-/// Returns dim radius ins scale
-void
-dwg_ent_dim_radius_get_ins_scale(dwg_ent_dim_radius *radius,
-                                 dwg_point_3d *point, int *error)
-{
-  if (radius != 0 && point != 0)
-    {
-      *error = 0;
-      point->x = radius->ins_scale.x;
-      point->y = radius->ins_scale.y;
-      point->z = radius->ins_scale.z;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty radius", __FUNCTION__)
-      *error = 1;
-    }
-}
-
-
-/// Sets dim radius 12 point
-void
-dwg_ent_dim_radius_set_12_pt(dwg_ent_dim_radius *radius, dwg_point_2d *point,
+dwg_ent_dim_radius_set_def_pt(dwg_ent_dim_radius *radius, dwg_point_3d *point,
                              int *error)
 {
   if (radius != 0 && point != 0)
     {
       *error = 0;
-      radius->_12_pt.x = point->x;
-      radius->_12_pt.y = point->y;
+      radius->def_pt.x = point->x;
+      radius->def_pt.y = point->y;
+      radius->def_pt.z = point->z;
     }
   else
     {
@@ -10563,54 +7055,17 @@ dwg_ent_dim_radius_set_12_pt(dwg_ent_dim_radius *radius, dwg_point_2d *point,
     }
 }
 
-/// Returns dim radius 12 point
+/// Returns dim radius def 10 point
 void
-dwg_ent_dim_radius_get_12_pt(dwg_ent_dim_radius *radius, dwg_point_2d *point,
+dwg_ent_dim_radius_get_def_pt(dwg_ent_dim_radius *radius, dwg_point_3d *point,
                              int *error)
 {
   if (radius != 0 && point != 0)
     {
       *error = 0;
-      point->x = radius->_12_pt.x;
-      point->y = radius->_12_pt.y;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty radius", __FUNCTION__)
-      *error = 1;
-    }
-}
-
-/// Sets dim radius 10 point
-void
-dwg_ent_dim_radius_set_10_pt(dwg_ent_dim_radius *radius, dwg_point_3d *point,
-                             int *error)
-{
-  if (radius != 0 && point != 0)
-    {
-      *error = 0;
-      radius->_10_pt.x = point->x;
-      radius->_10_pt.y = point->y;
-      radius->_10_pt.z = point->z;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty radius", __FUNCTION__)
-      *error = 1;
-    }
-}
-
-/// Returns dim radius 10 point
-void
-dwg_ent_dim_radius_get_10_pt(dwg_ent_dim_radius *radius, dwg_point_3d *point,
-                             int *error)
-{
-  if (radius != 0 && point != 0)
-    {
-      *error = 0;
-      point->x = radius->_10_pt.x;
-      point->y = radius->_10_pt.y;
-      point->z = radius->_10_pt.z;
+      point->x = radius->def_pt.x;
+      point->y = radius->def_pt.y;
+      point->z = radius->def_pt.z;
     }
   else
     {
@@ -10620,17 +7075,17 @@ dwg_ent_dim_radius_get_10_pt(dwg_ent_dim_radius *radius, dwg_point_3d *point,
 }
 
 
-/// Sets dim radius 15 point
+/// Sets dim radius first_arc 15 point
 void
-dwg_ent_dim_radius_set_15_pt(dwg_ent_dim_radius *radius, dwg_point_3d *point,
+dwg_ent_dim_radius_set_first_arc_pt(dwg_ent_dim_radius *radius, dwg_point_3d *point,
                              int *error)
 {
   if (radius != 0 && point != 0)
     {
       *error = 0;
-      radius->_15_pt.x = point->x;
-      radius->_15_pt.y = point->y;
-      radius->_15_pt.z = point->z;
+      radius->first_arc_pt.x = point->x;
+      radius->first_arc_pt.y = point->y;
+      radius->first_arc_pt.z = point->z;
     }
   else
     {
@@ -10639,17 +7094,17 @@ dwg_ent_dim_radius_set_15_pt(dwg_ent_dim_radius *radius, dwg_point_3d *point,
     }
 }
 
-/// Returns dim radius 15 point
+/// Returns dim radius first_arc 15 point
 void
-dwg_ent_dim_radius_get_15_pt(dwg_ent_dim_radius *radius, dwg_point_3d *point,
+dwg_ent_dim_radius_get_first_arc_pt(dwg_ent_dim_radius *radius, dwg_point_3d *point,
                              int *error)
 {
   if (radius != 0 && point != 0)
     {
       *error = 0;
-      point->x = radius->_15_pt.x;
-      point->y = radius->_15_pt.y;
-      point->z = radius->_15_pt.z;
+      point->x = radius->first_arc_pt.x;
+      point->y = radius->first_arc_pt.y;
+      point->z = radius->first_arc_pt.z;
     }
   else
     {
@@ -10696,588 +7151,18 @@ dwg_ent_dim_radius_set_leader_length(dwg_ent_dim_radius *radius, BITCODE_BD leng
 *             FUNCTIONS FOR DIAMETER DIMENSION ENTITY               *
 ********************************************************************/
 
-/// Returns the elevation ecs11
-/** Usage : double ecs11 = dwg_ent_dim_diameter_get_elevation_ecs11(dim, &error);
-\param 1 dwg_ent_dim_diameter
-\param 2 int
-*/
-BITCODE_BD
-dwg_ent_dim_diameter_get_elevation_ecs11(dwg_ent_dim_diameter *dia, int *error)
-{
-  if (dia != 0)
-    {
-      *error = 0;
-      return dia->elevation.ecs_11;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty dia", __FUNCTION__)
-      *error = 1;
-      return nan("");
-    }
-}
 
-/// Sets the elevation ecs11
-/** Usage : dwg_ent_dim_diameter_set_elevation_ecs11(dim, ecs11, &error);
-\param 1 dwg_ent_dim_diameter
-\param 2 double
-\param 3 int
-*/
+/// Sets dim diameter def 10 point
 void
-dwg_ent_dim_diameter_set_elevation_ecs11(dwg_ent_dim_diameter *dia,
-                                         double elevation_ecs11, int *error)
-{
-  if (dia != 0)
-    {
-      *error = 0;
-      dia->elevation.ecs_11 = elevation_ecs11;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty dia", __FUNCTION__)
-      *error = 1;
-    }
-}
-
-/// Returns the elevation ecs12
-/** Usage : double ecs12 = dwg_ent_dim_diameter_get_elevation_ecs12(dim, &error);
-\param 1 dwg_ent_dim_diameter
-\param 2 int
-*/
-BITCODE_BD
-dwg_ent_dim_diameter_get_elevation_ecs12(dwg_ent_dim_diameter *dia, int *error)
-{
-  if (dia != 0)
-    {
-      *error = 0;
-      return dia->elevation.ecs_12;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty dia", __FUNCTION__)
-      *error = 1;
-      return nan("");
-    }
-}
-
-/// Sets the elevation ecs12
-/** Usage : dwg_ent_dim_diameter_set_elevation_ecs12(dim, ecs12, &error);
-\param 1 dwg_ent_dim_diameter
-\param 2 double
-\param 3 int
-*/
-void
-dwg_ent_dim_diameter_set_elevation_ecs12(dwg_ent_dim_diameter *dia,
-                                         double elevation_ecs12, int *error)
-{
-  if (dia != 0)
-    {
-      *error = 0;
-      dia->elevation.ecs_12 = elevation_ecs12;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty dia", __FUNCTION__)
-      *error = 1;
-    }
-}
-
-/// Returns dim diameter flags1
-char
-dwg_ent_dim_diameter_get_flags1(dwg_ent_dim_diameter *dia, int *error)
-{
-  if (dia != 0)
-    {
-      *error = 0;
-      return dia->flags_1;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty dia", __FUNCTION__)
-      *error = 1;
-      return '\0';
-    }
-}
-
-/// Sets dim diameter flags1
-void
-dwg_ent_dim_diameter_set_flags1(dwg_ent_dim_diameter *dia, char flag,
-                                int *error)
-{
-  if (dia != 0)
-    {
-      *error = 0;
-      dia->flags_1 = flag;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty dia", __FUNCTION__)
-      *error = 1;
-    }
-}
-
-/// Returns dim diameter act measurement
-BITCODE_BD
-dwg_ent_dim_diameter_get_act_measurement(dwg_ent_dim_diameter *dia, int *error)
-{
-  if (dia != 0)
-    {
-      *error = 0;
-      return dia->act_measurement;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty dia", __FUNCTION__)
-      *error = 1;
-      return nan("");
-    }
-}
-
-/// Sets dim diameter act measurement
-void
-dwg_ent_dim_diameter_set_act_measurement(dwg_ent_dim_diameter *dia,
-                                         double act_measurement, int *error)
-{
-  if (dia != 0)
-    {
-      *error = 0;
-      dia->act_measurement = act_measurement;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty dia", __FUNCTION__)
-      *error = 1;
-    }
-}
-
-/// Returns dim diameter horiz dir
-BITCODE_BD
-dwg_ent_dim_diameter_get_horiz_dir(dwg_ent_dim_diameter *dia, int *error)
-{
-  if (dia != 0)
-    {
-      *error = 0;
-      return dia->horiz_dir;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty dia", __FUNCTION__)
-      *error = 1;
-      return nan("");
-    }
-}
-
-/// Sets dim diameter horiz dir
-void
-dwg_ent_dim_diameter_set_horiz_dir(dwg_ent_dim_diameter *dia, BITCODE_BD horiz_dir,
-                                   int *error)
-{
-  if (dia != 0)
-    {
-      *error = 0;
-      dia->horiz_dir = horiz_dir;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty dia", __FUNCTION__)
-      *error = 1;
-    }
-}
-
-/// Returns dim diameter lspace factor
-BITCODE_BD
-dwg_ent_dim_diameter_get_lspace_factor(dwg_ent_dim_diameter *dia, int *error)
-{
-  if (dia != 0)
-    {
-      *error = 0;
-      return dia->lspace_factor;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty dia", __FUNCTION__)
-      *error = 1;
-      return nan("");
-    }
-}
-
-/// Sets dim diameter
-void
-dwg_ent_dim_diameter_set_lspace_factor(dwg_ent_dim_diameter *dia,
-                                       double factor, int *error)
-{
-  if (dia != 0)
-    {
-      *error = 0;
-      dia->lspace_factor = factor;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty dia", __FUNCTION__)
-      *error = 1;
-    }
-}
-/// Returns dim diameter lspace style
-BITCODE_BS
-dwg_ent_dim_diameter_get_lspace_style(dwg_ent_dim_diameter *dia, int *error)
-{
-  if (dia != 0)
-    {
-      *error = 0;
-      return dia->lspace_style;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty dia", __FUNCTION__)
-      *error = 1;
-      return (BITCODE_BS)-1;
-    }
-}
-
-/// Sets dim diameter lspace style
-void
-dwg_ent_dim_diameter_set_lspace_style(dwg_ent_dim_diameter *dia,
-                                      BITCODE_BS style, int *error)
-{
-  if (dia != 0)
-    {
-      *error = 0;
-      dia->lspace_style = style;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty dia", __FUNCTION__)
-      *error = 1;
-    }
-}
-
-/// Returns dim diameter attachment point
-BITCODE_BS
-dwg_ent_dim_diameter_get_attachment_point(dwg_ent_dim_diameter *dia,
-                                          int *error)
-{
-  if (dia != 0)
-    {
-      *error = 0;
-      return dia->attachment_point;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty dia", __FUNCTION__)
-      *error = 1;
-      return (BITCODE_BS)-1;
-    }
-}
-
-/// Sets dim diameter attachment point
-void
-dwg_ent_dim_diameter_set_attachment_point(dwg_ent_dim_diameter *dia,
-                                          BITCODE_BS point, int *error)
-{
-  if (dia != 0)
-    {
-      *error = 0;
-      dia->attachment_point = point;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty dia", __FUNCTION__)
-      *error = 1;
-    }
-}
-
-/// Sets dim diameter extrusion
-void
-dwg_ent_dim_diameter_set_extrusion(dwg_ent_dim_diameter *dia,
-                                   dwg_point_3d *point, int *error)
-{
-  if (dia != 0 && point != 0)
-    {
-      *error = 0;
-      dia->extrusion.x = point->x;
-      dia->extrusion.y = point->y;
-      dia->extrusion.z = point->z;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty dia", __FUNCTION__)
-      *error = 1;
-    }
-}
-
-/// Returns dim diameter extrusion
-void
-dwg_ent_dim_diameter_get_extrusion(dwg_ent_dim_diameter *dia,
-                                   dwg_point_3d *point, int *error)
-{
-  if (dia != 0 && point != 0)
-    {
-      *error = 0;
-      point->x = dia->extrusion.x;
-      point->y = dia->extrusion.y;
-      point->z = dia->extrusion.z;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty dia", __FUNCTION__)
-      *error = 1;
-    }
-}
-
-/// Returns dim diameter user text
-char *
-dwg_ent_dim_diameter_get_user_text(dwg_ent_dim_diameter *dia, int *error)
-{
-  if (dia != 0)
-    {
-      *error = 0;
-      return dia->user_text;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty dia", __FUNCTION__)
-      *error = 1;
-      return NULL;
-    }
-}
-
-/// Sets dim diameter user text
-void
-dwg_ent_dim_diameter_set_user_text(dwg_ent_dim_diameter *dia, char * text,
-                                   int *error)
-{
-  if (dia != 0)
-    {
-      *error = 0;
-      dia->user_text = text;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns dim diameter text rotation
-BITCODE_BD
-dwg_ent_dim_diameter_get_text_rot(dwg_ent_dim_diameter *dia, int *error)
-{
-  if (dia != 0)
-    {
-      *error = 0;
-      return dia->text_rot;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty dia", __FUNCTION__)
-      *error = 1;
-      return nan("");
-    }
-}
-
-/// Sets dim diameter text rotation
-void
-dwg_ent_dim_diameter_set_text_rot(dwg_ent_dim_diameter *dia, BITCODE_BD rot,
-                                  int *error)
-{
-  if (dia != 0)
-    {
-      *error = 0;
-      dia->text_rot = rot;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns dim diameter ins rotation
-BITCODE_BD
-dwg_ent_dim_diameter_get_ins_rotation(dwg_ent_dim_diameter *dia, int *error)
-{
-  if (dia != 0)
-    {
-      *error = 0;
-      return dia->ins_rotation;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty dia", __FUNCTION__)
-      *error = 1;
-      return nan("");
-    }
-}
-
-/// Sets dim diameter ins rotation
-void
-dwg_ent_dim_diameter_set_ins_rotation(dwg_ent_dim_diameter *dia, BITCODE_BD rot,
-                                      int *error)
-{
-  if (dia != 0)
-    {
-      *error = 0;
-      dia->ins_rotation = rot;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns dim diameter flip arrow 1
-char
-dwg_ent_dim_diameter_get_flip_arrow1(dwg_ent_dim_diameter *dia, int *error)
-{
-  if (dia != 0)
-    {
-      *error = 0;
-      return dia->flip_arrow1;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return '\0';
-    }
-}
-
-/// Sets dim diameter flip arrow 1
-void
-dwg_ent_dim_diameter_set_flip_arrow1(dwg_ent_dim_diameter *dia,
-                                     char flip_arrow, int *error)
-{
-  if (dia != 0)
-    {
-      *error = 0;
-      dia->flip_arrow1 = flip_arrow;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns dim diameter flip arrow 2
-char
-dwg_ent_dim_diameter_get_flip_arrow2(dwg_ent_dim_diameter *dia, int *error)
-{
-  if (dia != 0)
-    {
-      *error = 0;
-      return dia->flip_arrow2;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return '\0';
-    }
-}
-
-/// Sets dim diameter flip arrow 2
-void
-dwg_ent_dim_diameter_set_flip_arrow2(dwg_ent_dim_diameter *dia,
-                                     char flip_arrow, int *error)
-{
-  if (dia != 0)
-    {
-      *error = 0;
-      dia->flip_arrow2 = flip_arrow;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Sets dim diameter text mid point
-void
-dwg_ent_dim_diameter_set_text_mid_pt(dwg_ent_dim_diameter *dia,
-                                     dwg_point_2d *point, int *error)
-{
-  if (dia != 0 && point != 0)
-    {
-      *error = 0;
-      dia->text_midpt.x = point->x;
-      dia->text_midpt.y = point->y;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns dim diameter text mid point
-void
-dwg_ent_dim_diameter_get_text_mid_pt(dwg_ent_dim_diameter *dia,
-                                     dwg_point_2d *point, int *error)
-{
-  if (dia != 0 && point != 0)
-    {
-      *error = 0;
-      point->x = dia->text_midpt.x;
-      point->y = dia->text_midpt.y;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Sets dim diameter ins scale
-void
-dwg_ent_dim_diameter_set_ins_scale(dwg_ent_dim_diameter *dia,
-                                   dwg_point_3d *point, int *error)
-{
-  if (dia != 0 && point != 0)
-    {
-      *error = 0;
-      dia->ins_scale.x = point->x;
-      dia->ins_scale.y = point->y;
-      dia->ins_scale.z = point->z;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns dim diameter ins scale
-void
-dwg_ent_dim_diameter_get_ins_scale(dwg_ent_dim_diameter *dia,
-                                   dwg_point_3d *point, int *error)
-{
-  if (dia != 0 && point != 0)
-    {
-      *error = 0;
-      point->x = dia->ins_scale.x;
-      point->y = dia->ins_scale.y;
-      point->z = dia->ins_scale.z;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Sets dim diameter 12 point
-void
-dwg_ent_dim_diameter_set_12_pt(dwg_ent_dim_diameter *dia, dwg_point_2d *point,
+dwg_ent_dim_diameter_set_def_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *point,
                                int *error)
 {
   if (dia != 0 && point != 0)
     {
       *error = 0;
-      dia->_12_pt.x = point->x;
-      dia->_12_pt.y = point->y;
+      dia->def_pt.x = point->x;
+      dia->def_pt.y = point->y;
+      dia->def_pt.z = point->z;
     }
   else
     {
@@ -11286,54 +7171,17 @@ dwg_ent_dim_diameter_set_12_pt(dwg_ent_dim_diameter *dia, dwg_point_2d *point,
     }
 }
 
-/// Returns dim diameter 12 point
+/// Returns dim diameter def 10 point
 void
-dwg_ent_dim_diameter_get_12_pt(dwg_ent_dim_diameter *dia, dwg_point_2d *point,
+dwg_ent_dim_diameter_get_def_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *point,
                                int *error)
 {
   if (dia != 0 && point != 0)
     {
       *error = 0;
-      point->x = dia->_12_pt.x;
-      point->y = dia->_12_pt.y;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Sets dim diameter 10 point
-void
-dwg_ent_dim_diameter_set_10_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *point,
-                               int *error)
-{
-  if (dia != 0 && point != 0)
-    {
-      *error = 0;
-      dia->_10_pt.x = point->x;
-      dia->_10_pt.y = point->y;
-      dia->_10_pt.z = point->z;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns dim diameter 10 point
-void
-dwg_ent_dim_diameter_get_10_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *point,
-                               int *error)
-{
-  if (dia != 0 && point != 0)
-    {
-      *error = 0;
-      point->x = dia->_10_pt.x;
-      point->y = dia->_10_pt.y;
-      point->z = dia->_10_pt.z;
+      point->x = dia->def_pt.x;
+      point->y = dia->def_pt.y;
+      point->z = dia->def_pt.z;
     }
   else
     {
@@ -11343,17 +7191,17 @@ dwg_ent_dim_diameter_get_10_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *point,
 }
 
 
-/// Sets dim diameter 15point
+/// Sets dim diameter first_arc 15 point
 void
-dwg_ent_dim_diameter_set_15_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *point,
+dwg_ent_dim_diameter_set_first_arc_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *point,
                                int *error)
 {
   if (dia != 0 && point != 0)
     {
       *error = 0;
-      dia->_15_pt.x = point->x;
-      dia->_15_pt.y = point->y;
-      dia->_15_pt.z = point->z;
+      dia->first_arc_pt.x = point->x;
+      dia->first_arc_pt.y = point->y;
+      dia->first_arc_pt.z = point->z;
     }
   else
     {
@@ -11362,17 +7210,17 @@ dwg_ent_dim_diameter_set_15_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *point,
     }
 }
 
-/// Returns dim diameter 15 point
+/// Returns dim diameter first_arc 15 point
 void
-dwg_ent_dim_diameter_get_15_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *point,
+dwg_ent_dim_diameter_get_first_arc_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *point,
                                int *error)
 {
   if (dia != 0 && point != 0)
     {
       *error = 0;
-      point->x = dia->_15_pt.x;
-      point->y = dia->_15_pt.y;
-      point->z = dia->_15_pt.z;
+      point->x = dia->first_arc_pt.x;
+      point->y = dia->first_arc_pt.y;
+      point->z = dia->first_arc_pt.z;
     }
   else
     {
@@ -12083,14 +7931,14 @@ dwg_ent_mtext_set_drawing_dir(dwg_ent_mtext *mtext, BITCODE_BS dir,
 
 }
 
-/// Returns mtext extends ht
+/// Returns mtext extents_height
 BITCODE_BD
-dwg_ent_mtext_get_extends_ht(dwg_ent_mtext *mtext, int *error)
+dwg_ent_mtext_get_extents_height(dwg_ent_mtext *mtext, int *error)
 {
   if (mtext != 0)
     {
       *error = 0;
-      return mtext->extends_ht;
+      return mtext->extents_height;
     }
   else
     {
@@ -12100,14 +7948,14 @@ dwg_ent_mtext_get_extends_ht(dwg_ent_mtext *mtext, int *error)
     }
 }
 
-/// Sets mtext extends ht
+/// Sets mtext 
 void
-dwg_ent_mtext_set_extends_ht(dwg_ent_mtext *mtext, BITCODE_BD ht, int *error)
+dwg_ent_mtext_set_extents_height(dwg_ent_mtext *mtext, BITCODE_BD ht, int *error)
 {
   if (mtext != 0)
     {
       *error = 0;
-      mtext->extends_ht = ht;
+      mtext->extents_height = ht;
     }
   else
     {
@@ -12117,14 +7965,14 @@ dwg_ent_mtext_set_extends_ht(dwg_ent_mtext *mtext, BITCODE_BD ht, int *error)
 
 }
 
-/// Returns mtext extends wid
+/// Returns mtext extents width
 BITCODE_BD
-dwg_ent_mtext_get_extends_wid(dwg_ent_mtext *mtext, int *error)
+dwg_ent_mtext_get_extents_width(dwg_ent_mtext *mtext, int *error)
 {
   if (mtext != 0)
     {
       *error = 0;
-      return mtext->extends_wid;
+      return mtext->extents_width;
     }
   else
     {
@@ -12134,14 +7982,14 @@ dwg_ent_mtext_get_extends_wid(dwg_ent_mtext *mtext, int *error)
     }
 }
 
-/// Sets mtext extends wid
+/// Sets mtext extents_width
 void
-dwg_ent_mtext_set_extends_wid(dwg_ent_mtext *mtext, BITCODE_BD wid, int *error)
+dwg_ent_mtext_set_extents_width(dwg_ent_mtext *mtext, BITCODE_BD wid, int *error)
 {
   if (mtext != 0)
     {
       *error = 0;
-      mtext->extends_wid = wid;
+      mtext->extents_width = wid;
     }
   else
     {
@@ -13027,12 +8875,12 @@ dwg_ent_tolerance_get_text_string(dwg_ent_tolerance *tol, int *error)
 ********************************************************************/
 /// Returns lwpline flags
 BITCODE_BS
-dwg_ent_lwpline_get_flags(dwg_ent_lwpline *lwpline, int *error)
+dwg_ent_lwpline_get_flag(dwg_ent_lwpline *lwpline, int *error)
 {
   if (lwpline != 0)
     {
       *error = 0;
-      return lwpline->flags;
+      return lwpline->flag;
     }
   else
     {
@@ -13044,12 +8892,12 @@ dwg_ent_lwpline_get_flags(dwg_ent_lwpline *lwpline, int *error)
 
 /// Sets lwpline flags
 void
-dwg_ent_lwpline_set_flags(dwg_ent_lwpline *lwpline, char flags, int *error)
+dwg_ent_lwpline_set_flag(dwg_ent_lwpline *lwpline, char flags, int *error)
 {
   if (lwpline != 0)
     {
       *error = 0;
-      lwpline->flags = flags;
+      lwpline->flag = flags;
     }
   else
     {
@@ -13370,12 +9218,12 @@ dwg_ent_lwpline_get_widths(dwg_ent_lwpline *lwpline, int *error)
 
 /// Returns ole2frame flags
 BITCODE_BS
-dwg_ent_ole2frame_get_flags(dwg_ent_ole2frame *frame, int *error)
+dwg_ent_ole2frame_get_flag(dwg_ent_ole2frame *frame, int *error)
 {
   if (frame != 0)
     {
       *error = 0;
-      return frame->flags;
+      return frame->flag;
     }
   else
     {
@@ -13387,13 +9235,13 @@ dwg_ent_ole2frame_get_flags(dwg_ent_ole2frame *frame, int *error)
 
 /// Sets ole2frame flags
 void
-dwg_ent_ole2frame_set_flags(dwg_ent_ole2frame *frame, BITCODE_BS flags,
+dwg_ent_ole2frame_set_flag(dwg_ent_ole2frame *frame, BITCODE_BS flags,
                             int *error)
 {
   if (frame != 0)
     {
       *error = 0;
-      frame->flags = flags;
+      frame->flag = flags;
     }
   else
     {
@@ -13541,12 +9389,12 @@ dwg_obj_proxy_set_class_id(dwg_obj_proxy *proxy, BITCODE_BL class_id,
 }
 
 BITCODE_BL
-dwg_obj_proxy_get_object_drawing_format(dwg_obj_proxy *proxy, int *error)
+dwg_obj_proxy_get_version(dwg_obj_proxy *proxy, int *error)
 {
   if (proxy != 0)
     {
       *error = 0;
-      return proxy->object_drawing_format;
+      return proxy->version;
     }
   else
     {
@@ -13557,14 +9405,14 @@ dwg_obj_proxy_get_object_drawing_format(dwg_obj_proxy *proxy, int *error)
 }
 
 void
-dwg_obj_proxy_set_object_drawing_format(dwg_obj_proxy *proxy,
-                                        BITCODE_BL object_drawing_format,
-                                        int *error)
+dwg_obj_proxy_set_version(dwg_obj_proxy *proxy,
+                          BITCODE_BL version,
+                          int *error)
 {
   if (proxy != 0)
     {
       *error = 0;
-      proxy->object_drawing_format = object_drawing_format;
+      proxy->version = version;
     }
   else
     {
@@ -13574,12 +9422,12 @@ dwg_obj_proxy_set_object_drawing_format(dwg_obj_proxy *proxy,
 }
 
 BITCODE_B
-dwg_obj_proxy_get_original_data_format(dwg_obj_proxy *proxy, int *error)
+dwg_obj_proxy_get_from_dxf(dwg_obj_proxy *proxy, int *error)
 {
   if (proxy != 0)
     {
       *error = 0;
-      return proxy->original_data_format;
+      return proxy->from_dxf;
     }
   else
     {
@@ -13590,14 +9438,14 @@ dwg_obj_proxy_get_original_data_format(dwg_obj_proxy *proxy, int *error)
 }
 
 void
-dwg_obj_proxy_set_original_data_format(dwg_obj_proxy *proxy,
-                                       BITCODE_B original_data_format,
-                                       int *error)
+dwg_obj_proxy_set_from_dxf(dwg_obj_proxy *proxy,
+                           BITCODE_B from_dxf,
+                           int *error)
 {
   if (proxy != 0)
     {
       *error = 0;
-      proxy->original_data_format = original_data_format;
+      proxy->from_dxf = from_dxf;
     }
   else
     {
@@ -14687,12 +10535,12 @@ dwg_ent_viewport_get_circle_zoom(dwg_ent_viewport *vp, int *error)
 
 /// Sets viewport status flags
 void
-dwg_ent_viewport_set_status_flags(dwg_ent_viewport *vp, BITCODE_BL flags, int *error)
+dwg_ent_viewport_set_status_flag(dwg_ent_viewport *vp, BITCODE_BL flags, int *error)
 {
   if (vp != 0)
     {
       *error = 0;
-      vp->status_flags = flags;
+      vp->status_flag = flags;
     }
   else
     {
@@ -14701,14 +10549,14 @@ dwg_ent_viewport_set_status_flags(dwg_ent_viewport *vp, BITCODE_BL flags, int *e
     }
 }
 
-/// Returns viewport status flags
+/// Returns viewport status flag
 BITCODE_BL
-dwg_ent_viewport_get_status_flags(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_status_flag(dwg_ent_viewport *vp, int *error)
 {
   if (vp != 0)
     {
       *error = 0;
-      return vp->status_flags;
+      return vp->status_flag;
     }
   else
     {
@@ -15707,12 +11555,12 @@ dwg_ent_polyline_pface_set_numfaces(dwg_ent_polyline_pface *pface,
 
 /// Returns polyline mesh flags
 BITCODE_BS
-dwg_ent_polyline_mesh_get_flags(dwg_ent_polyline_mesh *mesh, int *error)
+dwg_ent_polyline_mesh_get_flag(dwg_ent_polyline_mesh *mesh, int *error)
 {
   if (mesh != 0)
     {
       *error = 0;
-      return mesh->flags;
+      return mesh->flag;
     }
   else
     {
@@ -15724,13 +11572,13 @@ dwg_ent_polyline_mesh_get_flags(dwg_ent_polyline_mesh *mesh, int *error)
 
 /// Sets polyline mesh flags
 void
-dwg_ent_polyline_mesh_set_flags(dwg_ent_polyline_mesh *mesh,
+dwg_ent_polyline_mesh_set_flag(dwg_ent_polyline_mesh *mesh,
                                 BITCODE_BS flags, int *error)
 {
   if (mesh != 0)
     {
       *error = 0;
-      mesh->flags = flags;
+      mesh->flag = flags;
     }
   else
     {
@@ -16126,12 +11974,12 @@ dwg_ent_polyline_2d_set_elevation(dwg_ent_polyline_2d *line2d,
 
 /// Returns polyline 2d flag
 BITCODE_BS
-dwg_ent_polyline_2d_get_flags(dwg_ent_polyline_2d *line2d, int *error)
+dwg_ent_polyline_2d_get_flag(dwg_ent_polyline_2d *line2d, int *error)
 {
   if (line2d != 0)
     {
       *error = 0;
-      return line2d->flags;
+      return line2d->flag;
     }
   else
     {
@@ -16143,13 +11991,13 @@ dwg_ent_polyline_2d_get_flags(dwg_ent_polyline_2d *line2d, int *error)
 
 /// Sets polyline 2d flags
 void
-dwg_ent_polyline_2d_set_flags(dwg_ent_polyline_2d *line2d, BITCODE_BS flags,
+dwg_ent_polyline_2d_set_flag(dwg_ent_polyline_2d *line2d, BITCODE_BS flags,
                               int *error)
 {
   if (line2d != 0)
     {
       *error = 0;
-      line2d->flags = flags;
+      line2d->flag = flags;
     }
   else
     {
@@ -16231,14 +12079,14 @@ dwg_ent_polyline_2d_set_owned_obj_count(dwg_ent_polyline_2d *line2d,
 *                 FUNCTIONS FOR POLYLINE_3D ENTITY                  *
 ********************************************************************/
 
-/// Returns polyline 3d flags1
+/// Returns polyline 3d flag
 BITCODE_RC
-dwg_ent_polyline_3d_get_flags_1(dwg_ent_polyline_3d *line3d, int *error)
+dwg_ent_polyline_3d_get_flag(dwg_ent_polyline_3d *line3d, int *error)
 {
   if (line3d != 0)
     {
       *error = 0;
-      return line3d->flags_1;
+      return line3d->flag;
     }
   else
     {
@@ -16248,15 +12096,15 @@ dwg_ent_polyline_3d_get_flags_1(dwg_ent_polyline_3d *line3d, int *error)
     }
 }
 
-/// Sets polyline 3d flags1
+/// Sets polyline 3d flag
 void
-dwg_ent_polyline_3d_set_flags_1(dwg_ent_polyline_3d *line3d, BITCODE_RC flags_1,
+dwg_ent_polyline_3d_set_flag(dwg_ent_polyline_3d *line3d, BITCODE_RC flag,
                                 int *error)
 {
   if (line3d != 0)
     {
       *error = 0;
-      line3d->flags_1 = flags_1;
+      line3d->flag = flag;
     }
   else
     {
@@ -16265,14 +12113,14 @@ dwg_ent_polyline_3d_set_flags_1(dwg_ent_polyline_3d *line3d, BITCODE_RC flags_1,
     }
 }
 
-/// Returns polyline 3d flags2
+/// Returns polyline 3d flag2
 BITCODE_RC
-dwg_ent_polyline_3d_get_flags_2(dwg_ent_polyline_3d *line3d, int *error)
+dwg_ent_polyline_3d_get_flag2(dwg_ent_polyline_3d *line3d, int *error)
 {
   if (line3d != 0)
     {
       *error = 0;
-      return line3d->flags_2;
+      return line3d->flag2;
     }
   else
     {
@@ -16282,15 +12130,15 @@ dwg_ent_polyline_3d_get_flags_2(dwg_ent_polyline_3d *line3d, int *error)
     }
 }
 
-/// Sets polyline 3d flags2
+/// Sets polyline 3d flag2
 void
-dwg_ent_polyline_3d_set_flags_2(dwg_ent_polyline_3d *line3d, BITCODE_RC flags_2,
+dwg_ent_polyline_3d_set_flag2(dwg_ent_polyline_3d *line3d, BITCODE_RC flag2,
                                 int *error)
 {
   if (line3d != 0)
     {
       *error = 0;
-      line3d->flags_2 = flags_2;
+      line3d->flag2 = flag2;
     }
   else
     {
@@ -16338,8 +12186,8 @@ dwg_ent_polyline_3d_set_owned_obj_count(dwg_ent_polyline_3d *line3d,
 *                   FUNCTIONS FOR 3DFACE ENTITY                     *
 ********************************************************************/
 
-/// Returns invis flags of a _3dface entity.
-/** Usage :- BITCODE_BS flag = dwg_ent_3dface_get_invis_flags(_face, &error);
+/// Returns the invis flags of a _3dface entity.
+/** Usage :- BITCODE_BS flag = dwg_ent_3dface_get_invis_flags(_3dface, &error);
 \param 1 dwg_ent_3dface
 \param 2 int
 */
@@ -16360,7 +12208,7 @@ dwg_ent_3dface_get_invis_flags(dwg_ent_3dface *_3dface, int *error)
 }
 
 /// This sets the invis_flags of a _3dface entity.
-/** Usage :- dwg_ent_3dface_set_invis_flags(face, flag, &error);
+/** Usage :- dwg_ent_3dface_set_invis_flagsx(_3dface, flags, &error);
 \param 1 dwg_ent_3dface
 \param 2 BITCODE_BS
 \param 3 int
@@ -17090,11 +12938,11 @@ dwg_ent_image_set_num_clip_verts(dwg_ent_image *image, BITCODE_BD num, int *erro
 }
 
 /// Returns image clip verts
-dwg_ent_image_clip_vert *
+BITCODE_2RD *
 dwg_ent_image_get_clip_verts(dwg_ent_image *image, int *error)
 {
-  dwg_ent_image_clip_vert *ptx = (dwg_ent_image_clip_vert*)
-    malloc(sizeof(dwg_ent_image_clip_vert)* image->num_clip_verts);
+  BITCODE_2RD *ptx = (BITCODE_2RD*)
+    malloc(sizeof(BITCODE_2RD) * image->num_clip_verts);
   if (ptx != 0)
     {
       BITCODE_BL i;
@@ -17150,14 +12998,14 @@ dwg_ent_mline_get_scale(dwg_ent_mline *mline, int *error)
     }
 }
 
-/// sets just value
+/// sets justification value
 void
-dwg_ent_mline_set_just(dwg_ent_mline *mline, char just, int *error)
+dwg_ent_mline_set_justification(dwg_ent_mline *mline, char justification, int *error)
 {
   if (mline != 0)
     {
       *error = 0;
-      mline->just = just;
+      mline->justification = justification;
     }
   else
     {
@@ -17166,14 +13014,14 @@ dwg_ent_mline_set_just(dwg_ent_mline *mline, char just, int *error)
     }
 }
 
-/// Returns just value
+/// Returns justification value
 char
-dwg_ent_mline_get_just(dwg_ent_mline *mline, int *error)
+dwg_ent_mline_get_justification(dwg_ent_mline *mline, int *error)
 {
   if (mline != 0)
     {
       *error = 0;
-      return mline->just;
+      return mline->justification;
     }
   else
     {
@@ -17261,13 +13109,13 @@ dwg_ent_mline_get_extrusion(dwg_ent_mline *mline, dwg_point_3d *point,
 
 /// Sets open closed value
 void
-dwg_ent_mline_set_open_closed(dwg_ent_mline *mline, BITCODE_BS oc,
+dwg_ent_mline_set_flags(dwg_ent_mline *mline, BITCODE_BS oc,
                               int *error)
 {
   if (mline != 0)
     {
       *error = 0;
-      mline->open_closed = oc;
+      mline->flags = oc;
     }
   else
     {
@@ -17276,14 +13124,14 @@ dwg_ent_mline_set_open_closed(dwg_ent_mline *mline, BITCODE_BS oc,
     }
 }
 
-/// Returns open/closed value
+/// Returns flags value
 BITCODE_BS
-dwg_ent_mline_get_open_closed(dwg_ent_mline *mline, int *error)
+dwg_ent_mline_get_flags(dwg_ent_mline *mline, int *error)
 {
   if (mline != 0)
     {
       *error = 0;
-      return mline->open_closed;
+      return mline->flags;
     }
   else
     {
@@ -17361,11 +13209,11 @@ dwg_ent_mline_get_num_verts(dwg_ent_mline *mline, int *error)
 }
 
 /// Returns mline vertices
-dwg_ent_mline_vert *
+dwg_ent_mline_vertex *
 dwg_ent_mline_get_verts(dwg_ent_mline *mline, int *error)
 {
-  dwg_ent_mline_vert *ptx = (dwg_ent_mline_vert*)
-    malloc(sizeof(dwg_ent_mline_vert)* mline->num_verts);
+  dwg_ent_mline_vertex *ptx = (dwg_ent_mline_vertex*)
+    malloc(sizeof(dwg_ent_mline_vertex)* mline->num_verts);
   if (ptx != 0)
     {
       BITCODE_BS i;
@@ -18935,26 +14783,10 @@ dwg_ent_table_get_extrusion(dwg_ent_table *table, dwg_point_3d *point,
     }
 }
 
-/// Sets has attribs
-void
-dwg_ent_table_set_has_attribs(dwg_ent_table *table, unsigned char attribs,
-                              int *error)
-{
-  if (table != 0)
-    {
-      *error = 0;
-      table->has_attribs = attribs;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
 
 /// Returns has attribs
 unsigned char
-dwg_ent_table_get_has_attribs(dwg_ent_table *table, int *error)
+dwg_ent_table_has_attribs(dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -19176,31 +15008,14 @@ dwg_ent_table_get_row_heights(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets table overrides present
-void
-dwg_ent_table_set_table_overrides_present(dwg_ent_table *table,
-                                          BITCODE_B present, int *error)
-{
-  if (table != 0)
-    {
-      *error = 0;
-      table->table_overrides_present = present;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
 /// Returns table overrides present
 BITCODE_B
-dwg_ent_table_get_table_overrides_present(dwg_ent_table *table, int *error)
+dwg_ent_table_has_table_overrides(dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      return table->table_overrides_present;
+      return table->has_table_overrides;
     }
   else
     {
@@ -19720,33 +15535,15 @@ dwg_ent_table_get_data_row_height(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets border color overrides present value
-void
-dwg_ent_table_set_border_color_overrides_present(dwg_ent_table *table,
-                                                 unsigned char present,
-                                                 int *error)
-{
-  if (table != 0)
-    {
-      *error = 0;
-      table->border_color_overrides_present = present;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns border color overrides present value
+/// Returns border color overrides existance
 unsigned char
-dwg_ent_table_get_border_color_overrides_present(dwg_ent_table *table,
+dwg_ent_table_has_border_color_overrides(dwg_ent_table *table,
                                                  int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      return table->border_color_overrides_present;
+      return table->has_border_color_overrides;
     }
   else
     {
@@ -19790,33 +15587,16 @@ dwg_ent_table_get_border_color_overrides_flag(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets border lineweight overrides present value
-void
-dwg_ent_table_set_border_lineweight_overrides_present(dwg_ent_table *table,
-                                                      unsigned char present,
-                                                      int *error)
-{
-  if (table != 0)
-    {
-      *error = 0;
-      table->border_lineweight_overrides_present = present;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
 
 /// Returns border lineweight overrides present value
 unsigned char
-dwg_ent_table_get_border_lineweight_overrides_present(dwg_ent_table *table,
-                                                      int *error)
+dwg_ent_table_has_border_lineweight_overrides(dwg_ent_table *table,
+                                              int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      return table->border_lineweight_overrides_present;
+      return table->has_border_lineweight_overrides;
     }
   else
     {
@@ -19863,13 +15643,13 @@ dwg_ent_table_get_border_lineweight_overrides_flag(dwg_ent_table *table,
 
 /// Sets title horiz top lineweight value
 void
-dwg_ent_table_set_title_horiz_top_lineweight(dwg_ent_table *table,
+dwg_ent_table_set_title_horiz_top_linewt(dwg_ent_table *table,
                                             BITCODE_BS lw, int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      table->title_horiz_top_lineweigh = lw;
+      table->title_horiz_top_linewt = lw;
     }
   else
     {
@@ -19880,12 +15660,12 @@ dwg_ent_table_set_title_horiz_top_lineweight(dwg_ent_table *table,
 
 /// Returns title horiz top lineweight value
 BITCODE_BS
-dwg_ent_table_get_title_horiz_top_lineweight(dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_horiz_top_linewt(dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      return table->title_horiz_top_lineweigh;
+      return table->title_horiz_top_linewt;
     }
   else
     {
@@ -19897,13 +15677,13 @@ dwg_ent_table_get_title_horiz_top_lineweight(dwg_ent_table *table, int *error)
 
 /// Sets title horiz ins lineweight value
 void
-dwg_ent_table_set_title_horiz_ins_lineweight(dwg_ent_table *table,
+dwg_ent_table_set_title_horiz_ins_linewt(dwg_ent_table *table,
                                              BITCODE_BS lw, int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      table->title_horiz_ins_lineweigh = lw;
+      table->title_horiz_ins_linewt = lw;
     }
   else
     {
@@ -19914,12 +15694,12 @@ dwg_ent_table_set_title_horiz_ins_lineweight(dwg_ent_table *table,
 
 /// Returns title horiz ins lineweight value
 BITCODE_BS
-dwg_ent_table_get_title_horiz_ins_lineweight(dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_horiz_ins_linewt(dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      return table->title_horiz_ins_lineweigh;
+      return table->title_horiz_ins_linewt;
     }
   else
     {
@@ -19931,13 +15711,13 @@ dwg_ent_table_get_title_horiz_ins_lineweight(dwg_ent_table *table, int *error)
 
 /// Sets title horiz bottom lineweight value
 void
-dwg_ent_table_set_title_horiz_bottom_lineweight(dwg_ent_table *table,
+dwg_ent_table_set_title_horiz_bottom_linewt(dwg_ent_table *table,
                                                 BITCODE_BS lw, int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      table->title_horiz_bottom_lineweigh = lw;
+      table->title_horiz_bottom_linewt = lw;
     }
   else
     {
@@ -19948,13 +15728,13 @@ dwg_ent_table_set_title_horiz_bottom_lineweight(dwg_ent_table *table,
 
 /// Returns title horiz bottom lineweight value
 BITCODE_BS
-dwg_ent_table_get_title_horiz_bottom_lineweight(dwg_ent_table *table,
+dwg_ent_table_get_title_horiz_bottom_linewt(dwg_ent_table *table,
                                                 int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      return table->title_horiz_bottom_lineweigh;
+      return table->title_horiz_bottom_linewt;
     }
   else
     {
@@ -19966,13 +15746,13 @@ dwg_ent_table_get_title_horiz_bottom_lineweight(dwg_ent_table *table,
 
 /// Sets title vert left lineweight value
 void
-dwg_ent_table_set_title_vert_left_lineweight(dwg_ent_table *table,
+dwg_ent_table_set_title_vert_left_linewt(dwg_ent_table *table,
                                              BITCODE_BS lw, int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      table->title_vert_left_lineweigh = lw;
+      table->title_vert_left_linewt = lw;
     }
   else
     {
@@ -19983,12 +15763,12 @@ dwg_ent_table_set_title_vert_left_lineweight(dwg_ent_table *table,
 
 /// Sets title vert left lineweight value
 BITCODE_BS
-dwg_ent_table_get_title_vert_left_lineweight(dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_vert_left_linewt(dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      return table->title_vert_left_lineweigh;
+      return table->title_vert_left_linewt;
     }
   else
     {
@@ -20000,13 +15780,13 @@ dwg_ent_table_get_title_vert_left_lineweight(dwg_ent_table *table, int *error)
 
 /// Sets title vert ins lineweight value
 void
-dwg_ent_table_set_title_vert_ins_lineweight(dwg_ent_table *table,
+dwg_ent_table_set_title_vert_ins_linewt(dwg_ent_table *table,
                                             BITCODE_BS lw, int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      table->title_vert_ins_lineweigh = lw;
+      table->title_vert_ins_linewt = lw;
     }
   else
     {
@@ -20017,12 +15797,12 @@ dwg_ent_table_set_title_vert_ins_lineweight(dwg_ent_table *table,
 
 /// Returns title vert ins lineweight
 BITCODE_BS
-dwg_ent_table_get_title_vert_ins_lineweight(dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_vert_ins_linewt(dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      return table->title_vert_ins_lineweigh;
+      return table->title_vert_ins_linewt;
     }
   else
     {
@@ -20034,13 +15814,13 @@ dwg_ent_table_get_title_vert_ins_lineweight(dwg_ent_table *table, int *error)
 
 /// Sets title vert right lineweight
 void
-dwg_ent_table_set_title_vert_right_lineweight(dwg_ent_table *table,
+dwg_ent_table_set_title_vert_right_linewt(dwg_ent_table *table,
                                               BITCODE_BS lw, int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      table->title_vert_right_lineweigh = lw;
+      table->title_vert_right_linewt = lw;
     }
   else
     {
@@ -20051,12 +15831,12 @@ dwg_ent_table_set_title_vert_right_lineweight(dwg_ent_table *table,
 
 /// Returns title vert right lineweight value
 BITCODE_BS
-dwg_ent_table_get_title_vert_right_lineweight(dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_vert_right_linewt(dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      return table->title_vert_right_lineweigh;
+      return table->title_vert_right_linewt;
     }
   else
     {
@@ -20068,13 +15848,13 @@ dwg_ent_table_get_title_vert_right_lineweight(dwg_ent_table *table, int *error)
 
 /// Sets header horiz top lineweight
 void
-dwg_ent_table_set_header_horiz_top_lineweight(dwg_ent_table *table,
+dwg_ent_table_set_header_horiz_top_linewt(dwg_ent_table *table,
                                               BITCODE_BS lw, int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      table->header_horiz_top_lineweigh = lw;
+      table->header_horiz_top_linewt = lw;
     }
   else
     {
@@ -20085,12 +15865,12 @@ dwg_ent_table_set_header_horiz_top_lineweight(dwg_ent_table *table,
 
 /// Returns header horiz top lineweight value
 BITCODE_BS
-dwg_ent_table_get_header_horiz_top_lineweight(dwg_ent_table *table, int *error)
+dwg_ent_table_get_header_horiz_top_linewt(dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      return table->header_horiz_top_lineweigh;
+      return table->header_horiz_top_linewt;
     }
   else
     {
@@ -20102,13 +15882,13 @@ dwg_ent_table_get_header_horiz_top_lineweight(dwg_ent_table *table, int *error)
 
 /// Sets header horiz ins lineweight
 void
-dwg_ent_table_set_header_horiz_ins_lineweight(dwg_ent_table *table,
+dwg_ent_table_set_header_horiz_ins_linewt(dwg_ent_table *table,
                                               BITCODE_BS lw, int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      table->header_horiz_ins_lineweigh = lw;
+      table->header_horiz_ins_linewt = lw;
     }
   else
     {
@@ -20119,13 +15899,13 @@ dwg_ent_table_set_header_horiz_ins_lineweight(dwg_ent_table *table,
 
 /// Returns header horiz ins lineweight value
 BITCODE_BS
-dwg_ent_table_get_header_horiz_ins_lineweight(dwg_ent_table *table,
+dwg_ent_table_get_header_horiz_ins_linewt(dwg_ent_table *table,
                                               int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      return table->header_horiz_ins_lineweigh;
+      return table->header_horiz_ins_linewt;
     }
   else
     {
@@ -20137,13 +15917,13 @@ dwg_ent_table_get_header_horiz_ins_lineweight(dwg_ent_table *table,
 
 /// Sets header horiz bottom lineweight value
 void
-dwg_ent_table_set_header_horiz_bottom_lineweight(dwg_ent_table *table,
+dwg_ent_table_set_header_horiz_bottom_linewt(dwg_ent_table *table,
                                                  BITCODE_BS lw, int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      table->header_horiz_bottom_lineweigh = lw;
+      table->header_horiz_bottom_linewt = lw;
     }
   else
     {
@@ -20154,13 +15934,13 @@ dwg_ent_table_set_header_horiz_bottom_lineweight(dwg_ent_table *table,
 
 /// Returns header horiz bottom lineweight value
 BITCODE_BS
-dwg_ent_table_get_header_horiz_bottom_lineweight(dwg_ent_table *table,
+dwg_ent_table_get_header_horiz_bottom_linewt(dwg_ent_table *table,
                                                  int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      return table->header_horiz_bottom_lineweigh;
+      return table->header_horiz_bottom_linewt;
     }
   else
     {
@@ -20172,13 +15952,13 @@ dwg_ent_table_get_header_horiz_bottom_lineweight(dwg_ent_table *table,
 
 /// Sets header vert left lineweight value
 void
-dwg_ent_table_set_header_vert_left_lineweight(dwg_ent_table *table,
+dwg_ent_table_set_header_vert_left_linewt(dwg_ent_table *table,
                                               BITCODE_BS lw, int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      table->header_vert_left_lineweigh = lw;
+      table->header_vert_left_linewt = lw;
     }
   else
     {
@@ -20189,12 +15969,12 @@ dwg_ent_table_set_header_vert_left_lineweight(dwg_ent_table *table,
 
 /// Returns header vert left lineweight value
 BITCODE_BS
-dwg_ent_table_get_header_vert_left_lineweight(dwg_ent_table *table, int *error)
+dwg_ent_table_get_header_vert_left_linewt(dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      return table->header_vert_left_lineweigh;
+      return table->header_vert_left_linewt;
     }
   else
     {
@@ -20206,13 +15986,13 @@ dwg_ent_table_get_header_vert_left_lineweight(dwg_ent_table *table, int *error)
 
 /// Sets header vert ins lineweight
 void
-dwg_ent_table_set_header_vert_ins_lineweight(dwg_ent_table *table,
+dwg_ent_table_set_header_vert_ins_linewt(dwg_ent_table *table,
                                              BITCODE_BS lw, int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      table->header_vert_ins_lineweigh = lw;
+      table->header_vert_ins_linewt = lw;
     }
   else
     {
@@ -20223,12 +16003,12 @@ dwg_ent_table_set_header_vert_ins_lineweight(dwg_ent_table *table,
 
 /// Returns header vert ins lineweight value
 BITCODE_BS
-dwg_ent_table_get_header_vert_ins_lineweight(dwg_ent_table *table, int *error)
+dwg_ent_table_get_header_vert_ins_linewt(dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      return table->header_vert_ins_lineweigh;
+      return table->header_vert_ins_linewt;
     }
   else
     {
@@ -20240,13 +16020,13 @@ dwg_ent_table_get_header_vert_ins_lineweight(dwg_ent_table *table, int *error)
 
 /// Sets header vert right lineweight value
 void
-dwg_ent_table_set_header_vert_right_lineweight(dwg_ent_table *table,
+dwg_ent_table_set_header_vert_right_linewt(dwg_ent_table *table,
                                                BITCODE_BS lw, int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      table->header_vert_right_lineweigh = lw;
+      table->header_vert_right_linewt = lw;
     }
   else
     {
@@ -20257,13 +16037,13 @@ dwg_ent_table_set_header_vert_right_lineweight(dwg_ent_table *table,
 
 /// Returns header vert right lineweight value
 BITCODE_BS
-dwg_ent_table_get_header_vert_right_lineweight(dwg_ent_table *table,
+dwg_ent_table_get_header_vert_right_linewt(dwg_ent_table *table,
                                                int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      return table->header_vert_right_lineweigh;
+      return table->header_vert_right_linewt;
     }
   else
     {
@@ -20275,13 +16055,13 @@ dwg_ent_table_get_header_vert_right_lineweight(dwg_ent_table *table,
 
 /// Sets data horiz top lineweight value
 void
-dwg_ent_table_set_data_horiz_top_lineweight(dwg_ent_table *table,
+dwg_ent_table_set_data_horiz_top_linewt(dwg_ent_table *table,
                                             BITCODE_BS lw, int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      table->data_horiz_top_lineweigh = lw;
+      table->data_horiz_top_linewt = lw;
     }
   else
     {
@@ -20292,12 +16072,12 @@ dwg_ent_table_set_data_horiz_top_lineweight(dwg_ent_table *table,
 
 /// Returns data horiz top lineweight value
 BITCODE_BS
-dwg_ent_table_get_data_horiz_top_lineweight(dwg_ent_table *table, int *error)
+dwg_ent_table_get_data_horiz_top_linewt(dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      return table->data_horiz_top_lineweigh;
+      return table->data_horiz_top_linewt;
     }
   else
     {
@@ -20309,13 +16089,13 @@ dwg_ent_table_get_data_horiz_top_lineweight(dwg_ent_table *table, int *error)
 
 /// Sets data horiz ins lineweight value
 void
-dwg_ent_table_set_data_horiz_ins_lineweight(dwg_ent_table *table,
+dwg_ent_table_set_data_horiz_ins_linewt(dwg_ent_table *table,
                                             BITCODE_BS lw, int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      table->data_horiz_ins_lineweigh = lw;
+      table->data_horiz_ins_linewt = lw;
     }
   else
     {
@@ -20326,12 +16106,12 @@ dwg_ent_table_set_data_horiz_ins_lineweight(dwg_ent_table *table,
 
 /// Returns data horiz ins lineweight value
 BITCODE_BS
-dwg_ent_table_get_data_horiz_ins_lineweight(dwg_ent_table *table, int *error)
+dwg_ent_table_get_data_horiz_ins_linewt(dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      return table->data_horiz_ins_lineweigh;
+      return table->data_horiz_ins_linewt;
     }
   else
     {
@@ -20343,13 +16123,13 @@ dwg_ent_table_get_data_horiz_ins_lineweight(dwg_ent_table *table, int *error)
 
 /// Sets data horiz bottom lineweight
 void
-dwg_ent_table_set_data_horiz_bottom_lineweight(dwg_ent_table *table,
+dwg_ent_table_set_data_horiz_bottom_linewt(dwg_ent_table *table,
                                                BITCODE_BS lw, int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      table->data_horiz_bottom_lineweigh = lw;
+      table->data_horiz_bottom_linewt = lw;
     }
   else
     {
@@ -20360,13 +16140,13 @@ dwg_ent_table_set_data_horiz_bottom_lineweight(dwg_ent_table *table,
 
 /// Returns data horiz bottom lineweight
 BITCODE_BS
-dwg_ent_table_get_data_horiz_bottom_lineweight(dwg_ent_table *table,
+dwg_ent_table_get_data_horiz_bottom_linewt(dwg_ent_table *table,
                                                int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      return table->data_horiz_bottom_lineweigh;
+      return table->data_horiz_bottom_linewt;
     }
   else
     {
@@ -20378,13 +16158,13 @@ dwg_ent_table_get_data_horiz_bottom_lineweight(dwg_ent_table *table,
 
 /// Sets data vert ins lineweight value
 void
-dwg_ent_table_set_data_vert_ins_lineweight(dwg_ent_table *table,
+dwg_ent_table_set_data_vert_ins_linewt(dwg_ent_table *table,
                                            BITCODE_BS lw, int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      table->data_horiz_ins_lineweigh = lw;
+      table->data_horiz_ins_linewt = lw;
     }
   else
     {
@@ -20395,12 +16175,12 @@ dwg_ent_table_set_data_vert_ins_lineweight(dwg_ent_table *table,
 
 /// Returns title border visibility overrides flag
 BITCODE_BS
-dwg_ent_table_get_data_vert_ins_lineweight(dwg_ent_table *table, int *error)
+dwg_ent_table_get_data_vert_ins_linewt(dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      return table->data_horiz_ins_lineweigh;
+      return table->data_horiz_ins_linewt;
     }
   else
     {
@@ -20410,34 +16190,16 @@ dwg_ent_table_get_data_vert_ins_lineweight(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets title border visibility overrides flag
-/// Sets
-void
-dwg_ent_table_set_border_visibility_overrides_present(dwg_ent_table *table,
-                                                      unsigned char overrides,
-                                                      int *error)
-{
-  if (table != 0)
-    {
-      *error = 0;
-      table->border_visibility_overrides_present = overrides;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
 
 /// Returns title border visibility overrides flag
 unsigned char
-dwg_ent_table_get_border_visibility_overrides_present(dwg_ent_table *table,
+dwg_ent_table_has_border_visibility_overrides(dwg_ent_table *table,
                                                       int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      return table->border_visibility_overrides_present;
+      return table->has_border_visibility_overrides;
     }
   else
     {

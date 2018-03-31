@@ -62,83 +62,93 @@ static bool env_var_checked_p;
 #define FIELD(name,type)\
   { bit_write_##type(dat, _obj->name); \
     FIELD_TRACE(name, type); }
-#define FIELD_TRACE(name,type)\
-  if (loglevel>=2)\
-    {\
-        LOG_TRACE(#name ": " FORMAT_##type "\n", _obj->name)\
-    }
-#define FIELD_CAST(name,type,cast)\
+#define FIELDG(name,type,dxf) \
+  { bit_write_##type(dat, _obj->name); \
+    FIELD_G_TRACE(name, type, dxf); }
+#define FIELD_TRACE(name,type) \
+  LOG_TRACE(#name ": " FORMAT_##type "\n", _obj->name)
+#define FIELD_G_TRACE(name,type,dxfgroup) \
+  LOG_TRACE(#name ": " FORMAT_##type " " #type " " #dxfgroup "\n", _obj->name)
+#define FIELD_CAST(name,type,cast,dxf)                    \
   { bit_write_##type(dat, (BITCODE_##type)_obj->name); \
-    FIELD_TRACE(name,cast); }
+    FIELD_G_TRACE(name,cast,dxf); }
 
 #define FIELD_VALUE(name) _obj->name
 
-#define FIELD_B(name) FIELD(name, B);
-#define FIELD_BB(name) FIELD(name, BB);
-#define FIELD_3B(name) FIELD(name, 3B);
-#define FIELD_BS(name) FIELD(name, BS);
-#define FIELD_BL(name) FIELD(name, BL);
-#define FIELD_BLL(name) FIELD(name, BLL);
-#define FIELD_BD(name) FIELD(name, BD);
-#define FIELD_RC(name) FIELD(name, RC);
-#define FIELD_RS(name) FIELD(name, RS);
-#define FIELD_RD(name) FIELD(name, RD);
-#define FIELD_RL(name) FIELD(name, RL);
-#define FIELD_RLL(name) FIELD(name, RLL);
-#define FIELD_MC(name) FIELD(name, MC);
-#define FIELD_MS(name) FIELD(name, MS);
-#define FIELD_TV(name) \
-  { IF_ENCODE_FROM_EARLIER { _obj->name = strdup(""); } FIELD(name, TV); }
+#define FIELD_B(name,dxf) FIELDG(name, B, dxf)
+#define FIELD_BB(name,dxf) FIELDG(name, BB, dxf)
+#define FIELD_3B(name,dxf) FIELDG(name, 3B, dxf)
+#define FIELD_BS(name,dxf) FIELDG(name, BS, dxf)
+#define FIELD_BL(name,dxf) FIELDG(name, BL, dxf)
+#define FIELD_BLL(name,dxf) FIELDG(name, BLL, dxf)
+#define FIELD_BD(name,dxf) FIELDG(name, BD, dxf)
+#define FIELD_RC(name,dxf) FIELDG(name, RC, dxf)
+#define FIELD_RS(name,dxf) FIELDG(name, RS, dxf)
+#define FIELD_RD(name,dxf) FIELDG(name, RD, dxf)
+#define FIELD_RL(name,dxf) FIELDG(name, RL, dxf)
+#define FIELD_RLL(name,dxf) FIELDG(name, RLL, dxf)
+#define FIELD_MC(name,dxf) FIELDG(name, MC, dxf)
+#define FIELD_MS(name,dxf) FIELDG(name, MS, dxf)
+#define FIELD_TV(name,dxf) \
+  { IF_ENCODE_FROM_EARLIER { _obj->name = strdup(""); } FIELDG(name, TV, dxf); }
 #define FIELD_T FIELD_TV /*TODO: implement version dependant string fields */
-#define FIELD_TF(name,len) \
+#define FIELD_TF(name,len,dxf)             \
   { bit_write_TF(dat, _obj->name, len); \
-    FIELD_TRACE(name, TF); }
-#define FIELD_BT(name) FIELD(name, BT);
+    FIELD_G_TRACE(name, TF, dxf); }
+#define FIELD_BT(name, dxf) FIELDG(name, BT, dxf);
 
-#define FIELD_DD(name, _default) bit_write_DD(dat, FIELD_VALUE(name), _default);
-#define FIELD_2DD(name, d1, d2) FIELD_DD(name.x, d1); FIELD_DD(name.y, d2);
-
-#define FIELD_2RD(name) FIELD(name.x, RD); FIELD(name.y, RD);
-#define FIELD_2BD(name) FIELD(name.x, BD); FIELD(name.y, BD);
-#define FIELD_3RD(name) FIELD(name.x, RD); FIELD(name.y, RD); FIELD(name.z, RD);
-#define FIELD_3BD(name) FIELD(name.x, BD); FIELD(name.y, BD); FIELD(name.z, BD);
-#define FIELD_3DPOINT(name) FIELD_3BD(name)
-#define FIELD_4BITS(name) bit_write_4BITS(dat,_obj->name);
-#define FIELD_TIMEBLL(name) \
+#define FIELD_DD(name, _default, dxf) bit_write_DD(dat, FIELD_VALUE(name), _default);
+#define FIELD_2DD(name, d1, d2, dxf) { FIELD_DD(name.x, d1, dxf); FIELD_DD(name.y, d2, dxf+10); }
+#define FIELD_3DD(name, def, dxf) { \
+    FIELD_DD(name.x, FIELD_VALUE(def.x), dxf); \
+    FIELD_DD(name.y, FIELD_VALUE(def.y), dxf+10); \
+    FIELD_DD(name.z, FIELD_VALUE(def.z), dxf+20); }
+#define FIELD_2RD(name,dxf) { FIELDG(name.x, RD, dxf); FIELDG(name.y, RD, dxf+10); }
+#define FIELD_2BD(name,dxf) { FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+10); }
+#define FIELD_2BD_1(name,dxf) { FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+1); }
+#define FIELD_3RD(name,dxf) { FIELDG(name.x, RD, dxf); FIELDG(name.y, RD, dxf+10); \
+                              FIELDG(name.z, RD,dxf+20); }
+#define FIELD_3BD(name,dxf) { FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+10); \
+                              FIELDG(name.z, BD, dxf+20); }
+#define FIELD_3BD_1(name,dxf) { FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+1); \
+                                FIELDG(name.z, BD, dxf+2); }
+#define FIELD_3DPOINT(name,dxf) FIELD_3BD(name,dxf)
+#define FIELD_4BITS(name,dxf) bit_write_4BITS(dat,_obj->name);
+#define FIELD_TIMEBLL(name,dxf) \
   { bit_write_TIMEBLL(dat, (BITCODE_TIMEBLL)_obj->name); \
     LOG_TRACE(#name ": " FORMAT_BL "." FORMAT_BL "\n", _obj->name.days, _obj->name.ms); }
 
-#define FIELD_CMC(name)\
+#define FIELD_CMC(name, dxf) \
   {\
     bit_write_CMC(dat, &_obj->name);\
   }
 
-#define FIELD_BE(name)\
+#define FIELD_BE(name, dxf)\
   bit_write_BE(dat, FIELD_VALUE(name.x), FIELD_VALUE(name.y), FIELD_VALUE(name.z));
 
-#define FIELD_2RD_VECTOR(name, size)\
+#define FIELD_2RD_VECTOR(name, size, dxf)                   \
   for (vcount=0; vcount < (long)_obj->size; vcount++)\
     {\
-      FIELD_2RD(name[vcount]);\
+      FIELD_2RD(name[vcount], dxf);\
     }
 
-#define FIELD_2DD_VECTOR(name, size)\
-  FIELD_2RD(name[0]);\
+#define FIELD_2DD_VECTOR(name, size, dxf)\
+  FIELD_2RD(name[0], dxf); \
   for (vcount = 1; vcount < (long)_obj->size; vcount++)\
     {\
-      FIELD_2DD(name[vcount], FIELD_VALUE(name[vcount - 1].x), FIELD_VALUE(name[vcount - 1].y));\
+      FIELD_2DD(name[vcount], FIELD_VALUE(name[vcount - 1].x), FIELD_VALUE(name[vcount - 1].y), dxf);\
     }
 
-#define FIELD_3DPOINT_VECTOR(name, size)\
+#define FIELD_3DPOINT_VECTOR(name, size, dxf)\
   for (vcount=0; vcount < (long)_obj->size; vcount++)   \
     {\
-      FIELD_3DPOINT(name[vcount]);\
+      FIELD_3DPOINT(name[vcount], dxf);\
     }
 
 #define REACTORS(code)\
   for (vcount=0; vcount < (long)obj->tio.object->num_reactors; vcount++) \
     {\
-      FIELD_HANDLE_N(reactors[vcount], vcount, code);    \
+      FIELD_HANDLE_N(reactors[vcount], vcount, code, 5);    \
     }
     
 #define XDICOBJHANDLE(code)\
@@ -146,12 +156,12 @@ static bool env_var_checked_p;
     {\
       if (!obj->tio.object->xdic_missing_flag) \
         {\
-          FIELD_HANDLE(xdicobjhandle, code);\
+          FIELD_HANDLE(xdicobjhandle, code, 0);   \
         }\
     }\
   PRIOR_VERSIONS\
     {\
-      FIELD_HANDLE(xdicobjhandle, code);\
+      FIELD_HANDLE(xdicobjhandle, code, 0);       \
     }
 
 //XXX need a review
@@ -160,18 +170,18 @@ static bool env_var_checked_p;
     {\
       if (!obj->tio.entity->xdic_missing_flag)\
         {\
-          FIELD_HANDLE(xdicobjhandle, code);\
+          FIELD_HANDLE(xdicobjhandle, code, 0);   \
         }\
     }\
   PRIOR_VERSIONS\
     {\
-      FIELD_HANDLE(xdicobjhandle, code);\
+      FIELD_HANDLE(xdicobjhandle, code, 0); \
     }
 
 
 //FIELD_VECTOR_N(name, type, size):
 // writes a 'size' elements vector of data of the type indicated by 'type'
-#define FIELD_VECTOR_N(name, type, size)\
+#define FIELD_VECTOR_N(name, type, size, dxf)\
   if (size>0)\
     {\
       for (vcount=0; vcount < (long)size; vcount++)\
@@ -184,10 +194,10 @@ static bool env_var_checked_p;
         }\
     }
 
-#define FIELD_VECTOR(name, type, size) \
-  FIELD_VECTOR_N(name, type, _obj->size)
+#define FIELD_VECTOR(name, type, size, dxf) \
+  FIELD_VECTOR_N(name, type, _obj->size, dxf)
 
-#define FIELD_HANDLE(name, handle_code) \
+#define FIELD_HANDLE(name, handle_code, dxf) \
   {\
     IF_ENCODE_FROM_EARLIER { ; } \
     else { \
@@ -201,28 +211,30 @@ static bool env_var_checked_p;
     }\
   }
 
-#define FIELD_HANDLE_N(name, vcount, handle_code)\
-  FIELD_HANDLE(name, handle_code)
+#define FIELD_HANDLE_N(name, vcount, handle_code, dxf)\
+  FIELD_HANDLE(name, handle_code, dxf)
 
-#define HANDLE_VECTOR_N(name, size, code)\
+#define HANDLE_VECTOR_N(name, size, code, dxf)\
   if (size>0) \
     assert(_obj->name); \
   for (vcount=0; vcount < (long)size; vcount++)\
     {\
       assert(_obj->name[vcount]); \
-      FIELD_HANDLE_N(name[vcount], vcount, code);   \
+      FIELD_HANDLE_N(name[vcount], vcount, code, dxf);   \
     }
 
-#define FIELD_INSERT_COUNT(insert_count, type)   \
-  FIELD_RL(insert_count)
+#define FIELD_INSERT_COUNT(insert_count, type, dxf)   \
+  FIELD_RL(insert_count, dxf)
 
-#define HANDLE_VECTOR(name, sizefield, code) \
-  HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code)
+#define HANDLE_VECTOR(name, sizefield, code, dxf) \
+  HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code, dxf)
 
 #define FIELD_XDATA(name, size)
 
 #define COMMON_ENTITY_HANDLE_DATA  \
- dwg_encode_common_entity_handle_data(dat, obj);
+  SINCE(R_13) {\
+    dwg_encode_common_entity_handle_data(dat, obj);\
+  }
 
 //TODO unify REPEAT macros
 #define REPEAT_N(times, name, type) \
@@ -237,10 +249,13 @@ static bool env_var_checked_p;
 #define REPEAT3(times, name, type) \
   for (rcount3=0; (long)rcount3<(long)_obj->times; rcount3++)
 
+#define REPEAT4(times, name, type) \
+  for (rcount4=0; (long)rcount4<(long)_obj->times; rcount4++)
+
 #define DWG_ENTITY(token) \
   static void dwg_encode_##token (Bit_Chain * dat, Dwg_Object* obj)	\
 { \
-  long vcount, rcount, rcount2, rcount3; \
+  long vcount, rcount, rcount2, rcount3, rcount4; \
   Dwg_Data* dwg = obj->parent; \
   Dwg_Entity_##token * _obj = obj->tio.entity->tio.token; \
   if (dwg_encode_entity (obj, dat)) return;       \
@@ -251,7 +266,7 @@ static bool env_var_checked_p;
 #define DWG_OBJECT(token) \
   static void dwg_encode_##token (Bit_Chain * dat, Dwg_Object* obj) \
 { \
-  long vcount, rcount, rcount2, rcount3; \
+  long vcount, rcount, rcount2, rcount3, rcount4; \
   Dwg_Data* dwg = obj->parent; \
   Dwg_Object_##token * _obj = obj->tio.object->tio.token; \
   if (dwg_encode_object (obj, dat)) return;  \
@@ -265,7 +280,7 @@ static bool env_var_checked_p;
 #define ENT_REACTORS(code)\
   for (vcount=0; vcount < _obj->num_reactors; vcount++)\
     {\
-      FIELD_HANDLE_N(reactors[vcount], vcount, code);      \
+      FIELD_HANDLE_N(reactors[vcount], vcount, code, -5); \
     }
 
 
@@ -665,14 +680,14 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
     pvzadr = dat->byte; // Keep the first address of the section to write its size later
     LOG_TRACE("pvzadr: %lx\n", pvzadr)
 
-    FIELD_RL(size);
+      FIELD_RL(size, 0);
     if (FIELD_VALUE(address) != (BITCODE_RL)(pvzadr - 16))
       {
         LOG_WARN("second_header->address %x != %x",
                  FIELD_VALUE(address), (unsigned)(pvzadr - 16));
         FIELD_VALUE(address) = pvzadr - 16;
       }
-    FIELD_BL(address);
+    FIELD_BL(address, 0);
 
     // AC1012, AC1014 or AC1015. This is a char[11], zero padded.
     // with \n at 12.
@@ -682,14 +697,14 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
 
     for (i = 0; i < 4; i++)
       {
-        FIELD_B(null_b[i]);
+        FIELD_B(null_b[i], 0);
       }
     // documented as 0x18,0x78,0x01,0x04 for R13, 0x18,0x78,0x01,0x05 for R14
     // but it is 0x10,0x7d,0xf4,0x78 on r14
     // also: 10 7d f4 78 on 2004
     for (i = 0; i < 4; i++)
       {
-        FIELD_RC(unknown_rc4[i]);
+        FIELD_RC(unknown_rc4[i], 0);
       }
 
     UNTIL (R_2000) {
@@ -707,9 +722,9 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
        */
       for (i = 0; i < _obj->num_sections; i++)
         {
-          FIELD_RC(sections[i].nr);
-          FIELD_BL(sections[i].address);
-          FIELD_BL(sections[i].size);
+          FIELD_RC(sections[i].nr, 0);
+          FIELD_BL(sections[i].address, 0);
+          FIELD_BL(sections[i].size, 0);
         }
       /*
         for (i = 0; i < 6; i++)
@@ -720,7 +735,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
         }
       */
       /* Handles */
-      FIELD_BS(num_handlers); // 14, resp. 16 in r14
+      FIELD_BS(num_handlers, 0); // 14, resp. 16 in r14
 
       if (FIELD_VALUE(num_handlers) != 14) {
         LOG_ERROR("Second header num_handlers != 14: %d\n", FIELD_VALUE(num_handlers));
@@ -729,9 +744,9 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
       }
       for (i = 0; i < FIELD_VALUE(num_handlers); i++)
         {
-          FIELD_RC(handlers[i].size);
-          FIELD_RC(handlers[i].nr);
-          FIELD_VECTOR(handlers[i].data, RC, handlers[i].size);
+          FIELD_RC(handlers[i].size, 0);
+          FIELD_RC(handlers[i].nr, 0);
+          FIELD_VECTOR(handlers[i].data, RC, handlers[i].size, 0);
         }
       /*
         bit_write_BS(dat, 14);
@@ -756,8 +771,8 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
       bit_write_CRC(dat, pvzadr, 0xC0C1);
 
       VERSION(R_14) {
-        FIELD_RL(junk_r14_1);
-        FIELD_RL(junk_r14_2);
+        FIELD_RL(junk_r14_1, 0);
+        FIELD_RL(junk_r14_2, 0);
       }
     }
     bit_write_sentinel(dat, dwg_sentinel(DWG_SENTINEL_SECOND_HEADER_END));
@@ -922,18 +937,6 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       dwg_encode_LWPLINE(dat, obj);
       return 1;
     }
-  if (!strcmp(dxfname, "MLEADER"))
-    {
-      UNTESTED_CLASS;
-      dwg_encode_MLEADER(dat, obj);
-      return 0;
-    }
-  if (!strcmp(dxfname, "MLEADERSTYLE"))
-    {
-      UNTESTED_CLASS;
-      //dwg_encode_MLEADERSTYLE(dat, obj);
-      return 0;
-    }
   if (!strcmp(dxfname, "OLE2FRAME"))
     {
       assert(!is_entity);
@@ -943,85 +946,126 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
   if (!strcmp(dxfname, "OBJECTCONTEXTDATA")
       || strcmp(klass->cppname, "AcDbObjectContextData"))
     {
+      assert(!is_entity);
       dwg_encode_OBJECTCONTEXTDATA(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "ACDBPLACEHOLDER"))
     {
+      assert(!is_entity);
       dwg_encode_PLACEHOLDER(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "PROXY"))
     {
+      assert(!is_entity);
       dwg_encode_PROXY(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "RASTERVARIABLES"))
     {
+      assert(!is_entity);
       dwg_encode_RASTERVARIABLES(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "SORTENTSTABLE"))
     {
+      assert(!is_entity);
       dwg_encode_SORTENTSTABLE(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "SPATIAL_FILTER"))
     {
+      assert(!is_entity);
       dwg_encode_SPATIAL_FILTER(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "SPATIAL_INDEX"))
     {
+      assert(!is_entity);
       dwg_encode_SPATIAL_INDEX(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "TABLE"))
     {
+      assert(is_entity);
       dwg_encode_TABLE(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "XRECORD"))
     {
+      assert(!is_entity);
       dwg_encode_XRECORD(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "WIPEOUT"))
     {
+      assert(is_entity);
       dwg_encode_WIPEOUT(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "FIELDLIST"))
     {
       UNTESTED_CLASS;
+      assert(!is_entity);
       dwg_encode_FIELDLIST(dat, obj);
+      return 1;
+    }
+  if (!strcmp(dxfname, "SCALE"))
+    {
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      dwg_encode_SCALE(dat, obj);
+      return 1;
+    }
+  if (!strcmp(dxfname, "MLEADER"))
+    {
+      UNTESTED_CLASS;
+      assert(is_entity);
+      dwg_encode_MLEADER(dat, obj);
+      return 1;
+    }
+  if (!strcmp(dxfname, "MLEADERSTYLE"))
+    {
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      dwg_encode_MLEADERSTYLE(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "AcDbField")) //???
     {
       UNTESTED_CLASS;
+      assert(!is_entity);
       dwg_encode_FIELD(dat, obj);
-      return 0;
+      return 1;
     }
-  if (!strcmp(dxfname, "CELLSTYLEMAP"))
+  if (!strcmp(dxfname, "GEODATA"))
     {
       UNTESTED_CLASS;
       assert(!is_entity);
-      dwg_encode_CELLSTYLEMAP(dat, obj);
-      return 0;
+      dwg_encode_GEODATA(dat, obj);
+      return 1;
     }
   if (!strcmp(dxfname, "VBA_PROJECT"))
     {
       // Has its own section?
       UNTESTED_CLASS;
-      dwg_encode_VBA_PROJECT(dat, obj);
+      assert(!is_entity);
+      //dwg_encode_VBA_PROJECT(dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "WIPEOUTVARIABLE"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
-      //dwg_encode_WIPEOUTVARIABLE(dat, obj);
+      dwg_encode_WIPEOUTVARIABLE(dat, obj);
+      return 1;
+    }
+  if (!strcmp(dxfname, "CELLSTYLEMAP"))
+    {
+      UNHANDLED_CLASS; //broken
+      assert(!is_entity);
+      //dwg_encode_CELLSTYLEMAP(dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "VISUALSTYLE"))
@@ -1051,48 +1095,76 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       assert(!is_entity);
       //SCALE has a name, bitsizes: 199,207,215,343,335,351,319
       dwg_encode_SCALE(dat, obj);
-      return 0;
+      return 1;
     }
-  if (!strcmp(dxfname, "MLEADERSTYLE"))
+  if (!strcmp(dxfname, "TABLEGEOMETRY"))
     {
-      UNHANDLED_CLASS;
+      UNTESTED_CLASS;
       assert(!is_entity);
-      //dwg_decode_MLEADERSTYLE(dat, obj);
-      return 0;
+      dwg_encode_TABLEGEOMETRY(dat, obj);
+      return 1;
+    }
+  if (!strcmp(dxfname, "TABLECONTENT"))
+    {
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      dwg_encode_TABLECONTENT(dat, obj);
+      return 1;
     }
   if (!strcmp(dxfname, "TABLESTYLE"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
-      //dwg_decode_TABLESTYLE(dat, obj);
+      //dwg_encode_TABLESTYLE(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "DBCOLOR"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_encode_DBCOLOR(dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "ACDBSECTIONVIEWSTYLE"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
-      //dwg_decode_SECTIONVIEWSTYLE(dat, obj);
+      //dwg_encode_SECTIONVIEWSTYLE(dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "ACDBDETAILVIEWSTYLE"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
-      //dwg_decode_DETAILVIEWSTYLE(dat, obj);
+      //dwg_encode_DETAILVIEWSTYLE(dat, obj);
       return 0;
     }
-  if (!strcmp(dxfname, "DBCOLOR"))
+  if (!strcmp(dxfname, "ACDBASSOCNETWORK"))
     {
       UNHANDLED_CLASS;
-      //assert(!is_entity);
-      //dwg_decode_DBCOLOR(dat, obj);
+      assert(!is_entity);
+      //dwg_encode_ASSOCNETWORK(dat, obj);
       return 0;
     }
-  if (!strcmp(dxfname, "MLEADER"))
+  if (!strcmp(dxfname, "ACDBASSOC2DCONSTRAINTGROUP"))
     {
       UNHANDLED_CLASS;
-      //assert(!is_entity);
-      //dwg_decode_MLEADER(dat, obj);
+      assert(!is_entity);
+      //dwg_encode_ASSOC2DCONSTRAINTGROUP(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "ACDBASSOCGEOMDEPENDENCY"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_encode_ASSOCGEOMDEPENDENCY(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "ACDB_LEADEROBJECTCONTEXTDATA_CLASS"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_encode_LEADEROBJECTCONTEXTDATA(dat, obj);
       return 0;
     }
 

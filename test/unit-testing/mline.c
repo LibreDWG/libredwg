@@ -9,7 +9,7 @@ low_level_process(dwg_object *obj)
   dwg_ent_mline *mline = dwg_object_to_MLINE(obj);
 
   printf("scale of mline : %f\n",mline->scale);
-  printf("just of mline : " FORMAT_RC "\n", mline->just);
+  printf("just of mline : " FORMAT_RC "\n", mline->justification);
   printf("extrusion of mline : x = %f, y = %f, z = %f\n", 
           mline->extrusion.x, mline->extrusion.y, mline->extrusion.z);
   printf("base_point of mline : x = %f,y = %f,z = %f\n",
@@ -35,7 +35,7 @@ api_process(dwg_object *obj)
   BITCODE_RC num_lines;
   BITCODE_BS i, num_verts;
   dwg_point_3d base_point, ext;  //3d_points 
-  dwg_ent_mline_vert * verts;
+  dwg_ent_mline_vertex * verts;
 
   dwg_ent_mline *mline = dwg_object_to_MLINE(obj);
 
@@ -46,7 +46,7 @@ api_process(dwg_object *obj)
   else
     printf("error in reading scale \n");
 
-  just = dwg_ent_mline_get_just(mline, &error);
+  just = dwg_ent_mline_get_justification(mline, &error);
   if (!error)
     printf("just of mline : " FORMAT_RC "\n", just);
   else

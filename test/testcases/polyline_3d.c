@@ -5,11 +5,10 @@
 void
 low_level_process (dwg_object * obj)
 {
-  // casts dwg object to 3d polyline
   dwg_ent_polyline_3d *polyline_3d = dwg_object_to_POLYLINE_3D (obj);
 
-  printf ("flag1 of polyline : " FORMAT_BS "\n", polyline_3d->flags_1);
-  printf ("flag2 of polyline : " FORMAT_BS "\n", polyline_3d->flags_2);
+  printf ("flag1 of polyline : " FORMAT_BS "\n", polyline_3d->flag);
+  printf ("flag2 of polyline : " FORMAT_BS "\n", polyline_3d->flag2);
   printf ("owned object of polyline : " FORMAT_BL "\n", polyline_3d->owned_obj_count);
 }
 
@@ -21,23 +20,19 @@ api_process (dwg_object * obj)
   BITCODE_RC flags1, flags2;
   dwg_ent_polyline_3d *polyline_3d = dwg_object_to_POLYLINE_3D (obj);
 
-
-  flags1 = dwg_ent_polyline_3d_get_flags_1 (polyline_3d, &error);
-  if (!error  && flags1 == polyline_3d->flags_1)	// error check
+  flags1 = dwg_ent_polyline_3d_get_flag (polyline_3d, &error);
+  if (!error  && flags1 == polyline_3d->flag)	// error check
     pass ("Working Properly");
   else
     fail ("error in reading flag1");
 
-
-  flags2 = dwg_ent_polyline_3d_get_flags_2 (polyline_3d, &error);
-  if (!error  && flags2 == polyline_3d->flags_2)	// error check
+  flags2 = dwg_ent_polyline_3d_get_flag2 (polyline_3d, &error);
+  if (!error  && flags2 == polyline_3d->flag2)	// error check
     pass ("Working Properly");
   else
     fail ("error in reading flag2");
 
-
-  owned_obj = dwg_ent_polyline_3d_get_owned_obj_count (polyline_3d,
-						       &error);
+  owned_obj = dwg_ent_polyline_3d_get_owned_obj_count (polyline_3d, &error);
   if (!error  && polyline_3d->owned_obj_count == owned_obj)	// error check
     pass ("Working Properly");
   else
