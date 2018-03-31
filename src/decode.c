@@ -2511,9 +2511,12 @@ dwg_decode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg)
       break;
     case 2: case 3: case 4: case 5:
       ref->absolute_ref = ref->handleref.value;
+      break;
     case 0: // ignore?
       ref->absolute_ref = ref->handleref.value;
+      break;
     default:
+      ref->absolute_ref = ref->handleref.value;
       LOG_WARN("Invalid handle pointer code %d", ref->handleref.code);
       break;
     }
@@ -2567,8 +2570,10 @@ dwg_decode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg,
           break;
         case 2: case 3: case 4: case 5:
           ref->absolute_ref = ref->handleref.value;
+          break;
         case 0: // ignore (ANYCODE)
           ref->absolute_ref = ref->handleref.value;
+          break;
         default:
           LOG_WARN("Invalid handle pointer code %d", ref->handleref.code);
           break;

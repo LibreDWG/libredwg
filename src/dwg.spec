@@ -841,7 +841,7 @@ DWG_ENTITY_END
     FIELD_BD (ins_rotation, 54); \
     SINCE(R_2000) \
       { \
-        FIELD_BS (attachment_pt, 71); \
+        FIELD_BS (attachment, 71); \
         FIELD_BS (lspace_style, 72); \
         FIELD_BD (lspace_factor, 41); \
         FIELD_BD (act_measurement, 42); \
@@ -861,7 +861,7 @@ DWG_ENTITY(DIMENSION_ORDINATE)
   DIMENSION_COMMON_DECODE;
   FIELD_3BD (ucsorigin_pt, 10);
   FIELD_3BD (feature_location_pt, 13);
-  FIELD_3BD (leader_endpoint_pt, 14);
+  FIELD_3BD (leader_endpt, 14);
   FIELD_RC (flags_2, 70);
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -1072,7 +1072,7 @@ DWG_ENTITY_END
 /*(30)*/
 DWG_ENTITY(POLYLINE_MESH)
 
-  FIELD_BS (flags, 70);
+  FIELD_BS (flag, 70);
   FIELD_BS (curve_type, 75);
   FIELD_BS (m_vert_count, 71);
   FIELD_BS (n_vert_count, 72);
@@ -1219,7 +1219,7 @@ DWG_ENTITY(VIEWPORT)
   SINCE(R_2000)
     {
       FIELD_BL (frozen_layer_count, 0);
-      FIELD_BL (status_flags, 90);
+      FIELD_BL (status_flag, 90);
       FIELD_TV (style_sheet, 1);
       FIELD_RC (render_mode, 281);
       FIELD_B (ucs_at_origin, 74);
@@ -1827,36 +1827,36 @@ DWG_ENTITY_END
 DWG_ENTITY(MLINE)
 
   FIELD_BD (scale, 40);
-  FIELD_RC (just, 0); /*spec-typo? Spec says EC instead of RC...*/
+  FIELD_RC (justification, 70); /* spec-typo? Spec says EC instead of RC */
   FIELD_3DPOINT (base_point, 10);
   FIELD_3DPOINT (extrusion, 210);
-  FIELD_BS (open_closed, 0);
-  FIELD_RC (num_lines, 73);
+  FIELD_BS (flags, 71);
+  FIELD_RC (num_lines, 73); //aka linesinstyle
   FIELD_BS (num_verts, 72);
 
-  REPEAT(num_verts, verts, Dwg_Entity_MLINE_vert)
+  REPEAT(num_verts, verts, Dwg_MLINE_vertex)
     {
-      FIELD_3DPOINT (verts[rcount].vertex, 0);
-      FIELD_3DPOINT (verts[rcount].vertex_direction, 0);
-      FIELD_3DPOINT (verts[rcount].miter_direction, 0);
+      FIELD_3DPOINT (verts[rcount].vertex, 10);
+      FIELD_3DPOINT (verts[rcount].vertex_direction, 210);
+      FIELD_3DPOINT (verts[rcount].miter_direction, 11);
 
-      REPEAT2(num_lines, verts[rcount].lines, Dwg_Entity_MLINE_line)
+      REPEAT2(num_lines, verts[rcount].lines, Dwg_MLINE_line)
         {
-          FIELD_BS (verts[rcount].lines[rcount2].num_segparms, 0);
+          FIELD_BS (verts[rcount].lines[rcount2].num_segparms, 74);
           REPEAT3(verts[rcount].lines[rcount2].num_segparms,
                   verts[rcount].lines[rcount2].segparms,
                   BITCODE_BD)
             {
-              FIELD_BD (verts[rcount].lines[rcount2].segparms[rcount3], 0);
+              FIELD_BD (verts[rcount].lines[rcount2].segparms[rcount3], 41);
             }
           END_REPEAT(verts[rcount].lines[rcount2].segparms);
 
-          FIELD_BS (verts[rcount].lines[rcount2].num_areafillparms, 0);
+          FIELD_BS (verts[rcount].lines[rcount2].num_areafillparms, 75);
           REPEAT3(verts[rcount].lines[rcount2].num_areafillparms,
                   verts[rcount].lines[rcount2].areafillparms,
                   BITCODE_BD)
             {
-              FIELD_BD (verts[rcount].lines[rcount2].areafillparms[rcount3], 0);
+              FIELD_BD (verts[rcount].lines[rcount2].areafillparms[rcount3], 42);
             }
           END_REPEAT(verts[rcount].lines[rcount2].areafillparms);
         }
@@ -1865,7 +1865,7 @@ DWG_ENTITY(MLINE)
   END_REPEAT(verts);
 
   COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (mline_style, 5, 0);
+  FIELD_HANDLE (mlinestyle, 5, 340);
 
 DWG_ENTITY_END
 
@@ -2797,24 +2797,23 @@ DWG_OBJECT(GROUP)
 
 DWG_OBJECT_END
 
-/*(73)*/
+/* (73) undocumented DXF codes */
 DWG_OBJECT(MLINESTYLE)
 
-  FIELD_TV (name, 0);
-  FIELD_TV (desc, 0);
-  FIELD_BS (flags, 0);
-  FIELD_CMC (fillcolor, 0);
-  FIELD_BD (startang, 0);
-  FIELD_BD (endang, 0);
-  FIELD_RC (linesinstyle, 0);
-
-  REPEAT(linesinstyle, lines, Dwg_Object_MLINESTYLE_line)
+  FIELD_TV (name, 2);
+  FIELD_TV (desc, 3);
+  FIELD_BS (flag, 70);
+  FIELD_CMC (fill_color, 62);
+  FIELD_BD (start_angle, 51);
+  FIELD_BD (end_angle, 52);
+  FIELD_RC (num_lines, 71);
+  REPEAT(num_lines, lines, Dwg_MLINESTYLE_line)
   {
-    FIELD_BD (lines[rcount].offset, 0);
+    FIELD_BD (lines[rcount].offset, 49);
 #ifndef IS_FREE
-    FIELD_CMC (lines[rcount].color, 0);
+    FIELD_CMC (lines[rcount].color, 62);
 #endif
-    FIELD_BS (lines[rcount].ltindex, 0);
+    FIELD_BS (lines[rcount].ltindex, 6);
   }
   END_REPEAT(lines);
 
@@ -3418,9 +3417,9 @@ DWG_OBJECT(FIELD)
   FIELD_TV (code, 0);
 
   FIELD_BL (num_childhdl, 0);
-  HANDLE_VECTOR(childhdl, num_childhdl, 360, 0);
+  HANDLE_VECTOR (childhdl, num_childhdl, 360, 0);
   FIELD_BL (num_objects, 0);
-  HANDLE_VECTOR(objects, num_objects, 331, 0);
+  HANDLE_VECTOR (objects, num_objects, 331, 0);
 
   UNTIL(R_2004) {
     FIELD_TV (format, 0);
@@ -3952,7 +3951,7 @@ DWG_ENTITY(TABLE)
   
   SINCE(R_2004)
     {
-      HANDLE_VECTOR(attribs, owned_object_count, 4, 0)
+      HANDLE_VECTOR (attribs, owned_object_count, 4, 0)
     }
   
   if (FIELD_VALUE(has_attribs))
@@ -3974,7 +3973,7 @@ DWG_ENTITY(TABLE)
       if (FIELD_VALUE(cells[rcount].type) == 2 &&
           FIELD_VALUE(cells[rcount].additional_data_flag) == 1)
         {
-          HANDLE_VECTOR(cells[rcount].attr_def_id, cells[rcount].attr_def_count, 4, 331);
+          HANDLE_VECTOR (cells[rcount].attr_def_id, cells[rcount].attr_def_count, 4, 331);
         }
   
       if (FIELD_VALUE(cells[rcount].additional_data_flag2) == 1 &&
@@ -4072,8 +4071,8 @@ DWG_ENTITY_END
           FIELD_CMC (sty.border[rcount2].color, 62); \
           FIELD_BL (sty.border[rcount2].linewt, 92); \
           FIELD_HANDLE (sty.border[rcount2].line_type, 3, 340); \
-          FIELD_BL (sty.border[rcount2].double_line_spacing, 93); \
-          FIELD_BD (sty.border[rcount2].linewt, 40); \
+          FIELD_BL (sty.border[rcount2].invisible, 93); \
+          FIELD_BD (sty.border[rcount2].double_line_spacing, 93); \
         } \
       END_REPEAT (sty.border)
 
@@ -4084,7 +4083,7 @@ DWG_OBJECT(TABLECONTENT)
   FIELD_TV (ldata.desc, 300);
 
   FIELD_BL (tdata.num_cols, 90);
-  REPEAT(tdata.num_cols, tdata.cols, Dwg_LinkedTableData)
+  REPEAT(tdata.num_cols, tdata.cols, Dwg_TableDataColumn)
     {
       FIELD_TV (tdata.cols[rcount].name, 300);
       FIELD_BL (tdata.cols[rcount].custom_data, 91);
@@ -4095,14 +4094,20 @@ DWG_OBJECT(TABLECONTENT)
   REPEAT(tdata.num_rows, tdata.rows, Dwg_TableRow)
     {
       #define row tdata.rows[rcount]
-      FIELD_TV (row.num_cells, 90);
-      REPEAT2(row.num_cells, row.cell, Dwg_TableCell)
+      FIELD_BL (row.num_cells, 90);
+      REPEAT2(row.num_cells, row.cells, Dwg_TableCell)
         {
-          #define cell row.cell[rcount2]
+          #define cell row.cells[rcount2]
           FIELD_BL (cell.flag, 90);
           FIELD_TV (cell.tooltip, 300);
-          FIELD_BL (cell.custom_data, 91);
-          LOG_WARN("TODO TABLECONTENT Custom data collection, see paragraph 20.4.100");
+          FIELD_BL (cell.customdata, 91);
+          FIELD_BL (cell.num_customdata_items, 90);
+          REPEAT3(cell.num_customdata_items, cell.customdata_items, Dwg_TABLE_CustomDataItem)
+            {
+              FIELD_TV(cell.customdata_items[rcount3].name, 300);
+              Table_Value(cell.customdata_items[rcount3].value);
+            }
+          END_REPEAT(cell.customdata_items);
           FIELD_BL (cell.has_linked_data, 92);
           if (FIELD_VALUE(cell.has_linked_data))
             {
@@ -4114,7 +4119,7 @@ DWG_OBJECT(TABLECONTENT)
           FIELD_BL (cell.num_cell_contents, 95);
           REPEAT3(cell.num_cell_contents, cell.cell_contents, Dwg_TableCellContent)
             {
-              #define content rows[rcount].cell[rcount2].cell_contents[rcount3]
+              #define content tdata.rows[rcount].cells[rcount2].cell_contents[rcount3]
 
               FIELD_BL(content.type, 90);
               if (FIELD_VALUE(content.type) == 1)
@@ -4122,10 +4127,12 @@ DWG_OBJECT(TABLECONTENT)
                   // 20.4.99 Value, page 241
                   Table_Value(content.value)
                 }
-              else if (FIELD_VALUE(content.type) == 2) // Field
+              else if (FIELD_VALUE(content.type) == 2) { // Field
                 FIELD_HANDLE (content.handle, 3, 340);
-              else if (FIELD_VALUE(content.type) == 4) // Block
+              }
+              else if (FIELD_VALUE(content.type) == 4) { // Block
                 FIELD_HANDLE (content.handle, 3, 340);
+              }
               FIELD_BL (content.num_attrs, 91);
               REPEAT4(content.num_attrs, content.attrs, Dwg_TableCellContentAttr)
                 {
@@ -4150,8 +4157,9 @@ DWG_OBJECT(TABLECONTENT)
               FIELD_BL (cell.geom_data_flag, 91);
               FIELD_BD (cell.unknown_d40, 40);
               FIELD_BD (cell.unknown_d41, 41);
-              FIELD_BD (cell.geom_data_flag1, 0);
-              if (FIELD_VALUE(cell.geom_data_flag1))
+              FIELD_BL (cell.has_cell_geom, 0);
+              FIELD_HANDLE (cell.cell_geom_handle, ANYCODE, 0);
+              if (FIELD_VALUE(cell.has_cell_geom))
                 {
                   REPEAT_N(1, cell.geom_data, Dwg_CellContentGeometry)
                     {
@@ -4169,9 +4177,15 @@ DWG_OBJECT(TABLECONTENT)
             }
           #undef cell
         }
-      END_REPEAT(row.cell);
+      END_REPEAT(row.cells);
       FIELD_BL (row.custom_data, 91);
-      LOG_WARN("TODO TABLECONTENT row custom data collection, see paragraph 20.4.100");
+      FIELD_BL (row.num_customdata_items, 90);
+      REPEAT3(row.num_customdata_items, row.customdata_items, Dwg_TABLE_CustomDataItem)
+        {
+          FIELD_TV(row.customdata_items[rcount3].name, 300);
+          Table_Value(row.customdata_items[rcount3].value);
+        }
+      END_REPEAT(row.customdata_items);
       {
         Cell_Style_Fields(row.cell_style);
         FIELD_BL (row.style_id, 90);
@@ -4181,16 +4195,16 @@ DWG_OBJECT(TABLECONTENT)
     }
   END_REPEAT(tdata.rows);
   FIELD_BL (tdata.num_field_refs, 0);
-  HANDLE_VECTOR (tdata.num_field_refs, tdata.field_refs, 3, 0);
+  HANDLE_VECTOR (tdata.field_refs, tdata.num_field_refs, 3, 0);
 
   FIELD_BL (fdata.num_merged_cells, 90);
   REPEAT(fdata.num_merged_cells, fdata.merged_cells, Dwg_FormattedTableMerged)
     {
-      #define merged fdata->merged_cells[rcount]
-      FIELD_BL (merged->top_row, 91);
-      FIELD_BL (merged->left_col, 92);
-      FIELD_BL (merged->bottom_row, 93);
-      FIELD_BL (merged->right_col, 94);
+      #define merged fdata.merged_cells[rcount]
+      FIELD_BL (merged.top_row, 91);
+      FIELD_BL (merged.left_col, 92);
+      FIELD_BL (merged.bottom_row, 93);
+      FIELD_BL (merged.right_col, 94);
       #undef merged
     }
   END_REPEAT(fdata.merged_cells);
@@ -4220,9 +4234,9 @@ DWG_OBJECT(TABLEGEOMETRY)
   FIELD_BL (num_rows, 90);
   FIELD_BL (num_cols, 91);
   FIELD_BL (num_cells, 92);
-  REPEAT(num_cells, cell, Dwg_TABLEGEOMETRY_Cell)
+  REPEAT(num_cells, cells, Dwg_TABLEGEOMETRY_Cell)
     {
-      #define cell cell[rcount]
+      #define cell cells[rcount]
       FIELD_BL (cell.flag, 93);
       FIELD_BD (cell.width_w_gap, 40);
       FIELD_BD (cell.height_w_gap, 41);
@@ -4241,7 +4255,7 @@ DWG_OBJECT(TABLEGEOMETRY)
         }
       END_REPEAT(cell.geom_data);
     }
-  END_REPEAT(cell);
+  END_REPEAT(cells);
 
 DWG_OBJECT_END
 
@@ -4625,7 +4639,7 @@ DWG_ENTITY(WIPEOUT)
     FIELD_B (clip_mode, 290);
   }
   FIELD_BS (clip_boundary_type, 71); // 1 rect, 2 polygon
-  if (FIELD_VALUE(clip_mode) == 1)
+  if (FIELD_VALUE(clip_mode))
     {
       FIELD_2RD (boundary_pt0, 14);
       FIELD_2RD (boundary_pt1, 14);
