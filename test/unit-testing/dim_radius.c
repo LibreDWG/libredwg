@@ -12,12 +12,10 @@ low_level_process(dwg_object *obj)
           dim_radius->lspace_factor);
   printf("lspace style of dim_radius : " FORMAT_BS "\n",
           dim_radius->lspace_style);
-  printf("attach point of dim_radius : " FORMAT_BS "\n",
-          dim_radius->attachment_point);
-  printf("Radius of dim_radius : %f\n",
-          dim_radius->elevation.ecs_11);
-  printf("Thickness of dim_radius : %f\n",
-          dim_radius->elevation.ecs_12);
+  printf("attachment of dim_radius : " FORMAT_BS "\n",
+          dim_radius->attachment);
+  printf("elevation of dim_radius : %f\n",
+          dim_radius->elevation);
   printf("extrusion of dim_radius : x = %f, y = %f, z = %f\n",
           dim_radius->extrusion.x, dim_radius->extrusion.y,
           dim_radius->extrusion.z);
@@ -41,101 +39,84 @@ void
 api_process(dwg_object *obj)
 {
   int error;
-  double ecs11, ecs12, act_measure, horiz_dir, lspace_factor, text_rot, 
+  double elevation, act_measure, horiz_dir, lspace_factor, text_rot, 
     ins_rot, ext_line_rot, dim_rot, length ;
   BITCODE_B flip_arrow1, flip_arrow2;
   BITCODE_RC flags1;
-  BITCODE_BS lspace_style, attach_pt;
+  BITCODE_BS lspace_style, attachment;
   char * user_text;
   dwg_point_2d text_mid_pt;
   dwg_point_3d ext, ins_scale;
 
   dwg_ent_dim_radius *dim_radius = dwg_object_to_DIMENSION_RADIUS(obj);
+  dwg_ent_dim *dim = dwg_object_to_DIMENSION(obj);
 
-  horiz_dir = dwg_ent_dim_radius_get_horiz_dir(dim_radius, &error);
+  horiz_dir = dwg_ent_dim_get_horiz_dir(dim, &error);
   if ( !error )
     printf("horiz dir of dim_radius : %f\n", horiz_dir);
   else
     printf("in reading horiz dir \n");
 
-
-  lspace_factor = dwg_ent_dim_radius_get_elevation_ecs11(dim_radius, 
-                                                         &error);
+  lspace_factor = dwg_ent_dim_get_lspace_factor(dim, &error);
   if ( !error )
     printf("lspace factor of dim_radius : %f\n", lspace_factor);
   else
     printf("in reading lspace factor \n");
 
-
-  lspace_style = dwg_ent_dim_radius_get_elevation_ecs11(dim_radius, 
-                                                        &error);
+  lspace_style = dwg_ent_dim_get_lspace_style(dim, &error);
   if ( !error )
     printf("lspace style of dim_radius : " FORMAT_BS "\n", lspace_style);
   else
     printf("in reading lspace style \n");
 
-
-  attach_pt = dwg_ent_dim_radius_get_elevation_ecs11(dim_radius, 
-                                                     &error);
+  attachment = dwg_ent_dim_get_attachment(dim, &error);
   if ( !error )
-    printf("attach point of dim_radius : " FORMAT_BS "\n", attach_pt);
+    printf("attachment of dim_radius : " FORMAT_BS "\n", attachment);
   else
     printf("in reading attach point \n");
 
 
-  ecs11 = dwg_ent_dim_radius_get_elevation_ecs11(dim_radius, &error);
+  elevation = dwg_ent_dim_get_elevation(dim, &error);
   if ( !error )
-    printf("Radius of dim_radius : %f\n", ecs11);
+    printf("Radius of dim_radius : %f\n", elevation);
   else
-    printf("in reading ecs11 \n");
+    printf("in reading elevation \n");
 
-
-  ecs12 = dwg_ent_dim_radius_get_elevation_ecs12(dim_radius, &error);
-  if ( !error )
-    printf("Thickness of dim_radius : %f\n", ecs12);
-  else
-    printf("in reading ecs12 \n");
-
-
-  dwg_ent_dim_radius_get_extrusion(dim_radius, &ext,
-                                   &error);
+  dwg_ent_dim_get_extrusion(dim, &ext, &error);
   if ( !error )
     printf("extrusion of dim_radius : x = %f, y = %f, z = %f\n",
            ext.x, ext.y, ext.z);
   else
     printf("error in reading extrusion \n");
 
-  dwg_ent_dim_radius_get_ins_scale(dim_radius, &ins_scale,
-                                   &error);
+  dwg_ent_dim_get_ins_scale(dim, &ins_scale, &error);
   if ( !error )
     printf("ins_scale of dim_radius : x = %f, y = %f, z = %f\n",
            ins_scale.x, ins_scale.y, ins_scale.z);
   else
     printf("error in reading ins_scale \n");
 
-  dwg_ent_dim_radius_get_text_mid_pt(dim_radius, &text_mid_pt,
-                                     &error);
+  dwg_ent_dim_get_text_mid_pt(dim, &text_mid_pt, &error);
   if ( !error )
     printf("text_mid_pt of dim_radius : x = %f, y = %f\n",
            text_mid_pt.x, text_mid_pt.y);
   else
     printf("error in reading text_mid_pt \n");
 
-  user_text = dwg_ent_dim_radius_get_user_text(dim_radius, &error);
+  user_text = dwg_ent_dim_get_user_text(dim, &error);
   if ( !error )
     printf("user text of dim_radius : %s\n", user_text);
   else
     printf("in reading user_text \n");
 
-
-  text_rot = dwg_ent_dim_radius_get_text_rot(dim_radius, &error);
+  text_rot = dwg_ent_dim_get_text_rot(dim, &error);
   if ( !error )
     printf(" text rotation of dim_radius : %f\n", text_rot);
   else
     printf("in reading text rotation \n");
 
 
-  ins_rot = dwg_ent_dim_radius_get_ins_rotation(dim_radius, &error);
+  ins_rot = dwg_ent_dim_get_ins_rotation(dim_radius, &error);
   if ( !error )
     printf("ins rotation of dim_radius : %f\n", ins_rot);
   else

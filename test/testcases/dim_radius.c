@@ -36,6 +36,7 @@ api_process (dwg_object * obj)
   double length;
   BITCODE_RC flags2;
   dwg_ent_dim_radius *dim_radius = dwg_object_to_DIMENSION_RADIUS (obj);
+  dwg_ent_dim *dim = dwg_object_to_DIMENSION(obj);
 
   length = dwg_ent_dim_radius_get_leader_length (dim_radius, &error);
   if (!error  && length == dim_radius->leader_len)

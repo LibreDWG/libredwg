@@ -17,8 +17,7 @@ api_process (dwg_object * obj)
   char *user_text;
   dwg_point_2d text_mid_pt, pt12;
   dwg_point_3d extrusion, ins_scale;
-  dwg_ent_dim *dim = (dwg_ent_dim *)dwg_object_to_DIMENSION_ALIGNED (obj);
-
+  dwg_ent_dim *dim = dwg_object_to_DIMENSION(obj);
 
   horiz_dir = dwg_ent_dim_get_horiz_dir (dim, &error);
   if (!error && horiz_dir == dim->horiz_dir)

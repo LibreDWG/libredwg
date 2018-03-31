@@ -13,6 +13,7 @@ api_process (dwg_object * obj)
   BITCODE_RC flags2;
   dwg_point_3d pt10, pt13, pt14;
   dwg_ent_dim_linear *dim_linear = dwg_object_to_DIMENSION_LINEAR (obj);
+  dwg_ent_dim *dim = dwg_object_to_DIMENSION(obj);
 
   dwg_ent_dim_linear_get_def_pt (dim_linear, &pt10, &error);
   if (!error  && dim_linear->def_pt.x == pt10.x && dim_linear->def_pt.y == pt10.y && dim_linear->def_pt.z == pt10.z)

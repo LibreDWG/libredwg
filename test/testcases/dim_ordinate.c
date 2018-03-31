@@ -46,6 +46,7 @@ api_process (dwg_object * obj)
   BITCODE_RC flags2;
   dwg_point_3d pt10, pt13, pt14;
   dwg_ent_dim_ordinate *dim_ordinate = dwg_object_to_DIMENSION_ORDINATE (obj);
+  dwg_ent_dim *dim = dwg_object_to_DIMENSION(obj);
 
   dwg_ent_dim_ordinate_get_ucsorigin_pt (dim_ordinate, &pt10, &error);
   if (!error  && pt10.x == dim_ordinate->ucsorigin_pt.x && pt10.y == dim_ordinate->ucsorigin_pt.y && pt10.z == dim_ordinate->ucsorigin_pt.z)

@@ -19,7 +19,7 @@ api_process (dwg_object * obj)
   dwg_point_2d text_mid_pt, pt12;
   dwg_point_3d pt10, pt13, pt14, pt15, extrusion, ins_scale;
   dwg_ent_dim_ang3pt *dim_ang3pt = dwg_object_to_DIMENSION_ANG3PT (obj);
-  dwg_ent_dim *dim = (dwg_ent_dim *)dwg_object_to_DIMENSION_ANG3PT (obj);
+  dwg_ent_dim *dim = dwg_object_to_DIMENSION(obj);
 
   dwg_ent_dim_ang3pt_get_def_pt (dim_ang3pt, &pt10, &error);
   if (!error  && dim_ang3pt->def_pt.x == pt10.x && dim_ang3pt->def_pt.y == pt10.y && dim_ang3pt->def_pt.z == pt10.z)
