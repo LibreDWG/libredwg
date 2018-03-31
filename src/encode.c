@@ -676,7 +676,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
     dwg->header.section[3].size = dwg->second_header.size;
     bit_write_sentinel(dat, dwg_sentinel(DWG_SENTINEL_SECOND_HEADER_BEGIN));
 
-    LOG_INFO("\n=======> Second Header: %8X\n", (unsigned int) dat->byte - 16)
+    LOG_INFO("\n=======> Second Header: %8X\n", (unsigned int) dat->byte - 16);
     pvzadr = dat->byte; // Keep the first address of the section to write its size later
     LOG_TRACE("pvzadr: %lx\n", pvzadr)
 
@@ -696,51 +696,24 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
     LOG_TRACE("version: %s\n", _obj->version)
 
     for (i = 0; i < 4; i++)
-      {
-        FIELD_B(null_b[i], 0);
-      }
-    // documented as 0x18,0x78,0x01,0x04 for R13, 0x18,0x78,0x01,0x05 for R14
-    // but it is 0x10,0x7d,0xf4,0x78 on r14
-    // also: 10 7d f4 78 on 2004
+      FIELD_B(null_b[i], 0);
+    FIELD_RC(unknown_10, 0); // 0x10
     for (i = 0; i < 4; i++)
-      {
-        FIELD_RC(unknown_rc4[i], 0);
-      }
+      FIELD_RC(unknown_rc4[i], 0);
 
     UNTIL (R_2000) {
-      /*
-      // Fixed chain
-      bit_write_RC(dat, 0x0F);
-      bit_write_RC(dat, 0x14);
-      bit_write_RC(dat, 0x64);
-      bit_write_RC(dat, 0x78);
-      bit_write_RC(dat, 0x01);
-      bit_write_RC(dat, 0x06);
-      */
+      FIELD_RC(num_sections, 0); // r14: 5, r2000: 6
+        for (i = 0; i < FIELD_VALUE(num_sections); i++)
+        {
+          FIELD_RC(section[i].nr, 0);
+          FIELD_BL(section[i].address, 0);
+          FIELD_BL(section[i].size, 0);
+        }
 
-      /* Addresses
-       */
-      for (i = 0; i < _obj->num_sections; i++)
-        {
-          FIELD_RC(sections[i].nr, 0);
-          FIELD_BL(sections[i].address, 0);
-          FIELD_BL(sections[i].size, 0);
-        }
-      /*
-        for (i = 0; i < 6; i++)
-        {
-        bit_write_RC(dat, 0);
-        bit_write_BL(dat, dwg->header.section[0].address);
-        bit_write_BL(dat, dwg->header.section[0].size);
-        }
-      */
-      /* Handles */
       FIELD_BS(num_handlers, 0); // 14, resp. 16 in r14
-
-      if (FIELD_VALUE(num_handlers) != 14) {
-        LOG_ERROR("Second header num_handlers != 14: %d\n", FIELD_VALUE(num_handlers));
-        if (FIELD_VALUE(num_handlers) > 16)
-          FIELD_VALUE(num_handlers) = 14;
+      if (FIELD_VALUE(num_handlers) > 16) {
+        LOG_ERROR("Second header num_handlers > 16: %d\n", FIELD_VALUE(num_handlers));
+        FIELD_VALUE(num_handlers) = 14;
       }
       for (i = 0; i < FIELD_VALUE(num_handlers); i++)
         {
@@ -748,25 +721,6 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
           FIELD_RC(handlers[i].nr, 0);
           FIELD_VECTOR(handlers[i].data, RC, handlers[i].size, 0);
         }
-      /*
-        bit_write_BS(dat, 14);
-        for (i = 0; i < 14; i++)
-        {
-        int i2;
-        struct _handler *handle = &dwg->second_header.handlers[i];
-        bit_write_RC(dat, handle->size);
-        bit_write_RC(dat, i);
-        for (i2 = 0; i2 < handle->size; i2++)
-        bit_write_RC(dat, handle->data[i2]);
-        }
-      */
-
-      /* Go back to begin to write the size
-         pvzadr_2 = dat->byte;
-         dat->byte = pvzadr;
-         bit_write_RL(dat, pvzadr_2 - pvzadr + 10);
-         dat->byte = pvzadr_2;
-      */
 
       bit_write_CRC(dat, pvzadr, 0xC0C1);
 

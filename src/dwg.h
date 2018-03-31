@@ -4036,6 +4036,7 @@ typedef struct _dwg_struct
     BITCODE_RL address;
     char version[12];
     BITCODE_B null_b[4];
+    BITCODE_RC unknown_10;
     BITCODE_RC unknown_rc4[4];
     BITCODE_RC num_sections;
     struct _sections
@@ -4043,7 +4044,7 @@ typedef struct _dwg_struct
       BITCODE_RC nr;
       BITCODE_BL address;
       BITCODE_BL size;
-    } sections[3];
+    } section[4];
     BITCODE_BS num_handlers;
     struct _handler
     {

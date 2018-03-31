@@ -1127,6 +1127,11 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
 
       FIELD_RL(size, 0);
       FIELD_BL(address, 0);
+      if (!dwg->header.section[3].address)
+        {
+          dwg->header.section[3].address = dwg->second_header.address;
+          dwg->header.section[3].size = dwg->second_header.size;
+        }
 
       // AC1012, AC1014 or AC1015. This is a char[11], zero padded.
       // with \n at 12.
@@ -1134,29 +1139,35 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
         _obj->version[i] = bit_read_RC(dat);
       LOG_TRACE("version: %s\n", _obj->version)
       for (i = 0; i < 4; i++)
-        {
-          FIELD_B(null_b[i], 0);
-        }
+        FIELD_B(null_b[i], 0);
 
       // documented as 0x18,0x78,0x01,0x04 for R13, 0x18,0x78,0x01,0x05 for R14
-      // but it is 0x10,0x7d,0xf4,0x78 on r14
-      // also: 10 7d f4 78 on 2004
+      // r14:      7d f4 78 01
+      // r2000:    14 64 78 01
+      FIELD_RC(unknown_10, 0); // 0x10
       for (i = 0; i < 4; i++)
-        {
-          FIELD_RC(unknown_rc4[i], 0);
-        }
+        FIELD_RC(unknown_rc4[i], 0);
 
       UNTIL (R_2000) {
-        //FIELD_RS(unknown_rs);
-        //FIELD_RC(unknown_rc);
-        // the last 4/5 would have beeen nice as num_sections
-        //FIELD_RC(num_sections);
-        _obj->num_sections = 4;
-        for (i = 0; i < _obj->num_sections; i++)
+        FIELD_RC(num_sections, 0); // r14: 5, r2000: 6
+        for (i = 0; i < FIELD_VALUE(num_sections); i++)
           {
-            FIELD_RC(sections[i].nr, 0);
-            FIELD_BL(sections[i].address, 0);
-            FIELD_BL(sections[i].size, 0);
+            // address+sizes of sections 0-2 is correct, 3+4 is empty
+            FIELD_RC(section[i].nr, 0);
+            FIELD_BL(section[i].address, 0);
+            FIELD_BL(section[i].size, 0);
+          }
+        if (DWG_LOGLEVEL >= DWG_LOGLEVEL_HANDLE)
+          {
+            LOG_HANDLE("1st header was:\n");
+            for (i = 0; i < (int)dwg->header.num_sections; i++)
+              {
+                LOG_HANDLE("section[%d] %ld %u %u\n", i,
+                           dwg->header.section[i].number,
+                           dwg->header.section[i].address,
+                           dwg->header.section[i].size);
+              }
+            LOG_HANDLE("start 3: %lu\n", pvzadr-16);
           }
 
         FIELD_BS(num_handlers, 0); // 14, resp. 16 in r14

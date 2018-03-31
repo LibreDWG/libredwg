@@ -44,6 +44,7 @@ run ()
     log=$dwg-$bprog.log
     arg="${srcdir}/$dwg.dwg"
     if test $bprog = dwgrewrite; then
+        rm $dwg-dwgrewrite.dwg
         arg="$arg ${srcdir}/$dwg-$bprog.dwg"
     fi
     echo LIBREDWG_TRACE=9 $TESTPROG ./$prog $arg
