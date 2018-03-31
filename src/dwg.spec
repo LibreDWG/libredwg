@@ -29,21 +29,21 @@ DWG_ENTITY (TEXT)
     FIELD_RD (height, 40);
     FIELD_TV (text_value, 1);
     if (obj->opts & 1)
-      FIELD_RD (rotation, 50);
+      FIELD_RD (rotation, 50)
     if (obj->opts & 2)
-      FIELD_RD (width_factor, 41);
+      FIELD_RD (width_factor, 41)
     if (obj->opts & 4)
-      FIELD_RD (oblique_ang, 51);
+      FIELD_RD (oblique_ang, 51)
     if (obj->opts & 8) {
       ENCODER { bit_write_RC(dat, obj->linetype_rs); }
       DECODER { obj->linetype_rs = bit_read_RC(dat); }
     }
     if (obj->opts & 16)
-      FIELD_RC (generation, 71);
+      FIELD_RC (generation, 71)
     if (obj->opts & 32)
-      FIELD_RC (horiz_alignment, 72);
+      FIELD_RC (horiz_alignment, 72)
     if (obj->opts & 64)
-      FIELD_2RD (alignment_pt, 11);
+      FIELD_2RD (alignment_pt, 11)
     if (obj->opts & 256)
       FIELD_RC (vert_alignment, 73);
   }
@@ -711,9 +711,9 @@ DWG_ENTITY(ARC)
     FIELD_RD (start_angle, 50);
     FIELD_RD (end_angle, 51);
     if (obj->opts & 1)
-      FIELD_3RD (extrusion, 210);
+      FIELD_3RD (extrusion, 210)
     if (obj->opts & 2)
-      FIELD_RD (center.z, 30);
+      FIELD_RD (center.z, 30)
   }
   LATER_VERSIONS {
     FIELD_3BD (center, 10);
@@ -735,9 +735,9 @@ DWG_ENTITY(CIRCLE)
     FIELD_2RD (center, 10);
     FIELD_RD (radius, 40);
     if (obj->opts & 1)
-      FIELD_3RD (extrusion, 210);
+      FIELD_3RD (extrusion, 210)
     if (obj->opts & 2)
-      FIELD_RD (center.z, 38);
+      FIELD_RD (center.z, 38)
   }
   LATER_VERSIONS {
     FIELD_3BD (center, 10);
@@ -755,17 +755,19 @@ DWG_ENTITY(LINE)
 
   PRE(R_13) {
     if (obj->flag & 4)
-      FIELD_3RD (start, 10);
+      FIELD_3RD (start, 10)
     else
-      FIELD_2RD (start, 10);
+      FIELD_2RD (start, 10)
+
     if (obj->flag & 4)
-      FIELD_3RD (end, 11);
+      FIELD_3RD (end, 11)
     else
-      FIELD_2RD (end, 11);
+      FIELD_2RD (end, 11)
+
     if (obj->opts & 1)
-      FIELD_3RD (extrusion, 210);
+      FIELD_3RD (extrusion, 210)
     if (obj->opts & 2)
-      FIELD_RD (thickness, 39);
+      FIELD_RD (thickness, 39)
   }
   VERSIONS(R_13, R_14)
     {
@@ -1105,9 +1107,9 @@ DWG_ENTITY(SOLID)
     FIELD_2RD (corner3, 13);
     FIELD_2RD (corner4, 14);
     if (obj->opts & 1)
-      FIELD_3RD (extrusion, 210);
+      FIELD_3RD (extrusion, 210)
     if (obj->opts & 2)
-      FIELD_RD (elevation, 38);
+      FIELD_RD (elevation, 38)
   }
   LATER_VERSIONS {
     FIELD_BT (thickness, 39);
@@ -1132,9 +1134,9 @@ DWG_ENTITY(TRACE)
     FIELD_2RD (corner3, 12);
     FIELD_2RD (corner4, 13);
     if (obj->opts & 1)
-      FIELD_3RD (extrusion, 210);
+      FIELD_3RD (extrusion, 210)
     if (obj->opts & 2)
-      FIELD_RD (elevation, 38);
+      FIELD_RD (elevation, 38)
   }
   LATER_VERSIONS {
     FIELD_BT (thickness, 39);
@@ -1158,9 +1160,9 @@ DWG_ENTITY(SHAPE)
     FIELD_2RD (ins_pt, 10);
     FIELD_RS (shape_no, 2);
     if (obj->opts & 1)
-      FIELD_3RD (extrusion, 210);
+      FIELD_3RD (extrusion, 210)
     if (obj->opts & 2)
-      FIELD_RD (ins_pt.z, 38);
+      FIELD_RD (ins_pt.z, 38)
   }
   LATER_VERSIONS {
     FIELD_3BD (ins_pt, 10);
@@ -1305,6 +1307,7 @@ DWG_ENTITY(SPLINE)
       {
         FIELD_BD (knots[rcount], 40);
       }
+    END_REPEAT(knots);
     REPEAT(num_ctrl_pts, ctrl_pts, Dwg_Entity_SPLINE_control_point)
       {
         FIELD_3BD (ctrl_pts[rcount], 10);
@@ -1313,12 +1316,14 @@ DWG_ENTITY(SPLINE)
         else
           FIELD_BD (ctrl_pts[rcount].w, 41);
       }
+    END_REPEAT(ctrl_pts);
   }
   if (FIELD_VALUE(scenario) & 2) {
     REPEAT(num_fit_pts, fit_pts, Dwg_Entity_SPLINE_point)
       {
         FIELD_3BD (fit_pts[rcount], 11);
       }
+    END_REPEAT(fit_pts);
   }
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -1430,6 +1435,7 @@ void decode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
                 {
                   PARSE_WIRE_STRUCT(wires[rcount])
                 }
+              END_REPEAT(wires);
               FIELD_BL (num_silhouettes, 0);
               REPEAT(num_silhouettes, silhouettes, Dwg_Entity_3DSOLID_silhouette)
                 {
@@ -1439,11 +1445,14 @@ void decode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
                   FIELD_3BD (silhouettes[rcount].vp_up_dir, 0);
                   FIELD_B (silhouettes[rcount].vp_perspective, 0);
                   FIELD_BL (silhouettes[rcount].num_wires, 0);
-                  REPEAT2(silhouettes[rcount].num_wires, silhouettes[rcount].wires, Dwg_Entity_3DSOLID_wire)
+                  REPEAT2(silhouettes[rcount].num_wires, silhouettes[rcount].wires,
+                          Dwg_Entity_3DSOLID_wire)
                     {
                       PARSE_WIRE_STRUCT(silhouettes[rcount].wires[rcount2])
                     }
+                  END_REPEAT(silhouettes[rcount].wires);
                 }
+              END_REPEAT(silhouettes);
             }
         }
 
@@ -1840,6 +1849,7 @@ DWG_ENTITY(MLINE)
             {
               FIELD_BD (verts[rcount].lines[rcount2].segparms[rcount3], 0);
             }
+          END_REPEAT(verts[rcount].lines[rcount2].segparms);
 
           FIELD_BS (verts[rcount].lines[rcount2].num_areafillparms, 0);
           REPEAT3(verts[rcount].lines[rcount2].num_areafillparms,
@@ -1848,8 +1858,11 @@ DWG_ENTITY(MLINE)
             {
               FIELD_BD (verts[rcount].lines[rcount2].areafillparms[rcount3], 0);
             }
+          END_REPEAT(verts[rcount].lines[rcount2].areafillparms);
         }
+      END_REPEAT(verts[rcount].lines);
     }
+  END_REPEAT(verts);
 
   COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE (mline_style, 5, 0);
@@ -1996,7 +2009,7 @@ DWG_OBJECT(LAYER)
     FIELD_VALUE(flag) = FIELD_VALUE(frozen) |
       (FIELD_VALUE(frozen_in_new) << 1) |
       (FIELD_VALUE(locked) << 2) |
-      (obj->color_rs < 0 ? 32 : 0) |
+      (FIELD_VALUE(color_rs) < 0 ? 32 : 0) |
       (FIELD_VALUE(xrefdep) << 4) |
       (FIELD_VALUE(_64_flag) << 6);
   }
@@ -2144,6 +2157,7 @@ DWG_OBJECT(LTYPE)
           FIELD_VALUE(text_area_is_present) = 1;
       }
     }
+  END_REPEAT(dash);
 
   UNTIL(R_2004) {
     FIELD_VECTOR_N (strings_area, RC, 256, 3);
@@ -2544,9 +2558,9 @@ DWG_OBJECT(DIMSTYLE)
       FIELD_T (DIMBLK_T, 5);
       FIELD_T (DIMBLK1_T, 6);
       FIELD_T (DIMBLK2_T, 7);
-      FIELD_RC (DIMCLRD, 176);
-      FIELD_RC (DIMCLRE, 177);
-      FIELD_RC (DIMCLRT, 178);
+      FIELD_RC (DIMCLRD_N, 176);
+      FIELD_RC (DIMCLRE_N, 177);
+      FIELD_RC (DIMCLRT_N, 178);
     }
   VERSIONS(R_13, R_14)
     {
@@ -2755,7 +2769,7 @@ DWG_OBJECT(VP_ENT_HDR)
   SINCE(R_13) {
     FIELD_B (flag1, 70); // bit 1 of 70
     FIELD_VALUE(flag) =
-      (FIELD_VALUE(flag_1) << 1) |
+      (FIELD_VALUE(flag1) << 1) |
       (FIELD_VALUE(xrefdep) << 4) |
       (FIELD_VALUE(_64_flag) << 6);
 
@@ -2802,6 +2816,7 @@ DWG_OBJECT(MLINESTYLE)
 #endif
     FIELD_BS (lines[rcount].ltindex, 0);
   }
+  END_REPEAT(lines);
 
   UNTIL(R_2007) {
     FIELD_HANDLE (parenthandle, 4, 0);
@@ -2844,6 +2859,7 @@ DWG_ENTITY(HATCH)
           FIELD_BL (colors[rcount].rgb_color, 63); // and 421
           FIELD_RC (colors[rcount].ignored_color_byte, 0);
         }
+      END_REPEAT(colors);
       FIELD_TV (gradient_name, 470);
     }
 
@@ -2902,11 +2918,12 @@ DWG_ENTITY(HATCH)
                               FIELD_BD (paths[rcount].segs[rcount2].control_points[rcount3].weigth, 40);
                             }
                         }
-                      SINCE(R_2014)
+                      END_REPEAT(paths[rcount].segs[rcount2].control_points);
+                      SINCE(R_2013) // r2014 really
                         {
                           FIELD_BL(paths[rcount].segs[rcount2].num_fitpts, 97);
-                          FIELD_VECTOR(paths[rcount].segs[rcount2].fitpts, 2RD,
-                                       paths[rcount].segs[rcount2].num_fitpts, 11);
+                          FIELD_2RD_VECTOR(paths[rcount].segs[rcount2].fitpts,
+                                           paths[rcount].segs[rcount2].num_fitpts, 11);
                         }
                       break;
                     default:
@@ -2914,6 +2931,7 @@ DWG_ENTITY(HATCH)
                       break;
                 }
             }
+          END_REPEAT(paths[rcount].segs);
         }
       else
         { /* POLYLINE PATH */
@@ -2929,6 +2947,7 @@ DWG_ENTITY(HATCH)
                   FIELD_BD (paths[rcount].polyline_paths[rcount2].bulge, 42);
                 }
             }
+          END_REPEAT(paths[rcount].polyline_paths);
         }
       FIELD_BL (paths[rcount].num_boundary_handles, 97);
       DECODER {
@@ -2937,6 +2956,7 @@ DWG_ENTITY(HATCH)
           FIELD_VALUE (has_derived) || (FIELD_VALUE (paths[rcount].flag) & 0x4);
       }
     }
+  END_REPEAT(paths);
   FIELD_BS (style, 75);
   FIELD_BS (pattern_type, 76);
   if (!FIELD_VALUE(solid_fill))
@@ -2945,7 +2965,7 @@ DWG_ENTITY(HATCH)
       FIELD_BD (scale_spacing, 41);
       FIELD_B (double_flag, 77);
       FIELD_BS (num_deflines, 78);
-      REPEAT (num_deflines, deflines, Dwg_Entity_HATCH_DefLine)
+      REPEAT(num_deflines, deflines, Dwg_Entity_HATCH_DefLine)
         {
           FIELD_BD (deflines[rcount].angle, 53);
           FIELD_2BD_1 (deflines[rcount].pt0, 43);
@@ -2955,13 +2975,13 @@ DWG_ENTITY(HATCH)
             {
               FIELD_BD (deflines[rcount].dashes[rcount2], 49);
             }
+          END_REPEAT(deflines[rcount].dashes);
         }
+      END_REPEAT(deflines);
     }
 
   if (FIELD_VALUE (has_derived))
-    {
       FIELD_BD (pixel_size, 47);
-    }
   FIELD_BL (num_seeds, 98);
   FIELD_2RD_VECTOR (seeds, num_seeds, 10);
 
@@ -3011,10 +3031,7 @@ DWG_ENTITY(IMAGE)
   else
     {
       FIELD_BL (num_clip_verts, 91);
-      REPEAT(num_clip_verts, clip_verts, Dwg_Entity_IMAGE_clip_vert)
-      {
-        FIELD_2RD (clip_verts[rcount], 14);
-      }
+      FIELD_2RD_VECTOR(clip_verts, num_clip_verts, 14);
     }
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -3062,6 +3079,7 @@ DWG_OBJECT(LAYER_INDEX)
       FIELD_BL (entries[rcount].idxlong, 0);
       FIELD_TV (entries[rcount].layer, 8);
     }
+  END_REPEAT(entries)
 
   UNTIL(R_2007) {
     FIELD_HANDLE (parenthandle, 4, 0);
@@ -3075,7 +3093,6 @@ DWG_OBJECT_END
 //pg.145
 DWG_OBJECT(LAYOUT)
 
-{
   FIELD_TV (page_setup_name, 1);
   FIELD_TV (printer_or_config, 2);
   FIELD_BS (plot_layout_flags, 70);
@@ -3186,6 +3203,7 @@ DWG_ENTITY(LWPLINE)
       FIELD_BD (widths[rcount].start, 40);
       FIELD_BD (widths[rcount].end, 41);
     }
+  END_REPEAT(widths)
 
   COMMON_ENTITY_HANDLE_DATA;
 
@@ -3247,6 +3265,7 @@ DWG_ENTITY(PROXY_LWPOLYLINE)
       FIELD_BD (widths[rcount].start);
       FIELD_BD (widths[rcount].end);
     }
+  END_REPEAT(widths)
 
   FIELD_RC (unknown_1);
   FIELD_RC (unknown_2);
@@ -3337,38 +3356,37 @@ DWG_OBJECT_END
 
 DWG_OBJECT(FIELD)
 
-  SINCE(R_2004)
+  LOG_INFO("TODO FIELD\n");
+  FIELD_TV (id, 0);
+  FIELD_TV (code, 0);
+
+  FIELD_BL (num_childhdl, 0);
+  HANDLE_VECTOR(childhdl, num_childhdl, 360, 0);
+  FIELD_BL (num_objects, 0);
+  HANDLE_VECTOR(objects, num_objects, 331, 0);
+
+  UNTIL(R_2004) {
+    FIELD_TV (format, 0);
+  }
+
+  FIELD_BL (evaluation_option, 0);
+  FIELD_BL (filing_option, 0);
+  FIELD_BL (field_state, 0);
+  FIELD_BL (evaluation_status, 0);
+  FIELD_BL (evaluation_error_code, 0);
+  FIELD_TV (evaluation_error_msg, 0);
+  FIELD_BL (value, 0); /* TODO value p20.4.99 */
+  FIELD_TV (value_string, 0);
+  FIELD_TV (value_string_length, 0);
+
+  FIELD_BL (num_childval, 0);
+  REPEAT_N((long)FIELD_VALUE(num_childval), childval, Dwg_Object_FIELD_ChildValue)
     {
-      LOG_INFO("TODO FIELD\n");
-      FIELD_TV (id, 0);
-      FIELD_TV (code, 0);
-
-      FIELD_BL (num_childhdl, 0);
-      HANDLE_VECTOR(childhdl, num_childhdl, 360, 0);
-      FIELD_BL (num_objects, 0);
-      HANDLE_VECTOR(objects, num_objects, 331, 0);
-
-      UNTIL(R_2004) {
-        FIELD_TV (format, 0);
-      }
-
-      FIELD_BL (evaluation_option, 0);
-      FIELD_BL (filing_option, 0);
-      FIELD_BL (field_state, 0);
-      FIELD_BL (evaluation_status, 0);
-      FIELD_BL (evaluation_error_code, 0);
-      FIELD_TV (evaluation_error_msg, 0);
-      FIELD_BL (value, 0); /* TODO value p20.4.99 */
-      FIELD_TV (value_string, 0);
-      FIELD_TV (value_string_length, 0);
-
-      FIELD_BL (num_childval, 0);
-      REPEAT_N((long)FIELD_VALUE(num_childval), childval, Dwg_Object_FIELD_ChildValue)
-        {
-          FIELD_TV (childval[rcount].key, 0);
-          FIELD_BL (childval[rcount].value, 0); /* TODO value p20.4.99 */
-        }
+      FIELD_TV (childval[rcount].key, 0);
+      FIELD_BL (childval[rcount].value, 0); /* TODO value p20.4.99 */
     }
+  END_REPEAT(childval)
+
 DWG_OBJECT_END
 
 DWG_OBJECT(FIELDLIST)
@@ -3404,14 +3422,14 @@ DWG_OBJECT(GEODATA)
       FIELD_T (coord_system_def, 0);
       FIELD_T (geo_rss_tag, 0);
     }
-  VERSIONS(R_2009, R_2010)
+    VERSIONS(R_2007, R_2010)// r2009-2010 really
     {
       FIELD_3BD (ref_pt, 0);
       FIELD_BL (units_value_horiz, 0);
       FIELD_3BD (design_pt, 0);
       FIELD_3BD (obs_pt, 0); // 0,0,0
       FIELD_3BD (up_dir, 0);
-      FIELD_BD (north_dir_angle, 0);
+      FIELD_BD (north_dir_angle_deg, 0);
       FIELD_3BD (north_dir, 0); // obsolete: 1,1,1
       FIELD_T (coord_system_def, 0);
       FIELD_T (geo_rss_tag, 0);
@@ -3428,6 +3446,7 @@ DWG_OBJECT(GEODATA)
       FIELD_2RD (geomesh_pts[rcount].source_pt, 0);
       FIELD_2RD (geomesh_pts[rcount].dest_pt, 0);
     }
+  END_REPEAT(geomesh_pts);
   FIELD_BL (num_geomesh_faces, 0);
   REPEAT_N(FIELD_VALUE(num_geomesh_faces), geomesh_faces, Dwg_Object_GEODATA_meshface)
     {
@@ -3436,6 +3455,7 @@ DWG_OBJECT(GEODATA)
       FIELD_BL (geomesh_faces[rcount].face3, 0);
       FIELD_BL (geomesh_faces[rcount].face4, 0);
     }
+  END_REPEAT(geomesh_faces);
   UNTIL(R_2007)
     {
       FIELD_BL (scale_est, 0);
@@ -3467,7 +3487,7 @@ DWG_OBJECT_END
 DWG_OBJECT(SORTENTSTABLE)
 
   FIELD_BL (num_ents, 0);
-  HANDLE_VECTOR (sort_handles, num_entries, ANYCODE, 0);
+  HANDLE_VECTOR (sort_handles, num_ents, ANYCODE, 0);
 
   UNTIL(R_2007) {
     FIELD_HANDLE (parenthandle, 4, 0);
@@ -3724,9 +3744,11 @@ DWG_ENTITY(TABLE)
               }
             }
         }
-    } /* End Cell Data (remaining data applies to entire table)*/
+    }
+  END_REPEAT(cells);
+  /* End Cell Data (remaining data applies to entire table)*/
   
-   COMMON: */
+  /* COMMON: */
   
   FIELD_B (has_table_overrides, 0);
   if (FIELD_VALUE(has_table_overrides))
@@ -3957,7 +3979,7 @@ DWG_ENTITY(TABLE)
           FIELD_HANDLE (cells[rcount].text_style_override, ANYCODE, 7);
         }
     }
-  VECTOR_FREE(cells);
+  END_REPEAT(cells);
   
   if (FIELD_VALUE(has_table_overrides))
     {
@@ -3993,7 +4015,7 @@ DWG_ENTITY(TABLE)
               FIELD_BD (break_heights[rcount].height, 0);
               FIELD_BL (break_heights[rcount].flag, 0);
             }
-          VECTOR_FREE(break_heights);
+          END_REPEAT(break_heights);
         }
       FIELD_BL (num_break_rows, 0);
       REPEAT(num_break_rows, break_rows, Dwg_Entity_TABLE_BreakRow)
@@ -4002,7 +4024,7 @@ DWG_ENTITY(TABLE)
           FIELD_BL (break_rows[rcount].start, 0);
           FIELD_BL (break_rows[rcount].end, 0);
         }
-      VECTOR_FREE(break_rows);
+      END_REPEAT(break_rows);
     }
 
 DWG_ENTITY_END
@@ -4014,14 +4036,14 @@ DWG_OBJECT(TABLECONTENT)
   FIELD_TV (ldata.desc, 300);
 
   FIELD_BL (tdata.num_cols, 90);
-  REPEAT(tdata.num_cols, tdata->cols, Dwg_Object_TableDataColumn)
+  REPEAT(tdata.num_cols, tdata.cols, Dwg_Object_LinkedTableData)
     {
-      Dwg_Object_TableDataColumn *col = &FIELD_VALUE(tdata->cols[rcount]);
-      Dwg_Object_CellStyle *sty = &FIELD_VALUE(col->cell_style);
+      Dwg_Object_TableDataColumn *col = &(FIELD_VALUE(tdata.cols[rcount]));
+      Dwg_Object_CellStyle *sty = &col->cell_style;
       Dwg_Object_ContentFormat *fmt = &sty->content_format;
       FIELD_TV (col->name, 300);
       FIELD_TV (col->custom_data, 91);
-      LOG_WARN("TODO TABLECONTENT Custom data collection, see paragraph 20.4.100");
+      // cell style:
       FIELD_TV (sty->type, 90); // 20.4.101.4..
       FIELD_TV (sty->data_flags, 170);
       FIELD_BL (sty->property_override_flags, 91);
@@ -4061,9 +4083,9 @@ DWG_OBJECT(TABLECONTENT)
           FIELD_BL (border->double_line_spacing, 93);
           FIELD_BD (border->linewt, 40);
         }
-      VECTOR_FREE(sty->border);
+      END_REPEAT(sty->border);
     }
-  VECTOR_FREE(tdata->cols);
+  END_REPEAT(tdata->cols);
   FIELD_BL (tdata.num_rows, 90);
   REPEAT(tdata.num_rows, tdata->rows, Dwg_Object_TableRow)
     {
@@ -4109,7 +4131,7 @@ DWG_OBJECT(TABLECONTENT)
                   FIELD_TV (attr->value, 301);
                   FIELD_BL (attr->index, 92);
                 }
-              VECTOR_FREE(content->attrs);
+              END_REPEAT(content->attrs);
               if (FIELD_VALUE(content->content_format))
                 {
                   FIELD_BL (fmt->property_override_flags, 90);
@@ -4125,7 +4147,7 @@ DWG_OBJECT(TABLECONTENT)
                   FIELD_BD (fmt->text_height, 92);
                 }
             }
-          VECTOR_FREE(cell->cell_contents);
+          END_REPEAT(cell->cell_contents);
           FIELD_BL (cell->style_id, 90);
           FIELD_BL (cell->has_geom_data, 91);
           if (FIELD_VALUE(cell->has_geom_data))
@@ -4146,10 +4168,11 @@ DWG_OBJECT(TABLECONTENT)
                       FIELD_BD (geom->height, 0); 
                       FIELD_BD (geom->unknown, 0); 
                     }
+                  END_REPEAT (cell->geom_data);
                 }
             }
         }
-      VECTOR_FREE(row->cell);
+      END_REPEAT(row->cell);
       FIELD_BL (row->custom_data, 91);
       LOG_WARN("TODO TABLECONTENT row custom data collection, see paragraph 20.4.100");
       {
@@ -4195,12 +4218,13 @@ DWG_OBJECT(TABLECONTENT)
             FIELD_BL (border->double_line_spacing, 93);
             FIELD_BD (border->linewt, 40);
           }
+        END_REPEAT (sty->border);
         // end cell style
         FIELD_BL (row->style_id, 90);
         FIELD_BL (row->height, 40);
       }
     }
-  VECTOR_FREE(tdata->rows);
+  END_REPEAT(tdata->rows);
   FIELD_BL (tdata.num_field_refs, 0);
   HANDLE_VECTOR (tdata.num_field_refs, tdata->field_refs, 3, 0);
 
@@ -4213,6 +4237,7 @@ DWG_OBJECT(TABLECONTENT)
       FIELD_BL (merged->bottom_row, 93);
       FIELD_BL (merged->right_col, 94);
     }
+  END_REPEAT(fdata->merged_cells);
   FIELD_HANDLE (table_style, 3, 340);
   
 DWG_OBJECT_END
@@ -4266,12 +4291,14 @@ DWG_OBJECT(CELLSTYLEMAP)
           FIELD_BL (border->double_line_spacing, 93);
           FIELD_BD (border->linewt, 40);
         }
+      END_REPEAT (sty->border);
       // end cell style
 
       FIELD_BL (cells[rcount].id, 90);
       FIELD_BL (cells[rcount].type, 91);
       FIELD_TV (cells[rcount].name, 300);
     }
+  END_REPEAT (cells);
 
 DWG_OBJECT_END
   
@@ -4299,7 +4326,9 @@ DWG_OBJECT(TABLEGEOMETRY)
           FIELD_BD (geom->height, 0); 
           FIELD_BD (geom->unknown, 0); 
         }
+      END_REPEAT(cell->geom_data);
     }
+  END_REPEAT(cell);
 
 DWG_OBJECT_END
 
@@ -4409,6 +4438,7 @@ DWG_ENTITY(MLEADER)
           FIELD_3BD (lev1.breaks[rcount2].start, 12);
           FIELD_3BD (lev1.breaks[rcount2].end, 13);
         }
+      END_REPEAT (lev1.breaks);
       FIELD_BL (lev1.index, 90);
       FIELD_BD (lev1.landing_distance, 40);
       REPEAT2(lev1.num_lines, lev1.lines, Leader_Line)
@@ -4419,7 +4449,7 @@ DWG_ENTITY(MLEADER)
             {
               FIELD_3BD (lev2.points[rcount3], 10);
             }
-          VECTOR_FREE (lev2.points);
+          END_REPEAT (lev2.points);
           FIELD_BL (lev2.num_breaks, 0);
           FIELD_BL (lev2.segment_index, 90);
           REPEAT2(lev2.num_breaks, lev2.breaks, Leader_Break)
@@ -4427,6 +4457,7 @@ DWG_ENTITY(MLEADER)
               FIELD_3BD (lev2.breaks[rcount2].start, 11);
               FIELD_3BD (lev2.breaks[rcount2].end, 12);
             }
+          END_REPEAT(lev2.breaks);
           FIELD_BL (lev2.index, 91);
 	  SINCE (R_2010)
             {
@@ -4440,14 +4471,14 @@ DWG_ENTITY(MLEADER)
             }
 #         undef lev2
         }
-      VECTOR_FREE (lev1.lines);
+      END_REPEAT (lev1.lines);
       SINCE (R_2010)
         {
           FIELD_BS (lev1.attach_dir, 271);
         }
 #     undef lev1
     }
-  VECTOR_FREE (ctx.leaders);
+  END_REPEAT (ctx.leaders);
 
   FIELD_BD (ctx.scale, 40);
   FIELD_3BD (ctx.content_base, 10);
@@ -4551,6 +4582,7 @@ DWG_ENTITY(MLEADER)
           FIELD_BL (arrowheads->is_default, 94);
           FIELD_HANDLE (arrowheads->arrowhead, 5, 345);
         }
+      END_REPEAT(arrowheads);
       FIELD_BL (num_blocklabels, 0);
       REPEAT(num_blocklabels, blocklabels, Leader_BlockLabel)
         {
@@ -4559,6 +4591,7 @@ DWG_ENTITY(MLEADER)
           FIELD_BS (blocklabels->ui_index, 177);
           FIELD_BD (blocklabels->width, 44);
         }
+      END_REPEAT(blocklabels);
       FIELD_B (neg_textdir, 294);
       FIELD_BS (ipe_align, 178);
       FIELD_BS (justification, 179);
@@ -4687,10 +4720,7 @@ DWG_ENTITY(WIPEOUT)
   else
     {
       FIELD_BL (num_clip_verts, 91);
-      REPEAT(num_clip_verts, clip_verts, Dwg_Entity_IMAGE_clip_vert)
-      {
-        FIELD_2RD (clip_verts[rcount], 14);
-      }
+      FIELD_2RD_VECTOR(clip_verts, num_clip_verts, 14);
     }
   COMMON_ENTITY_HANDLE_DATA;
 
@@ -4780,6 +4810,9 @@ DWG_OBJECT_END
 DWG_OBJECT(LEADEROBJECTCONTEXTDATA)
 DWG_OBJECT_END
 */
+
+
+
 
 
 

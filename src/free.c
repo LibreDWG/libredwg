@@ -110,9 +110,6 @@ static Bit_Chain *dat = &pdat;
 #define FIELD_INSERT_COUNT(insert_count, type, dxf)
 #define FIELD_XDATA(name, size)
 
-//#undef VECTOR_FREE
-#define VECTOR_FREE(field) FIELD_TV(field,0)
-
 #define REACTORS(code) FIELD_TV(reactors,0)
 #define ENT_REACTORS(code) FIELD_TV(reactors,0)
 #define XDICOBJHANDLE(code)\
@@ -151,6 +148,8 @@ static Bit_Chain *dat = &pdat;
 
 #define REPEAT3(times, name, type) \
   for (rcount3=0; rcount3<(int)_obj->times; rcount3++)
+
+#define END_REPEAT(field) FIELD_TV(field,0)
 
 #define COMMON_ENTITY_HANDLE_DATA
 //TODO num_eed and reactors

@@ -34,7 +34,7 @@
 #endif
 
 #ifndef IS_FREE
-#define VECTOR_FREE(field)
+#define END_REPEAT(field)
 #endif
 
 #define COMMON_TABLE_FLAGS \

@@ -533,9 +533,9 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
           FIELD_T (DIMBLK_T, 5);
           FIELD_T (DIMBLK1_T, 6);
           FIELD_T (DIMBLK2_T, 7);
-          FIELD_RC (DIMCLRD_C, 176);
-          FIELD_RC (DIMCLRE_C, 177);
-          FIELD_RC (DIMCLRT_C, 178);
+          FIELD_RC (DIMCLRD_N, 176);
+          FIELD_RC (DIMCLRE_N, 177);
+          FIELD_RC (DIMCLRT_N, 178);
 
           //??
           CHK_ENDPOS;

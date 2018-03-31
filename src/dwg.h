@@ -564,13 +564,13 @@ typedef struct _dwg_header_variables {
   BITCODE_BD DIMTVP;
   BITCODE_BD DIMTFAC;
   BITCODE_BD DIMGAP;
-  BITCODE_T DIMPOST_T;
+  BITCODE_T DIMPOST_T; /* preR13 => handle */
   BITCODE_T DIMAPOST_T;
   BITCODE_T DIMBLK_T;
   BITCODE_T DIMBLK1_T;
   BITCODE_T DIMBLK2_T;
   BITCODE_BD DIMALTRND;
-  BITCODE_RC DIMCLRD_C;
+  BITCODE_RC DIMCLRD_C; /* preR13 => CMC */
   BITCODE_RC DIMCLRE_C;
   BITCODE_RC DIMCLRT_C;
   BITCODE_CMC DIMCLRD;
@@ -1949,7 +1949,7 @@ typedef struct _dwg_object_DIMSTYLE
   BITCODE_BS DIMTDEC;
   BITCODE_BS DIMALTU;
   BITCODE_BS DIMALTTD;
-  //BITCODE_H DIMTXSTY;
+  /* BITCODE_H DIMTXSTY; */
   BITCODE_BD DIMSCALE;
   BITCODE_BD DIMASZ;
   BITCODE_BD DIMEXO;
@@ -1978,12 +1978,12 @@ typedef struct _dwg_object_DIMSTYLE
   BITCODE_T DIMBLK_T;
   BITCODE_T DIMBLK1_T;
   BITCODE_T DIMBLK2_T;
-  //BITCODE_TV DIMPOST;
-  //BITCODE_TV DIMAPOST;
+  /* BITCODE_TV DIMPOST; */
+  /* BITCODE_TV DIMAPOST; */
   BITCODE_BD DIMALTRND;
-  BITCODE_RC DIMCLRD_C;
-  BITCODE_RC DIMCLRE_C;
-  BITCODE_RC DIMCLRT_C;
+  BITCODE_RC DIMCLRD_N; /* preR13 */
+  BITCODE_RC DIMCLRE_N; /* preR13 */
+  BITCODE_RC DIMCLRT_N; /* preR13 */
   BITCODE_CMC DIMCLRD;
   BITCODE_CMC DIMCLRE;
   BITCODE_CMC DIMCLRT;
@@ -3190,6 +3190,7 @@ typedef struct _dwg_object_GEODATA
                             3 geographic defined by latitude/longitude) */
   BITCODE_3BD design_pt;
   BITCODE_3BD ref_pt;
+  BITCODE_3BD obs_pt;
   BITCODE_BD unit_scale_horiz;
   BITCODE_BL units_value_horiz;
   BITCODE_BD unit_scale_vert;
@@ -3238,11 +3239,6 @@ typedef struct _dwg_object_IDBUFFER
 /**
  Classes for IMAGE (varies)
  */
-typedef struct _dwg_entity_IMAGE_clip_vert
-{
-  double x;
-  double y;
-} Dwg_Entity_IMAGE_clip_vert;
 
 typedef struct _dwg_entity_IMAGE
 {
@@ -3265,7 +3261,7 @@ typedef struct _dwg_entity_IMAGE
   BITCODE_2RD boundary_pt0;
   BITCODE_2RD boundary_pt1;
   BITCODE_BL num_clip_verts;
-  Dwg_Entity_IMAGE_clip_vert* clip_verts;
+  BITCODE_2RD* clip_verts;
   BITCODE_H imagedef;
   BITCODE_H imagedefreactor;
 } Dwg_Entity_IMAGE;
@@ -3373,6 +3369,7 @@ typedef struct _dwg_object_SCALE
   BITCODE_BD paper_units;
   BITCODE_BD drawing_units;
   BITCODE_B has_unit_scale;
+  BITCODE_H parenthandle;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
 } Dwg_Object_SCALE;
@@ -3449,7 +3446,7 @@ typedef struct _dwg_entity_WIPEOUT
   BITCODE_2RD boundary_pt0;
   BITCODE_2RD boundary_pt1;
   BITCODE_BL num_clip_verts;
-  Dwg_Entity_IMAGE_clip_vert* clip_verts;
+  BITCODE_2RD* clip_verts;
   BITCODE_H imagedef;
   BITCODE_H imagedefreactor;
 } Dwg_Entity_WIPEOUT;
@@ -3726,6 +3723,7 @@ typedef struct _dwg_object_object
     Dwg_Object_CELLSTYLEMAP *CELLSTYLEMAP;
     Dwg_Object_FIELD *FIELD;
     Dwg_Object_FIELDLIST *FIELDLIST;
+    Dwg_Object_GEODATA *GEODATA;
     Dwg_Object_IDBUFFER *IDBUFFER;
     Dwg_Object_IMAGEDEF *IMAGEDEF;
     Dwg_Object_IMAGEDEF_REACTOR *IMAGEDEF_REACTOR;
