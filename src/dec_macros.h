@@ -234,7 +234,11 @@
   _obj->name = (type *) calloc(_obj->times, sizeof(type)); \
   for (rcount3=0; rcount3<(long)_obj->times; rcount3++)
 
-#define COMMON_ENTITY_HANDLE_DATA \
+#define REPEAT4(times, name, type) \
+  _obj->name = (type *) calloc(_obj->times, sizeof(type)); \
+  for (rcount4=0; rcount4<(long)_obj->times; rcount4++)
+
+#define COMMON_ENTITY_HANDLE_DATA               \
   SINCE(R_13) {\
     dwg_decode_common_entity_handle_data(dat, obj);\
   }
@@ -242,7 +246,7 @@
 #define DWG_ENTITY(token) static void \
 dwg_decode_##token (Bit_Chain * dat, Dwg_Object * obj)\
 {\
-  long vcount, rcount, rcount2, rcount3;\
+  long vcount, rcount, rcount2, rcount3, rcount4;\
   Dwg_Entity_##token *ent, *_obj;\
   Dwg_Data* dwg = obj->parent;\
   LOG_INFO("Entity " #token "\n")\
@@ -260,7 +264,7 @@ dwg_decode_##token (Bit_Chain * dat, Dwg_Object * obj)\
 #define DWG_OBJECT(token) static void \
 dwg_decode_ ## token (Bit_Chain * dat, Dwg_Object * obj) \
 { \
-  long vcount, rcount, rcount2, rcount3;\
+  long vcount, rcount, rcount2, rcount3, rcount4; \
   Dwg_Object_##token *_obj;\
   Dwg_Data* dwg = obj->parent;\
   LOG_INFO("Object " #token "\n")\

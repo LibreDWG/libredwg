@@ -3354,9 +3354,66 @@ DWG_OBJECT(OBJECTCONTEXTDATA)
 
 DWG_OBJECT_END
 
+// 20.4.99 Value, page 241. for FIELD and TABLE
+#define Table_Value(value) \
+  SINCE(R_2007) \
+    { \
+      FIELD_BL (value.flags, 93); \
+    } \
+  FIELD_BL (value.data_type, 90); \
+  switch (FIELD_VALUE(value.data_type)) \
+    { \
+    case 0: /* kUnknown */ \
+      FIELD_BL (value.data_long, 0); \
+      break; \
+    case 1: /* kLong */ \
+      FIELD_BL (value.data_long, 0); \
+      break; \
+    case 2: /* kDouble */ \
+      FIELD_BD (value.data_double, 0); \
+      break; \
+    case 4: /* kString */ \
+      FIELD_TV (value.data_string, 0); \
+      break; \
+    case 8: /* kDate */ \
+      FIELD_BL (value.data_size, 0); \
+      FIELD_VECTOR (value.data_date, RC, value.data_size, 0); \
+      break; \
+    case 16: /* kPoint */ \
+      FIELD_BL (value.data_size, 0); \
+      FIELD_2RD (value.data_point, 0); \
+      break; \
+    case 32: /* k3dPoint */ \
+      FIELD_BL (value.data_size, 0); \
+      FIELD_3RD (value.data_3dpoint, 0); \
+      break; \
+    case 64: /* kObjectId */ \
+      /* data is a HANDLE */ \
+      /* read from appropriate place in handles section */ \
+      break; \
+    case 128: /* kBuffer */ \
+      LOG_ERROR("Unknown data type in TABLE entity: \"kBuffer\".\n") \
+        break; \
+    case 256: /* kResBuf */ \
+      LOG_ERROR("Unknown data type in TABLE entity: \"kResBuf\".\n") \
+        break; \
+    case 512: /* kGeneral since r2007*/ \
+      LOG_ERROR("Unknown data type in TABLE entity: \"kGeneral\".\n") \
+        break; \
+    default: \
+      LOG_ERROR("Invalid data type in TABLE entity\n") \
+        break; \
+    } \
+  SINCE(R_2007) \
+    { \
+      FIELD_BL (value.unit_type, 94); \
+      FIELD_TV (value.format_string, 300); \
+      FIELD_TV (value.value_string, 302); \
+    }
+
 DWG_OBJECT(FIELD)
 
-  LOG_INFO("TODO FIELD\n");
+  //LOG_INFO("TODO FIELD\n");
   FIELD_TV (id, 0);
   FIELD_TV (code, 0);
 
@@ -3375,15 +3432,15 @@ DWG_OBJECT(FIELD)
   FIELD_BL (evaluation_status, 0);
   FIELD_BL (evaluation_error_code, 0);
   FIELD_TV (evaluation_error_msg, 0);
-  FIELD_BL (value, 0); /* TODO value p20.4.99 */
+  Table_Value(value)
   FIELD_TV (value_string, 0);
   FIELD_TV (value_string_length, 0);
 
   FIELD_BL (num_childval, 0);
-  REPEAT_N((long)FIELD_VALUE(num_childval), childval, Dwg_Object_FIELD_ChildValue)
+  REPEAT_N((long)FIELD_VALUE(num_childval), childval, Dwg_FIELD_ChildValue)
     {
       FIELD_TV (childval[rcount].key, 0);
-      FIELD_BL (childval[rcount].value, 0); /* TODO value p20.4.99 */
+      Table_Value(childval[rcount].value)
     }
   END_REPEAT(childval)
 
@@ -3441,14 +3498,14 @@ DWG_OBJECT(GEODATA)
   FIELD_T (observation_to_tag, 0);
   FIELD_T (observation_coverage_tag, 0);
   FIELD_BL (num_geomesh_pts, 0);
-  REPEAT_N(FIELD_VALUE(num_geomesh_pts), geomesh_pts, Dwg_Object_GEODATA_meshpt)
+  REPEAT_N(FIELD_VALUE(num_geomesh_pts), geomesh_pts, Dwg_GEODATA_meshpt)
     {
       FIELD_2RD (geomesh_pts[rcount].source_pt, 0);
       FIELD_2RD (geomesh_pts[rcount].dest_pt, 0);
     }
   END_REPEAT(geomesh_pts);
   FIELD_BL (num_geomesh_faces, 0);
-  REPEAT_N(FIELD_VALUE(num_geomesh_faces), geomesh_faces, Dwg_Object_GEODATA_meshface)
+  REPEAT_N(FIELD_VALUE(num_geomesh_faces), geomesh_faces, Dwg_GEODATA_meshface)
     {
       FIELD_BL (geomesh_faces[rcount].face1, 0);
       FIELD_BL (geomesh_faces[rcount].face2, 0);
@@ -3611,7 +3668,7 @@ DWG_ENTITY(TABLE)
   FIELD_BL (num_rows, 91);
   FIELD_VECTOR (col_widths, BD, num_cols, 142);
   FIELD_VECTOR (row_heights, BD, num_rows, 141);
-  REPEAT_N((long)(FIELD_VALUE(num_rows)*FIELD_VALUE(num_cols)), cells, Dwg_Entity_TABLE_Cell)
+  REPEAT_N((long)(FIELD_VALUE(num_rows)*FIELD_VALUE(num_cols)), cells, Dwg_TABLE_Cell)
     {
       FIELD_BS (cells[rcount].type, 171);
       FIELD_RC (cells[rcount].flags, 172);
@@ -3688,60 +3745,7 @@ DWG_ENTITY(TABLE)
               FIELD_BL (cells[rcount].unknown, 0);
 
               // 20.4.99 Value, page 241
-              SINCE(R_2007)
-                {
-                  FIELD_BL (cells[rcount].flags_2007, 93);
-                }
-              FIELD_BL (cells[rcount].data_type, 90);
-              switch (FIELD_VALUE(cells[rcount].data_type))
-                {
-                case 0: /* kUnknown */
-                  FIELD_BL (cells[rcount].data_long, 0);
-                  break;
-                case 1: /* kLong */
-                  FIELD_BL (cells[rcount].data_long, 0);
-                  break;
-                case 2: /* kDouble */
-                  FIELD_BD (cells[rcount].data_double, 0);
-                  break;
-                case 4: /* kString */
-                  FIELD_TV (cells[rcount].data_string, 0);
-                  break;
-                case 8: /* kDate */
-                  FIELD_BL (cells[rcount].data_size, 0);
-                  FIELD_VECTOR (cells[rcount].data_date, RC, cells[rcount].data_size, 0);
-                  break;
-                case 16: /* kPoint */
-                  FIELD_BL (cells[rcount].data_size, 0);
-                  FIELD_2RD (cells[rcount].data_point, 0);
-                  break;
-                case 32: /* k3dPoint */
-                  FIELD_BL (cells[rcount].data_size, 0);
-                  FIELD_3RD (cells[rcount].data_3dpoint, 0);
-                  break;
-                case 64: /* kObjectId */
-                  //data is a HANDLE
-                  //read from appropriate place in handles section
-                  break;
-                case 128: /* kBuffer */
-                  LOG_ERROR("Unknown data type in TABLE entity: \"kBuffer\".\n")
-                    break;
-                case 256: /* kResBuf */
-                  LOG_ERROR("Unknown data type in TABLE entity: \"kResBuf\".\n")
-                    break;
-                case 512: /* kGeneral since r2007*/
-                  LOG_ERROR("Unknown data type in TABLE entity: \"kGeneral\".\n")
-                    break;
-                default:
-                  LOG_ERROR("Invalid data type in TABLE entity\n")
-                    break;
-                }
-              SINCE(R_2007)
-              {
-                FIELD_BL (cells[rcount].unit_type, 94);
-                FIELD_TV (cells[rcount].format_string, 300);
-                FIELD_TV (cells[rcount].value_string, 302);
-              }
+              Table_Value(cells[rcount].value)
             }
         }
     }
@@ -3956,7 +3960,7 @@ DWG_ENTITY(TABLE)
   
   FIELD_HANDLE (table_style_id, 5, 342);
   
-  REPEAT_N((long)(FIELD_VALUE(num_rows)*FIELD_VALUE(num_cols)), cells, Dwg_Entity_TABLE_Cell)
+  REPEAT_N((long)(FIELD_VALUE(num_rows)*FIELD_VALUE(num_cols)), cells, Dwg_TABLE_Cell)
     {
       if (FIELD_VALUE(cells[rcount].type) == 1)
         { /* text cell */
@@ -4009,7 +4013,7 @@ DWG_ENTITY(TABLE)
           FIELD_BL (break_unknown1, 0);
           FIELD_BL (break_unknown2, 0);
           FIELD_BL (num_break_heights, 0);
-          REPEAT(num_break_heights, break_heights, Dwg_Entity_TABLE_BreakHeight)
+          REPEAT(num_break_heights, break_heights, Dwg_TABLE_BreakHeight)
             {
               FIELD_3BD (break_heights[rcount].position, 0);
               FIELD_BD (break_heights[rcount].height, 0);
@@ -4018,7 +4022,7 @@ DWG_ENTITY(TABLE)
           END_REPEAT(break_heights);
         }
       FIELD_BL (num_break_rows, 0);
-      REPEAT(num_break_rows, break_rows, Dwg_Entity_TABLE_BreakRow)
+      REPEAT(num_break_rows, break_rows, Dwg_TABLE_BreakRow)
         {
           FIELD_3BD (break_rows[rcount].position, 0);
           FIELD_BL (break_rows[rcount].start, 0);
@@ -4029,6 +4033,50 @@ DWG_ENTITY(TABLE)
 
 DWG_ENTITY_END
 
+// 20.4.101.3 Content format for TABLECONTENT and Cell_Style_Field
+#define Content_Format(fmt) \
+      FIELD_BL (fmt.property_override_flags, 90); \
+      FIELD_BL (fmt.property_flags, 91); \
+      FIELD_BL (fmt.value_data_type, 92); \
+      FIELD_BL (fmt.value_unit_type, 93); \
+      FIELD_TV (fmt.value_format_string, 300); \
+      FIELD_BD (fmt.rotation, 40); \
+      FIELD_BD (fmt.block_scale, 140); \
+      FIELD_BL (fmt.cell_align, 94); \
+      FIELD_CMC (fmt.content_color, 62); \
+      FIELD_HANDLE (fmt.text_style, 3, 92); \
+      FIELD_BD (fmt.text_height, 92)
+
+// Cell style 20.4.101.4 for TABLE, TABLECONTENT and CELLSTYLEMAP
+#define Cell_Style_Fields(sty) \
+      FIELD_BL (sty.type, 90); \
+      FIELD_BS (sty.data_flags, 170); \
+      FIELD_BL (sty.property_override_flags, 91); \
+      FIELD_BL (sty.merge_flags, 92); \
+      FIELD_CMC (sty.background_color, 62); \
+      FIELD_BL (sty.content_layout, 93); \
+      Content_Format(sty.content_format); \
+      FIELD_BS (sty.margin_override_flags, 171); \
+      FIELD_BD (sty.vert_margin, 40); \
+      FIELD_BD (sty.horiz_margin, 40); \
+      FIELD_BD (sty.bottom_margin, 40); \
+      FIELD_BD (sty.right_margin, 40); \
+      FIELD_BD (sty.margin_horiz_spacing, 40); \
+      FIELD_BD (sty.margin_vert_spacing, 40); \
+      FIELD_BL (sty.num_borders, 94); /* 0-6 */ \
+      REPEAT2(sty.num_borders, sty.border, Dwg_BorderStyle) \
+        { \
+          FIELD_BL (sty.border[rcount2].edge_flags, 95); \
+          FIELD_BL (sty.border[rcount2].border_property_overrides_flag, 90); \
+          FIELD_BL (sty.border[rcount2].border_type, 91); \
+          FIELD_CMC (sty.border[rcount2].color, 62); \
+          FIELD_BL (sty.border[rcount2].linewt, 92); \
+          FIELD_HANDLE (sty.border[rcount2].line_type, 3, 340); \
+          FIELD_BL (sty.border[rcount2].double_line_spacing, 93); \
+          FIELD_BD (sty.border[rcount2].linewt, 40); \
+        } \
+      END_REPEAT (sty.border)
+
 //pg.237 20.4.97
 DWG_OBJECT(TABLECONTENT)
 
@@ -4036,208 +4084,116 @@ DWG_OBJECT(TABLECONTENT)
   FIELD_TV (ldata.desc, 300);
 
   FIELD_BL (tdata.num_cols, 90);
-  REPEAT(tdata.num_cols, tdata.cols, Dwg_Object_LinkedTableData)
+  REPEAT(tdata.num_cols, tdata.cols, Dwg_LinkedTableData)
     {
-      Dwg_Object_TableDataColumn *col = &(FIELD_VALUE(tdata.cols[rcount]));
-      Dwg_Object_CellStyle *sty = &col->cell_style;
-      Dwg_Object_ContentFormat *fmt = &sty->content_format;
-      FIELD_TV (col->name, 300);
-      FIELD_TV (col->custom_data, 91);
-      // cell style:
-      FIELD_TV (sty->type, 90); // 20.4.101.4..
-      FIELD_TV (sty->data_flags, 170);
-      FIELD_BL (sty->property_override_flags, 91);
-      FIELD_BL (sty->merge_flags, 92);
-      FIELD_CMC (sty->background_color, 62);
-      FIELD_BL (sty->content_layout, 93);
-
-      FIELD_BL (fmt->property_override_flags, 90);
-      FIELD_BL (fmt->property_flags, 91);
-      FIELD_BL (fmt->value_data_type, 92);
-      FIELD_BL (fmt->value_unit_type, 93);
-      FIELD_TV (fmt->value_format_string, 300);
-      FIELD_BD (fmt->rotation, 40);
-      FIELD_BD (fmt->block_scale, 140);
-      FIELD_BL (fmt->cell_align, 94);
-      FIELD_CMC (fmt->content_color, 62);
-      FIELD_HANDLE (fmt->text_style, 3, 92);
-      FIELD_BD (fmt->text_height, 92);
-
-      FIELD_BS (sty->margin_override_flags, 171);
-      FIELD_BD (sty->vert_margin, 40);
-      FIELD_BD (sty->horiz_margin, 40);
-      FIELD_BD (sty->bottom_margin, 40);
-      FIELD_BD (sty->right_margin, 40);
-      FIELD_BD (sty->margin_horiz_spacing, 40);
-      FIELD_BD (sty->margin_vert_spacing, 40);
-      FIELD_BL (sty->num_borders, 94); /* 0-6 */
-      REPEAT2(sty->num_borders, sty->border, Dwg_Object_BorderStyle)
-        {
-          Dwg_Object_BorderStyle *border = *sty->border[rcount2];
-          FIELD_BL (border->edge_flags, 95);
-          FIELD_BL (border->border_property_overrides_flag, 90);
-          FIELD_BL (border->border_type, 91);
-          FIELD_CMC (border->color, 62);
-          FIELD_BL (border->linewt, 92);
-          FIELD_HANDLE (border->line_type, 3, 340);
-          FIELD_BL (border->double_line_spacing, 93);
-          FIELD_BD (border->linewt, 40);
-        }
-      END_REPEAT(sty->border);
+      FIELD_TV (tdata.cols[rcount].name, 300);
+      FIELD_BL (tdata.cols[rcount].custom_data, 91);
+      Cell_Style_Fields(tdata.cols[rcount].cell_style);
     }
-  END_REPEAT(tdata->cols);
+  END_REPEAT(tdata.cols);
   FIELD_BL (tdata.num_rows, 90);
-  REPEAT(tdata.num_rows, tdata->rows, Dwg_Object_TableRow)
+  REPEAT(tdata.num_rows, tdata.rows, Dwg_TableRow)
     {
-      Dwg_Object_TableRow *row = &FIELD_VALUE(tdata->rows[rcount]);
-      FIELD_TV (row->num_cells, 90);
-      REPEAT2(row->num_cells, row->cell, Dwg_Object_TableCell)
+      #define row tdata.rows[rcount]
+      FIELD_TV (row.num_cells, 90);
+      REPEAT2(row.num_cells, row.cell, Dwg_TableCell)
         {
-          Dwg_Object_TableCell* cell = FIELD_VALUE(row->cell[rcount2]);
-          FIELD_BL (cell->flag, 90);
-          FIELD_TV (cell->tooltip, 300);
-          FIELD_BL (cell->custom_data, 91);
+          #define cell row.cell[rcount2]
+          FIELD_BL (cell.flag, 90);
+          FIELD_TV (cell.tooltip, 300);
+          FIELD_BL (cell.custom_data, 91);
           LOG_WARN("TODO TABLECONTENT Custom data collection, see paragraph 20.4.100");
-          FIELD_BL (cell->has_linked_data, 92);
-          if (FIELD_VALUE(cell->has_linked_data))
+          FIELD_BL (cell.has_linked_data, 92);
+          if (FIELD_VALUE(cell.has_linked_data))
             {
-              FIELD_HANDLE (cell->data_link, 5, 340);
-              FIELD_BL (cell->num_rows, 93);
-              FIELD_BL (cell->num_cols, 94);
-              FIELD_BL (cell->unknown, 96);
+              FIELD_HANDLE (cell.data_link, 5, 340);
+              FIELD_BL (cell.num_rows, 93);
+              FIELD_BL (cell.num_cols, 94);
+              FIELD_BL (cell.unknown, 96);
             }
-          FIELD_BL (cell->num_cell_contents, 95);
-          REPEAT3(cell->num_cell_contents, cell->cell_contents, Dwg_Object_TableCellContent)
+          FIELD_BL (cell.num_cell_contents, 95);
+          REPEAT3(cell.num_cell_contents, cell.cell_contents, Dwg_TableCellContent)
             {
-              Dwg_Object_TableCellContent* content =
-                &FIELD_VALUE(rows[rcount]->cell[rcount2]->cell_contents[rcount3]);
-              Dwg_Object_ContentFormat *fmt = &content->content_format;
+              #define content rows[rcount].cell[rcount2].cell_contents[rcount3]
 
-              FIELD_BL(content->type, 90);
-              if (FIELD_VALUE(content->type) == 1) // Value
+              FIELD_BL(content.type, 90);
+              if (FIELD_VALUE(content.type) == 1)
                 {
-                  LOG_WARN("TODO TABLECONTENT content value: 20.4.99 Value");
+                  // 20.4.99 Value, page 241
+                  Table_Value(content.value)
                 }
-              else if (FIELD_VALUE(content->type) == 2) // Field
-                FIELD_HANDLE (content->handle, 3, 340);
-              else if (FIELD_VALUE(content->type) == 4) // Block
-                FIELD_HANDLE (content->handle, 3, 340);
-              FIELD_BL (content->num_attrs, 91);
-              REPEAT4(content->num_attrs, content->attrs, Dwg_Object_TableCellContentAttr)
+              else if (FIELD_VALUE(content.type) == 2) // Field
+                FIELD_HANDLE (content.handle, 3, 340);
+              else if (FIELD_VALUE(content.type) == 4) // Block
+                FIELD_HANDLE (content.handle, 3, 340);
+              FIELD_BL (content.num_attrs, 91);
+              REPEAT4(content.num_attrs, content.attrs, Dwg_TableCellContentAttr)
                 {
-                  Dwg_Object_TableCellContentAttr* attr =
-                    FIELD_VALUE(content->attrs[rcount4]);
-                  FIELD_HANDLE (attr->attdef, 5, 330);
-                  FIELD_TV (attr->value, 301);
-                  FIELD_BL (attr->index, 92);
+                  #define attr content.attrs[rcount4]
+                  FIELD_HANDLE (attr.attdef, 5, 330);
+                  FIELD_TV (attr.value, 301);
+                  FIELD_BL (attr.index, 92);
+                  #undef attr
                 }
-              END_REPEAT(content->attrs);
-              if (FIELD_VALUE(content->content_format))
+              END_REPEAT(content.attrs);
+              if (FIELD_VALUE(content.has_content_format_overrides))
                 {
-                  FIELD_BL (fmt->property_override_flags, 90);
-                  FIELD_BL (fmt->property_flags, 91);
-                  FIELD_BL (fmt->value_data_type, 92);
-                  FIELD_BL (fmt->value_unit_type, 93);
-                  FIELD_TV (fmt->value_format_string, 300);
-                  FIELD_BD (fmt->rotation, 40);
-                  FIELD_BD (fmt->block_scale, 140);
-                  FIELD_BL (fmt->cell_align, 94);
-                  FIELD_CMC (fmt->content_color, 62);
-                  FIELD_HANDLE (fmt->text_style, 3, 92);
-                  FIELD_BD (fmt->text_height, 92);
+                  Content_Format(content.content_format);
                 }
+              #undef content
             }
-          END_REPEAT(cell->cell_contents);
-          FIELD_BL (cell->style_id, 90);
-          FIELD_BL (cell->has_geom_data, 91);
-          if (FIELD_VALUE(cell->has_geom_data))
+          END_REPEAT(cell.cell_contents);
+          FIELD_BL (cell.style_id, 90);
+          FIELD_BL (cell.has_geom_data, 91);
+          if (FIELD_VALUE(cell.has_geom_data))
             {
-              FIELD_BL (cell->geom_data_flag, 91);
-              FIELD_BD (cell->unknown_d40, 40);
-              FIELD_BD (cell->unknown_d41, 41);
-              FIELD_BD (cell->geom_data_flag1, 0);
-              if (FIELD_VALUE(cell->geom_data_flag1))
+              FIELD_BL (cell.geom_data_flag, 91);
+              FIELD_BD (cell.unknown_d40, 40);
+              FIELD_BD (cell.unknown_d41, 41);
+              FIELD_BD (cell.geom_data_flag1, 0);
+              if (FIELD_VALUE(cell.geom_data_flag1))
                 {
-                  REPEAT_N(1, cell->geom_data, Dwg_Object_CellContentGeometry)
+                  REPEAT_N(1, cell.geom_data, Dwg_CellContentGeometry)
                     {
-                      Dwg_Object_CellContentGeometry *geom = &FIELD_VALUE(cell->geom_data[0]);
-                      FIELD_3BD (geom->dist_top_left, 0); 
-                      FIELD_3BD (geom->dist_center, 0); 
-                      FIELD_BD (geom->content_width, 0); 
-                      FIELD_BD (geom->width, 0); 
-                      FIELD_BD (geom->height, 0); 
-                      FIELD_BD (geom->unknown, 0); 
+#define geom cell.geom_data[0]
+                      FIELD_3BD (geom.dist_top_left, 0); 
+                      FIELD_3BD (geom.dist_center, 0); 
+                      FIELD_BD (geom.content_width, 0); 
+                      FIELD_BD (geom.width, 0); 
+                      FIELD_BD (geom.height, 0); 
+                      FIELD_BD (geom.unknown, 0);
+#undef geom
                     }
-                  END_REPEAT (cell->geom_data);
+                  END_REPEAT (cell.geom_data);
                 }
             }
+          #undef cell
         }
-      END_REPEAT(row->cell);
-      FIELD_BL (row->custom_data, 91);
+      END_REPEAT(row.cell);
+      FIELD_BL (row.custom_data, 91);
       LOG_WARN("TODO TABLECONTENT row custom data collection, see paragraph 20.4.100");
       {
-        Dwg_Object_CellStyle *sty = &FIELD_VALUE(row->cell_style);
-        Dwg_Object_ContentFormat *fmt = &sty->content_format;
-        // cell style:
-        FIELD_TV (sty->type, 90); // 20.4.101.4..
-        FIELD_TV (sty->data_flags, 170);
-        FIELD_BL (sty->property_override_flags, 91);
-        FIELD_BL (sty->merge_flags, 92);
-        FIELD_CMC (sty->background_color, 62);
-        FIELD_BL (sty->content_layout, 93);
-
-        FIELD_BL (fmt->property_override_flags, 90);
-        FIELD_BL (fmt->property_flags, 91);
-        FIELD_BL (fmt->value_data_type, 92);
-        FIELD_BL (fmt->value_unit_type, 93);
-        FIELD_TV (fmt->value_format_string, 300);
-        FIELD_BD (fmt->rotation, 40);
-        FIELD_BD (fmt->block_scale, 140);
-        FIELD_BL (fmt->cell_align, 94);
-        FIELD_CMC (fmt->content_color, 62);
-        FIELD_HANDLE (fmt->text_style, 3, 92);
-        FIELD_BD (fmt->text_height, 92);
-
-        FIELD_BS (sty->margin_override_flags, 171);
-        FIELD_BD (sty->vert_margin, 40);
-        FIELD_BD (sty->horiz_margin, 40);
-        FIELD_BD (sty->bottom_margin, 40);
-        FIELD_BD (sty->right_margin, 40);
-        FIELD_BD (sty->margin_horiz_spacing, 40);
-        FIELD_BD (sty->margin_vert_spacing, 40);
-        FIELD_BL (sty->num_borders, 94); /* 0-6 */
-        REPEAT2(sty->num_borders, sty->border, Dwg_Object_BorderStyle)
-          {
-            Dwg_Object_BorderStyle *border = *sty->border[rcount2];
-            FIELD_BL (border->edge_flags, 95);
-            FIELD_BL (border->border_property_overrides_flag, 90);
-            FIELD_BL (border->border_type, 91);
-            FIELD_CMC (border->color, 62);
-            FIELD_BL (border->linewt, 92);
-            FIELD_HANDLE (border->line_type, 3, 340);
-            FIELD_BL (border->double_line_spacing, 93);
-            FIELD_BD (border->linewt, 40);
-          }
-        END_REPEAT (sty->border);
-        // end cell style
-        FIELD_BL (row->style_id, 90);
-        FIELD_BL (row->height, 40);
+        Cell_Style_Fields(row.cell_style);
+        FIELD_BL (row.style_id, 90);
+        FIELD_BL (row.height, 40);
       }
+      #undef row
     }
-  END_REPEAT(tdata->rows);
+  END_REPEAT(tdata.rows);
   FIELD_BL (tdata.num_field_refs, 0);
-  HANDLE_VECTOR (tdata.num_field_refs, tdata->field_refs, 3, 0);
+  HANDLE_VECTOR (tdata.num_field_refs, tdata.field_refs, 3, 0);
 
   FIELD_BL (fdata.num_merged_cells, 90);
-  REPEAT(fdata.num_merged_cells, fdata->merged_cells, Dwg_Object_FormattedTableMerged)
+  REPEAT(fdata.num_merged_cells, fdata.merged_cells, Dwg_FormattedTableMerged)
     {
-      Dwg_Object_FormattedTableMerged *merged = &FIELD_VALUE(data->merged_cells[rcount]);
+      #define merged fdata->merged_cells[rcount]
       FIELD_BL (merged->top_row, 91);
       FIELD_BL (merged->left_col, 92);
       FIELD_BL (merged->bottom_row, 93);
       FIELD_BL (merged->right_col, 94);
+      #undef merged
     }
-  END_REPEAT(fdata->merged_cells);
+  END_REPEAT(fdata.merged_cells);
   FIELD_HANDLE (table_style, 3, 340);
   
 DWG_OBJECT_END
@@ -4247,53 +4203,9 @@ DWG_OBJECT_END
 DWG_OBJECT(CELLSTYLEMAP)
 
   FIELD_BL (num_cells, 90);
-  REPEAT(num_cells, cells, Dwg_Object_CELLSTYLEMAP_Cell)
+  REPEAT(num_cells, cells, Dwg_CELLSTYLEMAP_Cell)
     {
-      Dwg_Object_CellStyle *sty = &FIELD_VALUE(cells[rcount].cell_style);
-      Dwg_Object_ContentFormat *fmt = &sty->content_format;
-      // cell style:
-      FIELD_TV (sty->type, 90); // 20.4.101.4..
-      FIELD_TV (sty->data_flags, 170);
-      FIELD_BL (sty->property_override_flags, 91);
-      FIELD_BL (sty->merge_flags, 92);
-      FIELD_CMC (sty->background_color, 62);
-      FIELD_BL (sty->content_layout, 93);
-
-      FIELD_BL (fmt->property_override_flags, 90);
-      FIELD_BL (fmt->property_flags, 91);
-      FIELD_BL (fmt->value_data_type, 92);
-      FIELD_BL (fmt->value_unit_type, 93);
-      FIELD_TV (fmt->value_format_string, 300);
-      FIELD_BD (fmt->rotation, 40);
-      FIELD_BD (fmt->block_scale, 140);
-      FIELD_BL (fmt->cell_align, 94);
-      FIELD_CMC (fmt->content_color, 62);
-      FIELD_HANDLE (fmt->text_style, 3, 92);
-      FIELD_BD (fmt->text_height, 92);
-
-      FIELD_BS (sty->margin_override_flags, 171);
-      FIELD_BD (sty->vert_margin, 40);
-      FIELD_BD (sty->horiz_margin, 40);
-      FIELD_BD (sty->bottom_margin, 40);
-      FIELD_BD (sty->right_margin, 40);
-      FIELD_BD (sty->margin_horiz_spacing, 40);
-      FIELD_BD (sty->margin_vert_spacing, 40);
-      FIELD_BL (sty->num_borders, 94); /* 0-6 */
-      REPEAT2(sty->num_borders, sty->border, Dwg_Object_BorderStyle)
-        {
-          Dwg_Object_BorderStyle *border = *sty->border[rcount2];
-          FIELD_BL (border->edge_flags, 95);
-          FIELD_BL (border->border_property_overrides_flag, 90);
-          FIELD_BL (border->border_type, 91);
-          FIELD_CMC (border->color, 62);
-          FIELD_BL (border->linewt, 92);
-          FIELD_HANDLE (border->line_type, 3, 340);
-          FIELD_BL (border->double_line_spacing, 93);
-          FIELD_BD (border->linewt, 40);
-        }
-      END_REPEAT (sty->border);
-      // end cell style
-
+      Cell_Style_Fields(cells[rcount].style);
       FIELD_BL (cells[rcount].id, 90);
       FIELD_BL (cells[rcount].type, 91);
       FIELD_TV (cells[rcount].name, 300);
@@ -4308,25 +4220,26 @@ DWG_OBJECT(TABLEGEOMETRY)
   FIELD_BL (num_rows, 90);
   FIELD_BL (num_cols, 91);
   FIELD_BL (num_cells, 92);
-  REPEAT(num_cells, cell, Dwg_Object_TABLEGEOMETRY_Cell)
+  REPEAT(num_cells, cell, Dwg_TABLEGEOMETRY_Cell)
     {
-      Dwg_Object_TABLEGEOMETRY_Cell *cell = &FIELD_VALUE(cell[rcount]);
-      FIELD_BL (cell->flag, 93);
-      FIELD_BD (cell->width_w_gap, 40);
-      FIELD_BD (cell->height_w_gap, 41);
-      FIELD_HANDLE (cell->unknown, 3, 330);
-      FIELD_BL (cell->num_geom_data, 94);
-      REPEAT2(cell->num_geom_data, cell->geom_data, Dwg_Object_CellContentGeometry)
+      #define cell cell[rcount]
+      FIELD_BL (cell.flag, 93);
+      FIELD_BD (cell.width_w_gap, 40);
+      FIELD_BD (cell.height_w_gap, 41);
+      FIELD_HANDLE (cell.unknown, 3, 330);
+      FIELD_BL (cell.num_geom_data, 94);
+      REPEAT2(cell.num_geom_data, cell.geom_data, Dwg_CellContentGeometry)
         {
-          Dwg_Object_CellContentGeometry *geom = &FIELD_VALUE(cell->geom_data[rcount2]);
-          FIELD_3BD (geom->dist_top_left, 0); 
-          FIELD_3BD (geom->dist_center, 0); 
-          FIELD_BD (geom->content_width, 0); 
-          FIELD_BD (geom->width, 0); 
-          FIELD_BD (geom->height, 0); 
-          FIELD_BD (geom->unknown, 0); 
+          #define geom cell.geom_data[rcount2]
+          FIELD_3BD (geom.dist_top_left, 0); 
+          FIELD_3BD (geom.dist_center, 0); 
+          FIELD_BD (geom.content_width, 0); 
+          FIELD_BD (geom.width, 0); 
+          FIELD_BD (geom.height, 0); 
+          FIELD_BD (geom.unknown, 0);
+          #undef geom
         }
-      END_REPEAT(cell->geom_data);
+      END_REPEAT(cell.geom_data);
     }
   END_REPEAT(cell);
 

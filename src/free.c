@@ -149,6 +149,9 @@ static Bit_Chain *dat = &pdat;
 #define REPEAT3(times, name, type) \
   for (rcount3=0; rcount3<(int)_obj->times; rcount3++)
 
+#define REPEAT4(times, name, type) \
+  for (rcount4=0; rcount4<(int)_obj->times; rcount4++)
+
 #define END_REPEAT(field) FIELD_TV(field,0)
 
 #define COMMON_ENTITY_HANDLE_DATA
@@ -158,7 +161,7 @@ static Bit_Chain *dat = &pdat;
 static void \
 dwg_free_ ##token (Dwg_Object * obj)\
 {\
-  int vcount, rcount, rcount2, rcount3;\
+  int vcount, rcount, rcount2, rcount3, rcount4;\
   Dwg_Entity_##token *ent, *_obj;\
   LOG_HANDLE("Free entity " #token "\n")\
   ent = obj->tio.entity->tio.token;\
@@ -173,7 +176,7 @@ dwg_free_ ##token (Dwg_Object * obj)\
 static void \
 dwg_free_ ##token (Dwg_Object * obj) \
 { \
-  int vcount, rcount, rcount2, rcount3;\
+ int vcount, rcount, rcount2, rcount3, rcount4; \
   Dwg_Object_##token *_obj;\
   LOG_HANDLE("Free object " #token " %p\n", obj)    \
   _obj = obj->tio.object->tio.token;

@@ -249,10 +249,13 @@ static bool env_var_checked_p;
 #define REPEAT3(times, name, type) \
   for (rcount3=0; (long)rcount3<(long)_obj->times; rcount3++)
 
+#define REPEAT4(times, name, type) \
+  for (rcount4=0; (long)rcount4<(long)_obj->times; rcount4++)
+
 #define DWG_ENTITY(token) \
   static void dwg_encode_##token (Bit_Chain * dat, Dwg_Object* obj)	\
 { \
-  long vcount, rcount, rcount2, rcount3; \
+  long vcount, rcount, rcount2, rcount3, rcount4; \
   Dwg_Data* dwg = obj->parent; \
   Dwg_Entity_##token * _obj = obj->tio.entity->tio.token; \
   if (dwg_encode_entity (obj, dat)) return;       \
@@ -263,7 +266,7 @@ static bool env_var_checked_p;
 #define DWG_OBJECT(token) \
   static void dwg_encode_##token (Bit_Chain * dat, Dwg_Object* obj) \
 { \
-  long vcount, rcount, rcount2, rcount3; \
+  long vcount, rcount, rcount2, rcount3, rcount4; \
   Dwg_Data* dwg = obj->parent; \
   Dwg_Object_##token * _obj = obj->tio.object->tio.token; \
   if (dwg_encode_object (obj, dat)) return;  \

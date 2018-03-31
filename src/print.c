@@ -176,13 +176,16 @@ static unsigned int cur_ver = 0;
 #define REPEAT3(times, name, type) \
   for (rcount3=0; rcount3<(int)_obj->times; rcount3++)
 
+#define REPEAT4(times, name, type) \
+  for (rcount4=0; rcount4<(int)_obj->times; rcount4++)
+
 #define COMMON_ENTITY_HANDLE_DATA /*  Empty */
 
 #define DWG_ENTITY(token) \
 static void \
 dwg_print_##token (Bit_Chain * dat, Dwg_Object * obj)\
 {\
-  int vcount, rcount, rcount2, rcount3;\
+ int vcount, rcount, rcount2, rcount3, rcount4; \
   Dwg_Entity_##token *ent, *_obj;\
   LOG_INFO("Entity " #token ":\n")\
   ent = obj->tio.entity->tio.token;\
@@ -198,7 +201,7 @@ dwg_print_##token (Bit_Chain * dat, Dwg_Object * obj)\
 static void \
 dwg_print_ ##token (Bit_Chain * dat, Dwg_Object * obj) \
 { \
-  int vcount, rcount, rcount2, rcount3;\
+  int vcount, rcount, rcount2, rcount3, rcount4;\
   Dwg_Object_##token *_obj;\
   LOG_INFO("Object " #token ":\n")\
   _obj = obj->tio.object->tio.token;\
