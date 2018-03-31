@@ -824,7 +824,6 @@ DWG_ENTITY_END
 /**
  * Macro for common DIMENSION declaration
  */
-/*FIELD_BD (elevation.ecs_11); \ */
 #define DIMENSION_COMMON_DECODE \
     SINCE(R_2010) \
       { \
@@ -832,7 +831,7 @@ DWG_ENTITY_END
       } \
     FIELD_3BD (extrusion, 210); \
     FIELD_2RD (text_midpt, 11); \
-    FIELD_BD (elevation.ecs_12, 16); \
+    FIELD_BD (elevation, 31); \
     FIELD_RC (flags_1, 70); \
     FIELD_TV (user_text, 1); \
     FIELD_BD (text_rot, 53); \
@@ -1618,11 +1617,11 @@ DWG_OBJECT(DICTIONARYWDLFT)
   FIELD_BL (numitems, 0);
 
   VERSION(R_14)
-    FIELD_RC (hard_owner, 0); // always 0
+    FIELD_RL (cloning_rl, 0); // always 0
   SINCE(R_2000)
     {
       IF_ENCODE_FROM_EARLIER {
-        FIELD_VALUE(cloning) = FIELD_VALUE(hard_owner) & 0xffff;
+        FIELD_VALUE(cloning) = FIELD_VALUE(cloning_rl) & 0xffff;
       }
       FIELD_BS (cloning, 281);
       FIELD_RC (hard_owner, 0);
@@ -4742,6 +4741,7 @@ DWG_OBJECT_END
 DWG_OBJECT(LEADEROBJECTCONTEXTDATA)
 DWG_OBJECT_END
 */
+
 
 
 

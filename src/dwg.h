@@ -972,11 +972,7 @@ typedef struct _dwg_entity_LINE
     BITCODE_RC class_version; /* R2010+ */ \
     BITCODE_3BD extrusion; \
     BITCODE_2RD text_midpt; \
-    struct \
-      { \
-        BITCODE_BD ecs_11; \
-        BITCODE_BD ecs_12; \
-      } elevation; \
+    BITCODE_BD elevation; \
     BITCODE_RC flags_1; \
     BITCODE_TV user_text; \
     BITCODE_BD text_rot; \
@@ -3624,6 +3620,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_ARC *ARC;
     Dwg_Entity_CIRCLE *CIRCLE;
     Dwg_Entity_LINE *LINE;
+    struct _dwg_entity_DIMENSION_common *DIMENSION_common;
     Dwg_Entity_DIMENSION_ORDINATE *DIMENSION_ORDINATE;
     Dwg_Entity_DIMENSION_LINEAR *DIMENSION_LINEAR;
     Dwg_Entity_DIMENSION_ALIGNED *DIMENSION_ALIGNED;

@@ -245,6 +245,32 @@ CAST_DWG_OBJECT_TO_OBJECT(XRECORD)
  *                FUNCTIONS START HERE ENTITY SPECIFIC               *
  ********************************************************************/
 
+/* There is no generic call dwg_get_DIMENSION, for this you have to
+   specify the exact DIMENSION_* type. */
+
+/* To access the common DIMENSION fields (only) */
+dwg_ent_dim *
+dwg_object_to_DIMENSION(dwg_object *obj)
+{
+    dwg_ent_dim *ret_obj = NULL;
+    if(obj != 0 &&
+       (obj->type == DWG_TYPE_DIMENSION_ORDINATE ||
+        obj->type == DWG_TYPE_DIMENSION_LINEAR ||
+        obj->type == DWG_TYPE_DIMENSION_ALIGNED ||
+        obj->type == DWG_TYPE_DIMENSION_ANG3PT ||
+        obj->type == DWG_TYPE_DIMENSION_ANG2LN ||
+        obj->type == DWG_TYPE_DIMENSION_RADIUS ||
+        obj->type == DWG_TYPE_DIMENSION_DIAMETER))
+      {
+        ret_obj = obj->tio.entity->tio.DIMENSION_common;
+      }
+    else
+      {
+        LOG_ERROR("invalid %s type: got 0x%x", "DIMENSION", obj ? obj->type : 0);
+      }
+    return (dwg_ent_dim *)ret_obj;  
+}
+
 /*******************************************************************
  *                    FUNCTIONS FOR CIRCLE ENTITY                    *
  ********************************************************************/
@@ -5293,18 +5319,18 @@ dwg_ent_dim_get_block_name(dwg_ent_dim *dim, int *error)
     }
 }
 
-/// Returns the elevation ecs11
-/** Usage : double ecs11 = dwg_ent_dim_get_elevation_ecs11(dim, &error);
+/// Returns the elevation, the z-coord for all 11,12, 16 ECS points
+/** Usage : double elevation = dwg_ent_dim_get_elevation(dim, &error);
 \param 1 dwg_ent_dim
 \param 2 int
 */
 BITCODE_BD
-dwg_ent_dim_get_elevation_ecs11(dwg_ent_dim *dim, int *error)
+dwg_ent_dim_get_elevation(dwg_ent_dim *dim, int *error)
 {
   if (dim != 0)
     {
       *error = 0;
-      return dim->elevation.ecs_11;
+      return dim->elevation;
     }
   else
     {
@@ -5314,20 +5340,19 @@ dwg_ent_dim_get_elevation_ecs11(dwg_ent_dim *dim, int *error)
     }
 }
 
-/// Sets the elevation ecs11
-/** Usage : dwg_ent_dim_set_elevation_ecs11(dim, ecs11, &error);
+/// Sets the elevation for the 11, 12, 16 ECS points
+/** Usage : dwg_ent_dim_set_elevation(dim, z, &error);
 \param 1 dwg_ent_dim
 \param 2 double
 \param 3 int
 */
 void
-dwg_ent_dim_set_elevation_ecs11(dwg_ent_dim *dim,
-                                double elevation_ecs11, int *error)
+dwg_ent_dim_set_elevation(dwg_ent_dim *dim, double elevation, int *error)
 {
   if (dim != 0)
     {
       *error = 0;
-      dim->elevation.ecs_11 = elevation_ecs11;
+      dim->elevation = elevation;
     }
   else
     {
@@ -5336,50 +5361,7 @@ dwg_ent_dim_set_elevation_ecs11(dwg_ent_dim *dim,
     }
 }
 
-/// Returns the elevation ecs12
-/** Usage : double ecs12 = dwg_ent_dim_get_elevation_ecs12(dim, &error);
-\param 1 dwg_ent_dim
-\param 2 int
-*/
-BITCODE_BD
-dwg_ent_dim_get_elevation_ecs12(dwg_ent_dim *dim, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      return dim->elevation.ecs_12;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
-    }
-}
-
-/// Sets the elevation ecs12
-/** Usage : dwg_ent_dim_set_elevation_ecs12(dim, ecs12, &error);
-\param 1 dwg_ent_dim
-\param 2 double
-\param 3 int
-*/
-void
-dwg_ent_dim_set_elevation_ecs12(dwg_ent_dim *dim,
-                                double elevation_ecs12, int *error)
-{
-  if (dim != 0)
-    {
-      *error = 0;
-      dim->elevation.ecs_12 = elevation_ecs12;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the flags1
+/// Returns the flag1
 /** Usage : char flags1 = dwg_ent_dim_get_flag1(dim, &error);
 \param 1 dwg_ent_dim
 \param 2 int
@@ -5400,7 +5382,7 @@ dwg_ent_dim_get_flag1(dwg_ent_dim *dim, int *error)
     }
 }
 
-/// Sets the flags1
+/// Sets the flag1
 /** Usage : dwg_ent_dim_set_flag1(dim, flag1, &error);
 \param 1 dwg_ent_dim
 \param 2 char
@@ -6185,7 +6167,7 @@ dwg_ent_dim_ordinate_get_feature_location_pt(dwg_ent_dim_ordinate *dim, dwg_poin
     }
 }
 
-/// Sets the 14 leader_endpoint point
+/// Sets the 14 leader_endpt
 /** Usage : dwg_ent_dim_ordinate_set_leader_endpt(dim, &point, &error);
 \param 1 dwg_ent_dim_ordinate
 \param 2 dwg_point_3d

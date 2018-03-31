@@ -357,6 +357,9 @@ CAST_DWG_OBJECT_TO_ENTITY_DECL(ARC)
 CAST_DWG_OBJECT_TO_ENTITY_DECL(CIRCLE)
 /// Macro call to cast dwg object to line
 CAST_DWG_OBJECT_TO_ENTITY_DECL(LINE)
+
+/// Macro call to cast dwg object to common dimension
+dwg_ent_dim * dwg_object_to_DIMENSION(dwg_object *obj);
 /// Macro call to cast dwg object to dimension ordinate
 CAST_DWG_OBJECT_TO_ENTITY_DECL(DIMENSION_ORDINATE)
 /// Macro call to cast dwg object to dimension linear
@@ -1449,17 +1452,11 @@ char *
 dwg_ent_dim_get_block_name(dwg_ent_dim *dim, int *error);
 
 BITCODE_BD
-dwg_ent_dim_get_elevation_ecs11(dwg_ent_dim *dim,
-                                int *error);
+dwg_ent_dim_get_elevation(dwg_ent_dim *dim,
+                          int *error);
 void
-dwg_ent_dim_set_elevation_ecs11(dwg_ent_dim *dim,
-                                double elevation_ecs11, int *error);
-BITCODE_BD
-dwg_ent_dim_get_elevation_ecs12(dwg_ent_dim *dim,
-                                int *error);
-void
-dwg_ent_dim_set_elevation_ecs12(dwg_ent_dim *dim,
-                                double elevation_ecs12, int *error);
+dwg_ent_dim_set_elevation(dwg_ent_dim *dim,
+                          double elevation, int *error);
 char
 dwg_ent_dim_get_flag1(dwg_ent_dim *dim, int *error);
 

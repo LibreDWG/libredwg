@@ -937,18 +937,6 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       dwg_encode_LWPLINE(dat, obj);
       return 1;
     }
-  if (!strcmp(dxfname, "MLEADER"))
-    {
-      UNTESTED_CLASS;
-      dwg_encode_MLEADER(dat, obj);
-      return 0;
-    }
-  if (!strcmp(dxfname, "MLEADERSTYLE"))
-    {
-      UNTESTED_CLASS;
-      //dwg_encode_MLEADERSTYLE(dat, obj);
-      return 0;
-    }
   if (!strcmp(dxfname, "OLE2FRAME"))
     {
       assert(!is_entity);
@@ -958,85 +946,126 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
   if (!strcmp(dxfname, "OBJECTCONTEXTDATA")
       || strcmp(klass->cppname, "AcDbObjectContextData"))
     {
+      assert(!is_entity);
       dwg_encode_OBJECTCONTEXTDATA(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "ACDBPLACEHOLDER"))
     {
+      assert(!is_entity);
       dwg_encode_PLACEHOLDER(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "PROXY"))
     {
+      assert(!is_entity);
       dwg_encode_PROXY(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "RASTERVARIABLES"))
     {
+      assert(!is_entity);
       dwg_encode_RASTERVARIABLES(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "SORTENTSTABLE"))
     {
+      assert(!is_entity);
       dwg_encode_SORTENTSTABLE(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "SPATIAL_FILTER"))
     {
+      assert(!is_entity);
       dwg_encode_SPATIAL_FILTER(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "SPATIAL_INDEX"))
     {
+      assert(!is_entity);
       dwg_encode_SPATIAL_INDEX(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "TABLE"))
     {
+      assert(is_entity);
       dwg_encode_TABLE(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "XRECORD"))
     {
+      assert(!is_entity);
       dwg_encode_XRECORD(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "WIPEOUT"))
     {
+      assert(is_entity);
       dwg_encode_WIPEOUT(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "FIELDLIST"))
     {
       UNTESTED_CLASS;
+      assert(!is_entity);
       dwg_encode_FIELDLIST(dat, obj);
+      return 1;
+    }
+  if (!strcmp(dxfname, "SCALE"))
+    {
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      dwg_encode_SCALE(dat, obj);
+      return 1;
+    }
+  if (!strcmp(dxfname, "MLEADER"))
+    {
+      UNTESTED_CLASS;
+      assert(is_entity);
+      dwg_encode_MLEADER(dat, obj);
+      return 1;
+    }
+  if (!strcmp(dxfname, "MLEADERSTYLE"))
+    {
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      dwg_encode_MLEADERSTYLE(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "AcDbField")) //???
     {
       UNTESTED_CLASS;
+      assert(!is_entity);
       dwg_encode_FIELD(dat, obj);
-      return 0;
+      return 1;
     }
-  if (!strcmp(dxfname, "CELLSTYLEMAP"))
+  if (!strcmp(dxfname, "GEODATA"))
     {
       UNTESTED_CLASS;
       assert(!is_entity);
-      dwg_encode_CELLSTYLEMAP(dat, obj);
-      return 0;
+      dwg_encode_GEODATA(dat, obj);
+      return 1;
     }
   if (!strcmp(dxfname, "VBA_PROJECT"))
     {
       // Has its own section?
       UNTESTED_CLASS;
-      dwg_encode_VBA_PROJECT(dat, obj);
+      assert(!is_entity);
+      //dwg_encode_VBA_PROJECT(dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "WIPEOUTVARIABLE"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
-      //dwg_encode_WIPEOUTVARIABLE(dat, obj);
+      dwg_encode_WIPEOUTVARIABLE(dat, obj);
+      return 1;
+    }
+  if (!strcmp(dxfname, "CELLSTYLEMAP"))
+    {
+      UNHANDLED_CLASS; //broken
+      assert(!is_entity);
+      //dwg_encode_CELLSTYLEMAP(dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "VISUALSTYLE"))
@@ -1066,48 +1095,76 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       assert(!is_entity);
       //SCALE has a name, bitsizes: 199,207,215,343,335,351,319
       dwg_encode_SCALE(dat, obj);
-      return 0;
+      return 1;
     }
-  if (!strcmp(dxfname, "MLEADERSTYLE"))
+  if (!strcmp(dxfname, "TABLEGEOMETRY"))
     {
-      UNHANDLED_CLASS;
+      UNTESTED_CLASS;
       assert(!is_entity);
-      //dwg_decode_MLEADERSTYLE(dat, obj);
-      return 0;
+      dwg_encode_TABLEGEOMETRY(dat, obj);
+      return 1;
+    }
+  if (!strcmp(dxfname, "TABLECONTENT"))
+    {
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      dwg_encode_TABLECONTENT(dat, obj);
+      return 1;
     }
   if (!strcmp(dxfname, "TABLESTYLE"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
-      //dwg_decode_TABLESTYLE(dat, obj);
+      //dwg_encode_TABLESTYLE(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "DBCOLOR"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_encode_DBCOLOR(dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "ACDBSECTIONVIEWSTYLE"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
-      //dwg_decode_SECTIONVIEWSTYLE(dat, obj);
+      //dwg_encode_SECTIONVIEWSTYLE(dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "ACDBDETAILVIEWSTYLE"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
-      //dwg_decode_DETAILVIEWSTYLE(dat, obj);
+      //dwg_encode_DETAILVIEWSTYLE(dat, obj);
       return 0;
     }
-  if (!strcmp(dxfname, "DBCOLOR"))
+  if (!strcmp(dxfname, "ACDBASSOCNETWORK"))
     {
       UNHANDLED_CLASS;
-      //assert(!is_entity);
-      //dwg_decode_DBCOLOR(dat, obj);
+      assert(!is_entity);
+      //dwg_encode_ASSOCNETWORK(dat, obj);
       return 0;
     }
-  if (!strcmp(dxfname, "MLEADER"))
+  if (!strcmp(dxfname, "ACDBASSOC2DCONSTRAINTGROUP"))
     {
       UNHANDLED_CLASS;
-      //assert(!is_entity);
-      //dwg_decode_MLEADER(dat, obj);
+      assert(!is_entity);
+      //dwg_encode_ASSOC2DCONSTRAINTGROUP(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "ACDBASSOCGEOMDEPENDENCY"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_encode_ASSOCGEOMDEPENDENCY(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "ACDB_LEADEROBJECTCONTEXTDATA_CLASS"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_encode_LEADEROBJECTCONTEXTDATA(dat, obj);
       return 0;
     }
 

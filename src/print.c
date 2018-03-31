@@ -49,18 +49,22 @@ static unsigned int cur_ver = 0;
 
 #define ANYCODE -1
 #define FIELD_HANDLE(name, handle_code, dxf) \
-  LOG_TRACE(#name ": HANDLE(%d.%d.%lu) absolute:%lu\n",\
-        _obj->name->handleref.code,\
-        _obj->name->handleref.size,\
-        _obj->name->handleref.value,\
-        _obj->name->absolute_ref)
+  if (_obj->name) { \
+    LOG_TRACE(#name ": HANDLE(%d.%d.%lu) absolute:%lu\n",\
+              _obj->name->handleref.code, \
+              _obj->name->handleref.size, \
+              _obj->name->handleref.value,\
+              _obj->name->absolute_ref);  \
+  }
 #define FIELD_HANDLE_N(name, vcount, handle_code, dxf)\
-  LOG_TRACE(#name "[%d]: HANDLE(%d.%d.%lu) absolute:%lu\n",\
-        (int)vcount,\
-        _obj->name->handleref.code,\
-        _obj->name->handleref.size,\
-        _obj->name->handleref.value,\
-        _obj->name->absolute_ref)
+  if (_obj->name) { \
+    LOG_TRACE(#name "[%d]: HANDLE(%d.%d.%lu) absolute:%lu\n",\
+              (int)vcount, \
+              _obj->name->handleref.code, \
+              _obj->name->handleref.size, \
+              _obj->name->handleref.value, \
+              _obj->name->absolute_ref); \
+  }
 
 #define FIELD_B(name,dxf) FIELD(name, B, dxf);
 #define FIELD_BB(name,dxf) FIELD(name, BB, dxf);
@@ -223,6 +227,7 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
   int i;
   char *dxfname;
   Dwg_Class *klass;
+  int is_entity;
 
   if ((obj->type - 500) > dwg->num_classes)
     return 0;
@@ -230,25 +235,48 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
   i = obj->type - 500;
   klass = &dwg->dwg_class[i];
   dxfname = klass->dxfname;
+  // almost always false
+  is_entity = dwg_class_is_entity(klass);
 
-  if (!strcmp(dxfname, "DICTIONARYVAR"))
-    {
-      dwg_print_DICTIONARYVAR(dat, obj);
-      return 1;
-    }
+#define UNHANDLED_CLASS \
+      LOG_WARN("Unhandled Class %s %d %s (0x%x%s)", is_entity ? "entity" : "object",\
+               klass->number, dxfname, klass->proxyflag,\
+               klass->wasazombie ? " was proxy" : "")
+#define UNTESTED_CLASS \
+      LOG_WARN("Untested Class %s %d %s (0x%x%s)", is_entity ? "entity" : "object",\
+               klass->number, dxfname, klass->proxyflag,\
+               klass->wasazombie ? " was proxy" : "")
+  
   if (!strcmp(dxfname, "ACDBDICTIONARYWDFLT"))
     {
+      assert(!is_entity);
       dwg_print_DICTIONARYWDLFT(dat, obj);
+      return 1;
+    }
+  if (!strcmp(dxfname, "DICTIONARYVAR"))
+    {
+      assert(!is_entity);
+      dwg_print_DICTIONARYVAR(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "HATCH"))
     {
+      assert(!is_entity);
       dwg_print_HATCH(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "FIELDLIST"))
     {
+      UNTESTED_CLASS;
+      assert(!is_entity);
       dwg_print_FIELDLIST(dat, obj);
+      return 1;
+    }
+  if (!strcmp(dxfname, "GROUP"))
+    {
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      dwg_print_GROUP(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "IDBUFFER"))
@@ -286,8 +314,15 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       dwg_print_LWPLINE(dat, obj);
       return 1;
     }
+  if (!strcmp(dxfname, "MLEADER"))
+    {
+      UNTESTED_CLASS;
+      dwg_print_MLEADER(dat, obj);
+      return 1;
+    }
   if (!strcmp(dxfname, "MLEADERSTYLE"))
     {
+      UNTESTED_CLASS; //broken
       //dwg_print_MLEADERSTYLE(dat, obj);
       return 0;
     }
@@ -339,21 +374,25 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "TABLE"))
     {
+      UNTESTED_CLASS;
       dwg_print_TABLE(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "WIPEOUTVARIABLE"))
     {
-      // TODO
-      LOG_WARN("Unhandled Object/Class %s\n", dwg->dwg_class[i].dxfname);
-      //dwg_print_WIPEOUTVARIABLE(dat, obj);
+      UNTESTED_CLASS;
+      dwg_print_WIPEOUTVARIABLE(dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "WIPEOUT"))
     {
-      // TODO
-      //LOG_WARN("Unhandled Object/Class %s\n", dwg->dwg_class[i].dxfname);
       dwg_print_WIPEOUT(dat, obj);
+      return 1;
+    }
+  if (!strcmp(dxfname, "FIELDLIST"))
+    {
+      UNTESTED_CLASS;
+      dwg_print_FIELDLIST(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "VBA_PROJECT"))
@@ -364,23 +403,38 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "CELLSTYLEMAP"))
     {
-      // TODO
-      LOG_WARN("Unhandled Object/Class %s\n", dwg->dwg_class[i].dxfname);
+      UNTESTED_CLASS;
       dwg_print_CELLSTYLEMAP(dat, obj);
-      return 0;
+      return 1;
     }
   if (!strcmp(dxfname, "VISUALSTYLE"))
     {
-      // TODO
-      LOG_WARN("Unhandled Object/Class %s\n", dwg->dwg_class[i].dxfname);
+      UNHANDLED_CLASS;
       //dwg_print_VISUALSTYLE(dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "AcDbField")) //?
     {
-      // TODO
-      LOG_WARN("Untested Object/Class %s\n", dwg->dwg_class[i].dxfname);
+      UNTESTED_CLASS;
       dwg_print_FIELD(dat, obj);
+      return 1;
+    }
+  if (!strcmp(dxfname, "TABLECONTENT"))
+    {
+      UNTESTED_CLASS;
+      dwg_print_TABLECONTENT(dat, obj);
+      return 1;
+    }
+  if (!strcmp(dxfname, "TABLEGEOMETRY"))
+    {
+      UNTESTED_CLASS;
+      dwg_print_TABLEGEOMETRY(dat, obj);
+      return 1;
+    }
+  if (!strcmp(dxfname, "GEODATA"))
+    {
+      UNTESTED_CLASS;
+      dwg_print_GEODATA(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "XRECORD"))
@@ -388,14 +442,80 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       dwg_print_XRECORD(dat, obj);
       return 1;
     }
+  if (!strcmp(dxfname, "ARCALIGNEDTEXT"))
+    {
+      UNHANDLED_CLASS;
+      //assert(!is_entity);
+      //dwg_print_ARCALIGNEDTEXT(dat, obj);
+      return 0;
+    }
   if (!strcmp(dxfname, "DIMASSOC"))
     {
-//TODO:      dwg_print_DIMASSOC(dat, obj);
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_print_DIMASSOC(dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "MATERIAL"))
     {
-//TODO:      dwg_print_MATERIAL(dat, obj);
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_print_MATERIAL(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "TABLESTYLE"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_print_TABLESTYLE(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "DBCOLOR"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_print_DBCOLOR(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "ACDBSECTIONVIEWSTYLE"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_print_SECTIONVIEWSTYLE(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "ACDBDETAILVIEWSTYLE"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_print_DETAILVIEWSTYLE(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "ACDBASSOCNETWORK"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_print_ASSOCNETWORK(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "ACDBASSOC2DCONSTRAINTGROUP"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_print_ASSOC2DCONSTRAINTGROUP(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "ACDBASSOCGEOMDEPENDENCY"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_print_ASSOCGEOMDEPENDENCY(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "ACDB_LEADEROBJECTCONTEXTDATA_CLASS"))
+    {
+      //UNHANDLED_CLASS;
+      //dwg_print_LEADEROBJECTCONTEXTDATA(dat, obj);
       return 0;
     }
 

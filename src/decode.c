@@ -1237,7 +1237,7 @@ resolve_objectref_vector(Bit_Chain* dat, Dwg_Data * dwg)
       //assign found pointer to objectref vector
       dwg->object_ref[i]->obj = obj;
 
-      if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)
+      if (DWG_LOGLEVEL >= DWG_LOGLEVEL_HANDLE)
         {
           if (obj)
             dwg_print_object(dat, obj);
@@ -2840,6 +2840,7 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
 
   if (!strcmp(dxfname, "ACDBDICTIONARYWDFLT"))
     {
+      //UNTESTED_CLASS;
       assert(!is_entity);
       dwg_decode_DICTIONARYWDLFT(dat, obj);
       return 1;
@@ -2985,31 +2986,10 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       dwg_decode_SCALE(dat, obj);
       return 1;
     }
-  if (!strcmp(dxfname, "MLEADER"))
-    {
-      UNTESTED_CLASS;
-      assert(is_entity);
-      dwg_decode_MLEADER(dat, obj);
-      return 1;
-    }
-  if (!strcmp(dxfname, "MLEADERSTYLE"))
-    {
-      UNTESTED_CLASS;
-      assert(!is_entity);
-      dwg_decode_MLEADERSTYLE(dat, obj);
-      return 0;
-    }
   if (!strcmp(dxfname, "AcDbField"))
     {
       UNTESTED_CLASS;
       dwg_decode_FIELD(dat, obj);
-      return 0;
-    }
-  if (!strcmp(dxfname, "CELLSTYLEMAP"))
-    {
-      UNHANDLED_CLASS; //broken
-      assert(!is_entity);
-      dwg_decode_CELLSTYLEMAP(dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "TABLECONTENT"))
@@ -3050,9 +3030,9 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "MLEADERSTYLE"))
     {
-      UNTESTED_CLASS;
+      UNTESTED_CLASS; //broken
       assert(!is_entity);
-      dwg_decode_MLEADERSTYLE(dat, obj);
+      //dwg_decode_MLEADERSTYLE(dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "WIPEOUTVARIABLE"))
@@ -3062,11 +3042,25 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       dwg_decode_WIPEOUTVARIABLE(dat, obj);
       return 1;
     }
+  if (!strcmp(dxfname, "CELLSTYLEMAP"))
+    {
+      UNHANDLED_CLASS; //broken
+      assert(!is_entity);
+      //dwg_decode_CELLSTYLEMAP(dat, obj);
+      return 0;
+    }
   if (!strcmp(dxfname, "VISUALSTYLE"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
       //dwg_decode_VISUALSTYLE(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "ARCALIGNEDTEXT"))
+    {
+      UNHANDLED_CLASS;
+      //assert(!is_entity);
+      //dwg_decode_ARCALIGNEDTEXT(dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "DIMASSOC"))
