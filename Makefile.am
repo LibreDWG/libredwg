@@ -19,7 +19,7 @@
 
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS = src examples test doc
+SUBDIRS = src programs examples test doc
 if HAVE_SWIG_PYTHON
 SUBDIRS += bindings
 endif

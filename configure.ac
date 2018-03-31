@@ -218,6 +218,7 @@ AC_CONFIG_FILES([
 	Makefile
 	src/Makefile
 	doc/Makefile
+	programs/Makefile
 	examples/Makefile
 	bindings/Makefile
 	bindings/python/Makefile

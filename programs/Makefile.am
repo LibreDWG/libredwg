@@ -20,34 +20,49 @@
 AM_CFLAGS = -I$(top_srcdir)/src -Wall -Wextra
 LDADD   = $(top_builddir)/src/libredwg.la -lm
 
-check_PROGRAMS = load_dwg dwg2svg2
+bin_PROGRAMS = dwgread dwgbmp dwg2dxf dwg2SVG
 
-load_dwg_SOURCES = load_dwg.c
-dwg2svg2_SOURCES = dwg2svg2.c
+if HAVE_LIBPS
+bin_PROGRAMS += dwg_ps
+dwg_ps_SOURCES = dwg_ps.c
+dwg_ps_LDADD = $(LDADD) -lps
+endif
+
+if USE_WRITE
+bin_PROGRAMS += dwgrewrite dxf2dwg
+dwgrewrite_SOURCES = dwgrewrite.c
+dxf2dwg_SOURCES    = dxf2dwg.c
+endif
+
+dwgread_SOURCES  = dwgread.c
+dwgbmp_SOURCES   = dwgbmp.c
+dwg2dxf_SOURCES  = dwg2dxf.c
+dwg2SVG_SOURCES  = dwg2SVG.c
 
 if HAVE_WINE
 TESTS_ENVIRONMENT = \
- PROGS='$(check_PROGRAMS)' \
+ PROGS='$(bin_PROGRAMS))' \
  datadir='$(top_srcdir)/test/test-data' \
  TESTPROG='wine'
 else
 TESTS_ENVIRONMENT = \
- PROGS='$(check_PROGRAMS)' \
+ PROGS='$(bin_PROGRAMS)' \
  datadir='$(top_srcdir)/test/test-data' \
  TESTPROG=''
 endif
 
-TESTS = $(top_srcdir)/programs/alive.test
+TESTS = alive.test
 
-EXTRA_DIST = load_dwg.py
-CLEANFILES = {example,sample}_2000.{bmp,ps,svg,dxf} {example,sample}_2000.dwg-rewrite.dwg
+EXTRA_DIST = suffix.c $(TESTS)
+CLEANFILES = {example,sample,Leader}_*.{bmp,ps,svg,dxf}
+CLEANFILES += {example,sample,,Leader}_*rewrite.dwg
 
 .c.i:
 	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
 	$(COMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -E -o $@ $<
 
 dsymutil:
-	for e in $(check_PROGRAMS); do dsymutil $$e; done
+	for e in $(bin_PROGRAMS); do dsymutil $$e; done
 
 # emacs flymake-mode
 check-syntax:
