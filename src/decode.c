@@ -36,7 +36,7 @@
 #include "print.h"
 
 /* The logging level for the read (decode) path.  */
-unsigned int loglevel;
+static unsigned int loglevel;
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
 

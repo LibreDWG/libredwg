@@ -53,6 +53,7 @@ EXTRA_HEADERS = \
 	decode.h \
 	dec_macros.h \
 	encode.h \
+	free.h \
         print.h \
 	logging.h \
 	spec.h

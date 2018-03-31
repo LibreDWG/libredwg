@@ -19,6 +19,7 @@
 /testcases/dim_aligned
 /testcases/dim_ang2ln
 /testcases/dim_ang3pt
+/testcases/dim_common
 /testcases/dim_diameter
 /testcases/dim_linear
 /testcases/dim_ordinate
@@ -59,6 +60,11 @@
 
 /xmlsuite/test_output
 
+/test-data/r1*/*.svg
+/test-data/r1*/*.bmp
+/test-data/r1*/*.log
+/test-data/r1*/*.dxf
+/test-data/r1*/*.dxflog
 /test-data/20*/*.svg
 /test-data/20*/*.bmp
 /test-data/20*/*.log

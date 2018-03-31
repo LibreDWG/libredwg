@@ -26,7 +26,7 @@
 #include "dwg.h"
 #include "free.h"
 
-unsigned int loglevel;
+static unsigned int loglevel;
 #ifdef USE_TRACING
 static int env_var_checked_p;
 #define DWG_LOGLEVEL loglevel
