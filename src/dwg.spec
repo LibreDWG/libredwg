@@ -1685,9 +1685,11 @@ DWG_ENTITY(MTEXT)
   FIELD_BD (extents_height, 0); //not documented
   FIELD_BD (extents_width, 0);
   FIELD_TV (text, 1); // or 3
+  /* doc error:
   UNTIL(R_2007) {
     FIELD_HANDLE (style, 5, 7);
   }
+  */
 
   SINCE(R_2000)
     {
@@ -1740,6 +1742,9 @@ DWG_ENTITY(MTEXT)
     }
 
   COMMON_ENTITY_HANDLE_DATA;
+  UNTIL(R_2007) {
+    FIELD_HANDLE (style, 5, 7);
+  }
 
 DWG_ENTITY_END
 

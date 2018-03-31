@@ -29,8 +29,8 @@
   { _obj->name = (BITCODE_##cast)bit_read_##type(dat); \
     FIELD_G_TRACE(name,cast,dxf); }
 
-#define FIELD_G_TRACE(name,type,dxfgroup)                               \
-  LOG_TRACE(#name ": " FORMAT_##type " " #type " " #dxfgroup "\n", _obj->name)
+#define FIELD_G_TRACE(name,type,dxfgroup) \
+  LOG_TRACE(#name ": " FORMAT_##type " [" #type " %d]\n", _obj->name, dxfgroup)
 #define FIELD_TRACE(name,type) \
   LOG_TRACE(#name ": " FORMAT_##type " " #type "\n", _obj->name)
 
@@ -63,12 +63,12 @@
       {\
         _obj->name = dwg_decode_handleref(dat, obj, dwg);\
       }\
-    LOG_TRACE(#name "[%d]: HANDLE(%d.%d.%lu) absolute:%lu\n",\
-          (int)vcount,\
-          _obj->name->handleref.code,\
-          _obj->name->handleref.size,\
-          _obj->name->handleref.value,\
-          _obj->name->absolute_ref);\
+    LOG_TRACE(#name "[%d]: HANDLE(%d.%d.%lu) absolute:%lu [%d]\n",\
+              (int)vcount,                          \
+              _obj->name->handleref.code,           \
+              _obj->name->handleref.size,           \
+              _obj->name->handleref.value,          \
+              _obj->name->absolute_ref, dxf);       \
   }
 
 #define FIELD_B(name,dxf) FIELDG(name, B, dxf)
@@ -172,7 +172,7 @@
         {\
           FIELD_VALUE(insert_count)++;\
         }\
-      FIELD_TRACE(insert_count, type)
+      FIELD_G_TRACE(insert_count, type, dxf)
 
 #define FIELD_XDATA(name, size)\
   _obj->name = dwg_decode_xdata(dat, obj->tio.object->tio.XRECORD, _obj->size)

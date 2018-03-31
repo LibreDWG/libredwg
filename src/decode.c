@@ -2996,21 +2996,41 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     {
       UNTESTED_CLASS;
       assert(!is_entity);
-      //dwg_decode_MLEADERSTYLE(dat, obj);
+      dwg_decode_MLEADERSTYLE(dat, obj);
       return 0;
     }
-  /*if (!strcmp(dxfname, "AcDbField"))
+  if (!strcmp(dxfname, "AcDbField"))
     {
       UNTESTED_CLASS;
       dwg_decode_FIELD(dat, obj);
       return 0;
     }
-  */
   if (!strcmp(dxfname, "CELLSTYLEMAP"))
+    {
+      UNHANDLED_CLASS; //broken
+      assert(!is_entity);
+      dwg_decode_CELLSTYLEMAP(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "TABLECONTENT"))
     {
       UNTESTED_CLASS;
       assert(!is_entity);
-      dwg_decode_CELLSTYLEMAP(dat, obj);
+      dwg_decode_TABLECONTENT(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "TABLEGEOMETRY"))
+    {
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      dwg_decode_TABLEGEOMETRY(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "GEODATA"))
+    {
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      dwg_decode_GEODATA(dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "VBA_PROJECT"))
@@ -3025,7 +3045,14 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     {
       UNTESTED_CLASS;
       assert(is_entity);
-      //dwg_decode_MLEADER(dat, obj);
+      dwg_decode_MLEADER(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "MLEADERSTYLE"))
+    {
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      dwg_decode_MLEADERSTYLE(dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "WIPEOUTVARIABLE"))
