@@ -6,8 +6,8 @@ low_level_process(dwg_object *obj)
 {
   dwg_ent_polyline_3d *polyline_3d = dwg_object_to_POLYLINE_3D(obj); 
 
-  printf("flag1 of polyline : " FORMAT_RC "\n", polyline_3d->flags_1);
-  printf("flag2 of polyline : " FORMAT_RC "\n", polyline_3d->flags_2);
+  printf("flag1 of polyline : " FORMAT_RC "\n", polyline_3d->flag);
+  printf("flag2 of polyline : " FORMAT_RC "\n", polyline_3d->flag2);
   printf("owned object of polyline : " FORMAT_BL "\n", polyline_3d->owned_obj_count);
 }
 
@@ -20,7 +20,7 @@ api_process(dwg_object *obj)
 
   dwg_ent_polyline_3d *polyline_3d = dwg_object_to_POLYLINE_3D(obj);
 
-  flags1 = dwg_ent_polyline_3d_get_flags_1(polyline_3d, &error);
+  flags1 = dwg_ent_polyline_3d_get_flag(polyline_3d, &error);
   if ( !error )
   {
      printf("flag1 of polyline : " FORMAT_RC "\n", flags1);
@@ -31,7 +31,7 @@ api_process(dwg_object *obj)
   }
 
 
-  flags2 = dwg_ent_polyline_3d_get_flags_2(polyline_3d, &error);
+  flags2 = dwg_ent_polyline_3d_get_flag2(polyline_3d, &error);
   if ( !error )
   {
      printf("flag2 of polyline : " FORMAT_RC "\n", flags2);

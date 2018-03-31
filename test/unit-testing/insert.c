@@ -81,7 +81,7 @@ api_process(dwg_object *obj)
     } 
 
 
-  has_attribs = dwg_ent_insert_get_has_attribs(insert, &error); 
+  has_attribs = dwg_ent_insert_has_attribs(insert, &error); 
   if ( !error )
     printf("attribs for insert : " FORMAT_B "\n", has_attribs);
   else

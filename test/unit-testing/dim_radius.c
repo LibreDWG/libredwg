@@ -42,7 +42,7 @@ api_process(dwg_object *obj)
   double elevation, act_measure, horiz_dir, lspace_factor, text_rot, 
     ins_rot, ext_line_rot, dim_rot, length ;
   BITCODE_B flip_arrow1, flip_arrow2;
-  BITCODE_RC flags1;
+  BITCODE_RC flag1;
   BITCODE_BS lspace_style, attachment;
   char * user_text;
   dwg_point_2d text_mid_pt;
@@ -116,38 +116,34 @@ api_process(dwg_object *obj)
     printf("in reading text rotation \n");
 
 
-  ins_rot = dwg_ent_dim_get_ins_rotation(dim_radius, &error);
+  ins_rot = dwg_ent_dim_get_ins_rotation(dim, &error);
   if ( !error )
     printf("ins rotation of dim_radius : %f\n", ins_rot);
   else
     printf("in reading ins rotation \n");
 
 
-  flip_arrow1 = dwg_ent_dim_radius_get_flip_arrow1(dim_radius,
-                                                   &error);
+  flip_arrow1 = dwg_ent_dim_get_flip_arrow1(dim, &error);
   if ( !error )
     printf("arrow1 of dim_radius : " FORMAT_B "\n", flip_arrow1);
   else
     printf("in reading arrow1 \n");
 
 
-  flip_arrow2 = dwg_ent_dim_radius_get_flip_arrow2(dim_radius,
-                                                   &error);
+  flip_arrow2 = dwg_ent_dim_get_flip_arrow2(dim, &error);
   if ( !error )
     printf("arrow1 of dim_radius : " FORMAT_B "\n", flip_arrow2);
   else
     printf("in reading arrow1 \n");
 
 
-  flags1 = dwg_ent_dim_radius_get_flags1(dim_radius,
-                                         &error);
+  flag1 = dwg_ent_dim_get_flag1(dim, &error);
   if ( !error )
-    printf("flags1 of dim_radius : " FORMAT_RC "\n", flags1);
+    printf("flag1 of dim_radius : " FORMAT_RC "\n", flag1);
   else
-    printf("in reading flags1 \n");
+    printf("in reading flag1 \n");
 
-  act_measure = dwg_ent_dim_radius_get_act_measurement(dim_radius,
-                                                       &error);
+  act_measure = dwg_ent_dim_get_act_measurement(dim, &error);
   if ( !error )
     printf("act_measurement of dim_radius : %f\n", act_measure);
   else

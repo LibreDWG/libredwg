@@ -77,7 +77,7 @@ api_process(dwg_object *obj)
     printf("error in reading extrusion \n");
 
 
-  has_attribs = dwg_ent_minsert_get_has_attribs(minsert, &error); 
+  has_attribs = dwg_ent_minsert_has_attribs(minsert, &error); 
   if ( !error )
     printf("attribs for minsert : " FORMAT_B "\n", has_attribs);
   else

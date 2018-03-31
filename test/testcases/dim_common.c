@@ -9,7 +9,7 @@ void
 api_process (dwg_object * obj)
 {
   int error;
-  double ecs11, ecs12, act_measure, horiz_dir, lspace_factor, text_rot,
+  double elevation, act_measure, horiz_dir, lspace_factor, text_rot,
     ins_rot;
   BITCODE_RC flags1;
   BITCODE_BS lspace_style, attachment;
@@ -26,19 +26,17 @@ api_process (dwg_object * obj)
     fail ("error in reading horiz dir");
 
 
-  lspace_factor = dwg_ent_dim_get_elevation_ecs11 (dim, &error);
+  lspace_factor = dwg_ent_dim_get_lspace_factor (dim, &error);
   if (!error  && dim->lspace_factor == lspace_factor)	// error check
     pass ("Working Properly");
   else
     fail ("error in reading lspace factor");
 
-
-  lspace_style = dwg_ent_dim_get_elevation_ecs11 (dim, &error);
+  lspace_style = dwg_ent_dim_get_lspace_style (dim, &error);
   if (!error  && lspace_style == dim->lspace_style)
     pass ("Working Properly");
   else
     fail ("error in reading lspace style");
-
 
   attachment = dwg_ent_dim_get_attachment (dim, &error);
   if (!error  && attachment == dim->attachment)
@@ -47,19 +45,11 @@ api_process (dwg_object * obj)
     fail ("error in reading attach point");
 
 
-  ecs11 = dwg_ent_dim_get_elevation_ecs11 (dim, &error);
-  if (!error  && ecs11 == dim->elevation.ecs_11)
+  elevation = dwg_ent_dim_get_elevation (dim, &error);
+  if (!error  && elevation == dim->elevation)
     pass ("Working Properly");
   else
-    fail ("error in reading ecs11");
-
-
-  ecs12 = dwg_ent_dim_get_elevation_ecs12 (dim, &error);
-  if (!error  && ecs12 == dim->elevation.ecs_12)
-    pass ("Working Properly");
-  else
-    fail ("error in reading ecs12");
-
+    fail ("error in reading elevation");
 
   dwg_ent_dim_get_extrusion (dim, &extrusion, &error);
   if (!error  && extrusion.x == dim->extrusion.x

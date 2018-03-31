@@ -11,8 +11,7 @@ low_level_process (dwg_object * obj)
   printf ("lspace factor of dim_radius : %f\n", dim->lspace_factor);
   printf ("lspace style of dim_radius : " FORMAT_BS "\n", dim->lspace_style);
   printf ("attachment of dim_radius : " FORMAT_BS "\n", dim->attachment);
-  printf ("Radius of dim_radius : %f\n", dim->elevation.ecs_11);
-  printf ("Thickness of dim_radius : %f\n", dim->elevation.ecs_12);
+  printf ("elevation of dim_radius : %f\n", dim->elevation);
   printf ("extrusion of dim_radius : x = %f, y = %f, z = %f\n",
 	  dim->extrusion.x, dim->extrusion.y, dim->extrusion.z);
   printf ("ins_scale of dim_radius : x = %f, y = %f, z = %f\n",
