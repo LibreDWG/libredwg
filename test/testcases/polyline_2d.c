@@ -57,8 +57,8 @@ api_process (dwg_object * obj)
     fail ("error in reading elevation");
 
 
-  flags = dwg_ent_polyline_2d_get_flags (polyline_2d, &error);
-  if (!error  && polyline_2d->flags == flags)	// error check
+  flags = dwg_ent_polyline_2d_get_flag (polyline_2d, &error);
+  if (!error  && polyline_2d->flag == flags)	// error check
     pass ("Working Properly");
   else
     fail ("error in reading flag");

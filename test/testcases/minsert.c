@@ -73,7 +73,7 @@ api_process (dwg_object * obj)
     fail ("error in reading extrusion");
 
 
-  attribs = dwg_ent_minsert_get_has_attribs (minsert, &error);
+  attribs = dwg_ent_minsert_has_attribs (minsert, &error);
   if (!error  && attribs == minsert->has_attribs)
     pass ("Working Properly");
   else

@@ -66,7 +66,7 @@ api_process (dwg_object * obj)
     fail ("error in reading thickness");
 
 
-  rotation = dwg_ent_text_get_rot_angle (text, &error);
+  rotation = dwg_ent_text_get_rotation (text, &error);
   if (!error  && rotation == text->rotation)
     pass ("Working Properly");
   else

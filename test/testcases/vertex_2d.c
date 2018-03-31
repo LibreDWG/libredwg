@@ -7,7 +7,7 @@ low_level_process (dwg_object * obj)
 {
   dwg_ent_vertex_2d *vertex_2d = dwg_object_to_VERTEX_2D (obj);
 
-  printf ("flag of vertex_2d : " FORMAT_BS "\n", vertex_2d->flags);
+  printf ("flag of vertex_2d : " FORMAT_BS "\n", vertex_2d->flag);
   printf ("point of vertex_2d : x = %f, y = %f, z = %f\n",
 	  vertex_2d->point.x, vertex_2d->point.y, vertex_2d->point.z);
   printf ("start width of vertex_2d : %f\n", vertex_2d->start_width);
@@ -26,8 +26,8 @@ api_process (dwg_object * obj)
   dwg_ent_vertex_2d *vertex_2d = dwg_object_to_VERTEX_2D (obj);
 
 
-  flags = dwg_ent_vertex_2d_get_flags (vertex_2d, &error);
-  if (!error  && flags == vertex_2d->flags)	// error check
+  flags = dwg_ent_vertex_2d_get_flag (vertex_2d, &error);
+  if (!error  && flags == vertex_2d->flag)
     pass ("Working Properly");
   else
     fail ("error in reading flag");

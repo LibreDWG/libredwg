@@ -67,7 +67,7 @@ api_process (dwg_object * obj)
     fail ("error in reading extrusion");
 
 
-  attribs = dwg_ent_insert_get_has_attribs (insert, &error);
+  attribs = dwg_ent_insert_has_attribs (insert, &error);
   if (!error  && attribs == insert->has_attribs)	// error check
     pass ("Working Properly");
   else
