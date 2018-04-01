@@ -17,6 +17,7 @@ TAGS
 gcov.log
 
 # globs, in specific dirs
+/00*.patch
 /examples/*.log
 /examples/*.bmp
 /examples/*-dwgrewrite.dwg
@@ -37,6 +38,8 @@ gcov.log
 /test/unit-testing/*.gcda
 
 # specific filenames
+/.gdbinit
+/.lldbinit
 /.cproject
 /.project
 /GPATH
@@ -65,6 +68,7 @@ gcov.log
 /config.status
 /configure
 /cover_db
+/cscope.files
 /doc/LibreDWG.info
 /doc/LibreDWG.pdf
 /doc/stamp-vti
