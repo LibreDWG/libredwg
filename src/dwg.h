@@ -4042,7 +4042,7 @@ typedef struct _dwg_struct
       BITCODE_RC nr;
       BITCODE_BL address;
       BITCODE_BL size;
-    } section[4];
+    } section[6];
     BITCODE_BS num_handlers;
     struct _handler
     {
