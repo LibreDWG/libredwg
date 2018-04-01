@@ -83,6 +83,12 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
 static Dwg_Object *
 dwg_resolve_handle(Dwg_Data* dwg, unsigned long int handle);
 
+static int
+dwg_resolve_handleref(Dwg_Object_Ref *ref, Dwg_Object * obj);
+
+static Dwg_Object_Ref *
+dwg_decode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg);
+
 static void
 dwg_decode_header_variables(Bit_Chain* dat, Dwg_Data * dwg);
 
@@ -320,7 +326,7 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
 
           //TODO RD elevation 30, 2RD base_pt 10: 24
           FIELD_RC (block_scaling, 0);
-          FIELD_RS (owned_object_count, 0);
+          FIELD_RS (owned_object_count, 0); //TODO cast
           FIELD_RC (flag2, 0);
           FIELD_RS (insert_count, 0);
           FIELD_RS (flag3, 0);
@@ -2095,9 +2101,7 @@ decode_R2007(Bit_Chain* dat, Dwg_Data * dwg)
  * Private functions
  */
 
-/* for objects and entities.
-   TODO: use dwg_decode_xdata instead, but into an array, not a linked list.
- */
+/* for objects and entities */
 static int
 dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
 {
@@ -2136,7 +2140,35 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
       } else {
         LOG_TRACE("EED[%u] handle: %d.%d.%lu\n", i,
                   obj->eed[i].handle.code, obj->eed[i].handle.size,
-                  obj->eed[i].handle.value)
+                  obj->eed[i].handle.value);
+        if (obj->object->supertype == DWG_SUPERTYPE_OBJECT &&
+            obj->object->dxfname &&
+            !strcmp(obj->object->dxfname, "MLEADERSTYLE"))
+          { // check for is_new_format: has extended data for APPID “ACAD_MLEADERVER”
+            Dwg_Object_Ref ref;
+            ref.obj = NULL;
+            ref.handleref = obj->eed[i].handle;
+            ref.absolute_ref = 0L;
+            if (dwg_resolve_handleref(&ref, obj->object))
+              {
+                Dwg_Data *dwg = obj->object->parent;
+                Dwg_Object_APPID_CONTROL *appid = dwg->appid_control;
+                if (appid)
+                  {
+                    // search absref in APPID_CONTROL apps[]
+                    for (i=0; i < appid->num_apps; i++)
+                      {
+                        if ( appid->apps[i]->absolute_ref == ref.absolute_ref )
+                          {
+                            Dwg_Object_MLEADERSTYLE *this = obj->tio.MLEADERSTYLE;
+                            this->is_new_format = 1;
+                            LOG_TRACE("EED found ACAD_MLEADERVER %lu: new format\n",
+                                      ref.absolute_ref);
+                          }
+                      }
+                  }
+              }
+          }
       }
       offset = dat->byte;
       obj->eed[i].size = size;
@@ -2185,7 +2217,7 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
             case 3:
             case 5:
               obj->eed[i].data->u.eed_3.layer = bit_read_RL(dat);
-              LOG_TRACE("EED[%u] short: " FORMAT_RS "\n", i,
+              LOG_TRACE("EED[%u] layer/...: " FORMAT_RL "\n", i,
                         obj->eed[i].data->u.eed_3.layer);
               break;
             case 4:
@@ -2475,9 +2507,9 @@ dwg_decode_object(Bit_Chain * dat, Dwg_Object_Object * obj)
  * Find a pointer to an object given it's id (handle)
  */
 static Dwg_Object *
-dwg_resolve_handle(Dwg_Data* dwg, long unsigned int absref)
+dwg_resolve_handle(Dwg_Data * dwg, long unsigned int absref)
 {
-  //FIXME find a faster algorithm. this is linear search, absref's are unsorted.
+  //TODO hash table? this is linear search, absref's are unsorted.
   long unsigned int i;
   for (i = 0; i < dwg->num_objects; i++)
     {
@@ -2488,6 +2520,41 @@ dwg_resolve_handle(Dwg_Data* dwg, long unsigned int absref)
     }
   LOG_WARN("Object not found: %lu in %ld objects", absref, dwg->num_objects)
   return NULL;
+}
+
+static int
+dwg_resolve_handleref(Dwg_Object_Ref *ref, Dwg_Object * obj)
+{
+  /*
+   * With TYPEDOBJHANDLE 2-5 the code indicates the type of ownership.
+   * With OFFSETOBJHANDLE >5 the handle is stored as an offset from some other handle.
+   */
+ switch (ref->handleref.code)
+    {
+    case 0x06:
+      ref->absolute_ref = (obj->handle.value + 1);
+      break;
+    case 0x08:
+      ref->absolute_ref = (obj->handle.value - 1);
+      break;
+    case 0x0A:
+      ref->absolute_ref = (obj->handle.value + ref->handleref.value);
+      break;
+    case 0x0C:
+      ref->absolute_ref = (obj->handle.value - ref->handleref.value);
+      break;
+    case 2: case 3: case 4: case 5:
+      ref->absolute_ref = ref->handleref.value;
+      break;
+    case 0: // ignore?
+      ref->absolute_ref = ref->handleref.value;
+      break;
+    default:
+      ref->absolute_ref = ref->handleref.value;
+      LOG_WARN("Invalid handle pointer code %d", ref->handleref.code);
+      return 0;
+    }
+  return 1;
 }
 
 static Dwg_Object_Ref *
@@ -2861,8 +2928,7 @@ dwg_decode_xdata(Bit_Chain * dat, Dwg_Object_XRECORD *obj, int size)
 
 /* OBJECTS *******************************************************************/
 
-#include<dwg.spec>
-
+#include "dwg.spec"
 
 /*--------------------------------------------------------------------------------
  * Private functions which depend on the preceding
@@ -3086,17 +3152,21 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "MULTILEADER"))
     {
-      UNTESTED_CLASS;
       assert(is_entity);
-      dwg_decode_MLEADER(dat, obj);
+#ifdef DEBUG
+      UNTESTED_CLASS; //broken in ctx.content_base.y
+      dwg_decode_MULTILEADER(dat, obj);
+      return 1;
+#else
+      UNHANDLED_CLASS;
       return 0;
+#endif
     }
   if (!strcmp(dxfname, "MLEADERSTYLE"))
     {
-      UNTESTED_CLASS; //broken
       assert(!is_entity);
-      //dwg_decode_MLEADERSTYLE(dat, obj);
-      return 0;
+      dwg_decode_MLEADERSTYLE(dat, obj);
+      return 1;
     }
   if (!strcmp(dxfname, "WIPEOUTVARIABLE"))
     {
@@ -3459,6 +3529,8 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
       break;
     case DWG_TYPE_APPID_CONTROL:
       dwg_decode_APPID_CONTROL(dat, obj);
+      if (obj->tio.object->tio.APPID_CONTROL->num_apps)
+        obj->parent->appid_control = obj->tio.object->tio.APPID_CONTROL;
       break;
     case DWG_TYPE_APPID:
       dwg_decode_APPID(dat, obj);

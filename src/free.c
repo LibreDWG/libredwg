@@ -269,10 +269,15 @@ dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
       dwg_free_LWPLINE(obj);
       return 1;
     }
+  if (!strcmp(dxfname, "MULTILEADER"))
+    {
+      dwg_free_MULTILEADER(obj);
+      return 1;
+    }
   if (!strcmp(dxfname, "MLEADERSTYLE"))
     {
-      //dwg_free_MLEADERSTYLE(obj);
-      return 0;
+      dwg_free_MLEADERSTYLE(obj);
+      return 1;
     }
   if (!strcmp(dxfname, "OLE2FRAME"))
     {
@@ -362,12 +367,12 @@ dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "DIMASSOC"))
     {
-//TODO:      dwg_free_DIMASSOC(obj);
+      //dwg_free_DIMASSOC(obj);
       return 0;
     }
   if (!strcmp(dxfname, "MATERIAL"))
     {
-//TODO:      dwg_free_MATERIAL(obj);
+      //dwg_free_MATERIAL(obj);
       return 0;
     }
 

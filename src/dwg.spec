@@ -2455,13 +2455,13 @@ DWG_OBJECT_END
 /*(66)*/
 DWG_OBJECT(APPID_CONTROL)
 
-  FIELD_BS (num_entries, 70);
+  FIELD_BS (num_apps, 70);
 
-  //UNTIL(R_2007) {
-  FIELD_HANDLE (null_handle, 4, 0);
-  //}
+  UNTIL(R_2007) {
+    FIELD_HANDLE (null_handle, 4, 0);
+  }
   XDICOBJHANDLE(3);
-  HANDLE_VECTOR(apps, num_entries, 2, 0);
+  HANDLE_VECTOR(apps, num_apps, 2, 0);
 
 DWG_OBJECT_END
 
@@ -4342,9 +4342,9 @@ DWG_OBJECT(SCALE)
 DWG_OBJECT_END
 
 /* pg. 157, 20.4.48 (varies)
-   dxfname: MULTILEADER
+   AcDbMLeader
  */
-DWG_ENTITY(MLEADER)
+DWG_ENTITY(MULTILEADER)
 
   SINCE(R_2010)
     {
@@ -4415,7 +4415,7 @@ DWG_ENTITY(MLEADER)
   END_REPEAT (ctx.leaders);
 
   FIELD_BD (ctx.scale, 40);
-  FIELD_3BD (ctx.content_base, 10);
+  FIELD_3BD (ctx.content_base, 10); //broken y
   FIELD_BD (ctx.text_height, 41);
   FIELD_BD (ctx.arrow_size, 140);
   FIELD_BD (ctx.landing_gap, 145);
@@ -4565,17 +4565,14 @@ DWG_OBJECT(MLEADERSTYLE)
   FIELD_BD (second_seg_angle, 41);
   FIELD_BS (type, 173);
   FIELD_CMC (line_color, 91);
-  FIELD_HANDLE (line_type, 5, 340);
   FIELD_BL (linewt, 92);
   FIELD_B (landing, 290);
   FIELD_BD (landing_gap, 42);
   FIELD_B (dog_leg, 291);
   FIELD_BD (landing_dist, 43);
   FIELD_TV (description, 3);
-  FIELD_HANDLE (arrow_head, 5, 341);
-  FIELD_BD (arrow_head_size, 444);
+  FIELD_BD (arrow_head_size, 44);
   FIELD_TV (text_default, 300);
-  FIELD_HANDLE (text_style, 5, 342);
   FIELD_BS (attach_left, 174);
   FIELD_BS (attach_right, 178);
   FIELD_BS (text_angle_type, 175);
@@ -4583,11 +4580,11 @@ DWG_OBJECT(MLEADERSTYLE)
   FIELD_CMC (text_color, 93);
   FIELD_BD (text_height, 45);
   FIELD_B (text_frame, 292);
-  SINCE (R_2010) {  //IF IsNewFormat OR DXF file
+  //is_new_format: if the object has extended data for APPID “ACAD_MLEADERVER”.
+  if (FIELD_VALUE(is_new_format) || dat->version >= R_2010) {
     FIELD_B (text_always_left, 297);
   }
   FIELD_BD (align_space, 46);
-  FIELD_HANDLE (block, 5, 343);
   FIELD_CMC (block_color, 94);
   FIELD_BD (block_scale.x, 47);
   FIELD_BD (block_scale.y, 49);
@@ -4607,6 +4604,12 @@ DWG_OBJECT(MLEADERSTYLE)
       FIELD_BS (attach_top, 273);
       FIELD_BS (attach_bottom, 272);
     }
+
+  // wrong documentation in the ODA. the handles are at the end.
+  FIELD_HANDLE (line_type, 5, 340);
+  FIELD_HANDLE (arrow_head, 5, 341);
+  FIELD_HANDLE (text_style, 5, 342);
+  FIELD_HANDLE (block, 5, 343);
 
 DWG_OBJECT_END
 

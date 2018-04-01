@@ -5146,18 +5146,18 @@ dwg_obj_mlinestyle_set_num_lines(dwg_obj_mlinestyle *mlinestyle,
 *               FUNCTIONS FOR APPID_CONTROL OBJECT                  *
 ********************************************************************/
 
-/// Returns the num entries of appid_control
-/** Usage : int num = dwg_obj_appid_control_get_num_entries(appcontrol, &error);
+/// Returns the number of all registered apps of appid_control
+/** Usage : int num = dwg_obj_appid_control_get_num_apps(appcontrol, &error);
 \param 1 dwg_obj_appid_control
 \param 2 int
 */
 BITCODE_BS
-dwg_obj_appid_control_get_num_entries(dwg_obj_appid_control *appid, int *error)
+dwg_obj_appid_control_get_num_apps(dwg_obj_appid_control *appid, int *error)
 {
   if (appid != 0)
     {
       *error = 0;
-      return appid->num_entries;
+      return appid->num_apps;
     }
   else
     {
@@ -5167,27 +5167,21 @@ dwg_obj_appid_control_get_num_entries(dwg_obj_appid_control *appid, int *error)
     }
 }
 
-/// Sets the num entries of appid control
-/** Usage : dwg_obj_appid_control_set_num_entries(appcontrol, 5, &error);
-\param 1 dwg_obj_appid_control
-\param 2 int
-\param 3 int
-*/
-void
-dwg_obj_appid_control_set_num_entries(dwg_obj_appid_control *appid,
-                                      BITCODE_BS entries, int *error)
+dwg_object_ref *
+dwg_obj_appid_control_get_appid(dwg_obj_appid_control *appid,
+                                BITCODE_BS index, int *error)
 {
-  if (appid != 0)
+  if (appid != 0 && index < appid->num_apps)
     {
       *error = 0;
-      appid->num_entries = entries;
+      return appid->apps[index];
     }
   else
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return NULL;
     }
-
 }
 
 /*******************************************************************

@@ -975,14 +975,13 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "MULTILEADER"))
     {
-      UNTESTED_CLASS;
+      UNTESTED_CLASS; // broken decoder
       assert(is_entity);
-      dwg_encode_MLEADER(dat, obj);
+      dwg_encode_MULTILEADER(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "MLEADERSTYLE"))
     {
-      UNTESTED_CLASS;
       assert(!is_entity);
       dwg_encode_MLEADERSTYLE(dat, obj);
       return 1;
