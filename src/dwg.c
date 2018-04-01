@@ -191,10 +191,10 @@ dwg_bmp(Dwg_Data *dwg, BITCODE_RL *size)
   *size = 0;
   assert(dwg);
   dat = (Bit_Chain*) &dwg->picture;
-  if (!dat)
+  if (!dat || !dat->size)
     {
       LOG_TRACE("no IMAGE DATA\n")
-        return NULL;
+      return NULL;
     }
   dat->bit = 0;
   dat->byte = 0;
