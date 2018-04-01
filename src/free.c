@@ -212,195 +212,200 @@ dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
 
   i = obj->type - 500;
   klass = &dwg->dwg_class[i];
-  dxfname = klass->dxfname;
+  dxfname = strdup(klass->dxfname);
 
   if (!strcmp(dxfname, "DICTIONARYVAR"))
     {
       dwg_free_DICTIONARYVAR(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "ACDBDICTIONARYWDFLT"))
     {
       dwg_free_DICTIONARYWDLFT(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "HATCH"))
     {
       dwg_free_HATCH(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "FIELDLIST"))
     {
       dwg_free_FIELDLIST(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "IDBUFFER"))
     {
       dwg_free_IDBUFFER(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "IMAGE"))
     {
       dwg_free_IMAGE(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "IMAGEDEF"))
     {
       dwg_free_IMAGEDEF(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "IMAGEDEF_REACTOR"))
     {
       dwg_free_IMAGEDEF_REACTOR(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "LAYER_INDEX"))
     {
       dwg_free_LAYER_INDEX(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "LAYOUT"))
     {
       dwg_free_LAYOUT(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "LWPLINE"))
     {
       dwg_free_LWPLINE(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "MULTILEADER"))
     {
 #ifdef DEBUG_MULTILEADER
       //broken Leader_Line's/Points
       dwg_free_MULTILEADER(obj);
-      return 1;
+      goto known;
 #else
-      return 0;
+      goto unknown;
 #endif
     }
   if (!strcmp(dxfname, "MLEADERSTYLE"))
     {
       dwg_free_MLEADERSTYLE(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "OLE2FRAME"))
     {
       dwg_free_OLE2FRAME(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "OBJECTCONTEXTDATA")
       || strcmp(klass->cppname, "AcDbObjectContextData"))
     {
       dwg_free_OBJECTCONTEXTDATA(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "ACDBPLACEHOLDER"))
     {
       dwg_free_PLACEHOLDER(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "PROXY"))
     {
       dwg_free_PROXY(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "RASTERVARIABLES"))
     {
       dwg_free_RASTERVARIABLES(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "SCALE"))
     {
       dwg_free_SCALE(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "SORTENTSTABLE"))
     {
       dwg_free_SORTENTSTABLE(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "SPATIAL_FILTER"))
     {
       dwg_free_SPATIAL_FILTER(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "SPATIAL_INDEX"))
     {
       dwg_free_SPATIAL_INDEX(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "TABLE"))
     {
       dwg_free_TABLE(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "WIPEOUTVARIABLE"))
     {
       dwg_free_WIPEOUTVARIABLE(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "WIPEOUT"))
     {
       dwg_free_WIPEOUT(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "VBA_PROJECT"))
     {
       dwg_free_VBA_PROJECT(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "CELLSTYLEMAP"))
     {
 #ifdef DEBUG_CELLSTYLEMAP
       dwg_free_CELLSTYLEMAP(obj);
-      return 1;
+      goto known;
 #else
-      return 0;
+      goto unknown;
 #endif
     }
   if (!strcmp(dxfname, "VISUALSTYLE"))
     {
       dwg_free_VISUALSTYLE(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "AcDbField")) //?
     {
       dwg_free_FIELD(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "TABLECONTENT"))
     {
       dwg_free_TABLECONTENT(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "TABLEGEOMETRY"))
     {
       dwg_free_TABLEGEOMETRY(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "GEODATA"))
     {
       dwg_free_GEODATA(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "XRECORD"))
     {
       dwg_free_XRECORD(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "DIMASSOC"))
     {
       //dwg_free_DIMASSOC(obj);
-      return 0;
+      goto unknown;
     }
   if (!strcmp(dxfname, "MATERIAL"))
     {
       //dwg_free_MATERIAL(obj);
-      return 0;
+      goto unknown;
     }
-
+ unknown:  
+  free(dxfname);
   return 0;
+
+ known:
+  free(dxfname);
+  return 1;
 }
 
 void
@@ -523,8 +528,7 @@ dwg_free_object(Dwg_Object *obj)
       break;
     case DWG_TYPE_3DSOLID:
       dwg_free__3DSOLID(obj);
-      break; /* Check the type of the object
-              */
+      break; /* Check the type of the object */
     case DWG_TYPE_BODY:
       dwg_free_BODY(obj);
       break;
@@ -672,7 +676,6 @@ dwg_free_object(Dwg_Object *obj)
               klass = &dwg->dwg_class[i];
               is_entity = dwg_class_is_entity(klass);
             }
-          // properly dwg_decode_object/_entity for eed, reactors, xdic
           if (klass && !is_entity)
             {
               dwg_free_UNKNOWN_OBJ(obj);
