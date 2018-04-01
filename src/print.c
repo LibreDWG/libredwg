@@ -407,9 +407,14 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "CELLSTYLEMAP"))
     {
+#ifdef DEBUG_CELLSTYLEMAP
       UNTESTED_CLASS;
       dwg_print_CELLSTYLEMAP(dat, obj);
       return 1;
+#else
+      UNHANDLED_CLASS;
+      return 0;
+#endif
     }
   if (!strcmp(dxfname, "VISUALSTYLE"))
     {

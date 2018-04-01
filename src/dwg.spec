@@ -4220,6 +4220,8 @@ DWG_OBJECT_END
 
 // pg.246 20.4.102
 // added with r2008, backcompat with r2007
+// unused
+//#define DEBUG_CELLSTYLEMAP
 DWG_OBJECT(CELLSTYLEMAP)
 
   FIELD_BL (num_cells, 90);
@@ -4343,7 +4345,7 @@ DWG_OBJECT(SCALE)
 DWG_OBJECT_END
 
 /* pg. 157, 20.4.48 (varies)
-   AcDbMLeader
+   AcDbMLeader. yet unused.
  */
 //#define DEBUG_MULTILEADER
 DWG_ENTITY(MULTILEADER)

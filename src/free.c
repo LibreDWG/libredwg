@@ -337,8 +337,8 @@ dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "WIPEOUTVARIABLE"))
     {
-      //dwg_free_WIPEOUTVARIABLE(obj);
-      return 0;
+      dwg_free_WIPEOUTVARIABLE(obj);
+      return 1;
     }
   if (!strcmp(dxfname, "WIPEOUT"))
     {
@@ -352,8 +352,12 @@ dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "CELLSTYLEMAP"))
     {
+#ifdef DEBUG_CELLSTYLEMAP
       dwg_free_CELLSTYLEMAP(obj);
       return 1;
+#else
+      return 0;
+#endif
     }
   if (!strcmp(dxfname, "VISUALSTYLE"))
     {
@@ -363,6 +367,21 @@ dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
   if (!strcmp(dxfname, "AcDbField")) //?
     {
       dwg_free_FIELD(obj);
+      return 1;
+    }
+  if (!strcmp(dxfname, "TABLECONTENT"))
+    {
+      dwg_free_TABLECONTENT(obj);
+      return 1;
+    }
+  if (!strcmp(dxfname, "TABLEGEOMETRY"))
+    {
+      dwg_free_TABLEGEOMETRY(obj);
+      return 1;
+    }
+  if (!strcmp(dxfname, "GEODATA"))
+    {
+      dwg_free_GEODATA(obj);
       return 1;
     }
   if (!strcmp(dxfname, "XRECORD"))

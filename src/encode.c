@@ -1022,10 +1022,15 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "CELLSTYLEMAP"))
     {
-      UNHANDLED_CLASS; //broken
       assert(!is_entity);
-      //dwg_encode_CELLSTYLEMAP(dat, obj);
+#ifdef DEBUG_CELLSTYLEMAP
+      UNTESTED_CLASS; //broken
+      dwg_encode_CELLSTYLEMAP(dat, obj);
+      return 1;
+#else
+      UNHANDLED_CLASS;
       return 0;
+#endif
     }
   if (!strcmp(dxfname, "VISUALSTYLE"))
     {
