@@ -69,3 +69,8 @@ check-syntax:
 	test -n "$(CHK_SOURCES)" && \
 	  $(COMPILE) -o /dev/null -S $(CHK_SOURCES)
 .PHONY: check-syntax
+
+#TODO: alive.test => runtests with VALGRIND support
+#@VALGRIND_CHECK_RULES@
+#VALGRIND_SUPPRESSIONS_FILES = $(PACKAGE).supp
+#EXTRA_DIST = $(PACKAGE).supp
