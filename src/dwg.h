@@ -1607,7 +1607,7 @@ typedef struct _dwg_object_LAYER
   BITCODE_B locked;
   BITCODE_BS flag_s;
   BITCODE_CMC color;
-  BITCODE_RS color_rs;    /* preR13 */
+  short      color_rs;    /* preR13, needs to be signed */
   BITCODE_RS linetype_rs; /* preR13 */
   BITCODE_H layer_control;
   BITCODE_H* reactors;
