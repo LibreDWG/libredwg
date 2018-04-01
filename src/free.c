@@ -24,6 +24,7 @@
 #include "common.h"
 #include "bits.h"
 #include "dwg.h"
+#include "decode.h"
 #include "free.h"
 
 static unsigned int loglevel;
@@ -118,7 +119,8 @@ static Bit_Chain *dat = &pdat;
   HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code, dxf)
 
 #define FIELD_INSERT_COUNT(insert_count, type, dxf)
-#define FIELD_XDATA(name, size)
+#define FIELD_XDATA(name, size) \
+  dwg_free_xdata(_obj, _obj->size)
 
 #define REACTORS(code) FIELD_TV(reactors,0)
 #define ENT_REACTORS(code) FIELD_TV(reactors,0)
@@ -194,6 +196,23 @@ dwg_free_ ##token (Dwg_Object * obj) \
 #define DWG_OBJECT_END \
     free(_obj); obj->tio.object->tio.UNKNOWN_OBJ = NULL; \
     free(obj->tio.object); obj->tio.object = NULL; \
+    free(obj); obj = NULL; \
+}
+
+static void
+dwg_free_xdata(Dwg_Object_XRECORD *obj, int size)
+{
+  Dwg_Resbuf *rbuf = obj->xdata;
+
+  while (rbuf)
+    {
+      Dwg_Resbuf *tmp = rbuf->next;
+      short type = get_base_value_type(rbuf->type);
+      if (type == VT_STRING || type == VT_BINARY)
+        free (rbuf->value.str.u.data);
+      free (rbuf);
+      rbuf = tmp;
+    }
 }
 
 #include "dwg.spec"
@@ -717,6 +736,12 @@ dwg_free(Dwg_Data * dwg)
           dwg_free_object(&dwg->object[i]);
         }
       FREE_IF(dwg->header.section);
+      {
+        Dwg_Header_Variables* _obj = &dwg->header_vars;
+        Dwg_Object* obj = NULL;
+
+        #include "header_variables.spec"
+      }
       if (dwg->picture.size && dwg->picture.chain)
         free(dwg->picture.chain);
       for (i=0; i < dwg->num_classes; ++i)

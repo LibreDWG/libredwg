@@ -4290,12 +4290,16 @@ DWG_OBJECT(XRECORD)
            vcount++)
         {
           FIELD_VALUE(objid_handles) = vcount
-            ? (BITCODE_H*) realloc(FIELD_VALUE(objid_handles), sizeof(Dwg_Object_Ref) * (vcount+1))
+            ? (BITCODE_H*) realloc(FIELD_VALUE(objid_handles),
+                                   (vcount+1) * sizeof(Dwg_Object_Ref))
             : (BITCODE_H*) malloc(sizeof(Dwg_Object_Ref));
           FIELD_HANDLE_N (objid_handles[vcount], vcount, ANYCODE, 0);
         }
       FIELD_VALUE(num_objid_handles) = vcount;
     }
+    #ifndef IS_DECODER
+      HANDLE_VECTOR(objid_handles, num_objid_handles, 4, 0);
+    #endif
 
 DWG_OBJECT_END
 

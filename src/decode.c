@@ -58,24 +58,6 @@ static bool env_var_checked_p;
  * Private functions
  */
 
-enum RES_BUF_VALUE_TYPE
-{
-  VT_INVALID = 0,
-  VT_STRING = 1,
-  VT_POINT3D = 2,
-  VT_REAL = 3,
-  VT_INT16 = 4,
-  VT_INT32 = 5,
-  VT_INT8 = 6,
-  VT_BINARY = 7,
-  VT_HANDLE = 8,
-  VT_OBJECTID = 9,
-  VT_BOOL = 10
-};
-
-static enum RES_BUF_VALUE_TYPE
-get_base_value_type(short gc);
-
 static void
 dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
     long unsigned int address);
@@ -2737,7 +2719,7 @@ dwg_decode_common_entity_handle_data(Bit_Chain * dat, Dwg_Object * obj)
 
 }
 
-static enum RES_BUF_VALUE_TYPE
+enum RES_BUF_VALUE_TYPE
 get_base_value_type(short gc)
 {
   if (gc >= 300)
@@ -2852,20 +2834,36 @@ dwg_decode_xdata(Bit_Chain * dat, Dwg_Object_XRECORD *obj, int size)
       switch (get_base_value_type(rbuf->type))
         {
         case VT_STRING:
-          length   = bit_read_RS(dat);
-          codepage = bit_read_RC(dat);
-          if (length > 0)
-            {
-              rbuf->value.str = (char *)calloc(length + 1, sizeof(char));
-              if (!rbuf->value.str)
-                {
-                  LOG_ERROR("Out of memory");
-                  return NULL;
-                }
-              for (i = 0; i < length; i++)
-                rbuf->value.str[i] = bit_read_RC(dat);
-              rbuf->value.str[i] = '\0';
-            }
+          UNTIL(R_2007) {
+            length = rbuf->value.str.size = bit_read_RS(dat);
+            rbuf->value.str.codepage = bit_read_RC(dat);
+            if (length > 0)
+              {
+                rbuf->value.str.u.data = (char *)calloc(length + 1, sizeof(char));
+                if (!rbuf->value.str.u.data)
+                  {
+                    LOG_ERROR("Out of memory");
+                    return NULL;
+                  }
+                for (i = 0; i < length; i++)
+                  rbuf->value.str.u.data[i] = bit_read_RC(dat);
+                rbuf->value.str.u.data[i] = '\0';
+              }
+          } LATER_VERSIONS {
+            length = rbuf->value.str.size = bit_read_RS(dat);
+            if (length > 0)
+              {
+                rbuf->value.str.u.wdata = calloc(length + 1, 2);
+                if (!rbuf->value.str.u.wdata)
+                  {
+                    LOG_ERROR("Out of memory");
+                    return NULL;
+                  }
+                for (i = 0; i < length; i++)
+                  rbuf->value.str.u.wdata[i] = bit_read_RS(dat);
+                rbuf->value.str.u.wdata[i] = '\0';
+              }
+          }
           break;
         case VT_REAL:
           rbuf->value.dbl = bit_read_RD(dat);
@@ -2886,17 +2884,17 @@ dwg_decode_xdata(Bit_Chain * dat, Dwg_Object_XRECORD *obj, int size)
           rbuf->value.pt[2] = bit_read_RD(dat);
           break;
         case VT_BINARY:
-          rbuf->value.chunk.size = bit_read_RC(dat);
-          if (rbuf->value.chunk.size > 0)
+          rbuf->value.str.size = bit_read_RC(dat);
+          if (rbuf->value.str.size > 0)
             {
-              rbuf->value.chunk.data = (char *)calloc(rbuf->value.chunk.size, sizeof(char));
-              if (!rbuf->value.chunk.data)
+              rbuf->value.str.u.data = (char *)calloc(rbuf->value.str.size, sizeof(char));
+              if (!rbuf->value.str.u.data)
                 {
                   LOG_ERROR("Out of memory");
                   return NULL;
                 }
-              for (i = 0; i < rbuf->value.chunk.size; i++)
-                rbuf->value.chunk.data[i] = bit_read_RC(dat);
+              for (i = 0; i < rbuf->value.str.size; i++)
+                rbuf->value.str.u.data[i] = bit_read_RC(dat);
             }
           break;
         case VT_HANDLE:
@@ -2907,7 +2905,7 @@ dwg_decode_xdata(Bit_Chain * dat, Dwg_Object_XRECORD *obj, int size)
         case VT_INVALID:
         default:
           LOG_ERROR("Invalid group code in xdata: %d", rbuf->type)
-          free(rbuf);
+          free (rbuf);
           dat->byte = end_address;
           obj->num_eed = num_xdata;
           return root;

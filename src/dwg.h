@@ -316,7 +316,11 @@ typedef struct _dwg_color /* CmColor: R15 and earlier */
 struct _dwg_binary_chunk
 {
   short size;
-  char *data;
+  int  codepage;
+  union {
+    char *data;
+    DWGCHAR *wdata;
+  } u;
 };
 
 /**
@@ -327,14 +331,13 @@ typedef struct _dwg_resbuf
   short type;
   union
   {
-    char   *str;
     double  pt[3];
     char    i8;
     short   i16;
     int     i32;
     double  dbl;
     unsigned char hdl[8];
-    struct _dwg_binary_chunk chunk;
+    struct _dwg_binary_chunk str;
   } value;
   struct _dwg_resbuf *next;
 } Dwg_Resbuf;
