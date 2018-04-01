@@ -535,7 +535,6 @@ BITCODE_BD
 bit_read_BD(Bit_Chain * dat)
 {
   unsigned char two_bit_code;
-  long int *res;
   double result;
 
   two_bit_code = bit_read_BB(dat);
@@ -553,7 +552,7 @@ bit_read_BD(Bit_Chain * dat)
     {
       LOG_ERROR("bit_read_BD: unexpected 2-bit code: '11'")
       /* create a Not-A-Number (NaN) */
-      res = (long int *) &result;
+      int32_t *res = (int32_t*) &result;
       res[0] = -1;
       res[1] = -1;
       return (result);
