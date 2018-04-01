@@ -10,6 +10,7 @@
 #include "config.h"
 #include "dwg.h"
 #include "logging.h"
+#include "bits.h"
 #include "dwg_api.h"
 
 /*******************************************************************
@@ -401,7 +402,7 @@ dwg_ent_circle_get_radius(dwg_ent_circle *circle, int *error)
     {
       LOG_ERROR("%s: empty circle", __FUNCTION__)
       *error = 1;
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -443,7 +444,7 @@ dwg_ent_circle_get_thickness(dwg_ent_circle *circle, int *error)
     {
       LOG_ERROR("%s: empty circle", __FUNCTION__)
       *error = 1;
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -692,7 +693,7 @@ dwg_ent_line_get_thickness(dwg_ent_line *line, int *error)
     {
       LOG_ERROR("%s: empty line", __FUNCTION__)
       *error = 1;
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -894,7 +895,7 @@ dwg_ent_arc_get_radius(dwg_ent_arc *arc, int *error)
     {
       LOG_ERROR("%s: empty arc", __FUNCTION__)
       *error = 1;
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -936,7 +937,7 @@ dwg_ent_arc_get_thickness(dwg_ent_arc *arc, int *error)
     {
       LOG_ERROR("%s: empty arc", __FUNCTION__)
       *error = 1;
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -1024,7 +1025,7 @@ dwg_ent_arc_get_start_angle(dwg_ent_arc *arc, int *error)
     {
       LOG_ERROR("%s: empty arc", __FUNCTION__)
       *error = 1;
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -1066,7 +1067,7 @@ dwg_ent_arc_get_end_angle(dwg_ent_arc *arc, int *error)
     {
       LOG_ERROR("%s: empty arc", __FUNCTION__)
       *error = 1;
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -1319,7 +1320,7 @@ dwg_ent_ellipse_get_axis_ratio(dwg_ent_ellipse *ellipse, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty ellipse", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -1362,7 +1363,7 @@ dwg_ent_ellipse_get_start_angle(dwg_ent_ellipse *ellipse, int *error)
     {
       LOG_ERROR("%s: empty ellipse", __FUNCTION__)
       *error = 1;
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -1405,7 +1406,7 @@ dwg_ent_ellipse_get_end_angle(dwg_ent_ellipse *ellipse, int *error)
     {
       LOG_ERROR("%s: empty ellipse", __FUNCTION__)
       *error = 1;
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -1540,7 +1541,7 @@ dwg_ent_text_get_height(dwg_ent_text *text, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty text", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -1630,7 +1631,7 @@ dwg_ent_text_get_thickness(dwg_ent_text *text, int *error)
     {
       LOG_ERROR("%s: empty text", __FUNCTION__)
       *error = 1;
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -1672,7 +1673,7 @@ dwg_ent_text_get_rotation(dwg_ent_text *text, int *error)
     {
       LOG_ERROR("%s: empty text", __FUNCTION__)
       *error = 1;
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -1892,7 +1893,7 @@ dwg_ent_attrib_get_height(dwg_ent_attrib *attrib, int *error)
     {
       LOG_ERROR("%s: empty attrib", __FUNCTION__)
       *error = 1;
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -1982,7 +1983,7 @@ dwg_ent_attrib_get_thickness(dwg_ent_attrib *attrib, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty attrib", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -2025,7 +2026,7 @@ dwg_ent_attrib_get_rot_angle(dwg_ent_attrib *attrib, int *error)
     {
       LOG_ERROR("%s: empty attrib", __FUNCTION__)
       *error = 1;
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -2248,7 +2249,7 @@ dwg_ent_attdef_get_height(dwg_ent_attdef *attdef, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -2338,7 +2339,7 @@ dwg_ent_attdef_get_thickness(dwg_ent_attdef *attdef, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -2381,7 +2382,7 @@ dwg_ent_attdef_get_rot_angle(dwg_ent_attdef *attdef, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -2563,7 +2564,7 @@ dwg_ent_point_get_thickness(dwg_ent_point *point, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -2658,7 +2659,7 @@ dwg_ent_solid_get_thickness(dwg_ent_solid *solid, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -2701,7 +2702,7 @@ dwg_ent_solid_get_elevation(dwg_ent_solid *solid, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -3220,7 +3221,7 @@ dwg_ent_trace_get_thickness(dwg_ent_trace *trace, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -3263,7 +3264,7 @@ dwg_ent_trace_get_elevation(dwg_ent_trace *trace, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -3916,7 +3917,7 @@ dwg_ent_vertex_2d_get_start_width(dwg_ent_vertex_2d *vert, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -3959,7 +3960,7 @@ dwg_ent_vertex_2d_get_end_width(dwg_ent_vertex_2d *vert, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -4002,7 +4003,7 @@ dwg_ent_vertex_2d_get_bulge(dwg_ent_vertex_2d *vert, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -4044,7 +4045,7 @@ dwg_ent_vertex_2d_get_tangent_dir(dwg_ent_vertex_2d *vert, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -4229,7 +4230,7 @@ dwg_ent_insert_get_rotation(dwg_ent_insert *insert, int *error)
     {
       LOG_ERROR("%s: empty insert", __FUNCTION__)
       *error = 1;
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -4569,7 +4570,7 @@ dwg_ent_minsert_get_rotation(dwg_ent_minsert *minsert, int *error)
     {
       LOG_ERROR("%s: empty minsert", __FUNCTION__)
       *error = 1;
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -4809,7 +4810,7 @@ dwg_ent_minsert_get_col_spacing(dwg_ent_minsert *minsert, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -4852,7 +4853,7 @@ dwg_ent_minsert_get_row_spacing(dwg_ent_minsert *minsert, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -5336,7 +5337,7 @@ dwg_ent_dim_get_elevation(dwg_ent_dim *dim, int *error)
     {
       LOG_ERROR("%s: empty dim", __FUNCTION__)
       *error = 1;
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -5421,7 +5422,7 @@ dwg_ent_dim_get_act_measurement(dwg_ent_dim *dim, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -5464,7 +5465,7 @@ dwg_ent_dim_get_horiz_dir(dwg_ent_dim *dim, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -5507,7 +5508,7 @@ dwg_ent_dim_get_lspace_factor(dwg_ent_dim *dim, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -5729,7 +5730,7 @@ dwg_ent_dim_get_text_rot(dwg_ent_dim *dim, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -5772,7 +5773,7 @@ dwg_ent_dim_get_ins_rotation(dwg_ent_dim *dim, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -6380,7 +6381,7 @@ dwg_ent_dim_linear_get_ext_line_rotation(dwg_ent_dim_linear *dim, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -6423,7 +6424,7 @@ dwg_ent_dim_linear_get_dim_rot(dwg_ent_dim_linear *dim, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -6613,7 +6614,7 @@ dwg_ent_dim_aligned_get_ext_line_rotation(dwg_ent_dim_aligned *dim, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -7126,7 +7127,7 @@ dwg_ent_dim_radius_get_leader_length(dwg_ent_dim_radius *radius, int *error)
     {
       LOG_ERROR("%s: empty radius", __FUNCTION__)
       *error = 1;
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -7242,7 +7243,7 @@ dwg_ent_dim_diameter_get_leader_length(dwg_ent_dim_diameter *dia, int *error)
     {
       LOG_ERROR("%s: empty dia", __FUNCTION__)
       *error = 1;
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -7408,7 +7409,7 @@ dwg_ent_shape_get_scale(dwg_ent_shape *shape, int *error)
     {
       LOG_ERROR("%s: empty shape", __FUNCTION__)
       *error = 1;
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -7441,7 +7442,7 @@ dwg_ent_shape_get_rotation(dwg_ent_shape *shape, int *error)
     {
       LOG_ERROR("%s: empty shape", __FUNCTION__)
       *error = 1;
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -7474,7 +7475,7 @@ dwg_ent_shape_get_width_factor(dwg_ent_shape *shape, int *error)
     {
       LOG_ERROR("%s: empty shape", __FUNCTION__)
       *error = 1;
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -7508,7 +7509,7 @@ dwg_ent_shape_get_oblique(dwg_ent_shape *shape, int *error)
     {
       LOG_ERROR("%s: empty shape", __FUNCTION__)
       *error = 1;
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -7541,7 +7542,7 @@ dwg_ent_shape_get_thickness(dwg_ent_shape *shape, int *error)
     {
       LOG_ERROR("%s: empty shape", __FUNCTION__)
       *error = 1;
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -7575,7 +7576,7 @@ dwg_ent_shape_get_shape_no(dwg_ent_shape *shape, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -7787,7 +7788,7 @@ dwg_ent_mtext_get_rect_height(dwg_ent_mtext *mtext, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -7822,7 +7823,7 @@ dwg_ent_mtext_get_rect_width(dwg_ent_mtext *mtext, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -7857,7 +7858,7 @@ dwg_ent_mtext_get_text_height(dwg_ent_mtext *mtext, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -7944,7 +7945,7 @@ dwg_ent_mtext_get_extents_height(dwg_ent_mtext *mtext, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -7978,7 +7979,7 @@ dwg_ent_mtext_get_extents_width(dwg_ent_mtext *mtext, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -8081,7 +8082,7 @@ dwg_ent_mtext_get_linespace_factor(dwg_ent_mtext *mtext, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -8398,7 +8399,7 @@ dwg_ent_leader_get_dimgap(dwg_ent_leader *leader, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -8433,7 +8434,7 @@ dwg_ent_leader_get_box_height(dwg_ent_leader *leader, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -8467,7 +8468,7 @@ dwg_ent_leader_get_box_width(dwg_ent_leader *leader, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -8604,7 +8605,7 @@ dwg_ent_leader_get_dimasz(dwg_ent_leader *leader, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -8676,7 +8677,7 @@ dwg_ent_tolerance_get_height(dwg_ent_tolerance *tol, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -8711,7 +8712,7 @@ dwg_ent_tolerance_get_dimgap(dwg_ent_tolerance *tol, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -8919,7 +8920,7 @@ dwg_ent_lwpline_get_const_width(dwg_ent_lwpline *lwpline, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -8952,7 +8953,7 @@ dwg_ent_lwpline_get_elevation(dwg_ent_lwpline *lwpline, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -8985,7 +8986,7 @@ dwg_ent_lwpline_get_thickness(dwg_ent_lwpline *lwpline, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -9817,7 +9818,7 @@ dwg_ent_spline_get_fit_tol(dwg_ent_spline *spline, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -9926,7 +9927,7 @@ dwg_ent_spline_get_knot_tol(dwg_ent_spline *spline, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -9960,7 +9961,7 @@ dwg_ent_spline_get_ctrl_tol(dwg_ent_spline *spline, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -10344,7 +10345,7 @@ dwg_ent_viewport_get_width(dwg_ent_viewport *vp, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -10377,7 +10378,7 @@ dwg_ent_viewport_get_height(dwg_ent_viewport *vp, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -10773,7 +10774,7 @@ dwg_ent_viewport_get_view_twist_angle(dwg_ent_viewport *vp, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -10807,7 +10808,7 @@ dwg_ent_viewport_get_view_height(dwg_ent_viewport *vp, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -10841,7 +10842,7 @@ dwg_ent_viewport_get_lens_length(dwg_ent_viewport *vp, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -10875,7 +10876,7 @@ dwg_ent_viewport_get_front_clip_z(dwg_ent_viewport *vp, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -10909,7 +10910,7 @@ dwg_ent_viewport_get_back_clip_z(dwg_ent_viewport *vp, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -10942,7 +10943,7 @@ dwg_ent_viewport_get_snap_angle(dwg_ent_viewport *vp, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -11234,7 +11235,7 @@ dwg_ent_viewport_get_ucs_elevation(dwg_ent_viewport *vp, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -11404,7 +11405,7 @@ dwg_ent_viewport_get_brightness(dwg_ent_viewport *vp, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -11438,7 +11439,7 @@ dwg_ent_viewport_get_contrast(dwg_ent_viewport *vp, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -11849,7 +11850,7 @@ dwg_ent_polyline_2d_get_start_width(dwg_ent_polyline_2d *line2d, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -11883,7 +11884,7 @@ dwg_ent_polyline_2d_get_end_width(dwg_ent_polyline_2d *line2d, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -11917,7 +11918,7 @@ dwg_ent_polyline_2d_get_thickness(dwg_ent_polyline_2d *line2d, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -11951,7 +11952,7 @@ dwg_ent_polyline_2d_get_elevation(dwg_ent_polyline_2d *line2d, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -12576,7 +12577,7 @@ dwg_ent_image_get_size_height(dwg_ent_image *image, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -12610,7 +12611,7 @@ dwg_ent_image_get_size_width(dwg_ent_image *image, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -12917,7 +12918,7 @@ dwg_ent_image_get_num_clip_verts(dwg_ent_image *image, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -12994,7 +12995,7 @@ dwg_ent_mline_get_scale(dwg_ent_mline *mline, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -14741,7 +14742,7 @@ dwg_ent_table_get_rotation(dwg_ent_table *table, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -15191,7 +15192,7 @@ dwg_ent_table_get_horiz_cell_margin(dwg_ent_table *table, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -15225,7 +15226,7 @@ dwg_ent_table_get_vert_cell_margin(dwg_ent_table *table, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -15463,7 +15464,7 @@ dwg_ent_table_get_title_row_height(dwg_ent_table *table, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -15497,7 +15498,7 @@ dwg_ent_table_get_header_row_height(dwg_ent_table *table, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
@@ -15531,7 +15532,7 @@ dwg_ent_table_get_data_row_height(dwg_ent_table *table, int *error)
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return nan("");
+      return bit_nan();
     }
 }
 
