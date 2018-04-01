@@ -1600,7 +1600,10 @@ read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
 	    {
 	      section_number = *((uint32_t*)ptr);      // Index into SectionMap
 	      data_size      = *((uint32_t*)ptr + 1);
-	      start_offset   = *((uint64_t*)ptr + 1);
+	      //start_offset   = *((uint64_t*)ptr + 1); // avoid alignment ubsan
+	      start_offset   = *((uint32_t*)ptr + 2);
+              start_offset <<= 32;
+              start_offset  += *((uint32_t*)ptr + 3);
 	      ptr += 16;
 
 	      dwg->header.section_info[i].sections[j] = find_section(dwg, section_number);
@@ -1948,10 +1951,10 @@ decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
   {
     Dwg_Object *obj = NULL;
     struct Dwg_R2004_Header* _obj = &dwg->r2004_header;
-    const int size = sizeof(struct Dwg_R2004_Header);
+    const unsigned size = sizeof(struct Dwg_R2004_Header);
     char encrypted_data[size];
-    int rseed = 1;
-    int i;
+    uint32_t rseed = 1;
+    unsigned i;
 
     dat->byte = 0x80;
     for (i = 0; i < size; i++)
