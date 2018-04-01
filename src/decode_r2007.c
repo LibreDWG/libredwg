@@ -31,8 +31,8 @@ static unsigned int loglevel;
 #define DBG_MAX_COUNT 0x10000
 #define DBG_MAX_SIZE  0xf00000
 
+#undef DWG_LOGLEVEL
 #ifdef USE_TRACING
-# undef DWG_LOGLEVEL
 # define DWG_LOGLEVEL loglevel
 #else
 # define DWG_LOGLEVEL DWG_LOGLEVEL_TRACE

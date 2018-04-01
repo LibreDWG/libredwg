@@ -30,8 +30,6 @@ static unsigned int loglevel;
 #ifdef USE_TRACING
 static int env_var_checked_p;
 #define DWG_LOGLEVEL loglevel
-#else
-#define DWG_LOGLEVEL DWG_LOGLEVEL_TRACE
 #endif
 #include "logging.h"
 
