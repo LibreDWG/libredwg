@@ -361,12 +361,8 @@ dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "VISUALSTYLE"))
     {
-#ifdef DEBUG_VISUALSTYLE
       dwg_free_VISUALSTYLE(obj);
       return 1;
-#else
-      return 0;
-#endif
     }
   if (!strcmp(dxfname, "AcDbField")) //?
     {

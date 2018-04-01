@@ -1035,14 +1035,8 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
   if (!strcmp(dxfname, "VISUALSTYLE"))
     {
       assert(!is_entity);
-#ifdef DEBUG_VISUALSTYLE
-      UNTESTED_CLASS;
       dwg_encode_VISUALSTYLE(dat, obj);
       return 1;
-#else
-      UNHANDLED_CLASS;
-      return 0;
-#endif
     }
   if (!strcmp(dxfname, "DIMASSOC"))
     {
