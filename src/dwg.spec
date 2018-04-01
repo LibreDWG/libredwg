@@ -3672,7 +3672,8 @@ DWG_ENTITY(TABLE)
   FIELD_BL (num_rows, 91);
   FIELD_VECTOR (col_widths, BD, num_cols, 142);
   FIELD_VECTOR (row_heights, BD, num_rows, 141);
-  REPEAT_N((long)(FIELD_VALUE(num_rows)*FIELD_VALUE(num_cols)), cells, Dwg_TABLE_Cell)
+  FIELD_VALUE(num_cells) = FIELD_VALUE(num_rows) * FIELD_VALUE(num_cols);
+  REPEAT(num_cells, cells, Dwg_TABLE_Cell)
     {
       FIELD_BS (cells[rcount].type, 171);
       FIELD_RC (cells[rcount].flags, 172);
@@ -3963,8 +3964,8 @@ DWG_ENTITY(TABLE)
     FIELD_HANDLE (seqend, 3, 0);
   
   FIELD_HANDLE (table_style_id, 5, 342);
-  
-  REPEAT_N((long)(FIELD_VALUE(num_rows)*FIELD_VALUE(num_cols)), cells, Dwg_TABLE_Cell)
+
+  REPEAT(num_cells, cells, Dwg_TABLE_Cell)
     {
       if (FIELD_VALUE(cells[rcount].type) == 1)
         { /* text cell */

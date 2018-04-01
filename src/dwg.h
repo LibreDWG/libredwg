@@ -2748,6 +2748,7 @@ typedef struct _dwg_entity_TABLE
   BITCODE_3BD horiz_direction;
   BITCODE_BL num_cols;
   BITCODE_BL num_rows;
+  unsigned long num_cells; /* computed */
   BITCODE_BD* col_widths;
   BITCODE_BD* row_heights;
   Dwg_TABLE_Cell* cells;

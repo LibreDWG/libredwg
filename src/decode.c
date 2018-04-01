@@ -2248,7 +2248,7 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
 #ifdef DEBUG
           // sanity checks
           if (code == 0 || code == 4)
-            assert((unsigned int)obj->eed[i].data->u.eed_0.length != size-1);
+            assert(obj->eed[i].data->u.eed_0.length != size-1);
           if (code == 10) // 3 double
             assert(size != 1 + 3*8);
 #endif
