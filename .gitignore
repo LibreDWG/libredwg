@@ -63,6 +63,7 @@ gcov.log
 /build-aux/test-driver
 /build-aux/texinfo.tex
 /check-dwg.log
+/check-dwg-valgrind.log
 /config.cache
 /config.log
 /config.status

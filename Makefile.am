@@ -30,6 +30,12 @@ check-dwg: all
 	  echo examples/dwgread $$d | tee -a check-dwg.log; \
 	  LIBREDWG_TRACE=4 examples/dwgread $$d >> check-dwg.log 2>&1; \
 	done
+check-dwg-valgrind: all
+	-rm check-dwg-valgrind.log
+	for d in `find test/test-data -iname \*.dwg`; do \
+	  echo LIBREDWG_TRACE=4 valgrind --leak-check=full examples/dwgread $$d | tee -a check-dwg-valgrind.log; \
+	  LIBREDWG_TRACE=4 valgrind --leak-check=full examples/dwgread $$d >> check-dwg-valgrind.log 2>&1; \
+	done
 
 if ENABLE_GCOV
 gcov: check
