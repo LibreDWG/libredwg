@@ -41,8 +41,8 @@ run ()
     prog=$1
     dwg=$2
 
-    bprog=`basename $prog .exe`
-    bdwg=`basename $dwg .dwg`
+    bprog=$(basename $prog .exe)
+    bdwg=$(basename $dwg .dwg)
     log=$bdwg-$bprog.log
     arg="${datadir}/$dwg.dwg"
     if test $bprog = dwgrewrite; then
@@ -69,7 +69,7 @@ DATA="sample_2000 example_2000 r14/Leader_r14 2000/Leader_2000 2004/Leader_2004"
 TODO="r11/ACEL10 2007/Leader_2007 2010/Leader_2010 2013/Leader_2013"
 
 for d in $DATA; do
-    b=`basename $d`
+    b=$(basename $d)
     rm $b.dxf 2>/dev/null
     rm $b.svg 2>/dev/null
     rm $b.ps 2>/dev/null

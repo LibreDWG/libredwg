@@ -1514,8 +1514,8 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
         bit_write_H(dat, &(ent->eed[i].handle));
         bit_write_RC(dat, ent->eed[i].data->code);
         LOG_TRACE("EED[%u] code: " FORMAT_RC "\n", i, ent->eed[i].data->code)
-        for (j=0; j < ent->eed[i].size-2; j++)
-          bit_write_RC(dat, ent->eed[i].data->u.raw[j]);
+        for (j=1; j < ent->eed[i].size-1; j++)
+          bit_write_RC(dat, ent->eed[i].raw[j]);
 
         if (i+1 < num_eed)
           bit_write_BS(dat, ent->eed[i+1].size);
@@ -1673,8 +1673,8 @@ dwg_encode_object(Dwg_Object * obj, Bit_Chain * dat)
         bit_write_H(dat, &(ord->eed[i].handle));
         bit_write_RC(dat, ord->eed[i].data->code);
         LOG_TRACE("EED[%u] code: " FORMAT_RC "\n", i, ord->eed[i].data->code)
-        for (j=0; j < ord->eed[i].size-2; j++)
-          bit_write_RC(dat, ord->eed[i].data->u.raw[j]);
+        for (j=1; j < ord->eed[i].size-1; j++)
+          bit_write_RC(dat, ord->eed[i].raw[j]);
 
         if (i+1 < num_eed)
           bit_write_BS(dat, ord->eed[i+1].size);

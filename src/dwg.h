@@ -3543,18 +3543,15 @@ typedef struct _dwg_entity_eed_data
 {
   BITCODE_RC code;
   union eed_data_t {
-    char raw[0];           /* inlined */
     struct { /* 0 (1000) string */
       BITCODE_RC length;
-      BITCODE_RS codepage; /* need to swap via ntohs() */
+      BITCODE_RS codepage;
       char string[0];      /* inlined */
     } eed_0;
-#ifdef HAVE_WCHAR_H
     struct { /* R2007+ 0 (1000) string */
       BITCODE_RS length;
       DWGCHAR string[0]; /* inlined */
     } eed_0_r2007;
-#endif
     struct { /* 1 (1001) invalid */
       char invalid[0];
     } eed_1;
@@ -3562,14 +3559,14 @@ typedef struct _dwg_entity_eed_data
       BITCODE_RC byte;
     } eed_2;
     struct { /* 3 (1003) layer */
-      BITCODE_RL layer; /* need to ntohl() */
+      BITCODE_RL layer;
     } eed_3;
     struct { /* 4 (1004) binary */
       BITCODE_RC length;
       char data[0];
     } eed_4;
     struct { /* 5 (1005) entity */
-      BITCODE_RL entity; /* need to ntohl() */
+      BITCODE_RL entity;
     } eed_5;
     struct { /* 10-13 point */
       BITCODE_3RD point;
@@ -3578,10 +3575,10 @@ typedef struct _dwg_entity_eed_data
       BITCODE_RD real;
     } eed_40;
     struct { /* 70 short int */
-      BITCODE_RS rs; /* need to ntohs() */
+      BITCODE_RS rs;
     } eed_70;
     struct { /* 71 long int */
-      BITCODE_RL rl; /* need to ntohl() */
+      BITCODE_RL rl;
     } eed_71;
   } u;
 } Dwg_Eed_Data;
@@ -3591,6 +3588,7 @@ typedef struct _dwg_entity_eed
   BITCODE_BS size;
   Dwg_Handle handle;
   Dwg_Eed_Data *data;
+  char* raw; /* a copy of data */
 } Dwg_Eed;
 
 /**
