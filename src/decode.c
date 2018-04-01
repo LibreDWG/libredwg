@@ -3044,7 +3044,7 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "SCALE"))
     {
-      UNTESTED_CLASS;
+      //UNTESTED_CLASS;
       assert(!is_entity);
       dwg_decode_SCALE(dat, obj);
       return 1;
@@ -3084,7 +3084,7 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       dwg_decode_VBA_PROJECT(dat, obj);
       return 0;
     }
-  if (!strcmp(dxfname, "MLEADER"))
+  if (!strcmp(dxfname, "MULTILEADER"))
     {
       UNTESTED_CLASS;
       assert(is_entity);

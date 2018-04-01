@@ -314,7 +314,7 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       dwg_print_LWPLINE(dat, obj);
       return 1;
     }
-  if (!strcmp(dxfname, "MLEADER"))
+  if (!strcmp(dxfname, "MULTILEADER"))
     {
       UNTESTED_CLASS;
       dwg_print_MLEADER(dat, obj);

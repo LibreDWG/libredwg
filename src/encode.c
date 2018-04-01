@@ -968,12 +968,12 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "SCALE"))
     {
-      UNTESTED_CLASS;
+      //UNTESTED_CLASS;
       assert(!is_entity);
       dwg_encode_SCALE(dat, obj);
       return 1;
     }
-  if (!strcmp(dxfname, "MLEADER"))
+  if (!strcmp(dxfname, "MULTILEADER"))
     {
       UNTESTED_CLASS;
       assert(is_entity);
