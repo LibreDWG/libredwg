@@ -3497,8 +3497,7 @@ typedef struct _dwg_object_WIPEOUTVARIABLE
  */
 typedef struct _dwg_object_VISUALSTYLE
 {
-  BITCODE_H* dictionary; /* (hard-pointer to DICTIONARY_VISUALSTYLE or reverse?) */
-  /* TODO */
+  BITCODE_H dictionary; /* (hard-pointer to DICTIONARY_VISUALSTYLE or reverse?) */
 } Dwg_Object_VISUALSTYLE;
 
 

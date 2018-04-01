@@ -4708,16 +4708,16 @@ DWG_ENTITY(LONG_TRANSACTION)
 
 DWG_ENTITY_END
 
-/*
-Those undocumented objects are stored as raw UNKNOWN_OBJ:
-
 // r2007+
+#define DEBUG_VISUALSTYLE
 DWG_OBJECT(VISUALSTYLE)
 
-  // hard-pointer to H DICTIONARY_VISUALSTYLE
-  FIELD_HANDLE (visualstyle, 5);
+  FIELD_HANDLE (dictionary, 5, 0);
 
 DWG_OBJECT_END
+
+/*
+Those undocumented objects are stored as raw UNKNOWN_OBJ:
 
 // r2000+
 DWG_OBJECT(ARCALIGNEDTEXT)

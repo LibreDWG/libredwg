@@ -3189,10 +3189,14 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "VISUALSTYLE"))
     {
+#ifdef DEBUG_VISUALSTYLE
+      UNTESTED_CLASS;
+      dwg_decode_VISUALSTYLE(dat, obj);
+      return 1;
+#else
       UNHANDLED_CLASS;
-      assert(!is_entity);
-      //dwg_decode_VISUALSTYLE(dat, obj);
       return 0;
+#endif
     }
   if (!strcmp(dxfname, "ARCALIGNEDTEXT"))
     {
