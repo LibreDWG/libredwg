@@ -4344,6 +4344,7 @@ DWG_OBJECT_END
 /* pg. 157, 20.4.48 (varies)
    AcDbMLeader
  */
+//#define DEBUG_MULTILEADER
 DWG_ENTITY(MULTILEADER)
 
   SINCE(R_2010)
@@ -4362,8 +4363,8 @@ DWG_ENTITY(MULTILEADER)
   REPEAT(ctx.num_leaders, ctx.leaders, Dwg_Leader)
     {
 #     define lev1 ctx.leaders[rcount]
-      FIELD_B (lev1.is_valid, 290);
-      FIELD_B (lev1.unknown, 291);
+      FIELD_B (lev1.is_valid, 290);  //1
+      FIELD_B (lev1.num_lines, 291); //1
       FIELD_3BD (lev1.connection, 10);
       FIELD_3BD (lev1.direction, 11);
       FIELD_BL (lev1.num_breaks, 0);
@@ -4374,14 +4375,15 @@ DWG_ENTITY(MULTILEADER)
         }
       END_REPEAT (lev1.breaks);
       FIELD_BL (lev1.index, 90);
-      FIELD_BD (lev1.landing_distance, 40);
+      FIELD_BD (lev1.landing_distance, 40); //ok
+      // num_lines was missing
       REPEAT2(lev1.num_lines, lev1.lines, Leader_Line)
         {
 #         define lev2 lev1.lines[rcount2]
-          FIELD_BL (lev2.num_points, 0);
+          FIELD_BL (lev2.num_points, 0); //ok?
           REPEAT3(lev2.num_points, lev2.points, BITCODE_3BD)
             {
-              FIELD_3BD (lev2.points[rcount3], 10);
+              FIELD_3BD (lev2.points[rcount3], 10); //nok
             }
           END_REPEAT (lev2.points);
           FIELD_BL (lev2.num_breaks, 0);
@@ -4415,7 +4417,7 @@ DWG_ENTITY(MULTILEADER)
   END_REPEAT (ctx.leaders);
 
   FIELD_BD (ctx.scale, 40);
-  FIELD_3BD (ctx.content_base, 10); //broken y
+  FIELD_3BD (ctx.content_base, 10); //broken
   FIELD_BD (ctx.text_height, 41);
   FIELD_BD (ctx.arrow_size, 140);
   FIELD_BD (ctx.landing_gap, 145);

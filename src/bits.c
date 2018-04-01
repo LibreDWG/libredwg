@@ -535,19 +535,14 @@ BITCODE_BD
 bit_read_BD(Bit_Chain * dat)
 {
   unsigned char two_bit_code;
-  double result;
 
   two_bit_code = bit_read_BB(dat);
-
   if (two_bit_code == 0)
-    {
-      result = bit_read_RD(dat);
-      return (result);
-    }
+      return bit_read_RD(dat);
   else if (two_bit_code == 1)
-    return (1.0);
+    return 1.0;
   else if (two_bit_code == 2)
-    return (0.0);
+    return 0.0;
   else /* if (two_bit_code == 3) */
     {
       LOG_ERROR("bit_read_BD: unexpected 2-bit code: '11'")

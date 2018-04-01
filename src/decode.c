@@ -3153,8 +3153,8 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
   if (!strcmp(dxfname, "MULTILEADER"))
     {
       assert(is_entity);
-#ifdef DEBUG
-      UNTESTED_CLASS; //broken in ctx.content_base.y
+#ifdef DEBUG_MULTILEADER
+      UNTESTED_CLASS; //broken Leader_Line's/Points
       dwg_decode_MULTILEADER(dat, obj);
       return 1;
 #else

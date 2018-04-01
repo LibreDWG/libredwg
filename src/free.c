@@ -271,8 +271,13 @@ dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "MULTILEADER"))
     {
+#ifdef DEBUG_MULTILEADER
+      //broken Leader_Line's/Points
       dwg_free_MULTILEADER(obj);
       return 1;
+#else
+      return 0;
+#endif
     }
   if (!strcmp(dxfname, "MLEADERSTYLE"))
     {

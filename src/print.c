@@ -316,9 +316,14 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "MULTILEADER"))
     {
-      UNTESTED_CLASS; //broken in ctx.content_base.y
+#ifdef DEBUG_MULTILEADER
+      UNTESTED_CLASS; //broken Leader_Line's/Points
       dwg_print_MULTILEADER(dat, obj);
       return 1;
+#else
+      UNHANDLED_CLASS;
+      return 0;
+#endif
     }
   if (!strcmp(dxfname, "MLEADERSTYLE"))
     {
