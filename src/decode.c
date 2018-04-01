@@ -2147,7 +2147,7 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
             obj->eed[i].raw[j] = bit_read_RC(dat);
           dat->byte = sav_byte;
 
-          obj->eed[i].data = (Dwg_Eed_Data*)calloc(size + 1, 1);
+          obj->eed[i].data = (Dwg_Eed_Data*)calloc(size + 8, 1);
           obj->eed[i].data->code = code = bit_read_RC(dat);
           LOG_TRACE("EED[%u] code: %d\n", i, (int)code);
 #define MIN(X,Y) ((X) < (Y) ? (X) : (Y))
