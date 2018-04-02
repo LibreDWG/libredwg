@@ -52,8 +52,8 @@ static Bit_Chain *dat = &pdat;
 #define FIELD_VALUE(name) _obj->name
 
 #define ANYCODE -1
-#define FIELD_HANDLE(name, code, dxf) FIELD_TV(name, dxf)
-#define FIELD_HANDLE_N(name, vcount, code, dxf) FIELD_TV(name, dxf)
+#define FIELD_HANDLE(name,code,dxf) dwg_free_handleref(_obj->name, dwg)
+#define FIELD_HANDLE_N(name,vcount,code,dxf) FIELD_HANDLE(name, code, dxf)
 
 #define FIELD_B(name,dxf) FIELD(name, B)
 #define FIELD_BB(name,dxf) FIELD(name, BB)
@@ -122,8 +122,18 @@ static Bit_Chain *dat = &pdat;
 #define FIELD_XDATA(name, size) \
   dwg_free_xdata(_obj, _obj->size)
 
-#define REACTORS(code) FIELD_TV(reactors,0)
-#define ENT_REACTORS(code) FIELD_TV(reactors,0)
+#define REACTORS(code) \
+  for (vcount=0; vcount < (long)obj->tio.object->num_reactors; vcount++) \
+    {\
+      FIELD_HANDLE_N(reactors[vcount], vcount, code, -5); \
+    } \
+    FIELD_TV(reactors,0)
+#define ENT_REACTORS(code)  \
+  for (vcount=0; vcount < obj->tio.entity->num_reactors; vcount++)\
+    {\
+      FIELD_HANDLE_N(reactors[vcount], vcount, code, -5);  \
+    }\
+  FIELD_TV(reactors,0)
 #define XDICOBJHANDLE(code)\
   SINCE(R_2004)\
     {\
@@ -175,6 +185,7 @@ dwg_free_ ##token (Dwg_Object * obj)\
 {\
   int vcount, rcount, rcount2, rcount3, rcount4;\
   Dwg_Entity_##token *ent, *_obj;\
+  Dwg_Data* dwg = obj->parent;\
   LOG_HANDLE("Free entity " #token "\n")\
   ent = obj->tio.entity->tio.token;\
   _obj = ent;
@@ -188,7 +199,8 @@ dwg_free_ ##token (Dwg_Object * obj)\
 static void \
 dwg_free_ ##token (Dwg_Object * obj) \
 { \
- int vcount, rcount, rcount2, rcount3, rcount4; \
+  int vcount, rcount, rcount2, rcount3, rcount4; \
+  Dwg_Data* dwg = obj->parent;\
   Dwg_Object_##token *_obj;\
   LOG_HANDLE("Free object " #token " %p\n", obj)    \
   _obj = obj->tio.object->tio.token;
@@ -196,7 +208,26 @@ dwg_free_ ##token (Dwg_Object * obj) \
 #define DWG_OBJECT_END \
     free(_obj); obj->tio.object->tio.UNKNOWN_OBJ = NULL; \
     free(obj->tio.object); obj->tio.object = NULL; \
-    free(obj); obj = NULL; \
+    obj->parent = NULL; \
+    /* free(obj); obj = NULL; */ \
+}
+
+static void
+dwg_free_handleref(Dwg_Object_Ref *ref, Dwg_Data * dwg)
+{
+  long unsigned int i;
+  if (!dwg) {
+    free(ref);
+    return;
+  }
+  for (i=0; i < dwg->num_object_refs; i++)
+    {
+      if (dwg->object_ref[i] == ref)
+        {
+          dwg->object_ref[i] = NULL;
+          free(ref);
+        }
+    }
 }
 
 static void
@@ -434,9 +465,15 @@ dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
 void
 dwg_free_object(Dwg_Object *obj)
 {
-  if (obj->parent)
-    dat->version = obj->parent->header.version;
-  else
+  long unsigned int j;
+  Dwg_Data *dwg;
+
+  if (obj && obj->parent) {
+    dwg = obj->parent;
+    dat->version = dwg->header.version;
+  } else
+    return;
+  if (obj->type == DWG_TYPE_FREED)
     return;
   dat->from_version = dat->version;
   switch (obj->type)
@@ -691,7 +728,6 @@ dwg_free_object(Dwg_Object *obj)
       */
       else if (!dwg_free_variable_type(obj->parent, obj))
         {
-          Dwg_Data *dwg = obj->parent;
           int is_entity;
           int i = obj->type - 500;
           Dwg_Class *klass = NULL;
@@ -715,6 +751,7 @@ dwg_free_object(Dwg_Object *obj)
             }
         }
     }
+  obj->type = DWG_TYPE_FREED;
 }
 
 void
@@ -736,10 +773,11 @@ dwg_free(Dwg_Data * dwg)
       LOG_TRACE("dwg_free %p\n", dwg)
       /*if (dwg->bit_chain && dwg->bit_chain->size)
         free (dwg->bit_chain->chain);*/
-#define FREE_IF(ptr) if (ptr) free(ptr)
+#define FREE_IF(ptr) { if (ptr) free(ptr); }
       for (i=0; i < dwg->num_objects; ++i)
         {
-          dwg_free_object(&dwg->object[i]);
+          if (dwg->object[i].type != DWG_TYPE_BLOCK_CONTROL)
+            dwg_free_object(&dwg->object[i]);
         }
       FREE_IF(dwg->header.section);
       {
@@ -756,24 +794,21 @@ dwg_free(Dwg_Data * dwg)
           FREE_IF(dwg->dwg_class[i].cppname);
           FREE_IF(dwg->dwg_class[i].dxfname);
         }
-      if (dwg->num_classes) {
+      if (dwg->num_classes)
         FREE_IF(dwg->dwg_class);
-      }
       for (i=0; i < dwg->header.num_descriptions; ++i)
-        {
-          FREE_IF(dwg->header.section_info[i].sections);
-        }
-      if (dwg->header.num_descriptions) {
+        FREE_IF(dwg->header.section_info[i].sections);
+      if (dwg->header.num_descriptions)
         FREE_IF(dwg->header.section_info);
-      }
       for (i=0; i < dwg->second_header.num_handlers; i++)
+        FREE_IF(dwg->second_header.handlers[i].data);
+      for (i=0; i < dwg->num_objects; ++i)
         {
-          FREE_IF(dwg->second_header.handlers[i].data);
+          if (dwg->object[i].type == DWG_TYPE_BLOCK_CONTROL)
+            dwg_free_object(&dwg->object[i]);
         }
       for (i=0; i < dwg->num_object_refs; ++i)
-        {
-          FREE_IF(dwg->object_ref[i]);
-        }
+        FREE_IF(dwg->object_ref[i]);
       FREE_IF(dwg->object_ref);
       FREE_IF(dwg->object);
 #undef FREE_IF
