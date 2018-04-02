@@ -8,7 +8,6 @@
 * DIMSTYLE_CONTROL: one R2000+ RC missing
 * LEADER: associated_annotation, dimstyle handles (untested)
 * undocumented and apparently unused: LONG_TRANSACTION, DUMMY
-* VISUALSTYLE: hard-pointer to H DICTIONARY_VISUALSTYLE
 * SPATIAL_INDEX class/object untested
 * WIPEOUTVARIABLE class/object untested
 * link VBA_PROJECT object to its section, and vice versa
