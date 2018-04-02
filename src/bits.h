@@ -240,4 +240,7 @@ bit_print(Bit_Chain * dat, long unsigned int size);
 void
 bit_explore_chain(Bit_Chain * dat, long unsigned int size);
 
+BITCODE_BD
+bit_nan(void);
+
 #endif

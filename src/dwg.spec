@@ -35,17 +35,18 @@ DWG_ENTITY (TEXT)
     if (obj->opts & 4)
       FIELD_RD (oblique_ang, 51)
     if (obj->opts & 8) {
-      ENCODER { bit_write_RC(dat, obj->linetype_rs); }
       DECODER { obj->linetype_rs = bit_read_RC(dat); }
+      ENCODER { bit_write_RC(dat, obj->linetype_rs); }
+      PRINT   { LOG_TRACE("linetype_rs: " FORMAT_RS "\n", obj->linetype_rs); }
     }
     if (obj->opts & 16)
-      FIELD_RC (generation, 71)
+      FIELD_CAST (generation, RC, BS, 71)
     if (obj->opts & 32)
-      FIELD_RC (horiz_alignment, 72)
+      FIELD_CAST (horiz_alignment, RC, BS, 72)
     if (obj->opts & 64)
       FIELD_2RD (alignment_pt, 11)
     if (obj->opts & 256)
-      FIELD_RC (vert_alignment, 73);
+      FIELD_CAST (vert_alignment, RC, BS, 73);
   }
   VERSIONS(R_13,R_14)
     {
@@ -1494,9 +1495,9 @@ void encode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
 #endif //#if IS_ENCODER
 
 #ifdef IS_FREE
-void free_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj);
+void free_3dsolid(Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj);
 
-void free_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
+void free_3dsolid(Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
 {
   unsigned int i;
   int vcount;
@@ -1512,7 +1513,7 @@ void free_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
     }
 }
 #undef FREE_3DSOLID
-#define FREE_3DSOLID free_3dsolid(dat, obj, _obj)
+#define FREE_3DSOLID free_3dsolid(obj, _obj)
 #endif
 
 
@@ -1899,9 +1900,9 @@ DWG_OBJECT(BLOCK_HEADER)
     FIELD_RD (base_pt.z, 30);
     FIELD_2RD (base_pt, 10);
     FIELD_RC (block_scaling, 0);
-    FIELD_RS (owned_object_count, 0);
+    FIELD_CAST (owned_object_count, RS, BL, 0);
     FIELD_RC (flag2, 0);
-    FIELD_RS (insert_count, 0);
+    FIELD_CAST (insert_count, RS, RL, 0);
     FIELD_RS (flag3, 0);
   }
   SINCE(R_13) {
@@ -2211,7 +2212,7 @@ DWG_OBJECT(VIEW)
     FIELD_RD (width, 41);
     FIELD_3RD (target, 12);
     FIELD_3RD (direction, 11);
-    FIELD_RS (view_mode, 71);
+    FIELD_CAST (view_mode, RS, 4BITS, 71);
     FIELD_RD (lens_length, 42);
     FIELD_RD (front_clip, 43);
     FIELD_RD (back_clip, 44);
@@ -2357,7 +2358,7 @@ DWG_OBJECT(VPORT)
     FIELD_RD (lens_length, 42);
     FIELD_RD (front_clip, 43);
     FIELD_RD (back_clip, 33);
-    FIELD_RS (view_mode, 71);
+    FIELD_CAST (view_mode, RS, 4BITS, 71);
 
     FIELD_2RD (lower_left, 10);
     FIELD_2RD (upper_right, 11);
@@ -2367,7 +2368,7 @@ DWG_OBJECT(VPORT)
     FIELD_RC (UCSICON, 74);
     FIELD_RC (GRIDMODE, 76);
     FIELD_2RD (GRIDUNIT, 15);
-    FIELD_RS (SNAPMODE, 75);
+    FIELD_CAST (SNAPMODE, RS, B, 75);
     FIELD_RC (SNAPSTYLE, 77);
     FIELD_RS (SNAPISOPAIR, 78);
     FIELD_RD (SNAPANG, 50);
@@ -2455,13 +2456,13 @@ DWG_OBJECT_END
 /*(66)*/
 DWG_OBJECT(APPID_CONTROL)
 
-  FIELD_BS (num_entries, 70);
+  FIELD_BS (num_apps, 70);
 
-  //UNTIL(R_2007) {
-  FIELD_HANDLE (null_handle, 4, 0);
-  //}
+  UNTIL(R_2007) {
+    FIELD_HANDLE (null_handle, 4, 0);
+  }
   XDICOBJHANDLE(3);
-  HANDLE_VECTOR(apps, num_entries, 2, 0);
+  HANDLE_VECTOR(apps, num_apps, 2, 0);
 
 DWG_OBJECT_END
 
@@ -3024,7 +3025,7 @@ DWG_ENTITY(IMAGE)
   FIELD_RC (contrast, 282);
   FIELD_RC (fade, 283);
   SINCE(R_2010) {
-    FIELD_BS (clip_mode, 290); // 0 outside, 1 inside
+    FIELD_B (clip_mode, 290); // 0 outside, 1 inside
   }
   FIELD_BS (clip_boundary_type, 71); // 1 rect, 2 polygon
   if (FIELD_VALUE(clip_mode) == 1)
@@ -3672,7 +3673,8 @@ DWG_ENTITY(TABLE)
   FIELD_BL (num_rows, 91);
   FIELD_VECTOR (col_widths, BD, num_cols, 142);
   FIELD_VECTOR (row_heights, BD, num_rows, 141);
-  REPEAT_N((long)(FIELD_VALUE(num_rows)*FIELD_VALUE(num_cols)), cells, Dwg_TABLE_Cell)
+  FIELD_VALUE(num_cells) = FIELD_VALUE(num_rows) * FIELD_VALUE(num_cols);
+  REPEAT(num_cells, cells, Dwg_TABLE_Cell)
     {
       FIELD_BS (cells[rcount].type, 171);
       FIELD_RC (cells[rcount].flags, 172);
@@ -3963,8 +3965,8 @@ DWG_ENTITY(TABLE)
     FIELD_HANDLE (seqend, 3, 0);
   
   FIELD_HANDLE (table_style_id, 5, 342);
-  
-  REPEAT_N((long)(FIELD_VALUE(num_rows)*FIELD_VALUE(num_cols)), cells, Dwg_TABLE_Cell)
+
+  REPEAT(num_cells, cells, Dwg_TABLE_Cell)
     {
       if (FIELD_VALUE(cells[rcount].type) == 1)
         { /* text cell */
@@ -4219,6 +4221,9 @@ DWG_OBJECT_END
 
 // pg.246 20.4.102
 // added with r2008, backcompat with r2007
+// unused
+//#define DEBUG_CELLSTYLEMAP
+#ifdef DEBUG_CELLSTYLEMAP
 DWG_OBJECT(CELLSTYLEMAP)
 
   FIELD_BL (num_cells, 90);
@@ -4232,6 +4237,7 @@ DWG_OBJECT(CELLSTYLEMAP)
   END_REPEAT (cells);
 
 DWG_OBJECT_END
+#endif
   
 //pg.246 20.4.103
 DWG_OBJECT(TABLEGEOMETRY)
@@ -4287,12 +4293,16 @@ DWG_OBJECT(XRECORD)
            vcount++)
         {
           FIELD_VALUE(objid_handles) = vcount
-            ? (BITCODE_H*) realloc(FIELD_VALUE(objid_handles), sizeof(Dwg_Object_Ref) * (vcount+1))
+            ? (BITCODE_H*) realloc(FIELD_VALUE(objid_handles),
+                                   (vcount+1) * sizeof(Dwg_Object_Ref))
             : (BITCODE_H*) malloc(sizeof(Dwg_Object_Ref));
           FIELD_HANDLE_N (objid_handles[vcount], vcount, ANYCODE, 0);
         }
       FIELD_VALUE(num_objid_handles) = vcount;
     }
+    #ifndef IS_DECODER
+      HANDLE_VECTOR(objid_handles, num_objid_handles, 4, 0);
+    #endif
 
 DWG_OBJECT_END
 
@@ -4310,6 +4320,8 @@ DWG_OBJECT_END
 
 // just guessing:
 // VBA_PROJECT (81 + varies)
+//#define DEBUG_VBA_PROJECT
+#ifdef DEBUG_VBA_PROJECT
 DWG_OBJECT(VBA_PROJECT)
 
   FIELD_RL(num_bytes, 0)
@@ -4322,6 +4334,7 @@ DWG_OBJECT(VBA_PROJECT)
   XDICOBJHANDLE(3);
 
 DWG_OBJECT_END
+#endif
 
 // SCALE (varies)
 // 20.4.92 page 221
@@ -4341,8 +4354,12 @@ DWG_OBJECT(SCALE)
 
 DWG_OBJECT_END
 
-/* pg. 157, 20.4.48 (varies) */
-DWG_ENTITY(MLEADER)
+/* pg. 157, 20.4.48 (varies)
+   AcDbMLeader. broken leader_lines/points
+ */
+//#define DEBUG_MULTILEADER
+#ifdef DEBUG_MULTILEADER
+DWG_ENTITY(MULTILEADER)
 
   SINCE(R_2010)
     {
@@ -4360,8 +4377,8 @@ DWG_ENTITY(MLEADER)
   REPEAT(ctx.num_leaders, ctx.leaders, Dwg_Leader)
     {
 #     define lev1 ctx.leaders[rcount]
-      FIELD_B (lev1.is_valid, 290);
-      FIELD_B (lev1.unknown, 291);
+      FIELD_B (lev1.is_valid, 290);  //1
+      FIELD_B (lev1.num_lines, 291); //1
       FIELD_3BD (lev1.connection, 10);
       FIELD_3BD (lev1.direction, 11);
       FIELD_BL (lev1.num_breaks, 0);
@@ -4372,14 +4389,15 @@ DWG_ENTITY(MLEADER)
         }
       END_REPEAT (lev1.breaks);
       FIELD_BL (lev1.index, 90);
-      FIELD_BD (lev1.landing_distance, 40);
+      FIELD_BD (lev1.landing_distance, 40); //ok
+      // num_lines was missing
       REPEAT2(lev1.num_lines, lev1.lines, Leader_Line)
         {
 #         define lev2 lev1.lines[rcount2]
-          FIELD_BL (lev2.num_points, 0);
+          FIELD_BL (lev2.num_points, 0); //ok?
           REPEAT3(lev2.num_points, lev2.points, BITCODE_3BD)
             {
-              FIELD_3BD (lev2.points[rcount3], 10);
+              FIELD_3BD (lev2.points[rcount3], 10); //nok
             }
           END_REPEAT (lev2.points);
           FIELD_BL (lev2.num_breaks, 0);
@@ -4413,7 +4431,7 @@ DWG_ENTITY(MLEADER)
   END_REPEAT (ctx.leaders);
 
   FIELD_BD (ctx.scale, 40);
-  FIELD_3BD (ctx.content_base, 10);
+  FIELD_3BD (ctx.content_base, 10); //broken
   FIELD_BD (ctx.text_height, 41);
   FIELD_BD (ctx.arrow_size, 140);
   FIELD_BD (ctx.landing_gap, 145);
@@ -4543,6 +4561,7 @@ DWG_ENTITY(MLEADER)
   //COMMON_ENTITY_HANDLE_DATA; //??
 
 DWG_ENTITY_END
+#endif
 
 /* par 20.4.87 (varies) */
 DWG_OBJECT(MLEADERSTYLE)
@@ -4563,17 +4582,14 @@ DWG_OBJECT(MLEADERSTYLE)
   FIELD_BD (second_seg_angle, 41);
   FIELD_BS (type, 173);
   FIELD_CMC (line_color, 91);
-  FIELD_HANDLE (line_type, 5, 340);
   FIELD_BL (linewt, 92);
   FIELD_B (landing, 290);
   FIELD_BD (landing_gap, 42);
   FIELD_B (dog_leg, 291);
   FIELD_BD (landing_dist, 43);
   FIELD_TV (description, 3);
-  FIELD_HANDLE (arrow_head, 5, 341);
-  FIELD_BD (arrow_head_size, 444);
+  FIELD_BD (arrow_head_size, 44);
   FIELD_TV (text_default, 300);
-  FIELD_HANDLE (text_style, 5, 342);
   FIELD_BS (attach_left, 174);
   FIELD_BS (attach_right, 178);
   FIELD_BS (text_angle_type, 175);
@@ -4581,11 +4597,11 @@ DWG_OBJECT(MLEADERSTYLE)
   FIELD_CMC (text_color, 93);
   FIELD_BD (text_height, 45);
   FIELD_B (text_frame, 292);
-  SINCE (R_2010) {  //IF IsNewFormat OR DXF file
+  //is_new_format: if the object has extended data for APPID “ACAD_MLEADERVER”.
+  if (FIELD_VALUE(is_new_format) || dat->version >= R_2010) {
     FIELD_B (text_always_left, 297);
   }
   FIELD_BD (align_space, 46);
-  FIELD_HANDLE (block, 5, 343);
   FIELD_CMC (block_color, 94);
   FIELD_BD (block_scale.x, 47);
   FIELD_BD (block_scale.y, 49);
@@ -4605,6 +4621,12 @@ DWG_OBJECT(MLEADERSTYLE)
       FIELD_BS (attach_top, 273);
       FIELD_BS (attach_bottom, 272);
     }
+
+  // wrong documentation in the ODA. the handles are at the end.
+  FIELD_HANDLE (line_type, 5, 340);
+  FIELD_HANDLE (arrow_head, 5, 341);
+  FIELD_HANDLE (text_style, 5, 342);
+  FIELD_HANDLE (block, 5, 343);
 
 DWG_OBJECT_END
 
@@ -4639,8 +4661,7 @@ DWG_ENTITY(WIPEOUT)
   FIELD_RC (contrast, 282);
   FIELD_RC (fade, 283);
 
-  SINCE(R_2010)
-  {
+  SINCE(R_2010) {
     FIELD_B (clip_mode, 290);
   }
   FIELD_BS (clip_boundary_type, 71); // 1 rect, 2 polygon
@@ -4698,23 +4719,21 @@ DWG_ENTITY(LONG_TRANSACTION)
 
 DWG_ENTITY_END
 
-/*
 // r2007+
 DWG_OBJECT(VISUALSTYLE)
 
-  // hard-pointer to H DICTIONARY_VISUALSTYLE
-  FIELD_HANDLE (visualstyle, 5);
+  FIELD_HANDLE (dictionary, 5, 0);
 
 DWG_OBJECT_END
+
+/*
+Those undocumented objects are stored as raw UNKNOWN_OBJ:
 
 // r2000+
 DWG_OBJECT(ARCALIGNEDTEXT)
-
-  LOG_INFO("TODO ARCALIGNEDTEXT\n");
-
 DWG_OBJECT_END
 
-//(varies)
+//(varies) lots of fields in the DXF docs
 DWG_OBJECT(MATERIAL)
 DWG_OBJECT_END
 
@@ -4742,11 +4761,3 @@ DWG_OBJECT_END
 DWG_OBJECT(LEADEROBJECTCONTEXTDATA)
 DWG_OBJECT_END
 */
-
-
-
-
-
-
-
-

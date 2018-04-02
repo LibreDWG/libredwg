@@ -28,8 +28,8 @@
       FIELD_VALUE(dwg_version) = dwg->header.dwg_version;
       FIELD_VALUE(maint_version) = dwg->header.maint_version;
       memcpy(FIELD_VALUE(unknown_rs),tmpunknown,sizeof(tmpunknown));
-      FIELD_VALUE(TDCREATE)   = dwg->header_vars.TDCREATE;
-      FIELD_VALUE(TDUPDATE)   = dwg->header_vars.TDUPDATE;
+      //FIELD_VALUE(TDCREATE)   = dwg->header_vars.TDCREATE;
+      //FIELD_VALUE(TDUPDATE)   = dwg->header_vars.TDUPDATE;
     }
   }
 
@@ -50,15 +50,17 @@
   for (i=0; i<6; i++) {
     #undef FORMAT_RS
     #define FORMAT_RS "0x%" PRIx16
-    FIELD_RS(unknown_rs[i], 0); /* 5 0x893 5 0x893 0 1 0 0 0 0 */
+    FIELD_RS(unknown_rs[i], 0); /* 5 0x893 5 0x893 0 1 */
     #undef FORMAT_RS
     #define FORMAT_RS "%" PRIu16
   }
-for (i=0; i<5; i++) { // or 8
-    FIELD_RS(zero_l[i], 0);
+  for (i=0; i<20; i++) { // documented as 5xRL, but really looks like some RC flags
+    FIELD_RC(unknown_rc[i], 0);
   }
-  FIELD_TIMEBLL(TDCREATE, 0);
-  FIELD_TIMEBLL(TDUPDATE, 0);
+  DEBUG_HERE();
+  FIELD_RD(TDCREATE, 0);
+  DEBUG_HERE();
+  FIELD_RD(TDUPDATE, 0);
   FIELD_RL(HANDSEED, 0);
   FIELD_RL(plot_stamp, 0);
   FIELD_RS(zero_1, 0);
@@ -70,14 +72,12 @@ for (i=0; i<5; i++) { // or 8
   FIELD_RL(zero_5, 0);
   FIELD_RL(zero_6, 0);
   FIELD_RL(zero_7, 0);
+  FIELD_RL(zero_8, 0);
+  DEBUG_HERE();
 
   SINCE(R_2018) {
     for (i = 0; i < 3; i++) {
       FIELD_RS(zero_18[i], 0);
     }
   }
-
-
-
-
 

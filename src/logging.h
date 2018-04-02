@@ -37,13 +37,12 @@
 #define DWG_LOGLEVEL_TRACE   3 //eg for each field value parsed
 #define DWG_LOGLEVEL_HANDLE  4 //print all referenced objects (handles)
 #define DWG_LOGLEVEL_INSANE  5 //print all vector data (string content)
-// #define LOGLEVEL_FOO .. //if more codes are necessary
+// #define LOGLEVEL_FOO ..     //if more codes are necessary
 #define DWG_LOGLEVEL_ALL     9
 
 #ifndef DWG_LOGLEVEL
 #define DWG_LOGLEVEL DWG_LOGLEVEL_ERROR
-//#define DWG_LOGLEVEL DWG_LOGLEVEL_NONE //default loglevel
-#endif //ifndef LOGLEVEL
+#endif
 
 #define HANDLER fprintf
 #define OUTPUT stderr
@@ -85,4 +84,4 @@
         }
 #endif
 
-#endif //#ifndef LOGGING_H
+#endif

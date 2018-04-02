@@ -535,29 +535,30 @@ BITCODE_BD
 bit_read_BD(Bit_Chain * dat)
 {
   unsigned char two_bit_code;
-  long int *res;
-  double result;
 
   two_bit_code = bit_read_BB(dat);
-
   if (two_bit_code == 0)
-    {
-      result = bit_read_RD(dat);
-      return (result);
-    }
+      return bit_read_RD(dat);
   else if (two_bit_code == 1)
-    return (1.0);
+    return 1.0;
   else if (two_bit_code == 2)
-    return (0.0);
+    return 0.0;
   else /* if (two_bit_code == 3) */
     {
       LOG_ERROR("bit_read_BD: unexpected 2-bit code: '11'")
-      /* create a Not-A-Number (NaN) */
-      res = (long int *) &result;
-      res[0] = -1;
-      res[1] = -1;
-      return (result);
+      return bit_nan();
     }
+}
+
+/* create a Not-A-Number (NaN) without libm dependency */
+BITCODE_BD
+bit_nan(void)
+{
+  double result;
+  int32_t *res = (int32_t*) &result;
+  res[0] = -1;
+  res[1] = -1;
+  return result;
 }
 
 /** Write 1 bitdouble (compacted data).

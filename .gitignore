@@ -17,12 +17,16 @@ TAGS
 gcov.log
 
 # globs, in specific dirs
+/00*.patch
 /examples/*.log
 /examples/*.bmp
 /examples/*-dwgrewrite.dwg
 /src/*.gcno
 /src/*.gcov
 /src/*.gcda
+/programs/*.log
+/programs/*.bmp
+/programs/*-dwgrewrite.dwg
 /test/testcases/*.gcov
 /test/testcases/*.gcno
 /test/testcases/*.gcda
@@ -31,9 +35,11 @@ gcov.log
 /test/xmlsuite/testsuite.gcda
 /test/unit-testing/*.gcov
 /test/unit-testing/*.gcno
-/test/unit-testing/*.gcdax
+/test/unit-testing/*.gcda
 
 # specific filenames
+/.gdbinit
+/.lldbinit
 /.cproject
 /.project
 /GPATH
@@ -57,24 +63,26 @@ gcov.log
 /build-aux/test-driver
 /build-aux/texinfo.tex
 /check-dwg.log
+/check-dwg-valgrind.log
 /config.cache
 /config.log
 /config.status
 /configure
 /cover_db
+/cscope.files
 /doc/LibreDWG.info
 /doc/LibreDWG.pdf
 /doc/stamp-vti
 /doc/version.texi
-/examples/dwgbmp
-/examples/load_dwg
-/examples/dwgrewrite
-/examples/dwgread
+/programs/dwgbmp
+/programs/dwgrewrite
+/programs/dwgread
+/programs/dwg2SVG
+/programs/dwg2dxf
+/programs/dwg_ps
+/programs/dxf2dwg
 /examples/dwg2svg2
-/examples/dwg2SVG
-/examples/dwg2dxf
-/examples/dwg_ps
-/examples/dxf2dwg
+/examples/load_dwg
 /libtool
 /m4/libtool.m4
 /m4/ltoptions.m4

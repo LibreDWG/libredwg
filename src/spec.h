@@ -11,17 +11,33 @@
 /*****************************************************************************/
 
 #ifdef IS_ENCODER
-#define ENCODER if (1)
 #define DECODER if (0)
+#define ENCODER if (1)
+#define PRINT   if (0)
+#define FREE    if (0)
 #endif
 
 #ifdef IS_DECODER
-#define ENCODER if (0)
 #define DECODER if (1)
+#define ENCODER if (0)
+#define PRINT   if (0)
+#define FREE    if (0)
 #undef IF_ENCODE_FROM_EARLIER
 #define IF_ENCODE_FROM_EARLIER if (0)
 #undef IF_ENCODE_FROM_PRE_R13
 #define IF_ENCODE_FROM_PRE_R13 if (0)
+#endif
+
+#if defined(IS_PRINT)
+#define PRINT   if (1)
+#define FREE    if (0)
+#endif
+
+#if defined(IS_FREE)
+#define PRINT   if (0)
+#define FREE    if (1)
+#else
+#define END_REPEAT(field)
 #endif
 
 #if defined(IS_PRINT) || defined(IS_FREE)
@@ -31,10 +47,6 @@
 #define IF_ENCODE_FROM_EARLIER if (0)
 #undef IF_ENCODE_FROM_PRE_R13
 #define IF_ENCODE_FROM_PRE_R13 if (0)
-#endif
-
-#ifndef IS_FREE
-#define END_REPEAT(field)
 #endif
 
 #define COMMON_TABLE_FLAGS \

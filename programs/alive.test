@@ -1,0 +1,101 @@
+#!/bin/sh
+# alive.test
+#
+# Copyright (C) 2010 Thien-Thi Nguyen
+#
+# This program is free software, licensed under the terms of the GNU
+# General Public License as published by the Free Software Foundation,
+# either version 3 of the License, or (at your option) any later version.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# Author: Thien-Thi Nguyen
+# Modified: Reini Urban
+
+# Commentary:
+
+# This is a provisional test until something better comes along.
+# It checks "aliveness" and the program returning success, and not
+# correctness or performance.
+#
+# It relies on the TESTS_ENVIRONMENT Makefile.am variable to set
+# `PROGS'.  Each prog in PROGS is run against a set of example DWGs,
+# and if *not* successful the maximally verbose
+# output (from setting LIBREDWG_TRACE=9) is saved in a file whose
+# name is DWG-PROG.log.
+#
+# If there are no problems, exit successfully.  Otherwise display
+# the count of problem runs, the list of *.log files and finally
+# exit failurefully.
+
+# Code:
+
+test "$PROGS" || { echo ERROR: Env var PROGS not set ; exit 1 ; }
+test "$datadir" || { echo ERROR: Env var datadir not set ; exit 1 ; }
+
+problems=0
+rm -f dwg*.log
+
+run ()
+{
+    prog=$1
+    dwg=$2
+
+    bprog=$(basename $prog .exe)
+    bdwg=$(basename $dwg .dwg)
+    log=$bdwg-$bprog.log
+    arg="${datadir}/$dwg.dwg"
+    if test $bprog = dwgrewrite; then
+        rm $dwg-dwgrewrite.dwg
+        arg="$arg ${datadir}/$dwg-$bprog.dwg"
+    fi
+    echo LIBREDWG_TRACE=5 $TESTPROG ./$prog $arg
+    if LIBREDWG_TRACE=5 $TESTPROG ./$prog $arg > $log 2>&1
+    then
+        rm $log
+    else
+        if test $bprog = dwgbmp -a $bdwg = Leader_2004
+        then
+            # exits with -1, no thumbnail
+            rm $log
+        else
+            if test $bprog = dwgrewrite -o $bprog = dxf2dwg
+            then
+                tmpnum=$(expr 1 + $problems)
+                echo $(basename $0): TODO $prog $tmpnum failures
+                ls -l $log
+            else
+                problems=$(expr 1 + $problems)
+            fi
+        fi
+    fi
+}
+
+DATA="sample_2000 example_2000 r14/Leader_r14 2000/Leader_2000 2004/Leader_2004"
+TODO="r11/ACEL10 2007/Leader_2007 2010/Leader_2010 2013/Leader_2013"
+
+for d in $DATA; do
+    b=$(basename $d)
+    rm $b.dxf 2>/dev/null
+    rm $b.svg 2>/dev/null
+    rm $b.ps 2>/dev/null
+    rm $b.bmp 2>/dev/null
+    rm $b-rewrite.dwg 2>/dev/null
+done
+
+for prog in $PROGS ; do
+    for dwg in $DATA; do
+        run $prog $dwg
+    done
+done
+#run dwgread r11/ACEL10
+
+if [ 0 = $problems ] ; then
+    exit 0
+else
+    echo $(basename $0): $problems failures
+    ls -l *.log
+    exit 1
+fi
+
+# alive.test ends here

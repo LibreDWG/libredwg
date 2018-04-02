@@ -34,6 +34,7 @@
 #include "bits.h"
 #include "dwg.h"
 #include "encode.h"
+#include "decode.h"
 
 /* The logging level for the write (encode) path.  */
 static unsigned int loglevel;
@@ -229,7 +230,8 @@ static bool env_var_checked_p;
 #define HANDLE_VECTOR(name, sizefield, code, dxf) \
   HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code, dxf)
 
-#define FIELD_XDATA(name, size)
+#define FIELD_XDATA(name, size) \
+  dwg_encode_xdata(dat, _obj, _obj->size)
 
 #define COMMON_ENTITY_HANDLE_DATA  \
   SINCE(R_13) {\
@@ -313,6 +315,8 @@ dwg_encode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg,
                                Dwg_Object_Ref* ref, unsigned int code);
 void
 dwg_encode_add_object(Dwg_Object * obj, Bit_Chain * dat, unsigned long address);
+static void
+dwg_encode_xdata(Bit_Chain * dat, Dwg_Object_XRECORD *obj, int size);
 
 /*--------------------------------------------------------------------------------
  * Public variables
@@ -968,21 +972,24 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "SCALE"))
     {
-      UNTESTED_CLASS;
       assert(!is_entity);
       dwg_encode_SCALE(dat, obj);
       return 1;
     }
-  if (!strcmp(dxfname, "MLEADER"))
+  if (!strcmp(dxfname, "MULTILEADER"))
     {
-      UNTESTED_CLASS;
       assert(is_entity);
-      dwg_encode_MLEADER(dat, obj);
+#ifdef DEBUG_MULTILEADER
+      UNTESTED_CLASS; // broken decoder
+      dwg_encode_MULTILEADER(dat, obj);
       return 1;
+#else
+      UNHANDLED_CLASS;
+      return 0;
+#endif
     }
   if (!strcmp(dxfname, "MLEADERSTYLE"))
     {
-      UNTESTED_CLASS;
       assert(!is_entity);
       dwg_encode_MLEADERSTYLE(dat, obj);
       return 1;
@@ -1003,11 +1010,16 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "VBA_PROJECT"))
     {
+      assert(!is_entity);
+#ifdef DEBUG_VBA_PROJECT
       // Has its own section?
       UNTESTED_CLASS;
-      assert(!is_entity);
-      //dwg_encode_VBA_PROJECT(dat, obj);
+      dwg_encode_VBA_PROJECT(dat, obj);
+      return 1;
+#else
+      UNHANDLED_CLASS;
       return 0;
+#endif
     }
   if (!strcmp(dxfname, "WIPEOUTVARIABLE"))
     {
@@ -1018,17 +1030,21 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "CELLSTYLEMAP"))
     {
-      UNHANDLED_CLASS; //broken
       assert(!is_entity);
-      //dwg_encode_CELLSTYLEMAP(dat, obj);
+#ifdef DEBUG_CELLSTYLEMAP
+      UNTESTED_CLASS; //broken
+      dwg_encode_CELLSTYLEMAP(dat, obj);
+      return 1;
+#else
+      UNHANDLED_CLASS;
       return 0;
+#endif
     }
   if (!strcmp(dxfname, "VISUALSTYLE"))
     {
-      UNHANDLED_CLASS;
       assert(!is_entity);
-      //dwg_encode_VISUALSTYLE(dat, obj);
-      return 0;
+      dwg_encode_VISUALSTYLE(dat, obj);
+      return 1;
     }
   if (!strcmp(dxfname, "DIMASSOC"))
     {
@@ -1514,8 +1530,8 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
         bit_write_H(dat, &(ent->eed[i].handle));
         bit_write_RC(dat, ent->eed[i].data->code);
         LOG_TRACE("EED[%u] code: " FORMAT_RC "\n", i, ent->eed[i].data->code)
-        for (j=0; j < ent->eed[i].size-2; j++)
-          bit_write_RC(dat, ent->eed[i].data->u.raw[j]);
+        for (j=1; j < ent->eed[i].size-1; j++)
+          bit_write_RC(dat, ent->eed[i].raw[j]);
 
         if (i+1 < num_eed)
           bit_write_BS(dat, ent->eed[i+1].size);
@@ -1633,8 +1649,7 @@ void
 dwg_encode_handleref_with_code(Bit_Chain* dat, Dwg_Object* obj, Dwg_Data* dwg,
                                Dwg_Object_Ref* ref, unsigned int code)
 {
-  //XXX fixme. will this function be necessary?
-  //create the handle, then check the code. will it be necessary?
+  //XXX fixme. create the handle, then check the code.
   dwg_encode_handleref(dat, obj, dwg, ref);
   if (ref->handleref.code != code)
     {
@@ -1673,8 +1688,8 @@ dwg_encode_object(Dwg_Object * obj, Bit_Chain * dat)
         bit_write_H(dat, &(ord->eed[i].handle));
         bit_write_RC(dat, ord->eed[i].data->code);
         LOG_TRACE("EED[%u] code: " FORMAT_RC "\n", i, ord->eed[i].data->code)
-        for (j=0; j < ord->eed[i].size-2; j++)
-          bit_write_RC(dat, ord->eed[i].data->u.raw[j]);
+        for (j=1; j < ord->eed[i].size-1; j++)
+          bit_write_RC(dat, ord->eed[i].raw[j]);
 
         if (i+1 < num_eed)
           bit_write_BS(dat, ord->eed[i+1].size);
@@ -1704,6 +1719,68 @@ dwg_encode_header_variables(Bit_Chain* dat, Dwg_Data * dwg)
   Dwg_Object* obj = NULL;
 
   #include "header_variables.spec"
+}
+
+static void
+dwg_encode_xdata(Bit_Chain * dat, Dwg_Object_XRECORD *obj, int size)
+{
+  Dwg_Resbuf *tmp, *rbuf = obj->xdata;
+  short type;
+  int i;
+
+  while (rbuf)
+    {
+      tmp = rbuf->next;
+      type = get_base_value_type(rbuf->type);
+      switch (type)
+        {
+        case VT_STRING:
+          UNTIL(R_2007) {
+            bit_write_RS(dat, rbuf->value.str.size);
+            bit_write_RC(dat, rbuf->value.str.codepage);
+            for (i = 0; i < rbuf->value.str.size; i++)
+              bit_write_RC(dat, rbuf->value.str.u.data[i]);
+          } LATER_VERSIONS {
+            bit_write_RS(dat, rbuf->value.str.size);
+            for (i = 0; i < rbuf->value.str.size; i++)
+              bit_write_RS(dat, rbuf->value.str.u.wdata[i]);
+          }
+          break;
+        case VT_REAL:
+          bit_write_RD(dat, rbuf->value.dbl);
+          break;
+        case VT_BOOL:
+        case VT_INT8:
+          bit_write_RC(dat, rbuf->value.i8);
+          break;
+        case VT_INT16:
+          bit_write_RS(dat, rbuf->value.i16);
+          break;
+        case VT_INT32:
+          bit_write_RL(dat, rbuf->value.i32);
+          break;
+        case VT_POINT3D:
+          bit_write_RD(dat, rbuf->value.pt[0]);
+          bit_write_RD(dat, rbuf->value.pt[1]);
+          bit_write_RD(dat, rbuf->value.pt[2]);
+          break;
+        case VT_BINARY:
+          bit_write_RC(dat, rbuf->value.str.size);
+          for (i = 0; i < rbuf->value.str.size; i++)
+            bit_write_RC(dat, rbuf->value.str.u.data[i]);
+          break;
+        case VT_HANDLE:
+        case VT_OBJECTID:
+          for (i = 0; i < 8; i++)
+             bit_write_RC(dat, rbuf->value.hdl[i]);
+          break;
+        case VT_INVALID:
+        default:
+          LOG_ERROR("Invalid group code in xdata: %d", rbuf->type)
+          break;
+        }
+      rbuf = tmp;
+    }
 }
 
 #undef IS_ENCODER

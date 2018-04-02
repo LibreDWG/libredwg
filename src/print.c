@@ -314,17 +314,21 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       dwg_print_LWPLINE(dat, obj);
       return 1;
     }
-  if (!strcmp(dxfname, "MLEADER"))
+  if (!strcmp(dxfname, "MULTILEADER"))
     {
-      UNTESTED_CLASS;
-      dwg_print_MLEADER(dat, obj);
+#ifdef DEBUG_MULTILEADER
+      UNTESTED_CLASS; //broken Leader_Line's/Points
+      dwg_print_MULTILEADER(dat, obj);
       return 1;
+#else
+      UNHANDLED_CLASS;
+      return 0;
+#endif
     }
   if (!strcmp(dxfname, "MLEADERSTYLE"))
     {
-      UNTESTED_CLASS; //broken
-      //dwg_print_MLEADERSTYLE(dat, obj);
-      return 0;
+      dwg_print_MLEADERSTYLE(dat, obj);
+      return 1;
     }
   if (!strcmp(dxfname, "OLE2FRAME"))
     {
@@ -397,21 +401,30 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "VBA_PROJECT"))
     {
-      LOG_ERROR("Unhandled Object VBA_PROJECT. Has its own section?\n");
+#ifdef DEBUG_VBA_PROJECT
+      UNTESTED_CLASS;
       dwg_print_VBA_PROJECT(dat, obj);
+      return 1;
+#else
+      UNHANDLED_CLASS;
       return 0;
+#endif
     }
   if (!strcmp(dxfname, "CELLSTYLEMAP"))
     {
+#ifdef DEBUG_CELLSTYLEMAP
       UNTESTED_CLASS;
       dwg_print_CELLSTYLEMAP(dat, obj);
       return 1;
+#else
+      UNHANDLED_CLASS;
+      return 0;
+#endif
     }
   if (!strcmp(dxfname, "VISUALSTYLE"))
     {
-      UNHANDLED_CLASS;
-      //dwg_print_VISUALSTYLE(dat, obj);
-      return 0;
+      dwg_print_VISUALSTYLE(dat, obj);
+      return 1;
     }
   if (!strcmp(dxfname, "AcDbField")) //?
     {

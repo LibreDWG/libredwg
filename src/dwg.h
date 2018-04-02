@@ -269,11 +269,13 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_PROXY_ENTITY = 0x1f2, /* 498 */
   DWG_TYPE_PROXY_OBJECT = 0x1f3, /* 499 */
 
+  DWG_TYPE_FREED = 0x1ff,
+
   /* non-fixed types > 500:
      TABLE, CELLSTYLEMAP, DBCOLOR, DICTIONARYVAR, DICTIONARYWDFLT ,
      FIELD, GROUP, HATCH, IDBUFFER, IMAGE, IMAGEDEF, IMAGEDEF_REACTOR,
      LAYER_INDEX, LAYER_FILTER, LAYOUT, LIGHTLIST, LWPLINE, MATERIAL,
-     MLEADER, MLEADERSTYLE, OLE2FRAME, PLACEHOLDER, PLOTSETTINGS,
+     MULTILEADER, MLEADERSTYLE, OLE2FRAME, PLACEHOLDER, PLOTSETTINGS,
      RASTERVARIABLES, SCALE, SORTENTSTABLE, SPATIAL_FILTER,
      SPATIAL_INDEX, TABLEGEOMETRY, TABLESTYLE, VBA_PROJECT,
      VISUALSTYLE, WIPEOUT, WIPEOUTVARIABLE, XRECORD
@@ -316,7 +318,11 @@ typedef struct _dwg_color /* CmColor: R15 and earlier */
 struct _dwg_binary_chunk
 {
   short size;
-  char *data;
+  int  codepage;
+  union {
+    char *data;
+    DWGCHAR *wdata;
+  } u;
 };
 
 /**
@@ -327,14 +333,13 @@ typedef struct _dwg_resbuf
   short type;
   union
   {
-    char   *str;
     double  pt[3];
     char    i8;
     short   i16;
     int     i32;
     double  dbl;
     unsigned char hdl[8];
-    struct _dwg_binary_chunk chunk;
+    struct _dwg_binary_chunk str;
   } value;
   struct _dwg_resbuf *next;
 } Dwg_Resbuf;
@@ -1545,9 +1550,9 @@ typedef struct _dwg_object_BLOCK_HEADER
   BITCODE_BL __iterator;
   BITCODE_RC flag;  /* preR13 */
   BITCODE_TV entry_name;
-  BITCODE_RC used;  /* preR13 */
+  BITCODE_RS used;  /* preR13 */
   BITCODE_RC flag2; /* preR13 */
-  BITCODE_RC flag3; /* preR13 */
+  BITCODE_RS flag3; /* preR13 */
   BITCODE_B _64_flag;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
@@ -1597,7 +1602,7 @@ typedef struct _dwg_object_LAYER
 {
   BITCODE_RC flag;
   BITCODE_TV entry_name;
-  BITCODE_RC used; /* preR13 */
+  BITCODE_RS used; /* preR13 */
   BITCODE_B _64_flag;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
@@ -1607,7 +1612,7 @@ typedef struct _dwg_object_LAYER
   BITCODE_B locked;
   BITCODE_BS flag_s;
   BITCODE_CMC color;
-  BITCODE_RS color_rs;    /* preR13 */
+  short      color_rs;    /* preR13, needs to be signed */
   BITCODE_RS linetype_rs; /* preR13 */
   BITCODE_H layer_control;
   BITCODE_H* reactors;
@@ -1638,7 +1643,7 @@ typedef struct _dwg_object_SHAPEFILE
 {
   BITCODE_RC flag; /* preR13 */
   BITCODE_TV entry_name;
-  BITCODE_RC used; /* preR13 */
+  BITCODE_RS used; /* preR13 */
   BITCODE_B _64_flag;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
@@ -1690,7 +1695,7 @@ typedef struct _dwg_object_LTYPE
 {
   BITCODE_RC flag; /* preR13 */
   BITCODE_TV entry_name;
-  BITCODE_RC used; /* preR13 */
+  BITCODE_RS used; /* preR13 */
   BITCODE_B _64_flag;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
@@ -1729,7 +1734,7 @@ typedef struct _dwg_object_VIEW
 {
   BITCODE_RC flag; /* preR13 */
   BITCODE_TV entry_name;
-  BITCODE_RC used; /* preR13 */
+  BITCODE_RS used; /* preR13 */
   BITCODE_B _64_flag;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
@@ -1779,7 +1784,7 @@ typedef struct _dwg_object_UCS
 {
   BITCODE_RC flag; /* preR13 */
   BITCODE_TV entry_name;
-  BITCODE_RC used; /* preR13 */
+  BITCODE_RS used; /* preR13 */
   BITCODE_B _64_flag;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
@@ -1815,7 +1820,7 @@ typedef struct _dwg_object_VPORT
 {
   BITCODE_RC flag; /* preR13 */
   BITCODE_TV entry_name;
-  BITCODE_RC used; /* preR13 */
+  BITCODE_RS used; /* preR13 */
   BITCODE_B _64_flag;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
@@ -1874,7 +1879,7 @@ typedef struct _dwg_object_VPORT
  */
 typedef struct _dwg_object_APPID_CONTROL
 {
-  BITCODE_BS num_entries;
+  BITCODE_BS num_apps;
   BITCODE_H null_handle;
   BITCODE_H xdicobjhandle;
   BITCODE_H* apps;
@@ -1887,7 +1892,7 @@ typedef struct _dwg_object_APPID
 {
   BITCODE_RC flag; /* preR13 */
   BITCODE_TV entry_name;
-  BITCODE_RC used; /* preR13 */
+  BITCODE_RS used; /* preR13 */
   BITCODE_B _64_flag;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
@@ -1917,7 +1922,7 @@ typedef struct _dwg_object_DIMSTYLE
 {
   BITCODE_RC flag; /* preR13 */
   BITCODE_TV entry_name;
-  BITCODE_RC used; /* preR13 */
+  BITCODE_RS used; /* preR13 */
   BITCODE_B _64_flag;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
@@ -2040,7 +2045,7 @@ typedef struct _dwg_object_VP_ENT_HDR
 {
   BITCODE_RC flag; /* preR13 */
   BITCODE_TV entry_name;
-  BITCODE_RC used; /* preR13 */
+  BITCODE_RS used; /* preR13 */
   BITCODE_B _64_flag;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
@@ -2328,7 +2333,7 @@ typedef struct _dwg_object_PLACEHOLDER
 } Dwg_Object_PLACEHOLDER;
 
 /**
- * Entity MLEADER (varies)
+ * Entity MULTILEADER (varies)
  * R2000+
  */
 typedef struct
@@ -2463,7 +2468,7 @@ typedef struct
 
 } Dwg_MLEADERAnnotContext;
 
-typedef struct
+typedef struct _dwg_object_MULTILEADER
 {
   BITCODE_BS class_version; /* r2010+ =2 */
   Dwg_MLEADERAnnotContext ctx;
@@ -2508,13 +2513,13 @@ typedef struct
   BITCODE_BS attach_bottom; /* r2010+ */
 
   BITCODE_B text_extended;  /* r2013+ */
-} Dwg_Entity_MLEADER;
+} Dwg_Entity_MULTILEADER;
 
 /**
  * Object MLEADERSTYLE (varies)
  * R2000+
  */
-typedef struct
+typedef struct _dwg_object_MLEADERSTYLE
 {
   BITCODE_BS class_version; /* r2010+ =2 */
 
@@ -2544,6 +2549,7 @@ typedef struct
   BITCODE_CMC text_color;
   BITCODE_BD text_height;
   BITCODE_B text_frame;
+  BITCODE_B is_new_format; /* computed */
   BITCODE_B text_always_left;
   BITCODE_BD align_space;
   BITCODE_H block;
@@ -2747,6 +2753,7 @@ typedef struct _dwg_entity_TABLE
   BITCODE_3BD horiz_direction;
   BITCODE_BL num_cols;
   BITCODE_BL num_rows;
+  unsigned long num_cells; /* computed */
   BITCODE_BD* col_widths;
   BITCODE_BD* row_heights;
   Dwg_TABLE_Cell* cells;
@@ -3495,8 +3502,7 @@ typedef struct _dwg_object_WIPEOUTVARIABLE
  */
 typedef struct _dwg_object_VISUALSTYLE
 {
-  BITCODE_H* dictionary; /* (hard-pointer to DICTIONARY_VISUALSTYLE or reverse?) */
-  /* TODO */
+  BITCODE_H dictionary; /* (hard-pointer to DICTIONARY_VISUALSTYLE or reverse?) */
 } Dwg_Object_VISUALSTYLE;
 
 
@@ -3543,18 +3549,15 @@ typedef struct _dwg_entity_eed_data
 {
   BITCODE_RC code;
   union eed_data_t {
-    char raw[0];           /* inlined */
     struct { /* 0 (1000) string */
       BITCODE_RC length;
-      BITCODE_RS codepage; /* need to swap via ntohs() */
+      BITCODE_RS codepage;
       char string[0];      /* inlined */
     } eed_0;
-#ifdef HAVE_WCHAR_H
     struct { /* R2007+ 0 (1000) string */
       BITCODE_RS length;
       DWGCHAR string[0]; /* inlined */
     } eed_0_r2007;
-#endif
     struct { /* 1 (1001) invalid */
       char invalid[0];
     } eed_1;
@@ -3562,14 +3565,14 @@ typedef struct _dwg_entity_eed_data
       BITCODE_RC byte;
     } eed_2;
     struct { /* 3 (1003) layer */
-      BITCODE_RL layer; /* need to ntohl() */
+      BITCODE_RL layer;
     } eed_3;
     struct { /* 4 (1004) binary */
       BITCODE_RC length;
       char data[0];
     } eed_4;
     struct { /* 5 (1005) entity */
-      BITCODE_RL entity; /* need to ntohl() */
+      BITCODE_RL entity;
     } eed_5;
     struct { /* 10-13 point */
       BITCODE_3RD point;
@@ -3578,10 +3581,10 @@ typedef struct _dwg_entity_eed_data
       BITCODE_RD real;
     } eed_40;
     struct { /* 70 short int */
-      BITCODE_RS rs; /* need to ntohs() */
+      BITCODE_RS rs;
     } eed_70;
     struct { /* 71 long int */
-      BITCODE_RL rl; /* need to ntohl() */
+      BITCODE_RL rl;
     } eed_71;
   } u;
 } Dwg_Eed_Data;
@@ -3591,6 +3594,7 @@ typedef struct _dwg_entity_eed
   BITCODE_BS size;
   Dwg_Handle handle;
   Dwg_Eed_Data *data;
+  char* raw; /* a copy of data */
 } Dwg_Eed;
 
 /**
@@ -3652,7 +3656,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_DUMMY *DUMMY;
     Dwg_Entity_LONG_TRANSACTION *LONG_TRANSACTION;
     Dwg_Entity_LWPLINE *LWPLINE;
-    Dwg_Entity_MLEADER *MLEADER;
+    Dwg_Entity_MULTILEADER *MULTILEADER;
     Dwg_Entity_PROXY_LWPOLYLINE *PROXY_LWPOLYLINE;
     Dwg_Entity_PROXY_ENTITY *PROXY_ENTITY;
     Dwg_Entity_HATCH *HATCH;
@@ -3995,9 +3999,9 @@ typedef struct _dwg_struct
     BITCODE_RS   dwg_version_2;
     BITCODE_RS   maint_version_2;
     BITCODE_RS   unknown_rs[6];
-    BITCODE_RL   zero_l[8];
-    BITCODE_TIMEBLL TDCREATE;
-    BITCODE_TIMEBLL TDUPDATE;
+    BITCODE_RC   unknown_rc[20]; /* some vars */
+    BITCODE_RD   TDCREATE; /* ?? format TD */
+    BITCODE_RD   TDUPDATE;
     BITCODE_RL   HANDSEED;
     BITCODE_RL   plot_stamp;
     BITCODE_RS   zero_1;
@@ -4009,6 +4013,7 @@ typedef struct _dwg_struct
     BITCODE_RL   zero_5;
     BITCODE_RL   zero_6;
     BITCODE_RL   zero_7;
+    BITCODE_RL   zero_8; /* ?? */
     BITCODE_RS   zero_18[3]; /* R2018+ */
   } auxheader;
 
@@ -4030,6 +4035,7 @@ typedef struct _dwg_struct
   Dwg_Object * layer_control;
   Dwg_Object * mspace_block;
   Dwg_Object * pspace_block;
+  Dwg_Object_APPID_CONTROL * appid_control;
 
   struct _dwg_second_header {
     BITCODE_RL size;
@@ -4044,7 +4050,7 @@ typedef struct _dwg_struct
       BITCODE_RC nr;
       BITCODE_BL address;
       BITCODE_BL size;
-    } section[4];
+    } section[6];
     BITCODE_BS num_handlers;
     struct _handler
     {
@@ -4058,7 +4064,6 @@ typedef struct _dwg_struct
 
   long unsigned int measurement;
   unsigned int layout_number;
-
 } Dwg_Data;
 
 /*--------------------------------------------------

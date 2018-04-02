@@ -24,14 +24,13 @@
 #include "common.h"
 #include "bits.h"
 #include "dwg.h"
+#include "decode.h"
 #include "free.h"
 
 static unsigned int loglevel;
 #ifdef USE_TRACING
 static int env_var_checked_p;
 #define DWG_LOGLEVEL loglevel
-#else
-#define DWG_LOGLEVEL DWG_LOGLEVEL_TRACE
 #endif
 #include "logging.h"
 
@@ -53,8 +52,8 @@ static Bit_Chain *dat = &pdat;
 #define FIELD_VALUE(name) _obj->name
 
 #define ANYCODE -1
-#define FIELD_HANDLE(name, code, dxf) FIELD_TV(name, dxf)
-#define FIELD_HANDLE_N(name, vcount, code, dxf) FIELD_TV(name, dxf)
+#define FIELD_HANDLE(name,code,dxf) dwg_free_handleref(_obj->name, dwg)
+#define FIELD_HANDLE_N(name,vcount,code,dxf) FIELD_HANDLE(name, code, dxf)
 
 #define FIELD_B(name,dxf) FIELD(name, B)
 #define FIELD_BB(name,dxf) FIELD(name, BB)
@@ -120,10 +119,21 @@ static Bit_Chain *dat = &pdat;
   HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code, dxf)
 
 #define FIELD_INSERT_COUNT(insert_count, type, dxf)
-#define FIELD_XDATA(name, size)
+#define FIELD_XDATA(name, size) \
+  dwg_free_xdata(_obj, _obj->size)
 
-#define REACTORS(code) FIELD_TV(reactors,0)
-#define ENT_REACTORS(code) FIELD_TV(reactors,0)
+#define REACTORS(code) \
+  for (vcount=0; vcount < (long)obj->tio.object->num_reactors; vcount++) \
+    {\
+      FIELD_HANDLE_N(reactors[vcount], vcount, code, -5); \
+    } \
+    FIELD_TV(reactors,0)
+#define ENT_REACTORS(code)  \
+  for (vcount=0; vcount < obj->tio.entity->num_reactors; vcount++)\
+    {\
+      FIELD_HANDLE_N(reactors[vcount], vcount, code, -5);  \
+    }\
+  FIELD_TV(reactors,0)
 #define XDICOBJHANDLE(code)\
   SINCE(R_2004)\
     {\
@@ -175,6 +185,7 @@ dwg_free_ ##token (Dwg_Object * obj)\
 {\
   int vcount, rcount, rcount2, rcount3, rcount4;\
   Dwg_Entity_##token *ent, *_obj;\
+  Dwg_Data* dwg = obj->parent;\
   LOG_HANDLE("Free entity " #token "\n")\
   ent = obj->tio.entity->tio.token;\
   _obj = ent;
@@ -188,7 +199,8 @@ dwg_free_ ##token (Dwg_Object * obj)\
 static void \
 dwg_free_ ##token (Dwg_Object * obj) \
 { \
- int vcount, rcount, rcount2, rcount3, rcount4; \
+  int vcount, rcount, rcount2, rcount3, rcount4; \
+  Dwg_Data* dwg = obj->parent;\
   Dwg_Object_##token *_obj;\
   LOG_HANDLE("Free object " #token " %p\n", obj)    \
   _obj = obj->tio.object->tio.token;
@@ -196,6 +208,42 @@ dwg_free_ ##token (Dwg_Object * obj) \
 #define DWG_OBJECT_END \
     free(_obj); obj->tio.object->tio.UNKNOWN_OBJ = NULL; \
     free(obj->tio.object); obj->tio.object = NULL; \
+    obj->parent = NULL; \
+    /* free(obj); obj = NULL; */ \
+}
+
+static void
+dwg_free_handleref(Dwg_Object_Ref *ref, Dwg_Data * dwg)
+{
+  long unsigned int i;
+  if (!dwg) {
+    free(ref);
+    return;
+  }
+  for (i=0; i < dwg->num_object_refs; i++)
+    {
+      if (dwg->object_ref[i] == ref)
+        {
+          dwg->object_ref[i] = NULL;
+          free(ref);
+        }
+    }
+}
+
+static void
+dwg_free_xdata(Dwg_Object_XRECORD *obj, int size)
+{
+  Dwg_Resbuf *rbuf = obj->xdata;
+
+  while (rbuf)
+    {
+      Dwg_Resbuf *tmp = rbuf->next;
+      short type = get_base_value_type(rbuf->type);
+      if (type == VT_STRING || type == VT_BINARY)
+        free (rbuf->value.str.u.data);
+      free (rbuf);
+      rbuf = tmp;
+    }
 }
 
 #include "dwg.spec"
@@ -214,174 +262,218 @@ dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
 
   i = obj->type - 500;
   klass = &dwg->dwg_class[i];
-  dxfname = klass->dxfname;
+  dxfname = strdup(klass->dxfname);
 
   if (!strcmp(dxfname, "DICTIONARYVAR"))
     {
       dwg_free_DICTIONARYVAR(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "ACDBDICTIONARYWDFLT"))
     {
       dwg_free_DICTIONARYWDLFT(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "HATCH"))
     {
       dwg_free_HATCH(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "FIELDLIST"))
     {
       dwg_free_FIELDLIST(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "IDBUFFER"))
     {
       dwg_free_IDBUFFER(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "IMAGE"))
     {
       dwg_free_IMAGE(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "IMAGEDEF"))
     {
       dwg_free_IMAGEDEF(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "IMAGEDEF_REACTOR"))
     {
       dwg_free_IMAGEDEF_REACTOR(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "LAYER_INDEX"))
     {
       dwg_free_LAYER_INDEX(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "LAYOUT"))
     {
       dwg_free_LAYOUT(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "LWPLINE"))
     {
       dwg_free_LWPLINE(obj);
-      return 1;
+      goto known;
+    }
+  if (!strcmp(dxfname, "MULTILEADER"))
+    {
+#ifdef DEBUG_MULTILEADER
+      //broken Leader_Line's/Points
+      dwg_free_MULTILEADER(obj);
+      goto known;
+#else
+      goto unknown;
+#endif
     }
   if (!strcmp(dxfname, "MLEADERSTYLE"))
     {
-      //dwg_free_MLEADERSTYLE(obj);
-      return 0;
+      dwg_free_MLEADERSTYLE(obj);
+      goto known;
     }
   if (!strcmp(dxfname, "OLE2FRAME"))
     {
       dwg_free_OLE2FRAME(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "OBJECTCONTEXTDATA")
       || strcmp(klass->cppname, "AcDbObjectContextData"))
     {
       dwg_free_OBJECTCONTEXTDATA(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "ACDBPLACEHOLDER"))
     {
       dwg_free_PLACEHOLDER(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "PROXY"))
     {
       dwg_free_PROXY(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "RASTERVARIABLES"))
     {
       dwg_free_RASTERVARIABLES(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "SCALE"))
     {
       dwg_free_SCALE(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "SORTENTSTABLE"))
     {
       dwg_free_SORTENTSTABLE(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "SPATIAL_FILTER"))
     {
       dwg_free_SPATIAL_FILTER(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "SPATIAL_INDEX"))
     {
       dwg_free_SPATIAL_INDEX(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "TABLE"))
     {
       dwg_free_TABLE(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "WIPEOUTVARIABLE"))
     {
-      //dwg_free_WIPEOUTVARIABLE(obj);
-      return 0;
+      dwg_free_WIPEOUTVARIABLE(obj);
+      goto known;
     }
   if (!strcmp(dxfname, "WIPEOUT"))
     {
       dwg_free_WIPEOUT(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "VBA_PROJECT"))
     {
+#ifdef DEBUG_VBA_PROJECT
       dwg_free_VBA_PROJECT(obj);
-      return 1;
+      goto known;
+#else
+      goto unknown;
+#endif
     }
   if (!strcmp(dxfname, "CELLSTYLEMAP"))
     {
+#ifdef DEBUG_CELLSTYLEMAP
       dwg_free_CELLSTYLEMAP(obj);
-      return 1;
+      goto known;
+#else
+      goto unknown;
+#endif
     }
   if (!strcmp(dxfname, "VISUALSTYLE"))
     {
-      //dwg_free_VISUALSTYLE(obj);
-      return 0;
+      dwg_free_VISUALSTYLE(obj);
+      goto known;
     }
   if (!strcmp(dxfname, "AcDbField")) //?
     {
       dwg_free_FIELD(obj);
-      return 1;
+      goto known;
+    }
+  if (!strcmp(dxfname, "TABLECONTENT"))
+    {
+      dwg_free_TABLECONTENT(obj);
+      goto known;
+    }
+  if (!strcmp(dxfname, "TABLEGEOMETRY"))
+    {
+      dwg_free_TABLEGEOMETRY(obj);
+      goto known;
+    }
+  if (!strcmp(dxfname, "GEODATA"))
+    {
+      dwg_free_GEODATA(obj);
+      goto known;
     }
   if (!strcmp(dxfname, "XRECORD"))
     {
       dwg_free_XRECORD(obj);
-      return 1;
+      goto known;
     }
   if (!strcmp(dxfname, "DIMASSOC"))
     {
-//TODO:      dwg_free_DIMASSOC(obj);
-      return 0;
+      //dwg_free_DIMASSOC(obj);
+      goto unknown;
     }
   if (!strcmp(dxfname, "MATERIAL"))
     {
-//TODO:      dwg_free_MATERIAL(obj);
-      return 0;
+      //dwg_free_MATERIAL(obj);
+      goto unknown;
     }
-
+ unknown:  
+  free(dxfname);
   return 0;
+
+ known:
+  free(dxfname);
+  return 1;
 }
 
 void
 dwg_free_object(Dwg_Object *obj)
 {
-  if (obj->parent)
-    dat->version = obj->parent->header.version;
-  else
+  long unsigned int j;
+  Dwg_Data *dwg;
+
+  if (obj && obj->parent) {
+    dwg = obj->parent;
+    dat->version = dwg->header.version;
+  } else
+    return;
+  if (obj->type == DWG_TYPE_FREED)
     return;
   dat->from_version = dat->version;
   switch (obj->type)
@@ -496,8 +588,7 @@ dwg_free_object(Dwg_Object *obj)
       break;
     case DWG_TYPE_3DSOLID:
       dwg_free__3DSOLID(obj);
-      break; /* Check the type of the object
-              */
+      break; /* Check the type of the object */
     case DWG_TYPE_BODY:
       dwg_free_BODY(obj);
       break;
@@ -615,9 +706,11 @@ dwg_free_object(Dwg_Object *obj)
     case DWG_TYPE_OLEFRAME:
       dwg_free_OLEFRAME(obj);
       break;
+#ifdef DEBUG_VBA_PROJECT
     case DWG_TYPE_VBA_PROJECT:
-      //dwg_free_VBA_PROJECT(obj);
+      dwg_free_VBA_PROJECT(obj);
       break;
+#endif
     case DWG_TYPE_LAYOUT:
       dwg_free_LAYOUT(obj);
       break;
@@ -635,7 +728,6 @@ dwg_free_object(Dwg_Object *obj)
       */
       else if (!dwg_free_variable_type(obj->parent, obj))
         {
-          Dwg_Data *dwg = obj->parent;
           int is_entity;
           int i = obj->type - 500;
           Dwg_Class *klass = NULL;
@@ -645,7 +737,6 @@ dwg_free_object(Dwg_Object *obj)
               klass = &dwg->dwg_class[i];
               is_entity = dwg_class_is_entity(klass);
             }
-          // properly dwg_decode_object/_entity for eed, reactors, xdic
           if (klass && !is_entity)
             {
               dwg_free_UNKNOWN_OBJ(obj);
@@ -660,6 +751,7 @@ dwg_free_object(Dwg_Object *obj)
             }
         }
     }
+  obj->type = DWG_TYPE_FREED;
 }
 
 void
@@ -681,12 +773,19 @@ dwg_free(Dwg_Data * dwg)
       LOG_TRACE("dwg_free %p\n", dwg)
       /*if (dwg->bit_chain && dwg->bit_chain->size)
         free (dwg->bit_chain->chain);*/
-#define FREE_IF(ptr) if (ptr) free(ptr)
+#define FREE_IF(ptr) { if (ptr) free(ptr); }
       for (i=0; i < dwg->num_objects; ++i)
         {
-          dwg_free_object(&dwg->object[i]);
+          if (dwg->object[i].type != DWG_TYPE_BLOCK_CONTROL)
+            dwg_free_object(&dwg->object[i]);
         }
       FREE_IF(dwg->header.section);
+      {
+        Dwg_Header_Variables* _obj = &dwg->header_vars;
+        Dwg_Object* obj = NULL;
+
+        #include "header_variables.spec"
+      }
       if (dwg->picture.size && dwg->picture.chain)
         free(dwg->picture.chain);
       for (i=0; i < dwg->num_classes; ++i)
@@ -695,24 +794,21 @@ dwg_free(Dwg_Data * dwg)
           FREE_IF(dwg->dwg_class[i].cppname);
           FREE_IF(dwg->dwg_class[i].dxfname);
         }
-      if (dwg->num_classes) {
+      if (dwg->num_classes)
         FREE_IF(dwg->dwg_class);
-      }
       for (i=0; i < dwg->header.num_descriptions; ++i)
-        {
-          FREE_IF(dwg->header.section_info[i].sections);
-        }
-      if (dwg->header.num_descriptions) {
+        FREE_IF(dwg->header.section_info[i].sections);
+      if (dwg->header.num_descriptions)
         FREE_IF(dwg->header.section_info);
-      }
       for (i=0; i < dwg->second_header.num_handlers; i++)
+        FREE_IF(dwg->second_header.handlers[i].data);
+      for (i=0; i < dwg->num_objects; ++i)
         {
-          FREE_IF(dwg->second_header.handlers[i].data);
+          if (dwg->object[i].type == DWG_TYPE_BLOCK_CONTROL)
+            dwg_free_object(&dwg->object[i]);
         }
       for (i=0; i < dwg->num_object_refs; ++i)
-        {
-          FREE_IF(dwg->object_ref[i]);
-        }
+        FREE_IF(dwg->object_ref[i]);
       FREE_IF(dwg->object_ref);
       FREE_IF(dwg->object);
 #undef FREE_IF
