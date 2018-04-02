@@ -33,6 +33,11 @@
   LOG_TRACE(#name ": " FORMAT_##type " [" #type " %d]\n", _obj->name, dxfgroup)
 #define FIELD_TRACE(name,type) \
   LOG_TRACE(#name ": " FORMAT_##type " " #type "\n", _obj->name)
+#define LOG_TRACE_TF(var,len) \
+  for (i=0; i<len; i++) { \
+    LOG_TRACE("%02x ", (unsigned char)((char*)var)[i]); \
+  } \
+  LOG_TRACE("\n")
 
 #define FIELD_VALUE(name) _obj->name
 
@@ -116,6 +121,35 @@
 #define FIELD_CMC(name,dxf) \
   { bit_read_CMC(dat, &_obj->name); \
     LOG_TRACE(#name ": index %d\n", _obj->name.index); }
+
+#undef DEBUG_HERE
+#define DEBUG_HERE()\
+  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE) { \
+    Bit_Chain here = *dat; \
+    char *tmp; BITCODE_BB bb; BITCODE_RS rs; BITCODE_RL rl;\
+    LOG_TRACE("DEBUG_HERE @%X.%u:\n  24RC: ", (unsigned int)dat->byte, dat->bit);\
+    tmp = bit_read_TF(dat,24);\
+    LOG_TRACE_TF(tmp, 24);\
+    *dat = here;\
+    LOG_TRACE("  B  :"FORMAT_B"\n", bit_read_B(dat));\
+    *dat = here; bb = bit_read_BB(dat) & 0x3;\
+    LOG_TRACE("  BB :"FORMAT_BB"\n", bb);\
+    *dat = here; rs = bit_read_RS(dat);\
+    LOG_TRACE("  RS :"FORMAT_RS" / 0x%04x\n", rs, rs); \
+    *dat = here; rs = bit_read_BS(dat);\
+    LOG_TRACE("  BS :"FORMAT_BS" / 0x%04x\n", rs, rs);\
+    *dat = here; rl = bit_read_RL(dat);  \
+    LOG_TRACE("  RL :"FORMAT_RL " / 0x%08x\n", rl, rl);\
+    *dat = here;\
+    LOG_TRACE("  RD :"FORMAT_RD "\n", bit_read_RD(dat));\
+    *dat = here; \
+    if (bb != 3) { rl = bit_read_BL(dat);\
+      LOG_TRACE("  BL :"FORMAT_BL " / 0x%08x\n", rl, rl);\
+      *dat = here;\
+      LOG_TRACE("  BD :"FORMAT_BD "\n", bit_read_BD(dat));\
+      *dat = here;\
+    }\
+  }
 
 //FIELD_VECTOR_N(name, type, size):
 // reads data of the type indicated by 'type' 'size' times and stores

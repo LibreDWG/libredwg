@@ -3999,9 +3999,9 @@ typedef struct _dwg_struct
     BITCODE_RS   dwg_version_2;
     BITCODE_RS   maint_version_2;
     BITCODE_RS   unknown_rs[6];
-    BITCODE_RS   zero_rs[5];
-    BITCODE_TIMEBLL TDCREATE;
-    BITCODE_TIMEBLL TDUPDATE;
+    BITCODE_RC   unknown_rc[20]; /* some vars */
+    BITCODE_RD   TDCREATE; /* ?? format TD */
+    BITCODE_RD   TDUPDATE;
     BITCODE_RL   HANDSEED;
     BITCODE_RL   plot_stamp;
     BITCODE_RS   zero_1;
@@ -4013,6 +4013,7 @@ typedef struct _dwg_struct
     BITCODE_RL   zero_5;
     BITCODE_RL   zero_6;
     BITCODE_RL   zero_7;
+    BITCODE_RL   zero_8; /* ?? */
     BITCODE_RS   zero_18[3]; /* R2018+ */
   } auxheader;
 

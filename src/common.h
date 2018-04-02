@@ -37,6 +37,8 @@
 #define UNTIL(v) cur_ver = v; if (dat->version <= v)
 #define LATER_VERSIONS else
 
+#define DEBUG_HERE()
+
 // when writing, check also rewriting from an earlier version and fill in a default then
 #define IF_ENCODE_FROM_EARLIER \
   if (dat->from_version && dat->from_version < cur_ver)
