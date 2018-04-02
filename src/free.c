@@ -366,8 +366,12 @@ dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "VBA_PROJECT"))
     {
+#ifdef DEBUG_VBA_PROJECT
       dwg_free_VBA_PROJECT(obj);
       goto known;
+#else
+      goto unknown;
+#endif
     }
   if (!strcmp(dxfname, "CELLSTYLEMAP"))
     {
@@ -665,9 +669,11 @@ dwg_free_object(Dwg_Object *obj)
     case DWG_TYPE_OLEFRAME:
       dwg_free_OLEFRAME(obj);
       break;
+#ifdef DEBUG_VBA_PROJECT
     case DWG_TYPE_VBA_PROJECT:
-      //dwg_free_VBA_PROJECT(obj);
+      dwg_free_VBA_PROJECT(obj);
       break;
+#endif
     case DWG_TYPE_LAYOUT:
       dwg_free_LAYOUT(obj);
       break;

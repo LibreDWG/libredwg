@@ -1550,7 +1550,7 @@ typedef struct _dwg_object_BLOCK_HEADER
   BITCODE_TV entry_name;
   BITCODE_RS used;  /* preR13 */
   BITCODE_RC flag2; /* preR13 */
-  BITCODE_RC flag3; /* preR13 */
+  BITCODE_RS flag3; /* preR13 */
   BITCODE_B _64_flag;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
@@ -3997,7 +3997,7 @@ typedef struct _dwg_struct
     BITCODE_RS   dwg_version_2;
     BITCODE_RS   maint_version_2;
     BITCODE_RS   unknown_rs[6];
-    BITCODE_RL   zero_l[8];
+    BITCODE_RS   zero_rs[5];
     BITCODE_TIMEBLL TDCREATE;
     BITCODE_TIMEBLL TDUPDATE;
     BITCODE_RL   HANDSEED;

@@ -54,8 +54,8 @@
     #undef FORMAT_RS
     #define FORMAT_RS "%" PRIu16
   }
-for (i=0; i<5; i++) { // or 8
-    FIELD_RS(zero_l[i], 0);
+  for (i=0; i<5; i++) { // documented as 5xRL
+    FIELD_RS(zero_rs[i], 0);
   }
   FIELD_TIMEBLL(TDCREATE, 0);
   FIELD_TIMEBLL(TDUPDATE, 0);
@@ -76,8 +76,3 @@ for (i=0; i<5; i++) { // or 8
       FIELD_RS(zero_18[i], 0);
     }
   }
-
-
-
-
-

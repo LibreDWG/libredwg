@@ -308,9 +308,9 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
 
           //TODO RD elevation 30, 2RD base_pt 10: 24
           FIELD_RC (block_scaling, 0);
-          FIELD_RS (owned_object_count, 0); //TODO cast
+          FIELD_CAST (owned_object_count, RS, BL, 0);
           FIELD_RC (flag2, 0);
-          FIELD_RS (insert_count, 0);
+          FIELD_CAST (insert_count, RS, RL, 0);
           FIELD_RS (flag3, 0);
           CHK_ENDPOS;
         }
@@ -384,7 +384,7 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
           FIELD_RD (width, 41);
           FIELD_3RD (target, 12);
           FIELD_3RD (direction, 11);
-          FIELD_RS (view_mode, 71);
+          FIELD_CAST (view_mode, RS, 4BITS, 71);
           FIELD_RD (lens_length, 42);
           FIELD_RD (front_clip, 43);
           FIELD_RD (back_clip, 44);
@@ -427,7 +427,7 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
           FIELD_RD (lens_length, 42);
           FIELD_RD (front_clip, 43);
           FIELD_RD (back_clip, 33);
-          FIELD_RS (view_mode, 71);
+          FIELD_CAST (view_mode, RS, 4BITS, 71);
 
           FIELD_2RD (lower_left, 10);
           FIELD_2RD (upper_right, 11);
@@ -437,7 +437,7 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
           FIELD_RC (UCSICON, 74);
           FIELD_RC (GRIDMODE, 76);
           FIELD_2RD (GRIDUNIT, 15);
-          FIELD_RS (SNAPMODE, 75);
+          FIELD_CAST (SNAPMODE, RS, B, 75);
           FIELD_RC (SNAPSTYLE, 77);
           FIELD_RS (SNAPISOPAIR, 78);
           FIELD_RD (SNAPANG, 50);
@@ -3142,11 +3142,16 @@ dwg_decode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "VBA_PROJECT"))
     {
+      assert(!is_entity);
+#ifdef DEBUG_VBA_PROJECT
       // Has its own section?
       UNTESTED_CLASS;
-      assert(!is_entity);
       dwg_decode_VBA_PROJECT(dat, obj);
+      return 1;
+#else
+      UNHANDLED_CLASS;
       return 0;
+#endif
     }
   if (!strcmp(dxfname, "MULTILEADER"))
     {

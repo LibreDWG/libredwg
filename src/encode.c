@@ -1010,11 +1010,16 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "VBA_PROJECT"))
     {
+      assert(!is_entity);
+#ifdef DEBUG_VBA_PROJECT
       // Has its own section?
       UNTESTED_CLASS;
-      assert(!is_entity);
-      //dwg_encode_VBA_PROJECT(dat, obj);
+      dwg_encode_VBA_PROJECT(dat, obj);
+      return 1;
+#else
+      UNHANDLED_CLASS;
       return 0;
+#endif
     }
   if (!strcmp(dxfname, "WIPEOUTVARIABLE"))
     {

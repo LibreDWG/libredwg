@@ -401,9 +401,14 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "VBA_PROJECT"))
     {
-      LOG_ERROR("Unhandled Object VBA_PROJECT. Has its own section?\n");
+#ifdef DEBUG_VBA_PROJECT
+      UNTESTED_CLASS;
       dwg_print_VBA_PROJECT(dat, obj);
+      return 1;
+#else
+      UNHANDLED_CLASS;
       return 0;
+#endif
     }
   if (!strcmp(dxfname, "CELLSTYLEMAP"))
     {
