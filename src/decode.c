@@ -53,6 +53,7 @@ static bool env_var_checked_p;
 #define REFS_PER_REALLOC 100
 
 #define MAX(X,Y) ((X) > (Y) ? (X) : (Y))
+#define MIN(X,Y) ((X) < (Y) ? (X) : (Y))
 
 /*--------------------------------------------------------------------------------
  * Private functions
@@ -1128,7 +1129,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
       LOG_TRACE("version: %s\n", _obj->version)
       for (i = 0; i < 4; i++)
         FIELD_B(null_b[i], 0);
-
+      //DEBUG_HERE();
       // documented as 0x18,0x78,0x01,0x04 for R13, 0x18,0x78,0x01,0x05 for R14
       // r14:      7d f4 78 01
       // r2000:    14 64 78 01
@@ -1136,9 +1137,13 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
       for (i = 0; i < 4; i++)
         FIELD_RC(unknown_rc4[i], 0);
 
+      if (dat->version < R_2000 &&
+          FIELD_VALUE(unknown_10) == 0x18 &&
+          FIELD_VALUE(unknown_rc4[0]) == 0x78)
+        dat->byte -= 2;
       UNTIL (R_2000) {
         FIELD_RC(num_sections, 0); // r14: 5, r2000: 6
-        for (i = 0; i < FIELD_VALUE(num_sections); i++)
+        for (i = 0; i < MIN(6,FIELD_VALUE(num_sections)); i++)
           {
             // address+sizes of sections 0-2 is correct, 3+4 is empty
             FIELD_RC(section[i].nr, 0);
@@ -2167,7 +2172,6 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
           obj->eed[idx].data = (Dwg_Eed_Data*)calloc(size + 8, 1);
           obj->eed[idx].data->code = code = bit_read_RC(dat);
           LOG_TRACE("EED[%u] code: %d\n", idx, (int)code);
-#define MIN(X,Y) ((X) < (Y) ? (X) : (Y))
           switch (code)
             {
             case 0:
@@ -2226,7 +2230,6 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
             default:
               LOG_WARN("Unknown EED code %d", code);
             }
-#undef MIN
 #ifdef DEBUG
           // sanity checks
           if (code == 0 || code == 4)
