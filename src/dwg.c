@@ -412,12 +412,12 @@ get_first_owned_object(Dwg_Object* hdr_obj, Dwg_Object_BLOCK_HEADER* hdr)
   if (version >= R_2004)
     {
       hdr->__iterator = 0;
-      if (hdr->entities && hdr->entities[0])
+      if (hdr->entities && hdr->owned_object_count && hdr->entities[0])
         return hdr->entities[0]->obj;
       else
         return NULL;
     }
-
+  //TODO: preR13 block table
   LOG_ERROR("Unsupported version: %d\n", version);
   return NULL;
 }
