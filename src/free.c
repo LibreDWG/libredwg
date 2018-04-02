@@ -53,8 +53,8 @@ static Bit_Chain *dat = &pdat;
 #define FIELD_VALUE(name) _obj->name
 
 #define ANYCODE -1
-#define FIELD_HANDLE(name, code, dxf) {}
-#define FIELD_HANDLE_N(name, vcount, code, dxf) {}
+#define FIELD_HANDLE(name, code, dxf) FIELD_TV(name, dxf)
+#define FIELD_HANDLE_N(name, vcount, code, dxf) FIELD_TV(name, dxf)
 
 #define FIELD_B(name,dxf) FIELD(name, B)
 #define FIELD_BB(name,dxf) FIELD(name, BB)
@@ -100,13 +100,25 @@ static Bit_Chain *dat = &pdat;
 //FIELD_VECTOR_N(name, type, size):
 // reads data of the type indicated by 'type' 'size' times and stores
 // it all in the vector called 'name'.
-#define FIELD_VECTOR_N(name, type, size, dxf) if (size) { FIELD_TV(name,dxf) }
-#define FIELD_VECTOR(name, type, size, dxf) if (_obj->size) { FIELD_TV(name,dxf) }
+#define FIELD_VECTOR_N(name, type, size, dxf) \
+  if (size) { \
+    for (vcount=0; vcount < (int)size; vcount++)  \
+      FIELD_##type(name[vcount], dxf); \
+  } \
+  FIELD_TV(name,dxf);
+#define FIELD_VECTOR(name, type, size, dxf) FIELD_VECTOR_N(name, type, _obj->size, dxf)
 #define FIELD_2RD_VECTOR(name, size, dxf) FIELD_TV(name,dxf)
 #define FIELD_2DD_VECTOR(name, size, dxf) FIELD_TV(name,dxf)
 #define FIELD_3DPOINT_VECTOR(name, size, dxf) FIELD_TV(name,dxf)
-#define HANDLE_VECTOR_N(name, size, code, dxf) if (size) { FIELD_TV(name,dxf) }
-#define HANDLE_VECTOR(name, sizefield, code, dxf) if (_obj->sizefield) { FIELD_TV(name,dxf) }
+#define HANDLE_VECTOR_N(name, size, code, dxf) \
+  for (vcount=0; vcount < (long)size; vcount++) \
+    {\
+      FIELD_HANDLE_N(name[vcount], vcount, code, dxf);  \
+    } \
+  if (size) { FIELD_TV(name,dxf) }
+#define HANDLE_VECTOR(name, sizefield, code, dxf) \
+  HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code, dxf)
+
 #define FIELD_INSERT_COUNT(insert_count, type, dxf)
 #define FIELD_XDATA(name, size)
 
@@ -693,6 +705,14 @@ dwg_free(Dwg_Data * dwg)
       if (dwg->header.num_descriptions) {
         FREE_IF(dwg->header.section_info);
       }
+      for (i=0; i < dwg->second_header.num_handlers; i++)
+        {
+          FREE_IF(dwg->second_header.handlers[i].data);
+        }
+      for (i=0; i < dwg->num_object_refs; ++i)
+        {
+          FREE_IF(dwg->object_ref[i]);
+        }
       FREE_IF(dwg->object_ref);
       FREE_IF(dwg->object);
 #undef FREE_IF

@@ -95,8 +95,8 @@ dwg_read_file(char *filename, Dwg_Data * dwg_data)
     }
   fclose(fp);
 
-  /* Decode the dwg structure
-   */
+  /* Decode the dwg structure */
+  memset(dwg_data, 0, sizeof(Dwg_Data));
   if (dwg_decode_data(&bit_chain, dwg_data))
     {
       LOG_ERROR("Failed to decode file: %s\n", filename)

@@ -1499,9 +1499,10 @@ void free_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj);
 void free_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
 {
   unsigned int i;
+  int vcount;
   if (FIELD_VALUE(version) == 1)
     {
-      for (i=0; i<FIELD_VALUE (num_blocks); i++)
+      for (i=0; i < FIELD_VALUE (num_blocks); i++)
         {
           FIELD_VECTOR (sat_data[i], RC, block_size[i], 0);
         }
@@ -4741,6 +4742,7 @@ DWG_OBJECT_END
 DWG_OBJECT(LEADEROBJECTCONTEXTDATA)
 DWG_OBJECT_END
 */
+
 
 
 

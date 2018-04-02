@@ -365,6 +365,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
     #include "header.spec"
   }
 
+  section_address = dat->byte;
   PRE(R_2004) {
     if (!dwg->header.num_sections) /* Usually 3-5, max 6 */
       dwg->header.num_sections = 6;
@@ -703,7 +704,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
 
     UNTIL (R_2000) {
       FIELD_RC(num_sections, 0); // r14: 5, r2000: 6
-        for (i = 0; i < FIELD_VALUE(num_sections); i++)
+      for (i = 0; i < FIELD_VALUE(num_sections); i++)
         {
           FIELD_RC(section[i].nr, 0);
           FIELD_BL(section[i].address, 0);
@@ -752,7 +753,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
    */
   dat->size = dat->byte;
 
-  /* Write section addresses
+  /* Write section addresses (XXX pre2004 only?)
    */
   dat->byte = section_address;
   dat->bit = 0;

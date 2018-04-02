@@ -190,7 +190,7 @@ static unsigned int cur_ver = 0;
 static void \
 dwg_print_##token (Bit_Chain * dat, Dwg_Object * obj)\
 {\
- int vcount, rcount, rcount2, rcount3, rcount4; \
+  int vcount, rcount, rcount2, rcount3, rcount4; \
   Dwg_Entity_##token *ent, *_obj;\
   LOG_INFO("Entity " #token ":\n")\
   ent = obj->tio.entity->tio.token;\
