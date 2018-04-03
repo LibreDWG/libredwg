@@ -41,8 +41,8 @@ run ()
     prog=$1
     dwg=$2
 
-    bprog=$(basename $prog .exe)
-    bdwg=$(basename $dwg .dwg)
+    bprog=`basename $prog .exe`
+    bdwg=`basename $dwg .dwg`
     log=$bdwg-$bprog.log
     arg="${datadir}/$dwg.dwg"
     if test $bprog = dwgrewrite; then
@@ -93,7 +93,7 @@ done
 if [ 0 = $problems ] ; then
     exit 0
 else
-    echo $(basename $0): $problems failures
+    echo `basename $0`: $problems failures
     ls -l *.log
     exit 1
 fi

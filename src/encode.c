@@ -1519,26 +1519,21 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
   bit_write_H(dat, &(obj->handle));
 
   num_eed = ent->num_eed;
-  if (!num_eed) {
-    bit_write_BS(dat, 0);
-  } else {
-    bit_write_BS(dat, ent->eed[0].size);
-    for (i = 0; i < num_eed; i++)
-      {
-        BITCODE_BS j;
-        LOG_TRACE("EED[%u] size: " FORMAT_BS "\n", i, ent->eed[i].size)
-        bit_write_H(dat, &(ent->eed[i].handle));
-        bit_write_RC(dat, ent->eed[i].data->code);
-        LOG_TRACE("EED[%u] code: " FORMAT_RC "\n", i, ent->eed[i].data->code)
-        for (j=1; j < ent->eed[i].size-1; j++)
-          bit_write_RC(dat, ent->eed[i].raw[j]);
-
-        if (i+1 < num_eed)
-          bit_write_BS(dat, ent->eed[i+1].size);
-        else
-          bit_write_BS(dat, 0);
-      }
-  }
+  for (i = 0; i < num_eed; i++)
+    {
+      BITCODE_BS j, size;
+      size = ent->eed[i].size;
+      bit_write_BS(dat, size);
+      LOG_TRACE("EED[%u] size: " FORMAT_BS "\n", i, size);
+      if (size) // not all eed's have a new handle
+        {
+          bit_write_H(dat, &(ent->eed[i].handle));
+          LOG_TRACE("EED[%u] code: %d\n", i, (int)ent->eed[i].data->code);
+          for (j=0; j < size; j++)
+            bit_write_RC(dat, ent->eed[i].raw[j]);
+        }
+    }
+  bit_write_BS(dat, 0);
 
   bit_write_B(dat, ent->picture_exists);
   if (ent->picture_exists)

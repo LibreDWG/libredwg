@@ -50,7 +50,7 @@ static bool env_var_checked_p;
 #include "logging.h"
 #include "dec_macros.h"
 
-#define REFS_PER_REALLOC 100
+#define REFS_PER_REALLOC 128
 
 #define MAX(X,Y) ((X) > (Y) ? (X) : (Y))
 #define MIN(X,Y) ((X) < (Y) ? (X) : (Y))
@@ -2092,39 +2092,44 @@ decode_R2007(Bit_Chain* dat, Dwg_Data * dwg)
 static int
 dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
 {
-  unsigned int idx;
   BITCODE_BS size;
+  unsigned int idx = 0;
   int error = 0;
-  long unsigned int offset = dat->byte;
 
-  idx = obj->num_eed = 0;
+  obj->num_eed = 0;
   while ((size = bit_read_BS(dat)))
     {
+      int i;
       BITCODE_BS j;
       BITCODE_RC code;
-      LOG_TRACE("EED[%u] size: " FORMAT_BS "\n", idx, size)
+      long unsigned int end, offset;
+      long unsigned int sav_byte;
+
+      LOG_TRACE("EED[%u] size: " FORMAT_BS "\n", idx, size);
       if (size > 1024)
         {
-          LOG_ERROR(
-              "dwg_decode_eed: Absurd extended object data size: %lu ignored."
-              " Object: %lu (handle)",
-              (long unsigned int) size, obj->object->handle.value)
-          obj->bitsize = 0;
+          LOG_ERROR("dwg_decode_eed: Absurd extended object data size: %lu ignored."
+                    " Object: %lu (handle)",
+                    (long unsigned int) size, obj->object->handle.value)
+            obj->bitsize = 0;
           obj->num_eed = 0;
           obj->num_handles = 0;
           obj->num_reactors = 0;
           return -1; //XXX
         }
 
-      if (idx)
+      if (idx) {
         obj->eed = (Dwg_Eed*)realloc(obj->eed, (idx+1) * sizeof(Dwg_Eed));
-      else
+      } else {
         obj->eed = (Dwg_Eed*)calloc(1, sizeof(Dwg_Eed));
+      }
+      obj->eed[idx].size = size;
       error = bit_read_H(dat, &obj->eed[idx].handle);
       if (error) {
         LOG_ERROR("No EED[%d].handle", idx);
-        return -1;
+        return error;
       } else {
+        end = dat->byte + size;
         LOG_TRACE("EED[%u] handle: %d.%d.%lu\n", idx,
                   obj->eed[idx].handle.code, obj->eed[idx].handle.size,
                   obj->eed[idx].handle.value);
@@ -2157,19 +2162,20 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
               }
           }
       }
-      offset = dat->byte;
-      obj->eed[idx].size = size;
-      if (size > 0)
+
+      sav_byte = dat->byte;
+      obj->eed[idx].raw = calloc(size, 1);
+      for (j=0; j < size; j++)
+        obj->eed[idx].raw[j] = bit_read_RC(dat);
+      LOG_TRACE_TF(obj->eed[idx].raw, size);
+      dat->byte = sav_byte;
+
+      while (dat->byte < end)
         {
           BITCODE_RC lenc;
           BITCODE_RS lens;
-          long unsigned int sav_byte = dat->byte;
-          obj->eed[idx].raw = calloc(size, 1);
-          for (j=0; j < size; j++)
-            obj->eed[idx].raw[j] = bit_read_RC(dat);
-          dat->byte = sav_byte;
 
-          obj->eed[idx].data = (Dwg_Eed_Data*)calloc(size + 8, 1);
+          obj->eed[idx].data = (Dwg_Eed_Data*)calloc(size + 1, 1);
           obj->eed[idx].data->code = code = bit_read_RC(dat);
           LOG_TRACE("EED[%u] code: %d\n", idx, (int)code);
           switch (code)
@@ -2178,6 +2184,8 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
               UNTIL(R_2007) {
                 obj->eed[idx].data->u.eed_0.length = lenc = bit_read_RC(dat);
                 obj->eed[idx].data->u.eed_0.codepage = bit_read_RS_LE(dat);
+                LOG_TRACE("EED[%u] string: len=%d cp=%hu (size=%d)\r", idx,
+                          (int)lenc, obj->eed[idx].data->u.eed_0.codepage, (int)size);
                 /* code:1 + len:1 + cp:2 */
                 for (j=0; j < MIN(lenc,size-4); j++)
                   obj->eed[idx].data->u.eed_0.string[j] = bit_read_RC(dat);
@@ -2187,7 +2195,7 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
                           obj->eed[idx].data->u.eed_0.codepage);
               } LATER_VERSIONS {
                 obj->eed[idx].data->u.eed_0_r2007.length = lens = bit_read_RS(dat);
-                /* code:1 + len:2 */
+                /* code:1 + len:2 NUL? */
                 for (j=0; j < MIN(lens,(size-3)/2); j++)
                   obj->eed[idx].data->u.eed_0_r2007.string[j] = bit_read_RS_LE(dat);
                 obj->eed[idx].data->u.eed_0_r2007.string[j] = 0;
@@ -2217,15 +2225,22 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
               obj->eed[idx].data->u.eed_10.point.x = bit_read_RD(dat);
               obj->eed[idx].data->u.eed_10.point.y = bit_read_RD(dat);
               obj->eed[idx].data->u.eed_10.point.z = bit_read_RD(dat);
+              LOG_TRACE("EED[%u] 3dpoint: %f, %f, %f\n", idx,
+                        obj->eed[idx].data->u.eed_10.point.x,
+                        obj->eed[idx].data->u.eed_10.point.y,
+                        obj->eed[idx].data->u.eed_10.point.z);
               break;
             case 40: case 41: case 42:
               obj->eed[idx].data->u.eed_40.real = bit_read_RD(dat);
+              LOG_TRACE("EED[%u] real: %f\n", idx, obj->eed[idx].data->u.eed_40.real);
               break;
             case 70:
               obj->eed[idx].data->u.eed_70.rs = bit_read_RS(dat);
+              LOG_TRACE("EED[%u] short: %d\n", idx, obj->eed[idx].data->u.eed_70.rs);
               break;
             case 71:
               obj->eed[idx].data->u.eed_71.rl = bit_read_RL(dat);
+              LOG_TRACE("EED[%u] long: %d\n", idx, obj->eed[idx].data->u.eed_71.rl);
               break;
             default:
               LOG_WARN("Unknown EED code %d", code);
@@ -2233,18 +2248,24 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
 #ifdef DEBUG
           // sanity checks
           if (code == 0 || code == 4)
-            assert(obj->eed[idx].data->u.eed_0.length != size-1);
+            assert(obj->eed[idx].data->u.eed_0.length <= size-1);
           if (code == 10) // 3 double
-            assert(size != 1 + 3*8);
+            assert(size >= 1 + 3*8);
 #endif
+
+          idx++;
+          obj->num_eed++;
+          if (dat->byte < end-1)
+            {
+              size = (long)(end - dat->byte + 1);
+              LOG_HANDLE("EED[%u] size remaining: %ld\n", idx, (long)size);
+
+              obj->eed = (Dwg_Eed*)realloc(obj->eed, (idx+1) * sizeof(Dwg_Eed));
+              obj->eed[idx].handle = obj->eed[idx-1].handle;
+              obj->eed[idx].size = 0;
+            }
         }
-      idx++;
-      obj->num_eed++;
-      if (dat->byte != offset + size) {
-        LOG_INFO("EED[%u] size padding: %ld\n", idx, (long)(offset + size - dat->byte))
-        dat->byte = offset + size;
-      }
-      offset = dat->byte;
+      dat->byte = end;
     }
   return error;
 }
