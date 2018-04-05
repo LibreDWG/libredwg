@@ -2164,9 +2164,7 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
       }
 
       sav_byte = dat->byte;
-      obj->eed[idx].raw = calloc(size, 1);
-      for (j=0; j < size; j++)
-        obj->eed[idx].raw[j] = bit_read_RC(dat);
+      obj->eed[idx].raw = bit_read_TF(dat, size);
       LOG_TRACE_TF(obj->eed[idx].raw, size);
       dat->byte = sav_byte;
 
@@ -2325,15 +2323,7 @@ dwg_decode_entity(Bit_Chain * dat, Dwg_Object_Entity * ent)
       LOG_TRACE("picture_size: " FORMAT_BLL " \n", ent->picture_size)
       if (ent->picture_size < 210210)
         {
-          BITCODE_BLL l;
-          ent->picture = (char *)calloc(ent->picture_size, 1);
-          if (!ent->picture)
-            {
-              LOG_ERROR("Out of memory");
-              return -2;
-            }
-          for (l = 0; l < ent->picture_size; l++)
-            ent->picture[l] = bit_read_RC(dat);
+          ent->picture = bit_read_TF(dat, ent->picture_size);
         }
       else
         {
@@ -2861,18 +2851,7 @@ dwg_decode_xdata(Bit_Chain * dat, Dwg_Object_XRECORD *obj, int size)
           UNTIL(R_2007) {
             length = rbuf->value.str.size = bit_read_RS(dat);
             rbuf->value.str.codepage = bit_read_RC(dat);
-            if (length > 0)
-              {
-                rbuf->value.str.u.data = (char *)calloc(length + 1, sizeof(char));
-                if (!rbuf->value.str.u.data)
-                  {
-                    LOG_ERROR("Out of memory");
-                    return NULL;
-                  }
-                for (i = 0; i < length; i++)
-                  rbuf->value.str.u.data[i] = bit_read_RC(dat);
-                rbuf->value.str.u.data[i] = '\0';
-              }
+            rbuf->value.str.u.data = bit_read_TF(dat, length);
           } LATER_VERSIONS {
             length = rbuf->value.str.size = bit_read_RS(dat);
             if (length > 0)
@@ -2909,17 +2888,7 @@ dwg_decode_xdata(Bit_Chain * dat, Dwg_Object_XRECORD *obj, int size)
           break;
         case VT_BINARY:
           rbuf->value.str.size = bit_read_RC(dat);
-          if (rbuf->value.str.size > 0)
-            {
-              rbuf->value.str.u.data = (char *)calloc(rbuf->value.str.size, sizeof(char));
-              if (!rbuf->value.str.u.data)
-                {
-                  LOG_ERROR("Out of memory");
-                  return NULL;
-                }
-              for (i = 0; i < rbuf->value.str.size; i++)
-                rbuf->value.str.u.data[i] = bit_read_RC(dat);
-            }
+          rbuf->value.str.u.data = bit_read_TF(dat, rbuf->value.str.size);
           break;
         case VT_HANDLE:
         case VT_OBJECTID:
@@ -3674,19 +3643,8 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
                 }
               object_address = dat->byte;
               obj->supertype = DWG_SUPERTYPE_UNKNOWN;
-              obj->tio.unknown = (unsigned char*)calloc(obj->size, 1);
-              if (!obj->tio.unknown)
-                {
-                  LOG_ERROR("Out of memory");
-                  return;
-                }
-              // write obj->size bytes, excl. bitsize and handle
-              // overshoot the bitsize and handle size
-              for (i=0; i<(int)obj->size; i++) {
-                obj->tio.unknown[i] = bit_read_RC(dat);
-              }
+              obj->tio.unknown = (unsigned char *)bit_read_TF(dat, obj->size);
               dat->byte = object_address;
-              //memcpy(obj->tio.unknown, &dat->chain[object_address], obj->size);
             }
         }
     }

@@ -415,8 +415,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
       //dwg->picture.size = 0; // If one desires not to copy pictures,
       // should un-comment this line
       bit_write_sentinel(dat, dwg_sentinel(DWG_SENTINEL_PICTURE_BEGIN));
-      for (j = 0; j < dwg->picture.size; j++)
-        bit_write_RC(dat, dwg->picture.chain[j]);
+      bit_write_TF(dat, (char *)dwg->picture.chain, dwg->picture.size);
       if (dwg->picture.size == 0)
         {
           bit_write_RL(dat, 5);
@@ -696,8 +695,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
 
     // AC1012, AC1014 or AC1015. This is a char[11], zero padded.
     // with \n at 12.
-    for (i = 0; i < 12; i++)
-      bit_write_RC(dat, _obj->version[i]);
+    bit_write_TF(dat, _obj->version, 12);
     LOG_TRACE("version: %s\n", _obj->version)
 
     for (i = 0; i < 4; i++)
@@ -1475,9 +1473,7 @@ dwg_encode_add_object(Dwg_Object * obj, Bit_Chain * dat,
               object_address = dat->byte;
               // write obj->size bytes, excl. bitsize and handle
               // overshoot the bitsize and handle size
-              for (i=0; i<(int)obj->size; i++) {
-                bit_write_RC(dat, obj->tio.unknown[i]);
-              }
+              bit_write_TF(dat, (char*)obj->tio.unknown, obj->size);
               dat->byte = object_address;
             }
         }
@@ -1507,7 +1503,7 @@ dwg_encode_add_object(Dwg_Object * obj, Bit_Chain * dat,
 static int
 dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
 {
-  BITCODE_BS i, num_eed;
+  BITCODE_BS i;
   BITCODE_BL bitsize;
   Dwg_Object_Entity* ent = obj->tio.entity;
 
@@ -1518,10 +1514,9 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
     }
   bit_write_H(dat, &(obj->handle));
 
-  num_eed = ent->num_eed;
-  for (i = 0; i < num_eed; i++)
+  for (i = 0; i < ent->num_eed; i++)
     {
-      BITCODE_BS j, size;
+      BITCODE_BS size;
       size = ent->eed[i].size;
       bit_write_BS(dat, size);
       LOG_TRACE("EED[%u] size: " FORMAT_BS "\n", i, size);
@@ -1529,8 +1524,7 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
         {
           bit_write_H(dat, &(ent->eed[i].handle));
           LOG_TRACE("EED[%u] code: %d\n", i, (int)ent->eed[i].data->code);
-          for (j=0; j < size; j++)
-            bit_write_RC(dat, ent->eed[i].raw[j]);
+          bit_write_TF(dat, ent->eed[i].raw, size);
         }
     }
   bit_write_BS(dat, 0);
@@ -1548,8 +1542,11 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
         }
       if (ent->picture_size < 210210)
         {
+          bit_write_TF(dat, ent->picture, ent->picture_size);
+          /*
           for (i=0; i< ent->picture_size; i++)
             bit_write_RC(dat, ent->picture[i]);
+          */
         }
       else 
         {
@@ -1681,11 +1678,13 @@ dwg_encode_object(Dwg_Object * obj, Bit_Chain * dat)
         BITCODE_BS j;
         LOG_TRACE("EED[%u] size: " FORMAT_BS "\n", i, ord->eed[i].size)
         bit_write_H(dat, &(ord->eed[i].handle));
-        bit_write_RC(dat, ord->eed[i].data->code);
         LOG_TRACE("EED[%u] code: " FORMAT_RC "\n", i, ord->eed[i].data->code)
+        bit_write_TF(dat, ord->eed[i].raw, ord->eed[i].size);
+        /*
+        bit_write_RC(dat, ord->eed[i].data->code);
         for (j=1; j < ord->eed[i].size-1; j++)
           bit_write_RC(dat, ord->eed[i].raw[j]);
-
+        */
         if (i+1 < num_eed)
           bit_write_BS(dat, ord->eed[i+1].size);
         else
@@ -1733,8 +1732,7 @@ dwg_encode_xdata(Bit_Chain * dat, Dwg_Object_XRECORD *obj, int size)
           UNTIL(R_2007) {
             bit_write_RS(dat, rbuf->value.str.size);
             bit_write_RC(dat, rbuf->value.str.codepage);
-            for (i = 0; i < rbuf->value.str.size; i++)
-              bit_write_RC(dat, rbuf->value.str.u.data[i]);
+            bit_write_TF(dat, rbuf->value.str.u.data, rbuf->value.str.size);
           } LATER_VERSIONS {
             bit_write_RS(dat, rbuf->value.str.size);
             for (i = 0; i < rbuf->value.str.size; i++)
@@ -1761,8 +1759,7 @@ dwg_encode_xdata(Bit_Chain * dat, Dwg_Object_XRECORD *obj, int size)
           break;
         case VT_BINARY:
           bit_write_RC(dat, rbuf->value.str.size);
-          for (i = 0; i < rbuf->value.str.size; i++)
-            bit_write_RC(dat, rbuf->value.str.u.data[i]);
+          bit_write_TF(dat, rbuf->value.str.u.data, rbuf->value.str.size);
           break;
         case VT_HANDLE:
         case VT_OBJECTID:

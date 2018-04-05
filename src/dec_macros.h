@@ -34,10 +34,11 @@
 #define FIELD_TRACE(name,type) \
   LOG_TRACE(#name ": " FORMAT_##type " " #type "\n", _obj->name)
 #define LOG_TRACE_TF(var,len) \
-  for (i=0; i<len; i++) { \
-    LOG_TRACE("%02x ", (unsigned char)((char*)var)[i]); \
-  } \
-  LOG_TRACE("\n")
+  { int _i; \
+    for (_i=0; _i<len; _i++) { \
+      LOG_TRACE("%02x ", (unsigned char)((char*)var)[_i]); \
+    } \
+  LOG_TRACE("\n"); }
 
 #define FIELD_VALUE(name) _obj->name
 
@@ -92,7 +93,8 @@
 #define FIELD_MS(name,dxf) FIELDG(name, MS, dxf)
 #define FIELD_TF(name,len,dxf)       \
   { _obj->name = bit_read_TF(dat,len); \
-    FIELD_G_TRACE(name, TF, dxf); }
+    FIELD_G_TRACE(name, TF, dxf);\
+    LOG_TRACE_TF(FIELD_VALUE(name), len); }
 #define FIELD_TV(name,dxf) FIELDG(name, TV, dxf);
 #define FIELD_T FIELD_TV /*TODO: implement version dependant string fields */
 #define FIELD_BT(name,dxf) FIELDG(name, BT, dxf);
@@ -128,7 +130,7 @@
     Bit_Chain here = *dat; \
     char *tmp; BITCODE_BB bb; BITCODE_RS rs; BITCODE_RL rl;\
     LOG_TRACE("DEBUG_HERE @%X.%u:\n  24RC: ", (unsigned int)dat->byte, dat->bit);\
-    tmp = bit_read_TF(dat,24);\
+    tmp = bit_read_TF(dat, 24);\
     LOG_TRACE_TF(tmp, 24);\
     *dat = here;\
     LOG_TRACE("  B  :"FORMAT_B"\n", bit_read_B(dat));\

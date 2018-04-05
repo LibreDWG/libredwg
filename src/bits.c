@@ -979,7 +979,8 @@ bit_write_CRC(Bit_Chain * dat, long unsigned int start_address,
   return (crc);
 }
 
-/** Read fixed text. After usage, the allocated memory must be properly freed.
+/** Read fixed text with zero-termination.
+ *  After usage, the allocated memory must be properly freed.
  *  preR11
  */
 BITCODE_TF
