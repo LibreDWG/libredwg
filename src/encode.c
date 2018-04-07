@@ -860,7 +860,7 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "IMAGE"))
     {
-      assert(!is_entity);
+      assert(is_entity);
       dwg_encode_IMAGE(dat, obj);
       return 1;
     }
@@ -901,7 +901,7 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       return 1;
     }
   if (!strcmp(dxfname, "OBJECTCONTEXTDATA")
-      || strcmp(klass->cppname, "AcDbObjectContextData"))
+      || !strcmp(klass->cppname, "AcDbObjectContextData"))
     {
       assert(!is_entity);
       dwg_encode_OBJECTCONTEXTDATA(dat, obj);
