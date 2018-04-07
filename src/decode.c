@@ -247,13 +247,14 @@ static void
 decode_preR13_section_chk(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
 {
   Dwg_Section *tbl = &dwg->header.section[id];
-#define CMP(f,type) if (tbl->f != f) LOG_ERROR("decode_preR13_section_chk %s %s", tbl->name, #f);
+#define CMP(f,type) if (tbl->f != f) LOG_ERROR("decode_preR13_section_chk %s %s", tbl->name, #f)
   //LOG_ERROR(name "->" #f " " FORMAT_##type " != " #f " " FORMAT_##type)
   BITCODE_RS id1, size;
-  BITCODE_RL address, number;
+  BITCODE_RL address;
+  long number;
   id1 = bit_read_RS(dat);
-  size = bit_read_RS(dat); CMP(size, RS)
-  number = (BITCODE_RL)bit_read_RS(dat); CMP(number, RL)
+  size = bit_read_RS(dat); CMP(size, RS);
+  number = (long)bit_read_RS(dat); CMP(number, RL);
   address = bit_read_RL(dat); CMP(address, RL)
 #undef CMP
   LOG_TRACE("chk table %-8s [%2d]: size:%-4u nr:%-3ld (0x%x)\n",
