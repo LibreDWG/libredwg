@@ -511,62 +511,50 @@ load_dwg (char *dwgfilename, xmlNodePtr rootnode)
       switch (dwg.object[i].type)
 	{
 	case DWG_TYPE_ARC:
-	  //What to do when we have an arc
 	  add_arc (rootnode, dwg.object[i]);
 	  break;
 
 	case DWG_TYPE_LINE:
-	  //What to do when we have a line
 	  add_line (rootnode, dwg.object[i]);
 	  break;
 
 	case DWG_TYPE_CIRCLE:
-	  //What to do when we get a cicle
 	  add_circle (rootnode, dwg.object[i]);
 	  break;
 
 	case DWG_TYPE_POLYLINE_3D:
-	  //What to do when we get a 3D Polyline
 	  add_3dpolyline (rootnode, dwg.object[i]);
 	  break;
 
      /* case DWG_TYPE_BLOCK:
-          //What to do when we get a block
           add_block(rootnode, dwg.object[i]);
           break; */
 
 	case DWG_TYPE_MLINE:
-	  //What to do when we get a mline
 	  add_mline (rootnode, dwg.object[i]);
 	  break;
 
 	case DWG_TYPE_ELLIPSE:
-	  //What to do when we get a ellipse
 	  add_ellipse (rootnode, dwg.object[i]);
 	  break;
 
 	case DWG_TYPE_POINT:
-	  //What to do when get a point
 	  add_point (rootnode, dwg.object[i]);
 	  break;
 
 	case DWG_TYPE_RAY:
-	  //What to do when we get a ray
 	  add_ray (rootnode, dwg.object[i]);
 	  break;
 
 	case DWG_TYPE_TEXT:
-	  //What to do when get a text
 	  add_text (rootnode, dwg.object[i]);
 	  break;
 
 	case DWG_TYPE_SPLINE:
-	  //What to do when we get a spline
 	  add_spline (rootnode, dwg.object[i]);
 	  break;
 
 /*      case DWG_TYPE_TABLE:
-          //What to do when we get a table
           add_table(rootnode, dwg.object[i]);
           break;*/
 

@@ -6,14 +6,15 @@ def processData(line):
 
 
 DwgTxtFileName = sys.argv[1]
+OutDir = sys.argv[2]
 if not os.path.exists(DwgTxtFileName):
 	sys.exit("File not found " + DwgTxtFileName)
 
 Extension = DwgTxtFileName.split('.')
 if Extension[-1] == 'txt':
-	XMLFileName = DwgTxtFileName.rstrip('txt') + "xml"
+	XMLFileName = OutDir + "/" + DwgTxtFileName.rstrip('txt') + "xml"
 else:
-	XMLFileName = DwgTxtFileName+"xml"
+	XMLFileName = OutDir + "/" + DwgTxtFileName+"xml"
 
 FR = open(DwgTxtFileName,'r')
 

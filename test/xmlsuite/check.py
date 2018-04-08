@@ -5,44 +5,44 @@ import sys
 import libxml2
 import re
 
-
 # Divide the scripts into two files
 sys.path.append(os.getcwd())
 from helper import *
 
 srcdir = os.path.dirname(__file__)
-# Give here the path where DWG files are present
+# path where DWG files are present
 path_to_dwg = srcdir + "/../test-data"
-
-#generate xml from txt files
-generatexml(path_to_dwg)
-
-#The name of the output files folder
-testoutput_folder = "test_output"
+# The name of the output files folder
+outdir = "test_output"
 
 # Get all the directories
 dirs = [d for d in os.listdir(path_to_dwg) if os.path.isdir(os.path.join(path_to_dwg, d))]
+
+for dir in dirs:
+    for file in os.listdir(os.path.join(path_to_dwg, dir)):
+        if file.endswith(".dwg"):
+            #First thing will be to make duplicate directory structure
+            if not os.path.exists(outdir + "/" + dir):
+                #Need to be careful here
+                try:
+                    os.makedirs(outdir + "/" + dir)
+                except OSError, e:
+                    pass
+            pass
+
+# generate xml from txt files
+generatexml(path_to_dwg)
 
 #Now execute testsuite.c on all the DWG files found and create a seperate directory structure
 for dir in dirs:
     for file in os.listdir(os.path.join(path_to_dwg, dir)):
         if file.endswith(".dwg"):
-            #First thing will be to make duplicate directory structure
-            if not os.path.exists(testoutput_folder + "/" + dir):
-                #Need to be careful here
-                try:
-                    os.makedirs(testoutput_folder + "/" + dir)
-                except OSError, e:
-                    pass
-            pass
-
-
-            #Decide the filename of the XML File
+            # filename of the XML File
             dwg_xmlfile = file.rsplit(".", 1)[0] + ".xml"
 
-            #Start running testsuite on every DWG file
+            # Start running testsuite on every DWG file
             os.system("./testsuite " + path_to_dwg + "/"
-                        + dir + "/" + file + " " + testoutput_folder 
+                        + dir + "/" + file + " " + outdir 
                         + "/" + dir + "/" + dwg_xmlfile + " 2> /dev/null")
         pass
 
@@ -53,8 +53,8 @@ for dir in dirs:
         if file.endswith(".xml"):
 
             #Duplicate file has same directory structure
-            if os.path.exists(testoutput_folder + "/" + dir + "/" + file):
-                result = xmlprocess(path_to_dwg+ "/" + dir + "/" + file, testoutput_folder + "/" + dir + "/" + file)
+            if os.path.exists(outdir + "/" + dir + "/" + file):
+                result = xmlprocess(path_to_dwg+ "/" + dir + "/" + file, outdir + "/" + dir + "/" + file)
             else:
                 result = [0, []]
             

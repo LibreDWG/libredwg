@@ -22,7 +22,7 @@ class bcolors:
 This functions uses the script to generate xml which can be used for
 comparison later.
 
-@param strign dwgdir The path to DWG dir
+@param string dwgdir The path to DWG dir
 '''
 def generatexml(dwgdir):
 	# This beats ‘sys.argv[0]’, which is not guaranteed to be set.
@@ -32,7 +32,8 @@ def generatexml(dwgdir):
 	os.chdir(dwgdir)
 	for filename in glob.glob ("*/*.txt"):
 		# maybe add double-quotes for the script?
-		os.system (me + " " + srcdir + "/txttoxml.py " + filename)
+		os.system (me + " " + srcdir + "/txttoxml.py " + filename + " "
+                           + current_dir + "/test_output")
 	os.chdir(current_dir)
 
 '''
