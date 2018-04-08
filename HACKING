@@ -84,8 +84,6 @@ someone should probably think about and resolve them!
     - v      -- validation ("make check" stuff)
     - [??? more topics here]
 
-* [??? other exceptions]
-
 * trailing whitespace
 
   Don't be uncool; avoid introducing trailing whitespace!  See:
@@ -123,6 +121,19 @@ someone should probably think about and resolve them!
     LIBREDWG_TRACE=4  winedbg .libs/dwgread.exe ../test/test-data/2000/Leader_2000.dwg
   > b dwg_decode_eed
   > cont
+
+* python on macports
+
+  On macports with system python overriding the macports python2.7 you'd might need to set
+  either:
+
+  $ export PYTHONPATH=/opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/
+
+  or run the tests with:
+
+  $ make check PYTHON=/opt/local/bin/python2.7
+
+  because the system python is missing libxml2.
 
 * etc
 #+STARTUP: odd
