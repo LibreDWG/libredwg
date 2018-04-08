@@ -15,7 +15,9 @@
 #  define GCC_DIAG_RESTORE
 #endif
 
+#ifdef HAVE_CTYPE_H
 #include <ctype.h>
+#endif
 
 #define IS_DECODER
 
