@@ -15,6 +15,8 @@
 #  define GCC_DIAG_RESTORE
 #endif
 
+#include <ctype.h>
+
 #define IS_DECODER
 
 #define FIELDG(name,type,dxfgroup) \
@@ -38,7 +40,13 @@
     for (_i=0; _i<len; _i++) { \
       LOG_TRACE("%02x ", (unsigned char)((char*)var)[_i]); \
     } \
-  LOG_TRACE("\n"); }
+    LOG_TRACE("\n"); \
+    for (_i=0; _i<len; _i++) { \
+      char c = ((char*)var)[_i]; \
+      LOG_TRACE("%2c ", isprint(c) ? c : ' ');  \
+    } \
+    LOG_TRACE("\n"); \
+  }
 
 #define FIELD_VALUE(name) _obj->name
 

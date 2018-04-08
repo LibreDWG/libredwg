@@ -3545,6 +3545,7 @@ typedef struct _dwg_object_UNKNOWN_OBJ
 
 /* OBJECTS - END ************************************************************/
 
+#pragma pack(1)
 typedef struct _dwg_entity_eed_data
 {
   BITCODE_RC code;
@@ -3552,14 +3553,14 @@ typedef struct _dwg_entity_eed_data
     struct { /* 0 (1000) string */
       BITCODE_RC length;
       BITCODE_RS codepage;
-      char string[0];      /* inlined */
+      char string[1];      /* inlined */
     } eed_0;
     struct { /* R2007+ 0 (1000) string */
       BITCODE_RS length;
-      DWGCHAR string[0]; /* inlined */
+      DWGCHAR string[1]; /* inlined */
     } eed_0_r2007;
     struct { /* 1 (1001) invalid */
-      char invalid[0];
+      char invalid[1];
     } eed_1;
     struct { /* 2 (1002) { or } */
       BITCODE_RC byte;
@@ -3569,7 +3570,7 @@ typedef struct _dwg_entity_eed_data
     } eed_3;
     struct { /* 4 (1004) binary */
       BITCODE_RC length;
-      char data[0];
+      char data[1];
     } eed_4;
     struct { /* 5 (1005) entity */
       BITCODE_RL entity;
@@ -3588,6 +3589,7 @@ typedef struct _dwg_entity_eed_data
     } eed_71;
   } u;
 } Dwg_Eed_Data;
+#pragma pack()
 
 typedef struct _dwg_entity_eed
 {
