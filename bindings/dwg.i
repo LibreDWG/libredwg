@@ -17,7 +17,7 @@
  * modified by Reini Urban
  */
 
-%module libredwg
+%module LibreDWG
 
 %{
 #include "../src/config.h"

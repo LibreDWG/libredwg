@@ -241,10 +241,12 @@ AC_ARG_ENABLE(python,
 AC_MSG_CHECKING([for --disable-python])
 if test x$enable_python != xfalse -a x$cross_compiling = xno; then
     AX_PKG_SWIG([1.3.17], [],
-      AC_MSG_WARN([SWIG is required for python bindings. disabled]))
+      AC_MSG_WARN([SWIG is required for python+perl bindings. disabled]))
     if test -n "$SWIG"; then
       AM_PATH_PYTHON([2.7])
       SWIG_PYTHON
+      AC_PATH_PROG([PERL], [perl])
+      AM_RUN_LOG([$PERL --version])
     fi
     dnl AX_SWIG_ENABLE_CXX
     dnl SWIG_MULTI_MODULE_SUPPORT
@@ -255,6 +257,8 @@ else
 fi
 AM_CONDITIONAL([HAVE_SWIG_PYTHON],
   [test -n "$SWIG" && test -n "$PYTHON_VERSION"])
+AM_CONDITIONAL([HAVE_SWIG_PERL],
+  [test -n "$SWIG" && test -n "$PERL"])
 
 AC_CHECK_PROGS([DOXYGEN], [doxygen])
 AM_CONDITIONAL([HAVE_DOXYGEN], [test -n "$DOXYGEN"])
@@ -284,6 +288,7 @@ AC_CONFIG_FILES([
 	programs/Makefile
 	examples/Makefile
 	bindings/Makefile
+	bindings/perl/Makefile
 	bindings/python/Makefile
 	test/Makefile
 	test/testcases/Makefile
