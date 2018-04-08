@@ -31,7 +31,7 @@ pkgpythondir = $(pythondir)
 if HAVE_SWIG_PYTHON
 
 BUILT_SOURCES = swig_wrap_python.c
-SWIG_SOURCES = $(srcdir)/../dwg.i $(top_srcdir)/src/dwg.h
+SWIG_SOURCES = $(srcdir)/../dwg.i $(top_srcdir)/include/dwg.h
 
 dist_python_PYTHON = libredwg.py
 pyexec_LTLIBRARIES = _libredwg.la
@@ -43,14 +43,14 @@ _libredwg_la_SOURCES = $(BUILT_SOURCES)  $(SWIG_SOURCES)
 ## more magic: SWIG_PYTHON_CPPFLAGS resolves to null and python includes
 ## are not passed to gcc via -I
 ##    _libredwg_la_CPPFLAGS = $(SWIG_PYTHON_CPPFLAGS) -I$(top_srcdir)/src
-_libredwg_la_CPPFLAGS = -I$(top_srcdir)/src $(AX_SWIG_PYTHON_CPPFLAGS)
+_libredwg_la_CPPFLAGS = -I$(top_srcdir)/include $(AX_SWIG_PYTHON_CPPFLAGS)
 _libredwg_la_LDFLAGS = -module
 _libredwg_la_LIBADD = ../../src/libredwg.la
 
 ## not elegant, but works
 ## With macports gcc you need -I/opt/local/lib/gcc6/gcc/x86_64-apple-darwin15/6.4.0/include
 swig_wrap_python.c : $(SWIG_SOURCES) Makefile.am
-	swig -python -importall -I$(top_srcdir)/src -o $@ $(srcdir)/../dwg.i
+	swig -python -importall -I$(top_srcdir)/include -o $@ $(srcdir)/../dwg.i
 
 ## should work out of the box, but $(SWIG) resolves to swig -c++
 ## which we don't want, and SWIG_PYTHON_OPT resolves to null,

@@ -18,7 +18,7 @@
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 lib_LTLIBRARIES = libredwg.la
-AM_CFLAGS = @WARN_CFLAGS@
+AM_CFLAGS = -I$(top_srcdir)/include -I. @WARN_CFLAGS@
 
 libredwg_la_SOURCES = \
 	dwg.c \
@@ -36,9 +36,6 @@ libredwg_la_SOURCES = \
 
 libredwg_la_LDFLAGS = -version-info 0:0:0 -no-undefined
 
-include_HEADERS = \
-	dwg.h \
-	dwg_api.h
 EXTRA_HEADERS = \
 	dwg.spec \
         header_variables.spec \

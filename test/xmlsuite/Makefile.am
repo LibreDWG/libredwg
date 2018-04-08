@@ -2,7 +2,7 @@
 AM_CPPFLAGS = $(XML2_CFLAGS)
 # no -O2
 # CFLAGS = -g
-AM_CFLAGS = -I$(top_srcdir)/src @WARN_CFLAGS@
+AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src @WARN_CFLAGS@
 LDADD = $(top_builddir)/src/libredwg.la $(XML2_LIBS)
 
 if HAVE_SWIG_PYTHON

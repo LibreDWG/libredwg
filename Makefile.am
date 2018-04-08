@@ -24,6 +24,10 @@ if HAVE_SWIG_PYTHON
 SUBDIRS += bindings
 endif
 
+include_HEADERS = \
+	include/dwg.h \
+	include/dwg_api.h
+
 check-dwg: all
 	-rm check-dwg.log
 	for d in `find test/test-data -iname \*.dwg`; do \

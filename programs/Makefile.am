@@ -17,7 +17,7 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-AM_CFLAGS = -I$(top_srcdir)/src -Wall -Wextra
+AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src @WARN_CFLAGS@
 LDADD   = $(top_builddir)/src/libredwg.la -lm
 
 bin_PROGRAMS = dwgread dwgbmp dwg2dxf dwg2SVG

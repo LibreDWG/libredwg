@@ -20,7 +20,6 @@
 * finish DXF writing (easy)
 * add DXF reading (easy)
 
-* move the 2 public headers to a seperate include dir
 * fix the remaining leaks.
 * check 32bit/64bit strictness with the public headers (internally we can handle it).
 * enhance and document the API functions.
