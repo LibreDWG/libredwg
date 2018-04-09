@@ -1,0 +1,35 @@
+[ AutoCAD - Mon May 26 16:49:24 2014  ]----------------------------------------
+
+<DwgEntity
+#<VLA-OBJECT IAcadLWPolyline 000000003749fc68>
+; IAcadLWPolyline: AutoCAD Lightweight Polyline Interface
+; Property values:
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 000000013ffe2308>
+;   Area (RO) = 54.3027
+;   Closed = 0
+;   ConstantWidth = 0.0
+;   Coordinate = ...Indexed contents not shown...
+;   Coordinates = (9.00535 12.2913 17.1819 14.7267 20.7826 8.24476 ... )
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 00000000371e3548>
+;   Elevation = 0.0
+;   EntityTransparency = "ByLayer"
+;   Handle (RO) = "1BD"
+;   HasExtensionDictionary (RO) = 0
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 0000000039c02518>
+;   Layer = "0"
+;   Length (RO) = 32.2673
+;   Linetype = "ByLayer"
+;   LinetypeGeneration = 0
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   Material = "ByLayer"
+;   Normal = (0.0 0.0 1.0)
+;   ObjectID (RO) = 104
+;   ObjectID32 (RO) = 104
+;   ObjectName (RO) = "AcDbPolyline"
+;   OwnerID (RO) = 105
+;   OwnerID32 (RO) = 105
+;   PlotStyleName = "ByLayer"
+;   Thickness = 0.0
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 0000000039c026f0>
+;   Visible = -1
