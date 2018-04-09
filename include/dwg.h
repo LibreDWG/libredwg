@@ -2084,7 +2084,8 @@ typedef struct _dwg_MLINESTYLE_line
 {
   BITCODE_BD offset;
   BITCODE_CMC color;
-  BITCODE_BS ltindex;
+  BITCODE_BS ltindex; /* until 2018 */
+  BITCODE_H ltype;    /* since 2018 */
 } Dwg_MLINESTYLE_line;
 
 typedef struct _dwg_object_MLINESTYLE

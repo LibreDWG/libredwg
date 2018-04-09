@@ -198,7 +198,7 @@ dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
   PRE(R_13)
     {
       // TODO: tables, entities, block entities
-      LOG_ERROR(WE_CAN "This file's version code is: %s", version)
+      LOG_ERROR(WE_CAN "We dont' decode tables, entities, blocks yet")
       return decode_preR13(dat, dwg);
     }
 
@@ -209,16 +209,15 @@ dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
 
   VERSION(R_2004)
     {
-      //LOG_WARN(WE_CAN "This file's version code is: %s\n"
-      //    "Support for this version is still experimental.", version)
       return decode_R2004(dat, dwg);
     }
 
   SINCE(R_2007)
     {
-      LOG_WARN(WE_CAN "This file's version code is: %s\n"
-               "Support for this version is still experimental.\n"
-               "It will probably crash and/or give you invalid output.", version)
+      LOG_ERROR(WE_CAN
+               "Support for this version is still experimental."
+               " We dont' decode objects yet.\n"
+               "It will probably crash and/or give you invalid output.")
       return decode_R2007(dat, dwg);
     }
 

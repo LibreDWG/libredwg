@@ -2819,7 +2819,14 @@ DWG_OBJECT(MLINESTYLE)
 #ifndef IS_FREE
     FIELD_CMC (lines[rcount].color, 62);
 #endif
-    FIELD_BS (lines[rcount].ltindex, 6);
+    PRE(R_2018)
+    {
+      FIELD_BS (lines[rcount].ltindex, 6);
+    }
+    SINCE(R_2018)
+    {
+      FIELD_HANDLE (lines[rcount].ltype, 5, 6);
+    }
   }
   END_REPEAT(lines);
 
@@ -4761,3 +4768,4 @@ DWG_OBJECT_END
 DWG_OBJECT(LEADEROBJECTCONTEXTDATA)
 DWG_OBJECT_END
 */
+
