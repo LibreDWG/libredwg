@@ -469,13 +469,29 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
 
   for (j = 0; j < dwg->num_classes; j++)
     {
-      bit_write_BS(dat, dwg->dwg_class[j].number);
-      bit_write_BS(dat, dwg->dwg_class[j].proxyflag);
-      bit_write_TV(dat, dwg->dwg_class[j].appname);
-      bit_write_TV(dat, dwg->dwg_class[j].cppname);
-      bit_write_TV(dat, dwg->dwg_class[j].dxfname);
-      bit_write_B(dat,  dwg->dwg_class[j].wasazombie);
-      bit_write_BS(dat, dwg->dwg_class[j].item_class_id);
+      Dwg_Class *klass;
+      klass = &dwg->dwg_class[j];
+      bit_write_BS(dat, klass->number);
+      bit_write_BS(dat, klass->proxyflag);
+      bit_write_TV(dat, klass->appname);
+      bit_write_TV(dat, klass->cppname);
+      bit_write_TV(dat, klass->dxfname);
+      bit_write_B(dat,  klass->wasazombie);
+      bit_write_BS(dat, klass->item_class_id);
+      LOG_TRACE("Class %d 0x%x %s\n"
+                "%s \"%s\" %d 0x%x\n",
+                klass->number, klass->proxyflag, klass->dxfname,
+                klass->cppname, klass->appname,
+                klass->wasazombie, klass->item_class_id)
+
+      SINCE(R_2007)
+        {
+          bit_write_BL(dat, klass->instance_count);
+          bit_write_BL(dat, klass->dwg_version);
+          bit_write_BL(dat, klass->maint_version);
+          bit_write_BL(dat, klass->unknown_1);
+          bit_write_BL(dat, klass->unknown_2);
+        }
     }
 
   /* Write the size of the section at its beginning
@@ -512,8 +528,6 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
   }
   for (j = 0; j < dwg->num_objects; j++)
     {
-      Bit_Chain nkn;
-      Dwg_Handle tkt;
 
       /* Define the handle of each object, including unknown */
       omap[j].idc = j;
@@ -522,16 +536,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
       else if (dwg->object[j].supertype == DWG_SUPERTYPE_OBJECT)
         omap[j].handle = dwg->object[j].handle.value;
       else if (dwg->object[j].supertype == DWG_SUPERTYPE_UNKNOWN)
-        {
-          nkn.chain = dwg->object[j].tio.unknown;
-          nkn.size = dwg->object[j].size;
-          nkn.byte = nkn.bit = 0;
-          //FIXME read?? should write
-          bit_read_BS(&nkn);
-          bit_read_RL(&nkn);
-          bit_read_H(&nkn, &tkt);
-          omap[j].handle = tkt.value;
-        }
+        omap[j].handle = dwg->object[j].handle.value;
       else
         omap[j].handle = 0x7FFFFFFF; /* Error! */
 
@@ -1424,14 +1429,8 @@ dwg_encode_add_object(Dwg_Object * obj, Bit_Chain * dat,
     break;
   default:
       if (obj->type == obj->parent->layout_number)
-        {
-          dwg_encode_LAYOUT(dat, obj);
-        }
-      /* > 500:
-         TABLE, DICTIONARYWDLFT, IDBUFFER, IMAGE, IMAGEDEF, IMAGEDEFREACTOR,
-         LAYER_INDEX, OLE2FRAME, PROXY, RASTERVARIABLES, SORTENTSTABLE, SPATIAL_FILTER,
-         SPATIAL_INDEX
-      */
+        dwg_encode_LAYOUT(dat, obj);
+
       else if (!dwg_encode_variable_type(obj->parent, dat, obj))
         {
           Dwg_Data *dwg = obj->parent;

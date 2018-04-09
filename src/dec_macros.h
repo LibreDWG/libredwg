@@ -150,6 +150,8 @@
     LOG_TRACE("  RS :"FORMAT_RS" / 0x%04x\n", rs, rs); \
     *dat = here; rs = bit_read_BS(dat);\
     LOG_TRACE("  BS :"FORMAT_BS" / 0x%04x\n", rs, rs);\
+    *dat = here; rs = bit_read_MS(dat);\
+    LOG_TRACE("  MS :"FORMAT_RS" / 0x%04x\n", rs, rs); \
     *dat = here; rl = bit_read_RL(dat);  \
     LOG_TRACE("  RL :"FORMAT_RL " / 0x%08x\n", rl, rl);\
     *dat = here;\

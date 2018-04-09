@@ -935,6 +935,15 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
                 klass->cppname, klass->appname,
                 klass->wasazombie, klass->item_class_id)
 
+      SINCE(R_2007)
+        {
+          klass->instance_count = bit_read_BL(dat);
+          klass->dwg_version = bit_read_BL(dat);
+          klass->maint_version = bit_read_BL(dat);
+          klass->unknown_1 = bit_read_BL(dat);
+          klass->unknown_2 = bit_read_BL(dat);
+        }
+
       if (strcmp((const char *)klass->dxfname, "LAYOUT") == 0)
         dwg->layout_number = klass->number;
 
@@ -977,6 +986,8 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
   dwg->num_objects = 0;
   object_begin = dat->size;
   object_end = 0;
+  LOG_TRACE("@ %lu RL Object-map section 2, size %u\n", dat->byte,
+            (unsigned)dwg->header.section[2].size)
   do
     {
       long unsigned int last_address;
@@ -3313,6 +3324,8 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
   dat->byte = address;
   dat->bit = 0;
 
+  LOG_INFO("\n")
+  //DEBUG_HERE();
   /*
    * Reserve memory space for objects
    */
@@ -3327,9 +3340,7 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
       return;
     }
 
-  if (loglevel)
-      LOG_INFO("\n\n======================\nObject number: %lu",
-               num)
+  LOG_INFO("\n======================\nObject number: %lu", num)
 
   obj = &dwg->object[num];
   memset(obj, 0, sizeof(Dwg_Object));
@@ -3596,20 +3607,15 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
       break;
     default:
       if (obj->type == obj->parent->layout_number)
-        {
-          dwg_decode_LAYOUT(dat, obj);
-        }
+        dwg_decode_LAYOUT(dat, obj);
 
-      /* > 500:
-       *  TABLE, DICTIONARYWDLFT, IDBUFFER, IMAGE, IMAGEDEF, IMAGEDEFREACTOR,
-       *  LAYER_INDEX, OLE2FRAME, PROXY, RASTERVARIABLES, SORTENTSTABLE, SPATIAL_FILTER,
-       *  SPATIAL_INDEX, WIPEOUTVARIABLES
-       */
       else if (!dwg_decode_variable_type(dwg, dat, obj))
         {
           int is_entity;
           int i = obj->type - 500;
           Dwg_Class *klass = NULL;
+          BITCODE_MS size;
+          BITCODE_BS type;
 
           if (dat->byte != end_address)
             {
@@ -3619,8 +3625,9 @@ dwg_decode_add_object(Dwg_Data * dwg, Bit_Chain * dat,
             }
           dat->byte = address;   // restart and read into the UNKNOWN_OBJ object
           dat->bit = 0;
-          bit_read_MS(dat); // size
-          bit_read_BS(dat); // type
+          size = bit_read_MS(dat);
+          type = bit_read_BS(dat);
+
           if (i <= (int)dwg->num_classes)
             {
               klass = &dwg->dwg_class[i];

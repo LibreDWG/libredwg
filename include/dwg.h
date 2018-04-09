@@ -3842,8 +3842,12 @@ typedef struct _dwg_class
   char *cppname;
   char *dxfname;
   BITCODE_B wasazombie; /* really Was-a-proxy flag */
-  /* missing 91 Instance count for a custom class */
   BITCODE_BS item_class_id; /* Is-an-entity. 1f2 for entities, 1f3 for objects */
+  BITCODE_BL instance_count; /* 91 Instance count for a custom class */
+  BITCODE_BL dwg_version;
+  BITCODE_BL maint_version;
+  BITCODE_BL unknown_1;
+  BITCODE_BL unknown_2;
 } Dwg_Class;
 
 /**
