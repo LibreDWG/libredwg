@@ -20,6 +20,9 @@
 #include <libgen.h>
 #include <stdlib.h>
 
+char *
+suffix (const char *filename, const char *ext);
+
 /* Return a newly `malloc'ed string made from "re-suffixing" FILENAME with
    ".EXT" (note dot).  That is, when FILENAME has the form "STEM.dwg" the
    value is "STEM.EXT", otherwise the value is "FILENAME.EXT".

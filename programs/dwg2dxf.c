@@ -29,14 +29,15 @@
 #include "suffix.c"
 
 int minimal = 0;
-FILE *fh;
+//FILE *fh;
 char buf[4096];
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
 
-char *dxf_format (int code);
+int usage(void);
+const char *dxf_format (int code);
 
-int usage() {
+int usage(void) {
   // -as-r2014 for saveas
   // -m for minimal
   printf("\nUsage:\tdwg2dxf [-as-rVER] [-m|--minimal] <input_file.dwg> [<output_file.dxf>]\n");
@@ -89,7 +90,7 @@ int usage() {
       ? ref->obj->tio.object->tio.section->entry_name : ""); \
   }
 
-char *
+const char *
 dxf_format (int code)
 {
   if (0 <= code && code < 5)
@@ -141,6 +142,8 @@ dxf_format (int code)
 
   return "(unknown code)";
 }
+
+GCC_DIAG_IGNORE(-Wformat-nonliteral)
 
 // see https://www.autodesk.com/techpubs/autocad/acad2000/dxf/header_section_group_codes_dxf_02.htm
 static int
@@ -581,6 +584,8 @@ dwg_write_dxf(char *filename, Dwg_Data * dwg)
   fclose(fh);
   return 1;
 }
+
+GCC_DIAG_RESTORE
 
 int
 main (int argc, char *argv[])

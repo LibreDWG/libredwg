@@ -32,30 +32,21 @@ Dwg_Data g_dwg;
 double model_xmin, model_ymin;
 double page_width, page_height, scale;
 
+static void output_SVG(Dwg_Data* dwg);
+
+static
 double transform_X(double x)
 {
   return x - model_xmin;
 }
 
+static
 double transform_Y(double y)
 {
   return page_height - (y - model_ymin);
 }
 
-int
-test_SVG(char *filename);
-
-void
-output_SVG(Dwg_Data* dwg);
-
-int
-main(int argc, char *argv[])
-{
-  REQUIRE_INPUT_FILE_ARG (argc);
-  return test_SVG (argv[1]);
-}
-
-int
+static int
 test_SVG(char *filename)
 {
   int error = dwg_read_file(filename, &g_dwg);
@@ -68,7 +59,7 @@ test_SVG(char *filename)
   return error ? 1 : 0;
 }
 
-void
+static void
 output_TEXT(Dwg_Object* obj)
 {
   Dwg_Entity_TEXT* text = obj->tio.entity->tio.TEXT;
@@ -82,8 +73,7 @@ output_TEXT(Dwg_Object* obj)
       text->height /* fontsize */, text->text_value);
 }
 
-
-void
+static void
 output_LINE(Dwg_Object* obj)
 {
   Dwg_Entity_LINE* line = obj->tio.entity->tio.LINE;
@@ -92,7 +82,7 @@ output_LINE(Dwg_Object* obj)
       obj->index, transform_X(line->start.x), transform_Y(line->start.y), transform_X(line->end.x), transform_Y(line->end.y));
 }
 
-void
+static void
 output_CIRCLE(Dwg_Object* obj)
 {
   Dwg_Entity_CIRCLE* circle = obj->tio.entity->tio.CIRCLE;
@@ -101,7 +91,7 @@ output_CIRCLE(Dwg_Object* obj)
       obj->index, transform_X(circle->center.x), transform_Y(circle->center.y), circle->radius);
 }
 
-void
+static void
 output_ARC(Dwg_Object* obj)
 {
   Dwg_Entity_ARC* arc = obj->tio.entity->tio.ARC;
@@ -118,7 +108,7 @@ output_ARC(Dwg_Object* obj)
       large_arc, transform_X(x_end), transform_Y(y_end), 0.1);
 }
 
-void
+static void
 output_INSERT(Dwg_Object* obj)
 {
   Dwg_Entity_INSERT* insert = obj->tio.entity->tio.INSERT;
@@ -146,7 +136,7 @@ output_INSERT(Dwg_Object* obj)
     }
 }
 
-void
+static void
 output_object(Dwg_Object* obj){
   if (!obj)
     {
@@ -166,6 +156,7 @@ output_object(Dwg_Object* obj){
     output_ARC(obj);
 }
 
+static
 void output_BLOCK_HEADER(Dwg_Object_Ref* ref)
 {
   Dwg_Object* obj;
@@ -205,8 +196,7 @@ void output_BLOCK_HEADER(Dwg_Object_Ref* ref)
   printf("\t</g>\n");
 }
 
-
-void
+static void
 output_SVG(Dwg_Data* dwg)
 {
   unsigned int i;
@@ -262,4 +252,11 @@ output_SVG(Dwg_Data* dwg)
     }
 */
   printf("</svg>\n");
+}
+
+int
+main(int argc, char *argv[])
+{
+  REQUIRE_INPUT_FILE_ARG (argc);
+  return test_SVG (argv[1]);
 }

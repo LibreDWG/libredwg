@@ -26,7 +26,7 @@
 #include <dwg.h>
 #include "suffix.c"
 
-void
+static void
 create_postscript(Dwg_Data *dwg, char *output)
 {
   double dx;

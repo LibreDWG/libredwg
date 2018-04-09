@@ -29,14 +29,14 @@
 #include "suffix.c"
 
 int minimal = 0;
-FILE *fh;
 char buf[4096];
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
 
-char *dxf_format (int code);
+int usage(void);
+const char *dxf_format (int code);
 
-int usage() {
+int usage(void) {
   // -as-r2014 for saveas
   printf("\nUsage:\tdxf2dwg [-as-rVER] <input_file.dxf> [<output_file.dwg>]\n");
   return 1;
@@ -89,7 +89,7 @@ int usage() {
       ? ref->obj->tio.object->tio.section->entry_name : ""); \
   }
 
-char *
+const char *
 dxf_format (int code)
 {
   if (0 <= code && code < 5)

@@ -26,7 +26,9 @@
 #include "../src/common.h"
 #include "suffix.c"
 
-int usage() {
+int usage(void);
+
+int usage(void) {
   printf("\nUsage:\trewrite [-as-rxxxx] <dwg_input_file.dwg> [<dwg_output_file.dwg>]\n");
   return 1;
 }

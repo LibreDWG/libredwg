@@ -26,7 +26,7 @@
 #include <dwg.h>
 #include "suffix.c"
 
-int
+static int
 get_bmp(char *filename)
 {
   char *outfile;
