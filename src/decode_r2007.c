@@ -109,6 +109,7 @@ typedef struct _r2007_section
   int64_t  encoded;
   int64_t  num_pages;
   DWGCHAR *name;
+  Dwg_Section_Type type;
   r2007_section_page **pages;
   struct _r2007_section *next;
 } r2007_section;
@@ -805,6 +806,7 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
       LOG_TEXT_UNICODE(TRACE, section->name)
       LOG_TRACE("\n")
 #endif
+      section->type = dwg_section_type(section->name);
     
       section->pages = (r2007_section_page**) malloc(
         (size_t)section->num_pages * sizeof(r2007_section_page*));

@@ -450,3 +450,53 @@ dwg_class_is_entity(Dwg_Class *klass)
 {
   return klass->item_class_id == 0x1f2;
 }
+
+Dwg_Section_Type
+dwg_section_type(DWGCHAR *wname)
+{
+  char name[24];
+  uint16_t c;
+  int i = 0;
+
+  while ((c = *wname++)) {
+    name[i++] = (char)(c & 0xff);
+  }
+  name[i] = '\0';
+
+  if (!strcmp(name, "AcDb:Header")) {
+    return SECTION_HEADER;
+  } else if (!strcmp(name, "AcDb:Classes")) {
+    return SECTION_CLASSES;
+  } else if (!strcmp(name, "AcDb:SummaryInfo")) {
+    return SECTION_SUMMARYINFO;
+  } else if (!strcmp(name, "AcDb:Preview")) {
+    return SECTION_PREVIEW;
+  } else if (!strcmp(name, "AcDb:VBAProject")) {
+    return SECTION_VBAPROJECT;
+  } else if (!strcmp(name, "AcDb:AppInfo")) {
+    return SECTION_APPINFO;
+  } else if (!strcmp(name, "AcDb:FileDepList")) {
+    return SECTION_FILEDEPLIST;
+  } else if (!strcmp(name, "AcDb:RevHistory")) {
+    return SECTION_REVHISTORY;
+  } else if (!strcmp(name, "AcDb:Security")) {
+    return SECTION_SECURITY;
+  } else if (!strcmp(name, "AcDb:AcDbObjects")) {
+    return SECTION_OBJECTS;
+  } else if (!strcmp(name, "AcDb:ObjFreeSpace")) {
+    return SECTION_OBJFREESPACE;
+  } else if (!strcmp(name, "AcDb:Template")) {
+    return SECTION_TEMPLATE;
+  } else if (!strcmp(name, "AcDb:Handles")) {
+    return SECTION_HANDLES;
+  } else if (!strcmp(name, "AcDb:AcDsPrototype_1b")) {
+    return SECTION_PROTOTYPE;
+  } else if (!strcmp(name, "AcDb:AuxHeader")) {
+    return SECTION_AUXHEADER;
+  } else if (!strcmp(name, "AcDb:Signature")) {
+    return SECTION_SIGNATURE;
+  } else if (!strcmp(name, "AcDb:AppInfoHistory")) { // AC1021
+    return SECTION_APPINFOHISTORY;
+  }
+  return SECTION_UNKNOWN;
+}

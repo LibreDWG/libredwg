@@ -3862,28 +3862,41 @@ typedef struct _dwg_chain
   unsigned char bit;
 } Dwg_Chain;
 
-typedef enum DWG_SECTION_TYPE
+typedef enum DWG_SECTION_TYPE /* since r2004+ */
 {
-  SECTION_HEADER = 0x01,
-  SECTION_AUXHEADER = 0x02,
-  SECTION_CLASSES = 0x03,
-  SECTION_HANDLES = 0x04,
-  SECTION_TEMPLATE = 0x05,
-  SECTION_OBJFREESPACE = 0x06,
-  SECTION_DBOBJECTS = 0x07,
-  SECTION_REVHISTORY = 0x08,
-  SECTION_SUMMARYINFO = 0x09,
-  SECTION_PREVIEW = 0x0a,
-  SECTION_APPINFO = 0x0b,
-  SECTION_APPINFOHISTORY = 0x0c,
-  SECTION_FILEDEPLIST = 0x0d,
-  SECTION_SECURITY,      /* .. */
-  SECTION_VBAPROJECT,    /* not seen */
-  SECTION_SIGNATURE      /* .. */
+  SECTION_HEADER = 1,			/* AcDb:Header */
+  SECTION_AUXHEADER = 2,		/* AcDb:AuxHeader */
+  SECTION_CLASSES = 3,			/* AcDb:Classes */
+  SECTION_HANDLES = 4,			/* AcDb:Handles */
+  SECTION_TEMPLATE = 5,			/* AcDb:Template */
+  SECTION_OBJFREESPACE = 6,		/* AcDb:ObjFreeSpace */
+  SECTION_OBJECTS = 7,			/* AcDb:AcDbObjects */
+  SECTION_REVHISTORY = 8,		/* AcDb:RevHistory */
+  SECTION_SUMMARYINFO = 9,		/* AcDb:SummaryInfo */
+  SECTION_PREVIEW = 10,			/* AcDb:Preview */
+  SECTION_APPINFO = 11, 		/* AcDb:AppInfo */
+  SECTION_APPINFOHISTORY = 12,		/* AcDb:AppInfoHistory */
+  SECTION_FILEDEPLIST = 13,		/* AcDb:FileDepList */
+  SECTION_SECURITY,      		/* AcDb:Security */
+  SECTION_VBAPROJECT,    		/* AcDb:VBAProject */
+  SECTION_SIGNATURE,     		/* AcDb:Signature */
+  SECTION_PROTOTYPE,      		/* AcDb:AcDsPrototype_1b */
+  SECTION_UNKNOWN,
 } Dwg_Section_Type;
+
+typedef enum DWG_SECTION_TYPE_R13
+{
+  SECTION_HEADER_R13 = 0,
+  SECTION_CLASSES_R13 = 1,
+  SECTION_OBJECTS_R13 = 2,
+  SECTION_2NDHEADER_R13 = 3,
+  SECTION_MEASUREMENT_R13 = 4,
+  SECTION_AUXHEADER_R2000 = 5,
+} Dwg_Section_Type_R13;
 
 typedef enum DWG_SECTION_TYPE_R11
 {
+  SECTION_HEADER_R11 = 0,
   SECTION_BLOCK = 1,
   SECTION_LAYER = 2,
   SECTION_STYLE = 3,
@@ -4161,6 +4174,9 @@ get_first_owned_object(Dwg_Object* hdr_obj, Dwg_Object_BLOCK_HEADER* hdr);
 
 Dwg_Object*
 get_next_owned_object(Dwg_Object* hdr_obj, Dwg_Object* current, Dwg_Object_BLOCK_HEADER* hdr);
+
+Dwg_Section_Type
+dwg_section_type(DWGCHAR *wname);
 
 void
 dwg_free(Dwg_Data * dwg);
