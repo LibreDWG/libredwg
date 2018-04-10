@@ -393,17 +393,73 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
         Dwg_Object *obj = NULL;
 
         #include "auxheader.spec"
-
-        /*
-        dwg->header.section[5].size = DWG_UNKNOWN5_SIZE;
-        dwg->unknown5.size = dwg->header.section[5].size;
-        dwg->unknown5.byte = dwg->unknown5.bit = 0;
-        while (dat->byte + dwg->unknown5.size >= dat->size)
-          bit_chain_alloc(dat);
-        memcpy(&dat->chain[dat->byte], dwg->unknown5.chain, dwg->unknown5.size);
-        dat->byte += dwg->unknown5.size;
-        */
       }
+  }
+
+  /* r2004 file header (compressed + encrypted) */
+  SINCE(R_2004)
+  {
+    /* System Section */
+    typedef union _system_section
+    {
+      unsigned char data[0x14]; // 20byte: 5*4
+      struct
+      {
+        uint32_t section_type;   /* 0x4163043b */
+        uint32_t decomp_data_size;
+        uint32_t comp_data_size;
+        uint32_t compression_type;
+        uint32_t checksum;
+      } fields;
+    } system_section;
+
+    system_section ss;
+    Dwg_Section *section;
+
+    Dwg_Object *obj = NULL;
+    struct Dwg_R2004_Header* _obj = &dwg->r2004_header;
+    const int size = sizeof(struct Dwg_R2004_Header);
+    char encrypted_data[size];
+    int rseed = 1;
+
+    dat->byte = 0x80;
+    for (i = 0; i < size; i++)
+      {
+        rseed *= 0x343fd;
+        rseed += 0x269ec3;
+        encrypted_data[i] = bit_read_RC(dat) ^ (rseed >> 0x10);
+      }
+    LOG_TRACE("\n#### Write 2004 File Header ####\n");
+    dat->byte = 0x80;
+    if (dat->byte+0x80 >= dat->size - 1) {
+      dat->size = dat->byte + 0x80;
+      bit_chain_alloc(dat);
+    }
+    memcpy(&dat->chain[0x80], encrypted_data, size);
+    LOG_INFO("@0x%lx\n", dat->byte);
+
+    #include "r2004_file_header.spec"
+
+    /*-------------------------------------------------------------------------
+     * Section Page Map
+     */
+    dat->byte = dwg->r2004_header.section_map_address + 0x100;
+
+    LOG_TRACE("\n=== Write System Section (Section Page Map) ===\n");
+#ifndef HAVE_COMPRESS_R2004_SECTION
+    dwg->r2004_header.comp_data_size   = dwg->r2004_header.decomp_data_size;
+    dwg->r2004_header.compression_type = 0;
+#endif
+    FIELD_RL(section_type, 0); // should be 0x4163043b
+    FIELD_RL(decomp_data_size, 0);
+    FIELD_RL(comp_data_size, 0);
+    FIELD_RL(compression_type, 0);
+    FIELD_RL(checksum, 0);
+    LOG_TRACE("\n")
+
+    LOG_WARN("TODO write_R2004_section_map(dat, dwg)")
+
+    LOG_TRACE("\n")
   }
 
   /*------------------------------------------------------------

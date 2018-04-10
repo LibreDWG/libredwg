@@ -89,17 +89,26 @@ bit_write_RC(Bit_Chain * dat, unsigned char value);
 BITCODE_RS
 bit_read_RS(Bit_Chain * dat);
 
+void
+bit_write_RS(Bit_Chain * dat, BITCODE_RS value);
+
 BITCODE_RS
 bit_read_RS_LE(Bit_Chain * dat);
 
 void
-bit_write_RS(Bit_Chain * dat, BITCODE_RS value);
+bit_write_RS_LE(Bit_Chain * dat, BITCODE_RS value);
 
 BITCODE_RL
 bit_read_RL(Bit_Chain * dat);
 
 void
 bit_write_RL(Bit_Chain * dat, BITCODE_RL value);
+
+BITCODE_RL
+bit_read_RL_LE(Bit_Chain * dat);
+
+void
+bit_write_RL_LE(Bit_Chain * dat, BITCODE_RL value);
 
 BITCODE_RLL
 bit_read_RLL(Bit_Chain * dat);

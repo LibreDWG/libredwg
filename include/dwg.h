@@ -3907,9 +3907,15 @@ typedef struct _dwg_section
   BITCODE_RL x00;
   BITCODE_TV name;
   Dwg_Section_Type type; /* to be casted to Dwg_Section_Type_r11 preR13 */
+  /* r2004 section fields: */
+  BITCODE_RL section_type;
+  BITCODE_RL decomp_data_size;
+  BITCODE_RL comp_data_size;
+  BITCODE_RL compression_type;
+  BITCODE_RL checksum;
 } Dwg_Section;
 
-/* Dwg_Section_r2007:
+/* Dwg_R2007_Section:
   int64_t  data_size;    // max size of page
   int64_t  max_size;
   int64_t  encrypted;
@@ -3993,6 +3999,12 @@ typedef struct _dwg_struct
       BITCODE_RL gap_array_size;
       BITCODE_RL CRC;
       char padding[12];
+      /* System Section: Section Page Map */
+      BITCODE_RL section_type; /* 0x4163043b */
+      BITCODE_RL decomp_data_size;
+      BITCODE_RL comp_data_size;
+      BITCODE_RL compression_type;
+      BITCODE_RL checksum;
   } r2004_header;
 
   /* #define DWG_AUXHEADER_SIZE 123 */

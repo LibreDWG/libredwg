@@ -308,6 +308,15 @@ bit_write_RS(Bit_Chain * dat, BITCODE_RS value)
   bit_write_RC(dat, value >> 8);
 }
 
+/** Write 1 raw short little-endian.
+ */
+void
+bit_write_RS_LE(Bit_Chain * dat, BITCODE_RS value)
+{
+  bit_write_RC(dat, value >> 8);
+  bit_write_RC(dat, value & 0xFF);
+}
+
 /** Read 1 raw long (4 byte, BE).
  */
 BITCODE_RL
@@ -329,6 +338,29 @@ bit_write_RL(Bit_Chain * dat, BITCODE_RL value)
   //least significant word first:
   bit_write_RS(dat, value & 0xFFFF);
   bit_write_RS(dat, value >> 16);
+}
+
+/** Read 1 raw long (4 byte, LE).
+ */
+BITCODE_RL
+bit_read_RL_LE(Bit_Chain * dat)
+{
+  BITCODE_RS word1, word2;
+
+  //most significant word first
+  word1 = bit_read_RS_LE(dat);
+  word2 = bit_read_RS_LE(dat);
+  return ((((uint32_t) word1) << 16) | ((uint32_t) word2));
+}
+
+/** Write 1 raw long (4 byte, LE).
+ */
+void
+bit_write_RL_LE(Bit_Chain * dat, BITCODE_RL value)
+{
+  //most significant word first:
+  bit_write_RS_LE(dat, value >> 16);
+  bit_write_RS_LE(dat, value & 0xFFFF);
 }
 
 /** Read 1 raw 64bit long (8 byte, BE).
