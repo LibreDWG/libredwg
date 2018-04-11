@@ -1636,7 +1636,7 @@ typedef union _encrypted_section_header
   struct
   {
     unsigned long int tag;
-    unsigned long int section_type;
+    BITCODE_RL section_type;
     unsigned long int data_size;
     unsigned long int section_size;
     unsigned long int start_offset;
@@ -1648,12 +1648,11 @@ typedef union _encrypted_section_header
 
 static int
 read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *dwg,
-                            Bit_Chain* sec_dat,
-                            long unsigned int section_type)
+                            Bit_Chain* sec_dat, BITCODE_RL section_type)
 {
   long unsigned int address, sec_mask;
   long unsigned int max_decomp_size;
-  Dwg_Section_Info *info = 0;
+  Dwg_Section_Info *info = NULL;
   encrypted_section_header es;
   char *decomp;
   unsigned int i, j;
@@ -1668,13 +1667,13 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *dwg,
     }
   if (!info)
     {
-      LOG_WARN("Failed to find section %lu", section_type);
+      LOG_WARN("Failed to find section %d", (int)section_type);
       return 1;
     }
   else
     {
-      LOG_TRACE("\nFound section %s %lu with %d sections\n",
-                info->name, section_type, info->num_sections);
+      LOG_TRACE("\nFound section %s %d with %d sections\n",
+                info->name, (int)section_type, info->num_sections);
     }
 
   max_decomp_size = info->num_sections * info->max_decomp_size;

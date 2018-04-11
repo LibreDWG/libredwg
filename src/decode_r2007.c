@@ -120,16 +120,18 @@ int read_r2007_meta_data(Bit_Chain *dat, Dwg_Data *dwg);
 extern int rs_decode_block(unsigned char *blk, int fix);
   
 /* private */
-static r2007_section* get_section(r2007_section *sections_map, int64_t hashcode);
+static r2007_section* get_section(r2007_section *sections_map, Dwg_Section_Type sec_type);
 static r2007_page* get_page(r2007_page *pages_map, int64_t id);
 static void pages_destroy(r2007_page *page);
 static void sections_destroy(r2007_section *section);
 static r2007_section* read_sections_map(Bit_Chain* dat, int64_t size_comp, 
                                  int64_t size_uncomp, int64_t correction);
-//static r2007_section* read_r2007_section_classes(Bit_Chain* dat,
-//           Dwg_Data *dwg, r2007_section *sections_map, r2007_page *pages_map);
-//static r2007_section* read_r2007_section_header(Bit_Chain* dat,
-//           Dwg_Data *dwg, r2007_section *sections_map, r2007_page *pages_map);
+static int read_data_section(Bit_Chain *sec_dat, Bit_Chain *dat, r2007_section *sections_map, 
+                             r2007_page *pages_map, Dwg_Section_Type sec_type);
+static int read_2007_section_classes(Bit_Chain* dat,
+           Dwg_Data *dwg, r2007_section *sections_map, r2007_page *pages_map);
+static int read_2007_section_header(Bit_Chain* dat,
+           Dwg_Data *dwg, r2007_section *sections_map, r2007_page *pages_map);
 static r2007_page* read_pages_map(Bit_Chain* dat, int64_t size_comp,
                            int64_t size_uncomp, int64_t correction);
 static void read_file_header(Bit_Chain* dat, r2007_file_header *file_header);
@@ -637,10 +639,9 @@ read_data_page(Bit_Chain* dat, unsigned char *decomp, int64_t page_size,
   return 0;
 }
 
-/* yet unused */
 static int
 read_data_section(Bit_Chain *sec_dat, Bit_Chain *dat, r2007_section *sections_map, 
-                  r2007_page *pages_map, int64_t hashcode)
+                  r2007_page *pages_map, Dwg_Section_Type sec_type)
 {
   r2007_section *section;
   r2007_page *page;
@@ -648,9 +649,9 @@ read_data_section(Bit_Chain *sec_dat, Bit_Chain *dat, r2007_section *sections_ma
   unsigned char *decomp;
   int i;
   
-  section = get_section(sections_map, hashcode);
+  section = get_section(sections_map, sec_type);
   if (section == NULL) {
-    LOG_ERROR("Failed to find section")
+    LOG_ERROR("Failed to find section %d", (int)sec_type)
     return 1;
   }
   
@@ -937,20 +938,19 @@ pages_destroy(r2007_page *page)
     }
 }
 
-/* Lookup a section in the section map. The section is identified by its hashcode.
+/* Lookup a section in the section map. The section is identified by its numeric type.
  */
 static r2007_section*
-get_section(r2007_section *sections_map, int64_t hashcode)
+get_section(r2007_section *sections_map, Dwg_Section_Type sec_type)
 {
   r2007_section *section = sections_map;
-  
   while (section != NULL)
     {
-      if (section->hashcode == hashcode)
+      if (section->type == sec_type)
         break;
       section = section->next;
     }
-  
+
   return section;
 }
 
@@ -1022,22 +1022,118 @@ read_file_header(Bit_Chain* dat, r2007_file_header *file_header)
   free(pedata);
 }
 
-/* TODO */
-#if 0
-// TODO Data section AcDb:Classes p86
-static r2007_section*
-read_r2007_section_classes(Bit_Chain* dat, Dwg_Data *dwg,
-                           r2007_section *sections_map, r2007_page *pages_map)
+// TODO string stream. p86
+static int
+read_2007_section_classes(Bit_Chain* dat, Dwg_Data *dwg,
+                          r2007_section *sections_map, r2007_page *pages_map)
 {
+  unsigned long int size;
+  unsigned long int max_num;
+  unsigned long int num_objects, dwg_version, maint_version, unknown;
+  char c;
+  Bit_Chain sec_dat;
+  int error;
+
+  sec_dat.chain = NULL;
+  error = read_data_section(&sec_dat, dat, sections_map, 
+                            pages_map, SECTION_CLASSES);
+  if (error)
+    {
+      LOG_ERROR("Failed to read class section");
+      if (sec_dat.chain)
+        free(sec_dat.chain);
+      return error;
+    }
+
+  if (bit_search_sentinel(&sec_dat, dwg_sentinel(DWG_SENTINEL_CLASS_BEGIN)))
+    {
+      size    = bit_read_RL(&sec_dat);  // size of class data area
+      if (dat->version >= R_2010 && dwg->header.maint_version > 3) {
+          bit_read_RL(&sec_dat);
+      }
+      max_num = bit_read_BS(&sec_dat);  // Maximum class number
+      c = bit_read_RC(&sec_dat);        // 0x00
+      c = bit_read_RC(&sec_dat);        // 0x00
+      c = bit_read_B(&sec_dat);         // 1
+
+      // TODO prepare string stream
+      //
+
+      dwg->layout_number = 0;
+      dwg->num_classes = 0;
+
+      do
+        {
+          unsigned int idc;
+
+          idc = dwg->num_classes;
+          if (idc == 0)
+            dwg->dwg_class = (Dwg_Class *) calloc(1, sizeof(Dwg_Class));
+          else
+            dwg->dwg_class = (Dwg_Class *) realloc(dwg->dwg_class, (idc + 1)
+                * sizeof(Dwg_Class));
+          if (!dwg->dwg_class)
+            {
+              LOG_ERROR("Out of memory");
+              if (sec_dat.chain)
+                free(sec_dat.chain);
+              return 2;
+            }
+
+          dwg->dwg_class[idc].number        = bit_read_BS(&sec_dat);
+          dwg->dwg_class[idc].proxyflag     = bit_read_BS(&sec_dat);
+          /*
+          dwg->dwg_class[idc].appname       = (char*)bit_read_TU(&sec_dat);
+          dwg->dwg_class[idc].cppname       = (char*)bit_read_TU(&sec_dat);
+          dwg->dwg_class[idc].dxfname       = (char*)bit_read_TU(&sec_dat);
+          */
+          dwg->dwg_class[idc].wasazombie    = bit_read_B(&sec_dat);
+          dwg->dwg_class[idc].item_class_id = bit_read_BS(&sec_dat);
+
+          num_objects   = bit_read_BL(&sec_dat);  // DXF 91
+          dwg_version   = bit_read_BS(&sec_dat);  // Dwg Version
+          maint_version = bit_read_BS(&sec_dat);  // Maintenance release version.
+          unknown       = bit_read_BL(&sec_dat);  // Unknown (normally 0L)
+          unknown       = bit_read_BL(&sec_dat);  // Unknown (normally 0L)
+
+          LOG_TRACE("-------------------\n")
+          LOG_TRACE("Number:           %d\n", dwg->dwg_class[idc].number)
+          LOG_TRACE("Proxyflag:        %x\n", dwg->dwg_class[idc].proxyflag)
+          /*
+          LOG_TRACE("Application name: %S\n", dwg->dwg_class[idc].appname)
+          LOG_TRACE("C++ class name:   %S\n", dwg->dwg_class[idc].cppname)
+          LOG_TRACE("DXF record name:  %S\n", dwg->dwg_class[idc].dxfname)
+          */
+          LOG_TRACE("Class ID:         %x\n", dwg->dwg_class[idc].item_class_id)
+
+          if (strcmp((const char *)dwg->dwg_class[idc].dxfname, "LAYOUT") == 0)
+            dwg->layout_number = dwg->dwg_class[idc].number;
+
+          dwg->num_classes++;
+
+        } while (sec_dat.byte < (size - 1));
+    }
+  else
+    {
+      LOG_ERROR("Failed to find class section sentinel");
+      free(sec_dat.chain);
+      return 1;
+    }
+  free(sec_dat.chain);
+  return 0;
 }
 
 // TODO
-static r2007_section*
-read_r2007_section_header(Bit_Chain* dat, Dwg_Data *dwg,
-                           r2007_section *sections_map, r2007_page *pages_map)
+static int
+read_2007_section_header(Bit_Chain* dat, Dwg_Data *dwg,
+                         r2007_section *sections_map, r2007_page *pages_map)
 {
+  Bit_Chain sec_dat;
+  int error;
+  error = read_data_section(&sec_dat, dat, sections_map, 
+                            pages_map, SECTION_HEADER);
+  return error;
 }
-#endif
 
 
 /* exported */
@@ -1065,7 +1161,6 @@ read_r2007_meta_data(Bit_Chain *dat, Dwg_Data *dwg)
   
   // Sections Map
   page = get_page(pages_map, file_header.sections_map_id);
-  
   if (page)
     {
       dat->byte = page->offset;
@@ -1073,12 +1168,8 @@ read_r2007_meta_data(Bit_Chain *dat, Dwg_Data *dwg)
         file_header.sections_map_size_uncomp, file_header.sections_map_correction);
     }
 
-#if 0
-  // Section Classes
-  read_r2007_section_classes(dat, dwg, sections_map, pages_map);
-  // Section Header
-  read_r2007_section_header(dat, dwg, sections_map, pages_map);
-#endif
+  read_2007_section_classes(dat, dwg, sections_map, pages_map);
+  read_2007_section_header(dat, dwg, sections_map, pages_map);
 
   pages_destroy(pages_map);
   if (page)
