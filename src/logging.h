@@ -77,11 +77,15 @@
 #  define LOG_TEXT_UNICODE(level, wstr) \
 	if (DWG_LOGLEVEL >= DWG_LOGLEVEL_##level) { \
             BITCODE_TU ws = wstr; \
-            uint16_t c; \
-            while ((c = *ws++)) { \
-              HANDLER(OUTPUT, "%c", (char)(c & 0xff)); \
+            uint16_t _c; \
+            while ((_c = *ws++)) { \
+              HANDLER(OUTPUT, "%c", (char)(_c & 0xff)); \
             } \
         }
 #endif
+#define LOG_TRACE_TU(s,wstr) \
+  LOG_TRACE("%s: ", s) \
+  LOG_TEXT_UNICODE(TRACE, (BITCODE_TU)wstr) \
+  LOG_TRACE("\n")
 
 #endif

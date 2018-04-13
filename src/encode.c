@@ -96,6 +96,9 @@ static bool env_var_checked_p;
 #define FIELD_TF(name,len,dxf)             \
   { bit_write_TF(dat, _obj->name, len); \
     FIELD_G_TRACE(name, TF, dxf); }
+#define FIELD_TU(name,dxf) \
+  { bit_write_TU(dat, (BITCODE_TU)_obj->name);  \
+    LOG_TRACE_TU(#name, (BITCODE_TU)_obj->name); }
 #define FIELD_BT(name, dxf) FIELDG(name, BT, dxf);
 
 #define FIELD_DD(name, _default, dxf) bit_write_DD(dat, FIELD_VALUE(name), _default);
@@ -236,6 +239,15 @@ static bool env_var_checked_p;
 #define COMMON_ENTITY_HANDLE_DATA  \
   SINCE(R_13) {\
     dwg_encode_common_entity_handle_data(dat, obj);\
+  }
+#define START_STRING_STREAM \
+  bit_write_B(dat, obj->has_strings); \
+  if (obj->has_strings) { \
+    Bit_Chain sav_dat = *dat; \
+    dat->byte = (obj->bitsize + 191) >> 3; \
+    dat->bit = (obj->bitsize + 191) & 7;
+#define END_STRING_STREAM \
+    *dat = sav_dat; \
   }
 
 //TODO unify REPEAT macros

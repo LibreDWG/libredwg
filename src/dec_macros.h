@@ -95,6 +95,9 @@
     LOG_TRACE_TF(FIELD_VALUE(name), len); }
 #define FIELD_TV(name,dxf) FIELDG(name, TV, dxf);
 #define FIELD_T FIELD_TV /*TODO: implement version dependant string fields */
+#define FIELD_TU(name,dxf) \
+  { _obj->name = (char*)bit_read_TU(dat); \
+    LOG_TRACE_TU(#name, (BITCODE_TU)FIELD_VALUE(name)); }
 #define FIELD_BT(name,dxf) FIELDG(name, BT, dxf);
 #define FIELD_4BITS(name,dxf) _obj->name = bit_read_4BITS(dat);
 
@@ -252,6 +255,17 @@
     {\
       FIELD_HANDLE(xdicobjhandle, code, 0); \
     }
+
+#define START_STRING_STREAM \
+  obj->has_strings = bit_read_B(dat); \
+  if (obj->has_strings) { \
+    Bit_Chain sav_dat = *dat; \
+    dat->byte = (obj->bitsize + 191) >> 3; \
+    dat->bit = (obj->bitsize + 191) & 7;
+
+#define END_STRING_STREAM \
+    *dat = sav_dat; \
+  }
 
 //TODO unify REPEAT macros
 #define REPEAT_N(times, name, type) \

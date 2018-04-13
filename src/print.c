@@ -82,6 +82,7 @@ static unsigned int cur_ver = 0;
 #define FIELD_MS(name,dxf) FIELD(name, MS, dxf);
 #define FIELD_TF(name,len,dxf) FIELD_TRACE(name, TF, dxf)
 #define FIELD_TV(name,dxf) FIELD(name, TV, dxf);
+#define FIELD_TU(name,dxf) LOG_TRACE_TU(#name, (BITCODE_TU)_obj->name)
 #define FIELD_T FIELD_TV /*TODO: implement version dependant string fields */
 #define FIELD_BT(name,dxf) FIELD(name, BT, dxf);
 #define FIELD_4BITS(name,dxf) FIELD_TRACE(name,4BITS,dxf)
@@ -185,6 +186,14 @@ static unsigned int cur_ver = 0;
   for (rcount4=0; rcount4<(int)_obj->times; rcount4++)
 
 #define COMMON_ENTITY_HANDLE_DATA /*  Empty */
+#define START_STRING_STREAM \
+  if (obj->has_strings) { \
+    Bit_Chain sav_dat = *dat; \
+    dat->byte = (obj->bitsize + 191) >> 3; \
+    dat->bit = (obj->bitsize + 191) & 7;
+#define END_STRING_STREAM \
+    *dat = sav_dat; \
+  }
 
 #define DWG_ENTITY(token) \
 static void \

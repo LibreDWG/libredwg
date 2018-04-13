@@ -3815,6 +3815,7 @@ typedef struct _dwg_object
   BITCODE_RC extra; /* preR13 */
   BITCODE_RS linetype_rs; /* pre R13 */
   /* preR13 in the obj: eed, elevation/pt.z, thickness, paper */
+  BITCODE_B  has_strings;       /* r2007+ */
   BITCODE_MC handlestream_size; /* r2010+ in bits */
 
   Dwg_Object_Supertype supertype;

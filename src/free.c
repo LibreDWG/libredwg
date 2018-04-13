@@ -75,7 +75,7 @@ static Bit_Chain *dat = &pdat;
       free (FIELD_VALUE(name)); \
       FIELD_VALUE(name) = NULL; \
     }
-
+#define FIELD_TU(name,dxf)  FIELD_TV(name,dxf)
 #define FIELD_TF(name,len,dxf) FIELD_TV(name,dxf)
 #define FIELD_T FIELD_TV /*TODO: implement version dependant string fields */
 #define FIELD_BT(name,dxf) FIELD(name, BT);
@@ -177,6 +177,8 @@ static Bit_Chain *dat = &pdat;
 #define END_REPEAT(field) FIELD_TV(field,0)
 
 #define COMMON_ENTITY_HANDLE_DATA
+#define START_STRING_STREAM
+#define END_STRING_STREAM
 //TODO num_eed and reactors
 
 #define DWG_ENTITY(token) \
@@ -788,14 +790,16 @@ dwg_free(Dwg_Data * dwg)
       }
       if (dwg->picture.size && dwg->picture.chain)
         free(dwg->picture.chain);
-      for (i=0; i < dwg->num_classes; ++i)
-        {
-          FREE_IF(dwg->dwg_class[i].appname);
-          FREE_IF(dwg->dwg_class[i].cppname);
-          FREE_IF(dwg->dwg_class[i].dxfname);
-        }
       if (dwg->num_classes)
-        FREE_IF(dwg->dwg_class);
+        {
+          for (i=0; i < dwg->num_classes; ++i)
+            {
+              FREE_IF(dwg->dwg_class[i].appname);
+              FREE_IF(dwg->dwg_class[i].cppname);
+              FREE_IF(dwg->dwg_class[i].dxfname);
+            }
+          FREE_IF(dwg->dwg_class);
+        }
       for (i=0; i < dwg->header.num_descriptions; ++i)
         FREE_IF(dwg->header.section_info[i].sections);
       if (dwg->header.num_descriptions)
