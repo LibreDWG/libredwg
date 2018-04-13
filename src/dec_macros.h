@@ -74,6 +74,15 @@
               _obj->name->handleref.value,          \
               _obj->name->absolute_ref, dxf);       \
   }
+#define FIELD_DATAHANDLE(name, handle_code, dxf) \
+  { \
+    _obj->name = dwg_decode_handleref(dat, obj, dwg);\
+    LOG_TRACE(#name ": HANDLE(%d.%d.%lu) absolute:%lu\n",\
+          _obj->name->handleref.code,\
+          _obj->name->handleref.size,\
+          _obj->name->handleref.value,\
+          _obj->name->absolute_ref);\
+  }
 
 #define FIELD_B(name,dxf) FIELDG(name, B, dxf)
 #define FIELD_BB(name,dxf) FIELDG(name, BB, dxf)
@@ -256,12 +265,16 @@
       FIELD_HANDLE(xdicobjhandle, code, 0); \
     }
 
+#define SECTION_STRING_STREAM \
+  { \
+    Bit_Chain sav_dat = *dat; \
+    dat = str_dat;
+
 #define START_STRING_STREAM \
   obj->has_strings = bit_read_B(dat); \
   if (obj->has_strings) { \
     Bit_Chain sav_dat = *dat; \
-    dat->byte = (obj->bitsize + 191) >> 3; \
-    dat->bit = (obj->bitsize + 191) & 7;
+    obj_string_stream(dat, obj->bitsize, dat);
 
 #define END_STRING_STREAM \
     *dat = sav_dat; \

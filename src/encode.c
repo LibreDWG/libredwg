@@ -51,6 +51,9 @@ static bool env_var_checked_p;
 
 #include "logging.h"
 
+extern void
+obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
+
 /*--------------------------------------------------------------------------------
  * spec MACROS
  */
@@ -214,6 +217,8 @@ static bool env_var_checked_p;
       bit_write_H(hdl_dat, &_obj->name->handleref); \
     }\
   }
+#define FIELD_DATAHANDLE(name, handle_code, dxf) \
+  { bit_write_H(dat, &_obj->name->handleref); }
 
 #define FIELD_HANDLE_N(name, vcount, handle_code, dxf)\
   FIELD_HANDLE(name, handle_code, dxf)
@@ -240,12 +245,17 @@ static bool env_var_checked_p;
   SINCE(R_13) {\
     dwg_encode_common_entity_handle_data(dat, hdl_dat, obj); \
   }
+#define SECTION_STRING_STREAM \
+  { \
+    Bit_Chain sav_dat = *dat; \
+    dat = str_dat;
+
 #define START_STRING_STREAM \
   bit_write_B(dat, obj->has_strings); \
   if (obj->has_strings) { \
     Bit_Chain sav_dat = *dat; \
-    dat->byte = (obj->bitsize + 191) >> 3; \
-    dat->bit = (obj->bitsize + 191) & 7;
+    obj_string_stream(dat, obj->bitsize, dat);
+
 #define END_STRING_STREAM \
     *dat = sav_dat; \
   }
@@ -317,7 +327,8 @@ dwg_encode_object(Dwg_Object* obj, Bit_Chain* dat, Bit_Chain* hdl_dat);
 static void
 dwg_encode_common_entity_handle_data(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj);
 static void
-dwg_encode_header_variables(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Data* dwg);
+dwg_encode_header_variables(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
+                            Dwg_Data* dwg);
 static int
 dwg_encode_variable_type(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj);
 void
@@ -506,8 +517,10 @@ dwg_encode_chains(Dwg_Data* dwg, Bit_Chain* dat)
 
   bit_write_RL(dat, 0); // Size of the section
 
-  // encode 
-  dwg_encode_header_variables(dat, hdl_dat, dwg);
+  // encode
+  //if (dat->version >= R_2007)
+  //  str_dat = dat;
+  dwg_encode_header_variables(dat, hdl_dat, dat, dwg);
 
   /* Write the size of the section at its beginning
    */
@@ -1778,7 +1791,8 @@ dwg_encode_object(Dwg_Object* obj, Bit_Chain* dat, Bit_Chain* hdl_dat)
 }
 
 static void
-dwg_encode_header_variables(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Data * dwg)
+dwg_encode_header_variables(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
+                            Dwg_Data * dwg)
 {
   Dwg_Header_Variables* _obj = &dwg->header_vars;
   Dwg_Object* obj = NULL;

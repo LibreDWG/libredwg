@@ -55,6 +55,19 @@ bit_advance_position(Bit_Chain * dat, int advance)
   dat->bit = endpos % 8;
 }
 
+/* Absolute set
+ */
+void
+bit_set_position(Bit_Chain * dat, unsigned long bitpos)
+{
+  dat->byte = bitpos >> 3;
+  if (dat->byte >= dat->size)
+    {
+      LOG_ERROR("buffer overflow at %lu", dat->byte)
+    }
+  dat->bit = bitpos & 7;
+}
+
 /** Read 1 bit.
  */
 BITCODE_B

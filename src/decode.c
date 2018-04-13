@@ -64,10 +64,12 @@ Dwg_Object_Ref *
 dwg_decode_handleref_with_code(Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Data* dwg,
                                unsigned int code);
 void
-dwg_decode_header_variables(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Data* dwg);
+dwg_decode_header_variables(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
+                            Dwg_Data* dwg);
 int
 read_r2007_meta_data(Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Data *dwg);
-
+extern void
+obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 
 /*--------------------------------------------------------------------------------
  * Private functions
@@ -873,7 +875,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
   LOG_TRACE("         Length: %lu\n", pvz)
 
   dat->bit = 0;
-  dwg_decode_header_variables(dat, dat, dwg);
+  dwg_decode_header_variables(dat, dat, dat, dwg);
 
   // Check CRC-on
   dat->bit = 0;
@@ -1840,7 +1842,7 @@ read_2004_section_header(Bit_Chain* dat, Dwg_Data *dwg)
     {
       unsigned long int size = bit_read_RL(&sec_dat);
       LOG_TRACE("Length: %lu\n", size);
-      dwg_decode_header_variables(&sec_dat, &sec_dat, dwg);
+      dwg_decode_header_variables(&sec_dat, &sec_dat, &sec_dat, dwg);
     }
   free(sec_dat.chain);
   return 0;
@@ -2703,7 +2705,8 @@ dwg_decode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg,
 }
 
 void
-dwg_decode_header_variables(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Data * dwg)
+dwg_decode_header_variables(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
+                            Dwg_Data * dwg)
 {
   Dwg_Header_Variables* _obj = &dwg->header_vars;
   Dwg_Object* obj = NULL;

@@ -53,6 +53,7 @@ static Bit_Chain *dat = &pdat;
 
 #define ANYCODE -1
 #define FIELD_HANDLE(name,code,dxf) dwg_free_handleref(_obj->name, dwg)
+#define FIELD_DATAHANDLE(name,code,dxf) FIELD_HANDLE(name, code, dxf)
 #define FIELD_HANDLE_N(name,vcount,code,dxf) FIELD_HANDLE(name, code, dxf)
 
 #define FIELD_B(name,dxf) FIELD(name, B)
@@ -177,6 +178,7 @@ static Bit_Chain *dat = &pdat;
 #define END_REPEAT(field) FIELD_TV(field,0)
 
 #define COMMON_ENTITY_HANDLE_DATA
+#define SECTION_STRING_STREAM
 #define START_STRING_STREAM
 #define END_STRING_STREAM
 //TODO num_eed and reactors

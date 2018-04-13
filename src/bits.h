@@ -54,7 +54,10 @@ typedef struct _bit_chain
 /* Functions for raw data manipulations.
  */
 void
-bit_advance_position(Bit_Chain * dat, int salto);
+bit_advance_position(Bit_Chain * dat, int advance);
+
+void
+bit_set_position(Bit_Chain * dat, unsigned long bitpos);
 
 BITCODE_B
 bit_read_B(Bit_Chain * dat);

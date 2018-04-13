@@ -42,11 +42,11 @@
       FIELD_BD (unknown_2, 0);
       FIELD_BD (unknown_3, 0);
     }
-  VERSIONS(R_13, R_2007) { // undocumented as such in the ODA spec
-      FIELD_TV (unknown_text1, 0); // ""
-      FIELD_TV (unknown_text2, 0); // ""
-      FIELD_TV (unknown_text3, 0); // ""
-      FIELD_TV (unknown_text4, 0); // ""
+  VERSIONS(R_13, R_2004) { // undocumented as such in the ODA spec
+      FIELD_TV (unknown_text1, 0);
+      FIELD_TV (unknown_text2, 0);
+      FIELD_TV (unknown_text3, 0);
+      FIELD_TV (unknown_text4, 0);
   }
   SINCE(R_13)
     {
@@ -93,7 +93,7 @@
       FIELD_B (unknown_11, 0); //undocumented
     }
 
-  FIELD_B (user_timer_onoff, 0);
+  FIELD_B (USRTIMER, 70);
   FIELD_B (SKPOLY, 70);
   FIELD_B (ANGDIR, 70);
   FIELD_B (SPLFRAME, 70);
@@ -131,7 +131,7 @@
 
   VERSION(R_13)
     {
-      FIELD_BS (SAVEIMAGES, 0); // DXF code?
+      FIELD_BS (SAVEIMAGES, 70); // DXF code?
     }
 
   VERSIONS(R_14, R_2000)
@@ -186,7 +186,7 @@
       FIELD_BL (unknown_12, 0);
       FIELD_BL (unknown_13, 0);
       FIELD_BL (unknown_14, 0);
-      FIELD_BL (unknown_14b, 0);
+      FIELD_BL (unknown_14b, 0); //?
     }
 
   IF_ENCODE_FROM_PRE_R13 {
@@ -234,7 +234,9 @@
   FIELD_BD (FACETRES, 40);
   FIELD_BD (CMLSCALE, 40);
   FIELD_BD (CELTSCALE, 40);
-  FIELD_TV (MENU, 1);
+  PRE(R_2007) {
+    FIELD_TV (MENU, 1);
+  }
   FIELD_TIMEBLL (TDCREATE, 40);
   FIELD_TIMEBLL (TDUPDATE, 40);
 
@@ -248,7 +250,7 @@
   FIELD_TIMEBLL (TDINDWG, 40);
   FIELD_TIMEBLL (TDUSRTIMER, 40);
   FIELD_CMC (CECOLOR, 62);
-  FIELD_HANDLE (HANDSEED, ANYCODE, 0); 
+  FIELD_DATAHANDLE (HANDSEED, ANYCODE, 0);
   FIELD_HANDLE (CLAYER, 5, 8);
   FIELD_HANDLE (TEXTSTYLE, 5, 7);
   FIELD_HANDLE (CELTYPE, 5, 6);
@@ -282,9 +284,9 @@
 
   SINCE(R_2000)
     {
-      FIELD_HANDLE (PUCSBASE, 5, 2);
+      FIELD_HANDLE (PUCSNAME, 5, 2);
       FIELD_BS (PUCSORTHOVIEW, 70);
-      FIELD_HANDLE (PUCSORTHOREF, 5, 2);
+      FIELD_HANDLE (PUCSBASE, 5, 2);
       FIELD_3BD (PUCSORGTOP, 10);
       FIELD_3BD (PUCSORGBOTTOM, 10);
       FIELD_3BD (PUCSORGLEFT, 10);
@@ -306,17 +308,19 @@
 
   SINCE(R_2000)
     {
-      FIELD_HANDLE (UCSBASE, 5, 2);
-      FIELD_BS (UCSORTHOVIEW, 70);
       FIELD_HANDLE (UCSORTHOREF, 5, 2);
+      FIELD_BS (UCSORTHOVIEW, 70);
+      FIELD_HANDLE (UCSBASE, 5, 2);
       FIELD_3BD (UCSORGTOP, 10);
       FIELD_3BD (UCSORGBOTTOM, 10);
       FIELD_3BD (UCSORGLEFT, 10);
       FIELD_3BD (UCSORGRIGHT, 10);
       FIELD_3BD (UCSORGFRONT, 10);
       FIELD_3BD (UCSORGBACK, 10);
-      FIELD_TV (DIMPOST, 1);
-      FIELD_TV (DIMAPOST, 1);
+      PRE(R_2007) {
+        FIELD_TV (DIMPOST, 1);
+        FIELD_TV (DIMAPOST, 1);
+      }
     }
 
   VERSIONS(R_13, R_14)
@@ -446,17 +450,15 @@
     }
 
   SINCE(R_2007)
-    { // not in DXF
-      FIELD_B (DIMFXLON, 0);
+    { // not in DXF?
+      FIELD_B (DIMFXLON, 70);
     }
 
   SINCE(R_2010)
-    { // not in DXF
-      FIELD_B (DIMTXTDIRECTION, 0);
-      FIELD_BD (DIMALTMZF, 0);
-      FIELD_T (DIMALTMZS, 0);
-      FIELD_BD (DIMMZF, 0);
-      FIELD_T (DIMMZS, 0);
+    {
+      FIELD_B (DIMTXTDIRECTION, 70);
+      FIELD_BD (DIMALTMZF, 40);
+      FIELD_BD (DIMMZF, 40);
     }
 
   SINCE(R_2000)
@@ -469,7 +471,7 @@
     }
 
   SINCE(R_2007)
-    { // not in DXF
+    { // not in DXF?
       FIELD_HANDLE (DIMLTYPE, 5, 0);
       FIELD_HANDLE (DIMLTEX1, 5, 0);
       FIELD_HANDLE (DIMLTEX2, 5, 0);
@@ -490,11 +492,9 @@
   FIELD_HANDLE (VPORT_CONTROL_OBJECT, 5, 0);
   FIELD_HANDLE (APPID_CONTROL_OBJECT, 5, 0);
   FIELD_HANDLE (DIMSTYLE_CONTROL_OBJECT, 5, 0);
-
-  VERSIONS(R_13, R_2000)
-    {
-      FIELD_HANDLE (VP_ENT_HDR_CONTROL_OBJECT, 5, 0);
-    }
+  VERSIONS(R_13, R_2000) {
+    FIELD_HANDLE (VP_ENT_HDR_CONTROL_OBJECT, 5, 0);
+  }
 
   FIELD_HANDLE (DICTIONARY_ACAD_GROUP, 5, 0);
   FIELD_HANDLE (DICTIONARY_ACAD_MLINESTYLE, 5, 0);
@@ -508,8 +508,10 @@
       }
       FIELD_BS (TSTACKALIGN, 70);
       FIELD_BS (TSTACKSIZE, 70);
-      FIELD_TV (HYPERLINKBASE, 1);
-      FIELD_TV (STYLESHEET, 0);
+      PRE(R_2007) {
+        FIELD_TV (HYPERLINKBASE, 1);
+        FIELD_TV (STYLESHEET, 1);
+      }
       FIELD_HANDLE (DICTIONARY_LAYOUTS, 5, 0);
       FIELD_HANDLE (DICTIONARY_PLOTSETTINGS, 5, 0);
       FIELD_HANDLE (DICTIONARY_PLOTSTYLES, 5, 0);
@@ -549,8 +551,10 @@
         {
           FIELD_HANDLE (CPSNID, 5, 0);
         }
-      FIELD_TV (FINGERPRINTGUID, 2);
-      FIELD_TV (VERSIONGUID, 2);
+      PRE(R_2007) {
+        FIELD_TV (FINGERPRINTGUID, 2);
+        FIELD_TV (VERSIONGUID, 2);
+      }
     }
 
   SINCE(R_2004)
@@ -565,7 +569,9 @@
       FIELD_BS (INTERSECTIONCOLOR, 70);
       FIELD_RC (OBSLTYPE, 280);
       FIELD_RC (INTERSECTIONDISPLAY, 290);
-      FIELD_TV (PROJECTNAME, 1);
+      PRE(R_2007) {
+        FIELD_TV (PROJECTNAME, 1);
+      }
     }
 
   FIELD_HANDLE (BLOCK_RECORD_PSPACE, 5, 0);
@@ -622,4 +628,25 @@
 
   /* TODO: This really is the section[0] CRC not related to the header */
   FIELD_RS (CRC, 0);
+
+  SINCE(R_2007) {
+    SECTION_STRING_STREAM
+    FIELD_TU (unknown_text1, 0);
+    FIELD_TU (unknown_text2, 0);
+    FIELD_TU (unknown_text3, 0);
+    FIELD_TU (unknown_text4, 0);
+    FIELD_TU (MENU, 1);
+    FIELD_TU (DIMPOST, 1);
+    FIELD_TU (DIMAPOST, 1);
+    SINCE(R_2010) {
+      FIELD_TU (DIMALTMZS, 70);
+      FIELD_TU (DIMMZS, 70);
+    }
+    FIELD_TU (HYPERLINKBASE, 1);
+    FIELD_TU (STYLESHEET, 1);
+    FIELD_TU (FINGERPRINTGUID, 1);
+    FIELD_TU (VERSIONGUID, 1);
+    FIELD_TU (PROJECTNAME, 1);
+    END_STRING_STREAM
+  }
 

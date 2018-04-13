@@ -32,6 +32,9 @@
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
 
+extern void
+obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
+
 /*--------------------------------------------------------------------------------
  * MACROS
  */
@@ -56,6 +59,7 @@ static unsigned int cur_ver = 0;
               _obj->name->handleref.value,\
               _obj->name->absolute_ref);  \
   }
+#define FIELD_DATAHANDLE(name, code, dxf) FIELD_HANDLE(name, code, dxf)
 #define FIELD_HANDLE_N(name, vcount, handle_code, dxf)\
   if (_obj->name) { \
     LOG_TRACE(#name "[%d]: HANDLE(%d.%d.%lu) absolute:%lu\n",\
@@ -186,11 +190,15 @@ static unsigned int cur_ver = 0;
   for (rcount4=0; rcount4<(int)_obj->times; rcount4++)
 
 #define COMMON_ENTITY_HANDLE_DATA /*  Empty */
+#define SECTION_STRING_STREAM \
+  { \
+    Bit_Chain sav_dat = *dat; \
+    dat = str_dat;
 #define START_STRING_STREAM \
+  obj->has_strings = bit_read_B(dat); \
   if (obj->has_strings) { \
     Bit_Chain sav_dat = *dat; \
-    dat->byte = (obj->bitsize + 191) >> 3; \
-    dat->bit = (obj->bitsize + 191) & 7;
+    obj_string_stream(dat, obj->bitsize, dat);
 #define END_STRING_STREAM \
     *dat = sav_dat; \
   }

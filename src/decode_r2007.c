@@ -38,7 +38,13 @@ Dwg_Object_Ref *
 dwg_decode_handleref_with_code(Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Data* dwg,
                                unsigned int code);
 void
-dwg_decode_header_variables(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Data* dwg);
+dwg_decode_header_variables(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
+                            Dwg_Data* dwg);
+
+// private
+void
+obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
+
 
 // only for temp. debugging, to abort on obviously wrong sizes.
 // should be a bit larger then the filesize.
@@ -1036,8 +1042,35 @@ read_file_header(Bit_Chain* dat, r2007_file_header *file_header)
   free(pedata);
 }
 
+void
+obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str)
+{
+  BITCODE_RL start = bitsize - 1; // in bits
+  BITCODE_RS data_size; // in byte
+  BITCODE_B endbit;
+  *str = *dat;
+  bit_set_position(str, start);
+  LOG_TRACE("obj string stream\n  pos: %u, %lu/%u\n", start, str->byte, str->bit);
+  endbit = bit_read_B(str);
+  LOG_TRACE("  endbit: %d\n", (int)endbit);
+  bit_advance_position(str, -17);
+  LOG_TRACE("  pos: %u, %lu\n", start, str->byte);
+  data_size = bit_read_RS(str);
+  LOG_TRACE("  data_size: %u\n", data_size);
+  if (data_size & 0x8000) {
+    BITCODE_RS hi_size;
+    bit_advance_position(str, -33);
+    data_size &= 0x7FFF;
+    hi_size = bit_read_RS(str);
+    data_size |= (hi_size << 15);
+    LOG_TRACE("  pos: %u, %lu\n", start, str->byte);
+  }
+  bit_advance_position(str, -data_size - 16);
+  LOG_TRACE("  pos: %u, %lu/%u\n", start, str->byte, str->bit);
+}
+
 static void
-start_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str)
+section_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str)
 {
   // 24 bytes (sentinel+size+hsize) - 1 bit (endbit)
   BITCODE_RL start = bitsize + 159; // in bits
@@ -1046,7 +1079,7 @@ start_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str)
   *str = *dat;
   str->byte = start >> 3;
   str->bit = start & 7;
-  LOG_TRACE("string stream\n  pos: %u, %lu/%u\n", start, str->byte, str->bit);
+  LOG_TRACE("section string stream\n  pos: %u, %lu/%u\n", start, str->byte, str->bit);
   endbit = bit_read_B(str);
   LOG_TRACE("  endbit: %d\n", (int)endbit);
   start -= 16;
@@ -1130,9 +1163,7 @@ read_2007_section_classes(Bit_Chain* dat, Dwg_Data *dwg,
       assert(max_num >= 500);
       assert(max_num < 5000);
 
-      // see also START_STRING_STREAM
-      // TODO seperate Bit_Chain *str from dat. read FIELD_TU from str not dat.
-      start_string_stream(&sec_dat, bitsize, &str);
+      section_string_stream(&sec_dat, bitsize, &str);
 
       dwg->dwg_class = (Dwg_Class *) calloc(max_num-500, sizeof(Dwg_Class));
       if (!dwg->dwg_class)
@@ -1196,12 +1227,11 @@ read_2007_section_classes(Bit_Chain* dat, Dwg_Data *dwg,
   return 0;
 }
 
-// TODO
 static int
 read_2007_section_header(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Data *dwg,
                          r2007_section *sections_map, r2007_page *pages_map)
 {
-  Bit_Chain sec_dat;
+  Bit_Chain sec_dat, str_dat;
   int error;
   LOG_TRACE("\nHeader\n-------------------\n")
   error = read_data_section(&sec_dat, dat, sections_map, 
@@ -1216,10 +1246,29 @@ read_2007_section_header(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Data *dwg,
   if (bit_search_sentinel(&sec_dat, dwg_sentinel(DWG_SENTINEL_VARIABLE_BEGIN)))
     {
       unsigned long int size = bit_read_RL(&sec_dat);
+      BITCODE_RL bitsize = 0;
+      BITCODE_RL endbits = 160; //start bit: 16 sentinel + 4 size
       LOG_TRACE("Length: %lu\n", size);
-
       *hdl_dat = sec_dat;
-      dwg_decode_header_variables(&sec_dat, hdl_dat, dwg);
+      if (dat->version >= R_2010 && dwg->header.maint_version > 3)
+        {
+          BITCODE_RL hsize = bit_read_RL(&sec_dat);
+          LOG_TRACE("hsize: " FORMAT_RL " [RL]\n", hsize)
+        }
+      if (dat->version >= R_2007)
+        {
+          Bit_Chain sav_dat = sec_dat;
+          bitsize = bit_read_RL(&sec_dat);
+          LOG_TRACE("bitsize: " FORMAT_RL " [RL]\n", bitsize);
+          endbits += bitsize;
+          hdl_dat->byte = endbits >> 3;
+          hdl_dat->bit = endbits & 7;
+
+          section_string_stream(&sec_dat, bitsize, &str_dat);
+          sec_dat = sav_dat;
+        }
+
+      dwg_decode_header_variables(&sec_dat, hdl_dat, &str_dat, dwg);
     }
   else {
     DEBUG_HERE();
