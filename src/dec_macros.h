@@ -45,11 +45,11 @@
   { \
     if (handle_code >= 0) \
       {\
-        _obj->name = dwg_decode_handleref_with_code(dat, obj, dwg, handle_code);\
+        _obj->name = dwg_decode_handleref_with_code(hdl_dat, obj, dwg, handle_code);\
       }\
     else\
       {\
-        _obj->name = dwg_decode_handleref(dat, obj, dwg);\
+        _obj->name = dwg_decode_handleref(hdl_dat, obj, dwg);\
       }\
     LOG_TRACE(#name ": HANDLE(%d.%d.%lu) absolute:%lu\n",\
           _obj->name->handleref.code,\
@@ -61,11 +61,11 @@
   {\
     if (handle_code>=0) \
       {\
-        _obj->name = dwg_decode_handleref_with_code(dat, obj, dwg, handle_code);\
+        _obj->name = dwg_decode_handleref_with_code(hdl_dat, obj, dwg, handle_code);\
       }\
     else\
       {\
-        _obj->name = dwg_decode_handleref(dat, obj, dwg);\
+        _obj->name = dwg_decode_handleref(hdl_dat, obj, dwg);\
       }\
     LOG_TRACE(#name "[%d]: HANDLE(%d.%d.%lu) absolute:%lu [%d]\n",\
               (int)vcount,                          \
@@ -290,11 +290,11 @@
 
 #define COMMON_ENTITY_HANDLE_DATA               \
   SINCE(R_13) {\
-    dwg_decode_common_entity_handle_data(dat, obj);\
+    dwg_decode_common_entity_handle_data(dat, hdl_dat, obj); \
   }
 
 #define DWG_ENTITY(token) static void \
-dwg_decode_##token (Bit_Chain * dat, Dwg_Object * obj)\
+dwg_decode_##token (Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj)\
 {\
   long vcount, rcount, rcount2, rcount3, rcount4;\
   Dwg_Entity_##token *ent, *_obj;\
@@ -307,12 +307,12 @@ dwg_decode_##token (Bit_Chain * dat, Dwg_Object * obj)\
   ent = obj->tio.entity->tio.token;\
   _obj = ent;\
   obj->tio.entity->object = obj;\
-  if (dwg_decode_entity (dat, obj->tio.entity)) return;
+  if (dwg_decode_entity (dat, hdl_dat, obj->tio.entity)) return;
 
 #define DWG_ENTITY_END }
 
 #define DWG_OBJECT(token) static void \
-dwg_decode_ ## token (Bit_Chain * dat, Dwg_Object * obj) \
+dwg_decode_ ## token (Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj) \
 { \
   long vcount, rcount, rcount2, rcount3, rcount4; \
   Dwg_Object_##token *_obj;\
@@ -322,7 +322,7 @@ dwg_decode_ ## token (Bit_Chain * dat, Dwg_Object * obj) \
   obj->tio.object = (Dwg_Object_Object*)calloc (1, sizeof(Dwg_Object_Object)); \
   obj->tio.object->tio.token = (Dwg_Object_##token *)calloc (1, sizeof(Dwg_Object_##token)); \
   obj->tio.object->object = obj;\
-  if (dwg_decode_object (dat, obj->tio.object)) return;\
+  if (dwg_decode_object (dat, hdl_dat, obj->tio.object)) return; \
   _obj = obj->tio.object->tio.token;
 
 #define DWG_OBJECT_END }

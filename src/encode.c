@@ -211,7 +211,7 @@ static bool env_var_checked_p;
           LOG_WARN("Expected a CODE %d handle, got a %d", \
                     handle_code, _obj->name->handleref.code); \
         } \
-      bit_write_H(dat, &_obj->name->handleref); \
+      bit_write_H(hdl_dat, &_obj->name->handleref); \
     }\
   }
 
@@ -238,7 +238,7 @@ static bool env_var_checked_p;
 
 #define COMMON_ENTITY_HANDLE_DATA  \
   SINCE(R_13) {\
-    dwg_encode_common_entity_handle_data(dat, obj);\
+    dwg_encode_common_entity_handle_data(dat, hdl_dat, obj); \
   }
 #define START_STRING_STREAM \
   bit_write_B(dat, obj->has_strings); \
@@ -267,23 +267,23 @@ static bool env_var_checked_p;
   for (rcount4=0; (long)rcount4<(long)_obj->times; rcount4++)
 
 #define DWG_ENTITY(token) \
-  static void dwg_encode_##token (Bit_Chain * dat, Dwg_Object* obj)	\
+  static void dwg_encode_##token (Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj)	\
 { \
   long vcount, rcount, rcount2, rcount3, rcount4; \
   Dwg_Data* dwg = obj->parent; \
   Dwg_Entity_##token * _obj = obj->tio.entity->tio.token; \
-  if (dwg_encode_entity (obj, dat)) return;       \
-  LOG_INFO("Entity " #token ":\n") \
+  if (dwg_encode_entity (obj, dat, hdl_dat)) return; \
+  LOG_INFO("Entity " #token ":\n")
 
 #define DWG_ENTITY_END }
 
 #define DWG_OBJECT(token) \
-  static void dwg_encode_##token (Bit_Chain * dat, Dwg_Object* obj) \
+  static void dwg_encode_##token (Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj) \
 { \
   long vcount, rcount, rcount2, rcount3, rcount4; \
   Dwg_Data* dwg = obj->parent; \
   Dwg_Object_##token * _obj = obj->tio.object->tio.token; \
-  if (dwg_encode_object (obj, dat)) return;  \
+  if (dwg_encode_object (obj, dat, hdl_dat)) return; \
   LOG_INFO("Object " #token " handle: %d.%d.%lu\n",\
     obj->handle.code, \
     obj->handle.size, \
@@ -311,22 +311,24 @@ typedef struct
  */
 
 static int
-dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat);
+dwg_encode_entity(Dwg_Object* obj, Bit_Chain* dat, Bit_Chain* hdl_dat);
 static int
-dwg_encode_object(Dwg_Object * obj, Bit_Chain * dat);
+dwg_encode_object(Dwg_Object* obj, Bit_Chain* dat, Bit_Chain* hdl_dat);
 static void
-dwg_encode_common_entity_handle_data(Bit_Chain * dat, Dwg_Object * obj);
+dwg_encode_common_entity_handle_data(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj);
 static void
-dwg_encode_header_variables(Bit_Chain* dat, Dwg_Data * dwg);
+dwg_encode_header_variables(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Data* dwg);
 static int
-dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj);
+dwg_encode_variable_type(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj);
 void
-dwg_encode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg, Dwg_Object_Ref* ref);
+dwg_encode_handleref(Bit_Chain *hdl_dat, Dwg_Object * obj, Dwg_Data* dwg,
+                     Dwg_Object_Ref* ref);
 void 
-dwg_encode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg,
+dwg_encode_handleref_with_code(Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Data* dwg,
                                Dwg_Object_Ref* ref, unsigned int code);
 void
-dwg_encode_add_object(Dwg_Object * obj, Bit_Chain * dat, unsigned long address);
+dwg_encode_add_object(Dwg_Object* obj, Bit_Chain* dat, Bit_Chain* hdl_dat,
+                      unsigned long address);
 static void
 dwg_encode_xdata(Bit_Chain * dat, Dwg_Object_XRECORD *obj, int size);
 
@@ -338,7 +340,7 @@ dwg_encode_xdata(Bit_Chain * dat, Dwg_Object_XRECORD *obj, int size);
  * Public functions
  */
 int
-dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
+dwg_encode_chains(Dwg_Data* dwg, Bit_Chain* dat)
 {
   int ckr_missing = 1;
   int i;
@@ -353,6 +355,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
   long unsigned int last_handle;
   Object_Map *omap;
   Object_Map pvzmap;
+  Bit_Chain *hdl_dat;
 
 #ifdef USE_TRACING
   /* Before starting, set the logging level, but only do so once.  */
@@ -367,6 +370,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
 #endif  /* USE_TRACING */
 
   bit_chain_alloc(dat);
+  hdl_dat = dat;
 
   /*------------------------------------------------------------
    * Header
@@ -503,7 +507,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
   bit_write_RL(dat, 0); // Size of the section
 
   // encode 
-  dwg_encode_header_variables(dat, dwg);
+  dwg_encode_header_variables(dat, hdl_dat, dwg);
 
   /* Write the size of the section at its beginning
    */
@@ -651,7 +655,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
         {
 	  if (obj->supertype == DWG_SUPERTYPE_ENTITY ||
               obj->supertype == DWG_SUPERTYPE_OBJECT)
-	    dwg_encode_add_object(obj, dat, dat->byte);
+	    dwg_encode_add_object(obj, dat, hdl_dat, dat->byte);
 	  /*
           if (obj->supertype == DWG_SUPERTYPE_ENTITY)
             dwg_encode_entity(obj, dat);
@@ -873,7 +877,7 @@ dwg_encode_chains(Dwg_Data * dwg, Bit_Chain * dat)
  * returns 1 if object could be encoded and 0 otherwise.
  */
 static int
-dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
+dwg_encode_variable_type(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj)
 {
   int i;
   char *dxfname;
@@ -904,147 +908,147 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
   if (!strcmp(dxfname, "ACDBDICTIONARYWDFLT"))
     {
       assert(!is_entity);
-      dwg_encode_DICTIONARYWDLFT(dat, obj);
+      dwg_encode_DICTIONARYWDLFT(dat, hdl_dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "DICTIONARYVAR"))
     {
       assert(!is_entity);
-      dwg_encode_DICTIONARYVAR(dat, obj);
+      dwg_encode_DICTIONARYVAR(dat, hdl_dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "HATCH"))
     {
       assert(!is_entity);
-      dwg_encode_HATCH(dat, obj);
+      dwg_encode_HATCH(dat, hdl_dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "GROUP"))
     {
       assert(!is_entity);
-      dwg_encode_GROUP(dat, obj);
+      dwg_encode_GROUP(dat, hdl_dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "IDBUFFER"))
     {
       assert(!is_entity);
-      dwg_encode_IDBUFFER(dat, obj);
+      dwg_encode_IDBUFFER(dat, hdl_dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "IMAGE"))
     {
       assert(is_entity);
-      dwg_encode_IMAGE(dat, obj);
+      dwg_encode_IMAGE(dat, hdl_dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "IMAGEDEF"))
     {
       assert(!is_entity);
-      dwg_encode_IMAGEDEF(dat, obj);
+      dwg_encode_IMAGEDEF(dat, hdl_dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "IMAGEDEF_REACTOR"))
     {
       assert(!is_entity);
-      dwg_encode_IMAGEDEF_REACTOR(dat, obj);
+      dwg_encode_IMAGEDEF_REACTOR(dat, hdl_dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "LAYER_INDEX"))
     {
       assert(!is_entity);
-      dwg_encode_LAYER_INDEX(dat, obj);
+      dwg_encode_LAYER_INDEX(dat, hdl_dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "LAYOUT"))
     {
       assert(!is_entity);
-      dwg_encode_LAYOUT(dat, obj);
+      dwg_encode_LAYOUT(dat, hdl_dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "LWPLINE"))
     {
       assert(!is_entity);
-      dwg_encode_LWPLINE(dat, obj);
+      dwg_encode_LWPLINE(dat, hdl_dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "OLE2FRAME"))
     {
       assert(!is_entity);
-      dwg_encode_OLE2FRAME(dat, obj);
+      dwg_encode_OLE2FRAME(dat, hdl_dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "OBJECTCONTEXTDATA")
       || !strcmp(klass->cppname, "AcDbObjectContextData"))
     {
       assert(!is_entity);
-      dwg_encode_OBJECTCONTEXTDATA(dat, obj);
+      dwg_encode_OBJECTCONTEXTDATA(dat, hdl_dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "ACDBPLACEHOLDER"))
     {
       assert(!is_entity);
-      dwg_encode_PLACEHOLDER(dat, obj);
+      dwg_encode_PLACEHOLDER(dat, hdl_dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "PROXY"))
     {
       assert(!is_entity);
-      dwg_encode_PROXY(dat, obj);
+      dwg_encode_PROXY(dat, hdl_dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "RASTERVARIABLES"))
     {
       assert(!is_entity);
-      dwg_encode_RASTERVARIABLES(dat, obj);
+      dwg_encode_RASTERVARIABLES(dat, hdl_dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "SORTENTSTABLE"))
     {
       assert(!is_entity);
-      dwg_encode_SORTENTSTABLE(dat, obj);
+      dwg_encode_SORTENTSTABLE(dat, hdl_dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "SPATIAL_FILTER"))
     {
       assert(!is_entity);
-      dwg_encode_SPATIAL_FILTER(dat, obj);
+      dwg_encode_SPATIAL_FILTER(dat, hdl_dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "SPATIAL_INDEX"))
     {
       assert(!is_entity);
-      dwg_encode_SPATIAL_INDEX(dat, obj);
+      dwg_encode_SPATIAL_INDEX(dat, hdl_dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "TABLE"))
     {
       assert(is_entity);
-      dwg_encode_TABLE(dat, obj);
+      dwg_encode_TABLE(dat, hdl_dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "XRECORD"))
     {
       assert(!is_entity);
-      dwg_encode_XRECORD(dat, obj);
+      dwg_encode_XRECORD(dat, hdl_dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "WIPEOUT"))
     {
       assert(is_entity);
-      dwg_encode_WIPEOUT(dat, obj);
+      dwg_encode_WIPEOUT(dat, hdl_dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "FIELDLIST"))
     {
       UNTESTED_CLASS;
       assert(!is_entity);
-      dwg_encode_FIELDLIST(dat, obj);
+      dwg_encode_FIELDLIST(dat, hdl_dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "SCALE"))
     {
       assert(!is_entity);
-      dwg_encode_SCALE(dat, obj);
+      dwg_encode_SCALE(dat, hdl_dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "MULTILEADER"))
@@ -1052,7 +1056,7 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       assert(is_entity);
 #ifdef DEBUG_MULTILEADER
       UNTESTED_CLASS; // broken decoder
-      dwg_encode_MULTILEADER(dat, obj);
+      dwg_encode_MULTILEADER(dat, hdl_dat, obj);
       return 1;
 #else
       UNHANDLED_CLASS;
@@ -1062,21 +1066,21 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
   if (!strcmp(dxfname, "MLEADERSTYLE"))
     {
       assert(!is_entity);
-      dwg_encode_MLEADERSTYLE(dat, obj);
+      dwg_encode_MLEADERSTYLE(dat, hdl_dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "AcDbField")) //???
     {
       UNTESTED_CLASS;
       assert(!is_entity);
-      dwg_encode_FIELD(dat, obj);
+      dwg_encode_FIELD(dat, hdl_dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "GEODATA"))
     {
       UNTESTED_CLASS;
       assert(!is_entity);
-      dwg_encode_GEODATA(dat, obj);
+      dwg_encode_GEODATA(dat, hdl_dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "VBA_PROJECT"))
@@ -1085,7 +1089,7 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
 #ifdef DEBUG_VBA_PROJECT
       // Has its own section?
       UNTESTED_CLASS;
-      dwg_encode_VBA_PROJECT(dat, obj);
+      dwg_encode_VBA_PROJECT(dat, hdl_dat, obj);
       return 1;
 #else
       UNHANDLED_CLASS;
@@ -1096,7 +1100,7 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
-      dwg_encode_WIPEOUTVARIABLE(dat, obj);
+      dwg_encode_WIPEOUTVARIABLE(dat, hdl_dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "CELLSTYLEMAP"))
@@ -1104,7 +1108,7 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       assert(!is_entity);
 #ifdef DEBUG_CELLSTYLEMAP
       UNTESTED_CLASS; //broken
-      dwg_encode_CELLSTYLEMAP(dat, obj);
+      dwg_encode_CELLSTYLEMAP(dat, hdl_dat, obj);
       return 1;
 #else
       UNHANDLED_CLASS;
@@ -1114,21 +1118,21 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
   if (!strcmp(dxfname, "VISUALSTYLE"))
     {
       assert(!is_entity);
-      dwg_encode_VISUALSTYLE(dat, obj);
+      dwg_encode_VISUALSTYLE(dat, hdl_dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "DIMASSOC"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
-      //dwg_encode_DIMASSOC(dat, obj);
+      //dwg_encode_DIMASSOC(dat, hdl_dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "MATERIAL"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
-      //dwg_encode_MATERIAL(dat, obj);
+      //dwg_encode_MATERIAL(dat, hdl_dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "SCALE"))
@@ -1136,77 +1140,77 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       UNTESTED_CLASS;
       assert(!is_entity);
       //SCALE has a name, bitsizes: 199,207,215,343,335,351,319
-      dwg_encode_SCALE(dat, obj);
+      dwg_encode_SCALE(dat, hdl_dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "TABLEGEOMETRY"))
     {
       UNTESTED_CLASS;
       assert(!is_entity);
-      dwg_encode_TABLEGEOMETRY(dat, obj);
+      dwg_encode_TABLEGEOMETRY(dat, hdl_dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "TABLECONTENT"))
     {
       UNTESTED_CLASS;
       assert(!is_entity);
-      dwg_encode_TABLECONTENT(dat, obj);
+      dwg_encode_TABLECONTENT(dat, hdl_dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "TABLESTYLE"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
-      //dwg_encode_TABLESTYLE(dat, obj);
+      //dwg_encode_TABLESTYLE(dat, hdl_dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "DBCOLOR"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
-      //dwg_encode_DBCOLOR(dat, obj);
+      //dwg_encode_DBCOLOR(dat, hdl_dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "ACDBSECTIONVIEWSTYLE"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
-      //dwg_encode_SECTIONVIEWSTYLE(dat, obj);
+      //dwg_encode_SECTIONVIEWSTYLE(dat, hdl_dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "ACDBDETAILVIEWSTYLE"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
-      //dwg_encode_DETAILVIEWSTYLE(dat, obj);
+      //dwg_encode_DETAILVIEWSTYLE(dat, hdl_dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "ACDBASSOCNETWORK"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
-      //dwg_encode_ASSOCNETWORK(dat, obj);
+      //dwg_encode_ASSOCNETWORK(dat, hdl_dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "ACDBASSOC2DCONSTRAINTGROUP"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
-      //dwg_encode_ASSOC2DCONSTRAINTGROUP(dat, obj);
+      //dwg_encode_ASSOC2DCONSTRAINTGROUP(dat, hdl_dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "ACDBASSOCGEOMDEPENDENCY"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
-      //dwg_encode_ASSOCGEOMDEPENDENCY(dat, obj);
+      //dwg_encode_ASSOCGEOMDEPENDENCY(dat, hdl_dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "ACDB_LEADEROBJECTCONTEXTDATA_CLASS"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
-      //dwg_encode_LEADEROBJECTCONTEXTDATA(dat, obj);
+      //dwg_encode_LEADEROBJECTCONTEXTDATA(dat, hdl_dat, obj);
       return 0;
     }
 
@@ -1228,7 +1232,7 @@ dwg_encode_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
 }
 
 void
-dwg_encode_add_object(Dwg_Object * obj, Bit_Chain * dat,
+dwg_encode_add_object(Dwg_Object* obj, Bit_Chain* dat, Bit_Chain* hdl_dat,
                       unsigned long address)
 {
   unsigned long previous_address;
@@ -1261,245 +1265,245 @@ dwg_encode_add_object(Dwg_Object * obj, Bit_Chain * dat,
   switch (obj->type)
     {
   case DWG_TYPE_TEXT:
-    dwg_encode_TEXT(dat, obj);
+    dwg_encode_TEXT(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_ATTRIB:
-    dwg_encode_ATTRIB(dat, obj);
+    dwg_encode_ATTRIB(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_ATTDEF:
-    dwg_encode_ATTDEF(dat, obj);
+    dwg_encode_ATTDEF(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_BLOCK:
-    dwg_encode_BLOCK(dat, obj);
+    dwg_encode_BLOCK(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_ENDBLK:
-    dwg_encode_ENDBLK(dat, obj);
+    dwg_encode_ENDBLK(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_SEQEND:
-    dwg_encode_SEQEND(dat, obj);
+    dwg_encode_SEQEND(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_INSERT:
-    dwg_encode_INSERT(dat, obj);
+    dwg_encode_INSERT(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_MINSERT:
-    dwg_encode_MINSERT(dat, obj);
+    dwg_encode_MINSERT(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_VERTEX_2D:
-    dwg_encode_VERTEX_2D(dat, obj);
+    dwg_encode_VERTEX_2D(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_VERTEX_3D:
-    dwg_encode_VERTEX_3D(dat, obj);
+    dwg_encode_VERTEX_3D(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_VERTEX_MESH:
-    dwg_encode_VERTEX_MESH(dat, obj);
+    dwg_encode_VERTEX_MESH(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_VERTEX_PFACE:
-    dwg_encode_VERTEX_PFACE(dat, obj);
+    dwg_encode_VERTEX_PFACE(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_VERTEX_PFACE_FACE:
-    dwg_encode_VERTEX_PFACE_FACE(dat, obj);
+    dwg_encode_VERTEX_PFACE_FACE(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_POLYLINE_2D:
-    dwg_encode_POLYLINE_2D(dat, obj);
+    dwg_encode_POLYLINE_2D(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_POLYLINE_3D:
-    dwg_encode_POLYLINE_3D(dat, obj);
+    dwg_encode_POLYLINE_3D(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_ARC:
-    dwg_encode_ARC(dat, obj);
+    dwg_encode_ARC(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_CIRCLE:
-    dwg_encode_CIRCLE(dat, obj);
+    dwg_encode_CIRCLE(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_LINE:
-    dwg_encode_LINE(dat, obj);
+    dwg_encode_LINE(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_DIMENSION_ORDINATE:
-    dwg_encode_DIMENSION_ORDINATE(dat, obj);
+    dwg_encode_DIMENSION_ORDINATE(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_DIMENSION_LINEAR:
-    dwg_encode_DIMENSION_LINEAR(dat, obj);
+    dwg_encode_DIMENSION_LINEAR(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_DIMENSION_ALIGNED:
-    dwg_encode_DIMENSION_ALIGNED(dat, obj);
+    dwg_encode_DIMENSION_ALIGNED(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_DIMENSION_ANG3PT:
-    dwg_encode_DIMENSION_ANG3PT(dat, obj);
+    dwg_encode_DIMENSION_ANG3PT(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_DIMENSION_ANG2LN:
-    dwg_encode_DIMENSION_ANG2LN(dat, obj);
+    dwg_encode_DIMENSION_ANG2LN(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_DIMENSION_RADIUS:
-    dwg_encode_DIMENSION_RADIUS(dat, obj);
+    dwg_encode_DIMENSION_RADIUS(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_DIMENSION_DIAMETER:
-    dwg_encode_DIMENSION_DIAMETER(dat, obj);
+    dwg_encode_DIMENSION_DIAMETER(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_POINT:
-    dwg_encode_POINT(dat, obj);
+    dwg_encode_POINT(dat, hdl_dat, obj);
     break;
   case DWG_TYPE__3DFACE:
-    dwg_encode__3DFACE(dat, obj);
+    dwg_encode__3DFACE(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_POLYLINE_PFACE:
-    dwg_encode_POLYLINE_PFACE(dat, obj);
+    dwg_encode_POLYLINE_PFACE(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_POLYLINE_MESH:
-    dwg_encode_POLYLINE_MESH(dat, obj);
+    dwg_encode_POLYLINE_MESH(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_SOLID:
-    dwg_encode_SOLID(dat, obj);
+    dwg_encode_SOLID(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_TRACE:
-    dwg_encode_TRACE(dat, obj);
+    dwg_encode_TRACE(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_SHAPE:
-    dwg_encode_SHAPE(dat, obj);
+    dwg_encode_SHAPE(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_VIEWPORT:
-    dwg_encode_VIEWPORT(dat, obj);
+    dwg_encode_VIEWPORT(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_ELLIPSE:
-    dwg_encode_ELLIPSE(dat, obj);
+    dwg_encode_ELLIPSE(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_SPLINE:
-    dwg_encode_SPLINE(dat, obj);
+    dwg_encode_SPLINE(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_REGION:
-    dwg_encode_REGION(dat, obj);
+    dwg_encode_REGION(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_3DSOLID:
-    dwg_encode__3DSOLID(dat, obj);
+    dwg_encode__3DSOLID(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_BODY:
-    dwg_encode_BODY(dat, obj);
+    dwg_encode_BODY(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_RAY:
-    dwg_encode_RAY(dat, obj);
+    dwg_encode_RAY(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_XLINE:
-    dwg_encode_XLINE(dat, obj);
+    dwg_encode_XLINE(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_DICTIONARY:
-    dwg_encode_DICTIONARY(dat, obj);
+    dwg_encode_DICTIONARY(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_MTEXT:
-    dwg_encode_MTEXT(dat, obj);
+    dwg_encode_MTEXT(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_LEADER:
-    dwg_encode_LEADER(dat, obj);
+    dwg_encode_LEADER(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_TOLERANCE:
-    dwg_encode_TOLERANCE(dat, obj);
+    dwg_encode_TOLERANCE(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_MLINE:
-    dwg_encode_MLINE(dat, obj);
+    dwg_encode_MLINE(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_BLOCK_CONTROL:
-    dwg_encode_BLOCK_CONTROL(dat, obj);
+    dwg_encode_BLOCK_CONTROL(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_BLOCK_HEADER:
-    dwg_encode_BLOCK_HEADER(dat, obj);
+    dwg_encode_BLOCK_HEADER(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_LAYER_CONTROL:
-    dwg_encode_LAYER_CONTROL(dat, obj);
+    dwg_encode_LAYER_CONTROL(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_LAYER:
-    dwg_encode_LAYER(dat, obj);
+    dwg_encode_LAYER(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_SHAPEFILE_CONTROL:
-    dwg_encode_SHAPEFILE_CONTROL(dat, obj);
+    dwg_encode_SHAPEFILE_CONTROL(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_SHAPEFILE:
-    dwg_encode_SHAPEFILE(dat, obj);
+    dwg_encode_SHAPEFILE(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_LTYPE_CONTROL:
-    dwg_encode_LTYPE_CONTROL(dat, obj);
+    dwg_encode_LTYPE_CONTROL(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_LTYPE:
-    dwg_encode_LTYPE(dat, obj);
+    dwg_encode_LTYPE(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_VIEW_CONTROL:
-    dwg_encode_VIEW_CONTROL(dat, obj);
+    dwg_encode_VIEW_CONTROL(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_VIEW:
-    dwg_encode_VIEW(dat, obj);
+    dwg_encode_VIEW(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_UCS_CONTROL:
-    dwg_encode_UCS_CONTROL(dat, obj);
+    dwg_encode_UCS_CONTROL(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_UCS:
-    dwg_encode_UCS(dat, obj);
+    dwg_encode_UCS(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_VPORT_CONTROL:
-    dwg_encode_VPORT_CONTROL(dat, obj);
+    dwg_encode_VPORT_CONTROL(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_VPORT:
-    dwg_encode_VPORT(dat, obj);
+    dwg_encode_VPORT(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_APPID_CONTROL:
-    dwg_encode_APPID_CONTROL(dat, obj);
+    dwg_encode_APPID_CONTROL(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_APPID:
-    dwg_encode_APPID(dat, obj);
+    dwg_encode_APPID(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_DIMSTYLE_CONTROL:
-    dwg_encode_DIMSTYLE_CONTROL(dat, obj);
+    dwg_encode_DIMSTYLE_CONTROL(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_DIMSTYLE:
-    dwg_encode_DIMSTYLE(dat, obj);
+    dwg_encode_DIMSTYLE(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_VP_ENT_HDR_CONTROL:
-    dwg_encode_VP_ENT_HDR_CONTROL(dat, obj);
+    dwg_encode_VP_ENT_HDR_CONTROL(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_VP_ENT_HDR:
-    dwg_encode_VP_ENT_HDR(dat, obj);
+    dwg_encode_VP_ENT_HDR(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_GROUP:
-    dwg_encode_GROUP(dat, obj);
+    dwg_encode_GROUP(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_MLINESTYLE:
-    dwg_encode_MLINESTYLE(dat, obj);
+    dwg_encode_MLINESTYLE(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_OLE2FRAME:
-    dwg_encode_OLE2FRAME(dat, obj);
+    dwg_encode_OLE2FRAME(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_DUMMY:
-    dwg_encode_DUMMY(dat, obj);
+    dwg_encode_DUMMY(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_LONG_TRANSACTION:
-    dwg_encode_LONG_TRANSACTION(dat, obj);
+    dwg_encode_LONG_TRANSACTION(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_LWPLINE:
-    dwg_encode_LWPLINE(dat, obj);
+    dwg_encode_LWPLINE(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_HATCH:
-    dwg_encode_HATCH(dat, obj);
+    dwg_encode_HATCH(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_XRECORD:
-    dwg_encode_XRECORD(dat, obj);
+    dwg_encode_XRECORD(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_PLACEHOLDER:
-    dwg_encode_PLACEHOLDER(dat, obj);
+    dwg_encode_PLACEHOLDER(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_PROXY_ENTITY:
-    dwg_encode_PROXY_ENTITY(dat, obj);
+    dwg_encode_PROXY_ENTITY(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_OLEFRAME:
-    dwg_encode_OLEFRAME(dat, obj);
+    dwg_encode_OLEFRAME(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_VBA_PROJECT:
     LOG_ERROR("Unhandled Object VBA_PROJECT. Has its own section");
-    //dwg_encode_VBA_PROJECT(dat, obj);
+    //dwg_encode_VBA_PROJECT(dat, hdl_dat, obj);
     break;
   case DWG_TYPE_LAYOUT:
-    dwg_encode_LAYOUT(dat, obj);
+    dwg_encode_LAYOUT(dat, hdl_dat, obj);
     break;
   default:
       if (obj->type == obj->parent->layout_number)
-        dwg_encode_LAYOUT(dat, obj);
+        dwg_encode_LAYOUT(dat, hdl_dat, obj);
 
-      else if (!dwg_encode_variable_type(obj->parent, dat, obj))
+      else if (!dwg_encode_variable_type(obj->parent, dat, hdl_dat, obj))
         {
           Dwg_Data *dwg = obj->parent;
           int is_entity;
@@ -1519,11 +1523,11 @@ dwg_encode_add_object(Dwg_Object * obj, Bit_Chain * dat,
           // properly dwg_decode_object/_entity for eed, reactors, xdic
           if (klass && !is_entity)
             {
-              dwg_encode_UNKNOWN_OBJ(dat, obj);
+              dwg_encode_UNKNOWN_OBJ(dat, hdl_dat, obj);
             }
           else if (klass)
             {
-              dwg_encode_UNKNOWN_ENT(dat, obj);
+              dwg_encode_UNKNOWN_ENT(dat, hdl_dat, obj);
             }
           else // not a class
             {
@@ -1534,7 +1538,7 @@ dwg_encode_add_object(Dwg_Object * obj, Bit_Chain * dat,
                 LOG_INFO("Object bitsize: " FORMAT_RL " @%lu.%u\n", obj->bitsize,
                          dat->byte, dat->bit);
               }
-              bit_write_H(dat, &(obj->handle));
+              bit_write_H(hdl_dat, &(obj->handle));
               LOG_INFO("Object handle: %d.%d.%lu\n",
                        obj->handle.code, obj->handle.size, obj->handle.value);
               object_address = dat->byte;
@@ -1568,7 +1572,7 @@ dwg_encode_add_object(Dwg_Object * obj, Bit_Chain * dat,
    See DWG_SUPERTYPE_ENTITY in dwg_encode_chains.
  */
 static int
-dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
+dwg_encode_entity(Dwg_Object* obj, Bit_Chain* dat, Bit_Chain* hdl_dat)
 {
   BITCODE_BS i;
   BITCODE_BL bitsize;
@@ -1579,7 +1583,7 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
       bitsize = ent->bitsize;
       bit_write_RL(dat, bitsize);
     }
-  bit_write_H(dat, &(obj->handle));
+  bit_write_H(hdl_dat, &(obj->handle));
 
   for (i = 0; i < ent->num_eed; i++)
     {
@@ -1681,13 +1685,13 @@ dwg_encode_entity(Dwg_Object * obj, Bit_Chain * dat)
 }
 
 static void
-dwg_encode_common_entity_handle_data(Bit_Chain * dat, Dwg_Object * obj)
+dwg_encode_common_entity_handle_data(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj)
 {
   Dwg_Object_Entity *ent;
   Dwg_Data *dwg = obj->parent;
+  Dwg_Object_Entity *_obj;
   int i;
   long unsigned int vcount;
-  Dwg_Object_Entity *_obj;
   ent = obj->tio.entity;
   _obj = ent;
 
@@ -1696,7 +1700,7 @@ dwg_encode_common_entity_handle_data(Bit_Chain * dat, Dwg_Object * obj)
 }
 
 void
-dwg_encode_handleref(Bit_Chain* dat, Dwg_Object* obj, Dwg_Data* dwg, Dwg_Object_Ref* ref)
+dwg_encode_handleref(Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Data* dwg, Dwg_Object_Ref* ref)
 {
   //this function should receive a Object_Ref without an abs_ref, calculate it and return a Dwg_Handle
   //this should be a higher level function 
@@ -1705,11 +1709,11 @@ dwg_encode_handleref(Bit_Chain* dat, Dwg_Object* obj, Dwg_Data* dwg, Dwg_Object_
 }
 
 void 
-dwg_encode_handleref_with_code(Bit_Chain* dat, Dwg_Object* obj, Dwg_Data* dwg,
+dwg_encode_handleref_with_code(Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Data* dwg,
                                Dwg_Object_Ref* ref, unsigned int code)
 {
-  //XXX fixme. create the handle, then check the code.
-  dwg_encode_handleref(dat, obj, dwg, ref);
+  //XXX fixme. create the handle, then check the code. allow relative handle soft codes.
+  dwg_encode_handleref(hdl_dat, obj, dwg, ref);
   if (ref->handleref.code != code)
     {
       LOG_INFO("Warning: trying to write handle with wrong code.\n"
@@ -1723,7 +1727,7 @@ dwg_encode_handleref_with_code(Bit_Chain* dat, Dwg_Object* obj, Dwg_Data* dwg,
    See DWG_SUPERTYPE_OBJECT in dwg_encode_chains.
 */
 static int
-dwg_encode_object(Dwg_Object * obj, Bit_Chain * dat)
+dwg_encode_object(Dwg_Object* obj, Bit_Chain* dat, Bit_Chain* hdl_dat)
 {
   BITCODE_BS i, num_eed;
   Dwg_Object_Object* ord = obj->tio.object;
@@ -1733,7 +1737,7 @@ dwg_encode_object(Dwg_Object * obj, Bit_Chain * dat)
        bit_write_RL(dat, ord->bitsize);
     }
 
-  bit_write_H(dat, &ord->object->handle);
+  bit_write_H(hdl_dat, &ord->object->handle);
 
   num_eed = ord->num_eed;
   if (!num_eed) {
@@ -1744,7 +1748,7 @@ dwg_encode_object(Dwg_Object * obj, Bit_Chain * dat)
       {
         BITCODE_BS j;
         LOG_TRACE("EED[%u] size: " FORMAT_BS "\n", i, ord->eed[i].size)
-        bit_write_H(dat, &(ord->eed[i].handle));
+        bit_write_H(hdl_dat, &(ord->eed[i].handle));
         LOG_TRACE("EED[%u] code: " FORMAT_RC "\n", i, ord->eed[i].data->code)
         bit_write_TF(dat, ord->eed[i].raw, ord->eed[i].size);
         /*
@@ -1774,7 +1778,7 @@ dwg_encode_object(Dwg_Object * obj, Bit_Chain * dat)
 }
 
 static void
-dwg_encode_header_variables(Bit_Chain* dat, Dwg_Data * dwg)
+dwg_encode_header_variables(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Data * dwg)
 {
   Dwg_Header_Variables* _obj = &dwg->header_vars;
   Dwg_Object* obj = NULL;
@@ -1783,7 +1787,7 @@ dwg_encode_header_variables(Bit_Chain* dat, Dwg_Data * dwg)
 }
 
 static void
-dwg_encode_xdata(Bit_Chain * dat, Dwg_Object_XRECORD *obj, int size)
+dwg_encode_xdata(Bit_Chain* dat, Dwg_Object_XRECORD *obj, int size)
 {
   Dwg_Resbuf *tmp, *rbuf = obj->xdata;
   short type;

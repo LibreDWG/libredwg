@@ -25,7 +25,20 @@
 #include "logging.h"
 #include "dec_macros.h"
 
+/* The logging level for the read (decode) path.  */
 static unsigned int loglevel;
+/* the current version per spec block */
+static unsigned int cur_ver = 0;
+
+/* imports */
+Dwg_Object_Ref *
+dwg_decode_handleref(Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Data* dwg);
+
+Dwg_Object_Ref *
+dwg_decode_handleref_with_code(Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Data* dwg,
+                               unsigned int code);
+void
+dwg_decode_header_variables(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Data* dwg);
 
 // only for temp. debugging, to abort on obviously wrong sizes.
 // should be a bit larger then the filesize.
@@ -116,7 +129,7 @@ typedef struct _r2007_section
 } r2007_section;
 
 /* exported */
-int read_r2007_meta_data(Bit_Chain *dat, Dwg_Data *dwg);
+int read_r2007_meta_data(Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Data *dwg);
 /* imported */
 extern int rs_decode_block(unsigned char *blk, int fix);
   
@@ -131,7 +144,7 @@ static int read_data_section(Bit_Chain *sec_dat, Bit_Chain *dat, r2007_section *
                              r2007_page *pages_map, Dwg_Section_Type sec_type);
 static int read_2007_section_classes(Bit_Chain* dat,
            Dwg_Data *dwg, r2007_section *sections_map, r2007_page *pages_map);
-static int read_2007_section_header(Bit_Chain* dat,
+static int read_2007_section_header(Bit_Chain* dat, Bit_Chain* hdl_dat,
            Dwg_Data *dwg, r2007_section *sections_map, r2007_page *pages_map);
 static r2007_page* read_pages_map(Bit_Chain* dat, int64_t size_comp,
                            int64_t size_uncomp, int64_t correction);
@@ -1185,33 +1198,40 @@ read_2007_section_classes(Bit_Chain* dat, Dwg_Data *dwg,
 
 // TODO
 static int
-read_2007_section_header(Bit_Chain* dat, Dwg_Data *dwg,
+read_2007_section_header(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Data *dwg,
                          r2007_section *sections_map, r2007_page *pages_map)
 {
   Bit_Chain sec_dat;
   int error;
+  LOG_TRACE("\nHeader\n-------------------\n")
   error = read_data_section(&sec_dat, dat, sections_map, 
                             pages_map, SECTION_HEADER);
   if (error)
     {
-      LOG_ERROR("Failed to read class section");
+      LOG_ERROR("Failed to read header section");
       if (sec_dat.chain)
         free(sec_dat.chain);
       return error;
     }
-
-  if (bit_search_sentinel(&sec_dat, dwg_sentinel(DWG_SENTINEL_HEADER_BEGIN)))
+  if (bit_search_sentinel(&sec_dat, dwg_sentinel(DWG_SENTINEL_VARIABLE_BEGIN)))
     {
-      BITCODE_RL bitsize = 0;
-      LOG_TRACE("\nHeader\n-------------------\n")
+      unsigned long int size = bit_read_RL(&sec_dat);
+      LOG_TRACE("Length: %lu\n", size);
+
+      *hdl_dat = sec_dat;
+      dwg_decode_header_variables(&sec_dat, hdl_dat, dwg);
     }
+  else {
+    DEBUG_HERE();
+    error = 1;
+  }
   return error;
 }
 
 
 /* exported */
 int
-read_r2007_meta_data(Bit_Chain *dat, Dwg_Data *dwg)
+read_r2007_meta_data(Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Data *dwg)
 {
   r2007_file_header file_header;
   r2007_page *pages_map, *page;
@@ -1242,7 +1262,7 @@ read_r2007_meta_data(Bit_Chain *dat, Dwg_Data *dwg)
     }
 
   read_2007_section_classes(dat, dwg, sections_map, pages_map);
-  read_2007_section_header(dat, dwg, sections_map, pages_map);
+  read_2007_section_header(dat, hdl_dat, dwg, sections_map, pages_map);
 
   pages_destroy(pages_map);
   if (page)

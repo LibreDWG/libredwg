@@ -1363,10 +1363,10 @@ DWG_ENTITY_END
 
 #ifdef IS_DECODER
 
-#define DECODE_3DSOLID decode_3dsolid(dat, obj, _obj);
-void decode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj);
+#define DECODE_3DSOLID decode_3dsolid(dat, hdl_dat, obj, _obj);
+void decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj);
 
-void decode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
+void decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
 {
   Dwg_Data* dwg = obj->parent;
   int vcount, rcount, rcount2;
@@ -1490,10 +1490,10 @@ void decode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
 
 #ifdef IS_ENCODER
 
-#define ENCODE_3DSOLID encode_3dsolid(dat, obj, _obj);
-void encode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj);
+#define ENCODE_3DSOLID encode_3dsolid(dat, hdl_dat, obj, _obj);
+void encode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj);
 
-void encode_3dsolid(Bit_Chain* dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
+void encode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
 {
   //TODO Implement-me
   assert(dat);
