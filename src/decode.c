@@ -1531,7 +1531,7 @@ find_section(Dwg_Data *dwg, unsigned long int index)
   for (i = 0; i < dwg->header.num_sections; ++i)
     {
       if ((unsigned long int)dwg->header.section[i].number == index)
-        return (&dwg->header.section[i]);
+        return &dwg->header.section[i];
     }
   return 0;
 }
@@ -1670,7 +1670,7 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *dwg,
   char *decomp;
   unsigned int i, j;
 
-  for (i=0; i < dwg->header.num_infos && info == 0; ++i)
+  for (i=0; i < dwg->header.num_infos && !info; ++i)
     {
       if (dwg->header.section_info[i].type == section_type)
         {
@@ -1999,8 +1999,9 @@ decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
   if (section)
     {
       Dwg_Object *obj = NULL;
-      Dwg_Section* _obj = &dwg->header.section[dwg->r2004_header.section_info_id];
-      LOG_TRACE("\n=== Data Section (Section Info) ===\n")
+      Dwg_Section* _obj = section;
+      LOG_TRACE("\n=== Data Section (Section Info %d) ===\n",
+                dwg->r2004_header.section_info_id)
       dat->byte = section->address;
 
       FIELD_RL(section_type, 0); // should be 0x4163043b
