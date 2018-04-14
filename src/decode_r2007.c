@@ -471,7 +471,9 @@ read_instructions(unsigned char **src, unsigned char *opcode, uint32_t *offset,
     }
 }
 
-/* See spec version 5.0 pp. 29 */
+/* par 4.7 Compression, page 32 (same as format 2004) 
+   TODO: replace by decompress_R2004_section(dat, decomp, comp_data_size)
+*/
 static int 
 decompress_r2007(char *dst, int dst_size, char *src, int src_size)
 {
@@ -680,7 +682,6 @@ read_data_section(Bit_Chain *sec_dat, Bit_Chain *dat, r2007_section *sections_ma
   }
   
   max_decomp_size = section->data_size;
-  
   decomp = (unsigned char *)malloc(max_decomp_size * sizeof(char));
   if (decomp == NULL) {
     LOG_ERROR("Out of memory")
@@ -689,7 +690,8 @@ read_data_section(Bit_Chain *sec_dat, Bit_Chain *dat, r2007_section *sections_ma
   
   for (i = 0; i < (int)section->num_pages; i++)
     {
-      page = get_page(pages_map, section->pages[i]->id);
+      r2007_section_page *section_page = section->pages[i];
+      page = get_page(pages_map, section_page->id);
       if (page == NULL)
         {
           free(decomp);
@@ -698,8 +700,8 @@ read_data_section(Bit_Chain *sec_dat, Bit_Chain *dat, r2007_section *sections_ma
         }
     
       dat->byte = page->offset; 
-      if (read_data_page(dat, &decomp[section->pages[i]->offset], page->size, 
-                         section->pages[i]->comp_size, section->pages[i]->uncomp_size) != 0)
+      if (read_data_page(dat, &decomp[section_page->offset], page->size, 
+                         section_page->comp_size, section_page->uncomp_size) != 0)
         {
           free(decomp);
           LOG_ERROR("Failed to read page")

@@ -1563,53 +1563,44 @@ read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
   ptr = decomp + 20; // section name char[64]
   for (i = 0; i < dwg->header.num_descriptions; ++i)
     {
-      dwg->header.section_info[i].size            = *((int32_t*)ptr);
-      dwg->header.section_info[i].pagecount 	  = *((int32_t*)ptr + 1);
-      dwg->header.section_info[i].num_sections    = *((int32_t*)ptr + 2);
-      dwg->header.section_info[i].max_decomp_size = *((int32_t*)ptr + 3);
-      dwg->header.section_info[i].unknown2        = *((int32_t*)ptr + 4);
-      dwg->header.section_info[i].compressed      = *((int32_t*)ptr + 5);
-      dwg->header.section_info[i].type            = *((int32_t*)ptr + 6);
-      dwg->header.section_info[i].encrypted       = *((int32_t*)ptr + 7);
+      Dwg_Section_Info* info = &dwg->header.section_info[i];
+      info->size            = *((int32_t*)ptr);
+      info->pagecount 	    = *((int32_t*)ptr + 1);
+      info->num_sections    = *((int32_t*)ptr + 2);
+      info->max_decomp_size = *((int32_t*)ptr + 3);
+      info->unknown2        = *((int32_t*)ptr + 4);
+      info->compressed      = *((int32_t*)ptr + 5);
+      info->type            = *((int32_t*)ptr + 6);
+      info->encrypted       = *((int32_t*)ptr + 7);
       ptr += 32;
-      memcpy(dwg->header.section_info[i].name, ptr, 64);
+      memcpy(info->name, ptr, 64);
       ptr += 64;
 
       LOG_TRACE("\nSection Info description fields\n")
-      LOG_TRACE("Size:                  %u\n",
-                dwg->header.section_info[i].size)
-      LOG_TRACE("PageCount:             %u\n",
-                dwg->header.section_info[i].pagecount)
-      LOG_TRACE("Number of sections:    %u\n",
-                dwg->header.section_info[i].num_sections)
-      LOG_TRACE("Max decompressed size: %u / 0x%x\n", // normally 0x7400
-                dwg->header.section_info[i].max_decomp_size,
-                dwg->header.section_info[i].max_decomp_size)
-      LOG_TRACE("Unknown:               %u\n",
-                dwg->header.section_info[i].unknown2)
-      LOG_TRACE("Compressed:            %u (1=no, 2=yes)\n",
-                dwg->header.section_info[i].compressed)
-      LOG_TRACE("Section Type:          %d\n",
-                dwg->header.section_info[i].type)
-      LOG_TRACE("Encrypted:             %d (0=no, 1=yes, 2=unknown)\n",
-                dwg->header.section_info[i].encrypted)
-      LOG_TRACE("SectionName:           %s\n\n",
-            dwg->header.section_info[i].name)
+      LOG_TRACE("Size:            %u\n", info->size)
+      LOG_TRACE("PageCount:       %u\n", info->pagecount)
+      LOG_TRACE("Num sections:    %u\n", info->num_sections)
+      LOG_TRACE("Max decomp size: %u / 0x%x\n", // normally 0x7400
+                info->max_decomp_size, info->max_decomp_size)
+      LOG_TRACE("Unknown:         %u\n", info->unknown2)
+      LOG_TRACE("Compressed:      %u (1=no, 2=yes)\n", info->compressed)
+      LOG_TRACE("Section Type:    %d\n", info->type)
+      LOG_TRACE("Encrypted:       %d (0=no, 1=yes, 2=unknown)\n", info->encrypted)
+      LOG_TRACE("SectionName:     %s\n\n", info->name)
 
-      dwg->header.section_info[i].sections = (Dwg_Section**)
-        calloc(dwg->header.section_info[i].num_sections, sizeof(Dwg_Section*));
-      if (!dwg->header.section_info[i].sections)
+      info->sections = (Dwg_Section**)
+        calloc(info->num_sections, sizeof(Dwg_Section*));
+      if (!info->sections)
         {
           LOG_ERROR("Out of memory");
           return;
         }
 
-      if (dwg->header.section_info[i].num_sections < 10000)
+      if (info->num_sections < 10000)
 	{
-	  LOG_INFO("Section count %u in area %d\n",
-                   dwg->header.section_info[i].num_sections, i)
+	  LOG_INFO("Section count %u in area %d\n", info->num_sections, i)
 
-	  for (j = 0; j < dwg->header.section_info[i].num_sections; j++)
+	  for (j = 0; j < info->num_sections; j++)
 	    {
 	      section_number = *((uint32_t*)ptr);      // Index into SectionMap
 	      data_size      = *((uint32_t*)ptr + 1);
@@ -1619,7 +1610,7 @@ read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
               start_offset  += *((uint32_t*)ptr + 3);
 	      ptr += 16;
 
-	      dwg->header.section_info[i].sections[j] = find_section(dwg, section_number);
+	      info->sections[j] = find_section(dwg, section_number);
 
 	      LOG_TRACE("Section Number: %d\n", section_number)
               LOG_TRACE("Data size:      %d\n", data_size) //compressed
@@ -1629,7 +1620,7 @@ read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
       else
 	{
 	  LOG_ERROR("Section count %u in area %d too high! Skipping",
-                    dwg->header.section_info[i].num_sections, i)
+                    info->num_sections, i)
 	}
     }
   free(decomp);
