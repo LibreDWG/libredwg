@@ -1,6 +1,5 @@
 
 * add object_refs for 2007
-* add string and handle streams since 2007
 * add bit_read_MCU type for 2010 bitsize
 * pre-R13: tables, entities, block entities
 * PROXY subentities, PROXY_ENTITY
@@ -16,9 +15,12 @@
 * convert XRECORD xdata linked-list ResBuf to array of eed[],
   same structure as common EED.
 
-* encode_2007 (move the local structs to the dwg, as union)
+* merge decode_r2007 with the 2004 decoder. It is almost the same, just
+  the sections have now multiple pages.
+* encode for 2004+: move the local structs to the dwg, as union.
 * finish DXF writing (easy)
 * add DXF reading (easy)
+* add binary DXF
 
 * fix the remaining leaks.
 * check 32bit/64bit strictness with the public headers (internally we can handle it).
