@@ -1844,12 +1844,9 @@ read_2004_section_header(Bit_Chain* dat, Dwg_Data *dwg)
 static int
 read_2004_section_handles(Bit_Chain* dat, Dwg_Data *dwg)
 {
-  unsigned int section_size = 0;
-  unsigned char sgdc[2];
-  long unsigned int duabyte;
-  long unsigned int lastmap;
-  Bit_Chain hdl_dat;
-  Bit_Chain obj_dat;
+  Bit_Chain obj_dat, hdl_dat;
+  BITCODE_RS section_size = 0;
+  long unsigned int endpos;
   int error;
 
   error = read_2004_compressed_section(dat, dwg, &obj_dat, SECTION_OBJECTS);
@@ -1863,7 +1860,7 @@ read_2004_section_handles(Bit_Chain* dat, Dwg_Data *dwg)
       return error;
     }
 
-  lastmap = hdl_dat.byte + hdl_dat.size;
+  endpos = hdl_dat.byte + hdl_dat.size;
   dwg->num_objects = 0;
 
   do
@@ -1871,12 +1868,9 @@ read_2004_section_handles(Bit_Chain* dat, Dwg_Data *dwg)
       long unsigned int last_offset;
       long unsigned int last_handle;
       long unsigned int previous_address = 0;
+      long unsigned int startpos = hdl_dat.byte;
 
-      duabyte = hdl_dat.byte;
-      sgdc[0] = bit_read_RC(&hdl_dat);
-      sgdc[1] = bit_read_RC(&hdl_dat);
-      section_size = (sgdc[0] << 8) | sgdc[1];
-
+      section_size = bit_read_RS_LE(&hdl_dat);
       LOG_TRACE("Section size: %u\n", section_size);
       if (section_size > 2034)
         {
@@ -1886,7 +1880,7 @@ read_2004_section_handles(Bit_Chain* dat, Dwg_Data *dwg)
 
       last_handle = 0;
       last_offset = 0;
-      while (hdl_dat.byte - duabyte < section_size)
+      while (hdl_dat.byte - startpos < section_size)
         {
           long int pvztkt;
           long int pvzadr;
@@ -1906,7 +1900,7 @@ read_2004_section_handles(Bit_Chain* dat, Dwg_Data *dwg)
         break;
       hdl_dat.byte += 2; // CRC
 
-      if (hdl_dat.byte >= lastmap)
+      if (hdl_dat.byte >= endpos)
         break;
     }
   while (section_size > 2);
