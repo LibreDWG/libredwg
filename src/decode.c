@@ -743,7 +743,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
   long unsigned int size;
   long unsigned int lasta;
   long unsigned int lastmap;
-  long unsigned int duabyte;
+  long unsigned int startpos;
   long unsigned int object_begin;
   long unsigned int object_end;
   long unsigned int pvz;
@@ -998,15 +998,13 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
             (unsigned)dwg->header.section[SECTION_OBJECTS_R13].size)
   do
     {
-      long unsigned int last_address;
+      long unsigned int last_offset;
       long unsigned int last_handle;
-      long unsigned int previous_address = 0;
+      long unsigned int oldpos = 0;
+      startpos = dat->byte;
 
-      duabyte = dat->byte;
-      sgdc[0] = bit_read_RC(dat);
-      sgdc[1] = bit_read_RC(dat);
-      section_size = (sgdc[0] << 8) | sgdc[1];
-      LOG_TRACE("section_size: %u\n", section_size)
+      section_size = bit_read_RS_LE(dat);
+      LOG_TRACE("Section size: %u\n", section_size);
       if (section_size > 2035)
         {
           LOG_ERROR("Object-map section size greater than 2035!")
@@ -1014,33 +1012,27 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
         }
 
       last_handle = 0;
-      last_address = 0;
-      while (dat->byte - duabyte < section_size)
+      last_offset = 0;
+      while (dat->byte - startpos < section_size)
         {
-#if 0
-          long unsigned int kobj;
-#endif
-          long int pvztkt;
-          long int pvzadr;
-          previous_address = dat->byte;
-          pvztkt = bit_read_MC(dat);
-          last_handle += pvztkt;
-          pvzadr = bit_read_MC(dat);
-          last_address += pvzadr;
-          LOG_TRACE("Idc: %li\t", dwg->num_objects)
-          LOG_TRACE("Handle: %li\tAddress: %li", pvztkt, pvzadr)
-          //}
-          if (dat->byte == previous_address)
+          long int handle, offset;
+          oldpos = dat->byte;
+          handle = bit_read_MC(dat);
+          offset = bit_read_MC(dat);
+          last_handle += handle;
+          last_offset += offset;
+          LOG_TRACE("\nNext object: %li\t", dwg->num_objects)
+          LOG_TRACE("Handle: %li\tOffset: %li\n", handle, offset)
+
+          if (dat->byte == oldpos)
             break;
-          //if (dat->byte - duabyte >= seksize)
-          //break;
 
-          if (object_end < last_address)
-            object_end = last_address;
-          if (object_begin > last_address)
-            object_begin = last_address;
+          if (object_end < last_offset)
+            object_end = last_offset;
+          if (object_begin > last_offset)
+            object_begin = last_offset;
 
-          dwg_decode_add_object(dwg, dat, dat, last_address);
+          dwg_decode_add_object(dwg, dat, dat, last_offset);
 #if 0
           kobj = dwg->num_objects;
           if (dwg->num_objects > kobj)
@@ -1048,7 +1040,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
           //TODO: blame Juca
 #endif
         }
-      if (dat->byte == previous_address)
+      if (dat->byte == oldpos)
         break;
 
       // CRC on
@@ -1058,11 +1050,8 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
           dat->bit = 0;
         }
 
-      sgdc[0] = bit_read_RC(dat);
-      sgdc[1] = bit_read_RC(dat);
-      ckr = (sgdc[0] << 8) | sgdc[1];
-
-      ckr2 = bit_calc_CRC(0xc0c1, dat->chain + duabyte, section_size);
+      ckr = bit_read_RS_LE(dat);
+      ckr2 = bit_calc_CRC(0xc0c1, dat->chain + startpos, section_size);
       if (ckr != ckr2)
         {
           LOG_ERROR("Section CRC mismatch %d <=> %d", ckr, ckr2);
@@ -1093,7 +1082,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
    antckr = 0xC0C1;
    do
    {
-     duabyte = dat->byte;
+     startpos = dat->byte;
      sgdc[0] = bit_read_RC (dat);
      sgdc[1] = bit_read_RC (dat);
      section_size = (sgdc[0] << 8) | sgdc[1];
@@ -1101,7 +1090,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
      dat->byte += section_size;
      ckr = bit_read_CRC (dat);
      dat->byte -= 2;
-     bit_write_CRC (dat, duabyte, antckr);
+     bit_write_CRC (dat, startpos, antckr);
      dat->byte -= 2;
      ckr2 = bit_read_CRC (dat);
      if (loglevel) fprintf (stderr, "Read: %X\nCreated: %X\t SEMO: %X\n", ckr, ckr2, antckr);
@@ -1867,7 +1856,7 @@ read_2004_section_handles(Bit_Chain* dat, Dwg_Data *dwg)
     {
       long unsigned int last_offset;
       long unsigned int last_handle;
-      long unsigned int previous_address = 0;
+      long unsigned int oldpos = 0;
       long unsigned int startpos = hdl_dat.byte;
 
       section_size = bit_read_RS_LE(&hdl_dat);
@@ -1882,21 +1871,19 @@ read_2004_section_handles(Bit_Chain* dat, Dwg_Data *dwg)
       last_offset = 0;
       while (hdl_dat.byte - startpos < section_size)
         {
-          long int pvztkt;
-          long int pvzadr;
-
-          previous_address = hdl_dat.byte;
-
-          pvztkt = bit_read_MC(&hdl_dat);
-          last_handle += pvztkt;
-
-          pvzadr = bit_read_MC(&hdl_dat);
-          last_offset += pvzadr;
+          long int handle, offset;
+          oldpos = dat->byte;
+          handle = bit_read_MC(&hdl_dat);
+          offset = bit_read_MC(&hdl_dat);
+          last_handle += handle;
+          last_offset += offset;
+          LOG_TRACE("\nNext object: %li\t", dwg->num_objects)
+          LOG_TRACE("Handle: %li\tOffset: %li\n", handle, offset)
 
           dwg_decode_add_object(dwg, &obj_dat, &obj_dat, last_offset);
         }
 
-      if (hdl_dat.byte == previous_address)
+      if (hdl_dat.byte == oldpos)
         break;
       hdl_dat.byte += 2; // CRC
 
@@ -3268,7 +3255,7 @@ void
 dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
                       long unsigned int address)
 {
-  long unsigned int previous_address;
+  long unsigned int oldpos;
   long unsigned int object_address, end_address;
   unsigned char previous_bit;
   Dwg_Object *obj;
@@ -3276,7 +3263,7 @@ dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
 
   /* Keep the previous address
    */
-  previous_address = dat->byte;
+  oldpos = dat->byte;
   previous_bit = dat->bit;
 
   /* Use the indicated address for the object
@@ -3284,7 +3271,6 @@ dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
   dat->byte = address;
   dat->bit = 0;
 
-  LOG_INFO("\n")
   //DEBUG_HERE();
   /*
    * Reserve memory space for objects
@@ -3300,7 +3286,7 @@ dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
       return;
     }
 
-  LOG_INFO("\n======================\nObject number: %lu", num)
+  LOG_INFO("======================\nObject number: %lu", num)
 
   obj = &dwg->object[num];
   memset(obj, 0, sizeof(Dwg_Object));
@@ -3635,7 +3621,7 @@ dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
 
   /* Register the previous addresses for return
    */
-  dat->byte = previous_address;
+  dat->byte = oldpos;
   dat->bit = previous_bit;
 }
 
