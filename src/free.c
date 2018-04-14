@@ -726,18 +726,15 @@ dwg_free_object(Dwg_Object *obj)
             dwg_free_LAYOUT(obj);
           }
         }
-      /* > 500:
-         TABLE, DICTIONARYWDLFT, IDBUFFER, IMAGE, IMAGEDEF, IMAGEDEF_REACTOR,
-         LAYER_INDEX, OLE2FRAME, PROXY, RASTERVARIABLES, SORTENTSTABLE, SPATIAL_FILTER,
-         SPATIAL_INDEX
-      */
+
       else if (!dwg_free_variable_type(obj->parent, obj))
         {
           int is_entity;
           int i = obj->type - 500;
           Dwg_Class *klass = NULL;
 
-          if (i <= (int)dwg->num_classes)
+          dwg = obj->parent;
+          if (dwg->dwg_class && i >= 0 && i <= (int)dwg->num_classes)
             {
               klass = &dwg->dwg_class[i];
               is_entity = dwg_class_is_entity(klass);
