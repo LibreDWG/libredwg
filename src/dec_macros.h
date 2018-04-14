@@ -51,11 +51,14 @@
       {\
         _obj->name = dwg_decode_handleref(hdl_dat, obj, dwg);\
       }\
-    LOG_TRACE(#name ": HANDLE(%d.%d.%lu) absolute:%lu\n",\
+    if (_obj->name)\
+      {\
+        LOG_TRACE(#name ": HANDLE(%d.%d.%lu) absolute:%lu\n",   \
           _obj->name->handleref.code,\
           _obj->name->handleref.size,\
           _obj->name->handleref.value,\
-          _obj->name->absolute_ref);\
+          _obj->name->absolute_ref)\
+      }\
   }
 #define FIELD_HANDLE_N(name, vcount, handle_code, dxf)  \
   {\
@@ -67,12 +70,15 @@
       {\
         _obj->name = dwg_decode_handleref(hdl_dat, obj, dwg);\
       }\
-    LOG_TRACE(#name "[%d]: HANDLE(%d.%d.%lu) absolute:%lu [%d]\n",\
+    if (_obj->name)\
+      {\
+        LOG_TRACE(#name "[%d]: HANDLE(%d.%d.%lu) absolute:%lu [%d]\n",  \
               (int)vcount,                          \
               _obj->name->handleref.code,           \
               _obj->name->handleref.size,           \
               _obj->name->handleref.value,          \
-              _obj->name->absolute_ref, dxf);       \
+              _obj->name->absolute_ref, dxf)        \
+      }\
   }
 #define FIELD_DATAHANDLE(name, handle_code, dxf) \
   { \

@@ -58,7 +58,9 @@
   } \
   LATER_VERSIONS \
   { \
-    FIELD_TV (entry_name, 2); \
+    PRE(R_2007) { \
+      FIELD_TV (entry_name, 2); \
+    } \
     FIELD_B (_64_flag, 0); \
     PRE(R_2010) \
     { \

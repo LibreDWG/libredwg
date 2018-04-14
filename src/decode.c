@@ -1976,7 +1976,12 @@ decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
     dat->byte = dwg->r2004_header.section_map_address + 0x100;
 
     LOG_TRACE("\n=== Read System Section (Section Page Map) ===\n\n")
-    FIELD_RL(section_type, 0); // should be 0x4163043b
+    FIELD_RL(section_type, 0);
+    if (FIELD_VALUE(section_type) != 0x41630e3b)
+      {
+        LOG_WARN("Invalid System Section Page Map type 0x%x != 0x41630e3b",
+                 FIELD_VALUE(section_type));
+      }
     FIELD_RL(decomp_data_size, 0);
     FIELD_RL(comp_data_size, 0);
     FIELD_RL(compression_type, 0);
@@ -1989,7 +1994,7 @@ decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
   if (!dwg->header.section)
     {
       LOG_ERROR("Failed to read R2004 Section Page Map.")
-        return -1;
+      return -1;
     }
 
   /*-------------------------------------------------------------------------
@@ -2004,7 +2009,12 @@ decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
                 dwg->r2004_header.section_info_id)
       dat->byte = section->address;
 
-      FIELD_RL(section_type, 0); // should be 0x4163043b
+      FIELD_RL(section_type, 0);
+      if (FIELD_VALUE(section_type) != 0x4163003b)
+        {
+          LOG_WARN("Invalid Data Section Page Map type 0x%x != 0x4163003b",
+                   FIELD_VALUE(section_type));
+        }
       FIELD_RL(decomp_data_size, 0);
       FIELD_RL(comp_data_size, 0);
       FIELD_RL(compression_type, 0);
@@ -2658,8 +2668,8 @@ dwg_decode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg,
   ref = dwg_decode_handleref(dat, obj, dwg);
   if (!ref)
     {
-      LOG_ERROR("dwg_decode_handleref_with_code: ref is a null pointer");
-      return 0;
+      LOG_ERROR("Invalid handleref");
+      return NULL;
     }
 
   if (ref->absolute_ref == 0 && ref->handleref.code != code)
