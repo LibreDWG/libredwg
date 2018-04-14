@@ -35,11 +35,11 @@ Dwg_Object_Ref *
 dwg_decode_handleref(Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Data* dwg);
 
 Dwg_Object_Ref *
-dwg_decode_handleref_with_code(Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Data* dwg,
-                               unsigned int code);
+dwg_decode_handleref_with_code(Bit_Chain* hdl_dat, Dwg_Object* obj,
+                               Dwg_Data* dwg, unsigned int code);
 void
-dwg_decode_header_variables(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
-                            Dwg_Data* dwg);
+dwg_decode_header_variables(Bit_Chain* dat, Bit_Chain* hdl_dat,
+                            Bit_Chain* str_dat, Dwg_Data* dwg);
 void
 dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
                       long unsigned int address);
@@ -103,7 +103,7 @@ typedef struct r2007_file_header
 typedef struct _r2007_page
 {
   int64_t id;
-  int64_t size;  
+  int64_t size;
   int64_t offset;
   struct _r2007_page *next;
 } r2007_page;
@@ -141,16 +141,19 @@ typedef struct _r2007_section
 int read_r2007_meta_data(Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Data *dwg);
 /* imported */
 extern int rs_decode_block(unsigned char *blk, int fix);
-  
+
 /* private */
-static r2007_section* get_section(r2007_section *sections_map, Dwg_Section_Type sec_type);
+static r2007_section* get_section(r2007_section *sections_map,
+                                  Dwg_Section_Type sec_type);
 static r2007_page* get_page(r2007_page *pages_map, int64_t id);
 static void pages_destroy(r2007_page *page);
 static void sections_destroy(r2007_section *section);
-static r2007_section* read_sections_map(Bit_Chain* dat, int64_t size_comp, 
-                                        int64_t size_uncomp, int64_t correction);
+static r2007_section* read_sections_map(Bit_Chain* dat, int64_t size_comp,
+                                        int64_t size_uncomp,
+                                        int64_t correction);
 static int read_data_section(Bit_Chain *sec_dat, Bit_Chain *dat,
-           r2007_section *sections_map, r2007_page *pages_map, Dwg_Section_Type sec_type);
+           r2007_section *sections_map, r2007_page *pages_map,
+                             Dwg_Section_Type sec_type);
 static int read_2007_section_classes(Bit_Chain* dat,
            Dwg_Data *dwg, r2007_section *sections_map, r2007_page *pages_map);
 static int read_2007_section_header(Bit_Chain* dat, Bit_Chain* hdl_dat,
@@ -194,7 +197,7 @@ dst += 8;
 dst = copy_bytes_16(dst, src + offset);
 
 
-static char* 
+static char*
 copy_bytes_2(char *dst, char *src)
 {
   dst[0] = src[1];
@@ -202,7 +205,7 @@ copy_bytes_2(char *dst, char *src)
   return dst + 2;
 }
 
-static char* 
+static char*
 copy_bytes_3(char *dst, char *src)
 {
   dst[0] = src[2];
@@ -211,19 +214,19 @@ copy_bytes_3(char *dst, char *src)
   return dst + 3;
 }
 
-static char* 
+static char*
 copy_bytes_16(char *dst, char *src)
 {
   *(uint64_t*)dst = *(uint64_t*)(src + 8);
-  *(uint64_t*)(dst + 8) = *(uint64_t*)src;  
+  *(uint64_t*)(dst + 8) = *(uint64_t*)src;
   return dst + 16;
 }
 
-static void 
+static void
 copy_bytes(char *dst, uint32_t length, uint32_t offset)
 {
   char *src = dst - offset;
-  
+
   while (length-- > 0)
     *dst++ = *src++;
 }
@@ -237,78 +240,78 @@ copy_compressed_bytes(char *dst, char *src, int length)
     {
       copy_16(16);
       copy_16(0);
-    
-      src += 32;	    
+
+      src += 32;
       length -= 32;
     }
-  
+
   switch (length)
   {
-    case 1:  
+    case 1:
       copy_1(0);
       break;
-    case 2:  
+    case 2:
       copy_2(0);
       break;
-    case 3:  
+    case 3:
       copy_3(0);
       break;
-    case 4:  
-      copy_4(0);        
+    case 4:
+      copy_4(0);
       break;
-    case 5:  
+    case 5:
       copy_1(4);
-      copy_4(0); 
+      copy_4(0);
       break;
-    case 6:  
+    case 6:
       copy_1(5);
-      copy_4(1); 
+      copy_4(1);
       copy_1(0);
       break;
-    case 7:  
+    case 7:
       copy_2(5);
-      copy_4(1); 
-      copy_1(0); 
+      copy_4(1);
+      copy_1(0);
       break;
-    case 8:  
+    case 8:
       copy_8(0);
       break;
-    case 9:  
+    case 9:
       copy_1(8);
       copy_8(0);
       break;
-    case 10:  
+    case 10:
       copy_1(9);
       copy_8(1);
       copy_1(0);
       break;
-    case 11:  
+    case 11:
       copy_2(9);
       copy_8(1);
       copy_1(0);
       break;
-    case 12:  
+    case 12:
       copy_4(8);
       copy_8(0);
       break;
-    case 13:  
+    case 13:
       copy_1(12);
       copy_4(8);
       copy_8(0);
       break;
-    case 14:  
+    case 14:
       copy_1(13);
       copy_4(9);
       copy_8(1);
       copy_1(0);
       break;
-    case 15:  
+    case 15:
       copy_2(13);
       copy_4(9);
       copy_8(1);
       copy_1(0);
       break;
-    case 16:  
+    case 16:
       copy_16(0);
       break;
     case 17:
@@ -316,30 +319,30 @@ copy_compressed_bytes(char *dst, char *src, int length)
       copy_1(8);
       copy_8(0);
       break;
-    case 18:  
+    case 18:
       copy_1(17);
       copy_16(1);
       copy_1(0);
       break;
-    case 19:  
+    case 19:
       copy_3(16);
       copy_16(0);
       break;
-    case 20:  
+    case 20:
       copy_4(16);
       copy_16(0);
       break;
-    case 21:  
+    case 21:
       copy_1(20);
       copy_4(16);
       copy_16(0);
       break;
-    case 22:  
+    case 22:
       copy_2(20);
       copy_4(16);
       copy_16(0);
       break;
-    case 23:  
+    case 23:
       copy_3(20);
       copy_4(16);
       copy_16(0);
@@ -348,41 +351,41 @@ copy_compressed_bytes(char *dst, char *src, int length)
       copy_8(16);
       copy_16(0);
       break;
-    case 25:  
+    case 25:
       copy_8(17);
       copy_1(16);
-      copy_16(0);        
+      copy_16(0);
       break;
-    case 26:  
+    case 26:
       copy_1(25);
       copy_8(17);
       copy_1(16);
       copy_16(0);
       break;
-    case 27:  
+    case 27:
       copy_2(25);
       copy_8(17);
       copy_1(16);
       copy_16(0);
       break;
-    case 28:  
+    case 28:
       copy_4(24);
       copy_8(16);
       copy_16(0);
       break;
-    case 29:  
+    case 29:
       copy_1(28);
       copy_4(24);
       copy_8(16);
       copy_16(0);
       break;
-    case 30:  
+    case 30:
       copy_2(28);
       copy_4(24);
       copy_8(16);
       copy_16(0);
       break;
-    case 31:  
+    case 31:
       copy_1(30);
       copy_4(26);
       copy_8(18);
@@ -399,35 +402,35 @@ static uint32_t
 read_literal_length(unsigned char **src, unsigned char opcode)
 {
   uint32_t length = opcode + 8;
-  
+
   if (length == 0x17)
     {
       int n = *(*src)++;
-    
+
       length += n;
-    
+
       if (n == 0xff)
         {
           do
             {
               n = *(*src)++;
               n |= (*(*src)++ << 8);
-        
+
               length += n;
-            } 
+            }
           while (n == 0xFFFF);
         }
     }
-  
+
   return length;
 }
 
 /* See spec version 5.1 page 53 */
-static void 
+static void
 read_instructions(unsigned char **src, unsigned char *opcode, uint32_t *offset,
-                  uint32_t *length) 
+                  uint32_t *length)
 {
-  switch (*opcode >> 4) 
+  switch (*opcode >> 4)
     {
     case 0:
       *length = (*opcode & 0xf) + 0x13;
@@ -436,25 +439,25 @@ read_instructions(unsigned char **src, unsigned char *opcode, uint32_t *offset,
       *length = ((*opcode >> 3) & 0x10) + *length;
       *offset = ((*opcode & 0x78) << 5) + 1 + *offset;
       break;
-    
+
     case 1:
       *length = (*opcode & 0xf) + 3;
       *offset = *(*src)++;
       *opcode = *(*src)++;
       *offset = ((*opcode & 0xf8) << 5) + 1 + *offset;
       break;
-    
+
     case 2:
       *offset = *(*src)++;
       *offset = ((*(*src)++ << 8) & 0xff00) | *offset;
       *length = *opcode & 7;
-    
-      if ((*opcode & 8) == 0) 
+
+      if ((*opcode & 8) == 0)
         {
           *opcode = *(*src)++;
           *length = (*opcode & 0xf8) + *length;
-        } 
-      else 
+        }
+      else
         {
           (*offset)++;
           *length = (*(*src)++ << 3) + *length;
@@ -462,7 +465,7 @@ read_instructions(unsigned char **src, unsigned char *opcode, uint32_t *offset,
           *length = (((*opcode & 0xf8) << 8) + *length) + 0x100;
         }
       break;
-    
+
     default:
       *length = *opcode >> 4;
       *offset = *opcode & 15;
@@ -472,77 +475,77 @@ read_instructions(unsigned char **src, unsigned char *opcode, uint32_t *offset,
     }
 }
 
-/* par 4.7 Compression, page 32 (same as format 2004) 
+/* par 4.7 Compression, page 32 (same as format 2004)
    TODO: replace by decompress_R2004_section(dat, decomp, comp_data_size)
 */
-static int 
+static int
 decompress_r2007(char *dst, int dst_size, char *src, int src_size)
 {
   uint32_t length = 0;
   uint32_t offset = 0;
-  
+
   char *dst_end = dst + dst_size;
   char *src_end = src + src_size;
-  
+
   unsigned char opcode = *src++;
-  
+
   if ((opcode & 0xf0) == 0x20)
     {
       src += 2;
       length = *src++ & 0x07;
-    
+
       if (length == 0) {
         LOG_ERROR("Decompression error: zero length")
         return 1;
       }
-    } 
-  
+    }
+
   while (src < src_end)
-    {   
+    {
       if (length == 0)
         length = read_literal_length((unsigned char**)&src, opcode);
-      
+
       if ((dst + length) > dst_end) {
         LOG_ERROR("Decompression error: length overflow")
         return 1;
       }
-      
+
       copy_compressed_bytes(dst, src, length);
-      
+
       dst += length;
       src += length;
-      
+
       length = 0;
-      
+
       if (src >= src_end)
         return 0;
 
       opcode = *src++;
-      
+
       read_instructions((unsigned char**)&src, &opcode, &offset, &length);
-      
+
       while (1)
         {
           copy_bytes(dst, length, offset);
-        
+
           dst += length;
-          length = (opcode & 7);   
-        
+          length = (opcode & 7);
+
           if (length != 0 || src >= src_end)
             break;
-        
+
           opcode = *src++;
-        
+
           if ((opcode >> 4) == 0)
             break;
-        
+
           if ((opcode >> 4) == 0x0f)
             opcode &= 0xf;
-        
+
           read_instructions((unsigned char**)&src, &opcode, &offset, &length);
-        } 
+        }
     }
-  
+
   return 0;
 }
 
@@ -584,15 +587,15 @@ read_system_page(Bit_Chain* dat, int64_t size_comp, int64_t size_uncomp,
                  int64_t repeat_count)
 {
   int i;
-  
+
   int64_t pesize;      // Pre RS encoded size
   int64_t block_count; // Number of RS encoded blocks
   int64_t page_size;
-  
+
   char *rsdata;        // RS encoded data
   char *pedata;        // Pre RS encoded data
   char *data;          // The data RS unencoded and uncompressed
-  
+
   // Round to a multiple of 8
   pesize = ((size_comp + 7) & ~7) * repeat_count;
   // Devide pre encoded size by RS k-value (239)
@@ -610,38 +613,38 @@ read_system_page(Bit_Chain* dat, int64_t size_comp, int64_t size_uncomp,
     LOG_ERROR("Out of memory")
     return NULL;
   }
-  
+
   rsdata = &data[size_uncomp];
   bit_read_fixed(dat, rsdata, page_size);
   pedata = decode_rs(rsdata, block_count, 239);
-  
+
   if (size_comp < size_uncomp)
     decompress_r2007(data, size_uncomp, pedata, size_comp);
   else
     memcpy(data, pedata, size_uncomp);
-  
+
   free(pedata);
-  
+
   return data;
 }
 
 static int
-read_data_page(Bit_Chain* dat, unsigned char *decomp, int64_t page_size, 
+read_data_page(Bit_Chain* dat, unsigned char *decomp, int64_t page_size,
                int64_t size_comp, int64_t size_uncomp)
 {
   int i;
-  
+
   int64_t pesize;      // Pre RS encoded size
   int64_t block_count; // Number of RS encoded blocks
-  
+
   char *rsdata;        // RS encoded data
   char *pedata;        // Pre RS encoded data
-  
+
     // Round to a multiple of 8
   pesize = ((size_comp + 7) & ~7);
-  
+
   block_count = (pesize + 0xFB - 1) / 0xFB;
-  
+
   rsdata = (char*)malloc(page_size * sizeof(char));
   if (rsdata == NULL) {
     LOG_ERROR("Out of memory")
@@ -649,19 +652,19 @@ read_data_page(Bit_Chain* dat, unsigned char *decomp, int64_t page_size,
   }
   bit_read_fixed(dat, rsdata, page_size);
   pedata = decode_rs(rsdata, block_count, 0xFB);
-  
+
   if (size_comp < size_uncomp)
     decompress_r2007((char*)decomp, size_uncomp, pedata, size_comp);
   else
     memcpy(decomp, pedata, size_uncomp);
-  
+
   free(pedata);
-  
+
   return 0;
 }
 
 static int
-read_data_section(Bit_Chain *sec_dat, Bit_Chain *dat, r2007_section *sections_map, 
+read_data_section(Bit_Chain *sec_dat, Bit_Chain *dat, r2007_section *sections_map,
                   r2007_page *pages_map, Dwg_Section_Type sec_type)
 {
   r2007_section *section;
@@ -669,20 +672,20 @@ read_data_section(Bit_Chain *sec_dat, Bit_Chain *dat, r2007_section *sections_ma
   int64_t max_decomp_size;
   unsigned char *decomp;
   int i;
-  
+
   section = get_section(sections_map, sec_type);
   if (section == NULL) {
     LOG_ERROR("Failed to find section %d", (int)sec_type)
     return 1;
   }
-  
+
   max_decomp_size = section->data_size;
   decomp = (unsigned char *)malloc(max_decomp_size * sizeof(char));
   if (decomp == NULL) {
     LOG_ERROR("Out of memory")
     return 2;
   }
-  
+
   for (i = 0; i < (int)section->num_pages; i++)
     {
       r2007_section_page *section_page = section->pages[i];
@@ -693,10 +696,11 @@ read_data_section(Bit_Chain *sec_dat, Bit_Chain *dat, r2007_section *sections_ma
           LOG_ERROR("Failed to find page")
           return 3;
         }
-    
-      dat->byte = page->offset; 
-      if (read_data_page(dat, &decomp[section_page->offset], page->size, 
-                         section_page->comp_size, section_page->uncomp_size) != 0)
+
+      dat->byte = page->offset;
+      if (read_data_page(dat, &decomp[section_page->offset], page->size,
+                         section_page->comp_size, section_page->uncomp_size)
+          != 0)
         {
           free(decomp);
           LOG_ERROR("Failed to read page")
@@ -726,11 +730,11 @@ bfr_read(void *dst, char **src, size_t size)
 static DWGCHAR*
 bfr_read_string(char **src)
 {
-  uint16_t *ptr = (uint16_t*)*src;  
+  uint16_t *ptr = (uint16_t*)*src;
   int32_t length = 0, wsize;
   DWGCHAR *str, *str_base;
   int i;
-  
+
   while (*ptr != 0)
     {
       ptr++;
@@ -750,33 +754,33 @@ bfr_read_string(char **src)
     {
       *str++ = (DWGCHAR)(*ptr++);
     }
-  
+
   *src += length * 2 + 2;
   *str = 0;
-  
+
   return str_base;
 }
 
 static r2007_section*
-read_sections_map(Bit_Chain* dat, int64_t size_comp, 
+read_sections_map(Bit_Chain* dat, int64_t size_comp,
                   int64_t size_uncomp, int64_t correction)
 {
   char *data;
   r2007_section *sections = 0, *last_section = 0, *section;
   char *ptr, *ptr_end;
   int i, j = 0;
-  
+
   data = read_system_page(dat, size_comp, size_uncomp, correction);
   if (!data) {
     LOG_ERROR("Failed to read system page")
     return NULL;
   }
-  
+
   ptr = data;
   ptr_end = data + size_uncomp;
-  
+
   LOG_TRACE("\n=== System Section (Section Map) ===\n")
-  
+
   while (ptr < ptr_end)
     {
       section = (r2007_section*) malloc(sizeof(r2007_section));
@@ -785,9 +789,9 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
           LOG_ERROR("Out of memory");
           return NULL;
         }
-    
+
       bfr_read(section, &ptr, 64);
-    
+
       LOG_TRACE("Section [%d]:\n", j)
       LOG_TRACE("  data size:     %"PRIu64"\n", section->data_size)
       LOG_TRACE("  max size:      %"PRIu64"\n", section->max_size)
@@ -803,22 +807,22 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
       assert(section->max_size  <  DBG_MAX_SIZE);
       assert(section->name_length <  DBG_MAX_SIZE);
       assert(section->num_pages < 0x10000);
-    
+
       section->next  = 0;
       section->pages = 0;
-    
+
       if (sections == 0)
         sections = last_section = section;
       else
         {
           last_section->next = section;
           last_section = section;
-        } 
-    
+        }
+
       j++;
       if (ptr >= ptr_end)
         break;
-    
+
       // Section Name
       section->name = bfr_read_string(&ptr);
 #ifdef HAVE_NATIVE_WCHAR2
@@ -829,7 +833,7 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
       LOG_TRACE("\n")
 #endif
       section->type = dwg_section_type(section->name);
-    
+
       section->pages = (r2007_section_page**) malloc(
         (size_t)section->num_pages * sizeof(r2007_section_page*));
       if (!section->pages)
@@ -837,7 +841,7 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
           LOG_ERROR("Out of memory");
           return NULL;
         }
-    
+
       for (i = 0; i < section->num_pages; i++)
         {
           section->pages[i] = (r2007_section_page*) malloc(
@@ -849,14 +853,17 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
             }
 
           bfr_read(section->pages[i], &ptr, 56);
-      
+
           LOG_TRACE("\n  Page[%d]:\n", i)
           LOG_TRACE("   offset:        %"PRIu64"\n", section->pages[i]->offset);
           LOG_TRACE("   size:          %"PRIu64"\n", section->pages[i]->size);
           LOG_TRACE("   id:            %"PRIu64"\n", section->pages[i]->id);
-          LOG_TRACE("   uncomp_size:   %"PRIu64"\n", section->pages[i]->uncomp_size);
-          LOG_TRACE("   comp_size:     %"PRIu64"\n", section->pages[i]->comp_size);
-          LOG_TRACE("   checksum:      %"PRIx64"\n", section->pages[i]->checksum);
+          LOG_TRACE("   uncomp_size:   %"PRIu64"\n",
+                    section->pages[i]->uncomp_size);
+          LOG_TRACE("   comp_size:     %"PRIu64"\n",
+                    section->pages[i]->comp_size);
+          LOG_TRACE("   checksum:      %"PRIx64"\n",
+                    section->pages[i]->checksum);
           LOG_TRACE("   crc:           %"PRIx64"\n\n", section->pages[i]->crc);
           //debugging sanity
           assert(section->pages[i]->size < DBG_MAX_SIZE);
@@ -864,9 +871,9 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
           assert(section->pages[i]->comp_size < DBG_MAX_SIZE);
         }
     }
-  
+
   free(data);
-  
+
   return sections;
 }
 
@@ -874,22 +881,22 @@ static r2007_page*
 read_pages_map(Bit_Chain* dat, int64_t size_comp,
                int64_t size_uncomp, int64_t correction)
 {
-  char *data, *ptr, *ptr_end;  
+  char *data, *ptr, *ptr_end;
   r2007_page *pages = 0, *last_page = 0, *page;
   int64_t offset = 0x480;   //dat->byte;
   int64_t index;
-  
+
   data = read_system_page(dat, size_comp, size_uncomp, correction);
   if (!data) {
     LOG_ERROR("Failed to read system page")
     return NULL;
   }
-  
+
   ptr = data;
   ptr_end = data + size_uncomp;
-  
+
   LOG_TRACE("\n=== System Section (Pages Map) ===\n")
-  
+
   while (ptr < ptr_end)
     {
       page = (r2007_page*) malloc(sizeof(r2007_page));
@@ -900,32 +907,32 @@ read_pages_map(Bit_Chain* dat, int64_t size_comp,
           pages_destroy(pages);
           return NULL;
         }
-    
+
       page->size   = bfr_read_int64(ptr);
       page->id     = bfr_read_int64(ptr);
       page->offset = offset;
       offset += page->size;
-    
+
       index = page->id > 0 ? page->id : -page->id;
-    
+
       LOG_TRACE("Page [%2"PRId64"]: ", page->id)
       LOG_TRACE("size: 0x%05"PRIx64" ", page->size)
       //LOG_TRACE("id:      0x%"PRId64" ", page->id)
       LOG_TRACE("offset: 0x6%"PRIx64" \n", page->offset)
-    
-      page->next = 0;      
-    
+
+      page->next = 0;
+
       if (pages == 0)
         pages = last_page = page;
       else
         {
           last_page->next = page;
           last_page = page;
-        }           
+        }
     }
-  
+
   free(data);
-  
+
   return pages;
 }
 
@@ -935,14 +942,14 @@ static r2007_page*
 get_page(r2007_page *pages_map, int64_t id)
 {
   r2007_page *page = pages_map;
-  
+
   while (page != NULL)
     {
       if (page->id == id)
         break;
       page = page->next;
     }
-  
+
   return page;
 }
 
@@ -950,7 +957,7 @@ static void
 pages_destroy(r2007_page *page)
 {
   r2007_page *next;
-  
+
   while (page != 0)
     {
       next = page->next;
@@ -959,7 +966,8 @@ pages_destroy(r2007_page *page)
     }
 }
 
-/* Lookup a section in the section map. The section is identified by its numeric type.
+/* Lookup a section in the section map.
+ * The section is identified by its numeric type.
  */
 static r2007_section*
 get_section(r2007_section *sections_map, Dwg_Section_Type sec_type)
@@ -979,27 +987,27 @@ static void
 sections_destroy(r2007_section *section)
 {
   r2007_section *next;
-  
+
   while (section != 0)
     {
       next = section->next;
-    
+
       if (section->pages != 0)
         {
           while (section->num_pages-- > 0)
             {
               free(section->pages[section->num_pages]);
             }
-      
+
           free(section->pages);
         }
-    
+
       free(section);
       section = next;
     }
 }
 
-static void 
+static void
 read_file_header(Bit_Chain* dat, r2007_file_header *file_header)
 {
   char data[0x3d8]; //0x400 - 5 long
@@ -1009,7 +1017,7 @@ read_file_header(Bit_Chain* dat, r2007_file_header *file_header)
   int64_t compr_crc;
   int32_t compr_len;
   int i;
-  
+
   dat->byte = 0x80;
   bit_read_fixed(dat, data, 0x3d8);
   pedata = decode_rs(data, 3, 239);
@@ -1018,7 +1026,7 @@ read_file_header(Bit_Chain* dat, r2007_file_header *file_header)
   seqence_key = *((int64_t*)&pedata[8]);
   compr_crc   = *((int64_t*)&pedata[16]);
   compr_len   = *((int32_t*)&pedata[24]);
-  
+
   if (compr_len > 0)
     decompress_r2007((char*)file_header, 0x110, &pedata[32], compr_len);
   else
@@ -1049,7 +1057,8 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str)
   BITCODE_B endbit;
   *str = *dat;
   bit_set_position(str, start);
-  LOG_TRACE("obj string stream\n  pos: %u, %lu/%u\n", start, str->byte, str->bit);
+  LOG_TRACE("obj string stream\n  pos: %u, %lu/%u\n", start,
+            str->byte, str->bit);
   endbit = bit_read_B(str);
   LOG_TRACE("  endbit: %d\n", (int)endbit);
   bit_advance_position(str, -17);
@@ -1117,7 +1126,7 @@ read_2007_section_classes(Bit_Chain* dat, Dwg_Data *dwg,
   char c;
 
   sec_dat.chain = NULL;
-  error = read_data_section(&sec_dat, dat, sections_map, 
+  error = read_data_section(&sec_dat, dat, sections_map,
                             pages_map, SECTION_CLASSES);
   if (error)
     {
@@ -1187,8 +1196,8 @@ read_2007_section_classes(Bit_Chain* dat, Dwg_Data *dwg,
           dwg->dwg_class[idc].instance_count = bit_read_BL(&sec_dat);  // DXF 91
           dwg->dwg_class[idc].dwg_version   = bit_read_BS(&sec_dat);
           dwg->dwg_class[idc].maint_version = bit_read_BS(&sec_dat);
-          dwg->dwg_class[idc].unknown_1     = bit_read_BL(&sec_dat);  // Default 0
-          dwg->dwg_class[idc].unknown_2     = bit_read_BL(&sec_dat);  // Default 0
+          dwg->dwg_class[idc].unknown_1     = bit_read_BL(&sec_dat);  // 0
+          dwg->dwg_class[idc].unknown_2     = bit_read_BL(&sec_dat);  // 0
 
           LOG_TRACE("-------------------\n")
           LOG_TRACE("Number:           %d\n", dwg->dwg_class[idc].number)
@@ -1196,10 +1205,13 @@ read_2007_section_classes(Bit_Chain* dat, Dwg_Data *dwg,
           LOG_TRACE_TU("Application name: ", dwg->dwg_class[idc].appname)
           LOG_TRACE_TU("C++ class name:   ", dwg->dwg_class[idc].cppname)
           LOG_TRACE_TU("DXF record name:  ", dwg->dwg_class[idc].dxfname)
-          LOG_TRACE("Class ID:         0x%x (0x1f3 for object, 0x1f2 for entity)\n",
+          LOG_TRACE("Class ID:         0x%x "
+                    "(0x1f3 for object, 0x1f2 for entity)\n",
                     dwg->dwg_class[idc].item_class_id)
-          LOG_TRACE("instance count:   %u\n", dwg->dwg_class[idc].instance_count)
-          LOG_TRACE("dwg version:      %u (%u)\n", dwg->dwg_class[idc].dwg_version,
+          LOG_TRACE("instance count:   %u\n",
+                    dwg->dwg_class[idc].instance_count)
+          LOG_TRACE("dwg version:      %u (%u)\n",
+                    dwg->dwg_class[idc].dwg_version,
                     dwg->dwg_class[idc].maint_version)
           LOG_TRACE("unknown:          %u %u\n", dwg->dwg_class[idc].unknown_1,
                     dwg->dwg_class[idc].unknown_2)
@@ -1233,7 +1245,7 @@ read_2007_section_header(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Data *dwg,
   Bit_Chain sec_dat, str_dat;
   int error;
   LOG_TRACE("\nHeader\n-------------------\n")
-  error = read_data_section(&sec_dat, dat, sections_map, 
+  error = read_data_section(&sec_dat, dat, sections_map,
                             pages_map, SECTION_HEADER);
   if (error)
     {
@@ -1285,7 +1297,7 @@ read_2007_section_handles(Bit_Chain* dat, Bit_Chain* hdl, Dwg_Data *dwg,
   long unsigned int endpos;
   int error;
 
-  error = read_data_section(&obj_dat, dat, sections_map, 
+  error = read_data_section(&obj_dat, dat, sections_map,
                             pages_map, SECTION_OBJECTS);
   if (error)
     {
@@ -1296,7 +1308,7 @@ read_2007_section_handles(Bit_Chain* dat, Bit_Chain* hdl, Dwg_Data *dwg,
     }
 
   LOG_TRACE("\nHandles\n-------------------\n")
-  error = read_data_section(&hdl_dat, dat, sections_map, 
+  error = read_data_section(&hdl_dat, dat, sections_map,
                             pages_map, SECTION_HANDLES);
   if (error)
     {
@@ -1354,7 +1366,7 @@ read_2007_section_handles(Bit_Chain* dat, Bit_Chain* hdl, Dwg_Data *dwg,
 
   free(hdl_dat.chain);
   free(obj_dat.chain);
-  
+
   return error;
 }
 
@@ -1374,21 +1386,22 @@ read_r2007_meta_data(Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Data *dwg)
 #endif
   // @ 0x62
   read_file_header(dat, &file_header);
-  
+
   // Pages Map
   dat->byte += 0x28;  // overread check data
   dat->byte += file_header.pages_map_offset;
-  
+
   pages_map = read_pages_map(dat, file_header.pages_map_size_comp,
-    file_header.pages_map_size_uncomp, file_header.pages_map_correction);  
-  
+    file_header.pages_map_size_uncomp, file_header.pages_map_correction);
+
   // Sections Map
   page = get_page(pages_map, file_header.sections_map_id);
   if (page)
     {
       dat->byte = page->offset;
       sections_map = read_sections_map(dat, file_header.sections_map_size_comp,
-        file_header.sections_map_size_uncomp, file_header.sections_map_correction);
+                                       file_header.sections_map_size_uncomp,
+                                       file_header.sections_map_correction);
     }
 
   error = read_2007_section_classes(dat, dwg, sections_map, pages_map);
@@ -1398,7 +1411,7 @@ read_r2007_meta_data(Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Data *dwg)
   /////////////////////////////////////////
   //	incomplete implementation
   /////////////////////////////////////////
-  
+
   pages_destroy(pages_map);
   if (page)
     sections_destroy(sections_map);
