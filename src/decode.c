@@ -148,7 +148,7 @@ dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
   dwg->picture.size = 0;
   dwg->picture.chain = NULL;
   dwg->header.num_sections = 0;
-  dwg->header.num_descriptions = 0;
+  dwg->header.num_infos = 0;
   dwg->measurement = 0;
   dwg->dwg_class = NULL;
   dwg->object_ref = NULL;
@@ -1543,9 +1543,9 @@ read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
 
   decompress_R2004_section(dat, decomp, comp_data_size);
 
-  dwg->header.num_descriptions = *(uint32_t*)decomp;
+  dwg->header.num_infos = *(uint32_t*)decomp;
   dwg->header.section_info = (Dwg_Section_Info*)
-    calloc(dwg->header.num_descriptions, sizeof(Dwg_Section_Info));
+    calloc(dwg->header.num_infos, sizeof(Dwg_Section_Info));
   if (!dwg->header.section_info)
     {
       LOG_ERROR("Out of memory");
@@ -1561,7 +1561,7 @@ read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
                                             *((int32_t*)decomp + 4))
 
   ptr = decomp + 20; // section name char[64]
-  for (i = 0; i < dwg->header.num_descriptions; ++i)
+  for (i = 0; i < dwg->header.num_infos; ++i)
     {
       Dwg_Section_Info* info = &dwg->header.section_info[i];
       info->size            = *((int32_t*)ptr);
@@ -1655,7 +1655,7 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *dwg,
   char *decomp;
   unsigned int i, j;
 
-  for (i=0; i < dwg->header.num_descriptions && info == 0; ++i)
+  for (i=0; i < dwg->header.num_infos && info == 0; ++i)
     {
       if (dwg->header.section_info[i].type == section_type)
         {
@@ -1981,7 +1981,7 @@ decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
 
   read_R2004_section_map(dat, dwg);
 
-  if (dwg->header.section == 0)
+  if (!dwg->header.section)
     {
       LOG_ERROR("Failed to read R2004 Section Page Map.")
         return -1;
@@ -1991,7 +1991,7 @@ decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
    * Section Info
    */
   section = find_section(dwg, dwg->r2004_header.section_info_id);
-  if (section != 0)
+  if (section)
     {
       Dwg_Object *obj = NULL;
       Dwg_Section* _obj = &dwg->header.section[dwg->r2004_header.section_info_id];
@@ -2010,23 +2010,22 @@ decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
     }
 
   error += read_2004_section_classes(dat, dwg);
-
   error += read_2004_section_header(dat, dwg);
-
   error += read_2004_section_handles(dat, dwg);
 
-  /* Clean up */
-  if (dwg->header.section_info != 0)
+  /* Clean up. XXX? Need this to write the sections, at least the name and type */
+#if 0
+  if (dwg->header.section_info != NULL)
     {
       unsigned u;
-      for (u = 0; u < dwg->header.num_descriptions; ++u)
+      for (u = 0; u < dwg->header.num_infos; ++u)
         if (dwg->header.section_info[u].sections != 0)
           free(dwg->header.section_info[u].sections);
 
       free(dwg->header.section_info);
-      dwg->header.num_descriptions = 0;
+      dwg->header.num_infos = 0;
     }
-
+#endif
   resolve_objectref_vector(dat, dwg);
 
   return error;
@@ -2048,6 +2047,7 @@ decode_R2007(Bit_Chain* dat, Dwg_Data * dwg)
     #include "header.spec"
   }
 
+  // this includes classes, header, handles + objects
   error = read_r2007_meta_data(dat, &hdl_dat, dwg);
   if (error)
     {
@@ -2055,9 +2055,6 @@ decode_R2007(Bit_Chain* dat, Dwg_Data * dwg)
       return error;
     }
 
-  /////////////////////////////////////////
-  //	incomplete implementation!
-  /////////////////////////////////////////
   LOG_INFO("\nDecoding of DWG version R2007+ objectrefs is not implemented yet.\n")
   LOG_TRACE("  num objects: %lu\n", dwg->num_objects)
   LOG_TRACE("  num object_refs: %lu\n", dwg->num_object_refs)
