@@ -247,6 +247,8 @@ copy_compressed_bytes(char *dst, char *src, int length)
 
   switch (length)
   {
+    case 0:
+      break;
     case 1:
       copy_1(0);
       break;
@@ -391,7 +393,7 @@ copy_compressed_bytes(char *dst, char *src, int length)
       copy_8(18);
       copy_16(2);
       copy_2(0);
-    break;
+      break;
     default:
       LOG_ERROR("Wrong length %d", length);
   }
