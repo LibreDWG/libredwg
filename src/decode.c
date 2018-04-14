@@ -2451,7 +2451,8 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object_Object* obj)
   BITCODE_BS size;
   int error = 2;
 
-  obj->datbyte = dat->byte; // the offset
+  obj->datpos = dat->byte;     // the data stream offset
+  obj->hdlpos = hdl_dat->byte; // the handle stream offset
   SINCE(R_2000)
     {
       obj->bitsize = bit_read_RL(dat);

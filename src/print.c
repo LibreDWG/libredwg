@@ -42,11 +42,13 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 #define IS_PRINT
 
 #define FIELD(name,type,dxf) \
-  FIELD_TRACE(name,type,dxf)
-#define FIELD_TRACE(name,type,dxf) \
+  FIELD_G_TRACE(name,type,dxf)
+#define FIELD_TRACE(name,type) \
+  LOG_TRACE(#name ": " FORMAT_##type " " #type "\n", _obj->name)
+#define FIELD_G_TRACE(name,type,dxf) \
   LOG_TRACE(#name ": " FORMAT_##type " " #type " " #dxf "\n", _obj->name)
 #define FIELD_CAST(name,type,cast,dxf)             \
-  FIELD_TRACE(name,cast,dxf)
+  FIELD_G_TRACE(name,cast,dxf)
 
 #define FIELD_VALUE(name) _obj->name
 
@@ -84,13 +86,13 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 #define FIELD_RLL(name,dxf) FIELD(name, RLL, dxf);
 #define FIELD_MC(name,dxf) FIELD(name, MC, dxf);
 #define FIELD_MS(name,dxf) FIELD(name, MS, dxf);
-#define FIELD_TF(name,len,dxf) FIELD_TRACE(name, TF, dxf)
+#define FIELD_TF(name,len,dxf) FIELD_G_TRACE(name, TF, dxf)
 #define FIELD_TFF(name,len,dxf) FIELD_TF(name,len,dxf)
 #define FIELD_TV(name,dxf) FIELD(name, TV, dxf);
 #define FIELD_TU(name,dxf) LOG_TRACE_TU(#name, (BITCODE_TU)_obj->name)
 #define FIELD_T FIELD_TV /*TODO: implement version dependant string fields */
 #define FIELD_BT(name,dxf) FIELD(name, BT, dxf);
-#define FIELD_4BITS(name,dxf) FIELD_TRACE(name,4BITS,dxf)
+#define FIELD_4BITS(name,dxf) FIELD_G_TRACE(name,4BITS,dxf)
 #define FIELD_BE(name,dxf) FIELD_3RD(name,dxf)
 #define FIELD_DD(name, _default, dxf)                                       \
   LOG_TRACE(#name " " #dxf ": " FORMAT_DD ", default: " FORMAT_DD "\n", _obj->name, _default)
@@ -154,7 +156,7 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
   HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code, dxf)
 
 #define FIELD_INSERT_COUNT(insert_count, type, dxf) \
-  FIELD_TRACE(insert_count, type, dxf)
+  FIELD_G_TRACE(insert_count, type, dxf)
 
 #define FIELD_XDATA(name, size)
 
@@ -210,6 +212,7 @@ dwg_print_##token (Bit_Chain * dat, Dwg_Object * obj)\
 {\
   int vcount, rcount, rcount2, rcount3, rcount4; \
   Dwg_Entity_##token *ent, *_obj;\
+  Bit_Chain *hdl_dat = dat;\
   LOG_INFO("Entity " #token ":\n")\
   ent = obj->tio.entity->tio.token;\
   _obj=ent;\
@@ -226,6 +229,7 @@ dwg_print_ ##token (Bit_Chain * dat, Dwg_Object * obj) \
 { \
   int vcount, rcount, rcount2, rcount3, rcount4;\
   Dwg_Object_##token *_obj;\
+  Bit_Chain *hdl_dat = dat;\
   LOG_INFO("Object " #token ":\n")\
   _obj = obj->tio.object->tio.token;\
   LOG_INFO("Object handle: %d.%d.%lu\n",\
@@ -557,6 +561,7 @@ void
 dwg_print_object(Bit_Chain* dat, Dwg_Object *obj)
 {
   //Bit_Chain * dat = (Bit_Chain *)obj->parent->bit_chain;
+  Bit_Chain *hdl_dat = dat;
   switch (obj->type)
     {
     case DWG_TYPE_TEXT:

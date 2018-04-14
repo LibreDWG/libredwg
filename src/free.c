@@ -190,6 +190,7 @@ dwg_free_ ##token (Dwg_Object * obj)\
 {\
   int vcount, rcount, rcount2, rcount3, rcount4;\
   Dwg_Entity_##token *ent, *_obj;\
+  Bit_Chain *hdl_dat = dat;\
   Dwg_Data* dwg = obj->parent;\
   LOG_HANDLE("Free entity " #token "\n")\
   ent = obj->tio.entity->tio.token;\
@@ -207,6 +208,7 @@ dwg_free_ ##token (Dwg_Object * obj) \
   int vcount, rcount, rcount2, rcount3, rcount4; \
   Dwg_Data* dwg = obj->parent;\
   Dwg_Object_##token *_obj;\
+  Bit_Chain *hdl_dat = dat;\
   LOG_HANDLE("Free object " #token " %p\n", obj)    \
   _obj = obj->tio.object->tio.token;
 

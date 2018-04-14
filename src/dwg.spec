@@ -4355,16 +4355,18 @@ DWG_OBJECT(XRECORD)
     FIELD_BS (cloning_flags, 280);
   }
 
-  UNTIL(R_2007) {
-    FIELD_HANDLE (parenthandle, 4, 0); // 3 or 8
-  }
+  START_HANDLE_STREAM;
+  //UNTIL(R_2007) {
+  FIELD_HANDLE (parenthandle, 4, 0); // 3 or 8
+  //}
   REACTORS(4);
   XDICOBJHANDLE(3);
 
   DECODER
     {
+      // FIXME 2007 hdl_dat
       for (vcount=0;
-           dat->byte < obj->tio.object->datbyte + (obj->tio.object->bitsize/8);
+           hdl_dat->byte < obj->tio.object->datpos + (obj->tio.object->bitsize/8);
            vcount++)
         {
           FIELD_VALUE(objid_handles) = vcount
@@ -4372,8 +4374,11 @@ DWG_OBJECT(XRECORD)
                                    (vcount+1) * sizeof(Dwg_Object_Ref))
             : (BITCODE_H*) malloc(sizeof(Dwg_Object_Ref));
           FIELD_HANDLE_N (objid_handles[vcount], vcount, ANYCODE, 0);
+          if (!FIELD_VALUE(objid_handles[vcount]))
+            break;
         }
       FIELD_VALUE(num_objid_handles) = vcount;
+      FIELD_TRACE(num_objid_handles, BL);
     }
     #ifndef IS_DECODER
       HANDLE_VECTOR(objid_handles, num_objid_handles, 4, 0);
@@ -4842,4 +4847,3 @@ DWG_OBJECT_END
 DWG_OBJECT(LEADEROBJECTCONTEXTDATA)
 DWG_OBJECT_END
 */
-
