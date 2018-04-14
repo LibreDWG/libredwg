@@ -40,6 +40,9 @@ dwg_decode_handleref_with_code(Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Data* dw
 void
 dwg_decode_header_variables(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
                             Dwg_Data* dwg);
+void
+dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
+                      long unsigned int address);
 
 // private
 void
@@ -1282,33 +1285,91 @@ read_2007_section_header(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Data *dwg,
 }
 
 static int
-read_2007_section_handles(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Data *dwg,
+read_2007_section_handles(Bit_Chain* dat, Bit_Chain* hdl, Dwg_Data *dwg,
                           r2007_section *sections_map, r2007_page *pages_map)
 {
-  Bit_Chain sec_dat;
+  Bit_Chain obj_dat, hdl_dat;
+  long unsigned int endmap;
+  unsigned int section_size = 0;
   int error;
+
   LOG_TRACE("\nObjects\n-------------------\n")
-  error = read_data_section(&sec_dat, dat, sections_map, 
+  error = read_data_section(&obj_dat, dat, sections_map, 
                             pages_map, SECTION_OBJECTS);
   if (error)
     {
       LOG_ERROR("Failed to read objects section");
-      if (sec_dat.chain)
-        free(sec_dat.chain);
+      if (obj_dat.chain)
+        free(obj_dat.chain);
       return error;
     }
 
   LOG_TRACE("\nHandles\n-------------------\n")
-  error = read_data_section(&sec_dat, dat, sections_map, 
+  error = read_data_section(&hdl_dat, dat, sections_map, 
                             pages_map, SECTION_HANDLES);
   if (error)
     {
       LOG_ERROR("Failed to read handles section");
-      if (sec_dat.chain)
-        free(sec_dat.chain);
+      if (hdl_dat.chain)
+        free(hdl_dat.chain);
       return error;
     }
 
+  endmap = hdl_dat.byte + hdl_dat.size;
+  dwg->num_objects = 0;
+
+  do
+    {
+      long unsigned int last_offset;
+      long unsigned int last_handle;
+      long unsigned int startpos;
+      long unsigned int previous_address = 0;
+      unsigned char sgdc[2];
+
+      startpos = hdl_dat.byte;
+      sgdc[0] = bit_read_RC(&hdl_dat);
+      sgdc[1] = bit_read_RC(&hdl_dat);
+      section_size = (sgdc[0] << 8) | sgdc[1];
+
+      LOG_TRACE("Section size: %u\n", section_size);
+      if (section_size > 2034)
+        {
+          LOG_ERROR("Object-map section size greater than 2034!");
+          return 1;
+        }
+
+      last_handle = 0;
+      last_offset = 0;
+      while (hdl_dat.byte - startpos < section_size)
+        {
+          long int pvztkt;
+          long int pvzadr;
+
+          previous_address = hdl_dat.byte;
+
+          pvztkt = bit_read_MC(&hdl_dat);
+          last_handle += pvztkt;
+
+          pvzadr = bit_read_MC(&hdl_dat);
+          last_offset += pvzadr;
+
+          dwg_decode_add_object(dwg, &obj_dat, hdl, last_offset);
+        }
+
+      if (hdl_dat.byte == previous_address)
+        break;
+      hdl_dat.byte += 2; // CRC
+
+      if (hdl_dat.byte >= endmap)
+        break;
+    }
+  while (section_size > 2);
+
+  LOG_TRACE("\nNum objects: %lu\n", dwg->num_objects);
+
+  free(hdl_dat.chain);
+  free(obj_dat.chain);
+  
   return error;
 }
 

@@ -66,7 +66,11 @@ dwg_decode_handleref_with_code(Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Data* dw
 void
 dwg_decode_header_variables(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
                             Dwg_Data* dwg);
-int
+void
+dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
+                      long unsigned int address);
+
+extern int
 read_r2007_meta_data(Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Data *dwg);
 extern void
 obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
@@ -74,10 +78,6 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 /*--------------------------------------------------------------------------------
  * Private functions
  */
-
-static void
-dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
-    long unsigned int address);
 
 static Dwg_Object *
 dwg_resolve_handle(Dwg_Data* dwg, unsigned long int handle);
@@ -3270,7 +3270,7 @@ dwg_decode_variable_type(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_
   return 0;
 }
 
-static void
+void
 dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
                       long unsigned int address)
 {
