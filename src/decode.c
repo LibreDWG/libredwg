@@ -1133,8 +1133,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
 
       // AC1012, AC1014 or AC1015. This is a char[11], zero padded.
       // with \n at 12.
-      for (i = 0; i < 12; i++)
-        _obj->version[i] = bit_read_RC(dat);
+      bit_read_fixed(dat, _obj->version, 12);
       LOG_TRACE("version: %s\n", _obj->version)
       for (i = 0; i < 4; i++)
         FIELD_B(null_b[i], 0);
@@ -1331,9 +1330,8 @@ decompress_R2004_section(Bit_Chain* dat, char *decomp,
 
   // length of the first sequence of uncompressed or literal data.
   lit_length = read_literal_length(dat, &opcode1);
-
-  for (i = 0; i < lit_length; ++i)
-    *dst++ = bit_read_RC(dat);
+  bit_read_fixed(dat, decomp, lit_length);
+  dst += lit_length;
 
   opcode1 = 0x00;
   while (dat->byte - start_byte < comp_data_size)
@@ -1675,9 +1673,7 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *dwg,
     {
       address = info->sections[i]->address;
       dat->byte = address;
-
-      for (j = 0; j < 0x20; j++)
-        es.char_data[j] = bit_read_RC(dat);
+      bit_read_fixed(dat, (char*)es.char_data, 0x20);
 
       sec_mask = 0x4164536b ^ address;
       for (j = 0; j < 8; ++j)
@@ -2128,7 +2124,7 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
 
       while (dat->byte < end)
         {
-          BITCODE_RC lenc;
+          int lenc;
           BITCODE_RS lens;
 
           obj->eed[idx].data = (Dwg_Eed_Data*)calloc(size + 1, 1);
@@ -2142,15 +2138,13 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
                 obj->eed[idx].data->u.eed_0.codepage = bit_read_RS_LE(dat);
                 if (lenc > size-4)
                   {
-                    LOG_ERROR("Invalid EED string len %d, max %d", (int)lenc, size-4);
+                    LOG_ERROR("Invalid EED string len %d, max %d", lenc, size-4);
                     dat->byte = end;
                     return 1;
                   }
                 /* code:1 + len:1 + cp:2 */
-                for (j=0; j < lenc; j++) {
-                  obj->eed[idx].data->u.eed_0.string[j] = bit_read_RC(dat);
-                }
-                obj->eed[idx].data->u.eed_0.string[j] = '\0';
+                bit_read_fixed(dat, obj->eed[idx].data->u.eed_0.string, lenc);
+                obj->eed[idx].data->u.eed_0.string[lenc] = '\0';
                 LOG_TRACE("EED[%u] string: %s len=%d cp=%d\n", idx,
                           obj->eed[idx].data->u.eed_0.string, (int)lenc,
                           (int)obj->eed[idx].data->u.eed_0.codepage);
@@ -2858,8 +2852,7 @@ dwg_decode_xdata(Bit_Chain * dat, Dwg_Object_XRECORD *obj, int size)
           break;
         case VT_HANDLE:
         case VT_OBJECTID:
-          for (i = 0; i < 8; i++)
-             rbuf->value.hdl[i] = bit_read_RC(dat);
+          bit_read_fixed(dat, (char*)rbuf->value.hdl, 8);
           break;
         case VT_INVALID:
         default:

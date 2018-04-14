@@ -612,10 +612,7 @@ read_system_page(Bit_Chain* dat, int64_t size_comp, int64_t size_uncomp,
   }
   
   rsdata = &data[size_uncomp];
-  
-  for (i = 0; i < page_size; i++)
-    rsdata[i] = bit_read_RC(dat);
-  
+  bit_read_fixed(dat, rsdata, page_size);
   pedata = decode_rs(rsdata, block_count, 239);
   
   if (size_comp < size_uncomp)
@@ -650,10 +647,7 @@ read_data_page(Bit_Chain* dat, unsigned char *decomp, int64_t page_size,
     LOG_ERROR("Out of memory")
     return 1;
   }
-  
-  for (i = 0; i < page_size; i++)
-    rsdata[i] = bit_read_RC(dat);  
-  
+  bit_read_fixed(dat, rsdata, page_size);
   pedata = decode_rs(rsdata, block_count, 0xFB);
   
   if (size_comp < size_uncomp)
@@ -1017,9 +1011,7 @@ read_file_header(Bit_Chain* dat, r2007_file_header *file_header)
   int i;
   
   dat->byte = 0x80;
-  for (i=0; i < 0x3d8; i++)
-    data[i] = bit_read_RC(dat);
-
+  bit_read_fixed(dat, data, 0x3d8);
   pedata = decode_rs(data, 3, 239);
 
   seqence_crc = *((int64_t*)pedata);

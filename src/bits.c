@@ -1031,17 +1031,21 @@ bit_write_CRC(Bit_Chain * dat, long unsigned int start_address,
 BITCODE_TF
 bit_read_TF(Bit_Chain * dat, int length)
 {
-  int i;
-  unsigned char *chain;
+  char *chain = malloc(length+1);
 
-  chain = malloc(length+1);
-  for (i = 0; i < length; i++)
-    {
-      chain[i] = bit_read_RC(dat);
-    }
-  chain[i] = '\0';
+  bit_read_fixed(dat, chain, length);
+  chain[length] = '\0';
 
   return (char*)chain;
+}
+
+void
+bit_read_fixed(Bit_Chain * dat, char *dest, int length)
+{
+  for (int i = 0; i < length; i++)
+    {
+      dest[i] = bit_read_RC(dat);
+    }
 }
 
 /** Write fixed text.

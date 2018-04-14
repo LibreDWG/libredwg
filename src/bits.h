@@ -205,6 +205,9 @@ BITCODE_TF
 bit_read_TF(Bit_Chain * dat, int length);
 
 void
+bit_read_fixed(Bit_Chain * dat, char *dest, int length);
+
+void
 bit_write_TF(Bit_Chain * dat, char *chain, int length);
 
 BITCODE_TV
