@@ -145,15 +145,19 @@ static r2007_page* get_page(r2007_page *pages_map, int64_t id);
 static void pages_destroy(r2007_page *page);
 static void sections_destroy(r2007_section *section);
 static r2007_section* read_sections_map(Bit_Chain* dat, int64_t size_comp, 
-                                 int64_t size_uncomp, int64_t correction);
-static int read_data_section(Bit_Chain *sec_dat, Bit_Chain *dat, r2007_section *sections_map, 
-                             r2007_page *pages_map, Dwg_Section_Type sec_type);
+                                        int64_t size_uncomp, int64_t correction);
+static int read_data_section(Bit_Chain *sec_dat, Bit_Chain *dat,
+           r2007_section *sections_map, r2007_page *pages_map, Dwg_Section_Type sec_type);
 static int read_2007_section_classes(Bit_Chain* dat,
            Dwg_Data *dwg, r2007_section *sections_map, r2007_page *pages_map);
 static int read_2007_section_header(Bit_Chain* dat, Bit_Chain* hdl_dat,
            Dwg_Data *dwg, r2007_section *sections_map, r2007_page *pages_map);
+static int read_2007_section_handles(Bit_Chain* dat, Bit_Chain* hdl_dat,
+           Dwg_Data *dwg, r2007_section *sections_map, r2007_page *pages_map);
+static int read_2007_section_objects(Bit_Chain* dat, Bit_Chain* hdl_dat,
+           Dwg_Data *dwg, r2007_section *sections_map, r2007_page *pages_map);
 static r2007_page* read_pages_map(Bit_Chain* dat, int64_t size_comp,
-                           int64_t size_uncomp, int64_t correction);
+                                  int64_t size_uncomp, int64_t correction);
 static void read_file_header(Bit_Chain* dat, r2007_file_header *file_header);
 static void read_instructions(unsigned char **src, unsigned char *opcode,
                               uint32_t *offset, uint32_t *length);
@@ -702,13 +706,13 @@ read_data_section(Bit_Chain *sec_dat, Bit_Chain *dat, r2007_section *sections_ma
           return 4;
         }
     }
-  
+
   sec_dat->bit     = 0;
   sec_dat->byte    = 0;
   sec_dat->chain   = decomp;
   sec_dat->size    = max_decomp_size;
-  sec_dat->version = dat->version;    
-  
+  sec_dat->version = dat->version;
+
   return 0;
 }
 
@@ -1277,6 +1281,45 @@ read_2007_section_header(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Data *dwg,
   return error;
 }
 
+static int
+read_2007_section_handles(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Data *dwg,
+                          r2007_section *sections_map, r2007_page *pages_map)
+{
+  Bit_Chain sec_dat;
+  int error;
+  LOG_TRACE("\nHandles\n-------------------\n")
+  error = read_data_section(&sec_dat, dat, sections_map, 
+                            pages_map, SECTION_HANDLES);
+  if (error)
+    {
+      LOG_ERROR("Failed to read handles section");
+      if (sec_dat.chain)
+        free(sec_dat.chain);
+      return error;
+    }
+
+  return error;
+}
+
+static int
+read_2007_section_objects(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Data *dwg,
+                          r2007_section *sections_map, r2007_page *pages_map)
+{
+  Bit_Chain sec_dat;
+  int error;
+  LOG_TRACE("\nObjects\n-------------------\n")
+  error = read_data_section(&sec_dat, dat, sections_map, 
+                            pages_map, SECTION_OBJECTS);
+  if (error)
+    {
+      LOG_ERROR("Failed to read objects section");
+      if (sec_dat.chain)
+        free(sec_dat.chain);
+      return error;
+    }
+
+  return error;
+}
 
 /* exported */
 int
@@ -1285,6 +1328,7 @@ read_r2007_meta_data(Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Data *dwg)
   r2007_file_header file_header;
   r2007_page *pages_map, *page;
   r2007_section *sections_map;
+  int error;
 
 #ifdef USE_TRACING
   char *probe = getenv ("LIBREDWG_TRACE");
@@ -1310,12 +1354,15 @@ read_r2007_meta_data(Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Data *dwg)
         file_header.sections_map_size_uncomp, file_header.sections_map_correction);
     }
 
-  read_2007_section_classes(dat, dwg, sections_map, pages_map);
-  read_2007_section_header(dat, hdl_dat, dwg, sections_map, pages_map);
+  error = read_2007_section_classes(dat, dwg, sections_map, pages_map);
+  error += read_2007_section_header(dat, hdl_dat, dwg, sections_map, pages_map);
+  error += read_2007_section_handles(dat, hdl_dat, dwg, sections_map, pages_map);
+  error += read_2007_section_objects(dat, hdl_dat, dwg, sections_map, pages_map);
+  //read_2007_blocks(dat, hdl_dat, dwg, sections_map, pages_map);
 
   pages_destroy(pages_map);
   if (page)
     sections_destroy(sections_map);
 
-  return 0;
+  return error;
 }
