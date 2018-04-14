@@ -33,10 +33,7 @@
       FIELD_VALUE(section_array_size) = 0x13;
     }
   }
-
-  for (i=0; i<12; i++) {
-    FIELD_RC(file_ID_string[i], 0);
-  }
+  FIELD_TFF(file_ID_string, 12, 0) //pre-allocated
   FIELD_RL(header_offset, 0);
   FIELD_RL(header_size, 0);
   FIELD_RL(x04, 0);
@@ -61,8 +58,7 @@
   FIELD_RL(CRC, 0);                  // @0x68
   //end of encrypted 0x6c header
 
-  //well, the padding is also encrypted, but ODA didnt grok that
-  for (i=0; i<(int)sizeof(FIELD_VALUE(padding)); i++) {
-    FIELD_RC(padding[i], 0); // encrypted via 0
-  }
+  // well, the padding is also encrypted, but ODA didnt grok that
+  // encrypted via 0
+  FIELD_TFF(padding, (int)sizeof(FIELD_VALUE(padding)), 0)
 

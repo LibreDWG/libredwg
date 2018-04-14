@@ -99,6 +99,7 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 #define FIELD_TF(name,len,dxf)             \
   { bit_write_TF(dat, _obj->name, len); \
     FIELD_G_TRACE(name, TF, dxf); }
+#define FIELD_TFF(name,len,dxf) FIELD_TF(name,len,dxf)
 #define FIELD_TU(name,dxf) \
   { bit_write_TU(dat, (BITCODE_TU)_obj->name);  \
     LOG_TRACE_TU(#name, (BITCODE_TU)_obj->name); }
