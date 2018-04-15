@@ -105,13 +105,13 @@
 #define FIELD_MC(name,dxf) FIELDG(name, MC, dxf)
 #define FIELD_MS(name,dxf) FIELDG(name, MS, dxf)
 #define FIELD_TF(name,len,dxf) \
-  { _obj->name = bit_read_TF(dat,len); \
+  { _obj->name = bit_read_TF(dat,(int)len); \
     FIELD_G_TRACE(name, TF, dxf);\
-    LOG_TRACE_TF(FIELD_VALUE(name), len); }
+    LOG_TRACE_TF(FIELD_VALUE(name), (int)len); }
 #define FIELD_TFF(name,len,dxf) \
-  { bit_read_fixed(dat,_obj->name,len); \
+  { bit_read_fixed(dat,_obj->name,(int)len); \
     FIELD_G_TRACE(name, TF, dxf);\
-    LOG_TRACE_TF(FIELD_VALUE(name), len); }
+    LOG_TRACE_TF(FIELD_VALUE(name), (int)len); }
 #define FIELD_TV(name,dxf) FIELDG(name, TV, dxf)
 #define FIELD_TU(name,dxf) \
   { _obj->name = (char*)bit_read_TU(str_dat); \

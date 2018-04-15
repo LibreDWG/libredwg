@@ -1386,7 +1386,7 @@ void decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Ent
               FIELD_VALUE(block_size) = (BITCODE_BL*)
                 realloc(FIELD_VALUE(block_size), (i+1) * sizeof (BITCODE_BL));
               FIELD_BL (block_size[i], 0);
-              FIELD_VECTOR (sat_data[i], RC, block_size[i], 0);
+              FIELD_TF (sat_data[i], FIELD_VALUE(block_size[i]), 0);
               total_size += FIELD_VALUE (block_size[i]);
             } while(FIELD_VALUE (block_size[i++]));
 
@@ -1511,7 +1511,7 @@ void free_3dsolid(Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
     {
       for (i=0; i < FIELD_VALUE (num_blocks); i++)
         {
-          FIELD_VECTOR (sat_data[i], RC, block_size[i], 0);
+          FIELD_TF (sat_data[i], block_size[i], 0);
         }
       free(_obj->sat_data);
       free(_obj->block_size);
@@ -1670,7 +1670,7 @@ DWG_ENTITY(OLEFRAME)
   }
 
   FIELD_BL (data_length, 0);
-  FIELD_VECTOR (data, RC, data_length, 0);
+  FIELD_TF (data, FIELD_VALUE(data_length), 0);
 
   COMMON_ENTITY_HANDLE_DATA;
 
@@ -1957,7 +1957,7 @@ DWG_OBJECT(BLOCK_HEADER)
         }
       else
         {
-          FIELD_VECTOR (preview_data, RC, preview_data_size, 310);
+          FIELD_TF (preview_data, FIELD_VALUE(preview_data_size), 310);
         }
     }
 
@@ -2196,13 +2196,13 @@ DWG_OBJECT(LTYPE)
   END_REPEAT(dash);
 
   UNTIL(R_2004) {
-    FIELD_VECTOR_N (strings_area, RC, 256, 3);
+    FIELD_TF (strings_area, 256, 3);
   }
   LATER_VERSIONS
     {
       if (FIELD_VALUE(text_area_is_present))
         {
-          FIELD_VECTOR_N (strings_area, RC, 512, 3);
+          FIELD_TF (strings_area, 512, 3);
         }
     }
 
@@ -3278,7 +3278,7 @@ DWG_ENTITY(OLE2FRAME)
   }
 
   FIELD_BL (data_length, 0);
-  FIELD_VECTOR (data, RC, data_length, 0);
+  FIELD_TF (data, FIELD_VALUE(data_length), 0);
 
   SINCE(R_2000) {
     FIELD_RC (unknown, 0);
@@ -3438,7 +3438,7 @@ DWG_OBJECT_END
       break; \
     case 8: /* kDate */ \
       FIELD_BL (value.data_size, 0); \
-      FIELD_VECTOR (value.data_date, RC, value.data_size, 0); \
+      FIELD_TF (value.data_date, FIELD_VALUE(value.data_size), 0); \
       break; \
     case 16: /* kPoint */ \
       FIELD_BL (value.data_size, 0); \
@@ -4392,8 +4392,8 @@ DWG_OBJECT_END
 #ifdef DEBUG_VBA_PROJECT
 DWG_OBJECT(VBA_PROJECT)
 
-  FIELD_RL(num_bytes, 0)
-  FIELD_VECTOR(bytes, RC, num_bytes, 0)
+  FIELD_RL (num_bytes, 0)
+  FIELD_TF (bytes, num_bytes, 0)
 
   START_HANDLE_STREAM;
   UNTIL(R_2007) {
@@ -4760,7 +4760,7 @@ DWG_ENTITY(UNKNOWN_ENT)
   FIELD_VALUE(num_bytes) = obj->bitsize / 8;
   FIELD_VALUE(num_bits)  = obj->bitsize % 8;
 
-  FIELD_VECTOR (bytes, RC, num_bytes, 0);
+  FIELD_TF (bytes, FIELD_VALUE(num_bytes), 0);
   FIELD_VECTOR (bits, B, num_bits, 0);
   //COMMON_ENTITY_HANDLE_DATA; // including this
 
@@ -4772,7 +4772,7 @@ DWG_OBJECT(UNKNOWN_OBJ)
   FIELD_VALUE(num_bytes) = obj->bitsize / 8;
   FIELD_VALUE(num_bits)  = obj->bitsize % 8;
 
-  FIELD_VECTOR (bytes, RC, num_bytes, 0);
+  FIELD_TF (bytes, FIELD_VALUE(num_bytes), 0);
   FIELD_VECTOR (bits, B, num_bits, 0);
 
 DWG_OBJECT_END

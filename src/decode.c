@@ -2290,10 +2290,10 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
     }
   SINCE(R_2007)
     {
+      // the handle stream offset
+      //ent->object->hdlpos = (dat->byte * 8) + (dat->bit & 7) + obj->bitsize;
       //obj_string_stream(dat, ent->bitsize, str_dat);
     }
-  // the handle stream offset
-  //ent->object->hdlpos = (dat->byte * 8) + (dat->bit & 7) + obj->bitsize;
 
   error = bit_read_H(dat, &(ent->object->handle));
   if (error)
@@ -2481,8 +2481,7 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
       obj_string_stream(dat, obj->bitsize, str_dat);
     }
 
-  error = bit_read_H(dat, &obj->object->handle);
-  if (error)
+  if (bit_read_H(dat, &obj->object->handle))
     {
       LOG_ERROR(
           "\tError in object handle! Bit_Chain current address: 0x%0x",
