@@ -129,7 +129,7 @@ extern "C" {
 #define BITCODE_T  BITCODE_TV
 #define BITCODE_TU BITCODE_RS*   /* UCS-2 unicode text */
 #ifdef HAVE_NATIVE_WCHAR2
-# define FORMAT_TU "\"%S\""
+# define FORMAT_TU "\"%ls\""
 #else
 # define FORMAT_TU "\"%hn\""     /* will print garbage */
 #endif
