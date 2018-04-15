@@ -404,11 +404,11 @@
 
   VERSIONS(R_13, R_14)
     {
-      FIELD_T (DIMPOST, 1);
-      FIELD_T (DIMAPOST, 1);
-      FIELD_T (DIMBLK_T, 1);
-      FIELD_T (DIMBLK1_T, 1);
-      FIELD_T (DIMBLK2_T, 1);
+      FIELD_TV (DIMPOST, 1);
+      FIELD_TV (DIMAPOST, 1);
+      FIELD_TV (DIMBLK_T, 1);
+      FIELD_TV (DIMBLK1_T, 1);
+      FIELD_TV (DIMBLK2_T, 1);
     }
 
   SINCE(R_2000)

@@ -3785,7 +3785,6 @@ typedef struct _dwg_object_object
 
   BITCODE_RL bitsize;
   long unsigned int datpos; /* the data stream offset */
-  long unsigned int hdlpos; /* the handle stream offset */
   /* Dwg_Handle handle; */
   unsigned int num_eed;
   Dwg_Eed *eed;
@@ -3828,6 +3827,7 @@ typedef struct _dwg_object
 
   char *dxfname;
   BITCODE_RL bitsize;
+  BITCODE_RL hdlpos;
   Dwg_Handle handle;
   struct _dwg_struct *parent;
 } Dwg_Object;

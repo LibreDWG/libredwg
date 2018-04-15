@@ -42,17 +42,21 @@
 void
 bit_advance_position(Bit_Chain * dat, int advance)
 {
-  int endpos;
-
-  endpos = dat->bit + advance;
+  int endpos = dat->bit + advance;
   if (dat->byte >= dat->size - 1 && endpos > 7)
     {
+      // but allow pointing to the very end.
+      if ( dat->byte != dat->size - 1 || dat->bit != 0 )
+        {
+          LOG_ERROR("buffer overflow at pos %lu, size %lu, advance by %d",
+                    dat->byte, dat->size, advance)
+        }
       dat->byte = dat->size - 1;
       dat->bit = 0;
       return;
     }
   dat->byte += endpos / 8;
-  dat->bit = endpos % 8;
+  dat->bit = (endpos % 8) & 7;
 }
 
 /* Absolute set

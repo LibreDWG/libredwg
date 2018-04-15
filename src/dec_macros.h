@@ -112,11 +112,16 @@
   { bit_read_fixed(dat,_obj->name,len); \
     FIELD_G_TRACE(name, TF, dxf);\
     LOG_TRACE_TF(FIELD_VALUE(name), len); }
-#define FIELD_TV(name,dxf) FIELDG(name, TV, dxf);
-#define FIELD_T FIELD_TV /*TODO: implement version dependant string fields */
+#define FIELD_TV(name,dxf) FIELDG(name, TV, dxf)
 #define FIELD_TU(name,dxf) \
-  { _obj->name = (char*)bit_read_TU(dat); \
+  { _obj->name = (char*)bit_read_TU(str_dat); \
     LOG_TRACE_TU(#name, (BITCODE_TU)FIELD_VALUE(name)); }
+#define FIELD_T(name,dxf) \
+  { if (dat->version < R_2007) \
+      FIELD_TV(name,dxf) \
+    else \
+      FIELD_TU(name,dxf) \
+  }
 #define FIELD_BT(name,dxf) FIELDG(name, BT, dxf);
 #define FIELD_4BITS(name,dxf) _obj->name = bit_read_4BITS(dat);
 
@@ -289,6 +294,9 @@
 #define END_STRING_STREAM \
     *dat = sav_dat; \
   }
+#define START_HANDLE_STREAM \
+  *hdl_dat = *dat; \
+  if (dat->version >= R_2007) bit_set_position(hdl_dat, obj->hdlpos)
 
 //TODO unify REPEAT macros
 #define REPEAT_N(times, name, type) \
@@ -311,17 +319,25 @@
   if (_obj->times) _obj->name = (type *) calloc(_obj->times, sizeof(type)); \
   for (rcount4=0; rcount4<(long)_obj->times; rcount4++)
 
-#define COMMON_ENTITY_HANDLE_DATA               \
+#define COMMON_ENTITY_HANDLE_DATA \
   SINCE(R_13) {\
+    START_HANDLE_STREAM; \
     dwg_decode_common_entity_handle_data(dat, hdl_dat, obj); \
   }
 
 #define DWG_ENTITY(token) static void \
-dwg_decode_##token (Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj)\
+dwg_decode_##token (Bit_Chain* dat, Dwg_Object* obj)\
 {\
   long vcount, rcount, rcount2, rcount3, rcount4;\
   Dwg_Entity_##token *ent, *_obj;\
   Dwg_Data* dwg = obj->parent;\
+  Bit_Chain* hdl_dat = dat; \
+  Bit_Chain* str_dat; \
+  if (dat->version >= R_2007) { \
+    str_dat = malloc(sizeof(Bit_Chain)); /* seperate string buffer */ \
+    *str_dat = *dat; \
+  } else \
+    str_dat = dat; \
   LOG_INFO("Entity " #token "\n")\
   dwg->num_entities++;\
   obj->supertype = DWG_SUPERTYPE_ENTITY;\
@@ -330,22 +346,28 @@ dwg_decode_##token (Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj)\
   ent = obj->tio.entity->tio.token;\
   _obj = ent;\
   obj->tio.entity->object = obj;\
-  if (dwg_decode_entity (dat, hdl_dat, obj->tio.entity)) return;
+  if (dwg_decode_entity(dat, hdl_dat, str_dat, obj->tio.entity)) return;
 
 #define DWG_ENTITY_END }
 
 #define DWG_OBJECT(token) static void \
-dwg_decode_ ## token (Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj) \
+dwg_decode_ ## token (Bit_Chain* dat, Dwg_Object* obj) \
 { \
   long vcount, rcount, rcount2, rcount3, rcount4; \
   Dwg_Object_##token *_obj;\
   Dwg_Data* dwg = obj->parent;\
+  Bit_Chain* hdl_dat = dat; /* handle stream initially the same */ \
+  Bit_Chain* str_dat; \
+  if (dat->version >= R_2007) { \
+    str_dat = calloc(1, sizeof(Bit_Chain)); /* seperate string buffer */ \
+  } else \
+    str_dat = dat; \
   LOG_INFO("Object " #token "\n")\
   obj->supertype = DWG_SUPERTYPE_OBJECT;\
   obj->tio.object = (Dwg_Object_Object*)calloc (1, sizeof(Dwg_Object_Object)); \
   obj->tio.object->tio.token = (Dwg_Object_##token *)calloc (1, sizeof(Dwg_Object_##token)); \
   obj->tio.object->object = obj;\
-  if (dwg_decode_object (dat, hdl_dat, obj->tio.object)) return; \
+  if (dwg_decode_object(dat, hdl_dat, str_dat, obj->tio.object)) return; \
   _obj = obj->tio.object->tio.token;
 
 #define DWG_OBJECT_END }

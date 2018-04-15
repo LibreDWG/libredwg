@@ -205,6 +205,8 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 #define END_STRING_STREAM \
     *dat = sav_dat; \
   }
+#define START_HANDLE_STREAM \
+  *hdl_dat = *dat; bit_set_position(hdl_dat, obj->hdlpos)
 
 #define DWG_ENTITY(token) \
 static void \
@@ -213,6 +215,7 @@ dwg_print_##token (Bit_Chain * dat, Dwg_Object * obj)\
   int vcount, rcount, rcount2, rcount3, rcount4; \
   Dwg_Entity_##token *ent, *_obj;\
   Bit_Chain *hdl_dat = dat;\
+  Bit_Chain* str_dat = dat;\
   LOG_INFO("Entity " #token ":\n")\
   ent = obj->tio.entity->tio.token;\
   _obj=ent;\
@@ -230,6 +233,7 @@ dwg_print_ ##token (Bit_Chain * dat, Dwg_Object * obj) \
   int vcount, rcount, rcount2, rcount3, rcount4;\
   Dwg_Object_##token *_obj;\
   Bit_Chain *hdl_dat = dat;\
+  Bit_Chain* str_dat = dat;\
   LOG_INFO("Object " #token ":\n")\
   _obj = obj->tio.object->tio.token;\
   LOG_INFO("Object handle: %d.%d.%lu\n",\
@@ -561,7 +565,7 @@ void
 dwg_print_object(Bit_Chain* dat, Dwg_Object *obj)
 {
   //Bit_Chain * dat = (Bit_Chain *)obj->parent->bit_chain;
-  Bit_Chain *hdl_dat = dat;
+  //Bit_Chain *hdl_dat = dat;
   switch (obj->type)
     {
     case DWG_TYPE_TEXT:

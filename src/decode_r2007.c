@@ -46,7 +46,7 @@ dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
 
 // private
 void
-obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
+obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str_dat);
 
 
 // only for temp. debugging, to abort on obviously wrong sizes.
@@ -1056,15 +1056,17 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str)
 {
   BITCODE_RL start = bitsize - 1; // in bits
   BITCODE_RS data_size; // in byte
-  BITCODE_B endbit;
+  BITCODE_B has_strings;
   *str = *dat;
-  bit_set_position(str, start);
-  LOG_TRACE("obj string stream\n  pos: %u, %lu/%u\n", start,
-            str->byte, str->bit);
-  endbit = bit_read_B(str);
-  LOG_TRACE("  endbit: %d\n", (int)endbit);
+  bit_advance_position(str, start);
+  LOG_TRACE("obj string stream +%u: @%lu/%u ", start,
+            str->byte, str->bit & 7);
+  has_strings = bit_read_B(str);
+  LOG_TRACE(" has_strings: %d\n", (int)has_strings);
+  if (!has_strings)
+    return;
   bit_advance_position(str, -17);
-  LOG_TRACE("  pos: %u, %lu\n", start, str->byte);
+  LOG_TRACE("  -17: @%lu/%u\n", str->byte, str->bit & 7);
   data_size = bit_read_RS(str);
   LOG_TRACE("  data_size: %u\n", data_size);
   if (data_size & 0x8000) {
@@ -1073,10 +1075,16 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str)
     data_size &= 0x7FFF;
     hi_size = bit_read_RS(str);
     data_size |= (hi_size << 15);
-    LOG_TRACE("  pos: %u, %lu\n", start, str->byte);
+    LOG_TRACE("  -33: @%lu\n", str->byte);
   }
-  bit_advance_position(str, -data_size - 16);
-  LOG_TRACE("  pos: %u, %lu/%u\n", start, str->byte, str->bit);
+  if (data_size > bitsize)
+    {
+      bit_advance_position(str, -16);
+      LOG_ERROR("Invalid string stream data_size: @%lu/%u", str->byte, str->bit & 7);
+      return;
+    }
+  bit_advance_position(str, -(int)data_size - 16);
+  LOG_TRACE("  %d: @%lu/%u\n", -(int)data_size - 16, str->byte, str->bit & 7);
 }
 
 static void
