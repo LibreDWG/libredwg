@@ -1644,6 +1644,7 @@ read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
 }
 
 /* Encrypted Section Header */
+#pragma pack(1)
 typedef union _encrypted_section_header
 {
   unsigned long int long_data[8];
@@ -1703,7 +1704,7 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *dwg,
     {
       address = info->sections[i]->address;
       dat->byte = address;
-      bit_read_fixed(dat, (char*)es.char_data, 0x20);
+      bit_read_fixed(dat, (char*)es.char_data, 32);
 
       sec_mask = 0x4164536b ^ address;
       for (j = 0; j < 8; ++j)
