@@ -56,7 +56,7 @@ bit_advance_position(Bit_Chain * dat, int advance)
       return;
     }
   dat->byte += endpos / 8;
-  dat->bit = (endpos % 8) & 7;
+  dat->bit = endpos & 7;
 }
 
 /* Absolute set
@@ -64,12 +64,12 @@ bit_advance_position(Bit_Chain * dat, int advance)
 void
 bit_set_position(Bit_Chain * dat, unsigned long bitpos)
 {
-  dat->byte = bitpos >> 3;
-  if (dat->byte >= dat->size)
-    {
-      LOG_ERROR("buffer overflow at %lu", dat->byte)
-    }
+  dat->byte = bitpos / 8;
   dat->bit = bitpos & 7;
+  if (dat->byte > dat->size || (dat->byte == dat->size && dat->bit))
+    {
+      LOG_ERROR("buffer overflow at %lu, have %lu", dat->byte, dat->size)
+    }
 }
 
 /** Read 1 bit.

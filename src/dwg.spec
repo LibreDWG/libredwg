@@ -1882,7 +1882,7 @@ DWG_OBJECT(BLOCK_CONTROL)
 
   FIELD_BL (num_entries, 70);
 
-  START_HANDLE_STREAM;
+  START_HANDLE_STREAM; //XXX 20.4 vs 15.1
   FIELD_HANDLE (null_handle, 4, 0);
   XDICOBJHANDLE(3);
   HANDLE_VECTOR(block_headers, num_entries, 2, 0);

@@ -73,7 +73,7 @@ dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
 extern int
 read_r2007_meta_data(Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Data *dwg);
 extern void
-obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
+obj_string_stream(Bit_Chain *dat, Dwg_Object *obj, Bit_Chain *str);
 
 /*------------------------------------------------------------------------------
  * Private functions
@@ -2468,18 +2468,22 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
       obj->bitsize = bit_read_RL(dat);
       LOG_INFO("Object bitsize: " FORMAT_RL " @%lu.%u\n", obj->bitsize,
                dat->byte, dat->bit);
+      // the handle stream offset, i.e. end of the object, right after the has_strings bit.
+      // minus 2* RL
+      obj->object->hdlpos = (dat->byte * 8) + (dat->bit & 7) + obj->bitsize - 32;
     }
   SINCE(R_2010)
     {
-      obj->bitsize = dat->size - 0;
+      obj->bitsize = dat->size - 16;
       LOG_INFO("Object bitsize: " FORMAT_RL " @%lu.%u\n", obj->bitsize,
                dat->byte, dat->bit);
+      // minus 1* RL
+      obj->object->hdlpos = (dat->byte * 8) + (dat->bit & 7) + obj->bitsize - 16;
     }
   SINCE(R_2007)
     {
-      // the handle stream offset, i.e. end of the object
-      obj->object->hdlpos = (dat->byte * 8) + (dat->bit & 7) + obj->bitsize;
-      obj_string_stream(dat, obj->bitsize, str_dat);
+      obj->object->bitsize = obj->bitsize;
+      obj_string_stream(dat, obj->object, str_dat);
     }
 
   if (bit_read_H(dat, &obj->object->handle))

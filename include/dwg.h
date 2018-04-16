@@ -3828,7 +3828,7 @@ typedef struct _dwg_object
 
   char *dxfname;
   BITCODE_RL bitsize;
-  BITCODE_RL hdlpos;
+  unsigned long hdlpos;
   Dwg_Handle handle;
   struct _dwg_struct *parent;
 } Dwg_Object;

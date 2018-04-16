@@ -289,14 +289,18 @@
   obj->has_strings = bit_read_B(dat); \
   if (obj->has_strings) { \
     Bit_Chain sav_dat = *dat; \
-    obj_string_stream(dat, obj->bitsize, dat);
+    obj_string_stream(dat, obj, dat);
 
 #define END_STRING_STREAM \
     *dat = sav_dat; \
   }
+/* just skip the has_strings bit */
 #define START_HANDLE_STREAM \
   *hdl_dat = *dat; \
-  if (dat->version >= R_2007) bit_set_position(hdl_dat, obj->hdlpos)
+  if (dat->version >= R_2007) { \
+    if (obj->has_strings) bit_set_position(hdl_dat, obj->hdlpos); \
+    else bit_advance_position(hdl_dat, 1); \
+  }
 
 //TODO unify REPEAT macros
 #define REPEAT_N(times, name, type) \
