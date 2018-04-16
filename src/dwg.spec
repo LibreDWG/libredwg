@@ -2522,20 +2522,15 @@ DWG_OBJECT(DIMSTYLE_CONTROL)
   FIELD_BS (num_entries, 70);
   SINCE(R_2000)
     {
-      /*
-      This is not stated in the spec.
-       I've seen it in a R2000 file but not on a R14,
-       so I'll assume it is a R_2000+ field.
-      TODO: this should be checked with more sample files from various DWG versions.
-        ~Juca
-      */
-      FIELD_RC (unknown, 0);
+      /* number of additional hard handles, undocumented */
+      FIELD_RC (num_morehandles, 0);
     }
 
   START_HANDLE_STREAM;
   FIELD_HANDLE (null_handle, 4, 0);
   XDICOBJHANDLE(3);
   HANDLE_VECTOR (dimstyles, num_entries, 2, 0);
+  HANDLE_VECTOR (morehandles, num_morehandles, 5, 0);
 
 DWG_OBJECT_END
 
