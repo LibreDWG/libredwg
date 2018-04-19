@@ -1883,7 +1883,7 @@ typedef struct _dwg_object_VPORT
  */
 typedef struct _dwg_object_APPID_CONTROL
 {
-  BITCODE_BS num_apps;
+  BITCODE_BS num_entries;
   BITCODE_H null_handle;
   BITCODE_H xdicobjhandle;
   BITCODE_H* apps;

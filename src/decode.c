@@ -2144,7 +2144,7 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
                 if (appid)
                   {
                     // search absref in APPID_CONTROL apps[]
-                    for (j=0; j < appid->num_apps; j++)
+                    for (j=0; j < appid->num_entries; j++)
                       {
                         if ( appid->apps[j]->absolute_ref == ref.absolute_ref )
                           {
@@ -3547,7 +3547,7 @@ dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
       break;
     case DWG_TYPE_APPID_CONTROL:
       dwg_decode_APPID_CONTROL(dat, obj);
-      if (obj->tio.object->tio.APPID_CONTROL->num_apps)
+      if (obj->tio.object->tio.APPID_CONTROL->num_entries)
         obj->parent->appid_control = obj->tio.object->tio.APPID_CONTROL;
       break;
     case DWG_TYPE_APPID:

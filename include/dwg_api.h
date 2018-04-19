@@ -1414,8 +1414,8 @@ dwg_obj_mlinestyle_set_num_lines(dwg_obj_mlinestyle *mlinestyle,
 
 
 BITCODE_BS
-dwg_obj_appid_control_get_num_apps(dwg_obj_appid_control *appid,
-                                   int *error);
+dwg_obj_appid_control_get_num_entries(dwg_obj_appid_control *appid,
+                                      int *error);
 
 dwg_object_ref *
 dwg_obj_appid_control_get_appid(dwg_obj_appid_control *appid, BITCODE_BS index,

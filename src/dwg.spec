@@ -2008,9 +2008,7 @@ DWG_OBJECT(LAYER_CONTROL)
   FIELD_BL (num_entries, 70);
 
   START_HANDLE_STREAM;
-  UNTIL(R_2007) {
-    FIELD_HANDLE (null_handle, 4, 0);
-  }
+  FIELD_HANDLE (null_handle, 4, 0);
   XDICOBJHANDLE(3);
   HANDLE_VECTOR(layers, num_entries, 2, 0);
 
@@ -2130,9 +2128,7 @@ DWG_OBJECT(LTYPE_CONTROL)
   FIELD_BS (num_entries, 70);
 
   START_HANDLE_STREAM;
-  UNTIL(R_2007) {
-    FIELD_HANDLE (null_handle, 4, 0);
-  }
+  FIELD_HANDLE (null_handle, 4, 0);
   XDICOBJHANDLE(3);
   HANDLE_VECTOR(linetypes, num_entries, 2, 0);
   FIELD_HANDLE (bylayer, 3, 0);
@@ -2218,9 +2214,7 @@ DWG_OBJECT(VIEW_CONTROL)
   FIELD_BL (num_entries, 70);
 
   START_HANDLE_STREAM;
-  UNTIL(R_2007) {
-    FIELD_HANDLE (null_handle, 4, 0);
-  }
+  FIELD_HANDLE (null_handle, 4, 0);
   XDICOBJHANDLE(3);
   HANDLE_VECTOR(views, num_entries, 2, 0);
 
@@ -2312,9 +2306,7 @@ DWG_OBJECT(UCS_CONTROL)
   FIELD_BS (num_entries, 70);
 
   START_HANDLE_STREAM;
-  UNTIL(R_2007) {
-    FIELD_HANDLE (null_handle, 4, 0);
-  }
+  FIELD_HANDLE (null_handle, 4, 0);
   XDICOBJHANDLE(3);
   HANDLE_VECTOR(ucs, num_entries, 2, 0);
 
@@ -2487,13 +2479,12 @@ DWG_OBJECT_END
 /*(66)*/
 DWG_OBJECT(APPID_CONTROL)
 
-  FIELD_BS (num_apps, 70);
+  FIELD_BS (num_entries, 70);
 
-  UNTIL(R_2007) {
-    FIELD_HANDLE (null_handle, 4, 0);
-  }
+  START_HANDLE_STREAM;
+  FIELD_HANDLE (null_handle, 4, 0);
   XDICOBJHANDLE(3);
-  HANDLE_VECTOR(apps, num_apps, 2, 0);
+  HANDLE_VECTOR(apps, num_entries, 2, 0);
 
 DWG_OBJECT_END
 

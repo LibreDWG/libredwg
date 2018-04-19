@@ -5147,17 +5147,17 @@ dwg_obj_mlinestyle_set_num_lines(dwg_obj_mlinestyle *mlinestyle,
 ********************************************************************/
 
 /// Returns the number of all registered apps of appid_control
-/** Usage : int num = dwg_obj_appid_control_get_num_apps(appcontrol, &error);
+/** Usage : int num = dwg_obj_appid_control_get_num_entries(appcontrol, &error);
 \param 1 dwg_obj_appid_control
 \param 2 int
 */
 BITCODE_BS
-dwg_obj_appid_control_get_num_apps(dwg_obj_appid_control *appid, int *error)
+dwg_obj_appid_control_get_num_entries(dwg_obj_appid_control *appid, int *error)
 {
   if (appid != 0)
     {
       *error = 0;
-      return appid->num_apps;
+      return appid->num_entries;
     }
   else
     {
@@ -5171,7 +5171,7 @@ dwg_object_ref *
 dwg_obj_appid_control_get_appid(dwg_obj_appid_control *appid,
                                 BITCODE_BS index, int *error)
 {
-  if (appid != 0 && index < appid->num_apps)
+  if (appid != 0 && index < appid->num_entries)
     {
       *error = 0;
       return appid->apps[index];
