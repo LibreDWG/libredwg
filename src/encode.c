@@ -1277,7 +1277,11 @@ dwg_encode_add_object(Dwg_Object* obj, Bit_Chain* dat,
   object_address = dat->byte;
   //  ktl_lastaddress = dat->byte + obj->size; /* (calculate the bitsize) */
   
-  bit_write_BS(dat, obj->type);
+  PRE(R_2010) {
+    bit_write_BS(dat, obj->type);
+  } LATER_VERSIONS {
+    bit_write_BOT(dat, obj->type);
+  }
 
   LOG_INFO(" Type: %d\n", obj->type)
 

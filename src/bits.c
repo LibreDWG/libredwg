@@ -540,6 +540,43 @@ bit_write_BL(Bit_Chain * dat, BITCODE_BL value)
     }
 }
 
+/** Read object type 2010+ (BB + 1 or 2 bytes).
+ *  par 2.12
+ */
+BITCODE_BS
+bit_read_BOT(Bit_Chain * dat)
+{
+  unsigned char two_bit_code;
+
+  two_bit_code = bit_read_BB(dat);
+
+  if (two_bit_code == 0)
+    return bit_read_RC(dat);
+  else if (two_bit_code == 1)
+    return bit_read_RC(dat) + 0x1f0;
+  else
+    return bit_read_RS(dat);
+}
+
+/** Write object type 2010+ (BB + 1 or 2 bytes).
+ */
+void
+bit_write_BOT(Bit_Chain * dat, BITCODE_BS value)
+{
+  if (value < 256) {
+    bit_write_BB(dat, 0);
+    bit_write_RC(dat, value);
+  }
+  else if (value < 0x7fff) {
+    bit_write_BB(dat, 1);
+    bit_write_RC(dat, value - 0x1f0);
+  }
+  else {
+    bit_write_BB(dat, 1);
+    bit_write_RS(dat, value);
+  }
+}
+
 /** Read 1 bitlonglong (compacted data).
  *  The first 1-3 bits indicate the length l (see paragraph 2.1). Then
  *  l bytes follow, which represent the number (the least significant

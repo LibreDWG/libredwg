@@ -221,13 +221,22 @@ dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
       return decode_R2004(dat, dwg);
     }
 
-  SINCE(R_2007)
+  VERSION(R_2007)
     {
       LOG_ERROR(WE_CAN
                "Support for this version is still experimental."
                " We dont' decode objects yet.\n"
                "It will probably crash and/or give you invalid output.")
       return decode_R2007(dat, dwg);
+    }
+
+  SINCE(R_2010)
+    {
+      LOG_ERROR(WE_CAN
+               "Support for this version is still experimental."
+               " We dont' decode objects yet.\n"
+               "It will probably crash and/or give you invalid output.")
+      return decode_R2004(dat, dwg);
     }
 
   // This line should not be reached
@@ -1444,7 +1453,7 @@ decompress_R2004_section(Bit_Chain* dat, char *decomp,
   return 0;  // Success
 }
 
-/* Read R2004 Section Map
+/* Read R2004, 2010+ Section Map
  * The Section Map is a vector of number, size, and address triples used
  * to locate the sections in the file.
  */
@@ -1538,7 +1547,7 @@ find_section(Dwg_Data *dwg, unsigned long int index)
   return 0;
 }
 
-/* Read R2004 Section Info
+/* Read R2004, 2010+ Section Info
  */
 static void
 read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
@@ -1743,7 +1752,7 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *dwg,
   return 0;
 }
 
-/* R2004 Class Section
+/* R2004, 2010+ Class Section
  */
 static int
 read_2004_section_classes(Bit_Chain* dat, Dwg_Data *dwg)
@@ -1833,7 +1842,7 @@ read_2004_section_classes(Bit_Chain* dat, Dwg_Data *dwg)
   return 0;
 }
 
-/* R2004 Header Section
+/* R2004, 2010+ Header Section
  */
 static int
 read_2004_section_header(Bit_Chain* dat, Dwg_Data *dwg)
@@ -1855,7 +1864,7 @@ read_2004_section_header(Bit_Chain* dat, Dwg_Data *dwg)
   return 0;
 }
 
-/* R2004 Handles Section
+/* R2004, 2010+ Handles Section
  */
 static int
 read_2004_section_handles(Bit_Chain* dat, Dwg_Data *dwg)
@@ -1926,6 +1935,7 @@ read_2004_section_handles(Bit_Chain* dat, Dwg_Data *dwg)
   return 0;
 }
 
+/* for 2004 and 2010+ */
 static int
 decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
 {
@@ -3354,9 +3364,12 @@ dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
   SINCE(R_2010)
   {
     obj->handlestream_size = bit_read_MC(dat);
+    LOG_INFO(" handlestream size: %ld/0x%x\n",
+             obj->handlestream_size, (unsigned)obj->handlestream_size)
+    obj->type = bit_read_BOT(dat);
+  } else {
+    obj->type = bit_read_BS(dat);
   }
-  obj->type = bit_read_BS(dat);
-
   LOG_INFO(" Type: %d/0x%x\n", obj->type, obj->type)
 
   /* Check the type of the object

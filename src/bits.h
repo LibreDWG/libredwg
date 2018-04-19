@@ -142,6 +142,12 @@ bit_read_BL(Bit_Chain * dat);
 void
 bit_write_BL(Bit_Chain * dat, BITCODE_BL value);
 
+BITCODE_BS
+bit_read_BOT(Bit_Chain * dat);
+
+void
+bit_write_BOT(Bit_Chain * dat, BITCODE_BS value);
+
 BITCODE_BLL
 bit_read_BLL(Bit_Chain * dat);
 
