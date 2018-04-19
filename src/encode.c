@@ -417,7 +417,7 @@ dwg_encode(Dwg_Data* dwg, Bit_Chain* dat)
   PRE(R_13)
     {
       // TODO: tables, entities, block entities
-      LOG_ERROR(WE_CAN "We dont' encode tables, entities, blocks yet")
+      LOG_ERROR(WE_CAN "We don't encode tables, entities, blocks yet")
       return encode_preR13(dwg, dat);
     }
 
@@ -449,7 +449,7 @@ dwg_encode(Dwg_Data* dwg, Bit_Chain* dat)
 
   VERSION(R_2007)
     {
-      LOG_ERROR(WE_CAN "We dont' encode R2007 sections yet")
+      LOG_ERROR(WE_CAN "We don't encode R2007 sections yet")
       return 1;
     }
 

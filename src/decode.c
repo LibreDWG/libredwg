@@ -204,7 +204,7 @@ dwg_decode(Bit_Chain * dat, Dwg_Data * dwg)
   PRE(R_13)
     {
       // TODO: tables, entities, block entities
-      LOG_ERROR(WE_CAN "We dont' decode tables, entities, blocks yet")
+      LOG_ERROR(WE_CAN "We don't decode tables, entities, blocks yet")
       return decode_preR13(dat, dwg);
     }
 
@@ -222,7 +222,7 @@ dwg_decode(Bit_Chain * dat, Dwg_Data * dwg)
     {
       LOG_ERROR(WE_CAN
                "Support for this version is still experimental."
-               " We dont' decode objects yet.\n"
+               " We don't decode objects yet.\n"
                "It will probably crash and/or give you invalid output.")
       return decode_R2007(dat, dwg);
     }
@@ -231,7 +231,7 @@ dwg_decode(Bit_Chain * dat, Dwg_Data * dwg)
     {
       LOG_ERROR(WE_CAN
                "Support for this version is still experimental."
-               " We dont' decode objects yet.\n"
+               " We don't decode objects yet.\n"
                "It will probably crash and/or give you invalid output.")
       return decode_R2004(dat, dwg);
     }
