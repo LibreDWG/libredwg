@@ -352,11 +352,15 @@ static void
 dwg_encode_xdata(Bit_Chain * dat, Dwg_Object_XRECORD *obj, int size);
 
 /*--------------------------------------------------------------------------------
- * Public variables
+ * Public functions
  */
 
-/*--------------------------------------------------------------------------------
- * Public functions
+/**
+ * dwg_encode_chains: the current generic encoder entry point.
+ *
+ * TODO: rename to dwg_encode_data(), parallel to dwg_decode_data().
+ * Split up into preR13, R13_2000, 2004 and 2007 parts.
+ * 2010+ uses the 2004 format.
  */
 int
 dwg_encode_chains(Dwg_Data* dwg, Bit_Chain* dat)
@@ -695,7 +699,7 @@ dwg_encode_chains(Dwg_Data* dwg, Bit_Chain* dat)
       LOG_INFO ("Object(%lu): %6lu / Address: %08lX / Idc: %u\n", 
 		 j, omap[j].handle, omap[j].address, omap[j].idc);
 
-  /* Unknown bitdouble between objects and object map
+  /* Unknown bitdouble between objects and object map (or short?)
    */
   bit_write_RS(dat, 0);
 
