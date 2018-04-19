@@ -327,6 +327,8 @@ typedef struct
 /*--------------------------------------------------------------------------------
  * Private functions prototypes
  */
+static int
+encode_preR13(Dwg_Data* dwg, Bit_Chain* dat);
 
 static int
 dwg_encode_entity(Dwg_Object* obj, Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat);
@@ -358,7 +360,7 @@ dwg_encode_xdata(Bit_Chain * dat, Dwg_Object_XRECORD *obj, int size);
 /**
  * dwg_encode(): the current generic encoder entry point.
  *
- * TODO: Split up into preR13, R13_2000, 2004 and 2007 parts.
+ * TODO: preR13 tables, 2007 maps.
  * 2010+ uses the 2004 format.
  */
 int
@@ -406,8 +408,19 @@ dwg_encode(Dwg_Data* dwg, Bit_Chain* dat)
 
     #include "header.spec"
   }
-
   section_address = dat->byte;
+
+#define WE_CAN \
+    "This version of LibreDWG is only capable of encoding " \
+    "version R13-R2000 (code: AC1012-AC1015) DWG files.\n"
+
+  PRE(R_13)
+    {
+      // TODO: tables, entities, block entities
+      LOG_ERROR(WE_CAN "We dont' encode tables, entities, blocks yet")
+      return encode_preR13(dwg, dat);
+    }
+
   PRE(R_2004) {
     if (!dwg->header.num_sections) /* Usually 3-5, max 6 */
       dwg->header.num_sections = 6;
@@ -434,6 +447,12 @@ dwg_encode(Dwg_Data* dwg, Bit_Chain* dat)
       }
   }
 
+  VERSION(R_2007)
+    {
+      LOG_ERROR(WE_CAN "We dont' encode R2007 sections yet")
+      return 1;
+    }
+
   /* r2004 file header (compressed + encrypted) */
   SINCE(R_2004)
   {
@@ -459,6 +478,8 @@ dwg_encode(Dwg_Data* dwg, Bit_Chain* dat)
     const int size = sizeof(struct Dwg_R2004_Header);
     char encrypted_data[size];
     int rseed = 1;
+
+    LOG_ERROR(WE_CAN "We don't encode the R2004_section_map yet")
 
     dat->byte = 0x80;
     for (i = 0; i < size; i++)
@@ -893,6 +914,13 @@ dwg_encode(Dwg_Data* dwg, Bit_Chain* dat)
 
   return 0;
 }
+
+static int
+encode_preR13(Dwg_Data* dwg, Bit_Chain* dat)
+{
+  return 1;
+}
+
 
 #include "dwg.spec"
 

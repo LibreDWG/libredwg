@@ -99,13 +99,10 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg);
 
 static int
 decode_preR13(Bit_Chain* dat, Dwg_Data * dwg);
-
 static int
 decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg);
-
 static int
 decode_R2004(Bit_Chain* dat, Dwg_Data * dwg);
-
 static int
 decode_R2007(Bit_Chain* dat, Dwg_Data * dwg);
 
