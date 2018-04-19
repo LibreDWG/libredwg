@@ -15,6 +15,7 @@
  * written by Felipe Castro
  * modified by Felipe Corrêa da Silva Sances
  * modified by Rodrigo Rodrigues da Silva
+ * modified by Reini Urban
  */
 
 #ifndef ENCODE_H
@@ -24,6 +25,6 @@
 #include "dwg.h"
 
 int
-dwg_encode_chains(Dwg_Data * dwg_struct, Bit_Chain * bitaro);
+dwg_encode(Dwg_Data *dwg, Bit_Chain *dat);
 
 #endif

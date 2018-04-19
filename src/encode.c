@@ -356,14 +356,13 @@ dwg_encode_xdata(Bit_Chain * dat, Dwg_Object_XRECORD *obj, int size);
  */
 
 /**
- * dwg_encode_chains: the current generic encoder entry point.
+ * dwg_encode(): the current generic encoder entry point.
  *
- * TODO: rename to dwg_encode_data(), parallel to dwg_decode_data().
- * Split up into preR13, R13_2000, 2004 and 2007 parts.
+ * TODO: Split up into preR13, R13_2000, 2004 and 2007 parts.
  * 2010+ uses the 2004 format.
  */
 int
-dwg_encode_chains(Dwg_Data* dwg, Bit_Chain* dat)
+dwg_encode(Dwg_Data* dwg, Bit_Chain* dat)
 {
   int ckr_missing = 1;
   int i;
@@ -1598,7 +1597,7 @@ dwg_encode_add_object(Dwg_Object* obj, Bit_Chain* dat,
 
    The last common part is common_entity_handle_data.spec
    called by COMMON_ENTITY_HANDLE_DATA in dwg.spec
-   See DWG_SUPERTYPE_ENTITY in dwg_encode_chains.
+   See DWG_SUPERTYPE_ENTITY in dwg_encode().
  */
 static int
 dwg_encode_entity(Dwg_Object* obj, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
@@ -1754,7 +1753,7 @@ dwg_encode_handleref_with_code(Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Data* dw
 /* The first common part of every object.
 
    There is no COMMON_ENTITY_HANDLE_DATA for objects.
-   See DWG_SUPERTYPE_OBJECT in dwg_encode_chains.
+   See DWG_SUPERTYPE_OBJECT in dwg_encode().
 */
 static int
 dwg_encode_object(Dwg_Object* obj, Bit_Chain* hdl_dat, Bit_Chain* str_dat,

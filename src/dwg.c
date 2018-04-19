@@ -97,7 +97,7 @@ dwg_read_file(char *filename, Dwg_Data * dwg_data)
 
   /* Decode the dwg structure */
   memset(dwg_data, 0, sizeof(Dwg_Data));
-  if (dwg_decode_data(&bit_chain, dwg_data))
+  if (dwg_decode(&bit_chain, dwg_data))
     {
       LOG_ERROR("Failed to decode file: %s\n", filename)
       free(bit_chain.chain);
@@ -132,7 +132,7 @@ dwg_write_file(char *filename, Dwg_Data * dwg_data)
 
   // Encode the DWG struct
   bit_chain.size = 0;
-  if (dwg_encode_chains (dwg_data, &bit_chain))
+  if (dwg_encode (dwg_data, &bit_chain))
     {
       LOG_ERROR("Failed to encode datastructure.\n")
       if (bit_chain.size > 0) {

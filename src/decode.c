@@ -132,14 +132,14 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
  * Public function definitions
  */
 
-/** dwg_decode_data
+/** dwg_decode
  * returns 0 on success.
  *
  * everything in dwg is cleared
  * and then either read from dat, or set to a default.
  */
 int
-dwg_decode_data(Bit_Chain * dat, Dwg_Data * dwg)
+dwg_decode(Bit_Chain * dat, Dwg_Data * dwg)
 {
   int i;
   char version[7];

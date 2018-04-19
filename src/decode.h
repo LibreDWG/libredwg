@@ -42,6 +42,6 @@ enum RES_BUF_VALUE_TYPE
 get_base_value_type(short gc);
 
 int
-dwg_decode_data(Bit_Chain * bit_chain, Dwg_Data * dwg_data);
+dwg_decode(Bit_Chain *dat, Dwg_Data *dwg);
 
 #endif
