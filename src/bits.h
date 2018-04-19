@@ -56,6 +56,9 @@ typedef struct _bit_chain
 void
 bit_advance_position(Bit_Chain * dat, int advance);
 
+unsigned long
+bit_position(Bit_Chain * dat);
+
 void
 bit_set_position(Bit_Chain * dat, unsigned long bitpos);
 

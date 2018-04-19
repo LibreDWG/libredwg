@@ -2466,22 +2466,18 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
   VERSIONS(R_2000, R_2007)
     {
       obj->bitsize = bit_read_RL(dat);
-      LOG_INFO("Object bitsize: " FORMAT_RL " @%lu.%u\n", obj->bitsize,
-               dat->byte, dat->bit);
-      // the handle stream offset, i.e. end of the object, right after the has_strings bit.
-      // minus 2* RL
-      obj->object->hdlpos = (dat->byte * 8) + (dat->bit & 7) + obj->bitsize - 32;
     }
   SINCE(R_2010)
     {
       obj->bitsize = dat->size - 16;
-      LOG_INFO("Object bitsize: " FORMAT_RL " @%lu.%u\n", obj->bitsize,
-               dat->byte, dat->bit);
-      // minus 1* RL
-      obj->object->hdlpos = (dat->byte * 8) + (dat->bit & 7) + obj->bitsize - 16;
     }
   SINCE(R_2007)
     {
+      LOG_INFO("Object bitsize: " FORMAT_RL " @%lu.%u %lu\n", obj->bitsize,
+               dat->byte, dat->bit, bit_position(dat));
+      // the handle stream offset, i.e. end of the object, right after the has_strings bit.
+      // minus 1* RL
+      obj->object->hdlpos = bit_position(dat) + obj->bitsize;
       obj->object->bitsize = obj->bitsize;
       obj_string_stream(dat, obj->object, str_dat);
     }

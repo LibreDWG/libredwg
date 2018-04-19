@@ -1767,7 +1767,7 @@ dwg_encode_object(Dwg_Object* obj, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
       LOG_INFO("Object bitsize: " FORMAT_RL " @%lu.%u\n", obj->bitsize,
                dat->byte, dat->bit);
     }
-  obj->hdlpos = (dat->byte * 8) + (dat->bit & 7) + obj->bitsize; // the handle stream offset
+  obj->hdlpos = bit_position(dat) + obj->bitsize; // the handle stream offset
   SINCE(R_2007)
     {
       obj_string_stream(dat, obj->bitsize, str_dat);

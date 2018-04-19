@@ -1058,8 +1058,8 @@ obj_string_stream(Bit_Chain *dat, Dwg_Object *obj, Bit_Chain *str)
   BITCODE_RL data_size; // in byte
   *str = *dat;
   bit_advance_position(str, start);
-  LOG_TRACE("obj string stream +%u: @%lu/%u ", start,
-            str->byte, str->bit & 7);
+  LOG_TRACE("obj string stream +%u: @%lu/%u %lu", start,
+            str->byte, str->bit & 7, bit_position(str));
   obj->has_strings = bit_read_B(str);
   LOG_TRACE(" has_strings: %d\n", (int)obj->has_strings);
   if (!obj->has_strings)
@@ -1080,10 +1080,12 @@ obj_string_stream(Bit_Chain *dat, Dwg_Object *obj, Bit_Chain *str)
     {
       bit_advance_position(str, -16);
       LOG_ERROR("Invalid string stream data_size: @%lu/%u", str->byte, str->bit & 7);
+      obj->has_strings = 0;
       return;
     }
   bit_advance_position(str, -(int)data_size - 16);
-  LOG_TRACE("  %d: @%lu/%u\n", -(int)data_size - 16, str->byte, str->bit & 7);
+  LOG_TRACE("  %d: @%lu/%u %lu\n", -(int)data_size - 16, str->byte, str->bit & 7,
+            bit_position(str));
 }
 
 static void
@@ -1094,14 +1096,12 @@ section_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str)
   BITCODE_RS data_size; // in byte
   BITCODE_B endbit;
   *str = *dat;
-  str->byte = start >> 3;
-  str->bit = start & 7;
+  bit_set_position(str, start);
   LOG_TRACE("section string stream\n  pos: %u, %lu/%u\n", start, str->byte, str->bit);
   endbit = bit_read_B(str);
   LOG_TRACE("  endbit: %d\n", (int)endbit);
   start -= 16;
-  str->byte = start >> 3;
-  str->bit = start & 7;
+  bit_set_position(str, start);
   LOG_TRACE("  pos: %u, %lu\n", start, str->byte);
   //str->bit = start & 7;
   data_size = bit_read_RS(str);
@@ -1110,15 +1110,13 @@ section_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str)
     BITCODE_RS hi_size;
     start -= 16;
     data_size &= 0x7FFF;
-    str->byte = start >> 3;
-    str->bit = start & 7;
+    bit_set_position(str, start);
     LOG_TRACE("  pos: %u, %lu\n", start, str->byte);
     hi_size = bit_read_RS(str);
     data_size |= (hi_size << 15);
   }
   start -= data_size;
-  str->byte = start >> 3;
-  str->bit = start & 7;
+  bit_set_position(str, start);
   LOG_TRACE("  pos: %u, %lu/%u\n", start, str->byte, str->bit);
 }
 
@@ -1281,8 +1279,7 @@ read_2007_section_header(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Data *dwg,
           bitsize = bit_read_RL(&sec_dat);
           LOG_TRACE("bitsize: " FORMAT_RL " [RL]\n", bitsize);
           endbits += bitsize;
-          hdl_dat->byte = endbits >> 3;
-          hdl_dat->bit = endbits & 7;
+          bit_set_position(hdl_dat, endbits);
 
           section_string_stream(&sec_dat, bitsize, &str_dat);
           sec_dat = sav_dat;

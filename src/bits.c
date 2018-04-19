@@ -59,7 +59,15 @@ bit_advance_position(Bit_Chain * dat, int advance)
   dat->bit = endpos & 7;
 }
 
-/* Absolute set
+/* Absolute get in bits
+ */
+unsigned long
+bit_position(Bit_Chain * dat)
+{
+  return (dat->byte * 8) + (dat->bit & 7);
+}
+
+/* Absolute set in bits
  */
 void
 bit_set_position(Bit_Chain * dat, unsigned long bitpos)
