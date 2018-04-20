@@ -2082,7 +2082,7 @@ decode_R2007(Bit_Chain* dat, Dwg_Data * dwg)
     }
 
   LOG_INFO("\nDecoding of DWG version R2007+ objectrefs is not implemented yet.\n")
-  LOG_TRACE("  num objects: %lu\n", dwg->num_objects)
+  LOG_TRACE("Num objects: %lu\n", dwg->num_objects)
   LOG_TRACE("  num object_refs: %lu\n", dwg->num_object_refs)
   return resolve_objectref_vector(dat, dwg);
 }
