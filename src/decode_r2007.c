@@ -1209,9 +1209,9 @@ read_2007_section_classes(Bit_Chain* dat, Dwg_Data *dwg,
           LOG_TRACE("-------------------\n")
           LOG_TRACE("Number:           %d\n", dwg->dwg_class[idc].number)
           LOG_TRACE("Proxyflag:        0x%x\n", dwg->dwg_class[idc].proxyflag)
-          LOG_TRACE_TU("Application name: ", dwg->dwg_class[idc].appname)
-          LOG_TRACE_TU("C++ class name:   ", dwg->dwg_class[idc].cppname)
-          LOG_TRACE_TU("DXF record name:  ", dwg->dwg_class[idc].dxfname)
+          LOG_TRACE_TU("Application name", dwg->dwg_class[idc].appname,0)
+          LOG_TRACE_TU("C++ class name  ", dwg->dwg_class[idc].cppname,0)
+          LOG_TRACE_TU("DXF record name ", dwg->dwg_class[idc].dxfname,0)
           LOG_TRACE("Class ID:         0x%x "
                     "(0x1f3 for object, 0x1f2 for entity)\n",
                     dwg->dwg_class[idc].item_class_id)

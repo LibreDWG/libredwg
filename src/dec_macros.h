@@ -115,7 +115,7 @@
 #define FIELD_TV(name,dxf) FIELDG(name, TV, dxf)
 #define FIELD_TU(name,dxf) \
   { _obj->name = (char*)bit_read_TU(str_dat); \
-    LOG_TRACE_TU(#name, (BITCODE_TU)FIELD_VALUE(name)); }
+    LOG_TRACE_TU(#name, (BITCODE_TU)FIELD_VALUE(name),dxf); }
 #define FIELD_T(name,dxf) \
   { if (dat->version < R_2007) \
       FIELD_TV(name,dxf) \
