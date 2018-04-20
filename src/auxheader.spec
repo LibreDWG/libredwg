@@ -54,9 +54,7 @@
     #undef FORMAT_RS
     #define FORMAT_RS "%" PRIu16
   }
-  for (i=0; i<20; i++) { // documented as 5xRL, but really looks like some RC flags
-    FIELD_RC(unknown_rc[i], 0);
-  }
+  FIELD_TFF(unknown_rc, 20, 0) // documented as 5xRL, but really looks like some RC flags
   DEBUG_HERE();
   FIELD_RD(TDCREATE, 0);
   DEBUG_HERE();
@@ -80,4 +78,5 @@
       FIELD_RS(zero_18[i], 0);
     }
   }
+
 
