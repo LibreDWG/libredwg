@@ -3879,7 +3879,7 @@ typedef enum DWG_SECTION_TYPE /* since r2004+ */
   SECTION_APPINFO = 11, 		/* AcDb:AppInfo */
   SECTION_APPINFOHISTORY = 12,		/* AcDb:AppInfoHistory */
   SECTION_FILEDEPLIST = 13,		/* AcDb:FileDepList */
-  SECTION_SECURITY,      		/* AcDb:Security */
+  SECTION_SECURITY,      		/* AcDb:Security, if stored with a password */
   SECTION_VBAPROJECT,    		/* AcDb:VBAProject */
   SECTION_SIGNATURE,     		/* AcDb:Signature */
   SECTION_PROTOTYPE,      		/* AcDb:AcDsPrototype_1b */

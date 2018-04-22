@@ -1026,7 +1026,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
   do
     {
       long unsigned int last_offset;
-      long unsigned int last_handle;
+      //long unsigned int last_handle;
       long unsigned int oldpos = 0;
       startpos = dat->byte;
 
@@ -1038,18 +1038,18 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
           return -1;
         }
 
-      last_handle = 0;
+      //last_handle = 0;
       last_offset = 0;
       while (dat->byte - startpos < section_size)
         {
-          long int handle, offset;
+          long handle, offset;
           oldpos = dat->byte;
           handle = bit_read_MC(dat);
           offset = bit_read_MC(dat);
-          last_handle += handle;
+          //last_handle += handle;
           last_offset += offset;
-          LOG_TRACE("\nNext object: %li\t", dwg->num_objects)
-          LOG_TRACE("Handle: %li\tOffset: %li\n", handle, offset)
+          LOG_TRACE("\nNext object: %lu\t", dwg->num_objects)
+          LOG_TRACE("Handle: %li\tOffset: %ld @%lu\n", handle, offset, last_offset)
 
           if (dat->byte == oldpos)
             break;
@@ -1063,7 +1063,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
 #if 0
           kobj = dwg->num_objects;
           if (dwg->num_objects > kobj)
-            dwg->object[dwg->num_objects - 1].handle.value = lastahandle;
+            dwg->object[dwg->num_objects - 1].handle.value = last_handle;
           //TODO: blame Juca
 #endif
         }
@@ -1888,7 +1888,7 @@ read_2004_section_handles(Bit_Chain* dat, Dwg_Data *dwg)
   do
     {
       long unsigned int last_offset;
-      long unsigned int last_handle;
+      //long unsigned int last_handle;
       long unsigned int oldpos = 0;
       long unsigned int startpos = hdl_dat.byte;
 
@@ -1900,18 +1900,18 @@ read_2004_section_handles(Bit_Chain* dat, Dwg_Data *dwg)
           return 1;
         }
 
-      last_handle = 0;
+      //last_handle = 0;
       last_offset = 0;
       while (hdl_dat.byte - startpos < section_size)
         {
-          long int handle, offset;
+          long handle, offset;
           oldpos = dat->byte;
           handle = bit_read_MC(&hdl_dat);
           offset = bit_read_MC(&hdl_dat);
-          last_handle += handle;
+          //last_handle += handle;
           last_offset += offset;
-          LOG_TRACE("\nNext object: %li\t", dwg->num_objects)
-          LOG_TRACE("Handle: %li\tOffset: %li\n", handle, offset)
+          LOG_TRACE("\nNext object: %lu\t", dwg->num_objects)
+          LOG_TRACE("Handle: %li\tOffset: %ld @%lu\n", handle, offset, last_offset)
 
           dwg_decode_add_object(dwg, &obj_dat, &obj_dat, last_offset);
         }
@@ -2293,13 +2293,13 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
 
   VERSIONS(R_2000, R_2010) //ODA says 2000 only
     {
-      ent->bitsize = bit_read_RL(dat);
+      ent->bitsize = bit_read_RL(dat); // until the handles
       LOG_TRACE("Entity bitsize: " FORMAT_BL " @%lu.%u\n", ent->bitsize, dat->byte, dat->bit)
     }
   SINCE(R_2007)
     {
       // set the handle stream offset
-      ent->object->hdlpos = (dat->byte * 8) + (dat->bit & 7) + ent->bitsize;
+      ent->object->hdlpos = bit_position(dat) + ent->bitsize;
       ent->object->bitsize = ent->bitsize;
       // and set the string stream (restricted to size)
       obj_string_stream(dat, ent->object, str_dat);
@@ -3349,7 +3349,8 @@ dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
       return;
     }
 
-  LOG_INFO("======================\nObject number: %lu", num)
+  LOG_INFO("==========================================\n"
+           "Object number: %lu", num)
 
   obj = &dwg->object[num];
   memset(obj, 0, sizeof(Dwg_Object));
@@ -3357,19 +3358,20 @@ dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
   dwg->num_objects++;
   obj->parent = dwg;
   obj->size = bit_read_MS(dat);
+  LOG_INFO(", Size: %d/0x%x", obj->size, obj->size)
   object_address = dat->byte;
   end_address = object_address + obj->size; /* (calculate the bitsize) */
 
   SINCE(R_2010)
   {
     obj->handlestream_size = bit_read_MC(dat);
-    LOG_INFO(" handlestream size: %ld/0x%x\n",
+    LOG_INFO(", Hdlsize: %ld/0x%x",
              obj->handlestream_size, (unsigned)obj->handlestream_size)
     obj->type = bit_read_BOT(dat);
   } else {
     obj->type = bit_read_BS(dat);
   }
-  LOG_INFO(" Type: %d/0x%x\n", obj->type, obj->type)
+  LOG_INFO(", Type: %d\n", obj->type)
 
   /* Check the type of the object
    */
