@@ -222,7 +222,7 @@ dwg_decode(Bit_Chain * dat, Dwg_Data * dwg)
     {
       LOG_ERROR(WE_CAN
                "Support for this version is still experimental."
-               " We don't decode objects yet.\n"
+               " We don't decode handle and string streams correctly yet.\n"
                "It will probably crash and/or give you invalid output.")
       return decode_R2007(dat, dwg);
     }
@@ -2291,16 +2291,18 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
   BITCODE_BS size;
   int error;
 
-  VERSIONS(R_2000, R_2004) //ODA says 2000 only
+  VERSIONS(R_2000, R_2010) //ODA says 2000 only
     {
       ent->bitsize = bit_read_RL(dat);
       LOG_TRACE("Entity bitsize: " FORMAT_BL " @%lu.%u\n", ent->bitsize, dat->byte, dat->bit)
     }
   SINCE(R_2007)
     {
-      // the handle stream offset
-      //ent->object->hdlpos = (dat->byte * 8) + (dat->bit & 7) + obj->bitsize;
-      //obj_string_stream(dat, ent->bitsize, str_dat);
+      // set the handle stream offset
+      ent->object->hdlpos = (dat->byte * 8) + (dat->bit & 7) + ent->bitsize;
+      ent->object->bitsize = ent->bitsize;
+      // and set the string stream (restricted to size)
+      obj_string_stream(dat, ent->object, str_dat);
     }
 
   error = bit_read_H(dat, &(ent->object->handle));
