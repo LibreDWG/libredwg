@@ -2182,7 +2182,7 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
           switch (code)
             {
             case 0:
-              UNTIL(R_2007) {
+              PRE(R_2007) {
                 obj->eed[idx].data->u.eed_0.length = lenc = bit_read_RC(dat);
                 obj->eed[idx].data->u.eed_0.codepage = bit_read_RS_LE(dat);
                 if (lenc > size-4)
