@@ -2291,8 +2291,12 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
   BITCODE_BS size;
   int error;
 
-  VERSIONS(R_2000, R_2010) //ODA says 2000 only
+  VERSIONS(R_2000, R_2010)
     {
+      SINCE(R_2007)
+        {
+          *str_dat = *dat;
+        }
       ent->bitsize = bit_read_RL(dat); // until the handles
       LOG_TRACE("Entity bitsize: " FORMAT_BL " @%lu.%u\n", ent->bitsize, dat->byte, dat->bit)
     }
@@ -2474,6 +2478,10 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
   obj->datpos = dat->byte;     // the data stream offset
   VERSIONS(R_2000, R_2007)
     {
+      SINCE(R_2007)
+        {
+          *str_dat = *dat;
+        }
       obj->bitsize = bit_read_RL(dat);
     }
   SINCE(R_2010)

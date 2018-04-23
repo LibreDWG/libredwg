@@ -1056,12 +1056,9 @@ obj_string_stream(Bit_Chain *dat, Dwg_Object *obj, Bit_Chain *str)
 {
   BITCODE_RL start = obj->bitsize - 1; // in bits
   BITCODE_RL data_size; // in byte
-  *str = *dat;
   str->chain += str->byte;
-  str->byte = 0;
-  str->size = (obj->bitsize / 8);
-  if (str->bit)
-    str->size++;
+  str->byte = 0; str->bit = 0;
+  str->size = (obj->bitsize / 8) + 1;
   bit_advance_position(str, start);
   LOG_TRACE("obj string stream +%u: @%lu/%u %lu", start,
             str->byte, str->bit & 7, bit_position(str));
