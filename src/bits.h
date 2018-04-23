@@ -231,6 +231,9 @@ bit_read_TU(Bit_Chain * dat);
 void
 bit_write_TU(Bit_Chain * dat, BITCODE_TU value);
 
+char*
+bit_convert_TU(BITCODE_TU wstr);
+
 long unsigned int
 bit_read_L(Bit_Chain * dat);
 

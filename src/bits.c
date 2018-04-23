@@ -1194,6 +1194,24 @@ bit_write_TU(Bit_Chain * dat, BITCODE_TU chain)
   bit_write_RS(dat, 0); //?? unsure about that
 }
 
+char* bit_convert_TU(BITCODE_TU wstr)
+{
+  BITCODE_TU tmp = wstr;
+  char *str;
+  int len = 0;
+  uint16_t c;
+  while (*tmp++) {
+    len++;
+  }
+  str = malloc(len+1);
+  len = 0;
+  while ((c = *wstr++)) {
+    str[len++] = c & 0xff;
+  }
+  str[len] = '\0';
+  return str;
+}
+
 /** Read 1 bitlong according to normal order
  */
 long unsigned int

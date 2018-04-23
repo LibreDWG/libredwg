@@ -1193,12 +1193,11 @@ read_2007_section_classes(Bit_Chain* dat, Dwg_Data *dwg,
 
       for (idc = 0; idc < max_num-500; idc++)
         {
-          char name[8];
           dwg->dwg_class[idc].number        = bit_read_BS(&sec_dat);
           dwg->dwg_class[idc].proxyflag     = bit_read_BS(&sec_dat);
           dwg->dwg_class[idc].appname       = (char*)bit_read_TU(&str);
           dwg->dwg_class[idc].cppname       = (char*)bit_read_TU(&str);
-          dwg->dwg_class[idc].dxfname       = (char*)bit_read_TU(&str);
+          dwg->dwg_class[idc].dxfname_u     = bit_read_TU(&str);
           dwg->dwg_class[idc].wasazombie    = bit_read_B(&sec_dat);
           dwg->dwg_class[idc].item_class_id = bit_read_BS(&sec_dat);
 
@@ -1213,7 +1212,7 @@ read_2007_section_classes(Bit_Chain* dat, Dwg_Data *dwg,
           LOG_TRACE("Proxyflag:        0x%x\n", dwg->dwg_class[idc].proxyflag)
           LOG_TRACE_TU("Application name", dwg->dwg_class[idc].appname,0)
           LOG_TRACE_TU("C++ class name  ", dwg->dwg_class[idc].cppname,0)
-          LOG_TRACE_TU("DXF record name ", dwg->dwg_class[idc].dxfname,0)
+          LOG_TRACE_TU("DXF record name ", dwg->dwg_class[idc].dxfname_u,0)
           LOG_TRACE("Class ID:         0x%x "
                     "(0x1f3 for object, 0x1f2 for entity)\n",
                     dwg->dwg_class[idc].item_class_id)
@@ -1224,16 +1223,9 @@ read_2007_section_classes(Bit_Chain* dat, Dwg_Data *dwg,
                     dwg->dwg_class[idc].maint_version)
           LOG_TRACE("unknown:          %u %u\n", dwg->dwg_class[idc].unknown_1,
                     dwg->dwg_class[idc].unknown_2)
-          {
-            BITCODE_TU ws = (BITCODE_TU)dwg->dwg_class[idc].dxfname;
-            for (int i=0; i<7; i++) {
-              uint16_t _c = *ws++;
-              name[i] = _c & 0xff;
-              if (!_c)
-                break;
-            }
-          }
-          if (strcmp(name, "LAYOUT") == 0)
+
+          dwg->dwg_class[idc].dxfname = bit_convert_TU(dwg->dwg_class[idc].dxfname_u);
+          if (strcmp(dwg->dwg_class[idc].dxfname, "LAYOUT") == 0)
             dwg->layout_number = dwg->dwg_class[idc].number;
         }
     }
