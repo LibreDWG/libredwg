@@ -560,6 +560,7 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
     case SECTION_HEADER_R11:
     default:
       LOG_ERROR("Invalid table id %d", id);
+      tbl->number = 0;
       break;
     }
   dwg->num_objects += tbl->number;
@@ -573,7 +574,7 @@ decode_preR13_entities(unsigned long start, unsigned long end,
 {
   LOG_TRACE("entities: (0x%lx-0x%lx) TODO\n", start, end)
   //_obj, obj
-
+  DEBUG_HERE();
   /* TODO Common entity preR13 header:
     FIELD_RC (flag, 70);
     FIELD_RS (size, 0);
