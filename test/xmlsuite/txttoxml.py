@@ -67,12 +67,10 @@ if Extension[-1] == 'txt':
 else:
 	XMLFileName = OutDir + "/" + DwgTxtFileName + "xml"
 
-FR = open(DwgTxtFileName,'r')
-# TODO if built from a non-writable srcdir this will fail. eg make distcheck.
-# Writing to test_output would solve this, or creating a builddir for test-data.
-FW = open(XMLFileName,'w')
+if os.path.exists(DwgTxtFileName):
+        FR = open(DwgTxtFileName,'r')
+        FW = open(XMLFileName,'w')
+        for Line in FR:
+	        FW.write(processData(Line))
+        FW.write("/>\n</DwgData>")
 
-for Line in FR:
-	FW.write(processData(Line))
-
-FW.write("/>\n</DwgData>")
