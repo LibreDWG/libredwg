@@ -620,7 +620,7 @@ decode_preR13(Bit_Chain* dat, Dwg_Data * dwg)
 
     #include "header.spec"
   }
-  LOG_INFO("@0x%lx\n", dat->byte); //0x14
+  LOG_TRACE("@0x%lx\n", dat->byte); //0x14
 
   // tables really
   dwg->header.num_sections = 12;
@@ -732,7 +732,7 @@ decode_preR13(Bit_Chain* dat, Dwg_Data * dwg)
     LOG_WARN("blocks_end %x/%x", rl1, blocks_end);
   }
   // 12 byte
-  LOG_INFO("@0x%lx\n", dat->byte);
+  LOG_TRACE("@0x%lx\n", dat->byte);
   rl1 = bit_read_RL(dat);
   rl2 = bit_read_RL(dat);
   LOG_TRACE("?2long: 0x%x 0x%x\n", rl1, rl2);
@@ -740,7 +740,7 @@ decode_preR13(Bit_Chain* dat, Dwg_Data * dwg)
   LOG_TRACE("?1long: 0x%x\n", rl1);
 
   dat->byte = blocks_end + 36 + 4*4 + 12;
-  LOG_INFO("@0x%lx\n", dat->byte);
+  LOG_TRACE("@0x%lx\n", dat->byte);
   decode_preR13_section_chk(SECTION_BLOCK, dat, dwg);
   decode_preR13_section_chk(SECTION_LAYER, dat, dwg);
   decode_preR13_section_chk(SECTION_STYLE, dat, dwg);
@@ -1286,7 +1286,7 @@ resolve_objectref_vector(Bit_Chain* dat, Dwg_Data * dwg)
       //assign found pointer to objectref vector
       dwg->object_ref[i]->obj = obj;
 
-      if (DWG_LOGLEVEL >= DWG_LOGLEVEL_HANDLE)
+      if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)
         {
           if (obj)
             dwg_print_object(dat, obj);
@@ -2322,7 +2322,7 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
       ent->num_handles = 0;
       return 0;
     }
-  LOG_INFO("Entity handle: %d.%d.%lu\n",
+  LOG_TRACE("Entity handle: %d.%d.%lu\n",
            ent->object->handle.code, ent->object->handle.size, ent->object->handle.value)
 
   error = dwg_decode_eed(dat, (Dwg_Object_Object *)ent);
@@ -2491,7 +2491,7 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
     }
   SINCE(R_2007)
     {
-      LOG_INFO("Object bitsize: " FORMAT_RL " @%lu.%u %lu\n", obj->bitsize,
+      LOG_TRACE("Object bitsize: " FORMAT_RL " @%lu.%u %lu\n", obj->bitsize,
                dat->byte, dat->bit, bit_position(dat));
       // the handle stream offset, i.e. end of the object, right after the has_strings bit.
       // minus 1* RL
@@ -2511,7 +2511,7 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
       obj->num_reactors = 0;
       return -1;
     }
-  LOG_INFO("Object handle: %d.%d.%lu\n",
+  LOG_TRACE("Object handle: %d.%d.%lu\n",
            obj->object->handle.code, obj->object->handle.size,
            obj->object->handle.value)
 
@@ -3671,12 +3671,12 @@ dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
               SINCE(R_2000)
               {
                 obj->bitsize = bit_read_RL(dat);
-                LOG_INFO("Object bitsize: " FORMAT_RL " @%lu.%u\n", obj->bitsize,
+                LOG_TRACE("Object bitsize: " FORMAT_RL " @%lu.%u\n", obj->bitsize,
                          dat->byte, dat->bit);
               }
               if (!bit_read_H(dat, &obj->handle))
                 {
-                  LOG_INFO("Object handle: %d.%d.%lu\n",
+                  LOG_TRACE("Object handle: %d.%d.%lu\n",
                            obj->handle.code, obj->handle.size, obj->handle.value)
                 }
               object_address = dat->byte;
