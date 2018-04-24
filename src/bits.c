@@ -1243,14 +1243,20 @@ bit_write_L(Bit_Chain * dat, long unsigned int value)
 
 /** Read 2 time BL bitlong (compacted data).
  *  used for TDCREATE, TDUPDATE
+ * pre-R13 read 2xRL
  */
 BITCODE_TIMEBLL
 bit_read_TIMEBLL(Bit_Chain * dat)
 {
   BITCODE_TIMEBLL date;
 
-  date.days =  bit_read_BL(dat);
-  date.ms   =  bit_read_BL(dat);
+  if (dat->version < R_13) {
+    date.days =  bit_read_RL(dat);
+    date.ms   =  bit_read_RL(dat);
+  } else {
+    date.days =  bit_read_BL(dat);
+    date.ms   =  bit_read_BL(dat);
+  }
   return date;
 }
 
@@ -1260,8 +1266,13 @@ bit_read_TIMEBLL(Bit_Chain * dat)
 void
 bit_write_TIMEBLL(Bit_Chain * dat, BITCODE_TIMEBLL date)
 {
-  bit_write_BL(dat, date.days);
-  bit_write_BL(dat, date.ms);
+  if (dat->version < R_13) {
+    bit_write_RL(dat, date.days);
+    bit_write_RL(dat, date.ms);
+  } else {
+    bit_write_BL(dat, date.days);
+    bit_write_BL(dat, date.ms);
+  }
 }
 
 /** Read color

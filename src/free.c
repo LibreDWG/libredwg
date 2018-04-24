@@ -777,7 +777,7 @@ dwg_free(Dwg_Data * dwg)
           env_var_checked_p = 1;
         }
 #endif  /* USE_TRACING */
-      LOG_TRACE("dwg_free %p\n", dwg)
+      LOG_INFO("dwg_free\n")
       /*if (dwg->bit_chain && dwg->bit_chain->size)
         free (dwg->bit_chain->chain);*/
 #define FREE_IF(ptr) { if (ptr) free(ptr); }

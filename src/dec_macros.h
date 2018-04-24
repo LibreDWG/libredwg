@@ -154,29 +154,38 @@
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE) { \
     Bit_Chain here = *dat; \
     char *tmp; BITCODE_BB bb; BITCODE_RS rs; BITCODE_RL rl;\
-    LOG_TRACE("DEBUG_HERE @%X.%u:\n  24RC: ", (unsigned int)dat->byte, dat->bit);\
+    LOG_TRACE("DEBUG_HERE @%u.%u / 0x%x\n  24RC: ", (unsigned int)dat->byte, dat->bit, \
+              (unsigned int)dat->byte); \
     tmp = bit_read_TF(dat, 24);\
     LOG_TRACE_TF(tmp, 24);\
-    *dat = here;\
-    LOG_TRACE("  B  :"FORMAT_B"\n", bit_read_B(dat));\
-    *dat = here; bb = bit_read_BB(dat) & 0x3;\
-    LOG_TRACE("  BB :"FORMAT_BB"\n", bb);\
-    *dat = here; rs = bit_read_RS(dat);\
+    SINCE(R_13) {\
+      *dat = here;\
+      LOG_TRACE("  B  :"FORMAT_B"\n", bit_read_B(dat));\
+      *dat = here; bb = bit_read_BB(dat) & 0x3;\
+      LOG_TRACE("  BB :"FORMAT_BB"\n", bb);\
+    }\
+    *dat = here; rs = bit_read_RS(dat);                \
     LOG_TRACE("  RS :"FORMAT_RS" / 0x%04x\n", rs, rs); \
-    *dat = here; rs = bit_read_BS(dat);\
-    LOG_TRACE("  BS :"FORMAT_BS" / 0x%04x\n", rs, rs);\
-    *dat = here; rs = bit_read_MS(dat);\
-    LOG_TRACE("  MS :"FORMAT_RS" / 0x%04x\n", rs, rs); \
+    SINCE(R_13) {\
+      *dat = here; rs = bit_read_BS(dat); \
+      LOG_TRACE("  BS :"FORMAT_BS" / 0x%04x\n", rs, rs);\
+     }\
+    SINCE(R_2007) {\
+      *dat = here; rs = bit_read_MS(dat);              \
+      LOG_TRACE("  MS :"FORMAT_RS" / 0x%04x\n", rs, rs); \
+    }\
     *dat = here; rl = bit_read_RL(dat);  \
     LOG_TRACE("  RL :"FORMAT_RL " / 0x%08x\n", rl, rl);\
     *dat = here;\
     LOG_TRACE("  RD :"FORMAT_RD "\n", bit_read_RD(dat));\
     *dat = here; \
-    if (bb != 3) { rl = bit_read_BL(dat);\
-      LOG_TRACE("  BL :"FORMAT_BL " / 0x%08x\n", rl, rl);\
-      *dat = here;\
-      LOG_TRACE("  BD :"FORMAT_BD "\n", bit_read_BD(dat));\
-      *dat = here;\
+    SINCE(R_13) {\
+      if (bb != 3) { rl = bit_read_BL(dat);                     \
+        LOG_TRACE("  BL :"FORMAT_BL " / 0x%08x\n", rl, rl);     \
+        *dat = here;                                            \
+        LOG_TRACE("  BD :"FORMAT_BD "\n", bit_read_BD(dat));    \
+        *dat = here;                                            \
+      }                                                         \
     }\
   }
 

@@ -18,67 +18,93 @@
 
 #include "spec.h"
 
-  FIELD_RD(unknown_0, 0);  // -12.0
-  FIELD_RS(unknown_54, 0); // 65520 / no: 0xB8BC
-
-  FIELD_2RD (INSBASE, 10);
+  FIELD_3RD (INSBASE, 10); //ok 0x5e
+  FIELD_RS (PLINEGEN, 70); //ok
   FIELD_3RD (EXTMIN, 10);
   FIELD_3RD (EXTMAX, 10);
   FIELD_2RD (LIMMIN, 10);
   FIELD_2RD (LIMMAX, 10);
   FIELD_2RD (VIEWCTR, 12);
-  FIELD_RD (ELEVATION, 40);
+  FIELD_RD (unknown_0, 0); //0d8
   FIELD_RD (VIEWSIZE, 40);
-  FIELD_RS (SNAPMODE, 75);
-  FIELD_2RD (SNAPUNIT, 14);
-  FIELD_2RD (SNAPBASE, 13);
-  FIELD_RD (SNAPANG, 50);
-  FIELD_RS (SNAPSTYL, 77);
-  FIELD_RS (SNAPISOPAIR, 78);
-  FIELD_RS (GRIDMODE, 76);
+  FIELD_RS (SNAPMODE, 70);    //ineffective
+  FIELD_2RD (SNAPUNIT, 14);   //??
+  FIELD_2RD (SNAPBASE, 13);   //??
+  FIELD_RD (SNAPANG, 50);     //??
+  FIELD_RS (SNAPSTYL, 70);    //77 ??
+  FIELD_RS (SNAPISOPAIR, 70); //78 ??
+  FIELD_RS (GRIDMODE, 70);    //76 ??
   FIELD_2RD (GRIDUNIT, 15);
-  FIELD_CAST (ORTHOMODE, RS, B, 70);
-  FIELD_CAST (REGENMODE, RS, B, 70);
-  FIELD_CAST (FILLMODE, RS, B, 70);
-  FIELD_CAST (MIRRTEXT, RS, B, 70);
-  FIELD_RS (DRAGMODE, 70); // 2
-  FIELD_RD (LTSCALE, 40);  // 16.0
-  FIELD_RS (OSMODE, 70);
-  FIELD_CAST (QTEXTMODE, RS, B, 70);
-  FIELD_RS (ATTMODE, 70);
-  FIELD_RD (TEXTSIZE, 40);
-  FIELD_RD (TRACEWID, 40);
+  FIELD_CAST (ORTHOMODE, RS, B, 70); //ok
+  FIELD_CAST (REGENMODE, RS, B, 70); //ok
+  FIELD_CAST (FILLMODE, RS, B, 70);  //ok
+  FIELD_CAST (QTEXTMODE, RS, B, 70); //ok
+  FIELD_RS (DRAGMODE, 70); // 2 ineffective with r12
+  FIELD_RD (LTSCALE, 40);  // 16.0 confirmed
+  FIELD_RD (TEXTSIZE, 40); //unconfirmed, ineffective with r12
+  FIELD_RD (TRACEWID, 40); //ok
+  DEBUG_HERE() // 14a
+  //RS TEXTSTYLE STYLE index?
+  //RS 15
 
-  FIELD_3RD (UCSORG, 10);
-  FIELD_3RD (UCSXDIR, 11);
-  FIELD_3RD (UCSYDIR, 12);
+  dat->byte = 0x156;
+  FIELD_RS (PSLTSCALE, 70);
+
+  dat->byte = 0x164;
+  FIELD_RS (LUNITS, 70); //ok
+  FIELD_RS (LUPREC, 70); //ok
+  DEBUG_HERE()//@168
+  //RS 2xRD
+  dat->byte = 0x17a;
+  FIELD_RD (SKETCHINC, 40); //ok
+  FIELD_RD (FILLETRAD, 40); //ok
+  FIELD_RS (AUNITS, 70);    //ok
+  FIELD_RS (AUPREC, 70);    //ok
+  DEBUG_HERE()//@18e
+  //RC 0
+  //RS 25
+  dat->byte = 0x192;
+  FIELD_RS (ATTMODE, 70);
+  FIELD_TF (MENU, 15, 1);
+  FIELD_RD (DIMSCALE, 40); //ok 0x1a3
+  FIELD_RD (DIMASZ, 40); //ok
+  FIELD_RD (DIMEXO, 40); //ok
+  FIELD_RD (DIMDLI, 40); //ok
+  FIELD_RD (DIMEXE, 40); //ok
+  FIELD_RD (DIMTP, 40);  //ok
+  FIELD_RD (DIMTM, 40);  //ok
+  FIELD_RD (DIMTXT, 40); //ok
+  FIELD_RD (DIMCEN, 40); //ok
+  FIELD_RD (DIMTSZ, 40); //ok
+  FIELD_RC (DIMTOL, 70); //ok 1f3
+  FIELD_RC (DIMLIM, 70); //ok 1f4
+  FIELD_RC (DIMTIH, 70); //ok 1f5
+  FIELD_RC (DIMTOH, 70); //ok 1f6
+  FIELD_RC (DIMSE1, 70); //ok
+  FIELD_RC (DIMSE2, 70); //ok
+  FIELD_CAST (DIMTAD, RC, RS, 70); //ok
+  FIELD_RC (LIMCHECK, 70); //ok 1fa
+  DEBUG_HERE() //1fb
+
+  // not in DWG, resp. not converted by ODA from r12 dxf to r12 dwg:
+  // SNAPMODE, DRAGMODE, BLIPMODE, CHAMFERA, CHAMFERB,
+  // COORDS, ATTDIA, ATTREQ, HANDLING, WORLDVIEW, SHADEDGE
+
+  //the names?
+  dat->byte = 0x229;
+  FIELD_RD (ELEVATION, 40); //ok 
+  FIELD_RD (THICKNESS, 40); //ok 
+  DEBUG_HERE() //239
+
+  dat->byte = 0x2e5;
+  FIELD_CAST (DIMZIN, RC, B, 70); //ok
+  FIELD_RD (DIMRND, 40);
+  FIELD_RD (DIMDLE, 40);
+  DEBUG_HERE() //2ee
 
   /*
   TODO...
   FIELD_HANDLE (UCSNAME, ANYCODE);
-
-  FIELD_RD (DIMSCALE);
-  FIELD_RD (DIMASZ);
-  FIELD_RD (DIMEXO);
-  FIELD_RD (DIMDLI);
-  FIELD_RD (DIMEXE);
-  FIELD_RD (DIMRND);
-  FIELD_RD (DIMDLE);
-  FIELD_RD (DIMMTP);
-  FIELD_RD (DIMMTM);
-
-  FIELD_RD (DIMTXT);
-  FIELD_RD (DIMCEN);
-  FIELD_RD (DIMTSZ);
-  FIELD_RD (DIMALTF);
-  FIELD_RD (DIMLFAC);
-  FIELD_RD (DIMTVP);
-  FIELD_RD (DIMTFAC);
-  FIELD_RD (DIMGAP);
-
-  FIELD_CMC (DIMCLRD);
-  FIELD_CMC (DIMCLRE);
-  FIELD_CMC (DIMCLRT);
 
   FIELD_HANDLE (BLOCK_CONTROL_OBJECT, ANYCODE);
   FIELD_HANDLE (LAYER_CONTROL_OBJECT, ANYCODE);
@@ -101,6 +127,126 @@
   FIELD_HANDLE (LTYPE_CONTINUOUS, ANYCODE);
 
   */
-  dat->byte = 0x23a - 2;
-  FIELD_RS (CRC, 0);
+  dat->byte = 0x31b;
+  FIELD_RS (CECOLOR_idx, 62);
+  DECODER {
+    _obj->CELTYPE = calloc(1, sizeof(Dwg_Object_Ref));
+    _obj->CELTYPE->absolute_ref = bit_read_RS(dat); // 6, ff for BYLAYER, fe for BYBLOCK
+    FIELD_G_TRACE(CELTYPE->absolute_ref, RLL, 6)
+  }
+  FIELD_TIMEBLL (TDCREATE, 40);
+  FIELD_TIMEBLL (TDUPDATE, 40);
+  FIELD_TIMEBLL (TDINDWG, 40);
+  FIELD_TIMEBLL (TDUSRTIMER, 40);
+  DEBUG_HERE() //
 
+  dat->byte = 0x33f;
+  FIELD_CAST (USRTIMER, RS, B, 70);
+  FIELD_RS (unknown_10, 70);
+  FIELD_CAST (SKPOLY, RS, B, 70);
+  DEBUG_HERE() //345
+
+  dat->byte = 0x353;
+  FIELD_RD (ANGBASE, 50);
+  FIELD_CAST (ANGDIR, RS, B, 70);
+  FIELD_RS (PDMODE, 70);
+  FIELD_RD (PDSIZE, 40);
+  FIELD_RD (PLINEWID, 40);
+  FIELD_RS (USERI1, 70);
+  FIELD_RS (USERI2, 70);
+  FIELD_RS (USERI3, 70);
+  FIELD_RS (USERI4, 70);
+  FIELD_RS (USERI5, 70);
+  FIELD_RD (USERR1, 40);
+  FIELD_RD (USERR2, 40);
+  FIELD_RD (USERR3, 40);
+  FIELD_RD (USERR4, 40);
+  FIELD_RD (USERR5, 40);
+  FIELD_RC (DIMALT, 70); //ok
+  FIELD_CAST (DIMALTD, RC, RS, 70); //ok
+  FIELD_RC (DIMASO, 70); //ok
+  FIELD_RC (DIMSHO, 70); //ok
+  FIELD_CAST (DIMTOFL, RS, B, 70);
+  DEBUG_HERE() //3a7
+
+  dat->byte = 0x3c5;
+  FIELD_RD (DIMALTF, 40);
+  FIELD_RD (DIMLFAC, 40);
+  FIELD_RS (SPLINESEGS, 70);
+  FIELD_CAST (SPLFRAME, RS, B, 70);
+  DEBUG_HERE() //3d9
+
+  dat->byte = 0x3ed;
+  FIELD_CAST (MIRRTEXT, RS, B, 70); //confirmed
+  DEBUG_HERE() //3ef
+  // UCS: 3ef
+
+  dat->byte = 0x3fb;
+  FIELD_3RD (UCSORG, 10); //ok
+  FIELD_3RD (UCSXDIR, 11); //ok
+  FIELD_3RD (UCSYDIR, 12); //ok
+  DEBUG_HERE() //443
+  
+  dat->byte = 0x47d;
+  FIELD_RC (DIMTOFL, 70); //ok
+  DEBUG_HERE() //47e
+
+  dat->byte = 0x4c0;
+  FIELD_RC (DIMSAH, 70); //ok
+  FIELD_RC (DIMTIX, 70); //ok
+  FIELD_RC (DIMSOXD, 70); //ok
+  FIELD_RD (DIMTVP, 40); //ok
+  DEBUG_HERE() //4cb
+
+  dat->byte = 0x4ee;
+  DECODER {
+    _obj->HANDSEED = calloc(1, sizeof(Dwg_Object_Ref));
+    _obj->HANDSEED->absolute_ref = bit_read_RS(dat);
+    FIELD_G_TRACE(HANDSEED->absolute_ref, RLL, 5)
+  }
+  DEBUG_HERE() //4f0
+
+  dat->byte = 0x4f6;
+  FIELD_RS (SURFU, 70); //ok
+  FIELD_RS (SURFV, 70); //ok
+  FIELD_RS (SURFTYPE, 70); //ok
+  FIELD_RS (SURFTAB1, 70); //ok
+  FIELD_RS (SURFTAB2, 70); //ok
+  DEBUG_HERE() //500 VPORT
+
+  dat->byte = 0x50c;
+  FIELD_RS (SPLINETYPE, 70);
+  DEBUG_HERE() //50e
+  // 3
+
+  dat->byte = 0x531;
+  FIELD_RS (DIMCLRD_C, 70); //ok
+  FIELD_RS (DIMCLRE_C, 70); //ok
+  FIELD_RS (DIMCLRT_C, 70); //ok
+  FIELD_RS (SHADEDGE, 70); //ok
+  FIELD_RS (SHADEDIF, 70); //ok
+  FIELD_RS (UNITMODE, 70); //ok
+  DEBUG_HERE() //53d
+  
+  dat->byte = 0x5df;
+  FIELD_RD (DIMTFAC, 40); //ok
+  FIELD_3RD (PUCSORG, 10); //ok
+  FIELD_3RD (PUCSXDIR, 11); //ok
+  FIELD_3RD (PUCSYDIR, 12); //ok
+  FIELD_RS (unknown_10, 70); //ff ff/-1
+  FIELD_RC (TILEMODE, 70); //ok
+  FIELD_CAST (PLIMCHECK, RS, B, 70); //ok
+  FIELD_RS (unknown_10, 70); //0
+  FIELD_RC (unknown_11, 70); //0
+  FIELD_3RD (PEXTMIN, 10); //ok 637
+  FIELD_3RD (PEXTMAX, 10); //
+  FIELD_2RD (PLIMMIN, 10); //
+  FIELD_2RD (PLIMMAX, 10); //
+  DEBUG_HERE() //687
+
+  dat->byte = 0x6a9;
+  FIELD_RS (MAXACTVP, 70); //ok
+  FIELD_RD (DIMGAP, 40); //ok
+  FIELD_RD (PELEVATION, 40); //ok 
+  FIELD_RS (VISRETAIN, 70); //ok
+  FIELD_RS (CRC, 0); // 0x6bd

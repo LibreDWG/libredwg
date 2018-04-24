@@ -458,8 +458,8 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
           FIELD_RC (UCSICON, 74);
           FIELD_RC (GRIDMODE, 76);
           FIELD_2RD (GRIDUNIT, 15);
-          FIELD_CAST (SNAPMODE, RS, B, 75);
-          FIELD_RC (SNAPSTYLE, 77);
+          FIELD_CAST (SNAPMODE, RS, B, 70); //75
+          FIELD_RC (SNAPSTYLE, 70); //77
           FIELD_RS (SNAPISOPAIR, 78);
           FIELD_RD (SNAPANG, 50);
           FIELD_2RD (SNAPBASE, 13);
