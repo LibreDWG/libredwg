@@ -485,42 +485,14 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
     case SECTION_DIMSTYLE:
       for (i=0; i< tbl->number; i++)
         {
-          PREP_TABLE (DIMSTYLE);
+          //unsigned long off;
+          PREP_TABLE (DIMSTYLE); //d1f
 
           FIELD_RC (flag, 70);
           FIELD_TF (entry_name, 32, 2);
-          FIELD_RS (used, 0);
-
-          FIELD_RC (DIMTOL, 71);
-          FIELD_RC (DIMLIM, 72);
-          FIELD_RC (DIMTIH, 73);
-          FIELD_RC (DIMTOH, 74);
-          FIELD_RC (DIMSE1, 75);
-          FIELD_RC (DIMSE2, 76);
-          FIELD_RC (DIMALT, 170);
-          FIELD_RC (DIMTOFL, 172);
-          FIELD_RC (DIMSAH, 173);
-          FIELD_RC (DIMTIX, 174);
-          FIELD_RC (DIMSOXD, 175);
-          FIELD_CAST (DIMALTD, RC, BS, 171);
-          FIELD_CAST (DIMZIN, RC, BS, 78);
-          FIELD_RC (DIMSD1, 281);
-          FIELD_RC (DIMSD2, 282);
-          FIELD_CAST (DIMTOLJ, RC, BS, 283);
-          FIELD_CAST (DIMJUST, RC, BS, 280);
-          FIELD_CAST (DIMFIT, RC, BS, 287);
-          FIELD_RC (DIMUPT, 288);
-          FIELD_CAST (DIMTZIN, RC, BS, 284);
-          FIELD_CAST (DIMMALTZ, RC, BS, 285);
-          FIELD_CAST (DIMMALTTZ, RC, BS, 286);
-          FIELD_CAST (DIMTAD, RC, BS, 77);
-          FIELD_RS (DIMUNIT, 270);
-          FIELD_RS (DIMAUNIT, 275);
-          FIELD_RS (DIMDEC, 271);
-          FIELD_RS (DIMTDEC, 272);
-          FIELD_RS (DIMALTU, 273);
-          FIELD_RS (DIMALTTD, 274);
-          FIELD_RD (DIMSCALE, 40);
+          //off = dat->byte;
+          FIELD_RS (used, 0);    //d40
+          FIELD_RD (DIMSCALE, 40); //d42
           FIELD_RD (DIMASZ, 41);
           FIELD_RD (DIMEXO, 42);
           FIELD_RD (DIMDLI, 43);
@@ -528,26 +500,41 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
           FIELD_RD (DIMRND, 45);
           FIELD_RD (DIMDLE, 46);
           FIELD_RD (DIMTP, 47);
-          FIELD_RD (DIMTM, 48);
+          FIELD_RD (DIMTM, 48); //ok
           FIELD_RD (DIMTXT, 140);
-          FIELD_RD (DIMCEN, 141);
+          FIELD_RD (DIMCEN, 141); //ok
           FIELD_RD (DIMTSZ, 142);
           FIELD_RD (DIMALTF, 143);
           FIELD_RD (DIMLFAC, 144);
-          FIELD_RD (DIMTVP, 145);
-          FIELD_RD (DIMTFAC, 146);
-          FIELD_RD (DIMGAP, 147);
-          FIELD_TV (DIMPOST, 3);
-          FIELD_TV (DIMAPOST, 4); //??
-          FIELD_TV (DIMBLK_T, 5);
-          FIELD_TV (DIMBLK1_T, 6);
-          FIELD_TV (DIMBLK2_T, 7);
-          FIELD_RC (DIMCLRD_N, 176);
-          FIELD_RC (DIMCLRE_N, 177);
-          FIELD_RC (DIMCLRT_N, 178);
-
-          //??
-          CHK_ENDPOS;
+          FIELD_RD (DIMTVP, 145); //db2
+          FIELD_RC (DIMTOL, 71);  //dba
+          FIELD_RC (DIMLIM, 72);  //dbb
+          FIELD_RC (DIMTIH, 73);
+          FIELD_RC (DIMTOH, 74);
+          FIELD_RC (DIMSE1, 75);
+          FIELD_RC (DIMSE2, 76);
+          FIELD_CAST (DIMTAD, RC, RS, 77); //ok
+          FIELD_CAST (DIMZIN, RC, BS, 78); //dc1
+          FIELD_RC (DIMALT, 170);
+          FIELD_CAST (DIMALTD, RC, BS, 171); //ok
+          FIELD_RC (DIMTOFL, 172); //ok
+          FIELD_RC (DIMSAH, 173);  //ok
+          FIELD_RC (DIMTIX, 174);  //ok
+          FIELD_RC (DIMSOXD, 175); //ok
+          FIELD_TF (DIMPOST, 16, 3); //ok dc8
+          FIELD_TF (DIMAPOST, 16, 4); //dd8
+          FIELD_TF (DIMBLK_T, 16, 5);  //?? unsupported by ODA
+          FIELD_TF (DIMBLK1_T, 16, 6); //?? unsupported by ODA
+          FIELD_TF (DIMBLK2_T, 66, 7); //?? unsupported by ODA
+          //DEBUG_HERE(); //e18
+          //dat->byte += 50; //unknown: DIMSHO, DIMASO (global)
+          FIELD_RS (DIMCLRD_N, 176); //e4a
+          FIELD_RS (DIMCLRE_N, 177);
+          FIELD_RS (DIMCLRT_N, 178); //e4e
+          FIELD_RC (DIMUPT, 0); //??
+          FIELD_RD (DIMTFAC, 146); //e51
+          FIELD_RD (DIMGAP, 147);  //e59
+          CHK_ENDPOS; //-e63
         }
       break;
 
