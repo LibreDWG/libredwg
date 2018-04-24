@@ -322,7 +322,7 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
       for (i=0; i < tbl->number; i++)
         {
           PREP_TABLE (BLOCK_HEADER);
-
+          //TODO DXF 8: layer name
           FIELD_RC (flag, 70);
           FIELD_TF (entry_name, 32, 2);
           FIELD_RS (used, 0);
@@ -342,12 +342,13 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
         {
           PREP_TABLE (LAYER);
 
-          FIELD_RC (flag, 70);
+          FIELD_RC (flag, 70); //860
           FIELD_TF (entry_name, 32, 2);
           FIELD_RS (used, 0);
 
           FIELD_RS (color_rs, 62);   // color, off if negative
           FIELD_RS (linetype_rs, 6); // style
+          //FIELD_RS (CRC, 0);
           CHK_ENDPOS;
         }
       break;
@@ -362,12 +363,13 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
           FIELD_TF (entry_name, 32, 2);
           FIELD_RS (used, 0);
 
-          FIELD_RD (fixed_height, 40);
+          FIELD_RD (fixed_height, 40); //ok
           FIELD_RD (width_factor, 41);
           FIELD_RD (oblique_ang, 50);
           FIELD_RC (generation, 71);
           FIELD_RD (last_height, 42);
-          FIELD_TF (font_name, 128, 3);
+          FIELD_TF (font_name, 64, 3); //8ed
+          FIELD_TF (bigfont_name, 64, 4); //92d
           CHK_ENDPOS;
         }
       break;
