@@ -9,13 +9,14 @@ DWG is a file format created in the 70's for the emerging CAD applications.
 Currently it is the native file format of AutoCAD, a proprietary CAD program 
 developed by AutoDesk.
 
-LibreDWG is a fork from LibDWG due to its usage of Esperanto, which we think
-is not the best strategy for a free software project which aims to get lots of
-contributors.  LibreDWG is written in English.  Since we forked LibDWG (May
-16, 2009), its development seems to have been inactive.  At the moment
-our decoder is almost done, just some R2007+ structures fail to read. Among
-the example applications we wrote using LibreDWG is an initial SVG conversion
-and a DWG rewrite, i.e saveas tool. Please contact us if you can help.
+LibreDWG is a fork from LibDWG due to its usage of Esperanto, which we
+think is not the best strategy for a free software project which aims
+to get lots of contributors.  LibreDWG is written in English.  Since
+we forked LibDWG (May 16, 2009), its development seems to have been
+inactive.  At the moment our decoder is almost done, just some R2007+
+streams and pre-R13 entities fail to read.  Among the example
+applications we wrote using LibreDWG is an initial SVG conversion and
+a DWG rewrite, i.e saveas tool. Please contact us if you can help.
 
 The program dwg_ps (in examples/) reads DWG and outputs Postscript; it
 depends on pslib: <http://pslib.sourceforge.net>.  In many GNU/Linux
@@ -25,12 +26,13 @@ If the configure script does not find pslib, dwg_ps will not be built.
 Sometimes we hang on our IRC channel which is #libredwg at irc.freenode.net
 If you don't find us there, please email the package maintainers:
 
-Hardeep Singh Rai <hardeep.rai AT gmail DOT com>
+Reini Urban <rurban AT cpan.org>
 
 The now inactive founders and previous maintainers were:
 
 Felipe Corrêa da Silva Sanches <juca AT members.fsf.org>
 Rodrigo Rodrigues da Silva <pitanga AT members.fsf.org>
+Hardeep Singh Rai <hardeep.rai AT gmail DOT com>
 
 If you are looking for general information about the project, check our website:
 http://www.gnu.org/software/libredwg
@@ -41,6 +43,7 @@ You need the following dependencies:
 - Basic development tools (gcc/clang, autoconf, automake and libtool)
 - SWIG 1.7+
 - Python development headers (debian: python-dev; yum: python-devel)
+  and the libxml2 python bindings.
 - TeXinfo for building the docs
 
 See INSTALL for generic instructions.  Basically, you do:
@@ -69,15 +72,25 @@ customize the installation dirs.  Other options recognized by configure are:
   
     NB: This is an experimental feature that is under construction, so it's
     highly unstable.
-x
+
     Enable write support (default: no). When enabled you activate the write
     support for the dwg format.
 
 == Example usage of the library ==
 
-The examples directory contains some application code that uses our lib:
+The programs and examples directories contains some application code that uses our lib:
 
 * dwgread -- A simple DWG reader.
+
+* dwgrewrite -- Reads a DWG, writes it back under a different name and optionally
+  under a different version, and re-reads it back for confirmation.
+  Under construction.
+
+* dwg2dxf -- Converts a DWG to a DXF (ascii or binary), optionally
+  under a different version. Under construction.
+
+* dxf2dwg -- Converts a ascii or binary DXF to a DWG, optionally
+  under a different version. Under construction.
 
 * load_dwg -- This is a skeleton code, reading the DWG and adding an entity.
   Look there if you want to have a quickly glance on how to use the library.
@@ -94,16 +107,13 @@ The examples directory contains some application code that uses our lib:
 
 * dwgbmp -- Extracts the bmp thumbnail of a dwg file when it is available.
 
-* dwgrewrite -- Load, rewrite and try to re-read a existing dwg file. Currently
-  fails when re-reading the written DWG.
-
 * xmlsuite -- an extensive example library to use the SWIG python bindings
   is in the test/xmlsuite directory.
 
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2009, 2010 Free Software Foundation, Inc.                  */
+/*  Copyright (C) 2009, 2010, 2015, 2018 Free Software Foundation, Inc.      */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
