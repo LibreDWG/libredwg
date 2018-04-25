@@ -96,6 +96,9 @@ decode_preR13_section_chk(Dwg_Section_Type_r11 id, Bit_Chain* dat,
                           Dwg_Data * dwg);
 static void
 decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg);
+static void
+decode_preR13_entities(unsigned long start, unsigned long end, unsigned long offset,
+                       Bit_Chain* dat, Dwg_Data * dwg);
 
 static int
 decode_preR13(Bit_Chain* dat, Dwg_Data * dwg);
@@ -563,39 +566,48 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
 }
 
 static void
-decode_preR13_entities(unsigned long start, unsigned long end,
-                       unsigned long offset,
-                       Bit_Chain* dat, Dwg_Data * dwg)
+decode_entity_preR13(Bit_Chain* dat, Dwg_Object *obj, Dwg_Object_Entity *ent)
 {
-  LOG_TRACE("entities: (0x%lx-0x%lx) TODO\n", start, end)
-  //_obj, obj
-  DEBUG_HERE();
-  /* TODO Common entity preR13 header:
-    FIELD_RC (flag, 70);
-    FIELD_RS (size, 0);
-    FIELD_RS (layer, 0);
-    FIELD_RS (opts, 0);
-    if (FIELD_VALUE(flag) & 1)
-      FIELD_RC (color, 60);
-    if (FIELD_VALUE(flag) & 0x40)
-      FIELD_RC (extra, 0);
-    if (FIELD_VALUE(extra) & 2)
-      decode_eed();
-    if (FIELD_VALUE(flag) & 2)
-      FIELD_RS (type, 0);
-    if (FIELD_VALUE(flag) & 4 && kind > 2 && kind != 22)
-      FIELD_RD (elevation/pt.z, 30);
-    if (FIELD_VALUE(flag) & 8)
-      FIELD_RD (thickness, 39);
-    if (FIELD_VALUE(flag) & 0x20)
-      FIELD_HANDLE (handle, 0, 0);
-    if (FIELD_VALUE(extra) & 4)
-      FIELD_RS (paper, 0);
-    */
+  Dwg_Object_Entity *_obj = ent;
+  obj->type = bit_read_RC(dat);
+  LOG_INFO("\n===========================\nEntity Type: %d", obj->type);
 
-  //#include "dwg.spec"
-
-  dat->byte = end;
+  FIELD_RC (flag_r11, 70)
+  //ent->flag = bit_read_RC(dat);
+  //LOG_INFO(", Flag: 0x%x", obj->flag)
+  obj->size = bit_read_RS(dat);
+  LOG_INFO(", Size: %d/0x%x\n", obj->size, obj->size);
+  FIELD_RS (layer_r11, 8);
+  FIELD_RS (opts_r11, 0);
+  //ent->layer = bit_read_RS(dat);
+  //ent->opts = bit_read_RS(dat);
+  LOG_TRACE("Layer: %d, Opts: 0x%x", ent->layer_r11, ent->opts_r11)
+  if (ent->flag_r11 & 1)
+    {
+      FIELD_RC (color_r11, 0);
+      //ent->color_r11 = bit_read_RC(dat);
+      //LOG_TRACE(", Color: %d", ent->color_r11)
+    }
+  if (ent->flag_r11 & 0x40)
+    {
+      FIELD_RC (extra_r11, 0);
+      //ent->extra_r11 = bit_read_RC(dat);
+      //LOG_TRACE(", Extra: 0x%x", ent->extra)
+    }
+  /* Common entity preR13 header:
+  if (ent->extra & 2)
+     dwg_decode_eed(dat, ent);
+  if (FIELD_VALUE(flag) & 2)
+     FIELD_RS (type, 0);
+     if (FIELD_VALUE(flag) & 4 && kind > 2 && kind != 22)
+     FIELD_RD (elevation/pt.z, 30);
+     if (FIELD_VALUE(flag) & 8)
+     FIELD_RD (thickness, 39);
+     if (FIELD_VALUE(flag) & 0x20)
+     FIELD_HANDLE (handle, 0, 0);
+     if (FIELD_VALUE(extra) & 4)
+     FIELD_RS (paper, 0);
+  */
 }
 
 static int
@@ -2957,6 +2969,110 @@ dwg_decode_xdata(Bit_Chain * dat, Dwg_Object_XRECORD *obj, int size)
 /*--------------------------------------------------------------------------------
  * Private functions which depend on the preceding
  */
+
+static void
+decode_preR13_entities(unsigned long start, unsigned long end,
+                       unsigned long offset,
+                       Bit_Chain* dat, Dwg_Data * dwg)
+{
+  int num = dwg->num_objects;
+  LOG_TRACE("entities: (0x%lx-0x%lx, offset 0x%lx) TODO\n", start, end, offset)
+
+  while (dat->byte < end)
+    {
+      Dwg_Object *obj;
+      Dwg_Object_Entity* ent;
+      BITCODE_RS crc;
+
+      if (!num)
+        dwg->object = (Dwg_Object *) malloc(sizeof(Dwg_Object));
+      else
+        dwg->object = (Dwg_Object *) realloc(dwg->object, (num + 1)
+                                             * sizeof(Dwg_Object));
+      if (!dwg->object)
+        {
+          LOG_ERROR("Out of memory");
+          return;
+        }
+      obj = &dwg->object[num];
+      memset(obj, 0, sizeof(Dwg_Object));
+      obj->index = num;
+      dwg->num_objects++;
+      dwg->num_entities++;
+      obj->parent = dwg;
+      obj->supertype = DWG_SUPERTYPE_ENTITY;
+      ent = obj->tio.entity = (Dwg_Object_Entity*)calloc (1, sizeof(Dwg_Object_Entity));
+      obj->tio.entity->object = obj;
+    
+      DEBUG_HERE();
+      decode_entity_preR13(dat, obj, ent);
+
+      switch (obj->type)
+        {
+          case 1:
+            dwg_decode_LINE(dat, obj);
+            break;
+          case 2:
+            dwg_decode_POINT(dat, obj);
+            break;
+          case 3:
+            dwg_decode_CIRCLE(dat, obj);
+            break;
+          case 4:
+            dwg_decode_SHAPE(dat, obj);
+            break;
+          case 7:
+            dwg_decode_TEXT(dat, obj);
+            break;
+          case 8:
+            dwg_decode_ARC(dat, obj);
+            break;
+          case 9:
+            dwg_decode_TRACE(dat, obj);
+            break;
+          case 11:
+            dwg_decode_SOLID(dat, obj);
+            break;
+          case 12:
+            dwg_decode_BLOCK(dat, obj);
+            break;
+          case 13:
+            dwg_decode_ENDBLK(dat, obj);
+            break;
+          case 14:
+            dwg_decode_INSERT(dat, obj);
+            break;
+          case 15:
+            dwg_decode_ATTDEF(dat, obj);
+            break;
+          case 16:
+            dwg_decode_ATTRIB(dat, obj);
+            break;
+          case 17:
+            dwg_decode_SEQEND(dat, obj);
+            break;
+          case 19:
+            dwg_decode_POLYLINE_2D(dat, obj);
+            break;
+          case 20:
+            dwg_decode_VERTEX_2D(dat, obj);
+            break;
+          case 22:
+            dwg_decode__3DFACE(dat, obj);
+            break;
+          case 23:
+            //TODO check opts for the type of dimension
+            dwg_decode_DIMENSION_LINEAR(dat, obj);
+            break;
+          case 24:
+            dwg_decode_VPORT(dat, obj);
+            break;
+        }
+      crc = bit_read_RS(dat);
+    }
+
+  dat->byte = end;
+}
 
 /** dwg_decode_variable_type
  * decode object by class name, not type. if type > 500.

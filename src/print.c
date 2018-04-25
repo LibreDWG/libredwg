@@ -214,11 +214,12 @@ dwg_print_##token (Bit_Chain * dat, Dwg_Object * obj)\
 {\
   int vcount, rcount, rcount2, rcount3, rcount4; \
   Dwg_Entity_##token *ent, *_obj;\
+  Dwg_Object_Entity *_ent;\
   Bit_Chain *hdl_dat = dat;\
   Bit_Chain* str_dat = dat;\
   LOG_INFO("Entity " #token ":\n")\
-  ent = obj->tio.entity->tio.token;\
-  _obj=ent;\
+  _ent = obj->tio.entity;\
+  _obj = ent = _ent->tio.token;\
   LOG_TRACE("Entity handle: %d.%d.%lu\n",\
     obj->handle.code,\
     obj->handle.size,\

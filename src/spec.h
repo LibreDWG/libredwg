@@ -49,6 +49,8 @@
 #define IF_ENCODE_FROM_PRE_R13 if (0)
 #endif
 
+#define R11OPTS(b) _ent->opts_r11 & b
+
 #define COMMON_TABLE_FLAGS \
   PRE(R_13) \
   { \

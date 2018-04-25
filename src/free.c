@@ -191,12 +191,13 @@ dwg_free_ ##token (Dwg_Object * obj)\
 {\
   int vcount, rcount, rcount2, rcount3, rcount4;\
   Dwg_Entity_##token *ent, *_obj;\
+  Dwg_Object_Entity *_ent;\
   Bit_Chain *hdl_dat = dat;\
   Bit_Chain* str_dat = dat;\
   Dwg_Data* dwg = obj->parent;\
   LOG_HANDLE("Free entity " #token "\n")\
-  ent = obj->tio.entity->tio.token;\
-  _obj = ent;
+  _ent = obj->tio.entity;\
+  _obj = ent = _ent->tio.token;
 
 #define DWG_ENTITY_END \
     free(_obj); obj->tio.entity->tio.UNKNOWN_ENT = NULL; \

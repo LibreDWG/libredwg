@@ -285,9 +285,10 @@ static void dwg_encode_##token (Bit_Chain* dat, Dwg_Object* obj)	\
 { \
   long vcount, rcount, rcount2, rcount3, rcount4; \
   Dwg_Data* dwg = obj->parent; \
+  Dwg_Object_Entity *_ent = obj->tio.entity; \
+  Dwg_Entity_##token * _obj = _ent->tio.token; \
   Bit_Chain* hdl_dat = dat; \
   Bit_Chain* str_dat = dat; \
-  Dwg_Entity_##token * _obj = obj->tio.entity->tio.token; \
   if (dwg_encode_entity(obj, dat, hdl_dat, str_dat)) return; \
   LOG_INFO("Entity " #token ":\n")
 

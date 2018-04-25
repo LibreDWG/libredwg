@@ -28,24 +28,24 @@ DWG_ENTITY (TEXT)
     FIELD_2RD (insertion_pt, 10);
     FIELD_RD (height, 40);
     FIELD_TV (text_value, 1);
-    if (obj->opts & 1)
+    if (R11OPTS(1))
       FIELD_RD (rotation, 50)
-    if (obj->opts & 2)
+    if (R11OPTS(2))
       FIELD_RD (width_factor, 41)
-    if (obj->opts & 4)
+    if (R11OPTS(4))
       FIELD_RD (oblique_ang, 51)
-    if (obj->opts & 8) {
-      DECODER { obj->linetype_rs = bit_read_RC(dat); }
-      ENCODER { bit_write_RC(dat, obj->linetype_rs); }
-      PRINT   { LOG_TRACE("linetype_rs: " FORMAT_RS "\n", obj->linetype_rs); }
+    if (R11OPTS(8)) {
+      DECODER { _ent->linetype_r11 = bit_read_RC(dat); }
+      ENCODER { bit_write_RC(dat, _ent->linetype_r11); }
+      PRINT   { LOG_TRACE("linetype_rs: " FORMAT_RS "\n", _ent->linetype_r11); }
     }
-    if (obj->opts & 16)
+    if (R11OPTS(16))
       FIELD_CAST (generation, RC, BS, 71)
-    if (obj->opts & 32)
+    if (R11OPTS(32))
       FIELD_CAST (horiz_alignment, RC, BS, 72)
-    if (obj->opts & 64)
+    if (R11OPTS(64))
       FIELD_2RD (alignment_pt, 11)
-    if (obj->opts & 256)
+    if (R11OPTS(256))
       FIELD_CAST (vert_alignment, RC, BS, 73);
   }
   VERSIONS(R_13, R_14)
@@ -121,7 +121,10 @@ DWG_ENTITY_END
 /* (2/16) */
 DWG_ENTITY(ATTRIB)
 
-  // TODO PRE(R_R13)
+  PRE(R_13)
+    {
+      LOG_ERROR("TODO ATTRIB")
+    }
   VERSIONS(R_13, R_14)
     {
       FIELD_BD (elevation, 30);
@@ -226,7 +229,10 @@ DWG_ENTITY_END
 /* (3/15) */
 DWG_ENTITY(ATTDEF)
 
-  // TODO PRE(R_R13)
+  PRE(R_13)
+    {
+      LOG_ERROR("TODO ATTDEF")
+    }
   VERSIONS(R_13, R_14)
     {
       FIELD_BD (elevation, 30);
@@ -558,9 +564,22 @@ DWG_ENTITY_END
 /* (10/20) */
 DWG_ENTITY(VERTEX_2D)
 
-  // TODO PRE(R_R13)
-  FIELD_RC (flag, 70);
-  FIELD_3BD (point, 10);
+  PRE(R_13)
+  {
+    FIELD_2RD (point, 10);
+    if (R11OPTS(1))
+      FIELD_RD (start_width, 40);
+    if (R11OPTS(2))
+      FIELD_RD (end_width, 41);
+    if (R11OPTS(4))
+      FIELD_RD (tangent_dir, 50);
+    if (R11OPTS(8))
+      FIELD_RC (flag, 70);
+  }
+  SINCE(R_13)
+  {
+    FIELD_RC (flag, 70);
+    FIELD_3BD (point, 10);
 
   /* Decoder and Encoder routines could be the same but then we
      wouldn't compress data when saving. So we explicitely implemented
@@ -597,11 +616,12 @@ DWG_ENTITY(VERTEX_2D)
         }
     }
 
-  FIELD_BD (bulge, 42);
-  SINCE(R_2010) {
-    FIELD_BL (id, 91);
+    FIELD_BD (bulge, 42);
+    SINCE(R_2010) {
+      FIELD_BL (id, 91);
+    }
+    FIELD_BD (tangent_dir, 50);
   }
-  FIELD_BD (tangent_dir, 50);
 
   COMMON_ENTITY_HANDLE_DATA;
 
@@ -653,18 +673,32 @@ DWG_ENTITY_END
 /*(15)*/
 DWG_ENTITY(POLYLINE_2D)
 
-  FIELD_BS (flag, 70);
-  FIELD_BS (curve_type, 75);
-  FIELD_BD (start_width, 40);
-  FIELD_BD (end_width, 41);
-  FIELD_BT (thickness, 39);
-  FIELD_BD (elevation, 30);
-  FIELD_BE (extrusion, 210);
-
-  SINCE(R_2004) {
-    FIELD_BL (owned_obj_count, 0);
+  PRE(R_13)
+  {
+    if (R11OPTS(1))
+      FIELD_CAST (flag, RC, RS, 70);
+    if (R11OPTS(2))
+      FIELD_RD (start_width, 40);
+    //??
+    if (R11OPTS(4))
+      FIELD_RS (curve_type, 75);
+    if (R11OPTS(8))
+      FIELD_RD (end_width, 40);
   }
+  SINCE (R_13)
+  {
+    FIELD_BS (flag, 70);
+    FIELD_BS (curve_type, 75);
+    FIELD_BD (start_width, 40);
+    FIELD_BD (end_width, 41);
+    FIELD_BT (thickness, 39);
+    FIELD_BD (elevation, 30);
+    FIELD_BE (extrusion, 210);
 
+    SINCE(R_2004) {
+      FIELD_BL (owned_obj_count, 0);
+    }
+  }
   COMMON_ENTITY_HANDLE_DATA;
 
   VERSIONS(R_13, R_2000)
@@ -678,7 +712,10 @@ DWG_ENTITY(POLYLINE_2D)
       HANDLE_VECTOR(vertex, owned_obj_count, 3, 0);
     }
 
-  FIELD_HANDLE (seqend, 3, 0);
+  SINCE (R_13)
+  {
+    FIELD_HANDLE (seqend, 3, 0);
+  }
 
 DWG_ENTITY_END
 
@@ -717,9 +754,9 @@ DWG_ENTITY(ARC)
     FIELD_RD (radius, 40);
     FIELD_RD (start_angle, 50);
     FIELD_RD (end_angle, 51);
-    if (obj->opts & 1)
+    if (R11OPTS(1))
       FIELD_3RD (extrusion, 210)
-    if (obj->opts & 2)
+    if (R11OPTS(2))
       FIELD_RD (center.z, 30)
   }
   LATER_VERSIONS {
@@ -741,9 +778,9 @@ DWG_ENTITY(CIRCLE)
   PRE(R_13) {
     FIELD_2RD (center, 10);
     FIELD_RD (radius, 40);
-    if (obj->opts & 1)
+    if (R11OPTS(1))
       FIELD_3RD (extrusion, 210)
-    if (obj->opts & 2)
+    if (R11OPTS(2))
       FIELD_RD (center.z, 38)
   }
   LATER_VERSIONS {
@@ -761,19 +798,19 @@ DWG_ENTITY_END
 DWG_ENTITY(LINE)
 
   PRE(R_13) {
-    if (obj->flag & 4)
+    if (_ent->flag_r11 & 4)
       FIELD_3RD (start, 10)
     else
       FIELD_2RD (start, 10)
 
-    if (obj->flag & 4)
+    if (_ent->flag_r11 & 4)
       FIELD_3RD (end, 11)
     else
       FIELD_2RD (end, 11)
 
-    if (obj->opts & 1)
+    if (R11OPTS(1))
       FIELD_3RD (extrusion, 210)
-    if (obj->opts & 2)
+    if (R11OPTS(2))
       FIELD_RD (thickness, 39)
   }
   VERSIONS(R_13, R_14)
@@ -1112,9 +1149,9 @@ DWG_ENTITY(SOLID)
     FIELD_2RD (corner2, 12);
     FIELD_2RD (corner3, 13);
     FIELD_2RD (corner4, 14);
-    if (obj->opts & 1)
+    if (R11OPTS(1))
       FIELD_3RD (extrusion, 210)
-    if (obj->opts & 2)
+    if (R11OPTS(2))
       FIELD_RD (elevation, 38)
   }
   LATER_VERSIONS {
@@ -1139,9 +1176,9 @@ DWG_ENTITY(TRACE)
     FIELD_2RD (corner2, 11);
     FIELD_2RD (corner3, 12);
     FIELD_2RD (corner4, 13);
-    if (obj->opts & 1)
+    if (R11OPTS(1))
       FIELD_3RD (extrusion, 210)
-    if (obj->opts & 2)
+    if (R11OPTS(2))
       FIELD_RD (elevation, 38)
   }
   LATER_VERSIONS {
@@ -1165,9 +1202,9 @@ DWG_ENTITY(SHAPE)
     FIELD_HANDLE (shapefile, 5, 0);
     FIELD_2RD (ins_pt, 10);
     FIELD_RS (shape_no, 2);
-    if (obj->opts & 1)
+    if (R11OPTS(1))
       FIELD_3RD (extrusion, 210)
-    if (obj->opts & 2)
+    if (R11OPTS(2))
       FIELD_RD (ins_pt.z, 38)
   }
   LATER_VERSIONS {
@@ -4779,4 +4816,5 @@ DWG_OBJECT_END
 DWG_OBJECT(LEADEROBJECTCONTEXTDATA)
 DWG_OBJECT_END
 */
+
 

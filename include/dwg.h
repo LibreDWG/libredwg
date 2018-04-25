@@ -3701,10 +3701,20 @@ typedef struct _dwg_object_entity
   BITCODE_BS invisible;
   BITCODE_RC lineweight;        /* r2000+ */
 
+  /* preR13 entity fields: */
+  BITCODE_RC flag_r11;
+  BITCODE_RS type_r11;
+  BITCODE_RS opts_r11;
+  BITCODE_RC extra_r11;
+  BITCODE_RS layer_r11;
+  BITCODE_RC color_r11;
+  BITCODE_RS linetype_r11;
+  /* preR13 in the obj: eed, elevation/pt.z, thickness, paper */
+
   /* XXX I think this field is deprecated due to
      the new handle parsing functions */
   unsigned int num_handles;
-
+  
   /* Common Entity Handle Data */
   BITCODE_H subentity;
   BITCODE_H* reactors;
@@ -3720,7 +3730,7 @@ typedef struct _dwg_object_entity
   BITCODE_H full_visualstyle; /* r2010+ */
   BITCODE_H face_visualstyle;
   BITCODE_H edge_visualstyle;
-  } Dwg_Object_Entity;
+} Dwg_Object_Entity;
 
 /**
  Structure for ordinary object attributes
@@ -3807,13 +3817,7 @@ typedef struct _dwg_object
   unsigned int type;
   /* unsigned int ckr; */
   unsigned int index;
-  BITCODE_RC flag;  /* preR13 */
-  BITCODE_RS layer; /* preR13 */
-  BITCODE_RS opts;  /* preR13 */
-  BITCODE_RC color; /* preR13 */
-  BITCODE_RC extra; /* preR13 */
-  BITCODE_RS linetype_rs; /* pre R13 */
-  /* preR13 in the obj: eed, elevation/pt.z, thickness, paper */
+
   BITCODE_B  has_strings;       /* r2007+ */
   BITCODE_MC handlestream_size; /* r2010+ in bits */
 

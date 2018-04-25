@@ -343,6 +343,7 @@ dwg_decode_##token (Bit_Chain* dat, Dwg_Object* obj)\
 {\
   long vcount, rcount, rcount2, rcount3, rcount4;\
   Dwg_Entity_##token *ent, *_obj;\
+  Dwg_Object_Entity *_ent;\
   Dwg_Data* dwg = obj->parent;\
   Bit_Chain* hdl_dat = dat; \
   Bit_Chain* str_dat; \
@@ -354,12 +355,12 @@ dwg_decode_##token (Bit_Chain* dat, Dwg_Object* obj)\
   LOG_INFO("Entity " #token "\n")\
   dwg->num_entities++;\
   obj->supertype = DWG_SUPERTYPE_ENTITY;\
-  obj->tio.entity = (Dwg_Object_Entity*)calloc(1, sizeof(Dwg_Object_Entity)); \
-  obj->tio.entity->tio.token = (Dwg_Entity_##token *)calloc(1, sizeof (Dwg_Entity_##token)); \
+  _ent = obj->tio.entity = (Dwg_Object_Entity*)calloc(1, sizeof(Dwg_Object_Entity));\
+  obj->tio.entity->tio.token = (Dwg_Entity_##token *)calloc(1, sizeof (Dwg_Entity_##token));\
   ent = obj->tio.entity->tio.token;\
   _obj = ent;\
-  obj->tio.entity->object = obj;\
-  if (dwg_decode_entity(dat, hdl_dat, str_dat, obj->tio.entity)) return;
+  _ent->object = obj;\
+  if (dwg_decode_entity(dat, hdl_dat, str_dat, _ent)) return;
 
 #define DWG_ENTITY_END }
 
