@@ -180,12 +180,15 @@ extern void dwg_free_xdata_resbuf(Dwg_Resbuf *rbuf);
 
 #define END_REPEAT(field) FIELD_TV(field,0)
 
-#define COMMON_ENTITY_HANDLE_DATA
+#define COMMON_ENTITY_HANDLE_DATA \
+  SINCE(R_13) {\
+    dwg_free_common_entity_handle_data(obj); \
+    dwg_free_eed(obj);\
+  }
 #define SECTION_STRING_STREAM
 #define START_STRING_STREAM
 #define END_STRING_STREAM
 #define START_HANDLE_STREAM
-//TODO num_eed and reactors
 
 #define DWG_ENTITY(token) \
 static void \
@@ -211,18 +214,19 @@ static void \
 dwg_free_ ##token (Dwg_Object * obj) \
 { \
   int vcount, rcount, rcount2, rcount3, rcount4; \
-  Dwg_Data* dwg = obj->parent;\
-  Dwg_Object_##token *_obj;\
-  Bit_Chain *hdl_dat = dat;\
-  Bit_Chain* str_dat = dat;\
-  LOG_HANDLE("Free object " #token " %p\n", obj)    \
+  Dwg_Data* dwg = obj->parent;                   \
+  Dwg_Object_##token *_obj;                      \
+  Bit_Chain *hdl_dat = dat;                      \
+  Bit_Chain* str_dat = dat;                      \
+  LOG_HANDLE("Free object " #token " %p\n", obj) \
   _obj = obj->tio.object->tio.token;
 
-#define DWG_OBJECT_END \
-    free(_obj); obj->tio.object->tio.UNKNOWN_OBJ = NULL; \
-    free(obj->tio.object); obj->tio.object = NULL; \
-    obj->parent = NULL; \
-    /* free(obj); obj = NULL; */ \
+#define DWG_OBJECT_END                                  \
+  dwg_free_eed(obj);                                    \
+  free(_obj); obj->tio.object->tio.UNKNOWN_OBJ = NULL;  \
+  free(obj->tio.object); obj->tio.object = NULL;        \
+  obj->parent = NULL;                                   \
+  /* free(obj); obj = NULL; */                          \
 }
 
 static void
@@ -244,9 +248,47 @@ dwg_free_handleref(Dwg_Object_Ref *ref, Dwg_Data * dwg)
 }
 
 static void
+dwg_free_common_entity_handle_data(Dwg_Object* obj)
+{
+
+  Dwg_Data *dwg = obj->parent;
+  Dwg_Object_Entity *_obj;
+  long unsigned int vcount;
+  Dwg_Object_Entity *ent;
+
+  ent = obj->tio.entity;
+  _obj = ent;
+
+  #include "common_entity_handle_data.spec"
+
+}
+
+static void
 dwg_free_xdata(Dwg_Object_XRECORD *obj, int size)
 {
   dwg_free_xdata_resbuf(obj->xdata);
+}
+
+static void
+dwg_free_eed(Dwg_Object* obj)
+{
+  unsigned int i;
+  if (obj->supertype == DWG_SUPERTYPE_OBJECT) {
+    Dwg_Object_Object* _obj = obj->tio.object;
+    for (i=0; i < _obj->num_eed; i++) {
+      free (_obj->eed[i].raw);
+      free (_obj->eed[i].data);
+    }
+    free(_obj->eed);
+  }
+  else if (obj->supertype == DWG_SUPERTYPE_ENTITY) {
+    Dwg_Object_Entity* _obj = obj->tio.entity;
+    for (i=0; i < _obj->num_eed; i++) {
+      free (_obj->eed[i].raw);
+      free (_obj->eed[i].data);
+    }
+    free(_obj->eed);
+  }
 }
 
 #include "dwg.spec"
