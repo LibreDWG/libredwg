@@ -1748,7 +1748,7 @@ static void
 dwg_encode_common_entity_handle_data(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj)
 {
   Dwg_Object_Entity *ent;
-  Dwg_Data *dwg = obj->parent;
+  //Dwg_Data *dwg = obj->parent;
   Dwg_Object_Entity *_obj;
   int i;
   long unsigned int vcount;
