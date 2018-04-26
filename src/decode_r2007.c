@@ -851,6 +851,7 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
           if (!section->pages[i])
             {
               LOG_ERROR("Out of memory");
+              free(sections);
               return NULL;
             }
 
@@ -1401,6 +1402,7 @@ read_r2007_meta_data(Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Data *dwg)
   if (!page)
     {
       LOG_ERROR("Failed to find sections page map %d", (int)file_header.sections_map_id);
+      pages_destroy(pages_map);
       return 3;
     }
   dat->byte = page->offset;

@@ -69,6 +69,9 @@ dwg_decode_header_variables(Bit_Chain* dat, Bit_Chain* hdl_dat,
 void
 dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
                       long unsigned int address);
+/* reused with free */
+void
+dwg_free_xdata_resbuf(Dwg_Resbuf *rbuf);
 
 extern int
 read_r2007_meta_data(Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Data *dwg);
@@ -1905,6 +1908,7 @@ read_2004_section_handles(Bit_Chain* dat, Dwg_Data *dwg)
       if (section_size > 2034)
         {
           LOG_ERROR("Object-map section size greater than 2034!");
+          free(obj_dat.chain);
           return 1;
         }
 
@@ -2865,6 +2869,20 @@ get_base_value_type(short gc)
   return VT_INVALID;
 }
 
+void
+dwg_free_xdata_resbuf(Dwg_Resbuf *rbuf)
+{
+  while (rbuf)
+    {
+      Dwg_Resbuf *next = rbuf->next;
+      short type = get_base_value_type(rbuf->type);
+      if (type == VT_STRING || type == VT_BINARY)
+        free (rbuf->value.str.u.data);
+      free(rbuf);
+      rbuf = next;
+    }
+}
+
 // TODO: unify with eed[], use an array not linked list.
 static Dwg_Resbuf*
 dwg_decode_xdata(Bit_Chain * dat, Dwg_Object_XRECORD *obj, int size)
@@ -2885,6 +2903,7 @@ dwg_decode_xdata(Bit_Chain * dat, Dwg_Object_XRECORD *obj, int size)
       if (!rbuf)
         {
           LOG_ERROR("Out of memory");
+          dwg_free_xdata_resbuf(curr);
           return NULL;
         }
       num_xdata++;
@@ -2906,6 +2925,7 @@ dwg_decode_xdata(Bit_Chain * dat, Dwg_Object_XRECORD *obj, int size)
                 if (!rbuf->value.str.u.wdata)
                   {
                     LOG_ERROR("Out of memory");
+                    dwg_free_xdata_resbuf(rbuf);
                     return NULL;
                   }
                 for (i = 0; i < length; i++)
@@ -2943,7 +2963,7 @@ dwg_decode_xdata(Bit_Chain * dat, Dwg_Object_XRECORD *obj, int size)
         case VT_INVALID:
         default:
           LOG_ERROR("Invalid group code in xdata: %d", rbuf->type)
-          free (rbuf);
+          dwg_free_xdata_resbuf(rbuf);
           dat->byte = end_address;
           obj->num_eed = num_xdata;
           return root;

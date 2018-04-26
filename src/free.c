@@ -39,6 +39,8 @@ static unsigned int cur_ver = 0;
 static Bit_Chain pdat = {NULL,0,0,0,0,0};
 static Bit_Chain *dat = &pdat;
 
+extern void dwg_free_xdata_resbuf(Dwg_Resbuf *rbuf);
+
 /*--------------------------------------------------------------------------------
  * MACROS
  */
@@ -236,7 +238,7 @@ dwg_free_handleref(Dwg_Object_Ref *ref, Dwg_Data * dwg)
       if (dwg->object_ref[i] == ref)
         {
           dwg->object_ref[i] = NULL;
-          free(ref);
+          if (ref) free(ref);
         }
     }
 }
@@ -244,17 +246,7 @@ dwg_free_handleref(Dwg_Object_Ref *ref, Dwg_Data * dwg)
 static void
 dwg_free_xdata(Dwg_Object_XRECORD *obj, int size)
 {
-  Dwg_Resbuf *rbuf = obj->xdata;
-
-  while (rbuf)
-    {
-      Dwg_Resbuf *tmp = rbuf->next;
-      short type = get_base_value_type(rbuf->type);
-      if (type == VT_STRING || type == VT_BINARY)
-        free (rbuf->value.str.u.data);
-      free (rbuf);
-      rbuf = tmp;
-    }
+  dwg_free_xdata_resbuf(obj->xdata);
 }
 
 #include "dwg.spec"
