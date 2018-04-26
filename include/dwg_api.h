@@ -61,6 +61,8 @@ Dwg_Entity_##token **dwg_get_##token (Dwg_Object_Ref * ref) \
         counts++; \
       obj = get_next_owned_object(ref->obj, obj, hdr); \
     } \
+  if (!counts) \
+    return NULL; \
   ret_##token = (Dwg_Entity_##token **)malloc (counts * sizeof(Dwg_Entity_##token *));\
   obj = get_first_owned_object(ref->obj, hdr); \
   while (obj) \
@@ -83,7 +85,7 @@ Dwg_Entity_##token *dwg_object_to_##token(Dwg_Object *obj);
 Dwg_Entity_##token *dwg_object_to_##token(Dwg_Object *obj) \
 { \
     Dwg_Entity_##token *ret_obj = NULL; \
-    if(obj != 0 && obj->type == DWG_TYPE_##token) \
+    if (obj != 0 && obj->type == DWG_TYPE_##token) \
       { \
         ret_obj = obj->tio.entity->tio.token; \
       } \

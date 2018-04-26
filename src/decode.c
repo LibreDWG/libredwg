@@ -682,7 +682,7 @@ decode_preR13(Bit_Chain* dat, Dwg_Data * dwg)
   decode_preR13_section_ptr("APPID", SECTION_APPID, dat, dwg);
   rl1 = bit_read_RL(dat);
   rs2 = bit_read_RS(dat);
-  LOG_TRACE("?long+short: 0x%x 0x%x\n", rl1, rs2);
+  LOG_TRACE("?long+short: 0x%x 0x%x\n", rl1, (unsigned)rs2);
   decode_preR13_section_ptr("DIMSTYLE", SECTION_DIMSTYLE, dat, dwg);
   // skip: 0x69f - dat->bytes
   dat->byte = 0x69f;

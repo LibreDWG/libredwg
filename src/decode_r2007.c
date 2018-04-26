@@ -682,7 +682,7 @@ read_data_section(Bit_Chain *sec_dat, Bit_Chain *dat, r2007_section *sections_ma
   }
 
   max_decomp_size = section->data_size;
-  decomp = (unsigned char *)malloc(max_decomp_size * sizeof(char));
+  decomp = malloc(max_decomp_size);
   if (decomp == NULL) {
     LOG_ERROR("Out of memory")
     return 2;
@@ -1292,7 +1292,7 @@ static int
 read_2007_section_handles(Bit_Chain* dat, Bit_Chain* hdl, Dwg_Data *dwg,
                           r2007_section *sections_map, r2007_page *pages_map)
 {
-  Bit_Chain obj_dat, hdl_dat;
+  static Bit_Chain obj_dat, hdl_dat;
   BITCODE_RS section_size = 0;
   long unsigned int endpos;
   int error;

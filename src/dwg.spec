@@ -1428,8 +1428,7 @@ void decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Ent
             } while(FIELD_VALUE (block_size[i++]));
 
           // de-obfuscate SAT data
-          FIELD_VALUE(raw_sat_data) = (unsigned char*)
-            malloc (total_size * sizeof(unsigned char*));
+          FIELD_VALUE(raw_sat_data) = malloc (total_size+1);
           num_blocks = i-1;
           FIELD_VALUE(num_blocks) = num_blocks;
           index = 0;
@@ -1447,6 +1446,7 @@ void decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Ent
                     }
                 }
             }
+          FIELD_VALUE(raw_sat_data)[index] = '\0';
           LOG_TRACE("Raw SAT data:\n%s\n", FIELD_VALUE (raw_sat_data)); // DXF 1 + 3 if >255
         }
       else //if (FIELD_VALUE(version)==2)
@@ -4348,9 +4348,9 @@ DWG_OBJECT(XRECORD)
            vcount++)
         {
           FIELD_VALUE(objid_handles) = vcount
-            ? (BITCODE_H*) realloc(FIELD_VALUE(objid_handles),
+            ? realloc(FIELD_VALUE(objid_handles),
                                    (vcount+1) * sizeof(Dwg_Object_Ref))
-            : (BITCODE_H*) malloc(sizeof(Dwg_Object_Ref));
+            : malloc(sizeof(Dwg_Object_Ref));
           FIELD_HANDLE_N (objid_handles[vcount], vcount, ANYCODE, 0);
           if (!FIELD_VALUE(objid_handles[vcount]))
             break;
@@ -4816,5 +4816,4 @@ DWG_OBJECT_END
 DWG_OBJECT(LEADEROBJECTCONTEXTDATA)
 DWG_OBJECT_END
 */
-
 
