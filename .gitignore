@@ -42,6 +42,8 @@ gcov.log
 /.lldbinit
 /.cproject
 /.project
+/.patches
+/.analysis
 /GPATH
 /GRTAGS
 /GTAGS

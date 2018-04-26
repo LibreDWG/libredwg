@@ -205,7 +205,9 @@ dwg_decode(Bit_Chain * dat, Dwg_Data * dwg)
     {
       // TODO: tables, entities, block entities
       LOG_ERROR(WE_CAN "We don't decode tables, entities, blocks yet")
+#ifndef IS_RELEASE
       return decode_preR13(dat, dwg);
+#endif
     }
 
   VERSIONS(R_13, R_2000)
@@ -224,7 +226,9 @@ dwg_decode(Bit_Chain * dat, Dwg_Data * dwg)
                "Support for this version is still experimental."
                " We don't decode handle and string streams correctly yet.\n"
                "It will probably crash and/or give you invalid output.")
+#ifndef IS_RELEASE
       return decode_R2007(dat, dwg);
+#endif
     }
 
   SINCE(R_2010)
@@ -233,7 +237,9 @@ dwg_decode(Bit_Chain * dat, Dwg_Data * dwg)
                "Support for this version is still experimental."
                " We don't decode objects yet.\n"
                "It will probably crash and/or give you invalid output.")
+#ifndef IS_RELEASE
       return decode_R2004(dat, dwg);
+#endif
     }
 
   // This line should not be reached

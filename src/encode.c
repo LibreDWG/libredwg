@@ -418,7 +418,9 @@ dwg_encode(Dwg_Data* dwg, Bit_Chain* dat)
     {
       // TODO: tables, entities, block entities
       LOG_ERROR(WE_CAN "We don't encode tables, entities, blocks yet")
+#ifndef IS_RELEASE
       return encode_preR13(dwg, dat);
+#endif
     }
 
   PRE(R_2004) {

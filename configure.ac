@@ -83,6 +83,11 @@ if test x$ac_cv_header_wchar_h = xyes; then
 fi
 
 AX_IS_RELEASE([git-directory])
+if test x$ax_is_release = xyes; then
+   AC_DEFINE([IS_RELEASE],1,[Define to 1 if this is a release,
+   skipping unknown DWG versions and objects.])
+fi
+
 dnl disable unwanted warnings here. These should be fixed before 1.0
 enable_Werror=no
 ax_enable_compile_warnings=yes

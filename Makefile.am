@@ -41,6 +41,11 @@ check-dwg-valgrind: all
 	  LIBREDWG_TRACE=4 valgrind --leak-check=full programs/dwgread $$d >> check-dwg-valgrind.log 2>&1; \
 	done
 
+# clang-analyzer.llvm.org
+SCAN_BUILD = scan-build
+scan-build: clean
+	$(SCAN_BUILD) -V -o .analysis $(MAKE) -j4
+
 if ENABLE_GCOV
 gcov: check
 	$(MAKE) -C test gcov
