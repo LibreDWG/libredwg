@@ -19,7 +19,7 @@
 #include "spec.h"
 
   FIELD_3RD (INSBASE, 10); //ok 0x5e
-  FIELD_RS (PLINEGEN, 70); //ok
+  FIELD_CAST (PLINEGEN, RS, B, 70); //ok
   FIELD_3RD (EXTMIN, 10);
   FIELD_3RD (EXTMAX, 10);
   FIELD_2RD (LIMMIN, 10);
@@ -48,7 +48,7 @@
   //RS 15
 
   dat->byte = 0x156;
-  FIELD_RS (PSLTSCALE, 70);
+  FIELD_CAST (PSLTSCALE, RS, B, 70);
 
   dat->byte = 0x164;
   FIELD_RS (LUNITS, 70); //ok
@@ -132,7 +132,7 @@
   DECODER {
     _obj->CELTYPE = calloc(1, sizeof(Dwg_Object_Ref));
     _obj->CELTYPE->absolute_ref = bit_read_RS(dat); // 6, ff for BYLAYER, fe for BYBLOCK
-    FIELD_G_TRACE(CELTYPE->absolute_ref, RLL, 6)
+    LOG_TRACE("CELTYPE: %lu [long 6]\n", _obj->CELTYPE->absolute_ref)
   }
   FIELD_TIMEBLL (TDCREATE, 40);
   FIELD_TIMEBLL (TDUPDATE, 40);
@@ -202,7 +202,7 @@
   DECODER {
     _obj->HANDSEED = calloc(1, sizeof(Dwg_Object_Ref));
     _obj->HANDSEED->absolute_ref = bit_read_RS(dat);
-    FIELD_G_TRACE(HANDSEED->absolute_ref, RLL, 5)
+    LOG_TRACE("HANDSEED: %lu [long 5]\n", _obj->HANDSEED->absolute_ref)
   }
   DEBUG_HERE() //4f0
 
@@ -248,5 +248,6 @@
   FIELD_RS (MAXACTVP, 70); //ok
   FIELD_RD (DIMGAP, 40); //ok
   FIELD_RD (PELEVATION, 40); //ok 
-  FIELD_RS (VISRETAIN, 70); //ok
+  FIELD_CAST (VISRETAIN, RS, B, 70); //ok
   FIELD_RS (CRC, 0); // 0x6bd
+
