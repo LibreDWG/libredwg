@@ -151,7 +151,8 @@ dxf_header_read (FILE *fh, Dwg_Data * dwg)
 {
   //double ms;
   //struct Dwg_Header *dat = &dwg->header;
-  (void)fh; (void)dwg;
+  (void)fh;
+  dwg->header.version = R_INVALID;
 
 /*  
   SECTION(HEADER);
