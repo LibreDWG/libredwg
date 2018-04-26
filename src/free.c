@@ -183,7 +183,6 @@ extern void dwg_free_xdata_resbuf(Dwg_Resbuf *rbuf);
 #define COMMON_ENTITY_HANDLE_DATA \
   SINCE(R_13) {\
     dwg_free_common_entity_handle_data(obj); \
-    dwg_free_eed(obj);\
   }
 #define SECTION_STRING_STREAM
 #define START_STRING_STREAM
@@ -242,7 +241,7 @@ dwg_free_handleref(Dwg_Object_Ref *ref, Dwg_Data * dwg)
       if (dwg->object_ref[i] == ref)
         {
           dwg->object_ref[i] = NULL;
-          if (ref) free(ref);
+          if (ref) { free(ref); ref = NULL; }
         }
     }
 }
@@ -277,17 +276,23 @@ dwg_free_eed(Dwg_Object* obj)
     Dwg_Object_Object* _obj = obj->tio.object;
     for (i=0; i < _obj->num_eed; i++) {
       free (_obj->eed[i].raw);
+      _obj->eed[i].raw = NULL;
       free (_obj->eed[i].data);
+      _obj->eed[i].data = NULL;
     }
     free(_obj->eed);
+    _obj->eed = NULL;
   }
   else if (obj->supertype == DWG_SUPERTYPE_ENTITY) {
     Dwg_Object_Entity* _obj = obj->tio.entity;
     for (i=0; i < _obj->num_eed; i++) {
       free (_obj->eed[i].raw);
+      _obj->eed[i].raw = NULL;
       free (_obj->eed[i].data);
+      _obj->eed[i].data = NULL;
     }
     free(_obj->eed);
+    _obj->eed = NULL;
   }
 }
 
@@ -762,9 +767,9 @@ dwg_free_object(Dwg_Object *obj)
     default:
       if (obj->type == obj->parent->layout_number)
         {
-          SINCE(R_13) {
-            dwg_free_LAYOUT(obj);
-          }
+          /*SINCE(R_13) {
+            dwg_free_LAYOUT(obj); // avoid double-free, esp. in eed
+          }*/
         }
 
       else if (!dwg_free_variable_type(obj->parent, obj))
