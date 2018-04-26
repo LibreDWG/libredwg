@@ -122,6 +122,8 @@ dnl Checks for library functions.
 AC_FUNC_MALLOC
 AC_FUNC_REALLOC
 AC_FUNC_STAT
+AC_CHECK_FUNCS([setenv],[],
+      AC_MSG_WARN([setenv not found - programs will not print error messages]))
 
 dnl Feature: --enable-trace
 AC_ARG_ENABLE([trace],[AS_HELP_STRING([--enable-trace],[

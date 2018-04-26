@@ -20,6 +20,7 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <libps/pslib.h>
 
 #include "../src/config.h"
@@ -114,6 +115,9 @@ main(int argc, char *argv[])
   Dwg_Data dwg;
 
   REQUIRE_INPUT_FILE_ARG (argc);
+#if defined(USE_TRACING) && defined(HAVE_SETENV)
+  setenv("LIBREDWG_TRACE", "1", 0);
+#endif
 
   success = dwg_read_file(argv[1], &dwg);
   if (success)

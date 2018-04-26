@@ -20,6 +20,7 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "../src/config.h"
@@ -105,6 +106,9 @@ int
 main (int argc, char *argv[])
 {
   REQUIRE_INPUT_FILE_ARG (argc);
+#if defined(USE_TRACING) && defined(HAVE_SETENV)
+  setenv("LIBREDWG_TRACE", "1", 0);
+#endif
   return get_bmp (argv[1]);
 }
 

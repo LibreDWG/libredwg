@@ -19,6 +19,7 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "../src/config.h"
@@ -48,6 +49,9 @@ main (int argc, char *argv[])
   if (argc < 2)
     return usage();
   filename_in = argv[1];
+#if defined(USE_TRACING) && defined(HAVE_SETENV)
+  setenv("LIBREDWG_TRACE", "1", 0);
+#endif
 
   if (argc > 2 && !strncmp(argv[1], "-as-r", 5))
     {
@@ -81,8 +85,11 @@ main (int argc, char *argv[])
   if (error)
       printf("READ ERROR\n");
   num_objects = dwg.num_objects;
-  if (!num_objects)
+  if (!num_objects) {
     printf("Read 0 objects\n");
+    if (error)
+      return error;
+  }
 
   printf("Writing DWG file %s", filename_out);
 #ifndef USE_WRITE
@@ -99,8 +106,9 @@ main (int argc, char *argv[])
   }
   error = dwg_write_file(filename_out, &dwg);
 #endif
-  if (error)
+  if (error) {
       printf("WRITE ERROR\n");
+  }
   dwg_free(&dwg);
 
 #ifdef USE_WRITE

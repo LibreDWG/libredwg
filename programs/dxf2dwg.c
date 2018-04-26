@@ -18,6 +18,7 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
 
@@ -566,6 +567,9 @@ main (int argc, char *argv[])
   if (argc < 2)
     return usage();
   filename_in = argv[1];
+#if defined(USE_TRACING) && defined(HAVE_SETENV)
+  setenv("LIBREDWG_TRACE", "1", 0);
+#endif
 
   if (argc > 2 && !strncmp(argv[1], "-as-r", 5))
     {

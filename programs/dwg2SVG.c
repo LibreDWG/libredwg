@@ -258,5 +258,8 @@ int
 main(int argc, char *argv[])
 {
   REQUIRE_INPUT_FILE_ARG (argc);
+#if defined(USE_TRACING) && defined(HAVE_SETENV)
+  setenv("LIBREDWG_TRACE", "1", 0);
+#endif
   return test_SVG (argv[1]);
 }
