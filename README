@@ -11,12 +11,11 @@ developed by AutoDesk.
 
 LibreDWG is a fork from LibDWG due to its usage of Esperanto, which we
 think is not the best strategy for a free software project which aims
-to get lots of contributors.  LibreDWG is written in English.  Since
-we forked LibDWG (May 16, 2009), its development seems to have been
-inactive.  At the moment our decoder is almost done, just some R2007+
-streams and pre-R13 entities fail to read.  Among the example
-applications we wrote using LibreDWG is an initial SVG conversion and
-a DWG rewrite, i.e saveas tool. Please contact us if you can help.
+to get lots of contributors.  LibreDWG is written in English.  At the
+moment our decoder is almost done, just some R2007+ streams and
+pre-R13 entities fail to read.  Among the example applications we
+wrote using LibreDWG is an initial SVG conversion and a DWG rewrite,
+i.e saveas tool. Please contact us if you can help.
 
 The program dwg_ps (in examples/) reads DWG and outputs Postscript; it
 depends on pslib: <http://pslib.sourceforge.net>.  In many GNU/Linux
@@ -70,11 +69,10 @@ customize the installation dirs.  Other options recognized by configure are:
 
   --enable-write
   
-    NB: This is an experimental feature that is under construction, so it's
-    highly unstable.
-
-    Enable write support (default: no). When enabled you activate the write
+    Enable write support (default: no). When enabled, you activate the write
     support for the dwg format.
+    This is an experimental feature that is under construction, so it's
+    highly unstable.
 
 == Example usage of the library ==
 
@@ -84,7 +82,7 @@ The programs and examples directories contains some application code that uses o
 
 * dwgrewrite -- Reads a DWG, writes it back under a different name and optionally
   under a different version, and re-reads it back for confirmation.
-  Under construction.
+  Under construction, only with --enable-write.
 
 * dwg2dxf -- Converts a DWG to a DXF (ascii or binary), optionally
   under a different version. Under construction.
@@ -97,7 +95,7 @@ The programs and examples directories contains some application code that uses o
 
 * dwg_ps -- Opens a DWG file and outputs an PostScript file.  This code
   depends on the PSlib library.  On Debian-based systems this is usually
-  available as a package named pslib-dev
+  available as a package named pslib-dev.
 
 * dwg2SVG -- Opens a DWG file and outputs an SVG (Scalable Vector Graphics)
   file.  SVG is a W3C standard for 2d vector graphics.  You can open these

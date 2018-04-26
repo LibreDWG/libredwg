@@ -1,0 +1,131 @@
+Contributing to LibreDWG
+
+There are certain legal requirements and style issues which all
+contributions must meet:
+
+Legal Prerequisites
+
+Before we can incorporate significant contributions, certain legal
+requirements must be met. This package is owned by the FSF.
+
+The FSF prefers that a contributor files a copyright assignment for
+significant contributions, i.e. > 15 lines of code or
+docs. The most common forms are an assignment for a specific change,
+an assignment for all future changes, and an employer disclaimer, if
+an employer or school owns work created by the developer. It's a good
+idea to send assign@gnu.org a copy of your request.
+
+If a contributor is reluctant to sign a copyright assignment for a
+change, a copyright disclaimer to put the change in the public domain
+is acceptable as well. The copyright disclaimer form is different than
+an employer disclaimer form. A copyright assignment is more convenient
+if a contributor plans to make several separate contributions.
+
+Small changes can be accepted without a copyright disclaimer or a
+copyright assignment on file.
+
+See https://www.gnu.org/prep/maintain/html_node/Legally-Significant.html
+and https://www.gnu.org/prep/maintain/html_node/Copyright-Papers.html
+for details and contact us to obtain the relevant forms.
+
+Coding Standards
+
+All contributions should conform to the GNU Coding Standards. There are
+also some additional coding conventions for LibreDWG; these include
+documentation and testsuite requirements as well as requirements on
+code formatting.
+
+Submissions which do not conform to the standards will be returned
+with a request to address any such problems.
+
+Submitting Patches
+
+Every patch must have several pieces of information, before we can
+properly evaluate it:
+
+A description of the problem/bug and how your patch addresses it.
+
+For new features a description of the feature and your
+implementation. For bugs a description of what was wrong with the
+existing code, and a reference to any previous bug report (in the
+LibreDWG bug tracker) and any existing testcases for the problem in
+the LibreDWG testsuite.
+
+Testcases
+
+If you cannot follow the recommendations of the GNU coding conventions
+about testcases, you should include a justification for why adequate
+testcases cannot be added.
+
+ChangeLog
+
+A ChangeLog entry as plaintext; see the various ChangeLog files for
+format and content, and the GNU Coding Standards for further
+information. The ChangeLog entries should be plaintext rather than
+part of the patch since the top of the ChangeLog changes rapidly and a
+patch to the ChangeLog would probably no longer apply by the time your
+patch is reviewed. If your change fixes a PR, put text in the
+ChangeLog entry mentioning the PR. The git commit machinery
+understands how to extract this information and automatically append
+the commit log to the PR. In order to be recognized, the text must fit
+a particular form. It must start with "PR", and then must include the
+PR number. For instance, PR #2369 is valid. Multiple PRs can be
+mentioned in a single message.
+
+Bootstrapping and testing
+
+State the host and target combinations you used to do proper testing
+as described above, and the results of your testing.
+
+The patch itself
+
+Do not include generated files as part of the patch, just mention them
+in the ChangeLog (e.g., "* configure: Regenerate.").
+
+Don't mix together changes made for different reasons. Send them
+individually. Ideally, each change you send should be impossible to
+subdivide into parts that we might want to consider separately,
+because each of its parts gets its motivation from the other parts. In
+particular, changes to code formatting to conform to coding standards
+are best not mixed with substantive changes, because that makes it
+difficult to see what the real changes are. (In the case of a very
+large reorganization of code, it may make sense to separate changes
+even further to make it clearer what has changed; for example, by
+first sending structural changes that make subsequent changes easier
+but do not change LibreDWG's behavior, then new code, then the changes that
+actually make use of the new code and change LibreDWG's behavior.)
+
+We prefer patches posted as plain text or as MIME parts of type
+text/x-patch or text/plain, disposition inline, encoded as 7bit or
+8bit. It is strongly discouraged to post patches as MIME parts of type
+application/whatever, disposition attachment or encoded as base64 or
+quoted-printable. Avoid MIME large-message splitting (message/partial)
+at all costs.
+
+If the patch is too big or too mechanical, posting it gzipped or
+bzip2ed and uuencoded or encoded as a base64 MIME part is acceptable,
+as long as the ChangeLog is still posted as plain text.
+
+Acceptable formats are patches attached to the Savannah Bug tracker, pull requests
+on the github mirror https://github.com/rurban/libredwg, or email attachments
+formatted with git format-patch.
+
+(Everything listed here still applies if you can check in the patch
+without further approval under the LibreDWG write access policies, except
+that ChangeLog entries may be included as part of the patch and diffs
+representing new files may be omitted, especially if large, since they
+can be accessed directly from the repository.)
+
+Pinging patches, Getting patches applied
+
+If you do not receive a response to a patch that you have submitted
+within two weeks or so, it may be a good idea to chase it by sending a
+follow-up email to the same list(s). Patches can occasionally fall
+through the cracks. Please be sure to include a brief summary of the
+patch and the URL of the entry in the mailing list archive or the tracker url
+of the original submission.
+
+If you do not have write access and a patch of yours has been
+approved, but not committed, please advise the approver of that
+fact. You may want to point out lack of write access in your initial
+submission, too.
