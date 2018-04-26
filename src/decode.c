@@ -2126,7 +2126,7 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
           LOG_ERROR("dwg_decode_eed: Absurd extended object data size: %lu ignored."
                     " Object: %lu (handle)",
                     (long unsigned int) size, obj->object->handle.value)
-            obj->bitsize = 0;
+          obj->bitsize = 0;
           obj->num_eed = 0;
           obj->num_handles = 0;
           obj->num_reactors = 0;
@@ -2135,6 +2135,7 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
 
       if (idx) {
         obj->eed = (Dwg_Eed*)realloc(obj->eed, (idx+1) * sizeof(Dwg_Eed));
+        memset(&obj->eed[idx], 0, sizeof(Dwg_Eed));
       } else {
         obj->eed = (Dwg_Eed*)calloc(1, sizeof(Dwg_Eed));
       }
@@ -2142,6 +2143,8 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
       error = bit_read_H(dat, &obj->eed[idx].handle);
       if (error) {
         LOG_ERROR("No EED[%d].handle", idx);
+        obj->num_eed = 0;
+        free(obj->eed);
         return error;
       } else {
         end = dat->byte + size;
@@ -2200,6 +2203,10 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
                 if (lenc > size-4)
                   {
                     LOG_ERROR("Invalid EED string len %d, max %d", lenc, size-4);
+                    obj->num_eed = 0;
+                    free(obj->eed[idx].raw);
+                    free(obj->eed[idx].data);
+                    free(obj->eed);
                     dat->byte = end;
                     return 1;
                   }
@@ -3791,10 +3798,12 @@ dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
           if (klass && !is_entity)
             {
               dwg_decode_UNKNOWN_OBJ(dat, obj);
+              obj->supertype = DWG_SUPERTYPE_UNKNOWN;
             }
           else if (klass)
             {
               dwg_decode_UNKNOWN_ENT(dat, obj);
+              obj->supertype = DWG_SUPERTYPE_UNKNOWN;
             }
           else // not a class
             {

@@ -275,9 +275,11 @@ dwg_free_eed(Dwg_Object* obj)
   if (obj->supertype == DWG_SUPERTYPE_OBJECT) {
     Dwg_Object_Object* _obj = obj->tio.object;
     for (i=0; i < _obj->num_eed; i++) {
-      free (_obj->eed[i].raw);
+      if (_obj->eed[i].size && _obj->eed[i].raw)
+        free (_obj->eed[i].raw);
       _obj->eed[i].raw = NULL;
-      free (_obj->eed[i].data);
+      if (_obj->eed[i].data)
+        free (_obj->eed[i].data);
       _obj->eed[i].data = NULL;
     }
     free(_obj->eed);
@@ -286,9 +288,11 @@ dwg_free_eed(Dwg_Object* obj)
   else if (obj->supertype == DWG_SUPERTYPE_ENTITY) {
     Dwg_Object_Entity* _obj = obj->tio.entity;
     for (i=0; i < _obj->num_eed; i++) {
-      free (_obj->eed[i].raw);
+      if (_obj->eed[i].size && _obj->eed[i].raw)
+        free (_obj->eed[i].raw);
       _obj->eed[i].raw = NULL;
-      free (_obj->eed[i].data);
+      if (_obj->eed[i].data)
+        free (_obj->eed[i].data);
       _obj->eed[i].data = NULL;
     }
     free(_obj->eed);
