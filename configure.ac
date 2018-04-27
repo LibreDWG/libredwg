@@ -57,7 +57,7 @@ dnl avoid rpl_malloc when cross-compiling. we don't need malloc.h
 dnl we just want to know if it's needed
 ac_cv_func_malloc_0_nonnull=yes
 ac_cv_func_realloc_0_nonnull=yes
-AC_CHECK_HEADERS([stdlib.h string.h unistd.h malloc.h wchar.h ctype.h])
+AC_CHECK_HEADERS([stdlib.h string.h unistd.h malloc.h wchar.h ctype.h getopt.h])
 
 AC_CHECK_HEADER([dejagnu.h], [],
   AC_MSG_WARN([Couldn't find dejagnu.h]))
@@ -124,6 +124,8 @@ AC_FUNC_REALLOC
 AC_FUNC_STAT
 AC_CHECK_FUNCS([setenv],[],
       AC_MSG_WARN([setenv not found - programs will not print error messages]))
+AC_CHECK_FUNCS([getopt_long],[],
+      AC_MSG_WARN([getopt_long not found - programs will not accept long options]))
 
 dnl Feature: --enable-trace
 AC_ARG_ENABLE([trace],[AS_HELP_STRING([--enable-trace],[

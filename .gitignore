@@ -81,7 +81,7 @@ gcov.log
 /programs/dwgread
 /programs/dwg2SVG
 /programs/dwg2dxf
-/programs/dwg_ps
+/programs/dwg2ps
 /programs/dxf2dwg
 /examples/dwg2svg2
 /examples/load_dwg

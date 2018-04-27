@@ -20,20 +20,34 @@
 
 #include <stdio.h>
 #include "../src/config.h"
+
 #include <dwg.h>
-#include "suffix.c"
+#include "suffix.inc"
+static int help(void);
+int verbosity(int argc, char **argv, int i);
+#include "common.inc"
 
-int
-test_dwg_c(char *filename);
-
-int
-main(int argc, char *argv[])
-{
-  REQUIRE_INPUT_FILE_ARG (argc);
-  return test_dwg_c (argv[1]);
+static int usage(void) {
+  printf("\nUsage: dwgread [-v[0-9]] DWGFILE\n");
+  return 1;
+}
+static int opt_version(void) {
+  printf("dwgread %s\n", PACKAGE_VERSION);
+  return 0;
+}
+static int help(void) {
+  printf("\nUsage: dwgread [OPTION]... DWGFILE\n");
+  printf("Reads the DWG and prints error, success or verbose internal progress.\n"
+         "\n");
+  printf("  -v[0-9], --verbose [0-9]  verbosity\n");
+  printf("           --help           display this help and exit\n");
+  printf("           --version        output version information and exit\n"
+         "\n");
+  printf("GNU LibreDWG online manual: <https://www.gnu.org/software/libredwg/>\n");
+  return 0;
 }
 
-int
+static int
 test_dwg_c(char *filename)
 {
   int error;
@@ -52,3 +66,29 @@ test_dwg_c(char *filename)
   return error ? 1 : 0;
 }
 
+int
+main(int argc, char *argv[])
+{
+  int i = 1;
+  if (argc < 2)
+    {
+      return usage();
+    }
+#if defined(USE_TRACING) && defined(HAVE_SETENV)
+  setenv("LIBREDWG_TRACE", "1", 0);
+#endif
+  if (argc > 2 &&
+      (!strcmp(argv[i], "--verbose") ||
+       !strncmp(argv[i], "-v", 2)))
+    {
+      int num_args = verbosity(argc, argv, i);
+      argc -= num_args;
+      i += num_args;
+    }
+  if (argc > 1 && !strcmp(argv[i], "--help"))
+    return help();
+  if (argc > 1 && !strcmp(argv[i], "--version"))
+    return opt_version();
+  REQUIRE_INPUT_FILE_ARG (argc);
+  return test_dwg_c (argv[i]);
+}

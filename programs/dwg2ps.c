@@ -12,7 +12,8 @@
 /*****************************************************************************/
 
 /*
- * dwg_ps.c: create a PostScript file from a DWG
+ * dwg_ps.c: create a PostScript file of lines from a DWG
+ * TODO: more 2D elements, see dwg2SVG
  * written by Felipe Castro
  * modified by Felipe Corrêa da Silva Sances
  * modified by Thien-Thi Nguyen
@@ -25,7 +26,30 @@
 
 #include "../src/config.h"
 #include <dwg.h>
-#include "suffix.c"
+#include "suffix.inc"
+static int help(void);
+int verbosity(int argc, char **argv, int i);
+#include "common.inc"
+
+static int usage(void) {
+  printf("\nUsage: dwg2ps [-v[0-9]] DWGFILE [PSFILE]\n");
+  return 1;
+}
+static int opt_version(void) {
+  printf("dwg2ps %s\n", PACKAGE_VERSION);
+  return 0;
+}
+static int help(void) {
+  printf("\nUsage: dwg2ps [OPTION]... DWGFILE [PSFILE]\n");
+  printf("Converts some 2D elements of the DWG to a Postscript file.\n"
+         "\n");
+  printf("  -v[0-9], --verbose [0-9]  verbosity\n");
+  printf("           --help           display this help and exit\n");
+  printf("           --version        output version information and exit\n"
+         "\n");
+  printf("GNU LibreDWG online manual: <https://www.gnu.org/software/libredwg/>\n");
+  return 0;
+}
 
 static void
 create_postscript(Dwg_Data *dwg, char *output)
@@ -113,11 +137,26 @@ main(int argc, char *argv[])
   int success;
   char *outfile;
   Dwg_Data dwg;
+  int i = 1;
 
-  REQUIRE_INPUT_FILE_ARG (argc);
+  if (argc < 2)
+    return usage();
 #if defined(USE_TRACING) && defined(HAVE_SETENV)
   setenv("LIBREDWG_TRACE", "1", 0);
 #endif
+  if (argc > 2 &&
+      (!strcmp(argv[i], "--verbose") ||
+       !strncmp(argv[i], "-v", 2)))
+    {
+      int num_args = verbosity(argc, argv, i);
+      argc -= num_args;
+      i += num_args;
+    }
+  if (argc > 1 && !strcmp(argv[i], "--help"))
+    return help();
+  if (argc > 1 && !strcmp(argv[i], "--version"))
+    return opt_version();
+  REQUIRE_INPUT_FILE_ARG (argc);
 
   success = dwg_read_file(argv[1], &dwg);
   if (success)

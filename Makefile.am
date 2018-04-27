@@ -28,6 +28,10 @@ include_HEADERS = \
 	include/dwg.h \
 	include/dwg_api.h
 
+.PHONY: check-dwg check-dwg-valgrind man scan-build
+
+man:
+	$(MAKE) -C programs man
 check-dwg: all
 	-rm check-dwg.log
 	for d in `find test/test-data -iname \*.dwg`; do \
@@ -52,6 +56,7 @@ gcov: check
 	$(MAKE) -C src gcov
 	gcov2perl test/*/*.gcov src/*.gcov
 	cover -no-gcov
+.PHONY: gcov
 endif
 
 if HAVE_WINE
@@ -59,6 +64,7 @@ check-wine:
 	$(MAKE) -C test check-wine
 #	for t in test/testcases/*.exe; do b="`basename $$t .exe`"; \
 #	    $(WINE) $$t | tee tests/$$b.log; done
+.PHONY: check-wine
 endif
 
 EXTRA_DIST = README README-alpha

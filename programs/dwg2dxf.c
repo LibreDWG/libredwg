@@ -27,25 +27,49 @@
 #include "../src/common.h"
 #include "../src/bits.h"
 #include "../src/logging.h"
-#include "suffix.c"
+#include "suffix.inc"
+static int help(void);
+int verbosity(int argc, char **argv, int i);
+#include "common.inc"
 
 int minimal = 0;
+int binary = 0;
 //FILE *fh;
 char buf[4096];
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
 
-int usage(void);
 const char *dxf_format (int code);
 
-int usage(void) {
-  // -as-r2014 for saveas
-  // -m for minimal
-  printf("\nUsage:\tdwg2dxf [-as-rVER] [-m|--minimal] <input_file.dwg> [<output_file.dxf>]\n");
+static int usage(void) {
+  printf("\nUsage: dwg2dxf [-v[N]] [-as-rNNNN] [-m|--minimal] [-b|--binary] <input_file.dwg> [<output_file.dxf>]\n");
   return 1;
 }
+static int opt_version(void) {
+  printf("dwg2dxf %s\n", PACKAGE_VERSION);
+  return 0;
+}
+static int help(void) {
+  printf("\nUsage: dwg2dxf [OPTION]... DWGFILE [DXFFILE]\n");
+  printf("Converts the DWG to a DXF.\n");
+  printf("Default DXFFILE: DWGFILE with .dxf extension.\n"
+         "\n");
+  printf("  -v[0-9], --verbose [0-9]  verbosity\n");
+  printf("  -as-rNNNN                 save as version\n");
+  printf("           Valid versions:\n");
+  printf("             r12, r14, r2000, r2004\n");
+  printf("           Planned versions:\n");
+  printf("             r9, r10, r11, r2007, r2010, r2013, r2018\n");
+  printf("  -m, --minimal             only $ACADVER, HANDSEED and ENTITIES\n");
+  printf("  -b, --binary              save as binary DXF\n"); //not yet
+  printf("      --help                display this help and exit\n");
+  printf("      --version             output version information and exit\n"
+         "\n");
+  printf("GNU LibreDWG online manual: <https://www.gnu.org/software/libredwg/>\n");
+  return 0;
+}
 
-#define VAR(name, code, value)\
+#define VAR(name, code, value)                  \
   {\
     fprintf (fh, "  9\n$" #name "\n%3i\n", code);\
     snprintf (buf, 4096, "%s\n", dxf_format (code));\
@@ -591,6 +615,7 @@ GCC_DIAG_RESTORE
 int
 main (int argc, char *argv[])
 {
+  int i = 1;
   int error;
   Dwg_Data dwg;
   char* filename_in;
@@ -601,31 +626,50 @@ main (int argc, char *argv[])
   // check args
   if (argc < 2)
     return usage();
-  filename_in = argv[1];
 #if defined(USE_TRACING) && defined(HAVE_SETENV)
   setenv("LIBREDWG_TRACE", "1", 0);
 #endif
 
-  if (argc > 2 && !strncmp(argv[1], "-as-r", 5))
+  if (argc > 2 &&
+      (!strcmp(argv[i], "--verbose") ||
+       !strncmp(argv[i], "-v", 2)))
     {
-      const char *opt = argv[1];
+      int num_args = verbosity(argc, argv, i);
+      argc -= num_args;
+      i += num_args;
+    }
+  if (argc > 2 && !strncmp(argv[i], "-as-r", 5))
+    {
+      const char *opt = argv[i];
       dwg_version = dwg_version_as(&opt[4]);
       if (dwg_version == R_INVALID)
         {
-          fprintf(stderr, "Invalid option %s\n", argv[1]);
+          fprintf(stderr, "Invalid version %s\n", opt);
           return usage();
         }
       version = &opt[4];
-      filename_in = argv[2];
       argc--;
+      i++;
     }
   if (argc > 2 && (!strcmp(argv[1], "-m") || !strcmp(argv[1], "--minimal")))
     {
       minimal = 1;
       argc--;
     }
+  if (argc > 2 && (!strcmp(argv[i], "-b") || !strcmp(argv[i], "--binary")))
+    {
+      binary = 1;
+      argc--;
+      i++;
+    }
+  if (argc > 1 && !strcmp(argv[i], "--help"))
+    return help();
+  if (argc > 1 && !strcmp(argv[i], "--version"))
+    return opt_version();
+
+  filename_in = argv[i];
   if (argc > 2)
-    filename_out = argv[2];
+    filename_out = argv[i+1];
   else
     filename_out = suffix (filename_in, "dxf");
   

@@ -20,7 +20,7 @@
 
 #include "config.h"
 #include <dwg.h>
-#include "../programs/suffix.c"
+#include "../programs/suffix.inc"
 
 void
 add_line(double x1, double y1, double x2, double y2)

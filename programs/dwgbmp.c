@@ -22,15 +22,38 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include "../src/config.h"
+
 #include <dwg.h>
-#include "suffix.c"
+#include "suffix.inc"
+static int help(void);
+int verbosity(int argc, char **argv, int i);
+#include "common.inc"
+
+static int usage(void) {
+  printf("\nUsage: dwgbmp [-v[0-9]] DWGFILE [BMPFILE]\n");
+  return 1;
+}
+static int opt_version(void) {
+  printf("dwgbmp %s\n", PACKAGE_VERSION);
+  return 0;
+}
+static int help(void) {
+  printf("\nUsage: dwgbmp [OPTION]... DWGFILE [BMPFILE]\n");
+  printf("Extract the DWG preview image as BMP.\n");
+  printf("Default BMPFILE: DWGFILE with .bmp extension.\n"
+         "\n");
+  printf("  -v[0-9], --verbose [0-9]  verbosity\n");
+  printf("           --help           display this help and exit\n");
+  printf("           --version        output version information and exit\n"
+         "\n");
+  printf("GNU LibreDWG online manual: <https://www.gnu.org/software/libredwg/>\n");
+  return 0;
+}
 
 static int
-get_bmp(char *filename)
+get_bmp(char *dwgfile, char *bmpfile)
 {
-  char *outfile;
   unsigned char *data;
   int success;
   BITCODE_RL size;
@@ -46,9 +69,9 @@ get_bmp(char *filename)
   } bmp_h;
 
   /* Read dwg data */
-  success = dwg_read_file(filename, &dwg);
+  success = dwg_read_file(dwgfile, &dwg);
   if (success != 0) {
-    fprintf(stderr, "Unable to read file %s\n", filename);
+    fprintf(stderr, "Unable to read file %s\n", dwgfile);
     return success;
   }
 
@@ -64,11 +87,10 @@ get_bmp(char *filename)
     return -3;
   }
 
-  outfile = suffix (filename, "bmp");
-  fh = fopen (outfile, "w");
+  fh = fopen (bmpfile, "w");
   if (!fh) {
-    fprintf(stderr, "Unable to write BMP file '%s'\n", outfile);
-    free (outfile);
+    fprintf(stderr, "Unable to write BMP file '%s'\n", bmpfile);
+    free (bmpfile);
     return -4;
   }
 
@@ -84,20 +106,20 @@ get_bmp(char *filename)
   }
   retval = fwrite(&bmp_h.file_size, 3, sizeof(long), fh);
   if (!retval) {
-    free (outfile);
+    free (bmpfile);
     perror("writing BMP file_size"); return 1;
   }
 
   /* Write data (DIB header + bitmap) */
   retval = fwrite(data, 1, size, fh);
   if (!retval) {
-    free (outfile);
+    free (bmpfile);
     perror("writing BMP header"); return 1;
   }
   fclose(fh);
 
-  printf ("Success. Written preview image to '%s'\n", outfile);
-  free (outfile);
+  printf ("Success. Written preview image to '%s'\n", bmpfile);
+  free (bmpfile);
   dwg_free(&dwg);
   return success;
 }
@@ -105,10 +127,30 @@ get_bmp(char *filename)
 int
 main (int argc, char *argv[])
 {
-  REQUIRE_INPUT_FILE_ARG (argc);
+  int i = 1;
+  char *dwgfile, *bmpfile;
+
+  if (argc < 2)
+    return usage();
 #if defined(USE_TRACING) && defined(HAVE_SETENV)
   setenv("LIBREDWG_TRACE", "1", 0);
 #endif
-  return get_bmp (argv[1]);
+  if (argc > 2 &&
+      (!strcmp(argv[i], "--verbose") ||
+       !strncmp(argv[i], "-v", 2)))
+    {
+      int num_args = verbosity(argc, argv, i);
+      argc -= num_args;
+      i += num_args;
+    }
+  if (argc > 1 && !strcmp(argv[i], "--help"))
+    return help();
+  if (argc > 1 && !strcmp(argv[i], "--version"))
+    return opt_version();
+  REQUIRE_INPUT_FILE_ARG (argc);
+
+  dwgfile = argv[i];
+  bmpfile = suffix (dwgfile, "bmp");
+  return get_bmp (dwgfile, bmpfile);
 }
 

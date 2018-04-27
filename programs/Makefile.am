@@ -25,9 +25,9 @@ bin_PROGRAMS = dwgread dwgbmp dwg2SVG
 noinst_PROGRAMS = dwg2dxf
 
 if HAVE_LIBPS
-bin_PROGRAMS += dwg_ps
-dwg_ps_SOURCES = dwg_ps.c
-dwg_ps_LDADD = $(LDADD) -lps
+bin_PROGRAMS += dwg2ps
+dwg2ps_SOURCES = dwg2ps.c
+dwg2ps_LDADD = $(LDADD) -lps
 endif
 
 if USE_WRITE
@@ -57,9 +57,20 @@ endif
 
 TESTS = alive.test
 
-EXTRA_DIST = suffix.c $(TESTS)
+EXTRA_DIST = suffix.inc common.inc $(TESTS)
 CLEANFILES = {example,sample,Leader}_*.{bmp,ps,svg,dxf}
 CLEANFILES += {example,sample,,Leader}_*rewrite.dwg
+
+.PHONY: man dsymutil check-syntax
+
+# could also use $(subst .c,.1,)
+man: $(bin_PROGRAMS) $(noinst_PROGRAMS)
+	for p in $(bin_PROGRAMS) $(noinst_PROGRAMS); do \
+	  $(MAKE) $$p.1; done
+
+# TODO $*F stem is GNU make only. ./ prefix is POSIX only
+.c.1:
+	help2man -p LibreDWG ./$(*F) > $@
 
 .c.i:
 	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -72,7 +83,6 @@ dsymutil:
 check-syntax:
 	test -n "$(CHK_SOURCES)" && \
 	  $(COMPILE) -o /dev/null -S $(CHK_SOURCES)
-.PHONY: check-syntax
 
 #TODO: alive.test => runtests with VALGRIND support
 #@VALGRIND_CHECK_RULES@

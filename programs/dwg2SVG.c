@@ -26,13 +26,36 @@
 #include "../src/config.h"
 #include <dwg.h>
 #include "../src/bits.h"
-#include "suffix.c"
+#include "suffix.inc"
+static int help(void);
+int verbosity(int argc, char **argv, int i);
+#include "common.inc"
+
+static void output_SVG(Dwg_Data* dwg);
 
 Dwg_Data g_dwg;
 double model_xmin, model_ymin;
 double page_width, page_height, scale;
 
-static void output_SVG(Dwg_Data* dwg);
+static int usage(void) {
+  printf("\nUsage: dwg2SVG [-v[0-9]] DWGFILE >SVGFILE\n");
+  return 1;
+}
+static int opt_version(void) {
+  printf("dwg2SVG %s\n", PACKAGE_VERSION);
+  return 0;
+}
+static int help(void) {
+  printf("\nUsage: dwg2SVG [OPTION]... DWGFILE >SVGFILE\n");
+  printf("Converts some 2D elements of the DWG to a SVG.\n"
+         "\n");
+  printf("  -v[0-9], --verbose [0-9]  verbosity\n");
+  printf("           --help           display this help and exit\n");
+  printf("           --version        output version information and exit\n"
+         "\n");
+  printf("GNU LibreDWG online manual: <https://www.gnu.org/software/libredwg/>\n");
+  return 0;
+}
 
 static
 double transform_X(double x)
@@ -257,9 +280,27 @@ output_SVG(Dwg_Data* dwg)
 int
 main(int argc, char *argv[])
 {
+  int i = 1;
+  if (argc < 2)
+    return usage();
+#if defined(USE_TRACING) && defined(HAVE_SETENV)
+  setenv("LIBREDWG_TRACE", "1", 0);
+#endif
+  if (argc > 2 &&
+      (!strcmp(argv[i], "--verbose") ||
+       !strncmp(argv[i], "-v", 2)))
+    {
+      int num_args = verbosity(argc, argv, i);
+      argc -= num_args;
+      i += num_args;
+    }
+  if (argc > 1 && !strcmp(argv[i], "--help"))
+    return help();
+  if (argc > 1 && !strcmp(argv[i], "--version"))
+    return opt_version();
   REQUIRE_INPUT_FILE_ARG (argc);
 #if defined(USE_TRACING) && defined(HAVE_SETENV)
   setenv("LIBREDWG_TRACE", "1", 0);
 #endif
-  return test_SVG (argv[1]);
+  return test_SVG (argv[i]);
 }

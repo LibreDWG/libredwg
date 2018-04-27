@@ -22,7 +22,8 @@
 * finish DXF writing (easy)
 * add DXF reading (easy)
 * add binary DXF
-* add programs manpages
+* move verbosity/loglevel to some dwg or dat struct
+* add programs manpages, add getopt_long, --verbose --version --license
 * add make target: manual
 
 * fix the remaining leaks.
