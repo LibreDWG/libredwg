@@ -20,7 +20,9 @@
 AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src @WARN_CFLAGS@
 LDADD   = $(top_builddir)/src/libredwg.la -lm
 
-bin_PROGRAMS = dwgread dwgbmp dwg2dxf dwg2SVG
+bin_PROGRAMS = dwgread dwgbmp dwg2SVG
+# not yet ready
+noinst_PROGRAMS = dwg2dxf
 
 if HAVE_LIBPS
 bin_PROGRAMS += dwg_ps
@@ -29,7 +31,9 @@ dwg_ps_LDADD = $(LDADD) -lps
 endif
 
 if USE_WRITE
-bin_PROGRAMS += dwgrewrite dxf2dwg
+bin_PROGRAMS += dwgrewrite
+# not yet ready
+noinst_PROGRAMS += dxf2dwg
 dwgrewrite_SOURCES = dwgrewrite.c
 dxf2dwg_SOURCES    = dxf2dwg.c
 endif
