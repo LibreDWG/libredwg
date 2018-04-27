@@ -314,7 +314,7 @@ typedef struct _dwg_color /* CmColor: R15 and earlier */
 {
   unsigned int index;
   long unsigned int rgb;
-  unsigned char byte;    /* &1 name follows, &2 book name follows */
+  unsigned char flag;    /* 1: name follows, 2: book name follows */
   char* name;
   char* book_name;
   unsigned char transparency_type; /* 0 BYLAYER, 1 BYBLOCK, 3 alpha in the last byte */
@@ -1754,6 +1754,11 @@ typedef struct _dwg_object_VIEW
   BITCODE_BD back_clip;
   BITCODE_4BITS view_mode;
   BITCODE_RC render_mode;
+  BITCODE_B use_default_lights;
+  BITCODE_RC default_lightning_type;
+  BITCODE_BD brightness;
+  BITCODE_BD contrast;
+  BITCODE_CMC ambient_color;
   BITCODE_B pspace_flag;
   BITCODE_B associated_ucs;
   BITCODE_3BD origin;
@@ -1766,9 +1771,12 @@ typedef struct _dwg_object_VIEW
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
   BITCODE_H null_handle;
+  BITCODE_H background_handle;
+  BITCODE_H visual_style_handle;
+  BITCODE_H sun_handle;
   BITCODE_H base_ucs_handle;
   BITCODE_H named_ucs_handle;
-  BITCODE_H live_section;
+  BITCODE_H live_section_handle;
 } Dwg_Object_VIEW;
 
 /**

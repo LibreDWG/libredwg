@@ -1284,10 +1284,10 @@ bit_read_CMC(Bit_Chain * dat, Dwg_Color* color)
   if (dat->version >= R_2004)
     {
       color->rgb = bit_read_BL(dat);
-      color->byte = bit_read_RC(dat);
-      if (color->byte & 1)
+      color->flag = bit_read_RC(dat);
+      if (color->flag & 1)
         color->name = (char*)bit_read_TV(dat);
-      if (color->byte & 2)
+      if (color->flag & 2)
         color->book_name = (char*)bit_read_TV(dat);
     }
 }
@@ -1301,10 +1301,10 @@ bit_write_CMC(Bit_Chain * dat, Dwg_Color* color)
   if (dat->version >= R_2004)
     {
       bit_write_BL(dat, color->rgb);
-      bit_write_RC(dat, color->byte);
-      if (color->byte & 1)
+      bit_write_RC(dat, color->flag);
+      if (color->flag & 1)
         bit_write_TV(dat, color->name);
-      if (color->byte & 2)
+      if (color->flag & 2)
         bit_write_TV(dat, color->book_name);
     }
 }

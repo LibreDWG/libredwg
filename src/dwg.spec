@@ -2291,6 +2291,20 @@ DWG_OBJECT(VIEW)
   SINCE(R_2000) {
     FIELD_RC (render_mode, 281);
   }
+  SINCE(R_2007) {
+    IF_ENCODE_FROM_EARLIER {
+      FIELD_VALUE(use_default_lights) = 1;
+      FIELD_VALUE(default_lightning_type) = 1;
+      FIELD_VALUE(ambient_color.index) = 250;
+      //TODO FIELD_VALUE(ambient_color.rgb) = ?;
+      //TODO FIELD_VALUE(ambient_color.byte) = ?; //+ name, book_name
+    }
+    FIELD_B (use_default_lights, 292);
+    FIELD_RC (default_lightning_type, 282);
+    FIELD_BD (brightness, 141);
+    FIELD_BD (contrast, 142);
+    FIELD_CMC (ambient_color, 63);
+  }
   SINCE(R_13) {
     FIELD_B (pspace_flag, 0);
     FIELD_VALUE(flag) =
@@ -2323,16 +2337,21 @@ DWG_OBJECT(VIEW)
     XDICOBJHANDLE(3);
     FIELD_HANDLE (null_handle, 5, 0);
   }
+  SINCE(R_2007) {
+    FIELD_HANDLE (background_handle, 4, 332);
+    FIELD_HANDLE (visual_style_handle, 5, 348);
+    FIELD_HANDLE (sun_handle, 3, 361);
+  }
   SINCE(R_2000)
     {
       if (FIELD_VALUE(associated_ucs) & 1)
         {
-          FIELD_HANDLE (base_ucs_handle, ANYCODE, 346);
-          FIELD_HANDLE (named_ucs_handle, ANYCODE, 345);
+          FIELD_HANDLE (base_ucs_handle, 5, 346);
+          FIELD_HANDLE (named_ucs_handle, 5, 345);
 	}
     }
   SINCE(R_2007) {
-    FIELD_HANDLE (live_section, ANYCODE, 334);
+    FIELD_HANDLE (live_section_handle, 4, 334);
   }
 
 DWG_OBJECT_END
@@ -2452,6 +2471,13 @@ DWG_OBJECT(VPORT)
     }
     SINCE(R_2007)
     {
+      IF_ENCODE_FROM_EARLIER {
+        FIELD_VALUE(use_default_lights) = 1;
+        FIELD_VALUE(default_lightning_type) = 1;
+        FIELD_VALUE(ambient_color.index) = 250;
+        //TODO FIELD_VALUE(ambient_color.rgb) = ?;
+        //TODO FIELD_VALUE(ambient_color.byte) = ?; //+ name, book_name
+      }
       FIELD_B (use_default_lights, 292);
       FIELD_RC (default_lightning_type, 282);
       FIELD_BD (brightness, 141);
@@ -2500,15 +2526,15 @@ DWG_OBJECT(VPORT)
 
   SINCE(R_2007)
     {
-      FIELD_HANDLE (background_handle, ANYCODE, 332);
-      FIELD_HANDLE (visual_style_handle, ANYCODE, 348);
-      FIELD_HANDLE (sun_handle, ANYCODE, 361);
+      FIELD_HANDLE (background_handle, 4, 332);
+      FIELD_HANDLE (visual_style_handle, 5, 348);
+      FIELD_HANDLE (sun_handle, 3, 361);
     }
 
   SINCE(R_2000)
     {
-      FIELD_HANDLE (named_ucs_handle, ANYCODE, 345);
-      FIELD_HANDLE (base_ucs_handle, ANYCODE, 346);
+      FIELD_HANDLE (named_ucs_handle, 5, 345);
+      FIELD_HANDLE (base_ucs_handle, 5, 346);
     }
 
 DWG_OBJECT_END
