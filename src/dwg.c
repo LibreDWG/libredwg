@@ -52,6 +52,7 @@ dwg_read_file(char *filename, Dwg_Data * dwg_data)
   size_t size;
   Bit_Chain bit_chain;
 
+  memset(dwg_data, 0, sizeof(Dwg_Data));
   if (stat(filename, &attrib))
     {
       LOG_ERROR("File not found: %s\n", filename)
@@ -96,7 +97,6 @@ dwg_read_file(char *filename, Dwg_Data * dwg_data)
   fclose(fp);
 
   /* Decode the dwg structure */
-  memset(dwg_data, 0, sizeof(Dwg_Data));
   if (dwg_decode(&bit_chain, dwg_data))
     {
       LOG_ERROR("Failed to decode file: %s\n", filename)
