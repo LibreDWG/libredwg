@@ -58,7 +58,11 @@ dwg_read_file(char *filename, Dwg_Data * dwg_data)
       LOG_ERROR("File not found: %s\n", filename)
       return -1;
     }
-  if (!S_ISREG (attrib.st_mode))
+  if (!(S_ISREG (attrib.st_mode)
+#ifndef _WIN32
+        || S_ISLNK (attrib.st_mode)
+#endif
+        ))
     {
       LOG_ERROR("Error: %s\n", filename)
       return -1;
@@ -121,8 +125,8 @@ dwg_read_file(char *filename, Dwg_Data * dwg_data)
 int
 dwg_write_file(char *filename, Dwg_Data * dwg_data)
 {
-  FILE *dt;
-  struct stat atrib;
+  FILE *fh;
+  struct stat attrib;
   Bit_Chain bit_chain;
 
   assert(filename);
@@ -144,13 +148,13 @@ dwg_write_file(char *filename, Dwg_Data * dwg_data)
     }
  
   // try opening the output file in write mode
-  if (!stat (filename, &atrib))
+  if (!stat (filename, &attrib))
     {
       LOG_ERROR("The file already exists. We won't overwrite it.")
       return -1;
     }
-  dt = fopen (filename, "w");
-  if (!dt)
+  fh = fopen (filename, "wb");
+  if (!fh)
     {
       LOG_ERROR("Failed to create the file: %s\n", filename)
       return -1;
@@ -158,16 +162,16 @@ dwg_write_file(char *filename, Dwg_Data * dwg_data)
    
 
   // Write the data into the file
-  if (fwrite (bit_chain.chain, sizeof (char), bit_chain.size, dt) != bit_chain.size)
+  if (fwrite (bit_chain.chain, sizeof (char), bit_chain.size, fh) != bit_chain.size)
     {
       LOG_ERROR("Failed to write data into the file: %s\n", filename)
-      fclose (dt);
+      fclose (fh);
       free (bit_chain.chain);
       bit_chain.chain = NULL;
       bit_chain.size = 0;
       return -1;
     }
-  fclose (dt);
+  fclose (fh);
 
   if (bit_chain.size > 0) {
     free (bit_chain.chain);
