@@ -1642,7 +1642,7 @@ DWG_OBJECT(DICTIONARY)
           obj->handle.value);
       return;
     }
-  FIELD_VECTOR (text, TV, numitems, 0);
+  FIELD_VECTOR_T (text, numitems, 0);
 
   START_HANDLE_STREAM;
   FIELD_HANDLE (parenthandle, 4, 0);
@@ -1678,7 +1678,7 @@ DWG_OBJECT(DICTIONARYWDLFT)
           obj->handle.value);
       return;
     }
-  FIELD_VECTOR (text, TV, numitems, 0);
+  FIELD_VECTOR_T (text, numitems, 0);
 
   START_HANDLE_STREAM;
   FIELD_HANDLE (parenthandle, 4, 0);
@@ -1776,7 +1776,7 @@ DWG_ENTITY(MTEXT)
           FIELD_B (flow_reversed, 74);
           if (!FIELD_VALUE(auto_height) && FIELD_VALUE(column_type) == 2)
             {
-              FIELD_VECTOR(column_heights, BD, num_column_heights, 46);
+              FIELD_VECTOR (column_heights, BD, num_column_heights, 46);
             }
         }
     }
@@ -2997,8 +2997,8 @@ DWG_ENTITY(HATCH)
                       FIELD_B (paths[rcount].segs[rcount2].is_periodic, 74);
                       FIELD_BL (paths[rcount].segs[rcount2].num_knots, 95);
                       FIELD_BL (paths[rcount].segs[rcount2].num_control_points, 96);
-                      FIELD_VECTOR(paths[rcount].segs[rcount2].knots, BD,
-                                   paths[rcount].segs[rcount2].num_knots, 40)
+                      FIELD_VECTOR (paths[rcount].segs[rcount2].knots, BD,
+                                    paths[rcount].segs[rcount2].num_knots, 40)
                       REPEAT3(paths[rcount].segs[rcount2].num_control_points,
                               paths[rcount].segs[rcount2].control_points,
                               Dwg_Entity_HATCH_ControlPoint)
@@ -4548,7 +4548,7 @@ DWG_ENTITY(MULTILEADER)
       FIELD_BD (ctx.txt.col_gutter, 143);
       FIELD_B (ctx.txt.is_col_flow_reversed, 294);
       FIELD_BL (ctx.txt.num_col_sizes, 0);
-      FIELD_VECTOR(ctx.txt.col_sizes, BD, ctx.txt.num_col_sizes, 144);
+      FIELD_VECTOR (ctx.txt.col_sizes, BD, ctx.txt.num_col_sizes, 144);
       FIELD_B (ctx.txt.word_break, 295);
       FIELD_B (ctx.txt.unknown, 0);
     }

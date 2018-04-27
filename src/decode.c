@@ -1215,7 +1215,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
             LOG_HANDLE("start 3: %lu\n", pvzadr-16);
           }
 
-        FIELD_BS(num_handlers, 0); // 14, resp. 16 in r14
+        FIELD_BS (num_handlers, 0); // 14, resp. 16 in r14
         if (FIELD_VALUE(num_handlers) > 16) {
           LOG_ERROR("Second header num_handlers > 16: %d\n",
                     FIELD_VALUE(num_handlers));
@@ -1223,17 +1223,17 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
         }
         for (i = 0; i < FIELD_VALUE(num_handlers); i++)
           {
-            FIELD_RC(handlers[i].size, 0);
-            FIELD_RC(handlers[i].nr, 0);
-            FIELD_VECTOR(handlers[i].data, RC, handlers[i].size, 0);
+            FIELD_RC (handlers[i].size, 0);
+            FIELD_RC (handlers[i].nr, 0);
+            FIELD_VECTOR (handlers[i].data, RC, handlers[i].size, 0);
           }
 
         // Check CRC-on
         ckr = bit_read_CRC(dat);
 
         VERSION(R_14) {
-          FIELD_RL(junk_r14_1, 0);
-          FIELD_RL(junk_r14_2, 0);
+          FIELD_RL (junk_r14_1, 0);
+          FIELD_RL (junk_r14_2, 0);
         }
       }
 
@@ -2726,7 +2726,7 @@ dwg_decode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg,
   ref = dwg_decode_handleref(dat, obj, dwg);
   if (!ref)
     {
-      LOG_ERROR("Invalid handleref");
+      //LOG_ERROR("Invalid handleref");
       return NULL;
     }
 
@@ -3097,6 +3097,9 @@ decode_preR13_entities(unsigned long start, unsigned long end,
             break;
           case 24:
             dwg_decode_VPORT(dat, obj);
+            break;
+          default:
+            LOG_ERROR("Unknown object type %d", obj->type)
             break;
         }
       crc = bit_read_RS(dat);

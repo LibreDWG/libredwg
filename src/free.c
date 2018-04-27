@@ -109,6 +109,7 @@ extern void dwg_free_xdata_resbuf(Dwg_Resbuf *rbuf);
       FIELD_##type(name[vcount], dxf); \
   } \
   FIELD_TV(name,dxf);
+#define FIELD_VECTOR_T(name, size, dxf) FIELD_VECTOR_N(name, TV, _obj->size, dxf)
 #define FIELD_VECTOR(name, type, size, dxf) FIELD_VECTOR_N(name, type, _obj->size, dxf)
 #define FIELD_2RD_VECTOR(name, size, dxf) FIELD_TV(name,dxf)
 #define FIELD_2DD_VECTOR(name, size, dxf) FIELD_TV(name,dxf)

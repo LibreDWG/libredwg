@@ -190,7 +190,7 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 //FIELD_VECTOR_N(name, type, size):
 // writes a 'size' elements vector of data of the type indicated by 'type'
 #define FIELD_VECTOR_N(name, type, size, dxf)\
-  if (size>0)\
+  if (size > 0)\
     {\
       for (vcount=0; vcount < (long)size; vcount++)\
         {\
@@ -199,6 +199,20 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
             {\
               LOG_TRACE(#name "[%ld]: " FORMAT_##type "\n", (long)vcount, _obj->name[vcount]) \
             }\
+        }\
+    }
+#define FIELD_VECTOR_T(name, size, dxf)\
+  if (_obj->size > 0)\
+    {\
+      for (vcount=0; vcount < (long)_obj->size; vcount++)\
+        {\
+          PRE (R_2007) { \
+            bit_write_TV(dat, _obj->name[vcount]);\
+            LOG_TRACE(#name "[%d]: %s\n", (int)vcount, _obj->name[vcount]) \
+          } else { \
+            bit_write_TU(dat, (BITCODE_TU)_obj->name[vcount]); \
+            LOG_TRACE_TU(#name, _obj->name[vcount], dxf) \
+          } \
         }\
     }
 

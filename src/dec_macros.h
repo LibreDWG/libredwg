@@ -193,14 +193,31 @@
 // reads data of the type indicated by 'type' 'size' times and stores
 // it all in the vector called 'name'.
 #define FIELD_VECTOR_N(name, type, size, dxf) \
-  if (size>0)\
-    {\
+  if (size > 0) \
+    { \
       _obj->name = (BITCODE_##type*) malloc(size * sizeof(BITCODE_##type));\
       for (vcount=0; vcount<(long)size; vcount++) \
         {\
-          _obj->name[vcount] = bit_read_##type(dat);\
-          LOG_INSANE(#name "[%ld]: " FORMAT_##type "\n", (long)vcount, _obj->name[vcount]) \
-        }\
+          _obj->name[vcount] = bit_read_##type(dat); \
+          LOG_INSANE(#name "[%ld]: " FORMAT_##type "\n", \
+                     (long)vcount, _obj->name[vcount]) \
+        } \
+    }
+#define FIELD_VECTOR_T(name, size, dxf) \
+  if (_obj->size > 0) \
+    { \
+      _obj->name = (char**) malloc(_obj->size * sizeof(char*)); \
+      for (vcount=0; vcount<(long)_obj->size; vcount++) \
+        {\
+          PRE (R_2007) { \
+            _obj->name[vcount] = bit_read_TV(dat); \
+            LOG_INSANE(#name "[%ld]: %s\n", \
+                       (long)vcount, _obj->name[vcount]) \
+          } LATER_VERSIONS { \
+            _obj->name[vcount] = (char*)bit_read_TU(dat); \
+            LOG_TRACE_TU(#name, _obj->name[vcount], dxf) \
+          } \
+        } \
     }
 
 #define FIELD_VECTOR(name, type, size, dxf) FIELD_VECTOR_N(name, type, _obj->size, dxf)

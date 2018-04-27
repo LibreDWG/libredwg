@@ -40,15 +40,15 @@
 /* Advance bits (forward or backward)
  */
 void
-bit_advance_position(Bit_Chain * dat, int advance)
+bit_advance_position(Bit_Chain * dat, long advance)
 {
-  int endpos = dat->bit + advance;
+  long endpos = dat->bit + advance;
   if (dat->byte >= dat->size - 1 && endpos > 7)
     {
       // but allow pointing to the very end.
       if ( dat->byte != dat->size - 1 || dat->bit != 0 )
         {
-          LOG_ERROR("buffer overflow at pos %lu, size %lu, advance by %d",
+          LOG_ERROR("buffer overflow at pos %lu, size %lu, advance by %ld",
                     dat->byte, dat->size, advance)
         }
       dat->byte = dat->size - 1;
@@ -960,7 +960,7 @@ bit_read_H(Bit_Chain * dat, Dwg_Handle * handle)
   handle->value = 0;
   if (handle->size > 4)
     {
-      LOG_ERROR("handle-reference is longer than 4 bytes: %i.%i.%lu\n",
+      LOG_ERROR("Invalid handle-reference, longer than 4 bytes: %i.%i.%lu",
                 handle->code, handle->size, handle->value)
       handle->size = 0;
       return (-1);

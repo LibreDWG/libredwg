@@ -124,6 +124,18 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
           LOG_TRACE(#name "[%d]: " FORMAT_##type "\n", vcount, _obj->name[vcount])\
         }\
     }
+#define FIELD_VECTOR_T(name, size, dxf)\
+  if (_obj->size > 0)\
+    {\
+      for (vcount=0; vcount < (int)_obj->size; vcount++)\
+        {\
+          PRE (R_2007) { \
+            LOG_TRACE(#name "[%d]: %s\n", vcount, _obj->name[vcount]) \
+          } else { \
+            LOG_TRACE_TU(#name, _obj->name[vcount], dxf) \
+          } \
+        }\
+    }
 
 #define FIELD_VECTOR(name, type, size, dxf) FIELD_VECTOR_N(name, type, _obj->size, dxf)
 
