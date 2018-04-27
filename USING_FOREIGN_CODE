@@ -1,0 +1,64 @@
+The GPLv3 is compatible with the following licenses (but not vice versa):
+
+* GPLv2 and later. (Not the GPLv2 only License)
+* Affero General Public License, Version 3 (see sec. 13 of GPLv3)
+* Lesser General Public License, Versions 2, 2.1 and 3 (LGPL)
+* GNU All-Permissive License
+* Apache License, Version 2
+* Artistic License 2.0
+* Clarified Artistic License
+* Berkeley Database License (a.k.a. the Sleepycat Software Product License)
+* Boost Software License
+* Modified BSD license without the advertising clause (aka 3-clause BSD license)
+* CC0
+* CeCILL version 2
+* The Clear BSD License
+* Cryptix General License
+* eCos license version 2.0
+* Educational Community License 2.0
+* Eiffel Forum License, version 2
+* EU DataGrid Software License
+* Expat License
+* FreeBSD license (aka 2-clause BSD license), the original BSD license with the
+  advertising clause and another clause removed.
+* Freetype Project License
+* Historical Permission Notice and Disclaimer
+* License of the iMatix Standard Function Library
+* License of imlib2
+* Independent JPEG Group License
+* Informal license, with caveats.
+* Intel Open Source License
+* ISC License (aka OpenBSD License), with caveats.
+* Mozilla Public License (MPL) version 2.0
+* NCSA/University of Illinois Open Source License
+* License of Netscape JavaScript
+* OpenLDAP License, Version 2.7
+* License of Perl 5 and below, with caveats.
+* Public Domain
+* License of Python 2.0.1, 2.1.1, and newer versions
+* License of Python 1.6a2 and earlier versions
+* License of Ruby
+* SGI Free Software License B, version 2.0
+* Standard ML of New Jersey Copyright License
+* Unicode, Inc. License Agreement for Data Files and Software
+* Universal Permissive License (UPL)
+* The Unlicense
+* License of Vim, Version 6.1 or later
+* W3C Software Notice and License
+* License of WebM
+* WTFPL, Version 2
+* WxWidgets Library License
+* WxWindows Library License
+* X11 License
+* XFree86 1.1 License
+* License of ZLib
+* Zope Public License, Version 2.0 und 2.1
+
+Note: This means OSS (Open Source Software) under a listed license can
+generally be used for creating free software under GPLv3. It does not
+mean free software under the GPLv3 may be incorporated into OSS which
+uses one of these licenses.
+
+From https://www.gnu.org/licenses/license-list.en.html#GPLCompatibleLicenses
+
+See also CONTRIBUTING.

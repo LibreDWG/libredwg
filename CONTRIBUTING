@@ -9,11 +9,11 @@ Before we can incorporate significant contributions, certain legal
 requirements must be met. This package is owned by the FSF.
 
 The FSF prefers that a contributor files a copyright assignment for
-significant contributions, i.e. > 15 lines of code or
-docs. The most common forms are an assignment for a specific change,
-an assignment for all future changes, and an employer disclaimer, if
-an employer or school owns work created by the developer. It's a good
-idea to send assign@gnu.org a copy of your request.
+significant contributions, i.e. > 15 lines of code or docs. The most
+common forms are an assignment for a specific change, an assignment
+for all future changes, and an employer disclaimer, if an employer or
+school owns work created by the developer. It's a good idea to send
+assign@gnu.org a copy of your request.
 
 If a contributor is reluctant to sign a copyright assignment for a
 change, a copyright disclaimer to put the change in the public domain
