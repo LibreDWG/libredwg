@@ -135,6 +135,15 @@ someone should probably think about and resolve them!
 
   because the system python is missing libxml2.
 
+* adding other code
+
+You can only add significant code by some author who has copyright
+assigned to the FSF or signed a copyright disclaimer with the FSF. See
+CONTRIBUTING.
+
+The license of this work (code, docs, ...) must be GPLv3 compatible,
+see the list at USING_FOREIGN_CODE.
+
 * etc
 #+STARTUP: odd
   Local variables:
