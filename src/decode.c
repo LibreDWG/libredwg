@@ -2894,7 +2894,7 @@ dwg_free_xdata_resbuf(Dwg_Resbuf *rbuf)
 static Dwg_Resbuf*
 dwg_decode_xdata(Bit_Chain * dat, Dwg_Object_XRECORD *obj, int size)
 {
-  Dwg_Resbuf *rbuf, *root=0, *curr=0;
+  Dwg_Resbuf *rbuf, *root = NULL, *curr = NULL;
   unsigned char codepage;
   long unsigned int end_address;
   int i, length, num_xdata = 0;
@@ -2910,11 +2910,11 @@ dwg_decode_xdata(Bit_Chain * dat, Dwg_Object_XRECORD *obj, int size)
       if (!rbuf)
         {
           LOG_ERROR("Out of memory");
-          dwg_free_xdata_resbuf(curr);
+          dwg_free_xdata_resbuf(root);
           return NULL;
         }
       num_xdata++;
-      rbuf->next = 0;
+      rbuf->next = NULL;
       rbuf->type = bit_read_RS(dat);
 
       switch (get_base_value_type(rbuf->type))
@@ -2932,7 +2932,10 @@ dwg_decode_xdata(Bit_Chain * dat, Dwg_Object_XRECORD *obj, int size)
                 if (!rbuf->value.str.u.wdata)
                   {
                     LOG_ERROR("Out of memory");
-                    dwg_free_xdata_resbuf(rbuf);
+                    if (root)
+                      dwg_free_xdata_resbuf(root);
+                    else
+                      dwg_free_xdata_resbuf(rbuf);
                     return NULL;
                   }
                 for (i = 0; i < length; i++)
@@ -2974,11 +2977,12 @@ dwg_decode_xdata(Bit_Chain * dat, Dwg_Object_XRECORD *obj, int size)
           dat->byte = end_address;
           obj->num_eed = num_xdata;
           return root;
-          break;
         }
 
-      if (curr == 0)
-        curr = root = rbuf;
+      if (!curr)
+        {
+          curr = root = rbuf;
+        }
       else
         {
           curr->next = rbuf;
