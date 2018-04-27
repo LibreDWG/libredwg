@@ -22,6 +22,8 @@
 * finish DXF writing (easy)
 * add DXF reading (easy)
 * add binary DXF
+* add programs manpages
+* add make target: manual
 
 * fix the remaining leaks.
 * enhance and document the API functions.
