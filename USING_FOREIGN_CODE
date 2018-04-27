@@ -62,3 +62,93 @@ uses one of these licenses.
 From https://www.gnu.org/licenses/license-list.en.html#GPLCompatibleLicenses
 
 See also CONTRIBUTING.
+
+Incompatible software licenses include:
+--------------------------------------
+
+GPL-Incompatible Free Software Licenses
+
+The following licenses are free software licenses, but are not
+compatible with the GNU GPL.
+
+* Affero General Public License version 1
+* Academic Free License, all versions through 3.0
+* Apache License, Version 1.1
+* Apache License, Version 1.0
+* Apple Public Source License (APSL), version 2
+* BitTorrent Open Source License
+* Original BSD license (aka 4-clause BSD license)
+* CeCILL-B version 1
+* CeCILL-C version 1
+* Common Development and Distribution License (CDDL), version 1.0
+* Common Public Attribution License 1.0 (CPAL)
+* Common Public License Version 1.0
+* Condor Public License
+* Eclipse Public License Version 1.0 and 2.0
+* European Union Public License (EUPL) version 1.1
+* Gnuplot license
+* IBM Public License, Version 1.0
+* Jabber Open Source License, Version 1.0
+* LaTeX Project Public License 1.2 and 1.3a
+* Lucent Public License Version 1.02 (Plan 9 license)
+* Microsoft Public License (Ms-PL)
+* Microsoft Reciprocal License (Ms-RL)
+* Mozilla Public License (MPL) version 1.1
+* Netizen Open Source License (NOSL), Version 1.0
+* Netscape Public License (NPL), versions 1.0 and 1.1
+* Nokia Open Source License
+* Old OpenLDAP License, Version 2.3
+* Open Software License, all versions through 3.0
+* OpenSSL license
+* Phorum License, Version 2.0
+* PHP License, Version 3.01
+* License of Python 1.6b1 through 2.0 and 2.1
+* Q Public License (QPL), Version 1.0
+* RealNetworks Public Source License (RPSL), Version 1.0
+* Sun Industry Standards Source License 1.0
+* Sun Public License
+* License of xinetd
+* Yahoo! Public License 1.1
+* Zend License, Version 2.0
+* Zimbra Public License 1.3
+* Zope Public License version 1
+
+Nonfree Software Licenses
+
+The following licenses do not qualify as free software licenses. A
+nonfree license is automatically incompatible with the GNU GPL.
+
+* No license
+* Aladdin Free Public License
+* Apple Public Source License (APSL), version 1.x
+* Artistic License 1.0
+* AT&T Public License
+* Code Project Open License, version 1.02
+* eCos Public License, version 1.1
+* CNRI Digital Object Repository License Agreement
+* GPL for Computer Programs of the Public Administration
+* Hacktivismo Enhanced-Source Software License Agreement (HESSLA)
+* Jahia Community Source License
+* The JSON License
+* Old license of ksh93
+* License of Lha
+* Microsoft's Shared Source CLI, C#, and Jscript License
+* NASA Open Source Agreement
+* Oculus Rift SDK License
+* Open Public License
+* Peer-Production License
+* License of PINE
+* Old Plan 9 license
+* Reciprocal Public License
+* Scilab license
+* Scratch 1.4 license
+* Simple Machines License
+* Old Squeak license
+* Sun Community Source License
+* Sun Solaris Source Code (Foundation Release) License, Version 1.1
+* Sybase Open Watcom Public License version 1.0
+* SystemC “Open Source” License, Version 3.0
+* Truecrypt license 3.0
+* University of Utah Public License
+* YaST License
+
