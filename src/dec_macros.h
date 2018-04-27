@@ -324,7 +324,7 @@
 #define START_HANDLE_STREAM \
   *hdl_dat = *dat; \
   if (dat->version >= R_2007) { \
-    if (obj->has_strings) bit_set_position(hdl_dat, obj->hdlpos); \
+    if (1 || obj->has_strings) bit_set_position(hdl_dat, obj->hdlpos); \
     else bit_advance_position(hdl_dat, 1); \
   }
 

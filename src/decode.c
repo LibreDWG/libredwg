@@ -2312,17 +2312,16 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
 
   VERSIONS(R_2000, R_2010)
     {
-      SINCE(R_2007)
-        {
-          *str_dat = *dat;
-        }
+      SINCE(R_2007) {
+        *str_dat = *dat;
+      }
       ent->bitsize = bit_read_RL(dat); // until the handles
       LOG_TRACE("Entity bitsize: " FORMAT_BL " @%lu.%u\n", ent->bitsize, dat->byte, dat->bit)
     }
   SINCE(R_2007)
     {
-      // set the handle stream offset
-      ent->object->hdlpos = bit_position(dat) + ent->bitsize;
+      // The handle stream offset, - 2*RL
+      ent->object->hdlpos = bit_position(dat) + ent->bitsize - 32;
       ent->object->bitsize = ent->bitsize;
       // and set the string stream (restricted to size)
       obj_string_stream(dat, ent->object, str_dat);
@@ -2332,7 +2331,7 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
   if (error)
     {
       LOG_WARN(
-          "dwg_decode_entity read ent->object->handle:\tCurrent Bit_Chain address: 0x%0x",
+          "dwg_decode_entity handle:\tCurrent Bit_Chain address: 0x%0x",
           (unsigned int) dat->byte)
       ent->bitsize = 0;
       ent->num_eed = 0;
@@ -2497,10 +2496,9 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
   obj->datpos = dat->byte;     // the data stream offset
   VERSIONS(R_2000, R_2007)
     {
-      SINCE(R_2007)
-        {
-          *str_dat = *dat;
-        }
+      SINCE(R_2007) {
+        *str_dat = *dat;
+      }
       obj->bitsize = bit_read_RL(dat);
     }
   SINCE(R_2010)
@@ -2511,9 +2509,9 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
     {
       LOG_TRACE("Object bitsize: " FORMAT_RL " @%lu.%u %lu\n", obj->bitsize,
                dat->byte, dat->bit, bit_position(dat));
-      // the handle stream offset, i.e. end of the object, right after the has_strings bit.
-      // minus 1* RL
-      obj->object->hdlpos = bit_position(dat) + obj->bitsize;
+      // The handle stream offset, i.e. end of the object, right after
+      // the has_strings bit. minus 2* RL
+      obj->object->hdlpos = bit_position(dat) + obj->bitsize - 32;
       obj->object->bitsize = obj->bitsize;
       obj_string_stream(dat, obj->object, str_dat);
     }
