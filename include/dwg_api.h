@@ -2624,18 +2624,18 @@ BITCODE_BS
 dwg_ent_viewport_get_shadeplot_mode(dwg_ent_viewport *vp, int *error);
 
 void
-dwg_ent_viewport_set_use_def_lights(dwg_ent_viewport *vp,
+dwg_ent_viewport_set_use_default_lights(dwg_ent_viewport *vp,
                                     unsigned char lights, int *error);
 
 unsigned char
-dwg_ent_viewport_get_use_def_lights(dwg_ent_viewport *vp, int *error);
+dwg_ent_viewport_get_use_default_lights(dwg_ent_viewport *vp, int *error);
 
 void
-dwg_ent_viewport_set_def_lighting_type(dwg_ent_viewport *vp, char type,
+dwg_ent_viewport_set_default_lighting_type(dwg_ent_viewport *vp, char type,
                                        int *error);
 
 char
-dwg_ent_viewport_get_def_lighting_type(dwg_ent_viewport *vp, int *error);
+dwg_ent_viewport_get_default_lighting_type(dwg_ent_viewport *vp, int *error);
 
 void
 dwg_ent_viewport_set_brightness(dwg_ent_viewport *vp, BITCODE_BD brightness,

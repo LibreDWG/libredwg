@@ -1280,11 +1280,11 @@ DWG_ENTITY(VIEWPORT)
 
   SINCE(R_2007)
     {
-      FIELD_B (use_def_lights, 292);
-      FIELD_RC (def_lighting_type, 282);
+      FIELD_B (use_default_lights, 292);
+      FIELD_RC (default_lighting_type, 282);
       FIELD_BD (brightness, 141);
       FIELD_BD (contrast, 142);
-      FIELD_CMC (ambient_light_color, 63);
+      FIELD_CMC (ambient_color, 63);
     }
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -2482,7 +2482,7 @@ DWG_OBJECT(VPORT)
       FIELD_RC (default_lightning_type, 282);
       FIELD_BD (brightness, 141);
       FIELD_BD (contrast, 142);
-      FIELD_CMC (ambient_color, 63);
+      FIELD_CMC (ambient_color, 63); // +421, 431
     }
     
     FIELD_2RD (lower_left, 10);
@@ -2528,7 +2528,7 @@ DWG_OBJECT(VPORT)
     {
       FIELD_HANDLE (background_handle, 4, 332);
       FIELD_HANDLE (visual_style_handle, 5, 348);
-      FIELD_HANDLE (sun_handle, 3, 361);
+      FIELD_HANDLE (sun_handle, 3, 361); //333 shade_plot?
     }
 
   SINCE(R_2000)

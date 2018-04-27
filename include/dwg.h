@@ -1243,11 +1243,11 @@ typedef struct _dwg_entity_VIEWPORT
   BITCODE_BD ucs_elevation;
   BITCODE_BS ucs_ortho_view_type;
   BITCODE_BS shadeplot_mode;
-  BITCODE_B use_def_lights;
-  BITCODE_RC def_lighting_type;
+  BITCODE_B use_default_lights;
+  BITCODE_RC default_lighting_type;
   BITCODE_BD brightness;
   BITCODE_BD contrast;
-  BITCODE_CMC ambient_light_color;
+  BITCODE_CMC ambient_color;
 } Dwg_Entity_VIEWPORT;
 
 /**

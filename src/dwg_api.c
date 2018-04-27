@@ -11303,13 +11303,13 @@ dwg_ent_viewport_get_shadeplot_mode(dwg_ent_viewport *vp, int *error)
 
 /// Sets viewport default lightning usage
 void
-dwg_ent_viewport_set_use_def_lights(dwg_ent_viewport *vp,
+dwg_ent_viewport_set_use_default_lights(dwg_ent_viewport *vp,
                                     unsigned char lights, int *error)
 {
   if (vp != 0)
     {
       *error = 0;
-      vp->use_def_lights = lights;
+      vp->use_default_lights = lights;
     }
   else
     {
@@ -11320,12 +11320,12 @@ dwg_ent_viewport_set_use_def_lights(dwg_ent_viewport *vp,
 
 /// Returns viewport default lightning usage
 unsigned char
-dwg_ent_viewport_get_use_def_lights(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_use_default_lights(dwg_ent_viewport *vp, int *error)
 {
   if (vp != 0)
     {
       *error = 0;
-      return vp->use_def_lights;
+      return vp->use_default_lights;
     }
   else
     {
@@ -11337,13 +11337,13 @@ dwg_ent_viewport_get_use_def_lights(dwg_ent_viewport *vp, int *error)
 
 /// Sets viewport default lightning type
 void
-dwg_ent_viewport_set_def_lighting_type(dwg_ent_viewport *vp, char type,
+dwg_ent_viewport_set_default_lighting_type(dwg_ent_viewport *vp, char type,
                                        int *error)
 {
   if (vp != 0)
     {
       *error = 0;
-      vp->def_lighting_type = type;
+      vp->default_lighting_type = type;
     }
   else
     {
@@ -11354,12 +11354,12 @@ dwg_ent_viewport_set_def_lighting_type(dwg_ent_viewport *vp, char type,
 
 /// Returns viewport default lightning type
 char
-dwg_ent_viewport_get_def_lighting_type(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_default_lighting_type(dwg_ent_viewport *vp, int *error)
 {
   if (vp != 0)
     {
       *error = 0;
-      return vp->def_lighting_type;
+      return vp->default_lighting_type;
     }
   else
     {
