@@ -13,7 +13,7 @@
 @copying
 This manual is for GNU LibreDWG (version @value{VERSION}, @value{UPDATED}).
 
-Copyright @copyright{} 2010 Free Software Foundation, Inc.
+Copyright @copyright{} 2010, 2015, 2018 Free Software Foundation, Inc.
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
@@ -33,9 +33,9 @@ Texts.  A copy of the license is included in the section entitled
 @titlepage
 @title GNU LibreDWG
 @subtitle for version @value{VERSION}, @value{UPDATED}
-@author Thien-Thi Nguyen
 @c Hey, if you can change this, you can comment in the next line!
 @author GNU LibreDWG Developers
+@author Thien-Thi Nguyen
 @page
 @vskip 0pt plus 1filll
 @insertcopying
@@ -57,7 +57,7 @@ Texts.  A copy of the license is included in the section entitled
 * Types::               Enums, structs.
 * Constants::           Value macros, invariably.
 * Functions::           Call them.
-* Examples::            Useful binaries.
+* Programs::            Useful binaries.
 
 * Reporting bugs::      Sending bug reports and feature suggestions.
 * GNU Free Documentation License:: Copying and sharing this documentation.
@@ -111,7 +111,7 @@ The LibreDWG implementation of the specification is an ongoing process;
 as of version @value{VERSION}, coverage is approximately 99%.
 
 It can read the formats R13, R14, R2000 and R2004 for 99%.
-R2007 can be partially read (~80%).
+R11 and R2007 can be partially read (~80%).
 
 Here is a list of features that are still missing.
 
@@ -119,13 +119,14 @@ Here is a list of features that are still missing.
 
 @table @asis
 
-@item Reading R2007+ DWG
-Reading DWG formats for R2007 and later: R2010, R2013, R2018 is an ongoing effort, and about halfway implemented.
+@item Reading pre-R13 and R2007+ DWG
+Reading DWG formats for pre-R13 and R2007 and later: R2010, R2013, R2018 is an ongoing effort, and about halfway implemented.
 
-Reading DWG formats for earlier than R13 is not our target, but will be added eventually as soon as we find proper docs and samples.
+@item Writing pre-R13 and R2004+ DWG
+Writing DWG formats for R2004 and later: R2007, R2010, R2013, R2018 is an ongoing effort and not yet implemented.
 
-@item Writing R2007+ DWG
-Writing DWG formats for R2007 and later: R2010, R2013, R2018 is an ongoing effort and not yet implemented.
+@item Reading and writing ASCII and binary DXF
+DXF support is an ongoing effort, and about halfway implemented.
 
 @end table
 
@@ -146,10 +147,11 @@ Related libraries:
 
 @table @asis
 @item libdwg
-The old abandoned version (documented in Esperanto) which was forked to LibreDWG in 2009.
+The old version (documented in Esperanto) which was forked to LibreDWG in 2009.
 But in the meantime it got a DXF reader.
 @item libdxfrw
-Read the DWG format for all versions, written in C++, under the GPLv2 license.
+Read the DWG format for all versions but with much less elements, only those needed for DXF.
+Written in C++, under the GPLv2 license.
 @item OpenDWG
 The OpenDWG's license does not allow the usage in free software projects.
 @end table
@@ -159,7 +161,7 @@ made it impossible for the free software projects LibreCAD and FreeCAD
 to use LibreDWG.
 
 Compared to libdwg and libdxfrw, LibreDWG can read and write much more details,
-but still fails to read many DWG's.
+but still fails to read newer DWG's.
 
 @node Usage
 @chapter Usage
@@ -410,10 +412,10 @@ Return 0 if successful.
 The iterator is similar to above, but you want to encode all data structures, not just the
 entities.
 
-@node Examples
-@chapter Examples
+@node Programs
+@chapter Programs
 
-@cindex examples
+@cindex programs
 
 LibreDWG installs some binary programs to read or write DWG files.
 
@@ -422,23 +424,27 @@ LibreDWG installs some binary programs to read or write DWG files.
 @item @file{dwgread}
 
 This is mostly used with @code{--enable-trace} and @code{LIBREDWG_TRACE=n} to debug
-the read contents of the DWG.
+the decoded contents of the DWG.
 
 @item @file{dwgrewrite}
 
-Read and write the DWG, optionally via @code{--as-rVER} as another
+Read and write the DWG, optionally via @code{--as-rNNNN} as another
 version, an earlier or later version.
 
 @item @file{dwg2SVG}
 Convert a DWG to a limited SVG. All paperspace and modelspace enties of type:
 TEXT, LINE, CIRCLE, ARC, INSERT.
 
+@item @file{dwg2ps}
+Convert a DWG to a limited Postscript file. All paperspace and modelspace enties of type LINE.
+
 @item @file{dwg2dxf}
 
-Convert a DWG to DXF, optionally via @code{--as-rVER} as another
+Convert a DWG to DXF, optionally via @code{--as-rNNNN} as another
 version, an earlier or later version, or via @code{-m} or
-@code{--minimal} as a minimal DWF version, skipping most headers vars,
+@code{--minimal} as a minimal DXF version, skipping most headers vars,
 classes, tables and objects.
+@code{--binary} as a binary DXF file, with full precision.
 Some parts of the DXF writers are not yet implemented.
 
 @item @file{dxf2dwg}
@@ -469,6 +475,8 @@ To report bugs or suggest enhancements for GNU LibreDWG, please
 or send electronic mail to @email{libredwg@@gnu.org}.
 (If you use the web interface, you don't need to also send email,
 since that is done automatically.)
+Pull requests at the github mirror at 
+@uref{http://github.org/rurban/libredwg, Github} are also accepted for now.
 
 @cindex checklist for bug reports
 For bug reports, please include enough information for the maintainers
@@ -492,8 +500,8 @@ better to include too much than to leave out something important.
 Patches are welcome; if possible, please make them with
 @samp{git format-patch} and
 include @file{ChangeLog} entries (@pxref{Change Log,,, emacs, The GNU
-Emacs Manual}).  Please follow the existing coding style.
-
+Emacs Manual}).  Please follow the existing GNU coding conventions.
+See @file{CONTRIBUTING} in the source distribution.
 
 @node GNU Free Documentation License
 @appendix GNU Free Documentation License

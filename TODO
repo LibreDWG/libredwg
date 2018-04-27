@@ -22,8 +22,9 @@
 * finish DXF writing (easy)
 * add DXF reading (easy)
 * add binary DXF
-* move verbosity/loglevel to some dwg or dat struct
-* add programs manpages, add getopt_long, --verbose --version --license
+* move verbosity/loglevel to some dwg or dat struct to get rid of
+  --enable-trace and setenv().
+* add getopt_long() for position independent options
 * add make target: manual
 
 * fix the remaining leaks.
@@ -34,3 +35,7 @@
   POSIX releases via travis => github (savannah/ftpupload)?
 * check testsuite errors when cross-compiled under wine.
   latest wine needs a new WINEARCH env var.
+* check for a waiver/copyright assignment from
+  Alex Papazoglou <papazoga> for his reed-solomon code (yet unused).
+  Otherwise use rscode-1.3 by Henry Minsky <hqm@alum.mit.edu> which is GPLv3.
+

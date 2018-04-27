@@ -17,10 +17,11 @@ pre-R13 entities fail to read.  Among the example applications we
 wrote using LibreDWG is an initial SVG conversion and a DWG rewrite,
 i.e saveas tool. Please contact us if you can help.
 
-The program dwg_ps (in examples/) reads DWG and outputs Postscript; it
-depends on pslib: <http://pslib.sourceforge.net>.  In many GNU/Linux
-distributions, this is available by installing the pslib-dev package.
-If the configure script does not find pslib, dwg_ps will not be built.
+The program dwg2ps reads DWG and outputs Postscript for most 2D
+elements. It depends on pslib: <http://pslib.sourceforge.net>.  In
+many GNU/Linux distributions, this is available by installing the
+pslib-dev package.  If the configure script does not find pslib,
+dwg2ps will not be built.
 
 Sometimes we hang on our IRC channel which is #libredwg at irc.freenode.net
 If you don't find us there, please email the package maintainers:
