@@ -768,7 +768,7 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
                   int64_t size_uncomp, int64_t correction)
 {
   char *data;
-  r2007_section *sections = 0, *last_section = 0, *section;
+  r2007_section *sections = NULL, *last_section = NULL, *section;
   char *ptr, *ptr_end;
   int i, j = 0;
 
@@ -789,6 +789,7 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
       if (!section)
         {
           LOG_ERROR("Out of memory");
+          sections_destroy(sections); // the root
           return NULL;
         }
 
@@ -810,11 +811,13 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
       assert(section->name_length <  DBG_MAX_SIZE);
       assert(section->num_pages < 0x10000);
 
-      section->next  = 0;
-      section->pages = 0;
+      section->next  = NULL;
+      section->pages = NULL;
 
-      if (sections == 0)
-        sections = last_section = section;
+      if (!sections)
+        {
+          sections = last_section = section;
+        }
       else
         {
           last_section->next = section;
@@ -841,6 +844,10 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
       if (!section->pages)
         {
           LOG_ERROR("Out of memory");
+          if (sections)
+            sections_destroy(sections); // the root
+          else
+            sections_destroy(section);
           return NULL;
         }
 
@@ -851,7 +858,10 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
           if (!section->pages[i])
             {
               LOG_ERROR("Out of memory");
-              free(sections);
+              if (sections)
+                sections_destroy(sections); // the root
+              else
+                sections_destroy(section);
               return NULL;
             }
 
@@ -995,13 +1005,12 @@ sections_destroy(r2007_section *section)
     {
       next = section->next;
 
-      if (section->pages != 0)
+      if (section->pages)
         {
           while (section->num_pages-- > 0)
             {
               free(section->pages[section->num_pages]);
             }
-
           free(section->pages);
         }
 
