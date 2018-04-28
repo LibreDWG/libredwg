@@ -3827,6 +3827,7 @@ typedef struct _dwg_object
   unsigned int index;
 
   BITCODE_B  has_strings;       /* r2007+ */
+  BITCODE_RL stringstream_size; /* r2007+ in bits, unused */
   BITCODE_MC handlestream_size; /* r2010+ in bits */
 
   Dwg_Object_Supertype supertype;

@@ -1684,6 +1684,7 @@ DWG_OBJECT(DICTIONARYWDLFT)
     {
       HANDLE_VECTOR(itemhandles, numitems, 2, 0);
     }
+  //TODO 2007
   FIELD_HANDLE (defaultid, 5, 7);
 
 DWG_OBJECT_END
@@ -2083,12 +2084,23 @@ DWG_OBJECT(LAYER)
   }
   FIELD_CMC (color, 62);
 
-  //2007+ strings here, skip them.
-  SINCE(R_2007) {
-    //DEBUG_HERE()
-    obj->has_strings = 1;
-  }
+  //LOG_TRACE("@%lu.%u (%lu)\n", hdl_dat->byte, hdl_dat->bit, bit_position(hdl_dat));
   START_HANDLE_STREAM;
+  if (0) {
+    SINCE(R_2007) {
+      // 64266: 64138 + 170 (- 42)
+      long pos = bit_position(hdl_dat);
+      for (; !_obj->layer_control || _obj->layer_control->absolute_ref != 2;
+           bit_set_position(hdl_dat, pos) )
+        {
+          LOG_TRACE("@%lu.%u (%lu)\n", hdl_dat->byte, hdl_dat->bit, pos);
+          FIELD_HANDLE (layer_control, 4, 0);
+          pos--;
+        }
+    } else {
+      FIELD_HANDLE (layer_control, 4, 0);
+    }
+  }
   FIELD_HANDLE (layer_control, 4, 0);
   REACTORS(4);
   XDICOBJHANDLE(3);
@@ -4843,4 +4855,3 @@ DWG_OBJECT_END
 DWG_OBJECT(LEADEROBJECTCONTEXTDATA)
 DWG_OBJECT_END
 */
-

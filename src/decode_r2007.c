@@ -1100,6 +1100,7 @@ obj_string_stream(Bit_Chain *dat, Dwg_Object *obj, Bit_Chain *str)
       obj->has_strings = 0;
       return;
     }
+  obj->stringstream_size = data_size;
   bit_advance_position(str, -(int)data_size);
   //LOG_TRACE(" %d: @%lu.%u (%lu)\n", -(int)data_size - 16, str->byte, str->bit & 7,
   //          bit_position(str));

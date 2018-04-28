@@ -2322,7 +2322,7 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
     {
       // The handle stream offset, i.e. end of the object, right after
       // the has_strings bit.
-      ent->object->hdlpos = bit_position(dat) + ent->bitsize;
+      ent->object->hdlpos = bit_position(dat) + ent->bitsize - 42;
       ent->object->bitsize = ent->bitsize;
       // and set the string stream (restricted to size)
       obj_string_stream(dat, ent->object, str_dat);
@@ -2512,7 +2512,7 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
                dat->byte, dat->bit, bit_position(dat));
       // The handle stream offset, i.e. end of the object, right after
       // the has_strings bit.
-      obj->object->hdlpos = bit_position(dat) + obj->bitsize;
+      obj->object->hdlpos = bit_position(dat) + obj->bitsize - 42;
       obj->object->bitsize = obj->bitsize;
       // and set the string stream (restricted to size)
       obj_string_stream(dat, obj->object, str_dat);
