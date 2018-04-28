@@ -2064,7 +2064,7 @@ DWG_OBJECT(LAYER)
   VERSIONS(R_13, R_14)
   {
     FIELD_B (frozen, 0); // bit 1
-    FIELD_B (on, 0);
+    FIELD_B (on, 0); // unused, negate the color
     FIELD_B (frozen_in_new, 0);
     FIELD_B (locked, 0);
     FIELD_VALUE(flag) = FIELD_VALUE(frozen) |
@@ -2079,9 +2079,19 @@ DWG_OBJECT(LAYER)
     // contains frozen (1 bit), on (2 bit), frozen by default in new viewports (4 bit),
     // locked (8 bit), plotting flag (16 bit), and lineweight (mask with 0x03E0)
     FIELD_VALUE(flag) = (BITCODE_RC)FIELD_VALUE(flag_s) & 0xff;
+    FIELD_VALUE(frozen) = FIELD_VALUE(flag) & 1;
+    FIELD_VALUE(on) = FIELD_VALUE(flag) & 2;
+    FIELD_VALUE(frozen_in_new) = FIELD_VALUE(flag) & 4;
+    FIELD_VALUE(locked) = FIELD_VALUE(flag) & 8;
+    //TODO plotf 290 bit 16, linewidth 370 (flag_s & 0x03E0) >> 5
   }
   FIELD_CMC (color, 62);
 
+  //2007+ strings here, skip them.
+  SINCE(R_2007) {
+    //DEBUG_HERE()
+    obj->has_strings = 1;
+  }
   START_HANDLE_STREAM;
   FIELD_HANDLE (layer_control, 4, 0);
   REACTORS(4);
