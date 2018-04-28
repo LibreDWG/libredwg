@@ -1636,10 +1636,8 @@ DWG_OBJECT(DICTIONARY)
     }
   if (FIELD_VALUE(numitems) > 10000)
     {
-      fprintf(
-          stderr,
-          "Strange: dictionary with more than 10 thousand entries! Handle: %lu\n",
-          obj->handle.value);
+      LOG_ERROR("Invalid dictionary with more than 10.000 entries. Handle: %lu\n",
+              obj->handle.value);
       return;
     }
   FIELD_VECTOR_T (text, numitems, 0);
@@ -1672,10 +1670,8 @@ DWG_OBJECT(DICTIONARYWDLFT)
 
   if (FIELD_VALUE(numitems) > 10000)
     {
-      fprintf(
-          stderr,
-          "Strange: dictionary with more than 10 thousand entries! Handle: %lu\n",
-          obj->handle.value);
+      LOG_ERROR("Invalid dictionary with more than 10.000 entries. Handle: %lu\n",
+              obj->handle.value);
       return;
     }
   FIELD_VECTOR_T (text, numitems, 0);
