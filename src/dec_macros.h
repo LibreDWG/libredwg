@@ -215,7 +215,7 @@
                        (long)vcount, _obj->name[vcount]) \
           } LATER_VERSIONS { \
             _obj->name[vcount] = (char*)bit_read_TU(dat); \
-            LOG_TRACE_TU(#name, _obj->name[vcount], dxf) \
+            LOG_TRACE_TU_I(#name, vcount, _obj->name[vcount], dxf) \
           } \
         } \
     }

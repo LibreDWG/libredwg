@@ -87,5 +87,9 @@
   LOG_TRACE("%s: \"", s) \
   LOG_TEXT_UNICODE(TRACE, (BITCODE_TU)wstr) \
   LOG_TRACE("\" [TU %d]\n", dxf)
+#define LOG_TRACE_TU_I(s, i, wstr, dxf) \
+  LOG_TRACE("%s[%d]: \"", s, (int)i) \
+  LOG_TEXT_UNICODE(TRACE, (BITCODE_TU)wstr) \
+  LOG_TRACE("\" [TU %d]\n", dxf)
 
 #endif
