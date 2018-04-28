@@ -218,7 +218,8 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
     *dat = sav_dat; \
   }
 #define START_HANDLE_STREAM \
-  *hdl_dat = *dat; bit_set_position(hdl_dat, obj->hdlpos)
+  *hdl_dat = *dat; \
+  if (dat->version >= R_2007) bit_set_position(hdl_dat, obj->hdlpos)
 
 #define DWG_ENTITY(token) \
 static void \

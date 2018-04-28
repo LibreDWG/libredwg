@@ -323,10 +323,7 @@
 /* just skip the has_strings bit */
 #define START_HANDLE_STREAM \
   *hdl_dat = *dat; \
-  if (dat->version >= R_2007) { \
-    if (1 && obj->has_strings) bit_set_position(hdl_dat, obj->hdlpos); \
-    else bit_advance_position(hdl_dat, 1); \
-  }
+  if (dat->version >= R_2007) bit_set_position(hdl_dat, obj->hdlpos)
 
 //TODO unify REPEAT macros
 #define REPEAT_N(times, name, type) \
