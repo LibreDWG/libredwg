@@ -1065,38 +1065,42 @@ void
 obj_string_stream(Bit_Chain *dat, Dwg_Object *obj, Bit_Chain *str)
 {
   BITCODE_RL start = obj->bitsize - 1; // in bits
-  BITCODE_RL data_size; // in byte
+  BITCODE_RL data_size = 0; // in byte
   str->chain += str->byte;
   str->byte = 0; str->bit = 0;
   str->size = (obj->bitsize / 8) + 1;
   bit_advance_position(str, start);
-  LOG_TRACE("obj string stream +%u: @%lu/%u %lu", start,
+  LOG_TRACE("obj string stream +%u: @%lu.%u (%lu)", start,
             str->byte, str->bit & 7, bit_position(str));
   obj->has_strings = bit_read_B(str);
   LOG_TRACE(" has_strings: %d\n", (int)obj->has_strings);
   if (!obj->has_strings)
     return;
-  bit_advance_position(str, -17);
-  LOG_TRACE("  -17: @%lu/%u\n", str->byte, str->bit & 7);
+
+  bit_advance_position(str, -1);
+  str->byte -= 3;
+  LOG_TRACE(" @%lu.%u", str->byte, str->bit & 7);
   data_size = (BITCODE_RL)bit_read_RS(str);
-  LOG_TRACE("  data_size: %u 0x%x\n", data_size, data_size);
+  LOG_TRACE(" data_size: %u/0x%x\n", data_size, data_size);
+
   if (data_size & 0x8000) {
     BITCODE_RS hi_size;
-    bit_advance_position(str, -33);
+    bit_advance_position(str, -1);
+    str->byte -= 4;
     data_size &= 0x7FFF;
     hi_size = bit_read_RS(str);
     data_size |= (hi_size << 15);
     LOG_TRACE("  -33: @%lu\n", str->byte);
   }
+  str->byte -= 2;
   if (data_size > obj->bitsize)
     {
-      bit_advance_position(str, -16);
-      LOG_ERROR("Invalid string stream data_size: @%lu/%u", str->byte, str->bit & 7);
+      LOG_ERROR("Invalid string stream data_size: @%lu.%u", str->byte, str->bit & 7);
       obj->has_strings = 0;
       return;
     }
-  bit_advance_position(str, -(int)data_size - 16);
-  LOG_TRACE("  %d: @%lu/%u %lu\n", -(int)data_size - 16, str->byte, str->bit & 7,
+  bit_advance_position(str, -(int)data_size);
+  LOG_TRACE(" %d: @%lu.%u (%lu)\n", -(int)data_size - 16, str->byte, str->bit & 7,
             bit_position(str));
 }
 

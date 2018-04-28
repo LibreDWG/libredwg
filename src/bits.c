@@ -42,7 +42,7 @@
 void
 bit_advance_position(Bit_Chain * dat, long advance)
 {
-  long endpos = dat->bit + advance;
+  long endpos = (long)dat->bit + advance;
   if (dat->byte >= dat->size - 1 && endpos > 7)
     {
       // but allow pointing to the very end.
@@ -55,7 +55,15 @@ bit_advance_position(Bit_Chain * dat, long advance)
       dat->bit = 0;
       return;
     }
-  dat->byte += endpos / 8;
+  if ((long)dat->byte + (endpos / 8) < 0)
+    {
+      LOG_ERROR("buffer underflow at pos %lu, size %lu, advance by %ld",
+                dat->byte, dat->size, advance)
+      dat->byte = 0;
+      dat->bit = 0;
+      return;
+    }
+  dat->byte += (endpos >> 3);
   dat->bit = endpos & 7;
 }
 
