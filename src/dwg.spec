@@ -2083,22 +2083,17 @@ DWG_OBJECT(LAYER)
   FIELD_CMC (color, 62);
 
   START_HANDLE_STREAM;
-  UNTIL(R_2007)
-    {
-      FIELD_HANDLE (layer_control, 4, 0);
-      REACTORS(4);
-      XDICOBJHANDLE(3);
-      FIELD_HANDLE (xref, 5, 0);
-    }
-  VERSIONS(R_2000, R_2007) {
+  FIELD_HANDLE (layer_control, 4, 0);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+  FIELD_HANDLE (xref, 5, 0);
+  SINCE(R_2000) {
     FIELD_HANDLE (plotstyle, 5, 390);
   }
   SINCE(R_2007) {
     FIELD_HANDLE (material, ANYCODE, 347);
   }
-  UNTIL(R_2007) {
-    FIELD_HANDLE (linetype, 5, 6);
-  }
+  FIELD_HANDLE (linetype, 5, 6);
   //FIELD_HANDLE (null_handle, 5); // doc error?
 
 DWG_OBJECT_END
