@@ -1090,7 +1090,8 @@ obj_string_stream(Bit_Chain *dat, Dwg_Object *obj, Bit_Chain *str)
     data_size &= 0x7FFF;
     hi_size = bit_read_RS(str);
     data_size |= (hi_size << 15);
-    LOG_TRACE("  -33: @%lu\n", str->byte);
+    LOG_TRACE(" data_size: %u/0x%x\n", data_size, data_size);
+    //LOG_TRACE("  -33: @%lu\n", str->byte);
   }
   str->byte -= 2;
   if (data_size > obj->bitsize)
@@ -1100,8 +1101,8 @@ obj_string_stream(Bit_Chain *dat, Dwg_Object *obj, Bit_Chain *str)
       return;
     }
   bit_advance_position(str, -(int)data_size);
-  LOG_TRACE(" %d: @%lu.%u (%lu)\n", -(int)data_size - 16, str->byte, str->bit & 7,
-            bit_position(str));
+  //LOG_TRACE(" %d: @%lu.%u (%lu)\n", -(int)data_size - 16, str->byte, str->bit & 7,
+  //          bit_position(str));
 }
 
 static void
