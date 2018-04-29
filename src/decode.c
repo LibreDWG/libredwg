@@ -2322,7 +2322,8 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
     {
       // The handle stream offset, i.e. end of the object, right after
       // the has_strings bit.
-      ent->object->hdlpos = bit_position(dat) + ent->bitsize - 42;
+      //ent->object->hdlpos = bit_position(dat) + ent->bitsize - 42;
+      ent->object->hdlpos = ent->object->address * 8 + ent->bitsize;
       ent->object->bitsize = ent->bitsize;
       // and set the string stream (restricted to size)
       obj_string_stream(dat, ent->object, str_dat);
@@ -2502,17 +2503,18 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
       }
       obj->bitsize = bit_read_RL(dat);
     }
-  SINCE(R_2010)
+  /*SINCE(R_2010)
     {
       obj->bitsize = dat->size - 16;
-    }
+    }*/
   SINCE(R_2007)
     {
       LOG_TRACE("Object bitsize: " FORMAT_RL " @%lu.%u %lu\n", obj->bitsize,
                dat->byte, dat->bit, bit_position(dat));
       // The handle stream offset, i.e. end of the object, right after
       // the has_strings bit.
-      obj->object->hdlpos = bit_position(dat) + obj->bitsize - 42;
+      //obj->object->hdlpos = bit_position(dat) + obj->bitsize - 42;
+      obj->object->hdlpos = obj->object->address * 8 + obj->bitsize;
       obj->object->bitsize = obj->bitsize;
       // and set the string stream (restricted to size)
       obj_string_stream(dat, obj->object, str_dat);
@@ -3513,11 +3515,12 @@ dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
   obj->parent = dwg;
   obj->size = bit_read_MS(dat);
   LOG_INFO(", Size: %d/0x%x", obj->size, obj->size)
-  object_address = dat->byte;
+  obj->address = object_address = dat->byte;
   end_address = object_address + obj->size; /* (calculate the bitsize) */
 
   SINCE(R_2010)
   {
+    obj->bitsize = obj->size * 8;
     obj->handlestream_size = bit_read_MC(dat);
     LOG_INFO(", Hdlsize: %ld/0x%x",
              obj->handlestream_size, (unsigned)obj->handlestream_size)

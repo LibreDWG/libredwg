@@ -3822,8 +3822,8 @@ typedef struct _dwg_object_object
 typedef struct _dwg_object
 {
   unsigned int size;
+  unsigned long address;
   unsigned int type;
-  /* unsigned int ckr; */
   unsigned int index;
 
   BITCODE_B  has_strings;       /* r2007+ */

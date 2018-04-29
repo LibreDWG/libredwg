@@ -1684,7 +1684,6 @@ DWG_OBJECT(DICTIONARYWDLFT)
     {
       HANDLE_VECTOR(itemhandles, numitems, 2, 0);
     }
-  //TODO 2007
   FIELD_HANDLE (defaultid, 5, 7);
 
 DWG_OBJECT_END
