@@ -62,7 +62,7 @@
   { \
     FIELD_T (entry_name, 2); \
     FIELD_B (xrefref, 0); /* 70 bit 7 */ \
-    PRE(R_2010) \
+    PRE(R_2007) \
     { \
       FIELD_BS (xrefindex_plus1, 0); \
       FIELD_B (xrefdep, 0); \
