@@ -5242,13 +5242,15 @@ dwg_obj_appid_get_flag(dwg_obj_appid *appid, int *error)
   if (appid != 0)
     {
       *error = 0;
-      return appid->_64_flag;
+      return appid->flag & 1 ||
+             appid->xrefref >> 6 ||
+             appid->xrefdep >> 4;
     }
   else
     {
       LOG_ERROR("%s: empty appid", __FUNCTION__)
       *error = 1;
-      return '\0';
+      return 0;
     }
 }
 
@@ -5264,7 +5266,9 @@ dwg_obj_appid_set_flag(dwg_obj_appid *appid, char flag, int *error)
   if (appid != 0)
     {
       *error = 0;
-      appid->_64_flag = flag;
+      appid->flag = flag;
+      appid->xrefdep = flag & 16;
+      appid->xrefref = flag & 64;
     }
   else
     {

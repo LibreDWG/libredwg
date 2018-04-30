@@ -1915,7 +1915,7 @@ DWG_OBJECT(BLOCK_CONTROL)
 
   FIELD_BL (num_entries, 70);
 
-  START_HANDLE_STREAM; //XXX 20.4 vs 15.1
+  START_HANDLE_STREAM;
   FIELD_HANDLE (null_handle, 4, 0);
   XDICOBJHANDLE(3);
   HANDLE_VECTOR(block_headers, num_entries, 2, 0);
@@ -1947,9 +1947,8 @@ DWG_OBJECT(BLOCK_HEADER)
     FIELD_B (blkisxref, 0); // bit 4
     FIELD_B (xrefoverlaid, 0); // bit 8
   }
-
   SINCE(R_2000) {
-    FIELD_B (loaded_bit, 0);
+    FIELD_B (loaded_bit, 0); // bit 32
   }
   SINCE(R_13) {
     FIELD_VALUE(flag) = FIELD_VALUE(anonymous) |
@@ -1957,9 +1956,9 @@ DWG_OBJECT(BLOCK_HEADER)
                         FIELD_VALUE(blkisxref) << 2 |
                         FIELD_VALUE(xrefoverlaid) << 3 |
                         FIELD_VALUE(xrefdep) << 4 |
-                        FIELD_VALUE(_64_flag) << 6;
+                        FIELD_VALUE(xrefref) << 6;
   }
-  SINCE(R_2004) {
+  SINCE(R_2004) { // but not in 2007
     FIELD_BL (owned_object_count, 0);
     if (FIELD_VALUE(owned_object_count) > 0xf00000)
       {
@@ -2024,7 +2023,6 @@ DWG_OBJECT(BLOCK_HEADER)
   SINCE(R_13) {
     FIELD_HANDLE (endblk_entity, 3, 0);
   }
-
   SINCE(R_2000)
     {
       if (FIELD_VALUE(insert_count) && FIELD_VALUE(insert_count) < 0xf00000) {
@@ -2068,7 +2066,7 @@ DWG_OBJECT(LAYER)
       (FIELD_VALUE(locked) << 2) |
       (FIELD_VALUE(color_rs) < 0 ? 32 : 0) |
       (FIELD_VALUE(xrefdep) << 4) |
-      (FIELD_VALUE(_64_flag) << 6);
+      (FIELD_VALUE(xrefref) << 6);
   }
   SINCE(R_2000) {
     FIELD_BS (flag_s, 70); // 70,290,370
@@ -2323,7 +2321,7 @@ DWG_OBJECT(VIEW)
       FIELD_VALUE(pspace_flag) |
       FIELD_VALUE(xrefdep) << 4 |
       (FIELD_VALUE(xrefindex_plus1)>0 ? 32 : 0) |
-      FIELD_VALUE(_64_flag) << 6;
+      FIELD_VALUE(xrefref) << 6;
   }
   SINCE(R_2000)
     {
@@ -2873,7 +2871,7 @@ DWG_OBJECT(VP_ENT_HDR)
     FIELD_VALUE(flag) =
       (FIELD_VALUE(flag1) << 1) |
       (FIELD_VALUE(xrefdep) << 4) |
-      (FIELD_VALUE(_64_flag) << 6);
+      (FIELD_VALUE(xrefref) << 6);
 
     FIELD_HANDLE (vp_ent_ctrl, ANYCODE, 0);
     XDICOBJHANDLE(3);
@@ -4854,3 +4852,4 @@ DWG_OBJECT_END
 DWG_OBJECT(LEADEROBJECTCONTEXTDATA)
 DWG_OBJECT_END
 */
+

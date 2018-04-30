@@ -75,7 +75,7 @@
 #  define LOG_TEXT_UNICODE(level, args) LOG(level, args)
 #else
 #  define LOG_TEXT_UNICODE(level, wstr) \
-	if (DWG_LOGLEVEL >= DWG_LOGLEVEL_##level) { \
+	if (DWG_LOGLEVEL >= DWG_LOGLEVEL_##level && wstr) { \
             BITCODE_TU ws = wstr; \
             uint16_t _c; \
             while ((_c = *ws++)) { \

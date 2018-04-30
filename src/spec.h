@@ -61,7 +61,7 @@
   LATER_VERSIONS \
   { \
     FIELD_T (entry_name, 2); \
-    FIELD_B (_64_flag, 0); \
+    FIELD_B (xrefref, 0); /* 70 bit 7 */ \
     PRE(R_2010) \
     { \
       FIELD_BS (xrefindex_plus1, 0); \

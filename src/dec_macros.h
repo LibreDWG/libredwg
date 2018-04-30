@@ -117,10 +117,15 @@
   { _obj->name = (char*)bit_read_TU(str_dat); \
     LOG_TRACE_TU(#name, (BITCODE_TU)FIELD_VALUE(name),dxf); }
 #define FIELD_T(name,dxf) \
-  { if (dat->version < R_2007) \
+  { if (dat->version < R_2007) { \
       FIELD_TV(name,dxf) \
-    else \
-      FIELD_TU(name,dxf) \
+    } else { \
+      if (obj->has_strings) { \
+        FIELD_TU(name,dxf) \
+      } else { \
+        LOG_TRACE_TU(#name, NULL, dxf); \
+      } \
+    } \
   }
 #define FIELD_BT(name,dxf) FIELDG(name, BT, dxf);
 #define FIELD_4BITS(name,dxf) _obj->name = bit_read_4BITS(dat);

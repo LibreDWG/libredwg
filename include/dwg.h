@@ -1558,14 +1558,14 @@ typedef struct _dwg_object_BLOCK_HEADER
   BITCODE_RS used;  /* preR13 */
   BITCODE_RC flag2; /* preR13 */
   BITCODE_RS flag3; /* preR13 */
-  BITCODE_B _64_flag;
+  BITCODE_B anonymous;    /* flag 70 bit 1 */
+  BITCODE_B hasattrs;     /* flag 70 bit 2 */
+  BITCODE_B blkisxref;    /* flag 70 bit 3 */
+  BITCODE_B xrefoverlaid; /* flag 70 bit 4 */
+  BITCODE_B xrefdep;      /* flag 70 bit 5 */
+  BITCODE_B loaded_bit;   /* flag 70 bit 6 */
+  BITCODE_B xrefref;      /* flag 70 bit 7 */
   BITCODE_BS xrefindex_plus1;
-  BITCODE_B xrefdep;
-  BITCODE_B anonymous;
-  BITCODE_B hasattrs;
-  BITCODE_B blkisxref;
-  BITCODE_B xrefoverlaid;
-  BITCODE_B loaded_bit;
   BITCODE_BL owned_object_count;
   BITCODE_3DPOINT base_pt;
   BITCODE_TV xref_pname;
@@ -1608,7 +1608,7 @@ typedef struct _dwg_object_LAYER
   BITCODE_RC flag;
   BITCODE_TV entry_name;
   BITCODE_RS used; /* preR13 */
-  BITCODE_B _64_flag;
+  BITCODE_B xrefref;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
   BITCODE_B frozen;
@@ -1649,7 +1649,7 @@ typedef struct _dwg_object_SHAPEFILE
   BITCODE_RC flag; /* preR13 */
   BITCODE_TV entry_name;
   BITCODE_RS used; /* preR13 */
-  BITCODE_B _64_flag;
+  BITCODE_B xrefref;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
   BITCODE_B vertical;
@@ -1701,7 +1701,7 @@ typedef struct _dwg_object_LTYPE
   BITCODE_RC flag; /* preR13 */
   BITCODE_TV entry_name;
   BITCODE_RS used; /* preR13 */
-  BITCODE_B _64_flag;
+  BITCODE_B xrefref;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
   BITCODE_TV description;
@@ -1740,7 +1740,7 @@ typedef struct _dwg_object_VIEW
   BITCODE_RC flag; /* preR13 */
   BITCODE_TV entry_name;
   BITCODE_RS used; /* preR13 */
-  BITCODE_B _64_flag;
+  BITCODE_B xrefref;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
   BITCODE_BD height;
@@ -1798,7 +1798,7 @@ typedef struct _dwg_object_UCS
   BITCODE_RC flag; /* preR13 */
   BITCODE_TV entry_name;
   BITCODE_RS used; /* preR13 */
-  BITCODE_B _64_flag;
+  BITCODE_B xrefref;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
   BITCODE_3BD origin;
@@ -1834,7 +1834,7 @@ typedef struct _dwg_object_VPORT
   BITCODE_RC flag; /* preR13 */
   BITCODE_TV entry_name;
   BITCODE_RS used; /* preR13 */
-  BITCODE_B _64_flag;
+  BITCODE_B xrefref;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
   BITCODE_BD VIEWSIZE;
@@ -1906,7 +1906,7 @@ typedef struct _dwg_object_APPID
   BITCODE_RC flag; /* preR13 */
   BITCODE_TV entry_name;
   BITCODE_RS used; /* preR13 */
-  BITCODE_B _64_flag;
+  BITCODE_B xrefref;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
   BITCODE_RC unknown;
@@ -1937,7 +1937,7 @@ typedef struct _dwg_object_DIMSTYLE
   BITCODE_RC flag; /* preR13 */
   BITCODE_TV entry_name;
   BITCODE_RS used; /* preR13 */
-  BITCODE_B _64_flag;
+  BITCODE_B xrefref;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
 
@@ -2058,7 +2058,7 @@ typedef struct _dwg_object_VP_ENT_HDR
   BITCODE_RC flag; /* preR13 */
   BITCODE_TV entry_name;
   BITCODE_RS used; /* preR13 */
-  BITCODE_B _64_flag;
+  BITCODE_B xrefref;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
   BITCODE_B flag1;
