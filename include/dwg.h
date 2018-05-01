@@ -354,8 +354,10 @@ typedef struct _dwg_resbuf
  */
 
 typedef struct _dwg_header_variables {
+  BITCODE_RL size;
+  BITCODE_RL bitsize_hi; /* r2010+ */
   BITCODE_RL bitsize;
-  BITCODE_BLL requiredversions;
+  BITCODE_BLL requiredversions; /* r2013+ */
   BITCODE_BD unknown_0; /* 412148564080.0 */
   BITCODE_BD unknown_1; /* 1.0 */
   BITCODE_BD unknown_2; /* 1.0 */
@@ -366,8 +368,8 @@ typedef struct _dwg_header_variables {
   BITCODE_TV unknown_text4; /* "" */
   BITCODE_BL unknown_8; /* 24L */
   BITCODE_BL unknown_9; /* 0L */
-  BITCODE_BS unknown_10; /* 0 */
-  BITCODE_H current_vp_ent_hdr;
+  BITCODE_BS unknown_10; /* 0 r13-r14 */
+  BITCODE_H current_vp_ent_hdr; /* r13-r2000 */
   BITCODE_B DIMASO;
   BITCODE_B DIMSHO;
   BITCODE_B DIMSAV; /* undocumented */

@@ -77,6 +77,8 @@ extern int
 read_r2007_meta_data(Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Data *dwg);
 extern void
 obj_string_stream(Bit_Chain *dat, Dwg_Object *obj, Bit_Chain *str);
+extern void
+section_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 
 /*------------------------------------------------------------------------------
  * Private functions
@@ -905,10 +907,10 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
           (unsigned int) (dwg->header.section[SECTION_HEADER_R13].address
               + dwg->header.section[SECTION_HEADER_R13].size))
   dat->byte = dwg->header.section[SECTION_HEADER_R13].address + 16;
-  pvz = bit_read_RL(dat);
-  LOG_TRACE("         Length: %lu\n", pvz)
-
+  dwg->header_vars.size = bit_read_RL(dat);
+  LOG_TRACE("         Length: " FORMAT_RL "\n", dwg->header_vars.size)
   dat->bit = 0;
+
   dwg_decode_header_variables(dat, dat, dat, dwg);
 
   // Check CRC-on
@@ -1864,9 +1866,27 @@ read_2004_section_header(Bit_Chain* dat, Dwg_Data *dwg)
 
   if (bit_search_sentinel(&sec_dat, dwg_sentinel(DWG_SENTINEL_VARIABLE_BEGIN)))
     {
-      unsigned long int size = bit_read_RL(&sec_dat);
-      LOG_TRACE("Length: %lu\n", size);
-      dwg_decode_header_variables(&sec_dat, &sec_dat, &sec_dat, dwg);
+      PRE(R_2010) {
+        dwg_decode_header_variables(&sec_dat, &sec_dat, &sec_dat, dwg);
+      } else {
+        Bit_Chain hdl_dat, str_dat;
+        BITCODE_RL endbits = 160; //start bit: 16 sentinel + 4 size
+        hdl_dat = sec_dat;
+        str_dat = sec_dat;
+        dwg->header_vars.size = sec_dat.size;
+        if (dat->version >= R_2010 && dwg->header.maint_version > 3)
+          {
+            dwg->header_vars.bitsize_hi = bit_read_RL(&sec_dat);
+            LOG_TRACE("bitsize_hi: " FORMAT_RL " [RL]\n", dwg->header_vars.bitsize_hi)
+            endbits += 32;
+          }
+        dwg->header_vars.bitsize = dwg->header_vars.size * 8;
+        LOG_TRACE("bitsize: " FORMAT_RL " [RL]\n", dwg->header_vars.bitsize)
+        endbits += dwg->header_vars.bitsize;
+        bit_set_position(&hdl_dat, endbits);
+        section_string_stream(&sec_dat, dwg->header_vars.bitsize, &str_dat);
+        dwg_decode_header_variables(&sec_dat, &hdl_dat, &str_dat, dwg);
+      }
     }
   free(sec_dat.chain);
   return 0;

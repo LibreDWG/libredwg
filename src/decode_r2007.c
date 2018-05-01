@@ -44,10 +44,11 @@ void
 dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
                       long unsigned int address);
 
-// private
+// exported
 void
 obj_string_stream(Bit_Chain *dat, Dwg_Object *obj, Bit_Chain *str_dat);
-
+void
+section_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 
 // only for temp. debugging, to abort on obviously wrong sizes.
 // should be a bit larger then the filesize.
@@ -1106,7 +1107,7 @@ obj_string_stream(Bit_Chain *dat, Dwg_Object *obj, Bit_Chain *str)
   //          bit_position(str));
 }
 
-static void
+void
 section_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str)
 {
   // 24 bytes (sentinel+size+hsize) - 1 bit (endbit)
@@ -1273,26 +1274,24 @@ read_2007_section_header(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Data *dwg,
     }
   if (bit_search_sentinel(&sec_dat, dwg_sentinel(DWG_SENTINEL_VARIABLE_BEGIN)))
     {
-      unsigned long int size = bit_read_RL(&sec_dat);
-      BITCODE_RL bitsize = 0;
       BITCODE_RL endbits = 160; //start bit: 16 sentinel + 4 size
-      LOG_TRACE("Length: %lu\n", size);
+      dwg->header_vars.size = bit_read_RL(&sec_dat);
+      LOG_TRACE("size: " FORMAT_RL "\n", dwg->header_vars.size);
       *hdl_dat = sec_dat;
+      // unused: later versions re-use the 2004 section format
       if (dat->version >= R_2010 && dwg->header.maint_version > 3)
         {
-          BITCODE_RL hsize = bit_read_RL(&sec_dat);
-          LOG_TRACE("hsize: " FORMAT_RL " [RL]\n", hsize)
+          dwg->header_vars.bitsize_hi = bit_read_RL(&sec_dat);
+          LOG_TRACE("bitsize_hi: " FORMAT_RL " [RL]\n", dwg->header_vars.bitsize_hi)
+          endbits += 32;
         }
-      if (dat->version >= R_2007)
+      if (dat->version == R_2007) // always true so far
         {
-          Bit_Chain sav_dat = sec_dat;
-          bitsize = bit_read_RL(&sec_dat);
-          LOG_TRACE("bitsize: " FORMAT_RL " [RL]\n", bitsize);
-          endbits += bitsize;
+          dwg->header_vars.bitsize = bit_read_RL(&sec_dat);
+          LOG_TRACE("bitsize: " FORMAT_RL " [RL]\n", dwg->header_vars.bitsize);
+          endbits += dwg->header_vars.bitsize;
           bit_set_position(hdl_dat, endbits);
-
-          section_string_stream(&sec_dat, bitsize, &str_dat);
-          sec_dat = sav_dat;
+          section_string_stream(&sec_dat, dwg->header_vars.bitsize, &str_dat);
         }
 
       dwg_decode_header_variables(&sec_dat, hdl_dat, &str_dat, dwg);

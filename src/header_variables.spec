@@ -20,10 +20,7 @@
 
 #include "spec.h"
 
-  VERSION(R_2007)
-    {
-      FIELD_RL(bitsize, 0);
-    }
+  // size, bitsize_hi and bitsize read before
   SINCE(R_2013)
     {
       FIELD_BLL(requiredversions, 0);
