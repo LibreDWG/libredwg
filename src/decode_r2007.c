@@ -1144,10 +1144,9 @@ static int
 read_2007_section_classes(Bit_Chain* dat, Dwg_Data *dwg,
                           r2007_section *sections_map, r2007_page *pages_map)
 {
-  BITCODE_RL size;
+  BITCODE_RL size, idc;
   BITCODE_BS max_num;
   Bit_Chain sec_dat, str;
-  int idc;
   int error;
   char c;
 
@@ -1168,11 +1167,13 @@ read_2007_section_classes(Bit_Chain* dat, Dwg_Data *dwg,
       LOG_TRACE("\nClasses\n-------------------\n")
       size = bit_read_RL(&sec_dat);  // size of class data area
       LOG_TRACE("size: " FORMAT_RL " [RL]\n", size)
+      /*
       if (dat->version >= R_2010 && dwg->header.maint_version > 3)
         {
           BITCODE_RL hsize = bit_read_RL(&sec_dat);
           LOG_TRACE("hsize: " FORMAT_RL " [RL]\n", hsize)
         }
+      */
       if (dat->version >= R_2007)
         {
           bitsize = bit_read_RL(&sec_dat);
@@ -1188,7 +1189,7 @@ read_2007_section_classes(Bit_Chain* dat, Dwg_Data *dwg,
       LOG_TRACE("c: " FORMAT_B " [B]\n", c);
 
       dwg->layout_number = 0;
-      dwg->num_classes = max_num - 500;
+      dwg->num_classes = max_num - 499;
       if (max_num < 500 || max_num > 5000)
         {
           LOG_ERROR("Invalid max class number %d", max_num)
@@ -1199,7 +1200,7 @@ read_2007_section_classes(Bit_Chain* dat, Dwg_Data *dwg,
 
       section_string_stream(&sec_dat, bitsize, &str);
 
-      dwg->dwg_class = (Dwg_Class *) calloc(max_num-500, sizeof(Dwg_Class));
+      dwg->dwg_class = (Dwg_Class *) calloc(dwg->num_classes, sizeof(Dwg_Class));
       if (!dwg->dwg_class)
         {
           LOG_ERROR("Out of memory");
@@ -1208,7 +1209,7 @@ read_2007_section_classes(Bit_Chain* dat, Dwg_Data *dwg,
           return 2;
         }
 
-      for (idc = 0; idc < max_num-500; idc++)
+      for (idc = 0; idc < dwg->num_classes; idc++)
         {
           dwg->dwg_class[idc].number        = bit_read_BS(&sec_dat);
           dwg->dwg_class[idc].proxyflag     = bit_read_BS(&sec_dat);
@@ -1279,12 +1280,14 @@ read_2007_section_header(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Data *dwg,
       LOG_TRACE("size: " FORMAT_RL "\n", dwg->header_vars.size);
       *hdl_dat = sec_dat;
       // unused: later versions re-use the 2004 section format
+      /*
       if (dat->version >= R_2010 && dwg->header.maint_version > 3)
         {
           dwg->header_vars.bitsize_hi = bit_read_RL(&sec_dat);
           LOG_TRACE("bitsize_hi: " FORMAT_RL " [RL]\n", dwg->header_vars.bitsize_hi)
           endbits += 32;
         }
+      */
       if (dat->version == R_2007) // always true so far
         {
           dwg->header_vars.bitsize = bit_read_RL(&sec_dat);

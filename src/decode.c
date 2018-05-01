@@ -1767,12 +1767,12 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *dwg,
 static int
 read_2004_section_classes(Bit_Chain* dat, Dwg_Data *dwg)
 {
-  unsigned long int size;
-  unsigned long int max_num;
+  BITCODE_RL size;
+  BITCODE_BL max_num, idc;
   unsigned long int num_objects, dwg_version, maint_version, unknown;
   char c;
   int error;
-  Bit_Chain sec_dat;
+  Bit_Chain sec_dat, str_dat;
 
   sec_dat.chain = NULL;
   error = read_2004_compressed_section(dat, dwg, &sec_dat, SECTION_CLASSES);
@@ -1786,61 +1786,100 @@ read_2004_section_classes(Bit_Chain* dat, Dwg_Data *dwg)
 
   if (bit_search_sentinel(&sec_dat, dwg_sentinel(DWG_SENTINEL_CLASS_BEGIN)))
     {
+      BITCODE_RL bitsize = 0;
+      LOG_TRACE("\nClasses\n-------------------\n")
       size    = bit_read_RL(&sec_dat);  // size of class data area
+      LOG_TRACE("size: " FORMAT_RL " [RL]\n", size)
+      if ((dat->version >= R_2010 && dwg->header.maint_version > 3)
+          || dat->version >= R_2018)
+        {
+          BITCODE_RL hsize = bit_read_RL(&sec_dat);
+          LOG_TRACE("hsize: " FORMAT_RL " [RL]\n", hsize)
+        }
+      if (dat->version >= R_2007)
+        {
+          bitsize = bit_read_RL(&sec_dat);
+          LOG_TRACE("bitsize: " FORMAT_RL " [RL]\n", bitsize)
+        }
       max_num = bit_read_BS(&sec_dat);  // Maximum class number
+      LOG_TRACE("max_num: " FORMAT_BS " [BS]\n", max_num)
       c = bit_read_RC(&sec_dat);        // 0x00
+      LOG_TRACE("c: " FORMAT_RC " [RC]\n", c)
       c = bit_read_RC(&sec_dat);        // 0x00
+      LOG_TRACE("c: " FORMAT_RC " [RC]\n", c)
       c = bit_read_B(&sec_dat);         // 1
+      LOG_TRACE("c: " FORMAT_B " [B]\n", c)
 
       dwg->layout_number = 0;
-      dwg->num_classes = 0;
-
-      do
+      dwg->num_classes = max_num - 499;
+      if (max_num < 500 || max_num > 5000)
         {
-          unsigned int idc;
+          LOG_ERROR("Invalid max class number %d", max_num)
+          return 1;
+        }
+      assert(max_num >= 500);
+      assert(max_num < 5000);
 
-          idc = dwg->num_classes;
-          if (idc == 0)
-            dwg->dwg_class = (Dwg_Class *) calloc(1, sizeof(Dwg_Class));
-          else
-            dwg->dwg_class = (Dwg_Class *) realloc(dwg->dwg_class, (idc + 1)
-                * sizeof(Dwg_Class));
-          if (!dwg->dwg_class)
-            {
-              LOG_ERROR("Out of memory");
-              if (sec_dat.chain)
-                free(sec_dat.chain);
-              return 2;
-            }
+      if (dat->version >= R_2007)
+        section_string_stream(&sec_dat, bitsize, &str_dat);
 
+      dwg->dwg_class = (Dwg_Class *) calloc(dwg->num_classes, sizeof(Dwg_Class));
+      if (!dwg->dwg_class)
+        {
+          LOG_ERROR("Out of memory");
+          if (sec_dat.chain)
+            free(sec_dat.chain);
+          return 2;
+        }
+
+      for (idc = 0; idc < dwg->num_classes; idc++)
+        {
           dwg->dwg_class[idc].number        = bit_read_BS(&sec_dat);
           dwg->dwg_class[idc].proxyflag     = bit_read_BS(&sec_dat);
-          dwg->dwg_class[idc].appname       = bit_read_TV(&sec_dat);
-          dwg->dwg_class[idc].cppname       = bit_read_TV(&sec_dat);
-          dwg->dwg_class[idc].dxfname       = bit_read_TV(&sec_dat);
-          dwg->dwg_class[idc].wasazombie    = bit_read_B(&sec_dat);
-          dwg->dwg_class[idc].item_class_id = bit_read_BS(&sec_dat);
-
-          num_objects   = bit_read_BL(&sec_dat);  // DXF 91
-          dwg_version   = bit_read_BS(&sec_dat);  // Dwg Version
-          maint_version = bit_read_BS(&sec_dat);  // Maintenance release version.
-          unknown       = bit_read_BL(&sec_dat);  // Unknown (normally 0L)
-          unknown       = bit_read_BL(&sec_dat);  // Unknown (normally 0L)
-
           LOG_TRACE("-------------------\n")
           LOG_TRACE("Number:           %d\n", dwg->dwg_class[idc].number)
           LOG_TRACE("Proxyflag:        %x\n", dwg->dwg_class[idc].proxyflag)
-          LOG_TRACE("Application name: %s\n", dwg->dwg_class[idc].appname)
-          LOG_TRACE("C++ class name:   %s\n", dwg->dwg_class[idc].cppname)
-          LOG_TRACE("DXF record name:  %s\n", dwg->dwg_class[idc].dxfname)
-          LOG_TRACE("Class ID:         %x\n", dwg->dwg_class[idc].item_class_id)
+          if (dwg->header.version >= R_2007)
+            {
+              dwg->dwg_class[idc].appname       = (char*)bit_read_TU(&str_dat);
+              dwg->dwg_class[idc].cppname       = (char*)bit_read_TU(&str_dat);
+              dwg->dwg_class[idc].dxfname_u     = bit_read_TU(&str_dat);
+              LOG_TRACE_TU("Application name", dwg->dwg_class[idc].appname,0)
+              LOG_TRACE_TU("C++ class name  ", dwg->dwg_class[idc].cppname,0)
+              LOG_TRACE_TU("DXF record name ", dwg->dwg_class[idc].dxfname_u,0)
+              dwg->dwg_class[idc].dxfname = bit_convert_TU(dwg->dwg_class[idc].dxfname_u);
+            }
+          else
+            {
+              dwg->dwg_class[idc].appname       = bit_read_TV(&sec_dat);
+              dwg->dwg_class[idc].cppname       = bit_read_TV(&sec_dat);
+              dwg->dwg_class[idc].dxfname       = bit_read_TV(&sec_dat);
+              LOG_TRACE("Application name: %s\n", dwg->dwg_class[idc].appname)
+              LOG_TRACE("C++ class name:   %s\n", dwg->dwg_class[idc].cppname)
+              LOG_TRACE("DXF record name:  %s\n", dwg->dwg_class[idc].dxfname)
+            }
+          dwg->dwg_class[idc].wasazombie    = bit_read_B(&sec_dat);
+          dwg->dwg_class[idc].item_class_id = bit_read_BS(&sec_dat);
+          LOG_TRACE("Class ID:         0x%x "
+                    "(0x1f3 for object, 0x1f2 for entity)\n",
+                    dwg->dwg_class[idc].item_class_id)
 
-          if (strcmp((const char *)dwg->dwg_class[idc].dxfname, "LAYOUT") == 0)
+          dwg->dwg_class[idc].instance_count = bit_read_BL(&sec_dat);  // DXF 91
+          dwg->dwg_class[idc].dwg_version    = bit_read_BS(&sec_dat);
+          dwg->dwg_class[idc].maint_version  = bit_read_BS(&sec_dat);
+          dwg->dwg_class[idc].unknown_1      = bit_read_BL(&sec_dat);
+          dwg->dwg_class[idc].unknown_1      = bit_read_BL(&sec_dat);
+          LOG_TRACE("instance count:   %u\n",
+                    dwg->dwg_class[idc].instance_count)
+          LOG_TRACE("dwg version:      %u (%u)\n",
+                    dwg->dwg_class[idc].dwg_version,
+                    dwg->dwg_class[idc].maint_version)
+          LOG_TRACE("unknown:          %u %u\n", dwg->dwg_class[idc].unknown_1,
+                    dwg->dwg_class[idc].unknown_2)
+
+          if (strcmp(dwg->dwg_class[idc].dxfname, "LAYOUT") == 0)
             dwg->layout_number = dwg->dwg_class[idc].number;
-
-          dwg->num_classes++;
-
-        } while (sec_dat.byte < (size - 1));
+        }
     }
   else
     {
@@ -1866,6 +1905,9 @@ read_2004_section_header(Bit_Chain* dat, Dwg_Data *dwg)
 
   if (bit_search_sentinel(&sec_dat, dwg_sentinel(DWG_SENTINEL_VARIABLE_BEGIN)))
     {
+      LOG_TRACE("\nHeader\n-------------------\n")
+      dwg->header_vars.size = bit_read_RL(&sec_dat);
+      LOG_TRACE("size: " FORMAT_RL "\n", dwg->header_vars.size);
       PRE(R_2010) {
         dwg_decode_header_variables(&sec_dat, &sec_dat, &sec_dat, dwg);
       } else {
@@ -1873,15 +1915,14 @@ read_2004_section_header(Bit_Chain* dat, Dwg_Data *dwg)
         BITCODE_RL endbits = 160; //start bit: 16 sentinel + 4 size
         hdl_dat = sec_dat;
         str_dat = sec_dat;
-        dwg->header_vars.size = sec_dat.size;
-        if (dat->version >= R_2010 && dwg->header.maint_version > 3)
+        if (dwg->header.maint_version > 3 || dat->version >= R_2018)
           {
             dwg->header_vars.bitsize_hi = bit_read_RL(&sec_dat);
             LOG_TRACE("bitsize_hi: " FORMAT_RL " [RL]\n", dwg->header_vars.bitsize_hi)
             endbits += 32;
           }
         dwg->header_vars.bitsize = dwg->header_vars.size * 8;
-        LOG_TRACE("bitsize: " FORMAT_RL " [RL]\n", dwg->header_vars.bitsize)
+        //LOG_TRACE("bitsize: " FORMAT_RL " [RL]\n", dwg->header_vars.bitsize)
         endbits += dwg->header_vars.bitsize;
         bit_set_position(&hdl_dat, endbits);
         section_string_stream(&sec_dat, dwg->header_vars.bitsize, &str_dat);

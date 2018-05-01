@@ -80,7 +80,7 @@ bit_position(Bit_Chain * dat)
 void
 bit_set_position(Bit_Chain * dat, unsigned long bitpos)
 {
-  dat->byte = bitpos / 8;
+  dat->byte = bitpos >> 3;
   dat->bit = bitpos & 7;
   if (dat->byte > dat->size || (dat->byte == dat->size && dat->bit))
     {
