@@ -230,7 +230,7 @@ dwg_decode(Bit_Chain * dat, Dwg_Data * dwg)
     {
       LOG_ERROR(WE_CAN
                "Support for this version is still experimental."
-               " We don't decode handle and string streams correctly yet.\n"
+               " Some object types are still unstable.\n"
                "It will probably crash and/or give you invalid output.")
 #ifndef IS_RELEASE
       return decode_R2007(dat, dwg);
