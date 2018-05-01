@@ -1,6 +1,4 @@
-* R2007: fix some string stream and handle stream offsets, wrong have_string
-  bit offset.
-* R2010+: fix object bitsize.
+* R2010+: fix some remaining objects
 * pre-R13: finish entities, block entities
 * PROXY subentities, PROXY_ENTITY
 * CELLSTYLEMAP TABLE_Cell struct

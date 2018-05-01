@@ -54,25 +54,19 @@ run ()
     then
         rm $log
     else
-        if test $bprog = dwgbmp -a $bdwg = Leader_2004
+        if test $bprog = dwgrewrite -o $bprog = dxf2dwg
         then
-            # exits with -1, no thumbnail
-            rm $log
+            tmpnum=$(expr 1 + $problems)
+            echo $(basename $0): TODO $prog $tmpnum failures
+            ls -l $log
         else
-            if test $bprog = dwgrewrite -o $bprog = dxf2dwg
-            then
-                tmpnum=$(expr 1 + $problems)
-                echo $(basename $0): TODO $prog $tmpnum failures
-                ls -l $log
-            else
-                problems=$(expr 1 + $problems)
-            fi
+            problems=$(expr 1 + $problems)
         fi
     fi
 }
 
-DATA="sample_2000 example_2000 r14/Leader_r14 2000/Leader_2000 2004/Leader_2004"
-TODO="r11/ACEL10 2007/Leader_2007 2010/Leader_2010 2013/Leader_2013"
+DATA="sample_2000 example_2000 r14/Leader_r14 2000/Leader_2000 2004/Leader_2004 2007/Leader_2007"
+TODO="r11/ACEL10 2010/Leader_2010 2013/Leader_2013"
 
 for d in $DATA; do
     b=$(basename $d)

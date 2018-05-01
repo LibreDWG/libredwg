@@ -110,8 +110,8 @@ reverse-engineered.  The specification is almost complete.
 The LibreDWG implementation of the specification is an ongoing process;
 as of version @value{VERSION}, coverage is approximately 99%.
 
-It can read the formats R13, R14, R2000 and R2004 for 99%.
-R11 and R2007 can be partially read (~80%).
+It can read the formats R13, R14, R2000, R2004 and R2007 for 99%.
+R11, R2010, R2013 and R2018 can be partially read (~80%).
 
 Here is a list of features that are still missing.
 
@@ -119,8 +119,8 @@ Here is a list of features that are still missing.
 
 @table @asis
 
-@item Reading pre-R13 and R2007+ DWG
-Reading DWG formats for pre-R13 and R2007 and later: R2010, R2013, R2018 is an ongoing effort, and about halfway implemented.
+@item Reading pre-R13 and R2010+ DWG
+Reading DWG formats for pre-R13 and R2010 and later - R2013, R2018 - is an ongoing effort, some minor parts are missing.
 
 @item Writing pre-R13 and R2004+ DWG
 Writing DWG formats for R2004 and later: R2007, R2010, R2013, R2018 is an ongoing effort and not yet implemented.

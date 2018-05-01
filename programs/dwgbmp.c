@@ -80,10 +80,10 @@ get_bmp(char *dwgfile, char *bmpfile)
 
   if (!data) {
     fprintf(stderr, "No thumb in dwg file\n");
-    return -2;
+    return 0;
   }
   if (size < 1) {
-    fprintf(stderr, "No thumb data in dwg file\n");
+    fprintf(stderr, "Empty thumb data in dwg file\n");
     return -3;
   }
 

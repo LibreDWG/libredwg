@@ -15,10 +15,10 @@ path_to_dwg = srcdir + "/../test-data"
 # The name of the output files folder
 outdir = "test_output"
 
-# Get all the directories (skip 2007+ so far)
+# Get all the directories (skip 2010+ so far)
 dirs = [d for d in os.listdir(path_to_dwg)
           if os.path.isdir(os.path.join(path_to_dwg, d)) and
-             (d[0] == 'r' or int(d) <= 2004)]
+             (d[0] == 'r' or int(d) <= 2007)]
 
 for dir in dirs:
     for file in os.listdir(os.path.join(path_to_dwg, dir)):

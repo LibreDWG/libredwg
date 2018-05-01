@@ -230,20 +230,14 @@ dwg_decode(Bit_Chain * dat, Dwg_Data * dwg)
 
   VERSION(R_2007)
     {
-      LOG_ERROR(WE_CAN
-               "Support for this version is still experimental."
-               " Some object types are still unstable.\n"
-               "It will probably crash and/or give you invalid output.")
-#ifndef IS_RELEASE
       return decode_R2007(dat, dwg);
-#endif
     }
 
   SINCE(R_2010)
     {
       LOG_ERROR(WE_CAN
                "Support for this version is still experimental."
-               " We don't decode objects yet.\n"
+               " We don't decode all objects yet.\n"
                "It will probably crash and/or give you invalid output.")
 #ifndef IS_RELEASE
       return decode_R2004(dat, dwg);
@@ -2154,7 +2148,6 @@ decode_R2007(Bit_Chain* dat, Dwg_Data * dwg)
       return error;
     }
 
-  LOG_INFO("\nDecoding of DWG version R2007+ objectrefs is not implemented yet.\n")
   LOG_TRACE("Num objects: %lu\n", dwg->num_objects)
   LOG_TRACE("  num object_refs: %lu\n", dwg->num_object_refs)
   return resolve_objectref_vector(dat, dwg);

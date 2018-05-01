@@ -12,10 +12,10 @@ developed by AutoDesk.
 LibreDWG is a fork from LibDWG due to its usage of Esperanto, which we
 think is not the best strategy for a free software project which aims
 to get lots of contributors.  LibreDWG is written in English.  At the
-moment our decoder is almost done, just some R2007+ streams and
-pre-R13 entities fail to read.  Among the example applications we
-wrote using LibreDWG is an initial SVG conversion and a DWG rewrite,
-i.e saveas tool. Please contact us if you can help.
+moment our decoder is almost done, just some R2010+ and pre-R13
+entities fail to read.  Among the example applications we wrote using
+LibreDWG is an initial SVG conversion and a DWG rewrite, i.e saveas
+tool. Please contact us if you can help.
 
 The program dwg2ps reads DWG and outputs Postscript for most 2D
 elements. It depends on pslib: <http://pslib.sourceforge.net>.  In
