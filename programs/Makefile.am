@@ -45,7 +45,7 @@ dwg2SVG_SOURCES  = dwg2SVG.c
 
 if HAVE_WINE
 TESTS_ENVIRONMENT = \
- PROGS='$(bin_PROGRAMS))' \
+ PROGS='$(bin_PROGRAMS)' \
  datadir='$(top_srcdir)/test/test-data' \
  TESTPROG='wine'
 else
