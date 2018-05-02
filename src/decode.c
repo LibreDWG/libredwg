@@ -1762,7 +1762,7 @@ static int
 read_2004_section_classes(Bit_Chain* dat, Dwg_Data *dwg)
 {
   BITCODE_RL size;
-  BITCODE_BL max_num, idc;
+  BITCODE_BS max_num, idc;
   unsigned long int num_objects, dwg_version, maint_version, unknown;
   char c;
   int error;
