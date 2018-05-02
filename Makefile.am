@@ -58,13 +58,6 @@ gcov: check
 	cover -no-gcov
 endif
 
-if HAVE_WINE
-check-wine:
-	$(MAKE) -C test check-wine
-#	for t in test/testcases/*.exe; do b="`basename $$t .exe`"; \
-#	    $(WINE) $$t | tee tests/$$b.log; done
-endif
-
 EXTRA_DIST = README README-alpha
 CLEANFILES = check-dwg.log
 
