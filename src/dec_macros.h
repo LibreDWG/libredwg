@@ -25,18 +25,20 @@
   LOG_TRACE(#name ": " FORMAT_##type " [" #type " %d]\n", _obj->name, dxfgroup)
 #define FIELD_TRACE(name,type) \
   LOG_TRACE(#name ": " FORMAT_##type " " #type "\n", _obj->name)
-#define LOG_TRACE_TF(var,len) \
+#define LOG_TF(level,var,len)                   \
   { int _i; \
     for (_i=0; _i<len; _i++) { \
-      LOG_TRACE("%02x ", (unsigned char)((char*)var)[_i]); \
+      LOG(level,"%02x ", (unsigned char)((char*)var)[_i]);      \
     } \
-    LOG_TRACE("\n"); \
+    LOG(level,"\n"); \
     for (_i=0; _i<len; _i++) { \
       char c = ((char*)var)[_i]; \
-      LOG_TRACE("%2c ", isprint(c) ? c : ' ');  \
+      LOG(level,"%2c ", isprint(c) ? c : ' ');  \
     } \
-    LOG_TRACE("\n"); \
+    LOG(level,"\n"); \
   }
+#define LOG_TRACE_TF(var,len) LOG_TF(TRACE,var,len)
+#define LOG_INSANE_TF(var,len) LOG_TF(INSANE,var,len)
 
 #define FIELD_VALUE(name) _obj->name
 
@@ -107,11 +109,11 @@
 #define FIELD_TF(name,len,dxf) \
   { _obj->name = bit_read_TF(dat,(int)len); \
     FIELD_G_TRACE(name, TF, dxf);\
-    LOG_TRACE_TF(FIELD_VALUE(name), (int)len); }
+    LOG_INSANE_TF(FIELD_VALUE(name), (int)len); }
 #define FIELD_TFF(name,len,dxf) \
   { bit_read_fixed(dat,_obj->name,(int)len); \
     FIELD_G_TRACE(name, TF, dxf);\
-    LOG_TRACE_TF(FIELD_VALUE(name), (int)len); }
+    LOG_INSANE_TF(FIELD_VALUE(name), (int)len); }
 #define FIELD_TV(name,dxf) FIELDG(name, TV, dxf)
 #define FIELD_TU(name,dxf) \
   { _obj->name = (char*)bit_read_TU(str_dat); \

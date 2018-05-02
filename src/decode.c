@@ -1733,13 +1733,13 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *dwg,
               (unsigned int) es.fields.data_size)
       LOG_INFO("Comp data size:   0x%x\n",
               (unsigned int) es.fields.section_size)
-      LOG_INFO("StartOffset:      0x%x\n",
+      LOG_TRACE("StartOffset:      0x%x\n",
               (unsigned int) es.fields.start_offset)
-      LOG_INFO("Unknown:          0x%x\n",
+      LOG_HANDLE("Unknown:          0x%x\n",
               (unsigned int) es.fields.unknown);
-      LOG_INFO("Checksum1:        0x%x\n",
+      LOG_HANDLE("Checksum1:        0x%x\n",
             (unsigned int) es.fields.checksum_1)
-      LOG_INFO("Checksum2:        0x%x\n\n",
+      LOG_HANDLE("Checksum2:        0x%x\n\n",
             (unsigned int) es.fields.checksum_2)
 
       decompress_R2004_section(dat, &decomp[i * info->max_decomp_size],
@@ -1798,11 +1798,11 @@ read_2004_section_classes(Bit_Chain* dat, Dwg_Data *dwg)
       max_num = bit_read_BS(&sec_dat);  // Maximum class number
       LOG_TRACE("max_num: " FORMAT_BS " [BS]\n", max_num)
       c = bit_read_RC(&sec_dat);        // 0x00
-      LOG_TRACE("c: " FORMAT_RC " [RC]\n", c)
+      LOG_HANDLE("c: " FORMAT_RC " [RC]\n", c)
       c = bit_read_RC(&sec_dat);        // 0x00
-      LOG_TRACE("c: " FORMAT_RC " [RC]\n", c)
+      LOG_HANDLE("c: " FORMAT_RC " [RC]\n", c)
       c = bit_read_B(&sec_dat);         // 1
-      LOG_TRACE("c: " FORMAT_B " [B]\n", c)
+      LOG_HANDLE("c: " FORMAT_B " [B]\n", c)
 
       dwg->layout_number = 0;
       dwg->num_classes = max_num - 499;
@@ -1865,10 +1865,10 @@ read_2004_section_classes(Bit_Chain* dat, Dwg_Data *dwg)
           dwg->dwg_class[idc].unknown_1      = bit_read_BL(&sec_dat);
           LOG_TRACE("instance count:   %u\n",
                     dwg->dwg_class[idc].instance_count)
-          LOG_TRACE("dwg version:      %u (%u)\n",
+          LOG_HANDLE("dwg version:      %u (%u)\n",
                     dwg->dwg_class[idc].dwg_version,
                     dwg->dwg_class[idc].maint_version)
-          LOG_TRACE("unknown:          %u %u\n", dwg->dwg_class[idc].unknown_1,
+          LOG_HANDLE("unknown:          %u %u\n", dwg->dwg_class[idc].unknown_1,
                     dwg->dwg_class[idc].unknown_2)
 
           if (strcmp(dwg->dwg_class[idc].dxfname, "LAYOUT") == 0)
@@ -1978,7 +1978,7 @@ read_2004_section_handles(Bit_Chain* dat, Dwg_Data *dwg)
           //last_handle += handle;
           last_offset += offset;
           LOG_TRACE("\nNext object: %lu\t", dwg->num_objects)
-          LOG_TRACE("Handle: %li\tOffset: %ld @%lu\n", handle, offset, last_offset)
+          LOG_HANDLE("Handle: %li\tOffset: %ld @%lu\n", handle, offset, last_offset)
 
           dwg_decode_add_object(dwg, &obj_dat, &obj_dat, last_offset);
         }
@@ -2043,7 +2043,7 @@ decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
       bit_chain_alloc(dat);
     }
     memcpy(&dat->chain[0x80], encrypted_data, size);
-    LOG_INFO("@0x%lx\n", dat->byte);
+    LOG_HANDLE("@0x%lx\n", dat->byte);
 
     #include "r2004_file_header.spec"
 
@@ -2148,7 +2148,7 @@ decode_R2007(Bit_Chain* dat, Dwg_Data * dwg)
       return error;
     }
 
-  LOG_TRACE("Num objects: %lu\n", dwg->num_objects)
+  LOG_INFO("Num objects: %lu\n", dwg->num_objects)
   LOG_TRACE("  num object_refs: %lu\n", dwg->num_object_refs)
   return resolve_objectref_vector(dat, dwg);
 }
@@ -2237,7 +2237,7 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
 
       sav_byte = dat->byte;
       obj->eed[idx].raw = bit_read_TF(dat, size);
-      LOG_TRACE_TF(obj->eed[idx].raw, size);
+      LOG_INSANE_TF(obj->eed[idx].raw, size);
       dat->byte = sav_byte;
 
       while (dat->byte < end)

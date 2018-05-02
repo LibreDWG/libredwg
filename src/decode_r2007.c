@@ -800,8 +800,8 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
       LOG_TRACE("  data size:     %"PRIu64"\n", section->data_size)
       LOG_TRACE("  max size:      %"PRIu64"\n", section->max_size)
       LOG_TRACE("  encryption:    %"PRIu64"\n", section->encrypted)
-      LOG_TRACE("  hashcode:      %"PRIx64"\n", section->hashcode)
-      LOG_TRACE("  name length:   %"PRIu64"\n", section->name_length)
+      LOG_HANDLE("  hashcode:      %"PRIx64"\n", section->hashcode)
+      LOG_HANDLE("  name length:   %"PRIu64"\n", section->name_length)
       LOG_TRACE("  unknown:       %"PRIu64"\n", section->unknown)
       LOG_TRACE("  encoding:      %"PRIu64"\n", section->encoded)
       LOG_TRACE("  num pages:     %"PRIu64"\n", section->num_pages)
@@ -874,11 +874,11 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
           LOG_TRACE("   id:            %"PRIu64"\n", section->pages[i]->id);
           LOG_TRACE("   uncomp_size:   %"PRIu64"\n",
                     section->pages[i]->uncomp_size);
-          LOG_TRACE("   comp_size:     %"PRIu64"\n",
+          LOG_HANDLE("   comp_size:     %"PRIu64"\n",
                     section->pages[i]->comp_size);
-          LOG_TRACE("   checksum:      %"PRIx64"\n",
+          LOG_HANDLE("   checksum:      %"PRIx64"\n",
                     section->pages[i]->checksum);
-          LOG_TRACE("   crc:           %"PRIx64"\n\n", section->pages[i]->crc);
+          LOG_HANDLE("   crc:           %"PRIx64"\n\n", section->pages[i]->crc);
           //debugging sanity
           assert(section->pages[i]->size < DBG_MAX_SIZE);
           assert(section->pages[i]->uncomp_size < DBG_MAX_SIZE);
@@ -1080,9 +1080,9 @@ obj_string_stream(Bit_Chain *dat, Dwg_Object *obj, Bit_Chain *str)
 
   bit_advance_position(str, -1);
   str->byte -= 3;
-  LOG_TRACE(" @%lu.%u", str->byte, str->bit & 7);
+  LOG_HANDLE(" @%lu.%u", str->byte, str->bit & 7);
   data_size = (BITCODE_RL)bit_read_RS(str);
-  LOG_TRACE(" data_size: %u/0x%x\n", data_size, data_size);
+  LOG_HANDLE(" data_size: %u/0x%x\n", data_size, data_size);
 
   if (data_size & 0x8000) {
     BITCODE_RS hi_size;
@@ -1091,7 +1091,7 @@ obj_string_stream(Bit_Chain *dat, Dwg_Object *obj, Bit_Chain *str)
     data_size &= 0x7FFF;
     hi_size = bit_read_RS(str);
     data_size |= (hi_size << 15);
-    LOG_TRACE(" data_size: %u/0x%x\n", data_size, data_size);
+    LOG_HANDLE(" data_size: %u/0x%x\n", data_size, data_size);
     //LOG_TRACE("  -33: @%lu\n", str->byte);
   }
   str->byte -= 2;
@@ -1118,25 +1118,25 @@ section_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str)
   bit_set_position(str, start);
   LOG_TRACE("section string stream\n  pos: %u, %lu/%u\n", start, str->byte, str->bit);
   endbit = bit_read_B(str);
-  LOG_TRACE("  endbit: %d\n", (int)endbit);
+  LOG_HANDLE("  endbit: %d\n", (int)endbit);
   start -= 16;
   bit_set_position(str, start);
-  LOG_TRACE("  pos: %u, %lu\n", start, str->byte);
+  LOG_HANDLE("  pos: %u, %lu\n", start, str->byte);
   //str->bit = start & 7;
   data_size = bit_read_RS(str);
-  LOG_TRACE("  data_size: %u\n", data_size);
+  LOG_HANDLE("  data_size: %u\n", data_size);
   if (data_size & 0x8000) {
     BITCODE_RS hi_size;
     start -= 16;
     data_size &= 0x7FFF;
     bit_set_position(str, start);
-    LOG_TRACE("  pos: %u, %lu\n", start, str->byte);
+    LOG_HANDLE("  pos: %u, %lu\n", start, str->byte);
     hi_size = bit_read_RS(str);
     data_size |= (hi_size << 15);
   }
   start -= data_size;
   bit_set_position(str, start);
-  LOG_TRACE("  pos: %u, %lu/%u\n", start, str->byte, str->bit);
+  LOG_HANDLE("  pos: %u, %lu/%u\n", start, str->byte, str->bit);
 }
 
 // for string stream see p86
@@ -1182,11 +1182,11 @@ read_2007_section_classes(Bit_Chain* dat, Dwg_Data *dwg,
       max_num = bit_read_BS(&sec_dat);  // Maximum class number
       LOG_TRACE("max_num: " FORMAT_BS " [BS]\n", max_num)
       c = bit_read_RC(&sec_dat);        // 0x00
-      LOG_TRACE("c: " FORMAT_RC " [RC]\n", c)
+      LOG_HANDLE("c: " FORMAT_RC " [RC]\n", c)
       c = bit_read_RC(&sec_dat);        // 0x00
-      LOG_TRACE("c: " FORMAT_RC " [RC]\n", c)
+      LOG_HANDLE("c: " FORMAT_RC " [RC]\n", c)
       c = bit_read_B(&sec_dat);         // 1
-      LOG_TRACE("c: " FORMAT_B " [B]\n", c);
+      LOG_HANDLE("c: " FORMAT_B " [B]\n", c);
 
       dwg->layout_number = 0;
       dwg->num_classes = max_num - 499;
@@ -1239,7 +1239,7 @@ read_2007_section_classes(Bit_Chain* dat, Dwg_Data *dwg,
           LOG_TRACE("dwg version:      %u (%u)\n",
                     dwg->dwg_class[idc].dwg_version,
                     dwg->dwg_class[idc].maint_version)
-          LOG_TRACE("unknown:          %u %u\n", dwg->dwg_class[idc].unknown_1,
+          LOG_HANDLE("unknown:          %u %u\n", dwg->dwg_class[idc].unknown_1,
                     dwg->dwg_class[idc].unknown_2)
 
           dwg->dwg_class[idc].dxfname = bit_convert_TU(dwg->dwg_class[idc].dxfname_u);
@@ -1380,7 +1380,7 @@ read_2007_section_handles(Bit_Chain* dat, Bit_Chain* hdl, Dwg_Data *dwg,
     }
   while (section_size > 2);
 
-  LOG_TRACE("\nNum objects: %lu\n", dwg->num_objects);
+  LOG_INFO("\nNum objects: %lu\n", dwg->num_objects);
 
   free(hdl_dat.chain);
   free(obj_dat.chain);
