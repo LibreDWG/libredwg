@@ -70,19 +70,13 @@ build_script:
 
 test_script:
   - bash -c "make check"
-  - bash -c "make install install-pdf prefix= bindir= DESTDIR=`pwd`/%PROJECT_NAME%-%appveyor_build_version%-%ARCH%"
-  - cd %PROJECT_NAME%-%appveyor_build_version%-%ARCH%
-  - if "%MINGW%"=="1" 7z a ../%PROJECT_NAME%-%appveyor_build_version%-%ARCH%.zip *
-  - if "%MINGW%"=="1" appveyor PushArtifact ../%PROJECT_NAME%-%appveyor_build_version%-%ARCH%.zip *
+  - if "%MINGW%"=="1" call build-aux\appveyor-deploy.bat
 
-before_deploy:
-  - bash -c "make install install-pdf prefix= bindir= DESTDIR=`pwd`/%PROJECT_NAME%-%APPVEYOR_REPO_TAG_NAME%-%ARCH%"
-  - cd %PROJECT_NAME%-%APPVEYOR_REPO_TAG_NAME%-%ARCH%
-  - if "%MINGW%"=="1" 7z a ../%PROJECT_NAME%-%APPVEYOR_REPO_TAG_NAME%-%ARCH%.zip *
-  - if "%MINGW%"=="1" appveyor PushArtifact ../%PROJECT_NAME%-%APPVEYOR_REPO_TAG_NAME%-%ARCH%.zip *
+#before_deploy:
+#  - if "%MINGW%"=="1" call build-aux\appveyor-deploy.bat
 
 artifacts:
-  # nightlies (disabled)
+  # nightlies
   - path: libredwg-$(appveyor_build_version)-win32.zip
     name: nightly-win32
     type: zip
@@ -90,10 +84,10 @@ artifacts:
     name: nightly-win64
     type: zip
   # tagged
-  - path: $(APPVEYOR_REPO_TAG_NAME)-win32.zip
+  - path: libredwg-$(APPVEYOR_REPO_TAG_NAME)-win32.zip
     name: tagged-win32
     type: zip
-  - path: $(APPVEYOR_REPO_TAG_NAME)-win64.zip
+  - path: libredwg-$(APPVEYOR_REPO_TAG_NAME)-win64.zip
     name: tagged-win64
     type: zip
 
@@ -110,7 +104,7 @@ deploy:
   on:
     branch: /(master|relprep|deploy-test)/
 - provider: GitHub
-  tag: $(APPVEYOR_REPO_TAG_NAME)-win
+  tag: libredwg-$(APPVEYOR_REPO_TAG_NAME)-win
   description: 'libredwg windows tagged'
   auth_token:
     secure: AsIAOIgCJX0QhrUKal2V00aaB5nRWtmtFTFeDVsGnbJLeEQpv9avUp0HT1cA8bNs
