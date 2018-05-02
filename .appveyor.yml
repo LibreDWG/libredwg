@@ -70,6 +70,10 @@ build_script:
 
 test_script:
   - bash -c "make check"
+  - bash -c "make install install-pdf prefix= bindir= DESTDIR=`pwd`/%PROJECT_NAME%-%appveyor_build_version%-%ARCH%"
+  - cd %PROJECT_NAME%-%appveyor_build_version%-%ARCH%
+  - if "%MINGW%"=="1" 7z a ../%PROJECT_NAME%-%appveyor_build_version%-%ARCH%.zip *
+  - if "%MINGW%"=="1" appveyor PushArtifact ../%PROJECT_NAME%-%appveyor_build_version%-%ARCH%.zip *
 
 before_deploy:
   - bash -c "make install install-pdf prefix= bindir= DESTDIR=`pwd`/%PROJECT_NAME%-%APPVEYOR_REPO_TAG_NAME%-%ARCH%"
@@ -94,17 +98,17 @@ artifacts:
     type: zip
 
 deploy:
-#- provider: GitHub
-#  tag: libredwg-win-$(appveyor_build_version)
-#  description: 'libredwg windows nightly'
-#  auth_token:
-#    secure: AsIAOIgCJX0QhrUKal2V00aaB5nRWtmtFTFeDVsGnbJLeEQpv9avUp0HT1cA8bNs
-#  artifact: nightly-win32,nightly-win64
-#  draft: true
-#  prerelease: true
-#  force_update: true
-#  on:
-#    branch: /(master|relprep|deploy-test)/
+- provider: GitHub
+  tag: libredwg-win-$(appveyor_build_version)
+  description: 'libredwg windows nightly'
+  auth_token:
+    secure: AsIAOIgCJX0QhrUKal2V00aaB5nRWtmtFTFeDVsGnbJLeEQpv9avUp0HT1cA8bNs
+  artifact: nightly-win32,nightly-win64
+  draft: true
+  prerelease: true
+  force_update: true
+  on:
+    branch: /(master|relprep|deploy-test)/
 - provider: GitHub
   tag: $(APPVEYOR_REPO_TAG_NAME)-win
   description: 'libredwg windows tagged'
