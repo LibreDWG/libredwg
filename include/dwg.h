@@ -38,6 +38,7 @@
 #  include <wchar.h>
 #  define HAVE_NATIVE_WCHAR2
 #  define DWGCHAR wchar_t
+#  define dwg_wchar_t wchar_t
 # endif
 #endif
 
@@ -127,11 +128,12 @@ extern "C" {
 /* TODO: implement version dependant string parsing */
 /* encode codepages/utf8 */
 #define BITCODE_T  BITCODE_TV
-#define BITCODE_TU BITCODE_RS*   /* UCS-2 unicode text */
 #ifdef HAVE_NATIVE_WCHAR2
+# define BITCODE_TU dwg_wchar_t*  /* native UCS-2 wchar_t */
 # define FORMAT_TU "\"%ls\""
 #else
-# define FORMAT_TU "\"%hn\""     /* will print garbage */
+# define BITCODE_TU BITCODE_RS*   /* UCS-2 unicode text */
+# define FORMAT_TU "\"%hn\""      /* will print garbage */
 #endif
 
 typedef struct _dwg_time_bll {
