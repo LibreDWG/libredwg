@@ -5,16 +5,20 @@ environment:
     - MINGW: 1
       MSYS2_ARCH: x86_64
       MSYSTEM: MINGW64
+      ARCH: win64
       PLATFORM: x64
     - MINGW: 1
       MSYS2_ARCH: i686
       MSYSTEM: MINGW32
+      ARCH: win32
       PLATFORM: x86
     - CYGWIN: 1
       PLATFORM: x86
+      ARCH: cygwin32
       ISETUP: setup-x86
     - CYGWIN: 1
       PLATFORM: x64
+      ARCH: cygwin64
       ISETUP: setup-x86_64
   global:
     CYG_MIRROR: http://mirrors.kernel.org/sourceware/cygwin/
@@ -66,3 +70,48 @@ build_script:
 
 test_script:
   - bash -c "make check"
+
+before_deploy:
+  - bash -c "make install install-pdf prefix= bindir= DESTDIR=`pwd`/%PROJECT_NAME%-%APPVEYOR_REPO_TAG_NAME%-%ARCH%"
+  - cd %PROJECT_NAME%-%APPVEYOR_REPO_TAG_NAME%-%ARCH%
+  - if "%MINGW%"=="1" 7z a ../%PROJECT_NAME%-%APPVEYOR_REPO_TAG_NAME%-%ARCH%.zip *
+  - if "%MINGW%"=="1" appveyor PushArtifact ../%PROJECT_NAME%-%APPVEYOR_REPO_TAG_NAME%-%ARCH%.zip *
+
+artifacts:
+  # nightlies (disabled)
+  - path: libredwg-$(appveyor_build_version)-win32.zip
+    name: nightly-win32
+    type: zip
+  - path: libredwg-$(appveyor_build_version)-win64.zip
+    name: nightly-win64
+    type: zip
+  # tagged
+  - path: $(APPVEYOR_REPO_TAG_NAME)-win32.zip
+    name: tagged-win32
+    type: zip
+  - path: $(APPVEYOR_REPO_TAG_NAME)-win64.zip
+    name: tagged-win64
+    type: zip
+
+deploy:
+#- provider: GitHub
+#  tag: libredwg-win-$(appveyor_build_version)
+#  description: 'libredwg windows nightly'
+#  auth_token:
+#    secure: AsIAOIgCJX0QhrUKal2V00aaB5nRWtmtFTFeDVsGnbJLeEQpv9avUp0HT1cA8bNs
+#  artifact: nightly-win32,nightly-win64
+#  draft: true
+#  prerelease: true
+#  force_update: true
+#  on:
+#    branch: /(master|relprep|deploy-test)/
+- provider: GitHub
+  tag: $(APPVEYOR_REPO_TAG_NAME)-win
+  description: 'libredwg windows tagged'
+  auth_token:
+    secure: AsIAOIgCJX0QhrUKal2V00aaB5nRWtmtFTFeDVsGnbJLeEQpv9avUp0HT1cA8bNs
+  artifact: tagged-win32,tagged-win64
+  draft: true
+  force_update: true
+  on:
+    appveyor_repo_tag: true
