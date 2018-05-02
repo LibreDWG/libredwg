@@ -35,14 +35,14 @@ man:
 check-dwg: all
 	-rm check-dwg.log
 	for d in `find test/test-data -iname \*.dwg`; do \
-	  echo programs/dwgread $$d | tee -a check-dwg.log; \
-	  LIBREDWG_TRACE=4 programs/dwgread $$d >> check-dwg.log 2>&1; \
+	  echo programs/dwgread -v3 $$d | tee -a check-dwg.log; \
+	  LIBREDWG_TRACE=3 programs/dwgread $$d >> check-dwg.log 2>&1; \
 	done
 check-dwg-valgrind: all
 	-rm check-dwg-valgrind.log
 	for d in `find test/test-data -iname \*.dwg`; do \
-	  echo LIBREDWG_TRACE=4 valgrind --leak-check=full programs/dwgread $$d | tee -a check-dwg-valgrind.log; \
-	  LIBREDWG_TRACE=4 valgrind --leak-check=full programs/dwgread $$d >> check-dwg-valgrind.log 2>&1; \
+	  echo valgrind --leak-check=full programs/dwgread -v3 $$d | tee -a check-dwg-valgrind.log; \
+	  LIBREDWG_TRACE=3 valgrind --leak-check=full programs/dwgread $$d >> check-dwg-valgrind.log 2>&1; \
 	done
 
 # clang-analyzer.llvm.org
