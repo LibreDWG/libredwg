@@ -543,49 +543,39 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
   dat->byte = tbl->address + (tbl->number * tbl->size);
 }
 
-static void
+static int
 decode_entity_preR13(Bit_Chain* dat, Dwg_Object *obj, Dwg_Object_Entity *ent)
 {
   Dwg_Object_Entity *_obj = ent;
   obj->type = bit_read_RC(dat);
-  LOG_INFO("\n===========================\nEntity Type: %d", obj->type);
-
-  FIELD_RC (flag_r11, 70)
-  //ent->flag = bit_read_RC(dat);
-  //LOG_INFO(", Flag: 0x%x", obj->flag)
+  _obj->flag_r11 = bit_read_RC(dat); // dxf 70
   obj->size = bit_read_RS(dat);
-  LOG_INFO(", Size: %d/0x%x\n", obj->size, obj->size);
+  LOG_INFO("\n===========================\n"
+           "Entity number: %d, Type: %d, Size: %d/0x%x\n",
+           obj->index, obj->type, obj->size, obj->size);
+  LOG_TRACE("flag_r11: " FORMAT_RC "\n", _obj->flag_r11);
   FIELD_RS (layer_r11, 8);
   FIELD_RS (opts_r11, 0);
-  //ent->layer = bit_read_RS(dat);
-  //ent->opts = bit_read_RS(dat);
-  LOG_TRACE("Layer: %d, Opts: 0x%x", ent->layer_r11, ent->opts_r11)
+  //LOG_TRACE("Layer: %d, Opts: 0x%x\n", ent->layer_r11, ent->opts_r11)
   if (ent->flag_r11 & 1)
     {
       FIELD_RC (color_r11, 0);
-      //ent->color_r11 = bit_read_RC(dat);
-      //LOG_TRACE(", Color: %d", ent->color_r11)
     }
   if (ent->flag_r11 & 0x40)
     {
       FIELD_RC (extra_r11, 0);
-      //ent->extra_r11 = bit_read_RC(dat);
-      //LOG_TRACE(", Extra: 0x%x", ent->extra)
     }
-  /* Common entity preR13 header:
-  if (ent->extra & 2)
-     dwg_decode_eed(dat, ent);
-  if (FIELD_VALUE(flag) & 2)
-     FIELD_RS (type, 0);
-     if (FIELD_VALUE(flag) & 4 && kind > 2 && kind != 22)
-     FIELD_RD (elevation/pt.z, 30);
-     if (FIELD_VALUE(flag) & 8)
-     FIELD_RD (thickness, 39);
-     if (FIELD_VALUE(flag) & 0x20)
-     FIELD_HANDLE (handle, 0, 0);
-     if (FIELD_VALUE(extra) & 4)
-     FIELD_RS (paper, 0);
-  */
+  /* Common entity preR13 header: */
+  if (ent->extra_r11 & 2)
+    {
+      int error = dwg_decode_eed(dat, (Dwg_Object_Object *)ent);
+      if (error)
+        return error;
+    }
+  if (FIELD_VALUE(flag_r11) & 2)
+     FIELD_RS (kind_r11, 0);
+
+  return 0;
 }
 
 static int
@@ -2374,6 +2364,25 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
   Dwg_Data *dwg = ent->dwg;
   Dwg_Object *_obj = &dwg->object[ent->objid];
 
+  PRE(R_13) {
+    Dwg_Object *obj = _obj;
+    Dwg_Object_Entity* _obj = ent;
+
+    if (FIELD_VALUE(flag_r11) & 4 &&
+        FIELD_VALUE(kind_r11) > 2 &&
+        FIELD_VALUE(kind_r11) != 22)
+      FIELD_RD (elevation_r11, 30);
+    if (FIELD_VALUE(flag_r11) & 8)
+      FIELD_RD (thickness_r11, 39);
+    if (FIELD_VALUE(flag_r11) & 0x20) {
+      Dwg_Object_Ref* hdl =
+        dwg_decode_handleref_with_code(dat, obj, dwg, 0);
+      obj->handle = hdl->handleref;
+    }
+    if (FIELD_VALUE(extra_r11) & 4)
+      FIELD_RS (paper_r11, 0);
+  }
+
   VERSIONS(R_2000, R_2010)
     {
       SINCE(R_2007) {
@@ -2407,6 +2416,9 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
   LOG_TRACE("handle: %d.%d.%lX [5]\n", _obj->handle.code,
             _obj->handle.size, _obj->handle.value)
 
+  PRE(R_13) {
+    return 0;
+  }
   error = dwg_decode_eed(dat, (Dwg_Object_Object *)ent);
   if (error)
     return error;
@@ -3051,16 +3063,17 @@ decode_preR13_entities(unsigned long start, unsigned long end,
                        Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   int num = dwg->num_objects;
+  dat->bit = 0;
   LOG_TRACE("entities: (0x%lx-0x%lx, offset 0x%lx) TODO\n", start, end, offset)
-
   while (dat->byte < end)
     {
       Dwg_Object *obj;
       Dwg_Object_Entity* ent;
       BITCODE_RS crc;
+      int error;
 
       if (!num)
-        dwg->object = (Dwg_Object *) calloc(REFS_PER_REALLOC, sizeof(Dwg_Object));
+        dwg->object = (Dwg_Object *) malloc(REFS_PER_REALLOC * sizeof(Dwg_Object));
       else if (num % REFS_PER_REALLOC == 0)
         dwg->object = realloc(dwg->object,
             (num + REFS_PER_REALLOC) * sizeof(Dwg_Object));
@@ -3071,16 +3084,17 @@ decode_preR13_entities(unsigned long start, unsigned long end,
         }
       obj = &dwg->object[num];
       memset(obj, 0, sizeof(Dwg_Object));
-      obj->index = num;
       dwg->num_objects++;
       dwg->num_entities++;
+      obj->index = num;
       obj->parent = dwg;
       obj->supertype = DWG_SUPERTYPE_ENTITY;
       ent = obj->tio.entity = (Dwg_Object_Entity*)calloc (1, sizeof(Dwg_Object_Entity));
       obj->tio.entity->objid = obj->index;
     
+      obj->address = dat->byte;
       DEBUG_HERE();
-      decode_entity_preR13(dat, obj, ent);
+      error = decode_entity_preR13(dat, obj, ent);
 
       switch (obj->type)
         {
@@ -3146,7 +3160,13 @@ decode_preR13_entities(unsigned long start, unsigned long end,
             LOG_ERROR("Unknown object type %d", obj->type)
             break;
         }
+
+      bit_set_position(dat, obj->address + obj->size - 2);
       crc = bit_read_RS(dat);
+      num++;
+
+      if (obj->size < 2 || obj->size > 0x1000) //FIXME
+        dat->byte = end;
     }
 
   dat->byte = end;

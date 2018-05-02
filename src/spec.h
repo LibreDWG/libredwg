@@ -96,6 +96,7 @@
 #endif
 
 #define R11OPTS(b) _ent->opts_r11 & b
+#define R11FLAG(b) _ent->flag_r11 & b
 
 #ifndef COMMON_TABLE_FLAGS
 #define COMMON_TABLE_FLAGS(owner, acdbname) \

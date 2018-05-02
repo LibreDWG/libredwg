@@ -336,7 +336,11 @@ DWG_ENTITY_END
 /* (7/14) */
 DWG_ENTITY(INSERT)
 
-  FIELD_3DPOINT (ins_pt, 10);
+  PRE(R_13) {
+    FIELD_2RD (ins_pt, 10);
+  } else {
+    FIELD_3DPOINT (ins_pt, 10);
+  }
 
   VERSIONS(R_13, R_14)
     {
@@ -411,9 +415,13 @@ DWG_ENTITY(INSERT)
         }
     }
 
-  FIELD_BD (rotation, 50);
-  FIELD_3DPOINT (extrusion, 210);
-  FIELD_B (has_attribs, 66);
+  PRE(R_13) {
+    FIELD_RD (rotation, 50);
+  } else {
+    FIELD_BD (rotation, 50);
+    FIELD_3DPOINT (extrusion, 210);
+    FIELD_B (has_attribs, 66);
+  }
 
   SINCE(R_2004)
     {
@@ -811,12 +819,12 @@ DWG_ENTITY(LINE)
 
   SUBCLASS (AcDbLine)
   PRE(R_13) {
-    if (_ent->flag_r11 & 4)
+    if (R11FLAG(4))
       FIELD_3RD (start, 10)
     else
       FIELD_2RD (start, 10)
 
-    if (_ent->flag_r11 & 4)
+    if (R11FLAG(4))
       FIELD_3RD (end, 11)
     else
       FIELD_2RD (end, 11)
