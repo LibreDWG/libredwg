@@ -29,22 +29,22 @@ DWG_ENTITY (TEXT)
     FIELD_RD (height, 40);
     FIELD_TV (text_value, 1);
     if (R11OPTS(1))
-      FIELD_RD (rotation, 50)
+      FIELD_RD (rotation, 50);
     if (R11OPTS(2))
-      FIELD_RD (width_factor, 41)
+      FIELD_RD (width_factor, 41);
     if (R11OPTS(4))
-      FIELD_RD (oblique_ang, 51)
+      FIELD_RD (oblique_ang, 51);
     if (R11OPTS(8)) {
       DECODER { _ent->linetype_r11 = bit_read_RC(dat); }
       ENCODER { bit_write_RC(dat, _ent->linetype_r11); }
       PRINT   { LOG_TRACE("linetype_rs: " FORMAT_RS "\n", _ent->linetype_r11); }
     }
     if (R11OPTS(16))
-      FIELD_CAST (generation, RC, BS, 71)
+      FIELD_CAST (generation, RC, BS, 71);
     if (R11OPTS(32))
-      FIELD_CAST (horiz_alignment, RC, BS, 72)
+      FIELD_CAST (horiz_alignment, RC, BS, 72);
     if (R11OPTS(64))
-      FIELD_2RD (alignment_pt, 11)
+      FIELD_2RD (alignment_pt, 11);
     if (R11OPTS(256))
       FIELD_CAST (vert_alignment, RC, BS, 73);
   }
@@ -755,9 +755,9 @@ DWG_ENTITY(ARC)
     FIELD_RD (start_angle, 50);
     FIELD_RD (end_angle, 51);
     if (R11OPTS(1))
-      FIELD_3RD (extrusion, 210)
+      FIELD_3RD (extrusion, 210);
     if (R11OPTS(2))
-      FIELD_RD (center.z, 30)
+      FIELD_RD (center.z, 30);
   }
   LATER_VERSIONS {
     FIELD_3BD (center, 10);
@@ -779,9 +779,9 @@ DWG_ENTITY(CIRCLE)
     FIELD_2RD (center, 10);
     FIELD_RD (radius, 40);
     if (R11OPTS(1))
-      FIELD_3RD (extrusion, 210)
+      FIELD_3RD (extrusion, 210);
     if (R11OPTS(2))
-      FIELD_RD (center.z, 38)
+      FIELD_RD (center.z, 38);
   }
   LATER_VERSIONS {
     FIELD_3BD (center, 10);
@@ -809,9 +809,9 @@ DWG_ENTITY(LINE)
       FIELD_2RD (end, 11)
 
     if (R11OPTS(1))
-      FIELD_3RD (extrusion, 210)
+      FIELD_3RD (extrusion, 210);
     if (R11OPTS(2))
-      FIELD_RD (thickness, 39)
+      FIELD_RD (thickness, 39);
   }
   VERSIONS(R_13, R_14)
     {
@@ -1150,9 +1150,9 @@ DWG_ENTITY(SOLID)
     FIELD_2RD (corner3, 13);
     FIELD_2RD (corner4, 14);
     if (R11OPTS(1))
-      FIELD_3RD (extrusion, 210)
+      FIELD_3RD (extrusion, 210);
     if (R11OPTS(2))
-      FIELD_RD (elevation, 38)
+      FIELD_RD (elevation, 38);
   }
   LATER_VERSIONS {
     FIELD_BT (thickness, 39);
@@ -1177,9 +1177,9 @@ DWG_ENTITY(TRACE)
     FIELD_2RD (corner3, 12);
     FIELD_2RD (corner4, 13);
     if (R11OPTS(1))
-      FIELD_3RD (extrusion, 210)
+      FIELD_3RD (extrusion, 210);
     if (R11OPTS(2))
-      FIELD_RD (elevation, 38)
+      FIELD_RD (elevation, 38);
   }
   LATER_VERSIONS {
     FIELD_BT (thickness, 39);
@@ -1203,9 +1203,9 @@ DWG_ENTITY(SHAPE)
     FIELD_2RD (ins_pt, 10);
     FIELD_RS (shape_no, 2);
     if (R11OPTS(1))
-      FIELD_3RD (extrusion, 210)
+      FIELD_3RD (extrusion, 210);
     if (R11OPTS(2))
-      FIELD_RD (ins_pt.z, 38)
+      FIELD_RD (ins_pt.z, 38);
   }
   LATER_VERSIONS {
     FIELD_3BD (ins_pt, 10);
@@ -3008,7 +3008,7 @@ DWG_ENTITY(HATCH)
                       FIELD_BL (paths[rcount].segs[rcount2].num_knots, 95);
                       FIELD_BL (paths[rcount].segs[rcount2].num_control_points, 96);
                       FIELD_VECTOR (paths[rcount].segs[rcount2].knots, BD,
-                                    paths[rcount].segs[rcount2].num_knots, 40)
+                                    paths[rcount].segs[rcount2].num_knots, 40);
                       REPEAT3(paths[rcount].segs[rcount2].num_control_points,
                               paths[rcount].segs[rcount2].control_points,
                               Dwg_Entity_HATCH_ControlPoint)
@@ -4852,4 +4852,6 @@ DWG_OBJECT_END
 DWG_OBJECT(LEADEROBJECTCONTEXTDATA)
 DWG_OBJECT_END
 */
+
+
 

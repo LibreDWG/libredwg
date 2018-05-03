@@ -35,7 +35,7 @@ Texts.  A copy of the license is included in the section entitled
 @subtitle for version @value{VERSION}, @value{UPDATED}
 @c Hey, if you can change this, you can comment in the next line!
 @author GNU LibreDWG Developers
-@author Thien-Thi Nguyen
+@author and Thien-Thi Nguyen
 @page
 @vskip 0pt plus 1filll
 @insertcopying

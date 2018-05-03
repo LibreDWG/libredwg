@@ -93,6 +93,25 @@ main(int argc, char *argv[])
       argc -= num_args;
       i += num_args;
     }
+  if (argc > 2 &&
+      (!strcmp(argv[i], "--format") ||
+       !strncmp(argv[i], "-O", 2)))
+    {
+      int num_args;
+      if (!strncmp(argv[i], "-O", 2) && strcmp(argv[i], "-O")) //-Ofmt
+        {
+          fmt = argv[i]+2;
+          num_args = 1;
+        }
+      else //-O fmt | --format fmt
+        {
+          fmt = argv[i+1];
+          num_args = 2;
+        }
+      argc -= num_args;
+      i += num_args;
+    }
+  //TODO -o outfile
   if (argc > 1 && !strcmp(argv[i], "--help"))
     return help();
   if (argc > 1 && !strcmp(argv[i], "--version"))
