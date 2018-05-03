@@ -20,7 +20,7 @@
 #include <string.h>
 
 /* returns number of consumed args */
-int verbosity(int argc, char **argv, int i)
+int verbosity(int argc, char **argv, int i, unsigned int *opts)
 {
   int loglevel = 2;
   int num_args = 1;
@@ -40,6 +40,7 @@ int verbosity(int argc, char **argv, int i)
         }
       else
         loglevel = 2;
+      *opts = loglevel;
       sprintf(log_str, "%d", loglevel);
 #if defined(USE_TRACING) && defined(HAVE_SETENV)
       setenv("LIBREDWG_TRACE", log_str, 1);
@@ -57,6 +58,7 @@ int verbosity(int argc, char **argv, int i)
           exit(help());
         }
       loglevel = (int)l;
+      *opts = loglevel;
       sprintf(log_str, "%d", loglevel);
 #if defined(USE_TRACING) && defined(HAVE_SETENV)
       setenv("LIBREDWG_TRACE", log_str, 1);

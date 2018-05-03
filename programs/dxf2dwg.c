@@ -29,7 +29,7 @@
 #include "../src/logging.h"
 #include "suffix.inc"
 static int help(void);
-int verbosity(int argc, char **argv, int i);
+int verbosity(int argc, char **argv, int i, unsigned int *opts);
 #include "common.inc"
 
 int minimal = 0;
@@ -56,9 +56,9 @@ static int help(void) {
   printf("  -v[0-9], --verbose [0-9]  verbosity\n");
   printf("  -as-rNNNN                 save as version\n");
   printf("           Valid versions:\n");
-  printf("             r12, r14, r2000, r2004\n");
+  printf("             r12, r14, r2000\n");
   printf("           Planned versions:\n");
-  printf("             r9, r10, r11, r2007, r2010, r2013, r2018\n");
+  printf("             r9, r10, r11, r2004, r2007, r2010, r2013, r2018\n");
   printf("       --help               display this help and exit\n");
   printf("       --version            output version information and exit\n"
          "\n");
@@ -581,6 +581,7 @@ main (int argc, char *argv[])
 {
   int i = 1;
   int error;
+  unsigned int opts = 1; //loglevel
   Dwg_Data dwg;
   char* filename_in;
   const char *version = NULL;
@@ -598,7 +599,7 @@ main (int argc, char *argv[])
       (!strcmp(argv[i], "--verbose") ||
        !strncmp(argv[i], "-v", 2)))
     {
-      int num_args = verbosity(argc, argv, i);
+      int num_args = verbosity(argc, argv, i, &opts);
       argc -= num_args;
       i += num_args;
     }
@@ -634,6 +635,7 @@ main (int argc, char *argv[])
 
   printf("Reading DXF file %s\n", filename_in);
   printf("TODO: reading DXF not yet done\n");
+  dwg.opts = opts;
   error = dwg_read_dxf(filename_in, &dwg);
   if (error)
     {

@@ -15,6 +15,7 @@
  * testSVG.c: convert a DWG to SVG
  * written by Felipe Corrêa da Silva Sances
  * modified by Thien-Thi Nguyen
+ * modified by Reini Urban
  */
 
 #include <stdio.h>
@@ -28,7 +29,7 @@
 #include "../src/bits.h"
 #include "suffix.inc"
 static int help(void);
-int verbosity(int argc, char **argv, int i);
+int verbosity(int argc, char **argv, int i, unsigned int *opts);
 #include "common.inc"
 
 static void output_SVG(Dwg_Data* dwg);
@@ -67,19 +68,6 @@ static
 double transform_Y(double y)
 {
   return page_height - (y - model_ymin);
-}
-
-static int
-test_SVG(char *filename)
-{
-  int error = dwg_read_file(filename, &g_dwg);
-  if (!error)
-    output_SVG(&g_dwg);
-
-  dwg_free(&g_dwg);
-  /* This value is the return value for `main',
-     so clamp it to either 0 or 1.  */
-  return error ? 1 : 0;
 }
 
 static void
@@ -280,7 +268,10 @@ output_SVG(Dwg_Data* dwg)
 int
 main(int argc, char *argv[])
 {
+  int error;
   int i = 1;
+  unsigned int opts = 1; //loglevel 1
+
   if (argc < 2)
     return usage();
 #if defined(USE_TRACING) && defined(HAVE_SETENV)
@@ -290,7 +281,7 @@ main(int argc, char *argv[])
       (!strcmp(argv[i], "--verbose") ||
        !strncmp(argv[i], "-v", 2)))
     {
-      int num_args = verbosity(argc, argv, i);
+      int num_args = verbosity(argc, argv, i, &opts);
       argc -= num_args;
       i += num_args;
     }
@@ -299,8 +290,12 @@ main(int argc, char *argv[])
   if (argc > 1 && !strcmp(argv[i], "--version"))
     return opt_version();
   REQUIRE_INPUT_FILE_ARG (argc);
-#if defined(USE_TRACING) && defined(HAVE_SETENV)
-  setenv("LIBREDWG_TRACE", "1", 0);
-#endif
-  return test_SVG (argv[i]);
+
+  g_dwg.opts = opts;
+  error = dwg_read_file(argv[i], &g_dwg);
+  if (!error)
+    output_SVG(&g_dwg);
+
+  dwg_free(&g_dwg);
+  return error;
 }

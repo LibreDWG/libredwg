@@ -3871,7 +3871,7 @@ typedef struct _dwg_class
 } Dwg_Class;
 
 /**
- Dwg_Chain same as Bit_Chain in "bits.h"
+ Dwg_Chain similar to Bit_Chain in "bits.h"
  */
 typedef struct _dwg_chain
 {
@@ -3913,7 +3913,7 @@ typedef enum DWG_SECTION_TYPE_R13
   SECTION_AUXHEADER_R2000 = 5,
 } Dwg_Section_Type_R13;
 
-typedef enum DWG_SECTION_TYPE_R11
+typedef enum DWG_SECTION_TYPE_R11 /* tables */
 {
   SECTION_HEADER_R11 = 0,
   SECTION_BLOCK = 1,
@@ -4121,6 +4121,7 @@ typedef struct _dwg_struct
 
   long unsigned int measurement;
   unsigned int layout_number;
+  unsigned int opts; /* ignore */
 } Dwg_Data;
 
 /*--------------------------------------------------

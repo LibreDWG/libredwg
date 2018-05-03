@@ -16,6 +16,7 @@
  * written by Felipe Castro
  * modified by Felipe Corrêa da Silva Sances
  * modified by Thien-Thi Nguyen
+ * modified by Reini Urban
  */
 
 #include <stdio.h>
@@ -24,11 +25,13 @@
 #include <dwg.h>
 #include "suffix.inc"
 static int help(void);
-int verbosity(int argc, char **argv, int i);
+int verbosity(int argc, char **argv, int i, unsigned int *opts);
 #include "common.inc"
+static char *fmt = NULL;
+static char *outfile = NULL;
 
 static int usage(void) {
-  printf("\nUsage: dwgread [-v[0-9]] DWGFILE\n");
+  printf("\nUsage: dwgread [-v[0-9]] [-O FMT] [-o OUTFILE] DWGFILE\n");
   return 1;
 }
 static int opt_version(void) {
@@ -40,6 +43,8 @@ static int help(void) {
   printf("Reads the DWG and prints error, success or verbose internal progress.\n"
          "\n");
   printf("  -v[0-9], --verbose [0-9]  verbosity\n");
+  printf("  -O fmt,  --format fmt     fmt: JSON, YAML, XML, DXF, DXFB\n");
+  printf("  -o outfile                \n");
   printf("           --help           display this help and exit\n");
   printf("           --version        output version information and exit\n"
          "\n");
@@ -47,29 +52,14 @@ static int help(void) {
   return 0;
 }
 
-static int
-test_dwg_c(char *filename)
-{
-  int error;
-  Dwg_Data dwg_struct;
-
-  error = dwg_read_file(filename, &dwg_struct);
-  if (error)
-      printf("\nERROR\n");
-  else
-      printf("\nSUCCESS\n");
-
-  dwg_free(&dwg_struct);
-
-  /* This value is the return value for `main',
-     so clamp it to either 0 or 1.  */
-  return error ? 1 : 0;
-}
-
 int
 main(int argc, char *argv[])
 {
+  unsigned int opts = 1; //loglevel 1
   int i = 1;
+  int error;
+  Dwg_Data dwg;
+
   if (argc < 2)
     {
       return usage();
@@ -81,7 +71,25 @@ main(int argc, char *argv[])
       (!strcmp(argv[i], "--verbose") ||
        !strncmp(argv[i], "-v", 2)))
     {
-      int num_args = verbosity(argc, argv, i);
+      int num_args = verbosity(argc, argv, i, &opts);
+      argc -= num_args;
+      i += num_args;
+    }
+  if (argc > 2 &&
+      (!strcmp(argv[i], "--format") ||
+       !strncmp(argv[i], "-O", 2)))
+    {
+      int num_args;
+      if (!strncmp(argv[i], "-O", 2) && strcmp(argv[i], "-O")) //-Ofmt
+        {
+          fmt = argv[i]+2;
+          num_args = 1;
+        }
+      else //-O fmt | --format fmt
+        {
+          fmt = argv[i+1];
+          num_args = 2;
+        }
       argc -= num_args;
       i += num_args;
     }
@@ -89,6 +97,18 @@ main(int argc, char *argv[])
     return help();
   if (argc > 1 && !strcmp(argv[i], "--version"))
     return opt_version();
+
   REQUIRE_INPUT_FILE_ARG (argc);
-  return test_dwg_c (argv[i]);
+  dwg.opts = opts;
+  error = dwg_read_file(argv[i], &dwg);
+  if (!fmt)
+    {
+      if (error)
+        printf("\nERROR\n");
+      else
+        printf("\nSUCCESS\n");
+    }
+  dwg_free(&dwg);
+
+  return error;
 }

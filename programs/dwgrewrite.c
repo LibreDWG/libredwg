@@ -27,7 +27,7 @@
 #include "../src/common.h"
 #include "suffix.inc"
 static int help(void);
-int verbosity(int argc, char **argv, int i);
+int verbosity(int argc, char **argv, int i, unsigned int *opts);
 #include "common.inc"
 
 static int usage(void) {
@@ -61,6 +61,7 @@ main (int argc, char *argv[])
 {
   int error;
   int i = 1;
+  unsigned int opts = 1; //loglevel 1
   Dwg_Data dwg;
   char* filename_in;
   const char *version = NULL;
@@ -79,7 +80,7 @@ main (int argc, char *argv[])
       (!strcmp(argv[i], "--verbose") ||
        !strncmp(argv[i], "-v", 2)))
     {
-      int num_args = verbosity(argc, argv, i);
+      int num_args = verbosity(argc, argv, i, &opts);
       argc -= num_args;
       i += num_args;
     }

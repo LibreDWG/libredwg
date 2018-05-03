@@ -28,7 +28,7 @@
 #include <dwg.h>
 #include "suffix.inc"
 static int help(void);
-int verbosity(int argc, char **argv, int i);
+int verbosity(int argc, char **argv, int i, unsigned int *opts);
 #include "common.inc"
 
 static int usage(void) {
@@ -134,10 +134,11 @@ create_postscript(Dwg_Data *dwg, char *output)
 int
 main(int argc, char *argv[])
 {
-  int success;
+  int error;
   char *outfile;
-  Dwg_Data dwg;
   int i = 1;
+  unsigned int opts = 1; //loglevel 1
+  Dwg_Data dwg;
 
   if (argc < 2)
     return usage();
@@ -148,7 +149,7 @@ main(int argc, char *argv[])
       (!strcmp(argv[i], "--verbose") ||
        !strncmp(argv[i], "-v", 2)))
     {
-      int num_args = verbosity(argc, argv, i);
+      int num_args = verbosity(argc, argv, i, &opts);
       argc -= num_args;
       i += num_args;
     }
@@ -158,15 +159,16 @@ main(int argc, char *argv[])
     return opt_version();
   REQUIRE_INPUT_FILE_ARG (argc);
 
-  success = dwg_read_file(argv[1], &dwg);
-  if (success)
+  dwg.opts = opts;
+  error = dwg_read_file(argv[i], &dwg);
+  if (error)
     {
       puts("Not able to read dwg file!");
       dwg_free(&dwg);
       return 1;
     }
 
-  outfile = suffix (argv[1], "ps");
+  outfile = suffix (argv[i], "ps");
   create_postscript(&dwg, outfile);
 
   printf ("Success! See the file '%s'\n", outfile);

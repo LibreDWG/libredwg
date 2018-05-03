@@ -27,7 +27,7 @@
 #include <dwg.h>
 #include "suffix.inc"
 static int help(void);
-int verbosity(int argc, char **argv, int i);
+int verbosity(int argc, char **argv, int i, unsigned int *opts);
 #include "common.inc"
 
 static int usage(void) {
@@ -52,7 +52,7 @@ static int help(void) {
 }
 
 static int
-get_bmp(char *dwgfile, char *bmpfile)
+get_bmp(char *dwgfile, char *bmpfile, unsigned int opts)
 {
   unsigned char *data;
   int success;
@@ -68,6 +68,7 @@ get_bmp(char *dwgfile, char *bmpfile)
     long offset;
   } bmp_h;
 
+  dwg.opts = opts;
   /* Read dwg data */
   success = dwg_read_file(dwgfile, &dwg);
   if (success != 0) {
@@ -128,6 +129,7 @@ int
 main (int argc, char *argv[])
 {
   int i = 1;
+  unsigned int opts = 1;
   char *dwgfile, *bmpfile;
 
   if (argc < 2)
@@ -139,7 +141,7 @@ main (int argc, char *argv[])
       (!strcmp(argv[i], "--verbose") ||
        !strncmp(argv[i], "-v", 2)))
     {
-      int num_args = verbosity(argc, argv, i);
+      int num_args = verbosity(argc, argv, i, &opts);
       argc -= num_args;
       i += num_args;
     }
@@ -151,6 +153,6 @@ main (int argc, char *argv[])
 
   dwgfile = argv[i];
   bmpfile = suffix (dwgfile, "bmp");
-  return get_bmp (dwgfile, bmpfile);
+  return get_bmp (dwgfile, bmpfile, opts);
 }
 

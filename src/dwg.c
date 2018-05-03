@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2009, 2010 Free Software Foundation, Inc.                  */
+/*  Copyright (C) 2009, 2010, 2018 Free Software Foundation, Inc.            */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -16,12 +16,14 @@
  * modified by Felipe Corrêa da Silva Sances
  * modified by Rodrigo Rodrigues da Silva
  * modified by Anderson Pierre Cardoso
+ * modified by Reini Urban
  */
 
 #include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include <sys/stat.h>
 #include <assert.h>
 
@@ -32,6 +34,14 @@
 #include "encode.h"
 #include "free.h"
 
+/* The logging level per .o */
+static unsigned int loglevel;
+#ifdef USE_TRACING
+/* This flag means we have checked the environment variable
+   LIBREDWG_TRACE and set `loglevel' appropriately.  */
+static bool env_var_checked_p;
+#define DWG_LOGLEVEL loglevel
+#endif  /* USE_TRACING */
 #include "logging.h"
 
 /*------------------------------------------------------------------------------
@@ -52,7 +62,6 @@ dwg_read_file(char *filename, Dwg_Data * dwg_data)
   size_t size;
   Bit_Chain bit_chain;
 
-  memset(dwg_data, 0, sizeof(Dwg_Data));
   if (stat(filename, &attrib))
     {
       LOG_ERROR("File not found: %s\n", filename)
@@ -76,8 +85,10 @@ dwg_read_file(char *filename, Dwg_Data * dwg_data)
 
   /* Load whole file into memory
    */
-  bit_chain.bit = 0;
-  bit_chain.byte = 0;
+  loglevel = dwg_data->opts;
+  memset(dwg_data, 0, sizeof(Dwg_Data));
+  dwg_data->opts = loglevel;
+  memset(&bit_chain, 0, sizeof(Bit_Chain));
   bit_chain.size = attrib.st_size;
   bit_chain.chain = (unsigned char *) calloc(1, bit_chain.size);
   if (!bit_chain.chain)
@@ -197,12 +208,23 @@ dwg_bmp(Dwg_Data *dwg, BITCODE_RL *size)
   dat = (Bit_Chain*) &dwg->picture;
   if (!dat || !dat->size)
     {
-      LOG_TRACE("no IMAGE DATA\n")
+      LOG_INFO("no IMAGE DATA\n")
       return NULL;
     }
   dat->bit = 0;
   dat->byte = 0;
 
+#ifdef USE_TRACING
+  /* Before starting, set the logging level, but only do so once.  */
+  if (! env_var_checked_p)
+    {
+      char *probe = getenv ("LIBREDWG_TRACE");
+      if (probe)
+        loglevel = atoi (probe);
+      env_var_checked_p = true;
+    }
+#endif  /* USE_TRACING */
+  
   osize = bit_read_RL(dat); /* overall size of all images */
   LOG_TRACE("overall size: " FORMAT_RL "\n", osize)
   num_pictures = bit_read_RC(dat);

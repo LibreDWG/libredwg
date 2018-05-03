@@ -29,7 +29,7 @@
 #include "../src/logging.h"
 #include "suffix.inc"
 static int help(void);
-int verbosity(int argc, char **argv, int i);
+int verbosity(int argc, char **argv, int i, unsigned int *opts);
 #include "common.inc"
 
 int minimal = 0;
@@ -616,6 +616,7 @@ int
 main (int argc, char *argv[])
 {
   int i = 1;
+  unsigned int opts = 1; //loglevel 1
   int error;
   Dwg_Data dwg;
   char* filename_in;
@@ -634,7 +635,8 @@ main (int argc, char *argv[])
       (!strcmp(argv[i], "--verbose") ||
        !strncmp(argv[i], "-v", 2)))
     {
-      int num_args = verbosity(argc, argv, i);
+      int num_args = verbosity(argc, argv, i, &opts);
+      dwg.opts = opts;
       argc -= num_args;
       i += num_args;
     }
@@ -651,7 +653,7 @@ main (int argc, char *argv[])
       argc--;
       i++;
     }
-  if (argc > 2 && (!strcmp(argv[1], "-m") || !strcmp(argv[1], "--minimal")))
+  if (argc > 2 && (!strcmp(argv[i], "-m") || !strcmp(argv[i], "--minimal")))
     {
       minimal = 1;
       argc--;
@@ -673,27 +675,32 @@ main (int argc, char *argv[])
   else
     filename_out = suffix (filename_in, "dxf");
   
-  if (strcmp(filename_in, filename_out) == 0) {
-    if (filename_out != argv[2])
-      free (filename_out);
-    return usage();
-  }
+  if (strcmp(filename_in, filename_out) == 0)
+    {
+      if (filename_out != argv[2])
+        free (filename_out);
+      return usage();
+    }
 
+  dwg.opts = opts;
   printf("Reading DWG file %s\n", filename_in);
   error = dwg_read_file(filename_in, &dwg);
   if (error)
       printf("READ ERROR\n");
 
   printf("Writing DXF file %s", filename_out);
-  if (version) {
-    printf(" as %s\n", version);
-    if (dwg.header.from_version != dwg.header.version)
-      dwg.header.from_version = dwg.header.version;
-    //else keep from_version = 0
-    dwg.header.version = dwg_version;
-  } else {
-    printf("\n");
-  }
+  if (version)
+    {
+      printf(" as %s\n", version);
+      if (dwg.header.from_version != dwg.header.version)
+        dwg.header.from_version = dwg.header.version;
+      //else keep from_version = 0
+      dwg.header.version = dwg_version;
+    }
+  else
+    {
+      printf("\n");
+    }
   
   printf("TODO: write to DXF not yet completed\n");
   error = dwg_write_dxf(filename_out, &dwg);
