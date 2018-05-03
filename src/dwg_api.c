@@ -1,13 +1,32 @@
+/*****************************************************************************/
+/*  LibreDWG - free implementation of the DWG file format                    */
+/*                                                                           */
+/*  Copyright (C) 2013, 2018 Free Software Foundation, Inc.                  */
+/*                                                                           */
+/*  This library is free software, licensed under the terms of the GNU       */
+/*  General Public License as published by the Free Software Foundation,     */
+/*  either version 3 of the License, or (at your option) any later version.  */
+/*  You should have received a copy of the GNU General Public License        */
+/*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
+/*****************************************************************************/
+
+/*
+ * dwg_api.c: external C API
+ *
+ * written by Gaganjyot Singh
+ * modified by Reini Urban
+ */
+
 #include <stdlib.h>
-#include <math.h>
-#include <assert.h>
-#ifdef HAVE_MALLOC_H
-#include <malloc.h>
-#endif
 #include <stdint.h>
 #include <inttypes.h>
+#include <math.h>
+#include <assert.h>
 
 #include "config.h"
+#ifdef HAVE_MALLOC_H
+# include <malloc.h>
+#endif
 #include "dwg.h"
 #include "logging.h"
 #include "bits.h"

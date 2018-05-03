@@ -1,7 +1,7 @@
-/* libredwg API example */
-/* This is the only file an user of the API needs to include */
+/*****************************************************************************/
+/*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2009, 2010 Free Software Foundation, Inc.                  */
+/*  Copyright (C) 2013, 2018 Free Software Foundation, Inc.                  */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -9,6 +9,14 @@
 /*  You should have received a copy of the GNU General Public License        */
 /*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
 /*****************************************************************************/
+
+/*
+ * dwg_api.c: external C API
+ * This is the only file an user of the API needs to include.
+ *
+ * written by Gaganjyot Singh
+ * modified by Reini Urban
+ */
 
 #ifndef _DWG_API_H_
 #define _DWG_API_H_

@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2010 Free Software Foundation, Inc.                        */
+/*  Copyright (C) 2010, 2018 Free Software Foundation, Inc.                  */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -11,8 +11,9 @@
 /*****************************************************************************/
 
 /*
- * decode_r2007.c: functions to decode R2007 (r21) files
+ * decode_r2007.c: functions to decode R2007 (AC1021) sections
  * written by Till Heuschmann
+ * modified by Reini Urban
  */
 
 #include <stdio.h>

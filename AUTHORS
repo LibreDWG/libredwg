@@ -2,6 +2,9 @@ Reini Urban <rurban@cpan.org>
 	Many fixes and enhancements everywhere. Start with support for all
         DWG versions, and adding the missing bits. The current maintainer.
 
+Gaganjyot Singh <thegaganx@gmail.com>
+	Wrote dwg_api, testsvg2 (now dwg2svg2), testcases, unit-testing.
+
 Anderson Pierre Cardoso <apierre.cardoso@gmail.com>
 	Changes to configure.in, dwg.c and encode.c
 

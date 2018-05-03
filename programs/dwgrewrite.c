@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2010 Free Software Foundation, Inc.                        */
+/*  Copyright (C) 2010, 2018 Free Software Foundation, Inc.                  */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -46,9 +46,9 @@ static int help(void) {
   printf("  -v[0-9], --verbose [0-9]  verbosity\n");
   printf("  -as-rNNNN                 save as version\n");
   printf("           Valid versions:\n");
-  printf("             r12, r14, r2000, r2004\n");
+  printf("             r12, r14, r2000\n");
   printf("           Planned versions:\n");
-  printf("             r9, r10, r11, r2007, r2010, r2013, r2018\n");
+  printf("             r9, r10, r11, r2004, r2007, r2010, r2013, r2018\n");
   printf("           --help           display this help and exit\n");
   printf("           --version        output version information and exit\n"
          "\n");
