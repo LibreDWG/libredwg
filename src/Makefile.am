@@ -30,6 +30,8 @@ libredwg_la_SOURCES = \
 	encode.c \
         print.c \
         fmt_json.c \
+        fmt_dxf.c \
+        fmt_dxfb.c \
         free.c \
 	dwg_api.c \
 	$(EXTRA_HEADERS)
@@ -53,6 +55,8 @@ EXTRA_HEADERS = \
 	free.h \
         print.h \
 	fmt_json.h \
+	fmt_dxf.h \
+	fmt_dxfb.h \
 	logging.h \
 	spec.h
 

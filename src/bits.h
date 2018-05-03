@@ -29,6 +29,7 @@
 #ifndef BITS_H
 #define BITS_H
 
+#include <stdio.h>
 #include "config.h"
 #ifdef HAVE_WCHAR_H
 # include <wchar.h>
@@ -47,6 +48,7 @@ typedef struct _bit_chain
   long unsigned int size;
   long unsigned int byte;
   unsigned char bit;
+  FILE *fh;
   Dwg_Version_Type version;
   Dwg_Version_Type from_version;
 } Bit_Chain;
