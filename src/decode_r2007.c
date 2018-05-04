@@ -23,13 +23,15 @@
 #include <stdbool.h>
 #include <assert.h>
 #include "bits.h"
-#include "logging.h"
 #include "dec_macros.h"
 
 /* The logging level for the read (decode) path.  */
 static unsigned int loglevel;
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
+
+#define DWG_LOGLEVEL loglevel
+#include "logging.h"
 
 /* imports */
 Dwg_Object_Ref *
@@ -55,13 +57,6 @@ section_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 // should be a bit larger then the filesize.
 #define DBG_MAX_COUNT 0x10000
 #define DBG_MAX_SIZE  0xf00000
-
-#undef DWG_LOGLEVEL
-#ifdef USE_TRACING
-# define DWG_LOGLEVEL loglevel
-#else
-# define DWG_LOGLEVEL DWG_LOGLEVEL_TRACE
-#endif
 
 typedef struct r2007_file_header
 {
@@ -1397,9 +1392,14 @@ read_r2007_meta_data(Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Data *dwg)
   r2007_page *pages_map, *page;
   r2007_section *sections_map;
   int error;
-
 #ifdef USE_TRACING
-  char *probe = getenv ("LIBREDWG_TRACE");
+  char *probe;
+#endif
+
+  if (dwg->opts)
+    loglevel = dwg->opts & 0xf;
+#ifdef USE_TRACING
+  probe = getenv ("LIBREDWG_TRACE");
   if (probe)
     loglevel = atoi (probe);
 #endif

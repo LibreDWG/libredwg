@@ -44,8 +44,8 @@ static unsigned int cur_ver = 0;
 /* This flag means we have checked the environment variable
    LIBREDWG_TRACE and set `loglevel' appropriately.  */
 static bool env_var_checked_p;
-#define DWG_LOGLEVEL loglevel
 #endif  /* USE_TRACING */
+#define DWG_LOGLEVEL loglevel
 
 #include "logging.h"
 #include "dec_macros.h"
@@ -168,12 +168,13 @@ dwg_decode(Bit_Chain * dat, Dwg_Data * dwg)
   memset(&dwg->auxheader.aux_intro[0], 0, sizeof(dwg->auxheader));
   memset(&dwg->second_header.size, 0, sizeof(dwg->second_header));
 
+  if (dwg->opts)
+    loglevel = dwg->opts & 0xf;
 #ifdef USE_TRACING
   /* Before starting, set the logging level, but only do so once.  */
   if (! env_var_checked_p)
     {
       char *probe = getenv ("LIBREDWG_TRACE");
-
       if (probe)
         loglevel = atoi (probe);
       env_var_checked_p = true;

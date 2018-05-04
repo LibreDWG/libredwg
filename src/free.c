@@ -30,8 +30,8 @@
 static unsigned int loglevel;
 #ifdef USE_TRACING
 static int env_var_checked_p;
-#define DWG_LOGLEVEL loglevel
 #endif
+#define DWG_LOGLEVEL loglevel
 #include "logging.h"
 
 /* the current version per spec block */
@@ -812,6 +812,8 @@ dwg_free(Dwg_Data * dwg)
   unsigned int i;
   if (dwg)
     {
+      if (dwg->opts)
+        loglevel = dwg->opts & 0xf;
 #ifdef USE_TRACING
       /* Before starting, set the logging level, but only do so once.  */
       if (! env_var_checked_p)
