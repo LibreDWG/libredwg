@@ -3,12 +3,10 @@
 * PROXY subentities, PROXY_ENTITY
 * CELLSTYLEMAP TABLE_Cell struct
 * DIMSTYLE_CONTROL: one R2000+ RC missing
-* LEADER: associated_annotation, dimstyle handles (untested)
-* undocumented and apparently unused: LONG_TRANSACTION, DUMMY
 * SPATIAL_INDEX class/object untested
 * WIPEOUTVARIABLE class/object untested
 * link VBA_PROJECT object to its section, and vice versa
-* ACIS: implement parsing of SAT file version 2
+* ACIS: implement parsing of SAT file version 2,
   in ACIS entities 37, 38 and 39
 * convert XRECORD xdata linked-list ResBuf to array of eed[],
   same structure as common EED.
@@ -17,11 +15,9 @@
   the sections have multiple pages. Only for this version. 2010+ uses
   the 2004 format.
 * encode for 2004+: move the local structs to the dwg, as union?
-* finish DXF writing (easy)
+* finish DXF writing (easy, see the json branch)
 * add DXF reading (easy)
-* add binary DXF
-* move verbosity/loglevel to some dwg or dat struct to get rid of
-  --enable-trace and setenv().
+* add binary DXF (see the json branch)
 * add getopt_long() for position independent options
 * add make target: manual
 
@@ -29,8 +25,7 @@
 * enhance and document the API functions.
 * add the basic DWG layout and API to the docs.
 * add more defaults when encoding from older to newer versions.
-* automate windows nightlies and binary releases via appveyor.
-  POSIX releases via travis => github (savannah/ftpupload)?
+* build releases via travis => github (savannah/ftpupload)?
 * check testsuite errors when cross-compiled under wine.
   latest wine needs a new WINEARCH env var.
 * check for a waiver/copyright assignment from
