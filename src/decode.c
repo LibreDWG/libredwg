@@ -2246,7 +2246,7 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
           int lenc;
           BITCODE_RS lens;
 
-          obj->eed[idx].data = (Dwg_Eed_Data*)calloc(size + 1, 1);
+          obj->eed[idx].data = (Dwg_Eed_Data*)calloc(size + 2, 1);
           obj->eed[idx].data->code = code = bit_read_RC(dat);
           LOG_TRACE("EED[%u] code: %d\n", idx, (int)code);
           switch (code)
@@ -2268,7 +2268,7 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
                 /* code:1 + len:1 + cp:2 */
                 bit_read_fixed(dat, obj->eed[idx].data->u.eed_0.string, lenc);
                 obj->eed[idx].data->u.eed_0.string[lenc] = '\0';
-                LOG_TRACE("EED[%u] string: %s len=%d cp=%d\n", idx,
+                LOG_TRACE("EED[%u] string: \"%s\" len=%d cp=%d\n", idx,
                           obj->eed[idx].data->u.eed_0.string, (int)lenc,
                           (int)obj->eed[idx].data->u.eed_0.codepage);
               } LATER_VERSIONS {
@@ -2276,9 +2276,9 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
                 /* code:1 + len:2 NUL? */
                 for (j=0; j < MIN(lens,(size-3)/2); j++)
                   obj->eed[idx].data->u.eed_0_r2007.string[j] = bit_read_RS_LE(dat);
-                obj->eed[idx].data->u.eed_0_r2007.string[j] = 0;
+                //obj->eed[idx].data->u.eed_0_r2007.string[j] = 0; //already calloc'ed
 #ifdef _WIN32
-                LOG_TRACE("EED[%u] string: " FORMAT_TU " len=%d\n", idx,
+                LOG_TRACE("EED[%u] string: \"" FORMAT_TU "\" len=%d\n", idx,
                           obj->eed[idx].data->u.eed_0_r2007.string, (int)lens);
 #endif
               }
@@ -2316,11 +2316,11 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
               break;
             case 70:
               obj->eed[idx].data->u.eed_70.rs = bit_read_RS(dat);
-              LOG_TRACE("EED[%u] short: %d\n", idx, (int)obj->eed[idx].data->u.eed_70.rs);
+              LOG_TRACE("EED[%u] short: " FORMAT_RS "\n", idx, obj->eed[idx].data->u.eed_70.rs);
               break;
             case 71:
               obj->eed[idx].data->u.eed_71.rl = bit_read_RL(dat);
-              LOG_TRACE("EED[%u] long: %d\n", idx, (int)obj->eed[idx].data->u.eed_71.rl);
+              LOG_TRACE("EED[%u] long: " FORMAT_RL "\n", idx, obj->eed[idx].data->u.eed_71.rl);
               break;
             default:
               LOG_WARN("Unknown EED code %d", code);
