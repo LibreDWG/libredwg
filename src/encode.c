@@ -495,7 +495,7 @@ dwg_encode(Dwg_Data* dwg, Bit_Chain* dat)
     struct Dwg_R2004_Header* _obj = &dwg->r2004_header;
     const int size = sizeof(struct Dwg_R2004_Header);
     char encrypted_data[size];
-    int rseed = 1;
+    unsigned int rseed = 1;
 
     LOG_ERROR(WE_CAN "We don't encode the R2004_section_map yet")
 

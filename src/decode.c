@@ -2025,7 +2025,7 @@ decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
     Bit_Chain* hdl_dat = dat;
     const unsigned size = sizeof(struct Dwg_R2004_Header);
     char encrypted_data[size];
-    int rseed = 1;
+    unsigned int rseed = 1;
     unsigned i;
 
     dat->byte = 0x80;
