@@ -423,8 +423,7 @@ LibreDWG installs some binary programs to read or write DWG files.
 
 @item @file{dwgread}
 
-This is mostly used with @code{--enable-trace} and @code{LIBREDWG_TRACE=n} to debug
-the decoded contents of the DWG.
+This reads a DWG file, and optionally converts its content to some output formats: JSON, DXF, DXFB (i.e. Binary DXF).
 
 @item @file{dwgrewrite}
 

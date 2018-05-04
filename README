@@ -79,22 +79,19 @@ customize the installation dirs.  Other options recognized by configure are:
 
 The programs and examples directories contains some application code that uses our lib:
 
-* dwgread -- A simple DWG reader.
+* dwgread -- A DWG reader supporting various output formats.
 
 * dwgrewrite -- Reads a DWG, writes it back under a different name and optionally
   under a different version, and re-reads it back for confirmation.
   Under construction, only with --enable-write.
 
-* dwg2dxf -- Converts a DWG to a DXF (ascii or binary), optionally
+* dwg2dxf -- Converts a DWG to a DXF (ascii or binary, minimal or full), optionally
   under a different version. Under construction.
 
 * dxf2dwg -- Converts a ascii or binary DXF to a DWG, optionally
   under a different version. Under construction.
 
-* load_dwg -- This is a skeleton code, reading the DWG and adding an entity.
-  Look there if you want to have a quickly glance on how to use the library.
-
-* dwg_ps -- Opens a DWG file and outputs an PostScript file.  This code
+* dwg2ps -- Opens a DWG file and outputs an PostScript file.  This code
   depends on the PSlib library.  On Debian-based systems this is usually
   available as a package named pslib-dev.
 
@@ -105,6 +102,12 @@ The programs and examples directories contains some application code that uses o
   from DWG since SVG only supports 2-dimensional images.
 
 * dwgbmp -- Extracts the bmp thumbnail of a dwg file when it is available.
+
+* load_dwg -- This is a skeleton code, reading the DWG and adding an entity.
+  Look there if you want to have a quickly glance on how to use the library.
+
+* dwg2svg2 -- Another example how to use the DWG API, bypassing direct access to
+  the DWG struct.
 
 * xmlsuite -- an extensive example library to use the SWIG python bindings
   is in the test/xmlsuite directory.

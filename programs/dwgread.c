@@ -12,7 +12,8 @@
 /*****************************************************************************/
 
 /*
- * test.c: reading and loading a DWG file to memory
+ * dwgread.c: read a DWG file, print verbose logging, and output to
+ *            various formats.
  * written by Felipe Castro
  * modified by Felipe Corrêa da Silva Sances
  * modified by Thien-Thi Nguyen
@@ -23,12 +24,14 @@
 #include "../src/config.h"
 
 #include <dwg.h>
+#include "../src/bits.h"
 #include "suffix.inc"
+#include "fmt_json.h"
+#include "fmt_dxf.h"
+#include "fmt_dxfb.h"
 static int help(void);
 int verbosity(int argc, char **argv, int i, unsigned int *opts);
 #include "common.inc"
-static char *fmt = NULL;
-static char *outfile = NULL;
 
 static int usage(void) {
   printf("\nUsage: dwgread [-v[0-9]] [-O FMT] [-o OUTFILE] DWGFILE\n");
@@ -43,8 +46,8 @@ static int help(void) {
   printf("Reads the DWG and prints error, success or verbose internal progress.\n"
          "\n");
   printf("  -v[0-9], --verbose [0-9]  verbosity\n");
-  printf("  -O fmt,  --format fmt     fmt: JSON, YAML, XML, DXF, DXFB\n");
-  printf("  -o outfile                \n");
+  printf("  -O fmt,  --format fmt     fmt: JSON, DXF, DXFB\n"); //TODO: YAML, XML, SVG, PS, ...
+  printf("  -o outfile                also defines the output fmt. Default: stdout\n");
   printf("           --help           display this help and exit\n");
   printf("           --version        output version information and exit\n"
          "\n");
@@ -59,6 +62,8 @@ main(int argc, char *argv[])
   int i = 1;
   int error;
   Dwg_Data dwg;
+  const char *fmt = NULL;
+  const char *outfile = NULL;
 
   if (argc < 2)
     {
@@ -93,25 +98,26 @@ main(int argc, char *argv[])
       argc -= num_args;
       i += num_args;
     }
-  if (argc > 2 &&
-      (!strcmp(argv[i], "--format") ||
-       !strncmp(argv[i], "-O", 2)))
+  if (argc > 2 && !strcmp(argv[i], "-o"))
     {
-      int num_args;
-      if (!strncmp(argv[i], "-O", 2) && strcmp(argv[i], "-O")) //-Ofmt
+      outfile = argv[i+1];
+      argc -= 2;
+      i += 2;
+      if (!fmt)
         {
-          fmt = argv[i]+2;
-          num_args = 1;
+          if (strstr(outfile, ".json") || strstr(outfile, ".JSON"))
+            fmt = (char*)"json";
+          else
+          if (strstr(outfile, ".dxf") || strstr(outfile, ".DXF"))
+            fmt = (char*)"dxf";
+          else
+          if (strstr(outfile, ".dxfb") || strstr(outfile, ".DXFB"))
+            fmt = (char*)"dxfb";
+          else {
+            fprintf(stderr, "Unknown output format for %s\n", outfile);
+          }
         }
-      else //-O fmt | --format fmt
-        {
-          fmt = argv[i+1];
-          num_args = 2;
-        }
-      argc -= num_args;
-      i += num_args;
     }
-  //TODO -o outfile
   if (argc > 1 && !strcmp(argv[i], "--help"))
     return help();
   if (argc > 1 && !strcmp(argv[i], "--version"))
@@ -126,6 +132,33 @@ main(int argc, char *argv[])
         printf("\nERROR\n");
       else
         printf("\nSUCCESS\n");
+    }
+  else
+    {
+      Bit_Chain dat;
+      if (outfile)
+        dat.fh = fopen(outfile, "w");
+      else
+        dat.fh = stdout;
+      dat.version = dat.from_version = dwg.header.version;
+
+      if (!strcasecmp(fmt, "json"))
+        error = dwg_write_json(&dat, &dwg);
+      else if (!strcasecmp(fmt, "dxfb"))
+        error = dwg_write_dxfb(&dat, &dwg);
+      else if (!strcasecmp(fmt, "dxf"))
+        error = dwg_write_dxf(&dat, &dwg);
+      else {
+        fprintf(stderr, "Invalid output format %s\n", fmt);
+      }
+      if (outfile)
+        {
+          fclose(dat.fh);
+          if (error)
+            printf("\nERROR\n");
+          else
+            printf("\nSUCCESS\n");
+        }
     }
   dwg_free(&dwg);
 
