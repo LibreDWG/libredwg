@@ -135,6 +135,7 @@ typedef struct _r2007_section
 } r2007_section;
 
 /* exported */
+void read_r2007_init(Dwg_Data *dwg);
 int read_r2007_meta_data(Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Data *dwg);
 /* imported */
 extern int rs_decode_block(unsigned char *blk, int fix);
@@ -1385,6 +1386,13 @@ read_2007_section_handles(Bit_Chain* dat, Bit_Chain* hdl, Dwg_Data *dwg,
 }
 
 /* exported */
+void
+read_r2007_init(Dwg_Data *dwg)
+{
+  if (dwg->opts)
+    loglevel = dwg->opts & 0xf;
+}
+
 int
 read_r2007_meta_data(Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Data *dwg)
 {
@@ -1396,8 +1404,7 @@ read_r2007_meta_data(Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Data *dwg)
   char *probe;
 #endif
 
-  if (dwg->opts)
-    loglevel = dwg->opts & 0xf;
+  read_r2007_init(dwg);
 #ifdef USE_TRACING
   probe = getenv ("LIBREDWG_TRACE");
   if (probe)

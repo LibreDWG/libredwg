@@ -73,6 +73,8 @@ dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
 void
 dwg_free_xdata_resbuf(Dwg_Resbuf *rbuf);
 
+extern void
+read_r2007_init(Dwg_Data *dwg);
 extern int
 read_r2007_meta_data(Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Data *dwg);
 extern void
@@ -241,6 +243,7 @@ dwg_decode(Bit_Chain * dat, Dwg_Data * dwg)
                " We don't decode all objects yet.\n"
                "It will probably crash and/or give you invalid output.")
 #ifndef IS_RELEASE
+      read_r2007_init(dwg);
       return decode_R2004(dat, dwg);
 #endif
     }

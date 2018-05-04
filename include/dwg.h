@@ -4121,7 +4121,7 @@ typedef struct _dwg_struct
 
   long unsigned int measurement;
   unsigned int layout_number;
-  unsigned int opts; /* ignore */
+  unsigned int opts; /* 0xf: loglevel, ... */
 } Dwg_Data;
 
 /*--------------------------------------------------
