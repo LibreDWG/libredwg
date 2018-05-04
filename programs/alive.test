@@ -49,8 +49,8 @@ run ()
         rm $dwg-dwgrewrite.dwg
         arg="$arg ${datadir}/$dwg-$bprog.dwg"
     fi
-    echo LIBREDWG_TRACE=5 $TESTPROG ./$prog $arg
-    if LIBREDWG_TRACE=5 $TESTPROG ./$prog $arg > $log 2>&1
+    echo $TESTPROG ./$prog -v4 $arg
+    if $TESTPROG ./$prog -v4 $arg > $log 2>&1
     then
         rm $log
     else

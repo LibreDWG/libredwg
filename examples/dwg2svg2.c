@@ -26,6 +26,29 @@
 #include "../src/config.h"
 #include <dwg.h>
 #include <dwg_api.h>
+static int help(void);
+int verbosity(int argc, char **argv, int i, unsigned int *opts);
+#include "../programs/common.inc"
+
+static int usage(void) {
+  printf("\nUsage: dwg2svg2 [-v[0-9]] DWGFILE\n");
+  return 1;
+}
+static int opt_version(void) {
+  printf("dwg2svg2 %s\n", PACKAGE_VERSION);
+  return 0;
+}
+static int help(void) {
+  printf("\nUsage: dwg2svg2 [OPTION]... DWGFILE >file.svg\n");
+  printf("Example to use the DWG api\n"
+         "\n");
+  printf("  -v[0-9], --verbose [0-9]  verbosity\n");
+  printf("           --help           display this help and exit\n");
+  printf("           --version        output version information and exit\n"
+         "\n");
+  printf("GNU LibreDWG online manual: <https://www.gnu.org/software/libredwg/>\n");
+  return 0;
+}
 
 #define log_if_error(msg) \
   if (error) { fprintf(stderr, "ERROR: %s", msg); exit(1); }
@@ -42,30 +65,19 @@ double transform_Y(double y){
   return page_height - (y - model_ymin);
 }
 
-int
-test_SVG(char *filename);
-
 void
 output_SVG(dwg_data* dwg);
 
 int
-main(int argc, char *argv[])
-{
-  if (argc >= 1)
-    return test_SVG(argv[1]);
-}
-
-int
-test_SVG(char *filename)
+test_SVG(char *filename, unsigned int opts)
 {
   int error;
 
   memset(&dwg, 0, sizeof(dwg_data));
+  dwg.opts = opts;
   error = dwg_read_file(filename, &dwg);
   if (!error)
-    {
-      output_SVG(&dwg);
-    }
+    output_SVG(&dwg);
 
   dwg_free(&dwg);
   /* This value is the return value for `main',
@@ -375,4 +387,32 @@ output_SVG(dwg_data* dwg)
   log_if_error("block_control_get_paper_space");
 
   printf("</svg>\n");
+}
+
+int
+main(int argc, char *argv[])
+{
+  int i = 1;
+  unsigned int opts = 1;
+
+  if (argc < 2)
+    return usage();
+#if defined(USE_TRACING) && defined(HAVE_SETENV)
+  setenv("LIBREDWG_TRACE", "1", 0);
+#endif
+  if (argc > 2 &&
+      (!strcmp(argv[i], "--verbose") ||
+       !strncmp(argv[i], "-v", 2)))
+    {
+      int num_args = verbosity(argc, argv, i, &opts);
+      argc -= num_args;
+      i += num_args;
+    }
+  if (argc > 1 && !strcmp(argv[i], "--help"))
+    return help();
+  if (argc > 1 && !strcmp(argv[i], "--version"))
+    return opt_version();
+  if (argc >= 1)
+    return test_SVG(argv[i], opts);
+  return 1;
 }

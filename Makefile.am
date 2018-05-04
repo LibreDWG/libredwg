@@ -36,13 +36,13 @@ check-dwg: all
 	-rm check-dwg.log
 	for d in `find test/test-data -iname \*.dwg`; do \
 	  echo programs/dwgread -v3 $$d | tee -a check-dwg.log; \
-	  LIBREDWG_TRACE=3 programs/dwgread $$d >> check-dwg.log 2>&1; \
+	  programs/dwgread -v3 $$d >> check-dwg.log 2>&1; \
 	done
 check-dwg-valgrind: all
 	-rm check-dwg-valgrind.log
 	for d in `find test/test-data -iname \*.dwg`; do \
 	  echo valgrind --leak-check=full programs/dwgread -v3 $$d | tee -a check-dwg-valgrind.log; \
-	  LIBREDWG_TRACE=3 valgrind --leak-check=full programs/dwgread $$d >> check-dwg-valgrind.log 2>&1; \
+	  valgrind --leak-check=full programs/dwgread -v3 $$d >> check-dwg-valgrind.log 2>&1; \
 	done
 
 # clang-analyzer.llvm.org
