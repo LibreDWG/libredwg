@@ -21,9 +21,9 @@ low_level_process (dwg_object * obj)
   printf ("user text of dim_radius : %s\n", dim->user_text);
   printf ("text rotation of dim_radius : %f\n", dim->text_rot);
   printf ("ins rotation of dim_radius : %f\n", dim->ins_rotation);
-  printf ("arrow 1 of dim_radius : " FORMAT_BS "\n", dim->flip_arrow1);
-  printf ("arrow 2 of dim_radius : " FORMAT_BS "\n", dim->flip_arrow2);
-  printf ("flags2 of dim_radius : " FORMAT_BS "\n", dim->flags_1);
+  printf ("arrow 1 of dim_radius : " FORMAT_B "\n", dim->flip_arrow1);
+  printf ("arrow 2 of dim_radius : " FORMAT_B "\n", dim->flip_arrow2);
+  printf ("flags2 of dim_radius : " FORMAT_RC "\n", dim->flags_1);
   printf ("act_measurement of dim_radius : %f\n", dim->act_measurement);
   printf ("leader length of dim radius : %f\n", dim->leader_len);
 }

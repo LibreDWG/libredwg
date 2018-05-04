@@ -7,7 +7,7 @@ low_level_process (dwg_object * obj)
 {
   dwg_ent_vertex_3d *vertex_3d = dwg_object_to_VERTEX_3D (obj);
 
-  printf ("flag of vertex_3d : " FORMAT_BS "\n", vertex_3d->flag);
+  printf ("flag of vertex_3d : " FORMAT_RC "\n", vertex_3d->flag);
   printf ("point of vertex_3d : x = %f, y = %f, z = %f\n",
 	  vertex_3d->point.x, vertex_3d->point.y, vertex_3d->point.z);
 }

@@ -7,7 +7,7 @@ low_level_process (dwg_object * obj)
 {
   dwg_ent_seqend *seqend = dwg_object_to_SEQEND (obj);
 
-  printf ("dummy value of seqend : " FORMAT_BS, seqend->dummy);
+  printf ("dummy value of seqend : %c\n", seqend->dummy);
 }
 
 void

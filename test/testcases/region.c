@@ -9,24 +9,24 @@ low_level_process (dwg_object * obj)
   dwg_ent_region *region = dwg_object_to_REGION (obj);
   BITCODE_BL i;
 
-  printf ("acis empty of region : " FORMAT_BS, region->acis_empty);
-  printf ("version of region : " FORMAT_BS, region->version);
-  printf ("acis data of region : %s", region->acis_data);
-  printf ("wireframe data of region : " FORMAT_BS, region->wireframe_data_present);
-  printf ("point present of region : " FORMAT_BS, region->point_present);
+  printf ("acis empty of region : " FORMAT_B "\n", region->acis_empty);
+  printf ("version of region : " FORMAT_BS "\n", region->version);
+  printf ("acis data of region : %s\n", region->acis_data);
+  printf ("wireframe data of region : " FORMAT_B "\n", region->wireframe_data_present);
+  printf ("point present of region : " FORMAT_B "\n", region->point_present);
   printf ("point of region : x = %f, y = %f, z = %f\n", region->point.x,
 	  region->point.y, region->point.z);
-  printf ("num isolines of region : " FORMAT_BL, region->num_isolines);
-  printf ("isoline present of region : " FORMAT_BS, region->isoline_present);
-  printf ("num wires of region : " FORMAT_BL, region->num_wires);
+  printf ("num isolines of region : " FORMAT_BL "\n", region->num_isolines);
+  printf ("isoline present of region : " FORMAT_B "\n", region->isoline_present);
+  printf ("num wires of region : " FORMAT_BL "\n", region->num_wires);
 
   for (i = 0; i < region->num_wires; i++)
-    printf ("wire[%d] of region : " FORMAT_BL, i, region->wires[i].selection_marker);
+    printf ("wire[%d] of region : " FORMAT_BL "\n", i, region->wires[i].selection_marker);
 
-  printf ("num sil of region : " FORMAT_BL, region->num_silhouettes);
+  printf ("num sil of region : " FORMAT_BL "\n", region->num_silhouettes);
 
   for (i = 0; i < region->num_silhouettes; i++)
-    printf ("silhouette[%d] of region : " FORMAT_BL, i, region->silhouettes[i].vp_id);
+    printf ("silhouette[%d] of region : " FORMAT_BL "\n", i, region->silhouettes[i].vp_id);
 }
 
 void

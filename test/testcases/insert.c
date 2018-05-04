@@ -11,13 +11,13 @@ low_level_process (dwg_object * obj)
 
   printf ("insert points : x = %f, y = %f, z = %f\n",
 	  insert->ins_pt.x, insert->ins_pt.y, insert->ins_pt.z);
-  printf ("scale flag for insert : " FORMAT_BS "\n", insert->scale_flag);
+  printf ("scale flag for insert : " FORMAT_BB "\n", insert->scale_flag);
   printf ("scale points : x = %f, y = %f, z = %f\n",
 	  insert->scale.x, insert->scale.y, insert->scale.z);
   printf ("angle for insert : %f\n", insert->rotation);
   printf ("extrusion points : x = %f, y = %f, z = %f\n",
 	  insert->extrusion.x, insert->extrusion.y, insert->extrusion.z);
-  printf ("attribs for insert : " FORMAT_BS "\n", insert->has_attribs);
+  printf ("attribs for insert : " FORMAT_B "\n", insert->has_attribs);
   printf ("object count for insert : " FORMAT_BL "\n", insert->owned_obj_count);
 }
 

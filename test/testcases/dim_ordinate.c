@@ -30,10 +30,10 @@ low_level_process (dwg_object * obj)
   printf ("user text of dim_ordinate : %s\n", dim->user_text);
   printf ("text rotation of dim_ordinate : %f\n", dim->text_rot);
   printf ("ins rotation of dim_ordinate : %f\n", dim->ins_rotation);
-  printf ("arrow1 of dim_ordinate : " FORMAT_BS "\n", dim->flip_arrow1);
-  printf ("arrow2 of dim_ordinate : " FORMAT_BS "\n", dim->flip_arrow2);
-  printf ("flags1 of dim_ordinate : " FORMAT_BS "\n", dim->flags_1);
-  printf ("flags2 of dim_ordinate : " FORMAT_BS "\n", dim->flags_2);
+  printf ("arrow1 of dim_ordinate : " FORMAT_B "\n", dim->flip_arrow1);
+  printf ("arrow2 of dim_ordinate : " FORMAT_B "\n", dim->flip_arrow2);
+  printf ("flags1 of dim_ordinate : " FORMAT_RC "\n", dim->flags_1);
+  printf ("flags2 of dim_ordinate : " FORMAT_RC "\n", dim->flags_2);
   printf ("act_measurement of dim_ordinate : %f\n", dim->act_measurement);
 
 }

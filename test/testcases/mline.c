@@ -10,12 +10,12 @@ low_level_process (dwg_object * obj)
   dwg_ent_mline *mline = dwg_object_to_MLINE (obj);
 
   printf ("scale of mline : %f\n", mline->scale);
-  printf ("just of mline : " FORMAT_BS "\n", mline->justification);
+  printf ("just of mline : " FORMAT_RC "\n", mline->justification);
   printf ("extrusion of mline : x = %f, y = %f, z = %f\n",
 	  mline->extrusion.x, mline->extrusion.y, mline->extrusion.z);
   printf ("base_point of mline : x = %f, y = %f, z = %f\n",
 	  mline->base_point.x, mline->base_point.y, mline->base_point.z);
-  printf ("number of lines : " FORMAT_BS "\n", mline->num_lines);
+  printf ("number of lines : " FORMAT_RC "\n", mline->num_lines);
   printf ("number of verts : " FORMAT_BS "\n", mline->num_verts);
 
   for (i = 0; i < mline->num_verts; i++)

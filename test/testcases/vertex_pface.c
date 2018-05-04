@@ -7,7 +7,7 @@ low_level_process (dwg_object * obj)
 {
   dwg_ent_vertex_pface *vertex_pface = dwg_object_to_VERTEX_PFACE (obj);
 
-  printf ("flag of vertex_pface : " FORMAT_BS "\n", vertex_pface->flag);
+  printf ("flag of vertex_pface : " FORMAT_RC "\n", vertex_pface->flag);
   printf ("point of vertex_pface : x = %f, y = %f, z = %f\n",
 	  vertex_pface->point.x, vertex_pface->point.y,
 	  vertex_pface->point.z);
