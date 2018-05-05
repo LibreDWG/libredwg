@@ -22,6 +22,10 @@
 
 #include <stdio.h>
 #include "../src/config.h"
+// strings.h or string.h
+#ifdef AX_STRCASECMP_HEADER
+# include AX_STRCASECMP_HEADER
+#endif
 
 #include <dwg.h>
 #include "../src/bits.h"
