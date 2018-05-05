@@ -998,6 +998,9 @@ dxf_header_write(Bit_Chain *dat, Dwg_Data* dwg)
     ENDSEC();
     return;
   }
+  SINCE(R_13) {
+    VAR (ACADMAINTVER, 70, dwg->header.maint_version);
+  }
   if (dwg->header.codepage != 30 &&
       dwg->header.codepage != 0 &&
       dwg->header.version < R_2007) {
@@ -1005,8 +1008,7 @@ dxf_header_write(Bit_Chain *dat, Dwg_Data* dwg)
     // see https://pythonhosted.org/ezdxf/dxfinternals/fileencoding.html
     LOG_WARN("Unknown codepage %d, assuming ANSI_1252", dwg->header.codepage);
   }
-  SINCE(R_13) {
-    VAR (ACADMAINTVER, 70, dwg->header.maint_version);
+  SINCE(R_10) {
     VAR (DWGCODEPAGE, 3, codepage);
   }
   HEADER_3D (INSBASE);

@@ -36,8 +36,6 @@ static char buf[4096];
 //extern void obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 //extern const char *dxf_format (int code);
 
-void dwg_dxfb_object(Bit_Chain *dat, Dwg_Object *obj);
-
 /*
 static const char *
 dxfb_format (int code)
@@ -1073,6 +1071,10 @@ dxfb_header_write(Bit_Chain *dat, Dwg_Data* dwg)
     ENDSEC();
     return;
   }
+  SINCE(R_13) {
+    VAR (ACADMAINTVER);
+    VALUE_RC(dwg->header.maint_version, 70);
+  }
   if (dwg->header.codepage != 30 &&
       dwg->header.codepage != 0 &&
       dwg->header.version < R_2007) {
@@ -1080,9 +1082,7 @@ dxfb_header_write(Bit_Chain *dat, Dwg_Data* dwg)
     // see https://pythonhosted.org/ezdxf/dxfinternals/fileencoding.html
     LOG_WARN("Unknown codepage %d, assuming ANSI_1252", dwg->header.codepage);
   }
-  SINCE(R_13) {
-    VAR (ACADMAINTVER);
-    VALUE_RC(dwg->header.maint_version, 70);
+  SINCE(R_10) {
     VAR (DWGCODEPAGE);
     VALUE_TV(codepage, 3);
   }
