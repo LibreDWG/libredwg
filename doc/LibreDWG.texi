@@ -341,8 +341,8 @@ Return 0 if successful.
 You can then iterate over the entities in model space or paper space
 via two ways:
 
-1. by using the @file{dwg.h} data structures, via @code{dwg->object[0]}, which is of
-   type @code{DWG_TYPE_BLOCK_CONTROL},
+1. by using the @file{dwg.h} data structures. Via @code{dwg->object[0]}, which is of
+   type @code{Dwg_Object_BLOCK_CONTROL},
    and a custom @code{void process_BLOCK_HEADER((Dwg_Object_Ref* ref)}:
 
 @verbatim
