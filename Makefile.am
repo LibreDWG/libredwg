@@ -28,10 +28,13 @@ include_HEADERS = \
 	include/dwg.h \
 	include/dwg_api.h
 
-.PHONY: check-dwg check-dwg-valgrind man scan-build gcov check-wine
+.PHONY: check-dwg check-dwg-valgrind man manual scan-build gcov check-wine
 
 man:
 	$(MAKE) -C programs man
+manual:
+	$(MAKE) -C doc manual
+
 check-dwg: all
 	-rm check-dwg.log
 	for d in `find test/test-data -iname \*.dwg`; do \

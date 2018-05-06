@@ -20,3 +20,5 @@
 info_TEXINFOS = LibreDWG.texi
 LibreDWG_TEXINFOS = fdl.texi
 
+manual:
+	../build-aux/gendocs.sh LibreDWG "GNU LibreDWG - Manual"
