@@ -45,16 +45,12 @@ run ()
     bdwg=`basename $dwg .dwg`
     log=$bdwg-$bprog.log
     arg="${datadir}/$dwg.dwg"
-    if test $bprog = dwgrewrite; then
-        rm $dwg-dwgrewrite.dwg
-        arg="$arg ${datadir}/$dwg-$bprog.dwg"
-    fi
     echo $TESTPROG ./$prog -v4 $arg
     if $TESTPROG ./$prog -v4 $arg > $log 2>&1
     then
         rm $log
     else
-        if test $bprog = dwgrewrite -o $bprog = dxf2dwg
+        if test $bprog = dwgrewrite -o $bprog = dwgwrite -o $bprog = dxf2dwg
         then
             tmpnum=$(expr 1 + $problems)
             echo $(basename $0): TODO $prog $tmpnum failures
