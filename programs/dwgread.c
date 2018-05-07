@@ -30,9 +30,9 @@
 #include <dwg.h>
 #include "../src/bits.h"
 #include "suffix.inc"
-#include "fmt_json.h"
-#include "fmt_dxf.h"
-#include "fmt_dxfb.h"
+#include "out_json.h"
+#include "out_dxf.h"
+#include "out_dxfb.h"
 static int help(void);
 int verbosity(int argc, char **argv, int i, unsigned int *opts);
 #include "common.inc"

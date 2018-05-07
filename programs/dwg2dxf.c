@@ -32,16 +32,14 @@ static int help(void);
 int verbosity(int argc, char **argv, int i, unsigned int *opts);
 #include "common.inc"
 
-#include "../src/fmt_dxf.h"
-#include "../src/fmt_dxfb.h"
+#include "../src/out_dxf.h"
+#include "../src/out_dxfb.h"
 
 int minimal = 0;
 int binary = 0;
 char buf[4096];
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
-
-const char *dxf_format (int code);
 
 static int usage(void) {
   printf("\nUsage: dwg2dxf [-v[N]] [-as-rNNNN] [-m|--minimal] [-b|--binary] <input_file.dwg> [<output_file.dxf>]\n");

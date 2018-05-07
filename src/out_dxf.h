@@ -11,18 +11,19 @@
 /*****************************************************************************/
 
 /*
- * fmt_json.h: write dwg as json
+ * out_dxf.h: write dwg as Ascii DXF
  * written by Reini Urban
  */
 
-#ifndef PRINT_H
-#define PRINT_H
+#ifndef OUT_DXF_H
+#define OUT_DXF_H
 
 #include "dwg.h"
 #include "bits.h"
 
-int  dwg_write_json(Bit_Chain *dat, Dwg_Data* dwg);
-void dwg_json_object(Bit_Chain *dat, Dwg_Object *obj);
-void json_header_write(Bit_Chain *dat, Dwg_Data* dwg);
+const char *dxf_format (int code);
+int dwg_write_dxf(Bit_Chain *dat, Dwg_Data* dwg);
+void dwg_dxf_object(Bit_Chain *dat, Dwg_Object *obj);
+void dxf_header_write(Bit_Chain *dat, Dwg_Data* dwg);
 
 #endif

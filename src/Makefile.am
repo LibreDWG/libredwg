@@ -29,9 +29,9 @@ libredwg_la_SOURCES = \
 	reedsolomon.c \
 	encode.c \
         print.c \
-        fmt_json.c \
-        fmt_dxf.c \
-        fmt_dxfb.c \
+        out_json.c \
+        out_dxf.c \
+        out_dxfb.c \
         free.c \
 	dwg_api.c \
 	$(EXTRA_HEADERS)
@@ -59,9 +59,9 @@ EXTRA_HEADERS = \
 	free.h \
         print.h \
 	logging.h \
-	fmt_json.h \
-	fmt_dxf.h \
-	fmt_dxfb.h \
+	out_json.h \
+	out_dxf.h \
+	out_dxfb.h \
 	in_json.h \
 	in_dxf.h \
 	in_dxfb.h

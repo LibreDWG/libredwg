@@ -11,18 +11,16 @@
 /*****************************************************************************/
 
 /*
- * fmt_dxfb.h: write dwg as Binary DXF
+ * fmt_json.h: write dwg as json
  * written by Reini Urban
  */
 
-#ifndef FMT_DXFB_H
-#define FMT_DXFB_H
+#ifndef OUT_JSON_H
+#define OUT_JSON_H
 
 #include "dwg.h"
 #include "bits.h"
 
-int dwg_write_dxfb(Bit_Chain *dat, Dwg_Data* dwg);
-void dwg_dxfb_object(Bit_Chain *dat, Dwg_Object *obj);
-void dxfb_header_write(Bit_Chain *dat, Dwg_Data* dwg);
+int  dwg_write_json(Bit_Chain *dat, Dwg_Data* dwg);
 
 #endif

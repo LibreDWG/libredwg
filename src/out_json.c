@@ -11,7 +11,7 @@
 /*****************************************************************************/
 
 /*
- * fmt_json.c: write as JSON
+ * out_json.c: write as JSON
  * written by Reini Urban
  */
 
@@ -24,7 +24,7 @@
 #include "common.h"
 #include "bits.h"
 #include "dwg.h"
-#include "fmt_json.h"
+#include "out_json.h"
 
 #define DWG_LOGLEVEL DWG_LOGLEVEL_TRACE
 #include "logging.h"
@@ -34,6 +34,9 @@ static unsigned int cur_ver = 0;
 
 extern void
 obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
+
+void dwg_json_object(Bit_Chain *dat, Dwg_Object *obj);
+void json_header_write(Bit_Chain *dat, Dwg_Data* dwg);
 
 /*--------------------------------------------------------------------------------
  * MACROS

@@ -11,7 +11,7 @@
 /*****************************************************************************/
 
 /*
- * fmt_dxf.c: write as Ascii DXF
+ * out_dxf.c: write as Ascii DXF
  * written by Reini Urban
  */
 
@@ -24,7 +24,7 @@
 #include "common.h"
 #include "bits.h"
 #include "dwg.h"
-#include "fmt_dxf.h"
+#include "out_dxf.h"
 
 #define DWG_LOGLEVEL DWG_LOGLEVEL_TRACE
 #include "logging.h"

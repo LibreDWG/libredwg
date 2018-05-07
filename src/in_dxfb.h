@@ -11,12 +11,12 @@
 /*****************************************************************************/
 
 /*
- * in_json.h: read Binary DXF to dwg
+ * in_dxfb.h: read Binary DXF to dwg
  * written by Reini Urban
  */
 
-#ifndef PRINT_H
-#define PRINT_H
+#ifndef IN_DXFB_H
+#define IN_DXFB_H
 
 #include "dwg.h"
 #include "bits.h"
