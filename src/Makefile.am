@@ -35,7 +35,10 @@ libredwg_la_SOURCES = \
         free.c \
 	dwg_api.c \
 	$(EXTRA_HEADERS)
-#       encode_r2007.c
+#       encode_r2007.c \
+#       in_json.c \
+#       in_dxf.c \
+#       in_dxfb.c
 
 libredwg_la_LDFLAGS = -version-info 0:0:0 -no-undefined
 
@@ -47,6 +50,7 @@ EXTRA_HEADERS = \
         header.spec \
         auxheader.spec \
 	r2004_file_header.spec \
+	spec.h \
 	common.h \
 	bits.h \
 	decode.h \
@@ -54,11 +58,13 @@ EXTRA_HEADERS = \
 	encode.h \
 	free.h \
         print.h \
+	logging.h \
 	fmt_json.h \
 	fmt_dxf.h \
 	fmt_dxfb.h \
-	logging.h \
-	spec.h
+	in_json.h \
+	in_dxf.h \
+	in_dxfb.h
 
 EXTRA_DIST = \
 	$(include_HEADERS) \

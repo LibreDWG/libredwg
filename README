@@ -85,6 +85,8 @@ The programs and examples directories contains some application code that uses o
   under a different version, and re-reads it back for confirmation.
   Under construction, only with --enable-write.
 
+* dwgwrite -- A DWG writer supporting various input formats. Planned.
+
 * dwg2dxf -- Converts a DWG to a DXF (ascii or binary, minimal or full), optionally
   under a different version. Under construction.
 

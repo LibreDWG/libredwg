@@ -33,8 +33,9 @@ endif
 if USE_WRITE
 bin_PROGRAMS += dwgrewrite
 # not yet ready
-noinst_PROGRAMS += dxf2dwg
+noinst_PROGRAMS += dxf2dwg dwgwrite
 dwgrewrite_SOURCES = dwgrewrite.c
+dwgwrite_SOURCES   = dwgwrite.c
 dxf2dwg_SOURCES    = dxf2dwg.c
 endif
 
