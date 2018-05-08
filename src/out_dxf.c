@@ -36,6 +36,9 @@ static char buf[4096];
 extern void
 obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 
+static void
+dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
+
 /*--------------------------------------------------------------------------------
  * MACROS
  */
@@ -43,14 +46,14 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 #define IS_PRINT
 
 #define FIELD(name,type,dxf) \
-    fprintf(dat->fh, #name ": " FORMAT_##type ",\n", _obj->name)
+  if (dxf) { fprintf(dat->fh, #name ": " FORMAT_##type ",\n", _obj->name); }
 #define FIELD_CAST(name,type,cast,dxf) FIELD(name,cast,dxf)
 #define FIELD_TRACE(name,type)
 #define FIELD_TEXT(name,str) \
-    fprintf(dat->fh, #name ": \"%s\",\n", str)
+  fprintf(dat->fh, #name ": \"%s\",\n", str)
 #ifdef HAVE_NATIVE_WCHAR2
 # define FIELD_TEXT_TU(name,wstr) \
-    fprintf(dat->fh, #name ": \"%ls\",\n", wstr)
+  fprintf(dat->fh, #name ": \"%ls\",\n", wstr)
 #else
 # define FIELD_TEXT_TU(name,wstr) \
   { \
@@ -66,7 +69,7 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 #define FIELD_VALUE(name) _obj->name
 #define ANYCODE -1
 #define FIELD_HANDLE(name, handle_code, dxf) \
-  if (_obj->name) { \
+  if (dxf && _obj->name) { \
     fprintf(dat->fh, #name ": \"HANDLE(%d.%d.%lu) absolute:%lu\",\n",\
            _obj->name->handleref.code,                     \
            _obj->name->handleref.size,                     \
@@ -77,16 +80,16 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 #define VAR(name, code, value)                  \
   {\
     fprintf (dat->fh, "  9\n$" #name "\n%3i\n", code);      \
-    GCC_DIAG_IGNORE(-Wformat-nonliteral) \
     snprintf (buf, 4096, "%s\n", dxf_format (code));\
+    GCC_DIAG_IGNORE(-Wformat-nonliteral) \
     fprintf (dat->fh, buf, value);\
     GCC_DIAG_RESTORE \
   }
-#define HEADER_VALUE(name, code)\
+#define HEADER_VALUE(name, dxf)\
   {\
-    fprintf (dat->fh, "  9\n$" #name "\n%3i\n", code);\
+    fprintf (dat->fh, "  9\n$" #name "\n%3i\n", dxf);\
+    snprintf (buf, 4096, "%s\n", dxf_format (dxf));\
     GCC_DIAG_IGNORE(-Wformat-nonliteral) \
-    snprintf (buf, 4096, "%s\n", dxf_format (code));\
     fprintf (dat->fh, buf, dwg->header_vars.name);\
     GCC_DIAG_RESTORE \
   }
@@ -117,12 +120,12 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
     fprintf(dat->fh, buf, value);\
     GCC_DIAG_RESTORE \
   }
-#define HANDLE_NAME(name, code, section) \
+#define HANDLE_NAME(name, dxf, section) \
   {\
     Dwg_Object_Ref *ref = dwg->header_vars.name;\
-    GCC_DIAG_IGNORE(-Wformat-nonliteral) \
-    snprintf (buf, 4096, "  9\n$" #name "\n%3i\n%s\n", code, dxf_format (code));\
+    snprintf (buf, 4096, "  9\n$" #name "\n%3i\n%s\n", dxf, dxf_format (dxf));\
     /*if (ref && !ref->obj) ref->obj = dwg_resolve_handle(dwg, ref->absolute_ref); */ \
+    GCC_DIAG_IGNORE(-Wformat-nonliteral) \
     fprintf(dat->fh, buf, ref && ref->obj \
       ? ref->obj->tio.object->tio.section->entry_name : ""); \
     GCC_DIAG_RESTORE \
@@ -148,7 +151,7 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 #define FIELD_TF(name,len,dxf)  FIELD_TEXT(name, _obj->name)
 #define FIELD_TFF(name,len,dxf) FIELD_TEXT(name, _obj->name)
 #define FIELD_TV(name,dxf)      FIELD_TEXT(name, _obj->name)
-#define FIELD_TU(name,dxf)      FIELD_TEXT_TU(name, (BITCODE_TU)_obj->name)
+#define FIELD_TU(name,dxf)      if (dxf) { FIELD_TEXT_TU(name, (BITCODE_TU)_obj->name); }
 #define FIELD_T(name,dxf) \
   { if (dat->version >= R_2007) { FIELD_TU(name, dxf); } \
     else                        { FIELD_TV(name, dxf); } }
@@ -178,57 +181,56 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 // reads data of the type indicated by 'type' 'size' times and stores
 // it all in the vector called 'name'.
 #define FIELD_VECTOR_N(name, type, size, dxf)\
-    fprintf(dat->fh, "["); \
-    for (vcount=0; vcount < (int)size; vcount++)\
-      {\
-        fprintf(dat->fh, #name " " FORMAT_##type ",\n", _obj->name[vcount]); \
-      }\
-    fprintf(dat->fh, "]\n")
+  if (dxf)\
+    {\
+      for (vcount=0; vcount < (int)size; vcount++)\
+        {\
+          fprintf(dat->fh, #name ": " FORMAT_##type ",\n", _obj->name[vcount]);\
+        }\
+    }
 #define FIELD_VECTOR_T(name, size, dxf)\
-    fprintf(dat->fh, "["); \
-    PRE (R_2007) { \
-      for (vcount=0; vcount < (int)_obj->size; vcount++)\
-        fprintf(dat->fh, #name ": \"%s\",\n", _obj->name[vcount]); \
-    } else { \
-      for (vcount=0; vcount < (int)_obj->size; vcount++) \
-        FIELD_TEXT_TU(name, _obj->name[vcount]);\
-    }\
-    fprintf(dat->fh, "]\n")
+  if (dxf) {\
+    PRE (R_2007) {                                              \
+      for (vcount=0; vcount < (int)_obj->size; vcount++)             \
+        fprintf(dat->fh, #name ": \"%s\",\n", _obj->name[vcount]);   \
+    } else {                                                         \
+      for (vcount=0; vcount < (int)_obj->size; vcount++)             \
+        FIELD_TEXT_TU(name, _obj->name[vcount]);                     \
+    }                                                                \
+  }
 
 #define FIELD_VECTOR(name, type, size, dxf) FIELD_VECTOR_N(name, type, _obj->size, dxf)
 
 #define FIELD_2RD_VECTOR(name, size, dxf)\
-  fprintf(dat->fh, "["); \
-  for (vcount=0; vcount < (int)_obj->size; vcount++)\
-    {\
-      FIELD_2RD(name[vcount], dxf);\
-    }\
-  fprintf(dat->fh, "]\n");
+  if (dxf) {\
+    for (vcount=0; vcount < (int)_obj->size; vcount++)    \
+      {\
+        FIELD_2RD(name[vcount], dxf);\
+      }\
+  }
 
 #define FIELD_2DD_VECTOR(name, size, dxf)\
-  fprintf(dat->fh, "["); \
-  FIELD_2RD(name[0], 0);\
+  FIELD_2RD(name[0], dxf);\
   for (vcount = 1; vcount < (int)_obj->size; vcount++)\
     {\
       FIELD_2DD(name[vcount], FIELD_VALUE(name[vcount - 1].x), FIELD_VALUE(name[vcount - 1].y), dxf);\
     }\
-  fprintf(dat->fh, "]\n");
 
 #define FIELD_3DPOINT_VECTOR(name, size, dxf)\
-  fprintf(dat->fh, "["); \
-  for (vcount=0; vcount < (int)_obj->size; vcount++)\
-    {\
-      FIELD_3DPOINT(name[vcount], dxf);\
-    }\
-  fprintf(dat->fh, "]\n");
+  if (dxf) {\
+    for (vcount=0; vcount < (int)_obj->size; vcount++)\
+      {\
+        FIELD_3DPOINT(name[vcount], dxf);\
+      }\
+    }
 
 #define HANDLE_VECTOR_N(name, size, code, dxf) \
-  fprintf(dat->fh, "["); \
-  for (vcount=0; vcount < (int)size; vcount++)\
-    {\
-      FIELD_HANDLE_N(name[vcount], vcount, code, dxf);\
-    }\
-  fprintf(dat->fh, "]\n");
+  if (dxf) {\
+    for (vcount=0; vcount < (int)size; vcount++)\
+      {\
+        FIELD_HANDLE_N(name[vcount], vcount, code, dxf);\
+      }\
+    }
 
 #define HANDLE_VECTOR(name, sizefield, code, dxf) \
   HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code, dxf)
@@ -239,23 +241,18 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 #define FIELD_XDATA(name, size)
 
 #define REACTORS(code)\
-  fprintf(dat->fh, "[");\
   for (vcount=0; vcount < (int)obj->tio.object->num_reactors; vcount++)\
     {\
-      FIELD_HANDLE_N(reactors[vcount], vcount, code, dxf);\
-    }\
-  fprintf(dat->fh, "]\n");
-
-#define XDICOBJHANDLE(code)\
-  SINCE(R_2004)\
-    {\
-      if (!obj->tio.object->xdic_missing_flag)\
-        FIELD_HANDLE(xdicobjhandle, code, dxf);\
-    }\
-  PRIOR_VERSIONS\
-    {\
-      FIELD_HANDLE(xdicobjhandle, code, dxf);\
+      FIELD_HANDLE_N(reactors[vcount], vcount, code, -5);\
     }
+#define ENT_REACTORS(code)\
+  for (vcount=0; vcount < _obj->num_reactors; vcount++)\
+    {\
+      FIELD_HANDLE_N(reactors[vcount], vcount, code, -5);\
+    }
+
+#define XDICOBJHANDLE(code)
+#define ENT_XDICOBJHANDLE(code)
 
 #define REPEAT_N(times, name, type) \
   for (rcount=0; rcount<(int)times; rcount++)
@@ -272,7 +269,7 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 #define REPEAT4(times, name, type) \
   for (rcount4=0; rcount4<(int)_obj->times; rcount4++)
 
-#define COMMON_ENTITY_HANDLE_DATA
+#define COMMON_ENTITY_HANDLE_DATA dxf_common_entity_handle_data(dat, obj)
 #define SECTION_STRING_STREAM
 #define START_STRING_STREAM
 #define END_STRING_STREAM
@@ -919,7 +916,15 @@ dwg_dxf_object(Bit_Chain *dat, Dwg_Object *obj)
 static void
 dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj)
 {
-  (void)dat; (void)obj;
+  Dwg_Object_Entity *ent;
+  //Dwg_Data *dwg = obj->parent;
+  Dwg_Object_Entity *_obj;
+  int i;
+  long unsigned int vcount;
+  ent = obj->tio.entity;
+  _obj = ent;
+
+  #include "common_entity_handle_data.spec"
 }
 
 const char *
