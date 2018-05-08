@@ -1256,7 +1256,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
                                + dwg->header.section[4].size))
       dat->byte = dwg->header.section[4].address;
       dat->bit = 0;
-      dwg->measurement = bit_read_RL(dat);
+      dwg->measurement = bit_read_RL(dat); // TODO => header_vars.MEASUREMENT
 
       LOG_TRACE("         Size bytes :\t%lu\n", dat->size)
     }
