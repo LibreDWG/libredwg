@@ -197,10 +197,17 @@ dwg_decode(Bit_Chain * dat, Dwg_Data * dwg)
         break;
       }
     }
-  if (dwg->header.version == 0)
+  if (!dwg->header.version)
     {
-      LOG_ERROR("Invalid or unimplemented version code! "
-        "This file's version code is: %s\n", version)
+      if (strncmp(version, "AC", 2)) // let's ignore MC0.0 for now
+        {
+          LOG_ERROR("Invalid DWG, magic: %s", version);
+        }
+      else
+        {
+          LOG_ERROR("Invalid or unimplemented DWG version code %s",
+                    version);
+        }
       return -1;
     }
   dat->version = dwg->header.version;
