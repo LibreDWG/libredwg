@@ -26,7 +26,7 @@
 #include "dwg.h"
 #include "out_json.h"
 
-#define DWG_LOGLEVEL DWG_LOGLEVEL_TRACE
+#define DWG_LOGLEVEL DWG_LOGLEVEL_NONE
 #include "logging.h"
 
 /* the current version per spec block */
@@ -35,30 +35,36 @@ static unsigned int cur_ver = 0;
 extern void
 obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 
-void dwg_json_object(Bit_Chain *dat, Dwg_Object *obj);
-void json_header_write(Bit_Chain *dat, Dwg_Data* dwg);
-
 /*--------------------------------------------------------------------------------
  * MACROS
+ * TODO: use a dat field as indent level, i.e. bit.
  */
 
 #define IS_PRINT
 
+#define PREFIX for (int _i=0; _i<dat->bit; _i++) { fprintf (dat->fh, "  "); }
+#define ARRAY    PREFIX fprintf (dat->fh, "[\n"); dat->bit++
+#define ENDARRAY dat->bit--; PREFIX fprintf (dat->fh, "]\n")
+#define HASH     PREFIX fprintf (dat->fh, "{\n"); dat->bit++
+#define ENDHASH  dat->bit--; PREFIX fprintf (dat->fh, "}\n")
+#define SECTION(name) PREFIX fprintf (dat->fh, "\"%s\": [\n", #name); dat->bit++;
+#define ENDSEC()   ENDARRAY;
+
 #define FIELD(name,type,dxf) \
-    fprintf(dat->fh, "  \"" #name "\": " FORMAT_##type ",\n", _obj->name)
+    PREFIX fprintf(dat->fh, "\"" #name "\": " FORMAT_##type ",\n", _obj->name)
 #define FIELD_CAST(name,type,cast,dxf) FIELD(name,cast,dxf)
 #define FIELD_TRACE(name,type)
 #define FIELD_TEXT(name,str) \
-    fprintf(dat->fh, "  \"" #name "\": \"%s\",\n", str)
+    PREFIX fprintf(dat->fh, "\"" #name "\": \"%s\",\n", str)
 #ifdef HAVE_NATIVE_WCHAR2
 # define FIELD_TEXT_TU(name,wstr) \
-    fprintf(dat->fh, "  \"" #name "\": \"%ls\",\n", wstr)
+    PREFIX fprintf(dat->fh, "\"" #name "\": \"%ls\",\n", wstr)
 #else
 # define FIELD_TEXT_TU(name,wstr) \
   { \
     BITCODE_TU ws = (BITCODE_TU)wstr;\
-    uint16_t _c; \
-    fprintf(dat->fh, "  \"" #name "\": \""); \
+    uint16_t _c; PREFIX \
+    fprintf(dat->fh, "\"" #name "\": \""); \
     while ((_c = *ws++)) { \
       fprintf(dat->fh, "%c", (char)(_c & 0xff)); \
     } \
@@ -68,16 +74,26 @@ void json_header_write(Bit_Chain *dat, Dwg_Data* dwg);
 
 #define FIELD_VALUE(name) _obj->name
 #define ANYCODE -1
-#define FIELD_HANDLE(name, handle_code, dxf) \
-  if (_obj->name) { \
-    fprintf(dat->fh, "  \"" #name "\": \"HANDLE(%d.%d.%lu) absolute:%lu\",\n",\
+// todo: only the name, not the ref
+#define FIELD_HANDLE(name, handle_code, dxf)    \
+    PREFIX if (_obj->name) { \
+    fprintf(dat->fh, "\"%s\": \"HANDLE(%d.%d.%lu) absolute:%lu\",\n", #name, \
            _obj->name->handleref.code,                     \
            _obj->name->handleref.size,                     \
            _obj->name->handleref.value,                    \
            _obj->name->absolute_ref);                      \
   }
 #define FIELD_DATAHANDLE(name, code, dxf) FIELD_HANDLE(name, code, dxf)
-#define FIELD_HANDLE_N(name, vcount, handle_code, dxf) FIELD_HANDLE(name, handle_code, dxf)
+#define FIELD_HANDLE_N(name, vcount, handle_code, dxf) \
+    PREFIX if (_obj->name) { \
+    fprintf(dat->fh, "\"HANDLE(%d.%d.%lu) absolute:%lu\",\n",\
+           _obj->name->handleref.code,                     \
+           _obj->name->handleref.size,                     \
+           _obj->name->handleref.value,                    \
+           _obj->name->absolute_ref);                      \
+  } else {\
+    fprintf(dat->fh, "\"\",\n"); \
+  }
 
 #define FIELD_B(name,dxf)   FIELD(name, B, dxf)
 #define FIELD_BB(name,dxf)  FIELD(name, BB, dxf)
@@ -104,7 +120,7 @@ void json_header_write(Bit_Chain *dat, Dwg_Data* dwg);
 #define FIELD_4BITS(name,dxf) FIELD(name,4BITS,dxf)
 #define FIELD_BE(name,dxf)    FIELD_3RD(name,dxf)
 #define FIELD_DD(name, _default, dxf) \
-    fprintf(dat->fh, "  \"" #name "\": " FORMAT_DD ", default: " FORMAT_DD ",\n", \
+    PREFIX fprintf(dat->fh, "\"" #name "\": " FORMAT_DD ", default: " FORMAT_DD ",\n", \
             _obj->name, _default)
 #define FIELD_2DD(name, d1, d2, dxf) { \
     FIELD_DD(name.x, d1, dxf); \
@@ -124,66 +140,67 @@ void json_header_write(Bit_Chain *dat, Dwg_Data* dwg);
     FIELD(name.z, BD, dxf+2);}
 #define FIELD_3DPOINT(name,dxf) FIELD_3BD(name,dxf)
 #define FIELD_CMC(name,dxf)\
-    fprintf(dat->fh, "  \"" #name "\": %d,\n", _obj->name.index)
+    PREFIX fprintf(dat->fh, "\"" #name "\": %d,\n", _obj->name.index)
 #define FIELD_TIMEBLL(name,dxf) \
-    fprintf(dat->fh, "  \"" #name "\": " FORMAT_BL "." FORMAT_BL ",\n", \
+    PREFIX fprintf(dat->fh, "\"" #name "\": " FORMAT_BL "." FORMAT_BL ",\n", \
             _obj->name.days, _obj->name.ms)
 
 //FIELD_VECTOR_N(name, type, size):
 // reads data of the type indicated by 'type' 'size' times and stores
 // it all in the vector called 'name'.
 #define FIELD_VECTOR_N(name, type, size, dxf)\
-    fprintf(dat->fh, "["); \
+    ARRAY; \
     for (vcount=0; vcount < (int)size; vcount++)\
       {\
-        fprintf(dat->fh, "  \"" #name "\": " FORMAT_##type ",\n", _obj->name[vcount]); \
+        PREFIX fprintf(dat->fh, "\"" #name "\": " FORMAT_##type ",\n", _obj->name[vcount]); \
       }\
-    fprintf(dat->fh, "]\n");
+    ENDARRAY;
 #define FIELD_VECTOR_T(name, size, dxf)\
-    fprintf(dat->fh, "["); \
+    ARRAY; \
     PRE (R_2007) { \
-      for (vcount=0; vcount < (int)_obj->size; vcount++)\
-        fprintf(dat->fh, "  \"" #name "\": \"%s\",\n", _obj->name[vcount]); \
+      for (vcount=0; vcount < (int)_obj->size; vcount++) { \
+        PREFIX fprintf(dat->fh, "\"" #name "\": \"%s\",\n", _obj->name[vcount]); \
+      }\
     } else { \
       for (vcount=0; vcount < (int)_obj->size; vcount++)\
         FIELD_TEXT_TU(name, _obj->name[vcount]); \
     } \
-    fprintf(dat->fh, "]\n");
+    ENDARRAY;
 
 #define FIELD_VECTOR(name, type, size, dxf) FIELD_VECTOR_N(name, type, _obj->size, dxf)
 
 #define FIELD_2RD_VECTOR(name, size, dxf)\
-  fprintf(dat->fh, "["); \
+  ARRAY;\
   for (vcount=0; vcount < (int)_obj->size; vcount++)\
     {\
       FIELD_2RD(name[vcount], dxf);\
     }\
-  fprintf(dat->fh, "]\n");
+  ENDARRAY;
 
 #define FIELD_2DD_VECTOR(name, size, dxf)\
-  fprintf(dat->fh, "["); \
+  ARRAY;\
   FIELD_2RD(name[0], 0);\
   for (vcount = 1; vcount < (int)_obj->size; vcount++)\
     {\
       FIELD_2DD(name[vcount], FIELD_VALUE(name[vcount - 1].x), FIELD_VALUE(name[vcount - 1].y), dxf);\
     }\
-  fprintf(dat->fh, "]\n");
+  ENDARRAY;
 
 #define FIELD_3DPOINT_VECTOR(name, size, dxf)\
-  fprintf(dat->fh, "["); \
+  ARRAY;\
   for (vcount=0; vcount < (int)_obj->size; vcount++)\
     {\
       FIELD_3DPOINT(name[vcount], dxf);\
     }\
-  fprintf(dat->fh, "]\n");
+  ENDARRAY;
 
 #define HANDLE_VECTOR_N(name, size, code, dxf) \
-  fprintf(dat->fh, "["); \
+  ARRAY;\
   for (vcount=0; vcount < (int)size; vcount++)\
     {\
       FIELD_HANDLE_N(name[vcount], vcount, code, dxf);\
     }\
-  fprintf(dat->fh, "]\n");
+  ENDARRAY;
 
 #define HANDLE_VECTOR(name, sizefield, code, dxf) \
   HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code, dxf)
@@ -194,12 +211,13 @@ void json_header_write(Bit_Chain *dat, Dwg_Data* dwg);
 #define FIELD_XDATA(name, size)
 
 #define REACTORS(code)\
-  fprintf(dat->fh, "[");\
+  PREFIX; \
+  fprintf(dat->fh, "\"reactors\":"); ARRAY; \
   for (vcount=0; vcount < (int)obj->tio.object->num_reactors; vcount++)\
     {\
       FIELD_HANDLE_N(reactors[vcount], vcount, code, dxf);\
     }\
-  fprintf(dat->fh, "]\n");
+  ENDARRAY;
 
 #define XDICOBJHANDLE(code)\
   SINCE(R_2004)\
@@ -242,11 +260,7 @@ dwg_json_##token (Bit_Chain *dat, Dwg_Object * obj) \
   Dwg_Object_Entity *_ent;\
   LOG_INFO("Entity " #token ":\n")\
   _ent = obj->tio.entity;\
-  _obj = ent = _ent->tio.token;\
-  LOG_TRACE("Entity handle: %d.%d.%lu\n",\
-    obj->handle.code,\
-    obj->handle.size,\
-    obj->handle.value)
+  _obj = ent = _ent->tio.token;
 
 #define DWG_ENTITY_END }
 
@@ -258,11 +272,7 @@ dwg_json_ ##token (Bit_Chain *dat, Dwg_Object * obj) \
   Bit_Chain *hdl_dat = dat;\
   Dwg_Object_##token *_obj;\
   LOG_INFO("Object " #token ":\n")\
-  _obj = obj->tio.object->tio.token;\
-  LOG_TRACE("Object handle: %d.%d.%lu\n",\
-    obj->handle.code,\
-    obj->handle.size,\
-    obj->handle.value)
+  _obj = obj->tio.object->tio.token;
 
 #define DWG_OBJECT_END }
 
@@ -584,7 +594,7 @@ dwg_json_variable_type(Dwg_Data * dwg, Bit_Chain *dat, Dwg_Object* obj)
   return 0;
 }
 
-void
+static void
 dwg_json_object(Bit_Chain *dat, Dwg_Object *obj)
 {
   switch (obj->type)
@@ -870,18 +880,20 @@ dwg_json_object(Bit_Chain *dat, Dwg_Object *obj)
     }
 }
 
+/*
 static void
 json_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj)
 {
   (void)dat; (void)obj;
 }
+*/
 
-void
+static void
 json_header_write(Bit_Chain *dat, Dwg_Data* dwg)
 {
   Dwg_Header_Variables* _obj = &dwg->header_vars;
   Dwg_Object* obj = NULL;
-  const int minimal = dwg->opts & 1;
+  const int minimal = dwg->opts & 0x10;
   char buf[4096];
   double ms;
   const char* codepage =
@@ -891,9 +903,9 @@ json_header_write(Bit_Chain *dat, Dwg_Data* dwg)
       ? "UTF-8"
       : "ANSI_1252";
 
-  fprintf (dat->fh, "  \"HEADER\": {\n");
+  SECTION(HEADER);
   #include "header_variables.spec"
-  fprintf (dat->fh, "  }\n");
+  ENDSEC();
 }
 
 static int
@@ -901,30 +913,24 @@ json_classes_write (Bit_Chain *dat, Dwg_Data * dwg)
 {
   unsigned int i;
 
-  fprintf (dat->fh, "  {\n"
-           "  \"num_classes\": %u\n"
-           "  \"CLASSES\": [\n", dwg->num_classes);
+  SECTION(CLASSES);
   for (i=0; i < dwg->num_classes; i++)
     {
       Dwg_Class *_obj = &dwg->dwg_class[i];
-      fprintf (dat->fh, "  {\n");
-      //fprintf (dat->fh, "dxfname: \"%s\",\n", dwg->dwg_class[i].dxfname); //1
-      FIELD_BS(number, 0);
-      FIELD_T(dxfname, 1);
-      FIELD_T(cppname, 2);
-      FIELD_T(appname, 3);
-      FIELD_BS(proxyflag, 90);
-      FIELD_B(wasazombie, 280);
-      FIELD_BS(item_class_id, 281);
-      SINCE(R_2007)
-        {
-          FIELD_BL(instance_count, 91);
-        }
+      HASH;
+      FIELD_BS (number, 0);
+      FIELD_T (dxfname, 1);
+      FIELD_T (cppname, 2);
+      FIELD_T (appname, 3);
+      FIELD_BS (proxyflag, 90);
+      FIELD_BL (instance_count, 91);
+      FIELD_B  (wasazombie, 280);
+      FIELD_BS (item_class_id, 281);
       // Is-an-entity. 1f2 for entities, 1f3 for objects
       //VALUE (281, dwg->dwg_class[i].item_class_id == 0x1F2 ? 1 : 0);
-      fprintf (dat->fh, "  },\n");
+      ENDHASH;
     }
-  fprintf (dat->fh, "  ]\n  },\n");
+  ENDSEC();
   return 0;
 }
 
@@ -933,9 +939,9 @@ json_tables_write (Bit_Chain *dat, Dwg_Data * dwg)
 {
   (void)dwg;
 
-  //SECTION(TABLES);
+  SECTION(TABLES);
   //...
-  //ENDSEC();
+  ENDSEC();
   return 0;
 }
 
@@ -944,33 +950,43 @@ json_blocks_write (Bit_Chain *dat, Dwg_Data * dwg)
 {
   (void)dwg;
 
-  // SECTION(BLOCKS);
+  SECTION(BLOCKS);
   //...
-  //ENDSEC();
+  ENDSEC();
   return 0;
 }
 
 static int
 json_entities_write (Bit_Chain *dat, Dwg_Data * dwg)
 {
-  (void)dwg;
+  unsigned int i;
 
-  //SECTION(ENTITIES);
-  //...
-  //ENDSEC();
+  SECTION(ENTITIES);
+  for (i=0; i < dwg->num_objects; i++)
+    {
+      Dwg_Object *obj = &dwg->object[i];
+      HASH;
+      dwg_json_object(dat, obj);
+      ENDHASH;
+    }
+  ENDSEC();
   return 0;
 }
 
+/* The object map: we skip this
 static int
 json_objects_write (Bit_Chain *dat, Dwg_Data * dwg)
 {
-  (void)dwg;
+  unsigned int i;
 
-  //SECTION(OBJECTS);
-  //...
-  //ENDSEC();
+  SECTION(OBJECTS);
+  for (j = 0; j < dwg->num_objects; j++)
+    {
+    }
+  ENDSEC();
   return 0;
 }
+*/
 
 static int
 json_preview_write (Bit_Chain *dat, Dwg_Data * dwg)
@@ -983,42 +999,45 @@ json_preview_write (Bit_Chain *dat, Dwg_Data * dwg)
 int
 dwg_write_json(Bit_Chain *dat, Dwg_Data * dwg)
 {
-  const int minimal = dwg->opts & 1;
+  const int minimal = dwg->opts & 0x10;
   struct Dwg_Header *obj = &dwg->header;
 
   fprintf (dat->fh, "{\n"
                      "  \"created_by\": \"%s\",\n", PACKAGE_STRING);
+  dat->bit++;
   // a minimal header requires only $ACADVER, $HANDSEED, and then ENTITIES
   // see https://pythonhosted.org/ezdxf/dxfinternals/filestructure.html
-  SINCE(R_13)
-  {
-    json_header_write (dat, dwg);
+  json_header_write (dat, dwg);
 
-    SINCE(R_2000) {
-      if (json_classes_write (dat, dwg))
+  if (!minimal && dat->version >= R_13)
+    {
+      SINCE(R_2000) {
+        if (json_classes_write (dat, dwg))
+          goto fail;
+      }
+
+      if (json_tables_write (dat, dwg))
+        goto fail;
+      
+      if (json_blocks_write (dat, dwg))
         goto fail;
     }
-
-    if (json_tables_write (dat, dwg))
-      goto fail;
-
-    if (json_blocks_write (dat, dwg))
-      goto fail;
-  }
 
   if (json_entities_write (dat, dwg))
     goto fail;
 
+  /* only the object map
   SINCE(R_13) {
     if (json_objects_write (dat, dwg))
       goto fail;
-  }
+  }*/
 
-  if (dwg->header.version >= R_2000 && !minimal) {
+  if (!minimal && dat->version >= R_2000) {
     if (json_preview_write (dat, dwg))
       goto fail;
   }
 
+  dat->bit--;
   fprintf (dat->fh, "}\n");
   return 0;
  fail:

@@ -1862,7 +1862,7 @@ read_2004_section_classes(Bit_Chain* dat, Dwg_Data *dwg)
                     "(0x1f3 for object, 0x1f2 for entity)\n",
                     dwg->dwg_class[idc].item_class_id)
 
-          dwg->dwg_class[idc].instance_count = bit_read_BL(&sec_dat);  // DXF 91
+          dwg->dwg_class[idc].instance_count = bit_read_BL(&sec_dat);
           dwg->dwg_class[idc].dwg_version    = bit_read_BS(&sec_dat);
           dwg->dwg_class[idc].maint_version  = bit_read_BS(&sec_dat);
           dwg->dwg_class[idc].unknown_1      = bit_read_BL(&sec_dat);

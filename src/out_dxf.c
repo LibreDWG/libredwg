@@ -26,7 +26,7 @@
 #include "dwg.h"
 #include "out_dxf.h"
 
-#define DWG_LOGLEVEL DWG_LOGLEVEL_TRACE
+#define DWG_LOGLEVEL DWG_LOGLEVEL_NONE
 #include "logging.h"
 
 /* the current version per spec block */
@@ -1367,6 +1367,7 @@ dxf_classes_write (Bit_Chain *dat, Dwg_Data * dwg)
         VALUE (3, appname);
       }
       VALUE (90, dwg->dwg_class[i].proxyflag);
+      VALUE (91, dwg->dwg_class[i].instance_count);
       VALUE (280, dwg->dwg_class[i].wasazombie);
       // Is-an-entity. 1f2 for entities, 1f3 for objects
       VALUE (281, dwg->dwg_class[i].item_class_id == 0x1F2 ? 1 : 0);

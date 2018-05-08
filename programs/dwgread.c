@@ -68,6 +68,7 @@ main(int argc, char *argv[])
   Dwg_Data dwg;
   const char *fmt = NULL;
   const char *outfile = NULL;
+  int has_v = 0;
 
   if (argc < 2)
     {
@@ -81,6 +82,7 @@ main(int argc, char *argv[])
        !strncmp(argv[i], "-v", 2)))
     {
       int num_args = verbosity(argc, argv, i, &opts);
+      has_v = 1;
       argc -= num_args;
       i += num_args;
     }
@@ -99,6 +101,7 @@ main(int argc, char *argv[])
           fmt = argv[i+1];
           num_args = 2;
         }
+      if (!has_v) opts = 0;
       argc -= num_args;
       i += num_args;
     }
@@ -128,7 +131,8 @@ main(int argc, char *argv[])
     return opt_version();
 
   REQUIRE_INPUT_FILE_ARG (argc);
-  dwg.opts = opts;
+  if (has_v || !fmt)
+    dwg.opts = opts;
   error = dwg_read_file(argv[i], &dwg);
   if (!fmt)
     {
@@ -145,6 +149,8 @@ main(int argc, char *argv[])
       else
         dat.fh = stdout;
       dat.version = dat.from_version = dwg.header.version;
+      // TODO --as-rNNNN version? for now not. we want the native dump, converters
+      // are seperate.
 
       if (!strcasecmp(fmt, "json"))
         error = dwg_write_json(&dat, &dwg);
