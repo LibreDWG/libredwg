@@ -2899,7 +2899,7 @@ DWG_OBJECT_END
 /* (73) undocumented DXF codes */
 DWG_OBJECT(MLINESTYLE)
 
-  FIELD_T (name, 2);
+  FIELD_T (entry_name, 2);
   FIELD_T (desc, 3);
   FIELD_BS (flag, 70);
   FIELD_CMC (fill_color, 62);

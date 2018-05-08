@@ -4913,7 +4913,7 @@ dwg_obj_mlinestyle_get_name(dwg_obj_mlinestyle *mlinestyle, int *error)
   if (mlinestyle != 0)
     {
       *error = 0;
-      return mlinestyle->name;
+      return mlinestyle->entry_name;
     }
   else
     {
@@ -4936,7 +4936,7 @@ dwg_obj_mlinestyle_set_name(dwg_obj_mlinestyle *mlinestyle, char * name,
   if (mlinestyle != 0)
     {
       *error = 0;
-      mlinestyle->name = name;
+      mlinestyle->entry_name = name;
     }
   else
     {

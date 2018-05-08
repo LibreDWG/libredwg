@@ -74,7 +74,7 @@ char version_codes[DWG_VERSIONS][7] =
     "AC1009", // R_11 DWG Release 11/12 (LT R1/R2)
     "AC1012", // R_13
     "AC1014", // R_14
-    "AC1015", // R_2000 = R15
+    "AC1015", // R_2000 (r15)
     "AC1018", // R_2004
     "AC1021", // R_2007
     "AC1024", // R_2010

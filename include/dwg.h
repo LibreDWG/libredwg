@@ -2101,7 +2101,7 @@ typedef struct _dwg_MLINESTYLE_line
 
 typedef struct _dwg_object_MLINESTYLE
 {
-  BITCODE_TV name;
+  BITCODE_TV entry_name;
   BITCODE_TV desc;
   BITCODE_BS flag;
   BITCODE_CMC fill_color;
