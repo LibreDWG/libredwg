@@ -217,7 +217,7 @@ dwg_decode(Bit_Chain * dat, Dwg_Data * dwg)
 
 #define WE_CAN \
     "This version of LibreDWG is only capable of safely decoding " \
-    "version R13-R2004 (code: AC1012-AC1018) DWG files.\n"
+    "version R13-R2007 (code: AC1012-AC1021) DWG files.\n"
 
   PRE(R_13)
     {
