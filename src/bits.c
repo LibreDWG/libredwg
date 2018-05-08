@@ -773,7 +773,7 @@ bit_read_MS(Bit_Chain * dat)
       if (!(word[i] & 0x8000))
         {
           result |= (((long unsigned int) word[i]) << j);
-          return (result);
+          return result;
         }
       else
         word[i] &= 0x7fff;

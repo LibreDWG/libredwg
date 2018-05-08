@@ -708,9 +708,9 @@ dwg_encode(Dwg_Data* dwg, Bit_Chain* dat)
       obj = &dwg->object[omap[j].idc];
       if (obj->supertype == DWG_SUPERTYPE_UNKNOWN)
         {
-          bit_write_MS(dat, obj->size);
-          if (dat->byte + obj->size >= dat->size - 2)
+          if (dat->byte + obj->size >= dat->size)
             bit_chain_alloc(dat);
+          bit_write_MS(dat, obj->size);
           memcpy(&dat->chain[dat->byte], obj->tio.unknown, obj->size);
           dat->byte += obj->size;
         }
@@ -1320,8 +1320,9 @@ dwg_encode_add_object(Dwg_Object* obj, Bit_Chain* dat,
   dat->bit = 0;
 
   LOG_INFO("\n\n======================\nObject number: %u",
-           obj->index)
-
+           obj->index);
+  if (dat->byte + obj->size >= dat->size)
+    bit_chain_alloc(dat);
   bit_write_MS(dat, obj->size);
   object_address = dat->byte;
   //  ktl_lastaddress = dat->byte + obj->size; /* (calculate the bitsize) */

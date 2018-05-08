@@ -128,6 +128,8 @@ main (int argc, char *argv[])
       return error;
   }
 
+  if (opts)
+    printf("\n");
   printf("Writing DWG file %s", filename_out);
 #ifndef USE_WRITE
   error = 1;
@@ -150,6 +152,8 @@ main (int argc, char *argv[])
 
 #ifdef USE_WRITE
   // try to read again
+  if (opts)
+    printf("\n");
   printf("Re-reading created file %s\n", filename_out);
   error = dwg_read_file(filename_out, &dwg);
   if (error)
