@@ -2,7 +2,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2010 Free Software Foundation, Inc.                        */
+/*  Copyright (C) 2010, 2018 Free Software Foundation, Inc.                  */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -18,12 +18,15 @@
  * modified by Reini Urban
  */
 
+//TODO: SINCE(R_2010): LASTSAVEDBY, 1, ""
+
 #include "spec.h"
 
-  // size, bitsize_hi and bitsize read before
+// size, bitsize_hi and bitsize read before
+
   SINCE(R_2013)
     {
-      FIELD_BLL(requiredversions, 0);
+      FIELD_BLL(REQUIREDVERSIONS, 160);
     }
 
   SINCE(R_13)
@@ -646,4 +649,5 @@
     FIELD_TU (PROJECTNAME, 1);
     END_STRING_STREAM
   }
+
 

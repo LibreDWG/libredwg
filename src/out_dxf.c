@@ -1011,6 +1011,12 @@ dxf_header_write(Bit_Chain *dat, Dwg_Data* dwg)
   SINCE(R_10) {
     VAR (DWGCODEPAGE, 3, codepage);
   }
+  SINCE(R_2010) {
+    VAR (LASTSAVEDBY, 1, ""); //TODO
+  }
+  SINCE(R_2013) {
+    HEADER_VALUE (REQUIREDVERSIONS, 160);
+  }
   HEADER_3D (INSBASE);
   HEADER_3D (EXTMIN);
   HEADER_3D (EXTMAX);
@@ -1287,18 +1293,26 @@ dxf_header_write(Bit_Chain *dat, Dwg_Data* dwg)
   return;
 }
 
+// only called since r2000
 static int
 dxf_classes_write (Bit_Chain *dat, Dwg_Data * dwg)
 {
   unsigned int i;
 
-  SECTION(CLASSES);
+  SECTION (CLASSES);
   for (i=0; i < dwg->num_classes; i++)
     {
-      RECORD(CLASS);
+      RECORD (CLASS);
       VALUE (1, dwg->dwg_class[i].dxfname);
-      VALUE (2, dwg->dwg_class[i].cppname);
-      VALUE (3, dwg->dwg_class[i].appname);
+      PRE (R_2007) {
+        VALUE (2, dwg->dwg_class[i].cppname);
+        VALUE (3, dwg->dwg_class[i].appname);
+      } LATER_VERSIONS {
+        char *cppname = bit_convert_TU((BITCODE_TU)dwg->dwg_class[i].cppname);
+        char *appname = bit_convert_TU((BITCODE_TU)dwg->dwg_class[i].appname);
+        VALUE (2, cppname);
+        VALUE (3, appname);
+      }
       VALUE (90, dwg->dwg_class[i].proxyflag);
       VALUE (280, dwg->dwg_class[i].wasazombie);
       // Is-an-entity. 1f2 for entities, 1f3 for objects
