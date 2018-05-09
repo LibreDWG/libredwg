@@ -1988,7 +1988,7 @@ read_2004_section_handles(Bit_Chain* dat, Dwg_Data *dwg)
           offset = bit_read_MC(&hdl_dat);
           //last_handle += handle;
           last_offset += offset;
-          LOG_TRACE("\nNext object: %lu\t", dwg->num_objects)
+          LOG_TRACE("\n< Next object: %lu\t", dwg->num_objects)
           LOG_HANDLE("Handle: %li\tOffset: %ld @%lu\n", handle, offset, last_offset)
 
           dwg_decode_add_object(dwg, &obj_dat, &obj_dat, last_offset);

@@ -706,10 +706,16 @@ dwg_encode(Dwg_Data* dwg, Bit_Chain* dat)
       Dwg_Object *obj;
       omap[j].address = dat->byte;
       obj = &dwg->object[omap[j].idc];
+      obj->address = dat->byte; // change the address to the linearily sorted one
+      LOG_TRACE("\n> Next object: %lu\tHandle: %lu\tOffset: %lu\n"
+                "==========================================\n",
+                j, omap[j].handle, dat->byte);
+
       if (obj->supertype == DWG_SUPERTYPE_UNKNOWN)
         {
           if (dat->byte + obj->size >= dat->size)
             bit_chain_alloc(dat);
+          LOG_INFO("Unknown object, size %d, type %d\n", obj->size, obj->type);
           bit_write_MS(dat, obj->size);
           memcpy(&dat->chain[dat->byte], obj->tio.unknown, obj->size);
           dat->byte += obj->size;
@@ -1319,12 +1325,10 @@ dwg_encode_add_object(Dwg_Object* obj, Bit_Chain* dat,
   dat->byte = address;
   dat->bit = 0;
 
-  LOG_INFO("\n\n======================\nObject number: %u",
-           obj->index);
+  LOG_INFO("Object number: %u", obj->index);
   if (dat->byte + obj->size >= dat->size)
     bit_chain_alloc(dat);
-  bit_write_MS(dat, obj->size);
-  object_address = dat->byte;
+  bit_write_MS(dat, obj->size); // TODO: calculate size from the fields. either <0x7fff
   //  ktl_lastaddress = dat->byte + obj->size; /* (calculate the bitsize) */
   
   PRE(R_2010) {
@@ -1587,7 +1591,7 @@ dwg_encode_add_object(Dwg_Object* obj, Bit_Chain* dat,
 
           dat->byte = address;   // restart and write into the UNKNOWN_OBJ object
           dat->bit = 0;
-          bit_write_MS(dat, obj->size); // size
+          bit_write_MS(dat, obj->size); // unknown blobs have a known size
           bit_write_BS(dat, obj->type); // type
 
           if (i <= (int)dwg->num_classes)
@@ -1616,11 +1620,9 @@ dwg_encode_add_object(Dwg_Object* obj, Bit_Chain* dat,
               bit_write_H(dat, &(obj->handle));
               LOG_INFO("Object handle: %d.%d.%lu\n",
                        obj->handle.code, obj->handle.size, obj->handle.value);
-              object_address = dat->byte;
-              // write obj->size bytes, excl. bitsize and handle
-              // overshoot the bitsize and handle size
+              // write obj->size bytes, excl. bitsize and handle.
+              // overshoot the bitsize and handle size.
               bit_write_TF(dat, (char*)obj->tio.unknown, obj->size);
-              dat->byte = object_address;
             }
         }
     }
@@ -1634,10 +1636,22 @@ dwg_encode_add_object(Dwg_Object* obj, Bit_Chain* dat,
    }
    */
 
-  /* Register the previous addresses for return
+  /* Skip some bits to the next object. Objects always start at bit 0
+   * size should be really calculated and left alone.
    */
-  dat->byte = previous_address;
-  dat->bit = previous_bit;
+  {
+    unsigned long next_addr = previous_address + obj->size;
+    if (dat->bit)
+      dat->byte++;
+    if (next_addr != dat->byte)
+      {
+        if (obj->size)
+          LOG_TRACE("Wrong object size: %lu + %u != %lu: %ld off\n",
+                    previous_address, obj->size, dat->byte, (long)(next_addr - dat->byte));
+        dat->byte = next_addr;
+      }
+  }
+  dat->bit = 0;
 }
 
 /* The first common part of every entity.
