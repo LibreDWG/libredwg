@@ -788,25 +788,15 @@ bit_read_MS(Bit_Chain * dat)
 void
 bit_write_MS(Bit_Chain * dat, long unsigned int value)
 {
-  int i, j;
-  unsigned int word[4];
-  long unsigned int mask;
-
-  mask = 0x00007fff;
-  for (i = 1, j = 0; i >= 0; i--, j += 15)
+  if (value > 0x7fff)
     {
-      word[i] = ((unsigned int) ((value & mask) >> j)) | 0x8000;
-      mask = mask << 15;
+      bit_write_RS(dat, (value & 0xffff8000) >> 15);
+      bit_write_RS(dat, value & 0x7fff);
     }
-  /* TODO: useless?
-   for (i = 0; i < 1; i++)
-   if (word[i] & 0x7fff)
-   break;
-   */
-  i = 1;
-  word[i] &= 0x7fff;
-  for (j = 1; j >= i; j--)
-    bit_write_RS(dat, word[j]);
+  else
+    {
+      bit_write_RS(dat, value);
+    }
 }
 
 /** Read bit-extrusion.
