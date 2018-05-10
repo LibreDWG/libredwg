@@ -2952,12 +2952,12 @@ DWG_ENTITY(HATCH)
       FIELD_BD (gradient_shift, 461);
       FIELD_BL (single_color_gradient, 452);
       FIELD_BD (gradient_tint, 462);
-      FIELD_BL (num_colors, 453);
+      FIELD_BL (num_colors, 453); //default: 2
       REPEAT(num_colors, colors, Dwg_Entity_HATCH_Color)
         {
-          FIELD_BD (colors[rcount].unknown_double, 463);
+          FIELD_BD (colors[rcount].unknown_double, 463); //value
           FIELD_BS (colors[rcount].unknown_short, 0);
-          FIELD_BL (colors[rcount].rgb_color, 63); // and 421
+          FIELD_BL (colors[rcount].rgb_color, 63); // 63 for color as ACI. 421 for rgb
           FIELD_RC (colors[rcount].ignored_color_byte, 0);
         }
       END_REPEAT(colors);
@@ -2966,8 +2966,8 @@ DWG_ENTITY(HATCH)
 
   FIELD_BD (elevation, 30);
   FIELD_3BD (extrusion, 210);
-  FIELD_T (name, 2);
-  FIELD_B (solid_fill, 70);
+  FIELD_T (name, 2); //default: SOLID
+  FIELD_B (solid_fill, 70); //default: 1, pattern_fill: 0
   FIELD_B (associative, 71);
   FIELD_BL (num_paths, 91);
   REPEAT(num_paths, paths, Dwg_Entity_HATCH_Path)
@@ -3058,12 +3058,12 @@ DWG_ENTITY(HATCH)
       }
     }
   END_REPEAT(paths);
-  FIELD_BS (style, 75);
-  FIELD_BS (pattern_type, 76);
+  FIELD_BS (style, 75); // 0=normal (odd parity); 1=outer; 2=whole
+  FIELD_BS (pattern_type, 76); // 0=user; 1=predefined; 2=custom
   if (!FIELD_VALUE(solid_fill))
     {
       FIELD_BD (angle, 52);
-      FIELD_BD (scale_spacing, 41);
+      FIELD_BD (scale_spacing, 41); //default 1.0
       FIELD_B (double_flag, 77);
       FIELD_BS (num_deflines, 78);
       REPEAT(num_deflines, deflines, Dwg_Entity_HATCH_DefLine)
@@ -3512,31 +3512,31 @@ DWG_OBJECT_END
 DWG_OBJECT(FIELD)
 
   //LOG_INFO("TODO FIELD\n");
-  FIELD_T (id, 0);
-  FIELD_T (code, 0);
-  FIELD_BL (num_childhdl, 0);
+  FIELD_T (id, 1);
+  FIELD_T (code, 2); // and code 3 for subsequent >255 chunks
+  FIELD_BL (num_childhdl, 90);
   HANDLE_VECTOR (childhdl, num_childhdl, 360, 0);
-  FIELD_BL (num_objects, 0);
+  FIELD_BL (num_objects, 97);
   HANDLE_VECTOR (objects, num_objects, 331, 0);
 
   VERSION(R_2004) {
-    FIELD_TV (format, 0);
+    FIELD_TV (format, 4);
   }
 
-  FIELD_BL (evaluation_option, 0);
-  FIELD_BL (filing_option, 0);
-  FIELD_BL (field_state, 0);
-  FIELD_BL (evaluation_status, 0);
-  FIELD_BL (evaluation_error_code, 0);
-  FIELD_T (evaluation_error_msg, 0);
+  FIELD_BL (evaluation_option, 91);
+  FIELD_BL (filing_option, 92);
+  FIELD_BL (field_state, 94);
+  FIELD_BL (evaluation_status, 95);
+  FIELD_BL (evaluation_error_code, 96);
+  FIELD_T (evaluation_error_msg, 300);
   Table_Value(value)
-  FIELD_T (value_string, 0);
-  FIELD_T (value_string_length, 0);
+  FIELD_T (value_string, 301); // and 9 for subsequent >255 chunks
+  FIELD_T (value_string_length, 98);
 
-  FIELD_BL (num_childval, 0);
+  FIELD_BL (num_childval, 93);
   REPEAT_N((long)FIELD_VALUE(num_childval), childval, Dwg_FIELD_ChildValue)
     {
-      FIELD_T (childval[rcount].key, 0);
+      FIELD_T (childval[rcount].key, 6);
       Table_Value(childval[rcount].value)
     }
   END_REPEAT(childval)
@@ -3556,68 +3556,68 @@ DWG_OBJECT_END
 
 DWG_OBJECT(GEODATA)
 
-  FIELD_BL (class_version, 0);
-  FIELD_HANDLE (host_block, 4, 0);
-  FIELD_BS (coord_type, 0); // 0 unknown, local grid 1, projected grid 2, geographic (defined by latitude/longitude) = 3
+  FIELD_BL (class_version, 90); //1 for r2009, 2 for r2010 (default)
+  FIELD_HANDLE (host_block, 4, 330);
+  FIELD_BS (coord_type, 70); // 0 unknown, local grid 1, projected grid 2, geographic (defined by latitude/longitude) 3 (default)
   SINCE(R_2010)
     {
-      FIELD_3BD (design_pt, 0);
-      FIELD_3BD (ref_pt, 0);
-      FIELD_BD (unit_scale_horiz, 0);
-      FIELD_BL (units_value_horiz, 0);
-      FIELD_BD (unit_scale_vert, 0);
-      FIELD_BL (units_value_vert, 0);
-      FIELD_3BD (up_dir, 0);
-      FIELD_3BD (north_dir, 0);
-      FIELD_BL (scale_est, 0); // None = 1, User specified scale factor = 2, Grid scale at reference point = 3, Prismodial = 4
-      FIELD_BD (user_scale_factor, 0);
-      FIELD_B (sea_level_corr, 0);
-      FIELD_BD (sea_level_elev, 0);
-      FIELD_BD (coord_proj_radius, 0);
+      FIELD_3BD (design_pt, 10);
+      FIELD_3BD (ref_pt, 11);
+      FIELD_BD (unit_scale_horiz, 40);
+      FIELD_BL (units_value_horiz, 91);
+      FIELD_BD (unit_scale_vert, 41);
+      FIELD_BL (units_value_vert, 92);
+      FIELD_3BD (up_dir, 210);
+      FIELD_3BD (north_dir, 12);
+      FIELD_BL (scale_est, 95); // None = 1 (default), User specified scale factor = 2, Grid scale at reference point = 3, Prismodial = 4
+      FIELD_BD (user_scale_factor, 141);
+      FIELD_B (sea_level_corr, 294);
+      FIELD_BD (sea_level_elev, 142);
+      FIELD_BD (coord_proj_radius, 143);
       FIELD_T (coord_system_def, 0);
-      FIELD_T (geo_rss_tag, 0);
+      FIELD_T (geo_rss_tag, 302);
     }
-    VERSIONS(R_2007, R_2010)// r2009-2010 really
+    VERSIONS(R_2007, R_2010)// r2009-2010 really, class_version 1
     {
-      FIELD_3BD (ref_pt, 0);
-      FIELD_BL (units_value_horiz, 0);
-      FIELD_3BD (design_pt, 0);
+      FIELD_3BD (ref_pt, 11);
+      FIELD_BL (units_value_horiz, 91);
+      FIELD_3BD (design_pt, 10);
       FIELD_3BD (obs_pt, 0); // 0,0,0
-      FIELD_3BD (up_dir, 0);
+      FIELD_3BD (up_dir, 210);
       FIELD_BD (north_dir_angle_deg, 0);
-      FIELD_3BD (north_dir, 0); // obsolete: 1,1,1
+      FIELD_3BD (north_dir, 12); // obsolete: 1,1,1
       FIELD_T (coord_system_def, 0);
-      FIELD_T (geo_rss_tag, 0);
-      FIELD_BD (unit_scale_horiz, 0);
+      FIELD_T (geo_rss_tag, 302);
+      FIELD_BD (unit_scale_horiz, 40);
       FIELD_T (coord_system_datum, 0); //obsolete
       FIELD_T (coord_system_wkt, 0); //obsolete
     }
-  FIELD_T (observation_from_tag, 0);
-  FIELD_T (observation_to_tag, 0);
+  FIELD_T (observation_from_tag, 305);
+  FIELD_T (observation_to_tag, 306);
   FIELD_T (observation_coverage_tag, 0);
-  FIELD_BL (num_geomesh_pts, 0);
+  FIELD_BL (num_geomesh_pts, 93);
   REPEAT_N(FIELD_VALUE(num_geomesh_pts), geomesh_pts, Dwg_GEODATA_meshpt)
     {
-      FIELD_2RD (geomesh_pts[rcount].source_pt, 0);
-      FIELD_2RD (geomesh_pts[rcount].dest_pt, 0);
+      FIELD_2RD (geomesh_pts[rcount].source_pt, 13);
+      FIELD_2RD (geomesh_pts[rcount].dest_pt, 14);
     }
   END_REPEAT(geomesh_pts);
-  FIELD_BL (num_geomesh_faces, 0);
+  FIELD_BL (num_geomesh_faces, 96);
   REPEAT_N(FIELD_VALUE(num_geomesh_faces), geomesh_faces, Dwg_GEODATA_meshface)
     {
-      FIELD_BL (geomesh_faces[rcount].face1, 0);
-      FIELD_BL (geomesh_faces[rcount].face2, 0);
-      FIELD_BL (geomesh_faces[rcount].face3, 0);
+      FIELD_BL (geomesh_faces[rcount].face1, 97);
+      FIELD_BL (geomesh_faces[rcount].face2, 98);
+      FIELD_BL (geomesh_faces[rcount].face3, 99);
       FIELD_BL (geomesh_faces[rcount].face4, 0);
     }
   END_REPEAT(geomesh_faces);
-  UNTIL(R_2007)
+  UNTIL(R_2007) // r2009, class_version 1 really
     {
       FIELD_BL (scale_est, 0);
       FIELD_BD (user_scale_factor, 0);
       FIELD_B (sea_level_corr, 0);
       FIELD_BD (sea_level_elev, 0);
-      FIELD_BD (coord_proj_radius, 0);
+      FIELD_BD (coord_proj_radius, 143);
     }
 
 DWG_OBJECT_END

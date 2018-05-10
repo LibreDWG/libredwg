@@ -33,9 +33,14 @@
 static unsigned int cur_ver = 0;
 static char buf[4096];
 
+// exported
+const char* dxf_codepage (int code, Dwg_Data* dwg);
+
+// imported
 extern void
 obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 
+// private
 static void
 dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 
@@ -981,6 +986,18 @@ dxf_format (int code)
   return "(unknown code)";
 }
 
+const char* dxf_codepage (int code, Dwg_Data* dwg)
+{
+  if (code == 30 || code == 0)
+    return "ANSI_1252";
+  else if (code == 29)
+    return "ANSI_1251";
+  else if (dwg->header.version >= R_2007)
+    return "UTF-8"; // dwg internally: UCS-16, for DXF: UTF-8
+  else
+    return "ANSI_1252";
+}
+
 // see https://www.autodesk.com/techpubs/autocad/acad2000/dxf/header_section_group_codes_dxf_02.htm
 void
 dxf_header_write(Bit_Chain *dat, Dwg_Data* dwg)
@@ -989,12 +1006,7 @@ dxf_header_write(Bit_Chain *dat, Dwg_Data* dwg)
   Dwg_Object* obj = NULL;
   const int minimal = dwg->opts & 0x10;
   double ms;
-  const char* codepage =
-    (dwg->header.codepage == 30 || dwg->header.codepage == 0)
-    ? "ANSI_1252"
-    : (dwg->header.version >= R_2007)
-      ? "UTF-8"
-      : "ANSI_1252";
+  const char* codepage = dxf_codepage(dwg->header.codepage, dwg);
 
   // TODO => dxf_header_vars.spec (shared with dxfb and the readers)
   SECTION(HEADER);
@@ -1434,6 +1446,9 @@ dxf_objects_write (Bit_Chain *dat, Dwg_Data * dwg)
   ENDSEC();
   return 0;
 }
+
+//TODO: Beware, there's also a new ACDSDATA section, with ACDSSCHEMA elements
+// and the Thumbnail_Data
 
 static int
 dxf_preview_write (Bit_Chain *dat, Dwg_Data * dwg)

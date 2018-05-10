@@ -33,64 +33,13 @@
 static unsigned int cur_ver = 0;
 static char buf[4096];
 
-static void dxfb_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
+// imported
+extern const char* dxf_codepage (int code, Dwg_Data* dwg);
 //extern void obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 //extern const char *dxf_format (int code);
 
-/*
-static const char *
-dxfb_format (int code)
-{
-  if (0 <= code && code < 5)
-    return "%s";
-  if (code == 5)
-    return "%X";
-  if (5 < code && code < 10)
-    return "%s";
-  if (code < 60)
-    return "%-16.15g";
-  if (code < 80)
-    return "%6i";
-  if (89 < code && code < 100)
-    return "%9li";
-  if (code == 100)
-    return "%s";
-  if (code == 102)
-    return "%s";
-  if (code == 105)
-    return "%X";
-  if (105 < code && code < 148)
-    return "%-16.15g";
-  if (169 < code && code < 180)
-    return "%6i";
-  if (269 < code && code < 300)
-    return "%6i";
-  if (299 < code && code < 320)
-    return "%s";
-  if (319 < code && code < 370)
-    return "%X";
-  if (369 < code && code < 390)
-    return "%6i";
-  if (389 < code && code < 400)
-    return "%X";
-  if (399 < code && code < 410)
-    return "%6i";
-  if (409 < code && code < 420)
-    return "%s";
-  if (code == 999)
-    return "%s";
-  if (999 < code && code < 1010)
-    return "%s";
-  if (1009 < code && code < 1060)
-    return "%-16.15g";
-  if (1059 < code && code < 1071)
-    return "%6i";
-  if (code == 1071)
-    return "%9li";
-
-  return "(unknown code)";
-}
-*/
+//private
+static void dxfb_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 
 /*--------------------------------------------------------------------------------
  * MACROS
@@ -1066,12 +1015,7 @@ dxfb_header_write(Bit_Chain *dat, Dwg_Data* dwg)
   Dwg_Object* obj = NULL;
   double ms;
   const int minimal = dwg->opts & 1;
-  const char* codepage =
-    (dwg->header.codepage == 30 || dwg->header.codepage == 0)
-    ? "ANSI_1252"
-    : (dwg->header.version >= R_2007)
-      ? "UTF-8"
-      : "ANSI_1252";
+  const char* codepage = dxf_codepage(dwg->header.codepage, dwg);
 
   SECTION(HEADER);
 
@@ -1087,10 +1031,11 @@ dxfb_header_write(Bit_Chain *dat, Dwg_Data* dwg)
     VALUE_RC(dwg->header.maint_version, 70);
   }
   if (dwg->header.codepage != 30 &&
+      dwg->header.codepage != 29 &&
       dwg->header.codepage != 0 &&
       dwg->header.version < R_2007) {
     // some asian or eastern-european codepage
-    // see https://pythonhosted.org/ezdxf/dxfinternals/fileencoding.html
+    // see https://github.com/mozman/ezdxf/blob/master/docs/source/dxfinternals/fileencoding.rst
     LOG_WARN("Unknown codepage %d, assuming ANSI_1252", dwg->header.codepage);
   }
   SINCE(R_10) {
