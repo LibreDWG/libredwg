@@ -238,17 +238,32 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
                     handle_code, _obj->name->handleref.code); \
         } \
       bit_write_H(hdl_dat, &_obj->name->handleref); \
-      LOG_TRACE(#name ": HANDLE(%d.%d.%lu) absolute:%lu\n", \
-          _obj->name->handleref.code,\
-          _obj->name->handleref.size,\
-          _obj->name->handleref.value,\
-          _obj->name->absolute_ref)\
+      LOG_TRACE(#name ": HANDLE(%d.%d.%lu) absolute:%lu [%d]\n", \
+                _obj->name->handleref.code,\
+                _obj->name->handleref.size,\
+                _obj->name->handleref.value,\
+                _obj->name->absolute_ref, dxf)      \
     }
 #define FIELD_DATAHANDLE(name, handle_code, dxf) \
   { bit_write_H(dat, &_obj->name->handleref); }
 
 #define FIELD_HANDLE_N(name, vcount, handle_code, dxf)\
-  FIELD_HANDLE(name, handle_code, dxf)
+    IF_ENCODE_SINCE_R13 { \
+      RESET_VER \
+      assert(_obj->name); \
+      if (handle_code != ANYCODE && _obj->name->handleref.code != handle_code) \
+        { \
+          LOG_WARN("Expected a CODE %d handle, got a %d", \
+                    handle_code, _obj->name->handleref.code); \
+        } \
+      bit_write_H(hdl_dat, &_obj->name->handleref); \
+      LOG_TRACE(#name "[%d]: HANDLE(%d.%d.%lu) absolute:%lu [%d]\n", \
+                (int)vcount, \
+                _obj->name->handleref.code,\
+                _obj->name->handleref.size,\
+                _obj->name->handleref.value,\
+                _obj->name->absolute_ref, dxf) \
+    }
 
 #define HANDLE_VECTOR_N(name, size, code, dxf)\
   if (size>0) \

@@ -2406,8 +2406,8 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
       ent->num_handles = 0;
       return 0;
     }
-  LOG_TRACE("Entity handle: %d.%d.%lu\n",
-           ent->object->handle.code, ent->object->handle.size, ent->object->handle.value)
+  LOG_TRACE("handle: %d.%d.%lu [5]\n", ent->object->handle.code,
+            ent->object->handle.size, ent->object->handle.value)
 
   error = dwg_decode_eed(dat, (Dwg_Object_Object *)ent);
   if (error)
@@ -2596,9 +2596,8 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
       obj->num_reactors = 0;
       return -1;
     }
-  LOG_TRACE("Object handle: %d.%d.%lu\n",
-           obj->object->handle.code, obj->object->handle.size,
-           obj->object->handle.value)
+  LOG_TRACE("handle: %d.%d.%lu [5]\n", obj->object->handle.code,
+            obj->object->handle.size, obj->object->handle.value)
 
   error = dwg_decode_eed(dat, obj);
   if (error)
@@ -3886,12 +3885,12 @@ dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
               SINCE(R_2000)
               {
                 obj->bitsize = bit_read_RL(dat);
-                LOG_TRACE("Object bitsize: " FORMAT_RL " @%lu.%u\n", obj->bitsize,
+                LOG_TRACE("bitsize: " FORMAT_RL " @%lu.%u\n", obj->bitsize,
                          dat->byte, dat->bit);
               }
               if (!bit_read_H(dat, &obj->handle))
                 {
-                  LOG_TRACE("Object handle: %d.%d.%lu\n",
+                  LOG_TRACE("handle: %d.%d.%lu [5]\n",
                            obj->handle.code, obj->handle.size, obj->handle.value)
                 }
               object_address = dat->byte;

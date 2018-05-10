@@ -55,11 +55,11 @@
       }\
     if (_obj->name)\
       {\
-        LOG_TRACE(#name ": HANDLE(%d.%d.%lu) absolute:%lu\n",   \
-          _obj->name->handleref.code,\
-          _obj->name->handleref.size,\
-          _obj->name->handleref.value,\
-          _obj->name->absolute_ref)\
+        LOG_TRACE(#name ": HANDLE(%d.%d.%lu) absolute:%lu [%d]\n", \
+                  _obj->name->handleref.code, \
+                  _obj->name->handleref.size, \
+                  _obj->name->handleref.value,\
+                  _obj->name->absolute_ref, dxf) \
       }\
   }
 #define FIELD_HANDLE_N(name, vcount, handle_code, dxf)  \
@@ -373,7 +373,7 @@ dwg_decode_##token (Bit_Chain* dat, Dwg_Object* obj)\
     *str_dat = *dat; \
   } else \
     str_dat = dat; \
-  LOG_INFO("Entity " #token "\n")\
+  LOG_INFO("Entity " #token " ")\
   dwg->num_entities++;\
   obj->supertype = DWG_SUPERTYPE_ENTITY;\
   _ent = obj->tio.entity = (Dwg_Object_Entity*)calloc(1, sizeof(Dwg_Object_Entity));\
@@ -397,7 +397,7 @@ dwg_decode_ ## token (Bit_Chain* dat, Dwg_Object* obj) \
     str_dat = calloc(1, sizeof(Bit_Chain)); /* seperate string buffer */ \
   } else \
     str_dat = dat; \
-  LOG_INFO("Object " #token "\n")\
+  LOG_INFO("Object " #token " ")\
   obj->supertype = DWG_SUPERTYPE_OBJECT;\
   obj->tio.object = (Dwg_Object_Object*)calloc (1, sizeof(Dwg_Object_Object)); \
   obj->tio.object->tio.token = (Dwg_Object_##token *)calloc (1, sizeof(Dwg_Object_##token)); \

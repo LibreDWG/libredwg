@@ -76,11 +76,7 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 #define ANYCODE -1
 #define FIELD_HANDLE(name, handle_code, dxf) \
   if (dxf && _obj->name) { \
-    fprintf(dat->fh, #name ": \"HANDLE(%d.%d.%lu) absolute:%lu\",\n",\
-           _obj->name->handleref.code,                     \
-           _obj->name->handleref.size,                     \
-           _obj->name->handleref.value,                    \
-           _obj->name->absolute_ref);                      \
+    fprintf(dat->fh, "%d\n%lX\n", dxf, _obj->name->absolute_ref); \
   }
 
 #define HEADER_VALUE(name, dxf, value)\
@@ -244,15 +240,25 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 #define FIELD_XDATA(name, size)
 
 #define REACTORS(code)\
-  for (vcount=0; vcount < (int)obj->tio.object->num_reactors; vcount++)\
-    {\
-      FIELD_HANDLE_N(reactors[vcount], vcount, code, -5);\
-    }
+  if (obj->tio.object->num_reactors) {\
+    fprintf(dat->fh, "102\n{ACAD_REACTORS\n");\
+    for (vcount=0; vcount < (int)obj->tio.object->num_reactors; vcount++)\
+      { /* soft ptr */ \
+        fprintf(dat->fh, "330\n"); \
+        FIELD_HANDLE_N(reactors[vcount], vcount, code, -5);\
+      }\
+    fprintf(dat->fh, "102\n}\n");\
+  }
 #define ENT_REACTORS(code)\
-  for (vcount=0; vcount < _obj->num_reactors; vcount++)\
-    {\
-      FIELD_HANDLE_N(reactors[vcount], vcount, code, -5);\
-    }
+  if (_obj->num_reactors) {\
+    fprintf(dat->fh, "102\n{ACAD_REACTORS\n");\
+    for (vcount=0; vcount < _obj->num_reactors; vcount++)\
+      {\
+        fprintf(dat->fh, "330\n"); \
+        FIELD_HANDLE_N(reactors[vcount], vcount, code, -5);\
+      }\
+    fprintf(dat->fh, "102\n}\n");\
+  }
 
 #define XDICOBJHANDLE(code)
 #define ENT_XDICOBJHANDLE(code)
@@ -926,7 +932,7 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj)
   //Dwg_Data *dwg = obj->parent;
   Dwg_Object_Entity *_obj;
   int i;
-  long unsigned int vcount;
+  long unsigned int vcount = 0;
   ent = obj->tio.entity;
   _obj = ent;
 
@@ -938,7 +944,7 @@ dxf_format (int code)
 {
   if (0 <= code && code < 5)
     return "%s";
-  if (code == 5)
+  if (code == 5 || code == -5)
     return "%X";
   if (5 < code && code < 10)
     return "%s";

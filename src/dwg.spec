@@ -1916,9 +1916,9 @@ DWG_OBJECT(BLOCK_CONTROL)
   FIELD_BL (num_entries, 70);
 
   START_HANDLE_STREAM;
-  printf("dat->from_version=%d < cur_ver=%d\n", dat->from_version, cur_ver);
+  //printf("dat->from_version=%d < cur_ver=%d\n", dat->from_version, cur_ver);
   FIELD_HANDLE (null_handle, 4, 0);
-  printf("dat->from_version=%d < cur_ver=%d\n", dat->from_version, cur_ver);
+  //printf("dat->from_version=%d < cur_ver=%d\n", dat->from_version, cur_ver);
   XDICOBJHANDLE(3);
   HANDLE_VECTOR(block_headers, num_entries, 2, 0);
   FIELD_HANDLE (model_space, 3, 0);
@@ -3089,7 +3089,7 @@ DWG_ENTITY(HATCH)
   FIELD_2RD_VECTOR (seeds, num_seeds, 10);
 
   COMMON_ENTITY_HANDLE_DATA;
-  HANDLE_VECTOR (boundary_handles, num_boundary_handles, ANYCODE, 0);
+  HANDLE_VECTOR (boundary_handles, num_boundary_handles, 4, 330);
 
 DWG_OBJECT_END
 
