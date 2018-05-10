@@ -65,7 +65,7 @@ build_script:
   - if "%CYGWIN%"=="1" %CYG_ROOT%\bin\sh -lc "cygcheck -dc cygwin"
   - if "%MINGW%"=="1" call build-aux\msys2.bat
   - bash -c "sh ./autogen.sh"
-  - bash -c "./configure --enable-write --enable-trace || (cat config.log; false)"
+  - bash -c "./configure || (cat config.log; false)"
   - bash -c "make || (cat Makefile; false)"
 
 test_script:
