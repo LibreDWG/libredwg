@@ -12,7 +12,7 @@
 /*****************************************************************************/
 
 /*
- * encode.c: encoding functions
+ * encode.c: encoding functions to write a DWG
  * written by Felipe Castro
  * modified by Felipe Corrêa da Silva Sances
  * modified by Rodrigo Rodrigues da Silva
@@ -125,10 +125,7 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
   { bit_write_TIMEBLL(dat, (BITCODE_TIMEBLL)_obj->name); \
     LOG_TRACE(#name ": " FORMAT_BL "." FORMAT_BL "\n", _obj->name.days, _obj->name.ms); }
 
-#define FIELD_CMC(name, dxf) \
-  {\
-    bit_write_CMC(dat, &_obj->name);\
-  }
+#define FIELD_CMC(name, dxf) bit_write_CMC(dat, &_obj->name)
 
 #define FIELD_BE(name, dxf)\
   bit_write_BE(dat, FIELD_VALUE(name.x), FIELD_VALUE(name.y), FIELD_VALUE(name.z));

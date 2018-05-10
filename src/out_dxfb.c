@@ -33,6 +33,7 @@
 static unsigned int cur_ver = 0;
 static char buf[4096];
 
+static void dxfb_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 //extern void obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 //extern const char *dxf_format (int code);
 
@@ -97,8 +98,10 @@ dxfb_format (int code)
 
 #define IS_PRINT
 
-//TODO
 #define FIELD(name,type,dxf) \
+    if (dxf) { FIELD_##type(name, dxf); }
+
+#define HEADER_VALUE(name,type,dxf) \
     GROUP(9);\
     fprintf (dat->fh, "$%s%c", #name, 0);\
     GROUP(dxf);\
@@ -106,6 +109,7 @@ dxfb_format (int code)
 
 #define FIELD_CAST(name,type,cast,dxf) FIELD(name,cast,dxf)
 #define FIELD_TRACE(name,type)
+//TODO
 #define FIELD_TEXT(name,len,str) \
     fprintf(dat->fh, #name ": \"%s\",\n", str)
 #ifdef HAVE_NATIVE_WCHAR2
@@ -153,7 +157,7 @@ dxfb_format (int code)
 #define HEADER_TV(name,dxf) \
     HEADER_9(name);\
     VALUE_TV(dwg->header_vars.name, dxf)
-#define VAR(name) \
+#define HEADER_VAR(name) \
     GROUP(9);\
     fprintf (dat->fh, "$%s%c", #name, 0)
 #define POINT_3D(name, var, c1, c2, c3)\
@@ -169,10 +173,14 @@ dxfb_format (int code)
 #define HEADER_2D(name)\
     HEADER_9(name);\
     POINT_2D (name, header_vars.name, 10, 20)
-#define SECTION(section) \
+#define SECTION(token) \
     VALUE_TV("SECTION", 0);\
-    VALUE_TV(#section, 2)
+    VALUE_TV(#token, 2)
 #define ENDSEC()        VALUE_TV("ENDSEC", 0)
+#define TABLE(token) \
+    VALUE_TV("TABLE", 0);\
+    VALUE_TV(#token, 2)
+#define ENDTAB()        VALUE_TV("ENDTAB", 0)
 #define RECORD(record)  VALUE_TV(#record, 0)
  /*
 #define VALUE(code, value)                   \
@@ -194,7 +202,7 @@ dxfb_format (int code)
 #define FIELD_3B(name,dxf)  FIELD_RC(name, dxf)
 #define FIELD_BS(name,dxf)  FIELD_RS(name, dxf)
 #define FIELD_BL(name,dxf)  FIELD_RL(name, dxf)
-#define FIELD_BLL(name,dxf) FIELD_RLL(name, dxf)
+#define HEADER_BLL(name,dxf) HEADER_RLL(name, dxf)
 #define FIELD_BD(name,dxf)  FIELD_RD(name, dxf)
 
 #define HEADER_9(name) \
@@ -265,7 +273,7 @@ dxfb_format (int code)
     HEADER_9(name);\
     VALUE_HANDLE_NAME(dwg->header_vars.name,dxf,section)
 
-#define FIELD_RLL(name,dxf) \
+#define HEADER_RLL(name,dxf) \
   {\
     BITCODE_RLL s = _obj->name;\
     GROUP(9);\
@@ -282,8 +290,8 @@ dxfb_format (int code)
 #define FIELD_T(name,dxf) \
   { if (dat->version >= R_2007) { FIELD_TU(name, dxf); } \
     else                        { FIELD_TV(name, dxf); } }
-#define FIELD_BT(name,dxf)    FIELD(name, BT, dxf);
-#define FIELD_4BITS(name,dxf) FIELD(name,4BITS,dxf)
+#define FIELD_BT(name,dxf)    FIELD_BD(name, dxf);
+#define FIELD_4BITS(name,dxf) FIELD_RC(name, dxf)
 #define FIELD_BE(name,dxf)    FIELD_3RD(name,dxf)
 #define FIELD_DD(name, _default, dxf) FIELD_RD(name,dxf)
 #define FIELD_2DD(name, d1, d2, dxf) { FIELD_DD(name.x, d1, dxf); FIELD_DD(name.y, d2, dxf+10); }
@@ -397,7 +405,10 @@ dxfb_format (int code)
 #define REPEAT4(times, name, type) \
   for (rcount4=0; rcount4<(int)_obj->times; rcount4++)
 
-#define COMMON_ENTITY_HANDLE_DATA
+#define COMMON_ENTITY_HANDLE_DATA \
+  SINCE(R_13) { \
+    dxfb_common_entity_handle_data(dat, obj); \
+  }
 #define SECTION_STRING_STREAM
 #define START_STRING_STREAM
 #define END_STRING_STREAM
@@ -1064,7 +1075,7 @@ dxfb_header_write(Bit_Chain *dat, Dwg_Data* dwg)
 
   SECTION(HEADER);
 
-  VAR (ACADVER);
+  HEADER_VAR (ACADVER);
   VALUE_TV(version_codes[dwg->header.version], 1);
   if (minimal) {
     HEADER_H (HANDSEED, 5);
@@ -1072,7 +1083,7 @@ dxfb_header_write(Bit_Chain *dat, Dwg_Data* dwg)
     return;
   }
   SINCE(R_13) {
-    VAR (ACADMAINTVER);
+    HEADER_VAR (ACADMAINTVER);
     VALUE_RC(dwg->header.maint_version, 70);
   }
   if (dwg->header.codepage != 30 &&
@@ -1083,8 +1094,15 @@ dxfb_header_write(Bit_Chain *dat, Dwg_Data* dwg)
     LOG_WARN("Unknown codepage %d, assuming ANSI_1252", dwg->header.codepage);
   }
   SINCE(R_10) {
-    VAR (DWGCODEPAGE);
+    HEADER_VAR (DWGCODEPAGE);
     VALUE_TV(codepage, 3);
+  }
+  SINCE(R_2010) {
+    HEADER_VAR (LASTSAVEDBY); //TODO
+    VALUE_TV("", 1);
+  }
+  SINCE(R_2013) {
+    HEADER_BLL (REQUIREDVERSIONS, 160);
   }
   HEADER_3D (INSBASE);
   HEADER_3D (EXTMIN);
@@ -1216,24 +1234,24 @@ dxfb_header_write(Bit_Chain *dat, Dwg_Data* dwg)
   HEADER_RC (SKPOLY, 70);
 
   ms = (double)dwg->header_vars.TDCREATE.ms;
-  VAR (TDCREATE);
+  HEADER_VAR (TDCREATE);
   VALUE_RD (dwg->header_vars.TDCREATE.days + ms, 40);
   SINCE(R_13) {
-    VAR (TDUCREATE);
+    HEADER_VAR (TDUCREATE);
     VALUE_RD (dwg->header_vars.TDCREATE.days + ms, 40);
   }
   ms = (double)dwg->header_vars.TDUPDATE.ms;
-  VAR (TDUPDATE);
+  HEADER_VAR (TDUPDATE);
   VALUE_RD (dwg->header_vars.TDUPDATE.days + ms, 40);
   SINCE(R_13) {
-    VAR (TDUUPDATE);
+    HEADER_VAR (TDUUPDATE);
     VALUE_RD (dwg->header_vars.TDUPDATE.days + ms, 40);
   }
   ms = (double)dwg->header_vars.TDINDWG.ms;
-  VAR (TDINDWG);
+  HEADER_VAR (TDINDWG);
   VALUE_RD (dwg->header_vars.TDINDWG.days + ms, 40);
   ms = (double)dwg->header_vars.TDUSRTIMER.ms;
-  VAR (TDUSRTIMER);
+  HEADER_VAR (TDUSRTIMER);
   VALUE_RD (dwg->header_vars.TDUSRTIMER.days + ms, 40);
 
   //HEADER_VALUE (USRTIMER, 70); // 1
@@ -1327,7 +1345,7 @@ dxfb_header_write(Bit_Chain *dat, Dwg_Data* dwg)
   HEADER_RC (PSLTSCALE, 70);
   HEADER_RC (TREEDEPTH, 70);
   UNTIL(R_11) {
-    VAR (DWGCODEPAGE);
+    HEADER_VAR (DWGCODEPAGE);
     VALUE_TV (codepage, 3);
   }
   VERSIONS(R_14, R_2000) {

@@ -45,6 +45,7 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 
 #define IS_PRINT
 
+//TODO
 #define FIELD(name,type,dxf) \
   if (dxf) { fprintf(dat->fh, #name ": " FORMAT_##type ",\n", _obj->name); }
 #define FIELD_CAST(name,type,cast,dxf) FIELD(name,cast,dxf)
@@ -63,7 +64,7 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
     while ((_c = *ws++)) { \
       fprintf(dat->fh, "%c", (char)(_c & 0xff)); \
     } \
-    fprintf(dat->fh, "\",\n"); \
+    fprintf(dat->fh, "\"\n"); \
   }
 #endif
 #define FIELD_VALUE(name) _obj->name
@@ -86,22 +87,12 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
     GCC_DIAG_RESTORE \
   }
 #define HEADER_VAR(name, dxf) HEADER_VALUE(name, dxf, dwg->header_vars.name)
-#define POINT_3D(name, var, c1, c2, c3)\
-  {\
-    fprintf (dat->fh, "  9\n$" #name "\n");\
-    fprintf (dat->fh, "%3i\n%-16.12g\n", c1, dwg->var.x);\
-    fprintf (dat->fh, "%3i\n%-16.12g\n", c2, dwg->var.y);\
-    fprintf (dat->fh, "%3i\n%-16.12g\n", c3, dwg->var.z);\
-  }
-#define POINT_2D(name, var, c1, c2) \
-  {\
-    fprintf (dat->fh, "  9\n$" #name "\n");\
-    fprintf (dat->fh, "%3i\n%-16.12g\n", c1, dwg->var.x);\
-    fprintf (dat->fh, "%3i\n%-16.12g\n", c2, dwg->var.y);\
-  }
+
 #define HEADER_3D(name)\
+  fprintf (dat->fh, "  9\n$" #name "\n"); \
   POINT_3D (name, header_vars.name, 10, 20, 30);
 #define HEADER_2D(name)\
+  fprintf (dat->fh, "  9\n$" #name "\n"); \
   POINT_2D (name, header_vars.name, 10, 20);
 
 #define SECTION(section) fprintf(dat->fh, "  0\nSECTION\n  2\n" #section "\n")
@@ -172,6 +163,17 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
     fprintf(dat->fh, #name ": %d,\n", _obj->name.index)
 #define FIELD_TIMEBLL(name,dxf) \
     fprintf(dat->fh, #name ": " FORMAT_BL "." FORMAT_BL ",\n", _obj->name.days, _obj->name.ms)
+#define POINT_3D(name, var, c1, c2, c3)\
+  {\
+    fprintf (dat->fh, "%3i\n%-16.12g\n", c1, dwg->var.x);\
+    fprintf (dat->fh, "%3i\n%-16.12g\n", c2, dwg->var.y);\
+    fprintf (dat->fh, "%3i\n%-16.12g\n", c3, dwg->var.z);\
+  }
+#define POINT_2D(name, var, c1, c2) \
+  {\
+    fprintf (dat->fh, "%3i\n%-16.12g\n", c1, dwg->var.x);\
+    fprintf (dat->fh, "%3i\n%-16.12g\n", c2, dwg->var.y);\
+  }
 
 //FIELD_VECTOR_N(name, type, size):
 // reads data of the type indicated by 'type' 'size' times and stores
@@ -265,7 +267,10 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 #define REPEAT4(times, name, type) \
   for (rcount4=0; rcount4<(int)_obj->times; rcount4++)
 
-#define COMMON_ENTITY_HANDLE_DATA dxf_common_entity_handle_data(dat, obj)
+#define COMMON_ENTITY_HANDLE_DATA \
+  SINCE(R_13) { \
+    dxf_common_entity_handle_data(dat, obj); \
+  }
 #define SECTION_STRING_STREAM
 #define START_STRING_STREAM
 #define END_STRING_STREAM
