@@ -71,7 +71,7 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 #define FIELD_TRACE(name,type) \
   LOG_TRACE(#name ": " FORMAT_##type "\n", _obj->name)
 #define FIELD_G_TRACE(name,type,dxfgroup) \
-  LOG_TRACE(#name ": " FORMAT_##type " " #type " " #dxfgroup "\n", _obj->name)
+  LOG_TRACE(#name ": " FORMAT_##type " [" #type " " #dxfgroup "]\n", _obj->name)
 #define FIELD_CAST(name,type,cast,dxf)                    \
   { bit_write_##type(dat, (BITCODE_##type)_obj->name); \
     FIELD_G_TRACE(name,cast,dxf); }
@@ -152,7 +152,7 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 #define REACTORS(code)\
   for (vcount=0; vcount < (long)obj->tio.object->num_reactors; vcount++) \
     {\
-      FIELD_HANDLE_N(reactors[vcount], vcount, code, 5);    \
+      FIELD_HANDLE_N(reactors[vcount], vcount, code, -5);    \
     }
     
 #define XDICOBJHANDLE(code)\
@@ -226,6 +226,11 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
                     handle_code, _obj->name->handleref.code); \
         } \
       bit_write_H(hdl_dat, &_obj->name->handleref); \
+      LOG_TRACE(#name ": HANDLE(%d.%d.%lu) absolute:%lu\n", \
+          _obj->name->handleref.code,\
+          _obj->name->handleref.size,\
+          _obj->name->handleref.value,\
+          _obj->name->absolute_ref)\
     }\
   }
 #define FIELD_DATAHANDLE(name, handle_code, dxf) \
