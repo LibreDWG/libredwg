@@ -77,10 +77,10 @@ test_script:
 
 artifacts:
   # nightlies
-  - path: libredwg-$(appveyor_build_version)-win32.zip
+  - path: libredwg-$(APPVEYOR_BUILD_VERSION)-win32.zip
     name: nightly-win32
     type: zip
-  - path: libredwg-$(appveyor_build_version)-win64.zip
+  - path: libredwg-$(APPVEYOR_BUILD_VERSION)-win64.zip
     name: nightly-win64
     type: zip
   # tagged
@@ -93,7 +93,7 @@ artifacts:
 
 deploy:
 - provider: GitHub
-  tag: libredwg-win-$(appveyor_build_version)
+  tag: $(APPVEYOR_BUILD_VERSION)
   description: 'libredwg windows nightly'
   auth_token:
     secure: AsIAOIgCJX0QhrUKal2V00aaB5nRWtmtFTFeDVsGnbJLeEQpv9avUp0HT1cA8bNs
@@ -104,7 +104,7 @@ deploy:
   on:
     branch: /(master|relprep|deploy-test)/
 - provider: GitHub
-  tag: libredwg-$(APPVEYOR_REPO_TAG_NAME)-win
+  tag: $(APPVEYOR_REPO_TAG_NAME)
   description: 'libredwg windows tagged'
   auth_token:
     secure: AsIAOIgCJX0QhrUKal2V00aaB5nRWtmtFTFeDVsGnbJLeEQpv9avUp0HT1cA8bNs

@@ -7,7 +7,7 @@ rem TODO cygwin pkg and src tar.xz
 if "%CYGWIN%" == "1" exit
 
 rem simple windows .zip with bins and pdf in root
-set DESTDIR=libredwg-%appveyor_build_version%-%ARCH%
+set DESTDIR=libredwg-%APPVEYOR_BUILD_VERSION%-%ARCH%
 if not "x%APPVEYOR_REPO_TAG_NAME%" == "x" set DESTDIR=libredwg-%APPVEYOR_REPO_TAG_NAME%-%ARCH%
 echo DESTDIR: %DESTDIR%
 
