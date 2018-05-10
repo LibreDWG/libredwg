@@ -48,6 +48,7 @@
 #define PRIOR_VERSIONS else
 #define UNTIL(v) cur_ver = v; if (dat->version <= v)
 #define LATER_VERSIONS else
+#define RESET_VER cur_ver = dat->version;
 
 #define DEBUG_HERE()
 

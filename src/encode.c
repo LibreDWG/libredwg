@@ -94,8 +94,18 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 #define FIELD_MS(name,dxf) FIELDG(name, MS, dxf)
 #define FIELD_TV(name,dxf) \
   { IF_ENCODE_FROM_EARLIER { _obj->name = strdup(""); } FIELDG(name, TV, dxf); }
-#define FIELD_T FIELD_TV /*TODO: implement version dependant string fields */
-#define FIELD_TF(name,len,dxf)             \
+#define FIELD_T(name,dxf) \
+  { if (dat->version < R_2007) { \
+      FIELD_TV(name,dxf) \
+    } else { \
+      if (obj->has_strings) { \
+        FIELD_TU(name,dxf) \
+      } else { \
+        LOG_TRACE_TU(#name, L"", dxf); \
+      } \
+    } \
+  }
+#define FIELD_TF(name,len,dxf) \
   { bit_write_TF(dat, _obj->name, len); \
     FIELD_G_TRACE(name, TF, dxf); }
 #define FIELD_TFF(name,len,dxf) FIELD_TF(name,len,dxf)
@@ -156,21 +166,23 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
     }
     
 #define XDICOBJHANDLE(code)\
-  SINCE(R_2004)\
+  RESET_VER \
+  SINCE (R_2004)\
     {\
       if (!obj->tio.object->xdic_missing_flag) \
         {\
-          FIELD_HANDLE(xdicobjhandle, code, 0);   \
+          FIELD_HANDLE(xdicobjhandle, code, 0); \
         }\
     }\
   PRIOR_VERSIONS\
     {\
-      FIELD_HANDLE(xdicobjhandle, code, 0);       \
-    }
+      FIELD_HANDLE(xdicobjhandle, code, 0); \
+    } \
+  RESET_VER
 
-//XXX need a review
 #define ENT_XDICOBJHANDLE(code)\
-  SINCE(R_2004)\
+  RESET_VER \
+  SINCE (R_2004)\
     {\
       if (!obj->tio.entity->xdic_missing_flag)\
         {\
@@ -180,8 +192,8 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
   PRIOR_VERSIONS\
     {\
       FIELD_HANDLE(xdicobjhandle, code, 0); \
-    }
-
+    } \
+  RESET_VER
 
 //FIELD_VECTOR_N(name, type, size):
 // writes a 'size' elements vector of data of the type indicated by 'type'
@@ -210,15 +222,15 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
             LOG_TRACE_TU(#name, _obj->name[vcount], dxf) \
           } \
         }\
+      RESET_VER \
     }
 
 #define FIELD_VECTOR(name, type, size, dxf) \
   FIELD_VECTOR_N(name, type, _obj->size, dxf)
 
 #define FIELD_HANDLE(name, handle_code, dxf) \
-  {\
-    IF_ENCODE_FROM_EARLIER { ; } \
-    else { \
+    IF_ENCODE_SINCE_R13 { \
+      RESET_VER \
       assert(_obj->name); \
       if (handle_code != ANYCODE && _obj->name->handleref.code != handle_code) \
         { \
@@ -231,8 +243,7 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
           _obj->name->handleref.size,\
           _obj->name->handleref.value,\
           _obj->name->absolute_ref)\
-    }\
-  }
+    }
 #define FIELD_DATAHANDLE(name, handle_code, dxf) \
   { bit_write_H(dat, &_obj->name->handleref); }
 
@@ -260,7 +271,9 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 #define COMMON_ENTITY_HANDLE_DATA  \
   SINCE(R_13) {\
     dwg_encode_common_entity_handle_data(dat, hdl_dat, obj); \
-  }
+  } \
+  RESET_VER
+
 #define SECTION_STRING_STREAM \
   { \
     Bit_Chain sav_dat = *dat; \
@@ -269,6 +282,7 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 /* TODO: dump all TU strings here */
 #define START_STRING_STREAM \
   bit_write_B(dat, obj->has_strings); \
+  RESET_VER \
   if (obj->has_strings) { \
     Bit_Chain sav_dat = *dat; \
     obj_string_stream(dat, obj->bitsize, dat);
@@ -279,7 +293,7 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 #define START_HANDLE_STREAM \
   *hdl_dat = *dat; \
   if (dat->version >= R_2007) bit_set_position(hdl_dat, obj->hdlpos); \
-  cur_ver = dat->version
+  RESET_VER
 
 //TODO unify REPEAT macros
 #define REPEAT_N(times, name, type) \
@@ -1649,8 +1663,9 @@ dwg_encode_add_object(Dwg_Object* obj, Bit_Chain* dat,
     if (next_addr != dat->byte)
       {
         if (obj->size)
-          LOG_TRACE("Wrong object size: %lu + %u != %lu: %ld off\n",
-                    previous_address, obj->size, dat->byte, (long)(next_addr - dat->byte));
+          LOG_WARN("Wrong object size: %lu + %u != %lu: %ld off",
+                   previous_address, obj->size, dat->byte,
+                   (long)(next_addr - dat->byte));
         dat->byte = next_addr;
       }
   }

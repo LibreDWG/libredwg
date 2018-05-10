@@ -52,7 +52,7 @@
 #define R11OPTS(b) _ent->opts_r11 & b
 
 #define COMMON_TABLE_FLAGS \
-  PRE(R_13) \
+  PRE (R_13) \
   { \
     FIELD_RC (flag, 70); \
     FIELD_TF (entry_name, 32, 2); \
@@ -62,7 +62,7 @@
   { \
     FIELD_T (entry_name, 2); \
     FIELD_B (xrefref, 0); /* 70 bit 7 */ \
-    PRE(R_2007) \
+    PRE (R_2007) \
     { \
       FIELD_BS (xrefindex_plus1, 0); \
       FIELD_B (xrefdep, 0); \
@@ -74,4 +74,5 @@
         FIELD_BS (xrefindex_plus1, 0); \
       } \
     } \
-  }
+  }\
+  RESET_VER
