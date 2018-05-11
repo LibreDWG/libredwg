@@ -62,7 +62,7 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
     PREFIX fprintf(dat->fh, "\"" #name "\": \"%s\",\n", str)
 #ifdef HAVE_NATIVE_WCHAR2
 # define FIELD_TEXT_TU(name,wstr) \
-    PREFIX fprintf(dat->fh, "\"" #name "\": \"%ls\",\n", wstr)
+    PREFIX fprintf(dat->fh, "\"" #name "\": \"%ls\",\n", (wchar_t*)wstr)
 #else
 # define FIELD_TEXT_TU(name,wstr) \
   { \
