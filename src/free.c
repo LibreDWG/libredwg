@@ -47,6 +47,9 @@ extern void dwg_free_xdata_resbuf(Dwg_Resbuf *rbuf);
 
 #define IS_FREE
 
+#define VALUE(value,type,dxf)
+#define VALUE_RC(value,dxf) VALUE(value, RC, dxf)
+
 #define FIELD(name,type) {}
 #define FIELD_TRACE(name,type) \
   LOG_TRACE(#name ": " FORMAT_##type "\n", _obj->name)

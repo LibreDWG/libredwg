@@ -10,43 +10,48 @@
 /*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
 /*****************************************************************************/
 
-#ifdef IS_ENCODER
+#ifndef SPEC_H
+#define SPEC_H
+
 #define DECODER if (0)
-#define ENCODER if (1)
+#define ENCODER if (0)
 #define PRINT   if (0)
+#define DXF     if (0)
 #define FREE    if (0)
+#define IF_ENCODE_FROM_EARLIER   if (0)
+#define IF_ENCODE_FROM_PRE_R13   if (0)
+#define IF_ENCODE_FROM_SINCE_R13 if (0)
+
+#ifdef IS_ENCODER
+#undef ENCODER
+#define ENCODER if (1)
+// when writing, check also rewriting from an earlier version and fill in a default then
+#undef IF_ENCODE_FROM_EARLIER
+#undef IF_ENCODE_FROM_PRE_R13
+#undef IF_ENCODE_FROM_SINCE_R13
+#define IF_ENCODE_FROM_EARLIER \
+  if (dat->from_version && dat->from_version < cur_ver)
+#define IF_ENCODE_FROM_PRE_R13 \
+  if (dat->from_version && dat->from_version < R_13)
+#define IF_ENCODE_SINCE_R13 \
+  if (dat->from_version && dat->from_version >= R_13)
 #endif
 
 #ifdef IS_DECODER
+#undef  DECODER
 #define DECODER if (1)
-#define ENCODER if (0)
-#define PRINT   if (0)
-#define FREE    if (0)
-#undef IF_ENCODE_FROM_EARLIER
-#define IF_ENCODE_FROM_EARLIER if (0)
-#undef IF_ENCODE_FROM_PRE_R13
-#define IF_ENCODE_FROM_PRE_R13 if (0)
 #endif
 
 #if defined(IS_PRINT)
+#undef  PRINT
 #define PRINT   if (1)
-#define FREE    if (0)
 #endif
 
 #if defined(IS_FREE)
-#define PRINT   if (0)
+#undef FREE
 #define FREE    if (1)
 #else
 #define END_REPEAT(field)
-#endif
-
-#if defined(IS_PRINT) || defined(IS_FREE)
-#define ENCODER if (0)
-#define DECODER if (0)
-#undef IF_ENCODE_FROM_EARLIER
-#define IF_ENCODE_FROM_EARLIER if (0)
-#undef IF_ENCODE_FROM_PRE_R13
-#define IF_ENCODE_FROM_PRE_R13 if (0)
 #endif
 
 #define R11OPTS(b) _ent->opts_r11 & b
@@ -76,3 +81,5 @@
     } \
   }\
   RESET_VER
+
+#endif /* SPEC_H */

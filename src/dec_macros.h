@@ -9,9 +9,13 @@
 
 #define IS_DECODER
 
-#define FIELDG(name,type,dxfgroup) \
+#define VALUE(value,type,dxf) \
+  LOG_TRACE(FORMAT_##type " [" #type " %d]\n", value, dxf)
+#define VALUE_RC(value,dxf) VALUE(value, RC, dxf)
+
+#define FIELDG(name,type,dxf) \
   { _obj->name = bit_read_##type(dat); \
-    FIELD_G_TRACE(name,type,dxfgroup); }
+    FIELD_G_TRACE(name,type,dxf); }
 
 #define FIELD(name,type) \
   { _obj->name = bit_read_##type(dat); \

@@ -49,29 +49,32 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
  */
 
 #define IS_PRINT
+#define IS_DXF
 
-//TODO
-#define FIELD(name,type,dxf) \
-  if (dxf) { fprintf(dat->fh, #name ": " FORMAT_##type ",\n", _obj->name); }
+#define FIELD(name,type,dxf) VALUE(_obj->name,type,dxf)
 #define FIELD_CAST(name,type,cast,dxf) FIELD(name,cast,dxf)
 #define FIELD_TRACE(name,type)
-#define FIELD_TEXT(name,str) \
-  fprintf(dat->fh, #name ": \"%s\",\n", str)
+
+#define VALUE_TV(value,dxf) \
+  { GROUP(dxf); \
+    fprintf(dat->fh, "%s\n", value); }
 #ifdef HAVE_NATIVE_WCHAR2
-# define FIELD_TEXT_TU(name,wstr) \
-  fprintf(dat->fh, #name ": \"%ls\",\n", wstr)
+# define VALUE_TU(value,dxf)\
+  { GROUP(dxf); \
+    fprintf(dat->fh, "%ls\n", (wchar_t*)value); }
 #else
-# define FIELD_TEXT_TU(name,wstr) \
+# define VALUE_TU(wstr,dxf) \
   { \
     BITCODE_TU ws = (BITCODE_TU)wstr; \
     uint16_t _c; \
-    fprintf(dat->fh, #name ": \""); \
+    GROUP(dxf);\
     while ((_c = *ws++)) { \
       fprintf(dat->fh, "%c", (char)(_c & 0xff)); \
     } \
-    fprintf(dat->fh, "\"\n"); \
+    fprintf(dat->fh, "\n"); \
   }
 #endif
+
 #define FIELD_VALUE(name) _obj->name
 #define ANYCODE -1
 #define FIELD_HANDLE(name, handle_code, dxf) \
@@ -101,13 +104,18 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 #define TABLE(table)     fprintf(dat->fh, "  0\nTABLE\n  2\n" #table "\n")
 #define ENDTAB()         fprintf(dat->fh, "  0\nENDTAB\n")
 #define RECORD(record)   fprintf(dat->fh, "  0\n" #record "\n")
-#define VALUE(code, value) \
-  {\
-    snprintf (buf, 4096, "%3i\n%s\n", code, dxf_format (code));\
+
+#define GROUP(dxf) \
+    fprintf (dat->fh, "%3i\n", dxf)
+#define VALUE(value, type, dxf) \
+  if (dxf) { \
+    GROUP(dxf);\
+    snprintf (buf, 4096, "%s\n", dxf_format (dxf));\
     GCC_DIAG_IGNORE(-Wformat-nonliteral) \
     fprintf(dat->fh, buf, value);\
     GCC_DIAG_RESTORE \
   }
+
 #define HANDLE_NAME(name, dxf, section) \
   {\
     Dwg_Object_Ref *ref = dwg->header_vars.name;\
@@ -122,6 +130,20 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 #define FIELD_DATAHANDLE(name, code, dxf) FIELD_HANDLE(name, code, dxf)
 #define FIELD_HANDLE_N(name, vcount, handle_code, dxf) FIELD_HANDLE(name, handle_code, dxf)
 
+#define VALUE_B(value,dxf)   VALUE(value, RC, dxf)
+#define VALUE_BB(value,dxf)  VALUE(value, RC, dxf)
+#define VALUE_3B(value,dxf)  VALUE(value, RC, dxf)
+#define VALUE_BS(value,dxf)  VALUE(value, RS, dxf)
+#define VALUE_BL(value,dxf)  VALUE(value, BL, dxf)
+#define VALUE_BLL(value,dxf) VALUE(value, RLL, dxf)
+#define VALUE_BD(value,dxf)  VALUE(value, RD, dxf)
+#define VALUE_RC(value,dxf)  VALUE(value, RC, dxf)
+#define VALUE_RS(value,dxf)  VALUE(value, RS, dxf)
+#define VALUE_RD(value,dxf)  VALUE(value, RD, dxf)
+#define VALUE_RL(value,dxf)  VALUE(value, RL, dxf)
+#define VALUE_RLL(value,dxf) VALUE(value, RLL, dxf)
+#define VALUE_MC(value,dxf)  VALUE(value, MC, dxf)
+#define VALUE_MS(value,dxf)  VALUE(value, MS, dxf)
 #define FIELD_B(name,dxf)   FIELD(name, B, dxf)
 #define FIELD_BB(name,dxf)  FIELD(name, BB, dxf)
 #define FIELD_3B(name,dxf)  FIELD(name, 3B, dxf)
@@ -136,18 +158,20 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 #define FIELD_RLL(name,dxf) FIELD(name, RLL, dxf)
 #define FIELD_MC(name,dxf)  FIELD(name, MC, dxf)
 #define FIELD_MS(name,dxf)  FIELD(name, MS, dxf)
-#define FIELD_TF(name,len,dxf)  FIELD_TEXT(name, _obj->name)
-#define FIELD_TFF(name,len,dxf) FIELD_TEXT(name, _obj->name)
-#define FIELD_TV(name,dxf)      FIELD_TEXT(name, _obj->name)
-#define FIELD_TU(name,dxf)      if (dxf) { FIELD_TEXT_TU(name, (BITCODE_TU)_obj->name); }
+#define FIELD_TF(name,len,dxf)  VALUE_TV(_obj->name, dxf)
+#define FIELD_TFF(name,len,dxf) VALUE_TV(_obj->name, dxf)
+#define FIELD_TV(name,dxf) if (_obj->name && dxf) { VALUE_TV(_obj->name,dxf); }
+#define FIELD_TU(name,dxf) if (_obj->name && dxf) { VALUE_TU((BITCODE_TU)_obj->name, dxf); }
 #define FIELD_T(name,dxf) \
   { if (dat->version >= R_2007) { FIELD_TU(name, dxf); } \
     else                        { FIELD_TV(name, dxf); } }
-#define FIELD_BT(name,dxf) FIELD(name, BT, dxf);
-#define FIELD_4BITS(name,dxf) FIELD(name,4BITS,dxf)
-#define FIELD_BE(name,dxf) FIELD_3RD(name,dxf)
-#define FIELD_DD(name, _default, dxf) \
-    fprintf(dat->fh, #name ": " FORMAT_DD ", default: " FORMAT_DD ",\n", _obj->name, _default)
+#define VALUE_T(value,dxf) \
+  { if (dat->version >= R_2007) { VALUE_TU(value, dxf); } \
+    else                        { VALUE_TV(value, dxf); } }
+#define FIELD_BT(name,dxf)     FIELD(name, BT, dxf);
+#define FIELD_4BITS(name,dxf)  FIELD(name,4BITS,dxf)
+#define FIELD_BE(name,dxf)     FIELD_3RD(name,dxf)
+#define FIELD_DD(name, _default, dxf) FIELD_BD(name, dxf)
 #define FIELD_2DD(name, d1, d2, dxf) { FIELD_DD(name.x, d1, dxf); FIELD_DD(name.y, d2, dxf+10); }
 #define FIELD_3DD(name, def, dxf) { \
     FIELD_DD(name.x, FIELD_VALUE(def.x), dxf); \
@@ -161,9 +185,11 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 #define FIELD_3BD_1(name,dxf) {FIELD(name.x, BD, dxf); FIELD(name.y, BD, dxf+1); FIELD(name.z, BD, dxf+2);}
 #define FIELD_3DPOINT(name,dxf) FIELD_3BD(name,dxf)
 #define FIELD_CMC(name,dxf)\
-    fprintf(dat->fh, #name ": %d,\n", _obj->name.index)
+  VALUE_RC(_obj->name.index, dxf)
 #define FIELD_TIMEBLL(name,dxf) \
-    fprintf(dat->fh, #name ": " FORMAT_BL "." FORMAT_BL ",\n", _obj->name.days, _obj->name.ms)
+  GROUP(dxf);\
+  fprintf(dat->fh, FORMAT_BL "." FORMAT_BL "\n", _obj->name.days, _obj->name.ms)
+
 #define POINT_3D(name, var, c1, c2, c3)\
   {\
     fprintf (dat->fh, "%3i\n%-16.12g\n", c1, dwg->var.x);\
@@ -189,12 +215,12 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
     }
 #define FIELD_VECTOR_T(name, size, dxf)\
   if (dxf) {\
-    PRE (R_2007) {                                              \
+    PRE (R_2007) {                                                   \
       for (vcount=0; vcount < (int)_obj->size; vcount++)             \
-        fprintf(dat->fh, #name ": \"%s\",\n", _obj->name[vcount]);   \
+        VALUE_TV(_obj->name[vcount], dxf);                           \
     } else {                                                         \
       for (vcount=0; vcount < (int)_obj->size; vcount++)             \
-        FIELD_TEXT_TU(name, _obj->name[vcount]);                     \
+        VALUE_TU(_obj->name[vcount], dxf);                           \
     }                                                                \
   }
 
@@ -1385,23 +1411,16 @@ dxf_classes_write (Bit_Chain *dat, Dwg_Data * dwg)
   for (i=0; i < dwg->num_classes; i++)
     {
       RECORD (CLASS);
-      VALUE (1, dwg->dwg_class[i].dxfname);
-      PRE (R_2007) {
-        VALUE (2, dwg->dwg_class[i].cppname);
-        VALUE (3, dwg->dwg_class[i].appname);
-      } LATER_VERSIONS {
-        char *cppname = bit_convert_TU((BITCODE_TU)dwg->dwg_class[i].cppname);
-        char *appname = bit_convert_TU((BITCODE_TU)dwg->dwg_class[i].appname);
-        VALUE (2, cppname);
-        VALUE (3, appname);
-      }
-      VALUE (90, dwg->dwg_class[i].proxyflag);
+      VALUE_T (dwg->dwg_class[i].dxfname, 1);
+      VALUE_T (dwg->dwg_class[i].cppname, 2);
+      VALUE_T (dwg->dwg_class[i].appname, 3);
+      VALUE_RS (dwg->dwg_class[i].proxyflag, 90);
       SINCE (R_2004) {
-        VALUE (91, dwg->dwg_class[i].instance_count);
+        VALUE_RC (dwg->dwg_class[i].instance_count, 91);
       }
-      VALUE (280, dwg->dwg_class[i].wasazombie);
+      VALUE_RC (dwg->dwg_class[i].wasazombie, 280);
       // Is-an-entity. 1f2 for entities, 1f3 for objects
-      VALUE (281, dwg->dwg_class[i].item_class_id == 0x1F2 ? 1 : 0);
+      VALUE_RC (dwg->dwg_class[i].item_class_id == 0x1F2 ? 1 : 0, 281);
     }
   ENDSEC();
   return 0;
@@ -1470,7 +1489,7 @@ dwg_write_dxf(Bit_Chain *dat, Dwg_Data * dwg)
   const int minimal = dwg->opts & 0x10;
   struct Dwg_Header *obj = &dwg->header;
 
-  VALUE(999, PACKAGE_STRING);
+  VALUE_TV(PACKAGE_STRING, 999);
 
   // A minimal header requires only $ACADVER, $HANDSEED, and then ENTITIES
   // see https://pythonhosted.org/ezdxf/dxfinternals/filestructure.html
@@ -1509,3 +1528,4 @@ dwg_write_dxf(Bit_Chain *dat, Dwg_Data * dwg)
 }
 
 #undef IS_PRINT
+#undef IS_DXF

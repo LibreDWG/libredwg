@@ -45,9 +45,9 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 #define FIELD(name,type,dxf) \
   FIELD_G_TRACE(name,type,dxf)
 #define FIELD_TRACE(name,type) \
-  LOG_TRACE(#name ": " FORMAT_##type " " #type "\n", _obj->name)
+  LOG_TRACE(#name ": " FORMAT_##type " [" #type "]\n", _obj->name)
 #define FIELD_G_TRACE(name,type,dxf) \
-  LOG_TRACE(#name ": " FORMAT_##type " " #type " " #dxf "\n", _obj->name)
+  LOG_TRACE(#name ": " FORMAT_##type " [" #type " " #dxf "]\n", _obj->name)
 #define FIELD_CAST(name,type,cast,dxf)             \
   FIELD_G_TRACE(name,cast,dxf)
 
@@ -113,6 +113,10 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
   LOG_TRACE(#name ": index %d\n", _obj->name.index)
 #define FIELD_TIMEBLL(name,dxf) \
   LOG_TRACE(#name " " #dxf ": " FORMAT_BL "." FORMAT_BL "\n", _obj->name.days, _obj->name.ms)
+
+#define VALUE(value,type,dxf) \
+  LOG_TRACE(FORMAT_##type " [" #type " " #dxf "]\n", value)
+#define VALUE_RC(value,dxf) VALUE(value, RC, dxf)
 
 //FIELD_VECTOR_N(name, type, size):
 // reads data of the type indicated by 'type' 'size' times and stores

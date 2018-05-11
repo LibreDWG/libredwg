@@ -1913,7 +1913,11 @@ DWG_ENTITY_END
 /*(48)*/
 DWG_OBJECT(BLOCK_CONTROL)
 
-  FIELD_BL (num_entries, 70);
+  DXF {
+    VALUE (FIELD_VALUE(num_entries)-2, RC, 70);
+  } else {
+    FIELD_BL (num_entries, 70);
+  }
 
   START_HANDLE_STREAM;
   //printf("dat->from_version=%d < cur_ver=%d\n", dat->from_version, cur_ver);
@@ -4854,3 +4858,4 @@ DWG_OBJECT_END
 DWG_OBJECT(LEADEROBJECTCONTEXTDATA)
 DWG_OBJECT_END
 */
+
