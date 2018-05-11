@@ -2412,7 +2412,7 @@ typedef struct
 {
   BITCODE_BS class_version;
   BITCODE_B has_xdic_file;
-  BITCODE_B is_default;;
+  BITCODE_B is_default;
 
   BITCODE_H scale_handle;
 

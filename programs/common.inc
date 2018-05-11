@@ -22,7 +22,7 @@
 /* returns number of consumed args */
 int verbosity(int argc, char **argv, int i, unsigned int *opts)
 {
-  int loglevel = 2;
+  unsigned int loglevel = 2;
   int num_args = 1;
   char log_str[4];
   if (!strcmp(argv[i], "--verbose") || // --verbose 2 or --verbose
@@ -36,7 +36,7 @@ int verbosity(int argc, char **argv, int i, unsigned int *opts)
               printf("Invalid verbosity %s\n", argv[i+1]); // -vbla
               exit(help());
             }
-          loglevel = (int)l;
+          loglevel = (unsigned int)l;
         }
       else
         loglevel = 2;
@@ -57,7 +57,7 @@ int verbosity(int argc, char **argv, int i, unsigned int *opts)
           printf("Invalid verbosity %s\n", opt); // -vbla
           exit(help());
         }
-      loglevel = (int)l;
+      loglevel = (unsigned int)l;
       *opts = loglevel;
       sprintf(log_str, "%d", loglevel);
 #if defined(USE_TRACING) && defined(HAVE_SETENV)

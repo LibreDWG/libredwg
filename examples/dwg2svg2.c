@@ -25,6 +25,11 @@
 #include "../src/config.h"
 #include <dwg.h>
 #include <dwg_api.h>
+
+static dwg_data g_dwg;
+static double model_xmin, model_ymin;
+static double page_width, page_height, scale;
+
 static int help(void);
 int verbosity(int argc, char **argv, int i, unsigned int *opts);
 #include "../programs/common.inc"
@@ -52,39 +57,35 @@ static int help(void) {
 #define log_if_error(msg) \
   if (error) { fprintf(stderr, "ERROR: %s", msg); exit(1); }
 
-dwg_data dwg;
-double model_xmin, model_ymin;
-double page_width, page_height, scale;
-
-double transform_X(double x){
+static double transform_X(double x){
   return x - model_xmin;
 }
 
-double transform_Y(double y){
+static double transform_Y(double y){
   return page_height - (y - model_ymin);
 }
 
-void
+static void
 output_SVG(dwg_data* dwg);
 
-int
+static int
 test_SVG(char *filename, unsigned int opts)
 {
   int error;
 
-  memset(&dwg, 0, sizeof(dwg_data));
-  dwg.opts = opts;
-  error = dwg_read_file(filename, &dwg);
+  memset(&g_dwg, 0, sizeof(dwg_data));
+  g_dwg.opts = opts;
+  error = dwg_read_file(filename, &g_dwg);
   if (!error)
-    output_SVG(&dwg);
+    output_SVG(&g_dwg);
 
-  dwg_free(&dwg);
+  dwg_free(&g_dwg);
   /* This value is the return value for `main',
      so clamp it to either 0 or 1.  */
   return error ? 1 : 0;
 }
 
-void
+static void
 output_TEXT(dwg_object* obj)
 {
   int error, index;
@@ -115,7 +116,7 @@ output_TEXT(dwg_object* obj)
       fontsize, text_value);
 }
 
-void
+static void
 output_LINE(dwg_object* obj)
 {
   int error, index;
@@ -138,7 +139,7 @@ output_LINE(dwg_object* obj)
       transform_Y(end.y));
 }
 
-void
+static void
 output_CIRCLE(dwg_object* obj)
 {
   Dwg_Entity_CIRCLE* circle;
@@ -161,7 +162,7 @@ output_CIRCLE(dwg_object* obj)
       index, transform_X(center.x), transform_Y(center.y), radius);
 }
 
-void
+static void
 output_ARC(dwg_object* obj)
 {
   Dwg_Entity_ARC* arc;
@@ -198,7 +199,7 @@ output_ARC(dwg_object* obj)
       large_arc, transform_X(x_end), transform_Y(y_end), 0.1);
 }
 
-void
+static void
 output_INSERT(dwg_object* obj)
 {
   int index, error;
@@ -227,8 +228,7 @@ output_INSERT(dwg_object* obj)
   abs_ref = dwg_ent_insert_get_abs_ref(insert, &error);
   log_if_error("insert_get_abs_ref");
   
-  //if (insert->block_header->handleref.code == 5)
-  if (42) //XXX did this to test the new handleref.code handling "code"
+  if (insert->block_header->handleref.code == 5)
     {
       printf(
           "\t<use id=\"dwg-object-%d\" transform=\"translate(%f %f) rotate(%f) scale(%f %f)\" xlink:href=\"#symbol-%lu\" /><!-- block_header->handleref: %d.%d.%lu -->\n",
@@ -246,7 +246,7 @@ output_INSERT(dwg_object* obj)
     }
 }
 
-void
+static void
 output_object(dwg_object* obj){
   if (!obj)
     {
@@ -280,7 +280,8 @@ output_object(dwg_object* obj){
     }
 }
 
-void output_BLOCK_HEADER(dwg_object_ref* ref)
+static void
+output_BLOCK_HEADER(dwg_object_ref* ref)
 {
   dwg_object* obj, *variable_obj;
   dwg_obj_block_header* hdr;
@@ -330,8 +331,8 @@ void output_BLOCK_HEADER(dwg_object_ref* ref)
 }
 
 
-void
-output_SVG(dwg_data* dwg)
+static void
+output_SVG(dwg_data *dwg)
 {
   unsigned int i, num_hdr_objs;
   int error;
