@@ -18,9 +18,11 @@
  */
 
 #include <stdio.h>
-#include <string.h>
 #include <libgen.h>
+#include <string.h>
 #include <stdlib.h>
+
+#include "config.h"
 
 char *
 suffix (const char *filename, const char *ext);
@@ -34,7 +36,11 @@ char *
 suffix (const char *filename, const char *ext)
 {
   char *copy = strdup (filename);
+#ifdef HAVE_BASENAME
   char *base = basename (copy);
+#else
+  char *base = copy;
+#endif
   int len = strlen (base) + 1 + strlen (ext) + 1;
   char *rv = malloc (len);
   char *dot;

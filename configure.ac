@@ -57,7 +57,8 @@ dnl avoid rpl_malloc when cross-compiling. we don't need malloc.h
 dnl we just want to know if it's needed
 ac_cv_func_malloc_0_nonnull=yes
 ac_cv_func_realloc_0_nonnull=yes
-AC_CHECK_HEADERS([stdlib.h string.h unistd.h malloc.h wchar.h ctype.h getopt.h])
+AC_CHECK_HEADERS([stdlib.h string.h unistd.h malloc.h wchar.h ctype.h \
+                  libgen.h getopt.h])
 AX_INCLUDE_STRCASECMP
 
 AC_CHECK_HEADER([dejagnu.h], [],
@@ -123,11 +124,13 @@ dnl Checks for library functions.
 AC_FUNC_MALLOC
 AC_FUNC_REALLOC
 AC_FUNC_STAT
-AC_CHECK_FUNCS([setenv],[],AC_MSG_WARN([
-      setenv not found. --enable-trace is limited with cmdline apps.
+AC_CHECK_FUNCS([setenv],[],
+  AC_MSG_WARN([setenv not found. --enable-trace is limited with cmdline apps.
       Only -v args are taken for verbosity not the LIBREDWG_TRACE env var.]))
-AC_CHECK_FUNCS([getopt_long],[],AC_MSG_WARN([
-      getopt_long not found. programs will not accept long options.]))
+AC_CHECK_FUNCS([getopt_long],[],
+  AC_MSG_WARN([getopt_long not found. programs will not accept long options.]))
+AC_CHECK_FUNCS([basename],[],
+  AC_MSG_WARN([basename not found. The default outfile will be unexpected.]))
 
 dnl Feature: --enable-trace
 AC_ARG_ENABLE([trace],[AS_HELP_STRING([--enable-trace],[
