@@ -103,8 +103,10 @@ static void dxfb_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
       fwrite(&icode, 2, 1, dat->fh); \
     }                                \
   }
-#define FIELD_TV(name,dxf) if (_obj->name && dxf) VALUE_TV(_obj->name, dxf)
-#define FIELD_TU(name,dxf) if (_obj->name && dxf) VALUE_TU(_obj->name, dxf)
+#define FIELD_TV(name,dxf) \
+  if (_obj->name != NULL && dxf != 0) { VALUE_TV(_obj->name,dxf); }
+#define FIELD_TU(name,dxf) \
+  if (_obj->name != NULL && dxf != 0) { VALUE_TU(_obj->name, dxf); }
 #define VALUE_T(value,dxf) \
   { if (dat->version >= R_2007) { VALUE_TU(value, dxf); } \
     else                        { VALUE_TV(value, dxf); } }

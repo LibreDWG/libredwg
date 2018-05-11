@@ -3905,7 +3905,7 @@ dwg_obj_xrecord_set_cloning_flags(dwg_obj_xrecord *xrecord, BITCODE_BS cloning_f
 BITCODE_BL
 dwg_obj_xrecord_get_num_eed(dwg_obj_xrecord *xrecord, int *error);
 void
-dwg_obj_xrecord_set_num_eed(dwg_obj_xrecord *xrecord, unsigned int num_eed,
+dwg_obj_xrecord_set_num_eed(dwg_obj_xrecord *xrecord, BITCODE_BL num_eed,
                             int *error);
 
 //Dwg_Eed*
