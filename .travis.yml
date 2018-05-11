@@ -9,6 +9,7 @@ addons:
       - libxml2
       - python-libxml2
       - texinfo
+      - swig
 matrix:
   fast_finish: true
   include:
