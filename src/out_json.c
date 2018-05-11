@@ -37,18 +37,18 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 
 /*--------------------------------------------------------------------------------
  * MACROS
- * TODO: use a dat field as indent level, i.e. bit.
  */
 
 #define IS_PRINT
 
-#define PREFIX for (int _i=0; _i<dat->bit; _i++) { fprintf (dat->fh, "  "); }
+#define PREFIX   for (int _i=0; _i<dat->bit; _i++) { fprintf (dat->fh, "  "); }
 #define ARRAY    PREFIX fprintf (dat->fh, "[\n"); dat->bit++
-#define ENDARRAY dat->bit--; PREFIX fprintf (dat->fh, "]\n")
+#define ENDARRAY dat->bit--; PREFIX fprintf (dat->fh, "],\n")
 #define HASH     PREFIX fprintf (dat->fh, "{\n"); dat->bit++
-#define ENDHASH  dat->bit--; PREFIX fprintf (dat->fh, "}\n")
+#define ENDHASH  dat->bit--; PREFIX fprintf (dat->fh, "},\n")
 #define SECTION(name) PREFIX fprintf (dat->fh, "\"%s\": [\n", #name); dat->bit++;
-#define ENDSEC()   ENDARRAY;
+#define ENDSEC()  ENDARRAY
+#define NOCOMMA   fseek(dat->fh, -2, SEEK_CUR)
 
 #define VALUE(value,type,dxf) \
     fprintf(dat->fh, FORMAT_##type, value)
@@ -56,22 +56,28 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 
 #define FIELD(name,type,dxf) \
     PREFIX fprintf(dat->fh, "\"" #name "\": " FORMAT_##type ",\n", _obj->name)
+#define _FIELD(name,type,value) \
+    PREFIX fprintf(dat->fh, "\"" #name "\": " FORMAT_##type ",\n", obj->name)
+#define ENT_FIELD(name,type,value) \
+    PREFIX fprintf(dat->fh, "\"" #name "\": " FORMAT_##type ",\n", _ent->name)
 #define FIELD_CAST(name,type,cast,dxf) FIELD(name,cast,dxf)
 #define FIELD_TRACE(name,type)
 #define FIELD_TEXT(name,str) \
-    PREFIX fprintf(dat->fh, "\"" #name "\": \"%s\",\n", str)
+    PREFIX fprintf(dat->fh, "\"" #name "\": \"%s\",\n", str ? str : "")
 #ifdef HAVE_NATIVE_WCHAR2
 # define FIELD_TEXT_TU(name,wstr) \
-    PREFIX fprintf(dat->fh, "\"" #name "\": \"%ls\",\n", (wchar_t*)wstr)
+    PREFIX fprintf(dat->fh, "\"" #name "\": \"%ls\",\n", wstr ? (wchar_t*)wstr : L"")
 #else
 # define FIELD_TEXT_TU(name,wstr) \
   { \
     BITCODE_TU ws = (BITCODE_TU)wstr;\
     uint16_t _c; PREFIX \
     fprintf(dat->fh, "\"" #name "\": \""); \
-    while ((_c = *ws++)) { \
-      fprintf(dat->fh, "%c", (char)(_c & 0xff)); \
-    } \
+    if (ws) { \
+      while ((_c = *ws++)) { \
+        fprintf(dat->fh, "%c", (char)(_c & 0xff)); \
+      } \
+    }\
     fprintf(dat->fh, "\",\n"); \
   }
 #endif
@@ -158,6 +164,7 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
       {\
         PREFIX fprintf(dat->fh, "\"" #name "\": " FORMAT_##type ",\n", _obj->name[vcount]); \
       }\
+    if (size) NOCOMMA;\
     ENDARRAY;
 #define FIELD_VECTOR_T(name, size, dxf)\
     ARRAY; \
@@ -169,6 +176,7 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
       for (vcount=0; vcount < (int)_obj->size; vcount++)\
         FIELD_TEXT_TU(name, _obj->name[vcount]); \
     } \
+    if (_obj->size) NOCOMMA;\
     ENDARRAY;
 
 #define FIELD_VECTOR(name, type, size, dxf) FIELD_VECTOR_N(name, type, _obj->size, dxf)
@@ -179,6 +187,7 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
     {\
       FIELD_2RD(name[vcount], dxf);\
     }\
+  if (_obj->size) NOCOMMA;\
   ENDARRAY;
 
 #define FIELD_2DD_VECTOR(name, size, dxf)\
@@ -188,6 +197,7 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
     {\
       FIELD_2DD(name[vcount], FIELD_VALUE(name[vcount - 1].x), FIELD_VALUE(name[vcount - 1].y), dxf);\
     }\
+  if (_obj->size) NOCOMMA;\
   ENDARRAY;
 
 #define FIELD_3DPOINT_VECTOR(name, size, dxf)\
@@ -196,6 +206,7 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
     {\
       FIELD_3DPOINT(name[vcount], dxf);\
     }\
+  if (_obj->size) NOCOMMA;\
   ENDARRAY;
 
 #define HANDLE_VECTOR_N(name, size, code, dxf) \
@@ -204,6 +215,7 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
     {\
       FIELD_HANDLE_N(name[vcount], vcount, code, dxf);\
     }\
+  if (size) NOCOMMA;                            \
   ENDARRAY;
 
 #define HANDLE_VECTOR(name, sizefield, code, dxf) \
@@ -221,6 +233,7 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
     {\
       FIELD_HANDLE_N(reactors[vcount], vcount, code, dxf);\
     }\
+  if (obj->tio.object->num_reactors) NOCOMMA;\
   ENDARRAY;
 
 #define XDICOBJHANDLE(code)\
@@ -264,7 +277,12 @@ dwg_json_##token (Bit_Chain *dat, Dwg_Object * obj) \
   Dwg_Object_Entity *_ent;\
   LOG_INFO("Entity " #token ":\n")\
   _ent = obj->tio.entity;\
-  _obj = ent = _ent->tio.token;
+  _obj = ent = _ent->tio.token;\
+  FIELD_TEXT(entity, #token);\
+  _FIELD(type,RL,0);\
+  _FIELD(size,RL,0);\
+  _FIELD(bitsize,BL,0);\
+  ENT_FIELD(picture_exists,B,0);
 
 #define DWG_ENTITY_END }
 
@@ -276,7 +294,11 @@ dwg_json_ ##token (Bit_Chain *dat, Dwg_Object * obj) \
   Bit_Chain *hdl_dat = dat;\
   Dwg_Object_##token *_obj;\
   LOG_INFO("Object " #token ":\n")\
-  _obj = obj->tio.object->tio.token;
+  _obj = obj->tio.object->tio.token;\
+  FIELD_TEXT(object, #token);\
+  _FIELD(type,RL,0);\
+  _FIELD(size,RL,0);\
+  _FIELD(bitsize,BL,0);
 
 #define DWG_OBJECT_END }
 
@@ -909,6 +931,7 @@ json_header_write(Bit_Chain *dat, Dwg_Data* dwg)
 
   SECTION(HEADER);
   #include "header_variables.spec"
+  NOCOMMA;
   ENDSEC();
 }
 
@@ -918,12 +941,13 @@ json_classes_write (Bit_Chain *dat, Dwg_Data * dwg)
   unsigned int i;
 
   SECTION(CLASSES);
+  LOG_TRACE("num_classes: %u\n", dwg->num_classes);
   for (i=0; i < dwg->num_classes; i++)
     {
       Dwg_Class *_obj = &dwg->dwg_class[i];
       HASH;
       FIELD_BS (number, 0);
-      FIELD_T (dxfname, 1);
+      FIELD_TV (dxfname, 1);
       FIELD_T (cppname, 2);
       FIELD_T (appname, 3);
       FIELD_BS (proxyflag, 90);
@@ -932,8 +956,10 @@ json_classes_write (Bit_Chain *dat, Dwg_Data * dwg)
       FIELD_BS (item_class_id, 281);
       // Is-an-entity. 1f2 for entities, 1f3 for objects
       //VALUE (281, dwg->dwg_class[i].item_class_id == 0x1F2 ? 1 : 0);
+      NOCOMMA;
       ENDHASH;
     }
+  NOCOMMA;
   ENDSEC();
   return 0;
 }
@@ -971,8 +997,10 @@ json_entities_write (Bit_Chain *dat, Dwg_Data * dwg)
       Dwg_Object *obj = &dwg->object[i];
       HASH;
       dwg_json_object(dat, obj);
+      NOCOMMA;
       ENDHASH;
     }
+  NOCOMMA;
   ENDSEC();
   return 0;
 }
