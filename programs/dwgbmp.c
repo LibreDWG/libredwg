@@ -12,9 +12,10 @@
 /*****************************************************************************/
 
 /*
- * get_bmp.c: get the bmp thumbnail in a dwg file
+ * dwgbmp.c: get the bmp thumbnail in a dwg file
  * written by Felipe Castro
  * modified by Felipe Corrêa da Silva Sances
+ * modified by Rodrigo Rodrigues da Silva
  * modified by Thien-Thi Nguyen
  * modified by Reini Urban
  */

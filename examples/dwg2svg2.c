@@ -1,8 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2009 Free Software Foundation, Inc.                        */
-/*  Copyright (C) 2010 Thien-Thi Nguyen                                      */
+/*  Copyright (C) 2013, 2018 Free Software Foundation, Inc.                  */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -12,9 +11,9 @@
 /*****************************************************************************/
 
 /*
- * testSVG.c: convert a DWG to SVG
- * written by Felipe Corrêa da Silva Sances
- * modified by Thien-Thi Nguyen
+ * dwg2svg2.c: convert a DWG to SVG via the API
+ * written by Gaganjyot Singh
+ * modified by Reini Urban
  */
 
 #include <stdio.h>

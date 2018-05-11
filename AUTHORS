@@ -5,6 +5,9 @@ Reini Urban <rurban@cpan.org>
 Gaganjyot Singh <thegaganx@gmail.com>
 	Wrote dwg_api, testsvg2 (now dwg2svg2), testcases, unit-testing.
 
+Achyuta Piyush <achyutapiyush@gmail.com>
+	Wrote the xml test suite
+
 Anderson Pierre Cardoso <apierre.cardoso@gmail.com>
 	Changes to configure.in, dwg.c and encode.c
 

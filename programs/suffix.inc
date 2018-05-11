@@ -2,6 +2,7 @@
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
 /*  Copyright (C) 2010 Thien-Thi Nguyen                                      */
+/*  Copyright (C) 2018 Free Software Foundation, Inc.                        */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -13,6 +14,7 @@
 /*
  * suffix.c: avoid hardcoded input/output filenames
  * written by Thien-Thi Nguyen
+ * modified by Reini Urban
  */
 
 #include <stdio.h>

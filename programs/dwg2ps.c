@@ -16,6 +16,7 @@
  * TODO: more 2D elements, see dwg2SVG
  * written by Felipe Castro
  * modified by Felipe Corrêa da Silva Sances
+ * modified by Rodrigo Rodrigues da Silva
  * modified by Thien-Thi Nguyen
  * modified by Reini Urban
  */

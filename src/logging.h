@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2010 Free Software Foundation, Inc.                        */
+/*  Copyright (C) 2010, 2018 Free Software Foundation, Inc.                  */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -13,6 +13,7 @@
 /*
  * logging.h: logging macros
  * written by Rodrigo Rodrigues da Silva
+ * modified by Reini Urban
  */
 
 //Reduce logging code through macros. In the future, this file can be used as

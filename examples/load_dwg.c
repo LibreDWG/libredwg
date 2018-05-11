@@ -16,6 +16,7 @@
  * written by Felipe Castro
  * modified by Felipe Corrêa da Silva Sances
  * modified by Thien-Thi Nguyen
+ * modified by Reini Urban
  */
 
 #include <stdio.h>

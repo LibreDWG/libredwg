@@ -14,6 +14,7 @@
 /*
  * testSVG.c: convert a DWG to SVG
  * written by Felipe Corrêa da Silva Sances
+ * modified by Rodrigo Rodrigues da Silva
  * modified by Thien-Thi Nguyen
  * modified by Reini Urban
  */
