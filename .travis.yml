@@ -6,9 +6,9 @@ os:
 addons:
   apt:
     packages:
+      - texinfo
       - libxml2
       - python-libxml2
-      - texinfo
       - swig
 matrix:
   fast_finish: true
@@ -42,4 +42,4 @@ script:
   - make -j4
   - make check
   - if [ "$DISTCHECK" = "1" ]; then
-      make distcheck || cat bindings/python/Makefile; fi
+      make distcheck V=1 || cat doc/Makefile; fi
