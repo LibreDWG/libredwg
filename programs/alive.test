@@ -21,13 +21,13 @@
 #
 # It relies on the TESTS_ENVIRONMENT Makefile.am variable to set
 # `PROGS'.  Each prog in PROGS is run against a set of example DWGs,
-# and if *not* successful the maximally verbose
-# output (from setting LIBREDWG_TRACE=9) is saved in a file whose
-# name is DWG-PROG.log.
+# and if *not* successful the verbose output from -v4 is saved in a
+# file whose name is DWG-PROG.log.
 #
 # If there are no problems, exit successfully.  Otherwise display
 # the count of problem runs, the list of *.log files and finally
 # exit failurefully.
+# datadir must be set to support testing from a seperate build dir.
 
 # Code:
 
@@ -37,6 +37,7 @@ test "$datadir" || { echo ERROR: Env var datadir not set ; exit 1 ; }
 problems=0
 rm -f dwg*.log
 
+#just check that it does not crash
 run ()
 {
     prog=$1
@@ -46,8 +47,19 @@ run ()
     bdwg=`basename $dwg .dwg`
     log=$bdwg-$bprog.log
     arg="${datadir}/$dwg.dwg"
-    echo $TESTPROG ./$prog -v4 $arg
-    if $TESTPROG ./$prog -v4 $arg > $log 2>&1
+    if test $bprog = dwgrewrite
+    then
+        arg="-v2 $arg"
+    else
+        arg="-v4 $arg"
+    fi
+    echo $TESTPROG ./$prog $arg
+    # writers can hang
+    if test $bprog = dwgrewrite -o $bprog = dwgwrite -o $bprog = dxf2dwg
+    then
+       (sleep 5s; killall $bprog 2>/dev/null) &
+    fi
+    if $TESTPROG ./$prog $arg > $log 2>&1
     then
         rm $log
     else
@@ -80,6 +92,17 @@ for prog in $PROGS ; do
     done
 done
 #run dwgread r11/ACEL10
+
+# check generated DXF's against original DXF's
+# skip the run part if dwg2dxf is part of bin_PROGRAMS (i.e. being installed)
+# only in programs, not examples:
+if [ -f cmp_dxf.pl ]; then
+    for dwg in $DATA; do
+        base=$(basename $dwg .dwg)
+        run dwg2dxf $dwg
+        perl cmp_dxf.pl ${datadir}/$dwg.dxf $base.dxf
+    done
+fi
 
 if [ 0 = $problems ] ; then
     exit 0

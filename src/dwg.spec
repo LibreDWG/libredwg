@@ -1914,7 +1914,7 @@ DWG_ENTITY_END
 DWG_OBJECT(BLOCK_CONTROL)
 
   DXF {
-    VALUE (FIELD_VALUE(num_entries)-2, RC, 70);
+    VALUE (FIELD_VALUE(num_entries)-2, RL, 70);
   } else {
     FIELD_BL (num_entries, 70);
   }

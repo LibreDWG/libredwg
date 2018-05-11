@@ -926,8 +926,8 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
                       dwg->header.section[SECTION_HEADER_R13].size - 34);
   if (ckr != ckr2)
     {
-      LOG_ERROR("Section[%ld] CRC mismatch %d <=> %d",
-                dwg->header.section[SECTION_HEADER_R13].number, ckr, ckr2);
+      LOG_WARN("Section[%ld] CRC mismatch %d <=> %d",
+               dwg->header.section[SECTION_HEADER_R13].number, ckr, ckr2);
       // TODO: xor with num_sections
       //if (dwg->header.version == R_2000)
       //  return -1;

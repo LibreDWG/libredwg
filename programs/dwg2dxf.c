@@ -162,7 +162,7 @@ main (int argc, char *argv[])
   dat.version = dwg.header.version;
   dat.from_version = dwg.header.from_version;
 
-  fprintf(stderr, "TODO: write to DXF not yet completed\n");
+  fprintf(stderr, "WARNING: write to DXF not yet completed\n");
   if (minimal)
     dwg.opts |= 0x10;
   if (binary) {
@@ -180,6 +180,8 @@ main (int argc, char *argv[])
   }
   if (error)
     fprintf(stderr, "WRITE ERROR\n");
+  if (dat.fh)
+    fclose(dat.fh);
 
   if (filename_out != argv[2])
     free (filename_out);

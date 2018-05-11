@@ -51,16 +51,16 @@ TESTS_ENVIRONMENT = \
  TESTPROG='wine'
 else
 TESTS_ENVIRONMENT = \
- PROGS='$(bin_PROGRAMS)' \
+ PROGS='$(bin_PROGRAMS) dwg2dxf' \
  datadir='$(top_srcdir)/test/test-data' \
  TESTPROG=''
 endif
 
 TESTS = alive.test
 
-EXTRA_DIST = suffix.inc common.inc $(TESTS)
+EXTRA_DIST = suffix.inc common.inc $(TESTS) cmp_dxf.pl
 CLEANFILES = {example,sample,Leader}_*.{bmp,ps,svg,dxf}
-CLEANFILES += {example,sample,,Leader}_*rewrite.dwg
+CLEANFILES += {example,sample,Leader}_*rewrite.dwg
 
 .PHONY: man dsymutil check-syntax
 

@@ -81,23 +81,37 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
   if (dxf && _obj->name) { \
     fprintf(dat->fh, "%d\n%lX\n", dxf, _obj->name->absolute_ref); \
   }
-
-#define HEADER_VALUE(name, dxf, value)\
+#define HEADER_9(name) \
+    GROUP(9);\
+    fprintf (dat->fh, "$%s\n", #name)
+#define VALUE_H(value,dxf) \
   {\
-    fprintf (dat->fh, "  9\n$" #name "\n%3i\n", dxf);\
-    snprintf (buf, 4096, "%s\n", dxf_format (dxf));\
-    GCC_DIAG_IGNORE(-Wformat-nonliteral) \
-    fprintf (dat->fh, buf, value);\
-    GCC_DIAG_RESTORE \
+    Dwg_Object_Ref *ref = value;\
+    if (ref && ref->obj) { VALUE_RS(ref->absolute_ref, dxf); }\
+    else { VALUE_RS(0, dxf); } \
   }
-#define HEADER_VAR(name, dxf) HEADER_VALUE(name, dxf, dwg->header_vars.name)
+#define HEADER_H(name,dxf) \
+    HEADER_9(name);\
+    VALUE_H(dwg->header_vars.name, dxf)
+
+#define HEADER_VALUE(name, type, dxf, value) \
+  if (dxf) {\
+    GROUP(9);\
+    fprintf (dat->fh, "$%s\n", #name);\
+    VALUE (value, type, dxf);\
+  }
+#define HEADER_VAR(name, type, dxf) \
+  HEADER_VALUE(name, type, dxf, dwg->header_vars.name)
 
 #define HEADER_3D(name)\
-  fprintf (dat->fh, "  9\n$" #name "\n"); \
+  HEADER_9(name);\
   POINT_3D (name, header_vars.name, 10, 20, 30);
 #define HEADER_2D(name)\
-  fprintf (dat->fh, "  9\n$" #name "\n"); \
+  HEADER_9(name);\
   POINT_2D (name, header_vars.name, 10, 20);
+#define HEADER_BLL(name, dxf) \
+  HEADER_9(name);\
+  VALUE_BLL(dwg->header_vars.name, dxf);
 
 #define SECTION(section) fprintf(dat->fh, "  0\nSECTION\n  2\n" #section "\n")
 #define ENDSEC()         fprintf(dat->fh, "  0\nENDSEC\n")
@@ -116,10 +130,13 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
     GCC_DIAG_RESTORE \
   }
 
+#define HEADER_HANDLE_NAME(name, dxf, section) \
+  HEADER_9(name);\
+  HANDLE_NAME(name, dxf, section)
 #define HANDLE_NAME(name, dxf, section) \
   {\
     Dwg_Object_Ref *ref = dwg->header_vars.name;\
-    snprintf (buf, 4096, "  9\n$" #name "\n%3i\n%s\n", dxf, dxf_format (dxf));\
+    snprintf (buf, 4096, "%3i\n%s\n", dxf, dxf_format (dxf));\
     /*if (ref && !ref->obj) ref->obj = dwg_resolve_handle(dwg, ref->absolute_ref); */ \
     GCC_DIAG_IGNORE(-Wformat-nonliteral) \
     fprintf(dat->fh, buf, ref && ref->obj \
@@ -129,6 +146,14 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 
 #define FIELD_DATAHANDLE(name, code, dxf) FIELD_HANDLE(name, code, dxf)
 #define FIELD_HANDLE_N(name, vcount, handle_code, dxf) FIELD_HANDLE(name, handle_code, dxf)
+
+#define HEADER_RC(name,dxf)  HEADER_9(name); FIELD(name, RC, dxf)
+#define HEADER_RS(name,dxf)  HEADER_9(name); FIELD(name, RS, dxf)
+#define HEADER_RD(name,dxf)  HEADER_9(name); FIELD(name, RD, dxf)
+#define HEADER_RL(name,dxf)  HEADER_9(name); FIELD(name, RL, dxf)
+#define HEADER_RLL(name,dxf) HEADER_9(name); FIELD(name, RLL, dxf)
+#define HEADER_TV(name,dxf)  HEADER_9(name); VALUE_TV(_obj->name,dxf)
+#define HEADER_T(name,dxf)   HEADER_9(name); VALUE_T(_obj->name, dxf)
 
 #define VALUE_B(value,dxf)   VALUE(value, RC, dxf)
 #define VALUE_BB(value,dxf)  VALUE(value, RC, dxf)
@@ -160,8 +185,10 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 #define FIELD_MS(name,dxf)  FIELD(name, MS, dxf)
 #define FIELD_TF(name,len,dxf)  VALUE_TV(_obj->name, dxf)
 #define FIELD_TFF(name,len,dxf) VALUE_TV(_obj->name, dxf)
-#define FIELD_TV(name,dxf) if (_obj->name && dxf) { VALUE_TV(_obj->name,dxf); }
-#define FIELD_TU(name,dxf) if (_obj->name && dxf) { VALUE_TU((BITCODE_TU)_obj->name, dxf); }
+#define FIELD_TV(name,dxf) \
+  if (_obj->name != NULL && dxf != 0) { VALUE_TV(_obj->name,dxf); }
+#define FIELD_TU(name,dxf) \
+  if (_obj->name != NULL && dxf != 0) { VALUE_TU((BITCODE_TU)_obj->name, dxf); }
 #define FIELD_T(name,dxf) \
   { if (dat->version >= R_2007) { FIELD_TU(name, dxf); } \
     else                        { FIELD_TV(name, dxf); } }
@@ -185,10 +212,13 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 #define FIELD_3BD_1(name,dxf) {FIELD(name.x, BD, dxf); FIELD(name.y, BD, dxf+1); FIELD(name.z, BD, dxf+2);}
 #define FIELD_3DPOINT(name,dxf) FIELD_3BD(name,dxf)
 #define FIELD_CMC(name,dxf)\
-  VALUE_RC(_obj->name.index, dxf)
+  VALUE_RS(_obj->name.index, dxf)
 #define FIELD_TIMEBLL(name,dxf) \
   GROUP(dxf);\
   fprintf(dat->fh, FORMAT_BL "." FORMAT_BL "\n", _obj->name.days, _obj->name.ms)
+#define HEADER_CMC(name,dxf) \
+    HEADER_9(name);\
+    VALUE_RS(dwg->header_vars.name.index, dxf)
 
 #define POINT_3D(name, var, c1, c2, c3)\
   {\
@@ -1036,10 +1066,23 @@ dxf_header_write(Bit_Chain *dat, Dwg_Data* dwg)
 {
   Dwg_Header_Variables* _obj = &dwg->header_vars;
   Dwg_Object* obj = NULL;
-  const int minimal = dwg->opts & 0x10;
   double ms;
+  const int minimal = dwg->opts & 0x10;
   const char* codepage = dxf_codepage(dwg->header.codepage, dwg);
 
+  if (dwg->header.codepage != 30 &&
+      dwg->header.codepage != 29 &&
+      dwg->header.codepage != 0 &&
+      dwg->header.version < R_2007) {
+    // some asian or eastern-european codepage
+    // see https://github.com/mozman/ezdxf/blob/master/docs/source/dxfinternals/fileencoding.rst
+    LOG_WARN("Unknown codepage %d, assuming ANSI_1252", dwg->header.codepage);
+  }
+
+#include "header_variables_dxf.spec"
+
+  return;
+/*  
   // TODO => dxf_header_vars.spec (shared with dxfb and the readers)
   SECTION(HEADER);
 
@@ -1399,6 +1442,7 @@ dxf_header_write(Bit_Chain *dat, Dwg_Data* dwg)
 
   ENDSEC();
   return;
+*/
 }
 
 // only called since r2000
@@ -1408,10 +1452,11 @@ dxf_classes_write (Bit_Chain *dat, Dwg_Data * dwg)
   unsigned int i;
 
   SECTION (CLASSES);
+  LOG_TRACE("num_classes: %u\n", dwg->num_classes);
   for (i=0; i < dwg->num_classes; i++)
     {
       RECORD (CLASS);
-      VALUE_T (dwg->dwg_class[i].dxfname, 1);
+      VALUE_TV (dwg->dwg_class[i].dxfname, 1);
       VALUE_T (dwg->dwg_class[i].cppname, 2);
       VALUE_T (dwg->dwg_class[i].appname, 3);
       VALUE_RS (dwg->dwg_class[i].proxyflag, 90);
@@ -1521,6 +1566,7 @@ dwg_write_dxf(Bit_Chain *dat, Dwg_Data * dwg)
     if (dxf_preview_write (dat, dwg))
       goto fail;
   }
+  RECORD(EOF);
 
   return 0;
  fail:
