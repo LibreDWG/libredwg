@@ -7,9 +7,11 @@ addons:
   apt:
     packages:
       - texinfo
+      - texlive
       - libxml2
       - python-libxml2
       - swig
+      - help2man
 matrix:
   fast_finish: true
   include:
@@ -42,4 +44,5 @@ script:
   - make -j4
   - make check
   - if [ "$DISTCHECK" = "1" ]; then
-      make distcheck V=1 || cat doc/Makefile; fi
+      make distcheck V=1 || (cat doc/Makefile; false);
+    fi
