@@ -123,10 +123,11 @@ dnl Checks for library functions.
 AC_FUNC_MALLOC
 AC_FUNC_REALLOC
 AC_FUNC_STAT
-AC_CHECK_FUNCS([setenv],[],
-      AC_MSG_WARN([setenv not found - programs will not print error messages]))
-AC_CHECK_FUNCS([getopt_long],[],
-      AC_MSG_WARN([getopt_long not found - programs will not accept long options]))
+AC_CHECK_FUNCS([setenv],[],AC_MSG_WARN([
+      setenv not found. --enable-trace is limited with cmdline apps.
+      Only -v args are taken for verbosity not the LIBREDWG_TRACE env var.]))
+AC_CHECK_FUNCS([getopt_long],[],AC_MSG_WARN([
+      getopt_long not found. programs will not accept long options.]))
 
 dnl Feature: --enable-trace
 AC_ARG_ENABLE([trace],[AS_HELP_STRING([--enable-trace],[
