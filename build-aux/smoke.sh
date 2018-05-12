@@ -10,28 +10,42 @@ Darwin) # macports compilers
     make=gmake
 
 export PKG_CONFIG_PATH=/opt/local/lib/pkgconfig
-gmake -s clean
-echo clang-mp-5.0 -fsanitize=address,undefined -fno-omit-frame-pointer
+gmake -s -j4 clean
+
+echo clang-mp-5.0 -fsanitize=address,undefined -fno-omit-frame-pointer --enable-trace --enable-write
 CC="clang-mp-5.0 -fsanitize=address,undefined -fno-omit-frame-pointer" \
     ./configure --enable-trace --enable-write && \
     gmake -s -j4 check || exit
-gmake -s clean
-echo clang-mp-6.0 -O3 -march=native
+gmake -s -j4 clean
+echo clang-mp-6.0 -O3 -march=native --enable-write
 CC="clang-mp-6.0 -O3 -march=native" \
     ./configure --enable-write && \
     gmake -s -j4 check || exit
-gmake -s clean
-echo clang-mp-devel
-CC="clang-mp-devel" \
-    ./configure && \
-    gmake -s -j4 check || exit
-gmake -s clean
+gmake -s -j4 clean
+#echo clang-mp-devel
+#CC="clang-mp-devel" \
+#    ./configure && \
+#    gmake -s -j4 check || exit
+#gmake -s -j4 clean
 for CC in gcc-mp-4.3 gcc-mp-4.6 gcc-mp-4.8 gcc-mp-4.9 gcc-mp-5 gcc-mp-6 gcc-mp-7; do
     echo $CC
     ./configure && \
     gmake -s -j4 check || exit
-    gmake -s clean
+    gmake -s -j4 clean
 done
+for CC in clang-mp-3.3 clang-mp-3.7 clang-mp-3.8 clang-mp-3.9 clang-mp-4.0 clang-mp-5.0 \
+          clang-mp-6.0 clang-mp-devel; do
+    echo $CC
+    ./configure && \
+    gmake -s -j4 check || exit
+    gmake -s -j4 clean
+done
+
+echo gcc-mp-6 --enable-write --enable-gcov
+CC="gcc-mp-6" ./configure --enable-write --enable-trace --enable-gcov=gcov-mp-6 && \
+    make -s -j4 check || exit
+    make -s -j4 gcov
+make -s -j4 clean
 
 # port install arm-elf-gcc (with newlib, not glibc)
 if [ -e /opt/local/bin/arm-elf-gcc-4.7 ]; then
@@ -39,16 +53,18 @@ if [ -e /opt/local/bin/arm-elf-gcc-4.7 ]; then
     CC=arm-elf-gcc-4.7 ./configure --host=arm-elf --disable-shared && \
         gmake -s -j4 || \
         (gmake -s -C src out_dxf.i && mv src/out_dxf.i src/out_dxf.c && gmake -s);
-    $make -s -j4 -C examples check_PROGRAMS
+    gmake -s -j4 -C examples load_dwg dwg2svg2
+    git checkout src/out_dxf.c
     #qemu-arm -L /opt/local/arm-elf programs/dwgread test/test-data/sample_2000.dwg || exit
 fi
+gmake -s -j4 clean
 
 ;;
 
 Linux)
 make -s -j4 clean
 
-echo clang-3.9 -fsanitize=address -fno-omit-frame-pointer
+echo clang-3.9 -fsanitize=address -fno-omit-frame-pointer --enable-write
 CC="clang-3.9 -fsanitize=address -fno-omit-frame-pointer" \
     ./configure --enable-write && \
     make -s -j4 check || exit
@@ -67,16 +83,36 @@ echo gcc-4.4 -ansi
 CC="gcc-4.4 -ansi" ./configure && \
     make -s -j4 check || exit
 make -s -j4 clean
-CC="gcc-6" ./configure && \
+echo gcc-6 --enable-write
+CC="gcc-6" ./configure --enable-write && \
     make -s -j4 check || exit
 make -s -j4 clean
-CC="gcc-7" ./configure && \
+echo gcc-7 --enable-write
+CC="gcc-7" ./configure --enable-write && \
     make -s -j4 check || exit
 make -s -j4 clean
+echo gcc-8 --enable-write
+CC="gcc-8" ./configure --enable-write && \
+    make -s -j4 check || exit
+make -s -j4 clean
+echo gcc-8 --enable-write --enable-gcov
+CC="gcc-8" ./configure --enable-write --enable-gcov=gcov-8 && \
+    make -s -j4 check || exit
+    make -s -j4 gcov
+make -s -j4 clean
+
 CC="clang-7 -fsanitize=address,undefined -fno-omit-frame-pointer" \
     ./configure --enable-write --enable-trace && \
     make -s -j4 check || exit
 make -s -j4 clean
+for CC in clang-3.0 clang-3.4 clang-3.5 clang-3.6 clang-3.7 clang-3.8 clang-3.9 clang-4.0 \
+          clang-5.0 clang-6.0 clang-7
+do
+    echo $CC
+    ./configure && \
+    make -s -j4 check || exit
+    make -s -j4 clean
+done
 
 if [ -e /usr/bin/arm-linux-gnueabihf-gcc ]; then
     echo "--host=arm-linux-gnueabihf --disable-shared"
@@ -113,6 +149,7 @@ $make -s -j4 clean
 $make -s -j4 clean
 ./configure --enable-write && \
     $make -s -j4 check || exit
+    $make check-valgrind
 $make -s -j4 clean
 ./configure --disable-shared && \
     $make -s -j4 check || exit
