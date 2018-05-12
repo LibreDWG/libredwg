@@ -214,7 +214,6 @@ typedef struct _dwg_object_entity                 dwg_obj_ent;
 typedef struct _dwg_object_object                 dwg_obj_obj;
 typedef struct _dwg_class                         dwg_class;
 typedef struct _dwg_struct                        dwg_data;
-typedef struct _dwg_object_ref		          dwg_object_ref;
 typedef struct _dwg_entity_eed_data		  dwg_entity_eed_data;
 typedef struct _dwg_entity_eed			  dwg_entity_eed;
 
