@@ -17,12 +17,12 @@
  * written by Reini Urban
  */
 
+#include "../src/config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
 
-#include "../src/config.h"
 #include <dwg.h>
 #include "../src/common.h"
 #include "../src/bits.h"

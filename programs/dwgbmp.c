@@ -20,10 +20,10 @@
  * modified by Reini Urban
  */
 
+#include "../src/config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../src/config.h"
 
 #include <dwg.h>
 #include "suffix.inc"

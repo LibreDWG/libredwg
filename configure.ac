@@ -83,6 +83,7 @@ dnl AC_CHECK_TYPE([wchar_t],[],[],[[#include <wchar.h>]])
 if test x$ac_cv_header_wchar_h = xyes; then
    AX_COMPILE_CHECK_SIZEOF([wchar_t], [#include <wchar.h>])
 fi
+AC_DEFINE([_POSIX_C_SOURCE],[200809L],[Needed for strdup])
 
 AX_IS_RELEASE([git-directory])
 if test x$ax_is_release = xyes; then

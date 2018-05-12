@@ -16,15 +16,19 @@
  * modified by Reini Urban
  */
 
+#include "../src/config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include <math.h>
 
-#include "../src/config.h"
 #include <dwg.h>
 #include <dwg_api.h>
+
+#ifndef M_PI
+# define M_PI      3.14159265358979323846264338327950288
+#endif
 
 static dwg_data g_dwg;
 static double model_xmin, model_ymin;

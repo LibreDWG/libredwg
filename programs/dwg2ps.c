@@ -21,11 +21,12 @@
  * modified by Reini Urban
  */
 
+#include "../src/config.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <libps/pslib.h>
 
-#include "../src/config.h"
 #include <dwg.h>
 #include "suffix.inc"
 static int help(void);

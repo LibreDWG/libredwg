@@ -17,12 +17,12 @@
  * written by Reini Urban
  */
 
+#include "../src/config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
 
-#include "../src/config.h"
 #include <dwg.h>
 #include "../src/common.h"
 #include "../src/bits.h"
@@ -660,6 +660,7 @@ main (int argc, char *argv[])
   error = dwg_write_file(filename_out, &dwg);
 #else
   error = 1;
+# error no write support
 #endif  
   if (error)
       printf("WRITE ERROR\n");
