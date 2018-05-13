@@ -148,7 +148,6 @@ AC_ARG_ENABLE([write],[AS_HELP_STRING([--enable-write],[
 ])
 AM_CONDITIONAL([USE_WRITE], [test -n "$enable_write"])
 
-
 AC_ARG_ENABLE(gcov,
 	AS_HELP_STRING([--enable-gcov],
 		       [turn on test coverage @<:@default=no@:>@]),
@@ -202,7 +201,18 @@ fi
 AM_CONDITIONAL([HAVE_WINE], [test -n "$WINE"])
 
 dnl optional SWIG + python bindings
-if test x$cross_compiling = xno; then
+dnl Feature: --disable-python or --enable-python=python3.6
+AC_ARG_ENABLE(python,
+	AS_HELP_STRING([--disable-python],
+		       [Disable python bindings @<:@default=check@:>@]),
+	[case "${enableval}" in
+	yes) enable_python=true ;;
+	no)  enable_python=false ;;
+	*)   enable_python=true ; PYTHON="${enableval}" ;;
+	esac], [enable_python=check])
+
+AC_MSG_CHECKING([for --disable-python])
+if test x$enable_python != xfalse -a x$cross_compiling = xno; then
     AX_PKG_SWIG([1.3.17], [],
       AC_MSG_WARN([SWIG is required for python bindings. disabled]))
     if test -n "$SWIG"; then
@@ -212,7 +222,9 @@ if test x$cross_compiling = xno; then
     dnl AX_SWIG_ENABLE_CXX
     dnl SWIG_MULTI_MODULE_SUPPORT
 else
-    AC_MSG_WARN([disabled swig bindings: cross-compiled])
+    if test x$enable_python = xfalse; then AC_MSG_RESULT([yes (swig disabled)])
+    else AC_MSG_WARN([disabled swig bindings: cross-compiled])
+    fi
 fi
 AM_CONDITIONAL([HAVE_SWIG_PYTHON],
   [test -n "$SWIG" && test -n "$PYTHON_VERSION"])

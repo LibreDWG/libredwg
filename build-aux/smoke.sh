@@ -137,7 +137,7 @@ fi
 
 esac
 
-CC="cc -m32" ./configure && \
+CC="cc -m32" ./configure --disable-python && \
     $make -s -j4 check || exit
 $make -s -j4 clean
 ./configure && \
@@ -154,6 +154,12 @@ $make -s -j4 clean
 ./configure --disable-shared && \
     $make -s -j4 check || exit
 $make -s -j4 clean
+
+#TODO >2.7
+#./configure --enable-python=python3.6 && \
+#    $make -s -j4 check || exit
+#$make -s -j4 clean
+
 
 WINEARCH=win32 CFLAGS="-g -gdwarf-2" \
     ./configure --host=i686-w64-mingw32 && \
