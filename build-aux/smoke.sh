@@ -18,9 +18,10 @@ CC="clang-mp-5.0 -fsanitize=address,undefined -fno-omit-frame-pointer" \
     gmake -s -j4 check || exit
 gmake -s -j4 clean
 echo clang-mp-6.0 -O3 -march=native --enable-write
-CC="clang-mp-6.0 -O3 -march=native" \
+CC="clang-mp-6.0 -O3 -march=native --enable-write" \
     ./configure --enable-write && \
     gmake -s -j4 check || exit
+    gmake scan-build
 gmake -s -j4 clean
 #echo clang-mp-devel
 #CC="clang-mp-devel" \

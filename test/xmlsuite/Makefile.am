@@ -10,6 +10,9 @@ if HAVE_SWIG_PYTHON
 # Set env var ‘PYTHON’ so that check.py can invoke other .py programs.
 TESTS_ENVIRONMENT = PYTHON='$(PYTHON)' $(PYTHON)
 
+CLEANFILES = *.log *.sum site.bak result.htm
+MAINTAINERCLEANFILES  = *_flymake.[ch] *~ *.i
+
 check_PROGRAMS = testsuite
 TESTS = check.py
 
@@ -18,18 +21,10 @@ TESTS = check.py
 if ENABLE_GCOV
 AM_CFLAGS += @GCOV_CFLAGS@
 LIBS      += @GCOV_LIBS@
-#  -e's,$(EXEEXT),,'
-gcov: $(check_PROGRAMS) check
+gcov: $(CHECK)
 	-test -f gcov.log && rm gcov.log
-	-for f in $(check_PROGRAMS); do \
-	  c="`echo $$f|sed -e's,.exe,,'`"; \
-	  test -e $$c.c -a -e $$c.gcda && \
-	    echo $(GCOV) $$c.c && $(GCOV) $$c.c >>gcov.log; \
-	 done
-endif
+	$(GCOV) *.gcno | tee -a $(builddir)/gcov.log
 
-CLEANFILES = *.log *.sum site.bak result.htm
-if ENABLE_GCOV
 CLEANFILES  += *.gcov *.gcno *.gcda gcov.log
 endif
 

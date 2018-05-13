@@ -78,15 +78,9 @@ check-syntax:
 if ENABLE_GCOV
 AM_CFLAGS += @GCOV_CFLAGS@
 LIBS      += @GCOV_LIBS@
-#  -e's,$(EXEEXT),,'
 gcov: $(check_PROGRAMS) check
 	-test -f gcov.log && rm gcov.log
-	-for f in $(check_PROGRAMS); do \
-	  c="`echo $$f|sed -e's,.exe,,'`"; \
-	  test -e $$c.c -a -e $$c.gcda && \
-	    echo $(GCOV) $$c.c && $(GCOV) $$c.c >>gcov.log; \
-	 done
-endif
-if ENABLE_GCOV
+	$(GCOV) *.gcno | tee -a $(builddir)/gcov.log
+
 CLEANFILES  += *.gcov *.gcno *.gcda gcov.log
 endif

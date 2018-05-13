@@ -57,12 +57,15 @@ if ENABLE_GCOV
 gcov: check
 	$(MAKE) -C test gcov
 	$(MAKE) -C src gcov
-	gcov2perl test/*/*.gcov src/*.gcov
+	$(MAKE) -C programs gcov
+	$(MAKE) -C examples gcov
+	gcov2perl test/*/*.gcov src/*.gcov programs/*.gcov examples/*.gcov
 	cover -no-gcov
 endif
 
 EXTRA_DIST = README README-alpha
 CLEANFILES = check-dwg.log
+MAINTAINERCLEANFILES  = *~ *.log cover_db .analysis
 
 maintainer-clean-local:
 	-rm -rf cover_db

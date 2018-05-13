@@ -61,6 +61,7 @@ TESTS = alive.test
 EXTRA_DIST = suffix.inc common.inc $(TESTS) cmp_dxf.pl
 CLEANFILES = {example,sample,Leader}_*.{bmp,ps,svg,dxf}
 CLEANFILES += {example,sample,Leader}_*rewrite.dwg
+MAINTAINERCLEANFILES  = *_flymake.[ch] *~ *.i
 
 .PHONY: man dsymutil check-syntax
 
@@ -84,6 +85,16 @@ dsymutil:
 check-syntax:
 	test -n "$(CHK_SOURCES)" && \
 	  $(COMPILE) -o /dev/null -S $(CHK_SOURCES)
+
+if ENABLE_GCOV
+AM_CFLAGS += @GCOV_CFLAGS@
+LIBS      += @GCOV_LIBS@
+gcov: $(CHECK)
+	-test -f gcov.log && rm gcov.log
+	$(GCOV) *.gcno | tee -a $(builddir)/gcov.log
+
+CLEANFILES  += *.gcov *.gcno *.gcda gcov.log
+endif
 
 #TODO: alive.test => runtests with VALGRIND support
 #@VALGRIND_CHECK_RULES@
