@@ -57,7 +57,7 @@ run ()
     # writers can hang
     if test $bprog = dwgrewrite -o $bprog = dwgwrite -o $bprog = dxf2dwg
     then
-        if test -n $MINGW; then
+        if test x$MINGW != x; then
             OLDTESTPROG=$TESTPROG
             TESTPROG=echo
         else
@@ -77,7 +77,7 @@ run ()
             problems=$(expr 1 + $problems)
         fi
     fi
-    if test -n $MINGW -a -n $OLDTESTPROG; then
+    if test x$MINGW != x -a x$OLDTESTPROG != x; then
         TESTPROG=$OLDTESTPROG
     fi
 }
@@ -104,7 +104,7 @@ done
 # check generated DXF's against original DXF's
 # skip the run part if dwg2dxf is part of bin_PROGRAMS (i.e. being installed)
 # only in programs, not examples:
-if [ -f cmp_dxf.pl ]; then
+if test -f cmp_dxf.pl ; then
     for dwg in $DATA; do
         base=$(basename $dwg .dwg)
         run dwg2dxf $dwg
@@ -112,7 +112,7 @@ if [ -f cmp_dxf.pl ]; then
     done
 fi
 
-if [ 0 = $problems ] ; then
+if test x0 = x$problems ; then
     exit 0
 else
     echo `basename $0`: $problems failures
