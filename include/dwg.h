@@ -4190,7 +4190,13 @@ Dwg_Object*
 dwg_next_object(const Dwg_Object* obj);
 
 Dwg_Object*
-dwg_ref_get_object(const Dwg_Object_Ref* ref);
+dwg_ref_get_object(const Dwg_Data* dwg, const Dwg_Object_Ref* ref);
+
+Dwg_Object *
+dwg_resolve_handle(const Dwg_Data* dwg, const unsigned long int absref);
+
+int
+dwg_resolve_handleref(Dwg_Object_Ref *ref, const Dwg_Object * obj);
 
 Dwg_Object*
 get_first_owned_object(const Dwg_Object* hdr_obj, Dwg_Object_BLOCK_HEADER* hdr);

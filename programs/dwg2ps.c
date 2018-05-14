@@ -95,7 +95,7 @@ create_postscript(Dwg_Data *dwg, char *output)
 
   /* Mark the origin with a crossed circle
    */
-#	define H 2000
+#define H 2000
   PS_circle(ps, 0, 0, H);
   PS_moveto(ps, 0, H);
   PS_lineto(ps, 0, -H);
@@ -122,6 +122,30 @@ create_postscript(Dwg_Data *dwg, char *output)
           PS_moveto(ps, line->start.x, line->start.y);
           PS_lineto(ps, line->end.x, line->end.y);
           PS_stroke(ps);
+        }
+      else if (obj->type == DWG_TYPE_POLYLINE_2D)
+        {
+          Dwg_Entity_POLYLINE_2D* pline;
+          Dwg_Entity_VERTEX_2D *vertex;
+
+          pline = obj->tio.entity->tio.POLYLINE_2D;
+          if (dwg->header.version >= R_2004)
+            {
+              for (int i=0; i<pline->owned_obj_count; i++)
+                {
+                  vertex = (Dwg_Entity_VERTEX_2D *)
+                    dwg_ref_get_object(dwg, pline->vertex[i]);
+                  if (vertex)
+                    {
+                      //TODO: width, bulge, tangent_dir
+                      if (i == 0)
+                        PS_moveto(ps, vertex->point.x, vertex->point.y);
+                      else
+                        PS_lineto(ps, vertex->point.x, vertex->point.y);
+                      PS_stroke(ps);
+                    }
+                }
+            }
         }
     }
 

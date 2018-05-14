@@ -86,12 +86,6 @@ section_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
  * Private functions
  */
 
-static Dwg_Object *
-dwg_resolve_handle(Dwg_Data* dwg, unsigned long int handle);
-
-static int
-dwg_resolve_handleref(Dwg_Object_Ref *ref, Dwg_Object * obj);
-
 static int
 resolve_objectref_vector(Bit_Chain* dat, Dwg_Data * dwg);
 
@@ -2619,60 +2613,6 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
     }
 
   return 0;
-}
-
-/**
- * Find a pointer to an object given it's id (handle)
- */
-static Dwg_Object *
-dwg_resolve_handle(Dwg_Data * dwg, long unsigned int absref)
-{
-  //TODO hash table? this is linear search, absref's are unsorted.
-  long unsigned int i;
-  for (i = 0; i < dwg->num_objects; i++)
-    {
-      if (dwg->object[i].handle.value == absref)
-        {
-          return &dwg->object[i];
-        }
-    }
-  LOG_WARN("Object not found: %lu in %ld objects", absref, dwg->num_objects)
-  return NULL;
-}
-
-static int
-dwg_resolve_handleref(Dwg_Object_Ref *ref, Dwg_Object * obj)
-{
-  /*
-   * With TYPEDOBJHANDLE 2-5 the code indicates the type of ownership.
-   * With OFFSETOBJHANDLE >5 the handle is stored as an offset from some other handle.
-   */
- switch (ref->handleref.code)
-    {
-    case 0x06:
-      ref->absolute_ref = (obj->handle.value + 1);
-      break;
-    case 0x08:
-      ref->absolute_ref = (obj->handle.value - 1);
-      break;
-    case 0x0A:
-      ref->absolute_ref = (obj->handle.value + ref->handleref.value);
-      break;
-    case 0x0C:
-      ref->absolute_ref = (obj->handle.value - ref->handleref.value);
-      break;
-    case 2: case 3: case 4: case 5:
-      ref->absolute_ref = ref->handleref.value;
-      break;
-    case 0: // ignore?
-      ref->absolute_ref = ref->handleref.value;
-      break;
-    default:
-      ref->absolute_ref = ref->handleref.value;
-      LOG_WARN("Invalid handle pointer code %d", ref->handleref.code);
-      return 0;
-    }
-  return 1;
 }
 
 Dwg_Object_Ref *
