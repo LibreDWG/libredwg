@@ -1,4 +1,4 @@
-/*****************************************************************************/
+ /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
 /*  Copyright (C) 2018 Free Software Foundation, Inc.                        */
@@ -11,7 +11,7 @@
 /*****************************************************************************/
 
 /*
- * out_dxf.c: write as Ascii DXF
+ * in_dxf.c: read ascii DXF
  * written by Reini Urban
  */
 
@@ -24,7 +24,7 @@
 #include "common.h"
 #include "bits.h"
 #include "dwg.h"
-#include "out_dxf.h"
+#include "in_dxf.h"
 
 #define DWG_LOGLEVEL DWG_LOGLEVEL_NONE
 #include "logging.h"
@@ -33,16 +33,16 @@
 static unsigned int cur_ver = 0;
 static char buf[4096];
 
-// exported
-const char* dxf_codepage (int code, Dwg_Data* dwg);
-
 // imported
+extern const char *
+dxf_format (int code);
 extern void
 obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 
-// private
+//internal
 static void
 dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
+
 
 /*--------------------------------------------------------------------------------
  * MACROS
@@ -694,7 +694,7 @@ dwg_dxf_variable_type(Dwg_Data * dwg, Bit_Chain *dat, Dwg_Object* obj)
   return 0;
 }
 
-void
+static void
 dwg_dxf_object(Bit_Chain *dat, Dwg_Object *obj)
 {
 
@@ -984,117 +984,36 @@ dwg_dxf_object(Bit_Chain *dat, Dwg_Object *obj)
 static void
 dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj)
 {
-  Dwg_Object_Entity *ent;
-  //Dwg_Data *dwg = obj->parent;
-  Dwg_Object_Entity *_obj;
-  int i;
-  long unsigned int vcount = 0;
-  ent = obj->tio.entity;
-  _obj = ent;
-
-  #include "common_entity_handle_data.spec"
-}
-
-const char *
-dxf_format (int code)
-{
-  if (0 <= code && code < 5)
-    return "%s";
-  if (code == 5 || code == -5)
-    return "%X";
-  if (5 < code && code < 10)
-    return "%s";
-  if (code < 60)
-    return "%-16.15g";
-  if (code < 80)
-    return "%6i";
-  if (89 < code && code < 100)
-    return "%9li";
-  if (code == 100)
-    return "%s";
-  if (code == 102)
-    return "%s";
-  if (code == 105)
-    return "%X";
-  if (105 < code && code < 148)
-    return "%-16.15g";
-  if (169 < code && code < 180)
-    return "%6i";
-  if (269 < code && code < 300)
-    return "%6i";
-  if (299 < code && code < 320)
-    return "%s";
-  if (319 < code && code < 370)
-    return "%X";
-  if (369 < code && code < 390)
-    return "%6i";
-  if (389 < code && code < 400)
-    return "%X";
-  if (399 < code && code < 410)
-    return "%6i";
-  if (409 < code && code < 420)
-    return "%s";
-  if (code == 999)
-    return "%s";
-  if (999 < code && code < 1010)
-    return "%s";
-  if (1009 < code && code < 1060)
-    return "%-16.15g";
-  if (1059 < code && code < 1071)
-    return "%6i";
-  if (code == 1071)
-    return "%9li";
-
-  return "(unknown code)";
-}
-
-const char* dxf_codepage (int code, Dwg_Data* dwg)
-{
-  if (code == 30 || code == 0)
-    return "ANSI_1252";
-  else if (code == 29)
-    return "ANSI_1251";
-  else if (dwg->header.version >= R_2007)
-    return "UTF-8"; // dwg internally: UCS-16, for DXF: UTF-8
-  else
-    return "ANSI_1252";
+  (void)dat; (void)obj;
 }
 
 // see https://www.autodesk.com/techpubs/autocad/acad2000/dxf/header_section_group_codes_dxf_02.htm
-void
-dxf_header_write(Bit_Chain *dat, Dwg_Data* dwg)
+static int
+dxf_header_read(Bit_Chain *dat, Dwg_Data* dwg)
 {
   Dwg_Header_Variables* _obj = &dwg->header_vars;
   Dwg_Object* obj = NULL;
-  double ms;
   const int minimal = dwg->opts & 0x10;
-  const char* codepage = dxf_codepage(dwg->header.codepage, dwg);
+  double ms;
+  const char* codepage =
+    (dwg->header.codepage == 30 || dwg->header.codepage == 0)
+    ? "ANSI_1252"
+    : (dwg->header.version >= R_2007)
+      ? "UTF-8"
+      : "ANSI_1252";
 
-  if (dwg->header.codepage != 30 &&
-      dwg->header.codepage != 29 &&
-      dwg->header.codepage != 0 &&
-      dwg->header.version < R_2007) {
-    // some asian or eastern-european codepage
-    // see https://github.com/mozman/ezdxf/blob/master/docs/source/dxfinternals/fileencoding.rst
-    LOG_WARN("Unknown codepage %d, assuming ANSI_1252", dwg->header.codepage);
-  }
-
-  #include "header_variables_dxf.spec"
-
-  return;
+  return 0;
 }
 
-// only called since r2000
 static int
-dxf_classes_write (Bit_Chain *dat, Dwg_Data * dwg)
+dxf_classes_read (Bit_Chain *dat, Dwg_Data * dwg)
 {
   unsigned int i;
 
-  SECTION (CLASSES);
-  LOG_TRACE("num_classes: %u\n", dwg->num_classes);
+  SECTION(CLASSES);
   for (i=0; i < dwg->num_classes; i++)
     {
-      RECORD (CLASS);
+      RECORD(CLASS);
       VALUE_TV (dwg->dwg_class[i].dxfname, 1);
       VALUE_T (dwg->dwg_class[i].cppname, 2);
       VALUE_T (dwg->dwg_class[i].appname, 3);
@@ -1111,7 +1030,7 @@ dxf_classes_write (Bit_Chain *dat, Dwg_Data * dwg)
 }
 
 static int
-dxf_tables_write (Bit_Chain *dat, Dwg_Data * dwg)
+dxf_tables_read (Bit_Chain *dat, Dwg_Data * dwg)
 {
   (void)dwg;
 
@@ -1124,7 +1043,7 @@ dxf_tables_write (Bit_Chain *dat, Dwg_Data * dwg)
 }
 
 static int
-dxf_blocks_write (Bit_Chain *dat, Dwg_Data * dwg)
+dxf_blocks_read (Bit_Chain *dat, Dwg_Data * dwg)
 {
   (void)dwg;
 
@@ -1135,7 +1054,7 @@ dxf_blocks_write (Bit_Chain *dat, Dwg_Data * dwg)
 }
 
 static int
-dxf_entities_write (Bit_Chain *dat, Dwg_Data * dwg)
+dxf_entities_read (Bit_Chain *dat, Dwg_Data * dwg)
 {
   (void)dwg;
 
@@ -1146,7 +1065,7 @@ dxf_entities_write (Bit_Chain *dat, Dwg_Data * dwg)
 }
 
 static int
-dxf_objects_write (Bit_Chain *dat, Dwg_Data * dwg)
+dxf_objects_read (Bit_Chain *dat, Dwg_Data * dwg)
 {
   (void)dwg;
 
@@ -1156,11 +1075,8 @@ dxf_objects_write (Bit_Chain *dat, Dwg_Data * dwg)
   return 0;
 }
 
-//TODO: Beware, there's also a new ACDSDATA section, with ACDSSCHEMA elements
-// and the Thumbnail_Data
-
 static int
-dxf_preview_write (Bit_Chain *dat, Dwg_Data * dwg)
+dxf_preview_read (Bit_Chain *dat, Dwg_Data * dwg)
 {
   (void)dat; (void)dwg;
   //...
@@ -1168,44 +1084,42 @@ dxf_preview_write (Bit_Chain *dat, Dwg_Data * dwg)
 }
 
 int
-dwg_write_dxf(Bit_Chain *dat, Dwg_Data * dwg)
+dwg_read_dxf(Bit_Chain *dat, Dwg_Data * dwg)
 {
   const int minimal = dwg->opts & 0x10;
   struct Dwg_Header *obj = &dwg->header;
 
-  VALUE_TV(PACKAGE_STRING, 999);
+  //VALUE(999, PACKAGE_STRING);
 
   // A minimal header requires only $ACADVER, $HANDSEED, and then ENTITIES
   // see https://pythonhosted.org/ezdxf/dxfinternals/filestructure.html
-  SINCE(R_13)
-  {
-    dxf_header_write (dat, dwg);
+  dxf_header_read (dat, dwg);
+  if (dwg->header.version < R_13)
+    goto fail;
 
-    SINCE(R_2000) {
-      if (dxf_classes_write (dat, dwg))
-        goto fail;
-    }
-
-    if (dxf_tables_write (dat, dwg))
-      goto fail;
-
-    if (dxf_blocks_write (dat, dwg))
+  SINCE(R_2000) {
+    if (dxf_classes_read (dat, dwg))
       goto fail;
   }
 
-  if (dxf_entities_write (dat, dwg))
+  if (dxf_tables_read (dat, dwg))
+    goto fail;
+
+  if (dxf_blocks_read (dat, dwg))
+    goto fail;
+
+  if (dxf_entities_read (dat, dwg))
     goto fail;
 
   SINCE(R_13) {
-    if (dxf_objects_write (dat, dwg))
+    if (dxf_objects_read (dat, dwg))
       goto fail;
   }
 
   if (dwg->header.version >= R_2000 && !minimal) {
-    if (dxf_preview_write (dat, dwg))
+    if (dxf_preview_read (dat, dwg))
       goto fail;
   }
-  RECORD(EOF);
 
   return 0;
  fail:

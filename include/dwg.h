@@ -4129,75 +4129,78 @@ typedef struct _dwg_struct
  */
 
 int
-dwg_read_file(char *filename, Dwg_Data * dwg);
+dwg_read_file(const char *filename, Dwg_Data * dwg);
+int
+dxf_read_file(const char *filename, Dwg_Data * dwg);
 
 #ifdef USE_WRITE
 int
-dwg_write_file(char *filename, Dwg_Data * dwg_data);
+dwg_write_file(const char *filename, const Dwg_Data * dwg);
 #endif
 
 unsigned char*
-dwg_bmp(Dwg_Data *, BITCODE_RL *);
+dwg_bmp(const Dwg_Data *, BITCODE_RL *);
 
 double
-dwg_model_x_min(Dwg_Data *);
+dwg_model_x_min(const Dwg_Data *);
 double
-dwg_model_x_max(Dwg_Data *);
+dwg_model_x_max(const Dwg_Data *);
 double
-dwg_model_y_min(Dwg_Data *);
+dwg_model_y_min(const Dwg_Data *);
 double
-dwg_model_y_max(Dwg_Data *);
+dwg_model_y_max(const Dwg_Data *);
 double
-dwg_model_z_min(Dwg_Data *);
+dwg_model_z_min(const Dwg_Data *);
 double
-dwg_model_z_max(Dwg_Data *);
+dwg_model_z_max(const Dwg_Data *);
 double
-dwg_page_x_min(Dwg_Data *);
+dwg_page_x_min(const Dwg_Data *);
 double
-dwg_page_x_max(Dwg_Data *);
+dwg_page_x_max(const Dwg_Data *);
 double
-dwg_page_y_min(Dwg_Data *);
+dwg_page_y_min(const Dwg_Data *);
 double
-dwg_page_y_max(Dwg_Data *);
+dwg_page_y_max(const Dwg_Data *);
 
 unsigned int
-dwg_get_layer_count(Dwg_Data *);
+dwg_get_layer_count(const Dwg_Data *);
 
 Dwg_Object_LAYER**
-dwg_get_layers(Dwg_Data *);
+dwg_get_layers(const Dwg_Data *);
 
 long unsigned int
-dwg_get_object_count(Dwg_Data *dwg);
+dwg_get_object_count(const Dwg_Data *dwg);
 
 long unsigned int
-dwg_get_object_object_count(Dwg_Data *dwg);
+dwg_get_object_object_count(const Dwg_Data *dwg);
 
 int
-dwg_class_is_entity(Dwg_Class *klass);
+dwg_class_is_entity(const Dwg_Class *klass);
 
 long unsigned int
-dwg_get_entity_count(Dwg_Data *);
+dwg_get_entity_count(const Dwg_Data *);
 
 Dwg_Object_Entity **
-dwg_get_entities(Dwg_Data *);
+dwg_get_entities(const Dwg_Data *);
 
 Dwg_Object_LAYER *
-dwg_get_entity_layer(Dwg_Object_Entity *);
+dwg_get_entity_layer(const Dwg_Object_Entity *);
 
 Dwg_Object*
-dwg_next_object(Dwg_Object* obj);
+dwg_next_object(const Dwg_Object* obj);
 
 Dwg_Object*
-dwg_ref_get_object(Dwg_Object_Ref* ref);
+dwg_ref_get_object(const Dwg_Object_Ref* ref);
 
 Dwg_Object*
-get_first_owned_object(Dwg_Object* hdr_obj, Dwg_Object_BLOCK_HEADER* hdr);
+get_first_owned_object(const Dwg_Object* hdr_obj, Dwg_Object_BLOCK_HEADER* hdr);
 
 Dwg_Object*
-get_next_owned_object(Dwg_Object* hdr_obj, Dwg_Object* current, Dwg_Object_BLOCK_HEADER* hdr);
+get_next_owned_object(const Dwg_Object* hdr_obj, const Dwg_Object* current,
+                      Dwg_Object_BLOCK_HEADER* hdr);
 
 Dwg_Section_Type
-dwg_section_type(DWGCHAR *wname);
+dwg_section_type(const DWGCHAR *wname);
 
 void
 dwg_free(Dwg_Data * dwg);

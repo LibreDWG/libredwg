@@ -11,7 +11,7 @@
 /*****************************************************************************/
 
 /*
- * encode.h: encoding function prototypes
+ * encode.h: encoding function prototypes, write from dwg to dat buffer.
  * written by Felipe Castro
  * modified by Felipe Corrêa da Silva Sances
  * modified by Rodrigo Rodrigues da Silva

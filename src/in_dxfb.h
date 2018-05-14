@@ -22,6 +22,5 @@
 #include "bits.h"
 
 int  dwg_read_dxfb(Bit_Chain *dat, Dwg_Data* dwg);
-void dwg_dxfb_object(Bit_Chain *dat, Dwg_Object *obj);
 
 #endif

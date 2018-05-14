@@ -32,6 +32,8 @@
 #include "decode.h"
 #include "dwg.h"
 #include "encode.h"
+#include "in_dxf.h"
+#include "in_dxfb.h"
 #include "free.h"
 
 /* The logging level per .o */
@@ -55,7 +57,7 @@ static bool env_var_checked_p;
  * and then either read from dat, or set to a default.
  */
 int
-dwg_read_file(char *filename, Dwg_Data * dwg_data)
+dwg_read_file(const char *filename, Dwg_Data * dwg)
 {
   FILE *fp;
   struct stat attrib;
@@ -85,9 +87,9 @@ dwg_read_file(char *filename, Dwg_Data * dwg_data)
 
   /* Load whole file into memory
    */
-  loglevel = dwg_data->opts;
-  memset(dwg_data, 0, sizeof(Dwg_Data));
-  dwg_data->opts = loglevel;
+  loglevel = dwg->opts;
+  memset(dwg, 0, sizeof(Dwg_Data));
+  dwg->opts = loglevel;
   memset(&bit_chain, 0, sizeof(Bit_Chain));
   bit_chain.size = attrib.st_size;
   bit_chain.chain = (unsigned char *) calloc(1, bit_chain.size);
@@ -112,7 +114,7 @@ dwg_read_file(char *filename, Dwg_Data * dwg_data)
   fclose(fp);
 
   /* Decode the dwg structure */
-  if (dwg_decode(&bit_chain, dwg_data))
+  if (dwg_decode(&bit_chain, dwg))
     {
       LOG_ERROR("Failed to decode file: %s\n", filename)
       free(bit_chain.chain);
@@ -129,31 +131,118 @@ dwg_read_file(char *filename, Dwg_Data * dwg_data)
   return 0;
 }
 
+/** dxf_read_file
+ * returns 0 on success.
+ *
+ * detects binary or ascii file.
+ * everything in dwg is cleared
+ * and then either read from dat, or set to a default.
+ */
+int
+dxf_read_file(const char *filename, Dwg_Data * dwg)
+{
+  int error;
+  FILE *fp;
+  struct stat attrib;
+  size_t size;
+  Bit_Chain dat;
+
+  if (stat(filename, &attrib))
+    {
+      LOG_ERROR("File not found: %s\n", filename)
+      return -1;
+    }
+  if (!(S_ISREG (attrib.st_mode)
+#ifndef _WIN32
+        || S_ISLNK (attrib.st_mode)
+#endif
+        ))
+    {
+      LOG_ERROR("Error: %s\n", filename)
+      return -1;
+    }
+  fp = fopen(filename, "rb");
+  if (!fp)
+    {
+      LOG_ERROR("Could not open file: %s\n", filename)
+      return -1;
+    }
+
+  /* Load whole file into memory
+   */
+  loglevel = dwg->opts;
+  memset(dwg, 0, sizeof(Dwg_Data));
+  dwg->opts = loglevel;
+  memset(&dat, 0, sizeof(Bit_Chain));
+  dat.size = attrib.st_size;
+  dat.chain = (unsigned char *) calloc(1, dat.size);
+  if (!dat.chain)
+    {
+      LOG_ERROR("Not enough memory.\n")
+      fclose(fp);
+      return -1;
+    }
+
+  size = fread(dat.chain, sizeof(char), dat.size, fp);
+  if (size != dat.size)
+    {
+      LOG_ERROR("Could not read the entire file (%lu out of %lu): %s\n",
+          (long unsigned int) size, dat.size, filename)
+      fclose(fp);
+      free(dat.chain);
+      dat.chain = NULL;
+      dat.size = 0;
+      return -1;
+    }
+  fclose(fp);
+
+  /* See if ascii or binary */
+  if (!memcmp(dat.chain, "AutoCAD Binary DXF", sizeof("AutoCAD Binary DXF")-1))
+    error = dwg_read_dxfb(&dat, dwg);
+  else
+    error = dwg_read_dxf(&dat, dwg);
+  
+  if (error)
+    {
+      LOG_ERROR("Failed to decode DXF file: %s\n", filename)
+      free(dat.chain);
+      dat.chain = NULL;
+      dat.size = 0;
+      return -1;
+    }
+
+  //TODO: does dwg hold any char* pointers to the dat or are they all copied?
+  free(dat.chain);
+  dat.chain = NULL;
+  dat.size = 0;
+
+  return 0;
+}
 
 /* if write support is enabled */
 #ifdef USE_WRITE
 
 int
-dwg_write_file(char *filename, Dwg_Data * dwg_data)
+dwg_write_file(const char *filename, const Dwg_Data * dwg)
 {
   FILE *fh;
   struct stat attrib;
-  Bit_Chain bit_chain;
+  Bit_Chain dat;
 
   assert(filename);
-  assert(dwg_data);
-  bit_chain.version = (Dwg_Version_Type)dwg_data->header.version;
-  bit_chain.from_version = (Dwg_Version_Type)dwg_data->header.from_version;
+  assert(dwg);
+  dat.version = (Dwg_Version_Type)dwg->header.version;
+  dat.from_version = (Dwg_Version_Type)dwg->header.from_version;
 
   // Encode the DWG struct
-  bit_chain.size = 0;
-  if (dwg_encode (dwg_data, &bit_chain))
+  dat.size = 0;
+  if (dwg_encode ((Dwg_Data *)dwg, &dat))
     {
       LOG_ERROR("Failed to encode datastructure.\n")
-      if (bit_chain.size > 0) {
-        free (bit_chain.chain);
-        bit_chain.chain = NULL;
-        bit_chain.size = 0;
+      if (dat.size > 0) {
+        free (dat.chain);
+        dat.chain = NULL;
+        dat.size = 0;
       }
       return -1;
     }
@@ -173,21 +262,21 @@ dwg_write_file(char *filename, Dwg_Data * dwg_data)
    
 
   // Write the data into the file
-  if (fwrite (bit_chain.chain, sizeof (char), bit_chain.size, fh) != bit_chain.size)
+  if (fwrite (dat.chain, sizeof (char), dat.size, fh) != dat.size)
     {
       LOG_ERROR("Failed to write data into the file: %s\n", filename)
       fclose (fh);
-      free (bit_chain.chain);
-      bit_chain.chain = NULL;
-      bit_chain.size = 0;
+      free (dat.chain);
+      dat.chain = NULL;
+      dat.size = 0;
       return -1;
     }
   fclose (fh);
 
-  if (bit_chain.size > 0) {
-    free (bit_chain.chain);
-    bit_chain.chain = NULL;
-    bit_chain.size = 0;
+  if (dat.size > 0) {
+    free (dat.chain);
+    dat.chain = NULL;
+    dat.size = 0;
   }
 
   return 0;
@@ -196,7 +285,7 @@ dwg_write_file(char *filename, Dwg_Data * dwg_data)
 
 /* IMAGE DATA (R13C3+) */
 unsigned char *
-dwg_bmp(Dwg_Data *dwg, BITCODE_RL *size)
+dwg_bmp(const Dwg_Data *dwg, BITCODE_RL *size)
 {
   BITCODE_RC i, num_pictures, code;
   int plene;
@@ -270,77 +359,77 @@ dwg_bmp(Dwg_Data *dwg, BITCODE_RL *size)
 }
 
 double
-dwg_model_x_min(Dwg_Data *dwg)
+dwg_model_x_min(const Dwg_Data *dwg)
 {
   assert(dwg);
   return dwg->header_vars.EXTMIN.x;
 }
 
 double
-dwg_model_x_max(Dwg_Data *dwg)
+dwg_model_x_max(const Dwg_Data *dwg)
 {
   assert(dwg);
   return dwg->header_vars.EXTMAX.x;
 }
 
 double
-dwg_model_y_min(Dwg_Data *dwg)
+dwg_model_y_min(const Dwg_Data *dwg)
 {
   assert(dwg);
   return dwg->header_vars.EXTMIN.y;
 }
 
 double
-dwg_model_y_max(Dwg_Data *dwg)
+dwg_model_y_max(const Dwg_Data *dwg)
 {
   assert(dwg);
   return dwg->header_vars.EXTMAX.y;
 }
 
 double
-dwg_model_z_min(Dwg_Data *dwg)
+dwg_model_z_min(const Dwg_Data *dwg)
 {
   assert(dwg);
   return dwg->header_vars.EXTMIN.z;
 }
 
 double
-dwg_model_z_max(Dwg_Data *dwg)
+dwg_model_z_max(const Dwg_Data *dwg)
 {
   assert(dwg);
   return dwg->header_vars.EXTMAX.z;
 }
 
 double
-dwg_page_x_min(Dwg_Data *dwg)
+dwg_page_x_min(const Dwg_Data *dwg)
 {
   assert(dwg);
   return dwg->header_vars.EXTMIN.x;
 }
 
 double
-dwg_page_x_max(Dwg_Data *dwg)
+dwg_page_x_max(const Dwg_Data *dwg)
 {
   assert(dwg);
   return dwg->header_vars.PEXTMAX.x;
 }
 
 double
-dwg_page_y_min(Dwg_Data *dwg)
+dwg_page_y_min(const Dwg_Data *dwg)
 {
   assert(dwg);
   return dwg->header_vars.PEXTMIN.y;
 }
 
 double
-dwg_page_y_max(Dwg_Data *dwg)
+dwg_page_y_max(const Dwg_Data *dwg)
 {
   assert(dwg);
   return dwg->header_vars.PEXTMAX.y;
 }
 
 unsigned int
-dwg_get_layer_count(Dwg_Data *dwg)
+dwg_get_layer_count(const Dwg_Data *dwg)
 {
   assert(dwg);
   assert(dwg->layer_control->tio.object);
@@ -348,7 +437,7 @@ dwg_get_layer_count(Dwg_Data *dwg)
 }
 
 Dwg_Object_LAYER **
-dwg_get_layers(Dwg_Data *dwg)
+dwg_get_layers(const Dwg_Data *dwg)
 {
   unsigned int i;
   Dwg_Object_LAYER ** layers;
@@ -365,28 +454,28 @@ dwg_get_layers(Dwg_Data *dwg)
 }
 
 long unsigned int
-dwg_get_object_count(Dwg_Data *dwg)
+dwg_get_object_count(const Dwg_Data *dwg)
 {
   assert(dwg);
   return dwg->num_objects;
 }
 
 long unsigned int
-dwg_get_object_object_count(Dwg_Data *dwg)
+dwg_get_object_object_count(const Dwg_Data *dwg)
 {
   assert(dwg);
   return dwg->num_objects - dwg->num_entities;
 }
 
 long unsigned int
-dwg_get_entity_count(Dwg_Data *dwg)
+dwg_get_entity_count(const Dwg_Data *dwg)
 {
   assert(dwg);
   return dwg->num_entities;
 }
 
 Dwg_Object_Entity **
-dwg_get_entities(Dwg_Data *dwg)
+dwg_get_entities(const Dwg_Data *dwg)
 {
   long unsigned int i, ent_count = 0;
   Dwg_Object_Entity ** entities;
@@ -406,13 +495,13 @@ dwg_get_entities(Dwg_Data *dwg)
 }
 
 Dwg_Object_LAYER *
-dwg_get_entity_layer(Dwg_Object_Entity * ent)
+dwg_get_entity_layer(const Dwg_Object_Entity * ent)
 {
   return ent->layer->obj->tio.object->tio.LAYER;
 }
 
 Dwg_Object*
-dwg_next_object(Dwg_Object* obj)
+dwg_next_object(const Dwg_Object* obj)
 {
   if ((obj->index+1) > (obj->parent->num_objects-1))
     return NULL;
@@ -420,13 +509,13 @@ dwg_next_object(Dwg_Object* obj)
 }
 
 Dwg_Object*
-dwg_ref_get_object(Dwg_Object_Ref* ref)
+dwg_ref_get_object(const Dwg_Object_Ref* ref)
 {
   return ref->obj ? ref->obj : NULL;
 }
 
 Dwg_Object*
-get_first_owned_object(Dwg_Object* hdr_obj, Dwg_Object_BLOCK_HEADER* hdr)
+get_first_owned_object(const Dwg_Object* hdr_obj, Dwg_Object_BLOCK_HEADER* hdr)
 {
   unsigned int version = hdr_obj->parent->header.version;
 
@@ -449,7 +538,7 @@ get_first_owned_object(Dwg_Object* hdr_obj, Dwg_Object_BLOCK_HEADER* hdr)
 }
 
 Dwg_Object*
-get_next_owned_object(Dwg_Object* hdr_obj, Dwg_Object* current,
+get_next_owned_object(const Dwg_Object* hdr_obj, const Dwg_Object* current,
                       Dwg_Object_BLOCK_HEADER* hdr)
 {
   unsigned int version = hdr_obj->parent->header.version;
@@ -472,19 +561,21 @@ get_next_owned_object(Dwg_Object* hdr_obj, Dwg_Object* current,
 }
 
 int
-dwg_class_is_entity(Dwg_Class *klass)
+dwg_class_is_entity(const Dwg_Class *klass)
 {
   return klass->item_class_id == 0x1f2;
 }
 
 Dwg_Section_Type
-dwg_section_type(DWGCHAR *wname)
+dwg_section_type(const DWGCHAR *wname)
 {
+  DWGCHAR *wp;
   char name[24];
   uint16_t c;
   int i = 0;
 
-  while ((c = *wname++)) {
+  wp = (DWGCHAR *)wname;
+  while ((c = *wp++)) {
     name[i++] = (char)(c & 0xff);
   }
   name[i] = '\0';

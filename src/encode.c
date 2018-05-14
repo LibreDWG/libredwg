@@ -331,7 +331,7 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
   for (rcount4=0; (long)rcount4<(long)_obj->times; rcount4++)
 
 #define DWG_ENTITY(token) \
-static void dwg_encode_##token (Bit_Chain* dat, Dwg_Object* obj)	\
+static void dwg_encode_##token (Bit_Chain* dat, Dwg_Object* obj) \
 { \
   long vcount, rcount, rcount2, rcount3, rcount4; \
   Dwg_Data* dwg = obj->parent; \
@@ -382,11 +382,14 @@ static int
 encode_preR13(Dwg_Data* dwg, Bit_Chain* dat);
 
 static int
-dwg_encode_entity(Dwg_Object* obj, Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat);
+dwg_encode_entity(Dwg_Object* obj,
+                  Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat);
 static int
-dwg_encode_object(Dwg_Object* obj, Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat);
+dwg_encode_object(Dwg_Object* obj,
+                  Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat);
 static void
-dwg_encode_common_entity_handle_data(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj);
+dwg_encode_common_entity_handle_data(Bit_Chain* dat, Bit_Chain* hdl_dat,
+                                     Dwg_Object* obj);
 static void
 dwg_encode_header_variables(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
                             Dwg_Data* dwg);
@@ -1698,8 +1701,8 @@ dwg_encode_add_object(Dwg_Object* obj, Bit_Chain* dat,
    See DWG_SUPERTYPE_ENTITY in dwg_encode().
  */
 static int
-dwg_encode_entity(Dwg_Object* obj, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
-                  Bit_Chain* dat)
+dwg_encode_entity(Dwg_Object* obj,
+                  Bit_Chain* hdl_dat, Bit_Chain* str_dat, Bit_Chain* dat)
 {
   BITCODE_BS i;
   BITCODE_BL bitsize;
@@ -1812,7 +1815,8 @@ dwg_encode_entity(Dwg_Object* obj, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
 }
 
 static void
-dwg_encode_common_entity_handle_data(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj)
+dwg_encode_common_entity_handle_data(Bit_Chain* dat, Bit_Chain* hdl_dat,
+                                     Dwg_Object* obj)
 {
   Dwg_Object_Entity *ent;
   //Dwg_Data *dwg = obj->parent;
@@ -1854,8 +1858,8 @@ dwg_encode_handleref_with_code(Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Data* dw
    See DWG_SUPERTYPE_OBJECT in dwg_encode().
 */
 static int
-dwg_encode_object(Dwg_Object* obj, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
-                  Bit_Chain* dat)
+dwg_encode_object(Dwg_Object* obj,
+                  Bit_Chain* hdl_dat, Bit_Chain* str_dat, Bit_Chain* dat)
 {
   BITCODE_BS i, num_eed;
   Dwg_Object_Object* ord = obj->tio.object;
