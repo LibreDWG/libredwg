@@ -126,7 +126,7 @@ main(int argc, char *argv[])
             fmt = (char*)"json";
           else
           if (strstr(infile, ".dxf") || strstr(infile, ".DXF"))
-            fmt = (char*)"dxf";
+            fmt = (char*)"dxf"; // or dxfb
           else
           if (strstr(infile, ".dxfb") || strstr(infile, ".DXFB"))
             fmt = (char*)"dxfb";
@@ -140,17 +140,18 @@ main(int argc, char *argv[])
   //REQUIRE_INPUT_FILE_ARG (argc);
   dwg.opts = opts;
   if (infile)
-    dat.fh = fopen(infile, "w");
+    dat.fh = fopen(infile, "r");
   else
     dat.fh = stdin;
 
   /*if (!strcasecmp(fmt, "json"))
     error = dwg_read_json(&dat, &dwg);
-  else if (!strcasecmp(fmt, "dxfb"))
+  else */
+  if (!strcasecmp(fmt, "dxfb"))
     error = dwg_read_dxfb(&dat, &dwg);
   else if (!strcasecmp(fmt, "dxf"))
-    error = dwg_read_dxf(&dat, &dwg);
-  else */ {
+    error = dxf_read_file(infile, &dwg); // ascii or binary
+  else {
     fprintf(stderr, "Invalid input format %s\n", fmt);
     if (argc)
       fclose(dat.fh);
@@ -160,6 +161,8 @@ main(int argc, char *argv[])
     fclose(dat.fh);
 
   //dat.version = dat.from_version = dwg.header.version;
+  if (!outfile)
+    outfile = suffix (infile, "dwg");
   error = dwg_write_file(outfile, &dwg);
   if (error)
     printf("\nERROR\n");
