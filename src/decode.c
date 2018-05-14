@@ -82,6 +82,11 @@ obj_string_stream(Bit_Chain *dat, Dwg_Object *obj, Bit_Chain *str);
 extern void
 section_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 
+extern Dwg_Object *
+dwg_resolve_handle(const Dwg_Data* dwg, const unsigned long int absref);
+extern int
+dwg_resolve_handleref(Dwg_Object_Ref *ref, const Dwg_Object * obj);
+
 /*------------------------------------------------------------------------------
  * Private functions
  */

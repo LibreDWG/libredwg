@@ -46,6 +46,12 @@ static bool env_var_checked_p;
 #endif  /* USE_TRACING */
 #include "logging.h"
 
+// used by decode.c:
+Dwg_Object *
+dwg_resolve_handle(const Dwg_Data * dwg, const long unsigned int absref);
+int
+dwg_resolve_handleref(Dwg_Object_Ref *ref, const Dwg_Object * obj);
+
 /*------------------------------------------------------------------------------
  * Public functions
  */
@@ -519,6 +525,24 @@ dwg_ref_get_object(const Dwg_Data* dwg, const Dwg_Object_Ref* ref)
   // Without obj we don't get an absolute_ref from relative OFFSETOBJHANDLE handle types.
   if (ref->handleref.code < 6 &&
       dwg_resolve_handleref((Dwg_Object_Ref*)ref, NULL))
+    {
+      return dwg_resolve_handle(dwg, ref->absolute_ref);
+    }
+  else
+    return NULL;
+}
+
+/**
+ * Find an object given its handle and relative base object.
+ * OFFSETOBJHANDLE, handleref.code > 6.
+ */
+Dwg_Object*
+dwg_ref_get_object_relative(const Dwg_Data* dwg, const Dwg_Object_Ref* ref,
+                            const Dwg_Object* obj)
+{
+  if (ref->obj)
+    return ref->obj;
+  if (dwg_resolve_handleref((Dwg_Object_Ref*)ref, obj))
     {
       return dwg_resolve_handle(dwg, ref->absolute_ref);
     }
