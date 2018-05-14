@@ -28,6 +28,8 @@
 #include <libps/pslib.h>
 
 #include <dwg.h>
+#include "../src/common.h"
+//#include "../src/bits.h" //bit_convert_TU
 #include "suffix.inc"
 static int help(void);
 int verbosity(int argc, char **argv, int i, unsigned int *opts);
@@ -61,7 +63,7 @@ create_postscript(Dwg_Data *dwg, char *output)
   double scale_x;
   double scale_y;
   double scale;
-  long unsigned i;
+  unsigned long i;
   //FILE *fh;
   PSDoc *ps;
 
@@ -75,10 +77,11 @@ create_postscript(Dwg_Data *dwg, char *output)
       return;
     }
 
-  PS_set_info(ps, "Creator", "dwg_ps");
-  PS_set_info(ps, "Author", "LibreDWG example");
-  PS_set_info(ps, "Title", "DWG to Postscript example");
-  PS_set_info(ps, "Keywords", "dwg, postscript, conversion, CAD, plot");
+  PS_set_info(ps, "Creator", "dwg2ps " PACKAGE_VERSION);
+  //TODO LASTSAVEDBY
+  //PS_set_info(ps, "Author", bit_convert_TU(dwg->header_vars.LASTSAVEDBY));
+  PS_set_info(ps, "Title", output);
+  //PS_set_info(ps, "Keywords", "dwg, postscript, conversion, CAD, plot");
 
   /* First page: Model Space (?)
    */
@@ -89,13 +92,14 @@ create_postscript(Dwg_Data *dwg, char *output)
   scale = 25.4 / 72; // pt:mm
   PS_begin_page(ps, dx / scale, dy / scale);
   scale *= (scale_x > scale_y ? scale_x : scale_y);
-  PS_scale(ps, scale, scale);
-  PS_translate(ps, -dwg_model_x_min(dwg), -dwg_model_y_min(dwg));
-  //printf ("%f (%f, %f)\n", scale, scale_x, scale_y);
+  PS_scale(ps, (float)scale, (float)scale);
+  PS_translate(ps, (float)-dwg_model_x_min(dwg), (float)-dwg_model_y_min(dwg));
+  fprintf (stderr, "Limits: %f, %f\n", dx, dy);
+  fprintf (stderr, "Scale: %f (%f, %f)\n", scale, scale_x, scale_y);
 
   /* Mark the origin with a crossed circle
    */
-#define H 2000
+#define H 1
   PS_circle(ps, 0, 0, H);
   PS_moveto(ps, 0, H);
   PS_lineto(ps, 0, -H);
@@ -119,8 +123,8 @@ create_postscript(Dwg_Data *dwg, char *output)
         {
           Dwg_Entity_LINE* line;
           line = obj->tio.entity->tio.LINE;
-          PS_moveto(ps, line->start.x, line->start.y);
-          PS_lineto(ps, line->end.x, line->end.y);
+          PS_moveto(ps, (float)line->start.x, (float)line->start.y);
+          PS_lineto(ps, (float)line->end.x, (float)line->end.y);
           PS_stroke(ps);
         }
       else if (obj->type == DWG_TYPE_POLYLINE_2D)
@@ -131,21 +135,33 @@ create_postscript(Dwg_Data *dwg, char *output)
           pline = obj->tio.entity->tio.POLYLINE_2D;
           if (dwg->header.version >= R_2004)
             {
-              for (int i=0; i<pline->owned_obj_count; i++)
+              BITCODE_RL j;
+              for (j=0; i<pline->owned_obj_count; j++)
                 {
                   vertex = (Dwg_Entity_VERTEX_2D *)
-                    dwg_ref_get_object(dwg, pline->vertex[i]);
+                    dwg_ref_get_object(dwg, pline->vertex[j]);
                   if (vertex)
                     {
                       //TODO: width, bulge, tangent_dir
-                      if (i == 0)
-                        PS_moveto(ps, vertex->point.x, vertex->point.y);
+                      if (j == 0)
+                        PS_moveto(ps, (float)vertex->point.x, (float)vertex->point.y);
                       else
-                        PS_lineto(ps, vertex->point.x, vertex->point.y);
+                        PS_lineto(ps, (float)vertex->point.x, (float)vertex->point.y);
                       PS_stroke(ps);
                     }
                 }
             }
+        }
+      else if (obj->type == DWG_TYPE_ARC)
+        {
+          Dwg_Entity_ARC* arc = obj->tio.entity->tio.ARC;
+          PS_arc(ps, (float)arc->center.x, (float)arc->center.y, (float)arc->radius,
+                     (float)arc->start_angle, (float)arc->end_angle);
+        }
+      else if (obj->type == DWG_TYPE_CIRCLE)
+        {
+          Dwg_Entity_CIRCLE* cir = obj->tio.entity->tio.CIRCLE;
+          PS_circle(ps, (float)cir->center.x, (float)cir->center.y, (float)cir->radius);
         }
     }
 
