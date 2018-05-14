@@ -32,3 +32,4 @@
   Alex Papazoglou <papazoga> for his reed-solomon code (yet unused).
   Otherwise use rscode-1.3 by Henry Minsky <hqm@alum.mit.edu> which is GPLv3.
 
+* Add Windows Visual Studio support;
