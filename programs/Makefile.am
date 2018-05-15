@@ -79,7 +79,7 @@ man: $(bin_PROGRAMS) $(noinst_PROGRAMS)
 	$(COMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -E -o $@ $<
 
 dsymutil:
-	for e in $(bin_PROGRAMS); do dsymutil $$e; done
+	for e in $(bin_PROGRAMS) $(noinst_PROGRAMS); do dsymutil $$e; done
 
 # emacs flymake-mode
 check-syntax:
