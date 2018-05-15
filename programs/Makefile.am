@@ -23,15 +23,18 @@ LDADD   = $(top_builddir)/src/libredwg.la -lm
 bin_PROGRAMS = dwgread dwgbmp dwg2SVG
 # not yet ready
 noinst_PROGRAMS = dwg2dxf
+dist_man1_MANS = dwgread.1 dwgbmp.1 dwg2SVG.1
 
 if HAVE_LIBPS
 bin_PROGRAMS += dwg2ps
+dist_man1_MANS += dwg2ps.1
 dwg2ps_SOURCES = dwg2ps.c
 dwg2ps_LDADD = $(LDADD) -lps
 endif
 
 if USE_WRITE
 bin_PROGRAMS += dwgrewrite
+dist_man1_MANS += dwgrewrite.1
 # not yet ready
 noinst_PROGRAMS += dxf2dwg dwgwrite
 dwgrewrite_SOURCES = dwgrewrite.c
