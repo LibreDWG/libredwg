@@ -109,10 +109,9 @@ create_postscript(Dwg_Data *dwg, char *output)
 
   /* Iterate all entities
    */
-  Dwg_Object *obj;
   for (i = 0; i < dwg->num_objects; i++)
     {
-      obj = &dwg->object[i];
+      Dwg_Object *obj = &dwg->object[i];
       if (obj->supertype == DWG_SUPERTYPE_UNKNOWN) // unknown
         continue;
       if (obj->type == DWG_SUPERTYPE_OBJECT) // not entity

@@ -556,7 +556,7 @@ dwg_ref_get_object_relative(const Dwg_Data* dwg, const Dwg_Object_Ref* ref,
 Dwg_Object *
 dwg_resolve_handle(const Dwg_Data * dwg, const long unsigned int absref)
 {
-  // TODO hash table or bisect?
+  // TODO hash table or sorted
   // This is linear search, absref's are currently unsorted. encode sorts them.
   long unsigned int i;
   for (i = 0; i < dwg->num_objects; i++)
