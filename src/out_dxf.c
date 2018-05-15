@@ -350,6 +350,7 @@ dwg_dxf_##token (Bit_Chain *dat, Dwg_Object * obj) \
   int vcount, rcount, rcount2, rcount3, rcount4; \
   Dwg_Entity_##token *ent, *_obj;\
   Dwg_Object_Entity *_ent;\
+  RECORD(token);\
   LOG_INFO("Entity " #token ":\n")\
   _ent = obj->tio.entity;\
   _obj = ent = _ent->tio.token;\
@@ -367,6 +368,7 @@ dwg_dxf_ ##token (Bit_Chain *dat, Dwg_Object * obj) \
   int vcount, rcount, rcount2, rcount3, rcount4;\
   Bit_Chain *hdl_dat = dat;\
   Dwg_Object_##token *_obj;\
+  RECORD(token);\
   LOG_INFO("Object " #token ":\n")\
   _obj = obj->tio.object->tio.token;\
   LOG_TRACE("Object handle: %d.%d.%lu\n",\
@@ -810,8 +812,7 @@ dwg_dxf_object(Bit_Chain *dat, Dwg_Object *obj)
       break;
     case DWG_TYPE_3DSOLID:
       dwg_dxf__3DSOLID(dat, obj);
-      break; /* Check the type of the object
-              */
+      break; /* Check the type of the object */
     case DWG_TYPE_BODY:
       dwg_dxf_BODY(dat, obj);
       break;
@@ -900,7 +901,8 @@ dwg_dxf_object(Bit_Chain *dat, Dwg_Object *obj)
       dwg_dxf_GROUP(dat, obj);
       break;
     case DWG_TYPE_MLINESTYLE:
-      dwg_dxf_MLINESTYLE(dat, obj);
+      LOG_WARN("Skipping MLINESTYLE");
+      //dwg_dxf_MLINESTYLE(dat, obj);
       break;
     case DWG_TYPE_OLE2FRAME:
       dwg_dxf_OLE2FRAME(dat, obj);
@@ -1215,10 +1217,14 @@ dxf_blocks_write (Bit_Chain *dat, Dwg_Data * dwg)
 static int
 dxf_entities_write (Bit_Chain *dat, Dwg_Data * dwg)
 {
-  (void)dwg;
+  long unsigned int i;
 
   SECTION(ENTITIES);
-  //...
+  for (i=0; i<dwg->num_objects; i++)
+    {
+      if (dwg->object[i].supertype == DWG_SUPERTYPE_ENTITY)
+        dwg_dxf_object(dat, &dwg->object[i]);
+    }
   ENDSEC();
   return 0;
 }
@@ -1226,10 +1232,14 @@ dxf_entities_write (Bit_Chain *dat, Dwg_Data * dwg)
 static int
 dxf_objects_write (Bit_Chain *dat, Dwg_Data * dwg)
 {
-  (void)dwg;
+  long unsigned int i;
 
   SECTION(OBJECTS);
-  //...
+  for (i=0; i<dwg->num_objects; i++)
+    {
+      if (dwg->object[i].supertype == DWG_SUPERTYPE_OBJECT)
+        dwg_dxf_object(dat, &dwg->object[i]);
+    }
   ENDSEC();
   return 0;
 }
