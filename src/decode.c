@@ -151,7 +151,7 @@ dwg_decode(Bit_Chain * dat, Dwg_Data * dwg)
   char version[7];
 
   dwg->num_object_refs = 0;
-  dwg->num_layers = 0;
+  //dwg->num_layers = 0; // see now dwg->layer_control->num_entries
   dwg->num_entities = 0;
   dwg->num_objects = 0;
   dwg->num_classes = 0;
@@ -3680,6 +3680,8 @@ dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
       break;
     case DWG_TYPE_BLOCK_CONTROL:
       dwg_decode_BLOCK_CONTROL(dat, obj);
+      if (obj->tio.object->tio.BLOCK_CONTROL->num_entries)
+        dwg->block_control = obj->tio.object->tio.BLOCK_CONTROL;
       break;
     case DWG_TYPE_BLOCK_HEADER:
       dwg_decode_BLOCK_HEADER(dat, obj);
@@ -3688,39 +3690,49 @@ dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
        */
       break;
     case DWG_TYPE_LAYER_CONTROL:
-      //set LAYER_CONTROL object - helps keep track of layers
-      obj->parent->layer_control = obj;
       dwg_decode_LAYER_CONTROL(dat, obj);
+      if (obj->tio.object->tio.LAYER_CONTROL->num_entries)
+        dwg->layer_control = obj->tio.object->tio.LAYER_CONTROL;
       break;
     case DWG_TYPE_LAYER:
       dwg_decode_LAYER(dat, obj);
       break;
     case DWG_TYPE_SHAPEFILE_CONTROL:
       dwg_decode_SHAPEFILE_CONTROL(dat, obj);
+      if (obj->tio.object->tio.SHAPEFILE_CONTROL->num_entries)
+        dwg->style_control = obj->tio.object->tio.SHAPEFILE_CONTROL;
       break;
     case DWG_TYPE_SHAPEFILE:
       dwg_decode_SHAPEFILE(dat, obj);
       break;
     case DWG_TYPE_LTYPE_CONTROL:
       dwg_decode_LTYPE_CONTROL(dat, obj);
+      if (obj->tio.object->tio.LTYPE_CONTROL->num_entries)
+        dwg->ltype_control = obj->tio.object->tio.LTYPE_CONTROL;
       break;
     case DWG_TYPE_LTYPE:
       dwg_decode_LTYPE(dat, obj);
       break;
     case DWG_TYPE_VIEW_CONTROL:
       dwg_decode_VIEW_CONTROL(dat, obj);
+      if (obj->tio.object->tio.VIEW_CONTROL->num_entries)
+        dwg->view_control = obj->tio.object->tio.VIEW_CONTROL;
       break;
     case DWG_TYPE_VIEW:
       dwg_decode_VIEW(dat, obj);
       break;
     case DWG_TYPE_UCS_CONTROL:
       dwg_decode_UCS_CONTROL(dat, obj);
+      if (obj->tio.object->tio.UCS_CONTROL->num_entries)
+        dwg->ucs_control = obj->tio.object->tio.UCS_CONTROL;
       break;
     case DWG_TYPE_UCS:
       dwg_decode_UCS(dat, obj);
       break;
     case DWG_TYPE_VPORT_CONTROL:
       dwg_decode_VPORT_CONTROL(dat, obj);
+      if (obj->tio.object->tio.VPORT_CONTROL->num_entries)
+        dwg->vport_control = obj->tio.object->tio.VPORT_CONTROL;
       break;
     case DWG_TYPE_VPORT:
       dwg_decode_VPORT(dat, obj);
@@ -3728,19 +3740,23 @@ dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
     case DWG_TYPE_APPID_CONTROL:
       dwg_decode_APPID_CONTROL(dat, obj);
       if (obj->tio.object->tio.APPID_CONTROL->num_entries)
-        obj->parent->appid_control = obj->tio.object->tio.APPID_CONTROL;
+        dwg->appid_control = obj->tio.object->tio.APPID_CONTROL;
       break;
     case DWG_TYPE_APPID:
       dwg_decode_APPID(dat, obj);
       break;
     case DWG_TYPE_DIMSTYLE_CONTROL:
       dwg_decode_DIMSTYLE_CONTROL(dat, obj);
+      if (obj->tio.object->tio.DIMSTYLE_CONTROL->num_entries)
+        dwg->dimstyle_control = obj->tio.object->tio.DIMSTYLE_CONTROL;
       break;
     case DWG_TYPE_DIMSTYLE:
       dwg_decode_DIMSTYLE(dat, obj);
       break;
     case DWG_TYPE_VP_ENT_HDR_CONTROL:
       dwg_decode_VP_ENT_HDR_CONTROL(dat, obj);
+      if (obj->tio.object->tio.VP_ENT_HDR_CONTROL->num_entries)
+        dwg->vp_ent_hdr_control = obj->tio.object->tio.VP_ENT_HDR_CONTROL;
       break;
     case DWG_TYPE_VP_ENT_HDR:
       dwg_decode_VP_ENT_HDR(dat, obj);
@@ -3786,7 +3802,7 @@ dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
       dwg_decode_LAYOUT(dat, obj);
       break;
     default:
-      if (obj->type == obj->parent->layout_number)
+      if (obj->type == dwg->layout_number)
         dwg_decode_LAYOUT(dat, obj);
 
       else if (!dwg_decode_variable_type(dwg, dat, hdl_dat, obj))

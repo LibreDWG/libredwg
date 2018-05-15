@@ -4088,11 +4088,19 @@ typedef struct _dwg_struct
   long unsigned int num_object_refs;
   Dwg_Object_Ref ** object_ref;
 
-  long unsigned int num_layers;
-  Dwg_Object * layer_control;
   Dwg_Object * mspace_block;
   Dwg_Object * pspace_block;
-  Dwg_Object_APPID_CONTROL * appid_control;
+  /* Those TABLES might be NULL with num_entries=0 */
+  Dwg_Object_BLOCK_CONTROL    * block_control; /* unused */
+  Dwg_Object_LAYER_CONTROL    * layer_control;
+  Dwg_Object_SHAPEFILE_CONTROL * style_control;
+  Dwg_Object_LTYPE_CONTROL    * ltype_control;
+  Dwg_Object_VIEW_CONTROL     * view_control;
+  Dwg_Object_UCS_CONTROL      * ucs_control;
+  Dwg_Object_VPORT_CONTROL    * vport_control;
+  Dwg_Object_APPID_CONTROL    * appid_control;
+  Dwg_Object_DIMSTYLE_CONTROL * dimstyle_control;
+  Dwg_Object_VP_ENT_HDR_CONTROL * vp_ent_hdr_control;
 
   struct _dwg_second_header {
     BITCODE_RL size;

@@ -438,24 +438,21 @@ unsigned int
 dwg_get_layer_count(const Dwg_Data *dwg)
 {
   assert(dwg);
-  assert(dwg->layer_control->tio.object);
-  return dwg->layer_control->tio.object->tio.LAYER_CONTROL->num_entries;
+  return dwg->layer_control ? dwg->layer_control->num_entries : 0;
 }
 
 Dwg_Object_LAYER **
 dwg_get_layers(const Dwg_Data *dwg)
 {
   unsigned int i;
+  unsigned int num_layers = dwg_get_layer_count(dwg);
   Dwg_Object_LAYER ** layers;
-  
+
   assert(dwg);
-  layers = (Dwg_Object_LAYER **) calloc(dwg_get_layer_count(dwg),
+  layers = (Dwg_Object_LAYER **) calloc(num_layers,
                                         sizeof (Dwg_Object_LAYER*));
-  for (i=0; i < dwg_get_layer_count(dwg); i++)
-    {
-      layers[i] = dwg->layer_control->tio.object->tio.LAYER_CONTROL->
-            layers[i]->obj->tio.object->tio.LAYER;
-    }
+  for (i=0; i < num_layers; i++)
+    layers[i] = dwg->layer_control->layers[i]->obj->tio.object->tio.LAYER;
   return layers;
 }
 

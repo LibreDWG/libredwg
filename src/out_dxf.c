@@ -190,11 +190,11 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 #define FIELD_TU(name,dxf) \
   if (_obj->name != NULL && dxf != 0) { VALUE_TU((BITCODE_TU)_obj->name, dxf); }
 #define FIELD_T(name,dxf) \
-  { if (dat->version >= R_2007) { FIELD_TU(name, dxf); } \
-    else                        { FIELD_TV(name, dxf); } }
+  { if (dat->from_version >= R_2007) { FIELD_TU(name, dxf); } \
+    else                             { FIELD_TV(name, dxf); } }
 #define VALUE_T(value,dxf) \
-  { if (dat->version >= R_2007) { VALUE_TU(value, dxf); } \
-    else                        { VALUE_TV(value, dxf); } }
+  { if (dat->from_version >= R_2007) { VALUE_TU(value, dxf); } \
+    else                             { VALUE_TV(value, dxf); } }
 #define FIELD_BT(name,dxf)     FIELD(name, BT, dxf);
 #define FIELD_4BITS(name,dxf)  FIELD(name,4BITS,dxf)
 #define FIELD_BE(name,dxf)     FIELD_3RD(name,dxf)
@@ -1084,7 +1084,7 @@ dxf_header_write(Bit_Chain *dat, Dwg_Data* dwg)
   return;
 }
 
-// only called since r2000
+// only called since r2000. but not really needed, unless referenced
 static int
 dxf_classes_write (Bit_Chain *dat, Dwg_Data * dwg)
 {
@@ -1113,12 +1113,90 @@ dxf_classes_write (Bit_Chain *dat, Dwg_Data * dwg)
 static int
 dxf_tables_write (Bit_Chain *dat, Dwg_Data * dwg)
 {
-  (void)dwg;
+  unsigned int i;
 
   SECTION(TABLES);
-  TABLE(VPORT);
-  //...
-  ENDTAB();
+  if (dwg->vport_control)
+    {
+      TABLE(VPORT);
+      for (i=0; i<dwg->vport_control->num_entries; i++)
+        {
+          Dwg_Object *obj = dwg_ref_get_object(dwg, dwg->vport_control->vports[i]);
+          if (obj) dwg_dxf_VPORT(dat, obj);
+        }
+      ENDTAB();
+    }
+  if (dwg->ltype_control)
+    {
+      TABLE(VPORT);
+      for (i=0; i<dwg->ltype_control->num_entries; i++)
+        {
+          Dwg_Object *obj = dwg_ref_get_object(dwg, dwg->ltype_control->linetypes[i]);
+          if (obj) dwg_dxf_LTYPE(dat, obj);
+        }
+      ENDTAB();
+    }
+  if (dwg->layer_control)
+    {
+      TABLE(LAYER);
+      for (i=0; i<dwg->layer_control->num_entries; i++)
+        {
+          Dwg_Object *obj = dwg_ref_get_object(dwg, dwg->layer_control->layers[i]);
+          if (obj) dwg_dxf_LAYER(dat, obj);
+        }
+      ENDTAB();
+    }
+  if (dwg->style_control)
+    {
+      TABLE(STYLE);
+      for (i=0; i<dwg->style_control->num_entries; i++)
+        {
+          Dwg_Object *obj = dwg_ref_get_object(dwg, dwg->style_control->shapefiles[i]);
+          if (obj) dwg_dxf_SHAPEFILE(dat, obj);
+        }
+      ENDTAB();
+    }
+  if (dwg->view_control)
+    {
+      TABLE(VIEW);
+      for (i=0; i<dwg->view_control->num_entries; i++)
+        {
+          Dwg_Object *obj = dwg_ref_get_object(dwg, dwg->view_control->views[i]);
+          if (obj) dwg_dxf_VIEW(dat, obj);
+        }
+      ENDTAB();
+    }
+  if (dwg->ucs_control)
+    {
+      TABLE(UCS);
+      for (i=0; i<dwg->ucs_control->num_entries; i++)
+        {
+          Dwg_Object *obj = dwg_ref_get_object(dwg, dwg->ucs_control->ucs[i]);
+          if (obj) dwg_dxf_UCS(dat, obj);
+        }
+      ENDTAB();
+    }
+  if (dwg->appid_control)
+    {
+      TABLE(APPID);
+      for (i=0; i<dwg->appid_control->num_entries; i++)
+        {
+          Dwg_Object *obj = dwg_ref_get_object(dwg, dwg->appid_control->apps[i]);
+          if (obj) dwg_dxf_APPID(dat, obj);
+        }
+      ENDTAB();
+    }
+  if (dwg->dimstyle_control)
+    {
+      TABLE(DIMSTYLE);
+      //ignoring morehandles
+      for (i=0; i<dwg->dimstyle_control->num_entries; i++)
+        {
+          Dwg_Object *obj = dwg_ref_get_object(dwg, dwg->dimstyle_control->dimstyles[i]);
+          if (obj) dwg_dxf_DIMSTYLE(dat, obj);
+        }
+      ENDTAB();
+    }
   ENDSEC();
   return 0;
 }
