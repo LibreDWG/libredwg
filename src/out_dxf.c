@@ -1116,83 +1116,83 @@ dxf_tables_write (Bit_Chain *dat, Dwg_Data * dwg)
   unsigned int i;
 
   SECTION(TABLES);
-  if (dwg->vport_control)
+  if (dwg->vport_control.num_entries)
     {
       TABLE(VPORT);
-      for (i=0; i<dwg->vport_control->num_entries; i++)
+      for (i=0; i<dwg->vport_control.num_entries; i++)
         {
-          Dwg_Object *obj = dwg_ref_get_object(dwg, dwg->vport_control->vports[i]);
+          Dwg_Object *obj = dwg_ref_get_object(dwg, dwg->vport_control.vports[i]);
           if (obj) dwg_dxf_VPORT(dat, obj);
         }
       ENDTAB();
     }
-  if (dwg->ltype_control)
+  if (dwg->ltype_control.num_entries)
     {
       TABLE(VPORT);
-      for (i=0; i<dwg->ltype_control->num_entries; i++)
+      for (i=0; i<dwg->ltype_control.num_entries; i++)
         {
-          Dwg_Object *obj = dwg_ref_get_object(dwg, dwg->ltype_control->linetypes[i]);
+          Dwg_Object *obj = dwg_ref_get_object(dwg, dwg->ltype_control.linetypes[i]);
           if (obj) dwg_dxf_LTYPE(dat, obj);
         }
       ENDTAB();
     }
-  if (dwg->layer_control)
+  if (dwg->layer_control.num_entries)
     {
       TABLE(LAYER);
-      for (i=0; i<dwg->layer_control->num_entries; i++)
+      for (i=0; i<dwg->layer_control.num_entries; i++)
         {
-          Dwg_Object *obj = dwg_ref_get_object(dwg, dwg->layer_control->layers[i]);
+          Dwg_Object *obj = dwg_ref_get_object(dwg, dwg->layer_control.layers[i]);
           if (obj) dwg_dxf_LAYER(dat, obj);
         }
       ENDTAB();
     }
-  if (dwg->style_control)
+  if (dwg->style_control.num_entries)
     {
       TABLE(STYLE);
-      for (i=0; i<dwg->style_control->num_entries; i++)
+      for (i=0; i<dwg->style_control.num_entries; i++)
         {
-          Dwg_Object *obj = dwg_ref_get_object(dwg, dwg->style_control->shapefiles[i]);
+          Dwg_Object *obj = dwg_ref_get_object(dwg, dwg->style_control.styles[i]);
           if (obj) dwg_dxf_SHAPEFILE(dat, obj);
         }
       ENDTAB();
     }
-  if (dwg->view_control)
+  if (dwg->view_control.num_entries)
     {
       TABLE(VIEW);
-      for (i=0; i<dwg->view_control->num_entries; i++)
+      for (i=0; i<dwg->view_control.num_entries; i++)
         {
-          Dwg_Object *obj = dwg_ref_get_object(dwg, dwg->view_control->views[i]);
+          Dwg_Object *obj = dwg_ref_get_object(dwg, dwg->view_control.views[i]);
           if (obj) dwg_dxf_VIEW(dat, obj);
         }
       ENDTAB();
     }
-  if (dwg->ucs_control)
+  if (dwg->ucs_control.num_entries)
     {
       TABLE(UCS);
-      for (i=0; i<dwg->ucs_control->num_entries; i++)
+      for (i=0; i<dwg->ucs_control.num_entries; i++)
         {
-          Dwg_Object *obj = dwg_ref_get_object(dwg, dwg->ucs_control->ucs[i]);
+          Dwg_Object *obj = dwg_ref_get_object(dwg, dwg->ucs_control.ucs[i]);
           if (obj) dwg_dxf_UCS(dat, obj);
         }
       ENDTAB();
     }
-  if (dwg->appid_control)
+  if (dwg->appid_control.num_entries)
     {
       TABLE(APPID);
-      for (i=0; i<dwg->appid_control->num_entries; i++)
+      for (i=0; i<dwg->appid_control.num_entries; i++)
         {
-          Dwg_Object *obj = dwg_ref_get_object(dwg, dwg->appid_control->apps[i]);
+          Dwg_Object *obj = dwg_ref_get_object(dwg, dwg->appid_control.apps[i]);
           if (obj) dwg_dxf_APPID(dat, obj);
         }
       ENDTAB();
     }
-  if (dwg->dimstyle_control)
+  if (dwg->dimstyle_control.num_entries)
     {
       TABLE(DIMSTYLE);
       //ignoring morehandles
-      for (i=0; i<dwg->dimstyle_control->num_entries; i++)
+      for (i=0; i<dwg->dimstyle_control.num_entries; i++)
         {
-          Dwg_Object *obj = dwg_ref_get_object(dwg, dwg->dimstyle_control->dimstyles[i]);
+          Dwg_Object *obj = dwg_ref_get_object(dwg, dwg->dimstyle_control.dimstyles[i]);
           if (obj) dwg_dxf_DIMSTYLE(dat, obj);
         }
       ENDTAB();

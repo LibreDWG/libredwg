@@ -2119,7 +2119,7 @@ DWG_OBJECT(LAYER)
 
 DWG_OBJECT_END
 
-/*(52)*/
+/* STYLE table (52) */
 DWG_OBJECT(SHAPEFILE_CONTROL)
 
   FIELD_BL (num_entries, 70);
@@ -2127,7 +2127,7 @@ DWG_OBJECT(SHAPEFILE_CONTROL)
   START_HANDLE_STREAM;
   FIELD_HANDLE (null_handle, 4, 0);
   XDICOBJHANDLE(3);
-  HANDLE_VECTOR(shapefiles, num_entries, 2, 0);
+  HANDLE_VECTOR(styles, num_entries, 2, 0);
 
 DWG_OBJECT_END
 

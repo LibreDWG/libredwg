@@ -2226,19 +2226,16 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
             if (dwg_resolve_handleref(&ref, obj->object))
               {
                 Dwg_Data *dwg = obj->object->parent;
-                Dwg_Object_APPID_CONTROL *appid = dwg->appid_control;
-                if (appid)
+                Dwg_Object_APPID_CONTROL *appid = &dwg->appid_control;
+                // search absref in APPID_CONTROL apps[]
+                for (j=0; j < appid->num_entries; j++)
                   {
-                    // search absref in APPID_CONTROL apps[]
-                    for (j=0; j < appid->num_entries; j++)
+                    if ( appid->apps[j]->absolute_ref == ref.absolute_ref )
                       {
-                        if ( appid->apps[j]->absolute_ref == ref.absolute_ref )
-                          {
-                            Dwg_Object_MLEADERSTYLE *this = obj->tio.MLEADERSTYLE;
-                            this->is_new_format = 1;
-                            LOG_TRACE("EED found ACAD_MLEADERVER %lu: new format\n",
-                                      ref.absolute_ref);
-                          }
+                        Dwg_Object_MLEADERSTYLE *this = obj->tio.MLEADERSTYLE;
+                        this->is_new_format = 1;
+                        LOG_TRACE("EED found ACAD_MLEADERVER %lu: new format\n",
+                                  ref.absolute_ref);
                       }
                   }
               }
@@ -3681,7 +3678,7 @@ dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
     case DWG_TYPE_BLOCK_CONTROL:
       dwg_decode_BLOCK_CONTROL(dat, obj);
       if (obj->tio.object->tio.BLOCK_CONTROL->num_entries)
-        dwg->block_control = obj->tio.object->tio.BLOCK_CONTROL;
+        dwg->block_control = *obj->tio.object->tio.BLOCK_CONTROL;
       break;
     case DWG_TYPE_BLOCK_HEADER:
       dwg_decode_BLOCK_HEADER(dat, obj);
@@ -3692,7 +3689,7 @@ dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
     case DWG_TYPE_LAYER_CONTROL:
       dwg_decode_LAYER_CONTROL(dat, obj);
       if (obj->tio.object->tio.LAYER_CONTROL->num_entries)
-        dwg->layer_control = obj->tio.object->tio.LAYER_CONTROL;
+        dwg->layer_control = *obj->tio.object->tio.LAYER_CONTROL;
       break;
     case DWG_TYPE_LAYER:
       dwg_decode_LAYER(dat, obj);
@@ -3700,7 +3697,7 @@ dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
     case DWG_TYPE_SHAPEFILE_CONTROL:
       dwg_decode_SHAPEFILE_CONTROL(dat, obj);
       if (obj->tio.object->tio.SHAPEFILE_CONTROL->num_entries)
-        dwg->style_control = obj->tio.object->tio.SHAPEFILE_CONTROL;
+        dwg->style_control = *obj->tio.object->tio.SHAPEFILE_CONTROL;
       break;
     case DWG_TYPE_SHAPEFILE:
       dwg_decode_SHAPEFILE(dat, obj);
@@ -3708,7 +3705,7 @@ dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
     case DWG_TYPE_LTYPE_CONTROL:
       dwg_decode_LTYPE_CONTROL(dat, obj);
       if (obj->tio.object->tio.LTYPE_CONTROL->num_entries)
-        dwg->ltype_control = obj->tio.object->tio.LTYPE_CONTROL;
+          dwg->ltype_control = *obj->tio.object->tio.LTYPE_CONTROL;
       break;
     case DWG_TYPE_LTYPE:
       dwg_decode_LTYPE(dat, obj);
@@ -3716,7 +3713,7 @@ dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
     case DWG_TYPE_VIEW_CONTROL:
       dwg_decode_VIEW_CONTROL(dat, obj);
       if (obj->tio.object->tio.VIEW_CONTROL->num_entries)
-        dwg->view_control = obj->tio.object->tio.VIEW_CONTROL;
+        dwg->view_control = *obj->tio.object->tio.VIEW_CONTROL;
       break;
     case DWG_TYPE_VIEW:
       dwg_decode_VIEW(dat, obj);
@@ -3724,7 +3721,7 @@ dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
     case DWG_TYPE_UCS_CONTROL:
       dwg_decode_UCS_CONTROL(dat, obj);
       if (obj->tio.object->tio.UCS_CONTROL->num_entries)
-        dwg->ucs_control = obj->tio.object->tio.UCS_CONTROL;
+        dwg->ucs_control = *obj->tio.object->tio.UCS_CONTROL;
       break;
     case DWG_TYPE_UCS:
       dwg_decode_UCS(dat, obj);
@@ -3732,7 +3729,7 @@ dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
     case DWG_TYPE_VPORT_CONTROL:
       dwg_decode_VPORT_CONTROL(dat, obj);
       if (obj->tio.object->tio.VPORT_CONTROL->num_entries)
-        dwg->vport_control = obj->tio.object->tio.VPORT_CONTROL;
+        dwg->vport_control = *obj->tio.object->tio.VPORT_CONTROL;
       break;
     case DWG_TYPE_VPORT:
       dwg_decode_VPORT(dat, obj);
@@ -3740,7 +3737,7 @@ dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
     case DWG_TYPE_APPID_CONTROL:
       dwg_decode_APPID_CONTROL(dat, obj);
       if (obj->tio.object->tio.APPID_CONTROL->num_entries)
-        dwg->appid_control = obj->tio.object->tio.APPID_CONTROL;
+        dwg->appid_control = *obj->tio.object->tio.APPID_CONTROL;
       break;
     case DWG_TYPE_APPID:
       dwg_decode_APPID(dat, obj);
@@ -3748,7 +3745,7 @@ dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
     case DWG_TYPE_DIMSTYLE_CONTROL:
       dwg_decode_DIMSTYLE_CONTROL(dat, obj);
       if (obj->tio.object->tio.DIMSTYLE_CONTROL->num_entries)
-        dwg->dimstyle_control = obj->tio.object->tio.DIMSTYLE_CONTROL;
+        dwg->dimstyle_control = *obj->tio.object->tio.DIMSTYLE_CONTROL;
       break;
     case DWG_TYPE_DIMSTYLE:
       dwg_decode_DIMSTYLE(dat, obj);
@@ -3756,7 +3753,7 @@ dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
     case DWG_TYPE_VP_ENT_HDR_CONTROL:
       dwg_decode_VP_ENT_HDR_CONTROL(dat, obj);
       if (obj->tio.object->tio.VP_ENT_HDR_CONTROL->num_entries)
-        dwg->vp_ent_hdr_control = obj->tio.object->tio.VP_ENT_HDR_CONTROL;
+        dwg->vp_ent_hdr_control = *obj->tio.object->tio.VP_ENT_HDR_CONTROL;
       break;
     case DWG_TYPE_VP_ENT_HDR:
       dwg_decode_VP_ENT_HDR(dat, obj);
