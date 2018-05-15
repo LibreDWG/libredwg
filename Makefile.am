@@ -51,7 +51,7 @@ check-dwg-valgrind: all
 # clang-analyzer.llvm.org
 SCAN_BUILD = scan-build
 scan-build: clean
-	$(SCAN_BUILD) -V -o .analysis $(MAKE) -j4
+	$(SCAN_BUILD) -V -o .analysis $(MAKE) -j4 &
 
 if ENABLE_GCOV
 gcov: check
