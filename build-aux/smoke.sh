@@ -18,16 +18,11 @@ CC="clang-mp-5.0 -fsanitize=address,undefined -fno-omit-frame-pointer" \
     gmake -s -j4 check || exit
 gmake -s -j4 clean
 echo clang-mp-6.0 -O3 -march=native --enable-write
-CC="clang-mp-6.0 -O3 -march=native --enable-write" \
+CC="clang-mp-6.0 -O3 -march=native" \
     ./configure --enable-write && \
     gmake -s -j4 check || exit
     gmake scan-build
 gmake -s -j4 clean
-#echo clang-mp-devel
-#CC="clang-mp-devel" \
-#    ./configure && \
-#    gmake -s -j4 check || exit
-#gmake -s -j4 clean
 for CC in gcc-mp-4.3 gcc-mp-4.6 gcc-mp-4.8 gcc-mp-4.9 gcc-mp-5 gcc-mp-6 gcc-mp-7; do
     echo $CC
     ./configure && \
@@ -46,7 +41,7 @@ echo gcc-mp-6 --enable-write --enable-gcov
 CC="gcc-mp-6" ./configure --enable-write --enable-trace --enable-gcov=gcov-mp-6 && \
     make -s -j4 check || exit
     make -s -j4 gcov
-make -s -j4 clean
+gmake -s -j4 clean
 
 # port install arm-elf-gcc (with newlib, not glibc)
 if [ -e /opt/local/bin/arm-elf-gcc-4.7 ]; then
