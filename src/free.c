@@ -40,7 +40,7 @@ static Bit_Chain pdat = {NULL,0,0,0,0,0};
 static Bit_Chain *dat = &pdat;
 
 extern void dwg_free_xdata_resbuf(Dwg_Resbuf *rbuf);
-
+extern int  dwg_obj_is_control(const Dwg_Object *obj);
 /*--------------------------------------------------------------------------------
  * MACROS
  */
@@ -238,6 +238,7 @@ dwg_free_handleref(Dwg_Object_Ref *ref, Dwg_Data * dwg)
   long unsigned int i;
   if (!dwg) {
     free(ref);
+    ref = NULL;
     return;
   }
   for (i=0; i < dwg->num_object_refs; i++)
@@ -828,12 +829,11 @@ dwg_free(Dwg_Data * dwg)
         }
 #endif  /* USE_TRACING */
       LOG_INFO("dwg_free\n")
-      /*if (dwg->bit_chain && dwg->bit_chain->size)
-        free (dwg->bit_chain->chain);*/
-#define FREE_IF(ptr) { if (ptr) free(ptr); }
+#define FREE_IF(ptr) { if (ptr) free(ptr); ptr = NULL; }
+      // copied table fields have duplicate pointers, but are freed only once
       for (i=0; i < dwg->num_objects; ++i)
         {
-          if (dwg->object[i].type != DWG_TYPE_BLOCK_CONTROL)
+          if (!dwg_obj_is_control(&dwg->object[i]))
             dwg_free_object(&dwg->object[i]);
         }
       FREE_IF(dwg->header.section);
@@ -863,7 +863,7 @@ dwg_free(Dwg_Data * dwg)
         FREE_IF(dwg->second_header.handlers[i].data);
       for (i=0; i < dwg->num_objects; ++i)
         {
-          if (dwg->object[i].type == DWG_TYPE_BLOCK_CONTROL)
+          if (dwg_obj_is_control(&dwg->object[i]))
             dwg_free_object(&dwg->object[i]);
         }
       for (i=0; i < dwg->num_object_refs; ++i)

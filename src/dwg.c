@@ -47,10 +47,9 @@ static bool env_var_checked_p;
 #include "logging.h"
 
 // used by decode.c:
-Dwg_Object *
-dwg_resolve_handle(const Dwg_Data * dwg, const long unsigned int absref);
-int
-dwg_resolve_handleref(Dwg_Object_Ref *ref, const Dwg_Object * obj);
+Dwg_Object *dwg_resolve_handle(const Dwg_Data * dwg, const long unsigned int absref);
+int dwg_resolve_handleref(Dwg_Object_Ref *ref, const Dwg_Object * obj);
+int dwg_obj_is_control(const Dwg_Object *obj);
 
 /*------------------------------------------------------------------------------
  * Public functions
@@ -651,6 +650,22 @@ int
 dwg_class_is_entity(const Dwg_Class *klass)
 {
   return klass->item_class_id == 0x1f2;
+}
+
+int
+dwg_obj_is_control(const Dwg_Object *obj)
+{
+  unsigned int type = obj->type;
+  return type == DWG_TYPE_BLOCK_CONTROL ||
+         type == DWG_TYPE_LAYER_CONTROL ||
+         type == DWG_TYPE_SHAPEFILE_CONTROL ||
+         type == DWG_TYPE_LTYPE_CONTROL ||
+         type == DWG_TYPE_VIEW_CONTROL ||
+         type == DWG_TYPE_UCS_CONTROL ||
+         type == DWG_TYPE_VPORT_CONTROL ||
+         type == DWG_TYPE_APPID_CONTROL ||
+         type == DWG_TYPE_DIMSTYLE_CONTROL ||
+         type == DWG_TYPE_VP_ENT_HDR_CONTROL;
 }
 
 Dwg_Section_Type
