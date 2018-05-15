@@ -14,14 +14,8 @@ think is not the best strategy for a free software project which aims
 to get lots of contributors.  LibreDWG is written in English.  At the
 moment our decoder is almost done, just some R2010+ and pre-R13
 entities fail to read.  Among the example applications we wrote using
-LibreDWG is an initial SVG conversion and a DWG rewrite, i.e saveas
-tool. Please contact us if you can help.
-
-The program dwg2ps reads DWG and outputs Postscript for most 2D
-elements. It depends on pslib: <http://pslib.sourceforge.net>.  In
-many GNU/Linux distributions, this is available by installing the
-pslib-dev package.  If the configure script does not find pslib,
-dwg2ps will not be built.
+LibreDWG is an initial SVG and Postscript conversion, dxf converters
+and a DWG rewrite, i.e saveas tool. Please contact us if you can help.
 
 Sometimes we hang on our IRC channel which is #libredwg at irc.freenode.net
 If you don't find us there, please email the package maintainers:
@@ -42,10 +36,10 @@ http://www.gnu.org/software/libredwg
 You need the following dependencies:
 - Basic development tools (gcc/clang, autoconf, automake and libtool)
 - SWIG 1.7+
-- Python development headers (debian: python-dev; yum: python-devel)
+- Python 2.7 development headers (debian: python-dev; yum: python-devel)
   and the libxml2 python bindings.
 - TeXinfo for building the docs
-- gmake on BSD's. We use one GNU make extension: *F.
+- gmake on BSD's. We use one GNU make extension: *F
 
 See INSTALL for generic instructions.  Basically, you do:
 
@@ -86,7 +80,7 @@ The programs and examples directories contains some application code that uses o
   under a different version, and re-reads it back for confirmation.
   Under construction, only with --enable-write.
 
-* dwgwrite -- A DWG writer supporting various input formats. Planned.
+* dwgwrite -- A DWG writer supporting various input formats. Under construction.
 
 * dwg2dxf -- Converts a DWG to a DXF (ascii or binary, minimal or full), optionally
   under a different version. Under construction.
