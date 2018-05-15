@@ -7,11 +7,15 @@ make=make
 
 case `uname` in
 Darwin) # macports compilers
-    make=gmake
+make=gmake
 
+# for dejagnu
 export PKG_CONFIG_PATH=/opt/local/lib/pkgconfig
-gmake -s -j4 clean
+# for pslib    
+CFLAGS=-I/usr/local/include
+LDFLAGS=-L/usr/local/lib
 
+gmake -s -j4 clean
 echo clang-mp-5.0 -fsanitize=address,undefined -fno-omit-frame-pointer --enable-trace --enable-write
 CC="clang-mp-5.0 -fsanitize=address,undefined -fno-omit-frame-pointer" \
     ./configure --enable-trace --enable-write && \
