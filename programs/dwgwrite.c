@@ -144,15 +144,23 @@ main(int argc, char *argv[])
   else
     dat.fh = stdin;
 
-  /*if (!strcasecmp(fmt, "json"))
+  /*if ((fmt && !strcasecmp(fmt, "json")) ||
+        (infline && !strcasecmp(infile, ".json")))
     error = dwg_read_json(&dat, &dwg);
   else */
-  if (!strcasecmp(fmt, "dxfb"))
+  if ((fmt && !strcasecmp(fmt, "dxfb")) ||
+      (infile && !strcasecmp(infile, ".dxfb")))
     error = dwg_read_dxfb(&dat, &dwg);
-  else if (!strcasecmp(fmt, "dxf"))
+  else if ((fmt && !strcasecmp(fmt, "dxf")) ||
+           (infile && !strcasecmp(infile, ".dxf")))
     error = dxf_read_file(infile, &dwg); // ascii or binary
   else {
-    fprintf(stderr, "Invalid input format %s\n", fmt);
+    if (fmt)
+      fprintf(stderr, "Invalid input format %s\n", fmt);
+    else if (infile)
+      fprintf(stderr, "Missing input format for %s\n", infile);
+    else
+      fprintf(stderr, "Missing input format\n");
     if (argc)
       fclose(dat.fh);
     exit(1);
