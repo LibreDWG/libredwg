@@ -164,7 +164,7 @@
 #define DEBUG_HERE()\
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE) { \
     Bit_Chain here = *dat; \
-    char *tmp; BITCODE_BB bb; BITCODE_RS rs; BITCODE_RL rl;\
+    char *tmp; BITCODE_BB bb = 0; BITCODE_RS rs; BITCODE_RL rl;\
     LOG_TRACE("DEBUG_HERE @%u.%u / 0x%x\n  24RC: ", (unsigned int)dat->byte, dat->bit, \
               (unsigned int)dat->byte); \
     tmp = bit_read_TF(dat, 24);\
