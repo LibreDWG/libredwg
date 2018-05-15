@@ -1206,10 +1206,37 @@ dxf_tables_write (Bit_Chain *dat, Dwg_Data * dwg)
 static int
 dxf_blocks_write (Bit_Chain *dat, Dwg_Data * dwg)
 {
-  (void)dwg;
+  unsigned int i;
+  Dwg_Object *mspace = NULL, *pspace = NULL;
 
   SECTION(BLOCKS);
-  //...
+  if (dwg->block_control.model_space)
+    {
+      Dwg_Object *obj = dwg_ref_get_object(dwg, dwg->block_control.model_space);
+      if (obj) {
+        mspace = obj;
+        assert(obj->type == DWG_TYPE_BLOCK_HEADER);
+        dwg_dxf_BLOCK_HEADER(dat, obj);
+      }
+    }
+  if (dwg->block_control.paper_space)
+    {
+      Dwg_Object *obj = dwg_ref_get_object(dwg, dwg->block_control.paper_space);
+      if (obj) {
+        pspace = obj;
+        assert(obj->type == DWG_TYPE_BLOCK_HEADER);
+        dwg_dxf_BLOCK_HEADER(dat, obj);
+      }
+    }
+  for (i=0; i<dwg->block_control.num_entries; i++)
+    {
+      Dwg_Object *obj = dwg_ref_get_object(dwg, dwg->block_control.block_headers[i]);
+      if (obj && obj != mspace && obj != pspace)
+        {
+          assert(obj->type == DWG_TYPE_BLOCK_HEADER);
+          dwg_dxf_BLOCK_HEADER(dat, obj);
+        }
+    }
   ENDSEC();
   return 0;
 }

@@ -162,7 +162,7 @@ main (int argc, char *argv[])
   dat.version = dwg.header.version;
   dat.from_version = dwg.header.from_version;
 
-  fprintf(stderr, "WARNING: write to DXF not yet completed\n");
+  //fprintf(stderr, "WARNING: BLOCKS missing\n");
   if (minimal)
     dwg.opts |= 0x10;
   if (binary) {
