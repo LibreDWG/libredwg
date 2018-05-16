@@ -75,7 +75,7 @@ man: $(bin_PROGRAMS) $(noinst_PROGRAMS)
 
 # TODO $*F stem is GNU make only. ./ prefix is POSIX only
 .c.1:
-	help2man -p LibreDWG ./$(*F) > $@
+	help2man -p LibreDWG -o $@ ./$(*F) || true
 
 .c.i:
 	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
