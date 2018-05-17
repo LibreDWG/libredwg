@@ -342,7 +342,17 @@ static void dwg_encode_##token (Bit_Chain* dat, Dwg_Object* obj) \
   if (dwg_encode_entity(obj, dat, hdl_dat, str_dat)) return; \
   LOG_INFO("Entity " #token ":\n")
 
-#define DWG_ENTITY_END }
+#define DWG_ENTITY_END \
+  if (obj->bitsize == 0 && dat->version >= R_13 && dat->version <= R_2010) \
+    { \
+      unsigned long address = bit_position(dat); \
+      unsigned long bitsize = address - obj->bitsize_address; \
+      bit_set_position(dat, obj->bitsize_address); \
+      bit_write_RL(dat, bitsize); \
+      bit_set_position(dat, address); \
+      /* CRC? */ \
+    } \
+}
 
 #define DWG_OBJECT(token) \
 static void dwg_encode_##token (Bit_Chain* dat, Dwg_Object* obj) \
@@ -358,7 +368,17 @@ static void dwg_encode_##token (Bit_Chain* dat, Dwg_Object* obj) \
     obj->handle.size, \
     obj->handle.value)
 
-#define DWG_OBJECT_END }
+#define DWG_OBJECT_END \
+  if (obj->bitsize == 0 && dat->version >= R_13 && dat->version <= R_2007) \
+    { \
+      unsigned long address = bit_position(dat); \
+      unsigned long bitsize = address - obj->bitsize_address; \
+      bit_set_position(dat, obj->bitsize_address); \
+      bit_write_RL(dat, bitsize); \
+      bit_set_position(dat, address); \
+      /* CRC? */ \
+    } \
+}
 
 #define ENT_REACTORS(code)\
   for (vcount=0; vcount < _obj->num_reactors; vcount++)\
@@ -1354,22 +1374,17 @@ dwg_encode_add_object(Dwg_Object* obj, Bit_Chain* dat,
   unsigned long object_address;
   unsigned char previous_bit;
 
-  /* Keep the previous address
-   */
   previous_address = dat->byte;
   previous_bit = dat->bit;
-
-  /* Use the indicated address for the object
-   */
   dat->byte = address;
   dat->bit = 0;
 
   LOG_INFO("Object number: %u", obj->index);
   if (dat->byte + obj->size >= dat->size)
     bit_chain_alloc(dat);
-  bit_write_MS(dat, obj->size); // TODO: calculate size from the fields. either <0x7fff
-  //  ktl_lastaddress = dat->byte + obj->size; /* (calculate the bitsize) */
-  
+  // TODO: calculate size from the fields. either <0x7fff or more
+  bit_write_MS(dat, obj->size);
+
   PRE(R_2010) {
     bit_write_BS(dat, obj->type);
   } LATER_VERSIONS {
@@ -1705,13 +1720,15 @@ dwg_encode_entity(Dwg_Object* obj,
                   Bit_Chain* hdl_dat, Bit_Chain* str_dat, Bit_Chain* dat)
 {
   BITCODE_BS i;
-  BITCODE_BL bitsize;
   Dwg_Object_Entity* ent = obj->tio.entity;
 
   SINCE(R_2000)
     {
-      bitsize = ent->bitsize;
-      bit_write_RL(dat, bitsize);
+      obj->bitsize_address = bit_position(dat);
+      if (!obj->bitsize)
+        bit_write_RL(dat, obj->size * 8);
+      else
+        bit_write_RL(dat, obj->bitsize);
     }
   bit_write_H(dat, &(obj->handle));
 
@@ -1759,9 +1776,13 @@ dwg_encode_entity(Dwg_Object* obj,
         }
      }
   
-  VERSIONS(R_13,R_14)
+  VERSIONS(R_13, R_14)
     {
-      bit_write_RL(dat, ent->bitsize);
+      obj->bitsize_address = bit_position(dat);
+      if (!obj->bitsize)
+        bit_write_RL(dat, obj->size * 8);
+      else
+        bit_write_RL(dat, obj->bitsize);
     }
 
   bit_write_BB(dat, ent->entity_mode);
@@ -1866,8 +1887,12 @@ dwg_encode_object(Dwg_Object* obj,
   
   VERSIONS(R_2000, R_2007)
     {
-       bit_write_RL(dat, ord->bitsize);
-       LOG_INFO("Object bitsize: " FORMAT_RL " @%lu.%u\n", obj->bitsize,
+      obj->bitsize_address = bit_position(dat);
+      if (!obj->bitsize)
+        bit_write_RL(dat, obj->size * 8);
+      else
+        bit_write_RL(dat, obj->bitsize);
+      LOG_INFO("Object bitsize: " FORMAT_RL " @%lu.%u\n", obj->bitsize,
                 dat->byte, dat->bit);
     }
   SINCE(R_2010)
@@ -1908,16 +1933,20 @@ dwg_encode_object(Dwg_Object* obj,
       }
   }
 
-  VERSIONS(R_13,R_14)
+  VERSIONS(R_13, R_14)
     {
-       bit_write_RL(dat, ord->bitsize);
+      obj->bitsize_address = bit_position(dat);
+      if (!obj->bitsize)
+        bit_write_RL(dat, obj->size * 8);
+      else
+        bit_write_RL(dat, obj->bitsize);
     }
 
    bit_write_BL(dat, ord->num_reactors);
 
   SINCE(R_2004)
     {
-       bit_write_B(dat, ord->xdic_missing_flag);
+      bit_write_B(dat, ord->xdic_missing_flag);
     }
   return 0;
 }

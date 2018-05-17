@@ -2183,6 +2183,7 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
       BITCODE_RC code = 0;
       long unsigned int end, offset;
       long unsigned int sav_byte;
+      Dwg_Object *_obj = obj->object;
 
       LOG_TRACE("EED[%u] size: " FORMAT_BS "\n", idx, size);
       if (size > 1024)
@@ -2190,7 +2191,7 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
           LOG_ERROR("dwg_decode_eed: Absurd extended object data size: %lu ignored."
                     " Object: %lu (handle)",
                     (long unsigned int) size, obj->object->handle.value)
-          obj->bitsize = 0;
+          _obj->bitsize = 0;
           obj->num_eed = 0;
           obj->num_handles = 0;
           obj->num_reactors = 0;
@@ -2370,40 +2371,40 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
   unsigned int i;
   BITCODE_BS size;
   int error;
+  Dwg_Object *_obj = ent->object;
 
   VERSIONS(R_2000, R_2010)
     {
       SINCE(R_2007) {
         *str_dat = *dat;
       }
-      ent->bitsize = bit_read_RL(dat); // until the handles
-      LOG_TRACE("Entity bitsize: " FORMAT_BL " @%lu.%u\n", ent->bitsize, dat->byte, dat->bit)
+      _obj->bitsize = bit_read_RL(dat); // until the handles
+      LOG_TRACE("Entity bitsize: " FORMAT_BL " @%lu.%u\n", _obj->bitsize, dat->byte, dat->bit)
     }
   SINCE(R_2007)
     {
       // The handle stream offset, i.e. end of the object, right after
       // the has_strings bit.
-      //ent->object->hdlpos = bit_position(dat) + ent->bitsize - 42;
-      ent->object->hdlpos = ent->object->address * 8 + ent->bitsize;
-      ent->object->bitsize = ent->bitsize;
+      //_obj->hdlpos = bit_position(dat) + ent->bitsize - 42;
+      _obj->hdlpos = _obj->address * 8 + _obj->bitsize;
       // and set the string stream (restricted to size)
-      obj_string_stream(dat, ent->object, str_dat);
+      obj_string_stream(dat, _obj, str_dat);
     }
 
-  error = bit_read_H(dat, &(ent->object->handle));
+  error = bit_read_H(dat, &(_obj->handle));
   if (error)
     {
       LOG_WARN(
           "dwg_decode_entity handle:\tCurrent Bit_Chain address: 0x%0x",
           (unsigned int) dat->byte)
-      ent->bitsize = 0;
+      _obj->bitsize = 0;
       ent->num_eed = 0;
       ent->picture_exists = 0;
       ent->num_handles = 0;
       return 0;
     }
-  LOG_TRACE("handle: %d.%d.%lu [5]\n", ent->object->handle.code,
-            ent->object->handle.size, ent->object->handle.value)
+  LOG_TRACE("handle: %d.%d.%lu [5]\n", _obj->handle.code,
+            _obj->handle.size, _obj->handle.value)
 
   error = dwg_decode_eed(dat, (Dwg_Object_Object *)ent);
   if (error)
@@ -2431,14 +2432,14 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
         {
           LOG_ERROR(
               "dwg_decode_entity:  Absurd! Picture-size: %lu kB. Object: %lu (handle)",
-              (unsigned long)(ent->picture_size / 1000), ent->object->handle.value)
+              (unsigned long)(ent->picture_size / 1000), _obj->handle.value)
           bit_advance_position(dat, -(4 * 8 + 1));
         }
     }
 
   VERSIONS(R_13, R_14)
     {
-      ent->bitsize = bit_read_RL(dat);
+      _obj->bitsize = bit_read_RL(dat);
     }
 
   ent->entity_mode  = bit_read_BB(dat);
@@ -2555,6 +2556,7 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
   unsigned int i;
   BITCODE_BS size;
   int error = 2;
+  Dwg_Object *_obj = obj->object;
 
   obj->datpos = dat->byte;     // the data stream offset
   VERSIONS(R_2000, R_2007)
@@ -2562,38 +2564,37 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
       SINCE(R_2007) {
         *str_dat = *dat;
       }
-      obj->bitsize = bit_read_RL(dat);
+      _obj->bitsize = bit_read_RL(dat);
     }
   /*SINCE(R_2010)
     {
-      obj->bitsize = dat->size - 16;
+      _obj->bitsize = dat->size - 16;
     }*/
   SINCE(R_2007)
     {
-      LOG_TRACE("Object bitsize: " FORMAT_RL " @%lu.%u %lu\n", obj->bitsize,
+      LOG_TRACE("Object bitsize: " FORMAT_RL " @%lu.%u %lu\n", _obj->bitsize,
                dat->byte, dat->bit, bit_position(dat));
       // The handle stream offset, i.e. end of the object, right after
       // the has_strings bit.
-      //obj->object->hdlpos = bit_position(dat) + obj->bitsize - 42;
-      obj->object->hdlpos = obj->object->address * 8 + obj->bitsize;
-      obj->object->bitsize = obj->bitsize;
+      //_obj->hdlpos = bit_position(dat) + obj->bitsize - 42;
+      _obj->hdlpos = _obj->address * 8 + _obj->bitsize;
       // and set the string stream (restricted to size)
-      obj_string_stream(dat, obj->object, str_dat);
+      obj_string_stream(dat, _obj, str_dat);
     }
 
-  if (bit_read_H(dat, &obj->object->handle))
+  if (bit_read_H(dat, &_obj->handle))
     {
       LOG_ERROR(
           "\tError in object handle! Bit_Chain current address: 0x%0x",
           (unsigned int) dat->byte)
-      obj->bitsize = 0;
+      _obj->bitsize = 0;
       obj->num_eed = 0;
       obj->num_handles = 0;
       obj->num_reactors = 0;
       return -1;
     }
-  LOG_TRACE("handle: %d.%d.%lu [5]\n", obj->object->handle.code,
-            obj->object->handle.size, obj->object->handle.value)
+  LOG_TRACE("handle: %d.%d.%lu [5]\n", _obj->handle.code,
+            _obj->handle.size, _obj->handle.value)
 
   error = dwg_decode_eed(dat, obj);
   if (error)
@@ -2601,7 +2602,7 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
 
   VERSIONS(R_13,R_14)
     {
-      obj->bitsize = bit_read_RL(dat);
+      _obj->bitsize = bit_read_RL(dat);
     }
   // documentation bug
   obj->num_reactors = bit_read_BL(dat);

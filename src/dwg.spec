@@ -4386,7 +4386,7 @@ DWG_OBJECT(XRECORD)
   DECODER
     {
       for (vcount=0;
-           hdl_dat->byte < obj->tio.object->datpos + (obj->tio.object->bitsize/8);
+           hdl_dat->byte < obj->tio.object->datpos + (obj->bitsize/8);
            vcount++)
         {
           FIELD_VALUE(objid_handles) = vcount

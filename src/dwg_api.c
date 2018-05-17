@@ -17085,7 +17085,7 @@ BITCODE_RL
 dwg_ent_get_bitsize(dwg_obj_ent *obj, int *error)
 {
   *error = 0;
-  return obj->bitsize;
+  return obj->object->bitsize;
 }
 unsigned int
 dwg_obj_get_num_eed(dwg_obj_obj *obj, int *error)

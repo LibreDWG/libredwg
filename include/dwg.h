@@ -3685,9 +3685,6 @@ typedef struct _dwg_object_entity
     Dwg_Entity_UNKNOWN_ENT *UNKNOWN_ENT;
   } tio;
 
-  BITCODE_RL bitsize;
-  /* Dwg_Handle handle; */
-
   unsigned int num_eed;
   Dwg_Eed *eed; /* see also Dwg_Resbuf* xdata */
 
@@ -3805,13 +3802,10 @@ typedef struct _dwg_object_object
     Dwg_Object_UNKNOWN_OBJ *UNKNOWN_OBJ;
   } tio;
 
-  BITCODE_RL bitsize;
   long unsigned int datpos; /* the data stream offset */
-  /* Dwg_Handle handle; */
   unsigned int num_eed;
   Dwg_Eed *eed;
 
-  /* TODO: should these be removed? */
   BITCODE_BL num_reactors;      /* r13-r14 */
   BITCODE_B xdic_missing_flag;  /* r2004+ */
   BITCODE_B has_ds_binary_data; /* r2013+ */
@@ -3830,6 +3824,7 @@ typedef struct _dwg_object
   unsigned int type;
   unsigned int index;
 
+  long unsigned int bitsize_address; /* bitsize offset: r13-2007 */
   BITCODE_B  has_strings;       /* r2007+ */
   BITCODE_RL stringstream_size; /* r2007+ in bits, unused */
   BITCODE_MC handlestream_size; /* r2010+ in bits */
