@@ -67,7 +67,7 @@ if Extension[-1] == 'txt':
 else:
 	XMLFileName = OutDir + "/" + DwgTxtFileName + "xml"
 
-if os.path.exists(DwgTxtFileName):
+if os.path.exists(DwgTxtFileName) and os.path.exists(OutDir):
         FR = open(DwgTxtFileName,'r')
         FW = open(XMLFileName,'w')
         for Line in FR:

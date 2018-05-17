@@ -27,13 +27,13 @@ comparison later.
 def generatexml(dwgdir):
 	# This beats ‘sys.argv[0]’, which is not guaranteed to be set.
 	me = os.getenv ("PYTHON")
-        srcdir = os.path.dirname(__file__)
+	srcdir = os.path.dirname(__file__)
 	current_dir = os.getcwd()
 	os.chdir(dwgdir)
 	for filename in glob.glob ("*/*.txt"):
 		# maybe add double-quotes for the script?
 		os.system (me + " " + srcdir + "/txttoxml.py " + filename + " "
-                           + current_dir + "/test_output")
+	                   + current_dir + "/test_output")
 	os.chdir(current_dir)
 
 '''
@@ -106,13 +106,13 @@ def xmlprocess(ideal, practical):
 
 	match = 0
 
-	#Now its time for comparison, For each Dwgenentity
+	# Now its time for comparison, For each dwg entity
 	for original, duplicate in zip(original_entities, duplicate_entities):
 		original_attributes = {}
 		duplicate_attributes = {}
 		excluded_attributes = ["Delta", "id", "Document", "Visible", "text", "Application", "Hyperlinks"]
 
-		#collect original attributes. Removing the attributes here, so the total length is also set
+		# collect original attributes. Removing the attributes here, so the total length is also set
 		for attr in original.properties:
 			if attr.name not in excluded_attributes:
 				original_attributes[attr.name] = processattr(attr.content)
@@ -123,8 +123,8 @@ def xmlprocess(ideal, practical):
 
 		
 		unmatched_attr = []
-		#collect duplicate attributes and check if it matches with original ones
-		for key,value in original_attributes.iteritems():
+		# collect duplicate attributes and check if it matches with original ones
+		for key,value in original_attributes.items():
 			try:
 				if value == duplicate_attributes[key]:
 					match+=1
@@ -142,7 +142,7 @@ def xmlprocess(ideal, practical):
 				continue
 		
 
-	#What are the total number of attributes
+	# What are the total number of attributes
 	try:
 		total_attr = len(original_attributes)
 		if total_attr == 0:
