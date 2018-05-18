@@ -1690,18 +1690,26 @@ dwg_encode_add_object(Dwg_Object* obj, Bit_Chain* dat,
    }
    */
 
+  /* Now 1 padding bits until next byte, and then a RS CRC */
+  if (dat->bit) {
+    for (int i=dat->bit; i<8; i++) {
+      bit_write_B(dat, 1);
+    }
+  }
+  bit_write_CRC(dat, address, 0xC0C1);
+
   /* Skip some bits to the next object. Objects always start at bit 0
    * size should be really calculated and left alone.
    */
   {
-    unsigned long next_addr = previous_address + obj->size;
+    unsigned long next_addr = address + obj->size;
     if (dat->bit)
       dat->byte++;
     if (next_addr != dat->byte)
       {
         if (obj->size)
           LOG_WARN("Wrong object size: %lu + %u != %lu: %ld off",
-                   previous_address, obj->size, dat->byte,
+                   address, obj->size, dat->byte,
                    (long)(next_addr - dat->byte));
         dat->byte = next_addr;
       }

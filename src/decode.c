@@ -832,11 +832,11 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
     }
 
   // Check CRC
-  ckr = bit_calc_CRC(0xc0c1, dat->chain, dat->byte);
+  ckr = bit_calc_CRC(0xC0C1, dat->chain, dat->byte);
   ckr2 = bit_read_RS(dat);
   if (ckr != ckr2)
     {
-      LOG_ERROR("Header CRC mismatch %d <=> %d", ckr, ckr2);
+      LOG_ERROR("Header CRC mismatch %x <=> %x", ckr, ckr2);
       //if (dwg->header.version == R_2000)
       //  return -1;
       /* The CRC depends on num_sections. XOR result with
@@ -921,7 +921,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
   dat->bit = 0;
   ckr = dwg->header_vars.CRC;
   pvz = dwg->header.section[SECTION_HEADER_R13].address + 16;
-  ckr2 = bit_calc_CRC(0xc0c1, &(dat->chain[pvz]),
+  ckr2 = bit_calc_CRC(0xC0C1, &(dat->chain[pvz]),
                       dwg->header.section[SECTION_HEADER_R13].size - 34);
   if (ckr != ckr2)
     {
@@ -1012,7 +1012,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
   dat->bit = 0;
   ckr = bit_read_RS(dat);
   pvz = dwg->header.section[SECTION_CLASSES_R13].address + 16;
-  ckr2 = bit_calc_CRC(0xc0c1, &(dat->chain[pvz]),
+  ckr2 = bit_calc_CRC(0xC0C1, &(dat->chain[pvz]),
                       dwg->header.section[SECTION_CLASSES_R13].size - 34);
   if (ckr != ckr2)
     {
@@ -1048,7 +1048,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
       startpos = dat->byte;
 
       section_size = bit_read_RS_LE(dat);
-      LOG_TRACE("Section size: %u\n", section_size);
+      LOG_TRACE("\nSection size: %u\n", section_size);
       if (section_size > 2035)
         {
           LOG_ERROR("Object-map section size greater than 2035!")
@@ -1095,7 +1095,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
         }
 
       ckr = bit_read_RS_LE(dat);
-      ckr2 = bit_calc_CRC(0xc0c1, dat->chain + startpos, section_size);
+      ckr2 = bit_calc_CRC(0xC0C1, dat->chain + startpos, section_size);
       if (ckr != ckr2)
         {
           LOG_ERROR("Section CRC mismatch %d <=> %d", ckr, ckr2);
@@ -1969,7 +1969,7 @@ read_2004_section_handles(Bit_Chain* dat, Dwg_Data *dwg)
       long unsigned int startpos = hdl_dat.byte;
 
       section_size = bit_read_RS_LE(&hdl_dat);
-      LOG_TRACE("Section size: %u\n", section_size);
+      LOG_TRACE("\nSection size: %u\n", section_size);
       if (section_size > 2034)
         {
           LOG_ERROR("Object-map section size greater than 2034!");
@@ -3868,6 +3868,33 @@ dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
        fprintf (stderr, "End address:\t%10lu (calculated)\n", address + 2 + obj->size);
      }
    */
+
+  /* Now 1 padding bits until next byte, and then a RS CRC */
+  if (dat->bit) {
+    unsigned char r = 8 - dat->bit;
+    //LOG_TRACE("padding: %X/%X (%d bits)\n", dat->chain[dat->byte],
+    //          dat->chain[dat->byte] & ((1<<r)-1), r);
+    bit_advance_position(dat, r);
+  }
+#if 1
+  bit_check_CRC(dat, address, 0xC0C1);
+#else  
+  {
+    BITCODE_RS seed, calc;
+    BITCODE_RS crc = bit_read_RS(dat);
+    LOG_TRACE("crc:  %X RS\n", crc);
+    dat->byte -= 2;
+    // experimentally verify the seed 0xC0C1, for all objects
+    for (seed=0; seed<0xffff; seed++) {
+      calc = bit_calc_CRC(seed, &(dat->chain[address]), dat->byte - address);
+      if (calc == crc)
+        break;
+    }
+    bit_check_CRC(dat, address, seed);
+    LOG_TRACE("seed: %X RS\n", seed);
+    LOG_TRACE("size: %d\n", (int)(dat->byte - address - 2));
+  }
+#endif
 
   /* Register the previous addresses for return
    */

@@ -68,7 +68,8 @@ customize the installation dirs.  Other options recognized by configure are:
     Enable write support (default: no). When enabled, you activate the write
     support for the dwg format.
     This is an experimental feature that is under construction, so it's
-    highly unstable.
+    highly unstable. Rewriting test/test-data/sample_2000.dwg works ok in the R_2000
+    format.
 
 == Example usage of the library ==
 
