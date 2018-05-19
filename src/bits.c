@@ -911,7 +911,7 @@ bit_write_DD(Bit_Chain * dat, double value, double default_value)
         }
       else
         {
-          bit_write_BB(dat, 0);
+          bit_write_BB(dat, 3);
           bit_write_RD(dat, value);
         }
     }
@@ -965,7 +965,7 @@ bit_read_H(Bit_Chain * dat, Dwg_Handle * handle)
       return (-1);
     }
 
-  //XXX is this code portable?
+  // TODO: little-endian only
   val = (unsigned char *) &handle->value;
   for (i = handle->size - 1; i >= 0; i--)
     val[i] = bit_read_RC(dat);
@@ -988,6 +988,7 @@ bit_write_H(Bit_Chain * dat, Dwg_Handle * handle)
       return;
     }
 
+  // TODO: little-endian only
   val = (unsigned char *) &handle->value;
   for (i = 3; i >= 0; i--)
     if (val[i])
@@ -1213,31 +1214,19 @@ char* bit_convert_TU(BITCODE_TU wstr)
 
 /** Read 1 bitlong according to normal order
  */
-long unsigned int
+BITCODE_RL
 bit_read_L(Bit_Chain * dat)
 {
-  unsigned char btk[4];
-
-  btk[3] = bit_read_RC(dat);
-  btk[2] = bit_read_RC(dat);
-  btk[1] = bit_read_RC(dat);
-  btk[0] = bit_read_RC(dat);
-
-  return (*((long unsigned int *) btk));
+  return bit_read_RL_LE(dat);
 }
 
 /** Write 1 bitlong according to normal order
  */
 void
-bit_write_L(Bit_Chain * dat, long unsigned int value)
+bit_write_L(Bit_Chain * dat, BITCODE_RL value)
 {
-  unsigned char *btk;
-
-  btk = (unsigned char *) value;
-  bit_write_RC(dat, btk[3]);
-  bit_write_RC(dat, btk[2]);
-  bit_write_RC(dat, btk[1]);
-  bit_write_RC(dat, btk[0]);
+  bit_write_RL_LE(dat, value);
+  return;
 }
 
 /** Read 2 time BL bitlong (compacted data).

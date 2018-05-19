@@ -4,53 +4,34 @@
 #include <stdlib.h>
 #include "tests_common.h"
 
-void bit_write_B_tests (void);
 void bit_advance_position_tests (void);
 void bit_read_B_tests (void);
-void bit_write_BB_tests (void);
+void bit_write_B_tests (void);
 void bit_read_BB_tests (void);
-void bit_write_3B_tests (void);
+void bit_write_BB_tests (void);
 void bit_read_3B_tests (void);
-void bit_write_4BITS_tests (void);
+void bit_write_3B_tests (void);
 void bit_read_4BITS_tests (void);
+void bit_write_4BITS_tests (void);
 void bit_read_RC_tests (void);
 void bit_write_RC_tests (void);
 void bit_read_RS_tests (void);
 void bit_write_RS_tests (void);
-void bit_write_RL_tests (void);
 void bit_read_RL_tests (void);
-void bit_write_RD_tests (void);
+void bit_write_RL_tests (void);
 void bit_read_RD_tests (void);
-    
-void
-bit_write_B_tests (void)
-{
-  Bit_Chain bitchain = strtobt ("0000000");
-  bit_write_B (&bitchain, 1);
-
-  if (bitchain.chain[0] == 0x80)
-    {
-      pass ("bit_write_B");
-    }
-  else
-    {
-      fail ("bit_write_B");
-    }
-
-}
+void bit_write_RD_tests (void);
+void bit_read_H_tests (void);
+void bit_write_H_tests (void);
 
 void
 bit_advance_position_tests (void)
 {
   Bit_Chain bitchain = strtobt ("10101010");
   if (bitchain.bit == 0 && bitchain.byte == 0)
-    {
-      pass ("bit_advance_position");
-    }
+    pass ("bit_advance_position");
   else
-    {
-      fail ("bit_advance_position");
-    }
+    fail ("bit_advance_position");
 }
 
 void
@@ -59,12 +40,35 @@ bit_read_B_tests (void)
   Bit_Chain bitchain = strtobt ("101010");
   unsigned char result = bit_read_B (&bitchain);
   if (result == 0x01)
+    pass ("bit_read_B");
+  else
+    fail ("bit_read_B %c", result);
+}
+
+void
+bit_write_B_tests (void)
+{
+  Bit_Chain bitchain = strtobt ("0000000");
+  bit_write_B (&bitchain, 1);
+
+  if (bitchain.chain[0] == 0x80)
+    pass ("bit_write_B");
+  else
+    fail ("bit_write_B");
+}
+
+void
+bit_read_BB_tests (void)
+{
+  Bit_Chain bitchain = strtobt ("10101010");
+  unsigned char result = bit_read_BB (&bitchain);
+  if (result == 2)
     {
-      pass ("bit_read_B");
+      pass ("bit_read_BB");
     }
   else
     {
-      fail ("bit_read_B %c", result);
+      fail ("bit_read_BB %d", result);
     }
 }
 
@@ -86,18 +90,24 @@ bit_write_BB_tests (void)
 }
 
 void
-bit_read_BB_tests (void)
+bit_read_3B_tests (void)
 {
   Bit_Chain bitchain = strtobt ("10101010");
-  unsigned char result = bit_read_BB (&bitchain);
-  if (result == 2)
-    {
-      pass ("bit_read_BB");
-    }
+  unsigned char result = bit_read_3B (&bitchain);
+  if (result == 1)
+    pass ("bit_read_3B");
   else
-    {
-      fail ("bit_read_BB %d", result);
-    }
+    fail ("bit_read_3B %d", result);
+  result = bit_read_3B (&bitchain);
+  if (result == 1)
+    pass ("bit_read_3B");
+  else
+    fail ("bit_read_3B %d", result);
+  result = bit_read_3B (&bitchain);
+  if (result == 1)
+    pass ("bit_read_3B");
+  else
+    fail ("bit_read_3B %d", result);
 }
 
 void
@@ -108,46 +118,9 @@ bit_write_3B_tests (void)
   bit_write_3B (&bitchain, 0x2);
 
   if (bitchain.chain[0] == 80)
-    {
-      pass ("bit_write_3B");
-    }
+    pass ("bit_write_3B");
   else
-    {
-      fail ("bit_write_3B %d", bitchain.chain[0]);
-    }
-}
-
-void
-bit_read_3B_tests (void)
-{
-  Bit_Chain bitchain = strtobt ("10101010");
-  unsigned char result = bit_read_3B (&bitchain);
-  if (result == 1)
-    {
-      pass ("bit_read_3B");
-    }
-  else
-    {
-      fail ("bit_read_3B %d", result);
-    }
-  result = bit_read_3B (&bitchain);
-  if (result == 1)
-    {
-      pass ("bit_read_3B");
-    }
-  else
-    {
-      fail ("bit_read_3B %d", result);
-    }
-  result = bit_read_3B (&bitchain);
-  if (result == 1)
-    {
-      pass ("bit_read_3B");
-    }
-  else
-    {
-      fail ("bit_read_3B %d", result);
-    }
+    fail ("bit_write_3B %d", bitchain.chain[0]);
 }
 
 /* This function calls tests for bit_write_4BITS_tests() 
@@ -161,13 +134,9 @@ bit_write_4BITS_tests (void)
   printf ("%x\n", bitchain.chain[0]);
 
   if (bitchain.chain[0] == 0xF0)
-    {
-      pass ("bit_write_4BITS");
-    }
+    pass ("bit_write_4BITS");
   else
-    {
-      fail ("bit_write_4BITS %x", bitchain.chain[0]);
-    }
+    fail ("bit_write_4BITS %x", bitchain.chain[0]);
 }
 
 void
@@ -176,13 +145,9 @@ bit_read_4BITS_tests (void)
   Bit_Chain bitchain = strtobt ("11111111");
   unsigned char result = bit_read_4BITS (&bitchain);
   if (result == 0xF)
-    {
-      pass ("bit_read_4BITS");
-    }
+    pass ("bit_read_4BITS");
   else
-    {
-      fail ("bit_read_4BITS");
-    }
+    fail ("bit_read_4BITS");
 }
 
 void
@@ -191,13 +156,9 @@ bit_read_RC_tests (void)
   Bit_Chain bitchain = strtobt ("11111111");
   unsigned char result = bit_read_RC (&bitchain);
   if (result == 0xFF)
-    {
-      pass ("bit_read_RC");
-    }
+    pass ("bit_read_RC");
   else
-    {
-      fail ("bit_read_RC");
-    }
+    fail ("bit_read_RC");
 }
 
 void
@@ -206,13 +167,9 @@ bit_write_RC_tests (void)
   Bit_Chain bitchain = strtobt ("00000000");
   bit_write_RC (&bitchain, 0xFF);
   if (bitchain.chain[0] == 0xFF)
-    {
-      pass ("bit_write_RC");
-    }
+    pass ("bit_write_RC");
   else
-    {
-      fail ("bit_write_RC");
-    }
+    fail ("bit_write_RC");
 }
 
 void
@@ -222,13 +179,9 @@ bit_read_RS_tests (void)
   unsigned int result = bit_read_RS (&bitchain);
 
   if (result == 511)
-    {
-      pass ("bit_read_RS");
-    }
+    pass ("bit_read_RS");
   else
-    {
-      fail ("bit_write_RS");
-    }
+    fail ("bit_write_RS");
 }
 
 void
@@ -238,13 +191,9 @@ bit_write_RS_tests (void)
   bit_write_RS (&bitchain, 511);
 
   if (bitchain.chain[0] == 255 && bitchain.chain[1] == 0x01)
-    {
-      pass ("bit_write_RS");
-    }
+    pass ("bit_write_RS");
   else
-    {
-      fail ("bit_write_RS");
-    }
+    fail ("bit_write_RS");
 }
 
 void
@@ -252,15 +201,11 @@ bit_write_RL_tests (void)
 {
   Bit_Chain bitchain = strtobt ("11111111111111111111111111111111");
   bit_write_RL (&bitchain, 2147549183);
-  if (bitchain.chain[0] == 255 && bitchain.chain[1] == 255
-      && bitchain.chain[2] == 0 && bitchain.chain[3] == 128)
-    {
-      pass ("bit_write_RL");
-    }
+  if (bitchain.chain[0] == 255 && bitchain.chain[1] == 255 &&
+      bitchain.chain[2] == 0 && bitchain.chain[3] == 128)
+    pass ("bit_write_RL");
   else
-    {
-      fail ("bit_write_RL");
-    }
+    fail ("bit_write_RL");
 }
 
 void
@@ -268,37 +213,11 @@ bit_read_RL_tests (void)
 {
   Bit_Chain bitchain = strtobt ("11111111111111111111111111111111");
   long unsigned int result = bit_read_RL (&bitchain);
+
   if (result == 0xFFFFFFFF)
-    {
       pass ("bit_read_RL");
-    }
   else
-    {
       fail ("bit_read_RL");
-    }
-}
-
-void
-bit_write_RD_tests (void)
-{
-  Bit_Chain bitchain;
-  double value = 25.2547841;
-  double *result;
-
-  bitprepare(&bitchain, sizeof(double));
-  bit_write_RD(&bitchain, value);
-  bit_print(&bitchain, sizeof(double));
-
-  result = (double *) bitchain.chain;
-
-  if (*result == value)
-  {
-  	pass("bit_write_RD");
-  }
-  else
-  {
-  	fail("bit_write_RD");
-  }
 }
 
 void
@@ -315,13 +234,27 @@ bit_read_RD_tests (void)
   result = bit_read_RD(&bitchain);
 
   if (result == value)
-    {
-      pass("bit_read_RD");
-    }
+    pass("bit_read_RD");
   else
-    {
-      fail("bit_read_RD");
-    }
+    fail("bit_read_RD");
+}
+
+void
+bit_write_RD_tests (void)
+{
+  Bit_Chain bitchain;
+  double value = 25.2547841;
+  double *result;
+
+  bitprepare(&bitchain, sizeof(double));
+  bit_write_RD(&bitchain, value);
+  bit_print(&bitchain, sizeof(double));
+
+  result = (double *) bitchain.chain;
+  if (*result == value)
+    pass("bit_write_RD");
+  else
+    fail("bit_write_RD");
 }
 
 int
@@ -329,24 +262,32 @@ main (int argc, char const *argv[])
 {
 
   Bit_Chain bitchain;
+  BITCODE_BD dbl;
+  BITCODE_BL bl;
+  BITCODE_BS bs;
+  unsigned long pos;
+  unsigned char sentinel[] =
+    {0xCF,0x7B,0x1F,0x23,0xFD,0xDE,0x38,0xA9,0x5F,0x7C,0x68,0xB8,0x4E,0x6D,0x33,0x5F};
   
+  bit_read_B_tests ();
   bit_write_B_tests ();
   bit_advance_position_tests ();
-  bit_read_B_tests ();
-  bit_write_BB_tests ();
   bit_read_BB_tests ();
-  bit_write_3B_tests ();
+  bit_write_BB_tests ();
   bit_read_3B_tests ();
-  bit_write_4BITS_tests ();
+  bit_write_3B_tests ();
   bit_read_4BITS_tests ();
+  bit_write_4BITS_tests ();
   bit_read_RC_tests ();
   bit_write_RC_tests ();
   bit_read_RS_tests ();
   bit_write_RS_tests ();
   bit_read_RL_tests ();
   bit_write_RL_tests ();
-  bit_write_RD_tests();
   bit_read_RD_tests();
+  bit_write_RD_tests();
+  //bit_read_H_tests();
+  //bit_write_H_tests();
 
   //Prepare the testcase
   bitchain.size = 100;
@@ -355,307 +296,218 @@ main (int argc, char const *argv[])
   bitchain.version = R_2000;
   bitchain.chain = (unsigned char *) malloc (bitchain.size);
 
-#if 0
   bit_write_RD(&bitchain, 0xBA43B7400);
-  if (bitchain.byte == 16 && bitchain.bit == 0)
-    {
-      pass("bit_write_RL is working properly");
-    }
+  if (bitchain.byte == 8 && bitchain.bit == 0)
+    pass("bit_write_RD");
   else
-    {
-      fail("bit_write_RL is not working properly");
-    }
+    fail("bit_write_RD @%d.%d", bitchain.byte, bitchain.bit);
 
   bit_advance_position(&bitchain, -64);
   if (bit_read_RD(&bitchain) == 0xBA43B7400)
-    {
-      pass("bit_read_RD is working properly");
-    }
+    pass("bit_read_RD");
   else
-    {
-      fail("bit_read_RD is not working properly");
-    }
+    fail("bit_read_RD");
 
   bit_write_BS(&bitchain, 256);
-  if (bitchain.byte == 16 && bitchain.bit == 2)
-    {
-      pass("bit_write_BS is working properly");
-    }
+  if (bitchain.byte == 8 && bitchain.bit == 2)
+    pass("bit_write_BS");
   else
-    {
-      fail("bit_write_BS is not working properly");
-    }
+    fail("bit_write_BS @%d.%d", bitchain.byte, bitchain.bit);
 
   bit_advance_position(&bitchain, -2);
-  if (bit_read_BS(&bitchain) == 256)
-    {
-      pass("bit_read_BS is working properly");
-    }
+  if ((bs = bit_read_BS(&bitchain)) == 256)
+    pass("bit_read_BS");
   else
-    {
-      fail("bit_read_BS is not working properly");
-    }
+    fail("bit_read_BS %d", bs);
 
   bit_write_BL(&bitchain, 0);
-  if (bitchain.byte == 16 && bitchain.bit == 4)
-    {
-      pass("bit_write_BL is working properly");
-    }
+  if (bitchain.byte == 8 && bitchain.bit == 4)
+    pass("bit_write_BL");
   else
-    {
-      fail("bit_write_BL is working properly");
-    }
+    fail("bit_write_BL @%d.%d", bitchain.byte, bitchain.bit);
 
   bit_advance_position(&bitchain, -2);
-  if (bit_read_BL(&bitchain) == 0)
-    {
-      pass("bit_read_BL is working properly");
-    }
+  if ((bl = bit_read_BL(&bitchain)) == 0)
+    pass("bit_read_BL");
   else
-    {
-      fail("bit_read_BL is working properly");
-    }
+    fail("bit_read_BL " FORMAT_BL, bl);
 
+  pos = bit_position(&bitchain);
   bit_write_BD(&bitchain, 1.0);
-  if (bitchain.byte == 16 && bitchain.bit == 6)
-    {
-      pass("bit_write_BD is working properly");
-    }
+  if (bitchain.byte == 8 && bitchain.bit == 6)
+    pass("bit_write_BD");
   else
-    {
-      fail("bit_write_BD is not working properly");
-    }
+    fail("bit_write_BD @%d.%d", bitchain.byte, bitchain.bit);
 
-  bit_advance_position(&bitchain, -2);
-  if (bit_read_BD(&bitchain) == 1.0)
-    {
-      pass("bit_read_BD is working properly");
-    }
+  bit_set_position(&bitchain, pos);
+  if ((dbl = bit_read_BD(&bitchain)) == 1.0)
+    pass("bit_read_BD");
   else
-    {
-      fail("bit_read_BD is not working properly");
-    }
+    fail("bit_read_BD %f", dbl);
 
   bit_advance_position(&bitchain, 2);
   bit_write_MC(&bitchain, 300);
-  if (bitchain.byte == 19)
-    {
-      pass("bit_write_MC is working properly");
-    }
+  if (bitchain.byte == 11)
+    pass("bit_write_MC");
   else
-    {
-      fail("bit_write_MC is not working properly");
-    }
+    fail("bit_write_MC @%d.%d", bitchain.byte, bitchain.bit);
 
   bit_advance_position(&bitchain, -16);
   if (bit_read_MC(&bitchain) == 300)
-    {
-      pass("bit_read_MC is working properly");
-    }
+    pass("bit_read_MC");
   else
-    {
-      fail("bit_read_MC is not working properly");
-    }
+    fail("bit_read_MC");
 
   bit_write_MS(&bitchain, 5000);
-  if (bitchain.byte == 21)
-    {
-      pass("bit_write_MS is working properly");
-    }
+  if (bitchain.byte == 13)
+    pass("bit_write_MS");
   else
-    {
-      fail("bit_write_MS is not working properly");
-    }
+    fail("bit_write_MS @%d.%d", bitchain.byte, bitchain.bit);
 
   bit_advance_position(&bitchain, -16);
-  if (bit_read_MS(&bitchain) == 5000)
-    {
-      pass("bit_read_MS is working properly");
-    }
+  if ((bs = bit_read_MS(&bitchain)) == 5000)
+    pass("bit_read_MS");
   else
-    {
-      fail("bit_read_MS is not working properly");
-    }
+    fail("bit_read_MS %d", bs);
 
   bit_write_BE(&bitchain, 20.2535, 10.2523, 52.32563);
-  if (bitchain.bit == 7 && bitchain.byte == 45)
-    {
-      pass("bit_write_BE is working properly");
-    }
+  if (bitchain.bit == 7 && bitchain.byte == 37)
+    pass("bit_write_BE");
   else
-    {
-      fail("bit_write_BE is not working properly");
-    }
+    fail("bit_write_BE @%d.%d", bitchain.byte, bitchain.bit);
 
   bit_advance_position(&bitchain, -199);
   {
     double x,y,z;
     bit_read_BE(&bitchain, &x, &y, &z);
     if (x == 20.2535 && y == 10.2523 && z == 52.32563)
-      {
-        pass("bit_read_BE is working properly");
-      }
+      pass("bit_read_BE");
     else
-      {
-        fail("bit_read_BE is not working properly");
-      }
+      fail("bit_read_BE (%f,%f,%f)", x, y, z);
   }
 
+  pos = bit_position(&bitchain);
   bit_write_DD(&bitchain, 20.256, 50.252);
-  if (bitchain.bit == 1 && bitchain.byte == 54)
-    {
-      pass("bit_write_DD is working properly");
-    }
+  if (bitchain.bit == 1 && bitchain.byte == 46)
+    pass("bit_write_DD");
   else
-    {
-      fail("bit_write_DD is not working properly");
-    }
+    fail("bit_write_DD @%d.%d", bitchain.byte, bitchain.bit);
 
-  //bit_advance_position is not working
-  bit_advance_position(&bitchain, -73);
-  bit_advance_position(&bitchain, 7);
-  if (bit_read_DD(&bitchain, 50.252) == 20.256)
-    {
-      pass("bit_read_DD is working properly");
-    }
+  bit_set_position(&bitchain, pos);
+  if ((dbl = bit_read_DD(&bitchain, 50.252)) == 20.256)
+    pass("bit_read_DD");
   else
-    {
-      fail("bit_read_DD is not working properly");
-    }
+    fail("bit_read_DD %f", dbl);
 
   bit_advance_position(&bitchain, 64);
+  pos = bit_position(&bitchain);
   bit_write_BT(&bitchain, 3.0);
   if (bitchain.bit == 4 && bitchain.byte == 62)
-    {
-      pass("bit_write_BT is working properly");
-    }
+    pass("bit_write_BT");
   else
-    {
-      fail("bit_write_BT is not working properly");
-    }
+    fail("bit_write_BT @%d.%d", bitchain.byte, bitchain.bit);
 
-  bit_advance_position(&bitchain, -74);
-  if (bit_read_BT(&bitchain) == 3.0)
-    {
-      pass("bit_read_BT is working properly");
-    }
+  bit_set_position(&bitchain, pos);
+  if ((dbl = bit_read_BT(&bitchain)) == 3.0)
+    pass("bit_read_BT");
   else
-    {
-      fail("bit_read_BT is not working properly");
-    }
+    fail("bit_read_BT %f", dbl);
 
   {
-    Dwg_Handle write_handle;
-    write_handle.code = 2;
-    write_handle.value = 100;
-    bit_write_H(&bitchain, &write_handle);
-    if (bitchain.bit == 4 && bitchain.byte == 64)
+    int i;
+    Dwg_Handle handles[] = {{4,1,5}, {12,1,11}, {4,1,12}, {3,0,0}, {5,0,0},
+                            {2,1,24}, {2,2,522}, {5,1,94}, {2,1,100}};
+    Dwg_Handle handle;
+    pos = bit_position(&bitchain);
+    for (i=0; i<9; i++)
       {
-        pass("bit_write_H is working properly");
-      }
-    else
-      {
-        fail("bit_write_H is not working properly");
+        unsigned long byte = 63 + handles[i].size;
+        bit_write_H(&bitchain, &handles[i]);
+        if (bitchain.byte == byte && bitchain.bit == 4)
+          pass("bit_write_H (%d.%d.%ld)",
+               handles[i].code, handles[i].size, handles[i].value);
+        else
+          fail("bit_write_H (%d.%d.%ld) @%d.%d",
+               handles[i].code, handles[i].size, handles[i].value,
+               bitchain.byte, bitchain.bit);
+
+        bit_set_position(&bitchain, pos);
+        bit_read_H(&bitchain, &handle);
+        if (handle.code == handles[i].code &&
+            handle.size == handles[i].size &&
+            handle.value == handles[i].value)
+          pass("bit_read_H (%d.%d.%ld)", handle.code, handle.size, handle.value);
+        else
+          fail("bit_read_H (%d.%d.%lu)", handle.code, handle.size, handle.value);
+
+        bit_set_position(&bitchain, pos);
       }
   }
 
-  {
-    Dwg_Handle read_handle;
-    bit_advance_position(&bitchain, -16);
-    bit_read_H(&bitchain, &read_handle);
-    if (read_handle.code == 2 && read_handle.value == 100)
-      {
-        pass("bit_read_H is working properly");
-      }
-    else
-      {
-        fail("bit_read_H is not working properly");
-      }
-  }
-
-  bit_advance_position(&bitchain, -18);
+  bit_advance_position(&bitchain, -2);
   {
     unsigned int crc = bit_write_CRC(&bitchain, 0, 0x64);
-    if (crc == 10063)
-      {
-        pass("bit_write_CRC is working properly");
-      }
+    if (crc == 0x6618)
+      pass("bit_write_CRC");
     else
-      {
-        fail("bit_write_CRC is not working properly");
-      }
+      fail("bit_write_CRC %X", crc);
   }
 
   bit_advance_position(&bitchain, -16);
   if (bit_check_CRC(&bitchain, 0, 0x64))
-    {
-      pass("bit_check_CRC is working properly");
-    }
+    pass("bit_check_CRC");
   else
-    {
-      fail("bit_check_CRC is not working properly");
-    }
+    fail("bit_check_CRC");
 
   bit_advance_position(&bitchain, -16);
-  if (bit_read_CRC(&bitchain) == 10063)
-    {
-      pass("bit_read_CRC is working properly");
-    }
+  if ((bs = bit_read_CRC(&bitchain)) == 0x6618)
+    pass("bit_read_CRC");
   else
-    {
-      fail("bit_read_CRC is not working properly");
-    }
+    fail("bit_read_CRC %X", bs);
+  bit_advance_position(&bitchain, -16);
 
-  bit_write_TV(&bitchain, "GNU");
-  if (bitchain.bit == 2 && bitchain.byte == 71)
-    {
-      pass("bit_write_TV is working properly");
-    }
+  if ((bs = bit_calc_CRC(0x64, (unsigned char *)&bitchain.chain, 0)) == 0x64)
+    pass("bit_calc_CRC");
   else
-    {
-      fail("bit_write_TV is not working properly");
-    }
+    fail("bit_calc_CRC %X", bs);
+  bit_advance_position(&bitchain, 16);
+  
+  bit_write_TV(&bitchain, (char*)"GNU");
+  if (bitchain.byte == 69 && bitchain.bit == 2)
+    pass("bit_write_TV");
+  else
+    fail("bit_write_TV @%ld.%d", bitchain.byte, bitchain.bit);
 
   bit_advance_position(&bitchain, -34);
   if (!strcmp((const char*) bit_read_TV(&bitchain), "GNU"))
-    {
-      pass("bit_read_TV is working properly");
-    }
+    pass("bit_read_TV");
   else
-    {
-      fail("bit_read_TV is not working properly");
-    }
+    fail("bit_read_TV");
 	
-  //printf("Bit === %d and byte == %lu \n", bitchain.bit, bitchain.byte);
-  //bit_write_L(&bitchain, 20); //not working
-  fail("bit_write_L is not working properly");
-	
-  bit_advance_position(&bitchain, -33);
-  if (bit_read_L(&bitchain) == 140736713692480)
-    {
-      pass("bit_read_L is working properly");
-    }
+  bit_write_L(&bitchain, 20);
+  if (bitchain.byte == 73 && bitchain.bit == 2)
+    pass("bit_write_L");
   else
-    {
-      fail("bit_read_L is not working properly");
-    }
+    fail("bit_write_L @%ld.%d", bitchain.byte, bitchain.bit);
+	
+  bit_advance_position(&bitchain, -32);
+  if ((bl = bit_read_L(&bitchain)) == 20)
+    pass("bit_read_L");
+  else
+    fail("bit_read_L %ul", bl);
 
   {
     Dwg_Color color;
     color.index = 19;
     color.rgb = 5190965;
-    color.byte = 1;
-    color.name = "Some name";
-    color.book_name = "book_name";
+    color.flag = 1;
+    color.name = (char*)"Some name";
+    color.book_name = (char*)"book_name";
     bit_write_CMC(&bitchain, &color);
-    if (bitchain.bit == 2 && bitchain.byte == 73)
-      {
-        pass("bit_write_CMC is working properly");
-      }
+    if (bitchain.byte == 74 && bitchain.bit == 4)
+      pass("bit_write_CMC");
     else
-      {
-        fail("bit_write_CMC is not working properly");
-      }
+      fail("bit_write_CMC @%ld.%d", bitchain.byte, bitchain.bit);
   }
 
   bit_advance_position(&bitchain, -10);
@@ -665,62 +517,44 @@ main (int argc, char const *argv[])
 
     if (color_read.index == 19 &&
         color_read.rgb == 5190965 &&
-        color_read.byte == 1 &&
+        color_read.flag == 1 &&
         !strcmp(color_read.name, "Some name"))
-      {
-        pass("bit_read_CMC is working properly");
-      }
+      pass("bit_read_CMC");
     else
-      {
-        fail("bit_read_CMC is not working properly");
-      }
+      fail("bit_read_CMC");
   }
 
   bitchain.byte++;
   bitchain.bit = 0;
   {
-    unsigned char sentinel[] = {0xCF,0x7B,0x1F,0x23,0xFD,0xDE,0x38,0xA9,0x5F,0x7C,0x68,0xB8,0x4E,0x6D,0x33,0x5F};
     bit_write_sentinel(&bitchain, sentinel);
 	
     if (bitchain.chain[--bitchain.byte] == 0x5F)
-      {
-        pass("bit_write_sentinel is working properly");
-      }
+      pass("bit_write_sentinel");
     else
-      {
-        fail("bit_write_sentinel is not working properly");
-      }
+      fail("bit_write_sentinel %c", bitchain.chain[bitchain.byte]);
   }
 
   bitchain.bit = 0;
   bitchain.byte = 0;
   {
     int ret = bit_search_sentinel(&bitchain, sentinel);
-    if (bitchain.byte == 90)
-      {
-        pass("bit_search_sentinel is working properly");
-      }
+    if (bitchain.byte == 91)
+      pass("bit_search_sentinel");
     else
-      {
-        fail("bit_search_sentinel is not working properly");
-      }
+      fail("bit_search_sentinel %d", bitchain.byte);
   }
 
   bit_chain_alloc(&bitchain);
   if (bitchain.size == 41060)
-    {
-      pass("bit_chain_alloc is working properly");
-    }
+    pass("bit_chain_alloc");
   else
-    {
-      fail("bit_chain_alloc is not working properly");
-    }
+    fail("bit_chain_alloc %ld", bitchain.size);
 
   {
-    unsigned int check = bit_calc_CRC(12100, &bitchain.chain, 90);
+    unsigned int check = bit_calc_CRC(12100, (unsigned char *)&bitchain.chain, 90L);
     // How do I test this
   }
-#endif
 
   free (bitchain.chain);
   return 0;

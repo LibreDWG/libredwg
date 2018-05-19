@@ -236,11 +236,11 @@ bit_write_TU(Bit_Chain * dat, BITCODE_TU value);
 char*
 bit_convert_TU(BITCODE_TU wstr);
 
-long unsigned int
+BITCODE_RL
 bit_read_L(Bit_Chain * dat);
 
 void
-bit_write_L(Bit_Chain * dat, long unsigned int value);
+bit_write_L(Bit_Chain * dat, BITCODE_RL value);
 
 BITCODE_TIMEBLL
 bit_read_TIMEBLL(Bit_Chain * dat);
