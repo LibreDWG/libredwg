@@ -233,9 +233,13 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
   FIELD_VECTOR_N(name, type, _obj->size, dxf)
 
 #define FIELD_HANDLE(name, handle_code, dxf) \
-    IF_ENCODE_SINCE_R13 { \
-      RESET_VER \
-      assert(_obj->name); \
+  IF_ENCODE_SINCE_R13 { \
+    RESET_VER \
+    if (!_obj->name) { \
+      Dwg_Handle null_handle = {0,0,0}; \
+      bit_write_H(hdl_dat, &null_handle); \
+      LOG_TRACE(#name ": HANDLE(0.0.0) absolute:0 [%d]\n", dxf) \
+    } else { \
       if (handle_code != ANYCODE && _obj->name->handleref.code != handle_code) \
         { \
           LOG_WARN("Expected a CODE %d handle, got a %d", \
@@ -246,7 +250,8 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
                 _obj->name->handleref.code,\
                 _obj->name->handleref.size,\
                 _obj->name->handleref.value,\
-                _obj->name->absolute_ref, dxf)      \
+                _obj->name->absolute_ref, dxf) \
+      } \
     }
 #define FIELD_DATAHANDLE(name, handle_code, dxf) \
   { bit_write_H(dat, &_obj->name->handleref); }
@@ -1863,16 +1868,55 @@ dwg_encode_handleref(Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Data* dwg, Dwg_Obj
   assert(obj);
 }
 
+/**
+ * code:
+ *  TYPEDOBJHANDLE:
+ *   2 Soft owner
+ *   3 Hard owner
+ *   4 Soft pointer
+ *   5 Hard pointer
+ *  OFFSETOBJHANDLE for soft owners or pointers:
+ *   6 ref + 1
+ *   8 ref - 1
+ *   a ref + offset
+ *   c ref - offset
+ */
 void 
 dwg_encode_handleref_with_code(Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Data* dwg,
                                Dwg_Object_Ref* ref, unsigned int code)
 {
   //XXX fixme. create the handle, then check the code. allow relative handle soft codes.
   dwg_encode_handleref(hdl_dat, obj, dwg, ref);
-  if (ref->handleref.code != code)
+  if (ref->absolute_ref == 0 && ref->handleref.code != code)
     {
-      LOG_INFO("Warning: trying to write handle with wrong code.\n"
-               "Expected code=%d, got %d.\n", code, ref->handleref.code)
+      /*
+       * With TYPEDOBJHANDLE 2-5 the code indicates the type of ownership.
+       * With OFFSETOBJHANDLE >5 the handle is stored as an offset from some other handle.
+       */
+      switch (ref->handleref.code)
+        {
+        case 0x06:
+          ref->absolute_ref = (obj->handle.value + 1);
+          break;
+        case 0x08:
+          ref->absolute_ref = (obj->handle.value - 1);
+          break;
+        case 0x0A:
+          ref->absolute_ref = (obj->handle.value + ref->handleref.value);
+          break;
+        case 0x0C:
+          ref->absolute_ref = (obj->handle.value - ref->handleref.value);
+          break;
+        case 2: case 3: case 4: case 5:
+          ref->absolute_ref = ref->handleref.value;
+          break;
+        case 0: // ignore (ANYCODE)
+          ref->absolute_ref = ref->handleref.value;
+          break;
+        default:
+          LOG_WARN("Invalid handle pointer code %d", ref->handleref.code);
+          break;
+        }
     }
 }
 

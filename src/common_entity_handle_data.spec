@@ -1,6 +1,7 @@
 /* -*- c -*- */
 
-#undef IF_ENCODE_FROM_EARLIER
+#include "spec.h"
+/*#undef IF_ENCODE_FROM_EARLIER
 #define IF_ENCODE_FROM_EARLIER if (0)
 #undef IF_ENCODE_FROM_PRE_R13
 #define IF_ENCODE_FROM_PRE_R13 if (0)
@@ -11,9 +12,8 @@
 # define IF_IS_ENCODER 0
 # define IF_IS_DECODER 1
 #endif
-
-  if (FIELD_VALUE(entity_mode) == 0
-      || IF_IS_ENCODER)
+*/
+  if (FIELD_VALUE(entity_mode) == 0 || IF_IS_ENCODER)
     {
       FIELD_HANDLE(subentity, 4, 0); // doc: owner ref always?
     }
@@ -23,6 +23,10 @@
   VERSIONS(R_13, R_14)
     {
       FIELD_HANDLE(layer, 5, 8);
+      ENCODER {
+        if (dat->from_version == R_2000)
+          FIELD_VALUE(isbylayerlt) = FIELD_VALUE(linetype_flags) == 3 ? 1 : 0;
+      }
       if (!FIELD_VALUE(isbylayerlt))
         FIELD_HANDLE(ltype, 5, 6);
     }
@@ -72,4 +76,5 @@
       if (FIELD_VALUE(has_edge_visualstyle))
         FIELD_HANDLE(edge_visualstyle, 5, 0);
     }
+
 

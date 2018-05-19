@@ -21,9 +21,13 @@
 #define IF_ENCODE_FROM_EARLIER   if (0)
 #define IF_ENCODE_FROM_PRE_R13   if (0)
 #define IF_ENCODE_FROM_SINCE_R13 if (0)
+#define IF_IS_ENCODER 0
+#define IF_IS_DECODER 0
 
 #ifdef IS_ENCODER
 #undef ENCODER
+#undef IF_IS_ENCODER
+#define IF_IS_ENCODER 1
 #define ENCODER if (1)
 // when writing, check also rewriting from an earlier version and fill in a default then
 #undef IF_ENCODE_FROM_EARLIER
@@ -39,6 +43,8 @@
 
 #ifdef IS_DECODER
 #undef  DECODER
+#undef IF_IS_DECODER
+#define IF_IS_DECODER 1
 #define DECODER if (1)
 #endif
 
