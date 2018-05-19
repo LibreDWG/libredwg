@@ -852,6 +852,8 @@ dwg_free(Dwg_Data * dwg)
               FREE_IF(dwg->dwg_class[i].appname);
               FREE_IF(dwg->dwg_class[i].cppname);
               FREE_IF(dwg->dwg_class[i].dxfname);
+              if (dwg->header.version >= R_2007)
+                FREE_IF(dwg->dwg_class[i].dxfname_u);
             }
           FREE_IF(dwg->dwg_class);
         }
