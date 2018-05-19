@@ -416,10 +416,10 @@ main (int argc, char const *argv[])
   {
     int i;
     Dwg_Handle handles[] = {{4,1,5}, {12,1,11}, {4,1,12}, {3,0,0}, {5,0,0},
-                            {2,1,24}, {2,2,522}, {5,1,94}, {2,1,100}};
+                            {2,1,24}, {0,1,1}, {2,2,522}, {5,1,94}, {2,1,100}};
     Dwg_Handle handle;
     pos = bit_position(&bitchain);
-    for (i=0; i<9; i++)
+    for (i=0; i<10; i++)
       {
         unsigned long byte = 63 + handles[i].size;
         bit_write_H(&bitchain, &handles[i]);

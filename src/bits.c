@@ -980,7 +980,7 @@ bit_write_H(Bit_Chain * dat, Dwg_Handle * handle)
 {
   int i;
   unsigned char *val;
-  unsigned char code_counter;
+  unsigned char size;
 
   if (handle->value == 0)
     {
@@ -994,10 +994,10 @@ bit_write_H(Bit_Chain * dat, Dwg_Handle * handle)
     if (val[i])
       break;
 
-  code_counter = handle->code << 4;
-  code_counter |= i + 1;
+  size = handle->code << 4;
+  size |= i + 1;
 
-  bit_write_RC(dat, code_counter);
+  bit_write_RC(dat, size);
 
   for (; i >= 0; i--)
     bit_write_RC(dat, val[i]);

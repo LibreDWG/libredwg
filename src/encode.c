@@ -1915,7 +1915,7 @@ dwg_encode_object(Dwg_Object* obj,
       obj_string_stream(dat, obj->bitsize, str_dat);
     }
 
-  bit_write_H(dat, &ord->object->handle);
+  bit_write_H(dat, &(obj->handle));
 
   num_eed = ord->num_eed;
   if (!num_eed) {

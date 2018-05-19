@@ -2565,6 +2565,7 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
         *str_dat = *dat;
       }
       _obj->bitsize = bit_read_RL(dat);
+      LOG_TRACE("bitsize: " FORMAT_RL " ", _obj->bitsize);
     }
   /*SINCE(R_2010)
     {
@@ -2572,8 +2573,8 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
     }*/
   SINCE(R_2007)
     {
-      LOG_TRACE("Object bitsize: " FORMAT_RL " @%lu.%u %lu\n", _obj->bitsize,
-               dat->byte, dat->bit, bit_position(dat));
+      //LOG_TRACE("Object bitsize: " FORMAT_RL " @%lu.%u %lu\n", _obj->bitsize,
+      //         dat->byte, dat->bit, bit_position(dat));
       // The handle stream offset, i.e. end of the object, right after
       // the has_strings bit.
       //_obj->hdlpos = bit_position(dat) + obj->bitsize - 42;
