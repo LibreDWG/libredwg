@@ -1302,7 +1302,7 @@ resolve_objectref_vector(Bit_Chain* dat, Dwg_Data * dwg)
       //assign found pointer to objectref vector
       dwg->object_ref[i]->obj = obj;
 
-      if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)
+      if (DWG_LOGLEVEL >= DWG_LOGLEVEL_HANDLE)
         {
           if (obj)
             dwg_print_object(dat, obj);

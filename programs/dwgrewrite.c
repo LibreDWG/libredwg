@@ -81,6 +81,7 @@ main (int argc, char *argv[])
        !strncmp(argv[i], "-v", 2)))
     {
       int num_args = verbosity(argc, argv, i, &opts);
+      dwg.opts = opts;
       argc -= num_args;
       i += num_args;
     }
