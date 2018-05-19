@@ -1391,7 +1391,7 @@ dwg_encode_add_object(Dwg_Object* obj, Bit_Chain* dat,
     bit_write_BOT(dat, obj->type);
   }
 
-  LOG_INFO(" Type: %d\n", obj->type)
+  LOG_INFO(", Size: %d, Type: %d\n", obj->size, obj->type)
 
   /* Check the type of the object
    */
@@ -1698,17 +1698,12 @@ dwg_encode_add_object(Dwg_Object* obj, Bit_Chain* dat,
   }
   bit_write_CRC(dat, address, 0xC0C1);
 
-  /* Skip some bits to the next object. Objects always start at bit 0
-   * size should be really calculated and left alone.
-   */
   {
-    unsigned long next_addr = address + obj->size;
-    if (dat->bit)
-      dat->byte++;
+    unsigned long next_addr = address + obj->size + 4;
     if (next_addr != dat->byte)
       {
         if (obj->size)
-          LOG_WARN("Wrong object size: %lu + %u != %lu: %ld off",
+          LOG_WARN("Wrong object size: %lu + %u + 4 != %lu: %ld off",
                    address, obj->size, dat->byte,
                    (long)(next_addr - dat->byte));
         dat->byte = next_addr;
