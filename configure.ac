@@ -104,9 +104,9 @@ dnl fi
 dnl until we can make a release, favor no optims.
 dnl it's fast enough and better for debugging.
 if test x$ac_compiler_gnu = xyes; then
-  CFLAGS="$CFLAGS -g -fno-omit-frame-pointer"
+  CFLAGS="-g -fno-omit-frame-pointer"
 else
-  CFLAGS="$CFLAGS -g"
+  CFLAGS="-g"
 fi
 
 if test "x$ac_cv_prog_cc_c99" = "xno"; then
