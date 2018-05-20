@@ -1009,7 +1009,7 @@ dxf_format (int code)
     return "%-16.15g";
   if (code < 80)
     return "%6i";
-  if (89 < code && code < 100)
+  if (90 <= code && code <= 99)
     return "%9li";
   if (code == 100)
     return "%s";
@@ -1017,34 +1017,54 @@ dxf_format (int code)
     return "%s";
   if (code == 105)
     return "%X";
-  if (105 < code && code < 148)
+  if (110 <= code && code <= 149)
     return "%-16.15g";
-  if (169 < code && code < 180)
+  if (160 <= code && code <= 169)
+    return "%12li";
+  if (170 <= code && code <= 179)
     return "%6i";
-  if (269 < code && code < 300)
+  if (210 <= code && code <= 239)
+    return "%-16.15g";
+  if (270 <= code && code <= 289)
     return "%6i";
-  if (299 < code && code < 320)
+  if (290 <= code && code <= 299)
+    return "%2i"; // boolean
+  if (300 <= code && code <= 319)
     return "%s";
-  if (319 < code && code < 370)
+  if (320 <= code && code <= 369)
     return "%X";
-  if (369 < code && code < 390)
+  if (370 <= code && code <= 389)
     return "%6i";
-  if (389 < code && code < 400)
+  if (390 <= code && code <= 399)
     return "%X";
-  if (399 < code && code < 410)
+  if (400 <= code && code <= 409)
     return "%6i";
-  if (409 < code && code < 420)
+  if (410 <= code && code <= 419)
     return "%s";
+  if (420 <= code && code <= 429)
+    return "%9li"; //int32_t
+  if (430 <= code && code <= 439)
+    return "%s";
+  if (440 <= code && code <= 449)
+    return "%9li"; //int32_t
+  if (450 <= code && code <= 459)
+    return "%12li"; //long
+  if (460 <= code && code <= 469)
+    return "%-16.15g";
+  if (470 <= code && code <= 479)
+    return "%s";
+  if (480 <= code && code <= 481)
+    return "%X";
   if (code == 999)
     return "%s";
-  if (999 < code && code < 1010)
+  if (1000 <= code && code <= 1009)
     return "%s";
-  if (1009 < code && code < 1060)
+  if (1010 <= code && code <= 1059)
     return "%-16.15g";
-  if (1059 < code && code < 1071)
+  if (1060 <= code && code <= 1070)
     return "%6i";
   if (code == 1071)
-    return "%9li";
+    return "%9li"; //int32_t
 
   return "(unknown code)";
 }
