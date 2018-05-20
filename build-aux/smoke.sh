@@ -120,6 +120,7 @@ CC="clang-7 -fsanitize=address,undefined -fno-omit-frame-pointer" \
     ./configure --enable-write --enable-trace && \
     make -s -j4 check || exit
 make -s -j4 clean
+
 for CC in clang-3.0 clang-3.4 clang-3.5 clang-3.6 clang-3.7 clang-3.8 clang-3.9 clang-4.0 \
           clang-5.0 clang-6.0 clang-7
 do
@@ -155,17 +156,21 @@ esac
 CC="cc -m32" ./configure --disable-python && \
     $make -s -j4 check || exit
 $make -s -j4 clean
+
 ./configure && \
     $make -s -j4 check || exit
     $make distcheck
 $make -s -j4 clean
+
 ./configure --enable-trace && \
     $make -s -j4 check || exit
 $make -s -j4 clean
+
 ./configure --enable-write && \
     $make -s -j4 check || exit
     $make check-valgrind
 $make -s -j4 clean
+
 ./configure --disable-shared && \
     $make -s -j4 check || exit
 $make -s -j4 clean
@@ -175,14 +180,14 @@ $make -s -j4 clean
     $make -s -j4 check || exit
 $make -s -j4 clean
 
-
 WINEARCH=win32 CFLAGS="-g -gdwarf-2" \
     ./configure --host=i686-w64-mingw32 && \
     $make -s -j4 check
-    $make -s -j4 clean
+$make -s -j4 clean
+
 WINEARCH=win64 ./configure --host=x86_64-w64-mingw32 && \
     $make -s -j4 check
-    $make -s -j4 clean
+$make -s -j4 clean
 
 ./configure --enable-write --disable-shared && \
     $make -s -j4 check || exit
