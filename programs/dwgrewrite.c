@@ -35,7 +35,7 @@ static int usage(void) {
   return 1;
 }
 static int opt_version(void) {
-  printf("\ndwgrewrite %s\n", PACKAGE_VERSION);
+  printf("dwgrewrite %s\n", PACKAGE_VERSION);
   return 0;
 }
 static int help(void) {
