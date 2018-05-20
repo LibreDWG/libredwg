@@ -576,21 +576,19 @@ main (int argc, char const *argv[])
     else
       fail("bit_search_sentinel %d", bitchain.byte);
   }
+  {
+    unsigned int check = bit_calc_CRC(0xc0c1, (unsigned char *)bitchain.chain, 107);
+    if (check == 0x8dd4)
+      pass("bit_calc_CRC");
+    else
+      fail("bit_calc_CRC 0x%x", check);
+  }
 
   bit_chain_alloc(&bitchain);
   if (bitchain.size == 82020)
     pass("bit_chain_alloc");
   else
     fail("bit_chain_alloc %ld", bitchain.size);
-
-  {
-    unsigned int check = bit_calc_CRC(0xc0c1, (unsigned char *)bitchain.chain,
-                                      bitchain.size - 2);
-    if (check == 0x1a2f) //but some linux with gcc-7.3 gets 0x98eb instead. uninitialized memory?
-      pass("bit_calc_CRC");
-    else
-      fail("bit_calc_CRC 0x%x", check);
-  }
 
   free (bitchain.chain);
   return 0;
