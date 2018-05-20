@@ -63,13 +63,9 @@ bit_read_BB_tests (void)
   Bit_Chain bitchain = strtobt ("10101010");
   unsigned char result = bit_read_BB (&bitchain);
   if (result == 2)
-    {
-      pass ("bit_read_BB");
-    }
+    pass ("bit_read_BB");
   else
-    {
-      fail ("bit_read_BB %d", result);
-    }
+    fail ("bit_read_BB %d", result);
 }
 
 void
@@ -80,13 +76,9 @@ bit_write_BB_tests (void)
   bit_write_BB (&bitchain, 0x2);
 
   if (bitchain.chain[0] == 0x60)
-    {
-      pass ("bit_write_BB");
-    }
+    pass ("bit_write_BB");
   else
-    {
-      fail ("bit_write_BB %d", bitchain.chain[0]);
-    }
+    fail ("bit_write_BB %d", bitchain.chain[0]);
 }
 
 void
@@ -268,7 +260,7 @@ main (int argc, char const *argv[])
   unsigned long pos;
   unsigned char sentinel[] =
     {0xCF,0x7B,0x1F,0x23,0xFD,0xDE,0x38,0xA9,0x5F,0x7C,0x68,0xB8,0x4E,0x6D,0x33,0x5F};
-  
+
   bit_read_B_tests ();
   bit_write_B_tests ();
   bit_advance_position_tests ();
@@ -294,7 +286,7 @@ main (int argc, char const *argv[])
   bitchain.bit = 0;
   bitchain.byte = 0;
   bitchain.version = R_2000;
-  bitchain.chain = (unsigned char *) malloc (bitchain.size);
+  bitchain.chain = (unsigned char *) calloc (bitchain.size, 1);
 
   bit_write_RD(&bitchain, 0xBA43B7400);
   if (bitchain.byte == 8 && bitchain.bit == 0)
@@ -594,7 +586,7 @@ main (int argc, char const *argv[])
   {
     unsigned int check = bit_calc_CRC(0xc0c1, (unsigned char *)bitchain.chain,
                                       bitchain.size - 2);
-    if (check == 0x1a2f)
+    if (check == 0x1a2f) //but some linux with gcc-7.3 gets 0x98eb instead. uninitialized memory?
       pass("bit_calc_CRC");
     else
       fail("bit_calc_CRC 0x%x", check);
