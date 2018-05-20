@@ -447,7 +447,7 @@ main (int argc, char const *argv[])
   bit_advance_position(&bitchain, -2);
   {
     unsigned int crc = bit_write_CRC(&bitchain, 0, 0x64);
-    if (crc == 0x6618)
+    if (crc == 0x7b2a)
       pass("bit_write_CRC");
     else
       fail("bit_write_CRC %X", crc);
@@ -460,7 +460,7 @@ main (int argc, char const *argv[])
     fail("bit_check_CRC");
 
   bit_advance_position(&bitchain, -16);
-  if ((bs = bit_read_CRC(&bitchain)) == 0x6618)
+  if ((bs = bit_read_CRC(&bitchain)) == 0x7b2a)
     pass("bit_read_CRC");
   else
     fail("bit_read_CRC %X", bs);
@@ -496,8 +496,10 @@ main (int argc, char const *argv[])
   else
     fail("bit_read_L %ul", bl);
 
+  pos = bit_position(&bitchain);
   {
     Dwg_Color color;
+    bitchain.version = R_2000;
     color.index = 19;
     color.rgb = 5190965;
     color.flag = 1;
@@ -509,19 +511,44 @@ main (int argc, char const *argv[])
     else
       fail("bit_write_CMC @%ld.%d", bitchain.byte, bitchain.bit);
   }
-
+  //pass ("CMC size: %ld", bit_position(&bitchain) - pos); //10
   bit_advance_position(&bitchain, -10);
   {
     Dwg_Color color_read;
     bit_read_CMC(&bitchain, &color_read);
 
-    if (color_read.index == 19 &&
-        color_read.rgb == 5190965 &&
-        color_read.flag == 1 &&
-        !strcmp(color_read.name, "Some name"))
+    if (color_read.index == 19)
       pass("bit_read_CMC");
     else
-      fail("bit_read_CMC");
+      fail("bit_read_CMC %d", color_read.index);
+  }
+
+  bit_advance_position(&bitchain, -10);
+  {
+    Dwg_Color color;
+    bitchain.version = R_2004;
+    color.index = 19;
+    color.rgb = 5190965;
+    color.flag = 1;
+    color.name = (char*)"Some name";
+    color.book_name = (char*)"book_name";
+    bit_write_CMC(&bitchain, &color);
+    if (bitchain.byte == 90 && bitchain.bit == 0)
+      pass("bit_write_CMC r2000");
+    else
+      fail("bit_write_CMC @%ld.%d", bitchain.byte, bitchain.bit);
+
+    bit_set_position(&bitchain, pos);
+    bit_read_CMC(&bitchain, &color);
+
+    if (color.index == 19 &&
+        color.rgb == 5190965 &&
+        color.flag == 1 &&
+        !strcmp(color.name, "Some name"))
+      pass("bit_read_CMC r2004");
+    else
+      fail("bit_read_CMC (%d,%ld,%d) %s",
+           color.index, color.rgb, color.flag, color.name);
   }
 
   bitchain.byte++;
@@ -539,21 +566,25 @@ main (int argc, char const *argv[])
   bitchain.byte = 0;
   {
     int ret = bit_search_sentinel(&bitchain, sentinel);
-    if (bitchain.byte == 91)
+    if (bitchain.byte == 107)
       pass("bit_search_sentinel");
     else
       fail("bit_search_sentinel %d", bitchain.byte);
   }
 
   bit_chain_alloc(&bitchain);
-  if (bitchain.size == 41060)
+  if (bitchain.size == 82020)
     pass("bit_chain_alloc");
   else
     fail("bit_chain_alloc %ld", bitchain.size);
 
   {
-    unsigned int check = bit_calc_CRC(12100, (unsigned char *)&bitchain.chain, 90L);
-    // How do I test this
+    unsigned int check = bit_calc_CRC(0xc0c1, (unsigned char *)bitchain.chain,
+                                      bitchain.size - 2);
+    if (check == 0x6275)
+      pass("bit_calc_CRC");
+    else
+      fail("bit_calc_CRC 0x%x", check);
   }
 
   free (bitchain.chain);

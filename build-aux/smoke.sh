@@ -11,6 +11,7 @@ make=gmake
 
 # for dejagnu
 export PKG_CONFIG_PATH=/opt/local/lib/pkgconfig
+export PYTHONPATH=/opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages
 # for pslib    
 CFLAGS=-I/usr/local/include
 LDFLAGS=-L/usr/local/lib
@@ -27,19 +28,33 @@ CC="clang-mp-6.0 -O3 -march=native" \
     gmake -s -j4 check || exit
     gmake scan-build
 gmake -s -j4 clean
-for CC in gcc-mp-4.3 gcc-mp-4.6 gcc-mp-4.8 gcc-mp-4.9 gcc-mp-5 gcc-mp-6 gcc-mp-7; do
+
+for CC in gcc-mp-4.3 gcc-mp-4.6 gcc-mp-4.8 gcc-mp-4.9 gcc-mp-5 gcc-mp-6 gcc-mp-7
+do
     echo $CC
     ./configure && \
     gmake -s -j4 check || exit
     gmake -s -j4 clean
 done
-for CC in clang-mp-3.3 clang-mp-3.7 clang-mp-3.8 clang-mp-3.9 clang-mp-4.0 clang-mp-5.0 \
-          clang-mp-6.0 clang-mp-devel; do
+
+for CC in clang-mp-3.3 clang-mp-3.7 clang-mp-3.8 clang-mp-3.9 clang-mp-4.0 \
+          clang-mp-5.0 clang-mp-6.0 clang-mp-devel
+do
     echo $CC
-    ./configure && \
+    CFLAGS="-I/opt/lcoal/include" ./configure && \
     gmake -s -j4 check || exit
     gmake -s -j4 clean
 done
+
+unset PYTHONPATH
+export PYTHONPATH
+echo gcc-mp-6 --enable-python=python3.6m
+CC="gcc-mp-6" ./configure --enable-python=python3.6m && \
+    make -s -j4 check || exit
+    make -s -j4 gcov
+gmake -s -j4 clean
+
+export PYTHONPATH=/opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages
 
 echo gcc-mp-6 --enable-write --enable-gcov
 CC="gcc-mp-6" ./configure --enable-write --enable-trace --enable-gcov=gcov-mp-6 && \
