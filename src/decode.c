@@ -2515,7 +2515,9 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
 
   SINCE(R_2000)
     {
+      // 00 BYLAYER, 01 BYBLOCK, 10 CONTINUOUS, 11 ltype handle
       ent->linetype_flags = bit_read_BB(dat);
+      // 00 BYLAYER, 01 BYBLOCK, 10 CONTINUOUS, 11 plotstyle handle
       ent->plotstyle_flags = bit_read_BB(dat);
     }
 

@@ -2920,7 +2920,18 @@ DWG_OBJECT(MLINESTYLE)
 #endif
     PRE(R_2018)
     {
-      FIELD_BS (lines[rcount].ltindex, 6);
+#ifdef IS_DXF
+        switch (FIELD_VALUE(lines[rcount].ltindex)) {
+        case 32767: VALUE_TV("BYLAYER", 6); break;
+        case 32766: VALUE_TV("BYBLOCK", 6); break;
+        case 0: VALUE_TV("CONTINUOUS", 6); break;
+        //else lookup on LTYPE_CONTROL list
+        default: /*FIELD_HANDLE(ltype, 5, 6);*/
+                 VALUE_TV("", 6); break;
+        }
+#else
+        FIELD_BS (lines[rcount].ltindex, 6);
+#endif
     }
     SINCE(R_2018)
     {
@@ -4858,4 +4869,3 @@ DWG_OBJECT_END
 DWG_OBJECT(LEADEROBJECTCONTEXTDATA)
 DWG_OBJECT_END
 */
-

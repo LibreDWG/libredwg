@@ -79,6 +79,7 @@ gcov.log
 /programs/dwgbmp
 /programs/dwgrewrite
 /programs/dwgread
+/programs/dwgwrite
 /programs/dwg2SVG
 /programs/dwg2dxf
 /programs/dwg2ps

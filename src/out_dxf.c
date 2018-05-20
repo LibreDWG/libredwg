@@ -901,8 +901,7 @@ dwg_dxf_object(Bit_Chain *dat, Dwg_Object *obj)
       dwg_dxf_GROUP(dat, obj);
       break;
     case DWG_TYPE_MLINESTYLE:
-      LOG_WARN("Skipping MLINESTYLE");
-      //dwg_dxf_MLINESTYLE(dat, obj);
+      dwg_dxf_MLINESTYLE(dat, obj);
       break;
     case DWG_TYPE_OLE2FRAME:
       dwg_dxf_OLE2FRAME(dat, obj);
