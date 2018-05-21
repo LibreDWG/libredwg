@@ -57,11 +57,11 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 
 #define VALUE_TV(value,dxf) \
   { GROUP(dxf); \
-    fprintf(dat->fh, "%s\n", value); }
+    fprintf(dat->fh, "%s\r\n", value); }
 #ifdef HAVE_NATIVE_WCHAR2
 # define VALUE_TU(value,dxf)\
   { GROUP(dxf); \
-    fprintf(dat->fh, "%ls\n", (wchar_t*)value); }
+    fprintf(dat->fh, "%ls\r\n", (wchar_t*)value); }
 #else
 # define VALUE_TU(wstr,dxf) \
   { \
@@ -71,7 +71,7 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
     while ((_c = *ws++)) { \
       fprintf(dat->fh, "%c", (char)(_c & 0xff)); \
     } \
-    fprintf(dat->fh, "\n"); \
+    fprintf(dat->fh, "\r\n"); \
   }
 #endif
 
@@ -79,11 +79,11 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 #define ANYCODE -1
 #define FIELD_HANDLE(name, handle_code, dxf) \
   if (dxf && _obj->name) { \
-    fprintf(dat->fh, "%d\n%lX\n", dxf, _obj->name->absolute_ref); \
+    fprintf(dat->fh, "%d\r\n%lX\r\n", dxf, _obj->name->absolute_ref); \
   }
 #define HEADER_9(name) \
     GROUP(9);\
-    fprintf (dat->fh, "$%s\n", #name)
+    fprintf (dat->fh, "$%s\r\n", #name)
 #define VALUE_H(value,dxf) \
   {\
     Dwg_Object_Ref *ref = value;\
@@ -97,7 +97,7 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 #define HEADER_VALUE(name, type, dxf, value) \
   if (dxf) {\
     GROUP(9);\
-    fprintf (dat->fh, "$%s\n", #name);\
+    fprintf (dat->fh, "$%s\r\n", #name);\
     VALUE (value, type, dxf);\
   }
 #define HEADER_VAR(name, type, dxf) \
@@ -113,18 +113,18 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
   HEADER_9(name);\
   VALUE_BLL(dwg->header_vars.name, dxf);
 
-#define SECTION(section) fprintf(dat->fh, "  0\nSECTION\n  2\n" #section "\n")
-#define ENDSEC()         fprintf(dat->fh, "  0\nENDSEC\n")
-#define TABLE(table)     fprintf(dat->fh, "  0\nTABLE\n  2\n" #table "\n")
-#define ENDTAB()         fprintf(dat->fh, "  0\nENDTAB\n")
-#define RECORD(record)   fprintf(dat->fh, "  0\n" #record "\n")
+#define SECTION(section) fprintf(dat->fh, "  0\r\nSECTION\r\n  2\r\n" #section "\r\n")
+#define ENDSEC()         fprintf(dat->fh, "  0\r\nENDSEC\r\n")
+#define TABLE(table)     fprintf(dat->fh, "  0\r\nTABLE\r\n  2\r\n" #table "\r\n")
+#define ENDTAB()         fprintf(dat->fh, "  0\r\nENDTAB\r\n")
+#define RECORD(record)   fprintf(dat->fh, "  0\r\n" #record "\r\n")
 
 #define GROUP(dxf) \
-    fprintf (dat->fh, "%3i\n", dxf)
+    fprintf (dat->fh, "%3i\r\n", dxf)
 #define VALUE(value, type, dxf) \
   if (dxf) { \
     GROUP(dxf);\
-    snprintf (buf, 4096, "%s\n", dxf_format (dxf));\
+    snprintf (buf, 4096, "%s\r\n", dxf_format (dxf));\
     GCC_DIAG_IGNORE(-Wformat-nonliteral) \
     fprintf(dat->fh, buf, value);\
     GCC_DIAG_RESTORE \
@@ -136,7 +136,7 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 #define HANDLE_NAME(name, dxf, section) \
   {\
     Dwg_Object_Ref *ref = dwg->header_vars.name;\
-    snprintf (buf, 4096, "%3i\n%s\n", dxf, dxf_format (dxf));\
+    snprintf (buf, 4096, "%3i\r\n%s\r\n", dxf, dxf_format (dxf));\
     /*if (ref && !ref->obj) ref->obj = dwg_resolve_handle(dwg, ref->absolute_ref); */ \
     GCC_DIAG_IGNORE(-Wformat-nonliteral) \
     fprintf(dat->fh, buf, ref && ref->obj \
@@ -215,21 +215,21 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
   VALUE_RS(_obj->name.index, dxf)
 #define FIELD_TIMEBLL(name,dxf) \
   GROUP(dxf);\
-  fprintf(dat->fh, FORMAT_BL "." FORMAT_BL "\n", _obj->name.days, _obj->name.ms)
+  fprintf(dat->fh, FORMAT_BL "." FORMAT_BL "\r\n", _obj->name.days, _obj->name.ms)
 #define HEADER_CMC(name,dxf) \
     HEADER_9(name);\
     VALUE_RS(dwg->header_vars.name.index, dxf)
 
 #define POINT_3D(name, var, c1, c2, c3)\
   {\
-    fprintf (dat->fh, "%3i\n%-16.12g\n", c1, dwg->var.x);\
-    fprintf (dat->fh, "%3i\n%-16.12g\n", c2, dwg->var.y);\
-    fprintf (dat->fh, "%3i\n%-16.12g\n", c3, dwg->var.z);\
+    fprintf (dat->fh, "%3i\r\n%-16.11g\r\n", c1, dwg->var.x);\
+    fprintf (dat->fh, "%3i\r\n%-16.11g\r\n", c2, dwg->var.y);\
+    fprintf (dat->fh, "%3i\r\n%-16.11g\r\n", c3, dwg->var.z);\
   }
 #define POINT_2D(name, var, c1, c2) \
   {\
-    fprintf (dat->fh, "%3i\n%-16.12g\n", c1, dwg->var.x);\
-    fprintf (dat->fh, "%3i\n%-16.12g\n", c2, dwg->var.y);\
+    fprintf (dat->fh, "%3i\r\n%-16.11g\r\n", c1, dwg->var.x);\
+    fprintf (dat->fh, "%3i\r\n%-16.11g\r\n", c2, dwg->var.y);\
   }
 
 //FIELD_VECTOR_N(name, type, size):
@@ -240,7 +240,7 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
     {\
       for (vcount=0; vcount < (int)size; vcount++)\
         {\
-          fprintf(dat->fh, #name ": " FORMAT_##type ",\n", _obj->name[vcount]);\
+          fprintf(dat->fh, #name ": " FORMAT_##type ",\r\n", _obj->name[vcount]);\
         }\
     }
 #define FIELD_VECTOR_T(name, size, dxf)\
@@ -297,23 +297,23 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 
 #define REACTORS(code)\
   if (obj->tio.object->num_reactors) {\
-    fprintf(dat->fh, "102\n{ACAD_REACTORS\n");\
+    fprintf(dat->fh, "102\r\n{ACAD_REACTORS\r\n");\
     for (vcount=0; vcount < (int)obj->tio.object->num_reactors; vcount++)\
       { /* soft ptr */ \
-        fprintf(dat->fh, "330\n"); \
+        fprintf(dat->fh, "330\r\n"); \
         FIELD_HANDLE_N(reactors[vcount], vcount, code, -5);\
       }\
-    fprintf(dat->fh, "102\n}\n");\
+    fprintf(dat->fh, "102\r\n}\r\n");\
   }
 #define ENT_REACTORS(code)\
   if (_obj->num_reactors) {\
-    fprintf(dat->fh, "102\n{ACAD_REACTORS\n");\
+    fprintf(dat->fh, "102\r\n{ACAD_REACTORS\r\n");\
     for (vcount=0; vcount < _obj->num_reactors; vcount++)\
       {\
-        fprintf(dat->fh, "330\n"); \
+        fprintf(dat->fh, "330\r\n"); \
         FIELD_HANDLE_N(reactors[vcount], vcount, code, -5);\
       }\
-    fprintf(dat->fh, "102\n}\n");\
+    fprintf(dat->fh, "102\r\n}\r\n");\
   }
 
 #define XDICOBJHANDLE(code)
@@ -1006,7 +1006,7 @@ dxf_format (int code)
   if (5 < code && code < 10)
     return "%s";
   if (code < 60)
-    return "%-16.15g";
+    return "%-16.11g";
   if (code < 80)
     return "%6i";
   if (90 <= code && code <= 99)
@@ -1018,13 +1018,13 @@ dxf_format (int code)
   if (code == 105)
     return "%X";
   if (110 <= code && code <= 149)
-    return "%-16.15g";
+    return "%-16.11g";
   if (160 <= code && code <= 169)
     return "%12li";
   if (170 <= code && code <= 179)
     return "%6i";
   if (210 <= code && code <= 239)
-    return "%-16.15g";
+    return "%-16.11g";
   if (270 <= code && code <= 289)
     return "%6i";
   if (290 <= code && code <= 299)
@@ -1050,7 +1050,7 @@ dxf_format (int code)
   if (450 <= code && code <= 459)
     return "%12li"; //long
   if (460 <= code && code <= 469)
-    return "%-16.15g";
+    return "%-16.11g";
   if (470 <= code && code <= 479)
     return "%s";
   if (480 <= code && code <= 481)
@@ -1060,7 +1060,7 @@ dxf_format (int code)
   if (1000 <= code && code <= 1009)
     return "%s";
   if (1010 <= code && code <= 1059)
-    return "%-16.15g";
+    return "%-16.11g";
   if (1060 <= code && code <= 1070)
     return "%6i";
   if (code == 1071)
