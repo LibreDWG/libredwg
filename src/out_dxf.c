@@ -222,14 +222,14 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 
 #define POINT_3D(name, var, c1, c2, c3)\
   {\
-    fprintf (dat->fh, "%3i\r\n%-16.11g\r\n", c1, dwg->var.x);\
-    fprintf (dat->fh, "%3i\r\n%-16.11g\r\n", c2, dwg->var.y);\
-    fprintf (dat->fh, "%3i\r\n%-16.11g\r\n", c3, dwg->var.z);\
+    fprintf (dat->fh, "%3i\r\n%-16.14f\r\n", c1, dwg->var.x);\
+    fprintf (dat->fh, "%3i\r\n%-16.14f\r\n", c2, dwg->var.y);\
+    fprintf (dat->fh, "%3i\r\n%-16.14f\r\n", c3, dwg->var.z);\
   }
 #define POINT_2D(name, var, c1, c2) \
   {\
-    fprintf (dat->fh, "%3i\r\n%-16.11g\r\n", c1, dwg->var.x);\
-    fprintf (dat->fh, "%3i\r\n%-16.11g\r\n", c2, dwg->var.y);\
+    fprintf (dat->fh, "%3i\r\n%-16.14f\r\n", c1, dwg->var.x);\
+    fprintf (dat->fh, "%3i\r\n%-16.14f\r\n", c2, dwg->var.y);\
   }
 
 //FIELD_VECTOR_N(name, type, size):
@@ -1006,7 +1006,7 @@ dxf_format (int code)
   if (5 < code && code < 10)
     return "%s";
   if (code < 60)
-    return "%-16.11g";
+    return "%-16.14f";
   if (code < 80)
     return "%6i";
   if (90 <= code && code <= 99)
@@ -1018,13 +1018,13 @@ dxf_format (int code)
   if (code == 105)
     return "%X";
   if (110 <= code && code <= 149)
-    return "%-16.11g";
+    return "%-16.14f";
   if (160 <= code && code <= 169)
     return "%12li";
   if (170 <= code && code <= 179)
     return "%6i";
   if (210 <= code && code <= 239)
-    return "%-16.11g";
+    return "%-16.14f";
   if (270 <= code && code <= 289)
     return "%6i";
   if (290 <= code && code <= 299)
@@ -1050,7 +1050,7 @@ dxf_format (int code)
   if (450 <= code && code <= 459)
     return "%12li"; //long
   if (460 <= code && code <= 469)
-    return "%-16.11g";
+    return "%-16.14f";
   if (470 <= code && code <= 479)
     return "%s";
   if (480 <= code && code <= 481)
@@ -1060,7 +1060,7 @@ dxf_format (int code)
   if (1000 <= code && code <= 1009)
     return "%s";
   if (1010 <= code && code <= 1059)
-    return "%-16.11g";
+    return "%-16.14f";
   if (1060 <= code && code <= 1070)
     return "%6i";
   if (code == 1071)
