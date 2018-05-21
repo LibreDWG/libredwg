@@ -147,6 +147,20 @@ someone should probably think about and resolve them!
   $ sudo cp /opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/libxml2* \
             /System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/
 
+* fuzzing with afl-fuzz
+
+On darwin I need to set AFL_CC and CC.
+
+  make clean
+  export AFL_CC=clang-mp-3.8
+  CC="afl-clang" ./configure --enable-trace --enable-write --disable-shared
+  make
+  mkdir fuzz-in; cp test/test-data/example_2000.dwg fuzz-in/
+  afl-fuzz -i fuzz-in -o fuzz-out -- programs/dwgread -
+
+Using the fast option and an internal loop would be faster. I get 220/sec uninstrumented
+and 800/sec instrumented without -O2, which is fast enough to finish within 30m for a 32k DWG.
+
 * adding other code
 
 You can only add significant code by some author who has copyright
