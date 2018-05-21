@@ -89,6 +89,8 @@ The programs and examples directories contains some application code that uses o
 * dxf2dwg -- Converts a ascii or binary DXF to a DWG, optionally
   under a different version. Under construction.
 
+* dwglayers -- Prints the list of layers in a DWG
+
 * dwg2ps -- Opens a DWG file and outputs an PostScript file.  This code
   depends on the PSlib library.  On Debian-based systems this is usually
   available as a package named pslib-dev.

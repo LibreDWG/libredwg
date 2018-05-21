@@ -20,10 +20,9 @@
 AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src @WARN_CFLAGS@
 LDADD   = $(top_builddir)/src/libredwg.la -lm
 
-bin_PROGRAMS = dwgread dwgbmp dwg2SVG
-# not yet ready
-noinst_PROGRAMS = dwg2dxf
-dist_man1_MANS = dwgread.1 dwgbmp.1 dwg2SVG.1
+bin_PROGRAMS = dwgread dwgbmp dwg2dxf dwg2SVG dwglayers
+noinst_PROGRAMS =
+dist_man1_MANS = dwgread.1 dwgbmp.1 dwg2dxf.1 dwg2SVG.1 dwglayers.1
 
 if HAVE_LIBPS
 bin_PROGRAMS += dwg2ps
@@ -45,6 +44,7 @@ endif
 dwgread_SOURCES  = dwgread.c
 dwgbmp_SOURCES   = dwgbmp.c
 dwg2dxf_SOURCES  = dwg2dxf.c
+dwglayers_SOURCES = dwglayers.c
 dwg2SVG_SOURCES  = dwg2SVG.c
 
 if HAVE_WINE
@@ -75,7 +75,7 @@ man: $(bin_PROGRAMS) $(noinst_PROGRAMS)
 
 # TODO $*F stem is GNU make only. ./ prefix is POSIX only
 .c.1:
-	help2man -p LibreDWG -o $@ ./$(*F) || true
+	help2man -p LibreDWG $(*F) >$@ || true
 
 .c.i:
 	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\

@@ -152,16 +152,15 @@ But in the meantime it got a DXF reader.
 @item libdxfrw
 Read the DWG format for all versions but with much less elements, only those needed for DXF.
 Written in C++, under the GPLv2 license.
+@item libopencad
+Read the R2000 DWG format.
+Written in C++, under the GPLv2 license.
 @item OpenDWG
 The OpenDWG's license does not allow the usage in free software projects.
 @end table
 
-The 2009 license update of LibreDWG to the version 3 of the GNU GPL
-made it impossible for the free software projects LibreCAD and FreeCAD
-to use LibreDWG.
-
-Compared to libdwg and libdxfrw, LibreDWG can read and write much more details,
-but still fails to read newer DWG's.
+Compared to libdwg, libdxfrw and libopencad, LibreDWG can read and
+write much more details.
 
 @node Usage
 @chapter Usage
@@ -425,10 +424,21 @@ LibreDWG installs some binary programs to read or write DWG files.
 
 This reads a DWG file, and optionally converts its content to some output formats: JSON, DXF, DXFB (i.e. Binary DXF).
 
+@item @file{dwgwrite}
+
+Create a DWG from a given input file (JSON, DXF, Binary DXF),
+optionally via @code{--as-rNNNN} as another version. Experimental.
+
 @item @file{dwgrewrite}
 
 Read and write the DWG, optionally via @code{--as-rNNNN} as another
 version, an earlier or later version.
+
+@item @file{dwglayers}
+
+Prints all layers in a DWG.
+With @code{-f} or @code{--flags} also the status of frown, on/off and locked.
+With @code{--on} only the visible layers, which are on and not frozen.
 
 @item @file{dwg2SVG}
 Convert a DWG to a limited SVG. All paperspace and modelspace enties of type:

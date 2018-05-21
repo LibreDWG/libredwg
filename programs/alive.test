@@ -47,11 +47,14 @@ run ()
     bdwg=`basename $dwg .dwg`
     log=$bdwg-$bprog.log
     arg="${datadir}/$dwg.dwg"
-    if test $bprog = dwgrewrite
+    if test $bprog != dwglayers
     then
-        arg="-v2 $arg"
-    else
-        arg="-v4 $arg"
+        if test $bprog = dwgrewrite
+        then
+            arg="-v2 $arg"
+        else
+            arg="-v4 $arg"
+        fi
     fi
     echo $TESTPROG ./$prog $arg
     # writers can hang

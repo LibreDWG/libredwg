@@ -42,8 +42,8 @@ static unsigned int loglevel;
 /* This flag means we have checked the environment variable
    LIBREDWG_TRACE and set `loglevel' appropriately.  */
 static bool env_var_checked_p;
-#define DWG_LOGLEVEL loglevel
 #endif  /* USE_TRACING */
+#define DWG_LOGLEVEL loglevel
 #include "logging.h"
 
 // used by decode.c:
