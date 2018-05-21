@@ -175,11 +175,6 @@ $make -s -j4 clean
     $make -s -j4 check || exit
 $make -s -j4 clean
 
-#python3.6m was broken for macports: --enable-framework=/opt/local/Library/Frameworks
-./configure --enable-python=python3.6m && \
-    $make -s -j4 check || exit
-$make -s -j4 clean
-
 WINEARCH=win32 CFLAGS="-g -gdwarf-2" \
     ./configure --host=i686-w64-mingw32 && \
     $make -s -j4 check

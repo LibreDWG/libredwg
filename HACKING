@@ -141,6 +141,12 @@ someone should probably think about and resolve them!
 
   because the system python is missing libxml2.
 
+  Or add the macports libxml2 to the system python2.7:
+
+  $ port install py27-libxml2
+  $ sudo cp /opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/libxml2* \
+            /System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/
+
 * adding other code
 
 You can only add significant code by some author who has copyright
