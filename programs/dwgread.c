@@ -40,7 +40,7 @@ int verbosity(int argc, char **argv, int i, unsigned int *opts);
 #include "common.inc"
 
 static int usage(void) {
-  printf("\nUsage: dwgread [-v[0-9]] [-O FMT] [-o OUTFILE] DWGFILE\n");
+  printf("\nUsage: dwgread [-v[0-9]] [-O FMT] [-o OUTFILE] [DWGFILE|-]\n");
   return 1;
 }
 static int opt_version(void) {

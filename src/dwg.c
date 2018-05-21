@@ -55,6 +55,72 @@ int dwg_obj_is_control(const Dwg_Object *obj);
  * Public functions
  */
 
+static int dat_read_file (Bit_Chain* dat, FILE* fp, const char* filename)
+{
+  size_t size;
+  dat->chain = (unsigned char *) calloc(1, dat->size);
+  if (!dat->chain)
+    {
+      LOG_ERROR("Not enough memory.\n")
+        fclose(fp);
+      return -1;
+    }
+
+  size = fread(dat->chain, sizeof(char), dat->size, fp);
+  if (size != dat->size)
+    {
+      LOG_ERROR("Could not read file (%lu out of %lu): %s\n",
+                (long unsigned int) size, dat->size, filename)
+        fclose(fp);
+      free(dat->chain);
+      dat->chain = NULL;
+      dat->size = 0;
+      return -1;
+    }
+  return 0;
+}
+
+static int dat_read_stream (Bit_Chain* dat, FILE* fp)
+{
+  size_t size = 0;
+
+  do {
+    if (dat->chain)
+      dat->chain = (unsigned char *) realloc(dat->chain, dat->size + 4096);
+    else {
+      dat->chain = (unsigned char *) calloc(1, 4096);
+      dat->size = 0;
+    }
+    if (!dat->chain)
+      {
+        LOG_ERROR("Not enough memory.\n");
+        fclose(fp);
+        return -1;
+      }
+    size = fread(&dat->chain[dat->size], sizeof(char), 4096, fp);
+    dat->size += size;
+  } while (size == 4096);
+
+  if (dat->size == 0)
+    {
+      LOG_ERROR("Could not read from stream (%lu out of %lu)\n",
+                (long unsigned int)size, dat->size);
+      fclose(fp);
+      free(dat->chain);
+      dat->chain = NULL;
+      return -1;
+    }
+
+  // clear the slack and realloc
+  size = dat->size & 0xfff;
+  if (size)
+    {
+      memset(&dat->chain[dat->size], 0, 0xfff - size);
+      dat->chain = (unsigned char *) realloc(dat->chain, dat->size);
+    }
+  return 0;
+}
+
 /** dwg_read_file
  * returns 0 on success.
  *
@@ -69,52 +135,54 @@ dwg_read_file(const char *filename, Dwg_Data * dwg)
   size_t size;
   Bit_Chain bit_chain;
 
-  if (stat(filename, &attrib))
+  if (!strcmp(filename, "-"))
     {
-      LOG_ERROR("File not found: %s\n", filename)
-      return -1;
+      fp = stdin;
     }
-  if (!(S_ISREG (attrib.st_mode)
+  else
+    {
+      if (stat(filename, &attrib))
+        {
+          LOG_ERROR("File not found: %s\n", filename);
+          return -1;
+        }
+      if (!(S_ISREG (attrib.st_mode)
 #ifndef _WIN32
-        || S_ISLNK (attrib.st_mode)
+            || S_ISLNK (attrib.st_mode)
 #endif
-        ))
-    {
-      LOG_ERROR("Error: %s\n", filename)
-      return -1;
+            ))
+        {
+          LOG_ERROR("Error: %s\n", filename);
+          return -1;
+        }
+      fp = fopen(filename, "rb");
     }
-  fp = fopen(filename, "rb");
   if (!fp)
     {
       LOG_ERROR("Could not open file: %s\n", filename)
       return -1;
     }
 
-  /* Load whole file into memory
+  /* Load whole file into memory, even if streamed (for now)
    */
   loglevel = dwg->opts;
   memset(dwg, 0, sizeof(Dwg_Data));
   dwg->opts = loglevel;
   memset(&bit_chain, 0, sizeof(Bit_Chain));
-  bit_chain.size = attrib.st_size;
-  bit_chain.chain = (unsigned char *) calloc(1, bit_chain.size);
-  if (!bit_chain.chain)
+  if (fp == stdin)
     {
-      LOG_ERROR("Not enough memory.\n")
-      fclose(fp);
-      return -1;
+      int error;
+      error = dat_read_stream(&bit_chain, fp);
+      if (error)
+        return error;
     }
-
-  size = fread(bit_chain.chain, sizeof(char), bit_chain.size, fp);
-  if (size != bit_chain.size)
+  else
     {
-      LOG_ERROR("Could not read the entire file (%lu out of %lu): %s\n",
-          (long unsigned int) size, bit_chain.size, filename)
-      fclose(fp);
-      free(bit_chain.chain);
-      bit_chain.chain = NULL;
-      bit_chain.size = 0;
-      return -1;
+      int error;
+      bit_chain.size = attrib.st_size;
+      error = dat_read_file(&bit_chain, fp, filename);
+      if (error)
+        return error;
     }
   fclose(fp);
 
