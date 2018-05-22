@@ -6,10 +6,21 @@ dwgwrite \- manual page for dwgwrite 0.4-dev
 .B dwgwrite
 [\fI\,OPTION\/\fR]... [\fI\,-o DWGFILE\/\fR] \fI\,INFILE\/\fR
 .SH DESCRIPTION
-Writes a DWG file (not yet functional)
+Writes a DWG file from various input formats. (only r2000 for now)
 .TP
 \fB\-v[0\-9]\fR, \fB\-\-verbose\fR [0\-9]
 verbosity
+.TP
+\fB\-as\-rNNNN\fR
+save as version
+.IP
+Valid versions:
+.IP
+r12, r14, r2000 (default)
+.IP
+Planned versions:
+.IP
+r9, r10, r11, r2004, r2007, r2010, r2013, r2018
 .TP
 \fB\-I\fR fmt,  \fB\-\-format\fR fmt
 fmt: JSON, DXF, DXFB

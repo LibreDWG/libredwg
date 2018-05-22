@@ -254,7 +254,7 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
       } \
     }
 #define FIELD_DATAHANDLE(name, handle_code, dxf) \
-  { bit_write_H(dat, &_obj->name->handleref); }
+  { bit_write_H(dat, _obj->name ? &_obj->name->handleref : NULL); }
 
 #define FIELD_HANDLE_N(name, vcount, handle_code, dxf)\
     IF_ENCODE_SINCE_R13 { \
@@ -507,9 +507,11 @@ dwg_encode(Dwg_Data* dwg, Bit_Chain* dat)
     if (!dwg->header.num_sections) /* Usually 3-5, max 6 */
       dwg->header.num_sections = 6;
     bit_write_RL(dat, dwg->header.num_sections);
+    if (!dwg->header.section)
+      dwg->header.section = calloc(dwg->header.num_sections, sizeof(Dwg_Section));
     section_address = dat->byte; // Jump to section address
     dat->byte += (dwg->header.num_sections * 9);
-    bit_read_CRC(dat); // Check crc
+    bit_write_CRC(dat, 0, 0xC0C1);
 
     bit_write_sentinel(dat, dwg_sentinel(DWG_SENTINEL_HEADER_END));
 
@@ -562,6 +564,9 @@ dwg_encode(Dwg_Data* dwg, Bit_Chain* dat)
     unsigned int rseed = 1;
 
     LOG_ERROR(WE_CAN "We don't encode the R2004_section_map yet")
+
+    if (dwg->header.num_infos && !dwg->header.section_info)
+      dwg->header.section_info = calloc(dwg->header.num_infos, sizeof(Dwg_Section_Info));
 
     dat->byte = 0x80;
     for (i = 0; i < size; i++)

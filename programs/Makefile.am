@@ -31,21 +31,21 @@ dwg2ps_SOURCES = dwg2ps.c
 dwg2ps_LDADD = $(LDADD) -lps
 endif
 
-if USE_WRITE
-bin_PROGRAMS += dwgrewrite
-dist_man1_MANS += dwgrewrite.1
-# not yet ready
-noinst_PROGRAMS += dxf2dwg dwgwrite
-dwgrewrite_SOURCES = dwgrewrite.c
-dwgwrite_SOURCES   = dwgwrite.c
-dxf2dwg_SOURCES    = dxf2dwg.c
-endif
-
 dwgread_SOURCES  = dwgread.c
 dwgbmp_SOURCES   = dwgbmp.c
 dwg2dxf_SOURCES  = dwg2dxf.c
 dwglayers_SOURCES = dwglayers.c
 dwg2SVG_SOURCES  = dwg2SVG.c
+
+if USE_WRITE
+bin_PROGRAMS += dwgrewrite
+# not yet ready
+noinst_PROGRAMS += dxf2dwg dwgwrite
+dist_man1_MANS += dwgrewrite.1 dwgwrite.1 dxf2dwg.1
+dwgrewrite_SOURCES = dwgrewrite.c
+dwgwrite_SOURCES   = dwgwrite.c
+dxf2dwg_SOURCES    = dxf2dwg.c
+endif
 
 if HAVE_WINE
 TESTS_ENVIRONMENT = \
@@ -73,9 +73,9 @@ man: $(bin_PROGRAMS) $(noinst_PROGRAMS)
 	for p in $(bin_PROGRAMS) $(noinst_PROGRAMS); do \
 	  $(MAKE) $$p.1; done
 
-# TODO $*F stem is GNU make only. ./ prefix is POSIX only
+# TODO $*F stem is GNU make only. ./ prefix is POSIX only, not on Windows
 .c.1:
-	help2man -p LibreDWG $(*F) >$@ || true
+	help2man -p LibreDWG ./$(*F) >$@ || true
 
 .c.i:
 	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\

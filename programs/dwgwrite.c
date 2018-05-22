@@ -34,7 +34,7 @@ int verbosity(int argc, char **argv, int i, unsigned int *opts);
 #include "common.inc"
 
 static int usage(void) {
-  printf("\nUsage: dwgwrite [-v[0-9]] [-I FMT] [-o DWGFILE] INFILE\n");
+  printf("\nUsage: dwgwrite [-v[0-9]] [-as-rNNNN] [-I FMT] [-o DWGFILE] INFILE\n");
   return 1;
 }
 static int opt_version(void) {
@@ -43,10 +43,16 @@ static int opt_version(void) {
 }
 static int help(void) {
   printf("\nUsage: dwgwrite [OPTION]... [-o DWGFILE] INFILE\n");
-  printf("Writes a DWG file (not yet functional)\n"
+  printf("Writes a DWG file from various input formats. (only r2000 for now)\n"
          "\n");
   printf("  -v[0-9], --verbose [0-9]  verbosity\n");
-  printf("  -I fmt,  --format fmt     fmt: JSON, DXF, DXFB\n"); //TODO: YAML, XML, SVG, PS, ...
+  printf("  -as-rNNNN                 save as version\n");
+  printf("           Valid versions:\n");
+  printf("             r12, r14, r2000 (default)\n");
+  printf("           Planned versions:\n");
+  printf("             r9, r10, r11, r2004, r2007, r2010, r2013, r2018\n");
+  printf("  -I fmt,  --format fmt     fmt: JSON, DXF, DXFB\n");
+  //TODO: GeoJSON, YAML, XML/OGR, GPX, SVG, PS, ...
   printf("  -o dwgfile                \n");
   printf("           --help           display this help and exit\n");
   printf("           --version        output version information and exit\n"
@@ -66,6 +72,8 @@ main(int argc, char *argv[])
   const char *infile = NULL;
   char *outfile = NULL;
   Bit_Chain dat;
+  const char *version = NULL;
+  Dwg_Version_Type dwg_version;
 
   if (argc < 2)
     {
@@ -81,6 +89,19 @@ main(int argc, char *argv[])
       int num_args = verbosity(argc, argv, i, &opts);
       argc -= num_args;
       i += num_args;
+    }
+  if (argc > 2 && !strncmp(argv[i], "-as-r", 5))
+    {
+      const char *opt = argv[i];
+      dwg_version = dwg_version_as(&opt[4]);
+      if (dwg_version == R_INVALID)
+        {
+          fprintf(stderr, "Invalid version %s\n", argv[1]);
+          return usage();
+        }
+      version = &opt[4];
+      argc--;
+      i++;
     }
   if (argc > 2 &&
       (!strcmp(argv[i], "--format") ||
@@ -136,8 +157,7 @@ main(int argc, char *argv[])
         }
     }
 
-  //TODO: allow stdin, but require -I|--format then
-  //REQUIRE_INPUT_FILE_ARG (argc);
+  //allow stdin, but require -I|--format then
   dwg.opts = opts;
   if (infile)
     dat.fh = fopen(infile, "r");
@@ -168,14 +188,17 @@ main(int argc, char *argv[])
   if (argc)
     fclose(dat.fh);
 
-  //dat.version = dat.from_version = dwg.header.version;
+  if (dwg.header.from_version != dwg.header.version)
+    dwg.header.from_version = dwg.header.version;
+  if (version) {
+    dat.version = dwg.header.version = dwg_version;
+  }
+  else {
+    dat.version = dwg.header.version = R_2000;
+  }
   if (!outfile)
     outfile = suffix (infile, "dwg");
   error = dwg_write_file(outfile, &dwg);
-  if (error)
-    printf("\nERROR\n");
-  else
-    printf("\nSUCCESS\n");
   dwg_free(&dwg);
 
   return error;

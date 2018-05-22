@@ -982,6 +982,11 @@ bit_write_H(Bit_Chain * dat, Dwg_Handle * handle)
   unsigned char *val;
   unsigned char size;
 
+  if (!handle)
+    {
+      bit_write_RC(dat, 0);
+      return;
+    }
   if (handle->value == 0)
     {
       bit_write_RC(dat, (handle->code << 4));
