@@ -17,6 +17,10 @@ entities fail to read.  Among the example applications we wrote using
 LibreDWG is an initial SVG and Postscript conversion, dxf converters
 and a DWG rewrite, i.e saveas tool. Please contact us if you can help.
 
+The strings API is utf-8 (wtf8 really, Windows UCS-2 has no surrogate
+pairs), and encodes to the internal 8-bit or UCS-2 strings, depending
+on the DWG version.
+
 Sometimes we hang on our IRC channel which is #libredwg at irc.freenode.net
 If you don't find us there, please email the package maintainers:
 

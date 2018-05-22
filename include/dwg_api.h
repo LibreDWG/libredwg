@@ -448,6 +448,9 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL(LAYER)
 /// Macro call to cast dwg object to xrecord
 CAST_DWG_OBJECT_TO_OBJECT_DECL(XRECORD)
 
+// initialize the DWG version, for r2007+ unicode strings and older field variants
+void dwg_api_init_version(Dwg_Data *dwg);
+
 /********************************************************************
 *                FUNCTIONS START HERE ENTITY SPECIFIC               *
 ********************************************************************/
@@ -689,7 +692,7 @@ dwg_ent_ellipse_set_end_angle(dwg_ent_ellipse *ellipse, BITCODE_BD end_angle,
 ********************************************************************/
 
 
-// Get/Set text of text
+// Get/Set text of text (utf-8 encoded)
 void
 dwg_ent_text_set_text(dwg_ent_text *text, char *text_value, int *error);
 
@@ -755,7 +758,7 @@ dwg_ent_text_set_horiz_align(dwg_ent_text *text, BITCODE_BS alignment, int *erro
 ********************************************************************/
 
 
-// Get/Set text of attrib
+// Get/Set text of attrib (utf-8 encoded)
 void
 dwg_ent_attrib_set_text(dwg_ent_attrib *attrib, char *text_value, int *error);
 
@@ -825,7 +828,7 @@ dwg_ent_attrib_set_horiz_align(dwg_ent_attrib *attrib, BITCODE_BS alignment,
 ********************************************************************/
 
 
-// Get/Set text of attdef
+// Get/Set default text of attdef (utf-8 encoded)
 void
 dwg_ent_attdef_set_text(dwg_ent_attdef *attdef, char *default_value,
                         int *error);
@@ -1507,6 +1510,7 @@ dwg_ent_dim_set_extrusion(dwg_ent_dim *dim,
 void
 dwg_ent_dim_get_extrusion(dwg_ent_dim *dim,
                           dwg_point_3d *point, int *error);
+/* (utf-8 encoded) */
 char *
 dwg_ent_dim_get_user_text(dwg_ent_dim *dim, int *error);
 
@@ -1971,6 +1975,7 @@ dwg_ent_mtext_get_extents_width(dwg_ent_mtext *mtext, int *error);
 void
 dwg_ent_mtext_set_extents_width(dwg_ent_mtext *mtext, BITCODE_BD wid, int *error);
 
+/* (utf-8 encoded) */
 char* dwg_ent_mtext_get_text(dwg_ent_mtext *mtext, int *error);
 
 void
@@ -2146,6 +2151,7 @@ void
 dwg_ent_tolerance_get_extrusion(dwg_ent_tolerance *tol, dwg_point_3d *point,
                                 int *error);
 
+/* (utf-8 encoded) */
 void
 dwg_ent_tolerance_set_text_string(dwg_ent_tolerance *tol, char *string,
                                   int *error);

@@ -107,11 +107,11 @@ main (int argc, char *argv[])
                layer->frozen ? "f" : " ",
                layer->on ?     "+" : "-",
                layer->locked ? "l" : " ");
-      // since r2007 unicode (we don't convert to utf-8)
+      // since r2007 unicode, converted to utf-8
       if (dwg.header.version >= R_2007) {
-        char *uni = bit_convert_TU((BITCODE_TU)layer->entry_name);
-        printf("%s\n", uni);
-        free(uni);
+        char *utf8 = bit_convert_TU((BITCODE_TU)layer->entry_name);
+        printf("%s\n", utf8);
+        free(utf8);
       }
       else
         printf("%s\n", layer->entry_name);

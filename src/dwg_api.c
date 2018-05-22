@@ -28,9 +28,16 @@
 # include <malloc.h>
 #endif
 #include "dwg.h"
+#include "common.h"
 #include "logging.h"
 #include "bits.h"
 #include "dwg_api.h"
+
+/* We don't pass in Dwg_Object*'s, so we don't know if the object
+   is >= r2007 or <r13 or what.
+   So we need some dwg_api_init_version(&dwg) to store the version.
+*/
+static Dwg_Version_Type dwg_version = R_INVALID;
 
 /*******************************************************************
  *        Functions created from macro to extract entities           *
@@ -264,6 +271,12 @@ CAST_DWG_OBJECT_TO_OBJECT(XRECORD)
 /*******************************************************************
  *                FUNCTIONS START HERE ENTITY SPECIFIC               *
  ********************************************************************/
+
+/* not thread safe */
+void dwg_api_init_version(Dwg_Data *dwg)
+{
+  dwg_version = (Dwg_Version_Type)dwg->header.version;
+}
 
 /* There is no generic call dwg_get_DIMENSION, for this you have to
    specify the exact DIMENSION_* type. */
@@ -1455,43 +1468,49 @@ dwg_ent_ellipse_set_end_angle(dwg_ent_ellipse *ellipse, BITCODE_BD end_angle,
  *                    FUNCTIONS FOR TEXT ENTITY                      *
  ********************************************************************/
 
-/// Sets text value of a text entity
+/// Sets text value of a text entity (utf-8 encoded).
 /** Usage : dwg_ent_text_set_text(text, "Hello world", &error);
     \param 1 dwg_ent_text
-    \param 2 string ( char * )
+    \param 2 utf-8 string ( char * )
     \param 2 int ptr &error
 */
 void
-dwg_ent_text_set_text(dwg_ent_text *text, char * text_value, int *error)
+dwg_ent_text_set_text(dwg_ent_text *ent, char * text_value, int *error)
 {
-  if (text != 0)
+  if (ent)
     {
       *error = 0;
-      text->text_value = text_value;
+      if (dwg_version >= R_2007)
+        ent->text_value = (char*)bit_utf8_to_TU(text_value);
+      else
+        ent->text_value = text_value;
     }
   else
     {
-      LOG_ERROR("%s: empty text", __FUNCTION__)
+      LOG_ERROR("%s: empty ent", __FUNCTION__)
       *error = 1;
     }
 }
 
-/// This returns the text value of a text entity.
+/// This returns the text value of a text entity (utf-8 encoded).
 /** Usage : dwg_ent_text_get_text(text, &error);
     \param 1 dwg_ent_text
     \param 2 int ptr &error
 */
 char *
-dwg_ent_text_get_text(dwg_ent_text *text, int *error)
+dwg_ent_text_get_text(dwg_ent_text *ent, int *error)
 {
-  if (text != 0)
+  if (ent)
     {
       *error = 0;
-      return text->text_value;
+      if (dwg_version >= R_2007)
+        return bit_convert_TU((BITCODE_TU)ent->text_value);
+      else
+        return ent->text_value;
     }
   else
     {
-      LOG_ERROR("%s: empty text", __FUNCTION__)
+      LOG_ERROR("%s: empty ent", __FUNCTION__)
       *error = 1;
       return NULL;
     }
@@ -1807,19 +1826,22 @@ dwg_ent_text_set_horiz_align(dwg_ent_text *text, BITCODE_BS alignment, int *erro
  *                   FUNCTIONS FOR ATTRIB ENTITY                     *
  ********************************************************************/
 
-/// Sets text value of a attrib entity.
+/// Sets text value of a attrib entity (utf-8 encoded).
 /** Usage : dwg_ent_attrib_set_text(attrib, "Hello world", &error);
     \param 1 dwg_ent_attrib
-    \param 2 string (char *)
+    \param 2 utf-8 string (char *)
     \param 3 int ptr &error
 */
 void
-dwg_ent_attrib_set_text(dwg_ent_attrib *attrib, char * text_value, int *error)
+dwg_ent_attrib_set_text(dwg_ent_attrib *ent, char * text_value, int *error)
 {
-  if (attrib != 0)
+  if (ent)
     {
       *error = 0;
-      attrib->text_value = text_value;
+      if (dwg_version >= R_2007)
+        ent->text_value = (char*)bit_utf8_to_TU(text_value);
+      else
+        ent->text_value = text_value;
     }
   else
     {
@@ -1828,18 +1850,21 @@ dwg_ent_attrib_set_text(dwg_ent_attrib *attrib, char * text_value, int *error)
     }
 }
 
-/// Returns the text value of a attrib entity.
+/// Returns the text value of a attrib entity (utf-8 encoded).
 /** Usage : char * text_val = dwg_ent_attrib_get_text(attrib, &error);
     \param 1 dwg_ent_attrib
     \param 2 int ptr &error
 */
 char *
-dwg_ent_attrib_get_text(dwg_ent_attrib *attrib, int *error)
+dwg_ent_attrib_get_text(dwg_ent_attrib *ent, int *error)
 {
-  if (attrib != 0)
+  if (ent)
     {
       *error = 0;
-      return attrib->text_value;
+      if (dwg_version >= R_2007)
+        return bit_convert_TU((BITCODE_TU)ent->text_value);
+      else
+        return ent->text_value;
     }
   else
     {
@@ -2162,20 +2187,23 @@ dwg_ent_attrib_set_horiz_align(dwg_ent_attrib *attrib, BITCODE_BS alignment,
  *                   FUNCTIONS FOR ATTDEF ENTITY                     *
  ********************************************************************/
 
-/// This sets text value of a attdef entity equal.
+/// This sets the default value of an attdef entity (utf-8 encoded).
 /** Usage :- dwg_ent_attdef_set_text(attdef, "Hello world", &error);
     \param 1 dwg_ent_attdef
-    \param 2 char *
+    \param 2 utf-8 string (char *)
     \param 3 int ptr &error
 */
 void
-dwg_ent_attdef_set_text(dwg_ent_attdef *attdef, char * default_value,
+dwg_ent_attdef_set_text(dwg_ent_attdef *ent, char * default_value,
                         int *error)
 {
-  if (attdef != 0)
+  if (ent)
     {
       *error = 0;
-      attdef->default_value = default_value;
+      if (dwg_version >= R_2007)
+        ent->default_value = (char*)bit_utf8_to_TU(default_value);
+      else
+        ent->default_value = default_value;
     }
   else
     {
@@ -2184,18 +2212,21 @@ dwg_ent_attdef_set_text(dwg_ent_attdef *attdef, char * default_value,
     }
 }
 
-/// This returns the text value of a attdef entity.
+/// This returns the default value of an attdef entity (utf-8 encoded).
 /** Usage : char * text = dwg_ent_attdef_get_text(attdef, &error);
     \param 1 dwg_ent_attdef
     \param 2 int ptr &error
 */
 char *
-dwg_ent_attdef_get_text(dwg_ent_attdef *attdef, int *error)
+dwg_ent_attdef_get_text(dwg_ent_attdef *ent, int *error)
 {
-  if (attdef != 0)
+  if (ent)
     {
       *error = 0;
-      return attdef->default_value;
+      if (dwg_version >= R_2007)
+        return bit_convert_TU((BITCODE_TU)ent->default_value);
+      else
+        return ent->default_value;
     }
   else
     {
@@ -2205,7 +2236,7 @@ dwg_ent_attdef_get_text(dwg_ent_attdef *attdef, int *error)
     }
 }
 
-/// This returns the insertion point of a attdef entity.
+/// This returns the insertion point of an attdef entity.
 /** Usage :- dwg_ent_attdef_get_insertion_point(attdef, &point, &error);
     \param 1 dwg_ent_attdef
     \param 2 dwg_point_2d
@@ -2983,19 +3014,22 @@ dwg_ent_solid_set_extrusion(dwg_ent_solid *solid, dwg_point_3d *vector,
 *                   FUNCTIONS FOR BLOCk ENTITY                      *
 ********************************************************************/
 
-/// sets name of the block entity.
-/** Usage :- dwg_ent_block_set_name(block, "blocko", &error);
+/// sets name of the block entity (utf-8 encoded)
+/** Usage :- dwg_ent_block_set_name(block, "block_name", &error);
 \param 1 dwg_ent_block
-\param 2 char *
+\param 2 utf-8 char *
 \param 3 int
 */
 void
-dwg_ent_block_set_name(dwg_ent_block *block, char * name, int *error)
+dwg_ent_block_set_name(dwg_ent_block *ent, char * name, int *error)
 {
-  if (block != 0)
+  if (ent)
     {
       *error = 0;
-      block->name = name;
+      if (dwg_version >= R_2007)
+        ent->name = (char*)bit_utf8_to_TU(name);
+      else
+        ent->name = name;
     }
   else
     {
@@ -3015,7 +3049,10 @@ dwg_ent_block_get_name(dwg_ent_block *block, int *error)
   if (block != 0)
     {
       *error = 0;
-      return block->name;
+      if (dwg_version >= R_2007)
+        return bit_convert_TU((BITCODE_TU)block->name);
+      else
+        return block->name;
     }
   else
     {
@@ -4902,7 +4939,7 @@ dwg_ent_minsert_set_row_spacing(dwg_ent_minsert *minsert, BITCODE_BD spacing,
 *                FUNCTIONS FOR MLINESTYLE OBJECT                    *
 ********************************************************************/
 
-/// Returns the name of mlinestyle
+/// Returns the name of mlinestyle (utf-8 encoded)
 /** Usage : char * name = dwg_obj_mlinestyle_get_name(mlinestyle, &error);
 \param 1 dwg_obj_mlinestyle
 \param 2 int
@@ -4910,10 +4947,13 @@ dwg_ent_minsert_set_row_spacing(dwg_ent_minsert *minsert, BITCODE_BD spacing,
 char *
 dwg_obj_mlinestyle_get_name(dwg_obj_mlinestyle *mlinestyle, int *error)
 {
-  if (mlinestyle != 0)
+  if (mlinestyle)
     {
       *error = 0;
-      return mlinestyle->entry_name;
+      if (dwg_version >= R_2007)
+        return bit_convert_TU((BITCODE_TU)mlinestyle->entry_name);
+      else
+        return mlinestyle->entry_name;
     }
   else
     {
@@ -4933,10 +4973,13 @@ void
 dwg_obj_mlinestyle_set_name(dwg_obj_mlinestyle *mlinestyle, char * name,
                             int *error)
 {
-  if (mlinestyle != 0)
+  if (mlinestyle)
     {
       *error = 0;
-      mlinestyle->entry_name = name;
+      if (dwg_version >= R_2007)
+        mlinestyle->entry_name = (char*)bit_utf8_to_TU(name);
+      else
+        mlinestyle->entry_name = name;
     }
   else
     {
@@ -4945,7 +4988,7 @@ dwg_obj_mlinestyle_set_name(dwg_obj_mlinestyle *mlinestyle, char * name,
     }
 }
 
-/// Returns the desc of mlinestyle
+/// Returns the desc of mlinestyle (utf-8 encoded)
 /** Usage : char * desc = dwg_obj_mlinestyle_get_desc(mlinestyle, &error);
 \param 1 dwg_obj_mlinestyle
 \param 2 int
@@ -4956,7 +4999,10 @@ dwg_obj_mlinestyle_get_desc(dwg_obj_mlinestyle *mlinestyle, int *error)
   if (mlinestyle != 0)
     {
       *error = 0;
-      return mlinestyle->desc;
+      if (dwg_version >= R_2007)
+        return bit_convert_TU((BITCODE_TU)mlinestyle->desc);
+      else
+        return mlinestyle->desc;
     }
   else
     {
@@ -4966,10 +5012,10 @@ dwg_obj_mlinestyle_get_desc(dwg_obj_mlinestyle *mlinestyle, int *error)
     }
 }
 
-/// Sets the desc of mlinestyle.
+/// Sets the desc of mlinestyle. (utf-8 encoded)
 /** Usage : dwg_obj_mlinestyle_set_desc(minsert, desc, &error);
 \param 1 dwg_obj_mlinestyle
-\param 2 char *
+\param 2 utf-8 char *
 \param 3 int
 */
 void
@@ -4979,7 +5025,10 @@ dwg_obj_mlinestyle_set_desc(dwg_obj_mlinestyle *mlinestyle, char * desc,
   if (mlinestyle != 0)
     {
       *error = 0;
-      mlinestyle->desc = desc;
+      if (dwg_version >= R_2007)
+        mlinestyle->desc = (char*)bit_utf8_to_TU(desc);
+      else
+        mlinestyle->desc = desc;
     }
   else
     {
@@ -5207,7 +5256,7 @@ dwg_obj_appid_control_get_appid(dwg_obj_appid_control *appid,
 *                    FUNCTIONS FOR APPID OBJECT                     *
 ********************************************************************/
 
-/// Returns the name of appid
+/// Returns the name of appid (utf-8 encoded)
 /** Usage : char * name = dwg_obj_appid_get_entry_name(mlinestyle, &error);
 \param 1 dwg_obj_appid
 \param 2 int
@@ -5215,10 +5264,13 @@ dwg_obj_appid_control_get_appid(dwg_obj_appid_control *appid,
 char *
 dwg_obj_appid_get_entry_name(dwg_obj_appid *appid, int *error)
 {
-  if (appid != 0)
+  if (appid)
     {
       *error = 0;
-      return appid->entry_name;
+      if (dwg_version >= R_2007)
+        return bit_convert_TU((BITCODE_TU)appid->entry_name);
+      else
+        return appid->entry_name;
     }
   else
     {
@@ -5228,20 +5280,23 @@ dwg_obj_appid_get_entry_name(dwg_obj_appid *appid, int *error)
     }
 }
 
-/// Sets the name of appid
+/// Sets the name of appid (utf-8 encoded)
 /** Usage : dwg_obj_appid_set_name(appid, "appid1", &error);
 \param 1 dwg_obj_appid
-\param 2 char *
+\param 2 utf-8 char *
 \param 3 int
 */
 void
 dwg_obj_appid_set_entry_name(dwg_obj_appid *appid, char * entry_name,
                              int *error)
 {
-  if (appid != 0)
+  if (appid)
     {
       *error = 0;
-      appid->entry_name = entry_name;
+      if (dwg_version >= R_2007)
+        appid->entry_name = (char*)bit_utf8_to_TU(entry_name);
+      else
+        appid->entry_name = entry_name;
     }
   else
     {
@@ -5321,13 +5376,19 @@ dwg_obj_appid_get_appid_control(dwg_obj_appid *appid, int *error)
 *            FUNCTIONS FOR ALL DIMENSION ENTITIES                *
 ********************************************************************/
 
+// (utf-8 encoded)
 char *
 dwg_ent_dim_get_block_name(dwg_ent_dim *dim, int *error)
 {
   if (dim != 0)
     {
+      char *name = ((dwg_ent_dim_linear *)dim)->
+                     block->obj->tio.object->tio.BLOCK_HEADER->entry_name;
       *error = 0;
-      return ((dwg_ent_dim_linear *)dim)->block->obj->tio.object->tio.BLOCK_HEADER->entry_name;
+      if (dwg_version >= R_2007)
+        return bit_convert_TU((BITCODE_TU)name);
+      else
+        return name;
     }
   else
     {
@@ -5687,7 +5748,7 @@ dwg_ent_dim_get_extrusion(dwg_ent_dim *dim,
     }
 }
 
-/// Returns the user text
+/// Returns the user text (utf-8 encoded)
 /** Usage : char * text  = dwg_ent_dim_get_user_text(dim, &error);
     \param 1 dwg_ent_dim
     \param 2 int ptr &error
@@ -5695,10 +5756,13 @@ dwg_ent_dim_get_extrusion(dwg_ent_dim *dim,
 char *
 dwg_ent_dim_get_user_text(dwg_ent_dim *dim, int *error)
 {
-  if (dim != 0)
+  if (dim)
     {
       *error = 0;
-      return dim->user_text;
+      if (dwg_version >= R_2007)
+        return bit_convert_TU((BITCODE_TU)dim->user_text);
+      else
+        return dim->user_text;
     }
   else
     {
@@ -5708,8 +5772,8 @@ dwg_ent_dim_get_user_text(dwg_ent_dim *dim, int *error)
     }
 }
 
-/// Sets the user text
-/** Usage : dwg_ent_dim_set_user_text(dim, "dimension texto", &error);
+/// Sets the user text (utf-8 encoded)
+/** Usage : dwg_ent_dim_set_user_text(dim, "dimension text", &error);
     \param 1 dwg_ent_dim
     \param 2 char *
     \param 3 int ptr &error
@@ -5718,10 +5782,13 @@ void
 dwg_ent_dim_set_user_text(dwg_ent_dim *dim, char * text,
                           int *error)
 {
-  if (dim != 0)
+  if (dim)
     {
       *error = 0;
-      dim->user_text = text;
+      if (dwg_version >= R_2007)
+        dim->user_text = (char*)bit_utf8_to_TU(text);
+      else
+        dim->user_text = text;
     }
   else
     {
@@ -8017,14 +8084,17 @@ dwg_ent_mtext_set_extents_width(dwg_ent_mtext *mtext, BITCODE_BD wid, int *error
 
 }
 
-/// Returns mtext text
+/// Returns mtext text value (utf-8 encoded)
 char *
-dwg_ent_mtext_get_text(dwg_ent_mtext *mtext, int *error)
+dwg_ent_mtext_get_text(dwg_ent_mtext *ent, int *error)
 {
-  if (mtext != 0)
+  if (ent)
     {
       *error = 0;
-      return mtext->text;
+      if (dwg_version >= R_2007)
+        return bit_convert_TU((BITCODE_TU)ent->text);
+      else
+        return ent->text;
     }
   else
     {
@@ -8034,14 +8104,17 @@ dwg_ent_mtext_get_text(dwg_ent_mtext *mtext, int *error)
     }
 }
 
-/// Sets mtext text
+/// Sets mtext text value (utf-8 encoded)
 void
-dwg_ent_mtext_set_text(dwg_ent_mtext *mtext, char * text, int *error)
+dwg_ent_mtext_set_text(dwg_ent_mtext *ent, char *text, int *error)
 {
-  if (mtext != 0)
+  if (ent)
     {
       *error = 0;
-      mtext->text = text;
+      if (dwg_version >= R_2007)
+        ent->text = (char*)bit_utf8_to_TU(text);
+      else
+        ent->text = text;
     }
   else
     {
@@ -8853,7 +8926,7 @@ dwg_ent_tolerance_get_extrusion(dwg_ent_tolerance *tol, dwg_point_3d *point,
 
 }
 
-/// Sets tolerance text string
+/// Sets tolerance text string (utf-8 encoded)
 void
 dwg_ent_tolerance_set_text_string(dwg_ent_tolerance *tol, char * string,
                                   int *error)
@@ -8861,7 +8934,10 @@ dwg_ent_tolerance_set_text_string(dwg_ent_tolerance *tol, char * string,
   if (tol != 0)
     {
       *error = 0;
-      tol->text_string = string;
+      if (dwg_version >= R_2007)
+        tol->text_string = (char*)bit_utf8_to_TU(string);
+      else
+        tol->text_string = string;
     }
   else
     {
@@ -8871,14 +8947,17 @@ dwg_ent_tolerance_set_text_string(dwg_ent_tolerance *tol, char * string,
 
 }
 
-/// Returns tolerance text string
+/// Returns tolerance text string (utf-8 encoded)
 char *
 dwg_ent_tolerance_get_text_string(dwg_ent_tolerance *tol, int *error)
 {
-  if (tol != 0)
+  if (tol)
     {
       *error = 0;
-      return tol->text_string;
+      if (dwg_version >= R_2007)
+        return bit_convert_TU((BITCODE_TU)tol->text_string);
+      else
+        return tol->text_string;
     }
   else
     {
@@ -9336,7 +9415,7 @@ dwg_ent_ole2frame_set_data_length(dwg_ent_ole2frame *frame, BITCODE_BL data_leng
     }
 }
 
-/// Returns ole2frame data
+/// Returns ole2frame data (binary)
 char *
 dwg_ent_ole2frame_get_data(dwg_ent_ole2frame *frame, int *error)
 {
@@ -10483,14 +10562,17 @@ dwg_ent_viewport_set_frozen_layer_count(dwg_ent_viewport *vp, BITCODE_BL count,
     }
 }
 
-/// Returns viewport style sheet
+/// Returns viewport style sheet name (utf-8 encoded)
 char *
 dwg_ent_viewport_get_style_sheet(dwg_ent_viewport *vp, int *error)
 {
   if (vp != 0)
     {
       *error = 0;
-      return vp->style_sheet;
+      if (dwg_version >= R_2007)
+        return bit_convert_TU((BITCODE_TU)vp->style_sheet);
+      else
+        return vp->style_sheet;
     }
   else
     {
@@ -10500,15 +10582,18 @@ dwg_ent_viewport_get_style_sheet(dwg_ent_viewport *vp, int *error)
     }
 }
 
-/// Sets viewport style sheet
+/// Sets viewport style sheet name (utf-8 encoded)
 void
 dwg_ent_viewport_set_style_sheet(dwg_ent_viewport *vp, char * sheet,
                                  int *error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
-      vp->style_sheet = sheet;
+      if (dwg_version >= R_2007)
+        vp->style_sheet = (char*)bit_utf8_to_TU(sheet);
+      else
+        vp->style_sheet = sheet;
     }
   else
     {
@@ -16954,16 +17039,19 @@ dwg_obj_block_control_get_paper_space(dwg_obj_block_control *ctrl, int *error)
 *                    FUNCTIONS FOR LAYER OBJECT                     *
 ********************************************************************/
 
-/// Get layer Name of the layer type argument passed in function
+/// Get name of the layer (utf-8 encoded)
 /** Usage :- char * layer_name = dwg_obj_layer_get_name(layer);
 */
 char *
 dwg_obj_layer_get_name(dwg_obj_layer *layer, int *error)
 {
-  if (layer != 0)
+  if (layer)
     {
       *error = 0;
-      return layer->entry_name;
+      if (dwg_version >= R_2007)
+        return bit_convert_TU((BITCODE_TU)layer->entry_name);
+      else
+        return layer->entry_name;
     }
   else
     {
@@ -16978,16 +17066,19 @@ dwg_obj_layer_get_name(dwg_obj_layer *layer, int *error)
 *                FUNCTIONS FOR BLOCK_HEADER OBJECT                  *
 ********************************************************************/
 
-/// Get Block Name of the block header type argument passed in function
+/// Get name of the block header (utf-8 encoded)
 /** Usage :- char * block_name = dwg_obj_block_header_get_name(hdr);
 */
 char *
 dwg_obj_block_header_get_name(dwg_obj_block_header *hdr, int *error)
 {
-  if (hdr != 0)
+  if (hdr)
     {
       *error = 0;
-      return hdr->entry_name;
+      if (dwg_version >= R_2007)
+        return bit_convert_TU((BITCODE_TU)hdr->entry_name);
+      else
+        return hdr->entry_name;
     }
   else
     {
@@ -17012,13 +17103,8 @@ dwg_get_block_header(dwg_data *dwg, int *error)
   *error = 0;
   assert(dwg->num_classes < 1000);
   assert(dwg->num_objects < 0xfffffff); // 0x4fa463eb
-  // cached?
-#if 0
-  if (dwg->mspace_block)
-    return dwg->mspace_block->tio.object->tio.BLOCK_HEADER;
-  else if (dwg->pspace_block)
-    return dwg->pspace_block->tio.object->tio.BLOCK_HEADER;
-#endif
+  if (dwg_version == R_INVALID)
+    dwg_version = (Dwg_Version_Type)dwg->header.version;
 
   obj = &dwg->object[0];
   while (obj && obj->type != DWG_TYPE_BLOCK_HEADER)
@@ -17051,28 +17137,38 @@ dwg_get_block_header(dwg_data *dwg, int *error)
 unsigned int
 dwg_get_num_classes(dwg_data *dwg)
 {
+  if (dwg_version == R_INVALID)
+    dwg_version = (Dwg_Version_Type)dwg->header.version;
   return dwg->num_classes;
 }
 long unsigned int
 dwg_get_num_objects(dwg_data *dwg)
 {
+  if (dwg_version == R_INVALID)
+    dwg_version = (Dwg_Version_Type)dwg->header.version;
   return dwg->num_objects;
 }
 long unsigned int
 dwg_get_num_entities(dwg_data *dwg)
 {
+  if (dwg_version == R_INVALID)
+    dwg_version = (Dwg_Version_Type)dwg->header.version;
   return dwg->num_entities;
 }
 
 dwg_class *
 dwg_get_class(dwg_data *dwg, unsigned int index)
 {
+  if (dwg_version == R_INVALID)
+    dwg_version = (Dwg_Version_Type)dwg->header.version;
   return (index < dwg->num_classes) ? &dwg->dwg_class[index] : NULL;
 }
 
 dwg_object *
 dwg_get_object(dwg_data *dwg, long unsigned int index)
 {
+  if (dwg_version == R_INVALID)
+    dwg_version = (Dwg_Version_Type)dwg->header.version;
   return (index < dwg->num_objects) ? &dwg->object[index] : NULL;
 }
 
@@ -17120,9 +17216,11 @@ dwg_ent_get_eed_data(dwg_obj_ent *ent, unsigned int index, int *error)
 int
 dwg_obj_object_get_index(dwg_object *obj, int *error)
 {
-  if (obj != 0)
+  if (obj)
     {
       *error = 0;
+      if (dwg_version == R_INVALID)
+        dwg_version = (Dwg_Version_Type)obj->parent->header.version;
       return obj->index;
     }
   else
@@ -17141,9 +17239,11 @@ dwg_obj_object_get_index(dwg_object *obj, int *error)
 dwg_handle *
 dwg_obj_get_handle(dwg_object *obj, int *error)
 {
-  if (obj != 0)
+  if (obj)
     {
       *error = 0;
+      if (dwg_version == R_INVALID)
+        dwg_version = (Dwg_Version_Type)obj->parent->header.version;
       return &obj->handle;
     }
   else
@@ -17162,10 +17262,11 @@ dwg_obj_get_handle(dwg_object *obj, int *error)
 dwg_obj_obj *
 dwg_object_to_object(dwg_object *obj, int *error)
 {
-
-  if (obj != 0)
+  if (obj)
     {
       *error = 0;
+      if (dwg_version == R_INVALID)
+        dwg_version = (Dwg_Version_Type)obj->parent->header.version;
       return obj->tio.object;
     }
   else
@@ -17184,10 +17285,11 @@ dwg_object_to_object(dwg_object *obj, int *error)
 dwg_obj_ent *
 dwg_object_to_entity(dwg_object *obj, int *error)
 {
-  return obj->tio.entity;
-  if (obj != 0)
+  if (obj)
     {
       *error = 0;
+      if (dwg_version == R_INVALID)
+        dwg_version = (Dwg_Version_Type)obj->parent->header.version;
       return obj->tio.entity;
     }
   else
@@ -17206,7 +17308,7 @@ dwg_object_to_entity(dwg_object *obj, int *error)
 dwg_object *
 dwg_obj_reference_get_object(dwg_object_ref *ref, int *error)
 {
-  if (ref != 0)
+  if (ref)
     {
       *error = 0;
       return ref->obj;
@@ -17227,7 +17329,7 @@ dwg_obj_reference_get_object(dwg_object_ref *ref, int *error)
 BITCODE_BL
 dwg_obj_ref_get_abs_ref(dwg_object_ref *ref, int *error)
 {
-  if (ref != 0)
+  if (ref)
     {
       *error = 0;
       return ref->absolute_ref;
@@ -17247,7 +17349,7 @@ dwg_obj_ref_get_abs_ref(dwg_object_ref *ref, int *error)
 int
 dwg_get_type(dwg_object *obj)
 {
-  if (obj != 0)
+  if (obj)
     {
       return obj->type;
     }
@@ -17258,7 +17360,7 @@ dwg_get_type(dwg_object *obj)
     }
 }
 
-/// Returns Dwg object dxfname
+/// Returns the object dxfname as ASCII string
 /** Usage : int type = dwg_get_dxfname(obj);
 \param 1 dwg_object
 */
@@ -17267,6 +17369,8 @@ dwg_get_dxfname(dwg_object *obj)
 {
   if (obj)
     {
+      if (dwg_version == R_INVALID)
+        dwg_version = (Dwg_Version_Type)obj->parent->header.version;
       return obj->dxfname;
     }
   else

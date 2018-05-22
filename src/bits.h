@@ -233,8 +233,13 @@ bit_read_TU(Bit_Chain * dat);
 void
 bit_write_TU(Bit_Chain * dat, BITCODE_TU value);
 
+/* converts UCS-2 to UTF-8 */
 char*
 bit_convert_TU(BITCODE_TU wstr);
+
+/* converts UTF-8 to UCS-2 */
+BITCODE_TU
+bit_utf8_to_TU(char* str);
 
 BITCODE_RL
 bit_read_L(Bit_Chain * dat);

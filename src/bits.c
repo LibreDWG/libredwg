@@ -1194,22 +1194,78 @@ bit_write_TU(Bit_Chain * dat, BITCODE_TU chain)
   bit_write_RS(dat, 0); //?? unsure about that
 }
 
+/* converts UCS-2 to UTF-8 */
 char* bit_convert_TU(BITCODE_TU wstr)
 {
   BITCODE_TU tmp = wstr;
   char *str;
-  int len = 0;
+  int i, len = 0;
   uint16_t c;
   while (*tmp++) {
     len++;
   }
   str = malloc(len+1);
-  len = 0;
+  i = 0;
   while ((c = *wstr++)) {
-    str[len++] = c & 0xff;
+    if (c < 256) {
+      str[i++] = c & 0xff;
+    }
+    else if (c < 0x800) {
+      if (i+3 > len) {
+        str = realloc(str, i+3);
+        len = i+2;
+      }
+      str[i+1] = (c & 0x3f) | 0x80;
+      str[i] = (c >> 6) & 0xc0;
+      i += 2;
+    }
+    else { /* windows ucs-2 has no D800-DC00 surrogate pairs. go straight up */
+      if (i+3 > len) {
+        str = realloc(str, i+4);
+        len = i+3;
+      }
+      str[i+3] = (c & 0x3f) | 0x80;
+      c >>= 6;
+      str[i+2] = (c & 0x3f) | 0x80;
+      c >>= 6;
+      str[i] = c & 0xe0;
+      i += 3;
+    }
   }
-  str[len] = '\0';
+  str[i] = '\0';
   return str;
+}
+
+/* converts UTF-8 to UCS-2 */
+BITCODE_TU
+bit_utf8_to_TU(char* str)
+{
+  BITCODE_TU wstr;
+  int i = 0;
+  int len = strlen(str);
+  unsigned char c;
+
+  wstr = malloc(2*(len+1));
+  while ((c = *str++)) {
+    if (c < 128) {
+      wstr[i++] = c;
+    }
+    else if ((c & 0xe0) == 0xc0) {
+      /* ignore invalid utf8 for now */
+      wstr[i++] = ((c & 0x1f) << 6) | (str[1] & 0x3f);
+      str++;
+    }
+    else if ((c & 0xe0) == 0xf0) {
+      /* ignore invalid utf8 for now */
+      wstr[i++] = ((c & 0x0f) << 12) |
+                  ((str[1] & 0x3f) << 6) |
+                  (str[2] & 0x3f);
+      str++;
+      str++;
+    }
+  }
+  wstr[i] = '\0';
+  return wstr;
 }
 
 /** Read 1 bitlong according to normal order
