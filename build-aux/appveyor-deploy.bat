@@ -1,4 +1,5 @@
-@echo off
+rem @echo off
+echo on
 
 cd %APPVEYOR_BUILD_FOLDER%
 echo ARCH: %ARCH%
@@ -11,10 +12,17 @@ set DESTDIR=libredwg-%APPVEYOR_BUILD_VERSION%-%ARCH%
 if not "x%APPVEYOR_REPO_TAG_NAME%" == "x" set DESTDIR=libredwg-%APPVEYOR_REPO_TAG_NAME%-%ARCH%
 echo DESTDIR: %DESTDIR%
 
-rem TODO install-pdf broken
 bash -c "make install prefix= bindir= pdfdir= DESTDIR=`pwd`/%DESTDIR%"
+rem TODO install-pdf broken
+rem bash -c "make install-pdf prefix= bindir= pdfdir= DESTDIR=`pwd`/%DESTDIR%"
 cd %DESTDIR%
 copy ..\README README.txt
-if "%MINGW%"=="1" 7z a ../%DESTDIR%.zip *
-rem if "%MINGW%"=="1" appveyor PushArtifact ../%DESTDIR%.zip *
+move /y bin\libredwg-0.dll libredwg-0.dll
+rmdir bin
+copy ..\programs\*.exe *.*
+mkdir examples
+copy ..\examples\*.exe examples
+copy ..\examples\*.c examples
+7z a ../%DESTDIR%.zip *
+appveyor PushArtifact ../%DESTDIR%.zip *
 cd ..
