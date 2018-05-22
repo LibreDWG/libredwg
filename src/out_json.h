@@ -11,7 +11,7 @@
 /*****************************************************************************/
 
 /*
- * fmt_json.h: write dwg as json
+ * out_json.h: write dwg as json
  * written by Reini Urban
  */
 
@@ -22,5 +22,6 @@
 #include "bits.h"
 
 int  dwg_write_json(Bit_Chain *dat, Dwg_Data* dwg);
+int  dwg_write_geojson(Bit_Chain *dat, Dwg_Data* dwg);
 
 #endif

@@ -130,8 +130,7 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 #define FIELD_4BITS(name,dxf) FIELD(name,4BITS,dxf)
 #define FIELD_BE(name,dxf)    FIELD_3RD(name,dxf)
 #define FIELD_DD(name, _default, dxf) \
-    PREFIX fprintf(dat->fh, "\"" #name "\": " FORMAT_DD ", default: " FORMAT_DD ",\n", \
-            _obj->name, _default)
+    PREFIX fprintf(dat->fh, "\"" #name "\": " FORMAT_DD ",\n", _obj->name)
 #define FIELD_2DD(name, d1, d2, dxf) { \
     FIELD_DD(name.x, d1, dxf); \
     FIELD_DD(name.y, d2, dxf+10); }

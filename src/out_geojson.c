@@ -1,0 +1,492 @@
+/*****************************************************************************/
+/*  LibreDWG - free implementation of the DWG file format                    */
+/*                                                                           */
+/*  Copyright (C) 2018 Free Software Foundation, Inc.                        */
+/*                                                                           */
+/*  This library is free software, licensed under the terms of the GNU       */
+/*  General Public License as published by the Free Software Foundation,     */
+/*  either version 3 of the License, or (at your option) any later version.  */
+/*  You should have received a copy of the GNU General Public License        */
+/*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
+/*****************************************************************************/
+
+/*
+ * out_geojson.c: write as GeoJSON
+ * written by Reini Urban
+ */
+
+#include "config.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include <assert.h>
+
+#include "common.h"
+#include "bits.h"
+#include "dwg.h"
+#include "out_json.h"
+
+#define DWG_LOGLEVEL DWG_LOGLEVEL_NONE
+#include "logging.h"
+
+/* the current version per spec block */
+static unsigned int cur_ver = 0;
+
+extern void
+obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
+
+/*--------------------------------------------------------------------------------
+ * See http://geojson.org/geojson-spec.html
+ * Arc, AttributeDefinition, BlockReference, Ellipse, Hatch, Line,
+   MText, Point, Polyline, Spline, Text =>
+ * Point, LineString, Polygon, MultiPoint, MultiLineString, MultiPolygon
+ * { "type": "FeatureCollection",
+     "features": [
+       { "type": "Feature",
+         "properties":
+           { "Layer": "SomeLayer",
+             "SubClasses": "AcDbEntity:AcDbLine",
+             "ExtendedEntity": null,
+             "Linetype": null,
+             "EntityHandle": "8B",
+             "Text": null
+           }, 
+         "geometry":
+           { "type": "LineString",
+             "coordinates": [ [ 370.858611653430728, 730.630303522043732, 0.0 ], [ 450.039756420260289, 619.219273076899071, 0.0 ] ] 
+           }
+       },
+     ], ...
+   }
+ *
+ * MACROS
+ */
+
+#define IS_PRINT
+
+#define PREFIX   for (int _i=0; _i<dat->bit; _i++) { fprintf (dat->fh, "  "); }
+#define ARRAY     PREFIX fprintf (dat->fh, "[\n"); dat->bit++
+#define SAMEARRAY PREFIX fprintf (dat->fh, "["); dat->bit++
+#define ENDARRAY  dat->bit--; PREFIX fprintf (dat->fh, "],\n")
+#define LASTENDARRAY dat->bit--; PREFIX fprintf (dat->fh, "]\n")
+#define HASH      PREFIX fprintf (dat->fh, "{\n"); dat->bit++
+#define SAMEHASH  fprintf (dat->fh, "{\n"); dat->bit++
+#define ENDHASH   dat->bit--; PREFIX fprintf (dat->fh, "},\n")
+#define LASTENDHASH dat->bit--; PREFIX fprintf (dat->fh, "}\n")
+#define SECTION(name) PREFIX fprintf (dat->fh, "\"%s\": [\n", #name); dat->bit++;
+#define ENDSEC()  ENDARRAY
+#define NOCOMMA   fseek(dat->fh, -2, SEEK_CUR)
+#define PAIR_S(name, value) \
+    PREFIX fprintf(dat->fh, "\"" #name "\": \"%s\",\n", value)
+#define LASTPAIR_S(name, value) \
+    PREFIX fprintf(dat->fh, "\"" #name "\": \"%s\"\n", value)
+#define PAIR_NULL(name) \
+    PREFIX fprintf(dat->fh, "\"" #name "\": null,\n")
+#define KEY(name) \
+    PREFIX fprintf(dat->fh, "\"" #name "\": ")
+#define GEOMETRY(name) \
+    KEY(geometry); SAMEHASH; \
+    PAIR_S(type, #name)
+#define ENDGEOMETRY LASTENDHASH
+
+//#define VALUE(value,type,dxf) \
+//    fprintf(dat->fh, FORMAT_##type, value)
+//#define VALUE_RC(value,dxf) VALUE(value, RC, dxf)
+
+#define FIELD(name,type,dxf)
+//    PREFIX fprintf(dat->fh, "\"" #name "\": " FORMAT_##type ",\n", _obj->name)
+#define _FIELD(name,type,value)
+//    PREFIX fprintf(dat->fh, "\"" #name "\": " FORMAT_##type ",\n", obj->name)
+#define ENT_FIELD(name,type,value)
+//    PREFIX fprintf(dat->fh, "\"" #name "\": " FORMAT_##type ",\n", _ent->name)
+#define FIELD_CAST(name,type,cast,dxf) FIELD(name,cast,dxf)
+#define FIELD_TRACE(name,type)
+#define FIELD_TEXT(name,str) 
+#define FIELD_TEXT_TU(name,wstr) 
+
+#define FIELD_VALUE(name) _obj->name
+#define ANYCODE -1
+// todo: only the name, not the ref
+#define FIELD_HANDLE(name, handle_code, dxf)
+#define FIELD_DATAHANDLE(name, code, dxf)
+#define FIELD_HANDLE_N(name, vcount, handle_code, dxf)
+#define FIELD_B(name,dxf)   FIELD(name, B, dxf)
+#define FIELD_BB(name,dxf)  FIELD(name, BB, dxf)
+#define FIELD_3B(name,dxf)  FIELD(name, 3B, dxf)
+#define FIELD_BS(name,dxf)  FIELD(name, BS, dxf)
+#define FIELD_BL(name,dxf)  FIELD(name, BL, dxf)
+#define FIELD_BLL(name,dxf) FIELD(name, BLL, dxf)
+#define FIELD_BD(name,dxf)  FIELD(name, BD, dxf)
+#define FIELD_RC(name,dxf)  FIELD(name, RC, dxf)
+#define FIELD_RS(name,dxf)  FIELD(name, RS, dxf)
+#define FIELD_RD(name,dxf)  FIELD(name, RD, dxf)
+#define FIELD_RL(name,dxf)  FIELD(name, RL, dxf)
+#define FIELD_RLL(name,dxf) FIELD(name, RLL, dxf)
+#define FIELD_MC(name,dxf)  FIELD(name, MC, dxf)
+#define FIELD_MS(name,dxf)  FIELD(name, MS, dxf)
+#define FIELD_TF(name,len,dxf)  FIELD_TEXT(name, _obj->name)
+#define FIELD_TFF(name,len,dxf) FIELD_TEXT(name, _obj->name)
+#define FIELD_TV(name,dxf)      FIELD_TEXT(name, _obj->name)
+#define FIELD_TU(name,dxf)      FIELD_TEXT_TU(name, (BITCODE_TU)_obj->name)
+#define FIELD_T(name,dxf)
+//  { if (dat->version >= R_2007) { FIELD_TU(name, dxf); }    \
+//    else                        { FIELD_TV(name, dxf); } }
+#define FIELD_BT(name,dxf)    FIELD(name, BT, dxf);
+#define FIELD_4BITS(name,dxf) FIELD(name,4BITS,dxf)
+#define FIELD_BE(name,dxf)    FIELD_3RD(name,dxf)
+#define FIELD_DD(name, _default, dxf) \
+    PREFIX fprintf(dat->fh, FORMAT_DD ", ", _obj->name)
+#define FIELD_2DD(name, d1, d2, dxf)
+#define FIELD_3DD(name, def, dxf)
+#define FIELD_2RD(name,dxf) 
+#define FIELD_2BD(name,dxf)
+#define FIELD_2BD_1(name,dxf)
+#define FIELD_3RD(name,dxf) ;
+#define FIELD_3BD(name,dxf)
+#define FIELD_3BD_1(name,dxf)
+#define FIELD_2DPOINT(name) \
+    PREFIX fprintf(dat->fh, "[ " FORMAT_DD ", " FORMAT_DD " ],\n", \
+            _obj->name.x, _obj->name.y)
+#define LASTFIELD_2DPOINT(name) \
+    PREFIX fprintf(dat->fh, "[ " FORMAT_DD ", " FORMAT_DD " ]\n", \
+            _obj->name.x, _obj->name.y)
+#define FIELD_3DPOINT(name) \
+    PREFIX fprintf(dat->fh, "[ " FORMAT_DD ", " FORMAT_DD ", " FORMAT_DD " ],\n", \
+            _obj->name.x, _obj->name.y, _obj->name.z)
+#define LASTFIELD_3DPOINT(name) \
+    PREFIX fprintf(dat->fh, "[ " FORMAT_DD ", " FORMAT_DD ", " FORMAT_DD " ]\n", \
+            _obj->name.x, _obj->name.y, _obj->name.z)
+#define FIELD_CMC(name,dxf)
+#define FIELD_TIMEBLL(name,dxf)
+
+//FIELD_VECTOR_N(name, type, size):
+// reads data of the type indicated by 'type' 'size' times and stores
+// it all in the vector called 'name'.
+#define FIELD_VECTOR_N(name, type, size, dxf)\
+    ARRAY; \
+    for (vcount=0; vcount < (int)size; vcount++)\
+      {\
+        PREFIX fprintf(dat->fh, "\"" #name "\": " FORMAT_##type ",\n", _obj->name[vcount]); \
+      }\
+    if (size) NOCOMMA;\
+    ENDARRAY;
+#define FIELD_VECTOR_T(name, size, dxf)\
+    ARRAY; \
+    PRE (R_2007) { \
+      for (vcount=0; vcount < (int)_obj->size; vcount++) { \
+        PREFIX fprintf(dat->fh, "\"" #name "\": \"%s\",\n", _obj->name[vcount]); \
+      }\
+    } else { \
+      for (vcount=0; vcount < (int)_obj->size; vcount++)\
+        FIELD_TEXT_TU(name, _obj->name[vcount]); \
+    } \
+    if (_obj->size) NOCOMMA;\
+    ENDARRAY;
+
+#define FIELD_VECTOR(name, type, size, dxf) FIELD_VECTOR_N(name, type, _obj->size, dxf)
+
+#define FIELD_2RD_VECTOR(name, size, dxf)\
+  ARRAY;\
+  for (vcount=0; vcount < (int)_obj->size; vcount++)\
+    {\
+      FIELD_2RD(name[vcount], dxf);\
+    }\
+  if (_obj->size) NOCOMMA;\
+  ENDARRAY;
+
+#define FIELD_2DD_VECTOR(name, size, dxf)\
+  ARRAY;\
+  FIELD_2RD(name[0], 0);\
+  for (vcount = 1; vcount < (int)_obj->size; vcount++)\
+    {\
+      FIELD_2DD(name[vcount], FIELD_VALUE(name[vcount - 1].x), FIELD_VALUE(name[vcount - 1].y), dxf);\
+    }\
+  if (_obj->size) NOCOMMA;\
+  ENDARRAY;
+
+#define FIELD_3DPOINT_VECTOR(name, size, dxf)\
+  ARRAY;\
+  for (vcount=0; vcount < (int)_obj->size; vcount++)\
+    {\
+      FIELD_3DPOINT(name[vcount], dxf);\
+    }\
+  if (_obj->size) NOCOMMA;\
+  ENDARRAY;
+
+// common properties
+static void
+dwg_geojson_feature(Bit_Chain *dat, Dwg_Object* obj, const char* subclass)
+{
+  char tmp[64];
+  PAIR_S(type, "Feature");
+  KEY(properties);
+  SAMEHASH;
+  PAIR_S(Layer, "0"); //TODO layer name
+    PAIR_S(SubClasses, subclass);
+    PAIR_NULL(ExtendedEntity);
+    PAIR_NULL(Linetype);
+
+    sprintf(tmp, "%lX", obj->handle.value);
+    PAIR_S(EntityHandle, tmp);
+    //TODO if has name or text
+    PAIR_NULL(Text);
+  ENDHASH;
+}
+
+#define FEATURE(subclass, obj) HASH; dwg_geojson_feature(dat, obj, #subclass)
+#define ENDFEATURE ENDHASH
+
+/* returns 1 if object could be printd and 0 otherwise
+ */
+static int
+dwg_geojson_variable_type(Dwg_Data * dwg, Bit_Chain *dat, Dwg_Object* obj)
+{
+  int i;
+  char *dxfname;
+  Dwg_Class *klass;
+  int is_entity;
+
+  if ((obj->type - 500) > dwg->num_classes)
+    return 0;
+
+  i = obj->type - 500;
+  klass = &dwg->dwg_class[i];
+  dxfname = klass->dxfname;
+  // almost always false
+  //is_entity = dwg_class_is_entity(klass);
+
+#define UNTESTED_CLASS \
+      LOG_WARN("Untested Class %s %d %s (0x%x%s)", is_entity ? "entity" : "object",\
+               klass->number, dxfname, klass->proxyflag,\
+               klass->wasazombie ? " was proxy" : "")
+  
+  if (!strcmp(dxfname, "LWPLINE"))
+    {
+      BITCODE_BL j;
+      Dwg_Entity_LWPLINE *_obj = obj->tio.entity->tio.LWPLINE;
+      //TODO: if closed and num_points > 3 use a Polygon
+      FEATURE(AcDbEntity:AcDbLwPolyline, obj);
+      GEOMETRY(LineString);
+      KEY(coordinates);
+        ARRAY;
+        for (j = 0; j < _obj->num_points-1 ; j++)
+        {
+          FIELD_2DPOINT(points[j]);
+        }
+        LASTFIELD_2DPOINT(points[j+1]);
+        LASTENDARRAY;
+      ENDGEOMETRY;
+      ENDFEATURE;
+      return 1;
+    }
+  if (!strcmp(dxfname, "GEODATA"))
+    {
+      //UNTESTED_CLASS;
+      //dwg_geojson_GEODATA(dat, obj);
+      return 1;
+    }
+
+  return 0;
+}
+
+static void
+dwg_geojson_object(Bit_Chain *dat, Dwg_Object *obj)
+{
+  switch (obj->type)
+    {
+    case DWG_TYPE_INSERT:
+      {
+        Dwg_Entity_INSERT *_obj = obj->tio.entity->tio.INSERT;
+        FEATURE(AcDbEntity:AcDbBlockReference, obj);
+        //TODO: explode insert into a GeometryCollection
+        GEOMETRY(Point);
+        KEY(coordinates);
+        ARRAY; LASTFIELD_3DPOINT(ins_pt); LASTENDARRAY;
+        ENDGEOMETRY;
+        ENDFEATURE;
+      }
+      break;
+    case DWG_TYPE_MINSERT:
+      //dwg_geojson_MINSERT(dat, obj);
+      break;
+    case DWG_TYPE_VERTEX_2D:
+      //dwg_geojson_VERTEX_2D(dat, obj);
+      break;
+    case DWG_TYPE_VERTEX_3D:
+      //dwg_geojson_VERTEX_3D(dat, obj);
+      break;
+    case DWG_TYPE_VERTEX_MESH:
+      //dwg_geojson_VERTEX_MESH(dat, obj);
+      break;
+    case DWG_TYPE_VERTEX_PFACE:
+      //dwg_geojson_VERTEX_PFACE(dat, obj);
+      break;
+    case DWG_TYPE_VERTEX_PFACE_FACE:
+      //dwg_geojson_VERTEX_PFACE_FACE(dat, obj);
+      break;
+    case DWG_TYPE_POLYLINE_2D:
+      {
+        Dwg_Entity_POLYLINE_2D *_obj = obj->tio.entity->tio.POLYLINE_2D;
+        FEATURE(AcDbEntity:AcDbPolyline, obj);
+        GEOMETRY(MultiLineString);
+        KEY(coordinates);
+          ARRAY;
+          if (dat->version >= R_2004)
+            {
+              BITCODE_RL j, size = _obj->owned_obj_count;
+              for (j=0; j<size; j++)
+                {
+                  Dwg_Entity_VERTEX_2D *vertex = (Dwg_Entity_VERTEX_2D *)
+                    dwg_ref_get_object(obj->parent, _obj->vertex[j]);
+                  if (vertex)
+                    {
+                      //TODO: width, bulge, tangent_dir
+                      Dwg_Entity_VERTEX_2D *_obj = vertex;
+                      if (j == size-1)
+                        {
+                          LASTFIELD_2DPOINT(point);
+                        }
+                      else
+                        {
+                          FIELD_2DPOINT(point);
+                        }
+                    }
+                }
+            }          
+          LASTENDARRAY;
+        ENDGEOMETRY;
+        ENDFEATURE;
+      }
+      break;
+    case DWG_TYPE_POLYLINE_3D:
+      //dwg_geojson_POLYLINE_3D(dat, obj);
+      break;
+    case DWG_TYPE_ARC:
+      //dwg_geojson_ARC(dat, obj);
+      break;
+    case DWG_TYPE_CIRCLE:
+      //dwg_geojson_CIRCLE(dat, obj);
+      break;
+    case DWG_TYPE_LINE:
+      {
+        Dwg_Entity_LINE *_obj = obj->tio.entity->tio.LINE;
+        FEATURE(AcDbEntity:AcDbLine, obj);
+        GEOMETRY(LineString);
+        KEY(coordinates);
+          ARRAY;
+          FIELD_3DPOINT(start); LASTFIELD_3DPOINT(end);
+          LASTENDARRAY;
+        ENDGEOMETRY;
+        ENDFEATURE;
+      }
+      break;
+    case DWG_TYPE_POINT:
+      //dwg_geojson_POINT(dat, obj);
+      break;
+    case DWG_TYPE__3DFACE:
+      //dwg_geojson__3DFACE(dat, obj);
+      break;
+    case DWG_TYPE_POLYLINE_PFACE:
+      //dwg_geojson_POLYLINE_PFACE(dat, obj);
+      break;
+    case DWG_TYPE_POLYLINE_MESH:
+      //dwg_geojson_POLYLINE_MESH(dat, obj);
+      break;
+    case DWG_TYPE_SOLID:
+      //dwg_geojson_SOLID(dat, obj);
+      break;
+    case DWG_TYPE_TRACE:
+      //dwg_geojson_TRACE(dat, obj);
+      break;
+    case DWG_TYPE_ELLIPSE:
+      //dwg_geojson_ELLIPSE(dat, obj);
+      break;
+    case DWG_TYPE_SPLINE:
+      //dwg_geojson_SPLINE(dat, obj);
+      break;
+    case DWG_TYPE_REGION:
+      //dwg_geojson_REGION(dat, obj);
+      break;
+    case DWG_TYPE_HATCH:
+      //dwg_geojson_HATCH(dat, obj);
+      break;
+    case DWG_TYPE_3DSOLID:
+      //dwg_geojson__3DSOLID(dat, obj);
+      break; /* Check the type of the object
+              */
+    case DWG_TYPE_BODY:
+      //dwg_geojson_BODY(dat, obj);
+      break;
+    case DWG_TYPE_RAY:
+      //dwg_geojson_RAY(dat, obj);
+      break;
+    case DWG_TYPE_XLINE:
+      //dwg_geojson_XLINE(dat, obj);
+      break;
+    case DWG_TYPE_MTEXT:
+      //dwg_geojson_MTEXT(dat, obj);
+      break;
+    case DWG_TYPE_MLINE:
+      //dwg_geojson_MLINE(dat, obj);
+      break;
+    case DWG_TYPE_LWPLINE:
+      //dwg_geojson_LWPLINE(dat, obj);
+      break;
+    default:
+      if (obj->type != obj->parent->layout_number)
+        dwg_geojson_variable_type(obj->parent, dat, obj);
+    }
+}
+
+static int
+geojson_entities_write (Bit_Chain *dat, Dwg_Data * dwg)
+{
+  unsigned int i;
+
+  SECTION(features);
+  for (i=0; i < dwg->num_objects; i++)
+    {
+      Dwg_Object *obj = &dwg->object[i];
+      dwg_geojson_object(dat, obj);
+    }
+  NOCOMMA;
+  ENDSEC();
+  return 0;
+}
+
+int
+dwg_write_geojson(Bit_Chain *dat, Dwg_Data * dwg)
+{
+  //const int minimal = dwg->opts & 0x10;
+  char date[12] = "YYYY-MM-DD";
+  time_t rawtime;
+
+  HASH;
+  PAIR_S(type, "FeatureCollection");
+
+  //array of features
+  if (geojson_entities_write (dat, dwg))
+    goto fail;
+
+  KEY(geocoding);
+  HASH;
+    time(&rawtime);
+    strftime(date, 12, "%Y-%m-%d", localtime(&rawtime));
+    PAIR_S(creation_date, date);
+    KEY(generator);
+    HASH;
+      KEY(author); HASH; PAIR_S(name, "dwgread"); ENDHASH;
+      PAIR_S(package, PACKAGE_NAME);
+      LASTPAIR_S(version, PACKAGE_VERSION);
+    LASTENDHASH;
+    //PAIR_S(license, "?");
+  LASTENDHASH;
+
+  LASTENDHASH;
+  return 0;
+ fail:
+  return 1;
+}
+
+#undef IS_PRINT

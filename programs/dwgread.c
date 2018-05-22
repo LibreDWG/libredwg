@@ -49,10 +49,12 @@ static int opt_version(void) {
 }
 static int help(void) {
   printf("\nUsage: dwgread [OPTION]... DWGFILE\n");
-  printf("Reads the DWG and prints error, success or verbose internal progress.\n"
+  printf("Reads the DWG into some optional output format,\n"
+         "and prints error, success or verbose internal progress.\n"
          "\n");
   printf("  -v[0-9], --verbose [0-9]  verbosity\n");
-  printf("  -O fmt,  --format fmt     fmt: JSON, DXF, DXFB\n"); //TODO: YAML, XML, SVG, PS, ...
+  printf("  -O fmt,  --format fmt     fmt: JSON, DXF, DXFB\n");
+  printf("           Planned formats: GeoJSON, YAML, XML/OGR, GPX, SVG, PS\n");
   printf("  -o outfile                also defines the output fmt. Default: stdout\n");
   printf("           --help           display this help and exit\n");
   printf("           --version        output version information and exit\n"
@@ -122,6 +124,9 @@ main(int argc, char *argv[])
           else
           if (strstr(outfile, ".dxfb") || strstr(outfile, ".DXFB"))
             fmt = (char*)"dxfb";
+          else
+          if (strstr(outfile, ".geojson") || strstr(outfile, ".GeoJSON"))
+            fmt = (char*)"geojson";
           else {
             fprintf(stderr, "Unknown output format for %s\n", outfile);
           }
@@ -151,8 +156,8 @@ main(int argc, char *argv[])
       else
         dat.fh = stdout;
       dat.version = dat.from_version = dwg.header.version;
-      // TODO --as-rNNNN version? for now not. we want the native dump, converters
-      // are seperate.
+      // TODO --as-rNNNN version? for now not.
+      // we want the native dump, converters are seperate.
 
       if (!strcasecmp(fmt, "json"))
         error = dwg_write_json(&dat, &dwg);
@@ -160,6 +165,8 @@ main(int argc, char *argv[])
         error = dwg_write_dxfb(&dat, &dwg);
       else if (!strcasecmp(fmt, "dxf"))
         error = dwg_write_dxf(&dat, &dwg);
+      else if (!strcasecmp(fmt, "geojson"))
+        error = dwg_write_geojson(&dat, &dwg);
       else {
         fprintf(stderr, "Invalid output format %s\n", fmt);
       }

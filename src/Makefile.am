@@ -32,6 +32,7 @@ libredwg_la_SOURCES = \
         out_json.c \
         out_dxf.c \
         out_dxfb.c \
+        out_geojson.c \
 	in_dxf.c \
 	in_dxfb.c \
         free.c \

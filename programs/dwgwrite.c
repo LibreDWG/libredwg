@@ -51,8 +51,8 @@ static int help(void) {
   printf("             r12, r14, r2000 (default)\n");
   printf("           Planned versions:\n");
   printf("             r9, r10, r11, r2004, r2007, r2010, r2013, r2018\n");
-  printf("  -I fmt,  --format fmt     fmt: JSON, DXF, DXFB\n");
-  //TODO: GeoJSON, YAML, XML/OGR, GPX, SVG, PS, ...
+  printf("  -I fmt,  --format fmt     JSON, DXF, DXFB\n");
+  printf("           Planned formats: GeoJSON, YAML, XML/OGR, GPX\n");
   printf("  -o dwgfile                \n");
   printf("           --help           display this help and exit\n");
   printf("           --version        output version information and exit\n"
