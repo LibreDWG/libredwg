@@ -44,8 +44,7 @@ script:
   - make -j4
   - make check
   - if [ "$DISTCHECK" = "1" ]; then
-      make distcheck V=1 || (cat doc/Makefile; false);
-      make dist;
+      make distcheck && sha1sum libredwg-*.tar.*;
     fi
 
 deploy:
