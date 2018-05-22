@@ -12,10 +12,11 @@ developed by AutoDesk.
 LibreDWG is a fork from LibDWG due to its usage of Esperanto, which we
 think is not the best strategy for a free software project which aims
 to get lots of contributors.  LibreDWG is written in English.  At the
-moment our decoder is almost done, just some R2010+ and pre-R13
-entities fail to read.  Among the example applications we wrote using
-LibreDWG is an initial SVG and Postscript conversion, dxf converters
-and a DWG rewrite, i.e saveas tool. Please contact us if you can help.
+moment our decoder (i.e. reader) is almost done, just some R2010+ and
+pre-R13 entities fail to read. The writer is good enough for R2000.
+Among the example applications we wrote using LibreDWG is an initial
+SVG and Postscript conversion, dxf converters and a DWG rewrite, i.e
+saveas tool. Please contact us if you can help.
 
 The strings API is utf-8 (wtf8 really, Windows UCS-2 has no surrogate
 pairs), and encodes to the internal 8-bit or UCS-2 strings, depending
