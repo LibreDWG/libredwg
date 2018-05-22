@@ -111,7 +111,9 @@ if test -f cmp_dxf.pl ; then
     for dwg in $DATA; do
         base=$(basename $dwg .dwg)
         run dwg2dxf $dwg
-        diff -bu ${datadir}/$dwg.dxf $base.dxf | perl cmp_dxf.pl
+        if [ -f ${datadir}/$dwg.dxf ]; then
+            diff -bu ${datadir}/$dwg.dxf $base.dxf | perl cmp_dxf.pl
+        fi
     done
 fi
 
