@@ -28,6 +28,7 @@
 #include <libps/pslib.h>
 
 #include <dwg.h>
+#include <dwg_api.h>
 #include "../src/common.h"
 //#include "../src/bits.h" //bit_convert_TU
 #include "suffix.inc"
@@ -94,8 +95,11 @@ create_postscript(Dwg_Data *dwg, char *output)
   scale *= (scale_x > scale_y ? scale_x : scale_y);
   PS_scale(ps, (float)scale, (float)scale);
   PS_translate(ps, (float)-dwg_model_x_min(dwg), (float)-dwg_model_y_min(dwg));
-  fprintf (stderr, "Limits: %f, %f\n", dx, dy);
-  fprintf (stderr, "Scale: %f (%f, %f)\n", scale, scale_x, scale_y);
+  if (dwg->opts)
+    {
+      fprintf (stderr, "Limits: %f, %f\n", dx, dy);
+      fprintf (stderr, "Scale: %f (%f, %f)\n", scale, scale_x, scale_y);
+    }
 
   /* Mark the origin with a crossed circle
    */
@@ -128,27 +132,16 @@ create_postscript(Dwg_Data *dwg, char *output)
         }
       else if (obj->type == DWG_TYPE_POLYLINE_2D)
         {
-          Dwg_Entity_POLYLINE_2D* pline;
-          Dwg_Entity_VERTEX_2D *vertex;
-
-          pline = obj->tio.entity->tio.POLYLINE_2D;
-          //TODO r13-r2000, abstract to an API
-          if (dwg->header.version >= R_2004)
+          int error;
+          BITCODE_RL j, numpts = dwg_obj_polyline_2d_get_numpoints(obj, &error);
+          dwg_point_2d *pts = dwg_obj_polyline_2d_get_points(obj, &error);
+          if (numpts && !error)
             {
-              BITCODE_RL j;
-              for (j=0; j<pline->owned_obj_count; j++)
+              PS_moveto(ps, (float)pts[0].x, (float)pts[0].y);
+              for (j=1; j<numpts; j++)
                 {
-                  vertex = (Dwg_Entity_VERTEX_2D *)
-                    dwg_ref_get_object(dwg, pline->vertex[j]);
-                  if (vertex)
-                    {
-                      //TODO: width, bulge, tangent_dir
-                      if (j == 0)
-                        PS_moveto(ps, (float)vertex->point.x, (float)vertex->point.y);
-                      else
-                        PS_lineto(ps, (float)vertex->point.x, (float)vertex->point.y);
-                      PS_stroke(ps);
-                    }
+                  PS_lineto(ps, (float)pts[j].x, (float)pts[j].y);
+                  PS_stroke(ps);
                 }
             }
         }
