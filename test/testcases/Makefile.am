@@ -65,6 +65,10 @@ EXTRA_DIST = \
 CLEANFILES = *.log *.sum site.bak 
 MAINTAINERCLEANFILES = *_flymake.[ch] *~ *.i
 
+bits_test.cbmc: bits_test.c ../../src/bits.c
+	cbmc -I. -I../../include -I/opt/local/include bits_test.c ../../src/bits.c \
+	     --unwind 6  --cover decision > bits_test.cbmc
+
 @VALGRIND_CHECK_RULES@
 #VALGRIND_SUPPRESSIONS_FILES = $(PACKAGE).supp
 #EXTRA_DIST = $(PACKAGE).supp
