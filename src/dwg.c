@@ -628,7 +628,10 @@ dwg_resolve_handle(const Dwg_Data * dwg, const long unsigned int absref)
       if (dwg->object[i].handle.value == absref)
         return &dwg->object[i];
     }
-  LOG_WARN("Object not found: %lu in %ld objects", absref, dwg->num_objects)
+  if (absref)
+    {
+      LOG_WARN("Object not found: %lu in %ld objects", absref, dwg->num_objects);
+    }
   return NULL;
 }
 

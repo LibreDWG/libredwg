@@ -128,9 +128,9 @@
     HEADER_RC (DIMTZIN, 70);
     HEADER_RC (DIMALTZ, 70);
     HEADER_RC (DIMALTTZ, 70);
-    HEADER_RC (DIMFIT, 70);
+    HEADER_RC (DIMFIT, 70);  //optional
     HEADER_RC (DIMUPT, 70);
-    HEADER_RC (DIMUNIT, 70);
+    HEADER_RC (DIMUNIT, 70); //optional
     HEADER_RC (DIMDEC, 70);
     HEADER_RC (DIMTDEC, 70);
     HEADER_RC (DIMALTU, 70);
@@ -147,8 +147,10 @@
     HEADER_RC (DIMFRAC, 70);
     HEADER_HANDLE_NAME (DIMLDRBLK, 1, BLOCK_HEADER);
     HEADER_RC (DIMLUNIT, 70);
-    HEADER_RC (DIMLWD, 70);
-    HEADER_RC (DIMLWE, 70);
+    //HEADER_RC (DIMLWD, 70); convert from unsigned to signed
+    //HEADER_RC (DIMLWE, 70);
+    HEADER_VALUE (DIMLWD, RS, 70, (int16_t)_obj->DIMLWD);
+    HEADER_VALUE (DIMLWE, RS, 70, (int16_t)_obj->DIMLWE);
     HEADER_RC (DIMTMOVE, 70);
   }
   HEADER_RC (LUNITS, 70);
@@ -173,16 +175,16 @@
   }
   HEADER_RC (SKPOLY, 70);
 
-  ms = (double)dwg->header_vars.TDCREATE.ms;
-  HEADER_VALUE (TDCREATE, RD, 40, dwg->header_vars.TDCREATE.days + ms);
+  ms = (double)_obj->TDCREATE.ms;
+  HEADER_VALUE (TDCREATE, RD, 40, _obj->TDCREATE.days + ms);
   SINCE(R_13) {
-    HEADER_VALUE (TDUCREATE, RD, 40, dwg->header_vars.TDCREATE.days + ms);
+    HEADER_VALUE (TDUCREATE, RD, 40, _obj->TDCREATE.days + ms);
   }
-  ms = (double)dwg->header_vars.TDUPDATE.ms;
-  HEADER_VALUE (TDUPDATE, RD, 40, dwg->header_vars.TDUPDATE.days + ms);
+  ms = (double)_obj->TDUPDATE.ms;
+  HEADER_VALUE (TDUPDATE, RD, 40, _obj->TDUPDATE.days + ms);
   SINCE(R_13) { //TODO decode properly
-    ms = (double)dwg->header_vars.TDUPDATE.ms;
-    HEADER_VALUE (TDUUPDATE, RD, 40, dwg->header_vars.TDUPDATE.days + ms);
+    ms = (double)_obj->TDUPDATE.ms;
+    HEADER_VALUE (TDUUPDATE, RD, 40, _obj->TDUPDATE.days + ms);
   }
   ms = (double)dwg->header_vars.TDINDWG.ms;
   HEADER_VALUE (TDINDWG, RD, 40, dwg->header_vars.TDINDWG.days + ms);
@@ -207,7 +209,8 @@
     HEADER_RC (HANDLING, 70); //default 1
   }
 
-  HEADER_H (HANDSEED, 5); //default: 20000, before r13: 0xB8BC
+  HEADER_VALUE (HANDSEED, RS, 5, _obj->HANDSEED->absolute_ref); 
+  //HEADER_H (HANDSEED, 5); //default: 20000, before r13: 0xB8BC
 
   HEADER_RC (SURFTAB1, 70); // 6
   HEADER_RC (SURFTAB2, 70); // 6
@@ -221,7 +224,7 @@
   HEADER_3D (UCSORG);
   HEADER_3D (UCSXDIR);
   HEADER_3D (UCSYDIR);
-  SINCE(R_2000) { //?
+  SINCE(R_2000) {
     HEADER_HANDLE_NAME (UCSORTHOREF, 2, UCS);
     HEADER_RC (UCSORTHOVIEW, 70);
     HEADER_3D (UCSORGTOP);
@@ -236,8 +239,8 @@
   HEADER_3D (PUCSORG);
   HEADER_3D (PUCSXDIR);
   HEADER_3D (PUCSYDIR);
-  SINCE(R_2000) { //?
-    //HEADER_HANDLE_NAME (PUCSORTHOREF, 2, UCS);
+  SINCE(R_2000) {
+    HEADER_HANDLE_NAME (PUCSORTHOREF, 2, UCS);
     HEADER_RC (PUCSORTHOVIEW, 70);
     HEADER_3D (PUCSORGTOP);
     HEADER_3D (PUCSORGBOTTOM);
@@ -285,13 +288,13 @@
   UNTIL(R_11) {
     HEADER_VALUE (DWGCODEPAGE, TV, 3, codepage);
   }
-  VERSIONS(R_14, R_2000) { //?
+  VERSIONS(R_14, R_2000) { //? maybe only for r14
     HEADER_RC (PICKSTYLE, 70);
   }
   HEADER_HANDLE_NAME (CMLSTYLE, 2, MLINESTYLE); //default: Standard
   HEADER_RC (CMLJUST, 70);
   HEADER_RD (CMLSCALE, 40); //default: 20
-  VERSIONS(R_14, R_2000) {
+  VERSION(R_14) {
     HEADER_RC (PROXYGRAPHICS, 70);
   }
   VERSION(R_13) {
@@ -325,4 +328,5 @@
   }
 
   ENDSEC();
+
 

@@ -97,7 +97,7 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 #define HEADER_VALUE(name, type, dxf, value) \
   if (dxf) {\
     GROUP(9);\
-    fprintf (dat->fh, "$%s\r\n", #name);\
+    fprintf (dat->fh, "$" #name "\r\n");\
     VALUE (value, type, dxf);\
   }
 #define HEADER_VAR(name, type, dxf) \
