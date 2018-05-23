@@ -24,27 +24,19 @@ api_process (dwg_object * obj)
 
 
   num_verts =
-    dwg_ent_polyline_pface_get_numverts (polyline_pface, &error);
-  if (!error  && polyline_pface->numverts == num_verts)	// error check
+    dwg_ent_polyline_pface_get_numpoints (polyline_pface, &error);
+  if (!error  && polyline_pface->numverts == num_verts)
     pass ("Working Properly");
   else
     fail ("error in reading num_verts");
 
-
-  owned_obj_count =
-    dwg_ent_polyline_pface_get_owned_obj_count (polyline_pface,
-						&error);
-  if (!error  && owned_obj_count == polyline_pface->owned_obj_count)	// error check
-    pass ("Working Properly");
-  else
-    fail ("error in reading owned_obj_count");
-
-
   num_faces = dwg_ent_polyline_pface_get_numfaces (polyline_pface,
 						   &error);
-  if (!error  && polyline_pface->numfaces == num_faces)	// error check
+  if (!error  && polyline_pface->numfaces == num_faces)
     pass ("Working Properly");
   else
     fail ("error in reading num faces");
 
+  //TODO get_points
+  //TODO get_faces
 }

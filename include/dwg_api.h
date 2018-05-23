@@ -2167,59 +2167,42 @@ dwg_ent_tolerance_get_text_string(dwg_ent_tolerance *tol, int *error);
 
 BITCODE_BS
 dwg_ent_lwpline_get_flag(dwg_ent_lwpline *lwpline, int *error);
-
 void
 dwg_ent_lwpline_set_flag(dwg_ent_lwpline *lwpline, char flags, int *error);
 
 BITCODE_BD
 dwg_ent_lwpline_get_const_width(dwg_ent_lwpline *lwpline, int *error);
-
 void
 dwg_ent_lwpline_set_const_width(dwg_ent_lwpline *lwpline, BITCODE_BD const_width,
                                 int *error);
 
 BITCODE_BD
 dwg_ent_lwpline_get_elevation(dwg_ent_lwpline *lwpline, int *error);
-
 void
 dwg_ent_lwpline_set_elevation(dwg_ent_lwpline *lwpline, BITCODE_BD elevation,
                               int *error);
 
 BITCODE_BD
 dwg_ent_lwpline_get_thickness(dwg_ent_lwpline *lwpline, int *error);
-
 void
 dwg_ent_lwpline_set_thickness(dwg_ent_lwpline *lwpline, BITCODE_BD thickness,
                               int *error);
 
-BITCODE_BL
-dwg_ent_lwpline_get_num_points(dwg_ent_lwpline *lwpline, int *error);
-
-void
-dwg_ent_lwpline_set_num_points(dwg_ent_lwpline *lwpline, BITCODE_BL num_points,
-                               int *error);
-
-BITCODE_BL
-dwg_ent_lwpline_get_num_bulges(dwg_ent_lwpline *lwpline, int *error);
-
-void
-dwg_ent_lwpline_set_num_bulges(dwg_ent_lwpline *lwpline, BITCODE_BL num_bulges,
-                               int *error);
-
-BITCODE_BL
-dwg_ent_lwpline_get_num_widths(dwg_ent_lwpline *lwpline, int *error);
-
-void
-dwg_ent_lwpline_set_num_widths(dwg_ent_lwpline *lwpline, BITCODE_BL num_widths,
-                               int *error);
-
 void
 dwg_ent_lwpline_get_normal(dwg_ent_lwpline *lwpline, dwg_point_3d *points,
                            int *error);
-
 void
 dwg_ent_lwpline_set_normal(dwg_ent_lwpline *lwpline, dwg_point_3d *points,
                            int *error);
+
+BITCODE_BL
+dwg_ent_lwpline_get_numpoints(dwg_ent_lwpline *lwpline, int *error);
+
+BITCODE_BL
+dwg_ent_lwpline_get_numbulges(dwg_ent_lwpline *lwpline, int *error);
+
+BITCODE_BL
+dwg_ent_lwpline_get_numwidths(dwg_ent_lwpline *lwpline, int *error);
 
 double *
 dwg_ent_lwpline_get_bulges(dwg_ent_lwpline *lwpline, int *error);
@@ -2671,27 +2654,13 @@ dwg_ent_viewport_get_contrast(dwg_ent_viewport *vp, int *error);
 
 
 BITCODE_BS
-dwg_ent_polyline_pface_get_numverts(dwg_ent_polyline_pface *pface, int *error);
-
-void
-dwg_ent_polyline_pface_set_numverts(dwg_ent_polyline_pface *pface,
-                                    BITCODE_BS numverts, int *error);
-
-BITCODE_BL
-dwg_ent_polyline_pface_get_owned_obj_count(dwg_ent_polyline_pface *pface,
-                                           int *error);
-
-void
-dwg_ent_polyline_pface_set_owned_obj_count(dwg_ent_polyline_pface *pface,
-                                           BITCODE_BL owned_obj_count, int *error);
+dwg_ent_polyline_pface_get_numpoints(dwg_ent_polyline_pface *pface, int *error);
 
 BITCODE_BS
 dwg_ent_polyline_pface_get_numfaces(dwg_ent_polyline_pface *pface, int *error);
 
-void
-dwg_ent_polyline_pface_set_numfaces(dwg_ent_polyline_pface *pface,
-                                    BITCODE_BS numfaces, int *error);
-
+dwg_point_3d *
+dwg_obj_polyline_pface_get_points(dwg_object *obj, int *error);
 
 /********************************************************************
 *                FUNCTIONS FOR POLYLINE_MESH ENTITY                 *
@@ -2807,12 +2776,10 @@ dwg_ent_polyline_2d_set_curve_type(dwg_ent_polyline_2d *line2d,
                                    BITCODE_BS curve_type, int *error);
 
 BITCODE_BL
-dwg_ent_polyline_2d_get_owned_obj_count(dwg_ent_polyline_2d *line2d,
-                                        int *error);
+dwg_obj_polyline_2d_get_numpoints(dwg_object *obj, int *error);
 
-void
-dwg_ent_polyline_2d_set_owned_obj_count(dwg_ent_polyline_2d *line2d,
-                                        BITCODE_BL owned_obj_count, int *error);
+dwg_point_2d *
+dwg_obj_polyline_2d_get_points(dwg_object *obj, int *error);
 
 
 /********************************************************************

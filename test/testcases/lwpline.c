@@ -89,7 +89,7 @@ api_process (dwg_object * obj)
     }
 
 
-  num_widths = dwg_ent_lwpline_get_num_widths (lwpline, &error);
+  num_widths = dwg_ent_lwpline_get_numwidths (lwpline, &error);
   if (error == 0 && num_widths == lwpline->num_widths)
     {
       pass ("lwpline_get_num_widths");
@@ -100,7 +100,7 @@ api_process (dwg_object * obj)
     }
 
 
-  num_bulges = dwg_ent_lwpline_get_num_bulges (lwpline, &error);
+  num_bulges = dwg_ent_lwpline_get_numbulges (lwpline, &error);
   if (error == 0 && num_bulges == lwpline->num_bulges)
     {
       pass ("lwpline_get_num_bulges");
@@ -111,7 +111,7 @@ api_process (dwg_object * obj)
     }
 
 
-  num_points = dwg_ent_lwpline_get_num_points (lwpline, &error);
+  num_points = dwg_ent_lwpline_get_numpoints (lwpline, &error);
   if (error == 0 && num_points == lwpline->num_points)
     {
       pass ("lwpline_get_num_points");

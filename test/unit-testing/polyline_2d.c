@@ -12,8 +12,9 @@ api_process(dwg_object *obj)
 {
   int error;
   double start_width, end_width, elevation, thickness;
-  BITCODE_BL owned_obj;
+  BITCODE_BL numpoints;
   unsigned int flags, curve_type;
+  dwg_point_2d *points;
   dwg_point_3d ext;
   dwg_ent_polyline_2d *polyline_2d = dwg_object_to_POLYLINE_2D(obj);
 
@@ -96,16 +97,27 @@ api_process(dwg_object *obj)
   }
 
 
-  owned_obj = dwg_ent_polyline_2d_get_owned_obj_count(polyline_2d,
-               &error);
+  numpoints = dwg_obj_polyline_2d_get_numpoints(obj, &error);
   if ( !error )
   {
-     printf("owned object of polyline : " FORMAT_BL "\n", owned_obj);
+     printf("numpoints of polyline : " FORMAT_BL "\n", numpoints);
   }
   else
   {
-    printf("error in reading owned object count");
+    printf("error in reading numpoints");
   }
 
+  points = dwg_obj_polyline_2d_get_points(obj, &error);
+  if ( !error )
+   {
+     unsigned long i;
+     for ( i = 0; i < numpoints ; i++ )
+       printf("point[%d] of polyline : x = %f\ty = %f\n",
+              (int)i, points[i].x, points[i].y);
+   }
+  else
+   {
+     printf("error in reading points \n");
+   }
 
 }

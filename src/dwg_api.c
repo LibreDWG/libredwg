@@ -9104,7 +9104,7 @@ dwg_ent_lwpline_set_thickness(dwg_ent_lwpline *lwpline, BITCODE_BD thickness,
 }
 /// Returns lwpline point count
 BITCODE_BL
-dwg_ent_lwpline_get_num_points(dwg_ent_lwpline *lwpline, int *error)
+dwg_ent_lwpline_get_numpoints(dwg_ent_lwpline *lwpline, int *error)
 {
   if (lwpline != 0)
     {
@@ -9119,25 +9119,9 @@ dwg_ent_lwpline_get_num_points(dwg_ent_lwpline *lwpline, int *error)
     }
 }
 
-/// Sets lwpline points count
-void
-dwg_ent_lwpline_set_num_points(dwg_ent_lwpline *lwpline, BITCODE_BL num_points,
-                               int *error)
-{
-  if (lwpline != 0)
-    {
-      *error = 0;
-      lwpline->num_points = num_points;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
 /// Returns lwpline bulges count
 BITCODE_BL
-dwg_ent_lwpline_get_num_bulges(dwg_ent_lwpline *lwpline, int *error)
+dwg_ent_lwpline_get_numbulges(dwg_ent_lwpline *lwpline, int *error)
 {
   if (lwpline != 0)
     {
@@ -9152,25 +9136,10 @@ dwg_ent_lwpline_get_num_bulges(dwg_ent_lwpline *lwpline, int *error)
     }
 }
 
-/// Sets lwpline bulges count
-void
-dwg_ent_lwpline_set_num_bulges(dwg_ent_lwpline *lwpline, BITCODE_BL num_bulges,
-                               int *error)
-{
-  if (lwpline != 0)
-    {
-      *error = 0;
-      lwpline->num_bulges = num_bulges;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
+
 /// Returns lwpline width count
 BITCODE_BL
-dwg_ent_lwpline_get_num_widths(dwg_ent_lwpline *lwpline, int *error)
+dwg_ent_lwpline_get_numwidths(dwg_ent_lwpline *lwpline, int *error)
 {
   if (lwpline != 0)
     {
@@ -9185,22 +9154,7 @@ dwg_ent_lwpline_get_num_widths(dwg_ent_lwpline *lwpline, int *error)
     }
 }
 
-/// Sets lwpline width count
-void
-dwg_ent_lwpline_set_num_widths(dwg_ent_lwpline *lwpline, BITCODE_BL num_widths,
-                               int *error)
-{
-  if (lwpline != 0)
-    {
-      *error = 0;
-      lwpline->num_widths = num_widths;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
+
 /// Returns lwpline normal
 void
 dwg_ent_lwpline_get_normal(dwg_ent_lwpline *lwpline, dwg_point_3d *point,
@@ -11551,7 +11505,7 @@ dwg_ent_viewport_get_contrast(dwg_ent_viewport *vp, int *error)
 
 /// Returns polyline pface num verts
 BITCODE_BS
-dwg_ent_polyline_pface_get_numverts(dwg_ent_polyline_pface *pface, int *error)
+dwg_ent_polyline_pface_get_numpoints(dwg_ent_polyline_pface *pface, int *error)
 {
   if (pface != 0)
     {
@@ -11563,58 +11517,6 @@ dwg_ent_polyline_pface_get_numverts(dwg_ent_polyline_pface *pface, int *error)
       LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
       return 0;
-    }
-}
-
-/// Sets num verts
-void
-dwg_ent_polyline_pface_set_numverts(dwg_ent_polyline_pface *pface,
-                                    BITCODE_BS numverts, int *error)
-{
-  if (pface != 0)
-    {
-      *error = 0;
-      pface->numverts = numverts;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      *error = 1;
-    }
-}
-
-/// Returns polyline pface owned object count
-BITCODE_BL
-dwg_ent_polyline_pface_get_owned_obj_count(dwg_ent_polyline_pface *pface,
-                                           int *error)
-{
-  if (pface != 0)
-    {
-      *error = 0;
-      return pface->owned_obj_count;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      *error = 1;
-      return 0L;
-    }
-}
-
-/// Sets polyline pfadce owned object count
-void
-dwg_ent_polyline_pface_set_owned_obj_count(dwg_ent_polyline_pface *pface,
-                                           BITCODE_BL owned_obj_count, int *error)
-{
-  if (pface != 0)
-    {
-      *error = 0;
-      pface->owned_obj_count = owned_obj_count;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      *error = 1;
     }
 }
 
@@ -11635,20 +11537,19 @@ dwg_ent_polyline_pface_get_numfaces(dwg_ent_polyline_pface *pface, int *error)
     }
 }
 
-/// Sets polyline pface numfaces
-void
-dwg_ent_polyline_pface_set_numfaces(dwg_ent_polyline_pface *pface,
-                                    BITCODE_BS numfaces, int *error)
+dwg_point_3d *
+dwg_obj_polyline_pface_get_points(dwg_object *obj, int *error)
 {
-  if (pface != 0)
+  if (obj || obj->type != DWG_TYPE_POLYLINE_PFACE)
     {
       *error = 0;
-      pface->numfaces = numfaces;
+      return NULL;
     }
   else
     {
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or wrong arg", __FUNCTION__)
       *error = 1;
+      return NULL;
     }
 }
 
@@ -12143,38 +12044,143 @@ dwg_ent_polyline_2d_set_curve_type(dwg_ent_polyline_2d *line2d,
     }
 }
 
-/// Returns owned object count
+/// Returns number of vertices
 BITCODE_BL
-dwg_ent_polyline_2d_get_owned_obj_count(dwg_ent_polyline_2d *line2d,
-                                        int *error)
+dwg_obj_polyline_2d_get_numpoints(dwg_object *obj, int *error)
 {
-  if (line2d != 0)
+  if (obj || obj->type != DWG_TYPE_POLYLINE_2D)
     {
+      BITCODE_BL num_points = 0;
+      Dwg_Data *dwg = obj->parent;
+      Dwg_Entity_POLYLINE_2D *_obj = obj->tio.entity->tio.POLYLINE_2D;
+      Dwg_Entity_VERTEX_2D *vertex;
       *error = 0;
-      return line2d->owned_obj_count;
+
+      if (dwg->header.version >= R_2004)
+        return obj->tio.entity->tio.POLYLINE_2D->owned_obj_count;
+      else if (dwg->header.version >= R_13) // iterate over first_vertex - last_vertex
+        {
+          Dwg_Object *vobj = dwg_ref_get_object(dwg, _obj->first_vertex);
+          Dwg_Object *vlast = dwg_ref_get_object(dwg, _obj->last_vertex);
+          if (!vobj)
+            *error = 1;
+          else {
+            do {
+              if ((vertex = dwg_object_to_VERTEX_2D(vobj))) {
+                num_points++;
+              } else {
+                *error = 1; // return not all vertexes, but some
+              }
+            } while ((vobj = dwg_next_object(vobj)) && vobj != vlast);
+          }
+        }
+      else // <r13: iterate over vertices until seqend
+        {
+          Dwg_Object *vobj;
+          while ((vobj = dwg_next_object(obj)) && vobj->type != DWG_TYPE_SEQEND)
+            {
+              if ((vertex = dwg_object_to_VERTEX_2D(vobj)))
+                num_points++;
+              else
+                *error = 1; // return not all vertexes, but some
+            }
+        }
+      return num_points;
     }
   else
     {
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or wrong arg", __FUNCTION__)
       *error = 1;
       return 0L;
     }
 }
 
-/// Sets owned object count
-void
-dwg_ent_polyline_2d_set_owned_obj_count(dwg_ent_polyline_2d *line2d,
-                                        BITCODE_BL owned_obj_count, int *error)
+dwg_point_2d *
+dwg_obj_polyline_2d_get_points(dwg_object *obj, int *error)
 {
-  if (line2d != 0)
+  *error = 0;
+  if (obj || obj->type != DWG_TYPE_POLYLINE_2D)
     {
-      *error = 0;
-      line2d->owned_obj_count = owned_obj_count;
+      BITCODE_BL i;
+      Dwg_Data *dwg = obj->parent;
+      Dwg_Entity_POLYLINE_2D *_obj = obj->tio.entity->tio.POLYLINE_2D;
+      BITCODE_BL num_points = dwg_obj_polyline_2d_get_numpoints(obj, error);
+      dwg_point_2d *ptx = calloc(num_points, sizeof(dwg_point_2d));
+      Dwg_Entity_VERTEX_2D *vertex;
+
+      if (*error)
+        return NULL;
+      if (!ptx)
+        {
+          LOG_ERROR("%s: Out of memory", __FUNCTION__);
+          *error = 1; return NULL;
+        }
+      vertex = NULL;
+      if (dwg->header.version >= R_2004)
+        for (i = 0; i < num_points; i++)
+          {
+            Dwg_Object *vobj = dwg_ref_get_object(dwg, _obj->vertex[i]);
+            if (vobj && (vertex = dwg_object_to_VERTEX_2D(vobj))) {
+              ptx[i].x = vertex->point.x;
+              ptx[i].y = vertex->point.y;
+            } else {
+              *error = 1; // return not all vertexes, but some
+            }
+          }
+      else if (dwg->header.version >= R_13) // iterate over first_vertex - last_vertex
+        {
+          Dwg_Object *vobj = dwg_ref_get_object(dwg, _obj->first_vertex);
+          Dwg_Object *vlast = dwg_ref_get_object(dwg, _obj->last_vertex);
+          if (!vobj)
+            *error = 1;
+          else {
+            i = 0;
+            do {
+              if ((vertex = dwg_object_to_VERTEX_2D(vobj))) {
+                ptx[i].x = vertex->point.x;
+                ptx[i].y = vertex->point.y;
+                i++;
+                if (i > num_points)
+                  {
+                    *error = 1;
+                    break;
+                  }
+              } else {
+                *error = 1; // return not all vertexes, but some
+              }
+            } while ((vobj = dwg_next_object(vobj)) && vobj != vlast);
+          }
+        }
+      else // <r13: iterate over vertices until seqend
+        {
+          Dwg_Object *vobj;
+          i = 0;
+          while ((vobj = dwg_next_object(obj)) && vobj->type != DWG_TYPE_SEQEND)
+            {
+              if ((vertex = dwg_object_to_VERTEX_2D(vobj)))
+                {
+                  ptx[i].x = vertex->point.x;
+                  ptx[i].y = vertex->point.y;
+                  i++;
+                  if (i > num_points)
+                    {
+                      *error = 1;
+                      break;
+                    }
+                }
+              else
+                {
+                  *error = 1; // return not all vertexes, but some
+                }
+            }
+        }
+      return ptx;
     }
   else
     {
       LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
+      return NULL;
     }
 }
 
