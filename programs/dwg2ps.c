@@ -132,10 +132,11 @@ create_postscript(Dwg_Data *dwg, char *output)
           Dwg_Entity_VERTEX_2D *vertex;
 
           pline = obj->tio.entity->tio.POLYLINE_2D;
+          //TODO r13-r2000, abstract to an API
           if (dwg->header.version >= R_2004)
             {
               BITCODE_RL j;
-              for (j=0; i<pline->owned_obj_count; j++)
+              for (j=0; j<pline->owned_obj_count; j++)
                 {
                   vertex = (Dwg_Entity_VERTEX_2D *)
                     dwg_ref_get_object(dwg, pline->vertex[j]);
