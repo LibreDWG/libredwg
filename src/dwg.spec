@@ -1935,7 +1935,7 @@ DWG_OBJECT_END
 /* (49/1) */
 DWG_OBJECT(BLOCK_HEADER)
 
-  COMMON_TABLE_FLAGS
+  COMMON_TABLE_FLAGS(block_control_handle, Block)
 
   PRE(R_13)
   {
@@ -2054,7 +2054,7 @@ DWG_OBJECT_END
 /* (51/2) */
 DWG_OBJECT(LAYER)
 
-  COMMON_TABLE_FLAGS
+  COMMON_TABLE_FLAGS(layer_control, Layer)
 
   PRE(R_13)
   {
@@ -2131,10 +2131,10 @@ DWG_OBJECT(SHAPEFILE_CONTROL)
 
 DWG_OBJECT_END
 
-/* (53/3) preR13: STYLE */
+/* (53/3) preR13+DXF: STYLE */
 DWG_OBJECT(SHAPEFILE)
 
-  COMMON_TABLE_FLAGS
+  COMMON_TABLE_FLAGS(shapefile_control, TextStyle)
 
   SINCE(R_13)
   {
@@ -2192,7 +2192,7 @@ DWG_OBJECT_END
 /* (57/5) */
 DWG_OBJECT(LTYPE)
 
-  COMMON_TABLE_FLAGS
+  COMMON_TABLE_FLAGS(linetype_control, Linetype)
 
   PRE(R_13)
   {
@@ -2276,7 +2276,7 @@ DWG_OBJECT_END
 /* (61/6) */
 DWG_OBJECT(VIEW)
 
-  COMMON_TABLE_FLAGS
+  COMMON_TABLE_FLAGS(view_control_handle, View)
 
   PRE(R_13)
   {
@@ -2387,7 +2387,7 @@ DWG_OBJECT_END
 /* (63/7) */
 DWG_OBJECT(UCS)
 
-  COMMON_TABLE_FLAGS
+  COMMON_TABLE_FLAGS(ucs_control_handle, Ucs)
 
   PRE(R_13)
   {
@@ -2439,7 +2439,7 @@ DWG_OBJECT_END
 /* (65/8) */
 DWG_OBJECT(VPORT)
 
-  COMMON_TABLE_FLAGS
+  COMMON_TABLE_FLAGS(vport_control, Viewport)
 
   PRE(R_13)
   { // TODO verify
@@ -2567,10 +2567,10 @@ DWG_OBJECT(APPID_CONTROL)
 
 DWG_OBJECT_END
 
-/* (67/9) */
+/* (67/9) Registered Apps */
 DWG_OBJECT(APPID)
 
-  COMMON_TABLE_FLAGS
+  COMMON_TABLE_FLAGS(app_control, RegApp)
 
   SINCE(R_13) {
     FIELD_RC (unknown, 71); // not in DXF if 0. has_something
@@ -2607,7 +2607,7 @@ DWG_OBJECT_END
 /* (69/10) */
 DWG_OBJECT(DIMSTYLE)
 
-  COMMON_TABLE_FLAGS
+  COMMON_TABLE_FLAGS(dimstyle_control, DimStyle)
 
   PRE(R_13)
     {
@@ -2870,7 +2870,7 @@ DWG_OBJECT_END
 /* VIEWPORT ENTITY HEADER (71/11) */
 DWG_OBJECT(VP_ENT_HDR)
 
-  COMMON_TABLE_FLAGS
+  COMMON_TABLE_FLAGS(vp_ent_ctrl, ViewportEntity) //??
 
   SINCE(R_13) {
     FIELD_B (flag1, 70); // bit 1 of 70
@@ -2879,7 +2879,7 @@ DWG_OBJECT(VP_ENT_HDR)
       (FIELD_VALUE(xrefdep) << 4) |
       (FIELD_VALUE(xrefref) << 6);
 
-    FIELD_HANDLE (vp_ent_ctrl, ANYCODE, 0);
+    FIELD_HANDLE (vp_ent_ctrl, 4, 0);
     XDICOBJHANDLE(3);
     FIELD_HANDLE (vp_ent, 5, 0);
   }
@@ -4869,3 +4869,4 @@ DWG_OBJECT_END
 DWG_OBJECT(LEADEROBJECTCONTEXTDATA)
 DWG_OBJECT_END
 */
+

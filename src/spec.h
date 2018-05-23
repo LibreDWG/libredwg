@@ -62,7 +62,8 @@
 
 #define R11OPTS(b) _ent->opts_r11 & b
 
-#define COMMON_TABLE_FLAGS \
+#ifndef COMMON_TABLE_FLAGS
+#define COMMON_TABLE_FLAGS(owner, acdbname) \
   PRE (R_13) \
   { \
     FIELD_RC (flag, 70); \
@@ -87,5 +88,6 @@
     } \
   }\
   RESET_VER
+#endif
 
 #endif /* SPEC_H */

@@ -36,7 +36,7 @@ while (<>) {
   next if /^ /;
   next if /^\+999/;
   next if /^\+LibreDWG /;
-  next if /^@@/;
+  #next if /^@@/;
   next if /^[\+\-]\d+\.\d+/;
   print "$_\n";
   # ignore comments

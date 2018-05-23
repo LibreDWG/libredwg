@@ -1550,6 +1550,7 @@ typedef struct _dwg_object_BLOCK_CONTROL
   BITCODE_H* block_headers;
   BITCODE_H model_space;
   BITCODE_H paper_space;
+  long unsigned int objid;
 } Dwg_Object_BLOCK_CONTROL;
 
 /**
@@ -1603,6 +1604,7 @@ typedef struct _dwg_object_LAYER_CONTROL
   BITCODE_H null_handle;
   BITCODE_H xdicobjhandle;
   BITCODE_H* layers;
+  long unsigned int objid;
 } Dwg_Object_LAYER_CONTROL;
 
 /**
@@ -1643,6 +1645,7 @@ typedef struct _dwg_object_SHAPEFILE_CONTROL
   BITCODE_H null_handle;
   BITCODE_H xdicobjhandle;
   BITCODE_H* styles;
+  long unsigned int objid;
 } Dwg_Object_SHAPEFILE_CONTROL;
 
 /**
@@ -1685,6 +1688,7 @@ typedef struct _dwg_object_LTYPE_CONTROL
   BITCODE_H* linetypes;
   BITCODE_H bylayer;
   BITCODE_H byblock;
+  long unsigned int objid;
 } Dwg_Object_LTYPE_CONTROL;
 
 /**
@@ -1735,6 +1739,7 @@ typedef struct _dwg_object_VIEW_CONTROL
   BITCODE_H null_handle;
   BITCODE_H xdicobjhandle;
   BITCODE_H* views;
+  long unsigned int objid;
 } Dwg_Object_VIEW_CONTROL;
 
 /**
@@ -1793,6 +1798,7 @@ typedef struct _dwg_object_UCS_CONTROL
   BITCODE_H null_handle;
   BITCODE_H xdicobjhandle;
   BITCODE_H* ucs;
+  long unsigned int objid;
 } Dwg_Object_UCS_CONTROL;
 
 /**
@@ -1829,6 +1835,7 @@ typedef struct _dwg_object_VPORT_CONTROL
   BITCODE_H null_handle;
   BITCODE_H xdicobjhandle;
   BITCODE_H* vports;
+  long unsigned int objid;
 } Dwg_Object_VPORT_CONTROL;
 
 /**
@@ -1901,6 +1908,7 @@ typedef struct _dwg_object_APPID_CONTROL
   BITCODE_H null_handle;
   BITCODE_H xdicobjhandle;
   BITCODE_H* apps;
+  long unsigned int objid;
 } Dwg_Object_APPID_CONTROL;
 
 /**
@@ -1932,6 +1940,7 @@ typedef struct _dwg_object_DIMSTYLE_CONTROL
   BITCODE_H xdicobjhandle;
   BITCODE_H* dimstyles;
   BITCODE_H* morehandles;
+  long unsigned int objid;
 } Dwg_Object_DIMSTYLE_CONTROL;
 
 /**
@@ -2053,6 +2062,7 @@ typedef struct _dwg_object_VP_ENT_HDR_CONTROL
   BITCODE_H null_handle;
   BITCODE_H xdicobjhandle;
   BITCODE_H* vp_ent_headers;
+  long unsigned int objid;
 } Dwg_Object_VP_ENT_HDR_CONTROL;
 
 /**
