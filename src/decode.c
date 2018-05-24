@@ -2751,16 +2751,28 @@ dwg_decode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg,
       switch (ref->handleref.code)
         {
         case 0x06:
-          ref->absolute_ref = (obj->handle.value + 1);
+          if (obj != NULL)
+            ref->absolute_ref = (obj->handle.value + 1);
+          else
+            LOG_WARN("%s: Missing obj arg", __FUNCTION__);
           break;
         case 0x08:
-          ref->absolute_ref = (obj->handle.value - 1);
+          if (obj != NULL)
+            ref->absolute_ref = (obj->handle.value - 1);
+          else
+            LOG_WARN("%s: Missing obj arg", __FUNCTION__);
           break;
         case 0x0A:
-          ref->absolute_ref = (obj->handle.value + ref->handleref.value);
+          if (obj != NULL)
+            ref->absolute_ref = (obj->handle.value + ref->handleref.value);
+          else
+            LOG_WARN("%s: Missing obj arg", __FUNCTION__);
           break;
         case 0x0C:
-          ref->absolute_ref = (obj->handle.value - ref->handleref.value);
+          if (obj != NULL)
+            ref->absolute_ref = (obj->handle.value - ref->handleref.value);
+          else
+            LOG_WARN("%s: Missing obj arg", __FUNCTION__);
           break;
         case 2: case 3: case 4: case 5:
           ref->absolute_ref = ref->handleref.value;
