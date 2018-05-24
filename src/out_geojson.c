@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <math.h>
 #include <assert.h>
 
 #include "common.h"
@@ -29,6 +30,7 @@
 
 #define DWG_LOGLEVEL DWG_LOGLEVEL_NONE
 #include "logging.h"
+#include "dwg_api.h"
 
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
@@ -145,18 +147,20 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 #define FIELD_3RD(name,dxf) ;
 #define FIELD_3BD(name,dxf)
 #define FIELD_3BD_1(name,dxf)
-#define FIELD_2DPOINT(name) \
-    PREFIX fprintf(dat->fh, "[ " FORMAT_DD ", " FORMAT_DD " ],\n", \
-            _obj->name.x, _obj->name.y)
-#define LASTFIELD_2DPOINT(name) \
-    PREFIX fprintf(dat->fh, "[ " FORMAT_DD ", " FORMAT_DD " ]\n", \
-            _obj->name.x, _obj->name.y)
-#define FIELD_3DPOINT(name) \
+#define VALUE_2DPOINT(px, py) \
+  PREFIX fprintf(dat->fh, "[ " FORMAT_DD ", " FORMAT_DD " ],\n", px, py)
+#define LASTVALUE_2DPOINT(px, py) \
+  PREFIX fprintf(dat->fh, "[ " FORMAT_DD ", " FORMAT_DD " ]\n", px, py)
+#define FIELD_2DPOINT(name)     VALUE_2DPOINT(_obj->name.x, _obj->name.y)
+#define LASTFIELD_2DPOINT(name) LASTVALUE_2DPOINT(_obj->name.x, _obj->name.y)
+#define VALUE_3DPOINT(px, py, pz) \
     PREFIX fprintf(dat->fh, "[ " FORMAT_DD ", " FORMAT_DD ", " FORMAT_DD " ],\n", \
-            _obj->name.x, _obj->name.y, _obj->name.z)
-#define LASTFIELD_3DPOINT(name) \
+            px, py, pz)
+#define LASTVALUE_3DPOINT(px, py, pz) \
     PREFIX fprintf(dat->fh, "[ " FORMAT_DD ", " FORMAT_DD ", " FORMAT_DD " ]\n", \
-            _obj->name.x, _obj->name.y, _obj->name.z)
+            px, py, pz)
+#define FIELD_3DPOINT(name)     VALUE_3DPOINT(_obj->name.x, _obj->name.y, _obj->name.z)
+#define LASTFIELD_3DPOINT(name) LASTVALUE_3DPOINT(_obj->name.x, _obj->name.y, _obj->name.z)
 #define FIELD_CMC(name,dxf)
 #define FIELD_TIMEBLL(name,dxf)
 
@@ -327,40 +331,57 @@ dwg_geojson_object(Bit_Chain *dat, Dwg_Object *obj)
       break;
     case DWG_TYPE_POLYLINE_2D:
       {
-        Dwg_Entity_POLYLINE_2D *_obj = obj->tio.entity->tio.POLYLINE_2D;
+        int error;
+        BITCODE_BL j, numpts;
+        dwg_point_2d *pts;
         FEATURE(AcDbEntity:AcDbPolyline, obj);
         GEOMETRY(MultiLineString);
         KEY(coordinates);
           ARRAY;
-          if (dat->version >= R_2004)
+          numpts = dwg_obj_polyline_2d_get_numpoints(obj, &error);
+          pts = dwg_obj_polyline_2d_get_points(obj, &error);
+          for (j=0; j<numpts; j++)
             {
-              BITCODE_RL j, size = _obj->owned_obj_count;
-              for (j=0; j<size; j++)
+              if (j == numpts-1)
                 {
-                  Dwg_Entity_VERTEX_2D *vertex = (Dwg_Entity_VERTEX_2D *)
-                    dwg_ref_get_object(obj->parent, _obj->vertex[j]);
-                  if (vertex)
-                    {
-                      //TODO: width, bulge, tangent_dir
-                      Dwg_Entity_VERTEX_2D *_obj = vertex;
-                      if (j == size-1)
-                        {
-                          LASTFIELD_2DPOINT(point);
-                        }
-                      else
-                        {
-                          FIELD_2DPOINT(point);
-                        }
-                    }
+                  LASTVALUE_2DPOINT(pts[j].x, pts[j].y);
                 }
-            }          
+              else
+                {
+                  VALUE_2DPOINT(pts[j].x, pts[j].y);
+                }
+            }
           LASTENDARRAY;
         ENDGEOMETRY;
         ENDFEATURE;
       }
       break;
     case DWG_TYPE_POLYLINE_3D:
-      //dwg_geojson_POLYLINE_3D(dat, obj);
+      {
+        int error;
+        BITCODE_BL j, numpts;
+        dwg_point_3d *pts;
+        FEATURE(AcDbEntity:AcDbPolyline, obj);
+        GEOMETRY(MultiLineString);
+        KEY(coordinates);
+          ARRAY;
+          numpts = dwg_obj_polyline_3d_get_numpoints(obj, &error);
+          pts = dwg_obj_polyline_3d_get_points(obj, &error);
+          for (j=0; j<numpts; j++)
+            {
+              if (j == numpts-1)
+                {
+                  LASTVALUE_3DPOINT(pts[j].x, pts[j].y, pts[j].z);
+                }
+              else
+                {
+                  VALUE_3DPOINT(pts[j].x, pts[j].y, pts[j].z);
+                }
+            }
+          LASTENDARRAY;
+        ENDGEOMETRY;
+        ENDFEATURE;
+      }
       break;
     case DWG_TYPE_ARC:
       //dwg_geojson_ARC(dat, obj);
@@ -382,7 +403,22 @@ dwg_geojson_object(Bit_Chain *dat, Dwg_Object *obj)
       }
       break;
     case DWG_TYPE_POINT:
-      //dwg_geojson_POINT(dat, obj);
+      {
+        Dwg_Entity_POINT *_obj = obj->tio.entity->tio.POINT;
+        FEATURE(AcDbEntity:AcDbPoint, obj);
+        GEOMETRY(Point);
+        KEY(coordinates);
+        if (fabs(_obj->z) > 0.000001)
+          {
+            VALUE_3DPOINT(_obj->x, _obj->y, _obj->z);
+          }
+        else
+          {
+            VALUE_2DPOINT(_obj->x, _obj->y);
+          }
+        ENDGEOMETRY;
+        ENDFEATURE;
+      }
       break;
     case DWG_TYPE__3DFACE:
       //dwg_geojson__3DFACE(dat, obj);
