@@ -921,8 +921,16 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
   dat->bit = 0;
   ckr = dwg->header_vars.CRC;
   pvz = dwg->header.section[SECTION_HEADER_R13].address + 16;
-  ckr2 = bit_calc_CRC(0xC0C1, &(dat->chain[pvz]),
+  LOG_TRACE("HEADER_R13.address 0x%lx\n", pvz);
+  LOG_TRACE("HEADER_R13.size %d\n", dwg->header.section[SECTION_HEADER_R13].size);
+  // typical sizes: 400-599
+  if (dwg->header.section[SECTION_HEADER_R13].size < 0xfff &&
+      pvz < dat->byte &&
+      pvz + dwg->header.section[SECTION_HEADER_R13].size < dat->size)
+    {
+      ckr2 = bit_calc_CRC(0xC0C1, &(dat->chain[pvz]),
                       dwg->header.section[SECTION_HEADER_R13].size - 34);
+    }
   if (ckr != ckr2)
     {
       LOG_WARN("Section[%ld] CRC mismatch %d <=> %d",
@@ -1012,8 +1020,13 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
   dat->bit = 0;
   ckr = bit_read_RS(dat);
   pvz = dwg->header.section[SECTION_CLASSES_R13].address + 16;
-  ckr2 = bit_calc_CRC(0xC0C1, &(dat->chain[pvz]),
+  if (dwg->header.section[SECTION_CLASSES_R13].size < 0xfff &&
+      pvz < dat->byte &&
+      pvz + dwg->header.section[SECTION_CLASSES_R13].size < dat->size)
+    {
+      ckr2 = bit_calc_CRC(0xC0C1, &(dat->chain[pvz]),
                       dwg->header.section[SECTION_CLASSES_R13].size - 34);
+    }
   if (ckr != ckr2)
     {
       LOG_ERROR("Section[%ld] CRC mismatch %d <=> %d",

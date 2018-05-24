@@ -100,7 +100,7 @@ bit_read_B(Bit_Chain * dat)
   if (dat->byte >= dat->size)
     {
       LOG_ERROR("buffer overflow at %lu", dat->byte)
-      return (-1);
+      return 0;
     }
   byte = dat->chain[dat->byte];
   result = (byte & (0x80 >> dat->bit)) >> (7 - dat->bit);
@@ -136,7 +136,7 @@ bit_read_BB(Bit_Chain * dat)
   if (dat->byte >= dat->size)
     {
       LOG_ERROR("buffer overflow at %lu", dat->byte)
-      return (-1);
+      return 0;
     }
   byte = dat->chain[dat->byte];
   if (dat->bit < 7)
@@ -258,7 +258,7 @@ bit_read_RC(Bit_Chain * dat)
   if (dat->byte >= dat->size)
     {
       LOG_ERROR("buffer overflow at %lu", dat->byte)
-      return (-1);
+      return 0;
     }
   byte = dat->chain[dat->byte];
   if (dat->bit == 0)
