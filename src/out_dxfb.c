@@ -887,11 +887,11 @@ dwg_dxfb_object(Bit_Chain *dat, Dwg_Object *obj)
     case DWG_TYPE_LAYER:
       dwg_dxfb_LAYER(dat, obj);
       break;
-    case DWG_TYPE_SHAPEFILE_CONTROL:
-      dwg_dxfb_SHAPEFILE_CONTROL(dat, obj);
+    case DWG_TYPE_STYLE_CONTROL:
+      dwg_dxfb_STYLE_CONTROL(dat, obj);
       break;
-    case DWG_TYPE_SHAPEFILE:
-      dwg_dxfb_SHAPEFILE(dat, obj);
+    case DWG_TYPE_STYLE:
+      dwg_dxfb_STYLE(dat, obj);
       break;
     case DWG_TYPE_LTYPE_CONTROL:
       dwg_dxfb_LTYPE_CONTROL(dat, obj);

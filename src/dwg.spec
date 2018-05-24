@@ -1199,7 +1199,7 @@ DWG_ENTITY_END
 DWG_ENTITY(SHAPE)
 
   PRE(R_13) {
-    FIELD_HANDLE (shapefile, 5, 0);
+    FIELD_HANDLE (style, 5, 0);
     FIELD_2RD (ins_pt, 10);
     FIELD_RS (shape_no, 2);
     if (R11OPTS(1))
@@ -1218,7 +1218,7 @@ DWG_ENTITY(SHAPE)
     FIELD_3BD (extrusion, 210);
 
     COMMON_ENTITY_HANDLE_DATA;
-    FIELD_HANDLE (shapefile, 5, 0);
+    FIELD_HANDLE (style, 5, 0);
   }
 
 DWG_ENTITY_END
@@ -2120,7 +2120,7 @@ DWG_OBJECT(LAYER)
 DWG_OBJECT_END
 
 /* STYLE table (52) */
-DWG_OBJECT(SHAPEFILE_CONTROL)
+DWG_OBJECT(STYLE_CONTROL)
 
   FIELD_BL (num_entries, 70);
 
@@ -2132,9 +2132,9 @@ DWG_OBJECT(SHAPEFILE_CONTROL)
 DWG_OBJECT_END
 
 /* (53/3) preR13+DXF: STYLE */
-DWG_OBJECT(SHAPEFILE)
+DWG_OBJECT(STYLE)
 
-  COMMON_TABLE_FLAGS(shapefile_control, TextStyle)
+  COMMON_TABLE_FLAGS(style_control, TextStyle)
 
   SINCE(R_13)
   {
@@ -2162,7 +2162,7 @@ DWG_OBJECT(SHAPEFILE)
     //TODO 1071  long truetype font’s pitch and family, charset, and italic and bold flags
 
     START_HANDLE_STREAM;
-    FIELD_HANDLE (shapefile_control, 4, 0);
+    FIELD_HANDLE (style_control, 4, 0);
     REACTORS(4);
     XDICOBJHANDLE(3);
     UNTIL(R_2007) {
@@ -2254,7 +2254,7 @@ DWG_OBJECT(LTYPE)
   REACTORS(4);
   XDICOBJHANDLE(3);
   FIELD_HANDLE (null_handle, 5, 0);
-  HANDLE_VECTOR(shapefiles, num_dashes, 5, 340);
+  HANDLE_VECTOR(styles, num_dashes, 5, 340);
 
 DWG_OBJECT_END
 

@@ -729,7 +729,7 @@ dwg_obj_is_control(const Dwg_Object *obj)
   unsigned int type = obj->type;
   return type == DWG_TYPE_BLOCK_CONTROL ||
          type == DWG_TYPE_LAYER_CONTROL ||
-         type == DWG_TYPE_SHAPEFILE_CONTROL ||
+         type == DWG_TYPE_STYLE_CONTROL ||
          type == DWG_TYPE_LTYPE_CONTROL ||
          type == DWG_TYPE_VIEW_CONTROL ||
          type == DWG_TYPE_UCS_CONTROL ||

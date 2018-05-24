@@ -684,11 +684,11 @@ dwg_free_object(Dwg_Object *obj)
     case DWG_TYPE_LAYER:
       dwg_free_LAYER(obj);
       break;
-    case DWG_TYPE_SHAPEFILE_CONTROL:
-      dwg_free_SHAPEFILE_CONTROL(obj);
+    case DWG_TYPE_STYLE_CONTROL:
+      dwg_free_STYLE_CONTROL(obj);
       break;
-    case DWG_TYPE_SHAPEFILE:
-      dwg_free_SHAPEFILE(obj);
+    case DWG_TYPE_STYLE:
+      dwg_free_STYLE(obj);
       break;
     case DWG_TYPE_LTYPE_CONTROL:
       dwg_free_LTYPE_CONTROL(obj);

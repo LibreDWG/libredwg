@@ -735,11 +735,11 @@ dwg_print_object(Bit_Chain* dat, Dwg_Object *obj)
     case DWG_TYPE_LAYER:
       dwg_print_LAYER(dat, obj);
       break;
-    case DWG_TYPE_SHAPEFILE_CONTROL:
-      dwg_print_SHAPEFILE_CONTROL(dat, obj);
+    case DWG_TYPE_STYLE_CONTROL:
+      dwg_print_STYLE_CONTROL(dat, obj);
       break;
-    case DWG_TYPE_SHAPEFILE:
-      dwg_print_SHAPEFILE(dat, obj);
+    case DWG_TYPE_STYLE:
+      dwg_print_STYLE(dat, obj);
       break;
     case DWG_TYPE_LTYPE_CONTROL:
       dwg_print_LTYPE_CONTROL(dat, obj);

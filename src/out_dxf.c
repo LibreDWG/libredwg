@@ -918,13 +918,13 @@ dwg_dxf_object(Bit_Chain *dat, Dwg_Object *obj)
       //RECORD(LAYER);
       //dwg_dxf_LAYER(dat, obj);
       break;
-    case DWG_TYPE_SHAPEFILE_CONTROL:
-      //RECORD(SHAPEFILE);
-      //dwg_dxf_SHAPEFILE_CONTROL(dat, obj);
+    case DWG_TYPE_STYLE_CONTROL:
+      //RECORD(STYLE);
+      //dwg_dxf_STYLE_CONTROL(dat, obj);
       break;
-    case DWG_TYPE_SHAPEFILE:
-      RECORD(SHAPEFILE);
-      dwg_dxf_SHAPEFILE(dat, obj);
+    case DWG_TYPE_STYLE:
+      RECORD(STYLE);
+      dwg_dxf_STYLE(dat, obj);
       break;
     case DWG_TYPE_LTYPE_CONTROL:
       //RECORD(LTYPE);
@@ -1291,17 +1291,17 @@ dxf_tables_write (Bit_Chain *dat, Dwg_Data * dwg)
     }
   if (dwg->style_control.num_entries)
     {
-      Dwg_Object_SHAPEFILE_CONTROL *_ctrl = &dwg->style_control;
+      Dwg_Object_STYLE_CONTROL *_ctrl = &dwg->style_control;
       Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
       TABLE(STYLE);
       COMMON_TABLE_CONTROL_FLAGS(null_handle);
-      dwg_dxf_SHAPEFILE_CONTROL(dat, ctrl);
+      dwg_dxf_STYLE_CONTROL(dat, ctrl);
       for (i=0; i<dwg->style_control.num_entries; i++)
         {
           Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->styles[i]);
           if (obj) {
             RECORD (STYLE);
-            dwg_dxf_SHAPEFILE(dat, obj);
+            dwg_dxf_STYLE(dat, obj);
           }
         }
       ENDTAB();

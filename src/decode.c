@@ -371,11 +371,11 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
         }
       break;
 
-    // was a text STYLE table, became a SHAPEFILE object
+    // was a text STYLE table, became a STYLE object
     case SECTION_STYLE:
       for (i=0; i < tbl->number; i++)
         {
-          PREP_TABLE (SHAPEFILE);
+          PREP_TABLE (STYLE);
 
           FIELD_RC (flag, 70);
           FIELD_TF (entry_name, 32, 2);
@@ -3700,14 +3700,14 @@ dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
     case DWG_TYPE_LAYER:
       dwg_decode_LAYER(dat, obj);
       break;
-    case DWG_TYPE_SHAPEFILE_CONTROL:
-      dwg_decode_SHAPEFILE_CONTROL(dat, obj);
-      obj->tio.object->tio.SHAPEFILE_CONTROL->objid = num;
-      if (obj->tio.object->tio.SHAPEFILE_CONTROL->num_entries)
-        dwg->style_control = *obj->tio.object->tio.SHAPEFILE_CONTROL;
+    case DWG_TYPE_STYLE_CONTROL:
+      dwg_decode_STYLE_CONTROL(dat, obj);
+      obj->tio.object->tio.STYLE_CONTROL->objid = num;
+      if (obj->tio.object->tio.STYLE_CONTROL->num_entries)
+        dwg->style_control = *obj->tio.object->tio.STYLE_CONTROL;
       break;
-    case DWG_TYPE_SHAPEFILE:
-      dwg_decode_SHAPEFILE(dat, obj);
+    case DWG_TYPE_STYLE:
+      dwg_decode_STYLE(dat, obj);
       break;
     case DWG_TYPE_LTYPE_CONTROL:
       dwg_decode_LTYPE_CONTROL(dat, obj);

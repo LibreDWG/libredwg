@@ -848,11 +848,11 @@ dwg_dxf_object(Bit_Chain *dat, Dwg_Object *obj)
     case DWG_TYPE_LAYER:
       dwg_dxf_LAYER(dat, obj);
       break;
-    case DWG_TYPE_SHAPEFILE_CONTROL:
-      dwg_dxf_SHAPEFILE_CONTROL(dat, obj);
+    case DWG_TYPE_STYLE_CONTROL:
+      dwg_dxf_STYLE_CONTROL(dat, obj);
       break;
-    case DWG_TYPE_SHAPEFILE:
-      dwg_dxf_SHAPEFILE(dat, obj);
+    case DWG_TYPE_STYLE:
+      dwg_dxf_STYLE(dat, obj);
       break;
     case DWG_TYPE_LTYPE_CONTROL:
       dwg_dxf_LTYPE_CONTROL(dat, obj);

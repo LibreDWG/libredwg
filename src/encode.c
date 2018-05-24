@@ -1554,11 +1554,11 @@ dwg_encode_add_object(Dwg_Object* obj, Bit_Chain* dat,
   case DWG_TYPE_LAYER:
     dwg_encode_LAYER(dat, obj);
     break;
-  case DWG_TYPE_SHAPEFILE_CONTROL:
-    dwg_encode_SHAPEFILE_CONTROL(dat, obj);
+  case DWG_TYPE_STYLE_CONTROL:
+    dwg_encode_STYLE_CONTROL(dat, obj);
     break;
-  case DWG_TYPE_SHAPEFILE:
-    dwg_encode_SHAPEFILE(dat, obj);
+  case DWG_TYPE_STYLE:
+    dwg_encode_STYLE(dat, obj);
     break;
   case DWG_TYPE_LTYPE_CONTROL:
     dwg_encode_LTYPE_CONTROL(dat, obj);

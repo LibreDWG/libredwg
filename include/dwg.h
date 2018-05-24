@@ -241,8 +241,8 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_BLOCK_HEADER = 0x31,
   DWG_TYPE_LAYER_CONTROL = 0x32,
   DWG_TYPE_LAYER = 0x33,
-  DWG_TYPE_SHAPEFILE_CONTROL = 0x34,
-  DWG_TYPE_SHAPEFILE = 0x35,
+  DWG_TYPE_STYLE_CONTROL = 0x34,
+  DWG_TYPE_STYLE = 0x35,
   /* DWG_TYPE_<UNKNOWN> = 0x36, */
   /* DWG_TYPE_<UNKNOWN> = 0x37, */
   DWG_TYPE_LTYPE_CONTROL = 0x38,
@@ -1209,7 +1209,7 @@ typedef struct _dwg_entity_SHAPE
   BITCODE_BD thickness;
   BITCODE_BS shape_no;
   BITCODE_3BD extrusion;
-  BITCODE_H shapefile;
+  BITCODE_H style;
 } Dwg_Entity_SHAPE;
 
 /**
@@ -1637,22 +1637,22 @@ typedef struct _dwg_object_LAYER
 } Dwg_Object_LAYER;
 
 /**
- Struct for SHAPEFILE_CONTROL (52)
+ Struct for STYLE_CONTROL (52)
  */
-typedef struct _dwg_object_SHAPEFILE_CONTROL
+typedef struct _dwg_object_STYLE_CONTROL
 {
   BITCODE_BS num_entries;
   BITCODE_H null_handle;
   BITCODE_H xdicobjhandle;
   BITCODE_H* styles;
   long unsigned int objid;
-} Dwg_Object_SHAPEFILE_CONTROL;
+} Dwg_Object_STYLE_CONTROL;
 
 /**
- Struct for SHAPEFILE (53)
+ Struct for STYLE (53)
  preR13 this was called the STYLE table. In R14 DXF still as STYLE
  */
-typedef struct _dwg_object_SHAPEFILE
+typedef struct _dwg_object_STYLE
 {
   BITCODE_RC flag; /* preR13 */
   BITCODE_TV entry_name;
@@ -1669,11 +1669,11 @@ typedef struct _dwg_object_SHAPEFILE
   BITCODE_BD last_height;
   BITCODE_TV font_name;
   BITCODE_TV bigfont_name;
-  BITCODE_H shapefile_control;
+  BITCODE_H style_control;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
   BITCODE_H null_handle;
-} Dwg_Object_SHAPEFILE;
+} Dwg_Object_STYLE;
 
 /* 54 and 55 are UNKNOWN OBJECTS */
 
@@ -1724,7 +1724,7 @@ typedef struct _dwg_object_LTYPE
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
   BITCODE_H null_handle;
-  BITCODE_H* shapefiles;
+  BITCODE_H* styles;
   BITCODE_B  text_area_is_present; /* if some shape_flag & 2 */
 } Dwg_Object_LTYPE;
 
@@ -3766,8 +3766,8 @@ typedef struct _dwg_object_object
     Dwg_Object_BLOCK_HEADER *BLOCK_HEADER;
     Dwg_Object_LAYER_CONTROL *LAYER_CONTROL;
     Dwg_Object_LAYER *LAYER;
-    Dwg_Object_SHAPEFILE_CONTROL *SHAPEFILE_CONTROL;
-    Dwg_Object_SHAPEFILE *SHAPEFILE;
+    Dwg_Object_STYLE_CONTROL *STYLE_CONTROL;
+    Dwg_Object_STYLE *STYLE;
     Dwg_Object_LTYPE_CONTROL *LTYPE_CONTROL;
     Dwg_Object_LTYPE *LTYPE;
     Dwg_Object_VIEW_CONTROL *VIEW_CONTROL;
@@ -4099,7 +4099,7 @@ typedef struct _dwg_struct
   /* Those TABLES might be empty with num_entries=0 */
   Dwg_Object_BLOCK_CONTROL      block_control; /* unused */
   Dwg_Object_LAYER_CONTROL      layer_control;
-  Dwg_Object_SHAPEFILE_CONTROL  style_control;
+  Dwg_Object_STYLE_CONTROL  style_control;
   Dwg_Object_LTYPE_CONTROL      ltype_control;
   Dwg_Object_VIEW_CONTROL       view_control;
   Dwg_Object_UCS_CONTROL        ucs_control;
