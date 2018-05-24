@@ -376,7 +376,7 @@ dwg_ent_circle_init(dwg_ent_circle *circle)
     \param 3 int ptr &error
 */
 void
-dwg_ent_circle_get_center(dwg_ent_circle *circle, dwg_point_3d *point,
+dwg_ent_circle_get_center(const dwg_ent_circle *circle, dwg_point_3d *point,
                           int *error)
 {
   if (point != 0 && circle != 0)
@@ -423,7 +423,7 @@ dwg_ent_circle_set_center(dwg_ent_circle *circle, dwg_point_3d *point,
     \param 2 int ptr &error
 */
 BITCODE_BD
-dwg_ent_circle_get_radius(dwg_ent_circle *circle, int *error)
+dwg_ent_circle_get_radius(const dwg_ent_circle *circle, int *error)
 {
   if (circle != 0)
     {
@@ -465,7 +465,7 @@ dwg_ent_circle_set_radius(dwg_ent_circle *circle, BITCODE_BD radius, int *error)
     \param 2 int ptr &error
 */
 BITCODE_BD
-dwg_ent_circle_get_thickness(dwg_ent_circle *circle, int *error)
+dwg_ent_circle_get_thickness(const dwg_ent_circle *circle, int *error)
 {
   if (circle != 0)
     {
@@ -532,7 +532,7 @@ dwg_ent_circle_set_extrusion(dwg_ent_circle *circle, dwg_point_3d *vector,
     \param 3 int ptr &error
 */
 void
-dwg_ent_circle_get_extrusion(dwg_ent_circle *circle, dwg_point_3d *vector,
+dwg_ent_circle_get_extrusion(const dwg_ent_circle *circle, dwg_point_3d *vector,
                              int *error)
 {
   if (circle != 0 && vector != 0)
@@ -619,7 +619,7 @@ dwg_ent_line_init(dwg_ent_line *line)
     \param 3 int ptr &error
 */
 void
-dwg_ent_line_get_start_point(dwg_ent_line *line, dwg_point_3d *point,
+dwg_ent_line_get_start_point(const dwg_ent_line *line, dwg_point_3d *point,
                              int *error)
 {
   if (line != 0)
@@ -667,7 +667,7 @@ dwg_ent_line_set_start_point(dwg_ent_line *line, dwg_point_3d *point,
     \param 3 int ptr &error
 */
 void
-dwg_ent_line_get_end_point(dwg_ent_line *line, dwg_point_3d *point,
+dwg_ent_line_get_end_point(const dwg_ent_line *line, dwg_point_3d *point,
                            int *error)
 {
   if (line != 0)
@@ -714,7 +714,7 @@ dwg_ent_line_set_end_point(dwg_ent_line *line, dwg_point_3d *point,
     \param 2 int ptr &error
 */
 BITCODE_BD
-dwg_ent_line_get_thickness(dwg_ent_line *line, int *error)
+dwg_ent_line_get_thickness(const dwg_ent_line *line, int *error)
 {
   if (line != 0)
     {
@@ -757,7 +757,7 @@ dwg_ent_line_set_thickness(dwg_ent_line *line, BITCODE_BD thickness, int *error)
     \param 3 int ptr &error
 */
 void
-dwg_ent_line_get_extrusion(dwg_ent_line *line, dwg_point_3d *vector,
+dwg_ent_line_get_extrusion(const dwg_ent_line *line, dwg_point_3d *vector,
                            int *error)
 {
   if (line != 0 && vector != 0)
@@ -869,7 +869,7 @@ dwg_ent_arc_init(dwg_ent_arc *arc)
     \param 3 int ptr &error
 */
 void
-dwg_ent_arc_get_center(dwg_ent_arc *arc, dwg_point_3d *point,
+dwg_ent_arc_get_center(const dwg_ent_arc *arc, dwg_point_3d *point,
                        int *error)
 {
   if (arc != 0 && point != 0)
@@ -916,7 +916,7 @@ dwg_ent_arc_set_center(dwg_ent_arc *arc, dwg_point_3d *point,
     \param 2 int ptr &error
 */
 BITCODE_BD
-dwg_ent_arc_get_radius(dwg_ent_arc *arc, int *error)
+dwg_ent_arc_get_radius(const dwg_ent_arc *arc, int *error)
 {
   if (arc != 0)
     {
@@ -958,7 +958,7 @@ dwg_ent_arc_set_radius(dwg_ent_arc *arc, BITCODE_BD radius, int *error)
     \param 2 int ptr &error
 */
 BITCODE_BD
-dwg_ent_arc_get_thickness(dwg_ent_arc *arc, int *error)
+dwg_ent_arc_get_thickness(const dwg_ent_arc *arc, int *error)
 {
   if (arc != 0)
     {
@@ -1001,7 +1001,7 @@ dwg_ent_arc_set_thickness(dwg_ent_arc *arc, BITCODE_BD thickness, int *error)
     \param 3 int ptr &error
 */
 void
-dwg_ent_arc_get_extrusion(dwg_ent_arc *arc, dwg_point_3d *vector, int *error)
+dwg_ent_arc_get_extrusion(const dwg_ent_arc *arc, dwg_point_3d *vector, int *error)
 {
   if (arc != 0 && vector != 0)
     {
@@ -1046,7 +1046,7 @@ dwg_ent_arc_set_extrusion(dwg_ent_arc *arc, dwg_point_3d *vector, int *error)
     \param 2 int ptr &error
 */
 BITCODE_BD
-dwg_ent_arc_get_start_angle(dwg_ent_arc *arc, int *error)
+dwg_ent_arc_get_start_angle(const dwg_ent_arc *arc, int *error)
 {
   if (arc != 0)
     {
@@ -1088,7 +1088,7 @@ dwg_ent_arc_set_start_angle(dwg_ent_arc *arc, BITCODE_BD start_angle, int *error
     \param 2 int ptr &error
 */
 BITCODE_BD
-dwg_ent_arc_get_end_angle(dwg_ent_arc *arc, int *error)
+dwg_ent_arc_get_end_angle(const dwg_ent_arc *arc, int *error)
 {
   if (arc != 0)
     {
@@ -1198,7 +1198,7 @@ dwg_ent_ellipse_init(dwg_ent_ellipse *ellipse)
     \param 3 int ptr &error
 */
 void
-dwg_ent_ellipse_get_center(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
+dwg_ent_ellipse_get_center(const dwg_ent_ellipse *ellipse, dwg_point_3d *point,
                            int *error)
 {
   if (ellipse != 0 && point != 0)
@@ -1246,7 +1246,7 @@ dwg_ent_ellipse_set_center(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
     \param 3 int ptr &error
 */
 void
-dwg_ent_ellipse_get_sm_axis(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
+dwg_ent_ellipse_get_sm_axis(const dwg_ent_ellipse *ellipse, dwg_point_3d *point,
                             int *error)
 {
   if (ellipse != 0 && point != 0)
@@ -1294,7 +1294,7 @@ dwg_ent_ellipse_set_sm_axis(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
     \param 3 int ptr &error
 */
 void
-dwg_ent_ellipse_get_extrusion(dwg_ent_ellipse *ellipse, dwg_point_3d *vector,
+dwg_ent_ellipse_get_extrusion(const dwg_ent_ellipse *ellipse, dwg_point_3d *vector,
                               int *error)
 {
   if (ellipse != 0 && vector != 0)
@@ -1341,7 +1341,7 @@ dwg_ent_ellipse_set_extrusion(dwg_ent_ellipse *ellipse, dwg_point_3d *vector,
     \param 2 int ptr &error
 */
 BITCODE_BD
-dwg_ent_ellipse_get_axis_ratio(dwg_ent_ellipse *ellipse, int *error)
+dwg_ent_ellipse_get_axis_ratio(const dwg_ent_ellipse *ellipse, int *error)
 {
   if (ellipse != 0)
     {
@@ -1384,7 +1384,7 @@ dwg_ent_ellipse_set_axis_ratio(dwg_ent_ellipse *ellipse, BITCODE_BD ratio,
     \param 2 int ptr &error
 */
 BITCODE_BD
-dwg_ent_ellipse_get_start_angle(dwg_ent_ellipse *ellipse, int *error)
+dwg_ent_ellipse_get_start_angle(const dwg_ent_ellipse *ellipse, int *error)
 {
   if (ellipse != 0)
     {
@@ -1427,7 +1427,7 @@ dwg_ent_ellipse_set_start_angle(dwg_ent_ellipse *ellipse, BITCODE_BD start_angle
     \param 2 int ptr &error
 */
 BITCODE_BD
-dwg_ent_ellipse_get_end_angle(dwg_ent_ellipse *ellipse, int *error)
+dwg_ent_ellipse_get_end_angle(const dwg_ent_ellipse *ellipse, int *error)
 {
   if (ellipse != 0)
     {
@@ -1498,7 +1498,7 @@ dwg_ent_text_set_text(dwg_ent_text *ent, char * text_value, int *error)
     \param 2 int ptr &error
 */
 char *
-dwg_ent_text_get_text(dwg_ent_text *ent, int *error)
+dwg_ent_text_get_text(const dwg_ent_text *ent, int *error)
 {
   if (ent)
     {
@@ -1523,7 +1523,7 @@ dwg_ent_text_get_text(dwg_ent_text *ent, int *error)
     \param 3 int ptr &error
 */
 void
-dwg_ent_text_get_insertion_point(dwg_ent_text *text, dwg_point_2d *point,
+dwg_ent_text_get_insertion_point(const dwg_ent_text *text, dwg_point_2d *point,
                                  int *error)
 {
   if (text != 0 && point != 0)
@@ -1568,7 +1568,7 @@ dwg_ent_text_set_insertion_point(dwg_ent_text *text, dwg_point_2d *point,
     \param 2 int ptr &error
 */
 BITCODE_BD
-dwg_ent_text_get_height(dwg_ent_text *text, int *error)
+dwg_ent_text_get_height(const dwg_ent_text *text, int *error)
 {
   if (text != 0)
     {
@@ -1611,7 +1611,7 @@ dwg_ent_text_set_height(dwg_ent_text *text, BITCODE_BD height, int *error)
     \param 3 int ptr &error
 */
 void
-dwg_ent_text_get_extrusion(dwg_ent_text *text, dwg_point_3d *vector,
+dwg_ent_text_get_extrusion(const dwg_ent_text *text, dwg_point_3d *vector,
                            int *error)
 {
   if (text != 0 && vector != 0)
@@ -1658,7 +1658,7 @@ dwg_ent_text_set_extrusion(dwg_ent_text *text, dwg_point_3d *vector,
     \param 2 int ptr &error
 */
 BITCODE_BD
-dwg_ent_text_get_thickness(dwg_ent_text *text, int *error)
+dwg_ent_text_get_thickness(const dwg_ent_text *text, int *error)
 {
   if (text != 0)
     {
@@ -1700,7 +1700,7 @@ dwg_ent_text_set_thickness(dwg_ent_text *text, BITCODE_BD thickness, int *error)
     \param 2 int ptr &error
 */
 BITCODE_BD
-dwg_ent_text_get_rotation(dwg_ent_text *text, int *error)
+dwg_ent_text_get_rotation(const dwg_ent_text *text, int *error)
 {
   if (text != 0)
     {
@@ -1743,7 +1743,7 @@ dwg_ent_text_set_rotation(dwg_ent_text *text, BITCODE_BD angle, int *error)
     \return short(1 = bottom, 2 = middle, 3 = top)
 */
 BITCODE_BS
-dwg_ent_text_get_vert_align(dwg_ent_text *text, int *error)
+dwg_ent_text_get_vert_align(const dwg_ent_text *text, int *error)
 {
   if (text != 0)
     {
@@ -1786,7 +1786,7 @@ dwg_ent_text_set_vert_align(dwg_ent_text *text, BITCODE_BS alignment, int *error
     \return (1 = left, 2 = center, 3 = right)
 */
 BITCODE_BS
-dwg_ent_text_get_horiz_align(dwg_ent_text *text, int *error)
+dwg_ent_text_get_horiz_align(const dwg_ent_text *text, int *error)
 {
   if (text != 0)
     {
@@ -1856,7 +1856,7 @@ dwg_ent_attrib_set_text(dwg_ent_attrib *ent, char * text_value, int *error)
     \param 2 int ptr &error
 */
 char *
-dwg_ent_attrib_get_text(dwg_ent_attrib *ent, int *error)
+dwg_ent_attrib_get_text(const dwg_ent_attrib *ent, int *error)
 {
   if (ent)
     {
@@ -1881,7 +1881,7 @@ dwg_ent_attrib_get_text(dwg_ent_attrib *ent, int *error)
     \param 3 int ptr &error
 */
 void
-dwg_ent_attrib_get_insertion_point(dwg_ent_attrib *attrib,
+dwg_ent_attrib_get_insertion_point(const dwg_ent_attrib *attrib,
                                    dwg_point_2d *point, int *error)
 {
   if (attrib != 0 && point != 0)
@@ -1926,7 +1926,7 @@ dwg_ent_attrib_set_insertion_point(dwg_ent_attrib *attrib,
     \param 2 int ptr &error
 */
 BITCODE_BD
-dwg_ent_attrib_get_height(dwg_ent_attrib *attrib, int *error)
+dwg_ent_attrib_get_height(const dwg_ent_attrib *attrib, int *error)
 {
   if (attrib != 0)
     {
@@ -1969,7 +1969,7 @@ dwg_ent_attrib_set_height(dwg_ent_attrib *attrib, BITCODE_BD height, int *error)
     \param 3 int ptr &error
 */
 void
-dwg_ent_attrib_get_extrusion(dwg_ent_attrib *attrib, dwg_point_3d *vector,
+dwg_ent_attrib_get_extrusion(const dwg_ent_attrib *attrib, dwg_point_3d *vector,
                              int *error)
 {
   if (attrib != 0 && vector != 0)
@@ -2016,7 +2016,7 @@ dwg_ent_attrib_set_extrusion(dwg_ent_attrib *attrib, dwg_point_3d *vector,
     \param 2 int ptr &error
 */
 BITCODE_BD
-dwg_ent_attrib_get_thickness(dwg_ent_attrib *attrib, int *error)
+dwg_ent_attrib_get_thickness(const dwg_ent_attrib *attrib, int *error)
 {
   if (attrib != 0)
     {
@@ -2059,7 +2059,7 @@ dwg_ent_attrib_set_thickness(dwg_ent_attrib *attrib, BITCODE_BD thickness,
     \param 2 int ptr &error
 */
 BITCODE_BD
-dwg_ent_attrib_get_rot_angle(dwg_ent_attrib *attrib, int *error)
+dwg_ent_attrib_get_rot_angle(const dwg_ent_attrib *attrib, int *error)
 {
   if (attrib != 0)
     {
@@ -2102,7 +2102,7 @@ dwg_ent_attrib_set_rot_angle(dwg_ent_attrib *attrib, BITCODE_BD angle, int *erro
     \return short(1 = bottom, 2 = middle, 3 = top)
 */
 BITCODE_BS
-dwg_ent_attrib_get_vert_align(dwg_ent_attrib *attrib, int *error)
+dwg_ent_attrib_get_vert_align(const dwg_ent_attrib *attrib, int *error)
 {
   if (attrib != 0)
     {
@@ -2146,7 +2146,7 @@ dwg_ent_attrib_set_vert_align(dwg_ent_attrib *attrib, BITCODE_BS alignment,
     \return (1 = left, 2 = center, 3 = right)
 */
 BITCODE_BS
-dwg_ent_attrib_get_horiz_align(dwg_ent_attrib *attrib, int *error)
+dwg_ent_attrib_get_horiz_align(const dwg_ent_attrib *attrib, int *error)
 {
   if (attrib != 0)
     {
@@ -2218,7 +2218,7 @@ dwg_ent_attdef_set_text(dwg_ent_attdef *ent, char * default_value,
     \param 2 int ptr &error
 */
 char *
-dwg_ent_attdef_get_text(dwg_ent_attdef *ent, int *error)
+dwg_ent_attdef_get_text(const dwg_ent_attdef *ent, int *error)
 {
   if (ent)
     {
@@ -2243,7 +2243,7 @@ dwg_ent_attdef_get_text(dwg_ent_attdef *ent, int *error)
     \param 3 int ptr &error
 */
 void
-dwg_ent_attdef_get_insertion_point(dwg_ent_attdef *attdef,
+dwg_ent_attdef_get_insertion_point(const dwg_ent_attdef *attdef,
                                    dwg_point_2d *point, int *error)
 {
   if (attdef != 0 && point != 0)
@@ -2288,7 +2288,7 @@ dwg_ent_attdef_set_insertion_point(dwg_ent_attdef *attdef,
     \param 2 int ptr &error
 */
 BITCODE_BD
-dwg_ent_attdef_get_height(dwg_ent_attdef *attdef, int *error)
+dwg_ent_attdef_get_height(const dwg_ent_attdef *attdef, int *error)
 {
   if (attdef != 0)
     {
@@ -2331,7 +2331,7 @@ dwg_ent_attdef_set_height(dwg_ent_attdef *attdef, BITCODE_BD height, int *error)
     \param 3 int ptr &error
 */
 void
-dwg_ent_attdef_get_extrusion(dwg_ent_attdef *attdef, dwg_point_3d *vector,
+dwg_ent_attdef_get_extrusion(const dwg_ent_attdef *attdef, dwg_point_3d *vector,
                              int *error)
 {
   if (attdef != 0 && vector != 0)
@@ -2378,7 +2378,7 @@ dwg_ent_attdef_set_extrusion(dwg_ent_attdef *attdef, dwg_point_3d *vector,
     \param 2 int ptr &error
 */
 BITCODE_BD
-dwg_ent_attdef_get_thickness(dwg_ent_attdef *attdef, int *error)
+dwg_ent_attdef_get_thickness(const dwg_ent_attdef *attdef, int *error)
 {
   if (attdef != 0)
     {
@@ -2421,7 +2421,7 @@ dwg_ent_attdef_set_thickness(dwg_ent_attdef *attdef, BITCODE_BD thickness,
     \param 2 int ptr &error
 */
 BITCODE_BD
-dwg_ent_attdef_get_rot_angle(dwg_ent_attdef *attdef, int *error)
+dwg_ent_attdef_get_rot_angle(const dwg_ent_attdef *attdef, int *error)
 {
   if (attdef != 0)
     {
@@ -2464,7 +2464,7 @@ dwg_ent_attdef_set_rot_angle(dwg_ent_attdef *attdef, BITCODE_BD angle, int *erro
     \return (1 = bottom, 2 = middle, 3 = top)
 */
 BITCODE_BS
-dwg_ent_attdef_get_vert_align(dwg_ent_attdef *attdef, int *error)
+dwg_ent_attdef_get_vert_align(const dwg_ent_attdef *attdef, int *error)
 {
   if (attdef != 0)
     {
@@ -2508,7 +2508,7 @@ dwg_ent_attdef_set_vert_align(dwg_ent_attdef *attdef, BITCODE_BS alignment,
     \return (1 = left, 2 = center, 3 = right)
 */
 BITCODE_BS
-dwg_ent_attdef_get_horiz_align(dwg_ent_attdef *attdef, int *error)
+dwg_ent_attdef_get_horiz_align(const dwg_ent_attdef *attdef, int *error)
 {
   if (attdef != 0)
     {
@@ -2580,7 +2580,7 @@ dwg_ent_point_set_point(dwg_ent_point *point, dwg_point_3d *retpoint,
 \param 3 int
 */
 void
-dwg_ent_point_get_point(dwg_ent_point *point, dwg_point_3d *retpoint,
+dwg_ent_point_get_point(const dwg_ent_point *point, dwg_point_3d *retpoint,
                         int *error)
 {
   if (point != 0 && retpoint != 0)
@@ -2603,7 +2603,7 @@ dwg_ent_point_get_point(dwg_ent_point *point, dwg_point_3d *retpoint,
 \param 2 int
 */
 BITCODE_BD
-dwg_ent_point_get_thickness(dwg_ent_point *point, int *error)
+dwg_ent_point_get_thickness(const dwg_ent_point *point, int *error)
 {
   if (point != 0)
     {
@@ -2671,7 +2671,7 @@ dwg_ent_point_set_extrusion(dwg_ent_point *point, dwg_point_3d *retpoint,
 \param 3 int
 */
 void
-dwg_ent_point_get_extrusion(dwg_ent_point *point, dwg_point_3d *retpoint,
+dwg_ent_point_get_extrusion(const dwg_ent_point *point, dwg_point_3d *retpoint,
                             int *error)
 {
   if (point != 0 && retpoint != 0)
@@ -2698,7 +2698,7 @@ dwg_ent_point_get_extrusion(dwg_ent_point *point, dwg_point_3d *retpoint,
 \param 2 int
 */
 double
-dwg_ent_solid_get_thickness(dwg_ent_solid *solid, int *error)
+dwg_ent_solid_get_thickness(const dwg_ent_solid *solid, int *error)
 {
   if (solid != 0)
     {
@@ -2741,7 +2741,7 @@ dwg_ent_solid_set_thickness(dwg_ent_solid *solid, BITCODE_BD thickness,
 \param 2 int
 */
 BITCODE_BD
-dwg_ent_solid_get_elevation(dwg_ent_solid *solid, int *error)
+dwg_ent_solid_get_elevation(const dwg_ent_solid *solid, int *error)
 {
   if (solid != 0)
     {
@@ -2785,7 +2785,7 @@ dwg_ent_solid_set_elevation(dwg_ent_solid *solid, BITCODE_BD elevation,
 \param 3 int
 */
 void
-dwg_ent_solid_get_corner1(dwg_ent_solid *solid, dwg_point_2d *point,
+dwg_ent_solid_get_corner1(const dwg_ent_solid *solid, dwg_point_2d *point,
                           int *error)
 {
   if (solid != 0 && point != 0)
@@ -2831,7 +2831,7 @@ dwg_ent_solid_set_corner1(dwg_ent_solid *solid, dwg_point_2d *point,
 \param 3 int
 */
 void
-dwg_ent_solid_get_corner2(dwg_ent_solid *solid, dwg_point_2d *point,
+dwg_ent_solid_get_corner2(const dwg_ent_solid *solid, dwg_point_2d *point,
                           int *error)
 {
   if (solid != 0 && point != 0)
@@ -2877,7 +2877,7 @@ dwg_ent_solid_set_corner2(dwg_ent_solid *solid, dwg_point_2d *point,
 \param 3 int
 */
 void
-dwg_ent_solid_get_corner3(dwg_ent_solid *solid, dwg_point_2d *point,
+dwg_ent_solid_get_corner3(const dwg_ent_solid *solid, dwg_point_2d *point,
                           int *error)
 {
   if (solid != 0 && point != 0)
@@ -2923,7 +2923,7 @@ dwg_ent_solid_set_corner3(dwg_ent_solid *solid, dwg_point_2d *point,
 \param 3 int
 */
 void
-dwg_ent_solid_get_corner4(dwg_ent_solid *solid, dwg_point_2d *point,
+dwg_ent_solid_get_corner4(const dwg_ent_solid *solid, dwg_point_2d *point,
                           int *error)
 {
   if (solid != 0 && point != 0)
@@ -2969,7 +2969,7 @@ dwg_ent_solid_set_corner4(dwg_ent_solid *solid, dwg_point_2d *point,
 \param 3 int
 */
 void
-dwg_ent_solid_get_extrusion(dwg_ent_solid *solid, dwg_point_3d *vector,
+dwg_ent_solid_get_extrusion(const dwg_ent_solid *solid, dwg_point_3d *vector,
                             int *error)
 {
   if (solid != 0 && vector != 0)
@@ -3044,7 +3044,7 @@ dwg_ent_block_set_name(dwg_ent_block *ent, char * name, int *error)
 \param 2 int
 */
 char *
-dwg_ent_block_get_name(dwg_ent_block *block, int *error)
+dwg_ent_block_get_name(const dwg_ent_block *block, int *error)
 {
   if (block != 0)
     {
@@ -3073,7 +3073,7 @@ dwg_ent_block_get_name(dwg_ent_block *block, int *error)
 \param 3 int
 */
 void
-dwg_ent_ray_get_point(dwg_ent_ray *ray, dwg_point_3d *point, int *error)
+dwg_ent_ray_get_point(const dwg_ent_ray *ray, dwg_point_3d *point, int *error)
 {
   if (ray != 0 && point != 0)
     {
@@ -3119,7 +3119,7 @@ dwg_ent_ray_set_point(dwg_ent_ray *ray, dwg_point_3d *point, int *error)
 \param 3 int
 */
 void
-dwg_ent_ray_get_vector(dwg_ent_ray *ray, dwg_point_3d *vector, int *error)
+dwg_ent_ray_get_vector(const dwg_ent_ray *ray, dwg_point_3d *vector, int *error)
 {
   if (ray != 0 && vector != 0)
     {
@@ -3169,7 +3169,7 @@ dwg_ent_ray_set_vector(dwg_ent_ray *ray, dwg_point_3d *vector, int *error)
 \param 3 int
 */
 void
-dwg_ent_xline_get_point(dwg_ent_xline *xline, dwg_point_3d *point, int *error)
+dwg_ent_xline_get_point(const dwg_ent_xline *xline, dwg_point_3d *point, int *error)
 {
   if (xline != 0 && point != 0)
     {
@@ -3215,7 +3215,7 @@ dwg_ent_xline_set_point(dwg_ent_xline *xline, dwg_point_3d *point, int *error)
 \param 3 int
 */
 void
-dwg_ent_xline_get_vector(dwg_ent_xline *xline, dwg_point_3d *vector,
+dwg_ent_xline_get_vector(const dwg_ent_xline *xline, dwg_point_3d *vector,
                          int *error)
 {
   if (xline != 0 && vector != 0)
@@ -3266,7 +3266,7 @@ dwg_ent_xline_set_vector(dwg_ent_xline *xline, dwg_point_3d *vector,
 \param 2 int
 */
 BITCODE_BD
-dwg_ent_trace_get_thickness(dwg_ent_trace *trace, int *error)
+dwg_ent_trace_get_thickness(const dwg_ent_trace *trace, int *error)
 {
   if (trace != 0)
     {
@@ -3309,7 +3309,7 @@ dwg_ent_trace_set_thickness(dwg_ent_trace *trace, BITCODE_BD thickness,
 \param 2 int
 */
 BITCODE_BD
-dwg_ent_trace_get_elevation(dwg_ent_trace *trace, int *error)
+dwg_ent_trace_get_elevation(const dwg_ent_trace *trace, int *error)
 {
   if (trace != 0)
     {
@@ -3353,7 +3353,7 @@ dwg_ent_trace_set_elevation(dwg_ent_trace *trace, BITCODE_BD elevation,
 \param 3 int
 */
 void
-dwg_ent_trace_get_corner1(dwg_ent_trace *trace, dwg_point_2d *point,
+dwg_ent_trace_get_corner1(const dwg_ent_trace *trace, dwg_point_2d *point,
                           int *error)
 {
   if (trace != 0 && point != 0)
@@ -3399,7 +3399,7 @@ dwg_ent_trace_set_corner1(dwg_ent_trace *trace, dwg_point_2d *point,
 \param 3 int
 */
 void
-dwg_ent_trace_get_corner2(dwg_ent_trace *trace, dwg_point_2d *point,
+dwg_ent_trace_get_corner2(const dwg_ent_trace *trace, dwg_point_2d *point,
                           int *error)
 {
   if (trace != 0 && point != 0)
@@ -3445,7 +3445,7 @@ dwg_ent_trace_set_corner2(dwg_ent_trace *trace, dwg_point_2d *point,
 \param 3 int
 */
 void
-dwg_ent_trace_get_corner3(dwg_ent_trace *trace, dwg_point_2d *point,
+dwg_ent_trace_get_corner3(const dwg_ent_trace *trace, dwg_point_2d *point,
                           int *error)
 {
   if (trace != 0 && point != 0)
@@ -3491,7 +3491,7 @@ dwg_ent_trace_set_corner3(dwg_ent_trace *trace, dwg_point_2d *point,
 \param 3 int
 */
 void
-dwg_ent_trace_get_corner4(dwg_ent_trace *trace, dwg_point_2d *point,
+dwg_ent_trace_get_corner4(const dwg_ent_trace *trace, dwg_point_2d *point,
                           int *error)
 {
   if (trace != 0 && point != 0)
@@ -3537,7 +3537,7 @@ dwg_ent_trace_set_corner4(dwg_ent_trace *trace, dwg_point_2d *point,
 \param 3 int
 */
 void
-dwg_ent_trace_get_extrusion(dwg_ent_trace *trace, dwg_point_3d *vector,
+dwg_ent_trace_get_extrusion(const dwg_ent_trace *trace, dwg_point_3d *vector,
                             int *error)
 {
   if (trace != 0 && vector != 0)
@@ -3588,7 +3588,7 @@ dwg_ent_trace_set_extrusion(dwg_ent_trace *trace, dwg_point_3d *vector,
 \param 2 int
 */
 char
-dwg_ent_vertex_3d_get_flag(dwg_ent_vertex_3d *vert, int *error)
+dwg_ent_vertex_3d_get_flag(const dwg_ent_vertex_3d *vert, int *error)
 {
   if (vert != 0)
     {
@@ -3631,7 +3631,7 @@ dwg_ent_vertex_3d_set_flag(dwg_ent_vertex_3d *vert, char flag, int *error)
 \param 3 int
 */
 void
-dwg_ent_vertex_3d_get_point(dwg_ent_vertex_3d *vert, dwg_point_3d *point,
+dwg_ent_vertex_3d_get_point(const dwg_ent_vertex_3d *vert, dwg_point_3d *point,
                             int *error)
 {
   if (vert != 0 && point != 0)
@@ -3682,7 +3682,7 @@ dwg_ent_vertex_3d_set_point(dwg_ent_vertex_3d *vert,
 \param 2 int
 */
 char
-dwg_ent_vertex_mesh_get_flag(dwg_ent_vertex_mesh *vert, int *error)
+dwg_ent_vertex_mesh_get_flag(const dwg_ent_vertex_mesh *vert, int *error)
 {
   if (vert != 0)
     {
@@ -3726,7 +3726,7 @@ dwg_ent_vertex_mesh_set_flag(dwg_ent_vertex_mesh *vert, char flags,
 \param 3 int
 */
 void
-dwg_ent_vertex_mesh_get_point(dwg_ent_vertex_mesh *vert, dwg_point_3d *point,
+dwg_ent_vertex_mesh_get_point(const dwg_ent_vertex_mesh *vert, dwg_point_3d *point,
                               int *error)
 {
   if (vert != 0 && point != 0)
@@ -3777,7 +3777,7 @@ dwg_ent_vertex_mesh_set_point(dwg_ent_vertex_mesh *vert, dwg_point_3d *point,
 \param 2 int
 */
 char
-dwg_ent_vertex_pface_get_flag(dwg_ent_vertex_pface *vert, int *error)
+dwg_ent_vertex_pface_get_flag(const dwg_ent_vertex_pface *vert, int *error)
 {
   if (vert != 0)
     {
@@ -3821,7 +3821,7 @@ dwg_ent_vertex_pface_set_flag(dwg_ent_vertex_pface *vert, char flags,
 \param 3 int
 */
 void
-dwg_ent_vertex_pface_get_point(dwg_ent_vertex_pface *vert,
+dwg_ent_vertex_pface_get_point(const dwg_ent_vertex_pface *vert,
                                dwg_point_3d *point, int *error)
 {
   if (vert != 0 && point != 0)
@@ -3872,7 +3872,7 @@ dwg_ent_vertex_pface_set_point(dwg_ent_vertex_pface *vert,
 \param 2 int
 */
 char
-dwg_ent_vertex_2d_get_flag(dwg_ent_vertex_2d *vert, int *error)
+dwg_ent_vertex_2d_get_flag(const dwg_ent_vertex_2d *vert, int *error)
 {
   if (vert != 0)
     {
@@ -3915,7 +3915,7 @@ dwg_ent_vertex_2d_set_flag(dwg_ent_vertex_2d *vert, char flags, int *error)
 \param 3 int
 */
 void
-dwg_ent_vertex_2d_get_point(dwg_ent_vertex_2d *vert, dwg_point_3d *point,
+dwg_ent_vertex_2d_get_point(const dwg_ent_vertex_2d *vert, dwg_point_3d *point,
                             int *error)
 {
   if (vert != 0 && point != 0)
@@ -3962,7 +3962,7 @@ dwg_ent_vertex_2d_set_point(dwg_ent_vertex_2d *vert, dwg_point_3d *point,
 \param 2 int
 */
 BITCODE_BD
-dwg_ent_vertex_2d_get_start_width(dwg_ent_vertex_2d *vert, int *error)
+dwg_ent_vertex_2d_get_start_width(const dwg_ent_vertex_2d *vert, int *error)
 {
   if (vert != 0)
     {
@@ -4005,7 +4005,7 @@ dwg_ent_vertex_2d_set_start_width(dwg_ent_vertex_2d *vert, BITCODE_BD start_widt
 \param 2 int
 */
 BITCODE_BD
-dwg_ent_vertex_2d_get_end_width(dwg_ent_vertex_2d *vert, int *error)
+dwg_ent_vertex_2d_get_end_width(const dwg_ent_vertex_2d *vert, int *error)
 {
   if (vert != 0)
     {
@@ -4048,7 +4048,7 @@ dwg_ent_vertex_2d_set_end_width(dwg_ent_vertex_2d *vert, BITCODE_BD end_width,
 \param 2 int
 */
 BITCODE_BD
-dwg_ent_vertex_2d_get_bulge(dwg_ent_vertex_2d *vert, int *error)
+dwg_ent_vertex_2d_get_bulge(const dwg_ent_vertex_2d *vert, int *error)
 {
   if (vert != 0)
     {
@@ -4090,7 +4090,7 @@ dwg_ent_vertex_2d_set_bulge(dwg_ent_vertex_2d *vert, BITCODE_BD bulge, int *erro
 \param 2 int
 */
 BITCODE_BD
-dwg_ent_vertex_2d_get_tangent_dir(dwg_ent_vertex_2d *vert, int *error)
+dwg_ent_vertex_2d_get_tangent_dir(const dwg_ent_vertex_2d *vert, int *error)
 {
   if (vert != 0)
     {
@@ -4138,7 +4138,7 @@ dwg_ent_vertex_2d_set_tangent_dir(dwg_ent_vertex_2d *vert, BITCODE_BD tangent_di
 \param 3 int
 */
 void
-dwg_ent_insert_get_ins_pt(dwg_ent_insert *insert, dwg_point_3d *point,
+dwg_ent_insert_get_ins_pt(const dwg_ent_insert *insert, dwg_point_3d *point,
                           int *error)
 {
   if (insert != 0 && point != 0)
@@ -4185,7 +4185,7 @@ dwg_ent_insert_set_ins_pt(dwg_ent_insert *insert, dwg_point_3d *point,
 \param 2 int
 */
 char
-dwg_ent_insert_get_scale_flag(dwg_ent_insert *insert, int *error)
+dwg_ent_insert_get_scale_flag(const dwg_ent_insert *insert, int *error)
 {
   if (insert != 0)
     {
@@ -4228,7 +4228,7 @@ dwg_ent_insert_set_scale_flag(dwg_ent_insert *insert, char flags, int *error)
 \param 3 int
 */
 void
-dwg_ent_insert_get_scale(dwg_ent_insert *insert, dwg_point_3d *point,
+dwg_ent_insert_get_scale(const dwg_ent_insert *insert, dwg_point_3d *point,
                          int *error)
 {
   if (insert != 0 && point != 0)
@@ -4275,7 +4275,7 @@ dwg_ent_insert_set_scale(dwg_ent_insert *insert, dwg_point_3d *point,
 \param 2 int
 */
 BITCODE_BD
-dwg_ent_insert_get_rotation(dwg_ent_insert *insert, int *error)
+dwg_ent_insert_get_rotation(const dwg_ent_insert *insert, int *error)
 {
   if (insert != 0)
     {
@@ -4319,7 +4319,7 @@ dwg_ent_insert_set_rotation(dwg_ent_insert *insert, BITCODE_BD rot_ang,
 \param 3 int
 */
 void
-dwg_ent_insert_get_extrusion(dwg_ent_insert *insert, dwg_point_3d *point,
+dwg_ent_insert_get_extrusion(const dwg_ent_insert *insert, dwg_point_3d *point,
                              int *error)
 {
   if (insert != 0 && point != 0)
@@ -4387,7 +4387,7 @@ dwg_ent_insert_has_attribs(dwg_ent_insert *insert, int *error)
 \param 2 int
 */
 BITCODE_BL
-dwg_ent_insert_get_owned_obj_count(dwg_ent_insert *insert, int *error)
+dwg_ent_insert_get_owned_obj_count(const dwg_ent_insert *insert, int *error)
 {
   if (insert != 0)
     {
@@ -4430,7 +4430,7 @@ dwg_ent_insert_set_owned_obj_count(dwg_ent_insert *insert, BITCODE_BL count,
 \param 2 int
 */
 dwg_handle *
-dwg_ent_insert_get_ref_handle(dwg_ent_insert *insert, int *error)
+dwg_ent_insert_get_ref_handle(const dwg_ent_insert *insert, int *error)
 {
   if (insert != 0)
     {
@@ -4451,7 +4451,7 @@ dwg_ent_insert_get_ref_handle(dwg_ent_insert *insert, int *error)
 \param 2 int
 */
 BITCODE_BL
-dwg_ent_insert_get_abs_ref(dwg_ent_insert *insert, int *error)
+dwg_ent_insert_get_abs_ref(const dwg_ent_insert *insert, int *error)
 {
   if (insert != 0)
     {
@@ -4477,7 +4477,7 @@ dwg_ent_insert_get_abs_ref(dwg_ent_insert *insert, int *error)
 \param 3 int
 */
 void
-dwg_ent_minsert_get_ins_pt(dwg_ent_minsert *minsert, dwg_point_3d *point,
+dwg_ent_minsert_get_ins_pt(const dwg_ent_minsert *minsert, dwg_point_3d *point,
                            int *error)
 {
   if (minsert != 0 && point != 0)
@@ -4524,7 +4524,7 @@ dwg_ent_minsert_set_ins_pt(dwg_ent_minsert *minsert, dwg_point_3d *point,
 \param 2 int
 */
 char
-dwg_ent_minsert_get_scale_flag(dwg_ent_minsert *minsert, int *error)
+dwg_ent_minsert_get_scale_flag(const dwg_ent_minsert *minsert, int *error)
 {
   if (minsert != 0)
     {
@@ -4568,7 +4568,7 @@ dwg_ent_minsert_set_scale_flag(dwg_ent_minsert *minsert, char flags,
 \param 3 int
 */
 void
-dwg_ent_minsert_get_scale(dwg_ent_minsert *minsert, dwg_point_3d *point,
+dwg_ent_minsert_get_scale(const dwg_ent_minsert *minsert, dwg_point_3d *point,
                           int *error)
 {
   if (minsert != 0 && point != 0)
@@ -4615,7 +4615,7 @@ dwg_ent_minsert_set_scale(dwg_ent_minsert *minsert, dwg_point_3d *point,
 \param 2 int
 */
 BITCODE_BD
-dwg_ent_minsert_get_rotation(dwg_ent_minsert *minsert, int *error)
+dwg_ent_minsert_get_rotation(const dwg_ent_minsert *minsert, int *error)
 {
   if (minsert != 0)
     {
@@ -4659,7 +4659,7 @@ dwg_ent_minsert_set_rotation(dwg_ent_minsert *minsert, BITCODE_BD rot_ang,
 \param 3 int
 */
 void
-dwg_ent_minsert_get_extrusion(dwg_ent_minsert *minsert, dwg_point_3d *point,
+dwg_ent_minsert_get_extrusion(const dwg_ent_minsert *minsert, dwg_point_3d *point,
                               int *error)
 {
   if (minsert != 0 && point != 0)
@@ -4728,7 +4728,7 @@ dwg_ent_minsert_has_attribs(dwg_ent_minsert *minsert, int *error)
 \param 2 int
 */
 BITCODE_BL
-dwg_ent_minsert_get_owned_obj_count(dwg_ent_minsert *minsert, int *error)
+dwg_ent_minsert_get_owned_obj_count(const dwg_ent_minsert *minsert, int *error)
 {
   if (minsert != 0)
     {
@@ -4771,7 +4771,7 @@ dwg_ent_minsert_set_owned_obj_count(dwg_ent_minsert *minsert, BITCODE_BL count,
 \param 2 int
 */
 BITCODE_BL
-dwg_ent_minsert_get_numcols(dwg_ent_minsert *minsert, int *error)
+dwg_ent_minsert_get_numcols(const dwg_ent_minsert *minsert, int *error)
 {
   if (minsert != 0)
     {
@@ -4813,7 +4813,7 @@ dwg_ent_minsert_set_numcols(dwg_ent_minsert *minsert, BITCODE_BL cols, int *erro
 \param 2 int
 */
 BITCODE_BL
-dwg_ent_minsert_get_numrows(dwg_ent_minsert *minsert, int *error)
+dwg_ent_minsert_get_numrows(const dwg_ent_minsert *minsert, int *error)
 {
   if (minsert != 0)
     {
@@ -4855,7 +4855,7 @@ dwg_ent_minsert_set_numrows(dwg_ent_minsert *minsert, BITCODE_BL cols, int *erro
 \param 2 int
 */
 BITCODE_BD
-dwg_ent_minsert_get_col_spacing(dwg_ent_minsert *minsert, int *error)
+dwg_ent_minsert_get_col_spacing(const dwg_ent_minsert *minsert, int *error)
 {
   if (minsert != 0)
     {
@@ -4898,7 +4898,7 @@ dwg_ent_minsert_set_col_spacing(dwg_ent_minsert *minsert, BITCODE_BD spacing,
 \param 2 int
 */
 BITCODE_BD
-dwg_ent_minsert_get_row_spacing(dwg_ent_minsert *minsert, int *error)
+dwg_ent_minsert_get_row_spacing(const dwg_ent_minsert *minsert, int *error)
 {
   if (minsert != 0)
     {
@@ -4945,7 +4945,7 @@ dwg_ent_minsert_set_row_spacing(dwg_ent_minsert *minsert, BITCODE_BD spacing,
 \param 2 int
 */
 char *
-dwg_obj_mlinestyle_get_name(dwg_obj_mlinestyle *mlinestyle, int *error)
+dwg_obj_mlinestyle_get_name(const dwg_obj_mlinestyle *mlinestyle, int *error)
 {
   if (mlinestyle)
     {
@@ -4994,7 +4994,7 @@ dwg_obj_mlinestyle_set_name(dwg_obj_mlinestyle *mlinestyle, char * name,
 \param 2 int
 */
 char *
-dwg_obj_mlinestyle_get_desc(dwg_obj_mlinestyle *mlinestyle, int *error)
+dwg_obj_mlinestyle_get_desc(const dwg_obj_mlinestyle *mlinestyle, int *error)
 {
   if (mlinestyle != 0)
     {
@@ -5043,7 +5043,7 @@ dwg_obj_mlinestyle_set_desc(dwg_obj_mlinestyle *mlinestyle, char * desc,
 \param 2 int
 */
 int
-dwg_obj_mlinestyle_get_flag(dwg_obj_mlinestyle *mlinestyle, int *error)
+dwg_obj_mlinestyle_get_flag(const dwg_obj_mlinestyle *mlinestyle, int *error)
 {
   if (mlinestyle != 0)
     {
@@ -5086,7 +5086,7 @@ dwg_obj_mlinestyle_set_flag(dwg_obj_mlinestyle *mlinestyle, int flags,
 \param 2 int
 */
 BITCODE_BD
-dwg_obj_mlinestyle_get_start_angle(dwg_obj_mlinestyle *mlinestyle, int *error)
+dwg_obj_mlinestyle_get_start_angle(const dwg_obj_mlinestyle *mlinestyle, int *error)
 {
   if (mlinestyle != 0)
     {
@@ -5129,7 +5129,7 @@ dwg_obj_mlinestyle_set_start_angle(dwg_obj_mlinestyle *mlinestyle,
 \param 2 int
 */
 BITCODE_BD
-dwg_obj_mlinestyle_get_end_angle(dwg_obj_mlinestyle *mlinestyle, int *error)
+dwg_obj_mlinestyle_get_end_angle(const dwg_obj_mlinestyle *mlinestyle, int *error)
 {
   if (mlinestyle != 0)
     {
@@ -5172,7 +5172,7 @@ dwg_obj_mlinestyle_set_end_angle(dwg_obj_mlinestyle *mlinestyle, BITCODE_BD end_
 \param 2 int
 */
 char
-dwg_obj_mlinestyle_get_num_lines(dwg_obj_mlinestyle *mlinestyle,
+dwg_obj_mlinestyle_get_num_lines(const dwg_obj_mlinestyle *mlinestyle,
                                  int *error)
 {
   if (mlinestyle != 0)
@@ -5220,7 +5220,7 @@ dwg_obj_mlinestyle_set_num_lines(dwg_obj_mlinestyle *mlinestyle,
 \param 2 int
 */
 BITCODE_BS
-dwg_obj_appid_control_get_num_entries(dwg_obj_appid_control *appid, int *error)
+dwg_obj_appid_control_get_num_entries(const dwg_obj_appid_control *appid, int *error)
 {
   if (appid != 0)
     {
@@ -5236,7 +5236,7 @@ dwg_obj_appid_control_get_num_entries(dwg_obj_appid_control *appid, int *error)
 }
 
 dwg_object_ref *
-dwg_obj_appid_control_get_appid(dwg_obj_appid_control *appid,
+dwg_obj_appid_control_get_appid(const dwg_obj_appid_control *appid,
                                 BITCODE_BS index, int *error)
 {
   if (appid != 0 && index < appid->num_entries)
@@ -5262,7 +5262,7 @@ dwg_obj_appid_control_get_appid(dwg_obj_appid_control *appid,
 \param 2 int
 */
 char *
-dwg_obj_appid_get_entry_name(dwg_obj_appid *appid, int *error)
+dwg_obj_appid_get_entry_name(const dwg_obj_appid *appid, int *error)
 {
   if (appid)
     {
@@ -5311,7 +5311,7 @@ dwg_obj_appid_set_entry_name(dwg_obj_appid *appid, char * entry_name,
 \param 2 int
 */
 char
-dwg_obj_appid_get_flag(dwg_obj_appid *appid, int *error)
+dwg_obj_appid_get_flag(const dwg_obj_appid *appid, int *error)
 {
   if (appid != 0)
     {
@@ -5357,7 +5357,7 @@ dwg_obj_appid_set_flag(dwg_obj_appid *appid, char flag, int *error)
 \param 2 int
 */
 dwg_obj_appid_control*
-dwg_obj_appid_get_appid_control(dwg_obj_appid *appid, int *error)
+dwg_obj_appid_get_appid_control(const dwg_obj_appid *appid, int *error)
 {
   if (appid != 0)
     {
@@ -5378,7 +5378,7 @@ dwg_obj_appid_get_appid_control(dwg_obj_appid *appid, int *error)
 
 // (utf-8 encoded)
 char *
-dwg_ent_dim_get_block_name(dwg_ent_dim *dim, int *error)
+dwg_ent_dim_get_block_name(const dwg_ent_dim *dim, int *error)
 {
   if (dim != 0)
     {
@@ -5404,7 +5404,7 @@ dwg_ent_dim_get_block_name(dwg_ent_dim *dim, int *error)
 \param 2 int
 */
 BITCODE_BD
-dwg_ent_dim_get_elevation(dwg_ent_dim *dim, int *error)
+dwg_ent_dim_get_elevation(const dwg_ent_dim *dim, int *error)
 {
   if (dim != 0)
     {
@@ -5446,7 +5446,7 @@ dwg_ent_dim_set_elevation(dwg_ent_dim *dim, double elevation, int *error)
 \param 2 int
 */
 char
-dwg_ent_dim_get_flag1(dwg_ent_dim *dim, int *error)
+dwg_ent_dim_get_flag1(const dwg_ent_dim *dim, int *error)
 {
   if (dim != 0)
     {
@@ -5489,7 +5489,7 @@ dwg_ent_dim_set_flag1(dwg_ent_dim *dim, char flag,
 \param 2 int
 */
 BITCODE_BD
-dwg_ent_dim_get_act_measurement(dwg_ent_dim *dim, int *error)
+dwg_ent_dim_get_act_measurement(const dwg_ent_dim *dim, int *error)
 {
   if (dim != 0)
     {
@@ -5532,7 +5532,7 @@ dwg_ent_dim_set_act_measurement(dwg_ent_dim *dim,
 \param 2 int
 */
 BITCODE_BD
-dwg_ent_dim_get_horiz_dir(dwg_ent_dim *dim, int *error)
+dwg_ent_dim_get_horiz_dir(const dwg_ent_dim *dim, int *error)
 {
   if (dim != 0)
     {
@@ -5575,7 +5575,7 @@ dwg_ent_dim_set_horiz_dir(dwg_ent_dim *dim, BITCODE_BD horiz_dir,
 \param 2 int
 */
 BITCODE_BD
-dwg_ent_dim_get_lspace_factor(dwg_ent_dim *dim, int *error)
+dwg_ent_dim_get_lspace_factor(const dwg_ent_dim *dim, int *error)
 {
   if (dim != 0)
     {
@@ -5618,7 +5618,7 @@ dwg_ent_dim_set_lspace_factor(dwg_ent_dim *dim,
 \param 2 int
 */
 BITCODE_BS
-dwg_ent_dim_get_lspace_style(dwg_ent_dim *dim,
+dwg_ent_dim_get_lspace_style(const dwg_ent_dim *dim,
                              int *error)
 {
   if (dim != 0)
@@ -5662,7 +5662,7 @@ dwg_ent_dim_set_lspace_style(dwg_ent_dim *dim,
 \param 2 int
 */
 BITCODE_BS
-dwg_ent_dim_get_attachment(dwg_ent_dim *dim,
+dwg_ent_dim_get_attachment(const dwg_ent_dim *dim,
                            int *error)
 {
   if (dim != 0)
@@ -5731,7 +5731,7 @@ dwg_ent_dim_set_extrusion(dwg_ent_dim *dim,
     \param 3 int ptr &error
 */
 void
-dwg_ent_dim_get_extrusion(dwg_ent_dim *dim,
+dwg_ent_dim_get_extrusion(const dwg_ent_dim *dim,
                           dwg_point_3d *point, int *error)
 {
   if (dim != 0 && point != 0)
@@ -5754,7 +5754,7 @@ dwg_ent_dim_get_extrusion(dwg_ent_dim *dim,
     \param 2 int ptr &error
 */
 char *
-dwg_ent_dim_get_user_text(dwg_ent_dim *dim, int *error)
+dwg_ent_dim_get_user_text(const dwg_ent_dim *dim, int *error)
 {
   if (dim)
     {
@@ -5803,7 +5803,7 @@ dwg_ent_dim_set_user_text(dwg_ent_dim *dim, char * text,
     \param 2 int ptr &error
 */
 BITCODE_BD
-dwg_ent_dim_get_text_rot(dwg_ent_dim *dim, int *error)
+dwg_ent_dim_get_text_rot(const dwg_ent_dim *dim, int *error)
 {
   if (dim != 0)
     {
@@ -5846,7 +5846,7 @@ dwg_ent_dim_set_text_rot(dwg_ent_dim *dim, BITCODE_BD rot,
     \param 2 int ptr &error
 */
 BITCODE_BD
-dwg_ent_dim_get_ins_rotation(dwg_ent_dim *dim, int *error)
+dwg_ent_dim_get_ins_rotation(const dwg_ent_dim *dim, int *error)
 {
   if (dim != 0)
     {
@@ -5889,7 +5889,7 @@ dwg_ent_dim_set_ins_rotation(dwg_ent_dim *dim, BITCODE_BD rot,
 \param 2 int
 */
 char
-dwg_ent_dim_get_flip_arrow1(dwg_ent_dim *dim, int *error)
+dwg_ent_dim_get_flip_arrow1(const dwg_ent_dim *dim, int *error)
 {
   if (dim != 0)
     {
@@ -5932,7 +5932,7 @@ dwg_ent_dim_set_flip_arrow1(dwg_ent_dim *dim,
 \param 2 int
 */
 char
-dwg_ent_dim_get_flip_arrow2(dwg_ent_dim *dim, int *error)
+dwg_ent_dim_get_flip_arrow2(const dwg_ent_dim *dim, int *error)
 {
   if (dim != 0)
     {
@@ -5999,7 +5999,7 @@ dwg_ent_dim_set_text_mid_pt(dwg_ent_dim *dim,
 \param 3 int
 */
 void
-dwg_ent_dim_get_text_mid_pt(dwg_ent_dim *dim,
+dwg_ent_dim_get_text_mid_pt(const dwg_ent_dim *dim,
                             dwg_point_2d *point, int *error)
 {
   if (dim != 0 && point != 0)
@@ -6046,7 +6046,7 @@ dwg_ent_dim_set_ins_scale(dwg_ent_dim *dim,
 \param 3 int
 */
 void
-dwg_ent_dim_get_ins_scale(dwg_ent_dim *dim,
+dwg_ent_dim_get_ins_scale(const dwg_ent_dim *dim,
                           dwg_point_3d *point, int *error)
 {
   if (dim != 0 && point != 0)
@@ -6093,7 +6093,7 @@ dwg_ent_dim_set_clone_ins_pt(dwg_ent_dim *dim, dwg_point_2d *point,
 \param 3 int
 */
 void
-dwg_ent_dim_get_clone_ins_pt(dwg_ent_dim *dim, dwg_point_2d *point,
+dwg_ent_dim_get_clone_ins_pt(const dwg_ent_dim *dim, dwg_point_2d *point,
                                int *error)
 {
   if (dim != 0 && point != 0)
@@ -6119,7 +6119,7 @@ dwg_ent_dim_get_clone_ins_pt(dwg_ent_dim *dim, dwg_point_2d *point,
 \param 2 int
 */
 char
-dwg_ent_dim_ordinate_get_flag2(dwg_ent_dim_ordinate *dim, int *error)
+dwg_ent_dim_ordinate_get_flag2(const dwg_ent_dim_ordinate *dim, int *error)
 {
   if (dim != 0)
     {
@@ -6187,7 +6187,7 @@ dwg_ent_dim_ordinate_set_ucsorigin_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *p
 \param 3 int
 */
 void
-dwg_ent_dim_ordinate_get_ucsorigin_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
+dwg_ent_dim_ordinate_get_ucsorigin_pt(const dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
                                int *error)
 {
   if (dim != 0 && point != 0)
@@ -6235,7 +6235,7 @@ dwg_ent_dim_ordinate_set_feature_location_pt(dwg_ent_dim_ordinate *dim, dwg_poin
 \param 3 int
 */
 void
-dwg_ent_dim_ordinate_get_feature_location_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
+dwg_ent_dim_ordinate_get_feature_location_pt(const dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
                                int *error)
 {
   if (dim != 0 && point != 0)
@@ -6283,7 +6283,7 @@ dwg_ent_dim_ordinate_set_leader_endpt(dwg_ent_dim_ordinate *dim, dwg_point_3d *p
 \param 3 int
 */
 void
-dwg_ent_dim_ordinate_get_leader_endpt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
+dwg_ent_dim_ordinate_get_leader_endpt(const dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
                                int *error)
 {
   if (dim != 0 && point != 0)
@@ -6335,7 +6335,7 @@ dwg_ent_dim_linear_set_def_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
 \param 3 int
 */
 void
-dwg_ent_dim_linear_get_def_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
+dwg_ent_dim_linear_get_def_pt(const dwg_ent_dim_linear *dim, dwg_point_3d *point,
                              int *error)
 {
   if (dim != 0 && point != 0)
@@ -6383,7 +6383,7 @@ dwg_ent_dim_linear_set_13_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
 \param 3 int
 */
 void
-dwg_ent_dim_linear_get_13_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
+dwg_ent_dim_linear_get_13_pt(const dwg_ent_dim_linear *dim, dwg_point_3d *point,
                              int *error)
 {
   if (dim != 0 && point != 0)
@@ -6431,7 +6431,7 @@ dwg_ent_dim_linear_set_14_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
 \param 3 int
 */
 void
-dwg_ent_dim_linear_get_14_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
+dwg_ent_dim_linear_get_14_pt(const dwg_ent_dim_linear *dim, dwg_point_3d *point,
                              int *error)
 {
   if (dim != 0 && point != 0)
@@ -6454,7 +6454,7 @@ dwg_ent_dim_linear_get_14_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
 \param 2 int
 */
 BITCODE_BD
-dwg_ent_dim_linear_get_ext_line_rotation(dwg_ent_dim_linear *dim, int *error)
+dwg_ent_dim_linear_get_ext_line_rotation(const dwg_ent_dim_linear *dim, int *error)
 {
   if (dim != 0)
     {
@@ -6497,7 +6497,7 @@ dwg_ent_dim_linear_set_ext_line_rotation(dwg_ent_dim_linear *dim, BITCODE_BD rot
 \param 2 int
 */
 BITCODE_BD
-dwg_ent_dim_linear_get_dim_rot(dwg_ent_dim_linear *dim, int *error)
+dwg_ent_dim_linear_get_dim_rot(const dwg_ent_dim_linear *dim, int *error)
 {
   if (dim != 0)
     {
@@ -6568,7 +6568,7 @@ dwg_ent_dim_aligned_set_def_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
 \param 3 int
 */
 void
-dwg_ent_dim_aligned_get_def_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
+dwg_ent_dim_aligned_get_def_pt(const dwg_ent_dim_aligned *dim, dwg_point_3d *point,
                               int *error)
 {
   if (dim != 0 && point != 0)
@@ -6616,7 +6616,7 @@ dwg_ent_dim_aligned_set_13_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
 \param 3 int
 */
 void
-dwg_ent_dim_aligned_get_13_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
+dwg_ent_dim_aligned_get_13_pt(const dwg_ent_dim_aligned *dim, dwg_point_3d *point,
                               int *error)
 {
   if (dim != 0 && point != 0)
@@ -6664,7 +6664,7 @@ dwg_ent_dim_aligned_set_14_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
 \param 3 int
 */
 void
-dwg_ent_dim_aligned_get_14_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
+dwg_ent_dim_aligned_get_14_pt(const dwg_ent_dim_aligned *dim, dwg_point_3d *point,
                               int *error)
 {
   if (dim != 0)
@@ -6687,7 +6687,7 @@ dwg_ent_dim_aligned_get_14_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
 \param 2 int
 */
 BITCODE_BD
-dwg_ent_dim_aligned_get_ext_line_rotation(dwg_ent_dim_aligned *dim, int *error)
+dwg_ent_dim_aligned_get_ext_line_rotation(const dwg_ent_dim_aligned *dim, int *error)
 {
   if (dim != 0)
     {
@@ -6759,7 +6759,7 @@ dwg_ent_dim_ang3pt_set_def_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
 \param 3 int
 */
 void
-dwg_ent_dim_ang3pt_get_def_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
+dwg_ent_dim_ang3pt_get_def_pt(const dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
                              int *error)
 {
   if (ang != 0)
@@ -6807,7 +6807,7 @@ dwg_ent_dim_ang3pt_set_13_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
 \param 3 int
 */
 void
-dwg_ent_dim_ang3pt_get_13_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
+dwg_ent_dim_ang3pt_get_13_pt(const dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
                              int *error)
 {
   if (ang != 0 && point != 0)
@@ -6855,7 +6855,7 @@ dwg_ent_dim_ang3pt_set_14_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
 \param 3 int
 */
 void
-dwg_ent_dim_ang3pt_get_14_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
+dwg_ent_dim_ang3pt_get_14_pt(const dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
                              int *error)
 {
   if (ang != 0 && point != 0)
@@ -6904,7 +6904,7 @@ dwg_ent_dim_ang3pt_set_first_arc_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point
 \param 3 int
 */
 void
-dwg_ent_dim_ang3pt_get_first_arc_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
+dwg_ent_dim_ang3pt_get_first_arc_pt(const dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
                              int *error)
 {
   if (ang != 0 && point != 0)
@@ -6947,7 +6947,7 @@ dwg_ent_dim_ang2ln_set_def_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
 
 /// Returns dim ang2ln 10 def point
 void
-dwg_ent_dim_ang2ln_get_def_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
+dwg_ent_dim_ang2ln_get_def_pt(const dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
                              int *error)
 {
   if (ang != 0 && point != 0)
@@ -6985,7 +6985,7 @@ dwg_ent_dim_ang2ln_set_13_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
 
 /// Returns dim ang2ln 13 point
 void
-dwg_ent_dim_ang2ln_get_13_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
+dwg_ent_dim_ang2ln_get_13_pt(const dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
                              int *error)
 {
   if (ang != 0 && point != 0)
@@ -7023,7 +7023,7 @@ dwg_ent_dim_ang2ln_set_14_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
 
 /// Returns dim ang2ln 14 point
 void
-dwg_ent_dim_ang2ln_get_14_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
+dwg_ent_dim_ang2ln_get_14_pt(const dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
                              int *error)
 {
   if (ang != 0 && point != 0)
@@ -7062,7 +7062,7 @@ dwg_ent_dim_ang2ln_set_first_arc_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point
 
 /// Returns dim ang2ln first_arc 15 point
 void
-dwg_ent_dim_ang2ln_get_first_arc_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
+dwg_ent_dim_ang2ln_get_first_arc_pt(const dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
                              int *error)
 {
   if (ang != 0 && point != 0)
@@ -7100,7 +7100,7 @@ dwg_ent_dim_ang2ln_set_16_pt(dwg_ent_dim_ang2ln *ang, dwg_point_2d *point,
 
 /// Returns dim ang2ln 16 point
 void
-dwg_ent_dim_ang2ln_get_16_pt(dwg_ent_dim_ang2ln *ang, dwg_point_2d *point,
+dwg_ent_dim_ang2ln_get_16_pt(const dwg_ent_dim_ang2ln *ang, dwg_point_2d *point,
                              int *error)
 {
   if (ang != 0 && point != 0)
@@ -7142,7 +7142,7 @@ dwg_ent_dim_radius_set_def_pt(dwg_ent_dim_radius *radius, dwg_point_3d *point,
 
 /// Returns dim radius def 10 point
 void
-dwg_ent_dim_radius_get_def_pt(dwg_ent_dim_radius *radius, dwg_point_3d *point,
+dwg_ent_dim_radius_get_def_pt(const dwg_ent_dim_radius *radius, dwg_point_3d *point,
                              int *error)
 {
   if (radius != 0 && point != 0)
@@ -7181,7 +7181,7 @@ dwg_ent_dim_radius_set_first_arc_pt(dwg_ent_dim_radius *radius, dwg_point_3d *po
 
 /// Returns dim radius first_arc 15 point
 void
-dwg_ent_dim_radius_get_first_arc_pt(dwg_ent_dim_radius *radius, dwg_point_3d *point,
+dwg_ent_dim_radius_get_first_arc_pt(const dwg_ent_dim_radius *radius, dwg_point_3d *point,
                              int *error)
 {
   if (radius != 0 && point != 0)
@@ -7200,7 +7200,7 @@ dwg_ent_dim_radius_get_first_arc_pt(dwg_ent_dim_radius *radius, dwg_point_3d *po
 
 /// Returns dim radius leader length
 BITCODE_BD
-dwg_ent_dim_radius_get_leader_length(dwg_ent_dim_radius *radius, int *error)
+dwg_ent_dim_radius_get_leader_length(const dwg_ent_dim_radius *radius, int *error)
 {
   if (radius != 0)
     {
@@ -7258,7 +7258,7 @@ dwg_ent_dim_diameter_set_def_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *point,
 
 /// Returns dim diameter def 10 point
 void
-dwg_ent_dim_diameter_get_def_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *point,
+dwg_ent_dim_diameter_get_def_pt(const dwg_ent_dim_diameter *dia, dwg_point_3d *point,
                                int *error)
 {
   if (dia != 0 && point != 0)
@@ -7297,7 +7297,7 @@ dwg_ent_dim_diameter_set_first_arc_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *p
 
 /// Returns dim diameter first_arc 15 point
 void
-dwg_ent_dim_diameter_get_first_arc_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *point,
+dwg_ent_dim_diameter_get_first_arc_pt(const dwg_ent_dim_diameter *dia, dwg_point_3d *point,
                                int *error)
 {
   if (dia != 0 && point != 0)
@@ -7316,7 +7316,7 @@ dwg_ent_dim_diameter_get_first_arc_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *p
 
 /// Returns dim diameter leader length
 BITCODE_BD
-dwg_ent_dim_diameter_get_leader_length(dwg_ent_dim_diameter *dia, int *error)
+dwg_ent_dim_diameter_get_leader_length(const dwg_ent_dim_diameter *dia, int *error)
 {
   if (dia != 0)
     {
@@ -7358,7 +7358,7 @@ dwg_ent_dim_diameter_set_leader_length(dwg_ent_dim_diameter *dia,
 \param 2 int
 */
 char
-dwg_ent_endblk_get_dummy(dwg_ent_endblk *endblk, int *error)
+dwg_ent_endblk_get_dummy(const dwg_ent_endblk *endblk, int *error)
 {
   if (endblk != 0)
     {
@@ -7404,7 +7404,7 @@ dwg_ent_endblk_set_dummy(dwg_ent_endblk *endblk, char dummy, int *error)
 \param 2 int
 */
 char
-dwg_ent_seqend_get_dummy(dwg_ent_seqend *seqend, int *error)
+dwg_ent_seqend_get_dummy(const dwg_ent_seqend *seqend, int *error)
 {
   if (seqend != 0)
     {
@@ -7446,7 +7446,7 @@ dwg_ent_seqend_set_dummy(dwg_ent_seqend *seqend, char dummy, int *error)
 
 /// Returns shape ins point
 void
-dwg_ent_shape_get_ins_pt(dwg_ent_shape *shape, dwg_point_3d *point, int *error)
+dwg_ent_shape_get_ins_pt(const dwg_ent_shape *shape, dwg_point_3d *point, int *error)
 {
   if (shape != 0 && point != 0)
     {
@@ -7482,7 +7482,7 @@ dwg_ent_shape_set_ins_pt(dwg_ent_shape *shape, dwg_point_3d *point, int *error)
 
 /// Returns shape scale
 BITCODE_BD
-dwg_ent_shape_get_scale(dwg_ent_shape *shape, int *error)
+dwg_ent_shape_get_scale(const dwg_ent_shape *shape, int *error)
 {
   if (shape != 0)
     {
@@ -7515,7 +7515,7 @@ dwg_ent_shape_set_scale(dwg_ent_shape *shape, BITCODE_BD scale, int *error)
 
 /// Returns shape rotation
 BITCODE_BD
-dwg_ent_shape_get_rotation(dwg_ent_shape *shape, int *error)
+dwg_ent_shape_get_rotation(const dwg_ent_shape *shape, int *error)
 {
   if (shape != 0)
     {
@@ -7548,7 +7548,7 @@ dwg_ent_shape_set_rotation(dwg_ent_shape *shape, BITCODE_BD rotation, int *error
 
 /// Returns shape width factor
 BITCODE_BD
-dwg_ent_shape_get_width_factor(dwg_ent_shape *shape, int *error)
+dwg_ent_shape_get_width_factor(const dwg_ent_shape *shape, int *error)
 {
   if (shape != 0)
     {
@@ -7582,7 +7582,7 @@ dwg_ent_shape_set_width_factor(dwg_ent_shape *shape, BITCODE_BD width_factor,
 
 /// Returns shape oblique
 BITCODE_BD
-dwg_ent_shape_get_oblique(dwg_ent_shape *shape, int *error)
+dwg_ent_shape_get_oblique(const dwg_ent_shape *shape, int *error)
 {
   if (shape != 0)
     {
@@ -7615,7 +7615,7 @@ dwg_ent_shape_set_oblique(dwg_ent_shape *shape, BITCODE_BD oblique, int *error)
 
 /// Returns shape thickness
 BITCODE_BD
-dwg_ent_shape_get_thickness(dwg_ent_shape *shape, int *error)
+dwg_ent_shape_get_thickness(const dwg_ent_shape *shape, int *error)
 {
   if (shape != 0)
     {
@@ -7649,7 +7649,7 @@ dwg_ent_shape_set_thickness(dwg_ent_shape *shape, BITCODE_BD thickness,
 
 /// Returns shape shape no
 BITCODE_BD
-dwg_ent_shape_get_shape_no(dwg_ent_shape *shape, int *error)
+dwg_ent_shape_get_shape_no(const dwg_ent_shape *shape, int *error)
 {
   if (shape != 0)
     {
@@ -7682,7 +7682,7 @@ dwg_ent_shape_set_shape_no(dwg_ent_shape *shape, BITCODE_BD no, int *error)
 
 /// Returns shape extrusion
 void
-dwg_ent_shape_get_extrusion(dwg_ent_shape *shape, dwg_point_3d *point,
+dwg_ent_shape_get_extrusion(const dwg_ent_shape *shape, dwg_point_3d *point,
                             int *error)
 {
   if (shape != 0 && point != 0)
@@ -7744,7 +7744,7 @@ dwg_ent_mtext_set_insertion_pt(dwg_ent_mtext *mtext, dwg_point_3d *point,
 
 /// Returns mtext insertion point
 void
-dwg_ent_mtext_get_insertion_pt(dwg_ent_mtext *mtext, dwg_point_3d *point,
+dwg_ent_mtext_get_insertion_pt(const dwg_ent_mtext *mtext, dwg_point_3d *point,
                                int *error)
 {
   if (mtext != 0 && point != 0)
@@ -7784,7 +7784,7 @@ dwg_ent_mtext_set_extrusion(dwg_ent_mtext *mtext, dwg_point_3d *point,
 
 /// Returns mtext extrusion
 void
-dwg_ent_mtext_get_extrusion(dwg_ent_mtext *mtext, dwg_point_3d *point,
+dwg_ent_mtext_get_extrusion(const dwg_ent_mtext *mtext, dwg_point_3d *point,
                             int *error)
 {
   if (mtext != 0 && point != 0)
@@ -7824,7 +7824,7 @@ dwg_ent_mtext_set_x_axis_dir(dwg_ent_mtext *mtext, dwg_point_3d *point,
 
 /// Returns mtext x axis dir
 void
-dwg_ent_mtext_get_x_axis_dir(dwg_ent_mtext *mtext, dwg_point_3d *point,
+dwg_ent_mtext_get_x_axis_dir(const dwg_ent_mtext *mtext, dwg_point_3d *point,
                              int *error)
 {
   if (mtext != 0 && point != 0)
@@ -7861,7 +7861,7 @@ dwg_ent_mtext_set_rect_height(dwg_ent_mtext *mtext, BITCODE_BD rect_height,
 
 /// Returns mtext rect height
 BITCODE_BD
-dwg_ent_mtext_get_rect_height(dwg_ent_mtext *mtext, int *error)
+dwg_ent_mtext_get_rect_height(const dwg_ent_mtext *mtext, int *error)
 {
   if (mtext != 0)
     {
@@ -7896,7 +7896,7 @@ dwg_ent_mtext_set_rect_width(dwg_ent_mtext *mtext, BITCODE_BD rect_width,
 
 /// Returns mtext rect width
 BITCODE_BD
-dwg_ent_mtext_get_rect_width(dwg_ent_mtext *mtext, int *error)
+dwg_ent_mtext_get_rect_width(const dwg_ent_mtext *mtext, int *error)
 {
   if (mtext != 0)
     {
@@ -7931,7 +7931,7 @@ dwg_ent_mtext_set_text_height(dwg_ent_mtext *mtext, BITCODE_BD text_height,
 
 /// Returns mtext text height
 BITCODE_BD
-dwg_ent_mtext_get_text_height(dwg_ent_mtext *mtext, int *error)
+dwg_ent_mtext_get_text_height(const dwg_ent_mtext *mtext, int *error)
 {
   if (mtext != 0)
     {
@@ -7948,7 +7948,7 @@ dwg_ent_mtext_get_text_height(dwg_ent_mtext *mtext, int *error)
 
 /// Returns mtext attachment
 BITCODE_BS
-dwg_ent_mtext_get_attachment(dwg_ent_mtext *mtext, int *error)
+dwg_ent_mtext_get_attachment(const dwg_ent_mtext *mtext, int *error)
 {
   if (mtext != 0)
     {
@@ -7983,7 +7983,7 @@ dwg_ent_mtext_set_attachment(dwg_ent_mtext *mtext, BITCODE_BS attachment,
 
 /// Returns mtext drawing dir
 BITCODE_BS
-dwg_ent_mtext_get_drawing_dir(dwg_ent_mtext *mtext, int *error)
+dwg_ent_mtext_get_drawing_dir(const dwg_ent_mtext *mtext, int *error)
 {
   if (mtext != 0)
     {
@@ -8018,7 +8018,7 @@ dwg_ent_mtext_set_drawing_dir(dwg_ent_mtext *mtext, BITCODE_BS dir,
 
 /// Returns mtext extents_height
 BITCODE_BD
-dwg_ent_mtext_get_extents_height(dwg_ent_mtext *mtext, int *error)
+dwg_ent_mtext_get_extents_height(const dwg_ent_mtext *mtext, int *error)
 {
   if (mtext != 0)
     {
@@ -8052,7 +8052,7 @@ dwg_ent_mtext_set_extents_height(dwg_ent_mtext *mtext, BITCODE_BD ht, int *error
 
 /// Returns mtext extents width
 BITCODE_BD
-dwg_ent_mtext_get_extents_width(dwg_ent_mtext *mtext, int *error)
+dwg_ent_mtext_get_extents_width(const dwg_ent_mtext *mtext, int *error)
 {
   if (mtext != 0)
     {
@@ -8086,7 +8086,7 @@ dwg_ent_mtext_set_extents_width(dwg_ent_mtext *mtext, BITCODE_BD wid, int *error
 
 /// Returns mtext text value (utf-8 encoded)
 char *
-dwg_ent_mtext_get_text(dwg_ent_mtext *ent, int *error)
+dwg_ent_mtext_get_text(const dwg_ent_mtext *ent, int *error)
 {
   if (ent)
     {
@@ -8126,7 +8126,7 @@ dwg_ent_mtext_set_text(dwg_ent_mtext *ent, char *text, int *error)
 
 /// Returns mtext linespace style
 BITCODE_BS
-dwg_ent_mtext_get_linespace_style(dwg_ent_mtext *mtext, int *error)
+dwg_ent_mtext_get_linespace_style(const dwg_ent_mtext *mtext, int *error)
 {
   if (mtext != 0)
     {
@@ -8161,7 +8161,7 @@ dwg_ent_mtext_set_linespace_style(dwg_ent_mtext *mtext, BITCODE_BS style,
 
 /// Returns mtext linespace factor
 BITCODE_BD
-dwg_ent_mtext_get_linespace_factor(dwg_ent_mtext *mtext, int *error)
+dwg_ent_mtext_get_linespace_factor(const dwg_ent_mtext *mtext, int *error)
 {
   if (mtext != 0)
     {
@@ -8216,7 +8216,7 @@ dwg_ent_leader_set_annot_type(dwg_ent_leader *leader, BITCODE_BS type,
 
 /// Returns leader annot type
 BITCODE_BS
-dwg_ent_leader_get_annot_type(dwg_ent_leader *leader, int *error)
+dwg_ent_leader_get_annot_type(const dwg_ent_leader *leader, int *error)
 {
   if (leader != 0)
     {
@@ -8250,7 +8250,7 @@ dwg_ent_leader_set_path_type(dwg_ent_leader *leader, BITCODE_BS type,
 
 /// Returns leader path type
 BITCODE_BS
-dwg_ent_leader_get_path_type(dwg_ent_leader *leader, int *error)
+dwg_ent_leader_get_path_type(const dwg_ent_leader *leader, int *error)
 {
   if (leader != 0)
     {
@@ -8267,7 +8267,7 @@ dwg_ent_leader_get_path_type(dwg_ent_leader *leader, int *error)
 
 /// Returns leader numpts
 BITCODE_BL
-dwg_ent_leader_get_numpts(dwg_ent_leader *leader, int *error)
+dwg_ent_leader_get_numpts(const dwg_ent_leader *leader, int *error)
 {
   if (leader != 0)
     {
@@ -8321,7 +8321,7 @@ dwg_ent_leader_set_origin(dwg_ent_leader *leader, dwg_point_3d *point,
 
 /// Returns leader origin
 void
-dwg_ent_leader_get_origin(dwg_ent_leader *leader, dwg_point_3d *point,
+dwg_ent_leader_get_origin(const dwg_ent_leader *leader, dwg_point_3d *point,
                           int *error)
 {
   if (leader != 0 && point != 0)
@@ -8361,7 +8361,7 @@ dwg_ent_leader_set_extrusion(dwg_ent_leader *leader, dwg_point_3d *point,
 
 /// Returns leader extrusion value
 void
-dwg_ent_leader_get_extrusion(dwg_ent_leader *leader, dwg_point_3d *point,
+dwg_ent_leader_get_extrusion(const dwg_ent_leader *leader, dwg_point_3d *point,
                              int *error)
 {
   if (leader != 0 && point != 0)
@@ -8401,7 +8401,7 @@ dwg_ent_leader_set_x_direction(dwg_ent_leader *leader, dwg_point_3d *point,
 
 /// Returns leader x direction value
 void
-dwg_ent_leader_get_x_direction(dwg_ent_leader *leader, dwg_point_3d *point,
+dwg_ent_leader_get_x_direction(const dwg_ent_leader *leader, dwg_point_3d *point,
                                int *error)
 {
   if (leader != 0 && point != 0)
@@ -8441,7 +8441,7 @@ dwg_ent_leader_set_offset_to_block_ins_pt(dwg_ent_leader *leader,
 
 /// Returns leader offset to block ins point
 void
-dwg_ent_leader_get_offset_to_block_ins_pt(dwg_ent_leader *leader,
+dwg_ent_leader_get_offset_to_block_ins_pt(const dwg_ent_leader *leader,
                                           dwg_point_3d *point, int *error)
 {
   if (leader != 0 && point != 0)
@@ -8478,7 +8478,7 @@ dwg_ent_leader_set_dimgap(dwg_ent_leader *leader, BITCODE_BD dimgap, int *error)
 
 /// Returns leader dimgap
 BITCODE_BD
-dwg_ent_leader_get_dimgap(dwg_ent_leader *leader, int *error)
+dwg_ent_leader_get_dimgap(const dwg_ent_leader *leader, int *error)
 {
   if (leader != 0)
     {
@@ -8513,7 +8513,7 @@ dwg_ent_leader_set_box_height(dwg_ent_leader *leader, BITCODE_BD height,
 
 /// Returns leader box height
 BITCODE_BD
-dwg_ent_leader_get_box_height(dwg_ent_leader *leader, int *error)
+dwg_ent_leader_get_box_height(const dwg_ent_leader *leader, int *error)
 {
   if (leader != 0)
     {
@@ -8547,7 +8547,7 @@ dwg_ent_leader_set_box_width(dwg_ent_leader *leader, BITCODE_BD width, int *erro
 
 /// Returns leader box width
 BITCODE_BD
-dwg_ent_leader_get_box_width(dwg_ent_leader *leader, int *error)
+dwg_ent_leader_get_box_width(const dwg_ent_leader *leader, int *error)
 {
   if (leader != 0)
     {
@@ -8582,7 +8582,7 @@ dwg_ent_leader_set_hook_line_on_x_dir(dwg_ent_leader *leader, char hook,
 
 /// Returns leader hook line on x dir value
 char
-dwg_ent_leader_get_hook_line_on_x_dir(dwg_ent_leader *leader, int *error)
+dwg_ent_leader_get_hook_line_on_x_dir(const dwg_ent_leader *leader, int *error)
 {
   if (leader != 0)
     {
@@ -8616,7 +8616,7 @@ dwg_ent_leader_set_arrowhead_on(dwg_ent_leader *leader, char arrow, int *error)
 
 /// Returns leader arrow head on
 char
-dwg_ent_leader_get_arrowhead_on(dwg_ent_leader *leader, int *error)
+dwg_ent_leader_get_arrowhead_on(const dwg_ent_leader *leader, int *error)
 {
   if (leader != 0)
     {
@@ -8651,7 +8651,7 @@ dwg_ent_leader_set_arrowhead_type(dwg_ent_leader *leader, BITCODE_BS type,
 
 /// Returns leader arrowhead type
 BITCODE_BS
-dwg_ent_leader_get_arrowhead_type(dwg_ent_leader *leader, int *error)
+dwg_ent_leader_get_arrowhead_type(const dwg_ent_leader *leader, int *error)
 {
   if (leader != 0)
     {
@@ -8684,7 +8684,7 @@ dwg_ent_leader_set_dimasz(dwg_ent_leader *leader, BITCODE_BD dimasz, int *error)
 
 /// Returns leader dimasz
 BITCODE_BD
-dwg_ent_leader_get_dimasz(dwg_ent_leader *leader, int *error)
+dwg_ent_leader_get_dimasz(const dwg_ent_leader *leader, int *error)
 {
   if (leader != 0)
     {
@@ -8718,7 +8718,7 @@ dwg_ent_leader_set_byblock_color(dwg_ent_leader *leader, BITCODE_BS color,
 
 /// Returns leader byblock color
 BITCODE_BS
-dwg_ent_leader_get_byblock_color(dwg_ent_leader *leader, int *error)
+dwg_ent_leader_get_byblock_color(const dwg_ent_leader *leader, int *error)
 {
   if (leader != 0)
     {
@@ -8756,7 +8756,7 @@ dwg_ent_tolerance_set_height(dwg_ent_tolerance *tol, BITCODE_BD height,
 
 /// Returns tolerance height
 BITCODE_BD
-dwg_ent_tolerance_get_height(dwg_ent_tolerance *tol, int *error)
+dwg_ent_tolerance_get_height(const dwg_ent_tolerance *tol, int *error)
 {
   if (tol != 0)
     {
@@ -8791,7 +8791,7 @@ dwg_ent_tolerance_set_dimgap(dwg_ent_tolerance *tol, BITCODE_BD dimgap,
 
 /// Returns tolerance dimgap
 BITCODE_BD
-dwg_ent_tolerance_get_dimgap(dwg_ent_tolerance *tol, int *error)
+dwg_ent_tolerance_get_dimgap(const dwg_ent_tolerance *tol, int *error)
 {
   if (tol != 0)
     {
@@ -8828,7 +8828,7 @@ dwg_ent_tolerance_set_ins_pt(dwg_ent_tolerance *tol, dwg_point_3d *point,
 
 /// Returns tolerance insertion point
 void
-dwg_ent_tolerance_get_ins_pt(dwg_ent_tolerance *tol, dwg_point_3d *point,
+dwg_ent_tolerance_get_ins_pt(const dwg_ent_tolerance *tol, dwg_point_3d *point,
                              int *error)
 {
   if (tol != 0 && point != 0)
@@ -8868,7 +8868,7 @@ dwg_ent_tolerance_set_x_direction(dwg_ent_tolerance *tol, dwg_point_3d *point,
 
 /// Returns tolerance x direction
 void
-dwg_ent_tolerance_get_x_direction(dwg_ent_tolerance *tol, dwg_point_3d *point,
+dwg_ent_tolerance_get_x_direction(const dwg_ent_tolerance *tol, dwg_point_3d *point,
                                   int *error)
 {
   if (tol != 0 && point != 0)
@@ -8908,7 +8908,7 @@ dwg_ent_tolerance_set_extrusion(dwg_ent_tolerance *tol, dwg_point_3d *point,
 
 /// Returns tolerance extrusion
 void
-dwg_ent_tolerance_get_extrusion(dwg_ent_tolerance *tol, dwg_point_3d *point,
+dwg_ent_tolerance_get_extrusion(const dwg_ent_tolerance *tol, dwg_point_3d *point,
                                 int *error)
 {
   if (tol != 0 && point != 0)
@@ -8949,7 +8949,7 @@ dwg_ent_tolerance_set_text_string(dwg_ent_tolerance *tol, char * string,
 
 /// Returns tolerance text string (utf-8 encoded)
 char *
-dwg_ent_tolerance_get_text_string(dwg_ent_tolerance *tol, int *error)
+dwg_ent_tolerance_get_text_string(const dwg_ent_tolerance *tol, int *error)
 {
   if (tol)
     {
@@ -8972,7 +8972,7 @@ dwg_ent_tolerance_get_text_string(dwg_ent_tolerance *tol, int *error)
 ********************************************************************/
 /// Returns lwpline flags
 BITCODE_BS
-dwg_ent_lwpline_get_flag(dwg_ent_lwpline *lwpline, int *error)
+dwg_ent_lwpline_get_flag(const dwg_ent_lwpline *lwpline, int *error)
 {
   if (lwpline != 0)
     {
@@ -9005,7 +9005,7 @@ dwg_ent_lwpline_set_flag(dwg_ent_lwpline *lwpline, char flags, int *error)
 
 /// Returns lwpline const width
 BITCODE_BD
-dwg_ent_lwpline_get_const_width(dwg_ent_lwpline *lwpline, int *error)
+dwg_ent_lwpline_get_const_width(const dwg_ent_lwpline *lwpline, int *error)
 {
   if (lwpline != 0)
     {
@@ -9038,7 +9038,7 @@ dwg_ent_lwpline_set_const_width(dwg_ent_lwpline *lwpline, BITCODE_BD const_width
 }
 /// Returns lwpline elevation
 BITCODE_BD
-dwg_ent_lwpline_get_elevation(dwg_ent_lwpline *lwpline, int *error)
+dwg_ent_lwpline_get_elevation(const dwg_ent_lwpline *lwpline, int *error)
 {
   if (lwpline != 0)
     {
@@ -9071,7 +9071,7 @@ dwg_ent_lwpline_set_elevation(dwg_ent_lwpline *lwpline, BITCODE_BD elevation,
 }
 /// Returns lwpline thickness
 BITCODE_BD
-dwg_ent_lwpline_get_thickness(dwg_ent_lwpline *lwpline, int *error)
+dwg_ent_lwpline_get_thickness(const dwg_ent_lwpline *lwpline, int *error)
 {
   if (lwpline != 0)
     {
@@ -9104,7 +9104,7 @@ dwg_ent_lwpline_set_thickness(dwg_ent_lwpline *lwpline, BITCODE_BD thickness,
 }
 /// Returns lwpline point count
 BITCODE_BL
-dwg_ent_lwpline_get_numpoints(dwg_ent_lwpline *lwpline, int *error)
+dwg_ent_lwpline_get_numpoints(const dwg_ent_lwpline *lwpline, int *error)
 {
   if (lwpline != 0)
     {
@@ -9121,7 +9121,7 @@ dwg_ent_lwpline_get_numpoints(dwg_ent_lwpline *lwpline, int *error)
 
 /// Returns lwpline bulges count
 BITCODE_BL
-dwg_ent_lwpline_get_numbulges(dwg_ent_lwpline *lwpline, int *error)
+dwg_ent_lwpline_get_numbulges(const dwg_ent_lwpline *lwpline, int *error)
 {
   if (lwpline != 0)
     {
@@ -9139,7 +9139,7 @@ dwg_ent_lwpline_get_numbulges(dwg_ent_lwpline *lwpline, int *error)
 
 /// Returns lwpline width count
 BITCODE_BL
-dwg_ent_lwpline_get_numwidths(dwg_ent_lwpline *lwpline, int *error)
+dwg_ent_lwpline_get_numwidths(const dwg_ent_lwpline *lwpline, int *error)
 {
   if (lwpline != 0)
     {
@@ -9157,7 +9157,7 @@ dwg_ent_lwpline_get_numwidths(dwg_ent_lwpline *lwpline, int *error)
 
 /// Returns lwpline normal
 void
-dwg_ent_lwpline_get_normal(dwg_ent_lwpline *lwpline, dwg_point_3d *point,
+dwg_ent_lwpline_get_normal(const dwg_ent_lwpline *lwpline, dwg_point_3d *point,
                            int *error)
 {
   if (lwpline != 0 && point != 0)
@@ -9194,7 +9194,7 @@ dwg_ent_lwpline_set_normal(dwg_ent_lwpline *lwpline, dwg_point_3d *point,
 }
 /// Returns lwpline bulges
 BITCODE_BD *
-dwg_ent_lwpline_get_bulges(dwg_ent_lwpline *lwpline, int *error)
+dwg_ent_lwpline_get_bulges(const dwg_ent_lwpline *lwpline, int *error)
 {
   BITCODE_BD *ptx = (BITCODE_BD*) malloc(sizeof(BITCODE_BD)* lwpline->num_bulges);
   if (ptx != 0)
@@ -9216,7 +9216,7 @@ dwg_ent_lwpline_get_bulges(dwg_ent_lwpline *lwpline, int *error)
 
 /// Returns lwpline points
 dwg_point_2d *
-dwg_ent_lwpline_get_points(dwg_ent_lwpline *lwpline, int *error)
+dwg_ent_lwpline_get_points(const dwg_ent_lwpline *lwpline, int *error)
 {
   dwg_point_2d *ptx = (dwg_point_2d*) malloc(sizeof(dwg_point_2d)* lwpline->num_points);
   if (ptx != 0)
@@ -9240,7 +9240,7 @@ dwg_ent_lwpline_get_points(dwg_ent_lwpline *lwpline, int *error)
 
 /// Returns lwpline widths
 dwg_lwpline_widths *
-dwg_ent_lwpline_get_widths(dwg_ent_lwpline *lwpline, int *error)
+dwg_ent_lwpline_get_widths(const dwg_ent_lwpline *lwpline, int *error)
 {
   dwg_lwpline_widths *ptx = (dwg_lwpline_widths*)
     malloc(sizeof(dwg_lwpline_widths)* lwpline->num_widths);
@@ -9269,7 +9269,7 @@ dwg_ent_lwpline_get_widths(dwg_ent_lwpline *lwpline, int *error)
 
 /// Returns ole2frame flags
 BITCODE_BS
-dwg_ent_ole2frame_get_flag(dwg_ent_ole2frame *frame, int *error)
+dwg_ent_ole2frame_get_flag(const dwg_ent_ole2frame *frame, int *error)
 {
   if (frame != 0)
     {
@@ -9303,7 +9303,7 @@ dwg_ent_ole2frame_set_flag(dwg_ent_ole2frame *frame, BITCODE_BS flags,
 
 /// Returns ole2frame mode
 BITCODE_BS
-dwg_ent_ole2frame_get_mode(dwg_ent_ole2frame *frame, int *error)
+dwg_ent_ole2frame_get_mode(const dwg_ent_ole2frame *frame, int *error)
 {
   if (frame != 0)
     {
@@ -9337,7 +9337,7 @@ dwg_ent_ole2frame_set_mode(dwg_ent_ole2frame *frame, BITCODE_BS mode,
 
 /// Returns ole2frame data length
 BITCODE_BL
-dwg_ent_ole2frame_get_data_length(dwg_ent_ole2frame *frame, int *error)
+dwg_ent_ole2frame_get_data_length(const dwg_ent_ole2frame *frame, int *error)
 {
   if (frame != 0)
     {
@@ -9371,7 +9371,7 @@ dwg_ent_ole2frame_set_data_length(dwg_ent_ole2frame *frame, BITCODE_BL data_leng
 
 /// Returns ole2frame data (binary)
 char *
-dwg_ent_ole2frame_get_data(dwg_ent_ole2frame *frame, int *error)
+dwg_ent_ole2frame_get_data(const dwg_ent_ole2frame *frame, int *error)
 {
   if (frame != 0)
     {
@@ -9408,7 +9408,7 @@ dwg_ent_ole2frame_set_data(dwg_ent_ole2frame *frame, char * data, int *error)
 
 
 BITCODE_BL
-dwg_obj_proxy_get_class_id(dwg_obj_proxy *proxy, int *error)
+dwg_obj_proxy_get_class_id(const dwg_obj_proxy *proxy, int *error)
 {
   if (proxy != 0)
     {
@@ -9440,7 +9440,7 @@ dwg_obj_proxy_set_class_id(dwg_obj_proxy *proxy, BITCODE_BL class_id,
 }
 
 BITCODE_BL
-dwg_obj_proxy_get_version(dwg_obj_proxy *proxy, int *error)
+dwg_obj_proxy_get_version(const dwg_obj_proxy *proxy, int *error)
 {
   if (proxy != 0)
     {
@@ -9473,7 +9473,7 @@ dwg_obj_proxy_set_version(dwg_obj_proxy *proxy,
 }
 
 BITCODE_B
-dwg_obj_proxy_get_from_dxf(dwg_obj_proxy *proxy, int *error)
+dwg_obj_proxy_get_from_dxf(const dwg_obj_proxy *proxy, int *error)
 {
   if (proxy != 0)
     {
@@ -9506,7 +9506,7 @@ dwg_obj_proxy_set_from_dxf(dwg_obj_proxy *proxy,
 }
 
 char*
-dwg_obj_proxy_get_data(dwg_obj_proxy *proxy, int *error)
+dwg_obj_proxy_get_data(const dwg_obj_proxy *proxy, int *error)
 {
   if (proxy != 0)
     {
@@ -9538,7 +9538,7 @@ dwg_obj_proxy_set_data(dwg_obj_proxy *proxy, char* data,
 }
 
 dwg_object_ref*
-dwg_obj_proxy_get_parenthandle(dwg_obj_proxy *proxy, int *error)
+dwg_obj_proxy_get_parenthandle(const dwg_obj_proxy *proxy, int *error)
 {
   if (proxy != 0)
     {
@@ -9554,7 +9554,7 @@ dwg_obj_proxy_get_parenthandle(dwg_obj_proxy *proxy, int *error)
 }
 
 dwg_object_ref**
-dwg_obj_proxy_get_reactors(dwg_obj_proxy *proxy, int *error)
+dwg_obj_proxy_get_reactors(const dwg_obj_proxy *proxy, int *error)
 {
   if (proxy != 0)
     {
@@ -9570,7 +9570,7 @@ dwg_obj_proxy_get_reactors(dwg_obj_proxy *proxy, int *error)
 }
 
 dwg_object_ref**
-dwg_obj_proxy_get_objid_object_handles(dwg_obj_proxy *proxy, int *error)
+dwg_obj_proxy_get_objid_object_handles(const dwg_obj_proxy *proxy, int *error)
 {
   if (proxy != 0)
     {
@@ -9591,7 +9591,7 @@ dwg_obj_proxy_get_objid_object_handles(dwg_obj_proxy *proxy, int *error)
 
 
 BITCODE_BL
-dwg_obj_xrecord_get_num_databytes(dwg_obj_xrecord *xrecord, int *error)
+dwg_obj_xrecord_get_num_databytes(const dwg_obj_xrecord *xrecord, int *error)
 {
   if (xrecord != 0)
     {
@@ -9623,7 +9623,7 @@ dwg_obj_xrecord_set_num_databytes(dwg_obj_xrecord *xrecord, BITCODE_BL num_datab
 }
 
 BITCODE_BS
-dwg_obj_xrecord_get_cloning_flags(dwg_obj_xrecord *xrecord, int *error)
+dwg_obj_xrecord_get_cloning_flags(const dwg_obj_xrecord *xrecord, int *error)
 {
   if (xrecord != 0)
     {
@@ -9655,7 +9655,7 @@ dwg_obj_xrecord_set_cloning_flags(dwg_obj_xrecord *xrecord, BITCODE_BS cloning_f
 }
 
 BITCODE_BL
-dwg_obj_xrecord_get_num_eed(dwg_obj_xrecord *xrecord, int *error)
+dwg_obj_xrecord_get_num_eed(const dwg_obj_xrecord *xrecord, int *error)
 {
   if (xrecord != 0)
     {
@@ -9688,7 +9688,7 @@ dwg_obj_xrecord_set_num_eed(dwg_obj_xrecord *xrecord,
 }
 
 Dwg_Resbuf*
-dwg_obj_xrecord_get_xdata(dwg_obj_xrecord *xrecord, int *error)
+dwg_obj_xrecord_get_xdata(const dwg_obj_xrecord *xrecord, int *error)
 {
   if (xrecord != 0)
     {
@@ -9720,7 +9720,7 @@ dwg_obj_xrecord_set_xdata(dwg_obj_xrecord *xrecord, Dwg_Resbuf* xdata,
 }
 
 dwg_object_ref*
-dwg_obj_xrecord_get_parenthandle(dwg_obj_xrecord *xrecord, int *error)
+dwg_obj_xrecord_get_parenthandle(const dwg_obj_xrecord *xrecord, int *error)
 {
   if (xrecord != 0)
     {
@@ -9736,7 +9736,7 @@ dwg_obj_xrecord_get_parenthandle(dwg_obj_xrecord *xrecord, int *error)
 }
 
 dwg_object_ref**
-dwg_obj_xrecord_get_reactors(dwg_obj_xrecord *xrecord, int *error)
+dwg_obj_xrecord_get_reactors(const dwg_obj_xrecord *xrecord, int *error)
 {
   if (xrecord != 0)
     {
@@ -9752,7 +9752,7 @@ dwg_obj_xrecord_get_reactors(dwg_obj_xrecord *xrecord, int *error)
 }
 
 BITCODE_BL
-dwg_obj_xrecord_get_num_objid_handles(dwg_obj_xrecord *xrecord, int *error)
+dwg_obj_xrecord_get_num_objid_handles(const dwg_obj_xrecord *xrecord, int *error)
 {
   if (xrecord != 0)
     {
@@ -9768,7 +9768,7 @@ dwg_obj_xrecord_get_num_objid_handles(dwg_obj_xrecord *xrecord, int *error)
 }
 
 dwg_object_ref**
-dwg_obj_xrecord_get_objid_handles(dwg_obj_xrecord *xrecord, int *error)
+dwg_obj_xrecord_get_objid_handles(const dwg_obj_xrecord *xrecord, int *error)
 {
   if (xrecord != 0)
     {
@@ -9789,7 +9789,7 @@ dwg_obj_xrecord_get_objid_handles(dwg_obj_xrecord *xrecord, int *error)
 
 /// Returns spline scenario
 BITCODE_BS
-dwg_ent_spline_get_scenario(dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_scenario(const dwg_ent_spline *spline, int *error)
 {
   if (spline != 0)
     {
@@ -9823,7 +9823,7 @@ dwg_ent_spline_set_scenario(dwg_ent_spline *spline, BITCODE_BS scenario,
 
 /// Returns spline degree
 BITCODE_BS
-dwg_ent_spline_get_degree(dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_degree(const dwg_ent_spline *spline, int *error)
 {
   if (spline != 0)
     {
@@ -9857,7 +9857,7 @@ dwg_ent_spline_set_degree(dwg_ent_spline *spline, BITCODE_BS degree,
 
 /// Returns spline fit tol
 BITCODE_BD
-dwg_ent_spline_get_fit_tol(dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_fit_tol(const dwg_ent_spline *spline, int *error)
 {
   if (spline != 0)
     {
@@ -9890,7 +9890,7 @@ dwg_ent_spline_set_fit_tol(dwg_ent_spline *spline, int fit_tol, int *error)
 
 /// Returns spline begin tan vector
 void
-dwg_ent_spline_get_begin_tan_vector(dwg_ent_spline *spline,
+dwg_ent_spline_get_begin_tan_vector(const dwg_ent_spline *spline,
                                     dwg_point_3d *point, int *error)
 {
   if (spline != 0 && point != 0)
@@ -9928,7 +9928,7 @@ dwg_ent_spline_set_begin_tan_vector(dwg_ent_spline *spline,
 
 /// Returns spline end tan vector points
 void
-dwg_ent_spline_get_end_tan_vector(dwg_ent_spline *spline,
+dwg_ent_spline_get_end_tan_vector(const dwg_ent_spline *spline,
                                   dwg_point_3d *point, int *error)
 {
   if (spline != 0 && point != 0)
@@ -9966,7 +9966,7 @@ dwg_ent_spline_set_end_tan_vector(dwg_ent_spline *spline,
 
 /// Returns spline knot tol value
 BITCODE_BD
-dwg_ent_spline_get_knot_tol(dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_knot_tol(const dwg_ent_spline *spline, int *error)
 {
   if (spline != 0)
     {
@@ -10000,7 +10000,7 @@ dwg_ent_spline_set_knot_tol(dwg_ent_spline *spline, BITCODE_BD knot_tol,
 
 /// Returns spline control tol value
 BITCODE_BD
-dwg_ent_spline_get_ctrl_tol(dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_ctrl_tol(const dwg_ent_spline *spline, int *error)
 {
   if (spline != 0)
     {
@@ -10034,7 +10034,7 @@ dwg_ent_spline_set_ctrl_tol(dwg_ent_spline *spline, BITCODE_BD ctrl_tol,
 
 /// Returns spline  number of fit points
 BITCODE_BS
-dwg_ent_spline_get_num_fit_pts(dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_num_fit_pts(const dwg_ent_spline *spline, int *error)
 {
   if (spline != 0)
     {
@@ -10068,7 +10068,7 @@ dwg_ent_spline_set_num_fit_pts(dwg_ent_spline *spline, BITCODE_BS num_fit_pts,
 
 /// Returns spline rational
 char
-dwg_ent_spline_get_rational(dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_rational(const dwg_ent_spline *spline, int *error)
 {
   if (spline != 0)
     {
@@ -10102,7 +10102,7 @@ dwg_ent_spline_set_rational(dwg_ent_spline *spline, char rational,
 
 /// Returns spline closed_b
 char
-dwg_ent_spline_get_closed_b(dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_closed_b(const dwg_ent_spline *spline, int *error)
 {
   if (spline != 0)
     {
@@ -10136,7 +10136,7 @@ dwg_ent_spline_set_closed_b(dwg_ent_spline *spline, char closed_b,
 
 /// Returns spline weighted value
 char
-dwg_ent_spline_get_weighted(dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_weighted(const dwg_ent_spline *spline, int *error)
 {
   if (spline != 0)
     {
@@ -10170,7 +10170,7 @@ dwg_ent_spline_set_weighted(dwg_ent_spline *spline, char weighted,
 
 /// Returns spline periodic
 char
-dwg_ent_spline_get_periodic(dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_periodic(const dwg_ent_spline *spline, int *error)
 {
   if (spline != 0)
     {
@@ -10204,7 +10204,7 @@ dwg_ent_spline_set_periodic(dwg_ent_spline *spline, char periodic,
 
 /// Returns spline knots number
 BITCODE_BL
-dwg_ent_spline_get_num_knots(dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_num_knots(const dwg_ent_spline *spline, int *error)
 {
   if (spline != 0)
     {
@@ -10237,7 +10237,7 @@ dwg_ent_spline_set_num_knots(dwg_ent_spline *spline, BITCODE_BL nums, int *error
 
 /// Returns spline control points number
 BITCODE_BL
-dwg_ent_spline_get_num_ctrl_pts(dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_num_ctrl_pts(const dwg_ent_spline *spline, int *error)
 {
   if (spline != 0)
     {
@@ -10271,7 +10271,7 @@ dwg_ent_spline_set_num_ctrl_pts(dwg_ent_spline *spline, BITCODE_BL nums,
 
 /// Returns spline fit points
 dwg_ent_spline_point *
-dwg_ent_spline_get_fit_points(dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_fit_points(const dwg_ent_spline *spline, int *error)
 {
   dwg_ent_spline_point *ptx = (dwg_ent_spline_point*)
     malloc(sizeof(dwg_ent_spline_point)* spline->num_fit_pts);
@@ -10295,7 +10295,7 @@ dwg_ent_spline_get_fit_points(dwg_ent_spline *spline, int *error)
 
 /// Returns spline control points
 dwg_ent_spline_control_point *
-dwg_ent_spline_get_ctrl_pts(dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_ctrl_pts(const dwg_ent_spline *spline, int *error)
 {
   dwg_ent_spline_control_point *ptx = (dwg_ent_spline_control_point*)
     malloc(sizeof(dwg_ent_spline_control_point)* spline->num_ctrl_pts);
@@ -10319,7 +10319,7 @@ dwg_ent_spline_get_ctrl_pts(dwg_ent_spline *spline, int *error)
 
 /// Returns spline knots
 double *
-dwg_ent_spline_get_knots(dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_knots(const dwg_ent_spline *spline, int *error)
 {
   double *ptx = (double*) malloc(sizeof(double)* spline->num_knots);
   if (ptx != 0)
@@ -10346,7 +10346,7 @@ dwg_ent_spline_get_knots(dwg_ent_spline *spline, int *error)
 
 /// Returns viewport center points
 void
-dwg_ent_viewport_get_center(dwg_ent_viewport *vp, dwg_point_3d *point,
+dwg_ent_viewport_get_center(const dwg_ent_viewport *vp, dwg_point_3d *point,
                             int *error)
 {
   if (vp != 0 && point != 0)
@@ -10384,7 +10384,7 @@ dwg_ent_viewport_set_center(dwg_ent_viewport *vp, dwg_point_3d *point,
 
 /// Returns viewport width
 BITCODE_BD
-dwg_ent_viewport_get_width(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_width(const dwg_ent_viewport *vp, int *error)
 {
   if (vp != 0)
     {
@@ -10417,7 +10417,7 @@ dwg_ent_viewport_set_width(dwg_ent_viewport *vp, BITCODE_BD width, int *error)
 
 /// Returns viewport height
 BITCODE_BD
-dwg_ent_viewport_get_height(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_height(const dwg_ent_viewport *vp, int *error)
 {
   if (vp != 0)
     {
@@ -10450,7 +10450,7 @@ dwg_ent_viewport_set_height(dwg_ent_viewport *vp, BITCODE_BD height, int *error)
 
 /// Returns viewport grid major
 BITCODE_BS
-dwg_ent_viewport_get_grid_major(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_grid_major(const dwg_ent_viewport *vp, int *error)
 {
   if (vp != 0)
     {
@@ -10484,7 +10484,7 @@ dwg_ent_viewport_set_grid_major(dwg_ent_viewport *vp, BITCODE_BS major,
 
 /// Returns viewport frozen layer count
 BITCODE_BL
-dwg_ent_viewport_get_frozen_layer_count(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_frozen_layer_count(const dwg_ent_viewport *vp, int *error)
 {
   if (vp != 0)
     {
@@ -10518,7 +10518,7 @@ dwg_ent_viewport_set_frozen_layer_count(dwg_ent_viewport *vp, BITCODE_BL count,
 
 /// Returns viewport style sheet name (utf-8 encoded)
 char *
-dwg_ent_viewport_get_style_sheet(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_style_sheet(const dwg_ent_viewport *vp, int *error)
 {
   if (vp != 0)
     {
@@ -10575,7 +10575,7 @@ dwg_ent_viewport_set_circle_zoom(dwg_ent_viewport *vp, BITCODE_BS zoom,
 
 /// Returns circle zoom value
 BITCODE_BS
-dwg_ent_viewport_get_circle_zoom(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_circle_zoom(const dwg_ent_viewport *vp, int *error)
 {
   if (vp != 0)
     {
@@ -10608,7 +10608,7 @@ dwg_ent_viewport_set_status_flag(dwg_ent_viewport *vp, BITCODE_BL flags, int *er
 
 /// Returns viewport status flag
 BITCODE_BL
-dwg_ent_viewport_get_status_flag(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_status_flag(const dwg_ent_viewport *vp, int *error)
 {
   if (vp != 0)
     {
@@ -10625,7 +10625,7 @@ dwg_ent_viewport_get_status_flag(dwg_ent_viewport *vp, int *error)
 
 /// Returns viewport render mode
 char
-dwg_ent_viewport_get_render_mode(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_render_mode(const dwg_ent_viewport *vp, int *error)
 {
   if (vp != 0)
     {
@@ -10675,7 +10675,7 @@ dwg_ent_viewport_set_ucs_at_origin(dwg_ent_viewport *vp, unsigned char origin,
 
 /// Returns viewport ucs at origini value
 unsigned char
-dwg_ent_viewport_get_ucs_at_origin(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_ucs_at_origin(const dwg_ent_viewport *vp, int *error)
 {
   if (vp != 0)
     {
@@ -10709,7 +10709,7 @@ dwg_ent_viewport_set_ucs_per_viewport(dwg_ent_viewport *vp,
 
 /// Returns viewport ucs per viewport
 unsigned char
-dwg_ent_viewport_get_ucs_per_viewport(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_ucs_per_viewport(const dwg_ent_viewport *vp, int *error)
 {
   if (vp != 0)
     {
@@ -10745,7 +10745,7 @@ dwg_ent_viewport_set_view_target(dwg_ent_viewport *vp, dwg_point_3d *point,
 
 /// Returns viewport view target
 void
-dwg_ent_viewport_get_view_target(dwg_ent_viewport *vp, dwg_point_3d *point,
+dwg_ent_viewport_get_view_target(const dwg_ent_viewport *vp, dwg_point_3d *point,
                                  int *error)
 {
   if (vp != 0 && point != 0)
@@ -10783,7 +10783,7 @@ dwg_ent_viewport_set_view_direction(dwg_ent_viewport *vp, dwg_point_3d *point,
 
 /// Returns viewport view direction
 void
-dwg_ent_viewport_get_view_direction(dwg_ent_viewport *vp, dwg_point_3d *point,
+dwg_ent_viewport_get_view_direction(const dwg_ent_viewport *vp, dwg_point_3d *point,
                                     int *error)
 {
   if (vp != 0 && point != 0)
@@ -10819,7 +10819,7 @@ dwg_ent_viewport_set_view_twist_angle(dwg_ent_viewport *vp, BITCODE_BD angle,
 
 /// Returns view twist angle
 BITCODE_BD
-dwg_ent_viewport_get_view_twist_angle(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_view_twist_angle(const dwg_ent_viewport *vp, int *error)
 {
   if (vp != 0)
     {
@@ -10853,7 +10853,7 @@ dwg_ent_viewport_set_view_height(dwg_ent_viewport *vp, BITCODE_BD height,
 
 /// Returns viewport view height
 BITCODE_BD
-dwg_ent_viewport_get_view_height(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_view_height(const dwg_ent_viewport *vp, int *error)
 {
   if (vp != 0)
     {
@@ -10887,7 +10887,7 @@ dwg_ent_viewport_set_lens_length(dwg_ent_viewport *vp, BITCODE_BD length,
 
 /// Returns lens length
 BITCODE_BD
-dwg_ent_viewport_get_lens_length(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_lens_length(const dwg_ent_viewport *vp, int *error)
 {
   if (vp != 0)
     {
@@ -10921,7 +10921,7 @@ dwg_ent_viewport_set_front_clip_z(dwg_ent_viewport *vp, BITCODE_BD front_z,
 
 /// Returns viewport front clip z value
 BITCODE_BD
-dwg_ent_viewport_get_front_clip_z(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_front_clip_z(const dwg_ent_viewport *vp, int *error)
 {
   if (vp != 0)
     {
@@ -10955,7 +10955,7 @@ dwg_ent_viewport_set_back_clip_z(dwg_ent_viewport *vp, BITCODE_BD back_z,
 
 /// Returns viewport back clip z value
 BITCODE_BD
-dwg_ent_viewport_get_back_clip_z(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_back_clip_z(const dwg_ent_viewport *vp, int *error)
 {
   if (vp != 0)
     {
@@ -10988,7 +10988,7 @@ dwg_ent_viewport_set_snap_angle(dwg_ent_viewport *vp, BITCODE_BD angle, int *err
 
 /// Returns viewport snap angle
 BITCODE_BD
-dwg_ent_viewport_get_snap_angle(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_snap_angle(const dwg_ent_viewport *vp, int *error)
 {
   if (vp != 0)
     {
@@ -11005,7 +11005,7 @@ dwg_ent_viewport_get_snap_angle(dwg_ent_viewport *vp, int *error)
 
 /// Returns viewport view center
 void
-dwg_ent_viewport_get_view_center(dwg_ent_viewport *vp, dwg_point_2d *point,
+dwg_ent_viewport_get_view_center(const dwg_ent_viewport *vp, dwg_point_2d *point,
                                  int *error)
 {
   if (vp != 0 && point != 0)
@@ -11041,7 +11041,7 @@ dwg_ent_viewport_set_view_center(dwg_ent_viewport *vp, dwg_point_2d *point,
 
 /// Returns grid spacing
 void
-dwg_ent_viewport_get_grid_spacing(dwg_ent_viewport *vp, dwg_point_2d *point,
+dwg_ent_viewport_get_grid_spacing(const dwg_ent_viewport *vp, dwg_point_2d *point,
                                   int *error)
 {
   if (vp != 0 && point != 0)
@@ -11077,7 +11077,7 @@ dwg_ent_viewport_set_grid_spacing(dwg_ent_viewport *vp, dwg_point_2d *point,
 
 /// Returns viewport snap base
 void
-dwg_ent_viewport_get_snap_base(dwg_ent_viewport *vp, dwg_point_2d *point,
+dwg_ent_viewport_get_snap_base(const dwg_ent_viewport *vp, dwg_point_2d *point,
                                int *error)
 {
   if (vp != 0 && point != 0)
@@ -11113,7 +11113,7 @@ dwg_ent_viewport_set_snap_base(dwg_ent_viewport *vp, dwg_point_2d *point,
 
 /// Returns viewport snap spacing
 void
-dwg_ent_viewport_get_snap_spacing(dwg_ent_viewport *vp, dwg_point_2d *point,
+dwg_ent_viewport_get_snap_spacing(const dwg_ent_viewport *vp, dwg_point_2d *point,
                                   int *error)
 {
   if (vp != 0 && point != 0)
@@ -11168,7 +11168,7 @@ dwg_ent_viewport_set_ucs_origin(dwg_ent_viewport *vp, dwg_point_3d *point,
 
 /// Returns viewport ucs origin
 void
-dwg_ent_viewport_get_ucs_origin(dwg_ent_viewport *vp, dwg_point_3d *point,
+dwg_ent_viewport_get_ucs_origin(const dwg_ent_viewport *vp, dwg_point_3d *point,
                                 int *error)
 {
   if (vp != 0 && point != 0)
@@ -11206,7 +11206,7 @@ dwg_ent_viewport_set_ucs_x_axis(dwg_ent_viewport *vp, dwg_point_3d *point,
 
 /// Returns viewport ucs X axis
 void
-dwg_ent_viewport_get_ucs_x_axis(dwg_ent_viewport *vp, dwg_point_3d *point,
+dwg_ent_viewport_get_ucs_x_axis(const dwg_ent_viewport *vp, dwg_point_3d *point,
                                 int *error)
 {
   if (vp != 0 && point != 0)
@@ -11244,7 +11244,7 @@ dwg_ent_viewport_set_ucs_y_axis(dwg_ent_viewport *vp, dwg_point_3d *point,
 
 /// Returns viewport ucs y axis
 void
-dwg_ent_viewport_get_ucs_y_axis(dwg_ent_viewport *vp, dwg_point_3d *point,
+dwg_ent_viewport_get_ucs_y_axis(const dwg_ent_viewport *vp, dwg_point_3d *point,
                                 int *error)
 {
   if (vp != 0 && point != 0)
@@ -11280,7 +11280,7 @@ dwg_ent_viewport_set_ucs_elevation(dwg_ent_viewport *vp, BITCODE_BD elevation,
 
 /// Returns ucs elevation
 BITCODE_BD
-dwg_ent_viewport_get_ucs_elevation(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_ucs_elevation(const dwg_ent_viewport *vp, int *error)
 {
   if (vp != 0)
     {
@@ -11314,7 +11314,7 @@ dwg_ent_viewport_set_ucs_ortho_view_type(dwg_ent_viewport *vp,
 
 /// Returns UCS ortho view type
 BITCODE_BS
-dwg_ent_viewport_get_ucs_ortho_view_type(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_ucs_ortho_view_type(const dwg_ent_viewport *vp, int *error)
 {
   if (vp != 0)
     {
@@ -11348,7 +11348,7 @@ dwg_ent_viewport_set_shadeplot_mode(dwg_ent_viewport *vp,
 
 /// Returns shade plot mode value
 BITCODE_BS
-dwg_ent_viewport_get_shadeplot_mode(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_shadeplot_mode(const dwg_ent_viewport *vp, int *error)
 {
   if (vp != 0)
     {
@@ -11382,7 +11382,7 @@ dwg_ent_viewport_set_use_default_lights(dwg_ent_viewport *vp,
 
 /// Returns viewport default lightning usage
 unsigned char
-dwg_ent_viewport_get_use_default_lights(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_use_default_lights(const dwg_ent_viewport *vp, int *error)
 {
   if (vp != 0)
     {
@@ -11416,7 +11416,7 @@ dwg_ent_viewport_set_default_lighting_type(dwg_ent_viewport *vp, char type,
 
 /// Returns viewport default lightning type
 char
-dwg_ent_viewport_get_default_lighting_type(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_default_lighting_type(const dwg_ent_viewport *vp, int *error)
 {
   if (vp != 0)
     {
@@ -11450,7 +11450,7 @@ dwg_ent_viewport_set_brightness(dwg_ent_viewport *vp, BITCODE_BD brightness,
 
 /// Returns viewport brightness
 BITCODE_BD
-dwg_ent_viewport_get_brightness(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_brightness(const dwg_ent_viewport *vp, int *error)
 {
   if (vp != 0)
     {
@@ -11484,7 +11484,7 @@ dwg_ent_viewport_set_contrast(dwg_ent_viewport *vp, BITCODE_BD contrast,
 
 /// Returns viewport contrast
 BITCODE_BD
-dwg_ent_viewport_get_contrast(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_contrast(const dwg_ent_viewport *vp, int *error)
 {
   if (vp != 0)
     {
@@ -11505,7 +11505,7 @@ dwg_ent_viewport_get_contrast(dwg_ent_viewport *vp, int *error)
 
 /// Returns polyline pface num verts
 BITCODE_BS
-dwg_ent_polyline_pface_get_numpoints(dwg_ent_polyline_pface *pface, int *error)
+dwg_ent_polyline_pface_get_numpoints(const dwg_ent_polyline_pface *pface, int *error)
 {
   if (pface != 0)
     {
@@ -11522,7 +11522,7 @@ dwg_ent_polyline_pface_get_numpoints(dwg_ent_polyline_pface *pface, int *error)
 
 /// Returns polyline pface numfaces
 BITCODE_BS
-dwg_ent_polyline_pface_get_numfaces(dwg_ent_polyline_pface *pface, int *error)
+dwg_ent_polyline_pface_get_numfaces(const dwg_ent_polyline_pface *pface, int *error)
 {
   if (pface != 0)
     {
@@ -11538,12 +11538,13 @@ dwg_ent_polyline_pface_get_numfaces(dwg_ent_polyline_pface *pface, int *error)
 }
 
 dwg_point_3d *
-dwg_obj_polyline_pface_get_points(dwg_object *obj, int *error)
+dwg_obj_polyline_pface_get_points(const dwg_object *obj, int *error)
 {
   if (obj || obj->type != DWG_TYPE_POLYLINE_PFACE)
     {
       *error = 0;
-      return NULL;
+      LOG_ERROR("%s: nyi", __FUNCTION__);
+      return NULL; //TODO
     }
   else
     {
@@ -11559,7 +11560,7 @@ dwg_obj_polyline_pface_get_points(dwg_object *obj, int *error)
 
 /// Returns polyline mesh flags
 BITCODE_BS
-dwg_ent_polyline_mesh_get_flag(dwg_ent_polyline_mesh *mesh, int *error)
+dwg_ent_polyline_mesh_get_flag(const dwg_ent_polyline_mesh *mesh, int *error)
 {
   if (mesh != 0)
     {
@@ -11593,7 +11594,7 @@ dwg_ent_polyline_mesh_set_flag(dwg_ent_polyline_mesh *mesh,
 
 /// Returns polyline mesh curve type
 BITCODE_BS
-dwg_ent_polyline_mesh_get_curve_type(dwg_ent_polyline_mesh *mesh, int *error)
+dwg_ent_polyline_mesh_get_curve_type(const dwg_ent_polyline_mesh *mesh, int *error)
 {
   if (mesh != 0)
     {
@@ -11627,7 +11628,7 @@ dwg_ent_polyline_mesh_set_curve_type(dwg_ent_polyline_mesh *mesh,
 
 /// Returns polyline mesh n vert count
 BITCODE_BS
-dwg_ent_polyline_mesh_get_m_vert_count(dwg_ent_polyline_mesh *mesh,
+dwg_ent_polyline_mesh_get_m_vert_count(const dwg_ent_polyline_mesh *mesh,
                                        int *error)
 {
   if (mesh != 0)
@@ -11662,7 +11663,7 @@ dwg_ent_polyline_mesh_set_m_vert_count(dwg_ent_polyline_mesh *mesh,
 
 /// Returns polyline mesh n vert count
 BITCODE_BS
-dwg_ent_polyline_mesh_get_n_vert_count(dwg_ent_polyline_mesh *mesh,
+dwg_ent_polyline_mesh_get_n_vert_count(const dwg_ent_polyline_mesh *mesh,
                                        int *error)
 {
   if (mesh != 0)
@@ -11697,7 +11698,7 @@ dwg_ent_polyline_mesh_set_n_vert_count(dwg_ent_polyline_mesh *mesh,
 
 /// Returns polyline mesh n density
 BITCODE_BS
-dwg_ent_polyline_mesh_get_m_density(dwg_ent_polyline_mesh *mesh, int *error)
+dwg_ent_polyline_mesh_get_m_density(const dwg_ent_polyline_mesh *mesh, int *error)
 {
   if (mesh != 0)
     {
@@ -11731,7 +11732,7 @@ dwg_ent_polyline_mesh_set_m_density(dwg_ent_polyline_mesh *mesh,
 
 /// Returns polyline mesh n density
 BITCODE_BS
-dwg_ent_polyline_mesh_get_n_density(dwg_ent_polyline_mesh *mesh, int *error)
+dwg_ent_polyline_mesh_get_n_density(const dwg_ent_polyline_mesh *mesh, int *error)
 {
   if (mesh != 0)
     {
@@ -11765,7 +11766,7 @@ dwg_ent_polyline_mesh_set_n_density(dwg_ent_polyline_mesh *mesh,
 
 /// Returns polyline mesh owned object count
 BITCODE_BL
-dwg_ent_polyline_mesh_get_owned_obj_count(dwg_ent_polyline_mesh *mesh,
+dwg_ent_polyline_mesh_get_owned_obj_count(const dwg_ent_polyline_mesh *mesh,
                                           int *error)
 {
   if (mesh != 0)
@@ -11804,7 +11805,7 @@ dwg_ent_polyline_mesh_set_owned_obj_count(dwg_ent_polyline_mesh *mesh,
 
 /// Returns polyline 2d extrusion
 void
-dwg_ent_polyline_2d_get_extrusion(dwg_ent_polyline_2d *line2d,
+dwg_ent_polyline_2d_get_extrusion(const dwg_ent_polyline_2d *line2d,
                                   dwg_point_3d *point, int *error)
 {
   if (line2d != 0 && point != 0)
@@ -11842,7 +11843,7 @@ dwg_ent_polyline_2d_set_extrusion(dwg_ent_polyline_2d *line2d,
 
 /// Returns polyline 2d start width
 BITCODE_BD
-dwg_ent_polyline_2d_get_start_width(dwg_ent_polyline_2d *line2d, int *error)
+dwg_ent_polyline_2d_get_start_width(const dwg_ent_polyline_2d *line2d, int *error)
 {
   if (line2d != 0)
     {
@@ -11876,7 +11877,7 @@ dwg_ent_polyline_2d_set_start_width(dwg_ent_polyline_2d *line2d,
 
 /// Returns polyline 2d end width
 BITCODE_BD
-dwg_ent_polyline_2d_get_end_width(dwg_ent_polyline_2d *line2d, int *error)
+dwg_ent_polyline_2d_get_end_width(const dwg_ent_polyline_2d *line2d, int *error)
 {
   if (line2d != 0)
     {
@@ -11910,7 +11911,7 @@ dwg_ent_polyline_2d_set_end_width(dwg_ent_polyline_2d *line2d,
 
 /// Returns polyline 2d thickness
 BITCODE_BD
-dwg_ent_polyline_2d_get_thickness(dwg_ent_polyline_2d *line2d, int *error)
+dwg_ent_polyline_2d_get_thickness(const dwg_ent_polyline_2d *line2d, int *error)
 {
   if (line2d != 0)
     {
@@ -11944,7 +11945,7 @@ dwg_ent_polyline_2d_set_thickness(dwg_ent_polyline_2d *line2d,
 
 /// Returns polyline 2d elevation
 BITCODE_BD
-dwg_ent_polyline_2d_get_elevation(dwg_ent_polyline_2d *line2d, int *error)
+dwg_ent_polyline_2d_get_elevation(const dwg_ent_polyline_2d *line2d, int *error)
 {
   if (line2d != 0)
     {
@@ -11978,7 +11979,7 @@ dwg_ent_polyline_2d_set_elevation(dwg_ent_polyline_2d *line2d,
 
 /// Returns polyline 2d flag
 BITCODE_BS
-dwg_ent_polyline_2d_get_flag(dwg_ent_polyline_2d *line2d, int *error)
+dwg_ent_polyline_2d_get_flag(const dwg_ent_polyline_2d *line2d, int *error)
 {
   if (line2d != 0)
     {
@@ -12012,7 +12013,7 @@ dwg_ent_polyline_2d_set_flag(dwg_ent_polyline_2d *line2d, BITCODE_BS flags,
 
 /// Returns curve type value
 BITCODE_BS
-dwg_ent_polyline_2d_get_curve_type(dwg_ent_polyline_2d *line2d, int *error)
+dwg_ent_polyline_2d_get_curve_type(const dwg_ent_polyline_2d *line2d, int *error)
 {
   if (line2d != 0)
     {
@@ -12046,7 +12047,7 @@ dwg_ent_polyline_2d_set_curve_type(dwg_ent_polyline_2d *line2d,
 
 /// Returns number of vertices
 BITCODE_BL
-dwg_obj_polyline_2d_get_numpoints(dwg_object *obj, int *error)
+dwg_obj_polyline_2d_get_numpoints(const dwg_object *obj, int *error)
 {
   if (obj || obj->type != DWG_TYPE_POLYLINE_2D)
     {
@@ -12096,7 +12097,7 @@ dwg_obj_polyline_2d_get_numpoints(dwg_object *obj, int *error)
 }
 
 dwg_point_2d *
-dwg_obj_polyline_2d_get_points(dwg_object *obj, int *error)
+dwg_obj_polyline_2d_get_points(const dwg_object *obj, int *error)
 {
   *error = 0;
   if (obj || obj->type != DWG_TYPE_POLYLINE_2D)
@@ -12190,7 +12191,7 @@ dwg_obj_polyline_2d_get_points(dwg_object *obj, int *error)
 
 /// Returns polyline 3d flag
 BITCODE_RC
-dwg_ent_polyline_3d_get_flag(dwg_ent_polyline_3d *line3d, int *error)
+dwg_ent_polyline_3d_get_flag(const dwg_ent_polyline_3d *line3d, int *error)
 {
   if (line3d != 0)
     {
@@ -12224,7 +12225,7 @@ dwg_ent_polyline_3d_set_flag(dwg_ent_polyline_3d *line3d, BITCODE_RC flag,
 
 /// Returns polyline 3d flag2
 BITCODE_RC
-dwg_ent_polyline_3d_get_flag2(dwg_ent_polyline_3d *line3d, int *error)
+dwg_ent_polyline_3d_get_flag2(const dwg_ent_polyline_3d *line3d, int *error)
 {
   if (line3d != 0)
     {
@@ -12258,7 +12259,7 @@ dwg_ent_polyline_3d_set_flag2(dwg_ent_polyline_3d *line3d, BITCODE_RC flag2,
 
 /// Returns polyline 3d owned object count
 BITCODE_BL
-dwg_ent_polyline_3d_get_owned_obj_count(dwg_ent_polyline_3d *line3d,
+dwg_ent_polyline_3d_get_owned_obj_count(const dwg_ent_polyline_3d *line3d,
                                         int *error)
 {
   if (line3d != 0)
@@ -12301,7 +12302,7 @@ dwg_ent_polyline_3d_set_owned_obj_count(dwg_ent_polyline_3d *line3d,
 \param 2 int
 */
 BITCODE_BS
-dwg_ent_3dface_get_invis_flags(dwg_ent_3dface *_3dface, int *error)
+dwg_ent_3dface_get_invis_flags(const dwg_ent_3dface *_3dface, int *error)
 {
   if (_3dface != 0)
     {
@@ -12345,7 +12346,7 @@ dwg_ent_3dface_set_invis_flags(dwg_ent_3dface *_3dface,
 \param 3 int
 */
 void
-dwg_ent_3dface_get_corner1(dwg_ent_3dface *_3dface, dwg_point_2d *point,
+dwg_ent_3dface_get_corner1(const dwg_ent_3dface *_3dface, dwg_point_2d *point,
                            int *error)
 {
   if (_3dface != 0 && point != 0)
@@ -12391,7 +12392,7 @@ dwg_ent_3dface_set_corner1(dwg_ent_3dface *_3dface, dwg_point_2d *point,
 \param 3 int
 */
 void
-dwg_ent_3dface_get_corner2(dwg_ent_3dface *_3dface, dwg_point_2d *point,
+dwg_ent_3dface_get_corner2(const dwg_ent_3dface *_3dface, dwg_point_2d *point,
                            int *error)
 {
   if (_3dface != 0 && point != 0)
@@ -12437,7 +12438,7 @@ dwg_ent_3dface_set_corner2(dwg_ent_3dface *_3dface, dwg_point_2d *point,
 \param 3 int
 */
 void
-dwg_ent_3dface_get_corner3(dwg_ent_3dface *_3dface, dwg_point_2d *point,
+dwg_ent_3dface_get_corner3(const dwg_ent_3dface *_3dface, dwg_point_2d *point,
                            int *error)
 {
   if (_3dface != 0 && point != 0)
@@ -12483,7 +12484,7 @@ dwg_ent_3dface_set_corner3(dwg_ent_3dface *_3dface, dwg_point_2d *point,
 \param 3 int
 */
 void
-dwg_ent_3dface_get_corner4(dwg_ent_3dface *_3dface, dwg_point_2d *point,
+dwg_ent_3dface_get_corner4(const dwg_ent_3dface *_3dface, dwg_point_2d *point,
                            int *error)
 {
   if (_3dface != 0 && point != 0)
@@ -12528,7 +12529,7 @@ dwg_ent_3dface_set_corner4(dwg_ent_3dface *_3dface, dwg_point_2d *point,
 
 /// Returns image class version
 BITCODE_BL
-dwg_ent_image_get_class_version(dwg_ent_image *image, int *error)
+dwg_ent_image_get_class_version(const dwg_ent_image *image, int *error)
 {
   if (image != 0)
     {
@@ -12562,7 +12563,7 @@ dwg_ent_image_set_class_version(dwg_ent_image *image, BITCODE_BL class_version,
 
 /// Returns image point 0 points
 void
-dwg_ent_image_get_pt0(dwg_ent_image *image, dwg_point_3d *point, int *error)
+dwg_ent_image_get_pt0(const dwg_ent_image *image, dwg_point_3d *point, int *error)
 {
   if (image != 0 && point != 0)
     {
@@ -12598,7 +12599,7 @@ dwg_ent_image_set_pt0(dwg_ent_image *image, dwg_point_3d *point, int *error)
 
 /// Returns image U_vector points
 void
-dwg_ent_image_get_u_vector(dwg_ent_image *image, dwg_point_3d *point,
+dwg_ent_image_get_u_vector(const dwg_ent_image *image, dwg_point_3d *point,
                            int *error)
 {
   if (image != 0 && point != 0)
@@ -12636,7 +12637,7 @@ dwg_ent_image_set_u_vector(dwg_ent_image *image, dwg_point_3d *point,
 
 /// Returns image v_vector points
 void
-dwg_ent_image_get_v_vector(dwg_ent_image *image, dwg_point_3d *point,
+dwg_ent_image_get_v_vector(const dwg_ent_image *image, dwg_point_3d *point,
                            int *error)
 {
   if (image != 0 && point != 0)
@@ -12674,7 +12675,7 @@ dwg_ent_image_set_v_vector(dwg_ent_image *image, dwg_point_3d *point,
 
 /// Returns image size height
 BITCODE_BD
-dwg_ent_image_get_size_height(dwg_ent_image *image, int *error)
+dwg_ent_image_get_size_height(const dwg_ent_image *image, int *error)
 {
   if (image != 0)
     {
@@ -12708,7 +12709,7 @@ dwg_ent_image_set_size_height(dwg_ent_image *image, BITCODE_BD size_height,
 
 /// Returns image size width
 BITCODE_BD
-dwg_ent_image_get_size_width(dwg_ent_image *image, int *error)
+dwg_ent_image_get_size_width(const dwg_ent_image *image, int *error)
 {
   if (image != 0)
     {
@@ -12742,7 +12743,7 @@ dwg_ent_image_set_size_width(dwg_ent_image *image, BITCODE_BD size_width,
 
 /// Returns image display props
 BITCODE_BS
-dwg_ent_image_get_display_props(dwg_ent_image *image, int *error)
+dwg_ent_image_get_display_props(const dwg_ent_image *image, int *error)
 {
   if (image != 0)
     {
@@ -12776,7 +12777,7 @@ dwg_ent_image_set_display_props(dwg_ent_image *image,
 
 /// Returns image clipping
 unsigned char
-dwg_ent_image_get_clipping(dwg_ent_image *image, int *error)
+dwg_ent_image_get_clipping(const dwg_ent_image *image, int *error)
 {
   if (image != 0)
     {
@@ -12810,7 +12811,7 @@ dwg_ent_image_set_clipping(dwg_ent_image *image, unsigned char clipping,
 
 /// Returns image brightness
 char
-dwg_ent_image_get_brightness(dwg_ent_image *image, int *error)
+dwg_ent_image_get_brightness(const dwg_ent_image *image, int *error)
 {
   if (image != 0)
     {
@@ -12843,7 +12844,7 @@ dwg_ent_image_set_brightness(dwg_ent_image *image, char brightness, int *error)
 
 /// Return image contrast
 char
-dwg_ent_image_get_contrast(dwg_ent_image *image, int *error)
+dwg_ent_image_get_contrast(const dwg_ent_image *image, int *error)
 {
   if (image != 0)
     {
@@ -12876,7 +12877,7 @@ dwg_ent_image_set_contrast(dwg_ent_image *image, char contrast, int *error)
 
 /// Returns image fade
 char
-dwg_ent_image_get_fade(dwg_ent_image *image, int *error)
+dwg_ent_image_get_fade(const dwg_ent_image *image, int *error)
 {
   if (image != 0)
     {
@@ -12909,7 +12910,7 @@ dwg_ent_image_set_fade(dwg_ent_image *image, char fade, int *error)
 
 /// Returns image clip boundary type
 BITCODE_BS
-dwg_ent_image_get_clip_boundary_type(dwg_ent_image *image, int *error)
+dwg_ent_image_get_clip_boundary_type(const dwg_ent_image *image, int *error)
 {
   if (image != 0)
     {
@@ -12943,7 +12944,7 @@ dwg_ent_image_set_clip_boundary_type(dwg_ent_image *image, BITCODE_BS type,
 
 /// Returns image boundary point 0
 void
-dwg_ent_image_get_boundary_pt0(dwg_ent_image *image, dwg_point_2d *point,
+dwg_ent_image_get_boundary_pt0(const dwg_ent_image *image, dwg_point_2d *point,
                                int *error)
 {
   if (image != 0 && point != 0)
@@ -12979,7 +12980,7 @@ dwg_ent_image_set_boundary_pt0(dwg_ent_image *image, dwg_point_2d *point,
 
 /// Returns boundary point1
 void
-dwg_ent_image_get_boundary_pt1(dwg_ent_image *image, dwg_point_2d *point,
+dwg_ent_image_get_boundary_pt1(const dwg_ent_image *image, dwg_point_2d *point,
                                int *error)
 {
   if (image != 0 && point != 0)
@@ -13015,7 +13016,7 @@ dwg_ent_image_set_boundary_pt1(dwg_ent_image *image, dwg_point_2d *point,
 
 /// Retuns number of clip verts
 BITCODE_BD
-dwg_ent_image_get_num_clip_verts(dwg_ent_image *image, int *error)
+dwg_ent_image_get_num_clip_verts(const dwg_ent_image *image, int *error)
 {
   if (image != 0)
     {
@@ -13048,7 +13049,7 @@ dwg_ent_image_set_num_clip_verts(dwg_ent_image *image, BITCODE_BD num, int *erro
 
 /// Returns image clip verts
 BITCODE_2RD *
-dwg_ent_image_get_clip_verts(dwg_ent_image *image, int *error)
+dwg_ent_image_get_clip_verts(const dwg_ent_image *image, int *error)
 {
   BITCODE_2RD *ptx = (BITCODE_2RD*)
     malloc(sizeof(BITCODE_2RD) * image->num_clip_verts);
@@ -13092,7 +13093,7 @@ dwg_ent_mline_set_scale(dwg_ent_mline *mline, BITCODE_BD scale, int *error)
 
 /// Returns scale value
 BITCODE_BD
-dwg_ent_mline_get_scale(dwg_ent_mline *mline, int *error)
+dwg_ent_mline_get_scale(const dwg_ent_mline *mline, int *error)
 {
   if (mline != 0)
     {
@@ -13125,7 +13126,7 @@ dwg_ent_mline_set_justification(dwg_ent_mline *mline, char justification, int *e
 
 /// Returns justification value
 char
-dwg_ent_mline_get_justification(dwg_ent_mline *mline, int *error)
+dwg_ent_mline_get_justification(const dwg_ent_mline *mline, int *error)
 {
   if (mline != 0)
     {
@@ -13161,7 +13162,7 @@ dwg_ent_mline_set_base_point(dwg_ent_mline *mline, dwg_point_3d *point,
 
 /// Returns base point value
 void
-dwg_ent_mline_get_base_point(dwg_ent_mline *mline, dwg_point_3d *point,
+dwg_ent_mline_get_base_point(const dwg_ent_mline *mline, dwg_point_3d *point,
                              int *error)
 {
   if (mline != 0 && point != 0)
@@ -13199,7 +13200,7 @@ dwg_ent_mline_set_extrusion(dwg_ent_mline *mline, dwg_point_3d *point,
 
 /// Returns extrusion points
 void
-dwg_ent_mline_get_extrusion(dwg_ent_mline *mline, dwg_point_3d *point,
+dwg_ent_mline_get_extrusion(const dwg_ent_mline *mline, dwg_point_3d *point,
                             int *error)
 {
   if (mline != 0 && point != 0)
@@ -13235,7 +13236,7 @@ dwg_ent_mline_set_flags(dwg_ent_mline *mline, BITCODE_BS oc,
 
 /// Returns flags value
 BITCODE_BS
-dwg_ent_mline_get_flags(dwg_ent_mline *mline, int *error)
+dwg_ent_mline_get_flags(const dwg_ent_mline *mline, int *error)
 {
   if (mline != 0)
     {
@@ -13268,7 +13269,7 @@ dwg_ent_mline_set_num_lines(dwg_ent_mline *mline, BITCODE_RC num, int *error)
 
 /// Returns number of lines
 BITCODE_RC
-dwg_ent_mline_get_num_lines(dwg_ent_mline *mline, int *error)
+dwg_ent_mline_get_num_lines(const dwg_ent_mline *mline, int *error)
 {
   if (mline != 0)
     {
@@ -13302,7 +13303,7 @@ dwg_ent_mline_set_num_verts(dwg_ent_mline *mline, BITCODE_BS num,
 
 /// Returns number of vertices
 BITCODE_BS
-dwg_ent_mline_get_num_verts(dwg_ent_mline *mline, int *error)
+dwg_ent_mline_get_num_verts(const dwg_ent_mline *mline, int *error)
 {
   if (mline != 0)
     {
@@ -13319,7 +13320,7 @@ dwg_ent_mline_get_num_verts(dwg_ent_mline *mline, int *error)
 
 /// Returns mline vertices
 dwg_ent_mline_vertex *
-dwg_ent_mline_get_verts(dwg_ent_mline *mline, int *error)
+dwg_ent_mline_get_verts(const dwg_ent_mline *mline, int *error)
 {
   dwg_ent_mline_vertex *ptx = (dwg_ent_mline_vertex*)
     malloc(sizeof(dwg_ent_mline_vertex)* mline->num_verts);
@@ -13347,7 +13348,7 @@ dwg_ent_mline_get_verts(dwg_ent_mline *mline, int *error)
 
 /// Returns vertex_pface vertind
 BITCODE_BS
-dwg_ent_vertex_pface_face_get_vertind(dwg_ent_vert_pface_face *face)
+dwg_ent_vertex_pface_face_get_vertind(const dwg_ent_vert_pface_face *face)
 {
   if (face != 0)
     {
@@ -13384,7 +13385,7 @@ dwg_ent_vertex_pface_face_set_vertind(dwg_ent_vert_pface_face *face,
 
 /// Returns acis empty value
 unsigned char
-dwg_ent_3dsolid_get_acis_empty(dwg_ent_3dsolid *_3dsolid, int *error)
+dwg_ent_3dsolid_get_acis_empty(const dwg_ent_3dsolid *_3dsolid, int *error)
 {
   if (_3dsolid != 0)
     {
@@ -13418,7 +13419,7 @@ dwg_ent_3dsolid_set_acis_empty(dwg_ent_3dsolid *_3dsolid, unsigned char acis,
 
 /// Returns version value
 BITCODE_BS
-dwg_ent_3dsolid_get_version(dwg_ent_3dsolid *_3dsolid, int *error)
+dwg_ent_3dsolid_get_version(const dwg_ent_3dsolid *_3dsolid, int *error)
 {
   if (_3dsolid != 0)
     {
@@ -13452,7 +13453,7 @@ dwg_ent_3dsolid_set_version(dwg_ent_3dsolid *_3dsolid, BITCODE_BS version,
 
 /// Returns pointer to block size
 BITCODE_BL*
-dwg_ent_3dsolid_get_block_size(dwg_ent_3dsolid *_3dsolid, int *error)
+dwg_ent_3dsolid_get_block_size(const dwg_ent_3dsolid *_3dsolid, int *error)
 {
   if (_3dsolid != 0)
     {
@@ -13469,7 +13470,7 @@ dwg_ent_3dsolid_get_block_size(dwg_ent_3dsolid *_3dsolid, int *error)
 
 /// Returns acis data
 char *
-dwg_ent_3dsolid_get_acis_data(dwg_ent_3dsolid *_3dsolid, int *error)
+dwg_ent_3dsolid_get_acis_data(const dwg_ent_3dsolid *_3dsolid, int *error)
 {
   if (_3dsolid != 0)
     {
@@ -13503,7 +13504,7 @@ dwg_ent_3dsolid_set_acis_data(dwg_ent_3dsolid *_3dsolid,
 
 /// Returns wireframe data present value
 char
-dwg_ent_3dsolid_get_wireframe_data_present(dwg_ent_3dsolid *_3dsolid,
+dwg_ent_3dsolid_get_wireframe_data_present(const dwg_ent_3dsolid *_3dsolid,
                                            int *error)
 {
   if (_3dsolid != 0)
@@ -13538,7 +13539,7 @@ dwg_ent_3dsolid_set_wireframe_data_present(dwg_ent_3dsolid *_3dsolid,
 
 /// Returns point present value
 char
-dwg_ent_3dsolid_get_point_present(dwg_ent_3dsolid *_3dsolid, int *error)
+dwg_ent_3dsolid_get_point_present(const dwg_ent_3dsolid *_3dsolid, int *error)
 {
   if (_3dsolid != 0)
     {
@@ -13572,7 +13573,7 @@ dwg_ent_3dsolid_set_point_present(dwg_ent_3dsolid *_3dsolid, char point,
 
 /// Returns point value
 void
-dwg_ent_3dsolid_get_point(dwg_ent_3dsolid *_3dsolid, dwg_point_3d *point,
+dwg_ent_3dsolid_get_point(const dwg_ent_3dsolid *_3dsolid, dwg_point_3d *point,
                           int *error)
 {
   if (_3dsolid != 0 && point != 0)
@@ -13610,7 +13611,7 @@ dwg_ent_3dsolid_set_point(dwg_ent_3dsolid *_3dsolid, dwg_point_3d *point,
 
 /// Returns number of isolines
 BITCODE_BL
-dwg_ent_3dsolid_get_num_isolines(dwg_ent_3dsolid *_3dsolid, int *error)
+dwg_ent_3dsolid_get_num_isolines(const dwg_ent_3dsolid *_3dsolid, int *error)
 {
   if (_3dsolid != 0)
     {
@@ -13644,7 +13645,7 @@ dwg_ent_3dsolid_set_num_isolines(dwg_ent_3dsolid *_3dsolid, BITCODE_BL num,
 
 /// Returns isoline present value
 char
-dwg_ent_3dsolid_get_isoline_present(dwg_ent_3dsolid *_3dsolid, int *error)
+dwg_ent_3dsolid_get_isoline_present(const dwg_ent_3dsolid *_3dsolid, int *error)
 {
   if (_3dsolid != 0)
     {
@@ -13678,7 +13679,7 @@ dwg_ent_3dsolid_set_isoline_present(dwg_ent_3dsolid *_3dsolid, char iso,
 
 /// Returns number of wires
 BITCODE_BL
-dwg_ent_3dsolid_get_num_wires(dwg_ent_3dsolid *_3dsolid, int *error)
+dwg_ent_3dsolid_get_num_wires(const dwg_ent_3dsolid *_3dsolid, int *error)
 {
   if (_3dsolid != 0)
     {
@@ -13711,7 +13712,7 @@ dwg_ent_3dsolid_set_num_wires(dwg_ent_3dsolid *_3dsolid, BITCODE_BL num, int *er
 
 /// Returns wire
 dwg_ent_solid_wire *
-dwg_ent_3dsolid_get_wire(dwg_ent_3dsolid *_3dsolid, int *error)
+dwg_ent_3dsolid_get_wire(const dwg_ent_3dsolid *_3dsolid, int *error)
 {
   dwg_ent_solid_wire *ptx = (dwg_ent_solid_wire*)
     malloc(sizeof(dwg_ent_solid_wire)* _3dsolid->num_wires);
@@ -13735,7 +13736,7 @@ dwg_ent_3dsolid_get_wire(dwg_ent_3dsolid *_3dsolid, int *error)
 
 /// Returns number of silhouettes
 BITCODE_BL
-dwg_ent_3dsolid_get_num_silhouettes(dwg_ent_3dsolid *_3dsolid, int *error)
+dwg_ent_3dsolid_get_num_silhouettes(const dwg_ent_3dsolid *_3dsolid, int *error)
 {
   if (_3dsolid != 0)
     {
@@ -13769,7 +13770,7 @@ dwg_ent_3dsolid_set_num_silhouettes(dwg_ent_3dsolid *_3dsolid,
 
 /// Returns silhouette
 dwg_ent_solid_silhouette *
-dwg_ent_3dsolid_get_silhouette(dwg_ent_3dsolid *_3dsolid, int *error)
+dwg_ent_3dsolid_get_silhouette(const dwg_ent_3dsolid *_3dsolid, int *error)
 {
   dwg_ent_solid_silhouette *ptx = (dwg_ent_solid_silhouette*)
     malloc(sizeof(dwg_ent_solid_silhouette)* _3dsolid->num_silhouettes);
@@ -13793,7 +13794,7 @@ dwg_ent_3dsolid_get_silhouette(dwg_ent_3dsolid *_3dsolid, int *error)
 
 /// Returns acis empty 2 value
 unsigned char
-dwg_ent_3dsolid_get_acis_empty2(dwg_ent_3dsolid *_3dsolid, int *error)
+dwg_ent_3dsolid_get_acis_empty2(const dwg_ent_3dsolid *_3dsolid, int *error)
 {
   if (_3dsolid != 0)
     {
@@ -13831,7 +13832,7 @@ dwg_ent_3dsolid_set_acis_empty2(dwg_ent_3dsolid *_3dsolid, unsigned char acis,
 
 /// Returns acis empty value
 unsigned char
-dwg_ent_region_get_acis_empty(dwg_ent_region *region, int *error)
+dwg_ent_region_get_acis_empty(const dwg_ent_region *region, int *error)
 {
   if (region != 0)
     {
@@ -13865,7 +13866,7 @@ dwg_ent_region_set_acis_empty(dwg_ent_region *region, unsigned char acis,
 
 /// Returns version value
 BITCODE_BS
-dwg_ent_region_get_version(dwg_ent_region *region, int *error)
+dwg_ent_region_get_version(const dwg_ent_region *region, int *error)
 {
   if (region != 0)
     {
@@ -13899,7 +13900,7 @@ dwg_ent_region_set_version(dwg_ent_region *region, BITCODE_BS version,
 
 /// Returns pointer
 BITCODE_BL*
-dwg_ent_region_get_block_size(dwg_ent_region *region, int *error)
+dwg_ent_region_get_block_size(const dwg_ent_region *region, int *error)
 {
   if (region != 0)
     {
@@ -13916,7 +13917,7 @@ dwg_ent_region_get_block_size(dwg_ent_region *region, int *error)
 
 /// Returns acis data
 char *
-dwg_ent_region_get_acis_data(dwg_ent_region *region, int *error)
+dwg_ent_region_get_acis_data(const dwg_ent_region *region, int *error)
 {
   if (region != 0)
     {
@@ -13950,7 +13951,7 @@ dwg_ent_region_set_acis_data(dwg_ent_region *region, char * data,
 
 /// Returns wireframe data present value
 char
-dwg_ent_region_get_wireframe_data_present(dwg_ent_region *region, int *error)
+dwg_ent_region_get_wireframe_data_present(const dwg_ent_region *region, int *error)
 {
   if (region != 0)
     {
@@ -13984,7 +13985,7 @@ dwg_ent_region_set_wireframe_data_present(dwg_ent_region *region, char data,
 
 /// Returns point present value
 char
-dwg_ent_region_get_point_present(dwg_ent_region *region, int *error)
+dwg_ent_region_get_point_present(const dwg_ent_region *region, int *error)
 {
   if (region != 0)
     {
@@ -14018,7 +14019,7 @@ dwg_ent_region_set_point_present(dwg_ent_region *region, char point,
 
 /// Returns point value
 void
-dwg_ent_region_get_point(dwg_ent_region *region, dwg_point_3d *point,
+dwg_ent_region_get_point(const dwg_ent_region *region, dwg_point_3d *point,
                          int *error)
 {
   if (region != 0 && point != 0)
@@ -14056,7 +14057,7 @@ dwg_ent_region_set_point(dwg_ent_region *region, dwg_point_3d *point,
 
 /// Returns number of isolines
 BITCODE_BL
-dwg_ent_region_get_num_isolines(dwg_ent_region *region, int *error)
+dwg_ent_region_get_num_isolines(const dwg_ent_region *region, int *error)
 {
   if (region != 0)
     {
@@ -14089,7 +14090,7 @@ dwg_ent_region_set_num_isolines(dwg_ent_region *region, BITCODE_BL num, int *err
 
 /// Returns isoline present value
 char
-dwg_ent_region_get_isoline_present(dwg_ent_region *region, int *error)
+dwg_ent_region_get_isoline_present(const dwg_ent_region *region, int *error)
 {
   if (region != 0)
     {
@@ -14123,7 +14124,7 @@ dwg_ent_region_set_isoline_present(dwg_ent_region *region, char iso,
 
 /// Returns number of wires
 BITCODE_BL
-dwg_ent_region_get_num_wires(dwg_ent_region *region, int *error)
+dwg_ent_region_get_num_wires(const dwg_ent_region *region, int *error)
 {
   if (region != 0)
     {
@@ -14156,7 +14157,7 @@ dwg_ent_region_set_num_wires(dwg_ent_region *region, BITCODE_BL num, int *error)
 
 /// Returns wire
 dwg_ent_solid_wire *
-dwg_ent_region_get_wire(dwg_ent_region *region, int *error)
+dwg_ent_region_get_wire(const dwg_ent_region *region, int *error)
 {
   dwg_ent_solid_wire *ptx = (dwg_ent_solid_wire*)
     malloc(sizeof(dwg_ent_solid_wire)* region->num_wires);
@@ -14180,7 +14181,7 @@ dwg_ent_region_get_wire(dwg_ent_region *region, int *error)
 
 /// Returns number of silhouettes
 BITCODE_BL
-dwg_ent_region_get_num_silhouettes(dwg_ent_region *region, int *error)
+dwg_ent_region_get_num_silhouettes(const dwg_ent_region *region, int *error)
 {
   if (region != 0)
     {
@@ -14214,7 +14215,7 @@ dwg_ent_region_set_num_silhouettes(dwg_ent_region *region, BITCODE_BL silhouette
 
 /// Returns silhouette
 dwg_ent_solid_silhouette *
-dwg_ent_region_get_silhouette(dwg_ent_region *region, int *error)
+dwg_ent_region_get_silhouette(const dwg_ent_region *region, int *error)
 {
   dwg_ent_solid_silhouette *ptx = (dwg_ent_solid_silhouette*)
     malloc(sizeof(dwg_ent_solid_silhouette)* region->num_silhouettes);
@@ -14238,7 +14239,7 @@ dwg_ent_region_get_silhouette(dwg_ent_region *region, int *error)
 
 /// Returns acis empty 2 value
 unsigned char
-dwg_ent_region_get_acis_empty2(dwg_ent_region *region, int *error)
+dwg_ent_region_get_acis_empty2(const dwg_ent_region *region, int *error)
 {
   if (region != 0)
     {
@@ -14275,7 +14276,7 @@ dwg_ent_region_set_acis_empty2(dwg_ent_region *region, unsigned char acis,
 ********************************************************************/
 /// Returns acis empty value
 unsigned char
-dwg_ent_body_get_acis_empty(dwg_ent_body *body, int *error)
+dwg_ent_body_get_acis_empty(const dwg_ent_body *body, int *error)
 {
   if (body != 0)
     {
@@ -14309,7 +14310,7 @@ dwg_ent_body_set_acis_empty(dwg_ent_body *body, unsigned char acis,
 
 /// Returns version value
 BITCODE_BS
-dwg_ent_body_get_version(dwg_ent_body *body, int *error)
+dwg_ent_body_get_version(const dwg_ent_body *body, int *error)
 {
   if (body != 0)
     {
@@ -14342,7 +14343,7 @@ dwg_ent_body_set_version(dwg_ent_body *body, BITCODE_BS version, int *error)
 
 /// Returns pointer to body block size
 BITCODE_BL *
-dwg_ent_body_get_block_size(dwg_ent_body *body, int *error)
+dwg_ent_body_get_block_size(const dwg_ent_body *body, int *error)
 {
   if (body != 0)
     {
@@ -14359,7 +14360,7 @@ dwg_ent_body_get_block_size(dwg_ent_body *body, int *error)
 
 /// Returns body acis data value
 char *
-dwg_ent_body_get_acis_data(dwg_ent_body *body, int *error)
+dwg_ent_body_get_acis_data(const dwg_ent_body *body, int *error)
 {
   if (body != 0)
     {
@@ -14392,7 +14393,7 @@ dwg_ent_body_set_acis_data(dwg_ent_body *body, char * data, int *error)
 
 /// Returns wireframe data present value
 char
-dwg_ent_body_get_wireframe_data_present(dwg_ent_body *body, int *error)
+dwg_ent_body_get_wireframe_data_present(const dwg_ent_body *body, int *error)
 {
   if (body != 0)
     {
@@ -14426,7 +14427,7 @@ dwg_ent_body_set_wireframe_data_present(dwg_ent_body *body, char data,
 
 /// Returns point present value
 char
-dwg_ent_body_get_point_present(dwg_ent_body *body, int *error)
+dwg_ent_body_get_point_present(const dwg_ent_body *body, int *error)
 {
   if (body != 0)
     {
@@ -14459,7 +14460,7 @@ dwg_ent_body_set_point_present(dwg_ent_body *body, char point, int *error)
 
 /// Returns point values
 void
-dwg_ent_body_get_point(dwg_ent_body *body, dwg_point_3d *point, int *error)
+dwg_ent_body_get_point(const dwg_ent_body *body, dwg_point_3d *point, int *error)
 {
   if (body != 0)
     {
@@ -14495,7 +14496,7 @@ dwg_ent_body_set_point(dwg_ent_body *body, dwg_point_3d *point, int *error)
 
 /// Returns number of isolines
 BITCODE_BL
-dwg_ent_body_get_num_isolines(dwg_ent_body *body, int *error)
+dwg_ent_body_get_num_isolines(const dwg_ent_body *body, int *error)
 {
   if (body != 0)
     {
@@ -14528,7 +14529,7 @@ dwg_ent_body_set_num_isolines(dwg_ent_body *body, BITCODE_BL num, int *error)
 
 /// returns isoline present value
 char
-dwg_ent_body_get_isoline_present(dwg_ent_body *body, int *error)
+dwg_ent_body_get_isoline_present(const dwg_ent_body *body, int *error)
 {
   if (body != 0)
     {
@@ -14561,7 +14562,7 @@ dwg_ent_body_set_isoline_present(dwg_ent_body *body, char iso, int *error)
 
 /// Returns number of wires
 BITCODE_BL
-dwg_ent_body_get_num_wires(dwg_ent_body *body, int *error)
+dwg_ent_body_get_num_wires(const dwg_ent_body *body, int *error)
 {
   if (body != 0)
     {
@@ -14594,7 +14595,7 @@ dwg_ent_body_set_num_wires(dwg_ent_body *body, BITCODE_BL num, int *error)
 
 /// Returns wire of body
 dwg_ent_solid_wire *
-dwg_ent_body_get_wire(dwg_ent_body *body, int *error)
+dwg_ent_body_get_wire(const dwg_ent_body *body, int *error)
 {
   dwg_ent_solid_wire *ptx = (dwg_ent_solid_wire*)
     malloc(sizeof(dwg_ent_solid_wire)* body->num_wires);
@@ -14618,7 +14619,7 @@ dwg_ent_body_get_wire(dwg_ent_body *body, int *error)
 
 /// Returns number of silhouettes value
 BITCODE_BL
-dwg_ent_body_get_num_silhouettes(dwg_ent_body *body, int *error)
+dwg_ent_body_get_num_silhouettes(const dwg_ent_body *body, int *error)
 {
   if (body != 0)
     {
@@ -14652,7 +14653,7 @@ dwg_ent_body_set_num_silhouettes(dwg_ent_body *body, BITCODE_BL silhouettes,
 
 /// Returns silhouette for body entity
 dwg_ent_solid_silhouette *
-dwg_ent_body_get_silhouette(dwg_ent_body *body,
+dwg_ent_body_get_silhouette(const dwg_ent_body *body,
                             int *error)
 {
   dwg_ent_solid_silhouette *ptx = (dwg_ent_solid_silhouette*)
@@ -14677,7 +14678,7 @@ dwg_ent_body_get_silhouette(dwg_ent_body *body,
 
 /// Returns acis empty2 value
 unsigned char
-dwg_ent_body_get_acis_empty2(dwg_ent_body *body, int *error)
+dwg_ent_body_get_acis_empty2(const dwg_ent_body *body, int *error)
 {
   if (body != 0)
     {
@@ -14734,7 +14735,7 @@ dwg_ent_table_set_insertion_point(dwg_ent_table *table, dwg_point_3d *point,
 
 /// Returns insertion point
 void
-dwg_ent_table_get_insertion_point(dwg_ent_table *table, dwg_point_3d *point,
+dwg_ent_table_get_insertion_point(const dwg_ent_table *table, dwg_point_3d *point,
                                   int *error)
 {
   if (table != 0 && point != 0)
@@ -14771,7 +14772,7 @@ dwg_ent_table_set_scale(dwg_ent_table *table, dwg_point_3d *point, int *error)
 
 /// Returns scale points
 void
-dwg_ent_table_get_scale(dwg_ent_table *table, dwg_point_3d *point, int *error)
+dwg_ent_table_get_scale(const dwg_ent_table *table, dwg_point_3d *point, int *error)
 {
   if (table != 0 && point != 0)
     {
@@ -14806,7 +14807,7 @@ dwg_ent_table_set_data_flags(dwg_ent_table *table, unsigned char flags,
 
 /// Returns data flags
 unsigned char
-dwg_ent_table_get_data_flags(dwg_ent_table *table, int *error)
+dwg_ent_table_get_data_flags(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -14839,7 +14840,7 @@ dwg_ent_table_set_rotation(dwg_ent_table *table, BITCODE_BD rotation, int *error
 
 /// Returns rotation
 BITCODE_BD
-dwg_ent_table_get_rotation(dwg_ent_table *table, int *error)
+dwg_ent_table_get_rotation(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -14875,7 +14876,7 @@ dwg_ent_table_set_extrusion(dwg_ent_table *table, dwg_point_3d *point,
 
 /// Returns extrusion points
 void
-dwg_ent_table_get_extrusion(dwg_ent_table *table, dwg_point_3d *point,
+dwg_ent_table_get_extrusion(const dwg_ent_table *table, dwg_point_3d *point,
                             int *error)
 {
   if (table != 0 && point != 0)
@@ -14929,7 +14930,7 @@ dwg_ent_table_set_owned_object_count(dwg_ent_table *table, BITCODE_BL count,
 
 /// Returns owned object count
 BITCODE_BL
-dwg_ent_table_get_owned_object_count(dwg_ent_table *table, int *error)
+dwg_ent_table_get_owned_object_count(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -14963,7 +14964,7 @@ dwg_ent_table_set_flag_for_table_value(dwg_ent_table *table,
 
 /// Returns flag for table value
 BITCODE_BS
-dwg_ent_table_get_flag_for_table_value(dwg_ent_table *table, int *error)
+dwg_ent_table_get_flag_for_table_value(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -15000,7 +15001,7 @@ dwg_ent_table_set_horiz_direction(dwg_ent_table *table, dwg_point_3d *point,
 
 /// Returns horiz direction
 void
-dwg_ent_table_get_horiz_direction(dwg_ent_table *table, dwg_point_3d *point,
+dwg_ent_table_get_horiz_direction(const dwg_ent_table *table, dwg_point_3d *point,
                                   int *error)
 {
   if (table != 0 && point != 0)
@@ -15035,7 +15036,7 @@ dwg_ent_table_set_num_cols(dwg_ent_table *table, BITCODE_BL num, int *error)
 
 /// Returns number of columns
 BITCODE_BL
-dwg_ent_table_get_num_cols(dwg_ent_table *table, int *error)
+dwg_ent_table_get_num_cols(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -15068,7 +15069,7 @@ dwg_ent_table_set_num_rows(dwg_ent_table *table, BITCODE_BL num, int *error)
 
 /// Returns number of rows
 BITCODE_BL
-dwg_ent_table_get_num_rows(dwg_ent_table *table, int *error)
+dwg_ent_table_get_num_rows(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -15085,7 +15086,7 @@ dwg_ent_table_get_num_rows(dwg_ent_table *table, int *error)
 
 /// Returns column widths
 double *
-dwg_ent_table_get_col_widths(dwg_ent_table *table, int *error)
+dwg_ent_table_get_col_widths(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -15102,7 +15103,7 @@ dwg_ent_table_get_col_widths(dwg_ent_table *table, int *error)
 
 /// Returns row heights
 double *
-dwg_ent_table_get_row_heights(dwg_ent_table *table, int *error)
+dwg_ent_table_get_row_heights(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -15153,7 +15154,7 @@ dwg_ent_table_set_table_flag_override(dwg_ent_table *table, BITCODE_BL override,
 
 /// returns flag overrides
 BITCODE_BL
-dwg_ent_table_get_table_flag_override(dwg_ent_table *table, int *error)
+dwg_ent_table_get_table_flag_override(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -15187,7 +15188,7 @@ dwg_ent_table_set_title_suppressed(dwg_ent_table *table, unsigned char title,
 
 /// Returns title suppressed
 unsigned char
-dwg_ent_table_get_title_suppressed(dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_suppressed(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -15221,7 +15222,7 @@ dwg_ent_table_set_header_suppressed(dwg_ent_table *table, unsigned char header,
 
 /// Returns header suppressed
 unsigned char
-dwg_ent_table_get_header_suppressed(dwg_ent_table *table, int *error)
+dwg_ent_table_get_header_suppressed(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -15255,7 +15256,7 @@ dwg_ent_table_set_flow_direction(dwg_ent_table *table, BITCODE_BS dir,
 
 /// Returns flow direction
 BITCODE_BS
-dwg_ent_table_get_flow_direction(dwg_ent_table *table, int *error)
+dwg_ent_table_get_flow_direction(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -15289,7 +15290,7 @@ dwg_ent_table_set_horiz_cell_margin(dwg_ent_table *table, BITCODE_BD margin,
 
 /// Returns horiz cell margin
 BITCODE_BD
-dwg_ent_table_get_horiz_cell_margin(dwg_ent_table *table, int *error)
+dwg_ent_table_get_horiz_cell_margin(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -15323,7 +15324,7 @@ dwg_ent_table_set_vert_cell_margin(dwg_ent_table *table, BITCODE_BD margin,
 
 /// Returns vert cell margin
 BITCODE_BD
-dwg_ent_table_get_vert_cell_margin(dwg_ent_table *table, int *error)
+dwg_ent_table_get_vert_cell_margin(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -15357,7 +15358,7 @@ dwg_ent_table_set_title_row_fill_none(dwg_ent_table *table, unsigned char fill,
 
 /// Returns title row fill none value
 unsigned char
-dwg_ent_table_get_title_row_fill_none(dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_row_fill_none(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -15391,7 +15392,7 @@ dwg_ent_table_set_header_row_fill_none(dwg_ent_table *table,
 
 /// Returns header row fill none value
 unsigned char
-dwg_ent_table_get_header_row_fill_none(dwg_ent_table *table, int *error)
+dwg_ent_table_get_header_row_fill_none(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -15425,7 +15426,7 @@ dwg_ent_table_set_data_row_fill_none(dwg_ent_table *table, unsigned char fill,
 
 /// Returns data row fill none value
 unsigned char
-dwg_ent_table_get_data_row_fill_none(dwg_ent_table *table, int *error)
+dwg_ent_table_get_data_row_fill_none(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -15459,7 +15460,7 @@ dwg_ent_table_set_title_row_align(dwg_ent_table *table, unsigned char fill,
 
 /// Returns title row align
 BITCODE_BS
-dwg_ent_table_get_title_row_align(dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_row_align(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -15493,7 +15494,7 @@ dwg_ent_table_set_header_row_align(dwg_ent_table *table, BITCODE_BS align,
 
 /// Returns header row align
 BITCODE_BS
-dwg_ent_table_get_header_row_align(dwg_ent_table *table, int *error)
+dwg_ent_table_get_header_row_align(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -15527,7 +15528,7 @@ dwg_ent_table_set_data_row_align(dwg_ent_table *table, BITCODE_BS align,
 
 /// Returns data row align
 BITCODE_BS
-dwg_ent_table_get_data_row_align(dwg_ent_table *table, int *error)
+dwg_ent_table_get_data_row_align(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -15561,7 +15562,7 @@ dwg_ent_table_set_title_row_height(dwg_ent_table *table, BITCODE_BD height,
 
 /// Returns title row height
 BITCODE_BD
-dwg_ent_table_get_title_row_height(dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_row_height(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -15595,7 +15596,7 @@ dwg_ent_table_set_header_row_height(dwg_ent_table *table, BITCODE_BD height,
 
 /// Returns header row height
 BITCODE_BD
-dwg_ent_table_get_header_row_height(dwg_ent_table *table, int *error)
+dwg_ent_table_get_header_row_height(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -15629,7 +15630,7 @@ dwg_ent_table_set_data_row_height(dwg_ent_table *table, BITCODE_BD height,
 
 /// Returns data row height value
 BITCODE_BD
-dwg_ent_table_get_data_row_height(dwg_ent_table *table, int *error)
+dwg_ent_table_get_data_row_height(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -15681,7 +15682,7 @@ dwg_ent_table_set_border_color_overrides_flag(dwg_ent_table *table,
 
 /// Returns border color overrides flag value
 BITCODE_BL
-dwg_ent_table_get_border_color_overrides_flag(dwg_ent_table *table, int *error)
+dwg_ent_table_get_border_color_overrides_flag(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -15734,7 +15735,7 @@ dwg_ent_table_set_border_lineweight_overrides_flag(dwg_ent_table *table,
 
 /// Returns border lineweight overrides flag value
 BITCODE_BL
-dwg_ent_table_get_border_lineweight_overrides_flag(dwg_ent_table *table,
+dwg_ent_table_get_border_lineweight_overrides_flag(const dwg_ent_table *table,
                                                    int *error)
 {
   if (table != 0)
@@ -15769,7 +15770,7 @@ dwg_ent_table_set_title_horiz_top_linewt(dwg_ent_table *table,
 
 /// Returns title horiz top lineweight value
 BITCODE_BS
-dwg_ent_table_get_title_horiz_top_linewt(dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_horiz_top_linewt(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -15803,7 +15804,7 @@ dwg_ent_table_set_title_horiz_ins_linewt(dwg_ent_table *table,
 
 /// Returns title horiz ins lineweight value
 BITCODE_BS
-dwg_ent_table_get_title_horiz_ins_linewt(dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_horiz_ins_linewt(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -15837,7 +15838,7 @@ dwg_ent_table_set_title_horiz_bottom_linewt(dwg_ent_table *table,
 
 /// Returns title horiz bottom lineweight value
 BITCODE_BS
-dwg_ent_table_get_title_horiz_bottom_linewt(dwg_ent_table *table,
+dwg_ent_table_get_title_horiz_bottom_linewt(const dwg_ent_table *table,
                                                 int *error)
 {
   if (table != 0)
@@ -15872,7 +15873,7 @@ dwg_ent_table_set_title_vert_left_linewt(dwg_ent_table *table,
 
 /// Sets title vert left lineweight value
 BITCODE_BS
-dwg_ent_table_get_title_vert_left_linewt(dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_vert_left_linewt(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -15906,7 +15907,7 @@ dwg_ent_table_set_title_vert_ins_linewt(dwg_ent_table *table,
 
 /// Returns title vert ins lineweight
 BITCODE_BS
-dwg_ent_table_get_title_vert_ins_linewt(dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_vert_ins_linewt(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -15940,7 +15941,7 @@ dwg_ent_table_set_title_vert_right_linewt(dwg_ent_table *table,
 
 /// Returns title vert right lineweight value
 BITCODE_BS
-dwg_ent_table_get_title_vert_right_linewt(dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_vert_right_linewt(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -15974,7 +15975,7 @@ dwg_ent_table_set_header_horiz_top_linewt(dwg_ent_table *table,
 
 /// Returns header horiz top lineweight value
 BITCODE_BS
-dwg_ent_table_get_header_horiz_top_linewt(dwg_ent_table *table, int *error)
+dwg_ent_table_get_header_horiz_top_linewt(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -16008,7 +16009,7 @@ dwg_ent_table_set_header_horiz_ins_linewt(dwg_ent_table *table,
 
 /// Returns header horiz ins lineweight value
 BITCODE_BS
-dwg_ent_table_get_header_horiz_ins_linewt(dwg_ent_table *table,
+dwg_ent_table_get_header_horiz_ins_linewt(const dwg_ent_table *table,
                                               int *error)
 {
   if (table != 0)
@@ -16043,7 +16044,7 @@ dwg_ent_table_set_header_horiz_bottom_linewt(dwg_ent_table *table,
 
 /// Returns header horiz bottom lineweight value
 BITCODE_BS
-dwg_ent_table_get_header_horiz_bottom_linewt(dwg_ent_table *table,
+dwg_ent_table_get_header_horiz_bottom_linewt(const dwg_ent_table *table,
                                                  int *error)
 {
   if (table != 0)
@@ -16078,7 +16079,7 @@ dwg_ent_table_set_header_vert_left_linewt(dwg_ent_table *table,
 
 /// Returns header vert left lineweight value
 BITCODE_BS
-dwg_ent_table_get_header_vert_left_linewt(dwg_ent_table *table, int *error)
+dwg_ent_table_get_header_vert_left_linewt(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -16112,7 +16113,7 @@ dwg_ent_table_set_header_vert_ins_linewt(dwg_ent_table *table,
 
 /// Returns header vert ins lineweight value
 BITCODE_BS
-dwg_ent_table_get_header_vert_ins_linewt(dwg_ent_table *table, int *error)
+dwg_ent_table_get_header_vert_ins_linewt(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -16146,7 +16147,7 @@ dwg_ent_table_set_header_vert_right_linewt(dwg_ent_table *table,
 
 /// Returns header vert right lineweight value
 BITCODE_BS
-dwg_ent_table_get_header_vert_right_linewt(dwg_ent_table *table,
+dwg_ent_table_get_header_vert_right_linewt(const dwg_ent_table *table,
                                                int *error)
 {
   if (table != 0)
@@ -16181,7 +16182,7 @@ dwg_ent_table_set_data_horiz_top_linewt(dwg_ent_table *table,
 
 /// Returns data horiz top lineweight value
 BITCODE_BS
-dwg_ent_table_get_data_horiz_top_linewt(dwg_ent_table *table, int *error)
+dwg_ent_table_get_data_horiz_top_linewt(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -16215,7 +16216,7 @@ dwg_ent_table_set_data_horiz_ins_linewt(dwg_ent_table *table,
 
 /// Returns data horiz ins lineweight value
 BITCODE_BS
-dwg_ent_table_get_data_horiz_ins_linewt(dwg_ent_table *table, int *error)
+dwg_ent_table_get_data_horiz_ins_linewt(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -16249,7 +16250,7 @@ dwg_ent_table_set_data_horiz_bottom_linewt(dwg_ent_table *table,
 
 /// Returns data horiz bottom lineweight
 BITCODE_BS
-dwg_ent_table_get_data_horiz_bottom_linewt(dwg_ent_table *table,
+dwg_ent_table_get_data_horiz_bottom_linewt(const dwg_ent_table *table,
                                                int *error)
 {
   if (table != 0)
@@ -16284,7 +16285,7 @@ dwg_ent_table_set_data_vert_ins_linewt(dwg_ent_table *table,
 
 /// Returns title border visibility overrides flag
 BITCODE_BS
-dwg_ent_table_get_data_vert_ins_linewt(dwg_ent_table *table, int *error)
+dwg_ent_table_get_data_vert_ins_linewt(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -16337,7 +16338,7 @@ dwg_ent_table_set_border_visibility_overrides_flag(dwg_ent_table *table,
 
 /// Returns title border visibility overrides flag
 BITCODE_BL
-dwg_ent_table_get_border_visibility_overrides_flag(dwg_ent_table *table,
+dwg_ent_table_get_border_visibility_overrides_flag(const dwg_ent_table *table,
                                                    int *error)
 {
   if (table != 0)
@@ -16373,7 +16374,7 @@ dwg_ent_table_set_title_horiz_top_visibility(dwg_ent_table *table,
 
 /// Returns title horiz top visibility
 BITCODE_BS
-dwg_ent_table_get_title_horiz_top_visibility(dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_horiz_top_visibility(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -16408,7 +16409,7 @@ dwg_ent_table_set_title_horiz_ins_visibility(dwg_ent_table *table,
 
 /// Returns title horiz ins visibility
 BITCODE_BS
-dwg_ent_table_get_title_horiz_ins_visibility(dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_horiz_ins_visibility(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -16443,7 +16444,7 @@ dwg_ent_table_set_title_horiz_bottom_visibility(dwg_ent_table *table,
 
 /// Returns title horiz bottom visibility
 BITCODE_BS
-dwg_ent_table_get_title_horiz_bottom_visibility(dwg_ent_table *table,
+dwg_ent_table_get_title_horiz_bottom_visibility(const dwg_ent_table *table,
                                                 int *error)
 {
   if (table != 0)
@@ -16479,7 +16480,7 @@ dwg_ent_table_set_title_vert_left_visibility(dwg_ent_table *table,
 
 /// Returns title vert left visibility
 BITCODE_BS
-dwg_ent_table_get_title_vert_left_visibility(dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_vert_left_visibility(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -16514,7 +16515,7 @@ dwg_ent_table_set_title_vert_ins_visibility(dwg_ent_table *table,
 
 /// Returns title vert ins visibility
 BITCODE_BS
-dwg_ent_table_get_title_vert_ins_visibility(dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_vert_ins_visibility(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -16549,7 +16550,7 @@ dwg_ent_table_set_title_vert_right_visibility(dwg_ent_table *table,
 
 /// Returns title vert right visibility
 BITCODE_BS
-dwg_ent_table_get_title_vert_right_visibility(dwg_ent_table *table,
+dwg_ent_table_get_title_vert_right_visibility(const dwg_ent_table *table,
                                               int *error)
 {
   if (table != 0)
@@ -16585,7 +16586,7 @@ dwg_ent_table_set_header_horiz_top_visibility(dwg_ent_table *table,
 
 /// Returns data header horiz top visibility
 BITCODE_BS
-dwg_ent_table_get_header_horiz_top_visibility(dwg_ent_table *table,
+dwg_ent_table_get_header_horiz_top_visibility(const dwg_ent_table *table,
                                               int *error)
 {
   if (table != 0)
@@ -16621,7 +16622,7 @@ dwg_ent_table_set_header_horiz_ins_visibility(dwg_ent_table *table,
 
 /// Returns data header horiz ins visibility
 BITCODE_BS
-dwg_ent_table_get_header_horiz_ins_visibility(dwg_ent_table *table,
+dwg_ent_table_get_header_horiz_ins_visibility(const dwg_ent_table *table,
                                               int *error)
 {
   if (table != 0)
@@ -16657,7 +16658,7 @@ dwg_ent_table_set_header_horiz_bottom_visibility(dwg_ent_table *table,
 
 /// Get data header horiz_bottom visibility
 BITCODE_BS
-dwg_ent_table_get_header_horiz_bottom_visibility(dwg_ent_table *table,
+dwg_ent_table_get_header_horiz_bottom_visibility(const dwg_ent_table *table,
                                                  int *error)
 {
   if (table != 0)
@@ -16675,7 +16676,7 @@ dwg_ent_table_get_header_horiz_bottom_visibility(dwg_ent_table *table,
 
 /// Returns data header vert left visibility
 BITCODE_BS
-dwg_ent_table_get_header_vert_left_visibility(dwg_ent_table *table,
+dwg_ent_table_get_header_vert_left_visibility(const dwg_ent_table *table,
                                               int *error)
 {
   if (table != 0)
@@ -16711,7 +16712,7 @@ dwg_ent_table_set_header_vert_ins_visibility(dwg_ent_table *table,
 
 /// Returns data header vert ins visibility
 BITCODE_BS
-dwg_ent_table_get_header_vert_ins_visibility(dwg_ent_table *table, int *error)
+dwg_ent_table_get_header_vert_ins_visibility(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -16746,7 +16747,7 @@ dwg_ent_table_set_header_vert_right_visibility(dwg_ent_table *table,
 
 /// Returns data header vert right visibility
 BITCODE_BS
-dwg_ent_table_get_header_vert_right_visibility(dwg_ent_table *table,
+dwg_ent_table_get_header_vert_right_visibility(const dwg_ent_table *table,
                                                int *error)
 {
   if (table != 0)
@@ -16782,7 +16783,7 @@ dwg_ent_table_set_data_horiz_top_visibility(dwg_ent_table *table,
 
 /// Returns data horiz top visibility
 BITCODE_BS
-dwg_ent_table_get_data_horiz_top_visibility(dwg_ent_table *table, int *error)
+dwg_ent_table_get_data_horiz_top_visibility(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -16817,7 +16818,7 @@ dwg_ent_table_set_data_horiz_ins_visibility(dwg_ent_table *table,
 
 /// Returns data horiz ins visibility
 BITCODE_BS
-dwg_ent_table_get_data_horiz_ins_visibility(dwg_ent_table *table, int *error)
+dwg_ent_table_get_data_horiz_ins_visibility(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -16852,7 +16853,7 @@ dwg_ent_table_set_data_horiz_bottom_visibility(dwg_ent_table *table,
 
 /// Returns data horiz bottom visibility
 BITCODE_BS
-dwg_ent_table_get_data_horiz_bottom_visibility(dwg_ent_table *table,
+dwg_ent_table_get_data_horiz_bottom_visibility(const dwg_ent_table *table,
                                                int *error)
 {
   if (table != 0)
@@ -16888,7 +16889,7 @@ dwg_ent_table_set_data_vert_ins_visibility(dwg_ent_table *table,
 
 /// Returns data vert ins visibility
 BITCODE_BS
-dwg_ent_table_get_data_vert_ins_visibility(dwg_ent_table *table, int *error)
+dwg_ent_table_get_data_vert_ins_visibility(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -16923,7 +16924,7 @@ dwg_ent_table_set_data_vert_right_visibility(dwg_ent_table *table,
 
 /// Returns data vert right visibility
 BITCODE_BS
-dwg_ent_table_get_data_vert_right_visibility(dwg_ent_table *table, int *error)
+dwg_ent_table_get_data_vert_right_visibility(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
@@ -16946,7 +16947,7 @@ dwg_ent_table_get_data_vert_right_visibility(dwg_ent_table *table, int *error)
 /** Usage :- dwg_obj_block_control *blc = dwg_block_header_get_block_control(hdr);
 */
 dwg_obj_block_control *
-dwg_block_header_get_block_control(dwg_obj_block_header* block_header,
+dwg_block_header_get_block_control(const dwg_obj_block_header* block_header,
                                    int *error)
 {
   if (block_header &&
@@ -16967,7 +16968,7 @@ dwg_block_header_get_block_control(dwg_obj_block_header* block_header,
 
 /// Extracts and returns all block headers
 dwg_object_ref **
-dwg_obj_block_control_get_block_headers(dwg_obj_block_control *ctrl,
+dwg_obj_block_control_get_block_headers(const dwg_obj_block_control *ctrl,
                                         int *error)
 {
   dwg_object_ref **ptx = (dwg_object_ref**)
@@ -16992,7 +16993,7 @@ dwg_obj_block_control_get_block_headers(dwg_obj_block_control *ctrl,
 
 /// Returns number of blocks
 BITCODE_BL
-dwg_obj_block_control_get_num_entries(dwg_obj_block_control *ctrl, int *error)
+dwg_obj_block_control_get_num_entries(const dwg_obj_block_control *ctrl, int *error)
 {
   if (ctrl != 0)
     {
@@ -17009,7 +17010,7 @@ dwg_obj_block_control_get_num_entries(dwg_obj_block_control *ctrl, int *error)
 
 /// Returns model space block
 dwg_object_ref *
-dwg_obj_block_control_get_model_space(dwg_obj_block_control *ctrl, int *error)
+dwg_obj_block_control_get_model_space(const dwg_obj_block_control *ctrl, int *error)
 {
   if (ctrl != 0)
     {
@@ -17026,7 +17027,7 @@ dwg_obj_block_control_get_model_space(dwg_obj_block_control *ctrl, int *error)
 
 /// Returns paper space block
 dwg_object_ref *
-dwg_obj_block_control_get_paper_space(dwg_obj_block_control *ctrl, int *error)
+dwg_obj_block_control_get_paper_space(const dwg_obj_block_control *ctrl, int *error)
 {
   if (ctrl != 0)
     {
@@ -17049,7 +17050,7 @@ dwg_obj_block_control_get_paper_space(dwg_obj_block_control *ctrl, int *error)
 /** Usage :- char * layer_name = dwg_obj_layer_get_name(layer);
 */
 char *
-dwg_obj_layer_get_name(dwg_obj_layer *layer, int *error)
+dwg_obj_layer_get_name(const dwg_obj_layer *layer, int *error)
 {
   if (layer)
     {
@@ -17076,7 +17077,7 @@ dwg_obj_layer_get_name(dwg_obj_layer *layer, int *error)
 /** Usage :- char * block_name = dwg_obj_block_header_get_name(hdr);
 */
 char *
-dwg_obj_block_header_get_name(dwg_obj_block_header *hdr, int *error)
+dwg_obj_block_header_get_name(const dwg_obj_block_header *hdr, int *error)
 {
   if (hdr)
     {
@@ -17141,21 +17142,21 @@ dwg_get_block_header(dwg_data *dwg, int *error)
 ********************************************************************/
 
 unsigned int
-dwg_get_num_classes(dwg_data *dwg)
+dwg_get_num_classes(const dwg_data *dwg)
 {
   if (dwg_version == R_INVALID)
     dwg_version = (Dwg_Version_Type)dwg->header.version;
   return dwg->num_classes;
 }
 long unsigned int
-dwg_get_num_objects(dwg_data *dwg)
+dwg_get_num_objects(const dwg_data *dwg)
 {
   if (dwg_version == R_INVALID)
     dwg_version = (Dwg_Version_Type)dwg->header.version;
   return dwg->num_objects;
 }
 long unsigned int
-dwg_get_num_entities(dwg_data *dwg)
+dwg_get_num_entities(const dwg_data *dwg)
 {
   if (dwg_version == R_INVALID)
     dwg_version = (Dwg_Version_Type)dwg->header.version;
@@ -17163,7 +17164,7 @@ dwg_get_num_entities(dwg_data *dwg)
 }
 
 dwg_class *
-dwg_get_class(dwg_data *dwg, unsigned int index)
+dwg_get_class(const dwg_data *dwg, unsigned int index)
 {
   if (dwg_version == R_INVALID)
     dwg_version = (Dwg_Version_Type)dwg->header.version;
@@ -17171,7 +17172,7 @@ dwg_get_class(dwg_data *dwg, unsigned int index)
 }
 
 dwg_object *
-dwg_get_object(dwg_data *dwg, long unsigned int index)
+dwg_get_object(const dwg_data *dwg, long unsigned int index)
 {
   if (dwg_version == R_INVALID)
     dwg_version = (Dwg_Version_Type)dwg->header.version;
@@ -17179,36 +17180,36 @@ dwg_get_object(dwg_data *dwg, long unsigned int index)
 }
 
 BITCODE_RL
-dwg_obj_get_bitsize(dwg_object *obj)
+dwg_obj_get_bitsize(const dwg_object *obj)
 {
   return obj->bitsize;
 }
 BITCODE_RL
-dwg_ent_get_bitsize(dwg_obj_ent *obj, int *error)
+dwg_ent_get_bitsize(const dwg_obj_ent *obj, int *error)
 {
   *error = 0;
   return obj->object->bitsize;
 }
 unsigned int
-dwg_obj_get_num_eed(dwg_obj_obj *obj, int *error)
+dwg_obj_get_num_eed(const dwg_obj_obj *obj, int *error)
 {
   *error = 0;
   return obj->num_eed;
 }
 unsigned int
-dwg_ent_get_num_eed(dwg_obj_ent *ent, int *error)
+dwg_ent_get_num_eed(const dwg_obj_ent *ent, int *error)
 {
   *error = 0;
   return ent->num_eed;
 }
 dwg_entity_eed *
-dwg_ent_get_eed(dwg_obj_ent *ent, unsigned int index, int *error)
+dwg_ent_get_eed(const dwg_obj_ent *ent, unsigned int index, int *error)
 {
   *error = 0;
   return (index < ent->num_eed) ? &ent->eed[index] : NULL;
 }
 dwg_entity_eed_data *
-dwg_ent_get_eed_data(dwg_obj_ent *ent, unsigned int index, int *error)
+dwg_ent_get_eed_data(const dwg_obj_ent *ent, unsigned int index, int *error)
 {
   *error = 0;
   return (index < ent->num_eed) ? ent->eed[index].data : NULL;
@@ -17220,7 +17221,7 @@ dwg_ent_get_eed_data(dwg_obj_ent *ent, unsigned int index, int *error)
 \param 2 int
 */
 int
-dwg_obj_object_get_index(dwg_object *obj, int *error)
+dwg_obj_object_get_index(const dwg_object *obj, int *error)
 {
   if (obj)
     {
@@ -17250,7 +17251,7 @@ dwg_obj_get_handle(dwg_object *obj, int *error)
       *error = 0;
       if (dwg_version == R_INVALID)
         dwg_version = (Dwg_Version_Type)obj->parent->header.version;
-      return &obj->handle;
+      return &(obj->handle);
     }
   else
     {
@@ -17312,7 +17313,7 @@ dwg_object_to_entity(dwg_object *obj, int *error)
 \param 2 int
 */
 dwg_object *
-dwg_obj_reference_get_object(dwg_object_ref *ref, int *error)
+dwg_obj_reference_get_object(const dwg_object_ref *ref, int *error)
 {
   if (ref)
     {
@@ -17333,7 +17334,7 @@ dwg_obj_reference_get_object(dwg_object_ref *ref, int *error)
 \param 2 int
 */
 BITCODE_BL
-dwg_obj_ref_get_abs_ref(dwg_object_ref *ref, int *error)
+dwg_obj_ref_get_abs_ref(const dwg_object_ref *ref, int *error)
 {
   if (ref)
     {
@@ -17353,7 +17354,7 @@ dwg_obj_ref_get_abs_ref(dwg_object_ref *ref, int *error)
 \param 1 dwg_object
 */
 int
-dwg_get_type(dwg_object *obj)
+dwg_get_type(const dwg_object *obj)
 {
   if (obj)
     {
@@ -17371,7 +17372,7 @@ dwg_get_type(dwg_object *obj)
 \param 1 dwg_object
 */
 char*
-dwg_get_dxfname(dwg_object *obj)
+dwg_get_dxfname(const dwg_object *obj)
 {
   if (obj)
     {

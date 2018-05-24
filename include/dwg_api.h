@@ -475,7 +475,7 @@ dwg_ent_circle_init(dwg_ent_circle *circle);
 
 // Get/Set the center point of a circle
 void
-dwg_ent_circle_get_center(dwg_ent_circle *circle, dwg_point_3d *point,
+dwg_ent_circle_get_center(const dwg_ent_circle *circle, dwg_point_3d *point,
                           int *error);
 
 void
@@ -484,7 +484,7 @@ dwg_ent_circle_set_center(dwg_ent_circle *circle, dwg_point_3d *point,
 
 // Get/Set the radius of a circle
 BITCODE_BD
-dwg_ent_circle_get_radius(dwg_ent_circle *circle, int *error);
+dwg_ent_circle_get_radius(const dwg_ent_circle *circle, int *error);
 
 void
 dwg_ent_circle_set_radius(dwg_ent_circle *circle, BITCODE_BD radius,
@@ -492,7 +492,7 @@ dwg_ent_circle_set_radius(dwg_ent_circle *circle, BITCODE_BD radius,
 
 // Get/Set the thickness of a circle
 BITCODE_BD
-dwg_ent_circle_get_thickness(dwg_ent_circle *circle, int *error);
+dwg_ent_circle_get_thickness(const dwg_ent_circle *circle, int *error);
 
 void
 dwg_ent_circle_set_thickness(dwg_ent_circle *circle, BITCODE_BD thickness,
@@ -500,11 +500,11 @@ dwg_ent_circle_set_thickness(dwg_ent_circle *circle, BITCODE_BD thickness,
 
 // Get/Set the extrusion of a circle
 void
-dwg_ent_circle_set_extrusion(dwg_ent_circle *circle,
+dwg_ent_circle_get_extrusion(const dwg_ent_circle *circle,
                              dwg_point_3d *vector, int *error);
 
 void
-dwg_ent_circle_get_extrusion(dwg_ent_circle *circle,
+dwg_ent_circle_set_extrusion(dwg_ent_circle *circle,
                              dwg_point_3d *vector, int *error);
 
 
@@ -527,7 +527,7 @@ dwg_ent_line_init(dwg_ent_line *line);
 
 // Get/Set the start point of a line
 void
-dwg_ent_line_get_start_point(dwg_ent_line *line, dwg_point_3d *point,
+dwg_ent_line_get_start_point(const dwg_ent_line *line, dwg_point_3d *point,
                              int *error);
 
 void
@@ -536,7 +536,7 @@ dwg_ent_line_set_start_point(dwg_ent_line *line, dwg_point_3d *point,
 
 // Get/Set the end point of a line
 void
-dwg_ent_line_get_end_point(dwg_ent_line *line, dwg_point_3d *point,
+dwg_ent_line_get_end_point(const dwg_ent_line *line, dwg_point_3d *point,
                            int *error);
 
 void
@@ -545,7 +545,7 @@ dwg_ent_line_set_end_point(dwg_ent_line *line, dwg_point_3d *point,
 
 // Get/Set the thickness of a line
 BITCODE_BD
-dwg_ent_line_get_thickness(dwg_ent_line *line, int *error);
+dwg_ent_line_get_thickness(const dwg_ent_line *line, int *error);
 
 void
 dwg_ent_line_set_thickness(dwg_ent_line *line, BITCODE_BD thickness, int *error);
@@ -556,7 +556,7 @@ dwg_ent_line_set_extrusion(dwg_ent_line *line, dwg_point_3d *vector,
                            int *error);
 
 void
-dwg_ent_line_get_extrusion(dwg_ent_line *line, dwg_point_3d *vector,
+dwg_ent_line_get_extrusion(const dwg_ent_line *line, dwg_point_3d *vector,
                            int *error);
 
 
@@ -577,42 +577,42 @@ dwg_ent_arc* dwg_ent_arc_init(dwg_ent_arc *arc);
 
 // Get/Set the center point of a arc
 void
-dwg_ent_arc_get_center(dwg_ent_arc *arc, dwg_point_3d *point, int *error);
+dwg_ent_arc_get_center(const dwg_ent_arc *arc, dwg_point_3d *point, int *error);
 
 void
 dwg_ent_arc_set_center(dwg_ent_arc *arc, dwg_point_3d *point, int *error);
 
 // Get/Set the radius of a arc
 BITCODE_BD
-dwg_ent_arc_get_radius(dwg_ent_arc *arc, int *error);
+dwg_ent_arc_get_radius(const dwg_ent_arc *arc, int *error);
 
 void
 dwg_ent_arc_set_radius(dwg_ent_arc *arc, BITCODE_BD radius, int *error);
 
 // Get/Set the thickness of arc
 BITCODE_BD
-dwg_ent_arc_get_thickness(dwg_ent_arc *arc, int *error);
+dwg_ent_arc_get_thickness(const dwg_ent_arc *arc, int *error);
 
 void
 dwg_ent_arc_set_thickness(dwg_ent_arc *arc, BITCODE_BD thickness, int *error);
 
 //Get/Set the extrusion of arc
 void
-dwg_ent_arc_get_extrusion(dwg_ent_arc *arc, dwg_point_3d *vector, int *error);
+dwg_ent_arc_get_extrusion(const dwg_ent_arc *arc, dwg_point_3d *vector, int *error);
 
 void
 dwg_ent_arc_set_extrusion(dwg_ent_arc *arc, dwg_point_3d *vector, int *error);
 
 // Get/set start angle arc
 BITCODE_BD
-dwg_ent_arc_get_start_angle(dwg_ent_arc *arc, int *error);
+dwg_ent_arc_get_start_angle(const dwg_ent_arc *arc, int *error);
 
 void
 dwg_ent_arc_set_start_angle(dwg_ent_arc *arc, BITCODE_BD start_angle, int *error);
 
 // Get/set end angle of arc
 BITCODE_BD
-dwg_ent_arc_get_end_angle(dwg_ent_arc *arc, int *error);
+dwg_ent_arc_get_end_angle(const dwg_ent_arc *arc, int *error);
 
 void
 dwg_ent_arc_set_end_angle(dwg_ent_arc *arc, BITCODE_BD end_angle, int *error);
@@ -637,7 +637,7 @@ dwg_ent_ellipse_init(dwg_ent_ellipse *ellipse);
 
 // Get/Set center of ellipse
 void
-dwg_ent_ellipse_get_center(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
+dwg_ent_ellipse_get_center(const dwg_ent_ellipse *ellipse, dwg_point_3d *point,
                            int *error);
 
 void
@@ -646,7 +646,7 @@ dwg_ent_ellipse_set_center(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
 
 // Get/Set sm axis of ellipse
 void
-dwg_ent_ellipse_get_sm_axis(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
+dwg_ent_ellipse_get_sm_axis(const dwg_ent_ellipse *ellipse, dwg_point_3d *point,
                             int *error);
 
 void
@@ -655,7 +655,7 @@ dwg_ent_ellipse_set_sm_axis(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
 
 // Get/Set extrusion of ellipse
 void
-dwg_ent_ellipse_get_extrusion(dwg_ent_ellipse *ellipse, dwg_point_3d *vector,
+dwg_ent_ellipse_get_extrusion(const dwg_ent_ellipse *ellipse, dwg_point_3d *vector,
                               int *error);
 
 void
@@ -664,7 +664,7 @@ dwg_ent_ellipse_set_extrusion(dwg_ent_ellipse *ellipse, dwg_point_3d *vector,
 
 // Get/Set axis ratio of ellipse
 BITCODE_BD
-dwg_ent_ellipse_get_axis_ratio(dwg_ent_ellipse *ellipse, int *error);
+dwg_ent_ellipse_get_axis_ratio(const dwg_ent_ellipse *ellipse, int *error);
 
 void
 dwg_ent_ellipse_set_axis_ratio(dwg_ent_ellipse *ellipse, BITCODE_BD ratio,
@@ -672,7 +672,7 @@ dwg_ent_ellipse_set_axis_ratio(dwg_ent_ellipse *ellipse, BITCODE_BD ratio,
 
 // Get/Set start angle of ellipse
 BITCODE_BD
-dwg_ent_ellipse_get_start_angle(dwg_ent_ellipse *ellipse, int *error);
+dwg_ent_ellipse_get_start_angle(const dwg_ent_ellipse *ellipse, int *error);
 
 void
 dwg_ent_ellipse_set_start_angle(dwg_ent_ellipse *ellipse, BITCODE_BD start_angle,
@@ -680,7 +680,7 @@ dwg_ent_ellipse_set_start_angle(dwg_ent_ellipse *ellipse, BITCODE_BD start_angle
 
 // Get/Set end angle of ellipse
 BITCODE_BD
-dwg_ent_ellipse_get_end_angle(dwg_ent_ellipse *ellipse, int *error);
+dwg_ent_ellipse_get_end_angle(const dwg_ent_ellipse *ellipse, int *error);
 
 void
 dwg_ent_ellipse_set_end_angle(dwg_ent_ellipse *ellipse, BITCODE_BD end_angle,
@@ -697,11 +697,11 @@ void
 dwg_ent_text_set_text(dwg_ent_text *text, char *text_value, int *error);
 
 char *
-dwg_ent_text_get_text(dwg_ent_text *text, int *error);
+dwg_ent_text_get_text(const dwg_ent_text *text, int *error);
 
 // Get/Set insertion points of text
 void
-dwg_ent_text_get_insertion_point(dwg_ent_text *text, dwg_point_2d *point,
+dwg_ent_text_get_insertion_point(const dwg_ent_text *text, dwg_point_2d *point,
                                  int *error);
 
 void
@@ -710,14 +710,14 @@ dwg_ent_text_set_insertion_point(dwg_ent_text *text, dwg_point_2d *point,
 
 //Get/Set height of text
 BITCODE_BD
-dwg_ent_text_get_height(dwg_ent_text *text, int *error);
+dwg_ent_text_get_height(const dwg_ent_text *text, int *error);
 
 void
 dwg_ent_text_set_height(dwg_ent_text *text, BITCODE_BD height, int *error);
 
 //Get/Set extrusion of text
 void
-dwg_ent_text_get_extrusion(dwg_ent_text *text, dwg_point_3d *vector,
+dwg_ent_text_get_extrusion(const dwg_ent_text *text, dwg_point_3d *vector,
                            int *error);
 
 void
@@ -726,28 +726,28 @@ dwg_ent_text_set_extrusion(dwg_ent_text *text, dwg_point_3d *vector,
 
 //Get/Set thickness of text
 BITCODE_BD
-dwg_ent_text_get_thickness(dwg_ent_text *text, int *error);
+dwg_ent_text_get_thickness(const dwg_ent_text *text, int *error);
 
 void
 dwg_ent_text_set_thickness(dwg_ent_text *text, BITCODE_BD thickness, int *error);
 
 //Get/Set rotation angle of text
 BITCODE_BD
-dwg_ent_text_get_rotation(dwg_ent_text *text, int *error);
+dwg_ent_text_get_rotation(const dwg_ent_text *text, int *error);
 
 void
 dwg_ent_text_set_rotation(dwg_ent_text *text, BITCODE_BD angle, int *error);
 
 //Get/Set horizontal alignment angle of text
 BITCODE_BS
-dwg_ent_text_get_vert_align(dwg_ent_text *text, int *error);
+dwg_ent_text_get_vert_align(const dwg_ent_text *text, int *error);
 
 void
 dwg_ent_text_set_vert_align(dwg_ent_text *text, BITCODE_BS alignment, int *error);
 
 //Get/Set vertical alignment of text
 BITCODE_BS
-dwg_ent_text_get_horiz_align(dwg_ent_text *text, int *error);
+dwg_ent_text_get_horiz_align(const dwg_ent_text *text, int *error);
 
 void
 dwg_ent_text_set_horiz_align(dwg_ent_text *text, BITCODE_BS alignment, int *error);
@@ -763,11 +763,11 @@ void
 dwg_ent_attrib_set_text(dwg_ent_attrib *attrib, char *text_value, int *error);
 
 char *
-dwg_ent_attrib_get_text(dwg_ent_attrib *attrib, int *error);
+dwg_ent_attrib_get_text(const dwg_ent_attrib *attrib, int *error);
 
 // Get/Set insertion points of attrib
 void
-dwg_ent_attrib_get_insertion_point(dwg_ent_attrib *attrib, dwg_point_2d *point,
+dwg_ent_attrib_get_insertion_point(const dwg_ent_attrib *attrib, dwg_point_2d *point,
                                    int *error);
 
 void
@@ -776,14 +776,14 @@ dwg_ent_attrib_set_insertion_point(dwg_ent_attrib *attrib, dwg_point_2d *point,
 
 //Get/Set height of attrib
 BITCODE_BD
-dwg_ent_attrib_get_height(dwg_ent_attrib *attrib, int *error);
+dwg_ent_attrib_get_height(const dwg_ent_attrib *attrib, int *error);
 
 void
 dwg_ent_attrib_set_height(dwg_ent_attrib *attrib, BITCODE_BD height, int *error);
 
 //Get/Set extrusion of attrib
 void
-dwg_ent_attrib_get_extrusion(dwg_ent_attrib *attrib, dwg_point_3d *vector,
+dwg_ent_attrib_get_extrusion(const dwg_ent_attrib *attrib, dwg_point_3d *vector,
                              int *error);
 
 void
@@ -792,7 +792,7 @@ dwg_ent_attrib_set_extrusion(dwg_ent_attrib *attrib, dwg_point_3d *vector,
 
 //Get/Set thickness of attrib
 BITCODE_BD
-dwg_ent_attrib_get_thickness(dwg_ent_attrib *attrib, int *error);
+dwg_ent_attrib_get_thickness(const dwg_ent_attrib *attrib, int *error);
 
 void
 dwg_ent_attrib_set_thickness(dwg_ent_attrib *attrib, BITCODE_BD thickness,
@@ -800,7 +800,7 @@ dwg_ent_attrib_set_thickness(dwg_ent_attrib *attrib, BITCODE_BD thickness,
 
 //Get/Set rotation angle of attrib
 BITCODE_BD
-dwg_ent_attrib_get_rot_angle(dwg_ent_attrib *attrib, int *error);
+dwg_ent_attrib_get_rot_angle(const dwg_ent_attrib *attrib, int *error);
 
 void
 dwg_ent_attrib_set_rot_angle(dwg_ent_attrib *attrib, BITCODE_BD angle,
@@ -808,7 +808,7 @@ dwg_ent_attrib_set_rot_angle(dwg_ent_attrib *attrib, BITCODE_BD angle,
 
 //Get/Set horizontal alignment angle of attrib
 BITCODE_BS
-dwg_ent_attrib_get_vert_align(dwg_ent_attrib *attrib, int *error);
+dwg_ent_attrib_get_vert_align(const dwg_ent_attrib *attrib, int *error);
 
 void
 dwg_ent_attrib_set_vert_align(dwg_ent_attrib *attrib, BITCODE_BS alignment,
@@ -816,7 +816,7 @@ dwg_ent_attrib_set_vert_align(dwg_ent_attrib *attrib, BITCODE_BS alignment,
 
 //Get/Set vertical alignment of attrib
 BITCODE_BS
-dwg_ent_attrib_get_horiz_align(dwg_ent_attrib *attrib, int *error);
+dwg_ent_attrib_get_horiz_align(const dwg_ent_attrib *attrib, int *error);
 
 void
 dwg_ent_attrib_set_horiz_align(dwg_ent_attrib *attrib, BITCODE_BS alignment,
@@ -834,11 +834,11 @@ dwg_ent_attdef_set_text(dwg_ent_attdef *attdef, char *default_value,
                         int *error);
 
 char *
-dwg_ent_attdef_get_text(dwg_ent_attdef *attdef, int *error);
+dwg_ent_attdef_get_text(const dwg_ent_attdef *attdef, int *error);
 
 // Get/Set insertion points of attdef
 void
-dwg_ent_attdef_get_insertion_point(dwg_ent_attdef *attdef, dwg_point_2d *point,
+dwg_ent_attdef_get_insertion_point(const dwg_ent_attdef *attdef, dwg_point_2d *point,
                                    int *error);
 
 void
@@ -847,14 +847,14 @@ dwg_ent_attdef_set_insertion_point(dwg_ent_attdef *attdef, dwg_point_2d *point,
 
 //Get/Set height of attdef
 BITCODE_BD
-dwg_ent_attdef_get_height(dwg_ent_attdef *attdef, int *error);
+dwg_ent_attdef_get_height(const dwg_ent_attdef *attdef, int *error);
 
 void
 dwg_ent_attdef_set_height(dwg_ent_attdef *attdef, BITCODE_BD height, int *error);
 
 //Get/Set extrusion of attdef
 void
-dwg_ent_attdef_get_extrusion(dwg_ent_attdef *attdef, dwg_point_3d *vector,
+dwg_ent_attdef_get_extrusion(const dwg_ent_attdef *attdef, dwg_point_3d *vector,
                              int *error);
 
 void
@@ -863,7 +863,7 @@ dwg_ent_attdef_set_extrusion(dwg_ent_attdef *attdef, dwg_point_3d *vector,
 
 //Get/Set thickness of attdef
 BITCODE_BD
-dwg_ent_attdef_get_thickness(dwg_ent_attdef *attdef, int *error);
+dwg_ent_attdef_get_thickness(const dwg_ent_attdef *attdef, int *error);
 
 void
 dwg_ent_attdef_set_thickness(dwg_ent_attdef *attdef, BITCODE_BD thickness,
@@ -871,7 +871,7 @@ dwg_ent_attdef_set_thickness(dwg_ent_attdef *attdef, BITCODE_BD thickness,
 
 //Get/Set rotation angle of attdef
 BITCODE_BD
-dwg_ent_attdef_get_rot_angle(dwg_ent_attdef *attdef, int *error);
+dwg_ent_attdef_get_rot_angle(const dwg_ent_attdef *attdef, int *error);
 
 void
 dwg_ent_attdef_set_rot_angle(dwg_ent_attdef *attdef, BITCODE_BD angle,
@@ -879,7 +879,7 @@ dwg_ent_attdef_set_rot_angle(dwg_ent_attdef *attdef, BITCODE_BD angle,
 
 //Get/Set horizontal alignment angle of attdef
 BITCODE_BS
-dwg_ent_attdef_get_vert_align(dwg_ent_attdef *attdef, int *error);
+dwg_ent_attdef_get_vert_align(const dwg_ent_attdef *attdef, int *error);
 
 void
 dwg_ent_attdef_set_vert_align(dwg_ent_attdef *attdef, BITCODE_BS alignment,
@@ -887,7 +887,7 @@ dwg_ent_attdef_set_vert_align(dwg_ent_attdef *attdef, BITCODE_BS alignment,
 
 //Get/Set vertical alignment of attdef
 BITCODE_BS
-dwg_ent_attdef_get_horiz_align(dwg_ent_attdef *attdef, int *error);
+dwg_ent_attdef_get_horiz_align(const dwg_ent_attdef *attdef, int *error);
 
 void
 dwg_ent_attdef_set_horiz_align(dwg_ent_attdef *attdef, BITCODE_BS alignment,
@@ -904,12 +904,12 @@ dwg_ent_point_set_point(dwg_ent_point *point, dwg_point_3d *retpoint,
                         int *error);
 
 void
-dwg_ent_point_get_point(dwg_ent_point *point, dwg_point_3d *retpoint,
+dwg_ent_point_get_point(const dwg_ent_point *point, dwg_point_3d *retpoint,
                         int *error);
 
 // Get/Set thickness of point entity
 BITCODE_BD
-dwg_ent_point_get_thickness(dwg_ent_point *point, int *error);
+dwg_ent_point_get_thickness(const dwg_ent_point *point, int *error);
 
 void
 dwg_ent_point_set_thickness(dwg_ent_point *point, BITCODE_BD thickness,
@@ -921,7 +921,7 @@ dwg_ent_point_set_extrusion(dwg_ent_point *point, dwg_point_3d *retpoint,
                             int *error);
 
 void
-dwg_ent_point_get_extrusion(dwg_ent_point *point, dwg_point_3d *retpoint,
+dwg_ent_point_get_extrusion(const dwg_ent_point *point, dwg_point_3d *retpoint,
                             int *error);
 
 
@@ -932,7 +932,7 @@ dwg_ent_point_get_extrusion(dwg_ent_point *point, dwg_point_3d *retpoint,
 
 // Get/Set thickness of solid entity
 BITCODE_BD
-dwg_ent_solid_get_thickness(dwg_ent_solid *solid, int *error);
+dwg_ent_solid_get_thickness(const dwg_ent_solid *solid, int *error);
 
 void
 dwg_ent_solid_set_thickness(dwg_ent_solid *solid, BITCODE_BD thickness,
@@ -940,7 +940,7 @@ dwg_ent_solid_set_thickness(dwg_ent_solid *solid, BITCODE_BD thickness,
 
 // Get/Set elevation of solid entity
 BITCODE_BD
-dwg_ent_solid_get_elevation(dwg_ent_solid *solid, int *error);
+dwg_ent_solid_get_elevation(const dwg_ent_solid *solid, int *error);
 
 void
 dwg_ent_solid_set_elevation(dwg_ent_solid *solid, BITCODE_BD elevation,
@@ -948,7 +948,7 @@ dwg_ent_solid_set_elevation(dwg_ent_solid *solid, BITCODE_BD elevation,
 
 // Get/Set corner1 of solid entity
 void
-dwg_ent_solid_get_corner1(dwg_ent_solid *solid, dwg_point_2d *point,
+dwg_ent_solid_get_corner1(const dwg_ent_solid *solid, dwg_point_2d *point,
                           int *error);
 
 void
@@ -957,7 +957,7 @@ dwg_ent_solid_set_corner1(dwg_ent_solid *solid, dwg_point_2d *point,
 
 // Get/Set corner2 of solid entity
 void
-dwg_ent_solid_get_corner2(dwg_ent_solid *solid, dwg_point_2d *point,
+dwg_ent_solid_get_corner2(const dwg_ent_solid *solid, dwg_point_2d *point,
                           int *error);
 
 void
@@ -966,7 +966,7 @@ dwg_ent_solid_set_corner2(dwg_ent_solid *solid, dwg_point_2d *point,
 
 // Get/Set corner3 of solid entity
 void
-dwg_ent_solid_get_corner3(dwg_ent_solid *solid, dwg_point_2d *point,
+dwg_ent_solid_get_corner3(const dwg_ent_solid *solid, dwg_point_2d *point,
                           int *error);
 
 void
@@ -975,7 +975,7 @@ dwg_ent_solid_set_corner3(dwg_ent_solid *solid, dwg_point_2d *point,
 
 // Get/Set corner4 of solid entity
 void
-dwg_ent_solid_get_corner4(dwg_ent_solid *solid, dwg_point_2d *point,
+dwg_ent_solid_get_corner4(const dwg_ent_solid *solid, dwg_point_2d *point,
                           int *error);
 
 void
@@ -984,7 +984,7 @@ dwg_ent_solid_set_corner4(dwg_ent_solid *solid, dwg_point_2d *point,
 
 // Get/Set extrusion of solid entity
 void
-dwg_ent_solid_get_extrusion(dwg_ent_solid *solid, dwg_point_3d *vector,
+dwg_ent_solid_get_extrusion(const dwg_ent_solid *solid, dwg_point_3d *vector,
                             int *error);
 
 void
@@ -1002,7 +1002,7 @@ void
 dwg_ent_block_set_name(dwg_ent_block *block, char *name, int *error);
 
 char *
-dwg_ent_block_get_name(dwg_ent_block *block, int *error);
+dwg_ent_block_get_name(const dwg_ent_block *block, int *error);
 
 
 /********************************************************************
@@ -1012,14 +1012,14 @@ dwg_ent_block_get_name(dwg_ent_block *block, int *error);
 
 // Get/Set point of ray entity
 void
-dwg_ent_ray_get_point(dwg_ent_ray *ray, dwg_point_3d *point, int *error);
+dwg_ent_ray_get_point(const dwg_ent_ray *ray, dwg_point_3d *point, int *error);
 
 void
 dwg_ent_ray_set_point(dwg_ent_ray *ray, dwg_point_3d *point, int *error);
 
 // Get/Set vector of ray entity
 void
-dwg_ent_ray_get_vector(dwg_ent_ray *ray, dwg_point_3d *vector, int *error);
+dwg_ent_ray_get_vector(const dwg_ent_ray *ray, dwg_point_3d *vector, int *error);
 
 void
 dwg_ent_ray_set_vector(dwg_ent_ray *ray, dwg_point_3d *vector, int *error);
@@ -1032,14 +1032,14 @@ dwg_ent_ray_set_vector(dwg_ent_ray *ray, dwg_point_3d *vector, int *error);
 
 // Get/Set point of xline entity
 void
-dwg_ent_xline_get_point(dwg_ent_xline *xline, dwg_point_3d *point, int *error);
+dwg_ent_xline_get_point(const dwg_ent_xline *xline, dwg_point_3d *point, int *error);
 
 void
 dwg_ent_xline_set_point(dwg_ent_xline *xline, dwg_point_3d *point, int *error);
 
 // Get/Set vector of xline entity
 void
-dwg_ent_xline_get_vector(dwg_ent_xline *xline, dwg_point_3d *vector,
+dwg_ent_xline_get_vector(const dwg_ent_xline *xline, dwg_point_3d *vector,
                          int *error);
 
 void
@@ -1054,7 +1054,7 @@ dwg_ent_xline_set_vector(dwg_ent_xline *xline, dwg_point_3d *vector,
 
 // Get/Set thickness of trace entity
 BITCODE_BD
-dwg_ent_trace_get_thickness(dwg_ent_trace *trace, int *error);
+dwg_ent_trace_get_thickness(const dwg_ent_trace *trace, int *error);
 
 void
 dwg_ent_trace_set_thickness(dwg_ent_trace *trace, BITCODE_BD thickness,
@@ -1062,7 +1062,7 @@ dwg_ent_trace_set_thickness(dwg_ent_trace *trace, BITCODE_BD thickness,
 
 // Get/Set elevation of trace entity
 BITCODE_BD
-dwg_ent_trace_get_elevation(dwg_ent_trace *trace, int *error);
+dwg_ent_trace_get_elevation(const dwg_ent_trace *trace, int *error);
 
 void
 dwg_ent_trace_set_elevation(dwg_ent_trace *trace, BITCODE_BD elevation,
@@ -1070,7 +1070,7 @@ dwg_ent_trace_set_elevation(dwg_ent_trace *trace, BITCODE_BD elevation,
 
 // Get/Set corner1 of trace entity
 void
-dwg_ent_trace_get_corner1(dwg_ent_trace *trace, dwg_point_2d *point,
+dwg_ent_trace_get_corner1(const dwg_ent_trace *trace, dwg_point_2d *point,
                           int *error);
 
 void
@@ -1079,7 +1079,7 @@ dwg_ent_trace_set_corner1(dwg_ent_trace *trace, dwg_point_2d *point,
 
 // Get/Set corner2 of trace entity
 void
-dwg_ent_trace_get_corner2(dwg_ent_trace *trace, dwg_point_2d *point,
+dwg_ent_trace_get_corner2(const dwg_ent_trace *trace, dwg_point_2d *point,
                           int *error);
 
 void
@@ -1088,7 +1088,7 @@ dwg_ent_trace_set_corner2(dwg_ent_trace *trace, dwg_point_2d *point,
 
 // Get/Set corner3 of trace entity
 void
-dwg_ent_trace_get_corner3(dwg_ent_trace *trace, dwg_point_2d *point,
+dwg_ent_trace_get_corner3(const dwg_ent_trace *trace, dwg_point_2d *point,
                           int *error);
 
 void
@@ -1097,7 +1097,7 @@ dwg_ent_trace_set_corner3(dwg_ent_trace *trace, dwg_point_2d *point,
 
 // Get/Set corner4 of trace entity
 void
-dwg_ent_trace_get_corner4(dwg_ent_trace *trace, dwg_point_2d *point,
+dwg_ent_trace_get_corner4(const dwg_ent_trace *trace, dwg_point_2d *point,
                           int *error);
 
 void
@@ -1106,7 +1106,7 @@ dwg_ent_trace_set_corner4(dwg_ent_trace *trace, dwg_point_2d *point,
 
 // Get/Set extrusion of trace entity
 void
-dwg_ent_trace_get_extrusion(dwg_ent_trace *trace, dwg_point_3d *vector,
+dwg_ent_trace_get_extrusion(const dwg_ent_trace *trace, dwg_point_3d *vector,
                             int *error);
 
 void
@@ -1121,14 +1121,14 @@ dwg_ent_trace_set_extrusion(dwg_ent_trace *trace, dwg_point_3d *vector,
 
 // Get/Set flags of vertex_3d entity
 char
-dwg_ent_vertex_3d_get_flag(dwg_ent_vertex_3d *vert, int *error);
+dwg_ent_vertex_3d_get_flag(const dwg_ent_vertex_3d *vert, int *error);
 
 void
 dwg_ent_vertex_3d_set_flag(dwg_ent_vertex_3d *vert, char flags, int *error);
 
 // Get/Set point of vertex_3d entity
 void
-dwg_ent_vertex_3d_get_point(dwg_ent_vertex_3d *vert, dwg_point_3d *point,
+dwg_ent_vertex_3d_get_point(const dwg_ent_vertex_3d *vert, dwg_point_3d *point,
                             int *error);
 
 void
@@ -1143,7 +1143,7 @@ dwg_ent_vertex_3d_set_point(dwg_ent_vertex_3d *vert, dwg_point_3d *point,
 
 // Get/Set flags of vertex_mesh entity
 char
-dwg_ent_vertex_mesh_get_flag(dwg_ent_vertex_mesh *vert, int *error);
+dwg_ent_vertex_mesh_get_flag(const dwg_ent_vertex_mesh *vert, int *error);
 
 void
 dwg_ent_vertex_mesh_set_flag(dwg_ent_vertex_mesh *vert, char flags,
@@ -1151,7 +1151,7 @@ dwg_ent_vertex_mesh_set_flag(dwg_ent_vertex_mesh *vert, char flags,
 
 // Get/Set point of vertex_mesh entity
 void
-dwg_ent_vertex_mesh_get_point(dwg_ent_vertex_mesh *vert, dwg_point_3d *point,
+dwg_ent_vertex_mesh_get_point(const dwg_ent_vertex_mesh *vert, dwg_point_3d *point,
                               int *error);
 
 void
@@ -1166,7 +1166,7 @@ dwg_ent_vertex_mesh_set_point(dwg_ent_vertex_mesh *vert, dwg_point_3d *point,
 
 // Get/Set flags of vertex_pface entity
 char
-dwg_ent_vertex_pface_get_flag(dwg_ent_vertex_pface *vert, int *error);
+dwg_ent_vertex_pface_get_flag(const dwg_ent_vertex_pface *vert, int *error);
 
 void
 dwg_ent_vertex_pface_set_flag(dwg_ent_vertex_pface *vert, char flags,
@@ -1174,7 +1174,7 @@ dwg_ent_vertex_pface_set_flag(dwg_ent_vertex_pface *vert, char flags,
 
 // Get/Set point of vertex_pface entity
 void
-dwg_ent_vertex_pface_get_point(dwg_ent_vertex_pface *vert, dwg_point_3d *point,
+dwg_ent_vertex_pface_get_point(const dwg_ent_vertex_pface *vert, dwg_point_3d *point,
                                int *error);
 
 void
@@ -1189,14 +1189,14 @@ dwg_ent_vertex_pface_set_point(dwg_ent_vertex_pface *vert, dwg_point_3d *point,
 
 // Get/Set flags of vertex_2d entity
 char
-dwg_ent_vertex_2d_get_flag(dwg_ent_vertex_2d *vert, int *error);
+dwg_ent_vertex_2d_get_flag(const dwg_ent_vertex_2d *vert, int *error);
 
 void
 dwg_ent_vertex_2d_set_flag(dwg_ent_vertex_2d *vert, char flags, int *error);
 
 // Get/Set point of vertex_2d entity
 void
-dwg_ent_vertex_2d_get_point(dwg_ent_vertex_2d *vert, dwg_point_3d *point,
+dwg_ent_vertex_2d_get_point(const dwg_ent_vertex_2d *vert, dwg_point_3d *point,
                             int *error);
 
 void
@@ -1205,7 +1205,7 @@ dwg_ent_vertex_2d_set_point(dwg_ent_vertex_2d *vert, dwg_point_3d *point,
 
 // Get/Set start_width of vertex_2d entity
 BITCODE_BD
-dwg_ent_vertex_2d_get_start_width(dwg_ent_vertex_2d *vert, int *error);
+dwg_ent_vertex_2d_get_start_width(const dwg_ent_vertex_2d *vert, int *error);
 
 void
 dwg_ent_vertex_2d_set_start_width(dwg_ent_vertex_2d *vert, BITCODE_BD start_width,
@@ -1213,7 +1213,7 @@ dwg_ent_vertex_2d_set_start_width(dwg_ent_vertex_2d *vert, BITCODE_BD start_widt
 
 // Get/Set end width of a vertex_2d entity
 BITCODE_BD
-dwg_ent_vertex_2d_get_end_width(dwg_ent_vertex_2d *vert, int *error);
+dwg_ent_vertex_2d_get_end_width(const dwg_ent_vertex_2d *vert, int *error);
 
 void
 dwg_ent_vertex_2d_set_end_width(dwg_ent_vertex_2d *vert, BITCODE_BD end_width,
@@ -1221,14 +1221,14 @@ dwg_ent_vertex_2d_set_end_width(dwg_ent_vertex_2d *vert, BITCODE_BD end_width,
 
 // Get/Set bulge of a vertex_2d entity
 BITCODE_BD
-dwg_ent_vertex_2d_get_bulge(dwg_ent_vertex_2d *vert, int *error);
+dwg_ent_vertex_2d_get_bulge(const dwg_ent_vertex_2d *vert, int *error);
 
 void
 dwg_ent_vertex_2d_set_bulge(dwg_ent_vertex_2d *vert, BITCODE_BD bulge, int *error);
 
 // Get/Set tanget_direction of a vertex_2d entity
 BITCODE_BD
-dwg_ent_vertex_2d_get_tangent_dir(dwg_ent_vertex_2d *vert, int *error);
+dwg_ent_vertex_2d_get_tangent_dir(const dwg_ent_vertex_2d *vert, int *error);
 
 void
 dwg_ent_vertex_2d_set_tangent_dir(dwg_ent_vertex_2d *vert, BITCODE_BD tangent_dir,
@@ -1242,7 +1242,7 @@ dwg_ent_vertex_2d_set_tangent_dir(dwg_ent_vertex_2d *vert, BITCODE_BD tangent_di
 
 // Get/Set insertion point of insert entity
 void
-dwg_ent_insert_get_ins_pt(dwg_ent_insert *insert, dwg_point_3d *point,
+dwg_ent_insert_get_ins_pt(const dwg_ent_insert *insert, dwg_point_3d *point,
                           int *error);
 
 void
@@ -1251,13 +1251,13 @@ dwg_ent_insert_set_ins_pt(dwg_ent_insert *insert, dwg_point_3d *point,
 
 // Get/Set scale flag of an insert entity
 char
-dwg_ent_insert_get_scale_flag(dwg_ent_insert *insert, int *error);
+dwg_ent_insert_get_scale_flag(const dwg_ent_insert *insert, int *error);
 
 void
 dwg_ent_insert_set_scale_flag(dwg_ent_insert *insert, char flags, int *error);
 
 void
-dwg_ent_insert_get_scale(dwg_ent_insert *insert, dwg_point_3d *point,
+dwg_ent_insert_get_scale(const dwg_ent_insert *insert, dwg_point_3d *point,
                          int *error);
 
 void
@@ -1265,14 +1265,14 @@ dwg_ent_insert_set_scale(dwg_ent_insert *insert, dwg_point_3d *point,
                          int *error);
 
 BITCODE_BD
-dwg_ent_insert_get_rotation(dwg_ent_insert *insert, int *error);
+dwg_ent_insert_get_rotation(const dwg_ent_insert *insert, int *error);
 
 void
 dwg_ent_insert_set_rotation(dwg_ent_insert *insert, BITCODE_BD rot_ang,
                                   int *error);
 
 void
-dwg_ent_insert_get_extrusion(dwg_ent_insert *insert, dwg_point_3d *point,
+dwg_ent_insert_get_extrusion(const dwg_ent_insert *insert, dwg_point_3d *point,
                              int *error);
 
 void
@@ -1283,7 +1283,7 @@ char
 dwg_ent_insert_has_attribs(dwg_ent_insert *insert, int *error);
 
 BITCODE_BL
-dwg_ent_insert_get_owned_obj_count(dwg_ent_insert *insert, int *error);
+dwg_ent_insert_get_owned_obj_count(const dwg_ent_insert *insert, int *error);
 
 void
 dwg_ent_insert_set_owned_obj_count(dwg_ent_insert *insert, BITCODE_BL count,
@@ -1296,7 +1296,7 @@ dwg_ent_insert_set_owned_obj_count(dwg_ent_insert *insert, BITCODE_BL count,
 
 
 void
-dwg_ent_minsert_get_ins_pt(dwg_ent_minsert *minsert, dwg_point_3d *point,
+dwg_ent_minsert_get_ins_pt(const dwg_ent_minsert *minsert, dwg_point_3d *point,
                            int *error);
 
 void
@@ -1304,14 +1304,14 @@ dwg_ent_minsert_set_ins_pt(dwg_ent_minsert *minsert, dwg_point_3d *point,
                            int *error);
 
 char
-dwg_ent_minsert_get_scale_flag(dwg_ent_minsert *minsert, int *error);
+dwg_ent_minsert_get_scale_flag(const dwg_ent_minsert *minsert, int *error);
 
 void
 dwg_ent_minsert_set_scale_flag(dwg_ent_minsert *minsert, char flags,
                                int *error);
 
 void
-dwg_ent_minsert_get_scale(dwg_ent_minsert *minsert, dwg_point_3d *point,
+dwg_ent_minsert_get_scale(const dwg_ent_minsert *minsert, dwg_point_3d *point,
                           int *error);
 
 void
@@ -1319,14 +1319,14 @@ dwg_ent_minsert_set_scale(dwg_ent_minsert *minsert, dwg_point_3d *point,
                           int *error);
 
 BITCODE_BD
-dwg_ent_minsert_get_rotation(dwg_ent_minsert *minsert, int *error);
+dwg_ent_minsert_get_rotation(const dwg_ent_minsert *minsert, int *error);
 
 void
 dwg_ent_minsert_set_rotation(dwg_ent_minsert *minsert, BITCODE_BD rot_ang,
                                    int *error);
 
 void
-dwg_ent_minsert_get_extrusion(dwg_ent_minsert *minsert, dwg_point_3d *point,
+dwg_ent_minsert_get_extrusion(const dwg_ent_minsert *minsert, dwg_point_3d *point,
                               int *error);
 
 void
@@ -1337,35 +1337,35 @@ char
 dwg_ent_minsert_has_attribs(dwg_ent_minsert *minsert, int *error);
 
 BITCODE_BL
-dwg_ent_minsert_get_owned_obj_count(dwg_ent_minsert *minsert, int *error);
+dwg_ent_minsert_get_owned_obj_count(const dwg_ent_minsert *minsert, int *error);
 
 void
 dwg_ent_minsert_set_owned_obj_count(dwg_ent_minsert *minsert, BITCODE_BL count,
                                     int *error);
 
 BITCODE_BL
-dwg_ent_minsert_get_numcols(dwg_ent_minsert *minsert, int *error);
+dwg_ent_minsert_get_numcols(const dwg_ent_minsert *minsert, int *error);
 
 void
 dwg_ent_minsert_set_numcols(dwg_ent_minsert *minsert, BITCODE_BL cols,
                             int *error);
 
 BITCODE_BL
-dwg_ent_minsert_get_numrows(dwg_ent_minsert *minsert, int *error);
+dwg_ent_minsert_get_numrows(const dwg_ent_minsert *minsert, int *error);
 
 void
 dwg_ent_minsert_set_numrows(dwg_ent_minsert *minsert, BITCODE_BL cols,
                             int *error);
 
 BITCODE_BD
-dwg_ent_minsert_get_col_spacing(dwg_ent_minsert *minsert, int *error);
+dwg_ent_minsert_get_col_spacing(const dwg_ent_minsert *minsert, int *error);
 
 void
 dwg_ent_minsert_set_col_spacing(dwg_ent_minsert *minsert, BITCODE_BD spacing,
                                 int *error);
 
 BITCODE_BD
-dwg_ent_minsert_get_row_spacing(dwg_ent_minsert *minsert, int *error);
+dwg_ent_minsert_get_row_spacing(const dwg_ent_minsert *minsert, int *error);
 
 void
 dwg_ent_minsert_set_row_spacing(dwg_ent_minsert *minsert, BITCODE_BD spacing,
@@ -1377,42 +1377,42 @@ dwg_ent_minsert_set_row_spacing(dwg_ent_minsert *minsert, BITCODE_BD spacing,
 ********************************************************************/
 
 char *
-dwg_obj_mlinestyle_get_name(dwg_obj_mlinestyle *mlinestyle, int *error);
+dwg_obj_mlinestyle_get_name(const dwg_obj_mlinestyle *mlinestyle, int *error);
 
 void
 dwg_obj_mlinestyle_set_name(dwg_obj_mlinestyle *mlinestyle, char *name,
                             int *error);
 
 char *
-dwg_obj_mlinestyle_get_desc(dwg_obj_mlinestyle *mlinestyle, int *error);
+dwg_obj_mlinestyle_get_desc(const dwg_obj_mlinestyle *mlinestyle, int *error);
 
 void
 dwg_obj_mlinestyle_set_desc(dwg_obj_mlinestyle *mlinestyle, char *desc,
                             int *error);
 
 int
-dwg_obj_mlinestyle_get_flag(dwg_obj_mlinestyle *mlinestyle, int *error);
+dwg_obj_mlinestyle_get_flag(const dwg_obj_mlinestyle *mlinestyle, int *error);
 
 void
 dwg_obj_mlinestyle_set_flag(dwg_obj_mlinestyle *mlinestyle, int flags,
                              int *error);
 
 BITCODE_BD
-dwg_obj_mlinestyle_get_start_angle(dwg_obj_mlinestyle *mlinestyle, int *error);
+dwg_obj_mlinestyle_get_start_angle(const dwg_obj_mlinestyle *mlinestyle, int *error);
 
 void
 dwg_obj_mlinestyle_set_start_angle(dwg_obj_mlinestyle *mlinestyle,
                                    double startang, int *error);
 
 BITCODE_BD
-dwg_obj_mlinestyle_get_end_angle(dwg_obj_mlinestyle *mlinestyle, int *error);
+dwg_obj_mlinestyle_get_end_angle(const dwg_obj_mlinestyle *mlinestyle, int *error);
 
 void
 dwg_obj_mlinestyle_set_end_angle(dwg_obj_mlinestyle *mlinestyle,
                                  double endang, int *error);
 
 char
-dwg_obj_mlinestyle_get_num_lines(dwg_obj_mlinestyle *mlinestyle,
+dwg_obj_mlinestyle_get_num_lines(const dwg_obj_mlinestyle *mlinestyle,
                                     int *error);
 
 void
@@ -1426,11 +1426,11 @@ dwg_obj_mlinestyle_set_num_lines(dwg_obj_mlinestyle *mlinestyle,
 
 
 BITCODE_BS
-dwg_obj_appid_control_get_num_entries(dwg_obj_appid_control *appid,
+dwg_obj_appid_control_get_num_entries(const dwg_obj_appid_control *appid,
                                       int *error);
 
 dwg_object_ref *
-dwg_obj_appid_control_get_appid(dwg_obj_appid_control *appid, BITCODE_BS index,
+dwg_obj_appid_control_get_appid(const dwg_obj_appid_control *appid, BITCODE_BS index,
                                 int *error);
 
 /********************************************************************
@@ -1439,20 +1439,20 @@ dwg_obj_appid_control_get_appid(dwg_obj_appid_control *appid, BITCODE_BS index,
 
 
 char *
-dwg_obj_appid_get_entry_name(dwg_obj_appid *appid, int *error);
+dwg_obj_appid_get_entry_name(const dwg_obj_appid *appid, int *error);
 
 void
 dwg_obj_appid_set_entry_name(dwg_obj_appid *appid, char *entry_name,
                              int *error);
 
 char
-dwg_obj_appid_get_flag(dwg_obj_appid *appid, int *error);
+dwg_obj_appid_get_flag(const dwg_obj_appid *appid, int *error);
 
 void
 dwg_obj_appid_set_flag(dwg_obj_appid *appid, char flag, int *error);
 
 dwg_obj_appid_control *
-dwg_obj_appid_get_appid_control(dwg_obj_appid *appid,
+dwg_obj_appid_get_appid_control(const dwg_obj_appid *appid,
                                 int *error);
 
 /*******************************************************************
@@ -1460,46 +1460,46 @@ dwg_obj_appid_get_appid_control(dwg_obj_appid *appid,
 ********************************************************************/
 
 char *
-dwg_ent_dim_get_block_name(dwg_ent_dim *dim, int *error);
+dwg_ent_dim_get_block_name(const dwg_ent_dim *dim, int *error);
 
 BITCODE_BD
-dwg_ent_dim_get_elevation(dwg_ent_dim *dim,
+dwg_ent_dim_get_elevation(const dwg_ent_dim *dim,
                           int *error);
 void
 dwg_ent_dim_set_elevation(dwg_ent_dim *dim,
                           double elevation, int *error);
 char
-dwg_ent_dim_get_flag1(dwg_ent_dim *dim, int *error);
+dwg_ent_dim_get_flag1(const dwg_ent_dim *dim, int *error);
 
 void
 dwg_ent_dim_set_flag1(dwg_ent_dim *dim, char flag,
                       int *error);
 BITCODE_BD
-dwg_ent_dim_get_act_measurement(dwg_ent_dim *dim,
+dwg_ent_dim_get_act_measurement(const dwg_ent_dim *dim,
                                 int *error);
 void
 dwg_ent_dim_set_act_measurement(dwg_ent_dim *dim,
                                 double act_measurement, int *error);
 BITCODE_BD
-dwg_ent_dim_get_horiz_dir(dwg_ent_dim *dim, int *error);
+dwg_ent_dim_get_horiz_dir(const dwg_ent_dim *dim, int *error);
 
 void
 dwg_ent_dim_set_horiz_dir(dwg_ent_dim *dim, BITCODE_BD horiz_dir,
                           int *error);
 BITCODE_BD
-dwg_ent_dim_get_lspace_factor(dwg_ent_dim *dim, int *error);
+dwg_ent_dim_get_lspace_factor(const dwg_ent_dim *dim, int *error);
 
 void
 dwg_ent_dim_set_lspace_factor(dwg_ent_dim *dim,
                               double factor, int *error);
 BITCODE_BS
-dwg_ent_dim_get_lspace_style(dwg_ent_dim *dim, int *error);
+dwg_ent_dim_get_lspace_style(const dwg_ent_dim *dim, int *error);
 
 void
 dwg_ent_dim_set_lspace_style(dwg_ent_dim *dim,
                              BITCODE_BS style, int *error);
 BITCODE_BS
-dwg_ent_dim_get_attachment(dwg_ent_dim *dim, int *error);
+dwg_ent_dim_get_attachment(const dwg_ent_dim *dim, int *error);
 
 void
 dwg_ent_dim_set_attachment(dwg_ent_dim *dim,
@@ -1508,35 +1508,35 @@ void
 dwg_ent_dim_set_extrusion(dwg_ent_dim *dim,
                           dwg_point_3d *point, int *error);
 void
-dwg_ent_dim_get_extrusion(dwg_ent_dim *dim,
+dwg_ent_dim_get_extrusion(const dwg_ent_dim *dim,
                           dwg_point_3d *point, int *error);
 /* (utf-8 encoded) */
 char *
-dwg_ent_dim_get_user_text(dwg_ent_dim *dim, int *error);
+dwg_ent_dim_get_user_text(const dwg_ent_dim *dim, int *error);
 
 void
 dwg_ent_dim_set_user_text(dwg_ent_dim *dim, char *text,
                           int *error);
 BITCODE_BD
-dwg_ent_dim_get_text_rot(dwg_ent_dim *dim, int *error);
+dwg_ent_dim_get_text_rot(const dwg_ent_dim *dim, int *error);
 
 void
 dwg_ent_dim_set_text_rot(dwg_ent_dim *dim, BITCODE_BD rot,
                          int *error);
 BITCODE_BD
-dwg_ent_dim_get_ins_rotation(dwg_ent_dim *dim, int *error);
+dwg_ent_dim_get_ins_rotation(const dwg_ent_dim *dim, int *error);
 
 void
 dwg_ent_dim_set_ins_rotation(dwg_ent_dim *dim, BITCODE_BD rot,
                              int *error);
 char
-dwg_ent_dim_get_flip_arrow1(dwg_ent_dim *dim, int *error);
+dwg_ent_dim_get_flip_arrow1(const dwg_ent_dim *dim, int *error);
 
 void
 dwg_ent_dim_set_flip_arrow1(dwg_ent_dim *dim,
                             char flip_arrow, int *error);
 char
-dwg_ent_dim_get_flip_arrow2(dwg_ent_dim *dim, int *error);
+dwg_ent_dim_get_flip_arrow2(const dwg_ent_dim *dim, int *error);
 
 void
 dwg_ent_dim_set_flip_arrow2(dwg_ent_dim *dim,
@@ -1545,19 +1545,19 @@ void
 dwg_ent_dim_set_text_mid_pt(dwg_ent_dim *dim,
                             dwg_point_2d *point, int *error);
 void
-dwg_ent_dim_get_text_mid_pt(dwg_ent_dim *dim,
+dwg_ent_dim_get_text_mid_pt(const dwg_ent_dim *dim,
                             dwg_point_2d *point, int *error);
 void
 dwg_ent_dim_set_ins_scale(dwg_ent_dim *dim,
                           dwg_point_3d *point, int *error);
 void
-dwg_ent_dim_get_ins_scale(dwg_ent_dim *dim,
+dwg_ent_dim_get_ins_scale(const dwg_ent_dim *dim,
                           dwg_point_3d *point, int *error);
 void
 dwg_ent_dim_set_clone_ins_pt(dwg_ent_dim *dim, dwg_point_2d *point,
                              int *error);
 void
-dwg_ent_dim_get_clone_ins_pt(dwg_ent_dim *dim, dwg_point_2d *point,
+dwg_ent_dim_get_clone_ins_pt(const dwg_ent_dim *dim, dwg_point_2d *point,
                              int *error);
 
 /********************************************************************
@@ -1570,7 +1570,7 @@ dwg_ent_dim_ordinate_set_ucsorigin_pt(dwg_ent_dim_ordinate *ord, dwg_point_3d *p
                                       int *error);
 
 void
-dwg_ent_dim_ordinate_get_ucsorigin_pt(dwg_ent_dim_ordinate *ord, dwg_point_3d *point,
+dwg_ent_dim_ordinate_get_ucsorigin_pt(const dwg_ent_dim_ordinate *ord, dwg_point_3d *point,
                                       int *error);
 
 void
@@ -1578,7 +1578,7 @@ dwg_ent_dim_ordinate_set_feature_location_pt(dwg_ent_dim_ordinate *ord, dwg_poin
                                int *error);
 
 void
-dwg_ent_dim_ordinate_get_feature_location_pt(dwg_ent_dim_ordinate *ord, dwg_point_3d *point,
+dwg_ent_dim_ordinate_get_feature_location_pt(const dwg_ent_dim_ordinate *ord, dwg_point_3d *point,
                                int *error);
 
 void
@@ -1586,7 +1586,7 @@ dwg_ent_dim_ordinate_set_leader_endpt(dwg_ent_dim_ordinate *ord, dwg_point_3d *p
                                int *error);
 
 void
-dwg_ent_dim_ordinate_get_leader_endpt(dwg_ent_dim_ordinate *ord, dwg_point_3d *point,
+dwg_ent_dim_ordinate_get_leader_endpt(const dwg_ent_dim_ordinate *ord, dwg_point_3d *point,
                                int *error);
 
 void
@@ -1594,7 +1594,7 @@ dwg_ent_dim_ordinate_set_flag2(dwg_ent_dim_ordinate *ord, char flag,
                                 int *error);
 
 char
-dwg_ent_dim_ordinate_get_flag2(dwg_ent_dim_ordinate *ord, int *error);
+dwg_ent_dim_ordinate_get_flag2(const dwg_ent_dim_ordinate *ord, int *error);
 
 
 /********************************************************************
@@ -1606,7 +1606,7 @@ dwg_ent_dim_linear_set_def_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
                              int *error);
 
 void
-dwg_ent_dim_linear_get_def_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
+dwg_ent_dim_linear_get_def_pt(const dwg_ent_dim_linear *dim, dwg_point_3d *point,
                              int *error);
 
 void
@@ -1614,7 +1614,7 @@ dwg_ent_dim_linear_set_13_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
                              int *error);
 
 void
-dwg_ent_dim_linear_get_13_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
+dwg_ent_dim_linear_get_13_pt(const dwg_ent_dim_linear *dim, dwg_point_3d *point,
                              int *error);
 
 void
@@ -1622,18 +1622,18 @@ dwg_ent_dim_linear_set_14_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
                              int *error);
 
 void
-dwg_ent_dim_linear_get_14_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
+dwg_ent_dim_linear_get_14_pt(const dwg_ent_dim_linear *dim, dwg_point_3d *point,
                              int *error);
 
 BITCODE_BD
-dwg_ent_dim_linear_get_dim_rot(dwg_ent_dim_linear *dim, int *error);
+dwg_ent_dim_linear_get_dim_rot(const dwg_ent_dim_linear *dim, int *error);
 
 void
 dwg_ent_dim_linear_set_dim_rot(dwg_ent_dim_linear *dim, BITCODE_BD rot,
                                int *error);
 
 BITCODE_BD
-dwg_ent_dim_linear_get_ext_line_rotation(dwg_ent_dim_linear *dim, int *error);
+dwg_ent_dim_linear_get_ext_line_rotation(const dwg_ent_dim_linear *dim, int *error);
 
 void
 dwg_ent_dim_linear_set_ext_line_rotation(dwg_ent_dim_linear *dim, BITCODE_BD rot,
@@ -1649,7 +1649,7 @@ dwg_ent_dim_aligned_set_def_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
                               int *error);
 
 void
-dwg_ent_dim_aligned_get_def_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
+dwg_ent_dim_aligned_get_def_pt(const dwg_ent_dim_aligned *dim, dwg_point_3d *point,
                               int *error);
 
 void
@@ -1657,7 +1657,7 @@ dwg_ent_dim_aligned_set_13_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
                               int *error);
 
 void
-dwg_ent_dim_aligned_get_13_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
+dwg_ent_dim_aligned_get_13_pt(const dwg_ent_dim_aligned *dim, dwg_point_3d *point,
                               int *error);
 
 void
@@ -1665,11 +1665,11 @@ dwg_ent_dim_aligned_set_14_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
                               int *error);
 
 void
-dwg_ent_dim_aligned_get_14_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
+dwg_ent_dim_aligned_get_14_pt(const dwg_ent_dim_aligned *dim, dwg_point_3d *point,
                               int *error);
 
 BITCODE_BD
-dwg_ent_dim_aligned_get_ext_line_rotation(dwg_ent_dim_aligned *dim,
+dwg_ent_dim_aligned_get_ext_line_rotation(const dwg_ent_dim_aligned *dim,
                                           int *error);
 
 void
@@ -1686,7 +1686,7 @@ dwg_ent_dim_ang3pt_set_def_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
                              int *error);
 
 void
-dwg_ent_dim_ang3pt_get_def_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
+dwg_ent_dim_ang3pt_get_def_pt(const dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
                              int *error);
 
 void
@@ -1694,7 +1694,7 @@ dwg_ent_dim_ang3pt_set_13_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
                              int *error);
 
 void
-dwg_ent_dim_ang3pt_get_13_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
+dwg_ent_dim_ang3pt_get_13_pt(const dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
                              int *error);
 
 void
@@ -1702,7 +1702,7 @@ dwg_ent_dim_ang3pt_set_14_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
                              int *error);
 
 void
-dwg_ent_dim_ang3pt_get_14_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
+dwg_ent_dim_ang3pt_get_14_pt(const dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
                              int *error);
 
 void
@@ -1710,7 +1710,7 @@ dwg_ent_dim_ang3pt_set_first_arc_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point
                              int *error);
 
 void
-dwg_ent_dim_ang3pt_get_first_arc_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
+dwg_ent_dim_ang3pt_get_first_arc_pt(const dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
                              int *error);
 
 
@@ -1723,7 +1723,7 @@ dwg_ent_dim_ang2ln_set_def_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
                              int *error);
 
 void
-dwg_ent_dim_ang2ln_get_def_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
+dwg_ent_dim_ang2ln_get_def_pt(const dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
                              int *error);
 
 void
@@ -1731,7 +1731,7 @@ dwg_ent_dim_ang2ln_set_13_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
                              int *error);
 
 void
-dwg_ent_dim_ang2ln_get_13_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
+dwg_ent_dim_ang2ln_get_13_pt(const dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
                              int *error);
 
 void
@@ -1739,7 +1739,7 @@ dwg_ent_dim_ang2ln_set_14_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
                              int *error);
 
 void
-dwg_ent_dim_ang2ln_get_14_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
+dwg_ent_dim_ang2ln_get_14_pt(const dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
                              int *error);
 
 void
@@ -1747,7 +1747,7 @@ dwg_ent_dim_ang2ln_set_first_arc_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point
                              int *error);
 
 void
-dwg_ent_dim_ang2ln_get_first_arc_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
+dwg_ent_dim_ang2ln_get_first_arc_pt(const dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
                              int *error);
 
 void
@@ -1755,7 +1755,7 @@ dwg_ent_dim_ang2ln_set_16_pt(dwg_ent_dim_ang2ln *ang, dwg_point_2d *point,
                              int *error);
 
 void
-dwg_ent_dim_ang2ln_get_16_pt(dwg_ent_dim_ang2ln *ang, dwg_point_2d *point,
+dwg_ent_dim_ang2ln_get_16_pt(const dwg_ent_dim_ang2ln *ang, dwg_point_2d *point,
                              int *error);
 
 
@@ -1768,7 +1768,7 @@ dwg_ent_dim_radius_set_def_pt(dwg_ent_dim_radius *radius, dwg_point_3d *point,
                              int *error);
 
 void
-dwg_ent_dim_radius_get_def_pt(dwg_ent_dim_radius *radius, dwg_point_3d *point,
+dwg_ent_dim_radius_get_def_pt(const dwg_ent_dim_radius *radius, dwg_point_3d *point,
                              int *error);
 
 void
@@ -1776,11 +1776,11 @@ dwg_ent_dim_radius_set_first_arc_pt(dwg_ent_dim_radius *radius, dwg_point_3d *po
                              int *error);
 
 void
-dwg_ent_dim_radius_get_first_arc_pt(dwg_ent_dim_radius *radius, dwg_point_3d *point,
+dwg_ent_dim_radius_get_first_arc_pt(const dwg_ent_dim_radius *radius, dwg_point_3d *point,
                              int *error);
 
 BITCODE_BD
-dwg_ent_dim_radius_get_leader_length(dwg_ent_dim_radius *radius, int *error);
+dwg_ent_dim_radius_get_leader_length(const dwg_ent_dim_radius *radius, int *error);
 
 void
 dwg_ent_dim_radius_set_leader_length(dwg_ent_dim_radius *radius, BITCODE_BD length,
@@ -1796,7 +1796,7 @@ dwg_ent_dim_diameter_set_def_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *point,
                                int *error);
 
 void
-dwg_ent_dim_diameter_get_def_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *point,
+dwg_ent_dim_diameter_get_def_pt(const dwg_ent_dim_diameter *dia, dwg_point_3d *point,
                                int *error);
 
 void
@@ -1804,11 +1804,11 @@ dwg_ent_dim_diameter_set_first_arc_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *p
                                int *error);
 
 void
-dwg_ent_dim_diameter_get_first_arc_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *point,
+dwg_ent_dim_diameter_get_first_arc_pt(const dwg_ent_dim_diameter *dia, dwg_point_3d *point,
                                int *error);
 
 BITCODE_BD
-dwg_ent_dim_diameter_get_leader_length(dwg_ent_dim_diameter *dia, int *error);
+dwg_ent_dim_diameter_get_leader_length(const dwg_ent_dim_diameter *dia, int *error);
 
 void
 dwg_ent_dim_diameter_set_leader_length(dwg_ent_dim_diameter *dia,
@@ -1821,7 +1821,7 @@ dwg_ent_dim_diameter_set_leader_length(dwg_ent_dim_diameter *dia,
 
 
 char
-dwg_ent_endblk_get_dummy(dwg_ent_endblk *endblk, int *error);
+dwg_ent_endblk_get_dummy(const dwg_ent_endblk *endblk, int *error);
 
 void
 dwg_ent_endblk_set_dummy(dwg_ent_endblk *endblk, char dummy, int *error);
@@ -1833,7 +1833,7 @@ dwg_ent_endblk_set_dummy(dwg_ent_endblk *endblk, char dummy, int *error);
 
 
 char
-dwg_ent_seqend_get_dummy(dwg_ent_seqend *seqend, int *error);
+dwg_ent_seqend_get_dummy(const dwg_ent_seqend *seqend, int *error);
 
 void
 dwg_ent_seqend_set_dummy(dwg_ent_seqend *seqend, char dummy, int *error);
@@ -1845,7 +1845,7 @@ dwg_ent_seqend_set_dummy(dwg_ent_seqend *seqend, char dummy, int *error);
 
 
 void
-dwg_ent_shape_get_ins_pt(dwg_ent_shape *shape, dwg_point_3d *point,
+dwg_ent_shape_get_ins_pt(const dwg_ent_shape *shape, dwg_point_3d *point,
                          int *error);
 
 void
@@ -1853,45 +1853,45 @@ dwg_ent_shape_set_ins_pt(dwg_ent_shape *shape, dwg_point_3d *point,
                          int *error);
 
 BITCODE_BD
-dwg_ent_shape_get_scale(dwg_ent_shape *shape, int *error);
+dwg_ent_shape_get_scale(const dwg_ent_shape *shape, int *error);
 
 void
 dwg_ent_shape_set_scale(dwg_ent_shape *shape, BITCODE_BD scale, int *error);
 
 BITCODE_BD
-dwg_ent_shape_get_rotation(dwg_ent_shape *shape, int *error);
+dwg_ent_shape_get_rotation(const dwg_ent_shape *shape, int *error);
 
 void
 dwg_ent_shape_set_rotation(dwg_ent_shape *shape, BITCODE_BD rotation, int *error);
 
 BITCODE_BD
-dwg_ent_shape_get_width_factor(dwg_ent_shape *shape, int *error);
+dwg_ent_shape_get_width_factor(const dwg_ent_shape *shape, int *error);
 
 void
 dwg_ent_shape_set_width_factor(dwg_ent_shape *shape, BITCODE_BD width_factor,
                                int *error);
 
 BITCODE_BD
-dwg_ent_shape_get_oblique(dwg_ent_shape *shape, int *error);
+dwg_ent_shape_get_oblique(const dwg_ent_shape *shape, int *error);
 
 void
 dwg_ent_shape_set_oblique(dwg_ent_shape *shape, BITCODE_BD oblique, int *error);
 
 BITCODE_BD
-dwg_ent_shape_get_thickness(dwg_ent_shape *shape, int *error);
+dwg_ent_shape_get_thickness(const dwg_ent_shape *shape, int *error);
 
 void
 dwg_ent_shape_set_thickness(dwg_ent_shape *shape, BITCODE_BD thickness,
                             int *error);
 
 BITCODE_BD
-dwg_ent_shape_get_shape_no(dwg_ent_shape *shape, int *error);
+dwg_ent_shape_get_shape_no(const dwg_ent_shape *shape, int *error);
 
 void
 dwg_ent_shape_set_shape_no(dwg_ent_shape *shape, BITCODE_BD no, int *error);
 
 void
-dwg_ent_shape_get_extrusion(dwg_ent_shape *shape, dwg_point_3d *point,
+dwg_ent_shape_get_extrusion(const dwg_ent_shape *shape, dwg_point_3d *point,
                             int *error);
 
 void
@@ -1909,7 +1909,7 @@ dwg_ent_mtext_set_insertion_pt(dwg_ent_mtext *mtext, dwg_point_3d *point,
                                int *error);
 
 void
-dwg_ent_mtext_get_insertion_pt(dwg_ent_mtext *mtext, dwg_point_3d *point,
+dwg_ent_mtext_get_insertion_pt(const dwg_ent_mtext *mtext, dwg_point_3d *point,
                                int *error);
 
 void
@@ -1917,7 +1917,7 @@ dwg_ent_mtext_set_extrusion(dwg_ent_mtext *mtext, dwg_point_3d *point,
                             int *error);
 
 void
-dwg_ent_mtext_get_extrusion(dwg_ent_mtext *mtext, dwg_point_3d *point,
+dwg_ent_mtext_get_extrusion(const dwg_ent_mtext *mtext, dwg_point_3d *point,
                             int *error);
 
 void
@@ -1925,7 +1925,7 @@ dwg_ent_mtext_set_x_axis_dir(dwg_ent_mtext *mtext, dwg_point_3d *point,
                              int *error);
 
 void
-dwg_ent_mtext_get_x_axis_dir(dwg_ent_mtext *mtext, dwg_point_3d *point,
+dwg_ent_mtext_get_x_axis_dir(const dwg_ent_mtext *mtext, dwg_point_3d *point,
                              int *error);
 
 void
@@ -1933,63 +1933,63 @@ dwg_ent_mtext_set_rect_height(dwg_ent_mtext *mtext, BITCODE_BD rect_height,
                               int *error);
 
 BITCODE_BD
-dwg_ent_mtext_get_rect_height(dwg_ent_mtext *mtext, int *error);
+dwg_ent_mtext_get_rect_height(const dwg_ent_mtext *mtext, int *error);
 
 void
 dwg_ent_mtext_set_rect_width(dwg_ent_mtext *mtext, BITCODE_BD rect_width,
                              int *error);
 
 BITCODE_BD
-dwg_ent_mtext_get_rect_width(dwg_ent_mtext *mtext, int *error);
+dwg_ent_mtext_get_rect_width(const dwg_ent_mtext *mtext, int *error);
 
 void
 dwg_ent_mtext_set_text_height(dwg_ent_mtext *mtext, BITCODE_BD text_height,
                               int *error);
 
 BITCODE_BD
-dwg_ent_mtext_get_text_height(dwg_ent_mtext *mtext, int *error);
+dwg_ent_mtext_get_text_height(const dwg_ent_mtext *mtext, int *error);
 
 BITCODE_BS
-dwg_ent_mtext_get_attachment(dwg_ent_mtext *mtext, int *error);
+dwg_ent_mtext_get_attachment(const dwg_ent_mtext *mtext, int *error);
 
 void
 dwg_ent_mtext_set_attachment(dwg_ent_mtext *mtext, BITCODE_BS attachment,
                              int *error);
 
 BITCODE_BS
-dwg_ent_mtext_get_drawing_dir(dwg_ent_mtext *mtext, int *error);
+dwg_ent_mtext_get_drawing_dir(const dwg_ent_mtext *mtext, int *error);
 
 void
 dwg_ent_mtext_set_drawing_dir(dwg_ent_mtext *mtext, BITCODE_BS dir,
                               int *error);
 
 BITCODE_BD
-dwg_ent_mtext_get_extents_height(dwg_ent_mtext *mtext, int *error);
+dwg_ent_mtext_get_extents_height(const dwg_ent_mtext *mtext, int *error);
 
 void
 dwg_ent_mtext_set_extents_height(dwg_ent_mtext *mtext, BITCODE_BD ht, int *error);
 
 BITCODE_BD
-dwg_ent_mtext_get_extents_width(dwg_ent_mtext *mtext, int *error);
+dwg_ent_mtext_get_extents_width(const dwg_ent_mtext *mtext, int *error);
 
 void
 dwg_ent_mtext_set_extents_width(dwg_ent_mtext *mtext, BITCODE_BD wid, int *error);
 
 /* (utf-8 encoded) */
-char* dwg_ent_mtext_get_text(dwg_ent_mtext *mtext, int *error);
+char* dwg_ent_mtext_get_text(const dwg_ent_mtext *mtext, int *error);
 
 void
 dwg_ent_mtext_set_text(dwg_ent_mtext *mtext, char *text, int *error);
 
 BITCODE_BS
-dwg_ent_mtext_get_linespace_style(dwg_ent_mtext *mtext, int *error);
+dwg_ent_mtext_get_linespace_style(const dwg_ent_mtext *mtext, int *error);
 
 void
 dwg_ent_mtext_set_linespace_style(dwg_ent_mtext *mtext, BITCODE_BS style,
                                   int *error);
 
 BITCODE_BD
-dwg_ent_mtext_get_linespace_factor(dwg_ent_mtext *mtext, int *error);
+dwg_ent_mtext_get_linespace_factor(const dwg_ent_mtext *mtext, int *error);
 
 void
 dwg_ent_mtext_set_linespace_factor(dwg_ent_mtext *mtext, BITCODE_BD factor,
@@ -2006,17 +2006,17 @@ dwg_ent_leader_set_annot_type(dwg_ent_leader *leader, BITCODE_BS type,
                               int *error);
 
 BITCODE_BS
-dwg_ent_leader_get_annot_type(dwg_ent_leader *leader, int *error);
+dwg_ent_leader_get_annot_type(const dwg_ent_leader *leader, int *error);
 
 void
 dwg_ent_leader_set_path_type(dwg_ent_leader *leader, BITCODE_BS type,
                              int *error);
 
 BITCODE_BS
-dwg_ent_leader_get_path_type(dwg_ent_leader *leader, int *error);
+dwg_ent_leader_get_path_type(const dwg_ent_leader *leader, int *error);
 
 BITCODE_BL
-dwg_ent_leader_get_numpts(dwg_ent_leader *leader, int *error);
+dwg_ent_leader_get_numpts(const dwg_ent_leader *leader, int *error);
 
 void
 dwg_ent_leader_set_numpts(dwg_ent_leader *leader, BITCODE_BL numpts, int *error);
@@ -2026,7 +2026,7 @@ dwg_ent_leader_set_origin(dwg_ent_leader *leader, dwg_point_3d *point,
                           int *error);
 
 void
-dwg_ent_leader_get_origin(dwg_ent_leader *leader, dwg_point_3d *point,
+dwg_ent_leader_get_origin(const dwg_ent_leader *leader, dwg_point_3d *point,
                           int *error);
 
 void
@@ -2034,7 +2034,7 @@ dwg_ent_leader_set_extrusion(dwg_ent_leader *leader, dwg_point_3d *point,
                              int *error);
 
 void
-dwg_ent_leader_get_extrusion(dwg_ent_leader *leader, dwg_point_3d *point,
+dwg_ent_leader_get_extrusion(const dwg_ent_leader *leader, dwg_point_3d *point,
                              int *error);
 
 void
@@ -2042,7 +2042,7 @@ dwg_ent_leader_set_x_direction(dwg_ent_leader *leader, dwg_point_3d *point,
                                int *error);
 
 void
-dwg_ent_leader_get_x_direction(dwg_ent_leader *leader, dwg_point_3d *point,
+dwg_ent_leader_get_x_direction(const dwg_ent_leader *leader, dwg_point_3d *point,
                                int *error);
 
 void
@@ -2050,62 +2050,62 @@ dwg_ent_leader_set_offset_to_block_ins_pt(dwg_ent_leader *leader,
                                           dwg_point_3d *point, int *error);
 
 void
-dwg_ent_leader_get_offset_to_block_ins_pt(dwg_ent_leader *leader,
+dwg_ent_leader_get_offset_to_block_ins_pt(const dwg_ent_leader *leader,
                                           dwg_point_3d *point, int *error);
 
 void
 dwg_ent_leader_set_dimgap(dwg_ent_leader *leader, BITCODE_BD dimgap, int *error);
 
 BITCODE_BD
-dwg_ent_leader_get_dimgap(dwg_ent_leader *leader, int *error);
+dwg_ent_leader_get_dimgap(const dwg_ent_leader *leader, int *error);
 
 void
 dwg_ent_leader_set_box_height(dwg_ent_leader *leader, BITCODE_BD height,
                               int *error);
 
 BITCODE_BD
-dwg_ent_leader_get_box_height(dwg_ent_leader *leader, int *error);
+dwg_ent_leader_get_box_height(const dwg_ent_leader *leader, int *error);
 
 void
 dwg_ent_leader_set_box_width(dwg_ent_leader *leader, BITCODE_BD width,
                              int *error);
 
 BITCODE_BD
-dwg_ent_leader_get_box_width(dwg_ent_leader *leader, int *error);
+dwg_ent_leader_get_box_width(const dwg_ent_leader *leader, int *error);
 
 void
 dwg_ent_leader_set_hook_line_on_x_dir(dwg_ent_leader *leader, char hook,
                                       int *error);
 
 char
-dwg_ent_leader_get_hook_line_on_x_dir(dwg_ent_leader *leader, int *error);
+dwg_ent_leader_get_hook_line_on_x_dir(const dwg_ent_leader *leader, int *error);
 
 void
 dwg_ent_leader_set_arrowhead_on(dwg_ent_leader *leader, char arrow,
                                 int *error);
 
 char
-dwg_ent_leader_get_arrowhead_on(dwg_ent_leader *leader, int *error);
+dwg_ent_leader_get_arrowhead_on(const dwg_ent_leader *leader, int *error);
 
 void
 dwg_ent_leader_set_arrowhead_type(dwg_ent_leader *leader, BITCODE_BS type,
                                   int *error);
 
 BITCODE_BS
-dwg_ent_leader_get_arrowhead_type(dwg_ent_leader *leader, int *error);
+dwg_ent_leader_get_arrowhead_type(const dwg_ent_leader *leader, int *error);
 
 void
 dwg_ent_leader_set_dimasz(dwg_ent_leader *leader, BITCODE_BD dimasz, int *error);
 
 BITCODE_BD
-dwg_ent_leader_get_dimasz(dwg_ent_leader *leader, int *error);
+dwg_ent_leader_get_dimasz(const dwg_ent_leader *leader, int *error);
 
 void
 dwg_ent_leader_set_byblock_color(dwg_ent_leader *leader, BITCODE_BS color,
                                  int *error);
 
 BITCODE_BS
-dwg_ent_leader_get_byblock_color(dwg_ent_leader *leader, int *error);
+dwg_ent_leader_get_byblock_color(const dwg_ent_leader *leader, int *error);
 
 
 /********************************************************************
@@ -2118,21 +2118,21 @@ dwg_ent_tolerance_set_height(dwg_ent_tolerance *tol, BITCODE_BD height,
                              int *error);
 
 BITCODE_BD
-dwg_ent_tolerance_get_height(dwg_ent_tolerance *tol, int *error);
+dwg_ent_tolerance_get_height(const dwg_ent_tolerance *tol, int *error);
 
 void
 dwg_ent_tolerance_set_dimgap(dwg_ent_tolerance *tol, BITCODE_BD dimgap,
                              int *error);
 
 BITCODE_BD
-dwg_ent_tolerance_get_dimgap(dwg_ent_tolerance *tol, int *error);
+dwg_ent_tolerance_get_dimgap(const dwg_ent_tolerance *tol, int *error);
 
 void
 dwg_ent_tolerance_set_ins_pt(dwg_ent_tolerance *tol, dwg_point_3d *point,
                              int *error);
 
 void
-dwg_ent_tolerance_get_ins_pt(dwg_ent_tolerance *tol, dwg_point_3d *point,
+dwg_ent_tolerance_get_ins_pt(const dwg_ent_tolerance *tol, dwg_point_3d *point,
                              int *error);
 
 void
@@ -2140,7 +2140,7 @@ dwg_ent_tolerance_set_x_direction(dwg_ent_tolerance *tol, dwg_point_3d *point,
                                   int *error);
 
 void
-dwg_ent_tolerance_get_x_direction(dwg_ent_tolerance *tol, dwg_point_3d *point,
+dwg_ent_tolerance_get_x_direction(const dwg_ent_tolerance *tol, dwg_point_3d *point,
                                   int *error);
 
 void
@@ -2148,7 +2148,7 @@ dwg_ent_tolerance_set_extrusion(dwg_ent_tolerance *tol, dwg_point_3d *point,
                                 int *error);
 
 void
-dwg_ent_tolerance_get_extrusion(dwg_ent_tolerance *tol, dwg_point_3d *point,
+dwg_ent_tolerance_get_extrusion(const dwg_ent_tolerance *tol, dwg_point_3d *point,
                                 int *error);
 
 /* (utf-8 encoded) */
@@ -2157,7 +2157,7 @@ dwg_ent_tolerance_set_text_string(dwg_ent_tolerance *tol, char *string,
                                   int *error);
 
 char *
-dwg_ent_tolerance_get_text_string(dwg_ent_tolerance *tol, int *error);
+dwg_ent_tolerance_get_text_string(const dwg_ent_tolerance *tol, int *error);
 
 
 /********************************************************************
@@ -2166,52 +2166,56 @@ dwg_ent_tolerance_get_text_string(dwg_ent_tolerance *tol, int *error);
 
 
 BITCODE_BS
-dwg_ent_lwpline_get_flag(dwg_ent_lwpline *lwpline, int *error);
+dwg_ent_lwpline_get_flag(const dwg_ent_lwpline *lwpline, int *error);
+
 void
 dwg_ent_lwpline_set_flag(dwg_ent_lwpline *lwpline, char flags, int *error);
 
 BITCODE_BD
-dwg_ent_lwpline_get_const_width(dwg_ent_lwpline *lwpline, int *error);
+dwg_ent_lwpline_get_const_width(const dwg_ent_lwpline *lwpline, int *error);
+
 void
 dwg_ent_lwpline_set_const_width(dwg_ent_lwpline *lwpline, BITCODE_BD const_width,
                                 int *error);
 
 BITCODE_BD
-dwg_ent_lwpline_get_elevation(dwg_ent_lwpline *lwpline, int *error);
+dwg_ent_lwpline_get_elevation(const dwg_ent_lwpline *lwpline, int *error);
+
 void
 dwg_ent_lwpline_set_elevation(dwg_ent_lwpline *lwpline, BITCODE_BD elevation,
                               int *error);
 
 BITCODE_BD
-dwg_ent_lwpline_get_thickness(dwg_ent_lwpline *lwpline, int *error);
+dwg_ent_lwpline_get_thickness(const dwg_ent_lwpline *lwpline, int *error);
+
 void
 dwg_ent_lwpline_set_thickness(dwg_ent_lwpline *lwpline, BITCODE_BD thickness,
                               int *error);
 
 void
-dwg_ent_lwpline_get_normal(dwg_ent_lwpline *lwpline, dwg_point_3d *points,
+dwg_ent_lwpline_get_normal(const dwg_ent_lwpline *lwpline, dwg_point_3d *points,
                            int *error);
 void
 dwg_ent_lwpline_set_normal(dwg_ent_lwpline *lwpline, dwg_point_3d *points,
                            int *error);
 
 BITCODE_BL
-dwg_ent_lwpline_get_numpoints(dwg_ent_lwpline *lwpline, int *error);
+dwg_ent_lwpline_get_numpoints(const dwg_ent_lwpline *lwpline, int *error);
 
 BITCODE_BL
-dwg_ent_lwpline_get_numbulges(dwg_ent_lwpline *lwpline, int *error);
+dwg_ent_lwpline_get_numbulges(const dwg_ent_lwpline *lwpline, int *error);
 
 BITCODE_BL
-dwg_ent_lwpline_get_numwidths(dwg_ent_lwpline *lwpline, int *error);
+dwg_ent_lwpline_get_numwidths(const dwg_ent_lwpline *lwpline, int *error);
 
 double *
-dwg_ent_lwpline_get_bulges(dwg_ent_lwpline *lwpline, int *error);
+dwg_ent_lwpline_get_bulges(const dwg_ent_lwpline *lwpline, int *error);
 
 dwg_point_2d *
-dwg_ent_lwpline_get_points(dwg_ent_lwpline *lwpline, int *error);
+dwg_ent_lwpline_get_points(const dwg_ent_lwpline *lwpline, int *error);
 
 dwg_lwpline_widths *
-dwg_ent_lwpline_get_widths(dwg_ent_lwpline *lwpline, int *error);
+dwg_ent_lwpline_get_widths(const dwg_ent_lwpline *lwpline, int *error);
 
 
 /********************************************************************
@@ -2220,28 +2224,28 @@ dwg_ent_lwpline_get_widths(dwg_ent_lwpline *lwpline, int *error);
 
 
 BITCODE_BS
-dwg_ent_ole2frame_get_flag(dwg_ent_ole2frame *frame, int *error);
+dwg_ent_ole2frame_get_flag(const dwg_ent_ole2frame *frame, int *error);
 
 void
 dwg_ent_ole2frame_set_flag(dwg_ent_ole2frame *frame, BITCODE_BS flags,
                             int *error);
 
 BITCODE_BS
-dwg_ent_ole2frame_get_mode(dwg_ent_ole2frame *frame, int *error);
+dwg_ent_ole2frame_get_mode(const dwg_ent_ole2frame *frame, int *error);
 
 void
 dwg_ent_ole2frame_set_mode(dwg_ent_ole2frame *frame, BITCODE_BS mode,
                            int *error);
 
 BITCODE_BL
-dwg_ent_ole2frame_get_data_length(dwg_ent_ole2frame *frame, int *error);
+dwg_ent_ole2frame_get_data_length(const dwg_ent_ole2frame *frame, int *error);
 
 void
 dwg_ent_ole2frame_set_data_length(dwg_ent_ole2frame *frame, BITCODE_BL data_length,
                                   int *error);
 
 char *
-dwg_ent_ole2frame_get_data(dwg_ent_ole2frame *frame, int *error);
+dwg_ent_ole2frame_get_data(const dwg_ent_ole2frame *frame, int *error);
 
 void
 dwg_ent_ole2frame_set_data(dwg_ent_ole2frame *frame, char *data, int *error);
@@ -2253,41 +2257,41 @@ dwg_ent_ole2frame_set_data(dwg_ent_ole2frame *frame, char *data, int *error);
 
 
 BITCODE_BL
-dwg_obj_proxy_get_class_id(dwg_obj_proxy *proxy, int *error);
+dwg_obj_proxy_get_class_id(const dwg_obj_proxy *proxy, int *error);
 
 void
 dwg_obj_proxy_set_class_id(dwg_obj_proxy *proxy, BITCODE_BL class_id,
                         int *error);
 
 BITCODE_BL
-dwg_obj_proxy_get_version(dwg_obj_proxy *proxy, int *error);
+dwg_obj_proxy_get_version(const dwg_obj_proxy *proxy, int *error);
 
 void
 dwg_obj_proxy_set_version(dwg_obj_proxy *proxy, BITCODE_BL version,
                           int *error);
 
 BITCODE_B
-dwg_obj_proxy_get_from_dxf(dwg_obj_proxy *proxy, int *error);
+dwg_obj_proxy_get_from_dxf(const dwg_obj_proxy *proxy, int *error);
 
 void
 dwg_obj_proxy_set_from_dxf(dwg_obj_proxy *proxy, BITCODE_B from_dxf,
                            int *error);
 
 char*
-dwg_obj_proxy_get_data(dwg_obj_proxy *proxy, int *error);
+dwg_obj_proxy_get_data(const dwg_obj_proxy *proxy, int *error);
 
 void
 dwg_obj_proxy_set_data(dwg_obj_proxy *proxy, char* data,
                        int *error);
 
 dwg_object_ref*
-dwg_obj_proxy_get_parenthandle(dwg_obj_proxy *proxy, int *error);
+dwg_obj_proxy_get_parenthandle(const dwg_obj_proxy *proxy, int *error);
 
 Dwg_Object_Ref**
-dwg_obj_proxy_get_reactors(dwg_obj_proxy *proxy, int *error);
+dwg_obj_proxy_get_reactors(const dwg_obj_proxy *proxy, int *error);
 
 dwg_object_ref**
-dwg_obj_proxy_get_objid_object_handles(dwg_obj_proxy *proxy, int *error);
+dwg_obj_proxy_get_objid_object_handles(const dwg_obj_proxy *proxy, int *error);
 
 
 /********************************************************************
@@ -2296,28 +2300,28 @@ dwg_obj_proxy_get_objid_object_handles(dwg_obj_proxy *proxy, int *error);
 
 
 BITCODE_BS
-dwg_ent_spline_get_scenario(dwg_ent_spline *spline, int *error);
+dwg_ent_spline_get_scenario(const dwg_ent_spline *spline, int *error);
 
 void
 dwg_ent_spline_set_scenario(dwg_ent_spline *spline, BITCODE_BS scenario,
                                int *error);
 
 BITCODE_BS
-dwg_ent_spline_get_degree(dwg_ent_spline *spline, int *error);
+dwg_ent_spline_get_degree(const dwg_ent_spline *spline, int *error);
 
 void
 dwg_ent_spline_set_degree(dwg_ent_spline *spline, BITCODE_BS degree,
                              int *error);
 
 BITCODE_BD
-dwg_ent_spline_get_fit_tol(dwg_ent_spline *spline, int *error);
+dwg_ent_spline_get_fit_tol(const dwg_ent_spline *spline, int *error);
 
 void
 dwg_ent_spline_set_fit_tol(dwg_ent_spline *spline, int fit_tol,
                               int *error);
 
 void
-dwg_ent_spline_get_begin_tan_vector(dwg_ent_spline *spline,
+dwg_ent_spline_get_begin_tan_vector(const dwg_ent_spline *spline,
                                        dwg_point_3d *point, int *error);
 
 void
@@ -2325,7 +2329,7 @@ dwg_ent_spline_set_begin_tan_vector(dwg_ent_spline *spline,
                                        dwg_point_3d *point, int *error);
 
 void
-dwg_ent_spline_get_end_tan_vector(dwg_ent_spline *spline,
+dwg_ent_spline_get_end_tan_vector(const dwg_ent_spline *spline,
                                      dwg_point_3d *point, int *error);
 
 void
@@ -2333,75 +2337,75 @@ dwg_ent_spline_set_end_tan_vector(dwg_ent_spline *spline,
                                      dwg_point_3d *point, int *error);
 
 BITCODE_BD
-dwg_ent_spline_get_knot_tol(dwg_ent_spline *spline, int *error);
+dwg_ent_spline_get_knot_tol(const dwg_ent_spline *spline, int *error);
 
 void
 dwg_ent_spline_set_knot_tol(dwg_ent_spline *spline, BITCODE_BD knot_tol,
                                int *error);
 
 BITCODE_BD
-dwg_ent_spline_get_ctrl_tol(dwg_ent_spline *spline, int *error);
+dwg_ent_spline_get_ctrl_tol(const dwg_ent_spline *spline, int *error);
 
 void
 dwg_ent_spline_set_ctrl_tol(dwg_ent_spline *spline, BITCODE_BD ctrl_tol,
                                int *error);
 
 BITCODE_BS
-dwg_ent_spline_get_num_fit_pts(dwg_ent_spline *spline, int *error);
+dwg_ent_spline_get_num_fit_pts(const dwg_ent_spline *spline, int *error);
 
 void
 dwg_ent_spline_set_num_fit_pts(dwg_ent_spline *spline, BITCODE_BS num_fit_pts,
                                   int *error);
 
 char
-dwg_ent_spline_get_rational(dwg_ent_spline *spline, int *error);
+dwg_ent_spline_get_rational(const dwg_ent_spline *spline, int *error);
 
 void
 dwg_ent_spline_set_rational(dwg_ent_spline *spline, char rational,
                                int *error);
 
 char
-dwg_ent_spline_get_closed_b(dwg_ent_spline *spline, int *error);
+dwg_ent_spline_get_closed_b(const dwg_ent_spline *spline, int *error);
 
 void
 dwg_ent_spline_set_closed_b(dwg_ent_spline *spline, char closed_b,
                                int *error);
 
 char
-dwg_ent_spline_get_weighted(dwg_ent_spline *spline, int *error);
+dwg_ent_spline_get_weighted(const dwg_ent_spline *spline, int *error);
 
 void
 dwg_ent_spline_set_weighted(dwg_ent_spline *spline, char weighted,
                                int *error);
 
 char
-dwg_ent_spline_get_periodic(dwg_ent_spline *spline, int *error);
+dwg_ent_spline_get_periodic(const dwg_ent_spline *spline, int *error);
 
 void
 dwg_ent_spline_set_periodic(dwg_ent_spline *spline, char periodic,
                                int *error);
 
 BITCODE_BL
-dwg_ent_spline_get_num_knots(dwg_ent_spline *spline, int *error);
+dwg_ent_spline_get_num_knots(const dwg_ent_spline *spline, int *error);
 
 void
 dwg_ent_spline_set_num_knots(dwg_ent_spline *spline, BITCODE_BL nums, int *error);
 
 BITCODE_BL
-dwg_ent_spline_get_num_ctrl_pts(dwg_ent_spline *spline, int *error);
+dwg_ent_spline_get_num_ctrl_pts(const dwg_ent_spline *spline, int *error);
 
 void
 dwg_ent_spline_set_num_ctrl_pts(dwg_ent_spline *spline, BITCODE_BL nums,
                                    int *error);
 
 dwg_ent_spline_point *
-dwg_ent_spline_get_fit_points(dwg_ent_spline *spline, int *error);
+dwg_ent_spline_get_fit_points(const dwg_ent_spline *spline, int *error);
 
 dwg_ent_spline_control_point *
-dwg_ent_spline_get_ctrl_pts(dwg_ent_spline *spline, int *error);
+dwg_ent_spline_get_ctrl_pts(const dwg_ent_spline *spline, int *error);
 
 double *
-dwg_ent_spline_get_knots(dwg_ent_spline *spline, int *error);
+dwg_ent_spline_get_knots(const dwg_ent_spline *spline, int *error);
 
 
 /********************************************************************
@@ -2410,7 +2414,7 @@ dwg_ent_spline_get_knots(dwg_ent_spline *spline, int *error);
 
 
 void
-dwg_ent_viewport_get_center(dwg_ent_viewport *vp, dwg_point_3d *point,
+dwg_ent_viewport_get_center(const dwg_ent_viewport *vp, dwg_point_3d *point,
                             int *error);
 
 void
@@ -2418,33 +2422,33 @@ dwg_ent_viewport_set_center(dwg_ent_viewport *vp, dwg_point_3d *point,
                             int *error);
 
 BITCODE_BD
-dwg_ent_viewport_get_width(dwg_ent_viewport *vp, int *error);
+dwg_ent_viewport_get_width(const dwg_ent_viewport *vp, int *error);
 
 void
 dwg_ent_viewport_set_width(dwg_ent_viewport *vp, BITCODE_BD width, int *error);
 
 BITCODE_BD
-dwg_ent_viewport_get_height(dwg_ent_viewport *vp, int *error);
+dwg_ent_viewport_get_height(const dwg_ent_viewport *vp, int *error);
 
 void
 dwg_ent_viewport_set_height(dwg_ent_viewport *vp, BITCODE_BD height, int *error);
 
 BITCODE_BS
-dwg_ent_viewport_get_grid_major(dwg_ent_viewport *vp, int *error);
+dwg_ent_viewport_get_grid_major(const dwg_ent_viewport *vp, int *error);
 
 void
 dwg_ent_viewport_set_grid_major(dwg_ent_viewport *vp, BITCODE_BS major,
                                 int *error);
 
 BITCODE_BL
-dwg_ent_viewport_get_frozen_layer_count(dwg_ent_viewport *vp, int *error);
+dwg_ent_viewport_get_frozen_layer_count(const dwg_ent_viewport *vp, int *error);
 
 void
 dwg_ent_viewport_set_frozen_layer_count(dwg_ent_viewport *vp, BITCODE_BL count,
                                         int *error);
 
 char *
-dwg_ent_viewport_get_style_sheet(dwg_ent_viewport *vp, int *error);
+dwg_ent_viewport_get_style_sheet(const dwg_ent_viewport *vp, int *error);
 
 void
 dwg_ent_viewport_set_style_sheet(dwg_ent_viewport *vp, char *sheet,
@@ -2455,17 +2459,17 @@ dwg_ent_viewport_set_circle_zoom(dwg_ent_viewport *vp, BITCODE_BS zoom,
                                  int *error);
 
 BITCODE_BS
-dwg_ent_viewport_get_circle_zoom(dwg_ent_viewport *vp, int *error);
+dwg_ent_viewport_get_circle_zoom(const dwg_ent_viewport *vp, int *error);
 
 void
 dwg_ent_viewport_set_status_flag(dwg_ent_viewport *vp, BITCODE_BL flags,
                                   int *error);
 
 BITCODE_BL
-dwg_ent_viewport_get_status_flag(dwg_ent_viewport *vp, int *error);
+dwg_ent_viewport_get_status_flag(const dwg_ent_viewport *vp, int *error);
 
 char
-dwg_ent_viewport_get_render_mode(dwg_ent_viewport *vp, int *error);
+dwg_ent_viewport_get_render_mode(const dwg_ent_viewport *vp, int *error);
 
 void
 dwg_ent_viewport_set_render_mode(dwg_ent_viewport *vp, char mode, int *error);
@@ -2475,21 +2479,21 @@ dwg_ent_viewport_set_ucs_at_origin(dwg_ent_viewport *vp, unsigned char origin,
                                    int *error);
 
 unsigned char
-dwg_ent_viewport_get_ucs_at_origin(dwg_ent_viewport *vp, int *error);
+dwg_ent_viewport_get_ucs_at_origin(const dwg_ent_viewport *vp, int *error);
 
 void
 dwg_ent_viewport_set_ucs_per_viewport(dwg_ent_viewport *vp,
                                       unsigned char viewport, int *error);
 
 unsigned char
-dwg_ent_viewport_get_ucs_per_viewport(dwg_ent_viewport *vp, int *error);
+dwg_ent_viewport_get_ucs_per_viewport(const dwg_ent_viewport *vp, int *error);
 
 void
 dwg_ent_viewport_set_view_target(dwg_ent_viewport *vp, dwg_point_3d *point,
                                  int *error);
 
 void
-dwg_ent_viewport_get_view_target(dwg_ent_viewport *vp, dwg_point_3d *point,
+dwg_ent_viewport_get_view_target(const dwg_ent_viewport *vp, dwg_point_3d *point,
                                  int *error);
 
 void
@@ -2497,7 +2501,7 @@ dwg_ent_viewport_set_view_direction(dwg_ent_viewport *vp, dwg_point_3d *point,
                                     int *error);
 
 void
-dwg_ent_viewport_get_view_direction(dwg_ent_viewport *vp, dwg_point_3d *point,
+dwg_ent_viewport_get_view_direction(const dwg_ent_viewport *vp, dwg_point_3d *point,
                                     int *error);
 
 void
@@ -2505,45 +2509,45 @@ dwg_ent_viewport_set_view_twist_angle(dwg_ent_viewport *vp, BITCODE_BD angle,
                                       int *error);
 
 BITCODE_BD
-dwg_ent_viewport_get_view_twist_angle(dwg_ent_viewport *vp, int *error);
+dwg_ent_viewport_get_view_twist_angle(const dwg_ent_viewport *vp, int *error);
 
 void
 dwg_ent_viewport_set_view_height(dwg_ent_viewport *vp, BITCODE_BD height,
                                  int *error);
 
 BITCODE_BD
-dwg_ent_viewport_get_view_height(dwg_ent_viewport *vp, int *error);
+dwg_ent_viewport_get_view_height(const dwg_ent_viewport *vp, int *error);
 
 void
 dwg_ent_viewport_set_lens_length(dwg_ent_viewport *vp, BITCODE_BD length,
                                  int *error);
 
 BITCODE_BD
-dwg_ent_viewport_get_lens_length(dwg_ent_viewport *vp, int *error);
+dwg_ent_viewport_get_lens_length(const dwg_ent_viewport *vp, int *error);
 
 void
 dwg_ent_viewport_set_front_clip_z(dwg_ent_viewport *vp, BITCODE_BD front_z,
                                   int *error);
 
 BITCODE_BD
-dwg_ent_viewport_get_front_clip_z(dwg_ent_viewport *vp, int *error);
+dwg_ent_viewport_get_front_clip_z(const dwg_ent_viewport *vp, int *error);
 
 void
 dwg_ent_viewport_set_back_clip_z(dwg_ent_viewport *vp, BITCODE_BD back_z,
                                  int *error);
 
 BITCODE_BD
-dwg_ent_viewport_get_back_clip_z(dwg_ent_viewport *vp, int *error);
+dwg_ent_viewport_get_back_clip_z(const dwg_ent_viewport *vp, int *error);
 
 void
 dwg_ent_viewport_set_snap_angle(dwg_ent_viewport *vp, BITCODE_BD angle,
                                 int *error);
 
 BITCODE_BD
-dwg_ent_viewport_get_snap_angle(dwg_ent_viewport *vp, int *error);
+dwg_ent_viewport_get_snap_angle(const dwg_ent_viewport *vp, int *error);
 
 void
-dwg_ent_viewport_get_view_center(dwg_ent_viewport *vp, dwg_point_2d *point,
+dwg_ent_viewport_get_view_center(const dwg_ent_viewport *vp, dwg_point_2d *point,
                                  int *error);
 
 void
@@ -2551,7 +2555,7 @@ dwg_ent_viewport_set_view_center(dwg_ent_viewport *vp, dwg_point_2d *point,
                                  int *error);
 
 void
-dwg_ent_viewport_get_grid_spacing(dwg_ent_viewport *vp, dwg_point_2d *point,
+dwg_ent_viewport_get_grid_spacing(const dwg_ent_viewport *vp, dwg_point_2d *point,
                                   int *error);
 
 void
@@ -2559,7 +2563,7 @@ dwg_ent_viewport_set_grid_spacing(dwg_ent_viewport *vp, dwg_point_2d *point,
                                   int *error);
 
 void
-dwg_ent_viewport_get_snap_base(dwg_ent_viewport *vp, dwg_point_2d *point,
+dwg_ent_viewport_get_snap_base(const dwg_ent_viewport *vp, dwg_point_2d *point,
                                int *error);
 
 void
@@ -2567,7 +2571,7 @@ dwg_ent_viewport_set_snap_base(dwg_ent_viewport *vp, dwg_point_2d *point,
                                int *error);
 
 void
-dwg_ent_viewport_get_snap_spacing(dwg_ent_viewport *vp, dwg_point_2d *point,
+dwg_ent_viewport_get_snap_spacing(const dwg_ent_viewport *vp, dwg_point_2d *point,
                                   int *error);
 
 void
@@ -2579,7 +2583,7 @@ dwg_ent_viewport_set_ucs_origin(dwg_ent_viewport *vp, dwg_point_3d *point,
                                 int *error);
 
 void
-dwg_ent_viewport_get_ucs_origin(dwg_ent_viewport *vp, dwg_point_3d *point,
+dwg_ent_viewport_get_ucs_origin(const dwg_ent_viewport *vp, dwg_point_3d *point,
                                 int *error);
 
 void
@@ -2587,7 +2591,7 @@ dwg_ent_viewport_set_ucs_x_axis(dwg_ent_viewport *vp, dwg_point_3d *point,
                                 int *error);
 
 void
-dwg_ent_viewport_get_ucs_x_axis(dwg_ent_viewport *vp, dwg_point_3d *point,
+dwg_ent_viewport_get_ucs_x_axis(const dwg_ent_viewport *vp, dwg_point_3d *point,
                                 int *error);
 
 void
@@ -2595,7 +2599,7 @@ dwg_ent_viewport_set_ucs_y_axis(dwg_ent_viewport *vp, dwg_point_3d *point,
                                 int *error);
 
 void
-dwg_ent_viewport_get_ucs_y_axis(dwg_ent_viewport *vp, dwg_point_3d *point,
+dwg_ent_viewport_get_ucs_y_axis(const dwg_ent_viewport *vp, dwg_point_3d *point,
                                 int *error);
 
 void
@@ -2603,49 +2607,49 @@ dwg_ent_viewport_set_ucs_elevation(dwg_ent_viewport *vp, BITCODE_BD elevation,
                                    int *error);
 
 BITCODE_BD
-dwg_ent_viewport_get_ucs_elevation(dwg_ent_viewport *vp, int *error);
+dwg_ent_viewport_get_ucs_elevation(const dwg_ent_viewport *vp, int *error);
 
 void
 dwg_ent_viewport_set_ucs_ortho_view_type(dwg_ent_viewport *vp, 
                                          BITCODE_BS type, int *error);
 
 BITCODE_BS
-dwg_ent_viewport_get_ucs_ortho_view_type(dwg_ent_viewport *vp, int *error);
+dwg_ent_viewport_get_ucs_ortho_view_type(const dwg_ent_viewport *vp, int *error);
 
 void
 dwg_ent_viewport_set_shadeplot_mode(dwg_ent_viewport *vp,
                                     BITCODE_BS shadeplot, int *error);
 
 BITCODE_BS
-dwg_ent_viewport_get_shadeplot_mode(dwg_ent_viewport *vp, int *error);
+dwg_ent_viewport_get_shadeplot_mode(const dwg_ent_viewport *vp, int *error);
 
 void
 dwg_ent_viewport_set_use_default_lights(dwg_ent_viewport *vp,
                                     unsigned char lights, int *error);
 
 unsigned char
-dwg_ent_viewport_get_use_default_lights(dwg_ent_viewport *vp, int *error);
+dwg_ent_viewport_get_use_default_lights(const dwg_ent_viewport *vp, int *error);
 
 void
 dwg_ent_viewport_set_default_lighting_type(dwg_ent_viewport *vp, char type,
                                        int *error);
 
 char
-dwg_ent_viewport_get_default_lighting_type(dwg_ent_viewport *vp, int *error);
+dwg_ent_viewport_get_default_lighting_type(const dwg_ent_viewport *vp, int *error);
 
 void
 dwg_ent_viewport_set_brightness(dwg_ent_viewport *vp, BITCODE_BD brightness,
                                 int *error);
 
 BITCODE_BD
-dwg_ent_viewport_get_brightness(dwg_ent_viewport *vp, int *error);
+dwg_ent_viewport_get_brightness(const dwg_ent_viewport *vp, int *error);
 
 void
 dwg_ent_viewport_set_contrast(dwg_ent_viewport *vp, BITCODE_BD contrast,
                               int *error);
 
 BITCODE_BD
-dwg_ent_viewport_get_contrast(dwg_ent_viewport *vp, int *error);
+dwg_ent_viewport_get_contrast(const dwg_ent_viewport *vp, int *error);
 
 
 /********************************************************************
@@ -2654,13 +2658,13 @@ dwg_ent_viewport_get_contrast(dwg_ent_viewport *vp, int *error);
 
 
 BITCODE_BS
-dwg_ent_polyline_pface_get_numpoints(dwg_ent_polyline_pface *pface, int *error);
+dwg_ent_polyline_pface_get_numpoints(const dwg_ent_polyline_pface *pface, int *error);
 
 BITCODE_BS
-dwg_ent_polyline_pface_get_numfaces(dwg_ent_polyline_pface *pface, int *error);
+dwg_ent_polyline_pface_get_numfaces(const dwg_ent_polyline_pface *pface, int *error);
 
 dwg_point_3d *
-dwg_obj_polyline_pface_get_points(dwg_object *obj, int *error);
+dwg_obj_polyline_pface_get_points(const dwg_object *obj, int *error);
 
 /********************************************************************
 *                FUNCTIONS FOR POLYLINE_MESH ENTITY                 *
@@ -2668,21 +2672,21 @@ dwg_obj_polyline_pface_get_points(dwg_object *obj, int *error);
 
 
 BITCODE_BS
-dwg_ent_polyline_mesh_get_flag(dwg_ent_polyline_mesh *mesh, int *error);
+dwg_ent_polyline_mesh_get_flag(const dwg_ent_polyline_mesh *mesh, int *error);
 
 void
 dwg_ent_polyline_mesh_set_flag(dwg_ent_polyline_mesh *mesh,
                                 BITCODE_BS flags, int *error);
 
 BITCODE_BS
-dwg_ent_polyline_mesh_get_curve_type(dwg_ent_polyline_mesh *mesh, int *error);
+dwg_ent_polyline_mesh_get_curve_type(const dwg_ent_polyline_mesh *mesh, int *error);
 
 void
 dwg_ent_polyline_mesh_set_curve_type(dwg_ent_polyline_mesh *mesh,
                                      BITCODE_BS curve_type, int *error);
 
 BITCODE_BS
-dwg_ent_polyline_mesh_get_m_vert_count(dwg_ent_polyline_mesh *mesh,
+dwg_ent_polyline_mesh_get_m_vert_count(const dwg_ent_polyline_mesh *mesh,
                                        int *error);
 
 void
@@ -2690,7 +2694,7 @@ dwg_ent_polyline_mesh_set_m_vert_count(dwg_ent_polyline_mesh *mesh,
                                        BITCODE_BS m_vert_count, int *error);
 
 BITCODE_BS
-dwg_ent_polyline_mesh_get_n_vert_count(dwg_ent_polyline_mesh *mesh,
+dwg_ent_polyline_mesh_get_n_vert_count(const dwg_ent_polyline_mesh *mesh,
                                        int *error);
 
 void
@@ -2698,21 +2702,21 @@ dwg_ent_polyline_mesh_set_n_vert_count(dwg_ent_polyline_mesh *mesh,
                                        BITCODE_BS n_vert_count, int *error);
 
 BITCODE_BS
-dwg_ent_polyline_mesh_get_m_density(dwg_ent_polyline_mesh *mesh, int *error);
+dwg_ent_polyline_mesh_get_m_density(const dwg_ent_polyline_mesh *mesh, int *error);
 
 void
 dwg_ent_polyline_mesh_set_m_density(dwg_ent_polyline_mesh *mesh,
                                     BITCODE_BS m_density, int *error);
 
 BITCODE_BS
-dwg_ent_polyline_mesh_get_n_density(dwg_ent_polyline_mesh *mesh, int *error);
+dwg_ent_polyline_mesh_get_n_density(const dwg_ent_polyline_mesh *mesh, int *error);
 
 void
 dwg_ent_polyline_mesh_set_n_density(dwg_ent_polyline_mesh *mesh,
                                     BITCODE_BS n_density, int *error);
 
 BITCODE_BL
-dwg_ent_polyline_mesh_get_owned_obj_count(dwg_ent_polyline_mesh *mesh,
+dwg_ent_polyline_mesh_get_owned_obj_count(const dwg_ent_polyline_mesh *mesh,
                                           int *error);
 
 void
@@ -2726,7 +2730,7 @@ dwg_ent_polyline_mesh_set_owned_obj_count(dwg_ent_polyline_mesh *mesh,
 
 
 void
-dwg_ent_polyline_2d_get_extrusion(dwg_ent_polyline_2d *line2d,
+dwg_ent_polyline_2d_get_extrusion(const dwg_ent_polyline_2d *line2d,
                                   dwg_point_3d *point, int *error);
 
 void
@@ -2734,52 +2738,52 @@ dwg_ent_polyline_2d_set_extrusion(dwg_ent_polyline_2d *line2d,
                                   dwg_point_3d *point, int *error);
 
 BITCODE_BD
-dwg_ent_polyline_2d_get_start_width(dwg_ent_polyline_2d *line2d, int *error);
+dwg_ent_polyline_2d_get_start_width(const dwg_ent_polyline_2d *line2d, int *error);
 
 void
 dwg_ent_polyline_2d_set_start_width(dwg_ent_polyline_2d *line2d,
                                     double start_width, int *error);
 
 BITCODE_BD
-dwg_ent_polyline_2d_get_end_width(dwg_ent_polyline_2d *line2d, int *error);
+dwg_ent_polyline_2d_get_end_width(const dwg_ent_polyline_2d *line2d, int *error);
 
 void
 dwg_ent_polyline_2d_set_end_width(dwg_ent_polyline_2d *line2d,
                                   double end_width, int *error);
 
 BITCODE_BD
-dwg_ent_polyline_2d_get_thickness(dwg_ent_polyline_2d *line2d, int *error);
+dwg_ent_polyline_2d_get_thickness(const dwg_ent_polyline_2d *line2d, int *error);
 
 void
 dwg_ent_polyline_2d_set_thickness(dwg_ent_polyline_2d *line2d,
                                   double thickness, int *error);
 
 BITCODE_BD
-dwg_ent_polyline_2d_get_elevation(dwg_ent_polyline_2d *line2d, int *error);
+dwg_ent_polyline_2d_get_elevation(const dwg_ent_polyline_2d *line2d, int *error);
 
 void
 dwg_ent_polyline_2d_set_elevation(dwg_ent_polyline_2d *line2d,
                                   double elevation, int *error);
 
 BITCODE_BS
-dwg_ent_polyline_2d_get_flag(dwg_ent_polyline_2d *line2d, int *error);
+dwg_ent_polyline_2d_get_flag(const dwg_ent_polyline_2d *line2d, int *error);
 
 void
 dwg_ent_polyline_2d_set_flag(dwg_ent_polyline_2d *line2d, BITCODE_BS flags,
                               int *error);
 
 BITCODE_BS
-dwg_ent_polyline_2d_get_curve_type(dwg_ent_polyline_2d *line2d, int *error);
+dwg_ent_polyline_2d_get_curve_type(const dwg_ent_polyline_2d *line2d, int *error);
 
 void
 dwg_ent_polyline_2d_set_curve_type(dwg_ent_polyline_2d *line2d,
                                    BITCODE_BS curve_type, int *error);
 
 BITCODE_BL
-dwg_obj_polyline_2d_get_numpoints(dwg_object *obj, int *error);
+dwg_obj_polyline_2d_get_numpoints(const dwg_object *obj, int *error);
 
 dwg_point_2d *
-dwg_obj_polyline_2d_get_points(dwg_object *obj, int *error);
+dwg_obj_polyline_2d_get_points(const dwg_object *obj, int *error);
 
 
 /********************************************************************
@@ -2788,21 +2792,21 @@ dwg_obj_polyline_2d_get_points(dwg_object *obj, int *error);
 
 
 char
-dwg_ent_polyline_3d_get_flag(dwg_ent_polyline_3d *line3d, int *error);
+dwg_ent_polyline_3d_get_flag(const dwg_ent_polyline_3d *line3d, int *error);
 
 void
 dwg_ent_polyline_3d_set_flag(dwg_ent_polyline_3d *line3d, char flag,
                              int *error);
 
 char
-dwg_ent_polyline_3d_get_flag2(dwg_ent_polyline_3d *line3d, int *error);
+dwg_ent_polyline_3d_get_flag2(const dwg_ent_polyline_3d *line3d, int *error);
 
 void
 dwg_ent_polyline_3d_set_flag2(dwg_ent_polyline_3d *line3d, char flag2,
                                 int *error);
 
 BITCODE_BL
-dwg_ent_polyline_3d_get_owned_obj_count(dwg_ent_polyline_3d *line3d,
+dwg_ent_polyline_3d_get_owned_obj_count(const dwg_ent_polyline_3d *line3d,
                                         int *error);
 
 void
@@ -2816,14 +2820,14 @@ dwg_ent_polyline_3d_set_owned_obj_count(dwg_ent_polyline_3d *line3d,
 
 
 BITCODE_BS
-dwg_ent_3dface_get_invis_flags(dwg_ent_3dface *_3dface, int *error);
+dwg_ent_3dface_get_invis_flags(const dwg_ent_3dface *_3dface, int *error);
 
 void
 dwg_ent_3dface_set_invis_flags(dwg_ent_3dface *_3dface,
                                BITCODE_BS invis_flags, int *error);
 
 void
-dwg_ent_3dface_get_corner1(dwg_ent_3dface *_3dface, dwg_point_2d *point,
+dwg_ent_3dface_get_corner1(const dwg_ent_3dface *_3dface, dwg_point_2d *point,
                            int *error);
 
 void
@@ -2831,7 +2835,7 @@ dwg_ent_3dface_set_corner1(dwg_ent_3dface *_3dface, dwg_point_2d *point,
                            int *error);
 
 void
-dwg_ent_3dface_get_corner2(dwg_ent_3dface *_3dface, dwg_point_2d *point,
+dwg_ent_3dface_get_corner2(const dwg_ent_3dface *_3dface, dwg_point_2d *point,
                            int *error);
 
 void
@@ -2839,7 +2843,7 @@ dwg_ent_3dface_set_corner2(dwg_ent_3dface *_3dface, dwg_point_2d *point,
                            int *error);
 
 void
-dwg_ent_3dface_get_corner3(dwg_ent_3dface *_3dface, dwg_point_2d *point,
+dwg_ent_3dface_get_corner3(const dwg_ent_3dface *_3dface, dwg_point_2d *point,
                            int *error);
 
 void
@@ -2847,7 +2851,7 @@ dwg_ent_3dface_set_corner3(dwg_ent_3dface *_3dface, dwg_point_2d *point,
                            int *error);
 
 void
-dwg_ent_3dface_get_corner4(dwg_ent_3dface *_3dface, dwg_point_2d *point,
+dwg_ent_3dface_get_corner4(const dwg_ent_3dface *_3dface, dwg_point_2d *point,
                            int *error);
 
 void
@@ -2861,20 +2865,20 @@ dwg_ent_3dface_set_corner4(dwg_ent_3dface *_3dface, dwg_point_2d *point,
 
 
 BITCODE_BL
-dwg_ent_image_get_class_version(dwg_ent_image *image, int *error);
+dwg_ent_image_get_class_version(const dwg_ent_image *image, int *error);
 
 void
 dwg_ent_image_set_class_version(dwg_ent_image *image, BITCODE_BL class_version,
                                 int *error);
 
 void
-dwg_ent_image_get_pt0(dwg_ent_image *image, dwg_point_3d *point, int *error);
+dwg_ent_image_get_pt0(const dwg_ent_image *image, dwg_point_3d *point, int *error);
 
 void
 dwg_ent_image_set_pt0(dwg_ent_image *image, dwg_point_3d *point, int *error);
 
 void
-dwg_ent_image_get_u_vector(dwg_ent_image *image, dwg_point_3d *point,
+dwg_ent_image_get_u_vector(const dwg_ent_image *image, dwg_point_3d *point,
                            int *error);
 
 void
@@ -2882,7 +2886,7 @@ dwg_ent_image_set_u_vector(dwg_ent_image *image, dwg_point_3d *point,
                            int *error);
 
 void
-dwg_ent_image_get_v_vector(dwg_ent_image *image, dwg_point_3d *point,
+dwg_ent_image_get_v_vector(const dwg_ent_image *image, dwg_point_3d *point,
                            int *error);
 
 void
@@ -2890,61 +2894,61 @@ dwg_ent_image_set_v_vector(dwg_ent_image *image, dwg_point_3d *point,
                            int *error);
 
 BITCODE_BD
-dwg_ent_image_get_size_height(dwg_ent_image *image, int *error);
+dwg_ent_image_get_size_height(const dwg_ent_image *image, int *error);
 
 void
 dwg_ent_image_set_size_height(dwg_ent_image *image, BITCODE_BD size_height,
                               int *error);
 
 BITCODE_BD
-dwg_ent_image_get_size_width(dwg_ent_image *image, int *error);
+dwg_ent_image_get_size_width(const dwg_ent_image *image, int *error);
 
 void
 dwg_ent_image_set_size_width(dwg_ent_image *image, BITCODE_BD size_width,
                              int *error);
 
 BITCODE_BS
-dwg_ent_image_get_display_props(dwg_ent_image *image, int *error);
+dwg_ent_image_get_display_props(const dwg_ent_image *image, int *error);
 
 void
 dwg_ent_image_set_display_props(dwg_ent_image *image,
                                 BITCODE_BS display_props, int *error);
 
 unsigned char
-dwg_ent_image_get_clipping(dwg_ent_image *image, int *error);
+dwg_ent_image_get_clipping(const dwg_ent_image *image, int *error);
 
 void
 dwg_ent_image_set_clipping(dwg_ent_image *image, unsigned char clipping,
                            int *error);
 
 char
-dwg_ent_image_get_brightness(dwg_ent_image *image, int *error);
+dwg_ent_image_get_brightness(const dwg_ent_image *image, int *error);
 
 void
 dwg_ent_image_set_brightness(dwg_ent_image *image, char brightness,
                              int *error);
 
 char
-dwg_ent_image_get_contrast(dwg_ent_image *image, int *error);
+dwg_ent_image_get_contrast(const dwg_ent_image *image, int *error);
 
 void
 dwg_ent_image_set_contrast(dwg_ent_image *image, char contrast, int *error);
 
 char
-dwg_ent_image_get_fade(dwg_ent_image *image, int *error);
+dwg_ent_image_get_fade(const dwg_ent_image *image, int *error);
 
 void
 dwg_ent_image_set_fade(dwg_ent_image *image, char fade, int *error);
 
 BITCODE_BS
-dwg_ent_image_get_clip_boundary_type(dwg_ent_image *image, int *error);
+dwg_ent_image_get_clip_boundary_type(const dwg_ent_image *image, int *error);
 
 void
 dwg_ent_image_set_clip_boundary_type(dwg_ent_image *image, BITCODE_BS type,
                                     int *error);
 
 void
-dwg_ent_image_get_boundary_pt0(dwg_ent_image *image, dwg_point_2d *point,
+dwg_ent_image_get_boundary_pt0(const dwg_ent_image *image, dwg_point_2d *point,
                                int *error);
 
 void
@@ -2952,7 +2956,7 @@ dwg_ent_image_set_boundary_pt0(dwg_ent_image *image, dwg_point_2d *point,
                                int *error);
 
 void
-dwg_ent_image_get_boundary_pt1(dwg_ent_image *image, dwg_point_2d *point,
+dwg_ent_image_get_boundary_pt1(const dwg_ent_image *image, dwg_point_2d *point,
                                int *error);
 
 void
@@ -2960,13 +2964,13 @@ dwg_ent_image_set_boundary_pt1(dwg_ent_image *image, dwg_point_2d *point,
                                int *error);
 
 BITCODE_BD
-dwg_ent_image_get_num_clip_verts(dwg_ent_image *image, int *error);
+dwg_ent_image_get_num_clip_verts(const dwg_ent_image *image, int *error);
 
 void
 dwg_ent_image_set_num_clip_verts(dwg_ent_image *image, BITCODE_BD num, int *error);
 
 BITCODE_2RD *
-dwg_ent_image_get_clip_verts(dwg_ent_image *image, int *error);
+dwg_ent_image_get_clip_verts(const dwg_ent_image *image, int *error);
 
 
 /********************************************************************
@@ -2978,20 +2982,20 @@ void
 dwg_ent_mline_set_scale(dwg_ent_mline *mline, BITCODE_BD scale, int *error);
 
 BITCODE_BD
-dwg_ent_mline_get_scale(dwg_ent_mline *mline, int *error);
+dwg_ent_mline_get_scale(const dwg_ent_mline *mline, int *error);
 
 void
 dwg_ent_mline_set_justification(dwg_ent_mline *mline, BITCODE_RC just, int *error);
 
 BITCODE_RC
-dwg_ent_mline_get_justification(dwg_ent_mline *mline, int *error);
+dwg_ent_mline_get_justification(const dwg_ent_mline *mline, int *error);
 
 void
 dwg_ent_mline_set_base_point(dwg_ent_mline *mline, dwg_point_3d *point,
                              int *error);
 
 void
-dwg_ent_mline_get_base_point(dwg_ent_mline *mline, dwg_point_3d *point,
+dwg_ent_mline_get_base_point(const dwg_ent_mline *mline, dwg_point_3d *point,
                              int *error);
 
 void
@@ -2999,7 +3003,7 @@ dwg_ent_mline_set_extrusion(dwg_ent_mline *mline, dwg_point_3d *point,
                             int *error);
 
 void
-dwg_ent_mline_get_extrusion(dwg_ent_mline *mline, dwg_point_3d *point,
+dwg_ent_mline_get_extrusion(const dwg_ent_mline *mline, dwg_point_3d *point,
                             int *error);
 
 void
@@ -3007,26 +3011,26 @@ dwg_ent_mline_set_flags(dwg_ent_mline *mline, BITCODE_BS oc,
                               int *error);
 
 BITCODE_BS
-dwg_ent_mline_get_flags(dwg_ent_mline *mline, int *error);
+dwg_ent_mline_get_flags(const dwg_ent_mline *mline, int *error);
 
 void
 dwg_ent_mline_set_num_lines(dwg_ent_mline *mline, BITCODE_RC num, int *error);
 
 BITCODE_RC
-dwg_ent_mline_get_num_lines(dwg_ent_mline *mline, int *error);
+dwg_ent_mline_get_num_lines(const dwg_ent_mline *mline, int *error);
 
 void
 dwg_ent_mline_set_num_verts(dwg_ent_mline *mline, BITCODE_BS num,
                             int *error);
 
 BITCODE_BS
-dwg_ent_mline_get_num_verts(dwg_ent_mline *mline, int *error);
+dwg_ent_mline_get_num_verts(const dwg_ent_mline *mline, int *error);
 
 dwg_ent_mline_vertex *
-dwg_ent_mline_get_verts(dwg_ent_mline *mline, int *error);
+dwg_ent_mline_get_verts(const dwg_ent_mline *mline, int *error);
 
 dwg_ent_mline_line *
-dwg_ent_mline_get_lines(dwg_ent_mline *mline, int *error);
+dwg_ent_mline_get_lines(const dwg_ent_mline *mline, int *error);
 
 /********************************************************************
 *                  FUNCTIONS FOR 3DSOLID ENTITY                     *
@@ -3034,31 +3038,31 @@ dwg_ent_mline_get_lines(dwg_ent_mline *mline, int *error);
 
 
 unsigned char
-dwg_ent_3dsolid_get_acis_empty(dwg_ent_3dsolid *_3dsolid, int *error);
+dwg_ent_3dsolid_get_acis_empty(const dwg_ent_3dsolid *_3dsolid, int *error);
 
 void
 dwg_ent_3dsolid_set_acis_empty(dwg_ent_3dsolid *_3dsolid, unsigned char acis,
                                int *error);
 
 BITCODE_BS
-dwg_ent_3dsolid_get_version(dwg_ent_3dsolid *_3dsolid, int *error);
+dwg_ent_3dsolid_get_version(const dwg_ent_3dsolid *_3dsolid, int *error);
 
 void
 dwg_ent_3dsolid_set_version(dwg_ent_3dsolid *_3dsolid, BITCODE_BS version,
                             int *error);
 
 BITCODE_BL*
-dwg_ent_3dsolid_get_block_size(dwg_ent_3dsolid *_3dsolid, int *error);
+dwg_ent_3dsolid_get_block_size(const dwg_ent_3dsolid *_3dsolid, int *error);
 
 char *
-dwg_ent_3dsolid_get_acis_data(dwg_ent_3dsolid *_3dsolid, int *error);
+dwg_ent_3dsolid_get_acis_data(const dwg_ent_3dsolid *_3dsolid, int *error);
 
 void
 dwg_ent_3dsolid_set_acis_data(dwg_ent_3dsolid *_3dsolid, char *data,
                               int *error);
 
 char
-dwg_ent_3dsolid_get_wireframe_data_present(dwg_ent_3dsolid *_3dsolid,
+dwg_ent_3dsolid_get_wireframe_data_present(const dwg_ent_3dsolid *_3dsolid,
                                            int *error);
 
 void
@@ -3066,14 +3070,14 @@ dwg_ent_3dsolid_set_wireframe_data_present(dwg_ent_3dsolid *_3dsolid,
                                            char data, int *error);
 
 char
-dwg_ent_3dsolid_get_point_present(dwg_ent_3dsolid *_3dsolid, int *error);
+dwg_ent_3dsolid_get_point_present(const dwg_ent_3dsolid *_3dsolid, int *error);
 
 void
 dwg_ent_3dsolid_set_point_present(dwg_ent_3dsolid *_3dsolid, char point,
                                   int *error);
 
 void
-dwg_ent_3dsolid_get_point(dwg_ent_3dsolid *_3dsolid, dwg_point_3d *point, 
+dwg_ent_3dsolid_get_point(const dwg_ent_3dsolid *_3dsolid, dwg_point_3d *point, 
                           int *error);
 
 void
@@ -3081,40 +3085,40 @@ dwg_ent_3dsolid_set_point(dwg_ent_3dsolid *_3dsolid, dwg_point_3d *point,
                           int *error);
 
 BITCODE_BL
-dwg_ent_3dsolid_get_num_isolines(dwg_ent_3dsolid *_3dsolid, int *error);
+dwg_ent_3dsolid_get_num_isolines(const dwg_ent_3dsolid *_3dsolid, int *error);
 
 void
 dwg_ent_3dsolid_set_num_isolines(dwg_ent_3dsolid *_3dsolid, BITCODE_BL num,
                                  int *error);
 
 char
-dwg_ent_3dsolid_get_isoline_present(dwg_ent_3dsolid *_3dsolid, int *error);
+dwg_ent_3dsolid_get_isoline_present(const dwg_ent_3dsolid *_3dsolid, int *error);
 
 void
 dwg_ent_3dsolid_set_isoline_present(dwg_ent_3dsolid *_3dsolid, char iso,
                                     int *error);
 
 BITCODE_BL
-dwg_ent_3dsolid_get_num_wires(dwg_ent_3dsolid *_3dsolid, int *error);
+dwg_ent_3dsolid_get_num_wires(const dwg_ent_3dsolid *_3dsolid, int *error);
 
 void
 dwg_ent_3dsolid_set_num_wires(dwg_ent_3dsolid *_3dsolid, BITCODE_BL num, int *error);
 
 dwg_ent_solid_wire *
-dwg_ent_3dsolid_get_wire(dwg_ent_3dsolid *_3dsolid, int *error);
+dwg_ent_3dsolid_get_wire(const dwg_ent_3dsolid *_3dsolid, int *error);
 
 BITCODE_BL
-dwg_ent_3dsolid_get_num_silhouettes(dwg_ent_3dsolid *_3dsolid, int *error);
+dwg_ent_3dsolid_get_num_silhouettes(const dwg_ent_3dsolid *_3dsolid, int *error);
 
 void
 dwg_ent_3dsolid_set_num_silhouettes(dwg_ent_3dsolid *_3dsolid,
                                     BITCODE_BL silhouettes, int *error);
 
 dwg_ent_solid_silhouette *
-dwg_ent_3dsolid_get_silhouette(dwg_ent_3dsolid *_3dsolid, int *error);
+dwg_ent_3dsolid_get_silhouette(const dwg_ent_3dsolid *_3dsolid, int *error);
 
 unsigned char
-dwg_ent_3dsolid_get_acis_empty2(dwg_ent_3dsolid *_3dsolid, int *error);
+dwg_ent_3dsolid_get_acis_empty2(const dwg_ent_3dsolid *_3dsolid, int *error);
 
 void
 dwg_ent_3dsolid_set_acis_empty2(dwg_ent_3dsolid *_3dsolid, unsigned char acis,
@@ -3127,44 +3131,44 @@ dwg_ent_3dsolid_set_acis_empty2(dwg_ent_3dsolid *_3dsolid, unsigned char acis,
 
 
 unsigned char
-dwg_ent_region_get_acis_empty(dwg_ent_region *region, int *error);
+dwg_ent_region_get_acis_empty(const dwg_ent_region *region, int *error);
 
 void
 dwg_ent_region_set_acis_empty(dwg_ent_region *region, unsigned char acis,
                               int *error);
 
 BITCODE_BS
-dwg_ent_region_get_version(dwg_ent_region *region, int *error);
+dwg_ent_region_get_version(const dwg_ent_region *region, int *error);
 
 void
 dwg_ent_region_set_version(dwg_ent_region *region, BITCODE_BS version,
                            int *error);
 
 BITCODE_BL*
-dwg_ent_region_get_block_size(dwg_ent_region *region, int *error);
+dwg_ent_region_get_block_size(const dwg_ent_region *region, int *error);
 
 char *
-dwg_ent_region_get_acis_data(dwg_ent_region *region, int *error);
+dwg_ent_region_get_acis_data(const dwg_ent_region *region, int *error);
 
 void
 dwg_ent_region_set_acis_data(dwg_ent_region *region, char *data, int *error);
 
 char
-dwg_ent_region_get_wireframe_data_present(dwg_ent_region *region, int *error);
+dwg_ent_region_get_wireframe_data_present(const dwg_ent_region *region, int *error);
 
 void
 dwg_ent_region_set_wireframe_data_present(dwg_ent_region *region, char data,
                                           int *error);
 
 char
-dwg_ent_region_get_point_present(dwg_ent_region *region, int *error);
+dwg_ent_region_get_point_present(const dwg_ent_region *region, int *error);
 
 void
 dwg_ent_region_set_point_present(dwg_ent_region *region, char point,
                                  int *error);
 
 void
-dwg_ent_region_get_point(dwg_ent_region *region, dwg_point_3d *point,
+dwg_ent_region_get_point(const dwg_ent_region *region, dwg_point_3d *point,
                          int *error);
 
 void
@@ -3172,39 +3176,39 @@ dwg_ent_region_set_point(dwg_ent_region *region, dwg_point_3d *point,
                          int *error);
 
 BITCODE_BL
-dwg_ent_region_get_num_isolines(dwg_ent_region *region, int *error);
+dwg_ent_region_get_num_isolines(const dwg_ent_region *region, int *error);
 
 void
 dwg_ent_region_set_num_isolines(dwg_ent_region *region, BITCODE_BL num, int *error);
 
 char
-dwg_ent_region_get_isoline_present(dwg_ent_region *region, int *error);
+dwg_ent_region_get_isoline_present(const dwg_ent_region *region, int *error);
 
 void
 dwg_ent_region_set_isoline_present(dwg_ent_region *region, char iso,
                                    int *error);
 
 BITCODE_BL
-dwg_ent_region_get_num_wires(dwg_ent_region *region, int *error);
+dwg_ent_region_get_num_wires(const dwg_ent_region *region, int *error);
 
 void
 dwg_ent_region_set_num_wires(dwg_ent_region *region, BITCODE_BL num, int *error);
 
 dwg_ent_solid_wire *
-dwg_ent_region_get_wire(dwg_ent_region *region, int *error);
+dwg_ent_region_get_wire(const dwg_ent_region *region, int *error);
 
 BITCODE_BL
-dwg_ent_region_get_num_silhouettes(dwg_ent_region *region, int *error);
+dwg_ent_region_get_num_silhouettes(const dwg_ent_region *region, int *error);
 
 void
 dwg_ent_region_set_num_silhouettes(dwg_ent_region *region, BITCODE_BL silhouettes,
                                    int *error);
 
 dwg_ent_solid_silhouette *
-dwg_ent_region_get_silhouette(dwg_ent_region *region, int *error);
+dwg_ent_region_get_silhouette(const dwg_ent_region *region, int *error);
 
 unsigned char
-dwg_ent_region_get_acis_empty2(dwg_ent_region *region, int *error);
+dwg_ent_region_get_acis_empty2(const dwg_ent_region *region, int *error);
 
 void
 dwg_ent_region_set_acis_empty2(dwg_ent_region *region, unsigned char acis,
@@ -3217,79 +3221,79 @@ dwg_ent_region_set_acis_empty2(dwg_ent_region *region, unsigned char acis,
 
 
 unsigned char
-dwg_ent_body_get_acis_empty(dwg_ent_body *body, int *error);
+dwg_ent_body_get_acis_empty(const dwg_ent_body *body, int *error);
 
 void
 dwg_ent_body_set_acis_empty(dwg_ent_body *body, unsigned char acis,
                             int *error);
 
 BITCODE_BS
-dwg_ent_body_get_version(dwg_ent_body *body, int *error);
+dwg_ent_body_get_version(const dwg_ent_body *body, int *error);
 
 void
 dwg_ent_body_set_version(dwg_ent_body *body, BITCODE_BS version, int *error);
 
 BITCODE_BL*
-dwg_ent_body_get_block_size(dwg_ent_body *body, int *error);
+dwg_ent_body_get_block_size(const dwg_ent_body *body, int *error);
 
 char *
-dwg_ent_body_get_acis_data(dwg_ent_body *body, int *error);
+dwg_ent_body_get_acis_data(const dwg_ent_body *body, int *error);
 
 void
 dwg_ent_body_set_acis_data(dwg_ent_body *body, char *data, int *error);
 
 char
-dwg_ent_body_get_wireframe_data_present(dwg_ent_body *body, int *error);
+dwg_ent_body_get_wireframe_data_present(const dwg_ent_body *body, int *error);
 
 void
 dwg_ent_body_set_wireframe_data_present(dwg_ent_body *body, char data,
                                         int *error);
 
 char
-dwg_ent_body_get_point_present(dwg_ent_body *body, int *error);
+dwg_ent_body_get_point_present(const dwg_ent_body *body, int *error);
 
 void
 dwg_ent_body_set_point_present(dwg_ent_body *body, char point, int *error);
 
 void
-dwg_ent_body_get_point(dwg_ent_body *body, dwg_point_3d *point, int *error);
+dwg_ent_body_get_point(const dwg_ent_body *body, dwg_point_3d *point, int *error);
 
 void
 dwg_ent_body_set_point(dwg_ent_body *body, dwg_point_3d *point, int *error);
 
 BITCODE_BL
-dwg_ent_body_get_num_isolines(dwg_ent_body *body, int *error);
+dwg_ent_body_get_num_isolines(const dwg_ent_body *body, int *error);
 
 void
 dwg_ent_body_set_num_isolines(dwg_ent_body *body, BITCODE_BL num, int *error);
 
 char
-dwg_ent_body_get_isoline_present(dwg_ent_body *body, int *error);
+dwg_ent_body_get_isoline_present(const dwg_ent_body *body, int *error);
 
 void
 dwg_ent_body_set_isoline_present(dwg_ent_body *body, char iso, int *error);
 
 BITCODE_BL
-dwg_ent_body_get_num_wires(dwg_ent_body *body, int *error);
+dwg_ent_body_get_num_wires(const dwg_ent_body *body, int *error);
 
 void
 dwg_ent_body_set_num_wires(dwg_ent_body *body, BITCODE_BL num, int *error);
 
 dwg_ent_solid_wire *
-dwg_ent_body_get_wire(dwg_ent_body *body, int *error);
+dwg_ent_body_get_wire(const dwg_ent_body *body, int *error);
 
 BITCODE_BL
-dwg_ent_body_get_num_silhouettes(dwg_ent_body *body, int *error);
+dwg_ent_body_get_num_silhouettes(const dwg_ent_body *body, int *error);
 
 void
 dwg_ent_body_set_num_silhouettes(dwg_ent_body *body, BITCODE_BL silhouettes,
                                  int *error);
 
 dwg_ent_solid_silhouette *
-dwg_ent_body_get_silhouette(dwg_ent_body *body, int *error);
+dwg_ent_body_get_silhouette(const dwg_ent_body *body, int *error);
 
 unsigned char
-dwg_ent_body_get_acis_empty2(dwg_ent_body *body, int *error);
+dwg_ent_body_get_acis_empty2(const dwg_ent_body *body, int *error);
 
 void
 dwg_ent_body_set_acis_empty2(dwg_ent_body *body, unsigned char acis,
@@ -3306,7 +3310,7 @@ dwg_ent_table_set_insertion_point(dwg_ent_table *table, dwg_point_3d *point,
                                   int *error);
 
 void
-dwg_ent_table_get_insertion_point(dwg_ent_table *table, dwg_point_3d *point,
+dwg_ent_table_get_insertion_point(const dwg_ent_table *table, dwg_point_3d *point,
                                   int *error);
 
 void
@@ -3314,7 +3318,7 @@ dwg_ent_table_set_scale(dwg_ent_table *table, dwg_point_3d *point,
                         int *error);
 
 void
-dwg_ent_table_get_scale(dwg_ent_table *table, dwg_point_3d *point,
+dwg_ent_table_get_scale(const dwg_ent_table *table, dwg_point_3d *point,
                         int *error);
 
 void
@@ -3322,20 +3326,20 @@ dwg_ent_table_set_data_flags(dwg_ent_table *table, unsigned char flags,
                              int *error);
 
 unsigned char
-dwg_ent_table_get_data_flags(dwg_ent_table *table, int *error);
+dwg_ent_table_get_data_flags(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_rotation(dwg_ent_table *table, BITCODE_BD rotation, int *error);
 
 BITCODE_BD
-dwg_ent_table_get_rotation(dwg_ent_table *table, int *error);
+dwg_ent_table_get_rotation(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_extrusion(dwg_ent_table *table, dwg_point_3d *point,
                             int *error);
 
 void
-dwg_ent_table_get_extrusion(dwg_ent_table *table, dwg_point_3d *point,
+dwg_ent_table_get_extrusion(const dwg_ent_table *table, dwg_point_3d *point,
                             int *error);
 
 unsigned char
@@ -3346,40 +3350,40 @@ dwg_ent_table_set_owned_object_count(dwg_ent_table *table, BITCODE_BL count,
                                      int *error);
 
 BITCODE_BL
-dwg_ent_table_get_owned_object_count(dwg_ent_table *table, int *error);
+dwg_ent_table_get_owned_object_count(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_flag_for_table_value(dwg_ent_table *table,
                                        BITCODE_BS value, int *error);
 
 BITCODE_BS
-dwg_ent_table_get_flag_for_table_value(dwg_ent_table *table, int *error);
+dwg_ent_table_get_flag_for_table_value(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_horiz_direction(dwg_ent_table *table, dwg_point_3d *point,
                                   int *error);
 
 void
-dwg_ent_table_get_horiz_direction(dwg_ent_table *table, dwg_point_3d *point,
+dwg_ent_table_get_horiz_direction(const dwg_ent_table *table, dwg_point_3d *point,
                                   int *error);
 
 void
 dwg_ent_table_set_num_cols(dwg_ent_table *table, BITCODE_BL num, int *error);
 
 BITCODE_BL
-dwg_ent_table_get_num_cols(dwg_ent_table *table, int *error);
+dwg_ent_table_get_num_cols(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_num_rows(dwg_ent_table *table, BITCODE_BL num, int *error);
 
 BITCODE_BL
-dwg_ent_table_get_num_rows(dwg_ent_table *table, int *error);
+dwg_ent_table_get_num_rows(const dwg_ent_table *table, int *error);
 
 double *
-dwg_ent_table_get_col_widths(dwg_ent_table *table, int *error);
+dwg_ent_table_get_col_widths(const dwg_ent_table *table, int *error);
 
 double *
-dwg_ent_table_get_row_heights(dwg_ent_table *table, int *error);
+dwg_ent_table_get_row_heights(const dwg_ent_table *table, int *error);
 
 BITCODE_B
 dwg_ent_table_has_table_overrides(dwg_ent_table *table, int *error);
@@ -3389,105 +3393,105 @@ dwg_ent_table_set_table_flag_override(dwg_ent_table *table, BITCODE_BL override,
                                       int *error);
 
 BITCODE_BL
-dwg_ent_table_get_table_flag_override(dwg_ent_table *table, int *error);
+dwg_ent_table_get_table_flag_override(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_title_suppressed(dwg_ent_table *table, unsigned char title,
                                    int *error);
 
 unsigned char
-dwg_ent_table_get_title_suppressed(dwg_ent_table *table, int *error);
+dwg_ent_table_get_title_suppressed(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_header_suppressed(dwg_ent_table *table, unsigned char header,
                                     int *error);
 
 unsigned char
-dwg_ent_table_get_header_suppressed(dwg_ent_table *table, int *error);
+dwg_ent_table_get_header_suppressed(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_flow_direction(dwg_ent_table *table, BITCODE_BS dir,
                                  int *error);
 
 BITCODE_BS
-dwg_ent_table_get_flow_direction(dwg_ent_table *table, int *error);
+dwg_ent_table_get_flow_direction(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_horiz_cell_margin(dwg_ent_table *table, BITCODE_BD margin,
                                     int *error);
 
 BITCODE_BD
-dwg_ent_table_get_horiz_cell_margin(dwg_ent_table *table, int *error);
+dwg_ent_table_get_horiz_cell_margin(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_vert_cell_margin(dwg_ent_table *table, BITCODE_BD margin,
                                    int *error);
 
 BITCODE_BD
-dwg_ent_table_get_vert_cell_margin(dwg_ent_table *table, int *error);
+dwg_ent_table_get_vert_cell_margin(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_title_row_fill_none(dwg_ent_table *table, unsigned char fill,
                                       int *error);
 
 unsigned char
-dwg_ent_table_get_title_row_fill_none(dwg_ent_table *table, int *error);
+dwg_ent_table_get_title_row_fill_none(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_header_row_fill_none(dwg_ent_table *table, 
                                        unsigned char fill, int *error);
 
 unsigned char
-dwg_ent_table_get_header_row_fill_none(dwg_ent_table *table, int *error);
+dwg_ent_table_get_header_row_fill_none(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_data_row_fill_none(dwg_ent_table *table, unsigned char fill,
                                      int *error);
 
 unsigned char
-dwg_ent_table_get_data_row_fill_none(dwg_ent_table *table, int *error);
+dwg_ent_table_get_data_row_fill_none(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_title_row_align(dwg_ent_table *table, unsigned char fill,
                                   int *error);
 
 BITCODE_BS
-dwg_ent_table_get_title_row_align(dwg_ent_table *table, int *error);
+dwg_ent_table_get_title_row_align(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_header_row_align(dwg_ent_table *table, BITCODE_BS align,
                                    int *error);
 
 BITCODE_BS
-dwg_ent_table_get_header_row_align(dwg_ent_table *table, int *error);
+dwg_ent_table_get_header_row_align(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_data_row_align(dwg_ent_table *table, BITCODE_BS align,
                                  int *error);
 
 BITCODE_BS
-dwg_ent_table_get_data_row_align(dwg_ent_table *table, int *error);
+dwg_ent_table_get_data_row_align(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_title_row_height(dwg_ent_table *table, BITCODE_BD height,
                                    int *error);
 
 BITCODE_BD
-dwg_ent_table_get_title_row_height(dwg_ent_table *table, int *error);
+dwg_ent_table_get_title_row_height(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_header_row_height(dwg_ent_table *table, BITCODE_BD height,
                                     int *error);
 
 BITCODE_BD
-dwg_ent_table_get_header_row_height(dwg_ent_table *table, int *error);
+dwg_ent_table_get_header_row_height(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_data_row_height(dwg_ent_table *table, BITCODE_BD height,
                                   int *error);
 
 BITCODE_BD
-dwg_ent_table_get_data_row_height(dwg_ent_table *table, int *error);
+dwg_ent_table_get_data_row_height(const dwg_ent_table *table, int *error);
 
 unsigned char
 dwg_ent_table_has_border_color_overrides(dwg_ent_table *table,
@@ -3498,7 +3502,7 @@ dwg_ent_table_set_border_color_overrides_flag(dwg_ent_table *table,
                                               BITCODE_BL overrides, int *error);
 
 BITCODE_BL
-dwg_ent_table_get_border_color_overrides_flag(dwg_ent_table *table,
+dwg_ent_table_get_border_color_overrides_flag(const dwg_ent_table *table,
                                               int *error);
 
 unsigned char
@@ -3510,7 +3514,7 @@ dwg_ent_table_set_border_lineweight_overrides_flag(dwg_ent_table *table,
                                                    BITCODE_BL overrides, int *error);
 
 BITCODE_BL
-dwg_ent_table_get_border_lineweight_overrides_flag(dwg_ent_table *table,
+dwg_ent_table_get_border_lineweight_overrides_flag(const dwg_ent_table *table,
                                                    int *error);
 
 void
@@ -3518,21 +3522,21 @@ dwg_ent_table_set_title_horiz_top_linewt(dwg_ent_table *table,
                                              BITCODE_BS lw, int *error);
 
 BITCODE_BS
-dwg_ent_table_get_title_horiz_top_linewt(dwg_ent_table *table, int *error);
+dwg_ent_table_get_title_horiz_top_linewt(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_title_horiz_ins_linewt(dwg_ent_table *table,
                                              BITCODE_BS lw, int *error);
 
 BITCODE_BS
-dwg_ent_table_get_title_horiz_ins_linewt(dwg_ent_table *table, int *error);
+dwg_ent_table_get_title_horiz_ins_linewt(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_title_horiz_bottom_linewt(dwg_ent_table *table,
                                                 BITCODE_BS lw, int *error);
 
 BITCODE_BS
-dwg_ent_table_get_title_horiz_bottom_linewt(dwg_ent_table *table,
+dwg_ent_table_get_title_horiz_bottom_linewt(const dwg_ent_table *table,
                                                 int *error);
 
 void
@@ -3540,21 +3544,21 @@ dwg_ent_table_set_title_vert_left_linewt(dwg_ent_table *table,
                                              BITCODE_BS lw, int *error);
 
 BITCODE_BS
-dwg_ent_table_get_title_vert_left_linewt(dwg_ent_table *table, int *error);
+dwg_ent_table_get_title_vert_left_linewt(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_title_vert_ins_linewt(dwg_ent_table *table,
                                             BITCODE_BS lw, int *error);
 
 BITCODE_BS
-dwg_ent_table_get_title_vert_ins_linewt(dwg_ent_table *table, int *error);
+dwg_ent_table_get_title_vert_ins_linewt(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_title_vert_right_linewt(dwg_ent_table *table,
                                               BITCODE_BS lw, int *error);
 
 BITCODE_BS
-dwg_ent_table_get_title_vert_right_linewt(dwg_ent_table *table,
+dwg_ent_table_get_title_vert_right_linewt(const dwg_ent_table *table,
                                               int *error);
 
 void
@@ -3562,21 +3566,21 @@ dwg_ent_table_set_header_horiz_top_linewt(dwg_ent_table *table,
                                               BITCODE_BS lw, int *error);
 
 BITCODE_BS
-dwg_ent_table_get_header_horiz_top_linewt(dwg_ent_table *table, int *error);
+dwg_ent_table_get_header_horiz_top_linewt(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_header_horiz_ins_linewt(dwg_ent_table *table,
                                               BITCODE_BS lw, int *error);
 
 BITCODE_BS
-dwg_ent_table_get_header_horiz_ins_linewt(dwg_ent_table *table, int *error);
+dwg_ent_table_get_header_horiz_ins_linewt(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_header_horiz_bottom_linewt(dwg_ent_table *table,
                                                  BITCODE_BS lw, int *error);
 
 BITCODE_BS
-dwg_ent_table_get_header_horiz_bottom_linewt(dwg_ent_table *table,
+dwg_ent_table_get_header_horiz_bottom_linewt(const dwg_ent_table *table,
                                                  int *error);
 
 void
@@ -3584,7 +3588,7 @@ dwg_ent_table_set_header_vert_left_linewt(dwg_ent_table *table,
                                               BITCODE_BS lw, int *error);
 
 BITCODE_BS
-dwg_ent_table_get_header_vert_left_linewt(dwg_ent_table *table,
+dwg_ent_table_get_header_vert_left_linewt(const dwg_ent_table *table,
                                               int *error);
 
 void
@@ -3592,14 +3596,14 @@ dwg_ent_table_set_header_vert_ins_linewt(dwg_ent_table *table,
                                              BITCODE_BS lw, int *error);
 
 BITCODE_BS
-dwg_ent_table_get_header_vert_ins_linewt(dwg_ent_table *table, int *error);
+dwg_ent_table_get_header_vert_ins_linewt(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_header_vert_right_linewt(dwg_ent_table *table,
                                                BITCODE_BS lw, int *error);
 
 BITCODE_BS
-dwg_ent_table_get_header_vert_right_linewt(dwg_ent_table *table,
+dwg_ent_table_get_header_vert_right_linewt(const dwg_ent_table *table,
                                                int *error);
 
 void
@@ -3607,21 +3611,21 @@ dwg_ent_table_set_data_horiz_top_linewt(dwg_ent_table *table,
                                             BITCODE_BS lw, int *error);
 
 BITCODE_BS
-dwg_ent_table_get_data_horiz_top_linewt(dwg_ent_table *table, int *error);
+dwg_ent_table_get_data_horiz_top_linewt(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_data_horiz_ins_linewt(dwg_ent_table *table,
                                             BITCODE_BS lw, int *error);
 
 BITCODE_BS
-dwg_ent_table_get_data_horiz_ins_linewt(dwg_ent_table *table, int *error);
+dwg_ent_table_get_data_horiz_ins_linewt(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_data_horiz_bottom_linewt(dwg_ent_table *table,
                                                BITCODE_BS lw, int *error);
 
 BITCODE_BS
-dwg_ent_table_get_data_horiz_bottom_linewt(dwg_ent_table *table,
+dwg_ent_table_get_data_horiz_bottom_linewt(const dwg_ent_table *table,
                                                int *error);
 
 void
@@ -3629,21 +3633,21 @@ dwg_ent_table_set_data_vert_left_linewt(dwg_ent_table *table,
                                             BITCODE_BS lw, int *error);
 
 BITCODE_BS
-dwg_ent_table_get_data_vert_left_linewt(dwg_ent_table *table, int *error);
+dwg_ent_table_get_data_vert_left_linewt(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_data_vert_ins_linewt(dwg_ent_table *table,
                                            BITCODE_BS lw, int *error);
 
 BITCODE_BS
-dwg_ent_table_get_data_vert_ins_linewt(dwg_ent_table *table, int *error);
+dwg_ent_table_get_data_vert_ins_linewt(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_data_vert_right_linewt(dwg_ent_table *table,
                                              BITCODE_BS lw, int *error);
 
 BITCODE_BS
-dwg_ent_table_get_data_vert_right_linewt(dwg_ent_table *table, int *error);
+dwg_ent_table_get_data_vert_right_linewt(const dwg_ent_table *table, int *error);
 
 unsigned char
 dwg_ent_table_has_border_visibility_overrides(dwg_ent_table *table,
@@ -3654,7 +3658,7 @@ dwg_ent_table_set_border_visibility_overrides_flag(dwg_ent_table *table,
                                                    BITCODE_BL overrides, int *error);
 
 BITCODE_BL
-dwg_ent_table_get_border_visibility_overrides_flag(dwg_ent_table *table,
+dwg_ent_table_get_border_visibility_overrides_flag(const dwg_ent_table *table,
                                                    int *error);
 
 void
@@ -3663,7 +3667,7 @@ dwg_ent_table_set_title_horiz_top_visibility(dwg_ent_table *table,
                                              int *error);
 
 BITCODE_BS
-dwg_ent_table_get_title_horiz_top_visibility(dwg_ent_table *table, int *error);
+dwg_ent_table_get_title_horiz_top_visibility(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_title_horiz_ins_visibility(dwg_ent_table *table,
@@ -3671,7 +3675,7 @@ dwg_ent_table_set_title_horiz_ins_visibility(dwg_ent_table *table,
                                              int *error);
 
 BITCODE_BS
-dwg_ent_table_get_title_horiz_ins_visibility(dwg_ent_table *table, int *error);
+dwg_ent_table_get_title_horiz_ins_visibility(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_title_horiz_bottom_visibility(dwg_ent_table *table,
@@ -3679,7 +3683,7 @@ dwg_ent_table_set_title_horiz_bottom_visibility(dwg_ent_table *table,
                                                 int *error);
 
 BITCODE_BS
-dwg_ent_table_get_title_horiz_bottom_visibility(dwg_ent_table *table,
+dwg_ent_table_get_title_horiz_bottom_visibility(const dwg_ent_table *table,
                                                 int *error);
 
 void
@@ -3688,7 +3692,7 @@ dwg_ent_table_set_title_vert_left_visibility(dwg_ent_table *table,
                                              int *error);
 
 BITCODE_BS
-dwg_ent_table_get_title_vert_left_visibility(dwg_ent_table *table, int *error);
+dwg_ent_table_get_title_vert_left_visibility(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_title_vert_ins_visibility(dwg_ent_table *table,
@@ -3696,7 +3700,7 @@ dwg_ent_table_set_title_vert_ins_visibility(dwg_ent_table *table,
                                             int *error);
 
 BITCODE_BS
-dwg_ent_table_get_title_vert_ins_visibility(dwg_ent_table *table, int *error);
+dwg_ent_table_get_title_vert_ins_visibility(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_title_vert_right_visibility(dwg_ent_table *table,
@@ -3704,7 +3708,7 @@ dwg_ent_table_set_title_vert_right_visibility(dwg_ent_table *table,
                                               int *error);
 
 BITCODE_BS
-dwg_ent_table_get_title_vert_right_visibility(dwg_ent_table *table,
+dwg_ent_table_get_title_vert_right_visibility(const dwg_ent_table *table,
                                               int *error);
 
 void
@@ -3713,11 +3717,11 @@ dwg_ent_table_set_header_horiz_top_visibility(dwg_ent_table *table,
                                               int *error);
 
 BITCODE_BS
-dwg_ent_table_get_header_horiz_top_visibility(dwg_ent_table *table,
+dwg_ent_table_get_header_horiz_top_visibility(const dwg_ent_table *table,
                                               int *error);
 
 BITCODE_BS
-dwg_ent_table_get_header_vert_left_visibility(dwg_ent_table *table,
+dwg_ent_table_get_header_vert_left_visibility(const dwg_ent_table *table,
                                               int *error);
 void
 dwg_ent_table_set_header_horiz_ins_visibility(dwg_ent_table *table,
@@ -3725,7 +3729,7 @@ dwg_ent_table_set_header_horiz_ins_visibility(dwg_ent_table *table,
                                               int *error);
 
 BITCODE_BS
-dwg_ent_table_get_header_horiz_ins_visibility(dwg_ent_table *table,
+dwg_ent_table_get_header_horiz_ins_visibility(const dwg_ent_table *table,
                                               int *error);
 
 void
@@ -3734,7 +3738,7 @@ dwg_ent_table_set_header_horiz_bottom_visibility(dwg_ent_table *table,
                                                  int *error);
 
 BITCODE_BS
-dwg_ent_table_get_header_horiz_bottom_visibility(dwg_ent_table *table,
+dwg_ent_table_get_header_horiz_bottom_visibility(const dwg_ent_table *table,
                                                  int *error);
 
 void
@@ -3743,7 +3747,7 @@ dwg_ent_table_set_header_vert_ins_visibility(dwg_ent_table *table,
                                              int *error);
 
 BITCODE_BS
-dwg_ent_table_get_header_vert_ins_visibility(dwg_ent_table *table, int *error);
+dwg_ent_table_get_header_vert_ins_visibility(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_header_vert_right_visibility(dwg_ent_table *table,
@@ -3751,7 +3755,7 @@ dwg_ent_table_set_header_vert_right_visibility(dwg_ent_table *table,
                                                int *error);
 
 BITCODE_BS
-dwg_ent_table_get_header_vert_right_visibility(dwg_ent_table *table,
+dwg_ent_table_get_header_vert_right_visibility(const dwg_ent_table *table,
                                                int *error);
 
 
@@ -3761,7 +3765,7 @@ dwg_ent_table_set_data_horiz_top_visibility(dwg_ent_table *table,
                                             int *error);
 
 BITCODE_BS
-dwg_ent_table_get_data_horiz_top_visibility(dwg_ent_table *table, int *error);
+dwg_ent_table_get_data_horiz_top_visibility(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_data_horiz_ins_visibility(dwg_ent_table *table,
@@ -3769,7 +3773,7 @@ dwg_ent_table_set_data_horiz_ins_visibility(dwg_ent_table *table,
                                             int *error);
 
 BITCODE_BS
-dwg_ent_table_get_data_horiz_ins_visibility(dwg_ent_table *table, int *error);
+dwg_ent_table_get_data_horiz_ins_visibility(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_data_horiz_bottom_visibility(dwg_ent_table *table,
@@ -3777,7 +3781,7 @@ dwg_ent_table_set_data_horiz_bottom_visibility(dwg_ent_table *table,
                                                int *error);
 
 BITCODE_BS
-dwg_ent_table_get_data_horiz_bottom_visibility(dwg_ent_table *table,
+dwg_ent_table_get_data_horiz_bottom_visibility(const dwg_ent_table *table,
                                                int *error);
 
 void
@@ -3786,7 +3790,7 @@ dwg_ent_table_set_data_vert_ins_visibility(dwg_ent_table *table,
                                            int *error);
 
 BITCODE_BS
-dwg_ent_table_get_data_vert_ins_visibility(dwg_ent_table *table, int *error);
+dwg_ent_table_get_data_vert_ins_visibility(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_data_vert_right_visibility(dwg_ent_table *table,
@@ -3794,7 +3798,7 @@ dwg_ent_table_set_data_vert_right_visibility(dwg_ent_table *table,
                                              int *error);
 
 BITCODE_BS
-dwg_ent_table_get_data_vert_right_visibility(dwg_ent_table *table, int *error);
+dwg_ent_table_get_data_vert_right_visibility(const dwg_ent_table *table, int *error);
 
 
 /********************************************************************
@@ -3804,7 +3808,7 @@ dwg_ent_table_get_data_vert_right_visibility(dwg_ent_table *table, int *error);
 
 // Get Layer Name
 char *
-dwg_obj_layer_get_name(dwg_obj_layer *layer, int *error);
+dwg_obj_layer_get_name(const dwg_obj_layer *layer, int *error);
 
 
 /********************************************************************
@@ -3814,7 +3818,7 @@ dwg_obj_layer_get_name(dwg_obj_layer *layer, int *error);
 
 // Get/Set vertind of a vertex_pface_face entity
 BITCODE_BS
-dwg_ent_vertex_pface_face_get_vertind(dwg_ent_vert_pface_face *face);
+dwg_ent_vertex_pface_face_get_vertind(const dwg_ent_vert_pface_face *face);
 
 void
 dwg_ent_vertex_pface_face_set_vertind(dwg_ent_vert_pface_face *face,
@@ -3830,7 +3834,7 @@ dwg_ent_vertex_pface_face_set_vertind(dwg_ent_vert_pface_face *face,
 Usage :- char *block_name = dwg_obj_block_header_get_name(hdr);
 */
 char *
-dwg_obj_block_header_get_name(dwg_obj_block_header *hdr, int *error);
+dwg_obj_block_header_get_name(const dwg_obj_block_header *hdr, int *error);
 
 dwg_obj_block_header *
 dwg_get_block_header(dwg_data *dwg, int *error);
@@ -3842,21 +3846,21 @@ dwg_get_block_header(dwg_data *dwg, int *error);
 
 
 BITCODE_BL
-dwg_obj_block_control_get_num_entries(dwg_obj_block_control *ctrl, int *error);
+dwg_obj_block_control_get_num_entries(const dwg_obj_block_control *ctrl, int *error);
 
 dwg_object_ref **
-dwg_obj_block_control_get_block_headers(dwg_obj_block_control *ctrl,
+dwg_obj_block_control_get_block_headers(const dwg_obj_block_control *ctrl,
                                         int *error);
 
 dwg_obj_block_control *
-dwg_block_header_get_block_control(dwg_obj_block_header* block_header,
+dwg_block_header_get_block_control(const dwg_obj_block_header* block_header,
                                    int *error);
 
 dwg_object_ref *
-dwg_obj_block_control_get_model_space(dwg_obj_block_control *ctrl, int *error);
+dwg_obj_block_control_get_model_space(const dwg_obj_block_control *ctrl, int *error);
 
 dwg_object_ref *
-dwg_obj_block_control_get_paper_space(dwg_obj_block_control *ctrl, int *error);
+dwg_obj_block_control_get_paper_space(const dwg_obj_block_control *ctrl, int *error);
 
 
 /********************************************************************
@@ -3864,40 +3868,40 @@ dwg_obj_block_control_get_paper_space(dwg_obj_block_control *ctrl, int *error);
 ********************************************************************/
 
 BITCODE_BL
-dwg_obj_xrecord_get_num_databytes(dwg_obj_xrecord *xrecord, int *error);
+dwg_obj_xrecord_get_num_databytes(const dwg_obj_xrecord *xrecord, int *error);
 void
 dwg_obj_xrecord_set_num_databytes(dwg_obj_xrecord *xrecord, BITCODE_BL num_databytes,
                                   int *error);
 
 BITCODE_BS
-dwg_obj_xrecord_get_cloning_flags(dwg_obj_xrecord *xrecord, int *error);
+dwg_obj_xrecord_get_cloning_flags(const dwg_obj_xrecord *xrecord, int *error);
 void
 dwg_obj_xrecord_set_cloning_flags(dwg_obj_xrecord *xrecord, BITCODE_BS cloning_flags,
                                   int *error);
 BITCODE_BL
-dwg_obj_xrecord_get_num_eed(dwg_obj_xrecord *xrecord, int *error);
+dwg_obj_xrecord_get_num_eed(const dwg_obj_xrecord *xrecord, int *error);
 void
 dwg_obj_xrecord_set_num_eed(dwg_obj_xrecord *xrecord, BITCODE_BL num_eed,
                             int *error);
 
 //Dwg_Eed*
-//dwg_obj_xrecord_get_eed(dwg_obj_xrecord *xrecord, BITCODE_BL index, int *error);
+//dwg_obj_xrecord_get_eed(const dwg_obj_xrecord *xrecord, BITCODE_BL index, int *error);
 
 Dwg_Resbuf*
-dwg_obj_xrecord_get_xdata(dwg_obj_xrecord *xrecord, int *error);
+dwg_obj_xrecord_get_xdata(const dwg_obj_xrecord *xrecord, int *error);
 void
 dwg_obj_xrecord_set_xdata(dwg_obj_xrecord *xrecord, Dwg_Resbuf* xdata, int *error);
 
 dwg_object_ref*
-dwg_obj_xrecord_get_parenthandle(dwg_obj_xrecord *xrecord, int *error);
+dwg_obj_xrecord_get_parenthandle(const dwg_obj_xrecord *xrecord, int *error);
 dwg_object_ref**
-dwg_obj_xrecord_get_reactors(dwg_obj_xrecord *xrecord, int *error);
+dwg_obj_xrecord_get_reactors(const dwg_obj_xrecord *xrecord, int *error);
 
 BITCODE_BL
-dwg_obj_xrecord_get_num_objid_handles(dwg_obj_xrecord *xrecord, int *error);
+dwg_obj_xrecord_get_num_objid_handles(const dwg_obj_xrecord *xrecord, int *error);
 
 dwg_object_ref**
-dwg_obj_xrecord_get_objid_handles(dwg_obj_xrecord *xrecord, int *error);
+dwg_obj_xrecord_get_objid_handles(const dwg_obj_xrecord *xrecord, int *error);
 
 
 /********************************************************************
@@ -3905,58 +3909,58 @@ dwg_obj_xrecord_get_objid_handles(dwg_obj_xrecord *xrecord, int *error);
 ********************************************************************/
 
 BITCODE_RL
-dwg_ent_get_bitsize(dwg_obj_ent *ent, int *error);
+dwg_ent_get_bitsize(const dwg_obj_ent *ent, int *error);
 
 unsigned int
-dwg_ent_get_num_eed(dwg_obj_ent *ent, int *error);
+dwg_ent_get_num_eed(const dwg_obj_ent *ent, int *error);
 
 dwg_entity_eed *
-dwg_ent_get_eed(dwg_obj_ent *ent, unsigned int index, int *error);
+dwg_ent_get_eed(const dwg_obj_ent *ent, unsigned int index, int *error);
 
 dwg_entity_eed_data *
-dwg_ent_get_eed_data(dwg_obj_ent *ent, unsigned int index, int *error);
+dwg_ent_get_eed_data(const dwg_obj_ent *ent, unsigned int index, int *error);
 
 BITCODE_B
-dwg_ent_get_picture_exists(dwg_obj_ent *ent, int *error);
+dwg_ent_get_picture_exists(const dwg_obj_ent *ent, int *error);
 
 BITCODE_BLL
-dwg_ent_get_picture_size(dwg_obj_ent *ent, int *error); // before r2007 only RL
+dwg_ent_get_picture_size(const dwg_obj_ent *ent, int *error); // before r2007 only RL
 
 BITCODE_RC *
-dwg_ent_get_picture(dwg_obj_ent *ent, int *error);
+dwg_ent_get_picture(const dwg_obj_ent *ent, int *error);
 
 BITCODE_BB
-dwg_ent_get_entity_mode(dwg_obj_ent *ent, int *error);
+dwg_ent_get_entity_mode(const dwg_obj_ent *ent, int *error);
 
 BITCODE_BL
-dwg_ent_get_num_reactors(dwg_obj_ent *ent, int *error);
+dwg_ent_get_num_reactors(const dwg_obj_ent *ent, int *error);
 
 BITCODE_B
-dwg_ent_get_xdic_missing_flag(dwg_obj_ent *ent, int *error); //r2004+
+dwg_ent_get_xdic_missing_flag(const dwg_obj_ent *ent, int *error); //r2004+
 
 BITCODE_B
-dwg_ent_get_isbylayerlt(dwg_obj_ent *ent, int *error); //r13-r14 only
+dwg_ent_get_isbylayerlt(const dwg_obj_ent *ent, int *error); //r13-r14 only
 
 BITCODE_B
-dwg_ent_get_nolinks(dwg_obj_ent *ent, int *error);
+dwg_ent_get_nolinks(const dwg_obj_ent *ent, int *error);
 
 BITCODE_CMC
-dwg_ent_get_color(dwg_obj_ent *ent, int *error);
+dwg_ent_get_color(const dwg_obj_ent *ent, int *error);
 
 BITCODE_BD
-dwg_ent_get_linetype_scale(dwg_obj_ent *ent, int *error);
+dwg_ent_get_linetype_scale(const dwg_obj_ent *ent, int *error);
 
 BITCODE_BB
-dwg_ent_get_linetype_flag(dwg_obj_ent *ent, int *error); //r2000+
+dwg_ent_get_linetype_flag(const dwg_obj_ent *ent, int *error); //r2000+
 
 BITCODE_BB
-dwg_ent_get_plotstyle_flag(dwg_obj_ent *ent, int *error); //r2000+
+dwg_ent_get_plotstyle_flag(const dwg_obj_ent *ent, int *error); //r2000+
 
 BITCODE_BB
-dwg_ent_get_material_flag(dwg_obj_ent *ent, int *error); //r2007+
+dwg_ent_get_material_flag(const dwg_obj_ent *ent, int *error); //r2007+
 
 BITCODE_RC
-dwg_ent_get_shadow_flag(dwg_obj_ent *ent, int *error); //r2007+
+dwg_ent_get_shadow_flag(const dwg_obj_ent *ent, int *error); //r2007+
 
 BITCODE_B
 dwg_ent_has_full_visualstyle(dwg_obj_ent *ent, int *error); //r2010+
@@ -3968,119 +3972,119 @@ BITCODE_B
 dwg_ent_has_edge_visualstyle(dwg_obj_ent *ent, int *error); //r2010+
 
 BITCODE_BS
-dwg_ent_get_invisible(dwg_obj_ent *ent, int *error);
+dwg_ent_get_invisible(const dwg_obj_ent *ent, int *error);
 
 BITCODE_RC
-dwg_ent_get_lineweight(dwg_obj_ent *ent, int *error); //r2000+
+dwg_ent_get_lineweight(const dwg_obj_ent *ent, int *error); //r2000+
 
 /*unsigned int
-dwg_ent_get_num_handles(dwg_obj_ent *ent, int *error);*/
+dwg_ent_get_num_handles(const dwg_obj_ent *ent, int *error);*/
 
 //TODO: dwg_object_ref* or dwg_handle*, not handle
 BITCODE_H
-dwg_ent_get_subentity(dwg_obj_ent *ent, int *error);
+dwg_ent_get_subentity(const dwg_obj_ent *ent, int *error);
 
 BITCODE_H*
-dwg_ent_get_reactors(dwg_obj_ent *ent, int *error);
+dwg_ent_get_reactors(const dwg_obj_ent *ent, int *error);
 
 BITCODE_H
-dwg_ent_get_xdicobjhandle(dwg_obj_ent *ent, int *error);
+dwg_ent_get_xdicobjhandle(const dwg_obj_ent *ent, int *error);
 
 BITCODE_H
-dwg_ent_get_prev_entity(dwg_obj_ent *ent, int *error);  //r13-r2000
+dwg_ent_get_prev_entity(const dwg_obj_ent *ent, int *error);  //r13-r2000
 
 BITCODE_H
-dwg_ent_get_next_entity(dwg_obj_ent *ent, int *error);  //r13-r2000
+dwg_ent_get_next_entity(const dwg_obj_ent *ent, int *error);  //r13-r2000
 
 BITCODE_H
-dwg_ent_get_color_handle(dwg_obj_ent *ent, int *error); //r2004+
+dwg_ent_get_color_handle(const dwg_obj_ent *ent, int *error); //r2004+
 
 BITCODE_H
-dwg_ent_get_layer(dwg_obj_ent *ent, int *error);
+dwg_ent_get_layer(const dwg_obj_ent *ent, int *error);
 
 BITCODE_H
-dwg_ent_get_ltype(dwg_obj_ent *ent, int *error);
+dwg_ent_get_ltype(const dwg_obj_ent *ent, int *error);
 
 BITCODE_H
-dwg_ent_get_material(dwg_obj_ent *ent, int *error);     //r2007+
+dwg_ent_get_material(const dwg_obj_ent *ent, int *error);     //r2007+
 
 BITCODE_H
-dwg_ent_get_plotstyle(dwg_obj_ent *ent, int *error);    //r2000+
+dwg_ent_get_plotstyle(const dwg_obj_ent *ent, int *error);    //r2000+
 
 BITCODE_H
-dwg_ent_get_full_visualstyle(dwg_obj_ent *ent, int *error); //r2010+
+dwg_ent_get_full_visualstyle(const dwg_obj_ent *ent, int *error); //r2010+
 
 BITCODE_H
-dwg_ent_get_face_visualstyle(dwg_obj_ent *ent, int *error); //r2010+
+dwg_ent_get_face_visualstyle(const dwg_obj_ent *ent, int *error); //r2010+
 
 BITCODE_H
-dwg_ent_get_edge_visualstyle(dwg_obj_ent *ent, int *error); //r2010+
+dwg_ent_get_edge_visualstyle(const dwg_obj_ent *ent, int *error); //r2010+
 
 /********************************************************************
 *                    FUNCTIONS FOR DWG OBJECT                       *
 ********************************************************************/
 
 unsigned int
-dwg_get_num_classes(dwg_data *dwg);
+dwg_get_num_classes(const dwg_data *dwg);
 
 dwg_class *
-dwg_get_class(dwg_data *dwg, unsigned int index);
+dwg_get_class(const dwg_data *dwg, unsigned int index);
 
 long unsigned int
-dwg_get_num_objects(dwg_data *dwg);
+dwg_get_num_objects(const dwg_data *dwg);
 long unsigned int
-dwg_get_num_entities(dwg_data *dwg);
+dwg_get_num_entities(const dwg_data *dwg);
 
 dwg_object *
-dwg_get_object(dwg_data *dwg, long unsigned int index);
+dwg_get_object(const dwg_data *dwg, long unsigned int index);
 
 BITCODE_RL
-dwg_obj_get_bitsize(dwg_object *obj);
+dwg_obj_get_bitsize(const dwg_object *obj);
 
 unsigned int
-dwg_obj_get_num_eed(dwg_obj_obj *obj, int *error);
+dwg_obj_get_num_eed(const dwg_obj_obj *obj, int *error);
 
 dwg_entity_eed *
-dwg_obj_get_eed(dwg_obj_obj *obj, int index, int *error);
+dwg_obj_get_eed(const dwg_obj_obj *obj, int index, int *error);
 
 dwg_entity_eed_data *
-dwg_obj_get_eed_data(dwg_obj_obj *obj, int index, int *error);
+dwg_obj_get_eed_data(const dwg_obj_obj *obj, int index, int *error);
 
 BITCODE_B
-dwg_obj_get_picture_exists(dwg_object *obj, int *error);
+dwg_obj_get_picture_exists(const dwg_object *obj, int *error);
 
 BITCODE_BLL
-dwg_obj_get_picture_size(dwg_object *obj, int *error); // before r2007 only RL
+dwg_obj_get_picture_size(const dwg_object *obj, int *error); // before r2007 only RL
 
 BITCODE_RC *
-dwg_obj_get_picture(dwg_object *obj, int *error);
+dwg_obj_get_picture(const dwg_object *obj, int *error);
 
 BITCODE_BB
-dwg_obj_get_entity_mode(dwg_object *obj, int *error);
+dwg_obj_get_entity_mode(const dwg_object *obj, int *error);
 
 BITCODE_BL
-dwg_obj_get_num_reactors(dwg_object *obj, int *error);
+dwg_obj_get_num_reactors(const dwg_object *obj, int *error);
 
 BITCODE_B
-dwg_obj_get_xdic_missing_flag(dwg_object *obj, int *error); //r2004+
+dwg_obj_get_xdic_missing_flag(const dwg_object *obj, int *error); //r2004+
 
 int 
-dwg_obj_object_get_index(dwg_object *obj, int *error);
+dwg_obj_object_get_index(const dwg_object *obj, int *error);
 
 dwg_handle *
 dwg_obj_get_handle(dwg_object *obj, int *error);
 
 BITCODE_BL
-dwg_obj_ref_get_abs_ref(dwg_object_ref *ref, int *error);
+dwg_obj_ref_get_abs_ref(const dwg_object_ref *ref, int *error);
 
 dwg_handle *
-dwg_ent_insert_get_ref_handle(dwg_ent_insert *insert, int *error);
+dwg_ent_insert_get_ref_handle(const dwg_ent_insert *insert, int *error);
 
 BITCODE_BL
-dwg_ent_insert_get_abs_ref(dwg_ent_insert *insert, int *error);
+dwg_ent_insert_get_abs_ref(const dwg_ent_insert *insert, int *error);
 
 dwg_object *
-dwg_obj_reference_get_object(dwg_object_ref *ref, int *error);
+dwg_obj_reference_get_object(const dwg_object_ref *ref, int *error);
 
 dwg_obj_obj *
 dwg_object_to_object(dwg_object *obj, int *error);
@@ -4089,10 +4093,10 @@ dwg_obj_ent *
 dwg_object_to_entity(dwg_object *obj, int *error);
 
 int
-dwg_get_type(dwg_object *obj);
+dwg_get_type(const dwg_object *obj);
 
 char*
-dwg_get_dxfname(dwg_object *obj);
+dwg_get_dxfname(const dwg_object *obj);
 
 #ifdef __cplusplus
 }
