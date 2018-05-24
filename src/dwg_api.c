@@ -11540,7 +11540,7 @@ dwg_ent_polyline_pface_get_numfaces(const dwg_ent_polyline_pface *pface, int *er
 dwg_point_3d *
 dwg_obj_polyline_pface_get_points(const dwg_object *obj, int *error)
 {
-  if (obj || obj->type != DWG_TYPE_POLYLINE_PFACE)
+  if (obj && obj->type == DWG_TYPE_POLYLINE_PFACE)
     {
       *error = 0;
       LOG_ERROR("%s: nyi", __FUNCTION__);
@@ -12049,7 +12049,7 @@ dwg_ent_polyline_2d_set_curve_type(dwg_ent_polyline_2d *line2d,
 BITCODE_BL
 dwg_obj_polyline_2d_get_numpoints(const dwg_object *obj, int *error)
 {
-  if (obj || obj->type != DWG_TYPE_POLYLINE_2D)
+  if (obj && obj->type == DWG_TYPE_POLYLINE_2D)
     {
       BITCODE_BL num_points = 0;
       Dwg_Data *dwg = obj->parent;
@@ -12100,7 +12100,7 @@ dwg_point_2d *
 dwg_obj_polyline_2d_get_points(const dwg_object *obj, int *error)
 {
   *error = 0;
-  if (obj || obj->type != DWG_TYPE_POLYLINE_2D)
+  if (obj && obj->type == DWG_TYPE_POLYLINE_2D)
     {
       BITCODE_BL i;
       Dwg_Data *dwg = obj->parent;
@@ -12261,7 +12261,7 @@ dwg_ent_polyline_3d_set_flag2(dwg_ent_polyline_3d *line3d, BITCODE_RC flag2,
 BITCODE_BL
 dwg_obj_polyline_3d_get_numpoints(const dwg_object *obj, int *error)
 {
-  if (obj || obj->type != DWG_TYPE_POLYLINE_3D)
+  if (obj && obj->type == DWG_TYPE_POLYLINE_3D)
     {
       BITCODE_BL num_points = 0;
       Dwg_Data *dwg = obj->parent;
@@ -12312,7 +12312,7 @@ dwg_point_3d *
 dwg_obj_polyline_3d_get_points(const dwg_object *obj, int *error)
 {
   *error = 0;
-  if (obj || obj->type != DWG_TYPE_POLYLINE_3D)
+  if (obj && obj->type == DWG_TYPE_POLYLINE_3D)
     {
       BITCODE_BL i;
       Dwg_Data *dwg = obj->parent;
