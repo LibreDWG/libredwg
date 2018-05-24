@@ -1260,14 +1260,23 @@ bit_utf8_to_TU(char* str)
       wstr[i++] = ((c & 0x1f) << 6) | (str[1] & 0x3f);
       str++;
     }
-    else if ((c & 0xe0) == 0xf0) {
+    else if ((c & 0xf0) == 0xe0) {
       /* ignore invalid utf8 for now */
+      /*
+      if (str[1] < 0x80 || str[1] > 0xBF ||
+          str[2] < 0x80 || str[2] > 0xBF) {
+        LOG_ERROR("utf-8: BAD_CONTINUATION_BYTE %s", str);
+      }
+      if (c == 0xe0 && str[1] < 0xa0) {
+        LOG_ERROR("utf-8: NON_SHORTEST %s", str);
+      } */
       wstr[i++] = ((c & 0x0f) << 12) |
                   ((str[1] & 0x3f) << 6) |
                   (str[2] & 0x3f);
       str++;
       str++;
     }
+    /* everything above 0xf0 exceeds ucs-2, 4-6 byte seqs */
   }
   wstr[i] = '\0';
   return wstr;
