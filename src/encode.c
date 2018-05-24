@@ -604,8 +604,8 @@ dwg_encode(Dwg_Data* dwg, Bit_Chain* dat)
     LOG_TRACE("\n")
 
     LOG_WARN("TODO write_R2004_section_map(dat, dwg)")
-
     LOG_TRACE("\n")
+    return 1;
   }
 
   /*------------------------------------------------------------
