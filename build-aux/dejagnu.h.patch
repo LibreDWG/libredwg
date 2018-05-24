@@ -1,0 +1,41 @@
+Suppress macports dejagnu warnings with newer clang's
+
+diff -bu /opt/local/include/dejagnu.h~ /opt/local/include/dejagnu.h
+--- /opt/local/include/dejagnu.h~	2018-05-24 13:01:44.000000000 +0200
++++ /opt/local/include/dejagnu.h	2018-05-24 13:00:17.000000000 +0200
+@@ -45,6 +45,8 @@
+ 
+ static char buffer[512];
+ 
++void dejawait (void);
++
+ void
+ dejawait (void)
+ {
+@@ -60,6 +62,18 @@
+ #endif  
+ }
+ 
++/* needed for -Wcast-align */
++#if defined(__clang__) || defined(__clang)
++#  define CLANG_DIAG_PRAGMA(x) _Pragma (#x)
++#  define CLANG_DIAG_IGNORE(x) _Pragma("GCC diagnostic push") \
++                             GCC_DIAG_PRAGMA(GCC diagnostic ignored #x)
++#  define CLANG_DIAG_RESTORE   _Pragma("GCC diagnostic pop")
++#else
++#  define CLANG_DIAG_IGNORE(w)
++#  define CLANG_DIAG_RESTORE
++#endif
++
++CLANG_DIAG_IGNORE(-Wformat-nonliteral)
+ 
+ static inline void
+ pass (const char* fmt, ...)
+@@ -313,5 +327,7 @@
+     std::string GetMsg (void) { return lastmsg; }
+ };
+ 
++CLANG_DIAG_RESTORE
++
+ #endif /* __cplusplus */
+ #endif /* _DEJAGNU_H_ */
