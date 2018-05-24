@@ -2806,13 +2806,10 @@ dwg_ent_polyline_3d_set_flag2(dwg_ent_polyline_3d *line3d, char flag2,
                                 int *error);
 
 BITCODE_BL
-dwg_ent_polyline_3d_get_owned_obj_count(const dwg_ent_polyline_3d *line3d,
-                                        int *error);
+dwg_obj_polyline_3d_get_numpoints(const dwg_object *obj, int *error);
 
-void
-dwg_ent_polyline_3d_set_owned_obj_count(dwg_ent_polyline_3d *line3d,
-                                        BITCODE_BL owned_obj_count, int *error);
-
+dwg_point_3d *
+dwg_obj_polyline_3d_get_points(const dwg_object *obj, int *error);
 
 /********************************************************************
 *                   FUNCTIONS FOR 3DFACE ENTITY                     *
