@@ -2856,21 +2856,21 @@ DWG_OBJECT(DIMSTYLE)
 DWG_OBJECT_END
 
 /* VIEWPORT ENTITY CONTROL (70)*/
-DWG_OBJECT(VP_ENT_HDR_CONTROL)
+DWG_OBJECT(VPORT_ENT_CONTROL)
 
   FIELD_BS (num_entries, 70);
 
   START_HANDLE_STREAM;
   FIELD_HANDLE (null_handle, 4, 0);
   XDICOBJHANDLE(3);
-  HANDLE_VECTOR (vp_ent_headers, num_entries, 4, 0);
+  HANDLE_VECTOR (vport_ent_headers, num_entries, 4, 0);
 
 DWG_OBJECT_END
 
 /* VIEWPORT ENTITY HEADER (71/11) */
-DWG_OBJECT(VP_ENT_HDR)
+DWG_OBJECT(VPORT_ENT_HEADER)
 
-  COMMON_TABLE_FLAGS(vp_ent_ctrl, ViewportEntity) //??
+  COMMON_TABLE_FLAGS(vport_ent_control, ViewportEntity) //??
 
   SINCE(R_13) {
     FIELD_B (flag1, 70); // bit 1 of 70
@@ -2879,9 +2879,9 @@ DWG_OBJECT(VP_ENT_HDR)
       (FIELD_VALUE(xrefdep) << 4) |
       (FIELD_VALUE(xrefref) << 6);
 
-    FIELD_HANDLE (vp_ent_ctrl, 4, 0);
+    FIELD_HANDLE (vport_ent_control, 4, 0);
     XDICOBJHANDLE(3);
-    FIELD_HANDLE (vp_ent, 5, 0);
+    FIELD_HANDLE (vport_ent, 5, 0);
   }
 
 DWG_OBJECT_END

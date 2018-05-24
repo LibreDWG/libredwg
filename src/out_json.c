@@ -814,11 +814,11 @@ dwg_json_object(Bit_Chain *dat, Dwg_Object *obj)
     case DWG_TYPE_DIMSTYLE:
       dwg_json_DIMSTYLE(dat, obj);
       break;
-    case DWG_TYPE_VP_ENT_HDR_CONTROL:
-      dwg_json_VP_ENT_HDR_CONTROL(dat, obj);
+    case DWG_TYPE_VPORT_ENT_CONTROL:
+      dwg_json_VPORT_ENT_CONTROL(dat, obj);
       break;
-    case DWG_TYPE_VP_ENT_HDR:
-      dwg_json_VP_ENT_HDR(dat, obj);
+    case DWG_TYPE_VPORT_ENT_HEADER:
+      dwg_json_VPORT_ENT_HEADER(dat, obj);
       break;
     case DWG_TYPE_GROUP:
       dwg_json_GROUP(dat, obj);

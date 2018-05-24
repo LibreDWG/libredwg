@@ -974,13 +974,13 @@ dwg_dxf_object(Bit_Chain *dat, Dwg_Object *obj)
       //RECORD(DIMSTYLE);
       //dwg_dxf_DIMSTYLE(dat, obj);
       break;
-    case DWG_TYPE_VP_ENT_HDR_CONTROL:
-      //RECORD(VP_ENT_HDR);
-      //dwg_dxf_VP_ENT_HDR_CONTROL(dat, obj);
+    case DWG_TYPE_VPORT_ENT_CONTROL:
+      //RECORD(VPORT_ENT_HEADER);
+      //dwg_dxf_VPORT_ENT_CONTROL(dat, obj);
       break;
-    case DWG_TYPE_VP_ENT_HDR:
-      //RECORD(VP_ENT_HDR);
-      //dwg_dxf_VP_ENT_HDR(dat, obj);
+    case DWG_TYPE_VPORT_ENT_HEADER:
+      //RECORD(VPORT_ENT_HEADER);
+      //dwg_dxf_VPORT_ENT_HEADER(dat, obj);
       break;
     case DWG_TYPE_GROUP:
       RECORD(GROUP);

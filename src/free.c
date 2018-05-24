@@ -726,11 +726,11 @@ dwg_free_object(Dwg_Object *obj)
     case DWG_TYPE_DIMSTYLE:
       dwg_free_DIMSTYLE(obj);
       break;
-    case DWG_TYPE_VP_ENT_HDR_CONTROL:
-      dwg_free_VP_ENT_HDR_CONTROL(obj);
+    case DWG_TYPE_VPORT_ENT_CONTROL:
+      dwg_free_VPORT_ENT_CONTROL(obj);
       break;
-    case DWG_TYPE_VP_ENT_HDR:
-      dwg_free_VP_ENT_HDR(obj);
+    case DWG_TYPE_VPORT_ENT_HEADER:
+      dwg_free_VPORT_ENT_HEADER(obj);
       break;
     case DWG_TYPE_GROUP:
       dwg_free_GROUP(obj);

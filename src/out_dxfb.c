@@ -929,11 +929,11 @@ dwg_dxfb_object(Bit_Chain *dat, Dwg_Object *obj)
     case DWG_TYPE_DIMSTYLE:
       dwg_dxfb_DIMSTYLE(dat, obj);
       break;
-    case DWG_TYPE_VP_ENT_HDR_CONTROL:
-      dwg_dxfb_VP_ENT_HDR_CONTROL(dat, obj);
+    case DWG_TYPE_VPORT_ENT_CONTROL:
+      dwg_dxfb_VPORT_ENT_CONTROL(dat, obj);
       break;
-    case DWG_TYPE_VP_ENT_HDR:
-      dwg_dxfb_VP_ENT_HDR(dat, obj);
+    case DWG_TYPE_VPORT_ENT_HEADER:
+      dwg_dxfb_VPORT_ENT_HEADER(dat, obj);
       break;
     case DWG_TYPE_GROUP:
       dwg_dxfb_GROUP(dat, obj);

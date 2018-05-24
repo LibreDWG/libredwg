@@ -558,9 +558,9 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
         }
       break;
 
-    case SECTION_VP_ENT_HDR:
+    case SECTION_VPORT_ENT:
       if (tbl->number) {
-        LOG_WARN("VP_ENT_HDR table");
+        LOG_WARN("VPORT_ENT table");
       }
       break;
 
@@ -695,11 +695,11 @@ decode_preR13(Bit_Chain* dat, Dwg_Data * dwg)
   decode_preR13_section_ptr("DIMSTYLE", SECTION_DIMSTYLE, dat, dwg);
   // skip: 0x69f - dat->bytes
   dat->byte = 0x69f;
-  decode_preR13_section_ptr("VP_ENT_HDR", SECTION_VP_ENT_HDR, dat, dwg);
+  decode_preR13_section_ptr("VPORT_ENT", SECTION_VPORT_ENT, dat, dwg);
   dat->byte += 38;
   // entities
   decode_preR13_entities(entities_start, entities_end, 0, dat, dwg);
-  dat->byte += 19;
+  dat->byte += 19; /* crc + sentinel? */
   decode_preR13_section(SECTION_BLOCK, dat, dwg);
   decode_preR13_section(SECTION_LAYER, dat, dwg);
   decode_preR13_section(SECTION_STYLE, dat, dwg);
@@ -709,7 +709,7 @@ decode_preR13(Bit_Chain* dat, Dwg_Data * dwg)
   decode_preR13_section(SECTION_VPORT, dat, dwg);
   decode_preR13_section(SECTION_APPID, dat, dwg);
   decode_preR13_section(SECTION_DIMSTYLE, dat, dwg);
-  decode_preR13_section(SECTION_VP_ENT_HDR, dat, dwg);
+  decode_preR13_section(SECTION_VPORT_ENT, dat, dwg);
   // blocks
   decode_preR13_entities(blocks_start, blocks_end, blocks_start - 0x40000000,
                          dat, dwg);
@@ -766,7 +766,7 @@ decode_preR13(Bit_Chain* dat, Dwg_Data * dwg)
   decode_preR13_section_chk(SECTION_VPORT, dat, dwg);
   decode_preR13_section_chk(SECTION_APPID, dat, dwg);
   decode_preR13_section_chk(SECTION_DIMSTYLE, dat, dwg);
-  decode_preR13_section_chk(SECTION_VP_ENT_HDR, dat, dwg);
+  decode_preR13_section_chk(SECTION_VPORT_ENT, dat, dwg);
   rl1 = bit_read_RL(dat);
   LOG_TRACE("long 0x%x\n", rl1); // address
 
@@ -3763,14 +3763,14 @@ dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
     case DWG_TYPE_DIMSTYLE:
       dwg_decode_DIMSTYLE(dat, obj);
       break;
-    case DWG_TYPE_VP_ENT_HDR_CONTROL:
-      dwg_decode_VP_ENT_HDR_CONTROL(dat, obj);
-      obj->tio.object->tio.VP_ENT_HDR_CONTROL->objid = num;
-      if (obj->tio.object->tio.VP_ENT_HDR_CONTROL->num_entries)
-        dwg->vp_ent_hdr_control = *obj->tio.object->tio.VP_ENT_HDR_CONTROL;
+    case DWG_TYPE_VPORT_ENT_CONTROL:
+      dwg_decode_VPORT_ENT_CONTROL(dat, obj);
+      obj->tio.object->tio.VPORT_ENT_CONTROL->objid = num;
+      if (obj->tio.object->tio.VPORT_ENT_CONTROL->num_entries)
+        dwg->vport_ent_control = *obj->tio.object->tio.VPORT_ENT_CONTROL;
       break;
-    case DWG_TYPE_VP_ENT_HDR:
-      dwg_decode_VP_ENT_HDR(dat, obj);
+    case DWG_TYPE_VPORT_ENT_HEADER:
+      dwg_decode_VPORT_ENT_HEADER(dat, obj);
       break;
     case DWG_TYPE_GROUP:
       dwg_decode_GROUP(dat, obj);
