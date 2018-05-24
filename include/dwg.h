@@ -1582,7 +1582,7 @@ typedef struct _dwg_object_BLOCK_HEADER
   BITCODE_BS insert_units;
   BITCODE_B explodable;
   BITCODE_RC block_scaling;
-  BITCODE_H block_control_handle;
+  BITCODE_H block_control;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
   BITCODE_H null_handle;
@@ -1777,7 +1777,7 @@ typedef struct _dwg_object_VIEW
   BITCODE_BD elevation;
   BITCODE_BS orthographic_view_type;
   BITCODE_B camera_plottable;
-  BITCODE_H view_control_handle;
+  BITCODE_H view_control;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
   BITCODE_H null_handle;
@@ -1818,7 +1818,7 @@ typedef struct _dwg_object_UCS
   BITCODE_BD elevation;
   BITCODE_BS orthographic_view_type;
   BITCODE_BS orthographic_type;
-  BITCODE_H ucs_control_handle;
+  BITCODE_H ucs_control;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
   BITCODE_H null_handle;

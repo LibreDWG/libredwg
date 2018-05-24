@@ -17059,12 +17059,12 @@ dwg_block_header_get_block_control(const dwg_obj_block_header* block_header,
                                    int *error)
 {
   if (block_header &&
-      block_header->block_control_handle &&
-      block_header->block_control_handle->obj &&
-      block_header->block_control_handle->obj->tio.object)
+      block_header->block_control &&
+      block_header->block_control->obj &&
+      block_header->block_control->obj->tio.object)
     {
       *error = 0;
-      return block_header->block_control_handle->obj->tio.object->tio.BLOCK_CONTROL;
+      return block_header->block_control->obj->tio.object->tio.BLOCK_CONTROL;
     }
   else
     {

@@ -1935,7 +1935,7 @@ DWG_OBJECT_END
 /* (49/1) */
 DWG_OBJECT(BLOCK_HEADER)
 
-  COMMON_TABLE_FLAGS(block_control_handle, Block)
+  COMMON_TABLE_FLAGS(block_control, Block)
 
   PRE(R_13)
   {
@@ -2002,7 +2002,7 @@ DWG_OBJECT(BLOCK_HEADER)
 
   SINCE(R_13) {
     START_HANDLE_STREAM;
-    FIELD_HANDLE (block_control_handle, 4, 0);
+    FIELD_HANDLE (block_control, 4, 0);
     REACTORS(4);
     XDICOBJHANDLE(3);
     FIELD_HANDLE (null_handle, 5, 0);
@@ -2276,7 +2276,7 @@ DWG_OBJECT_END
 /* (61/6) */
 DWG_OBJECT(VIEW)
 
-  COMMON_TABLE_FLAGS(view_control_handle, View)
+  COMMON_TABLE_FLAGS(view_control, View)
 
   PRE(R_13)
   {
@@ -2348,7 +2348,7 @@ DWG_OBJECT(VIEW)
   }
   SINCE(R_13) {
     START_HANDLE_STREAM;
-    FIELD_HANDLE (view_control_handle, 4, 0);
+    FIELD_HANDLE (view_control, 4, 0);
     REACTORS(4);
     XDICOBJHANDLE(3);
     FIELD_HANDLE (null_handle, 5, 0);
@@ -2387,7 +2387,7 @@ DWG_OBJECT_END
 /* (63/7) */
 DWG_OBJECT(UCS)
 
-  COMMON_TABLE_FLAGS(ucs_control_handle, Ucs)
+  COMMON_TABLE_FLAGS(ucs_control, Ucs)
 
   PRE(R_13)
   {
@@ -2412,7 +2412,7 @@ DWG_OBJECT(UCS)
   SINCE(R_13)
   {
     START_HANDLE_STREAM;
-    FIELD_HANDLE (ucs_control_handle, 4, 0);
+    FIELD_HANDLE (ucs_control, 4, 0);
     REACTORS(4);
     XDICOBJHANDLE(3);
     FIELD_HANDLE (null_handle, 5, 0);
