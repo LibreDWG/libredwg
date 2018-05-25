@@ -2505,11 +2505,11 @@ dwg_ent_viewport_get_view_direction(const dwg_ent_viewport *vp, dwg_point_3d *po
                                     int *error);
 
 void
-dwg_ent_viewport_set_view_twist_angle(dwg_ent_viewport *vp, BITCODE_BD angle,
+dwg_ent_viewport_set_view_twist(dwg_ent_viewport *vp, BITCODE_BD angle,
                                       int *error);
 
 BITCODE_BD
-dwg_ent_viewport_get_view_twist_angle(const dwg_ent_viewport *vp, int *error);
+dwg_ent_viewport_get_view_twist(const dwg_ent_viewport *vp, int *error);
 
 void
 dwg_ent_viewport_set_view_height(dwg_ent_viewport *vp, BITCODE_BD height,

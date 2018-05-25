@@ -1242,7 +1242,7 @@ DWG_ENTITY(VIEWPORT)
     {
       FIELD_3BD (view_target, 17);
       FIELD_3BD (view_direction, 16);
-      FIELD_BD (view_twist_angle, 51);
+      FIELD_BD (view_twist, 51);
       FIELD_BD (view_height, 45);
       FIELD_BD (lens_length, 42);
       FIELD_BD (front_clip_z, 43);
@@ -2424,7 +2424,7 @@ DWG_OBJECT(UCS)
     }
 DWG_OBJECT_END
 
-/*(64)*/
+/* (0x40/64) */
 DWG_OBJECT(VPORT_CONTROL)
 
   FIELD_BS (num_entries, 70);
@@ -2436,10 +2436,89 @@ DWG_OBJECT(VPORT_CONTROL)
 
 DWG_OBJECT_END
 
-/* (65/8) */
+/* 0x41/65 /8 */
 DWG_OBJECT(VPORT)
 
   COMMON_TABLE_FLAGS(vport_control, Viewport)
+
+  DXF { // has a different order of fields
+
+  FIELD_2RD (lower_left, 10);
+  FIELD_2RD (upper_right, 11);
+  FIELD_2RD (VIEWCTR, 12);
+  FIELD_2RD (SNAPBASE, 13);
+  FIELD_2RD (SNAPUNIT, 14);
+  FIELD_2RD (GRIDUNIT, 15);
+  FIELD_3RD (VIEWDIR, 16);
+  FIELD_3RD (view_target, 17);
+  FIELD_RD (VIEWSIZE, 40);
+  FIELD_RD (aspect_ratio, 41); //wrong!
+  FIELD_RD (lens_length, 42);
+  FIELD_RD (front_clip, 43);
+  FIELD_RD (back_clip, 44);
+  FIELD_RD (SNAPANG, 50);
+  FIELD_RD (view_twist, 51);
+
+  PRE(R_13) {
+    FIELD_RC (UCSFOLLOW, 71);
+  }
+  else {
+    FIELD_4BITS (view_mode, 71); // USCFOLLOW is bit 3 of 71
+  }
+  FIELD_RS (circle_zoom, 72);
+  FIELD_RC (FASTZOOM, 73);
+  FIELD_RC (UCSICON, 74);
+  FIELD_RC (GRIDMODE, 76);
+  FIELD_CAST (SNAPMODE, RS, B, 75);
+  FIELD_RC (SNAPSTYLE, 77);
+  FIELD_RS (SNAPISOPAIR, 78);
+  SINCE(R_2000) {
+    FIELD_RC (render_mode, 281);
+  }
+  //TODO 65
+
+  SINCE(R_2000)
+  {
+    FIELD_3BD (ucs_origin, 110);
+    FIELD_3BD (ucs_x_axis, 111);
+    FIELD_3BD (ucs_y_axis, 112);
+    // TODO: skip if empty
+    FIELD_HANDLE (named_ucs_handle, 5, 345);
+    if (FIELD_VALUE(ucs_orthografic_type))
+      FIELD_HANDLE (base_ucs_handle, 5, 346);
+    FIELD_BS (ucs_orthografic_type, 79);
+    FIELD_BD (ucs_elevation, 146);
+  }
+  SINCE(R_2007)
+  {
+    FIELD_HANDLE (visual_style_handle, 5, 348);
+    FIELD_BS (grid_flags, 60);
+    FIELD_BS (grid_major, 61);
+    FIELD_HANDLE (background_handle, 4, 332);
+    //FIELD_HANDLE (sun_handle, 3, 361); //ODA bug
+    FIELD_HANDLE (shade_plot_handle, 5, 333);
+
+    IF_ENCODE_FROM_EARLIER {
+      FIELD_VALUE(use_default_lights) = 1;
+      FIELD_VALUE(default_lightning_type) = 1;
+      FIELD_VALUE(ambient_color.index) = 250;
+      //TODO FIELD_VALUE(ambient_color.rgb) = ?;
+      //TODO FIELD_VALUE(ambient_color.byte) = ?; //+ name, book_name
+    }
+    FIELD_B (use_default_lights, 292);
+    FIELD_RC (default_lightning_type, 282);
+    FIELD_BD (brightness, 141);
+    FIELD_BD (contrast, 142);
+    //TODO: 63, 421, 423 only when non-black
+    FIELD_CMC (ambient_color, 63); // +421, 431
+  }
+  //TODO 1001 1070
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+
+  }
+  /* end of DXF: now DWG */
+  else {
 
   PRE(R_13)
   { // TODO verify
@@ -2448,10 +2527,10 @@ DWG_OBJECT(VPORT)
     FIELD_2RD (VIEWCTR, 12);
     FIELD_3RD (view_target, 17);
     FIELD_3RD (VIEWDIR, 16);
-    FIELD_RD (view_twist, 50);
+    FIELD_RD (view_twist, 51);
     FIELD_RD (lens_length, 42);
     FIELD_RD (front_clip, 43);
-    FIELD_RD (back_clip, 33);
+    FIELD_RD (back_clip, 44);
     FIELD_CAST (view_mode, RS, 4BITS, 71);
 
     FIELD_2RD (lower_left, 10);
@@ -2472,14 +2551,14 @@ DWG_OBJECT(VPORT)
   else
   {
     FIELD_BD (VIEWSIZE, 40);
-    FIELD_BD (aspect_ratio, 41);
+    FIELD_BD (aspect_ratio, 41); //wrong
     FIELD_2RD (VIEWCTR, 12);
     FIELD_3BD (view_target, 17);
     FIELD_3BD (VIEWDIR, 16);
-    FIELD_BD (view_twist, 50);
+    FIELD_BD (view_twist, 51);
     FIELD_BD (lens_length, 42);
     FIELD_BD (front_clip, 43);
-    FIELD_BD (back_clip, 33);
+    FIELD_BD (back_clip, 44);
     FIELD_4BITS (view_mode, 71);
 
     SINCE(R_2000) {
@@ -2542,9 +2621,10 @@ DWG_OBJECT(VPORT)
 
   SINCE(R_2007)
     {
-      FIELD_HANDLE (background_handle, 4, 332);
-      FIELD_HANDLE (visual_style_handle, 5, 348);
-      FIELD_HANDLE (sun_handle, 3, 361); //333 shade_plot?
+      FIELD_HANDLE (background_handle, 4, 332); //soft ptr
+      FIELD_HANDLE (visual_style_handle, 5, 348); //hard ptr
+      //FIELD_HANDLE (sun_handle, 3, 361); //ODA bug
+      FIELD_HANDLE (shade_plot_handle, 3, 333); //hard owner
     }
 
   SINCE(R_2000)
@@ -2552,6 +2632,7 @@ DWG_OBJECT(VPORT)
       FIELD_HANDLE (named_ucs_handle, 5, 345);
       FIELD_HANDLE (base_ucs_handle, 5, 346);
     }
+ }
 
 DWG_OBJECT_END
 
@@ -4869,4 +4950,3 @@ DWG_OBJECT_END
 DWG_OBJECT(LEADEROBJECTCONTEXTDATA)
 DWG_OBJECT_END
 */
-

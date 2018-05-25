@@ -391,7 +391,6 @@ dwg_dxf_ ##token (Bit_Chain *dat, Dwg_Object * obj) \
   VALUE_BS (ctrl->handle.value, 5); \
   VALUE_H  (_ctrl->null_handle, 330); \
   VALUE_TV ("AcDbSymbolTable", 100); \
-  VALUE_RS (_ctrl->num_entries, 70); \
   RESET_VER
 
 #define COMMON_TABLE_FLAGS(owner, acdbname) \
@@ -399,8 +398,8 @@ dwg_dxf_ ##token (Bit_Chain *dat, Dwg_Object * obj) \
   FIELD_HANDLE (owner, 4, 330); \
   VALUE_TV ("AcDbSymbolTableRecord", 100); \
   VALUE_TV ("AcDb" #acdbname "TableRecord", 100); \
-  VALUE_RC (0, 70); \
   FIELD_T (entry_name, 2); \
+  VALUE_RC (0, 70); \
   RESET_VER
 
 #include "dwg.spec"
@@ -1133,7 +1132,7 @@ dxf_format (int code)
   if (270 <= code && code <= 289)
     return "%6i";
   if (290 <= code && code <= 299)
-    return "%2i"; // boolean
+    return "%6i"; // boolean
   if (300 <= code && code <= 319)
     return "%s";
   if (320 <= code && code <= 369)
@@ -1248,15 +1247,18 @@ dxf_tables_write (Bit_Chain *dat, Dwg_Data * dwg)
       Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
       TABLE(VPORT);
       COMMON_TABLE_CONTROL_FLAGS(null_handle);
+      dwg_dxf_VPORT_CONTROL(dat, ctrl);
+      /* ??
       VALUE_TV ("ACAD", 1001);
       VALUE_TV ("DbSaveVer", 1000);
-      VALUE_RS (30, 1071);
-      dwg_dxf_VPORT_CONTROL(dat, ctrl);
+      VALUE_RS (30, 1071); */
       for (i=0; i<dwg->vport_control.num_entries; i++)
         {
           Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->vports[i]);
           if (obj) {
             RECORD (VPORT);
+            //reordered in the DXF: 2,70,10,11,12,13,14,15,16,...
+            //special-cased in the spec
             dwg_dxf_VPORT(dat, obj);
           }
         }

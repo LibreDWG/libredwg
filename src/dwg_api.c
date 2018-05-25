@@ -10802,13 +10802,13 @@ dwg_ent_viewport_get_view_direction(const dwg_ent_viewport *vp, dwg_point_3d *po
 
 /// Sets view twist angle
 void
-dwg_ent_viewport_set_view_twist_angle(dwg_ent_viewport *vp, BITCODE_BD angle,
+dwg_ent_viewport_set_view_twist(dwg_ent_viewport *vp, BITCODE_BD angle,
                                       int *error)
 {
   if (vp != 0)
     {
       *error = 0;
-      vp->view_twist_angle = angle;
+      vp->view_twist = angle;
     }
   else
     {
@@ -10819,12 +10819,12 @@ dwg_ent_viewport_set_view_twist_angle(dwg_ent_viewport *vp, BITCODE_BD angle,
 
 /// Returns view twist angle
 BITCODE_BD
-dwg_ent_viewport_get_view_twist_angle(const dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_view_twist(const dwg_ent_viewport *vp, int *error)
 {
   if (vp != 0)
     {
       *error = 0;
-      return vp->view_twist_angle;
+      return vp->view_twist;
     }
   else
     {
