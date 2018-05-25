@@ -802,7 +802,8 @@ bit_write_MS(Bit_Chain * dat, long unsigned int value)
 /** Read bit-extrusion.
  */
 void
-bit_read_BE(Bit_Chain * dat, double *x, double *y, double *z)
+bit_read_BE(Bit_Chain *restrict dat,
+            double *restrict x, double *restrict y, double *restrict z)
 {
   if (dat->version >= R_2000 && bit_read_B(dat))
     {
@@ -947,9 +948,9 @@ bit_write_BT(Bit_Chain * dat, double value)
 /** Read handle-references.
  */
 int
-bit_read_H(Bit_Chain * dat, Dwg_Handle * handle)
+bit_read_H(Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
 {
-  unsigned char *val;
+  unsigned char *restrict val;
   int i;
 
   handle->code = bit_read_RC(dat);
@@ -976,7 +977,7 @@ bit_read_H(Bit_Chain * dat, Dwg_Handle * handle)
 /** Write handle-references.
  */
 void
-bit_write_H(Bit_Chain * dat, Dwg_Handle * handle)
+bit_write_H(Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
 {
   int i;
   unsigned char *val;
@@ -1083,7 +1084,7 @@ bit_write_CRC(Bit_Chain * dat, long unsigned int start_address,
  *  preR11
  */
 BITCODE_TF
-bit_read_TF(Bit_Chain * dat, int length)
+bit_read_TF(Bit_Chain *restrict dat, int length)
 {
   char *chain = malloc(length+1);
 
@@ -1094,7 +1095,7 @@ bit_read_TF(Bit_Chain * dat, int length)
 }
 
 void
-bit_read_fixed(Bit_Chain * dat, char *dest, int length)
+bit_read_fixed(Bit_Chain *restrict dat, char *restrict dest, int length)
 {
   for (int i = 0; i < length; i++)
     {
@@ -1105,7 +1106,7 @@ bit_read_fixed(Bit_Chain * dat, char *dest, int length)
 /** Write fixed text.
  */
 void
-bit_write_TF(Bit_Chain * dat, char *chain, int length)
+bit_write_TF(Bit_Chain *restrict dat, char *restrict chain, int length)
 {
   int i;
   for (i = 0; i < length; i++)
@@ -1115,7 +1116,7 @@ bit_write_TF(Bit_Chain * dat, char *chain, int length)
 /** Read simple text. After usage, the allocated memory must be properly freed.
  */
 BITCODE_TV
-bit_read_TV(Bit_Chain * dat)
+bit_read_TV(Bit_Chain *restrict dat)
 {
   unsigned int i;
   unsigned int length;
@@ -1140,7 +1141,7 @@ bit_read_TV(Bit_Chain * dat)
 /** Write simple text.
  */
 void
-bit_write_TV(Bit_Chain * dat, char *chain)
+bit_write_TV(Bit_Chain *restrict dat, char *restrict chain)
 {
   int i;
   int length;
@@ -1155,7 +1156,7 @@ bit_write_TV(Bit_Chain * dat, char *chain)
  * See also bfr_read_string()
  */
 BITCODE_TU
-bit_read_TU(Bit_Chain * dat)
+bit_read_TU(Bit_Chain *restrict dat)
 {
   unsigned int i;
   unsigned int length;
@@ -1175,7 +1176,7 @@ bit_read_TU(Bit_Chain * dat)
 /** Write UCS-2 unicode text. Must be zero-delimited.
  */
 void
-bit_write_TU(Bit_Chain * dat, BITCODE_TU chain)
+bit_write_TU(Bit_Chain *restrict dat, BITCODE_TU restrict chain)
 {
   unsigned int i;
   unsigned int length;
@@ -1200,7 +1201,8 @@ bit_write_TU(Bit_Chain * dat, BITCODE_TU chain)
 }
 
 /* converts UCS-2 to UTF-8 */
-char* bit_convert_TU(BITCODE_TU wstr)
+char*
+bit_convert_TU(BITCODE_TU restrict wstr)
 {
   BITCODE_TU tmp = wstr;
   char *str;
@@ -1243,7 +1245,7 @@ char* bit_convert_TU(BITCODE_TU wstr)
 
 /* converts UTF-8 to UCS-2 */
 BITCODE_TU
-bit_utf8_to_TU(char* str)
+bit_utf8_to_TU(char* restrict str)
 {
   BITCODE_TU wstr;
   int i = 0;

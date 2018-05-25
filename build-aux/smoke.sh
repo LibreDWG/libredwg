@@ -17,11 +17,12 @@ CFLAGS=-I/usr/local/include
 LDFLAGS=-L/usr/local/lib
 
 gmake -s -j4 clean
-echo clang-mp-5.0 -fsanitize=address,undefined -fno-omit-frame-pointer --enable-trace --enable-write
-CC="clang-mp-5.0 -fsanitize=address,undefined -fno-omit-frame-pointer" \
+echo clang-mp-devel -fsanitize=address,undefined -fno-omit-frame-pointer --enable-trace --enable-write
+CC="clang-mp-devel -fsanitize=address,undefined -fno-omit-frame-pointer" \
     ./configure --enable-trace --enable-write && \
     gmake -s -j4 check || exit
 gmake -s -j4 clean
+
 echo clang-mp-6.0 -O3 -march=native --enable-write
 CC="clang-mp-6.0 -O3 -march=native" \
     ./configure --enable-write && \
@@ -29,7 +30,7 @@ CC="clang-mp-6.0 -O3 -march=native" \
     gmake scan-build
 gmake -s -j4 clean
 
-for CC in gcc-mp-4.3 gcc-mp-4.6 gcc-mp-4.8 gcc-mp-4.9 gcc-mp-5 gcc-mp-6 gcc-mp-7
+for CC in gcc-mp-4.3 gcc-mp-4.6 gcc-mp-4.8 gcc-mp-4.9 gcc-mp-5 gcc-mp-6 gcc-mp-7 gcc-8
 do
     echo $CC
     ./configure && \
@@ -121,8 +122,16 @@ CC="clang-7 -fsanitize=address,undefined -fno-omit-frame-pointer" \
     make -s -j4 check || exit
 make -s -j4 clean
 
-for CC in clang-3.0 clang-3.4 clang-3.5 clang-3.6 clang-3.7 clang-3.8 clang-3.9 clang-4.0 \
-          clang-5.0 clang-6.0 clang-7
+for CC in gcc-4.3 gcc-4.6 gcc-4.8 gcc-4.9 gcc-5 gcc-6 gcc-7 gcc-8
+do
+    echo $CC
+    ./configure && \
+    make -s -j4 check || exit
+    make -s -j4 clean
+done
+
+for CC in clang-3.0 clang-3.4 clang-3.5 clang-3.6 clang-3.7 clang-3.8 clang-3.9 \
+          clang-4.0 clang-5.0 clang-6.0 clang-7
 do
     echo $CC
     ./configure && \

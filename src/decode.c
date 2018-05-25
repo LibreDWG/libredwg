@@ -59,10 +59,12 @@ static bool env_var_checked_p;
  * Functions reused with decode_r2007
  */
 Dwg_Object_Ref *
-dwg_decode_handleref(Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Data* dwg);
+dwg_decode_handleref(Bit_Chain *restrict hdl_dat, Dwg_Object *restrict obj,
+                     Dwg_Data *restrict dwg);
+
 Dwg_Object_Ref *
-dwg_decode_handleref_with_code(Bit_Chain* hdl_dat, Dwg_Object* obj,
-                               Dwg_Data* dwg, unsigned int code);
+dwg_decode_handleref_with_code(Bit_Chain *restrict hdl_dat, Dwg_Object *restrict obj,
+                               Dwg_Data *restrict dwg, unsigned int code);
 void
 dwg_decode_header_variables(Bit_Chain* dat, Bit_Chain* hdl_dat,
                             Bit_Chain* str_dat, Dwg_Data* dwg);
@@ -76,16 +78,18 @@ dwg_free_xdata_resbuf(Dwg_Resbuf *rbuf);
 extern void
 read_r2007_init(Dwg_Data *dwg);
 extern int
-read_r2007_meta_data(Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Data *dwg);
+read_r2007_meta_data(Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Data *restrict dwg);
 extern void
-obj_string_stream(Bit_Chain *dat, Dwg_Object *obj, Bit_Chain *str);
+obj_string_stream(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
+                  Bit_Chain *restrict str_dat);
 extern void
-section_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
+section_string_stream(Bit_Chain *restrict dat, BITCODE_RL bitsize,
+                      Bit_Chain *restrict str);
 
 extern Dwg_Object *
 dwg_resolve_handle(const Dwg_Data* dwg, const unsigned long int absref);
 extern int
-dwg_resolve_handleref(Dwg_Object_Ref *ref, const Dwg_Object * obj);
+dwg_resolve_handleref(Dwg_Object_Ref *restrict ref, const Dwg_Object *restrict obj);
 
 /*------------------------------------------------------------------------------
  * Private functions
@@ -1372,7 +1376,7 @@ read_long_compression_offset(Bit_Chain* dat)
 /* R2004 Two Byte Offset
  */
 static int
-read_two_byte_offset(Bit_Chain* dat, int* lit_length)
+read_two_byte_offset(Bit_Chain *restrict dat, int *restrict lit_length)
 {
   int offset;
   unsigned char firstByte = bit_read_RC(dat);
@@ -1385,7 +1389,7 @@ read_two_byte_offset(Bit_Chain* dat, int* lit_length)
 /* Decompresses a system section of a 2004+ DWG file
  */
 static int
-decompress_R2004_section(Bit_Chain* dat, char *decomp,
+decompress_R2004_section(Bit_Chain *restrict dat, char *restrict decomp,
                          unsigned long int comp_data_size)
 {
   int lit_length, i;
@@ -2635,7 +2639,8 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
 }
 
 Dwg_Object_Ref *
-dwg_decode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg)
+dwg_decode_handleref(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
+                     Dwg_Data *restrict dwg)
 {
   // Welcome to the house of evil code
   Dwg_Object_Ref* ref = (Dwg_Object_Ref *) calloc(1, sizeof(Dwg_Object_Ref));
@@ -2744,8 +2749,8 @@ dwg_decode_handleref(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg)
  *   c ref - offset
  */
 Dwg_Object_Ref *
-dwg_decode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg,
-                               unsigned int code)
+dwg_decode_handleref_with_code(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
+                               Dwg_Data *restrict dwg, unsigned int code)
 {
   Dwg_Object_Ref * ref;
   ref = dwg_decode_handleref(dat, obj, dwg);
@@ -2803,7 +2808,7 @@ dwg_decode_handleref_with_code(Bit_Chain * dat, Dwg_Object * obj, Dwg_Data* dwg,
 
 void
 dwg_decode_header_variables(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
-                            Dwg_Data * dwg)
+                            Dwg_Data *restrict dwg)
 {
   Dwg_Header_Variables* _obj = &dwg->header_vars;
   Dwg_Object* obj = NULL;
@@ -2812,7 +2817,8 @@ dwg_decode_header_variables(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_d
 }
 
 static void
-dwg_decode_common_entity_handle_data(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj)
+dwg_decode_common_entity_handle_data(Bit_Chain* dat, Bit_Chain* hdl_dat,
+                                     Dwg_Object *restrict obj)
 {
 
   Dwg_Data *dwg = obj->parent;
@@ -2929,7 +2935,7 @@ dwg_free_xdata_resbuf(Dwg_Resbuf *rbuf)
 
 // TODO: unify with eed[], use an array not linked list.
 static Dwg_Resbuf*
-dwg_decode_xdata(Bit_Chain * dat, Dwg_Object_XRECORD *obj, int size)
+dwg_decode_xdata(Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj, int size)
 {
   Dwg_Resbuf *rbuf, *root = NULL, *curr = NULL;
   unsigned char codepage;
@@ -3041,7 +3047,7 @@ dwg_decode_xdata(Bit_Chain * dat, Dwg_Object_XRECORD *obj, int size)
 static void
 decode_preR13_entities(unsigned long start, unsigned long end,
                        unsigned long offset,
-                       Bit_Chain* dat, Dwg_Data * dwg)
+                       Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   int num = dwg->num_objects;
   LOG_TRACE("entities: (0x%lx-0x%lx, offset 0x%lx) TODO\n", start, end, offset)
@@ -3150,7 +3156,8 @@ decode_preR13_entities(unsigned long start, unsigned long end,
  * returns 1 if object could be decoded and 0 otherwise.
  */
 static int
-dwg_decode_variable_type(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj)
+dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
+                         Dwg_Object *restrict obj)
 {
   int i;
   char *dxfname;
@@ -3506,7 +3513,7 @@ dwg_decode_variable_type(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_
 }
 
 void
-dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
+dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
                       long unsigned int address)
 {
   long unsigned int oldpos;

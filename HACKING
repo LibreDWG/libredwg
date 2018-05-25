@@ -106,8 +106,8 @@ someone should probably think about and resolve them!
 
   $ libtool --mode=execute gdb PROGRAM
 
-  But it is easier to pass --disable-shared to configure and call gdb
-  directly.
+  But it is easier to pass --disable-shared to configure and call
+  gdb --args directly.
 
 * mingw cross-compilation
 

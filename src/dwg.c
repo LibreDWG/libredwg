@@ -55,7 +55,8 @@ int dwg_obj_is_control(const Dwg_Object *obj);
  * Public functions
  */
 
-static int dat_read_file (Bit_Chain* dat, FILE* fp, const char* filename)
+static int dat_read_file (Bit_Chain *restrict dat, FILE *restrict fp,
+                          const char *restrict filename)
 {
   size_t size;
   dat->chain = (unsigned char *) calloc(1, dat->size);
@@ -80,7 +81,7 @@ static int dat_read_file (Bit_Chain* dat, FILE* fp, const char* filename)
   return 0;
 }
 
-static int dat_read_stream (Bit_Chain* dat, FILE* fp)
+static int dat_read_stream (Bit_Chain *restrict dat, FILE *restrict fp)
 {
   size_t size = 0;
 
@@ -128,7 +129,7 @@ static int dat_read_stream (Bit_Chain* dat, FILE* fp)
  * and then either read from dat, or set to a default.
  */
 int
-dwg_read_file(const char *filename, Dwg_Data * dwg)
+dwg_read_file(const char *restrict filename, Dwg_Data *restrict dwg)
 {
   FILE *fp;
   struct stat attrib;
@@ -212,7 +213,7 @@ dwg_read_file(const char *filename, Dwg_Data * dwg)
  * and then either read from dat, or set to a default.
  */
 int
-dxf_read_file(const char *filename, Dwg_Data * dwg)
+dxf_read_file(const char *restrict filename, Dwg_Data *restrict dwg)
 {
   int error;
   FILE *fp;
@@ -296,7 +297,7 @@ dxf_read_file(const char *filename, Dwg_Data * dwg)
 #ifdef USE_WRITE
 
 int
-dwg_write_file(const char *filename, const Dwg_Data * dwg)
+dwg_write_file(const char *restrict filename, const Dwg_Data *restrict dwg)
 {
   FILE *fh;
   struct stat attrib;
@@ -358,7 +359,7 @@ dwg_write_file(const char *filename, const Dwg_Data * dwg)
 
 /* IMAGE DATA (R13C3+) */
 unsigned char *
-dwg_bmp(const Dwg_Data *dwg, BITCODE_RL *size)
+dwg_bmp(const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
 {
   BITCODE_RC i, num_pictures, code;
   int plene;
@@ -582,7 +583,7 @@ dwg_next_object(const Dwg_Object* obj)
  * Find an object given its handle
  */
 Dwg_Object*
-dwg_ref_get_object(const Dwg_Data* dwg, const Dwg_Object_Ref* ref)
+dwg_ref_get_object(const Dwg_Data *restrict dwg, const Dwg_Object_Ref *restrict ref)
 {
   if (ref->obj)
     return ref->obj;
@@ -601,8 +602,9 @@ dwg_ref_get_object(const Dwg_Data* dwg, const Dwg_Object_Ref* ref)
  * OFFSETOBJHANDLE, handleref.code > 6.
  */
 Dwg_Object*
-dwg_ref_get_object_relative(const Dwg_Data* dwg, const Dwg_Object_Ref* ref,
-                            const Dwg_Object* obj)
+dwg_ref_get_object_relative(const Dwg_Data *restrict dwg,
+                            const Dwg_Object_Ref *restrict ref,
+                            const Dwg_Object *restrict obj)
 {
   if (ref->obj)
     return ref->obj;
@@ -637,7 +639,7 @@ dwg_resolve_handle(const Dwg_Data * dwg, const long unsigned int absref)
 
 /* set ref->absolute_ref from obj, for a subsequent dwg_resolve_handle() */
 int
-dwg_resolve_handleref(Dwg_Object_Ref *ref, const Dwg_Object *obj)
+dwg_resolve_handleref(Dwg_Object_Ref *restrict ref, const Dwg_Object *restrict obj)
 {
   /*
    * With TYPEDOBJHANDLE 2-5 the code indicates the type of ownership.

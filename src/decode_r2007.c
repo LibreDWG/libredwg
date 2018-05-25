@@ -35,23 +35,26 @@ static unsigned int cur_ver = 0;
 
 /* imports */
 Dwg_Object_Ref *
-dwg_decode_handleref(Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Data* dwg);
+dwg_decode_handleref(Bit_Chain *restrict hdl_dat, Dwg_Object *restrict obj,
+                     Dwg_Data *restrict dwg);
 
 Dwg_Object_Ref *
-dwg_decode_handleref_with_code(Bit_Chain* hdl_dat, Dwg_Object* obj,
-                               Dwg_Data* dwg, unsigned int code);
+dwg_decode_handleref_with_code(Bit_Chain *restrict hdl_dat, Dwg_Object *restrict obj,
+                               Dwg_Data *restrict dwg, unsigned int code);
 void
 dwg_decode_header_variables(Bit_Chain* dat, Bit_Chain* hdl_dat,
-                            Bit_Chain* str_dat, Dwg_Data* dwg);
+                            Bit_Chain* str_dat, Dwg_Data *restrict dwg);
 void
-dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
+dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
                       long unsigned int address);
 
 // exported
 void
-obj_string_stream(Bit_Chain *dat, Dwg_Object *obj, Bit_Chain *str_dat);
+obj_string_stream(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
+                  Bit_Chain *restrict str_dat);
 void
-section_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
+section_string_stream(Bit_Chain *restrict dat, BITCODE_RL bitsize,
+                      Bit_Chain *restrict str);
 
 // only for temp. debugging, to abort on obviously wrong sizes.
 // should be a bit larger then the filesize.
@@ -136,7 +139,7 @@ typedef struct _r2007_section
 
 /* exported */
 void read_r2007_init(Dwg_Data *dwg);
-int read_r2007_meta_data(Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Data *dwg);
+int read_r2007_meta_data(Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Data *restrict dwg);
 /* imported */
 extern int rs_decode_block(unsigned char *blk, int fix);
 
@@ -150,26 +153,39 @@ static r2007_section* read_sections_map(Bit_Chain* dat, int64_t size_comp,
                                         int64_t size_uncomp,
                                         int64_t correction);
 static int read_data_section(Bit_Chain *sec_dat, Bit_Chain *dat,
-           r2007_section *sections_map, r2007_page *pages_map,
+                             r2007_section *restrict sections_map,
+                             r2007_page *restrict pages_map,
                              Dwg_Section_Type sec_type);
-static int read_2007_section_classes(Bit_Chain* dat,
-           Dwg_Data *dwg, r2007_section *sections_map, r2007_page *pages_map);
+static int read_2007_section_classes(Bit_Chain*restrict dat,
+                                     Dwg_Data *restrict dwg,
+                                     r2007_section *restrict sections_map,
+                                     r2007_page *restrict pages_map);
 static int read_2007_section_header(Bit_Chain* dat, Bit_Chain* hdl_dat,
-           Dwg_Data *dwg, r2007_section *sections_map, r2007_page *pages_map);
+                                    Dwg_Data *restrict dwg,
+                                    r2007_section *restrict sections_map,
+                                    r2007_page *restrict pages_map);
 static int read_2007_section_handles(Bit_Chain* dat, Bit_Chain* hdl_dat,
-           Dwg_Data *dwg, r2007_section *sections_map, r2007_page *pages_map);
+                                     Dwg_Data *restrict dwg,
+                                     r2007_section *restrict sections_map,
+                                     r2007_page *restrict pages_map);
 static r2007_page* read_pages_map(Bit_Chain* dat, int64_t size_comp,
                                   int64_t size_uncomp, int64_t correction);
-static void read_file_header(Bit_Chain* dat, r2007_file_header *file_header);
-static void read_instructions(unsigned char **src, unsigned char *opcode,
-                              uint32_t *offset, uint32_t *length);
-static void  copy_bytes(char *dst, uint32_t length, uint32_t offset);
+static void read_file_header(Bit_Chain *restrict dat,
+                             r2007_file_header *restrict file_header);
+static void read_instructions(unsigned char **restrict src,
+                              unsigned char *restrict opcode,
+                              uint32_t *restrict offset,
+                              uint32_t *restrict length);
+static inline char* copy_bytes_2(char *restrict dst, const char *restrict src);
+static inline char* copy_bytes_3(char *restrict dst, const char *restrict src);
+static void copy_bytes(char *dst, uint32_t length, uint32_t offset);
 static uint32_t read_literal_length(unsigned char **src, unsigned char opcode);
-static void copy_compressed_bytes(char *dst, char *src, int length);
-static void  bfr_read(void *dst, char **src, size_t size);
+static void copy_compressed_bytes(char *restrict dst, char *restrict src, int length);
+static void  bfr_read(void *restrict dst, char **restrict src, size_t size);
 static DWGCHAR* bfr_read_string(char **src);
 static char* decode_rs(const char *src, int block_count, int data_size);
-static int  decompress_r2007(char *dst, int dst_size, char *src, int src_size);
+static int  decompress_r2007(char *restrict dst, int dst_size,
+                             char *restrict src, int src_size);
 
 #define copy_1(offset) \
   *dst++ = *(src + offset);
@@ -221,7 +237,7 @@ copy_bytes(char *dst, uint32_t length, uint32_t offset)
 
 /* See spec version 5.0 page 30 */
 static void
-copy_compressed_bytes(char *dst, char *src, int length)
+copy_compressed_bytes(char *restrict dst, char *restrict src, int length)
 {
   while (length >= 32)
     {
@@ -468,7 +484,8 @@ read_instructions(unsigned char **src, unsigned char *opcode, uint32_t *offset,
    TODO: replace by decompress_R2004_section(dat, decomp, comp_data_size)
 */
 static int
-decompress_r2007(char *dst, int dst_size, char *src, int src_size)
+decompress_r2007(char *restrict dst, int dst_size,
+                 char *restrict src, int src_size)
 {
   uint32_t length = 0;
   uint32_t offset = 0;
@@ -717,7 +734,7 @@ read_data_section(Bit_Chain *sec_dat, Bit_Chain *dat, r2007_section *sections_ma
 #define bfr_read_int64(_p)   *((int64_t*)_p);  _p += 8;
 
 static void
-bfr_read(void *dst, char **src, size_t size)
+bfr_read(void *restrict dst, char **restrict src, size_t size)
 {
   memcpy(dst, *src, size);
   *src += size;
@@ -1014,7 +1031,7 @@ sections_destroy(r2007_section *section)
 }
 
 static void
-read_file_header(Bit_Chain* dat, r2007_file_header *file_header)
+read_file_header(Bit_Chain*restrict dat, r2007_file_header *restrict file_header)
 {
   char data[0x3d8]; //0x400 - 5 long
   char *pedata;
@@ -1056,7 +1073,9 @@ read_file_header(Bit_Chain* dat, r2007_file_header *file_header)
 }
 
 void
-obj_string_stream(Bit_Chain *dat, Dwg_Object *obj, Bit_Chain *str)
+obj_string_stream(Bit_Chain *dat,
+                  Dwg_Object *restrict obj,
+                  Bit_Chain *str)
 {
   BITCODE_RL start = obj->bitsize - 1; // in bits
   BITCODE_RL data_size = 0; // in byte
@@ -1101,7 +1120,8 @@ obj_string_stream(Bit_Chain *dat, Dwg_Object *obj, Bit_Chain *str)
 }
 
 void
-section_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str)
+section_string_stream(Bit_Chain *restrict dat, BITCODE_RL bitsize,
+                      Bit_Chain *restrict str)
 {
   // 24 bytes (sentinel+size+hsize) - 1 bit (endbit)
   BITCODE_RL start = bitsize + 159; // in bits
@@ -1134,8 +1154,9 @@ section_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str)
 
 // for string stream see p86
 static int
-read_2007_section_classes(Bit_Chain* dat, Dwg_Data *dwg,
-                          r2007_section *sections_map, r2007_page *pages_map)
+read_2007_section_classes(Bit_Chain*restrict dat, Dwg_Data *restrict dwg,
+                          r2007_section *restrict sections_map,
+                          r2007_page *restrict pages_map)
 {
   BITCODE_RL size, idc;
   BITCODE_BS max_num;
@@ -1251,8 +1272,10 @@ read_2007_section_classes(Bit_Chain* dat, Dwg_Data *dwg,
 }
 
 static int
-read_2007_section_header(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Data *dwg,
-                         r2007_section *sections_map, r2007_page *pages_map)
+read_2007_section_header(Bit_Chain*restrict dat, Bit_Chain*restrict hdl_dat,
+                         Dwg_Data *restrict dwg,
+                         r2007_section *restrict sections_map,
+                         r2007_page *restrict pages_map)
 {
   Bit_Chain sec_dat, str_dat;
   int error;
@@ -1300,8 +1323,10 @@ read_2007_section_header(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Data *dwg,
 }
 
 static int
-read_2007_section_handles(Bit_Chain* dat, Bit_Chain* hdl, Dwg_Data *dwg,
-                          r2007_section *sections_map, r2007_page *pages_map)
+read_2007_section_handles(Bit_Chain* dat, Bit_Chain* hdl,
+                          Dwg_Data *restrict dwg,
+                          r2007_section *restrict sections_map,
+                          r2007_page *restrict pages_map)
 {
   static Bit_Chain obj_dat, hdl_dat;
   BITCODE_RS section_size = 0;
@@ -1390,11 +1415,12 @@ read_r2007_init(Dwg_Data *dwg)
 }
 
 int
-read_r2007_meta_data(Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Data *dwg)
+read_r2007_meta_data(Bit_Chain *dat, Bit_Chain *hdl_dat,
+                     Dwg_Data *restrict dwg)
 {
   r2007_file_header file_header;
-  r2007_page *pages_map, *page;
-  r2007_section *sections_map;
+  r2007_page *restrict pages_map, *restrict page;
+  r2007_section *restrict sections_map;
   int error;
 #ifdef USE_TRACING
   char *probe;
@@ -1414,7 +1440,8 @@ read_r2007_meta_data(Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Data *dwg)
   dat->byte += file_header.pages_map_offset;
 
   pages_map = read_pages_map(dat, file_header.pages_map_size_comp,
-    file_header.pages_map_size_uncomp, file_header.pages_map_correction);
+                             file_header.pages_map_size_uncomp,
+                             file_header.pages_map_correction);
   if (!pages_map)
     return 1;
 
@@ -1422,7 +1449,8 @@ read_r2007_meta_data(Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Data *dwg)
   page = get_page(pages_map, file_header.sections_map_id);
   if (!page)
     {
-      LOG_ERROR("Failed to find sections page map %d", (int)file_header.sections_map_id);
+      LOG_ERROR("Failed to find sections page map %d",
+                (int)file_header.sections_map_id);
       pages_destroy(pages_map);
       return 3;
     }
@@ -1435,10 +1463,6 @@ read_r2007_meta_data(Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Data *dwg)
   error += read_2007_section_header(dat, hdl_dat, dwg, sections_map, pages_map);
   error += read_2007_section_handles(dat, hdl_dat, dwg, sections_map, pages_map);
   //read_2007_blocks(dat, hdl_dat, dwg, sections_map, pages_map);
-
-  /////////////////////////////////////////
-  //	incomplete implementation
-  /////////////////////////////////////////
 
   pages_destroy(pages_map);
   if (page)

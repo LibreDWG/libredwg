@@ -4144,17 +4144,17 @@ typedef struct _dwg_struct
  */
 
 int
-dwg_read_file(const char *filename, Dwg_Data * dwg);
+dwg_read_file(const char *restrict filename, Dwg_Data *restrict dwg);
 int
-dxf_read_file(const char *filename, Dwg_Data * dwg);
+dxf_read_file(const char *restrict filename, Dwg_Data *restrict dwg);
 
 #ifdef USE_WRITE
 int
-dwg_write_file(const char *filename, const Dwg_Data * dwg);
+dwg_write_file(const char *restrict filename, const Dwg_Data *restrict dwg);
 #endif
 
 unsigned char*
-dwg_bmp(const Dwg_Data *, BITCODE_RL *);
+dwg_bmp(const Dwg_Data *restrict, BITCODE_RL *restrict);
 
 double
 dwg_model_x_min(const Dwg_Data *);
@@ -4205,18 +4205,22 @@ Dwg_Object*
 dwg_next_object(const Dwg_Object* obj);
 
 Dwg_Object*
-dwg_ref_get_object(const Dwg_Data* dwg, const Dwg_Object_Ref* ref);
+dwg_ref_get_object(const Dwg_Data *restrict dwg,
+                   const Dwg_Object_Ref *restrict ref);
 
 Dwg_Object*
-dwg_ref_get_object_relative(const Dwg_Data* dwg, const Dwg_Object_Ref* ref,
-                            const Dwg_Object* obj);
+dwg_ref_get_object_relative(const Dwg_Data *restrict dwg,
+                            const Dwg_Object_Ref *restrict ref,
+                            const Dwg_Object *restrict obj);
 
 Dwg_Object*
-get_first_owned_object(const Dwg_Object* hdr_obj, Dwg_Object_BLOCK_HEADER* hdr);
+get_first_owned_object(const Dwg_Object *restrict hdr_obj,
+                       Dwg_Object_BLOCK_HEADER *restrict hdr);
 
 Dwg_Object*
-get_next_owned_object(const Dwg_Object* hdr_obj, const Dwg_Object* current,
-                      Dwg_Object_BLOCK_HEADER* hdr);
+get_next_owned_object(const Dwg_Object *restrict hdr_obj,
+                      const Dwg_Object *restrict current,
+                      Dwg_Object_BLOCK_HEADER *restrict hdr);
 
 Dwg_Section_Type
 dwg_section_type(const DWGCHAR *wname);
