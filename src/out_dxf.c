@@ -136,12 +136,19 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 #define HANDLE_NAME(name, dxf, section) \
   {\
     Dwg_Object_Ref *ref = dwg->header_vars.name;\
-    snprintf (buf, 4096, "%3i\r\n%s\r\n", dxf, dxf_format (dxf));\
     /*if (ref && !ref->obj) ref->obj = dwg_resolve_handle(dwg, ref->absolute_ref); */ \
-    GCC_DIAG_IGNORE(-Wformat-nonliteral) \
-    fprintf(dat->fh, buf, ref && ref->obj \
-      ? ref->obj->tio.object->tio.section->entry_name : ""); \
-    GCC_DIAG_RESTORE \
+    if (ref && ref->obj) \
+      { \
+        if (ref->obj->tio.object->tio.section->entry_name && \
+            !strcmp(ref->obj->tio.object->tio.section->entry_name, "STANDARD")) \
+            fprintf(dat->fh, "%3i\r\nStandard\r\n", dxf); \
+        else \
+            fprintf(dat->fh, "%3i\r\n%s\r\n", dxf, \
+                    ref->obj->tio.object->tio.section->entry_name); \
+      } \
+    else { \
+      fprintf(dat->fh, "%3i\r\n\r\n", dxf); \
+    } \
   }
 
 #define FIELD_DATAHANDLE(name, code, dxf) FIELD_HANDLE(name, code, dxf)

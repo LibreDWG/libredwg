@@ -614,7 +614,7 @@ dwg_encode(Dwg_Data* dwg, Bit_Chain* dat)
   if (dwg->header.preview_addr)
     {
       dat->byte = dwg->header.preview_addr;
-      //dwg->picture.size = 0; // If one desires not to copy pictures,
+      //dwg->picture.size = 0; // If one desires not to copy preview pictures,
       // should un-comment this line
       bit_write_sentinel(dat, dwg_sentinel(DWG_SENTINEL_PICTURE_BEGIN));
       bit_write_TF(dat, (char *)dwg->picture.chain, dwg->picture.size);
