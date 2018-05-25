@@ -667,8 +667,18 @@ read_system_page (Bit_Chain *out, Bit_Chain *dat, int64_t size_comp,
     }
 
   if (size_comp < size_uncomp)
-    error = decompress_r2007 (out->chain, size_uncomp, pedata,
-                              MIN (pedata_size, size_comp), data_end);
+    {
+      Bit_Chain pedat = { 0 };
+      pedat.chain = pedata;
+      pedat.size = page_size;
+      pedat.from_version = R_2007;
+      error = decompress_R2004_section (&pedat, &out->chain[out->byte],
+                                        (uint32_t)size_comp,
+                                        (uint32_t)page_size);
+      out->byte += page_size;
+      // decompress_r2007 (out->chain, size_uncomp, pedata, MIN (pedata_size,
+      //                   size_comp), data_end);
+    }
   else
     {
       if (out->byte + size_uncomp <= out->size)
