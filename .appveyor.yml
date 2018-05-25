@@ -26,6 +26,8 @@ environment:
 #  allow_failures:
 #    - MINGW: 1
 clone_depth: 1
+# we tag only already tested and deployed commits
+skip_tags: true
 #branches:
 #  only:
 #    - master
