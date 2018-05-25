@@ -70,6 +70,8 @@ int dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj);
 /*------------------------------------------------------------------------------
  * Functions reused with decode_r2007
  */
+int decompress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
+                              uint32_t decomp_data_size, uint32_t comp_data_size);
 Dwg_Object_Ref *dwg_decode_handleref (Bit_Chain *restrict hdl_dat,
                                       Dwg_Object *restrict obj,
                                       Dwg_Data *restrict dwg);
