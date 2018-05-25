@@ -66,23 +66,40 @@ CLEANFILES = {example,sample,Leader}_*.{bmp,ps,svg,dxf}
 CLEANFILES += {example,sample,Leader}_*rewrite.dwg
 MAINTAINERCLEANFILES  = *_flymake.[ch] *~ *.i
 
-.PHONY: man dsymutil check-syntax
-
-# could also use $(subst .c,.1,)
-man: $(bin_PROGRAMS) $(noinst_PROGRAMS)
-	for p in $(bin_PROGRAMS) $(noinst_PROGRAMS); do \
-	  $(MAKE) $$p.1; done
-
-# TODO $*F stem is GNU make only. ./ prefix is POSIX only, not on Windows
-.c.1:
-	help2man -p LibreDWG ./$(*F) >$@ || true
+.PHONY: man dsymutil clean-dsymutil check-syntax
 
 .c.i:
 	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
 	$(COMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -E -o $@ $<
 
+man: $(dist_man1_MANS)
+
+dwgread.1: dwgread.c dwgread$(EXTEXT)
+	help2man -p LibreDWG -o $@ dwgread$(EXTEXT) || true
+dwgbmp.1: dwgbmp.c dwgbmp$(EXTEXT)
+	help2man -p LibreDWG -o $@ dwgbmp$(EXTEXT) || true
+dwg2dxf.1: dwg2dxf.c dwg2dxf$(EXTEXT)
+	help2man -p LibreDWG -o $@ dwg2dxf$(EXTEXT) || true
+dwg2SVG.1: dwg2SVG.c dwg2SVG$(EXTEXT)
+	help2man -p LibreDWG -o $@ dwg2SVG$(EXTEXT) || true
+dwglayers.1: dwglayers.c dwglayers$(EXTEXT)
+	help2man -p LibreDWG -o $@ dwglayers$(EXTEXT) || true
+dwg2ps.1: dwg2ps.c dwg2ps$(EXTEXT)
+	help2man -p LibreDWG -o $@ dwg2ps$(EXTEXT) || true
+dwgrewrite.1: dwgrewrite.c dwgrewrite$(EXTEXT)
+	help2man -p LibreDWG -o $@ dwgrewrite$(EXTEXT) || true
+dwgwrite.1: dwgwrite.c dwgwrite$(EXTEXT)
+	help2man -p LibreDWG -o $@ dwgwrite$(EXTEXT) || true
+dxf2dwg.1: dxf2dwg.c dxf2dwg$(EXTEXT)
+	help2man -p LibreDWG -o $@ dxf2dwg$(EXTEXT) || true
+
+#.c.1: $(bin_PROGRAMS) $(noinst_PROGRAMS)
+#	help2man -p LibreDWG -o $@ $(*F) || true
+
 dsymutil:
 	for e in $(bin_PROGRAMS) $(noinst_PROGRAMS); do dsymutil $$e; done
+clean-dsymutil:
+	for e in $(bin_PROGRAMS) $(noinst_PROGRAMS); do rm -rf $$e.dSYM; done
 
 # emacs flymake-mode
 check-syntax:
