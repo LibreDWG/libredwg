@@ -1189,8 +1189,9 @@ read_two_byte_offset (Bit_Chain *restrict dat,
 }
 
 /* Decompresses a system section of a 2004+ DWG file
+   from dat (length: comp_data_size) into pre-allocated decomp buffer.
  */
-static int
+int
 decompress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
                           uint32_t decomp_data_size, uint32_t comp_data_size)
 {
