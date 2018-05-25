@@ -163,9 +163,6 @@ static r2007_page* read_pages_map(Bit_Chain* dat, int64_t size_comp,
 static void read_file_header(Bit_Chain* dat, r2007_file_header *file_header);
 static void read_instructions(unsigned char **src, unsigned char *opcode,
                               uint32_t *offset, uint32_t *length);
-static char* copy_bytes_2(char *dst, char *src);
-static char* copy_bytes_3(char *dst, char *src);
-static char* copy_bytes_16(char *dst, char *src);
 static void  copy_bytes(char *dst, uint32_t length, uint32_t offset);
 static uint32_t read_literal_length(unsigned char **src, unsigned char opcode);
 static void copy_compressed_bytes(char *dst, char *src, int length);
@@ -175,49 +172,41 @@ static char* decode_rs(const char *src, int block_count, int data_size);
 static int  decompress_r2007(char *dst, int dst_size, char *src, int src_size);
 
 #define copy_1(offset) \
-*dst++ = *(src + offset);
+  *dst++ = *(src + offset);
 
 #define copy_2(offset) \
-dst = copy_bytes_2(dst, src + offset);
+  dst = copy_bytes_2(dst, src + offset);
 
 #define copy_3(offset) \
-dst = copy_bytes_3(dst, src + offset);
+  dst = copy_bytes_3(dst, src + offset)
 
-#define copy_4(offset) \
-*(uint32_t*)dst = *(uint32_t*)(src + offset); \
-dst += 4;
+// 4 and 8 is not reverse, 16 is
+#define copy_n(n, offset) \
+  memcpy(dst, &src[offset], n); \
+  dst += n
 
-#define copy_8(offset) \
-*(uint64_t*)dst = *(uint64_t*)(src + offset); \
-dst += 8;
-
+#define copy_4(offset)  copy_n(4, offset)
+#define copy_8(offset)  copy_n(8, offset)
 #define copy_16(offset) \
-dst = copy_bytes_16(dst, src + offset);
+  memcpy(dst, &src[offset + 8], 8); \
+  memcpy(&dst[8], &src[offset], 8); \
+  dst += 16
 
-
-static char*
-copy_bytes_2(char *dst, char *src)
+static inline char*
+copy_bytes_2(char *restrict dst, const char *restrict src)
 {
   dst[0] = src[1];
   dst[1] = src[0];
   return dst + 2;
 }
 
-static char*
-copy_bytes_3(char *dst, char *src)
+static inline char*
+copy_bytes_3(char *restrict dst, const char *restrict src)
 {
   dst[0] = src[2];
   dst[1] = src[1];
   dst[2] = src[0];
   return dst + 3;
-}
-
-static char*
-copy_bytes_16(char *dst, char *src)
-{
-  *(uint64_t*)dst = *(uint64_t*)(src + 8);
-  *(uint64_t*)(dst + 8) = *(uint64_t*)src;
-  return dst + 16;
 }
 
 static void
@@ -488,6 +477,7 @@ decompress_r2007(char *dst, int dst_size, char *src, int src_size)
   char *src_end = src + src_size;
 
   unsigned char opcode = *src++;
+  LOG_INSANE("decompress_r2007(%p %d %p %d)\n", dst, dst_size, src, src_size);
 
   if ((opcode & 0xf0) == 0x20)
     {
@@ -506,10 +496,11 @@ decompress_r2007(char *dst, int dst_size, char *src, int src_size)
         length = read_literal_length((unsigned char**)&src, opcode);
 
       if ((dst + length) > dst_end) {
-        LOG_ERROR("Decompression error: length overflow")
+        LOG_ERROR("Decompression error: length overflow");
         return 1;
       }
 
+      //LOG_INSANE("copy_compressed_bytes(%p %p %u)\n", dst, src, length);
       copy_compressed_bytes(dst, src, length);
 
       dst += length;
@@ -526,6 +517,11 @@ decompress_r2007(char *dst, int dst_size, char *src, int src_size)
 
       while (1)
         {
+          if ((dst + length) > dst_end) {
+            LOG_ERROR("Decompression error: length overflow");
+            return 1;
+          }
+          //LOG_INSANE("copy_bytes(%p %u %u)\n", dst, length, offset);
           copy_bytes(dst, length, offset);
 
           dst += length;
