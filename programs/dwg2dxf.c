@@ -149,7 +149,7 @@ main (int argc, char *argv[])
   printf("Writing DXF file %s", filename_out);
   if (version)
     {
-      fprintf(stderr, " as %s\n", version);
+      printf(" as %s\n", version);
       if (dwg.header.from_version != dwg.header.version)
         dwg.header.from_version = dwg.header.version;
       //else keep from_version = 0
