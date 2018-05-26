@@ -78,6 +78,10 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 
 #define FIELD_VALUE(name) _obj->name
 #define ANYCODE -1
+#define VALUE_HANDLE(value, handle_code, dxf) \
+  if (dxf && value) { \
+    fprintf(dat->fh, "%d\r\n%lX\r\n", dxf, value->absolute_ref); \
+  }
 #define FIELD_HANDLE(name, handle_code, dxf) \
   if (dxf && _obj->name) { \
     fprintf(dat->fh, "%d\r\n%lX\r\n", dxf, _obj->name->absolute_ref); \
@@ -85,7 +89,7 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 #define HEADER_9(name) \
     GROUP(9);\
     fprintf (dat->fh, "$%s\r\n", #name)
-#define VALUE_H(value,dxf) \
+#define VALUE_H(value, dxf) \
   {\
     Dwg_Object_Ref *ref = value;\
     if (ref && ref->obj) { VALUE_RS(ref->absolute_ref, dxf); }\
@@ -133,13 +137,19 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 
 #define HEADER_HANDLE_NAME(name, dxf, section) \
   HEADER_9(name);\
-  HANDLE_NAME(name, dxf, section)
-#define HANDLE_NAME(name, dxf, section) \
   {\
     Dwg_Object_Ref *ref = dwg->header_vars.name;\
     Dwg_Object *o = ref ? ref->obj : NULL;\
     dxf_write_handle(dat, o, o ? o->tio.object->tio.section->entry_name : (char*)"", dxf); \
   }
+
+//FIXME name 102 field for XRECORD
+#define HANDLE_NAME(id, dxf) \
+  { \
+    Dwg_Object_Ref *ref = id;\
+    Dwg_Object *o = ref ? ref->obj : NULL;\
+    dxf_write_handle(dat, o, o ? "" : (char*)"", dxf); \
+}
 
 #define FIELD_DATAHANDLE(name, code, dxf) FIELD_HANDLE(name, code, dxf)
 #define FIELD_HANDLE_N(name, vcount, handle_code, dxf) FIELD_HANDLE(name, handle_code, dxf)
@@ -369,6 +379,7 @@ dwg_dxf_ ##token (Bit_Chain *dat, Dwg_Object * obj) \
   /* RECORD(token); */ \
   LOG_INFO("Object " #token ":\n")\
   _obj = obj->tio.object->tio.token;\
+  fprintf(dat->fh, "%3i\r\n%lX\r\n", 5, obj->handle.value); \
   LOG_TRACE("Object handle: %d.%d.%lu\n",\
     obj->handle.code,\
     obj->handle.size,\

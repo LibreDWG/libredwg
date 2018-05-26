@@ -24,6 +24,10 @@
 #define IF_IS_ENCODER 0
 #define IF_IS_DECODER 0
 
+#ifndef VALUE_HANDLE
+#define VALUE_HANDLE(value, handle_code, dxf)
+#endif
+
 #ifdef IS_ENCODER
 #undef ENCODER
 #undef IF_IS_ENCODER

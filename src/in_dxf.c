@@ -132,8 +132,6 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 
 #define HEADER_HANDLE_NAME(name, dxf, section) \
   HEADER_9(name);\
-  HANDLE_NAME(name, dxf, section)
-#define HANDLE_NAME(name, dxf, section) \
   {\
     Dwg_Object_Ref *ref = dwg->header_vars.name;\
     snprintf (buf, 4096, "%3i\n%s\n", dxf, dxf_format (dxf));\
@@ -143,6 +141,13 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
       ? ref->obj->tio.object->tio.section->entry_name : ""); \
     GCC_DIAG_RESTORE \
   }
+//FIXME
+#define HANDLE_NAME(id, dxf) \
+  { \
+    Dwg_Object_Ref *ref = id;\
+    Dwg_Object *o = ref ? ref->obj : NULL;\
+    VALUE_TV("", dxf); \
+}
 
 #define FIELD_DATAHANDLE(name, code, dxf) FIELD_HANDLE(name, code, dxf)
 #define FIELD_HANDLE_N(name, vcount, handle_code, dxf) FIELD_HANDLE(name, handle_code, dxf)

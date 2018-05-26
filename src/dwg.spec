@@ -1622,14 +1622,14 @@ DWG_OBJECT(DICTIONARY)
   FIELD_BL (numitems, 0);
 
   VERSION(R_14)
-    FIELD_RC (hard_owner, 0); // always 0
+    FIELD_RC (hard_owner, 330); // always 0
   SINCE(R_2000)
     {
       IF_ENCODE_FROM_EARLIER {
         FIELD_VALUE(cloning) = FIELD_VALUE(hard_owner) & 0xffff;
       }
       FIELD_BS (cloning, 281);
-      FIELD_RC (hard_owner, 0);
+      FIELD_RC (hard_owner, 330);
     }
   if (FIELD_VALUE(numitems) > 10000)
     {
@@ -1637,16 +1637,31 @@ DWG_OBJECT(DICTIONARY)
               obj->handle.value);
       return;
     }
-  FIELD_VECTOR_T (text, numitems, 0);
+
+#ifdef IS_DXF
+    VALUE_TV("AcDbDictionary", 100)
+    if (FIELD_VALUE(itemhandles) && FIELD_VALUE(text)) {
+      REPEAT(numitems, text, T)
+      {
+        FIELD_T (text[rcount], 3);
+        VALUE_HANDLE (_obj->itemhandles[rcount], 2, 350);
+      }
+    }
+    END_REPEAT(text)
+#else
+  FIELD_VECTOR_T (text, numitems, 3);
+#endif
 
   START_HANDLE_STREAM;
   FIELD_HANDLE (parenthandle, 4, 0);
   REACTORS(4);
   XDICOBJHANDLE(3);
+#ifndef IS_DXF
   SINCE(R_2000)
     {
-      HANDLE_VECTOR(itemhandles, numitems, 2, 0);
+      HANDLE_VECTOR(itemhandles, numitems, 2, 350);
     }
+#endif
 
 DWG_ENTITY_END
 
@@ -4509,6 +4524,9 @@ DWG_OBJECT_END
 //(79 + varies) pg.247 20.4.104
 DWG_OBJECT(XRECORD)
 
+#ifdef IS_DXF
+  VALUE_TV ("AcDbXrecord", 100);
+#endif
   FIELD_BL (num_databytes, 0);
   FIELD_XDATA (xdata, num_databytes);
 
@@ -4540,6 +4558,14 @@ DWG_OBJECT(XRECORD)
     }
     #ifndef IS_DECODER
       HANDLE_VECTOR(objid_handles, num_objid_handles, 4, 0);
+    #endif
+    #ifdef IS_DXF
+    if (FIELD_VALUE(objid_handles)) {
+      REPEAT(objid_handles, num_objid_handles, T)
+        HANDLE_NAME (_obj->objid_handles[rcount], 102);
+        VALUE_H (_obj->objid_handles[rcount], 340);
+      END_REPEAT(objid_handles)
+    }
     #endif
 
 DWG_OBJECT_END
