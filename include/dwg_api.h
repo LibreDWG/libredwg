@@ -1285,10 +1285,7 @@ dwg_ent_insert_has_attribs(dwg_ent_insert *insert, int *error);
 BITCODE_BL
 dwg_ent_insert_get_num_owned(const dwg_ent_insert *insert, int *error);
 
-void
-dwg_ent_insert_set_num_owned(dwg_ent_insert *insert, BITCODE_BL count,
-                                   int *error);
-
+//TODO dwg_ent_insert_add_owned, dwg_ent_insert_delete_owned
 
 /********************************************************************
 *                  FUNCTIONS FOR MINSERT ENTITY                     *
@@ -1339,23 +1336,16 @@ dwg_ent_minsert_has_attribs(dwg_ent_minsert *minsert, int *error);
 BITCODE_BL
 dwg_ent_minsert_get_num_owned(const dwg_ent_minsert *minsert, int *error);
 
-void
-dwg_ent_minsert_set_num_owned(dwg_ent_minsert *minsert, BITCODE_BL count,
-                                    int *error);
+//TODO dwg_ent_minsert_add_owned, dwg_ent_insert_delete_owned
 
 BITCODE_BL
 dwg_ent_minsert_get_numcols(const dwg_ent_minsert *minsert, int *error);
 
-void
-dwg_ent_minsert_set_numcols(dwg_ent_minsert *minsert, BITCODE_BL cols,
-                            int *error);
-
 BITCODE_BL
 dwg_ent_minsert_get_numrows(const dwg_ent_minsert *minsert, int *error);
 
-void
-dwg_ent_minsert_set_numrows(dwg_ent_minsert *minsert, BITCODE_BL cols,
-                            int *error);
+//TODO dwg_ent_minsert_add_row, dwg_ent_insert_delete_row
+//TODO dwg_ent_minsert_add_col, dwg_ent_insert_delete_col
 
 BITCODE_BD
 dwg_ent_minsert_get_col_spacing(const dwg_ent_minsert *minsert, int *error);
@@ -1414,11 +1404,6 @@ dwg_obj_mlinestyle_set_end_angle(dwg_obj_mlinestyle *mlinestyle,
 char
 dwg_obj_mlinestyle_get_num_lines(const dwg_obj_mlinestyle *mlinestyle,
                                     int *error);
-
-void
-dwg_obj_mlinestyle_set_num_lines(dwg_obj_mlinestyle *mlinestyle,
-                                 char num_lines, int *error);
-
 
 /********************************************************************
 *               FUNCTIONS FOR APPID_CONTROL OBJECT                  *
@@ -2019,9 +2004,6 @@ BITCODE_BL
 dwg_ent_leader_get_numpts(const dwg_ent_leader *leader, int *error);
 
 void
-dwg_ent_leader_set_numpts(dwg_ent_leader *leader, BITCODE_BL numpts, int *error);
-
-void
 dwg_ent_leader_set_origin(dwg_ent_leader *leader, dwg_point_3d *point,
                           int *error);
 
@@ -2353,9 +2335,7 @@ dwg_ent_spline_set_ctrl_tol(dwg_ent_spline *spline, BITCODE_BD ctrl_tol,
 BITCODE_BS
 dwg_ent_spline_get_num_fit_pts(const dwg_ent_spline *spline, int *error);
 
-void
-dwg_ent_spline_set_num_fit_pts(dwg_ent_spline *spline, BITCODE_BS num_fit_pts,
-                                  int *error);
+//TODO: dwg_ent_spline_add_fit_pts, dwg_ent_spline_delete_fit_pts
 
 char
 dwg_ent_spline_get_rational(const dwg_ent_spline *spline, int *error);
@@ -2388,18 +2368,15 @@ dwg_ent_spline_set_periodic(dwg_ent_spline *spline, char periodic,
 BITCODE_BL
 dwg_ent_spline_get_num_knots(const dwg_ent_spline *spline, int *error);
 
-void
-dwg_ent_spline_set_num_knots(dwg_ent_spline *spline, BITCODE_BL nums, int *error);
+//TODO: dwg_ent_spline_add_knots, dwg_ent_spline_delete_knots
 
 BITCODE_BL
 dwg_ent_spline_get_num_ctrl_pts(const dwg_ent_spline *spline, int *error);
 
-void
-dwg_ent_spline_set_num_ctrl_pts(dwg_ent_spline *spline, BITCODE_BL nums,
-                                   int *error);
+//TODO: dwg_ent_spline_add_ctrl_pts, dwg_ent_spline_delete_ctrl_pts
 
 dwg_ent_spline_point *
-dwg_ent_spline_get_fit_points(const dwg_ent_spline *spline, int *error);
+dwg_ent_spline_get_fit_pts(const dwg_ent_spline *spline, int *error);
 
 dwg_ent_spline_control_point *
 dwg_ent_spline_get_ctrl_pts(const dwg_ent_spline *spline, int *error);
@@ -2689,17 +2666,9 @@ BITCODE_BS
 dwg_ent_polyline_mesh_get_num_m_verts(const dwg_ent_polyline_mesh *mesh,
                                        int *error);
 
-void
-dwg_ent_polyline_mesh_set_num_m_verts(dwg_ent_polyline_mesh *mesh,
-                                       BITCODE_BS num_m_verts, int *error);
-
 BITCODE_BS
 dwg_ent_polyline_mesh_get_num_n_verts(const dwg_ent_polyline_mesh *mesh,
                                        int *error);
-
-void
-dwg_ent_polyline_mesh_set_num_n_verts(dwg_ent_polyline_mesh *mesh,
-                                       BITCODE_BS num_n_verts, int *error);
 
 BITCODE_BS
 dwg_ent_polyline_mesh_get_m_density(const dwg_ent_polyline_mesh *mesh, int *error);
@@ -2719,9 +2688,7 @@ BITCODE_BL
 dwg_ent_polyline_mesh_get_num_owned(const dwg_ent_polyline_mesh *mesh,
                                           int *error);
 
-void
-dwg_ent_polyline_mesh_set_num_owned(dwg_ent_polyline_mesh *mesh,
-                                          BITCODE_BL num_owned, int *error);
+//TODO dwg_ent_*_add_owned, dwg_ent_insert_delete_owned
 
 
 /********************************************************************
@@ -2963,9 +2930,6 @@ dwg_ent_image_set_boundary_pt1(dwg_ent_image *image, dwg_point_2d *point,
 BITCODE_BD
 dwg_ent_image_get_num_clip_verts(const dwg_ent_image *image, int *error);
 
-void
-dwg_ent_image_set_num_clip_verts(dwg_ent_image *image, BITCODE_BD num, int *error);
-
 BITCODE_2RD *
 dwg_ent_image_get_clip_verts(const dwg_ent_image *image, int *error);
 
@@ -3010,15 +2974,8 @@ dwg_ent_mline_set_flags(dwg_ent_mline *mline, BITCODE_BS oc,
 BITCODE_BS
 dwg_ent_mline_get_flags(const dwg_ent_mline *mline, int *error);
 
-void
-dwg_ent_mline_set_num_lines(dwg_ent_mline *mline, BITCODE_RC num, int *error);
-
 BITCODE_RC
 dwg_ent_mline_get_num_lines(const dwg_ent_mline *mline, int *error);
-
-void
-dwg_ent_mline_set_num_verts(dwg_ent_mline *mline, BITCODE_BS num,
-                            int *error);
 
 BITCODE_BS
 dwg_ent_mline_get_num_verts(const dwg_ent_mline *mline, int *error);
@@ -3098,18 +3055,11 @@ dwg_ent_3dsolid_set_isoline_present(dwg_ent_3dsolid *_3dsolid, char iso,
 BITCODE_BL
 dwg_ent_3dsolid_get_num_wires(const dwg_ent_3dsolid *_3dsolid, int *error);
 
-void
-dwg_ent_3dsolid_set_num_wires(dwg_ent_3dsolid *_3dsolid, BITCODE_BL num, int *error);
-
 dwg_ent_solid_wire *
 dwg_ent_3dsolid_get_wire(const dwg_ent_3dsolid *_3dsolid, int *error);
 
 BITCODE_BL
 dwg_ent_3dsolid_get_num_silhouettes(const dwg_ent_3dsolid *_3dsolid, int *error);
-
-void
-dwg_ent_3dsolid_set_num_silhouettes(dwg_ent_3dsolid *_3dsolid,
-                                    BITCODE_BL silhouettes, int *error);
 
 dwg_ent_solid_silhouette *
 dwg_ent_3dsolid_get_silhouette(const dwg_ent_3dsolid *_3dsolid, int *error);
@@ -3188,18 +3138,11 @@ dwg_ent_region_set_isoline_present(dwg_ent_region *region, char iso,
 BITCODE_BL
 dwg_ent_region_get_num_wires(const dwg_ent_region *region, int *error);
 
-void
-dwg_ent_region_set_num_wires(dwg_ent_region *region, BITCODE_BL num, int *error);
-
 dwg_ent_solid_wire *
 dwg_ent_region_get_wire(const dwg_ent_region *region, int *error);
 
 BITCODE_BL
 dwg_ent_region_get_num_silhouettes(const dwg_ent_region *region, int *error);
-
-void
-dwg_ent_region_set_num_silhouettes(dwg_ent_region *region, BITCODE_BL silhouettes,
-                                   int *error);
 
 dwg_ent_solid_silhouette *
 dwg_ent_region_get_silhouette(const dwg_ent_region *region, int *error);
@@ -3273,18 +3216,11 @@ dwg_ent_body_set_isoline_present(dwg_ent_body *body, char iso, int *error);
 BITCODE_BL
 dwg_ent_body_get_num_wires(const dwg_ent_body *body, int *error);
 
-void
-dwg_ent_body_set_num_wires(dwg_ent_body *body, BITCODE_BL num, int *error);
-
 dwg_ent_solid_wire *
 dwg_ent_body_get_wire(const dwg_ent_body *body, int *error);
 
 BITCODE_BL
 dwg_ent_body_get_num_silhouettes(const dwg_ent_body *body, int *error);
-
-void
-dwg_ent_body_set_num_silhouettes(dwg_ent_body *body, BITCODE_BL silhouettes,
-                                 int *error);
 
 dwg_ent_solid_silhouette *
 dwg_ent_body_get_silhouette(const dwg_ent_body *body, int *error);
@@ -3342,12 +3278,10 @@ dwg_ent_table_get_extrusion(const dwg_ent_table *table, dwg_point_3d *point,
 unsigned char
 dwg_ent_table_has_attribs(dwg_ent_table *table, int *error);
 
-void
-dwg_ent_table_set_num_owned(dwg_ent_table *table, BITCODE_BL count,
-                                     int *error);
-
 BITCODE_BL
 dwg_ent_table_get_num_owned(const dwg_ent_table *table, int *error);
+
+//TODO dwg_ent_*_add_owned, dwg_ent_insert_delete_owned
 
 void
 dwg_ent_table_set_flag_for_table_value(dwg_ent_table *table,
@@ -3364,14 +3298,8 @@ void
 dwg_ent_table_get_horiz_direction(const dwg_ent_table *table, dwg_point_3d *point,
                                   int *error);
 
-void
-dwg_ent_table_set_num_cols(dwg_ent_table *table, BITCODE_BL num, int *error);
-
 BITCODE_BL
 dwg_ent_table_get_num_cols(const dwg_ent_table *table, int *error);
-
-void
-dwg_ent_table_set_num_rows(dwg_ent_table *table, BITCODE_BL num, int *error);
 
 BITCODE_BL
 dwg_ent_table_get_num_rows(const dwg_ent_table *table, int *error);
@@ -3866,9 +3794,6 @@ dwg_obj_block_control_get_paper_space(const dwg_obj_block_control *ctrl, int *er
 
 BITCODE_BL
 dwg_obj_xrecord_get_num_databytes(const dwg_obj_xrecord *xrecord, int *error);
-void
-dwg_obj_xrecord_set_num_databytes(dwg_obj_xrecord *xrecord, BITCODE_BL num_databytes,
-                                  int *error);
 
 BITCODE_BS
 dwg_obj_xrecord_get_cloning_flags(const dwg_obj_xrecord *xrecord, int *error);
@@ -3877,9 +3802,6 @@ dwg_obj_xrecord_set_cloning_flags(dwg_obj_xrecord *xrecord, BITCODE_BS cloning_f
                                   int *error);
 BITCODE_BL
 dwg_obj_xrecord_get_num_eed(const dwg_obj_xrecord *xrecord, int *error);
-void
-dwg_obj_xrecord_set_num_eed(dwg_obj_xrecord *xrecord, BITCODE_BL num_eed,
-                            int *error);
 
 //Dwg_Eed*
 //dwg_obj_xrecord_get_eed(const dwg_obj_xrecord *xrecord, BITCODE_BL index, int *error);

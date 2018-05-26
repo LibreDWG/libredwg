@@ -4402,28 +4402,8 @@ dwg_ent_insert_get_num_owned(const dwg_ent_insert *insert, int *error)
     }
 }
 
-/// Sets the owned object count of insert.
 /// FIXME needs to adjust handle array instead: add/delete
-/** Usage : dwg_ent_insert_set_num_owned(insert, 20, &error);
-\param 1 dwg_ent_insert
-\param 2 BITCODE_BL
-\param 3 int
-*/
-void
-dwg_ent_insert_set_num_owned(dwg_ent_insert *insert, BITCODE_BL count,
-                             int *error)
-{
-  if (insert != 0)
-    {
-      *error = 0;
-      insert->num_owned = count;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty insert", __FUNCTION__)
-      *error = 1;
-    }
-}
+// TODO dwg_ent_insert_add_owned, dwg_ent_insert_delete_owned
 
 /// Returns the ref handle.
 /** Usage : dwg_obj_ref* handle = dwg_ent_insert_get_ref_handle(insert, &error);
@@ -4746,26 +4726,10 @@ dwg_ent_minsert_get_num_owned(const dwg_ent_minsert *minsert, int *error)
 
 /// Sets the owned object count of minsert.
 /// FIXME needs to adjust attrib_handles array: add/delete
-/** Usage : dwg_ent_minsert_set_num_owned(minsert, 20, &error);
-\param 1 dwg_ent_insert
-\param 2 BITCODE_BL
-\param 3 int
-*/
-void
-dwg_ent_minsert_set_num_owned(dwg_ent_minsert *minsert, BITCODE_BL count,
-                              int *error)
-{
-  if (minsert != 0)
-    {
-      *error = 0;
-      minsert->num_owned = count;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
+
+// TODO dwg_ent_minsert_add_owned, dwg_ent_minsert_delete_owned
+// TODO dwg_ent_minsert_add_row, dwg_ent_insert_delete_row
+// TODO dwg_ent_minsert_add_col, dwg_ent_insert_delete_col
 
 /// Returns the num cols of minsert
 /** Usage : BITCODE_BL num_cols = dwg_ent_minsert_get_numcols(minsert, &error);
@@ -4788,27 +4752,6 @@ dwg_ent_minsert_get_numcols(const dwg_ent_minsert *minsert, int *error)
     }
 }
 
-/// Sets the number of columns of minsert.
-/** Usage : dwg_ent_minsert_set_numcols(minsert, 20, &error);
-\param 1 dwg_ent_insert
-\param 2 BITCODE_BL
-\param 3 int
-*/
-void
-dwg_ent_minsert_set_numcols(dwg_ent_minsert *minsert, BITCODE_BL cols, int *error)
-{
-  if (minsert != 0)
-    {
-      *error = 0;
-      minsert->numcols = cols;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
 /// Returns the number of rows of minsert
 /** Usage : BITCODE_BL num_rows = dwg_ent_minsert_get_numrows(minsert, &error);
 \param 1 dwg_ent_minsert
@@ -4827,27 +4770,6 @@ dwg_ent_minsert_get_numrows(const dwg_ent_minsert *minsert, int *error)
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
       return 0L;
-    }
-}
-
-/// Sets the number of rows of minsert.
-/** Usage : dwg_ent_minsert_set_numrows(minsert, 20, &error);
-\param 1 dwg_ent_insert
-\param 2 BITCODE_BL
-\param 3 int
-*/
-void
-dwg_ent_minsert_set_numrows(dwg_ent_minsert *minsert, BITCODE_BL cols, int *error)
-{
-  if (minsert != 0)
-    {
-      *error = 0;
-      minsert->numrows = cols;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -5187,28 +5109,6 @@ dwg_obj_mlinestyle_get_num_lines(const dwg_obj_mlinestyle *mlinestyle,
       LOG_ERROR("%s: empty mlinestyle", __FUNCTION__)
       *error = 1;
       return '\0';
-    }
-}
-
-/// Sets the lines in style of mlinestyle
-/** Usage : dwg_obj_mlinestyle_get_num_lines(mlinestyle, linestyle, &error);
-\param 1 dwg_obj_mlinestyle
-\param 2 char
-\param 3 int
-*/
-void
-dwg_obj_mlinestyle_set_num_lines(dwg_obj_mlinestyle *mlinestyle,
-                                 char num_lines, int *error)
-{
-  if (mlinestyle != 0)
-    {
-      *error = 0;
-      mlinestyle->num_lines = num_lines;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty mlinestyle", __FUNCTION__)
-      *error = 1;
     }
 }
 
@@ -8284,22 +8184,7 @@ dwg_ent_leader_get_numpts(const dwg_ent_leader *leader, int *error)
     }
 }
 
-/// Sets leader numpts
-void
-dwg_ent_leader_set_numpts(dwg_ent_leader *leader, BITCODE_BL numpts, int *error)
-{
-  if (leader != 0)
-    {
-      *error = 0;
-      leader->numpts = numpts;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-
-}
+//TODO: dwg_ent_leader_add_point, dwg_ent_leader_delete_pts
 
 /// Sets leader end point proj
 void
@@ -9608,22 +9493,6 @@ dwg_obj_xrecord_get_num_databytes(const dwg_obj_xrecord *xrecord, int *error)
     }
 }
 
-void
-dwg_obj_xrecord_set_num_databytes(dwg_obj_xrecord *xrecord, BITCODE_BL num_databytes,
-                                  int *error)
-{
-  if (xrecord != 0)
-    {
-      *error = 0;
-      xrecord->num_databytes = num_databytes;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
 BITCODE_BS
 dwg_obj_xrecord_get_cloning_flags(const dwg_obj_xrecord *xrecord, int *error)
 {
@@ -9669,23 +9538,6 @@ dwg_obj_xrecord_get_num_eed(const dwg_obj_xrecord *xrecord, int *error)
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
       return 0U;
-    }
-}
-
-void
-dwg_obj_xrecord_set_num_eed(dwg_obj_xrecord *xrecord,
-                            BITCODE_BL num_eed,
-                            int *error)
-{
-  if (xrecord != 0)
-    {
-      *error = 0;
-      xrecord->num_eed = num_eed;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -10051,23 +9903,6 @@ dwg_ent_spline_get_num_fit_pts(const dwg_ent_spline *spline, int *error)
     }
 }
 
-/// Sets number of fit points
-void
-dwg_ent_spline_set_num_fit_pts(dwg_ent_spline *spline, BITCODE_BS num_fit_pts,
-                               int *error)
-{
-  if (spline != 0)
-    {
-      *error = 0;
-      spline->num_fit_pts = num_fit_pts;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
 /// Returns spline rational
 char
 dwg_ent_spline_get_rational(const dwg_ent_spline *spline, int *error)
@@ -10221,21 +10056,9 @@ dwg_ent_spline_get_num_knots(const dwg_ent_spline *spline, int *error)
     }
 }
 
-/// Sets spline knots number
-void
-dwg_ent_spline_set_num_knots(dwg_ent_spline *spline, BITCODE_BL nums, int *error)
-{
-  if (spline != 0)
-    {
-      *error = 0;
-      spline->num_knots = nums;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
+//TODO: dwg_ent_spline_add_fit_pts, dwg_ent_spline_delete_fit_pts
+//TODO: dwg_ent_spline_add_knots, dwg_ent_spline_delete_knots
+//TODO: dwg_ent_spline_add_ctrl_pts, dwg_ent_spline_delete_ctrl_pts
 
 /// Returns spline control points number
 BITCODE_BL
@@ -10254,26 +10077,9 @@ dwg_ent_spline_get_num_ctrl_pts(const dwg_ent_spline *spline, int *error)
     }
 }
 
-/// Sets spline control points number
-void
-dwg_ent_spline_set_num_ctrl_pts(dwg_ent_spline *spline, BITCODE_BL nums,
-                                int *error)
-{
-  if (spline != 0)
-    {
-      *error = 0;
-      spline->num_ctrl_pts = nums;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns spline fit points
+/// Return all spline fit points
 dwg_ent_spline_point *
-dwg_ent_spline_get_fit_points(const dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_fit_pts(const dwg_ent_spline *spline, int *error)
 {
   dwg_ent_spline_point *ptx = (dwg_ent_spline_point*)
     malloc(sizeof(dwg_ent_spline_point)* spline->num_fit_pts);
@@ -10501,7 +10307,7 @@ dwg_ent_viewport_get_num_frozen_layers(const dwg_ent_viewport *vp, int *error)
     }
 }
 
-/// Sets viewport frozen layer count
+/// Sets viewport frozen layer count (apparently safe to set)
 void
 dwg_ent_viewport_set_num_frozen_layers(dwg_ent_viewport *vp, BITCODE_BL count,
                                         int *error)
@@ -11646,23 +11452,7 @@ dwg_ent_polyline_mesh_get_num_m_verts(const dwg_ent_polyline_mesh *mesh,
     }
 }
 
-/// Sets polyline mesh M vert count
-/// FIXME: rather provide add/delete
-void
-dwg_ent_polyline_mesh_set_num_m_verts(dwg_ent_polyline_mesh *mesh,
-                                      BITCODE_BS num_m_verts, int *error)
-{
-  if (mesh != 0)
-    {
-      *error = 0;
-      mesh->num_m_verts = num_m_verts;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      *error = 1;
-    }
-}
+/// TODO: dwg_ent_polyline_mesh_add_{m,n}_vert, dwg_ent_polyline_mesh_delete_{m,n}_vert
 
 /// Returns polyline mesh n vert count
 BITCODE_BS
@@ -11679,24 +11469,6 @@ dwg_ent_polyline_mesh_get_num_n_verts(const dwg_ent_polyline_mesh *mesh,
       LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
       return 0;
-    }
-}
-
-/// Sets polyline mesh n vert count
-/// FIXME: rather provide add/delete
-void
-dwg_ent_polyline_mesh_set_num_n_verts(dwg_ent_polyline_mesh *mesh,
-                                       BITCODE_BS num_n_verts, int *error)
-{
-  if (mesh != 0)
-    {
-      *error = 0;
-      mesh->num_n_verts = num_n_verts;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      *error = 1;
     }
 }
 
@@ -11783,24 +11555,6 @@ dwg_ent_polyline_mesh_get_num_owned(const dwg_ent_polyline_mesh *mesh,
       LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
       return 0L;
-    }
-}
-
-/// Sets polyline mesh owned object count
-/// FIXME needs to adjust vertex array: add/delete
-void
-dwg_ent_polyline_mesh_set_num_owned(dwg_ent_polyline_mesh *mesh,
-                                    BITCODE_BL num_owned, int *error)
-{
-  if (mesh != 0)
-    {
-      *error = 0;
-      mesh->num_owned = num_owned;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      *error = 1;
     }
 }
 
@@ -13144,22 +12898,6 @@ dwg_ent_image_get_num_clip_verts(const dwg_ent_image *image, int *error)
     }
 }
 
-/// Sets number of clip verts
-void
-dwg_ent_image_set_num_clip_verts(dwg_ent_image *image, BITCODE_BD num, int *error)
-{
-  if (image != 0)
-    {
-      *error = 0;
-      image->num_clip_verts = num;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
 /// Returns image clip verts
 BITCODE_2RD *
 dwg_ent_image_get_clip_verts(const dwg_ent_image *image, int *error)
@@ -13364,22 +13102,6 @@ dwg_ent_mline_get_flags(const dwg_ent_mline *mline, int *error)
     }
 }
 
-/// Sets number of lines
-void
-dwg_ent_mline_set_num_lines(dwg_ent_mline *mline, BITCODE_RC num, int *error)
-{
-  if (mline != 0)
-    {
-      *error = 0;
-      mline->num_lines = num;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
 /// Returns number of lines
 BITCODE_RC
 dwg_ent_mline_get_num_lines(const dwg_ent_mline *mline, int *error)
@@ -13394,23 +13116,6 @@ dwg_ent_mline_get_num_lines(const dwg_ent_mline *mline, int *error)
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
       return '\0';
-    }
-}
-
-/// Sets number of vertices
-void
-dwg_ent_mline_set_num_verts(dwg_ent_mline *mline, BITCODE_BS num,
-                            int *error)
-{
-  if (mline != 0)
-    {
-      *error = 0;
-      mline->num_verts = num;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -13739,7 +13444,7 @@ dwg_ent_3dsolid_get_num_isolines(const dwg_ent_3dsolid *_3dsolid, int *error)
     }
 }
 
-/// Sets number of isolines
+/// Sets number of isolines (apparently safe to set)
 void
 dwg_ent_3dsolid_set_num_isolines(dwg_ent_3dsolid *_3dsolid, BITCODE_BL num,
                                  int *error)
@@ -13807,23 +13512,8 @@ dwg_ent_3dsolid_get_num_wires(const dwg_ent_3dsolid *_3dsolid, int *error)
     }
 }
 
-  /// Sets number of wires
-void
-dwg_ent_3dsolid_set_num_wires(dwg_ent_3dsolid *_3dsolid, BITCODE_BL num, int *error)
-{
-  if (_3dsolid != 0)
-    {
-      *error = 0;
-      _3dsolid->num_wires = num;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
 
-/// Returns wire
+/// Returns all wires
 dwg_ent_solid_wire *
 dwg_ent_3dsolid_get_wire(const dwg_ent_3dsolid *_3dsolid, int *error)
 {
@@ -13864,24 +13554,8 @@ dwg_ent_3dsolid_get_num_silhouettes(const dwg_ent_3dsolid *_3dsolid, int *error)
     }
 }
 
-/// Sets number of silhouettes
-void
-dwg_ent_3dsolid_set_num_silhouettes(dwg_ent_3dsolid *_3dsolid,
-                                    BITCODE_BL silhouettes, int *error)
-{
-  if (_3dsolid != 0)
-    {
-      *error = 0;
-      _3dsolid->num_silhouettes = silhouettes;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-  }
 
-/// Returns silhouette
+/// Returns all silhouettes
 dwg_ent_solid_silhouette *
 dwg_ent_3dsolid_get_silhouette(const dwg_ent_3dsolid *_3dsolid, int *error)
 {
@@ -14185,7 +13859,7 @@ dwg_ent_region_get_num_isolines(const dwg_ent_region *region, int *error)
     }
 }
 
-/// Sets number of isolines
+/// Sets number of isolines (apparently safe to set)
 void
 dwg_ent_region_set_num_isolines(dwg_ent_region *region, BITCODE_BL num, int *error)
 {
@@ -14252,21 +13926,7 @@ dwg_ent_region_get_num_wires(const dwg_ent_region *region, int *error)
     }
 }
 
-/// Sets number of wires
-void
-dwg_ent_region_set_num_wires(dwg_ent_region *region, BITCODE_BL num, int *error)
-{
-  if (region != 0)
-    {
-      *error = 0;
-      region->num_wires = num;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
+//TODO dwg_ent_region_add_wire, dwg_ent_region_delete_wire
 
 /// Returns wire
 dwg_ent_solid_wire *
@@ -14309,22 +13969,7 @@ dwg_ent_region_get_num_silhouettes(const dwg_ent_region *region, int *error)
     }
 }
 
-/// Sets number of silhouettes
-void
-dwg_ent_region_set_num_silhouettes(dwg_ent_region *region, BITCODE_BL silhouettes,
-                                   int *error)
-{
-  if (region != 0)
-    {
-      *error = 0;
-      region->num_silhouettes = silhouettes;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
+//TODO dwg_ent_region_add_silhouette, dwg_ent_region_delete_silhouette
 
 /// Returns silhouette
 dwg_ent_solid_silhouette *
@@ -14624,7 +14269,7 @@ dwg_ent_body_get_num_isolines(const dwg_ent_body *body, int *error)
     }
 }
 
-/// Sets number of isolines
+/// Sets number of isolines (apparently safe to set)
 void
 dwg_ent_body_set_num_isolines(dwg_ent_body *body, BITCODE_BL num, int *error)
 {
@@ -14690,22 +14335,6 @@ dwg_ent_body_get_num_wires(const dwg_ent_body *body, int *error)
     }
 }
 
-/// Sets number of wires
-void
-dwg_ent_body_set_num_wires(dwg_ent_body *body, BITCODE_BL num, int *error)
-{
-  if (body != 0)
-    {
-      *error = 0;
-      body->num_wires = num;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
 /// Returns wire of body
 dwg_ent_solid_wire *
 dwg_ent_body_get_wire(const dwg_ent_body *body, int *error)
@@ -14744,23 +14373,6 @@ dwg_ent_body_get_num_silhouettes(const dwg_ent_body *body, int *error)
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
       return 0L;
-    }
-}
-
-/// Sets number of silhouettes
-void
-dwg_ent_body_set_num_silhouettes(dwg_ent_body *body, BITCODE_BL silhouettes,
-                                 int *error)
-{
-  if (body != 0)
-    {
-      *error = 0;
-      body->num_silhouettes = silhouettes;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -15024,23 +14636,8 @@ dwg_ent_table_has_attribs(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets owned object count
-/// FIXME needs to adjust handle array instead: add/delete
-void
-dwg_ent_table_set_num_owned(dwg_ent_table *table, BITCODE_BL count,
-                            int *error)
-{
-  if (table != 0)
-    {
-      *error = 0;
-      table->num_owned = count;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
+/// needs to adjust handle array: add/delete
+//  TODO dwg_ent_table_add_owned, dwg_ent_table_delete_owned
 
 /// Returns owned object count
 BITCODE_BL
@@ -15132,22 +14729,6 @@ dwg_ent_table_get_horiz_direction(const dwg_ent_table *table, dwg_point_3d *poin
     }
 }
 
-/// Sets number of columns
-void
-dwg_ent_table_set_num_cols(dwg_ent_table *table, BITCODE_BL num, int *error)
-{
-  if (table != 0)
-    {
-      *error = 0;
-      table->num_cols = num;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
 /// Returns number of columns
 BITCODE_BL
 dwg_ent_table_get_num_cols(const dwg_ent_table *table, int *error)
@@ -15162,22 +14743,6 @@ dwg_ent_table_get_num_cols(const dwg_ent_table *table, int *error)
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
       return 0L;
-    }
-}
-
-/// Sets number of rows
-void
-dwg_ent_table_set_num_rows(dwg_ent_table *table, BITCODE_BL num, int *error)
-{
-  if (table != 0)
-    {
-      *error = 0;
-      table->num_rows = num;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -15197,6 +14762,10 @@ dwg_ent_table_get_num_rows(const dwg_ent_table *table, int *error)
       return 0L;
     }
 }
+
+//  TODO dwg_ent_table_add_col, dwg_ent_table_delete_col
+//  TODO dwg_ent_table_add_row, dwg_ent_table_delete_row
+
 
 /// Returns column widths
 double *
