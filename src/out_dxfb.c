@@ -229,10 +229,12 @@ static void dxfb_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 
 #define HANDLE_NAME(name, code, section) \
   VALUE_HANDLE_NAME(dwg->header_vars.name, dxf, section)
+//TODO: convert STANDARD to Standard?
 #define VALUE_HANDLE_NAME(value,dxf,section)\
   {\
     Dwg_Object_Ref *ref = value;\
-    if (ref && ref->obj) { VALUE_TV(ref->obj->tio.object->tio.section->entry_name, dxf);} \
+    if (ref && ref->obj && ref->obj->supertype == DWG_SUPERTYPE_OBJECT) { \
+      VALUE_TV(ref->obj->tio.object->tio.section->entry_name, dxf);} \
     else VALUE_TV("", dxf);\
   }
 #define FIELD_HANDLE_NAME(name,dxf,section) VALUE_HANDLE_NAME(_obj->name,dxf,section)

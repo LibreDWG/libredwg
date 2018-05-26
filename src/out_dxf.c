@@ -136,19 +136,8 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 #define HANDLE_NAME(name, dxf, section) \
   {\
     Dwg_Object_Ref *ref = dwg->header_vars.name;\
-    /*if (ref && !ref->obj) ref->obj = dwg_resolve_handle(dwg, ref->absolute_ref); */ \
     if (ref && ref->obj) \
-      { \
-        if (ref->obj->tio.object->tio.section->entry_name && \
-            !strcmp(ref->obj->tio.object->tio.section->entry_name, "STANDARD")) \
-            fprintf(dat->fh, "%3i\r\nStandard\r\n", dxf); \
-        else \
-            fprintf(dat->fh, "%3i\r\n%s\r\n", dxf, \
-                    ref->obj->tio.object->tio.section->entry_name); \
-      } \
-    else { \
-      fprintf(dat->fh, "%3i\r\n\r\n", dxf); \
-    } \
+      dxf_write_handle(dat, ref, ref->obj->tio.object->tio.section->entry_name, dxf); \
   }
 
 #define FIELD_DATAHANDLE(name, code, dxf) FIELD_HANDLE(name, code, dxf)
@@ -385,6 +374,29 @@ dwg_dxf_ ##token (Bit_Chain *dat, Dwg_Object * obj) \
     obj->handle.value)
 
 #define DWG_OBJECT_END }
+
+// r2000+ converts STANDARD to Standard, BYLAYER to ByLayer, BYBLOCK to ByBlock
+static void
+dxf_write_handle(Bit_Chain *dat, Dwg_Object_Ref *ref, char* entry_name, int dxf)
+{
+  /* ref objects are already all resolved */
+  /*if (ref && !ref->obj) ref->obj = dwg_resolve_handle(dwg, ref->absolute_ref); */
+  if (ref->obj->supertype == DWG_SUPERTYPE_OBJECT && entry_name)
+    {
+      //TODO: r2007+ unicode names
+      if (dat->version >= R_2000 && !strcmp(entry_name, "STANDARD"))
+        fprintf(dat->fh, "%3i\r\nStandard\r\n", dxf);
+      else if (dat->version >= R_2000 && !strcmp(entry_name, "BYLAYER"))
+        fprintf(dat->fh, "%3i\r\nByLayer\r\n", dxf);
+      else if (dat->version >= R_2000 && !strcmp(entry_name, "BYBLOCK"))
+        fprintf(dat->fh, "%3i\r\nByBlock\r\n", dxf);
+      else
+        fprintf(dat->fh, "%3i\r\n%s\r\n", dxf, entry_name);
+    }
+  else {
+    fprintf(dat->fh, "%3i\r\n\r\n", dxf);
+  }
+}
 
 //TODO
 #define COMMON_TABLE_CONTROL_FLAGS(owner) \
