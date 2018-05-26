@@ -112,7 +112,10 @@ if test -f cmp_dxf.pl ; then
         base=$(basename $dwg .dwg)
         run dwg2dxf $dwg
         if [ -f ${datadir}/$dwg.dxf ]; then
-            diff -bu ${datadir}/$dwg.dxf $base.dxf | perl cmp_dxf.pl
+            perl filt_dxf.pl ${datadir}/$dwg.dxf > $base.dxf.orig
+            perl filt_dxf.pl $base.dxf > $base.dxf.new
+            diff -bu  $base.dxf.orig $base.dxf.new | perl cmp_dxf.pl
+            rm $base.dxf.orig $base.dxf.new 2>/dev/null
         fi
     done
 fi
