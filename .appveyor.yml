@@ -115,3 +115,7 @@ deploy:
   force_update: true
   on:
     appveyor_repo_tag: true
+
+# 80GB quota
+after_deploy:
+  - del libredwg-*.zip
