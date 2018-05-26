@@ -97,7 +97,7 @@ api_process(dwg_object *obj)
   else
       printf("error in reading num wires");
 
-  wire = dwg_ent_body_get_wire(body, &error);
+  wire = dwg_ent_body_get_wires(body, &error);
   if ( !error )
     {
       for (i = 0; i < num_wires; i++)
@@ -110,15 +110,15 @@ api_process(dwg_object *obj)
   if ( !error )
       printf("num sil of body : " FORMAT_BL "\n", num_sil);
   else
-      printf("error in reading num silhouette");
+      printf("error in reading num silhouettes");
 
-  sil = dwg_ent_body_get_silhouette(body, &error);
+  sil = dwg_ent_body_get_silhouettes(body, &error);
   if ( !error )
     {
       for (i = 0; i < num_sil; i++)
         printf("silhouette[%u] of body : " FORMAT_BL "\n", i, sil[i].vp_id);
     }
   else
-      printf("error in reading silhouette");
+      printf("error in reading silhouettes");
     
 }

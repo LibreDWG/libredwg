@@ -101,7 +101,7 @@ api_process(dwg_object *obj)
     printf("error in reading num wires\n"); 
 
 
-  wire = dwg_ent_region_get_wire(region, &error);
+  wire = dwg_ent_region_get_wires(region, &error);
   if (!error)
     {
       for (i = 0; i < num_wires; i++)
@@ -114,14 +114,14 @@ api_process(dwg_object *obj)
   if (!error)
     printf("num_silhouettes of region :" FORMAT_BL "\n", num_sil);
   else
-    printf("error in reading num silhouette\n"); 
+    printf("error in reading num silhouettes\n"); 
 
-  sil = dwg_ent_region_get_silhouette(region, &error);
+  sil = dwg_ent_region_get_silhouettes(region, &error);
   if (!error)
     {
       for (i = 0; i < num_sil; i++)
-        printf("silhouette of region :" FORMAT_BL "\n", sil[i].vp_id);
+        printf("silhouettes of region :" FORMAT_BL "\n", sil[i].vp_id);
     }
   else
-    printf("error in reading silhouette\n"); 
+    printf("error in reading silhouettes\n"); 
 }

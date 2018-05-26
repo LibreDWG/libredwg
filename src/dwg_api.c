@@ -13515,7 +13515,7 @@ dwg_ent_3dsolid_get_num_wires(const dwg_ent_3dsolid *_3dsolid, int *error)
 
 /// Returns all wires
 dwg_ent_solid_wire *
-dwg_ent_3dsolid_get_wire(const dwg_ent_3dsolid *_3dsolid, int *error)
+dwg_ent_3dsolid_get_wires(const dwg_ent_3dsolid *_3dsolid, int *error)
 {
   dwg_ent_solid_wire *ptx = (dwg_ent_solid_wire*)
     malloc(sizeof(dwg_ent_solid_wire)* _3dsolid->num_wires);
@@ -13557,7 +13557,7 @@ dwg_ent_3dsolid_get_num_silhouettes(const dwg_ent_3dsolid *_3dsolid, int *error)
 
 /// Returns all silhouettes
 dwg_ent_solid_silhouette *
-dwg_ent_3dsolid_get_silhouette(const dwg_ent_3dsolid *_3dsolid, int *error)
+dwg_ent_3dsolid_get_silhouettes(const dwg_ent_3dsolid *_3dsolid, int *error)
 {
   dwg_ent_solid_silhouette *ptx = (dwg_ent_solid_silhouette*)
     malloc(sizeof(dwg_ent_solid_silhouette)* _3dsolid->num_silhouettes);
@@ -13928,9 +13928,9 @@ dwg_ent_region_get_num_wires(const dwg_ent_region *region, int *error)
 
 //TODO dwg_ent_region_add_wire, dwg_ent_region_delete_wire
 
-/// Returns wire
+/// Returns all wires
 dwg_ent_solid_wire *
-dwg_ent_region_get_wire(const dwg_ent_region *region, int *error)
+dwg_ent_region_get_wires(const dwg_ent_region *region, int *error)
 {
   dwg_ent_solid_wire *ptx = (dwg_ent_solid_wire*)
     malloc(sizeof(dwg_ent_solid_wire)* region->num_wires);
@@ -13971,9 +13971,9 @@ dwg_ent_region_get_num_silhouettes(const dwg_ent_region *region, int *error)
 
 //TODO dwg_ent_region_add_silhouette, dwg_ent_region_delete_silhouette
 
-/// Returns silhouette
+/// Returns all silhouettes
 dwg_ent_solid_silhouette *
-dwg_ent_region_get_silhouette(const dwg_ent_region *region, int *error)
+dwg_ent_region_get_silhouettes(const dwg_ent_region *region, int *error)
 {
   dwg_ent_solid_silhouette *ptx = (dwg_ent_solid_silhouette*)
     malloc(sizeof(dwg_ent_solid_silhouette)* region->num_silhouettes);
@@ -14335,9 +14335,9 @@ dwg_ent_body_get_num_wires(const dwg_ent_body *body, int *error)
     }
 }
 
-/// Returns wire of body
+/// Returns all wires of body
 dwg_ent_solid_wire *
-dwg_ent_body_get_wire(const dwg_ent_body *body, int *error)
+dwg_ent_body_get_wires(const dwg_ent_body *body, int *error)
 {
   dwg_ent_solid_wire *ptx = (dwg_ent_solid_wire*)
     malloc(sizeof(dwg_ent_solid_wire)* body->num_wires);
@@ -14376,9 +14376,9 @@ dwg_ent_body_get_num_silhouettes(const dwg_ent_body *body, int *error)
     }
 }
 
-/// Returns silhouette for body entity
+/// Returns all silhouettes for body entity
 dwg_ent_solid_silhouette *
-dwg_ent_body_get_silhouette(const dwg_ent_body *body,
+dwg_ent_body_get_silhouettes(const dwg_ent_body *body,
                             int *error)
 {
   dwg_ent_solid_silhouette *ptx = (dwg_ent_solid_silhouette*)

@@ -105,7 +105,7 @@ api_process (dwg_object * obj)
   else
     fail ("error in reading num wires");
 
-  wire = dwg_ent_region_get_wire (region, &error);
+  wire = dwg_ent_region_get_wires (region, &error);
   if (!error )
     {
       int matches = 1;
@@ -130,9 +130,9 @@ api_process (dwg_object * obj)
   if (!error  && region->num_silhouettes == num_sil)
     pass ("Working Properly");
   else
-    fail ("error in reading num silhouette");
+    fail ("error in reading num silhouettes");
 
-  sil = dwg_ent_region_get_silhouette (region, &error);
+  sil = dwg_ent_region_get_silhouettes (region, &error);
   if (!error )
     {
       int matches = 1;
@@ -149,12 +149,12 @@ api_process (dwg_object * obj)
 	}
       else
 	{
-	  fail ("error in reading silhouette");
+	  fail ("error in reading silhouettes");
 	}
     }
   else
     {
-      fail ("error in reading silhouette");
+      fail ("error in reading silhouettes");
     }
 
 }

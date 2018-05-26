@@ -109,30 +109,30 @@ api_process(dwg_object *obj)
       printf("error in reading num wires");
  
 
-  wire = dwg_ent_3dsolid_get_wire(_3dsolid, &error);
-  if ( !error ) // error checking
+  wire = dwg_ent_3dsolid_get_wires(_3dsolid, &error);
+  if ( !error )
     {
       for (i = 0; i < num_wires; i++)
           printf("wire[%u] of 3dsolid : " FORMAT_BL "\n", i, wire[i].selection_marker);
     }
   else
-      printf("error in reading num wires");
+      printf("error in reading wires");
 
 
   num_sil = dwg_ent_3dsolid_get_num_silhouettes(_3dsolid, &error);
   if ( !error )
       printf("num sil of 3dsolid : " FORMAT_BL "\n", num_sil);
   else
-      printf("error in reading num silhouette");
+      printf("error in reading num silhouettes");
 
 
-  sil = dwg_ent_3dsolid_get_silhouette(_3dsolid, &error);
+  sil = dwg_ent_3dsolid_get_silhouettes(_3dsolid, &error);
   if ( !error )
     {
       for (i = 0; i < num_sil; i++)
         printf("silhouette[%u] of 3dsolid : " FORMAT_BL "\n", i, sil[i].vp_id);
     }
   else
-      printf("error in reading silhouette");
+      printf("error in reading silhouettes");
     
 }

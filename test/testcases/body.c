@@ -19,14 +19,9 @@ api_process (dwg_object * obj)
 
   acis_empty = dwg_ent_body_get_acis_empty (body, &error);
   if (!error  && acis_empty == body->acis_empty)	// error check
-    {
       pass ("Working Properly");
-    }
   else
-    {
       fail ("error in reading acis empty");
-    }
-
 
   version = dwg_ent_body_get_version (body, &error);
   if (!error  && version == body->version)	// error check
@@ -78,7 +73,7 @@ api_process (dwg_object * obj)
   else
     fail ("error in reading num wires");
 
-  wire = dwg_ent_body_get_wire (body, &error);
+  wire = dwg_ent_body_get_wires (body, &error);
   if (!error )
     {
       BITCODE_BL i;
@@ -86,30 +81,22 @@ api_process (dwg_object * obj)
       for (i = 0; i < num_wires; i++)
 	{
 	  if (wire[i].selection_marker != body->wires[i].selection_marker)
-	    {
 	      matches = 0;
-	    }
 	}
       if (matches)
-	{
 	  pass ("Working Properly");
-	}
       else
-	{
 	  fail ("Working Properly");
-	}
     }
   else
-    {
       fail ("error in reading num wires");
-    }
 
   num_sil = dwg_ent_body_get_num_silhouettes (body, &error);
   if (!error  && body->num_silhouettes == num_sil)
     pass ("Working Properly");
   else
-    fail ("error in reading num silhouette");
-  sil = dwg_ent_body_get_silhouette (body, &error);
+    fail ("error in reading num silhouettes");
+  sil = dwg_ent_body_get_silhouettes (body, &error);
   if (!error )
     {
       BITCODE_BL i;
@@ -117,22 +104,13 @@ api_process (dwg_object * obj)
       for (i = 0; i < num_sil; i++)
 	{
 	  if (body->silhouettes[i].vp_id != sil[i].vp_id)
-	    {
 	      matches = 0;
-	    }
 	}
       if (matches)
-	{
 	  pass ("Working Properly");
-	}
       else
-	{
-	  fail ("error in reading silhouette");
-	}
+	  fail ("error in reading silhouettes");
     }
   else
-    {
-      fail ("error in reading silhouette");
-    }
-
+      fail ("error in reading silhouettes");
 }

@@ -3056,13 +3056,13 @@ BITCODE_BL
 dwg_ent_3dsolid_get_num_wires(const dwg_ent_3dsolid *_3dsolid, int *error);
 
 dwg_ent_solid_wire *
-dwg_ent_3dsolid_get_wire(const dwg_ent_3dsolid *_3dsolid, int *error);
+dwg_ent_3dsolid_get_wires(const dwg_ent_3dsolid *_3dsolid, int *error);
 
 BITCODE_BL
 dwg_ent_3dsolid_get_num_silhouettes(const dwg_ent_3dsolid *_3dsolid, int *error);
 
 dwg_ent_solid_silhouette *
-dwg_ent_3dsolid_get_silhouette(const dwg_ent_3dsolid *_3dsolid, int *error);
+dwg_ent_3dsolid_get_silhouettes(const dwg_ent_3dsolid *_3dsolid, int *error);
 
 unsigned char
 dwg_ent_3dsolid_get_acis_empty2(const dwg_ent_3dsolid *_3dsolid, int *error);
@@ -3139,13 +3139,13 @@ BITCODE_BL
 dwg_ent_region_get_num_wires(const dwg_ent_region *region, int *error);
 
 dwg_ent_solid_wire *
-dwg_ent_region_get_wire(const dwg_ent_region *region, int *error);
+dwg_ent_region_get_wires(const dwg_ent_region *region, int *error);
 
 BITCODE_BL
 dwg_ent_region_get_num_silhouettes(const dwg_ent_region *region, int *error);
 
 dwg_ent_solid_silhouette *
-dwg_ent_region_get_silhouette(const dwg_ent_region *region, int *error);
+dwg_ent_region_get_silhouettes(const dwg_ent_region *region, int *error);
 
 unsigned char
 dwg_ent_region_get_acis_empty2(const dwg_ent_region *region, int *error);
@@ -3217,13 +3217,13 @@ BITCODE_BL
 dwg_ent_body_get_num_wires(const dwg_ent_body *body, int *error);
 
 dwg_ent_solid_wire *
-dwg_ent_body_get_wire(const dwg_ent_body *body, int *error);
+dwg_ent_body_get_wires(const dwg_ent_body *body, int *error);
 
 BITCODE_BL
 dwg_ent_body_get_num_silhouettes(const dwg_ent_body *body, int *error);
 
 dwg_ent_solid_silhouette *
-dwg_ent_body_get_silhouette(const dwg_ent_body *body, int *error);
+dwg_ent_body_get_silhouettes(const dwg_ent_body *body, int *error);
 
 unsigned char
 dwg_ent_body_get_acis_empty2(const dwg_ent_body *body, int *error);

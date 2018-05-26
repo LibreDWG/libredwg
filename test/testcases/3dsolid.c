@@ -99,7 +99,7 @@ api_process (dwg_object * obj)
     fail ("3dsolid_get_num_wires %d", error);
 
 
-  wire = dwg_ent_3dsolid_get_wire (_3dsolid, &error);
+  wire = dwg_ent_3dsolid_get_wires (_3dsolid, &error);
   if (error == 0)
     {
       unsigned long i, matches = 1;
@@ -112,9 +112,9 @@ api_process (dwg_object * obj)
 	}
 
       if (matches)
-        pass ("3dsolid_get_wire matches [%ld]", i);
+        pass ("3dsolid_get_wires matches [%ld]", i);
       else
-        fail ("3dsolid_get_wire matches");
+        fail ("3dsolid_get_wires matches");
     }
   else
     fail ("3dsolid_get_wire matches error %d", error);
@@ -127,7 +127,7 @@ api_process (dwg_object * obj)
     fail ("get_num_silhouettes %d", error);
 
 
-  sil = dwg_ent_3dsolid_get_silhouette (_3dsolid, &error);
+  sil = dwg_ent_3dsolid_get_silhouettes (_3dsolid, &error);
   if (error == 0)
     {
       unsigned long i, matches = 1;
@@ -139,11 +139,11 @@ api_process (dwg_object * obj)
 	    }
 	}
       if (matches)
-        pass ("3dsolid_get_silhouette matches");
+        pass ("3dsolid_get_silhouettes matches");
       else
-        fail ("3dsolid_get_silhouette matches [%d]", i);
+        fail ("3dsolid_get_silhouettes matches [%d]", i);
     }
   else
-    fail ("error in reading silhouette");
+    fail ("error in reading silhouettes");
   
 }
