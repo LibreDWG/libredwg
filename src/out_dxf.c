@@ -1280,10 +1280,13 @@ dxf_tables_write (Bit_Chain *dat, Dwg_Data * dwg)
       TABLE(VPORT);
       COMMON_TABLE_CONTROL_FLAGS(null_handle);
       dwg_dxf_VPORT_CONTROL(dat, ctrl);
-      /* if saved from newer version, eg. AC1030:
-      VALUE_TV ("ACAD", 1001);
-      VALUE_TV ("DbSaveVer", 1000);
-      VALUE_RS (30, 1071); */
+      if (dat->version != dat->from_version && dat->from_version != R_INVALID)
+        {
+          /* if saved from newer version, eg. AC1032: */
+          VALUE_TV ("ACAD", 1001);
+          VALUE_TV ("DbSaveVer", 1000);
+          VALUE_RS ((dat->from_version * 3) + 15, 1071); // so that 69 is R_2018
+        }
       for (i=0; i<dwg->vport_control.num_entries; i++)
         {
           Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->vports[i]);
