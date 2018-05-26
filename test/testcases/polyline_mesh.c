@@ -12,23 +12,23 @@ low_level_process (dwg_object * obj)
 
   printf ("flags of polyline_mesh : " FORMAT_BS "\n", polyline_mesh->flag);
   printf ("owned obj count of polyline_mesh : " FORMAT_BL "\n",
-	  polyline_mesh->owned_obj_count);
+	  polyline_mesh->num_owned);
   printf ("curve type of polyline_mesh : " FORMAT_BS "\n", polyline_mesh->curve_type);
   printf ("M density of polyline_mesh : " FORMAT_BS "\n", polyline_mesh->m_density);
   printf ("n density of polyline_mesh : " FORMAT_BS "\n", polyline_mesh->n_density);
   printf ("m vert count of polyline_mesh : " FORMAT_BS "\n",
-	  polyline_mesh->m_vert_count);
+	  polyline_mesh->num_m_verts);
   printf ("n vert count of polyline_mesh : " FORMAT_BS "\n",
-	  polyline_mesh->n_vert_count);
+	  polyline_mesh->num_n_verts);
 }
 
 void
 api_process (dwg_object * obj)
 {
   int error;
-  BITCODE_BS flags, curve_type, mvert_count, nvert_count, m_density,
+  BITCODE_BS flags, curve_type, num_m_verts, num_n_verts, m_density,
     n_density;
-  BITCODE_BL owned_obj_count;
+  BITCODE_BL num_owned;
   dwg_ent_polyline_mesh *polyline_mesh = dwg_object_to_POLYLINE_MESH (obj);
 
 
@@ -39,12 +39,12 @@ api_process (dwg_object * obj)
     fail ("error in reading flags");
 
 
-  owned_obj_count = dwg_ent_polyline_mesh_get_owned_obj_count (polyline_mesh,
+  num_owned = dwg_ent_polyline_mesh_get_num_owned (polyline_mesh,
 							       &error);
-  if (!error  && owned_obj_count == polyline_mesh->owned_obj_count)	// error check
+  if (!error  && num_owned == polyline_mesh->num_owned)	// error check
     pass ("Working Properly");
   else
-    fail ("error in reading owned_obj_count");
+    fail ("error in reading num_owned");
 
   // retuns curve type
   curve_type = dwg_ent_polyline_mesh_get_curve_type (polyline_mesh,
@@ -71,17 +71,17 @@ api_process (dwg_object * obj)
     fail ("error in reading n density");
 
 
-  mvert_count = dwg_ent_polyline_mesh_get_m_vert_count (polyline_mesh,
+  num_m_verts = dwg_ent_polyline_mesh_get_num_m_verts (polyline_mesh,
 							&error);
-  if (!error  && mvert_count == polyline_mesh->m_vert_count)	// error check
+  if (!error  && num_m_verts == polyline_mesh->num_m_verts)	// error check
     pass ("Working Properly");
   else
     fail ("error in reading m vert count");
 
 
-  nvert_count = dwg_ent_polyline_mesh_get_n_vert_count (polyline_mesh,
+  num_n_verts = dwg_ent_polyline_mesh_get_num_n_verts (polyline_mesh,
 							&error);
-  if (!error  && nvert_count == polyline_mesh->n_vert_count)	// error check
+  if (!error  && num_n_verts == polyline_mesh->num_n_verts)	// error check
     pass ("Working Properly");
   else
     fail ("error in reading n vert count");

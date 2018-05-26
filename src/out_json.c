@@ -221,8 +221,8 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 #define HANDLE_VECTOR(name, sizefield, code, dxf) \
   HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code, dxf)
 
-#define FIELD_INSERT_COUNT(insert_count, type, dxf) \
-  FIELD(insert_count, type, dxf)
+#define FIELD_NUM_INSERTS(num_inserts, type, dxf) \
+  FIELD(num_inserts, type, dxf)
 
 #define FIELD_XDATA(name, size)
 
@@ -951,7 +951,7 @@ json_classes_write (Bit_Chain *dat, Dwg_Data * dwg)
       FIELD_T (cppname, 2);
       FIELD_T (appname, 3);
       FIELD_BS (proxyflag, 90);
-      FIELD_BL (instance_count, 91);
+      FIELD_BL (num_instances, 91);
       FIELD_B  (wasazombie, 280);
       FIELD_BS (item_class_id, 281);
       // Is-an-entity. 1f2 for entities, 1f3 for objects

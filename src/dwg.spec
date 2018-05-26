@@ -412,7 +412,7 @@ DWG_ENTITY(INSERT)
     {
       if (FIELD_VALUE(has_attribs))
         {
-          FIELD_BL (owned_obj_count, 0);
+          FIELD_BL (num_owned, 0);
         }
     }
 
@@ -432,12 +432,12 @@ DWG_ENTITY(INSERT)
     }
 
   //Spec typo? Spec says "2004:" but I think it should be "2004+:"
-  // just like field owned_obj_count (AND just like in MINSERT)
+  // just like field num_owned (AND just like in MINSERT)
   SINCE(R_2004)
     {
       if (FIELD_VALUE(has_attribs))
         {
-          HANDLE_VECTOR(attrib_handles, owned_obj_count, 4, 0);
+          HANDLE_VECTOR(attrib_handles, num_owned, 4, 0);
         }
     }
 
@@ -528,7 +528,7 @@ DWG_ENTITY(MINSERT)
   SINCE(R_2004)
     {
       if (FIELD_VALUE(has_attribs))
-        FIELD_BL (owned_obj_count, 0);
+        FIELD_BL (num_owned, 0);
     }
 
   FIELD_BS (numcols, 70);
@@ -551,7 +551,7 @@ DWG_ENTITY(MINSERT)
 
   SINCE(R_2004)
     {
-      HANDLE_VECTOR(attrib_handles, owned_obj_count, 4, 0);
+      HANDLE_VECTOR(attrib_handles, num_owned, 4, 0);
     }
 
   if (FIELD_VALUE(has_attribs))
@@ -696,7 +696,7 @@ DWG_ENTITY(POLYLINE_2D)
     FIELD_BE (extrusion, 210);
 
     SINCE(R_2004) {
-      FIELD_BL (owned_obj_count, 0);
+      FIELD_BL (num_owned, 0);
     }
   }
   COMMON_ENTITY_HANDLE_DATA;
@@ -709,7 +709,7 @@ DWG_ENTITY(POLYLINE_2D)
 
   SINCE(R_2004)
     {
-      HANDLE_VECTOR(vertex, owned_obj_count, 3, 0);
+      HANDLE_VECTOR(vertex, num_owned, 3, 0);
     }
 
   SINCE (R_13)
@@ -726,7 +726,7 @@ DWG_ENTITY(POLYLINE_3D)
   FIELD_RC (flag2, 0);
 
   SINCE(R_2004) {
-    FIELD_BL (owned_obj_count, 0);
+    FIELD_BL (num_owned, 0);
   }
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -739,7 +739,7 @@ DWG_ENTITY(POLYLINE_3D)
 
   SINCE(R_2004)
     {
-      HANDLE_VECTOR(vertex, owned_obj_count, 3, 0);
+      HANDLE_VECTOR(vertex, num_owned, 3, 0);
     }
 
   FIELD_HANDLE (seqend, 3, 0);
@@ -1094,7 +1094,7 @@ DWG_ENTITY(POLYLINE_PFACE)
   FIELD_BS (numfaces, 72);
 
   SINCE(R_2004) {
-    FIELD_BL (owned_obj_count, 0);
+    FIELD_BL (num_owned, 0);
   }
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -1106,7 +1106,7 @@ DWG_ENTITY(POLYLINE_PFACE)
     }
   SINCE(R_2004)
     {
-      HANDLE_VECTOR(vertex, owned_obj_count, 4, 0);
+      HANDLE_VECTOR(vertex, num_owned, 4, 0);
     }
   FIELD_HANDLE (seqend, 3, 0);
 
@@ -1117,13 +1117,13 @@ DWG_ENTITY(POLYLINE_MESH)
 
   FIELD_BS (flag, 70);
   FIELD_BS (curve_type, 75);
-  FIELD_BS (m_vert_count, 71);
-  FIELD_BS (n_vert_count, 72);
+  FIELD_BS (num_m_verts, 71);
+  FIELD_BS (num_n_verts, 72);
   FIELD_BS (m_density, 73);
   FIELD_BS (n_density, 74);
 
   SINCE(R_2004) {
-    FIELD_BL (owned_obj_count, 0);
+    FIELD_BL (num_owned, 0);
   }
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -1135,7 +1135,7 @@ DWG_ENTITY(POLYLINE_MESH)
     }
   SINCE(R_2004)
     {
-      HANDLE_VECTOR(vertex, owned_obj_count, 4, 0);
+      HANDLE_VECTOR(vertex, num_owned, 4, 0);
     }
   FIELD_HANDLE (seqend, 3, 0);
 
@@ -1261,7 +1261,7 @@ DWG_ENTITY(VIEWPORT)
 
   SINCE(R_2000)
     {
-      FIELD_BL (frozen_layer_count, 0);
+      FIELD_BL (num_frozen_layers, 0);
       FIELD_BL (status_flag, 90);
       FIELD_T (style_sheet, 1);
       FIELD_RC (render_mode, 281);
@@ -1942,9 +1942,9 @@ DWG_OBJECT(BLOCK_HEADER)
     FIELD_RD (base_pt.z, 30);
     FIELD_2RD (base_pt, 10);
     FIELD_RC (block_scaling, 0);
-    FIELD_CAST (owned_object_count, RS, BL, 0);
+    FIELD_CAST (num_owned, RS, BL, 0);
     FIELD_RC (flag2, 0);
-    FIELD_CAST (insert_count, RS, RL, 0);
+    FIELD_CAST (num_inserts, RS, RL, 0);
     FIELD_RS (flag3, 0);
   }
   SINCE(R_13) {
@@ -1965,10 +1965,10 @@ DWG_OBJECT(BLOCK_HEADER)
                         FIELD_VALUE(xrefref) << 6;
   }
   SINCE(R_2004) { // but not in 2007
-    FIELD_BL (owned_object_count, 0);
-    if (FIELD_VALUE(owned_object_count) > 0xf00000)
+    FIELD_BL (num_owned, 0);
+    if (FIELD_VALUE(num_owned) > 0xf00000)
       {
-        LOG_WARN("Unreasonable high owned_object_count value")
+        LOG_WARN("Unreasonable high num_owned value")
       }
   }
 
@@ -1979,7 +1979,7 @@ DWG_OBJECT(BLOCK_HEADER)
 
   SINCE(R_2000)
     {
-      FIELD_INSERT_COUNT (insert_count, RL, 0);
+      FIELD_NUM_INSERTS (num_inserts, RL, 0);
       FIELD_T (description, 4);
 
       FIELD_BL (preview_data_size, 0);
@@ -2020,9 +2020,9 @@ DWG_OBJECT(BLOCK_HEADER)
 
   SINCE(R_2004)
     {
-      if (FIELD_VALUE(owned_object_count) < 0xf00000)
+      if (FIELD_VALUE(num_owned) < 0xf00000)
         {
-          HANDLE_VECTOR(entities, owned_object_count, 4, 0);
+          HANDLE_VECTOR(entities, num_owned, 4, 0);
         }
     }
 
@@ -2031,8 +2031,8 @@ DWG_OBJECT(BLOCK_HEADER)
   }
   SINCE(R_2000)
     {
-      if (FIELD_VALUE(insert_count) && FIELD_VALUE(insert_count) < 0xf00000) {
-        HANDLE_VECTOR(insert_handles, insert_count, ANYCODE, 0);
+      if (FIELD_VALUE(num_inserts) && FIELD_VALUE(num_inserts) < 0xf00000) {
+        HANDLE_VECTOR(insert_handles, num_inserts, ANYCODE, 0);
       }
       FIELD_HANDLE (layout_handle, 5, 0);
     }
@@ -3856,7 +3856,7 @@ DWG_ENTITY(TABLE)
   FIELD_B (has_attribs, 66);
   
   SINCE(R_2004) {
-    FIELD_BL (owned_object_count, 0);
+    FIELD_BL (num_owned, 0);
   }
   
   FIELD_BS (flag_for_table_value, 90);
@@ -3886,10 +3886,10 @@ DWG_ENTITY(TABLE)
           FIELD_B (cells[rcount].additional_data_flag, 0);
           if (FIELD_VALUE(cells[rcount].additional_data_flag) == 1)
             {
-              FIELD_BS (cells[rcount].attr_def_count, 179);
+              FIELD_BS (cells[rcount].num_attr_defs, 179);
               FIELD_BS (cells[rcount].attr_def_index, 0);
               FIELD_T (cells[rcount].attr_def_text, 300);
-              //total_attr_def_count += FIELD_VALUE (cells[rcount].attr_def_count);
+              //total_num_attr_defs += FIELD_VALUE (cells[rcount].num_attr_defs);
             }
         }
       if (FIELD_VALUE(cells[rcount].type) == 1 ||
@@ -4150,7 +4150,7 @@ DWG_ENTITY(TABLE)
   
   SINCE(R_2004)
     {
-      HANDLE_VECTOR (attribs, owned_object_count, 4, 0)
+      HANDLE_VECTOR (attribs, num_owned, 4, 0)
     }
   
   if (FIELD_VALUE(has_attribs))
@@ -4172,7 +4172,7 @@ DWG_ENTITY(TABLE)
       if (FIELD_VALUE(cells[rcount].type) == 2 &&
           FIELD_VALUE(cells[rcount].additional_data_flag) == 1)
         {
-          HANDLE_VECTOR (cells[rcount].attr_def_id, cells[rcount].attr_def_count, 4, 331);
+          HANDLE_VECTOR (cells[rcount].attr_def_id, cells[rcount].num_attr_defs, 4, 331);
         }
   
       if (FIELD_VALUE(cells[rcount].additional_data_flag2) == 1 &&

@@ -267,13 +267,13 @@
   HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code, dxf)
 
 //skip non-zero bytes and a terminating zero
-#define FIELD_INSERT_COUNT(insert_count, type, dxf) \
-      FIELD_VALUE(insert_count)=0; \
+#define FIELD_NUM_INSERTS(num_inserts, type, dxf) \
+      FIELD_VALUE(num_inserts)=0; \
       while (bit_read_RC(dat)) \
         {\
-          FIELD_VALUE(insert_count)++;\
+          FIELD_VALUE(num_inserts)++;\
         }\
-      FIELD_G_TRACE(insert_count, type, dxf)
+      FIELD_G_TRACE(num_inserts, type, dxf)
 
 #define FIELD_XDATA(name, size)\
   _obj->name = dwg_decode_xdata(dat, _obj, _obj->size)

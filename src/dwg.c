@@ -525,21 +525,21 @@ dwg_get_layers(const Dwg_Data *dwg)
 }
 
 long unsigned int
-dwg_get_object_count(const Dwg_Data *dwg)
-{
-  assert(dwg);
-  return dwg->num_objects;
-}
-
-long unsigned int
-dwg_get_object_object_count(const Dwg_Data *dwg)
+dwg_get_object_num_objects(const Dwg_Data *dwg)
 {
   assert(dwg);
   return dwg->num_objects - dwg->num_entities;
 }
 
 long unsigned int
-dwg_get_entity_count(const Dwg_Data *dwg)
+dwg_get_num_objects(const Dwg_Data *dwg)
+{
+  assert(dwg);
+  return dwg->num_objects;
+}
+
+long unsigned int
+dwg_get_num_entities(const Dwg_Data *dwg)
 {
   assert(dwg);
   return dwg->num_entities;
@@ -552,7 +552,7 @@ dwg_get_entities(const Dwg_Data *dwg)
   Dwg_Object_Entity ** entities;
 
   assert(dwg);
-  entities = (Dwg_Object_Entity **) calloc(dwg_get_entity_count(dwg),
+  entities = (Dwg_Object_Entity **) calloc(dwg_get_num_entities(dwg),
                                            sizeof (Dwg_Object_Entity*));
   for (i=0; i < dwg->num_objects; i++)
     {
@@ -686,7 +686,7 @@ get_first_owned_object(const Dwg_Object* hdr_obj, Dwg_Object_BLOCK_HEADER* hdr)
   if (version >= R_2004)
     {
       hdr->__iterator = 0;
-      if (hdr->entities && hdr->owned_object_count && hdr->entities[0])
+      if (hdr->entities && hdr->num_owned && hdr->entities[0])
         return hdr->entities[0]->obj;
       else
         return NULL;
@@ -711,7 +711,7 @@ get_next_owned_object(const Dwg_Object* hdr_obj, const Dwg_Object* current,
   if (version >= R_2004)
     {
       hdr->__iterator++;
-      if (hdr->__iterator == hdr->owned_object_count) return 0;
+      if (hdr->__iterator == hdr->num_owned) return 0;
       return hdr->entities[hdr->__iterator]->obj;
     }
 

@@ -15,7 +15,7 @@ low_level_process(dwg_object *obj)
   printf("extrusion points : x = %f, y = %f, z = %f\n",
 	  minsert->extrusion.x, minsert->extrusion.y, minsert->extrusion.z);
   printf("attribs for minsert : " FORMAT_B "\n", minsert->has_attribs);
-  printf("object count for minsert : " FORMAT_BL "\n", minsert->owned_obj_count);
+  printf("object count for minsert : " FORMAT_BL "\n", minsert->num_owned);
   printf("number of rows for minsert : %u\n", minsert->numrows);
   printf("number of columns for minsert : %u\n", minsert->numcols);
   printf("col space for minsert : %f\n", minsert->row_spacing);
@@ -84,7 +84,7 @@ api_process(dwg_object *obj)
     printf("in reading attribs\n"); 
 
 
-  obj_count = dwg_ent_minsert_get_owned_obj_count(minsert, &error); 
+  obj_count = dwg_ent_minsert_get_num_owned(minsert, &error); 
   if ( !error )
     printf("object count for minsert : " FORMAT_BL "\n", obj_count);
   else

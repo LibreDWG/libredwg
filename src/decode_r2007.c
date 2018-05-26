@@ -1233,7 +1233,7 @@ read_2007_section_classes(Bit_Chain*restrict dat, Dwg_Data *restrict dwg,
           dwg->dwg_class[idc].wasazombie    = bit_read_B(&sec_dat);
           dwg->dwg_class[idc].item_class_id = bit_read_BS(&sec_dat);
 
-          dwg->dwg_class[idc].instance_count = bit_read_BL(&sec_dat);  // DXF 91
+          dwg->dwg_class[idc].num_instances = bit_read_BL(&sec_dat);  // DXF 91
           dwg->dwg_class[idc].dwg_version   = bit_read_BS(&sec_dat);
           dwg->dwg_class[idc].maint_version = bit_read_BS(&sec_dat);
           dwg->dwg_class[idc].unknown_1     = bit_read_BL(&sec_dat);  // 0
@@ -1249,7 +1249,7 @@ read_2007_section_classes(Bit_Chain*restrict dat, Dwg_Data *restrict dwg,
                     "(0x1f3 for object, 0x1f2 for entity)\n",
                     dwg->dwg_class[idc].item_class_id)
           LOG_TRACE("instance count:   %u\n",
-                    dwg->dwg_class[idc].instance_count)
+                    dwg->dwg_class[idc].num_instances)
           LOG_TRACE("dwg version:      %u (%u)\n",
                     dwg->dwg_class[idc].dwg_version,
                     dwg->dwg_class[idc].maint_version)

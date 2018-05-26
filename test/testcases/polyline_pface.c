@@ -9,7 +9,7 @@ low_level_process (dwg_object * obj)
 
   printf ("num verts of polyline_pface : " FORMAT_BL "\n", polyline_pface->numverts);
   printf ("owned obj count of polyline_pface : " FORMAT_BL "\n",
-	  polyline_pface->owned_obj_count);
+	  polyline_pface->num_owned);
   printf ("num faces of polyline_pface : " FORMAT_BL "\n", polyline_pface->numfaces);
 
 }
@@ -19,7 +19,7 @@ api_process (dwg_object * obj)
 {
   int error;
   BITCODE_BS num_verts, num_faces;
-  BITCODE_BL owned_obj_count;
+  BITCODE_BL num_owned;
   dwg_ent_polyline_pface *polyline_pface = dwg_object_to_POLYLINE_PFACE (obj);
 
 

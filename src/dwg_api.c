@@ -4382,17 +4382,17 @@ dwg_ent_insert_has_attribs(dwg_ent_insert *insert, int *error)
 }
 
 /// Returns the owned object count of insert
-/** Usage : BITCODE_BL count = dwg_ent_insert_get_owned_obj_count(insert, &error);
+/** Usage : BITCODE_BL count = dwg_ent_insert_get_num_owned(insert, &error);
 \param 1 dwg_ent_insert
 \param 2 int
 */
 BITCODE_BL
-dwg_ent_insert_get_owned_obj_count(const dwg_ent_insert *insert, int *error)
+dwg_ent_insert_get_num_owned(const dwg_ent_insert *insert, int *error)
 {
   if (insert != 0)
     {
       *error = 0;
-      return insert->owned_obj_count;
+      return insert->num_owned;
     }
   else
     {
@@ -4403,19 +4403,20 @@ dwg_ent_insert_get_owned_obj_count(const dwg_ent_insert *insert, int *error)
 }
 
 /// Sets the owned object count of insert.
-/** Usage : dwg_ent_insert_set_owned_obj_count(insert, 20, &error);
+/// FIXME needs to adjust handle array instead: add/delete
+/** Usage : dwg_ent_insert_set_num_owned(insert, 20, &error);
 \param 1 dwg_ent_insert
 \param 2 BITCODE_BL
 \param 3 int
 */
 void
-dwg_ent_insert_set_owned_obj_count(dwg_ent_insert *insert, BITCODE_BL count,
-                                   int *error)
+dwg_ent_insert_set_num_owned(dwg_ent_insert *insert, BITCODE_BL count,
+                             int *error)
 {
   if (insert != 0)
     {
       *error = 0;
-      insert->owned_obj_count = count;
+      insert->num_owned = count;
     }
   else
     {
@@ -4723,17 +4724,17 @@ dwg_ent_minsert_has_attribs(dwg_ent_minsert *minsert, int *error)
 
 
 /// Returns the owned object count of minsert
-/** Usage : BITCODE_BL count = dwg_ent_minsert_get_owned_obj_count(minsert, &error);
+/** Usage : BITCODE_BL count = dwg_ent_minsert_get_num_owned(minsert, &error);
 \param 1 dwg_ent_minsert
 \param 2 int
 */
 BITCODE_BL
-dwg_ent_minsert_get_owned_obj_count(const dwg_ent_minsert *minsert, int *error)
+dwg_ent_minsert_get_num_owned(const dwg_ent_minsert *minsert, int *error)
 {
   if (minsert != 0)
     {
       *error = 0;
-      return minsert->owned_obj_count;
+      return minsert->num_owned;
     }
   else
     {
@@ -4744,19 +4745,20 @@ dwg_ent_minsert_get_owned_obj_count(const dwg_ent_minsert *minsert, int *error)
 }
 
 /// Sets the owned object count of minsert.
-/** Usage : dwg_ent_minsert_set_owned_obj_count(minsert, 20, &error);
+/// FIXME needs to adjust attrib_handles array: add/delete
+/** Usage : dwg_ent_minsert_set_num_owned(minsert, 20, &error);
 \param 1 dwg_ent_insert
 \param 2 BITCODE_BL
 \param 3 int
 */
 void
-dwg_ent_minsert_set_owned_obj_count(dwg_ent_minsert *minsert, BITCODE_BL count,
-                                    int *error)
+dwg_ent_minsert_set_num_owned(dwg_ent_minsert *minsert, BITCODE_BL count,
+                              int *error)
 {
   if (minsert != 0)
     {
       *error = 0;
-      minsert->owned_obj_count = count;
+      minsert->num_owned = count;
     }
   else
     {
@@ -10484,12 +10486,12 @@ dwg_ent_viewport_set_grid_major(dwg_ent_viewport *vp, BITCODE_BS major,
 
 /// Returns viewport frozen layer count
 BITCODE_BL
-dwg_ent_viewport_get_frozen_layer_count(const dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_num_frozen_layers(const dwg_ent_viewport *vp, int *error)
 {
   if (vp != 0)
     {
       *error = 0;
-      return vp->frozen_layer_count;
+      return vp->num_frozen_layers;
     }
   else
     {
@@ -10501,13 +10503,13 @@ dwg_ent_viewport_get_frozen_layer_count(const dwg_ent_viewport *vp, int *error)
 
 /// Sets viewport frozen layer count
 void
-dwg_ent_viewport_set_frozen_layer_count(dwg_ent_viewport *vp, BITCODE_BL count,
+dwg_ent_viewport_set_num_frozen_layers(dwg_ent_viewport *vp, BITCODE_BL count,
                                         int *error)
 {
   if (vp != 0)
     {
       *error = 0;
-      vp->frozen_layer_count = count;
+      vp->num_frozen_layers = count;
     }
   else
     {
@@ -11628,13 +11630,13 @@ dwg_ent_polyline_mesh_set_curve_type(dwg_ent_polyline_mesh *mesh,
 
 /// Returns polyline mesh n vert count
 BITCODE_BS
-dwg_ent_polyline_mesh_get_m_vert_count(const dwg_ent_polyline_mesh *mesh,
+dwg_ent_polyline_mesh_get_num_m_verts(const dwg_ent_polyline_mesh *mesh,
                                        int *error)
 {
   if (mesh != 0)
     {
       *error = 0;
-      return mesh->m_vert_count;
+      return mesh->num_m_verts;
     }
   else
     {
@@ -11645,14 +11647,15 @@ dwg_ent_polyline_mesh_get_m_vert_count(const dwg_ent_polyline_mesh *mesh,
 }
 
 /// Sets polyline mesh M vert count
+/// FIXME: rather provide add/delete
 void
-dwg_ent_polyline_mesh_set_m_vert_count(dwg_ent_polyline_mesh *mesh,
-                                       BITCODE_BS m_vert_count, int *error)
+dwg_ent_polyline_mesh_set_num_m_verts(dwg_ent_polyline_mesh *mesh,
+                                      BITCODE_BS num_m_verts, int *error)
 {
   if (mesh != 0)
     {
       *error = 0;
-      mesh->m_vert_count = m_vert_count;
+      mesh->num_m_verts = num_m_verts;
     }
   else
     {
@@ -11663,13 +11666,13 @@ dwg_ent_polyline_mesh_set_m_vert_count(dwg_ent_polyline_mesh *mesh,
 
 /// Returns polyline mesh n vert count
 BITCODE_BS
-dwg_ent_polyline_mesh_get_n_vert_count(const dwg_ent_polyline_mesh *mesh,
+dwg_ent_polyline_mesh_get_num_n_verts(const dwg_ent_polyline_mesh *mesh,
                                        int *error)
 {
   if (mesh != 0)
     {
       *error = 0;
-      return mesh->n_vert_count;
+      return mesh->num_n_verts;
     }
   else
     {
@@ -11680,14 +11683,15 @@ dwg_ent_polyline_mesh_get_n_vert_count(const dwg_ent_polyline_mesh *mesh,
 }
 
 /// Sets polyline mesh n vert count
+/// FIXME: rather provide add/delete
 void
-dwg_ent_polyline_mesh_set_n_vert_count(dwg_ent_polyline_mesh *mesh,
-                                       BITCODE_BS n_vert_count, int *error)
+dwg_ent_polyline_mesh_set_num_n_verts(dwg_ent_polyline_mesh *mesh,
+                                       BITCODE_BS num_n_verts, int *error)
 {
   if (mesh != 0)
     {
       *error = 0;
-      mesh->n_vert_count = n_vert_count;
+      mesh->num_n_verts = num_n_verts;
     }
   else
     {
@@ -11766,13 +11770,13 @@ dwg_ent_polyline_mesh_set_n_density(dwg_ent_polyline_mesh *mesh,
 
 /// Returns polyline mesh owned object count
 BITCODE_BL
-dwg_ent_polyline_mesh_get_owned_obj_count(const dwg_ent_polyline_mesh *mesh,
+dwg_ent_polyline_mesh_get_num_owned(const dwg_ent_polyline_mesh *mesh,
                                           int *error)
 {
   if (mesh != 0)
     {
       *error = 0;
-      return mesh->owned_obj_count;
+      return mesh->num_owned;
     }
   else
     {
@@ -11783,14 +11787,15 @@ dwg_ent_polyline_mesh_get_owned_obj_count(const dwg_ent_polyline_mesh *mesh,
 }
 
 /// Sets polyline mesh owned object count
+/// FIXME needs to adjust vertex array: add/delete
 void
-dwg_ent_polyline_mesh_set_owned_obj_count(dwg_ent_polyline_mesh *mesh,
-                                          BITCODE_BL owned_obj_count, int *error)
+dwg_ent_polyline_mesh_set_num_owned(dwg_ent_polyline_mesh *mesh,
+                                    BITCODE_BL num_owned, int *error)
 {
   if (mesh != 0)
     {
       *error = 0;
-      mesh->owned_obj_count = owned_obj_count;
+      mesh->num_owned = num_owned;
     }
   else
     {
@@ -12058,7 +12063,7 @@ dwg_obj_polyline_2d_get_numpoints(const dwg_object *obj, int *error)
       *error = 0;
 
       if (dwg->header.version >= R_2004)
-        return obj->tio.entity->tio.POLYLINE_2D->owned_obj_count;
+        return obj->tio.entity->tio.POLYLINE_2D->num_owned;
       else if (dwg->header.version >= R_13) // iterate over first_vertex - last_vertex
         {
           Dwg_Object *vobj = dwg_ref_get_object(dwg, _obj->first_vertex);
@@ -12270,7 +12275,7 @@ dwg_obj_polyline_3d_get_numpoints(const dwg_object *obj, int *error)
       *error = 0;
 
       if (dwg->header.version >= R_2004)
-        return obj->tio.entity->tio.POLYLINE_3D->owned_obj_count;
+        return obj->tio.entity->tio.POLYLINE_3D->num_owned;
       else if (dwg->header.version >= R_13) // iterate over first_vertex - last_vertex
         {
           Dwg_Object *vobj = dwg_ref_get_object(dwg, _obj->first_vertex);
@@ -15020,14 +15025,15 @@ dwg_ent_table_has_attribs(dwg_ent_table *table, int *error)
 }
 
 /// Sets owned object count
+/// FIXME needs to adjust handle array instead: add/delete
 void
-dwg_ent_table_set_owned_object_count(dwg_ent_table *table, BITCODE_BL count,
-                                     int *error)
+dwg_ent_table_set_num_owned(dwg_ent_table *table, BITCODE_BL count,
+                            int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      table->owned_object_count = count;
+      table->num_owned = count;
     }
   else
     {
@@ -15038,12 +15044,12 @@ dwg_ent_table_set_owned_object_count(dwg_ent_table *table, BITCODE_BL count,
 
 /// Returns owned object count
 BITCODE_BL
-dwg_ent_table_get_owned_object_count(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_num_owned(const dwg_ent_table *table, int *error)
 {
   if (table != 0)
     {
       *error = 0;
-      return table->owned_object_count;
+      return table->num_owned;
     }
   else
     {
@@ -17255,20 +17261,6 @@ dwg_get_num_classes(const dwg_data *dwg)
   if (dwg_version == R_INVALID)
     dwg_version = (Dwg_Version_Type)dwg->header.version;
   return dwg->num_classes;
-}
-long unsigned int
-dwg_get_num_objects(const dwg_data *dwg)
-{
-  if (dwg_version == R_INVALID)
-    dwg_version = (Dwg_Version_Type)dwg->header.version;
-  return dwg->num_objects;
-}
-long unsigned int
-dwg_get_num_entities(const dwg_data *dwg)
-{
-  if (dwg_version == R_INVALID)
-    dwg_version = (Dwg_Version_Type)dwg->header.version;
-  return dwg->num_entities;
 }
 
 dwg_class *

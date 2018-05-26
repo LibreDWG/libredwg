@@ -8,7 +8,7 @@ low_level_process(dwg_object *obj)
 
   printf("flag1 of polyline_3d : " FORMAT_RC "\n", polyline_3d->flag);
   printf("flag2 of polyline_3d : " FORMAT_RC "\n", polyline_3d->flag2);
-  printf("numpoints of polyline_3d (r2004+): " FORMAT_BL "\n", polyline_3d->owned_obj_count);
+  printf("numpoints of polyline_3d (r2004+): " FORMAT_BL "\n", polyline_3d->num_owned);
 }
 
 void

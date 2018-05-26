@@ -285,8 +285,8 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
       FIELD_HANDLE_N(name[vcount], vcount, code, dxf);   \
     }
 
-#define FIELD_INSERT_COUNT(insert_count, type, dxf)   \
-  FIELD_RL(insert_count, dxf)
+#define FIELD_NUM_INSERTS(num_inserts, type, dxf)   \
+  FIELD_RL(num_inserts, dxf)
 
 #define HANDLE_VECTOR(name, sizefield, code, dxf) \
   HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code, dxf)
@@ -692,7 +692,7 @@ dwg_encode(Dwg_Data* dwg, Bit_Chain* dat)
 
       SINCE(R_2007)
         {
-          bit_write_BL(dat, klass->instance_count);
+          bit_write_BL(dat, klass->num_instances);
           bit_write_BL(dat, klass->dwg_version);
           bit_write_BL(dat, klass->maint_version);
           bit_write_BL(dat, klass->unknown_1);

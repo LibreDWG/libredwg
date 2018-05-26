@@ -836,7 +836,7 @@ typedef struct _dwg_entity_INSERT
   BITCODE_BD        rotation;
   BITCODE_3DPOINT   extrusion;
   BITCODE_B         has_attribs;
-  BITCODE_BL        owned_obj_count;
+  BITCODE_BL        num_owned;
 
   BITCODE_H   block_header;
   BITCODE_H   first_attrib;
@@ -856,7 +856,7 @@ typedef struct _dwg_entity_MINSERT
   BITCODE_BD        rotation;
   BITCODE_3DPOINT   extrusion;
   BITCODE_B         has_attribs;
-  BITCODE_BL        owned_obj_count;
+  BITCODE_BL        num_owned;
 
   BITCODE_BS        numcols;
   BITCODE_BS        numrows;
@@ -923,7 +923,7 @@ typedef struct _dwg_entity_POLYLINE_2D
   BITCODE_BT thickness;
   BITCODE_BD elevation;
   BITCODE_BE extrusion;
-  BITCODE_BL owned_obj_count;
+  BITCODE_BL num_owned;
   BITCODE_H first_vertex;
   BITCODE_H last_vertex;
   BITCODE_H* vertex;
@@ -937,7 +937,7 @@ typedef struct _dwg_entity_POLYLINE_3D
 {
   BITCODE_RC flag;
   BITCODE_RC flag2;
-  BITCODE_BL owned_obj_count;
+  BITCODE_BL num_owned;
   BITCODE_H first_vertex;
   BITCODE_H last_vertex;
   BITCODE_H* vertex;
@@ -1140,7 +1140,7 @@ typedef struct _dwg_entity_POLYLINE_PFACE
 {
   BITCODE_BS numverts;
   BITCODE_BS numfaces;
-  BITCODE_BL owned_obj_count;
+  BITCODE_BL num_owned;
   BITCODE_H first_vertex;
   BITCODE_H last_vertex;
   BITCODE_H* vertex;
@@ -1154,11 +1154,11 @@ typedef struct _dwg_entity_POLYLINE_MESH
 {
   BITCODE_BS flag;
   BITCODE_BS curve_type;
-  BITCODE_BS m_vert_count;
-  BITCODE_BS n_vert_count;
+  BITCODE_BS num_m_verts;
+  BITCODE_BS num_n_verts;
   BITCODE_BS m_density;
   BITCODE_BS n_density;
-  BITCODE_BL owned_obj_count;
+  BITCODE_BL num_owned;
   BITCODE_H first_vertex;
   BITCODE_H last_vertex;
   BITCODE_H* vertex;
@@ -1236,7 +1236,7 @@ typedef struct _dwg_entity_VIEWPORT
   BITCODE_2RD grid_spacing;
   BITCODE_BS circle_zoom;
   BITCODE_BS grid_major;
-  BITCODE_BL frozen_layer_count;
+  BITCODE_BL num_frozen_layers;
   BITCODE_BL status_flag;
   BITCODE_TV style_sheet;
   BITCODE_RC render_mode;
@@ -1572,10 +1572,10 @@ typedef struct _dwg_object_BLOCK_HEADER
   BITCODE_B loaded_bit;   /* flag 70 bit 6 */
   BITCODE_B xrefref;      /* flag 70 bit 7 */
   BITCODE_BS xrefindex_plus1;
-  BITCODE_BL owned_object_count;
+  BITCODE_BL num_owned;
   BITCODE_3DPOINT base_pt;
   BITCODE_TV xref_pname;
-  BITCODE_RL insert_count;
+  BITCODE_RL num_inserts;
   BITCODE_TV description;
   BITCODE_BL preview_data_size;
   BITCODE_RC* preview_data;
@@ -2716,7 +2716,7 @@ typedef struct _dwg_TABLE_cell
   BITCODE_TV text_string;
   BITCODE_BD block_scale;
   BITCODE_B additional_data_flag;
-  BITCODE_BS attr_def_count;
+  BITCODE_BS num_attr_defs;
   BITCODE_BS attr_def_index;
   BITCODE_TV attr_def_text;
   BITCODE_B additional_data_flag2;
@@ -2774,7 +2774,7 @@ typedef struct _dwg_entity_TABLE
   BITCODE_BD rotation;
   BITCODE_3BD extrusion;
   BITCODE_B has_attribs;
-  BITCODE_BL owned_object_count;
+  BITCODE_BL num_owned;
   BITCODE_BS flag_for_table_value; /* Bit flags, 0x06 (0x02 + 0x04): has block,
                                       0x10: table direction, 0 = up, 1 = down,
                                       0x20: title suppressed.
@@ -3870,7 +3870,7 @@ typedef struct _dwg_class
   BITCODE_TU dxfname_u;
   BITCODE_B  wasazombie; /* really Was-a-proxy flag */
   BITCODE_BS item_class_id; /* Is-an-entity. 1f2 for entities, 1f3 for objects */
-  BITCODE_BL instance_count; /* 91 Instance count for a custom class */
+  BITCODE_BL num_instances; /* 91 Instance count for a custom class */
   BITCODE_BL dwg_version;
   BITCODE_BL maint_version;
   BITCODE_BL unknown_1;
@@ -4184,16 +4184,16 @@ Dwg_Object_LAYER**
 dwg_get_layers(const Dwg_Data *);
 
 long unsigned int
-dwg_get_object_count(const Dwg_Data *dwg);
+dwg_get_num_objects(const Dwg_Data *dwg);
 
 long unsigned int
-dwg_get_object_object_count(const Dwg_Data *dwg);
+dwg_get_object_num_objects(const Dwg_Data *dwg);
 
 int
 dwg_class_is_entity(const Dwg_Class *klass);
 
 long unsigned int
-dwg_get_entity_count(const Dwg_Data *);
+dwg_get_num_entities(const Dwg_Data *);
 
 Dwg_Object_Entity **
 dwg_get_entities(const Dwg_Data *);

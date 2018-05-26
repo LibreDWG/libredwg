@@ -351,9 +351,9 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
 
           //TODO RD elevation 30, 2RD base_pt 10: 24
           FIELD_RC (block_scaling, 0);
-          FIELD_CAST (owned_object_count, RS, BL, 0);
+          FIELD_CAST (num_owned, RS, BL, 0);
           FIELD_RC (flag2, 0);
-          FIELD_CAST (insert_count, RS, RL, 0);
+          FIELD_CAST (num_inserts, RS, RL, 0);
           FIELD_RS (flag3, 0);
           CHK_ENDPOS;
         }
@@ -999,7 +999,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
 
       SINCE(R_2007)
         {
-          klass->instance_count = bit_read_BL(dat);
+          klass->num_instances = bit_read_BL(dat);
           klass->dwg_version = bit_read_BL(dat);
           klass->maint_version = bit_read_BL(dat);
           klass->unknown_1 = bit_read_BL(dat);
@@ -1885,13 +1885,13 @@ read_2004_section_classes(Bit_Chain* dat, Dwg_Data *dwg)
                     "(0x1f3 for object, 0x1f2 for entity)\n",
                     dwg->dwg_class[idc].item_class_id)
 
-          dwg->dwg_class[idc].instance_count = bit_read_BL(&sec_dat);
+          dwg->dwg_class[idc].num_instances = bit_read_BL(&sec_dat);
           dwg->dwg_class[idc].dwg_version    = bit_read_BS(&sec_dat);
           dwg->dwg_class[idc].maint_version  = bit_read_BS(&sec_dat);
           dwg->dwg_class[idc].unknown_1      = bit_read_BL(&sec_dat);
           dwg->dwg_class[idc].unknown_1      = bit_read_BL(&sec_dat);
-          LOG_TRACE("instance count:   %u\n",
-                    dwg->dwg_class[idc].instance_count)
+          LOG_TRACE( "num_instances:    %u\n",
+                    dwg->dwg_class[idc].num_instances)
           LOG_HANDLE("dwg version:      %u (%u)\n",
                     dwg->dwg_class[idc].dwg_version,
                     dwg->dwg_class[idc].maint_version)

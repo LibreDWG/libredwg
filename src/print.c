@@ -173,8 +173,8 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 #define HANDLE_VECTOR(name, sizefield, code, dxf) \
   HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code, dxf)
 
-#define FIELD_INSERT_COUNT(insert_count, type, dxf) \
-  FIELD_G_TRACE(insert_count, type, dxf)
+#define FIELD_NUM_INSERTS(num_inserts, type, dxf) \
+  FIELD_G_TRACE(num_inserts, type, dxf)
 
 #define FIELD_XDATA(name, size)
 

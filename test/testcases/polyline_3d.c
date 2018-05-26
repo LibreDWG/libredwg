@@ -9,7 +9,7 @@ low_level_process (dwg_object * obj)
 
   printf ("flag1 of polyline : " FORMAT_RC "\n", polyline_3d->flag);
   printf ("flag2 of polyline : " FORMAT_RC "\n", polyline_3d->flag2);
-  printf("numpoints of polyline_3d (r2004+): " FORMAT_BL "\n", polyline_3d->owned_obj_count);
+  printf("numpoints of polyline_3d (r2004+): " FORMAT_BL "\n", polyline_3d->num_owned);
 }
 
 void
@@ -34,7 +34,7 @@ api_process (dwg_object * obj)
 
   numpoints = dwg_obj_polyline_3d_get_numpoints(obj, &error);
   //FIXME: only valid for r2004+
-  if (!error && polyline_3d->owned_obj_count == numpoints)
+  if (!error && polyline_3d->num_owned == numpoints)
     pass ("Working Properly");
   else
     fail ("error in reading numpoints");

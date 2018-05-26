@@ -1283,10 +1283,10 @@ char
 dwg_ent_insert_has_attribs(dwg_ent_insert *insert, int *error);
 
 BITCODE_BL
-dwg_ent_insert_get_owned_obj_count(const dwg_ent_insert *insert, int *error);
+dwg_ent_insert_get_num_owned(const dwg_ent_insert *insert, int *error);
 
 void
-dwg_ent_insert_set_owned_obj_count(dwg_ent_insert *insert, BITCODE_BL count,
+dwg_ent_insert_set_num_owned(dwg_ent_insert *insert, BITCODE_BL count,
                                    int *error);
 
 
@@ -1337,10 +1337,10 @@ char
 dwg_ent_minsert_has_attribs(dwg_ent_minsert *minsert, int *error);
 
 BITCODE_BL
-dwg_ent_minsert_get_owned_obj_count(const dwg_ent_minsert *minsert, int *error);
+dwg_ent_minsert_get_num_owned(const dwg_ent_minsert *minsert, int *error);
 
 void
-dwg_ent_minsert_set_owned_obj_count(dwg_ent_minsert *minsert, BITCODE_BL count,
+dwg_ent_minsert_set_num_owned(dwg_ent_minsert *minsert, BITCODE_BL count,
                                     int *error);
 
 BITCODE_BL
@@ -2441,10 +2441,10 @@ dwg_ent_viewport_set_grid_major(dwg_ent_viewport *vp, BITCODE_BS major,
                                 int *error);
 
 BITCODE_BL
-dwg_ent_viewport_get_frozen_layer_count(const dwg_ent_viewport *vp, int *error);
+dwg_ent_viewport_get_num_frozen_layers(const dwg_ent_viewport *vp, int *error);
 
 void
-dwg_ent_viewport_set_frozen_layer_count(dwg_ent_viewport *vp, BITCODE_BL count,
+dwg_ent_viewport_set_num_frozen_layers(dwg_ent_viewport *vp, BITCODE_BL count,
                                         int *error);
 
 char *
@@ -2686,20 +2686,20 @@ dwg_ent_polyline_mesh_set_curve_type(dwg_ent_polyline_mesh *mesh,
                                      BITCODE_BS curve_type, int *error);
 
 BITCODE_BS
-dwg_ent_polyline_mesh_get_m_vert_count(const dwg_ent_polyline_mesh *mesh,
+dwg_ent_polyline_mesh_get_num_m_verts(const dwg_ent_polyline_mesh *mesh,
                                        int *error);
 
 void
-dwg_ent_polyline_mesh_set_m_vert_count(dwg_ent_polyline_mesh *mesh,
-                                       BITCODE_BS m_vert_count, int *error);
+dwg_ent_polyline_mesh_set_num_m_verts(dwg_ent_polyline_mesh *mesh,
+                                       BITCODE_BS num_m_verts, int *error);
 
 BITCODE_BS
-dwg_ent_polyline_mesh_get_n_vert_count(const dwg_ent_polyline_mesh *mesh,
+dwg_ent_polyline_mesh_get_num_n_verts(const dwg_ent_polyline_mesh *mesh,
                                        int *error);
 
 void
-dwg_ent_polyline_mesh_set_n_vert_count(dwg_ent_polyline_mesh *mesh,
-                                       BITCODE_BS n_vert_count, int *error);
+dwg_ent_polyline_mesh_set_num_n_verts(dwg_ent_polyline_mesh *mesh,
+                                       BITCODE_BS num_n_verts, int *error);
 
 BITCODE_BS
 dwg_ent_polyline_mesh_get_m_density(const dwg_ent_polyline_mesh *mesh, int *error);
@@ -2716,12 +2716,12 @@ dwg_ent_polyline_mesh_set_n_density(dwg_ent_polyline_mesh *mesh,
                                     BITCODE_BS n_density, int *error);
 
 BITCODE_BL
-dwg_ent_polyline_mesh_get_owned_obj_count(const dwg_ent_polyline_mesh *mesh,
+dwg_ent_polyline_mesh_get_num_owned(const dwg_ent_polyline_mesh *mesh,
                                           int *error);
 
 void
-dwg_ent_polyline_mesh_set_owned_obj_count(dwg_ent_polyline_mesh *mesh,
-                                          BITCODE_BL owned_obj_count, int *error);
+dwg_ent_polyline_mesh_set_num_owned(dwg_ent_polyline_mesh *mesh,
+                                          BITCODE_BL num_owned, int *error);
 
 
 /********************************************************************
@@ -3343,11 +3343,11 @@ unsigned char
 dwg_ent_table_has_attribs(dwg_ent_table *table, int *error);
 
 void
-dwg_ent_table_set_owned_object_count(dwg_ent_table *table, BITCODE_BL count,
+dwg_ent_table_set_num_owned(dwg_ent_table *table, BITCODE_BL count,
                                      int *error);
 
 BITCODE_BL
-dwg_ent_table_get_owned_object_count(const dwg_ent_table *table, int *error);
+dwg_ent_table_get_num_owned(const dwg_ent_table *table, int *error);
 
 void
 dwg_ent_table_set_flag_for_table_value(dwg_ent_table *table,
