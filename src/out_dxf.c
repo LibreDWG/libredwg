@@ -61,16 +61,17 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 #ifdef HAVE_NATIVE_WCHAR2
 # define VALUE_TU(value,dxf)\
   { GROUP(dxf); \
-    fprintf(dat->fh, "%ls\r\n", (wchar_t*)value); }
+    fprintf(dat->fh, "%ls\r\n", value ? (wchar_t*)value : ""); }
 #else
 # define VALUE_TU(wstr,dxf) \
   { \
     BITCODE_TU ws = (BITCODE_TU)wstr; \
     uint16_t _c; \
     GROUP(dxf);\
-    while ((_c = *ws++)) { \
-      fprintf(dat->fh, "%c", (char)(_c & 0xff)); \
-    } \
+    if (wstr) \
+      while ((_c = *ws++)) { \
+        fprintf(dat->fh, "%c", (char)(_c & 0xff)); \
+      } \
     fprintf(dat->fh, "\r\n"); \
   }
 #endif
@@ -136,8 +137,7 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 #define HANDLE_NAME(name, dxf, section) \
   {\
     Dwg_Object_Ref *ref = dwg->header_vars.name;\
-    if (ref && ref->obj) \
-      dxf_write_handle(dat, ref, ref->obj->tio.object->tio.section->entry_name, dxf); \
+    dxf_write_handle(dat, ref, ref && ref->obj ? ref->obj->tio.object->tio.section->entry_name : "", dxf); \
   }
 
 #define FIELD_DATAHANDLE(name, code, dxf) FIELD_HANDLE(name, code, dxf)
@@ -182,9 +182,9 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 #define FIELD_TF(name,len,dxf)  VALUE_TV(_obj->name, dxf)
 #define FIELD_TFF(name,len,dxf) VALUE_TV(_obj->name, dxf)
 #define FIELD_TV(name,dxf) \
-  if (_obj->name != NULL && dxf != 0) { VALUE_TV(_obj->name,dxf); }
+  if (dxf != 0) { VALUE_TV(_obj->name,dxf); }
 #define FIELD_TU(name,dxf) \
-  if (_obj->name != NULL && dxf != 0) { VALUE_TU((BITCODE_TU)_obj->name, dxf); }
+  if (dxf != 0) { VALUE_TU((BITCODE_TU)_obj->name, dxf); }
 #define FIELD_T(name,dxf) \
   { if (dat->from_version >= R_2007) { FIELD_TU(name, dxf); } \
     else                             { FIELD_TV(name, dxf); } }
@@ -377,21 +377,38 @@ dwg_dxf_ ##token (Bit_Chain *dat, Dwg_Object * obj) \
 
 // r2000+ converts STANDARD to Standard, BYLAYER to ByLayer, BYBLOCK to ByBlock
 static void
-dxf_write_handle(Bit_Chain *dat, Dwg_Object_Ref *ref, char* entry_name, int dxf)
+dxf_write_handle(Bit_Chain *restrict dat, Dwg_Object_Ref *restrict ref, char *restrict entry_name, int dxf)
 {
   /* ref objects are already all resolved */
   /*if (ref && !ref->obj) ref->obj = dwg_resolve_handle(dwg, ref->absolute_ref); */
-  if (ref->obj->supertype == DWG_SUPERTYPE_OBJECT && entry_name)
+  if (ref && ref->obj && ref->obj->supertype == DWG_SUPERTYPE_OBJECT && entry_name)
     {
-      //TODO: r2007+ unicode names
-      if (dat->version >= R_2000 && !strcmp(entry_name, "STANDARD"))
-        fprintf(dat->fh, "%3i\r\nStandard\r\n", dxf);
-      else if (dat->version >= R_2000 && !strcmp(entry_name, "BYLAYER"))
-        fprintf(dat->fh, "%3i\r\nByLayer\r\n", dxf);
-      else if (dat->version >= R_2000 && !strcmp(entry_name, "BYBLOCK"))
-        fprintf(dat->fh, "%3i\r\nByBlock\r\n", dxf);
+      if (dat->version >= R_2007) // r2007+ unicode names
+        {
+          entry_name = bit_convert_TU((BITCODE_TU)entry_name);
+        }
+      if (dat->from_version >= R_2000 && dat->version < R_2000)
+        { // convert the other way round, from newer to older
+          if (!strcmp(entry_name, "Standard"))
+            fprintf(dat->fh, "%3i\r\nSTANDARD\r\n", dxf);
+          else if (!strcmp(entry_name, "ByLayer"))
+            fprintf(dat->fh, "%3i\r\nBYLAYER\r\n", dxf);
+          else if (!strcmp(entry_name, "ByBlock"))
+            fprintf(dat->fh, "%3i\r\nBYBLOCK\r\n", dxf);
+          else
+            fprintf(dat->fh, "%3i\r\n%s\r\n", dxf, entry_name);
+        }
       else
-        fprintf(dat->fh, "%3i\r\n%s\r\n", dxf, entry_name);
+        { // convert some standard names
+          if (dat->version >= R_2000 && !strcmp(entry_name, "STANDARD"))
+            fprintf(dat->fh, "%3i\r\nStandard\r\n", dxf);
+          else if (dat->version >= R_2000 && !strcmp(entry_name, "BYLAYER"))
+            fprintf(dat->fh, "%3i\r\nByLayer\r\n", dxf);
+          else if (dat->version >= R_2000 && !strcmp(entry_name, "BYBLOCK"))
+            fprintf(dat->fh, "%3i\r\nByBlock\r\n", dxf);
+          else
+            fprintf(dat->fh, "%3i\r\n%s\r\n", dxf, entry_name);
+        }
     }
   else {
     fprintf(dat->fh, "%3i\r\n\r\n", dxf);
