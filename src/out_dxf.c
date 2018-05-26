@@ -432,7 +432,6 @@ dxf_write_handle(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   VALUE_TV ("AcDbSymbolTableRecord", 100); \
   VALUE_TV ("AcDb" #acdbname "TableRecord", 100); \
   dxf_write_handle(dat, obj, _obj->entry_name, 2); \
-  VALUE_RC (0, 70); \
   RESET_VER
 
 #include "dwg.spec"
@@ -1281,7 +1280,7 @@ dxf_tables_write (Bit_Chain *dat, Dwg_Data * dwg)
       TABLE(VPORT);
       COMMON_TABLE_CONTROL_FLAGS(null_handle);
       dwg_dxf_VPORT_CONTROL(dat, ctrl);
-      /* ??
+      /* if saved from newer version, eg. AC1030:
       VALUE_TV ("ACAD", 1001);
       VALUE_TV ("DbSaveVer", 1000);
       VALUE_RS (30, 1071); */
@@ -1540,7 +1539,9 @@ dwg_write_dxf(Bit_Chain *dat, Dwg_Data * dwg)
   {
     dxf_header_write (dat, dwg);
 
-    SINCE(R_2000) {
+    // if downgraded from r2000 to r14, but we still have classes, keep the classes
+    if ((dat->from_version >= R_2000 && dwg->num_classes) ||
+        dat->version >= R_2000) {
       if (dxf_classes_write (dat, dwg))
         goto fail;
     }

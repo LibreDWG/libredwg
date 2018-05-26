@@ -429,7 +429,7 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
           FIELD_RD (width, 41);
           FIELD_3RD (target, 12);
           FIELD_3RD (direction, 11);
-          FIELD_CAST (view_mode, RS, 4BITS, 71);
+          FIELD_CAST (VIEWMODE, RS, 4BITS, 71);
           FIELD_RD (lens_length, 42);
           FIELD_RD (front_clip, 43);
           FIELD_RD (back_clip, 44);
@@ -472,7 +472,7 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
           FIELD_RD (lens_length, 42);
           FIELD_RD (front_clip, 43);
           FIELD_RD (back_clip, 33);
-          FIELD_CAST (view_mode, RS, 4BITS, 71);
+          FIELD_CAST (VIEWMODE, RS, 4BITS, 71);
 
           FIELD_2RD (lower_left, 10);
           FIELD_2RD (upper_right, 11);

@@ -1762,7 +1762,7 @@ typedef struct _dwg_object_VIEW
   BITCODE_BD lens_length;
   BITCODE_BD front_clip;
   BITCODE_BD back_clip;
-  BITCODE_4BITS view_mode;
+  BITCODE_4BITS VIEWMODE;
   BITCODE_RC render_mode;
   BITCODE_B use_default_lights;
   BITCODE_RC default_lightning_type;
@@ -1843,7 +1843,7 @@ typedef struct _dwg_object_VPORT_CONTROL
  */
 typedef struct _dwg_object_VPORT
 {
-  BITCODE_RC flag; /* preR13 */
+  BITCODE_RC flag;
   BITCODE_TV entry_name;
   BITCODE_RS used; /* preR13 */
   BITCODE_B xrefref;
@@ -1858,7 +1858,7 @@ typedef struct _dwg_object_VPORT
   BITCODE_BD lens_length;
   BITCODE_BD front_clip;
   BITCODE_BD back_clip;
-  BITCODE_4BITS view_mode;
+  BITCODE_4BITS VIEWMODE;
   BITCODE_RC render_mode;
   BITCODE_B use_default_lights;
   BITCODE_RC default_lightning_type;
@@ -1868,7 +1868,7 @@ typedef struct _dwg_object_VPORT
   BITCODE_2RD lower_left;
   BITCODE_2RD upper_right;
   BITCODE_B UCSFOLLOW;
-  BITCODE_BS circle_zoom;
+  BITCODE_BS circle_zoom; /* circle sides: nr of tesselations */
   BITCODE_B FASTZOOM;
   BITCODE_RC UCSICON;
   BITCODE_B GRIDMODE;

@@ -12,6 +12,8 @@
 #define VALUE(value,type,dxf) \
   LOG_TRACE(FORMAT_##type " [" #type " %d]\n", value, dxf)
 #define VALUE_RC(value,dxf) VALUE(value, RC, dxf)
+#define VALUE_RS(value,dxf) VALUE(value, RS, dxf)
+#define VALUE_RL(value,dxf) VALUE(value, RL, dxf)
 #define VALUE_RD(value,dxf) VALUE(value, RD, dxf)
 
 #define FIELDG(name,type,dxf) \
@@ -135,7 +137,9 @@
     } \
   }
 #define FIELD_BT(name,dxf) FIELDG(name, BT, dxf);
-#define FIELD_4BITS(name,dxf) _obj->name = bit_read_4BITS(dat);
+#define FIELD_4BITS(name,dxf) \
+    { _obj->name = bit_read_4BITS(dat); \
+      FIELD_G_TRACE(name,4BITS,dxf); }
 
 #define FIELD_BE(name,dxf) bit_read_BE(dat, &_obj->name.x, &_obj->name.y, &_obj->name.z);
 #define FIELD_DD(name, _default, dxf) FIELD_VALUE(name) = bit_read_DD(dat, _default);

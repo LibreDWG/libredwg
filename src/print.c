@@ -117,6 +117,8 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 #define VALUE(value,type,dxf) \
   LOG_TRACE(FORMAT_##type " [" #type " " #dxf "]\n", value)
 #define VALUE_RC(value,dxf) VALUE(value, RC, dxf)
+#define VALUE_RS(value,dxf) VALUE(value, RS, dxf)
+#define VALUE_RL(value,dxf) VALUE(value, RL, dxf)
 #define VALUE_RD(value,dxf) VALUE(value, RD, dxf)
 
 //FIELD_VECTOR_N(name, type, size):

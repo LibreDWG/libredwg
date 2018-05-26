@@ -1911,7 +1911,7 @@ DWG_ENTITY_END
 DWG_OBJECT(BLOCK_CONTROL)
 
   DXF {
-    VALUE (FIELD_VALUE(num_entries)-2, RL, 70);
+    VALUE_RL (FIELD_VALUE(num_entries)-2, 70);
   } else {
     FIELD_BL (num_entries, 70);
   }
@@ -2039,7 +2039,11 @@ DWG_OBJECT_END
 /*(50)*/
 DWG_OBJECT(LAYER_CONTROL)
 
-  FIELD_BL (num_entries, 70);
+  DXF {
+    VALUE_RL (FIELD_VALUE(num_entries)-1, 70);
+  } else {
+    FIELD_BL (num_entries, 70);
+  }
 
   START_HANDLE_STREAM;
   FIELD_HANDLE (null_handle, 4, 0);
@@ -2119,7 +2123,11 @@ DWG_OBJECT_END
 /* STYLE table (52) */
 DWG_OBJECT(STYLE_CONTROL)
 
-  FIELD_BL (num_entries, 70);
+  DXF {
+    VALUE_RL (FIELD_VALUE(num_entries)-1, 70);
+  } else {
+    FIELD_BL (num_entries, 70);
+  }
 
   START_HANDLE_STREAM;
   FIELD_HANDLE (null_handle, 4, 0);
@@ -2175,7 +2183,11 @@ DWG_OBJECT_END
 /*(56)*/
 DWG_OBJECT(LTYPE_CONTROL)
 
-  FIELD_BS (num_entries, 70);
+  DXF {
+    VALUE_RL (FIELD_VALUE(num_entries)-1, 70);
+  } else {
+    FIELD_BS (num_entries, 70); //BS or BL?
+  }
 
   START_HANDLE_STREAM;
   FIELD_HANDLE (null_handle, 4, 0);
@@ -2261,7 +2273,11 @@ DWG_OBJECT_END
 /*(60)*/
 DWG_OBJECT(VIEW_CONTROL)
 
-  FIELD_BL (num_entries, 70);
+  DXF {
+    VALUE_RL (FIELD_VALUE(num_entries)-1, 70);
+  } else {
+    FIELD_BL (num_entries, 70);
+  }
 
   START_HANDLE_STREAM;
   FIELD_HANDLE (null_handle, 4, 0);
@@ -2282,7 +2298,7 @@ DWG_OBJECT(VIEW)
     FIELD_RD (width, 41);
     FIELD_3RD (target, 12);
     FIELD_3RD (direction, 11);
-    FIELD_CAST (view_mode, RS, 4BITS, 71);
+    FIELD_CAST (VIEWMODE, RS, 4BITS, 71);
     FIELD_RD (lens_length, 42);
     FIELD_RD (front_clip, 43);
     FIELD_RD (back_clip, 44);
@@ -2299,7 +2315,7 @@ DWG_OBJECT(VIEW)
     FIELD_BD (lens_length, 42);
     FIELD_BD (front_clip, 43);
     FIELD_BD (back_clip, 44);
-    FIELD_4BITS(view_mode, 71);
+    FIELD_4BITS(VIEWMODE, 71);
   }
   SINCE(R_2000) {
     FIELD_RC (render_mode, 281);
@@ -2372,7 +2388,11 @@ DWG_OBJECT_END
 /*(62)*/
 DWG_OBJECT(UCS_CONTROL)
 
-  FIELD_BS (num_entries, 70);
+  DXF {
+    VALUE_RL (FIELD_VALUE(num_entries)-1, 70);
+  } else {
+    FIELD_BS (num_entries, 70); //BS or BL?
+  }
 
   START_HANDLE_STREAM;
   FIELD_HANDLE (null_handle, 4, 0);
@@ -2424,7 +2444,11 @@ DWG_OBJECT_END
 /* (0x40/64) */
 DWG_OBJECT(VPORT_CONTROL)
 
-  FIELD_BS (num_entries, 70);
+  DXF {
+    VALUE_RL (FIELD_VALUE(num_entries)-1, 70);
+  } else {
+    FIELD_BS (num_entries, 70);
+  }
 
   START_HANDLE_STREAM;
   FIELD_HANDLE (null_handle, 4, 0);
@@ -2438,8 +2462,13 @@ DWG_OBJECT(VPORT)
 
   COMMON_TABLE_FLAGS(vport_control, Viewport)
 
+  SINCE(R_13) {
+    FIELD_VALUE(flag) = FIELD_VALUE(flag) |
+                        FIELD_VALUE(xrefdep) << 4 |
+                        FIELD_VALUE(xrefref) << 6;
+  }
   DXF { // has a different order of fields
-
+  FIELD_RC (flag, 70);
   FIELD_2RD (lower_left, 10);
   FIELD_2RD (upper_right, 11);
   FIELD_2RD (VIEWCTR, 12);
@@ -2464,7 +2493,8 @@ DWG_OBJECT(VPORT)
     FIELD_RC (UCSFOLLOW, 71);
   }
   else {
-    FIELD_4BITS (view_mode, 71); // USCFOLLOW is bit 3 of 71
+    FIELD_VALUE(VIEWMODE) += (FIELD_VALUE(UCSFOLLOW) << 2);
+    FIELD_4BITS (VIEWMODE, 71); // UCSFOLLOW is bit 3 of 71
   }
   FIELD_RS (circle_zoom, 72);
   FIELD_RC (FASTZOOM, 73);
@@ -2532,12 +2562,12 @@ DWG_OBJECT(VPORT)
     FIELD_RD (lens_length, 42);
     FIELD_RD (front_clip, 43);
     FIELD_RD (back_clip, 44);
-    FIELD_CAST (view_mode, RS, 4BITS, 71);
+    FIELD_CAST (VIEWMODE, RS, 4BITS, 71);
 
     FIELD_2RD (lower_left, 10);
     FIELD_2RD (upper_right, 11);
     FIELD_RC (UCSFOLLOW, 71);
-    FIELD_RS (circle_zoom, 72);
+    FIELD_RS (circle_zoom, 72); //circle sides
     FIELD_RC (FASTZOOM, 73);
     FIELD_RC (UCSICON, 74);
     FIELD_RC (GRIDMODE, 76);
@@ -2560,7 +2590,7 @@ DWG_OBJECT(VPORT)
     FIELD_BD (lens_length, 42);
     FIELD_BD (front_clip, 43);
     FIELD_BD (back_clip, 44);
-    FIELD_4BITS (view_mode, 71);
+    FIELD_4BITS (VIEWMODE, 71);
 
     SINCE(R_2000) {
       FIELD_RC (render_mode, 281);
@@ -2640,7 +2670,11 @@ DWG_OBJECT_END
 /*(66)*/
 DWG_OBJECT(APPID_CONTROL)
 
-  FIELD_BS (num_entries, 70);
+  DXF {
+    VALUE_RL (FIELD_VALUE(num_entries)-1, 70);
+  } else {
+    FIELD_BS (num_entries, 70);
+  }
 
   START_HANDLE_STREAM;
   FIELD_HANDLE (null_handle, 4, 0);
@@ -2671,7 +2705,11 @@ DWG_OBJECT_END
 /*(68)*/
 DWG_OBJECT(DIMSTYLE_CONTROL)
 
-  FIELD_BS (num_entries, 70);
+  DXF {
+    VALUE_RL (FIELD_VALUE(num_entries)-1, 70);
+  } else {
+    FIELD_BS (num_entries, 70);
+  }
   SINCE(R_2000)
     {
       /* number of additional hard handles, undocumented */
@@ -2911,6 +2949,9 @@ DWG_OBJECT(DIMSTYLE)
   SINCE(R_13)
   {
     FIELD_B (flag, 70); // Bit 0 of 70
+    FIELD_VALUE(flag) = FIELD_VALUE(flag) |
+                        FIELD_VALUE(xrefdep) << 4 |
+                        FIELD_VALUE(xrefref) << 6;
 
     START_HANDLE_STREAM;
     FIELD_HANDLE (dimstyle_control, 4, 0);
@@ -2940,7 +2981,11 @@ DWG_OBJECT_END
 /* VIEWPORT ENTITY CONTROL (70)*/
 DWG_OBJECT(VPORT_ENTITY_CONTROL)
 
-  FIELD_BS (num_entries, 70);
+  DXF {
+    VALUE_RL (FIELD_VALUE(num_entries)-1, 70);
+  } else {
+    FIELD_BS (num_entries, 70);
+  }
 
   START_HANDLE_STREAM;
   FIELD_HANDLE (null_handle, 4, 0);
@@ -4951,4 +4996,3 @@ DWG_OBJECT_END
 DWG_OBJECT(LEADEROBJECTCONTEXTDATA)
 DWG_OBJECT_END
 */
-
