@@ -727,11 +727,11 @@ dwg_free_object(Dwg_Object *obj)
     case DWG_TYPE_DIMSTYLE:
       dwg_free_DIMSTYLE(obj);
       break;
-    case DWG_TYPE_VPORT_ENT_CONTROL:
-      dwg_free_VPORT_ENT_CONTROL(obj);
+    case DWG_TYPE_VPORT_ENTITY_CONTROL:
+      dwg_free_VPORT_ENTITY_CONTROL(obj);
       break;
-    case DWG_TYPE_VPORT_ENT_HEADER:
-      dwg_free_VPORT_ENT_HEADER(obj);
+    case DWG_TYPE_VPORT_ENTITY_HEADER:
+      dwg_free_VPORT_ENTITY_HEADER(obj);
       break;
     case DWG_TYPE_GROUP:
       dwg_free_GROUP(obj);

@@ -259,8 +259,8 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_APPID = 0x43,
   DWG_TYPE_DIMSTYLE_CONTROL = 0x44,
   DWG_TYPE_DIMSTYLE = 0x45,
-  DWG_TYPE_VPORT_ENT_CONTROL = 0x46,
-  DWG_TYPE_VPORT_ENT_HEADER = 0x47,
+  DWG_TYPE_VPORT_ENTITY_CONTROL = 0x46,
+  DWG_TYPE_VPORT_ENTITY_HEADER = 0x47,
   DWG_TYPE_GROUP = 0x48,
   DWG_TYPE_MLINESTYLE = 0x49,
   DWG_TYPE_OLE2FRAME = 0x4a,
@@ -371,7 +371,7 @@ typedef struct _dwg_header_variables {
   BITCODE_BL unknown_8; /* 24L */
   BITCODE_BL unknown_9; /* 0L */
   BITCODE_BS unknown_10; /* 0 r13-r14 */
-  BITCODE_H vport_ent_header; /* r11-r2000 */
+  BITCODE_H vport_entity_header; /* r11-r2000 */
   BITCODE_B DIMASO;
   BITCODE_B DIMSHO;
   BITCODE_B DIMSAV; /* undocumented */
@@ -624,7 +624,7 @@ typedef struct _dwg_header_variables {
   BITCODE_H VPORT_CONTROL_OBJECT;
   BITCODE_H APPID_CONTROL_OBJECT;
   BITCODE_H DIMSTYLE_CONTROL_OBJECT;
-  BITCODE_H VPORT_ENT_CONTROL_OBJECT; /* r11-r2000 */
+  BITCODE_H VPORT_ENTITY_CONTROL_OBJECT; /* r11-r2000 */
   BITCODE_H DICTIONARY_ACAD_GROUP;
   BITCODE_H DICTIONARY_ACAD_MLINESTYLE;
   BITCODE_H DICTIONARY_NAMED_OBJECTS;
@@ -2055,22 +2055,22 @@ typedef struct _dwg_object_DIMSTYLE
 
 /**
  VIEWPORT ENTITY CONTROL (r11-r2000)
- Struct for VPORT_ENT_CONTROL (70)
+ Struct for VPORT_ENTITY_CONTROL (70)
  */
-typedef struct _dwg_object_VPORT_ENT_CONTROL
+typedef struct _dwg_object_VPORT_ENTITY_CONTROL
 {
   BITCODE_BS num_entries;
   BITCODE_H null_handle;
   BITCODE_H xdicobjhandle;
-  BITCODE_H* vport_ent_headers;
+  BITCODE_H* vport_entity_headers;
   long unsigned int objid;
-} Dwg_Object_VPORT_ENT_CONTROL;
+} Dwg_Object_VPORT_ENTITY_CONTROL;
 
 /**
  VIEWPORT ENTITY HEADER (r11-r2000)
- Struct for VPORT_ENT_HEADER (71)
+ Struct for VPORT_ENTITY_HEADER (71)
  */
-typedef struct _dwg_object_VPORT_ENT_HEADER
+typedef struct _dwg_object_VPORT_ENTITY_HEADER
 {
   BITCODE_RC flag; /* preR13 */
   BITCODE_TV entry_name;
@@ -2079,11 +2079,11 @@ typedef struct _dwg_object_VPORT_ENT_HEADER
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
   BITCODE_B flag1;
-  BITCODE_H vport_ent_control;
+  BITCODE_H vport_entity_control;
   BITCODE_H xdicobjhandle;
   BITCODE_H xref_handle;
-  BITCODE_H vport_ent;
-} Dwg_Object_VPORT_ENT_HEADER;
+  BITCODE_H vport_entity;
+} Dwg_Object_VPORT_ENTITY_HEADER;
 
 /**
  Struct for GROUP (72)
@@ -3779,8 +3779,8 @@ typedef struct _dwg_object_object
     Dwg_Object_APPID *APPID;
     Dwg_Object_DIMSTYLE_CONTROL *DIMSTYLE_CONTROL;
     Dwg_Object_DIMSTYLE *DIMSTYLE;
-    Dwg_Object_VPORT_ENT_CONTROL *VPORT_ENT_CONTROL;
-    Dwg_Object_VPORT_ENT_HEADER *VPORT_ENT_HEADER;
+    Dwg_Object_VPORT_ENTITY_CONTROL *VPORT_ENTITY_CONTROL;
+    Dwg_Object_VPORT_ENTITY_HEADER *VPORT_ENTITY_HEADER;
     Dwg_Object_DICTIONARY *DICTIONARY;
     Dwg_Object_DICTIONARYWDLFT *DICTIONARYWDLFT;
     Dwg_Object_GROUP *GROUP;
@@ -3932,7 +3932,7 @@ typedef enum DWG_SECTION_TYPE_R11 /* tables */
   SECTION_VPORT = 8,
   SECTION_APPID = 9,
   SECTION_DIMSTYLE = 10,
-  SECTION_VPORT_ENT = 11,
+  SECTION_VPORT_ENTITY = 11,
 } Dwg_Section_Type_r11;
 
 typedef struct _dwg_section
@@ -4107,7 +4107,7 @@ typedef struct _dwg_struct
   Dwg_Object_VPORT_CONTROL      vport_control;
   Dwg_Object_APPID_CONTROL      appid_control;
   Dwg_Object_DIMSTYLE_CONTROL   dimstyle_control;
-  Dwg_Object_VPORT_ENT_CONTROL  vport_ent_control;
+  Dwg_Object_VPORT_ENTITY_CONTROL  vport_entity_control;
 
   struct _dwg_second_header {
     BITCODE_RL size;

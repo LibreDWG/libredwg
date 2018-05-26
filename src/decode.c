@@ -562,9 +562,9 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
         }
       break;
 
-    case SECTION_VPORT_ENT:
+    case SECTION_VPORT_ENTITY:
       if (tbl->number) {
-        LOG_WARN("VPORT_ENT table");
+        LOG_WARN("VPORT_ENTITY table");
       }
       break;
 
@@ -699,7 +699,7 @@ decode_preR13(Bit_Chain* dat, Dwg_Data * dwg)
   decode_preR13_section_ptr("DIMSTYLE", SECTION_DIMSTYLE, dat, dwg);
   // skip: 0x69f - dat->bytes
   dat->byte = 0x69f;
-  decode_preR13_section_ptr("VPORT_ENT", SECTION_VPORT_ENT, dat, dwg);
+  decode_preR13_section_ptr("VPORT_ENTITY", SECTION_VPORT_ENTITY, dat, dwg);
   dat->byte += 38;
   // entities
   decode_preR13_entities(entities_start, entities_end, 0, dat, dwg);
@@ -713,7 +713,7 @@ decode_preR13(Bit_Chain* dat, Dwg_Data * dwg)
   decode_preR13_section(SECTION_VPORT, dat, dwg);
   decode_preR13_section(SECTION_APPID, dat, dwg);
   decode_preR13_section(SECTION_DIMSTYLE, dat, dwg);
-  decode_preR13_section(SECTION_VPORT_ENT, dat, dwg);
+  decode_preR13_section(SECTION_VPORT_ENTITY, dat, dwg);
   // blocks
   decode_preR13_entities(blocks_start, blocks_end, blocks_start - 0x40000000,
                          dat, dwg);
@@ -770,7 +770,7 @@ decode_preR13(Bit_Chain* dat, Dwg_Data * dwg)
   decode_preR13_section_chk(SECTION_VPORT, dat, dwg);
   decode_preR13_section_chk(SECTION_APPID, dat, dwg);
   decode_preR13_section_chk(SECTION_DIMSTYLE, dat, dwg);
-  decode_preR13_section_chk(SECTION_VPORT_ENT, dat, dwg);
+  decode_preR13_section_chk(SECTION_VPORT_ENTITY, dat, dwg);
   rl1 = bit_read_RL(dat);
   LOG_TRACE("long 0x%x\n", rl1); // address
 
@@ -3795,14 +3795,14 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
     case DWG_TYPE_DIMSTYLE:
       dwg_decode_DIMSTYLE(dat, obj);
       break;
-    case DWG_TYPE_VPORT_ENT_CONTROL:
-      dwg_decode_VPORT_ENT_CONTROL(dat, obj);
-      obj->tio.object->tio.VPORT_ENT_CONTROL->objid = num;
-      if (obj->tio.object->tio.VPORT_ENT_CONTROL->num_entries)
-        dwg->vport_ent_control = *obj->tio.object->tio.VPORT_ENT_CONTROL;
+    case DWG_TYPE_VPORT_ENTITY_CONTROL:
+      dwg_decode_VPORT_ENTITY_CONTROL(dat, obj);
+      obj->tio.object->tio.VPORT_ENTITY_CONTROL->objid = num;
+      if (obj->tio.object->tio.VPORT_ENTITY_CONTROL->num_entries)
+        dwg->vport_entity_control = *obj->tio.object->tio.VPORT_ENTITY_CONTROL;
       break;
-    case DWG_TYPE_VPORT_ENT_HEADER:
-      dwg_decode_VPORT_ENT_HEADER(dat, obj);
+    case DWG_TYPE_VPORT_ENTITY_HEADER:
+      dwg_decode_VPORT_ENTITY_HEADER(dat, obj);
       break;
     case DWG_TYPE_GROUP:
       dwg_decode_GROUP(dat, obj);

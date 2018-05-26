@@ -738,7 +738,7 @@ dwg_obj_is_control(const Dwg_Object *obj)
          type == DWG_TYPE_VPORT_CONTROL ||
          type == DWG_TYPE_APPID_CONTROL ||
          type == DWG_TYPE_DIMSTYLE_CONTROL ||
-         type == DWG_TYPE_VPORT_ENT_CONTROL;
+         type == DWG_TYPE_VPORT_ENTITY_CONTROL;
 }
 
 Dwg_Section_Type

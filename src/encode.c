@@ -1598,11 +1598,11 @@ dwg_encode_add_object(Dwg_Object* obj, Bit_Chain* dat,
   case DWG_TYPE_DIMSTYLE:
     dwg_encode_DIMSTYLE(dat, obj);
     break;
-  case DWG_TYPE_VPORT_ENT_CONTROL:
-    dwg_encode_VPORT_ENT_CONTROL(dat, obj);
+  case DWG_TYPE_VPORT_ENTITY_CONTROL:
+    dwg_encode_VPORT_ENTITY_CONTROL(dat, obj);
     break;
-  case DWG_TYPE_VPORT_ENT_HEADER:
-    dwg_encode_VPORT_ENT_HEADER(dat, obj);
+  case DWG_TYPE_VPORT_ENTITY_HEADER:
+    dwg_encode_VPORT_ENTITY_HEADER(dat, obj);
     break;
   case DWG_TYPE_GROUP:
     dwg_encode_GROUP(dat, obj);

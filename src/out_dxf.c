@@ -1013,13 +1013,13 @@ dwg_dxf_object(Bit_Chain *dat, Dwg_Object *obj)
       //RECORD(DIMSTYLE);
       //dwg_dxf_DIMSTYLE(dat, obj);
       break;
-    case DWG_TYPE_VPORT_ENT_CONTROL:
-      //RECORD(VPORT_ENT_HEADER);
-      //dwg_dxf_VPORT_ENT_CONTROL(dat, obj);
+    case DWG_TYPE_VPORT_ENTITY_CONTROL:
+      //RECORD(VPORT_ENTITY_HEADER);
+      //dwg_dxf_VPORT_ENTITY_CONTROL(dat, obj);
       break;
-    case DWG_TYPE_VPORT_ENT_HEADER:
-      //RECORD(VPORT_ENT_HEADER);
-      //dwg_dxf_VPORT_ENT_HEADER(dat, obj);
+    case DWG_TYPE_VPORT_ENTITY_HEADER:
+      //RECORD(VPORT_ENTITY_HEADER);
+      //dwg_dxf_VPORT_ENTITY_HEADER(dat, obj);
       break;
     case DWG_TYPE_GROUP:
       RECORD(GROUP);
