@@ -294,17 +294,15 @@
   HEADER_HANDLE_NAME (CMLSTYLE, 2, MLINESTYLE); //default: Standard
   HEADER_RC (CMLJUST, 70);
   HEADER_RD (CMLSCALE, 40); //default: 20
-  VERSION(R_14) {
-    HEADER_RC (PROXYGRAPHICS, 70);
-  }
   VERSION(R_13) {
     HEADER_RC (SAVEIMAGES, 70);
   }
-  SINCE(R_2000) {
+  SINCE(R_14) {
     HEADER_RC (PROXYGRAPHICS, 70);
-    HEADER_VALUE (MEASUREMENT, RC, 70,
-                  dwg->header.num_sections > SECTION_MEASUREMENT_R13 ? 1 : 0);
-
+  }
+  HEADER_VALUE (MEASUREMENT, RC, 70,
+                dwg->header.num_sections > SECTION_MEASUREMENT_R13 ? 1 : 0);
+  SINCE(R_2000) {
     HEADER_RC (CELWEIGHT, 370);
     HEADER_RC (ENDCAPS, 280);
     HEADER_RC (JOINSTYLE, 280);
