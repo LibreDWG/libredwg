@@ -137,7 +137,8 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 #define HANDLE_NAME(name, dxf, section) \
   {\
     Dwg_Object_Ref *ref = dwg->header_vars.name;\
-    dxf_write_handle(dat, ref, ref && ref->obj ? ref->obj->tio.object->tio.section->entry_name : "", dxf); \
+    Dwg_Object *o = ref ? ref->obj : NULL;\
+    dxf_write_handle(dat, o, o ? o->tio.object->tio.section->entry_name : (char*)"", dxf); \
   }
 
 #define FIELD_DATAHANDLE(name, code, dxf) FIELD_HANDLE(name, code, dxf)
@@ -377,11 +378,10 @@ dwg_dxf_ ##token (Bit_Chain *dat, Dwg_Object * obj) \
 
 // r2000+ converts STANDARD to Standard, BYLAYER to ByLayer, BYBLOCK to ByBlock
 static void
-dxf_write_handle(Bit_Chain *restrict dat, Dwg_Object_Ref *restrict ref, char *restrict entry_name, int dxf)
+dxf_write_handle(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
+                 char *restrict entry_name, int dxf)
 {
-  /* ref objects are already all resolved */
-  /*if (ref && !ref->obj) ref->obj = dwg_resolve_handle(dwg, ref->absolute_ref); */
-  if (ref && ref->obj && ref->obj->supertype == DWG_SUPERTYPE_OBJECT && entry_name)
+  if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT && entry_name)
     {
       if (dat->version >= R_2007) // r2007+ unicode names
         {
@@ -395,6 +395,8 @@ dxf_write_handle(Bit_Chain *restrict dat, Dwg_Object_Ref *restrict ref, char *re
             fprintf(dat->fh, "%3i\r\nBYLAYER\r\n", dxf);
           else if (!strcmp(entry_name, "ByBlock"))
             fprintf(dat->fh, "%3i\r\nBYBLOCK\r\n", dxf);
+          else if (!strcmp(entry_name, "*Active"))
+            fprintf(dat->fh, "%3i\r\n*ACTIVE\r\n", dxf);
           else
             fprintf(dat->fh, "%3i\r\n%s\r\n", dxf, entry_name);
         }
@@ -406,6 +408,8 @@ dxf_write_handle(Bit_Chain *restrict dat, Dwg_Object_Ref *restrict ref, char *re
             fprintf(dat->fh, "%3i\r\nByLayer\r\n", dxf);
           else if (dat->version >= R_2000 && !strcmp(entry_name, "BYBLOCK"))
             fprintf(dat->fh, "%3i\r\nByBlock\r\n", dxf);
+          else if (dat->version >= R_2000 && !strcmp(entry_name, "*ACTIVE"))
+            fprintf(dat->fh, "%3i\r\n*Active\r\n", dxf);
           else
             fprintf(dat->fh, "%3i\r\n%s\r\n", dxf, entry_name);
         }
@@ -427,7 +431,7 @@ dxf_write_handle(Bit_Chain *restrict dat, Dwg_Object_Ref *restrict ref, char *re
   FIELD_HANDLE (owner, 4, 330); \
   VALUE_TV ("AcDbSymbolTableRecord", 100); \
   VALUE_TV ("AcDb" #acdbname "TableRecord", 100); \
-  FIELD_T (entry_name, 2); \
+  dxf_write_handle(dat, obj, _obj->entry_name, 2); \
   VALUE_RC (0, 70); \
   RESET_VER
 
