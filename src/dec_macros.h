@@ -12,6 +12,7 @@
 #define VALUE(value,type,dxf) \
   LOG_TRACE(FORMAT_##type " [" #type " %d]\n", value, dxf)
 #define VALUE_RC(value,dxf) VALUE(value, RC, dxf)
+#define VALUE_RD(value,dxf) VALUE(value, RD, dxf)
 
 #define FIELDG(name,type,dxf) \
   { _obj->name = bit_read_##type(dat); \

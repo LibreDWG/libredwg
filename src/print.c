@@ -117,6 +117,7 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 #define VALUE(value,type,dxf) \
   LOG_TRACE(FORMAT_##type " [" #type " " #dxf "]\n", value)
 #define VALUE_RC(value,dxf) VALUE(value, RC, dxf)
+#define VALUE_RD(value,dxf) VALUE(value, RD, dxf)
 
 //FIELD_VECTOR_N(name, type, size):
 // reads data of the type indicated by 'type' 'size' times and stores

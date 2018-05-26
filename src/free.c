@@ -49,6 +49,7 @@ extern int  dwg_obj_is_control(const Dwg_Object *obj);
 
 #define VALUE(value,type,dxf)
 #define VALUE_RC(value,dxf) VALUE(value, RC, dxf)
+#define VALUE_RD(value,dxf) VALUE(value, RD, dxf)
 
 #define FIELD(name,type) {}
 #define FIELD_TRACE(name,type) \

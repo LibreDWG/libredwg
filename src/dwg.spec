@@ -2452,7 +2452,11 @@ DWG_OBJECT(VPORT)
   FIELD_3RD (VIEWDIR, 16);
   FIELD_3RD (view_target, 17);
   FIELD_RD (VIEWSIZE, 40);
-  FIELD_RD (aspect_ratio, 41); //wrong!
+  PRE(R_13) {
+    FIELD_RD (aspect_ratio, 41);
+  } else {
+    VALUE_RD(FIELD_VALUE(aspect_ratio) / FIELD_VALUE(VIEWSIZE), 41);
+  }
   FIELD_RD (lens_length, 42);
   FIELD_RD (front_clip, 43);
   FIELD_RD (back_clip, 44);
@@ -4950,3 +4954,4 @@ DWG_OBJECT_END
 DWG_OBJECT(LEADEROBJECTCONTEXTDATA)
 DWG_OBJECT_END
 */
+

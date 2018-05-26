@@ -63,8 +63,10 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 #define REFS_PER_REALLOC 100
 
 #define VALUE(value,type,dxf) \
-  LOG_TRACE(FORMAT_##type " [" #type " %d]\n", value, dxf)
+  { bit_write_##type(dat, value); \
+    LOG_TRACE(FORMAT_##type " [" #type " %d]\n", value, dxf); }
 #define VALUE_RC(value,dxf) VALUE(value, RC, dxf)
+#define VALUE_RD(value,dxf) VALUE(value, RD, dxf)
 
 #define FIELD(name,type)\
   { bit_write_##type(dat, _obj->name); \

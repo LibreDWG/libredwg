@@ -53,6 +53,7 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 #define VALUE(value,type,dxf) \
     fprintf(dat->fh, FORMAT_##type, value)
 #define VALUE_RC(value,dxf) VALUE(value, RC, dxf)
+#define VALUE_RD(value,dxf) VALUE(value, RD, dxf)
 
 #define FIELD(name,type,dxf) \
     PREFIX fprintf(dat->fh, "\"" #name "\": " FORMAT_##type ",\n", _obj->name)
