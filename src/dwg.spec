@@ -1524,13 +1524,12 @@ void decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Ent
 #ifdef IS_ENCODER
 
 #define ENCODE_3DSOLID encode_3dsolid(dat, hdl_dat, obj, _obj);
-void encode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj);
-
-void encode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
+static void encode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
 {
   //TODO Implement-me
   assert(dat);
   assert(obj);
+  LOG_ERROR("encode_3dsolid nyi")
 }
 #else
 #define ENCODE_3DSOLID {}
@@ -1538,9 +1537,7 @@ void encode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Ent
 #endif //#if IS_ENCODER
 
 #ifdef IS_FREE
-void free_3dsolid(Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj);
-
-void free_3dsolid(Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
+static void free_3dsolid(Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
 {
   unsigned int i;
   int vcount;
@@ -4954,5 +4951,4 @@ DWG_OBJECT_END
 DWG_OBJECT(LEADEROBJECTCONTEXTDATA)
 DWG_OBJECT_END
 */
-
 
