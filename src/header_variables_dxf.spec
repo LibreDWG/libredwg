@@ -25,7 +25,7 @@
   HEADER_VALUE (ACADVER, TV, 1, version_codes[dwg->header.version]);
 
   if (minimal) {
-    HEADER_H (HANDSEED, 5);
+    HEADER_VALUE (HANDSEED, RS, 5, _obj->HANDSEED->absolute_ref);
     ENDSEC();
     return;
   }

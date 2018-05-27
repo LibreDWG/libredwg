@@ -1437,7 +1437,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
       ENDTAB();
     }
-  if (dwg->appid_control.num_entries)
+  if (dwg->appid_control.num_entries) //FIXME ACAD import
     {
       Dwg_Object_APPID_CONTROL *_ctrl = &dwg->appid_control;
       Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
@@ -1472,6 +1472,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
       ENDTAB();
     }
+#if 0
   if (dwg->block_control.num_entries)
     {
       Dwg_Object_BLOCK_CONTROL *_ctrl = &dwg->block_control;
@@ -1491,6 +1492,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       */
       ENDTAB();
     }
+#endif
   ENDSEC();
   return 0;
 }
@@ -1549,7 +1551,9 @@ dxf_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   SECTION(ENTITIES);
   for (i=0; i<dwg->num_objects; i++)
     {
-      if (dwg->object[i].supertype == DWG_SUPERTYPE_ENTITY)
+      if (dwg->object[i].supertype == DWG_SUPERTYPE_ENTITY &&
+          dwg->object[i].type != DWG_TYPE_BLOCK &&
+          dwg->object[i].type != DWG_TYPE_ENDBLK)
         dwg_dxf_object(dat, &dwg->object[i]);
     }
   ENDSEC();
