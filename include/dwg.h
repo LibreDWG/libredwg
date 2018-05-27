@@ -48,6 +48,7 @@ extern "C" {
 
 #define BITCODE_DOUBLE double
 
+/* The FORMAT_* are for logging only */
 #define BITCODE_RC char
 #ifdef _WIN32
 # define FORMAT_RC "0x%2x"
@@ -114,11 +115,11 @@ extern "C" {
 #define BITCODE_TV char *
 #define FORMAT_TV "\"%s\""
 #define BITCODE_BT BITCODE_DOUBLE
-#define FORMAT_BT "%f"
+#define FORMAT_BT "%g"
 #define BITCODE_DD BITCODE_DOUBLE
-#define FORMAT_DD "%f"
+#define FORMAT_DD "%g"
 #define BITCODE_BD BITCODE_DOUBLE
-#define FORMAT_BD "%f"
+#define FORMAT_BD "%g"
 #define BITCODE_BE BITCODE_3BD
 #define BITCODE_CMC Dwg_Color
 #define BITCODE_H Dwg_Object_Ref*

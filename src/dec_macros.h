@@ -46,6 +46,12 @@
   }
 #define LOG_TRACE_TF(var,len) LOG_TF(TRACE,var,len)
 #define LOG_INSANE_TF(var,len) LOG_TF(INSANE,var,len)
+#define FIELD_2PT_TRACE(name, type, dxf) \
+  LOG_TRACE(#name ": (" FORMAT_BD ", " FORMAT_BD ") [" #type " %d]\n", \
+            _obj->name.x, _obj->name.y, dxf)
+#define FIELD_3PT_TRACE(name, type, dxf) \
+  LOG_TRACE(#name ": (" FORMAT_BD ", " FORMAT_BD ", " FORMAT_BD ") [" #type " %d]\n", \
+            _obj->name.x, _obj->name.y, _obj->name.z, dxf)
 
 #define FIELD_VALUE(name) _obj->name
 
@@ -148,13 +154,33 @@
     FIELD_DD(name.x, FIELD_VALUE(def.x), dxf); \
     FIELD_DD(name.y, FIELD_VALUE(def.y), dxf+10); \
     FIELD_DD(name.z, FIELD_VALUE(def.z), dxf+20); }
-#define FIELD_2RD(name,dxf) { FIELDG(name.x, RD, dxf); FIELDG(name.y, RD, dxf+10); }
-#define FIELD_2BD(name,dxf) { FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+10); }
+//#define FIELD_2RD(name,dxf) { FIELDG(name.x, RD, dxf); FIELDG(name.y, RD, dxf+10); }
+//#define FIELD_2BD(name,dxf) { FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+10); }
 #define FIELD_2BD_1(name,dxf) { FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+1); }
-#define FIELD_3RD(name,dxf) { FIELDG(name.x, RD, dxf); FIELDG(name.y, RD, dxf+10); \
-                              FIELDG(name.z, RD,dxf+20); }
-#define FIELD_3BD(name,dxf) { FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+10); \
-                              FIELDG(name.z, BD, dxf+20); }
+//#define FIELD_3RD(name,dxf) { FIELDG(name.x, RD, dxf); FIELDG(name.y, RD, dxf+10); \
+//                              FIELDG(name.z, RD,dxf+20); }
+//  { FIELDG(name.x, BD, dxf);
+//    FIELDG(name.y, BD, dxf+10);
+//    FIELDG(name.z, BD, dxf+20); }
+#define FIELD_3RD(name,dxf) \
+  { _obj->name.x = bit_read_RD(dat); \
+    _obj->name.y = bit_read_RD(dat); \
+    _obj->name.z = bit_read_RD(dat); \
+    FIELD_3PT_TRACE(name,RD,dxf); }
+#define FIELD_3BD(name,dxf) \
+  { _obj->name.x = bit_read_BD(dat); \
+    _obj->name.y = bit_read_BD(dat); \
+    _obj->name.z = bit_read_BD(dat); \
+    FIELD_3PT_TRACE(name,BD,dxf); }
+#define FIELD_2RD(name,dxf) \
+  { _obj->name.x = bit_read_RD(dat); \
+    _obj->name.y = bit_read_RD(dat); \
+    FIELD_2PT_TRACE(name,RD,dxf); }
+#define FIELD_2BD(name,dxf) \
+  { _obj->name.x = bit_read_BD(dat); \
+    _obj->name.y = bit_read_BD(dat); \
+    FIELD_2PT_TRACE(name,BD,dxf); }
+
 #define FIELD_3BD_1(name,dxf) { FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+1); \
                                 FIELDG(name.z, BD, dxf+2); }
 #define FIELD_3DPOINT(name,dxf) FIELD_3BD(name,dxf)
