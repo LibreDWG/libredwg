@@ -144,14 +144,6 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
     dxf_write_handle(dat, o, o ? o->tio.object->tio.section->entry_name : (char*)"", dxf); \
   }
 
-//FIXME name 102 field for XRECORD
-#define HANDLE_NAME(id, dxf) \
-  { \
-    Dwg_Object_Ref *ref = id;\
-    Dwg_Object *o = ref ? ref->obj : NULL;\
-    dxf_write_handle(dat, o, o ? "" : (char*)"", dxf); \
-}
-
 #define FIELD_DATAHANDLE(name, code, dxf) FIELD_HANDLE(name, code, dxf)
 #define FIELD_HANDLE_N(name, vcount, handle_code, dxf) FIELD_HANDLE(name, handle_code, dxf)
 
@@ -248,7 +240,7 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
     {\
       for (vcount=0; vcount < (int)size; vcount++)\
         {\
-          fprintf(dat->fh, #name ": " FORMAT_##type ",\r\n", _obj->name[vcount]);\
+          VALUE_##type(_obj->name[vcount], dxf); \
         }\
     }
 #define FIELD_VECTOR_T(name, size, dxf)\
@@ -354,11 +346,12 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 
 #define DWG_ENTITY(token) \
 static void \
-dwg_dxf_##token (Bit_Chain *dat, Dwg_Object * obj) \
+dwg_dxf_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 {\
   int vcount, rcount, rcount2, rcount3, rcount4; \
   Dwg_Entity_##token *ent, *_obj;\
   Dwg_Object_Entity *_ent;\
+  const int minimal = obj->parent->opts & 0x10;\
   RECORD(token);\
   LOG_INFO("Entity " #token ":\n")\
   _ent = obj->tio.entity;\
@@ -372,11 +365,12 @@ dwg_dxf_##token (Bit_Chain *dat, Dwg_Object * obj) \
 
 #define DWG_OBJECT(token) \
 static void \
-dwg_dxf_ ##token (Bit_Chain *dat, Dwg_Object * obj) \
+dwg_dxf_ ##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
   int vcount, rcount, rcount2, rcount3, rcount4;\
   Bit_Chain *hdl_dat = dat;\
   Dwg_Object_##token *_obj;\
+  const int minimal = obj->parent->opts & 0x10;\
   /* if not a _CONTROL object: */ \
   /* RECORD(token); */ \
   LOG_INFO("Object " #token ":\n")\
@@ -496,17 +490,19 @@ dxf_write_handle(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
 
 //TODO
 #define COMMON_TABLE_CONTROL_FLAGS(owner) \
-  if (_ctrl->null_handle->absolute_ref) \
-    VALUE_H (_ctrl->null_handle, 330); \
-  VALUE_TV ("AcDbSymbolTable", 100); \
-  RESET_VER
+  if (!minimal) { \
+    if (_ctrl->null_handle->absolute_ref) \
+      VALUE_H (_ctrl->null_handle, 330); \
+    VALUE_TV ("AcDbSymbolTable", 100); \
+  }
 
 #define COMMON_TABLE_FLAGS(owner, acdbname) \
-  FIELD_HANDLE (owner, 4, 330); \
-  VALUE_TV ("AcDbSymbolTableRecord", 100); \
-  VALUE_TV ("AcDb" #acdbname "TableRecord", 100); \
-  dxf_write_handle(dat, obj, _obj->entry_name, 2); \
-  RESET_VER
+  if (!minimal) { \
+    FIELD_HANDLE (owner, 4, 330); \
+    VALUE_TV ("AcDbSymbolTableRecord", 100); \
+    VALUE_TV ("AcDb" #acdbname "TableRecord", 100); \
+  } \
+  dxf_write_handle(dat, obj, _obj->entry_name, 2);
 
 #include "dwg.spec"
 
@@ -830,189 +826,148 @@ dwg_dxf_variable_type(Dwg_Data * dwg, Bit_Chain *dat, Dwg_Object* obj)
 }
 
 void
-dwg_dxf_object(Bit_Chain *dat, Dwg_Object *obj)
+dwg_dxf_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
+  const int minimal = obj->parent->opts & 0x10;
 
   switch (obj->type)
     {
     case DWG_TYPE_TEXT:
-      RECORD(TEXT);
       dwg_dxf_TEXT(dat, obj);
       break;
     case DWG_TYPE_ATTRIB:
-      RECORD(ATTRIB);
       dwg_dxf_ATTRIB(dat, obj);
       break;
     case DWG_TYPE_ATTDEF:
-      RECORD(ATTDEF);
       dwg_dxf_ATTDEF(dat, obj);
       break;
     case DWG_TYPE_BLOCK:
-      RECORD(BLOCK);
       dwg_dxf_BLOCK(dat, obj);
       break;
     case DWG_TYPE_ENDBLK:
-      RECORD(ENDBLK);
       dwg_dxf_ENDBLK(dat, obj);
       break;
     case DWG_TYPE_SEQEND:
-      RECORD(SEQEND);
       dwg_dxf_SEQEND(dat, obj);
       break;
     case DWG_TYPE_INSERT:
-      RECORD(INSERT);
       dwg_dxf_INSERT(dat, obj);
       break;
     case DWG_TYPE_MINSERT:
-      RECORD(MINSERT);
       dwg_dxf_MINSERT(dat, obj);
       break;
     case DWG_TYPE_VERTEX_2D:
-      RECORD(VERTEX_2D);
       dwg_dxf_VERTEX_2D(dat, obj);
       break;
     case DWG_TYPE_VERTEX_3D:
-      RECORD(VERTEX_3D);
       dwg_dxf_VERTEX_3D(dat, obj);
       break;
     case DWG_TYPE_VERTEX_MESH:
-      RECORD(VERTEX_MESH);
       dwg_dxf_VERTEX_MESH(dat, obj);
       break;
     case DWG_TYPE_VERTEX_PFACE:
-      RECORD(VERTEX_PFACE);
       dwg_dxf_VERTEX_PFACE(dat, obj);
       break;
     case DWG_TYPE_VERTEX_PFACE_FACE:
-      RECORD(VERTEX_PFACE_FACE);
       dwg_dxf_VERTEX_PFACE_FACE(dat, obj);
       break;
     case DWG_TYPE_POLYLINE_2D:
-      RECORD(POLYLINE_2D);
       dwg_dxf_POLYLINE_2D(dat, obj);
       break;
     case DWG_TYPE_POLYLINE_3D:
-      RECORD(POLYLINE_3D);
       dwg_dxf_POLYLINE_3D(dat, obj);
       break;
     case DWG_TYPE_ARC:
-      RECORD(ARC);
       dwg_dxf_ARC(dat, obj);
       break;
     case DWG_TYPE_CIRCLE:
-      RECORD(CIRCLE);
       dwg_dxf_CIRCLE(dat, obj);
       break;
     case DWG_TYPE_LINE:
-      RECORD(LINE);
       dwg_dxf_LINE(dat, obj);
       break;
     case DWG_TYPE_DIMENSION_ORDINATE:
-      RECORD(DIMENSION_ORDINATE);
       dwg_dxf_DIMENSION_ORDINATE(dat, obj);
       break;
     case DWG_TYPE_DIMENSION_LINEAR:
-      RECORD(DIMENSION_LINEAR);
       dwg_dxf_DIMENSION_LINEAR(dat, obj);
       break;
     case DWG_TYPE_DIMENSION_ALIGNED:
-      RECORD(DIMENSION_ALIGNED);
       dwg_dxf_DIMENSION_ALIGNED(dat, obj);
       break;
     case DWG_TYPE_DIMENSION_ANG3PT:
-      RECORD(DIMENSION_ANG3PT);
       dwg_dxf_DIMENSION_ANG3PT(dat, obj);
       break;
     case DWG_TYPE_DIMENSION_ANG2LN:
-      RECORD(DIMENSION_ANG2LN);
       dwg_dxf_DIMENSION_ANG2LN(dat, obj);
       break;
     case DWG_TYPE_DIMENSION_RADIUS:
-      RECORD(DIMENSION_RADIUS);
       dwg_dxf_DIMENSION_RADIUS(dat, obj);
       break;
     case DWG_TYPE_DIMENSION_DIAMETER:
-      RECORD(DIMENSION_DIAMETER);
       dwg_dxf_DIMENSION_DIAMETER(dat, obj);
       break;
     case DWG_TYPE_POINT:
-      RECORD(POINT);
       dwg_dxf_POINT(dat, obj);
       break;
     case DWG_TYPE__3DFACE:
-      RECORD(_3DFACE);
       dwg_dxf__3DFACE(dat, obj);
       break;
     case DWG_TYPE_POLYLINE_PFACE:
-      RECORD(POLYLINE_PFACE);
       dwg_dxf_POLYLINE_PFACE(dat, obj);
       break;
     case DWG_TYPE_POLYLINE_MESH:
-      RECORD(POLYLINE_MESH);
       dwg_dxf_POLYLINE_MESH(dat, obj);
       break;
     case DWG_TYPE_SOLID:
-      RECORD(SOLID);
       dwg_dxf_SOLID(dat, obj);
       break;
     case DWG_TYPE_TRACE:
-      RECORD(TRACE);
       dwg_dxf_TRACE(dat, obj);
       break;
     case DWG_TYPE_SHAPE:
-      RECORD(SHAPE);
       dwg_dxf_SHAPE(dat, obj);
       break;
     case DWG_TYPE_VIEWPORT:
-      RECORD(VIEWPORT);
       dwg_dxf_VIEWPORT(dat, obj);
       break;
     case DWG_TYPE_ELLIPSE:
-      RECORD(ELLIPSE);
       dwg_dxf_ELLIPSE(dat, obj);
       break;
     case DWG_TYPE_SPLINE:
-      RECORD(SPLINE);
       dwg_dxf_SPLINE(dat, obj);
       break;
     case DWG_TYPE_REGION:
-      RECORD(REGION);
       dwg_dxf_REGION(dat, obj);
       break;
     case DWG_TYPE_3DSOLID:
-      RECORD(3DSOLID);
       dwg_dxf__3DSOLID(dat, obj);
       break; /* Check the type of the object */
     case DWG_TYPE_BODY:
-      RECORD(BODY);
       dwg_dxf_BODY(dat, obj);
       break;
     case DWG_TYPE_RAY:
-      RECORD(RAY);
       dwg_dxf_RAY(dat, obj);
       break;
     case DWG_TYPE_XLINE:
-      RECORD(XLINE);
       dwg_dxf_XLINE(dat, obj);
       break;
     case DWG_TYPE_DICTIONARY:
-      RECORD(DICTIONARY);
-      dwg_dxf_DICTIONARY(dat, obj);
+      if (!minimal) {
+        RECORD(DICTIONARY);
+        dwg_dxf_DICTIONARY(dat, obj);
+      }
       break;
     case DWG_TYPE_MTEXT:
-      RECORD(MTEXT);
       dwg_dxf_MTEXT(dat, obj);
       break;
     case DWG_TYPE_LEADER:
-      RECORD(LEADER);
       dwg_dxf_LEADER(dat, obj);
       break;
     case DWG_TYPE_TOLERANCE:
-      RECORD(TOLERANCE);
       dwg_dxf_TOLERANCE(dat, obj);
       break;
     case DWG_TYPE_MLINE:
-      RECORD(MLINE);
       dwg_dxf_MLINE(dat, obj);
       break;
     case DWG_TYPE_BLOCK_CONTROL:
@@ -1104,54 +1059,71 @@ dwg_dxf_object(Bit_Chain *dat, Dwg_Object *obj)
       dwg_dxf_MLINESTYLE(dat, obj);
       break;
     case DWG_TYPE_OLE2FRAME:
-      RECORD(OLE2FRAME);
-      dwg_dxf_OLE2FRAME(dat, obj);
+      if (!minimal) {
+        RECORD(OLE2FRAME);
+        dwg_dxf_OLE2FRAME(dat, obj);
+      }
       break;
     case DWG_TYPE_DUMMY:
-      RECORD(DUMMY);
-      dwg_dxf_DUMMY(dat, obj);
+      if (!minimal) {
+        RECORD(DUMMY);
+        dwg_dxf_DUMMY(dat, obj);
+      }
       break;
     case DWG_TYPE_LONG_TRANSACTION:
-      RECORD(LONG_TRANSACTION);
-      dwg_dxf_LONG_TRANSACTION(dat, obj);
+      if (!minimal) {
+        RECORD(LONG_TRANSACTION);
+        dwg_dxf_LONG_TRANSACTION(dat, obj);
+      }
       break;
     case DWG_TYPE_LWPLINE:
-      RECORD(LWPLINE);
       dwg_dxf_LWPLINE(dat, obj);
       break;
     case DWG_TYPE_HATCH:
-      RECORD(HATCH);
       dwg_dxf_HATCH(dat, obj);
       break;
     case DWG_TYPE_XRECORD:
-      RECORD(XRECORD);
-      dwg_dxf_XRECORD(dat, obj);
+      if (!minimal) {
+        RECORD(XRECORD);
+        dwg_dxf_XRECORD(dat, obj);
+      }
       break;
     case DWG_TYPE_PLACEHOLDER:
-      RECORD(PLACEHOLDER);
-      dwg_dxf_PLACEHOLDER(dat, obj);
+      if (!minimal) {
+        RECORD(PLACEHOLDER);
+        dwg_dxf_PLACEHOLDER(dat, obj);
+      }
       break;
     case DWG_TYPE_PROXY_ENTITY:
       //RECORD(PROXY_ENTITY);
       //dwg_dxf_PROXY_ENTITY(dat, obj);
       break;
     case DWG_TYPE_OLEFRAME:
-      RECORD(OLEFRAME);
-      dwg_dxf_OLEFRAME(dat, obj);
+      if (!minimal) {
+        RECORD(OLEFRAME);
+        dwg_dxf_OLEFRAME(dat, obj);
+      }
       break;
     case DWG_TYPE_VBA_PROJECT:
-      LOG_ERROR("Unhandled Object VBA_PROJECT. Has its own section\n");
-      //RECORD(VBA_PROJECT);
-      //dwg_dxf_VBA_PROJECT(dat, obj);
+      if (!minimal) {
+        LOG_ERROR("Unhandled Object VBA_PROJECT. Has its own section\n");
+        //RECORD(VBA_PROJECT);
+        //dwg_dxf_VBA_PROJECT(dat, obj);
+      }
       break;
     case DWG_TYPE_LAYOUT:
-      RECORD(LAYOUT);
-      dwg_dxf_LAYOUT(dat, obj);
+      if (!minimal) {
+        RECORD(LAYOUT);
+        dwg_dxf_LAYOUT(dat, obj);
+      }
       break;
     default:
       if (obj->type == obj->parent->layout_number)
         {
-          dwg_dxf_LAYOUT(dat, obj);
+          if (!minimal) {
+            RECORD(LAYOUT);
+            dwg_dxf_LAYOUT(dat, obj);
+          }
         }
       /* > 500:
          TABLE, DICTIONARYWDLFT, IDBUFFER, IMAGE, IMAGEDEF, IMAGEDEF_REACTOR,
@@ -1170,16 +1142,7 @@ dwg_dxf_object(Bit_Chain *dat, Dwg_Object *obj)
               klass = &dwg->dwg_class[i];
               is_entity = dwg_class_is_entity(klass);
             }
-          // properly dwg_decode_object/_entity for eed, reactors, xdic
-          if (klass && !is_entity)
-            {
-              dwg_dxf_UNKNOWN_OBJ(dat, obj);
-            }
-          else if (klass)
-            {
-              dwg_dxf_UNKNOWN_ENT(dat, obj);
-            }
-          else // not a class
+          if (!klass)
             {
               LOG_WARN("Unknown object, skipping eed/reactors/xdic");
               SINCE(R_2000)
@@ -1318,9 +1281,10 @@ dxf_header_write(Bit_Chain *dat, Dwg_Data* dwg)
 
 // only called since r2000. but not really needed, unless referenced
 static int
-dxf_classes_write (Bit_Chain *dat, Dwg_Data * dwg)
+dxf_classes_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   unsigned int i;
+  const int minimal = dwg->opts & 0x10;
 
   SECTION (CLASSES);
   LOG_TRACE("num_classes: %u\n", dwg->num_classes);
@@ -1343,9 +1307,10 @@ dxf_classes_write (Bit_Chain *dat, Dwg_Data * dwg)
 }
 
 static int
-dxf_tables_write (Bit_Chain *dat, Dwg_Data * dwg)
+dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   unsigned int i;
+  const int minimal = dwg->opts & 0x10;
 
   SECTION(TABLES);
   if (dwg->vport_control.num_entries)
@@ -1518,12 +1483,13 @@ dxf_tables_write (Bit_Chain *dat, Dwg_Data * dwg)
 }
 
 static int
-dxf_blocks_write (Bit_Chain *dat, Dwg_Data * dwg)
+dxf_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   unsigned int i;
   Dwg_Object *mspace = NULL, *pspace = NULL;
   Dwg_Object_BLOCK_CONTROL *_ctrl = &dwg->block_control;
   Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
+  const int minimal = dwg->opts & 0x10;
 
   SECTION(BLOCKS);
   COMMON_TABLE_CONTROL_FLAGS(null_handle);
@@ -1563,7 +1529,7 @@ dxf_blocks_write (Bit_Chain *dat, Dwg_Data * dwg)
 }
 
 static int
-dxf_entities_write (Bit_Chain *dat, Dwg_Data * dwg)
+dxf_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   long unsigned int i;
 
@@ -1578,7 +1544,7 @@ dxf_entities_write (Bit_Chain *dat, Dwg_Data * dwg)
 }
 
 static int
-dxf_objects_write (Bit_Chain *dat, Dwg_Data * dwg)
+dxf_objects_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   long unsigned int i;
 
@@ -1596,7 +1562,7 @@ dxf_objects_write (Bit_Chain *dat, Dwg_Data * dwg)
 // and the Thumbnail_Data
 
 static int
-dxf_preview_write (Bit_Chain *dat, Dwg_Data * dwg)
+dxf_preview_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   (void)dat; (void)dwg;
   //...
@@ -1613,10 +1579,9 @@ dwg_write_dxf(Bit_Chain *dat, Dwg_Data * dwg)
 
   // A minimal header requires only $ACADVER, $HANDSEED, and then ENTITIES
   // see https://pythonhosted.org/ezdxf/dxfinternals/filestructure.html
-  SINCE(R_13)
-  {
-    dxf_header_write (dat, dwg);
+  dxf_header_write (dat, dwg);
 
+  if (!minimal) {
     // if downgraded from r2000 to r14, but we still have classes, keep the classes
     if ((dat->from_version >= R_2000 && dwg->num_classes) ||
         dat->version >= R_2000) {
@@ -1634,14 +1599,15 @@ dwg_write_dxf(Bit_Chain *dat, Dwg_Data * dwg)
   if (dxf_entities_write (dat, dwg))
     goto fail;
 
-  SINCE(R_13) {
-    if (dxf_objects_write (dat, dwg))
-      goto fail;
-  }
-
-  if (dwg->header.version >= R_2000 && !minimal) {
-    if (dxf_preview_write (dat, dwg))
-      goto fail;
+  if (!minimal) {
+    SINCE(R_13) {
+      if (dxf_objects_write (dat, dwg))
+        goto fail;
+    }
+    SINCE(R_2000) {
+      if (dxf_preview_write (dat, dwg))
+        goto fail;
+    }
   }
   RECORD(EOF);
 
