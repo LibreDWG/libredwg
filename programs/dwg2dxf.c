@@ -115,6 +115,7 @@ main (int argc, char *argv[])
     {
       minimal = 1;
       argc--;
+      i++;
     }
   if (argc > 2 && (!strcmp(argv[i], "-b") || !strcmp(argv[i], "--binary")))
     {
