@@ -211,7 +211,7 @@ DWG_ENTITY(ATTRIB)
   FIELD_RC (flags, 70); // 1 invisible, 2 constant, 4 verify, 8 preset
 
   SINCE(R_2007) {
-    FIELD_B (lock_position_flag, 70);
+    FIELD_B (lock_position_flag, 0); // 70
   }
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -2091,15 +2091,15 @@ DWG_OBJECT(LAYER)
       (FIELD_VALUE(xrefref) << 6);
   }
   SINCE(R_2000) {
-    FIELD_BS (flag_s, 70); // 70,290,370
+    FIELD_BS (flag, 0); // 70,290,370
     // contains frozen (1 bit), on (2 bit), frozen by default in new viewports (4 bit),
     // locked (8 bit), plotting flag (16 bit), and lineweight (mask with 0x03E0)
-    FIELD_VALUE(flag) = (BITCODE_RC)FIELD_VALUE(flag_s) & 0xff;
+    //FIELD_VALUE(flag) = (BITCODE_RC)FIELD_VALUE(flag_s) & 0xff;
     FIELD_VALUE(frozen) = FIELD_VALUE(flag) & 1;
     FIELD_VALUE(on) = FIELD_VALUE(flag) & 2;
     FIELD_VALUE(frozen_in_new) = FIELD_VALUE(flag) & 4;
     FIELD_VALUE(locked) = FIELD_VALUE(flag) & 8;
-    //TODO plotf 290 bit 16, linewidth 370 (flag_s & 0x03E0) >> 5
+    //TODO plotf 290 bit 16, linewidth 370 (flag & 0x03E0) >> 5
   }
   FIELD_CMC (color, 62);
 
@@ -2477,13 +2477,7 @@ DWG_OBJECT(VPORT)
 
   COMMON_TABLE_FLAGS(vport_control, Viewport)
 
-  SINCE(R_13) {
-    FIELD_VALUE(flag) = FIELD_VALUE(flag) |
-                        FIELD_VALUE(xrefdep) << 4 |
-                        FIELD_VALUE(xrefref) << 6;
-  }
   DXF { // has a different order of fields
-  FIELD_RC (flag, 70);
   FIELD_2RD (lower_left, 10);
   FIELD_2RD (upper_right, 11);
   FIELD_2RD (VIEWCTR, 12);
@@ -2704,7 +2698,12 @@ DWG_OBJECT(APPID)
   COMMON_TABLE_FLAGS(app_control, RegApp)
 
   SINCE(R_13) {
-    FIELD_RC (unknown, 71); // not in DXF if 0. has_something
+    DXF {
+      if (FIELD_VALUE(unknown))
+        FIELD_RC (unknown, 71); // not in DXF if 0. has_something
+    } else {
+      FIELD_RC (unknown, 71);
+    }
   }
   VERSIONS(R_13, R_2007)
     {
@@ -3015,7 +3014,11 @@ DWG_OBJECT(VPORT_ENTITY_HEADER)
   COMMON_TABLE_FLAGS(vport_entity_control, ViewportEntity) //??
 
   SINCE(R_13) {
-    FIELD_B (flag1, 70); // bit 1 of 70
+    DXF {
+      ;
+    } else {
+      FIELD_B (flag1, 70); // bit 1 of 70
+    }
     FIELD_VALUE(flag) =
       (FIELD_VALUE(flag1) << 1) |
       (FIELD_VALUE(xrefdep) << 4) |

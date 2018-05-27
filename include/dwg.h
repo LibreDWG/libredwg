@@ -1613,7 +1613,7 @@ typedef struct _dwg_object_LAYER_CONTROL
  */
 typedef struct _dwg_object_LAYER
 {
-  BITCODE_RC flag;
+  BITCODE_BS flag;
   BITCODE_TV entry_name;
   BITCODE_RS used; /* preR13 */
   BITCODE_B xrefref;
@@ -1623,7 +1623,7 @@ typedef struct _dwg_object_LAYER
   BITCODE_B on;
   BITCODE_B frozen_in_new;
   BITCODE_B locked;
-  BITCODE_BS flag_s;
+  //BITCODE_BS flag_s;
   BITCODE_CMC color;
   short      color_rs;    /* preR13, needs to be signed */
   BITCODE_RS linetype_rs; /* preR13 */

@@ -94,6 +94,9 @@
         FIELD_BS (xrefindex_plus1, 0); \
       } \
     } \
+    FIELD_VALUE(flag) = FIELD_VALUE(flag) | \
+                        FIELD_VALUE(xrefdep) << 4 | \
+                        FIELD_VALUE(xrefref) << 6; \
   }\
   RESET_VER
 #endif

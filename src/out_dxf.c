@@ -96,11 +96,11 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 #define ANYCODE -1
 #define VALUE_HANDLE(value, handle_code, dxf) \
   if (dxf && value) { \
-    fprintf(dat->fh, "%d\r\n%lX\r\n", dxf, value->absolute_ref); \
+    fprintf(dat->fh, "%3i\r\n%lX\r\n", dxf, value->absolute_ref); \
   }
 #define FIELD_HANDLE(name, handle_code, dxf) \
   if (dxf && _obj->name) { \
-    fprintf(dat->fh, "%d\r\n%lX\r\n", dxf, _obj->name->absolute_ref); \
+    fprintf(dat->fh, "%3i\r\n%lX\r\n", dxf, _obj->name->absolute_ref); \
   }
 #define HEADER_9(name) \
     GROUP(9);\
@@ -513,7 +513,8 @@ dxf_write_handle(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       VALUE_TV ("AcDb" #acdbname "TableRecord", 100); \
     }\
   } \
-  dxf_write_handle(dat, obj, _obj->entry_name, 2);
+  dxf_write_handle(dat, obj, _obj->entry_name, 2); \
+  FIELD_RC (flag, 70);
 
 #include "dwg.spec"
 
