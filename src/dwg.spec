@@ -311,6 +311,10 @@ DWG_ENTITY_END
 /* (4/12) */
 DWG_ENTITY(BLOCK)
 
+  DXF {
+    if (dat->from_version >= R_2000)
+      VALUE_TV ("AcDbBlockBegin", 100);
+  }
   FIELD_T (name, 2);
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -320,6 +324,10 @@ DWG_ENTITY_END
 /* (5/13) */
 DWG_ENTITY(ENDBLK)
 
+  DXF {
+    if (dat->from_version >= R_2000)
+      VALUE_TV ("AcDbBlockEnd", 100);
+  }
   COMMON_ENTITY_HANDLE_DATA;
 
 DWG_ENTITY_END
@@ -673,6 +681,10 @@ DWG_ENTITY_END
 /*(15)*/
 DWG_ENTITY(POLYLINE_2D)
 
+  DXF {
+    if (dat->from_version >= R_2000)
+      VALUE_TV ("AcDbPolyline", 100);
+  }
   PRE(R_13)
   {
     if (R11OPTS(1))
@@ -749,6 +761,10 @@ DWG_ENTITY_END
 /* (17/8) */
 DWG_ENTITY(ARC)
 
+  DXF {
+    if (dat->from_version >= R_2000)
+      VALUE_TV ("AcDbArc", 100);
+  }
   PRE(R_13) {
     FIELD_2RD (center, 10);
     FIELD_RD (radius, 40);
@@ -775,6 +791,10 @@ DWG_ENTITY_END
 /* (18/3) */
 DWG_ENTITY(CIRCLE)
 
+  DXF {
+    if (dat->from_version >= R_2000)
+      VALUE_TV ("AcDbCircle", 100);
+  }
   PRE(R_13) {
     FIELD_2RD (center, 10);
     FIELD_RD (radius, 40);
@@ -797,6 +817,10 @@ DWG_ENTITY_END
 /* (19/1) */
 DWG_ENTITY(LINE)
 
+  DXF {
+    if (dat->from_version >= R_2000)
+      VALUE_TV ("AcDbLine", 100);
+  }
   PRE(R_13) {
     if (_ent->flag_r11 & 4)
       FIELD_3RD (start, 10)
@@ -4527,9 +4551,10 @@ DWG_OBJECT_END
 //(79 + varies) pg.247 20.4.104
 DWG_OBJECT(XRECORD)
 
-#ifdef IS_DXF
-  VALUE_TV ("AcDbXrecord", 100);
-#endif
+  DXF {
+    if (dat->from_version >= R_2000)
+      VALUE_TV ("AcDbXrecord", 100);
+  }
   FIELD_BL (num_databytes, 0);
   FIELD_XDATA (xdata, num_databytes);
 

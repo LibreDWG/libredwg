@@ -371,10 +371,14 @@ dwg_dxf_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
   LOG_INFO("Entity " #token ":\n")\
   _ent = obj->tio.entity;\
   _obj = ent = _ent->tio.token;\
+  fprintf(dat->fh, "%3i\r\n%lX\r\n", 5, obj->handle.value); \
   LOG_TRACE("Entity handle: %d.%d.%lu\n",\
-    obj->handle.code,\
-    obj->handle.size,\
-    obj->handle.value)
+            obj->handle.code,\
+            obj->handle.size,\
+            obj->handle.value); \
+  VALUE_HANDLE (obj->parent->header_vars.BLOCK_RECORD_MSPACE, 5, 330); \
+  if (dat->from_version >= R_2000) \
+    VALUE_TV ("AcDbEntity", 100)
 
 #define DWG_ENTITY_END }
 
@@ -498,12 +502,9 @@ dxf_write_handle(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
 
 //TODO
 #define COMMON_TABLE_CONTROL_FLAGS(owner) \
-  if (!minimal) { \
-    if (_ctrl->null_handle->absolute_ref) \
-      VALUE_H (_ctrl->null_handle, 330); \
+    VALUE_H (_ctrl->null_handle, 330); \
     if (dat->from_version >= R_2000) \
-      VALUE_TV ("AcDbSymbolTable", 100); \
-  }
+      VALUE_TV ("AcDbSymbolTable", 100)
 
 #define COMMON_TABLE_FLAGS(owner, acdbname) \
   if (!minimal) { \
@@ -1352,6 +1353,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
       ENDTAB();
     }
+#if 0  
   if (dwg->ltype_control.num_entries)
     {
       Dwg_Object_LTYPE_CONTROL *_ctrl = &dwg->ltype_control;
@@ -1385,7 +1387,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           }
         }
       ENDTAB();
-    }
+    }  
   if (dwg->style_control.num_entries)
     {
       Dwg_Object_STYLE_CONTROL *_ctrl = &dwg->style_control;
@@ -1437,6 +1439,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
       ENDTAB();
     }
+#endif
   if (dwg->appid_control.num_entries) //FIXME ACAD import
     {
       Dwg_Object_APPID_CONTROL *_ctrl = &dwg->appid_control;

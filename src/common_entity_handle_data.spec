@@ -1,18 +1,7 @@
 /* -*- c -*- */
 
-#include "spec.h"
-/*#undef IF_ENCODE_FROM_EARLIER
-#define IF_ENCODE_FROM_EARLIER if (0)
-#undef IF_ENCODE_FROM_PRE_R13
-#define IF_ENCODE_FROM_PRE_R13 if (0)
-#ifdef IS_DECODER
-# define IF_IS_DECODER 1
-# define IF_IS_ENCODER 0
-#else
-# define IF_IS_ENCODER 0
-# define IF_IS_DECODER 1
-#endif
-*/
+  #include "spec.h"
+
   if (FIELD_VALUE(entity_mode) == 0 || IF_IS_ENCODER)
     {
       FIELD_HANDLE(subentity, 4, 0); // doc: owner ref always?
@@ -92,4 +81,3 @@
       if (FIELD_VALUE(has_edge_visualstyle))
         FIELD_HANDLE(edge_visualstyle, 5, 0);
     }
-
