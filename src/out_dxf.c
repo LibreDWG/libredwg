@@ -496,13 +496,11 @@ dxf_write_handle(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
 
 //TODO
 #define COMMON_TABLE_CONTROL_FLAGS(owner) \
-  VALUE_BS (ctrl->handle.value, 5); \
   VALUE_H  (_ctrl->null_handle, 330); \
   VALUE_TV ("AcDbSymbolTable", 100); \
   RESET_VER
 
 #define COMMON_TABLE_FLAGS(owner, acdbname) \
-  VALUE_BS (obj->handle.value, 5); \
   FIELD_HANDLE (owner, 4, 330); \
   VALUE_TV ("AcDbSymbolTableRecord", 100); \
   VALUE_TV ("AcDb" #acdbname "TableRecord", 100); \
