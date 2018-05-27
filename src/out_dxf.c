@@ -493,14 +493,17 @@ dxf_write_handle(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   if (!minimal) { \
     if (_ctrl->null_handle->absolute_ref) \
       VALUE_H (_ctrl->null_handle, 330); \
-    VALUE_TV ("AcDbSymbolTable", 100); \
+    if (dat->from_version >= R_2000) \
+      VALUE_TV ("AcDbSymbolTable", 100); \
   }
 
 #define COMMON_TABLE_FLAGS(owner, acdbname) \
   if (!minimal) { \
     FIELD_HANDLE (owner, 4, 330); \
-    VALUE_TV ("AcDbSymbolTableRecord", 100); \
-    VALUE_TV ("AcDb" #acdbname "TableRecord", 100); \
+    if (dat->from_version >= R_2000) { \
+      VALUE_TV ("AcDbSymbolTableRecord", 100); \
+      VALUE_TV ("AcDb" #acdbname "TableRecord", 100); \
+    }\
   } \
   dxf_write_handle(dat, obj, _obj->entry_name, 2);
 
@@ -1284,7 +1287,7 @@ static int
 dxf_classes_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   unsigned int i;
-  const int minimal = dwg->opts & 0x10;
+  const int minimal = 0; //dwg->opts & 0x10;
 
   SECTION (CLASSES);
   LOG_TRACE("num_classes: %u\n", dwg->num_classes);
@@ -1310,7 +1313,7 @@ static int
 dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   unsigned int i;
-  const int minimal = dwg->opts & 0x10;
+  const int minimal = 0; //dwg->opts & 0x10;
 
   SECTION(TABLES);
   if (dwg->vport_control.num_entries)
@@ -1320,7 +1323,8 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       TABLE(VPORT);
       COMMON_TABLE_CONTROL_FLAGS(null_handle);
       dwg_dxf_VPORT_CONTROL(dat, ctrl);
-      if (dat->version != dat->from_version && dat->from_version != R_INVALID)
+      //TODO how far back can DXF read 1000?
+      if (dat->version != dat->from_version && dat->from_version >= R_2000)
         {
           /* if saved from newer version, eg. AC1032: */
           VALUE_TV ("ACAD", 1001);
@@ -1489,7 +1493,7 @@ dxf_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Dwg_Object *mspace = NULL, *pspace = NULL;
   Dwg_Object_BLOCK_CONTROL *_ctrl = &dwg->block_control;
   Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
-  const int minimal = dwg->opts & 0x10;
+  const int minimal = 0; //dwg->opts & 0x10;
 
   SECTION(BLOCKS);
   COMMON_TABLE_CONTROL_FLAGS(null_handle);
@@ -1574,6 +1578,9 @@ dwg_write_dxf(Bit_Chain *dat, Dwg_Data * dwg)
 {
   const int minimal = dwg->opts & 0x10;
   struct Dwg_Header *obj = &dwg->header;
+
+  if (dat->from_version == R_INVALID)
+    dat->from_version = dat->version;
 
   VALUE_TV(PACKAGE_STRING, 999);
 
