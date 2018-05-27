@@ -396,9 +396,9 @@ dwg_json_variable_type(Dwg_Data * dwg, Bit_Chain *dat, Dwg_Object* obj)
       dwg_json_LAYOUT(dat, obj);
       return 1;
     }
-  if (!strcmp(dxfname, "LWPLINE"))
+  if (!strcmp(dxfname, "LWPOLYLINE"))
     {
-      dwg_json_LWPLINE(dat, obj);
+      dwg_json_LWPOLYLINE(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "MULTILEADER"))
@@ -838,8 +838,8 @@ dwg_json_object(Bit_Chain *dat, Dwg_Object *obj)
     case DWG_TYPE_LONG_TRANSACTION:
       dwg_json_LONG_TRANSACTION(dat, obj);
       break;
-    case DWG_TYPE_LWPLINE:
-      dwg_json_LWPLINE(dat, obj);
+    case DWG_TYPE_LWPOLYLINE:
+      dwg_json_LWPOLYLINE(dat, obj);
       break;
     case DWG_TYPE_HATCH:
       dwg_json_HATCH(dat, obj);

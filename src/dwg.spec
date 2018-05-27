@@ -3455,7 +3455,7 @@ DWG_OBJECT(LAYOUT)
 DWG_OBJECT_END
 
 //pg.147
-DWG_ENTITY(LWPLINE)
+DWG_ENTITY(LWPOLYLINE)
 
   FIELD_BS (flag, 70);
 
@@ -3483,7 +3483,7 @@ DWG_ENTITY(LWPLINE)
   }
 
   FIELD_VECTOR (bulges, BD, num_bulges, 42);
-  REPEAT(num_widths, widths, Dwg_Entity_LWPLINE_width)
+  REPEAT(num_widths, widths, Dwg_Entity_LWPOLYLINE_width)
     {
       FIELD_BD (widths[rcount].start, 40);
       FIELD_BD (widths[rcount].end, 41);
@@ -3545,7 +3545,7 @@ DWG_ENTITY(PROXY_LWPOLYLINE)
   }
 
   FIELD_VECTOR (bulges, BD, num_bulges);
-  REPEAT(num_widths, widths, Dwg_Entity_LWPLINE_width)
+  REPEAT(num_widths, widths, Dwg_Entity_LWPOLYLINE_width)
     {
       FIELD_BD (widths[rcount].start);
       FIELD_BD (widths[rcount].end);

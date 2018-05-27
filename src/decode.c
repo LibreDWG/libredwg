@@ -3261,10 +3261,10 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
       dwg_decode_LAYOUT(dat, obj);
       return 1;
     }
-  if (!strcmp(dxfname, "LWPLINE"))
+  if (!strcmp(dxfname, "LWPOLYLINE"))
     {
       assert(is_entity);
-      dwg_decode_LWPLINE(dat, obj);
+      dwg_decode_LWPOLYLINE(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "OLE2FRAME"))
@@ -3834,8 +3834,8 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
     case DWG_TYPE_LONG_TRANSACTION:
       dwg_decode_LONG_TRANSACTION(dat, obj);
       break;
-    case DWG_TYPE_LWPLINE:
-      dwg_decode_LWPLINE(dat, obj);
+    case DWG_TYPE_LWPOLYLINE:
+      dwg_decode_LWPOLYLINE(dat, obj);
       break;
     case DWG_TYPE_HATCH:
       dwg_decode_HATCH(dat, obj);

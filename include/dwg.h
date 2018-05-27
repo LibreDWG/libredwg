@@ -267,7 +267,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_OLE2FRAME = 0x4a,
   DWG_TYPE_DUMMY = 0x4b,
   DWG_TYPE_LONG_TRANSACTION = 0x4c,
-  DWG_TYPE_LWPLINE = 0x4d, /* ?? */
+  DWG_TYPE_LWPOLYLINE = 0x4d, /* ?? */
   DWG_TYPE_HATCH = 0x4e,
   DWG_TYPE_XRECORD = 0x4f,
   DWG_TYPE_PLACEHOLDER = 0x50,
@@ -282,7 +282,7 @@ typedef enum DWG_OBJECT_TYPE
   /* non-fixed types > 500:
      TABLE, CELLSTYLEMAP, DBCOLOR, DICTIONARYVAR, DICTIONARYWDFLT ,
      FIELD, GROUP, HATCH, IDBUFFER, IMAGE, IMAGEDEF, IMAGEDEF_REACTOR,
-     LAYER_INDEX, LAYER_FILTER, LAYOUT, LIGHTLIST, LWPLINE, MATERIAL,
+     LAYER_INDEX, LAYER_FILTER, LAYOUT, LIGHTLIST, LWPOLYLINE, MATERIAL,
      MULTILEADER, MLEADERSTYLE, OLE2FRAME, PLACEHOLDER, PLOTSETTINGS,
      RASTERVARIABLES, SCALE, SORTENTSTABLE, SPATIAL_FILTER,
      SPATIAL_INDEX, TABLEGEOMETRY, TABLESTYLE, VBA_PROJECT,
@@ -2159,13 +2159,13 @@ typedef struct _dwg_entity_LONG_TRANSACTION
 /* NOT SURE ABOUT THIS ONE (IS IT OBJECT OR ENTITY?): */
 /**
  Struct for subtype PROXY_LWPOLYLINE (33) in a PROXY
- Not a LWPLINE (77? + varies)
+ Not a LWPOLYLINE (77? + varies)
  */
-typedef struct _dwg_entity_LWPLINE_width
+typedef struct _dwg_entity_LWPOLYLINE_width
 {
   BITCODE_BD start;
   BITCODE_BD end;
-} Dwg_Entity_LWPLINE_width;
+} Dwg_Entity_LWPOLYLINE_width;
 
 typedef struct _dwg_entity_PROXY_LWPOLYLINE
 {
@@ -2180,7 +2180,7 @@ typedef struct _dwg_entity_PROXY_LWPOLYLINE
   BITCODE_BL num_bulges;
   BITCODE_BD* bulges;
   BITCODE_BL num_widths;
-  Dwg_Entity_LWPLINE_width* widths;
+  Dwg_Entity_LWPOLYLINE_width* widths;
   BITCODE_RC unknown_1;
   BITCODE_RC unknown_2;
   BITCODE_RC unknown_3;
@@ -3378,9 +3378,9 @@ typedef struct _dwg_object_LAYER_INDEX
 } Dwg_Object_LAYER_INDEX;
 
 /**
- Classes for LWPLINE (77 + varies)
+ Classes for LWPOLYLINE (77 + varies)
  */
-typedef struct _dwg_entity_LWPLINE
+typedef struct _dwg_entity_LWPOLYLINE
 {
   BITCODE_BS flag;
   BITCODE_BD const_width;
@@ -3392,8 +3392,8 @@ typedef struct _dwg_entity_LWPLINE
   BITCODE_BL num_bulges;
   BITCODE_BD* bulges;
   BITCODE_BL num_widths;
-  Dwg_Entity_LWPLINE_width* widths;
-} Dwg_Entity_LWPLINE;
+  Dwg_Entity_LWPOLYLINE_width* widths;
+} Dwg_Entity_LWPOLYLINE;
 
 /**
  * 20.4.89 Class AcDbObjectContextData (varies)
@@ -3687,7 +3687,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_OLE2FRAME *OLE2FRAME;
     Dwg_Entity_DUMMY *DUMMY;
     Dwg_Entity_LONG_TRANSACTION *LONG_TRANSACTION;
-    Dwg_Entity_LWPLINE *LWPLINE;
+    Dwg_Entity_LWPOLYLINE *LWPOLYLINE;
     Dwg_Entity_MULTILEADER *MULTILEADER;
     Dwg_Entity_PROXY_LWPOLYLINE *PROXY_LWPOLYLINE;
     Dwg_Entity_PROXY_ENTITY *PROXY_ENTITY;

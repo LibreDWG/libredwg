@@ -357,9 +357,9 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       dwg_print_LAYOUT(dat, obj);
       return 1;
     }
-  if (!strcmp(dxfname, "LWPLINE"))
+  if (!strcmp(dxfname, "LWPOLYLINE"))
     {
-      dwg_print_LWPLINE(dat, obj);
+      dwg_print_LWPOLYLINE(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "MULTILEADER"))
@@ -801,8 +801,8 @@ dwg_print_object(Bit_Chain* dat, Dwg_Object *obj)
     case DWG_TYPE_LONG_TRANSACTION:
       dwg_print_LONG_TRANSACTION(dat, obj);
       break;
-    case DWG_TYPE_LWPLINE:
-      dwg_print_LWPLINE(dat, obj);
+    case DWG_TYPE_LWPOLYLINE:
+      dwg_print_LWPOLYLINE(dat, obj);
       break;
     case DWG_TYPE_HATCH:
       dwg_print_HATCH(dat, obj);

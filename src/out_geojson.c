@@ -265,10 +265,10 @@ dwg_geojson_variable_type(Dwg_Data * dwg, Bit_Chain *dat, Dwg_Object* obj)
                klass->number, dxfname, klass->proxyflag,\
                klass->wasazombie ? " was proxy" : "")
   
-  if (!strcmp(dxfname, "LWPLINE"))
+  if (!strcmp(dxfname, "LWPOLYLINE"))
     {
       BITCODE_BL j;
-      Dwg_Entity_LWPLINE *_obj = obj->tio.entity->tio.LWPLINE;
+      Dwg_Entity_LWPOLYLINE *_obj = obj->tio.entity->tio.LWPOLYLINE;
       //TODO: if closed and num_points > 3 use a Polygon
       FEATURE(AcDbEntity:AcDbLwPolyline, obj);
       GEOMETRY(LineString);
@@ -466,8 +466,8 @@ dwg_geojson_object(Bit_Chain *dat, Dwg_Object *obj)
     case DWG_TYPE_MLINE:
       //dwg_geojson_MLINE(dat, obj);
       break;
-    case DWG_TYPE_LWPLINE:
-      //dwg_geojson_LWPLINE(dat, obj);
+    case DWG_TYPE_LWPOLYLINE:
+      //dwg_geojson_LWPOLYLINE(dat, obj);
       break;
     default:
       if (obj->type != obj->parent->layout_number)

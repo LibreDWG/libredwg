@@ -376,9 +376,9 @@ dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
       dwg_free_LAYOUT(obj);
       goto known;
     }
-  if (!strcmp(dxfname, "LWPLINE"))
+  if (!strcmp(dxfname, "LWPOLYLINE"))
     {
-      dwg_free_LWPLINE(obj);
+      dwg_free_LWPOLYLINE(obj);
       goto known;
     }
   if (!strcmp(dxfname, "MULTILEADER"))
@@ -750,8 +750,8 @@ dwg_free_object(Dwg_Object *obj)
     case DWG_TYPE_LONG_TRANSACTION:
       dwg_free_LONG_TRANSACTION(obj);
       break;
-    case DWG_TYPE_LWPLINE:
-      dwg_free_LWPLINE(obj);
+    case DWG_TYPE_LWPOLYLINE:
+      dwg_free_LWPOLYLINE(obj);
       break;
     case DWG_TYPE_HATCH:
       dwg_free_HATCH(obj);

@@ -42,7 +42,7 @@ check_PROGRAMS = \
 	endblk \
 	insert \
 	line \
-	lwpline \
+	lwpolyline \
 	minsert \
 	mline \
 	mtext \
