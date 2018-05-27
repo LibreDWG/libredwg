@@ -4562,7 +4562,7 @@ DWG_OBJECT(XRECORD)
     #ifdef IS_DXF
     if (FIELD_VALUE(objid_handles)) {
       REPEAT(objid_handles, num_objid_handles, T)
-        HANDLE_NAME (_obj->objid_handles[rcount], 102);
+        //TODO xdata string, 102
         VALUE_H (_obj->objid_handles[rcount], 340);
       END_REPEAT(objid_handles)
     }

@@ -24,6 +24,7 @@
 #include "common.h"
 #include "bits.h"
 #include "dwg.h"
+#include "decode.h"
 #include "out_dxf.h"
 
 #define DWG_LOGLEVEL DWG_LOGLEVEL_NONE
@@ -300,7 +301,8 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 #define FIELD_NUM_INSERTS(num_inserts, type, dxf) \
   FIELD(num_inserts, type, dxf)
 
-#define FIELD_XDATA(name, size)
+#define FIELD_XDATA(name, size) \
+  dxf_write_xdata(dat, _obj->name, _obj->size)
 
 #define REACTORS(code)\
   if (obj->tio.object->num_reactors) {\
@@ -387,6 +389,68 @@ dwg_dxf_ ##token (Bit_Chain *dat, Dwg_Object * obj) \
 
 #define DWG_OBJECT_END }
 
+static void
+dxf_write_xdata(Bit_Chain *restrict dat, Dwg_Resbuf *restrict rbuf, BITCODE_BL size)
+{
+  Dwg_Resbuf *tmp;
+  int i;
+
+  while (rbuf)
+    {
+      //const char* fmt = dxf_format(rbuf->type);
+      short type = get_base_value_type(rbuf->type);
+      fprintf(dat->fh, "%3i\r\n", rbuf->type);
+
+      tmp = rbuf->next;
+      switch (type)
+        {
+        case VT_STRING:
+          UNTIL(R_2007) {
+            fprintf(dat->fh, "%s\r\n", rbuf->value.str.u.data);
+          } LATER_VERSIONS {
+            char* wtmp = bit_convert_TU(rbuf->value.str.u.wdata);
+            fprintf(dat->fh, "%s\r\n", wtmp);
+            free(wtmp);
+          }
+          break;
+        case VT_REAL:
+          fprintf(dat->fh, "%-16.14f\r\n", rbuf->value.dbl);
+          break;
+        case VT_BOOL:
+        case VT_INT8:
+          fprintf(dat->fh, "%6i\r\n", rbuf->value.i8);
+          break;
+        case VT_INT16:
+          fprintf(dat->fh, "%6i\r\n", rbuf->value.i16);
+          break;
+        case VT_INT32:
+          fprintf(dat->fh, "%6i\r\n", rbuf->value.i32);
+          break;
+        case VT_POINT3D:
+          fprintf(dat->fh, "%-16.14f\r\n", rbuf->value.pt[0]);
+          fprintf(dat->fh, "%3i\r\n", rbuf->type + 1);
+          fprintf(dat->fh, "%-16.14f\r\n", rbuf->value.pt[1]);
+          fprintf(dat->fh, "%3i\r\n", rbuf->type + 2);
+          fprintf(dat->fh, "%-16.14f\r\n", rbuf->value.pt[2]);
+          break;
+        case VT_BINARY:
+          fprintf(dat->fh, "%s\r\n", rbuf->value.str.u.data);
+          //bit_write_RC(dat, rbuf->value.str.size);
+          //bit_write_TF(dat, rbuf->value.str.u.data, rbuf->value.str.size);
+          break;
+        case VT_HANDLE:
+        case VT_OBJECTID:
+          fprintf(dat->fh, "%lX\r\n", (unsigned long)*(uint64_t*)rbuf->value.hdl);
+          break;
+        case VT_INVALID:
+        default:
+          fprintf(dat->fh, "\r\n");
+          break;
+        }
+      rbuf = tmp;
+    }
+}
+
 // r2000+ converts STANDARD to Standard, BYLAYER to ByLayer, BYBLOCK to ByBlock
 static void
 dxf_write_handle(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
@@ -446,6 +510,7 @@ dxf_write_handle(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   RESET_VER
 
 #include "dwg.spec"
+
 
 /* returns 1 if object could be printd and 0 otherwise
  */
