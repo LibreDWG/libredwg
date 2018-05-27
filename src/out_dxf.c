@@ -496,7 +496,8 @@ dxf_write_handle(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
 
 //TODO
 #define COMMON_TABLE_CONTROL_FLAGS(owner) \
-  VALUE_H  (_ctrl->null_handle, 330); \
+  if (_ctrl->null_handle->absolute_ref) \
+    VALUE_H (_ctrl->null_handle, 330); \
   VALUE_TV ("AcDbSymbolTable", 100); \
   RESET_VER
 
