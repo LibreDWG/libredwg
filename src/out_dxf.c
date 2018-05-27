@@ -76,6 +76,21 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
     fprintf(dat->fh, "\r\n"); \
   }
 #endif
+#define VALUE_BINARY(value,size,dxf) \
+{ \
+  long len = size; \
+  do { \
+    short j; \
+    long l = len > 127 ? 127 : len; \
+    GROUP(dxf); \
+    if (value) \
+      for (j=0; j < l; j++) { \
+        fprintf(dat->fh, "%02X", value[j]); \
+      } \
+    fprintf(dat->fh, "\r\n"); \
+    len -= 127; \
+  } while (len > 127); \
+}
 
 #define FIELD_VALUE(name) _obj->name
 #define ANYCODE -1
@@ -393,44 +408,37 @@ dxf_write_xdata(Bit_Chain *restrict dat, Dwg_Resbuf *restrict rbuf, BITCODE_BL s
     {
       //const char* fmt = dxf_format(rbuf->type);
       short type = get_base_value_type(rbuf->type);
-      fprintf(dat->fh, "%3i\r\n", rbuf->type);
 
       tmp = rbuf->next;
       switch (type)
         {
         case VT_STRING:
           UNTIL(R_2007) {
-            fprintf(dat->fh, "%s\r\n", rbuf->value.str.u.data);
+            VALUE_TV(rbuf->value.str.u.data, rbuf->type);
           } LATER_VERSIONS {
-            char* wtmp = bit_convert_TU(rbuf->value.str.u.wdata);
-            fprintf(dat->fh, "%s\r\n", wtmp);
-            free(wtmp);
+            VALUE_TU(rbuf->value.str.u.wdata, rbuf->type);
           }
           break;
         case VT_REAL:
-          fprintf(dat->fh, "%-16.14f\r\n", rbuf->value.dbl);
+          VALUE_RD(rbuf->value.dbl, rbuf->type);
           break;
         case VT_BOOL:
         case VT_INT8:
-          fprintf(dat->fh, "%6i\r\n", rbuf->value.i8);
+          VALUE_RC(rbuf->value.i8, rbuf->type);
           break;
         case VT_INT16:
-          fprintf(dat->fh, "%6i\r\n", rbuf->value.i16);
+          VALUE_RS(rbuf->value.i16, rbuf->type);
           break;
         case VT_INT32:
-          fprintf(dat->fh, "%6i\r\n", rbuf->value.i32);
+          VALUE_RL(rbuf->value.i32, rbuf->type);
           break;
         case VT_POINT3D:
-          fprintf(dat->fh, "%-16.14f\r\n", rbuf->value.pt[0]);
-          fprintf(dat->fh, "%3i\r\n", rbuf->type + 1);
-          fprintf(dat->fh, "%-16.14f\r\n", rbuf->value.pt[1]);
-          fprintf(dat->fh, "%3i\r\n", rbuf->type + 2);
-          fprintf(dat->fh, "%-16.14f\r\n", rbuf->value.pt[2]);
+          VALUE_RD(rbuf->value.pt[0], rbuf->type);
+          VALUE_RD(rbuf->value.pt[1], rbuf->type+1);
+          VALUE_RD(rbuf->value.pt[2], rbuf->type+2);
           break;
         case VT_BINARY:
-          fprintf(dat->fh, "%s\r\n", rbuf->value.str.u.data);
-          //bit_write_RC(dat, rbuf->value.str.size);
-          //bit_write_TF(dat, rbuf->value.str.u.data, rbuf->value.str.size);
+          VALUE_BINARY(rbuf->value.str.u.data, rbuf->value.str.size, rbuf->type);
           break;
         case VT_HANDLE:
         case VT_OBJECTID:
@@ -1563,13 +1571,18 @@ dxf_objects_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 }
 
 //TODO: Beware, there's also a new ACDSDATA section, with ACDSSCHEMA elements
-// and the Thumbnail_Data
-
+// and the Thumbnail_Data (per block?)
 static int
 dxf_preview_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  (void)dat; (void)dwg;
-  //...
+  Bit_Chain *pic = (Bit_Chain*) &dwg->picture;
+  if (pic->chain && pic->size && pic->size > 10)
+    {
+      SECTION(THUMBNAILIMAGE);
+      VALUE_RL(pic->size, 90);
+      VALUE_BINARY(pic->chain, pic->size, 310);
+      ENDSEC();
+    }
   return 0;
 }
 
