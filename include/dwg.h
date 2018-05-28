@@ -424,9 +424,12 @@ typedef struct _dwg_resbuf
  */
 typedef struct _dwg_header_variables {
   BITCODE_RL size;
-  BITCODE_RL bitsize_hi; /*!< r2010+ */
+  BITCODE_RL bitsize_hi;   /*!< r2010+ */
   BITCODE_RL bitsize;
+  BITCODE_RC ACADMAINTVER; /*!< r13+ */
   BITCODE_BLL REQUIREDVERSIONS; /*!< r2013+ */
+  BITCODE_TV DWGCODEPAGE;  /*!< r10+ */
+  BITCODE_TV LASTSAVEDBY;  /*!< r2010+ */
   BITCODE_BD unknown_0; /* 412148564080.0 */
   BITCODE_BD unknown_1; /* 1.0 */
   BITCODE_BD unknown_2; /* 1.0 */

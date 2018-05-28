@@ -126,6 +126,7 @@ main (int argc, char *argv[])
   printf("Reading DXF file %s\n", filename_in);
   printf("TODO: reading DXF not yet done\n");
   dwg.opts = opts;
+
   error = dxf_read_file(filename_in, &dwg);
   if (error)
     {

@@ -139,6 +139,7 @@ dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 #define TABLE(table)     fprintf(dat->fh, "  0\r\nTABLE\r\n  2\r\n" #table "\r\n")
 #define ENDTAB()         fprintf(dat->fh, "  0\r\nENDTAB\r\n")
 #define RECORD(record)   fprintf(dat->fh, "  0\r\n" #record "\r\n")
+#define SUBCLASS(text)   if (dat->from_version >= R_2000) { VALUE_TV(#text, 100); }
 
 #define GROUP(dxf) \
     fprintf (dat->fh, "%3i\r\n", dxf)

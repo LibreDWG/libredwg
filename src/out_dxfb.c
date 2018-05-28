@@ -141,7 +141,9 @@ static void dxfb_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
     VALUE_TV(#token, 2)
 #define ENDTAB()        VALUE_TV("ENDTAB", 0)
 #define RECORD(record)  VALUE_TV(#record, 0)
- /*
+#define SUBCLASS(text)  if (dat->from_version >= R_2000) { VALUE_TV(#text, 100); }
+
+/*
 #define VALUE(code, value)                   \
   {\
     GCC_DIAG_IGNORE(-Wformat-nonliteral) \

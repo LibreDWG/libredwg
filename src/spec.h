@@ -30,6 +30,9 @@
 #ifndef VALUE_TV
 #define VALUE_TV(value, dxf)
 #endif
+#ifndef SUBCLASS
+#define SUBCLASS(text)
+#endif
 
 #ifdef IS_ENCODER
 #undef ENCODER

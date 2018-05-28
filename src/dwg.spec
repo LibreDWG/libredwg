@@ -311,10 +311,7 @@ DWG_ENTITY_END
 /* (4/12) */
 DWG_ENTITY(BLOCK)
 
-  DXF {
-    if (dat->from_version >= R_2000)
-      VALUE_TV ("AcDbBlockBegin", 100);
-  }
+  SUBCLASS (AcDbBlockBegin)
   FIELD_T (name, 2);
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -324,10 +321,7 @@ DWG_ENTITY_END
 /* (5/13) */
 DWG_ENTITY(ENDBLK)
 
-  DXF {
-    if (dat->from_version >= R_2000)
-      VALUE_TV ("AcDbBlockEnd", 100);
-  }
+  SUBCLASS (AcDbBlockEnd)
   COMMON_ENTITY_HANDLE_DATA;
 
 DWG_ENTITY_END
@@ -681,10 +675,7 @@ DWG_ENTITY_END
 /*(15)*/
 DWG_ENTITY(POLYLINE_2D)
 
-  DXF {
-    if (dat->from_version >= R_2000)
-      VALUE_TV ("AcDbPolyline", 100);
-  }
+  SUBCLASS (AcDbPolyline)
   PRE(R_13)
   {
     if (R11OPTS(1))
@@ -761,10 +752,7 @@ DWG_ENTITY_END
 /* (17/8) */
 DWG_ENTITY(ARC)
 
-  DXF {
-    if (dat->from_version >= R_2000)
-      VALUE_TV ("AcDbArc", 100);
-  }
+  SUBCLASS (AcDbArc)
   PRE(R_13) {
     FIELD_2RD (center, 10);
     FIELD_RD (radius, 40);
@@ -791,10 +779,7 @@ DWG_ENTITY_END
 /* (18/3) */
 DWG_ENTITY(CIRCLE)
 
-  DXF {
-    if (dat->from_version >= R_2000)
-      VALUE_TV ("AcDbCircle", 100);
-  }
+  SUBCLASS (AcDbCircle)
   PRE(R_13) {
     FIELD_2RD (center, 10);
     FIELD_RD (radius, 40);
@@ -817,10 +802,7 @@ DWG_ENTITY_END
 /* (19/1) */
 DWG_ENTITY(LINE)
 
-  DXF {
-    if (dat->from_version >= R_2000)
-      VALUE_TV ("AcDbLine", 100);
-  }
+  SUBCLASS (AcDbLine)
   PRE(R_13) {
     if (_ent->flag_r11 & 4)
       FIELD_3RD (start, 10)
@@ -1643,6 +1625,7 @@ DWG_ENTITY_END
 /*(42)*/
 DWG_OBJECT(DICTIONARY)
 
+  SUBCLASS (AcDbDictionary)
   FIELD_BL (numitems, 0);
 
   VERSION(R_14)
@@ -1663,7 +1646,6 @@ DWG_OBJECT(DICTIONARY)
     }
 
 #ifdef IS_DXF
-    VALUE_TV("AcDbDictionary", 100)
     if (FIELD_VALUE(itemhandles) && FIELD_VALUE(text)) {
       REPEAT(numitems, text, T)
       {
@@ -3089,14 +3071,14 @@ DWG_OBJECT(MLINESTYLE)
 #endif
     PRE(R_2018)
     {
-#ifdef IS_DXF
+#if defined(IS_DXF) && !defined(IS_ENCODE)
         switch (FIELD_VALUE(lines[rcount].ltindex)) {
         case 32767: VALUE_TV("BYLAYER", 6); break;
         case 32766: VALUE_TV("BYBLOCK", 6); break;
-        case 0: VALUE_TV("CONTINUOUS", 6); break;
+        case 0:     VALUE_TV("CONTINUOUS", 6); break;
         //else lookup on LTYPE_CONTROL list
-        default: /*FIELD_HANDLE(ltype, 5, 6);*/
-                 VALUE_TV("", 6); break;
+        default:    /*FIELD_HANDLE_NAME(ltype, 5, 6);*/
+                    VALUE_TV("", 6); break;
         }
 #else
         FIELD_BS (lines[rcount].ltindex, 6);
@@ -4551,10 +4533,7 @@ DWG_OBJECT_END
 //(79 + varies) pg.247 20.4.104
 DWG_OBJECT(XRECORD)
 
-  DXF {
-    if (dat->from_version >= R_2000)
-      VALUE_TV ("AcDbXrecord", 100);
-  }
+  SUBCLASS (AcDbXrecord)
   FIELD_BL (num_databytes, 0);
   FIELD_XDATA (xdata, num_databytes);
 
