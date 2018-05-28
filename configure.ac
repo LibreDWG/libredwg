@@ -229,6 +229,9 @@ fi
 AM_CONDITIONAL([HAVE_SWIG_PYTHON],
   [test -n "$SWIG" && test -n "$PYTHON_VERSION"])
 
+AC_CHECK_PROGS([DOXYGEN], [doxygen])
+AM_CONDITIONAL([HAVE_DOXYGEN], [test -n "$DOXYGEN"])
+
 dnl check for valgrind
 case $host_os in
   darwin*)

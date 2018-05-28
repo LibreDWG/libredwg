@@ -1566,6 +1566,7 @@ dwg_ent_text_set_insertion_point(dwg_ent_text *text, dwg_point_2d *point,
 /** Usage :- double height = dwg_ent_text_get_height(text);
     \param 1 dwg_ent_text
     \param 2 int ptr &error
+    DXF 40
 */
 BITCODE_BD
 dwg_ent_text_get_height(const dwg_ent_text *text, int *error)
@@ -1588,6 +1589,7 @@ dwg_ent_text_get_height(const dwg_ent_text *text, int *error)
     \param 1 dwg_ent_text
     \param 2 double
     \param 3 int ptr &error
+    DXF 40
 */
 void
 dwg_ent_text_set_height(dwg_ent_text *text, BITCODE_BD height, int *error)
@@ -1604,11 +1606,13 @@ dwg_ent_text_set_height(dwg_ent_text *text, BITCODE_BD height, int *error)
     }
 }
 
-/// Returns extrusion value
-/** Usage : dwg_ent_text_get_extrusion(text, &point, &error);
-    \param 1 dwg_ent_text
-    \param 2 dwg_point_2d
-    \param 3 int ptr &error
+/**
+   \def dwg_ent_text_get_extrusion(text, &point, &error);
+   \brief Returns extrusion value
+   \param 1 dwg_ent_text
+   \param 2 dwg_point_2d
+   \param 3 int ptr &error
+   DXF 210
 */
 void
 dwg_ent_text_get_extrusion(const dwg_ent_text *text, dwg_point_3d *vector,
@@ -1629,6 +1633,7 @@ dwg_ent_text_get_extrusion(const dwg_ent_text *text, dwg_point_3d *vector,
 }
 
 /// Sets the text extrusion value.
+/// DXF param 210
 /** Usage :- dwg_ent_text_set_extrusion(text, &point, &error);
     \param 1 dwg_ent_text
     \param 2 dwg_point_2d
@@ -1653,6 +1658,7 @@ dwg_ent_text_set_extrusion(dwg_ent_text *text, dwg_point_3d *vector,
 }
 
 /// Returns the thickness of a text entity.
+/// DXF param 39
 /** Usage : dwg_ent_text_get_thickness(text, &error);
     \param 1 dwg_ent_text
     \param 2 int ptr &error
@@ -1674,6 +1680,7 @@ dwg_ent_text_get_thickness(const dwg_ent_text *text, int *error)
 }
 
 /// Sets the thickness of text.
+/// DXF param 39
 /** Usage :- dwg_ent_text_set_thickness(text, 50, &error);
     \param 1 dwg_ent_text
     \param 2 double
@@ -1695,6 +1702,7 @@ dwg_ent_text_set_thickness(dwg_ent_text *text, BITCODE_BD thickness, int *error)
 }
 
 /// Returns the rotation angle of a text entity.
+/// DXF param 50
 /** Usage :- double rot_ang = dwg_ent_text_get_rotation(text, &error);
     \param 1 dwg_ent_text
     \param 2 int ptr &error
@@ -1716,6 +1724,7 @@ dwg_ent_text_get_rotation(const dwg_ent_text *text, int *error)
 }
 
 /// Sets the rotation angle of a text entity.
+/// DXF param 50
 /** Usage : dwg_ent_text_set_rotation(text, angle, &error);
     \param 1 dwg_ent_text
     \param 2 BITCODE_BD
@@ -1737,6 +1746,7 @@ dwg_ent_text_set_rotation(dwg_ent_text *text, BITCODE_BD angle, int *error)
 }
 
 /// Returns the vertical alignment of a text entity.
+/// DXF param 73
 /** Usage : short align = dwg_ent_text_get_vert_align(text, &error);
     \param 1 dwg_ent_text
     \param 2 int ptr &error
@@ -1760,6 +1770,7 @@ dwg_ent_text_get_vert_align(const dwg_ent_text *text, int *error)
 
 /// Sets the vertical alignment of a text entity
 /** Usage : dwg_ent_text_set_vert_align(text, angle, &error);
+    DXF param 73
     \param 1 dwg_ent_text
     \param 2 short (1 = bottom, 2 = middle, 3 = top)
     \param 3 int ptr &error
@@ -1770,6 +1781,7 @@ dwg_ent_text_set_vert_align(dwg_ent_text *text, BITCODE_BS alignment, int *error
   if (text)
     {
       *error = 0;
+      //TODO: validation 1-3
       text->vert_alignment = alignment;
     }
   else
@@ -1780,6 +1792,7 @@ dwg_ent_text_set_vert_align(dwg_ent_text *text, BITCODE_BS alignment, int *error
 }
 
 /// Returns the horizontal alignment of a text entity.
+/// DXF param 72
 /** Usage : short align = dwg_ent_text_get_horiz_align(text, &error);
     \param 1 dwg_ent_text
     \param 2 int ptr &error
@@ -1802,6 +1815,7 @@ dwg_ent_text_get_horiz_align(const dwg_ent_text *text, int *error)
 }
 
 /// Sets the horizontal alignment of a text entity.
+/// DXF param 72
 /** Usage : dwg_ent_text_set_horiz_align(text, angle, &error);
     \param 1 dwg_ent_text
     \param 2 short (1 = left, 2 = center, 3 = right)
@@ -1813,6 +1827,7 @@ dwg_ent_text_set_horiz_align(dwg_ent_text *text, BITCODE_BS alignment, int *erro
   if (text)
     {
       *error = 0;
+      //TODO: validation 1-3
       text->horiz_alignment = alignment;
     }
   else

@@ -35,6 +35,11 @@ man:
 manual:
 	$(MAKE) -C doc manual
 
+if HAVE_DOXYGEN
+doxygen doc/html/index.html: doc/Doxyfile $(include_HEADERS)
+	$(DOXYGEN) doc/Doxyfile
+endif
+
 check-dwg: all
 	-rm check-dwg.log
 	for d in `find test/test-data -iname \*.dwg`; do \
