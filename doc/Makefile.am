@@ -17,8 +17,16 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+TEXINFO_TEX_DIR = $(abs_builddir)/latex
+TEXINPUTS="$(TEXINPUTS)$(PATH_SEPARATOR)$(TEXINFO_TEX_DIR)"
 info_TEXINFOS = LibreDWG.texi
 LibreDWG_TEXINFOS = fdl.texi
 
 manual:
 	../build-aux/gendocs.sh LibreDWG "GNU LibreDWG - Manual"
+
+refman doxygen refman/index.html: Doxyfile ../include/dwg_api.h ../include/dwg.h
+	$(MAKE) -C .. refman
+
+refman-pdf: refman
+	$(MAKE) -C latex

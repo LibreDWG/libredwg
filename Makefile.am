@@ -36,8 +36,10 @@ manual:
 	$(MAKE) -C doc manual
 
 if HAVE_DOXYGEN
-doxygen doc/html/index.html: doc/Doxyfile $(include_HEADERS)
+refman doxygen doc/html/index.html: doc/Doxyfile $(include_HEADERS)
 	$(DOXYGEN) doc/Doxyfile
+refman-pdf: doc/html/index.html
+	$(MAKE) -C doc/latex
 endif
 
 check-dwg: all

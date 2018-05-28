@@ -33,8 +33,8 @@
 #include "bits.h"
 #include "dwg_api.h"
 
-/* We don't pass in Dwg_Object*'s, so we don't know if the object
-   is >= r2007 or <r13 or what.
+/** We don't pass in Dwg_Object*'s, so we don't know if the object
+   is >= r2007 or <r13 or what. Default is r2000.
    So we need some dwg_api_init_version(&dwg) to store the version.
 */
 static Dwg_Version_Type dwg_version = R_INVALID;
