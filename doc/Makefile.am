@@ -30,3 +30,7 @@ refman doxygen refman/index.html: Doxyfile ../include/dwg_api.h ../include/dwg.h
 
 refman-pdf: refman
 	$(MAKE) -C latex
+
+DISTCLEANFILES = LibreDWG.pdf LibreDWG.{aux,cp,cps,log,t2p,toc}
+distclean-local:
+	-rm -rf manual refman latex
