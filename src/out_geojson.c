@@ -14,6 +14,13 @@
  * out_geojson.c: write as GeoJSON
  * written by Reini Urban
  */
+/* TODO: Arc, Circle, Ellipsis, Bulge (Curve) tesselation.
+ *       ocs/ucs transforms, explode of inserts?
+ *       NOCOMMA and \n not with stdout. stdout is line-buffered,
+ *       so NOCOMMA cannot backup past the previous \n to delete the comma.
+ *       We really have to add the comma before, not after, and special case the first
+ *       field, not the last to omit the comma.
+ */
 
 #include "config.h"
 #include <stdio.h>

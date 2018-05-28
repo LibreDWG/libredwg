@@ -14,6 +14,13 @@
  * in_dxf.c: read ascii DXF
  * written by Reini Urban
  */
+/* TODO:
+ * read spec and add fieldnames/group to some hash/array to search in.
+ * read until next object border (groups 0, 2), and collect all fields/values.
+ * (or just store the start+end offsets and jump back)
+ * map object to our struct type (i.e. 2 APPID => APPID_CONTROL, nth 0 APPID => nth APPID).
+ * find and fill fieldname/group in our struct.
+ */
 
 #include "config.h"
 #include <stdio.h>
@@ -38,11 +45,6 @@ extern const char *
 dxf_format (int code);
 extern void
 obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
-
-//internal
-static void
-dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
-
 
 /*--------------------------------------------------------------------------------
  * MACROS
@@ -380,6 +382,12 @@ dwg_dxf_ ##token (Bit_Chain *dat, Dwg_Object * obj) \
     obj->handle.value)
 
 #define DWG_OBJECT_END }
+
+static void
+dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj)
+{
+  (void)dat; (void)obj;
+}
 
 #include "dwg.spec"
 
@@ -984,12 +992,6 @@ dwg_dxf_object(Bit_Chain *dat, Dwg_Object *obj)
             }
         }
     }
-}
-
-static void
-dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj)
-{
-  (void)dat; (void)obj;
 }
 
 // see https://www.autodesk.com/techpubs/autocad/acad2000/dxf/header_section_group_codes_dxf_02.htm

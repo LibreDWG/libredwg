@@ -15,10 +15,10 @@
   the sections have multiple pages. Only for this version. 2010+ uses
   the 2004 format.
 * encode for 2004+: move the local structs to the dwg, as union?
-* finish DXF writing (easy, see the dxf branch)
-* finish binary DXF (easy, see the dxf branch)
+* finish DXF writing, test with AutoCAD open.
+* finish binary DXF (easy)
 * add DXF reading (easy)
-* add GeoJSON http://geojson.org/geojson-spec.html
+* finish GeoJSON http://geojson.org/geojson-spec.html
 * add getopt_long() for position independent options
 * check osm tools https://gitlab.com/osm-c-tools/osmctools how
   they could import GIS data easier.
@@ -26,14 +26,16 @@
 * add one of the easy OGR formats: gml, gpx.
   See https://wiki.openstreetmap.org/wiki/Dxf2gpx
   https://grass.osgeo.org/grass74/manuals/v.in.dxf.html and dwg (teigha and opencad)
-* add API funcs for OCS transforms (e.g. insert), find table elements (layer, ltype),
-  ...
+* add geomutils to tesselate curves (e.g. GeomJSON),
+  and to transform OCS/UCS objects when being displayed (e.g. svg, ps).
+  add API funcs to find table elements (layer, ltype).
 * check DWG constraints vs FreeCAD constraints
   https://www.freecadweb.org/wiki/Sketcher_Workbench#Sketcher_Constraints
 
 * fix the remaining leaks.
 * enhance and document the API functions.
 * add the basic DWG layout and API to the docs.
+* publish manual and link to doxygen refman API
 * add more defaults when encoding from older to newer versions.
 * build releases via travis => github (savannah/ftpupload)?
 * add fuzzing and solver-based test generation (bits)

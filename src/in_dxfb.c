@@ -12,8 +12,9 @@
 
 /*
  * in_dxfb.c: read Binary DXF to dwg WIP
- * See in_dxf.c
  * written by Reini Urban
+ *
+ * See in_dxf.c for the plan. Only the input methods are customized here.
  */
 
 #include "config.h"
@@ -37,9 +38,6 @@ static char buf[4096];
 // imported
 extern const char *
 dxf_format (int code);
-
-static void
-dxfb_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
 
 /*--------------------------------------------------------------------------------
  * MACROS
@@ -389,6 +387,12 @@ dwg_dxfb_ ##token (Bit_Chain *dat, Dwg_Object * obj) \
     obj->handle.value)
 
 #define DWG_OBJECT_END }
+
+static void
+dxfb_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj)
+{
+  (void)dat; (void)obj;
+}
 
 #include "dwg.spec"
 
@@ -993,12 +997,6 @@ dwg_dxfb_object(Bit_Chain *dat, Dwg_Object *obj)
             }
         }
     }
-}
-
-static void
-dxfb_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj)
-{
-  (void)dat; (void)obj;
 }
 
 // see https://www.autodesk.com/techpubs/autocad/acad2000/dxf/header_section_group_codes_dxf_02.htm
