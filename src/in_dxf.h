@@ -36,7 +36,7 @@ typedef struct _dxf_objs {
   Dxf_Field *fields;
 } Dxf_Objs;
 
-int  dwg_read_dxf(Bit_Chain *dat, Dwg_Data* dwg);
-int  dwg_read_dxfb(Bit_Chain *dat, Dwg_Data* dwg);
+int dwg_read_dxf(Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
+int dwg_read_dxfb(Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 
 #endif

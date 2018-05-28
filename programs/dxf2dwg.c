@@ -64,7 +64,7 @@ static int help(void) {
   return 0;
 }
 
-//TODO read code/name pair from fh until found, and store in obj
+//TODO read code/name pair from file until found, and store in obj
 
 int
 main (int argc, char *argv[])

@@ -27,6 +27,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <ctype.h>
 
 #include "common.h"
 #include "bits.h"
@@ -56,20 +57,41 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 void dxf_add_field(Dwg_Object *obj, const char *name, const char *type, int dxf);
 Dxf_Field* dxf_search_field(Dwg_Object *obj, const char *name, const char *type, int dxf);
 
-static void dxf_read_group(Bit_Chain *dat, int dxf)
+static int dxf_read_code(Bit_Chain *dat)
 {
-  int num;
-  int i = sscanf(&dat->chain[dat->byte], "%d\r\n", &num);
-  if (i && num == dxf)
-    dat->byte += i;
+  char *endptr;
+  long num = strtol((char*)&dat->chain[dat->byte], &endptr, 10);
+  dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
+  for (; isspace(dat->chain[dat->byte]); dat->byte++) ;
+  return (int)num;
+}
+
+static int dxf_read_group(Bit_Chain *dat, int dxf)
+{
+  char *endptr;
+  long num = strtol((char*)&dat->chain[dat->byte], &endptr, 10);
+  if ((int)num == dxf) {
+    dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
+    for (; isspace(dat->chain[dat->byte]); dat->byte++) ;
+    return 1;
+  }
+  return 0;
 }
 
 static void dxf_read_string(Bit_Chain *dat, char **string)
 {
-  int i = sscanf(&dat->chain[dat->byte], "%s\n", buf);
+  int i;
+  for (; isspace(dat->chain[dat->byte]); dat->byte++) ;
+  for (i = 0; !isspace(dat->chain[dat->byte]); dat->byte++)
+    {
+      buf[i++] = dat->chain[dat->byte];
+    }
+  //int i = sscanf(&dat->chain[dat->byte], "%s", buf);
   if (i) {
-    dat->byte += i;
-    if (!*string)
+    for (; isspace(dat->chain[dat->byte]); dat->byte++) ;
+    if (!string)
+      ; // ignore
+    else if (!*string)
       *string = malloc(strlen(buf)+1);
     else
       strcpy(*string, buf);
@@ -100,8 +122,10 @@ static void dxf_read_string(Bit_Chain *dat, char **string)
 #define ANYCODE -1
 #define FIELD_HANDLE(name, handle_code, dxf) \
   if (dxf && _obj->name) { \
-    GROUP(dxf); \
-    sscanf(&dat->chain[dat->byte], "%lX\n", &_obj->name->absolute_ref); \
+    if (GROUP(dxf)) { \
+      int i = sscanf(&dat->chain[dat->byte], "%lX", &_obj->name->absolute_ref); \
+      dat->byte += i; \
+    } \
   }
 #define HEADER_9(name) \
     GROUP(9)
@@ -118,9 +142,13 @@ static void dxf_read_string(Bit_Chain *dat, char **string)
 #define HEADER_VALUE(name, type, dxf, value) \
   if (dxf) {\
     char *headername; \
-    GROUP(9);\
-    sscanf(&dat->chain[dat->byte], "$%s\n", &headername);\
-    VALUE (value, type, dxf);\
+    if (GROUP(9)) { \
+      dxf_read_string(dat, &headername); \
+      VALUE (value, type, dxf); \
+    } \
+    else { \
+      FIELD(name,type,dxf); \
+    } \
   }
 #define HEADER_VAR(name, type, dxf) \
   HEADER_VALUE(name, type, dxf, dwg->header_vars.name)
@@ -140,9 +168,8 @@ static void dxf_read_string(Bit_Chain *dat, char **string)
 #define TABLE(table)   RECORD(TABLE); PAIR(2, table)
 #define ENDTAB()       RECORD(ENDTAB)
 #define PAIR(n, record) \
-  { int _i; GROUP(n); \
-    _i = sscanf(&dat->chain[dat->byte], "%s\n", buf); \
-    if (_i && !strcmp(buf, #record)) dat->byte += _i; }
+  { GROUP(n); \
+    dxf_read_string(dat, NULL); }
 #define RECORD(record) PAIR(0, record)
 #define GROUP(dxf) dxf_read_group(dat, dxf)
 
@@ -152,7 +179,7 @@ static void dxf_read_string(Bit_Chain *dat, char **string)
   HEADER_9(name);\
   {\
     Dwg_Object_Ref *ref = dwg->header_vars.name;\
-    snprintf (buf, 4096, "%3i\r\n%s\r\n", dxf, dxf_format (dxf));\
+    snprintf (buf, 4096, "%3i\n%s\n", dxf, dxf_format (dxf));\
     /*if (ref && !ref->obj) ref->obj = dwg_resolve_handle(dwg, ref->absolute_ref); */ \
     GCC_DIAG_IGNORE(-Wformat-nonliteral) \
     sscanf(&dat->chain[dat->byte], buf, ref && ref->obj \
@@ -1105,6 +1132,8 @@ dxf_header_read(Bit_Chain *dat, Dwg_Data* dwg)
   double ms;
   char* codepage;
 
+  if (dxf_read_group(dat, 999)) dxf_read_string(dat, NULL);
+
   #include "header_variables_dxf.spec"
 
   if (strcmp(_obj->DWGCODEPAGE, "ANSI_1252"))
@@ -1192,7 +1221,7 @@ dxf_preview_read (Bit_Chain *dat, Dwg_Data * dwg)
 }
 
 int
-dwg_read_dxf(Bit_Chain *dat, Dwg_Data * dwg)
+dwg_read_dxf(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   const int minimal = dwg->opts & 0x10;
   //warn if minimal != 0
