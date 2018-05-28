@@ -135,7 +135,7 @@ GET_DWG_ENTITY(OLE2FRAME)
 GET_DWG_ENTITY(DUMMY)
 /// Macro call to extract all LONG_TRANSACTION entities from a block
 GET_DWG_ENTITY(LONG_TRANSACTION)
-/// Macro call to extract all lwpolyline entities from a block
+/// Macro call to extract all lwpline entities from a block
 GET_DWG_ENTITY(LWPOLYLINE)
 /// Macro call to extract all PROXY_ENTITY entities from a block
 GET_DWG_ENTITY(PROXY_ENTITY)
@@ -244,7 +244,7 @@ CAST_DWG_OBJECT_TO_ENTITY(OLE2FRAME)
 CAST_DWG_OBJECT_TO_ENTITY(DUMMY)
 /// Macro call to cast dwg object to long_transaction
 CAST_DWG_OBJECT_TO_ENTITY(LONG_TRANSACTION)
-/// Macro call to cast dwg object to lwpolyline
+/// Macro call to cast dwg object to lwpline
 CAST_DWG_OBJECT_TO_ENTITY(LWPOLYLINE)
 /// Macro call to cast dwg object to hatch
 CAST_DWG_OBJECT_TO_ENTITY(HATCH)
@@ -8857,14 +8857,14 @@ dwg_ent_tolerance_get_text_string(const dwg_ent_tolerance *tol, int *error)
 /*******************************************************************
 *                   FUNCTIONS FOR LWPOLYLINE ENTITY                    *
 ********************************************************************/
-/// Returns lwpolyline flags
+/// Returns lwpline flags
 BITCODE_BS
-dwg_ent_lwpolyline_get_flag(const dwg_ent_lwpolyline *lwpolyline, int *error)
+dwg_ent_lwpline_get_flag(const dwg_ent_lwpline *lwpline, int *error)
 {
-  if (lwpolyline != 0)
+  if (lwpline != 0)
     {
       *error = 0;
-      return lwpolyline->flag;
+      return lwpline->flag;
     }
   else
     {
@@ -8874,14 +8874,14 @@ dwg_ent_lwpolyline_get_flag(const dwg_ent_lwpolyline *lwpolyline, int *error)
     }
 }
 
-/// Sets lwpolyline flags
+/// Sets lwpline flags
 void
-dwg_ent_lwpolyline_set_flag(dwg_ent_lwpolyline *lwpolyline, char flags, int *error)
+dwg_ent_lwpline_set_flag(dwg_ent_lwpline *lwpline, char flags, int *error)
 {
-  if (lwpolyline != 0)
+  if (lwpline != 0)
     {
       *error = 0;
-      lwpolyline->flag = flags;
+      lwpline->flag = flags;
     }
   else
     {
@@ -8890,14 +8890,14 @@ dwg_ent_lwpolyline_set_flag(dwg_ent_lwpolyline *lwpolyline, char flags, int *err
     }
 }
 
-/// Returns lwpolyline const width
+/// Returns lwpline const width
 BITCODE_BD
-dwg_ent_lwpolyline_get_const_width(const dwg_ent_lwpolyline *lwpolyline, int *error)
+dwg_ent_lwpline_get_const_width(const dwg_ent_lwpline *lwpline, int *error)
 {
-  if (lwpolyline != 0)
+  if (lwpline != 0)
     {
       *error = 0;
-      return lwpolyline->const_width;
+      return lwpline->const_width;
     }
   else
     {
@@ -8907,15 +8907,15 @@ dwg_ent_lwpolyline_get_const_width(const dwg_ent_lwpolyline *lwpolyline, int *er
     }
 }
 
-/// Sets lwpolyline const width
+/// Sets lwpline const width
 void
-dwg_ent_lwpolyline_set_const_width(dwg_ent_lwpolyline *lwpolyline, BITCODE_BD const_width,
+dwg_ent_lwpline_set_const_width(dwg_ent_lwpline *lwpline, BITCODE_BD const_width,
                                 int *error)
 {
-  if (lwpolyline != 0)
+  if (lwpline != 0)
     {
       *error = 0;
-      lwpolyline->const_width = const_width;
+      lwpline->const_width = const_width;
     }
   else
     {
@@ -8923,14 +8923,14 @@ dwg_ent_lwpolyline_set_const_width(dwg_ent_lwpolyline *lwpolyline, BITCODE_BD co
       LOG_ERROR("%s: empty arg", __FUNCTION__)
     }
 }
-/// Returns lwpolyline elevation
+/// Returns lwpline elevation
 BITCODE_BD
-dwg_ent_lwpolyline_get_elevation(const dwg_ent_lwpolyline *lwpolyline, int *error)
+dwg_ent_lwpline_get_elevation(const dwg_ent_lwpline *lwpline, int *error)
 {
-  if (lwpolyline != 0)
+  if (lwpline != 0)
     {
       *error = 0;
-      return lwpolyline->elevation;
+      return lwpline->elevation;
     }
   else
     {
@@ -8940,15 +8940,15 @@ dwg_ent_lwpolyline_get_elevation(const dwg_ent_lwpolyline *lwpolyline, int *erro
     }
 }
 
-/// Sets lwpolyline elevation
+/// Sets lwpline elevation
 void
-dwg_ent_lwpolyline_set_elevation(dwg_ent_lwpolyline *lwpolyline, BITCODE_BD elevation,
+dwg_ent_lwpline_set_elevation(dwg_ent_lwpline *lwpline, BITCODE_BD elevation,
                               int *error)
 {
-  if (lwpolyline != 0)
+  if (lwpline != 0)
     {
       *error = 0;
-      lwpolyline->elevation = elevation;
+      lwpline->elevation = elevation;
     }
   else
     {
@@ -8956,14 +8956,14 @@ dwg_ent_lwpolyline_set_elevation(dwg_ent_lwpolyline *lwpolyline, BITCODE_BD elev
       LOG_ERROR("%s: empty arg", __FUNCTION__)
     }
 }
-/// Returns lwpolyline thickness
+/// Returns lwpline thickness
 BITCODE_BD
-dwg_ent_lwpolyline_get_thickness(const dwg_ent_lwpolyline *lwpolyline, int *error)
+dwg_ent_lwpline_get_thickness(const dwg_ent_lwpline *lwpline, int *error)
 {
-  if (lwpolyline != 0)
+  if (lwpline != 0)
     {
       *error = 0;
-      return lwpolyline->thickness;
+      return lwpline->thickness;
     }
   else
     {
@@ -8973,15 +8973,15 @@ dwg_ent_lwpolyline_get_thickness(const dwg_ent_lwpolyline *lwpolyline, int *erro
     }
 }
 
-/// Sets lwpolyline thickness
+/// Sets lwpline thickness
 void
-dwg_ent_lwpolyline_set_thickness(dwg_ent_lwpolyline *lwpolyline, BITCODE_BD thickness,
+dwg_ent_lwpline_set_thickness(dwg_ent_lwpline *lwpline, BITCODE_BD thickness,
                               int *error)
 {
-  if (lwpolyline != 0)
+  if (lwpline != 0)
     {
       *error = 0;
-      lwpolyline->thickness = thickness;
+      lwpline->thickness = thickness;
     }
   else
     {
@@ -8989,31 +8989,14 @@ dwg_ent_lwpolyline_set_thickness(dwg_ent_lwpolyline *lwpolyline, BITCODE_BD thic
       LOG_ERROR("%s: empty arg", __FUNCTION__)
     }
 }
-/// Returns lwpolyline point count
+/// Returns lwpline point count
 BITCODE_BL
-dwg_ent_lwpolyline_get_numpoints(const dwg_ent_lwpolyline *lwpolyline, int *error)
+dwg_ent_lwpline_get_numpoints(const dwg_ent_lwpline *lwpline, int *error)
 {
-  if (lwpolyline != 0)
+  if (lwpline != 0)
     {
       *error = 0;
-      return lwpolyline->num_points;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return 0L;
-    }
-}
-
-/// Returns lwpolyline bulges count
-BITCODE_BL
-dwg_ent_lwpolyline_get_numbulges(const dwg_ent_lwpolyline *lwpolyline, int *error)
-{
-  if (lwpolyline != 0)
-    {
-      *error = 0;
-      return lwpolyline->num_bulges;
+      return lwpline->num_points;
     }
   else
     {
@@ -9023,15 +9006,14 @@ dwg_ent_lwpolyline_get_numbulges(const dwg_ent_lwpolyline *lwpolyline, int *erro
     }
 }
 
-
-/// Returns lwpolyline width count
+/// Returns lwpline bulges count
 BITCODE_BL
-dwg_ent_lwpolyline_get_numwidths(const dwg_ent_lwpolyline *lwpolyline, int *error)
+dwg_ent_lwpline_get_numbulges(const dwg_ent_lwpline *lwpline, int *error)
 {
-  if (lwpolyline != 0)
+  if (lwpline != 0)
     {
       *error = 0;
-      return lwpolyline->num_widths;
+      return lwpline->num_bulges;
     }
   else
     {
@@ -9042,17 +9024,35 @@ dwg_ent_lwpolyline_get_numwidths(const dwg_ent_lwpolyline *lwpolyline, int *erro
 }
 
 
-/// Returns lwpolyline normal
+/// Returns lwpline width count
+BITCODE_BL
+dwg_ent_lwpline_get_numwidths(const dwg_ent_lwpline *lwpline, int *error)
+{
+  if (lwpline != 0)
+    {
+      *error = 0;
+      return lwpline->num_widths;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0L;
+    }
+}
+
+
+/// Returns lwpline normal
 void
-dwg_ent_lwpolyline_get_normal(const dwg_ent_lwpolyline *lwpolyline, dwg_point_3d *point,
+dwg_ent_lwpline_get_normal(const dwg_ent_lwpline *lwpline, dwg_point_3d *point,
                            int *error)
 {
-  if (lwpolyline != 0 && point != 0)
+  if (lwpline != 0 && point != 0)
     {
       *error = 0;
-      point->x = lwpolyline->normal.x;
-      point->y = lwpolyline->normal.y;
-      point->z = lwpolyline->normal.z;
+      point->x = lwpline->normal.x;
+      point->y = lwpline->normal.y;
+      point->z = lwpline->normal.z;
     }
   else
     {
@@ -9061,17 +9061,17 @@ dwg_ent_lwpolyline_get_normal(const dwg_ent_lwpolyline *lwpolyline, dwg_point_3d
     }
 }
 
-/// Sets lwpolyline normal
+/// Sets lwpline normal
 void
-dwg_ent_lwpolyline_set_normal(dwg_ent_lwpolyline *lwpolyline, dwg_point_3d *point,
+dwg_ent_lwpline_set_normal(dwg_ent_lwpline *lwpline, dwg_point_3d *point,
                            int *error)
 {
-  if (lwpolyline != 0 && point != 0)
+  if (lwpline != 0 && point != 0)
     {
       *error = 0;
-      lwpolyline->normal.x = point->x;
-      lwpolyline->normal.y = point->y;
-      lwpolyline->normal.z = point->z;
+      lwpline->normal.x = point->x;
+      lwpline->normal.y = point->y;
+      lwpline->normal.z = point->z;
   }
     else
     {
@@ -9079,18 +9079,18 @@ dwg_ent_lwpolyline_set_normal(dwg_ent_lwpolyline *lwpolyline, dwg_point_3d *poin
       LOG_ERROR("%s: empty arg", __FUNCTION__)
     }
 }
-/// Returns lwpolyline bulges
+/// Returns lwpline bulges
 BITCODE_BD *
-dwg_ent_lwpolyline_get_bulges(const dwg_ent_lwpolyline *lwpolyline, int *error)
+dwg_ent_lwpline_get_bulges(const dwg_ent_lwpline *lwpline, int *error)
 {
-  BITCODE_BD *ptx = (BITCODE_BD*) malloc(sizeof(BITCODE_BD)* lwpolyline->num_bulges);
+  BITCODE_BD *ptx = (BITCODE_BD*) malloc(sizeof(BITCODE_BD)* lwpline->num_bulges);
   if (ptx != 0)
     {
       BITCODE_BL i;
       *error = 0;
-      for (i = 0; i < lwpolyline->num_bulges ; i++)
+      for (i = 0; i < lwpline->num_bulges ; i++)
         {
-          ptx[i] = lwpolyline->bulges[i];
+          ptx[i] = lwpline->bulges[i];
         }
       return ptx;
     }
@@ -9101,19 +9101,19 @@ dwg_ent_lwpolyline_get_bulges(const dwg_ent_lwpolyline *lwpolyline, int *error)
     }
 }
 
-/// Returns lwpolyline points
+/// Returns lwpline points
 dwg_point_2d *
-dwg_ent_lwpolyline_get_points(const dwg_ent_lwpolyline *lwpolyline, int *error)
+dwg_ent_lwpline_get_points(const dwg_ent_lwpline *lwpline, int *error)
 {
-  dwg_point_2d *ptx = (dwg_point_2d*) malloc(sizeof(dwg_point_2d)* lwpolyline->num_points);
+  dwg_point_2d *ptx = (dwg_point_2d*) malloc(sizeof(dwg_point_2d)* lwpline->num_points);
   if (ptx != 0)
     {
       BITCODE_BL i;
       *error = 0;
-      for (i = 0; i < lwpolyline->num_points ; i++)
+      for (i = 0; i < lwpline->num_points ; i++)
         {
-          ptx[i].x = lwpolyline->points[i].x;
-          ptx[i].y = lwpolyline->points[i].y;
+          ptx[i].x = lwpline->points[i].x;
+          ptx[i].y = lwpline->points[i].y;
         }
       return ptx;
     }
@@ -9125,20 +9125,20 @@ dwg_ent_lwpolyline_get_points(const dwg_ent_lwpolyline *lwpolyline, int *error)
     }
 }
 
-/// Returns lwpolyline widths
-dwg_lwpolyline_widths *
-dwg_ent_lwpolyline_get_widths(const dwg_ent_lwpolyline *lwpolyline, int *error)
+/// Returns lwpline widths
+dwg_lwpline_widths *
+dwg_ent_lwpline_get_widths(const dwg_ent_lwpline *lwpline, int *error)
 {
-  dwg_lwpolyline_widths *ptx = (dwg_lwpolyline_widths*)
-    malloc(sizeof(dwg_lwpolyline_widths)* lwpolyline->num_widths);
+  dwg_lwpline_widths *ptx = (dwg_lwpline_widths*)
+    malloc(sizeof(dwg_lwpline_widths)* lwpline->num_widths);
   if (ptx != 0)
     {
       BITCODE_BL i;
       *error = 0;
-      for (i = 0; i < lwpolyline->num_widths ; i++)
+      for (i = 0; i < lwpline->num_widths ; i++)
         {
-          ptx[i].start = lwpolyline->widths[i].start;
-          ptx[i].end = lwpolyline->widths[i].end;
+          ptx[i].start = lwpline->widths[i].start;
+          ptx[i].end = lwpline->widths[i].end;
         }
       return ptx;
     }

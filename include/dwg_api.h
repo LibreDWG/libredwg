@@ -46,11 +46,11 @@ typedef struct dwg_point_2d
 	double y;
 } dwg_point_2d;
 
-typedef struct dwg_lwpolyline_widths
+typedef struct dwg_lwpline_widths
 {
   double start;
   double end;
-} dwg_lwpolyline_widths;
+} dwg_lwpline_widths;
 
 // Extract All Entities of a specific type from a BLOCK
 #define GET_DWG_ENTITY_DECL(token) \
@@ -145,7 +145,7 @@ typedef struct _dwg_entity_POLYLINE_3D            dwg_ent_polyline_3d;
 typedef struct _dwg_entity_POLYLINE_2D            dwg_ent_polyline_2d;
 typedef struct _dwg_entity_POLYLINE_MESH          dwg_ent_polyline_mesh;
 typedef struct _dwg_entity_POLYLINE_PFACE         dwg_ent_polyline_pface;
-typedef struct _dwg_entity_LWPOLYLINE                dwg_ent_lwpolyline;
+typedef struct _dwg_entity_LWPOLYLINE                dwg_ent_lwpline;
 typedef struct _dwg_entity_ARC                    dwg_ent_arc;
 typedef struct _dwg_entity_ELLIPSE                dwg_ent_ellipse;
 typedef struct _dwg_entity_TEXT                   dwg_ent_text;
@@ -315,7 +315,7 @@ GET_DWG_ENTITY_DECL(OLE2FRAME)
 GET_DWG_ENTITY_DECL(DUMMY)
 /// Macro call to extract all LONG_TRANSACTION entities from a block
 GET_DWG_ENTITY_DECL(LONG_TRANSACTION)
-/// Macro call to extract all lwpolyline entities from a block
+/// Macro call to extract all lwpline entities from a block
 GET_DWG_ENTITY_DECL(LWPOLYLINE)
 /// Macro call to extract all PROXY_ENTITY entities from a block
 GET_DWG_ENTITY_DECL(PROXY_ENTITY)
@@ -425,7 +425,7 @@ CAST_DWG_OBJECT_TO_ENTITY_DECL(OLE2FRAME)
 CAST_DWG_OBJECT_TO_ENTITY_DECL(DUMMY)
 /// Macro call to cast dwg object to long_transaction
 CAST_DWG_OBJECT_TO_ENTITY_DECL(LONG_TRANSACTION)
-/// Macro call to cast dwg object to lwpolyline
+/// Macro call to cast dwg object to lwpline
 CAST_DWG_OBJECT_TO_ENTITY_DECL(LWPOLYLINE)
 /// Macro call to cast dwg object to proxy_entity
 CAST_DWG_OBJECT_TO_ENTITY_DECL(PROXY_ENTITY)
@@ -2148,56 +2148,56 @@ dwg_ent_tolerance_get_text_string(const dwg_ent_tolerance *tol, int *error);
 
 
 BITCODE_BS
-dwg_ent_lwpolyline_get_flag(const dwg_ent_lwpolyline *lwpolyline, int *error);
+dwg_ent_lwpline_get_flag(const dwg_ent_lwpline *lwpline, int *error);
 
 void
-dwg_ent_lwpolyline_set_flag(dwg_ent_lwpolyline *lwpolyline, char flags, int *error);
+dwg_ent_lwpline_set_flag(dwg_ent_lwpline *lwpline, char flags, int *error);
 
 BITCODE_BD
-dwg_ent_lwpolyline_get_const_width(const dwg_ent_lwpolyline *lwpolyline, int *error);
+dwg_ent_lwpline_get_const_width(const dwg_ent_lwpline *lwpline, int *error);
 
 void
-dwg_ent_lwpolyline_set_const_width(dwg_ent_lwpolyline *lwpolyline, BITCODE_BD const_width,
+dwg_ent_lwpline_set_const_width(dwg_ent_lwpline *lwpline, BITCODE_BD const_width,
                                 int *error);
 
 BITCODE_BD
-dwg_ent_lwpolyline_get_elevation(const dwg_ent_lwpolyline *lwpolyline, int *error);
+dwg_ent_lwpline_get_elevation(const dwg_ent_lwpline *lwpline, int *error);
 
 void
-dwg_ent_lwpolyline_set_elevation(dwg_ent_lwpolyline *lwpolyline, BITCODE_BD elevation,
+dwg_ent_lwpline_set_elevation(dwg_ent_lwpline *lwpline, BITCODE_BD elevation,
                               int *error);
 
 BITCODE_BD
-dwg_ent_lwpolyline_get_thickness(const dwg_ent_lwpolyline *lwpolyline, int *error);
+dwg_ent_lwpline_get_thickness(const dwg_ent_lwpline *lwpline, int *error);
 
 void
-dwg_ent_lwpolyline_set_thickness(dwg_ent_lwpolyline *lwpolyline, BITCODE_BD thickness,
+dwg_ent_lwpline_set_thickness(dwg_ent_lwpline *lwpline, BITCODE_BD thickness,
                               int *error);
 
 void
-dwg_ent_lwpolyline_get_normal(const dwg_ent_lwpolyline *lwpolyline, dwg_point_3d *points,
+dwg_ent_lwpline_get_normal(const dwg_ent_lwpline *lwpline, dwg_point_3d *points,
                            int *error);
 void
-dwg_ent_lwpolyline_set_normal(dwg_ent_lwpolyline *lwpolyline, dwg_point_3d *points,
+dwg_ent_lwpline_set_normal(dwg_ent_lwpline *lwpline, dwg_point_3d *points,
                            int *error);
 
 BITCODE_BL
-dwg_ent_lwpolyline_get_numpoints(const dwg_ent_lwpolyline *lwpolyline, int *error);
+dwg_ent_lwpline_get_numpoints(const dwg_ent_lwpline *lwpline, int *error);
 
 BITCODE_BL
-dwg_ent_lwpolyline_get_numbulges(const dwg_ent_lwpolyline *lwpolyline, int *error);
+dwg_ent_lwpline_get_numbulges(const dwg_ent_lwpline *lwpline, int *error);
 
 BITCODE_BL
-dwg_ent_lwpolyline_get_numwidths(const dwg_ent_lwpolyline *lwpolyline, int *error);
+dwg_ent_lwpline_get_numwidths(const dwg_ent_lwpline *lwpline, int *error);
 
 double *
-dwg_ent_lwpolyline_get_bulges(const dwg_ent_lwpolyline *lwpolyline, int *error);
+dwg_ent_lwpline_get_bulges(const dwg_ent_lwpline *lwpline, int *error);
 
 dwg_point_2d *
-dwg_ent_lwpolyline_get_points(const dwg_ent_lwpolyline *lwpolyline, int *error);
+dwg_ent_lwpline_get_points(const dwg_ent_lwpline *lwpline, int *error);
 
-dwg_lwpolyline_widths *
-dwg_ent_lwpolyline_get_widths(const dwg_ent_lwpolyline *lwpolyline, int *error);
+dwg_lwpline_widths *
+dwg_ent_lwpline_get_widths(const dwg_ent_lwpline *lwpline, int *error);
 
 
 /********************************************************************

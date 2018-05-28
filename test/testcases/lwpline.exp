@@ -9,9 +9,9 @@ if $tracelevel {
 # Execute everything in the  subdir so all the output files go there.
 cd $subdir
 
-# Execute the lwpolyline case, and analyse the output
-if { [host_execute "lwpolyline"] != "" } {
-    perror "lwpolyline had an execution error" 0
+# Execute the lwpline case, and analyse the output
+if { [host_execute "lwpline"] != "" } {
+    perror "lwpline had an execution error" 0
 } 
 
 # All done, back to the top level directory

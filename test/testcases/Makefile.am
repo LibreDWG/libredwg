@@ -26,7 +26,7 @@ paired = \
 	endblk \
 	insert \
 	line \
-	lwpolyline \
+	lwpline \
 	minsert \
 	mline \
 	mtext \
