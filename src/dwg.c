@@ -33,7 +33,6 @@
 #include "dwg.h"
 #include "encode.h"
 #include "in_dxf.h"
-#include "in_dxfb.h"
 #include "free.h"
 
 /* The logging level per .o */

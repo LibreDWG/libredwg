@@ -65,7 +65,6 @@ EXTRA_HEADERS = \
 	out_dxfb.h \
 	out_json.h \
 	in_dxf.h \
-	in_dxfb.h \
 	in_json.h
 
 EXTRA_DIST = \

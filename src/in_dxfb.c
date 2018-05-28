@@ -26,7 +26,7 @@
 #include "common.h"
 #include "bits.h"
 #include "dwg.h"
-#include "in_dxfb.h"
+#include "in_dxf.h"
 
 #define DWG_LOGLEVEL DWG_LOGLEVEL_TRACE
 #include "logging.h"
@@ -39,18 +39,18 @@ static char buf[4096];
 extern const char *
 dxf_format (int code);
 
+extern void dxf_add_field(Dwg_Object *obj, const char *name, const char *type, int dxf);
+extern Dxf_Field* dxf_search_field(Dwg_Object *obj, const char *name, const char *type, int dxf);
+
 /*--------------------------------------------------------------------------------
  * MACROS
  */
 
 #define IS_PRINT
 
-//TODO
+// add the name/type/dxf combo to some structure for this element.
 #define FIELD(name,type,dxf) \
-    GROUP(9);\
-    fprintf (dat->fh, "$%s%c", #name, 0);\
-    GROUP(dxf);\
-    fprintf (dat->fh, "$%s%c", #name, 0)
+  dxf_add_field(obj, #name, #type, dxf);
 
 #define FIELD_CAST(name,type,cast,dxf) FIELD(name,cast,dxf)
 #define FIELD_TRACE(name,type)
@@ -153,21 +153,19 @@ dxf_format (int code);
   {\
     BITCODE_RC c = value;\
     GROUP(dxf);\
-    fwrite(&c, 1, 1, dat->fh); \
+    fread(&c, 1, 1, dat->fh); \
   }
-#define FIELD_RC(name,dxf) VALUE_RC(_obj->name, dxf)
-#define HEADER_RC(name,dxf) \
-    HEADER_9(name);\
-    VALUE_RC(dwg->header_vars.name, dxf)
+#define FIELD_RC(name,dxf)  FIELD(name,RC,dxf)
+#define HEADER_RC(name,dxf)  FIELD(name,RC,dxf)
 #define HEADER_B(name,dxf) HEADER_RC(name,dxf)
 
 #define VALUE_RS(value,dxf) \
   {\
     BITCODE_RS s = value;\
     GROUP(dxf);\
-    fwrite(&s, 2, 1, dat->fh);\
+    fread(&s, 2, 1, dat->fh);\
   }
-#define FIELD_RS(name,dxf) VALUE_RS(_obj->name, dxf)
+#define FIELD_RS(name,dxf) FIELD(name,RS,dxf)
 #define HEADER_RS(name,dxf) \
     HEADER_9(name);\
     VALUE_RS(dwg->header_vars.name, dxf)

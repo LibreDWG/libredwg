@@ -28,7 +28,7 @@
 #include "suffix.inc"
 #include "in_json.h"
 #include "in_dxf.h"
-#include "in_dxfb.h"
+
 static int help(void);
 int verbosity(int argc, char **argv, int i, unsigned int *opts);
 #include "common.inc"

@@ -39,12 +39,20 @@
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
 static char buf[4096];
+static long start, end; //stream offsets
+
+static long num_dxf_objs;  // how many elements are added
+static long size_dxf_objs; // how many elements are allocated
+static Dxf_Objs* dxf_objs;
 
 // imported
 extern const char *
 dxf_format (int code);
 extern void
 obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
+
+void dxf_add_field(Dwg_Object *obj, const char *name, const char *type, int dxf);
+Dxf_Field* dxf_search_field(Dwg_Object *obj, const char *name, const char *type, int dxf);
 
 /*--------------------------------------------------------------------------------
  * MACROS
@@ -53,17 +61,17 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 #define IS_PRINT
 #define IS_DXF
 
-#define FIELD(name,type,dxf) VALUE(_obj->name,type,dxf)
+#define FIELD(name,type,dxf) dxf_add_field(obj, #name, #type, dxf)
 #define FIELD_CAST(name,type,cast,dxf) FIELD(name,cast,dxf)
 #define FIELD_TRACE(name,type)
 
 #define VALUE_TV(value,dxf) \
   { GROUP(dxf); \
-    fprintf(dat->fh, "%s\n", value); }
+    fprintf(dat->fh, "%s\r\n", value); }
 #ifdef HAVE_NATIVE_WCHAR2
 # define VALUE_TU(value,dxf)\
   { GROUP(dxf); \
-    fprintf(dat->fh, "%ls\n", (wchar_t*)value); }
+    fprintf(dat->fh, "%ls\r\n", (wchar_t*)value); }
 #else
 # define VALUE_TU(wstr,dxf) \
   { \
@@ -382,6 +390,90 @@ dwg_dxf_ ##token (Bit_Chain *dat, Dwg_Object * obj) \
     obj->handle.value)
 
 #define DWG_OBJECT_END }
+
+void dxf_add_field(Dwg_Object *obj, const char *name, const char *type, int dxf)
+{
+  int i;
+  Dxf_Objs *found = NULL;
+  Dxf_Field *field;
+
+  //array of [obj -> [fields], ...]
+  if (num_dxf_objs >= size_dxf_objs)
+    {
+      size_dxf_objs += 1000;
+      dxf_objs = realloc(dxf_objs, size_dxf_objs*sizeof(Dxf_Objs));
+      memset(&dxf_objs[num_dxf_objs], 0, 1000*sizeof(Dxf_Objs));
+    }
+  //search obj ptr in array
+  for (i=0; i<num_dxf_objs; i++)
+    {
+      if (dxf_objs[i].obj == obj)
+        {
+          found = &dxf_objs[i];
+          break;
+        }
+    }
+  if (!found) // new object (first field)
+    {
+      found = &dxf_objs[num_dxf_objs];
+      found->obj = obj;
+      found->num_fields = 1;
+      found->size_fields = 16;
+      found->fields = (Dxf_Field*)calloc(16, sizeof(Dxf_Field));
+      num_dxf_objs++;
+    }
+  /*if (!found->fields)
+    {
+      found->num_fields = 1;
+      found->size_fields = 16;
+      found->fields = calloc(found->size_fields, sizeof(Dxf_Field));
+    }
+    else */
+  if (found->num_fields > found->size_fields)
+    {
+      found->size_fields += 16;
+      found->fields = realloc(found->fields, found->size_fields*sizeof(Dxf_Field));
+      memset(&found->fields[found->num_fields], 0, 16*sizeof(Dxf_Field));
+    }
+
+  // fill the new field
+  field = &found->fields[found->num_fields];
+  field->name = malloc(strlen(name)+1);
+  strcpy(field->name, (char*)name);
+  field->type = malloc(strlen(type)+1);
+  strcpy(field->type, (char*)type);
+  field->dxf = dxf;
+  found->num_fields++;
+}
+
+Dxf_Field*
+dxf_search_field(Dwg_Object *obj, const char *name, const char *type, int dxf)
+{
+  int i;
+  Dxf_Objs *found = NULL;
+
+  // first search obj ptr in array
+  for (i=0; i<num_dxf_objs; i++)
+    {
+      if (dxf_objs[i].obj == obj)
+        {
+          found = &dxf_objs[i];
+          break;
+        }
+    }
+  if (!found)
+    {
+      LOG_ERROR("obj not found\n");
+      return NULL;
+    }
+  // then search field
+  for (i=0; i<found->num_fields; i++)
+    {
+      if (!strcmp(found->fields[i].name, name))
+        return &found->fields[i];
+    }
+  return NULL;
+}
 
 static void
 dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj)
@@ -1095,6 +1187,10 @@ dwg_read_dxf(Bit_Chain *dat, Dwg_Data * dwg)
 {
   const int minimal = dwg->opts & 0x10;
   struct Dwg_Header *obj = &dwg->header;
+
+  num_dxf_objs = 0;
+  size_dxf_objs = 1000;
+  dxf_objs = malloc(1000*sizeof(Dxf_Objs));
 
   //VALUE(999, PACKAGE_STRING);
 

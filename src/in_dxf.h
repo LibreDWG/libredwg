@@ -21,6 +21,22 @@
 #include "dwg.h"
 #include "bits.h"
 
+// global array of [obj -> [fields], ...]
+typedef struct _dxf_field {
+  char *name;
+  char *type;
+  int dxf;
+} Dxf_Field;
+
+// to search obj ptr in array
+typedef struct _dxf_objs {
+  Dwg_Object *obj;
+  int num_fields;
+  int size_fields;
+  Dxf_Field *fields;
+} Dxf_Objs;
+
 int  dwg_read_dxf(Bit_Chain *dat, Dwg_Data* dwg);
+int  dwg_read_dxfb(Bit_Chain *dat, Dwg_Data* dwg);
 
 #endif
