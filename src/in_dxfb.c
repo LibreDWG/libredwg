@@ -523,7 +523,7 @@ dwg_dxfb_variable_type(Dwg_Data * dwg, Bit_Chain *dat, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "PROXY"))
     {
-      dwg_dxfb_PROXY(dat, obj);
+      dwg_dxfb_PROXY_OBJECT(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "RASTERVARIABLES"))
@@ -824,7 +824,7 @@ dwg_dxfb_object(Bit_Chain *dat, Dwg_Object *obj)
     case DWG_TYPE_REGION:
       dwg_dxfb_REGION(dat, obj);
       break;
-    case DWG_TYPE_3DSOLID:
+    case DWG_TYPE__3DSOLID:
       dwg_dxfb__3DSOLID(dat, obj);
       break; /* Check the type of the object
               */

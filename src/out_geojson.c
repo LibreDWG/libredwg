@@ -454,7 +454,7 @@ dwg_geojson_object(Bit_Chain *dat, Dwg_Object *obj)
     case DWG_TYPE_HATCH:
       //dwg_geojson_HATCH(dat, obj);
       break;
-    case DWG_TYPE_3DSOLID:
+    case DWG_TYPE__3DSOLID:
       //dwg_geojson__3DSOLID(dat, obj);
       break; /* Check the type of the object
               */

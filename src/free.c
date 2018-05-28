@@ -414,7 +414,7 @@ dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "PROXY"))
     {
-      dwg_free_PROXY(obj);
+      dwg_free_PROXY_OBJECT(obj);
       goto known;
     }
   if (!strcmp(dxfname, "RASTERVARIABLES"))
@@ -648,7 +648,7 @@ dwg_free_object(Dwg_Object *obj)
     case DWG_TYPE_REGION:
       dwg_free_REGION(obj);
       break;
-    case DWG_TYPE_3DSOLID:
+    case DWG_TYPE__3DSOLID:
       dwg_free__3DSOLID(obj);
       break; /* Check the type of the object */
     case DWG_TYPE_BODY:

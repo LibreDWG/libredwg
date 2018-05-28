@@ -1,4 +1,4 @@
-#define DWG_TYPE DWG_TYPE_3DSOLID
+#define DWG_TYPE DWG_TYPE__3DSOLID
 #include "common.c"
 
 void
@@ -22,7 +22,7 @@ low_level_process(dwg_object *obj)
     printf("wire[%d] of 3dsolid : " FORMAT_BL "\n", (int)i,
            _3dsolid->wires[i].selection_marker);
 
-  printf("num sil of 3dsolid : " FORMAT_BL "\n", _3dsolid->num_silhouettes);
+  printf("num silhouettes of 3dsolid : " FORMAT_BL "\n", _3dsolid->num_silhouettes);
 
   for (i = 0; i < _3dsolid->num_silhouettes; i++)
     printf("silhouette[%d] of 3dsolid : " FORMAT_BL "\n", (int)i,

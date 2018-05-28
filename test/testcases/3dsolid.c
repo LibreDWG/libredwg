@@ -1,4 +1,4 @@
-#define DWG_TYPE DWG_TYPE_3DSOLID
+#define DWG_TYPE DWG_TYPE__3DSOLID
 #include "common.c"
 #include <dejagnu.h>
 

@@ -52,6 +52,9 @@ static bool env_var_checked_p;
 
 extern void
 obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
+extern void
+dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
+                      long unsigned int address);
 
 /*--------------------------------------------------------------------------------
  * spec MACROS
@@ -340,7 +343,26 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
   for (rcount4=0; (long)rcount4<(long)_obj->times; rcount4++)
 
 #define DWG_ENTITY(token) \
-static void dwg_encode_##token (Bit_Chain* dat, Dwg_Object* obj) \
+int dwg_add_##token (Dwg_Data * dwg)            \
+{                                               \
+  Bit_Chain dat;                                \
+  dat.size = sizeof(Dwg_Entity_##token) + 40;   \
+  dat.chain = calloc(dat.size, 1);              \
+  dat.version = dwg->header.version;            \
+  dat.from_version = dwg->header.from_version;  \
+  bit_write_MS(&dat, dat.size);                 \
+  if (dat.version >= R_2010) {                  \
+    bit_write_MC(&dat, 8*sizeof(Dwg_Entity_##token)); \
+    bit_write_BOT(&dat, DWG_TYPE_##token);      \
+  } else {                                      \
+    bit_write_BS(&dat, DWG_TYPE_##token);       \
+  }                                             \
+  bit_set_position(&dat, 0);                    \
+  dwg_decode_add_object(dwg, &dat, &dat, 0);    \
+  return 0;                                     \
+} \
+\
+static void dwg_encode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
   long vcount, rcount, rcount2, rcount3, rcount4; \
   Dwg_Data* dwg = obj->parent; \
@@ -364,7 +386,26 @@ static void dwg_encode_##token (Bit_Chain* dat, Dwg_Object* obj) \
 }
 
 #define DWG_OBJECT(token) \
-static void dwg_encode_##token (Bit_Chain* dat, Dwg_Object* obj) \
+int dwg_add_##token (Dwg_Data * dwg)             \
+{                                                \
+  Bit_Chain dat;                                 \
+  dat.size = sizeof(Dwg_Object_##token) + 40;    \
+  dat.chain = calloc(dat.size, 1);               \
+  dat.version = dwg->header.version;             \
+  dat.from_version = dwg->header.from_version;   \
+  bit_write_MS(&dat, dat.size);                  \
+  if (dat.version >= R_2010) {                   \
+    bit_write_MC(&dat, 8*sizeof(Dwg_Object_##token)); \
+    bit_write_BOT(&dat, DWG_TYPE_##token);       \
+  } else {                                       \
+    bit_write_BS(&dat, DWG_TYPE_##token);        \
+  }                                              \
+  bit_set_position(&dat, 0);                     \
+  dwg_decode_add_object(dwg, &dat, &dat, 0);     \
+  return 0;                                      \
+} \
+\
+static void dwg_encode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
   long vcount, rcount, rcount2, rcount3, rcount4; \
   Dwg_Data* dwg = obj->parent; \
@@ -1142,7 +1183,7 @@ dwg_encode_variable_type(Dwg_Data* dwg, Bit_Chain* dat, Dwg_Object* obj)
   if (!strcmp(dxfname, "PROXY"))
     {
       assert(!is_entity);
-      dwg_encode_PROXY(dat, obj);
+      dwg_encode_PROXY_OBJECT(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "RASTERVARIABLES"))
@@ -1367,7 +1408,7 @@ dwg_encode_variable_type(Dwg_Data* dwg, Bit_Chain* dat, Dwg_Object* obj)
            klass->number, dxfname, klass->proxyflag,                    \
            klass->wasazombie ? " was proxy" : "")
 
-  /* TODO: CELLSTYLEMAP, DBCOLOR, MATERIAL, MLEADER, MLEADERSTYLE,
+  /* TODO: CELLSTYLEMAP, DBCOLOR, MATERIAL, MULTILEADER, MLEADERSTYLE,
      PLOTSETTINGS, SCALE, TABLEGEOMETRY,
      TABLESTYLE, VBA_PROJECT, VISUALSTYLE, WIPEOUTVARIABLE,
      ACDBSECTIONVIEWSTYLE, ACDBDETAILVIEWSTYLE,
@@ -1519,7 +1560,7 @@ dwg_encode_add_object(Dwg_Object* obj, Bit_Chain* dat,
   case DWG_TYPE_REGION:
     dwg_encode_REGION(dat, obj);
     break;
-  case DWG_TYPE_3DSOLID:
+  case DWG_TYPE__3DSOLID:
     dwg_encode__3DSOLID(dat, obj);
     break;
   case DWG_TYPE_BODY:

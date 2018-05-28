@@ -3205,6 +3205,7 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
       //UNTESTED_CLASS;
       assert(!is_entity);
       dwg_decode_DICTIONARYWDLFT(dat, obj);
+      //obj->type = DWG_TYPE_DICTIONARYWDLFT;
       return 1;
     }
   if (!strcmp(dxfname, "DICTIONARYVAR"))
@@ -3289,7 +3290,7 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
   if (!strcmp(dxfname, "PROXY"))
     {
       assert(!is_entity);
-      dwg_decode_PROXY(dat, obj);
+      dwg_decode_PROXY_OBJECT(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "RASTERVARIABLES"))
@@ -3699,7 +3700,7 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
     case DWG_TYPE_REGION:
       dwg_decode_REGION(dat, obj);
       break;
-    case DWG_TYPE_3DSOLID:
+    case DWG_TYPE__3DSOLID:
       dwg_decode__3DSOLID(dat, obj);
       break;
     case DWG_TYPE_BODY:

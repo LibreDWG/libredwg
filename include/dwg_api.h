@@ -205,7 +205,7 @@ typedef struct _dwg_object_BLOCK_CONTROL          dwg_obj_block_control;
 typedef struct _dwg_object_MLINESTYLE             dwg_obj_mlinestyle;
 typedef struct _dwg_object_APPID                  dwg_obj_appid;
 typedef struct _dwg_object_APPID_CONTROL          dwg_obj_appid_control;
-typedef struct _dwg_object_PROXY                  dwg_obj_proxy;
+typedef struct _dwg_object_PROXY_OBJECT           dwg_obj_proxy;
 typedef struct _dwg_object_XRECORD                dwg_obj_xrecord;
 typedef struct _dwg_object                        dwg_object;
 typedef struct _dwg_object_ref                    dwg_object_ref;

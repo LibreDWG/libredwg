@@ -32,6 +32,7 @@
 #include "bits.h"
 #include "dwg.h"
 #include "in_dxf.h"
+#include "encode.h"
 
 #define DWG_LOGLEVEL DWG_LOGLEVEL_NONE
 #include "logging.h"
@@ -612,7 +613,7 @@ dwg_dxf_variable_type(Dwg_Data * dwg, Bit_Chain *dat, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "PROXY"))
     {
-      dwg_dxf_PROXY(dat, obj);
+      dwg_dxf_PROXY_OBJECT(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "RASTERVARIABLES"))
@@ -913,7 +914,7 @@ dwg_dxf_object(Bit_Chain *dat, Dwg_Object *obj)
     case DWG_TYPE_REGION:
       dwg_dxf_REGION(dat, obj);
       break;
-    case DWG_TYPE_3DSOLID:
+    case DWG_TYPE__3DSOLID:
       dwg_dxf__3DSOLID(dat, obj);
       break; /* Check the type of the object
               */
