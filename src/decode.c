@@ -55,26 +55,6 @@ static bool env_var_checked_p;
 #define MAX(X,Y) ((X) > (Y) ? (X) : (Y))
 #define MIN(X,Y) ((X) < (Y) ? (X) : (Y))
 
-/*------------------------------------------------------------------------------
- * Functions reused with decode_r2007
- */
-Dwg_Object_Ref *
-dwg_decode_handleref(Bit_Chain *restrict hdl_dat, Dwg_Object *restrict obj,
-                     Dwg_Data *restrict dwg);
-
-Dwg_Object_Ref *
-dwg_decode_handleref_with_code(Bit_Chain *restrict hdl_dat, Dwg_Object *restrict obj,
-                               Dwg_Data *restrict dwg, unsigned int code);
-void
-dwg_decode_header_variables(Bit_Chain* dat, Bit_Chain* hdl_dat,
-                            Bit_Chain* str_dat, Dwg_Data* dwg);
-void
-dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
-                      long unsigned int address);
-/* reused with free */
-void
-dwg_free_xdata_resbuf(Dwg_Resbuf *rbuf);
-
 extern void
 read_r2007_init(Dwg_Data *dwg);
 extern int
@@ -2806,7 +2786,7 @@ dwg_decode_handleref_with_code(Bit_Chain *restrict dat, Dwg_Object *restrict obj
   return ref;
 }
 
-void
+int
 dwg_decode_header_variables(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
                             Dwg_Data *restrict dwg)
 {

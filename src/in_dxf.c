@@ -1,4 +1,4 @@
- /*****************************************************************************/
+/*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
 /*  Copyright (C) 2018 Free Software Foundation, Inc.                        */
@@ -152,7 +152,7 @@ static Dxf_Pair* dxf_read_pair(Bit_Chain *dat)
     case VT_POINT3D:
       dxf_skip_ws(dat);
       sscanf((char*)&dat->chain[dat->byte], "%lf", &pair->value.d);
-      LOG_TRACE("dxf{%d,%f}\n", (int)pair->code, pair->value.d);
+      LOG_TRACE("dxf{%d,%f}\n", pair->code, pair->value.d);
       break;
     case VT_BINARY:
       //read into buf only?
@@ -199,7 +199,8 @@ static Dxf_Pair* dxf_read_pair(Bit_Chain *dat)
 #define FIELD_HANDLE(name, handle_code, dxf) \
   if (dxf && _obj->name) { \
     if (GROUP(dxf)) { \
-      int i = sscanf(&dat->chain[dat->byte], "%lX", &_obj->name->absolute_ref); \
+      int i = sscanf((char*)&dat->chain[dat->byte], "%lX", \
+                     &_obj->name->absolute_ref); \
       dat->byte += i; \
     } \
   }
@@ -1202,12 +1203,12 @@ dwg_dxf_object(Bit_Chain *dat, Dwg_Object *obj)
 #define DXF_CHECK_EOF \
   if (dat->byte >= dat->size || \
       (pair->code == 0 && !strcmp(pair->value.s, "EOF"))) \
-    return
+    return 1
 #define DXF_CHECK_ENDSEC \
   if (dat->byte >= dat->size || pair->code == 0) \
-    return
+    return 0
 
-static void dxf_skip_comment(Bit_Chain *dat, Dxf_Pair *pair)
+static int dxf_skip_comment(Bit_Chain *dat, Dxf_Pair *pair)
 {
   while (pair->code == 999)
     {
@@ -1215,9 +1216,10 @@ static void dxf_skip_comment(Bit_Chain *dat, Dxf_Pair *pair)
       pair = dxf_read_pair(dat);
       DXF_CHECK_EOF;
     }
+  return 0;
 }
 
-static void dxf_expect_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
+static int dxf_expect_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
 {
   while (pair->code != code)
     {
@@ -1230,9 +1232,10 @@ static void dxf_expect_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
                   code, pair->code, dat->byte);
       }
     }
+  return 0;
 }
 
-static void
+static int
 dxf_header_read(Bit_Chain *dat, Dwg_Data* dwg)
 {
   Dwg_Header_Variables* _obj = &dwg->header_vars;
@@ -1257,10 +1260,10 @@ dxf_header_read(Bit_Chain *dat, Dwg_Data* dwg)
   if (strcmp(_obj->DWGCODEPAGE, "ANSI_1252"))
       dwg->header.codepage = 30;
 
-  return;
+  return 0;
 }
 
-static void
+static int
 dxf_classes_read (Bit_Chain *dat, Dwg_Data * dwg)
 {
   unsigned int i;
@@ -1281,10 +1284,10 @@ dxf_classes_read (Bit_Chain *dat, Dwg_Data * dwg)
       VALUE_RC (dwg->dwg_class[i].item_class_id == 0x1F2 ? 1 : 0, 281);
     }
   ENDSEC();
-  return;
+  return 0;
 }
 
-static void
+static int
 dxf_tables_read (Bit_Chain *dat, Dwg_Data * dwg)
 {
   (void)dwg;
@@ -1294,10 +1297,10 @@ dxf_tables_read (Bit_Chain *dat, Dwg_Data * dwg)
   //...
   ENDTAB();
   ENDSEC();
-  return;
+  return 0;
 }
 
-static void
+static int
 dxf_blocks_read (Bit_Chain *dat, Dwg_Data * dwg)
 {
   (void)dwg;
@@ -1305,10 +1308,10 @@ dxf_blocks_read (Bit_Chain *dat, Dwg_Data * dwg)
   SECTION(BLOCKS);
   //...
   ENDSEC();
-  return;
+  return 0;
 }
 
-static void
+static int
 dxf_entities_read (Bit_Chain *dat, Dwg_Data * dwg)
 {
   (void)dwg;
@@ -1316,10 +1319,10 @@ dxf_entities_read (Bit_Chain *dat, Dwg_Data * dwg)
   SECTION(ENTITIES);
   //...
   ENDSEC();
-  return;
+  return 0;
 }
 
-static void
+static int
 dxf_objects_read (Bit_Chain *dat, Dwg_Data * dwg)
 {
   (void)dwg;
@@ -1327,22 +1330,22 @@ dxf_objects_read (Bit_Chain *dat, Dwg_Data * dwg)
   SECTION(OBJECTS);
   //...
   ENDSEC();
-  return;
+  return 0;
 }
 
-static void
+static int
 dxf_preview_read (Bit_Chain *dat, Dwg_Data * dwg)
 {
   (void)dat; (void)dwg;
   //...
-  return;
+  return 0;
 }
 
 int
 dwg_read_dxf(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   const int minimal = dwg->opts & 0x10;
-  DXF_Pair *pair;
+  Dxf_Pair *pair;
   //warn if minimal != 0
   //struct Dwg_Header *obj = &dwg->header;
   loglevel = dwg->opts & 0xf;

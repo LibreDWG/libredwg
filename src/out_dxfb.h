@@ -23,6 +23,6 @@
 
 int dwg_write_dxfb(Bit_Chain *dat, Dwg_Data* dwg);
 void dwg_dxfb_object(Bit_Chain *dat, Dwg_Object *obj);
-void dxfb_header_write(Bit_Chain *dat, Dwg_Data* dwg);
+int dxfb_header_write(Bit_Chain *dat, Dwg_Data* dwg);
 
 #endif

@@ -460,7 +460,7 @@ dwg_encode_object(Dwg_Object* obj,
 static void
 dwg_encode_common_entity_handle_data(Bit_Chain* dat, Bit_Chain* hdl_dat,
                                      Dwg_Object* obj);
-static void
+static int
 dwg_encode_header_variables(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
                             Dwg_Data* dwg);
 static int
@@ -2048,7 +2048,7 @@ dwg_encode_object(Dwg_Object* obj,
   return 0;
 }
 
-static void
+static int
 dwg_encode_header_variables(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
                             Dwg_Data * dwg)
 {

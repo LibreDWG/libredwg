@@ -1270,7 +1270,7 @@ const char* dxf_codepage (int code, Dwg_Data* dwg)
 }
 
 // see https://www.autodesk.com/techpubs/autocad/acad2000/dxf/header_section_group_codes_dxf_02.htm
-void
+static int
 dxf_header_write(Bit_Chain *dat, Dwg_Data* dwg)
 {
   Dwg_Header_Variables* _obj = &dwg->header_vars;
@@ -1290,7 +1290,7 @@ dxf_header_write(Bit_Chain *dat, Dwg_Data* dwg)
 
   #include "header_variables_dxf.spec"
 
-  return;
+  return 0;
 }
 
 // only called since r2000. but not really needed, unless referenced

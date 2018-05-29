@@ -916,7 +916,7 @@ json_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj)
 }
 */
 
-static void
+static int
 json_header_write(Bit_Chain *dat, Dwg_Data* dwg)
 {
   Dwg_Header_Variables* _obj = &dwg->header_vars;

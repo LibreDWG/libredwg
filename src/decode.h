@@ -15,6 +15,7 @@
  * written by Felipe Castro
  * modified by Felipe Corrêa da Silva Sances
  * modified by Rodrigo Rodrigues da Silva
+ * modified by Reini Urban
  */
 
 #ifndef DECODE_H
@@ -43,5 +44,25 @@ get_base_value_type(short gc);
 
 int
 dwg_decode(Bit_Chain *dat, Dwg_Data *dwg);
+
+/*------------------------------------------------------------------------------
+ * Functions reused with decode_r2007
+ */
+Dwg_Object_Ref *
+dwg_decode_handleref(Bit_Chain *restrict hdl_dat, Dwg_Object *restrict obj,
+                     Dwg_Data *restrict dwg);
+
+Dwg_Object_Ref *
+dwg_decode_handleref_with_code(Bit_Chain *restrict hdl_dat, Dwg_Object *restrict obj,
+                               Dwg_Data *restrict dwg, unsigned int code);
+int
+dwg_decode_header_variables(Bit_Chain* dat, Bit_Chain* hdl_dat,
+                            Bit_Chain* str_dat, Dwg_Data *restrict dwg);
+void
+dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
+                      long unsigned int address);
+/* reused with free */
+void
+dwg_free_xdata_resbuf(Dwg_Resbuf *rbuf);
 
 #endif

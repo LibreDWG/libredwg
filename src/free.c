@@ -813,6 +813,12 @@ dwg_free_object(Dwg_Object *obj)
   obj->type = DWG_TYPE_FREED;
 }
 
+static int dwg_free_header_vars(Dwg_Data * dwg)
+{
+  Dwg_Header_Variables* _obj = &dwg->header_vars;
+  Dwg_Object* obj = NULL;
+  #include "header_variables.spec"
+}
 void
 dwg_free(Dwg_Data * dwg)
 {
@@ -840,12 +846,7 @@ dwg_free(Dwg_Data * dwg)
             dwg_free_object(&dwg->object[i]);
         }
       FREE_IF(dwg->header.section);
-      {
-        Dwg_Header_Variables* _obj = &dwg->header_vars;
-        Dwg_Object* obj = NULL;
-
-        #include "header_variables.spec"
-      }
+      dwg_free_header_vars(dwg);
       if (dwg->picture.size && dwg->picture.chain)
         free(dwg->picture.chain);
       if (dwg->num_classes)

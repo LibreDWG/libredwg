@@ -27,7 +27,7 @@
   if (minimal) {
     HEADER_VALUE (HANDSEED, RS, 5, _obj->HANDSEED->absolute_ref);
     ENDSEC();
-    return;
+    return 0;
   }
 
   SINCE(R_13) {
@@ -326,4 +326,5 @@
   }
 
   ENDSEC();
+
 

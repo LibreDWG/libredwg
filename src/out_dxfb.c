@@ -1031,7 +1031,7 @@ dxfb_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj)
 }
 
 // see https://www.autodesk.com/techpubs/autocad/acad2000/dxf/header_section_group_codes_dxf_02.htm
-void
+int
 dxfb_header_write(Bit_Chain *dat, Dwg_Data* dwg)
 {
   Dwg_Header_Variables* _obj = &dwg->header_vars;
@@ -1051,7 +1051,7 @@ dxfb_header_write(Bit_Chain *dat, Dwg_Data* dwg)
 
 #include "header_variables_dxf.spec"
 
-  return;
+  return 0;
 }
 
 static int
