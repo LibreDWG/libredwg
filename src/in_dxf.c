@@ -33,6 +33,7 @@
 #include "bits.h"
 #include "dwg.h"
 #include "in_dxf.h"
+#include "decode.h"
 #include "encode.h"
 
 static unsigned int loglevel;
@@ -43,6 +44,17 @@ static unsigned int loglevel;
 static unsigned int cur_ver = 0;
 static char buf[4096];
 static long start, end; //stream offsets
+
+typedef struct _dxf_pair {
+  short code;
+  enum RES_BUF_VALUE_TYPE type;
+  union {
+    int i;
+    char *s;
+    long l;
+    double d;
+  } value;
+} Dxf_Pair;
 
 static long num_dxf_objs;  // how many elements are added
 static long size_dxf_objs; // how many elements are allocated
@@ -57,12 +69,17 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 void dxf_add_field(Dwg_Object *obj, const char *name, const char *type, int dxf);
 Dxf_Field* dxf_search_field(Dwg_Object *obj, const char *name, const char *type, int dxf);
 
+static inline void dxf_skip_ws(Bit_Chain *dat)
+{
+  for (; isspace(dat->chain[dat->byte]); dat->byte++) ;
+}
+
 static int dxf_read_code(Bit_Chain *dat)
 {
   char *endptr;
   long num = strtol((char*)&dat->chain[dat->byte], &endptr, 10);
   dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
-  for (; isspace(dat->chain[dat->byte]); dat->byte++) ;
+  dxf_skip_ws(dat);
   return (int)num;
 }
 
@@ -72,7 +89,7 @@ static int dxf_read_group(Bit_Chain *dat, int dxf)
   long num = strtol((char*)&dat->chain[dat->byte], &endptr, 10);
   if ((int)num == dxf) {
     dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
-    for (; isspace(dat->chain[dat->byte]); dat->byte++) ;
+    dxf_skip_ws(dat);
     return 1;
   }
   return 0;
@@ -86,9 +103,10 @@ static void dxf_read_string(Bit_Chain *dat, char **string)
     {
       buf[i++] = dat->chain[dat->byte];
     }
+  buf[i] = '\0';
   //int i = sscanf(&dat->chain[dat->byte], "%s", buf);
   if (i) {
-    for (; isspace(dat->chain[dat->byte]); dat->byte++) ;
+    dxf_skip_ws(dat);
     if (!string)
       ; // ignore
     else if (!*string)
@@ -96,6 +114,54 @@ static void dxf_read_string(Bit_Chain *dat, char **string)
     else
       strcpy(*string, buf);
   }
+}
+
+static Dxf_Pair* dxf_read_pair(Bit_Chain *dat)
+{
+  Dxf_Pair *pair = calloc(1, sizeof(Dxf_Pair));
+  pair->code = (short)dxf_read_code(dat);
+  pair->type = get_base_value_type(pair->code);
+  switch (pair->type)
+    {
+    case VT_STRING:
+      dxf_read_string(dat, &pair->value.s);
+      LOG_TRACE("dxf{%d,%s}\n", pair->code, pair->value.s);
+      SINCE(R_2007) {
+        BITCODE_TU wstr = bit_utf8_to_TU(pair->value.s);
+        free(pair->value.s);
+        pair->value.s = wstr;
+      }
+      break;
+    case VT_BOOL:
+    case VT_INT8:
+    case VT_INT16:
+    case VT_INT32:
+      pair->value.i = dxf_read_code(dat);
+      LOG_TRACE("dxf{%d,%d}\n", pair->code, pair->value.i);
+      break;
+    case VT_REAL:
+    case VT_POINT3D:
+      dxf_skip_ws(dat);
+      sscanf(&dat->chain[dat->byte], "%f", &pair->value.d);
+      LOG_TRACE("dxf{%d,%f}\n", pair->code, pair->value.d);
+      break;
+    case VT_BINARY:
+      dxf_read_string(dat, &pair->value.s);
+      //TODO convert %02X to string
+      LOG_TRACE("dxf{%d,%s}\n", pair->code, pair->value.s);
+      break;
+    case VT_HANDLE:
+    case VT_OBJECTID:
+      dxf_read_string(dat, &pair->value.s);
+      sscanf(buf, "%X", &pair->value.i);
+      LOG_TRACE("dxf{%d,%X}\n", pair->code, pair->value.i);
+      break;
+    case VT_INVALID:
+    default:
+      LOG_ERROR("Invalid DXF group code: %d", pair->code);
+      return NULL;
+    }
+  return pair;
 }
 
 /*--------------------------------------------------------------------------------
