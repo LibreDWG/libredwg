@@ -935,6 +935,7 @@ json_header_write(Bit_Chain *dat, Dwg_Data* dwg)
   #include "header_variables.spec"
   NOCOMMA;
   ENDSEC();
+  return 0;
 }
 
 static int

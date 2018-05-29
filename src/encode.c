@@ -2056,6 +2056,8 @@ dwg_encode_header_variables(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_d
   Dwg_Object* obj = NULL;
 
   #include "header_variables.spec"
+
+  return 0;
 }
 
 static void

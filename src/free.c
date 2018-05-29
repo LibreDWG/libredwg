@@ -818,7 +818,9 @@ static int dwg_free_header_vars(Dwg_Data * dwg)
   Dwg_Header_Variables* _obj = &dwg->header_vars;
   Dwg_Object* obj = NULL;
   #include "header_variables.spec"
+  return 0;
 }
+
 void
 dwg_free(Dwg_Data * dwg)
 {
