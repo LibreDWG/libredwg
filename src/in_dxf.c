@@ -27,6 +27,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <limits.h>
 #include <ctype.h>
 
 #include "common.h"
@@ -66,8 +67,10 @@ dxf_format (int code);
 extern void
 obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 
-void dxf_add_field(Dwg_Object *obj, const char *name, const char *type, int dxf);
-Dxf_Field* dxf_search_field(Dwg_Object *obj, const char *name, const char *type, int dxf);
+void dxf_add_field(Dwg_Object *restrict obj, const char *restrict name,
+                   const char *restrict type, int dxf);
+Dxf_Field* dxf_search_field(Dwg_Object *restrict obj, const char *restrict name,
+                            const char *restrict type, int dxf);
 
 static inline void dxf_skip_ws(Bit_Chain *dat)
 {
@@ -80,6 +83,8 @@ static int dxf_read_code(Bit_Chain *dat)
   long num = strtol((char*)&dat->chain[dat->byte], &endptr, 10);
   dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
   dxf_skip_ws(dat);
+  if (num > INT_MAX)
+    LOG_ERROR("%s: int overflow %ld (at %lu)", __FUNCTION__, num, dat->byte)
   return (int)num;
 }
 
@@ -134,7 +139,7 @@ static Dxf_Pair* dxf_read_pair(Bit_Chain *dat)
     {
     case VT_STRING:
       dxf_read_string(dat, &pair->value.s);
-      LOG_TRACE("dxf{%d,%s}\n", (int)pair->code, pair->value.s);
+      LOG_TRACE("dxf{%d, %s}\n", (int)pair->code, pair->value.s);
       SINCE(R_2007) {
         BITCODE_TU wstr = bit_utf8_to_TU(pair->value.s);
         free(pair->value.s);
@@ -146,19 +151,19 @@ static Dxf_Pair* dxf_read_pair(Bit_Chain *dat)
     case VT_INT16:
     case VT_INT32:
       pair->value.i = dxf_read_code(dat);
-      LOG_TRACE("dxf{%d,%d}\n", (int)pair->code, pair->value.i);
+      LOG_TRACE("dxf{%d, %d}\n", (int)pair->code, pair->value.i);
       break;
     case VT_REAL:
     case VT_POINT3D:
       dxf_skip_ws(dat);
       sscanf((char*)&dat->chain[dat->byte], "%lf", &pair->value.d);
-      LOG_TRACE("dxf{%d,%f}\n", pair->code, pair->value.d);
+      LOG_TRACE("dxf{%d, %f}\n", pair->code, pair->value.d);
       break;
     case VT_BINARY:
       //read into buf only?
       dxf_read_string(dat, &pair->value.s);
       //TODO convert %02X to string
-      LOG_TRACE("dxf{%d,%s}\n", (int)pair->code, pair->value.s);
+      LOG_TRACE("dxf{%d, %s}\n", (int)pair->code, pair->value.s);
       break;
     case VT_HANDLE:
     case VT_OBJECTID:
@@ -172,6 +177,34 @@ static Dxf_Pair* dxf_read_pair(Bit_Chain *dat)
       return NULL;
     }
   return pair;
+}
+
+#define DXF_CHECK_EOF           \
+  if (dat->byte >= dat->size || \
+      (pair->code == 0 && !strcmp(pair->value.s, "EOF"))) \
+    return 1
+
+static int dxf_skip_comment(Bit_Chain *dat, Dxf_Pair *pair)
+{
+  while (pair->code == 999)
+    {
+      dxf_free_pair(pair);
+      pair = dxf_read_pair(dat);
+      DXF_CHECK_EOF;
+    }
+  return 0;
+}
+
+static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
+{
+  if (pair->code == code)
+    {
+      dxf_skip_comment(dat, pair);
+      dxf_free_pair(pair);
+      DXF_CHECK_EOF;
+      return 1;
+    }
+  return 0;
 }
 
 /*--------------------------------------------------------------------------------
@@ -256,12 +289,13 @@ static Dxf_Pair* dxf_read_pair(Bit_Chain *dat)
   HEADER_9(name);\
   {\
     Dwg_Object_Ref *ref = dwg->header_vars.name;\
-    snprintf (buf, 4096, "%3i\n%s\n", dxf, dxf_format (dxf));\
-    /*if (ref && !ref->obj) ref->obj = dwg_resolve_handle(dwg, ref->absolute_ref); */ \
-    GCC_DIAG_IGNORE(-Wformat-nonliteral) \
-    sscanf(&dat->chain[dat->byte], buf, ref && ref->obj \
-      ? ref->obj->tio.object->tio.section->entry_name : ""); \
-    GCC_DIAG_RESTORE \
+    pair = dxf_read_pair(dat); \
+    DXF_CHECK_EOF; \
+    if (ref && ref->obj && pair->type == VT_HANDLE) { \
+      /* TODO: set the table handle */ \
+      ;/*ref->obj->handle.absolute_ref = pair->value.i; */ \
+      /*ref->obj->tio.object->tio.section->entry_name = strdup(pair->value.s);*/ \
+    } \
   }
 //FIXME
 #define HANDLE_NAME(id, dxf) \
@@ -343,21 +377,41 @@ static Dxf_Pair* dxf_read_pair(Bit_Chain *dat)
   VALUE_RS(_obj->name.index, dxf)
 #define FIELD_TIMEBLL(name,dxf) \
   GROUP(dxf);\
-  sscanf(&dat->chain[dat->byte], FORMAT_BL "." FORMAT_BL "\n", _obj->name.days, _obj->name.ms)
+  sscanf(&dat->chain[dat->byte], "%ld.%ld", \
+        &_obj->name.days, &_obj->name.ms)
 #define HEADER_CMC(name,dxf) \
     HEADER_9(name);\
     VALUE_RS(dwg->header_vars.name.index, dxf)
 
 #define POINT_3D(name, var, c1, c2, c3)\
   {\
-    fscanf (dat->fh, "%3i\n%-16.12g\n", c1, dwg->var.x);\
-    fscanf (dat->fh, "%3i\n%-16.12g\n", c2, dwg->var.y);\
-    fscanf (dat->fh, "%3i\n%-16.12g\n", c3, dwg->var.z);\
+    pair = dxf_read_pair(dat); \
+    DXF_CHECK_EOF; \
+    if (pair && pair->code == c1) { \
+      dwg->var.x = pair->value.d; \
+      dxf_free_pair(pair); \
+      pair = dxf_read_pair(dat); \
+      if (pair && pair->code == c2) \
+        dwg->var.y = pair->value.d; \
+      dxf_free_pair(pair); \
+      pair = dxf_read_pair(dat); \
+      if (pair && pair->code == c3) \
+        dwg->var.z = pair->value.d; \
+      dxf_free_pair(pair); \
+    } \
   }
 #define POINT_2D(name, var, c1, c2) \
   {\
-    fscanf (dat->fh, "%3i\n%-16.12g\n", c1, dwg->var.x);\
-    fscanf (dat->fh, "%3i\n%-16.12g\n", c2, dwg->var.y);\
+    pair = dxf_read_pair(dat); \
+    DXF_CHECK_EOF; \
+    if (pair && pair->code == c1) { \
+      dwg->var.x = pair->value.d; \
+      dxf_free_pair(pair); \
+      pair = dxf_read_pair(dat); \
+      if (pair && pair->code == c2) \
+        dwg->var.y = pair->value.d; \
+      dxf_free_pair(pair); \
+    } \
   }
 
 //FIELD_VECTOR_N(name, type, size):
@@ -368,7 +422,8 @@ static Dxf_Pair* dxf_read_pair(Bit_Chain *dat)
     {\
       for (vcount=0; vcount < (int)size; vcount++)\
         {\
-          sscanf(&dat->chain[dat->byte], #name ": " FORMAT_##type ",\n", _obj->name[vcount]);\
+          sscanf(&dat->chain[dat->byte], #name ": " FORMAT_##type ",\n", \
+            &_obj->name[vcount]); \
         }\
     }
 #define FIELD_VECTOR_T(name, size, dxf)\
@@ -424,25 +479,25 @@ static Dxf_Pair* dxf_read_pair(Bit_Chain *dat)
 #define FIELD_XDATA(name, size)
 
 #define REACTORS(code)\
-  if (obj->tio.object->num_reactors) {\
-    sscanf(&dat->chain[dat->byte], "102\n{ACAD_REACTORS\n");\
-    for (vcount=0; vcount < (int)obj->tio.object->num_reactors; vcount++)\
-      { /* soft ptr */ \
-        sscanf(&dat->chain[dat->byte], "330\n"); \
-        FIELD_HANDLE_N(reactors[vcount], vcount, code, -5);\
-      }\
-    GROUP(102); \
-    sscanf(&dat->chain[dat->byte], "102\n}\n");\
+  pair = dxf_read_pair(dat); \
+  if (dxf_check_code(dat, pair, 102)) { /* {ACAD_REACTORS */ \
+    dxf_free_pair(pair); vcount = 0; \
+    while (dxf_check_code(dat, pair, 330)) { \
+      vcount++; obj->tio.object->num_reactors++; \
+      FIELD_HANDLE_N(reactors[vcount], vcount, code, -5); \
+    } \
+    dxf_check_code(dat, pair, 102); \
   }
+
 #define ENT_REACTORS(code)\
-  if (_obj->num_reactors) {\
-    sscanf(&dat->chain[dat->byte], "102\n{ACAD_REACTORS\n");\
-    for (vcount=0; vcount < _obj->num_reactors; vcount++)\
-      {\
-        GROUP(330);\
-        FIELD_HANDLE_N(reactors[vcount], vcount, code, -5);\
-      }\
-    sscanf(&dat->chain[dat->byte], "102\n}\n");\
+  pair = dxf_read_code(dat); \
+  if (dxf_check_code(dat, pair, 102)) { /* {ACAD_REACTORS */ \
+    dxf_free_pair(pair); vcount = 0; \
+    while (dxf_check_code(dat, pair, 330)) { \
+      vcount++; _obj->num_reactors++; \
+      FIELD_HANDLE_N(reactors[vcount], vcount, code, -5); \
+    } \
+    dxf_check_code(dat, pair, 102); \
   }
 
 #define XDICOBJHANDLE(code)
@@ -479,6 +534,7 @@ dwg_dxf_##token (Bit_Chain *dat, Dwg_Object * obj) \
   int vcount, rcount, rcount2, rcount3, rcount4; \
   Dwg_Entity_##token *ent, *_obj;\
   Dwg_Object_Entity *_ent;\
+  Dxf_Pair *pair; \
   LOG_INFO("Entity " #token ":\n")\
   _ent = obj->tio.entity;\
   _obj = ent = _ent->tio.token;\
@@ -496,6 +552,7 @@ dwg_dxf_ ##token (Bit_Chain *dat, Dwg_Object * obj) \
   int vcount, rcount, rcount2, rcount3, rcount4;\
   Bit_Chain *hdl_dat = dat;\
   Dwg_Object_##token *_obj;\
+  Dxf_Pair *pair; \
   LOG_INFO("Object " #token ":\n")\
   _obj = obj->tio.object->tio.token;\
   LOG_TRACE("Object handle: %d.%d.%lu\n",\
@@ -505,7 +562,9 @@ dwg_dxf_ ##token (Bit_Chain *dat, Dwg_Object * obj) \
 
 #define DWG_OBJECT_END }
 
-void dxf_add_field(Dwg_Object *obj, const char *name, const char *type, int dxf)
+//TODO: we have only one obj per DXF context/section. simplify
+void dxf_add_field(Dwg_Object *restrict obj, const char *restrict name,
+                   const char *restrict type, int dxf)
 {
   int i;
   Dxf_Objs *found = NULL;
@@ -560,8 +619,9 @@ void dxf_add_field(Dwg_Object *obj, const char *name, const char *type, int dxf)
   found->num_fields++;
 }
 
-Dxf_Field*
-dxf_search_field(Dwg_Object *obj, const char *name, const char *type, int dxf)
+//TODO: we have only one obj per DXF context/section. simplify
+Dxf_Field* dxf_search_field(Dwg_Object *restrict obj, const char *restrict name,
+                            const char *restrict type, int dxf)
 {
   int i;
   Dxf_Objs *found = NULL;
@@ -1200,24 +1260,9 @@ dwg_dxf_object(Bit_Chain *dat, Dwg_Object *obj)
     }
 }
 
-#define DXF_CHECK_EOF \
-  if (dat->byte >= dat->size || \
-      (pair->code == 0 && !strcmp(pair->value.s, "EOF"))) \
-    return 1
 #define DXF_CHECK_ENDSEC \
   if (dat->byte >= dat->size || pair->code == 0) \
     return 0
-
-static int dxf_skip_comment(Bit_Chain *dat, Dxf_Pair *pair)
-{
-  while (pair->code == 999)
-    {
-      dxf_free_pair(pair);
-      pair = dxf_read_pair(dat);
-      DXF_CHECK_EOF;
-    }
-  return 0;
-}
 
 static int dxf_expect_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
 {
