@@ -39,7 +39,6 @@ static unsigned int cur_ver = 0;
 static Bit_Chain pdat = {NULL,0,0,0,0,0};
 static Bit_Chain *dat = &pdat;
 
-extern void dwg_free_xdata_resbuf(Dwg_Resbuf *rbuf);
 extern int  dwg_obj_is_control(const Dwg_Object *obj);
 /*--------------------------------------------------------------------------------
  * MACROS
