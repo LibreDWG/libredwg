@@ -71,7 +71,7 @@ Dxf_Field* dxf_search_field(Dwg_Object *obj, const char *name, const char *type,
 
 static inline void dxf_skip_ws(Bit_Chain *dat)
 {
-  for (; isspace(dat->chain[dat->byte]); dat->byte++) ;
+  for (; !dat->chain[dat->byte] || isspace(dat->chain[dat->byte]); dat->byte++) ;
 }
 
 static int dxf_read_code(Bit_Chain *dat)
@@ -98,7 +98,7 @@ static int dxf_read_group(Bit_Chain *dat, int dxf)
 static void dxf_read_string(Bit_Chain *dat, char **string)
 {
   int i;
-  for (; isspace(dat->chain[dat->byte]); dat->byte++) ;
+  dxf_skip_ws(dat);
   for (i = 0; !isspace(dat->chain[dat->byte]); dat->byte++)
     {
       buf[i++] = dat->chain[dat->byte];
@@ -108,12 +108,21 @@ static void dxf_read_string(Bit_Chain *dat, char **string)
   if (i) {
     dxf_skip_ws(dat);
     if (!string)
-      ; // ignore
-    else if (!*string)
+      return; // ignore
+    if (!*string)
       *string = malloc(strlen(buf)+1);
-    else
-      strcpy(*string, buf);
+    strcpy(*string, buf);
   }
+}
+
+static inline void dxf_free_pair(Dxf_Pair* pair)
+{
+  if (pair->type == VT_STRING ||
+      pair->type == VT_BINARY)
+    {
+      free(pair->value.s);
+    }
+  free(pair);
 }
 
 static Dxf_Pair* dxf_read_pair(Bit_Chain *dat)
@@ -125,11 +134,11 @@ static Dxf_Pair* dxf_read_pair(Bit_Chain *dat)
     {
     case VT_STRING:
       dxf_read_string(dat, &pair->value.s);
-      LOG_TRACE("dxf{%d,%s}\n", pair->code, pair->value.s);
+      LOG_TRACE("dxf{%d,%s}\n", (int)pair->code, pair->value.s);
       SINCE(R_2007) {
         BITCODE_TU wstr = bit_utf8_to_TU(pair->value.s);
         free(pair->value.s);
-        pair->value.s = wstr;
+        pair->value.s = (char*)wstr;
       }
       break;
     case VT_BOOL:
@@ -137,24 +146,25 @@ static Dxf_Pair* dxf_read_pair(Bit_Chain *dat)
     case VT_INT16:
     case VT_INT32:
       pair->value.i = dxf_read_code(dat);
-      LOG_TRACE("dxf{%d,%d}\n", pair->code, pair->value.i);
+      LOG_TRACE("dxf{%d,%d}\n", (int)pair->code, pair->value.i);
       break;
     case VT_REAL:
     case VT_POINT3D:
       dxf_skip_ws(dat);
-      sscanf(&dat->chain[dat->byte], "%f", &pair->value.d);
-      LOG_TRACE("dxf{%d,%f}\n", pair->code, pair->value.d);
+      sscanf((char*)&dat->chain[dat->byte], "%lf", &pair->value.d);
+      LOG_TRACE("dxf{%d,%f}\n", (int)pair->code, pair->value.d);
       break;
     case VT_BINARY:
+      //read into buf only?
       dxf_read_string(dat, &pair->value.s);
       //TODO convert %02X to string
-      LOG_TRACE("dxf{%d,%s}\n", pair->code, pair->value.s);
+      LOG_TRACE("dxf{%d,%s}\n", (int)pair->code, pair->value.s);
       break;
     case VT_HANDLE:
     case VT_OBJECTID:
-      dxf_read_string(dat, &pair->value.s);
+      dxf_read_string(dat, NULL);
       sscanf(buf, "%X", &pair->value.i);
-      LOG_TRACE("dxf{%d,%X}\n", pair->code, pair->value.i);
+      LOG_TRACE("dxf{%d,%X}\n", (int)pair->code, pair->value.i);
       break;
     case VT_INVALID:
     default:
@@ -1189,6 +1199,39 @@ dwg_dxf_object(Bit_Chain *dat, Dwg_Object *obj)
     }
 }
 
+#define DXF_CHECK_EOF \
+  if (dat->byte >= dat->size || \
+      (pair->code == 0 && !strcmp(pair->value.s, "EOF"))) \
+    return
+#define DXF_CHECK_ENDSEC \
+  if (dat->byte >= dat->size || pair->code == 0) \
+    return
+
+static void dxf_skip_comment(Bit_Chain *dat, Dxf_Pair *pair)
+{
+  while (pair->code == 999)
+    {
+      dxf_free_pair(pair);
+      pair = dxf_read_pair(dat);
+      DXF_CHECK_EOF;
+    }
+}
+
+static void dxf_expect_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
+{
+  while (pair->code != code)
+    {
+      dxf_free_pair(pair);
+      pair = dxf_read_pair(dat);
+      dxf_skip_comment(dat, pair);
+      DXF_CHECK_EOF;
+      if (pair->code != code) {
+        LOG_ERROR("Expecting DXF code %d, got %d (at %lu)",
+                  code, pair->code, dat->byte);
+      }
+    }
+}
+
 static void
 dxf_header_read(Bit_Chain *dat, Dwg_Data* dwg)
 {
@@ -1197,10 +1240,19 @@ dxf_header_read(Bit_Chain *dat, Dwg_Data* dwg)
   const int minimal = dwg->opts & 0x10;
   double ms;
   char* codepage;
+  Dxf_Pair *pair = dxf_read_pair(dat);
 
-  if (dxf_read_group(dat, 999)) dxf_read_string(dat, NULL);
-
+  // define fields (unordered)
   #include "header_variables_dxf.spec"
+
+  while (pair->code != 0) {
+    pair = dxf_read_pair(dat);
+    DXF_CHECK_ENDSEC;
+
+    //TODO process fields
+    
+    dxf_free_pair(pair);
+  }
 
   if (strcmp(_obj->DWGCODEPAGE, "ANSI_1252"))
       dwg->header.codepage = 30;
@@ -1290,6 +1342,7 @@ int
 dwg_read_dxf(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   const int minimal = dwg->opts & 0x10;
+  DXF_Pair *pair;
   //warn if minimal != 0
   //struct Dwg_Header *obj = &dwg->header;
   loglevel = dwg->opts & 0xf;
@@ -1298,14 +1351,54 @@ dwg_read_dxf(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   size_dxf_objs = 1000;
   dxf_objs = malloc(1000*sizeof(Dxf_Objs));
 
-  dxf_header_read (dat, dwg);
-  dxf_classes_read (dat, dwg);
-  dxf_tables_read (dat, dwg);
-  dxf_blocks_read (dat, dwg);
-  dxf_entities_read (dat, dwg);
-  dxf_objects_read (dat, dwg);
-  dxf_preview_read (dat, dwg);
-
+  while (dat->byte < dat->size) {
+    pair = dxf_read_pair(dat);
+    dxf_expect_code(dat, pair, 0);
+    DXF_CHECK_EOF;
+    if (!strcmp(pair->value.s, "SECTION"))
+      {
+        dxf_free_pair(pair);
+        pair = dxf_read_pair(dat);
+        dxf_expect_code(dat, pair, 2);
+        DXF_CHECK_EOF;
+        if (!strcmp(pair->value.s, "HEADER"))
+          {
+            dxf_free_pair(pair);
+            dxf_header_read (dat, dwg);
+          }
+        else if (!strcmp(pair->value.s, "CLASSES"))
+          {
+            dxf_free_pair(pair);
+            dxf_classes_read (dat, dwg);
+          }
+        else if (!strcmp(pair->value.s, "TABLES"))
+          {
+            dxf_free_pair(pair);
+            dxf_tables_read (dat, dwg);
+          }
+        else if (!strcmp(pair->value.s, "BLOCKS"))
+          {
+            dxf_free_pair(pair);
+            dxf_blocks_read (dat, dwg);
+          }
+        else if (!strcmp(pair->value.s, "ENTITIES"))
+          {
+            dxf_free_pair(pair);
+            dxf_entities_read (dat, dwg);
+          }
+        else if (!strcmp(pair->value.s, "OBJECTS"))
+          {
+            dxf_free_pair(pair);
+            dxf_objects_read (dat, dwg);
+          }
+      }
+    /* if (!strcmp(pair->value.s, "THUMBNAIL"))
+      {
+        dxf_free_pair(pair);
+        dxf_preview_read (dat, dwg);
+      }
+    */
+  }
   return dwg->num_objects ? 1 : 0;
 }
 

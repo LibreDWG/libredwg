@@ -2909,7 +2909,7 @@ get_base_value_type(short gc)
         }
       else              // 0-37
         {
-          if (gc <= 0)   return VT_INVALID;
+          if (gc < 0)    return VT_HANDLE;
           if (gc <= 4)   return VT_STRING;
           if (gc == 5)   return VT_HANDLE;
           if (gc <= 9)   return VT_STRING;
