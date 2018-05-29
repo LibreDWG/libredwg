@@ -135,6 +135,10 @@ dwg_read_file(const char *restrict filename, Dwg_Data *restrict dwg)
   size_t size;
   Bit_Chain bit_chain;
 
+  loglevel = dwg->opts;
+  memset(dwg, 0, sizeof(Dwg_Data));
+  dwg->opts = loglevel;
+
   if (!strcmp(filename, "-"))
     {
       fp = stdin;
@@ -165,9 +169,6 @@ dwg_read_file(const char *restrict filename, Dwg_Data *restrict dwg)
 
   /* Load whole file into memory, even if streamed (for now)
    */
-  loglevel = dwg->opts;
-  memset(dwg, 0, sizeof(Dwg_Data));
-  dwg->opts = loglevel;
   memset(&bit_chain, 0, sizeof(Bit_Chain));
   if (fp == stdin)
     {

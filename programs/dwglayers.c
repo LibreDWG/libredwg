@@ -91,6 +91,7 @@ main (int argc, char *argv[])
     return usage();
   
   filename_in = argv[i];
+  memset(&dwg, 0, sizeof(Dwg_Data));
   dwg.opts = 0;
   error = dwg_read_file(filename_in, &dwg);
   if (error)

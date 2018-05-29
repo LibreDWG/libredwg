@@ -23,11 +23,11 @@
 int verbosity(int argc, char **argv, int i, unsigned int *opts)
 {
   unsigned int loglevel = 2;
-  int num_args = 1;
   char log_str[4];
   if (!strcmp(argv[i], "--verbose") || // --verbose 2 or --verbose
       !strcmp(argv[i], "-v")) // -v 0 or -v
     {
+      int num_args;
       if (argc > i)
         {
           long l = strtol(argv[i+1], NULL, 10);
@@ -37,9 +37,13 @@ int verbosity(int argc, char **argv, int i, unsigned int *opts)
               exit(help());
             }
           loglevel = (unsigned int)l;
+          num_args = 2;
         }
       else
-        loglevel = 2;
+        {
+          num_args = 1;
+          loglevel = 2;
+        }
       *opts = loglevel;
       sprintf(log_str, "%d", loglevel);
 #if defined(USE_TRACING) && defined(HAVE_SETENV)
@@ -63,7 +67,7 @@ int verbosity(int argc, char **argv, int i, unsigned int *opts)
 #if defined(USE_TRACING) && defined(HAVE_SETENV)
       setenv("LIBREDWG_TRACE", log_str, 1);
 #endif
-      return num_args;
+      return 1;
     }
 
   printf("Invalid verbosity %s\n", argv[i]); // -vbla

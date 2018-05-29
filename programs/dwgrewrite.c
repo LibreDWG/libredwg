@@ -76,6 +76,7 @@ main (int argc, char *argv[])
   setenv("LIBREDWG_TRACE", "1", 0);
 #endif
 
+  memset(&dwg, 0, sizeof(Dwg_Data));
   if (argc > 2 &&
       (!strcmp(argv[i], "--verbose") ||
        !strncmp(argv[i], "-v", 2)))

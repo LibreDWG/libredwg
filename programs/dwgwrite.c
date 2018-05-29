@@ -158,6 +158,7 @@ main(int argc, char *argv[])
     }
 
   //allow stdin, but require -I|--format then
+  memset(&dwg, 0, sizeof(Dwg_Data));
   dwg.opts = opts;
   if (infile)
     dat.fh = fopen(infile, "r");

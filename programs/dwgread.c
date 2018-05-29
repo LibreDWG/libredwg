@@ -138,6 +138,7 @@ main(int argc, char *argv[])
     return opt_version();
 
   REQUIRE_INPUT_FILE_ARG (argc);
+  memset(&dwg, 0, sizeof(Dwg_Data));
   if (has_v || !fmt)
     dwg.opts = opts;
   error = dwg_read_file(argv[i], &dwg);
@@ -179,7 +180,8 @@ main(int argc, char *argv[])
             printf("\nSUCCESS\n");
         }
     }
-  dwg_free(&dwg);
+  if (dwg.header.version)
+    dwg_free(&dwg);
 
   return error;
 }

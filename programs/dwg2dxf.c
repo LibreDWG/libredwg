@@ -84,6 +84,7 @@ main (int argc, char *argv[])
   // check args
   if (argc < 2)
     return usage();
+  memset(&dwg, 0, sizeof(Dwg_Data));
 #if defined(USE_TRACING) && defined(HAVE_SETENV)
   setenv("LIBREDWG_TRACE", "1", 0);
 #endif

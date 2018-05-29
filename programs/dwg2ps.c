@@ -192,8 +192,9 @@ main(int argc, char *argv[])
     return help();
   if (argc > 1 && !strcmp(argv[i], "--version"))
     return opt_version();
-  REQUIRE_INPUT_FILE_ARG (argc);
 
+  REQUIRE_INPUT_FILE_ARG (argc);
+  memset(&dwg, 0, sizeof(Dwg_Data));
   dwg.opts = opts;
   error = dwg_read_file(argv[i], &dwg);
   if (error)

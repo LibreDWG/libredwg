@@ -69,6 +69,7 @@ get_bmp(char *dwgfile, char *bmpfile, unsigned int opts)
     long offset;
   } bmp_h;
 
+  memset(&dwg, 0, sizeof(Dwg_Data));
   dwg.opts = opts;
   /* Read dwg data */
   success = dwg_read_file(dwgfile, &dwg);
