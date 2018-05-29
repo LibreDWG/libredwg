@@ -43,7 +43,7 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 
 // private
 static void
-dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj);
+dxf_common_entity_handle_data(Bit_Chain *restrict dat, Dwg_Object *restrict obj);
 
 /*--------------------------------------------------------------------------------
  * MACROS
@@ -524,7 +524,8 @@ dxf_write_handle(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
 /* returns 1 if object could be printd and 0 otherwise
  */
 static int
-dwg_dxf_variable_type(Dwg_Data * dwg, Bit_Chain *dat, Dwg_Object* obj)
+dwg_dxf_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
+                      Dwg_Object *restrict obj)
 {
   int i;
   char *dxfname;
@@ -1171,7 +1172,7 @@ dwg_dxf_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 }
 
 static void
-dxf_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj)
+dxf_common_entity_handle_data(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
   Dwg_Object_Entity *ent;
   //Dwg_Data *dwg = obj->parent;
@@ -1271,7 +1272,7 @@ const char* dxf_codepage (int code, Dwg_Data* dwg)
 
 // see https://www.autodesk.com/techpubs/autocad/acad2000/dxf/header_section_group_codes_dxf_02.htm
 static int
-dxf_header_write(Bit_Chain *dat, Dwg_Data* dwg)
+dxf_header_write(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Dwg_Header_Variables* _obj = &dwg->header_vars;
   Dwg_Object* obj = NULL;

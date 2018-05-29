@@ -11,7 +11,7 @@
 /*****************************************************************************/
 
 /*
- * out_dxf.h: write dwg as Ascii DXF
+ * out_dxf.h: write dwg as DXF (Ascii or Binary)
  * written by Reini Urban
  */
 
@@ -23,6 +23,6 @@
 
 const char *dxf_format (int code);
 int dwg_write_dxf(Bit_Chain *dat, Dwg_Data* dwg);
-void dwg_dxf_object(Bit_Chain *dat, Dwg_Object *obj);
+int dwg_write_dxfb(Bit_Chain *dat, Dwg_Data* dwg);
 
 #endif

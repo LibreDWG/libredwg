@@ -33,7 +33,6 @@ int verbosity(int argc, char **argv, int i, unsigned int *opts);
 #include "common.inc"
 
 #include "../src/out_dxf.h"
-#include "../src/out_dxfb.h"
 
 int minimal = 0;
 int binary = 0;

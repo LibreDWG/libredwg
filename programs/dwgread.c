@@ -34,7 +34,7 @@
 #include "suffix.inc"
 #include "out_json.h"
 #include "out_dxf.h"
-#include "out_dxfb.h"
+
 static int help(void);
 int verbosity(int argc, char **argv, int i, unsigned int *opts);
 #include "common.inc"

@@ -62,7 +62,6 @@ EXTRA_HEADERS = \
         print.h \
 	logging.h \
 	out_dxf.h \
-	out_dxfb.h \
 	out_json.h \
 	in_dxf.h \
 	in_json.h
