@@ -3949,11 +3949,6 @@ dwg_get_num_classes(const dwg_data *dwg);
 dwg_class *
 dwg_get_class(const dwg_data *dwg, unsigned int index);
 
-long unsigned int
-dwg_get_num_objects(const dwg_data *dwg);
-long unsigned int
-dwg_get_num_entities(const dwg_data *dwg);
-
 dwg_object *
 dwg_get_object(const dwg_data *dwg, long unsigned int index);
 
