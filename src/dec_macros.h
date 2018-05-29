@@ -142,26 +142,23 @@
       } \
     } \
   }
-#define FIELD_BT(name,dxf) FIELDG(name, BT, dxf);
+#define FIELD_BT(name,dxf) FIELDG(name, BT, dxf)
 #define FIELD_4BITS(name,dxf) \
     { _obj->name = bit_read_4BITS(dat); \
       FIELD_G_TRACE(name,4BITS,dxf); }
 
-#define FIELD_BE(name,dxf) bit_read_BE(dat, &_obj->name.x, &_obj->name.y, &_obj->name.z);
-#define FIELD_DD(name, _default, dxf) FIELD_VALUE(name) = bit_read_DD(dat, _default);
-#define FIELD_2DD(name, d1, d2, dxf) { FIELD_DD(name.x, d1, dxf); FIELD_DD(name.y, d2, dxf+10); }
+#define FIELD_BE(name,dxf) \
+    bit_read_BE(dat, &_obj->name.x, &_obj->name.y, &_obj->name.z)
+#define FIELD_DD(name, _default, dxf) \
+    FIELD_VALUE(name) = bit_read_DD(dat, _default)
+#define FIELD_2DD(name, d1, d2, dxf) { \
+    FIELD_DD(name.x, d1, dxf); FIELD_DD(name.y, d2, dxf+10); \
+    FIELD_2PT_TRACE(name, DD, dxf); }
 #define FIELD_3DD(name, def, dxf) { \
     FIELD_DD(name.x, FIELD_VALUE(def.x), dxf); \
     FIELD_DD(name.y, FIELD_VALUE(def.y), dxf+10); \
-    FIELD_DD(name.z, FIELD_VALUE(def.z), dxf+20); }
-//#define FIELD_2RD(name,dxf) { FIELDG(name.x, RD, dxf); FIELDG(name.y, RD, dxf+10); }
-//#define FIELD_2BD(name,dxf) { FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+10); }
-#define FIELD_2BD_1(name,dxf) { FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+1); }
-//#define FIELD_3RD(name,dxf) { FIELDG(name.x, RD, dxf); FIELDG(name.y, RD, dxf+10); \
-//                              FIELDG(name.z, RD,dxf+20); }
-//  { FIELDG(name.x, BD, dxf);
-//    FIELDG(name.y, BD, dxf+10);
-//    FIELDG(name.z, BD, dxf+20); }
+    FIELD_DD(name.z, FIELD_VALUE(def.z), dxf+20); \
+    FIELD_3PT_TRACE(name, DD, dxf); }
 #define FIELD_3RD(name,dxf) \
   { _obj->name.x = bit_read_RD(dat); \
     _obj->name.y = bit_read_RD(dat); \
@@ -180,12 +177,21 @@
   { _obj->name.x = bit_read_BD(dat); \
     _obj->name.y = bit_read_BD(dat); \
     FIELD_2PT_TRACE(name,BD,dxf); }
-
-#define FIELD_3BD_1(name,dxf) { FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+1); \
-                                FIELDG(name.z, BD, dxf+2); }
+#define FIELD_2BD_1(name,dxf) \
+  { _obj->name.x = bit_read_BD(dat); \
+    _obj->name.y = bit_read_BD(dat); \
+    FIELD_2PT_TRACE(name,BD,dxf); }
+// FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+1);
+#define FIELD_3BD_1(name,dxf) \
+  { _obj->name.x = bit_read_BD(dat); \
+    _obj->name.y = bit_read_BD(dat); \
+    _obj->name.z = bit_read_BD(dat); \
+    FIELD_3PT_TRACE(name,BD,dxf); }
+//    FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+1);
+//    FIELDG(name.z, BD, dxf+2); }
 #define FIELD_3DPOINT(name,dxf) FIELD_3BD(name,dxf)
 #define FIELD_TIMEBLL(name,dxf) \
-  { _obj->name = bit_read_TIMEBLL(dat);                                  \
+  { _obj->name = bit_read_TIMEBLL(dat); \
     LOG_TRACE(#name ": " FORMAT_BL "." FORMAT_BL "\n", _obj->name.days, _obj->name.ms); }
 #define FIELD_CMC(name,dxf) \
   { bit_read_CMC(dat, &_obj->name); \
@@ -395,12 +401,12 @@
   }
 
 #define DWG_ENTITY(token) static void \
-dwg_decode_##token (Bit_Chain* dat, Dwg_Object* obj)\
-{\
-  long vcount, rcount, rcount2, rcount3, rcount4;\
-  Dwg_Entity_##token *ent, *_obj;\
-  Dwg_Object_Entity *_ent;\
-  Dwg_Data* dwg = obj->parent;\
+dwg_decode_##token (Bit_Chain* dat, Dwg_Object* obj) \
+{ \
+  long vcount, rcount, rcount2, rcount3, rcount4; \
+  Dwg_Entity_##token *ent, *_obj; \
+  Dwg_Object_Entity *_ent; \
+  Dwg_Data* dwg = obj->parent; \
   Bit_Chain* hdl_dat = dat; \
   Bit_Chain* str_dat; \
   if (dat->version >= R_2007) { \

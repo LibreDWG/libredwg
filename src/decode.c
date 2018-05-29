@@ -344,7 +344,7 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
         {
           PREP_TABLE (LAYER);
 
-          FIELD_RC (flag, 70); //860
+          FIELD_CAST (flag, RC, RS, 70); //860
           FIELD_TF (entry_name, 32, 2);
           FIELD_RS (used, 0);
 

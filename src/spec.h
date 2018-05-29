@@ -33,6 +33,14 @@
 #ifndef SUBCLASS
 #define SUBCLASS(text)
 #endif
+#ifndef FIELD_2PT_TRACE
+#define FIELD_2PT_TRACE(name, type, dxf) \
+  LOG_TRACE(#name ": (" FORMAT_BD ", " FORMAT_BD ") [" #type " %d]\n", \
+            _obj->name.x, _obj->name.y, dxf)
+#define FIELD_3PT_TRACE(name, type, dxf) \
+  LOG_TRACE(#name ": (" FORMAT_BD ", " FORMAT_BD ", " FORMAT_BD ") [" #type " %d]\n", \
+            _obj->name.x, _obj->name.y, _obj->name.z, dxf)
+#endif
 
 #ifdef IS_ENCODER
 #undef ENCODER

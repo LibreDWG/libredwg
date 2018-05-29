@@ -372,22 +372,26 @@ DWG_ENTITY(INSERT)
               FIELD_DD (scale.y, FIELD_VALUE (scale.x), 42);
               FIELD_DD (scale.z, FIELD_VALUE (scale.x), 43);
             }
+          FIELD_3PT_TRACE(scale, DD, 41);
         }
 
       ENCODER
         {
-          if (FIELD_VALUE(scale.x)==1.0 && FIELD_VALUE(scale.y)==1.0 && FIELD_VALUE(scale.z)==1.0)
+          if (FIELD_VALUE(scale.x) == 1.0 &&
+              FIELD_VALUE(scale.y) == 1.0 &&
+              FIELD_VALUE(scale.z) == 1.0)
             {
               FIELD_VALUE(scale_flag) = 3;
               FIELD_BB (scale_flag, 0);
             }
-          else if (FIELD_VALUE(scale.x)==FIELD_VALUE(scale.y) && FIELD_VALUE(scale.x)==FIELD_VALUE(scale.z))
+          else if (FIELD_VALUE(scale.x) == FIELD_VALUE(scale.y) &&
+                   FIELD_VALUE(scale.x) == FIELD_VALUE(scale.z))
             {
               FIELD_VALUE(scale_flag) = 2;
               FIELD_BB (scale_flag, 0);
               FIELD_RD (scale.x, 41);
             }
-          else if (FIELD_VALUE(scale.x)==1.0)
+          else if (FIELD_VALUE(scale.x) == 1.0)
             {
               FIELD_VALUE(scale_flag) = 1;
               FIELD_BB (scale_flag, 0);
@@ -403,6 +407,7 @@ DWG_ENTITY(INSERT)
               FIELD_DD (scale.y, FIELD_VALUE (scale.x), 42);
               FIELD_DD (scale.z, FIELD_VALUE (scale.x), 43);
             }
+          FIELD_3PT_TRACE(scale, DD, 41);
         }
     }
 
@@ -487,6 +492,7 @@ DWG_ENTITY(MINSERT)
               FIELD_DD (scale.y, FIELD_VALUE(scale.x), 42);
               FIELD_DD (scale.z, FIELD_VALUE(scale.x), 43);
             }
+          FIELD_3PT_TRACE(scale, DD, 41);
         }
 
       ENCODER
@@ -520,6 +526,7 @@ DWG_ENTITY(MINSERT)
               FIELD_DD (scale.y, FIELD_VALUE(scale.x), 42);
               FIELD_DD (scale.z, FIELD_VALUE(scale.x), 43);
             }
+          FIELD_3PT_TRACE(scale, DD, 41);
         }
     }
 
@@ -844,11 +851,14 @@ DWG_ENTITY(LINE)
               FIELD_RD (start.z, 30);
               FIELD_DD (end.z, FIELD_VALUE(start.z), 31);
             }
+          FIELD_3PT_TRACE(start, DD, 10);
+          FIELD_3PT_TRACE(end, DD, 11);
         }
 
       ENCODER
         {
-          FIELD_VALUE(Zs_are_zero) = (FIELD_VALUE(start.z) == 0.0 && FIELD_VALUE (end.z) == 0.0);
+          FIELD_VALUE(Zs_are_zero) = (FIELD_VALUE(start.z) == 0.0 &&
+                                      FIELD_VALUE (end.z) == 0.0);
           FIELD_B (Zs_are_zero, 0);
           FIELD_RD (start.x, 10);
           FIELD_DD (end.x, FIELD_VALUE(start.x), 11);
@@ -859,6 +869,8 @@ DWG_ENTITY(LINE)
               FIELD_RD (start.z, 30);
               FIELD_DD (end.z, FIELD_VALUE(start.z), 31);
             }
+          FIELD_3PT_TRACE(start, DD, 10);
+          FIELD_3PT_TRACE(end, DD, 11);
         }
     }
 
@@ -3915,6 +3927,7 @@ DWG_ENTITY(TABLE)
             LOG_ERROR("Invalid data_flags in TABLE entity\n")
             break;
         }
+      FIELD_3PT_TRACE(scale, DD, 41);
     }
   
   FIELD_BD (rotation, 50);
