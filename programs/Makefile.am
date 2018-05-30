@@ -80,24 +80,27 @@ MAINTAINERCLEANFILES += *_flymake.[ch] *~ *.i
 
 man: $(dist_man1_MANS)
 
-dwgread.1: dwgread.c dwgread$(EXTEXT)
-	help2man -p LibreDWG -o $@ dwgread$(EXTEXT) || true
-dwgbmp.1: dwgbmp.c dwgbmp$(EXTEXT)
-	help2man -p LibreDWG -o $@ dwgbmp$(EXTEXT) || true
-dwg2dxf.1: dwg2dxf.c dwg2dxf$(EXTEXT)
-	help2man -p LibreDWG -o $@ dwg2dxf$(EXTEXT) || true
-dwg2SVG.1: dwg2SVG.c dwg2SVG$(EXTEXT)
-	help2man -p LibreDWG -o $@ dwg2SVG$(EXTEXT) || true
-dwglayers.1: dwglayers.c dwglayers$(EXTEXT)
-	help2man -p LibreDWG -o $@ dwglayers$(EXTEXT) || true
-dwg2ps.1: dwg2ps.c dwg2ps$(EXTEXT)
-	help2man -p LibreDWG -o $@ dwg2ps$(EXTEXT) || true
-dwgrewrite.1: dwgrewrite.c dwgrewrite$(EXTEXT)
-	help2man -p LibreDWG -o $@ dwgrewrite$(EXTEXT) || true
-dwgwrite.1: dwgwrite.c dwgwrite$(EXTEXT)
-	help2man -p LibreDWG -o $@ dwgwrite$(EXTEXT) || true
-dxf2dwg.1: dxf2dwg.c dxf2dwg$(EXTEXT)
-	help2man -p LibreDWG -o $@ dxf2dwg$(EXTEXT) || true
+if !HAVE_MINGW_CROSS
+# Note: These rules do not work cross-compiled
+dwgread.1: dwgread.c dwgread$(EXEEXT)
+	help2man -p LibreDWG -o $@ dwgread$(EXEEXT) || true
+dwgbmp.1: dwgbmp.c dwgbmp$(EXEEXT)
+	help2man -p LibreDWG -o $@ dwgbmp$(EXEEXT) || true
+dwg2dxf.1: dwg2dxf.c dwg2dxf$(EXEEXT)
+	help2man -p LibreDWG -o $@ dwg2dxf$(EXEEXT) || true
+dwg2SVG.1: dwg2SVG.c dwg2SVG$(EXEEXT)
+	help2man -p LibreDWG -o $@ dwg2SVG$(EXEEXT) || true
+dwglayers.1: dwglayers.c dwglayers$(EXEEXT)
+	help2man -p LibreDWG -o $@ dwglayers$(EXEEXT) || true
+dwg2ps.1: dwg2ps.c dwg2ps$(EXEEXT)
+	help2man -p LibreDWG -o $@ dwg2ps$(EXEEXT) || true
+dwgrewrite.1: dwgrewrite.c dwgrewrite$(EXEEXT)
+	help2man -p LibreDWG -o $@ dwgrewrite$(EXEEXT) || true
+dwgwrite.1: dwgwrite.c dwgwrite$(EXEEXT)
+	help2man -p LibreDWG -o $@ dwgwrite$(EXEEXT) || true
+dxf2dwg.1: dxf2dwg.c dxf2dwg$(EXEEXT)
+	help2man -p LibreDWG -o $@ dxf2dwg$(EXEEXT) || true
+endif
 
 #.c.1: $(bin_PROGRAMS) $(noinst_PROGRAMS)
 #	help2man -p LibreDWG -o $@ $(*F) || true
