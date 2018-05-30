@@ -5,6 +5,7 @@ cd %APPVEYOR_BUILD_FOLDER%
 echo ARCH: %ARCH%
 
 rem TODO cygwin pkg and src tar.xz
+if "%CYGWIN%" == "1" du -sh
 if "%CYGWIN%" == "1" exit
 
 rem simple windows .zip with bins and pdf in root
@@ -26,3 +27,4 @@ copy ..\examples\*.c examples
 7z a ../%DESTDIR%.zip *
 appveyor PushArtifact ../%DESTDIR%.zip *
 cd ..
+dir *.*
