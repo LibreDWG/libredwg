@@ -15,11 +15,22 @@
  * written by Reini Urban
  */
 /* TODO:
- * read spec and add fieldnames/group to some hash/array to search in.
- * read until next object border (groups 0, 2), and collect all fields/values.
- * (or just store the start+end offsets and jump back)
- * map object to our struct type (i.e. 2 APPID => APPID_CONTROL, nth 0 APPID => nth APPID).
- * find and fill fieldname/group in our struct.
+ * read whole spec and add fieldnames/group to some hash/array to search in.
+ *   i.e. HEADER [ {HANDSEED, RS, 5}, ... ]
+ * while looping over the DXF:
+ *   read next object: border groups 0, 2
+ *   map object to our struct type
+ *     i.e. 0 SECTION 2 HEADER -> dwg->header_vars,
+ *          0 TABLE 2 APPID => APPID_CONTROL, nth 0 APPID => nth APPID.
+ *   find and fill fieldname/group in our struct. skip unknowns and missing names
+ *
+ * Alternate idea: already when reading the spec, mem-search the dxf (dat in memory)
+ * to the known border for the field within the current object range,
+ * border 0/2 => start - end. less memory, whole spec not needed in memory.
+ * Problems: we might miss some DXF groups, as we random search within it,
+ * and don't keep track what we used, and what not.
+ *
+ * But first check the EOL: CRLF or just LF. This speeds up the search.
  */
 
 #include "config.h"
