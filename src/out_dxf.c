@@ -60,7 +60,7 @@ dwg_dxf_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj);
 #ifdef HAVE_NATIVE_WCHAR2
 # define VALUE_TU(value,dxf)\
   { GROUP(dxf); \
-    fprintf(dat->fh, "%ls\r\n", value ? (wchar_t*)value : ""); }
+    fprintf(dat->fh, "%ls\r\n", value ? (wchar_t*)value : L""); }
 #else
 # define VALUE_TU(wstr,dxf) \
   { \
