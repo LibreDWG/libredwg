@@ -61,7 +61,7 @@ typedef enum DWG_VERSION_TYPE
    R_13,  R_14,  R_2000, R_2004, R_2007, R_2010, R_2013, R_2018, R_AFTER
 /* AC1012,AC1014,AC1015, AC1018, AC1021, AC1024, AC1027, AC1032, ... */
 } Dwg_Version_Type;
-extern char version_codes[DWG_VERSIONS][7];
+char version_codes[DWG_VERSIONS][7];
 
 Dwg_Version_Type dwg_version_as(const char *);
 

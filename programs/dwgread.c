@@ -29,7 +29,7 @@
 # include AX_STRCASECMP_HEADER
 #endif
 
-#include <dwg.h>
+#include "dwg.h"
 #include "../src/bits.h"
 #include "suffix.inc"
 #include "out_json.h"

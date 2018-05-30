@@ -39,7 +39,9 @@ static unsigned int cur_ver = 0;
 static Bit_Chain pdat = {NULL,0,0,0,0,0};
 static Bit_Chain *dat = &pdat;
 
-extern int  dwg_obj_is_control(const Dwg_Object *obj);
+/* from dwg.c */
+int dwg_obj_is_control(const Dwg_Object *obj);
+
 /*--------------------------------------------------------------------------------
  * MACROS
  */

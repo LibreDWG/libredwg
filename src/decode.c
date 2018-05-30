@@ -55,22 +55,6 @@ static bool env_var_checked_p;
 #define MAX(X,Y) ((X) > (Y) ? (X) : (Y))
 #define MIN(X,Y) ((X) < (Y) ? (X) : (Y))
 
-extern void
-read_r2007_init(Dwg_Data *dwg);
-extern int
-read_r2007_meta_data(Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Data *restrict dwg);
-extern void
-obj_string_stream(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
-                  Bit_Chain *restrict str_dat);
-extern void
-section_string_stream(Bit_Chain *restrict dat, BITCODE_RL bitsize,
-                      Bit_Chain *restrict str);
-
-extern Dwg_Object *
-dwg_resolve_handle(const Dwg_Data* dwg, const unsigned long int absref);
-extern int
-dwg_resolve_handleref(Dwg_Object_Ref *restrict ref, const Dwg_Object *restrict obj);
-
 /*------------------------------------------------------------------------------
  * Private functions
  */

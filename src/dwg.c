@@ -45,9 +45,7 @@ static bool env_var_checked_p;
 #define DWG_LOGLEVEL loglevel
 #include "logging.h"
 
-// used by decode.c:
-Dwg_Object *dwg_resolve_handle(const Dwg_Data * dwg, const long unsigned int absref);
-int dwg_resolve_handleref(Dwg_Object_Ref *ref, const Dwg_Object * obj);
+// used by free.c:
 int dwg_obj_is_control(const Dwg_Object *obj);
 
 /*------------------------------------------------------------------------------

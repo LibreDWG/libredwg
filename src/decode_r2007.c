@@ -24,6 +24,7 @@
 #include <assert.h>
 #include "bits.h"
 #include "dec_macros.h"
+#include "decode.h"
 
 /* The logging level for the read (decode) path.  */
 static unsigned int loglevel;
@@ -32,29 +33,6 @@ static unsigned int cur_ver = 0;
 
 #define DWG_LOGLEVEL loglevel
 #include "logging.h"
-
-/* imports */
-Dwg_Object_Ref *
-dwg_decode_handleref(Bit_Chain *restrict hdl_dat, Dwg_Object *restrict obj,
-                     Dwg_Data *restrict dwg);
-
-Dwg_Object_Ref *
-dwg_decode_handleref_with_code(Bit_Chain *restrict hdl_dat, Dwg_Object *restrict obj,
-                               Dwg_Data *restrict dwg, unsigned int code);
-void
-dwg_decode_header_variables(Bit_Chain* dat, Bit_Chain* hdl_dat,
-                            Bit_Chain* str_dat, Dwg_Data *restrict dwg);
-void
-dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
-                      long unsigned int address);
-
-// exported
-void
-obj_string_stream(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
-                  Bit_Chain *restrict str_dat);
-void
-section_string_stream(Bit_Chain *restrict dat, BITCODE_RL bitsize,
-                      Bit_Chain *restrict str);
 
 // only for temp. debugging, to abort on obviously wrong sizes.
 // should be a bit larger then the filesize.
@@ -137,11 +115,8 @@ typedef struct _r2007_section
   struct _r2007_section *next;
 } r2007_section;
 
-/* exported */
-void read_r2007_init(Dwg_Data *dwg);
-int read_r2007_meta_data(Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Data *restrict dwg);
 /* imported */
-extern int rs_decode_block(unsigned char *blk, int fix);
+int rs_decode_block(unsigned char *blk, int fix);
 
 /* private */
 static r2007_section* get_section(r2007_section *sections_map,

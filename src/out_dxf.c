@@ -34,9 +34,6 @@
 static unsigned int cur_ver = 0;
 static char buf[4096];
 
-// exported
-const char* dxf_codepage (int code, Dwg_Data* dwg);
-
 // private
 static void
 dxf_common_entity_handle_data(Bit_Chain *restrict dat, Dwg_Object *restrict obj);
@@ -338,16 +335,16 @@ dwg_dxf_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj);
   for (rcount=0; rcount<(int)times; rcount++)
 
 #define REPEAT(times, name, type) \
-  for (rcount=0; rcount<(int)_obj->times; rcount++)
+  for (rcount=0; rcount<(int)(_obj->times); rcount++)
 
 #define REPEAT2(times, name, type) \
-  for (rcount2=0; rcount2<(int)_obj->times; rcount2++)
+  for (rcount2=0; rcount2<(int)(_obj->times); rcount2++)
 
 #define REPEAT3(times, name, type) \
-  for (rcount3=0; rcount3<(int)_obj->times; rcount3++)
+  for (rcount3=0; rcount3<(int)(_obj->times); rcount3++)
 
 #define REPEAT4(times, name, type) \
-  for (rcount4=0; rcount4<(int)_obj->times; rcount4++)
+  for (rcount4=0; rcount4<(int)(_obj->times); rcount4++)
 
 #define COMMON_ENTITY_HANDLE_DATA \
   SINCE(R_13) { \

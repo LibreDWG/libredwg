@@ -70,4 +70,14 @@ void
 obj_string_stream(Bit_Chain *dat,
                   Dwg_Object *restrict obj,
                   Bit_Chain *str);
+
+void
+read_r2007_init(Dwg_Data *dwg);
+int
+read_r2007_meta_data(Bit_Chain *dat, Bit_Chain *hdl_dat,
+                     Dwg_Data *restrict dwg);
+void
+section_string_stream(Bit_Chain *restrict dat, BITCODE_RL bitsize,
+                      Bit_Chain *restrict str);
+
 #endif

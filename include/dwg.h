@@ -4319,6 +4319,13 @@ get_next_owned_object(const Dwg_Object *restrict hdr_obj,
                       const Dwg_Object *restrict current,
                       Dwg_Object_BLOCK_HEADER *restrict hdr);
 
+Dwg_Object *
+dwg_resolve_handle(const Dwg_Data* dwg,
+                   const unsigned long int absref);
+int
+dwg_resolve_handleref(Dwg_Object_Ref *restrict ref,
+                      const Dwg_Object *restrict obj);
+
 Dwg_Section_Type
 dwg_section_type(const DWGCHAR *wname);
 

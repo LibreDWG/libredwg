@@ -26,6 +26,7 @@
 #include "common.h"
 #include "bits.h"
 #include "dwg.h"
+#include "out_dxf.h"
 #include "in_dxf.h"
 
 #define DWG_LOGLEVEL DWG_LOGLEVEL_TRACE
@@ -34,13 +35,6 @@
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
 static char buf[4096];
-
-// imported
-extern const char *
-dxf_format (int code);
-
-extern void dxf_add_field(Dwg_Object *obj, const char *name, const char *type, int dxf);
-extern Dxf_Field* dxf_search_field(Dwg_Object *obj, const char *name, const char *type, int dxf);
 
 /*--------------------------------------------------------------------------------
  * MACROS
