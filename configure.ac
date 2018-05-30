@@ -62,7 +62,7 @@ AC_CHECK_HEADERS([stdlib.h string.h unistd.h malloc.h wchar.h ctype.h \
 AX_INCLUDE_STRCASECMP
 
 AC_CHECK_HEADER([dejagnu.h], [],
-  AC_MSG_WARN([Couldn't find dejagnu.h]))
+  AC_MSG_WARN([Couldn't find dejagnu.h. skip test/testcases]))
 AM_CONDITIONAL([HAVE_DEJAGNU], [test x$ac_cv_header_dejagnu_h = xyes])
 
 # Don't bother testing for libps headers if libps is not available.
@@ -125,9 +125,6 @@ dnl Checks for library functions.
 AC_FUNC_MALLOC
 AC_FUNC_REALLOC
 AC_FUNC_STAT
-AC_CHECK_FUNCS([setenv],[],
-  AC_MSG_WARN([setenv not found. --enable-trace is limited with cmdline apps.
-      Only -v args are taken for verbosity not the LIBREDWG_TRACE env var.]))
 AC_CHECK_FUNCS([getopt_long],[],
   AC_MSG_WARN([getopt_long not found. programs will not accept long options.]))
 AC_CHECK_FUNCS([basename],[],
@@ -140,6 +137,13 @@ AC_ARG_ENABLE([trace],[AS_HELP_STRING([--enable-trace],[
     Its value is an integer: 0 (no output) through 9 (full verbosity).])],[
   AC_DEFINE([USE_TRACING],1,[Define to 1 to enable runtime tracing support.])
 ])
+
+AC_CHECK_FUNCS([setenv],[],
+  AS_IF([test x$enable_trace = xyes],
+    [AC_MSG_WARN([setenv not found. --enable-trace is limited with cmdline apps.
+      Only -v args are taken for verbosity not the LIBREDWG_TRACE env var.])],
+    [AC_MSG_RESULT([  (setenv not needed, no --enable-trace)])]
+    ))
 
 dnl Feature: --enable-write
 AC_ARG_ENABLE([write],[AS_HELP_STRING([--enable-write],[
@@ -232,15 +236,20 @@ AM_CONDITIONAL([HAVE_SWIG_PYTHON],
 AC_CHECK_PROGS([DOXYGEN], [doxygen])
 AM_CONDITIONAL([HAVE_DOXYGEN], [test -n "$DOXYGEN"])
 
-dnl check for valgrind
-case $host_os in
-  darwin*)
-    enable_valgrind_helgrind=no
-    enable_valgrind_drd=no
-    ;;
-esac
-dnl passes only on some systems. --enable-valgrind-sgcheck
-AX_VALGRIND_DFLT([sgcheck], [off])
+if test x$cross_compiling = xno; then
+  dnl check for valgrind
+  case $host_os in
+    darwin*)
+      enable_valgrind_helgrind=no
+      enable_valgrind_drd=no
+      ;;
+  esac
+  dnl passes only on some systems. --enable-valgrind-sgcheck
+  AX_VALGRIND_DFLT([sgcheck], [off])
+else
+ AC_MSG_WARN([disabled valgrind: cross-compiled])
+ enable_valgrind=no
+fi
 AX_VALGRIND_CHECK()
 
 dnl Write it out
