@@ -37,10 +37,6 @@ static char buf[4096];
 // exported
 const char* dxf_codepage (int code, Dwg_Data* dwg);
 
-// imported
-extern void
-obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
-
 // private
 static void
 dxf_common_entity_handle_data(Bit_Chain *restrict dat, Dwg_Object *restrict obj);

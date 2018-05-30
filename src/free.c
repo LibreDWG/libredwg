@@ -235,7 +235,7 @@ dwg_free_ ##token (Dwg_Object * obj) \
 }
 
 static void
-dwg_free_handleref(Dwg_Object_Ref *ref, Dwg_Data * dwg)
+dwg_free_handleref(Dwg_Object_Ref *restrict ref, Dwg_Data *restrict dwg)
 {
   long unsigned int i;
   if (!dwg) {

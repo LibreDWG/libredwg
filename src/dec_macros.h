@@ -401,7 +401,7 @@
   }
 
 #define DWG_ENTITY(token) static void \
-dwg_decode_##token (Bit_Chain* dat, Dwg_Object* obj) \
+dwg_decode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
   long vcount, rcount, rcount2, rcount3, rcount4; \
   Dwg_Entity_##token *ent, *_obj; \
@@ -427,7 +427,7 @@ dwg_decode_##token (Bit_Chain* dat, Dwg_Object* obj) \
 #define DWG_ENTITY_END }
 
 #define DWG_OBJECT(token) static void \
-dwg_decode_ ## token (Bit_Chain* dat, Dwg_Object* obj) \
+dwg_decode_ ## token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
   long vcount, rcount, rcount2, rcount3, rcount4; \
   Dwg_Object_##token *_obj;\

@@ -33,6 +33,7 @@
 #include "common.h"
 #include "bits.h"
 #include "dwg.h"
+#include "decode.h"
 #include "out_json.h"
 
 #define DWG_LOGLEVEL DWG_LOGLEVEL_NONE
@@ -42,8 +43,6 @@
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
 
-extern void
-obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 
 /*--------------------------------------------------------------------------------
  * See http://geojson.org/geojson-spec.html

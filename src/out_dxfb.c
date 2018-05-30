@@ -34,11 +34,6 @@
 static unsigned int cur_ver = 0;
 static char buf[4096];
 
-// imported
-extern const char* dxf_codepage (int code, Dwg_Data* dwg);
-//extern void obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
-//extern const char *dxf_format (int code);
-
 //private
 static void dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
                                            Dwg_Object *restrict obj);

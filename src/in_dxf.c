@@ -34,6 +34,7 @@
 #include "bits.h"
 #include "dwg.h"
 #include "in_dxf.h"
+#include "out_dxf.h"
 #include "decode.h"
 #include "encode.h"
 
@@ -60,17 +61,6 @@ typedef struct _dxf_pair {
 static long num_dxf_objs;  // how many elements are added
 static long size_dxf_objs; // how many elements are allocated
 static Dxf_Objs* dxf_objs;
-
-// imported
-extern const char *
-dxf_format (int code);
-extern void
-obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
-
-void dxf_add_field(Dwg_Object *restrict obj, const char *restrict name,
-                   const char *restrict type, int dxf);
-Dxf_Field* dxf_search_field(Dwg_Object *restrict obj, const char *restrict name,
-                            const char *restrict type, int dxf);
 
 static inline void dxf_skip_ws(Bit_Chain *dat)
 {

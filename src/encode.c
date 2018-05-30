@@ -50,12 +50,6 @@ static bool env_var_checked_p;
 
 #include "logging.h"
 
-extern void
-obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
-extern void
-dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
-                      long unsigned int address);
-
 /*--------------------------------------------------------------------------------
  * spec MACROS
  */
@@ -316,7 +310,7 @@ dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
   RESET_VER \
   if (obj->has_strings) { \
     Bit_Chain sav_dat = *dat; \
-    obj_string_stream(dat, obj->bitsize, dat);
+    obj_string_stream(dat, obj, dat);
 
 #define END_STRING_STREAM \
     *dat = sav_dat; \
@@ -2001,7 +1995,7 @@ dwg_encode_object(Dwg_Object* obj,
   obj->hdlpos = bit_position(dat) + obj->bitsize; // the handle stream offset
   SINCE(R_2007)
     {
-      obj_string_stream(dat, obj->bitsize, str_dat);
+      obj_string_stream(dat, obj, str_dat);
     }
 
   bit_write_H(dat, &(obj->handle));

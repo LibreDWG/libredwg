@@ -25,6 +25,7 @@
 #include "common.h"
 #include "bits.h"
 #include "dwg.h"
+#include "decode.h"
 #include "print.h"
 
 #define DWG_LOGLEVEL DWG_LOGLEVEL_TRACE
@@ -32,9 +33,6 @@
 
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
-
-extern void
-obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 
 /*--------------------------------------------------------------------------------
  * MACROS
@@ -221,7 +219,7 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
   obj->has_strings = bit_read_B(dat); \
   if (obj->has_strings) { \
     Bit_Chain sav_dat = *dat; \
-    obj_string_stream(dat, obj->bitsize, dat);
+    obj_string_stream(dat, obj, dat);
 #define END_STRING_STREAM \
     *dat = sav_dat; \
   }

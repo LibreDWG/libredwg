@@ -22,6 +22,8 @@
 #include "bits.h"
 
 const char *dxf_format (int code);
+const char* dxf_codepage (int code, Dwg_Data* dwg);
+
 int dwg_write_dxf(Bit_Chain *dat, Dwg_Data* dwg);
 int dwg_write_dxfb(Bit_Chain *dat, Dwg_Data* dwg);
 
