@@ -28,7 +28,7 @@ AC_SUBST(ISODATE)
 
 AC_CANONICAL_HOST
 
-dnl Checks for programs.
+dnl Checks for programs
 PKG_PROG_PKG_CONFIG
 AC_PROG_CC
 AC_PROG_LN_S
@@ -37,7 +37,7 @@ AC_PROG_INSTALL
 AC_PROG_LIBTOOL
 LT_INIT
 
-dnl Checks for libraries.
+dnl Checks for libraries
 AC_CHECK_LIB([ps],[PS_open_file],
   libredwg_have_libps=yes,
   libredwg_have_libps=no)
@@ -51,10 +51,10 @@ fi
 AC_SUBST([XML2_CFLAGS])
 AC_SUBST([XML2_LIBS])
 
-dnl Checks for header files.
+dnl Checks for header files
 AC_HEADER_STDC
-dnl avoid rpl_malloc when cross-compiling. we don't need malloc.h
-dnl we just want to know if it's needed
+dnl Avoid rpl_malloc when cross-compiling. we don't need malloc.h
+dnl We just want to know if it's needed
 ac_cv_func_malloc_0_nonnull=yes
 ac_cv_func_realloc_0_nonnull=yes
 AC_CHECK_HEADERS([stdlib.h string.h unistd.h malloc.h wchar.h ctype.h \
@@ -70,7 +70,7 @@ if test yes = "$libredwg_have_libps" ; then
   AC_CHECK_HEADERS([libps/pslib.h])
 fi
 
-dnl Checks for typedefs, structures, and compiler characteristics.
+dnl Checks for typedefs, structures, and compiler characteristics
 AC_PROG_CC_C99
 AC_TYPE_SIZE_T
 AC_TYPE_UINT16_T
@@ -84,14 +84,15 @@ if test x$ac_cv_header_wchar_h = xyes; then
    AX_COMPILE_CHECK_SIZEOF([wchar_t], [#include <wchar.h>])
 fi
 AC_DEFINE([_POSIX_C_SOURCE],[200809L],[Needed for strdup])
+AC_DEFINE([__XSI_VISIBLE],[700],[Needed for cygwin strdup])
 
 AX_IS_RELEASE([git-directory])
 if test x$ax_is_release = xyes; then
    AC_DEFINE([IS_RELEASE],1,[Define to 1 if this is a release,
-   skipping unknown DWG versions and objects.])
+   skipping unstable DWG features, unknown DWG versions and objects.])
 fi
 
-dnl disable unwanted warnings here. These should be fixed before 1.0
+dnl Disable unwanted warnings here. These should be fixed before 1.0
 enable_Werror=no
 ax_enable_compile_warnings=yes
 AX_COMPILER_FLAGS([WARN_CFLAGS],[WARN_LDFLAGS])
@@ -121,10 +122,12 @@ else
 fi
 AC_SUBST(HAVE_C99)
 
-dnl Checks for library functions.
+dnl Checks for library functions
 AC_FUNC_MALLOC
 AC_FUNC_REALLOC
 AC_FUNC_STAT
+AC_CHECK_FUNC([strdup],[],
+  AC_MSG_ERROR([strdup not found. check your _POSIX_C_SOURCE vs ANSI settings.]))
 AC_CHECK_FUNCS([getopt_long],[],
   AC_MSG_WARN([getopt_long not found. programs will not accept long options.]))
 AC_CHECK_FUNCS([basename],[],
@@ -188,7 +191,7 @@ AM_CONDITIONAL(ENABLE_GCOV, test "x$enable_gcov" = "xtrue")
 AM_CONDITIONAL([HAVE_LIBPS],[test yes = "$libredwg_have_libps" &&
                              test yes = "$ac_cv_header_libps_pslib_h"])
 
-dnl check for mingw, cross and wine
+dnl Check for mingw, cross and wine
 AM_CONDITIONAL([HAVE_MINGW], [test "x$host_os" = "xmingw32"])
 AM_CONDITIONAL([HAVE_MINGW_CROSS],
         [test "x$host_os" = "xmingw32" -a "x$build_os" != "xmingw32"])
@@ -204,7 +207,7 @@ if test "x$host_os" = "xmingw32" -a "x$build_os" != "xmingw32"; then
 fi
 AM_CONDITIONAL([HAVE_WINE], [test -n "$WINE"])
 
-dnl optional SWIG + python bindings
+dnl Optional SWIG + python bindings
 dnl Feature: --disable-python or --enable-python=python3.6
 AC_ARG_ENABLE(python,
 	AS_HELP_STRING([--disable-python],

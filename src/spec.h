@@ -13,6 +13,8 @@
 #ifndef SPEC_H
 #define SPEC_H
 
+#include "decode.h"
+
 #define DECODER if (0)
 #define ENCODER if (0)
 #define PRINT   if (0)

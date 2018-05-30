@@ -17,12 +17,14 @@
  * modified by Reini Urban
  */
 
+#include "config.h"
 #include <stdio.h>
 #include <libgen.h>
+#ifdef __STDC_ALLOC_LIB__
+#define __STDC_WANT_LIB_EXT2__ 1 /* for strdup */
+#endif
 #include <string.h>
 #include <stdlib.h>
-
-#include "config.h"
 
 char *
 suffix (const char *filename, const char *ext);
