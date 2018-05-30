@@ -2843,73 +2843,74 @@ typedef struct _dwg_entity_TABLE
   BITCODE_BL unknown_bl;
   BITCODE_B unknown_b;
   BITCODE_BL unknown_bl1;
-  BITCODE_3BD insertion_point;
-  BITCODE_3BD scale;
+  BITCODE_3BD insertion_point; /*!< DXF 10 */
+  BITCODE_3BD scale;        /*!< DXF 41 */
   BITCODE_BB data_flags;
-  BITCODE_BD rotation;
-  BITCODE_3BD extrusion;
-  BITCODE_B has_attribs;
+  BITCODE_BD rotation;      /*!< DXF 50 */
+  BITCODE_3BD extrusion;    /*!< DXF 210 */
+  BITCODE_B has_attribs;    /*!< DXF 66 */
   BITCODE_BL num_owned;
-  BITCODE_BS flag_for_table_value; /* Bit flags, 0x06 (0x02 + 0x04): has block,
-                                      0x10: table direction, 0 = up, 1 = down,
-                                      0x20: title suppressed.
-                                      Normally 0x06 is always set. */
-  BITCODE_3BD horiz_direction;
-  BITCODE_BL num_cols;
-  BITCODE_BL num_rows;
-  unsigned long num_cells; /* computed */
-  BITCODE_BD* col_widths;
-  BITCODE_BD* row_heights;
+  BITCODE_BS flag_for_table_value; /*!< DXF 90.
+                                     Bit flags, 0x06 (0x02 + 0x04): has block,
+                                     0x10: table direction, 0 = up, 1 = down,
+                                     0x20: title suppressed.
+                                     Normally 0x06 is always set. */
+  BITCODE_3BD horiz_direction; /*!< DXF 11 */
+  BITCODE_BL num_cols;     /*!< DXF 90 */
+  BITCODE_BL num_rows;     /*!< DXF 91 */
+  unsigned long num_cells; /*!< computed */
+  BITCODE_BD* col_widths;  /*!< DXF 142 */
+  BITCODE_BD* row_heights; /*!< DXF 141 */
   Dwg_TABLE_Cell* cells;
   BITCODE_B has_table_overrides;
-  BITCODE_BL table_flag_override;
-  BITCODE_B title_suppressed;
-  BITCODE_B header_suppressed;
-  BITCODE_BS flow_direction;
-  BITCODE_BD horiz_cell_margin;
-  BITCODE_BD vert_cell_margin;
-  BITCODE_CMC title_row_color;
-  BITCODE_CMC header_row_color;
-  BITCODE_CMC data_row_color;
-  BITCODE_B title_row_fill_none;
-  BITCODE_B header_row_fill_none;
-  BITCODE_B data_row_fill_none;
-  BITCODE_CMC title_row_fill_color;
-  BITCODE_CMC header_row_fill_color;
-  BITCODE_CMC data_row_fill_color;
-  BITCODE_BS title_row_align;
-  BITCODE_BS header_row_align;
-  BITCODE_BS data_row_align;
-  BITCODE_H title_text_style;
-  BITCODE_H header_text_style;
-  BITCODE_H data_text_style;
-  BITCODE_BD title_row_height;
-  BITCODE_BD header_row_height;
-  BITCODE_BD data_row_height;
+  BITCODE_BL table_flag_override; /*!< DXF 93 */
+  BITCODE_B title_suppressed;     /*!< DXF 280 */
+  BITCODE_B header_suppressed;    /*!< DXF 281 */
+  BITCODE_BS flow_direction;      /*!< DXF 70 */
+  BITCODE_BD horiz_cell_margin;   /*!< DXF 40 */
+  BITCODE_BD vert_cell_margin;    /*!< DXF 41 */
+  BITCODE_CMC title_row_color;    /*!< DXF 64 */
+  BITCODE_CMC header_row_color;   /*!< DXF 64 */
+  BITCODE_CMC data_row_color;     /*!< DXF 64 */
+  BITCODE_B title_row_fill_none;  /*!< DXF 283 */
+  BITCODE_B header_row_fill_none; /*!< DXF 283 */
+  BITCODE_B data_row_fill_none;   /*!< DXF 283 */
+  BITCODE_CMC title_row_fill_color;  /*!< DXF 63 */
+  BITCODE_CMC header_row_fill_color; /*!< DXF 63 */
+  BITCODE_CMC data_row_fill_color;   /*!< DXF 63 */
+  BITCODE_BS title_row_align;   /*!< DXF 170 */
+  BITCODE_BS header_row_align;  /*!< DXF 170 */
+  BITCODE_BS data_row_align;    /*!< DXF 170 */
+  BITCODE_H title_text_style;   /*!< DXF 7 */
+  BITCODE_H header_text_style;  /*!< DXF 7 */
+  BITCODE_H data_text_style;    /*!< DXF 7 */
+  BITCODE_BD title_row_height;  /*!< DXF 140 */
+  BITCODE_BD header_row_height; /*!< DXF 140 */
+  BITCODE_BD data_row_height;   /*!< DXF 140 */
 
-  BITCODE_B has_border_color_overrides;
-  BITCODE_BL border_color_overrides_flag;
-  BITCODE_CMC title_horiz_top_color;
-  BITCODE_CMC title_horiz_ins_color;
-  BITCODE_CMC title_horiz_bottom_color;
-  BITCODE_CMC title_vert_left_color;
-  BITCODE_CMC title_vert_ins_color;
-  BITCODE_CMC title_vert_right_color;
-  BITCODE_CMC header_horiz_top_color;
-  BITCODE_CMC header_horiz_ins_color;
-  BITCODE_CMC header_horiz_bottom_color;
-  BITCODE_CMC header_vert_left_color;
-  BITCODE_CMC header_vert_ins_color;
-  BITCODE_CMC header_vert_right_color;
-  BITCODE_CMC data_horiz_top_color;
-  BITCODE_CMC data_horiz_ins_color;
-  BITCODE_CMC data_horiz_bottom_color;
-  BITCODE_CMC data_vert_left_color;
-  BITCODE_CMC data_vert_ins_color;
-  BITCODE_CMC data_vert_right_color;
+  BITCODE_B has_border_color_overrides;   /*!< if DXF 94 > 0 */
+  BITCODE_BL border_color_overrides_flag; /*!< DXF 94 */
+  BITCODE_CMC title_horiz_top_color;      /*!< DXF 64 if DXF 94 & 0x1 */
+  BITCODE_CMC title_horiz_ins_color;      /*!< DXF 65 if DXF 94 & 0x2 */
+  BITCODE_CMC title_horiz_bottom_color;   /*!< DXF 66 if DXF 94 & 0x4 */
+  BITCODE_CMC title_vert_left_color;      /*!< DXF 63 if DXF 94 & 0x8 */
+  BITCODE_CMC title_vert_ins_color;       /*!< DXF 68 if DXF 94 & 0x10 */
+  BITCODE_CMC title_vert_right_color;     /*!< DXF 69 if DXF 94 & 0x20 */
+  BITCODE_CMC header_horiz_top_color;     /*!< DXF 64 if DXF 94 & 0x40 */
+  BITCODE_CMC header_horiz_ins_color;     /*!< DXF 65 */
+  BITCODE_CMC header_horiz_bottom_color;  /*!< DXF 66 */
+  BITCODE_CMC header_vert_left_color;     /*!< DXF 63 */
+  BITCODE_CMC header_vert_ins_color;      /*!< DXF 68 */
+  BITCODE_CMC header_vert_right_color;    /*!< DXF 69 */
+  BITCODE_CMC data_horiz_top_color;       /*!< DXF 64 */
+  BITCODE_CMC data_horiz_ins_color;       /*!< DXF 65 */
+  BITCODE_CMC data_horiz_bottom_color;    /*!< DXF 66 */
+  BITCODE_CMC data_vert_left_color;       /*!< DXF 63 */
+  BITCODE_CMC data_vert_ins_color;        /*!< DXF 68 */
+  BITCODE_CMC data_vert_right_color;      /*!< DXF 69 */
 
-  BITCODE_B has_border_lineweight_overrides;
-  BITCODE_BL border_lineweight_overrides_flag;
+  BITCODE_B has_border_lineweight_overrides;   /*!< if DXF 95 > 0 */
+  BITCODE_BL border_lineweight_overrides_flag; /*!< DXF 95 */
   BITCODE_BS title_horiz_top_linewt;
   BITCODE_BS title_horiz_ins_linewt;
   BITCODE_BS title_horiz_bottom_linewt;
@@ -2930,7 +2931,7 @@ typedef struct _dwg_entity_TABLE
   BITCODE_BS data_vert_right_linewt;
 
   BITCODE_B has_border_visibility_overrides;
-  BITCODE_BL border_visibility_overrides_flag;
+  BITCODE_BL border_visibility_overrides_flag; /*!< DXF 96 */
   BITCODE_BS title_horiz_top_visibility;
   BITCODE_BS title_horiz_ins_visibility;
   BITCODE_BS title_horiz_bottom_visibility;

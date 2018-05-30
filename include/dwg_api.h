@@ -3239,491 +3239,558 @@ dwg_ent_body_set_acis_empty2(dwg_ent_body *body, unsigned char acis,
 
 
 void
-dwg_ent_table_set_insertion_point(dwg_ent_table *table, dwg_point_3d *point,
-                                  int *error);
+dwg_ent_table_set_insertion_point(dwg_ent_table *restrict table,
+                                  const dwg_point_3d *restrict point,
+                                  int *restrict error);
+void
+dwg_ent_table_get_insertion_point(const dwg_ent_table *restrict table,
+                                  dwg_point_3d *restrict point,
+                                  int *restrict error);
 
 void
-dwg_ent_table_get_insertion_point(const dwg_ent_table *table, dwg_point_3d *point,
-                                  int *error);
+dwg_ent_table_set_scale(dwg_ent_table *restrict table,
+                        const dwg_point_3d *restrict point,
+                        int *restrict error);
+void
+dwg_ent_table_get_scale(const dwg_ent_table *restrict table,
+                        dwg_point_3d *restrict point,
+                        int *restrict error);
 
 void
-dwg_ent_table_set_scale(dwg_ent_table *table, dwg_point_3d *point,
-                        int *error);
-
-void
-dwg_ent_table_get_scale(const dwg_ent_table *table, dwg_point_3d *point,
-                        int *error);
-
-void
-dwg_ent_table_set_data_flags(dwg_ent_table *table, unsigned char flags,
-                             int *error);
-
+dwg_ent_table_set_data_flags(dwg_ent_table *restrict table,
+                             const unsigned char flags,
+                             int *restrict error);
 unsigned char
-dwg_ent_table_get_data_flags(const dwg_ent_table *table, int *error);
+dwg_ent_table_get_data_flags(const dwg_ent_table *restrict table,
+                             int *restrict error);
 
 void
-dwg_ent_table_set_rotation(dwg_ent_table *table, BITCODE_BD rotation, int *error);
-
+dwg_ent_table_set_rotation(dwg_ent_table *restrict table,
+                           const BITCODE_BD rotation,
+                           int *restrict error);
 BITCODE_BD
-dwg_ent_table_get_rotation(const dwg_ent_table *table, int *error);
+dwg_ent_table_get_rotation(const dwg_ent_table *restrict table,
+                           int *restrict error);
 
 void
-dwg_ent_table_set_extrusion(dwg_ent_table *table, dwg_point_3d *point,
-                            int *error);
+dwg_ent_table_set_extrusion(dwg_ent_table *restrict table,
+                            const dwg_point_3d *restrict point,
+                            int *restrict error);
 
 void
-dwg_ent_table_get_extrusion(const dwg_ent_table *table, dwg_point_3d *point,
-                            int *error);
+dwg_ent_table_get_extrusion(const dwg_ent_table *restrict table,
+                            dwg_point_3d *restrict point,
+                            int *restrict error);
 
 unsigned char
-dwg_ent_table_has_attribs(dwg_ent_table *table, int *error);
+dwg_ent_table_has_attribs(dwg_ent_table *restrict table,
+                          int *restrict error);
 
 BITCODE_BL
-dwg_ent_table_get_num_owned(const dwg_ent_table *table, int *error);
+dwg_ent_table_get_num_owned(const dwg_ent_table *restrict table,
+                            int *restrict error);
 
 //TODO dwg_ent_*_add_owned, dwg_ent_insert_delete_owned
 
 void
-dwg_ent_table_set_flag_for_table_value(dwg_ent_table *table,
-                                       BITCODE_BS value, int *error);
+dwg_ent_table_set_flag_for_table_value(dwg_ent_table *restrict table,
+                                       const BITCODE_BS value,
+                                       int *restrict error);
 
 BITCODE_BS
-dwg_ent_table_get_flag_for_table_value(const dwg_ent_table *table, int *error);
+dwg_ent_table_get_flag_for_table_value(const dwg_ent_table *restrict table,
+                                       int *restrict error);
 
 void
-dwg_ent_table_set_horiz_direction(dwg_ent_table *table, dwg_point_3d *point,
-                                  int *error);
-
+dwg_ent_table_set_horiz_direction(dwg_ent_table *restrict table,
+                                  const dwg_point_3d *restrict point,
+                                  int *restrict error);
 void
-dwg_ent_table_get_horiz_direction(const dwg_ent_table *table, dwg_point_3d *point,
-                                  int *error);
+dwg_ent_table_get_horiz_direction(const dwg_ent_table *restrict table,
+                                  dwg_point_3d *restrict point,
+                                  int *restrict error);
 
 BITCODE_BL
-dwg_ent_table_get_num_cols(const dwg_ent_table *table, int *error);
+dwg_ent_table_get_num_cols(const dwg_ent_table *restrict table,
+                           int *restrict error);
 
 BITCODE_BL
-dwg_ent_table_get_num_rows(const dwg_ent_table *table, int *error);
+dwg_ent_table_get_num_rows(const dwg_ent_table *restrict table,
+                           int *restrict error);
 
 double *
-dwg_ent_table_get_col_widths(const dwg_ent_table *table, int *error);
+dwg_ent_table_get_col_widths(const dwg_ent_table *restrict table,
+                             int *restrict error);
 
 double *
-dwg_ent_table_get_row_heights(const dwg_ent_table *table, int *error);
+dwg_ent_table_get_row_heights(const dwg_ent_table *restrict table,
+                              int *restrict error);
 
 BITCODE_B
-dwg_ent_table_has_table_overrides(dwg_ent_table *table, int *error);
+dwg_ent_table_has_table_overrides(dwg_ent_table *restrict table,
+                                  int *restrict error);
 
 void
-dwg_ent_table_set_table_flag_override(dwg_ent_table *table, BITCODE_BL override,
-                                      int *error);
+dwg_ent_table_set_table_flag_override(dwg_ent_table *restrict table,
+                                      const BITCODE_BL override,
+                                      int *restrict error);
+BITCODE_BL
+dwg_ent_table_get_table_flag_override(const dwg_ent_table *restrict table,
+                                      int *restrict error);
+
+void
+dwg_ent_table_set_title_suppressed(dwg_ent_table *restrict table,
+                                   const unsigned char title,
+                                   int *restrict error);
+unsigned char
+dwg_ent_table_get_title_suppressed(const dwg_ent_table *restrict table,
+                                   int *restrict error);
+
+void
+dwg_ent_table_set_header_suppressed(dwg_ent_table *restrict table,
+                                    const unsigned char header,
+                                    int *restrict error);
+unsigned char
+dwg_ent_table_get_header_suppressed(const dwg_ent_table *restrict table,
+                                    int *restrict error);
+
+void
+dwg_ent_table_set_flow_direction(dwg_ent_table *restrict table,
+                                 const BITCODE_BS dir,
+                                 int *restrict error);
+BITCODE_BS
+dwg_ent_table_get_flow_direction(const dwg_ent_table *restrict table,
+                                 int *restrict error);
+
+void
+dwg_ent_table_set_horiz_cell_margin(dwg_ent_table *restrict table,
+                                    const BITCODE_BD margin,
+                                    int *restrict error);
+BITCODE_BD
+dwg_ent_table_get_horiz_cell_margin(const dwg_ent_table *restrict table,
+                                    int *restrict error);
+
+void
+dwg_ent_table_set_vert_cell_margin(dwg_ent_table *restrict table,
+                                   const BITCODE_BD margin,
+                                   int *restrict error);
+BITCODE_BD
+dwg_ent_table_get_vert_cell_margin(const dwg_ent_table *restrict table,
+                                   int *restrict error);
+
+void
+dwg_ent_table_set_title_row_fill_none(dwg_ent_table *restrict table,
+                                      const unsigned char fill,
+                                      int *restrict error);
+unsigned char
+dwg_ent_table_get_title_row_fill_none(const dwg_ent_table *restrict table,
+                                      int *restrict error);
+
+void
+dwg_ent_table_set_header_row_fill_none(dwg_ent_table *restrict table, 
+                                       unsigned char fill,
+                                       int *restrict error);
+unsigned char
+dwg_ent_table_get_header_row_fill_none(const dwg_ent_table *restrict table,
+                                       int *restrict error);
+
+void
+dwg_ent_table_set_data_row_fill_none(dwg_ent_table *restrict table,
+                                     const unsigned char fill,
+                                     int *restrict error);
+unsigned char
+dwg_ent_table_get_data_row_fill_none(const dwg_ent_table *restrict table,
+                                     int *restrict error);
+
+void
+dwg_ent_table_set_title_row_align(dwg_ent_table *restrict table,
+                                  const unsigned char fill,
+                                  int *restrict error);
+
+BITCODE_BS
+dwg_ent_table_get_title_row_align(const dwg_ent_table *restrict table,
+                                  int *restrict error);
+
+void
+dwg_ent_table_set_header_row_align(dwg_ent_table *restrict table,
+                                   const BITCODE_BS align,
+                                   int *restrict error);
+BITCODE_BS
+dwg_ent_table_get_header_row_align(const dwg_ent_table *restrict table,
+                                   int *restrict error);
+
+void
+dwg_ent_table_set_data_row_align(dwg_ent_table *restrict table,
+                                 const BITCODE_BS align,
+                                 int *restrict error);
+BITCODE_BS
+dwg_ent_table_get_data_row_align(const dwg_ent_table *restrict table,
+                                 int *restrict error);
+
+void
+dwg_ent_table_set_title_row_height(dwg_ent_table *restrict table,
+                                   const BITCODE_BD height,
+                                   int *restrict error);
+BITCODE_BD
+dwg_ent_table_get_title_row_height(const dwg_ent_table *restrict table,
+                                   int *restrict error);
+
+void
+dwg_ent_table_set_header_row_height(dwg_ent_table *restrict table,
+                                    const BITCODE_BD height,
+                                    int *restrict error);
+BITCODE_BD
+dwg_ent_table_get_header_row_height(const dwg_ent_table *restrict table,
+                                    int *restrict error);
+
+void
+dwg_ent_table_set_data_row_height(dwg_ent_table *restrict table,
+                                  const BITCODE_BD height,
+                                  int *restrict error);
+BITCODE_BD
+dwg_ent_table_get_data_row_height(const dwg_ent_table *restrict table,
+                                  int *restrict error);
+
+unsigned char
+dwg_ent_table_has_border_color_overrides(dwg_ent_table *restrict table,
+                                         int *restrict error);
+
+void
+dwg_ent_table_set_border_color_overrides_flag(dwg_ent_table *restrict table,
+                                              const BITCODE_BL overrides,
+                                              int *restrict error);
+BITCODE_BL
+dwg_ent_table_get_border_color_overrides_flag(const dwg_ent_table *restrict table,
+                                              int *restrict error);
+
+unsigned char
+dwg_ent_table_has_border_lineweight_overrides(dwg_ent_table *restrict table,
+                                              int *restrict error);
+
+void
+dwg_ent_table_set_border_lineweight_overrides_flag(dwg_ent_table *restrict table,
+                                                   const BITCODE_BL overrides,
+                                                   int *restrict error);
+BITCODE_BL
+dwg_ent_table_get_border_lineweight_overrides_flag(const dwg_ent_table *restrict table,
+                                                   int *restrict error);
+
+void
+dwg_ent_table_set_title_horiz_top_linewt(dwg_ent_table *restrict table,
+                                         const BITCODE_BS linewt,
+                                         int *restrict error);
+BITCODE_BS
+dwg_ent_table_get_title_horiz_top_linewt(const dwg_ent_table *restrict table,
+                                         int *restrict error);
+
+void
+dwg_ent_table_set_title_horiz_ins_linewt(dwg_ent_table *restrict table,
+                                         const BITCODE_BS linewt,
+                                         int *restrict error);
+BITCODE_BS
+dwg_ent_table_get_title_horiz_ins_linewt(const dwg_ent_table *restrict table,
+                                         int *restrict error);
+
+void
+dwg_ent_table_set_title_horiz_bottom_linewt(dwg_ent_table *restrict table,
+                                            const BITCODE_BS linewt,
+                                            int *restrict error);
+BITCODE_BS
+dwg_ent_table_get_title_horiz_bottom_linewt(const dwg_ent_table *restrict table,
+                                            int *restrict error);
+
+void
+dwg_ent_table_set_title_vert_left_linewt(dwg_ent_table *restrict table,
+                                         const BITCODE_BS linewt,
+                                         int *restrict error);
+BITCODE_BS
+dwg_ent_table_get_title_vert_left_linewt(const dwg_ent_table *restrict table,
+                                         int *restrict error);
+
+void
+dwg_ent_table_set_title_vert_ins_linewt(dwg_ent_table *restrict table,
+                                        const BITCODE_BS linewt,
+                                        int *restrict error);
+BITCODE_BS
+dwg_ent_table_get_title_vert_ins_linewt(const dwg_ent_table *restrict table,
+                                        int *restrict error);
+
+void
+dwg_ent_table_set_title_vert_right_linewt(dwg_ent_table *restrict table,
+                                          const BITCODE_BS linewt,
+                                          int *restrict error);
+BITCODE_BS
+dwg_ent_table_get_title_vert_right_linewt(const dwg_ent_table *restrict table,
+                                          int *restrict error);
+
+void
+dwg_ent_table_set_header_horiz_top_linewt(dwg_ent_table *restrict table,
+                                          const BITCODE_BS linewt,
+                                          int *restrict error);
+BITCODE_BS
+dwg_ent_table_get_header_horiz_top_linewt(const dwg_ent_table *restrict table,
+                                          int *restrict error);
+
+void
+dwg_ent_table_set_header_horiz_ins_linewt(dwg_ent_table *restrict table,
+                                          const BITCODE_BS linewt,
+                                          int *restrict error);
+BITCODE_BS
+dwg_ent_table_get_header_horiz_ins_linewt(const dwg_ent_table *restrict table,
+                                          int *restrict error);
+
+void
+dwg_ent_table_set_header_horiz_bottom_linewt(dwg_ent_table *restrict table,
+                                             const BITCODE_BS linewt,
+                                             int *restrict error);
+BITCODE_BS
+dwg_ent_table_get_header_horiz_bottom_linewt(const dwg_ent_table *restrict table,
+                                             int *restrict error);
+
+void
+dwg_ent_table_set_header_vert_left_linewt(dwg_ent_table *restrict table,
+                                          const BITCODE_BS linewt,
+                                          int *restrict error);
+BITCODE_BS
+dwg_ent_table_get_header_vert_left_linewt(const dwg_ent_table *restrict table,
+                                          int *restrict error);
+
+void
+dwg_ent_table_set_header_vert_ins_linewt(dwg_ent_table *restrict table,
+                                         const BITCODE_BS linewt,
+                                         int *restrict error);
+BITCODE_BS
+dwg_ent_table_get_header_vert_ins_linewt(const dwg_ent_table *restrict table,
+                                         int *restrict error);
+
+void
+dwg_ent_table_set_header_vert_right_linewt(dwg_ent_table *restrict table,
+                                           const BITCODE_BS linewt,
+                                           int *restrict error);
+BITCODE_BS
+dwg_ent_table_get_header_vert_right_linewt(const dwg_ent_table *restrict table,
+                                           int *restrict error);
+
+void
+dwg_ent_table_set_data_horiz_top_linewt(dwg_ent_table *restrict table,
+                                        const BITCODE_BS linewt,
+                                        int *restrict error);
+BITCODE_BS
+dwg_ent_table_get_data_horiz_top_linewt(const dwg_ent_table *restrict table,
+                                        int *restrict error);
+
+void
+dwg_ent_table_set_data_horiz_ins_linewt(dwg_ent_table *restrict table,
+                                        const BITCODE_BS linewt,
+                                        int *restrict error);
+BITCODE_BS
+dwg_ent_table_get_data_horiz_ins_linewt(const dwg_ent_table *restrict table,
+                                        int *restrict error);
+
+void
+dwg_ent_table_set_data_horiz_bottom_linewt(dwg_ent_table *restrict table,
+                                           const BITCODE_BS linewt,
+                                           int *restrict error);
+BITCODE_BS
+dwg_ent_table_get_data_horiz_bottom_linewt(const dwg_ent_table *restrict table,
+                                           int *restrict error);
+
+void
+dwg_ent_table_set_data_vert_left_linewt(dwg_ent_table *restrict table,
+                                        const BITCODE_BS linewt,
+                                        int *restrict error);
+BITCODE_BS
+dwg_ent_table_get_data_vert_left_linewt(const dwg_ent_table *restrict table,
+                                        int *restrict error);
+
+void
+dwg_ent_table_set_data_vert_ins_linewt(dwg_ent_table *restrict table,
+                                       const BITCODE_BS linewt,
+                                       int *restrict error);
+BITCODE_BS
+dwg_ent_table_get_data_vert_ins_linewt(const dwg_ent_table *restrict table,
+                                       int *restrict error);
+
+void
+dwg_ent_table_set_data_vert_right_linewt(dwg_ent_table *restrict table,
+                                         const BITCODE_BS linewt,
+                                         int *restrict error);
+BITCODE_BS
+dwg_ent_table_get_data_vert_right_linewt(const dwg_ent_table *restrict table,
+                                         int *restrict error);
+
+unsigned char
+dwg_ent_table_has_border_visibility_overrides(dwg_ent_table *restrict table,
+                                                      int *restrict error);
+
+void
+dwg_ent_table_set_border_visibility_overrides_flag(dwg_ent_table *restrict table,
+                                                   const BITCODE_BL overrides,
+                                                   int *restrict error);
 
 BITCODE_BL
-dwg_ent_table_get_table_flag_override(const dwg_ent_table *table, int *error);
+dwg_ent_table_get_border_visibility_overrides_flag(const dwg_ent_table *restrict table,
+                                                   int *restrict error);
 
 void
-dwg_ent_table_set_title_suppressed(dwg_ent_table *table, unsigned char title,
-                                   int *error);
-
-unsigned char
-dwg_ent_table_get_title_suppressed(const dwg_ent_table *table, int *error);
-
-void
-dwg_ent_table_set_header_suppressed(dwg_ent_table *table, unsigned char header,
-                                    int *error);
-
-unsigned char
-dwg_ent_table_get_header_suppressed(const dwg_ent_table *table, int *error);
-
-void
-dwg_ent_table_set_flow_direction(dwg_ent_table *table, BITCODE_BS dir,
-                                 int *error);
+dwg_ent_table_set_title_horiz_top_visibility(dwg_ent_table *restrict table,
+                                             const BITCODE_BS visibility,
+                                             int *restrict error);
 
 BITCODE_BS
-dwg_ent_table_get_flow_direction(const dwg_ent_table *table, int *error);
+dwg_ent_table_get_title_horiz_top_visibility(const dwg_ent_table *restrict table,
+                                             int *restrict error);
 
 void
-dwg_ent_table_set_horiz_cell_margin(dwg_ent_table *table, BITCODE_BD margin,
-                                    int *error);
-
-BITCODE_BD
-dwg_ent_table_get_horiz_cell_margin(const dwg_ent_table *table, int *error);
-
-void
-dwg_ent_table_set_vert_cell_margin(dwg_ent_table *table, BITCODE_BD margin,
-                                   int *error);
-
-BITCODE_BD
-dwg_ent_table_get_vert_cell_margin(const dwg_ent_table *table, int *error);
-
-void
-dwg_ent_table_set_title_row_fill_none(dwg_ent_table *table, unsigned char fill,
-                                      int *error);
-
-unsigned char
-dwg_ent_table_get_title_row_fill_none(const dwg_ent_table *table, int *error);
-
-void
-dwg_ent_table_set_header_row_fill_none(dwg_ent_table *table, 
-                                       unsigned char fill, int *error);
-
-unsigned char
-dwg_ent_table_get_header_row_fill_none(const dwg_ent_table *table, int *error);
-
-void
-dwg_ent_table_set_data_row_fill_none(dwg_ent_table *table, unsigned char fill,
-                                     int *error);
-
-unsigned char
-dwg_ent_table_get_data_row_fill_none(const dwg_ent_table *table, int *error);
-
-void
-dwg_ent_table_set_title_row_align(dwg_ent_table *table, unsigned char fill,
-                                  int *error);
+dwg_ent_table_set_title_horiz_ins_visibility(dwg_ent_table *restrict table,
+                                             const BITCODE_BS visibility,
+                                             int *restrict error);
 
 BITCODE_BS
-dwg_ent_table_get_title_row_align(const dwg_ent_table *table, int *error);
+dwg_ent_table_get_title_horiz_ins_visibility(const dwg_ent_table *restrict table,
+                                             int *restrict error);
 
 void
-dwg_ent_table_set_header_row_align(dwg_ent_table *table, BITCODE_BS align,
-                                   int *error);
+dwg_ent_table_set_title_horiz_bottom_visibility(dwg_ent_table *restrict table,
+                                                const BITCODE_BS visibility,
+                                                int *restrict error);
 
 BITCODE_BS
-dwg_ent_table_get_header_row_align(const dwg_ent_table *table, int *error);
+dwg_ent_table_get_title_horiz_bottom_visibility(const dwg_ent_table *restrict table,
+                                                int *restrict error);
 
 void
-dwg_ent_table_set_data_row_align(dwg_ent_table *table, BITCODE_BS align,
-                                 int *error);
+dwg_ent_table_set_title_vert_left_visibility(dwg_ent_table *restrict table,
+                                             const BITCODE_BS visibility,
+                                             int *restrict error);
 
 BITCODE_BS
-dwg_ent_table_get_data_row_align(const dwg_ent_table *table, int *error);
+dwg_ent_table_get_title_vert_left_visibility(const dwg_ent_table *restrict table,
+                                             int *restrict error);
 
 void
-dwg_ent_table_set_title_row_height(dwg_ent_table *table, BITCODE_BD height,
-                                   int *error);
-
-BITCODE_BD
-dwg_ent_table_get_title_row_height(const dwg_ent_table *table, int *error);
-
-void
-dwg_ent_table_set_header_row_height(dwg_ent_table *table, BITCODE_BD height,
-                                    int *error);
-
-BITCODE_BD
-dwg_ent_table_get_header_row_height(const dwg_ent_table *table, int *error);
-
-void
-dwg_ent_table_set_data_row_height(dwg_ent_table *table, BITCODE_BD height,
-                                  int *error);
-
-BITCODE_BD
-dwg_ent_table_get_data_row_height(const dwg_ent_table *table, int *error);
-
-unsigned char
-dwg_ent_table_has_border_color_overrides(dwg_ent_table *table,
-                                         int *error);
-
-void
-dwg_ent_table_set_border_color_overrides_flag(dwg_ent_table *table,
-                                              BITCODE_BL overrides, int *error);
-
-BITCODE_BL
-dwg_ent_table_get_border_color_overrides_flag(const dwg_ent_table *table,
-                                              int *error);
-
-unsigned char
-dwg_ent_table_has_border_lineweight_overrides(dwg_ent_table *table,
-                                                      int *error);
-
-void
-dwg_ent_table_set_border_lineweight_overrides_flag(dwg_ent_table *table,
-                                                   BITCODE_BL overrides, int *error);
-
-BITCODE_BL
-dwg_ent_table_get_border_lineweight_overrides_flag(const dwg_ent_table *table,
-                                                   int *error);
-
-void
-dwg_ent_table_set_title_horiz_top_linewt(dwg_ent_table *table,
-                                             BITCODE_BS lw, int *error);
+dwg_ent_table_set_title_vert_ins_visibility(dwg_ent_table *restrict table,
+                                            const BITCODE_BS visibility,
+                                            int *restrict error);
 
 BITCODE_BS
-dwg_ent_table_get_title_horiz_top_linewt(const dwg_ent_table *table, int *error);
+dwg_ent_table_get_title_vert_ins_visibility(const dwg_ent_table *restrict table,
+                                            int *restrict error);
 
 void
-dwg_ent_table_set_title_horiz_ins_linewt(dwg_ent_table *table,
-                                             BITCODE_BS lw, int *error);
+dwg_ent_table_set_title_vert_right_visibility(dwg_ent_table *restrict table,
+                                              const BITCODE_BS visibility,
+                                              int *restrict error);
 
 BITCODE_BS
-dwg_ent_table_get_title_horiz_ins_linewt(const dwg_ent_table *table, int *error);
+dwg_ent_table_get_title_vert_right_visibility(const dwg_ent_table *restrict table,
+                                              int *restrict error);
 
 void
-dwg_ent_table_set_title_horiz_bottom_linewt(dwg_ent_table *table,
-                                                BITCODE_BS lw, int *error);
+dwg_ent_table_set_header_horiz_top_visibility(dwg_ent_table *restrict table,
+                                              const BITCODE_BS visibility,
+                                              int *restrict error);
 
 BITCODE_BS
-dwg_ent_table_get_title_horiz_bottom_linewt(const dwg_ent_table *table,
-                                                int *error);
+dwg_ent_table_get_header_horiz_top_visibility(const dwg_ent_table *restrict table,
+                                              int *restrict error);
 
 void
-dwg_ent_table_set_title_vert_left_linewt(dwg_ent_table *table,
-                                             BITCODE_BS lw, int *error);
-
-BITCODE_BS
-dwg_ent_table_get_title_vert_left_linewt(const dwg_ent_table *table, int *error);
-
-void
-dwg_ent_table_set_title_vert_ins_linewt(dwg_ent_table *table,
-                                            BITCODE_BS lw, int *error);
-
-BITCODE_BS
-dwg_ent_table_get_title_vert_ins_linewt(const dwg_ent_table *table, int *error);
-
-void
-dwg_ent_table_set_title_vert_right_linewt(dwg_ent_table *table,
-                                              BITCODE_BS lw, int *error);
-
-BITCODE_BS
-dwg_ent_table_get_title_vert_right_linewt(const dwg_ent_table *table,
-                                              int *error);
-
-void
-dwg_ent_table_set_header_horiz_top_linewt(dwg_ent_table *table,
-                                              BITCODE_BS lw, int *error);
-
-BITCODE_BS
-dwg_ent_table_get_header_horiz_top_linewt(const dwg_ent_table *table, int *error);
-
-void
-dwg_ent_table_set_header_horiz_ins_linewt(dwg_ent_table *table,
-                                              BITCODE_BS lw, int *error);
-
-BITCODE_BS
-dwg_ent_table_get_header_horiz_ins_linewt(const dwg_ent_table *table, int *error);
-
-void
-dwg_ent_table_set_header_horiz_bottom_linewt(dwg_ent_table *table,
-                                                 BITCODE_BS lw, int *error);
-
-BITCODE_BS
-dwg_ent_table_get_header_horiz_bottom_linewt(const dwg_ent_table *table,
-                                                 int *error);
-
-void
-dwg_ent_table_set_header_vert_left_linewt(dwg_ent_table *table,
-                                              BITCODE_BS lw, int *error);
-
-BITCODE_BS
-dwg_ent_table_get_header_vert_left_linewt(const dwg_ent_table *table,
-                                              int *error);
-
-void
-dwg_ent_table_set_header_vert_ins_linewt(dwg_ent_table *table,
-                                             BITCODE_BS lw, int *error);
-
-BITCODE_BS
-dwg_ent_table_get_header_vert_ins_linewt(const dwg_ent_table *table, int *error);
-
-void
-dwg_ent_table_set_header_vert_right_linewt(dwg_ent_table *table,
-                                               BITCODE_BS lw, int *error);
-
-BITCODE_BS
-dwg_ent_table_get_header_vert_right_linewt(const dwg_ent_table *table,
-                                               int *error);
-
-void
-dwg_ent_table_set_data_horiz_top_linewt(dwg_ent_table *table,
-                                            BITCODE_BS lw, int *error);
-
-BITCODE_BS
-dwg_ent_table_get_data_horiz_top_linewt(const dwg_ent_table *table, int *error);
-
-void
-dwg_ent_table_set_data_horiz_ins_linewt(dwg_ent_table *table,
-                                            BITCODE_BS lw, int *error);
-
-BITCODE_BS
-dwg_ent_table_get_data_horiz_ins_linewt(const dwg_ent_table *table, int *error);
-
-void
-dwg_ent_table_set_data_horiz_bottom_linewt(dwg_ent_table *table,
-                                               BITCODE_BS lw, int *error);
-
-BITCODE_BS
-dwg_ent_table_get_data_horiz_bottom_linewt(const dwg_ent_table *table,
-                                               int *error);
-
-void
-dwg_ent_table_set_data_vert_left_linewt(dwg_ent_table *table,
-                                            BITCODE_BS lw, int *error);
-
-BITCODE_BS
-dwg_ent_table_get_data_vert_left_linewt(const dwg_ent_table *table, int *error);
-
-void
-dwg_ent_table_set_data_vert_ins_linewt(dwg_ent_table *table,
-                                           BITCODE_BS lw, int *error);
-
-BITCODE_BS
-dwg_ent_table_get_data_vert_ins_linewt(const dwg_ent_table *table, int *error);
-
-void
-dwg_ent_table_set_data_vert_right_linewt(dwg_ent_table *table,
-                                             BITCODE_BS lw, int *error);
-
-BITCODE_BS
-dwg_ent_table_get_data_vert_right_linewt(const dwg_ent_table *table, int *error);
-
-unsigned char
-dwg_ent_table_has_border_visibility_overrides(dwg_ent_table *table,
-                                                      int *error);
-
-void
-dwg_ent_table_set_border_visibility_overrides_flag(dwg_ent_table *table,
-                                                   BITCODE_BL overrides, int *error);
-
-BITCODE_BL
-dwg_ent_table_get_border_visibility_overrides_flag(const dwg_ent_table *table,
-                                                   int *error);
-
-void
-dwg_ent_table_set_title_horiz_top_visibility(dwg_ent_table *table,
-                                             BITCODE_BS visibility,
-                                             int *error);
-
-BITCODE_BS
-dwg_ent_table_get_title_horiz_top_visibility(const dwg_ent_table *table, int *error);
-
-void
-dwg_ent_table_set_title_horiz_ins_visibility(dwg_ent_table *table,
-                                             BITCODE_BS visibility,
-                                             int *error);
-
-BITCODE_BS
-dwg_ent_table_get_title_horiz_ins_visibility(const dwg_ent_table *table, int *error);
-
-void
-dwg_ent_table_set_title_horiz_bottom_visibility(dwg_ent_table *table,
-                                                BITCODE_BS visibility,
-                                                int *error);
-
-BITCODE_BS
-dwg_ent_table_get_title_horiz_bottom_visibility(const dwg_ent_table *table,
-                                                int *error);
-
-void
-dwg_ent_table_set_title_vert_left_visibility(dwg_ent_table *table,
-                                             BITCODE_BS visibility,
-                                             int *error);
-
-BITCODE_BS
-dwg_ent_table_get_title_vert_left_visibility(const dwg_ent_table *table, int *error);
-
-void
-dwg_ent_table_set_title_vert_ins_visibility(dwg_ent_table *table,
-                                            BITCODE_BS visibility,
-                                            int *error);
-
-BITCODE_BS
-dwg_ent_table_get_title_vert_ins_visibility(const dwg_ent_table *table, int *error);
-
-void
-dwg_ent_table_set_title_vert_right_visibility(dwg_ent_table *table,
-                                              BITCODE_BS visibility,
-                                              int *error);
-
-BITCODE_BS
-dwg_ent_table_get_title_vert_right_visibility(const dwg_ent_table *table,
-                                              int *error);
-
-void
-dwg_ent_table_set_header_horiz_top_visibility(dwg_ent_table *table,
-                                              BITCODE_BS visibility,
-                                              int *error);
-
-BITCODE_BS
-dwg_ent_table_get_header_horiz_top_visibility(const dwg_ent_table *table,
-                                              int *error);
-
-BITCODE_BS
-dwg_ent_table_get_header_vert_left_visibility(const dwg_ent_table *table,
-                                              int *error);
-void
-dwg_ent_table_set_header_horiz_ins_visibility(dwg_ent_table *table,
-                                              BITCODE_BS visibility,
-                                              int *error);
-
-BITCODE_BS
-dwg_ent_table_get_header_horiz_ins_visibility(const dwg_ent_table *table,
-                                              int *error);
-
-void
-dwg_ent_table_set_header_horiz_bottom_visibility(dwg_ent_table *table,
-                                                 BITCODE_BS visibility,
-                                                 int *error);
-
-BITCODE_BS
-dwg_ent_table_get_header_horiz_bottom_visibility(const dwg_ent_table *table,
-                                                 int *error);
-
-void
-dwg_ent_table_set_header_vert_ins_visibility(dwg_ent_table *table,
-                                             BITCODE_BS visibility,
-                                             int *error);
-
-BITCODE_BS
-dwg_ent_table_get_header_vert_ins_visibility(const dwg_ent_table *table, int *error);
-
-void
-dwg_ent_table_set_header_vert_right_visibility(dwg_ent_table *table,
+dwg_ent_table_set_header_vert_left_visibility(dwg_ent_table *restrict table,
                                                BITCODE_BS visibility,
-                                               int *error);
+                                              int *restrict error);
+BITCODE_BS
+dwg_ent_table_get_header_vert_left_visibility(const dwg_ent_table *restrict table,
+                                              int *restrict error);
+void
+dwg_ent_table_set_header_horiz_ins_visibility(dwg_ent_table *restrict table,
+                                              const BITCODE_BS visibility,
+                                              int *restrict error);
 
 BITCODE_BS
-dwg_ent_table_get_header_vert_right_visibility(const dwg_ent_table *table,
-                                               int *error);
+dwg_ent_table_get_header_horiz_ins_visibility(const dwg_ent_table *restrict table,
+                                              int *restrict error);
+
+void
+dwg_ent_table_set_header_horiz_bottom_visibility(dwg_ent_table *restrict table,
+                                                 const BITCODE_BS visibility,
+                                                 int *restrict error);
+
+BITCODE_BS
+dwg_ent_table_get_header_horiz_bottom_visibility(const dwg_ent_table *restrict table,
+                                                 int *restrict error);
+
+void
+dwg_ent_table_set_header_vert_ins_visibility(dwg_ent_table *restrict table,
+                                             const BITCODE_BS visibility,
+                                             int *restrict error);
+
+BITCODE_BS
+dwg_ent_table_get_header_vert_ins_visibility(const dwg_ent_table *restrict table,
+                                             int *restrict error);
+
+void
+dwg_ent_table_set_header_vert_right_visibility(dwg_ent_table *restrict table,
+                                               const BITCODE_BS visibility,
+                                               int *restrict error);
+
+BITCODE_BS
+dwg_ent_table_get_header_vert_right_visibility(const dwg_ent_table *restrict table,
+                                               int *restrict error);
 
 
 void
-dwg_ent_table_set_data_horiz_top_visibility(dwg_ent_table *table,
-                                            BITCODE_BS visibility,
-                                            int *error);
+dwg_ent_table_set_data_horiz_top_visibility(dwg_ent_table *restrict table,
+                                            const BITCODE_BS visibility,
+                                            int *restrict error);
 
 BITCODE_BS
-dwg_ent_table_get_data_horiz_top_visibility(const dwg_ent_table *table, int *error);
+dwg_ent_table_get_data_horiz_top_visibility(const dwg_ent_table *restrict table,
+                                            int *restrict error);
 
 void
-dwg_ent_table_set_data_horiz_ins_visibility(dwg_ent_table *table,
-                                            BITCODE_BS visibility,
-                                            int *error);
+dwg_ent_table_set_data_horiz_ins_visibility(dwg_ent_table *restrict table,
+                                            const BITCODE_BS visibility,
+                                            int *restrict error);
 
 BITCODE_BS
-dwg_ent_table_get_data_horiz_ins_visibility(const dwg_ent_table *table, int *error);
+dwg_ent_table_get_data_horiz_ins_visibility(const dwg_ent_table *restrict table,
+                                            int *restrict error);
 
 void
-dwg_ent_table_set_data_horiz_bottom_visibility(dwg_ent_table *table,
-                                               BITCODE_BS visibility,
-                                               int *error);
+dwg_ent_table_set_data_horiz_bottom_visibility(dwg_ent_table *restrict table,
+                                               const BITCODE_BS visibility,
+                                               int *restrict error);
 
 BITCODE_BS
-dwg_ent_table_get_data_horiz_bottom_visibility(const dwg_ent_table *table,
-                                               int *error);
+dwg_ent_table_get_data_horiz_bottom_visibility(const dwg_ent_table *restrict table,
+                                               int *restrict error);
 
 void
-dwg_ent_table_set_data_vert_ins_visibility(dwg_ent_table *table,
-                                           BITCODE_BS visibility,
-                                           int *error);
-
+dwg_ent_table_set_data_vert_left_visibility(dwg_ent_table *restrict table,
+                                            const BITCODE_BS visibility,
+                                            int *restrict error);
 BITCODE_BS
-dwg_ent_table_get_data_vert_ins_visibility(const dwg_ent_table *table, int *error);
+dwg_ent_table_get_data_vert_left_visibility(const dwg_ent_table *restrict table,
+                                            int *restrict error);
 
 void
-dwg_ent_table_set_data_vert_right_visibility(dwg_ent_table *table,
-                                             BITCODE_BS visibility,
-                                             int *error);
+dwg_ent_table_set_data_vert_ins_visibility(dwg_ent_table *restrict table,
+                                           const BITCODE_BS visibility,
+                                           int *restrict error);
 
 BITCODE_BS
-dwg_ent_table_get_data_vert_right_visibility(const dwg_ent_table *table, int *error);
+dwg_ent_table_get_data_vert_ins_visibility(const dwg_ent_table *restrict table,
+                                           int *restrict error);
+
+void
+dwg_ent_table_set_data_vert_right_visibility(dwg_ent_table *restrict table,
+                                             const BITCODE_BS visibility,
+                                             int *restrict error);
+
+BITCODE_BS
+dwg_ent_table_get_data_vert_right_visibility(const dwg_ent_table *restrict table,
+                                             int *restrict error);
 
 
 /********************************************************************
@@ -3733,7 +3800,7 @@ dwg_ent_table_get_data_vert_right_visibility(const dwg_ent_table *table, int *er
 
 // Get Layer Name
 char *
-dwg_obj_layer_get_name(const dwg_obj_layer *layer, int *error);
+dwg_obj_layer_get_name(const dwg_obj_layer *layer, int * error);
 
 
 /********************************************************************
@@ -3759,10 +3826,10 @@ dwg_ent_vertex_pface_face_set_vertind(dwg_ent_vert_pface_face *face,
 Usage :- char *block_name = dwg_obj_block_header_get_name(hdr);
 */
 char *
-dwg_obj_block_header_get_name(const dwg_obj_block_header *hdr, int *error);
+dwg_obj_block_header_get_name(const dwg_obj_block_header *hdr, int * error);
 
 dwg_obj_block_header *
-dwg_get_block_header(dwg_data *dwg, int *error);
+dwg_get_block_header(dwg_data *dwg, int * error);
 
 
 /********************************************************************
@@ -3771,7 +3838,7 @@ dwg_get_block_header(dwg_data *dwg, int *error);
 
 
 BITCODE_BL
-dwg_obj_block_control_get_num_entries(const dwg_obj_block_control *ctrl, int *error);
+dwg_obj_block_control_get_num_entries(const dwg_obj_block_control *ctrl, int * error);
 
 dwg_object_ref **
 dwg_obj_block_control_get_block_headers(const dwg_obj_block_control *ctrl,
@@ -3950,7 +4017,7 @@ dwg_class *
 dwg_get_class(const dwg_data *dwg, unsigned int index);
 
 dwg_object *
-dwg_get_object(const dwg_data *dwg, long unsigned int index);
+dwg_get_object(dwg_data *dwg, long unsigned int index);
 
 BITCODE_RL
 dwg_obj_get_bitsize(const dwg_object *obj);
@@ -3959,10 +4026,10 @@ unsigned int
 dwg_obj_get_num_eed(const dwg_obj_obj *obj, int *error);
 
 dwg_entity_eed *
-dwg_obj_get_eed(const dwg_obj_obj *obj, int index, int *error);
+dwg_obj_get_eed(const dwg_obj_obj *obj, const int index, int *error);
 
 dwg_entity_eed_data *
-dwg_obj_get_eed_data(const dwg_obj_obj *obj, int index, int *error);
+dwg_obj_get_eed_data(const dwg_obj_obj *obj, const int index, int *error);
 
 BITCODE_B
 dwg_obj_get_picture_exists(const dwg_object *obj, int *error);
@@ -3982,7 +4049,7 @@ dwg_obj_get_num_reactors(const dwg_object *obj, int *error);
 BITCODE_B
 dwg_obj_get_xdic_missing_flag(const dwg_object *obj, int *error); //r2004+
 
-int 
+unsigned int
 dwg_obj_object_get_index(const dwg_object *obj, int *error);
 
 dwg_handle *

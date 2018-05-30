@@ -14455,10 +14455,14 @@ dwg_ent_body_set_acis_empty2(dwg_ent_body *body, unsigned char acis,
 *                    FUNCTIONS FOR TABLE ENTITY                     *
 ********************************************************************/
 
-/// Sets insertion point
+/** Sets _dwg_entity_TABLE::insertion_point, DXF 10.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_insertion_point(dwg_ent_table *table, dwg_point_3d *point,
-                                  int *error)
+dwg_ent_table_set_insertion_point(dwg_ent_table *restrict table,
+                                  const dwg_point_3d *restrict point,
+                                  int *restrict error)
 {
   if (table && point)
     {
@@ -14474,10 +14478,14 @@ dwg_ent_table_set_insertion_point(dwg_ent_table *table, dwg_point_3d *point,
     }
 }
 
-/// Returns insertion point
+/** Returns _dwg_entity_TABLE::insertion point, DXF 10.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_get_insertion_point(const dwg_ent_table *table, dwg_point_3d *point,
-                                  int *error)
+dwg_ent_table_get_insertion_point(const dwg_ent_table *restrict table,
+                                  dwg_point_3d *restrict point,
+                                  int *restrict error)
 {
   if (table && point)
     {
@@ -14493,13 +14501,30 @@ dwg_ent_table_get_insertion_point(const dwg_ent_table *table, dwg_point_3d *poin
     }
 }
 
-/// Sets scale points
+/** Sets _dwg_entity_TABLE::scale, DXF 41. if r13+
+\param[in]  table      dwg_ent_table *
+\param[in]  point      dwg_point_3d *, scale in x, y, z
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_scale(dwg_ent_table *table, dwg_point_3d *point, int *error)
+dwg_ent_table_set_scale(dwg_ent_table *restrict table,
+                        const dwg_point_3d *restrict point,
+                        int *restrict error)
 {
   if (table && point)
     {
       *error = 0;
+      // set data_flags (for r2000+)
+      if (point->x == 1.0) {
+        if (point->y == 1.0 && point->z == 1.0)
+          table->data_flags = 3;
+        else
+          table->data_flags = 1;
+      } else if (point->x == point->y && point->x == point->z)
+        table->data_flags = 2;
+      else
+        table->data_flags = 0;
+
       table->scale.x = point->x;
       table->scale.y = point->y;
       table->scale.z = point->z;
@@ -14511,9 +14536,14 @@ dwg_ent_table_set_scale(dwg_ent_table *table, dwg_point_3d *point, int *error)
     }
 }
 
-/// Returns scale points
+/** Returns _dwg_entity_TABLE::scale, DXF 41. if r13+
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_get_scale(const dwg_ent_table *table, dwg_point_3d *point, int *error)
+dwg_ent_table_get_scale(const dwg_ent_table *restrict table,
+                        dwg_point_3d *restrict point,
+                        int *restrict error)
 {
   if (table && point)
     {
@@ -14529,12 +14559,16 @@ dwg_ent_table_get_scale(const dwg_ent_table *table, dwg_point_3d *point, int *er
     }
 }
 
-/// Sets data flags
+/** Sets _dwg_entity_TABLE::data_flags, if r2000+.
+\param[in]  table      dwg_ent_table *
+\param[in]  flags      0 - 3
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_data_flags(dwg_ent_table *table, unsigned char flags,
-                             int *error)
+dwg_ent_table_set_data_flags(dwg_ent_table *restrict table, const unsigned char flags,
+                             int *restrict error)
 {
-  if (table)
+  if (table && flags <= 3)
     {
       *error = 0;
       table->data_flags = flags;
@@ -14542,13 +14576,16 @@ dwg_ent_table_set_data_flags(dwg_ent_table *table, unsigned char flags,
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Returns data flags
+/** Returns _dwg_entity_TABLE::data_flags, no DXF.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 unsigned char
-dwg_ent_table_get_data_flags(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_data_flags(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -14563,9 +14600,13 @@ dwg_ent_table_get_data_flags(const dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets rotation
+/** Sets _dwg_entity_TABLE::rotation, DXF 50.
+\param[in]  table      dwg_ent_table *
+\param[in]  rotation   double
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_rotation(dwg_ent_table *table, BITCODE_BD rotation, int *error)
+dwg_ent_table_set_rotation(dwg_ent_table *restrict table, const BITCODE_BD rotation, int *restrict error)
 {
   if (table)
     {
@@ -14579,9 +14620,12 @@ dwg_ent_table_set_rotation(dwg_ent_table *table, BITCODE_BD rotation, int *error
     }
 }
 
-/// Returns rotation
+/** Returns _dwg_entity_TABLE::rotation, DXF 50.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BD
-dwg_ent_table_get_rotation(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_rotation(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -14596,10 +14640,14 @@ dwg_ent_table_get_rotation(const dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets extrusion points
+/** Sets _dwg_entity_TABLE::extrusion, DXF 210.
+\param[in]  table      dwg_ent_table *
+\param[in]  point      dwg_point_3d *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_extrusion(dwg_ent_table *table, dwg_point_3d *point,
-                            int *error)
+dwg_ent_table_set_extrusion(dwg_ent_table *restrict table, const dwg_point_3d *point,
+                            int *restrict error)
 {
   if (table && point)
     {
@@ -14615,10 +14663,13 @@ dwg_ent_table_set_extrusion(dwg_ent_table *table, dwg_point_3d *point,
     }
 }
 
-/// Returns extrusion points
+/** Returns _dwg_entity_TABLE::extrusion, DXF 210.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_get_extrusion(const dwg_ent_table *table, dwg_point_3d *point,
-                            int *error)
+dwg_ent_table_get_extrusion(const dwg_ent_table *restrict table, dwg_point_3d *point,
+                            int *restrict error)
 {
   if (table && point)
     {
@@ -14635,9 +14686,12 @@ dwg_ent_table_get_extrusion(const dwg_ent_table *table, dwg_point_3d *point,
 }
 
 
-/// Returns has attribs
+/** Returns _dwg_entity_TABLE::has_attribs boolean, DXF 66.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 unsigned char
-dwg_ent_table_has_attribs(dwg_ent_table *table, int *error)
+dwg_ent_table_has_attribs(dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -14652,12 +14706,15 @@ dwg_ent_table_has_attribs(dwg_ent_table *table, int *error)
     }
 }
 
-/// needs to adjust handle array: add/delete
-//  TODO dwg_ent_table_add_owned, dwg_ent_table_delete_owned
+// needs to adjust handle array: add/delete
+// TODO dwg_ent_table_add_owned, dwg_ent_table_delete_owned
 
-/// Returns owned object count
+/** Returns _dwg_entity_TABLE::num_owned, no DXF.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BL
-dwg_ent_table_get_num_owned(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_num_owned(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -14672,12 +14729,21 @@ dwg_ent_table_get_num_owned(const dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets flag for table value
+/** Sets _dwg_entity_TABLE::flag_for_table_value, DXF 90.
+\param[in]  table      dwg_ent_table *
+\param[in]  value      short
+
+    Bit flags, 0x06 (0x02 + 0x04): has block, 0x10: table direction, 0
+    = up, 1 = down, 0x20: title suppressed. Normally 0x06 is always
+    set.
+
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_flag_for_table_value(dwg_ent_table *table,
-                                       BITCODE_BS value, int *error)
+dwg_ent_table_set_flag_for_table_value(dwg_ent_table *restrict table,
+                                       const BITCODE_BS value, int *restrict error)
 {
-  if (table)
+  if (table && value < 0x30)
     {
       *error = 0;
       table->flag_for_table_value = value;
@@ -14689,9 +14755,13 @@ dwg_ent_table_set_flag_for_table_value(dwg_ent_table *table,
     }
 }
 
-/// Returns flag for table value
+/** Returns _dwg_entity_TABLE::flag_for_table_value, DXF 90.
+    \sa dwg_ent_table_set_flag_for_table_value
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_flag_for_table_value(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_flag_for_table_value(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -14706,10 +14776,14 @@ dwg_ent_table_get_flag_for_table_value(const dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets horiz direction
+/** Sets _dwg_entity_TABLE::horiz_direction, DXF 11.
+\param[in]  table      dwg_ent_table *
+\param[in]  point      dwg_point_3d *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_horiz_direction(dwg_ent_table *table, dwg_point_3d *point,
-                                  int *error)
+dwg_ent_table_set_horiz_direction(dwg_ent_table *restrict table, const dwg_point_3d *point,
+                                  int *restrict error)
 {
   if (table && point)
     {
@@ -14717,7 +14791,6 @@ dwg_ent_table_set_horiz_direction(dwg_ent_table *table, dwg_point_3d *point,
       table->horiz_direction.x = point->x;
       table->horiz_direction.y = point->y;
       table->horiz_direction.z = point->z;
-
     }
   else
     {
@@ -14726,10 +14799,13 @@ dwg_ent_table_set_horiz_direction(dwg_ent_table *table, dwg_point_3d *point,
     }
 }
 
-/// Returns horiz direction
+/** Returns _dwg_entity_TABLE::horiz_direction, DXF 11.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_get_horiz_direction(const dwg_ent_table *table, dwg_point_3d *point,
-                                  int *error)
+dwg_ent_table_get_horiz_direction(const dwg_ent_table *restrict table, dwg_point_3d *point,
+                                  int *restrict error)
 {
   if (table && point)
     {
@@ -14745,9 +14821,12 @@ dwg_ent_table_get_horiz_direction(const dwg_ent_table *table, dwg_point_3d *poin
     }
 }
 
-/// Returns number of columns
+/** Returns _dwg_entity_TABLE::num_cols number of columns, DXF 91.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BL
-dwg_ent_table_get_num_cols(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_num_cols(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -14762,9 +14841,12 @@ dwg_ent_table_get_num_cols(const dwg_ent_table *table, int *error)
     }
 }
 
-/// Returns number of rows
+/** Returns _dwg_entity_TABLE::num_cols number of rows, DXF 92.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BL
-dwg_ent_table_get_num_rows(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_num_rows(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -14783,9 +14865,12 @@ dwg_ent_table_get_num_rows(const dwg_ent_table *table, int *error)
 //  TODO dwg_ent_table_add_row, dwg_ent_table_delete_row
 
 
-/// Returns column widths
+/** Returns array of _dwg_entity_TABLE::col_widths, DXF 142
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 double *
-dwg_ent_table_get_col_widths(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_col_widths(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -14800,9 +14885,12 @@ dwg_ent_table_get_col_widths(const dwg_ent_table *table, int *error)
     }
 }
 
-/// Returns row heights
+/** Returns array of _dwg_entity_TABLE::row_heights, DXF 141
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 double *
-dwg_ent_table_get_row_heights(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_row_heights(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -14817,9 +14905,12 @@ dwg_ent_table_get_row_heights(const dwg_ent_table *table, int *error)
     }
 }
 
-/// Returns table overrides present
+/** Returns _dwg_entity_TABLE::has_table_overrides boolean, no DXF.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_B
-dwg_ent_table_has_table_overrides(dwg_ent_table *table, int *error)
+dwg_ent_table_has_table_overrides(dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -14834,12 +14925,16 @@ dwg_ent_table_has_table_overrides(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets flag overrrides
+/** Sets _dwg_entity_TABLE::table_flag_override, DXF 90.
+\param[in]  table      dwg_ent_table *
+\param[in]  override   0 - 0x7fffff
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_table_flag_override(dwg_ent_table *table, BITCODE_BL override,
-                                      int *error)
+dwg_ent_table_set_table_flag_override(dwg_ent_table *restrict table, const BITCODE_BL override,
+                                      int *restrict error)
 {
-  if (table)
+  if (table != NULL && override < 0x800000)
     {
       *error = 0;
       table->table_flag_override = override;
@@ -14851,9 +14946,12 @@ dwg_ent_table_set_table_flag_override(dwg_ent_table *table, BITCODE_BL override,
     }
 }
 
-/// returns flag overrides
+/** Returns _dwg_entity_TABLE::table_flag_override, DXF 93.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BL
-dwg_ent_table_get_table_flag_override(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_table_flag_override(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -14868,15 +14966,20 @@ dwg_ent_table_get_table_flag_override(const dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets title supressed
+/** Sets _dwg_entity_TABLE::title_suppressed, DXF 280.
+\param[in]  table      dwg_ent_table *
+\param[in]  yesno      0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_title_suppressed(dwg_ent_table *table, unsigned char title,
-                                   int *error)
+dwg_ent_table_set_title_suppressed(dwg_ent_table *restrict table, const unsigned char yesno,
+                                   int *restrict error)
 {
-  if (table)
+  if (table != NULL && yesno <= 1)
     {
       *error = 0;
-      table->title_suppressed = title;
+      if (yesno) table->table_flag_override |= 0x1;
+      table->title_suppressed = yesno;
     }
   else
     {
@@ -14885,9 +14988,12 @@ dwg_ent_table_set_title_suppressed(dwg_ent_table *table, unsigned char title,
     }
 }
 
-/// Returns title suppressed
+/** Returns _dwg_entity_TABLE::title_suppressed, DXF 280.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 unsigned char
-dwg_ent_table_get_title_suppressed(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_suppressed(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -14902,12 +15008,16 @@ dwg_ent_table_get_title_suppressed(const dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets header suppressed
+/** Sets _dwg_entity_TABLE::header_suppressed, DXF 281.
+\param[in]  table      dwg_ent_table *
+\param[in]  header     0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_header_suppressed(dwg_ent_table *table, unsigned char header,
-                                    int *error)
+dwg_ent_table_set_header_suppressed(dwg_ent_table *restrict table, const unsigned char header,
+                                    int *restrict error)
 {
-  if (table)
+  if (table && header <= 1)
     {
       *error = 0;
       table->header_suppressed = header;
@@ -14919,9 +15029,12 @@ dwg_ent_table_set_header_suppressed(dwg_ent_table *table, unsigned char header,
     }
 }
 
-/// Returns header suppressed
+/** Returns _dwg_entity_TABLE::header_suppressed, DXF 281.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 unsigned char
-dwg_ent_table_get_header_suppressed(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_header_suppressed(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -14936,14 +15049,19 @@ dwg_ent_table_get_header_suppressed(const dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets flow direction
+/** Sets _dwg_entity_TABLE::flow_direction, DXF 70.
+\param[in]  table      dwg_ent_table *
+\param[in]  dir        short?
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_flow_direction(dwg_ent_table *table, BITCODE_BS dir,
-                                 int *error)
+dwg_ent_table_set_flow_direction(dwg_ent_table *restrict table, const BITCODE_BS dir,
+                                 int *restrict error)
 {
   if (table)
     {
       *error = 0;
+      if (dir) table->table_flag_override |= 0x4;
       table->flow_direction = dir;
     }
   else
@@ -14953,9 +15071,12 @@ dwg_ent_table_set_flow_direction(dwg_ent_table *table, BITCODE_BS dir,
     }
 }
 
-/// Returns flow direction
+/** Returns _dwg_entity_TABLE::flow_direction, DXF 70.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_flow_direction(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_flow_direction(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -14970,14 +15091,20 @@ dwg_ent_table_get_flow_direction(const dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets horiz cell margin
+/** Sets _dwg_entity_TABLE::horiz_cell_margin, DXF 41.
+\param[in]  table      dwg_ent_table *
+\param[in]  margin     double
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_horiz_cell_margin(dwg_ent_table *table, BITCODE_BD margin,
-                                    int *error)
+dwg_ent_table_set_horiz_cell_margin(dwg_ent_table *restrict table, const BITCODE_BD margin,
+                                    int *restrict error)
 {
   if (table)
     {
       *error = 0;
+      if (margin > 0.0) table->table_flag_override |= 0x8;
+      else table->table_flag_override &= ~0x8;
       table->horiz_cell_margin = margin;
     }
   else
@@ -14987,9 +15114,12 @@ dwg_ent_table_set_horiz_cell_margin(dwg_ent_table *table, BITCODE_BD margin,
     }
 }
 
-/// Returns horiz cell margin
+/** Returns _dwg_entity_TABLE::horiz_cell_margin, DXF 41.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BD
-dwg_ent_table_get_horiz_cell_margin(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_horiz_cell_margin(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -15004,14 +15134,20 @@ dwg_ent_table_get_horiz_cell_margin(const dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets vert cell margin
+/** Sets _dwg_entity_TABLE::vert_cell_margin, DXF 41.
+\param[in]  table      dwg_ent_table *
+\param[in]  margin     double
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_vert_cell_margin(dwg_ent_table *table, BITCODE_BD margin,
-                                   int *error)
+dwg_ent_table_set_vert_cell_margin(dwg_ent_table *restrict table, const BITCODE_BD margin,
+                                   int *restrict error)
 {
   if (table)
     {
       *error = 0;
+      if (margin > 0.0) table->table_flag_override |= 0x10;
+      else table->table_flag_override &= ~0x10;
       table->vert_cell_margin = margin;
     }
   else
@@ -15021,9 +15157,12 @@ dwg_ent_table_set_vert_cell_margin(dwg_ent_table *table, BITCODE_BD margin,
     }
 }
 
-/// Returns vert cell margin
+/** Returns _dwg_entity_TABLE::vert_cell_margin, DXF 41.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BD
-dwg_ent_table_get_vert_cell_margin(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_vert_cell_margin(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -15038,14 +15177,19 @@ dwg_ent_table_get_vert_cell_margin(const dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets title row fill none
+/** Sets _dwg_entity_TABLE::title_row_fill_none, DXF 283.
+\param[in]  table      dwg_ent_table *
+\param[in]  fill       ?
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_title_row_fill_none(dwg_ent_table *table, unsigned char fill,
-                                      int *error)
+dwg_ent_table_set_title_row_fill_none(dwg_ent_table *restrict table, const unsigned char fill,
+                                      int *restrict error)
 {
   if (table)
     {
       *error = 0;
+      if (fill) table->table_flag_override |= 0x100;
       table->title_row_fill_none = fill;
     }
   else
@@ -15055,9 +15199,12 @@ dwg_ent_table_set_title_row_fill_none(dwg_ent_table *table, unsigned char fill,
     }
 }
 
-/// Returns title row fill none value
+/** Returns _dwg_entity_TABLE::title_row_fill_none, DXF 283.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 unsigned char
-dwg_ent_table_get_title_row_fill_none(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_row_fill_none(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -15072,14 +15219,19 @@ dwg_ent_table_get_title_row_fill_none(const dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets header row fill none value
+/** Sets _dwg_entity_TABLE::header_row_fill_none, DXF 283.
+\param[in]  table      dwg_ent_table *
+\param[in]  fill       ?
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_header_row_fill_none(dwg_ent_table *table,
-                                       unsigned char fill, int *error)
+dwg_ent_table_set_header_row_fill_none(dwg_ent_table *restrict table,
+                                       const unsigned char fill, int *restrict error)
 {
   if (table)
     {
       *error = 0;
+      if (fill) table->table_flag_override |= 0x200;
       table->header_row_fill_none = fill;
     }
   else
@@ -15089,9 +15241,12 @@ dwg_ent_table_set_header_row_fill_none(dwg_ent_table *table,
     }
 }
 
-/// Returns header row fill none value
+/** Returns _dwg_entity_TABLE::header_row_fill_none, DXF 283.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 unsigned char
-dwg_ent_table_get_header_row_fill_none(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_header_row_fill_none(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -15106,14 +15261,19 @@ dwg_ent_table_get_header_row_fill_none(const dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets data row fill none value
+/** Sets _dwg_entity_TABLE::data_row_fill_none, DXF 283.
+\param[in]  table      dwg_ent_table *
+\param[in]  fill       ?
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_data_row_fill_none(dwg_ent_table *table, unsigned char fill,
-                                     int *error)
+dwg_ent_table_set_data_row_fill_none(dwg_ent_table *restrict table, const unsigned char fill,
+                                     int *restrict error)
 {
   if (table)
     {
       *error = 0;
+      if (fill) table->table_flag_override |= 0x400;
       table->data_row_fill_none = fill;
     }
   else
@@ -15123,9 +15283,12 @@ dwg_ent_table_set_data_row_fill_none(dwg_ent_table *table, unsigned char fill,
     }
 }
 
-/// Returns data row fill none value
+/** Returns _dwg_entity_TABLE::data_row_fill_none, DXF 283.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 unsigned char
-dwg_ent_table_get_data_row_fill_none(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_data_row_fill_none(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -15140,15 +15303,22 @@ dwg_ent_table_get_data_row_fill_none(const dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets title row align value
+/** Sets _dwg_entity_TABLE::title_row_align, DXF 170.
+    and possibly enables bitmask 0x4000 of
+    _dwg_entity_TABLE::table_flag_override, DXF 93 .
+\param[in]  table      dwg_ent_table *
+\param[in]  align      short?
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_title_row_align(dwg_ent_table *table, unsigned char fill,
-                                  int *error)
+dwg_ent_table_set_title_row_align(dwg_ent_table *restrict table, const unsigned char align,
+                                  int *restrict error)
 {
   if (table)
     {
       *error = 0;
-      table->title_row_align = fill;
+      if (align) table->table_flag_override |= 0x4000;
+      table->title_row_align = align;
     }
   else
     {
@@ -15157,9 +15327,12 @@ dwg_ent_table_set_title_row_align(dwg_ent_table *table, unsigned char fill,
     }
 }
 
-/// Returns title row align
+/** Returns _dwg_entity_TABLE::title_row_align, DXF 170.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_title_row_align(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_row_align(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -15174,14 +15347,20 @@ dwg_ent_table_get_title_row_align(const dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets header row align
+/** Sets _dwg_entity_TABLE::header_row_align, DXF 170.
+    and possibly enables bitmask 0x8000 of _dwg_entity_TABLE::table_flag_override, DXF 93 .
+\param[in]  table      dwg_ent_table *
+\param[in]  align      short?
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_header_row_align(dwg_ent_table *table, BITCODE_BS align,
-                                   int *error)
+dwg_ent_table_set_header_row_align(dwg_ent_table *restrict table, const BITCODE_BS align,
+                                   int *restrict error)
 {
   if (table)
     {
       *error = 0;
+      if (align) table->table_flag_override |= 0x8000;
       table->header_row_align = align;
     }
   else
@@ -15191,9 +15370,13 @@ dwg_ent_table_set_header_row_align(dwg_ent_table *table, BITCODE_BS align,
     }
 }
 
-/// Returns header row align
+/** Returns _dwg_entity_TABLE::header_row_align, DXF 170.
+    Might be ignored if bit of 0x8000 of table_flag_override DXF 93 is not set.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_header_row_align(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_header_row_align(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -15208,14 +15391,22 @@ dwg_ent_table_get_header_row_align(const dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets data row align
+/** Sets _dwg_entity_TABLE::data_row_align, DXF 170,
+    and possibly table_flag_override 93.
+
+    TODO: possible values?
+\param[in]  table      dwg_ent_table *
+\param[in]  align      short?
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_data_row_align(dwg_ent_table *table, BITCODE_BS align,
-                                 int *error)
+dwg_ent_table_set_data_row_align(dwg_ent_table *restrict table, const BITCODE_BS align,
+                                 int *restrict error)
 {
   if (table)
     {
       *error = 0;
+      if (align) table->table_flag_override |= 0x10000;
       table->data_row_align = align;
     }
   else
@@ -15225,9 +15416,13 @@ dwg_ent_table_set_data_row_align(dwg_ent_table *table, BITCODE_BS align,
     }
 }
 
-/// Returns data row align
+/** Returns _dwg_entity_TABLE::data_row_align, DXF 170.
+    Might be ignored if bit of 0x10000 of table_flag_override, DXF 93 is not set.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_data_row_align(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_data_row_align(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -15242,14 +15437,20 @@ dwg_ent_table_get_data_row_align(const dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets title row height
+/** Sets _dwg_entity_TABLE::title_row_height, DXF 140.
+    and en/disables the _dwg_entity_TABLE::table_flag_override
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_title_row_height(dwg_ent_table *table, BITCODE_BD height,
-                                   int *error)
+dwg_ent_table_set_title_row_height(dwg_ent_table *restrict table, const BITCODE_BD height,
+                                   int *restrict error)
 {
   if (table)
     {
       *error = 0;
+      if (height > 0.0) table->table_flag_override |= 0x100000;
+      else table->table_flag_override &= ~0x100000;
       table->title_row_height = height;
     }
   else
@@ -15259,9 +15460,12 @@ dwg_ent_table_set_title_row_height(dwg_ent_table *table, BITCODE_BD height,
     }
 }
 
-/// Returns title row height
+/** Returns _dwg_entity_TABLE::title_row_height, DXF 140.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BD
-dwg_ent_table_get_title_row_height(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_row_height(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -15276,14 +15480,20 @@ dwg_ent_table_get_title_row_height(const dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets header row height
+/** Sets _dwg_entity_TABLE::header_row_height, DXF 140.
+    and en/disables the _dwg_entity_TABLE::table_flag_override.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_header_row_height(dwg_ent_table *table, BITCODE_BD height,
-                                    int *error)
+dwg_ent_table_set_header_row_height(dwg_ent_table *restrict table, const BITCODE_BD height,
+                                    int *restrict error)
 {
   if (table)
     {
       *error = 0;
+      if (height > 0.0) table->table_flag_override |= 0x200000;
+      else table->table_flag_override &= ~0x200000;
       table->header_row_height = height;
     }
   else
@@ -15293,9 +15503,12 @@ dwg_ent_table_set_header_row_height(dwg_ent_table *table, BITCODE_BD height,
     }
 }
 
-/// Returns header row height
+/** Returns _dwg_entity_TABLE::header_row_height, DXF 140.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BD
-dwg_ent_table_get_header_row_height(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_header_row_height(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -15310,14 +15523,20 @@ dwg_ent_table_get_header_row_height(const dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets data row height
+/** Sets _dwg_entity_TABLE::data_row_height, DXF 140.
+    and en/disables the _dwg_entity_TABLE::table_flag_override.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_data_row_height(dwg_ent_table *table, BITCODE_BD height,
-                                  int *error)
+dwg_ent_table_set_data_row_height(dwg_ent_table *restrict table, BITCODE_BD height,
+                                  int *restrict error)
 {
   if (table)
     {
       *error = 0;
+      if (height > 0.0) table->table_flag_override |= 0x400000;
+      else table->table_flag_override &= ~0x400000;
       table->data_row_height = height;
     }
   else
@@ -15327,9 +15546,12 @@ dwg_ent_table_set_data_row_height(dwg_ent_table *table, BITCODE_BD height,
     }
 }
 
-/// Returns data row height value
+/** Returns _dwg_entity_TABLE::data_row_height, DXF 140.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BD
-dwg_ent_table_get_data_row_height(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_data_row_height(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -15344,10 +15566,13 @@ dwg_ent_table_get_data_row_height(const dwg_ent_table *table, int *error)
     }
 }
 
-/// Returns border color overrides existance
+/** Returns _dwg_entity_TABLE::has_border_color_overrides, if DXF 94 > 0.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 unsigned char
-dwg_ent_table_has_border_color_overrides(dwg_ent_table *table,
-                                                 int *error)
+dwg_ent_table_has_border_color_overrides(dwg_ent_table *restrict table,
+                                         int *restrict error)
 {
   if (table)
     {
@@ -15362,12 +15587,17 @@ dwg_ent_table_has_border_color_overrides(dwg_ent_table *table,
     }
 }
 
-/// Sets border color overrides flag value
+/** Sets _dwg_entity_TABLE::border_color_overrides_flag, DXF 94.
+    \sa dwg_ent_table_get_border_color_overrides_flag
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_border_color_overrides_flag(dwg_ent_table *table,
-                                              BITCODE_BL overrides, int *error)
+dwg_ent_table_set_border_color_overrides_flag(dwg_ent_table *restrict table,
+                                              const BITCODE_BL overrides,
+                                              int *restrict error)
 {
-  if (table)
+  if (table && overrides >=0 && overrides <= 1)
     {
       *error = 0;
       table->border_color_overrides_flag = overrides;
@@ -15375,13 +15605,24 @@ dwg_ent_table_set_border_color_overrides_flag(dwg_ent_table *table,
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Returns border color overrides flag value
+/** Returns _dwg_entity_TABLE::border_color_overrides_flag, DXF 94.
+
+    Bitmask 1: has title_horiz_top_color
+            2: has title_horiz_ins_color
+            4: has title_horiz_bottom_color
+            8: has title_vert_left_color
+           10: has title_vert_ins_color
+           20: has title_vert_right_color
+           ...
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+ */
 BITCODE_BL
-dwg_ent_table_get_border_color_overrides_flag(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_border_color_overrides_flag(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -15397,10 +15638,13 @@ dwg_ent_table_get_border_color_overrides_flag(const dwg_ent_table *table, int *e
 }
 
 
-/// Returns border lineweight overrides present value
+/** Returns _dwg_entity_TABLE::has_border_lineweight_overrides, if DXF 95 > 0
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 unsigned char
-dwg_ent_table_has_border_lineweight_overrides(dwg_ent_table *table,
-                                              int *error)
+dwg_ent_table_has_border_lineweight_overrides(dwg_ent_table *restrict table,
+                                              int *restrict error)
 {
   if (table)
     {
@@ -15415,12 +15659,17 @@ dwg_ent_table_has_border_lineweight_overrides(dwg_ent_table *table,
     }
 }
 
-/// Sets border lineweight overrides flag
+/** Sets _dwg_entity_TABLE::border_lineweight_overrides_flag, DXF 95.
+\param[in]  table      dwg_ent_table *
+\param[in]  overrides  0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_border_lineweight_overrides_flag(dwg_ent_table *table,
-                                                   BITCODE_BL overrides, int *error)
+dwg_ent_table_set_border_lineweight_overrides_flag(dwg_ent_table *restrict table,
+                                                   const BITCODE_BL overrides,
+                                                   int *restrict error)
 {
-  if (table)
+  if (table && overrides >=0 && overrides <= 1)
     {
       *error = 0;
       table->border_lineweight_overrides_flag = overrides;
@@ -15428,14 +15677,17 @@ dwg_ent_table_set_border_lineweight_overrides_flag(dwg_ent_table *table,
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Returns border lineweight overrides flag value
+/** Returns _dwg_entity_TABLE::border_lineweight_overrides_flag, DXF 95.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BL
-dwg_ent_table_get_border_lineweight_overrides_flag(const dwg_ent_table *table,
-                                                   int *error)
+dwg_ent_table_get_border_lineweight_overrides_flag(const dwg_ent_table *restrict table,
+                                                   int *restrict error)
 {
   if (table)
     {
@@ -15450,15 +15702,19 @@ dwg_ent_table_get_border_lineweight_overrides_flag(const dwg_ent_table *table,
     }
 }
 
-/// Sets title horiz top lineweight value
+/** Sets _dwg_entity_TABLE::title_horiz_top_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_title_horiz_top_linewt(dwg_ent_table *table,
-                                            BITCODE_BS lw, int *error)
+dwg_ent_table_set_title_horiz_top_linewt(dwg_ent_table *restrict table,
+                                         const BITCODE_BS linewt, int *restrict error)
 {
   if (table)
     {
       *error = 0;
-      table->title_horiz_top_linewt = lw;
+      table->title_horiz_top_linewt = linewt;
     }
   else
     {
@@ -15467,9 +15723,13 @@ dwg_ent_table_set_title_horiz_top_linewt(dwg_ent_table *table,
     }
 }
 
-/// Returns title horiz top lineweight value
+/** Returns _dwg_entity_TABLE::title_horiz_top_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_title_horiz_top_linewt(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_horiz_top_linewt(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -15484,15 +15744,19 @@ dwg_ent_table_get_title_horiz_top_linewt(const dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets title horiz ins lineweight value
+/** Sets _dwg_entity_TABLE::title_horiz_ins_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_title_horiz_ins_linewt(dwg_ent_table *table,
-                                             BITCODE_BS lw, int *error)
+dwg_ent_table_set_title_horiz_ins_linewt(dwg_ent_table *restrict table,
+                                         const BITCODE_BS linewt, int *restrict error)
 {
   if (table)
     {
       *error = 0;
-      table->title_horiz_ins_linewt = lw;
+      table->title_horiz_ins_linewt = linewt;
     }
   else
     {
@@ -15501,9 +15765,13 @@ dwg_ent_table_set_title_horiz_ins_linewt(dwg_ent_table *table,
     }
 }
 
-/// Returns title horiz ins lineweight value
+/** Returns _dwg_entity_TABLE::title_horiz_ins_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_title_horiz_ins_linewt(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_horiz_ins_linewt(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -15518,15 +15786,19 @@ dwg_ent_table_get_title_horiz_ins_linewt(const dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets title horiz bottom lineweight value
+/** Sets _dwg_entity_TABLE::title_horiz_bottom_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_title_horiz_bottom_linewt(dwg_ent_table *table,
-                                                BITCODE_BS lw, int *error)
+dwg_ent_table_set_title_horiz_bottom_linewt(dwg_ent_table *restrict table,
+                                         const BITCODE_BS linewt, int *restrict error)
 {
   if (table)
     {
       *error = 0;
-      table->title_horiz_bottom_linewt = lw;
+      table->title_horiz_bottom_linewt = linewt;
     }
   else
     {
@@ -15535,10 +15807,14 @@ dwg_ent_table_set_title_horiz_bottom_linewt(dwg_ent_table *table,
     }
 }
 
-/// Returns title horiz bottom lineweight value
+/** Returns _dwg_entity_TABLE::title_horiz_bottom_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_title_horiz_bottom_linewt(const dwg_ent_table *table,
-                                                int *error)
+dwg_ent_table_get_title_horiz_bottom_linewt(const dwg_ent_table *restrict table,
+                                            int *restrict error)
 {
   if (table)
     {
@@ -15553,15 +15829,19 @@ dwg_ent_table_get_title_horiz_bottom_linewt(const dwg_ent_table *table,
     }
 }
 
-/// Sets title vert left lineweight value
+/** Sets _dwg_entity_TABLE::title_vert_left_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_title_vert_left_linewt(dwg_ent_table *table,
-                                             BITCODE_BS lw, int *error)
+dwg_ent_table_set_title_vert_left_linewt(dwg_ent_table *restrict table,
+                                         const BITCODE_BS linewt, int *restrict error)
 {
   if (table)
     {
       *error = 0;
-      table->title_vert_left_linewt = lw;
+      table->title_vert_left_linewt = linewt;
     }
   else
     {
@@ -15570,9 +15850,13 @@ dwg_ent_table_set_title_vert_left_linewt(dwg_ent_table *table,
     }
 }
 
-/// Sets title vert left lineweight value
+/** Returns _dwg_entity_TABLE::title_vert_left_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_title_vert_left_linewt(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_vert_left_linewt(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -15587,15 +15871,19 @@ dwg_ent_table_get_title_vert_left_linewt(const dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets title vert ins lineweight value
+/** Sets _dwg_entity_TABLE::title_vert_ins_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_title_vert_ins_linewt(dwg_ent_table *table,
-                                            BITCODE_BS lw, int *error)
+dwg_ent_table_set_title_vert_ins_linewt(dwg_ent_table *restrict table,
+                                        const BITCODE_BS linewt, int *restrict error)
 {
   if (table)
     {
       *error = 0;
-      table->title_vert_ins_linewt = lw;
+      table->title_vert_ins_linewt = linewt;
     }
   else
     {
@@ -15604,9 +15892,13 @@ dwg_ent_table_set_title_vert_ins_linewt(dwg_ent_table *table,
     }
 }
 
-/// Returns title vert ins lineweight
+/** Returns _dwg_entity_TABLE::title_vert_ins_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_title_vert_ins_linewt(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_vert_ins_linewt(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -15621,15 +15913,19 @@ dwg_ent_table_get_title_vert_ins_linewt(const dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets title vert right lineweight
+/** Sets _dwg_entity_TABLE::title_vert_right_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_title_vert_right_linewt(dwg_ent_table *table,
-                                              BITCODE_BS lw, int *error)
+dwg_ent_table_set_title_vert_right_linewt(dwg_ent_table *restrict table,
+                                          const BITCODE_BS linewt, int *restrict error)
 {
   if (table)
     {
       *error = 0;
-      table->title_vert_right_linewt = lw;
+      table->title_vert_right_linewt = linewt;
     }
   else
     {
@@ -15638,9 +15934,13 @@ dwg_ent_table_set_title_vert_right_linewt(dwg_ent_table *table,
     }
 }
 
-/// Returns title vert right lineweight value
+/** Returns _dwg_entity_TABLE::title_vert_right_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_title_vert_right_linewt(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_vert_right_linewt(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -15655,15 +15955,19 @@ dwg_ent_table_get_title_vert_right_linewt(const dwg_ent_table *table, int *error
     }
 }
 
-/// Sets header horiz top lineweight
+/** Sets _dwg_entity_TABLE::header_horiz_top_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_header_horiz_top_linewt(dwg_ent_table *table,
-                                              BITCODE_BS lw, int *error)
+dwg_ent_table_set_header_horiz_top_linewt(dwg_ent_table *restrict table,
+                                          const BITCODE_BS linewt, int *restrict error)
 {
   if (table)
     {
       *error = 0;
-      table->header_horiz_top_linewt = lw;
+      table->header_horiz_top_linewt = linewt;
     }
   else
     {
@@ -15672,9 +15976,13 @@ dwg_ent_table_set_header_horiz_top_linewt(dwg_ent_table *table,
     }
 }
 
-/// Returns header horiz top lineweight value
+/** Returns _dwg_entity_TABLE::header_horiz_top_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_header_horiz_top_linewt(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_header_horiz_top_linewt(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -15689,15 +15997,19 @@ dwg_ent_table_get_header_horiz_top_linewt(const dwg_ent_table *table, int *error
     }
 }
 
-/// Sets header horiz ins lineweight
+/** Sets _dwg_entity_TABLE::header_horiz_ins_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_header_horiz_ins_linewt(dwg_ent_table *table,
-                                              BITCODE_BS lw, int *error)
+dwg_ent_table_set_header_horiz_ins_linewt(dwg_ent_table *restrict table,
+                                          const BITCODE_BS linewt, int *restrict error)
 {
   if (table)
     {
       *error = 0;
-      table->header_horiz_ins_linewt = lw;
+      table->header_horiz_ins_linewt = linewt;
     }
   else
     {
@@ -15706,10 +16018,14 @@ dwg_ent_table_set_header_horiz_ins_linewt(dwg_ent_table *table,
     }
 }
 
-/// Returns header horiz ins lineweight value
+/** Returns _dwg_entity_TABLE::header_horiz_ins_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_header_horiz_ins_linewt(const dwg_ent_table *table,
-                                              int *error)
+dwg_ent_table_get_header_horiz_ins_linewt(const dwg_ent_table *restrict table,
+                                          int *restrict error)
 {
   if (table)
     {
@@ -15724,15 +16040,20 @@ dwg_ent_table_get_header_horiz_ins_linewt(const dwg_ent_table *table,
     }
 }
 
-/// Sets header horiz bottom lineweight value
+/** Sets _dwg_entity_TABLE::header_horiz_bottom_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_header_horiz_bottom_linewt(dwg_ent_table *table,
-                                                 BITCODE_BS lw, int *error)
+dwg_ent_table_set_header_horiz_bottom_linewt(dwg_ent_table *restrict table,
+                                             const BITCODE_BS linewt,
+                                             int *restrict error)
 {
   if (table)
     {
       *error = 0;
-      table->header_horiz_bottom_linewt = lw;
+      table->header_horiz_bottom_linewt = linewt;
     }
   else
     {
@@ -15741,10 +16062,14 @@ dwg_ent_table_set_header_horiz_bottom_linewt(dwg_ent_table *table,
     }
 }
 
-/// Returns header horiz bottom lineweight value
+/** Returns _dwg_entity_TABLE::header_horiz_bottom_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_header_horiz_bottom_linewt(const dwg_ent_table *table,
-                                                 int *error)
+dwg_ent_table_get_header_horiz_bottom_linewt(const dwg_ent_table *restrict table,
+                                             int *restrict error)
 {
   if (table)
     {
@@ -15759,15 +16084,19 @@ dwg_ent_table_get_header_horiz_bottom_linewt(const dwg_ent_table *table,
     }
 }
 
-/// Sets header vert left lineweight value
+/** Sets _dwg_entity_TABLE::header_vert_left_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_header_vert_left_linewt(dwg_ent_table *table,
-                                              BITCODE_BS lw, int *error)
+dwg_ent_table_set_header_vert_left_linewt(dwg_ent_table *restrict table,
+                                          const BITCODE_BS linewt, int *restrict error)
 {
   if (table)
     {
       *error = 0;
-      table->header_vert_left_linewt = lw;
+      table->header_vert_left_linewt = linewt;
     }
   else
     {
@@ -15776,9 +16105,13 @@ dwg_ent_table_set_header_vert_left_linewt(dwg_ent_table *table,
     }
 }
 
-/// Returns header vert left lineweight value
+/** Returns _dwg_entity_TABLE::header_vert_left_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_header_vert_left_linewt(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_header_vert_left_linewt(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -15793,15 +16126,19 @@ dwg_ent_table_get_header_vert_left_linewt(const dwg_ent_table *table, int *error
     }
 }
 
-/// Sets header vert ins lineweight
+/** Sets _dwg_entity_TABLE::header_vert_ins_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_header_vert_ins_linewt(dwg_ent_table *table,
-                                             BITCODE_BS lw, int *error)
+dwg_ent_table_set_header_vert_ins_linewt(dwg_ent_table *restrict table,
+                                         const BITCODE_BS linewt, int *restrict error)
 {
   if (table)
     {
       *error = 0;
-      table->header_vert_ins_linewt = lw;
+      table->header_vert_ins_linewt = linewt;
     }
   else
     {
@@ -15810,9 +16147,12 @@ dwg_ent_table_set_header_vert_ins_linewt(dwg_ent_table *table,
     }
 }
 
-/// Returns header vert ins lineweight value
+/** Returns _dwg_entity_TABLE::header_vert_ins_linewt
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_header_vert_ins_linewt(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_header_vert_ins_linewt(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -15827,15 +16167,19 @@ dwg_ent_table_get_header_vert_ins_linewt(const dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets header vert right lineweight value
+/** Sets _dwg_entity_TABLE::header_vert_right_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_header_vert_right_linewt(dwg_ent_table *table,
-                                               BITCODE_BS lw, int *error)
+dwg_ent_table_set_header_vert_right_linewt(dwg_ent_table *restrict table,
+                                           const BITCODE_BS linewt, int *restrict error)
 {
   if (table)
     {
       *error = 0;
-      table->header_vert_right_linewt = lw;
+      table->header_vert_right_linewt = linewt;
     }
   else
     {
@@ -15844,10 +16188,13 @@ dwg_ent_table_set_header_vert_right_linewt(dwg_ent_table *table,
     }
 }
 
-/// Returns header vert right lineweight value
+/** Returns _dwg_entity_TABLE::header_vert_right_linewt
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_header_vert_right_linewt(const dwg_ent_table *table,
-                                               int *error)
+dwg_ent_table_get_header_vert_right_linewt(const dwg_ent_table *restrict table,
+                                           int *restrict error)
 {
   if (table)
     {
@@ -15862,15 +16209,19 @@ dwg_ent_table_get_header_vert_right_linewt(const dwg_ent_table *table,
     }
 }
 
-/// Sets data horiz top lineweight value
+/** Sets _dwg_entity_TABLE::data_horiz_top_linewt, DXF ?.
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_data_horiz_top_linewt(dwg_ent_table *table,
-                                            BITCODE_BS lw, int *error)
+dwg_ent_table_set_data_horiz_top_linewt(dwg_ent_table *restrict table,
+                                        const BITCODE_BS linewt, int *restrict error)
 {
   if (table)
     {
       *error = 0;
-      table->data_horiz_top_linewt = lw;
+      table->data_horiz_top_linewt = linewt;
     }
   else
     {
@@ -15879,9 +16230,14 @@ dwg_ent_table_set_data_horiz_top_linewt(dwg_ent_table *table,
     }
 }
 
-/// Returns data horiz top lineweight value
+/** Returns _dwg_entity_TABLE::data_horiz_top_linewt, DXF ?.
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_data_horiz_top_linewt(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_data_horiz_top_linewt(const dwg_ent_table *restrict table,
+                                        int *restrict error)
 {
   if (table)
     {
@@ -15896,15 +16252,20 @@ dwg_ent_table_get_data_horiz_top_linewt(const dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets data horiz ins lineweight value
+/** Sets _dwg_entity_TABLE::data_horiz_ins_linewt, DXF ?.
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_data_horiz_ins_linewt(dwg_ent_table *table,
-                                            BITCODE_BS lw, int *error)
+dwg_ent_table_set_data_horiz_ins_linewt(dwg_ent_table *restrict table,
+                                        const BITCODE_BS linewt,
+                                        int *restrict error)
 {
   if (table)
     {
       *error = 0;
-      table->data_horiz_ins_linewt = lw;
+      table->data_horiz_ins_linewt = linewt;
     }
   else
     {
@@ -15913,9 +16274,14 @@ dwg_ent_table_set_data_horiz_ins_linewt(dwg_ent_table *table,
     }
 }
 
-/// Returns data horiz ins lineweight value
+/** Returns _dwg_entity_TABLE::data_horiz_ins_linewt, DXF ?.
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_data_horiz_ins_linewt(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_data_horiz_ins_linewt(const dwg_ent_table *restrict table,
+                                        int *restrict error)
 {
   if (table)
     {
@@ -15930,15 +16296,20 @@ dwg_ent_table_get_data_horiz_ins_linewt(const dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets data horiz bottom lineweight
+/** Sets _dwg_entity_TABLE::data_horiz_bottom_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_data_horiz_bottom_linewt(dwg_ent_table *table,
-                                               BITCODE_BS lw, int *error)
+dwg_ent_table_set_data_horiz_bottom_linewt(dwg_ent_table *restrict table,
+                                           const BITCODE_BS linewt,
+                                           int *restrict error)
 {
   if (table)
     {
       *error = 0;
-      table->data_horiz_bottom_linewt = lw;
+      table->data_horiz_bottom_linewt = linewt;
     }
   else
     {
@@ -15947,10 +16318,13 @@ dwg_ent_table_set_data_horiz_bottom_linewt(dwg_ent_table *table,
     }
 }
 
-/// Returns data horiz bottom lineweight
+/** Returns _dwg_entity_TABLE::data_horiz_bottom_linewt
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_data_horiz_bottom_linewt(const dwg_ent_table *table,
-                                               int *error)
+dwg_ent_table_get_data_horiz_bottom_linewt(const dwg_ent_table *restrict table,
+                                           int *restrict error)
 {
   if (table)
     {
@@ -15965,15 +16339,19 @@ dwg_ent_table_get_data_horiz_bottom_linewt(const dwg_ent_table *table,
     }
 }
 
-/// Sets data vert ins lineweight value
+/** Sets _dwg_entity_TABLE::data_horiz_ins_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_data_vert_ins_linewt(dwg_ent_table *table,
-                                           BITCODE_BS lw, int *error)
+dwg_ent_table_set_data_vert_ins_linewt(dwg_ent_table *restrict table,
+                                       BITCODE_BS linewt, int *restrict error)
 {
   if (table)
     {
       *error = 0;
-      table->data_horiz_ins_linewt = lw;
+      table->data_horiz_ins_linewt = linewt;
     }
   else
     {
@@ -15982,9 +16360,12 @@ dwg_ent_table_set_data_vert_ins_linewt(dwg_ent_table *table,
     }
 }
 
-/// Returns title border visibility overrides flag
+/** Returns _dwg_entity_TABLE::data_horiz_ins_linewt
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_data_vert_ins_linewt(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_data_vert_ins_linewt(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -16000,10 +16381,13 @@ dwg_ent_table_get_data_vert_ins_linewt(const dwg_ent_table *table, int *error)
 }
 
 
-/// Returns title border visibility overrides flag
+/** Returns _dwg_entity_TABLE::has_border_visibility_overrides
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 unsigned char
-dwg_ent_table_has_border_visibility_overrides(dwg_ent_table *table,
-                                                      int *error)
+dwg_ent_table_has_border_visibility_overrides(dwg_ent_table *restrict table,
+                                              int *restrict error)
 {
   if (table)
     {
@@ -16018,12 +16402,17 @@ dwg_ent_table_has_border_visibility_overrides(dwg_ent_table *table,
     }
 }
 
-/// Sets title border visibility overrides flag
+/** Sets _dwg_entity_TABLE::border_visibility_overrides_flag, DXF 96.
+\param[in]  table      dwg_ent_table *
+\param[in]  overrides  0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_border_visibility_overrides_flag(dwg_ent_table *table,
-                                                   BITCODE_BL overrides, int *error)
+dwg_ent_table_set_border_visibility_overrides_flag(dwg_ent_table *restrict table,
+                                                   BITCODE_BL overrides,
+                                                   int *restrict error)
 {
-  if (table)
+  if (table && overrides <= 1)
     {
       *error = 0;
       table->border_visibility_overrides_flag = overrides;
@@ -16031,14 +16420,17 @@ dwg_ent_table_set_border_visibility_overrides_flag(dwg_ent_table *table,
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Returns title border visibility overrides flag
+/** Returns _dwg_entity_TABLE::border_visibility_overrides_flag, DXF 96.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BL
-dwg_ent_table_get_border_visibility_overrides_flag(const dwg_ent_table *table,
-                                                   int *error)
+dwg_ent_table_get_border_visibility_overrides_flag(const dwg_ent_table *restrict table,
+                                                   int *restrict error)
 {
   if (table)
     {
@@ -16053,27 +16445,35 @@ dwg_ent_table_get_border_visibility_overrides_flag(const dwg_ent_table *table,
     }
 }
 
-/// Sets title horiz top visibility
+/** Sets _dwg_entity_TABLE::title_horiz_top_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[in]  visibility 0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_title_horiz_top_visibility(dwg_ent_table *table,
+dwg_ent_table_set_title_horiz_top_visibility(dwg_ent_table *restrict table,
                                              BITCODE_BS visibility,
-                                             int *error)
+                                             int *restrict error)
 {
-  if (table)
+  if (table && visibility >=0 && visibility <= 1)
     {
       *error = 0;
+      if (visibility) table->border_visibility_overrides_flag |= 0x1;
       table->title_horiz_top_visibility = visibility;
     }
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Returns title horiz top visibility
+/** Returns _dwg_entity_TABLE::title_horiz_top_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_title_horiz_top_visibility(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_horiz_top_visibility(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -16088,27 +16488,35 @@ dwg_ent_table_get_title_horiz_top_visibility(const dwg_ent_table *table, int *er
     }
 }
 
-/// Sets title horiz ins visibility
+/** Sets _dwg_entity_TABLE::title_horiz_ins_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[in]  visibility 0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_title_horiz_ins_visibility(dwg_ent_table *table,
+dwg_ent_table_set_title_horiz_ins_visibility(dwg_ent_table *restrict table,
                                              BITCODE_BS visibility,
-                                             int *error)
+                                             int *restrict error)
 {
-  if (table)
+  if (table && visibility <= 1)
     {
       *error = 0;
+      if (visibility) table->border_visibility_overrides_flag |= 0x2;
       table->title_horiz_ins_visibility = visibility;
     }
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Returns title horiz ins visibility
+/** Returns _dwg_entity_TABLE::title_horiz_ins_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_title_horiz_ins_visibility(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_horiz_ins_visibility(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -16123,28 +16531,36 @@ dwg_ent_table_get_title_horiz_ins_visibility(const dwg_ent_table *table, int *er
     }
 }
 
-/// Sets title horiz bottom visibility
+/** Sets _dwg_entity_TABLE::title_horiz_bottom_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[in]  visibility 0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_title_horiz_bottom_visibility(dwg_ent_table *table,
+dwg_ent_table_set_title_horiz_bottom_visibility(dwg_ent_table *restrict table,
                                                 BITCODE_BS visibility,
-                                                int *error)
+                                                int *restrict error)
 {
-  if (table)
+  if (table && visibility <= 1)
     {
       *error = 0;
+      if (visibility) table->border_visibility_overrides_flag |= 0x4;
       table->title_horiz_bottom_visibility = visibility;
     }
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Returns title horiz bottom visibility
+/** Returns _dwg_entity_TABLE::title_horiz_bottom_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_title_horiz_bottom_visibility(const dwg_ent_table *table,
-                                                int *error)
+dwg_ent_table_get_title_horiz_bottom_visibility(const dwg_ent_table *restrict table,
+                                                int *restrict error)
 {
   if (table)
     {
@@ -16159,27 +16575,35 @@ dwg_ent_table_get_title_horiz_bottom_visibility(const dwg_ent_table *table,
     }
 }
 
-/// Sets title vert left visibility
+/** Sets _dwg_entity_TABLE::title_vert_left_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[in]  visibility 0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_title_vert_left_visibility(dwg_ent_table *table,
+dwg_ent_table_set_title_vert_left_visibility(dwg_ent_table *restrict table,
                                              BITCODE_BS visibility,
-                                             int *error)
+                                             int *restrict error)
 {
-  if (table)
+  if (table && visibility <= 1)
     {
       *error = 0;
+      if (visibility) table->border_visibility_overrides_flag |= 0x8;
       table->title_vert_left_visibility = visibility;
     }
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Returns title vert left visibility
+/** Returns _dwg_entity_TABLE::title_vert_left_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_title_vert_left_visibility(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_vert_left_visibility(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -16194,27 +16618,35 @@ dwg_ent_table_get_title_vert_left_visibility(const dwg_ent_table *table, int *er
     }
 }
 
-/// Sets title vert ins visibility
+/** Sets _dwg_entity_TABLE::title_vert_ins_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[in]  visibility 0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_title_vert_ins_visibility(dwg_ent_table *table,
+dwg_ent_table_set_title_vert_ins_visibility(dwg_ent_table *restrict table,
                                             BITCODE_BS visibility,
-                                            int *error)
+                                            int *restrict error)
 {
-  if (table)
+  if (table && visibility <= 1)
     {
       *error = 0;
+      if (visibility) table->border_visibility_overrides_flag |= 0x10;
       table->title_vert_ins_visibility = visibility;
     }
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Returns title vert ins visibility
+/** Returns _dwg_entity_TABLE::title_vert_ins_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_title_vert_ins_visibility(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_vert_ins_visibility(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -16229,28 +16661,36 @@ dwg_ent_table_get_title_vert_ins_visibility(const dwg_ent_table *table, int *err
     }
 }
 
-/// Sets title vert right visibility
+/** Sets _dwg_entity_TABLE::title_vert_right_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[in]  visibility 0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_title_vert_right_visibility(dwg_ent_table *table,
+dwg_ent_table_set_title_vert_right_visibility(dwg_ent_table *restrict table,
                                               BITCODE_BS visibility,
-                                              int *error)
+                                              int *restrict error)
 {
-  if (table)
+  if (table && visibility <= 1)
     {
       *error = 0;
+      if (visibility) table->border_visibility_overrides_flag |= 0x20;
       table->title_vert_right_visibility = visibility;
     }
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Returns title vert right visibility
+/** Returns _dwg_entity_TABLE::title_vert_right_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_title_vert_right_visibility(const dwg_ent_table *table,
-                                              int *error)
+dwg_ent_table_get_title_vert_right_visibility(const dwg_ent_table *restrict table,
+                                              int *restrict error)
 {
   if (table)
     {
@@ -16265,28 +16705,36 @@ dwg_ent_table_get_title_vert_right_visibility(const dwg_ent_table *table,
     }
 }
 
-/// Sets data header horiz top visibility
+/** Sets _dwg_entity_TABLE::header_horiz_top_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[in]  visibility 0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_header_horiz_top_visibility(dwg_ent_table *table,
+dwg_ent_table_set_header_horiz_top_visibility(dwg_ent_table *restrict table,
                                               BITCODE_BS visibility,
-                                              int *error)
+                                              int *restrict error)
 {
-  if (table)
+  if (table && visibility <= 1)
     {
       *error = 0;
+      if (visibility) table->border_visibility_overrides_flag |= 0x40;
       table->header_horiz_top_visibility = visibility;
     }
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Returns data header horiz top visibility
+/** Returns _dwg_entity_TABLE::header_horiz_top_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_header_horiz_top_visibility(const dwg_ent_table *table,
-                                              int *error)
+dwg_ent_table_get_header_horiz_top_visibility(const dwg_ent_table *restrict table,
+                                              int *restrict error)
 {
   if (table)
     {
@@ -16301,28 +16749,36 @@ dwg_ent_table_get_header_horiz_top_visibility(const dwg_ent_table *table,
     }
 }
 
-/// Sets data header horiz ins visibility
+/** Sets _dwg_entity_TABLE::header_horiz_ins_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[in]  visibility 0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_header_horiz_ins_visibility(dwg_ent_table *table,
+dwg_ent_table_set_header_horiz_ins_visibility(dwg_ent_table *restrict table,
                                               BITCODE_BS visibility,
-                                              int *error)
+                                              int *restrict error)
 {
-  if (table)
+  if (table && visibility <= 1)
     {
       *error = 0;
+      if (visibility) table->border_visibility_overrides_flag |= 0x80;
       table->header_horiz_ins_visibility = visibility;
     }
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Returns data header horiz ins visibility
+/** Returns _dwg_entity_TABLE::header_horiz_ins_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_header_horiz_ins_visibility(const dwg_ent_table *table,
-                                              int *error)
+dwg_ent_table_get_header_horiz_ins_visibility(const dwg_ent_table *restrict table,
+                                              int *restrict error)
 {
   if (table)
     {
@@ -16337,28 +16793,36 @@ dwg_ent_table_get_header_horiz_ins_visibility(const dwg_ent_table *table,
     }
 }
 
-/// Sets data header vert left visibility
+/** Sets _dwg_entity_TABLE::header_horiz_bottom_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[in]  visibility 0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_header_horiz_bottom_visibility(dwg_ent_table *table,
+dwg_ent_table_set_header_horiz_bottom_visibility(dwg_ent_table *restrict table,
                                                  BITCODE_BS visibility,
-                                                 int *error)
+                                                 int *restrict error)
 {
-  if (table)
+  if (table && visibility <= 1)
     {
       *error = 0;
+      if (visibility) table->border_visibility_overrides_flag |= 0x100;
       table->header_horiz_bottom_visibility = visibility;
     }
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Get data header horiz_bottom visibility
+/** Returns _dwg_entity_TABLE::header_horiz_bottom_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_header_horiz_bottom_visibility(const dwg_ent_table *table,
-                                                 int *error)
+dwg_ent_table_get_header_horiz_bottom_visibility(const dwg_ent_table *restrict table,
+                                                 int *restrict error)
 {
   if (table)
     {
@@ -16373,10 +16837,36 @@ dwg_ent_table_get_header_horiz_bottom_visibility(const dwg_ent_table *table,
     }
 }
 
-/// Returns data header vert left visibility
+/** Sets _dwg_entity_TABLE::header_vert_left_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[in]  visibility 0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
+void
+dwg_ent_table_set_header_vert_left_visibility(dwg_ent_table *restrict table,
+                                               BITCODE_BS visibility,
+                                               int *restrict error)
+{
+  if (table && visibility <= 1)
+    {
+      *error = 0;
+      if (visibility) table->border_visibility_overrides_flag |= 0x200;
+      table->header_vert_left_visibility = visibility;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
+    }
+}
+
+/** Returns _dwg_entity_TABLE::header_vert_left_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_header_vert_left_visibility(const dwg_ent_table *table,
-                                              int *error)
+dwg_ent_table_get_header_vert_left_visibility(const dwg_ent_table *restrict table,
+                                              int *restrict error)
 {
   if (table)
     {
@@ -16391,27 +16881,35 @@ dwg_ent_table_get_header_vert_left_visibility(const dwg_ent_table *table,
     }
 }
 
-/// Sets data header vert ins visibility
+/** Sets _dwg_entity_TABLE::header_vert_ins_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[in]  visibility 0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_header_vert_ins_visibility(dwg_ent_table *table,
+dwg_ent_table_set_header_vert_ins_visibility(dwg_ent_table *restrict table,
                                              BITCODE_BS visibility,
-                                             int *error)
+                                             int *restrict error)
 {
-  if (table)
+  if (table && visibility <= 1)
     {
       *error = 0;
+      if (visibility) table->border_visibility_overrides_flag |= 0x400;
       table->header_vert_ins_visibility = visibility;
     }
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Returns data header vert ins visibility
+/** Returns _dwg_entity_TABLE::header_vert_ins_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_header_vert_ins_visibility(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_header_vert_ins_visibility(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -16426,28 +16924,36 @@ dwg_ent_table_get_header_vert_ins_visibility(const dwg_ent_table *table, int *er
     }
 }
 
-/// Sets data header vert right visibility
+/** Sets data header vert right visibility
+\param[in]  table      dwg_ent_table *
+\param[in]  visibility 0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_header_vert_right_visibility(dwg_ent_table *table,
+dwg_ent_table_set_header_vert_right_visibility(dwg_ent_table *restrict table,
                                                BITCODE_BS visibility,
-                                               int *error)
+                                               int *restrict error)
 {
-  if (table)
+  if (table && visibility >=0 && visibility <= 1)
     {
       *error = 0;
+      if (visibility) table->border_visibility_overrides_flag |= 0x800;
       table->header_vert_right_visibility = visibility;
     }
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Returns data header vert right visibility
+/** Returns _dwg_entity_TABLE::header_vert_right_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_header_vert_right_visibility(const dwg_ent_table *table,
-                                               int *error)
+dwg_ent_table_get_header_vert_right_visibility(const dwg_ent_table *restrict table,
+                                               int *restrict error)
 {
   if (table)
     {
@@ -16462,27 +16968,35 @@ dwg_ent_table_get_header_vert_right_visibility(const dwg_ent_table *table,
     }
 }
 
-/// Sets data horiz top visibility
+/** Sets _dwg_entity_TABLE::data_horiz_top_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[in]  visibility 0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_data_horiz_top_visibility(dwg_ent_table *table,
+dwg_ent_table_set_data_horiz_top_visibility(dwg_ent_table *restrict table,
                                             BITCODE_BS visibility,
-                                            int *error)
+                                            int *restrict error)
 {
-  if (table)
+  if (table && visibility <= 1)
     {
       *error = 0;
+      if (visibility) table->border_visibility_overrides_flag |= 0x1000;
       table->data_horiz_top_visibility = visibility;
     }
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Returns data horiz top visibility
+/** Returns _dwg_entity_TABLE::data_horiz_top_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_data_horiz_top_visibility(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_data_horiz_top_visibility(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -16497,27 +17011,35 @@ dwg_ent_table_get_data_horiz_top_visibility(const dwg_ent_table *table, int *err
     }
 }
 
-/// Sets data horiz ins visibility
+/** Sets _dwg_entity_TABLE::data_horiz_ins_visibility, DXF ?
+\param[in]  table      dwg_ent_table *
+\param[in]  visibility 0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_data_horiz_ins_visibility(dwg_ent_table *table,
+dwg_ent_table_set_data_horiz_ins_visibility(dwg_ent_table *restrict table,
                                             BITCODE_BS visibility,
-                                            int *error)
+                                            int *restrict error)
 {
-  if (table)
+  if (table && visibility <= 1)
     {
       *error = 0;
+      if (visibility) table->border_visibility_overrides_flag |= 0x2000;
       table->data_horiz_ins_visibility = visibility;
     }
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Returns data horiz ins visibility
+/** Returns _dwg_entity_TABLE::data_horiz_ins_visibility, DXF ?
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_data_horiz_ins_visibility(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_data_horiz_ins_visibility(const dwg_ent_table *restrict table, int *restrict error)
 {
   if (table)
     {
@@ -16527,33 +17049,41 @@ dwg_ent_table_get_data_horiz_ins_visibility(const dwg_ent_table *table, int *err
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
       return 0;
     }
 }
 
-/// Sets data horiz bottom visibility
+/** Sets _dwg_entity_TABLE::data_horiz_bottom_visibility, DXF ?.
+\param[in]  table      dwg_ent_table *
+\param[in]  visibility 0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_data_horiz_bottom_visibility(dwg_ent_table *table,
+dwg_ent_table_set_data_horiz_bottom_visibility(dwg_ent_table *restrict table,
                                                BITCODE_BS visibility,
-                                               int *error)
+                                               int *restrict error)
 {
-  if (table)
+  if (table && visibility <= 1)
     {
       *error = 0;
+      if (visibility) table->border_visibility_overrides_flag |= 0x4000;
       table->data_horiz_bottom_visibility = visibility;
     }
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Returns data horiz bottom visibility
+/** Returns _dwg_entity_TABLE::data_horiz_bottom_visibility, DXF ?.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_data_horiz_bottom_visibility(const dwg_ent_table *table,
-                                               int *error)
+dwg_ent_table_get_data_horiz_bottom_visibility(const dwg_ent_table *restrict table,
+                                               int *restrict error)
 {
   if (table)
     {
@@ -16568,32 +17098,41 @@ dwg_ent_table_get_data_horiz_bottom_visibility(const dwg_ent_table *table,
     }
 }
 
-/// Sets data vert right visibility
+/** Sets _dwg_entity_TABLE::data_vert_left_visibility, DXF ?.
+\param[in]  table      dwg_ent_table *
+\param[in]  visibility 0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_data_vert_ins_visibility(dwg_ent_table *table,
-                                           BITCODE_BS visibility,
-                                           int *error)
+dwg_ent_table_set_data_vert_left_visibility(dwg_ent_table *restrict table,
+                                           const BITCODE_BS visibility,
+                                           int *restrict error)
 {
-  if (table)
+  if (table && visibility >=0 && visibility <= 1)
     {
       *error = 0;
-      table->data_horiz_ins_visibility = visibility;
+      if (visibility) table->border_visibility_overrides_flag |= 0x8000;
+      table->data_vert_left_visibility = visibility;
     }
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Returns data vert ins visibility
+/** Returns _dwg_entity_TABLE::data_vert_left_visibility, DXF ?.
+\param[in]  table  dwg_ent_table *
+\param[out] error  set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_data_vert_ins_visibility(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_data_vert_left_visibility(const dwg_ent_table *restrict table,
+                                            int *restrict error)
 {
   if (table)
     {
       *error = 0;
-      return table->data_horiz_ins_visibility;
+      return table->data_vert_left_visibility;
     }
   else
     {
@@ -16603,27 +17142,82 @@ dwg_ent_table_get_data_vert_ins_visibility(const dwg_ent_table *table, int *erro
     }
 }
 
-/// Sets data vert right visibility
+/** Sets _dwg_entity_TABLE::data_vert_ins_visibility, DXF ?.
+\param[in]  table      dwg_ent_table *
+\param[in]  visibility 0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_data_vert_right_visibility(dwg_ent_table *table,
-                                             BITCODE_BS visibility,
-                                             int *error)
+dwg_ent_table_set_data_vert_ins_visibility(dwg_ent_table *restrict table,
+                                           const BITCODE_BS visibility,
+                                           int *restrict error)
+{
+  if (table && visibility >=0 && visibility <= 1)
+    {
+      *error = 0;
+      if (visibility) table->border_visibility_overrides_flag |= 0x10000;
+      table->data_vert_ins_visibility = visibility;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
+    }
+}
+
+/** Returns _dwg_entity_TABLE::data_vert_ins_visibility, DXF ?.
+\param[in]  table  dwg_ent_table *
+\param[out] error  set to 0 for ok, 1 on error
+*/
+BITCODE_BS
+dwg_ent_table_get_data_vert_ins_visibility(const dwg_ent_table *restrict table,
+                                           int *restrict error)
 {
   if (table)
     {
       *error = 0;
-      table->data_vert_right_visibility = visibility;
+      return table->data_vert_ins_visibility;
     }
   else
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
     }
 }
 
-/// Returns data vert right visibility
+/** Sets the table data vert right visibility.
+    Bit 0x20000 of border_visibility override flag, DXF 96
+\param[in]  table      dwg_ent_table *
+\param[in]  visibility short: 0 = visible, 1 = invisible
+\param[out] error      set to 0 for ok, 1 on error
+*/
+void
+dwg_ent_table_set_data_vert_right_visibility(dwg_ent_table *restrict table,
+                                             const BITCODE_BS visibility,
+                                             int *restrict error)
+{
+  if (table && visibility <= 1)
+    {
+      *error = 0;
+      if (visibility) table->border_visibility_overrides_flag |= 0x20000;
+      table->data_vert_right_visibility = visibility;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
+    }
+}
+
+/** Returns _dwg_entity_TABLE::data vert right visibility, DXF ?.
+    Bit 0x20000 of border_visibility override flag, DXF 96
+\param[in]  table  dwg_ent_table *
+\param[out] error  set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_data_vert_right_visibility(const dwg_ent_table *table, int *error)
+dwg_ent_table_get_data_vert_right_visibility(const dwg_ent_table *restrict table,
+                                             int *restrict error)
 {
   if (table)
     {
@@ -16642,8 +17236,11 @@ dwg_ent_table_get_data_vert_right_visibility(const dwg_ent_table *table, int *er
 *               FUNCTIONS FOR BLOCK_CONTROL OBJECT                  *
 ********************************************************************/
 
-/// Returns block control object from a block header type argument passed to function
-/** Usage :- dwg_obj_block_control *blc = dwg_block_header_get_block_control(hdr);
+/** Returns the block control object from the block header
+\code Usage: dwg_obj_block_control *blk = dwg_block_header_get_block_control(hdr, &error);
+\endcode
+\param[in]  block_header
+\param[out] error  set to 0 for ok, >0 if not found.
 */
 dwg_obj_block_control *
 dwg_block_header_get_block_control(const dwg_obj_block_header* block_header,
@@ -16652,6 +17249,7 @@ dwg_block_header_get_block_control(const dwg_obj_block_header* block_header,
   if (block_header &&
       block_header->block_control &&
       block_header->block_control->obj &&
+      block_header->block_control->obj->type == DWG_TYPE_BLOCK_CONTROL &&
       block_header->block_control->obj->tio.object)
     {
       *error = 0;
@@ -16660,12 +17258,15 @@ dwg_block_header_get_block_control(const dwg_obj_block_header* block_header,
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
       return NULL;
     }
 }
 
-/// Extracts and returns all block headers
+/** Extracts and returns all block headers as references
+\param[in]  ctrl
+\param[out] error  set to 0 for ok, >0 if not found.
+*/
 dwg_object_ref **
 dwg_obj_block_control_get_block_headers(const dwg_obj_block_control *ctrl,
                                         int *error)
@@ -16690,7 +17291,10 @@ dwg_obj_block_control_get_block_headers(const dwg_obj_block_control *ctrl,
     }
 }
 
-/// Returns number of blocks
+/** Returns number of blocks
+\param[in]  ctrl
+\param[out] error  set to 0 for ok, >0 if not found.
+*/
 BITCODE_BL
 dwg_obj_block_control_get_num_entries(const dwg_obj_block_control *ctrl, int *error)
 {
@@ -16707,7 +17311,10 @@ dwg_obj_block_control_get_num_entries(const dwg_obj_block_control *ctrl, int *er
     }
 }
 
-/// Returns model space block
+/** Returns reference to model space block
+\param[in]  ctrl
+\param[out] error  set to 0 for ok, >0 if not found.
+*/
 dwg_object_ref *
 dwg_obj_block_control_get_model_space(const dwg_obj_block_control *ctrl, int *error)
 {
@@ -16724,7 +17331,10 @@ dwg_obj_block_control_get_model_space(const dwg_obj_block_control *ctrl, int *er
     }
 }
 
-/// Returns paper space block
+/** Returns reference to paper space block
+\param[in]  ctrl
+\param[out] error  set to 0 for ok, >0 if not found.
+*/
 dwg_object_ref *
 dwg_obj_block_control_get_paper_space(const dwg_obj_block_control *ctrl, int *error)
 {
@@ -16745,8 +17355,11 @@ dwg_obj_block_control_get_paper_space(const dwg_obj_block_control *ctrl, int *er
 *                    FUNCTIONS FOR LAYER OBJECT                     *
 ********************************************************************/
 
-/// Get name of the layer (utf-8 encoded)
-/** Usage :- char * layer_name = dwg_obj_layer_get_name(layer);
+/** Get name of the layer (utf-8 encoded)
+\code Usage: char* layer_name = dwg_obj_layer_get_name(layer, &error);
+\endcode
+\param[in]  layer
+\param[out] error  set to 0 for ok, >0 if not found.
 */
 char *
 dwg_obj_layer_get_name(const dwg_obj_layer *layer, int *error)
@@ -16772,8 +17385,11 @@ dwg_obj_layer_get_name(const dwg_obj_layer *layer, int *error)
 *                FUNCTIONS FOR BLOCK_HEADER OBJECT                  *
 ********************************************************************/
 
-/// Get name of the block header (utf-8 encoded)
-/** Usage :- char * block_name = dwg_obj_block_header_get_name(hdr);
+/** Get name of the block header (utf-8 encoded)
+\code Usage: char* block_name = dwg_obj_block_header_get_name(hdr, &error);
+\endcode
+\param[in]  hdr
+\param[out] error  set to 0 for ok, >0 if not found.
 */
 char *
 dwg_obj_block_header_get_name(const dwg_obj_block_header *hdr, int *error)
@@ -16794,11 +17410,12 @@ dwg_obj_block_header_get_name(const dwg_obj_block_header *hdr, int *error)
     }
 }
 
-/// Returns 1st block header present in the dwg file
-/** Usage :- dwg_obj_block_header = dwg_get_block_header(dwg, &error);
-Usually the model space block.
-\param 1 dwg_data
-\param 2 int
+/** Returns 1st block header present in the dwg file.
+    Usually the model space block.
+\code Usage: dwg_obj_block_header = dwg_get_block_header(dwg, &error);
+\endcode
+\param[in]  dwg
+\param[out] error  set to 0 for ok, >0 if not found.
 */
 dwg_obj_block_header *
 dwg_get_block_header(dwg_data *dwg, int *error)
@@ -16807,20 +17424,31 @@ dwg_get_block_header(dwg_data *dwg, int *error)
   Dwg_Object_BLOCK_HEADER *blk;
 
   *error = 0;
-  assert(dwg->num_classes < 1000);
-  assert(dwg->num_objects < 0xfffffff); // 0x4fa463eb
+  if (!dwg || dwg->num_classes > 1000 || dwg->num_objects > 0xfffffff)
+    {
+      *error = 1;
+      return NULL;
+    }
   if (dwg_version == R_INVALID)
     dwg_version = (Dwg_Version_Type)dwg->header.version;
 
   obj = &dwg->object[0];
   while (obj && obj->type != DWG_TYPE_BLOCK_HEADER)
     {
-      assert(obj->size < 0xffff);
+      if (obj->size > 0xffff)
+        {
+          *error = 2;
+          return NULL;
+        }
       obj = dwg_next_object(obj);
     }
   if (obj && DWG_TYPE_BLOCK_HEADER == obj->type)
     {
-      assert(obj->size < 0xffff);
+      if (obj->size > 0xffff)
+        {
+          *error = 2;
+          return NULL;
+        }
       blk = obj->tio.object->tio.BLOCK_HEADER;
       if (!strcmp(blk->entry_name, "*Paper_Space"))
         dwg->pspace_block = obj;
@@ -16830,7 +17458,7 @@ dwg_get_block_header(dwg_data *dwg, int *error)
     }
   else
     {
-      *error = 1;
+      *error = 3;
       LOG_ERROR("%s: BLOCK_HEADER not found", __FUNCTION__)
       return NULL;
     }
@@ -16840,72 +17468,177 @@ dwg_get_block_header(dwg_data *dwg, int *error)
 *                    FUNCTIONS FOR DWG OBJECT                       *
 ********************************************************************/
 
+/** Returns the number of classes or 0
+\code Usage: unsigned num_classes = dwg_get_num_classes(dwg);
+\endcode
+\param[in]  dwg   dwg_data*
+*/
 unsigned int
 dwg_get_num_classes(const dwg_data *dwg)
 {
+  if (!dwg)
+    return 0;
   if (dwg_version == R_INVALID)
     dwg_version = (Dwg_Version_Type)dwg->header.version;
   return dwg->num_classes;
 }
 
+/** Returns the nth class or NULL
+\code Usage: dwg_object* obj = dwg_get_object(dwg, 0);
+\endcode
+\param[in]  dwg   dwg_data*
+\param[in]  index
+*/
 dwg_class *
 dwg_get_class(const dwg_data *dwg, unsigned int index)
 {
+  if (!dwg)
+    return NULL;
   if (dwg_version == R_INVALID)
     dwg_version = (Dwg_Version_Type)dwg->header.version;
   return (index < dwg->num_classes) ? &dwg->dwg_class[index] : NULL;
 }
 
+/** Returns the nth object or NULL
+\code Usage: dwg_object* obj = dwg_get_object(dwg, 0);
+\endcode
+\param[in]  dwg   dwgdata*
+\param[in]  index
+*/
 dwg_object *
-dwg_get_object(const dwg_data *dwg, long unsigned int index)
+dwg_get_object(dwg_data *dwg, long unsigned int index)
 {
+  if (!dwg)
+    return NULL;
   if (dwg_version == R_INVALID)
     dwg_version = (Dwg_Version_Type)dwg->header.version;
   return (index < dwg->num_objects) ? &dwg->object[index] : NULL;
 }
 
+/** Returns the object bitsize or 0
+\code Usage: long bitsize = dwg_obj_get_bitsize(obj);
+\endcode
+\param[in]  obj   dwg_object*
+*/
 BITCODE_RL
 dwg_obj_get_bitsize(const dwg_object *obj)
 {
-  return obj->bitsize;
+  return obj ? obj->bitsize : 0;
 }
+
+/** Returns the entity bitsize
+\code Usage: long bitsize = dwg_ent_get_bitsize(ent, &error);
+\endcode
+\param[in]  ent   dwg_obj_ent*
+\param[out] error set to 0 for ok, 1 on error
+*/
 BITCODE_RL
-dwg_ent_get_bitsize(const dwg_obj_ent *obj, int *error)
+dwg_ent_get_bitsize(const dwg_obj_ent *ent, int *error)
 {
-  *error = 0;
-  return obj->object->bitsize;
+  if (!ent || !ent->object || ent->object->supertype != DWG_SUPERTYPE_ENTITY) {
+    *error = 1;
+    return 0;
+  } else {
+    *error = 0;
+    return ent->object->bitsize;
+  }
 }
+/** Returns the number of object EED structures.
+See dwg_object_to_object how to get the obj.
+\code Usage: int num_eed = dwg_obj_get_num_eed(ent,&error);
+\endcode
+\param[in]  obj    dwg_obj_obj*
+\param[out] error set to 0 for ok, 1 on error
+*/
 unsigned int
 dwg_obj_get_num_eed(const dwg_obj_obj *obj, int *error)
 {
-  *error = 0;
-  return obj->num_eed;
+  if (!obj || !obj->object || obj->object->supertype != DWG_SUPERTYPE_OBJECT) {
+    *error = 1;
+    LOG_ERROR("%s: empty or invalid obj", __FUNCTION__)
+    return 0;
+  } else {
+    *error = 0;
+    return obj->num_eed;
+  }
 }
+/** Returns the number of entity EED structures
+See dwg_object_to_entity how to get the ent.
+\code Usage: int num_eed = dwg_ent_get_num_eed(ent,&error);
+\endcode
+\param[in]  ent   dwg_obj_ent*
+\param[out] error set to 0 for ok, 1 on error
+*/
 unsigned int
 dwg_ent_get_num_eed(const dwg_obj_ent *ent, int *error)
 {
-  *error = 0;
-  return ent->num_eed;
+  if (!ent || !ent->object || ent->object->supertype != DWG_SUPERTYPE_ENTITY) {
+    *error = 1;
+    LOG_ERROR("%s: empty or invalid ent", __FUNCTION__)
+    return 0;
+  } else {
+    *error = 0;
+    return ent->num_eed;
+  }
 }
+/** Returns the nth EED structure.
+\code Usage: dwg_entity_eed *eed = dwg_ent_get_eed(ent,0,&error);
+\endcode
+\param[in]  ent    dwg_obj_ent*
+\param[in]  index  [0 - num_eed-1]
+\param[out] error  set to 0 for ok, 1 if ent == NULL or 2 if index out of bounds.
+*/
 dwg_entity_eed *
-dwg_ent_get_eed(const dwg_obj_ent *ent, unsigned int index, int *error)
+dwg_ent_get_eed(const dwg_obj_ent *ent, const unsigned int index, int *error)
 {
-  *error = 0;
-  return (index < ent->num_eed) ? &ent->eed[index] : NULL;
-}
-dwg_entity_eed_data *
-dwg_ent_get_eed_data(const dwg_obj_ent *ent, unsigned int index, int *error)
-{
-  *error = 0;
-  return (index < ent->num_eed) ? ent->eed[index].data : NULL;
+  if (!ent || !ent->object || ent->object->supertype != DWG_SUPERTYPE_ENTITY) {
+    *error = 1;
+    LOG_ERROR("%s: empty or invalid ent", __FUNCTION__)
+    return NULL;
+  }
+  else if (index >= ent->num_eed) {
+    *error = 2;
+    return NULL;
+  }
+  else {
+    *error = 0;
+    return &ent->eed[index];
+  }
 }
 
-/// Returns dwg_object index
-/** Usage : int index = dwg_obj_object_get_index(obj, &error);
-\param 1 dwg_object
-\param 2 int
+/** Returns the data union of the nth EED structure.
+\code Usage: dwg_entity_eed_data *eed = dwg_ent_get_eed_data(ent,0,&error);
+\endcode
+\param[in]  ent    dwg_obj_ent*
+\param[in]  index  [0 - num_eed-1]
+\param[out] error  set to 0 for ok, 1 if ent == NULL or 2 if index out of bounds.
 */
-int
+dwg_entity_eed_data *
+dwg_ent_get_eed_data(const dwg_obj_ent *ent, const unsigned int index, int *error)
+{
+  if (!ent || !ent->object || ent->object->supertype != DWG_SUPERTYPE_ENTITY) {
+    *error = 1;
+    LOG_ERROR("%s: empty or invalid ent", __FUNCTION__)
+    return NULL;
+  }
+  else if (index >= ent->num_eed) {
+    *error = 2;
+    return NULL;
+  }
+  else {
+    *error = 0;
+    return ent->eed[index].data;
+  }
+}
+
+/** Returns the global index/objid in the list of all objects.
+    This is the same as a dwg_handle absolute_ref value.
+\code Usage: int index = dwg_obj_object_get_index(obj, &error);
+\endcode
+\param[in]  obj   dwg_object*
+\param[out] error set to 0 for ok, 1 on error
+*/
+unsigned int
 dwg_obj_object_get_index(const dwg_object *obj, int *error)
 {
   if (obj)
@@ -16923,10 +17656,11 @@ dwg_obj_object_get_index(const dwg_object *obj, int *error)
     }
 }
 
-/// Returns dwg handle from dwg object
-/** Usage : dwg_handle handle = dwg_object_get_handle(obj, &error);
-\param 1 dwg_object
-\param 2 int
+/** Returns dwg_handle* from dwg_object*
+\code Usage: dwg_handle* handle = dwg_object_get_handle(obj, &error);
+\endcode
+\param[in]  obj   dwg_object*
+\param[out] error set to 0 for ok, 1 on error
 */
 dwg_handle *
 dwg_obj_get_handle(dwg_object *obj, int *error)
@@ -16946,15 +17680,16 @@ dwg_obj_get_handle(dwg_object *obj, int *error)
     }
 }
 
-/// returns object from dwg object
-/** Usage : dwg_obj_obj ent = dwg_object_to_object(obj, &error);
-\param 1 dwg_object
-\param 2 int
+/** Returns dwg_obj_obj* from dwg_object*
+\code Usage: dwg_obj_obj ent = dwg_object_to_object(obj, &error);
+\endcode
+\param[in]  obj   dwg_object*
+\param[out] error set to 0 for ok, 1 on error
 */
 dwg_obj_obj *
 dwg_object_to_object(dwg_object *obj, int *error)
 {
-  if (obj)
+  if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT)
     {
       *error = 0;
       if (dwg_version == R_INVALID)
@@ -16964,20 +17699,21 @@ dwg_object_to_object(dwg_object *obj, int *error)
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty obj", __FUNCTION__)
+      LOG_ERROR("%s: Empty or invalid obj", __FUNCTION__)
       return NULL;
     }
 }
 
-/// returns entity from dwg object
-/** Usage : dwg_obj_ent ent = dwg_object_to_entity(obj, &error);
-\param 1 dwg_object
-\param 2 int
+/** Returns dwg_obj_ent* from dwg object
+\code Usage : dwg_obj_ent* ent = dwg_object_to_entity(obj, &error);
+\endcode
+\param obj   dwg_object*
+\param error
 */
 dwg_obj_ent *
 dwg_object_to_entity(dwg_object *obj, int *error)
 {
-  if (obj)
+  if (obj && obj->supertype == DWG_SUPERTYPE_ENTITY)
     {
       *error = 0;
       if (dwg_version == R_INVALID)
@@ -16987,15 +17723,16 @@ dwg_object_to_entity(dwg_object *obj, int *error)
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty obj", __FUNCTION__)
+      LOG_ERROR("%s: Empty or invalid obj", __FUNCTION__)
       return NULL;
     }
 }
 
-/// Returns object from reference
-/** Usage : dwg_object obj = dwg_obj_reference_get_object(obj, &error);
-\param 1 dwg_object_ref
-\param 2 int
+/** Returns object from reference or NULL
+\code Usage: dwg_object obj = dwg_obj_reference_get_object(obj, &error);
+\endcode
+\param[in]  ref   dwg_object_ref*
+\param[out] error set to 0 for ok, 1 on error
 */
 dwg_object *
 dwg_obj_reference_get_object(const dwg_object_ref *ref, int *error)
@@ -17013,10 +17750,11 @@ dwg_obj_reference_get_object(const dwg_object_ref *ref, int *error)
     }
 }
 
-/// Returns absolute reference
-/** Usage : BITCODE_BL ref = dwg_obj_ref_get_abs_ref(obj, &error);
-\param 1 dwg_object_ref
-\param 2 int
+/* Returns absolute reference
+\code Usage: BITCODE_BL ref = dwg_obj_ref_get_abs_ref(obj, &error);
+\endcode
+\param[in]  ref   dwg_object_ref*
+\param[out] error set to 0 for ok, 1 on error
 */
 BITCODE_BL
 dwg_obj_ref_get_abs_ref(const dwg_object_ref *ref, int *error)
@@ -17034,9 +17772,10 @@ dwg_obj_ref_get_abs_ref(const dwg_object_ref *ref, int *error)
     }
 }
 
-/// Returns Dwg object type
-/** Usage : int type = dwg_get_type(obj);
-\param 1 dwg_object
+/** Returns Dwg object type
+\code Usage: int type = dwg_get_type(obj);
+\endcode
+\param[in]  obj   dwg_object*
 */
 int
 dwg_get_type(const dwg_object *obj)
@@ -17052,9 +17791,10 @@ dwg_get_type(const dwg_object *obj)
     }
 }
 
-/// Returns the object dxfname as ASCII string
-/** Usage : int type = dwg_get_dxfname(obj);
-\param 1 dwg_object
+/** Returns the object dxfname as ASCII string
+\code Usage : int type = dwg_get_dxfname(obj);
+\endcode
+\param obj dwg_object*
 */
 char*
 dwg_get_dxfname(const dwg_object *obj)
