@@ -16,8 +16,8 @@
   the 2004 format.
 * encode for 2004+: move the local structs to the dwg, as union?
 * finish DXF writing, test with AutoCAD open.
-* finish binary DXF (easy)
-* add DXF reading (easy)
+* finish binary DXF (easy). cross-check via: filedia 0, dxfout => Binary
+* add DXF reading (medium)
 * finish GeoJSON http://geojson.org/geojson-spec.html
 * add getopt_long() for position independent options
 * check osm tools https://gitlab.com/osm-c-tools/osmctools how
@@ -31,8 +31,10 @@
   add API funcs to find table elements (layer, ltype).
 * check DWG constraints vs FreeCAD constraints
   https://www.freecadweb.org/wiki/Sketcher_Workbench#Sketcher_Constraints
+* check valabind vapi files to generate more and better bindings
+  (e.g. radare2-bindings). rust, go, node, java, perl, ruby, php, autolisp (via ARX).
 
-* fix the remaining leaks.
+* fix the remaining leaks (xdata?).
 * enhance and document the API functions.
 * add the basic DWG layout and API to the docs.
 * publish manual and link to doxygen refman API
