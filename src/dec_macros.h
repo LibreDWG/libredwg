@@ -35,11 +35,11 @@
 #define LOG_TF(level,var,len)                   \
   { int _i; \
     for (_i=0; _i<len; _i++) { \
-      LOG(level,"%02x ", (unsigned char)((char*)var)[_i]);      \
+      LOG(level,"%02x ", (unsigned char)((char*)var)[_i]); \
     } \
     LOG(level,"\n"); \
     for (_i=0; _i<len; _i++) { \
-      char c = ((char*)var)[_i]; \
+      unsigned char c = ((unsigned char*)var)[_i]; \
       LOG(level,"%2c ", isprint(c) ? c : ' ');  \
     } \
     LOG(level,"\n"); \
