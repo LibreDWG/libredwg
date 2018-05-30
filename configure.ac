@@ -142,7 +142,7 @@ AC_CHECK_FUNCS([setenv],[],
   AS_IF([test x$enable_trace = xyes],
     [AC_MSG_WARN([setenv not found. --enable-trace is limited with cmdline apps.
       Only -v args are taken for verbosity not the LIBREDWG_TRACE env var.])],
-    [AC_MSG_RESULT([  (setenv not needed, no --enable-trace)])]
+    [AC_MSG_RESULT([setenv not needed. no --enable-trace.])]
     ))
 
 dnl Feature: --enable-write
