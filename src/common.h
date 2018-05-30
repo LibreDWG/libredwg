@@ -78,23 +78,29 @@ Dwg_Version_Type dwg_version_as(const char *);
   BS,  /** bitshort */
   BL,  /** bitlong */
   BD,  /** bitdouble */
-  MC,  /** modular char  */
-  MS,  /** modular short  */
+  MC,  /** modular char */
+  MS,  /** modular short */
   BE,  /** BitExtrusion */
   DD,  /** BitDouble With Default */
   BT,  /** BitThickness */
   H,   /** handle reference (see the HANDLE REFERENCES section) */
   CMC, /** CmColor value */
   T,   /** text (bitshort length, followed by the string) */
+  TV,  /** ASCII text value, -r2007 */
   TU,  /** Unicode text (bitshort character length, followed by
-           Unicode string, 2 bytes per character). Unicode text is read from the
-           “string stream” within the object data. */
+           UCS-2 string). Unicode text is read from the
+           “string stream” within the object data. r2007+ */
+  TF,  /** fixed-length text */
   2RD, /** 2 raw doubles **/
   3RD, /** 3 raw doubles **/
   2BD, /** 2D point (2 bitdoubles) **/
   3BD, /** 3D point (3 bitdoubles) **/
+  2DD, /** 2 doubles with default **/
+  3DD, /** 3 doubles with default **/
   3B,  /** special 3-bit code R24+ */
   BLL, /** bitlonglong R24+ */
+  TIMEBLL, /** time long.long */
+  4BITS, /** 4 bits, r2000+ for VIEWMODE */
 #endif
 
 /**
