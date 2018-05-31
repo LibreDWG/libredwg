@@ -27,19 +27,22 @@ libredwg_la_SOURCES = \
 	decode.c \
         decode_r2007.c \
 	reedsolomon.c \
-	encode.c \
         print.c \
         out_json.c \
         out_dxf.c \
         out_dxfb.c \
         out_geojson.c \
-	in_dxf.c \
-	in_dxfb.c \
         free.c \
 	dwg_api.c \
 	$(EXTRA_HEADERS)
+if USE_WRITE
+libredwg_la_SOURCES += \
+	encode.c \
+	in_dxf.c \
+	in_dxfb.c
 #       encode_r2007.c \
 #       in_json.c
+endif
 
 libredwg_la_LDFLAGS = -version-info 0:0:0 -no-undefined
 
@@ -57,14 +60,17 @@ EXTRA_HEADERS = \
 	bits.h \
 	decode.h \
 	dec_macros.h \
-	encode.h \
 	free.h \
         print.h \
 	logging.h \
 	out_dxf.h \
-	out_json.h \
+	out_json.h
+if USE_WRITE
+EXTRA_HEADERS += \
+	encode.h \
 	in_dxf.h \
 	in_json.h
+endif
 
 EXTRA_DIST = \
 	$(include_HEADERS) \

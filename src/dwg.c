@@ -203,6 +203,9 @@ dwg_read_file(const char *restrict filename, Dwg_Data *restrict dwg)
   return 0;
 }
 
+/* if write support is enabled */
+#ifdef USE_WRITE
+
 /** dxf_read_file
  * returns 0 on success.
  *
@@ -304,9 +307,6 @@ dxf_read_file(const char *restrict filename, Dwg_Data *restrict dwg)
   return 0;
 }
 
-/* if write support is enabled */
-#ifdef USE_WRITE
-
 int
 dwg_write_file(const char *restrict filename, const Dwg_Data *restrict dwg)
 {
@@ -367,7 +367,7 @@ dwg_write_file(const char *restrict filename, const Dwg_Data *restrict dwg)
 }
 #endif /* USE_WRITE */ 
 
-/* IMAGE DATA (R13C3+) */
+/* THUMBNAIL IMAGE DATA (R13C3+) */
 unsigned char *
 dwg_bmp(const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
 {
@@ -381,7 +381,7 @@ dwg_bmp(const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
   dat = (Bit_Chain*) &dwg->picture;
   if (!dat || !dat->size)
     {
-      LOG_INFO("no IMAGE DATA\n")
+      LOG_INFO("no THUMBNAIL Image Data\n")
       return NULL;
     }
   dat->bit = 0;
