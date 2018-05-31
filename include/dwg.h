@@ -4290,6 +4290,12 @@ dwg_get_object_num_objects(const Dwg_Data *dwg);
 int
 dwg_class_is_entity(const Dwg_Class *klass);
 
+int
+dwg_obj_is_control(const Dwg_Object *obj);
+
+int
+dwg_obj_is_table(const Dwg_Object *obj);
+
 long unsigned int
 dwg_get_num_entities(const Dwg_Data *);
 

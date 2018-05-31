@@ -249,9 +249,9 @@ CAST_DWG_OBJECT_TO_ENTITY(LWPOLYLINE)
 /// cast dwg object to hatch
 CAST_DWG_OBJECT_TO_ENTITY(HATCH)
 
-//untyped >1000:
+//untyped >500:
 /// cast dwg object to image
-//CAST_DWG_OBJECT_TO_ENTITY(IMAGE)
+CAST_DWG_OBJECT_TO_ENTITY_BYNAME(IMAGE)
 
 
 /*******************************************************************
@@ -17205,6 +17205,11 @@ dwg_ent_table_get_data_vert_right_visibility(const dwg_ent_table *restrict table
 }
 
 /*******************************************************************
+*                    FUNCTIONS FOR TABLES                          *
+*        First the special tables: BLOCKS and LAYER                *
+********************************************************************/
+
+/*******************************************************************
 *               FUNCTIONS FOR BLOCK_CONTROL OBJECT                  *
 ********************************************************************/
 
@@ -17324,36 +17329,6 @@ dwg_obj_block_control_get_paper_space(const dwg_obj_block_control *ctrl, int *er
 }
 
 /*******************************************************************
-*                    FUNCTIONS FOR LAYER OBJECT                     *
-********************************************************************/
-
-/** Get name of the layer (utf-8 encoded)
-\code Usage: char* layer_name = dwg_obj_layer_get_name(layer, &error);
-\endcode
-\param[in]  layer
-\param[out] error  set to 0 for ok, >0 if not found.
-*/
-char *
-dwg_obj_layer_get_name(const dwg_obj_layer *layer, int *error)
-{
-  if (layer)
-    {
-      *error = 0;
-      if (dwg_version >= R_2007)
-        return bit_convert_TU((BITCODE_TU)layer->entry_name);
-      else
-        return layer->entry_name;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return NULL;
-    }
-
-}
-
-/*******************************************************************
 *                FUNCTIONS FOR BLOCK_HEADER OBJECT                  *
 ********************************************************************/
 
@@ -17432,6 +17407,97 @@ dwg_get_block_header(dwg_data *dwg, int *error)
     {
       *error = 3;
       LOG_ERROR("%s: BLOCK_HEADER not found", __FUNCTION__)
+      return NULL;
+    }
+}
+
+/*******************************************************************
+*                    FUNCTIONS FOR LAYER OBJECT                     *
+********************************************************************/
+
+/** Get name of the layer (utf-8 encoded)
+\code Usage: char* layer_name = dwg_obj_layer_get_name(layer, &error);
+\endcode
+\param[in]  layer
+\param[out] error  set to 0 for ok, >0 if not found.
+*/
+char *
+dwg_obj_layer_get_name(const dwg_obj_layer *layer, int *error)
+{
+  if (layer)
+    {
+      *error = 0;
+      if (dwg_version >= R_2007)
+        return bit_convert_TU((BITCODE_TU)layer->entry_name);
+      else
+        return layer->entry_name;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return NULL;
+    }
+}
+
+/*******************************************************************
+*                    FUNCTIONS FOR OTHER TABLE OBJECTS             *
+********************************************************************/
+
+/** Get number of table entries from the table control object.
+\code Usage: char* name = dwg_obj_tablectrl_get_num_entries(obj, &error);
+\endcode
+\param[in]  table  a <TABLE>_CONTROL dwg_object*
+\param[out] error  set to 0 for ok, >0 if not found.
+*/
+BITCODE_BL
+dwg_obj_tablectrl_get_num_entries(const dwg_object *obj, int * error)
+{
+  if (obj &&
+      obj->supertype == DWG_SUPERTYPE_OBJECT &&
+      dwg_obj_is_control(obj))
+    {
+      // HACK: we can guarantee that num_entries is always the first field.
+      Dwg_Object_STYLE_CONTROL *ctrl = obj->tio.object->tio.STYLE_CONTROL;
+      *error = 0;
+      return ctrl->num_entries;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty or invalid table control arg %p, type: 0x%x",
+                __FUNCTION__, obj, obj ? obj->type : 0)
+      return 0;
+    }
+}
+
+/** Get name of the table entry (utf-8 encoded)
+\code Usage: char* name = dwg_obj_table_get_name(obj, &error);
+\endcode
+\param[in]  table  a <TABLE> dwg_object*
+\param[out] error  set to 0 for ok, >0 if not found.
+*/
+char *
+dwg_obj_table_get_name(const dwg_object *obj, int *error)
+{
+  if (obj &&
+      obj->supertype == DWG_SUPERTYPE_OBJECT &&
+      dwg_obj_is_table(obj))
+    {
+      // HACK: we can guarantee that the entry_name is always the first field,
+      // by using COMMON_TABLE_FLAGS.
+      Dwg_Object_STYLE *table = obj->tio.object->tio.STYLE;
+      *error = 0;
+      if (dwg_version >= R_2007)
+        return bit_convert_TU((BITCODE_TU)table->entry_name);
+      else
+        return table->entry_name;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty or invalid table arg %p, type: 0x%x",
+                __FUNCTION__, obj, obj ? obj->type : 0)
       return NULL;
     }
 }

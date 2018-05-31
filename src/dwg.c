@@ -752,6 +752,22 @@ dwg_obj_is_control(const Dwg_Object *obj)
          type == DWG_TYPE_VPORT_ENTITY_CONTROL;
 }
 
+int
+dwg_obj_is_table(const Dwg_Object *obj)
+{
+  unsigned int type = obj->type;
+  return type == DWG_TYPE_BLOCK_HEADER ||
+         type == DWG_TYPE_LAYER ||
+         type == DWG_TYPE_STYLE ||
+         type == DWG_TYPE_LTYPE ||
+         type == DWG_TYPE_VIEW ||
+         type == DWG_TYPE_UCS ||
+         type == DWG_TYPE_VPORT ||
+         type == DWG_TYPE_APPID ||
+         type == DWG_TYPE_DIMSTYLE ||
+         type == DWG_TYPE_VPORT_ENTITY_HEADER;
+}
+
 Dwg_Section_Type
 dwg_section_type(const DWGCHAR *wname)
 {

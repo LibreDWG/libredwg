@@ -88,7 +88,10 @@ Dwg_Entity_##token **dwg_get_##token (Dwg_Object_Ref * ref) \
 // Cast a Dwg_Object to Entity
 #define CAST_DWG_OBJECT_TO_ENTITY_DECL(token) \
 Dwg_Entity_##token *dwg_object_to_##token(Dwg_Object *obj);
+#define CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL(token) \
+Dwg_Entity_##token *dwg_object_to_##token(Dwg_Object *obj);
 
+// Only for fixed typed entities, < 500
 #define CAST_DWG_OBJECT_TO_ENTITY(token) \
 Dwg_Entity_##token *dwg_object_to_##token(Dwg_Object *obj) \
 { \
@@ -100,6 +103,25 @@ Dwg_Entity_##token *dwg_object_to_##token(Dwg_Object *obj) \
     else \
       { \
         LOG_ERROR("invalid %s type: got 0x%x", #token, obj ? obj->type : 0); \
+      } \
+  return ret_obj; \
+}
+
+/// for all classes, types > 500. There's only IMAGE.
+#define CAST_DWG_OBJECT_TO_ENTITY_BYNAME(token) \
+Dwg_Entity_##token *dwg_object_to_##token(Dwg_Object *obj) \
+{ \
+    Dwg_Entity_##token *ret_obj = NULL; \
+    if (obj && (obj->type == DWG_TYPE_##token || \
+               (obj->dxfname && !strcmp(obj->dxfname, #token)))) \
+      { \
+        ret_obj = obj->tio.entity->tio.token; \
+      } \
+    else \
+      { \
+        LOG_ERROR("invalid %s type: got %s, 0x%x", #token, \
+                  obj ? obj->dxfname : "<no obj>", \
+                  obj ? obj->type : 0); \
       } \
   return ret_obj; \
 }
@@ -126,7 +148,7 @@ Dwg_Object_##token *dwg_object_to_##token(Dwg_Object *obj) \
 Dwg_Object_##token *dwg_object_to_##token(Dwg_Object *obj) \
 { \
     Dwg_Object_##token *ret_obj = NULL; \
-    if (obj && obj->dxfname && !strcmp(obj->dxfname, dxfname)) \
+    if (obj && obj->dxfname && !strcmp(obj->dxfname, #dxfname)) \
       { \
         ret_obj = obj->tio.object->tio.token; \
       } \
@@ -432,7 +454,7 @@ CAST_DWG_OBJECT_TO_ENTITY_DECL(PROXY_ENTITY)
 /// cast dwg object to hatch
 CAST_DWG_OBJECT_TO_ENTITY_DECL(HATCH)
 /// cast dwg object to image
-CAST_DWG_OBJECT_TO_ENTITY_DECL(IMAGE)
+CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL(IMAGE)
 
 /*******************************************************************
 *     Functions created from macro to cast dwg object to object     *
@@ -1358,6 +1380,7 @@ dwg_obj_mlinestyle_get_num_lines(const dwg_obj_mlinestyle *mlinestyle,
 
 /********************************************************************
 *               FUNCTIONS FOR APPID_CONTROL OBJECT                  *
+*                       The APPID table                             *
 ********************************************************************/
 
 
@@ -1371,6 +1394,7 @@ dwg_obj_appid_control_get_appid(const dwg_obj_appid_control *appid, BITCODE_BS i
 
 /********************************************************************
 *                    FUNCTIONS FOR APPID OBJECT                     *
+*                       An APPID table entry                        *
 ********************************************************************/
 
 
@@ -1392,7 +1416,7 @@ dwg_obj_appid_get_appid_control(const dwg_obj_appid *appid,
                                 int *error);
 
 /*******************************************************************
-*            FUNCTIONS FOR ALL DIMENSION ENTITIES                *
+*            FUNCTIONS FOR ALL DIMENSION ENTITIES                  *
 ********************************************************************/
 
 char *
@@ -3745,16 +3769,6 @@ dwg_ent_table_get_data_vert_right_visibility(const dwg_ent_table *restrict table
 
 
 /********************************************************************
-*                    FUNCTIONS FOR LAYER OBJECT                     *
-********************************************************************/
-
-
-// Get Layer Name
-char *
-dwg_obj_layer_get_name(const dwg_obj_layer *layer, int * error);
-
-
-/********************************************************************
 *              FUNCTIONS FOR VERTEX_PFACE_FACE ENTITY               *
 ********************************************************************/
 
@@ -3768,12 +3782,17 @@ dwg_ent_vertex_pface_face_set_vertind(dwg_ent_vert_pface_face *face,
                                       BITCODE_BS vertind[4]);
 
 
+/*******************************************************************
+*                    FUNCTIONS FOR TABLES                          *
+*        First the special tables: BLOCKS and LAYER                *
+********************************************************************/
+
+
 /********************************************************************
 *                FUNCTIONS FOR BLOCK_HEADER OBJECT                  *
 ********************************************************************/
 
-
-/* Get Block Name of the block header type argument passed in function
+/* Get Block Name of the block header
 Usage :- char *block_name = dwg_obj_block_header_get_name(hdr);
 */
 char *
@@ -3786,7 +3805,6 @@ dwg_get_block_header(dwg_data *dwg, int * error);
 /********************************************************************
 *               FUNCTIONS FOR BLOCK_CONTROL OBJECT                  *
 ********************************************************************/
-
 
 BITCODE_BL
 dwg_obj_block_control_get_num_entries(const dwg_obj_block_control *ctrl, int * error);
@@ -3805,6 +3823,23 @@ dwg_obj_block_control_get_model_space(const dwg_obj_block_control *ctrl, int *er
 dwg_object_ref *
 dwg_obj_block_control_get_paper_space(const dwg_obj_block_control *ctrl, int *error);
 
+
+/********************************************************************
+*                    FUNCTIONS FOR LAYER OBJECT                     *
+********************************************************************/
+
+
+// Get Layer Name
+char *
+dwg_obj_layer_get_name(const dwg_obj_layer *layer, int * error);
+
+// Get name of any table entry
+char *
+dwg_obj_table_get_name(const dwg_object *obj, int *error);
+
+// Get number of table entries
+BITCODE_BL
+dwg_obj_tablectrl_get_num_entries(const dwg_object *obj, int * error);
 
 /********************************************************************
 *                    FUNCTIONS FOR XRECORD OBJECT                     *
