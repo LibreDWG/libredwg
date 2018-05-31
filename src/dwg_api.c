@@ -308,42 +308,6 @@ dwg_object_to_DIMENSION(dwg_object *obj)
  *                    FUNCTIONS FOR CIRCLE ENTITY                    *
  ********************************************************************/
 
-/** Create and return a new _dwg_entity_CIRCLE:: entity with default values.
-Do not use, will be removed!
-This function does not add a new circle to the DWG. Use dwg_add_CIRCLE(dwg) instead.
-\code Usage: dwg_ent_circle_new();
-\endcode
-\param[out] error   int*, is set to 0 for ok, 1 on error
- */
-dwg_ent_circle *
-dwg_ent_circle_new(int *error)
-{
-  dwg_ent_circle *circle = (dwg_ent_circle*)calloc(1, sizeof(Dwg_Entity_CIRCLE));
-  if (circle)
-    {
-      *error = 0;
-      return dwg_ent_circle_init(circle); // calloc already does this for us
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: null malloc", __FUNCTION__)
-      return NULL;
-    }
-}
-
-/** Free the _dwg_entity_CIRCLE:: created by dwg_ent_circle_new().
-\code Usage: dwg_ent_circle_delete();
-\endcode
-\param[in,out] circle  dwg_ent_circle*
-\param[out]    error   int*, is set to 0 for ok, 1 on error
-*/
-void
-dwg_ent_circle_delete(dwg_ent_circle *circle)
-{
-  free(circle);
-}
-
 /** Reset all geometric _dwg_entity_CIRCLE:: entity fields to zero
 \code Usage: dwg_ent_circle_init(circle);
 /endcode
@@ -563,41 +527,6 @@ dwg_ent_circle_get_extrusion(const dwg_ent_circle *restrict circle, dwg_point_3d
 /*******************************************************************
  *                    FUNCTIONS FOR LINE ENTITY                      *
  ********************************************************************/
-
-/** Creates a new and initialized _dwg_entity_LINE::
-Do not use, will be removed!
-This function does not add a new line to the DWG. Use dwg_add_LINE(dwg) instead.
-\code Usage: dwg_ent_line_new();
-\endcode
-\param[out] error   int*, set to 0 for ok, 1 on error
- */
-dwg_ent_line *
-dwg_ent_line_new(int *error)
-{
-  dwg_ent_line *line = (dwg_ent_line*) calloc(1, sizeof(Dwg_Entity_LINE));
-  if (line)
-    {
-      *error = 0;
-      return dwg_ent_line_init(line);
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: null malloc", __FUNCTION__)
-      return NULL;
-    }
-}
-
-/** Free the _dwg_entity_LINE:: created by dwg_ent_circle_line().
-\code Usage: dwg_ent_line_delete();
-\endcode
-\param[in,out] line    dwg_ent_line*
-*/
-void
-dwg_ent_line_delete(dwg_ent_line *line)
-{
-  free(line);
-}
 
 /** Initialize the geometric fields of a _dwg_entity_LINE:: to zero.
 \code Usage: dwg_ent_line_init();
@@ -820,37 +749,6 @@ dwg_ent_line_set_extrusion(dwg_ent_line *restrict line, const dwg_point_3d *rest
 /*******************************************************************
  *                    FUNCTIONS FOR ARC ENTITY                       *
  ********************************************************************/
-
-/// This function creates a new entity of arc type.
-/** Do not use, will be removed!
-This function does not add a new arc to the DWG. Use dwg_add_ARC(dwg) instead.
-Usage :- dwg_ent_arc_new();
- */
-dwg_ent_arc *
-dwg_ent_arc_new(int *error)
-{
-  dwg_ent_arc *arc = (dwg_ent_arc*) malloc(sizeof(Dwg_Entity_ARC));
-  if (arc)
-    {
-      *error = 0;
-      return dwg_ent_arc_init(arc);
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: null malloc", __FUNCTION__)
-      return NULL;
-    }
-}
-
-/// This function deletes entity created by dwg_ent_arc_new() function and frees the allocated memory.
-/** Usage :- dwg_ent_arc_delete();
- */
-void
-dwg_ent_arc_delete(dwg_ent_arc *arc)
-{
-  free(arc);
-}
 
 /// This function initialises a arc entity with default/zero values.
 /** Usage :- dwg_ent_arc_init();
@@ -1159,37 +1057,6 @@ dwg_ent_arc_set_end_angle(dwg_ent_arc *restrict arc, const BITCODE_BD angle,
 /*******************************************************************
  *                   FUNCTIONS FOR ELLIPSE ENTITY                    *
  ********************************************************************/
-
-/// This function creates a new entity of ellipse type.
-/** Do not use, will be removed!
-This function does not add a new ellipse to the DWG. Use dwg_add_ELLIPSE(dwg) instead.
-Usage :- dwg_ent_ellipse_new();
- */
-dwg_ent_ellipse *
-dwg_ent_ellipse_new(int *error)
-{
-  dwg_ent_ellipse *ellipse = (dwg_ent_ellipse*)malloc(sizeof(Dwg_Entity_ELLIPSE));
-  if (ellipse)
-    {
-      *error = 0;
-      return dwg_ent_ellipse_init(ellipse);
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: null malloc", __FUNCTION__)
-      return NULL;
-    }
-}
-
-/// This function deletes entity created by dwg_ent_ellipse_new() function and frees the allocated memory.
-/** Usage :- dwg_ent_ellipse_delete();
- */
-void
-dwg_ent_ellipse_delete(dwg_ent_ellipse *ellipse)
-{
-  free(ellipse);
-}
 
 /// This function initialises a ellipse entity with default or zero values.
 /** Usage :- dwg_ent_ellipse_init();

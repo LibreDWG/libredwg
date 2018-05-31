@@ -460,15 +460,6 @@ void dwg_api_init_version(Dwg_Data *dwg);
 *                    FUNCTIONS FOR CIRCLE ENTITY                    *
 ********************************************************************/
 
-
-/// Creates a new initialized _dwg_entity_CIRCLE::
-dwg_ent_circle*
-dwg_ent_circle_new(int *error);
-
-/// Deletes a _dwg_entity_CIRCLE::
-void
-dwg_ent_circle_delete(dwg_ent_circle *circle);
-
 /// Initializes a _dwg_entity_CIRCLE:: with its default values
 dwg_ent_circle *
 dwg_ent_circle_init(dwg_ent_circle *circle);
@@ -512,15 +503,6 @@ dwg_ent_circle_set_extrusion(dwg_ent_circle *restrict circle,
 *                    FUNCTIONS FOR LINE ENTITY                      *
 ********************************************************************/
 
-
-// Creates a new line entity
-dwg_ent_line *
-dwg_ent_line_new(int *restrict error);
-
-// Deletes a line entity
-void
-dwg_ent_line_delete(dwg_ent_line *line);
-
 // Initializes a line with its default values
 dwg_ent_line *
 dwg_ent_line_init(dwg_ent_line *line);
@@ -563,14 +545,6 @@ dwg_ent_line_get_extrusion(const dwg_ent_line *restrict line, dwg_point_3d *rest
 /********************************************************************
 *                    FUNCTIONS FOR ARC ENTITY                       *
 ********************************************************************/
-
-
-// Creates a new arc entity
-dwg_ent_arc* dwg_ent_arc_new(int *restrict error);
-
-// Deletes a arc entity
-void
-dwg_ent_arc_delete(dwg_ent_arc *arc);
 
 // Initializes a arc with its default values
 dwg_ent_arc* dwg_ent_arc_init(dwg_ent_arc *arc);
@@ -621,15 +595,6 @@ dwg_ent_arc_set_end_angle(dwg_ent_arc *restrict arc, const BITCODE_BD end_angle,
 /********************************************************************
 *                   FUNCTIONS FOR ELLIPSE ENTITY                    *
 ********************************************************************/
-
-
-// Creates a new ellipse entity
-dwg_ent_ellipse *
-dwg_ent_ellipse_new(int *error);
-
-// Deletes a ellipse entity
-void
-dwg_ent_ellipse_delete(dwg_ent_ellipse *ellipse);
 
 // Initializes a ellipse with its default values
 dwg_ent_ellipse *
