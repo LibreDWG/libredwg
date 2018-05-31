@@ -1264,6 +1264,10 @@ dwg_dxf_object(Bit_Chain *dat, Dwg_Object *obj)
 #define DXF_CHECK_ENDSEC \
   if (dat->byte >= dat->size || pair->code == 0) \
     return 0
+#define DXF_BREAK_ENDSEC \
+  if (dat->byte >= dat->size || \
+      (pair->code == 0 && !strcmp(pair->value.s, "ENDSEC"))) \
+    break
 
 static int dxf_expect_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
 {
@@ -1296,9 +1300,9 @@ dxf_header_read(Bit_Chain *dat, Dwg_Data* dwg)
 
   while (pair->code != 0) {
     pair = dxf_read_pair(dat);
-    DXF_CHECK_ENDSEC;
+    DXF_BREAK_ENDSEC;
 
-    //TODO process fields
+    //TODO process field
     
     dxf_free_pair(pair);
   }
@@ -1382,8 +1386,11 @@ dxf_objects_read (Bit_Chain *dat, Dwg_Data * dwg)
 static int
 dxf_preview_read (Bit_Chain *dat, Dwg_Data * dwg)
 {
-  (void)dat; (void)dwg;
-  //...
+  (void)dwg;
+  SECTION(THUMBNAILIMAGE);
+  //VALUE_RL(pic->size, 90);
+  //VALUE_BINARY(pic->chain, pic->size, 310);
+  ENDSEC();
   return 0;
 }
 
