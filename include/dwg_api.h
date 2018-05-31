@@ -145,7 +145,7 @@ typedef struct _dwg_entity_POLYLINE_3D            dwg_ent_polyline_3d;
 typedef struct _dwg_entity_POLYLINE_2D            dwg_ent_polyline_2d;
 typedef struct _dwg_entity_POLYLINE_MESH          dwg_ent_polyline_mesh;
 typedef struct _dwg_entity_POLYLINE_PFACE         dwg_ent_polyline_pface;
-typedef struct _dwg_entity_LWPOLYLINE                dwg_ent_lwpline;
+typedef struct _dwg_entity_LWPOLYLINE             dwg_ent_lwpline;
 typedef struct _dwg_entity_ARC                    dwg_ent_arc;
 typedef struct _dwg_entity_ELLIPSE                dwg_ent_ellipse;
 typedef struct _dwg_entity_TEXT                   dwg_ent_text;
@@ -461,51 +461,51 @@ void dwg_api_init_version(Dwg_Data *dwg);
 ********************************************************************/
 
 
-// Creates a new circle entity
+/// Creates a new initialized _dwg_entity_CIRCLE::
 dwg_ent_circle*
 dwg_ent_circle_new(int *error);
 
-// Deletes a circle entity
+/// Deletes a _dwg_entity_CIRCLE::
 void
-dwg_ent_circle_delete(dwg_ent_circle *circle, int *error);
+dwg_ent_circle_delete(dwg_ent_circle *circle);
 
-// Initializes a circle with its default values
+/// Initializes a _dwg_entity_CIRCLE:: with its default values
 dwg_ent_circle *
 dwg_ent_circle_init(dwg_ent_circle *circle);
 
-// Get/Set the center point of a circle
+// Get/Set the center point of a _dwg_entity_CIRCLE::
 void
-dwg_ent_circle_get_center(const dwg_ent_circle *circle, dwg_point_3d *point,
-                          int *error);
+dwg_ent_circle_get_center(const dwg_ent_circle *restrict circle, dwg_point_3d *restrict point,
+                          int *restrict error);
 
 void
-dwg_ent_circle_set_center(dwg_ent_circle *circle, dwg_point_3d *point,
-                          int *error);
+dwg_ent_circle_set_center(dwg_ent_circle *restrict circle, const dwg_point_3d *restrict point,
+                          int *restrict error);
 
 // Get/Set the radius of a circle
 BITCODE_BD
-dwg_ent_circle_get_radius(const dwg_ent_circle *circle, int *error);
+dwg_ent_circle_get_radius(const dwg_ent_circle *restrict circle, int *restrict error);
 
 void
-dwg_ent_circle_set_radius(dwg_ent_circle *circle, BITCODE_BD radius,
-                          int *error);
+dwg_ent_circle_set_radius(dwg_ent_circle *restrict circle, const BITCODE_BD radius,
+                          int *restrict error);
 
 // Get/Set the thickness of a circle
 BITCODE_BD
-dwg_ent_circle_get_thickness(const dwg_ent_circle *circle, int *error);
+dwg_ent_circle_get_thickness(const dwg_ent_circle *restrict circle, int *restrict error);
 
 void
-dwg_ent_circle_set_thickness(dwg_ent_circle *circle, BITCODE_BD thickness,
-                             int *error);
+dwg_ent_circle_set_thickness(dwg_ent_circle *restrict circle, BITCODE_BD thickness,
+                             int *restrict error);
 
 // Get/Set the extrusion of a circle
 void
-dwg_ent_circle_get_extrusion(const dwg_ent_circle *circle,
-                             dwg_point_3d *vector, int *error);
+dwg_ent_circle_get_extrusion(const dwg_ent_circle *restrict circle,
+                             dwg_point_3d *restrict vector, int *restrict error);
 
 void
-dwg_ent_circle_set_extrusion(dwg_ent_circle *circle,
-                             dwg_point_3d *vector, int *error);
+dwg_ent_circle_set_extrusion(dwg_ent_circle *restrict circle,
+                             const dwg_point_3d *restrict vector, int *restrict error);
 
 
 /********************************************************************
@@ -515,11 +515,11 @@ dwg_ent_circle_set_extrusion(dwg_ent_circle *circle,
 
 // Creates a new line entity
 dwg_ent_line *
-dwg_ent_line_new(int *error);
+dwg_ent_line_new(int *restrict error);
 
 // Deletes a line entity
 void
-dwg_ent_line_delete(dwg_ent_line *line, int *error);
+dwg_ent_line_delete(dwg_ent_line *line);
 
 // Initializes a line with its default values
 dwg_ent_line *
@@ -527,37 +527,37 @@ dwg_ent_line_init(dwg_ent_line *line);
 
 // Get/Set the start point of a line
 void
-dwg_ent_line_get_start_point(const dwg_ent_line *line, dwg_point_3d *point,
-                             int *error);
+dwg_ent_line_get_start_point(const dwg_ent_line *restrict line, dwg_point_3d *restrict point,
+                             int *restrict error);
 
 void
-dwg_ent_line_set_start_point(dwg_ent_line *line, dwg_point_3d *point,
-                             int *error);
+dwg_ent_line_set_start_point(dwg_ent_line *restrict line, const dwg_point_3d *restrict point,
+                             int *restrict error);
 
 // Get/Set the end point of a line
 void
-dwg_ent_line_get_end_point(const dwg_ent_line *line, dwg_point_3d *point,
-                           int *error);
+dwg_ent_line_get_end_point(const dwg_ent_line *restrict line, dwg_point_3d *restrict point,
+                           int *restrict error);
 
 void
-dwg_ent_line_set_end_point(dwg_ent_line *line, dwg_point_3d *point,
-                           int *error);
+dwg_ent_line_set_end_point(dwg_ent_line *restrict line, const dwg_point_3d *restrict point,
+                           int *restrict error);
 
 // Get/Set the thickness of a line
 BITCODE_BD
-dwg_ent_line_get_thickness(const dwg_ent_line *line, int *error);
+dwg_ent_line_get_thickness(const dwg_ent_line *restrict line, int *restrict error);
 
 void
-dwg_ent_line_set_thickness(dwg_ent_line *line, BITCODE_BD thickness, int *error);
+dwg_ent_line_set_thickness(dwg_ent_line *restrict line, const BITCODE_BD thickness, int *restrict error);
 
 // Get/Set the extrusion of a line
 void
-dwg_ent_line_set_extrusion(dwg_ent_line *line, dwg_point_3d *vector,
-                           int *error);
+dwg_ent_line_set_extrusion(dwg_ent_line *restrict line, const dwg_point_3d *restrict vector,
+                           int *restrict error);
 
 void
-dwg_ent_line_get_extrusion(const dwg_ent_line *line, dwg_point_3d *vector,
-                           int *error);
+dwg_ent_line_get_extrusion(const dwg_ent_line *restrict line, dwg_point_3d *restrict vector,
+                           int *restrict error);
 
 
 /********************************************************************
@@ -566,56 +566,56 @@ dwg_ent_line_get_extrusion(const dwg_ent_line *line, dwg_point_3d *vector,
 
 
 // Creates a new arc entity
-dwg_ent_arc* dwg_ent_arc_new(int *error);
+dwg_ent_arc* dwg_ent_arc_new(int *restrict error);
 
 // Deletes a arc entity
 void
-dwg_ent_arc_delete(dwg_ent_arc *arc, int *error);
+dwg_ent_arc_delete(dwg_ent_arc *arc);
 
 // Initializes a arc with its default values
 dwg_ent_arc* dwg_ent_arc_init(dwg_ent_arc *arc);
 
 // Get/Set the center point of a arc
 void
-dwg_ent_arc_get_center(const dwg_ent_arc *arc, dwg_point_3d *point, int *error);
+dwg_ent_arc_get_center(const dwg_ent_arc *restrict arc, dwg_point_3d *restrict point, int *restrict error);
 
 void
-dwg_ent_arc_set_center(dwg_ent_arc *arc, dwg_point_3d *point, int *error);
+dwg_ent_arc_set_center(dwg_ent_arc *restrict arc, const dwg_point_3d *restrict point, int *restrict error);
 
 // Get/Set the radius of a arc
 BITCODE_BD
-dwg_ent_arc_get_radius(const dwg_ent_arc *arc, int *error);
+dwg_ent_arc_get_radius(const dwg_ent_arc *restrict arc, int *restrict error);
 
 void
-dwg_ent_arc_set_radius(dwg_ent_arc *arc, BITCODE_BD radius, int *error);
+dwg_ent_arc_set_radius(dwg_ent_arc *restrict arc, const BITCODE_BD radius, int *restrict error);
 
 // Get/Set the thickness of arc
 BITCODE_BD
-dwg_ent_arc_get_thickness(const dwg_ent_arc *arc, int *error);
+dwg_ent_arc_get_thickness(const dwg_ent_arc *restrict arc, int *restrict error);
 
 void
-dwg_ent_arc_set_thickness(dwg_ent_arc *arc, BITCODE_BD thickness, int *error);
+dwg_ent_arc_set_thickness(dwg_ent_arc *restrict arc, const BITCODE_BD thickness, int *restrict error);
 
 //Get/Set the extrusion of arc
 void
-dwg_ent_arc_get_extrusion(const dwg_ent_arc *arc, dwg_point_3d *vector, int *error);
+dwg_ent_arc_get_extrusion(const dwg_ent_arc *restrict arc, dwg_point_3d *restrict vector, int *restrict error);
 
 void
-dwg_ent_arc_set_extrusion(dwg_ent_arc *arc, dwg_point_3d *vector, int *error);
+dwg_ent_arc_set_extrusion(dwg_ent_arc *restrict arc, const dwg_point_3d *restrict vector, int *restrict error);
 
 // Get/set start angle arc
 BITCODE_BD
-dwg_ent_arc_get_start_angle(const dwg_ent_arc *arc, int *error);
+dwg_ent_arc_get_start_angle(const dwg_ent_arc *restrict arc, int *restrict error);
 
 void
-dwg_ent_arc_set_start_angle(dwg_ent_arc *arc, BITCODE_BD start_angle, int *error);
+dwg_ent_arc_set_start_angle(dwg_ent_arc *restrict arc, const BITCODE_BD start_angle, int *restrict error);
 
 // Get/set end angle of arc
 BITCODE_BD
-dwg_ent_arc_get_end_angle(const dwg_ent_arc *arc, int *error);
+dwg_ent_arc_get_end_angle(const dwg_ent_arc *restrict arc, int *restrict error);
 
 void
-dwg_ent_arc_set_end_angle(dwg_ent_arc *arc, BITCODE_BD end_angle, int *error);
+dwg_ent_arc_set_end_angle(dwg_ent_arc *restrict arc, const BITCODE_BD end_angle, int *restrict error);
 
 
 /********************************************************************
@@ -629,7 +629,7 @@ dwg_ent_ellipse_new(int *error);
 
 // Deletes a ellipse entity
 void
-dwg_ent_ellipse_delete(dwg_ent_ellipse *ellipse, int *error);
+dwg_ent_ellipse_delete(dwg_ent_ellipse *ellipse);
 
 // Initializes a ellipse with its default values
 dwg_ent_ellipse *
@@ -917,11 +917,11 @@ dwg_ent_point_set_thickness(dwg_ent_point *point, BITCODE_BD thickness,
 
 // Get/Set extrusion of point entity
 void
-dwg_ent_point_set_extrusion(dwg_ent_point *point, dwg_point_3d *retpoint,
+dwg_ent_point_set_extrusion(dwg_ent_point *point, dwg_point_3d *vector,
                             int *error);
 
 void
-dwg_ent_point_get_extrusion(const dwg_ent_point *point, dwg_point_3d *retpoint,
+dwg_ent_point_get_extrusion(const dwg_ent_point *point, dwg_point_3d *vector,
                             int *error);
 
 
@@ -1272,11 +1272,11 @@ dwg_ent_insert_set_rotation(dwg_ent_insert *insert, BITCODE_BD rot_ang,
                                   int *error);
 
 void
-dwg_ent_insert_get_extrusion(const dwg_ent_insert *insert, dwg_point_3d *point,
+dwg_ent_insert_get_extrusion(const dwg_ent_insert *insert, dwg_point_3d *vector,
                              int *error);
 
 void
-dwg_ent_insert_set_extrusion(dwg_ent_insert *insert, dwg_point_3d *point,
+dwg_ent_insert_set_extrusion(dwg_ent_insert *insert, dwg_point_3d *vector,
                              int *error);
 
 char
@@ -1323,11 +1323,11 @@ dwg_ent_minsert_set_rotation(dwg_ent_minsert *minsert, BITCODE_BD rot_ang,
                                    int *error);
 
 void
-dwg_ent_minsert_get_extrusion(const dwg_ent_minsert *minsert, dwg_point_3d *point,
+dwg_ent_minsert_get_extrusion(const dwg_ent_minsert *minsert, dwg_point_3d *vector,
                               int *error);
 
 void
-dwg_ent_minsert_set_extrusion(dwg_ent_minsert *minsert, dwg_point_3d *point,
+dwg_ent_minsert_set_extrusion(dwg_ent_minsert *minsert, dwg_point_3d *vector,
                               int *error);
 
 char
@@ -1491,10 +1491,10 @@ dwg_ent_dim_set_attachment(dwg_ent_dim *dim,
                            BITCODE_BS attachment, int *error);
 void
 dwg_ent_dim_set_extrusion(dwg_ent_dim *dim,
-                          dwg_point_3d *point, int *error);
+                          dwg_point_3d *vector, int *error);
 void
 dwg_ent_dim_get_extrusion(const dwg_ent_dim *dim,
-                          dwg_point_3d *point, int *error);
+                          dwg_point_3d *vector, int *error);
 /* (utf-8 encoded) */
 char *
 dwg_ent_dim_get_user_text(const dwg_ent_dim *dim, int *error);
@@ -1876,11 +1876,11 @@ void
 dwg_ent_shape_set_shape_no(dwg_ent_shape *shape, BITCODE_BD no, int *error);
 
 void
-dwg_ent_shape_get_extrusion(const dwg_ent_shape *shape, dwg_point_3d *point,
+dwg_ent_shape_get_extrusion(const dwg_ent_shape *shape, dwg_point_3d *vector,
                             int *error);
 
 void
-dwg_ent_shape_set_extrusion(dwg_ent_shape *shape, dwg_point_3d *point,
+dwg_ent_shape_set_extrusion(dwg_ent_shape *shape, dwg_point_3d *vector,
                             int *error);
 
 
@@ -1898,11 +1898,11 @@ dwg_ent_mtext_get_insertion_pt(const dwg_ent_mtext *mtext, dwg_point_3d *point,
                                int *error);
 
 void
-dwg_ent_mtext_set_extrusion(dwg_ent_mtext *mtext, dwg_point_3d *point,
+dwg_ent_mtext_set_extrusion(dwg_ent_mtext *mtext, dwg_point_3d *vector,
                             int *error);
 
 void
-dwg_ent_mtext_get_extrusion(const dwg_ent_mtext *mtext, dwg_point_3d *point,
+dwg_ent_mtext_get_extrusion(const dwg_ent_mtext *mtext, dwg_point_3d *vector,
                             int *error);
 
 void
@@ -2012,19 +2012,19 @@ dwg_ent_leader_get_origin(const dwg_ent_leader *leader, dwg_point_3d *point,
                           int *error);
 
 void
-dwg_ent_leader_set_extrusion(dwg_ent_leader *leader, dwg_point_3d *point,
+dwg_ent_leader_set_extrusion(dwg_ent_leader *leader, dwg_point_3d *vector,
                              int *error);
 
 void
-dwg_ent_leader_get_extrusion(const dwg_ent_leader *leader, dwg_point_3d *point,
+dwg_ent_leader_get_extrusion(const dwg_ent_leader *leader, dwg_point_3d *vector,
                              int *error);
 
 void
-dwg_ent_leader_set_x_direction(dwg_ent_leader *leader, dwg_point_3d *point,
+dwg_ent_leader_set_x_direction(dwg_ent_leader *leader, dwg_point_3d *vector,
                                int *error);
 
 void
-dwg_ent_leader_get_x_direction(const dwg_ent_leader *leader, dwg_point_3d *point,
+dwg_ent_leader_get_x_direction(const dwg_ent_leader *leader, dwg_point_3d *vector,
                                int *error);
 
 void
@@ -2126,11 +2126,11 @@ dwg_ent_tolerance_get_x_direction(const dwg_ent_tolerance *tol, dwg_point_3d *po
                                   int *error);
 
 void
-dwg_ent_tolerance_set_extrusion(dwg_ent_tolerance *tol, dwg_point_3d *point,
+dwg_ent_tolerance_set_extrusion(dwg_ent_tolerance *tol, dwg_point_3d *vector,
                                 int *error);
 
 void
-dwg_ent_tolerance_get_extrusion(const dwg_ent_tolerance *tol, dwg_point_3d *point,
+dwg_ent_tolerance_get_extrusion(const dwg_ent_tolerance *tol, dwg_point_3d *vector,
                                 int *error);
 
 /* (utf-8 encoded) */
@@ -2698,11 +2698,11 @@ dwg_ent_polyline_mesh_get_num_owned(const dwg_ent_polyline_mesh *mesh,
 
 void
 dwg_ent_polyline_2d_get_extrusion(const dwg_ent_polyline_2d *line2d,
-                                  dwg_point_3d *point, int *error);
+                                  dwg_point_3d *vector, int *error);
 
 void
 dwg_ent_polyline_2d_set_extrusion(dwg_ent_polyline_2d *line2d,
-                                  dwg_point_3d *point, int *error);
+                                  dwg_point_3d *vector, int *error);
 
 BITCODE_BD
 dwg_ent_polyline_2d_get_start_width(const dwg_ent_polyline_2d *line2d, int *error);
@@ -2960,11 +2960,11 @@ dwg_ent_mline_get_base_point(const dwg_ent_mline *mline, dwg_point_3d *point,
                              int *error);
 
 void
-dwg_ent_mline_set_extrusion(dwg_ent_mline *mline, dwg_point_3d *point,
+dwg_ent_mline_set_extrusion(dwg_ent_mline *mline, dwg_point_3d *vector,
                             int *error);
 
 void
-dwg_ent_mline_get_extrusion(const dwg_ent_mline *mline, dwg_point_3d *point,
+dwg_ent_mline_get_extrusion(const dwg_ent_mline *mline, dwg_point_3d *vector,
                             int *error);
 
 void
@@ -3274,12 +3274,12 @@ dwg_ent_table_get_rotation(const dwg_ent_table *restrict table,
 
 void
 dwg_ent_table_set_extrusion(dwg_ent_table *restrict table,
-                            const dwg_point_3d *restrict point,
+                            const dwg_point_3d *restrict vector,
                             int *restrict error);
 
 void
 dwg_ent_table_get_extrusion(const dwg_ent_table *restrict table,
-                            dwg_point_3d *restrict point,
+                            dwg_point_3d *restrict vector,
                             int *restrict error);
 
 unsigned char
