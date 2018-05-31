@@ -309,6 +309,8 @@ dwg_object_to_DIMENSION(dwg_object *obj)
  ********************************************************************/
 
 /** Create and return a new _dwg_entity_CIRCLE:: entity with default values.
+Do not use, will be removed!
+This function does not add a new circle to the DWG. Use dwg_add_CIRCLE(dwg) instead.
 \code Usage: dwg_ent_circle_new();
 \endcode
 \param[out] error   int*, is set to 0 for ok, 1 on error
@@ -563,6 +565,8 @@ dwg_ent_circle_get_extrusion(const dwg_ent_circle *restrict circle, dwg_point_3d
  ********************************************************************/
 
 /** Creates a new and initialized _dwg_entity_LINE::
+Do not use, will be removed!
+This function does not add a new line to the DWG. Use dwg_add_LINE(dwg) instead.
 \code Usage: dwg_ent_line_new();
 \endcode
 \param[out] error   int*, set to 0 for ok, 1 on error
@@ -818,7 +822,9 @@ dwg_ent_line_set_extrusion(dwg_ent_line *restrict line, const dwg_point_3d *rest
  ********************************************************************/
 
 /// This function creates a new entity of arc type.
-/** Usage :- dwg_ent_arc_new();
+/** Do not use, will be removed!
+This function does not add a new arc to the DWG. Use dwg_add_ARC(dwg) instead.
+Usage :- dwg_ent_arc_new();
  */
 dwg_ent_arc *
 dwg_ent_arc_new(int *error)
@@ -1155,7 +1161,9 @@ dwg_ent_arc_set_end_angle(dwg_ent_arc *restrict arc, const BITCODE_BD angle,
  ********************************************************************/
 
 /// This function creates a new entity of ellipse type.
-/** Usage :- dwg_ent_ellipse_new();
+/** Do not use, will be removed!
+This function does not add a new ellipse to the DWG. Use dwg_add_ELLIPSE(dwg) instead.
+Usage :- dwg_ent_ellipse_new();
  */
 dwg_ent_ellipse *
 dwg_ent_ellipse_new(int *error)
