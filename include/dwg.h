@@ -1612,18 +1612,21 @@ typedef struct _dwg_entity_MLINE
   BITCODE_H mlinestyle;
 } Dwg_Entity_MLINE;
 
+#define COMMON_TABLE_CONTROL_FIELDS(entries) \
+  BITCODE_BS num_entries; \
+  BITCODE_H null_handle; \
+  BITCODE_H xdicobjhandle; \
+  BITCODE_H* entries; \
+  long unsigned int objid;
+
 /**
  BLOCK_CONTROL (48) object, table header
  */
 typedef struct _dwg_object_BLOCK_CONTROL
 {
-  BITCODE_BS num_entries;
-  BITCODE_H null_handle;
-  BITCODE_H xdicobjhandle;
-  BITCODE_H* block_headers;
+  COMMON_TABLE_CONTROL_FIELDS(block_headers);
   BITCODE_H model_space;
   BITCODE_H paper_space;
-  long unsigned int objid;
 } Dwg_Object_BLOCK_CONTROL;
 
 /**
@@ -1673,11 +1676,7 @@ typedef struct _dwg_object_BLOCK_HEADER
  */
 typedef struct _dwg_object_LAYER_CONTROL
 {
-  BITCODE_BS num_entries;
-  BITCODE_H null_handle;
-  BITCODE_H xdicobjhandle;
-  BITCODE_H* layers;
-  long unsigned int objid;
+  COMMON_TABLE_CONTROL_FIELDS(layers);
 } Dwg_Object_LAYER_CONTROL;
 
 /**
@@ -1714,11 +1713,7 @@ typedef struct _dwg_object_LAYER
  */
 typedef struct _dwg_object_STYLE_CONTROL
 {
-  BITCODE_BS num_entries;
-  BITCODE_H null_handle;
-  BITCODE_H xdicobjhandle;
-  BITCODE_H* styles;
-  long unsigned int objid;
+  COMMON_TABLE_CONTROL_FIELDS(styles);
 } Dwg_Object_STYLE_CONTROL;
 
 /**
@@ -1755,13 +1750,9 @@ typedef struct _dwg_object_STYLE
  */
 typedef struct _dwg_object_LTYPE_CONTROL
 {
-  BITCODE_BS num_entries;
-  BITCODE_H null_handle;
-  BITCODE_H xdicobjhandle;
-  BITCODE_H* linetypes;
+  COMMON_TABLE_CONTROL_FIELDS(linetypes);
   BITCODE_H bylayer;
   BITCODE_H byblock;
-  long unsigned int objid;
 } Dwg_Object_LTYPE_CONTROL;
 
 /**
@@ -1808,11 +1799,7 @@ typedef struct _dwg_object_LTYPE
  */
 typedef struct _dwg_object_VIEW_CONTROL
 {
-  BITCODE_BS num_entries;
-  BITCODE_H null_handle;
-  BITCODE_H xdicobjhandle;
-  BITCODE_H* views;
-  long unsigned int objid;
+  COMMON_TABLE_CONTROL_FIELDS(views);
 } Dwg_Object_VIEW_CONTROL;
 
 /**
@@ -1867,11 +1854,7 @@ typedef struct _dwg_object_VIEW
  */
 typedef struct _dwg_object_UCS_CONTROL
 {
-  BITCODE_BS num_entries;
-  BITCODE_H null_handle;
-  BITCODE_H xdicobjhandle;
-  BITCODE_H* ucs;
-  long unsigned int objid;
+  COMMON_TABLE_CONTROL_FIELDS(ucs);
 } Dwg_Object_UCS_CONTROL;
 
 /**
@@ -1904,11 +1887,7 @@ typedef struct _dwg_object_UCS
  */
 typedef struct _dwg_object_VPORT_CONTROL
 {
-  BITCODE_BS num_entries;
-  BITCODE_H null_handle;
-  BITCODE_H xdicobjhandle;
-  BITCODE_H* vports;
-  long unsigned int objid;
+  COMMON_TABLE_CONTROL_FIELDS(vports);
 } Dwg_Object_VPORT_CONTROL;
 
 /**
@@ -1978,11 +1957,7 @@ typedef struct _dwg_object_VPORT
  */
 typedef struct _dwg_object_APPID_CONTROL
 {
-  BITCODE_BS num_entries;
-  BITCODE_H null_handle;
-  BITCODE_H xdicobjhandle;
-  BITCODE_H* apps;
-  long unsigned int objid;
+  COMMON_TABLE_CONTROL_FIELDS(apps);
 } Dwg_Object_APPID_CONTROL;
 
 /**
@@ -2010,13 +1985,9 @@ typedef struct _dwg_object_APPID
  */
 typedef struct _dwg_object_DIMSTYLE_CONTROL
 {
-  BITCODE_BS num_entries;
+  COMMON_TABLE_CONTROL_FIELDS(dimstyles);
   BITCODE_RC num_morehandles; /* undocumented */
-  BITCODE_H null_handle;
-  BITCODE_H xdicobjhandle;
-  BITCODE_H* dimstyles;
   BITCODE_H* morehandles;
-  long unsigned int objid;
 } Dwg_Object_DIMSTYLE_CONTROL;
 
 /**
@@ -2135,11 +2106,7 @@ typedef struct _dwg_object_DIMSTYLE
  */
 typedef struct _dwg_object_VPORT_ENTITY_CONTROL
 {
-  BITCODE_BS num_entries;
-  BITCODE_H null_handle;
-  BITCODE_H xdicobjhandle;
-  BITCODE_H* vport_entity_headers;
-  long unsigned int objid;
+  COMMON_TABLE_CONTROL_FIELDS(vport_entity_headers);
 } Dwg_Object_VPORT_ENTITY_CONTROL;
 
 /**
