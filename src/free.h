@@ -13,6 +13,8 @@
 /*
  * free.h: helper functions to free all spec fields
  * written by Reini Urban
+ *
+ * now empty, all methods are public
  */
 
 #ifndef FREE_H
@@ -20,8 +22,5 @@
 
 #include "dwg.h"
 #include "bits.h"
-
-void
-dwg_free_object(Dwg_Object *obj);
 
 #endif
