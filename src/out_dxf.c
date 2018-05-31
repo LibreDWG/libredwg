@@ -392,9 +392,9 @@ dwg_dxf_ ##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
   _obj = obj->tio.object->tio.token;\
   fprintf(dat->fh, "%3i\r\n%lX\r\n", 5, obj->handle.value); \
   LOG_TRACE("Object handle: %d.%d.%lu\n",\
-    obj->handle.code,\
-    obj->handle.size,\
-    obj->handle.value)
+            obj->handle.code,   \
+            obj->handle.size,   \
+            obj->handle.value)
 
 #define DWG_OBJECT_END }
 
@@ -496,7 +496,7 @@ dxf_write_handle(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   }
 }
 
-//TODO
+//TODO: 5 330 100 70. have: 330 100 5 70
 #define COMMON_TABLE_CONTROL_FLAGS(owner) \
     VALUE_H (_ctrl->null_handle, 330); \
     if (dat->from_version >= R_2000) \
@@ -1001,16 +1001,16 @@ dwg_dxf_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       //dwg_dxf_STYLE_CONTROL(dat, obj);
       break;
     case DWG_TYPE_STYLE:
-      RECORD(STYLE);
-      dwg_dxf_STYLE(dat, obj);
+      //RECORD(STYLE);
+      //dwg_dxf_STYLE(dat, obj);
       break;
     case DWG_TYPE_LTYPE_CONTROL:
       //RECORD(LTYPE);
       //dwg_dxf_LTYPE_CONTROL(dat, obj);
       break;
     case DWG_TYPE_LTYPE:
-      RECORD(LTYPE);
-      dwg_dxf_LTYPE(dat, obj);
+      //RECORD(LTYPE);
+      //dwg_dxf_LTYPE(dat, obj);
       break;
     case DWG_TYPE_VIEW_CONTROL:
       //RECORD(VIEW);
@@ -1328,6 +1328,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       Dwg_Object_VPORT_CONTROL *_ctrl = &dwg->vport_control;
       Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
       TABLE(VPORT);
+      // add handle 5 here at first
       COMMON_TABLE_CONTROL_FLAGS(null_handle);
       dwg_dxf_VPORT_CONTROL(dat, ctrl);
       //TODO how far back can DXF read 1000?
@@ -1350,18 +1351,28 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
       ENDTAB();
     }
-if (0) { //only temp. to test dxf import into acad.
+if (1) { //only temp. to test dxf import into acad. this is broken
   if (dwg->ltype_control.num_entries)
     {
       Dwg_Object_LTYPE_CONTROL *_ctrl = &dwg->ltype_control;
       Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
+      Dwg_Object *obj;
       TABLE(LTYPE);
       COMMON_TABLE_CONTROL_FLAGS(null_handle);
       dwg_dxf_LTYPE_CONTROL(dat, ctrl);
+      // first the 2 builtin ltypes: ByBlock, ByLayer
+      if ((obj  = dwg_ref_get_object(dwg, dwg->header_vars.LTYPE_BYBLOCK))) {
+        RECORD (LTYPE);
+        dwg_dxf_LTYPE(dat, obj);
+      }
+      if ((obj  = dwg_ref_get_object(dwg, dwg->header_vars.LTYPE_BYLAYER))) {
+        RECORD (LTYPE);
+        dwg_dxf_LTYPE(dat, obj);
+      }
+      // here LTYPE_CONTINUOUS is already included
       for (i=0; i<dwg->ltype_control.num_entries; i++)
         {
-          Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->linetypes[i]);
-          if (obj) {
+          if ((obj = dwg_ref_get_object(dwg, _ctrl->linetypes[i]))) {
             RECORD (LTYPE);
             dwg_dxf_LTYPE(dat, obj);
           }
