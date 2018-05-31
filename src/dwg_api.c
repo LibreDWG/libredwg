@@ -278,10 +278,10 @@ void dwg_api_init_version(Dwg_Data *dwg)
   dwg_version = (Dwg_Version_Type)dwg->header.version;
 }
 
-/* There is no generic call dwg_get_DIMENSION, for this you have to
-   specify the exact DIMENSION_* type. */
-
-/* To access the common DIMENSION fields (only) */
+/** To access the common DIMENSION fields (only).
+    There is no generic call dwg_get_DIMENSION, for this you have to
+    specify the exact DIMENSION_* type.
+*/
 dwg_ent_dim *
 dwg_object_to_DIMENSION(dwg_object *obj)
 {
@@ -308,30 +308,6 @@ dwg_object_to_DIMENSION(dwg_object *obj)
  *                    FUNCTIONS FOR CIRCLE ENTITY                    *
  ********************************************************************/
 
-/** Reset all geometric _dwg_entity_CIRCLE:: entity fields to zero
-\code Usage: dwg_ent_circle_init(circle);
-/endcode
-\param[in,out]  circle    dwg_ent_circle*
-*/
-dwg_ent_circle *
-dwg_ent_circle_init(dwg_ent_circle *circle)
-{
-  if (circle)
-    {
-      circle->center.x    = circle->center.y = 0.0;
-      circle->center.z    = 0.0;
-      circle->radius      = 0.0;
-      circle->thickness   = 0.0;
-      circle->extrusion.x = circle->extrusion.y = 0.0;
-      circle->extrusion.z = 0.0;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty circle", __FUNCTION__)
-    }
-  return circle;
-}
-
 /** Returns the _dwg_entity_CIRCLE::center, DXF 10.
 \code Usage: dwg_ent_circle_get_center(circle, &point, &error);
 \encode
@@ -340,7 +316,8 @@ dwg_ent_circle_init(dwg_ent_circle *circle)
 \param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_circle_get_center(const dwg_ent_circle *restrict circle, dwg_point_3d *restrict point,
+dwg_ent_circle_get_center(const dwg_ent_circle *restrict circle,
+                          dwg_point_3d *restrict point,
                           int *restrict error)
 {
   if (point && circle)
@@ -365,7 +342,8 @@ dwg_ent_circle_get_center(const dwg_ent_circle *restrict circle, dwg_point_3d *r
 \param[out]    error  set to 0 for ok, 1 on error
 */
 void
-dwg_ent_circle_set_center(dwg_ent_circle *restrict circle, const dwg_point_3d *restrict point,
+dwg_ent_circle_set_center(dwg_ent_circle *restrict circle,
+                          const dwg_point_3d *restrict point,
                           int *restrict error)
 {
   if (point && circle)
@@ -507,7 +485,8 @@ dwg_ent_circle_set_extrusion(dwg_ent_circle *restrict circle,
 \param[out] error  int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_circle_get_extrusion(const dwg_ent_circle *restrict circle, dwg_point_3d *restrict vector,
+dwg_ent_circle_get_extrusion(const dwg_ent_circle *restrict circle,
+                             dwg_point_3d *restrict vector,
                              int *restrict error)
 {
   if (circle && vector)
@@ -528,29 +507,6 @@ dwg_ent_circle_get_extrusion(const dwg_ent_circle *restrict circle, dwg_point_3d
  *                    FUNCTIONS FOR LINE ENTITY                      *
  ********************************************************************/
 
-/** Initialize the geometric fields of a _dwg_entity_LINE:: to zero.
-\code Usage: dwg_ent_line_init();
-\endcode
-\param[in,out] line    dwg_ent_line*
- */
-dwg_ent_line *
-dwg_ent_line_init(dwg_ent_line *line)
-{
-  if (line)
-    {
-      line->start.x     = line->start.y = line->start.z = 0.0;
-      line->end.x       = line->end.y   = line->end.z = 0.0;
-      line->thickness   = 0.0;
-      line->extrusion.x = line->extrusion.y = 0.0;
-      line->extrusion.z = 0.0;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty line", __FUNCTION__)
-    }
-  return line;
-}
-
 /** Returns the _dwg_entity_LINE::start point, DXF 10.
 \code Usage: dwg_ent_line_get_start_point(line, &point, &error);
 \endcode
@@ -559,7 +515,8 @@ dwg_ent_line_init(dwg_ent_line *line)
 \param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_line_get_start_point(const dwg_ent_line *restrict line, dwg_point_3d *restrict point,
+dwg_ent_line_get_start_point(const dwg_ent_line *restrict line,
+                             dwg_point_3d *restrict point,
                              int *restrict error)
 {
   if (line)
@@ -584,7 +541,8 @@ dwg_ent_line_get_start_point(const dwg_ent_line *restrict line, dwg_point_3d *re
 \param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_line_set_start_point(dwg_ent_line *restrict line, const dwg_point_3d *restrict point,
+dwg_ent_line_set_start_point(dwg_ent_line *restrict line,
+                             const dwg_point_3d *restrict point,
                              int *restrict error)
 {
   if (line)
@@ -609,7 +567,8 @@ dwg_ent_line_set_start_point(dwg_ent_line *restrict line, const dwg_point_3d *re
 \param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_line_get_end_point(const dwg_ent_line *restrict line, dwg_point_3d *restrict point,
+dwg_ent_line_get_end_point(const dwg_ent_line *restrict line,
+                           dwg_point_3d *restrict point,
                            int *restrict error)
 {
   if (line)
@@ -749,28 +708,6 @@ dwg_ent_line_set_extrusion(dwg_ent_line *restrict line, const dwg_point_3d *rest
 /*******************************************************************
  *                    FUNCTIONS FOR ARC ENTITY                       *
  ********************************************************************/
-
-/// This function initialises a arc entity with default/zero values.
-/** Usage :- dwg_ent_arc_init();
- */
-dwg_ent_arc *
-dwg_ent_arc_init(dwg_ent_arc *arc)
-{
-  if (arc)
-    {
-      arc->center.x    = arc->center.y = arc->center.z = 0.0;
-      arc->radius      = 0.0;
-      arc->thickness   = 0.0;
-      arc->extrusion.x = arc->extrusion.y = arc->extrusion.z = 0.0;
-      arc->start_angle = 0.0;
-      arc->end_angle   = 0.0;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty arc", __FUNCTION__)
-    }
-  return arc;
-}
 
 /** Returns the _dwg_entity_ARC::center, DXF 10.
 \code Usage: dwg_ent_arc_get_center(arc, &point, &error);
@@ -1057,31 +994,6 @@ dwg_ent_arc_set_end_angle(dwg_ent_arc *restrict arc, const BITCODE_BD angle,
 /*******************************************************************
  *                   FUNCTIONS FOR ELLIPSE ENTITY                    *
  ********************************************************************/
-
-/// This function initialises a ellipse entity with default or zero values.
-/** Usage :- dwg_ent_ellipse_init();
- */
-dwg_ent_ellipse *
-dwg_ent_ellipse_init(dwg_ent_ellipse *ellipse)
-{
-  if (ellipse)
-    {
-      ellipse->center.x    = ellipse->center.y = 0.0;
-      ellipse->center.z    = 0.0;
-      ellipse->sm_axis.x   = ellipse->sm_axis.y = 0.0;
-      ellipse->sm_axis.z   = 0.0;
-      ellipse->extrusion.x = ellipse->extrusion.y = 0.0;
-      ellipse->extrusion.z = 0.0;
-      ellipse->axis_ratio  = 0.0;
-      ellipse->start_angle = 0.0;
-      ellipse->end_angle   = 0.0;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty ellipse", __FUNCTION__)
-    }
-  return ellipse;
-}
 
 /** returns ellipse center.
 \code Usage: dwg_ent_ellipse_get_center(ellipse, &center, &error);

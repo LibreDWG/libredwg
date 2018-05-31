@@ -460,10 +460,6 @@ void dwg_api_init_version(Dwg_Data *dwg);
 *                    FUNCTIONS FOR CIRCLE ENTITY                    *
 ********************************************************************/
 
-/// Initializes a _dwg_entity_CIRCLE:: with its default values
-dwg_ent_circle *
-dwg_ent_circle_init(dwg_ent_circle *circle);
-
 // Get/Set the center point of a _dwg_entity_CIRCLE::
 void
 dwg_ent_circle_get_center(const dwg_ent_circle *restrict circle, dwg_point_3d *restrict point,
@@ -503,10 +499,6 @@ dwg_ent_circle_set_extrusion(dwg_ent_circle *restrict circle,
 *                    FUNCTIONS FOR LINE ENTITY                      *
 ********************************************************************/
 
-// Initializes a line with its default values
-dwg_ent_line *
-dwg_ent_line_init(dwg_ent_line *line);
-
 // Get/Set the start point of a line
 void
 dwg_ent_line_get_start_point(const dwg_ent_line *restrict line, dwg_point_3d *restrict point,
@@ -545,9 +537,6 @@ dwg_ent_line_get_extrusion(const dwg_ent_line *restrict line, dwg_point_3d *rest
 /********************************************************************
 *                    FUNCTIONS FOR ARC ENTITY                       *
 ********************************************************************/
-
-// Initializes a arc with its default values
-dwg_ent_arc* dwg_ent_arc_init(dwg_ent_arc *arc);
 
 // Get/Set the center point of a arc
 void
@@ -595,10 +584,6 @@ dwg_ent_arc_set_end_angle(dwg_ent_arc *restrict arc, const BITCODE_BD end_angle,
 /********************************************************************
 *                   FUNCTIONS FOR ELLIPSE ENTITY                    *
 ********************************************************************/
-
-// Initializes a ellipse with its default values
-dwg_ent_ellipse *
-dwg_ent_ellipse_init(dwg_ent_ellipse *ellipse);
 
 // Get/Set center of ellipse
 void
