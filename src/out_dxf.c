@@ -1350,7 +1350,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
       ENDTAB();
     }
-#if 0  
+if (0) { //only temp. to test dxf import into acad.
   if (dwg->ltype_control.num_entries)
     {
       Dwg_Object_LTYPE_CONTROL *_ctrl = &dwg->ltype_control;
@@ -1436,7 +1436,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
       ENDTAB();
     }
-#endif
+}
   if (dwg->appid_control.num_entries) //FIXME ACAD import
     {
       Dwg_Object_APPID_CONTROL *_ctrl = &dwg->appid_control;
@@ -1472,27 +1472,28 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
       ENDTAB();
     }
-#if 0
-  if (dwg->block_control.num_entries)
+  // fool the warnings. this table is nowhere to be found in the wild
+  if (0 && dwg->vport_entity_control.num_entries)
     {
-      Dwg_Object_BLOCK_CONTROL *_ctrl = &dwg->block_control;
+      Dwg_Object_VPORT_ENTITY_CONTROL *_ctrl = &dwg->vport_entity_control;
       Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
-      TABLE(BLOCK_RECORD);
+      TABLE(VPORT_ENTITY);
       COMMON_TABLE_CONTROL_FLAGS(null_handle);
-      dwg_dxf_BLOCK_CONTROL(dat, ctrl);
-      /*
-      for (i=0; i < _ctrl->num_entries; i++)
+      dwg_dxf_VPORT_ENTITY_CONTROL(dat, ctrl);
+      for (i=0; i<dwg->vport_entity_control.num_entries; i++)
         {
-          Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->block_headers[i]);
+          Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->vport_entity_headers[i]);
           if (obj) {
-            RECORD (BLOCK_RECORD);
-            dwg_dxf_BLOCK_HEADER(dat, obj);
+            RECORD (VPORT_ENTITY_HEADER);
+            dwg_dxf_VPORT_ENTITY_HEADER(dat, obj);
           }
         }
-      */
+      // avoid unused warnings
+      dwg_dxf_PROXY_ENTITY(dat, &dwg->object[0]);
+      dwg_dxf_UNKNOWN_ENT(dat, &dwg->object[0]);
+      dwg_dxf_UNKNOWN_OBJ(dat, &dwg->object[0]);
       ENDTAB();
     }
-#endif
   ENDSEC();
   return 0;
 }
