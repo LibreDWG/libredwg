@@ -1262,19 +1262,18 @@ resolve_objectref_vector(Bit_Chain* dat, Dwg_Data * dwg)
 
   for (i = 0; i < dwg->num_object_refs; i++)
     {
-      LOG_TRACE("\n==========\n")
-      LOG_TRACE("-objref: HANDLE(%d.%d.%lu) Absolute:%lu\n",
+      LOG_TRACE("==========\n")
+      LOG_TRACE("-objref: HANDLE(%d.%d.%lX) Absolute:%lX/%lu\n",
                 dwg->object_ref[i]->handleref.code,
                 dwg->object_ref[i]->handleref.size,
                 dwg->object_ref[i]->handleref.value,
-                dwg->object_ref[i]->absolute_ref)
+                dwg->object_ref[i]->absolute_ref, dwg->object_ref[i]->absolute_ref)
 
-      //look for object
+      // search the handle in all objects
       obj = dwg_resolve_handle(dwg, dwg->object_ref[i]->absolute_ref);
-
       if (obj)
         {
-          LOG_TRACE("-found:  HANDLE(%d.%d.%lu)\n",
+          LOG_TRACE("-found:  HANDLE(%d.%d.%lX)\n",
               obj->handle.code,
               obj->handle.size,
               obj->handle.value)
@@ -2194,7 +2193,7 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
         return error;
       } else {
         end = dat->byte + size;
-        LOG_TRACE("EED[%u] handle: %d.%d.%lu\n", idx,
+        LOG_TRACE("EED[%u] handle: %d.%d.%lX\n", idx,
                   obj->eed[idx].handle.code, obj->eed[idx].handle.size,
                   obj->eed[idx].handle.value);
         if (obj->object->supertype == DWG_SUPERTYPE_OBJECT &&
@@ -2384,7 +2383,7 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
       ent->num_handles = 0;
       return 0;
     }
-  LOG_TRACE("handle: %d.%d.%lu [5]\n", _obj->handle.code,
+  LOG_TRACE("handle: %d.%d.%lX [5]\n", _obj->handle.code,
             _obj->handle.size, _obj->handle.value)
 
   error = dwg_decode_eed(dat, (Dwg_Object_Object *)ent);
@@ -2577,7 +2576,7 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
       obj->num_reactors = 0;
       return -1;
     }
-  LOG_TRACE("handle: %d.%d.%lu [5]\n", _obj->handle.code,
+  LOG_TRACE("handle: %d.%d.%lX [5]\n", _obj->handle.code,
             _obj->handle.size, _obj->handle.value)
 
   error = dwg_decode_eed(dat, obj);
@@ -3536,7 +3535,7 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
     }
 
   LOG_INFO("==========================================\n"
-           "Object number: %lu", num)
+           "Object number: %lu/%lX", num, num)
 
   obj = &dwg->object[num];
   memset(obj, 0, sizeof(Dwg_Object));
@@ -3882,7 +3881,7 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
               }
               if (!bit_read_H(dat, &obj->handle))
                 {
-                  LOG_TRACE("handle: %d.%d.%lu [5]\n",
+                  LOG_TRACE("handle: %d.%d.%lX [5]\n",
                            obj->handle.code, obj->handle.size, obj->handle.value)
                 }
               object_address = dat->byte;

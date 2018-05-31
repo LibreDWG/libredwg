@@ -68,7 +68,7 @@
       }\
     if (_obj->name)\
       {\
-        LOG_TRACE(#name ": HANDLE(%d.%d.%lu) absolute:%lu/%lX [%d]\n", \
+        LOG_TRACE(#name ": HANDLE(%d.%d.%lX) absolute:%lX/%lu [%d]\n", \
                   _obj->name->handleref.code, \
                   _obj->name->handleref.size, \
                   _obj->name->handleref.value,\
@@ -87,7 +87,7 @@
       }\
     if (_obj->name)\
       {\
-        LOG_TRACE(#name "[%d]: HANDLE(%d.%d.%lu) absolute:%lu/%lX [%d]\n",  \
+        LOG_TRACE(#name "[%d]: HANDLE(%d.%d.%lX) absolute:%lX/%lu [%d]\n",  \
               (int)vcount,                          \
               _obj->name->handleref.code,           \
               _obj->name->handleref.size,           \
@@ -98,7 +98,7 @@
 #define FIELD_DATAHANDLE(name, handle_code, dxf) \
   { \
     _obj->name = dwg_decode_handleref(dat, obj, dwg);\
-    LOG_TRACE(#name ": HANDLE(%d.%d.%lu) absolute:%lu/%lX [%d]\n",\
+    LOG_TRACE(#name ": HANDLE(%d.%d.%lX) absolute:%lX/%lu [%d]\n",\
               _obj->name->handleref.code,  \
               _obj->name->handleref.size,  \
               _obj->name->handleref.value, \

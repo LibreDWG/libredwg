@@ -539,7 +539,7 @@ dwg_dxf_##token (Bit_Chain *dat, Dwg_Object * obj) \
   LOG_INFO("Entity " #token ":\n")\
   _ent = obj->tio.entity;\
   _obj = ent = _ent->tio.token;\
-  LOG_TRACE("Entity handle: %d.%d.%lu\n",\
+  LOG_TRACE("Entity handle: %d.%d.%lX\n",\
     obj->handle.code,\
     obj->handle.size,\
     obj->handle.value)
@@ -556,7 +556,7 @@ dwg_dxf_ ##token (Bit_Chain *dat, Dwg_Object * obj) \
   Dxf_Pair *pair; \
   LOG_INFO("Object " #token ":\n")\
   _obj = obj->tio.object->tio.token;\
-  LOG_TRACE("Object handle: %d.%d.%lu\n",\
+  LOG_TRACE("Object handle: %d.%d.%lX\n",\
     obj->handle.code,\
     obj->handle.size,\
     obj->handle.value)
@@ -1254,7 +1254,7 @@ dwg_dxf_object(Bit_Chain *dat, Dwg_Object *obj)
                 {
                   LOG_INFO("Object bitsize: %u\n", obj->bitsize)
                 }
-              LOG_INFO("Object handle: %d.%d.%lu\n",
+              LOG_INFO("Object handle: %d.%d.%lX\n",
                        obj->handle.code, obj->handle.size, obj->handle.value);
             }
         }

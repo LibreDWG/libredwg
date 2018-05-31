@@ -418,7 +418,7 @@ static void dwg_encode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict ob
   Bit_Chain* str_dat = dat; \
   Dwg_Object_##token * _obj = obj->tio.object->tio.token; \
   if (dwg_encode_object(obj, dat, hdl_dat, str_dat)) return; \
-  LOG_INFO("Object " #token " handle: %d.%d.%lu\n",\
+  LOG_INFO("Object " #token " handle: %d.%d.%lX\n",\
     obj->handle.code, \
     obj->handle.size, \
     obj->handle.value)
@@ -1738,7 +1738,7 @@ dwg_encode_add_object(Dwg_Object* obj, Bit_Chain* dat,
                          dat->byte, dat->bit);
               }
               bit_write_H(dat, &(obj->handle));
-              LOG_INFO("Object handle: %d.%d.%lu\n",
+              LOG_INFO("Object handle: %d.%d.%lX\n",
                        obj->handle.code, obj->handle.size, obj->handle.value);
               // write obj->size bytes, excl. bitsize and handle.
               // overshoot the bitsize and handle size.

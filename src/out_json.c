@@ -905,7 +905,7 @@ dwg_json_object(Bit_Chain *dat, Dwg_Object *obj)
                 {
                   LOG_INFO("Object bitsize: %u\n", obj->bitsize)
                 }
-              LOG_INFO("Object handle: %d.%d.%lu\n",
+              LOG_INFO("Object handle: %d.%d.%lX\n",
                        obj->handle.code, obj->handle.size, obj->handle.value);
             }
         }

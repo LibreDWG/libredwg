@@ -407,7 +407,7 @@ dwg_dxfb_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
   _ent = obj->tio.entity;\
   _obj = ent = _ent->tio.token;\
   fprintf(dat->fh, "%3i\r\n%lX\r\n", 5, obj->handle.value); \
-  LOG_TRACE("Entity handle: %d.%d.%lu\n",\
+  LOG_TRACE("Entity handle: %d.%d.%lX\n",\
     obj->handle.code,\
     obj->handle.size,\
     obj->handle.value) \
@@ -430,7 +430,7 @@ dwg_dxfb_ ##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
   LOG_INFO("Object " #token ":\n")\
   _obj = obj->tio.object->tio.token;\
   fprintf(dat->fh, "%3i\r\n%lX\r\n", 5, obj->handle.value); \
-  LOG_TRACE("Object handle: %d.%d.%lu\n",\
+  LOG_TRACE("Object handle: %d.%d.%lX\n",\
     obj->handle.code,\
     obj->handle.size,\
     obj->handle.value)
@@ -1157,7 +1157,7 @@ dwg_dxfb_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
                 {
                   LOG_INFO("Object bitsize: %u\n", obj->bitsize)
                 }
-              LOG_INFO("Object handle: %d.%d.%lu\n",
+              LOG_INFO("Object handle: %d.%d.%lX\n",
                        obj->handle.code, obj->handle.size, obj->handle.value);
             }
         }
