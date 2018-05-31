@@ -517,10 +517,16 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "MATERIAL"))
     {
+#ifdef DEBUG_MATERIAL
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      dwg_print_MATERIAL(dat, obj);
+      return 1;
+#else
       UNHANDLED_CLASS;
       assert(!is_entity);
-      //dwg_print_MATERIAL(dat, obj);
       return 0;
+#endif
     }
   if (!strcmp(dxfname, "TABLESTYLE"))
     {

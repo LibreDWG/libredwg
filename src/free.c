@@ -516,8 +516,12 @@ dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "MATERIAL"))
     {
-      //dwg_free_MATERIAL(obj);
+#ifdef DEBUG_MATERIAL
+      dwg_free_MATERIAL(obj);
+      goto known;
+#else
       goto unknown;
+#endif
     }
  unknown:  
   free(dxfname);

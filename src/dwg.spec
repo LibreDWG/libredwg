@@ -4578,7 +4578,7 @@ DWG_OBJECT(XRECORD)
     #ifdef IS_DXF
     if (FIELD_VALUE(objid_handles)) {
       REPEAT(objid_handles, num_objid_handles, T)
-        //TODO xdata string, 102
+        //VALUE_TV ("", 102); //TODO xdata string, 102
         VALUE_H (_obj->objid_handles[rcount], 340);
       END_REPEAT(objid_handles)
     }
@@ -5003,6 +5003,133 @@ DWG_OBJECT(VISUALSTYLE)
 
 DWG_OBJECT_END
 
+// (varies) UNTESTED
+#ifdef DEBUG_MATERIAL
+DWG_OBJECT(MATERIAL)
+
+  FIELD_T (name, 1);
+  FIELD_T (desc, 2);
+
+  DEBUG_HERE(); // TODO from here on the order of the fields is unknown
+  FIELD_RC (ambient_color_flag, 70); // 0 Use current color, 1 Override
+  FIELD_BD (ambient_color_factor, 40); // 0.0 - 1.0
+  FIELD_CMC (ambient_color, 90);
+
+  DEBUG_HERE();
+  FIELD_RC (diffuse_color_flag, 71); // 0 Use current color, 1 Override
+  FIELD_BD (diffuse_color_factor, 41); // 0.0 - 1.0
+  FIELD_CMC (diffuse_color, 91);
+  FIELD_RC (diffusemap_source, 72); // 0 current, 1 image file (default)
+  FIELD_RC (diffusemap_filename, 3); // if NULL no diffuse map
+  FIELD_BD (diffusemap_blendfactor, 42); // 1.0
+  FIELD_RC (diffusemap_projection, 73); // 1 = Planar (def), 2 = Box, 3 = Cylinder, 4 = Sphere
+  FIELD_RC (diffusemap_tiling, 74); // 1 = Tile (def), 2 = Crop, 3 = Clamp
+  FIELD_RC (diffusemap_autotransform, 75); // 1 no, 2: scale to curr ent,
+                                        // 4: w/ current block transform
+  DEBUG_HERE();
+  FIELD_VECTOR_N (diffusemap_transmatrix, BD, 16, 43);
+
+  FIELD_BD (specular_gloss_factor, 44); //def: 0.5
+  FIELD_RC (specular_color_flag, 76); // 0 Use current color, 1 Override
+  FIELD_BD (specular_color_factor, 45); // 0.0 - 1.0
+  FIELD_CMC (specular_color, 92);
+
+  FIELD_RC (specularmap_source, 77); // 0 current, 1 image file (default)
+  FIELD_RC (specularmap_filename, 4); // if NULL no specular map
+  FIELD_BD (specularmap_blendfactor, 46); // 1.0
+  FIELD_RC (specularmap_projection, 78); // 1 = Planar (def), 2 = Box, 3 = Cylinder, 4 = Sphere
+  FIELD_RC (specularmap_tiling, 79); // 1 = Tile (def), 2 = Crop, 3 = Clamp
+  FIELD_RC (specularmap_autotransform, 170); // 1 no, 2: scale to curr ent,
+                                        // 4: w/ current block transform
+  FIELD_VECTOR_N (specularmap_transmatrix, BD, 16, 47);
+
+  FIELD_RC (reflectionmap_source, 171); // 0 current, 1 image file (default)
+  FIELD_RC (reflectionmap_filename, 6); // if NULL no diffuse map
+  FIELD_BD (reflectionmap_blendfactor, 48); // 1.0
+  FIELD_RC (reflectionmap_projection, 172); // 1 = Planar (def), 2 = Box, 3 = Cylinder, 4 = Sphere
+  FIELD_RC (reflectionmap_tiling, 173); // 1 = Tile (def), 2 = Crop, 3 = Clamp
+  FIELD_RC (reflectionmap_autotransform, 174); // 1 no, 2: scale to curr ent,
+                                        // 4: w/ current block transform
+  DEBUG_HERE();
+  FIELD_VECTOR_N (reflectionmap_transmatrix, BD, 16, 49);
+
+  FIELD_BD (opacity_percent, 140); //def: 1.0
+  FIELD_RC (opacitymap_source, 175); // 0 current, 1 image file (default)
+  FIELD_RC (opacitymap_filename, 7); // if NULL no specular map
+  FIELD_BD (opacitymap_blendfactor, 141); // 1.0
+  FIELD_RC (opacitymap_projection, 176); // 1 = Planar (def), 2 = Box, 3 = Cylinder, 4 = Sphere
+  FIELD_RC (opacitymap_tiling, 177); // 1 = Tile (def), 2 = Crop, 3 = Clamp
+  FIELD_RC (opacitymap_autotransform, 178); // 1 no, 2: scale to curr ent,
+                                        // 4: w/ current block transform
+  DEBUG_HERE();
+  FIELD_VECTOR_N (opacitymap_transmatrix, BD, 16, 142);
+
+  FIELD_RC (bumpmap_source, 179); // 0 current, 1 image file (default)
+  FIELD_RC (bumpmap_filename, 8); // if NULL no specular map
+  FIELD_BD (bumpmap_blendfactor, 143); // 1.0
+  FIELD_RC (bumpmap_projection, 270); // 1 = Planar (def), 2 = Box, 3 = Cylinder, 4 = Sphere
+  FIELD_RC (bumpmap_tiling, 271); // 1 = Tile (def), 2 = Crop, 3 = Clamp
+  FIELD_RC (bumpmap_autotransform, 272); // 1 no, 2: scale to curr ent,
+                                        // 4: w/ current block transform
+  DEBUG_HERE();
+  FIELD_VECTOR_N (bumpmap_transmatrix, BD, 16, 144);
+
+  FIELD_BD (refraction_index, 145); //def: 1.0
+  FIELD_RC (refractionmap_source, 273); // 0 current, 1 image file (default)
+  FIELD_RC (refractionmap_filename, 9); // if NULL no specular map
+  FIELD_BD (refractionmap_blendfactor, 143); // 1.0
+  FIELD_RC (refractionmap_projection, 274); // 1 = Planar (def), 2 = Box, 3 = Cylinder, 4 = Sphere
+  FIELD_RC (refractionmap_tiling, 275); // 1 = Tile (def), 2 = Crop, 3 = Clamp
+  FIELD_RC (refractionmap_autotransform, 276); // 1 no, 2: scale to curr ent,
+                                        // 4: w/ current block transform
+  FIELD_VECTOR_N (refractionmap_transmatrix, BD, 16, 147);
+  FIELD_BD (color_bleed_scale, 460);
+  FIELD_BD (indirect_dump_scale, 461);
+  FIELD_BD (reflectance_scale, 462);
+  FIELD_BD (transmittance_scale, 463);
+  FIELD_B (two_sided_material, 290);
+  DEBUG_HERE();
+  FIELD_BD (luminance, 464);
+  FIELD_RC (luminance_mode, 270);
+  FIELD_RC (normalmap_method, 271);
+  FIELD_BD (normalmap_strength, 465); //def: 1.0
+  FIELD_RC (normalmap_source, 72); // 0 current, 1 image file (default)
+  FIELD_RC (normalmap_filename, 3); // if NULL no specular map
+  FIELD_BD (normalmap_blendfactor, 42); // 1.0
+  FIELD_RC (normalmap_projection, 73); // 1 = Planar (def), 2 = Box, 3 = Cylinder, 4 = Sphere
+  FIELD_RC (normalmap_tiling, 74); // 1 = Tile (def), 2 = Crop, 3 = Clamp
+  FIELD_RC (normalmap_autotransform, 43); // 1 no, 2: scale to curr ent,
+                                        // 4: w/ current block transform
+  DEBUG_HERE();
+  FIELD_VECTOR_N (normalmap_transmatrix, BD, 16, 43);
+  FIELD_B (materials_anonymous, 293);
+  FIELD_RC (global_illumination_mode, 272);
+  FIELD_RC (final_gather_mode, 273);
+  FIELD_T (genprocname, 300);
+  FIELD_B (genprocvalbool, 291);
+  FIELD_RC (genprocvalint, 271);
+  FIELD_BD (genprocvalreal, 469);
+  FIELD_T (genprocvaltext, 301);
+  FIELD_B (genproctableend, 292);
+  FIELD_CMC (genprocvalcolorindex, 62);
+  FIELD_BS (genprocvalcolorrgb, 420);
+  FIELD_T (genprocvalcolorname, 430);
+  FIELD_RC (map_utile, 270);
+  FIELD_BD (translucence, 148);
+  FIELD_BL (self_illumination, 90);
+  FIELD_BD (reflectivity, 468);
+  FIELD_BL (illumination_model, 93);
+  DEBUG_HERE();
+  FIELD_BL (channel_flags, 94);
+  //78
+  //172
+  //176
+  //270
+  //274
+DWG_OBJECT_END
+#endif
+
+
 /*
 Those undocumented objects are stored as raw UNKNOWN_OBJ:
 
@@ -5029,10 +5156,6 @@ DWG_OBJECT(DIMASSOC)
 DWG_OBJECT_END
 
 DWG_OBJECT(EXACXREFPANELOBJECT)
-DWG_OBJECT_END
-
-//(varies) lots of fields in the DXF docs
-DWG_OBJECT(MATERIAL)
 DWG_OBJECT_END
 
 DWG_OBJECT(LEADEROBJECTCONTEXTDATA)

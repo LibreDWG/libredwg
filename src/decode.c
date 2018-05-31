@@ -2326,7 +2326,7 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
           if (dat->byte < end-1)
             {
               size = (long)(end - dat->byte + 1);
-              LOG_HANDLE("EED[%u] size remaining: %ld\n", idx, (long)size);
+              LOG_INSANE("EED[%u] size remaining: %ld\n", idx, (long)size);
 
               obj->eed = (Dwg_Eed*)realloc(obj->eed, (idx+1) * sizeof(Dwg_Eed));
               obj->eed[idx].handle = obj->eed[idx-1].handle;
@@ -2985,13 +2985,13 @@ dwg_decode_xdata(Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj, int 
         case VT_BINARY:
           rbuf->value.str.size = bit_read_RC(dat);
           rbuf->value.str.u.data = bit_read_TF(dat, rbuf->value.str.size);
-          LOG_TRACE("xdata[%d]: \"%s\" [%d]\n", num_xdata,
-                    rbuf->value.str.u.data, rbuf->type);
+          LOG_TRACE("xdata[%d]: ", num_xdata);
+          LOG_TRACE_TF(rbuf->value.str.u.data, rbuf->value.str.size);
           break;
         case VT_HANDLE:
         case VT_OBJECTID:
           bit_read_fixed(dat, (char*)rbuf->value.hdl, 8);
-          LOG_TRACE("xdata[%d]: %s/%lX [HDL %d]\n", num_xdata, rbuf->value.hdl,
+          LOG_TRACE("xdata[%d]: %lX [HDL %d]\n", num_xdata,
                     (unsigned long)*(uint64_t*)rbuf->value.hdl, rbuf->type);
           break;
         case VT_INVALID:
@@ -3413,10 +3413,16 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
     }
   if (!strcmp(dxfname, "MATERIAL"))
     {
+#ifdef DEBUG_MATERIAL
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      dwg_decode_MATERIAL(dat, obj);
+      return 1;
+#else
       UNHANDLED_CLASS;
       assert(!is_entity);
-      //dwg_decode_MATERIAL(dat, obj);
       return 0;
+#endif
     }
   if (!strcmp(dxfname, "TABLESTYLE"))
     {
