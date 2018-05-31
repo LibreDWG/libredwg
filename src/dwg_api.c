@@ -17422,7 +17422,7 @@ dwg_get_block_header(dwg_data *dwg, int *error)
 \param[out] error  set to 0 for ok, >0 if not found.
 */
 char *
-dwg_obj_layer_get_name(const dwg_obj_layer *layer, int *error)
+dwg_obj_layer_get_name(const dwg_obj_layer *restrict layer, int *restrict error)
 {
   if (layer)
     {
@@ -17441,17 +17441,17 @@ dwg_obj_layer_get_name(const dwg_obj_layer *layer, int *error)
 }
 
 /*******************************************************************
-*                    FUNCTIONS FOR OTHER TABLE OBJECTS             *
+*           GENERIC FUNCTIONS FOR OTHER TABLE OBJECTS              *
 ********************************************************************/
 
-/** Get number of table entries from the table control object.
+/** Get number of table entries from the generic table control object.
 \code Usage: char* name = dwg_obj_tablectrl_get_num_entries(obj, &error);
 \endcode
-\param[in]  table  a <TABLE>_CONTROL dwg_object*
+\param[in]  obj    a TABLE_CONTROL dwg_object*
 \param[out] error  set to 0 for ok, >0 if not found.
 */
 BITCODE_BL
-dwg_obj_tablectrl_get_num_entries(const dwg_object *obj, int * error)
+dwg_obj_tablectrl_get_num_entries(const dwg_object *restrict obj, int *restrict error)
 {
   if (obj &&
       obj->supertype == DWG_SUPERTYPE_OBJECT &&
@@ -17471,14 +17471,161 @@ dwg_obj_tablectrl_get_num_entries(const dwg_object *obj, int * error)
     }
 }
 
-/** Get name of the table entry (utf-8 encoded)
+/** Get all table entries from the generic table control object.
+\code Usage: dwg_object_ref **refs = dwg_obj_tablectrl_get_entries(obj, &error);
+\endcode
+\param[in]  obj    a TABLE_CONTROL dwg_object*
+\param[out] error  set to 0 for ok, >0 if not found.
+*/
+dwg_object_ref **
+dwg_obj_tablectrl_get_entries(const dwg_object *restrict obj, int *restrict error)
+{
+  if (obj &&
+      obj->supertype == DWG_SUPERTYPE_OBJECT &&
+      dwg_obj_is_control(obj))
+    {
+      // HACK: we can guarantee a common layout of the common fields
+      Dwg_Object_STYLE_CONTROL *ctrl = obj->tio.object->tio.STYLE_CONTROL;
+      return ctrl->styles;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty or invalid table control arg %p, type: 0x%x",
+                __FUNCTION__, obj, obj ? obj->type : 0)
+      return NULL;
+    }
+}
+
+/** Get the nth table entry from the generic table control object.
+\code Usage: dwg_object_ref *ref = dwg_obj_tablectrl_get_entry(obj, 0, &error);
+\endcode
+\param[in]  obj    a TABLE_CONTROL dwg_object*
+\param[in]  index  BITCODE_BS
+\param[out] error  set to 0 for ok, >0 if not found.
+*/
+dwg_object_ref *
+dwg_obj_tablectrl_get_entry(const dwg_object *restrict obj, const BITCODE_BS index,
+                            int *restrict error)
+{
+  if (obj &&
+      obj->supertype == DWG_SUPERTYPE_OBJECT &&
+      dwg_obj_is_control(obj))
+    {
+      // HACK: we can guarantee a common layout of the common fields
+      Dwg_Object_STYLE_CONTROL *ctrl = obj->tio.object->tio.STYLE_CONTROL;
+      BITCODE_BS count = ctrl->num_entries;
+      if (index < count)
+        {
+          *error = 0;
+          return ctrl->styles[index];
+        }
+      else
+        {
+          *error = 2;
+          LOG_ERROR("%s: index %d out of bounds %d",
+                    __FUNCTION__, index, count);
+          return NULL;
+        }
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty or invalid table control arg %p, type: 0x%x",
+                __FUNCTION__, obj, obj ? obj->type : 0)
+      return NULL;
+    }
+}
+
+/** Get the null_handle from the generic table control object.
+\code Usage: dwg_object_ref *ref = dwg_obj_tablectrl_get_null_handle(obj, &error);
+\endcode
+\param[in]  obj    a TABLE_CONTROL dwg_object*
+\param[out] error  set to 0 for ok, >0 if not found.
+*/
+dwg_object_ref *
+dwg_obj_tablectrl_get_null_handle(const dwg_object *restrict obj,
+                                  int *restrict error)
+{
+  if (obj &&
+      obj->supertype == DWG_SUPERTYPE_OBJECT &&
+      dwg_obj_is_control(obj))
+    {
+      // HACK: we can guarantee a common layout of the common fields
+      Dwg_Object_STYLE_CONTROL *ctrl = obj->tio.object->tio.STYLE_CONTROL;
+      return ctrl->null_handle;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty or invalid table control arg %p, type: 0x%x",
+                __FUNCTION__, obj, obj ? obj->type : 0)
+      return NULL;
+    }
+}
+
+/** Get the xdicobjhandle from the generic table control object.
+\code Usage: dwg_object_ref *ref = dwg_obj_tablectrl_get_xdicobjhandle(obj, &error);
+\endcode
+\param[in]  obj    a TABLE_CONTROL dwg_object*
+\param[out] error  set to 0 for ok, >0 if not found.
+*/
+dwg_object_ref *
+dwg_obj_tablectrl_get_xdicobjhandle(const dwg_object *restrict obj,
+                                    int *restrict error)
+{
+  if (obj &&
+      obj->supertype == DWG_SUPERTYPE_OBJECT &&
+      dwg_obj_is_control(obj))
+    {
+      // HACK: we can guarantee a common layout of the common fields
+      Dwg_Object_STYLE_CONTROL *ctrl = obj->tio.object->tio.STYLE_CONTROL;
+      return ctrl->xdicobjhandle;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty or invalid table control arg %p, type: 0x%x",
+                __FUNCTION__, obj, obj ? obj->type : 0)
+      return NULL;
+    }
+}
+
+/** Get the objid from the generic table control object.
+\code Usage: objid = dwg_obj_tablectrl_get_objid(obj, &error);
+\endcode
+\param[in]  obj    a TABLE_CONTROL dwg_object*
+\param[out] error  set to 0 for ok, >0 if not found.
+*/
+long unsigned int
+dwg_obj_tablectrl_get_objid(const dwg_object *restrict obj,
+                            int *restrict error)
+{
+  if (obj &&
+      obj->supertype == DWG_SUPERTYPE_OBJECT &&
+      dwg_obj_is_control(obj))
+    {
+      // HACK: we can guarantee a common layout of the common fields
+      Dwg_Object_STYLE_CONTROL *ctrl = obj->tio.object->tio.STYLE_CONTROL;
+      return ctrl->objid;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty or invalid table control arg %p, type: 0x%x",
+                __FUNCTION__, obj, obj ? obj->type : 0)
+      return 0;
+    }
+}
+
+/** Get name of the generic table entry (utf-8 encoded)
 \code Usage: char* name = dwg_obj_table_get_name(obj, &error);
 \endcode
-\param[in]  table  a <TABLE> dwg_object*
+\param[in]  obj    a TABLE dwg_object*
 \param[out] error  set to 0 for ok, >0 if not found.
 */
 char *
-dwg_obj_table_get_name(const dwg_object *obj, int *error)
+dwg_obj_table_get_name(const dwg_object *restrict obj, int *restrict error)
 {
   if (obj &&
       obj->supertype == DWG_SUPERTYPE_OBJECT &&

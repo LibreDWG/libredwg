@@ -3828,18 +3828,41 @@ dwg_obj_block_control_get_paper_space(const dwg_obj_block_control *ctrl, int *er
 *                    FUNCTIONS FOR LAYER OBJECT                     *
 ********************************************************************/
 
-
 // Get Layer Name
 char *
-dwg_obj_layer_get_name(const dwg_obj_layer *layer, int * error);
+dwg_obj_layer_get_name(const dwg_obj_layer *restrict layer, int *restrict error);
+
+/*******************************************************************
+*                    FUNCTIONS FOR TABLES                          *
+*             All other tables and table entries                   *
+********************************************************************/
 
 // Get name of any table entry
 char *
-dwg_obj_table_get_name(const dwg_object *obj, int *error);
+dwg_obj_table_get_name(const dwg_object *restrict obj, int *restrict error);
 
-// Get number of table entries
+// Get number of table entries from the table.
 BITCODE_BL
-dwg_obj_tablectrl_get_num_entries(const dwg_object *obj, int * error);
+dwg_obj_tablectrl_get_num_entries(const dwg_object *restrict obj, int *restrict error);
+
+// Get the nth table entry from the table.
+dwg_object_ref *
+dwg_obj_tablectrl_get_entry(const dwg_object *restrict obj, const BITCODE_BS index,
+                            int *restrict error);
+
+// Get all table entries from the table.
+dwg_object_ref **
+dwg_obj_tablectrl_get_entries(const dwg_object *restrict obj, int * error);
+
+dwg_object_ref *
+dwg_obj_tablectrl_get_null_handle(const dwg_object *restrict obj,
+                                  int *restrict error);
+dwg_object_ref *
+dwg_obj_tablectrl_get_xdicobjhandle(const dwg_object *restrict obj,
+                                    int *restrict error);
+long unsigned int
+dwg_obj_tablectrl_get_objid(const dwg_object *restrict obj,
+                            int *restrict error);
 
 /********************************************************************
 *                    FUNCTIONS FOR XRECORD OBJECT                     *

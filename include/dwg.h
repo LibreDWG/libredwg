@@ -1617,7 +1617,7 @@ typedef struct _dwg_entity_MLINE
   BITCODE_H null_handle; \
   BITCODE_H xdicobjhandle; \
   BITCODE_H* entries; \
-  long unsigned int objid;
+  long unsigned int objid
 
 /**
  BLOCK_CONTROL (48) object, table header
