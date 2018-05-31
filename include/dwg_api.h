@@ -223,105 +223,105 @@ typedef struct _dwg_entity_eed			  dwg_entity_eed;
 *        Functions created from macro to extract entities           *
 ********************************************************************/
 
-/// Macro call to extract all text entities from a block
+/// extract all text entities from a block
 GET_DWG_ENTITY_DECL(TEXT)
-/// Macro call to extract all attrib entities from a block
+/// extract all attrib entities from a block
 GET_DWG_ENTITY_DECL(ATTRIB)
-/// Macro call to extract all attdef entities from a block
+/// extract all attdef entities from a block
 GET_DWG_ENTITY_DECL(ATTDEF)
-/// Macro call to extract all block entities from a block
+/// extract all block entities from a block
 GET_DWG_ENTITY_DECL(BLOCK)
-/// Macro call to extract endblk entity from a block
+/// extract endblk entity from a block
 GET_DWG_ENTITY_DECL(ENDBLK)
-/// Macro call to extract all seqend entities from a block
+/// extract all seqend entities from a block
 GET_DWG_ENTITY_DECL(SEQEND)
-/// Macro call to extract all insert entities from a block
+/// extract all insert entities from a block
 GET_DWG_ENTITY_DECL(INSERT)
-/// Macro call to extract all minsert entities from a block
+/// extract all minsert entities from a block
 GET_DWG_ENTITY_DECL(MINSERT)
-/// Macro call to extract all vertex_2d entities from a block
+/// extract all vertex_2d entities from a block
 GET_DWG_ENTITY_DECL(VERTEX_2D)
-/// Macro call to extract all vertex_3d entities from a block
+/// extract all vertex_3d entities from a block
 GET_DWG_ENTITY_DECL(VERTEX_3D)
-/// Macro call to extract all vertex_mesh entities from a block
+/// extract all vertex_mesh entities from a block
 GET_DWG_ENTITY_DECL(VERTEX_MESH)
-/// Macro call to extract all vertex_pface entities from a block
+/// extract all vertex_pface entities from a block
 GET_DWG_ENTITY_DECL(VERTEX_PFACE)
-/// Macro call to extract all vertex_pface_face entities from a block
+/// extract all vertex_pface_face entities from a block
 GET_DWG_ENTITY_DECL(VERTEX_PFACE_FACE)
-/// Macro call to extract all polyline_2d entities from a block
+/// extract all polyline_2d entities from a block
 GET_DWG_ENTITY_DECL(POLYLINE_2D)
-/// Macro call to extract all polyline_3d entities from a block
+/// extract all polyline_3d entities from a block
 GET_DWG_ENTITY_DECL(POLYLINE_3D)
-/// Macro call to extract all arc entities from a block
+/// extract all arc entities from a block
 GET_DWG_ENTITY_DECL(ARC)
-/// Macro call to extract all circle entities from a block
+/// extract all circle entities from a block
 GET_DWG_ENTITY_DECL(CIRCLE)
-/// Macro call to extract all line entities from a block
+/// extract all line entities from a block
 GET_DWG_ENTITY_DECL(LINE)
-/// Macro call to extract all dimension ordinate entities from a block
+/// extract all dimension ordinate entities from a block
 GET_DWG_ENTITY_DECL(DIMENSION_ORDINATE)
-/// Macro call to extract all dimension linear entities from a block
+/// extract all dimension linear entities from a block
 GET_DWG_ENTITY_DECL(DIMENSION_LINEAR)
-/// Macro call to extract all dimension aligned entities from a block
+/// extract all dimension aligned entities from a block
 GET_DWG_ENTITY_DECL(DIMENSION_ALIGNED)
-/// Macro call to extract all dimension ang3pt entities from a block
+/// extract all dimension ang3pt entities from a block
 GET_DWG_ENTITY_DECL(DIMENSION_ANG3PT)
-/// Macro call to extract all dimension ang2ln entities from a block
+/// extract all dimension ang2ln entities from a block
 GET_DWG_ENTITY_DECL(DIMENSION_ANG2LN)
-/// Macro call to extract all dimension radius entities from a block
+/// extract all dimension radius entities from a block
 GET_DWG_ENTITY_DECL(DIMENSION_RADIUS)
-/// Macro call to extract all dimension diameter entities from a block
+/// extract all dimension diameter entities from a block
 GET_DWG_ENTITY_DECL(DIMENSION_DIAMETER)
-/// Macro call to extract all points entities from a block
+/// extract all points entities from a block
 GET_DWG_ENTITY_DECL(POINT)
-/// Macro call to extract all polyline_pface entities from a block
+/// extract all polyline_pface entities from a block
 GET_DWG_ENTITY_DECL(POLYLINE_PFACE)
-/// Macro call to extract all polyline_mesh entities from a block
+/// extract all polyline_mesh entities from a block
 GET_DWG_ENTITY_DECL(POLYLINE_MESH)
-/// Macro call to extract all solid entities from a block
+/// extract all solid entities from a block
 GET_DWG_ENTITY_DECL(SOLID)
-/// Macro call to extract all trace entities from a block
+/// extract all trace entities from a block
 GET_DWG_ENTITY_DECL(TRACE)
-/// Macro call to extract all shape entities from a block
+/// extract all shape entities from a block
 GET_DWG_ENTITY_DECL(SHAPE)
-/// Macro call to extract all viewport entities from a block
+/// extract all viewport entities from a block
 GET_DWG_ENTITY_DECL(VIEWPORT)
-/// Macro call to extract all ellipse entities from a block
+/// extract all ellipse entities from a block
 GET_DWG_ENTITY_DECL(ELLIPSE)
-/// Macro call to extract all spline entities from a block
+/// extract all spline entities from a block
 GET_DWG_ENTITY_DECL(SPLINE)
-/// Macro call to extract all region entities from a block
+/// extract all region entities from a block
 GET_DWG_ENTITY_DECL(REGION)
-/// Macro call to extract all body entities from a block
+/// extract all body entities from a block
 GET_DWG_ENTITY_DECL(BODY)
-/// Macro call to extract all ray entities from a block
+/// extract all ray entities from a block
 GET_DWG_ENTITY_DECL(RAY)
-/// Macro call to extract all xline entities from a block
+/// extract all xline entities from a block
 GET_DWG_ENTITY_DECL(XLINE)
-/// Macro call to extract all OLEFRAME entities from a block
+/// extract all OLEFRAME entities from a block
 GET_DWG_ENTITY_DECL(OLEFRAME)
-/// Macro call to extract all mtext entities from a block
+/// extract all mtext entities from a block
 GET_DWG_ENTITY_DECL(MTEXT)
-/// Macro call to extract all leader entities from a block
+/// extract all leader entities from a block
 GET_DWG_ENTITY_DECL(LEADER)
-/// Macro call to extract all tolerance entities from a block
+/// extract all tolerance entities from a block
 GET_DWG_ENTITY_DECL(TOLERANCE)
-/// Macro call to extract all mline entities from a block
+/// extract all mline entities from a block
 GET_DWG_ENTITY_DECL(MLINE)
-/// Macro call to extract all OLE2FRAME entities from a block
+/// extract all OLE2FRAME entities from a block
 GET_DWG_ENTITY_DECL(OLE2FRAME)
-/// Macro call to extract all DUMMY entities from a block
+/// extract all DUMMY entities from a block
 GET_DWG_ENTITY_DECL(DUMMY)
-/// Macro call to extract all LONG_TRANSACTION entities from a block
+/// extract all LONG_TRANSACTION entities from a block
 GET_DWG_ENTITY_DECL(LONG_TRANSACTION)
-/// Macro call to extract all lwpline entities from a block
+/// extract all lwpline entities from a block
 GET_DWG_ENTITY_DECL(LWPOLYLINE)
-/// Macro call to extract all PROXY_ENTITY entities from a block
+/// extract all PROXY_ENTITY entities from a block
 GET_DWG_ENTITY_DECL(PROXY_ENTITY)
-/// Macro call to extract all hatch entities from a block
+/// extract all hatch entities from a block
 GET_DWG_ENTITY_DECL(HATCH)
-/// Macro call to extract all image entities from a block
+/// extract all image entities from a block
 GET_DWG_ENTITY_DECL(IMAGE)
 
 /*******************************************************************
@@ -330,108 +330,108 @@ GET_DWG_ENTITY_DECL(IMAGE)
 *                where ENTITY can be LINE or CIRCLE                 *
 ********************************************************************/
 
-/// Macro call to cast dwg object to text
+/// cast dwg object to text
 CAST_DWG_OBJECT_TO_ENTITY_DECL(TEXT)
-/// Macro call to cast dwg object to attrib
+/// cast dwg object to attrib
 CAST_DWG_OBJECT_TO_ENTITY_DECL(ATTRIB)
-/// Macro call to cast dwg object to attdef
+/// cast dwg object to attdef
 CAST_DWG_OBJECT_TO_ENTITY_DECL(ATTDEF)
-/// Macro call to cast dwg object to block
+/// cast dwg object to block
 CAST_DWG_OBJECT_TO_ENTITY_DECL(BLOCK)
-/// Macro call to extract endblk entity from a block
+/// extract endblk entity from a block
 CAST_DWG_OBJECT_TO_ENTITY_DECL(ENDBLK)
-/// Macro call to cast dwg object to seqend
+/// cast dwg object to seqend
 CAST_DWG_OBJECT_TO_ENTITY_DECL(SEQEND)
-/// Macro call to cast dwg object to insert
+/// cast dwg object to insert
 CAST_DWG_OBJECT_TO_ENTITY_DECL(INSERT)
-/// Macro call to cast dwg object to minsert
+/// cast dwg object to minsert
 CAST_DWG_OBJECT_TO_ENTITY_DECL(MINSERT)
-/// Macro call to cast dwg object to vertex_2d
+/// cast dwg object to vertex_2d
 CAST_DWG_OBJECT_TO_ENTITY_DECL(VERTEX_2D)
-/// Macro call to cast dwg object to vertex_3d
+/// cast dwg object to vertex_3d
 CAST_DWG_OBJECT_TO_ENTITY_DECL(VERTEX_3D)
-/// Macro call to cast dwg object to vertex_mesh
+/// cast dwg object to vertex_mesh
 CAST_DWG_OBJECT_TO_ENTITY_DECL(VERTEX_MESH)
-/// Macro call to cast dwg object to vertex_pface
+/// cast dwg object to vertex_pface
 CAST_DWG_OBJECT_TO_ENTITY_DECL(VERTEX_PFACE)
-/// Macro call to cast dwg object to vertex_pface_face
+/// cast dwg object to vertex_pface_face
 CAST_DWG_OBJECT_TO_ENTITY_DECL(VERTEX_PFACE_FACE)
-/// Macro call to cast dwg object to polyline_2d
+/// cast dwg object to polyline_2d
 CAST_DWG_OBJECT_TO_ENTITY_DECL(POLYLINE_2D)
-/// Macro call to cast dwg object to polyline_3d
+/// cast dwg object to polyline_3d
 CAST_DWG_OBJECT_TO_ENTITY_DECL(POLYLINE_3D)
-/// Macro call to cast dwg object to arc
+/// cast dwg object to arc
 CAST_DWG_OBJECT_TO_ENTITY_DECL(ARC)
-/// Macro call to cast dwg object to circle
+/// cast dwg object to circle
 CAST_DWG_OBJECT_TO_ENTITY_DECL(CIRCLE)
-/// Macro call to cast dwg object to line
+/// cast dwg object to line
 CAST_DWG_OBJECT_TO_ENTITY_DECL(LINE)
 
-/// Macro call to cast dwg object to common dimension
+/// cast dwg object to common dimension
 dwg_ent_dim * dwg_object_to_DIMENSION(dwg_object *obj);
-/// Macro call to cast dwg object to dimension ordinate
+/// cast dwg object to dimension ordinate
 CAST_DWG_OBJECT_TO_ENTITY_DECL(DIMENSION_ORDINATE)
-/// Macro call to cast dwg object to dimension linear
+/// cast dwg object to dimension linear
 CAST_DWG_OBJECT_TO_ENTITY_DECL(DIMENSION_LINEAR)
-/// Macro call to cast dwg object to dimension aligned
+/// cast dwg object to dimension aligned
 CAST_DWG_OBJECT_TO_ENTITY_DECL(DIMENSION_ALIGNED)
-/// Macro call to cast dwg object to dimension ang3pt
+/// cast dwg object to dimension ang3pt
 CAST_DWG_OBJECT_TO_ENTITY_DECL(DIMENSION_ANG3PT)
-/// Macro call to cast dwg object to dimension ang2ln
+/// cast dwg object to dimension ang2ln
 CAST_DWG_OBJECT_TO_ENTITY_DECL(DIMENSION_ANG2LN)
-/// Macro call to cast dwg object to dimension radius
+/// cast dwg object to dimension radius
 CAST_DWG_OBJECT_TO_ENTITY_DECL(DIMENSION_RADIUS)
-/// Macro call to cast dwg object to dimension diameter
+/// cast dwg object to dimension diameter
 CAST_DWG_OBJECT_TO_ENTITY_DECL(DIMENSION_DIAMETER)
-/// Macro call to cast dwg object to points
+/// cast dwg object to points
 CAST_DWG_OBJECT_TO_ENTITY_DECL(POINT)
-/// Macro call to cast dwg object to polyline_pface
+/// cast dwg object to polyline_pface
 CAST_DWG_OBJECT_TO_ENTITY_DECL(POLYLINE_PFACE)
-/// Macro call to cast dwg object to polyline_mesh
+/// cast dwg object to polyline_mesh
 CAST_DWG_OBJECT_TO_ENTITY_DECL(POLYLINE_MESH)
-/// Macro call to cast dwg object to solid
+/// cast dwg object to solid
 CAST_DWG_OBJECT_TO_ENTITY_DECL(SOLID)
-/// Macro call to cast dwg object to trace
+/// cast dwg object to trace
 CAST_DWG_OBJECT_TO_ENTITY_DECL(TRACE)
-/// Macro call to cast dwg object to shape
+/// cast dwg object to shape
 CAST_DWG_OBJECT_TO_ENTITY_DECL(SHAPE)
-/// Macro call to cast dwg object to viewport
+/// cast dwg object to viewport
 CAST_DWG_OBJECT_TO_ENTITY_DECL(VIEWPORT)
-/// Macro call to cast dwg object to ellipse
+/// cast dwg object to ellipse
 CAST_DWG_OBJECT_TO_ENTITY_DECL(ELLIPSE)
-/// Macro call to cast dwg object to spline
+/// cast dwg object to spline
 CAST_DWG_OBJECT_TO_ENTITY_DECL(SPLINE)
-/// Macro call to cast dwg object to region
+/// cast dwg object to region
 CAST_DWG_OBJECT_TO_ENTITY_DECL(REGION)
-/// Macro call to cast dwg object to body
+/// cast dwg object to body
 CAST_DWG_OBJECT_TO_ENTITY_DECL(BODY)
-/// Macro call to cast dwg object to ray
+/// cast dwg object to ray
 CAST_DWG_OBJECT_TO_ENTITY_DECL(RAY)
-/// Macro call to cast dwg object to xline
+/// cast dwg object to xline
 CAST_DWG_OBJECT_TO_ENTITY_DECL(XLINE)
-/// Macro call to cast dwg object to oleframe
+/// cast dwg object to oleframe
 CAST_DWG_OBJECT_TO_ENTITY_DECL(OLEFRAME)
-/// Macro call to cast dwg object to mtext
+/// cast dwg object to mtext
 CAST_DWG_OBJECT_TO_ENTITY_DECL(MTEXT)
-/// Macro call to cast dwg object to leader
+/// cast dwg object to leader
 CAST_DWG_OBJECT_TO_ENTITY_DECL(LEADER)
-/// Macro call to cast dwg object to tolerance
+/// cast dwg object to tolerance
 CAST_DWG_OBJECT_TO_ENTITY_DECL(TOLERANCE)
-/// Macro call to cast dwg object to mline
+/// cast dwg object to mline
 CAST_DWG_OBJECT_TO_ENTITY_DECL(MLINE)
-/// Macro call to cast dwg object to ole2frame
+/// cast dwg object to ole2frame
 CAST_DWG_OBJECT_TO_ENTITY_DECL(OLE2FRAME)
-/// Macro call to cast dwg object to dummy
+/// cast dwg object to dummy
 CAST_DWG_OBJECT_TO_ENTITY_DECL(DUMMY)
-/// Macro call to cast dwg object to long_transaction
+/// cast dwg object to long_transaction
 CAST_DWG_OBJECT_TO_ENTITY_DECL(LONG_TRANSACTION)
-/// Macro call to cast dwg object to lwpline
+/// cast dwg object to lwpline
 CAST_DWG_OBJECT_TO_ENTITY_DECL(LWPOLYLINE)
-/// Macro call to cast dwg object to proxy_entity
+/// cast dwg object to proxy_entity
 CAST_DWG_OBJECT_TO_ENTITY_DECL(PROXY_ENTITY)
-/// Macro call to cast dwg object to hatch
+/// cast dwg object to hatch
 CAST_DWG_OBJECT_TO_ENTITY_DECL(HATCH)
-/// Macro call to cast dwg object to image
+/// cast dwg object to image
 CAST_DWG_OBJECT_TO_ENTITY_DECL(IMAGE)
 
 /*******************************************************************
@@ -439,16 +439,17 @@ CAST_DWG_OBJECT_TO_ENTITY_DECL(IMAGE)
 *                 Usage :- dwg_object_to_OBJECT(),                  *
 *            where OBJECT can be LAYER or BLOCK_HEADER              *
 ********************************************************************/
-/// Macro call to cast dwg object to block header
+/// cast dwg object to block header
 CAST_DWG_OBJECT_TO_OBJECT_DECL(BLOCK_HEADER)
-/// Macro call to cast dwg object to block control
+/// cast dwg object to block control
 CAST_DWG_OBJECT_TO_OBJECT_DECL(BLOCK_CONTROL)
-/// Macro call to cast dwg object to layer
+/// cast dwg object to layer
 CAST_DWG_OBJECT_TO_OBJECT_DECL(LAYER)
-/// Macro call to cast dwg object to xrecord
+/// cast dwg object to xrecord
 CAST_DWG_OBJECT_TO_OBJECT_DECL(XRECORD)
 
-// initialize the DWG version, for r2007+ unicode strings and older field variants
+/// initialize the DWG version, needed for r2007+ unicode strings
+/// and pre-R13 field variants. unneeded for r13-r2004
 void dwg_api_init_version(Dwg_Data *dwg);
 
 /********************************************************************
