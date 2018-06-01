@@ -1931,8 +1931,10 @@ DWG_ENTITY(MLINE)
             }
           END_REPEAT(verts[rcount].lines[rcount2].areafillparms);
         }
+      DECODER { _obj->verts[rcount].lines->parent = &_obj->verts[rcount]; }
       END_REPEAT(verts[rcount].lines);
     }
+  DECODER { _obj->verts->parent = _obj; }
   END_REPEAT(verts);
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -3136,6 +3138,7 @@ DWG_ENTITY(HATCH)
           FIELD_BL (colors[rcount].rgb_color, 63); // 63 for color as ACI. 421 for rgb
           FIELD_RC (colors[rcount].ignored_color_byte, 0);
         }
+      DECODER { _obj->colors->parent = _obj; }
       END_REPEAT(colors);
       FIELD_T (gradient_name, 470);
     }
@@ -3195,6 +3198,8 @@ DWG_ENTITY(HATCH)
                               FIELD_BD (paths[rcount].segs[rcount2].control_points[rcount3].weigth, 40);
                             }
                         }
+                      DECODER { _obj->paths[rcount].segs[rcount2].control_points->parent =
+                                    &_obj->paths[rcount].segs[rcount2]; }
                       END_REPEAT(paths[rcount].segs[rcount2].control_points);
                       SINCE(R_2013) // r2014 really
                         {
@@ -3208,6 +3213,7 @@ DWG_ENTITY(HATCH)
                       break;
                 }
             }
+          DECODER { _obj->paths[rcount].segs->parent = &_obj->paths[rcount]; }
           END_REPEAT(paths[rcount].segs);
         }
       else
@@ -3224,6 +3230,7 @@ DWG_ENTITY(HATCH)
                   FIELD_BD (paths[rcount].polyline_paths[rcount2].bulge, 42);
                 }
             }
+          DECODER { _obj->paths[rcount].polyline_paths->parent = &_obj->paths[rcount]; }
           END_REPEAT(paths[rcount].polyline_paths);
         }
       FIELD_BL (paths[rcount].num_boundary_handles, 97);
@@ -3233,6 +3240,7 @@ DWG_ENTITY(HATCH)
           FIELD_VALUE (has_derived) || (FIELD_VALUE (paths[rcount].flag) & 0x4);
       }
     }
+  DECODER { _obj->paths->parent = _obj; }
   END_REPEAT(paths);
   FIELD_BS (style, 75); // 0=normal (odd parity); 1=outer; 2=whole
   FIELD_BS (pattern_type, 76); // 0=user; 1=predefined; 2=custom
@@ -3254,6 +3262,7 @@ DWG_ENTITY(HATCH)
             }
           END_REPEAT(deflines[rcount].dashes);
         }
+      DECODER { _obj->deflines->parent = _obj; }
       END_REPEAT(deflines);
     }
 
