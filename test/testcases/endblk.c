@@ -16,8 +16,8 @@ api_process (dwg_object * obj)
   else
     fail("dwg_ent_generic_parent ENDBLK %p == %p", parent, endblk->parent);
 
-  if (!error2 && obj2->address == obj->address && parent->object->address == obj2->address)
+  if (!error2 && obj2 == obj)
     pass ("dwg_ent_generic_to_object ok");
   else
-    fail("dwg_ent_generic_to_object ENDBLK %lu == %lu", obj2->address, obj->address);
+    fail("dwg_ent_generic_to_object ENDBLK %p == %p", obj2, obj);
 }

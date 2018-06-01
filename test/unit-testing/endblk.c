@@ -5,10 +5,13 @@ void
 low_level_process(dwg_object *obj)
 {
   dwg_ent_endblk *endblk = dwg_object_to_ENDBLK(obj);
+  Dwg_Data *dwg = endblk->parent->dwg;
+
   if (endblk->parent != obj->tio.entity)
     printf("ERROR: obj_obj of endblk %p == %p", endblk->parent, obj->tio.entity);
-  if (endblk->parent->object->address != obj->address)
-    printf("ERROR: obj of endblk %p == obj %p", endblk->parent->object, obj);
+
+  if (&dwg->object[endblk->parent->objid] != obj)
+    printf("ERROR: obj of endblk %lu -> obj %p", endblk->parent->objid, obj);
 }
 
 void
@@ -21,6 +24,6 @@ api_process(dwg_object *obj)
   
   if (error1 || parent != obj->tio.entity)
     printf("ERROR: dwg_ent_generic_parent %p == %p", parent, obj->tio.entity);
-  if (error2 || obj2->address != obj->address)
-    printf("ERROR: dwg_ent_generic_to_object %lu == %lu", obj2->address, obj->address);
+  if (error2 || obj2 != obj)
+    printf("ERROR: dwg_ent_generic_to_object %p == %p", obj2, obj);
 }

@@ -17568,17 +17568,15 @@ dwg_obj_table_get_name(const dwg_object *restrict obj, int *restrict error)
 BITCODE_RL
 dwg_ent_get_bitsize(const dwg_obj_ent *restrict ent, int *restrict error)
 {
-  if (!ent || !ent->object || ent->object->supertype != DWG_SUPERTYPE_ENTITY) {
-    *error = 1;
-    return 0;
+  Dwg_Object *obj = dwg_ent_to_object(ent, error);
+  if (!error) {
+    return obj->bitsize;
   } else {
-    *error = 0;
-    return ent->object->bitsize;
+    return 0;
   }
 }
 /** Returns the number of object EED structures.
-See dwg_object_to_object how to get the obj.
-\code Usage: int num_eed = dwg_obj_get_num_eed(ent,&error);
+\code Usage: int num_eed = dwg_obj_get_num_eed(ent, &error);
 \endcode
 \param[in]  obj     dwg_obj_obj*
 \param[out] error   int*, is set to 0 for ok, 1 on error
@@ -17586,14 +17584,12 @@ See dwg_object_to_object how to get the obj.
 unsigned int
 dwg_obj_get_num_eed(const dwg_obj_obj *restrict obj, int *restrict error)
 {
-  if (!obj || !obj->object || obj->object->supertype != DWG_SUPERTYPE_OBJECT) {
+  if (!obj) {
     *error = 1;
-    LOG_ERROR("%s: empty or invalid obj", __FUNCTION__)
     return 0;
-  } else {
-    *error = 0;
-    return obj->num_eed;
   }
+  *error = 0;
+  return obj->num_eed;
 }
 /** Returns the number of entity EED structures
 See dwg_object_to_entity how to get the ent.
@@ -17605,14 +17601,12 @@ See dwg_object_to_entity how to get the ent.
 unsigned int
 dwg_ent_get_num_eed(const dwg_obj_ent *restrict ent, int *restrict error)
 {
-  if (!ent || !ent->object || ent->object->supertype != DWG_SUPERTYPE_ENTITY) {
+  if (!ent) {
     *error = 1;
-    LOG_ERROR("%s: empty or invalid ent", __FUNCTION__)
     return 0;
-  } else {
-    *error = 0;
-    return ent->num_eed;
   }
+  *error = 0;
+  return ent->num_eed;
 }
 /** Returns the nth EED structure.
 \code Usage: dwg_entity_eed *eed = dwg_ent_get_eed(ent,0,&error);
@@ -17624,7 +17618,7 @@ dwg_ent_get_num_eed(const dwg_obj_ent *restrict ent, int *restrict error)
 dwg_entity_eed *
 dwg_ent_get_eed(const dwg_obj_ent *restrict ent, const unsigned int index, int *restrict error)
 {
-  if (!ent || !ent->object || ent->object->supertype != DWG_SUPERTYPE_ENTITY) {
+  if (!ent) {
     *error = 1;
     LOG_ERROR("%s: empty or invalid ent", __FUNCTION__)
     return NULL;
@@ -17650,7 +17644,7 @@ dwg_entity_eed_data *
 dwg_ent_get_eed_data(const dwg_obj_ent *restrict ent, const unsigned int index,
                      int *restrict error)
 {
-  if (!ent || !ent->object || ent->object->supertype != DWG_SUPERTYPE_ENTITY) {
+  if (!ent) {
     *error = 1;
     LOG_ERROR("%s: empty or invalid ent", __FUNCTION__)
     return NULL;
@@ -17662,6 +17656,39 @@ dwg_ent_get_eed_data(const dwg_obj_ent *restrict ent, const unsigned int index,
   else {
     *error = 0;
     return ent->eed[index].data;
+  }
+}
+
+/** Returns dwg_object* from dwg_obj_ent*
+\code Usage: dwg_object* obj = dwg_obj_ent_to_object(ent, &error);
+\endcode
+\param[in]  obj     dwg_obj_ent*
+\param[out] error   int*, is set to 0 for ok, 1 on error
+*/
+dwg_object *
+dwg_ent_to_object(const dwg_obj_ent *restrict obj, int *restrict error)
+{
+  dwg_data *dwg;
+  dwg_object *retval;
+  if (!obj) {
+    *error = 1;
+    LOG_ERROR("%s: Empty or invalid obj", __FUNCTION__);
+    return NULL;
+  }
+  dwg = obj->dwg;
+  if (dwg_version == R_INVALID)
+    dwg_version = (Dwg_Version_Type)dwg->header.version;
+  if (obj->objid >= dwg->num_objects) {
+    *error = 1;
+    return NULL;
+  }
+  retval = &dwg->object[obj->objid];
+  if (retval->supertype == DWG_SUPERTYPE_ENTITY) {
+    *error = 0;
+    return retval;
+  } else {
+    *error = 1;
+    return NULL;
   }
 }
 
@@ -17690,8 +17717,6 @@ dwg_ent_generic_parent(const dwg_ent_generic *restrict ent, int *restrict error)
     {
       dwg_obj_ent *retval = ent->parent;
       *error = 0;
-      if (dwg_version == R_INVALID)
-        dwg_version = (Dwg_Version_Type)retval->object->parent->header.version;
       return retval;
     }
   else
@@ -17837,6 +17862,40 @@ dwg_obj_get_handle(dwg_object *restrict obj, int *restrict error)
     }
 }
 
+/** Returns dwg_object* from dwg_obj_obj*
+\code Usage: dwg_object* obj = dwg_obj_obj_to_object(_obj, &error);
+\endcode
+\param[in]  obj     dwg_obj_obj*
+\param[out] error   int*, is set to 0 for ok, 1 on error
+*/
+dwg_object *
+dwg_obj_obj_to_object(const dwg_obj_obj *restrict obj, int *restrict error)
+{
+  dwg_data *dwg;
+  dwg_object *retval;
+
+  if (!obj) {
+    *error = 1;
+    LOG_ERROR("%s: Empty or invalid obj", __FUNCTION__)
+    return NULL;
+  }
+  dwg = obj->dwg;
+  if (dwg_version == R_INVALID)
+    dwg_version = (Dwg_Version_Type)dwg->header.version;
+  if (obj->objid >= dwg->num_objects) {
+    *error = 1;
+    return NULL;
+  }
+  retval = &dwg->object[obj->objid];
+  if (retval->supertype == DWG_SUPERTYPE_OBJECT) {
+    *error = 0;
+    return retval;
+  } else {
+    *error = 1;
+    return NULL;
+  }
+}
+
 /** Returns dwg_object* from any dwg_obj_*
 \code Usage: dwg_object* obj = dwg_obj_generic_to_object(_obj, &error);
 \endcode
@@ -17846,9 +17905,10 @@ dwg_obj_get_handle(dwg_object *restrict obj, int *restrict error)
 dwg_object *
 dwg_obj_generic_to_object(const dwg_obj_generic *restrict obj, int *restrict error)
 {
-  if (obj && obj->parent && obj->parent->object)
+  if (obj && obj->parent && obj->parent->objid)
     {
-      dwg_object *retval = obj->parent->object;
+      dwg_data *dwg = obj->parent->dwg;
+      dwg_object *retval = &dwg->object[obj->parent->objid];
       *error = 0;
       if (dwg_version == R_INVALID)
         dwg_version = (Dwg_Version_Type)retval->parent->header.version;
@@ -17875,8 +17935,6 @@ dwg_obj_generic_parent(const dwg_obj_generic *restrict obj, int *restrict error)
     {
       dwg_obj_obj *retval = obj->parent;
       *error = 0;
-      if (dwg_version == R_INVALID)
-        dwg_version = (Dwg_Version_Type)retval->object->parent->header.version;
       return retval;
     }
   else

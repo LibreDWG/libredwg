@@ -3908,6 +3908,9 @@ dwg_obj_xrecord_get_objid_handles(const dwg_obj_xrecord *xrecord, int *error);
 ********************************************************************/
 
 dwg_object *
+dwg_ent_to_object(const dwg_obj_ent *restrict obj, int *restrict error);
+
+dwg_object *
 dwg_ent_generic_to_object(const dwg_ent_generic *restrict obj, int *restrict error);
 
 dwg_obj_ent *
@@ -4028,6 +4031,9 @@ dwg_ent_get_edge_visualstyle(const dwg_obj_ent *ent, int *error); //r2010+
 /********************************************************************
 *                    FUNCTIONS FOR DWG OBJECT                       *
 ********************************************************************/
+
+dwg_object *
+dwg_obj_obj_to_object(const dwg_obj_obj *restrict obj, int *restrict error);
 
 dwg_object *
 dwg_obj_generic_to_object(const dwg_obj_generic *restrict obj, int *restrict error);

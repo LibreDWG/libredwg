@@ -4038,7 +4038,7 @@ typedef struct _dwg_entity_eed
  */
 typedef struct _dwg_object_entity
 {
-  struct _dwg_object* object; /*<! the parent */
+  long unsigned int objid; /*<! link to the parent */
   union
   {
     Dwg_Entity_UNUSED *UNUSED;
@@ -4102,6 +4102,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_UNKNOWN_ENT *UNKNOWN_ENT;
   } tio;
 
+  struct _dwg_struct *dwg;
   unsigned int num_eed;
   Dwg_Eed *eed; /* see also Dwg_Resbuf* xdata */
 
@@ -4163,7 +4164,7 @@ typedef struct _dwg_object_entity
  */
 typedef struct _dwg_object_object
 {
-  struct _dwg_object* object; /*<! the parent */
+  long unsigned int objid; /*<! link to the parent */
   union
   {
     Dwg_Object_BLOCK_CONTROL *BLOCK_CONTROL;
@@ -4233,10 +4234,11 @@ typedef struct _dwg_object_object
     Dwg_Object_UNKNOWN_OBJ *UNKNOWN_OBJ;
   } tio;
 
-  long unsigned int datpos; /* the data stream offset */
+  struct _dwg_struct *dwg;
   unsigned int num_eed;
   Dwg_Eed *eed;
 
+  long unsigned int datpos; /* the data stream offset */
   BITCODE_BL num_reactors;      /*!< r13-r14 */
   BITCODE_B xdic_missing_flag;  /*!< r2004+ */
   BITCODE_B has_ds_binary_data; /*!< r2013+ */

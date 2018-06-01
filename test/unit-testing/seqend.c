@@ -5,13 +5,13 @@ void
 low_level_process(dwg_object *obj)
 {
   dwg_ent_seqend *seqend = dwg_object_to_SEQEND(obj);
+  Dwg_Data *dwg = seqend->parent->dwg;
 
   if (seqend->parent != obj->tio.entity)
     printf("ERROR: obj_obj of seqend %p == %p", seqend->parent, obj->tio.entity);
 
-  if (seqend->parent->object->address != obj->address)
-    printf("ERROR: obj of seqend %lu == obj %lu", seqend->parent->object->address,
-           obj->address);
+  if (&dwg->object[seqend->parent->objid] != obj)
+    printf("ERROR: obj of seqend %lu -> obj %p", seqend->parent->objid, obj);
 }
 
 void

@@ -289,7 +289,7 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
   Dwg_Object_##name *_obj = calloc (1, sizeof(Dwg_Object_##name));      \
   obj->tio.object = calloc (1, sizeof(Dwg_Object_Object));              \
   obj->tio.object->tio.name = _obj;                                     \
-  obj->tio.object->object = obj;                                        \
+  obj->tio.object->objid = obj->index;                                  \
   obj->parent = dwg;                                                    \
   LOG_TRACE("\n-- table entry " #name " [%d]:\n", i)
 
@@ -2154,6 +2154,7 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
   BITCODE_BS size;
   unsigned int idx = 0;
   int error = 0;
+  Dwg_Data *dwg = obj->dwg;
 
   obj->num_eed = 0;
   while ((size = bit_read_BS(dat)))
@@ -2163,14 +2164,14 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
       BITCODE_RC code = 0;
       long unsigned int end, offset;
       long unsigned int sav_byte;
-      Dwg_Object *_obj = obj->object;
+      Dwg_Object *_obj = &dwg->object[obj->objid];
 
       LOG_TRACE("EED[%u] size: " FORMAT_BS "\n", idx, size);
       if (size > 1024)
         {
           LOG_ERROR("dwg_decode_eed: Absurd extended object data size: %lu ignored."
                     " Object: %lu (handle)",
-                    (long unsigned int) size, obj->object->handle.value)
+                    (long unsigned int) size, _obj->handle.value)
           _obj->bitsize = 0;
           obj->num_eed = 0;
           obj->num_handles = 0;
@@ -2196,17 +2197,16 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
         LOG_TRACE("EED[%u] handle: %d.%d.%lX\n", idx,
                   obj->eed[idx].handle.code, obj->eed[idx].handle.size,
                   obj->eed[idx].handle.value);
-        if (obj->object->supertype == DWG_SUPERTYPE_OBJECT &&
-            obj->object->dxfname &&
-            !strcmp(obj->object->dxfname, "MLEADERSTYLE"))
+        if (_obj->supertype == DWG_SUPERTYPE_OBJECT &&
+            _obj->dxfname &&
+            !strcmp(_obj->dxfname, "MLEADERSTYLE"))
           { // check for is_new_format: has extended data for APPID “ACAD_MLEADERVER”
             Dwg_Object_Ref ref;
             ref.obj = NULL;
             ref.handleref = obj->eed[idx].handle;
             ref.absolute_ref = 0L;
-            if (dwg_resolve_handleref(&ref, obj->object))
+            if (dwg_resolve_handleref(&ref, _obj))
               {
-                Dwg_Data *dwg = obj->object->parent;
                 Dwg_Object_APPID_CONTROL *appid = &dwg->appid_control;
                 // search absref in APPID_CONTROL apps[]
                 for (j=0; j < appid->num_entries; j++)
@@ -2351,7 +2351,8 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
   unsigned int i;
   BITCODE_BS size;
   int error;
-  Dwg_Object *_obj = ent->object;
+  Dwg_Data *dwg = ent->dwg;
+  Dwg_Object *_obj = &dwg->object[ent->objid];
 
   VERSIONS(R_2000, R_2010)
     {
@@ -2538,7 +2539,8 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
   unsigned int i;
   BITCODE_BS size;
   int error = 2;
-  Dwg_Object *_obj = obj->object;
+  Dwg_Data *dwg = obj->dwg;
+  Dwg_Object *_obj = &dwg->object[obj->objid];
 
   obj->datpos = dat->byte;     // the data stream offset
   VERSIONS(R_2000, R_2007)
@@ -3056,7 +3058,7 @@ decode_preR13_entities(unsigned long start, unsigned long end,
       obj->parent = dwg;
       obj->supertype = DWG_SUPERTYPE_ENTITY;
       ent = obj->tio.entity = (Dwg_Object_Entity*)calloc (1, sizeof(Dwg_Object_Entity));
-      obj->tio.entity->object = obj;
+      obj->tio.entity->objid = obj->index;
     
       DEBUG_HERE();
       decode_entity_preR13(dat, obj, ent);
@@ -3129,6 +3131,7 @@ decode_preR13_entities(unsigned long start, unsigned long end,
     }
 
   dat->byte = end;
+  return;
 }
 
 /** dwg_decode_variable_type
@@ -3499,7 +3502,10 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
   return 0;
 }
 
-void
+/** Adds an object to the DWG (i.e. dwg->object[dwg->num_objects])
+    Returns 1 if the dwg->object pool was re-alloced.
+ */
+int
 dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
                       long unsigned int address)
 {
@@ -3522,19 +3528,17 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
   //DEBUG_HERE();
   /*
    * Reserve memory space for objects. A realloc violates all internal pointers.
+   * TODO: Bigger pool, and return if we realloced or not. (to re-resolve all refs)
    */
   if (!num)
     dwg->object = (Dwg_Object *) malloc(sizeof(Dwg_Object));
   else
-    {
-      dwg->object = (Dwg_Object *) realloc(dwg->object, (num + 1)
-                                           * sizeof(Dwg_Object));
-      //TODO: adjust pointers
-    }
+    dwg->object = (Dwg_Object *) realloc(dwg->object, (num + 1)
+                                         * sizeof(Dwg_Object));
   if (!dwg->object)
     {
       LOG_ERROR("Out of memory");
-      return;
+      return 0;
     }
 
   LOG_INFO("==========================================\n"
@@ -3935,6 +3939,7 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
    */
   dat->byte = oldpos;
   dat->bit = previous_bit;
+  return num == 0 ? 0 : 1; //re-alloced or not
 }
 
 #undef IS_DECODER

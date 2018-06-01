@@ -421,7 +421,8 @@ dwg_decode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
   obj->tio.entity->tio.token = (Dwg_Entity_##token *)calloc(1, sizeof (Dwg_Entity_##token));\
   ent = obj->tio.entity->tio.token;\
   _obj = ent;\
-  _ent->object = obj; /* this might move! TODO: objid */\
+  _ent->dwg = dwg; \
+  _ent->objid = obj->index; /* obj ptr itself might move */ \
   _obj->parent = obj->tio.entity;\
   if (dwg_decode_entity(dat, hdl_dat, str_dat, _ent)) return;
 
@@ -443,7 +444,8 @@ dwg_decode_ ## token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
   obj->supertype = DWG_SUPERTYPE_OBJECT;\
   obj->tio.object = (Dwg_Object_Object*)calloc (1, sizeof(Dwg_Object_Object)); \
   obj->tio.object->tio.token = (Dwg_Object_##token *)calloc (1, sizeof(Dwg_Object_##token)); \
-  obj->tio.object->object = obj; /* this might move! TODO: objid */ \
+  obj->tio.object->dwg = dwg; \
+  obj->tio.object->objid = obj->index; /* obj ptr itself might move */ \
   if (dwg_decode_object(dat, hdl_dat, str_dat, obj->tio.object)) return; \
   _obj = obj->tio.object->tio.token; \
   _obj->parent = obj->tio.object;

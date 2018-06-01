@@ -58,7 +58,7 @@ dwg_decode_handleref_with_code(Bit_Chain *restrict hdl_dat, Dwg_Object *restrict
 int
 dwg_decode_header_variables(Bit_Chain* dat, Bit_Chain* hdl_dat,
                             Bit_Chain* str_dat, Dwg_Data *restrict dwg);
-void
+int
 dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
                       long unsigned int address);
 /* reused with free */
