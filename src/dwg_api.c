@@ -17618,7 +17618,9 @@ dwg_obj_tablectrl_get_objid(const dwg_object *restrict obj,
     }
 }
 
-/** Get name of the generic table entry (utf-8 encoded)
+// TODO: the same for the dwg_tbl_generic obj
+
+/** Get name of the table object entry (utf-8 encoded)
 \code Usage: char* name = dwg_obj_table_get_name(obj, &error);
 \endcode
 \param[in]  obj    a TABLE dwg_object*
@@ -17687,7 +17689,7 @@ dwg_get_class(const dwg_data *dwg, unsigned int index)
 /** Returns the nth object or NULL
 \code Usage: dwg_object* obj = dwg_get_object(dwg, 0);
 \endcode
-\param[in]  dwg   dwgdata*
+\param[in]  dwg   dwg_data*
 \param[in]  index
 */
 dwg_object *
@@ -17714,11 +17716,11 @@ dwg_obj_get_bitsize(const dwg_object *obj)
 /** Returns the entity bitsize
 \code Usage: long bitsize = dwg_ent_get_bitsize(ent, &error);
 \endcode
-\param[in]  ent   dwg_obj_ent*
+\param[in]  ent     dwg_obj_ent*
 \param[out] error   int*, is set to 0 for ok, 1 on error
 */
 BITCODE_RL
-dwg_ent_get_bitsize(const dwg_obj_ent *ent, int *error)
+dwg_ent_get_bitsize(const dwg_obj_ent *restrict ent, int *restrict error)
 {
   if (!ent || !ent->object || ent->object->supertype != DWG_SUPERTYPE_ENTITY) {
     *error = 1;
@@ -17732,11 +17734,11 @@ dwg_ent_get_bitsize(const dwg_obj_ent *ent, int *error)
 See dwg_object_to_object how to get the obj.
 \code Usage: int num_eed = dwg_obj_get_num_eed(ent,&error);
 \endcode
-\param[in]  obj    dwg_obj_obj*
+\param[in]  obj     dwg_obj_obj*
 \param[out] error   int*, is set to 0 for ok, 1 on error
 */
 unsigned int
-dwg_obj_get_num_eed(const dwg_obj_obj *obj, int *error)
+dwg_obj_get_num_eed(const dwg_obj_obj *restrict obj, int *restrict error)
 {
   if (!obj || !obj->object || obj->object->supertype != DWG_SUPERTYPE_OBJECT) {
     *error = 1;
@@ -17751,11 +17753,11 @@ dwg_obj_get_num_eed(const dwg_obj_obj *obj, int *error)
 See dwg_object_to_entity how to get the ent.
 \code Usage: int num_eed = dwg_ent_get_num_eed(ent,&error);
 \endcode
-\param[in]  ent   dwg_obj_ent*
+\param[in]  ent     dwg_obj_ent*
 \param[out] error   int*, is set to 0 for ok, 1 on error
 */
 unsigned int
-dwg_ent_get_num_eed(const dwg_obj_ent *ent, int *error)
+dwg_ent_get_num_eed(const dwg_obj_ent *restrict ent, int *restrict error)
 {
   if (!ent || !ent->object || ent->object->supertype != DWG_SUPERTYPE_ENTITY) {
     *error = 1;
@@ -17774,7 +17776,7 @@ dwg_ent_get_num_eed(const dwg_obj_ent *ent, int *error)
 \param[out] error  set to 0 for ok, 1 if ent == NULL or 2 if index out of bounds.
 */
 dwg_entity_eed *
-dwg_ent_get_eed(const dwg_obj_ent *ent, const unsigned int index, int *error)
+dwg_ent_get_eed(const dwg_obj_ent *restrict ent, const unsigned int index, int *restrict error)
 {
   if (!ent || !ent->object || ent->object->supertype != DWG_SUPERTYPE_ENTITY) {
     *error = 1;
@@ -17799,7 +17801,8 @@ dwg_ent_get_eed(const dwg_obj_ent *ent, const unsigned int index, int *error)
 \param[out] error  set to 0 for ok, 1 if ent == NULL or 2 if index out of bounds.
 */
 dwg_entity_eed_data *
-dwg_ent_get_eed_data(const dwg_obj_ent *ent, const unsigned int index, int *error)
+dwg_ent_get_eed_data(const dwg_obj_ent *restrict ent, const unsigned int index,
+                     int *restrict error)
 {
   if (!ent || !ent->object || ent->object->supertype != DWG_SUPERTYPE_ENTITY) {
     *error = 1;
@@ -17820,11 +17823,11 @@ dwg_ent_get_eed_data(const dwg_obj_ent *ent, const unsigned int index, int *erro
     This is the same as a dwg_handle absolute_ref value.
 \code Usage: int index = dwg_obj_object_get_index(obj, &error);
 \endcode
-\param[in]  obj   dwg_object*
+\param[in]  obj     dwg_object*
 \param[out] error   int*, is set to 0 for ok, 1 on error
 */
 unsigned int
-dwg_obj_object_get_index(const dwg_object *obj, int *error)
+dwg_obj_object_get_index(const dwg_object *restrict obj, int *restrict error)
 {
   if (obj)
     {
@@ -17844,11 +17847,11 @@ dwg_obj_object_get_index(const dwg_object *obj, int *error)
 /** Returns dwg_handle* from dwg_object*
 \code Usage: dwg_handle* handle = dwg_object_get_handle(obj, &error);
 \endcode
-\param[in]  obj   dwg_object*
+\param[in]  obj     dwg_object*
 \param[out] error   int*, is set to 0 for ok, 1 on error
 */
 dwg_handle *
-dwg_obj_get_handle(dwg_object *obj, int *error)
+dwg_obj_get_handle(dwg_object *restrict obj, int *restrict error)
 {
   if (obj)
     {
@@ -17865,21 +17868,84 @@ dwg_obj_get_handle(dwg_object *obj, int *error)
     }
 }
 
-/** Returns dwg_obj_obj* from dwg_object*
-\code Usage: dwg_obj_obj ent = dwg_object_to_object(obj, &error);
+/** Returns dwg_object* from any dwg_obj_*
+\code Usage: dwg_object* obj = dwg_obj_generic_to_object(_obj, &error);
 \endcode
-\param[in]  obj   dwg_object*
+\param[in]  obj     dwg_obj_generic* (layer, block_header, xrecord, ...)
+\param[out] error   int*, is set to 0 for ok, 1 on error
+*/
+dwg_object *
+dwg_obj_generic_to_object(const dwg_obj_generic *restrict obj, int *restrict error)
+{
+  if (obj && obj->parent && obj->parent->object)
+    {
+      dwg_object *retval = obj->parent->object;
+      *error = 0;
+      if (dwg_version == R_INVALID)
+        dwg_version = (Dwg_Version_Type)retval->parent->header.version;
+      return retval;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: Empty or invalid obj", __FUNCTION__)
+      return NULL;
+    }
+}
+
+/** Returns dwg_object* from any dwg_ent_*, the parent of the parent.
+\code Usage: dwg_object* obj = dwg_ent_generic_to_object(_obj, &error);
+\endcode
+\param[in]  obj     dwg_ent_generic* (line, circle, ...)
+\param[out] error   int*, is set to 0 for ok, 1 on error
+*/
+dwg_object *
+dwg_ent_generic_to_object(const dwg_ent_generic *restrict obj, int *restrict error)
+{
+  return dwg_obj_generic_to_object((dwg_obj_generic *restrict)obj, error);
+}
+
+/** Returns dwg_obj_obj* from any dwg_obj_*
+\code Usage: dwg_obj_obj* obj = dwg_obj_generic_parent(_obj, &error);
+\endcode
+\param[in]  obj     dwg_obj_generic* (layer, block_header, xrecord, ...)
 \param[out] error   int*, is set to 0 for ok, 1 on error
 */
 dwg_obj_obj *
-dwg_object_to_object(dwg_object *obj, int *error)
+dwg_obj_generic_parent(const dwg_obj_generic *restrict obj, int *restrict error)
 {
-  if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT)
+  if (obj && obj->parent)
     {
+      dwg_obj_obj *retval = obj->parent;
       *error = 0;
       if (dwg_version == R_INVALID)
-        dwg_version = (Dwg_Version_Type)obj->parent->header.version;
-      return obj->tio.object;
+        dwg_version = (Dwg_Version_Type)retval->object->parent->header.version;
+      return retval;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: Empty or invalid obj", __FUNCTION__)
+      return NULL;
+    }
+}
+
+/** Returns dwg_obj_ent* from any dwg_ent_* entity
+\code Usage: dwg_obj_ent* ent = dwg_ent_generic_parent(_ent, &error);
+\endcode
+\param[in]  ent     dwg_ent_generic* (line, circle, ...)
+\param[out] error   int*, is set to 0 for ok, 1 on error
+*/
+dwg_obj_ent *
+dwg_ent_generic_parent(const dwg_ent_generic *restrict ent, int *restrict error)
+{
+  if (ent && ent->parent)
+    {
+      dwg_obj_ent *retval = ent->parent;
+      *error = 0;
+      if (dwg_version == R_INVALID)
+        dwg_version = (Dwg_Version_Type)retval->object->parent->header.version;
+      return retval;
     }
   else
     {
@@ -17904,6 +17970,30 @@ dwg_object_to_entity(dwg_object *obj, int *error)
       if (dwg_version == R_INVALID)
         dwg_version = (Dwg_Version_Type)obj->parent->header.version;
       return obj->tio.entity;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: Empty or invalid obj", __FUNCTION__)
+      return NULL;
+    }
+}
+
+/** Returns dwg_obj_obj* from dwg_object*
+\code Usage: dwg_obj_obj ent = dwg_object_to_object(obj, &error);
+\endcode
+\param[in]  obj   dwg_object*
+\param[out] error   int*, is set to 0 for ok, 1 on error
+*/
+dwg_obj_obj *
+dwg_object_to_object(dwg_object *obj, int *error)
+{
+  if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT)
+    {
+      *error = 0;
+      if (dwg_version == R_INVALID)
+        dwg_version = (Dwg_Version_Type)obj->parent->header.version;
+      return obj->tio.object;
     }
   else
     {

@@ -218,6 +218,7 @@ typedef struct _dwg_entity_3DSOLID_silhouette     dwg_ent_solid_silhouette;
 typedef struct _dwg_entity_TABLE                  dwg_ent_table;
 typedef struct _dwg_entity_HATCH                  dwg_ent_hatch;
 typedef struct _dwg_entity_VERTEX_PFACE_FACE      dwg_ent_vert_pface_face;
+typedef struct _dwg_entity_DUMMY                  dwg_ent_generic;
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -229,6 +230,9 @@ typedef struct _dwg_object_APPID                  dwg_obj_appid;
 typedef struct _dwg_object_APPID_CONTROL          dwg_obj_appid_control;
 typedef struct _dwg_object_PROXY_OBJECT           dwg_obj_proxy;
 typedef struct _dwg_object_XRECORD                dwg_obj_xrecord;
+typedef struct _dwg_object_UNKNOWN_OBJ            dwg_obj_generic;
+typedef struct _dwg_object_STYLE_CONTROL          dwg_tbl_generic;
+
 typedef struct _dwg_object                        dwg_object;
 typedef struct _dwg_object_ref                    dwg_object_ref;
 typedef struct _dwg_handle                        dwg_handle;
@@ -3903,6 +3907,12 @@ dwg_obj_xrecord_get_objid_handles(const dwg_obj_xrecord *xrecord, int *error);
 *                    COMMON FUNCTIONS FOR DWG ENTITY                *
 ********************************************************************/
 
+dwg_object *
+dwg_ent_generic_to_object(const dwg_ent_generic *restrict obj, int *restrict error);
+
+dwg_obj_ent *
+dwg_ent_generic_parent(const dwg_ent_generic *restrict ent, int *restrict error);
+
 BITCODE_RL
 dwg_ent_get_bitsize(const dwg_obj_ent *ent, int *error);
 
@@ -4019,11 +4029,11 @@ dwg_ent_get_edge_visualstyle(const dwg_obj_ent *ent, int *error); //r2010+
 *                    FUNCTIONS FOR DWG OBJECT                       *
 ********************************************************************/
 
-unsigned int
-dwg_get_num_classes(const dwg_data *dwg);
+dwg_object *
+dwg_obj_generic_to_object(const dwg_obj_generic *restrict obj, int *restrict error);
 
-dwg_class *
-dwg_get_class(const dwg_data *dwg, unsigned int index);
+dwg_obj_obj *
+dwg_obj_generic_parent(const dwg_obj_generic *restrict obj, int *restrict error);
 
 dwg_object *
 dwg_get_object(dwg_data *dwg, long unsigned int index);
@@ -4062,7 +4072,7 @@ unsigned int
 dwg_obj_object_get_index(const dwg_object *obj, int *error);
 
 dwg_handle *
-dwg_obj_get_handle(dwg_object *obj, int *error);
+dwg_obj_get_handle(dwg_object *restrict obj, int *restrict error);
 
 BITCODE_BL
 dwg_obj_ref_get_abs_ref(const dwg_object_ref *ref, int *error);
@@ -4087,6 +4097,12 @@ dwg_get_type(const dwg_object *obj);
 
 char*
 dwg_get_dxfname(const dwg_object *obj);
+
+unsigned int
+dwg_get_num_classes(const dwg_data *dwg);
+
+dwg_class *
+dwg_get_class(const dwg_data *dwg, unsigned int index);
 
 #ifdef __cplusplus
 }
