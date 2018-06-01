@@ -3365,6 +3365,7 @@ DWG_OBJECT(LAYER_INDEX)
       FIELD_BL (entries[rcount].idxlong, 0);
       FIELD_T (entries[rcount].layer, 8);
     }
+  DECODER { _obj->entries->parent = _obj; }
   END_REPEAT(entries)
 
   START_HANDLE_STREAM;
@@ -3724,6 +3725,7 @@ DWG_OBJECT(FIELD)
       FIELD_T (childval[rcount].key, 6);
       Table_Value(childval[rcount].value)
     }
+  DECODER { _obj->childval->parent = _obj; }
   END_REPEAT(childval)
 
 DWG_OBJECT_END
@@ -4031,6 +4033,7 @@ DWG_ENTITY(TABLE)
             }
         }
     }
+  DECODER { _obj->cells->parent = _obj; }
   END_REPEAT(cells);
   /* End Cell Data (remaining data applies to entire table)*/
   
@@ -4265,6 +4268,7 @@ DWG_ENTITY(TABLE)
           FIELD_HANDLE (cells[rcount].text_style_override, ANYCODE, 7);
         }
     }
+  DECODER { _obj->cells->parent = _obj; }
   END_REPEAT(cells);
   
   if (FIELD_VALUE(has_table_overrides))
@@ -4301,6 +4305,7 @@ DWG_ENTITY(TABLE)
               FIELD_BD (break_heights[rcount].height, 0);
               FIELD_BL (break_heights[rcount].flag, 0);
             }
+          DECODER { _obj->break_heights->parent = _obj; }
           END_REPEAT(break_heights);
         }
       FIELD_BL (num_break_rows, 0);
@@ -4310,6 +4315,7 @@ DWG_ENTITY(TABLE)
           FIELD_BL (break_rows[rcount].start, 0);
           FIELD_BL (break_rows[rcount].end, 0);
         }
+      DECODER { _obj->break_rows->parent = _obj; }
       END_REPEAT(break_rows);
     }
 
@@ -4372,6 +4378,7 @@ DWG_OBJECT(TABLECONTENT)
       FIELD_BL (tdata.cols[rcount].custom_data, 91);
       Cell_Style_Fields(tdata.cols[rcount].cell_style);
     }
+  DECODER { _obj->tdata.cols->parent = &_obj->tdata; }
   END_REPEAT(tdata.cols);
   FIELD_BL (tdata.num_rows, 90);
   REPEAT(tdata.num_rows, tdata.rows, Dwg_TableRow)
@@ -4390,6 +4397,7 @@ DWG_OBJECT(TABLECONTENT)
               FIELD_T (cell.customdata_items[rcount3].name, 300);
               Table_Value(cell.customdata_items[rcount3].value);
             }
+          DECODER { _obj->cell.customdata_items->cell_parent = &_obj->cell; }
           END_REPEAT(cell.customdata_items);
           FIELD_BL (cell.has_linked_data, 92);
           if (FIELD_VALUE(cell.has_linked_data))
@@ -4460,6 +4468,7 @@ DWG_OBJECT(TABLECONTENT)
             }
           #undef cell
         }
+      DECODER { _obj->row.cells->row_parent = &_obj->row; }
       END_REPEAT(row.cells);
       FIELD_BL (row.custom_data, 91);
       FIELD_BL (row.num_customdata_items, 90);
@@ -4468,6 +4477,7 @@ DWG_OBJECT(TABLECONTENT)
           FIELD_T (row.customdata_items[rcount3].name, 300);
           Table_Value(row.customdata_items[rcount3].value);
         }
+      DECODER { _obj->row.customdata_items->row_parent = &_obj->row; }
       END_REPEAT(row.customdata_items);
       {
         Cell_Style_Fields(row.cell_style);
@@ -4476,6 +4486,7 @@ DWG_OBJECT(TABLECONTENT)
       }
       #undef row
     }
+  DECODER { _obj->tdata.rows->parent = &_obj->tdata; }
   END_REPEAT(tdata.rows);
   FIELD_BL (tdata.num_field_refs, 0);
   HANDLE_VECTOR (tdata.field_refs, tdata.num_field_refs, 3, 0);
@@ -4490,6 +4501,7 @@ DWG_OBJECT(TABLECONTENT)
       FIELD_BL (merged.right_col, 94);
       #undef merged
     }
+  DECODER { _obj->fdata.merged_cells->parent = &_obj->fdata; }
   END_REPEAT(fdata.merged_cells);
 
   START_HANDLE_STREAM;
@@ -4512,6 +4524,7 @@ DWG_OBJECT(CELLSTYLEMAP)
       FIELD_BL (cells[rcount].type, 91);
       FIELD_T (cells[rcount].name, 300);
     }
+  DECODER { _obj->cells->parent = _obj; }
   END_REPEAT (cells);
 
 DWG_OBJECT_END
@@ -4542,8 +4555,10 @@ DWG_OBJECT(TABLEGEOMETRY)
           FIELD_BD (geom.unknown, 0);
           #undef geom
         }
+      DECODER { _obj->cell.geom_data->geom_parent = &_obj->cell; }
       END_REPEAT(cell.geom_data);
     }
+  DECODER { _obj->cells->parent = _obj; }
   END_REPEAT(cells);
 
 DWG_OBJECT_END
@@ -4673,6 +4688,7 @@ DWG_ENTITY(MULTILEADER)
           FIELD_3BD (lev1.breaks[rcount2].start, 12);
           FIELD_3BD (lev1.breaks[rcount2].end, 13);
         }
+      DECODER { _obj->lev1.breaks->parent = &_obj->lev1; }
       END_REPEAT (lev1.breaks);
       FIELD_BL (lev1.index, 90);
       FIELD_BD (lev1.landing_distance, 40); //ok
@@ -4685,6 +4701,7 @@ DWG_ENTITY(MULTILEADER)
             {
               FIELD_3BD (lev2.points[rcount3], 10); //nok
             }
+          DECODER { _obj->lev2.points->parent = &_obj->lev2; }
           END_REPEAT (lev2.points);
           FIELD_BL (lev2.num_breaks, 0);
           FIELD_BL (lev2.segment_index, 90);
@@ -4693,6 +4710,7 @@ DWG_ENTITY(MULTILEADER)
               FIELD_3BD (lev2.breaks[rcount2].start, 11);
               FIELD_3BD (lev2.breaks[rcount2].end, 12);
             }
+          DECODER { _obj->lev2.breaks->parent = &_obj->lev2; }
           END_REPEAT(lev2.breaks);
           FIELD_BL (lev2.index, 91);
 	  SINCE (R_2010)
@@ -4707,6 +4725,7 @@ DWG_ENTITY(MULTILEADER)
             }
 #         undef lev2
         }
+      DECODER { _obj->lev1.lines->parent = &_obj->lev1; }
       END_REPEAT (lev1.lines);
       SINCE (R_2010)
         {
@@ -4714,6 +4733,7 @@ DWG_ENTITY(MULTILEADER)
         }
 #     undef lev1
     }
+  DECODER { _obj->ctx.leaders->parent = _obj; }
   END_REPEAT (ctx.leaders);
 
   FIELD_BD (ctx.scale, 40);

@@ -2897,6 +2897,9 @@ typedef struct _dwg_TABLE_CustomDataItem
 {
   BITCODE_TV name;
   Dwg_TABLE_value value;
+
+  struct _dwg_TableCell *cell_parent;
+  struct _dwg_TableRow *row_parent;
 } Dwg_TABLE_CustomDataItem;
 
 typedef struct _dwg_TABLE_cell
@@ -2940,6 +2943,8 @@ typedef struct _dwg_TABLE_cell
   BITCODE_H cell_handle;
   BITCODE_H* attr_def_id;
   BITCODE_H text_style_override;
+
+  struct _dwg_entity_TABLE *parent;
 } Dwg_TABLE_Cell;
 
 typedef struct _dwg_TABLE_BreakHeight
@@ -2947,6 +2952,8 @@ typedef struct _dwg_TABLE_BreakHeight
   BITCODE_3BD position;
   BITCODE_BD height;
   BITCODE_BL flag;
+
+  struct _dwg_entity_TABLE *parent;
 } Dwg_TABLE_BreakHeight;
 
 typedef struct _dwg_TABLE_BreakRow
@@ -2954,6 +2961,8 @@ typedef struct _dwg_TABLE_BreakRow
   BITCODE_3BD position;
   BITCODE_BL start;
   BITCODE_BL end;
+
+  struct _dwg_entity_TABLE *parent;
 } Dwg_TABLE_BreakRow;
 
 typedef struct _dwg_entity_TABLE
@@ -3108,6 +3117,8 @@ typedef struct _dwg_TableCellContentAttr
   BITCODE_H attdef;
   BITCODE_TV value;
   BITCODE_BL index;
+
+  struct _dwg_TableCellContent *parent;
 } Dwg_TableCellContentAttr;
 
 // Content format 20.4.101.3
@@ -3135,6 +3146,8 @@ typedef struct _dwg_TableCellContent
   Dwg_TableCellContentAttr *attrs;
   BITCODE_BS has_content_format_overrides;
   Dwg_ContentFormat content_format;
+
+  struct _dwg_TableCell *parent;
 } Dwg_TableCellContent;
 
 // 20.4.98
@@ -3147,6 +3160,9 @@ typedef struct _dwg_CellContentGeometry
   BITCODE_BD width;
   BITCODE_BD height;
   BITCODE_BD unknown;
+
+  struct _dwg_TableCell *cell_parent;
+  struct _dwg_TABLEGEOMETRY_Cell *geom_parent;
 } Dwg_CellContentGeometry;
 
 typedef struct _dwg_TableCell
@@ -3171,6 +3187,9 @@ typedef struct _dwg_TableCell
   BITCODE_BL has_cell_geom;
   BITCODE_H cell_geom_handle;
   Dwg_CellContentGeometry *geom_data;
+
+  struct _dwg_CellStyle *style_parent;
+  struct _dwg_TableRow *row_parent;
 } Dwg_TableCell;
 
 typedef struct _dwg_BorderStyle
@@ -3183,6 +3202,8 @@ typedef struct _dwg_BorderStyle
   BITCODE_H line_type;
   BITCODE_BL invisible;
   BITCODE_BD double_line_spacing;
+
+  struct _dwg_CellStyle *parent;
 } Dwg_BorderStyle;
 
 /**
@@ -3207,6 +3228,9 @@ typedef struct _dwg_CellStyle
   BITCODE_BD margin_vert_spacing;
   BITCODE_BL num_borders; /* 0-6 */
   Dwg_BorderStyle *border;
+
+  struct _dwg_TableRow *tablerow_parent;
+  struct _dwg_TableDataColumn *tabledatacolumn_parent;
 } Dwg_CellStyle;
 
 typedef struct _dwg_TableRow
@@ -3219,6 +3243,8 @@ typedef struct _dwg_TableRow
   Dwg_CellStyle cell_style;
   BITCODE_BL style_id;
   BITCODE_BL height;
+
+  struct _dwg_LinkedTableData *parent;
 } Dwg_TableRow;
 
 typedef struct _dwg_TableDataColumn
@@ -3229,6 +3255,8 @@ typedef struct _dwg_TableDataColumn
   Dwg_CellStyle cell_style;
   BITCODE_BL cell_style_id;
   BITCODE_BL width;
+
+  struct _dwg_LinkedTableData *parent;
 } Dwg_TableDataColumn;
 
 typedef struct _dwg_LinkedTableData
@@ -3247,6 +3275,8 @@ typedef struct _dwg_FormattedTableMerged
   BITCODE_BL left_col;
   BITCODE_BL bottom_row;
   BITCODE_BL right_col;
+
+  struct _dwg_FormattedTableData *parent;
 } Dwg_FormattedTableMerged;
 
 typedef struct _dwg_FormattedTableData
@@ -3254,6 +3284,8 @@ typedef struct _dwg_FormattedTableData
   Dwg_CellStyle cell_style;
   BITCODE_BL num_merged_cells;
   Dwg_FormattedTableMerged *merged_cells;
+
+  struct _dwg_object_TABLECONTENT *parent;
 } Dwg_FormattedTableData;
 
 typedef struct _dwg_object_TABLECONTENT
@@ -3278,6 +3310,8 @@ typedef struct _dwg_TABLESTYLE_Cell
                       ref TABLESTYLE. custom IDs > 100 */
   BITCODE_BL type; /* 1=data, 2=label */
   BITCODE_TV name;
+
+  struct _dwg_object_TABLESTYLE *parent;
 } Dwg_TABLESTYLE_Cell;
 
 typedef struct _dwg_object_TABLESTYLE
@@ -3308,6 +3342,8 @@ typedef struct _dwg_CELLSTYLEMAP_Cell
                       ref TABLESTYLE. custom IDs > 100 */
   BITCODE_BL type; /* 1=data, 2=label */
   BITCODE_TV name;
+
+  struct _dwg_object_CELLSTYLEMAP *parent;
 } Dwg_CELLSTYLEMAP_Cell;
 
 typedef struct _dwg_object_CELLSTYLEMAP
@@ -3330,6 +3366,8 @@ typedef struct _dwg_TABLEGEOMETRY_Cell
   BITCODE_H unknown;
   BITCODE_BL num_geom_data;
   Dwg_CellContentGeometry *geom_data;
+
+  struct _dwg_object_TABLEGEOMETRY *parent;
 } Dwg_TABLEGEOMETRY_Cell;
 
 typedef struct _dwg_object_TABLEGEOMETRY
@@ -3404,9 +3442,11 @@ typedef struct _dwg_object_DICTIONARYWDLFT
  R18+
  */
 typedef struct _dwg_FIELD_ChildValue
-{                   /* dxf group code */
-  BITCODE_TV key;   /* 6 */
+{
+  BITCODE_TV key;   /*!< DXF 6 */
   Dwg_TABLE_value value;
+
+  struct _dwg_object_FIELD *parent;
 } Dwg_FIELD_ChildValue;
 
 typedef struct _dwg_object_FIELD
@@ -3591,6 +3631,8 @@ typedef struct _dwg_layer_entry
 {
   BITCODE_BL idxlong;
   BITCODE_TV layer;
+
+  struct _dwg_object_LAYER_INDEX *parent;
 } Dwg_LAYER_entry;
 
 typedef struct _dwg_object_LAYER_INDEX

@@ -15569,7 +15569,7 @@ dwg_ent_table_set_border_color_overrides_flag(dwg_ent_table *restrict table,
                                               const BITCODE_BL overrides,
                                               int *restrict error)
 {
-  if (table && overrides >=0 && overrides <= 1)
+  if (table && overrides <= 1)
     {
       *error = 0;
       table->border_color_overrides_flag = overrides;
@@ -15641,7 +15641,7 @@ dwg_ent_table_set_border_lineweight_overrides_flag(dwg_ent_table *restrict table
                                                    const BITCODE_BL overrides,
                                                    int *restrict error)
 {
-  if (table && overrides >=0 && overrides <= 1)
+  if (table && overrides <= 1)
     {
       *error = 0;
       table->border_lineweight_overrides_flag = overrides;
