@@ -37,6 +37,7 @@ manual:
 
 if HAVE_DOXYGEN
 refman doxygen doc/html/index.html: doc/Doxyfile $(include_HEADERS)
+	-rm {src,include}/*_flymake.{c,h}
 	$(DOXYGEN) doc/Doxyfile
 refman-pdf: doc/html/index.html
 	$(MAKE) -C doc/latex
