@@ -5,17 +5,23 @@ void
 low_level_process(dwg_object *obj)
 {
   dwg_ent_seqend *seqend = dwg_object_to_SEQEND(obj);
-
-  printf("dummy value of seqend : %d", seqend->dummy);
+  if (seqend->parent != obj->tio.entity)
+    printf("ERROR: obj_obj of seqend %p == %p", seqend->parent, obj->tio.entity);
+  if (seqend->parent->object->address != obj->address)
+    printf("ERROR: obj of seqend %lu == obj %lu", seqend->parent->object->address,
+           obj->address);
 }
 
 void
 api_process(dwg_object *obj)
 {
-  int error;
-  char dummy;
-  dwg_ent_seqend *seqend = dwg_object_to_SEQEND(obj);
-
-  dummy = dwg_ent_seqend_get_dummy(seqend, &error);
-  printf("dummy value of seqend : %d", dummy);
+  int error1, error2;
+  dwg_ent_generic *seqend = (dwg_ent_generic *)dwg_object_to_SEQEND(obj);
+  dwg_obj_ent *parent = dwg_ent_generic_parent(seqend, &error1);
+  dwg_object *obj2 = dwg_ent_generic_to_object(seqend, &error2);
+  
+  if (error1 || parent != obj->tio.entity)
+    printf("ERROR: dwg_ent_generic_parent %p == %p", parent, obj->tio.entity);
+  if (error2 || obj2->address != obj->address)
+    printf("ERROR: dwg_ent_generic_to_object %lu == %lu", obj2->address, obj->address);
 }

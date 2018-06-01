@@ -792,6 +792,8 @@ typedef int Dwg_Entity_UNUSED;
  */
 typedef struct _dwg_entity_TEXT
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_RC dataflags;        /*!< r2000+ */
   BITCODE_RD elevation;        /*!< DXF 30 (z coord of 10), when dataflags & 1 */
   BITCODE_2DPOINT insertion_pt; /*!< DXF 10 */
@@ -810,8 +812,6 @@ typedef struct _dwg_entity_TEXT
   BITCODE_BS vert_alignment;  /*!< DXF 73. options 0-3:
                                  0 = Baseline; 1 = Bottom; 2 = Middle; 3 = Top */
   BITCODE_H style;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_TEXT;
 
 /** \ref Dwg_Entity_ATTRIB
@@ -819,6 +819,8 @@ typedef struct _dwg_entity_TEXT
  */
 typedef struct _dwg_entity_ATTRIB
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_BD elevation;
   BITCODE_2DPOINT insertion_pt;
   BITCODE_2DPOINT alignment_pt;
@@ -845,8 +847,6 @@ typedef struct _dwg_entity_ATTRIB
   BITCODE_RC annotative_data_bytes;
   BITCODE_H  annotative_app;
   BITCODE_BS annotative_short;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_ATTRIB;
 
 /** \ref Dwg_Entity_ATTDEF
@@ -854,6 +854,8 @@ typedef struct _dwg_entity_ATTRIB
  */
 typedef struct _dwg_entity_ATTDEF
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_BD elevation;
   BITCODE_2DPOINT insertion_pt;
   BITCODE_2DPOINT alignment_pt;
@@ -876,8 +878,6 @@ typedef struct _dwg_entity_ATTDEF
   BITCODE_RC class_version; /* R2010+ */
   BITCODE_TV prompt;
   BITCODE_H style;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_ATTDEF;
 
 /**
@@ -885,9 +885,9 @@ typedef struct _dwg_entity_ATTDEF
  */
 typedef struct _dwg_entity_BLOCK
 {
-  BITCODE_TV name;
-
   struct _dwg_object_entity *parent;
+
+  BITCODE_TV name;
 } Dwg_Entity_BLOCK;
 
 /**
@@ -895,8 +895,6 @@ typedef struct _dwg_entity_BLOCK
  */
 typedef struct _dwg_entity_ENDBLK
 {
-  char dummy;
-
   struct _dwg_object_entity *parent;
 } Dwg_Entity_ENDBLK;
 
@@ -905,8 +903,6 @@ typedef struct _dwg_entity_ENDBLK
  */
 typedef struct _dwg_entity_SEQEND
 {
-  char dummy;
-
   struct _dwg_object_entity *parent;
 } Dwg_Entity_SEQEND;
 
@@ -915,6 +911,8 @@ typedef struct _dwg_entity_SEQEND
  */
 typedef struct _dwg_entity_INSERT
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_3DPOINT   ins_pt;
   BITCODE_BB        scale_flag;
   BITCODE_3DPOINT   scale;
@@ -928,8 +926,6 @@ typedef struct _dwg_entity_INSERT
   BITCODE_H   last_attrib;
   BITCODE_H*  attrib_handles;
   BITCODE_H   seqend;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_INSERT;
 
 /**
@@ -937,6 +933,8 @@ typedef struct _dwg_entity_INSERT
  */
 typedef struct _dwg_entity_MINSERT
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_3DPOINT   ins_pt;
   BITCODE_BB        scale_flag;
   BITCODE_3DPOINT   scale;
@@ -955,8 +953,6 @@ typedef struct _dwg_entity_MINSERT
   BITCODE_H   last_attrib;
   BITCODE_H*  attrib_handles;
   BITCODE_H   seqend;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_MINSERT;
 
 /**
@@ -964,6 +960,8 @@ typedef struct _dwg_entity_MINSERT
  */
 typedef struct _dwg_entity_VERTEX_2D
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_RC flag;
   BITCODE_3BD point;
   BITCODE_BD start_width;
@@ -971,8 +969,6 @@ typedef struct _dwg_entity_VERTEX_2D
   BITCODE_BL id; /* R2010+ */
   BITCODE_BD bulge;
   BITCODE_BD tangent_dir;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_VERTEX_2D;
 
 /**
@@ -980,10 +976,10 @@ typedef struct _dwg_entity_VERTEX_2D
  */
 typedef struct _dwg_entity_VERTEX_3D
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_RC flag;
   BITCODE_3BD point;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_VERTEX_3D;
 
 /**
@@ -1001,9 +997,9 @@ typedef Dwg_Entity_VERTEX_3D Dwg_Entity_VERTEX_PFACE;
  */
 typedef struct _dwg_entity_VERTEX_PFACE_FACE
 {
-  BITCODE_BS vertind[4];
-
   struct _dwg_object_entity *parent;
+
+  BITCODE_BS vertind[4];
 } Dwg_Entity_VERTEX_PFACE_FACE;
 
 /**
@@ -1011,6 +1007,8 @@ typedef struct _dwg_entity_VERTEX_PFACE_FACE
  */
 typedef struct _dwg_entity_POLYLINE_2D
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_BS flag;
   BITCODE_BS curve_type;
   BITCODE_BD start_width;
@@ -1023,8 +1021,6 @@ typedef struct _dwg_entity_POLYLINE_2D
   BITCODE_H last_vertex;
   BITCODE_H* vertex;
   BITCODE_H seqend;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_POLYLINE_2D;
 
 /**
@@ -1032,6 +1028,8 @@ typedef struct _dwg_entity_POLYLINE_2D
  */
 typedef struct _dwg_entity_POLYLINE_3D
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_RC flag;
   BITCODE_RC flag2;
   BITCODE_BL num_owned;
@@ -1039,8 +1037,6 @@ typedef struct _dwg_entity_POLYLINE_3D
   BITCODE_H last_vertex;
   BITCODE_H* vertex;
   BITCODE_H seqend;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_POLYLINE_3D;
 
 /**
@@ -1048,14 +1044,14 @@ typedef struct _dwg_entity_POLYLINE_3D
  */
 typedef struct _dwg_entity_ARC
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_3BD center;
   BITCODE_BD radius;
   BITCODE_BT thickness;
   BITCODE_BE extrusion;
   BITCODE_BD start_angle;
   BITCODE_BD end_angle;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_ARC;
 
 /**
@@ -1063,12 +1059,12 @@ typedef struct _dwg_entity_ARC
  */
 typedef struct _dwg_entity_CIRCLE
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_3BD center;
   BITCODE_BD radius;
   BITCODE_BT thickness;
   BITCODE_BE extrusion;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_CIRCLE;
 
 /**
@@ -1076,19 +1072,20 @@ typedef struct _dwg_entity_CIRCLE
  */
 typedef struct _dwg_entity_LINE
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_RC Zs_are_zero;
   BITCODE_3BD start;
   BITCODE_3BD end;
   BITCODE_BT thickness;
   BITCODE_BE extrusion;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_LINE;
 
 /**
  * Macro for common DIMENSION declaration
  */
 #define DIMENSION_COMMON \
+    struct _dwg_object_entity *parent; \
     BITCODE_RC class_version; /* R2010+ */ \
     BITCODE_3BD extrusion; \
     BITCODE_2RD text_midpt; \
@@ -1125,8 +1122,6 @@ typedef struct _dwg_entity_DIMENSION_ORDINATE
   BITCODE_RC flags_2;
   BITCODE_H dimstyle;
   BITCODE_H block;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_DIMENSION_ORDINATE;
 
 /**
@@ -1142,8 +1137,6 @@ typedef struct _dwg_entity_DIMENSION_LINEAR
   BITCODE_BD dim_rot;
   BITCODE_H dimstyle;
   BITCODE_H block;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_DIMENSION_LINEAR;
 
 /**
@@ -1158,8 +1151,6 @@ typedef struct _dwg_entity_DIMENSION_ALIGNED
   BITCODE_BD ext_line_rot;
   BITCODE_H dimstyle;
   BITCODE_H block;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_DIMENSION_ALIGNED;
 
 /**
@@ -1174,8 +1165,6 @@ typedef struct _dwg_entity_DIMENSION_ANG3PT
   BITCODE_3BD first_arc_pt;
   BITCODE_H dimstyle;
   BITCODE_H block;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_DIMENSION_ANG3PT;
 
 /**
@@ -1191,8 +1180,6 @@ typedef struct _dwg_entity_DIMENSION_ANG2LN
   BITCODE_3BD def_pt;
   BITCODE_H dimstyle;
   BITCODE_H block;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_DIMENSION_ANG2LN;
 
 /**
@@ -1206,8 +1193,6 @@ typedef struct _dwg_entity_DIMENSION_RADIUS
   BITCODE_BD leader_len;
   BITCODE_H dimstyle;
   BITCODE_H block;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_DIMENSION_RADIUS;
 
 /**
@@ -1221,8 +1206,6 @@ typedef struct _dwg_entity_DIMENSION_DIAMETER
   BITCODE_BD leader_len;
   BITCODE_H dimstyle;
   BITCODE_H block;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_DIMENSION_DIAMETER;
 
 /**
@@ -1230,14 +1213,14 @@ typedef struct _dwg_entity_DIMENSION_DIAMETER
  */
 typedef struct _dwg_entity_POINT
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_BD x;
   BITCODE_BD y;
   BITCODE_BD z;
   BITCODE_BT thickness;
   BITCODE_BE extrusion;
   BITCODE_BD x_ang;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_POINT;
 
 /**
@@ -1245,6 +1228,8 @@ typedef struct _dwg_entity_POINT
  */
 typedef struct _dwg_entity_3DFACE
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_B has_no_flags;
   BITCODE_B z_is_zero;
   BITCODE_3BD corner1;
@@ -1252,8 +1237,6 @@ typedef struct _dwg_entity_3DFACE
   BITCODE_3BD corner3;
   BITCODE_3BD corner4;
   BITCODE_BS invis_flags;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity__3DFACE;
 
 /**
@@ -1261,6 +1244,8 @@ typedef struct _dwg_entity_3DFACE
  */
 typedef struct _dwg_entity_POLYLINE_PFACE
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_BS numverts;
   BITCODE_BS numfaces;
   BITCODE_BL num_owned;
@@ -1268,8 +1253,6 @@ typedef struct _dwg_entity_POLYLINE_PFACE
   BITCODE_H last_vertex;
   BITCODE_H* vertex;
   BITCODE_H seqend;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_POLYLINE_PFACE;
 
 /**
@@ -1277,6 +1260,8 @@ typedef struct _dwg_entity_POLYLINE_PFACE
  */
 typedef struct _dwg_entity_POLYLINE_MESH
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_BS flag;
   BITCODE_BS curve_type;
   BITCODE_BS num_m_verts;
@@ -1288,8 +1273,6 @@ typedef struct _dwg_entity_POLYLINE_MESH
   BITCODE_H last_vertex;
   BITCODE_H* vertex;
   BITCODE_H seqend;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_POLYLINE_MESH;
 
 /**
@@ -1298,6 +1281,8 @@ typedef struct _dwg_entity_POLYLINE_MESH
 
 typedef struct _dwg_entity_SOLID
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_BT thickness;
   BITCODE_BD elevation;
   BITCODE_2RD corner1;
@@ -1305,8 +1290,6 @@ typedef struct _dwg_entity_SOLID
   BITCODE_2RD corner3;
   BITCODE_2RD corner4;
   BITCODE_BE extrusion;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_SOLID;
 
 /**
@@ -1315,6 +1298,8 @@ typedef struct _dwg_entity_SOLID
 
 typedef struct _dwg_entity_TRACE
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_BT thickness;
   BITCODE_BD elevation;
   BITCODE_2RD corner1;
@@ -1322,8 +1307,6 @@ typedef struct _dwg_entity_TRACE
   BITCODE_2RD corner3;
   BITCODE_2RD corner4;
   BITCODE_BE extrusion;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_TRACE;
 
 /**
@@ -1332,6 +1315,8 @@ typedef struct _dwg_entity_TRACE
 
 typedef struct _dwg_entity_SHAPE
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_3BD ins_pt;
   BITCODE_BD scale;
   BITCODE_BD rotation;
@@ -1341,8 +1326,6 @@ typedef struct _dwg_entity_SHAPE
   BITCODE_BS shape_no;
   BITCODE_3BD extrusion;
   BITCODE_H style;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_SHAPE;
 
 /**
@@ -1351,6 +1334,8 @@ typedef struct _dwg_entity_SHAPE
 
 typedef struct _dwg_entity_VIEWPORT
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_3BD center;
   BITCODE_BD width;
   BITCODE_BD height;
@@ -1386,8 +1371,6 @@ typedef struct _dwg_entity_VIEWPORT
   BITCODE_BD brightness;
   BITCODE_BD contrast;
   BITCODE_CMC ambient_color;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_VIEWPORT;
 
 /**
@@ -1395,14 +1378,14 @@ typedef struct _dwg_entity_VIEWPORT
  */
 typedef struct _dwg_entity_ELLIPSE
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_3BD center;
   BITCODE_3BD sm_axis;
   BITCODE_3BD extrusion;
   BITCODE_BD axis_ratio;
   BITCODE_BD start_angle;
   BITCODE_BD end_angle;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_ELLIPSE;
 
 /**
@@ -1410,25 +1393,27 @@ typedef struct _dwg_entity_ELLIPSE
  */
 typedef struct _dwg_entity_SPLINE_point
 {
+  struct _dwg__entity_SPLINE *parent;
+
   double x;
   double y;
   double z;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_SPLINE_point;
 
 typedef struct _dwg_entity_SPLINE_control_point
 {
+  struct _dwg__entity_SPLINE *parent;
+
   double x;
   double y;
   double z;
   double w;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_SPLINE_control_point;
 
 typedef struct _dwg_entity_SPLINE
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_RS flag; /* computed */
   BITCODE_BS scenario; /* 1 spline, 2 bezier */
   BITCODE_BS degree;
@@ -1449,8 +1434,6 @@ typedef struct _dwg_entity_SPLINE
   BITCODE_BD* knots;
   BITCODE_BL num_ctrl_pts;
   Dwg_Entity_SPLINE_control_point* ctrl_pts;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_SPLINE;
 
 /**
@@ -1459,6 +1442,7 @@ typedef struct _dwg_entity_SPLINE
 #define Dwg_Entity_3DSOLID Dwg_Entity__3DSOLID
 typedef struct _dwg_entity_3DSOLID_wire
 {
+  struct _dwg_entity_3DSOLID *parent;
   BITCODE_RC type;
   BITCODE_BL selection_marker;
   BITCODE_BS color;
@@ -1474,12 +1458,11 @@ typedef struct _dwg_entity_3DSOLID_wire
   BITCODE_B has_rotation;
   BITCODE_B has_reflection;
   BITCODE_B has_shear;
-
-  struct _dwg_entity_3DSOLID *parent;
 } Dwg_Entity_3DSOLID_wire;
 
 typedef struct _dwg_entity_3DSOLID_silhouette
 {
+  struct _dwg_entity_3DSOLID *parent;
   BITCODE_BL vp_id;
   BITCODE_3BD vp_target;
   BITCODE_3BD vp_dir_from_target;
@@ -1487,12 +1470,12 @@ typedef struct _dwg_entity_3DSOLID_silhouette
   BITCODE_B vp_perspective;
   BITCODE_BL num_wires;
   Dwg_Entity_3DSOLID_wire * wires;
-
-  struct _dwg_entity_3DSOLID *parent;
 } Dwg_Entity_3DSOLID_silhouette;
 
 typedef struct _dwg_entity_3DSOLID
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_B acis_empty;
   BITCODE_B unknown;
   BITCODE_BS version;
@@ -1515,8 +1498,6 @@ typedef struct _dwg_entity_3DSOLID
   BITCODE_H history_id;
   BITCODE_B ACIS_empty_bit;
   unsigned char* raw_sat_data;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity__3DSOLID;
 
 /**
@@ -1534,10 +1515,10 @@ typedef Dwg_Entity__3DSOLID Dwg_Entity_BODY;
  */
 typedef struct _dwg_entity_RAY
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_3BD point;
   BITCODE_3BD vector;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_RAY;
 
 /**
@@ -1546,10 +1527,13 @@ typedef struct _dwg_entity_RAY
 typedef Dwg_Entity_RAY Dwg_Entity_XLINE;
 
 /**
- Structure for DICTIONARY (42)
+ DICTIONARY (42)
+ This structure is used for all the new tables.
  */
-typedef struct _dwg_entity_DICTIONARY
+typedef struct _dwg_object_DICTIONARY
 {
+  struct _dwg_object_object *parent;
+
   BITCODE_BL numitems;
   BITCODE_RC unknown_r14;
   BITCODE_BS cloning;
@@ -1559,8 +1543,6 @@ typedef struct _dwg_entity_DICTIONARY
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
   BITCODE_H* itemhandles;
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_DICTIONARY;
 
 /**
@@ -1569,12 +1551,12 @@ typedef struct _dwg_entity_DICTIONARY
  */
 typedef struct _dwg_entity_OLEFRAME
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_BS flag;
   BITCODE_BS mode;
   BITCODE_BL data_length;
   BITCODE_RC* data;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_OLEFRAME;
 
 /**
@@ -1582,6 +1564,8 @@ typedef struct _dwg_entity_OLEFRAME
  */
 typedef struct _dwg_entity_MTEXT
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_3BD insertion_pt;
   BITCODE_3BD extrusion;
   BITCODE_3BD x_axis_dir;
@@ -1612,8 +1596,6 @@ typedef struct _dwg_entity_MTEXT
   BITCODE_B auto_height;
   BITCODE_B flow_reversed;
   BITCODE_BD *column_heights;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_MTEXT;
 
 /**
@@ -1621,6 +1603,8 @@ typedef struct _dwg_entity_MTEXT
  */
 typedef struct _dwg_entity_LEADER
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_B unknown_bit_1; /* always seems to be zero */
   BITCODE_BS annot_type;
   BITCODE_BS path_type;
@@ -1646,8 +1630,6 @@ typedef struct _dwg_entity_LEADER
   BITCODE_B unknown_bit_5;
   BITCODE_H associated_annotation;
   BITCODE_H dimstyle;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_LEADER;
 
 /**
@@ -1655,6 +1637,8 @@ typedef struct _dwg_entity_LEADER
  */
 typedef struct _dwg_entity_TOLERANCE
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_BS unknown_short;
   BITCODE_BD height;
   BITCODE_BD dimgap;
@@ -1663,8 +1647,6 @@ typedef struct _dwg_entity_TOLERANCE
   BITCODE_3BD extrusion;
   BITCODE_TV text_string;
   BITCODE_H dimstyle;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_TOLERANCE;
 
 /**
@@ -1672,26 +1654,26 @@ typedef struct _dwg_entity_TOLERANCE
  */
 typedef struct _dwg_entity_MLINE_line
 {
+  struct _dwg_entity_MLINE_vertex *parent;
   BITCODE_BS num_segparms;
   BITCODE_BD * segparms;
   BITCODE_BS num_areafillparms;
   BITCODE_BD* areafillparms;
-
-  struct _dwg_entity_MLINE_vertex *parent;
 } Dwg_MLINE_line;
 
 typedef struct _dwg_entity_MLINE_vertex
 {
+  struct _dwg_entity_MLINE *parent;
   BITCODE_3BD vertex;
   BITCODE_3BD vertex_direction;
   BITCODE_3BD miter_direction;
   Dwg_MLINE_line* lines;
-
-  struct _dwg_entity_MLINE *parent;
 } Dwg_MLINE_vertex;
 
 typedef struct _dwg_entity_MLINE
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_BD scale;
   BITCODE_RC justification;
   BITCODE_3BD base_point;
@@ -1701,17 +1683,15 @@ typedef struct _dwg_entity_MLINE
   BITCODE_BS num_verts;
   Dwg_MLINE_vertex* verts;
   BITCODE_H mlinestyle;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_MLINE;
 
 #define COMMON_TABLE_CONTROL_FIELDS(entries) \
+  struct _dwg_object_object *parent; \
   BITCODE_BS num_entries; \
   BITCODE_H null_handle; \
   BITCODE_H xdicobjhandle; \
   BITCODE_H* entries; \
-  long unsigned int objid; \
-  struct _dwg_object_object *parent
+  long unsigned int objid
 
 /**
  BLOCK_CONTROL (48) object, table header
@@ -1728,20 +1708,22 @@ typedef struct _dwg_object_BLOCK_CONTROL
  */
 typedef struct _dwg_object_BLOCK_HEADER
 {
-  BITCODE_BL __iterator;
+  struct _dwg_object_object *parent;
   BITCODE_RC flag;  /* preR13 */
   BITCODE_TV entry_name;
   BITCODE_RS used;  /* preR13 */
+  BITCODE_B xrefref;
+  BITCODE_BS xrefindex_plus1;
+  BITCODE_B xrefdep;
+
+  BITCODE_BL __iterator;
   BITCODE_RC flag2; /* preR13 */
   BITCODE_RS flag3; /* preR13 */
   BITCODE_B anonymous;    /* flag 70 bit 1 */
   BITCODE_B hasattrs;     /* flag 70 bit 2 */
   BITCODE_B blkisxref;    /* flag 70 bit 3 */
   BITCODE_B xrefoverlaid; /* flag 70 bit 4 */
-  BITCODE_B xrefdep;      /* flag 70 bit 5 */
   BITCODE_B loaded_bit;   /* flag 70 bit 6 */
-  BITCODE_B xrefref;      /* flag 70 bit 7 */
-  BITCODE_BS xrefindex_plus1;
   BITCODE_BL num_owned;
   BITCODE_3DPOINT base_pt;
   BITCODE_TV xref_pname;
@@ -1763,8 +1745,6 @@ typedef struct _dwg_object_BLOCK_HEADER
   BITCODE_H endblk_entity;
   BITCODE_H* insert_handles;
   BITCODE_H layout_handle;
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_BLOCK_HEADER;
 
 /**
@@ -1780,12 +1760,14 @@ typedef struct _dwg_object_LAYER_CONTROL
  */
 typedef struct _dwg_object_LAYER
 {
+  struct _dwg_object_object *parent;
   BITCODE_BS flag;
   BITCODE_TV entry_name;
   BITCODE_RS used; /* preR13 */
   BITCODE_B xrefref;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
+
   BITCODE_B frozen;
   BITCODE_B on;
   BITCODE_B frozen_in_new;
@@ -1802,8 +1784,6 @@ typedef struct _dwg_object_LAYER
   BITCODE_H material;
   BITCODE_H linetype;
   BITCODE_H null_handle; /* unused, doc error */
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_LAYER;
 
 /**
@@ -1820,12 +1800,14 @@ typedef struct _dwg_object_STYLE_CONTROL
  */
 typedef struct _dwg_object_STYLE
 {
+  struct _dwg_object_object *parent;
   BITCODE_RC flag; /* preR13 */
   BITCODE_TV entry_name;
   BITCODE_RS used; /* preR13 */
   BITCODE_B xrefref;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
+
   BITCODE_B vertical;
   BITCODE_B shape_file;
   BITCODE_BD fixed_height;
@@ -1839,8 +1821,6 @@ typedef struct _dwg_object_STYLE
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
   BITCODE_H null_handle;
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_STYLE;
 
 /* 54 and 55 are UNKNOWN OBJECTS */
@@ -1859,29 +1839,32 @@ typedef struct _dwg_object_LTYPE_CONTROL
  LTYPE (57) object, table entry
  */
 
-typedef struct _ltype_dash{
-    BITCODE_BD length;
-    BITCODE_BS complex_shapecode;
-    BITCODE_RD x_offset;
-    BITCODE_RD y_offset;
-    BITCODE_BD scale;
-    BITCODE_BD rotation;
-    BITCODE_BS shape_flag;
-} LTYPE_dash;
+typedef struct _dwg_LTYPE_dash {
+  struct _dwg_object_LTYPE *parent;
+  BITCODE_BD length;
+  BITCODE_BS complex_shapecode;
+  BITCODE_RD x_offset;
+  BITCODE_RD y_offset;
+  BITCODE_BD scale;
+  BITCODE_BD rotation;
+  BITCODE_BS shape_flag;
+} Dwg_LTYPE_dash;
 
 typedef struct _dwg_object_LTYPE
 {
+  struct _dwg_object_object *parent;
   BITCODE_RC flag; /* preR13 */
   BITCODE_TV entry_name;
   BITCODE_RS used; /* preR13 */
   BITCODE_B xrefref;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
+
   BITCODE_TV description;
   BITCODE_BD pattern_len;
   BITCODE_RC alignment;
   BITCODE_RC num_dashes;
-  LTYPE_dash* dash;
+  Dwg_LTYPE_dash* dash;
   BITCODE_RD* dashes_r11;
   BITCODE_RC* strings_area;
   BITCODE_H linetype_control;
@@ -1890,8 +1873,6 @@ typedef struct _dwg_object_LTYPE
   BITCODE_H null_handle;
   BITCODE_H* styles;
   BITCODE_B  text_area_is_present; /* if some shape_flag & 2 */
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_LTYPE;
 
 /* 58 and 59 are UNKNOWN OBJECTS */
@@ -1909,12 +1890,14 @@ typedef struct _dwg_object_VIEW_CONTROL
  */
 typedef struct _dwg_object_VIEW
 {
+  struct _dwg_object_object *parent;
   BITCODE_RC flag; /* preR13 */
   BITCODE_TV entry_name;
   BITCODE_RS used; /* preR13 */
   BITCODE_B xrefref;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
+
   BITCODE_BD height;
   BITCODE_BD width;
   BITCODE_2RD center;
@@ -1949,8 +1932,6 @@ typedef struct _dwg_object_VIEW
   BITCODE_H base_ucs_handle;
   BITCODE_H named_ucs_handle;
   BITCODE_H live_section_handle;
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_VIEW;
 
 /**
@@ -1966,12 +1947,14 @@ typedef struct _dwg_object_UCS_CONTROL
  */
 typedef struct _dwg_object_UCS
 {
+  struct _dwg_object_object *parent;
   BITCODE_RC flag; /* preR13 */
   BITCODE_TV entry_name;
   BITCODE_RS used; /* preR13 */
   BITCODE_B xrefref;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
+
   BITCODE_3BD origin;
   BITCODE_3BD x_direction;
   BITCODE_3BD y_direction;
@@ -1984,8 +1967,6 @@ typedef struct _dwg_object_UCS
   BITCODE_H null_handle;
   BITCODE_H base_ucs_handle;
   BITCODE_H unknown;
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_UCS;
 
 /**
@@ -2001,12 +1982,14 @@ typedef struct _dwg_object_VPORT_CONTROL
  */
 typedef struct _dwg_object_VPORT
 {
+  struct _dwg_object_object *parent;
   BITCODE_RC flag;
   BITCODE_TV entry_name;
   BITCODE_RS used; /* preR13 */
   BITCODE_B xrefref;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
+
   BITCODE_BD VIEWSIZE;
   BITCODE_BD aspect_ratio;
   BITCODE_2RD VIEWCTR;
@@ -2055,8 +2038,6 @@ typedef struct _dwg_object_VPORT
   BITCODE_H shade_plot_handle;
   BITCODE_H named_ucs_handle;
   BITCODE_H base_ucs_handle;
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_VPORT;
 
 /**
@@ -2074,19 +2055,19 @@ typedef struct _dwg_object_APPID_CONTROL
  */
 typedef struct _dwg_object_APPID
 {
+  struct _dwg_object_object *parent;
   BITCODE_RC flag; /* preR13 */
   BITCODE_TV entry_name;
   BITCODE_RS used; /* preR13 */
   BITCODE_B xrefref;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
+
   BITCODE_RC unknown;
   BITCODE_H app_control;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
   BITCODE_H null_handle;
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_APPID;
 
 /**
@@ -2105,6 +2086,7 @@ typedef struct _dwg_object_DIMSTYLE_CONTROL
  */
 typedef struct _dwg_object_DIMSTYLE
 {
+  struct _dwg_object_object *parent;
   BITCODE_RC flag; /* preR13 */
   BITCODE_TV entry_name;
   BITCODE_RS used; /* preR13 */
@@ -2208,8 +2190,6 @@ typedef struct _dwg_object_DIMSTYLE
   BITCODE_H DIMLTYPE;
   BITCODE_H DIMLTEX1;
   BITCODE_H DIMLTEX2;
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_DIMSTYLE;
 
 /**
@@ -2226,19 +2206,19 @@ typedef struct _dwg_object_VPORT_ENTITY_CONTROL
  */
 typedef struct _dwg_object_VPORT_ENTITY_HEADER
 {
+  struct _dwg_object_object *parent;
   BITCODE_RC flag; /* preR13 */
   BITCODE_TV entry_name;
   BITCODE_RS used; /* preR13 */
   BITCODE_B xrefref;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
+
   BITCODE_B flag1;
   BITCODE_H vport_entity_control;
   BITCODE_H xdicobjhandle;
   BITCODE_H xref_handle;
   BITCODE_H vport_entity;
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_VPORT_ENTITY_HEADER;
 
 /**
@@ -2246,6 +2226,7 @@ typedef struct _dwg_object_VPORT_ENTITY_HEADER
  */
 typedef struct _dwg_object_GROUP
 {
+  struct _dwg_object_object *parent;
   BITCODE_TV name;
   BITCODE_BS unnamed;
   BITCODE_BS selectable;
@@ -2254,8 +2235,6 @@ typedef struct _dwg_object_GROUP
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
   BITCODE_H* group_entries;
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_GROUP;
 
 /**
@@ -2263,6 +2242,7 @@ typedef struct _dwg_object_GROUP
  */
 typedef struct _dwg_MLINESTYLE_line
 {
+  struct _dwg_object_MLINESTYLE *parent;
   BITCODE_BD offset;
   BITCODE_CMC color;
   BITCODE_BS ltindex; /* until 2018 */
@@ -2271,6 +2251,7 @@ typedef struct _dwg_MLINESTYLE_line
 
 typedef struct _dwg_object_MLINESTYLE
 {
+  struct _dwg_object_object *parent;
   BITCODE_TV entry_name;
   BITCODE_TV desc;
   BITCODE_BS flag;
@@ -2282,8 +2263,6 @@ typedef struct _dwg_object_MLINESTYLE
   BITCODE_H parenthandle;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_MLINESTYLE;
 
 /**
@@ -2291,13 +2270,13 @@ typedef struct _dwg_object_MLINESTYLE
  */
 typedef struct _dwg_entity_OLE2FRAME
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_BS flag;
   BITCODE_BS mode;
   BITCODE_BL data_length;
   BITCODE_RC* data;
   BITCODE_RC unknown;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_OLE2FRAME;
 
 /**
@@ -2305,9 +2284,8 @@ typedef struct _dwg_entity_OLE2FRAME
  */
 typedef struct _dwg_entity_DUMMY
 {
-  /* ??? not seen */
-
   struct _dwg_object_entity *parent;
+  /* ??? not seen */
 } Dwg_Entity_DUMMY;
 
 /**
@@ -2315,8 +2293,8 @@ typedef struct _dwg_entity_DUMMY
  */
 typedef struct _dwg_entity_LONG_TRANSACTION
 {
-  /* ??? not seen */
   struct _dwg_object_entity *parent;
+  /* ??? not seen */
 } Dwg_Entity_LONG_TRANSACTION;
 
 /* NOT SURE ABOUT THIS ONE (IS IT OBJECT OR ENTITY?): */
@@ -2324,16 +2302,16 @@ typedef struct _dwg_entity_LONG_TRANSACTION
  subtype PROXY_LWPOLYLINE (33) in a PROXY object
  Not a LWPOLYLINE (77? + varies)
  */
-typedef struct _dwg_entity_LWPOLYLINE_width
+typedef struct _dwg_LWPOLYLINE_width
 {
   BITCODE_BD start;
   BITCODE_BD end;
-
-  struct _dwg_object_entity *parent;
-} Dwg_Entity_LWPOLYLINE_width;
+} Dwg_LWPOLYLINE_width;
 
 typedef struct _dwg_entity_PROXY_LWPOLYLINE
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_RL size; /* from flags to *widths */
   BITCODE_BS flags;
   BITCODE_BD const_width;
@@ -2345,12 +2323,10 @@ typedef struct _dwg_entity_PROXY_LWPOLYLINE
   BITCODE_BL num_bulges;
   BITCODE_BD* bulges;
   BITCODE_BL num_widths;
-  Dwg_Entity_LWPOLYLINE_width* widths;
+  Dwg_LWPOLYLINE_width* widths;
   BITCODE_RC unknown_1;
   BITCODE_RC unknown_2;
   BITCODE_RC unknown_3;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_PROXY_LWPOLYLINE;
 
 /**
@@ -2358,6 +2334,8 @@ typedef struct _dwg_entity_PROXY_LWPOLYLINE
  */
 typedef struct _dwg_entity_PROXY_ENTITY
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_BL class_id;
   BITCODE_BL version;
   BITCODE_BL maint_version;
@@ -2367,8 +2345,6 @@ typedef struct _dwg_entity_PROXY_ENTITY
   BITCODE_H* reactors;
   BITCODE_H* objid_object_handles;
   BITCODE_MS size;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_PROXY_ENTITY;
 
 /**
@@ -2376,6 +2352,8 @@ typedef struct _dwg_entity_PROXY_ENTITY
  */
 typedef struct _dwg_object_PROXY_OBJECT
 {
+  struct _dwg_object_object *parent;
+
   BITCODE_BL class_id;
   BITCODE_BL version;
   BITCODE_BL maint_version;
@@ -2384,8 +2362,6 @@ typedef struct _dwg_object_PROXY_OBJECT
   BITCODE_H parenthandle;
   BITCODE_H* reactors;
   BITCODE_H* objid_object_handles;
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_PROXY_OBJECT;
 
 /**
@@ -2396,26 +2372,25 @@ typedef struct _dwg_object_PROXY_OBJECT
 /**
  Structs for HATCH (78 + varies)
  */
-typedef struct _dwg_entity_HATCH_color
+typedef struct _dwg_HATCH_color
 {
+  struct _dwg_entity_HATCH *parent;
   BITCODE_BD unknown_double;
   BITCODE_BS unknown_short;
   BITCODE_BL rgb_color;
   BITCODE_RC ignored_color_byte;
+} Dwg_HATCH_Color;
 
-  struct _dwg_entity_HATCH *parent;
-} Dwg_Entity_HATCH_Color;
-
-typedef struct _dwg_entity_HATCH_control_point
+typedef struct _dwg_HATCH_control_point
 {
+  struct _dwg_HATCH_pathseg *parent;
   BITCODE_2RD point;
   BITCODE_BD weigth;
+} Dwg_HATCH_ControlPoint;
 
-  struct _dwg_entity_HATCH_pathseg *parent;
-} Dwg_Entity_HATCH_ControlPoint;
-
-typedef struct _dwg_entity_HATCH_pathseg
+typedef struct _dwg_HATCH_pathseg
 {
+  struct _dwg_HATCH_path *parent;
   BITCODE_RC type_status;
   /* LINE */
   BITCODE_2RD first_endpoint;
@@ -2440,53 +2415,50 @@ typedef struct _dwg_entity_HATCH_pathseg
   BITCODE_BL num_knots;
   BITCODE_BL num_control_points;
   BITCODE_BD* knots;
-  Dwg_Entity_HATCH_ControlPoint* control_points;
+  Dwg_HATCH_ControlPoint* control_points;
   BITCODE_BL num_fitpts;
   BITCODE_2RD *fitpts;
   BITCODE_2RD start_tangent;
   BITCODE_2RD end_tangent;
+} Dwg_HATCH_PathSeg;
 
-  struct _dwg_entity_HATCH_path *parent;
-} Dwg_Entity_HATCH_PathSeg;
-
-typedef struct _dwg_entity_HATCH_polylinepath
+typedef struct _dwg_HATCH_polylinepath
 {
+  struct _dwg_HATCH_path *parent;
   BITCODE_2RD point;
   BITCODE_BD bulge;
+} Dwg_HATCH_PolylinePath;
 
-  struct _dwg_entity_HATCH_path *parent;
-} Dwg_Entity_HATCH_PolylinePath;
-
-typedef struct _dwg_entity_HATCH_path
+typedef struct _dwg_HATCH_path
 {
+  struct _dwg_entity_HATCH *parent;
   /* Segment path */
   BITCODE_BL flag;
   BITCODE_BL num_segs_or_paths;
-  Dwg_Entity_HATCH_PathSeg* segs;
+  Dwg_HATCH_PathSeg* segs;
 
   /* Polyline path */
   BITCODE_B bulges_present;
   BITCODE_B closed;
-  Dwg_Entity_HATCH_PolylinePath* polyline_paths;
+  Dwg_HATCH_PolylinePath* polyline_paths;
 
   BITCODE_BL num_boundary_handles;
+} Dwg_HATCH_Path;
 
-  struct _dwg_entity_HATCH *parent;
-} Dwg_Entity_HATCH_Path;
-
-typedef struct _dwg_entity_HATCH_DefLine
+typedef struct _dwg_HATCH_DefLine
 {
+  struct _dwg_entity_HATCH *parent;
   BITCODE_BD  angle;
   BITCODE_2BD pt0;
   BITCODE_2BD offset;
   BITCODE_BS  num_dashes;
   BITCODE_BD * dashes;
-
-  struct _dwg_entity_HATCH *parent;
-} Dwg_Entity_HATCH_DefLine;
+} Dwg_HATCH_DefLine;
 
 typedef struct _dwg_entity_HATCH
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_BL is_gradient_fill;
   BITCODE_BL reserved;
   BITCODE_BD gradient_angle;
@@ -2494,7 +2466,7 @@ typedef struct _dwg_entity_HATCH
   BITCODE_BL single_color_gradient;
   BITCODE_BD gradient_tint;
   BITCODE_BL num_colors;
-  Dwg_Entity_HATCH_Color* colors;
+  Dwg_HATCH_Color* colors;
   BITCODE_TV gradient_name;
   BITCODE_BD elevation;
   BITCODE_3BD extrusion;
@@ -2502,22 +2474,20 @@ typedef struct _dwg_entity_HATCH
   BITCODE_B solid_fill;
   BITCODE_B associative;
   BITCODE_BL num_paths;
-  Dwg_Entity_HATCH_Path* paths;
+  Dwg_HATCH_Path* paths;
   BITCODE_BS style;
   BITCODE_BS pattern_type;
   BITCODE_BD angle;
   BITCODE_BD scale_spacing;
   BITCODE_B double_flag;
   BITCODE_BS num_deflines;
-  Dwg_Entity_HATCH_DefLine * deflines;
+  Dwg_HATCH_DefLine * deflines;
   BITCODE_B has_derived;
   BITCODE_BD pixel_size;
   BITCODE_BL num_seeds;
   BITCODE_2RD * seeds;
   BITCODE_BL num_boundary_handles;
   BITCODE_H* boundary_handles;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_HATCH;
 
 /**
@@ -2525,6 +2495,8 @@ typedef struct _dwg_entity_HATCH
  */
 typedef struct _dwg_object_XRECORD
 {
+  struct _dwg_object_object *parent;
+
   BITCODE_BL num_databytes;
   BITCODE_BS cloning_flags;
   unsigned int num_eed;
@@ -2534,8 +2506,6 @@ typedef struct _dwg_object_XRECORD
   BITCODE_H xdicobjhandle;
   BITCODE_BL num_objid_handles;
   BITCODE_H* objid_handles;
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_XRECORD;
 
 /**
@@ -2544,29 +2514,30 @@ typedef struct _dwg_object_XRECORD
  */
 typedef struct _dwg_object_PLACEHOLDER
 {
+  struct _dwg_object_object *parent;
+
   BITCODE_H parenthandle;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_PLACEHOLDER;
 
 /**
  * Entity MULTILEADER (varies)
  * R2000+
  */
-typedef struct
+typedef struct _dwg_Leader_Break
 {
   BITCODE_3BD start;
   BITCODE_3BD end;
-} Leader_Break;
+} Dwg_Leader_Break;
 
-typedef struct
+typedef struct _dwg_Leader_Line
 {
+  struct _dwg_Leader *parent;  
   BITCODE_BL num_points;
   BITCODE_3BD * points;
   BITCODE_BL num_breaks;
-  Leader_Break * breaks;
+  Dwg_Leader_Break * breaks;
   BITCODE_BL segment_index;
   BITCODE_BL index;
 
@@ -2577,41 +2548,44 @@ typedef struct
   BITCODE_BD arrow_size;
   BITCODE_H arrow_handle;
   BITCODE_BL flags;
-} Leader_Line;
+} Dwg_Leader_Line;
 
-typedef struct
+typedef struct _dwg_Leader_ArrowHead
 {
   BITCODE_BL is_default;
   BITCODE_H arrowhead;
-} Leader_ArrowHead;
+} Dwg_Leader_ArrowHead;
 
-typedef struct
+typedef struct _dwg_Leader_BlockLabel
 {
+  struct _dwg_object_MULTILEADER *parent;  
   BITCODE_H attdef;
   BITCODE_TV label_text;
   BITCODE_BS ui_index;
   BITCODE_BD width;
-} Leader_BlockLabel;
+} Dwg_Leader_BlockLabel;
 
-typedef struct
+typedef struct _dwg_Leader
 {
+  struct _dwg_MLeaderAnnotContext *parent;  
   BITCODE_B is_valid;
   BITCODE_B unknown;
   BITCODE_3BD connection;
   BITCODE_3BD direction;
   BITCODE_BL num_breaks;
-  Leader_Break * breaks;
+  Dwg_Leader_Break * breaks;
   BITCODE_BL num_lines;
-  Leader_Line * lines;
+  Dwg_Leader_Line * lines;
   BITCODE_BL index;
   BITCODE_BD landing_distance;
   /* ... */
   BITCODE_BS attach_dir;
 } Dwg_Leader;
 
-/* The MLEADERAnnotContext object (par 20.4.86), embedded into an MLEADER */
-typedef struct
+/* The MLeaderAnnotContext object (par 20.4.86), embedded into an MLEADER */
+typedef struct _dwg_MLeaderAnnotContext
 {
+  struct _dwg_object_MULTILEADER *parent;
   BITCODE_BS class_version;
   BITCODE_B has_xdic_file;
   BITCODE_B is_default;
@@ -2685,12 +2659,12 @@ typedef struct
   BITCODE_BS text_top;
   BITCODE_BS text_bottom;
 
-} Dwg_MLEADERAnnotContext;
+} Dwg_MLeaderAnnotContext;
 
 typedef struct _dwg_object_MULTILEADER
 {
   BITCODE_BS class_version; /*!< r2010+ =2 */
-  Dwg_MLEADERAnnotContext ctx;
+  Dwg_MLeaderAnnotContext ctx;
   BITCODE_H leaderstyle;
   BITCODE_BL flags; /* override */
   BITCODE_BS type;
@@ -2719,9 +2693,9 @@ typedef struct _dwg_object_MULTILEADER
 
   /* until r2007: */
   BITCODE_BL num_arrowheads;
-  Leader_ArrowHead *arrowheads;
+  Dwg_Leader_ArrowHead *arrowheads;
   BITCODE_BL num_blocklabels;
-  Leader_BlockLabel *blocklabels;
+  Dwg_Leader_BlockLabel *blocklabels;
   BITCODE_B neg_textdir;
   BITCODE_BS ipe_align;
   BITCODE_BS justification;
@@ -2740,8 +2714,9 @@ typedef struct _dwg_object_MULTILEADER
  */
 typedef struct _dwg_object_MLEADERSTYLE
 {
-  BITCODE_BS class_version; /*!< r2010+ =2 */
+  struct _dwg_object_object *parent;
 
+  BITCODE_BS class_version; /*!< r2010+ =2 */
   BITCODE_BS content_type;
   BITCODE_BS mleader_order;
   BITCODE_BS leader_order;
@@ -2788,8 +2763,6 @@ typedef struct _dwg_object_MLEADERSTYLE
   BITCODE_BS attach_bottom; /*!< r2010+ */
   
   BITCODE_B text_extended;   /*!< r2013+ */
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_MLEADERSTYLE;
 
 /**
@@ -2798,13 +2771,13 @@ typedef struct _dwg_object_MLEADERSTYLE
  */
 typedef struct _dwg_object_VBA_PROJECT
 {
+  struct _dwg_object_object *parent;
+
   BITCODE_RL num_bytes;
   char *bytes;
   BITCODE_H parenthandle;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_VBA_PROJECT;
 
 
@@ -2813,6 +2786,8 @@ typedef struct _dwg_object_VBA_PROJECT
  */
 typedef struct _dwg_object_LAYOUT
 {
+  struct _dwg_object_object *parent;
+
   BITCODE_TV page_setup_name;
   BITCODE_TV printer_or_config;
   BITCODE_BS plot_layout_flags;
@@ -2863,8 +2838,6 @@ typedef struct _dwg_object_LAYOUT
   BITCODE_H base_ucs;
   BITCODE_H named_ucs;
   BITCODE_H* viewports;
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_LAYOUT;
 
 /**
@@ -2967,6 +2940,8 @@ typedef struct _dwg_TABLE_BreakRow
 
 typedef struct _dwg_entity_TABLE
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_RC unknown_rc;
   BITCODE_H unknown_h;
   BITCODE_BL unknown_bl;
@@ -3102,8 +3077,6 @@ typedef struct _dwg_entity_TABLE
   Dwg_TABLE_BreakHeight *break_heights;
   BITCODE_BL num_break_rows;
   Dwg_TABLE_BreakRow *break_rows;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_TABLE;
 
 typedef struct _dwg_LinkedData
@@ -3112,14 +3085,14 @@ typedef struct _dwg_LinkedData
   BITCODE_TV desc;
 } Dwg_LinkedData;
 
-typedef struct _dwg_TableCellContentAttr
+typedef struct _dwg_TableCellContent_Attr
 {
   BITCODE_H attdef;
   BITCODE_TV value;
   BITCODE_BL index;
 
   struct _dwg_TableCellContent *parent;
-} Dwg_TableCellContentAttr;
+} Dwg_TableCellContent_Attr;
 
 // Content format 20.4.101.3
 typedef struct _dwg_ContentFormat
@@ -3143,7 +3116,7 @@ typedef struct _dwg_TableCellContent
   Dwg_TABLE_value value; // 20.4.99 Value
   BITCODE_H handle;
   BITCODE_BL num_attrs;
-  Dwg_TableCellContentAttr *attrs;
+  Dwg_TableCellContent_Attr *attrs;
   BITCODE_BS has_content_format_overrides;
   Dwg_ContentFormat content_format;
 
@@ -3290,12 +3263,12 @@ typedef struct _dwg_FormattedTableData
 
 typedef struct _dwg_object_TABLECONTENT
 {
+  struct _dwg_object_object *parent;
+
   Dwg_LinkedData ldata;
   Dwg_LinkedTableData tdata;
   Dwg_FormattedTableData fdata;
   BITCODE_H table_style;
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_TABLECONTENT;
 
 /**
@@ -3316,6 +3289,8 @@ typedef struct _dwg_TABLESTYLE_Cell
 
 typedef struct _dwg_object_TABLESTYLE
 {
+  struct _dwg_object_object *parent;
+
   BITCODE_BS class_version;
   BITCODE_TV name;
   BITCODE_BL flags;
@@ -3326,8 +3301,6 @@ typedef struct _dwg_object_TABLESTYLE
   BITCODE_BD vert_cell_margin;
   BITCODE_BL num_cells;
   Dwg_TABLESTYLE_Cell* cells;
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_TABLESTYLE;
 
 /**
@@ -3348,10 +3321,10 @@ typedef struct _dwg_CELLSTYLEMAP_Cell
 
 typedef struct _dwg_object_CELLSTYLEMAP
 {
+  struct _dwg_object_object *parent;
+
   BITCODE_BL num_cells;
   Dwg_CELLSTYLEMAP_Cell* cells;
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_CELLSTYLEMAP;
 
 /* 20.4.103 TABLEGEOMETRY
@@ -3386,11 +3359,11 @@ typedef struct _dwg_object_TABLEGEOMETRY
  */
 typedef struct _dwg_object_UNDERLAYDEFINITION
 {
+  struct _dwg_object_object *parent;
+
   /* TODO */
   BITCODE_TV filename;
   BITCODE_TV name;
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_UNDERLAYDEFINITION;
 
 /**
@@ -3398,10 +3371,8 @@ typedef struct _dwg_object_UNDERLAYDEFINITION
  */
 typedef struct _dwg_object_DBCOLOR
 {
-  char dummy;
-  /* TODO */
-
   struct _dwg_object_object *parent;
+
 } Dwg_Object_DBCOLOR;
 
 /**
@@ -3409,13 +3380,13 @@ typedef struct _dwg_object_DBCOLOR
  */
 typedef struct _dwg_object_DICTIONARYVAR
 {
+  struct _dwg_object_object *parent;
+
   BITCODE_RC intval;
   BITCODE_TV str;
   BITCODE_H parenthandle;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_DICTIONARYVAR;
 
 /**
@@ -3423,6 +3394,8 @@ typedef struct _dwg_object_DICTIONARYVAR
  */
 typedef struct _dwg_object_DICTIONARYWDLFT
 {
+  struct _dwg_object_object *parent;
+
   BITCODE_BL numitems;
   BITCODE_RL cloning_rl; /*!< r14 only */
   BITCODE_BS cloning;    /*!< r2000+ */
@@ -3433,24 +3406,23 @@ typedef struct _dwg_object_DICTIONARYWDLFT
   BITCODE_H xdicobjhandle;
   BITCODE_H* itemhandles;
   BITCODE_H defaultid;
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_DICTIONARYWDLFT;
 
 /**
  Class FIELDLIST AcDbField (varies)
- R18+
+ R2018+
  */
 typedef struct _dwg_FIELD_ChildValue
 {
   BITCODE_TV key;   /*!< DXF 6 */
   Dwg_TABLE_value value;
-
   struct _dwg_object_FIELD *parent;
 } Dwg_FIELD_ChildValue;
 
 typedef struct _dwg_object_FIELD
-{                   /* dxf group code */
+{
+  struct _dwg_object_object *parent;
+                    /* dxf group code */
   BITCODE_TV id;    /* 1 */
   BITCODE_TV code;  /* 2,3 */
   BITCODE_BL num_childhdl; /* 90 */
@@ -3469,20 +3441,18 @@ typedef struct _dwg_object_FIELD
   BITCODE_TV value_string_length; /* 98 */
   BITCODE_BL num_childval;      /* 93 */
   Dwg_FIELD_ChildValue *childval;
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_FIELD;
 
 /**
  * Object FIELDLIST (varies)
  */
-typedef struct
+typedef struct _dwg_object_FIELDLIST
 {
+  struct _dwg_object_object *parent;
+
   BITCODE_BL num_fields;
   BITCODE_B unknown;
   BITCODE_H * field_handles;
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_FIELDLIST;
 
 /**
@@ -3505,6 +3475,8 @@ typedef struct _dwg_GEODATA_meshface
 
 typedef struct _dwg_object_GEODATA
 {                   /* dxf group code */
+  struct _dwg_object_object *parent;
+
   BITCODE_BL class_version;
   BITCODE_H host_block;
   BITCODE_BS coord_type; /* 0 unknown, 1 local grid, 2 projected grid,
@@ -3541,8 +3513,6 @@ typedef struct _dwg_object_GEODATA
   BITCODE_B obsolete_false;
   BITCODE_BD north_dir_angle_deg;
   BITCODE_BD north_dir_angle_rad;
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_GEODATA;
 
 /**
@@ -3550,14 +3520,14 @@ typedef struct _dwg_object_GEODATA
  */
 typedef struct _dwg_object_IDBUFFER
 {
+  struct _dwg_object_object *parent;
+
   BITCODE_RC unknown;
   BITCODE_BL num_obj_ids;
   BITCODE_H parenthandle;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
   BITCODE_H* obj_ids;
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_IDBUFFER;
 
 /**
@@ -3566,6 +3536,8 @@ typedef struct _dwg_object_IDBUFFER
 
 typedef struct _dwg_entity_IMAGE
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_BL class_version;
   BITCODE_3BD pt0;
   BITCODE_3BD uvec;
@@ -3588,8 +3560,6 @@ typedef struct _dwg_entity_IMAGE
   BITCODE_2RD* clip_verts;
   BITCODE_H imagedef;
   BITCODE_H imagedefreactor;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_IMAGE;
 
 /**
@@ -3597,6 +3567,8 @@ typedef struct _dwg_entity_IMAGE
  */
 typedef struct _dwg_object_IMAGEDEF
 {
+  struct _dwg_object_object *parent;
+
   BITCODE_BL class_version;
   BITCODE_2RD image_size;
   BITCODE_TV file_path;
@@ -3607,8 +3579,6 @@ typedef struct _dwg_object_IMAGEDEF
   BITCODE_H null_handle; /*!< r2010+ */
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_IMAGEDEF;
 
 /**
@@ -3616,12 +3586,12 @@ typedef struct _dwg_object_IMAGEDEF
  */
 typedef struct _dwg_object_IMAGEDEF_REACTOR
 {
+  struct _dwg_object_object *parent;
+
   BITCODE_BL class_version;
   BITCODE_H parenthandle;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_IMAGEDEF_REACTOR;
 
 /**
@@ -3637,6 +3607,8 @@ typedef struct _dwg_layer_entry
 
 typedef struct _dwg_object_LAYER_INDEX
 {
+  struct _dwg_object_object *parent;
+
   BITCODE_BL timestamp1;
   BITCODE_BL timestamp2;
   BITCODE_BL num_entries;
@@ -3645,8 +3617,6 @@ typedef struct _dwg_object_LAYER_INDEX
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
   BITCODE_H* entry_handles;
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_LAYER_INDEX;
 
 /**
@@ -3654,6 +3624,8 @@ typedef struct _dwg_object_LAYER_INDEX
  */
 typedef struct _dwg_entity_LWPOLYLINE
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_BS flag;
   BITCODE_BD const_width;
   BITCODE_BD elevation;
@@ -3664,22 +3636,20 @@ typedef struct _dwg_entity_LWPOLYLINE
   BITCODE_BL num_bulges;
   BITCODE_BD* bulges;
   BITCODE_BL num_widths;
-  Dwg_Entity_LWPOLYLINE_width* widths;
-
-  struct _dwg_object_entity *parent;
+  Dwg_LWPOLYLINE_width* widths;
 } Dwg_Entity_LWPOLYLINE;
 
 /**
  * 20.4.89 Class AcDbObjectContextData (varies)
  * R2010+
  */
-typedef struct
+typedef struct _dwg_object_OBJECTCONTEXTDATA
 {
+  struct _dwg_object_object *parent;
+
   BITCODE_BS class_version; /*!< r2010+ =3 */
   BITCODE_B has_file;
   BITCODE_B defaultflag;
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_OBJECTCONTEXTDATA;
 
 /**
@@ -3688,6 +3658,8 @@ typedef struct
  */
 typedef struct _dwg_object_RASTERVARIABLES
 {
+  struct _dwg_object_object *parent;
+
   BITCODE_BL class_version;
   BITCODE_BS display_frame;
   BITCODE_BS display_quality;
@@ -3695,8 +3667,6 @@ typedef struct _dwg_object_RASTERVARIABLES
   BITCODE_H parenthandle;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_RASTERVARIABLES;
 
 /**
@@ -3704,6 +3674,8 @@ typedef struct _dwg_object_RASTERVARIABLES
  */
 typedef struct _dwg_object_SCALE
 {
+  struct _dwg_object_object *parent;
+
   BITCODE_BS flag;
   BITCODE_TV name;
   BITCODE_BD paper_units;
@@ -3712,8 +3684,6 @@ typedef struct _dwg_object_SCALE
   BITCODE_H parenthandle;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_SCALE;
 
 /**
@@ -3721,6 +3691,8 @@ typedef struct _dwg_object_SCALE
  */
 typedef struct _dwg_object_SORTENTSTABLE
 {
+  struct _dwg_object_object *parent;
+
   BITCODE_BL num_ents;
   BITCODE_H* sort_handles;
   BITCODE_H parenthandle;
@@ -3728,8 +3700,6 @@ typedef struct _dwg_object_SORTENTSTABLE
   BITCODE_H xdicobjhandle;
   BITCODE_H owner_handle;
   BITCODE_H* ents;
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_SORTENTSTABLE;
 
 /**
@@ -3737,6 +3707,8 @@ typedef struct _dwg_object_SORTENTSTABLE
  */
 typedef struct _dwg_object_SPATIAL_FILTER
 {
+  struct _dwg_object_object *parent;
+
   BITCODE_BS num_points;
   BITCODE_2RD* points;
   BITCODE_3BD extrusion;
@@ -3751,8 +3723,6 @@ typedef struct _dwg_object_SPATIAL_FILTER
   BITCODE_H parenthandle;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_SPATIAL_FILTER;
 
 /**
@@ -3760,14 +3730,14 @@ typedef struct _dwg_object_SPATIAL_FILTER
  */
 typedef struct _dwg_object_SPATIAL_INDEX
 {
+  struct _dwg_object_object *parent;
+
   BITCODE_BL timestamp1;
   BITCODE_BL timestamp2;
   BITCODE_RC* unknown;
   BITCODE_H parenthandle;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_SPATIAL_INDEX;
 
 /**
@@ -3776,6 +3746,8 @@ typedef struct _dwg_object_SPATIAL_INDEX
  */
 typedef struct _dwg_entity_WIPEOUT
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_BL class_version;
   BITCODE_3BD pt0;
   BITCODE_3BD uvec;
@@ -3798,8 +3770,6 @@ typedef struct _dwg_entity_WIPEOUT
   BITCODE_2RD* clip_verts;
   BITCODE_H imagedef;
   BITCODE_H imagedefreactor;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_WIPEOUT;
 
 /**
@@ -3808,12 +3778,12 @@ typedef struct _dwg_entity_WIPEOUT
  */
 typedef struct _dwg_object_WIPEOUTVARIABLE
 {
+  struct _dwg_object_object *parent;
+
   BITCODE_BS display_frame;
   BITCODE_H parenthandle;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_WIPEOUTVARIABLE;
 
 /**
@@ -3834,14 +3804,14 @@ typedef struct _dwg_object_VISUALSTYLE
  */
 typedef struct _dwg_object_LIGHTLIST
 {
+  struct _dwg_object_object *parent;
+
   BITCODE_H* dictionary; /* (hard-pointer to ACAD_LIGHT dictionary entry) */
   /* TODO */
   BITCODE_BS class_version;
   BITCODE_BS num_lights;
   BITCODE_H  light_handle; /* one for each light */
   BITCODE_TV light_name;   /* one for each light */
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_LIGHTLIST;
 
 /**
@@ -3850,9 +3820,12 @@ typedef struct _dwg_object_LIGHTLIST
 
 Acad Naming: e.g. Materials/assetlibrary_base.fbm/shaders/AdskShaders.mi
                   Materials/assetlibrary_base.fbm/Mats/SolidGlass/Generic.xml
+TODO: maybe seperate into the various map structs
  */
 typedef struct _dwg_object_MATERIAL
 {
+  struct _dwg_object_object *parent;
+
   BITCODE_T name; /*!< DXF 1 */
   BITCODE_T desc; /*!< DXF 2 optional */
 
@@ -3969,8 +3942,6 @@ typedef struct _dwg_object_MATERIAL
   //? BD backface_cull
   //? BD self_illum_luminance
   //? BD self_illum_color_temperature
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_MATERIAL;
 
 /**
@@ -3978,12 +3949,12 @@ typedef struct _dwg_object_MATERIAL
  */
 typedef struct _dwg_entity_UNKNOWN_ENT
 {
+  struct _dwg_object_entity *parent;
+
   int num_bytes;
   BITCODE_RC *bytes;
   int num_bits;
   BITCODE_B *bits;
-
-  struct _dwg_object_entity *parent;
 } Dwg_Entity_UNKNOWN_ENT;
 
 /**
@@ -3991,12 +3962,12 @@ typedef struct _dwg_entity_UNKNOWN_ENT
  */
 typedef struct _dwg_object_UNKNOWN_OBJ
 {
+  struct _dwg_object_object *parent;
+
   int num_bytes;
   BITCODE_RC *bytes;
   int num_bits;
   BITCODE_B *bits;
-
-  struct _dwg_object_object *parent;
 } Dwg_Object_UNKNOWN_OBJ;
 
 /* OBJECTS - END ************************************************************/
