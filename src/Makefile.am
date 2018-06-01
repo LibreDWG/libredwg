@@ -18,7 +18,7 @@
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 lib_LTLIBRARIES = libredwg.la
-AM_CFLAGS = -I$(top_srcdir)/include -I. @WARN_CFLAGS@
+AM_CFLAGS = -I$(top_srcdir)/include -I. $(WARN_CFLAGS)
 
 libredwg_la_SOURCES = \
 	dwg.c \
