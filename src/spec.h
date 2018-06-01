@@ -26,6 +26,10 @@
 #define IF_IS_ENCODER 0
 #define IF_IS_DECODER 0
 
+#define SET_PARENT(field, obj)
+#define SET_PARENT_OBJ(field)
+#define SET_PARENT_FIELD(field, what_parent, obj)
+
 #ifndef VALUE_HANDLE
 #define VALUE_HANDLE(value, handle_code, dxf)
 #endif
@@ -66,6 +70,13 @@
 #undef IF_IS_DECODER
 #define IF_IS_DECODER 1
 #define DECODER if (1)
+#undef SET_PARENT
+#undef SET_PARENT_OBJ
+#undef SET_PARENT_FIELD
+#define SET_PARENT(field, to) if (_obj->field) _obj->field->parent = to;
+#define SET_PARENT_OBJ(field) SET_PARENT(field, _obj);
+#define SET_PARENT_FIELD(field, what_parent, to) \
+    if (_obj->field) _obj->field->what_parent = to;
 #endif
 
 #if defined(IS_PRINT)

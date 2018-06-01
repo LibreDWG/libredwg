@@ -3521,13 +3521,16 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
 
   //DEBUG_HERE();
   /*
-   * Reserve memory space for objects
+   * Reserve memory space for objects. A realloc violates all internal pointers.
    */
   if (!num)
     dwg->object = (Dwg_Object *) malloc(sizeof(Dwg_Object));
   else
-    dwg->object = (Dwg_Object *) realloc(dwg->object, (num + 1)
-        * sizeof(Dwg_Object));
+    {
+      dwg->object = (Dwg_Object *) realloc(dwg->object, (num + 1)
+                                           * sizeof(Dwg_Object));
+      //TODO: adjust pointers
+    }
   if (!dwg->object)
     {
       LOG_ERROR("Out of memory");

@@ -2552,6 +2552,7 @@ typedef struct _dwg_Leader_Line
 
 typedef struct _dwg_Leader_ArrowHead
 {
+  struct _dwg_object_MULTILEADER *parent;
   BITCODE_BL is_default;
   BITCODE_H arrowhead;
 } Dwg_Leader_ArrowHead;
@@ -2567,7 +2568,6 @@ typedef struct _dwg_Leader_BlockLabel
 
 typedef struct _dwg_Leader
 {
-  struct _dwg_MLeaderAnnotContext *parent;  
   BITCODE_B is_valid;
   BITCODE_B unknown;
   BITCODE_3BD connection;
@@ -2580,6 +2580,7 @@ typedef struct _dwg_Leader
   BITCODE_BD landing_distance;
   /* ... */
   BITCODE_BS attach_dir;
+  struct _dwg_MLeaderAnnotContext *parent;
 } Dwg_Leader;
 
 /* The MLeaderAnnotContext object (par 20.4.86), embedded into an MLEADER */
