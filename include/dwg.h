@@ -11,7 +11,8 @@
 /*****************************************************************************/
 
 /*
- * dwg.c: main include file
+ * dwg.h: main public header file (the other variant is dwg_api.h)
+ *
  * written by Felipe Castro
  * modified by Felipe Corrêa da Silva Sances
  * modified by Rodrigo Rodrigues da Silva
@@ -40,6 +41,15 @@
 #  define DWGCHAR wchar_t
 #  define dwg_wchar_t wchar_t
 # endif
+#endif
+
+#if defined(_WIN32)
+# define EXPORT  __declspec(dllexport)
+#elif defined(__clang__) || defined(__clang) || \
+       (defined( __GNUC__) && ((__GNUC__ * 100) + __GNUC_MINOR__) >= 303)
+# define EXPORT __attribute__((visibility("default")))
+#else
+# define EXPORT
 #endif
 
 #ifdef __cplusplus
@@ -4561,240 +4571,232 @@ typedef struct _dwg_struct
 } Dwg_Data;
 
 /*--------------------------------------------------
- * Functions
+ * Exported Functions
  */
 
-int
+EXPORT int
 dwg_read_file(const char *restrict filename, Dwg_Data *restrict dwg);
-int
+EXPORT int
 dxf_read_file(const char *restrict filename, Dwg_Data *restrict dwg);
 
 #ifdef USE_WRITE
-int
+EXPORT int
 dwg_write_file(const char *restrict filename, const Dwg_Data *restrict dwg);
 #endif
 
-unsigned char*
+EXPORT unsigned char*
 dwg_bmp(const Dwg_Data *restrict, BITCODE_RL *restrict);
 
-double
-dwg_model_x_min(const Dwg_Data *);
-double
-dwg_model_x_max(const Dwg_Data *);
-double
-dwg_model_y_min(const Dwg_Data *);
-double
-dwg_model_y_max(const Dwg_Data *);
-double
-dwg_model_z_min(const Dwg_Data *);
-double
-dwg_model_z_max(const Dwg_Data *);
-double
-dwg_page_x_min(const Dwg_Data *);
-double
-dwg_page_x_max(const Dwg_Data *);
-double
-dwg_page_y_min(const Dwg_Data *);
-double
-dwg_page_y_max(const Dwg_Data *);
+EXPORT double dwg_model_x_min(const Dwg_Data *);
+EXPORT double dwg_model_x_max(const Dwg_Data *);
+EXPORT double dwg_model_y_min(const Dwg_Data *);
+EXPORT double dwg_model_y_max(const Dwg_Data *);
+EXPORT double dwg_model_z_min(const Dwg_Data *);
+EXPORT double dwg_model_z_max(const Dwg_Data *);
+EXPORT double dwg_page_x_min(const Dwg_Data *);
+EXPORT double dwg_page_x_max(const Dwg_Data *);
+EXPORT double dwg_page_y_min(const Dwg_Data *);
+EXPORT double dwg_page_y_max(const Dwg_Data *);
 
-unsigned int
+EXPORT unsigned int
 dwg_get_layer_count(const Dwg_Data *);
 
-Dwg_Object_LAYER**
+EXPORT Dwg_Object_LAYER**
 dwg_get_layers(const Dwg_Data *);
 
-long unsigned int
+EXPORT long unsigned int
 dwg_get_num_objects(const Dwg_Data *dwg);
 
-long unsigned int
+EXPORT long unsigned int
 dwg_get_object_num_objects(const Dwg_Data *dwg);
 
-int
+EXPORT int
 dwg_class_is_entity(const Dwg_Class *klass);
 
-int
+EXPORT int
 dwg_obj_is_control(const Dwg_Object *obj);
 
-int
+EXPORT int
 dwg_obj_is_table(const Dwg_Object *obj);
 
-long unsigned int
+EXPORT long unsigned int
 dwg_get_num_entities(const Dwg_Data *);
 
-Dwg_Object_Entity **
+EXPORT Dwg_Object_Entity **
 dwg_get_entities(const Dwg_Data *);
 
-Dwg_Object_LAYER *
+EXPORT Dwg_Object_LAYER *
 dwg_get_entity_layer(const Dwg_Object_Entity *);
 
-Dwg_Object*
+EXPORT Dwg_Object*
 dwg_next_object(const Dwg_Object* obj);
 
-Dwg_Object*
+EXPORT Dwg_Object*
 dwg_ref_get_object(const Dwg_Data *restrict dwg,
                    const Dwg_Object_Ref *restrict ref);
 
-Dwg_Object*
+EXPORT Dwg_Object*
 dwg_ref_get_object_relative(const Dwg_Data *restrict dwg,
                             const Dwg_Object_Ref *restrict ref,
                             const Dwg_Object *restrict obj);
 
-Dwg_Object*
+EXPORT Dwg_Object*
 get_first_owned_object(const Dwg_Object *restrict hdr_obj,
                        Dwg_Object_BLOCK_HEADER *restrict hdr);
 
-Dwg_Object*
+EXPORT Dwg_Object*
 get_next_owned_object(const Dwg_Object *restrict hdr_obj,
                       const Dwg_Object *restrict current,
                       Dwg_Object_BLOCK_HEADER *restrict hdr);
 
-Dwg_Object *
+EXPORT Dwg_Object *
 dwg_resolve_handle(const Dwg_Data* dwg,
                    const unsigned long int absref);
-int
+EXPORT int
 dwg_resolve_handleref(Dwg_Object_Ref *restrict ref,
                       const Dwg_Object *restrict obj);
 
-Dwg_Section_Type
+EXPORT Dwg_Section_Type
 dwg_section_type(const DWGCHAR *wname);
 
 /** Free the whole DWG. all tables, sections, objects, ...
 */
-void
+EXPORT void
 dwg_free(Dwg_Data * dwg);
 
 /** Free the object (all three structs and its fields)
 */
-void
+EXPORT void
 dwg_free_object(Dwg_Object *obj);
 
+#ifdef USE_WRITE
 /** Add the empty entity or object with its three structs to the DWG.
     All fields are zero'd, some are initialized with default values, as
     defined in dwg.spec.
-    Returns the new Dwg_Object* or NULL on error.
+    Returns the new objid or -1 on error.
 */
-Dwg_Object* dwg_add_TEXT (Dwg_Data * dwg);
-Dwg_Object* dwg_add_ATTRIB (Dwg_Data * dwg);
-Dwg_Object* dwg_add_ATTDEF (Dwg_Data * dwg);
-Dwg_Object* dwg_add_BLOCK (Dwg_Data * dwg);
-Dwg_Object* dwg_add_ENDBLK (Dwg_Data * dwg);
-Dwg_Object* dwg_add_SEQEND (Dwg_Data * dwg);
-Dwg_Object* dwg_add_INSERT (Dwg_Data * dwg);
-Dwg_Object* dwg_add_MINSERT (Dwg_Data * dwg);
-Dwg_Object* dwg_add_VERTEX_2D (Dwg_Data * dwg);
-Dwg_Object* dwg_add_VERTEX_3D (Dwg_Data * dwg);
-Dwg_Object* dwg_add_VERTEX_MESH (Dwg_Data * dwg);
-Dwg_Object* dwg_add_VERTEX_PFACE (Dwg_Data * dwg);
-Dwg_Object* dwg_add_VERTEX_PFACE_FACE (Dwg_Data * dwg);
-Dwg_Object* dwg_add_POLYLINE_2D (Dwg_Data * dwg);
-Dwg_Object* dwg_add_POLYLINE_3D (Dwg_Data * dwg);
-Dwg_Object* dwg_add_ARC (Dwg_Data * dwg);
-Dwg_Object* dwg_add_CIRCLE (Dwg_Data * dwg);
-Dwg_Object* dwg_add_LINE (Dwg_Data * dwg);
-Dwg_Object* dwg_add_DIMENSION_ORDINATE (Dwg_Data * dwg);
-Dwg_Object* dwg_add_DIMENSION_LINEAR (Dwg_Data * dwg);
-Dwg_Object* dwg_add_DIMENSION_ALIGNED (Dwg_Data * dwg);
-Dwg_Object* dwg_add_DIMENSION_ANG3PT (Dwg_Data * dwg);
-Dwg_Object* dwg_add_DIMENSION_ANG2LN (Dwg_Data * dwg);
-Dwg_Object* dwg_add_DIMENSION_RADIUS (Dwg_Data * dwg);
-Dwg_Object* dwg_add_DIMENSION_DIAMETER (Dwg_Data * dwg);
-Dwg_Object* dwg_add_POINT (Dwg_Data * dwg);
-Dwg_Object* dwg_add__3DFACE (Dwg_Data * dwg);
-Dwg_Object* dwg_add__3DSOLID (Dwg_Data * dwg);
-Dwg_Object* dwg_add_POLYLINE_PFACE (Dwg_Data * dwg);
-Dwg_Object* dwg_add_POLYLINE_MESH (Dwg_Data * dwg);
-Dwg_Object* dwg_add_SOLID (Dwg_Data * dwg);
-Dwg_Object* dwg_add_TRACE (Dwg_Data * dwg);
-Dwg_Object* dwg_add_SHAPE (Dwg_Data * dwg);
-Dwg_Object* dwg_add_VIEWPORT (Dwg_Data * dwg);
-Dwg_Object* dwg_add_ELLIPSE (Dwg_Data * dwg);
-Dwg_Object* dwg_add_SPLINE (Dwg_Data * dwg);
-Dwg_Object* dwg_add_REGION (Dwg_Data * dwg);
-Dwg_Object* dwg_add_3DSOLID (Dwg_Data * dwg);
-Dwg_Object* dwg_add_BODY (Dwg_Data * dwg);
-Dwg_Object* dwg_add_RAY (Dwg_Data * dwg);
-Dwg_Object* dwg_add_XLINE (Dwg_Data * dwg);
-Dwg_Object* dwg_add_DICTIONARY (Dwg_Data * dwg);
-Dwg_Object* dwg_add_OLEFRAME (Dwg_Data * dwg);
-Dwg_Object* dwg_add_MTEXT (Dwg_Data * dwg);
-Dwg_Object* dwg_add_LEADER (Dwg_Data * dwg);
-Dwg_Object* dwg_add_TOLERANCE (Dwg_Data * dwg);
-Dwg_Object* dwg_add_MLINE (Dwg_Data * dwg);
-Dwg_Object* dwg_add_BLOCK_CONTROL (Dwg_Data * dwg);
-Dwg_Object* dwg_add_BLOCK_HEADER (Dwg_Data * dwg);
-Dwg_Object* dwg_add_LAYER_CONTROL (Dwg_Data * dwg);
-Dwg_Object* dwg_add_LAYER (Dwg_Data * dwg);
-Dwg_Object* dwg_add_STYLE_CONTROL (Dwg_Data * dwg);
-Dwg_Object* dwg_add_STYLE (Dwg_Data * dwg);
-Dwg_Object* dwg_add_LTYPE_CONTROL (Dwg_Data * dwg);
-Dwg_Object* dwg_add_LTYPE (Dwg_Data * dwg);
-Dwg_Object* dwg_add_VIEW_CONTROL (Dwg_Data * dwg);
-Dwg_Object* dwg_add_VIEW (Dwg_Data * dwg);
-Dwg_Object* dwg_add_UCS_CONTROL (Dwg_Data * dwg);
-Dwg_Object* dwg_add_UCS (Dwg_Data * dwg);
-Dwg_Object* dwg_add_VPORT_CONTROL (Dwg_Data * dwg);
-Dwg_Object* dwg_add_VPORT (Dwg_Data * dwg);
-Dwg_Object* dwg_add_APPID_CONTROL (Dwg_Data * dwg);
-Dwg_Object* dwg_add_APPID (Dwg_Data * dwg);
-Dwg_Object* dwg_add_DIMSTYLE_CONTROL (Dwg_Data * dwg);
-Dwg_Object* dwg_add_DIMSTYLE (Dwg_Data * dwg);
-Dwg_Object* dwg_add_VPORT_ENTITY_CONTROL (Dwg_Data * dwg);
-Dwg_Object* dwg_add_VPORT_ENTITY_HEADER (Dwg_Data * dwg);
-Dwg_Object* dwg_add_GROUP (Dwg_Data * dwg);
-Dwg_Object* dwg_add_MLINESTYLE (Dwg_Data * dwg);
-Dwg_Object* dwg_add_OLE2FRAME (Dwg_Data * dwg);
-Dwg_Object* dwg_add_DUMMY (Dwg_Data * dwg);
-Dwg_Object* dwg_add_LONG_TRANSACTION (Dwg_Data * dwg);
-Dwg_Object* dwg_add_LWPOLYLINE (Dwg_Data * dwg);
-Dwg_Object* dwg_add_HATCH (Dwg_Data * dwg);
-Dwg_Object* dwg_add_XRECORD (Dwg_Data * dwg);
-Dwg_Object* dwg_add_PLACEHOLDER (Dwg_Data * dwg);
-Dwg_Object* dwg_add_VBA_PROJECT (Dwg_Data * dwg);
-Dwg_Object* dwg_add_LAYOUT (Dwg_Data * dwg);
-Dwg_Object* dwg_add_PROXY_ENTITY (Dwg_Data * dwg);
-Dwg_Object* dwg_add_PROXY_OBJECT (Dwg_Data * dwg);
-Dwg_Object* dwg_add_ARCALIGNEDTEXT (Dwg_Data * dwg);
-Dwg_Object* dwg_add_ASSOC2DCONSTRAINTGROUP (Dwg_Data * dwg);
-Dwg_Object* dwg_add_ASSOCGEOMDEPENDENCY (Dwg_Data * dwg);
-Dwg_Object* dwg_add_ASSOCNETWORK (Dwg_Data * dwg);
-Dwg_Object* dwg_add_CELLSTYLEMAP (Dwg_Data * dwg);
-Dwg_Object* dwg_add_DBCOLOR (Dwg_Data * dwg);
-Dwg_Object* dwg_add_DETAILVIEWSTYLE (Dwg_Data * dwg);
-Dwg_Object* dwg_add_DIMASSOC (Dwg_Data * dwg);
-Dwg_Object* dwg_add_DICTIONARYVAR (Dwg_Data * dwg);
-Dwg_Object* dwg_add_DICTIONARYWDLFT (Dwg_Data * dwg);
-Dwg_Object* dwg_add_EXACXREFPANELOBJECT (Dwg_Data * dwg);
-Dwg_Object* dwg_add_FIELD (Dwg_Data * dwg);
-Dwg_Object* dwg_add_FIELDLIST (Dwg_Data * dwg);
-Dwg_Object* dwg_add_GEODATA (Dwg_Data * dwg);
-Dwg_Object* dwg_add_IDBUFFER (Dwg_Data * dwg);
-Dwg_Object* dwg_add_IMAGE (Dwg_Data * dwg);
-Dwg_Object* dwg_add_IMAGEDEF (Dwg_Data * dwg);
-Dwg_Object* dwg_add_IMAGEDEF_REACTOR (Dwg_Data * dwg);
-Dwg_Object* dwg_add_LAYER_INDEX (Dwg_Data * dwg);
-Dwg_Object* dwg_add_LAYER_FILTER (Dwg_Data * dwg);
-Dwg_Object* dwg_add_LEADEROBJECTCONTEXTDATA (Dwg_Data * dwg);
-Dwg_Object* dwg_add_LIGHTLIST (Dwg_Data * dwg);
-Dwg_Object* dwg_add_MATERIAL (Dwg_Data * dwg);
-Dwg_Object* dwg_add_MULTILEADER (Dwg_Data * dwg);
-Dwg_Object* dwg_add_MLEADERSTYLE (Dwg_Data * dwg);
-Dwg_Object* dwg_add_NPOCOLLECTION (Dwg_Data * dwg);
-Dwg_Object* dwg_add_PLOTSETTINGS (Dwg_Data * dwg);
-Dwg_Object* dwg_add_OBJECTCONTEXTDATA (Dwg_Data * dwg);
-Dwg_Object* dwg_add_RASTERVARIABLES (Dwg_Data * dwg);
-Dwg_Object* dwg_add_SCALE (Dwg_Data * dwg);
-Dwg_Object* dwg_add_SECTIONVIEWSTYLE (Dwg_Data * dwg);
-Dwg_Object* dwg_add_SORTENTSTABLE (Dwg_Data * dwg);
-Dwg_Object* dwg_add_SPATIAL_FILTER (Dwg_Data * dwg);
-Dwg_Object* dwg_add_SPATIAL_INDEX (Dwg_Data * dwg);
-Dwg_Object* dwg_add_TABLE (Dwg_Data * dwg);
-Dwg_Object* dwg_add_TABLECONTENT (Dwg_Data * dwg);
-Dwg_Object* dwg_add_TABLEGEOMETRY (Dwg_Data * dwg);
-Dwg_Object* dwg_add_TABLESTYLE (Dwg_Data * dwg);
-Dwg_Object* dwg_add_VISUALSTYLE (Dwg_Data * dwg);
-Dwg_Object* dwg_add_WIPEOUT (Dwg_Data * dwg);
-Dwg_Object* dwg_add_WIPEOUTVARIABLE (Dwg_Data * dwg);
+EXPORT long dwg_add_TEXT (Dwg_Data * dwg);
+EXPORT long dwg_add_ATTRIB (Dwg_Data * dwg);
+EXPORT long dwg_add_ATTDEF (Dwg_Data * dwg);
+EXPORT long dwg_add_BLOCK (Dwg_Data * dwg);
+EXPORT long dwg_add_ENDBLK (Dwg_Data * dwg);
+EXPORT long dwg_add_SEQEND (Dwg_Data * dwg);
+EXPORT long dwg_add_INSERT (Dwg_Data * dwg);
+EXPORT long dwg_add_MINSERT (Dwg_Data * dwg);
+EXPORT long dwg_add_VERTEX_2D (Dwg_Data * dwg);
+EXPORT long dwg_add_VERTEX_3D (Dwg_Data * dwg);
+EXPORT long dwg_add_VERTEX_MESH (Dwg_Data * dwg);
+EXPORT long dwg_add_VERTEX_PFACE (Dwg_Data * dwg);
+EXPORT long dwg_add_VERTEX_PFACE_FACE (Dwg_Data * dwg);
+EXPORT long dwg_add_POLYLINE_2D (Dwg_Data * dwg);
+EXPORT long dwg_add_POLYLINE_3D (Dwg_Data * dwg);
+EXPORT long dwg_add_ARC (Dwg_Data * dwg);
+EXPORT long dwg_add_CIRCLE (Dwg_Data * dwg);
+EXPORT long dwg_add_LINE (Dwg_Data * dwg);
+EXPORT long dwg_add_DIMENSION_ORDINATE (Dwg_Data * dwg);
+EXPORT long dwg_add_DIMENSION_LINEAR (Dwg_Data * dwg);
+EXPORT long dwg_add_DIMENSION_ALIGNED (Dwg_Data * dwg);
+EXPORT long dwg_add_DIMENSION_ANG3PT (Dwg_Data * dwg);
+EXPORT long dwg_add_DIMENSION_ANG2LN (Dwg_Data * dwg);
+EXPORT long dwg_add_DIMENSION_RADIUS (Dwg_Data * dwg);
+EXPORT long dwg_add_DIMENSION_DIAMETER (Dwg_Data * dwg);
+EXPORT long dwg_add_POINT (Dwg_Data * dwg);
+EXPORT long dwg_add__3DFACE (Dwg_Data * dwg);
+EXPORT long dwg_add__3DSOLID (Dwg_Data * dwg);
+EXPORT long dwg_add_POLYLINE_PFACE (Dwg_Data * dwg);
+EXPORT long dwg_add_POLYLINE_MESH (Dwg_Data * dwg);
+EXPORT long dwg_add_SOLID (Dwg_Data * dwg);
+EXPORT long dwg_add_TRACE (Dwg_Data * dwg);
+EXPORT long dwg_add_SHAPE (Dwg_Data * dwg);
+EXPORT long dwg_add_VIEWPORT (Dwg_Data * dwg);
+EXPORT long dwg_add_ELLIPSE (Dwg_Data * dwg);
+EXPORT long dwg_add_SPLINE (Dwg_Data * dwg);
+EXPORT long dwg_add_REGION (Dwg_Data * dwg);
+EXPORT long dwg_add_3DSOLID (Dwg_Data * dwg);
+EXPORT long dwg_add_BODY (Dwg_Data * dwg);
+EXPORT long dwg_add_RAY (Dwg_Data * dwg);
+EXPORT long dwg_add_XLINE (Dwg_Data * dwg);
+EXPORT long dwg_add_DICTIONARY (Dwg_Data * dwg);
+EXPORT long dwg_add_OLEFRAME (Dwg_Data * dwg);
+EXPORT long dwg_add_MTEXT (Dwg_Data * dwg);
+EXPORT long dwg_add_LEADER (Dwg_Data * dwg);
+EXPORT long dwg_add_TOLERANCE (Dwg_Data * dwg);
+EXPORT long dwg_add_MLINE (Dwg_Data * dwg);
+EXPORT long dwg_add_BLOCK_CONTROL (Dwg_Data * dwg);
+EXPORT long dwg_add_BLOCK_HEADER (Dwg_Data * dwg);
+EXPORT long dwg_add_LAYER_CONTROL (Dwg_Data * dwg);
+EXPORT long dwg_add_LAYER (Dwg_Data * dwg);
+EXPORT long dwg_add_STYLE_CONTROL (Dwg_Data * dwg);
+EXPORT long dwg_add_STYLE (Dwg_Data * dwg);
+EXPORT long dwg_add_LTYPE_CONTROL (Dwg_Data * dwg);
+EXPORT long dwg_add_LTYPE (Dwg_Data * dwg);
+EXPORT long dwg_add_VIEW_CONTROL (Dwg_Data * dwg);
+EXPORT long dwg_add_VIEW (Dwg_Data * dwg);
+EXPORT long dwg_add_UCS_CONTROL (Dwg_Data * dwg);
+EXPORT long dwg_add_UCS (Dwg_Data * dwg);
+EXPORT long dwg_add_VPORT_CONTROL (Dwg_Data * dwg);
+EXPORT long dwg_add_VPORT (Dwg_Data * dwg);
+EXPORT long dwg_add_APPID_CONTROL (Dwg_Data * dwg);
+EXPORT long dwg_add_APPID (Dwg_Data * dwg);
+EXPORT long dwg_add_DIMSTYLE_CONTROL (Dwg_Data * dwg);
+EXPORT long dwg_add_DIMSTYLE (Dwg_Data * dwg);
+EXPORT long dwg_add_VPORT_ENTITY_CONTROL (Dwg_Data * dwg);
+EXPORT long dwg_add_VPORT_ENTITY_HEADER (Dwg_Data * dwg);
+EXPORT long dwg_add_GROUP (Dwg_Data * dwg);
+EXPORT long dwg_add_MLINESTYLE (Dwg_Data * dwg);
+EXPORT long dwg_add_OLE2FRAME (Dwg_Data * dwg);
+EXPORT long dwg_add_DUMMY (Dwg_Data * dwg);
+EXPORT long dwg_add_LONG_TRANSACTION (Dwg_Data * dwg);
+EXPORT long dwg_add_LWPOLYLINE (Dwg_Data * dwg);
+EXPORT long dwg_add_HATCH (Dwg_Data * dwg);
+EXPORT long dwg_add_XRECORD (Dwg_Data * dwg);
+EXPORT long dwg_add_PLACEHOLDER (Dwg_Data * dwg);
+EXPORT long dwg_add_VBA_PROJECT (Dwg_Data * dwg);
+EXPORT long dwg_add_LAYOUT (Dwg_Data * dwg);
+EXPORT long dwg_add_PROXY_ENTITY (Dwg_Data * dwg);
+EXPORT long dwg_add_PROXY_OBJECT (Dwg_Data * dwg);
+EXPORT long dwg_add_ARCALIGNEDTEXT (Dwg_Data * dwg);
+EXPORT long dwg_add_ASSOC2DCONSTRAINTGROUP (Dwg_Data * dwg);
+EXPORT long dwg_add_ASSOCGEOMDEPENDENCY (Dwg_Data * dwg);
+EXPORT long dwg_add_ASSOCNETWORK (Dwg_Data * dwg);
+EXPORT long dwg_add_CELLSTYLEMAP (Dwg_Data * dwg);
+EXPORT long dwg_add_DBCOLOR (Dwg_Data * dwg);
+EXPORT long dwg_add_DETAILVIEWSTYLE (Dwg_Data * dwg);
+EXPORT long dwg_add_DIMASSOC (Dwg_Data * dwg);
+EXPORT long dwg_add_DICTIONARYVAR (Dwg_Data * dwg);
+EXPORT long dwg_add_DICTIONARYWDLFT (Dwg_Data * dwg);
+EXPORT long dwg_add_EXACXREFPANELOBJECT (Dwg_Data * dwg);
+EXPORT long dwg_add_FIELD (Dwg_Data * dwg);
+EXPORT long dwg_add_FIELDLIST (Dwg_Data * dwg);
+EXPORT long dwg_add_GEODATA (Dwg_Data * dwg);
+EXPORT long dwg_add_IDBUFFER (Dwg_Data * dwg);
+EXPORT long dwg_add_IMAGE (Dwg_Data * dwg);
+EXPORT long dwg_add_IMAGEDEF (Dwg_Data * dwg);
+EXPORT long dwg_add_IMAGEDEF_REACTOR (Dwg_Data * dwg);
+EXPORT long dwg_add_LAYER_INDEX (Dwg_Data * dwg);
+EXPORT long dwg_add_LAYER_FILTER (Dwg_Data * dwg);
+EXPORT long dwg_add_LEADEROBJECTCONTEXTDATA (Dwg_Data * dwg);
+EXPORT long dwg_add_LIGHTLIST (Dwg_Data * dwg);
+EXPORT long dwg_add_MATERIAL (Dwg_Data * dwg);
+EXPORT long dwg_add_MULTILEADER (Dwg_Data * dwg);
+EXPORT long dwg_add_MLEADERSTYLE (Dwg_Data * dwg);
+EXPORT long dwg_add_NPOCOLLECTION (Dwg_Data * dwg);
+EXPORT long dwg_add_PLOTSETTINGS (Dwg_Data * dwg);
+EXPORT long dwg_add_OBJECTCONTEXTDATA (Dwg_Data * dwg);
+EXPORT long dwg_add_RASTERVARIABLES (Dwg_Data * dwg);
+EXPORT long dwg_add_SCALE (Dwg_Data * dwg);
+EXPORT long dwg_add_SECTIONVIEWSTYLE (Dwg_Data * dwg);
+EXPORT long dwg_add_SORTENTSTABLE (Dwg_Data * dwg);
+EXPORT long dwg_add_SPATIAL_FILTER (Dwg_Data * dwg);
+EXPORT long dwg_add_SPATIAL_INDEX (Dwg_Data * dwg);
+EXPORT long dwg_add_TABLE (Dwg_Data * dwg);
+EXPORT long dwg_add_TABLECONTENT (Dwg_Data * dwg);
+EXPORT long dwg_add_TABLEGEOMETRY (Dwg_Data * dwg);
+EXPORT long dwg_add_TABLESTYLE (Dwg_Data * dwg);
+EXPORT long dwg_add_VISUALSTYLE (Dwg_Data * dwg);
+EXPORT long dwg_add_WIPEOUT (Dwg_Data * dwg);
+EXPORT long dwg_add_WIPEOUTVARIABLE (Dwg_Data * dwg);
+#endif
 
 #ifdef __cplusplus
 }

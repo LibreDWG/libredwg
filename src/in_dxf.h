@@ -41,7 +41,9 @@ void dxf_add_field(Dwg_Object *restrict obj, const char *restrict name,
 Dxf_Field* dxf_search_field(Dwg_Object *restrict obj, const char *restrict name,
                             const char *restrict type, int dxf);
 
-int dwg_read_dxf(Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
-int dwg_read_dxfb(Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
+EXPORT int
+dwg_read_dxf(Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
+EXPORT int
+dwg_read_dxfb(Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 
 #endif

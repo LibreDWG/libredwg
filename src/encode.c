@@ -340,7 +340,7 @@ static bool env_var_checked_p;
   for (rcount4=0; (long)rcount4<(long)_obj->times; rcount4++)
 
 #define DWG_ENTITY(token) \
-Dwg_Object* dwg_add_##token (Dwg_Data * dwg)    \
+EXPORT long dwg_add_##token (Dwg_Data * dwg)    \
 {                                               \
   Bit_Chain dat;                                \
   BITCODE_BL num_objs  = dwg->num_objects;      \
@@ -358,9 +358,9 @@ Dwg_Object* dwg_add_##token (Dwg_Data * dwg)    \
   bit_set_position(&dat, 0);                    \
   dwg_decode_add_object(dwg, &dat, &dat, 0);    \
   if (num_objs == dwg->num_objects)             \
-    return NULL;                                \
+    return -1;                                  \
   else                                          \
-    return &dwg->object[dwg->num_objects];      \
+    return (long)dwg->num_objects;              \
 } \
 \
 static void dwg_encode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
@@ -387,7 +387,7 @@ static void dwg_encode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict ob
 }
 
 #define DWG_OBJECT(token) \
-Dwg_Object* dwg_add_##token (Dwg_Data * dwg)     \
+EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
 {                                                \
   Bit_Chain dat;                                 \
   BITCODE_BL num_objs  = dwg->num_objects;       \
@@ -405,9 +405,9 @@ Dwg_Object* dwg_add_##token (Dwg_Data * dwg)     \
   bit_set_position(&dat, 0);                     \
   dwg_decode_add_object(dwg, &dat, &dat, 0);     \
   if (num_objs == dwg->num_objects)              \
-    return NULL;                                 \
-  else                                           \
-    return &dwg->object[dwg->num_objects];       \
+    return -1;                                  \
+  else                                          \
+    return (long)dwg->num_objects;              \
 } \
 \
 static void dwg_encode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \

@@ -270,7 +270,7 @@ static unsigned int cur_ver = 0;
 
 #define DWG_ENTITY(token) \
 static void \
-dwg_json_##token (Bit_Chain *dat, Dwg_Object * obj) \
+dwg_json_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 {\
   int vcount, rcount, rcount2, rcount3, rcount4; \
   Dwg_Entity_##token *ent, *_obj;\
@@ -288,7 +288,7 @@ dwg_json_##token (Bit_Chain *dat, Dwg_Object * obj) \
 
 #define DWG_OBJECT(token) \
 static void \
-dwg_json_ ##token (Bit_Chain *dat, Dwg_Object * obj) \
+dwg_json_ ##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
   int vcount, rcount, rcount2, rcount3, rcount4;\
   Bit_Chain *hdl_dat = dat;\
@@ -307,7 +307,8 @@ dwg_json_ ##token (Bit_Chain *dat, Dwg_Object * obj) \
 /* returns 1 if object could be printd and 0 otherwise
  */
 static int
-dwg_json_variable_type(Dwg_Data * dwg, Bit_Chain *dat, Dwg_Object* obj)
+dwg_json_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
+                       Dwg_Object *restrict  obj)
 {
   int i;
   char *dxfname;
@@ -627,7 +628,7 @@ dwg_json_variable_type(Dwg_Data * dwg, Bit_Chain *dat, Dwg_Object* obj)
 }
 
 static void
-dwg_json_object(Bit_Chain *dat, Dwg_Object *obj)
+dwg_json_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
   switch (obj->type)
     {
@@ -914,14 +915,14 @@ dwg_json_object(Bit_Chain *dat, Dwg_Object *obj)
 
 /*
 static void
-json_common_entity_handle_data(Bit_Chain *dat, Dwg_Object* obj)
+json_common_entity_handle_data(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
   (void)dat; (void)obj;
 }
 */
 
 static int
-json_header_write(Bit_Chain *dat, Dwg_Data* dwg)
+json_header_write(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Dwg_Header_Variables* _obj = &dwg->header_vars;
   Dwg_Object* obj = NULL;
@@ -943,7 +944,7 @@ json_header_write(Bit_Chain *dat, Dwg_Data* dwg)
 }
 
 static int
-json_classes_write (Bit_Chain *dat, Dwg_Data * dwg)
+json_classes_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   unsigned int i;
 
@@ -972,7 +973,7 @@ json_classes_write (Bit_Chain *dat, Dwg_Data * dwg)
 }
 
 static int
-json_tables_write (Bit_Chain *dat, Dwg_Data * dwg)
+json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   (void)dwg;
 
@@ -983,7 +984,7 @@ json_tables_write (Bit_Chain *dat, Dwg_Data * dwg)
 }
 
 static int
-json_blocks_write (Bit_Chain *dat, Dwg_Data * dwg)
+json_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   (void)dwg;
 
@@ -994,7 +995,7 @@ json_blocks_write (Bit_Chain *dat, Dwg_Data * dwg)
 }
 
 static int
-json_entities_write (Bit_Chain *dat, Dwg_Data * dwg)
+json_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   unsigned int i;
 
@@ -1014,7 +1015,7 @@ json_entities_write (Bit_Chain *dat, Dwg_Data * dwg)
 
 /* The object map: we skip this
 static int
-json_objects_write (Bit_Chain *dat, Dwg_Data * dwg)
+json_objects_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   unsigned int i;
 
@@ -1028,15 +1029,15 @@ json_objects_write (Bit_Chain *dat, Dwg_Data * dwg)
 */
 
 static int
-json_preview_write (Bit_Chain *dat, Dwg_Data * dwg)
+json_preview_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   (void)dat; (void)dwg;
   //...
   return 0;
 }
 
-int
-dwg_write_json(Bit_Chain *dat, Dwg_Data * dwg)
+EXPORT int
+dwg_write_json(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   const int minimal = dwg->opts & 0x10;
   struct Dwg_Header *obj = &dwg->header;

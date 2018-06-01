@@ -15,6 +15,7 @@
  * written by Felipe Castro
  * modified by Felipe Corrêa da Silva Sances
  * modified by Rodrigo Rodrigues da Silva
+ * modified by Reini Urban
  */
 
 /**
@@ -234,12 +235,12 @@ bit_read_TU(Bit_Chain *restrict dat);
 void
 bit_write_TU(Bit_Chain *restrict dat, BITCODE_TU restrict value);
 
-/* converts UCS-2 to UTF-8 */
-char*
+/* converts UCS-2 to UTF-8. needed by dwglayers */
+EXPORT char*
 bit_convert_TU(BITCODE_TU restrict wstr);
 
-/* converts UTF-8 to UCS-2 */
-BITCODE_TU
+/* converts UTF-8 to UCS-2. eventually needed by dwg writers (dxf2dwg) */
+EXPORT BITCODE_TU
 bit_utf8_to_TU(char* restrict str);
 
 BITCODE_RL

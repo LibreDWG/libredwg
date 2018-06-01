@@ -1,4 +1,5 @@
 #include "../../src/bits.h"
+
 //-Wno-format-nonliteral
 #include <dejagnu.h>
 #include <string.h>

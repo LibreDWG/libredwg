@@ -226,7 +226,8 @@ static unsigned int cur_ver = 0;
 
 // common properties
 static void
-dwg_geojson_feature(Bit_Chain *dat, Dwg_Object* obj, const char* subclass)
+dwg_geojson_feature(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
+                    const char *restrict subclass)
 {
   char tmp[64];
   PAIR_S(type, "Feature");
@@ -250,7 +251,8 @@ dwg_geojson_feature(Bit_Chain *dat, Dwg_Object* obj, const char* subclass)
 /* returns 1 if object could be printd and 0 otherwise
  */
 static int
-dwg_geojson_variable_type(Dwg_Data * dwg, Bit_Chain *dat, Dwg_Object* obj)
+dwg_geojson_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
+                          Dwg_Object *restrict obj)
 {
   int i;
   char *dxfname;
@@ -301,7 +303,7 @@ dwg_geojson_variable_type(Dwg_Data * dwg, Bit_Chain *dat, Dwg_Object* obj)
 }
 
 static void
-dwg_geojson_object(Bit_Chain *dat, Dwg_Object *obj)
+dwg_geojson_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
   switch (obj->type)
     {
@@ -482,7 +484,7 @@ dwg_geojson_object(Bit_Chain *dat, Dwg_Object *obj)
 }
 
 static int
-geojson_entities_write (Bit_Chain *dat, Dwg_Data * dwg)
+geojson_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   unsigned int i;
 
@@ -497,8 +499,8 @@ geojson_entities_write (Bit_Chain *dat, Dwg_Data * dwg)
   return 0;
 }
 
-int
-dwg_write_geojson(Bit_Chain *dat, Dwg_Data * dwg)
+EXPORT int
+dwg_write_geojson(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   //const int minimal = dwg->opts & 0x10;
   char date[12] = "YYYY-MM-DD";

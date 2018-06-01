@@ -36,6 +36,16 @@
 #  define GCC_DIAG_RESTORE
 #endif
 
+#ifndef EXPORT
+# if defined(_WIN32)
+#   define EXPORT  __declspec(dllexport)
+# elif defined(HAVE_ATTRIBUTE_VISIBILITY_DEFAULT)
+#   define EXPORT __attribute__((visibility("default")))
+# else
+#   define EXPORT
+# endif
+#endif
+
 #define TODO_ENCODER fprintf(stderr, "TODO: Encoder\n");
 #define TODO_DECODER fprintf(stderr, "TODO: Decoder\n");
 
@@ -63,7 +73,7 @@ typedef enum DWG_VERSION_TYPE
 } Dwg_Version_Type;
 extern char version_codes[DWG_VERSIONS][7];
 
-Dwg_Version_Type dwg_version_as(const char *);
+EXPORT Dwg_Version_Type dwg_version_as(const char *);
 
 /**
  Data types (including compressed forms) used through the project

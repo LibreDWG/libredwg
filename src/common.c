@@ -86,7 +86,7 @@ char version_codes[DWG_VERSIONS][7] =
 // map [rVER] to our enum number, not the dwg->header.dwgversion
 // Acad 2013 offers Saveas DWG: 2013,2010,2007,2004,2004,2000,r14
 //                         DXF: 2013,2010,2007,2004,2004,2000,r12
-Dwg_Version_Type dwg_version_as(const char *version)
+EXPORT Dwg_Version_Type dwg_version_as(const char *version)
 {
   if (!strcmp(version, "r2000"))
     return R_2000;

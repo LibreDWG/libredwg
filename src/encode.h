@@ -26,7 +26,7 @@
 
 int dwg_encode(Dwg_Data *dwg, Bit_Chain *dat);
 
-Dwg_Object* dwg_add_UNKNOWN_ENT (Dwg_Data * dwg);
-Dwg_Object* dwg_add_UNKNOWN_OBJ (Dwg_Data * dwg);
+long dwg_add_UNKNOWN_ENT (Dwg_Data * dwg);
+long dwg_add_UNKNOWN_OBJ (Dwg_Data * dwg);
 
 #endif

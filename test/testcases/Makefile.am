@@ -2,18 +2,20 @@ AUTOMAKE_OPTIONS = dejagnu
 
 AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src $(WARN_CFLAGS)
 LDADD   = $(top_builddir)/src/libredwg.la -lm
-#SOURCES = $(top_builddir)/src/libredwg.la
+
+bits_test_LDADD = $(LDADD) $(top_builddir)/src/bits.lo
+
+private = bits_test \
+	  decode_test
 
 paired = \
 	3dsolid \
 	arc \
 	attdef \
 	attrib \
-	bits_test \
 	block \
 	body \
 	circle \
-	decode_test \
 	dim_common \
 	dim_aligned \
 	dim_ang2ln \
@@ -53,14 +55,15 @@ unpaired = \
 	vertex_2d \
 	vertex_mesh
 
-check_PROGRAMS = $(paired) $(unpaired)
+check_PROGRAMS = $(paired) $(unpaired) $(private)
 
 # todo: more dwg versions, in test/test-data
 EXTRA_DIST = \
 	example_2000.dwg \
 	vertex.mesh \
 	tests_common.h common.c \
-	$(paired:=.exp)
+	$(paired:=.exp) \
+	$(private:=.exp)
 
 CLEANFILES = *.log *.sum site.bak 
 MAINTAINERCLEANFILES = *_flymake.[ch] *~ *.i

@@ -1,4 +1,6 @@
+#pragma pack(1)
 #include "../../src/decode.c"
+
 #include <dejagnu.h>
 #include "tests_common.h"
 

@@ -21,7 +21,7 @@
 #include "dwg.h"
 #include "bits.h"
 
-int  dwg_write_json(Bit_Chain *dat, Dwg_Data* dwg);
-int  dwg_write_geojson(Bit_Chain *dat, Dwg_Data* dwg);
+EXPORT int dwg_write_json(Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
+EXPORT int dwg_write_geojson(Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 
 #endif
