@@ -17652,66 +17652,8 @@ dwg_obj_table_get_name(const dwg_object *restrict obj, int *restrict error)
 }
 
 /*******************************************************************
-*                    FUNCTIONS FOR DWG OBJECT                       *
+*                    FUNCTIONS FOR GENERIC ENTITY                  *
 ********************************************************************/
-
-/** Returns the number of classes or 0
-\code Usage: unsigned num_classes = dwg_get_num_classes(dwg);
-\endcode
-\param[in]  dwg   dwg_data*
-*/
-unsigned int
-dwg_get_num_classes(const dwg_data *dwg)
-{
-  if (!dwg)
-    return 0;
-  if (dwg_version == R_INVALID)
-    dwg_version = (Dwg_Version_Type)dwg->header.version;
-  return dwg->num_classes;
-}
-
-/** Returns the nth class or NULL
-\code Usage: dwg_object* obj = dwg_get_object(dwg, 0);
-\endcode
-\param[in]  dwg   dwg_data*
-\param[in]  index
-*/
-dwg_class *
-dwg_get_class(const dwg_data *dwg, unsigned int index)
-{
-  if (!dwg)
-    return NULL;
-  if (dwg_version == R_INVALID)
-    dwg_version = (Dwg_Version_Type)dwg->header.version;
-  return (index < dwg->num_classes) ? &dwg->dwg_class[index] : NULL;
-}
-
-/** Returns the nth object or NULL
-\code Usage: dwg_object* obj = dwg_get_object(dwg, 0);
-\endcode
-\param[in]  dwg   dwg_data*
-\param[in]  index
-*/
-dwg_object *
-dwg_get_object(dwg_data *dwg, long unsigned int index)
-{
-  if (!dwg)
-    return NULL;
-  if (dwg_version == R_INVALID)
-    dwg_version = (Dwg_Version_Type)dwg->header.version;
-  return (index < dwg->num_objects) ? &dwg->object[index] : NULL;
-}
-
-/** Returns the object bitsize or 0
-\code Usage: long bitsize = dwg_obj_get_bitsize(obj);
-\endcode
-\param[in]  obj   dwg_object*
-*/
-BITCODE_RL
-dwg_obj_get_bitsize(const dwg_object *obj)
-{
-  return obj ? obj->bitsize : 0;
-}
 
 /** Returns the entity bitsize
 \code Usage: long bitsize = dwg_ent_get_bitsize(ent, &error);
@@ -17819,6 +17761,129 @@ dwg_ent_get_eed_data(const dwg_obj_ent *restrict ent, const unsigned int index,
   }
 }
 
+/** Returns dwg_object* from any dwg_ent_*, the parent of the parent.
+\code Usage: dwg_object* obj = dwg_ent_generic_to_object(_obj, &error);
+\endcode
+\param[in]  obj     dwg_ent_generic* (line, circle, ...)
+\param[out] error   int*, is set to 0 for ok, 1 on error
+*/
+dwg_object *
+dwg_ent_generic_to_object(const dwg_ent_generic *restrict obj, int *restrict error)
+{
+  return dwg_obj_generic_to_object((dwg_obj_generic *restrict)obj, error);
+}
+
+/** Returns dwg_obj_ent* from any dwg_ent_* entity
+\code Usage: dwg_obj_ent* ent = dwg_ent_generic_parent(_ent, &error);
+\endcode
+\param[in]  ent     dwg_ent_generic* (line, circle, ...)
+\param[out] error   int*, is set to 0 for ok, 1 on error
+*/
+dwg_obj_ent *
+dwg_ent_generic_parent(const dwg_ent_generic *restrict ent, int *restrict error)
+{
+  if (ent && ent->parent)
+    {
+      dwg_obj_ent *retval = ent->parent;
+      *error = 0;
+      if (dwg_version == R_INVALID)
+        dwg_version = (Dwg_Version_Type)retval->object->parent->header.version;
+      return retval;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: Empty or invalid obj", __FUNCTION__)
+      return NULL;
+    }
+}
+
+/** Returns dwg_obj_ent* from dwg object
+\code Usage : dwg_obj_ent* ent = dwg_object_to_entity(obj, &error);
+\endcode
+\param obj   dwg_object*
+\param error
+*/
+dwg_obj_ent *
+dwg_object_to_entity(dwg_object *obj, int *error)
+{
+  if (obj && obj->supertype == DWG_SUPERTYPE_ENTITY)
+    {
+      *error = 0;
+      if (dwg_version == R_INVALID)
+        dwg_version = (Dwg_Version_Type)obj->parent->header.version;
+      return obj->tio.entity;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: Empty or invalid obj", __FUNCTION__)
+      return NULL;
+    }
+}
+
+/*******************************************************************
+*                    FUNCTIONS FOR DWG OBJECT                       *
+********************************************************************/
+
+/** Returns the number of classes or 0
+\code Usage: unsigned num_classes = dwg_get_num_classes(dwg);
+\endcode
+\param[in]  dwg   dwg_data*
+*/
+unsigned int
+dwg_get_num_classes(const dwg_data *dwg)
+{
+  if (!dwg)
+    return 0;
+  if (dwg_version == R_INVALID)
+    dwg_version = (Dwg_Version_Type)dwg->header.version;
+  return dwg->num_classes;
+}
+
+/** Returns the nth class or NULL
+\code Usage: dwg_object* obj = dwg_get_object(dwg, 0);
+\endcode
+\param[in]  dwg   dwg_data*
+\param[in]  index
+*/
+dwg_class *
+dwg_get_class(const dwg_data *dwg, unsigned int index)
+{
+  if (!dwg)
+    return NULL;
+  if (dwg_version == R_INVALID)
+    dwg_version = (Dwg_Version_Type)dwg->header.version;
+  return (index < dwg->num_classes) ? &dwg->dwg_class[index] : NULL;
+}
+
+/** Returns the nth object or NULL
+\code Usage: dwg_object* obj = dwg_get_object(dwg, 0);
+\endcode
+\param[in]  dwg   dwg_data*
+\param[in]  index
+*/
+dwg_object *
+dwg_get_object(dwg_data *dwg, long unsigned int index)
+{
+  if (!dwg)
+    return NULL;
+  if (dwg_version == R_INVALID)
+    dwg_version = (Dwg_Version_Type)dwg->header.version;
+  return (index < dwg->num_objects) ? &dwg->object[index] : NULL;
+}
+
+/** Returns the object bitsize or 0
+\code Usage: long bitsize = dwg_obj_get_bitsize(obj);
+\endcode
+\param[in]  obj   dwg_object*
+*/
+BITCODE_RL
+dwg_obj_get_bitsize(const dwg_object *obj)
+{
+  return obj ? obj->bitsize : 0;
+}
+
 /** Returns the global index/objid in the list of all objects.
     This is the same as a dwg_handle absolute_ref value.
 \code Usage: int index = dwg_obj_object_get_index(obj, &error);
@@ -17893,18 +17958,6 @@ dwg_obj_generic_to_object(const dwg_obj_generic *restrict obj, int *restrict err
     }
 }
 
-/** Returns dwg_object* from any dwg_ent_*, the parent of the parent.
-\code Usage: dwg_object* obj = dwg_ent_generic_to_object(_obj, &error);
-\endcode
-\param[in]  obj     dwg_ent_generic* (line, circle, ...)
-\param[out] error   int*, is set to 0 for ok, 1 on error
-*/
-dwg_object *
-dwg_ent_generic_to_object(const dwg_ent_generic *restrict obj, int *restrict error)
-{
-  return dwg_obj_generic_to_object((dwg_obj_generic *restrict)obj, error);
-}
-
 /** Returns dwg_obj_obj* from any dwg_obj_*
 \code Usage: dwg_obj_obj* obj = dwg_obj_generic_parent(_obj, &error);
 \endcode
@@ -17921,55 +17974,6 @@ dwg_obj_generic_parent(const dwg_obj_generic *restrict obj, int *restrict error)
       if (dwg_version == R_INVALID)
         dwg_version = (Dwg_Version_Type)retval->object->parent->header.version;
       return retval;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: Empty or invalid obj", __FUNCTION__)
-      return NULL;
-    }
-}
-
-/** Returns dwg_obj_ent* from any dwg_ent_* entity
-\code Usage: dwg_obj_ent* ent = dwg_ent_generic_parent(_ent, &error);
-\endcode
-\param[in]  ent     dwg_ent_generic* (line, circle, ...)
-\param[out] error   int*, is set to 0 for ok, 1 on error
-*/
-dwg_obj_ent *
-dwg_ent_generic_parent(const dwg_ent_generic *restrict ent, int *restrict error)
-{
-  if (ent && ent->parent)
-    {
-      dwg_obj_ent *retval = ent->parent;
-      *error = 0;
-      if (dwg_version == R_INVALID)
-        dwg_version = (Dwg_Version_Type)retval->object->parent->header.version;
-      return retval;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: Empty or invalid obj", __FUNCTION__)
-      return NULL;
-    }
-}
-
-/** Returns dwg_obj_ent* from dwg object
-\code Usage : dwg_obj_ent* ent = dwg_object_to_entity(obj, &error);
-\endcode
-\param obj   dwg_object*
-\param error
-*/
-dwg_obj_ent *
-dwg_object_to_entity(dwg_object *obj, int *error)
-{
-  if (obj && obj->supertype == DWG_SUPERTYPE_ENTITY)
-    {
-      *error = 0;
-      if (dwg_version == R_INVALID)
-        dwg_version = (Dwg_Version_Type)obj->parent->header.version;
-      return obj->tio.entity;
     }
   else
     {
@@ -18047,8 +18051,12 @@ dwg_obj_ref_get_abs_ref(const dwg_object_ref *ref, int *error)
     }
 }
 
-/** Returns Dwg object type
-\code Usage: int type = dwg_get_type(obj);
+/** Returns the dwg object type, see \ref DWG_OBJECT_TYPE "enum DWG_OBJECT_TYPE".
+    With types > 500 you need to check the dxfname instead.
+    \sa dwg_get_dxfname
+\code Usage:
+  int type = dwg_get_type(obj);
+  if (type > 500) dxfname = dwg_get_dxfname(obj);
 \endcode
 \param[in]  obj   dwg_object*
 */
@@ -18066,8 +18074,9 @@ dwg_get_type(const dwg_object *obj)
     }
 }
 
-/** Returns the object dxfname as ASCII string
-\code Usage : int type = dwg_get_dxfname(obj);
+/** Returns the object dxfname as ASCII string. Since r2007 utf8 encoded, but
+    we haven't seen unicode names for the dxfname yet.
+\code Usage: const char* name = dwg_get_dxfname(obj);
 \endcode
 \param obj dwg_object*
 */
