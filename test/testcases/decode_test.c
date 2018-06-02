@@ -1,5 +1,7 @@
-#pragma pack(1)
+#include "../../src/common.h"
+GCC_DIAG_IGNORE(-Wpragma-pack)
 #include "../../src/decode.c"
+GCC_DIAG_RESTORE
 
 #include <dejagnu.h>
 #include "tests_common.h"

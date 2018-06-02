@@ -5,9 +5,6 @@ LDADD   = $(top_builddir)/src/libredwg.la -lm
 
 bits_test_LDADD = $(LDADD) $(top_builddir)/src/bits.lo
 
-private = bits_test \
-	  decode_test
-
 paired = \
 	3dsolid \
 	arc \
@@ -54,6 +51,9 @@ paired = \
 unpaired = \
 	vertex_2d \
 	vertex_mesh
+
+private = bits_test \
+	  decode_test
 
 check_PROGRAMS = $(paired) $(unpaired) $(private)
 
