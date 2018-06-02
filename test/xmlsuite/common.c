@@ -69,7 +69,7 @@ doubletochar (double x)
  * Format: (x y)
  *
  * @param double x The x co-ordinate of the point
- * @param doubel y The y co-ordinate of the point
+ * @param double y The y co-ordinate of the point
  *
  * @return xmlChar* Returns the string in the given format. Return empty string on error
  */
@@ -90,7 +90,6 @@ spointprepare2 (double x, double y)
     }
 
   return result;
-
 }
 
 
