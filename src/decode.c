@@ -281,7 +281,8 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
             tbl->name, id, tbl->size, tbl->number, tbl->address,
             (long)(tbl->address + tbl->number * tbl->size))
   dat->byte = tbl->address;
-  dwg->object = realloc(dwg->object, old_size + size);
+  if (dwg->num_objects % REFS_PER_REALLOC == 0)
+    dwg->object = realloc(dwg->object, old_size + size + REFS_PER_REALLOC);
 
   // TODO: move to a spec dwg_r11.spec, and dwg_decode_r11_NAME
 #define PREP_TABLE(name)\
@@ -936,10 +937,9 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
 
       i = dwg->num_classes;
       if (i == 0)
-        dwg->dwg_class = (Dwg_Class *) malloc(sizeof(Dwg_Class));
+        dwg->dwg_class = malloc(sizeof(Dwg_Class));
       else
-        dwg->dwg_class = (Dwg_Class *) realloc(dwg->dwg_class, (i + 1)
-            * sizeof(Dwg_Class));
+        dwg->dwg_class = realloc(dwg->dwg_class, (i + 1) * sizeof(Dwg_Class));
       if (!dwg->dwg_class)
         {
           LOG_ERROR("Out of memory");
@@ -1504,10 +1504,10 @@ read_R2004_section_map(Bit_Chain* dat, Dwg_Data * dwg)
 
   while (bytes_remaining)
     {
-      if (dwg->header.num_sections==0)
-        dwg->header.section = (Dwg_Section*) calloc(1, sizeof(Dwg_Section));
+      if (dwg->header.num_sections == 0)
+        dwg->header.section = calloc(1, sizeof(Dwg_Section));
       else
-        dwg->header.section = (Dwg_Section*) realloc(dwg->header.section,
+        dwg->header.section = realloc(dwg->header.section,
                        sizeof(Dwg_Section) * (dwg->header.num_sections+1));
       if (!dwg->header.section)
         {
@@ -2659,14 +2659,10 @@ dwg_decode_handleref(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
     {
       // Reserve memory space for object references
       if (!dwg->num_object_refs)
-        dwg->object_ref = (Dwg_Object_Ref **)
-          calloc(REFS_PER_REALLOC, sizeof(Dwg_Object_Ref*));
-      else
-        if (dwg->num_object_refs % REFS_PER_REALLOC == 0)
-          {
-            dwg->object_ref = (Dwg_Object_Ref **) realloc(dwg->object_ref,
-                (dwg->num_object_refs + REFS_PER_REALLOC) * sizeof(Dwg_Object_Ref*));
-          }
+        dwg->object_ref = calloc(REFS_PER_REALLOC, sizeof(Dwg_Object_Ref*));
+      else if (dwg->num_object_refs % REFS_PER_REALLOC == 0)
+        dwg->object_ref = realloc(dwg->object_ref,
+              (dwg->num_object_refs + REFS_PER_REALLOC) * sizeof(Dwg_Object_Ref*));
 
       if (!dwg->object_ref)
         {
@@ -3064,11 +3060,10 @@ decode_preR13_entities(unsigned long start, unsigned long end,
       BITCODE_RS crc;
 
       if (!num)
-        dwg->object = (Dwg_Object *) malloc(sizeof(Dwg_Object));
-      else
-        //TODO use REFS_PER_REALLOC
-        dwg->object = (Dwg_Object *) realloc(dwg->object, (num + 1)
-                                             * sizeof(Dwg_Object));
+        dwg->object = (Dwg_Object *) calloc(REFS_PER_REALLOC, sizeof(Dwg_Object));
+      else if (num % REFS_PER_REALLOC == 0)
+        dwg->object = realloc(dwg->object,
+            (num + REFS_PER_REALLOC) * sizeof(Dwg_Object));
       if (!dwg->object)
         {
           LOG_ERROR("Out of memory");
@@ -3552,13 +3547,11 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
   //DEBUG_HERE();
   /*
    * Reserve memory space for objects. A realloc violates all internal pointers.
-   * TODO: Bigger pool, and return if we realloced or not. (to re-resolve all refs)
    */
   if (!num)
-    dwg->object = (Dwg_Object *) malloc(sizeof(Dwg_Object));
-  else // use REFS_PER_REALLOC
-    dwg->object = (Dwg_Object *) realloc(dwg->object, (num + 1)
-                                         * sizeof(Dwg_Object));
+    dwg->object = calloc(REFS_PER_REALLOC, sizeof(Dwg_Object));
+  else if (num % REFS_PER_REALLOC == 0)
+    dwg->object = realloc(dwg->object, (num + REFS_PER_REALLOC) * sizeof(Dwg_Object));
   if (!dwg->object)
     {
       LOG_ERROR("Out of memory");
