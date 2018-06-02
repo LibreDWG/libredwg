@@ -135,13 +135,20 @@ GET_DWG_ENTITY(OLE2FRAME)
 /// extract all lwpline entities from a block
 GET_DWG_ENTITY(LWPOLYLINE)
 /// extract all PROXY_ENTITY entities from a block
-GET_DWG_ENTITY(PROXY_ENTITY)
+//GET_DWG_ENTITY(PROXY_ENTITY)
 /// extract all hatch entities from a block
 GET_DWG_ENTITY(HATCH)
 
-//untyped >1000:
-/// extract all image entities from a block
-//GET_DWG_ENTITY(IMAGE)
+//untyped >500:
+GET_DWG_ENTITY(IMAGE)
+GET_DWG_ENTITY(CAMERA)
+GET_DWG_ENTITY(SURFACE)
+GET_DWG_ENTITY(GEOPOSITIONMARKER)
+GET_DWG_ENTITY(LIGHT)
+GET_DWG_ENTITY(MULTILEADER)
+GET_DWG_ENTITY(TABLE)
+GET_DWG_ENTITY(UNDERLAY)
+GET_DWG_ENTITY(WIPEOUT)
 
 /*******************************************************************
  *     Functions created from macro to cast dwg_object to entity     *
@@ -16434,7 +16441,7 @@ dwg_ent_table_get_data_horiz_bottom_linewt(const dwg_ent_table *restrict table,
     }
 }
 
-/** Sets _dwg_entity_TABLE::data_horiz_ins_linewt
+/** Sets _dwg_entity_TABLE::data_vert_ins_linewt
 \param[in]  table      dwg_ent_table *
 \param[in]  linewt     short
 \param[out] error      set to 0 for ok, 1 on error
@@ -16442,12 +16449,12 @@ dwg_ent_table_get_data_horiz_bottom_linewt(const dwg_ent_table *restrict table,
 void
 dwg_ent_table_set_data_vert_ins_linewt(dwg_ent_table *restrict table,
                                        BITCODE_BS linewt,
-                          int *restrict error)
+                                       int *restrict error)
 {
   if (table)
     {
       *error = 0;
-      table->data_horiz_ins_linewt = linewt;
+      table->data_vert_ins_linewt = linewt;
     }
   else
     {
@@ -16456,18 +16463,18 @@ dwg_ent_table_set_data_vert_ins_linewt(dwg_ent_table *restrict table,
     }
 }
 
-/** Returns _dwg_entity_TABLE::data_horiz_ins_linewt
+/** Returns _dwg_entity_TABLE::data_vert_ins_linewt
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
 */
 BITCODE_BS
 dwg_ent_table_get_data_vert_ins_linewt(const dwg_ent_table *restrict table,
-                          int *restrict error)
+                                       int *restrict error)
 {
   if (table)
     {
       *error = 0;
-      return table->data_horiz_ins_linewt;
+      return table->data_vert_ins_linewt;
     }
   else
     {
@@ -16477,6 +16484,91 @@ dwg_ent_table_get_data_vert_ins_linewt(const dwg_ent_table *restrict table,
     }
 }
 
+/** Sets _dwg_entity_TABLE::data_vert_right_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
+void
+dwg_ent_table_set_data_vert_right_linewt(dwg_ent_table *restrict table,
+                                         BITCODE_BS linewt,
+                                         int *restrict error)
+{
+  if (table)
+    {
+      *error = 0;
+      table->data_vert_right_linewt = linewt;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
+}
+
+/** Returns _dwg_entity_TABLE::data_vert_right_linewt
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
+BITCODE_BS
+dwg_ent_table_get_data_vert_right_linewt(const dwg_ent_table *restrict table,
+                                         int *restrict error)
+{
+  if (table)
+    {
+      *error = 0;
+      return table->data_vert_right_linewt;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
+}
+
+/** Sets _dwg_entity_TABLE::data_vert_left_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
+void
+dwg_ent_table_set_data_vert_left_linewt(dwg_ent_table *restrict table,
+                                        BITCODE_BS linewt,
+                                        int *restrict error)
+{
+  if (table)
+    {
+      *error = 0;
+      table->data_vert_left_linewt = linewt;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
+}
+
+/** Returns _dwg_entity_TABLE::data_vert_left_linewt
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
+BITCODE_BS
+dwg_ent_table_get_data_vert_left_linewt(const dwg_ent_table *restrict table,
+                                        int *restrict error)
+{
+  if (table)
+    {
+      *error = 0;
+      return table->data_vert_left_linewt;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
+    }
+}
 
 /** Returns _dwg_entity_TABLE::has_border_visibility_overrides
 \param[in]  table      dwg_ent_table *
@@ -17646,8 +17738,8 @@ dwg_object_tablectrl_get_entries(const dwg_object *restrict obj,
 */
 dwg_object_ref *
 dwg_object_tablectrl_get_entry(const dwg_object *restrict obj,
-                            const BITCODE_BS index,
-                            int *restrict error)
+                               const BITCODE_BS index,
+                               int *restrict error)
 {
   if (obj &&
       obj->supertype == DWG_SUPERTYPE_OBJECT &&
@@ -17791,7 +17883,7 @@ dwg_ref_get_table_name(const dwg_object_ref *restrict ref,
 */
 char *
 dwg_obj_table_get_name(const dwg_object *restrict obj,
-                          int *restrict error)
+                       int *restrict error)
 {
   if (obj &&
       obj->supertype == DWG_SUPERTYPE_OBJECT &&
@@ -17815,6 +17907,7 @@ dwg_obj_table_get_name(const dwg_object *restrict obj,
       return NULL;
     }
 }
+
 
 /*******************************************************************
 *                    FUNCTIONS FOR GENERIC ENTITY                  *
@@ -17860,23 +17953,6 @@ dwg_ent_get_bitsize(const dwg_obj_ent *restrict ent,
   }
 }
 
-/** Returns the number of object EED structures.
-\code Usage: int num_eed = dwg_obj_get_num_eed(ent, &error);
-\endcode
-\param[in]  obj     dwg_obj_obj*
-\param[out] error   int*, is set to 0 for ok, 1 on error
-*/
-unsigned int
-dwg_obj_get_num_eed(const dwg_obj_obj *restrict obj,
-                    int *restrict error)
-{
-  if (!obj) {
-    *error = 1;
-    return 0;
-  }
-  *error = 0;
-  return obj->num_eed;
-}
 /** Returns the number of entity EED structures
 See dwg_object_to_entity how to get the ent.
 \code Usage: int num_eed = dwg_ent_get_num_eed(ent,&error);
@@ -17947,6 +18023,244 @@ dwg_ent_get_eed_data(const dwg_obj_ent *restrict ent,
     *error = 0;
     return ent->eed[index].data;
   }
+}
+
+#define _BODY_FIELD(ent,field) \
+  if (!ent) { \
+    *error = 1; \
+    return 0; \
+  } \
+  *error = 0; \
+  return ent->field
+
+EXPORT const Dwg_Color*
+dwg_ent_get_color(const dwg_obj_ent *restrict ent,
+                  int *restrict error)
+{
+  if (!ent) {
+    *error = 1;
+    return NULL;
+  }
+  *error = 0;
+  return &(ent->color);
+}
+
+EXPORT BITCODE_B
+dwg_ent_get_picture_exists(const dwg_obj_ent *restrict ent,
+                          int *restrict error)
+{
+  _BODY_FIELD(ent, picture_exists);
+}
+
+EXPORT BITCODE_BLL
+dwg_ent_get_picture_size(const dwg_obj_ent *restrict ent,
+                          int *restrict error) // before r2007 only RL
+{
+  _BODY_FIELD(ent, picture_size);
+}
+
+EXPORT BITCODE_RC *
+dwg_ent_get_picture(const dwg_obj_ent *restrict ent,
+                          int *restrict error)
+{
+  _BODY_FIELD(ent, picture);
+}
+
+EXPORT BITCODE_BB
+dwg_ent_get_entity_mode(const dwg_obj_ent *restrict ent,
+                          int *restrict error)
+{
+  _BODY_FIELD(ent, entity_mode);
+}
+
+EXPORT BITCODE_BL
+dwg_ent_get_num_reactors(const dwg_obj_ent *restrict ent,
+                          int *restrict error)
+{
+  _BODY_FIELD(ent, num_reactors);
+}
+
+EXPORT BITCODE_B
+dwg_ent_get_xdic_missing_flag(const dwg_obj_ent *restrict ent,
+                          int *restrict error) //r2004+
+{
+  _BODY_FIELD(ent, xdic_missing_flag);
+}
+
+EXPORT BITCODE_B
+dwg_ent_get_isbylayerlt(const dwg_obj_ent *restrict ent,
+                          int *restrict error) //r13-r14 only
+{
+  _BODY_FIELD(ent, isbylayerlt);
+}
+
+EXPORT BITCODE_B
+dwg_ent_get_nolinks(const dwg_obj_ent *restrict ent,
+                          int *restrict error)
+{
+  _BODY_FIELD(ent, nolinks);
+}
+
+EXPORT double
+dwg_ent_get_linetype_scale(const dwg_obj_ent *restrict ent,
+                          int *restrict error)
+{
+  _BODY_FIELD(ent, linetype_scale);
+}
+
+EXPORT BITCODE_BB
+dwg_ent_get_linetype_flags(const dwg_obj_ent *restrict ent,
+                          int *restrict error) //r2000+
+{
+  _BODY_FIELD(ent, linetype_flags);
+}
+
+EXPORT BITCODE_BB
+dwg_ent_get_plotstyle_flags(const dwg_obj_ent *restrict ent,
+                          int *restrict error) //r2000+
+{
+  _BODY_FIELD(ent, plotstyle_flags);
+}
+
+EXPORT BITCODE_BB
+dwg_ent_get_material_flags(const dwg_obj_ent *restrict ent,
+                          int *restrict error) //r2007+
+{
+  _BODY_FIELD(ent, material_flags);
+}
+
+EXPORT BITCODE_RC
+dwg_ent_get_shadow_flags(const dwg_obj_ent *restrict ent,
+                         int *restrict error) //r2007+
+{
+  _BODY_FIELD(ent, shadow_flags);
+}
+
+EXPORT BITCODE_B
+dwg_ent_has_full_visualstyle(dwg_obj_ent *restrict ent,
+                             int *restrict error) //r2010+
+{
+  _BODY_FIELD(ent, has_full_visualstyle);
+}
+
+EXPORT BITCODE_B
+dwg_ent_has_face_visualstyle(dwg_obj_ent *restrict ent,
+                             int *restrict error) //r2010+
+{
+  _BODY_FIELD(ent, has_face_visualstyle);
+}
+
+EXPORT BITCODE_B
+dwg_ent_has_edge_visualstyle(dwg_obj_ent *restrict ent,
+                          int *restrict error) //r2010+
+{
+  _BODY_FIELD(ent, has_edge_visualstyle);
+}
+
+EXPORT BITCODE_BS
+dwg_ent_get_invisible(const dwg_obj_ent *restrict ent,
+                          int *restrict error)
+{
+  _BODY_FIELD(ent, invisible);
+}
+
+EXPORT BITCODE_RC
+dwg_ent_get_lineweight(const dwg_obj_ent *restrict ent,
+                          int *restrict error) //r2000+
+{
+  _BODY_FIELD(ent, lineweight);
+}
+
+//TODO: dwg_object_ref* or dwg_handle*, not handle
+EXPORT dwg_object_ref *
+dwg_ent_get_subentity(const dwg_obj_ent *restrict ent,
+                          int *restrict error)
+{
+  _BODY_FIELD(ent, subentity);
+}
+
+EXPORT dwg_object_ref **
+dwg_ent_get_reactors(const dwg_obj_ent *restrict ent,
+                          int *restrict error)
+{
+  _BODY_FIELD(ent, reactors);
+}
+
+EXPORT dwg_object_ref *
+dwg_ent_get_xdicobjhandle(const dwg_obj_ent *restrict ent,
+                          int *restrict error)
+{
+  _BODY_FIELD(ent, xdicobjhandle);
+}
+
+EXPORT dwg_object_ref *
+dwg_ent_get_prev_entity(const dwg_obj_ent *restrict ent,
+                          int *restrict error)  //r13-r2000
+{
+  _BODY_FIELD(ent, prev_entity);
+}
+
+EXPORT dwg_object_ref *
+dwg_ent_get_next_entity(const dwg_obj_ent *restrict ent,
+                          int *restrict error)  //r13-r2000
+{
+  _BODY_FIELD(ent, next_entity);
+}
+
+EXPORT dwg_object_ref *
+dwg_ent_get_color_handle(const dwg_obj_ent *restrict ent,
+                          int *restrict error) //r2004+
+{
+  _BODY_FIELD(ent, color_handle);
+}
+
+EXPORT dwg_object_ref *
+dwg_ent_get_layer(const dwg_obj_ent *restrict ent,
+                          int *restrict error)
+{
+  _BODY_FIELD(ent, layer);
+}
+
+EXPORT dwg_object_ref *
+dwg_ent_get_ltype(const dwg_obj_ent *restrict ent,
+                          int *restrict error)
+{
+  _BODY_FIELD(ent, ltype);
+}
+
+EXPORT dwg_object_ref *
+dwg_ent_get_material(const dwg_obj_ent *restrict ent,
+                     int *restrict error)     //r2007+
+{
+  _BODY_FIELD(ent, material);
+}
+
+EXPORT dwg_object_ref *
+dwg_ent_get_plotstyle(const dwg_obj_ent *restrict ent,
+                      int *restrict error)    //r2000+
+{
+  _BODY_FIELD(ent, plotstyle);
+}
+
+EXPORT dwg_object_ref *
+dwg_ent_get_full_visualstyle(const dwg_obj_ent *restrict ent,
+                             int *restrict error) //r2010+
+{
+  _BODY_FIELD(ent, full_visualstyle);
+}
+
+EXPORT dwg_object_ref *
+dwg_ent_get_face_visualstyle(const dwg_obj_ent *restrict ent,
+                          int *restrict error) //r2010+
+{
+  _BODY_FIELD(ent, face_visualstyle);
+}
+
+EXPORT dwg_object_ref *
+dwg_ent_get_edge_visualstyle(const dwg_obj_ent *restrict ent,
+                             int *restrict error) //r2010+
+{
+  _BODY_FIELD(ent, edge_visualstyle);
 }
 
 /** Returns dwg_object* from dwg_obj_ent*
@@ -18130,6 +18444,8 @@ dwg_object_get_bitsize(const dwg_object *obj)
 
 /** Returns the global index/objid in the list of all objects.
     This is the same as a dwg_handle absolute_ref value.
+    \sa dwg_obj_get_objid
+
 \code Usage: int index = dwg_object_get_index(obj, &error);
 \endcode
 \param[in]  obj     dwg_object*
@@ -18207,12 +18523,12 @@ dwg_object_get_type(const dwg_object *obj)
     \sa dwg_object_get_type
 \code Usage:
   int type = dwg_object_get_type(obj);
-  if (type > 500) dxfname = dwg_object_get_dxfname(obj);
+  if (type > 500) dxfname = dwg_object_get_fixedtype(obj);
 \endcode
 \param[in]  obj   dwg_object*
 */
 int
-dwg_get_fixedtype(const dwg_object *obj)
+dwg_object_get_fixedtype(const dwg_object *obj)
 {
   if (obj)
     {
@@ -18250,6 +18566,124 @@ dwg_object_get_dxfname(const dwg_object *obj)
 /*******************************************************************
 *                    FUNCTIONS FOR DWG OBJECT SUBCLASSES           *
 ********************************************************************/
+
+/** This is the same as \sa dwg_object_get_index */
+EXPORT long unsigned int
+dwg_obj_get_objid(const dwg_obj_obj *restrict obj,
+                  int *restrict error)
+{
+  _BODY_FIELD(obj, objid);
+}
+
+/** Returns the number of object EED structures.
+\code Usage: int num_eed = dwg_obj_get_num_eed(ent, &error);
+\endcode
+\param[in]  obj     dwg_obj_obj*
+\param[out] error   int*, is set to 0 for ok, 1 on error
+*/
+unsigned int
+dwg_obj_get_num_eed(const dwg_obj_obj *restrict obj,
+                    int *restrict error)
+{
+  if (!obj) {
+    *error = 1;
+    return 0;
+  }
+  *error = 0;
+  return obj->num_eed;
+}
+/** Returns the nth EED structure.
+\code Usage: dwg_entity_eed *eed = dwg_obj_get_eed(obj,0,&error);
+\endcode
+\param[in]  obj    dwg_obj_obj*
+\param[in]  index  [0 - num_eed-1]
+\param[out] error  set to 0 for ok, 1 if obj == NULL or 2 if index out of bounds.
+*/
+dwg_entity_eed *
+dwg_obj_get_eed(const dwg_obj_obj *restrict obj,
+                const unsigned int index,
+                int *restrict error)
+{
+  if (!obj) {
+    *error = 1;
+    LOG_ERROR("%s: empty or invalid obj", __FUNCTION__)
+    return NULL;
+  }
+  else if (index >= obj->num_eed) {
+    *error = 2;
+    return NULL;
+  }
+  else {
+    *error = 0;
+    return &obj->eed[index];
+  }
+}
+
+/** Returns the data union of the nth EED structure.
+\code Usage: dwg_entity_eed_data *eed = dwg_obj_get_eed_data(obj,0,&error);
+\endcode
+\param[in]  obj    dwg_obj_obj*
+\param[in]  index  [0 - num_eed-1]
+\param[out] error  set to 0 for ok, 1 if obj == NULL or 2 if index out of bounds.
+*/
+dwg_entity_eed_data *
+dwg_obj_get_eed_data(const dwg_obj_obj *restrict obj,
+                     const unsigned int index,
+                     int *restrict error)
+{
+  if (!obj) {
+    *error = 1;
+    LOG_ERROR("%s: empty or invalid obj", __FUNCTION__)
+    return NULL;
+  }
+  else if (index >= obj->num_eed) {
+    *error = 2;
+    return NULL;
+  }
+  else {
+    *error = 0;
+    return obj->eed[index].data;
+  }
+}
+
+EXPORT BITCODE_BL
+dwg_obj_get_num_reactors(const dwg_obj_obj *restrict obj,
+                         int *restrict error)
+{
+  _BODY_FIELD(obj, num_reactors);
+}
+EXPORT BITCODE_H*
+dwg_obj_get_reactors(const dwg_obj_obj *restrict obj,
+                         int *restrict error)
+{
+  _BODY_FIELD(obj, reactors);
+}
+EXPORT BITCODE_H
+dwg_obj_get_xdicobjhandle(const dwg_obj_obj *restrict obj,
+                         int *restrict error)
+{
+  _BODY_FIELD(obj, xdicobjhandle);
+}
+/* r2004+ */
+EXPORT BITCODE_B
+dwg_obj_get_xdic_missing_flag(const dwg_obj_obj *restrict obj,
+                              int *restrict error)
+{
+  _BODY_FIELD(obj, xdic_missing_flag);
+}
+/* r2013+ */
+EXPORT BITCODE_B
+dwg_obj_get_has_ds_binary_data(const dwg_obj_obj *restrict obj,
+                               int *restrict error)
+{
+  _BODY_FIELD(obj, has_ds_binary_data);
+}
+EXPORT Dwg_Handle *
+dwg_obj_get_handleref(const dwg_obj_obj *restrict obj,
+                      int *restrict error)
+{
+  _BODY_FIELD(obj, handleref);
+}
 
 /** Returns dwg_obj_obj* from dwg_object*
 \code Usage: dwg_obj_obj ent = dwg_object_to_object(obj, &error);

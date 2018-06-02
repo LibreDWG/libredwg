@@ -2229,7 +2229,6 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
                     (long unsigned int) size, _obj->handle.value)
           _obj->bitsize = 0;
           obj->num_eed = 0;
-          obj->num_handles = 0;
           obj->num_reactors = 0;
           return DWG_ERR_VALUEOUTOFBOUNDS; //XXX
         }

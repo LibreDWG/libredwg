@@ -43,7 +43,9 @@
 # endif
 #endif
 
-#ifdef _WIN32
+#ifdef SWIG
+# define EXPORT extern
+#elif defined(_WIN32)
 # ifdef DLL_EXPORT
 #   define EXPORT  __declspec(dllexport)
 # else
@@ -485,7 +487,7 @@ typedef struct _dwg_resbuf
     unsigned char hdl[8];
     struct _dwg_binary_chunk str;
   } value;
-  struct _dwg_resbuf *next;
+  struct _dwg_resbuf *next; /* FIXME: this is a perl keyword */
 } Dwg_Resbuf;
 
 /**
@@ -4634,7 +4636,7 @@ typedef struct _dwg_object_object
   BITCODE_B xdic_missing_flag;  /*!< r2004+ */
   BITCODE_B has_ds_binary_data; /*!< r2013+ */
 
-  unsigned int num_handles;
+  /*unsigned int num_handles;*/
   Dwg_Handle *handleref;
 } Dwg_Object_Object;
 
@@ -5114,7 +5116,6 @@ EXPORT int dwg_add_VIEWPORT (Dwg_Object *obj);
 EXPORT int dwg_add_ELLIPSE (Dwg_Object *obj);
 EXPORT int dwg_add_SPLINE (Dwg_Object *obj);
 EXPORT int dwg_add_REGION (Dwg_Object *obj);
-EXPORT int dwg_add_3DSOLID (Dwg_Object *obj);
 EXPORT int dwg_add_BODY (Dwg_Object *obj);
 EXPORT int dwg_add_RAY (Dwg_Object *obj);
 EXPORT int dwg_add_XLINE (Dwg_Object *obj);
@@ -5179,9 +5180,9 @@ EXPORT int dwg_add_CELLSTYLEMAP (Dwg_Object *obj);
 #endif
 //EXPORT int dwg_add_CSACDOCUMENTOPTIONS (Dwg_Object *obj);
 //EXPORT int dwg_add_DATATABLE (Dwg_Object *obj);
-EXPORT int dwg_add_DBCOLOR (Dwg_Object *obj);
-EXPORT int dwg_add_DETAILVIEWSTYLE (Dwg_Object *obj);
-EXPORT int dwg_add_DIMASSOC (Dwg_Object *obj);
+//EXPORT int dwg_add_DBCOLOR (Dwg_Object *obj);
+//EXPORT int dwg_add_DETAILVIEWSTYLE (Dwg_Object *obj);
+//EXPORT int dwg_add_DIMASSOC (Dwg_Object *obj);
 EXPORT int dwg_add_DICTIONARYVAR (Dwg_Object *obj);
 EXPORT int dwg_add_DICTIONARYWDFLT (Dwg_Object *obj);
 //EXPORT int dwg_add_DIMASSOC (Dwg_Object *obj);
@@ -5196,9 +5197,9 @@ EXPORT int dwg_add_IMAGE (Dwg_Object *obj);
 EXPORT int dwg_add_IMAGEDEF (Dwg_Object *obj);
 EXPORT int dwg_add_IMAGEDEF_REACTOR (Dwg_Object *obj);
 EXPORT int dwg_add_LAYER_INDEX (Dwg_Object *obj);
-EXPORT int dwg_add_LAYER_FILTER (Dwg_Object *obj);
+//EXPORT int dwg_add_LAYER_FILTER (Dwg_Object *obj);
 //EXPORT int dwg_add_LAYOUTPRINTCONFIG (Dwg_Object *obj);
-EXPORT int dwg_add_LEADEROBJECTCONTEXTDATA (Dwg_Object *obj);
+//EXPORT int dwg_add_LEADEROBJECTCONTEXTDATA (Dwg_Object *obj);
 //EXPORT int dwg_add_LIGHTLIST (Dwg_Object *obj);
 EXPORT int dwg_add_MLEADERSTYLE (Dwg_Object *obj);
 #ifdef DEBUG_CLASSES

@@ -52,11 +52,12 @@ typedef struct _dwg_LWPLINE_widths
   double end;
 } dwg_lwpline_widths;
 
-// Extract All Entities of a specific type from a BLOCK
+/* Extract All Entities of a specific type from a BLOCK */
 #define GET_DWG_ENTITY_DECL(token) \
 EXPORT \
 Dwg_Entity_##token **dwg_get_##token (Dwg_Object_Ref * hdr);
 
+/* Checks now also variable classes */
 #define GET_DWG_ENTITY(token) \
 EXPORT \
 Dwg_Entity_##token **dwg_get_##token (Dwg_Object_Ref * hdr) \
@@ -66,8 +67,7 @@ Dwg_Entity_##token **dwg_get_##token (Dwg_Object_Ref * hdr) \
   Dwg_Object * obj = get_first_owned_object(hdr->obj); \
   while (obj) \
     { \
-     /* TODO varies */ \
-      if (obj->type == DWG_TYPE_##token) \
+      if (obj->type == DWG_TYPE_##token || obj->fixedtype == DWG_TYPE_##token) \
         counts++; \
       obj = get_next_owned_object(hdr->obj, obj); \
     } \
@@ -77,8 +77,7 @@ Dwg_Entity_##token **dwg_get_##token (Dwg_Object_Ref * hdr) \
   obj = get_first_owned_object(hdr->obj); \
   while (obj) \
     { \
-      /* TODO varies */ \
-      if(obj->type == DWG_TYPE_##token) \
+      if (obj->type == DWG_TYPE_##token || obj->fixedtype == DWG_TYPE_##token) \
         { \
           ret_##token[x] = obj->tio.entity->tio.token; \
           x++; \
@@ -108,25 +107,24 @@ Dwg_Entity_##token *dwg_object_to_##token(Dwg_Object *obj) \
       } \
     else \
       { \
-        LOG_ERROR("invalid %s type: got 0x%x", #token, obj ? obj->type : 0); \
+        LOG_ERROR("Invalid %s type: got 0x%x", #token, obj ? obj->type : 0); \
       } \
   return ret_obj; \
 }
 
-/// for all classes, types > 500. There's only IMAGE.
+/// for all classes, types > 500. IMAGE, OLE2FRAME, WIPEOUT
 #define CAST_DWG_OBJECT_TO_ENTITY_BYNAME(token) \
 EXPORT \
 Dwg_Entity_##token *dwg_object_to_##token(Dwg_Object *obj) \
 { \
     Dwg_Entity_##token *ret_obj = NULL; \
-    if (obj && (obj->type == DWG_TYPE_##token || \
-               (obj->dxfname && !strcmp(obj->dxfname, #token)))) \
+    if (obj && (obj->type == DWG_TYPE_##token || obj->fixedtype == DWG_TYPE_##token)) \
       { \
         ret_obj = obj->tio.entity->tio.token; \
       } \
     else \
       { \
-        LOG_ERROR("invalid %s type: got %s, 0x%x", #token, \
+        LOG_ERROR("Invalid %s type: got %s, 0x%x", #token, \
                   obj ? obj->dxfname : "<no obj>", \
                   obj ? obj->type : 0); \
       } \
@@ -142,13 +140,13 @@ EXPORT \
 Dwg_Object_##token *dwg_object_to_##token(Dwg_Object *obj) \
 { \
     Dwg_Object_##token *ret_obj = NULL; \
-    if(obj != 0 && obj->type == DWG_TYPE_##token) \
+    if (obj && (obj->type == DWG_TYPE_##token || obj->fixedtype == DWG_TYPE_##token)) \
       { \
         ret_obj = obj->tio.object->tio.token; \
       } \
     else \
       { \
-        LOG_ERROR("invalid %s type: got 0x%x", #token, obj ? obj->type : 0); \
+        LOG_ERROR("Invalid %s type: got 0x%x", #token, obj ? obj->type : 0); \
       } \
   return ret_obj; \
 }
@@ -164,7 +162,7 @@ Dwg_Object_##token *dwg_object_to_##token(Dwg_Object *obj) \
       } \
     else \
       { \
-        LOG_ERROR("invalid %s type: got 0x%x", #token, obj ? obj->type : 0); \
+        LOG_ERROR("Invalid %s type: got 0x%x", #token, obj ? obj->type : 0); \
       } \
   return ret_obj; \
 }
@@ -350,11 +348,20 @@ GET_DWG_ENTITY_DECL(OLE2FRAME)
 /// extract all lwpline entities from a block
 GET_DWG_ENTITY_DECL(LWPOLYLINE)
 /// extract all PROXY_ENTITY entities from a block
-GET_DWG_ENTITY_DECL(PROXY_ENTITY)
+//GET_DWG_ENTITY_DECL(PROXY_ENTITY)
 /// extract all hatch entities from a block
 GET_DWG_ENTITY_DECL(HATCH)
-/// extract all image entities from a block
+
+/// extract all varying entities from a block
 GET_DWG_ENTITY_DECL(IMAGE)
+GET_DWG_ENTITY_DECL(CAMERA)
+GET_DWG_ENTITY_DECL(SURFACE)
+GET_DWG_ENTITY_DECL(GEOPOSITIONMARKER)
+GET_DWG_ENTITY_DECL(LIGHT)
+GET_DWG_ENTITY_DECL(MULTILEADER)
+GET_DWG_ENTITY_DECL(TABLE)
+GET_DWG_ENTITY_DECL(UNDERLAY)
+GET_DWG_ENTITY_DECL(WIPEOUT)
 
 /*******************************************************************
 *     Functions created from macro to cast dwg_object to entity     *
@@ -455,10 +462,10 @@ CAST_DWG_OBJECT_TO_ENTITY_DECL(OLE2FRAME)
 /// dwg object to lwpline
 CAST_DWG_OBJECT_TO_ENTITY_DECL(LWPOLYLINE)
 /// dwg object to proxy_entity
-CAST_DWG_OBJECT_TO_ENTITY_DECL(PROXY_ENTITY)
+//CAST_DWG_OBJECT_TO_ENTITY_DECL(PROXY_ENTITY)
 /// dwg object to hatch
 CAST_DWG_OBJECT_TO_ENTITY_DECL(HATCH)
-  
+
 /// dwg object to variable types
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL(IMAGE)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL(CAMERA)
@@ -3569,16 +3576,16 @@ EXPORT BITCODE_RC
 dwg_ent_mline_get_num_lines(const dwg_ent_mline *restrict mline,
                             int *restrict error);
 
+EXPORT dwg_mline_line *
+dwg_mline_vertex_get_lines(const dwg_mline_vertex *restrict vertex,
+                           int *restrict error);
+
 EXPORT BITCODE_BS
 dwg_ent_mline_get_num_verts(const dwg_ent_mline *restrict mline,
                             int *restrict error);
 
 EXPORT dwg_mline_vertex *
 dwg_ent_mline_get_verts(const dwg_ent_mline *restrict mline,
-                        int *restrict error);
-
-EXPORT dwg_mline_line *
-dwg_ent_mline_get_lines(const dwg_ent_mline *restrict mline,
                         int *restrict error);
 
 /********************************************************************
@@ -4582,10 +4589,6 @@ EXPORT dwg_object_ref*
 dwg_obj_xrecord_get_parenthandle(const dwg_obj_xrecord *restrict xrecord,
                                  int *restrict error);
 
-EXPORT dwg_object_ref**
-dwg_obj_xrecord_get_reactors(const dwg_obj_xrecord *restrict xrecord,
-                             int *restrict error);
-
 EXPORT BITCODE_BL
 dwg_obj_xrecord_get_num_objid_handles(const dwg_obj_xrecord *restrict xrecord,
                                       int *restrict error);
@@ -4621,11 +4624,11 @@ dwg_ent_get_num_eed(const dwg_obj_ent *restrict ent,
 
 EXPORT dwg_entity_eed *
 dwg_ent_get_eed(const dwg_obj_ent *restrict ent, unsigned int index,
-                          int *restrict error);
+                int *restrict error);
 
 EXPORT dwg_entity_eed_data *
 dwg_ent_get_eed_data(const dwg_obj_ent *restrict ent, unsigned int index,
-                          int *restrict error);
+                     int *restrict error);
 
 EXPORT BITCODE_B
 dwg_ent_get_picture_exists(const dwg_obj_ent *restrict ent,
@@ -4633,27 +4636,27 @@ dwg_ent_get_picture_exists(const dwg_obj_ent *restrict ent,
 
 EXPORT BITCODE_BLL
 dwg_ent_get_picture_size(const dwg_obj_ent *restrict ent,
-                          int *restrict error); // before r2007 only RL
+                         int *restrict error); // before r2007 only RL
 
 EXPORT BITCODE_RC *
 dwg_ent_get_picture(const dwg_obj_ent *restrict ent,
-                          int *restrict error);
+                    int *restrict error);
 
 EXPORT BITCODE_BB
 dwg_ent_get_entity_mode(const dwg_obj_ent *restrict ent,
-                          int *restrict error);
+                        int *restrict error);
 
 EXPORT BITCODE_BL
 dwg_ent_get_num_reactors(const dwg_obj_ent *restrict ent,
-                          int *restrict error);
+                         int *restrict error);
 
 EXPORT BITCODE_B
 dwg_ent_get_xdic_missing_flag(const dwg_obj_ent *restrict ent,
-                          int *restrict error); //r2004+
+                              int *restrict error); //r2004+
 
 EXPORT char *
 dwg_ent_get_layer_name(const dwg_obj_ent *restrict ent,
-                          int *restrict error);
+                       int *restrict error);
 
 EXPORT BITCODE_B
 dwg_ent_get_isbylayerlt(const dwg_obj_ent *restrict ent,
@@ -4663,28 +4666,28 @@ EXPORT BITCODE_B
 dwg_ent_get_nolinks(const dwg_obj_ent *restrict ent,
                           int *restrict error);
 
-EXPORT BITCODE_CMC
+EXPORT const Dwg_Color*
 dwg_ent_get_color(const dwg_obj_ent *restrict ent,
-                          int *restrict error);
+                  int *restrict error);
 
 EXPORT double
 dwg_ent_get_linetype_scale(const dwg_obj_ent *restrict ent,
                           int *restrict error);
 
 EXPORT BITCODE_BB
-dwg_ent_get_linetype_flag(const dwg_obj_ent *restrict ent,
+dwg_ent_get_linetype_flags(const dwg_obj_ent *restrict ent,
+                           int *restrict error); //r2000+
+
+EXPORT BITCODE_BB
+dwg_ent_get_plotstyle_flags(const dwg_obj_ent *restrict ent,
                           int *restrict error); //r2000+
 
 EXPORT BITCODE_BB
-dwg_ent_get_plotstyle_flag(const dwg_obj_ent *restrict ent,
-                          int *restrict error); //r2000+
-
-EXPORT BITCODE_BB
-dwg_ent_get_material_flag(const dwg_obj_ent *restrict ent,
+dwg_ent_get_material_flags(const dwg_obj_ent *restrict ent,
                           int *restrict error); //r2007+
 
 EXPORT BITCODE_RC
-dwg_ent_get_shadow_flag(const dwg_obj_ent *restrict ent,
+dwg_ent_get_shadow_flags(const dwg_obj_ent *restrict ent,
                           int *restrict error); //r2007+
 
 EXPORT BITCODE_B
@@ -4707,60 +4710,55 @@ EXPORT BITCODE_RC
 dwg_ent_get_lineweight(const dwg_obj_ent *restrict ent,
                           int *restrict error); //r2000+
 
-/*EXPORT unsigned int
-dwg_ent_get_num_handles(const dwg_obj_ent *restrict ent,
-                          int *restrict error);*/
-
-//TODO: dwg_object_ref* or dwg_handle*, not handle
-EXPORT BITCODE_H
+EXPORT dwg_object_ref*
 dwg_ent_get_subentity(const dwg_obj_ent *restrict ent,
                           int *restrict error);
 
-EXPORT BITCODE_H*
+EXPORT dwg_object_ref**
 dwg_ent_get_reactors(const dwg_obj_ent *restrict ent,
-                          int *restrict error);
+                     int *restrict error);
 
-EXPORT BITCODE_H
+EXPORT dwg_object_ref*
 dwg_ent_get_xdicobjhandle(const dwg_obj_ent *restrict ent,
                           int *restrict error);
 
-EXPORT BITCODE_H
+EXPORT dwg_object_ref*
 dwg_ent_get_prev_entity(const dwg_obj_ent *restrict ent,
-                          int *restrict error);  //r13-r2000
+                        int *restrict error);  //r13-r2000
 
-EXPORT BITCODE_H
+EXPORT dwg_object_ref*
 dwg_ent_get_next_entity(const dwg_obj_ent *restrict ent,
-                          int *restrict error);  //r13-r2000
+                        int *restrict error);  //r13-r2000
 
-EXPORT BITCODE_H
+EXPORT dwg_object_ref*
 dwg_ent_get_color_handle(const dwg_obj_ent *restrict ent,
-                          int *restrict error); //r2004+
+                         int *restrict error); //r2004+
 
-EXPORT BITCODE_H
+EXPORT dwg_object_ref*
 dwg_ent_get_layer(const dwg_obj_ent *restrict ent,
-                          int *restrict error);
+                  int *restrict error);
 
-EXPORT BITCODE_H
+EXPORT dwg_object_ref*
 dwg_ent_get_ltype(const dwg_obj_ent *restrict ent,
-                          int *restrict error);
+                  int *restrict error);
 
-EXPORT BITCODE_H
+EXPORT dwg_object_ref*
 dwg_ent_get_material(const dwg_obj_ent *restrict ent,
-                          int *restrict error);     //r2007+
+                     int *restrict error);     //r2007+
 
-EXPORT BITCODE_H
+EXPORT dwg_object_ref*
 dwg_ent_get_plotstyle(const dwg_obj_ent *restrict ent,
-                          int *restrict error);    //r2000+
+                      int *restrict error);    //r2000+
 
-EXPORT BITCODE_H
+EXPORT dwg_object_ref*
 dwg_ent_get_full_visualstyle(const dwg_obj_ent *restrict ent,
-                          int *restrict error); //r2010+
+                             int *restrict error); //r2010+
 
-EXPORT BITCODE_H
+EXPORT dwg_object_ref*
 dwg_ent_get_face_visualstyle(const dwg_obj_ent *restrict ent,
                           int *restrict error); //r2010+
 
-EXPORT BITCODE_H
+EXPORT dwg_object_ref*
 dwg_ent_get_edge_visualstyle(const dwg_obj_ent *restrict ent,
                              int *restrict error); //r2010+
 
@@ -4770,7 +4768,42 @@ dwg_ent_get_edge_visualstyle(const dwg_obj_ent *restrict ent,
 
 EXPORT dwg_object *
 dwg_obj_obj_to_object(const dwg_obj_obj *restrict obj,
-                          int *restrict error);
+                      int *restrict error);
+
+EXPORT long unsigned int
+dwg_obj_get_objid(const dwg_obj_obj *restrict obj,
+                  int *restrict error);
+
+EXPORT unsigned int
+dwg_obj_get_num_eed(const dwg_obj_obj *restrict obj,
+                    int *restrict error);
+EXPORT dwg_entity_eed *
+dwg_obj_get_eed(const dwg_obj_obj *restrict obj, const unsigned int index,
+                int *restrict error);
+EXPORT dwg_entity_eed_data *
+dwg_obj_get_eed_data(const dwg_obj_obj *restrict obj, const unsigned int index,
+                     int *restrict error);
+
+EXPORT BITCODE_BL
+dwg_obj_get_num_reactors(const dwg_obj_obj *restrict obj,
+                         int *restrict error);
+EXPORT BITCODE_H*
+dwg_obj_get_reactors(const dwg_obj_obj *restrict obj,
+                         int *restrict error);
+EXPORT BITCODE_H
+dwg_obj_get_xdicobjhandle(const dwg_obj_obj *restrict obj,
+                         int *restrict error);
+/* r2004+ */
+EXPORT BITCODE_B
+dwg_obj_get_xdic_missing_flag(const dwg_obj_obj *restrict obj,
+                              int *restrict error);
+/* r2013+ */
+EXPORT BITCODE_B
+dwg_obj_get_has_ds_binary_data(const dwg_obj_obj *restrict obj,
+                               int *restrict error);
+EXPORT Dwg_Handle *
+dwg_obj_get_handleref(const dwg_obj_obj *restrict obj,
+                      int *restrict error);
 
 EXPORT dwg_object *
 dwg_obj_generic_to_object(const dwg_obj_generic *restrict obj,
@@ -4787,59 +4820,12 @@ EXPORT BITCODE_RL
 dwg_object_get_bitsize(const dwg_object *obj);
 
 EXPORT unsigned int
-dwg_obj_get_num_eed(const dwg_obj_obj *restrict obj,
-                    int *restrict error);
-
-EXPORT dwg_entity_eed *
-dwg_obj_get_eed(const dwg_obj_obj *restrict obj, const int index,
-                          int *restrict error);
-
-EXPORT dwg_entity_eed_data *
-dwg_obj_get_eed_data(const dwg_obj_obj *restrict obj, const int index,
-                     int *restrict error);
-
-EXPORT BITCODE_B
-dwg_object_get_picture_exists(const dwg_object *restrict obj,
-                              int *restrict error);
-
-EXPORT BITCODE_BLL
-dwg_object_get_picture_size(const dwg_object *restrict obj,
-                         int *restrict error); // before r2007 only RL
-
-EXPORT BITCODE_RC *
-dwg_object_get_picture(const dwg_object *restrict obj,
-                    int *restrict error);
-
-EXPORT BITCODE_BB
-dwg_object_get_entity_mode(const dwg_object *restrict obj,
-                           int *restrict error);
-
-EXPORT BITCODE_BL
-dwg_object_get_num_reactors(const dwg_object *restrict obj,
-                            int *restrict error);
-
-EXPORT BITCODE_B
-dwg_object_get_xdic_missing_flag(const dwg_object *restrict obj,
-                                 int *restrict error); //r2004+
-
-EXPORT unsigned int
 dwg_object_get_index(const dwg_object *restrict obj,
                      int *restrict error);
 
 EXPORT dwg_handle *
 dwg_object_get_handle(dwg_object *restrict obj,
                    int *restrict error);
-
-EXPORT BITCODE_BL
-dwg_ref_get_absref(const dwg_object_ref *restrict ref,
-                   int *restrict error);
-
-EXPORT dwg_object *
-dwg_ref_get_object(const dwg_object_ref *restrict ref,
-                   int *restrict error);
-
-EXPORT dwg_object *
-dwg_absref_get_object(const dwg_data* dwg, const BITCODE_BL absref);
 
 EXPORT dwg_obj_obj *
 dwg_object_to_object(dwg_object *restrict obj,
@@ -4852,8 +4838,22 @@ dwg_object_to_entity(dwg_object *restrict obj,
 EXPORT int
 dwg_object_get_type(const dwg_object *obj);
 
+EXPORT int
+dwg_object_get_fixedtype(const dwg_object *obj);
+
 EXPORT char*
 dwg_object_get_dxfname(const dwg_object *obj);
+
+EXPORT BITCODE_BL
+dwg_ref_get_absref(const dwg_object_ref *restrict ref,
+                   int *restrict error);
+
+EXPORT dwg_object *
+dwg_ref_get_object(const dwg_object_ref *restrict ref,
+                   int *restrict error);
+
+EXPORT dwg_object *
+dwg_absref_get_object(const dwg_data* dwg, const BITCODE_BL absref);
 
 EXPORT unsigned int
 dwg_get_num_classes(const dwg_data *dwg);
