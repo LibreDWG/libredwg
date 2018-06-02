@@ -339,6 +339,10 @@ static bool env_var_checked_p;
 #define REPEAT4(times, name, type) \
   for (rcount4=0; (long)rcount4<(long)_obj->times; rcount4++)
 
+/* returns -1 if not added, else returns the new objid.
+   does a complete handleref rescan to invalidate and resolve
+   all internal obj pointers after a realloc.
+*/
 #define DWG_ENTITY(token) \
 EXPORT long dwg_add_##token (Dwg_Data * dwg)    \
 {                                               \
@@ -356,7 +360,8 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)    \
     bit_write_BS(&dat, DWG_TYPE_##token);       \
   }                                             \
   bit_set_position(&dat, 0);                    \
-  dwg_decode_add_object(dwg, &dat, &dat, 0);    \
+  if (dwg_decode_add_object(dwg, &dat, &dat, 0)) \
+    dwg_resolve_objectrefs_silent(dwg);         \
   if (num_objs == dwg->num_objects)             \
     return -1;                                  \
   else                                          \
@@ -386,6 +391,10 @@ static void dwg_encode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict ob
     } \
 }
 
+/* returns -1 if not added, else returns the new objid.
+   does a complete handleref rescan to invalidate and resolve
+   all internal obj pointers after a realloc.
+*/
 #define DWG_OBJECT(token) \
 EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
 {                                                \
@@ -403,11 +412,12 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
     bit_write_BS(&dat, DWG_TYPE_##token);        \
   }                                              \
   bit_set_position(&dat, 0);                     \
-  dwg_decode_add_object(dwg, &dat, &dat, 0);     \
+  if (dwg_decode_add_object(dwg, &dat, &dat, 0)) \
+    dwg_resolve_objectrefs_silent(dwg);          \
   if (num_objs == dwg->num_objects)              \
-    return -1;                                  \
-  else                                          \
-    return (long)dwg->num_objects;              \
+    return -1;                                   \
+  else                                           \
+    return (long)dwg->num_objects;               \
 } \
 \
 static void dwg_encode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
@@ -454,33 +464,33 @@ typedef struct
  * Private functions prototypes
  */
 static int
-encode_preR13(Dwg_Data* dwg, Bit_Chain* dat);
+encode_preR13(Dwg_Data *restrict dwg, Bit_Chain *restrict dat);
 
 static int
-dwg_encode_entity(Dwg_Object* obj,
+dwg_encode_entity(Dwg_Object *restrict obj,
                   Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat);
 static int
-dwg_encode_object(Dwg_Object* obj,
-                  Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat);
+dwg_encode_object(Dwg_Object *restrict obj,
+                  Bit_Chain *restrict dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat);
 static void
 dwg_encode_common_entity_handle_data(Bit_Chain* dat, Bit_Chain* hdl_dat,
-                                     Dwg_Object* obj);
+                                     Dwg_Object *restrict obj);
 static int
 dwg_encode_header_variables(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
                             Dwg_Data* dwg);
 static int
-dwg_encode_variable_type(Dwg_Data* dwg, Bit_Chain* dat, Dwg_Object* obj);
+dwg_encode_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat, Dwg_Object *restrict obj);
 void
-dwg_encode_handleref(Bit_Chain *hdl_dat, Dwg_Object * obj, Dwg_Data* dwg,
-                     Dwg_Object_Ref* ref);
+dwg_encode_handleref(Bit_Chain *hdl_dat, Dwg_Object * obj, Dwg_Data *restrict dwg,
+                     Dwg_Object_Ref *restrict ref);
 void 
 dwg_encode_handleref_with_code(Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Data* dwg,
-                               Dwg_Object_Ref* ref, unsigned int code);
+                               Dwg_Object_Ref *restrict ref, unsigned int code);
 void
-dwg_encode_add_object(Dwg_Object* obj, Bit_Chain* dat, unsigned long address);
+dwg_encode_add_object(Dwg_Object *restrict obj, Bit_Chain *restrict dat, unsigned long address);
 
 static void
-dwg_encode_xdata(Bit_Chain * dat, Dwg_Object_XRECORD *obj, int size);
+dwg_encode_xdata(Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj, int size);
 
 /*--------------------------------------------------------------------------------
  * Public functions
@@ -493,7 +503,7 @@ dwg_encode_xdata(Bit_Chain * dat, Dwg_Object_XRECORD *obj, int size);
  * 2010+ uses the 2004 format.
  */
 int
-dwg_encode(Dwg_Data* dwg, Bit_Chain* dat)
+dwg_encode(Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 {
   int ckr_missing = 1;
   int i;

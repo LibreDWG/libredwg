@@ -1293,6 +1293,26 @@ resolve_objectref_vector(Bit_Chain* dat, Dwg_Data * dwg)
   return dwg->num_object_refs ? 0 : 1;
 }
 
+void
+dwg_resolve_objectrefs_silent(Dwg_Data *restrict dwg)
+{
+  long unsigned int i;
+  Dwg_Object *restrict obj;
+  int oldloglevel = loglevel;
+
+  loglevel = 0;
+  // Dwg_Object_Ref->obj are stored all over. dirty it to update dynamically.
+  dwg->dirty_refs = 1; // TODO: this is now forever. find a way to resolve all objs also.
+  for (i = 0; i < dwg->num_object_refs; i++)
+    {
+      //scan num_objects for the id (absolute_ref)
+      obj = dwg_resolve_handle(dwg, dwg->object_ref[i]->absolute_ref);
+      dwg->object_ref[i]->obj = obj;
+    }
+  //TODO: scan dwg->num_objects also to update it's handlerefs
+  loglevel = oldloglevel;
+}
+
 /* R2004 Literal Length
  */
 static int
@@ -2603,6 +2623,8 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
   return 0;
 }
 
+/* Store an object reference in a seperate dwg->object_ref array
+   which is the id for handles, i.e. DXF 5, 330. */
 Dwg_Object_Ref *
 dwg_decode_handleref(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
                      Dwg_Data *restrict dwg)
@@ -2632,12 +2654,13 @@ dwg_decode_handleref(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
     }
 
   // If the handle size is 0, it is probably a null handle.
-  // It shouldn't be placed in the object ref vector
+  // It shouldn't be placed in the object ref vector.
   if (ref->handleref.size)
     {
       // Reserve memory space for object references
       if (!dwg->num_object_refs)
-        dwg->object_ref = (Dwg_Object_Ref **) calloc(REFS_PER_REALLOC, sizeof(Dwg_Object_Ref*));
+        dwg->object_ref = (Dwg_Object_Ref **)
+          calloc(REFS_PER_REALLOC, sizeof(Dwg_Object_Ref*));
       else
         if (dwg->num_object_refs % REFS_PER_REALLOC == 0)
           {
@@ -3043,6 +3066,7 @@ decode_preR13_entities(unsigned long start, unsigned long end,
       if (!num)
         dwg->object = (Dwg_Object *) malloc(sizeof(Dwg_Object));
       else
+        //TODO use REFS_PER_REALLOC
         dwg->object = (Dwg_Object *) realloc(dwg->object, (num + 1)
                                              * sizeof(Dwg_Object));
       if (!dwg->object)
@@ -3532,7 +3556,7 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
    */
   if (!num)
     dwg->object = (Dwg_Object *) malloc(sizeof(Dwg_Object));
-  else
+  else // use REFS_PER_REALLOC
     dwg->object = (Dwg_Object *) realloc(dwg->object, (num + 1)
                                          * sizeof(Dwg_Object));
   if (!dwg->object)

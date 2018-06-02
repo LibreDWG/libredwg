@@ -24,9 +24,10 @@
 #include "bits.h"
 #include "dwg.h"
 
-int dwg_encode(Dwg_Data *dwg, Bit_Chain *dat);
+int dwg_encode(Dwg_Data *restrict dwg, Bit_Chain *restrict dat);
 
 long dwg_add_UNKNOWN_ENT (Dwg_Data * dwg);
 long dwg_add_UNKNOWN_OBJ (Dwg_Data * dwg);
+void dwg_resolve_objectrefs_silent(Dwg_Data *restrict dwg);
 
 #endif

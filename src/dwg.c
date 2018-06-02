@@ -555,6 +555,7 @@ dwg_get_num_entities(const Dwg_Data *dwg)
   return dwg->num_entities;
 }
 
+/** Returns a copy of all entities */
 Dwg_Object_Entity **
 dwg_get_entities(const Dwg_Data *dwg)
 {
@@ -570,6 +571,7 @@ dwg_get_entities(const Dwg_Data *dwg)
         {
           entities[ent_count] = dwg->object[i].tio.entity;
           ent_count++;
+          assert(ent_count < dwg->num_objects);
         }
     }
   return entities;
@@ -584,24 +586,26 @@ dwg_get_entity_layer(const Dwg_Object_Entity * ent)
 Dwg_Object*
 dwg_next_object(const Dwg_Object* obj)
 {
-  if ((obj->index+1) > (obj->parent->num_objects-1))
+  const Dwg_Data *dwg = obj->parent;
+  if ((obj->index+1) > (dwg->num_objects-1))
     return NULL;
-  return &obj->parent->object[obj->index+1];
+  return &dwg->object[obj->index+1];
 }
 
 /**
  * Find an object given its handle
  */
 Dwg_Object*
-dwg_ref_get_object(const Dwg_Data *restrict dwg, const Dwg_Object_Ref *restrict ref)
+dwg_ref_get_object(const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
 {
-  if (ref->obj)
+  if (ref->obj && !dwg->dirty_refs)
     return ref->obj;
   // Without obj we don't get an absolute_ref from relative OFFSETOBJHANDLE handle types.
   if (ref->handleref.code < 6 &&
       dwg_resolve_handleref((Dwg_Object_Ref*)ref, NULL))
     {
-      return dwg_resolve_handle(dwg, ref->absolute_ref);
+      ref->obj = dwg_resolve_handle(dwg, ref->absolute_ref);
+      return ref->obj;
     }
   else
     return NULL;
@@ -613,21 +617,23 @@ dwg_ref_get_object(const Dwg_Data *restrict dwg, const Dwg_Object_Ref *restrict 
  */
 Dwg_Object*
 dwg_ref_get_object_relative(const Dwg_Data *restrict dwg,
-                            const Dwg_Object_Ref *restrict ref,
+                            Dwg_Object_Ref *restrict ref,
                             const Dwg_Object *restrict obj)
 {
-  if (ref->obj)
+  if (ref->obj && !dwg->dirty_refs)
     return ref->obj;
   if (dwg_resolve_handleref((Dwg_Object_Ref*)ref, obj))
     {
-      return dwg_resolve_handle(dwg, ref->absolute_ref);
+      ref->obj = dwg_resolve_handle(dwg, ref->absolute_ref);
+      return ref->obj;
     }
   else
     return NULL;
 }
 
 /**
- * Find a pointer to an object given it's absolute id (handle)
+ * Find a pointer to an object given it's absolute id (handle).
+ * TODO: Check and update each handleref obj cache.
  */
 Dwg_Object *
 dwg_resolve_handle(const Dwg_Data * dwg, const long unsigned int absref)

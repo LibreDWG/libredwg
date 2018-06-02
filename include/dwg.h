@@ -4525,6 +4525,7 @@ typedef struct _dwg_struct
   long unsigned int num_entities;
   long unsigned int num_object_refs;
   Dwg_Object_Ref ** object_ref;
+  int dirty_refs; /* 1 if we added an entity, and invalidated all the internal ref->obj's */
 
   Dwg_Object * mspace_block;
   Dwg_Object * pspace_block;
@@ -4633,11 +4634,11 @@ dwg_next_object(const Dwg_Object* obj);
 
 EXPORT Dwg_Object*
 dwg_ref_get_object(const Dwg_Data *restrict dwg,
-                   const Dwg_Object_Ref *restrict ref);
+                   Dwg_Object_Ref *restrict ref);
 
 EXPORT Dwg_Object*
 dwg_ref_get_object_relative(const Dwg_Data *restrict dwg,
-                            const Dwg_Object_Ref *restrict ref,
+                            Dwg_Object_Ref *restrict ref,
                             const Dwg_Object *restrict obj);
 
 EXPORT Dwg_Object*
