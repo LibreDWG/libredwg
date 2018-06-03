@@ -169,6 +169,12 @@ bit_read_MC(Bit_Chain *dat);
 void
 bit_write_MC(Bit_Chain *dat, BITCODE_MC value);
 
+BITCODE_UMC
+bit_read_UMC(Bit_Chain *dat);
+
+void
+bit_write_UMC(Bit_Chain *dat, BITCODE_UMC value);
+
 BITCODE_MS
 bit_read_MS(Bit_Chain *dat);
 

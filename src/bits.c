@@ -680,10 +680,85 @@ bit_write_BD(Bit_Chain * dat, double value)
     }
 }
 
-/** Read 1 modular char (max 4 bytes, unsigned).
+/** Read 1 modular char (max 4 bytes, signed).
  */
 BITCODE_MC
 bit_read_MC(Bit_Chain * dat)
+{
+  int i, j;
+  int negative;
+  unsigned char byte[4];
+  long unsigned int result;
+
+  negative = 0;
+  result = 0;
+  for (i = 3, j = 0; i >= 0; i--, j += 7)
+    {
+      byte[i] = bit_read_RC(dat);
+      if (!(byte[i] & 0x80))
+        {
+          if ((byte[i] & 0x40))
+            {
+              negative = 1;
+              byte[i] &= 0xbf;
+            }
+          result |= (((long unsigned int) byte[i]) << j);
+          return (negative ? -((long int) result) : (long int) result);
+        }
+      else
+        byte[i] &= 0x7f;
+      result |= ((long unsigned int) byte[i]) << j;
+    }
+
+  LOG_ERROR("bit_read_MC: error parsing modular char.")
+  return 0; /* error... */
+}
+
+/** Write 1 modular char (max 4 bytes, signed).
+ */
+void
+bit_write_MC(Bit_Chain * dat, BITCODE_MC val)
+{
+  int i, j;
+  int negative;
+  unsigned char byte[4];
+  long unsigned int mask;
+  long unsigned int value;
+
+  if (val < 0)
+    {
+      negative = 1;
+      value = (long unsigned int) -val;
+    }
+  else
+    {
+      negative = 0;
+      value = (long unsigned int) val;
+    }
+  mask = 0x0000007f;
+  for (i = 3, j = 0; i > -1; i--, j += 7)
+    {
+      byte[i] = (unsigned char) ((value & mask) >> j);
+      byte[i] |= 0x80;
+      mask = mask << 7;
+    }
+  for (i = 0; i < 3; i++)
+    if (byte[i] & 0x7f)
+      break;
+
+  if (byte[i] & 0x40)
+    i--;
+  byte[i] &= 0x7f;
+  if (negative)
+    byte[i] |= 0x40;
+  for (j = 3; j >= i; j--)
+    bit_write_RC(dat, byte[j]);
+}
+
+/** Read 1 modular char (max 4 bytes, unsigned).
+ */
+BITCODE_UMC
+bit_read_UMC(Bit_Chain * dat)
 {
   int i, j;
   unsigned char byte[4];
@@ -710,7 +785,7 @@ bit_read_MC(Bit_Chain * dat)
 /** Write 1 modular char (max 4 bytes, unsigned).
  */
 void
-bit_write_MC(Bit_Chain * dat, BITCODE_MC val)
+bit_write_UMC(Bit_Chain * dat, BITCODE_UMC val)
 {
   int i, j;
   int negative;

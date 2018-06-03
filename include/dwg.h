@@ -65,8 +65,10 @@ extern "C" {
 #else
 # define FORMAT_RC "0x%hhx"
 # endif
-#define BITCODE_MC long unsigned int
-#define FORMAT_MC "%lu"
+#define BITCODE_MC long int
+#define FORMAT_MC "%ld"
+#define BITCODE_UMC long unsigned int
+#define FORMAT_UMC "%lu"
 #define BITCODE_MS long unsigned int
 #define FORMAT_MS "%lu"
 #define BITCODE_B unsigned char
@@ -4273,7 +4275,7 @@ typedef struct _dwg_object
   long unsigned int bitsize_address; /* bitsize offset: r13-2007 */
   BITCODE_B  has_strings;       /*!< r2007+ */
   BITCODE_RL stringstream_size; /*!< r2007+ in bits, unused */
-  BITCODE_MC handlestream_size; /*!< r2010+ in bits */
+  BITCODE_UMC handlestream_size; /*!< r2010+ in bits */
 
   Dwg_Object_Supertype supertype;
   union
