@@ -3599,9 +3599,9 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
 
   SINCE(R_2010)
   {
-    obj->handlestream_size = bit_read_MC(dat); //FIXME <0
+    obj->handlestream_size = bit_read_MC(dat);
     LOG_INFO(", Hdlsize: %ld", obj->handlestream_size);
-    if (obj->handlestream_size < 0) obj->handlestream_size = 0;
+    //if (obj->handlestream_size < 0) obj->handlestream_size = 0;
     obj->bitsize = obj->size * 8 - obj->handlestream_size;
     obj->type = bit_read_BOT(dat);
   } else {

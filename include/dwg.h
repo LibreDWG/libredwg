@@ -65,8 +65,8 @@ extern "C" {
 #else
 # define FORMAT_RC "0x%hhx"
 # endif
-#define BITCODE_MC long int
-#define FORMAT_MC "%l"
+#define BITCODE_MC long unsigned int
+#define FORMAT_MC "%lu"
 #define BITCODE_MS long unsigned int
 #define FORMAT_MS "%lu"
 #define BITCODE_B unsigned char

@@ -680,30 +680,23 @@ bit_write_BD(Bit_Chain * dat, double value)
     }
 }
 
-/** Read 1 modular char (max 4 bytes).
+/** Read 1 modular char (max 4 bytes, unsigned).
  */
 BITCODE_MC
 bit_read_MC(Bit_Chain * dat)
 {
   int i, j;
-  int negative;
   unsigned char byte[4];
   long unsigned int result;
 
-  negative = 0;
   result = 0;
   for (i = 3, j = 0; i >= 0; i--, j += 7)
     {
       byte[i] = bit_read_RC(dat);
       if (!(byte[i] & 0x80))
         {
-          if ((byte[i] & 0x40))
-            {
-              negative = 1;
-              byte[i] &= 0xbf;
-            }
           result |= (((long unsigned int) byte[i]) << j);
-          return (negative ? -((long int) result) : (long int) result);
+          return result;
         }
       else
         byte[i] &= 0x7f;
@@ -714,10 +707,10 @@ bit_read_MC(Bit_Chain * dat)
   return 0; /* error... */
 }
 
-/** Write 1 modular char (max 4 bytes).
+/** Write 1 modular char (max 4 bytes, unsigned).
  */
 void
-bit_write_MC(Bit_Chain * dat, long int val)
+bit_write_MC(Bit_Chain * dat, BITCODE_MC val)
 {
   int i, j;
   int negative;
@@ -725,17 +718,7 @@ bit_write_MC(Bit_Chain * dat, long int val)
   long unsigned int mask;
   long unsigned int value;
 
-  if (val < 0)
-    {
-      negative = 1;
-      value = (long unsigned int) -val;
-    }
-  else
-    {
-      negative = 0;
-      value = (long unsigned int) val;
-    }
-
+  value = (long unsigned int) val;
   mask = 0x0000007f;
   for (i = 3, j = 0; i > -1; i--, j += 7)
     {
@@ -750,11 +733,8 @@ bit_write_MC(Bit_Chain * dat, long int val)
   if (byte[i] & 0x40)
     i--;
   byte[i] &= 0x7f;
-  if (negative)
-    byte[i] |= 0x40;
   for (j = 3; j >= i; j--)
     bit_write_RC(dat, byte[j]);
-  //if (value == 64) printf ("(%2X) \n", byte[i]);
 }
 
 /** Read 1 modular short (max 2 words).
