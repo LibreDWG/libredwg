@@ -371,7 +371,9 @@
 /* just skip the has_strings bit */
 #define START_HANDLE_STREAM \
   *hdl_dat = *dat; \
-  if (dat->version >= R_2007) bit_set_position(hdl_dat, obj->hdlpos)
+  LOG_HANDLE(" @%lu.%u %lu", dat->byte, dat->bit, bit_position(dat)); \
+  if (dat->version >= R_2007) { bit_set_position(hdl_dat, obj->hdlpos); \
+     LOG_HANDLE(" @%lu.%u %lu\n", dat->byte, dat->bit, bit_position(dat)); }
 
 //TODO unify REPEAT macros
 #define REPEAT_N(times, name, type) \
