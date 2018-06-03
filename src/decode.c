@@ -2391,7 +2391,7 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
   SINCE (R_2007) {
     *str_dat = *dat;
   }
-  VERSIONS (R_2000, R_2010)
+  VERSIONS (R_2000, R_2007)
     {
       _obj->bitsize = bit_read_RL(dat); // until the handles
       LOG_TRACE("Entity bitsize: " FORMAT_BL " @%lu.%u\n", _obj->bitsize, dat->byte, dat->bit)
@@ -2400,8 +2400,13 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
     {
       // The handle stream offset, i.e. end of the object, right after
       // the has_strings bit.
-      //_obj->hdlpos = bit_position(dat) + ent->bitsize - 42;
       _obj->hdlpos = _obj->address * 8 + _obj->bitsize;
+      SINCE(R_2010)
+      {
+        _obj->hdlpos += 8;
+        LOG_HANDLE("(bitsize: " FORMAT_RL ", ", _obj->bitsize);
+        LOG_HANDLE("hdlpos: " FORMAT_RL ")\n", _obj->hdlpos);
+      }
       // and set the string stream (restricted to size)
       obj_string_stream(dat, _obj, str_dat);
     }
