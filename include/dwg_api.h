@@ -1273,10 +1273,12 @@ dwg_ent_insert_get_num_owned(const dwg_ent_insert *insert, int *error);
 
 //TODO dwg_ent_insert_add_owned, dwg_ent_insert_delete_owned
 
+EXPORT dwg_object *
+dwg_ent_insert_get_block_header(const dwg_ent_insert *restrict insert, int *restrict error);
+
 /********************************************************************
 *                  FUNCTIONS FOR MINSERT ENTITY                     *
 ********************************************************************/
-
 
 EXPORT void
 dwg_ent_minsert_get_ins_pt(const dwg_ent_minsert *minsert, dwg_point_3d *point,
@@ -1347,6 +1349,9 @@ EXPORT void
 dwg_ent_minsert_set_row_spacing(dwg_ent_minsert *minsert, BITCODE_BD spacing,
                                 int *error);
 
+EXPORT dwg_object *
+dwg_ent_minsert_get_block_header(const dwg_ent_minsert *restrict minsert,
+                                 int *restrict error);
 
 /********************************************************************
 *                FUNCTIONS FOR MLINESTYLE OBJECT                    *
@@ -3836,9 +3841,14 @@ dwg_obj_layer_get_name(const dwg_obj_layer *restrict layer, int *restrict error)
 *             All other tables and table entries                   *
 ********************************************************************/
 
-// Get name of any table entry
+/// Get name of any table entry. Defaults to ByLayer.
+/// \sa dwg_ent_get_layer_name which defaults to "0"
 EXPORT char *
 dwg_obj_table_get_name(const dwg_object *restrict obj, int *restrict error);
+
+// Get name of the referenced table entry. Defaults to ByLayer
+EXPORT char *
+dwg_ref_get_table_name(const dwg_object_ref *ref, int *error);
 
 // Get number of table entries from the table.
 EXPORT BITCODE_BL
@@ -3942,6 +3952,9 @@ dwg_ent_get_num_reactors(const dwg_obj_ent *ent, int *error);
 
 EXPORT BITCODE_B
 dwg_ent_get_xdic_missing_flag(const dwg_obj_ent *ent, int *error); //r2004+
+
+EXPORT char *
+dwg_ent_get_layer_name(const dwg_obj_ent *restrict ent, int *restrict error);
 
 EXPORT BITCODE_B
 dwg_ent_get_isbylayerlt(const dwg_obj_ent *ent, int *error); //r13-r14 only
@@ -4078,16 +4091,13 @@ EXPORT dwg_handle *
 dwg_obj_get_handle(dwg_object *restrict obj, int *restrict error);
 
 EXPORT BITCODE_BL
-dwg_obj_ref_get_abs_ref(const dwg_object_ref *ref, int *error);
-
-EXPORT dwg_handle *
-dwg_ent_insert_get_ref_handle(const dwg_ent_insert *insert, int *error);
-
-EXPORT BITCODE_BL
-dwg_ent_insert_get_abs_ref(const dwg_ent_insert *insert, int *error);
+dwg_ref_get_absref(const dwg_object_ref *ref, int *error);
 
 EXPORT dwg_object *
-dwg_obj_reference_get_object(const dwg_object_ref *ref, int *error);
+dwg_obj_ref_get_object(const dwg_object_ref *ref, int *error);
+
+dwg_object *
+dwg_absref_get_object(const dwg_data* dwg, const long unsigned int absref);
 
 EXPORT dwg_obj_obj *
 dwg_object_to_object(dwg_object *obj, int *error);

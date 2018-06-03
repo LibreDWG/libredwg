@@ -4285,47 +4285,25 @@ dwg_ent_insert_get_num_owned(const dwg_ent_insert *insert, int *error)
 /// FIXME needs to adjust handle array instead: add/delete
 // TODO dwg_ent_insert_add_owned, dwg_ent_insert_delete_owned
 
-/** Returns the ref handle.
-\code Usage: dwg_obj_ref* handle = dwg_ent_insert_get_ref_handle(insert, &error);
+/** Returns the block object.
+\code Usage: dwg_object* block_header = dwg_ent_insert_get_block_header(insert, &error);
 \endcode
-\param 1 dwg_ent_insert
+\param[in]  insert  dwg_ent_insert*
 \param[out] error   int*, is set to 0 for ok, 1 on error
 */
-dwg_handle *
-dwg_ent_insert_get_ref_handle(const dwg_ent_insert *insert, int *error)
+dwg_object *
+dwg_ent_insert_get_block_header(const dwg_ent_insert *restrict insert, int *restrict error)
 {
   if (insert)
     {
       *error = 0;
-      return &insert->block_header->handleref;
+      return dwg_obj_ref_get_object(insert->block_header, error);
     }
   else
     {
       LOG_ERROR("%s: empty insert", __FUNCTION__)
       *error = 1;
       return NULL;
-    }
-}
-
-/** Returns the abs reference.
-\code Usage: BITCODE_BL ref = dwg_ent_insert_get_abs_ref(insert, &error);
-\endcode
-\param 1 dwg_ent_insert
-\param[out] error   int*, is set to 0 for ok, 1 on error
-*/
-BITCODE_BL
-dwg_ent_insert_get_abs_ref(const dwg_ent_insert *insert, int *error)
-{
-  if (insert)
-    {
-      *error = 0;
-      return insert->block_header->absolute_ref;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty insert", __FUNCTION__)
-      *error = 1;
-      return (BITCODE_BL)-1L;
     }
 }
 
@@ -4756,6 +4734,29 @@ dwg_ent_minsert_set_row_spacing(dwg_ent_minsert *minsert, BITCODE_BD spacing,
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
+    }
+}
+
+/** Returns the block object.
+\code Usage: dwg_object* block_header = dwg_ent_minsert_get_block_header(minsert, &error);
+\endcode
+\param[in]  minsert dwg_ent_minsert*
+\param[out] error   int*, is set to 0 for ok, 1 on error
+*/
+dwg_object *
+dwg_ent_minsert_get_block_header(const dwg_ent_minsert *restrict minsert,
+                                 int *restrict error)
+{
+  if (minsert)
+    {
+      *error = 0;
+      return dwg_obj_ref_get_object(minsert->block_header, error);
+    }
+  else
+    {
+      LOG_ERROR("%s: empty insert", __FUNCTION__)
+      *error = 1;
+      return NULL;
     }
 }
 
@@ -17523,9 +17524,30 @@ dwg_obj_tablectrl_get_objid(const dwg_object *restrict obj,
     }
 }
 
+/** Returns name of the referenced table entry (as UTF-8). Defaults to ByLayer 
+    Since r2007 it returns a malloc'd copy, before the direct reference to the
+    dwg field or the constant "ByLayer".
+\code Usage: char* name = dwg_ref_get_table_name(ref, &error);
+\endcode
+\param[in]  ref     dwg_obj_ref*   A handle
+\param[out] error   int*, is set to 0 for ok, 1 on error
+*/
+char *
+dwg_ref_get_table_name(const dwg_object_ref *ref, int *error)
+{
+  char *name = NULL;
+  if (ref && ref->obj)
+    name = dwg_obj_table_get_name(ref->obj, error);
+  if (!name)
+    name = "ByLayer";
+  return name;
+}
+
 // TODO: the same for the dwg_tbl_generic obj
 
 /** Get name of the table object entry (utf-8 encoded)
+    Since r2007 it returns a malloc'd copy, before the direct reference to the
+    dwg field.
 \code Usage: char* name = dwg_obj_table_get_name(obj, &error);
 \endcode
 \param[in]  obj    a TABLE dwg_object*
@@ -17536,14 +17558,15 @@ dwg_obj_table_get_name(const dwg_object *restrict obj, int *restrict error)
 {
   if (obj &&
       obj->supertype == DWG_SUPERTYPE_OBJECT &&
-      dwg_obj_is_table(obj))
+      (dwg_obj_is_table(obj) || obj->type == DWG_TYPE_DICTIONARY))
     {
-      // HACK: we can guarantee that the entry_name is always the first field,
+      // HACK: we can guarantee that the table entry_name is always the first field,
       // by using COMMON_TABLE_FLAGS.
+      // TODO: Dictionary also?
       Dwg_Object_STYLE *table = obj->tio.object->tio.STYLE;
       *error = 0;
-      if (dwg_version >= R_2007)
-        return bit_convert_TU((BITCODE_TU)table->entry_name);
+      if (obj->parent->header.version >= R_2007)
+        return bit_convert_TU((BITCODE_TU)table->entry_name); //creates a copy
       else
         return table->entry_name;
     }
@@ -17559,6 +17582,27 @@ dwg_obj_table_get_name(const dwg_object *restrict obj, int *restrict error)
 /*******************************************************************
 *                    FUNCTIONS FOR GENERIC ENTITY                  *
 ********************************************************************/
+
+/** Returns the entity layer name (as UTF-8), or "0"
+    Since r2007 it returns a malloc'd copy, before the direct reference
+    to the dwg field or the constant "0".
+\code Usage: char* layer = dwg_ent_get_layer_name(ent, &error);
+\endcode
+\param[in]  ent     dwg_obj_ent*
+\param[out] error   int*, is set to 0 for ok, 1 on error
+*/
+char *
+dwg_ent_get_layer_name(const dwg_obj_ent *restrict ent, int *restrict error)
+{
+  char *name = NULL;
+  Dwg_Object* layer = ent->layer ? ent->layer->obj : NULL;
+
+  if (layer)
+    name = dwg_obj_table_get_name(layer, error);
+  if (!name)
+    name = "0";
+  return name;
+}
 
 /** Returns the entity bitsize
 \code Usage: long bitsize = dwg_ent_get_bitsize(ent, &error);
@@ -17576,6 +17620,7 @@ dwg_ent_get_bitsize(const dwg_obj_ent *restrict ent, int *restrict error)
     return 0;
   }
 }
+
 /** Returns the number of object EED structures.
 \code Usage: int num_eed = dwg_obj_get_num_eed(ent, &error);
 \endcode
@@ -17971,13 +18016,13 @@ dwg_object_to_object(dwg_object *obj, int *error)
 }
 
 /** Returns object from reference or NULL
-\code Usage: dwg_object obj = dwg_obj_reference_get_object(obj, &error);
+\code Usage: dwg_object obj = dwg_obj_ref_get_object(obj, &error);
 \endcode
-\param[in]  ref   dwg_object_ref*
+\param[in]  ref     dwg_object_ref*
 \param[out] error   int*, is set to 0 for ok, 1 on error
 */
 dwg_object *
-dwg_obj_reference_get_object(const dwg_object_ref *ref, int *error)
+dwg_obj_ref_get_object(const dwg_object_ref *ref, int *error)
 {
   if (ref)
     {
@@ -17992,14 +18037,30 @@ dwg_obj_reference_get_object(const dwg_object_ref *ref, int *error)
     }
 }
 
-/* Returns absolute reference
-\code Usage: BITCODE_BL ref = dwg_obj_ref_get_abs_ref(obj, &error);
+/** Returns object from absolute reference or NULL
+\code Usage: dwg_object* obj = dwg_absref_get_object(dwg, absref);
+\endcode
+\param[in]  dwg
+\param[in]  absref
+*/
+dwg_object *
+dwg_absref_get_object(const dwg_data* dwg, const long unsigned int absref)
+{
+  if (absref)
+      return dwg_resolve_handle(dwg, absref);
+  else
+    return NULL;
+}
+
+/* Returns the absolute handle reference, to be looked up
+   in dwg->object_refs[]
+\code Usage: BITCODE_BL ref = dwg_ref_get_absref(obj, &error);
 \endcode
 \param[in]  ref   dwg_object_ref*
 \param[out] error   int*, is set to 0 for ok, 1 on error
 */
 BITCODE_BL
-dwg_obj_ref_get_abs_ref(const dwg_object_ref *ref, int *error)
+dwg_ref_get_absref(const dwg_object_ref *ref, int *error)
 {
   if (ref)
     {

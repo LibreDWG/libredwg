@@ -580,7 +580,8 @@ dwg_get_entities(const Dwg_Data *dwg)
 Dwg_Object_LAYER *
 dwg_get_entity_layer(const Dwg_Object_Entity * ent)
 {
-  return ent->layer->obj->tio.object->tio.LAYER;
+  //TODO: empty means default layer 0
+  return ent->layer ? ent->layer->obj->tio.object->tio.LAYER : NULL;
 }
 
 Dwg_Object*

@@ -1545,10 +1545,10 @@ typedef struct _dwg_object_DICTIONARY
   struct _dwg_object_object *parent;
 
   BITCODE_BL numitems;
-  BITCODE_RC unknown_r14;
-  BITCODE_BS cloning;
-  BITCODE_RC hard_owner;
   BITCODE_TV* text;
+  BITCODE_BS cloning;
+  BITCODE_RC unknown_r14;
+  BITCODE_RC hard_owner;
   BITCODE_H parenthandle;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;

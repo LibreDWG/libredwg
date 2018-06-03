@@ -227,10 +227,10 @@ output_INSERT(dwg_object* obj)
   log_if_error("insert_get_scale");
   obj_handle = dwg_obj_get_handle(obj, &error);
   log_if_error("get_handle");
-  ins_handle = dwg_ent_insert_get_ref_handle(insert, &error);
+  ins_handle = &obj->handle;
   log_if_error("insert_get_ref_handle");
-  abs_ref = dwg_ent_insert_get_abs_ref(insert, &error);
-  log_if_error("insert_get_abs_ref");
+  abs_ref = insert->block_header->absolute_ref;
+  log_if_error("block_absref");
   
   if (insert->block_header->handleref.code == 5)
     {
@@ -293,9 +293,9 @@ output_BLOCK_HEADER(dwg_object_ref* ref)
   unsigned long abs_ref;
   char *name;
   
-  obj = dwg_obj_reference_get_object(ref, &error);
+  obj = dwg_obj_ref_get_object(ref, &error);
   log_if_error("reference_get_object");
-  abs_ref = dwg_obj_ref_get_abs_ref(ref, &error);
+  abs_ref = dwg_ref_get_absref(ref, &error);
   log_if_error("ref_get_abs_ref");
   if (!ref)
     {

@@ -47,8 +47,8 @@ void add_table (xmlNodePtr rootnode, const Dwg_Object *obj);
 #define newXMLEntity(rootnode) xmlNewChild (rootnode, NULL, (const xmlChar *)"DwgEntity", NULL)
 
 /*
- * This functions creates some of the common attributes that are common to every entity.
- * @params xmlNodePtr node The pointer to the node to whose attribute is to be added
+ * Creates some of the common attributes, luckily we don't have to care about the order.
+ * @params xmlNodePtr node       The XML DwgEntity node
  * @params const Dwg_Object *obj The DWG object
  * @return none
  */
@@ -57,21 +57,40 @@ common_entity_attrs (xmlNodePtr node, const Dwg_Object *obj)
 {
   int error;
   xmlChar *buf;
-  char *name = NULL;
-  Dwg_Object* layer = obj->tio.entity->layer ? obj->tio.entity->layer->obj : NULL;
+  char *name;
+  Dwg_Object_Entity *ent = obj->tio.entity;
+
+  //EntityTransparency, ObjectID, ObjectID32, Visible
 
   buf = doubletohex (obj->handle.value);
   newXMLProp ("Handle", buf);
 
-  if (layer) name = dwg_obj_table_get_name(layer, &error);
-  if (!name) name = "0";
-  newXMLcProp ("Layer", name);
+  buf = ent->xdicobjhandle ? (xmlChar *)"1" : (xmlChar *)"0";
+  newXMLcProp ("HasExtensionDictionary", buf);
 
-  buf = doubletochar (obj->tio.entity->linetype_scale);
+  //Always return the default "0"
+  name = dwg_ent_get_layer_name(ent, &error);
+  if (!error)
+    newXMLcProp ("Layer", name); //leaks r2007+
+
+  //Always return the default: ByLayer
+  name = dwg_ref_get_table_name(ent->ltype, &error);
+  if (!error)
+    newXMLcProp ("Linetype", name); //leaks r2007+
+
+  buf = doubletochar (ent->linetype_scale);
   newXMLProp ("LinetypeScale", buf);
 
-  buf = doubletochar (obj->tio.entity->lineweight);
+  buf = doubletochar (ent->lineweight);
   newXMLProp ("Lineweight", buf);
+
+  name = dwg_ref_get_table_name(ent->material, &error);
+  if (!error)
+    newXMLcProp ("Material", name); //leaks r2007+
+
+  name = dwg_ref_get_table_name(ent->plotstyle, &error);
+  if (!error)
+    newXMLcProp ("PlotStyleName", name); //leaks r2007+
 }
 
 /* 
