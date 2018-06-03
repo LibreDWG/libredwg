@@ -1907,7 +1907,7 @@ read_2004_section_header(Bit_Chain* dat, Dwg_Data *dwg)
       LOG_TRACE("\nHeader\n-------------------\n")
       dwg->header_vars.size = bit_read_RL(&sec_dat);
       LOG_TRACE("size: " FORMAT_RL "\n", dwg->header_vars.size);
-      PRE(R_2010) {
+      PRE (R_2007) {
         dwg_decode_header_variables(&sec_dat, &sec_dat, &sec_dat, dwg);
       } else {
         Bit_Chain hdl_dat, str_dat;
@@ -1918,10 +1918,10 @@ read_2004_section_header(Bit_Chain* dat, Dwg_Data *dwg)
           {
             dwg->header_vars.bitsize_hi = bit_read_RL(&sec_dat);
             LOG_TRACE("bitsize_hi: " FORMAT_RL " [RL]\n", dwg->header_vars.bitsize_hi)
-            endbits += 32;
+            endbits += 32; //192
           }
-        dwg->header_vars.bitsize = dwg->header_vars.size * 8;
-        //LOG_TRACE("bitsize: " FORMAT_RL " [RL]\n", dwg->header_vars.bitsize)
+        dwg->header_vars.bitsize = bit_read_RL(&sec_dat);
+        LOG_TRACE("bitsize: " FORMAT_RL " [RL]\n", dwg->header_vars.bitsize)
         endbits += dwg->header_vars.bitsize;
         bit_set_position(&hdl_dat, endbits);
         section_string_stream(&sec_dat, dwg->header_vars.bitsize, &str_dat);
