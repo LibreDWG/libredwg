@@ -2388,15 +2388,15 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
       FIELD_RS (paper_r11, 0);
   }
 
-  VERSIONS(R_2000, R_2010)
+  SINCE (R_2007) {
+    *str_dat = *dat;
+  }
+  VERSIONS (R_2000, R_2010)
     {
-      SINCE(R_2007) {
-        *str_dat = *dat;
-      }
       _obj->bitsize = bit_read_RL(dat); // until the handles
       LOG_TRACE("Entity bitsize: " FORMAT_BL " @%lu.%u\n", _obj->bitsize, dat->byte, dat->bit)
     }
-  SINCE(R_2007)
+  SINCE (R_2007)
     {
       // The handle stream offset, i.e. end of the object, right after
       // the has_strings bit.
@@ -2580,18 +2580,19 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
   Dwg_Object *_obj = &dwg->object[obj->objid];
 
   obj->datpos = dat->byte;     // the data stream offset
+  SINCE(R_2007) {
+    *str_dat = *dat;
+  }
   VERSIONS(R_2000, R_2007)
     {
-      SINCE(R_2007) {
-        *str_dat = *dat;
-      }
       _obj->bitsize = bit_read_RL(dat);
       LOG_TRACE("bitsize: " FORMAT_RL " ", _obj->bitsize);
     }
-  /*SINCE(R_2010)
+  SINCE(R_2010)
     {
-      _obj->bitsize = dat->size - 16;
-    }*/
+      _obj->bitsize = (_obj->size * 8) - _obj->handlestream_size;
+      LOG_TRACE("(bitsize: " FORMAT_RL ") ", _obj->bitsize);
+    }
   SINCE(R_2007)
     {
       //LOG_TRACE("Object bitsize: " FORMAT_RL " @%lu.%u %lu\n", _obj->bitsize,
