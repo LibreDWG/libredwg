@@ -4295,20 +4295,32 @@ typedef struct _dwg_object
  */
 typedef struct _dwg_class
 {
-  BITCODE_BS number;
+  BITCODE_BS number; /*!< starting with 500 */
   /* see http://images.autodesk.com/adsk/files/autocad_2012_pdf_dxf-reference_enu.pdf */
-  BITCODE_BS proxyflag;
+  BITCODE_BS proxyflag; /*!<
+      erase allowed = 1,
+      transform allowed = 2,
+      color change allowed = 4,
+      layer change allowed = 8,
+      line type change allowed = 16,
+      line type scale change allowed = 32,
+      visibility change allowed = 64,
+      cloning allowed = 128,
+      Lineweight change allowed = 256,
+      Plot Style Name change allowed = 512,
+      Disables proxy warning dialog = 1024,
+      is R13 format proxy= 32768 */
   char *appname;
   char *cppname;
-  char *dxfname;
-  BITCODE_TU dxfname_u;
+  char *dxfname; /*!< ASCII or UTF-8 */
+  BITCODE_TU dxfname_u; /* r2007+, always transformed to dxfname as UTF-8 */ 
   BITCODE_B  wasazombie; /*!< really Was-a-proxy flag */
   BITCODE_BS item_class_id; /* Is-an-entity. 1f2 for entities, 1f3 for objects */
   BITCODE_BL num_instances; /* 91 Instance count for a custom class */
   BITCODE_BL dwg_version;
   BITCODE_BL maint_version;
-  BITCODE_BL unknown_1;
-  BITCODE_BL unknown_2;
+  BITCODE_BL unknown_1; /*!< def: 0L */
+  BITCODE_BL unknown_2; /*!< def: 0L */
 } Dwg_Class;
 
 /**

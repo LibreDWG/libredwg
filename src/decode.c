@@ -1881,6 +1881,11 @@ read_2004_section_classes(Bit_Chain* dat, Dwg_Data *dwg)
       free(sec_dat.chain);
       return 1;
     }
+
+  // then RS: CRC
+  // dwg_sentinel(DWG_SENTINEL_CLASS_END)
+  // SINCE(R_2004) 8 unknown bytes
+  
   free(sec_dat.chain);
   return 0;
 }

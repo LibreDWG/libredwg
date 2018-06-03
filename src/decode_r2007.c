@@ -1098,15 +1098,23 @@ void
 section_string_stream(Bit_Chain *restrict dat, BITCODE_RL bitsize,
                       Bit_Chain *restrict str)
 {
-  // 24 bytes (sentinel+size+hsize) - 1 bit (endbit)
-  BITCODE_RL start = bitsize + 159; // in bits
+  BITCODE_RL start;     // in bits
   BITCODE_RS data_size; // in byte
   BITCODE_B endbit;
+  PRE(R_2010) {
+    // r2007: + 24 bytes (sentinel+size+hsize) - 1 bit (endbit)
+    start = bitsize + 159;
+  } else {
+    // r2010: + 24 bytes (sentinel+size+hSize) - 1 bit (endbit)
+    start = bitsize + 191; /* 8*24 = 192 */
+  }
   *str = *dat;
   bit_set_position(str, start);
   LOG_TRACE("section string stream\n  pos: %u, %lu/%u\n", start, str->byte, str->bit);
   endbit = bit_read_B(str);
   LOG_HANDLE("  endbit: %d\n", (int)endbit);
+  if (!endbit)
+    return; // i.e. has no strings. without data_size should be 0
   start -= 16;
   bit_set_position(str, start);
   LOG_HANDLE("  pos: %u, %lu\n", start, str->byte);
