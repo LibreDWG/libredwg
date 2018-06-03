@@ -188,8 +188,8 @@ dwg_decode(Bit_Chain * dat, Dwg_Data * dwg)
 
   PRE(R_13)
     {
-      // TODO: tables, entities, block entities
-      LOG_ERROR(WE_CAN "We don't decode tables, entities, blocks yet")
+      // TODO: entities, block entities
+      LOG_ERROR(WE_CAN "We don't decode most entities and blocks yet")
 #ifndef IS_RELEASE
       return decode_preR13(dat, dwg);
 #endif
@@ -212,14 +212,12 @@ dwg_decode(Bit_Chain * dat, Dwg_Data * dwg)
 
   SINCE(R_2010)
     {
-      LOG_ERROR(WE_CAN
+      LOG_WARN(WE_CAN
                "Support for this version is still experimental."
-               " We don't decode all objects yet.\n"
-               "It will probably crash and/or give you invalid output.")
-#ifndef IS_RELEASE
+               " We don't decode all fields yet.\n"
+               "It might crash and/or give you invalid output.")
       read_r2007_init(dwg);
       return decode_R2004(dat, dwg);
-#endif
     }
 
   // This line should not be reached
@@ -2439,24 +2437,24 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
       LOG_TRACE("picture_exists: 1\n")
       VERSIONS(R_13, R_2007)
         {
-          ent->picture_size = (BITCODE_BLL)bit_read_RL(dat);
+          ent->picture_size = bit_read_RL(dat);
         }
       SINCE(R_2010)
         {
-          ent->picture_size = bit_read_BLL(dat);
+          ent->picture_size = bit_read_BLL(dat); //ODA doc bug?
         }
 
       LOG_TRACE("picture_size: " FORMAT_BLL " \n", ent->picture_size)
       if (ent->picture_size < 210210)
         {
-          ent->picture = bit_read_TF(dat, ent->picture_size);
+          ent->picture = bit_read_TF(dat, ent->picture_size); // DXF 310
         }
       else
         {
-          LOG_ERROR(
-              "dwg_decode_entity:  Absurd! Picture-size: %lu kB. Object: %lu (handle)",
-              (unsigned long)(ent->picture_size / 1000), _obj->handle.value)
-          bit_advance_position(dat, -(4 * 8 + 1));
+          LOG_ERROR("Invalid picture-size: %lu kB. Object: %lu (handle)",
+                    (unsigned long)(ent->picture_size / 1000), _obj->handle.value)
+          bit_set_position(dat, _obj->address);
+          return 1;
         }
     }
 
@@ -2557,7 +2555,7 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
       ent->has_edge_visualstyle = bit_read_B(dat);
     }
 
-  ent->invisible = bit_read_BS(dat);
+  ent->invisible = bit_read_BS(dat); //bit 0: 0 visible, 1 invisible
 
   SINCE(R_2000)
     {
@@ -2634,6 +2632,14 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
     }
   // documentation bug
   obj->num_reactors = bit_read_BL(dat);
+  SINCE (R_2010)
+  {
+    if (obj->num_reactors > 0x1000)
+      {
+        obj->num_reactors = 0;
+        LOG_WARN("Invalid num_reactors")
+      }
+  }
   SINCE(R_2004)
     {
       obj->xdic_missing_flag = bit_read_B(dat);

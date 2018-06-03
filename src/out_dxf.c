@@ -510,7 +510,7 @@ dxf_write_handle(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       VALUE_TV ("AcDb" #acdbname "TableRecord", 100); \
     }\
   } \
-  dxf_write_handle(dat, obj, _obj->entry_name, 2); \
+  if (_obj->entry_name) dxf_write_handle(dat, obj, _obj->entry_name, 2); \
   FIELD_RC (flag, 70);
 
 #include "dwg.spec"
@@ -846,6 +846,8 @@ dwg_dxf_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
   const int minimal = obj->parent->opts & 0x10;
 
+  if (obj->supertype == DWG_SUPERTYPE_UNKNOWN)
+    return;
   switch (obj->type)
     {
     case DWG_TYPE_TEXT:
@@ -1378,7 +1380,8 @@ if (1) { //only temp. to test dxf import into acad. this is broken
       // here LTYPE_CONTINUOUS is already included
       for (i=0; i<dwg->ltype_control.num_entries; i++)
         {
-          if ((obj = dwg_ref_get_object(dwg, _ctrl->linetypes[i]))) {
+          obj = dwg_ref_get_object(dwg, _ctrl->linetypes[i]);
+          if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
             RECORD (LTYPE);
             dwg_dxf_LTYPE(dat, obj);
           }
@@ -1395,7 +1398,7 @@ if (1) { //only temp. to test dxf import into acad. this is broken
       for (i=0; i<dwg->layer_control.num_entries; i++)
         {
           Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->layers[i]);
-          if (obj) {
+          if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
             RECORD (LAYER);
             dwg_dxf_LAYER(dat, obj);
           }
@@ -1412,7 +1415,7 @@ if (1) { //only temp. to test dxf import into acad. this is broken
       for (i=0; i<dwg->style_control.num_entries; i++)
         {
           Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->styles[i]);
-          if (obj) {
+          if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
             RECORD (STYLE);
             dwg_dxf_STYLE(dat, obj);
           }
@@ -1429,7 +1432,8 @@ if (1) { //only temp. to test dxf import into acad. this is broken
       for (i=0; i<dwg->view_control.num_entries; i++)
         {
           Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->views[i]);
-          if (obj) {
+          //FIXME ignore ACDBSECTIONVIEWSTYLE and ACDBDETAILVIEWSTYLE
+          if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
             RECORD (VIEW);
             dwg_dxf_VIEW(dat, obj);
           }
@@ -1446,7 +1450,7 @@ if (1) { //only temp. to test dxf import into acad. this is broken
       for (i=0; i<dwg->ucs_control.num_entries; i++)
         {
           Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->ucs[i]);
-          if (obj) {
+          if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
             RECORD (UCS);
             dwg_dxf_UCS(dat, obj);
           }
@@ -1464,7 +1468,7 @@ if (1) { //only temp. to test dxf import into acad. this is broken
       for (i=0; i<dwg->appid_control.num_entries; i++)
         {
           Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->apps[i]);
-          if (obj) {
+          if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
             RECORD (APPID);
             dwg_dxf_APPID(dat, obj);
           }
@@ -1482,7 +1486,7 @@ if (1) { //only temp. to test dxf import into acad. this is broken
       for (i=0; i<dwg->dimstyle_control.num_entries; i++)
         {
           Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->dimstyles[i]);
-          if (obj) {
+          if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
             RECORD (DIMSTYLE);
             dwg_dxf_DIMSTYLE(dat, obj);
           }
@@ -1500,7 +1504,7 @@ if (1) { //only temp. to test dxf import into acad. this is broken
       for (i=0; i<dwg->vport_entity_control.num_entries; i++)
         {
           Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->vport_entity_headers[i]);
-          if (obj) {
+          if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
             RECORD (VPORT_ENTITY_HEADER);
             dwg_dxf_VPORT_ENTITY_HEADER(dat, obj);
           }

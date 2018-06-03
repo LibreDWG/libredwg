@@ -1,4 +1,4 @@
-* R2010+: fix some remaining objects, handles
+* R2010+: fix some remaining fields. Most DWG's can be read.
 * pre-R13: finish
 * PROXY subentities, PROXY_ENTITY
 * CELLSTYLEMAP TABLE_Cell struct

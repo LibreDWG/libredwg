@@ -110,8 +110,11 @@ reverse-engineered.  The specification is almost complete.
 The LibreDWG implementation of the specification is an ongoing process;
 as of version @value{VERSION}, coverage is approximately 99%.
 
-It can read the formats R13, R14, R2000, R2004 and R2007 for 99%.
-R11, R2010, R2013 and R2018 can be partially read (~80%).
+It can read the formats R13, R14, R2000, R2004, and R2007 for 99%.
+R2010, R2013 and R2018 can be partially read (~90%), but fail on some advanced DWG's.
+R11 and earlier cannot be read yet, only partially.
+Reading R11 and earlier is ony enabled with the development git checkout, not
+the released tarball.
 
 Here is a list of features that are still missing.
 
@@ -120,19 +123,17 @@ Here is a list of features that are still missing.
 @table @asis
 
 @item Reading pre-R13 and R2010+ DWG
-Reading DWG formats for pre-R13 and R2010 and later - R2013, R2018 - is an ongoing effort, some minor parts are missing.
-
-R2010+: fix some remaining objects, handles.
+Reading DWG formats for pre-R13 and some R2010+ objects is an ongoing effort, some minor parts are missing. Simple DWGs can be read already, advanced DWGs not.
 
 Missing:
-
-* MATERIAL
 
 * PROXY subentities, PROXY_ENTITY
 
 * CELLSTYLEMAP TABLE_Cell struct
 
 Halfway:
+
+* MATERIAL
 
 * SPATIAL_INDEX class/object untested
 
@@ -141,14 +142,15 @@ Halfway:
 * ACIS: only converted to a raw string
 
 @item Writing pre-R13 and R2004+ DWG
-Writing DWG formats for R2004 and later: R2007, R2010, R2013, R2018 is an ongoing effort and not yet implemented.
+Writing DWG formats for R2004 and later: R2007, R2010, R2013, R2018 is an
+ongoing effort and not yet implemented.
 
 @item Reading and writing ASCII and binary DXF
 DXF support is an ongoing effort, and about halfway implemented.
 Ascii DXF's are generated fully, with much more elements and fields and other free libraries,
 but AutoCAD fails to import them yet.
 Binary DXF are done about 50%.
-Reading DXF is not yet implemented.
+Reading DXF is not yet fully implemented, this is under construction.
 
 @end table
 
@@ -273,7 +275,10 @@ DWG structure, which is passed around the functions x(@pxref{Functions}).
 1 bit-encoded double with default
 @end deftypevr
 @deftypevr {define} BITCODE_MC long int
-1 modular char, max 4 bytes
+1-4 modular chars
+@end deftypevr
+@deftypevr {define} BITCODE_UMC long unsigned int
+1-4 unsigned modular chars
 @end deftypevr
 @deftypevr {define} BITCODE_MS long unsigned int
 1 modular short, max 2 words

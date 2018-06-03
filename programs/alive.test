@@ -85,8 +85,9 @@ run ()
     fi
 }
 
-DATA="sample_2000 example_2000 r14/Leader_r14 2000/Leader_2000 2004/Leader_2004 2007/Leader_2007"
-TODO="r11/ACEL10 2010/Leader_2010 2013/Leader_2013"
+DATA="sample_2000 example_2000 r14/Leader_r14 2000/Leader_2000 2004/Leader_2004"
+DATA="$DATA 2007/Leader_2007 2010/Arc 2013/Arc 2018/Arc"
+TODO="r11/ACEL10 2010/Leader_2010 2013/Leader_2013 2018/Leader_2018"
 
 for d in $DATA; do
     b=$(basename $d)
@@ -104,19 +105,19 @@ for prog in $PROGS ; do
 done
 #run dwgread r11/ACEL10
 
-# check generated DXF's against original DXF's
+# TODO: check generated DXF's against original DXF's
 # skip the run part if dwg2dxf is part of bin_PROGRAMS (i.e. being installed)
 # only in programs, not examples:
 if test -f cmp_dxf.pl ; then
     for dwg in $DATA; do
         base=$(basename $dwg .dwg)
         run dwg2dxf $dwg
-        if [ -f ${datadir}/$dwg.dxf ]; then
-            perl filt_dxf.pl ${datadir}/$dwg.dxf > $base.dxf.orig
-            perl filt_dxf.pl $base.dxf > $base.dxf.new
-            diff -bu  $base.dxf.orig $base.dxf.new | perl cmp_dxf.pl
-            rm $base.dxf.orig $base.dxf.new 2>/dev/null
-        fi
+        #if [ -f ${datadir}/$dwg.dxf ]; then
+        #    perl filt_dxf.pl ${datadir}/$dwg.dxf > $base.dxf.orig
+        #    perl filt_dxf.pl $base.dxf > $base.dxf.new
+        #    diff -bu  $base.dxf.orig $base.dxf.new | perl cmp_dxf.pl
+        #    rm $base.dxf.orig $base.dxf.new 2>/dev/null
+        #fi
     done
 fi
 

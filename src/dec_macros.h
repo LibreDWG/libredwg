@@ -377,22 +377,32 @@
 
 //TODO unify REPEAT macros
 #define REPEAT_N(times, name, type) \
+  if (dat->version >= R_2010 && times > 0x1000) { \
+    fprintf(stderr, "Invalid rcount %ld", (long)times); return; } \
   if (times) _obj->name = (type *) calloc(times, sizeof(type)); \
   for (rcount=0; rcount<(long)times; rcount++)
 
 #define REPEAT(times, name, type) \
+  if (dat->version >= R_2010 && _obj->times > 0x1000) { \
+    fprintf(stderr, "Invalid rcount %ld", (long)_obj->times); return; } \
   if (_obj->times) _obj->name = (type *) calloc(_obj->times, sizeof(type)); \
   for (rcount=0; rcount<(long)_obj->times; rcount++)
 
 #define REPEAT2(times, name, type) \
+  if (dat->version >= R_2010 && _obj->times > 0x1000) { \
+    fprintf(stderr, "Invalid rcount2 %ld", (long)_obj->times); return; } \
   if (_obj->times) _obj->name = (type *) calloc(_obj->times, sizeof(type)); \
   for (rcount2=0; rcount2<(long)_obj->times; rcount2++)
 
 #define REPEAT3(times, name, type) \
+  if (dat->version >= R_2010 && _obj->times > 0x1000) { \
+    fprintf(stderr, "Invalid rcount3 %ld", (long)_obj->times); return; } \
   if (_obj->times) _obj->name = (type *) calloc(_obj->times, sizeof(type)); \
   for (rcount3=0; rcount3<(long)_obj->times; rcount3++)
 
 #define REPEAT4(times, name, type) \
+  if (dat->version >= R_2010 && _obj->times > 0x1000) { \
+    fprintf(stderr, "Invalid rcount4 %ld", (long)_obj->times); return; } \
   if (_obj->times) _obj->name = (type *) calloc(_obj->times, sizeof(type)); \
   for (rcount4=0; rcount4<(long)_obj->times; rcount4++)
 

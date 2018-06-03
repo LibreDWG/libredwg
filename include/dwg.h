@@ -4119,7 +4119,7 @@ typedef struct _dwg_object_entity
   Dwg_Eed *eed; /* see also Dwg_Resbuf* xdata */
 
   BITCODE_B picture_exists;
-  BITCODE_BLL picture_size; /* before r2007 only RL */
+  BITCODE_BL picture_size;
   BITCODE_RC *picture;
 
   BITCODE_BB entity_mode;

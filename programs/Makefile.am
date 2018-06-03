@@ -67,8 +67,8 @@ endif
 TESTS = alive.test
 
 EXTRA_DIST = suffix.inc common.inc $(TESTS) cmp_dxf.pl
-CLEANFILES = {example,sample,Leader}_*.{bmp,ps,svg,dxf}
-CLEANFILES += {example,sample,Leader}_*rewrite.dwg
+CLEANFILES = {example_,sample_,Arc,Leader_}*.{bmp,ps,svg,dxf}
+CLEANFILES += {example_,sample_,Arc,Leader_}*rewrite.dwg
 MAINTAINERCLEANFILES = $(dist_man1_MANS)
 MAINTAINERCLEANFILES += *_flymake.[ch] *~ *.i
 

@@ -292,17 +292,17 @@ output_BLOCK_HEADER(dwg_object_ref* ref)
   int error;
   unsigned long abs_ref;
   char *name;
-  
+
+  if (!ref)
+    {
+      fprintf(stderr, "Empty BLOCK."
+              " Could not output an SVG symbol for this BLOCK_HEADER\n");
+      return;
+    }
   obj = dwg_obj_ref_get_object(ref, &error);
   log_if_error("reference_get_object");
   abs_ref = dwg_ref_get_absref(ref, &error);
   log_if_error("ref_get_abs_ref");
-  if (!ref)
-    {
-      fprintf(stderr, "Found null object reference."
-              " Could not output an SVG symbol for this BLOCK_HEADER\n");
-      return;
-    }
   if (!obj)
     {
       fprintf(stderr, "Found null ref->obj\n");
