@@ -2251,7 +2251,7 @@ dwg_ent_mtext_get_text_height(const dwg_ent_mtext *restrict mtext,
 
 EXPORT BITCODE_BS
 dwg_ent_mtext_get_attachment(const dwg_ent_mtext *restrict mtext,
-                          int *restrict error);
+                             int *restrict error);
 
 EXPORT void
 dwg_ent_mtext_set_attachment(dwg_ent_mtext *restrict mtext,
@@ -2260,7 +2260,7 @@ dwg_ent_mtext_set_attachment(dwg_ent_mtext *restrict mtext,
 
 EXPORT BITCODE_BS
 dwg_ent_mtext_get_drawing_dir(const dwg_ent_mtext *restrict mtext,
-                          int *restrict error);
+                              int *restrict error);
 
 EXPORT void
 dwg_ent_mtext_set_drawing_dir(dwg_ent_mtext *restrict mtext,

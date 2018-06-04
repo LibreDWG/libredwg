@@ -21,10 +21,12 @@
 /**
  The position of bits within bytes is numerically ordered as depicted below:
 
+/code
  position: 01234567 01234567 01234567 ...
  bits:     76543210 76543210 76543210 ...
            \______/ \______/ \______/
             byte 1   byte 2   byte 3  ...
+\endcode
  */
 
 #ifndef BITS_H
@@ -241,11 +243,12 @@ bit_read_TU(Bit_Chain *restrict dat);
 void
 bit_write_TU(Bit_Chain *restrict dat, BITCODE_TU restrict value);
 
-/* converts UCS-2 to UTF-8. needed by dwglayers */
+/* Converts UCS-2 to UTF-8, returning a copy. */
 EXPORT char*
 bit_convert_TU(BITCODE_TU restrict wstr);
 
-/* converts UTF-8 to UCS-2. eventually needed by dwg writers (dxf2dwg) */
+/** Converts UTF-8 to UCS-2. Returns a copy.
+    Eventually needed by dwg writers (dxf2dwg) */
 EXPORT BITCODE_TU
 bit_utf8_to_TU(char* restrict str);
 

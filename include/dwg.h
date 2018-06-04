@@ -1578,36 +1578,50 @@ typedef struct _dwg_entity_MTEXT
 {
   struct _dwg_object_entity *parent;
 
-  BITCODE_3BD insertion_pt;
-  BITCODE_3BD extrusion;
-  BITCODE_3BD x_axis_dir;
-  BITCODE_BD rect_height;
-  BITCODE_BD rect_width;
-  BITCODE_BD text_height;
-  BITCODE_BS attachment;
-  BITCODE_BS drawing_dir;
-  BITCODE_BD extents_height; /* spec typo? */
-  BITCODE_BD extents_width;
-  BITCODE_TV text;
-  BITCODE_H style;
-  BITCODE_BS linespace_style;
-  BITCODE_BD linespace_factor;
+  BITCODE_3BD insertion_pt;/*!< DXF 10 */
+  BITCODE_3BD extrusion;   /*!< DXF 210 */
+  BITCODE_3BD x_axis_dir;  /*!< DXF 1 */
+  BITCODE_BD rect_height;  /*!< no DXF */
+  BITCODE_BD rect_width;   /*!< DXF 41 */
+  BITCODE_BD text_height;  /*!< DXF 40 */
+  BITCODE_BS attachment;   /*!< DXF 71.
+                             1 = Top left, 2 = Top center, 3 = Top
+                             right, 4 = Middle left, 5 = Middle
+                             center, 6 = Middle right, 7 = Bottom
+                             left, 8 = Bottom center, 9 = Bottom
+                             right */
+  BITCODE_BS drawing_dir;  /*!< DXF 72.
+                            1 = Left to right, 3 = Top to bottom,
+                            5 = By style (the flow direction is inherited
+                            from the associated text style) */
+  BITCODE_BD extents_height; /*!< DXF 42 */
+  BITCODE_BD extents_width;  /*!< DXF 43 */
+  BITCODE_TV text;	     /*!< DXF 1 */
+  BITCODE_H style;           /*!< DXF 7 */
+  BITCODE_BS linespace_style; /*!< DXF 73. r2000+ */
+  BITCODE_BD linespace_factor;/*!< DXF 44. r2000+. Mtext line spacing factor (optional):
+                               Percentage of default (3-on-5) line spacing to
+                               be applied. Valid values range from 0.25 to 4.00 */
   BITCODE_B unknown_bit;
-  BITCODE_BL bg_flag;
-  BITCODE_BL bg_scale_factor;
-  BITCODE_CMC bg_color;
-  BITCODE_BL bg_transparent;
-  BITCODE_B annotative;
+  BITCODE_BL bg_fill_flag;   /*!< DXF 90. r2004+
+                               0 = Background fill off,
+                               1 = Use background fill color,
+                               2 = Use drawing window color as background fill color. */
+  BITCODE_BL bg_fill_scale;  /*!< DXF 45. r2004+
+                               margin around the text. */
+  BITCODE_CMC bg_fill_color; /*!< DXF 63. r2004+. on bg_fill_flag==1 */
+  BITCODE_BL bg_fill_trans;  /*!< DXF 441. r2004+. unused */
+  BITCODE_B annotative;      /*!< r2018+: */
   BITCODE_BS class_version;
   BITCODE_B default_flag;
-  BITCODE_H reg_app;
-  BITCODE_BL column_type;
-  BITCODE_BL num_column_heights;
-  BITCODE_BD column_width;
-  BITCODE_BD gutter;
-  BITCODE_B auto_height;
-  BITCODE_B flow_reversed;
-  BITCODE_BD *column_heights;
+  BITCODE_H appid;
+  BITCODE_BL column_type;    /*!< DXF 75 */
+  BITCODE_BL num_column_heights;/*!< DXF 76 */
+  BITCODE_BD column_width;   /*!< DXF 48 */
+  BITCODE_BD gutter;         /*!< DXF 49 */
+  BITCODE_B auto_height;     /*!< DXF 79 */
+  BITCODE_B flow_reversed;   /*!< DXF 74 */
+  BITCODE_BD *column_heights;/*!< DXF 50 */
 } Dwg_Entity_MTEXT;
 
 /**

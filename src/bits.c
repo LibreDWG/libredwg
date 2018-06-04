@@ -1298,7 +1298,7 @@ bit_convert_TU(BITCODE_TU restrict wstr)
   return str;
 }
 
-/* converts UTF-8 to UCS-2 */
+/** converts UTF-8 to UCS-2. Returns a copy */
 BITCODE_TU
 bit_utf8_to_TU(char* restrict str)
 {

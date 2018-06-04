@@ -7882,18 +7882,18 @@ dwg_ent_mtext_get_extrusion(const dwg_ent_mtext *restrict mtext,
 
 }
 
-/// Sets mtext x axis dir
+/// Sets the _dwg_entity_MTEXT::x_axis_dir vector, DXF 11 (in WCS)
 void
 dwg_ent_mtext_set_x_axis_dir(dwg_ent_mtext *restrict mtext,
-                             const dwg_point_3d *restrict point,
+                             const dwg_point_3d *restrict vector,
                              int *restrict error)
 {
-  if (mtext && point)
+  if (mtext && vector)
     {
       *error = 0;
-      mtext->x_axis_dir.x = point->x;
-      mtext->x_axis_dir.y = point->y;
-      mtext->x_axis_dir.z = point->z;
+      mtext->x_axis_dir.x = vector->x;
+      mtext->x_axis_dir.y = vector->y;
+      mtext->x_axis_dir.z = vector->z;
     }
   else
     {
@@ -7903,18 +7903,18 @@ dwg_ent_mtext_set_x_axis_dir(dwg_ent_mtext *restrict mtext,
 
 }
 
-/// Returns mtext x axis dir
+/// Returns the _dwg_entity_MTEXT::x_axis_dir vector, DXF 11 (in WCS)
 void
 dwg_ent_mtext_get_x_axis_dir(const dwg_ent_mtext *restrict mtext,
-                             dwg_point_3d *restrict point,
+                             dwg_point_3d *restrict vector,
                              int *restrict error)
 {
-  if (mtext && point)
+  if (mtext && vector)
     {
       *error = 0;
-      point->x = mtext->x_axis_dir.x;
-      point->y = mtext->x_axis_dir.y;
-      point->z = mtext->x_axis_dir.z;
+      vector->x = mtext->x_axis_dir.x;
+      vector->y = mtext->x_axis_dir.y;
+      vector->z = mtext->x_axis_dir.z;
     }
   else
     {
@@ -7924,7 +7924,7 @@ dwg_ent_mtext_get_x_axis_dir(const dwg_ent_mtext *restrict mtext,
 
 }
 
-/// Sets mtext rect height
+/// Sets the _dwg_entity_MTEXT::rect_height, no DXF
 void
 dwg_ent_mtext_set_rect_height(dwg_ent_mtext *restrict mtext,
                               const double rect_height,
@@ -7942,7 +7942,7 @@ dwg_ent_mtext_set_rect_height(dwg_ent_mtext *restrict mtext,
     }
 }
 
-/// Returns mtext rect height
+/// Returns the _dwg_entity_MTEXT::rect_height, no DXF
 double
 dwg_ent_mtext_get_rect_height(const dwg_ent_mtext *restrict mtext,
                           int *restrict error)
@@ -7960,7 +7960,7 @@ dwg_ent_mtext_get_rect_height(const dwg_ent_mtext *restrict mtext,
     }
 }
 
-/// Sets mtext rect width
+/// Sets the _dwg_entity_MTEXT::rect_width, DXF 41.
 void
 dwg_ent_mtext_set_rect_width(dwg_ent_mtext *restrict mtext,
                              const double rect_width,
@@ -7979,7 +7979,7 @@ dwg_ent_mtext_set_rect_width(dwg_ent_mtext *restrict mtext,
 
 }
 
-/// Returns mtext rect width
+/// Returns the _dwg_entity_MTEXT::rect_width, DXF 41.
 double
 dwg_ent_mtext_get_rect_width(const dwg_ent_mtext *restrict mtext,
                           int *restrict error)
@@ -7997,7 +7997,7 @@ dwg_ent_mtext_get_rect_width(const dwg_ent_mtext *restrict mtext,
     }
 }
 
-/// Sets mtext text height
+/// Sets the _dwg_entity_MTEXT::text_height, DXF 40.
 void
 dwg_ent_mtext_set_text_height(dwg_ent_mtext *restrict mtext,
                               const double text_height,
@@ -8016,7 +8016,7 @@ dwg_ent_mtext_set_text_height(dwg_ent_mtext *restrict mtext,
 
 }
 
-/// Returns mtext text height
+/// Returns the _dwg_entity_MTEXT::text_height, DXF 40.
 double
 dwg_ent_mtext_get_text_height(const dwg_ent_mtext *restrict mtext,
                           int *restrict error)
@@ -8034,10 +8034,10 @@ dwg_ent_mtext_get_text_height(const dwg_ent_mtext *restrict mtext,
     }
 }
 
-/// Returns mtext attachment
+/// Returns the _dwg_entity_MTEXT::attachment flag, DXF 71.
 BITCODE_BS
 dwg_ent_mtext_get_attachment(const dwg_ent_mtext *restrict mtext,
-                          int *restrict error)
+                             int *restrict error)
 {
   if (mtext)
     {
@@ -8052,9 +8052,10 @@ dwg_ent_mtext_get_attachment(const dwg_ent_mtext *restrict mtext,
     }
 }
 
-/// Sets mtext attachment
+/// Sets the _dwg_entity_MTEXT::attachment flag, DXF 71.
 void
-dwg_ent_mtext_set_attachment(dwg_ent_mtext *restrict mtext, BITCODE_BS attachment,
+dwg_ent_mtext_set_attachment(dwg_ent_mtext *restrict mtext,
+                             const BITCODE_BS attachment,
                              int *restrict error)
 {
   if (mtext)
@@ -8070,7 +8071,7 @@ dwg_ent_mtext_set_attachment(dwg_ent_mtext *restrict mtext, BITCODE_BS attachmen
 
 }
 
-/// Returns mtext drawing dir
+/// Returns the _dwg_entity_MTEXT::drawing_dir flag, DXF 72.
 BITCODE_BS
 dwg_ent_mtext_get_drawing_dir(const dwg_ent_mtext *restrict mtext,
                           int *restrict error)
@@ -8088,9 +8089,10 @@ dwg_ent_mtext_get_drawing_dir(const dwg_ent_mtext *restrict mtext,
     }
 }
 
-/// Sets mtext drawing dir
+/// Sets the _dwg_entity_MTEXT::drawing_dir flag, DXF 72.
 void
-dwg_ent_mtext_set_drawing_dir(dwg_ent_mtext *restrict mtext, BITCODE_BS dir,
+dwg_ent_mtext_set_drawing_dir(dwg_ent_mtext *restrict mtext,
+                              const BITCODE_BS dir,
                               int *restrict error)
 {
   if (mtext)
@@ -8106,7 +8108,7 @@ dwg_ent_mtext_set_drawing_dir(dwg_ent_mtext *restrict mtext, BITCODE_BS dir,
 
 }
 
-/// Returns mtext extents_height
+/// Returns the _dwg_entity_MTEXT::extents_height, DXF 42.
 double
 dwg_ent_mtext_get_extents_height(const dwg_ent_mtext *restrict mtext,
                           int *restrict error)
@@ -8124,16 +8126,16 @@ dwg_ent_mtext_get_extents_height(const dwg_ent_mtext *restrict mtext,
     }
 }
 
-/// Sets mtext 
+/// Sets the _dwg_entity_MTEXT::extents_height, DXF 42.
 void
 dwg_ent_mtext_set_extents_height(dwg_ent_mtext *restrict mtext,
-                          const double ht,
-                          int *restrict error)
+                                 const double height,
+                                 int *restrict error)
 {
   if (mtext)
     {
       *error = 0;
-      mtext->extents_height = ht;
+      mtext->extents_height = height;
     }
   else
     {
@@ -8143,7 +8145,7 @@ dwg_ent_mtext_set_extents_height(dwg_ent_mtext *restrict mtext,
 
 }
 
-/// Returns mtext extents width
+/// Returns the _dwg_entity_MTEXT::extents_width, DXF 43.
 double
 dwg_ent_mtext_get_extents_width(const dwg_ent_mtext *restrict mtext,
                           int *restrict error)
@@ -8161,11 +8163,11 @@ dwg_ent_mtext_get_extents_width(const dwg_ent_mtext *restrict mtext,
     }
 }
 
-/// Sets mtext extents_width
+/// Sets the _dwg_entity_MTEXT::extents_width, DXF 43.
 void
 dwg_ent_mtext_set_extents_width(dwg_ent_mtext *restrict mtext,
-                          const double wid,
-                          int *restrict error)
+                                const double wid,
+                                int *restrict error)
 {
   if (mtext)
     {
@@ -8183,15 +8185,15 @@ dwg_ent_mtext_set_extents_width(dwg_ent_mtext *restrict mtext,
 /// Returns mtext text value (utf-8 encoded)
 char *
 dwg_ent_mtext_get_text(const dwg_ent_mtext *restrict ent,
-                          int *restrict error)
+                       int *restrict error)
 {
   if (ent)
     {
       *error = 0;
       if (dwg_version >= R_2007)
-        return bit_convert_TU((BITCODE_TU)ent->text);
+        return bit_convert_TU((BITCODE_TU)ent->text); // a copy
       else
-        return ent->text;
+        return ent->text; // the ref
     }
   else
     {

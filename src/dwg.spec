@@ -1750,15 +1750,15 @@ DWG_ENTITY(MTEXT)
 
   FIELD_BD (rect_width, 41);
   SINCE(R_2007) {
-    FIELD_BD (rect_height, 46);
+    FIELD_BD (rect_height, 0);
   }
 
   FIELD_BD (text_height, 40);
   FIELD_BS (attachment, 71);
   FIELD_BS (drawing_dir, 72);
-  FIELD_BD (extents_height, 0); //not documented
-  FIELD_BD (extents_width, 0);
-  FIELD_T (text, 1); // or 3
+  FIELD_BD (extents_height, 42);
+  FIELD_BD (extents_width, 43);
+  FIELD_T (text, 1); // or 3 if >250
   /* doc error:
   UNTIL(R_2007) {
     FIELD_HANDLE (style, 5, 7);
@@ -1774,12 +1774,12 @@ DWG_ENTITY(MTEXT)
 
   SINCE(R_2004)
     {
-      FIELD_BL (bg_flag, 90);
-      if (FIELD_VALUE(bg_flag) & (dat->version <= R_2018 ? 1 : 0x10))
+      FIELD_BL (bg_fill_flag, 90);
+      if (FIELD_VALUE(bg_fill_flag) & (dat->version <= R_2018 ? 1 : 0x10))
         {
-          FIELD_BL (bg_scale_factor, 45); // def: 1.5
-          FIELD_CMC (bg_color, 63);
-          FIELD_BL (bg_transparent, 441);
+          FIELD_BL (bg_fill_scale, 45); // def: 1.5
+          FIELD_CMC (bg_fill_color, 63);
+          FIELD_BL (bg_fill_trans, 441);
         }
     }
   SINCE(R_2018)
@@ -1790,27 +1790,27 @@ DWG_ENTITY(MTEXT)
           FIELD_BS (class_version, 0); // def: 0
           FIELD_B (default_flag, 0);   // def: 1
         }
+      FIELD_HANDLE (appid, 5, 0);
       // redundant fields
-      FIELD_HANDLE (reg_app, 5, 0);
-      FIELD_BL (attachment, 0);
+      FIELD_BL (attachment, 71);
       FIELD_3BD (x_axis_dir, 10);
       FIELD_3BD (insertion_pt, 11);
-      FIELD_BD (rect_width, 40);
-      FIELD_BD (rect_height, 41);
+      FIELD_BD (rect_width, 41);
+      FIELD_BD (rect_height, 0);
       FIELD_BD (extents_width, 42);
       FIELD_BD (extents_height, 43);
       // end redundant fields
-      FIELD_BL (column_type, 71);
+      FIELD_BL (column_type, 75);
       if (FIELD_VALUE(column_type))
         {
-          FIELD_BL (num_column_heights, 72);
-          FIELD_BD (column_width, 44);
-          FIELD_BD (gutter, 45);
-          FIELD_B (auto_height, 73);
+          FIELD_BL (num_column_heights, 76);
+          FIELD_BD (column_width, 48);
+          FIELD_BD (gutter, 49);
+          FIELD_B (auto_height, 79);
           FIELD_B (flow_reversed, 74);
           if (!FIELD_VALUE(auto_height) && FIELD_VALUE(column_type) == 2)
             {
-              FIELD_VECTOR (column_heights, BD, num_column_heights, 46);
+              FIELD_VECTOR (column_heights, BD, num_column_heights, 50);
             }
         }
     }
@@ -5221,3 +5221,4 @@ DWG_OBJECT(TABLESTYLE)
 DWG_OBJECT_END
 
 */
+
