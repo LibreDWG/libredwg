@@ -2237,7 +2237,7 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
           int lenc;
           BITCODE_RS lens;
 
-          obj->eed[idx].data = (Dwg_Eed_Data*)calloc(size + 2, 1);
+          obj->eed[idx].data = (Dwg_Eed_Data*)calloc(size + 8, 1);
           obj->eed[idx].data->code = code = bit_read_RC(dat);
           LOG_TRACE("EED[%u] code: %d\n", idx, (int)code);
           switch (code)
@@ -2314,7 +2314,8 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
               LOG_TRACE("EED[%u] long: " FORMAT_RL "\n", idx, obj->eed[idx].data->u.eed_71.rl);
               break;
             default:
-              LOG_WARN("Unknown EED code %d", code);
+              LOG_ERROR("Unknown EED code %d", code);
+              return 1;
             }
 #ifdef DEBUG
           // sanity checks
@@ -2502,7 +2503,7 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
                   name = bit_read_TV(dat);
                   ent->color.index = 0;
                   ent->color.rgb   = c1 << 24 | c2 << 16 | c3 << 8 | c4;
-                  strcpy(ent->color.name, name);
+                  ent->color.name  = name;
                 }
 
               /*if (flags & 0x4000)
@@ -3196,7 +3197,7 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
 
   if ((obj->type - 500) > dwg->num_classes)
     {
-      LOG_WARN("Invalid object type %d, only %d classes", obj->type, dwg->num_classes);
+      LOG_ERROR("Invalid object type %d, only %d classes", obj->type, dwg->num_classes);
       return 0;
     }
 
@@ -3877,7 +3878,7 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
 
       else if (!dwg_decode_variable_type(dwg, dat, hdl_dat, obj))
         {
-          int is_entity;
+          int is_entity = 0;
           int i = obj->type - 500;
           Dwg_Class *klass = NULL;
           BITCODE_MS size;
@@ -3894,11 +3895,20 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
           size = bit_read_MS(dat);
           type = bit_read_BS(dat);
 
-          if (i <= (int)dwg->num_classes)
+          if (i > 0 && i <= (int)dwg->num_classes)
             {
               klass = &dwg->dwg_class[i];
               is_entity = dwg_class_is_entity(klass);
             }
+          else if (size > 0xffff) {
+            LOG_ERROR("Invalid object type %d and size %lu", type, size);
+            obj->supertype = DWG_SUPERTYPE_UNKNOWN;
+            obj->type = 0;
+            obj->size = 0;
+            dat->byte = oldpos;
+            dat->bit  = previous_bit;
+            return 0;
+          }
           // properly dwg_decode_object/_entity for eed, reactors, xdic
           if (klass && !is_entity)
             {

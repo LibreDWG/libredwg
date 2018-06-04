@@ -739,7 +739,7 @@ get_next_owned_object(const Dwg_Object* hdr_obj, const Dwg_Object* current,
 int
 dwg_class_is_entity(const Dwg_Class *klass)
 {
-  return klass->item_class_id == 0x1f2;
+  return klass && klass->item_class_id == 0x1f2;
 }
 
 int

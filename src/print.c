@@ -830,11 +830,11 @@ dwg_print_object(Bit_Chain* dat, Dwg_Object *obj)
       else if (!dwg_print_variable_type(obj->parent, dat, obj))
         {
           Dwg_Data *dwg = obj->parent;
-          int is_entity;
+          int is_entity = 0;
           int i = obj->type - 500;
           Dwg_Class *klass = NULL;
 
-          if (i <= (int)dwg->num_classes)
+          if (i > 0 && i <= (int)dwg->num_classes)
             {
               klass = &dwg->dwg_class[i];
               is_entity = dwg_class_is_entity(klass);
