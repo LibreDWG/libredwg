@@ -1110,30 +1110,32 @@ section_string_stream(Bit_Chain *restrict dat, BITCODE_RL bitsize,
   }
   *str = *dat;
   bit_set_position(str, start);
-  LOG_TRACE("section string stream\n  pos: %u, %lu/%u\n", start, str->byte, str->bit);
+  LOG_TRACE("section string stream\n  pos: " FORMAT_RL ", %lu/%u\n",
+            start, str->byte, str->bit);
   endbit = bit_read_B(str);
   LOG_HANDLE("  endbit: %d\n", (int)endbit);
   if (!endbit)
     return; // i.e. has no strings. without data_size should be 0
   start -= 16;
   bit_set_position(str, start);
-  LOG_HANDLE("  pos: %u, %lu\n", start, str->byte);
+  LOG_HANDLE("  pos: " FORMAT_RL ", %lu\n", start, str->byte);
   //str->bit = start & 7;
   data_size = bit_read_RS(str);
-  LOG_HANDLE("  data_size: %u\n", data_size);
+  LOG_HANDLE("  data_size: " FORMAT_RL "\n", data_size);
   if (data_size & 0x8000) {
     BITCODE_RS hi_size;
     start -= 16;
     data_size &= 0x7FFF;
     bit_set_position(str, start);
-    LOG_HANDLE("  pos: %u, %lu\n", start, str->byte);
+    LOG_HANDLE("  pos: " FORMAT_RL ", %lu\n", start, str->byte);
     hi_size = bit_read_RS(str);
     data_size |= (hi_size << 15);
-    LOG_HANDLE("  hi_size: %u, data_size: %lu\n", hi_size, data_size);
+    LOG_HANDLE("  hi_size: " FORMAT_RS ", data_size: " FORMAT_RL "\n",
+               hi_size, data_size);
   }
   start -= data_size;
   bit_set_position(str, start);
-  LOG_HANDLE("  pos: %u, %lu/%u\n", start, str->byte, str->bit);
+  LOG_HANDLE("  pos: " FORMAT_RL ", %lu/%u\n", start, str->byte, str->bit);
 }
 
 // for string stream see p86
