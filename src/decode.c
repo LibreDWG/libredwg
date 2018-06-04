@@ -3217,7 +3217,6 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
 
   if (!strcmp(dxfname, "ACDBDICTIONARYWDFLT"))
     {
-      //UNTESTED_CLASS;
       assert(!is_entity);
       dwg_decode_DICTIONARYWDLFT(dat, obj);
       //obj->type = DWG_TYPE_DICTIONARYWDLFT;
@@ -3359,7 +3358,6 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
     }
   if (!strcmp(dxfname, "SCALE"))
     {
-      //UNTESTED_CLASS;
       assert(!is_entity);
       dwg_decode_SCALE(dat, obj);
       return 1;
@@ -3534,15 +3532,6 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
            klass->number, dxfname, klass->proxyflag,                    \
            klass->wasazombie ? " was proxy" : "")
 
-  /* TODO: CELLSTYLEMAP, DBCOLOR, MATERIAL, MLEADER, MLEADERSTYLE,
-     PLOTSETTINGS, SCALE, TABLEGEOMETRY,
-     TABLESTYLE, VBA_PROJECT, VISUALSTYLE, WIPEOUTVARIABLE,
-     ACDBSECTIONVIEWSTYLE, ACDBDETAILVIEWSTYLE,
-     NPOCOLLECTION, EXACXREFPANELOBJECT,
-     ARCALIGNEDTEXT (2000+), UNDERLAYDEFINITION (2 strings),
-     AcDbObjectContextData,
-     AcDbAnnotScaleObjectContextData (H 340)
-  */
 #undef UNHANDLED_CLASS
 #undef UNTESTED_CLASS
 

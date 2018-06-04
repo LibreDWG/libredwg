@@ -1,16 +1,24 @@
 * pre-R13: finish remaining entities and the blocks.
+* MATERIAL (in work)
 * PROXY subentities, PROXY_ENTITY
 * CELLSTYLEMAP TABLE_Cell struct
+* MULTILEADER: broken Leader_Line's/Points
 * DIMSTYLE_CONTROL: one R2000+ RC missing
-* SPATIAL_INDEX class/object untested
-* WIPEOUTVARIABLE class/object untested
-* link VBA_PROJECT object to its section, and vice versa
-* ACIS: implement parsing of SAT file version 2,
-  in ACIS entities 37, 38 and 39
 * r2010+ Some AEC EED (Autodesk Architectural Desktop) objects.
+* Untested: FIELDLIST, AcDbField, TABLECONTENT, TABLEGEOMETRY, GEODATA,
+  WIPEOUTVARIABLE
+* Unhandled (i.e. passed through): MATERIAL, CELLSTYLEMAP,
+  MULTILEADER, PROXY, PROXY_ENTITY, DBCOLOR, PLOTSETTINGS, TABLESTYLE,
+  VBA_PROJECT, DIMASSOC, ACDBSECTIONVIEWSTYLE, ACDBDETAILVIEWSTYLE,
+  ACDBASSOCNETWORK, ACDBASSOC2DCONSTRAINTGROUP,
+  ACDBASSOCGEOMDEPENDENCY, ACDB_LEADEROBJECTCONTEXTDATA_CLASS,
+  NPOCOLLECTION, EXACXREFPANELOBJECT, ARCALIGNEDTEXT (2000+),
+  UNDERLAYDEFINITION (2 strings), OBJECTCONTEXTDATA,
+  AcDbAnnotScaleObjectContextDatax
+
 * convert XRECORD xdata linked-list ResBuf to array of eed[],
   same structure as common EED.
-
+* link VBA_PROJECT object to its section, and vice versa
 * merge decode_r2007 with the 2004 decoder. It is almost the same, just
   the sections have multiple pages. Only for this version. 2010+ uses
   the 2004 format.
@@ -29,6 +37,8 @@
 * add geomutils to tesselate curves (e.g. GeomJSON),
   and to transform OCS/UCS objects when being displayed (e.g. svg, ps).
   add API funcs to find table elements (layer, ltype).
+* ACIS: implement parsing of SAT file version 2,
+  in ACIS entities 37, 38 and 39
 * map DWG constraints to FreeCAD and SolveSpace constraints
   https://www.freecadweb.org/wiki/Sketcher_Workbench#Sketcher_Constraints
 * check valabind vapi files to generate more and better bindings
