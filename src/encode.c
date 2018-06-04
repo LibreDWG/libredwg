@@ -168,6 +168,8 @@ static bool env_var_checked_p;
     }
 
 #define REACTORS(code)\
+  if (dat->version >= R_2000 && obj->tio.object->num_reactors > 0x1000) { \
+    fprintf(stderr, "Invalid num_reactors: %ld\n", (long)obj->tio.object->num_reactors); return; } \
   for (vcount=0; vcount < (long)obj->tio.object->num_reactors; vcount++) \
     {\
       FIELD_HANDLE_N(reactors[vcount], vcount, code, -5);    \
@@ -323,22 +325,6 @@ static bool env_var_checked_p;
   if (dat->version >= R_2007) bit_set_position(hdl_dat, obj->hdlpos); \
   RESET_VER
 
-//TODO unify REPEAT macros
-#define REPEAT_N(times, name, type) \
-  for (rcount=0; (long)rcount<(long)times; rcount++)
-
-#define REPEAT(times, name, type) \
-  for (rcount=0; (long)rcount<(long)_obj->times; rcount++)
-
-#define REPEAT2(times, name, type) \
-  for (rcount2=0; (long)rcount2<(long)_obj->times; rcount2++)
-
-#define REPEAT3(times, name, type) \
-  for (rcount3=0; (long)rcount3<(long)_obj->times; rcount3++)
-
-#define REPEAT4(times, name, type) \
-  for (rcount4=0; (long)rcount4<(long)_obj->times; rcount4++)
-
 /* returns -1 if not added, else returns the new objid.
    does a complete handleref rescan to invalidate and resolve
    all internal obj pointers after a realloc.
@@ -370,7 +356,7 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)    \
 \
 static void dwg_encode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
-  long vcount, rcount, rcount2, rcount3, rcount4; \
+  long vcount, rcount1, rcount2, rcount3, rcount4; \
   Dwg_Data* dwg = obj->parent; \
   Dwg_Object_Entity *_ent = obj->tio.entity; \
   Dwg_Entity_##token * _obj = _ent->tio.token; \
@@ -422,7 +408,7 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
 \
 static void dwg_encode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
-  long vcount, rcount, rcount2, rcount3, rcount4; \
+  long vcount, rcount1, rcount2, rcount3, rcount4; \
   Dwg_Data* dwg = obj->parent; \
   Bit_Chain* hdl_dat = dat; \
   Bit_Chain* str_dat = dat; \
@@ -446,6 +432,8 @@ static void dwg_encode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict ob
 }
 
 #define ENT_REACTORS(code)\
+  if (dat->version >= R_2000 && _obj->num_reactors > 0x1000) { \
+    fprintf(stderr, "Invalid num_reactors: %ld\n", (long)_obj->num_reactors); return; } \
   for (vcount=0; vcount < _obj->num_reactors; vcount++)\
     {\
       FIELD_HANDLE_N(reactors[vcount], vcount, code, -5); \

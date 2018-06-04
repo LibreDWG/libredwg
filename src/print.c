@@ -125,18 +125,18 @@ static unsigned int cur_ver = 0;
 #define FIELD_VECTOR_N(name, type, size, dxf)\
   if (size>0)\
     {\
-      for (vcount=0; vcount < (int)size; vcount++)\
+      for (vcount=0; vcount < (long)size; vcount++)\
         {\
-          LOG_TRACE(#name "[%d]: " FORMAT_##type "\n", vcount, _obj->name[vcount])\
+          LOG_TRACE(#name "[%ld]: " FORMAT_##type "\n", vcount, _obj->name[vcount])\
         }\
     }
 #define FIELD_VECTOR_T(name, size, dxf)\
   if (_obj->size > 0)\
     {\
-      for (vcount=0; vcount < (int)_obj->size; vcount++)\
+      for (vcount=0; vcount < (long)_obj->size; vcount++)\
         {\
           PRE (R_2007) { \
-            LOG_TRACE(#name "[%d]: %s\n", vcount, _obj->name[vcount]) \
+            LOG_TRACE(#name "[%ld]: %s\n", vcount, _obj->name[vcount]) \
           } else { \
             LOG_TRACE_TU(#name, _obj->name[vcount], dxf) \
           } \
@@ -146,26 +146,26 @@ static unsigned int cur_ver = 0;
 #define FIELD_VECTOR(name, type, size, dxf) FIELD_VECTOR_N(name, type, _obj->size, dxf)
 
 #define FIELD_2RD_VECTOR(name, size, dxf)\
-  for (vcount=0; vcount < (int)_obj->size; vcount++)\
+  for (vcount=0; vcount < (long)_obj->size; vcount++)\
     {\
       FIELD_2RD(name[vcount], dxf);\
     }
 
 #define FIELD_2DD_VECTOR(name, size, dxf)\
   FIELD_2RD(name[0], 0);\
-  for (vcount = 1; vcount < (int)_obj->size; vcount++)\
+  for (vcount = 1; vcount < (long)_obj->size; vcount++)\
     {\
       FIELD_2DD(name[vcount], FIELD_VALUE(name[vcount - 1].x), FIELD_VALUE(name[vcount - 1].y), dxf);\
     }
 
 #define FIELD_3DPOINT_VECTOR(name, size, dxf)\
-  for (vcount=0; vcount < (int)_obj->size; vcount++)\
+  for (vcount=0; vcount < (long)_obj->size; vcount++)\
     {\
       FIELD_3DPOINT(name[vcount], dxf);\
     }
 
 #define HANDLE_VECTOR_N(name, size, code, dxf) \
-  for (vcount=0; vcount < (int)size; vcount++)\
+  for (vcount=0; vcount < (long)size; vcount++)\
     {\
       FIELD_HANDLE_N(name[vcount], vcount, code, dxf);\
     }
@@ -179,7 +179,9 @@ static unsigned int cur_ver = 0;
 #define FIELD_XDATA(name, size)
 
 #define REACTORS(code)\
-  for (vcount=0; vcount < (int)obj->tio.object->num_reactors; vcount++)\
+  if (dat->version >= R_2000 && obj->tio.object->num_reactors > 0x1000) { \
+    fprintf(stderr, "Invalid num_reactors: %ld\n", (long)obj->tio.object->num_reactors); return; } \
+  for (vcount=0; vcount < (long)obj->tio.object->num_reactors; vcount++)\
     {\
       FIELD_HANDLE_N(reactors[vcount], vcount, code, dxf);\
     }
@@ -194,21 +196,6 @@ static unsigned int cur_ver = 0;
     {\
       FIELD_HANDLE(xdicobjhandle, code, dxf);\
     }
-
-#define REPEAT_N(times, name, type) \
-  for (rcount=0; rcount<(int)times; rcount++)
-
-#define REPEAT(times, name, type) \
-  for (rcount=0; rcount<(int)_obj->times; rcount++)
-
-#define REPEAT2(times, name, type) \
-  for (rcount2=0; rcount2<(int)_obj->times; rcount2++)
-
-#define REPEAT3(times, name, type) \
-  for (rcount3=0; rcount3<(int)_obj->times; rcount3++)
-
-#define REPEAT4(times, name, type) \
-  for (rcount4=0; rcount4<(int)_obj->times; rcount4++)
 
 #define COMMON_ENTITY_HANDLE_DATA /*  Empty */
 #define SECTION_STRING_STREAM \
@@ -231,7 +218,7 @@ static unsigned int cur_ver = 0;
 static void \
 dwg_print_##token (Bit_Chain * dat, Dwg_Object * obj)\
 {\
-  int vcount, rcount, rcount2, rcount3, rcount4; \
+  long vcount, rcount1, rcount2, rcount3, rcount4; \
   Dwg_Entity_##token *ent, *_obj;\
   Dwg_Object_Entity *_ent;\
   Bit_Chain *hdl_dat = dat;\
@@ -250,7 +237,7 @@ dwg_print_##token (Bit_Chain * dat, Dwg_Object * obj)\
 static void \
 dwg_print_ ##token (Bit_Chain * dat, Dwg_Object * obj) \
 { \
-  int vcount, rcount, rcount2, rcount3, rcount4;\
+  long vcount, rcount1, rcount2, rcount3, rcount4;\
   Dwg_Object_##token *_obj;\
   Bit_Chain *hdl_dat = dat;\
   Bit_Chain* str_dat = dat;\

@@ -1374,23 +1374,23 @@ DWG_ENTITY(SPLINE)
   if (FIELD_VALUE(scenario) & 1) {
     REPEAT(num_knots, knots, BITCODE_BD)
       {
-        FIELD_BD (knots[rcount], 40);
+        FIELD_BD (knots[rcount1], 40);
       }
     END_REPEAT(knots);
     REPEAT(num_ctrl_pts, ctrl_pts, Dwg_Entity_SPLINE_control_point)
       {
-        FIELD_3BD (ctrl_pts[rcount], 10);
+        FIELD_3BD (ctrl_pts[rcount1], 10);
         if (!FIELD_VALUE(weighted))
-            FIELD_VALUE(ctrl_pts[rcount].w) = 0; // skipped when encoding
+            FIELD_VALUE(ctrl_pts[rcount1].w) = 0; // skipped when encoding
         else
-          FIELD_BD (ctrl_pts[rcount].w, 41);
+          FIELD_BD (ctrl_pts[rcount1].w, 41);
       }
     END_REPEAT(ctrl_pts);
   }
   if (FIELD_VALUE(scenario) & 2) {
     REPEAT(num_fit_pts, fit_pts, Dwg_Entity_SPLINE_point)
       {
-        FIELD_3BD (fit_pts[rcount], 11);
+        FIELD_3BD (fit_pts[rcount1], 11);
       }
     END_REPEAT(fit_pts);
   }
@@ -1428,7 +1428,7 @@ void decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Ent
 void decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
 {
   Dwg_Data* dwg = obj->parent;
-  int vcount, rcount, rcount2;
+  int vcount, rcount1, rcount2;
   int i=0;
   unsigned long j;
   int index;
@@ -1502,24 +1502,24 @@ void decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Ent
               FIELD_BL (num_wires, 0);
               REPEAT(num_wires, wires, Dwg_Entity_3DSOLID_wire)
                 {
-                  PARSE_WIRE_STRUCT(wires[rcount])
+                  PARSE_WIRE_STRUCT(wires[rcount1])
                 }
               END_REPEAT(wires);
               FIELD_BL (num_silhouettes, 0);
               REPEAT(num_silhouettes, silhouettes, Dwg_Entity_3DSOLID_silhouette)
                 {
-                  FIELD_BL (silhouettes[rcount].vp_id, 0);
-                  FIELD_3BD (silhouettes[rcount].vp_target, 0);
-                  FIELD_3BD (silhouettes[rcount].vp_dir_from_target, 0);
-                  FIELD_3BD (silhouettes[rcount].vp_up_dir, 0);
-                  FIELD_B (silhouettes[rcount].vp_perspective, 0);
-                  FIELD_BL (silhouettes[rcount].num_wires, 0);
-                  REPEAT2(silhouettes[rcount].num_wires, silhouettes[rcount].wires,
+                  FIELD_BL (silhouettes[rcount1].vp_id, 0);
+                  FIELD_3BD (silhouettes[rcount1].vp_target, 0);
+                  FIELD_3BD (silhouettes[rcount1].vp_dir_from_target, 0);
+                  FIELD_3BD (silhouettes[rcount1].vp_up_dir, 0);
+                  FIELD_B (silhouettes[rcount1].vp_perspective, 0);
+                  FIELD_BL (silhouettes[rcount1].num_wires, 0);
+                  REPEAT2(silhouettes[rcount1].num_wires, silhouettes[rcount1].wires,
                           Dwg_Entity_3DSOLID_wire)
                     {
-                      PARSE_WIRE_STRUCT(silhouettes[rcount].wires[rcount2])
+                      PARSE_WIRE_STRUCT(silhouettes[rcount1].wires[rcount2])
                     }
-                  END_REPEAT(silhouettes[rcount].wires);
+                  END_REPEAT(silhouettes[rcount1].wires);
                 }
               END_REPEAT(silhouettes);
             }
@@ -1669,8 +1669,8 @@ DWG_OBJECT(DICTIONARY)
     if (FIELD_VALUE(itemhandles) && FIELD_VALUE(text)) {
       REPEAT(numitems, text, T)
       {
-        FIELD_T (text[rcount], 3);
-        VALUE_HANDLE (_obj->itemhandles[rcount], 2, 350);
+        FIELD_T (text[rcount1], 3);
+        VALUE_HANDLE (_obj->itemhandles[rcount1], 2, 350);
       }
     }
     END_REPEAT(text)
@@ -1915,32 +1915,32 @@ DWG_ENTITY(MLINE)
 
   REPEAT(num_verts, verts, Dwg_MLINE_vertex)
     {
-      FIELD_3DPOINT (verts[rcount].vertex, 10);
-      FIELD_3DPOINT (verts[rcount].vertex_direction, 210);
-      FIELD_3DPOINT (verts[rcount].miter_direction, 11);
+      FIELD_3DPOINT (verts[rcount1].vertex, 10);
+      FIELD_3DPOINT (verts[rcount1].vertex_direction, 210);
+      FIELD_3DPOINT (verts[rcount1].miter_direction, 11);
 
-      REPEAT2(num_lines, verts[rcount].lines, Dwg_MLINE_line)
+      REPEAT2_C(num_lines, verts[rcount1].lines, Dwg_MLINE_line)
         {
-          FIELD_BS (verts[rcount].lines[rcount2].num_segparms, 74);
-          REPEAT3(verts[rcount].lines[rcount2].num_segparms,
-                  verts[rcount].lines[rcount2].segparms,
+          FIELD_BS (verts[rcount1].lines[rcount2].num_segparms, 74);
+          REPEAT3(verts[rcount1].lines[rcount2].num_segparms,
+                  verts[rcount1].lines[rcount2].segparms,
                   BITCODE_BD)
             {
-              FIELD_BD (verts[rcount].lines[rcount2].segparms[rcount3], 41);
+              FIELD_BD (verts[rcount1].lines[rcount2].segparms[rcount3], 41);
             }
-          END_REPEAT(verts[rcount].lines[rcount2].segparms);
+          END_REPEAT(verts[rcount1].lines[rcount2].segparms);
 
-          FIELD_BS (verts[rcount].lines[rcount2].num_areafillparms, 75);
-          REPEAT3(verts[rcount].lines[rcount2].num_areafillparms,
-                  verts[rcount].lines[rcount2].areafillparms,
+          FIELD_BS (verts[rcount1].lines[rcount2].num_areafillparms, 75);
+          REPEAT3(verts[rcount1].lines[rcount2].num_areafillparms,
+                  verts[rcount1].lines[rcount2].areafillparms,
                   BITCODE_BD)
             {
-              FIELD_BD (verts[rcount].lines[rcount2].areafillparms[rcount3], 42);
+              FIELD_BD (verts[rcount1].lines[rcount2].areafillparms[rcount3], 42);
             }
-          END_REPEAT(verts[rcount].lines[rcount2].areafillparms);
+          END_REPEAT(verts[rcount1].lines[rcount2].areafillparms);
         }
-      SET_PARENT(verts[rcount].lines, &_obj->verts[rcount])
-      END_REPEAT(verts[rcount].lines);
+      SET_PARENT(verts[rcount1].lines, &_obj->verts[rcount1])
+      END_REPEAT(verts[rcount1].lines);
     }
   SET_PARENT_OBJ(verts)
   END_REPEAT(verts);
@@ -2254,33 +2254,33 @@ DWG_OBJECT(LTYPE)
     FIELD_RC (alignment, 72);
   }
   FIELD_RC (num_dashes, 73);
-  REPEAT(num_dashes, dash, Dwg_LTYPE_dash)
+  REPEAT_C(num_dashes, dash, Dwg_LTYPE_dash)
     {
       PRE(R_13)
       {
-        FIELD_RD (dash[rcount].length, 49);
+        FIELD_RD (dash[rcount1].length, 49);
 #ifndef IS_PRINT        
-        FIELD_VALUE(pattern_len) += FIELD_VALUE(dash[rcount].length);
+        FIELD_VALUE(pattern_len) += FIELD_VALUE(dash[rcount1].length);
 #endif
-        FIELD_RS (dash[rcount].complex_shapecode, 74);
-        FIELD_RD (dash[rcount].x_offset, 44);
-        FIELD_RD (dash[rcount].y_offset, 45);
-        FIELD_RD (dash[rcount].scale, 46);
-        FIELD_RD (dash[rcount].rotation, 50);
-        FIELD_RS (dash[rcount].shape_flag, 75);
-        if (FIELD_VALUE(dash[rcount].shape_flag) & 0x2)
+        FIELD_RS (dash[rcount1].complex_shapecode, 74);
+        FIELD_RD (dash[rcount1].x_offset, 44);
+        FIELD_RD (dash[rcount1].y_offset, 45);
+        FIELD_RD (dash[rcount1].scale, 46);
+        FIELD_RD (dash[rcount1].rotation, 50);
+        FIELD_RS (dash[rcount1].shape_flag, 75);
+        if (FIELD_VALUE(dash[rcount1].shape_flag) & 0x2)
           FIELD_VALUE(text_area_is_present) = 1;
       }
       LATER_VERSIONS
       {
-        FIELD_BD (dash[rcount].length, 49);
-        FIELD_BS (dash[rcount].complex_shapecode, 74);
-        FIELD_RD (dash[rcount].x_offset, 44);
-        FIELD_RD (dash[rcount].y_offset, 45);
-        FIELD_BD (dash[rcount].scale, 46);
-        FIELD_BD (dash[rcount].rotation, 50);
-        FIELD_BS (dash[rcount].shape_flag, 75);
-        if (FIELD_VALUE(dash[rcount].shape_flag) & 0x2)
+        FIELD_BD (dash[rcount1].length, 49);
+        FIELD_BS (dash[rcount1].complex_shapecode, 74);
+        FIELD_RD (dash[rcount1].x_offset, 44);
+        FIELD_RD (dash[rcount1].y_offset, 45);
+        FIELD_BD (dash[rcount1].scale, 46);
+        FIELD_BD (dash[rcount1].rotation, 50);
+        FIELD_BS (dash[rcount1].shape_flag, 75);
+        if (FIELD_VALUE(dash[rcount1].shape_flag) & 0x2)
           FIELD_VALUE(text_area_is_present) = 1;
       }
     }
@@ -3082,16 +3082,16 @@ DWG_OBJECT(MLINESTYLE)
   FIELD_BD (start_angle, 51);
   FIELD_BD (end_angle, 52);
   FIELD_RC (num_lines, 71);
-  REPEAT(num_lines, lines, Dwg_MLINESTYLE_line)
+  REPEAT_C(num_lines, lines, Dwg_MLINESTYLE_line)
   {
-    FIELD_BD (lines[rcount].offset, 49);
+    FIELD_BD (lines[rcount1].offset, 49);
 #ifndef IS_FREE
-    FIELD_CMC (lines[rcount].color, 62);
+    FIELD_CMC (lines[rcount1].color, 62);
 #endif
     PRE(R_2018)
     {
 #if defined(IS_DXF) && !defined(IS_ENCODE)
-        switch (FIELD_VALUE(lines[rcount].ltindex)) {
+        switch (FIELD_VALUE(lines[rcount1].ltindex)) {
         case 32767: VALUE_TV("BYLAYER", 6); break;
         case 32766: VALUE_TV("BYBLOCK", 6); break;
         case 0:     VALUE_TV("CONTINUOUS", 6); break;
@@ -3100,12 +3100,12 @@ DWG_OBJECT(MLINESTYLE)
                     VALUE_TV("", 6); break;
         }
 #else
-        FIELD_BS (lines[rcount].ltindex, 6);
+        FIELD_BS (lines[rcount1].ltindex, 6);
 #endif
     }
     SINCE(R_2018)
     {
-      FIELD_HANDLE (lines[rcount].ltype, 5, 6);
+      FIELD_HANDLE (lines[rcount1].ltype, 5, 6);
     }
   }
   SET_PARENT_OBJ(lines)
@@ -3143,10 +3143,10 @@ DWG_ENTITY(HATCH)
       FIELD_BL (num_colors, 453); //default: 2
       REPEAT(num_colors, colors, Dwg_HATCH_Color)
         {
-          FIELD_BD (colors[rcount].unknown_double, 463); //value
-          FIELD_BS (colors[rcount].unknown_short, 0);
-          FIELD_BL (colors[rcount].rgb_color, 63); // 63 for color as ACI. 421 for rgb
-          FIELD_RC (colors[rcount].ignored_color_byte, 0);
+          FIELD_BD (colors[rcount1].unknown_double, 463); //value
+          FIELD_BS (colors[rcount1].unknown_short, 0);
+          FIELD_BL (colors[rcount1].rgb_color, 63); // 63 for color as ACI. 421 for rgb
+          FIELD_RC (colors[rcount1].ignored_color_byte, 0);
         }
       SET_PARENT_OBJ(colors)
       END_REPEAT(colors);
@@ -3161,61 +3161,61 @@ DWG_ENTITY(HATCH)
   FIELD_BL (num_paths, 91);
   REPEAT(num_paths, paths, Dwg_HATCH_Path)
     {
-      FIELD_BL (paths[rcount].flag, 92);
-      if (!(FIELD_VALUE(paths[rcount].flag) & 2))
+      FIELD_BL (paths[rcount1].flag, 92);
+      if (!(FIELD_VALUE(paths[rcount1].flag) & 2))
         {
-          FIELD_BL (paths[rcount].num_segs_or_paths, 93);
-          REPEAT2(paths[rcount].num_segs_or_paths, paths[rcount].segs,
+          FIELD_BL (paths[rcount1].num_segs_or_paths, 93);
+          REPEAT2(paths[rcount1].num_segs_or_paths, paths[rcount1].segs,
                   Dwg_HATCH_PathSeg)
             {
-              FIELD_RC (paths[rcount].segs[rcount2].type_status, 72);
-              switch (FIELD_VALUE(paths[rcount].segs[rcount2].type_status))
+              FIELD_RC (paths[rcount1].segs[rcount2].type_status, 72);
+              switch (FIELD_VALUE(paths[rcount1].segs[rcount2].type_status))
                 {
                     case 1: /* LINE */
-                      FIELD_2RD (paths[rcount].segs[rcount2].first_endpoint, 10);
-                      FIELD_2RD (paths[rcount].segs[rcount2].second_endpoint, 11);
+                      FIELD_2RD (paths[rcount1].segs[rcount2].first_endpoint, 10);
+                      FIELD_2RD (paths[rcount1].segs[rcount2].second_endpoint, 11);
                       break;
                     case 2: /* CIRCULAR ARC */
-                      FIELD_2RD (paths[rcount].segs[rcount2].center, 10);
-                      FIELD_BD (paths[rcount].segs[rcount2].radius, 40);
-                      FIELD_BD (paths[rcount].segs[rcount2].start_angle, 50);
-                      FIELD_BD (paths[rcount].segs[rcount2].end_angle, 51);
-                      FIELD_B (paths[rcount].segs[rcount2].is_ccw, 73);
+                      FIELD_2RD (paths[rcount1].segs[rcount2].center, 10);
+                      FIELD_BD (paths[rcount1].segs[rcount2].radius, 40);
+                      FIELD_BD (paths[rcount1].segs[rcount2].start_angle, 50);
+                      FIELD_BD (paths[rcount1].segs[rcount2].end_angle, 51);
+                      FIELD_B (paths[rcount1].segs[rcount2].is_ccw, 73);
                       break;
                     case 3: /* ELLIPTICAL ARC */
-                      FIELD_2RD (paths[rcount].segs[rcount2].center, 10);
-                      FIELD_2RD (paths[rcount].segs[rcount2].endpoint, 11);
-                      FIELD_BD (paths[rcount].segs[rcount2].minor_major_ratio, 40);
-                      FIELD_BD (paths[rcount].segs[rcount2].start_angle, 50);
-                      FIELD_BD (paths[rcount].segs[rcount2].end_angle, 51);
-                      FIELD_B (paths[rcount].segs[rcount2].is_ccw, 73);
+                      FIELD_2RD (paths[rcount1].segs[rcount2].center, 10);
+                      FIELD_2RD (paths[rcount1].segs[rcount2].endpoint, 11);
+                      FIELD_BD (paths[rcount1].segs[rcount2].minor_major_ratio, 40);
+                      FIELD_BD (paths[rcount1].segs[rcount2].start_angle, 50);
+                      FIELD_BD (paths[rcount1].segs[rcount2].end_angle, 51);
+                      FIELD_B (paths[rcount1].segs[rcount2].is_ccw, 73);
                       break;
                     case 4: /* SPLINE */
-                      FIELD_BL (paths[rcount].segs[rcount2].degree, 94);
-                      FIELD_B (paths[rcount].segs[rcount2].is_rational, 73);
-                      FIELD_B (paths[rcount].segs[rcount2].is_periodic, 74);
-                      FIELD_BL (paths[rcount].segs[rcount2].num_knots, 95);
-                      FIELD_BL (paths[rcount].segs[rcount2].num_control_points, 96);
-                      FIELD_VECTOR (paths[rcount].segs[rcount2].knots, BD,
-                                    paths[rcount].segs[rcount2].num_knots, 40);
-                      REPEAT3(paths[rcount].segs[rcount2].num_control_points,
-                              paths[rcount].segs[rcount2].control_points,
+                      FIELD_BL (paths[rcount1].segs[rcount2].degree, 94);
+                      FIELD_B (paths[rcount1].segs[rcount2].is_rational, 73);
+                      FIELD_B (paths[rcount1].segs[rcount2].is_periodic, 74);
+                      FIELD_BL (paths[rcount1].segs[rcount2].num_knots, 95);
+                      FIELD_BL (paths[rcount1].segs[rcount2].num_control_points, 96);
+                      FIELD_VECTOR (paths[rcount1].segs[rcount2].knots, BD,
+                                    paths[rcount1].segs[rcount2].num_knots, 40);
+                      REPEAT3(paths[rcount1].segs[rcount2].num_control_points,
+                              paths[rcount1].segs[rcount2].control_points,
                               Dwg_HATCH_ControlPoint)
                         {
-                          FIELD_2RD (paths[rcount].segs[rcount2].control_points[rcount3].point, 10);
-                          if (FIELD_VALUE(paths[rcount].segs[rcount2].is_rational))
+                          FIELD_2RD (paths[rcount1].segs[rcount2].control_points[rcount3].point, 10);
+                          if (FIELD_VALUE(paths[rcount1].segs[rcount2].is_rational))
                             {
-                              FIELD_BD (paths[rcount].segs[rcount2].control_points[rcount3].weigth, 40);
+                              FIELD_BD (paths[rcount1].segs[rcount2].control_points[rcount3].weigth, 40);
                             }
                         }
-                      SET_PARENT(paths[rcount].segs[rcount2].control_points, 
-                                 &_obj->paths[rcount].segs[rcount2])
-                      END_REPEAT(paths[rcount].segs[rcount2].control_points);
+                      SET_PARENT(paths[rcount1].segs[rcount2].control_points, 
+                                 &_obj->paths[rcount1].segs[rcount2])
+                      END_REPEAT(paths[rcount1].segs[rcount2].control_points);
                       SINCE(R_2013) // r2014 really
                         {
-                          FIELD_BL(paths[rcount].segs[rcount2].num_fitpts, 97);
-                          FIELD_2RD_VECTOR(paths[rcount].segs[rcount2].fitpts,
-                                           paths[rcount].segs[rcount2].num_fitpts, 11);
+                          FIELD_BL(paths[rcount1].segs[rcount2].num_fitpts, 97);
+                          FIELD_2RD_VECTOR(paths[rcount1].segs[rcount2].fitpts,
+                                           paths[rcount1].segs[rcount2].num_fitpts, 11);
                         }
                       break;
                     default:
@@ -3223,31 +3223,31 @@ DWG_ENTITY(HATCH)
                       break;
                 }
             }
-          SET_PARENT(paths[rcount].segs, &_obj->paths[rcount])
-          END_REPEAT(paths[rcount].segs);
+          SET_PARENT(paths[rcount1].segs, &_obj->paths[rcount1])
+          END_REPEAT(paths[rcount1].segs);
         }
       else
         { /* POLYLINE PATH */
-          FIELD_B (paths[rcount].bulges_present, 72);
-          FIELD_B (paths[rcount].closed, 73);
-          FIELD_BL (paths[rcount].num_segs_or_paths, 91);
-          REPEAT2(paths[rcount].num_segs_or_paths, paths[rcount].polyline_paths,
+          FIELD_B (paths[rcount1].bulges_present, 72);
+          FIELD_B (paths[rcount1].closed, 73);
+          FIELD_BL (paths[rcount1].num_segs_or_paths, 91);
+          REPEAT2(paths[rcount1].num_segs_or_paths, paths[rcount1].polyline_paths,
                   Dwg_HATCH_PolylinePath)
             {
-              FIELD_2RD (paths[rcount].polyline_paths[rcount2].point, 10);
-              if (FIELD_VALUE(paths[rcount].bulges_present))
+              FIELD_2RD (paths[rcount1].polyline_paths[rcount2].point, 10);
+              if (FIELD_VALUE(paths[rcount1].bulges_present))
                 {
-                  FIELD_BD (paths[rcount].polyline_paths[rcount2].bulge, 42);
+                  FIELD_BD (paths[rcount1].polyline_paths[rcount2].bulge, 42);
                 }
             }
-          SET_PARENT(paths[rcount].polyline_paths, &_obj->paths[rcount])
-          END_REPEAT(paths[rcount].polyline_paths);
+          SET_PARENT(paths[rcount1].polyline_paths, &_obj->paths[rcount1])
+          END_REPEAT(paths[rcount1].polyline_paths);
         }
-      FIELD_BL (paths[rcount].num_boundary_handles, 97);
+      FIELD_BL (paths[rcount1].num_boundary_handles, 97);
       DECODER {
-        FIELD_VALUE (num_boundary_handles) += FIELD_VALUE (paths[rcount].num_boundary_handles);
+        FIELD_VALUE (num_boundary_handles) += FIELD_VALUE (paths[rcount1].num_boundary_handles);
         FIELD_VALUE (has_derived) =
-          FIELD_VALUE (has_derived) || (FIELD_VALUE (paths[rcount].flag) & 0x4);
+          FIELD_VALUE (has_derived) || (FIELD_VALUE (paths[rcount1].flag) & 0x4);
       }
     }
   SET_PARENT_OBJ(paths)
@@ -3262,15 +3262,15 @@ DWG_ENTITY(HATCH)
       FIELD_BS (num_deflines, 78);
       REPEAT(num_deflines, deflines, Dwg_HATCH_DefLine)
         {
-          FIELD_BD (deflines[rcount].angle, 53);
-          FIELD_2BD_1 (deflines[rcount].pt0, 43);
-          FIELD_2BD_1 (deflines[rcount].offset, 45);
-          FIELD_BS (deflines[rcount].num_dashes, 79);
-          REPEAT2 (deflines[rcount].num_dashes, deflines[rcount].dashes, BITCODE_BD)
+          FIELD_BD (deflines[rcount1].angle, 53);
+          FIELD_2BD_1 (deflines[rcount1].pt0, 43);
+          FIELD_2BD_1 (deflines[rcount1].offset, 45);
+          FIELD_BS (deflines[rcount1].num_dashes, 79);
+          REPEAT2 (deflines[rcount1].num_dashes, deflines[rcount1].dashes, BITCODE_BD)
             {
-              FIELD_BD (deflines[rcount].dashes[rcount2], 49);
+              FIELD_BD (deflines[rcount1].dashes[rcount2], 49);
             }
-          END_REPEAT(deflines[rcount].dashes);
+          END_REPEAT(deflines[rcount1].dashes);
         }
       SET_PARENT_OBJ(deflines)
       END_REPEAT(deflines);
@@ -3372,8 +3372,8 @@ DWG_OBJECT(LAYER_INDEX)
   FIELD_BL (num_entries, 0);
   REPEAT (num_entries, entries, Dwg_LAYER_entry)
     {
-      FIELD_BL (entries[rcount].idxlong, 0);
-      FIELD_T (entries[rcount].layer, 8);
+      FIELD_BL (entries[rcount1].idxlong, 0);
+      FIELD_T (entries[rcount1].layer, 8);
     }
   SET_PARENT_OBJ(entries)
   END_REPEAT(entries)
@@ -3495,8 +3495,8 @@ DWG_ENTITY(LWPOLYLINE)
   FIELD_VECTOR (bulges, BD, num_bulges, 42);
   REPEAT(num_widths, widths, Dwg_LWPOLYLINE_width)
     {
-      FIELD_BD (widths[rcount].start, 40);
-      FIELD_BD (widths[rcount].end, 41);
+      FIELD_BD (widths[rcount1].start, 40);
+      FIELD_BD (widths[rcount1].end, 41);
     }
   END_REPEAT(widths)
 
@@ -3557,8 +3557,8 @@ DWG_ENTITY(PROXY_LWPOLYLINE)
   FIELD_VECTOR (bulges, BD, num_bulges);
   REPEAT(num_widths, widths, Dwg_Entity_LWPOLYLINE_width)
     {
-      FIELD_BD (widths[rcount].start);
-      FIELD_BD (widths[rcount].end);
+      FIELD_BD (widths[rcount1].start);
+      FIELD_BD (widths[rcount1].end);
     }
   END_REPEAT(widths)
 
@@ -3732,8 +3732,8 @@ DWG_OBJECT(FIELD)
   FIELD_BL (num_childval, 93);
   REPEAT_N((long)FIELD_VALUE(num_childval), childval, Dwg_FIELD_ChildValue)
     {
-      FIELD_T (childval[rcount].key, 6);
-      Table_Value(childval[rcount].value)
+      FIELD_T (childval[rcount1].key, 6);
+      Table_Value(childval[rcount1].value)
     }
   SET_PARENT_OBJ(childval)
   END_REPEAT(childval)
@@ -3795,17 +3795,17 @@ DWG_OBJECT(GEODATA)
   FIELD_BL (num_geomesh_pts, 93);
   REPEAT_N(FIELD_VALUE(num_geomesh_pts), geomesh_pts, Dwg_GEODATA_meshpt)
     {
-      FIELD_2RD (geomesh_pts[rcount].source_pt, 13);
-      FIELD_2RD (geomesh_pts[rcount].dest_pt, 14);
+      FIELD_2RD (geomesh_pts[rcount1].source_pt, 13);
+      FIELD_2RD (geomesh_pts[rcount1].dest_pt, 14);
     }
   END_REPEAT(geomesh_pts);
   FIELD_BL (num_geomesh_faces, 96);
   REPEAT_N(FIELD_VALUE(num_geomesh_faces), geomesh_faces, Dwg_GEODATA_meshface)
     {
-      FIELD_BL (geomesh_faces[rcount].face1, 97);
-      FIELD_BL (geomesh_faces[rcount].face2, 98);
-      FIELD_BL (geomesh_faces[rcount].face3, 99);
-      FIELD_BL (geomesh_faces[rcount].face4, 0);
+      FIELD_BL (geomesh_faces[rcount1].face1, 97);
+      FIELD_BL (geomesh_faces[rcount1].face2, 98);
+      FIELD_BL (geomesh_faces[rcount1].face3, 99);
+      FIELD_BL (geomesh_faces[rcount1].face4, 0);
     }
   END_REPEAT(geomesh_faces);
   UNTIL(R_2007) // r2009, class_version 1 really
@@ -3964,82 +3964,82 @@ DWG_ENTITY(TABLE)
   FIELD_VALUE(num_cells) = FIELD_VALUE(num_rows) * FIELD_VALUE(num_cols);
   REPEAT(num_cells, cells, Dwg_TABLE_Cell)
     {
-      FIELD_BS (cells[rcount].type, 171);
-      FIELD_RC (cells[rcount].flags, 172);
-      FIELD_B (cells[rcount].merged_value, 173);
-      FIELD_B (cells[rcount].autofit_flag, 174);
-      FIELD_BL (cells[rcount].merged_width_flag, 175);
-      FIELD_BL (cells[rcount].merged_height_flag, 176);
-      FIELD_BD (cells[rcount].rotation_value, 145);
+      FIELD_BS (cells[rcount1].type, 171);
+      FIELD_RC (cells[rcount1].flags, 172);
+      FIELD_B (cells[rcount1].merged_value, 173);
+      FIELD_B (cells[rcount1].autofit_flag, 174);
+      FIELD_BL (cells[rcount1].merged_width_flag, 175);
+      FIELD_BL (cells[rcount1].merged_height_flag, 176);
+      FIELD_BD (cells[rcount1].rotation_value, 145);
   
-      if (FIELD_VALUE(cells[rcount].type) == 1)
+      if (FIELD_VALUE(cells[rcount1].type) == 1)
         { /* text cell */
-          FIELD_T (cells[rcount].text_string, 1);
+          FIELD_T (cells[rcount1].text_string, 1);
         }
-      if (FIELD_VALUE(cells[rcount].type) == 2)
+      if (FIELD_VALUE(cells[rcount1].type) == 2)
         { /* block cell */
-          FIELD_BD (cells[rcount].block_scale, 144);
-          FIELD_B (cells[rcount].additional_data_flag, 0);
-          if (FIELD_VALUE(cells[rcount].additional_data_flag) == 1)
+          FIELD_BD (cells[rcount1].block_scale, 144);
+          FIELD_B (cells[rcount1].additional_data_flag, 0);
+          if (FIELD_VALUE(cells[rcount1].additional_data_flag) == 1)
             {
-              FIELD_BS (cells[rcount].num_attr_defs, 179);
-              FIELD_BS (cells[rcount].attr_def_index, 0);
-              FIELD_T (cells[rcount].attr_def_text, 300);
-              //total_num_attr_defs += FIELD_VALUE (cells[rcount].num_attr_defs);
+              FIELD_BS (cells[rcount1].num_attr_defs, 179);
+              FIELD_BS (cells[rcount1].attr_def_index, 0);
+              FIELD_T (cells[rcount1].attr_def_text, 300);
+              //total_num_attr_defs += FIELD_VALUE (cells[rcount1].num_attr_defs);
             }
         }
-      if (FIELD_VALUE(cells[rcount].type) == 1 ||
-          FIELD_VALUE(cells[rcount].type) == 2)
+      if (FIELD_VALUE(cells[rcount1].type) == 1 ||
+          FIELD_VALUE(cells[rcount1].type) == 2)
         { /* common to both text and block cells */
-          FIELD_B (cells[rcount].additional_data_flag, 0);
-          if (FIELD_VALUE(cells[rcount].additional_data_flag) == 1)
+          FIELD_B (cells[rcount1].additional_data_flag, 0);
+          if (FIELD_VALUE(cells[rcount1].additional_data_flag) == 1)
             {
               BITCODE_BL cell_flag;
-              FIELD_BL (cells[rcount].cell_flag_override, 177);
-              cell_flag = FIELD_VALUE(cells[rcount].cell_flag_override);
-              FIELD_RC (cells[rcount].virtual_edge_flag, 178);
+              FIELD_BL (cells[rcount1].cell_flag_override, 177);
+              cell_flag = FIELD_VALUE(cells[rcount1].cell_flag_override);
+              FIELD_RC (cells[rcount1].virtual_edge_flag, 178);
   
               if (cell_flag & 0x01)
-                FIELD_RS (cells[rcount].cell_alignment, 170);
+                FIELD_RS (cells[rcount1].cell_alignment, 170);
               if (cell_flag & 0x02)
-                FIELD_B (cells[rcount].background_fill_none, 283);
+                FIELD_B (cells[rcount1].background_fill_none, 283);
               if (cell_flag & 0x04)
-                FIELD_CMC (cells[rcount].background_color, 63);
+                FIELD_CMC (cells[rcount1].background_color, 63);
               if (cell_flag & 0x08)
-                FIELD_CMC (cells[rcount].content_color, 64);
+                FIELD_CMC (cells[rcount1].content_color, 64);
               if (cell_flag & 0x10)
-                FIELD_HANDLE (cells[rcount].text_style, 5, 7);
+                FIELD_HANDLE (cells[rcount1].text_style, 5, 7);
               if (cell_flag & 0x20)
-                FIELD_BD (cells[rcount].text_height, 140);
+                FIELD_BD (cells[rcount1].text_height, 140);
               if (cell_flag & 0x00040)
-                FIELD_CMC (cells[rcount].top_grid_color, 69);
+                FIELD_CMC (cells[rcount1].top_grid_color, 69);
               if (cell_flag & 0x00400)
-                FIELD_BS (cells[rcount].top_grid_linewt, 279);
+                FIELD_BS (cells[rcount1].top_grid_linewt, 279);
               if (cell_flag & 0x04000)
-                FIELD_BS (cells[rcount].top_visibility, 289);
+                FIELD_BS (cells[rcount1].top_visibility, 289);
               if (cell_flag & 0x00080)
-                FIELD_CMC (cells[rcount].right_grid_color, 65);
+                FIELD_CMC (cells[rcount1].right_grid_color, 65);
               if (cell_flag & 0x00800)
-                FIELD_BS (cells[rcount].right_grid_linewt, 275);
+                FIELD_BS (cells[rcount1].right_grid_linewt, 275);
               if (cell_flag & 0x08000)
-                FIELD_BS (cells[rcount].right_visibility, 285);
+                FIELD_BS (cells[rcount1].right_visibility, 285);
               if (cell_flag & 0x00100)
-                FIELD_CMC (cells[rcount].bottom_grid_color, 66);
+                FIELD_CMC (cells[rcount1].bottom_grid_color, 66);
               if (cell_flag & 0x01000)
-                FIELD_BS (cells[rcount].bottom_grid_linewt, 276);
+                FIELD_BS (cells[rcount1].bottom_grid_linewt, 276);
               if (cell_flag & 0x10000)
-                FIELD_BS (cells[rcount].bottom_visibility, 286);
+                FIELD_BS (cells[rcount1].bottom_visibility, 286);
               if (cell_flag & 0x00200)
-                FIELD_CMC (cells[rcount].left_grid_color, 68);
+                FIELD_CMC (cells[rcount1].left_grid_color, 68);
               if (cell_flag & 0x02000)
-                FIELD_BS (cells[rcount].left_grid_linewt, 278);
+                FIELD_BS (cells[rcount1].left_grid_linewt, 278);
               if (cell_flag & 0x20000)
-                FIELD_BS (cells[rcount].left_visibility, 288);
+                FIELD_BS (cells[rcount1].left_visibility, 288);
   
-              FIELD_BL (cells[rcount].unknown, 0);
+              FIELD_BL (cells[rcount1].unknown, 0);
 
               // 20.4.99 Value, page 241
-              Table_Value(cells[rcount].value)
+              Table_Value(cells[rcount1].value)
             }
         }
     }
@@ -4257,25 +4257,25 @@ DWG_ENTITY(TABLE)
 
   REPEAT(num_cells, cells, Dwg_TABLE_Cell)
     {
-      if (FIELD_VALUE(cells[rcount].type) == 1)
+      if (FIELD_VALUE(cells[rcount1].type) == 1)
         { /* text cell */
-          FIELD_HANDLE (cells[rcount].cell_handle, 5, 344);
+          FIELD_HANDLE (cells[rcount1].cell_handle, 5, 344);
         }
       else
         { /* block cell */
-          FIELD_HANDLE (cells[rcount].cell_handle, 5, 340);
+          FIELD_HANDLE (cells[rcount1].cell_handle, 5, 340);
         }
   
-      if (FIELD_VALUE(cells[rcount].type) == 2 &&
-          FIELD_VALUE(cells[rcount].additional_data_flag) == 1)
+      if (FIELD_VALUE(cells[rcount1].type) == 2 &&
+          FIELD_VALUE(cells[rcount1].additional_data_flag) == 1)
         {
-          HANDLE_VECTOR (cells[rcount].attr_def_id, cells[rcount].num_attr_defs, 4, 331);
+          HANDLE_VECTOR (cells[rcount1].attr_def_id, cells[rcount1].num_attr_defs, 4, 331);
         }
   
-      if (FIELD_VALUE(cells[rcount].additional_data_flag2) == 1 &&
-          FIELD_VALUE(cells[rcount].cell_flag_override) & 0x08)
+      if (FIELD_VALUE(cells[rcount1].additional_data_flag2) == 1 &&
+          FIELD_VALUE(cells[rcount1].cell_flag_override) & 0x08)
         {
-          FIELD_HANDLE (cells[rcount].text_style_override, ANYCODE, 7);
+          FIELD_HANDLE (cells[rcount1].text_style_override, ANYCODE, 7);
         }
     }
   SET_PARENT_OBJ(cells)
@@ -4311,9 +4311,9 @@ DWG_ENTITY(TABLE)
           FIELD_BL (num_break_heights, 0);
           REPEAT(num_break_heights, break_heights, Dwg_TABLE_BreakHeight)
             {
-              FIELD_3BD (break_heights[rcount].position, 0);
-              FIELD_BD (break_heights[rcount].height, 0);
-              FIELD_BL (break_heights[rcount].flag, 0);
+              FIELD_3BD (break_heights[rcount1].position, 0);
+              FIELD_BD (break_heights[rcount1].height, 0);
+              FIELD_BL (break_heights[rcount1].flag, 0);
             }
           SET_PARENT_OBJ(break_heights)
           END_REPEAT(break_heights);
@@ -4321,9 +4321,9 @@ DWG_ENTITY(TABLE)
       FIELD_BL (num_break_rows, 0);
       REPEAT(num_break_rows, break_rows, Dwg_TABLE_BreakRow)
         {
-          FIELD_3BD (break_rows[rcount].position, 0);
-          FIELD_BL (break_rows[rcount].start, 0);
-          FIELD_BL (break_rows[rcount].end, 0);
+          FIELD_3BD (break_rows[rcount1].position, 0);
+          FIELD_BL (break_rows[rcount1].start, 0);
+          FIELD_BL (break_rows[rcount1].end, 0);
         }
       SET_PARENT_OBJ(break_rows)
       END_REPEAT(break_rows);
@@ -4384,16 +4384,16 @@ DWG_OBJECT(TABLECONTENT)
   FIELD_BL (tdata.num_cols, 90);
   REPEAT(tdata.num_cols, tdata.cols, Dwg_TableDataColumn)
     {
-      FIELD_T (tdata.cols[rcount].name, 300);
-      FIELD_BL (tdata.cols[rcount].custom_data, 91);
-      Cell_Style_Fields(tdata.cols[rcount].cell_style);
+      FIELD_T (tdata.cols[rcount1].name, 300);
+      FIELD_BL (tdata.cols[rcount1].custom_data, 91);
+      Cell_Style_Fields(tdata.cols[rcount1].cell_style);
     }
   SET_PARENT(tdata.cols, &_obj->tdata)
   END_REPEAT(tdata.cols);
   FIELD_BL (tdata.num_rows, 90);
   REPEAT(tdata.num_rows, tdata.rows, Dwg_TableRow)
     {
-      #define row tdata.rows[rcount]
+      #define row tdata.rows[rcount1]
       FIELD_BL (row.num_cells, 90);
       REPEAT2(row.num_cells, row.cells, Dwg_TableCell)
         {
@@ -4420,7 +4420,7 @@ DWG_OBJECT(TABLECONTENT)
           FIELD_BL (cell.num_cell_contents, 95);
           REPEAT3(cell.num_cell_contents, cell.cell_contents, Dwg_TableCellContent)
             {
-              #define content tdata.rows[rcount].cells[rcount2].cell_contents[rcount3]
+              #define content tdata.rows[rcount1].cells[rcount2].cell_contents[rcount3]
 
               FIELD_BL(content.type, 90);
               if (FIELD_VALUE(content.type) == 1)
@@ -4507,7 +4507,7 @@ DWG_OBJECT(TABLECONTENT)
   FIELD_BL (fdata.num_merged_cells, 90);
   REPEAT(fdata.num_merged_cells, fdata.merged_cells, Dwg_FormattedTableMerged)
     {
-      #define merged fdata.merged_cells[rcount]
+      #define merged fdata.merged_cells[rcount1]
       FIELD_BL (merged.top_row, 91);
       FIELD_BL (merged.left_col, 92);
       FIELD_BL (merged.bottom_row, 93);
@@ -4532,10 +4532,10 @@ DWG_OBJECT(CELLSTYLEMAP)
   FIELD_BL (num_cells, 90);
   REPEAT(num_cells, cells, Dwg_CELLSTYLEMAP_Cell)
     {
-      Cell_Style_Fields(cells[rcount].style);
-      FIELD_BL (cells[rcount].id, 90);
-      FIELD_BL (cells[rcount].type, 91);
-      FIELD_T (cells[rcount].name, 300);
+      Cell_Style_Fields(cells[rcount1].style);
+      FIELD_BL (cells[rcount1].id, 90);
+      FIELD_BL (cells[rcount1].type, 91);
+      FIELD_T (cells[rcount1].name, 300);
     }
   SET_PARENT_OBJ(cells)
   END_REPEAT (cells);
@@ -4551,7 +4551,7 @@ DWG_OBJECT(TABLEGEOMETRY)
   FIELD_BL (num_cells, 92);
   REPEAT(num_cells, cells, Dwg_TABLEGEOMETRY_Cell)
     {
-      #define cell cells[rcount]
+      #define cell cells[rcount1]
       FIELD_BL (cell.flag, 93);
       FIELD_BD (cell.width_w_gap, 40);
       FIELD_BD (cell.height_w_gap, 41);
@@ -4616,7 +4616,7 @@ DWG_OBJECT(XRECORD)
     if (FIELD_VALUE(objid_handles)) {
       REPEAT(num_objid_handles, objid_handles, T)
         //VALUE_TV ("", 102); //TODO xdata string, 102
-        VALUE_H (_obj->objid_handles[rcount], 340);
+        VALUE_H (_obj->objid_handles[rcount1], 340);
       END_REPEAT(objid_handles)
     }
     #endif
@@ -4690,7 +4690,7 @@ DWG_ENTITY(MULTILEADER)
   FIELD_BL (ctx.num_leaders, 0);
   REPEAT(ctx.num_leaders, ctx.leaders, Dwg_Leader)
     {
-#     define lev1 ctx.leaders[rcount]
+#     define lev1 ctx.leaders[rcount1]
       FIELD_B (lev1.is_valid, 290);  //1
       FIELD_B (lev1.num_lines, 291); //1
       FIELD_3BD (lev1.connection, 10);
@@ -4800,9 +4800,9 @@ DWG_ENTITY(MULTILEADER)
       FIELD_3BD (ctx.blk.scale, 16);
       FIELD_BD (ctx.blk.rotation, 46);
       FIELD_CMC (ctx.blk.color, 93);
-      for (rcount = 0; rcount < 16; rcount++)
+      for (rcount1 = 0; rcount1 < 16; rcount1++)
         {
-          FIELD_BD (ctx.blk.transform[rcount], 47);
+          FIELD_BD (ctx.blk.transform[rcount1], 47);
         }
     }
 

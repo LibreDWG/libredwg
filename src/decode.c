@@ -2394,7 +2394,7 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
       {
         _obj->hdlpos += 8;
         LOG_HANDLE("(bitsize: " FORMAT_RL ", ", _obj->bitsize);
-        LOG_HANDLE("hdlpos: " FORMAT_RL ")\n", _obj->hdlpos);
+        LOG_HANDLE("hdlpos: %lu)\n", _obj->hdlpos);
       }
       // and set the string stream (restricted to size)
       obj_string_stream(dat, _obj, str_dat);
@@ -2435,7 +2435,7 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
           ent->picture_size = bit_read_BLL(dat); //ODA doc bug?
         }
 
-      LOG_TRACE("picture_size: " FORMAT_BLL " \n", ent->picture_size)
+      LOG_TRACE("picture_size: " FORMAT_BL " \n", ent->picture_size)
       if (ent->picture_size < 210210)
         {
           ent->picture = bit_read_TF(dat, ent->picture_size); // DXF 310
@@ -2593,7 +2593,7 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
       {
         _obj->hdlpos += 8;
         LOG_HANDLE("(bitsize: " FORMAT_RL ", ", _obj->bitsize);
-        LOG_HANDLE("hdlpos: " FORMAT_RL ")\n", _obj->hdlpos);
+        LOG_HANDLE("hdlpos: %lu)\n", _obj->hdlpos);
       }
       // and set the string stream (restricted to size)
       obj_string_stream(dat, _obj, str_dat);

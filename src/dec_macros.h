@@ -375,36 +375,34 @@
   if (dat->version >= R_2007) { bit_set_position(hdl_dat, obj->hdlpos); \
      LOG_HANDLE(" @%lu.%u %lu\n", dat->byte, dat->bit, bit_position(dat)); }
 
-//TODO unify REPEAT macros
+// unchecked with a constant
+#define REPEAT_CN(times, name, type) \
+  _obj->name = (type *) calloc(times, sizeof(type)); \
+  for (rcount1=0; rcount1<(long)times; rcount1++)
 #define REPEAT_N(times, name, type) \
   if (dat->version >= R_2010 && times > 0x1000) { \
     fprintf(stderr, "Invalid rcount %ld", (long)times); return; } \
   if (times) _obj->name = (type *) calloc(times, sizeof(type)); \
-  for (rcount=0; rcount<(long)times; rcount++)
+  for (rcount1=0; rcount1<(long)times; rcount1++)
 
-#define REPEAT(times, name, type) \
+#define _REPEAT(times, name, type, idx) \
   if (dat->version >= R_2010 && _obj->times > 0x1000) { \
-    fprintf(stderr, "Invalid rcount %ld", (long)_obj->times); return; } \
+    fprintf(stderr, "Invalid rcount " #idx " %ld", (long)_obj->times); return; } \
   if (_obj->times) _obj->name = (type *) calloc(_obj->times, sizeof(type)); \
-  for (rcount=0; rcount<(long)_obj->times; rcount++)
+  for (rcount##idx=0; rcount##idx<(long)_obj->times; rcount##idx++)
+#define _REPEAT_C(times, name, type, idx) \
+  if (_obj->times) _obj->name = (type *) calloc(_obj->times, sizeof(type)); \
+  for (rcount##idx=0; rcount##idx<(long)_obj->times; rcount##idx++)
 
-#define REPEAT2(times, name, type) \
-  if (dat->version >= R_2010 && _obj->times > 0x1000) { \
-    fprintf(stderr, "Invalid rcount2 %ld", (long)_obj->times); return; } \
-  if (_obj->times) _obj->name = (type *) calloc(_obj->times, sizeof(type)); \
-  for (rcount2=0; rcount2<(long)_obj->times; rcount2++)
+#define REPEAT(times, name, type)   _REPEAT(times, name, type, 1)
+#define REPEAT2(times, name, type)  _REPEAT(times, name, type, 2)
+#define REPEAT3(times, name, type)  _REPEAT(times, name, type, 3)
+#define REPEAT4(times, name, type)  _REPEAT(times, name, type, 4)
 
-#define REPEAT3(times, name, type) \
-  if (dat->version >= R_2010 && _obj->times > 0x1000) { \
-    fprintf(stderr, "Invalid rcount3 %ld", (long)_obj->times); return; } \
-  if (_obj->times) _obj->name = (type *) calloc(_obj->times, sizeof(type)); \
-  for (rcount3=0; rcount3<(long)_obj->times; rcount3++)
-
-#define REPEAT4(times, name, type) \
-  if (dat->version >= R_2010 && _obj->times > 0x1000) { \
-    fprintf(stderr, "Invalid rcount4 %ld", (long)_obj->times); return; } \
-  if (_obj->times) _obj->name = (type *) calloc(_obj->times, sizeof(type)); \
-  for (rcount4=0; rcount4<(long)_obj->times; rcount4++)
+#define REPEAT_C(times, name, type)   _REPEAT_C(times, name, type, 1)
+#define REPEAT2_C(times, name, type)  _REPEAT_C(times, name, type, 2)
+#define REPEAT3_C(times, name, type)  _REPEAT_C(times, name, type, 3)
+#define REPEAT4_C(times, name, type)  _REPEAT_C(times, name, type, 4)
 
 #define COMMON_ENTITY_HANDLE_DATA \
   SINCE(R_13) {\
@@ -415,7 +413,7 @@
 #define DWG_ENTITY(token) static void \
 dwg_decode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
-  long vcount, rcount, rcount2, rcount3, rcount4; \
+  long vcount, rcount1, rcount2, rcount3, rcount4; \
   Dwg_Entity_##token *ent, *_obj; \
   Dwg_Object_Entity *_ent; \
   Dwg_Data* dwg = obj->parent; \
@@ -443,7 +441,7 @@ dwg_decode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 #define DWG_OBJECT(token) static void \
 dwg_decode_ ## token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
-  long vcount, rcount, rcount2, rcount3, rcount4; \
+  long vcount, rcount1, rcount2, rcount3, rcount4; \
   Dwg_Object_##token *_obj;\
   Dwg_Data* dwg = obj->parent;\
   Bit_Chain* hdl_dat = dat; /* handle stream initially the same */ \

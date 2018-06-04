@@ -504,21 +504,6 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
 #define XDICOBJHANDLE(code)
 #define ENT_XDICOBJHANDLE(code)
 
-#define REPEAT_N(times, name, type) \
-  for (rcount=0; rcount<(int)times; rcount++)
-
-#define REPEAT(times, name, type) \
-  for (rcount=0; rcount<(int)_obj->times; rcount++)
-
-#define REPEAT2(times, name, type) \
-  for (rcount2=0; rcount2<(int)_obj->times; rcount2++)
-
-#define REPEAT3(times, name, type) \
-  for (rcount3=0; rcount3<(int)_obj->times; rcount3++)
-
-#define REPEAT4(times, name, type) \
-  for (rcount4=0; rcount4<(int)_obj->times; rcount4++)
-
 #define COMMON_ENTITY_HANDLE_DATA \
   SINCE(R_13) { \
     dxf_common_entity_handle_data(dat, obj); \
@@ -532,7 +517,7 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
 static void \
 dwg_dxf_##token (Bit_Chain *dat, Dwg_Object * obj) \
 {\
-  int vcount, rcount, rcount2, rcount3, rcount4; \
+  long vcount, rcount1, rcount2, rcount3, rcount4; \
   Dwg_Entity_##token *ent, *_obj;\
   Dwg_Object_Entity *_ent;\
   Dxf_Pair *pair; \
@@ -550,7 +535,7 @@ dwg_dxf_##token (Bit_Chain *dat, Dwg_Object * obj) \
 static void \
 dwg_dxf_ ##token (Bit_Chain *dat, Dwg_Object * obj) \
 { \
-  int vcount, rcount, rcount2, rcount3, rcount4;\
+  long vcount, rcount1, rcount2, rcount3, rcount4;\
   Bit_Chain *hdl_dat = dat;\
   Dwg_Object_##token *_obj;\
   Dxf_Pair *pair; \

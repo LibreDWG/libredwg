@@ -371,21 +371,6 @@ static void dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
 #define XDICOBJHANDLE(code)
 #define ENT_XDICOBJHANDLE(code)
 
-#define REPEAT_N(times, name, type) \
-  for (rcount=0; rcount<(int)times; rcount++)
-
-#define REPEAT(times, name, type) \
-  for (rcount=0; rcount<(int)_obj->times; rcount++)
-
-#define REPEAT2(times, name, type) \
-  for (rcount2=0; rcount2<(int)_obj->times; rcount2++)
-
-#define REPEAT3(times, name, type) \
-  for (rcount3=0; rcount3<(int)_obj->times; rcount3++)
-
-#define REPEAT4(times, name, type) \
-  for (rcount4=0; rcount4<(int)_obj->times; rcount4++)
-
 #define COMMON_ENTITY_HANDLE_DATA \
   SINCE(R_13) { \
     dxfb_common_entity_handle_data(dat, obj); \
@@ -399,7 +384,7 @@ static void dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
 static void \
 dwg_dxfb_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 {\
-  int vcount, rcount, rcount2, rcount3, rcount4; \
+  long vcount, rcount1, rcount2, rcount3, rcount4; \
   Dwg_Entity_##token *ent, *_obj;\
   Dwg_Object_Entity *_ent;\
   const int minimal = obj->parent->opts & 0x10;\
@@ -421,7 +406,7 @@ dwg_dxfb_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 static void \
 dwg_dxfb_ ##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
-  int vcount, rcount, rcount2, rcount3, rcount4;\
+  long vcount, rcount1, rcount2, rcount3, rcount4;\
   Bit_Chain *hdl_dat = dat;\
   Dwg_Object_##token *_obj;\
   const int minimal = obj->parent->opts & 0x10;\

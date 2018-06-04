@@ -247,21 +247,6 @@ static unsigned int cur_ver = 0;
       FIELD_HANDLE(xdicobjhandle, code, dxf);\
     }
 
-#define REPEAT_N(times, name, type) \
-  for (rcount=0; rcount<(int)times; rcount++)
-
-#define REPEAT(times, name, type) \
-  for (rcount=0; rcount<(int)_obj->times; rcount++)
-
-#define REPEAT2(times, name, type) \
-  for (rcount2=0; rcount2<(int)_obj->times; rcount2++)
-
-#define REPEAT3(times, name, type) \
-  for (rcount3=0; rcount3<(int)_obj->times; rcount3++)
-
-#define REPEAT4(times, name, type) \
-  for (rcount4=0; rcount4<(int)_obj->times; rcount4++)
-
 #define COMMON_ENTITY_HANDLE_DATA
 #define SECTION_STRING_STREAM
 #define START_STRING_STREAM
@@ -272,7 +257,7 @@ static unsigned int cur_ver = 0;
 static void \
 dwg_json_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 {\
-  int vcount, rcount, rcount2, rcount3, rcount4; \
+  long vcount, rcount1, rcount2, rcount3, rcount4; \
   Dwg_Entity_##token *ent, *_obj;\
   Dwg_Object_Entity *_ent;\
   LOG_INFO("Entity " #token ":\n")\
@@ -290,7 +275,7 @@ dwg_json_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 static void \
 dwg_json_ ##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
-  int vcount, rcount, rcount2, rcount3, rcount4;\
+  long vcount, rcount1, rcount2, rcount3, rcount4;\
   Bit_Chain *hdl_dat = dat;\
   Dwg_Object_##token *_obj;\
   LOG_INFO("Object " #token ":\n")\
