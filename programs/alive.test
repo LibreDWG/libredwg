@@ -47,15 +47,12 @@ run ()
     bdwg=`basename $dwg .dwg`
     log=$bdwg-$bprog.log
     arg="${datadir}/$dwg.dwg"
-    if test $bprog != dwglayers
-    then
-        if test $bprog = dwgrewrite
-        then
-            arg="-v2 $arg"
-        else
-            arg="-v4 $arg"
-        fi
-    fi
+    case $bprog in
+    dwglayers)  ;;
+    dwggrep)    arg="tekst $arg" ;;
+    dwgrewrite) arg="-v2 $arg" ;;
+    *)          arg="-v4 $arg" ;;
+    esac
     echo $TESTPROG ./$prog $arg
     # writers can hang
     if test $bprog = dwgrewrite -o $bprog = dwgwrite -o $bprog = dxf2dwg
@@ -71,15 +68,18 @@ run ()
     then
         rm $log
     else
-        if test $bprog = dwgrewrite -o $bprog = dwgwrite -o $bprog = dxf2dwg
+        if test $bprog != dwggrep
         then
-            test -f core && rm core
-            tmpnum=$(expr 1 + $problems)
-            echo $(basename $0): TODO $prog $tmpnum failures
-            ls -l $log
-        else
-            problems=$(expr 1 + $problems)
-            tail -n100 $log
+            if test $bprog = dwgrewrite -o $bprog = dwgwrite -o $bprog = dxf2dwg
+            then
+                test -f core && rm core
+                tmpnum=$(expr 1 + $problems)
+                echo $(basename $0): TODO $prog $tmpnum failures
+                ls -l $log
+            else
+                problems=$(expr 1 + $problems)
+                tail -n100 $log
+            fi
         fi
     fi
     if test x$MINGW != x -a x$OLDTESTPROG != x; then
@@ -105,6 +105,15 @@ for prog in $PROGS ; do
         run $prog $dwg
     done
 done
+case $PROGS in
+  *dwggrep*)
+    echo ./dwggrep -c tekst ../test/test-data/example_20*.dwg
+    if test `./dwggrep -c tekst ../test/test-data/example_20*.dwg` != 9; then
+      problems=$(expr 1 + $problems)
+    fi
+
+esac
+
 #run dwgread r11/ACEL10
 
 # TODO: check generated DXF's against original DXF's

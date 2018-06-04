@@ -654,6 +654,15 @@ Prints all layers in a DWG.
 With @code{-f} or @code{--flags} also the status of frown, on/off and locked.
 With @code{--on} only the visible layers, which are on and not frozen.
 
+@item @file{dwggrep}
+@cindex dwggrep
+
+Search regex pattern in all text values list of DWGs.
+With @code{--type NAME} search only NAME entities or objects.
+With @code{--dxf NUM} search only in DXF group NUM fields.
+
+Still in development.
+
 @item @file{dwg2SVG}
 @cindex dwg2SVG
 Convert a DWG to a limited SVG. All paperspace and modelspace enties of type:

@@ -43,6 +43,21 @@ AC_CHECK_LIB([ps],[PS_open_file],
   libredwg_have_libps=yes,
   libredwg_have_libps=no)
 
+dnl `pcre2-config --libs8`
+AC_CHECK_LIB([pcre2-8],[pcre2_config_8],
+  libredwg_have_libpcre2=yes,
+  libredwg_have_libpcre2=no
+  if pkg-config --exists libpcre2; then
+    libredwg_have_libpcre2=yes
+    PCRE2_CFLAGS=`pkg-config libpcre2 --cflags`
+    PCRE2_LIBS=`pkg-config libpcre2 --libs`
+  else
+    AC_MSG_WARN([libpcre2 for dwggrep not found])
+  fi
+  AC_SUBST([PCRE2_CFLAGS])
+  AC_SUBST([PCRE2_LIBS])
+  )
+
 dnl PKG_CHECK_MODULES([LIBXML2], [libxml-2.0], [],
 dnl    AC_MSG_ERROR([Install libxml-2.0 first]))
 if pkg-config --exists libxml-2.0; then
@@ -69,6 +84,10 @@ AM_CONDITIONAL([HAVE_DEJAGNU], [test x$ac_cv_header_dejagnu_h = xyes])
 # Don't bother testing for libps headers if libps is not available.
 if test yes = "$libredwg_have_libps" ; then
   AC_CHECK_HEADERS([libps/pslib.h])
+fi
+
+if test yes = "$libredwg_have_libcre2" ; then
+  AC_CHECK_HEADERS([pcre2.h])
 fi
 
 dnl Checks for typedefs, structures, and compiler characteristics
