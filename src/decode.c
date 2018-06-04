@@ -183,13 +183,12 @@ dwg_decode(Bit_Chain * dat, Dwg_Data * dwg)
   LOG_INFO("This file's version code is: %s\n", version)
 
 #define WE_CAN \
-    "This version of LibreDWG is only capable of safely decoding " \
-    "version R13-R2007 (code: AC1012-AC1021) DWG files.\n"
+    "This version of LibreDWG is only capable of decoding " \
+    "version R13-R2018 (code: AC1012-AC1032) DWG files.\n"
 
   PRE(R_13)
     {
-      // TODO: entities, block entities
-      LOG_ERROR(WE_CAN "We don't decode most entities and blocks yet")
+      LOG_ERROR(WE_CAN "We don't decode many entities and no blocks yet.")
 #ifndef IS_RELEASE
       return decode_preR13(dat, dwg);
 #endif
@@ -199,30 +198,22 @@ dwg_decode(Bit_Chain * dat, Dwg_Data * dwg)
     {
       return decode_R13_R2000(dat, dwg);
     }
-
   VERSION(R_2004)
     {
       return decode_R2004(dat, dwg);
     }
-
   VERSION(R_2007)
     {
       return decode_R2007(dat, dwg);
     }
-
   SINCE(R_2010)
     {
-      LOG_WARN(WE_CAN
-               "Support for this version is still experimental."
-               " We don't decode all fields yet.\n"
-               "It might crash and/or give you invalid output.")
       read_r2007_init(dwg);
       return decode_R2004(dat, dwg);
     }
 
   // This line should not be reached
-  LOG_ERROR(
-      "LibreDWG does not support this version: %s.", version)
+  LOG_ERROR("LibreDWG does not support this version: %s.", version)
   return -1;
 }
 

@@ -1099,7 +1099,7 @@ section_string_stream(Bit_Chain *restrict dat, BITCODE_RL bitsize,
                       Bit_Chain *restrict str)
 {
   BITCODE_RL start;     // in bits
-  BITCODE_RS data_size; // in byte
+  BITCODE_RL data_size; // in bits
   BITCODE_B endbit;
   PRE(R_2010) {
     // r2007: + 24 bytes (sentinel+size+hsize) - 1 bit (endbit)
@@ -1129,6 +1129,7 @@ section_string_stream(Bit_Chain *restrict dat, BITCODE_RL bitsize,
     LOG_HANDLE("  pos: %u, %lu\n", start, str->byte);
     hi_size = bit_read_RS(str);
     data_size |= (hi_size << 15);
+    LOG_HANDLE("  hi_size: %u, data_size: %lu\n", hi_size, data_size);
   }
   start -= data_size;
   bit_set_position(str, start);
