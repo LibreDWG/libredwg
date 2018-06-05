@@ -3208,13 +3208,15 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
   is_entity = dwg_class_is_entity(klass);
 
 #define UNHANDLED_CLASS \
-      LOG_WARN("Unhandled Class %s %d %s (0x%x%s)", is_entity ? "entity" : "object",\
+      LOG_WARN("Unhandled Class %s %d %s (0x%x%s) -@%ld", is_entity ? "entity" : "object",\
                klass->number, dxfname, klass->proxyflag,\
-               klass->wasazombie ? " was proxy" : "")
+               klass->wasazombie ? " was proxy" : "",\
+               obj->address + obj->size)
 #define UNTESTED_CLASS \
-      LOG_WARN("Untested Class %s %d %s (0x%x%s)", is_entity ? "entity" : "object",\
+      LOG_WARN("Untested Class %s %d %s (0x%x%s) -@%ld", is_entity ? "entity" : "object",\
                klass->number, dxfname, klass->proxyflag,\
-               klass->wasazombie ? " was proxy" : "")
+               klass->wasazombie ? " was proxy" : "",\
+               obj->address + obj->size)
 
   if (!strcmp(dxfname, "ACDBDICTIONARYWDFLT"))
     {
@@ -3294,6 +3296,14 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
     {
       assert(!is_entity);
       dwg_decode_OBJECTCONTEXTDATA(dat, obj);
+      return 1;
+    }
+  if (!strcmp(dxfname, "OBJECT_PTR")
+      || !strcmp(klass->cppname, "CAseDLPNTableRecord"))
+    {
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      dwg_decode_OBJECT_PTR(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "ACDBPLACEHOLDER"))
@@ -3495,6 +3505,19 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
 #else
       UNHANDLED_CLASS;
       assert(is_entity);
+      return 0;
+#endif
+    }
+  if (!strcmp(dxfname, "SUN"))
+    {
+#ifdef DEBUG_SUN // i.e. test/test-data/2000/1.dwg, referenced by VIEW 361
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      dwg_decode_SUN(dat, obj);
+      return 1;
+#else
+      UNHANDLED_CLASS;
+      assert(!is_entity);
       return 0;
 #endif
     }

@@ -197,7 +197,13 @@
   { bit_read_CMC(dat, &_obj->name); \
     LOG_TRACE(#name ": index %d\n", _obj->name.index); }
 
+#undef DEBUG_POS
 #undef DEBUG_HERE
+#define DEBUG_POS()\
+  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE) { \
+    LOG_TRACE("DEBUG_POS @%u.%u / 0x%x (%lu)\n", (unsigned int)dat->byte, dat->bit, \
+              (unsigned int)dat->byte, bit_position(dat)); \
+  }
 #define DEBUG_HERE()\
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE) { \
     Bit_Chain here = *dat; \
@@ -315,6 +321,7 @@
   _obj->name = dwg_decode_xdata(dat, _obj, _obj->size)
 
 #define REACTORS(code)\
+  LOG_TRACE("num_reactors: %u\n", (int)obj->tio.object->num_reactors);  \
   FIELD_VALUE(reactors) = (BITCODE_H*) malloc(sizeof(BITCODE_H) * obj->tio.object->num_reactors);\
   for (vcount=0; vcount < (long)obj->tio.object->num_reactors; vcount++) \
     {\
@@ -322,6 +329,7 @@
     }
 
 #define ENT_REACTORS(code)\
+  LOG_TRACE("num_reactors: %u\n", (int)obj->tio.entity->num_reactors); \
   FIELD_VALUE(reactors) = (BITCODE_H*) malloc(sizeof(BITCODE_H) * obj->tio.entity->num_reactors);\
   for (vcount=0; vcount < obj->tio.entity->num_reactors; vcount++)\
     {\
@@ -334,6 +342,10 @@
       if (!obj->tio.object->xdic_missing_flag)\
         {\
           FIELD_HANDLE(xdicobjhandle, code, 0);\
+        }\
+      else \
+        {\
+          LOG_TRACE("xdic_missing_flag: 1\n"); \
         }\
     }\
   PRIOR_VERSIONS\
@@ -371,9 +383,9 @@
 /* just skip the has_strings bit */
 #define START_HANDLE_STREAM \
   *hdl_dat = *dat; \
-  LOG_HANDLE(" @%lu.%u %lu", dat->byte, dat->bit, bit_position(dat)); \
+  LOG_HANDLE(" @%lu.%u (%lu) ", dat->byte, dat->bit, bit_position(dat)); \
   if (dat->version >= R_2007) { bit_set_position(hdl_dat, obj->hdlpos); \
-     LOG_HANDLE(" @%lu.%u %lu\n", dat->byte, dat->bit, bit_position(dat)); }
+     LOG_HANDLE(" @%lu.%u (%lu)\n", dat->byte, dat->bit, bit_position(dat)); }
 
 // unchecked with a constant
 #define REPEAT_CN(times, name, type) \

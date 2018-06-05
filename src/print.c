@@ -374,6 +374,14 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       dwg_print_OBJECTCONTEXTDATA(dat, obj);
       return 1;
     }
+  if (!strcmp(dxfname, "OBJECT_PTR")
+      || !strcmp(klass->cppname, "CAseDLPNTableRecord"))
+    {
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      dwg_print_OBJECT_PTR(dat, obj);
+      return 1;
+    }
   if (!strcmp(dxfname, "ACDBPLACEHOLDER"))
     {
       dwg_print_PLACEHOLDER(dat, obj);
@@ -538,6 +546,19 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
 #else
       UNHANDLED_CLASS;
       assert(is_entity);
+      return 0;
+#endif
+    }
+  if (!strcmp(dxfname, "SUN"))
+    {
+#ifdef DEBUG_SUN
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      dwg_print_SUN(dat, obj);
+      return 1;
+#else
+      UNHANDLED_CLASS;
+      assert(!is_entity);
       return 0;
 #endif
     }

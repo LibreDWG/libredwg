@@ -628,6 +628,14 @@ dwg_dxf_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       dwg_dxf_OBJECTCONTEXTDATA(dat, obj);
       return 1;
     }
+  if (!strcmp(dxfname, "OBJECT_PTR")
+      || !strcmp(klass->cppname, "CAseDLPNTableRecord"))
+    {
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      dwg_dxf_OBJECT_PTR(dat, obj);
+      return 1;
+    }
   if (!strcmp(dxfname, "ACDBPLACEHOLDER"))
     {
       dwg_dxf_PLACEHOLDER(dat, obj);

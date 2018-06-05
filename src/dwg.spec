@@ -5315,17 +5315,18 @@ DWG_OBJECT_END
 #endif
 
 #ifdef DEBUG_PLOTSETTINGS
+// (varies) UNTESTED
 DWG_OBJECT(PLOTSETTINGS)
-  //unsorted!
+  //unsorted! See also LAYOUT
   SUBCLASS (AcDbPlotSettings)
   FIELD_T (page_setup_name, 1);
   FIELD_T (printer_cfg_file, 2);
   FIELD_T (paper_size, 4);
   FIELD_H (plotview, 0, 6);
-  FIELD_BD (margin_left, 40); // margins in mm
-  FIELD_BD (margin_bottom, 41);
-  FIELD_BD (margin_right, 42);
-  FIELD_BD (margin_top, 43);
+  FIELD_BD (left_margin, 40);
+  FIELD_BD (bottom_margin, 41);
+  FIELD_BD (right_margin, 42);
+  FIELD_BD (top_margin, 43);
   FIELD_BD (paper_width, 44); // in mm
   FIELD_BD (paper_height, 45); // in mm
   FIELD_2BD_1 (plot_origin, 46); // + 47
@@ -5348,13 +5349,13 @@ DWG_OBJECT(PLOTSETTINGS)
 				4096 = ZoomToPaperOnUpdate
 				8192 = Initializing
 				16384 = PrevPlotInit */
-  FIELD_RC (plot_paper_units, 72); /*!< 0 inches, 1 mm, 2 pixel */
-  FIELD_RC (plot_rotation, 73);    /*!< 0 normal, 1 90, 2 180, 3 270 deg */
-  FIELD_RC (plot_type, 74);    /*!< 0 display, 1 extents, 2 limits, 3 view (see DXF 6),
+  FIELD_BS (plot_paper_units, 72); /*!< 0 inches, 1 mm, 2 pixel */
+  FIELD_BS (plot_rotation, 73);    /*!< 0 normal, 1 90, 2 180, 3 270 deg */
+  FIELD_BS (plot_type, 74);    /*!< 0 display, 1 extents, 2 limits, 3 view (see DXF 6),
                                     4 window (see 48-140), 5 layout */
   FIELD_H (stylesheet, 0, 7);
   FIELD_B (use_std_scale, 0);
-  FIELD_RC (std_scale_type, 75); /*!< 0 = scaled to fit,
+  FIELD_BS (std_scale_type, 75); /*!< 0 = scaled to fit,
                                    1 = 1/128"=1', 2 = 1/64"=1', 3 = 1/32"=1'
                                    4 = 1/16"=1', 5 = 3/32"=1', 6 = 1/8"=1'
                                    7 = 3/16"=1', 8 = 1/4"=1', 9 = 3/8"=1'
@@ -5365,18 +5366,22 @@ DWG_OBJECT(PLOTSETTINGS)
                                    27 = 2:1, 28 = 4:1, 29 = 8:1, 30 = 10:1, 31 = 100:1, 32 = 1000:1
                                */
   FIELD_BD (std_scale_factor, 147); /*!< value of 75 */
-  FIELD_RC (shade_plot_mode, 76); /*!< 0 display, 1 wireframe, 2 hidden, 3 rendered, 4 visualstyle,
-                                       5 renderPreset */
-  FIELD_RC (shade_plot_res_level, 77); /*!< 0 draft, 1 preview, 2 nomal, 3 presentation, 4 maximum,
-                                            5 custom */
-  FIELD_BS (shade_plot_custom_dpi, 78); /*!< 100-32767 */
   FIELD_2BD_1 (paper_image_origin, 148); // + 149
-  FIELD_HANDLE (shade_plot_id, 0, 333) // optional
+  SINCE(R_2004)
+    {
+      FIELD_BS (shade_plot_mode, 76); /*!< 0 display, 1 wireframe, 2 hidden, 3 rendered, 4 visualstyle,
+                                       5 renderPreset */
+      FIELD_BS (shade_plot_res_level, 77); /*!< 0 draft, 1 preview, 2 nomal, 3 presentation, 4 maximum,
+                                            5 custom */
+      FIELD_BS (shade_plot_custom_dpi, 78); /*!< 100-32767 */
+      FIELD_HANDLE (shade_plot_id, 0, 333) // optional
+    }
 
 DWG_OBJECT_END
 #endif
 
 #ifdef DEBUG_LIGHT  
+// (varies) UNTESTED
 DWG_ENTITY(LIGHT) /* Container for all properties relating to a
                      generic light.  A dictionary of these objects is
                      resident in the database, in the named object
@@ -5417,7 +5422,65 @@ DWG_ENTITY(LIGHT) /* Container for all properties relating to a
 
 DWG_ENTITY_END
 #endif
+
+// (varies) UNKNOWN FIELDS
+// 11 byte+3bit accounted for. the handle stream (parenthandle) is also off a bit.
+DWG_OBJECT(SUN) //referenced by VIEW 361
+
+  COMMON_TABLE_FLAGS(view_control, Sun)
+
+  DEBUG_HERE()
+  rcount1 = bit_position(dat);
+  rcount2 = rcount1 - obj->address * 8;
+  FIELD_VALUE(num_bytes) = (obj->bitsize - rcount2) / 8;
+  FIELD_VALUE(num_bits)  = (obj->bitsize - rcount2) % 8;
+  LOG_TRACE("num_bytes: %d, num_bits: %d\n", FIELD_VALUE(num_bytes), FIELD_VALUE(num_bits));
+  FIELD_TF (bytes, FIELD_VALUE(num_bytes), 0);
+  FIELD_VECTOR (bits, B, num_bits, 0);
+  bit_set_position(dat, rcount1 + 115 - 8); // 8 for the parenthandle
+
+#if 0
+  //FIELD_BL (num_unknown, 0); //0
+  //find handle stream
+  for (vcount=bit_position(dat); dat->byte<9993; bit_set_position(dat,++vcount))
+    {
+      Dwg_Data *dwg = obj->parent;
+      DEBUG_POS()
+      // @9979.6 5.0.0, @9980.0 4.0.0, @9991.1 3.0.0
+      // search for a valid code=4 handle followed by a valid code=3
+      FIELD_HANDLE(parenthandle, 4, 0);
+      if (_obj->parenthandle &&
+          _obj->parenthandle->handleref.code == 4 &&
+          _obj->parenthandle->absolute_ref < dwg->num_object_refs)
+        {
+          //reactors also 4. could check num_reactors
+          FIELD_HANDLE(xdicobjhandle, 3, 0);
+          if (_obj->xdicobjhandle &&
+              _obj->xdicobjhandle->handleref.code == 3 &&
+              _obj->xdicobjhandle->absolute_ref < dwg->num_object_refs)
+            {
+              bit_set_position(dat, vcount);
+              break;
+            }
+        }
+    }
+#endif
+
+  START_HANDLE_STREAM;
+  FIELD_HANDLE (parenthandle, 4, 330); //@9980.0, @9981.3, @9985.5 (11.0.0)
+  REACTORS(4);
+  XDICOBJHANDLE(3); //@9991.1
+  //DEBUG_POS() //@9992.1
+
+DWG_OBJECT_END
+
+// (varies) UNTESTED
+DWG_OBJECT(OBJECT_PTR) //empty? only xdata. CAseDLPNTableRecord
+
+  DEBUG_HERE()
   
+DWG_OBJECT_END
+
 /* Those undocumented objects are stored as raw UNKNOWN_OBJ: */
 
 #if 0
@@ -5443,6 +5506,10 @@ DWG_OBJECT_END
 DWG_OBJECT(SECTIONVIEWSTYLE)
 DWG_OBJECT_END
 
+DWG_OBJECT(TABLESTYLE)
+  SUBCLASS (AcDbTableStyle)
+DWG_OBJECT_END
+
 DWG_OBJECT(DIMASSOC)
 DWG_OBJECT_END
 
@@ -5458,14 +5525,16 @@ DWG_OBJECT_END
 DWG_OBJECT(NPOCOLLECTION)
 DWG_OBJECT_END
 
-DWG_OBJECT(OBJECT_PTR) //empty? only xdata. CAseDLPNTableRecord
+DWG_OBJECT(CSACDOCUMENTOPTIONS)
+//size 161
 DWG_OBJECT_END
 
-DWG_OBJECT(TABLESTYLE) // AcDbTableStyle
-DWG_OBJECT_END
-
-DWG_ENTITY(CAMERA) // i.e. a named view, not persistant in a DWG. CAMERADISPLAY=1
+DWG_ENTITY(CAMERA) // i.e. a named view, not persistent in a DWG. CAMERADISPLAY=1
+DWG_ENTITY_END
 
 DWG_ENTITY(GEOPOSITIONMARKER) // AcDbGeoPositionMarker, undocumented
+  SUBCLASS (AcDbGeoPositionMarker)
+DWG_ENTITY_END
   
 #endif
+

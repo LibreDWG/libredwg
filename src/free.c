@@ -536,6 +536,15 @@ dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
       goto unknown;
 #endif
     }
+  if (!strcmp(dxfname, "SUN"))
+    {
+#ifdef DEBUG_SUN
+      dwg_free_SUN(obj);
+      goto known;
+#else
+      goto unknown;
+#endif
+    }
 
  unknown:  
   free(dxfname);

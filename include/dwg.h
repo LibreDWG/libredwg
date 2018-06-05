@@ -331,6 +331,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_SORTENTSTABLE,
   DWG_TYPE_SPATIAL_FILTER,
   DWG_TYPE_SPATIAL_INDEX,
+  DWG_TYPE_SUN,
   DWG_TYPE_TABLE,
   DWG_TYPE_TABLECONTENT,
   DWG_TYPE_TABLEGEOMETRY,
@@ -4041,6 +4042,16 @@ typedef struct _dwg_object_PLOTSETTINGS
 } Dwg_Object_PLOTSETTINGS;
 
 /**
+ Object OBJECT_PTR (varies) UNKNOWN FIELDS
+ yet unsorted, and unused.
+ */
+typedef struct _dwg_object_OBJECT_PTR
+{
+  struct _dwg_object_object *parent;
+
+} Dwg_Object_OBJECT_PTR;
+
+/**
  Entity LIGHT (varies) UNKNOWN FIELDS
  yet unsorted, and unused.
  */
@@ -4072,6 +4083,32 @@ typedef struct _dwg_entity_LIGHT
   BITCODE_RC glyph_display_type;  /*!< DXF ? */
   BITCODE_RC glyph_display;       /*!< DXF ? */
 } Dwg_Entity_LIGHT;
+
+/**
+ Object SUN (varies) UNKNOWN FIELDS
+ */
+typedef struct _dwg_object_SUN
+{
+  struct _dwg_object_object *parent;
+  BITCODE_RC flag; /* preR13 */
+  BITCODE_TV entry_name;
+  BITCODE_RS used; /* preR13 */
+  BITCODE_B xrefref;
+  BITCODE_BS xrefindex_plus1;
+  BITCODE_B xrefdep;
+
+  // 11.3 bytes missing, from UNKNOWN_OBJ
+  int num_bytes;
+  BITCODE_RC *bytes;
+  int num_bits;
+  BITCODE_B *bits;
+
+  BITCODE_H parenthandle;
+  BITCODE_H* reactors;
+  BITCODE_H xdicobjhandle;
+  BITCODE_H view_control;
+
+} Dwg_Object_SUN;
 
 /**
  Unknown Class entity (unused)
@@ -4346,9 +4383,10 @@ typedef struct _dwg_object_object
     Dwg_Object_MLEADERSTYLE *MLEADERSTYLE;
     Dwg_Object_MLINESTYLE *MLINESTYLE;
     //TODO Dwg_Object_NPOCOLLECTION *NPOCOLLECTION;
+    Dwg_Object_OBJECT_PTR *OBJECT_PTR;
     Dwg_Object_OBJECTCONTEXTDATA *OBJECTCONTEXTDATA;
     Dwg_Object_PLACEHOLDER *PLACEHOLDER;
-    //TODO Dwg_Object_PLOTSETTINGS *PLOTSETTINGS;
+    Dwg_Object_PLOTSETTINGS *PLOTSETTINGS;
     Dwg_Object_PROXY_OBJECT *PROXY_OBJECT;
     Dwg_Object_RASTERVARIABLES *RASTERVARIABLES;
     Dwg_Object_SCALE *SCALE;
@@ -4356,6 +4394,7 @@ typedef struct _dwg_object_object
     Dwg_Object_SORTENTSTABLE *SORTENTSTABLE;
     Dwg_Object_SPATIAL_FILTER *SPATIAL_FILTER;
     Dwg_Object_SPATIAL_INDEX *SPATIAL_INDEX;
+    Dwg_Object_SUN *SUN; /* unhandled */
     Dwg_Object_TABLECONTENT *TABLECONTENT;
     Dwg_Object_TABLEGEOMETRY *TABLEGEOMETRY;
     Dwg_Object_TABLESTYLE *TABLESTYLE;
@@ -4911,13 +4950,13 @@ EXPORT long dwg_add_IMAGEDEF_REACTOR (Dwg_Data * dwg);
 EXPORT long dwg_add_LAYER_INDEX (Dwg_Data * dwg);
 EXPORT long dwg_add_LAYER_FILTER (Dwg_Data * dwg);
 EXPORT long dwg_add_LEADEROBJECTCONTEXTDATA (Dwg_Data * dwg);
-/*EXPORT long dwg_add_LIGHT (Dwg_Data * dwg);*/
+EXPORT long dwg_add_LIGHT (Dwg_Data * dwg);
 EXPORT long dwg_add_LIGHTLIST (Dwg_Data * dwg);
 EXPORT long dwg_add_MATERIAL (Dwg_Data * dwg);
 EXPORT long dwg_add_MULTILEADER (Dwg_Data * dwg);
 EXPORT long dwg_add_MLEADERSTYLE (Dwg_Data * dwg);
 EXPORT long dwg_add_NPOCOLLECTION (Dwg_Data * dwg);
-/*EXPORT long dwg_add_PLOTSETTINGS (Dwg_Data * dwg);*/
+EXPORT long dwg_add_PLOTSETTINGS (Dwg_Data * dwg);
 EXPORT long dwg_add_OBJECTCONTEXTDATA (Dwg_Data * dwg);
 EXPORT long dwg_add_RASTERVARIABLES (Dwg_Data * dwg);
 EXPORT long dwg_add_SCALE (Dwg_Data * dwg);
@@ -4925,6 +4964,7 @@ EXPORT long dwg_add_SECTIONVIEWSTYLE (Dwg_Data * dwg);
 EXPORT long dwg_add_SORTENTSTABLE (Dwg_Data * dwg);
 EXPORT long dwg_add_SPATIAL_FILTER (Dwg_Data * dwg);
 EXPORT long dwg_add_SPATIAL_INDEX (Dwg_Data * dwg);
+EXPORT long dwg_add_SUN (Dwg_Data * dwg);
 EXPORT long dwg_add_TABLE (Dwg_Data * dwg);
 EXPORT long dwg_add_TABLECONTENT (Dwg_Data * dwg);
 EXPORT long dwg_add_TABLEGEOMETRY (Dwg_Data * dwg);

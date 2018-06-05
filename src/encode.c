@@ -1177,6 +1177,13 @@ dwg_encode_variable_type(Dwg_Data* dwg, Bit_Chain* dat, Dwg_Object* obj)
       dwg_encode_OBJECTCONTEXTDATA(dat, obj);
       return 1;
     }
+  if (!strcmp(dxfname, "OBJECT_PTR")
+      || !strcmp(klass->cppname, "CAseDLPNTableRecord"))
+    {
+      assert(!is_entity);
+      dwg_encode_OBJECT_PTR(dat, obj);
+      return 1;
+    }
   if (!strcmp(dxfname, "ACDBPLACEHOLDER"))
     {
       assert(!is_entity);
