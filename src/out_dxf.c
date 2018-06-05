@@ -482,10 +482,12 @@ dxf_write_handle(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
 }
 
 //TODO: 5 330 100 70. have: 330 100 5 70
-#define COMMON_TABLE_CONTROL_FLAGS(owner) \
+#define COMMON_TABLE_CONTROL_FLAGS(owner, acdbname) \
     VALUE_H (_ctrl->null_handle, 330); \
-    if (dat->from_version >= R_2000) \
-      VALUE_TV ("AcDbSymbolTable", 100)
+    if (dat->from_version >= R_2000) { \
+      VALUE_TV ("AcDbSymbolTable", 100); \
+      VALUE_TV ("AcDb" #acdbname "Table", 100); \
+    }
 
 #define COMMON_TABLE_FLAGS(owner, acdbname) \
   if (!minimal) { \
@@ -667,10 +669,10 @@ dwg_dxf_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       dwg_dxf_TABLE(dat, obj);
       return 1;
     }
-  if (!strcmp(dxfname, "WIPEOUTVARIABLE"))
+  if (!strcmp(dxfname, "WIPEOUTVARIABLES"))
     {
       UNTESTED_CLASS;
-      dwg_dxf_WIPEOUTVARIABLE(dat, obj);
+      dwg_dxf_WIPEOUTVARIABLES(dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "WIPEOUT"))
@@ -710,6 +712,20 @@ dwg_dxf_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
     {
       dwg_dxf_VISUALSTYLE(dat, obj);
       return 1;
+    }
+  if (!strcmp(dxfname, "ACDBSECTIONVIEWSTYLE"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_dxf_SECTIONVIEWSTYLE(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "ACDBDETAILVIEWSTYLE"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_dxf_DETAILVIEWSTYLE(dat, obj);
+      return 0;
     }
   if (!strcmp(dxfname, "AcDbField")) //?
     {
@@ -767,6 +783,32 @@ dwg_dxf_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       return 0;
 #endif
     }
+  if (!strcmp(dxfname, "PLOTSETTINGS"))
+    {
+#ifdef DEBUG_PLOTSETTINGS
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      dwg_dxf_PLOTSETTINGS(dat, obj);
+      return 1;
+#else
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      return 0;
+#endif
+    }
+  if (!strcmp(dxfname, "LIGHT"))
+    {
+#ifdef DEBUG_LIGHT
+      UNTESTED_CLASS;
+      assert(is_entity);
+      dwg_dxf_LIGHT(dat, obj);
+      return 1;
+#else
+      UNHANDLED_CLASS;
+      assert(is_entity);
+      return 0;
+#endif
+    }
   if (!strcmp(dxfname, "TABLESTYLE"))
     {
       UNHANDLED_CLASS;
@@ -779,20 +821,6 @@ dwg_dxf_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       UNHANDLED_CLASS;
       assert(!is_entity);
       //dwg_dxf_DBCOLOR(dat, obj);
-      return 0;
-    }
-  if (!strcmp(dxfname, "ACDBSECTIONVIEWSTYLE"))
-    {
-      UNHANDLED_CLASS;
-      assert(!is_entity);
-      //dwg_dxf_SECTIONVIEWSTYLE(dat, obj);
-      return 0;
-    }
-  if (!strcmp(dxfname, "ACDBDETAILVIEWSTYLE"))
-    {
-      UNHANDLED_CLASS;
-      assert(!is_entity);
-      //dwg_dxf_DETAILVIEWSTYLE(dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "ACDBASSOCNETWORK"))
@@ -1322,7 +1350,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
       TABLE(VPORT);
       // add handle 5 here at first
-      COMMON_TABLE_CONTROL_FLAGS(null_handle);
+      COMMON_TABLE_CONTROL_FLAGS(null_handle, Viewport);
       dwg_dxf_VPORT_CONTROL(dat, ctrl);
       //TODO how far back can DXF read 1000?
       if (dat->version != dat->from_version && dat->from_version >= R_2000)
@@ -1351,7 +1379,7 @@ if (1) { //only temp. to test dxf import into acad. this is broken
       Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
       Dwg_Object *obj;
       TABLE(LTYPE);
-      COMMON_TABLE_CONTROL_FLAGS(null_handle);
+      COMMON_TABLE_CONTROL_FLAGS(null_handle, Linetype);
       dwg_dxf_LTYPE_CONTROL(dat, ctrl);
       // first the 2 builtin ltypes: ByBlock, ByLayer
       if ((obj  = dwg_ref_get_object(dwg, dwg->header_vars.LTYPE_BYBLOCK))) {
@@ -1378,7 +1406,7 @@ if (1) { //only temp. to test dxf import into acad. this is broken
       Dwg_Object_LAYER_CONTROL *_ctrl = &dwg->layer_control;
       Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
       TABLE(LAYER);
-      COMMON_TABLE_CONTROL_FLAGS(null_handle);
+      COMMON_TABLE_CONTROL_FLAGS(null_handle, Layer);
       dwg_dxf_LAYER_CONTROL(dat, ctrl);
       for (i=0; i<dwg->layer_control.num_entries; i++)
         {
@@ -1395,7 +1423,7 @@ if (1) { //only temp. to test dxf import into acad. this is broken
       Dwg_Object_STYLE_CONTROL *_ctrl = &dwg->style_control;
       Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
       TABLE(STYLE);
-      COMMON_TABLE_CONTROL_FLAGS(null_handle);
+      COMMON_TABLE_CONTROL_FLAGS(null_handle, TextStyle);
       dwg_dxf_STYLE_CONTROL(dat, ctrl);
       for (i=0; i<dwg->style_control.num_entries; i++)
         {
@@ -1412,7 +1440,7 @@ if (1) { //only temp. to test dxf import into acad. this is broken
       Dwg_Object_VIEW_CONTROL *_ctrl = &dwg->view_control;
       Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
       TABLE(VIEW);
-      COMMON_TABLE_CONTROL_FLAGS(null_handle);
+      COMMON_TABLE_CONTROL_FLAGS(null_handle, View);
       dwg_dxf_VIEW_CONTROL(dat, ctrl);
       for (i=0; i<dwg->view_control.num_entries; i++)
         {
@@ -1430,7 +1458,7 @@ if (1) { //only temp. to test dxf import into acad. this is broken
       Dwg_Object_UCS_CONTROL *_ctrl = &dwg->ucs_control;
       Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
       TABLE(UCS);
-      COMMON_TABLE_CONTROL_FLAGS(null_handle);
+      COMMON_TABLE_CONTROL_FLAGS(null_handle, UCS);
       dwg_dxf_UCS_CONTROL(dat, ctrl);
       for (i=0; i<dwg->ucs_control.num_entries; i++)
         {
@@ -1448,7 +1476,7 @@ if (1) { //only temp. to test dxf import into acad. this is broken
       Dwg_Object_APPID_CONTROL *_ctrl = &dwg->appid_control;
       Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
       TABLE(APPID);
-      COMMON_TABLE_CONTROL_FLAGS(null_handle);
+      COMMON_TABLE_CONTROL_FLAGS(null_handle, RegApp);
       dwg_dxf_APPID_CONTROL(dat, ctrl);
       for (i=0; i<dwg->appid_control.num_entries; i++)
         {
@@ -1465,7 +1493,7 @@ if (1) { //only temp. to test dxf import into acad. this is broken
       Dwg_Object_DIMSTYLE_CONTROL *_ctrl = &dwg->dimstyle_control;
       Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
       TABLE(DIMSTYLE);
-      COMMON_TABLE_CONTROL_FLAGS(null_handle);
+      COMMON_TABLE_CONTROL_FLAGS(null_handle, DimStyle);
       dwg_dxf_DIMSTYLE_CONTROL(dat, ctrl);
       //ignoring morehandles
       for (i=0; i<dwg->dimstyle_control.num_entries; i++)
@@ -1484,7 +1512,7 @@ if (1) { //only temp. to test dxf import into acad. this is broken
       Dwg_Object_VPORT_ENTITY_CONTROL *_ctrl = &dwg->vport_entity_control;
       Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
       TABLE(VPORT_ENTITY);
-      COMMON_TABLE_CONTROL_FLAGS(null_handle);
+      COMMON_TABLE_CONTROL_FLAGS(null_handle, Viewport);
       dwg_dxf_VPORT_ENTITY_CONTROL(dat, ctrl);
       for (i=0; i<dwg->vport_entity_control.num_entries; i++)
         {
@@ -1514,7 +1542,7 @@ dxf_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   const int minimal = 0; //dwg->opts & 0x10;
 
   SECTION(BLOCKS);
-  COMMON_TABLE_CONTROL_FLAGS(null_handle);
+  COMMON_TABLE_CONTROL_FLAGS(null_handle, Block);
   dwg_dxf_BLOCK_CONTROL(dat, ctrl);
   if (_ctrl->model_space)
     {

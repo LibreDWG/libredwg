@@ -297,16 +297,18 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_ASSOC2DCONSTRAINTGROUP,
   DWG_TYPE_ASSOCGEOMDEPENDENCY,
   DWG_TYPE_ASSOCNETWORK,
+  DWG_TYPE_CAMERA,
   DWG_TYPE_CELLSTYLEMAP,
   DWG_TYPE_DBCOLOR,
   DWG_TYPE_DETAILVIEWSTYLE,
   DWG_TYPE_DIMASSOC,
   DWG_TYPE_DICTIONARYVAR,
-  DWG_TYPE_DICTIONARYWDLFT, /* ACDBDICTIONARYWDLFT */
+  DWG_TYPE_DICTIONARYWDLFT,
   DWG_TYPE_EXACXREFPANELOBJECT,
   DWG_TYPE_FIELD,
   DWG_TYPE_FIELDLIST,
   DWG_TYPE_GEODATA,
+  DWG_TYPE_GEOPOSITIONMARKER,
   DWG_TYPE_IDBUFFER,
   DWG_TYPE_IMAGE,
   DWG_TYPE_IMAGEDEF,
@@ -314,6 +316,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_LAYER_INDEX,
   DWG_TYPE_LAYER_FILTER,
   DWG_TYPE_LEADEROBJECTCONTEXTDATA,
+  DWG_TYPE_LIGHT,
   DWG_TYPE_LIGHTLIST,
   DWG_TYPE_MATERIAL,
   DWG_TYPE_MULTILEADER,
@@ -321,6 +324,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_NPOCOLLECTION,
   DWG_TYPE_PLOTSETTINGS,
   DWG_TYPE_OBJECTCONTEXTDATA,
+  DWG_TYPE_OBJECT_PTR,
   DWG_TYPE_RASTERVARIABLES,
   DWG_TYPE_SCALE,
   DWG_TYPE_SECTIONVIEWSTYLE,
@@ -333,7 +337,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_TABLESTYLE,
   DWG_TYPE_VISUALSTYLE,
   DWG_TYPE_WIPEOUT,
-  DWG_TYPE_WIPEOUTVARIABLE,
+  DWG_TYPE_WIPEOUTVARIABLES,
 
   DWG_TYPE_UNKNOWN_ENT = 0xfffe,
   DWG_TYPE_UNKNOWN_OBJ = 0xffff,
@@ -2298,7 +2302,7 @@ typedef struct _dwg_entity_OLE2FRAME
 {
   struct _dwg_object_entity *parent;
 
-  BITCODE_BS flag;
+  BITCODE_BS flag;        /*!< DXF 70 */
   BITCODE_BS mode;
   BITCODE_BL data_length;
   BITCODE_RC* data;
@@ -2362,10 +2366,10 @@ typedef struct _dwg_entity_PROXY_ENTITY
 {
   struct _dwg_object_entity *parent;
 
-  BITCODE_BL class_id;
-  BITCODE_BL version;
-  BITCODE_BL maint_version;
-  BITCODE_B from_dxf;
+  BITCODE_BL class_id;      /*!< DXF 91 */
+  BITCODE_BL version;       /*!< DXF 71 */
+  BITCODE_BL maint_version; /*!< DXF 97 */
+  BITCODE_B from_dxf;       /*!< DXF 70 */
   BITCODE_RC* data;
   BITCODE_H parenthandle;
   BITCODE_H* reactors;
@@ -3653,17 +3657,17 @@ typedef struct _dwg_entity_LWPOLYLINE
 {
   struct _dwg_object_entity *parent;
 
-  BITCODE_BS flag;
-  BITCODE_BD const_width;
-  BITCODE_BD elevation;
-  BITCODE_BD thickness;
-  BITCODE_3BD normal;
-  BITCODE_BL num_points;
-  BITCODE_2RD* points;
+  BITCODE_BS flag;		/*!< DXF 70 */
+  BITCODE_BD const_width;	/*!< DXF 43 */
+  BITCODE_BD elevation;		/*!< DXF 38 */
+  BITCODE_BD thickness;		/*!< DXF 39 */
+  BITCODE_3BD normal;		/*!< DXF 210 */
+  BITCODE_BL num_points;	/*!< DXF 90 */
+  BITCODE_2RD* points;		/*!< DXF 10,20 */
   BITCODE_BL num_bulges;
-  BITCODE_BD* bulges;
+  BITCODE_BD* bulges;		/*!< DXF 42 */
   BITCODE_BL num_widths;
-  Dwg_LWPOLYLINE_width* widths;
+  Dwg_LWPOLYLINE_width* widths;	/*!< DXF 41,42 */
 } Dwg_Entity_LWPOLYLINE;
 
 /**
@@ -3800,10 +3804,10 @@ typedef struct _dwg_entity_WIPEOUT
 } Dwg_Entity_WIPEOUT;
 
 /**
- Class WIPEOUTVARIABLE (varies, 505)
+ Class WIPEOUTVARIABLES (varies, 505)
  R2000+, Object bitsize: 96
  */
-typedef struct _dwg_object_WIPEOUTVARIABLE
+typedef struct _dwg_object_WIPEOUTVARIABLES
 {
   struct _dwg_object_object *parent;
 
@@ -3811,7 +3815,7 @@ typedef struct _dwg_object_WIPEOUTVARIABLE
   BITCODE_H parenthandle;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
-} Dwg_Object_WIPEOUTVARIABLE;
+} Dwg_Object_WIPEOUTVARIABLES;
 
 /**
  Class VISUALSTYLE (varies)
@@ -3843,7 +3847,7 @@ typedef struct _dwg_object_LIGHTLIST
 
 /**
  Object MATERIAL (varies) UNKNOWN FIELDS
- R2007+
+ R2007+ yet unused
 
 Acad Naming: e.g. Materials/assetlibrary_base.fbm/shaders/AdskShaders.mi
                   Materials/assetlibrary_base.fbm/Mats/SolidGlass/Generic.xml
@@ -3970,6 +3974,104 @@ typedef struct _dwg_object_MATERIAL
   //? BD self_illum_luminance
   //? BD self_illum_color_temperature
 } Dwg_Object_MATERIAL;
+
+/**
+ Object PLOTSETTINGS (varies) UNKNOWN FIELDS
+ yet unsorted, and unused.
+ */
+typedef struct _dwg_object_PLOTSETTINGS
+{
+  struct _dwg_object_object *parent;
+
+  BITCODE_T page_setup_name;  /*!< DXF 1 */
+  BITCODE_T printer_cfg_file; /*!< DXF 2 */
+  BITCODE_T paper_size;       /*!< DXF 4 */
+  BITCODE_H plotview;         /*!< DXF 6 */
+  BITCODE_BD margin_left;     /*!< DXF 40, margins in mm */
+  BITCODE_BD margin_bottom;   /*!< DXF 41 */
+  BITCODE_BD margin_right;    /*!< DXF 42 */
+  BITCODE_BD margin_top;      /*!< DXF 43 */
+  BITCODE_BD paper_width;     /*!< DXF 44, in mm */
+  BITCODE_BD paper_height;    /*!< DXF 45, in mm */
+  BITCODE_2BD plot_origin; 	     /*!< DXF 46 */ // + 47
+  BITCODE_2BD plot_window_ll;      /*!< DXF 48 */ // + 49
+  BITCODE_2BD plot_window_ur;      /*!< DXF 140 */ // + 141
+  BITCODE_BD num_custom_print_scale; /*!< DXF 142 */ // in paper units
+  BITCODE_BD den_custom_print_scale; /*!< DXF 143 */ // in drawing units
+  BITCODE_BS plot_layout;    /*!< DXF 70
+				1 = PlotViewportBorders
+				2 = ShowPlotStyles
+				4 = PlotCentered
+				8 = PlotHidden
+				16 = UseStandardScale
+				32 = PlotPlotStyles
+				64 = ScaleLineweights
+				128 = PrintLineweights
+				512 = DrawViewportsFirst
+				1024 = ModelType
+				2048 = UpdatePaper
+				4096 = ZoomToPaperOnUpdate
+				8192 = Initializing
+				16384 = PrevPlotInit */
+  BITCODE_RC plot_paper_units; /*!< DXF 72,  0 inches, 1 mm, 2 pixel */
+  BITCODE_RC plot_rotation;    /*!< DXF 73,  0 normal, 1 90, 2 180, 3 270 deg */
+  BITCODE_RC plot_type;        /*!< DXF 74,  0 display, 1 extents, 2 limits, 3 view (see DXF 6),
+                                             4 window (see 48-140), 5 layout */
+  BITCODE_H stylesheet;        /*!< DXF 7 */
+  BITCODE_B use_std_scale;     /*!< DXF 0 */
+  BITCODE_RC std_scale_type; /*!< DXF 75, 0 = scaled to fit,
+                                   1 = 1/128"=1', 2 = 1/64"=1', 3 = 1/32"=1'
+                                   4 = 1/16"=1', 5 = 3/32"=1', 6 = 1/8"=1'
+                                   7 = 3/16"=1', 8 = 1/4"=1', 9 = 3/8"=1'
+                                   10 = 1/2"=1', 11 = 3/4"=1', 12 = 1"=1'
+                                   13 = 3"=1', 14 = 6"=1', 15 = 1'=1'
+                                   16 = 1:1, 17= 1:2, 18 = 1:4 19 = 1:8, 20 = 1:10, 21= 1:16
+                                   22 = 1:20, 23 = 1:30, 24 = 1:40, 25 = 1:50, 26 = 1:100
+                                   27 = 2:1, 28 = 4:1, 29 = 8:1, 30 = 10:1, 31 = 100:1, 32 = 1000:1
+                               */
+  BITCODE_BD std_scale_factor; /*!< DXF 147, value of 75 */
+  BITCODE_RC shade_plot_mode;  /*!< DXF 76, 0 display, 1 wireframe, 2 hidden, 3 rendered,
+                                            4 visualstyle, 5 renderPreset */
+  BITCODE_RC shade_plot_res_level; /*!< DXF 77, 0 draft, 1 preview, 2 nomal,
+                                                3 presentation, 4 maximum, 5 custom */
+  BITCODE_BS  shade_plot_custom_dpi; /*!< DXF 78, 100-32767 */
+  BITCODE_2BD paper_image_origin;    /*!< DXF 148 + 149 */
+  BITCODE_H   shade_plot_id;         /*!< DXF 333  optional */
+  
+} Dwg_Object_PLOTSETTINGS;
+
+/**
+ Entity LIGHT (varies) UNKNOWN FIELDS
+ yet unsorted, and unused.
+ */
+typedef struct _dwg_entity_LIGHT
+{
+  struct _dwg_object_entity *parent;
+
+  BITCODE_T name; 	/*!< DXF 1 */
+  BITCODE_T type; 	/*!< DXF 70, distant = 1; point = 2; spot = 3 */
+  BITCODE_B status; 	/*!< DXF 290 */
+  BITCODE_B plot_glyph; /*!< DXF 291 */
+  BITCODE_BD intensity; /*!< DXF 40 */
+  BITCODE_3BD position; /*!< DXF 10 */
+  BITCODE_3BD target;   /*!< DXF 11 */
+  BITCODE_RC attenuation_type;        /*!< DXF 72 */
+  BITCODE_B use_attenuation_limits;   /*!< DXF 292 */
+  BITCODE_BD attenuation_start_limit; /*!< DXF 41 */
+  BITCODE_BD attenuation_end_limit;   /*!< DXF 42 */
+  BITCODE_BD hotspot_angle; /*!< DXF 50 */
+  BITCODE_BD falloff_angle; /*!< DXF 51, type=spot only */
+  BITCODE_B cast_shadows;   /*!< DXF 293 */
+  BITCODE_RC shadow_type;   /*!< DXF 73, 0 or 1 */
+  BITCODE_BS shadow_map_size;     /*!< DXF 91 */
+  BITCODE_BS shadow_map_softness; /*!< DXF 280 */
+  BITCODE_RC lamp_color_preset;   /*!< DXF ? */
+  BITCODE_RC lamp_color_type;     /*!< DXF ? */
+  BITCODE_RC physical_intensity_method; /*!< DXF ? */
+  BITCODE_RS drawable_type;       /*!< DXF ? */
+  BITCODE_RC glyph_display_type;  /*!< DXF ? */
+  BITCODE_RC glyph_display;       /*!< DXF ? */
+} Dwg_Entity_LIGHT;
 
 /**
  Unknown Class entity (unused)
@@ -4116,6 +4218,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_MLINE *MLINE;
     Dwg_Entity_OLE2FRAME *OLE2FRAME;
     Dwg_Entity_DUMMY *DUMMY;
+    Dwg_Entity_LIGHT *LIGHT;
     Dwg_Entity_LONG_TRANSACTION *LONG_TRANSACTION;
     Dwg_Entity_LWPOLYLINE *LWPOLYLINE;
     Dwg_Entity_MULTILEADER *MULTILEADER;
@@ -4258,7 +4361,7 @@ typedef struct _dwg_object_object
     Dwg_Object_TABLESTYLE *TABLESTYLE;
     Dwg_Object_VBA_PROJECT *VBA_PROJECT;
     Dwg_Object_VISUALSTYLE *VISUALSTYLE;
-    Dwg_Object_WIPEOUTVARIABLE *WIPEOUTVARIABLE;
+    Dwg_Object_WIPEOUTVARIABLES *WIPEOUTVARIABLES;
     Dwg_Object_XRECORD *XRECORD;
     Dwg_Object_UNKNOWN_OBJ *UNKNOWN_OBJ;
   } tio;
@@ -4808,12 +4911,13 @@ EXPORT long dwg_add_IMAGEDEF_REACTOR (Dwg_Data * dwg);
 EXPORT long dwg_add_LAYER_INDEX (Dwg_Data * dwg);
 EXPORT long dwg_add_LAYER_FILTER (Dwg_Data * dwg);
 EXPORT long dwg_add_LEADEROBJECTCONTEXTDATA (Dwg_Data * dwg);
+/*EXPORT long dwg_add_LIGHT (Dwg_Data * dwg);*/
 EXPORT long dwg_add_LIGHTLIST (Dwg_Data * dwg);
 EXPORT long dwg_add_MATERIAL (Dwg_Data * dwg);
 EXPORT long dwg_add_MULTILEADER (Dwg_Data * dwg);
 EXPORT long dwg_add_MLEADERSTYLE (Dwg_Data * dwg);
 EXPORT long dwg_add_NPOCOLLECTION (Dwg_Data * dwg);
-EXPORT long dwg_add_PLOTSETTINGS (Dwg_Data * dwg);
+/*EXPORT long dwg_add_PLOTSETTINGS (Dwg_Data * dwg);*/
 EXPORT long dwg_add_OBJECTCONTEXTDATA (Dwg_Data * dwg);
 EXPORT long dwg_add_RASTERVARIABLES (Dwg_Data * dwg);
 EXPORT long dwg_add_SCALE (Dwg_Data * dwg);
@@ -4827,7 +4931,7 @@ EXPORT long dwg_add_TABLEGEOMETRY (Dwg_Data * dwg);
 EXPORT long dwg_add_TABLESTYLE (Dwg_Data * dwg);
 EXPORT long dwg_add_VISUALSTYLE (Dwg_Data * dwg);
 EXPORT long dwg_add_WIPEOUT (Dwg_Data * dwg);
-EXPORT long dwg_add_WIPEOUTVARIABLE (Dwg_Data * dwg);
+EXPORT long dwg_add_WIPEOUTVARIABLES (Dwg_Data * dwg);
 #endif
 
 #ifdef __cplusplus

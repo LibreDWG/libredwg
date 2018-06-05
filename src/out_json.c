@@ -453,10 +453,10 @@ dwg_json_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       dwg_json_TABLE(dat, obj);
       return 1;
     }
-  if (!strcmp(dxfname, "WIPEOUTVARIABLE"))
+  if (!strcmp(dxfname, "WIPEOUTVARIABLES"))
     {
       UNTESTED_CLASS;
-      dwg_json_WIPEOUTVARIABLE(dat, obj);
+      dwg_json_WIPEOUTVARIABLES(dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "WIPEOUT"))
@@ -496,6 +496,20 @@ dwg_json_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
     {
       dwg_json_VISUALSTYLE(dat, obj);
       return 1;
+    }
+  if (!strcmp(dxfname, "ACDBSECTIONVIEWSTYLE"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_json_SECTIONVIEWSTYLE(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "ACDBDETAILVIEWSTYLE"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_json_DETAILVIEWSTYLE(dat, obj);
+      return 0;
     }
   if (!strcmp(dxfname, "AcDbField")) //?
     {
@@ -553,6 +567,32 @@ dwg_json_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       return 0;
 #endif
     }
+  if (!strcmp(dxfname, "PLOTSETTINGS"))
+    {
+#ifdef DEBUG_PLOTSETTINGS
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      dwg_json_PLOTSETTINGS(dat, obj);
+      return 1;
+#else
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      return 0;
+#endif
+    }
+  if (!strcmp(dxfname, "LIGHT"))
+    {
+#ifdef DEBUG_LIGHT
+      UNTESTED_CLASS;
+      assert(is_entity);
+      dwg_json_LIGHT(dat, obj);
+      return 1;
+#else
+      UNHANDLED_CLASS;
+      assert(is_entity);
+      return 0;
+#endif
+    }
   if (!strcmp(dxfname, "TABLESTYLE"))
     {
       UNHANDLED_CLASS;
@@ -565,20 +605,6 @@ dwg_json_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       UNHANDLED_CLASS;
       assert(!is_entity);
       //dwg_json_DBCOLOR(dat, obj);
-      return 0;
-    }
-  if (!strcmp(dxfname, "ACDBSECTIONVIEWSTYLE"))
-    {
-      UNHANDLED_CLASS;
-      assert(!is_entity);
-      //dwg_json_SECTIONVIEWSTYLE(dat, obj);
-      return 0;
-    }
-  if (!strcmp(dxfname, "ACDBDETAILVIEWSTYLE"))
-    {
-      UNHANDLED_CLASS;
-      assert(!is_entity);
-      //dwg_json_DETAILVIEWSTYLE(dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "ACDBASSOCNETWORK"))

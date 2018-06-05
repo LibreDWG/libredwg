@@ -137,7 +137,7 @@ Halfway:
 
 * SPATIAL_INDEX class/object untested
 
-* WIPEOUTVARIABLE class/object untested
+* WIPEOUTVARIABLES class/object untested
 
 * ACIS: only converted to a raw string
 

@@ -3421,11 +3421,11 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
       dwg_decode_MLEADERSTYLE(dat, obj);
       return 1;
     }
-  if (!strcmp(dxfname, "WIPEOUTVARIABLE"))
+  if (!strcmp(dxfname, "WIPEOUTVARIABLES"))
     {
       UNTESTED_CLASS;
       assert(!is_entity);
-      dwg_decode_WIPEOUTVARIABLE(dat, obj);
+      dwg_decode_WIPEOUTVARIABLES(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "CELLSTYLEMAP"))
@@ -3469,6 +3469,32 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
 #else
       UNHANDLED_CLASS;
       assert(!is_entity);
+      return 0;
+#endif
+    }
+  if (!strcmp(dxfname, "PLOTSETTINGS"))
+    {
+#ifdef DEBUG_PLOTSETTINGS
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      dwg_decode_PLOTSETTINGS(dat, obj);
+      return 1;
+#else
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      return 0;
+#endif
+    }
+  if (!strcmp(dxfname, "LIGHT"))
+    {
+#ifdef DEBUG_LIGHT
+      UNTESTED_CLASS;
+      assert(is_entity);
+      dwg_decode_LIGHT(dat, obj);
+      return 1;
+#else
+      UNHANDLED_CLASS;
+      assert(is_entity);
       return 0;
 #endif
     }

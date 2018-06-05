@@ -415,11 +415,11 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       dwg_print_TABLE(dat, obj);
       return 1;
     }
-  if (!strcmp(dxfname, "WIPEOUTVARIABLE"))
+  if (!strcmp(dxfname, "WIPEOUTVARIABLES"))
     {
       UNTESTED_CLASS;
-      dwg_print_WIPEOUTVARIABLE(dat, obj);
-      return 0;
+      dwg_print_WIPEOUTVARIABLES(dat, obj);
+      return 1;
     }
   if (!strcmp(dxfname, "WIPEOUT"))
     {
@@ -512,6 +512,32 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
 #else
       UNHANDLED_CLASS;
       assert(!is_entity);
+      return 0;
+#endif
+    }
+  if (!strcmp(dxfname, "PLOTSETTINGS"))
+    {
+#ifdef DEBUG_PLOTSETTINGS
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      dwg_print_PLOTSETTINGS(dat, obj);
+      return 1;
+#else
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      return 0;
+#endif
+    }
+  if (!strcmp(dxfname, "LIGHT"))
+    {
+#ifdef DEBUG_LIGHT
+      UNTESTED_CLASS;
+      assert(is_entity);
+      dwg_print_LIGHT(dat, obj);
+      return 1;
+#else
+      UNHANDLED_CLASS;
+      assert(is_entity);
       return 0;
 #endif
     }

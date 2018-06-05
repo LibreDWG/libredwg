@@ -436,9 +436,9 @@ dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
       dwg_free_TABLE(obj);
       goto known;
     }
-  if (!strcmp(dxfname, "WIPEOUTVARIABLE"))
+  if (!strcmp(dxfname, "WIPEOUTVARIABLES"))
     {
-      dwg_free_WIPEOUTVARIABLE(obj);
+      dwg_free_WIPEOUTVARIABLES(obj);
       goto known;
     }
   if (!strcmp(dxfname, "WIPEOUT"))
@@ -468,6 +468,16 @@ dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
     {
       dwg_free_VISUALSTYLE(obj);
       goto known;
+    }
+  if (!strcmp(dxfname, "ACDBSECTIONVIEWSTYLE"))
+    {
+      //dwg_free_SECTIONVIEWSTYLE(obj);
+      goto unknown;
+    }
+  if (!strcmp(dxfname, "ACDBDETAILVIEWSTYLE"))
+    {
+      //dwg_free_DETAILVIEWSTYLE(obj);
+      goto unknown;
     }
   if (!strcmp(dxfname, "AcDbField")) //?
     {
@@ -508,6 +518,25 @@ dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
       goto unknown;
 #endif
     }
+  if (!strcmp(dxfname, "PLOTSETTINGS"))
+    {
+#ifdef DEBUG_PLOTSETTINGS
+      dwg_free_PLOTSETTINGS(obj);
+      goto known;
+#else
+      goto unknown;
+#endif
+    }
+  if (!strcmp(dxfname, "LIGHT"))
+    {
+#ifdef DEBUG_LIGHT
+      dwg_free_LIGHT(obj);
+      goto known;
+#else
+      goto unknown;
+#endif
+    }
+
  unknown:  
   free(dxfname);
   return 0;

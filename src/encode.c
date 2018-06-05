@@ -1289,11 +1289,11 @@ dwg_encode_variable_type(Dwg_Data* dwg, Bit_Chain* dat, Dwg_Object* obj)
       return 0;
 #endif
     }
-  if (!strcmp(dxfname, "WIPEOUTVARIABLE"))
+  if (!strcmp(dxfname, "WIPEOUTVARIABLES"))
     {
-      UNHANDLED_CLASS;
+      UNTESTED_CLASS;
       assert(!is_entity);
-      dwg_encode_WIPEOUTVARIABLE(dat, obj);
+      dwg_encode_WIPEOUTVARIABLES(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "CELLSTYLEMAP"))
@@ -1314,6 +1314,20 @@ dwg_encode_variable_type(Dwg_Data* dwg, Bit_Chain* dat, Dwg_Object* obj)
       dwg_encode_VISUALSTYLE(dat, obj);
       return 1;
     }
+  if (!strcmp(dxfname, "ACDBSECTIONVIEWSTYLE"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_encode_SECTIONVIEWSTYLE(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "ACDBDETAILVIEWSTYLE"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_encode_DETAILVIEWSTYLE(dat, obj);
+      return 0;
+    }
   if (!strcmp(dxfname, "DIMASSOC"))
     {
       UNHANDLED_CLASS;
@@ -1331,6 +1345,32 @@ dwg_encode_variable_type(Dwg_Data* dwg, Bit_Chain* dat, Dwg_Object* obj)
 #else
       UNHANDLED_CLASS;
       assert(!is_entity);
+      return 0;
+#endif
+    }
+  if (!strcmp(dxfname, "PLOTSETTINGS"))
+    {
+#ifdef DEBUG_PLOTSETTINGS
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      dwg_encode_PLOTSETTINGS(dat, obj);
+      return 1;
+#else
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      return 0;
+#endif
+    }
+  if (!strcmp(dxfname, "LIGHT"))
+    {
+#ifdef DEBUG_LIGHT
+      UNTESTED_CLASS;
+      assert(is_entity);
+      dwg_encode_LIGHT(dat, obj);
+      return 1;
+#else
+      UNHANDLED_CLASS;
+      assert(is_entity);
       return 0;
 #endif
     }
@@ -1370,20 +1410,6 @@ dwg_encode_variable_type(Dwg_Data* dwg, Bit_Chain* dat, Dwg_Object* obj)
       //dwg_encode_DBCOLOR(dat, obj);
       return 0;
     }
-  if (!strcmp(dxfname, "ACDBSECTIONVIEWSTYLE"))
-    {
-      UNHANDLED_CLASS;
-      assert(!is_entity);
-      //dwg_encode_SECTIONVIEWSTYLE(dat, obj);
-      return 0;
-    }
-  if (!strcmp(dxfname, "ACDBDETAILVIEWSTYLE"))
-    {
-      UNHANDLED_CLASS;
-      assert(!is_entity);
-      //dwg_encode_DETAILVIEWSTYLE(dat, obj);
-      return 0;
-    }
   if (!strcmp(dxfname, "ACDBASSOCNETWORK"))
     {
       UNHANDLED_CLASS;
@@ -1419,7 +1445,7 @@ dwg_encode_variable_type(Dwg_Data* dwg, Bit_Chain* dat, Dwg_Object* obj)
 
   /* TODO: CELLSTYLEMAP, DBCOLOR, MATERIAL, MULTILEADER, MLEADERSTYLE,
      PLOTSETTINGS, SCALE, TABLEGEOMETRY,
-     TABLESTYLE, VBA_PROJECT, VISUALSTYLE, WIPEOUTVARIABLE,
+     TABLESTYLE, VBA_PROJECT, VISUALSTYLE, WIPEOUTVARIABLES,
      ACDBSECTIONVIEWSTYLE, ACDBDETAILVIEWSTYLE,
      NPOCOLLECTION, EXACXREFPANELOBJECT,
      ARCALIGNEDTEXT (2000+)

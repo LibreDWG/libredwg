@@ -806,10 +806,10 @@ dwg_dxf_variable_type(Dwg_Data * dwg, Bit_Chain *dat, Dwg_Object* obj)
       dwg_dxf_TABLE(dat, obj);
       return 1;
     }
-  if (!strcmp(dxfname, "WIPEOUTVARIABLE"))
+  if (!strcmp(dxfname, "WIPEOUTVARIABLES"))
     {
       UNTESTED_CLASS;
-      dwg_dxf_WIPEOUTVARIABLE(dat, obj);
+      dwg_dxf_WIPEOUTVARIABLES(dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "WIPEOUT"))
@@ -849,6 +849,20 @@ dwg_dxf_variable_type(Dwg_Data * dwg, Bit_Chain *dat, Dwg_Object* obj)
     {
       dwg_dxf_VISUALSTYLE(dat, obj);
       return 1;
+    }
+  if (!strcmp(dxfname, "ACDBSECTIONVIEWSTYLE"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_dxf_SECTIONVIEWSTYLE(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "ACDBDETAILVIEWSTYLE"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_dxf_DETAILVIEWSTYLE(dat, obj);
+      return 0;
     }
   if (!strcmp(dxfname, "AcDbField")) //?
     {
@@ -895,10 +909,42 @@ dwg_dxf_variable_type(Dwg_Data * dwg, Bit_Chain *dat, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "MATERIAL"))
     {
+#ifdef DEBUG_MATERIAL
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      dwg_dxf_MATERIAL(dat, obj);
+      return 1;
+#else
       UNHANDLED_CLASS;
       assert(!is_entity);
-      //dwg_dxf_MATERIAL(dat, obj);
       return 0;
+#endif
+    }
+  if (!strcmp(dxfname, "PLOTSETTINGS"))
+    {
+#ifdef DEBUG_PLOTSETTINGS
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      dwg_dxf_PLOTSETTINGS(dat, obj);
+      return 1;
+#else
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      return 0;
+#endif
+    }
+  if (!strcmp(dxfname, "LIGHT"))
+    {
+#ifdef DEBUG_LIGHT
+      UNTESTED_CLASS;
+      assert(is_entity);
+      dwg_dxf_LIGHT(dat, obj);
+      return 1;
+#else
+      UNHANDLED_CLASS;
+      assert(is_entity);
+      return 0;
+#endif
     }
   if (!strcmp(dxfname, "TABLESTYLE"))
     {
@@ -912,20 +958,6 @@ dwg_dxf_variable_type(Dwg_Data * dwg, Bit_Chain *dat, Dwg_Object* obj)
       UNHANDLED_CLASS;
       assert(!is_entity);
       //dwg_dxf_DBCOLOR(dat, obj);
-      return 0;
-    }
-  if (!strcmp(dxfname, "ACDBSECTIONVIEWSTYLE"))
-    {
-      UNHANDLED_CLASS;
-      assert(!is_entity);
-      //dwg_dxf_SECTIONVIEWSTYLE(dat, obj);
-      return 0;
-    }
-  if (!strcmp(dxfname, "ACDBDETAILVIEWSTYLE"))
-    {
-      UNHANDLED_CLASS;
-      assert(!is_entity);
-      //dwg_dxf_DETAILVIEWSTYLE(dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "ACDBASSOCNETWORK"))
