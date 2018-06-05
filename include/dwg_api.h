@@ -46,7 +46,7 @@ typedef struct dwg_point_2d
   double y;
 } dwg_point_2d;
 
-typedef struct dwg_lwpline_widths
+typedef struct _dwg_LWPLINE_widths
 {
   double start;
   double end;
@@ -190,8 +190,8 @@ typedef struct _dwg_entity_INSERT                 dwg_ent_insert;
 typedef struct _dwg_entity_MINSERT                dwg_ent_minsert;
 typedef struct _dwg_entity_BLOCK                  dwg_ent_block;
 typedef struct _dwg_entity_IMAGE                  dwg_ent_image;
-typedef struct _dwg_entity_MLINE_line             dwg_ent_mline_line;
-typedef struct _dwg_entity_MLINE_vertex           dwg_ent_mline_vertex;
+typedef struct _dwg_MLINE_line                    dwg_mline_line;
+typedef struct _dwg_MLINE_vertex                  dwg_mline_vertex;
 typedef struct _dwg_entity_MLINE                  dwg_ent_mline;
 typedef struct _dwg_entity_RAY                    dwg_ent_ray, 
                                                   dwg_ent_xline;
@@ -213,17 +213,17 @@ typedef struct _dwg_entity_MTEXT                  dwg_ent_mtext;
 typedef struct _dwg_entity_TOLERANCE              dwg_ent_tolerance;
 typedef struct _dwg_entity_ENDBLK                 dwg_ent_endblk;
 typedef struct _dwg_entity_SEQEND                 dwg_ent_seqend;
-typedef struct _dwg_entity_SPLINE_point           dwg_ent_spline_point;
 typedef struct _dwg_entity_SPLINE                 dwg_ent_spline;
-typedef struct _dwg_entity_SPLINE_control_point   dwg_ent_spline_control_point;
+typedef struct _dwg_SPLINE_point                  dwg_spline_point;
+typedef struct _dwg_SPLINE_control_point          dwg_spline_control_point;
 typedef struct _dwg_entity_OLEFRAME               dwg_ent_oleframe;
 typedef struct _dwg_entity_OLE2FRAME              dwg_ent_ole2frame;
 typedef struct _dwg_entity_VIEWPORT               dwg_ent_viewport;
 typedef struct _dwg_entity_3DSOLID                dwg_ent_3dsolid,
                                                   dwg_ent_region,
                                                   dwg_ent_body;
-typedef struct _dwg_entity_3DSOLID_wire           dwg_ent_solid_wire;
-typedef struct _dwg_entity_3DSOLID_silhouette     dwg_ent_solid_silhouette;
+typedef struct _dwg_3DSOLID_wire                  dwg_3dsolid_wire;
+typedef struct _dwg_3DSOLID_silhouette            dwg_3dsolid_silhouette;
 typedef struct _dwg_entity_TABLE                  dwg_ent_table;
 typedef struct _dwg_entity_HATCH                  dwg_ent_hatch;
 typedef struct _dwg_entity_VERTEX_PFACE_FACE      dwg_ent_vert_pface_face;
@@ -2810,11 +2810,11 @@ dwg_ent_spline_get_num_ctrl_pts(const dwg_ent_spline *restrict spline,
 
 //TODO: dwg_ent_spline_add_ctrl_pts, dwg_ent_spline_delete_ctrl_pts
 
-EXPORT dwg_ent_spline_point *
+EXPORT dwg_spline_point *
 dwg_ent_spline_get_fit_pts(const dwg_ent_spline *restrict spline,
                            int *restrict error);
 
-EXPORT dwg_ent_spline_control_point *
+EXPORT dwg_spline_control_point *
 dwg_ent_spline_get_ctrl_pts(const dwg_ent_spline *restrict spline,
                             int *restrict error);
 
@@ -3566,23 +3566,23 @@ dwg_ent_mline_set_flags(dwg_ent_mline *restrict mline,
 
 EXPORT BITCODE_BS
 dwg_ent_mline_get_flags(const dwg_ent_mline *restrict mline,
-                          int *restrict error);
+                        int *restrict error);
 
 EXPORT BITCODE_RC
 dwg_ent_mline_get_num_lines(const dwg_ent_mline *restrict mline,
-                          int *restrict error);
+                            int *restrict error);
 
 EXPORT BITCODE_BS
 dwg_ent_mline_get_num_verts(const dwg_ent_mline *restrict mline,
-                          int *restrict error);
+                            int *restrict error);
 
-EXPORT dwg_ent_mline_vertex *
+EXPORT dwg_mline_vertex *
 dwg_ent_mline_get_verts(const dwg_ent_mline *restrict mline,
-                          int *restrict error);
+                        int *restrict error);
 
-EXPORT dwg_ent_mline_line *
+EXPORT dwg_mline_line *
 dwg_ent_mline_get_lines(const dwg_ent_mline *restrict mline,
-                          int *restrict error);
+                        int *restrict error);
 
 /********************************************************************
 *                  FUNCTIONS FOR 3DSOLID ENTITY                     *
@@ -3602,22 +3602,13 @@ EXPORT BITCODE_BS
 dwg_ent_3dsolid_get_version(const dwg_ent_3dsolid *restrict _3dsolid,
                             int *restrict error);
 
-EXPORT void
-dwg_ent_3dsolid_set_version(dwg_ent_3dsolid *restrict _3dsolid,
-                            const BITCODE_BS version,
-                            int *restrict error);
-
-EXPORT BITCODE_BL*
-dwg_ent_3dsolid_get_block_size(const dwg_ent_3dsolid *restrict _3dsolid,
-                               int *restrict error);
-
-EXPORT char *
+EXPORT unsigned char*
 dwg_ent_3dsolid_get_acis_data(const dwg_ent_3dsolid *restrict _3dsolid,
                               int *restrict error);
 
 EXPORT void
 dwg_ent_3dsolid_set_acis_data(dwg_ent_3dsolid *restrict _3dsolid,
-                              const char *data,
+                              const unsigned char *restrict sat_data,
                               int *restrict error);
 
 EXPORT char
@@ -3670,7 +3661,7 @@ EXPORT BITCODE_BL
 dwg_ent_3dsolid_get_num_wires(const dwg_ent_3dsolid *restrict _3dsolid,
                               int *restrict error);
 
-EXPORT dwg_ent_solid_wire *
+EXPORT dwg_3dsolid_wire *
 dwg_ent_3dsolid_get_wires(const dwg_ent_3dsolid *restrict _3dsolid,
                           int *restrict error);
 
@@ -3678,7 +3669,7 @@ EXPORT BITCODE_BL
 dwg_ent_3dsolid_get_num_silhouettes(const dwg_ent_3dsolid *restrict _3dsolid,
                                     int *restrict error);
 
-EXPORT dwg_ent_solid_silhouette *
+EXPORT dwg_3dsolid_silhouette *
 dwg_ent_3dsolid_get_silhouettes(const dwg_ent_3dsolid *restrict _3dsolid,
                                 int *restrict error);
 
@@ -3699,7 +3690,7 @@ dwg_ent_3dsolid_set_acis_empty2(dwg_ent_3dsolid *restrict _3dsolid,
 
 EXPORT unsigned char
 dwg_ent_region_get_acis_empty(const dwg_ent_region *restrict region,
-                          int *restrict error);
+                              int *restrict error);
 
 EXPORT void
 dwg_ent_region_set_acis_empty(dwg_ent_region *restrict region,
@@ -3710,23 +3701,14 @@ EXPORT BITCODE_BS
 dwg_ent_region_get_version(const dwg_ent_region *restrict region,
                           int *restrict error);
 
-EXPORT void
-dwg_ent_region_set_version(dwg_ent_region *restrict region,
-                           const BITCODE_BS version,
-                           int *restrict error);
-
-EXPORT BITCODE_BL*
-dwg_ent_region_get_block_size(const dwg_ent_region *restrict region,
-                              int *restrict error);
-
-EXPORT char *
+EXPORT unsigned char *
 dwg_ent_region_get_acis_data(const dwg_ent_region *restrict region,
                              int *restrict error);
 
 EXPORT void
 dwg_ent_region_set_acis_data(dwg_ent_region *restrict region,
-                             const char *restrict data,
-                          int *restrict error);
+                             const unsigned char *restrict data,
+                             int *restrict error);
 
 EXPORT char
 dwg_ent_region_get_wireframe_data_present(const dwg_ent_region *restrict region,
@@ -3763,7 +3745,7 @@ dwg_ent_region_get_num_isolines(const dwg_ent_region *restrict region,
 EXPORT void
 dwg_ent_region_set_num_isolines(dwg_ent_region *restrict region,
                                 const BITCODE_BL num,
-                          int *restrict error);
+                                int *restrict error);
 
 EXPORT char
 dwg_ent_region_get_isoline_present(const dwg_ent_region *restrict region,
@@ -3776,9 +3758,9 @@ dwg_ent_region_set_isoline_present(dwg_ent_region *restrict region,
 
 EXPORT BITCODE_BL
 dwg_ent_region_get_num_wires(const dwg_ent_region *restrict region,
-                          int *restrict error);
+                             int *restrict error);
 
-EXPORT dwg_ent_solid_wire *
+EXPORT dwg_3dsolid_wire *
 dwg_ent_region_get_wires(const dwg_ent_region *restrict region,
                          int *restrict error);
 
@@ -3786,7 +3768,7 @@ EXPORT BITCODE_BL
 dwg_ent_region_get_num_silhouettes(const dwg_ent_region *restrict region,
                                    int *restrict error);
 
-EXPORT dwg_ent_solid_silhouette *
+EXPORT dwg_3dsolid_silhouette *
 dwg_ent_region_get_silhouettes(const dwg_ent_region *restrict region,
                                int *restrict error);
 
@@ -3804,7 +3786,6 @@ dwg_ent_region_set_acis_empty2(dwg_ent_region *restrict region,
 *                    FUNCTIONS FOR BODY ENTITY                      *
 ********************************************************************/
 
-
 EXPORT unsigned char
 dwg_ent_body_get_acis_empty(const dwg_ent_body *restrict body,
                           int *restrict error);
@@ -3818,21 +3799,13 @@ EXPORT BITCODE_BS
 dwg_ent_body_get_version(const dwg_ent_body *restrict body,
                           int *restrict error);
 
-EXPORT void
-dwg_ent_body_set_version(dwg_ent_body *restrict body,
-                         const BITCODE_BS version,
-                          int *restrict error);
-
-EXPORT BITCODE_BL*
-dwg_ent_body_get_block_size(const dwg_ent_body *restrict body,
-                          int *restrict error);
-
-EXPORT char *
+EXPORT unsigned char *
 dwg_ent_body_get_acis_data(const dwg_ent_body *restrict body,
-                          int *restrict error);
+                           int *restrict error);
 
 EXPORT void
-dwg_ent_body_set_acis_data(dwg_ent_body *restrict body, const char *data,
+dwg_ent_body_set_acis_data(dwg_ent_body *restrict body,
+                           const unsigned char *data,
                            int *restrict error);
 
 EXPORT char
@@ -3885,15 +3858,15 @@ EXPORT BITCODE_BL
 dwg_ent_body_get_num_wires(const dwg_ent_body *restrict body,
                           int *restrict error);
 
-EXPORT dwg_ent_solid_wire *
+EXPORT dwg_3dsolid_wire *
 dwg_ent_body_get_wires(const dwg_ent_body *restrict body,
-                          int *restrict error);
+                       int *restrict error);
 
 EXPORT BITCODE_BL
 dwg_ent_body_get_num_silhouettes(const dwg_ent_body *restrict body,
-                          int *restrict error);
+                                 int *restrict error);
 
-EXPORT dwg_ent_solid_silhouette *
+EXPORT dwg_3dsolid_silhouette *
 dwg_ent_body_get_silhouettes(const dwg_ent_body *restrict body,
                           int *restrict error);
 
@@ -3906,11 +3879,9 @@ dwg_ent_body_set_acis_empty2(dwg_ent_body *restrict body,
                              unsigned char empty2,
                              int *restrict error); 
 
-
 /********************************************************************
 *                    FUNCTIONS FOR TABLE ENTITY                     *
 ********************************************************************/
-
 
 EXPORT void
 dwg_ent_table_set_insertion_point(dwg_ent_table *restrict table,

@@ -8,14 +8,13 @@ api_process (dwg_object * obj)
   int error;
   BITCODE_BS version;
   BITCODE_BL *block_size, num_isolines, num_wires, num_sil;
-  char *acis_data;
+  unsigned char *acis_data;
   BITCODE_B wireframe_data_present, point_present, isoline_present; 
   BITCODE_B acis_empty, acis2_empty;
   dwg_point_3d point;
   dwg_ent_body *body = dwg_object_to_BODY (obj);
-  dwg_ent_solid_wire *wire;
-  dwg_ent_solid_silhouette *sil;
-
+  dwg_3dsolid_wire *wire;
+  dwg_3dsolid_silhouette *sil;
 
   acis_empty = dwg_ent_body_get_acis_empty (body, &error);
   if (!error  && acis_empty == body->acis_empty)	// error check
@@ -29,13 +28,11 @@ api_process (dwg_object * obj)
   else
     fail ("error in reading version");
 
-
   acis_data = dwg_ent_body_get_acis_data (body, &error);
   if (!error  && acis_data == body->acis_data)	// error checks
     pass ("Working Properly");
   else
     fail ("error in reading acis data");
-
 
   wireframe_data_present = dwg_ent_body_get_wireframe_data_present (body, &error);
   if (!error  && wireframe_data_present == body->wireframe_data_present)
@@ -48,6 +45,7 @@ api_process (dwg_object * obj)
     pass ("Working Properly");
   else
     fail ("error in reading point present");
+
   dwg_ent_body_get_point (body, &point, &error);
   if (!error  && point.x == body->point.x
       && point.y == body->point.y && point.z == body->point.z)

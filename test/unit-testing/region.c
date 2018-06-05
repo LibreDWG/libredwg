@@ -33,12 +33,12 @@ api_process(dwg_object *obj)
   BITCODE_BL i;
   BITCODE_BS version;
   BITCODE_BL block_size, num_isolines, num_wires, num_sil;
-  char * acis_data;
+  unsigned char * acis_data;
   BITCODE_B wireframe_data_present, point_present, isoline_present; 
   BITCODE_B acis_empty, acis2_empty;
   dwg_point_3d point;
-  dwg_ent_solid_wire *wire;
-  dwg_ent_solid_silhouette *sil;
+  dwg_3dsolid_wire *wire;
+  dwg_3dsolid_silhouette *sil;
 
   dwg_ent_region *region = dwg_object_to_REGION(obj);
 

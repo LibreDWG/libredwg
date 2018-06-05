@@ -10375,12 +10375,11 @@ dwg_ent_spline_get_num_ctrl_pts(const dwg_ent_spline *restrict spline,
 }
 
 /// Return all spline fit points
-dwg_ent_spline_point *
+dwg_spline_point *
 dwg_ent_spline_get_fit_pts(const dwg_ent_spline *restrict spline,
                           int *restrict error)
 {
-  dwg_ent_spline_point *ptx = (dwg_ent_spline_point*)
-    malloc(sizeof(dwg_ent_spline_point)* spline->num_fit_pts);
+  dwg_spline_point *ptx = calloc(spline->num_fit_pts, sizeof(dwg_spline_point));
   if (ptx)
     {
       BITCODE_BS i;
@@ -10400,12 +10399,12 @@ dwg_ent_spline_get_fit_pts(const dwg_ent_spline *restrict spline,
 }
 
 /// Returns spline control points
-dwg_ent_spline_control_point *
+dwg_spline_control_point *
 dwg_ent_spline_get_ctrl_pts(const dwg_ent_spline *restrict spline,
                           int *restrict error)
 {
-  dwg_ent_spline_control_point *ptx = (dwg_ent_spline_control_point*)
-    malloc(sizeof(dwg_ent_spline_control_point)* spline->num_ctrl_pts);
+  dwg_spline_control_point *ptx = calloc(spline->num_ctrl_pts,
+                                         sizeof(dwg_spline_control_point));
   if (ptx)
     {
       BITCODE_BL i;
@@ -13067,7 +13066,7 @@ dwg_ent_image_set_size_width(dwg_ent_image *restrict image,
 /// Returns image display props
 BITCODE_BS
 dwg_ent_image_get_display_props(const dwg_ent_image *restrict image,
-                          int *restrict error)
+                                int *restrict error)
 {
   if (image)
     {
@@ -13085,8 +13084,8 @@ dwg_ent_image_get_display_props(const dwg_ent_image *restrict image,
 /// Sets image display props
 void
 dwg_ent_image_set_display_props(dwg_ent_image *restrict image,
-                                BITCODE_BS display_props,
-                          int *restrict error)
+                                const BITCODE_BS display_props,
+                                int *restrict error)
 {
   if (image)
     {
@@ -13120,7 +13119,8 @@ dwg_ent_image_get_clipping(const dwg_ent_image *restrict image,
 
 /// Sets image clipping
 void
-dwg_ent_image_set_clipping(dwg_ent_image *restrict image, unsigned char clipping,
+dwg_ent_image_set_clipping(dwg_ent_image *restrict image,
+                           unsigned char clipping,
                            int *restrict error)
 {
   if (image)
@@ -13138,7 +13138,7 @@ dwg_ent_image_set_clipping(dwg_ent_image *restrict image, unsigned char clipping
 /// Returns image brightness
 char
 dwg_ent_image_get_brightness(const dwg_ent_image *restrict image,
-                          int *restrict error)
+                             int *restrict error)
 {
   if (image)
     {
@@ -13155,8 +13155,9 @@ dwg_ent_image_get_brightness(const dwg_ent_image *restrict image,
 
 /// Sets image brightness
 void
-dwg_ent_image_set_brightness(dwg_ent_image *restrict image, char brightness,
-                          int *restrict error)
+dwg_ent_image_set_brightness(dwg_ent_image *restrict image,
+                             const char brightness,
+                             int *restrict error)
 {
   if (image)
     {
@@ -13190,8 +13191,9 @@ dwg_ent_image_get_contrast(const dwg_ent_image *restrict image,
 
 /// Sets image contrast
 void
-dwg_ent_image_set_contrast(dwg_ent_image *restrict image, char contrast,
-                          int *restrict error)
+dwg_ent_image_set_contrast(dwg_ent_image *restrict image,
+                           const char contrast,
+                           int *restrict error)
 {
   if (image)
     {
@@ -13208,7 +13210,7 @@ dwg_ent_image_set_contrast(dwg_ent_image *restrict image, char contrast,
 /// Returns image fade
 char
 dwg_ent_image_get_fade(const dwg_ent_image *restrict image,
-                          int *restrict error)
+                       int *restrict error)
 {
   if (image)
     {
@@ -13225,8 +13227,9 @@ dwg_ent_image_get_fade(const dwg_ent_image *restrict image,
 
 /// Sets image fade
 void
-dwg_ent_image_set_fade(dwg_ent_image *restrict image, char fade,
-                          int *restrict error)
+dwg_ent_image_set_fade(dwg_ent_image *restrict image,
+                       const char fade,
+                       int *restrict error)
 {
   if (image)
     {
@@ -13243,7 +13246,7 @@ dwg_ent_image_set_fade(dwg_ent_image *restrict image, char fade,
 /// Returns image clip boundary type
 BITCODE_BS
 dwg_ent_image_get_clip_boundary_type(const dwg_ent_image *restrict image,
-                          int *restrict error)
+                                     int *restrict error)
 {
   if (image)
     {
@@ -13260,7 +13263,8 @@ dwg_ent_image_get_clip_boundary_type(const dwg_ent_image *restrict image,
 
 /// Sets image clip boundary type
 void
-dwg_ent_image_set_clip_boundary_type(dwg_ent_image *restrict image, BITCODE_BS type,
+dwg_ent_image_set_clip_boundary_type(dwg_ent_image *restrict image,
+                                     const BITCODE_BS type,
                                      int *restrict error)
 {
   if (image)
@@ -13277,7 +13281,8 @@ dwg_ent_image_set_clip_boundary_type(dwg_ent_image *restrict image, BITCODE_BS t
 
 /// Returns image boundary point 0
 void
-dwg_ent_image_get_boundary_pt0(const dwg_ent_image *restrict image, dwg_point_2d *restrict point,
+dwg_ent_image_get_boundary_pt0(const dwg_ent_image *restrict image,
+                               dwg_point_2d *restrict point,
                                int *restrict error)
 {
   if (image && point)
@@ -13314,7 +13319,8 @@ dwg_ent_image_set_boundary_pt0(dwg_ent_image *restrict image,
 
 /// Returns boundary point1
 void
-dwg_ent_image_get_boundary_pt1(const dwg_ent_image *restrict image, dwg_point_2d *restrict point,
+dwg_ent_image_get_boundary_pt1(const dwg_ent_image *restrict image,
+                               dwg_point_2d *restrict point,
                                int *restrict error)
 {
   if (image && point)
@@ -13372,8 +13378,7 @@ BITCODE_2RD *
 dwg_ent_image_get_clip_verts(const dwg_ent_image *restrict image,
                           int *restrict error)
 {
-  BITCODE_2RD *ptx = (BITCODE_2RD*)
-    malloc(sizeof(BITCODE_2RD) * image->num_clip_verts);
+  BITCODE_2RD *ptx = calloc(image->num_clip_verts, sizeof(BITCODE_2RD));
   if (ptx)
     {
       BITCODE_BL i;
@@ -13399,8 +13404,8 @@ dwg_ent_image_get_clip_verts(const dwg_ent_image *restrict image,
 /// Sets mline scale value
 void
 dwg_ent_mline_set_scale(dwg_ent_mline *restrict mline,
-                          const double scale,
-                          int *restrict error)
+                        const double scale,
+                        int *restrict error)
 {
   if (mline)
     {
@@ -13417,7 +13422,7 @@ dwg_ent_mline_set_scale(dwg_ent_mline *restrict mline,
 /// Returns scale value
 double
 dwg_ent_mline_get_scale(const dwg_ent_mline *restrict mline,
-                          int *restrict error)
+                        int *restrict error)
 {
   if (mline)
     {
@@ -13434,8 +13439,9 @@ dwg_ent_mline_get_scale(const dwg_ent_mline *restrict mline,
 
 /// sets justification value
 void
-dwg_ent_mline_set_justification(dwg_ent_mline *restrict mline, char justification,
-                          int *restrict error)
+dwg_ent_mline_set_justification(dwg_ent_mline *restrict mline,
+                                const char justification,
+                                int *restrict error)
 {
   if (mline)
     {
@@ -13452,7 +13458,7 @@ dwg_ent_mline_set_justification(dwg_ent_mline *restrict mline, char justificatio
 /// Returns justification value
 char
 dwg_ent_mline_get_justification(const dwg_ent_mline *restrict mline,
-                          int *restrict error)
+                                int *restrict error)
 {
   if (mline)
     {
@@ -13489,7 +13495,8 @@ dwg_ent_mline_set_base_point(dwg_ent_mline *restrict mline,
 
 /// Returns base point value
 void
-dwg_ent_mline_get_base_point(const dwg_ent_mline *restrict mline, dwg_point_3d *restrict point,
+dwg_ent_mline_get_base_point(const dwg_ent_mline *restrict mline,
+                             dwg_point_3d *restrict point,
                              int *restrict error)
 {
   if (mline && point)
@@ -13567,7 +13574,7 @@ dwg_ent_mline_set_flags(dwg_ent_mline *restrict mline,
 /// Returns flags value
 BITCODE_BS
 dwg_ent_mline_get_flags(const dwg_ent_mline *restrict mline,
-                          int *restrict error)
+                        int *restrict error)
 {
   if (mline)
     {
@@ -13585,7 +13592,7 @@ dwg_ent_mline_get_flags(const dwg_ent_mline *restrict mline,
 /// Returns number of lines
 BITCODE_RC
 dwg_ent_mline_get_num_lines(const dwg_ent_mline *restrict mline,
-                          int *restrict error)
+                            int *restrict error)
 {
   if (mline)
     {
@@ -13600,10 +13607,34 @@ dwg_ent_mline_get_num_lines(const dwg_ent_mline *restrict mline,
     }
 }
 
+/// Returns all mline vertex lines
+dwg_mline_line *
+dwg_mline_vertex_get_lines(const dwg_mline_vertex *restrict vertex,
+                           int *restrict error)
+{
+  dwg_mline_line *ptx = calloc(vertex->num_lines, sizeof(dwg_mline_line));
+  if (ptx)
+    {
+      BITCODE_BS i;
+      *error = 0;
+      for (i = 0; i < vertex->num_lines ; i++)
+        {
+          ptx[i] = vertex->lines[i];
+        }
+      return ptx;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: null malloc", __FUNCTION__)
+      return NULL;
+    }
+}
+
 /// Returns number of vertices
 BITCODE_BS
 dwg_ent_mline_get_num_verts(const dwg_ent_mline *restrict mline,
-                          int *restrict error)
+                            int *restrict error)
 {
   if (mline)
     {
@@ -13619,12 +13650,11 @@ dwg_ent_mline_get_num_verts(const dwg_ent_mline *restrict mline,
 }
 
 /// Returns mline vertices
-dwg_ent_mline_vertex *
+dwg_mline_vertex *
 dwg_ent_mline_get_verts(const dwg_ent_mline *restrict mline,
-                          int *restrict error)
+                        int *restrict error)
 {
-  dwg_ent_mline_vertex *ptx = (dwg_ent_mline_vertex*)
-    malloc(sizeof(dwg_ent_mline_vertex)* mline->num_verts);
+  dwg_mline_vertex *ptx = calloc(mline->num_verts, sizeof(dwg_mline_vertex));
   if (ptx)
     {
       BITCODE_BS i;
@@ -13684,7 +13714,7 @@ dwg_ent_vertex_pface_face_set_vertind(dwg_ent_vert_pface_face *restrict face,
 *                  FUNCTIONS FOR 3DSOLID ENTITY                     *
 ********************************************************************/
 
-/// Returns acis empty value
+/// Returns the _dwg_entity_3DSOLID::acis_empty bit
 unsigned char
 dwg_ent_3dsolid_get_acis_empty(const dwg_ent_3dsolid *restrict _3dsolid,
                                int *restrict error)
@@ -13702,7 +13732,7 @@ dwg_ent_3dsolid_get_acis_empty(const dwg_ent_3dsolid *restrict _3dsolid,
     }
 }
 
-/// Sets acis empty value
+/// Sets the _dwg_entity_3DSOLID::acis_empty bit
 void
 dwg_ent_3dsolid_set_acis_empty(dwg_ent_3dsolid *restrict _3dsolid,
                                const unsigned char empty,
@@ -13720,10 +13750,12 @@ dwg_ent_3dsolid_set_acis_empty(dwg_ent_3dsolid *restrict _3dsolid,
     }
 }
 
-/// Returns version value
+/// Returns the _dwg_entity_3DSOLID::version
+/// the modeler format version number, DXF 70.
+/// Should be 1, we cannot handle 2 yet
 BITCODE_BS
 dwg_ent_3dsolid_get_version(const dwg_ent_3dsolid *restrict _3dsolid,
-                          int *restrict error)
+                            int *restrict error)
 {
   if (_3dsolid)
     {
@@ -13738,45 +13770,10 @@ dwg_ent_3dsolid_get_version(const dwg_ent_3dsolid *restrict _3dsolid,
     }
 }
 
-/// Sets version value
-void
-dwg_ent_3dsolid_set_version(dwg_ent_3dsolid *restrict _3dsolid, BITCODE_BS version,
-                            int *restrict error)
-{
-  if (_3dsolid)
-    {
-      *error = 0;
-      _3dsolid->version = version;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns pointer to block size
-BITCODE_BL*
-dwg_ent_3dsolid_get_block_size(const dwg_ent_3dsolid *restrict _3dsolid,
-                          int *restrict error)
-{
-  if (_3dsolid)
-    {
-      *error = 0;
-      return _3dsolid->block_size;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return NULL;
-    }
-}
-
-/// Returns acis data
-char *
+/// Returns the decrypted _dwg_entity_3DSOLID::acis_data string.
+unsigned char *
 dwg_ent_3dsolid_get_acis_data(const dwg_ent_3dsolid *restrict _3dsolid,
-                          int *restrict error)
+                              int *restrict error)
 {
   if (_3dsolid)
     {
@@ -13791,16 +13788,16 @@ dwg_ent_3dsolid_get_acis_data(const dwg_ent_3dsolid *restrict _3dsolid,
     }
 }
 
-/// Sets acis data
+/// Sets the _dwg_entity_3DSOLID::acis_data string.
 void
 dwg_ent_3dsolid_set_acis_data(dwg_ent_3dsolid *restrict _3dsolid,
-                              const char *restrict data,
-                          int *restrict error)
+                              const unsigned char *restrict acis_data,
+                              int *restrict error)
 {
   if (_3dsolid)
     {
       *error = 0;
-      _3dsolid->acis_data = (char*)data;
+      _3dsolid->acis_data = (unsigned char*)acis_data;
     }
   else
     {
@@ -13809,7 +13806,7 @@ dwg_ent_3dsolid_set_acis_data(dwg_ent_3dsolid *restrict _3dsolid,
     }
 }
 
-/// Returns wireframe data present value
+/// Returns the _dwg_entity_3DSOLID::wireframe_data_present bit
 char
 dwg_ent_3dsolid_get_wireframe_data_present(const dwg_ent_3dsolid *restrict _3dsolid,
                                            int *restrict error)
@@ -13827,16 +13824,16 @@ dwg_ent_3dsolid_get_wireframe_data_present(const dwg_ent_3dsolid *restrict _3dso
     }
 }
 
-/// Sets wireframe data present value
+/// Sets the _dwg_entity_3DSOLID::wireframe_data_present bit
 void
 dwg_ent_3dsolid_set_wireframe_data_present(dwg_ent_3dsolid *restrict _3dsolid,
-                                           char data,
-                          int *restrict error)
+                                           const char present,
+                                           int *restrict error)
 {
   if (_3dsolid)
     {
       *error = 0;
-      _3dsolid->wireframe_data_present = data;
+      _3dsolid->wireframe_data_present = present;
     }
   else
     {
@@ -13845,10 +13842,10 @@ dwg_ent_3dsolid_set_wireframe_data_present(dwg_ent_3dsolid *restrict _3dsolid,
     }
 }
 
-/// Returns point present value
+/// Returns the _dwg_entity_3DSOLID::point_present bit
 char
 dwg_ent_3dsolid_get_point_present(const dwg_ent_3dsolid *restrict _3dsolid,
-                          int *restrict error)
+                                  int *restrict error)
 {
   if (_3dsolid)
     {
@@ -13863,7 +13860,7 @@ dwg_ent_3dsolid_get_point_present(const dwg_ent_3dsolid *restrict _3dsolid,
     }
 }
 
-/// Sets point present value
+/// Sets the _dwg_entity_3DSOLID::point_present bit
 void
 dwg_ent_3dsolid_set_point_present(dwg_ent_3dsolid *restrict _3dsolid,
                                   const char present,
@@ -13881,9 +13878,10 @@ dwg_ent_3dsolid_set_point_present(dwg_ent_3dsolid *restrict _3dsolid,
     }
 }
 
-/// Returns point value
+/// Returns the _dwg_entity_3DSOLID::point
 void
-dwg_ent_3dsolid_get_point(const dwg_ent_3dsolid *restrict _3dsolid, dwg_point_3d *restrict point,
+dwg_ent_3dsolid_get_point(const dwg_ent_3dsolid *restrict _3dsolid,
+                          dwg_point_3d *restrict point,
                           int *restrict error)
 {
   if (_3dsolid && point)
@@ -13900,7 +13898,7 @@ dwg_ent_3dsolid_get_point(const dwg_ent_3dsolid *restrict _3dsolid, dwg_point_3d
     }
 }
 
-/// Sets point values
+/// Sets the _dwg_entity_3DSOLID::point
 void
 dwg_ent_3dsolid_set_point(dwg_ent_3dsolid *restrict _3dsolid,
                           const dwg_point_3d *restrict point,
@@ -13920,10 +13918,10 @@ dwg_ent_3dsolid_set_point(dwg_ent_3dsolid *restrict _3dsolid,
     }
 }
 
-/// Returns number of isolines
+/// Returns the _dwg_entity_3DSOLID::num_isolines
 BITCODE_BL
 dwg_ent_3dsolid_get_num_isolines(const dwg_ent_3dsolid *restrict _3dsolid,
-                          int *restrict error)
+                                 int *restrict error)
 {
   if (_3dsolid)
     {
@@ -13938,9 +13936,11 @@ dwg_ent_3dsolid_get_num_isolines(const dwg_ent_3dsolid *restrict _3dsolid,
     }
 }
 
-/// Sets number of isolines (apparently safe to set)
+/// Sets the _dwg_entity_3DSOLID::num_isolines
+/// (apparently safe to set)
 void
-dwg_ent_3dsolid_set_num_isolines(dwg_ent_3dsolid *restrict _3dsolid, BITCODE_BL num,
+dwg_ent_3dsolid_set_num_isolines(dwg_ent_3dsolid *restrict _3dsolid,
+                                 const BITCODE_BL num,
                                  int *restrict error)
 {
   if (_3dsolid)
@@ -13955,7 +13955,8 @@ dwg_ent_3dsolid_set_num_isolines(dwg_ent_3dsolid *restrict _3dsolid, BITCODE_BL 
     }
 }
 
-/// Returns isoline present value
+/// Returns the _dwg_entity_3DSOLID::isoline_present bit
+/// If set, wires and silhouettes are present.
 char
 dwg_ent_3dsolid_get_isoline_present(const dwg_ent_3dsolid *restrict _3dsolid,
                                     int *restrict error)
@@ -13973,7 +13974,8 @@ dwg_ent_3dsolid_get_isoline_present(const dwg_ent_3dsolid *restrict _3dsolid,
     }
 }
 
-/// Sets isoline present value
+/// Sets the _dwg_entity_3DSOLID::isoline_present bit
+/// If set, wires and silhouettes are present.
 void
 dwg_ent_3dsolid_set_isoline_present(dwg_ent_3dsolid *restrict _3dsolid,
                                     const char present,
@@ -13991,10 +13993,10 @@ dwg_ent_3dsolid_set_isoline_present(dwg_ent_3dsolid *restrict _3dsolid,
     }
 }
 
-/// Returns number of wires
+/// Returns the number of _dwg_entity_3DSOLID::num_wires wires
 BITCODE_BL
 dwg_ent_3dsolid_get_num_wires(const dwg_ent_3dsolid *restrict _3dsolid,
-                          int *restrict error)
+                              int *restrict error)
 {
   if (_3dsolid)
     {
@@ -14010,22 +14012,21 @@ dwg_ent_3dsolid_get_num_wires(const dwg_ent_3dsolid *restrict _3dsolid,
 }
 
 
-/// Returns all wires
-dwg_ent_solid_wire *
+/// Returns all _dwg_entity_3DSOLID::wire structs, as array of _dwg_3DSOLID_wire::
+dwg_3dsolid_wire *
 dwg_ent_3dsolid_get_wires(const dwg_ent_3dsolid *restrict _3dsolid,
                           int *restrict error)
 {
-  dwg_ent_solid_wire *ptx = (dwg_ent_solid_wire*)
-    malloc(sizeof(dwg_ent_solid_wire)* _3dsolid->num_wires);
-  if (ptx)
+  dwg_3dsolid_wire *wire = calloc(_3dsolid->num_wires, sizeof(dwg_3dsolid_wire));
+  if (wire)
     {
       BITCODE_BL i;
       *error = 0;
       for (i = 0; i < _3dsolid->num_wires ; i++)
         {
-          ptx[i] = _3dsolid->wires[i];
+          wire[i] = _3dsolid->wires[i];
         }
-      return ptx;
+      return wire;
     }
   else
     {
@@ -14035,10 +14036,10 @@ dwg_ent_3dsolid_get_wires(const dwg_ent_3dsolid *restrict _3dsolid,
     }
 }
 
-/// Returns number of silhouettes
+/// Returns the number of _dwg_entity_3DSOLID::num_silhouettes entries.
 BITCODE_BL
 dwg_ent_3dsolid_get_num_silhouettes(const dwg_ent_3dsolid *restrict _3dsolid,
-                          int *restrict error)
+                                    int *restrict error)
 {
   if (_3dsolid)
     {
@@ -14054,22 +14055,22 @@ dwg_ent_3dsolid_get_num_silhouettes(const dwg_ent_3dsolid *restrict _3dsolid,
 }
 
 
-/// Returns all silhouettes
-dwg_ent_solid_silhouette *
+/// Returns all _dwg_entity_3DSOLID::silhouettes structs, as array of _dwg_3DSOLID_silhouette::
+dwg_3dsolid_silhouette *
 dwg_ent_3dsolid_get_silhouettes(const dwg_ent_3dsolid *restrict _3dsolid,
-                          int *restrict error)
+                                int *restrict error)
 {
-  dwg_ent_solid_silhouette *ptx = (dwg_ent_solid_silhouette*)
-    malloc(sizeof(dwg_ent_solid_silhouette)* _3dsolid->num_silhouettes);
-  if (ptx)
+  dwg_3dsolid_silhouette *sh = calloc(_3dsolid->num_silhouettes,
+                                      sizeof(dwg_3dsolid_silhouette));
+  if (sh)
     {
       BITCODE_BL i;
       *error = 0;
       for (i = 0; i < _3dsolid->num_silhouettes ; i++)
         {
-          ptx[i] = _3dsolid->silhouettes[i];
+          sh[i] = _3dsolid->silhouettes[i];
         }
-      return ptx;
+      return sh;
     }
   else
     {
@@ -14079,7 +14080,7 @@ dwg_ent_3dsolid_get_silhouettes(const dwg_ent_3dsolid *restrict _3dsolid,
     }
 }
 
-/// Returns acis empty 2 value
+/// Returns the _dwg_entity_3DSOLID::acis_empty2 bit
 unsigned char
 dwg_ent_3dsolid_get_acis_empty2(const dwg_ent_3dsolid *restrict _3dsolid,
                           int *restrict error)
@@ -14097,7 +14098,7 @@ dwg_ent_3dsolid_get_acis_empty2(const dwg_ent_3dsolid *restrict _3dsolid,
     }
 }
 
-/// Sets acis empty 2 value
+/// Sets the _dwg_entity_3DSOLID::acis_empty2 bit
 void
 dwg_ent_3dsolid_set_acis_empty2(dwg_ent_3dsolid *restrict _3dsolid, unsigned char acis,
                                 int *restrict error)
@@ -14118,865 +14119,372 @@ dwg_ent_3dsolid_set_acis_empty2(dwg_ent_3dsolid *restrict _3dsolid, unsigned cha
 *                   FUNCTIONS FOR REGION ENTITY                     *
 ********************************************************************/
 
-/// Returns acis empty value
+// Returns the Dwg_Entity_REGION::acis_empty bit
 unsigned char
 dwg_ent_region_get_acis_empty(const dwg_ent_region *restrict region,
-                          int *restrict error)
-{
-  if (region)
-    {
-      *error = 0;
-      return region->acis_empty;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return '\0';
-    }
-}
-
-/// Sets acis empty value
-void
-dwg_ent_region_set_acis_empty(dwg_ent_region *restrict region, unsigned char acis,
                               int *restrict error)
 {
-  if (region)
-    {
-      *error = 0;
-      region->acis_empty = acis;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  return dwg_ent_3dsolid_get_acis_empty((const dwg_ent_3dsolid *)region, error);
 }
 
-/// Returns version value
+/// Sets the Dwg_Entity_REGION::acis_empty bit
+void
+dwg_ent_region_set_acis_empty(dwg_ent_region *restrict region, unsigned char empty,
+                              int *restrict error)
+{
+  dwg_ent_3dsolid_set_acis_empty((dwg_ent_3dsolid *)region, empty, error);
+}
+
+/// Returns the Dwg_Entity_REGION::version
+/// the modeler format version number, DXF 70.
+/// Should be 1, we cannot handle 2 yet
 BITCODE_BS
 dwg_ent_region_get_version(const dwg_ent_region *restrict region,
                           int *restrict error)
 {
-  if (region)
-    {
-      *error = 0;
-      return region->version;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return 0;
-    }
+  return dwg_ent_3dsolid_get_version((const dwg_ent_3dsolid *)region, error);
 }
 
-/// Sets version value
-void
-dwg_ent_region_set_version(dwg_ent_region *restrict region, BITCODE_BS version,
-                           int *restrict error)
-{
-  if (region)
-    {
-      *error = 0;
-      region->version = version;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
 
-/// Returns pointer
-BITCODE_BL*
-dwg_ent_region_get_block_size(const dwg_ent_region *restrict region,
-                          int *restrict error)
-{
-  if (region)
-    {
-      *error = 0;
-      return region->block_size;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return NULL;
-    }
-}
-
-/// Returns acis data
-char *
+/// Returns the decrypted Dwg_Entity_REGION::acis_data string.
+unsigned char *
 dwg_ent_region_get_acis_data(const dwg_ent_region *restrict region,
-                          int *restrict error)
-{
-  if (region)
-    {
-      *error = 0;
-      return region->acis_data;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return NULL;
-    }
-}
-
-/// Sets acis data
-void
-dwg_ent_region_set_acis_data(dwg_ent_region *restrict region,
-                             const char *restrict data,
                              int *restrict error)
 {
-  if (region)
-    {
-      *error = 0;
-      region->acis_data = (char*)data;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  return dwg_ent_3dsolid_get_acis_data((const dwg_ent_3dsolid *)region, error);
 }
 
-/// Returns wireframe data present value
+/// Sets the Dwg_Entity_REGION::acis_data string.
+void
+dwg_ent_region_set_acis_data(dwg_ent_region *restrict region,
+                             const unsigned char *restrict sat_data,
+                             int *restrict error)
+{
+  dwg_ent_3dsolid_set_acis_data((dwg_ent_3dsolid *)region, sat_data, error);
+}
+
+/// Returns the Dwg_Entity_REGION::wireframe_data_present bit
 char
 dwg_ent_region_get_wireframe_data_present(const dwg_ent_region *restrict region,
-                          int *restrict error)
-{
-  if (region)
-    {
-      *error = 0;
-      return region->wireframe_data_present;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return '\0';
-    }
-}
-
-/// Sets wireframe data present value
-void
-dwg_ent_region_set_wireframe_data_present(dwg_ent_region *restrict region, char data,
                                           int *restrict error)
 {
-  if (region)
-    {
-      *error = 0;
-      region->wireframe_data_present = data;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  return dwg_ent_3dsolid_get_wireframe_data_present((const dwg_ent_3dsolid *)region, error);
 }
 
-/// Returns point present value
+/// Sets the Dwg_Entity_REGION::wireframe_data_present bit
+void
+dwg_ent_region_set_wireframe_data_present(dwg_ent_region *restrict region,
+                                          const char present,
+                                          int *restrict error)
+{
+  dwg_ent_3dsolid_set_wireframe_data_present((dwg_ent_3dsolid *)region, present, error);
+}
+
+/// Returns the Dwg_Entity_REGION::point_present bit
 char
 dwg_ent_region_get_point_present(const dwg_ent_region *restrict region,
-                          int *restrict error)
-{
-  if (region)
-    {
-      *error = 0;
-      return region->point_present;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return '\0';
-    }
-}
-
-/// Sets point present value
-void
-dwg_ent_region_set_point_present(dwg_ent_region *restrict region, char point,
                                  int *restrict error)
 {
-  if (region)
-    {
-      *error = 0;
-      region->point_present = point;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  return dwg_ent_3dsolid_get_point_present((const dwg_ent_3dsolid *)region, error);
 }
 
-/// Returns point value
+/// Sets the Dwg_Entity_REGION::point_present bit
 void
-dwg_ent_region_get_point(const dwg_ent_region *restrict region, dwg_point_3d *restrict point,
+dwg_ent_region_set_point_present(dwg_ent_region *restrict region, const char present,
+                                 int *restrict error)
+{
+  dwg_ent_3dsolid_set_point_present((dwg_ent_3dsolid *)region, present, error);
+}
+
+/// Returns the Dwg_Entity_REGION::point
+void
+dwg_ent_region_get_point(const dwg_ent_region *restrict region,
+                         dwg_point_3d *restrict point,
                          int *restrict error)
 {
-  if (region && point)
-    {
-      *error = 0;
-      point->x = region->point.x;
-      point->y = region->point.y;
-      point->z = region->point.z;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  return dwg_ent_3dsolid_get_point((const dwg_ent_3dsolid *)region, point, error);
 }
 
-/// Sets point values
+/// Sets the Dwg_Entity_REGION::point
 void
 dwg_ent_region_set_point(dwg_ent_region *restrict region,
                          const dwg_point_3d *restrict point,
                          int *restrict error)
 {
-  if (region && point)
-    {
-      *error = 0;
-      region->point.x = point->x;
-      region->point.y = point->y;
-      region->point.z = point->z;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  dwg_ent_3dsolid_set_point((dwg_ent_3dsolid *)region, point, error);
 }
 
-/// Returns number of isolines
+/// Returns the Dwg_Entity_REGION::num_isolines
 BITCODE_BL
 dwg_ent_region_get_num_isolines(const dwg_ent_region *restrict region,
-                          int *restrict error)
+                                int *restrict error)
 {
-  if (region)
-    {
-      *error = 0;
-      return region->num_isolines;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return 0L;
-    }
+  return dwg_ent_3dsolid_get_num_isolines((const dwg_ent_3dsolid *)region, error);
 }
 
-/// Sets number of isolines (apparently safe to set)
+/// Sets the Dwg_Entity_REGION::num_isolines (??)
 void
-dwg_ent_region_set_num_isolines(dwg_ent_region *restrict region, BITCODE_BL num,
-                          int *restrict error)
+dwg_ent_region_set_num_isolines(dwg_ent_region *restrict region,
+                                BITCODE_BL num,
+                                int *restrict error)
 {
-  if (region)
-    {
-      *error = 0;
-      region->num_isolines = num;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  dwg_ent_3dsolid_set_num_isolines((dwg_ent_3dsolid *)region, num, error);
 }
 
-/// Returns isoline present value
+/// Returns the Dwg_Entity_REGION::isoline_present bit
+/// If set, wires and silhouettes are present.
 char
 dwg_ent_region_get_isoline_present(const dwg_ent_region *restrict region,
-                          int *restrict error)
-{
-  if (region)
-    {
-      *error = 0;
-      return region->isoline_present;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return '\0';
-    }
-}
-
-/// Sets isoline present value
-void
-dwg_ent_region_set_isoline_present(dwg_ent_region *restrict region, char iso,
                                    int *restrict error)
 {
-  if (region)
-    {
-      *error = 0;
-      region->isoline_present = iso;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  return dwg_ent_3dsolid_get_isoline_present((const dwg_ent_3dsolid *)region, error);
 }
 
-/// Returns number of wires
+/// Sets the Dwg_Entity_REGION::isoline_present bit
+/// If set, wires and silhouettes are present.
+void
+dwg_ent_region_set_isoline_present(dwg_ent_region *restrict region, char present,
+                                   int *restrict error)
+{
+  dwg_ent_3dsolid_set_isoline_present((dwg_ent_3dsolid *)region, present, error);
+}
+
+/// Returns the number of Dwg_Entity_REGION::num_wires wires
 BITCODE_BL
 dwg_ent_region_get_num_wires(const dwg_ent_region *restrict region,
-                          int *restrict error)
+                             int *restrict error)
 {
-  if (region)
-    {
-      *error = 0;
-      return region->num_wires;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return 0L;
-    }
+  return dwg_ent_3dsolid_get_num_wires((const dwg_ent_3dsolid *)region, error);
 }
 
 //TODO dwg_ent_region_add_wire, dwg_ent_region_delete_wire
 
-/// Returns all wires
-dwg_ent_solid_wire *
+/// Returns all Dwg_Entity_REGION::wire structs, as array of _dwg_3DSOLID_wire::
+dwg_3dsolid_wire *
 dwg_ent_region_get_wires(const dwg_ent_region *restrict region,
                           int *restrict error)
 {
-  dwg_ent_solid_wire *ptx = (dwg_ent_solid_wire*)
-    malloc(sizeof(dwg_ent_solid_wire)* region->num_wires);
-  if (ptx)
-    {
-      BITCODE_BL i;
-      *error = 0;
-      for (i = 0; i < region->num_wires ; i++)
-        {
-          ptx[i] = region->wires[i];
-        }
-      return ptx;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: null malloc", __FUNCTION__)
-      return NULL;
-    }
+  return dwg_ent_3dsolid_get_wires((const dwg_ent_3dsolid *)region, error);
 }
 
-/// Returns number of silhouettes
+/// Returns the number of Dwg_Entity_REGION::num_silhouettes entries.
 BITCODE_BL
 dwg_ent_region_get_num_silhouettes(const dwg_ent_region *restrict region,
-                          int *restrict error)
+                                   int *restrict error)
 {
-  if (region)
-    {
-      *error = 0;
-      return region->num_silhouettes;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return 0L;
-    }
+  return dwg_ent_3dsolid_get_num_silhouettes((const dwg_ent_3dsolid *)region, error);
 }
 
 //TODO dwg_ent_region_add_silhouette, dwg_ent_region_delete_silhouette
 
-/// Returns all silhouettes
-dwg_ent_solid_silhouette *
+/// Returns all Dwg_Entity_REGION::silhouettes structs, as array of _dwg_3DSOLID_silhouette::
+dwg_3dsolid_silhouette *
 dwg_ent_region_get_silhouettes(const dwg_ent_region *restrict region,
                           int *restrict error)
 {
-  dwg_ent_solid_silhouette *ptx = (dwg_ent_solid_silhouette*)
-    malloc(sizeof(dwg_ent_solid_silhouette)* region->num_silhouettes);
-  if (ptx)
-    {
-      BITCODE_BL i;
-      *error = 0;
-      for (i = 0; i < region->num_silhouettes ; i++)
-        {
-          ptx[i] = region->silhouettes[i];
-        }
-      return ptx;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: null malloc", __FUNCTION__)
-      return NULL;
-    }
+  return dwg_ent_3dsolid_get_silhouettes((const dwg_ent_3dsolid *)region, error);
 }
 
-/// Returns acis empty 2 value
+/// Returns the Dwg_Entity_REGION::acis_empty2 bit
 unsigned char
 dwg_ent_region_get_acis_empty2(const dwg_ent_region *restrict region,
                           int *restrict error)
 {
-  if (region)
-    {
-      *error = 0;
-      return region->acis_empty2;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return '\0';
-    }
+  return dwg_ent_3dsolid_get_acis_empty2((const dwg_ent_3dsolid *)region, error);
 }
 
-/// Sets acis empty 2 value
+/// Sets the Dwg_Entity_REGION::acis_empty2 bit
 void
-dwg_ent_region_set_acis_empty2(dwg_ent_region *restrict region, unsigned char acis,
+dwg_ent_region_set_acis_empty2(dwg_ent_region *restrict region, unsigned char empty2,
                                int *restrict error)
 {
-  if (region)
-    {
-      *error = 0;
-      region->acis_empty2 = acis;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  dwg_ent_3dsolid_set_acis_empty2((dwg_ent_3dsolid *)region, empty2, error);
 }
 
 /*******************************************************************
 *                    FUNCTIONS FOR BODY ENTITY                      *
 ********************************************************************/
-/// Returns acis empty value
+
+// Returns the Dwg_Entity_BODY::acis_empty bit
 unsigned char
 dwg_ent_body_get_acis_empty(const dwg_ent_body *restrict body,
-                          int *restrict error)
+                              int *restrict error)
 {
-  if (body)
-    {
-      *error = 0;
-      return body->acis_empty;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return '\0';
-    }
+  return dwg_ent_3dsolid_get_acis_empty((const dwg_ent_3dsolid *)body, error);
 }
 
-/// Sets acis empty value
+/// Sets the Dwg_Entity_BODY::acis_empty bit
 void
-dwg_ent_body_set_acis_empty(dwg_ent_body *restrict body, unsigned char acis,
-                            int *restrict error)
+dwg_ent_body_set_acis_empty(dwg_ent_body *restrict body, unsigned char empty,
+                              int *restrict error)
 {
-  if (body)
-    {
-      *error = 0;
-      body->acis_empty = acis;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  dwg_ent_3dsolid_set_acis_empty((dwg_ent_3dsolid *)body, empty, error);
 }
 
-/// Returns version value
+/// Returns the Dwg_Entity_BODY::version
+/// the modeler format version number, DXF 70.
+/// Should be 1, we cannot handle 2 yet
 BITCODE_BS
 dwg_ent_body_get_version(const dwg_ent_body *restrict body,
                           int *restrict error)
 {
-  if (body)
-    {
-      *error = 0;
-      return body->version;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return 0;
-    }
+  return dwg_ent_3dsolid_get_version((const dwg_ent_3dsolid *)body, error);
 }
 
-/// Sets version value
-void
-dwg_ent_body_set_version(dwg_ent_body *restrict body,
-                         const BITCODE_BS version,
-                          int *restrict error)
-{
-  if (body)
-    {
-      *error = 0;
-      body->version = version;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
 
-/// Returns pointer to body block size
-BITCODE_BL *
-dwg_ent_body_get_block_size(const dwg_ent_body *restrict body,
-                          int *restrict error)
-{
-  if (body)
-    {
-      *error = 0;
-      return body->block_size;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return NULL;
-    }
-}
-
-/// Returns body acis data value
-char *
+/// Returns the decrypted Dwg_Entity_BODY::acis_data string.
+unsigned char *
 dwg_ent_body_get_acis_data(const dwg_ent_body *restrict body,
-                          int *restrict error)
+                             int *restrict error)
 {
-  if (body)
-    {
-      *error = 0;
-      return body->acis_data;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return NULL;
-    }
+  return dwg_ent_3dsolid_get_acis_data((const dwg_ent_3dsolid *)body, error);
 }
 
-/// Sets acis data of body
+/// Sets the Dwg_Entity_BODY::acis_data string.
 void
 dwg_ent_body_set_acis_data(dwg_ent_body *restrict body,
-                           const char *restrict data,
-                          int *restrict error)
+                             const unsigned char *restrict sat_data,
+                             int *restrict error)
 {
-  if (body)
-    {
-      *error = 0;
-      body->acis_data = (char*)data;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  dwg_ent_3dsolid_set_acis_data((dwg_ent_3dsolid *)body, sat_data, error);
 }
 
-/// Returns wireframe data present value
+/// Returns the Dwg_Entity_BODY::wireframe_data_present bit
 char
 dwg_ent_body_get_wireframe_data_present(const dwg_ent_body *restrict body,
-                          int *restrict error)
+                                          int *restrict error)
 {
-  if (body)
-    {
-      *error = 0;
-      return body->wireframe_data_present;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return '\0';
-    }
+  return dwg_ent_3dsolid_get_wireframe_data_present((const dwg_ent_3dsolid *)body, error);
 }
 
-/// Sets wireframe data present value
+/// Sets the Dwg_Entity_BODY::wireframe_data_present bit
 void
 dwg_ent_body_set_wireframe_data_present(dwg_ent_body *restrict body,
                                         const char present,
                                         int *restrict error)
 {
-  if (body)
-    {
-      *error = 0;
-      body->wireframe_data_present = present;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  dwg_ent_3dsolid_set_wireframe_data_present((dwg_ent_3dsolid *)body, present, error);
 }
 
-/// Returns point present value
+/// Returns the Dwg_Entity_BODY::point_present bit
 char
 dwg_ent_body_get_point_present(const dwg_ent_body *restrict body,
-                          int *restrict error)
+                               int *restrict error)
 {
-  if (body)
-    {
-      *error = 0;
-      return body->point_present;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return '\0';
-    }
+  return dwg_ent_3dsolid_get_point_present((const dwg_ent_3dsolid *)body, error);
 }
 
-/// Sets point present value
+/// Sets the Dwg_Entity_BODY::point_present bit
 void
-dwg_ent_body_set_point_present(dwg_ent_body *restrict body,
-                               const char present,
-                          int *restrict error)
+dwg_ent_body_set_point_present(dwg_ent_body *restrict body, const char present,
+                               int *restrict error)
 {
-  if (body)
-    {
-      *error = 0;
-      body->point_present = present;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  dwg_ent_3dsolid_set_point_present((dwg_ent_3dsolid *)body, present, error);
 }
 
-/// Returns point values
+/// Returns the Dwg_Entity_BODY::point
 void
 dwg_ent_body_get_point(const dwg_ent_body *restrict body,
                        dwg_point_3d *restrict point,
                        int *restrict error)
 {
-  if (body)
-    {
-      *error = 0;
-      point->x = body->point.x;
-      point->y = body->point.y;
-      point->z = body->point.z;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  return dwg_ent_3dsolid_get_point((const dwg_ent_3dsolid *)body, point, error);
 }
 
-/// Sets point of body entity
+/// Sets the Dwg_Entity_BODY::point
 void
 dwg_ent_body_set_point(dwg_ent_body *restrict body,
                        const dwg_point_3d *restrict point,
-                          int *restrict error)
+                       int *restrict error)
 {
-  if (body)
-    {
-      *error = 0;
-      body->point.x = point->x;
-      body->point.y = point->y;
-      body->point.z = point->z;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  dwg_ent_3dsolid_set_point((dwg_ent_3dsolid *)body, point, error);
 }
 
-/// Returns number of isolines
+/// Returns the Dwg_Entity_BODY::num_isolines
 BITCODE_BL
 dwg_ent_body_get_num_isolines(const dwg_ent_body *restrict body,
-                          int *restrict error)
+                              int *restrict error)
 {
-  if (body)
-    {
-      *error = 0;
-      return body->num_isolines;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return 0L;
-    }
+  return dwg_ent_3dsolid_get_num_isolines((const dwg_ent_3dsolid *)body, error);
 }
 
-/// Sets number of isolines (apparently safe to set)
+/// Sets the Dwg_Entity_BODY::num_isolines (??)
 void
 dwg_ent_body_set_num_isolines(dwg_ent_body *restrict body,
                               const BITCODE_BL num,
-                          int *restrict error)
+                              int *restrict error)
 {
-  if (body)
-    {
-      *error = 0;
-      body->num_isolines = num;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  dwg_ent_3dsolid_set_num_isolines((dwg_ent_3dsolid *)body, num, error);
 }
 
-/// returns isoline present value
+/// Returns the Dwg_Entity_BODY::isoline_present bit
+/// If set, wires and silhouettes are present.
 char
 dwg_ent_body_get_isoline_present(const dwg_ent_body *restrict body,
-                          int *restrict error)
+                                 int *restrict error)
 {
-  if (body)
-    {
-      *error = 0;
-      return body->isoline_present;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return '\0';
-    }
+  return dwg_ent_3dsolid_get_isoline_present((const dwg_ent_3dsolid *)body, error);
 }
 
-/// Sets isoline present value
+/// Sets the Dwg_Entity_BODY::isoline_present bit
+/// If set, wires and silhouettes are present.
 void
-dwg_ent_body_set_isoline_present(dwg_ent_body *restrict body,
-                                 const char present,
-                          int *restrict error)
+dwg_ent_body_set_isoline_present(dwg_ent_body *restrict body, char present,
+                                 int *restrict error)
 {
-  if (body)
-    {
-      *error = 0;
-      body->isoline_present = present;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  dwg_ent_3dsolid_set_isoline_present((dwg_ent_3dsolid *)body, present, error);
 }
 
-/// Returns number of wires
+/// Returns the number of Dwg_Entity_BODY::num_wires wires
 BITCODE_BL
 dwg_ent_body_get_num_wires(const dwg_ent_body *restrict body,
-                          int *restrict error)
+                           int *restrict error)
 {
-  if (body)
-    {
-      *error = 0;
-      return body->num_wires;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return 0L;
-    }
+  return dwg_ent_3dsolid_get_num_wires((const dwg_ent_3dsolid *)body, error);
 }
 
-/// Returns all wires of body
-dwg_ent_solid_wire *
+//TODO dwg_ent_body_add_wire, dwg_ent_body_delete_wire
+
+/// Returns all Dwg_Entity_BODY::wire structs, as array of _dwg_3DSOLID_wire::
+dwg_3dsolid_wire *
 dwg_ent_body_get_wires(const dwg_ent_body *restrict body,
-                          int *restrict error)
+                       int *restrict error)
 {
-  dwg_ent_solid_wire *ptx = (dwg_ent_solid_wire*)
-    malloc(sizeof(dwg_ent_solid_wire)* body->num_wires);
-  if (ptx)
-    {
-      BITCODE_BL i;
-      *error = 0;
-      for (i = 0; i < body->num_wires ; i++)
-        {
-          ptx[i] = body->wires[i];
-        }
-      return ptx;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: null malloc", __FUNCTION__)
-      return NULL;
-    }
+  return dwg_ent_3dsolid_get_wires((const dwg_ent_3dsolid *)body, error);
 }
 
-/// Returns number of silhouettes value
+/// Returns the number of Dwg_Entity_BODY::num_silhouettes entries.
 BITCODE_BL
 dwg_ent_body_get_num_silhouettes(const dwg_ent_body *restrict body,
-                          int *restrict error)
+                                 int *restrict error)
 {
-  if (body)
-    {
-      *error = 0;
-      return body->num_silhouettes;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return 0L;
-    }
+  return dwg_ent_3dsolid_get_num_silhouettes((const dwg_ent_3dsolid *)body, error);
 }
 
-/// Returns all silhouettes for body entity
-dwg_ent_solid_silhouette *
+//TODO dwg_ent_body_add_silhouette, dwg_ent_body_delete_silhouette
+
+/// Returns all Dwg_Entity_BODY::silhouettes structs, as array of _dwg_3DSOLID_silhouette::
+dwg_3dsolid_silhouette *
 dwg_ent_body_get_silhouettes(const dwg_ent_body *restrict body,
-                            int *restrict error)
-{
-  dwg_ent_solid_silhouette *ptx = (dwg_ent_solid_silhouette*)
-    malloc(sizeof(dwg_ent_solid_silhouette)* body->num_silhouettes);
-  if (ptx)
-    {
-      BITCODE_BL i;
-      *error = 0;
-      for (i = 0; i < body->num_silhouettes ; i++)
-        {
-          ptx[i] = body->silhouettes[i];
-        }
-      return ptx;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: null malloc", __FUNCTION__)
-      return NULL;
-    }
-}
-
-/// Returns acis empty2 value
-unsigned char
-dwg_ent_body_get_acis_empty2(const dwg_ent_body *restrict body,
-                          int *restrict error)
-{
-  if (body)
-    {
-      *error = 0;
-      return body->acis_empty2;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return '\0';
-    }
-}
-
-/// Sets body acis empty2 value
-void
-dwg_ent_body_set_acis_empty2(dwg_ent_body *restrict body, unsigned char acis,
                              int *restrict error)
 {
-  if (body)
-    {
-      *error = 0;
-      body->acis_empty2 = acis;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  return dwg_ent_3dsolid_get_silhouettes((const dwg_ent_3dsolid *)body, error);
+}
+
+/// Returns the Dwg_Entity_BODY::acis_empty2 bit
+unsigned char
+dwg_ent_body_get_acis_empty2(const dwg_ent_body *restrict body,
+                             int *restrict error)
+{
+  return dwg_ent_3dsolid_get_acis_empty2((const dwg_ent_3dsolid *)body, error);
+}
+
+/// Sets the Dwg_Entity_BODY::acis_empty2 bit
+void
+dwg_ent_body_set_acis_empty2(dwg_ent_body *restrict body, unsigned char empty2,
+                             int *restrict error)
+{
+  dwg_ent_3dsolid_set_acis_empty2((dwg_ent_3dsolid *)body, empty2, error);
 }
 
 /*******************************************************************

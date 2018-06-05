@@ -1403,16 +1403,16 @@ typedef struct _dwg_entity_ELLIPSE
 /**
  spline - SPLINE (36) entity
  */
-typedef struct _dwg_entity_SPLINE_point
+typedef struct _dwg_SPLINE_point
 {
   struct _dwg__entity_SPLINE *parent;
 
   double x;
   double y;
   double z;
-} Dwg_Entity_SPLINE_point;
+} Dwg_SPLINE_point;
 
-typedef struct _dwg_entity_SPLINE_control_point
+typedef struct _dwg_SPLINE_control_point
 {
   struct _dwg__entity_SPLINE *parent;
 
@@ -1420,7 +1420,7 @@ typedef struct _dwg_entity_SPLINE_control_point
   double y;
   double z;
   double w;
-} Dwg_Entity_SPLINE_control_point;
+} Dwg_SPLINE_control_point;
 
 typedef struct _dwg_entity_SPLINE
 {
@@ -1441,18 +1441,18 @@ typedef struct _dwg_entity_SPLINE
   BITCODE_BD knot_tol;
   BITCODE_BD ctrl_tol;
   BITCODE_BS num_fit_pts;
-  Dwg_Entity_SPLINE_point* fit_pts;
+  Dwg_SPLINE_point* fit_pts;
   BITCODE_BL num_knots;
   BITCODE_BD* knots;
   BITCODE_BL num_ctrl_pts;
-  Dwg_Entity_SPLINE_control_point* ctrl_pts;
+  Dwg_SPLINE_control_point* ctrl_pts;
 } Dwg_Entity_SPLINE;
 
 /**
  3DSOLID (38) entity
  */
 #define Dwg_Entity_3DSOLID Dwg_Entity__3DSOLID
-typedef struct _dwg_entity_3DSOLID_wire
+typedef struct _dwg_3DSOLID_wire
 {
   struct _dwg_entity_3DSOLID *parent;
   BITCODE_RC type;
@@ -1470,9 +1470,9 @@ typedef struct _dwg_entity_3DSOLID_wire
   BITCODE_B has_rotation;
   BITCODE_B has_reflection;
   BITCODE_B has_shear;
-} Dwg_Entity_3DSOLID_wire;
+} Dwg_3DSOLID_wire;
 
-typedef struct _dwg_entity_3DSOLID_silhouette
+typedef struct _dwg_3DSOLID_silhouette
 {
   struct _dwg_entity_3DSOLID *parent;
   BITCODE_BL vp_id;
@@ -1481,35 +1481,34 @@ typedef struct _dwg_entity_3DSOLID_silhouette
   BITCODE_3BD vp_up_dir;
   BITCODE_B vp_perspective;
   BITCODE_BL num_wires;
-  Dwg_Entity_3DSOLID_wire * wires;
-} Dwg_Entity_3DSOLID_silhouette;
+  Dwg_3DSOLID_wire * wires;
+} Dwg_3DSOLID_silhouette;
 
 typedef struct _dwg_entity_3DSOLID
 {
   struct _dwg_object_entity *parent;
 
-  BITCODE_B acis_empty;
+  BITCODE_B acis_empty;  /*!< no DXF */
   BITCODE_B unknown;
-  BITCODE_BS version;
+  BITCODE_BS version;    /*!< DXF 70 Modeler format version =1*/
   BITCODE_BL num_blocks;
   BITCODE_BL* block_size;
-  BITCODE_RC** sat_data;
-  BITCODE_RC* acis_data;
+  BITCODE_RC** encr_sat_data;
+  unsigned char* acis_data; /*!< DXF 1, the decryted SAT data */
   BITCODE_B wireframe_data_present;
   BITCODE_B point_present;
   BITCODE_3BD point;
   BITCODE_BL num_isolines;
   BITCODE_B isoline_present;
   BITCODE_BL num_wires;
-  Dwg_Entity_3DSOLID_wire * wires;
+  Dwg_3DSOLID_wire * wires;
   BITCODE_BL num_silhouettes;
-  Dwg_Entity_3DSOLID_silhouette * silhouettes;
+  Dwg_3DSOLID_silhouette * silhouettes;
   BITCODE_B acis_empty2;
   struct _dwg_entity_3DSOLID* extra_acis_data;/* is it the best approach? */
   BITCODE_BL unknown_2007;
   BITCODE_H history_id;
-  BITCODE_B ACIS_empty_bit;
-  unsigned char* raw_sat_data;
+  BITCODE_B acis_empty_bit;
 } Dwg_Entity__3DSOLID;
 
 /**
@@ -1529,8 +1528,8 @@ typedef struct _dwg_entity_RAY
 {
   struct _dwg_object_entity *parent;
 
-  BITCODE_3BD point;
-  BITCODE_3BD vector;
+  BITCODE_3BD point;   /*!< DXF 10 */
+  BITCODE_3BD vector;  /*!< DXF 11 */
 } Dwg_Entity_RAY;
 
 /**
@@ -1546,15 +1545,15 @@ typedef struct _dwg_object_DICTIONARY
 {
   struct _dwg_object_object *parent;
 
-  BITCODE_BL numitems;
-  BITCODE_TV* text;
-  BITCODE_BS cloning;
+  BITCODE_BL numitems; /*!< no DXF */
+  BITCODE_TV* text;    /*!< DXF 3 */
+  BITCODE_BS cloning;  /*!< DXF 281 */
   BITCODE_RC unknown_r14;
-  BITCODE_RC hard_owner;
+  BITCODE_RC hard_owner; /*!< DXF 330 */
   BITCODE_H parenthandle;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
-  BITCODE_H* itemhandles;
+  BITCODE_H* itemhandles; /*!< DXF 350, pairwise with text */
 } Dwg_Object_DICTIONARY;
 
 /**
@@ -1678,21 +1677,22 @@ typedef struct _dwg_entity_TOLERANCE
 /**
  MLINE (47) entity
  */
-typedef struct _dwg_entity_MLINE_line
+typedef struct _dwg_MLINE_line
 {
-  struct _dwg_entity_MLINE_vertex *parent;
+  struct _dwg_MLINE_vertex *parent;
   BITCODE_BS num_segparms;
   BITCODE_BD * segparms;
   BITCODE_BS num_areafillparms;
   BITCODE_BD* areafillparms;
 } Dwg_MLINE_line;
 
-typedef struct _dwg_entity_MLINE_vertex
+typedef struct _dwg_MLINE_vertex
 {
   struct _dwg_entity_MLINE *parent;
   BITCODE_3BD vertex;
   BITCODE_3BD vertex_direction;
   BITCODE_3BD miter_direction;
+  BITCODE_RC num_lines;
   Dwg_MLINE_line* lines;
 } Dwg_MLINE_vertex;
 

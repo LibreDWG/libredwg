@@ -1377,7 +1377,7 @@ DWG_ENTITY(SPLINE)
         FIELD_BD (knots[rcount1], 40);
       }
     END_REPEAT(knots);
-    REPEAT(num_ctrl_pts, ctrl_pts, Dwg_Entity_SPLINE_control_point)
+    REPEAT(num_ctrl_pts, ctrl_pts, Dwg_SPLINE_control_point)
       {
         FIELD_3BD (ctrl_pts[rcount1], 10);
         if (!FIELD_VALUE(weighted))
@@ -1388,7 +1388,7 @@ DWG_ENTITY(SPLINE)
     END_REPEAT(ctrl_pts);
   }
   if (FIELD_VALUE(scenario) & 2) {
-    REPEAT(num_fit_pts, fit_pts, Dwg_Entity_SPLINE_point)
+    REPEAT(num_fit_pts, fit_pts, Dwg_SPLINE_point)
       {
         FIELD_3BD (fit_pts[rcount1], 11);
       }
@@ -1423,9 +1423,11 @@ DWG_ENTITY_END
 #ifdef IS_DECODER
 
 #define DECODE_3DSOLID decode_3dsolid(dat, hdl_dat, obj, _obj);
-void decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj);
+void decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj,
+                    Dwg_Entity_3DSOLID* _obj);
 
-void decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
+void decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj,
+                    Dwg_Entity_3DSOLID* _obj)
 {
   Dwg_Data* dwg = obj->parent;
   int vcount, rcount1, rcount2;
@@ -1439,22 +1441,25 @@ void decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Ent
   if (!FIELD_VALUE(acis_empty))
     {
       FIELD_B (unknown, 0);
+      IF_ENCODE_FROM_EARLIER {
+        FIELD_VALUE(version) = 1;
+      }
       FIELD_BS (version, 70);
       if (FIELD_VALUE(version) == 1)
         {
           do
             {
-              FIELD_VALUE(sat_data) = (BITCODE_RC**)
-                realloc(FIELD_VALUE(sat_data), (i+1) * sizeof (BITCODE_RC*));
+              FIELD_VALUE(encr_sat_data) = (BITCODE_RC**)
+                realloc(FIELD_VALUE(encr_sat_data), (i+1) * sizeof (BITCODE_RC*));
               FIELD_VALUE(block_size) = (BITCODE_BL*)
                 realloc(FIELD_VALUE(block_size), (i+1) * sizeof (BITCODE_BL));
               FIELD_BL (block_size[i], 0);
-              FIELD_TF (sat_data[i], FIELD_VALUE(block_size[i]), 0);
+              FIELD_TF (encr_sat_data[i], FIELD_VALUE(block_size[i]), 0);
               total_size += FIELD_VALUE (block_size[i]);
             } while(FIELD_VALUE (block_size[i++]));
 
           // de-obfuscate SAT data
-          FIELD_VALUE(raw_sat_data) = malloc (total_size+1);
+          FIELD_VALUE(acis_data) = malloc (total_size+1);
           num_blocks = i-1;
           FIELD_VALUE(num_blocks) = num_blocks;
           index = 0;
@@ -1462,23 +1467,25 @@ void decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Ent
             {
               for (j=0; j<FIELD_VALUE (block_size[i]); j++)
                 {
-                  if (FIELD_VALUE(sat_data[i][j] <= 32))
+                  if (FIELD_VALUE(encr_sat_data[i][j] <= 32))
                     {
-                      FIELD_VALUE(raw_sat_data)[index++] = FIELD_VALUE (sat_data[i][j]);
+                      FIELD_VALUE(acis_data)[index++] = FIELD_VALUE (encr_sat_data[i][j]);
                     }
                   else
                     {
-                      FIELD_VALUE(raw_sat_data)[index++] = 159 - FIELD_VALUE (sat_data[i][j]);
+                      FIELD_VALUE(acis_data)[index++] = 159 - FIELD_VALUE (encr_sat_data[i][j]);
                     }
                 }
             }
-          FIELD_VALUE(raw_sat_data)[index] = '\0';
-          LOG_TRACE("Raw SAT data:\n%s\n", FIELD_VALUE (raw_sat_data)); // DXF 1 + 3 if >255
+          FIELD_VALUE(acis_data)[index] = '\0';
+          // DXF 1 + 3 if >255
+          LOG_TRACE("acis_data [1]:\n%s\n", FIELD_VALUE (acis_data));
         }
       else //if (FIELD_VALUE(version)==2)
         {
           //TODO
-          LOG_ERROR("TODO: Implement parsing of SAT file (version 2) in entities 37,38 and 39.\n");
+          LOG_ERROR("TODO: Implement parsing of SAT file (version 2) "
+                    "in entities 37,38 and 39.\n");
         }
 
       FIELD_B (wireframe_data_present, 0);
@@ -1500,13 +1507,13 @@ void decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Ent
           if (FIELD_VALUE(isoline_present))
             {
               FIELD_BL (num_wires, 0);
-              REPEAT(num_wires, wires, Dwg_Entity_3DSOLID_wire)
+              REPEAT(num_wires, wires, Dwg_3DSOLID_wire)
                 {
                   PARSE_WIRE_STRUCT(wires[rcount1])
                 }
               END_REPEAT(wires);
               FIELD_BL (num_silhouettes, 0);
-              REPEAT(num_silhouettes, silhouettes, Dwg_Entity_3DSOLID_silhouette)
+              REPEAT(num_silhouettes, silhouettes, Dwg_3DSOLID_silhouette)
                 {
                   FIELD_BL (silhouettes[rcount1].vp_id, 0);
                   FIELD_3BD (silhouettes[rcount1].vp_target, 0);
@@ -1515,7 +1522,7 @@ void decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Ent
                   FIELD_B (silhouettes[rcount1].vp_perspective, 0);
                   FIELD_BL (silhouettes[rcount1].num_wires, 0);
                   REPEAT2(silhouettes[rcount1].num_wires, silhouettes[rcount1].wires,
-                          Dwg_Entity_3DSOLID_wire)
+                          Dwg_3DSOLID_wire)
                     {
                       PARSE_WIRE_STRUCT(silhouettes[rcount1].wires[rcount2])
                     }
@@ -1525,10 +1532,11 @@ void decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Ent
             }
         }
 
-      FIELD_B (ACIS_empty_bit, 0);
-      if (!FIELD_VALUE(ACIS_empty_bit))
+      FIELD_B (acis_empty_bit, 0);
+      if (!FIELD_VALUE(acis_empty_bit))
         {
-          LOG_ERROR("TODO: Implement parsing of ACIS data in the end of 3dsolid object parsing (ACIS_empty_bit==0).\n");
+          LOG_ERROR("TODO: Implement parsing of ACIS data at the end "
+                    "of 3dsolid object parsing (acis_empty_bit==0).\n");
         }
 
       SINCE(R_2007) {
@@ -1550,7 +1558,8 @@ void decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Ent
 #ifdef IS_ENCODER
 
 #define ENCODE_3DSOLID encode_3dsolid(dat, hdl_dat, obj, _obj);
-static void encode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
+static void encode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj,
+                           Dwg_Entity_3DSOLID* _obj)
 {
   //TODO Implement-me
   assert(dat);
@@ -1571,11 +1580,11 @@ static void free_3dsolid(Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
     {
       for (i=0; i < FIELD_VALUE (num_blocks); i++)
         {
-          FIELD_TF (sat_data[i], block_size[i], 0);
+          FIELD_TF (encr_sat_data[i], block_size[i], 0);
         }
-      free(_obj->sat_data);
+      free(_obj->encr_sat_data);
       free(_obj->block_size);
-      free(_obj->raw_sat_data);
+      free(_obj->acis_data);
     }
 }
 #undef FREE_3DSOLID
@@ -1918,6 +1927,7 @@ DWG_ENTITY(MLINE)
       FIELD_3DPOINT (verts[rcount1].vertex, 10);
       FIELD_3DPOINT (verts[rcount1].vertex_direction, 210);
       FIELD_3DPOINT (verts[rcount1].miter_direction, 11);
+      FIELD_VALUE (verts[rcount1].num_lines) = FIELD_VALUE (num_lines);
 
       REPEAT2_C(num_lines, verts[rcount1].lines, Dwg_MLINE_line)
         {
@@ -5196,6 +5206,9 @@ DWG_OBJECT_END
 DWG_OBJECT(DETAILVIEWSTYLE)
 DWG_OBJECT_END
 
+DWG_OBJECT(SECTIONVIEWSTYLE)
+DWG_OBJECT_END
+
 DWG_OBJECT(DIMASSOC)
 DWG_OBJECT_END
 
@@ -5214,11 +5227,7 @@ DWG_OBJECT_END
 DWG_OBJECT(PLOTSETTINGS)
 DWG_OBJECT_END
 
-DWG_OBJECT(SECTIONVIEWSTYLE)
-DWG_OBJECT_END
-
 DWG_OBJECT(TABLESTYLE)
 DWG_OBJECT_END
 
 */
-

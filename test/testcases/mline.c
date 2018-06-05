@@ -32,7 +32,7 @@ api_process (dwg_object * obj)
   char just;
   BITCODE_BS oc, num_verts, num_lines;
   dwg_point_3d base_point, ext;
-  dwg_ent_mline_vertex *verts;
+  dwg_mline_vertex *verts;
 
   dwg_ent_mline *mline = dwg_object_to_MLINE (obj);
 
@@ -63,13 +63,11 @@ api_process (dwg_object * obj)
   else
     fail ("error in reading base_point");
 
-
   num_lines = dwg_ent_mline_get_num_lines (mline, &error);
   if (!error  && num_lines == mline->num_lines)	// error checking
     pass ("Working Properly");
   else
     fail ("error in reading num lines");
-
 
   num_verts = dwg_ent_mline_get_num_verts (mline, &error);
   if (!error  && num_verts == mline->num_verts)	// error checking
@@ -78,7 +76,6 @@ api_process (dwg_object * obj)
     fail ("error in reading num verts");
 
   verts = dwg_ent_mline_get_verts (mline, &error);
-
   if (!error )
     {
       BITCODE_BS i, matches = 1;
