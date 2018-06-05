@@ -21,7 +21,7 @@
 /**
  The position of bits within bytes is numerically ordered as depicted below:
 
-/code
+\code
  position: 01234567 01234567 01234567 ...
  bits:     76543210 76543210 76543210 ...
            \______/ \______/ \______/
