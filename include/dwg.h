@@ -3978,7 +3978,7 @@ typedef struct _dwg_object_MATERIAL
 
 /**
  Object PLOTSETTINGS (varies) UNKNOWN FIELDS
- yet unsorted, and unused.
+ yet unsorted, and unused. See LAYOUT.
  */
 typedef struct _dwg_object_PLOTSETTINGS
 {
@@ -3988,10 +3988,10 @@ typedef struct _dwg_object_PLOTSETTINGS
   BITCODE_T printer_cfg_file; /*!< DXF 2 */
   BITCODE_T paper_size;       /*!< DXF 4 */
   BITCODE_H plotview;         /*!< DXF 6 */
-  BITCODE_BD margin_left;     /*!< DXF 40, margins in mm */
-  BITCODE_BD margin_bottom;   /*!< DXF 41 */
-  BITCODE_BD margin_right;    /*!< DXF 42 */
-  BITCODE_BD margin_top;      /*!< DXF 43 */
+  BITCODE_BD left_margin;     /*!< DXF 40, margins in mm */
+  BITCODE_BD bottom_margin;   /*!< DXF 42 */
+  BITCODE_BD right_margin;    /*!< DXF 43 */
+  BITCODE_BD top_margin;      /*!< DXF 44 */
   BITCODE_BD paper_width;     /*!< DXF 44, in mm */
   BITCODE_BD paper_height;    /*!< DXF 45, in mm */
   BITCODE_2BD plot_origin; 	     /*!< DXF 46 */ // + 47
@@ -4085,6 +4085,36 @@ typedef struct _dwg_entity_LIGHT
 } Dwg_Entity_LIGHT;
 
 /**
+ Entity CAMERA (varies) UNKNOWN FIELDS
+ not DWG peristent. yet unsorted, and unused.
+ */
+typedef struct _dwg_entity_CAMERA
+{
+  struct _dwg_object_entity *parent;
+  BITCODE_H view;
+} Dwg_Entity_CAMERA;
+
+/**
+ Entity GEOPOSITIONMARKER (varies) UNKNOWN FIELDS
+ yet unsorted, and unused.
+*/
+typedef struct _dwg_entity_GEOPOSITIONMARKER
+{
+  struct _dwg_object_entity *parent;
+  BITCODE_3BD position;   /*!< DXF 10 */
+  BITCODE_3BD extrusion;  /*!< DXF 210 */
+  BITCODE_BD radius;      /*!< DXF 40 */
+  BITCODE_BD landing_gap; /*!< DXF 41 */
+  BITCODE_T text;         /*!< DXF 1 */
+  BITCODE_BS alignment;   /*!< DXF 70  0 left, 1 center, 2 right */
+  BITCODE_H mtext_handle; /*!< DXF ? */
+  BITCODE_B mtext_visible;/*!< DXF ? */
+  BITCODE_B enable_frame_text; /*!< DXF ? */
+  BITCODE_T notes;        /*!< DXF 3 */
+  BITCODE_H style;        /*!< DXF 7 */
+} Dwg_Entity_GEOPOSITIONMARKER;
+
+/**
  Object SUN (varies) UNKNOWN FIELDS
  */
 typedef struct _dwg_object_SUN
@@ -4101,9 +4131,9 @@ typedef struct _dwg_object_SUN
   BITCODE_B is_on;   // 290
   BITCODE_CMC color; // 60
   BITCODE_BD intensity; // 40
-  //BITCODE_3BD (direction, 0); //calculated?
-  //BITCODE_BD (altitude, 0);   //calculated?
-  //BITCODE_BD (azimuth, 0);    //calculated?
+  //BITCODE_3BD direction; //calculated?
+  //BITCODE_BD altitude;   //calculated?
+  //BITCODE_BD azimuth;    //calculated?
   BITCODE_BL julian_day; //91
   BITCODE_BL time;       //92
   BITCODE_B  is_dst;     //292
@@ -4269,16 +4299,18 @@ typedef struct _dwg_object_entity
     Dwg_Entity_TOLERANCE *TOLERANCE;
     Dwg_Entity_MLINE *MLINE;
     Dwg_Entity_OLE2FRAME *OLE2FRAME;
+    Dwg_Entity_CAMERA *CAMERA;
     Dwg_Entity_DUMMY *DUMMY;
+    Dwg_Entity_HATCH *HATCH;
+    Dwg_Entity_IMAGE *IMAGE;
     Dwg_Entity_LIGHT *LIGHT;
     Dwg_Entity_LONG_TRANSACTION *LONG_TRANSACTION;
     Dwg_Entity_LWPOLYLINE *LWPOLYLINE;
     Dwg_Entity_MULTILEADER *MULTILEADER;
+    Dwg_Entity_GEOPOSITIONMARKER *GEOPOSITIONMARKER;
     Dwg_Entity_PROXY_LWPOLYLINE *PROXY_LWPOLYLINE;
     Dwg_Entity_PROXY_ENTITY *PROXY_ENTITY;
-    Dwg_Entity_HATCH *HATCH;
     Dwg_Entity_TABLE *TABLE;
-    Dwg_Entity_IMAGE *IMAGE;
     Dwg_Entity_WIPEOUT *WIPEOUT;
     Dwg_Entity_UNKNOWN_ENT *UNKNOWN_ENT;
   } tio;
@@ -4375,6 +4407,7 @@ typedef struct _dwg_object_object
     //TODO Dwg_Object_ASSOC2DCONSTRAINTGROUP *ASSOC2DCONSTRAINTGROUP;
     //TODO Dwg_Object_ASSOCGEOMDEPENDENCY *ASSOCGEOMDEPENDENCY;
     //TODO Dwg_Object_ASSOCNETWORK *ASSOCNETWORK;
+    //Dwg_Object_CSACDOCUMENTOPTIONS *CSACDOCUMENTOPTIONS;
     Dwg_Object_CELLSTYLEMAP *CELLSTYLEMAP;
     Dwg_Object_DBCOLOR *DBCOLOR;
     //TODO Dwg_Object_DETAILVIEWSTYLE *DETAILVIEWSTYLE;
@@ -4393,7 +4426,7 @@ typedef struct _dwg_object_object
     Dwg_Object_LAYER_INDEX *LAYER_INDEX;
     Dwg_Object_LAYOUT *LAYOUT;
     //TODO Dwg_Object_LEADEROBJECTCONTEXTDATA *LEADEROBJECTCONTEXTDATA;
-    Dwg_Object_LIGHTLIST *LIGHTLIST;
+    //Dwg_Object_LIGHTLIST *LIGHTLIST;
     Dwg_Object_MATERIAL *MATERIAL;
     Dwg_Object_MLEADERSTYLE *MLEADERSTYLE;
     Dwg_Object_MLINESTYLE *MLINESTYLE;
@@ -4409,7 +4442,7 @@ typedef struct _dwg_object_object
     Dwg_Object_SORTENTSTABLE *SORTENTSTABLE;
     Dwg_Object_SPATIAL_FILTER *SPATIAL_FILTER;
     Dwg_Object_SPATIAL_INDEX *SPATIAL_INDEX;
-    Dwg_Object_SUN *SUN; /* unhandled */
+    Dwg_Object_SUN *SUN;
     Dwg_Object_TABLECONTENT *TABLECONTENT;
     Dwg_Object_TABLEGEOMETRY *TABLEGEOMETRY;
     Dwg_Object_TABLESTYLE *TABLESTYLE;
@@ -4944,20 +4977,21 @@ EXPORT long dwg_add_VBA_PROJECT (Dwg_Data * dwg);
 EXPORT long dwg_add_LAYOUT (Dwg_Data * dwg);
 EXPORT long dwg_add_PROXY_ENTITY (Dwg_Data * dwg);
 EXPORT long dwg_add_PROXY_OBJECT (Dwg_Data * dwg);
-EXPORT long dwg_add_ARCALIGNEDTEXT (Dwg_Data * dwg);
-EXPORT long dwg_add_ASSOC2DCONSTRAINTGROUP (Dwg_Data * dwg);
-EXPORT long dwg_add_ASSOCGEOMDEPENDENCY (Dwg_Data * dwg);
-EXPORT long dwg_add_ASSOCNETWORK (Dwg_Data * dwg);
+//EXPORT long dwg_add_ARCALIGNEDTEXT (Dwg_Data * dwg);
+//EXPORT long dwg_add_ASSOC2DCONSTRAINTGROUP (Dwg_Data * dwg);
+//EXPORT long dwg_add_ASSOCGEOMDEPENDENCY (Dwg_Data * dwg);
+//EXPORT long dwg_add_ASSOCNETWORK (Dwg_Data * dwg);
 EXPORT long dwg_add_CELLSTYLEMAP (Dwg_Data * dwg);
 EXPORT long dwg_add_DBCOLOR (Dwg_Data * dwg);
 EXPORT long dwg_add_DETAILVIEWSTYLE (Dwg_Data * dwg);
 EXPORT long dwg_add_DIMASSOC (Dwg_Data * dwg);
 EXPORT long dwg_add_DICTIONARYVAR (Dwg_Data * dwg);
 EXPORT long dwg_add_DICTIONARYWDLFT (Dwg_Data * dwg);
-EXPORT long dwg_add_EXACXREFPANELOBJECT (Dwg_Data * dwg);
+//EXPORT long dwg_add_EXACXREFPANELOBJECT (Dwg_Data * dwg);
 EXPORT long dwg_add_FIELD (Dwg_Data * dwg);
 EXPORT long dwg_add_FIELDLIST (Dwg_Data * dwg);
 EXPORT long dwg_add_GEODATA (Dwg_Data * dwg);
+//EXPORT long dwg_add_GEOPOSITIONMARKER (Dwg_Data * dwg);
 EXPORT long dwg_add_IDBUFFER (Dwg_Data * dwg);
 EXPORT long dwg_add_IMAGE (Dwg_Data * dwg);
 EXPORT long dwg_add_IMAGEDEF (Dwg_Data * dwg);
@@ -4966,16 +5000,16 @@ EXPORT long dwg_add_LAYER_INDEX (Dwg_Data * dwg);
 EXPORT long dwg_add_LAYER_FILTER (Dwg_Data * dwg);
 EXPORT long dwg_add_LEADEROBJECTCONTEXTDATA (Dwg_Data * dwg);
 EXPORT long dwg_add_LIGHT (Dwg_Data * dwg);
-EXPORT long dwg_add_LIGHTLIST (Dwg_Data * dwg);
+//EXPORT long dwg_add_LIGHTLIST (Dwg_Data * dwg);
 EXPORT long dwg_add_MATERIAL (Dwg_Data * dwg);
-EXPORT long dwg_add_MULTILEADER (Dwg_Data * dwg);
+//EXPORT long dwg_add_MULTILEADER (Dwg_Data * dwg);
 EXPORT long dwg_add_MLEADERSTYLE (Dwg_Data * dwg);
-EXPORT long dwg_add_NPOCOLLECTION (Dwg_Data * dwg);
+//EXPORT long dwg_add_NPOCOLLECTION (Dwg_Data * dwg);
 EXPORT long dwg_add_PLOTSETTINGS (Dwg_Data * dwg);
-EXPORT long dwg_add_OBJECTCONTEXTDATA (Dwg_Data * dwg);
+//EXPORT long dwg_add_OBJECTCONTEXTDATA (Dwg_Data * dwg);
 EXPORT long dwg_add_RASTERVARIABLES (Dwg_Data * dwg);
 EXPORT long dwg_add_SCALE (Dwg_Data * dwg);
-EXPORT long dwg_add_SECTIONVIEWSTYLE (Dwg_Data * dwg);
+//EXPORT long dwg_add_SECTIONVIEWSTYLE (Dwg_Data * dwg);
 EXPORT long dwg_add_SORTENTSTABLE (Dwg_Data * dwg);
 EXPORT long dwg_add_SPATIAL_FILTER (Dwg_Data * dwg);
 EXPORT long dwg_add_SPATIAL_INDEX (Dwg_Data * dwg);

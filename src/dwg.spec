@@ -5187,8 +5187,11 @@ DWG_OBJECT(VISUALSTYLE)
 
 DWG_OBJECT_END
 
+/* In work area:
+   The following entities/objects are stored as raw UNKNOWN_ENT/OBJ,
+   unless enabled via -DDEBUG_... */
+
 // (varies) UNTESTED
-#ifdef DEBUG_MATERIAL
 DWG_OBJECT(MATERIAL)
 
   SUBCLASS (AcDbMaterial)
@@ -5204,13 +5207,13 @@ DWG_OBJECT(MATERIAL)
   FIELD_BS (diffuse_color_flag, 71); // 0 Use current color, 1 Override
   FIELD_BD (diffuse_color_factor, 41); // 0.0 - 1.0
   FIELD_CMC (diffuse_color, 91);
-  FIELD_BS (diffusemap_source, 72); // 0 current, 1 image file (default)
+  FIELD_BS (diffusemap_source, 72);  // 0 scene, 1 file (def), 2 procedural
   FIELD_BS (diffusemap_filename, 3); // if NULL no diffuse map
   FIELD_BD (diffusemap_blendfactor, 42); // 1.0
-  FIELD_BS (diffusemap_projection, 73); // 1 = Planar (def), 2 = Box, 3 = Cylinder, 4 = Sphere
-  FIELD_BS (diffusemap_tiling, 74); // 1 = Tile (def), 2 = Crop, 3 = Clamp
+  FIELD_BS (diffusemap_projection, 73); // 0 Inherit, 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere
+  FIELD_BS (diffusemap_tiling, 74);     // 0 Inherit, 1 Tile (def), 2 Crop, 3 Clamp, 4 Mirror
   FIELD_BS (diffusemap_autotransform, 75); // 1 no, 2: scale to curr ent,
-                                        // 4: w/ current block transform
+                                           // 4: w/ current block transform
   DEBUG_HERE();
   FIELD_VECTOR_N (diffusemap_transmatrix, BD, 16, 43);
 
@@ -5222,8 +5225,8 @@ DWG_OBJECT(MATERIAL)
   FIELD_BS (specularmap_source, 77); // 0 current, 1 image file (default)
   FIELD_BS (specularmap_filename, 4); // if NULL no specular map
   FIELD_BD (specularmap_blendfactor, 46); // 1.0
-  FIELD_BS (specularmap_projection, 78); // 1 = Planar (def), 2 = Box, 3 = Cylinder, 4 = Sphere
-  FIELD_BS (specularmap_tiling, 79); // 1 = Tile (def), 2 = Crop, 3 = Clamp
+  FIELD_BS (specularmap_projection, 78);  // 0 Inherit, 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere
+  FIELD_BS (specularmap_tiling, 79); // 0 Inherit, 1 Tile (def), 2 Crop, 3 Clamp, 4 Mirror
   FIELD_BS (specularmap_autotransform, 170); // 1 no, 2: scale to curr ent,
                                         // 4: w/ current block transform
   FIELD_VECTOR_N (specularmap_transmatrix, BD, 16, 47);
@@ -5231,8 +5234,8 @@ DWG_OBJECT(MATERIAL)
   FIELD_BS (reflectionmap_source, 171); // 0 current, 1 image file (default)
   FIELD_BS (reflectionmap_filename, 6); // if NULL no diffuse map
   FIELD_BD (reflectionmap_blendfactor, 48); // 1.0
-  FIELD_BS (reflectionmap_projection, 172); // 1 = Planar (def), 2 = Box, 3 = Cylinder, 4 = Sphere
-  FIELD_BS (reflectionmap_tiling, 173); // 1 = Tile (def), 2 = Crop, 3 = Clamp
+  FIELD_BS (reflectionmap_projection, 172); // 0 Inherit, 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere
+  FIELD_BS (reflectionmap_tiling, 173); // 0 Inherit, 1 Tile (def), 2 Crop, 3 Clamp, 4 Mirror
   FIELD_BS (reflectionmap_autotransform, 174); // 1 no, 2: scale to curr ent,
                                         // 4: w/ current block transform
   DEBUG_HERE();
@@ -5242,8 +5245,8 @@ DWG_OBJECT(MATERIAL)
   FIELD_BS (opacitymap_source, 175); // 0 current, 1 image file (default)
   FIELD_BS (opacitymap_filename, 7); // if NULL no specular map
   FIELD_BD (opacitymap_blendfactor, 141); // 1.0
-  FIELD_BS (opacitymap_projection, 176); // 1 = Planar (def), 2 = Box, 3 = Cylinder, 4 = Sphere
-  FIELD_BS (opacitymap_tiling, 177); // 1 = Tile (def), 2 = Crop, 3 = Clamp
+  FIELD_BS (opacitymap_projection, 176); // 0 Inherit, 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere
+  FIELD_BS (opacitymap_tiling, 177); // 0 Inherit, 1 Tile (def), 2 Crop, 3 Clamp, 4 Mirror
   FIELD_BS (opacitymap_autotransform, 178); // 1 no, 2: scale to curr ent,
                                         // 4: w/ current block transform
   DEBUG_HERE();
@@ -5252,8 +5255,8 @@ DWG_OBJECT(MATERIAL)
   FIELD_BS (bumpmap_source, 179); // 0 current, 1 image file (default)
   FIELD_BS (bumpmap_filename, 8); // if NULL no specular map
   FIELD_BD (bumpmap_blendfactor, 143); // 1.0
-  FIELD_BS (bumpmap_projection, 270); // 1 = Planar (def), 2 = Box, 3 = Cylinder, 4 = Sphere
-  FIELD_BS (bumpmap_tiling, 271); // 1 = Tile (def), 2 = Crop, 3 = Clamp
+  FIELD_BS (bumpmap_projection, 270); // 0 Inherit, 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere
+  FIELD_BS (bumpmap_tiling, 271); // 0 Inherit, 1 Tile (def), 2 Crop, 3 Clamp, 4 Mirror
   FIELD_BS (bumpmap_autotransform, 272); // 1 no, 2: scale to curr ent,
                                         // 4: w/ current block transform
   DEBUG_HERE();
@@ -5263,8 +5266,8 @@ DWG_OBJECT(MATERIAL)
   FIELD_BS (refractionmap_source, 273); // 0 current, 1 image file (default)
   FIELD_BS (refractionmap_filename, 9); // if NULL no specular map
   FIELD_BD (refractionmap_blendfactor, 143); // 1.0
-  FIELD_BS (refractionmap_projection, 274); // 1 = Planar (def), 2 = Box, 3 = Cylinder, 4 = Sphere
-  FIELD_BS (refractionmap_tiling, 275); // 1 = Tile (def), 2 = Crop, 3 = Clamp
+  FIELD_BS (refractionmap_projection, 274); // 0 Inherit, 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere
+  FIELD_BS (refractionmap_tiling, 275); // 0 Inherit, 1 Tile (def), 2 Crop, 3 Clamp, 4 Mirror
   FIELD_BS (refractionmap_autotransform, 276); // 1 no, 2: scale to curr ent,
                                         // 4: w/ current block transform
   FIELD_VECTOR_N (refractionmap_transmatrix, BD, 16, 147);
@@ -5281,15 +5284,15 @@ DWG_OBJECT(MATERIAL)
   FIELD_BS (normalmap_source, 72); // 0 current, 1 image file (default)
   FIELD_BS (normalmap_filename, 3); // if NULL no specular map
   FIELD_BD (normalmap_blendfactor, 42); // 1.0
-  FIELD_BS (normalmap_projection, 73); // 1 = Planar (def), 2 = Box, 3 = Cylinder, 4 = Sphere
-  FIELD_BS (normalmap_tiling, 74); // 1 = Tile (def), 2 = Crop, 3 = Clamp
-  FIELD_BS (normalmap_autotransform, 43); // 1 no, 2: scale to curr ent,
-                                        // 4: w/ current block transform
+  FIELD_BS (normalmap_projection, 73); // 0 Inherit, 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere
+  FIELD_BS (normalmap_tiling, 74); // 0 Inherit, 1 Tile (def), 2 Crop, 3 Clamp, 4 Mirror
+  FIELD_BS (normalmap_autotransform, 43); // 0 inherit, 1 no, 2 object (scale to curr ent),
+                                          // 4 model (w/ current block transform)
   DEBUG_HERE();
   FIELD_VECTOR_N (normalmap_transmatrix, BD, 16, 43);
   FIELD_B (materials_anonymous, 293);
-  FIELD_BS (global_illumination_mode, 272);
-  FIELD_BS (final_gather_mode, 273);
+  FIELD_BS (global_illumination_mode, 272); // 0 none, 1 cast, 2 receive, 3 cast&receive
+  FIELD_BS (final_gather_mode, 273);  // 0 none, 1 cast, 2 receive, 3 cast&receive
   FIELD_T (genprocname, 300);
   FIELD_B (genprocvalbool, 291);
   FIELD_BS (genprocvalint, 271);
@@ -5312,9 +5315,7 @@ DWG_OBJECT(MATERIAL)
   //270
   //274
 DWG_OBJECT_END
-#endif
 
-#ifdef DEBUG_PLOTSETTINGS
 // (varies) UNTESTED
 DWG_OBJECT(PLOTSETTINGS)
   //unsorted! See also LAYOUT
@@ -5322,7 +5323,7 @@ DWG_OBJECT(PLOTSETTINGS)
   FIELD_T (page_setup_name, 1);
   FIELD_T (printer_cfg_file, 2);
   FIELD_T (paper_size, 4);
-  FIELD_H (plotview, 0, 6);
+  FIELD_HANDLE (plotview, 0, 6);
   FIELD_BD (left_margin, 40);
   FIELD_BD (bottom_margin, 41);
   FIELD_BD (right_margin, 42);
@@ -5334,7 +5335,7 @@ DWG_OBJECT(PLOTSETTINGS)
   FIELD_2BD_1 (plot_window_ur, 140); // + 141
   FIELD_BD (num_custom_print_scale, 142); // in paper units
   FIELD_BD (den_custom_print_scale, 143); // in drawing units
-  FIELD_BS (plot_layout, 70) /*!< plot layout flag:
+  FIELD_BS (plot_layout, 70); /*!< plot layout flag:
 				1 = PlotViewportBorders
 				2 = ShowPlotStyles
 				4 = PlotCentered
@@ -5353,7 +5354,7 @@ DWG_OBJECT(PLOTSETTINGS)
   FIELD_BS (plot_rotation, 73);    /*!< 0 normal, 1 90, 2 180, 3 270 deg */
   FIELD_BS (plot_type, 74);    /*!< 0 display, 1 extents, 2 limits, 3 view (see DXF 6),
                                     4 window (see 48-140), 5 layout */
-  FIELD_H (stylesheet, 0, 7);
+  FIELD_HANDLE (stylesheet, 0, 7);
   FIELD_B (use_std_scale, 0);
   FIELD_BS (std_scale_type, 75); /*!< 0 = scaled to fit,
                                    1 = 1/128"=1', 2 = 1/64"=1', 3 = 1/32"=1'
@@ -5371,27 +5372,23 @@ DWG_OBJECT(PLOTSETTINGS)
     {
       FIELD_BS (shade_plot_mode, 76); /*!< 0 display, 1 wireframe, 2 hidden, 3 rendered, 4 visualstyle,
                                        5 renderPreset */
-      FIELD_BS (shade_plot_res_level, 77); /*!< 0 draft, 1 preview, 2 nomal, 3 presentation, 4 maximum,
-                                            5 custom */
+      FIELD_BS (shade_plot_res_level, 77); /*!< 0 draft, 1 preview, 2 nomal,
+                                             3 presentation, 4 maximum, 5 custom */
       FIELD_BS (shade_plot_custom_dpi, 78); /*!< 100-32767 */
-      FIELD_HANDLE (shade_plot_id, 0, 333) // optional
+      FIELD_HANDLE (shade_plot_id, 0, 333); // optional
     }
 
 DWG_OBJECT_END
-#endif
 
-#ifdef DEBUG_LIGHT  
 // (varies) UNTESTED
-DWG_ENTITY(LIGHT) /* Container for all properties relating to a
-                     generic light.  A dictionary of these objects is
-                     resident in the database, in the named object
-                     dictionary as ACAD_LIGHTS. They are indexed by
-                     the name of the setting objects. In the user
-                     interface, the contents of this dictionary
-                     correspond to user-defined light properties
-                     (displayed on a property palette accessible by
-                     selection of the light using a variety of
-                     methods */
+/* Container for all properties relating to a generic light.  A
+   dictionary of these objects is resident in the database, in the
+   named object dictionary as ACAD_LIGHTS (Object LIGHTLIST). They are
+   indexed by the name of the setting objects. In the user interface,
+   the contents of this dictionary correspond to user-defined light
+   properties (displayed on a property palette accessible by selection
+   of the light using a variety of methods */
+DWG_ENTITY(LIGHT)
   // unsorted!
   FIELD_T (name, 1);
   FIELD_T (type, 70); /*!< distant = 1; point = 2; spot = 3 */
@@ -5421,7 +5418,6 @@ DWG_ENTITY(LIGHT) /* Container for all properties relating to a
   FIELD_BS (glyph_display, 0);
 
 DWG_ENTITY_END
-#endif
 
 // (varies) UNKNOWN FIELDS
 // hard-owned child of AcDbViewportTableRecord or AcDbViewport 361
@@ -5501,14 +5497,45 @@ DWG_OBJECT(OBJECT_PTR) //empty? only xdata. CAseDLPNTableRecord
   
 DWG_OBJECT_END
 
-/* Those undocumented objects are stored as raw UNKNOWN_OBJ: */
+// (varies) UNTESTED
+// undocumented in DXF, only OARX
+DWG_ENTITY(GEOPOSITIONMARKER)
+
+  SUBCLASS (AcDbGeoPositionMarker)
+  FIELD_3BD (position, 10);
+  FIELD_3BD (extrusion, 210);
+  FIELD_BD (radius, 40);
+  FIELD_BD (landing_gap, 0);
+  FIELD_T (text, 1);
+  FIELD_BS (alignment, 0); // 0 left, 1 center, 2 right
+  FIELD_HANDLE (mtext_handle, 5, 0);
+  FIELD_B (mtext_visible, 0);
+  FIELD_B (enable_frame_text, 0);
+  FIELD_T (notes, 0);
+  FIELD_HANDLE (style, 5, 7);
+
+DWG_ENTITY_END
+
+DWG_ENTITY(CAMERA) // i.e. a named view, not persistent in a DWG. CAMERADISPLAY=1
+  FIELD_HANDLE(view, 5, 0);
+DWG_ENTITY_END
+
+/* Those undocumented objects are also stored as raw UNKNOWN_OBJ */
 
 #if 0
 // r2000+
 DWG_OBJECT(ARCALIGNEDTEXT)
 DWG_OBJECT_END
 
+// Class AcDbAssoc2dConstraintGroup
+// see https://help.autodesk.com/view/OARX/2018/ENU/?guid=OREF-AcDbAssoc2dConstraintGroup
 DWG_OBJECT(ASSOC2DCONSTRAINTGROUP)
+  SUBCLASS (AcDbAssocAction)
+  // this has multiple handles and types.
+  FIELD_BS(solution_status, 0); // 0 WellDefined, 1 UnderConstrained, 2 OverConstrained,
+	                        // 3 Inconsistent, 4 NotEvaluated, 5 NotAvailable,
+                                // 6 RejectedByClient
+
 DWG_OBJECT_END
 
 DWG_OBJECT(ASSOCGEOMDEPENDENCY)
@@ -5548,12 +5575,5 @@ DWG_OBJECT_END
 DWG_OBJECT(CSACDOCUMENTOPTIONS)
 //size 161
 DWG_OBJECT_END
-
-DWG_ENTITY(CAMERA) // i.e. a named view, not persistent in a DWG. CAMERADISPLAY=1
-DWG_ENTITY_END
-
-DWG_ENTITY(GEOPOSITIONMARKER) // AcDbGeoPositionMarker, undocumented
-  SUBCLASS (AcDbGeoPositionMarker)
-DWG_ENTITY_END
 
 #endif

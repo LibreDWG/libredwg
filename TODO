@@ -1,15 +1,15 @@
 * pre-R13: finish remaining entities and the blocks.
-* MATERIAL (in work)
 * PROXY subentities, PROXY_ENTITY
 * CELLSTYLEMAP TABLE_Cell struct
 * MULTILEADER: broken Leader_Line's/Points
 * DIMSTYLE_CONTROL: one R2000+ RC missing
-* r2010+ Some AEC EED (Autodesk Architectural Desktop) objects.
+* r2010+ some AEC (Autodesk Architectural Desktop) object invalid EED's.
 * Enabled, but untested: FIELDLIST, AcDbField, TABLECONTENT, TABLEGEOMETRY,
-  GEODATA, WIPEOUTVARIABLES, LONG_TRANSACTION, VBA_PROJECT
-* Unhandled (spec'ed but broken): MATERIAL, CELLSTYLEMAP,
-  MULTILEADER, PROXY, PROXY_ENTITY, PLOTSETTINGS, LIGHT
-* Unhandled (i.e. passed through): OBJECT_PTR, TABLESTYLE,
+  GEODATA, WIPEOUTVARIABLES, LONG_TRANSACTION, OBJECT_PTR
+* Unhandled (fields spec'ed but broken): MATERIAL, CELLSTYLEMAP,
+  MULTILEADER, PROXY, PROXY_ENTITY, PLOTSETTINGS, LIGHT, SUN,
+  GEOPOSITIONMARKER
+* Unhandled (i.e. passed through, no DXF and fields): TABLESTYLE,
   DBCOLOR, VBA_PROJECT, DIMASSOC, LIGHTLIST, LEADEROBJECTCONTEXTDATA,
   ACDBSECTIONVIEWSTYLE, ACDBDETAILVIEWSTYLE,
   ACDBASSOCNETWORK, ACDBASSOC2DCONSTRAINTGROUP,

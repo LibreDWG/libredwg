@@ -817,6 +817,32 @@ dwg_dxf_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       return 0;
 #endif
     }
+  if (!strcmp(dxfname, "SUN"))
+    {
+#ifdef DEBUG_LIGHT
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      dwg_dxf_SUN(dat, obj);
+      return 1;
+#else
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      return 0;
+#endif
+    }
+  if (!strcmp(dxfname, "GEOPOSITIONMARKER"))
+    {
+#ifdef DEBUG_GEOPOSITIONMARKER
+      UNTESTED_CLASS;
+      assert(is_entity);
+      dwg_dxf_GEOPOSITIONMARKER(dat, obj);
+      return 1;
+#else
+      UNHANDLED_CLASS;
+      assert(is_entity);
+      return 0;
+#endif
+    }
   if (!strcmp(dxfname, "TABLESTYLE"))
     {
       UNHANDLED_CLASS;
