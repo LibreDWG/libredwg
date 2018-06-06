@@ -51,6 +51,8 @@ int dwg_obj_is_control(const Dwg_Object *obj);
 
 #define IS_FREE
 
+#define FREE_IF(ptr) { if (ptr) free(ptr); ptr = NULL; }
+
 #define VALUE(value,type,dxf)
 #define VALUE_RC(value,dxf) VALUE(value, RC, dxf)
 #define VALUE_RS(value,dxf) VALUE(value, RS, dxf)
@@ -199,9 +201,9 @@ dwg_free_ ##token (Dwg_Object * obj)\
   _ent = obj->tio.entity;\
   _obj = ent = _ent->tio.token;
 
-#define DWG_ENTITY_END \
-    free(_obj); obj->tio.entity->tio.UNKNOWN_ENT = NULL; \
-    free(obj->tio.entity); obj->tio.object = NULL;\
+#define DWG_ENTITY_END      \
+  FREE_IF(_obj);            \
+  FREE_IF(obj->tio.entity); \
 }
 
 #define DWG_OBJECT(token) \
@@ -218,8 +220,8 @@ dwg_free_ ##token (Dwg_Object * obj) \
 
 #define DWG_OBJECT_END                                  \
   dwg_free_eed(obj);                                    \
-  free(_obj); obj->tio.object->tio.UNKNOWN_OBJ = NULL;  \
-  free(obj->tio.object); obj->tio.object = NULL;        \
+  FREE_IF(_obj);                                        \
+  FREE_IF(obj->tio.object);                             \
   obj->parent = NULL;                                   \
   /* free(obj); obj = NULL; */                          \
 }
@@ -871,7 +873,6 @@ dwg_free(Dwg_Data * dwg)
         }
 #endif  /* USE_TRACING */
       LOG_INFO("dwg_free\n")
-#define FREE_IF(ptr) { if (ptr) free(ptr); ptr = NULL; }
       // copied table fields have duplicate pointers, but are freed only once
       for (i=0; i < dwg->num_objects; ++i)
         {
