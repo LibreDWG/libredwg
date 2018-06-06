@@ -4097,16 +4097,31 @@ typedef struct _dwg_object_SUN
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
 
+  BITCODE_BL class_version; //90
+  BITCODE_B is_on;   // 290
+  BITCODE_CMC color; // 60
+  BITCODE_BD intensity; // 40
+  //BITCODE_3BD (direction, 0); //calculated?
+  //BITCODE_BD (altitude, 0);   //calculated?
+  //BITCODE_BD (azimuth, 0);    //calculated?
+  BITCODE_BL julian_day; //91
+  BITCODE_BL time;       //92
+  BITCODE_B  is_dst;     //292
+  BITCODE_B has_shadow;  //291
+  BITCODE_BS shadow_type;     //70
+  BITCODE_BS shadow_mapsize;  //71
+  BITCODE_BS shadow_softness; //280
+
   // 11.3 bytes missing, from UNKNOWN_OBJ
   int num_bytes;
   BITCODE_RC *bytes;
   int num_bits;
   BITCODE_B *bits;
 
+  BITCODE_H skyparams;
   BITCODE_H parenthandle;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
-  BITCODE_H view_control;
 
 } Dwg_Object_SUN;
 

@@ -1222,7 +1222,7 @@ dxf_format (int code)
     return "%-16.14f";
   if (code < 80)
     return "%6i";
-  if (90 <= code && code <= 99)
+  if (90 <= code && code <= 99) //BL
     return "%9li";
   if (code == 100)
     return "%s";

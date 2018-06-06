@@ -332,7 +332,7 @@ DWG_ENTITY_END
 /* (6) */
 DWG_ENTITY(SEQEND)
 
-  //SUBCLASS (AcDbSequenceEnd)
+  //SUBCLASS (AcDbSequenceEnd) //unused
   COMMON_ENTITY_HANDLE_DATA;
 
 DWG_ENTITY_END
@@ -588,8 +588,8 @@ DWG_ENTITY_END
 /* (10/20) */
 DWG_ENTITY(VERTEX_2D)
 
-  //SUBCLASS (AcDbVertex)
-  //SUBCLASS (AcDb2dVertex)
+  SUBCLASS (AcDbVertex)
+  SUBCLASS (AcDb2dVertex)
   PRE(R_13)
   {
     FIELD_2RD (point, 10);
@@ -3206,9 +3206,9 @@ DWG_OBJECT_END
 //pg.135
 DWG_OBJECT(DICTIONARYVAR)
 
-  //SUBCLASS (AcDbDictionary)
-  FIELD_RC (intval, 0);
-  FIELD_T (str, 0);
+  SUBCLASS (DictionaryVariables)
+  FIELD_RC (intval, 280);
+  FIELD_T (str, 1);
   FIELD_HANDLE (parenthandle, 4, 0);
   REACTORS(4);
   XDICOBJHANDLE(3);
@@ -5196,76 +5196,76 @@ DWG_OBJECT(MATERIAL)
   FIELD_T (desc, 2);
 
   DEBUG_HERE(); // TODO from here on the order of the fields is unknown
-  FIELD_RC (ambient_color_flag, 70); // 0 Use current color, 1 Override
+  FIELD_BS (ambient_color_flag, 70); // 0 Use current color, 1 Override
   FIELD_BD (ambient_color_factor, 40); // 0.0 - 1.0
   FIELD_CMC (ambient_color, 90);
 
   DEBUG_HERE();
-  FIELD_RC (diffuse_color_flag, 71); // 0 Use current color, 1 Override
+  FIELD_BS (diffuse_color_flag, 71); // 0 Use current color, 1 Override
   FIELD_BD (diffuse_color_factor, 41); // 0.0 - 1.0
   FIELD_CMC (diffuse_color, 91);
-  FIELD_RC (diffusemap_source, 72); // 0 current, 1 image file (default)
-  FIELD_RC (diffusemap_filename, 3); // if NULL no diffuse map
+  FIELD_BS (diffusemap_source, 72); // 0 current, 1 image file (default)
+  FIELD_BS (diffusemap_filename, 3); // if NULL no diffuse map
   FIELD_BD (diffusemap_blendfactor, 42); // 1.0
-  FIELD_RC (diffusemap_projection, 73); // 1 = Planar (def), 2 = Box, 3 = Cylinder, 4 = Sphere
-  FIELD_RC (diffusemap_tiling, 74); // 1 = Tile (def), 2 = Crop, 3 = Clamp
-  FIELD_RC (diffusemap_autotransform, 75); // 1 no, 2: scale to curr ent,
+  FIELD_BS (diffusemap_projection, 73); // 1 = Planar (def), 2 = Box, 3 = Cylinder, 4 = Sphere
+  FIELD_BS (diffusemap_tiling, 74); // 1 = Tile (def), 2 = Crop, 3 = Clamp
+  FIELD_BS (diffusemap_autotransform, 75); // 1 no, 2: scale to curr ent,
                                         // 4: w/ current block transform
   DEBUG_HERE();
   FIELD_VECTOR_N (diffusemap_transmatrix, BD, 16, 43);
 
   FIELD_BD (specular_gloss_factor, 44); //def: 0.5
-  FIELD_RC (specular_color_flag, 76); // 0 Use current color, 1 Override
+  FIELD_BS (specular_color_flag, 76); // 0 Use current color, 1 Override
   FIELD_BD (specular_color_factor, 45); // 0.0 - 1.0
   FIELD_CMC (specular_color, 92);
 
-  FIELD_RC (specularmap_source, 77); // 0 current, 1 image file (default)
-  FIELD_RC (specularmap_filename, 4); // if NULL no specular map
+  FIELD_BS (specularmap_source, 77); // 0 current, 1 image file (default)
+  FIELD_BS (specularmap_filename, 4); // if NULL no specular map
   FIELD_BD (specularmap_blendfactor, 46); // 1.0
-  FIELD_RC (specularmap_projection, 78); // 1 = Planar (def), 2 = Box, 3 = Cylinder, 4 = Sphere
-  FIELD_RC (specularmap_tiling, 79); // 1 = Tile (def), 2 = Crop, 3 = Clamp
-  FIELD_RC (specularmap_autotransform, 170); // 1 no, 2: scale to curr ent,
+  FIELD_BS (specularmap_projection, 78); // 1 = Planar (def), 2 = Box, 3 = Cylinder, 4 = Sphere
+  FIELD_BS (specularmap_tiling, 79); // 1 = Tile (def), 2 = Crop, 3 = Clamp
+  FIELD_BS (specularmap_autotransform, 170); // 1 no, 2: scale to curr ent,
                                         // 4: w/ current block transform
   FIELD_VECTOR_N (specularmap_transmatrix, BD, 16, 47);
 
-  FIELD_RC (reflectionmap_source, 171); // 0 current, 1 image file (default)
-  FIELD_RC (reflectionmap_filename, 6); // if NULL no diffuse map
+  FIELD_BS (reflectionmap_source, 171); // 0 current, 1 image file (default)
+  FIELD_BS (reflectionmap_filename, 6); // if NULL no diffuse map
   FIELD_BD (reflectionmap_blendfactor, 48); // 1.0
-  FIELD_RC (reflectionmap_projection, 172); // 1 = Planar (def), 2 = Box, 3 = Cylinder, 4 = Sphere
-  FIELD_RC (reflectionmap_tiling, 173); // 1 = Tile (def), 2 = Crop, 3 = Clamp
-  FIELD_RC (reflectionmap_autotransform, 174); // 1 no, 2: scale to curr ent,
+  FIELD_BS (reflectionmap_projection, 172); // 1 = Planar (def), 2 = Box, 3 = Cylinder, 4 = Sphere
+  FIELD_BS (reflectionmap_tiling, 173); // 1 = Tile (def), 2 = Crop, 3 = Clamp
+  FIELD_BS (reflectionmap_autotransform, 174); // 1 no, 2: scale to curr ent,
                                         // 4: w/ current block transform
   DEBUG_HERE();
   FIELD_VECTOR_N (reflectionmap_transmatrix, BD, 16, 49);
 
   FIELD_BD (opacity_percent, 140); //def: 1.0
-  FIELD_RC (opacitymap_source, 175); // 0 current, 1 image file (default)
-  FIELD_RC (opacitymap_filename, 7); // if NULL no specular map
+  FIELD_BS (opacitymap_source, 175); // 0 current, 1 image file (default)
+  FIELD_BS (opacitymap_filename, 7); // if NULL no specular map
   FIELD_BD (opacitymap_blendfactor, 141); // 1.0
-  FIELD_RC (opacitymap_projection, 176); // 1 = Planar (def), 2 = Box, 3 = Cylinder, 4 = Sphere
-  FIELD_RC (opacitymap_tiling, 177); // 1 = Tile (def), 2 = Crop, 3 = Clamp
-  FIELD_RC (opacitymap_autotransform, 178); // 1 no, 2: scale to curr ent,
+  FIELD_BS (opacitymap_projection, 176); // 1 = Planar (def), 2 = Box, 3 = Cylinder, 4 = Sphere
+  FIELD_BS (opacitymap_tiling, 177); // 1 = Tile (def), 2 = Crop, 3 = Clamp
+  FIELD_BS (opacitymap_autotransform, 178); // 1 no, 2: scale to curr ent,
                                         // 4: w/ current block transform
   DEBUG_HERE();
   FIELD_VECTOR_N (opacitymap_transmatrix, BD, 16, 142);
 
-  FIELD_RC (bumpmap_source, 179); // 0 current, 1 image file (default)
-  FIELD_RC (bumpmap_filename, 8); // if NULL no specular map
+  FIELD_BS (bumpmap_source, 179); // 0 current, 1 image file (default)
+  FIELD_BS (bumpmap_filename, 8); // if NULL no specular map
   FIELD_BD (bumpmap_blendfactor, 143); // 1.0
-  FIELD_RC (bumpmap_projection, 270); // 1 = Planar (def), 2 = Box, 3 = Cylinder, 4 = Sphere
-  FIELD_RC (bumpmap_tiling, 271); // 1 = Tile (def), 2 = Crop, 3 = Clamp
-  FIELD_RC (bumpmap_autotransform, 272); // 1 no, 2: scale to curr ent,
+  FIELD_BS (bumpmap_projection, 270); // 1 = Planar (def), 2 = Box, 3 = Cylinder, 4 = Sphere
+  FIELD_BS (bumpmap_tiling, 271); // 1 = Tile (def), 2 = Crop, 3 = Clamp
+  FIELD_BS (bumpmap_autotransform, 272); // 1 no, 2: scale to curr ent,
                                         // 4: w/ current block transform
   DEBUG_HERE();
   FIELD_VECTOR_N (bumpmap_transmatrix, BD, 16, 144);
 
   FIELD_BD (refraction_index, 145); //def: 1.0
-  FIELD_RC (refractionmap_source, 273); // 0 current, 1 image file (default)
-  FIELD_RC (refractionmap_filename, 9); // if NULL no specular map
+  FIELD_BS (refractionmap_source, 273); // 0 current, 1 image file (default)
+  FIELD_BS (refractionmap_filename, 9); // if NULL no specular map
   FIELD_BD (refractionmap_blendfactor, 143); // 1.0
-  FIELD_RC (refractionmap_projection, 274); // 1 = Planar (def), 2 = Box, 3 = Cylinder, 4 = Sphere
-  FIELD_RC (refractionmap_tiling, 275); // 1 = Tile (def), 2 = Crop, 3 = Clamp
-  FIELD_RC (refractionmap_autotransform, 276); // 1 no, 2: scale to curr ent,
+  FIELD_BS (refractionmap_projection, 274); // 1 = Planar (def), 2 = Box, 3 = Cylinder, 4 = Sphere
+  FIELD_BS (refractionmap_tiling, 275); // 1 = Tile (def), 2 = Crop, 3 = Clamp
+  FIELD_BS (refractionmap_autotransform, 276); // 1 no, 2: scale to curr ent,
                                         // 4: w/ current block transform
   FIELD_VECTOR_N (refractionmap_transmatrix, BD, 16, 147);
   FIELD_BD (color_bleed_scale, 460);
@@ -5275,31 +5275,31 @@ DWG_OBJECT(MATERIAL)
   FIELD_B (two_sided_material, 290);
   DEBUG_HERE();
   FIELD_BD (luminance, 464);
-  FIELD_RC (luminance_mode, 270);
-  FIELD_RC (normalmap_method, 271);
+  FIELD_BS (luminance_mode, 270);
+  FIELD_BS (normalmap_method, 271);
   FIELD_BD (normalmap_strength, 465); //def: 1.0
-  FIELD_RC (normalmap_source, 72); // 0 current, 1 image file (default)
-  FIELD_RC (normalmap_filename, 3); // if NULL no specular map
+  FIELD_BS (normalmap_source, 72); // 0 current, 1 image file (default)
+  FIELD_BS (normalmap_filename, 3); // if NULL no specular map
   FIELD_BD (normalmap_blendfactor, 42); // 1.0
-  FIELD_RC (normalmap_projection, 73); // 1 = Planar (def), 2 = Box, 3 = Cylinder, 4 = Sphere
-  FIELD_RC (normalmap_tiling, 74); // 1 = Tile (def), 2 = Crop, 3 = Clamp
-  FIELD_RC (normalmap_autotransform, 43); // 1 no, 2: scale to curr ent,
+  FIELD_BS (normalmap_projection, 73); // 1 = Planar (def), 2 = Box, 3 = Cylinder, 4 = Sphere
+  FIELD_BS (normalmap_tiling, 74); // 1 = Tile (def), 2 = Crop, 3 = Clamp
+  FIELD_BS (normalmap_autotransform, 43); // 1 no, 2: scale to curr ent,
                                         // 4: w/ current block transform
   DEBUG_HERE();
   FIELD_VECTOR_N (normalmap_transmatrix, BD, 16, 43);
   FIELD_B (materials_anonymous, 293);
-  FIELD_RC (global_illumination_mode, 272);
-  FIELD_RC (final_gather_mode, 273);
+  FIELD_BS (global_illumination_mode, 272);
+  FIELD_BS (final_gather_mode, 273);
   FIELD_T (genprocname, 300);
   FIELD_B (genprocvalbool, 291);
-  FIELD_RC (genprocvalint, 271);
+  FIELD_BS (genprocvalint, 271);
   FIELD_BD (genprocvalreal, 469);
   FIELD_T (genprocvaltext, 301);
   FIELD_B (genproctableend, 292);
   FIELD_CMC (genprocvalcolorindex, 62);
-  FIELD_BS (genprocvalcolorrgb, 420);
+  FIELD_BL (genprocvalcolorrgb, 420); //int32
   FIELD_T (genprocvalcolorname, 430);
-  FIELD_RC (map_utile, 270);
+  FIELD_BS (map_utile, 270);
   FIELD_BD (translucence, 148);
   FIELD_BL (self_illumination, 90);
   FIELD_BD (reflectivity, 468);
@@ -5400,7 +5400,7 @@ DWG_ENTITY(LIGHT) /* Container for all properties relating to a
   FIELD_BD (intensity, 40);
   FIELD_3BD (position, 10);
   FIELD_3BD (target, 11);
-  FIELD_RC (attenuation_type, 72);
+  FIELD_BS (attenuation_type, 72);
   FIELD_B (use_attenuation_limits, 292);
   if (FIELD_VALUE(use_attenuation_limits))
     {
@@ -5410,26 +5410,46 @@ DWG_ENTITY(LIGHT) /* Container for all properties relating to a
   FIELD_BD (hotspot_angle, 50);
   FIELD_BD (falloff_angle, 51); // (spotlight only)
   FIELD_B (cast_shadows, 293);
-  FIELD_RC (shadow_type, 73);   // 0 or 1
+  FIELD_BS (shadow_type, 73);   // 0 or 1
   FIELD_BS (shadow_map_size, 91);
   FIELD_BS (shadow_map_softness, 280);
-  FIELD_RC (lamp_color_preset, 0);
-  FIELD_RC (lamp_color_type, 0);
-  FIELD_RC (physical_intensity_method, 0);
+  FIELD_BS (lamp_color_preset, 0);
+  FIELD_BS (lamp_color_type, 0);
+  FIELD_BS (physical_intensity_method, 0);
   FIELD_RS (drawable_type, 0);
-  FIELD_RC (glyph_display_type, 0);
-  FIELD_RC (glyph_display, 0);
+  FIELD_BS (glyph_display_type, 0);
+  FIELD_BS (glyph_display, 0);
 
 DWG_ENTITY_END
 #endif
 
 // (varies) UNKNOWN FIELDS
-// 11 byte+3bit accounted for. the handle stream (parenthandle) is also off a bit.
-DWG_OBJECT(SUN) //referenced by VIEW 361
+// hard-owned child of AcDbViewportTableRecord or AcDbViewport 361
+// 11 byte+3bit accounted for.
+DWG_OBJECT(SUN)
 
-  COMMON_TABLE_FLAGS(view_control, Sun)
-
+  SUBCLASS(AcDbSun)
   DEBUG_HERE()
+  FIELD_BL (class_version, 90);
+  FIELD_B (is_on, 290); // status, isOn
+  FIELD_CMC (color, 60);
+  FIELD_BD (intensity, 40);
+  //FIELD_3BD (direction, 0); //calculated?
+  //FIELD_BD (altitude, 0); //calculated?
+  //FIELD_BD (azimuth, 0);  //calculated?
+  FIELD_BL (julian_day, 91);
+  FIELD_BL (time, 92);    // in seconds past midnight
+  FIELD_B (is_dst, 292);  // isDayLightSavingsOn
+  FIELD_B (has_shadow, 290); // shadow on/off
+  if (FIELD_VALUE(has_shadow))
+  {
+    FIELD_BS (shadow_type, 70); // 0 raytraced, 1 shadow maps
+    FIELD_BS (shadow_mapsize, 71);
+    FIELD_BS (shadow_softness, 280);
+  }
+  //there's still 46 bit free for some BD
+
+  DEBUG_HERE() DEBUG_POS()
   rcount1 = bit_position(dat);
   rcount2 = rcount1 - obj->address * 8;
   FIELD_VALUE(num_bytes) = (obj->bitsize - rcount2) / 8;
@@ -5437,10 +5457,9 @@ DWG_OBJECT(SUN) //referenced by VIEW 361
   LOG_TRACE("num_bytes: %d, num_bits: %d\n", FIELD_VALUE(num_bytes), FIELD_VALUE(num_bits));
   FIELD_TF (bytes, FIELD_VALUE(num_bytes), 0);
   FIELD_VECTOR (bits, B, num_bits, 0);
-  bit_set_position(dat, rcount1 + 115 - 8); // 8 for the parenthandle
+  bit_set_position(dat, rcount1 + 54 - 8);
 
 #if 0
-  //FIELD_BL (num_unknown, 0); //0
   //find handle stream
   for (vcount=bit_position(dat); dat->byte<9993; bit_set_position(dat,++vcount))
     {
@@ -5467,6 +5486,7 @@ DWG_OBJECT(SUN) //referenced by VIEW 361
 #endif
 
   START_HANDLE_STREAM;
+  FIELD_HANDLE (skyparams, 5, 0); //AcGiSkyParameters class?
   FIELD_HANDLE (parenthandle, 4, 330); //@9980.0, @9981.3, @9985.5 (11.0.0)
   REACTORS(4);
   XDICOBJHANDLE(3); //@9991.1
@@ -5537,4 +5557,3 @@ DWG_ENTITY(GEOPOSITIONMARKER) // AcDbGeoPositionMarker, undocumented
 DWG_ENTITY_END
   
 #endif
-
