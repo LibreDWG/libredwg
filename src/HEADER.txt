@@ -1,7 +1,7 @@
 LibreDWG - Free DWG read and write library
     based on LibDWG - Free DWG read-only library
 
-Copyright (C) 2008, 2009 Free Software Foundation, Inc.
+Copyright (C) 2008, 2009, 2018 Free Software Foundation, Inc.
 Copyright (C) 2009 Felipe Corrêa da Silva Sanches <juca@members.fsf.org>
 Copyright (C) 2009 Rodrigo Rodrigues da Silva <rodrigopitanga@gmail.com>
 
