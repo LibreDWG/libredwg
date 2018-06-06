@@ -11,7 +11,9 @@
 /*****************************************************************************/
 
 /*
- * testsuite.c: 
+ * testsuite.c: generate XML data per entity
+ * similar to the out_xml backend, but this uses libxml2 to add bloat for
+ * the "professional" company-type folks.
  * written by Achyuta Piyush
  * modified by Reini Urban
  */
@@ -20,27 +22,48 @@
 #include <stdlib.h>
 #include "dwg.h"
 #include "dwg_api.h"
-#include "suffix.c"
+#include "../../programs/suffix.inc"
 #include <libxml/tree.h>
 #include <libxml/parser.h>
 #include "common.c"
 
+
+// entities to check against:
+// perl -lne'/type="(IAcad.*?)" / and print $1' test/test-data/*/*.xml|sort -u
+/*
+    IAcad3DPolyline
+    IAcadArc
+    IAcadCircle
+    IAcadEllipse
+    IAcadHelix
+    IAcadLWPolyline
+    IAcadLine
+    IAcadMLine
+    IAcadMText
+    IAcadPoint
+    IAcadRay
+    IAcadSpline
+    IAcadXline
+ */
 int load_dwg (char *dwgfilename, xmlNodePtr rootnode);
 void common_entity_attrs (xmlNodePtr node, const Dwg_Object *obj);
-void add_line (xmlNodePtr rootnode, const Dwg_Object *obj);
-void add_circle (xmlNodePtr rootnode, const Dwg_Object *obj);
-void add_lwpolyline (xmlNodePtr rootnode, const Dwg_Object* obj);
 void add_2dpolyline (xmlNodePtr rootnode, const Dwg_Object* obj);
 void add_3dpolyline (xmlNodePtr rootnode, const Dwg_Object* obj);
 void add_arc (xmlNodePtr rootnode, const Dwg_Object *obj);
 void add_block (xmlNodePtr rootnode, const Dwg_Object *obj);
+void add_circle (xmlNodePtr rootnode, const Dwg_Object *obj);
 void add_ellipse (xmlNodePtr rootnode, const Dwg_Object *obj);
+void add_helix (xmlNodePtr rootnode, const Dwg_Object *obj);
+void add_insert (xmlNodePtr rootnode, const Dwg_Object *obj);
+void add_line (xmlNodePtr rootnode, const Dwg_Object *obj);
+void add_lwpolyline (xmlNodePtr rootnode, const Dwg_Object* obj);
 void add_mline (xmlNodePtr rootnode, const Dwg_Object *obj);
 void add_point (xmlNodePtr rootnode, const Dwg_Object *obj);
 void add_ray (xmlNodePtr rootnode, const Dwg_Object *obj);
 void add_spline (xmlNodePtr rootnode, const Dwg_Object *obj);
-void add_text (xmlNodePtr rootnode, const Dwg_Object *obj);
 void add_table (xmlNodePtr rootnode, const Dwg_Object *obj);
+void add_text (xmlNodePtr rootnode, const Dwg_Object *obj);
+void add_xline (xmlNodePtr rootnode, const Dwg_Object *obj);
 
 #define newXMLProp(name,buf) xmlNewProp(node, (const xmlChar *)name, buf); free(buf)
 #define newXMLcProp(name,buf) xmlNewProp(node, (const xmlChar *)name, (xmlChar*)(buf))
@@ -141,6 +164,57 @@ add_circle (xmlNodePtr rootnode, const Dwg_Object *obj)
 
   dtostring = doubletochar (circle->thickness);
   newXMLProp ("Thickness", dtostring);
+
+  common_entity_attrs (node, obj);
+  xmlAddChild (rootnode, node);
+}
+
+/*
+ * This function is emits all hypothetical helix/spring attributes in the XML file
+ * @params xmlNodePtr rootnode The root node of the XML Document
+ * @param const Dwg_Object *obj The DWG Object
+ */
+void
+add_helix (xmlNodePtr rootnode, const Dwg_Object *obj)
+{
+  // TODO: decode some AcDbHelix class
+  // but it is not even parsed by dwgread
+  Dwg_Entity_CIRCLE *circle = obj->tio.entity->tio.CIRCLE;
+  xmlChar *buf, *dtostring;
+  xmlNodePtr node = newXMLEntity (rootnode);
+
+  newXMLcProp ("type", "IAcadHelix");
+  newXMLcProp ("desc", "IAcadHelix: IAcadSpring Interface");
+
+  buf = spointprepare (circle->center.x, circle->center.y, circle->center.z);
+  newXMLProp ("Position", buf);
+
+  dtostring = doubletochar (circle->radius);
+  newXMLProp ("BaseRadius", dtostring);
+
+  dtostring = doubletochar (circle->thickness);
+  newXMLProp ("Thickness", dtostring);
+
+  dtostring = doubletochar (1);
+  newXMLProp ("Constrain", dtostring); // typo!
+  
+  dtostring = doubletochar (circle->thickness);
+  newXMLProp ("TopRadius", dtostring);
+
+  dtostring = doubletochar (circle->thickness);
+  newXMLProp ("TotalLength", dtostring);
+
+  dtostring = doubletochar (circle->thickness);
+  newXMLProp ("TurnHeight", dtostring);
+
+  dtostring = doubletochar (circle->thickness);
+  newXMLProp ("Turns", dtostring);
+
+  dtostring = doubletochar (circle->thickness);
+  newXMLProp ("TurnSlope", dtostring);
+
+  dtostring = doubletochar (circle->thickness);
+  newXMLProp ("Twist", dtostring);
 
   common_entity_attrs (node, obj);
   xmlAddChild (rootnode, node);
@@ -313,11 +387,42 @@ add_block (xmlNodePtr rootnode, const Dwg_Object *obj)
   Dwg_Entity_BLOCK *block = obj->tio.entity->tio.BLOCK;
   xmlNodePtr node = newXMLEntity (rootnode);
 
-  newXMLcProp ("type", "IAcadBlockReference");
-  newXMLcProp ("desc", "IAcadBlockReference: AutoCAD Block Reference Interface");
+  newXMLcProp ("type", "IAcadBlock");
+  newXMLcProp ("desc", "IAcadBlock: AutoCAD Block Interface");
 
   newXMLcProp ("EffectiveName", block->name);
 
+  common_entity_attrs (node, obj);
+  xmlAddChild (rootnode, node);
+}
+
+/*
+ * This functions emits all insert related attributes in the XML
+ * @param xmlNodePtr rootnode The root node of the XML document
+ * @param const Dwg_Object *obj The DWG Object
+ */
+void
+add_insert (xmlNodePtr rootnode, const Dwg_Object *obj)
+{
+  Dwg_Entity_INSERT *block = obj->tio.entity->tio.INSERT;
+  xmlNodePtr node = newXMLEntity (rootnode);
+  xmlChar *buf;
+  int error;
+
+  newXMLcProp ("type", "IAcadBlockReference");
+  newXMLcProp ("desc", "IAcadBlockReference: AutoCAD Block Reference Interface");
+
+  newXMLcProp ("EffectiveName", dwg_ref_get_table_name(block->block_header, &error));
+
+  buf = spointprepare (block->ins_pt.x, block->ins_pt.y, block->ins_pt.z);
+  newXMLProp ("BasePoint", buf);
+
+  buf = spointprepare (block->scale.x, block->scale.y, block->scale.z);
+  newXMLProp ("Scale", buf);
+
+  buf = doubletochar (block->rotation);
+  newXMLProp ("Rotation", buf);
+  
   common_entity_attrs (node, obj);
   xmlAddChild (rootnode, node);
 }
@@ -331,9 +436,8 @@ void
 add_ellipse (xmlNodePtr rootnode, const Dwg_Object *obj)
 {
   Dwg_Entity_ELLIPSE *ellipse = obj->tio.entity->tio.ELLIPSE;
-  xmlChar *buf, *dtostring;
-  //the start of the entity
   xmlNodePtr node = newXMLEntity (rootnode);
+  xmlChar *buf, *dtostring;
 
   //Now the attributes
   newXMLcProp ("type", "IAcadEllipse");
@@ -365,9 +469,56 @@ add_mline (xmlNodePtr rootnode, const Dwg_Object *obj)
 {
   Dwg_Entity_MLINE *mline = obj->tio.entity->tio.MLINE;
   xmlNodePtr node = newXMLEntity (rootnode);
+  xmlChar *buf, *dtostring;
 
   newXMLcProp ("type", "IAcadMLine");
   newXMLcProp ("desc", "IAcadMLine: IAcadMLine Interface");
+
+  if (mline->num_verts >= 3)
+    {
+      buf = malloc(80);
+      sprintf ((char*)buf, "(%.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f ... )",
+        mline->verts[0].vertex.x, mline->verts[0].vertex.y, mline->verts[0].vertex.z,
+        mline->verts[1].vertex.x, mline->verts[1].vertex.y, mline->verts[1].vertex.z,
+        mline->verts[2].vertex.x, mline->verts[2].vertex.y, mline->verts[2].vertex.z);
+      newXMLProp ("Coordinates", buf);
+    }
+
+  dtostring = doubletochar (mline->justification);
+  newXMLProp ("Justification", dtostring);
+
+  dtostring = doubletochar (mline->scale);
+  newXMLProp ("MLineScale", dtostring);
+  
+  common_entity_attrs (node, obj);
+  xmlAddChild (rootnode, node);
+}
+
+/* 
+ * This function is used to emit all line attributes
+ * @param xmlNodePtr rootnode The root node of XML document
+ * @param const Dwg_Object *obj The DWG Object
+ */
+void
+add_xline (xmlNodePtr rootnode, const Dwg_Object *obj)
+{
+  Dwg_Entity_XLINE *line = obj->tio.entity->tio.XLINE;
+  xmlChar *buf;
+  xmlNodePtr node = newXMLEntity (rootnode);
+
+  newXMLcProp ("type", "IAcadXline");
+  newXMLcProp ("desc", "IAcadXline: AutoCAD Xline Interface");
+
+  buf = spointprepare (line->point.x, line->point.y, line->point.z);
+  newXMLProp ("BasePoint", buf);
+
+  buf = spointprepare (line->vector.x, line->vector.y, line->vector.z);
+  newXMLProp ("DirectionVector", buf);
+
+  /*
+  buf = spointprepare (line->start.x, line->start.y, line->start.z);
+  newXMLProp ("SecondPoint", buf);
+  */
 
   common_entity_attrs (node, obj);
   xmlAddChild (rootnode, node);
@@ -531,11 +682,12 @@ load_dwg (char *dwgfilename, xmlNodePtr rootnode)
   dwg.num_objects = 0;
 
   //Read the DWG file
+  dwg.opts = 0; //silently
   error = dwg_read_file (dwgfilename, &dwg);
   if (error)
     return error;
 
-  //Emit all the objects to the XML file
+  //Emit some entities/objects to the XML file
   for (i = 0; i < dwg.num_objects; i++)
     {
       const Dwg_Object *obj = &dwg.object[i];
@@ -561,9 +713,13 @@ load_dwg (char *dwgfilename, xmlNodePtr rootnode)
 	  add_3dpolyline (rootnode, obj);
 	  break;
 
-     /* case DWG_TYPE_BLOCK:
+        case DWG_TYPE_BLOCK:
           add_block(rootnode, obj);
-          break; */
+          break;
+
+        case DWG_TYPE_INSERT:
+          add_insert(rootnode, obj);
+          break;
 
 	case DWG_TYPE_MLINE:
 	  add_mline (rootnode, obj);
@@ -581,6 +737,10 @@ load_dwg (char *dwgfilename, xmlNodePtr rootnode)
 	  add_ray (rootnode, obj);
 	  break;
 
+        /*case DWG_TYPE_HELIX:
+	  add_helix (rootnode, obj);
+	  break;*/
+
 	case DWG_TYPE_TEXT:
 	  add_text (rootnode, obj);
 	  break;
@@ -589,11 +749,22 @@ load_dwg (char *dwgfilename, xmlNodePtr rootnode)
 	  add_spline (rootnode, obj);
 	  break;
 
+	case DWG_TYPE_XLINE:
+	  add_xline (rootnode, obj);
+	  break;
+
 /*      case DWG_TYPE_TABLE:
           add_table(rootnode, obj);
           break;*/
 
         default:
+          if (obj->type < 500 || (obj->type - 500) > dwg.num_classes)
+            break;
+          if (!obj->dxfname || obj->supertype == DWG_SUPERTYPE_UNKNOWN)
+              break;
+          if (!strcmp(obj->dxfname, "Helix"))
+            add_helix(rootnode, obj);
+
           break;
 	}
     }
@@ -648,7 +819,5 @@ main (int argc, char *argv[])
   xmlFreeDoc (doc);
   xmlCleanupParser ();
 
-  //This would depend if the program is able to
-  //read the dwg file
   return 0;
 }

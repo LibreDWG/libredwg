@@ -4453,6 +4453,7 @@ dwg_ent_insert_get_num_owned(const dwg_ent_insert *restrict insert,
 
 /// FIXME needs to adjust handle array instead: add/delete
 // TODO dwg_ent_insert_add_owned, dwg_ent_insert_delete_owned
+//TODO get_name
 
 /** Returns the block object.
 \code Usage: dwg_object* block_header = dwg_ent_insert_get_block_header(insert, &error);

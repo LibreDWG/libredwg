@@ -32,7 +32,7 @@ else
 gcov:
 endif
 
-EXTRA_DIST = suffix.c common.c
+EXTRA_DIST = common.c
 EXTRA_DIST += newxml.py txttoxml.py
 EXTRA_DIST += header.htm helper.py $(TESTS)
 
