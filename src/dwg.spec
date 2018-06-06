@@ -5429,18 +5429,18 @@ DWG_ENTITY_END
 DWG_OBJECT(SUN)
 
   SUBCLASS(AcDbSun)
-  DEBUG_HERE()
   FIELD_BL (class_version, 90);
   FIELD_B (is_on, 290); // status, isOn
-  FIELD_CMC (color, 60);
-  FIELD_BD (intensity, 40);
-  //FIELD_3BD (direction, 0); //calculated?
-  //FIELD_BD (altitude, 0); //calculated?
-  //FIELD_BD (azimuth, 0);  //calculated?
+  FIELD_B (has_shadow, 291); // shadow on/off
+  FIELD_B (is_dst, 292);  // isDayLightSavingsOn
   FIELD_BL (julian_day, 91);
   FIELD_BL (time, 92);    // in seconds past midnight
-  FIELD_B (is_dst, 292);  // isDayLightSavingsOn
-  FIELD_B (has_shadow, 290); // shadow on/off
+  FIELD_BD (intensity, 40);
+  //DEBUG_HERE()
+  FIELD_CMC (color, 60);
+  //FIELD_BD (altitude, 0); //calculated?
+  //FIELD_BD (azimuth, 0);  //calculated?
+  //FIELD_3BD (direction, 0); //calculated?
   if (FIELD_VALUE(has_shadow))
   {
     FIELD_BS (shadow_type, 70); // 0 raytraced, 1 shadow maps
@@ -5457,7 +5457,7 @@ DWG_OBJECT(SUN)
   LOG_TRACE("num_bytes: %d, num_bits: %d\n", FIELD_VALUE(num_bytes), FIELD_VALUE(num_bits));
   FIELD_TF (bytes, FIELD_VALUE(num_bytes), 0);
   FIELD_VECTOR (bits, B, num_bits, 0);
-  bit_set_position(dat, rcount1 + 54 - 8);
+  bit_set_position(dat, rcount1 + 60);
 
 #if 0
   //find handle stream
@@ -5555,5 +5555,5 @@ DWG_ENTITY_END
 DWG_ENTITY(GEOPOSITIONMARKER) // AcDbGeoPositionMarker, undocumented
   SUBCLASS (AcDbGeoPositionMarker)
 DWG_ENTITY_END
-  
+
 #endif
