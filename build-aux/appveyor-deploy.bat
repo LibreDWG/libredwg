@@ -20,9 +20,9 @@ cd %DESTDIR%
 copy ..\README README.txt
 move /y bin\libredwg-0.dll libredwg-0.dll
 rmdir bin
-copy ..\programs\*.exe *.*
+copy ..\programs\.libs\*.exe *.*
 mkdir examples
-copy ..\examples\*.exe examples
+copy ..\examples\.libs\*.exe examples
 copy ..\examples\*.c examples
 7z a ../%DESTDIR%.zip *
 appveyor PushArtifact ../%DESTDIR%.zip *
