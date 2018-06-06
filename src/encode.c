@@ -114,11 +114,11 @@ static bool env_var_checked_p;
     } \
   }
 #define FIELD_TF(name,len,dxf) \
-  { bit_write_TF(dat, _obj->name, len); \
+  { if (_obj->name && len) bit_write_TF(dat, _obj->name, len); \
     FIELD_G_TRACE(name, TF, dxf); }
 #define FIELD_TFF(name,len,dxf) FIELD_TF(name,len,dxf)
 #define FIELD_TU(name,dxf) \
-  { bit_write_TU(dat, (BITCODE_TU)_obj->name);  \
+  { if (_obj->name) bit_write_TU(dat, (BITCODE_TU)_obj->name); \
     LOG_TRACE_TU(#name, (BITCODE_TU)_obj->name,dxf); }
 #define FIELD_BT(name, dxf) FIELDG(name, BT, dxf);
 
@@ -265,19 +265,22 @@ static bool env_var_checked_p;
 #define FIELD_HANDLE_N(name, vcount, handle_code, dxf)\
     IF_ENCODE_SINCE_R13 { \
       RESET_VER \
-      assert(_obj->name); \
-      if (handle_code != ANYCODE && _obj->name->handleref.code != handle_code) \
-        { \
-          LOG_WARN("Expected a CODE %d handle, got a %d", \
-                    handle_code, _obj->name->handleref.code); \
-        } \
-      bit_write_H(hdl_dat, &_obj->name->handleref); \
-      LOG_TRACE(#name "[%d]: HANDLE(%d.%d.%lu) absolute:%lu [%d]\n", \
-                (int)vcount, \
-                _obj->name->handleref.code,\
-                _obj->name->handleref.size,\
-                _obj->name->handleref.value,\
-                _obj->name->absolute_ref, dxf) \
+      if (!_obj->name) \
+        bit_write_H(hdl_dat, NULL); \
+      else { \
+        if (handle_code != ANYCODE && _obj->name->handleref.code != handle_code) \
+          { \
+            LOG_WARN("Expected a CODE %d handle, got a %d", \
+                      handle_code, _obj->name->handleref.code); \
+          } \
+        bit_write_H(hdl_dat, &_obj->name->handleref); \
+        LOG_TRACE(#name "[%d]: HANDLE(%d.%d.%lu) absolute:%lu [%d]\n", \
+                  (int)vcount, \
+                  _obj->name->handleref.code,\
+                  _obj->name->handleref.size,\
+                  _obj->name->handleref.value,\
+                  _obj->name->absolute_ref, dxf) \
+      }\
     }
 
 #define HANDLE_VECTOR_N(name, size, code, dxf)\

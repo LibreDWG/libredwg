@@ -105,12 +105,12 @@ main (int argc, char *argv[])
     return opt_version();
 
   filename_in = argv[i];
-  if (argc > i)
+  if (argc > i+1)
     filename_out = argv[i+1];
   else
     filename_out = suffix (filename_in, "-rewrite.dwg");
-  
-  if (strcmp(filename_in, filename_out) == 0) {
+
+  if (!filename_out || !strcmp(filename_in, filename_out)) {
     if (filename_out != argv[2])
       free (filename_out);
     return usage();
@@ -136,12 +136,16 @@ main (int argc, char *argv[])
 #ifndef USE_WRITE
   error = 1;
 #else
-  if (version) {
+  if (version) { // forced -as-rXXX
     printf(" as %s\n", version);
     if (dwg.header.from_version != dwg.header.version)
       dwg.header.from_version = dwg.header.version;
     //else keep from_version
     dwg.header.version = dwg_version;
+  } else if (dwg.header.version < R_13 || dwg.header.version > R_2000) {
+    // we cannot yet write pre-r13 or 2004+
+    printf(" as r2000\n");
+    dwg.header.version = R_2000;
   } else {
     printf("\n");
   }
