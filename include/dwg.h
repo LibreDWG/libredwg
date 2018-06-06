@@ -3868,65 +3868,65 @@ typedef struct _dwg_object_MATERIAL
   BITCODE_T name; /*!< DXF 1 */
   BITCODE_T desc; /*!< DXF 2 optional */
 
-  BITCODE_RC ambient_color_flag;    /*!< DXF 70 0 Use current color, 1 Override */
+  BITCODE_BS ambient_color_flag;    /*!< DXF 70 0 Use current color, 1 Override */
   BITCODE_BD ambient_color_factor;  /*!< DXF 40 0.0 - 1.0 */
   BITCODE_CMC ambient_color;        /*!< DXF 90 */
 
-  BITCODE_RC diffuse_color_flag;    /*!< DXF 71 0 Use current color, 1 Override */
+  BITCODE_BS diffuse_color_flag;    /*!< DXF 71 0 Use current color, 1 Override */
   BITCODE_BD diffuse_color_factor;  /*!< DXF 41 0.0 - 1.0 */
   BITCODE_CMC diffuse_color;        /*!< DXF 91 */
-  BITCODE_RC diffusemap_source;     /*!< DXF 72 0 current, 1 image file (def) */
-  BITCODE_RC diffusemap_filename;   /*!< DXF 3 if NULL no diffuse map */
+  BITCODE_BS diffusemap_source;     /*!< DXF 72 0 current, 1 image file (def) */
+  BITCODE_BS diffusemap_filename;   /*!< DXF 3 if NULL no diffuse map */
   BITCODE_BD diffusemap_blendfactor;/*!< DXF 42 def: 1.0 */
-  BITCODE_RC diffusemap_projection; /*!< DXF 73 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere */
-  BITCODE_RC diffusemap_tiling;     /*!< DXF 74 */ // 1 = Tile (def), 2 = Crop, 3 = Clamp
-  BITCODE_RC diffusemap_autotransform; /*!< DXF 75 */ // 1 no, 2: scale to curr ent,
+  BITCODE_BS diffusemap_projection; /*!< DXF 73 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere */
+  BITCODE_BS diffusemap_tiling;     /*!< DXF 74 */ // 1 = Tile (def), 2 = Crop, 3 = Clamp
+  BITCODE_BS diffusemap_autotransform; /*!< DXF 75 */ // 1 no, 2: scale to curr ent,
                                                       // 4: w/ current block transform
   BITCODE_BD* diffusemap_transmatrix;  /*!< DXF 43 */
 
   BITCODE_BD specular_gloss_factor; /*!< DXF 44 def: 0.5 */
-  BITCODE_RC specular_color_flag;   /*!< DXF 76 0 Use current color, 1 Override */
+  BITCODE_BS specular_color_flag;   /*!< DXF 76 0 Use current color, 1 Override */
   BITCODE_BD specular_color_factor; /*!< DXF 45 0.0 - 1.0 */
   BITCODE_CMC specular_color;       /*!< DXF 92 */
 
-  BITCODE_RC specularmap_source;     /*!< DXF 77 0 current, 1 image file (def) */
-  BITCODE_RC specularmap_filename;   /*!< DXF 4 if NULL no specular map */
+  BITCODE_BS specularmap_source;     /*!< DXF 77 0 current, 1 image file (def) */
+  BITCODE_BS specularmap_filename;   /*!< DXF 4 if NULL no specular map */
   BITCODE_BD specularmap_blendfactor;/*!< DXF 46 def: 1.0 */
-  BITCODE_RC specularmap_projection; /*!< DXF 78 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere */
-  BITCODE_RC specularmap_tiling;       /*!< DXF 79 1 Tile (def), 2 Crop, 3 Clamp */
-  BITCODE_RC specularmap_autotransform;/*!< DXF 170 1 no, 2: scale to curr ent,
+  BITCODE_BS specularmap_projection; /*!< DXF 78 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere */
+  BITCODE_BS specularmap_tiling;       /*!< DXF 79 1 Tile (def), 2 Crop, 3 Clamp */
+  BITCODE_BS specularmap_autotransform;/*!< DXF 170 1 no, 2: scale to curr ent,
                                                     4: w/ current block transform */
   BITCODE_BD* specularmap_transmatrix; /*!< DXF 47 */
 
   //?? BD reflection_depth
   //reflection_glossy_samples
-  BITCODE_RC reflectionmap_source;     /*!< DXF 171 0 current, 1 image file (default) */
-  BITCODE_RC reflectionmap_filename;   /*!< DXF 6 if NULL no reflectionmap map */
+  BITCODE_BS reflectionmap_source;     /*!< DXF 171 0 current, 1 image file (default) */
+  BITCODE_BS reflectionmap_filename;   /*!< DXF 6 if NULL no reflectionmap map */
   BITCODE_BD reflectionmap_blendfactor;/*!< DXF 48 1.0 */
-  BITCODE_RC reflectionmap_projection; /*!< DXF 172 1 Planar (def), 2 Box, 3 Cylinder, 4 = Sphere */
-  BITCODE_RC reflectionmap_tiling;     /*!< DXF 173 1 Tile (def), 2 Crop, 3 Clamp */
-  BITCODE_RC reflectionmap_autotransform;/*!< DXF 174 */ // 1 no, 2: scale to curr ent,
+  BITCODE_BS reflectionmap_projection; /*!< DXF 172 1 Planar (def), 2 Box, 3 Cylinder, 4 = Sphere */
+  BITCODE_BS reflectionmap_tiling;     /*!< DXF 173 1 Tile (def), 2 Crop, 3 Clamp */
+  BITCODE_BS reflectionmap_autotransform;/*!< DXF 174 */ // 1 no, 2: scale to curr ent,
                                                          // 4: w/ current block transform
   BITCODE_BD* reflectionmap_transmatrix; /*!< DXF 49 */
 
   BITCODE_BD opacity_percent;        /*!< DXF 140 def: 1.0 */
-  BITCODE_RC opacitymap_source;      /*!< DXF 175 0 current, 1 image file (def) */
-  BITCODE_RC opacitymap_filename;    /*!< DXF 7 */ // if NULL no specular map
+  BITCODE_BS opacitymap_source;      /*!< DXF 175 0 current, 1 image file (def) */
+  BITCODE_BS opacitymap_filename;    /*!< DXF 7 */ // if NULL no specular map
   BITCODE_BD opacitymap_blendfactor; /*!< DXF 141 def: 1.0 */
-  BITCODE_RC opacitymap_projection;  /*!< DXF 176 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere */
-  BITCODE_RC opacitymap_tiling;        /*!< DXF 177 1 Tile (def), 2 Crop, 3 Clamp */
-  BITCODE_RC opacitymap_autotransform; /*!< DXF 178 */ // 1 no, 2: scale to curr ent,
+  BITCODE_BS opacitymap_projection;  /*!< DXF 176 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere */
+  BITCODE_BS opacitymap_tiling;        /*!< DXF 177 1 Tile (def), 2 Crop, 3 Clamp */
+  BITCODE_BS opacitymap_autotransform; /*!< DXF 178 */ // 1 no, 2: scale to curr ent,
                                                        // 4: w/ current block transform
   BITCODE_BD* opacitymap_transmatrix; /*!< DXF 142 */
 
   //BITCODE_B bump_enable
   //?BD bump_amount
-  BITCODE_RC bumpmap_source;      /*!< DXF 179 0 current, 1 image file (def) */
-  BITCODE_RC bumpmap_filename;    /*!< DXF 8 if NULL no bumpmap (called asset_name) */
+  BITCODE_BS bumpmap_source;      /*!< DXF 179 0 current, 1 image file (def) */
+  BITCODE_BS bumpmap_filename;    /*!< DXF 8 if NULL no bumpmap (called asset_name) */
   BITCODE_BD bumpmap_blendfactor; /*!< DXF 143 def: 1.0 */
-  BITCODE_RC bumpmap_projection;  /*!< DXF 270 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere */
-  BITCODE_RC bumpmap_tiling;        /*!< DXF 271 1 Tile (def), 2 Crop, 3 Clamp */
-  BITCODE_RC bumpmap_autotransform; /*!< DXF 272 */ // 1 no, 2: scale to curr ent,
+  BITCODE_BS bumpmap_projection;  /*!< DXF 270 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere */
+  BITCODE_BS bumpmap_tiling;        /*!< DXF 271 1 Tile (def), 2 Crop, 3 Clamp */
+  BITCODE_BS bumpmap_autotransform; /*!< DXF 272 */ // 1 no, 2: scale to curr ent,
                                                     // 4: w/ current block transform
   BITCODE_BD* bumpmap_transmatrix;  /*!< DXF 144 */
 
@@ -3934,12 +3934,12 @@ typedef struct _dwg_object_MATERIAL
   //?? BD refraction_depth
   //?? BD refraction_translucency_weight
   //?? refraction_glossy_samples
-  BITCODE_RC refractionmap_source;   /*!< DXF 273 0 current, 1 image file (def) */
-  BITCODE_RC refractionmap_filename; /*!< DXF 9 if NULL no refractionmap */
+  BITCODE_BS refractionmap_source;   /*!< DXF 273 0 current, 1 image file (def) */
+  BITCODE_BS refractionmap_filename; /*!< DXF 9 if NULL no refractionmap */
   BITCODE_BD refractionmap_blendfactor;/*!< DXF 143 def: 1.0 */
-  BITCODE_RC refractionmap_projection; /*!< DXF 274 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere */
-  BITCODE_RC refractionmap_tiling;       /*!< DXF 275 1 Tile (def), 2 Crop, 3 Clamp */
-  BITCODE_RC refractionmap_autotransform;/*!< DXF 276 */ // 1 no, 2: scale to curr ent,
+  BITCODE_BS refractionmap_projection; /*!< DXF 274 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere */
+  BITCODE_BS refractionmap_tiling;       /*!< DXF 275 1 Tile (def), 2 Crop, 3 Clamp */
+  BITCODE_BS refractionmap_autotransform;/*!< DXF 276 */ // 1 no, 2: scale to curr ent,
                                                          // 4: w/ current block transform
   BITCODE_BD* refractionmap_transmatrix; /*!< DXF 147 */
 
@@ -3949,30 +3949,30 @@ typedef struct _dwg_object_MATERIAL
   BITCODE_BD transmittance_scale;  /*!< DXF 463 */
   BITCODE_B two_sided_material;    /*!< DXF 290 */
   BITCODE_BD luminance;            /*!< DXF 464 */
-  BITCODE_RC luminance_mode;       /*!< DXF 270 */
-  BITCODE_RC normalmap_method;     /*!< DXF 271 */
+  BITCODE_BS luminance_mode;       /*!< DXF 270 */
+  BITCODE_BS normalmap_method;     /*!< DXF 271 */
   BITCODE_BD normalmap_strength;   /*!< DXF 465 def: 1.0 */
-  BITCODE_RC normalmap_source;     /*!< DXF 72 0 current, 1 image file (default) */
-  BITCODE_RC normalmap_filename;   /*!< DXF 3 if NULL no normal map */
+  BITCODE_BS normalmap_source;     /*!< DXF 72 0 current, 1 image file (default) */
+  BITCODE_BS normalmap_filename;   /*!< DXF 3 if NULL no normal map */
   BITCODE_BD normalmap_blendfactor;/*!< DXF 42 def: 1.0 */
-  BITCODE_RC normalmap_projection; /*!< DXF 73 1 = Planar (def), 2 = Box, 3 = Cylinder, 4 = Sphere */
-  BITCODE_RC normalmap_tiling;     /*!< DXF 74 1 = Tile (def), 2 = Crop, 3 = Clamp */
-  BITCODE_RC normalmap_autotransform; /*!< DXF 43 1 no, 2: scale to curr ent,
+  BITCODE_BS normalmap_projection; /*!< DXF 73 1 = Planar (def), 2 = Box, 3 = Cylinder, 4 = Sphere */
+  BITCODE_BS normalmap_tiling;     /*!< DXF 74 1 = Tile (def), 2 = Crop, 3 = Clamp */
+  BITCODE_BS normalmap_autotransform; /*!< DXF 43 1 no, 2: scale to curr ent,
                                                   4: w/ current block transform */
   BITCODE_BD* normalmap_transmatrix; /*!< DXF 43 */
   BITCODE_B materials_anonymous;     /*!< DXF 293 */
-  BITCODE_RC global_illumination_mode;/*!< DXF 272 */
-  BITCODE_RC final_gather_mode; /*!< DXF 273 */
+  BITCODE_BS global_illumination_mode;/*!< DXF 272 */
+  BITCODE_BS final_gather_mode; /*!< DXF 273 */
   BITCODE_T genprocname; 	/*!< DXF 300 */
   BITCODE_B genprocvalbool; 	/*!< DXF 291 */
-  BITCODE_RC genprocvalint;     /*!< DXF 271 */
+  BITCODE_BS genprocvalint;     /*!< DXF 271 */
   BITCODE_BD genprocvalreal;    /*!< DXF 469 */
   BITCODE_T genprocvaltext;     /*!< DXF 301 */
   BITCODE_B genproctableend; 	/*!< DXF 292 */
   BITCODE_CMC genprocvalcolorindex;/*!< DXF 62 */
   BITCODE_BS genprocvalcolorrgb;/*!< DXF 420 */
   BITCODE_T genprocvalcolorname;/*!< DXF 430 */
-  BITCODE_RC map_utile; 	/*!< DXF 270 */
+  BITCODE_BS map_utile; 	/*!< DXF 270 */
   BITCODE_BD translucence; 	/*!< DXF 148 */
   BITCODE_BL self_illumination; /*!< DXF 90 */
   BITCODE_BD reflectivity; 	/*!< DXF 468 */
@@ -4021,13 +4021,13 @@ typedef struct _dwg_object_PLOTSETTINGS
 				4096 = ZoomToPaperOnUpdate
 				8192 = Initializing
 				16384 = PrevPlotInit */
-  BITCODE_RC plot_paper_units; /*!< DXF 72,  0 inches, 1 mm, 2 pixel */
-  BITCODE_RC plot_rotation;    /*!< DXF 73,  0 normal, 1 90, 2 180, 3 270 deg */
-  BITCODE_RC plot_type;        /*!< DXF 74,  0 display, 1 extents, 2 limits, 3 view (see DXF 6),
+  BITCODE_BS plot_paper_units; /*!< DXF 72,  0 inches, 1 mm, 2 pixel */
+  BITCODE_BS plot_rotation;    /*!< DXF 73,  0 normal, 1 90, 2 180, 3 270 deg */
+  BITCODE_BS plot_type;        /*!< DXF 74,  0 display, 1 extents, 2 limits, 3 view (see DXF 6),
                                              4 window (see 48-140), 5 layout */
   BITCODE_H stylesheet;        /*!< DXF 7 */
   BITCODE_B use_std_scale;     /*!< DXF 0 */
-  BITCODE_RC std_scale_type; /*!< DXF 75, 0 = scaled to fit,
+  BITCODE_BS std_scale_type; /*!< DXF 75, 0 = scaled to fit,
                                    1 = 1/128"=1', 2 = 1/64"=1', 3 = 1/32"=1'
                                    4 = 1/16"=1', 5 = 3/32"=1', 6 = 1/8"=1'
                                    7 = 3/16"=1', 8 = 1/4"=1', 9 = 3/8"=1'
@@ -4038,9 +4038,9 @@ typedef struct _dwg_object_PLOTSETTINGS
                                    27 = 2:1, 28 = 4:1, 29 = 8:1, 30 = 10:1, 31 = 100:1, 32 = 1000:1
                                */
   BITCODE_BD std_scale_factor; /*!< DXF 147, value of 75 */
-  BITCODE_RC shade_plot_mode;  /*!< DXF 76, 0 display, 1 wireframe, 2 hidden, 3 rendered,
+  BITCODE_BS shade_plot_mode;  /*!< DXF 76, 0 display, 1 wireframe, 2 hidden, 3 rendered,
                                             4 visualstyle, 5 renderPreset */
-  BITCODE_RC shade_plot_res_level; /*!< DXF 77, 0 draft, 1 preview, 2 nomal,
+  BITCODE_BS shade_plot_res_level; /*!< DXF 77, 0 draft, 1 preview, 2 nomal,
                                                 3 presentation, 4 maximum, 5 custom */
   BITCODE_BS  shade_plot_custom_dpi; /*!< DXF 78, 100-32767 */
   BITCODE_2BD paper_image_origin;    /*!< DXF 148 + 149 */
@@ -4073,22 +4073,22 @@ typedef struct _dwg_entity_LIGHT
   BITCODE_BD intensity; /*!< DXF 40 */
   BITCODE_3BD position; /*!< DXF 10 */
   BITCODE_3BD target;   /*!< DXF 11 */
-  BITCODE_RC attenuation_type;        /*!< DXF 72 */
+  BITCODE_BS attenuation_type;        /*!< DXF 72 */
   BITCODE_B use_attenuation_limits;   /*!< DXF 292 */
   BITCODE_BD attenuation_start_limit; /*!< DXF 41 */
   BITCODE_BD attenuation_end_limit;   /*!< DXF 42 */
   BITCODE_BD hotspot_angle; /*!< DXF 50 */
   BITCODE_BD falloff_angle; /*!< DXF 51, type=spot only */
   BITCODE_B cast_shadows;   /*!< DXF 293 */
-  BITCODE_RC shadow_type;   /*!< DXF 73, 0 or 1 */
+  BITCODE_BS shadow_type;   /*!< DXF 73, 0 or 1 */
   BITCODE_BS shadow_map_size;     /*!< DXF 91 */
   BITCODE_BS shadow_map_softness; /*!< DXF 280 */
-  BITCODE_RC lamp_color_preset;   /*!< DXF ? */
-  BITCODE_RC lamp_color_type;     /*!< DXF ? */
-  BITCODE_RC physical_intensity_method; /*!< DXF ? */
+  BITCODE_BS lamp_color_preset;   /*!< DXF ? */
+  BITCODE_BS lamp_color_type;     /*!< DXF ? */
+  BITCODE_BS physical_intensity_method; /*!< DXF ? */
   BITCODE_RS drawable_type;       /*!< DXF ? */
-  BITCODE_RC glyph_display_type;  /*!< DXF ? */
-  BITCODE_RC glyph_display;       /*!< DXF ? */
+  BITCODE_BS glyph_display_type;  /*!< DXF ? */
+  BITCODE_BS glyph_display;       /*!< DXF ? */
 } Dwg_Entity_LIGHT;
 
 /**
@@ -4129,7 +4129,7 @@ typedef struct _dwg_object_SUN
   struct _dwg_object_object *parent;
   BITCODE_RC flag; /* preR13 */
   BITCODE_TV entry_name;
-  BITCODE_RS used; /* preR13 */
+  BITCODE_RC used; /* preR13 */
   BITCODE_B xrefref;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
