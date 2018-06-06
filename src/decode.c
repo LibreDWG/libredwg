@@ -324,7 +324,7 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
 
           FIELD_RS (color_rs, 62);   // color, off if negative
           FIELD_RS (linetype_rs, 6); // style
-          //FIELD_RS (CRC, 0);
+          //FIELD_RS (crc, 0);
           CHK_ENDPOS;
         }
       break;
@@ -867,7 +867,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
 
   // Check CRC-on
   dat->bit = 0;
-  ckr = dwg->header_vars.CRC;
+  ckr = dwg->header_vars.crc;
   pvz = dwg->header.section[SECTION_HEADER_R13].address + 16;
   LOG_TRACE("HEADER_R13.address 0x%lx\n", pvz);
   LOG_TRACE("HEADER_R13.size %d\n", dwg->header.section[SECTION_HEADER_R13].size);

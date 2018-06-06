@@ -373,11 +373,14 @@ typedef struct _dwg_handle
 } Dwg_Handle;
 
 /**
- object references: obj is resolved by handleref when reading a DWG to the respective
- \ref Dwg_Object, and absolute_ref is resolved to the global object index.
+object references: obj is resolved by handleref (e.g. via
+dwg_resolve_handleref) when reading a DWG to the respective \ref
+Dwg_Object, and absolute_ref is resolved to the global
+_dwg_struct::object_ref index. It is the same as the hex number in the
+DXF handles.
 
- Used as \ref Dwg_Object_Ref
- */
+Used as \ref Dwg_Object_Ref
+*/
 typedef struct _dwg_object_ref
 {
   struct _dwg_object* obj;
@@ -795,7 +798,7 @@ typedef struct _dwg_header_variables {
   BITCODE_BS unknown_55;
   BITCODE_BS unknown_56;
   BITCODE_BS unknown_57;
-  BITCODE_RS CRC;
+  BITCODE_RS crc;
 } Dwg_Header_Variables;
 
 /* OBJECTS *******************************************************************/
@@ -4737,15 +4740,15 @@ typedef struct _dwg_struct
 
   Dwg_Header_Variables header_vars;
 
-  unsigned int num_classes;
-  Dwg_Class * dwg_class;
+  unsigned int num_classes;  /*!< size of dwg_class */
+  Dwg_Class * dwg_class;     /*!< list of all classes */
 
-  long unsigned int num_objects;
-  Dwg_Object * object;
+  long unsigned int num_objects; /*!< size of object */
+  Dwg_Object * object;           /*!< list of all objects and entities */
 
-  long unsigned int num_entities;
-  long unsigned int num_object_refs;
-  Dwg_Object_Ref ** object_ref;
+  long unsigned int num_entities;    /*!< number of entities in object */
+  long unsigned int num_object_refs; /*!< size of object_ref */
+  Dwg_Object_Ref ** object_ref;      /*!< list of all handles */
   int dirty_refs; /* 1 if we added an entity, and invalidated all the internal ref->obj's */
 
   Dwg_Object * mspace_block;

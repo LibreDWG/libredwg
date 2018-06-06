@@ -650,8 +650,8 @@
       FIELD_BS (unknown_57, 0);
     }
 
-  /* TODO: This really is the section[0] CRC not related to the header */
-  FIELD_RS (CRC, 0);
+  /* TODO: This really is the section[0] crc not related to the header */
+  FIELD_RS (crc, 0);
 
   SINCE(R_2007) {
     SECTION_STRING_STREAM
@@ -673,6 +673,3 @@
     FIELD_TU (PROJECTNAME, 1);
     END_STRING_STREAM
   }
-
-
-
