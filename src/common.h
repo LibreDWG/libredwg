@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2009 Free Software Foundation, Inc.                        */
+/*  Copyright (C) 2009, 2018 Free Software Foundation, Inc.                  */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -37,9 +37,13 @@
 #endif
 
 #ifndef EXPORT
-# if defined(_WIN32)
-#   define EXPORT  __declspec(dllexport)
-# elif defined(HAVE_ATTRIBUTE_VISIBILITY_DEFAULT)
+# ifdef _WIN32
+#   ifdef DLL_EXPORT
+#     define EXPORT  __declspec(dllexport)
+#   else
+#     define EXPORT  __declspec(dllimport)
+#   endif
+# elif defined HAVE_ATTRIBUTE_VISIBILITY_DEFAULT
 #   define EXPORT __attribute__((visibility("default")))
 # else
 #   define EXPORT

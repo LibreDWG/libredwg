@@ -43,8 +43,12 @@
 # endif
 #endif
 
-#if defined(_WIN32)
-# define EXPORT  __declspec(dllexport)
+#ifdef _WIN32
+# ifdef DLL_EXPORT
+#   define EXPORT  __declspec(dllexport)
+# else
+#   define EXPORT  __declspec(dllimport)
+# endif
 #elif defined(__clang__) || defined(__clang) || \
        (defined( __GNUC__) && ((__GNUC__ * 100) + __GNUC_MINOR__) >= 303)
 # define EXPORT __attribute__((visibility("default")))
