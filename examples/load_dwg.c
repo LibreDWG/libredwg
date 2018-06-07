@@ -16,6 +16,7 @@
  * written by Felipe Castro
  * modified by Felipe Corrêa da Silva Sances
  * modified by Thien-Thi Nguyen
+ * modified by Reini Urban
  */
 
 #include <stdio.h>
@@ -81,8 +82,8 @@ load_dwg(char *filename, unsigned int opts)
   int success;
   Dwg_Data dwg;
 
+  memset(&dwg, 0, sizeof(Dwg_Data));
   dwg.opts = opts;
-  dwg.num_objects = 0;
   success = dwg_read_file(filename, &dwg);
   for (i = 0; i < dwg.num_objects; i++)
     {
@@ -133,6 +134,7 @@ main (int argc, char *argv[])
     return help();
   if (argc > 1 && !strcmp(argv[i], "--version"))
     return opt_version();
+
   REQUIRE_INPUT_FILE_ARG (argc);
   load_dwg (argv[i], opts);
   return 0;

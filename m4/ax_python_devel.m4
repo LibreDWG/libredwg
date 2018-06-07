@@ -66,7 +66,7 @@
 #   modified version of the Autoconf Macro, you may extend this special
 #   exception to the GPL to apply to your modified version as well.
 
-#serial 4
+#serial 5
 
 AU_ALIAS([AC_PYTHON_DEVEL], [AX_PYTHON_DEVEL])
 AC_DEFUN([AX_PYTHON_DEVEL],[
@@ -194,15 +194,20 @@ EOD`
                                    [If available, contains the Python version number currently in use.])
 
 		# First, the library directory:
-		ac_python_libdir=`cat<<EOD | $PYTHON -
+		ac_python_libdir=`$PYTHON -c \
+		  "import distutils.sysconfig; \
+		  print (distutils.sysconfig.get_config_vars('LIBPL')[[0]])"`
+		if test -z "$ac_python_libdir"; then
+                	ac_python_libdir=`cat<<EOD | $PYTHON -
 
 # There should be only one
 import distutils.sysconfig
-for e in distutils.sysconfig.get_config_vars ('LIBDIR'):
+for e in distutils.sysconfig.get_config_vars('LIBDIR'):
 	if e != None:
 		print (e)
 		break
 EOD`
+                fi
 
 		# Before checking for libpythonX.Y, we need to know
 		# the extension the OS we're on uses for libraries
@@ -218,19 +223,28 @@ EOD`
 
 		# Strip away extension from the end to canonicalize its name:
 		ac_python_library=`echo "$ac_python_soname" | sed "s/${ac_python_soext}$//"`
+                echo ""
+                echo ac_python_libdir=$ac_python_libdir
+                echo ac_python_library=$ac_python_library
+                echo ac_python_soname=$ac_python_soname
 
-		# This small piece shamelessly adapted from PostgreSQL python macro;
-		# credits goes to momjian, I think. I'd like to put the right name
-		# in the credits, if someone can point me in the right direction... ?
+		# adapted from the PostgreSQL and LibreDWG python macros
+                # macports uses --enable-framework=/opt/local/Library/Frameworks
 		#
 		if test -n "$ac_python_libdir" -a -n "$ac_python_library" \
-			-a x"$ac_python_library" != x"$ac_python_soname"
+                        -a -e "$ac_python_libdir" -a ! -e "$ac_python_library"
 		then
-			# use the official shared library
+                        echo use the --enable-frameworked shared library
+			ac_python_library=`echo "$ac_python_library" | sed "s/^lib//"`
+			PYTHON_LDFLAGS="-L$ac_python_libdir -lpython$ac_python_version"
+                elif test -n "$ac_python_libdir" -a -n "$ac_python_library" \
+                          -a x"$ac_python_library" != x"$ac_python_soname"
+                then
+                        echo use the official shared library
 			ac_python_library=`echo "$ac_python_library" | sed "s/^lib//"`
 			PYTHON_LDFLAGS="-L$ac_python_libdir -l$ac_python_library"
 		else
-			# old way: use libpython from python_configdir
+                        echo old way: use libpython from python_configdir
 			ac_python_libdir=`$PYTHON -c \
 			  "from distutils.sysconfig import get_python_lib as f; \
 			  import os; \
@@ -272,13 +286,19 @@ EOD`
 	AC_SUBST(PYTHON_EXTRA_LIBS)
 
 	#
-	# linking flags needed when embedding
+	# linking flags needed when embedding. broken for macports:
+        # --enable-framework=/opt/local/Library/Frameworks -L prefix is missing.
+        # -Wl,-stack_size,1000000  -framework CoreFoundation Python.framework/Versions/3.6/Python
 	#
 	AC_MSG_CHECKING(python extra linking flags)
 	if test -z "$PYTHON_EXTRA_LDFLAGS"; then
-		PYTHON_EXTRA_LDFLAGS=`$PYTHON -c "import distutils.sysconfig; \
+          case $PYTHON_SITE_PKG in
+            /opt/local/Library/Frameworks*) ;;
+            *) PYTHON_EXTRA_LDFLAGS=`$PYTHON -c "import distutils.sysconfig; \
 			conf = distutils.sysconfig.get_config_var; \
 			print (conf('LINKFORSHARED'))"`
+               ;;
+          esac
 	fi
 	AC_MSG_RESULT([$PYTHON_EXTRA_LDFLAGS])
 	AC_SUBST(PYTHON_EXTRA_LDFLAGS)

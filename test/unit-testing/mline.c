@@ -35,7 +35,7 @@ api_process(dwg_object *obj)
   BITCODE_RC num_lines;
   BITCODE_BS i, num_verts;
   dwg_point_3d base_point, ext;  //3d_points 
-  dwg_ent_mline_vertex * verts;
+  dwg_mline_vertex * verts;
 
   dwg_ent_mline *mline = dwg_object_to_MLINE(obj);
 
@@ -66,7 +66,6 @@ api_process(dwg_object *obj)
            base_point.x, base_point.y, base_point.z);
   else
     printf("error in reading base_point \n");
-
 
   num_lines = dwg_ent_mline_get_num_lines(mline, &error);
   if (!error)

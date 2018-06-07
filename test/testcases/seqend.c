@@ -3,24 +3,21 @@
 #include <dejagnu.h>
 
 void
-low_level_process (dwg_object * obj)
-{
-  dwg_ent_seqend *seqend = dwg_object_to_SEQEND (obj);
-
-  printf ("dummy value of seqend : %c\n", seqend->dummy);
-}
-
-void
 api_process (dwg_object * obj)
 {
-  int error;
-  char dummy;
+  int error1, error2;
   dwg_ent_seqend *seqend = dwg_object_to_SEQEND (obj);
+  dwg_ent_generic *gen = (dwg_ent_generic *)seqend;
+  dwg_obj_ent *parent = dwg_ent_generic_parent(gen, &error1);
+  dwg_object *obj2 = dwg_ent_generic_to_object(gen, &error2);
 
-  dummy = dwg_ent_seqend_get_dummy (seqend, &error);
-  if (!error  && dummy == seqend->dummy)
-    pass ("Working Properly");
+  if (!error1 && seqend->parent == parent)
+    pass ("dwg_ent_generic_parent ok");
   else
-    fail ("dwg_ent_seqend_get_dummy");
+    fail("dwg_ent_generic_parent SEQEND %p == %p", parent, seqend->parent);
 
+  if (!error2 && obj2 == obj)
+    pass ("dwg_ent_generic_to_object ok");
+  else
+    fail("dwg_ent_generic_to_object SEQEND %p == %p", obj2, obj);
 }

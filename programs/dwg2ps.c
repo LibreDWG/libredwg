@@ -16,16 +16,21 @@
  * TODO: more 2D elements, see dwg2SVG
  * written by Felipe Castro
  * modified by Felipe Corrêa da Silva Sances
+ * modified by Rodrigo Rodrigues da Silva
  * modified by Thien-Thi Nguyen
  * modified by Reini Urban
  */
 
+#include "../src/config.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <libps/pslib.h>
 
-#include "../src/config.h"
 #include <dwg.h>
+#include <dwg_api.h>
+#include "../src/common.h"
+//#include "../src/bits.h" //bit_convert_TU
 #include "suffix.inc"
 static int help(void);
 int verbosity(int argc, char **argv, int i, unsigned int *opts);
@@ -59,7 +64,7 @@ create_postscript(Dwg_Data *dwg, char *output)
   double scale_x;
   double scale_y;
   double scale;
-  long unsigned i;
+  unsigned long i;
   //FILE *fh;
   PSDoc *ps;
 
@@ -73,10 +78,11 @@ create_postscript(Dwg_Data *dwg, char *output)
       return;
     }
 
-  PS_set_info(ps, "Creator", "dwg_ps");
-  PS_set_info(ps, "Author", "LibreDWG example");
-  PS_set_info(ps, "Title", "DWG to Postscript example");
-  PS_set_info(ps, "Keywords", "dwg, postscript, conversion, CAD, plot");
+  PS_set_info(ps, "Creator", "dwg2ps " PACKAGE_VERSION);
+  //TODO LASTSAVEDBY
+  //PS_set_info(ps, "Author", bit_convert_TU(dwg->header_vars.LASTSAVEDBY));
+  PS_set_info(ps, "Title", output);
+  //PS_set_info(ps, "Keywords", "dwg, postscript, conversion, CAD, plot");
 
   /* First page: Model Space (?)
    */
@@ -87,13 +93,17 @@ create_postscript(Dwg_Data *dwg, char *output)
   scale = 25.4 / 72; // pt:mm
   PS_begin_page(ps, dx / scale, dy / scale);
   scale *= (scale_x > scale_y ? scale_x : scale_y);
-  PS_scale(ps, scale, scale);
-  PS_translate(ps, -dwg_model_x_min(dwg), -dwg_model_y_min(dwg));
-  //printf ("%f (%f, %f)\n", scale, scale_x, scale_y);
+  PS_scale(ps, (float)scale, (float)scale);
+  PS_translate(ps, (float)-dwg_model_x_min(dwg), (float)-dwg_model_y_min(dwg));
+  if (dwg->opts)
+    {
+      fprintf (stderr, "Limits: %f, %f\n", dx, dy);
+      fprintf (stderr, "Scale: %f (%f, %f)\n", scale, scale_x, scale_y);
+    }
 
   /* Mark the origin with a crossed circle
    */
-#	define H 2000
+#define H 1
   PS_circle(ps, 0, 0, H);
   PS_moveto(ps, 0, H);
   PS_lineto(ps, 0, -H);
@@ -103,10 +113,9 @@ create_postscript(Dwg_Data *dwg, char *output)
 
   /* Iterate all entities
    */
-  Dwg_Object *obj;
   for (i = 0; i < dwg->num_objects; i++)
     {
-      obj = &dwg->object[i];
+      Dwg_Object *obj = &dwg->object[i];
       if (obj->supertype == DWG_SUPERTYPE_UNKNOWN) // unknown
         continue;
       if (obj->type == DWG_SUPERTYPE_OBJECT) // not entity
@@ -117,9 +126,35 @@ create_postscript(Dwg_Data *dwg, char *output)
         {
           Dwg_Entity_LINE* line;
           line = obj->tio.entity->tio.LINE;
-          PS_moveto(ps, line->start.x, line->start.y);
-          PS_lineto(ps, line->end.x, line->end.y);
+          PS_moveto(ps, (float)line->start.x, (float)line->start.y);
+          PS_lineto(ps, (float)line->end.x, (float)line->end.y);
           PS_stroke(ps);
+        }
+      else if (obj->type == DWG_TYPE_POLYLINE_2D)
+        {
+          int error;
+          BITCODE_RL j, numpts = dwg_obj_polyline_2d_get_numpoints(obj, &error);
+          dwg_point_2d *pts = dwg_obj_polyline_2d_get_points(obj, &error);
+          if (numpts && !error)
+            {
+              PS_moveto(ps, (float)pts[0].x, (float)pts[0].y);
+              for (j=1; j<numpts; j++)
+                {
+                  PS_lineto(ps, (float)pts[j].x, (float)pts[j].y);
+                  PS_stroke(ps);
+                }
+            }
+        }
+      else if (obj->type == DWG_TYPE_ARC)
+        {
+          Dwg_Entity_ARC* arc = obj->tio.entity->tio.ARC;
+          PS_arc(ps, (float)arc->center.x, (float)arc->center.y, (float)arc->radius,
+                     (float)arc->start_angle, (float)arc->end_angle);
+        }
+      else if (obj->type == DWG_TYPE_CIRCLE)
+        {
+          Dwg_Entity_CIRCLE* cir = obj->tio.entity->tio.CIRCLE;
+          PS_circle(ps, (float)cir->center.x, (float)cir->center.y, (float)cir->radius);
         }
     }
 
@@ -157,8 +192,9 @@ main(int argc, char *argv[])
     return help();
   if (argc > 1 && !strcmp(argv[i], "--version"))
     return opt_version();
-  REQUIRE_INPUT_FILE_ARG (argc);
 
+  REQUIRE_INPUT_FILE_ARG (argc);
+  memset(&dwg, 0, sizeof(Dwg_Data));
   dwg.opts = opts;
   error = dwg_read_file(argv[i], &dwg);
   if (error)

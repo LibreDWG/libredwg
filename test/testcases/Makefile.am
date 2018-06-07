@@ -1,19 +1,18 @@
 AUTOMAKE_OPTIONS = dejagnu
 
-AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src @WARN_CFLAGS@
+AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src $(WARN_CFLAGS)
 LDADD   = $(top_builddir)/src/libredwg.la -lm
-#SOURCES = $(top_builddir)/src/libredwg.la
+
+bits_test_LDADD = $(LDADD) $(top_builddir)/src/bits.lo
 
 paired = \
 	3dsolid \
 	arc \
 	attdef \
 	attrib \
-	bits_test \
 	block \
 	body \
 	circle \
-	decode_test \
 	dim_common \
 	dim_aligned \
 	dim_ang2ln \
@@ -53,17 +52,25 @@ unpaired = \
 	vertex_2d \
 	vertex_mesh
 
-check_PROGRAMS = $(paired) $(unpaired)
+private = bits_test \
+	  decode_test
+
+check_PROGRAMS = $(paired) $(unpaired) $(private)
 
 # todo: more dwg versions, in test/test-data
 EXTRA_DIST = \
 	example_2000.dwg \
 	vertex.mesh \
 	tests_common.h common.c \
-	$(paired:=.exp)
+	$(paired:=.exp) \
+	$(private:=.exp)
 
 CLEANFILES = *.log *.sum site.bak 
 MAINTAINERCLEANFILES = *_flymake.[ch] *~ *.i
+
+bits_test.cbmc: bits_test.c ../../src/bits.c
+	cbmc -I. -I../../include -I/opt/local/include bits_test.c ../../src/bits.c \
+	     --unwind 6  --cover decision > bits_test.cbmc
 
 @VALGRIND_CHECK_RULES@
 #VALGRIND_SUPPRESSIONS_FILES = $(PACKAGE).supp
@@ -78,15 +85,9 @@ check-syntax:
 if ENABLE_GCOV
 AM_CFLAGS += @GCOV_CFLAGS@
 LIBS      += @GCOV_LIBS@
-#  -e's,$(EXEEXT),,'
 gcov: $(check_PROGRAMS) check
 	-test -f gcov.log && rm gcov.log
-	-for f in $(check_PROGRAMS); do \
-	  c="`echo $$f|sed -e's,.exe,,'`"; \
-	  test -e $$c.c -a -e $$c.gcda && \
-	    echo $(GCOV) $$c.c && $(GCOV) $$c.c >>gcov.log; \
-	 done
-endif
-if ENABLE_GCOV
+	$(GCOV) *.gcno | tee -a $(builddir)/gcov.log
+
 CLEANFILES  += *.gcov *.gcno *.gcda gcov.log
 endif

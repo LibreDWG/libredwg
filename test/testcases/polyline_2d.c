@@ -13,7 +13,7 @@ api_process (dwg_object * obj)
 {
   int error;
   BITCODE_BD start_width, end_width, elevation, thickness;
-  BITCODE_BL owned_obj;
+  BITCODE_BL numpoints;
   unsigned int flags, curve_type;
   dwg_point_3d ext;
   dwg_ent_polyline_2d *polyline_2d = dwg_object_to_POLYLINE_2D (obj);
@@ -72,11 +72,9 @@ api_process (dwg_object * obj)
     fail ("error in reading curve type");
 
 
-  owned_obj = dwg_ent_polyline_2d_get_owned_obj_count (polyline_2d,
-						       &error);
-  if (!error  &&
-      owned_obj == polyline_2d->owned_obj_count)	// error check
+  numpoints = dwg_obj_polyline_2d_get_numpoints (obj, &error);
+  if (!error && numpoints > 0)
     pass ("Working Properly");
   else
-    fail ("error in reading owned object count");
+    fail ("error in reading numpoints");
 }

@@ -35,13 +35,13 @@ api_process (dwg_object * obj)
   int error;
   BITCODE_BS version;
   BITCODE_BL *block_size, num_isolines, num_wires, num_sil;
-  char *acis_data;
+  unsigned char *acis_data;
   BITCODE_B wireframe_data_present, point_present, isoline_present; 
   BITCODE_B acis_empty, acis2_empty;
   dwg_point_3d point;
   dwg_ent_region *region = dwg_object_to_REGION (obj);
-  dwg_ent_solid_wire *wire;
-  dwg_ent_solid_silhouette *sil;
+  dwg_3dsolid_wire *wire;
+  dwg_3dsolid_silhouette *sil;
   BITCODE_BL i;
 
 
@@ -51,23 +51,20 @@ api_process (dwg_object * obj)
   else
     fail ("error in reading acis empty");
 
-
   version = dwg_ent_region_get_version (region, &error);
-  if (!error  && version == region->version)	// error check
+  if (!error  && version == region->version)
     pass ("Working Properly");
   else
     fail ("error in reading version");
 
-
   acis_data = dwg_ent_region_get_acis_data (region, &error);
-  if (!error  && acis_data == region->acis_data)	// error checks
+  if (!error  && acis_data == region->acis_data)
     pass ("Working Properly");
   else
     fail ("error in reading acis data");
 
-
   wireframe_data_present = dwg_ent_region_get_wireframe_data_present (region, &error);
-  if (!error  && wireframe_data_present == region->wireframe_data_present)	// error check
+  if (!error  && wireframe_data_present == region->wireframe_data_present)
     pass ("Working Properly");
   else
     fail ("error in reading wireframe data present");
@@ -78,6 +75,7 @@ api_process (dwg_object * obj)
     pass ("Working Properly");
   else
     fail ("error in reading point present");
+
   dwg_ent_region_get_point (region, &point, &error);
   if (!error  && point.x == region->point.x
       && point.y == region->point.y && point.z == region->point.z)
@@ -85,16 +83,14 @@ api_process (dwg_object * obj)
   else
     fail ("error in reading point");
 
-  num_isolines =
-    dwg_ent_region_get_num_isolines (region, &error);
-  if (!error  && region->num_isolines == num_isolines)
+  num_isolines = dwg_ent_region_get_num_isolines (region, &error);
+  if (!error && region->num_isolines == num_isolines)
     pass ("Working Properly");
   else
     fail ("error in reading num isolines");
-  isoline_present =
-    dwg_ent_region_get_isoline_present (region, &error);
-  if (!error 
-      && isoline_present == region->isoline_present)
+
+  isoline_present = dwg_ent_region_get_isoline_present (region, &error);
+  if (!error && isoline_present == region->isoline_present)
     pass ("Working Properly");
   else
     fail ("error in reading isoline present");
@@ -105,7 +101,7 @@ api_process (dwg_object * obj)
   else
     fail ("error in reading num wires");
 
-  wire = dwg_ent_region_get_wire (region, &error);
+  wire = dwg_ent_region_get_wires (region, &error);
   if (!error )
     {
       int matches = 1;
@@ -130,9 +126,9 @@ api_process (dwg_object * obj)
   if (!error  && region->num_silhouettes == num_sil)
     pass ("Working Properly");
   else
-    fail ("error in reading num silhouette");
+    fail ("error in reading num silhouettes");
 
-  sil = dwg_ent_region_get_silhouette (region, &error);
+  sil = dwg_ent_region_get_silhouettes (region, &error);
   if (!error )
     {
       int matches = 1;
@@ -149,12 +145,12 @@ api_process (dwg_object * obj)
 	}
       else
 	{
-	  fail ("error in reading silhouette");
+	  fail ("error in reading silhouettes");
 	}
     }
   else
     {
-      fail ("error in reading silhouette");
+      fail ("error in reading silhouettes");
     }
 
 }

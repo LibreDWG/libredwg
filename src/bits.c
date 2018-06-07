@@ -100,7 +100,7 @@ bit_read_B(Bit_Chain * dat)
   if (dat->byte >= dat->size)
     {
       LOG_ERROR("buffer overflow at %lu", dat->byte)
-      return (-1);
+      return 0;
     }
   byte = dat->chain[dat->byte];
   result = (byte & (0x80 >> dat->bit)) >> (7 - dat->bit);
@@ -136,7 +136,7 @@ bit_read_BB(Bit_Chain * dat)
   if (dat->byte >= dat->size)
     {
       LOG_ERROR("buffer overflow at %lu", dat->byte)
-      return (-1);
+      return 0;
     }
   byte = dat->chain[dat->byte];
   if (dat->bit < 7)
@@ -258,7 +258,7 @@ bit_read_RC(Bit_Chain * dat)
   if (dat->byte >= dat->size)
     {
       LOG_ERROR("buffer overflow at %lu", dat->byte)
-      return (-1);
+      return 0;
     }
   byte = dat->chain[dat->byte];
   if (dat->bit == 0)
@@ -680,7 +680,7 @@ bit_write_BD(Bit_Chain * dat, double value)
     }
 }
 
-/** Read 1 modular char (max 4 bytes).
+/** Read 1 modular char (max 4 bytes, signed).
  */
 BITCODE_MC
 bit_read_MC(Bit_Chain * dat)
@@ -714,10 +714,10 @@ bit_read_MC(Bit_Chain * dat)
   return 0; /* error... */
 }
 
-/** Write 1 modular char (max 4 bytes).
+/** Write 1 modular char (max 4 bytes, signed).
  */
 void
-bit_write_MC(Bit_Chain * dat, long int val)
+bit_write_MC(Bit_Chain * dat, BITCODE_MC val)
 {
   int i, j;
   int negative;
@@ -735,7 +735,6 @@ bit_write_MC(Bit_Chain * dat, long int val)
       negative = 0;
       value = (long unsigned int) val;
     }
-
   mask = 0x0000007f;
   for (i = 3, j = 0; i > -1; i--, j += 7)
     {
@@ -754,7 +753,63 @@ bit_write_MC(Bit_Chain * dat, long int val)
     byte[i] |= 0x40;
   for (j = 3; j >= i; j--)
     bit_write_RC(dat, byte[j]);
-  //if (value == 64) printf ("(%2X) \n", byte[i]);
+}
+
+/** Read 1 modular char (max 4 bytes, unsigned).
+ */
+BITCODE_UMC
+bit_read_UMC(Bit_Chain * dat)
+{
+  int i, j;
+  unsigned char byte[4];
+  long unsigned int result;
+
+  result = 0;
+  for (i = 3, j = 0; i >= 0; i--, j += 7)
+    {
+      byte[i] = bit_read_RC(dat);
+      if (!(byte[i] & 0x80))
+        {
+          result |= (((long unsigned int) byte[i]) << j);
+          return result;
+        }
+      else
+        byte[i] &= 0x7f;
+      result |= ((long unsigned int) byte[i]) << j;
+    }
+
+  LOG_ERROR("bit_read_MC: error parsing modular char.")
+  return 0; /* error... */
+}
+
+/** Write 1 modular char (max 4 bytes, unsigned).
+ */
+void
+bit_write_UMC(Bit_Chain * dat, BITCODE_UMC val)
+{
+  int i, j;
+  int negative;
+  unsigned char byte[4];
+  long unsigned int mask;
+  long unsigned int value;
+
+  value = (long unsigned int) val;
+  mask = 0x0000007f;
+  for (i = 3, j = 0; i > -1; i--, j += 7)
+    {
+      byte[i] = (unsigned char) ((value & mask) >> j);
+      byte[i] |= 0x80;
+      mask = mask << 7;
+    }
+  for (i = 0; i < 3; i++)
+    if (byte[i] & 0x7f)
+      break;
+
+  if (byte[i] & 0x40)
+    i--;
+  byte[i] &= 0x7f;
+  for (j = 3; j >= i; j--)
+    bit_write_RC(dat, byte[j]);
 }
 
 /** Read 1 modular short (max 2 words).
@@ -773,7 +828,7 @@ bit_read_MS(Bit_Chain * dat)
       if (!(word[i] & 0x8000))
         {
           result |= (((long unsigned int) word[i]) << j);
-          return (result);
+          return result;
         }
       else
         word[i] &= 0x7fff;
@@ -788,31 +843,22 @@ bit_read_MS(Bit_Chain * dat)
 void
 bit_write_MS(Bit_Chain * dat, long unsigned int value)
 {
-  int i, j;
-  unsigned int word[4];
-  long unsigned int mask;
-
-  mask = 0x00007fff;
-  for (i = 1, j = 0; i >= 0; i--, j += 15)
+  if (value > 0x7fff)
     {
-      word[i] = ((unsigned int) ((value & mask) >> j)) | 0x8000;
-      mask = mask << 15;
+      bit_write_RS(dat, (value & 0xffff8000) >> 15);
+      bit_write_RS(dat, value & 0x7fff);
     }
-  /* TODO: useless?
-   for (i = 0; i < 1; i++)
-   if (word[i] & 0x7fff)
-   break;
-   */
-  i = 1;
-  word[i] &= 0x7fff;
-  for (j = 1; j >= i; j--)
-    bit_write_RS(dat, word[j]);
+  else
+    {
+      bit_write_RS(dat, value);
+    }
 }
 
 /** Read bit-extrusion.
  */
 void
-bit_read_BE(Bit_Chain * dat, double *x, double *y, double *z)
+bit_read_BE(Bit_Chain *restrict dat,
+            double *restrict x, double *restrict y, double *restrict z)
 {
   if (dat->version >= R_2000 && bit_read_B(dat))
     {
@@ -921,7 +967,7 @@ bit_write_DD(Bit_Chain * dat, double value, double default_value)
         }
       else
         {
-          bit_write_BB(dat, 0);
+          bit_write_BB(dat, 3);
           bit_write_RD(dat, value);
         }
     }
@@ -957,9 +1003,9 @@ bit_write_BT(Bit_Chain * dat, double value)
 /** Read handle-references.
  */
 int
-bit_read_H(Bit_Chain * dat, Dwg_Handle * handle)
+bit_read_H(Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
 {
-  unsigned char *val;
+  unsigned char *restrict val;
   int i;
 
   handle->code = bit_read_RC(dat);
@@ -975,7 +1021,7 @@ bit_read_H(Bit_Chain * dat, Dwg_Handle * handle)
       return (-1);
     }
 
-  //XXX is this code portable?
+  // TODO: little-endian only
   val = (unsigned char *) &handle->value;
   for (i = handle->size - 1; i >= 0; i--)
     val[i] = bit_read_RC(dat);
@@ -986,27 +1032,33 @@ bit_read_H(Bit_Chain * dat, Dwg_Handle * handle)
 /** Write handle-references.
  */
 void
-bit_write_H(Bit_Chain * dat, Dwg_Handle * handle)
+bit_write_H(Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
 {
   int i;
   unsigned char *val;
-  unsigned char code_counter;
+  unsigned char size;
 
+  if (!handle)
+    {
+      bit_write_RC(dat, 0);
+      return;
+    }
   if (handle->value == 0)
     {
       bit_write_RC(dat, (handle->code << 4));
       return;
     }
 
+  // TODO: little-endian only
   val = (unsigned char *) &handle->value;
   for (i = 3; i >= 0; i--)
     if (val[i])
       break;
 
-  code_counter = handle->code << 4;
-  code_counter |= i + 1;
+  size = handle->code << 4;
+  size |= i + 1;
 
-  bit_write_RC(dat, code_counter);
+  bit_write_RC(dat, size);
 
   for (; i >= 0; i--)
     bit_write_RC(dat, val[i]);
@@ -1087,7 +1139,7 @@ bit_write_CRC(Bit_Chain * dat, long unsigned int start_address,
  *  preR11
  */
 BITCODE_TF
-bit_read_TF(Bit_Chain * dat, int length)
+bit_read_TF(Bit_Chain *restrict dat, int length)
 {
   char *chain = malloc(length+1);
 
@@ -1098,7 +1150,7 @@ bit_read_TF(Bit_Chain * dat, int length)
 }
 
 void
-bit_read_fixed(Bit_Chain * dat, char *dest, int length)
+bit_read_fixed(Bit_Chain *restrict dat, char *restrict dest, int length)
 {
   for (int i = 0; i < length; i++)
     {
@@ -1109,7 +1161,7 @@ bit_read_fixed(Bit_Chain * dat, char *dest, int length)
 /** Write fixed text.
  */
 void
-bit_write_TF(Bit_Chain * dat, char *chain, int length)
+bit_write_TF(Bit_Chain *restrict dat, char *restrict chain, int length)
 {
   int i;
   for (i = 0; i < length; i++)
@@ -1119,7 +1171,7 @@ bit_write_TF(Bit_Chain * dat, char *chain, int length)
 /** Read simple text. After usage, the allocated memory must be properly freed.
  */
 BITCODE_TV
-bit_read_TV(Bit_Chain * dat)
+bit_read_TV(Bit_Chain *restrict dat)
 {
   unsigned int i;
   unsigned int length;
@@ -1144,7 +1196,7 @@ bit_read_TV(Bit_Chain * dat)
 /** Write simple text.
  */
 void
-bit_write_TV(Bit_Chain * dat, char *chain)
+bit_write_TV(Bit_Chain *restrict dat, char *restrict chain)
 {
   int i;
   int length;
@@ -1159,7 +1211,7 @@ bit_write_TV(Bit_Chain * dat, char *chain)
  * See also bfr_read_string()
  */
 BITCODE_TU
-bit_read_TU(Bit_Chain * dat)
+bit_read_TU(Bit_Chain *restrict dat)
 {
   unsigned int i;
   unsigned int length;
@@ -1179,7 +1231,7 @@ bit_read_TU(Bit_Chain * dat)
 /** Write UCS-2 unicode text. Must be zero-delimited.
  */
 void
-bit_write_TU(Bit_Chain * dat, BITCODE_TU chain)
+bit_write_TU(Bit_Chain *restrict dat, BITCODE_TU restrict chain)
 {
   unsigned int i;
   unsigned int length;
@@ -1203,51 +1255,105 @@ bit_write_TU(Bit_Chain * dat, BITCODE_TU chain)
   bit_write_RS(dat, 0); //?? unsure about that
 }
 
-char* bit_convert_TU(BITCODE_TU wstr)
+/* converts UCS-2 to UTF-8 */
+char*
+bit_convert_TU(BITCODE_TU restrict wstr)
 {
   BITCODE_TU tmp = wstr;
   char *str;
-  int len = 0;
+  int i, len = 0;
   uint16_t c;
   while (*tmp++) {
     len++;
   }
   str = malloc(len+1);
-  len = 0;
+  i = 0;
   while ((c = *wstr++)) {
-    str[len++] = c & 0xff;
+    if (c < 256) {
+      str[i++] = c & 0xff;
+    }
+    else if (c < 0x800) {
+      if (i+3 > len) {
+        str = realloc(str, i+3);
+        len = i+2;
+      }
+      str[i+1] = (c & 0x3f) | 0x80;
+      str[i] = (c >> 6) & 0xc0;
+      i += 2;
+    }
+    else { /* windows ucs-2 has no D800-DC00 surrogate pairs. go straight up */
+      if (i+3 > len) {
+        str = realloc(str, i+4);
+        len = i+3;
+      }
+      str[i+3] = (c & 0x3f) | 0x80;
+      c >>= 6;
+      str[i+2] = (c & 0x3f) | 0x80;
+      c >>= 6;
+      str[i] = c & 0xe0;
+      i += 3;
+    }
   }
-  str[len] = '\0';
+  str[i] = '\0';
   return str;
+}
+
+/** converts UTF-8 to UCS-2. Returns a copy */
+BITCODE_TU
+bit_utf8_to_TU(char* restrict str)
+{
+  BITCODE_TU wstr;
+  int i = 0;
+  int len = strlen(str);
+  unsigned char c;
+
+  wstr = malloc(2*(len+1));
+  while ((c = *str++)) {
+    if (c < 128) {
+      wstr[i++] = c;
+    }
+    else if ((c & 0xe0) == 0xc0) {
+      /* ignore invalid utf8 for now */
+      wstr[i++] = ((c & 0x1f) << 6) | (str[1] & 0x3f);
+      str++;
+    }
+    else if ((c & 0xf0) == 0xe0) {
+      /* ignore invalid utf8 for now */
+      /*
+      if (str[1] < 0x80 || str[1] > 0xBF ||
+          str[2] < 0x80 || str[2] > 0xBF) {
+        LOG_ERROR("utf-8: BAD_CONTINUATION_BYTE %s", str);
+      }
+      if (c == 0xe0 && str[1] < 0xa0) {
+        LOG_ERROR("utf-8: NON_SHORTEST %s", str);
+      } */
+      wstr[i++] = ((c & 0x0f) << 12) |
+                  ((str[1] & 0x3f) << 6) |
+                  (str[2] & 0x3f);
+      str++;
+      str++;
+    }
+    /* everything above 0xf0 exceeds ucs-2, 4-6 byte seqs */
+  }
+  wstr[i] = '\0';
+  return wstr;
 }
 
 /** Read 1 bitlong according to normal order
  */
-long unsigned int
+BITCODE_RL
 bit_read_L(Bit_Chain * dat)
 {
-  unsigned char btk[4];
-
-  btk[3] = bit_read_RC(dat);
-  btk[2] = bit_read_RC(dat);
-  btk[1] = bit_read_RC(dat);
-  btk[0] = bit_read_RC(dat);
-
-  return (*((long unsigned int *) btk));
+  return bit_read_RL_LE(dat);
 }
 
 /** Write 1 bitlong according to normal order
  */
 void
-bit_write_L(Bit_Chain * dat, long unsigned int value)
+bit_write_L(Bit_Chain * dat, BITCODE_RL value)
 {
-  unsigned char *btk;
-
-  btk = (unsigned char *) value;
-  bit_write_RC(dat, btk[3]);
-  bit_write_RC(dat, btk[2]);
-  bit_write_RC(dat, btk[1]);
-  bit_write_RC(dat, btk[0]);
+  bit_write_RL_LE(dat, value);
+  return;
 }
 
 /** Read 2 time BL bitlong (compacted data).

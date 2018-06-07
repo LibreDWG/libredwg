@@ -1,5 +1,2955 @@
-Generating full history
-----------
+Full history from the git log
+-----------------------------
+2018-05-27  Reini Urban  <rurban@cpan.org>
+
+	* src/out_dxf.c:
+	dxf: add VALUE_BINARY for xdata and THUMBNAILIMAGE
+	split into mult. lines of max size 127 (as %02X hex)
+
+        * include/dwg.h, src/dec_macros.h:
+	logging: shorten points
+	log most 2d/3d points as %g (no ending zeros)
+	and in parens as in AutoLISP.
+
+        * src/dec_macros.h:
+	decode: trace handle absolute as hex
+	in DXF they are only used as hex.
+	easier verification
+
+        * src/out_dxf.c:
+	dxf: 100 groups only with r2000+
+
+2018-05-27  Reini Urban  <rurban@cpan.org>
+
+	* src/out_dxf.c:
+        dxf: more minimal cleanup, and several fixes
+	avoid duplicate entity 0 RECORDS,
+	fix FIELD_VECTOR: LWPLINE bulges,
+	avoid 330 handles and 100 names with minimal.
+
+	but we still get a eNullHandle assertion on ACAD import.
+
+2018-05-27  Reini Urban  <rurban@cpan.org>
+
+	* programs/dwg2dxf.c:
+	dwg2dxf: fix -m --minimal arg processing
+	on another note: acad will crash with our -m dxf file so far :(
+	we need to minimize it a bit more.
+
+        * src/out_dxf.c:
+	dxf: skip empty TABLE_CONTROL null_handles
+
+2018-05-27  Reini Urban  <rurban@cpan.org>
+
+	* src/out_dxf.c: dxf: fix duplicate 5 handles
+	we emit the owner 5 handle already with DWG_OBJECT for all objects,
+	skip it for COMMON_TABLE_CONTROL_FLAGS and COMMON_TABLE_FLAGS.
+
+	acad import still fails at table APPID
+
+2018-05-27  Reini Urban  <rurban@cpan.org>
+
+        * src/decode.c, src/dwg.spec, src/out_dxf.c:
+	dxf: add dxf_write_xdata for XRECORD
+
+2018-05-26  Reini Urban  <rurban@cpan.org>
+
+        * src/dwg.spec, src/in_dxf.c, src/out_dxf.c,
+        src/spec.h:
+	dxf more DICTIONARY and XRECORD fields
+	but the 102 names for XRECORD not yet.
+
+2018-05-26  Reini Urban  <rurban@cpan.org>
+
+        * src/out_dxf.c:
+	dxf: add DbSaveVer if --as-rNNN
+	when a VPORT table was saved in a newer version,
+	dxf-out this version as DbSaveVer,1000.
+
+	This is the only table with DbSaveVer. Some objects do have a
+	AcDbSavedByObjectVersion tag, for the class version.
+
+2018-05-26  Reini Urban  <rurban@cpan.org>
+
+        * include/dwg.h, src/dec_macros.h, src/decode.c, src/dwg.spec
+        src/encode.c, src/free.c, src/out_dxf.c, src/out_json.c,
+        src/print.c:
+	dxf: rename VIEWMODE, fix table num_entries
+	VIEWMODE is a systemvariable, renamed from view_mode in VPORT and VIEW.
+	combine UCSFOLLOW with it (for encode and dxf).
+	via DXF the num_entries dont count the control entities.
+	initialize and DXF the VPORT_CONTROL->flag
+
+        * .appveyor.yml:
+	appveyor: decrease disk usage
+	delete the deployed zips. I hope this decreases the quota
+	which is 80GB per user.
+
+        * src/dwg.spec:
+	spec: simplify encode_3dsolid decl
+	make it static so we can avoid the decl.
+	log the error that encode_3dsolid is nyi (not yet implemented)
+
+2018-05-26  Reini Urban  <rurban@cpan.org>
+
+        * include/dwg_api.h, src/dwg_api.c,
+        test/testcases/3dsolid.c, test/testcases/body.c,
+        test/testcases/region.c, test/unit-testing/3dsolid.c,
+        test/unit-testing/body.c, test/unit-testing/region.c:
+	api: rename dwg_ent_<ACIS>_get_{wire,silhouette}
+	to get_wires, get_silhouettes.
+	It returns the array of all, not just one.
+
+2018-05-26  Reini Urban  <rurban@cpan.org>
+
+        * include/dwg_api.h, src/dwg_api.c:
+	api: remove array num setters
+	there exist various api functions to change the number of some elements
+	without changing the associated array itself, e.g.
+	dwg_ent_polyline_mesh_set_num_n_verts without setting the n_verts array.
+	all the set_num_ api functions need to go.
+	this is unsafe.
+
+	set_num_owned, set_numcols, set_numrows, set_num_lines, ...
+	See [GH #9]
+
+	not yet added add_array (i.e. push) and delete_array(at_index) apis yet.
+
+2018-05-26  Reini Urban  <rurban@cpan.org>
+
+        * include/dwg.h, include/dwg_api.h, src/dec_macros.h,
+        src/decode.c, src/decode_r2007.c, src/dwg.c, src/dwg.spec, src/dwg_api.c,
+        src/encode.c, src/free.c, src/in_dxf.c, src/in_dxfb.c, src/out_dxf.c,
+        src/out_dxfb.c, src/out_json.c, src/print.c, test/testcases/insert.c,
+        test/testcases/minsert.c, test/testcases/polyline_3d.c,
+        test/testcases/polyline_mesh.c, test/testcases/polyline_pface.c,
+        test/unit-testing/insert.c, test/unit-testing/minsert.c,
+        test/unit-testing/polyline_3d.c, test/unit-testing/polyline_mesh.c:
+	api: rename *_count fields to num*,
+	owned_obj_count + owned_object_count => num_owned,
+	insert_count => num_inserts,
+	instance_count => num_instances,
+	frozen_layer_count => num_frozen_layers,
+	FIELD_INSERT_COUNT => FIELD_NUM_INSERTS,
+	object_count => num_objects: dwg_get_num_objects already existed in dwg.h,
+	                             remove duplicate from dwg_api.h,
+	entity_count => num_entities: dwg_get_num_entities already existed in dwg.h,
+		 		      remove duplicate from dwg_api.h,
+	m_vert_count => num_m_verts,
+	n_vert_count => num_n_verts,
+	attr_def_count => num_attr_defs,
+
+	Closes [GH #8]
+
+2018-05-26  Reini Urban  <rurban@cpan.org>
+
+	api: rename VPORT_ENT to VPORT_ENTITY
+	for consistency. we dont use the ENT abbrevation in no
+	other object, but we do use _ENTITY already
+
+	dxf: oops
+	delete a .bak test-data file
+
+	dxf: fix VPORT aspect_ratio 41
+	The real aspect_ratio needs to be divided by the viewsize,
+	since r13 at least. <=r12 stores the real aspect_ratio already.
+
+	dwg2dxf: fix printing as version
+	to stdout not stderr
+
+	dxf: use more dxf_write_handle conversions
+	also for the name in COMMON_TABLE_FLAGS, as those names
+	also need conversions.
+	also add *Active
+
+	dxf: $MEASUREMENT is r14 already
+	simplify the logic also
+
+	dxf: $UCSBASE is r2000+ only
+
+	dxf: write even empty names/strings
+	don't skip the 1 group of e.g. DIMBLK1
+	convert unicode names to utf8
+	convert reversed standard names if read from newer and write as older.
+
+2018-05-26  Reini Urban  <rurban@cpan.org>
+
+	dxf: abstract HANDLE_NAME to dxf_write_handle
+	since r2000+ some Standard handle names are renamed:
+	STANDARD to Standard, BYLAYER to ByLayer, BYBLOCK to ByBlock.
+
+	also check that the table name is really an object, not an entity.
+
+2018-05-26  Reini Urban  <rurban@cpan.org>
+
+	dxf: add examples in more versions
+	sample_2000.dwg in r14-2018 DXF formats
+	example_2000.dwg in 2018 dwg and dxf formats
+
+	alive.test: add filt_dxf.pl
+	to normalize POSIX sprintf("%-16.14f") floating point numbers to
+	the format used with MSVC with native AutoCAD, so that we can
+	easily compare the output of oursvs them.
+
+2018-05-25  Reini Urban  <rurban@cpan.org>
+
+	restrict: add C99 restrict pointer decls
+	just a few pointers might be the same: dat, hdl_dat and str_dat.
+
+	2007: fix unaligned access on copy_n helpers
+	1-3 is reverse, 4-8 is straight. 16 is reverse 8-wise.
+	just use memcpy
+
+2018-05-25  Reini Urban  <rurban@cpan.org>
+
+	dxf: special-case VPORT field order
+	for DXF output.
+
+	fixed some wrong VPORT fields: sun_handle -> shade_plot_handle 333 (vport owns these)
+	view_twist_angle -> view_twist for consistency
+	aspect_ratio 41 is still wrong
+	view_twist 50 -> 51
+	back_clip 33 -> 44
+
+	also fix the common table format a bit
+	allow DXF groups in the spec
+
+2018-05-25  Reini Urban  <rurban@cpan.org>
+
+	dxf: support Standard in HANDLE_NAME
+	the DWG Standard table entry_name is called STANDARD,
+	but in the DXF it is translated to Standard.
+
+	Also simplify HANDLE_NAME to avoid the tmp buf,
+	names are always strings.
+
+2018-05-25  Reini Urban  <rurban@cpan.org>
+
+	man: fix dependency problem and POSIX/Windows compat
+	The .1 files depend on the c and the binary.
+	remove the $(*F) gnu make-ism.
+	enable windows compat to generate the man pages.
+	improve the man target: no submake's, enable proper deps.
+
+	Fixes spurious help2man: can't get `--help' info from ./dwgwrite errors
+	when the binary was not generated yet in parallel builds.
+	Closes GH #4
+
+2018-05-25  Reini Urban  <rurban@cpan.org>
+
+	appveyor.yml: skip_tags: true
+	we tag only already tested and deployed commits.
+	avoid double smoking on our slowest smoker.
+
+	on the other hand travis needs the tag to deploy the generated
+	dist's to this tag.
+
+2018-05-24  Reini Urban  <rurban@cpan.org>
+
+	fix bit_utf8_to_TU, 3 byte case. detected by gcc-8
+	praise the good compiler.
+	warning: bitwise comparison always evaluates to false [-Wtautological-compare]
+
+	encode: return early for 2004
+	to avoid useless hangs
+
+2018-05-24  Reini Urban  <rurban@cpan.org>
+
+	stability: return 0 on bit overflows
+	when a number is wrong we prev. returned -1,
+	leading to abnormal high numbers, sizes.
+	rather zero it to be able to continue on some unknown data.
+
+	avoid bit_calc_CRC overflows
+
+2018-05-24  Reini Urban  <rurban@cpan.org>
+
+	dwg_decode_handleref_with_code: fix null pointer dereference
+
+	api: fix null pointer dereference
+
+	add build-aux/dejagnu.h.patch
+	this header throws too many warnings with newer clang's.
+	for now only suppress clang warnings, gcc not yet.
+	(only tested until gcc-6 on macports. no idea about gcc-8)
+
+	rename VP_ENT_{HDR,CONTROL}
+	to more natural names. AutoCAD used ViewportEntity (r11-r2000).
+	Analog to block use VPORT_ENT_CONTROL and VPORT_ENT_HEADER.
+
+	rename {ucs,block,view}_control_handle to *_control
+	to harmonize all the control handles, which have no suffix.
+
+2018-05-24  Reini Urban  <rurban@cpan.org>
+
+	rename SHAPEFILE to STYLE
+	see [GH #7]
+	nobody else names it SHAPEFILE, only the ODA.
+
+	dxf names it STYLE and $TEXTSTYLE,
+	AutoCAD names it AcDbTextStyleTable,
+	libdxfrw names it STYLE and TEXTSTYLE
+
+2018-05-24  Reini Urban  <rurban@cpan.org>
+
+	geojson: use the new APIs
+	for polyline_2d, polyline_3d and add point.
+
+	api: add polyline_3d points api
+	and remove the badly named owned_obj_count field api
+
+	api: const most getters
+
+2018-05-24  Reini Urban  <rurban@cpan.org>
+
+	dxf: more table control fields
+	each table has at first the control object,
+	and then the COMMON_TABLE_FLAGS(owner, acdbname) before
+	the other fields, not after.
+	special-case this.
+
+	add a new objid to each control object, as link back to the Dwg_Object
+	(e.g. for the owner handle).
+
+2018-05-24  Reini Urban  <rurban@cpan.org>
+
+	dxf: add PUCSORTHOREF, fix HANDSEED
+
+	dwg2ps: use the new pline points API
+
+	cbmc: experimental CBMC rule for bits_test.c
+	To create coverage testcases.  Does not work so far, and needs an insane
+	amount of time.  Should be limited to single functions only.
+
+2018-05-24  Reini Urban  <rurban@cpan.org>
+
+	api: rename pline numpoints, add get_points API
+	numpoints is different across versions.
+
+	add a get_points API for various pline types,
+	this is also different across versions.
+
+2018-05-24  Reini Urban  <rurban@cpan.org>
+
+	json: new geojson output formatter
+	only LINE,LWPLINE,POLYLINE_2D,INSERT (unexploded) entities so far.
+
+	TODO: facetting of curves, ocs/ucs transforms, use the new pline points api.
+
+	TODO: NOCOMMA and \n not with stdout. stdout is line-buffered
+	so NOCOMMA cannot backup past the previous \n to delete the comma.
+	We really have to add the comma before, not after, and special case the first
+	field, not the last to omit the comma.
+
+2018-05-23  Reini Urban  <rurban@cpan.org>
+
+	dwg2ps: fix POLYLINE_2D
+	wrong loop index
+
+2018-05-22  Reini Urban  <rurban@cpan.org>
+
+	dxf: remove wrong test dxfs
+	we compare now our own created dxfs against {ex,s}ample_2000.dxf
+	unfortunately they don't match the versions. create proper ones later,
+	the one remaining should be enough for now.
+
+	travis: simplify distcheck
+	distcheck already creates the tardists.
+	add sha256sum (in ubuntu coreutils), we upload them to github releases.
+
+	travis: deploy releases on tags
+
+2018-05-22  Reini Urban  <rurban@cpan.org>
+
+	appveyor: re-try mingw install
+	install-binPROGRAMS is not triggered, do it manually.
+	also install examples/*.{c,exe}
+
+	move the dll to the root, together with all the programs. on windows
+	they should stay together. the rest is devel stuff.
+
+2018-05-22  Reini Urban  <rurban@cpan.org>
+
+	dwgwrite: improve encoding
+	of empty data. alloc empty sections and section_info.
+	allow empty handles (null_handle).
+	set the default version for dwgwrite to R_2000, support --as-rNNNN
+	add the dwgwrite.1 dxf2dwg.1 man pages
+
+	README: write is good enough for r2000
+	for most DWG's, some not yet.
+
+2018-05-22  Reini Urban  <rurban@cpan.org>
+
+	add API unicode support (for r2007 strings, optional)
+	convert UCS-2 to utf-8 (char*)
+
+	add bit_convert_TU() and bit_utf8_to_TU() converters, bit_convert_TU()
+	was prev. only latin-1, now full utf-8. converters written from scratch,
+	they are trivial. Ken Thompson designed it that way.
+	not rejecting any wrong utf-8 encodings yet.
+
+	add dwg_api_init_version(&dwg) for the version. only needed since r2007,
+	utf-8 is backwards compatible. ucs-2 not.
+
+	call inlined dwg_api_init_version on every API function with an
+	Dwg_Object or Dwg_Data.
+
+2018-05-21  Reini Urban  <rurban@cpan.org>
+
+	add dwglayers
+	Prints all layers in a DWG.
+
+	improve help2man rule, avoid --version warnings.
+
+2018-05-21  Reini Urban  <rurban@cpan.org>
+
+	cmp_dxf.pl: add some basics
+
+	dxf: change float printf format to %-16.14f
+	on windows it is different. %g swallows the ending zeros
+
+	dxf: use DOS EOL \r\n
+
+	HACKING: add fuzzing with afl-fuzz
+	fast enough on linux without our own loop so far.
+
+2018-05-21  Reini Urban  <rurban@cpan.org>
+
+	dwg_read_file: support - for stdin
+	dwgread - now reads from stdin.
+	I needed it for afl-fuzz, but should come handy elsewhere.
+	dwgwrite already supports reading from stdin.
+
+	* dwg.c (dat_read_stream,dat_read_file): helpers added.
+	  (dwg_read_file): use it.
+
+2018-05-21  Reini Urban  <rurban@cpan.org>
+
+	TODO: update practical TODOs
+	smoke.sh: delete duplicate python3.6m.
+
+2018-05-20  Reini Urban  <rurban@cpan.org>
+
+	dxf_format: add new DXF codes upto r2014
+
+	bits_test: improve flapping CRC tests
+	realloc creates uninitialized memory
+
+	smoke: whitespace only
+
+	bits_test: stabilize
+	avoid uninitialized memory, leading
+	to problems with -O2
+
+2018-05-20  Reini Urban  <rurban@cpan.org>
+
+	dxf: encode linetype_flags BYLAYER/BYBLOCK/CONTINUOUS
+	enable MLINESTYLE which has a similar lines[rcount].ltindex
+	flag.
+
+	add a BS 32767 bits test. This was not the problem.
+
+2018-05-20  Reini Urban  <rurban@cpan.org>
+
+	bits_test: add r2004 CMC test
+	and fix a stack-overflow, detected by asan
+
+	smoke: add python paths on darwin. no system libxml2, only via macports
+
+2018-05-20  Reini Urban  <rurban@cpan.org>
+
+	man: fix --version output for dwgrewrite
+	to help help2man
+	help2man: can't get `--version' info from ./dwgrewrite
+	Try `--no-discard-stderr' if option outputs to stderr
+
+2018-05-19  Reini Urban  <rurban@cpan.org>
+
+	encode: write empty null_handle
+	and simplify common_entity_handle_data.spec: use spec.h
+	common_entity_handle_data.spec: set isbylayerlt
+	dwg_encode_handleref: resolve handle codes
+
+	dwgrewrite: set --verbose dwg.opts
+	and print the objref object fields again only with -v4 (HANDLE) or higher.
+
+	decode: skip TRACE with FIELD_TF, FIELD_TFF
+	only log the (overlong) value at the INSANE level
+
+	encode: fix object size calculation
+	no Wrong object size: warning anymore
+
+	encode: fix object handle
+	wrote the wrong handle for each object
+
+	free: free class->dxfname_u also
+
+	fix bits, enable more testcases/bits_test's
+	fix bit_write_DD case BB=3.
+	fix bit_read_L, bit_write_L (unused).
+	add _H testcases, and many more.
+
+2018-05-18  Reini Urban  <rurban@cpan.org>
+
+	encode: fixed for r2000
+	write the object CRC (same seed).
+	dwgrewrite works now for sample_2000.dwg
+
+2018-05-18  Reini Urban  <rurban@cpan.org>
+
+	encode: fix bitsize
+	no duplicate bitsize fields on Dwg_Object_Object and Dwg_Object, only one.
+
+	patch encode bitsize after the object/entity was written.
+	we cannot assume that the encode user knows the bitsize, hence write the
+	actual bitsize. use a temp. obj->size*8 value. size change would be at 0x7fff.
+	so far we ignore that.
+
+2018-05-17  Reini Urban  <rurban@cpan.org>
+
+	xmlsuite: make it python3 compatible
+	tested ok with python 2.7 and 3.6.
+
+	smoke with --enable-python=python3.6m
+
+	fix m4/ax_python_devel.m4 for macports
+	which uses the --enable-framework=/opt/local/Library/Frameworks
+	prefix, which is not honored in the -L prefixes.
+	add a couple of echos
+
+2018-05-16  Reini Urban  <rurban@cpan.org>
+
+	man: make help2man optional
+	we ship the .1 files, and help2man is not on all systems.
+	only needed to regen the man files.
+	e.g. cygwin does not have it. add it there.
+
+	dxf: add BLOCKS
+	now only a few minor DXF issues are remaining
+
+	dxf: add ENTITIES and OBJECTS
+
+2018-05-15  Reini Urban  <rurban@cpan.org>
+
+	DEBUG_HERE: silence wrong uninit warning
+
+	free: add dwg_obj_is_control function
+	the tables have copies in dwg
+
+2018-05-15  Reini Urban  <rurban@cpan.org>
+
+	dwg, out_dxf: fix TABLES
+	as expected we have to copy the CONTROL object fields
+	to avoid corruption by realloc.
+
+	also rename SHAPEFILE handles field to styles.
+
+2018-05-15  Reini Urban  <rurban@cpan.org>
+
+	dwg, out_dxf: add TABLES
+	and add the table control links to the dwg struct.
+	note that these links might be corrupted if objects are realloced.
+	if so then we need to copy struct fields.
+
+	remove dwg->num_layers and harmonize with the other tables.
+
+2018-05-15  Reini Urban  <rurban@cpan.org>
+
+	dwg2dxf --help: add r2007, r2010, r2013
+	the dxf writer can do that already, i.e. will do that
+
+	add dist_man1_MANS
+	we distribute the man1 pages. but no man3, just the info.
+
+	dsymutil: add noinst_PROGRAMS also
+
+	README: Update
+	dwg2ps is not so good to be advertised in the README
+
+	dwg2ps: fix compiler warning
+	-Wdeclaration-after-statement
+
+	configure: allow CFLAGS overrides
+	e.g. for pslib CFLAGS=-I/usr/local/include LDFLAGS=-L/usr/local/lib
+
+2018-05-15  Reini Urban  <rurban@cpan.org>
+
+	scan-build: don't wait
+	scan-build -V calls scan-view which waits until we are finished
+	looking at it in the browser.
+	put this into the background, we need to kill scan-view
+	later (a python process).
+
+	without make just waits here, but we don't want to test this via smoke.sh
+
+2018-05-15  Reini Urban  <rurban@cpan.org>
+
+	dwgwrite: improve reader format detection
+	which reader: either manual -I --format argument, or by the extension of the
+	input file.
+
+	fix build-aux/smoke.sh
+	syntax error with CC, darwin only
+
+2018-05-14  Reini Urban  <rurban@cpan.org>
+
+	dwg_resolve_handle* not public yet
+	move out of dwg.h, it doesn't look stable enough.
+	but add a new dwg_ref_get_object_relative
+	to find a relative object from an handle and base object
+
+	dwg2ps: add arc and circle
+
+2018-05-14  Reini Urban  <rurban@cpan.org>
+
+	extend dwg_ref_get_object
+	to actually search for the object via absolute_ref,
+	not just the cached obj.
+	use it for polyline vertices in dwg2ps.
+
+	move the handle resolvers from private decode to the public dwg.
+
+2018-05-14  Reini Urban  <rurban@cpan.org>
+
+	dwgwrite: use dxf_read_file
+	which decides upon ascii or binary,
+	or dwg_read_dxfb directly with the .dxfb extension
+
+2018-05-14  Reini Urban  <rurban@cpan.org>
+
+	move dxf reading from dxf2dwg to in_dxf
+	from the sample into the library. dwgwrite will need that also,
+	and users also.
+	note that the reading implementation is not yet written.
+	it's mere copy of the writers (ascii and binary).
+	the reader needs to account for unsorted order of items.
+
+	and add a few const's
+
+2018-05-13  Reini Urban  <rurban@cpan.org>
+
+	improve gcov from 1% to 35%
+	the true library coverage is about 75%, but we are getting closer.
+
+	alive.test: dash fixes, empty $problems
+	115: [: =: unexpected operator
+	and more.
+
+	windows: skip dwgrewrite tests
+	on mingw. killall does not work there
+
+	configure: add --disable-python
+	and work on --enable-python=python3.6
+
+	smoke: more compilers
+
+2018-05-12  Reini Urban  <rurban@cpan.org>
+
+	HACKING: update deps, tips, dates
+
+	dwg_api.h: no double decl of dwg_object_ref
+	only clang-4 -std=c99 complained
+
+	POSIX 2008 for strdup, and add M_PI
+	several stricter compilers dont have strdup nor M_PI.
+	define _POSIX_C_SOURCE to 200809L
+	This fixes e.g. clang-4 -std=c99
+
+	add smoke.sh for darwin/linux
+	and probe for basename, which fails on my arm cross.
+	use POSIX libgen.h before string.h with the GNU extension of basename.
+	without basename fall back to fullpath for the outfile.
+
+2018-05-11  Reini Urban  <rurban@cpan.org>
+
+	various -Wall fixes
+	detected by the arm cross-compiler, which is a bit stricter
+
+	dwg2svg2: fix a few warnings
+	from clang -Weverything
+
+	json: add NOCOMMA, object fields
+	looks pretty good now, almost correct.
+	NOCOMMA erases the last ,\n of an array/hash
+
+2018-05-11  Reini Urban  <rurban@cpan.org>
+
+	configure: change setenv warning
+	tracing works now even without setenv(). Just --enable-trace
+	will not work as expected. -v1 does though.
+
+	Also note that we currently need a gmake on BSD's
+
+2018-05-11  Reini Urban  <rurban@cpan.org>
+
+	appveyor: re-enable --enable-write
+	we now kill hanging dwgrewrite processes
+
+	dxf: fix windows cast warning
+
+	dxf: unify into header_variables_dxf.spec
+	now just some more sections are missing.
+	also add some rudimentary dxf content testing.
+	add AutoCAD native and libdxfrw dxf's to compare against.
+	(no theiga yet)
+
+	dxf: harmonize ascii/binary types more
+	ans simplify spec.h. add a special DXF (out) block
+
+	travis: add suggested texlive
+	suggested by verbose distcheck.
+	distcheck passes now on travis, so en-arm it.
+
+	travis: verbose DISTCHECK
+	now it fails with make dvi
+
+	travis: add swig
+
+	work over all authors and copyright years
+
+2018-05-10  Reini Urban  <rurban@cpan.org>
+
+	encode: harmonize handle logging
+
+	appveyor: clean tag release names
+	dont double add the prefix and suffix.
+	stay with the simple tags, ie. the build number.
+	the zip has the proper name.
+
+	appveyor: disable write
+	it started segfaulting, since we improved it. enable it, when
+	it starts becoming more stable.
+
+2018-05-10  Reini Urban  <rurban@cpan.org>
+
+	encode: add RESET_VER
+	cur_ver should be reset after after SINCE/... version check block,
+	otherwise e.g. handles are not printed.
+
+	We are stuck with this syntax without the block in the macro, so try
+	to add these RESET_VER wherever it is missing.
+
+2018-05-10  Reini Urban  <rurban@cpan.org>
+
+	encode: fix HANDLE
+	reset wrong cur_ver to allow printing handles
+
+	encode: harmonize HANDLE tracing
+	and fix 2 minor issues: reactors have dxf code -5.
+	print the type as decode
+
+	dxf: more dxf codes, add dxf_codepage()
+	add dxf codes for FIELD and GEODATA.
+	support codepage 29: ANSI_1251
+
+	dxfb: more types and harmonize
+	the goal should be a header_vars_dxfout.spec, with typed fields, like HEADER_RC.
+	but maybe it can even serve for dxfin also, looping over all available names.
+
+2018-05-09  Reini Urban  <rurban@cpan.org>
+
+	encode: fix objects
+	advance to the next object, don't reset to start start address.
+	previously objects were overwriting each other.
+	calculate size, and adjust if wrong. users cannot be expected to
+	write both sizes, byte and bits correctly.
+
+	Now only bit_write_handle is broken, and several object sizes are off.
+
+2018-05-09  Reini Urban  <rurban@cpan.org>
+
+	encode: simplify bit_write_MS
+	this is just a very simple RLE encoded int, with the highest bit
+	announcing a further short. in this case 1 or 2 shorts.
+
+2018-05-08  Reini Urban  <rurban@cpan.org>
+
+	encode: ensure chain size
+	when writing objects
+
+	dxf: more header vars
+	fix colors,
+	fix MLINESTYLE handle name to entry_name for consistency,
+	rename the HEADER_VAR and HANDLE_VALUE macros.
+
+	Fix decode WE_CAN only error message
+	we can only decode version R13-R2007 (code: AC1012-AC1021) DWG files.
+	was -R2004
+
+	decode: improve version file-magic check
+	error with Invalid DWG, magic: %s
+	or Invalid or unimplemented DWG version code %s
+
+	dxf: add common_entity_handle_data
+	and few more minor improvements. only output
+	dxf codes != 0. still a lot todo.
+
+	json: indent arrays and hashes
+	add abstractions, also useful later for YAML.
+
+	dxf: add and fix more 2007+ vars
+	and fix some 2004+ dxf codes.
+	add SHADOWPLANELOCATION and REALWORLDSCALE unknowns.
+
+2018-05-08  Reini Urban  <rurban@cpan.org>
+
+	dxf: add REQUIREDVERSIONS as 160
+	this is a DXF header value.
+
+	also convert ucs-2 CLASS strings down to ascii for DXF.
+	TODO: decode header variable LASTSAVEDBY 2010+
+
+2018-05-08  Reini Urban  <rurban@cpan.org>
+
+	alive.test: simplify dwgrewrite handling
+	This does not need an extra argument anymore.
+
+	rename fmt_ to out_
+	corresponding to the needed in_ readers:
+	json, dxf, dxfb
+
+2018-05-07  Reini Urban  <rurban@cpan.org>
+
+	add dwgwrite skeleton
+	corresponding to dwgread. need format readers, not writers.
+	dwg_read_json(), dwg_read_dxf(), dwg_read_dxfb()
+
+	doc: fix Decoding API example
+
+	add manual, gendocs.sh
+	from gnulib (GPLv3).
+	just remove a wrong htmlarg setting.
+
+	dxf: DWGCODEPAGE is since r10
+
+	probe for strcasecmp header
+	use AX_INCLUDE_STRCASECMP from autoconf-archive.
+
+	dwg2dxf: use fmt_dxf{,b}
+
+2018-05-07  Reini Urban  <rurban@cpan.org>
+
+	dwgread: add the 3 output formats
+	and add -o outfile support and regen the man pages.
+
+	If this turns out nice, add the other output formats also:
+	YAML, XML, PS, SVG, ...
+
+2018-05-07  Reini Urban  <rurban@cpan.org>
+
+	add fmt_dxf and fmt_dxfb also
+
+2018-05-07  Reini Urban  <rurban@cpan.org>
+
+	json: start with -O fmt JSON WIP
+	various formatter output modules: -O json,yaml,xml,dxf for dwgread.
+	maybe even ps and svg. so we will need only a dwgread and dwgwrite,
+	not any other helpers.
+
+	add fmt_json.
+	for now they all print to stdout as stream,
+	but dwg2dxf might want to print to a fh, because this construct outfile from infile.
+	The --format arg can also serve for dwggrep as output format for each found entity.
+
+2018-05-04  Reini Urban  <rurban@cpan.org>
+
+	trace: init 2007 loglevel for 2010+
+	otherwise some 2007 helper functions, like section_string_stream
+	and obj_string_stream do no logging.
+	loglevel is module specific, and those helpers don't have dwg as arg.
+
+	TODO: update TODO
+
+	testcases: fix more wrong format types
+
+	ubsan: fix signed integer overflow
+	for the hash calc use an unsigned rseed.
+
+	eed: fix asan write error
+	when adding the ucs-2 string delimiter it will write 2 byte, past
+	the allocated bufsize. hence alloc size+2 to ensure delimited unicode strings.
+	and then we can skip writing the last 0, as we already used calloc with size+2.
+
+	trace: enable loglevel via -v
+	in encode, decode and free entry points
+
+	examples: add -v[0-9] support
+
+	work over copyright headers, add one AUTHOR
+	fix the years, add missing authors.
+
+	trace: independent loglevel per dwg.opts
+	pass through the loglevel/--verbosity without --enable-trace, resp.
+	without setenv()
+
+2018-05-02  Reini Urban  <rurban@cpan.org>
+
+	read_2004_section_classes: wrong max_num type
+
+	add build-aux/appveyor-deploy.bat
+	deploy either a tagged commit or nightly branch, not both
+
+	appveyor: add nightly deployments
+	for master branch changes.
+	see https://github.com/rurban/libredwg/releases
+
+	windows: add .appveyor.yml deploy
+	as zip
+
+	windows: harmonize wchar_t logging
+	improve native wchar_t as UCS-2 support (windows),
+	printing it natively
+
+	Makefile.am: remove check-wine
+	make check can handle wine already, check-wine was broken for a while
+
+	programs: fix wine typo
+	the additional ) caused run 'dwgrewrite.exe)' example_2000
+
+	less logging: adjust levels a bit
+	log less important info with higher levels.
+	add LOG_TF for fixed text for arbitrary levels, use if for binary
+	fixed blobs with INSANE, not TRACE.
+	log @ positions with level 4 HANDLE.
+
+2018-05-02  Reini Urban  <rurban@cpan.org>
+
+	check-dwg*: use -v3, not -v4
+	avoid logging large binary blobs, esp. with unsupported versions.
+	some example logs are >2GB
+
+	no double .PHONY targets
+
+2018-05-02  Reini Urban  <rurban@cpan.org>
+
+	check-dwg*: use -v3, not -v4
+	avoid logging large binary blobs, esp. with unsupported versions.
+	some example logs are >2GB
+
+2018-05-01  Reini Urban  <rurban@cpan.org>
+
+	2007: enable 2007 decoding, now supported.
+	enable tests, disarm the decode_R2007 IS_RELEASE check,
+	remove the warning, fix the docs.
+
+2018-05-01  Reini Urban  <rurban@cpan.org>
+
+	2010: prepare 2010 classes, fix 2007
+	on top of the 2004 section format. copy over the logic from 2017.
+	harmonizes classes, and fixes reading the last class (max_num) for 2007+.
+
+	This fixed reading most 2007 DWGs
+
+2018-05-01  Reini Urban  <rurban@cpan.org>
+
+	2010: prepare decode_header_variables
+	add bitsize_hi, calc. bitsize.
+	seperate the 3 streams for 2010.
+	can parse now until the individual object bitsizes. (still 0)
+
+	2007: change decode warning message
+	handle and string streams are now solved. start working on the
+	remaining bugs
+
+2018-04-30  Reini Urban  <rurban@cpan.org>
+
+	2007: fix xrefindex_plus1 ODA doc bug
+	xrefdep is before xrefindex_plus1 since r2007+, not r2010+
+
+	rename table flag bit 7 _64_flag to xrefref
+	referenced external reference, block code 70, bit 7 (64)
+
+2018-04-29  Reini Urban  <rurban@cpan.org>
+
+	2007: better hdlpos calculation
+	no -42 offset. start before reading the type after the size.
+	then the handle position naturally aligns.
+	add a Dwg_Object address field.
+	The r2010 bitsize derives from the obj->size.
+
+2018-04-28  Reini Urban  <rurban@cpan.org>
+
+	2007: adjust hdlpos by -42
+	found out error experimentally.
+	Most r2007 objects can now be read, just a few remaining errors.
+
+	unify START_HANDLE_STREAM
+	esp. it is r2007+ only
+
+	dwg.spec: cosmetics LOG_ERROR
+	for invalid DICTIONARY.numitems
+
+	2007: add FIELD_VECTOR_T vcount index
+	as <r2007. see DICTIONARY
+
+	2007: trust hdlpos
+	and distrust obj->has_strings. hdlpos should be always right.
+	some objects seem to ignore has_strings, like ENDBLK
+
+2018-04-28  Reini Urban  <rurban@cpan.org>
+
+	2007: fix obj string stream calc
+	fix for negative advance.
+	use one more byte offset to the back. data_size is now correct.
+	check bit_advance_position also for underflow < 0
+
+	TODO: with no strings dont try to read strings, set them to NULL.
+	(MLINESTYLE)
+
+2018-04-28  Reini Urban  <rurban@cpan.org>
+
+	2007: LAYER set flag bits
+	2007+ reads only a RS, set the bits for older releases.
+	also add some string stream debugging code
+
+	2010: use LAYER handles r2010+
+
+	2007: use COMMON_TABLE_FLAGS entry_name
+	FIELD_T, not FIELD_TV
+
+2018-04-27  Reini Urban  <rurban@cpan.org>
+
+	2007: undo START_HANDLE_STREAM has_strings offset
+
+2018-04-27  Reini Urban  <rurban@cpan.org>
+
+	2007: fix the hdlpos offset
+	and ignore the still wrong has_string bit.
+	Now the handle_stream and string_stream offsets are correct, just the string stream
+	length and bit are wrong.
+	Thus ignore the has_string bit for now in START_HANDLE_STREAM
+
+	Fixes many 2007 objects.
+
+2018-04-27  Reini Urban  <rurban@cpan.org>
+
+	2007: add FIELD_VECTOR_T
+	for 2007 array of TU texts. Fixes DICTIONARY with r2007.
+
+	read/write: allow hard- and symlinks
+	not just regular files. just on windows with mingw S_ISLNK is undefined.
+	and some minor improvements on write: binary, rename vars.
+
+	programs: crash on notexisting file
+	when returning early from dwg_read_file (e.g. not found, not readable) we
+	still call dwg_free, which needs the pointers to be NULLed.
+
+	2007: rename some VIEWPORT fields
+	def_lighting_type -> default_lighting_type
+	use_def_lights -> use_default_lights
+	ambient_light_color -> ambient_color
+
+	2007: complete VIEW and VPORT spec fields
+	rename Dwg_Color byte to flag
+
+	HACKING: link to CONTRIBUTING and USING_FOREIGN_CODE
+
+	USING_FOREIGN_CODE: add incompatible
+	licenses also. From https://www.gnu.org/licenses/license-list.en.html
+
+	add USING_FOREIGN_CODE
+	answering the question which code can be used in
+	LibreDWG, e.g. a reed-solomon library
+
+	update docs
+
+2018-04-27  Reini Urban  <rurban@cpan.org>
+
+	add manpages and option handling
+	option handling is minimal, position sensitive.
+	not using getopt_long() yet.
+
+	used help2man to create the initial manpages. (in sync)
+
+	rename dwg_ps program to dwg2ps for consistency
+
+2018-04-27  Reini Urban  <rurban@cpan.org>
+
+	noinst_PROGRAMS: dwg2dxf dxf2dwg
+	these are not yet ready.
+	we are targettting an early alpha release, and these will
+	not be ready for that
+
+	TODO: more TODO
+
+	leak: free the sections chain
+	sections is the root, section just the current element in the linked list.
+	only in the unlikely case of out of memory.
+
+	leak: free the xdata chain
+	and not just the last element, in case of out of memory (very unlikely).
+
+2018-04-26  Reini Urban  <rurban@cpan.org>
+
+	programs: default to LIBREDWG_TRACE 1
+	probe for setenv and use it. this is only failing on mingw.
+	print the error message when failing.
+	Fixes Bugs #31867, #35110, #46175
+
+	leak: set DWG_SUPERTYPE_UNKNOWN
+	to avoid double-free of eed data. this is one big chunk only.
+	free eed.raw only on size, otherwise it's a continuation with data only.
+
+	leak: fix double-free of LAYOUT eed
+
+	leak: free the eed data
+	and COMMON_ENTITY_HANDLE_DATA: all the common handles, reactors.
+
+	analyzer: initialize dwg->header.version
+	Logic error	Result of operation is garbage or undefined
+	programs/dxf2dwg.c	dwg_read_dxf
+
+	analyzer: fix memory leaks
+
+	analyzer: remove dead initialization
+	dwg_encode_common_entity_handle_data does not need dwg (yet).
+
+2018-04-26  Reini Urban  <rurban@cpan.org>
+
+	analyzer: fix clang-analyzer warnings
+	using the recent scan-build target.
+
+	Allocator sizeof operand mismatch (wrong malloc casts)
+	Branch condition evaluates to a garbage value (uninitialized obj_dat)
+	Undefined allocation of 0 bytes (CERT MEM04-C; CWE-131) (for counts=0)
+
+2018-04-26  Reini Urban  <rurban@cpan.org>
+
+	pre-R13: start decoding entities WIP
+	move the common pre-R13 entity fields to Dwg_Object_Entity
+	and add a spec-local _ent for this.
+	add a common decode_entity_preR13() decoder before the
+	entity-specific handlers. 70% done.
+	decode_preR13_entities: add the entity loop.
+	  missing: check DIMENSION opts field for the type.
+	dwg.spec: TODO ATTRIB/ATTDEF,
+	  add VERTEX_2D, POLYLINE_2D
+	  add R11OPTS(n) macro
+
+	silence r11 compilation warnings
+	use proper field casts for r11
+
+2018-04-26  Reini Urban  <rurban@cpan.org>
+
+	policy: add #ifndef IS_RELEASE checks
+	abort on unsupported DWG versions to avoid segv on
+	released packages.
+	logic: if a .git directory is present it is not a release.
+
+	also add a new scan-build target, using clang's static analyzer
+	clang-analyzer.
+
+2018-04-26  Reini Urban  <rurban@cpan.org>
+
+	add CONTRIBUTING, adjust TODO
+	copy CONTRIBUTING from the GCC project and adjust it.  Esp.  important for
+	Legal Prerequisites.  This is an official and important GNU package, with
+	ownership assigned to the FSF, to able to protect us from legal threats.
+
+	adjust TODO, README and README-alpha.
+	Mention that unreleased downloads of the library will crash
+	as it will try to decode unsupported DWG versions. Released
+	downloads will rather abort then.
+
+2018-04-25  Pero Brbora  <pbrbora@stud.unidu.hr>
+
+	unit-testing: Prevent segfault on error
+	Closes Savannah #8628
+
+2018-04-25  Reini Urban  <rurban@cpan.org>
+
+	README: updates
+
+2018-04-24  Reini Urban  <rurban@cpan.org>
+
+	pre-R13: fix STYLE
+	add bigfont_name field
+
+	pre-R13 DIMSTYLE vars
+	just the DIMBLK_T texts are unsure, and one unknown
+	RC var not in DXF: DIMUPT probably
+
+	pre-R13 header vars
+	complete the header vars with DXF counterparts.
+	missing are the handles (i.e. table indices), and texts.
+
+2018-04-23  Reini Urban  <rurban@cpan.org>
+
+	Improve object tracing
+	Print the type even with loglevel 2, but not much more
+
+2018-04-23  Reini Urban  <rurban@cpan.org>
+
+	r11: reset tbl->number on failure
+	when we read a non-object table, reset the index
+	so we don't increment it in the next line
+
+	   dwg->num_objects += tbl->number;
+
+2018-04-23  Reini Urban  <rurban@cpan.org>
+
+	xmlsuite: only process existing DwgTxtFileName
+	protect from skipped dwgs, such as <r13 and >2004
+
+	2007: add klass dxfname_u field
+	and use dxfname as the ASCII variant for comparisons.
+	This fixes reading all the class objects (>500).
+
+	2007: fix obj_string_stream
+	The bitsize calculation starts before reading the bitsize.
+	Thus initialize the string stream before reading the bitsize.
+	The bit is then always 0, as objects start at bit offset 0
+
+	2007: fix EED code 0
+	2007 already uses unicode strings in EED
+
+	2007: add absolute last_offset tracing
+	and outcomment last_handle for each object (was used
+	for object idx plausability)
+
+2018-04-23  Reini Urban  <rurban@cpan.org>
+
+	2007: limit string data size, read entity bitsize
+	reset the string stream to start at the object offset and limited
+	by the object size.
+
+	fix reading the entity bitsize in dwg_decode_entity:
+	R_2000 - R_2004 -> R_2000 - R_2010.
+
+2018-04-20  Reini Urban  <rurban@cpan.org>
+
+	harmonize Num Objects tracing
+	also for r2007
+
+	auxheader.spec: convert 20x unknown_rc RC to FIELD_TFF
+	for more pleasant logging
+
+	LOG_TRACE_TU: harmonize
+	with logging of TV
+
+	dont typos
+
+	start seperating encode version support
+	add a seperate encode_preR13(), but not for the other versions.
+	they are all basically the same, just the sections maps are different.
+
+	dwg_decode(), dwg_encode()
+	harmonize the two main entry points.
+	rename dwg_decode_data() to dwg_decode(),
+	rename dwg_encode_chains() to dwg_encode()
+
+	comment for dwg_encode_chains refactor
+	version specific and rename to dwg_encode_data()
+
+	2010: add BOT type
+	use the 2004 format.
+	bitcoded object type: single or double byte
+
+	rename APPID_CONTROL->num_apps to num_entries
+	for consistency with the other tabel control objects.
+
+	abstract bit_set_position
+	and a new bit_position getter
+
+2018-04-18  Reini Urban  <rurban@cpan.org>
+
+	xmlsuite: skip 2007+ so far
+
+	2007: more handle stream work
+	now almost works. we need to set the
+	handle stream to the end of the object: pos+bitsize = hdlpos
+	after the has_strings bit.
+
+2018-04-16  Reini Urban  <rurban@cpan.org>
+
+	name unknown DIMSTYLE_CONTROL vars
+	morehandles
+
+	undo <=2007 parenthandle
+	object parenthandles appear also in r2010.
+	The pointer to the control object.
+
+	pack _encrypted_section_header also
+	is wrong with some compiler settings, e.g. asan.
+
+	replace FIELD_VECTOR RC with FIELD_TF
+	esp. for tighter logging.
+	array of bytes => fixed length text.
+
+	WIP more 2007 handle stream
+	not for entities yet. there we dont have a bitsize.
+	initialize hdlpos after reading the object bitsize.
+	before 2007 hdl_dat is just the same as dat, ditto str_dat.
+	str_dat is a copy then because strings are interleaved.
+	hdl_dat just needs one advance, because the handles are only
+	at the end.
+
+2018-04-15  Reini Urban  <rurban@cpan.org>
+
+	sprintf %ls for cygwin
+	warning: passing argument 2 of fprintf from incompatible pointer type [-Wincompatible-pointer-types]
+	   LOG_TEXT_UNICODE(TRACE, (BITCODE_TU)wstr)
+
+	2007: and WIP the handle stream
+
+2018-04-14  Reini Urban  <rurban@cpan.org>
+
+	WIP 2007: start working on 2007 object strings
+	dont error on invalid handles (still invalid obj handle stream),
+	start with a few 2007 strings
+
+	2004: fix Data Section
+	access the right r2004_header.section_info_id.
+	e.g. 19 => index 16. 19 would be out of bounds
+
+	fix r11 free empty class
+	r11 has no classes at all, but tried
+	to deref them
+
+	2007: improve error handling
+	when get_page or read_pages_map fails
+
+	fix decompress_r2007: allow length 0
+	This is basically a LZ77 decompressor, where the case length=0
+	is allowed.
+
+	whitespace cleanup decode.c
+	M-x whitespace-mode
+
+	whitespace cleanup decode_r2007.c
+	M-x whitespace-mode
+
+	add FIELD_TFF type, pre-allocated fixed string
+	which merely makes for better logging.
+
+	use bit_read_fixed helper
+	for reading into already allocated fixed length string
+
+	more section_handles harmonizations
+
+	simplify 2004/2007 section_handles
+	and harmonize.
+
+	2007: WIP start reading objects and handles
+
+	2007: update TODO plan
+	merge decode_r2007 with the 2004 decoder, it is the same.
+
+	more 2007 harmonization
+	rename num_descriptions to num_infos, it is the section_info count.
+	move read_2007_section_objects into read_2007_section_handles, same as with 2004.
+
+	minor 2004+ section simplifications
+	no logical changes
+
+	2007: more sections handles and objects
+
+2018-04-14  Reini Urban  <rurban@cpan.org>
+
+	r2007 header_variables
+	HANDSEED is not read from the handle stream, but the data stream.
+	PUCSORTHOREF is wrong.
+	seperate obj_string_stream and section_string_stream:
+	SECTION_STRING_STREAM got a prepared str_hdl already,
+	START_STRING_STREAM calcs the stream pos from the obj->bitsize.
+	encoding >= r2007 not yet started (need to calc. handle and string stream offsets)
+
+	* bits.c,h (bit_set_position): added, set absolute
+
+2018-04-14  Reini Urban  <rurban@cpan.org>
+
+	add seperate handle stream for r2007+
+	before R2007 those two streams, dat and hdl_dat are the same.
+
+	but no extra string stream yet.
+	we handle that in the dwg.spec extra, locally.
+
+2018-04-14  Reini Urban  <rurban@cpan.org>
+
+	decode 2007 string streams
+	for now switch dat back and forth, but we really should provide two
+	streams: dat and str_dat for easier dwg.spec integration.
+	And we'll also need a third handle stream, hdl_dat. See the next commit.
+
+2018-04-11  Reini Urban  <rurban@cpan.org>
+
+	WIP read_2007_section_classes
+	missing: string stream.
+
+	change the section lookup by type, not hashcode.
+	it should be the same is with 2004 really. TODO merge the code base.
+
+2018-04-11  Reini Urban  <rurban@cpan.org>
+
+	add r2004+ dwg_section_type
+	resolve the section wname to the enum DWG_SECTION_TYPE, which we need
+	later. to lookup the header, classes, objects sections by index, not by name.
+
+	do the same for preR13 and R13 section types (also as enum).
+
+2018-04-10  Reini Urban  <rurban@cpan.org>
+
+	start encode the r2004 Section Page Map
+	Add the 5 r2004 section fields to the dwg->r2004_header and Dwg_Section.
+	simplify section maps massively, no system_section union needed.
+
+	Add native LE read/write bits for RL (yet unneeded).
+
+2018-04-09  Reini Urban  <rurban@cpan.org>
+
+	2018 fix for MLINESTYLE
+
+	add 2018 test-data DWGs and matching DXFs
+	The 2013 variants saved as 2018.
+
+	Fix programs CC warnings
+	with WARN_CFLAGS
+
+	classes >= 2007
+	add the missing 2007 class-map fields.
+
+	xmlsuite: write into builddir
+	not into srcdir, which could be read-only. e.g. make distcheck
+
+	HACKING: add macports python
+
+	move public headers into include/
+
+2018-04-08  Reini Urban  <rurban@cpan.org>
+
+	add HAVE_NATIVE_WCHAR2
+	We can only use wchar.h when on Windows with a sizeof 2.
+	On unix wchar_t is a 4-byte UTF-32.
+	How to handle these? Use native wchar_t internally
+	and convert when reading/writing?
+
+	add ctype.h probe
+
+	fix eed packed struct
+	some gccs add intermediate bytes into the Eed_Data struct,
+	esp. mingw.
+
+2018-04-07  Reini Urban  <rurban@cpan.org>
+
+	fix wrong encode class checks
+
+	fix -Wsign-compare
+
+	use bits _TF functions
+	for larger strings/raw data. esp. for later conversion to FIELD_TF
+	and LOG_TRACE_TF.
+
+	eed rewrite
+	EED are really a stream of size+app-handle + sequence of app-specific code+value pairs,
+	not just one code+value per handle.
+	So add a new eed struct per code+value pair, and leave the size empty of subsequent
+	eeds, and re-use the handle.
+
+2018-04-02  Reini Urban  <rurban@cpan.org>
+
+	fixed some r14 second header parsing
+	adjust for num_sections, which now actually matches the documentation
+
+	more TODO
+
+	Merge branch 'dxf' into work
+	seperate examples and programs.
+	many improvements and fixes, esp. some objects, memory leaks and eed.
+
+	Update TODO for the finished dxf branch
+
+	fix get_first_owned_object
+	with no BLOCK_HEADER entities, e.g. empty paperspace.
+
+	fix MLEADERSTYLE eed
+	wrong usage of index i, used twice, nested.
+	rename the inner appid loop to j,
+	the outer eed loop to idx.
+
+	more auxheader: still debugging
+	add some helpers: DEBUG_HERE() and LOG_TRACE_TF (fixed string)
+
+	Makefile.am: fix check-dwg targets
+
+	free: add dwg_free_handleref
+	where we lookup the handle in the global list of refs
+	and delete it there also.
+	also free the reactors, defer freeing BLOCK_CONTROL,
+	and set a freed obj->type to DWG_TYPE_FREED, to skip
+	double-frees
+
+	Fix reamining warnings
+	proper casts for preR13 types,
+	warp TODO objects into ifdef DEBUG_<OBJECT>
+	change IMAGE.clip_mode from BS to B ??
+
+	de-arm CRC check
+	allow failing CRCs, just log the error
+
+2018-04-02  Reini Urban  <rurban@cpan.org>
+
+	add dwg_encode_xdata and dwg_free_xdata
+	and enhance the xdata linked-list variant to
+	r2007 unicode strings.
+	simplify the mess a bit.
+
+	XRECORD: write and free the objid_handles
+	free the object_ref array.
+
+2018-04-02  Reini Urban  <rurban@cpan.org>
+
+	add check-dwg-valgrind
+
+	free: dup klass->dxfname
+	because freeing an object could free the dxfname also.
+	and some cases are unhandled.
+
+	VISUALSTYLE tested ok
+
+	test VISUALSTYLE
+
+	harmonize defined but disabled classes
+	CELLSTYLEMAP also.
+
+	fix more gcc-7 warnings
+	-Wint-in-bool-context: compute the TABLE field num_cells. we use it twice.
+	-Wsign-compare in some eed DEBUG sanity checks
+
+	build: document missing check-valgrind
+	for the alive.test hack. switch to a normal
+	runtest env, which does have valgrind support
+
+	change LAYER.color_rs from RS to signed short
+	to check for negative colors <r13
+
+2018-04-02  Reini Urban  <rurban@cpan.org>
+
+	DEBUG_MULTILEADER
+	all 4 actions decode/encode/print/free must be consistent
+	if to run the handler or not.
+
+	fixed 2004_Leader with empty BLOCK_HEADER->entities[0]
+	with dwg2SVG
+
+2018-04-02  Reini Urban  <rurban@cpan.org>
+
+	.gitignore: a few more private files
+
+2018-04-02  Reini Urban  <rurban@cpan.org>
+
+	fix MLEADERSTYLE is_new_format
+	add global dwg->appid_control, a list of all registered apps.
+	when an MLEADERSTYLE eed handle points to a ACAD_MLEADERVER APPID, then
+	use the new MLEADERSTYLE format (because it was imported from a newer version).
+	Fixes the text_always_left bit offset.
+
+	add dwg_resolve_handleref helper, a part of the handle decoder.
+
+	rename MLEADER to MULTILEADER, the dxf really has the MULTILEADER name,
+	libdwg uses it also.
+
+2018-04-02  Reini Urban  <rurban@cpan.org>
+
+	rename dxfname MLEADER to MULTILEADER
+	but keep our object definition the same name as in the docs.
+	unlike libdwg.
+
+	also: SCALE has now enough coverage.
+
+2018-04-02  Reini Urban  <rurban@cpan.org>
+
+	remov -lm dependency
+	use our own bit_nan()
+
+	bit_read_BD: fix 64bit stackoverflow
+	use int32_t, not long int to create nan.
+	we still avoid to link against libm,
+	even the dwg_api should not do anymore.
+
+	second_header: fix sections overflow
+	Leader_2000 has 6 sections there, not just 4
+
+	alive.test: dwgbmp Leader_2004 will always fail
+	because it has no embedded picture and it then returns -1
+
+	decode: fix ubsan problems
+	avoid *((uint64_t*)ptr) alignment problems (eg. sse).
+	crc code: use unsigned properly typed rseed to handle overflows
+
+	free: use default loglevel ERROR
+
+	eed: do away with pesky valgrind overflows
+	no idea why it still overflowed
+
+	refactor eed
+	make a raw copy, and also read into the eed union.
+
+	seperate programs dir
+	for bin_PROGRAMS.
+	enhance alive.test to test more DWGs
+
+2018-04-02  Reini Urban  <rurban@cpan.org>
+
+	free: add some more
+	HANDLE_VECTOR, FIELD_VECTOR (esp. for TV),
+	second_header.handlers, FIELD_HANDLE (the dwg_object_ref).
+
+	zero the dwg struct on dwg_read_file() (in case of early free).
+	dwg_encode_chains: initialize section_address (detected with -O2)
+
+2018-04-02  Reini Urban  <rurban@cpan.org>
+
+	dwg_bmp: protect from empty picture size
+	fixes dwgbmp Leader_2004.dwg
+
+2018-03-31  Reini Urban  <rurban@cpan.org>
+
+	fix make distcheck: add dim_common.exp
+	and src/free.h.
+	avoid duplicate loglevel symbol.
+
+	Fix r2000 second header
+	r2000 has 5 chars before the sections, not 4 as before.
+
+	Merge commit 'afa21732aa095f6a109821e561092748ae851d2e' into work
+
+	finish the API revamp: unit-tests
+
+	fix up the dimension unit tests
+	for the new DIMENSION API.
+	replace elevation_ecs11 by elevation.
+
+	add new DIMENSION_common subentity
+	for the API only, to save a lot of functions
+
+	adjust dim testcases
+
+	disable CELLSTYLEMAP, fix MTEXT style handle
+	FIELD_G_TRACE: print the dxf code numerically.
+
+	WIP cleanup the API
+	and more
+
+2018-03-31  Reini Urban  <rurban@cpan.org>
+
+	WIP more dxf codes: REPEAT_4, macrofy
+	remove _Entity/_Object from structs, which are not entities, objects,
+	just parts thereof.
+
+	macrofy common field accessors:
+	Table_Value(value)  20.4.99 for FIELD and TABLE
+	Cell_Style_Fields(sty)  20.4.101.4 for TABLE, TABLECONTENT and CELLSTYLEMAP
+	Content_Format(fmt) 20.4.101.3 for TABLECONTENT and Cell_Style_Field
+
+2018-03-31  Reini Urban  <rurban@cpan.org>
+
+	WIP more dxf codes: almost done
+	add END_REPEAT for free.
+	fixup some types and errors.
+
+	WIP more dxf codes
+	mostly HATCH, MLEADER, TABLE, ...
+	add VECTOR_FREE at the end of REPEAT
+
+2018-03-30  Reini Urban  <rurban@cpan.org>
+
+	WIP more dxf codes, and finish more objects
+	dwg_decode_handleref_with_code: handle offset pointer codes.
+
+	WIP more dxf codes
+	and some typos and more documented objects. esp. the new tables objects.
+
+	WIP add dxf codes to all fields
+	and integrate more r11 tables into dwg.spec
+
+	merge UCSICON_0+1 B to UCSICON BB
+
+2018-03-29  Reini Urban  <rurban@cpan.org>
+
+	typo: default_lightining_type
+	=> default_lightning_type
+
+	r11: fix free empty objects
+	dwg_free_LAYOUT:
+	obj->type == obj->parent->layout_number is not true there.
+
+2018-03-29  Reini Urban  <rurban@cpan.org>
+
+	dwg.spec: start adding r11 tables to the spec
+	make each FIELD a statement, to allow bracket less
+	single fields if statements. 3 lines => 1 line.
+	but not for SINCE/UNTIL, since this needs to set cur_ver before.
+
+	add IF_ENCODE_FROM_PRE_R13 r11 defaults, flags <=> bits,
+	also needed for dxf.
+
+2018-03-29  Reini Urban  <rurban@cpan.org>
+
+	dwg.spec: reformat
+	no functional changes, whitespace and rearrange FIELD macros only.
+
+	r11: implement the tables
+	add a BITCODE_TF fixed width text type.
+	fixed a few typos:
+	VIEW.lens_legth => lens_length
+	MLEADER: ctx.text_heigth => ctx.text_height
+
+2018-03-28  Reini Urban  <rurban@cpan.org>
+
+	more r11: outline all tables/sections
+	read now until the end
+
+	add TIMEBLL type, more r11 work
+	add a special TDCREATE type to simplify dxf handling.
+	add Dwg_Section_Type_r11 enum, rename table processing to section,
+	because they have similar structure.
+
+	2007: add LOG_TEXT_UNICODE, LIBREDWG_TRACE
+	honor LIBREDWG_TRACE on decode_2007.
+	beautify the log output a bit.
+	we can now print UCS-2 on unix platforms via LOG_TEXT_UNICODE
+	update TODO
+
+	R2004 decoding done, start with R2007
+
+	spec: add more unknown templates
+	and embed more parenthandle < 2007
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	fix 2004 Common Entity Data layer
+	layer is only for 2000, not 2004.
+	add shadow handle: 2007+
+	fixes reading all 2004 dwgs
+
+	fix HATCH num_boundary_handles
+	only count num_boundary_handles on decoder,
+	esp. not when printing it.
+	calloc all REPEAT objects to zero-init all counters.
+
+	HATCH: rename z_coord to elevation
+
+	harmonize to parenthandle
+	from XRECORD->parent and lots of parent_handle.
+
+	more objects and specs
+	complete the r2010+ optional xrefindex_plus1 for all tables,
+	add WIPEOUTVARIABLE, add entity_HATCH_DefLine,
+	optional null_handle 2010+,
+	SHAPEFILE_CONTROL: num_entries BS => BL.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	more 2007 specs: go over all objects
+	type all FIELDS: FIELD(name,type) => FIELD_type(name)
+	some entities have no post common entity data handles 2007+
+
+	DICTIONARY: no itemhandles <r2000
+	MTEXT: flip rect_width with rect_height
+	SPLINE: fixed 2013+, num_fit_pts BS => BL, read handles later,
+	LEADER: associated_annotation since r13, not 14.
+	BLOCK_CONTROL: num_entries BS => BL, paper_space <= 2007
+	BLOCK_HEADER: 2010+ xrefindex_plus1, rename preview_data fields
+	LAYER_CONTROL: num_entries BS => BL, null_handle <= 2007
+	LAYER: 2010+ xrefindex_plus1
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	fix 2004 header_vars
+	current_viewport_entity_header is only r13-r2000.
+
+	read_2004_compressed_section: better logging
+	and error handling. free the temp. decompression buffer.
+
+	fix ENT_REACTORS encode
+	and fix tracelevel for decode_object/entity: honor LOG_TRACE level.
+
+	silence free DIMSTYLE
+	some FIELD_CAST values were printed on free
+
+	examples: dont leak suffix filename_out
+	and add one missing dwg_free()
+
+	dwgrewrite: warn when num_objects differ
+	the previous re-read just checks for a valid structure,
+	not if really all objects were written.
+
+	suffix: fix . handling in ext
+	when the ext already contains a dot
+	dont add another one
+
+	encode: write empty strings
+	NULL chains.
+	Not yet NULL handles
+
+	2004: second_header since r2004
+	is read partially. the sections map and handlers is handled
+	elsewhere.
+
+	decode_R2004: logging cosmetics
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	fix decompress_R2004_section assert
+	src may be equal to decomp.
+	fixes reading 2004/Leader_2004.dwg and 2004/Drawing_2004.dwg
+
+	all my r11-r2004 dwgs can now be decoded.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	Add some of my test DWGs and DXFs
+	Produced with my evaluation copy of AutoCAD 2013 for MAC
+	and some free library blocks from the internet.
+
+	Add a LEADER, associate MLEADER, a HATCH filled with an image,
+	and parametric constraints objects.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	add MLEADER and OBJECTCONTEXTDATA
+	untested. just taken from the spec.
+
+	add BITCODE_TU UCS-2 DWGCHAR
+	not suore yet if the BITCODE_TU is zero-delimited nor not.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	Second header: improve, esp. r14
+	sanitize second_header, via proper fields.
+	esp. the encoder was wrong.
+
+	parsers all of my r2000 and r14 samples.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	more common 2010,2013 fields
+	handlestream_size, has_ds_binary_data
+
+	tune free calls
+	check also the size, not just the pointer.
+	free only once, not some classes twice, such as CELLSTYLEMAP,
+	VBA_PROJECT
+	honor the LIBREDWG_TRACE trace var, to display the free'd object
+	pointers.
+
+	fix EED padding and realloc
+	use (i+1) *
+	padding is normal, not something to warn about.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	add free dwg.spec callbacks
+	use the spec to free each field, similar to print.
+
+	result: from 23k down to 20k definitely lost.
+	Missing: XRECORD xdata ResBuf, DICTIONARY handles,
+	common entity data handles.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	bits: protect from overflow
+	and fix bit overflow, properly wrap around
+
+	disable MLEADERSTYLE
+	wrong EED offset
+
+	add FIELDLIST, MLEADERSTYLE
+	this is still WIP.
+	the first MLEADERSTYLE line_type handle is wrong.
+
+	add SCALE, VBA_PROJECT objects
+	VBA_PROJECT still untested. SCALE looks ok
+
+	restart unhandled/untested class objects
+	When a variable-type object is unknown/untested,
+	restart it to the prev. known address and read in the raw
+	bytes from there again.
+	Fixes offset problems with testing some new objects: VBA_PROJECT,
+	CELLSTYLEMAP which interestingly also is in some R2000 (AC1015) files from
+	the internet.
+	decode-only so far.
+
+	work on r14 stability
+	skip CRC check error with num_sections!=5,
+	fix DICTIONARYWDLFT.unknown_r14 to RL (probably some combination of RS,RC,RC)
+	r14 DICTIONARY.unknown_r14 is the hard_owner flag.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	dwg_encode_variable_type
+	sync with dwg_decode_variable_type
+
+	and let untested classes be also encoded as UNKNOWN_OBJ
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	add check-dwg target
+	test all test-data DWG files with dwgread
+
+	fix gcov targets
+	we are now at 23.9%
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	finish UNKNOWN_OBJ
+	add the encode and print parts.
+	we did for encode afterall.
+
+	TODO: we could store the address before trying untested objects
+	and reset if for the UNKNOWN_OBJ. that way we can look at
+	the union values and still be safe.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	WIP UNKNOWN_OBJ
+	use dwg_decode_object/entity for eed, reactors, xdic, even for
+	unknown objects/entities. So far all of them are class objects.
+	store the raw bytes as raw field vector, TODO /8 slack if
+	bitsize % 8.
+
+	This fixes the version dependent handling of bitsize, eed, reactors, xdic,
+	and should now handle all of the MATERIAL, SCALE, ... objects.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	fortify dwg_free, document clearing all of Dwg_Data
+	initialize all critical Dwg_Data pointers and counters,
+	so that dwg_free will not touch uninitialized data.
+
+	document that all incoming dwg data will be cleared in
+	dwg_decode_data and dwg_read_file.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	more DXF adjustments
+	rename VPORT fields to its DXF names.
+	rename Class fields: proxyflag.
+	item_class_id really is named Is-an-entity flag: 1f2 for entity, 1f3 for object.
+	See http://images.autodesk.com/adsk/files/autocad_2012_pdf_dxf-reference_enu.pdf
+
+	more DXF adjustments
+	WIREFRAME is not a headervar, DISPSILH is probably meant.
+	rename OBSCUREDCOLOR back to DXF OBSCOLOR, likewise
+	OBSCUREDLTYPE => OBSLTYPE, IDEXCTL => INDEXCTL.
+
+	dxf2dwg: fix r11-r2000
+	and add some more missing header_variables_r11
+
+	decode_preR13 WIP
+	added some prelim. header_variables_r11.spec,
+	not bit-encoded, just raw.
+	add the raw decoding layout, as found out 1995.
+
+	Update TODO
+
+	doc: add Examples and more
+
+	add dxf2dwg.c WIP
+	TODO: read DXF, code/name pairs, and look them up in one
+	of the specs.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	add dwg_version_as
+	similar to the acad saveas options,
+	to map the the --as-rVER option to our internal Dwg_Version_Type, e.g. R_2000.
+
+	* src/common.c, src/common.h (dwg_version_as): added.
+	* src/common.h (Dwg_Version_Type): added R_INVALID (similar to R_BEFORE).
+	* examples/dwg2dxf.c, examples/dwgrewrite.c: use dwg_version_as.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	add R_12, the same as R_11 but more prominent
+	AC1009 is mostly referenced as Saveas R 12 format, not R 11.
+	So we do support R_12, with the same AC1009 DWG.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	more dwg2dxf work
+	add some old defaults, and pre-r13 vars:
+	HANDLING, paperspace, ...
+
+	fix option handling a bit
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	add ole2frame to unit-testing
+	was skipped
+
+	add xrecord API and testcase
+	set num_eed in the XRECORD object.
+	TODO: change the linked list into an array, to unify with the
+	generic eed array
+
+	dwgread: simplify
+
+	dwg2svg2: 32bit now fixed
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	fix 32bit dwg_api
+	dwg_api.o didnt load stdint.h, so had a different size than
+	dwg*.o
+
+	* src/dwg_api.c: include stdint.h, inttypes.h, fixing 32bit.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	testcases: use DEJATOOL
+	see https://www.gnu.org/software/automake/manual/html_node/DejaGnu-Tests.html
+	and https://www.embecosm.com/appnotes/ean8/ean8-howto-dejagnu-1.0.html
+
+	* test/Makefile.am: : use DEJATOOL, not RUNTESTDEFAULTFLAGS
+	* test/testcases/Makefile.am: remove unsed RUNTESTDEFAULTFLAGS
+	* test/testcases/common.c: remove unused code
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	configure: fix AC_MSG_WARN quoting
+
+	dwg2svg2: more work on 32bit crashes
+
+	decode_R13_R15: optional section[4]
+	only read the measurement section when appropriate.
+	though in praxis it always is.
+
+	fixup examples/dwg2SVG.c
+	var initialization, dwg global not on stack.
+
+	doc: remove dwg_print_object from API
+	it is using the Bit_Chain.
+	But add examples how to iterate over all entities,
+	in model space and paper space.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	add Bit_Chain arg to dwg_print_object
+	and remove it from the global _dwg_struct.
+	move dwg_print_object from public dwg.h to private print.h,
+	because Bit_Chain is not public.
+
+	The bit_chain field was added with commit b24e5329b3e0ae178bb7162a6a492c0f6313899d
+	Author: Rodrigo Rodrigues da Silva <pitanga@members.fsf.org>
+	Date:   Fri Jan 29 04:43:47 2010 -0200
+
+	Added macro created print functions, made some functions private, increased
+	logging trying to fix objectrefs.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	unit-testing: move dwg struct from stack to global
+	on some 32bit systems the stack might be too small for 2500 byte.
+
+	extend the dwg_api
+	dwg: num_classes, num_objects, num_entities, object[], class[],
+	eed, bitsize.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	dwgbmp: fix use-after-free
+	cannot write the picture from the freed dwg.
+	free the dwg afterwards.
+
+	darwin: add a dymutil helper target hack, for better symbolization.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	load_dwg: silence unused-params warnings
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	more work on dwg_free
+	add dwg_object_free().
+
+	protect from double-free the bit_chain by setting
+	bit_chain.size = 0.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	.gitignore: add renamed examples
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	rearrange dwg.h
+	rename dwg_ot_layout to layout_number,
+	rename second_header.handlerik to second_header.handler.
+
+	free the dwg a bit more.
+	the objects and entities are still leaking massively.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	dwg2svg2: use global dwg
+	not stack allocated.
+	printf header after getting the objects.
+	zero-fill the dwg struct data.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	working on 32bit crashes
+	add two helper handles for mspace_block and pspace_block
+	BLOCK_HEADER.
+	zero-fill new objects.
+
+	TODO:
+	someone, maybe CRC, is overwriting the Dwg_Struct after num_classes,
+	32bit only. with dwg2svg2 only.
+
+	  CRC = 36953}, num_classes = 4,
+	  dwg_class = 0x8153100, num_objects = 61, object = 0x8158398, num_layers = 0,
+	  num_entities = 12, num_object_refs = 154, object_ref = 0x8155b78, layer_control = 0x81532a0,
+	  mspace_block = 0x8154ff0, pspace_block = 0x8156560,
+	=>
+	  CRC = 65028}, num_classes = 3086986712,
+	  dwg_class = 0xad9f3224, num_objects = 1336173547, object = 0x9059, num_layers = 4,
+	  num_entities = 135606528, num_object_refs = 61, object_ref = 0x8158398,
+	  layer_control = 0x0, mspace_block = 0xc, pspace_block = 0x9a,
+
+	CRC ... num_entities is wrong.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	configure: make python optional
+	check for swig, and only then for python.
+	and only then build the python bindings.
+
+	allow older 1.11.6 automake, e.g. debian wheezy.
+	don't use PKG_CHECK_MODULES, just call if pkg-config.
+	CFLAGS: add -fno-omit-frame-pointer to gcc for better 32bit debugging.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	improve win32 support
+	tested with i686-w64-mingw32 under wine 32bit.
+	still failing test case: dwg2svg2 with both dwgs.
+
+	DIMTXSTY: fix typo
+	fixes dwg2dxf
+
+	decode: zero-fill fresh memory
+	use calloc, not malloc, to be on the safe side.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	dwg2dxf headers, rename some header_vars to dxf
+	rename *_{M,P}SPACE vars to the canonical dxf names.
+	e.g. INSBASE_MSPACE => INSBASE,
+	INSBASE_PSPACE => PINSBASE.
+
+	finished header section.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	add dwg2dxf WIP
+	just the first few header vars yet
+
+	minor cleanup
+	remove unused Dwg_Data_Type from src/common.h
+
+	add proper error handling, ...
+
+	AUTHORS: add myself
+
+	README: add needed packages
+
+	calloc entity/object
+	zero-fill fresh entities/objects.
+	initialize Dwg_Object->bitsize, mostly just the object/entity part is initialized
+
+	dwgrewrite: fix filename_out
+
+	restore C++ compat
+	use extern "C"
+
+	extend Dwg_Handle types
+	from char to int. codes can go up to 1000, some even higher.
+
+	abstract dwg_decode_eed function
+	similar to dwg_decode_xdata for XRECORD.
+	add objid_handles code to XRECORD, decode only
+	dwg.h: add datbyte offset to dwg_object to know the end from start (=datbyte)
+	and bitsize.
+
+	ChangeLog: formatting
+
+	unit-testing: more type fixes
+	fix most of the remaining trash code and formatting.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	dwg_ps: fix asan crash
+	obj->tio.entity->entity_mode is not always defined, only for entities.
+
+	* examples/dwg_ps.c (create_postscript): remove wrong
+	  obj->tio.entity->entity_mode check
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	add FIELD_CAST
+	several r13-r14 DIM vars have only type RC.
+	store it as BS, and cast it up to BS.
+	detected with clang -Wformat, not with gcc.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	More fields, start with adding dxfgroup
+	FIELDS_G*.
+	Also avoid eed[i] overflows.
+
+	Avoid ntoh() dependency, add bit_read_RS_LE().
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	cross-compiler support
+	disable python+swig when cross-compiling.
+	disable rpl_malloc replacement, because of
+	AC_CHECK_HEADERS malloc.h.
+	we don't need it, we just want to know if it's needed.
+
+	add gcov probe and target
+	usage with suffix'ed gcc:
+	  CC=gcc-mp-6 ./configure --enable-gcov=gcov-mp-6
+	  make gcov
+
+	add ole2frame to testcases
+	and export its ENTITY
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	xmlsuite: fix compiler warnings and libxml2 insanity
+	they insist on using unsigned char* in their public API, oh my.
+	declare all mising funcs, and a lot more.
+
+	properly return the exit code.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	dwgbmp: proper error handling
+	add perror calls when fwrite failed.
+	write to stderr.
+	return failing exit code.
+
+	LOG_{ERROR,WARN}: no duplicate ending \n
+	LOG_{ERROR,WARN} already adds a \n
+
+	decode: adjust unhandled classes/objects
+	fixup the TODO list, add GROUP and WIPEOUT to the handled classes
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	dwg.h: check HAVE_WCHAR_H, fix DIMTAD, DIMZIN type
+	wchar_t is needed for examples, ... rely in HAVE_WCHAR_H.
+
+	change DIMTAD, DIMZIN decl from RC to BS, as used since r2000.
+	we need the larger type for the common storage.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	testcases/tolerance.c: fix and add extrusion test
+	there was a mixup
+
+	dwg_api: add missing common entity/object APIs
+	declarations only
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	decode: LOG_INFO handles when read
+	not later when the whole EED and more was read.
+
+	TODO: we already decrypt the raw SAT data. we only might want to
+	parse it into some SAT structures.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	EED done
+	inline the EED char buffers.
+
+	* configure.ac: probe for wchar.h needed for r2007+ text.
+	* src/dwg.h (Dwg_Eed_Data): inline the buffers, and comment that the
+	  integers need to be endian swapped for the API, if they need to be
+	  interpreted. They are still in network order. But mostly just dump the
+	  raw. Swap the codepage.
+	  (Dwg_Eed): Dwg_Eed_Data *data is now a calloc'd pointer, not inlined.
+	* src/bits.h: add <wchar.h>, needed for a unit-test.
+	* src/decode.c, src/encode.c: use the changed Dwg_Eed_Data.
+	  add length sanity checks and offset deviations. special-case eed_0 strings.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	EED: add dwg_encode_{object,entity} to encode WIP
+	also write common_entity_handle_data,
+	comment out unused objects and the proxy subtype. src compiles now warning free.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	rewrite EED (untested), more common entity support
+	Fix multiple instances of EED.
+	It it either stored as array, but more likely as linked list.
+	Anyway, we need to store it as array of structs, not as linked list.
+	But for sure not as the next EED overwriting the previous.
+
+	* src/common_entity_handle_data.spec: Add support for more entity
+	  fields R_2010+: simplify nolinks, add color_handle, add
+	  has_*_visualstyle R_2010+.
+	* src/dwg.h: add Dwg_Eed_Data, Dwg_Eed structs, num_eed + Dwg_Eed *eed in
+	  entity and object, add color_handle, *_visualstyle.
+	* src/decode.c (dwg_decode_entity, dwg_decode_object): add num_eed,
+	  minor rewrite of eed.
+	  add RLL support for picture_size R_2007+, add has_*_visualstyle R_2010+.
+	* src/encode.c (dwg_encode_entity, dwg_encode_object): likewise.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	maint: add error messages, copyright header
+	* src/reedsolomon.c: add copyright header, if DEBUG unused coe
+	* src/decode_r2007.c: add LOG_ERROR messages to the error branches
+
+	fix test/testcases default
+	worked ok via make check, but not from the cmdline
+
+	maint of examples/load_dwg.py
+	fix the name in usage,
+	fix style
+
+	cleanup testcases
+	fix the remaining warnings, cleanup the remaining junk
+	boilerplate, add decls.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	win32: unknown conversion type character h in format
+	for RC on mingw64
+
+	* src/dwg.h: special-case FORMAT_RC on windows.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	fix examples/dwg2svg2: get the center
+	* examples/dwg2svg2.c: circle.center was never initialized.
+	  fix the paperspace limits calculation: LIM not EXT.
+	  use double, not float.
+	* examples/dwg_ps.c: use double, not float.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	more work on R2010 objects
+	And assert on invalid section/page sizes and counts.
+	all r2007_file_header values for r2010 are still invalid.
+	for 2007 only some.
+
+	* src/decode.c (dwg_decode_data): enhance version mapper to all.
+	  simplify the warn and error messages for unknown versions.
+	  (resolve_objectref_vector): return success code.
+	  (decode_R2004): delete unused File Header Data fields, now parsed via spec (also encodable).
+	* src/decode_r2007.c: add DBG_MAX_COUNT, DBG_MAX_SIZE asserts.
+	* src/dwg.h, src/dwg.spec: more R2010+ fields for ATTRIB, ATTDEF, DIMENSION*.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	decode: demote some LOG_ERROR to LOG_WARN
+	they are harmless mostly. libdxfrw just ignores them and much more.
+	And LOG_ERROR should really panic, not continue.
+
+	rename examples, dwg prefix
+	all this to be able to use bin_PROGRAMS for faster
+	debugging cycles, without tests or long cmdlines.
+	anyway: rewrite => dwgrewrite, test => dwgread,
+	testSVG => dwg2SVG, testsvg2 => dwg2svg2, get_bmp => dwgbmp
+
+	Makefile.am: build examples before the tests
+	often we need to test via an example before running the full
+	testsuite
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	fix the dxfname, no final *
+	the last char is always \0, dont replace it with *.
+	the len BS includes the final \0, but we keep that.
+	we only store the ASCIIZ anyway.
+
+	also don't replace unprintable chars with ~.
+	we do support encode and codepages conversion later.
+	with codepages isprint() is relative.
+	thus unprintable chars can only be replaced in temp. print helpers.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	fix auxheader, trace types
+	* src/auxheader.spec: RS unknown[10] => RS unknown_rs[6] + RL zero_l[5],
+	  print unknown_rs as hex.
+	* src/dwg.h: print RC as 0x%hhx and BB as %uc.
+	* src/logging.h: add final \n to LOG_ERROR and LOG_WARN.
+	* src/dec_macros.h: trace the types also. needed for analysis.
+
+	fixup make distcheck for test-data
+	TODO: txttoxml.py: if built from a non-writable srcdir writing
+	to the srcdir/test-data/*.xml will fail. eg make distcheck
+	The XML must be written into the builddir.
+
+	travis: add python-libxml2
+
+	decode_r2007: use inttypes
+	use proper %PRIu64 for %lld format types.
+	on 64bit %lld is for long long, but we have only simple uint64_t
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	add WIPEOUT entity
+	not an object, rather a IMAGE.
+	also: fix obj->bitsize to BITCODE_RL,
+
+	disable reading some unknown objects/entities, we have better code to deal
+	with that.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	more unit-testing cleanup
+	coding-style, less useless comments,
+	fix some types, esp. TEXT vert_align, horiz_align,
+	remove some more output_object() funcs.
+
+	rename example.dwg to example_2000.dwg
+	use versioned dwg names
+
+	xmlsuite: move txttoxml.py
+	move txttoxml.py from test-data to xmlsuite, where it belongs to.
+	add skeletons for test-data/{r13,r14,2018}
+
+	dwg.h: rename 4 internal _dwg_bitecode_* to _dwg_bitcode_3bd
+	unused internally and in the API
+
+	README, TODO: update
+	* README: update outdated info
+	* TODO: update outdated info
+	* src/dwg.spec: add my name
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	api: add missing entities
+	OLEFRAME, OLE2FRAME, DUMMY, LONG_TRANSACTION, PROXY_ENTITY, IMAGE
+	were missing the block extractor and object extractors.
+
+	rename internal 3D_FACE type to 3DFACE for consistency:
+	_dwg_entity_3D_FACE => _dwg_entity_3DFACE
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	encode: limit the scope of obj, _obj
+	to the enclosing block only. these are temp. values
+	used in the helper macros. Fixes -Wshadow warnings
+
+	src: fix format types
+	in LOG calls, dectected by the new type strictness
+
+	Fix {vert,horiz}_align type from double to short
+	and properly document it
+
+	cleanup testcases
+	use proper types, only one error,
+	and much less trash.
+	it really should have be written with type macros,
+	but now this might be too much work for no gain.
+
+	Move test-data DWGs into one global place
+
+	refactor test dirs
+	under one single base dir test. dejagnu only used for testcases.
+	TODO: test-data
+
+	cleanup unit-tests
+	use proper types, only one error,
+	and much less trash.
+	it really should have be written with type macros,
+	but now this might be too much work for no gain.
+
+	dwg.h: better description of the raw types
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	strict uint32_t/BITCODE_RL types
+	not really long on 64bit systems.
+	add RLL type support.
+	be strict about BITCODE_BS, BITCODE_BL types.
+
+	Note that the raw RS RL ... types are not native raw. They are network-encoded,
+	i.e. big-endian. so they need to swap words.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	new Dwg_R2004_Header, use r2004_file_header.spec
+	* src/decode.c: use new dec_macros.h,
+	  avoid -Wshadow, put spec readers into its seperate blocks,
+	  indentation, unuse _2004_header_data, rather put into the global
+	  Dwg_Struct, use the new "r2004_file_header.spec".
+	* src/decode_r2007.c (decrypt_block): added
+	* src/dwg.h: use stdint types also for BITCODE_BL (not long, uint32_t),
+	  add BITCODE_RLL (uint64_t) for decode_r2007,
+	  identify some more header fields,
+	  add r2004_header, with padding.
+	* src/dwg.c: use FORMAT_* types.
+
+	add dec_macros.h, r2004_file_header.spec, spec.h
+	decode macros are to be used for src/decode_r2007.c also.
+	extract the common spec macros.
+	add r2004_file_header.spec for the 2004 File Header,
+	and fix two addresses there.
+
+	automake: harmonize LDADD
+
+	decode_r2007.c: import rs_decode_block
+	* src/decode_r2007.c: import rs_decode_block
+	* src/reedsolomon.c: whitespace, GNU formatted
+
+2018-03-27  Alex Papazoglou  <papazoga@gmail.com>
+
+	Reed-Solomon (255,239) codec.
+	Two routines, rs_encode_block() and rs_decode_block() are provided.
+	The first will encode a block, depositing the 16 parity bytes in a
+	caller-preallocated buffer. The second decodes a block; if there
+	are errors it optionally fixes them in place using the Euclidean
+	algorithm. Two example programs are provided to demonstrate.
+
+	rurban: guarded malloc.h
+
+	* examples/rsdecode.c: decode a stream
+	* examples/rsencode.c: encode a stream
+	* Makefile.am: added reedsolomon.c
+	* decode_r2007.c: incorporated rs_decode_block()
+	* reedsolomon.c: Reed-Solomon codec.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	cosmetics
+
+	fix parenthandle code in 2 classes
+	with r2000 MLINESTYLE and DICTIONARY parenthandle codes are 8, not 4.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	more C99: add stdint.h, inttypes.h
+	needed only for the bits_test.c testcase, which
+	needs uint16_t.
+	But it is used in bits, even publicly, so put it into
+	common.h
+
+	* src/common.h: include config.h, <stdint.h>, <inttypes.h>.
+	* src/bits.c: include <stdint.h>, <inttypes.h>.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	examples: add config.h
+	for better inttypes
+
+	* examples/dwg_ps.c: add config.h
+	* examples/get_bmp.c: add config.h
+	* examples/load_dwg.c: add config.h
+	* examples/rewrite.c: add config.h
+	* examples/test.c: add config.h
+	* examples/testSVG.c: add config.h
+	* examples/testsvg2.c: add config.h
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	add WIPEOUT
+	undocumented class, but seen in the wild
+
+	cleanup public headers
+	no c++ comments,
+	check STDC optionally for better inttypes
+	use inttypes for uint16_t vs %hu
+	remove logging.h dependency
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	more automake improvements
+	add AM_SILENT_RULES.
+	add missing DIST files, fixes distcheck.
+	testsuite/testcases: add -lm, failed on linux/gcc, passed on the smokers and
+	everywhere else.
+
+	* Makefile.am: add LIBTOOL_DISTCLEAN_FILES.
+	* configure.ac: add AM_SILENT_RULES.
+	* src/Makefile.am: add EXTRA_HEADERS, esp. the new specs.
+	* testsuite/testcases/Makefile.am: add -lm to LDADD
+	* testsuite/xmlsuite/Makefile.am: remove CFLAGS exception,
+	  it is now globally
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	.appveyor.yml: skip dejagnu on cygwin for now
+	fails to link for some unknwn reason. passes all configure probes tests.
+	See https://github.com/rurban/libredwg/issues/1
+
+	rename CELLSTYLEMAP_Cell.class to .type
+	a reserved keyword
+
+	more header_vars: FLAGS, ...
+	split FLAGS into some known flags,
+	set defaults for some new vars,
+	BLIPMODE, DIMSAV are used earlier than R13,
+	the 4 unknown texts are used only before R_2007
+
+	Fix the DIMJUST bug
+	DIMTDEC was missing, a few lines above.
+
+	change RS, BS to uint16_t
+	a true short.
+
+	add auxheader.spec
+	previously known as unknown section 5
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	More objects and versions
+	Prepare for all the old versions.
+	Add most missing new objects/classes.
+
+	Rename IMAGEDEFREACTOR to IMAGEDEF_REACTOR, same as the dxf class name.
+	Add CELLSTYLEMAP, FIELD/AcDbField, VISUALSTYLE (undocumented fields, probably
+	just a hard pointer to its dictionary).
+	Add typed obejcts: OLEFRAME, DUMMY, LONG_TRANSACTION, PROXY_ENTITY, PROXY_OBJECT.
+	Class/Object VBA_PROJECT is probably just handled in its own special section.
+
+	Fix the text_area_is_present global variable, only set in decode, and make
+	it a private field.
+
+	Use 4BITS for the view_mode.
+
+	Better named warn messages on unknown objects: print the unhandled/unknown name.
+	Remove duplicate DIMJUST header_variable !?!
+
+	Find name for TSTACKALIGN, TSTACKSIZE header_variables.
+	Add LOG_WARN macro.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	Add to ChangeLog
+	the missing entries since 2010-07-21
+
+	* ChangeLog: add missing entries
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	cygwin libtools -no-undefined
+	to be able to make a shared lib, without only static.
+
+	* src/Makefile.am (libredwg_la_LDFLAGS): add -no-undefined for cygwin.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	abstract common file header into header.spec
+	The header is basically the same for all versions.
+	we read until num_sections, resp. the first encrypted block
+
+	* src/header.spec: added.
+	* src/decode.c (decode_R13_R15,decode_R2004,decode_R2007): use header.spec.
+	* src/encode.c: use header.spec.
+	* src/dwg.c: fix indentation, rename stk to dwg
+	* src/dwg.h: named struct Dwg_Header, add header.spec variables
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	add read+write r2004 header
+	until the encryption at 0x80
+
+	rework file header <=r15
+	fill in the missing file header bits, for encode
+	to be byte equal.
+	rename unknown 1 section to 5 (which it is).
+
+	configure.ac: set CFLAGS=-g
+	no optimization yet needed. turn it on later
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	.travis.yml: debug make distcheck
+	only failing remotely. ok locally
+
+	* .travis.yml: fixup make distcheck
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	Cleanup the CRC error messages
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	Fix the section 0 crc comparison, add HANDLE logging
+	CRC was already read by header_vars.spec into the CRC field.
+	Don't read it again. The initial crc check passes now.
+
+	Seperate HANDLE from INSANE logging levels. INSANE for the individual
+	VECTOR values, i.e. string and binary content.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	fix crc, rename bit_ckr8 to bit_calc_CRC
+	export bit_calc_CRC: it is used by decode.c
+	use uint16_t to guarantee proper overflow.
+
+	rewrite does now write examples/example.dwg successfully.
+
+	translate more bit_datenaro
+
+	* src/bits.c, src/bits.h: use uint16_t for the seed and crc,
+	  rename bit_ckr8 to bit_calc_CRC.
+	* configure.ac: add AC_TYPE_UINT16_T
+	* src/decode.c, testsuite/testcases/bits_test.c: use renamed
+	  bit_calc_CRC function
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	doc: add basic types
+
+	rewrite.exe alive.test fix
+
+	testcases: fix more wrong types
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	refactor both unit tests
+	extract the common function output_object
+	into common.c via the arg DWG_TYPE.
+
+	fix some wrong leftover float and int types.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	fix more dwg_api int types
+	to the BITCODE types.
+	There were still several errors, found out in the
+	unit tests.
+
+	unit-testing: fix wrong float variables
+	to double
+
+	decode_r2007: add missing function declarations
+	* src/decode_r2007.c: add missing function declarations.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	examples/Makefile.am: add CLEANFILES
+	and check-syntax.
+	Fixes make distcheck.
+
+	* examples/Makefile.am: add CLEANFILES, check-syntax
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	fix examples/dwg_ps
+	* examples/Makefile.am: fix dwg_ps_LDADD.
+	* examples/dwg_ps.c: various fixes.
+
+	print.c: declare assert.h
+	used in dwg.spec: assert(FIELD_VALUE(scale_flag) == 0)
+
+	dwg_encode_chains: initialize ckr_missing
+	at the beginning, not just in the loop.
+
+	MINSERT spec
+	* src/dwg.spec (MINSERT):
+	  fix check logic: no multiple x == y == z expr,
+	  avoid sequence point problems when initializing:
+	  x=y=z=1.0
+
+	dwg_encode_chains: fix handle swap code
+	* src/encode (dwg_encode_chains): fixed the handle swap code
+
+	fix detected warnings
+	duplicate decarations, unused variables,
+	declaration after statement, ...
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	fix SWIG_LIB windows newline
+	mingw64 swig -swiglib prints a newline after each lib,
+	there are two:
+	SWIG_LIB = C:\msys64\MINGW64\bin\Lib
+	C:/msys64/MINGW64/share/swig/3.0.12
+
+	* m4/ax_pkg_swig.m4: strip \r\n in SWIG_LIB
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	probe for warn, mingw and valgrind
+	Add probes for mingw cross-compilation (testing via wine),
+	c99, compile-time SIZEOF(size_t) (for BLL, ULL),
+	useful warning flags and valgrind.
+	This caught a lot of errors.
+
+	* configure.ac: add many probes
+	* src/Makefile.am: add @WARN_CFLAGS@
+	* testsuite/testcases/Makefile.am: add @WARN_CFLAGS@, @VALGRIND_CHECK_RULES@
+	* testsuite/xmlsuite/Makefile.am: add @VALGRIND_CHECK_RULES@
+	* unit-testing/Makefile.am: add @WARN_CFLAGS@, @VALGRIND_CHECK_RULES@
+	* .gitignore: adjust for m4 changes
+	* m4/.placeholder: not longer needed.
+	* m4/ax_append_compile_flags.m4: added.
+	* m4/ax_append_flag.m4: added.
+	* m4/ax_append_link_flags.m4: added.
+	* m4/ax_check_compile_flag.m4: added.
+	* m4/ax_check_link_flag.m4: added.
+	* m4/ax_compile_check_sizeof.m4: added.
+	* m4/ax_compiler_flags.m4: added.
+	* m4/ax_compiler_flags_cflags.m4: added.
+	* m4/ax_compiler_flags_gir.m4: added.
+	* m4/ax_compiler_flags_ldflags.m4: added.
+	* m4/ax_is_release.m4: added.
+	* m4/ax_require_defined.m4: added.
+	* m4/ax_valgrind_check.m4: added.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	add .appveyor.yml
+	Tested at https://ci.appveyor.com/project/rurban/libredwg.
+	This is optional, but can be used to create binary releases
+	for windows/cygwin
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	fix make distcheck
+	add missing EXTRA_DIST files
+
+	* unit-testing/Makefile.am: add common.c to EXTRA_DIST,
+	  fix AM_CFLAGS for make distcheck.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	doc: fill in some basics
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	libredwg.la: direct -lm dependency
+	we use now nan() in the API code.
+
+	* src/Makefile.am: add -lm to libredwg_la_LDFLAGS.
+	* examples/Makefile.am: remove -lm from LDADD,
+	  use LDADD not AM_LDFLAGS,
+	  add -Wall to AM_CFLAGS.
+	* testsuite/testcases/Makefile.am: remove -lm from LDADD.
+	* testsuite/xmlsuite/Makefile.am: remove -lm from LDADD.
+	* unit-testing/Makefile.am: remove -lm from LDADD.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	unit-testing/Makefile.am: add -lm
+	for nan(). clang does not have it, only gcc
+
+	configure.ac: whitespace
+
+	use python_PYTHON
+	fixed make distcheck. See https://www.gnu.org/software/automake/manual/html_node/Python.html
+
+	add a .travis.yml
+	configured at https://travis-ci.org/rurban/libredwg/
+	but you can clone and configure your own. it's optional.
+
+	support rewrite as other version
+	when encoding into another version than the original
+	dwg version, check and ignore empty handles, and
+	use empty strings, and numbers as default.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	build: make swig and dejagnu optional
+	make python bindings only with swig and python.
+	run dejagnu tests only with dejagnu.
+
+	* Makefile.am: optional bindings and testsuite SUBDIRS.
+	* testsuite/Makefile.am: optional testcases SUBDIRS.
+	* configure.ac: export HAVE_DEJAGNU and HAVE_SWIG_PYTHON to automake.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	fix swig with stdint.h
+	skip importing from stdint.h, but we need
+	dwg.i importing from dwg.h and dwg_api.h.
+
+	* src/dwg.h: no SWIGIMPORTED for stdint.h.
+	* bindings/python/Makefile.am (swig_wrap_python.c): remove
+	  -I/usr/include.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	src/Makefile.am: cleanup
+	no functional changes.
+
+	* src/Makefile.am: minor cleanup, no changes.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	Fix bit_write_4BITS
+	and its testcase bit_write_4BITS_tests.
+	simply write 4 bits. used in VIEW view_mode.
+	All testcases pass now.
+
+	* src/bits.c (bit_write_4BITS): fix implementation.
+	* testsuite/testcases/bits_test.c: enhance tests a bit, print the
+	  failing result, no functional changes.
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	fix testcases/lwpline
+	wrong flags type, fix to BITCODE_BS.
+
+	* testsuite/testcases/lwpline.c: fix flags type
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	testcases: fix wrong float
+	testcases used float with too low numeric precision to pass the tests.
+	fix to BITCODE_BD ie double.
+	Remaining test errors: bit_write_4BITS, lwpline reading flag
+
+	* testsuite/testcases/arc.c,
+	  testsuite/testcases/attdef.c,
+	  testsuite/testcases/attrib.c,
+	  testsuite/testcases/circle.c,
+	  testsuite/testcases/ellipse.c,
+	  testsuite/testcases/line.c,
+	  testsuite/testcases/minsert.c,
+	  testsuite/testcases/mline.c,
+	  testsuite/testcases/mtext.c,
+	  testsuite/testcases/point.c,
+	  testsuite/testcases/polyline_2d.c,
+	  testsuite/testcases/shape.c,
+	  testsuite/testcases/solid.c,
+	  testsuite/testcases/text.c,
+	  testsuite/testcases/tolerance.c,
+	  testsuite/testcases/trace.c: change float to  BITCODE_BD
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	work on testsuites
+	on macports with make check PYTHON=/opt/local/bin/python2.7
+
+	examples/alive.test: TODO the rewrite tests
+	until we can fix them
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	python: depend on src/dwg.h
+	and add -I/usr/include for stdint.h (for uint64_t).
+
+	Note that on macports with gcc-mp-x you need to use the
+	gcc-specific -I/opt/local/lib/gcc6/gcc/x86_64-apple-darwin15/6.4.0/include
+	instead.
+	And build with the system python, but run the
+	tests with macports python make check PYTHON=/opt/local/bin/python2.7
+
+	* bindings/python/Makefile.am: depend on src/dwg.h, add
+	  -I/usr/include for stdint.h
+
+2018-03-27  Reini Urban  <rurban@cpan.org>
+
+	WIP Start R_2013, R_2018 support, stricter types, ...
+	add missing types, header variables, ...
+	read and write  3B and BLL types, BLL: 64bit only.
+	(this drops support for 32bit only, without uin64_t.
+	maybe probe for that)
+
 2018-03-15  Reini Urban  <rurban@cpan.org>
 
 	cygwin libtools -no-undefined

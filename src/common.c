@@ -74,7 +74,7 @@ char version_codes[DWG_VERSIONS][7] =
     "AC1009", // R_11 DWG Release 11/12 (LT R1/R2)
     "AC1012", // R_13
     "AC1014", // R_14
-    "AC1015", // R_2000 = R15
+    "AC1015", // R_2000 (r15)
     "AC1018", // R_2004
     "AC1021", // R_2007
     "AC1024", // R_2010
@@ -84,9 +84,9 @@ char version_codes[DWG_VERSIONS][7] =
   };
 
 // map [rVER] to our enum number, not the dwg->header.dwgversion
-// Acad 2013 offers Saveas DWG: 2013,2010,2007,2004,2004,2000,r14
-//                         DXF: 2013,2010,2007,2004,2004,2000,r12
-Dwg_Version_Type dwg_version_as(const char *version)
+// Acad 2018 offers SaveAs DWG: 2018,2013,2010,2007,2004,2004,2000,r14
+//                         DXF: 2018,2013,2010,2007,2004,2004,2000,r12
+EXPORT Dwg_Version_Type dwg_version_as(const char *version)
 {
   if (!strcmp(version, "r2000"))
     return R_2000;

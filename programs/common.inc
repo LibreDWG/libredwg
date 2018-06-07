@@ -1,3 +1,4 @@
+/* -*- c -*- */
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -22,12 +23,12 @@
 /* returns number of consumed args */
 int verbosity(int argc, char **argv, int i, unsigned int *opts)
 {
-  int loglevel = 2;
-  int num_args = 1;
+  unsigned int loglevel = 2;
   char log_str[4];
   if (!strcmp(argv[i], "--verbose") || // --verbose 2 or --verbose
       !strcmp(argv[i], "-v")) // -v 0 or -v
     {
+      int num_args;
       if (argc > i)
         {
           long l = strtol(argv[i+1], NULL, 10);
@@ -36,10 +37,14 @@ int verbosity(int argc, char **argv, int i, unsigned int *opts)
               printf("Invalid verbosity %s\n", argv[i+1]); // -vbla
               exit(help());
             }
-          loglevel = (int)l;
+          loglevel = (unsigned int)l;
+          num_args = 2;
         }
       else
-        loglevel = 2;
+        {
+          num_args = 1;
+          loglevel = 2;
+        }
       *opts = loglevel;
       sprintf(log_str, "%d", loglevel);
 #if defined(USE_TRACING) && defined(HAVE_SETENV)
@@ -57,13 +62,13 @@ int verbosity(int argc, char **argv, int i, unsigned int *opts)
           printf("Invalid verbosity %s\n", opt); // -vbla
           exit(help());
         }
-      loglevel = (int)l;
+      loglevel = (unsigned int)l;
       *opts = loglevel;
       sprintf(log_str, "%d", loglevel);
 #if defined(USE_TRACING) && defined(HAVE_SETENV)
       setenv("LIBREDWG_TRACE", log_str, 1);
 #endif
-      return num_args;
+      return 1;
     }
 
   printf("Invalid verbosity %s\n", argv[i]); // -vbla

@@ -16,9 +16,9 @@ void bitprepare(Bit_Chain * bitchain, size_t size)
 {
   bitchain->bit = 0;
   bitchain->byte = 0;
-  //bitchain.version = R_2000;
+  bitchain->version = R_2000;
   bitchain->size = size;
-  bitchain->chain = (unsigned char *) malloc(size);
+  bitchain->chain = (unsigned char *) calloc(size, 1);
 
 }
 
@@ -45,13 +45,9 @@ Bit_Chain strtobt(const char * binarystring)
   for (i = 0; i < length; ++i)
     {
       if (binarystring[i] == '0')
-        {
-          bit_write_B(&bitchain, 0);
-        }
+        bit_write_B(&bitchain, 0);
       else
-        {
-          bit_write_B(&bitchain, 1);
-        }
+        bit_write_B(&bitchain, 1);
     }
 
   bit_print(&bitchain, size_need);

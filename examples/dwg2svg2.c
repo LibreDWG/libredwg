@@ -1,8 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2009 Free Software Foundation, Inc.                        */
-/*  Copyright (C) 2010 Thien-Thi Nguyen                                      */
+/*  Copyright (C) 2013, 2018 Free Software Foundation, Inc.                  */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -12,20 +11,29 @@
 /*****************************************************************************/
 
 /*
- * testSVG.c: convert a DWG to SVG
- * written by Felipe Corrêa da Silva Sances
- * modified by Thien-Thi Nguyen
+ * dwg2svg2.c: convert a DWG to SVG via the API
+ * written by Gaganjyot Singh
+ * modified by Reini Urban
  */
 
+#include "../src/config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include <math.h>
 
-#include "../src/config.h"
 #include <dwg.h>
 #include <dwg_api.h>
+
+#ifndef M_PI
+# define M_PI      3.14159265358979323846264338327950288
+#endif
+
+static dwg_data g_dwg;
+static double model_xmin, model_ymin;
+static double page_width, page_height, scale;
+
 static int help(void);
 int verbosity(int argc, char **argv, int i, unsigned int *opts);
 #include "../programs/common.inc"
@@ -53,39 +61,35 @@ static int help(void) {
 #define log_if_error(msg) \
   if (error) { fprintf(stderr, "ERROR: %s", msg); exit(1); }
 
-dwg_data dwg;
-double model_xmin, model_ymin;
-double page_width, page_height, scale;
-
-double transform_X(double x){
+static double transform_X(double x){
   return x - model_xmin;
 }
 
-double transform_Y(double y){
+static double transform_Y(double y){
   return page_height - (y - model_ymin);
 }
 
-void
+static void
 output_SVG(dwg_data* dwg);
 
-int
+static int
 test_SVG(char *filename, unsigned int opts)
 {
   int error;
 
-  memset(&dwg, 0, sizeof(dwg_data));
-  dwg.opts = opts;
-  error = dwg_read_file(filename, &dwg);
+  memset(&g_dwg, 0, sizeof(dwg_data));
+  g_dwg.opts = opts;
+  error = dwg_read_file(filename, &g_dwg);
   if (!error)
-    output_SVG(&dwg);
+    output_SVG(&g_dwg);
 
-  dwg_free(&dwg);
+  dwg_free(&g_dwg);
   /* This value is the return value for `main',
      so clamp it to either 0 or 1.  */
   return error ? 1 : 0;
 }
 
-void
+static void
 output_TEXT(dwg_object* obj)
 {
   int error, index;
@@ -116,7 +120,7 @@ output_TEXT(dwg_object* obj)
       fontsize, text_value);
 }
 
-void
+static void
 output_LINE(dwg_object* obj)
 {
   int error, index;
@@ -139,7 +143,7 @@ output_LINE(dwg_object* obj)
       transform_Y(end.y));
 }
 
-void
+static void
 output_CIRCLE(dwg_object* obj)
 {
   Dwg_Entity_CIRCLE* circle;
@@ -162,7 +166,7 @@ output_CIRCLE(dwg_object* obj)
       index, transform_X(center.x), transform_Y(center.y), radius);
 }
 
-void
+static void
 output_ARC(dwg_object* obj)
 {
   Dwg_Entity_ARC* arc;
@@ -199,7 +203,7 @@ output_ARC(dwg_object* obj)
       large_arc, transform_X(x_end), transform_Y(y_end), 0.1);
 }
 
-void
+static void
 output_INSERT(dwg_object* obj)
 {
   int index, error;
@@ -223,13 +227,12 @@ output_INSERT(dwg_object* obj)
   log_if_error("insert_get_scale");
   obj_handle = dwg_obj_get_handle(obj, &error);
   log_if_error("get_handle");
-  ins_handle = dwg_ent_insert_get_ref_handle(insert, &error);
+  ins_handle = &obj->handle;
   log_if_error("insert_get_ref_handle");
-  abs_ref = dwg_ent_insert_get_abs_ref(insert, &error);
-  log_if_error("insert_get_abs_ref");
+  abs_ref = insert->block_header->absolute_ref;
+  log_if_error("block_absref");
   
-  //if (insert->block_header->handleref.code == 5)
-  if (42) //XXX did this to test the new handleref.code handling "code"
+  if (insert->block_header->handleref.code == 5)
     {
       printf(
           "\t<use id=\"dwg-object-%d\" transform=\"translate(%f %f) rotate(%f) scale(%f %f)\" xlink:href=\"#symbol-%lu\" /><!-- block_header->handleref: %d.%d.%lu -->\n",
@@ -247,7 +250,7 @@ output_INSERT(dwg_object* obj)
     }
 }
 
-void
+static void
 output_object(dwg_object* obj){
   if (!obj)
     {
@@ -281,24 +284,25 @@ output_object(dwg_object* obj){
     }
 }
 
-void output_BLOCK_HEADER(dwg_object_ref* ref)
+static void
+output_BLOCK_HEADER(dwg_object_ref* ref)
 {
   dwg_object* obj, *variable_obj;
   dwg_obj_block_header* hdr;
   int error;
   unsigned long abs_ref;
   char *name;
-  
-  obj = dwg_obj_reference_get_object(ref, &error);
-  log_if_error("reference_get_object");
-  abs_ref = dwg_obj_ref_get_abs_ref(ref, &error);
-  log_if_error("ref_get_abs_ref");
+
   if (!ref)
     {
-      fprintf(stderr, "Found null object reference."
+      fprintf(stderr, "Empty BLOCK."
               " Could not output an SVG symbol for this BLOCK_HEADER\n");
       return;
     }
+  obj = dwg_obj_ref_get_object(ref, &error);
+  log_if_error("reference_get_object");
+  abs_ref = dwg_ref_get_absref(ref, &error);
+  log_if_error("ref_get_abs_ref");
   if (!obj)
     {
       fprintf(stderr, "Found null ref->obj\n");
@@ -331,8 +335,8 @@ void output_BLOCK_HEADER(dwg_object_ref* ref)
 }
 
 
-void
-output_SVG(dwg_data* dwg)
+static void
+output_SVG(dwg_data *dwg)
 {
   unsigned int i, num_hdr_objs;
   int error;

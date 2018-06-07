@@ -18,6 +18,9 @@
 #include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
+#ifdef __STDC_ALLOC_LIB__
+#define __STDC_WANT_LIB_EXT2__ 1 /* for strdup */
+#endif
 #include <string.h>
 #include <assert.h>
 
@@ -39,13 +42,22 @@ static unsigned int cur_ver = 0;
 static Bit_Chain pdat = {NULL,0,0,0,0,0};
 static Bit_Chain *dat = &pdat;
 
-extern void dwg_free_xdata_resbuf(Dwg_Resbuf *rbuf);
+/* from dwg.c */
+int dwg_obj_is_control(const Dwg_Object *obj);
 
 /*--------------------------------------------------------------------------------
  * MACROS
  */
 
 #define IS_FREE
+
+#define FREE_IF(ptr) { if (ptr) free(ptr); ptr = NULL; }
+
+#define VALUE(value,type,dxf)
+#define VALUE_RC(value,dxf) VALUE(value, RC, dxf)
+#define VALUE_RS(value,dxf) VALUE(value, RS, dxf)
+#define VALUE_RL(value,dxf) VALUE(value, RL, dxf)
+#define VALUE_RD(value,dxf) VALUE(value, RD, dxf)
 
 #define FIELD(name,type) {}
 #define FIELD_TRACE(name,type) \
@@ -123,7 +135,7 @@ extern void dwg_free_xdata_resbuf(Dwg_Resbuf *rbuf);
 #define HANDLE_VECTOR(name, sizefield, code, dxf) \
   HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code, dxf)
 
-#define FIELD_INSERT_COUNT(insert_count, type, dxf)
+#define FIELD_NUM_INSERTS(num_inserts, type, dxf)
 #define FIELD_XDATA(name, size) \
   dwg_free_xdata(_obj, _obj->size)
 
@@ -164,21 +176,6 @@ extern void dwg_free_xdata_resbuf(Dwg_Resbuf *rbuf);
       FIELD_HANDLE(xdicobjhandle, code, 0); \
     }
 
-#define REPEAT_N(times, name, type) \
-  for (rcount=0; rcount<(int)times; rcount++)
-
-#define REPEAT(times, name, type) \
-  for (rcount=0; rcount<(int)_obj->times; rcount++)
-
-#define REPEAT2(times, name, type) \
-  for (rcount2=0; rcount2<(int)_obj->times; rcount2++)
-
-#define REPEAT3(times, name, type) \
-  for (rcount3=0; rcount3<(int)_obj->times; rcount3++)
-
-#define REPEAT4(times, name, type) \
-  for (rcount4=0; rcount4<(int)_obj->times; rcount4++)
-
 #define END_REPEAT(field) FIELD_TV(field,0)
 
 #define COMMON_ENTITY_HANDLE_DATA \
@@ -194,7 +191,7 @@ extern void dwg_free_xdata_resbuf(Dwg_Resbuf *rbuf);
 static void \
 dwg_free_ ##token (Dwg_Object * obj)\
 {\
-  int vcount, rcount, rcount2, rcount3, rcount4;\
+  long vcount, rcount1, rcount2, rcount3, rcount4;\
   Dwg_Entity_##token *ent, *_obj;\
   Dwg_Object_Entity *_ent;\
   Bit_Chain *hdl_dat = dat;\
@@ -204,16 +201,16 @@ dwg_free_ ##token (Dwg_Object * obj)\
   _ent = obj->tio.entity;\
   _obj = ent = _ent->tio.token;
 
-#define DWG_ENTITY_END \
-    free(_obj); obj->tio.entity->tio.UNKNOWN_ENT = NULL; \
-    free(obj->tio.entity); obj->tio.object = NULL;\
+#define DWG_ENTITY_END      \
+  FREE_IF(_obj);            \
+  FREE_IF(obj->tio.entity); \
 }
 
 #define DWG_OBJECT(token) \
 static void \
 dwg_free_ ##token (Dwg_Object * obj) \
 { \
-  int vcount, rcount, rcount2, rcount3, rcount4; \
+  long vcount, rcount1, rcount2, rcount3, rcount4; \
   Dwg_Data* dwg = obj->parent;                   \
   Dwg_Object_##token *_obj;                      \
   Bit_Chain *hdl_dat = dat;                      \
@@ -223,18 +220,19 @@ dwg_free_ ##token (Dwg_Object * obj) \
 
 #define DWG_OBJECT_END                                  \
   dwg_free_eed(obj);                                    \
-  free(_obj); obj->tio.object->tio.UNKNOWN_OBJ = NULL;  \
-  free(obj->tio.object); obj->tio.object = NULL;        \
+  FREE_IF(_obj);                                        \
+  FREE_IF(obj->tio.object);                             \
   obj->parent = NULL;                                   \
   /* free(obj); obj = NULL; */                          \
 }
 
 static void
-dwg_free_handleref(Dwg_Object_Ref *ref, Dwg_Data * dwg)
+dwg_free_handleref(Dwg_Object_Ref *restrict ref, Dwg_Data *restrict dwg)
 {
   long unsigned int i;
   if (!dwg) {
     free(ref);
+    ref = NULL;
     return;
   }
   for (i=0; i < dwg->num_object_refs; i++)
@@ -369,9 +367,9 @@ dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
       dwg_free_LAYOUT(obj);
       goto known;
     }
-  if (!strcmp(dxfname, "LWPLINE"))
+  if (!strcmp(dxfname, "LWPOLYLINE"))
     {
-      dwg_free_LWPLINE(obj);
+      dwg_free_LWPOLYLINE(obj);
       goto known;
     }
   if (!strcmp(dxfname, "MULTILEADER"))
@@ -407,7 +405,7 @@ dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "PROXY"))
     {
-      dwg_free_PROXY(obj);
+      dwg_free_PROXY_OBJECT(obj);
       goto known;
     }
   if (!strcmp(dxfname, "RASTERVARIABLES"))
@@ -440,9 +438,9 @@ dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
       dwg_free_TABLE(obj);
       goto known;
     }
-  if (!strcmp(dxfname, "WIPEOUTVARIABLE"))
+  if (!strcmp(dxfname, "WIPEOUTVARIABLES"))
     {
-      dwg_free_WIPEOUTVARIABLE(obj);
+      dwg_free_WIPEOUTVARIABLES(obj);
       goto known;
     }
   if (!strcmp(dxfname, "WIPEOUT"))
@@ -472,6 +470,16 @@ dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
     {
       dwg_free_VISUALSTYLE(obj);
       goto known;
+    }
+  if (!strcmp(dxfname, "ACDBSECTIONVIEWSTYLE"))
+    {
+      //dwg_free_SECTIONVIEWSTYLE(obj);
+      goto unknown;
+    }
+  if (!strcmp(dxfname, "ACDBDETAILVIEWSTYLE"))
+    {
+      //dwg_free_DETAILVIEWSTYLE(obj);
+      goto unknown;
     }
   if (!strcmp(dxfname, "AcDbField")) //?
     {
@@ -505,9 +513,41 @@ dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "MATERIAL"))
     {
-      //dwg_free_MATERIAL(obj);
+#ifdef DEBUG_MATERIAL
+      dwg_free_MATERIAL(obj);
+      goto known;
+#else
       goto unknown;
+#endif
     }
+  if (!strcmp(dxfname, "PLOTSETTINGS"))
+    {
+#ifdef DEBUG_PLOTSETTINGS
+      dwg_free_PLOTSETTINGS(obj);
+      goto known;
+#else
+      goto unknown;
+#endif
+    }
+  if (!strcmp(dxfname, "LIGHT"))
+    {
+#ifdef DEBUG_LIGHT
+      dwg_free_LIGHT(obj);
+      goto known;
+#else
+      goto unknown;
+#endif
+    }
+  if (!strcmp(dxfname, "SUN"))
+    {
+#ifdef DEBUG_SUN
+      dwg_free_SUN(obj);
+      goto known;
+#else
+      goto unknown;
+#endif
+    }
+
  unknown:  
   free(dxfname);
   return 0;
@@ -641,7 +681,7 @@ dwg_free_object(Dwg_Object *obj)
     case DWG_TYPE_REGION:
       dwg_free_REGION(obj);
       break;
-    case DWG_TYPE_3DSOLID:
+    case DWG_TYPE__3DSOLID:
       dwg_free__3DSOLID(obj);
       break; /* Check the type of the object */
     case DWG_TYPE_BODY:
@@ -680,11 +720,11 @@ dwg_free_object(Dwg_Object *obj)
     case DWG_TYPE_LAYER:
       dwg_free_LAYER(obj);
       break;
-    case DWG_TYPE_SHAPEFILE_CONTROL:
-      dwg_free_SHAPEFILE_CONTROL(obj);
+    case DWG_TYPE_STYLE_CONTROL:
+      dwg_free_STYLE_CONTROL(obj);
       break;
-    case DWG_TYPE_SHAPEFILE:
-      dwg_free_SHAPEFILE(obj);
+    case DWG_TYPE_STYLE:
+      dwg_free_STYLE(obj);
       break;
     case DWG_TYPE_LTYPE_CONTROL:
       dwg_free_LTYPE_CONTROL(obj);
@@ -722,11 +762,11 @@ dwg_free_object(Dwg_Object *obj)
     case DWG_TYPE_DIMSTYLE:
       dwg_free_DIMSTYLE(obj);
       break;
-    case DWG_TYPE_VP_ENT_HDR_CONTROL:
-      dwg_free_VP_ENT_HDR_CONTROL(obj);
+    case DWG_TYPE_VPORT_ENTITY_CONTROL:
+      dwg_free_VPORT_ENTITY_CONTROL(obj);
       break;
-    case DWG_TYPE_VP_ENT_HDR:
-      dwg_free_VP_ENT_HDR(obj);
+    case DWG_TYPE_VPORT_ENTITY_HEADER:
+      dwg_free_VPORT_ENTITY_HEADER(obj);
       break;
     case DWG_TYPE_GROUP:
       dwg_free_GROUP(obj);
@@ -743,8 +783,8 @@ dwg_free_object(Dwg_Object *obj)
     case DWG_TYPE_LONG_TRANSACTION:
       dwg_free_LONG_TRANSACTION(obj);
       break;
-    case DWG_TYPE_LWPLINE:
-      dwg_free_LWPLINE(obj);
+    case DWG_TYPE_LWPOLYLINE:
+      dwg_free_LWPOLYLINE(obj);
       break;
     case DWG_TYPE_HATCH:
       dwg_free_HATCH(obj);
@@ -806,6 +846,14 @@ dwg_free_object(Dwg_Object *obj)
   obj->type = DWG_TYPE_FREED;
 }
 
+static int dwg_free_header_vars(Dwg_Data * dwg)
+{
+  Dwg_Header_Variables* _obj = &dwg->header_vars;
+  Dwg_Object* obj = NULL;
+  #include "header_variables.spec"
+  return 0;
+}
+
 void
 dwg_free(Dwg_Data * dwg)
 {
@@ -825,21 +873,14 @@ dwg_free(Dwg_Data * dwg)
         }
 #endif  /* USE_TRACING */
       LOG_INFO("dwg_free\n")
-      /*if (dwg->bit_chain && dwg->bit_chain->size)
-        free (dwg->bit_chain->chain);*/
-#define FREE_IF(ptr) { if (ptr) free(ptr); }
+      // copied table fields have duplicate pointers, but are freed only once
       for (i=0; i < dwg->num_objects; ++i)
         {
-          if (dwg->object[i].type != DWG_TYPE_BLOCK_CONTROL)
+          if (!dwg_obj_is_control(&dwg->object[i]))
             dwg_free_object(&dwg->object[i]);
         }
       FREE_IF(dwg->header.section);
-      {
-        Dwg_Header_Variables* _obj = &dwg->header_vars;
-        Dwg_Object* obj = NULL;
-
-        #include "header_variables.spec"
-      }
+      dwg_free_header_vars(dwg);
       if (dwg->picture.size && dwg->picture.chain)
         free(dwg->picture.chain);
       if (dwg->num_classes)
@@ -849,6 +890,8 @@ dwg_free(Dwg_Data * dwg)
               FREE_IF(dwg->dwg_class[i].appname);
               FREE_IF(dwg->dwg_class[i].cppname);
               FREE_IF(dwg->dwg_class[i].dxfname);
+              if (dwg->header.version >= R_2007)
+                FREE_IF(dwg->dwg_class[i].dxfname_u);
             }
           FREE_IF(dwg->dwg_class);
         }
@@ -860,7 +903,7 @@ dwg_free(Dwg_Data * dwg)
         FREE_IF(dwg->second_header.handlers[i].data);
       for (i=0; i < dwg->num_objects; ++i)
         {
-          if (dwg->object[i].type == DWG_TYPE_BLOCK_CONTROL)
+          if (dwg_obj_is_control(&dwg->object[i]))
             dwg_free_object(&dwg->object[i]);
         }
       for (i=0; i < dwg->num_object_refs; ++i)

@@ -2,7 +2,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2010 Free Software Foundation, Inc.                        */
+/*  Copyright (C) 2010, 2018 Free Software Foundation, Inc.                  */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -18,12 +18,18 @@
  * modified by Reini Urban
  */
 
-#include "spec.h"
+//TODO: SINCE(R_2010): LASTSAVEDBY, 1, ""
 
-  // size, bitsize_hi and bitsize read before
+#include "spec.h"
+#ifndef M_PI_2
+# define M_PI_2      1.57079632679489661923132169163975144
+#endif
+
+// size, bitsize_hi and bitsize read before
+
   SINCE(R_2013)
     {
-      FIELD_BLL(requiredversions, 0);
+      FIELD_BLL(REQUIREDVERSIONS, 160);
     }
 
   SINCE(R_13)
@@ -59,7 +65,7 @@
     }
   VERSIONS(R_13, R_2000)
     {
-      FIELD_HANDLE (current_vp_ent_hdr, 5, 0);
+      FIELD_HANDLE (vport_entity_header, 5, 0);
     }
   SINCE(R_13)
     {
@@ -281,7 +287,7 @@
 
   SINCE(R_2000)
     {
-      FIELD_HANDLE (PUCSNAME, 5, 2);
+      FIELD_HANDLE (PUCSORTHOREF, 5, 2);
       FIELD_BS (PUCSORTHOVIEW, 70);
       FIELD_HANDLE (PUCSBASE, 5, 2);
       FIELD_3BD (PUCSORGTOP, 10);
@@ -490,7 +496,7 @@
   FIELD_HANDLE (APPID_CONTROL_OBJECT, 5, 0);
   FIELD_HANDLE (DIMSTYLE_CONTROL_OBJECT, 5, 0);
   VERSIONS(R_13, R_2000) {
-    FIELD_HANDLE (VP_ENT_HDR_CONTROL_OBJECT, 5, 0);
+    FIELD_HANDLE (VPORT_ENTITY_CONTROL_OBJECT, 5, 0);
   }
 
   FIELD_HANDLE (DICTIONARY_ACAD_GROUP, 5, 0);
@@ -556,14 +562,14 @@
 
   SINCE(R_2004)
     {
-      FIELD_RC (SORTENTS, 70);
-      FIELD_RC (INDEXCTL, 70);
-      FIELD_RC (HIDETEXT, 70);
-      FIELD_RC (XCLIPFRAME, 70);
+      FIELD_RC (SORTENTS, 280);
+      FIELD_RC (INDEXCTL, 280);
+      FIELD_RC (HIDETEXT, 280);
+      FIELD_RC (XCLIPFRAME, 290); //2010+: 280
       FIELD_RC (DIMASSOC, 70);
-      FIELD_RC (HALOGAP, 70);
+      FIELD_RC (HALOGAP, 280);
       FIELD_BS (OBSCOLOR, 70);
-      FIELD_BS (INTERSECTIONCOLOR, 70);
+      FIELD_BS (INTERSECTIONCOLOR, 280);
       FIELD_RC (OBSLTYPE, 280);
       FIELD_RC (INTERSECTIONDISPLAY, 290);
       PRE(R_2007) {
@@ -579,40 +585,61 @@
 
   SINCE(R_2007)
     {
-      FIELD_B (CAMERADISPLAY, 0);
+      IF_ENCODE_FROM_EARLIER {
+         FIELD_VALUE(STEPSPERSEC) = 2.0;
+         FIELD_VALUE(STEPSIZE)   = 50.0;
+         FIELD_VALUE(LENSLENGTH) = 50.0;
+         FIELD_VALUE(_3DDWFPREC) = 2.0;
+         FIELD_VALUE(PSOLWIDTH)  = 5.0;
+         FIELD_VALUE(PSOLHEIGHT) = 80.0;
+         FIELD_VALUE(LOFTANG1) = M_PI_2;
+         FIELD_VALUE(LOFTANG2) = M_PI_2;
+         FIELD_VALUE(LOFTPARAM) = 7;
+         FIELD_VALUE(LOFTNORMALS) = 1;
+         FIELD_VALUE(LATITUDE) = 1.0;
+         FIELD_VALUE(LONGITUDE) = 1.0;
+         FIELD_VALUE(TIMEZONE) = -8000;
+         FIELD_VALUE(LIGHTGLYPHDISPLAY) = 1;
+         FIELD_VALUE(TILEMODELIGHTSYNCH) = 1;
+         FIELD_VALUE(SOLIDHIST) = 1;
+         FIELD_VALUE(SHOWHIST) = 1;
+         FIELD_VALUE(DWFFRAME) = 2;
+         FIELD_VALUE(REALWORLDSCALE) = 1;
+      }
+      FIELD_B (CAMERADISPLAY, 290);
       FIELD_BL (unknown_21, 0);
       FIELD_BL (unknown_22, 0);
       FIELD_BD (unknown_23, 0);
-      FIELD_BD (STEPSPERSEC, 0);
-      FIELD_BD (STEPSIZE, 0);
-      FIELD_BD (_3DDWFPREC, 0);
-      FIELD_BD (LENSLENGTH, 0);
-      FIELD_BD (CAMERAHEIGHT, 0);
-      FIELD_RC (SOLIDHIST, 0);
-      FIELD_RC (SHOWHIST, 0);
-      FIELD_BD (PSOLWIDTH, 0);
-      FIELD_BD (PSOLHEIGHT, 0);
-      FIELD_BD (LOFTANG1, 0);
-      FIELD_BD (LOFTANG2, 0);
-      FIELD_BD (LOFTMAG1, 0);
-      FIELD_BD (LOFTMAG2, 0);
-      FIELD_BS (LOFTPARAM, 0);
-      FIELD_RC (LOFTNORMALS, 0);
-      FIELD_BD (LATITUDE, 0);
-      FIELD_BD (LONGITUDE, 0);
-      FIELD_BD (NORTHDIRECTION, 0);
-      FIELD_BL (TIMEZONE, 0);
-      FIELD_RC (LIGHTGLYPHDISPLAY, 0);
-      FIELD_RC (TILEMODELIGHTSYNCH, 0);
-      FIELD_RC (DWFFRAME, 0);
-      FIELD_RC (DGNFRAME, 0);
-      FIELD_B (unknown_47, 0);
+      FIELD_BD (STEPSPERSEC, 40);
+      FIELD_BD (STEPSIZE, 40);
+      FIELD_BD (_3DDWFPREC, 40);
+      FIELD_BD (LENSLENGTH, 40);
+      FIELD_BD (CAMERAHEIGHT, 40);
+      FIELD_RC (SOLIDHIST, 280);
+      FIELD_RC (SHOWHIST, 280);
+      FIELD_BD (PSOLWIDTH, 40);
+      FIELD_BD (PSOLHEIGHT, 40);
+      FIELD_BD (LOFTANG1, 40);
+      FIELD_BD (LOFTANG2, 40);
+      FIELD_BD (LOFTMAG1, 40);
+      FIELD_BD (LOFTMAG2, 40);
+      FIELD_BS (LOFTPARAM, 70);
+      FIELD_RC (LOFTNORMALS, 280);
+      FIELD_BD (LATITUDE, 40);
+      FIELD_BD (LONGITUDE, 40);
+      FIELD_BD (NORTHDIRECTION, 40);
+      FIELD_BL (TIMEZONE, 70);
+      FIELD_RC (LIGHTGLYPHDISPLAY, 280);
+      FIELD_RC (TILEMODELIGHTSYNCH, 280);
+      FIELD_RC (DWFFRAME, 280);
+      FIELD_RC (DGNFRAME, 280);
+      FIELD_B (REALWORLDSCALE, 290);
       FIELD_CMC (INTERFERECOLOR, 62);
       FIELD_HANDLE (INTERFEREOBJVS, 5, 345);
       FIELD_HANDLE (INTERFEREVPVS, 5, 346);
       FIELD_HANDLE (DRAGVS, 5, 349);
       FIELD_RC (CSHADOW, 280);
-      FIELD_BD (unknown_53, 0);
+      FIELD_BD (SHADOWPLANELOCATION, 40);
     }
 
   SINCE(R_14)
@@ -623,8 +650,8 @@
       FIELD_BS (unknown_57, 0);
     }
 
-  /* TODO: This really is the section[0] CRC not related to the header */
-  FIELD_RS (CRC, 0);
+  /* TODO: This really is the section[0] crc not related to the header */
+  FIELD_RS (crc, 0);
 
   SINCE(R_2007) {
     SECTION_STRING_STREAM
@@ -646,4 +673,3 @@
     FIELD_TU (PROJECTNAME, 1);
     END_STRING_STREAM
   }
-

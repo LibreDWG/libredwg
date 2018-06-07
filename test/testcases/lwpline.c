@@ -1,4 +1,4 @@
-#define DWG_TYPE DWG_TYPE_LWPLINE
+#define DWG_TYPE DWG_TYPE_LWPOLYLINE
 #include "common.c"
 #include <dejagnu.h>
 
@@ -6,7 +6,7 @@ void
 low_level_process (dwg_object * obj)
 {
   BITCODE_BL i;
-  dwg_ent_lwpline *lwpline = dwg_object_to_LWPLINE (obj);
+  dwg_ent_lwpline *lwpline = dwg_object_to_LWPOLYLINE (obj);
 
   printf ("normal of lwpline : x = %f, y = %f, z = %f\n",
 	  lwpline->normal.x, lwpline->normal.y, lwpline->normal.z);
@@ -42,7 +42,7 @@ api_process (dwg_object * obj)
   dwg_point_2d *points;
   dwg_lwpline_widths *width;
 
-  dwg_ent_lwpline *lwpline = dwg_object_to_LWPLINE (obj);
+  dwg_ent_lwpline *lwpline = dwg_object_to_LWPOLYLINE (obj);
 
   dwg_ent_lwpline_get_normal (lwpline, &normal, &error);
   if (error == 0 && lwpline->normal.x == normal.x &&
@@ -89,7 +89,7 @@ api_process (dwg_object * obj)
     }
 
 
-  num_widths = dwg_ent_lwpline_get_num_widths (lwpline, &error);
+  num_widths = dwg_ent_lwpline_get_numwidths (lwpline, &error);
   if (error == 0 && num_widths == lwpline->num_widths)
     {
       pass ("lwpline_get_num_widths");
@@ -100,7 +100,7 @@ api_process (dwg_object * obj)
     }
 
 
-  num_bulges = dwg_ent_lwpline_get_num_bulges (lwpline, &error);
+  num_bulges = dwg_ent_lwpline_get_numbulges (lwpline, &error);
   if (error == 0 && num_bulges == lwpline->num_bulges)
     {
       pass ("lwpline_get_num_bulges");
@@ -111,7 +111,7 @@ api_process (dwg_object * obj)
     }
 
 
-  num_points = dwg_ent_lwpline_get_num_points (lwpline, &error);
+  num_points = dwg_ent_lwpline_get_numpoints (lwpline, &error);
   if (error == 0 && num_points == lwpline->num_points)
     {
       pass ("lwpline_get_num_points");

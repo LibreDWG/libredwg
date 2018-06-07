@@ -14,23 +14,28 @@
 /*
  * testSVG.c: convert a DWG to SVG
  * written by Felipe Corrêa da Silva Sances
+ * modified by Rodrigo Rodrigues da Silva
  * modified by Thien-Thi Nguyen
  * modified by Reini Urban
  */
 
+#include "../src/config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include <math.h>
 
-#include "../src/config.h"
 #include <dwg.h>
 #include "../src/bits.h"
 #include "suffix.inc"
 static int help(void);
 int verbosity(int argc, char **argv, int i, unsigned int *opts);
 #include "common.inc"
+
+#ifndef M_PI
+# define M_PI      3.14159265358979323846264338327950288
+#endif
 
 static void output_SVG(Dwg_Data* dwg);
 
@@ -289,8 +294,9 @@ main(int argc, char *argv[])
     return help();
   if (argc > 1 && !strcmp(argv[i], "--version"))
     return opt_version();
-  REQUIRE_INPUT_FILE_ARG (argc);
 
+  REQUIRE_INPUT_FILE_ARG (argc);
+  memset(&g_dwg, 0, sizeof(Dwg_Data));
   g_dwg.opts = opts;
   error = dwg_read_file(argv[i], &g_dwg);
   if (!error)

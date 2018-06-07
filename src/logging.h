@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2010 Free Software Foundation, Inc.                        */
+/*  Copyright (C) 2010, 2018 Free Software Foundation, Inc.                  */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -13,6 +13,7 @@
 /*
  * logging.h: logging macros
  * written by Rodrigo Rodrigues da Silva
+ * modified by Reini Urban
  */
 
 //Reduce logging code through macros. In the future, this file can be used as
@@ -87,13 +88,13 @@
    LOG_TEXT_UNICODE(TRACE, (BITCODE_TU)wstr) \
    LOG_TRACE("\" [TU %d]\n", dxf)
 # define LOG_TEXT_UNICODE(level, wstr) \
-	if (DWG_LOGLEVEL >= DWG_LOGLEVEL_##level && wstr) { \
-            BITCODE_TU ws = wstr; \
-            uint16_t _c; \
-            while ((_c = *ws++)) { \
-              HANDLER(OUTPUT, "%c", (char)(_c & 0xff)); \
-            } \
-        }
+  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_##level && wstr) { \
+    BITCODE_TU ws = wstr;                             \
+    uint16_t _c;                                      \
+    while ((_c = *ws++)) {                            \
+      HANDLER(OUTPUT, "%c", (char)(_c & 0xff));       \
+    }                                                 \
+  }
 #endif
 
 #endif

@@ -1,7 +1,9 @@
+/* -*- c -*- */
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
 /*  Copyright (C) 2010 Thien-Thi Nguyen                                      */
+/*  Copyright (C) 2014, 2018 Free Software Foundation, Inc.                  */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -13,11 +15,16 @@
 /*
  * suffix.c: avoid hardcoded input/output filenames
  * written by Thien-Thi Nguyen
+ * modified by Reini Urban
  */
 
+#include "config.h"
 #include <stdio.h>
-#include <string.h>
 #include <libgen.h>
+#ifdef __STDC_ALLOC_LIB__
+#define __STDC_WANT_LIB_EXT2__ 1 /* for strdup */
+#endif
+#include <string.h>
 #include <stdlib.h>
 
 char *
@@ -32,7 +39,11 @@ char *
 suffix (const char *filename, const char *ext)
 {
   char *copy = strdup (filename);
+#ifdef HAVE_BASENAME
   char *base = basename (copy);
+#else
+  char *base = copy;
+#endif
   int len = strlen (base) + 1 + strlen (ext) + 1;
   char *rv = malloc (len);
   char *dot;

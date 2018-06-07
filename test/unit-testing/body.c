@@ -32,14 +32,13 @@ api_process(dwg_object *obj)
   BITCODE_BL i;
   BITCODE_BS version;
   BITCODE_BL block_size, num_isolines, num_wires, num_sil;
-  char * acis_data;
+  unsigned char * acis_data;
   BITCODE_B wireframe_data_present, point_present, isoline_present; 
   BITCODE_B acis_empty, acis2_empty;
   dwg_point_3d point;
   dwg_ent_body *body = dwg_object_to_BODY(obj);
-  dwg_ent_solid_wire *wire;
-  dwg_ent_solid_silhouette *sil;
-
+  dwg_3dsolid_wire *wire;
+  dwg_3dsolid_silhouette *sil;
 
   acis_empty = dwg_ent_body_get_acis_empty(body, &error);
   if ( !error )
@@ -97,7 +96,7 @@ api_process(dwg_object *obj)
   else
       printf("error in reading num wires");
 
-  wire = dwg_ent_body_get_wire(body, &error);
+  wire = dwg_ent_body_get_wires(body, &error);
   if ( !error )
     {
       for (i = 0; i < num_wires; i++)
@@ -110,15 +109,15 @@ api_process(dwg_object *obj)
   if ( !error )
       printf("num sil of body : " FORMAT_BL "\n", num_sil);
   else
-      printf("error in reading num silhouette");
+      printf("error in reading num silhouettes");
 
-  sil = dwg_ent_body_get_silhouette(body, &error);
+  sil = dwg_ent_body_get_silhouettes(body, &error);
   if ( !error )
     {
       for (i = 0; i < num_sil; i++)
         printf("silhouette[%u] of body : " FORMAT_BL "\n", i, sil[i].vp_id);
     }
   else
-      printf("error in reading silhouette");
+      printf("error in reading silhouettes");
     
 }

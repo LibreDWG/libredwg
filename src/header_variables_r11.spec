@@ -246,8 +246,7 @@
 
   dat->byte = 0x6a9;
   FIELD_RS (MAXACTVP, 70); //ok
-  FIELD_RD (DIMGAP, 40); //ok
+  FIELD_RD (DIMGAP, 40);   //ok
   FIELD_RD (PELEVATION, 40); //ok 
   FIELD_CAST (VISRETAIN, RS, B, 70); //ok
-  FIELD_RS (CRC, 0); // 0x6bd
-
+  FIELD_RS (crc, 0); // 0x6bd

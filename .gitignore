@@ -79,6 +79,10 @@ gcov.log
 /programs/dwgbmp
 /programs/dwgrewrite
 /programs/dwgread
+/programs/dwgwrite
+/programs/dwglayers
+# temp. mingw gcc DLLs for wine
+/programs/lib*.dll
 /programs/dwg2SVG
 /programs/dwg2dxf
 /programs/dwg2ps

@@ -28,115 +28,123 @@
 # include <malloc.h>
 #endif
 #include "dwg.h"
+#include "common.h"
 #include "logging.h"
 #include "bits.h"
 #include "dwg_api.h"
+
+/** We don't pass in Dwg_Object*'s, so we don't know if the object
+   is >= r2007 or <r13 or what. Default is r2000.
+   So we need some dwg_api_init_version(&dwg) to store the version.
+   This is not thread-safe, don't use different DWG versions in parallel threads!
+*/
+static Dwg_Version_Type dwg_version = R_INVALID;
 
 /*******************************************************************
  *        Functions created from macro to extract entities           *
  ********************************************************************/
 
-/// Macro call to extract all text entities from a block
+/// extract all text entities from a block
 GET_DWG_ENTITY(TEXT)
-/// Macro call to extract all attrib entities from a block
+/// extract all attrib entities from a block
 GET_DWG_ENTITY(ATTRIB)
-/// Macro call to extract all attdef entities from a block
+/// extract all attdef entities from a block
 GET_DWG_ENTITY(ATTDEF)
-/// Macro call to extract all block entities from a block
+/// extract all block entities from a block
 GET_DWG_ENTITY(BLOCK)
-/// Macro call to extract endblk entity from a block
+/// extract endblk entity from a block
 GET_DWG_ENTITY(ENDBLK)
-/// Macro call to extract all seqend entities from a block
+/// extract all seqend entities from a block
 GET_DWG_ENTITY(SEQEND)
-/// Macro call to extract all insert entities from a block
+/// extract all insert entities from a block
 GET_DWG_ENTITY(INSERT)
-/// Macro call to extract all minsert entities from a block
+/// extract all minsert entities from a block
 GET_DWG_ENTITY(MINSERT)
-/// Macro call to extract all vertex_2d entities from a block
+/// extract all vertex_2d entities from a block
 GET_DWG_ENTITY(VERTEX_2D)
-/// Macro call to extract all vertex_3d entities from a block
+/// extract all vertex_3d entities from a block
 GET_DWG_ENTITY(VERTEX_3D)
-/// Macro call to extract all vertex_mesh entities from a block
+/// extract all vertex_mesh entities from a block
 GET_DWG_ENTITY(VERTEX_MESH)
-/// Macro call to extract all vertex_pface entities from a block
+/// extract all vertex_pface entities from a block
 GET_DWG_ENTITY(VERTEX_PFACE)
-/// Macro call to extract all vertex_pface_face entities from a block
+/// extract all vertex_pface_face entities from a block
 GET_DWG_ENTITY(VERTEX_PFACE_FACE)
-/// Macro call to extract all polyline_2d entities from a block
+/// extract all polyline_2d entities from a block
 GET_DWG_ENTITY(POLYLINE_2D)
-/// Macro call to extract all polyline_3d entities from a block
+/// extract all polyline_3d entities from a block
 GET_DWG_ENTITY(POLYLINE_3D)
-/// Macro call to extract all arc entities from a block
+/// extract all arc entities from a block
 GET_DWG_ENTITY(ARC)
-/// Macro call to extract all circle entities from a block
+/// extract all circle entities from a block
 GET_DWG_ENTITY(CIRCLE)
-/// Macro call to extract all line entities from a block
+/// extract all line entities from a block
 GET_DWG_ENTITY(LINE)
-/// Macro call to extract all dimension ordinate entities from a block
+/// extract all dimension ordinate entities from a block
 GET_DWG_ENTITY(DIMENSION_ORDINATE)
-/// Macro call to extract all dimension linear entities from a block
+/// extract all dimension linear entities from a block
 GET_DWG_ENTITY(DIMENSION_LINEAR)
-/// Macro call to extract all dimension aligned entities from a block
+/// extract all dimension aligned entities from a block
 GET_DWG_ENTITY(DIMENSION_ALIGNED)
-/// Macro call to extract all dimension ang3pt entities from a block
+/// extract all dimension ang3pt entities from a block
 GET_DWG_ENTITY(DIMENSION_ANG3PT)
-/// Macro call to extract all dimension ang2ln entities from a block
+/// extract all dimension ang2ln entities from a block
 GET_DWG_ENTITY(DIMENSION_ANG2LN)
-/// Macro call to extract all dimension radius entities from a block
+/// extract all dimension radius entities from a block
 GET_DWG_ENTITY(DIMENSION_RADIUS)
-/// Macro call to extract all dimension diameter entities from a block
+/// extract all dimension diameter entities from a block
 GET_DWG_ENTITY(DIMENSION_DIAMETER)
-/// Macro call to extract all points entities from a block
+/// extract all points entities from a block
 GET_DWG_ENTITY(POINT)
-/// Macro call to extract all polyline_pface entities from a block
+/// extract all polyline_pface entities from a block
 GET_DWG_ENTITY(POLYLINE_PFACE)
-/// Macro call to extract all polyline_mesh entities from a block
+/// extract all polyline_mesh entities from a block
 GET_DWG_ENTITY(POLYLINE_MESH)
-/// Macro call to extract all solid entities from a block
+/// extract all solid entities from a block
 GET_DWG_ENTITY(SOLID)
-/// Macro call to extract all trace entities from a block
+/// extract all trace entities from a block
 GET_DWG_ENTITY(TRACE)
-/// Macro call to extract all shape entities from a block
+/// extract all shape entities from a block
 GET_DWG_ENTITY(SHAPE)
-/// Macro call to extract all viewport entities from a block
+/// extract all viewport entities from a block
 GET_DWG_ENTITY(VIEWPORT)
-/// Macro call to extract all ellipse entities from a block
+/// extract all ellipse entities from a block
 GET_DWG_ENTITY(ELLIPSE)
-/// Macro call to extract all spline entities from a block
+/// extract all spline entities from a block
 GET_DWG_ENTITY(SPLINE)
-/// Macro call to extract all region entities from a block
+/// extract all region entities from a block
 GET_DWG_ENTITY(REGION)
-/// Macro call to extract all body entities from a block
+/// extract all body entities from a block
 GET_DWG_ENTITY(BODY)
-/// Macro call to extract all ray entities from a block
+/// extract all ray entities from a block
 GET_DWG_ENTITY(RAY)
-/// Macro call to extract all xline entities from a block
+/// extract all xline entities from a block
 GET_DWG_ENTITY(XLINE)
-/// Macro call to extract all OLEFRAME entities from a block
+/// extract all OLEFRAME entities from a block
 GET_DWG_ENTITY(OLEFRAME)
-/// Macro call to extract all mtext entities from a block
+/// extract all mtext entities from a block
 GET_DWG_ENTITY(MTEXT)
-/// Macro call to extract all leader entities from a block
+/// extract all leader entities from a block
 GET_DWG_ENTITY(LEADER)
-/// Macro call to extract all tolerance entities from a block
+/// extract all tolerance entities from a block
 GET_DWG_ENTITY(TOLERANCE)
-/// Macro call to extract all mline entities from a block
+/// extract all mline entities from a block
 GET_DWG_ENTITY(MLINE)
-/// Macro call to cast dwg object to ole2frame
+/// cast dwg object to ole2frame
 GET_DWG_ENTITY(OLE2FRAME)
-/// Macro call to extract all DUMMY entities from a block
+/// extract all DUMMY entities from a block
 GET_DWG_ENTITY(DUMMY)
-/// Macro call to extract all LONG_TRANSACTION entities from a block
+/// extract all LONG_TRANSACTION entities from a block
 GET_DWG_ENTITY(LONG_TRANSACTION)
-/// Macro call to extract all lwpline entities from a block
-GET_DWG_ENTITY(LWPLINE)
-/// Macro call to extract all PROXY_ENTITY entities from a block
+/// extract all lwpline entities from a block
+GET_DWG_ENTITY(LWPOLYLINE)
+/// extract all PROXY_ENTITY entities from a block
 GET_DWG_ENTITY(PROXY_ENTITY)
-/// Macro call to extract all hatch entities from a block
+/// extract all hatch entities from a block
 GET_DWG_ENTITY(HATCH)
 
 //untyped >1000:
-/// Macro call to extract all image entities from a block
+/// extract all image entities from a block
 //GET_DWG_ENTITY(IMAGE)
 
 /*******************************************************************
@@ -145,106 +153,106 @@ GET_DWG_ENTITY(HATCH)
  *                where ENTITY can be LINE or CIRCLE                 *
  ********************************************************************/
 
-/// Macro call to cast dwg object to text
+/// cast dwg object to text
 CAST_DWG_OBJECT_TO_ENTITY(TEXT)
-/// Macro call to cast dwg object to attrib
+/// cast dwg object to attrib
 CAST_DWG_OBJECT_TO_ENTITY(ATTRIB)
-/// Macro call to cast dwg object to attdef
+/// cast dwg object to attdef
 CAST_DWG_OBJECT_TO_ENTITY(ATTDEF)
-/// Macro call to cast dwg object to block
+/// cast dwg object to block
 CAST_DWG_OBJECT_TO_ENTITY(BLOCK)
-/// Macro call to extract endblk entity from a block
+/// extract endblk entity from a block
 CAST_DWG_OBJECT_TO_ENTITY(ENDBLK)
-/// Macro call to cast dwg object to seqend
+/// cast dwg object to seqend
 CAST_DWG_OBJECT_TO_ENTITY(SEQEND)
-/// Macro call to cast dwg object to insert
+/// cast dwg object to insert
 CAST_DWG_OBJECT_TO_ENTITY(INSERT)
-/// Macro call to cast dwg object to minsert
+/// cast dwg object to minsert
 CAST_DWG_OBJECT_TO_ENTITY(MINSERT)
-/// Macro call to cast dwg object to vertex_2d
+/// cast dwg object to vertex_2d
 CAST_DWG_OBJECT_TO_ENTITY(VERTEX_2D)
-/// Macro call to cast dwg object to vertex_3d
+/// cast dwg object to vertex_3d
 CAST_DWG_OBJECT_TO_ENTITY(VERTEX_3D)
-/// Macro call to cast dwg object to vertex_mesh
+/// cast dwg object to vertex_mesh
 CAST_DWG_OBJECT_TO_ENTITY(VERTEX_MESH)
-/// Macro call to cast dwg object to vertex_pface
+/// cast dwg object to vertex_pface
 CAST_DWG_OBJECT_TO_ENTITY(VERTEX_PFACE)
-/// Macro call to cast dwg object to vertex_pface_face
+/// cast dwg object to vertex_pface_face
 CAST_DWG_OBJECT_TO_ENTITY(VERTEX_PFACE_FACE)
-/// Macro call to cast dwg object to polyline_2d
+/// cast dwg object to polyline_2d
 CAST_DWG_OBJECT_TO_ENTITY(POLYLINE_2D)
-/// Macro call to cast dwg object to polyline_3d
+/// cast dwg object to polyline_3d
 CAST_DWG_OBJECT_TO_ENTITY(POLYLINE_3D)
-/// Macro call to cast dwg object to arc
+/// cast dwg object to arc
 CAST_DWG_OBJECT_TO_ENTITY(ARC)
-/// Macro call to cast dwg object to circle
+/// cast dwg object to circle
 CAST_DWG_OBJECT_TO_ENTITY(CIRCLE)
-/// Macro call to cast dwg object to line
+/// cast dwg object to line
 CAST_DWG_OBJECT_TO_ENTITY(LINE)
-/// Macro call to cast dwg object to dimension ordinate
+/// cast dwg object to dimension ordinate
 CAST_DWG_OBJECT_TO_ENTITY(DIMENSION_ORDINATE)
-/// Macro call to cast dwg object to dimension linear
+/// cast dwg object to dimension linear
 CAST_DWG_OBJECT_TO_ENTITY(DIMENSION_LINEAR)
-/// Macro call to cast dwg object to dimension aligned
+/// cast dwg object to dimension aligned
 CAST_DWG_OBJECT_TO_ENTITY(DIMENSION_ALIGNED)
-/// Macro call to cast dwg object to dimension ang3pt
+/// cast dwg object to dimension ang3pt
 CAST_DWG_OBJECT_TO_ENTITY(DIMENSION_ANG3PT)
-/// Macro call to cast dwg object to dimension ang2ln
+/// cast dwg object to dimension ang2ln
 CAST_DWG_OBJECT_TO_ENTITY(DIMENSION_ANG2LN)
-/// Macro call to cast dwg object to dimension radius
+/// cast dwg object to dimension radius
 CAST_DWG_OBJECT_TO_ENTITY(DIMENSION_RADIUS)
-/// Macro call to cast dwg object to dimension diameter
+/// cast dwg object to dimension diameter
 CAST_DWG_OBJECT_TO_ENTITY(DIMENSION_DIAMETER)
-/// Macro call to cast dwg object to points
+/// cast dwg object to points
 CAST_DWG_OBJECT_TO_ENTITY(POINT)
-/// Macro call to cast dwg object to polyline_pface
+/// cast dwg object to polyline_pface
 CAST_DWG_OBJECT_TO_ENTITY(POLYLINE_PFACE)
-/// Macro call to cast dwg object to polyline_mesh
+/// cast dwg object to polyline_mesh
 CAST_DWG_OBJECT_TO_ENTITY(POLYLINE_MESH)
-/// Macro call to cast dwg object to solid
+/// cast dwg object to solid
 CAST_DWG_OBJECT_TO_ENTITY(SOLID)
-/// Macro call to cast dwg object to trace
+/// cast dwg object to trace
 CAST_DWG_OBJECT_TO_ENTITY(TRACE)
-/// Macro call to cast dwg object to shape
+/// cast dwg object to shape
 CAST_DWG_OBJECT_TO_ENTITY(SHAPE)
-/// Macro call to cast dwg object to viewport
+/// cast dwg object to viewport
 CAST_DWG_OBJECT_TO_ENTITY(VIEWPORT)
-/// Macro call to cast dwg object to ellipse
+/// cast dwg object to ellipse
 CAST_DWG_OBJECT_TO_ENTITY(ELLIPSE)
-/// Macro call to cast dwg object to spline
+/// cast dwg object to spline
 CAST_DWG_OBJECT_TO_ENTITY(SPLINE)
-/// Macro call to cast dwg object to region
+/// cast dwg object to region
 CAST_DWG_OBJECT_TO_ENTITY(REGION)
-/// Macro call to cast dwg object to body
+/// cast dwg object to body
 CAST_DWG_OBJECT_TO_ENTITY(BODY)
-/// Macro call to cast dwg object to ray
+/// cast dwg object to ray
 CAST_DWG_OBJECT_TO_ENTITY(RAY)
-/// Macro call to cast dwg object to xline
+/// cast dwg object to xline
 CAST_DWG_OBJECT_TO_ENTITY(XLINE)
-/// Macro call to cast dwg object to oleframe
+/// cast dwg object to oleframe
 CAST_DWG_OBJECT_TO_ENTITY(OLEFRAME)
-/// Macro call to cast dwg object to mtext
+/// cast dwg object to mtext
 CAST_DWG_OBJECT_TO_ENTITY(MTEXT)
-/// Macro call to cast dwg object to leader
+/// cast dwg object to leader
 CAST_DWG_OBJECT_TO_ENTITY(LEADER)
-/// Macro call to cast dwg object to tolerance
+/// cast dwg object to tolerance
 CAST_DWG_OBJECT_TO_ENTITY(TOLERANCE)
-/// Macro call to cast dwg object to mline
+/// cast dwg object to mline
 CAST_DWG_OBJECT_TO_ENTITY(MLINE)
-/// Macro call to cast dwg object to ole2frame
+/// cast dwg object to ole2frame
 CAST_DWG_OBJECT_TO_ENTITY(OLE2FRAME)
-/// Macro call to cast dwg object to dummy
+/// cast dwg object to dummy
 CAST_DWG_OBJECT_TO_ENTITY(DUMMY)
-/// Macro call to cast dwg object to long_transaction
+/// cast dwg object to long_transaction
 CAST_DWG_OBJECT_TO_ENTITY(LONG_TRANSACTION)
-/// Macro call to cast dwg object to lwpline
-CAST_DWG_OBJECT_TO_ENTITY(LWPLINE)
-/// Macro call to cast dwg object to hatch
+/// cast dwg object to lwpline
+CAST_DWG_OBJECT_TO_ENTITY(LWPOLYLINE)
+/// cast dwg object to hatch
 CAST_DWG_OBJECT_TO_ENTITY(HATCH)
 
-//untyped >1000:
-/// Macro call to cast dwg object to image
-//CAST_DWG_OBJECT_TO_ENTITY(IMAGE)
+//untyped >500:
+/// cast dwg object to image
+CAST_DWG_OBJECT_TO_ENTITY_BYNAME(IMAGE)
 
 
 /*******************************************************************
@@ -252,23 +260,31 @@ CAST_DWG_OBJECT_TO_ENTITY(HATCH)
  *                 Usage :- dwg_object_to_OBJECT(),                  *
  *            where OBJECT can be LAYER or BLOCK_HEADER              *
  ********************************************************************/
-/// Macro call to cast dwg object to block header
+/// cast dwg object to block header
 CAST_DWG_OBJECT_TO_OBJECT(BLOCK_HEADER)
-/// Macro call to cast dwg object to block control
+/// cast dwg object to block control
 CAST_DWG_OBJECT_TO_OBJECT(BLOCK_CONTROL)
-/// Macro call to cast dwg object to layer
+/// cast dwg object to layer
 CAST_DWG_OBJECT_TO_OBJECT(LAYER)
-/// Macro call to cast dwg object to xrecord
+/// cast dwg object to xrecord
 CAST_DWG_OBJECT_TO_OBJECT(XRECORD)
 
 /*******************************************************************
  *                FUNCTIONS START HERE ENTITY SPECIFIC               *
  ********************************************************************/
 
-/* There is no generic call dwg_get_DIMENSION, for this you have to
-   specify the exact DIMENSION_* type. */
+/** not thread safe. Deprecated.
+    TODO: replace with walking parents up to the dwg.
+ */
+void dwg_api_init_version(Dwg_Data *dwg)
+{
+  dwg_version = (Dwg_Version_Type)dwg->header.version;
+}
 
-/* To access the common DIMENSION fields (only) */
+/** To access the common DIMENSION fields (only).
+    There is no generic call dwg_get_DIMENSION, for this you have to
+    specify the exact DIMENSION_* type.
+*/
 dwg_ent_dim *
 dwg_object_to_DIMENSION(dwg_object *obj)
 {
@@ -295,78 +311,19 @@ dwg_object_to_DIMENSION(dwg_object *obj)
  *                    FUNCTIONS FOR CIRCLE ENTITY                    *
  ********************************************************************/
 
-/// This function creates and returns a new circle entity with default  values.
-/** Usage : dwg_ent_circle_new();
- */
-dwg_ent_circle *
-dwg_ent_circle_new(int *error)
-{
-  dwg_ent_circle *circle = (dwg_ent_circle*)malloc(sizeof(Dwg_Entity_CIRCLE));
-  if (circle != 0)
-    {
-      *error = 0;
-      return dwg_ent_circle_init(circle);
-    }
-  else
-    {
-      LOG_ERROR("%s: empty circle", __FUNCTION__)
-      *error = 1;
-      return NULL;
-    }
-}
-
-/// This function frees the memory allocated by the dwg_ent_circle_new() function.
-/** Usage :- dwg_ent_circle_delete();
- */
-void
-dwg_ent_circle_delete(dwg_ent_circle *circle, int *error)
-{
-  if (circle != 0)
-    {
-      *error = 0;
-      free(circle);
-    }
-  else
-    {
-      LOG_ERROR("%s: empty circle", __FUNCTION__)
-      *error = 1;
-    }
-}
-
-/// This function initialises a new circle entity with default values.
-/** Usage :- dwg_ent_circle_init(circle);
-    where circle is a pointer of dwg_ent_circle type
-*/
-dwg_ent_circle *
-dwg_ent_circle_init(dwg_ent_circle *circle)
-{
-  if (circle != 0)
-    {
-      circle->center.x    = circle->center.y = 0.0;
-      circle->center.z    = 0.0;
-      circle->radius      = 0.0;
-      circle->thickness   = 0.0;
-      circle->extrusion.x = circle->extrusion.y = 0.0;
-      circle->extrusion.z = 0.0;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty circle", __FUNCTION__)
-    }
-  return circle;
-}
-
-/// Returns the center values of circle to second argument.
-/** Usage : dwg_ent_circle_get_center(circle, &point, &error);
-    \param 1 dwg_ent_circle
-    \param 2 dwg_point_3d
-    \param 3 int ptr &error
+/** Returns the _dwg_entity_CIRCLE::center, DXF 10.
+\code Usage: dwg_ent_circle_get_center(circle, &point, &error);
+\encode
+\param[in]  circle  dwg_ent_circle*
+\param[out] point   dwg_point_3d*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_circle_get_center(dwg_ent_circle *circle, dwg_point_3d *point,
-                          int *error)
+dwg_ent_circle_get_center(const dwg_ent_circle *restrict circle,
+                          dwg_point_3d *restrict point,
+                          int *restrict error)
 {
-  if (point != 0 && circle != 0)
+  if (point && circle)
     {
       *error = 0;
       point->x = circle->center.x;
@@ -380,17 +337,19 @@ dwg_ent_circle_get_center(dwg_ent_circle *circle, dwg_point_3d *point,
     }
 }
 
-/// sets the center values of circle.
-/** Usage : dwg_ent_circle_set_center(circle, &point, &error);
-    \param 1 dwg_ent_circle
-    \param 2 dwg_point_3d
-    \param 3 int ptr &error
+/** Sets the _dwg_entity_CIRCLE::center, DXF 10.
+\code Usage: dwg_ent_circle_set_center(circle, &point, &error);
+\endcode
+\param[in,out] circle dwg_ent_circle*
+\param[in]     point  dwg_point_3d*
+\param[out]    error  set to 0 for ok, 1 on error
 */
 void
-dwg_ent_circle_set_center(dwg_ent_circle *circle, dwg_point_3d *point,
-                          int *error)
+dwg_ent_circle_set_center(dwg_ent_circle *restrict circle,
+                          const dwg_point_3d *restrict point,
+                          int *restrict error)
 {
-  if (point != 0 && circle != 0)
+  if (point && circle)
     {
       *error = 0;
       circle->center.x = point->x;
@@ -404,15 +363,17 @@ dwg_ent_circle_set_center(dwg_ent_circle *circle, dwg_point_3d *point,
     }
 }
 
-/// returns the circle radius.
-/** Usage : double radius = dwg_ent_circle_get_radius(circle, &error);
-    \param 1 dwg_ent_circle
-    \param 2 int ptr &error
+/** Returns the _dwg_entity_CIRCLE::radius, DXF 40.
+\code Usage: double radius = dwg_ent_circle_get_radius(circle, &error);
+\endcode
+\param[in]  circle  dwg_ent_circle*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_circle_get_radius(dwg_ent_circle *circle, int *error)
+double
+dwg_ent_circle_get_radius(const dwg_ent_circle *restrict circle,
+                          int *restrict error)
 {
-  if (circle != 0)
+  if (circle)
     {
       *error = 0;
       return circle->radius;
@@ -425,16 +386,19 @@ dwg_ent_circle_get_radius(dwg_ent_circle *circle, int *error)
     }
 }
 
-/// sets the circle radius.
-/** Usage : dwg_ent_circle_set_radius(circle, radius, &error);
-    \param 1 dwg_ent_circle
-    \param 2 double
-    \param 3 int ptr &error
+/** Sets the _dwg_entity_CIRCLE::radius, DXF 40.
+\code Usage: dwg_ent_circle_set_radius(circle, radius, &error);
+\endcode
+\param[in,out] circle  dwg_ent_circle*
+\param[in]     radius  double
+\param[out]    error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_circle_set_radius(dwg_ent_circle *circle, BITCODE_BD radius, int *error)
+dwg_ent_circle_set_radius(dwg_ent_circle *restrict circle,
+                          const double radius,
+                          int *restrict error)
 {
-  if (circle != 0)
+  if (circle)
     {
       *error = 0;
       circle->radius = radius;
@@ -446,15 +410,17 @@ dwg_ent_circle_set_radius(dwg_ent_circle *circle, BITCODE_BD radius, int *error)
     }
 }
 
-/// returns the circle thickness.
-/** Usage : double thickness = dwg_ent_circle_get_thickness(circle, &error);
-    \param 1 dwg_ent_circle
-    \param 2 int ptr &error
+/** Returns the_dwg_entity_CIRCLE::thickness, DXF 39 (the cylinder height)
+\code Usage: double thickness = dwg_ent_circle_get_thickness(circle, &error);
+\endcode
+\param[in]  circle  dwg_ent_circle*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_circle_get_thickness(dwg_ent_circle *circle, int *error)
+double
+dwg_ent_circle_get_thickness(const dwg_ent_circle *restrict circle,
+                             int *restrict error)
 {
-  if (circle != 0)
+  if (circle)
     {
       *error = 0;
       return circle->thickness;
@@ -467,16 +433,19 @@ dwg_ent_circle_get_thickness(dwg_ent_circle *circle, int *error)
     }
 }
 
-/// sets the circle thickness.
-/** Usage : dwg_ent_circle_set_thickness(circle, thickness, &error);
-    \param 1 dwg_ent_circle
-    \param 2 int ptr &error
+/** Sets the_dwg_entity_CIRCLE::thickness, DXF 39 (the cylinder height)
+\code Usage: dwg_ent_circle_set_thickness(circle, thickness, &error);
+\endcode
+\param[in,out] circle dwg_ent_circle*
+\param[in]  thickness double
+\param[out] error     int*, set to 0 for ok, 1 on error
 */
 void
-dwg_ent_circle_set_thickness(dwg_ent_circle *circle, BITCODE_BD thickness,
-                             int *error)
+dwg_ent_circle_set_thickness(dwg_ent_circle *restrict circle,
+                             const double thickness,
+                             int *restrict error)
 {
-  if (circle != 0)
+  if (circle)
     {
       *error = 0;
       circle->thickness = thickness;
@@ -488,17 +457,19 @@ dwg_ent_circle_set_thickness(dwg_ent_circle *circle, BITCODE_BD thickness,
     }
 }
 
-/// returns extrusion value of circle.
-/** Usage : dwg_ent_circle_get_extrusion(circle, &point, &error);
-    \param 1 dwg_ent_circle
-    \param 2 dwg_point_3d
-    \param 3 int ptr &error
+/** Sets the_dwg_entity_CIRCLE::extrusion vector, DXF 210
+\code Usage: dwg_ent_circle_set_extrusion(circle, &vector, &error);
+\endcode
+\param[in,out] circle dwg_ent_circle*
+\param[out] vector  dwg_point_3d*
+\param[out] error   int*, set to 0 for ok, 1 on error
 */
 void
-dwg_ent_circle_set_extrusion(dwg_ent_circle *circle, dwg_point_3d *vector,
-                             int *error)
+dwg_ent_circle_set_extrusion(dwg_ent_circle *restrict circle,
+                             const dwg_point_3d *restrict vector,
+                             int *restrict error)
 {
-  if (circle != 0 && vector != 0)
+  if (circle && vector)
     {
       *error = 0;
       circle->extrusion.x = vector->x;
@@ -512,17 +483,19 @@ dwg_ent_circle_set_extrusion(dwg_ent_circle *circle, dwg_point_3d *vector,
     }
 }
 
-/// sets extrusion value of circle.
-/** Usage : dwg_ent_circle_set_extrusion(circle, &point, &error);
-    \param 1 dwg_ent_circle
-    \param 2 dwg_point_3d
-    \param 3 int ptr &error
+/** Returns the _dwg_entity_CIRCLE::extrusion vector, DXF 210
+\code Usage: dwg_ent_circle_get_extrusion(circle, &point, &error);
+\endcode
+\param[in]  circle dwg_ent_circle*
+\param[out] vector dwg_point_3d*
+\param[out] error  int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_circle_get_extrusion(dwg_ent_circle *circle, dwg_point_3d *vector,
-                             int *error)
+dwg_ent_circle_get_extrusion(const dwg_ent_circle *restrict circle,
+                             dwg_point_3d *restrict vector,
+                             int *restrict error)
 {
-  if (circle != 0 && vector != 0)
+  if (circle && vector)
     {
       *error = 0;
       vector->x = circle->extrusion.x;
@@ -540,76 +513,19 @@ dwg_ent_circle_get_extrusion(dwg_ent_circle *circle, dwg_point_3d *vector,
  *                    FUNCTIONS FOR LINE ENTITY                      *
  ********************************************************************/
 
-/// This function creates a new entity of line.
-/** Usage :- dwg_ent_line_new();
- */
-dwg_ent_line *
-dwg_ent_line_new(int *error)
-{
-  dwg_ent_line *line = (dwg_ent_line*) malloc(sizeof(Dwg_Entity_LINE));
-  if (line != 0)
-    {
-      *error = 0;
-      return dwg_ent_line_init(line);
-    }
-  else
-    {
-      LOG_ERROR("%s: empty line", __FUNCTION__)
-      *error = 1;
-      return NULL;
-    }
-}
-
-/// This function deletes the entity created using dwg_ent_line_new() function and frees the allocated memory.
-/** Usage :- dwg_ent_line_delete();
- */
-void
-dwg_ent_line_delete(dwg_ent_line *line, int *error)
-{
-  if (line != 0)
-    {
-      *error = 0;
-      free(line);
-    }
-  else
-    {
-      LOG_ERROR("%s: empty line", __FUNCTION__)
-      *error = 1;
-    }
-}
-
-/// This function initialises a line entity with default or zero values.
-/** Usage :- dwg_ent_line_init();
- */
-dwg_ent_line *
-dwg_ent_line_init(dwg_ent_line *line)
-{
-  if (line != 0)
-    {
-      line->start.x     = line->start.y = line->start.z = 0.0;
-      line->end.x       = line->end.y   = line->end.z = 0.0;
-      line->thickness   = 0.0;
-      line->extrusion.x = line->extrusion.y = 0.0;
-      line->extrusion.z = 0.0;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty line", __FUNCTION__)
-    }
-  return line;
-}
-
-/// returns line start points.
-/** Usage : dwg_ent_line_get_start_point(line, &start_points, &error);
-    \param 1 dwg_ent_line
-    \param 2 dwg_point_2d
-    \param 3 int ptr &error
+/** Returns the _dwg_entity_LINE::start point, DXF 10.
+\code Usage: dwg_ent_line_get_start_point(line, &point, &error);
+\endcode
+\param[in]  line    dwg_ent_line*
+\param[out] point   dwg_point_2d*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_line_get_start_point(dwg_ent_line *line, dwg_point_3d *point,
-                             int *error)
+dwg_ent_line_get_start_point(const dwg_ent_line *restrict line,
+                             dwg_point_3d *restrict point,
+                             int *restrict error)
 {
-  if (line != 0)
+  if (line)
     {
       *error = 0;
       point->x = line->start.x;
@@ -623,17 +539,19 @@ dwg_ent_line_get_start_point(dwg_ent_line *line, dwg_point_3d *point,
     }
 }
 
-/// sets line start points.
-/** Usage : dwg_ent_line_set_start_point(line, &start_points, &error);
-    \param 1 dwg_ent_line
-    \param 2 dwg_point_2d
-    \param 3 int ptr &error
+/** Sets the _dwg_entity_LINE::start point, DXF 10.
+\code Usage: dwg_ent_line_set_start_point(line, point, &error);
+\endcode
+\param[in,out] line dwg_ent_line*
+\param[out] point   dwg_point_2d*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_line_set_start_point(dwg_ent_line *line, dwg_point_3d *point,
-                             int *error)
+dwg_ent_line_set_start_point(dwg_ent_line *restrict line,
+                             const dwg_point_3d *restrict point,
+                             int *restrict error)
 {
-  if (line != 0)
+  if (line)
     {
       *error = 0;
       line->start.x = point->x;
@@ -647,17 +565,19 @@ dwg_ent_line_set_start_point(dwg_ent_line *line, dwg_point_3d *point,
     }
 }
 
-/// returns line end points.
-/** Usage : dwg_ent_line_get_start_end(line, &end_points, &error);
-    \param 1 dwg_ent_line
-    \param 2 dwg_point_2d
-    \param 3 int ptr &error
+/** Returns the _dwg_entity_LINE::end point, DXF 11.
+\code Usage: dwg_ent_line_get_end_point(line, &point, &error);
+\endcode
+\param[in]  line    dwg_ent_line*
+\param[out] point   dwg_point_2d*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_line_get_end_point(dwg_ent_line *line, dwg_point_3d *point,
-                           int *error)
+dwg_ent_line_get_end_point(const dwg_ent_line *restrict line,
+                           dwg_point_3d *restrict point,
+                           int *restrict error)
 {
-  if (line != 0)
+  if (line)
     {
       *error = 0;
       point->x = line->end.x;
@@ -671,17 +591,19 @@ dwg_ent_line_get_end_point(dwg_ent_line *line, dwg_point_3d *point,
     }
 }
 
-/// sets line end points.
-/** Usage : dwg_ent_line_set_start_end(line, &end_points, &error);
-    \param 1 dwg_ent_line
-    \param 2 dwg_point_2d
-    \param 3 int ptr &error
+/** Sets the _dwg_entity_LINE::end point, DXF 11.
+\code Usage: dwg_ent_line_set_start_end(line, &end_points, &error);
+\endcode
+\param[in,out] line dwg_ent_line*
+\param[out] point   dwg_point_2d*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_line_set_end_point(dwg_ent_line *line, dwg_point_3d *point,
-                           int *error)
+dwg_ent_line_set_end_point(dwg_ent_line *restrict line,
+                           const dwg_point_3d *restrict point,
+                           int *restrict error)
 {
-  if (line != 0)
+  if (line)
     {
       *error = 0;
       line->end.x = point->x;
@@ -695,15 +617,17 @@ dwg_ent_line_set_end_point(dwg_ent_line *line, dwg_point_3d *point,
     }
 }
 
-/// Returns line thickness.
-/** Usage : double thickness = dwg_ent_line_get_thickness(line, &error);
-    \param 1 dwg_ent_line
-    \param 2 int ptr &error
+/** Returns the _dwg_entity_LINE::thickness, DXF 39.
+\code Usage: double thickness = dwg_ent_line_get_thickness(line, &error);
+\endcode
+\param[in]  line    dwg_ent_line*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_line_get_thickness(dwg_ent_line *line, int *error)
+double
+dwg_ent_line_get_thickness(const dwg_ent_line *restrict line,
+                          int *restrict error)
 {
-  if (line != 0)
+  if (line)
     {
       *error = 0;
       return line->thickness;
@@ -716,16 +640,19 @@ dwg_ent_line_get_thickness(dwg_ent_line *line, int *error)
     }
 }
 
-/// Sets line thickness.
-/** Usage : dwg_ent_line_get_thickness(line, thickness, &error);
-    \param 1 dwg_ent_line
-    \param 2 double
-    \param 3 int ptr &error
+/** Sets the _dwg_entity_LINE::thickness, DXF 39.
+\code Usage: dwg_ent_line_get_thickness(line, thickness, &error);
+\endcode
+\param[in,out] line   dwg_ent_line*
+\param[out] thickness double
+\param[out] error     int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_line_set_thickness(dwg_ent_line *line, BITCODE_BD thickness, int *error)
+dwg_ent_line_set_thickness(dwg_ent_line *restrict line,
+                           const double thickness,
+                           int *restrict error)
 {
-  if (line != 0)
+  if (line)
     {
       *error = 0;
       line->thickness = thickness;
@@ -737,17 +664,18 @@ dwg_ent_line_set_thickness(dwg_ent_line *line, BITCODE_BD thickness, int *error)
     }
 }
 
-/// returns line extrusion.
-/** Usage : dwg_ent_line_get_extrusion(line, &ext_points, &error);
-    \param 1 dwg_ent_line
-    \param 2 dwg_point_3d
-    \param 3 int ptr &error
+/** Returns the _dwg_entity_LINE::extrusion vector, DXF 210.
+\code Usage: dwg_ent_line_get_extrusion(line, &vector, &error);
+\endcode
+\param[in]  line    dwg_ent_line*
+\param[out] vector  dwg_point_3d*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_line_get_extrusion(dwg_ent_line *line, dwg_point_3d *vector,
-                           int *error)
+dwg_ent_line_get_extrusion(const dwg_ent_line *restrict line, dwg_point_3d *restrict vector,
+                           int *restrict error)
 {
-  if (line != 0 && vector != 0)
+  if (line && vector)
     {
       *error = 0;
       vector->x = line->extrusion.x;
@@ -761,17 +689,19 @@ dwg_ent_line_get_extrusion(dwg_ent_line *line, dwg_point_3d *vector,
     }
 }
 
-/// sets line extrusion.
-/** Usage : dwg_ent_line_set_extrusion(line, &ext_points, &error);
-    \param 1 dwg_ent_line
-    \param 2 dwg_point_3d
-    \param 3 int ptr &error
+/** Sets the _dwg_entity_LINE::extrusion vector, DXF 210.
+\code Usage: dwg_ent_line_set_extrusion(line, vector, &error);
+\endcode
+\param[in,out] line  dwg_ent_line*
+\param[out] vector   dwg_point_3d*
+\param[out] error    int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_line_set_extrusion(dwg_ent_line *line, dwg_point_3d *vector,
-                           int *error)
+dwg_ent_line_set_extrusion(dwg_ent_line *restrict line,
+                          const dwg_point_3d *restrict vector,
+                           int *restrict error)
 {
-  if (line != 0 && vector != 0)
+  if (line && vector)
     {
       *error = 0;
       line->extrusion.x = vector->x;
@@ -789,77 +719,18 @@ dwg_ent_line_set_extrusion(dwg_ent_line *line, dwg_point_3d *vector,
  *                    FUNCTIONS FOR ARC ENTITY                       *
  ********************************************************************/
 
-/// This function creates a new entity of arc type.
-/** Usage :- dwg_ent_arc_new();
- */
-dwg_ent_arc *
-dwg_ent_arc_new(int *error)
-{
-  dwg_ent_arc *arc = (dwg_ent_arc*) malloc(sizeof(Dwg_Entity_ARC));
-  if (arc != 0)
-    {
-      *error = 0;
-      return dwg_ent_arc_init(arc);
-    }
-  else
-    {
-      LOG_ERROR("%s: empty arc", __FUNCTION__)
-      *error = 1;
-      return NULL;
-    }
-}
-
-/// This function deletes entity created by dwg_ent_arc_new() function and frees the allocated memory.
-/** Usage :- dwg_ent_arc_delete();
- */
-void
-dwg_ent_arc_delete(dwg_ent_arc *arc, int *error)
-{
-  if (arc != 0)
-    {
-      *error = 0;
-      free(arc);
-    }
-  else
-    {
-      LOG_ERROR("%s: empty arc", __FUNCTION__)
-      *error = 1;
-    }
-}
-
-/// This function initialises a arc entity with default/zero values.
-/** Usage :- dwg_ent_arc_init();
- */
-dwg_ent_arc *
-dwg_ent_arc_init(dwg_ent_arc *arc)
-{
-  if (arc != 0)
-    {
-      arc->center.x    = arc->center.y = arc->center.z = 0.0;
-      arc->radius      = 0.0;
-      arc->thickness   = 0.0;
-      arc->extrusion.x = arc->extrusion.y = arc->extrusion.z = 0.0;
-      arc->start_angle = 0.0;
-      arc->end_angle   = 0.0;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty arc", __FUNCTION__)
-    }
-  return arc;
-}
-
-/// sets arc center.
-/** Usage : dwg_ent_arc_get_center(arc, &point, &error);
-    \param 1 dwg_ent_arc
+/** Returns the _dwg_entity_ARC::center, DXF 10.
+\code Usage: dwg_ent_arc_get_center(arc, &point, &error);
+\endcode
+\param[in]   arc    dwg_ent_arc*
     \param 2 dwg_point_3d
-    \param 3 int ptr &error
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_arc_get_center(dwg_ent_arc *arc, dwg_point_3d *point,
-                       int *error)
+dwg_ent_arc_get_center(const dwg_ent_arc *restrict arc, dwg_point_3d *restrict point,
+                       int *restrict error)
 {
-  if (arc != 0 && point != 0)
+  if (arc && point)
     {
       *error = 0;
       point->x = arc->center.x;
@@ -873,17 +744,19 @@ dwg_ent_arc_get_center(dwg_ent_arc *arc, dwg_point_3d *point,
     }
 }
 
-/// sets arc center.
-/** Usage : dwg_ent_arc_set_center(arc, &point, &error);
-    \param 1 dwg_ent_arc
-    \param 2 dwg_point_3d
-    \param 3 int ptr &error
+/** Sets the _dwg_entity_ARC::center, DXF 10.
+\code Usage: dwg_ent_arc_set_center(arc, &point, &error);
+\endcode
+\param[in,out] arc     dwg_ent_arc*
+\param[out]    center  dwg_point_3d*
+\param[out]    error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_arc_set_center(dwg_ent_arc *arc, dwg_point_3d *point,
-                       int *error)
+dwg_ent_arc_set_center(dwg_ent_arc *restrict arc,
+                          const dwg_point_3d *restrict point,
+                       int *restrict error)
 {
-  if (arc != 0 && point != 0)
+  if (arc && point)
     {
       *error = 0;
       arc->center.x = point->x;
@@ -897,15 +770,17 @@ dwg_ent_arc_set_center(dwg_ent_arc *arc, dwg_point_3d *point,
     }
 }
 
-/// Returns arc radius.
-/** Usage : double radius = dwg_ent_arc_get_radius(arc, &error);
-    \param 1 dwg_ent_arc
-    \param 2 int ptr &error
+/** Returns the _dwg_entity_ARC::radius, DXF 40.
+\code Usage: double radius = dwg_ent_arc_get_radius(arc, &error);
+\endcode
+\param[in]   arc    dwg_ent_arc*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_arc_get_radius(dwg_ent_arc *arc, int *error)
+double
+dwg_ent_arc_get_radius(const dwg_ent_arc *restrict arc,
+                          int *restrict error)
 {
-  if (arc != 0)
+  if (arc)
     {
       *error = 0;
       return arc->radius;
@@ -918,16 +793,19 @@ dwg_ent_arc_get_radius(dwg_ent_arc *arc, int *error)
     }
 }
 
-/// Sets arc radius
-/** Usage : dwg_ent_arc_set_radius(arc, radius, &error);
-    \param 1 dwg_ent_arc
-    \param 2 double
-    \param 3 int ptr &error
+/** Sets the _dwg_entity_ARC::radius, DXF 40.
+\code Usage: dwg_ent_arc_set_radius(arc, radius, &error);
+\endcode
+\param[in,out] arc     dwg_ent_arc*
+\param[out]    radius  double
+\param[out]    error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_arc_set_radius(dwg_ent_arc *arc, BITCODE_BD radius, int *error)
+dwg_ent_arc_set_radius(dwg_ent_arc *restrict arc,
+                          const double radius,
+                       int *restrict error)
 {
-  if (arc != 0)
+  if (arc)
     {
       *error = 0;
       arc->radius = radius;
@@ -939,15 +817,17 @@ dwg_ent_arc_set_radius(dwg_ent_arc *arc, BITCODE_BD radius, int *error)
     }
 }
 
-/// Returns arc thickness.
-/** Usage : double thickness = dwg_ent_arc_get_thickness(arc, &error);
-    \param 1 dwg_ent_arc
-    \param 2 int ptr &error
+/** Returns the _dwg_entity_ARC::thickness, DXF 39.
+\code Usage: double thickness = dwg_ent_arc_get_thickness(arc, &error);
+\endcode
+\param[in]   arc    dwg_ent_arc*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_arc_get_thickness(dwg_ent_arc *arc, int *error)
+double
+dwg_ent_arc_get_thickness(const dwg_ent_arc *restrict arc,
+                          int *restrict error)
 {
-  if (arc != 0)
+  if (arc)
     {
       *error = 0;
       return arc->thickness;
@@ -960,16 +840,19 @@ dwg_ent_arc_get_thickness(dwg_ent_arc *arc, int *error)
     }
 }
 
-/// Sets arc thickness.
-/** Usage : dwg_ent_arc_get_thickness(arc, thickness, &error);
-    \param 1 dwg_ent_arc
-    \param 2 double
-    \param 3 int ptr &error
+/** Sets the _dwg_entity_ARC::thickness, DXF 39.
+\code Usage: dwg_ent_arc_get_thickness(arc, thickness, &error);
+\endcode
+\param[in,out] arc       dwg_ent_arc*
+\param[out]    thickness double
+\param[out]    error     int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_arc_set_thickness(dwg_ent_arc *arc, BITCODE_BD thickness, int *error)
+dwg_ent_arc_set_thickness(dwg_ent_arc *restrict arc,
+                          const double thickness,
+                          int *restrict error)
 {
-  if (arc != 0)
+  if (arc)
     {
       *error = 0;
       arc->thickness = thickness;
@@ -981,16 +864,18 @@ dwg_ent_arc_set_thickness(dwg_ent_arc *arc, BITCODE_BD thickness, int *error)
     }
 }
 
-/// returns arc extrusion.
-/** Usage : dwg_ent_arc_get_extrusion(arc, &ext_points, &error);
-    \param 1 dwg_ent_arc
-    \param 2 dwg_point_3d
-    \param 3 int ptr &error
+/** Returns the _dwg_entity_ARC::extrusion vector, DXF 210.
+\code Usage: dwg_ent_arc_get_extrusion(arc, &vector, &error);
+\endcode
+\param[in]     arc      dwg_ent_arc*
+\param[out]    vector   dwg_point_3d*
+\param[out]    error    int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_arc_get_extrusion(dwg_ent_arc *arc, dwg_point_3d *vector, int *error)
+dwg_ent_arc_get_extrusion(const dwg_ent_arc *restrict arc, dwg_point_3d *restrict vector,
+                          int *restrict error)
 {
-  if (arc != 0 && vector != 0)
+  if (arc && vector)
     {
       *error = 0;
       vector->x = arc->extrusion.x;
@@ -1004,16 +889,19 @@ dwg_ent_arc_get_extrusion(dwg_ent_arc *arc, dwg_point_3d *vector, int *error)
     }
 }
 
-/// sets arc extrusion.
-/** Usage : dwg_ent_arc_set_extrusion(arc, &ext_points, &error);
-    \param 1 dwg_ent_arc
-    \param 2 dwg_point_3d
-    \param 3 int ptr &error
+/** Sets the _dwg_entity_ARC::extrusion vector, DXF 210.
+\code Usage: dwg_ent_arc_set_extrusion(arc, vector, &error);
+\endcode
+\param[in,out] arc      dwg_ent_arc*
+\param[in]     vector   dwg_point_3d*
+\param[out]    error    int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_arc_set_extrusion(dwg_ent_arc *arc, dwg_point_3d *vector, int *error)
+dwg_ent_arc_set_extrusion(dwg_ent_arc *restrict arc,
+                          const dwg_point_3d *restrict vector,
+                          int *restrict error)
 {
-  if (arc != 0 && vector != 0)
+  if (arc && vector)
     {
       *error = 0;
       arc->extrusion.x = vector->x;
@@ -1027,15 +915,17 @@ dwg_ent_arc_set_extrusion(dwg_ent_arc *arc, dwg_point_3d *vector, int *error)
     }
 }
 
-/// Returns arc start angle.
-/** Usage : double start_angle = dwg_ent_arc_get_start_angle(line, &error);
-    \param 1 dwg_ent_arc
-    \param 2 int ptr &error
+/** Returns the _dwg_entity_ARC::start_angle, DXF 50, in radians.
+\code Usage: double start_angle = dwg_ent_arc_get_start_angle(line, &error);
+\endcode
+\param[in]  arc     dwg_ent_arc*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_arc_get_start_angle(dwg_ent_arc *arc, int *error)
+double
+dwg_ent_arc_get_start_angle(const dwg_ent_arc *restrict arc,
+                          int *restrict error)
 {
-  if (arc != 0)
+  if (arc)
     {
       *error = 0;
       return arc->start_angle;
@@ -1048,19 +938,23 @@ dwg_ent_arc_get_start_angle(dwg_ent_arc *arc, int *error)
     }
 }
 
-/// Sets arc start angle.
-/** Usage : dwg_ent_arc_set_start_angle(arc, start_angle, &error);
-    \param 1 dwg_ent_arc
-    \param 2 double
-    \param 3 int ptr &error
+/** Sets the _dwg_entity_ARC::start_angle, DXF 50.
+\code Usage: dwg_ent_arc_set_start_angle(arc, angle, &error);
+\endcode
+\param[in,out] arc      dwg_ent_arc*
+\param[in]     angle    double (in radians)
+\param[out]    error    int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_arc_set_start_angle(dwg_ent_arc *arc, BITCODE_BD start_angle, int *error)
+dwg_ent_arc_set_start_angle(dwg_ent_arc *restrict arc,
+                          const double angle,
+                            int *restrict error)
 {
-  if (arc != 0)
+  if (arc)
     {
       *error = 0;
-      arc->start_angle = start_angle;
+      //TODO: normalize to PI? There are some DWG's with 2*PI or 4.623770
+      arc->start_angle = angle;
     }
   else
     {
@@ -1069,15 +963,17 @@ dwg_ent_arc_set_start_angle(dwg_ent_arc *arc, BITCODE_BD start_angle, int *error
     }
 }
 
-/// Returns arc end angle.
-/** Usage : double end_angle = dwg_ent_arc_get_end_angle(arc, &error);
-    \param 1 dwg_ent_arc
-    \param 2 int ptr &error
+/** Returns the _dwg_entity_ARC::end_angle, DXF 51, in radians.
+\code Usage: double end_angle = dwg_ent_arc_get_end_angle(arc, &error);
+\endcode
+\param[in]  arc     dwg_ent_arc*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_arc_get_end_angle(dwg_ent_arc *arc, int *error)
+double
+dwg_ent_arc_get_end_angle(const dwg_ent_arc *restrict arc,
+                          int *restrict error)
 {
-  if (arc != 0)
+  if (arc)
     {
       *error = 0;
       return arc->end_angle;
@@ -1090,19 +986,23 @@ dwg_ent_arc_get_end_angle(dwg_ent_arc *arc, int *error)
     }
 }
 
-/// Sets arc end angle.
-/** Usage : dwg_ent_arc_set_end_angle(arc, end_angle, &error);
-    \param 1 dwg_ent_arc
-    \param 2 double
-    \param 3 int ptr &error
+/** Sets the _dwg_entity_ARC::end_angle, DXF 51.
+\code Usage: dwg_ent_arc_set_end_angle(arc, angle, &error);
+\endcode
+\param[in,out] arc      dwg_ent_arc*
+\param[in]     angle    double (in radians)
+\param[out]    error    int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_arc_set_end_angle(dwg_ent_arc *arc, BITCODE_BD end_angle, int *error)
+dwg_ent_arc_set_end_angle(dwg_ent_arc *restrict arc,
+                          const double angle,
+                          int *restrict error)
 {
-  if (arc != 0)
+  if (arc)
     {
       *error = 0;
-      arc->end_angle = end_angle;
+      //TODO: normalize to PI?
+      arc->end_angle = angle;
     }
   else
     {
@@ -1115,80 +1015,19 @@ dwg_ent_arc_set_end_angle(dwg_ent_arc *arc, BITCODE_BD end_angle, int *error)
  *                   FUNCTIONS FOR ELLIPSE ENTITY                    *
  ********************************************************************/
 
-/// This function creates a new entity of ellipse type.
-/** Usage :- dwg_ent_ellipse_new();
- */
-dwg_ent_ellipse *
-dwg_ent_ellipse_new(int *error)
-{
-  dwg_ent_ellipse *ellipse = (dwg_ent_ellipse*)malloc(sizeof(Dwg_Entity_ELLIPSE));
-  if (ellipse != 0)
-    {
-      *error = 0;
-      return dwg_ent_ellipse_init(ellipse);
-    }
-  else
-    {
-      LOG_ERROR("%s: empty ellipse", __FUNCTION__)
-      *error = 1;
-      return NULL;
-    }
-}
-
-/// This function deletes entity created by dwg_ent_ellipse_new() function and frees the allocated memory.
-/** Usage :- dwg_ent_ellipse_delete();
- */
-void
-dwg_ent_ellipse_delete(dwg_ent_ellipse *ellipse, int *error)
-{
-  if (ellipse != 0)
-    {
-      *error = 0;
-      free(ellipse);
-    }
-  else
-    {
-      LOG_ERROR("%s: empty ellipse", __FUNCTION__)
-      *error = 1;
-    }
-}
-
-/// This function initialises a ellipse entity with default or zero values.
-/** Usage :- dwg_ent_ellipse_init();
- */
-dwg_ent_ellipse *
-dwg_ent_ellipse_init(dwg_ent_ellipse *ellipse)
-{
-  if (ellipse != 0)
-    {
-      ellipse->center.x    = ellipse->center.y = 0.0;
-      ellipse->center.z    = 0.0;
-      ellipse->sm_axis.x   = ellipse->sm_axis.y = 0.0;
-      ellipse->sm_axis.z   = 0.0;
-      ellipse->extrusion.x = ellipse->extrusion.y = 0.0;
-      ellipse->extrusion.z = 0.0;
-      ellipse->axis_ratio  = 0.0;
-      ellipse->start_angle = 0.0;
-      ellipse->end_angle   = 0.0;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty ellipse", __FUNCTION__)
-    }
-  return ellipse;
-}
-
-/// returns ellipse center.
-/** Usage : dwg_ent_ellipse_get_center(ellipse, &center, &error);
-    \param 1 dwg_ent_ellipse
-    \param 2 dwg_point_3d
-    \param 3 int ptr &error
+/**  Returns the _dwg_entity_ELLIPSE::center, DXF 10
+\code Usage: dwg_ent_ellipse_get_center(ellipse, &center, &error);
+\endcode
+\param[in]  ellipse dwg_ent_ellipse*
+\param[out] point   dwg_point_3d*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_ellipse_get_center(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
-                           int *error)
+dwg_ent_ellipse_get_center(const dwg_ent_ellipse *restrict ellipse,
+                           dwg_point_3d *restrict point,
+                           int *restrict error)
 {
-  if (ellipse != 0 && point != 0)
+  if (ellipse && point)
     {
       *error = 0;
       point->x = ellipse->center.x;
@@ -1202,17 +1041,19 @@ dwg_ent_ellipse_get_center(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
     }
 }
 
-/// sets ellipse center
-/** Usage : dwg_ent_ellipse_set_center(ellipse, &center &error);
-    \param 1 dwg_ent_ellipse
-    \param 2 dwg_point_3d
-    \param 3 int ptr &error
+/**  Sets the _dwg_entity_ELLIPSE::center, DXF 10
+\code Usage: dwg_ent_ellipse_set_center(ellipse, &center &error);
+\endcode
+\param[in,out] ellipse dwg_ent_ellipse*
+\param[in]     point   dwg_point_3d*
+\param[out]    error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_ellipse_set_center(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
-                           int *error)
+dwg_ent_ellipse_set_center(dwg_ent_ellipse *restrict ellipse,
+                           const dwg_point_3d *restrict point,
+                           int *restrict error)
 {
-  if (ellipse != 0 && point != 0)
+  if (ellipse && point)
     {
       *error = 0;
       ellipse->center.x = point->x;
@@ -1226,17 +1067,19 @@ dwg_ent_ellipse_set_center(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
     }
 }
 
-/// returns ellipse sm axis.
-/** Usage : dwg_ent_ellipse_get_sm_axis(ellipse, &point, &error);
-    \param 1 dwg_ent_ellipse
-    \param 2 dwg_point_3d
-    \param 3 int ptr &error
+/** Returns the _dwg_entity_ELLIPSE::sm_axis, DXF 11.
+\code Usage: dwg_ent_ellipse_get_sm_axis(ellipse, &point, &error);
+\endcode
+\param[in]  ellipse dwg_ent_ellipse*
+\param[out] point   dwg_point_3d*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_ellipse_get_sm_axis(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
-                            int *error)
+dwg_ent_ellipse_get_sm_axis(const dwg_ent_ellipse *restrict ellipse,
+                            dwg_point_3d *restrict point,
+                            int *restrict error)
 {
-  if (ellipse != 0 && point != 0)
+  if (ellipse && point)
     {
       *error = 0;
       point->x = ellipse->sm_axis.x;
@@ -1250,17 +1093,19 @@ dwg_ent_ellipse_get_sm_axis(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
     }
 }
 
-/// sets ellipse sm axis.
-/** Usage : dwg_ent_ellipse_set_sm_axis(ellipse, &point, &error);
-    \param 1 dwg_ent_ellipse
-    \param 2 dwg_point_3d
-    \param 3 int ptr &error
+/** Sets the _dwg_entity_ELLIPSE::sm_axis, DXF 11.
+\code Usage: dwg_ent_ellipse_set_sm_axis(ellipse, &point, &error);
+\endcode
+\param[in,out] ellipse dwg_ent_ellipse*
+\param[in]  point   dwg_point_3d*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_ellipse_set_sm_axis(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
-                            int *error)
+dwg_ent_ellipse_set_sm_axis(dwg_ent_ellipse *restrict ellipse,
+                            const dwg_point_3d *restrict point,
+                            int *restrict error)
 {
-  if (ellipse != 0 && point != 0)
+  if (ellipse && point)
     {
       *error = 0;
       ellipse->sm_axis.x = point->x;
@@ -1274,17 +1119,19 @@ dwg_ent_ellipse_set_sm_axis(dwg_ent_ellipse *ellipse, dwg_point_3d *point,
     }
 }
 
-/// returns ellipse extrusion.
-/** Usage : dwg_ent_ellipse_get_extrusion(ellipse, &ext_points, &error);
-    \param 1 dwg_ent_ellipse
-    \param 2 dwg_point_3d
-    \param 3 int ptr &error
+/** Returns the _dwg_entity_ELLIPSE::extrusion vector, DXF 210.
+\code Usage: dwg_ent_ellipse_get_extrusion(ellipse, &ext_points, &error);
+\endcode
+\param[in] ellipse  dwg_ent_ellipse*
+\param[out] vector  dwg_point_3d*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_ellipse_get_extrusion(dwg_ent_ellipse *ellipse, dwg_point_3d *vector,
-                              int *error)
+dwg_ent_ellipse_get_extrusion(const dwg_ent_ellipse *restrict ellipse,
+                              dwg_point_3d *restrict vector,
+                              int *restrict error)
 {
-  if (ellipse != 0 && vector != 0)
+  if (ellipse && vector)
     {
       *error = 0;
       vector->x = ellipse->extrusion.x;
@@ -1298,17 +1145,19 @@ dwg_ent_ellipse_get_extrusion(dwg_ent_ellipse *ellipse, dwg_point_3d *vector,
     }
 }
 
-/// sets ellipse extrusion.
-/** Usage : dwg_ent_ellipse_set_extrusion(ellipse, &ext_points, &error);
-    \param 1 dwg_ent_ellipse
-    \param 2 dwg_point_3d
-    \param 3 int ptr &error
+/** Sets the _dwg_entity_ELLIPSE::extrusion vector, DXF 210.
+\code Usage: dwg_ent_ellipse_set_extrusion(ellipse, &vector, &error);
+\endcode
+\param[in,out] ellipse dwg_ent_ellipse*
+\param[in]  vector  dwg_point_3d*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_ellipse_set_extrusion(dwg_ent_ellipse *ellipse, dwg_point_3d *vector,
-                              int *error)
+dwg_ent_ellipse_set_extrusion(dwg_ent_ellipse *restrict ellipse,
+                              const dwg_point_3d *restrict vector,
+                              int *restrict error)
 {
-  if (ellipse != 0 && vector != 0)
+  if (ellipse && vector)
     {
       *error = 0;
       ellipse->extrusion.x = vector->x;
@@ -1322,15 +1171,17 @@ dwg_ent_ellipse_set_extrusion(dwg_ent_ellipse *ellipse, dwg_point_3d *vector,
     }
 }
 
-/// Returns ellipse axis ratio
-/** Usage : double axis_ratio = dwg_ent_ellipse_get_axis_ratio(ellipse, &error);
-    \param 1 dwg_ent_ellipse
-    \param 2 int ptr &error
+/** Returns the _dwg_entity_ELLIPSE::axis_ratio, DXF 40.
+\code Usage: double axis_ratio = dwg_ent_ellipse_get_axis_ratio(ellipse, &error);
+\endcode
+\param[in] ellipse dwg_ent_ellipse*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_ellipse_get_axis_ratio(dwg_ent_ellipse *ellipse, int *error)
+double
+dwg_ent_ellipse_get_axis_ratio(const dwg_ent_ellipse *restrict ellipse,
+                          int *restrict error)
 {
-  if (ellipse != 0)
+  if (ellipse)
     {
       *error = 0;
       return ellipse->axis_ratio;
@@ -1343,17 +1194,19 @@ dwg_ent_ellipse_get_axis_ratio(dwg_ent_ellipse *ellipse, int *error)
     }
 }
 
-/// Sets ellipse axis ratio.
-/** Usage : dwg_ent_ellipse_set_axis_ratio(ellipse, axis_ratio, &error);
-    \param 1 dwg_ent_ellipse
+/** Sets the _dwg_entity_ELLIPSE::axis ratio, DXF 40.
+\code Usage: dwg_ent_ellipse_set_axis_ratio(ellipse, axis_ratio, &error);
+\endcode
+\param[in] ellipse dwg_ent_ellipse*
     \param 2 double
-    \param 3 int ptr &error
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_ellipse_set_axis_ratio(dwg_ent_ellipse *ellipse, BITCODE_BD ratio,
-                               int *error)
+dwg_ent_ellipse_set_axis_ratio(dwg_ent_ellipse *restrict ellipse,
+                          const double ratio,
+                               int *restrict error)
 {
-  if (ellipse != 0)
+  if (ellipse)
     {
       *error = 0;
       ellipse->axis_ratio = ratio;
@@ -1365,15 +1218,17 @@ dwg_ent_ellipse_set_axis_ratio(dwg_ent_ellipse *ellipse, BITCODE_BD ratio,
     }
 }
 
-/// Returns ellipse start angle.
-/** Usage : double start_angle = dwg_ent_ellipse_get_start_angle(ellipse, &error);
-    \param 1 dwg_ent_ellipse
-    \param 2 int ptr &error
+/** Returns the _dwg_entity_ELLIPSE::start_angle, DXF 41.
+\code Usage: double start_angle = dwg_ent_ellipse_get_start_angle(ellipse, &error);
+\endcode
+\param[in] ellipse dwg_ent_ellipse*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_ellipse_get_start_angle(dwg_ent_ellipse *ellipse, int *error)
+double
+dwg_ent_ellipse_get_start_angle(const dwg_ent_ellipse *restrict ellipse,
+                          int *restrict error)
 {
-  if (ellipse != 0)
+  if (ellipse)
     {
       *error = 0;
       return ellipse->start_angle;
@@ -1386,17 +1241,19 @@ dwg_ent_ellipse_get_start_angle(dwg_ent_ellipse *ellipse, int *error)
     }
 }
 
-/// Sets ellipse start angle.
-/** Usage : dwg_ent_ellipse_set_start_angle(ellipse, start_angle, &error);
-    \param 1 dwg_ent_ellipse
+/** Sets the _dwg_entity_ELLIPSE::start angle, DXF 41.
+\code Usage: dwg_ent_ellipse_set_start_angle(ellipse, start_angle, &error);
+\endcode
+\param[in] ellipse dwg_ent_ellipse*
     \param 2 double
-    \param 3 int ptr &error
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_ellipse_set_start_angle(dwg_ent_ellipse *ellipse, BITCODE_BD start_angle,
-                                int *error)
+dwg_ent_ellipse_set_start_angle(dwg_ent_ellipse *restrict ellipse,
+                          const double start_angle,
+                                int *restrict error)
 {
-  if (ellipse != 0)
+  if (ellipse)
     {
       *error = 0;
       ellipse->start_angle = start_angle;
@@ -1408,15 +1265,17 @@ dwg_ent_ellipse_set_start_angle(dwg_ent_ellipse *ellipse, BITCODE_BD start_angle
     }
 }
 
-/// Returns ellipse end angle.
-/** Usage : double end_angle = dwg_ent_ellipse_get_end_angle(ellipse, &error);
-    \param 1 dwg_ent_ellipse
-    \param 2 int ptr &error
+/** Returns the _dwg_entity_ELLIPSE::end_angle, DXF 42.
+\code Usage: double end_angle = dwg_ent_ellipse_get_end_angle(ellipse, &error);
+\endcode
+\param[in]  ellipse dwg_ent_ellipse*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_ellipse_get_end_angle(dwg_ent_ellipse *ellipse, int *error)
+double
+dwg_ent_ellipse_get_end_angle(const dwg_ent_ellipse *restrict ellipse,
+                          int *restrict error)
 {
-  if (ellipse != 0)
+  if (ellipse)
     {
       *error = 0;
       return ellipse->end_angle;
@@ -1429,17 +1288,19 @@ dwg_ent_ellipse_get_end_angle(dwg_ent_ellipse *ellipse, int *error)
     }
 }
 
-/// Sets ellipse end angle.
-/** Usage : dwg_ent_ellipse_set_end_angle(ellipse, end_angle, &error);
-    \param 1 dwg_ent_ellipse
-    \param 2 double
-    \param 3 int ptr &error
+/** Sets the _dwg_entity_ELLIPSE::end_angle, DXF 42.
+\code Usage: dwg_ent_ellipse_set_end_angle(ellipse, end_angle, &error);
+\endcode
+\param[in,out] ellipse    dwg_ent_ellipse*
+\param[in]     end_angle  double
+\param[out]    error      int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_ellipse_set_end_angle(dwg_ent_ellipse *ellipse, BITCODE_BD end_angle,
-                              int *error)
+dwg_ent_ellipse_set_end_angle(dwg_ent_ellipse *restrict ellipse,
+                          const double end_angle,
+                              int *restrict error)
 {
-  if (ellipse != 0)
+  if (ellipse)
     {
       *error = 0;
       ellipse->end_angle = end_angle;
@@ -1455,59 +1316,72 @@ dwg_ent_ellipse_set_end_angle(dwg_ent_ellipse *ellipse, BITCODE_BD end_angle,
  *                    FUNCTIONS FOR TEXT ENTITY                      *
  ********************************************************************/
 
-/// Sets text value of a text entity
-/** Usage : dwg_ent_text_set_text(text, "Hello world", &error);
-    \param 1 dwg_ent_text
-    \param 2 string ( char * )
-    \param 2 int ptr &error
+/** Sets the _dwg_entity_TEXT::text string, utf-8 encoded, DXF 1.
+\code Usage: dwg_ent_text_set_text(text, "Hello world", &error);
+\endcode
+\param[in] text dwg_ent_text*
+    \param 2 utf-8 string ( char * )
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_text_set_text(dwg_ent_text *text, char * text_value, int *error)
+dwg_ent_text_set_text(dwg_ent_text *restrict ent,
+                          const char *restrict text_value,
+                          int *restrict error)
 {
-  if (text != 0)
+  if (ent)
     {
       *error = 0;
-      text->text_value = text_value;
+      if (dwg_version >= R_2007)
+        ent->text_value = (char*)bit_utf8_to_TU((char*)text_value);
+      else
+        ent->text_value = (char*)text_value;
     }
   else
     {
-      LOG_ERROR("%s: empty text", __FUNCTION__)
+      LOG_ERROR("%s: empty ent", __FUNCTION__)
       *error = 1;
     }
 }
 
-/// This returns the text value of a text entity.
-/** Usage : dwg_ent_text_get_text(text, &error);
-    \param 1 dwg_ent_text
-    \param 2 int ptr &error
+/** Returns the _dwg_entity_TEXT::text string, utf-8 encoded, DXF 1.
+\code Usage: dwg_ent_text_get_text(text, &error);
+\endcode
+\param[in] text dwg_ent_text*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 char *
-dwg_ent_text_get_text(dwg_ent_text *text, int *error)
+dwg_ent_text_get_text(const dwg_ent_text *restrict ent,
+                          int *restrict error)
 {
-  if (text != 0)
+  if (ent)
     {
       *error = 0;
-      return text->text_value;
+      if (dwg_version >= R_2007)
+        return bit_convert_TU((BITCODE_TU)ent->text_value);
+      else
+        return ent->text_value;
     }
   else
     {
-      LOG_ERROR("%s: empty text", __FUNCTION__)
+      LOG_ERROR("%s: empty ent", __FUNCTION__)
       *error = 1;
       return NULL;
     }
 }
 
-/// This returns the insertion point of a text entity into second argument.
-/** Usage : dwg_ent_text_get_insertion_point(text, &point, &error);
-    \param 1 dwg_ent_text
-    \param 2 dwg_2d_point
-    \param 3 int ptr &error
+/** Returns the _dwg_entity_TEXT::insertion_pt, DXF 10.
+\code Usage: dwg_ent_text_get_insertion_point(text, &point, &error);
+\endcode
+\param[in] text     dwg_ent_text*
+\param[out] point   dwg_2d_point*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_text_get_insertion_point(dwg_ent_text *text, dwg_point_2d *point,
-                                 int *error)
+dwg_ent_text_get_insertion_point(const dwg_ent_text *restrict text,
+                                 dwg_point_2d *restrict point,
+                                 int *restrict error)
 {
-  if (text != 0 && point != 0)
+  if (text && point)
     {
       *error = 0;
       point->x = text->insertion_pt.x;
@@ -1520,17 +1394,19 @@ dwg_ent_text_get_insertion_point(dwg_ent_text *text, dwg_point_2d *point,
     }
 }
 
-/// Sets insertion point
-/** Usage :- dwg_ent_text_set_insertion_point(text, &point, &error)
-    \param 1 dwg_ent_text
-    \param 2 dwg_point_2d
-    \param 3 int ptr &error
+/** Sets the _dwg_entity_TEXT::insertion_pt, DXF 10.
+\code Usage: dwg_ent_text_set_insertion_point(text, &point, &error)
+\endcode
+\param[in,out] text    dwg_ent_text*
+\param[in]     point   dwg_2d_point*
+\param[out]    error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_text_set_insertion_point(dwg_ent_text *text, dwg_point_2d *point,
-                                 int *error)
+dwg_ent_text_set_insertion_point(dwg_ent_text *restrict text,
+                                 const dwg_point_2d *restrict point,
+                                 int *restrict error)
 {
-  if (text != 0 && point != 0)
+  if (text && point)
     {
       *error = 0;
       text->insertion_pt.x = point->x;
@@ -1543,15 +1419,17 @@ dwg_ent_text_set_insertion_point(dwg_ent_text *text, dwg_point_2d *point,
     }
 }
 
-/// Returns height of a text.
-/** Usage :- double height = dwg_ent_text_get_height(text);
-    \param 1 dwg_ent_text
-    \param 2 int ptr &error
+/** Returns the _dwg_entity_TEXT::height, DXF 40.
+\code Usage: double height = dwg_ent_text_get_height(text);
+\endcode
+\param[in]  text    dwg_ent_text*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_text_get_height(dwg_ent_text *text, int *error)
+double
+dwg_ent_text_get_height(const dwg_ent_text *restrict text,
+                          int *restrict error)
 {
-  if (text != 0)
+  if (text)
     {
       *error = 0;
       return text->height;
@@ -1564,16 +1442,19 @@ dwg_ent_text_get_height(dwg_ent_text *text, int *error)
     }
 }
 
-/// Sets height of Text
-/** Usage :- dwg_ent_text_set_height(text, 100, &error);
-    \param 1 dwg_ent_text
-    \param 2 double
-    \param 3 int ptr &error
+/** Sets the _dwg_entity_TEXT::height, DXF 40.
+\code Usage: dwg_ent_text_set_height(text, 100.0, &error);
+\endcode
+\param[in,out] text     dwg_ent_text*
+\param[int] height  double
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_text_set_height(dwg_ent_text *text, BITCODE_BD height, int *error)
+dwg_ent_text_set_height(dwg_ent_text *restrict text,
+                          const double height,
+                          int *restrict error)
 {
-  if (text != 0)
+  if (text)
     {
       *error = 0;
       text->height = height;
@@ -1585,17 +1466,18 @@ dwg_ent_text_set_height(dwg_ent_text *text, BITCODE_BD height, int *error)
     }
 }
 
-/// Returns extrusion value
-/** Usage : dwg_ent_text_get_extrusion(text, &point, &error);
-    \param 1 dwg_ent_text
-    \param 2 dwg_point_2d
-    \param 3 int ptr &error
+/** Returns the _dwg_entity_ELLIPSE::extrusion vector, DXF 210.
+\code dwg_ent_text_get_extrusion(text, &point, &error);
+\endcode
+\param[in]  text   dwg_ent_text*
+\param[out] vector dwg_point_3d*
+\param[out] error  int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_text_get_extrusion(dwg_ent_text *text, dwg_point_3d *vector,
-                           int *error)
+dwg_ent_text_get_extrusion(const dwg_ent_text *restrict text, dwg_point_3d *restrict vector,
+                           int *restrict error)
 {
-  if (text != 0 && vector != 0)
+  if (text && vector)
     {
       *error = 0;
       vector->x = text->extrusion.x;
@@ -1609,17 +1491,19 @@ dwg_ent_text_get_extrusion(dwg_ent_text *text, dwg_point_3d *vector,
     }
 }
 
-/// Sets the text extrusion value.
-/** Usage :- dwg_ent_text_set_extrusion(text, &point, &error);
-    \param 1 dwg_ent_text
-    \param 2 dwg_point_2d
-    \param 3 int ptr &error
+/** Sets the _dwg_entity_ELLIPSE::extrusion vector, DXF 210.
+\code Usage: dwg_ent_text_set_extrusion(text, &vector, &error);
+\encode
+\param[in,out] text dwg_ent_text*
+\param[in]     vector dwg_point_3d*
+\param[out]    error  int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_text_set_extrusion(dwg_ent_text *text, dwg_point_3d *vector,
-                           int *error)
+dwg_ent_text_set_extrusion(dwg_ent_text *restrict text,
+                           const dwg_point_3d *restrict vector,
+                           int *restrict error)
 {
-  if (text != 0 && vector != 0)
+  if (text && vector)
     {
       *error = 0;
       text->extrusion.x = vector->x;
@@ -1633,15 +1517,17 @@ dwg_ent_text_set_extrusion(dwg_ent_text *text, dwg_point_3d *vector,
     }
 }
 
-/// Returns the thickness of a text entity.
-/** Usage : dwg_ent_text_get_thickness(text, &error);
-    \param 1 dwg_ent_text
-    \param 2 int ptr &error
+/** Returns the _dwg_entity_ELLIPSE::thickness, DXF 39.
+\code Usage: thickness = dwg_ent_text_get_thickness(text, &error);
+\endcode
+\param[in]  text  dwg_ent_text*
+\param[out] error int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_text_get_thickness(dwg_ent_text *text, int *error)
+double
+dwg_ent_text_get_thickness(const dwg_ent_text *restrict text,
+                          int *restrict error)
 {
-  if (text != 0)
+  if (text)
     {
       *error = 0;
       return text->thickness;
@@ -1654,16 +1540,19 @@ dwg_ent_text_get_thickness(dwg_ent_text *text, int *error)
     }
 }
 
-/// Sets the thickness of text.
-/** Usage :- dwg_ent_text_set_thickness(text, 50, &error);
-    \param 1 dwg_ent_text
-    \param 2 double
-    \param 3 int ptr &error
+/** Sets the _dwg_entity_ELLIPSE::thickness, DXF 39.
+\code Usage: dwg_ent_text_set_thickness(text, 0.0 &error);
+\endcode
+\param[in,out] text      dwg_ent_text*
+\param[in]     thickness double
+\param[out]    error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_text_set_thickness(dwg_ent_text *text, BITCODE_BD thickness, int *error)
+dwg_ent_text_set_thickness(dwg_ent_text *restrict text,
+                          const double thickness,
+                          int *restrict error)
 {
-  if (text != 0)
+  if (text)
     {
       *error = 0;
       text->thickness = thickness;
@@ -1676,14 +1565,16 @@ dwg_ent_text_set_thickness(dwg_ent_text *text, BITCODE_BD thickness, int *error)
 }
 
 /// Returns the rotation angle of a text entity.
+/// DXF param 50
 /** Usage :- double rot_ang = dwg_ent_text_get_rotation(text, &error);
-    \param 1 dwg_ent_text
-    \param 2 int ptr &error
+\param[in] text dwg_ent_text*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_text_get_rotation(dwg_ent_text *text, int *error)
+double
+dwg_ent_text_get_rotation(const dwg_ent_text *restrict text,
+                          int *restrict error)
 {
-  if (text != 0)
+  if (text)
     {
       *error = 0;
       return text->rotation;
@@ -1696,16 +1587,19 @@ dwg_ent_text_get_rotation(dwg_ent_text *text, int *error)
     }
 }
 
-/// Sets the rotation angle of a text entity.
-/** Usage : dwg_ent_text_set_rotation(text, angle, &error);
-    \param 1 dwg_ent_text
-    \param 2 BITCODE_BD
-    \param 3 int ptr &error
+/** Sets the _dwg_entity_ELLIPSE::rotation angle, in radians, DXF 50.
+\code Usage: dwg_ent_text_set_rotation(text, angle, &error);
+\endcode
+\param[in,out] text   dwg_ent_text*
+\param[in] angle  double
+\param[out] error int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_text_set_rotation(dwg_ent_text *text, BITCODE_BD angle, int *error)
+dwg_ent_text_set_rotation(dwg_ent_text *restrict text,
+                          const double angle,
+                          int *restrict error)
 {
-  if (text != 0)
+  if (text)
     {
       *error = 0;
       text->rotation = angle;
@@ -1717,16 +1611,18 @@ dwg_ent_text_set_rotation(dwg_ent_text *text, BITCODE_BD angle, int *error)
     }
 }
 
-/// Returns the vertical alignment of a text entity.
-/** Usage : short align = dwg_ent_text_get_vert_align(text, &error);
-    \param 1 dwg_ent_text
-    \param 2 int ptr &error
+/** Returns the vertical alignment of a text entity, DXF 73.
+\code Usage: short align = dwg_ent_text_get_vert_align(text, &error);
+\endcode
+\param[in] text dwg_ent_text*
+\param[out] error   int*, is set to 0 for ok, 1 on error
     \return short(1 = bottom, 2 = middle, 3 = top)
 */
 BITCODE_BS
-dwg_ent_text_get_vert_align(dwg_ent_text *text, int *error)
+dwg_ent_text_get_vert_align(const dwg_ent_text *restrict text,
+                          int *restrict error)
 {
-  if (text != 0)
+  if (text)
     {
       *error = 0;
       return text->vert_alignment;
@@ -1739,18 +1635,21 @@ dwg_ent_text_get_vert_align(dwg_ent_text *text, int *error)
     }
 }
 
-/// Sets the vertical alignment of a text entity
-/** Usage : dwg_ent_text_set_vert_align(text, angle, &error);
-    \param 1 dwg_ent_text
+/** Sets the vertical alignment of a text entity, DXF 73.
+\code Usage: dwg_ent_text_set_vert_align(text, angle, &error);
+\endcode
+\param[in] text dwg_ent_text*
     \param 2 short (1 = bottom, 2 = middle, 3 = top)
-    \param 3 int ptr &error
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_text_set_vert_align(dwg_ent_text *text, BITCODE_BS alignment, int *error)
+dwg_ent_text_set_vert_align(dwg_ent_text *restrict text, BITCODE_BS alignment,
+                          int *restrict error)
 {
-  if (text != 0)
+  if (text)
     {
       *error = 0;
+      //TODO: validation 1-3
       text->vert_alignment = alignment;
     }
   else
@@ -1760,16 +1659,18 @@ dwg_ent_text_set_vert_align(dwg_ent_text *text, BITCODE_BS alignment, int *error
     }
 }
 
-/// Returns the horizontal alignment of a text entity.
-/** Usage : short align = dwg_ent_text_get_horiz_align(text, &error);
-    \param 1 dwg_ent_text
-    \param 2 int ptr &error
+/** Returns the horizontal alignment of a text entity, DXF 72.
+\code Usage: short align = dwg_ent_text_get_horiz_align(text, &error);
+\endcode
+\param[in] text dwg_ent_text*
+\param[out] error   int*, is set to 0 for ok, 1 on error
     \return (1 = left, 2 = center, 3 = right)
 */
 BITCODE_BS
-dwg_ent_text_get_horiz_align(dwg_ent_text *text, int *error)
+dwg_ent_text_get_horiz_align(const dwg_ent_text *restrict text,
+                          int *restrict error)
 {
-  if (text != 0)
+  if (text)
     {
       *error = 0;
       return text->horiz_alignment;
@@ -1782,18 +1683,21 @@ dwg_ent_text_get_horiz_align(dwg_ent_text *text, int *error)
     }
 }
 
-/// Sets the horizontal alignment of a text entity.
-/** Usage : dwg_ent_text_set_horiz_align(text, angle, &error);
-    \param 1 dwg_ent_text
+/** Sets the horizontal alignment of a text entity, DXF 72.
+\code Usage: dwg_ent_text_set_horiz_align(text, angle, &error);
+\endcode
+\param[in] text dwg_ent_text*
     \param 2 short (1 = left, 2 = center, 3 = right)
-    \param 3 int ptr &error
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_text_set_horiz_align(dwg_ent_text *text, BITCODE_BS alignment, int *error)
+dwg_ent_text_set_horiz_align(dwg_ent_text *restrict text, BITCODE_BS alignment,
+                          int *restrict error)
 {
-  if (text != 0)
+  if (text)
     {
       *error = 0;
+      //TODO: validation 1-3
       text->horiz_alignment = alignment;
     }
   else
@@ -1807,19 +1711,25 @@ dwg_ent_text_set_horiz_align(dwg_ent_text *text, BITCODE_BS alignment, int *erro
  *                   FUNCTIONS FOR ATTRIB ENTITY                     *
  ********************************************************************/
 
-/// Sets text value of a attrib entity.
-/** Usage : dwg_ent_attrib_set_text(attrib, "Hello world", &error);
-    \param 1 dwg_ent_attrib
-    \param 2 string (char *)
-    \param 3 int ptr &error
+/** Sets text value of a attrib entity (utf-8 encoded).
+\code Usage: dwg_ent_attrib_set_text(attrib, "Hello world", &error);
+\endcode
+\param[in] attrib dwg_ent_attrib*
+    \param 2 utf-8 string (char *)
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_attrib_set_text(dwg_ent_attrib *attrib, char * text_value, int *error)
+dwg_ent_attrib_set_text(dwg_ent_attrib *restrict ent,
+                        const char *restrict text_value,
+                          int *restrict error)
 {
-  if (attrib != 0)
+  if (ent)
     {
       *error = 0;
-      attrib->text_value = text_value;
+      if (dwg_version >= R_2007)
+        ent->text_value = (char*)bit_utf8_to_TU((char*)text_value);
+      else
+        ent->text_value = (char*)text_value;
     }
   else
     {
@@ -1828,18 +1738,23 @@ dwg_ent_attrib_set_text(dwg_ent_attrib *attrib, char * text_value, int *error)
     }
 }
 
-/// Returns the text value of a attrib entity.
-/** Usage : char * text_val = dwg_ent_attrib_get_text(attrib, &error);
-    \param 1 dwg_ent_attrib
-    \param 2 int ptr &error
+/** Returns the text value of a attrib entity (utf-8 encoded).
+\code Usage: char * text_val = dwg_ent_attrib_get_text(attrib, &error);
+\endcode
+\param[in] attrib dwg_ent_attrib*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 char *
-dwg_ent_attrib_get_text(dwg_ent_attrib *attrib, int *error)
+dwg_ent_attrib_get_text(const dwg_ent_attrib *restrict ent,
+                          int *restrict error)
 {
-  if (attrib != 0)
+  if (ent)
     {
       *error = 0;
-      return attrib->text_value;
+      if (dwg_version >= R_2007)
+        return bit_convert_TU((BITCODE_TU)ent->text_value);
+      else
+        return ent->text_value;
     }
   else
     {
@@ -1849,17 +1764,19 @@ dwg_ent_attrib_get_text(dwg_ent_attrib *attrib, int *error)
     }
 }
 
-/// Returns the insertion point of a attrib entity.
-/** Usage : dwg_ent_attrib_get_insertion_point(attrib, &point, &error);
-    \param 1 dwg_ent_attrib
+/** Returns the insertion point of a attrib entity.
+\code Usage: dwg_ent_attrib_get_insertion_point(attrib, &point, &error);
+\endcode
+\param[in] attrib dwg_ent_attrib*
     \param 2 dwg_point_3d
-    \param 3 int ptr &error
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_attrib_get_insertion_point(dwg_ent_attrib *attrib,
-                                   dwg_point_2d *point, int *error)
+dwg_ent_attrib_get_insertion_point(const dwg_ent_attrib *restrict attrib,
+                                   dwg_point_2d *restrict point,
+                          int *restrict error)
 {
-  if (attrib != 0 && point != 0)
+  if (attrib && point)
     {
       *error = 0;
       point->x = attrib->insertion_pt.x;
@@ -1872,17 +1789,19 @@ dwg_ent_attrib_get_insertion_point(dwg_ent_attrib *attrib,
     }
 }
 
-/// Sets the insertion point of a attrib entity.
-/** Usage : dwg_ent_attrib_set_insertion_point(attrib, &point, &error)
-    \param 1 dwg_ent_attrib
+/** Sets the insertion point of a attrib entity.
+\code Usage: dwg_ent_attrib_set_insertion_point(attrib, &point, &error)
+\endcode
+\param[in] attrib dwg_ent_attrib*
     \param 2 dwg_point_3d
-    \param 3 int ptr &error
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_attrib_set_insertion_point(dwg_ent_attrib *attrib,
-                                   dwg_point_2d *point, int *error)
+dwg_ent_attrib_set_insertion_point(dwg_ent_attrib *restrict attrib,
+                                   const dwg_point_2d *restrict point,
+                          int *restrict error)
 {
-  if (attrib != 0 && point != 0)
+  if (attrib && point)
     {
       *error = 0;
       attrib->insertion_pt.x = point->x;
@@ -1895,15 +1814,17 @@ dwg_ent_attrib_set_insertion_point(dwg_ent_attrib *attrib,
     }
 }
 
-/// This returns the height of a attrib entity.
-/** Usage : double height = dwg_ent_attrib_get_height(attrib, &error);
-    \param 1 dwg_ent_attrib
-    \param 2 int ptr &error
+/** This returns the height of a attrib entity.
+\code Usage: double height = dwg_ent_attrib_get_height(attrib, &error);
+\endcode
+\param[in] attrib dwg_ent_attrib*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_attrib_get_height(dwg_ent_attrib *attrib, int *error)
+double
+dwg_ent_attrib_get_height(const dwg_ent_attrib *restrict attrib,
+                          int *restrict error)
 {
-  if (attrib != 0)
+  if (attrib)
     {
       *error = 0;
       return attrib->height;
@@ -1916,16 +1837,19 @@ dwg_ent_attrib_get_height(dwg_ent_attrib *attrib, int *error)
     }
 }
 
-/// This sets height of a attrib entity.
-/** Usage : dwg_ent_attrib_set_height(attrib, 100, &error);
-    \param 1 dwg_ent_attrib
+/** This sets height of a attrib entity.
+\code Usage: dwg_ent_attrib_set_height(attrib, 100, &error);
+\endcode
+\param[in] attrib dwg_ent_attrib*
     \param 2 double
-    \param 3 int ptr &error
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_attrib_set_height(dwg_ent_attrib *attrib, BITCODE_BD height, int *error)
+dwg_ent_attrib_set_height(dwg_ent_attrib *restrict attrib,
+                          const double height,
+                          int *restrict error)
 {
-  if (attrib != 0)
+  if (attrib)
     {
       *error = 0;
       attrib->height = height;
@@ -1937,17 +1861,18 @@ dwg_ent_attrib_set_height(dwg_ent_attrib *attrib, BITCODE_BD height, int *error)
     }
 }
 
-/// Returns the extrusion values of attrib.
-/** Usage : dwg_ent_attrib_get_extrusion(attrib, &point, &error);
-    \param 1 dwg_ent_attrib
-    \param 2 dwg_point_3d
-    \param 3 int ptr &error
+/** Returns the extrusion values of attrib.
+\code Usage: dwg_ent_attrib_get_extrusion(attrib, &point, &error);
+\endcode
+\param[in] attrib dwg_ent_attrib*
+\param[out]  vector      dwg_point_3d *
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_attrib_get_extrusion(dwg_ent_attrib *attrib, dwg_point_3d *vector,
-                             int *error)
+dwg_ent_attrib_get_extrusion(const dwg_ent_attrib *restrict attrib, dwg_point_3d *restrict vector,
+                             int *restrict error)
 {
-  if (attrib != 0 && vector != 0)
+  if (attrib && vector)
     {
       *error = 0;
       vector->x = attrib->extrusion.x;
@@ -1961,17 +1886,19 @@ dwg_ent_attrib_get_extrusion(dwg_ent_attrib *attrib, dwg_point_3d *vector,
     }
 }
 
-/// Sets the attrib extrusion values equal to values of second argument.
-/** Usage : dwg_ent_attrib_set_extrusion(attrib, &point, &error);
-    \param 1 dwg_ent_attrib
+/** Sets the attrib extrusion values equal to values of second argument.
+\code Usage: dwg_ent_attrib_set_extrusion(attrib, &point, &error);
+\endcode
+\param[in] attrib dwg_ent_attrib*
     \param 2 dwg_point_3d
-    \param 3 int ptr &error
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_attrib_set_extrusion(dwg_ent_attrib *attrib, dwg_point_3d *vector,
-                             int *error)
+dwg_ent_attrib_set_extrusion(dwg_ent_attrib *restrict attrib,
+                             const dwg_point_3d *restrict vector,
+                             int *restrict error)
 {
-  if (attrib != 0 && vector != 0)
+  if (attrib && vector)
     {
       *error = 0;
       attrib->extrusion.x = vector->x;
@@ -1985,15 +1912,17 @@ dwg_ent_attrib_set_extrusion(dwg_ent_attrib *attrib, dwg_point_3d *vector,
     }
 }
 
-/// Returns the thickness of a attrib entity.
-/** Usage : double thick = dwg_ent_attrib_get_thickness(attrib, &error);
-    \param 1 dwg_ent_attrib
-    \param 2 int ptr &error
+/** Returns the thickness of a attrib entity.
+\code Usage: double thick = dwg_ent_attrib_get_thickness(attrib, &error);
+\endcode
+\param[in] attrib dwg_ent_attrib*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_attrib_get_thickness(dwg_ent_attrib *attrib, int *error)
+double
+dwg_ent_attrib_get_thickness(const dwg_ent_attrib *restrict attrib,
+                          int *restrict error)
 {
-  if (attrib != 0)
+  if (attrib)
     {
       *error = 0;
       return attrib->thickness;
@@ -2006,17 +1935,19 @@ dwg_ent_attrib_get_thickness(dwg_ent_attrib *attrib, int *error)
     }
 }
 
-/// This sets the thickness of a attrib entity.
-/** Usage : dwg_ent_attrib_set_thickness(attrib, thick, &error);
-    \param 1 dwg_ent_attrib
+/** This sets the thickness of a attrib entity.
+\code Usage: dwg_ent_attrib_set_thickness(attrib, thick, &error);
+\endcode
+\param[in] attrib dwg_ent_attrib*
     \param 2 double
-    \param 3 int ptr &error
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_attrib_set_thickness(dwg_ent_attrib *attrib, BITCODE_BD thickness,
-                             int *error)
+dwg_ent_attrib_set_thickness(dwg_ent_attrib *restrict attrib,
+                          const double thickness,
+                             int *restrict error)
 {
-  if (attrib != 0)
+  if (attrib)
     {
       *error = 0;
       attrib->thickness = thickness;
@@ -2028,15 +1959,17 @@ dwg_ent_attrib_set_thickness(dwg_ent_attrib *attrib, BITCODE_BD thickness,
     }
 }
 
-/// Returns the rotation angle of a attrib entity.
-/** Usage : double angle = dwg_ent_attrib_get_rot_angle(attrib, &error);
-    \param 1 dwg_ent_attrib
-    \param 2 int ptr &error
+/** Returns the rotation angle of a attrib entity.
+\code Usage: double angle = dwg_ent_attrib_get_rot_angle(attrib, &error);
+\endcode
+\param[in] attrib dwg_ent_attrib*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_attrib_get_rot_angle(dwg_ent_attrib *attrib, int *error)
+double
+dwg_ent_attrib_get_rot_angle(const dwg_ent_attrib *restrict attrib,
+                          int *restrict error)
 {
-  if (attrib != 0)
+  if (attrib)
     {
       *error = 0;
       return attrib->rotation;
@@ -2051,14 +1984,16 @@ dwg_ent_attrib_get_rot_angle(dwg_ent_attrib *attrib, int *error)
 
 /// This sets the rotation angle of a attrib entity.
 /** Usage :- dwg_ent_attrib_set_rot_angle(attrib, angle, &error);
-    \param 1 dwg_ent_attrib
+\param[in] attrib dwg_ent_attrib*
     \param 2 double
-    \param 3 int ptr &error
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_attrib_set_rot_angle(dwg_ent_attrib *attrib, BITCODE_BD angle, int *error)
+dwg_ent_attrib_set_rot_angle(dwg_ent_attrib *restrict attrib,
+                          const double angle,
+                          int *restrict error)
 {
-  if (attrib != 0)
+  if (attrib)
     {
       *error = 0;
       attrib->rotation = angle;
@@ -2070,16 +2005,18 @@ dwg_ent_attrib_set_rot_angle(dwg_ent_attrib *attrib, BITCODE_BD angle, int *erro
     }
 }
 
-/// This returns the vertical alignment of a attrib entity.
-/** Usage : short vert_align = dwg_ent_attrib_get_vert_align(attrib, &error);
-    \param 1 dwg_ent_attrib
-    \param 2 int ptr &error
+/** This returns the vertical alignment of a attrib entity.
+\code Usage: short vert_align = dwg_ent_attrib_get_vert_align(attrib, &error);
+\endcode
+\param[in] attrib dwg_ent_attrib*
+\param[out] error   int*, is set to 0 for ok, 1 on error
     \return short(1 = bottom, 2 = middle, 3 = top)
 */
 BITCODE_BS
-dwg_ent_attrib_get_vert_align(dwg_ent_attrib *attrib, int *error)
+dwg_ent_attrib_get_vert_align(const dwg_ent_attrib *restrict attrib,
+                          int *restrict error)
 {
-  if (attrib != 0)
+  if (attrib)
     {
       *error = 0;
       return attrib->vert_alignment;
@@ -2094,15 +2031,15 @@ dwg_ent_attrib_get_vert_align(dwg_ent_attrib *attrib, int *error)
 
 /// This sets the vertical alignment of a attrib entity.
 /** Usage :- dwg_ent_attrib_set_vert_align(attrib, angle, &error);
-    \param 1 dwg_ent_attrib
+\param[in] attrib dwg_ent_attrib*
     \param 2 short (1 = bottom, 2 = middle, 3 = top)
-    \param 3 int ptr &error
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_attrib_set_vert_align(dwg_ent_attrib *attrib, BITCODE_BS alignment,
-                              int *error)
+dwg_ent_attrib_set_vert_align(dwg_ent_attrib *restrict attrib, BITCODE_BS alignment,
+                              int *restrict error)
 {
-  if (attrib != 0)
+  if (attrib)
     {
       *error = 0;
       attrib->vert_alignment = alignment;
@@ -2114,16 +2051,18 @@ dwg_ent_attrib_set_vert_align(dwg_ent_attrib *attrib, BITCODE_BS alignment,
     }
 }
 
-/// This returns the horizontal alignment of a attrib entity.
-/** Usage : short horiz_align =  dwg_ent_attrib_get_horiz_align(attrib, &error);
-    \param 1 dwg_ent_attrib
-    \param 2 int ptr &error
+/** This returns the horizontal alignment of a attrib entity.
+\code Usage: short horiz_align =  dwg_ent_attrib_get_horiz_align(attrib, &error);
+\endcode
+\param[in] attrib dwg_ent_attrib*
+\param[out] error   int*, is set to 0 for ok, 1 on error
     \return (1 = left, 2 = center, 3 = right)
 */
 BITCODE_BS
-dwg_ent_attrib_get_horiz_align(dwg_ent_attrib *attrib, int *error)
+dwg_ent_attrib_get_horiz_align(const dwg_ent_attrib *restrict attrib,
+                          int *restrict error)
 {
-  if (attrib != 0)
+  if (attrib)
     {
       *error = 0;
       return attrib->horiz_alignment;
@@ -2138,15 +2077,15 @@ dwg_ent_attrib_get_horiz_align(dwg_ent_attrib *attrib, int *error)
 
 /// This sets the horizontal alignment of a attrib entity.
 /** Usage :- dwg_ent_attrib_set_horiz_align(attrib, angle, &error);
-    \param 1 dwg_ent_attrib
+\param[in] attrib dwg_ent_attrib*
     \param 2 short (1 = left, 2 = center, 3 = right)
-    \param 3 int ptr &error
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_attrib_set_horiz_align(dwg_ent_attrib *attrib, BITCODE_BS alignment,
-                               int *error)
+dwg_ent_attrib_set_horiz_align(dwg_ent_attrib *restrict attrib, BITCODE_BS alignment,
+                               int *restrict error)
 {
-  if (attrib != 0)
+  if (attrib)
     {
       *error = 0;
       attrib->horiz_alignment = alignment;
@@ -2162,20 +2101,24 @@ dwg_ent_attrib_set_horiz_align(dwg_ent_attrib *attrib, BITCODE_BS alignment,
  *                   FUNCTIONS FOR ATTDEF ENTITY                     *
  ********************************************************************/
 
-/// This sets text value of a attdef entity equal.
+/// This sets the default value of an attdef entity (utf-8 encoded).
 /** Usage :- dwg_ent_attdef_set_text(attdef, "Hello world", &error);
-    \param 1 dwg_ent_attdef
-    \param 2 char *
-    \param 3 int ptr &error
+\param[in]  attdef dwg_ent_attdef*
+\param[in]  default_value utf-8 string (char *)
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_attdef_set_text(dwg_ent_attdef *attdef, char * default_value,
-                        int *error)
+dwg_ent_attdef_set_text(dwg_ent_attdef *restrict ent,
+                        const char *restrict default_value,
+                        int *restrict error)
 {
-  if (attdef != 0)
+  if (ent)
     {
       *error = 0;
-      attdef->default_value = default_value;
+      if (dwg_version >= R_2007)
+        ent->default_value = (char*)bit_utf8_to_TU((char*)default_value);
+      else
+        ent->default_value = (char*)default_value;
     }
   else
     {
@@ -2184,18 +2127,23 @@ dwg_ent_attdef_set_text(dwg_ent_attdef *attdef, char * default_value,
     }
 }
 
-/// This returns the text value of a attdef entity.
-/** Usage : char * text = dwg_ent_attdef_get_text(attdef, &error);
-    \param 1 dwg_ent_attdef
-    \param 2 int ptr &error
+/** This returns the default value of an attdef entity (utf-8 encoded).
+\code Usage: char * text = dwg_ent_attdef_get_text(attdef, &error);
+\endcode
+\param[in] attdef dwg_ent_attdef*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 char *
-dwg_ent_attdef_get_text(dwg_ent_attdef *attdef, int *error)
+dwg_ent_attdef_get_text(const dwg_ent_attdef *restrict ent,
+                          int *restrict error)
 {
-  if (attdef != 0)
+  if (ent)
     {
       *error = 0;
-      return attdef->default_value;
+      if (dwg_version >= R_2007)
+        return bit_convert_TU((BITCODE_TU)ent->default_value);
+      else
+        return ent->default_value;
     }
   else
     {
@@ -2205,17 +2153,18 @@ dwg_ent_attdef_get_text(dwg_ent_attdef *attdef, int *error)
     }
 }
 
-/// This returns the insertion point of a attdef entity.
+/// This returns the insertion point of an attdef entity.
 /** Usage :- dwg_ent_attdef_get_insertion_point(attdef, &point, &error);
-    \param 1 dwg_ent_attdef
-    \param 2 dwg_point_2d
-    \param 3 int ptr &error
+\param[in] attdef  dwg_ent_attdef*
+\param[out] point   dwg_point_2d*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_attdef_get_insertion_point(dwg_ent_attdef *attdef,
-                                   dwg_point_2d *point, int *error)
+dwg_ent_attdef_get_insertion_point(const dwg_ent_attdef *restrict attdef,
+                                   dwg_point_2d *restrict point,
+                          int *restrict error)
 {
-  if (attdef != 0 && point != 0)
+  if (attdef && point)
     {
       *error = 0;
       point->x = attdef->insertion_pt.x;
@@ -2230,15 +2179,16 @@ dwg_ent_attdef_get_insertion_point(dwg_ent_attdef *attdef,
 
 /// This sets the insertion point of a attdef entity.
 /** Usage :- dwg_ent_attdef_set_insertion_point(attdef, &point, &error)
-    \param 1 dwg_ent_attdef
-    \param 2 dwg_point_2d
-    \param 3 int ptr &error
+\param[in] attdef   dwg_ent_attdef*
+\param[in] point    dwg_point_2d*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_attdef_set_insertion_point(dwg_ent_attdef *attdef,
-                                   dwg_point_2d *point, int *error)
+dwg_ent_attdef_set_insertion_point(dwg_ent_attdef *restrict attdef,
+                                   const dwg_point_2d *restrict point,
+                                   int *restrict error)
 {
-  if (attdef != 0 && point != 0)
+  if (attdef && point)
     {
       *error = 0;
       attdef->insertion_pt.x = point->x;
@@ -2253,13 +2203,14 @@ dwg_ent_attdef_set_insertion_point(dwg_ent_attdef *attdef,
 
 /// This returns the height of a attdef entity.
 /** Usage :- dwg_ent_attdef_get_height(attdef, &error);
-    \param 1 dwg_ent_attdef
-    \param 2 int ptr &error
+\param[in] attdef dwg_ent_attdef*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_attdef_get_height(dwg_ent_attdef *attdef, int *error)
+double
+dwg_ent_attdef_get_height(const dwg_ent_attdef *restrict attdef,
+                          int *restrict error)
 {
-  if (attdef != 0)
+  if (attdef)
     {
       *error = 0;
       return attdef->height;
@@ -2274,14 +2225,16 @@ dwg_ent_attdef_get_height(dwg_ent_attdef *attdef, int *error)
 
 /// This sets height of a attdef entity.
 /** Usage :- dwg_ent_attdef_set_height(attdef, 100, &error);
-    \param 1 dwg_ent_attdef
-    \param 2 double
-    \param 3 int ptr &error
+\param[in] attdef dwg_ent_attdef*
+\param[in] height double
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_attdef_set_height(dwg_ent_attdef *attdef, BITCODE_BD height, int *error)
+dwg_ent_attdef_set_height(dwg_ent_attdef *restrict attdef,
+                          const double height,
+                          int *restrict error)
 {
-  if (attdef != 0)
+  if (attdef)
     {
       *error = 0;
       attdef->height = height;
@@ -2293,17 +2246,19 @@ dwg_ent_attdef_set_height(dwg_ent_attdef *attdef, BITCODE_BD height, int *error)
     }
 }
 
-/// Returns the extrusion values of attdef.
-/** Usage : dwg_ent_attdef_get_extrusion(attdef, &point, &error);
-    \param 1 dwg_ent_attdef
-    \param 2 dwg_point_3d
-    \param 3 int ptr &error
+/** Returns the extrusion vector of attdef.
+\code Usage: dwg_ent_attdef_get_extrusion(attdef, &point, &error);
+\endcode
+\param[in]  attdef  dwg_ent_attdef*
+\param[out] vector  dwg_point_3d*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_attdef_get_extrusion(dwg_ent_attdef *attdef, dwg_point_3d *vector,
-                             int *error)
+dwg_ent_attdef_get_extrusion(const dwg_ent_attdef *restrict attdef,
+                             dwg_point_3d *restrict vector,
+                             int *restrict error)
 {
-  if (attdef != 0 && vector != 0)
+  if (attdef && vector)
     {
       *error = 0;
       vector->x = attdef->extrusion.x;
@@ -2319,15 +2274,16 @@ dwg_ent_attdef_get_extrusion(dwg_ent_attdef *attdef, dwg_point_3d *vector,
 
 /// Sets the attdef extrusion values.
 /** Usage :- dwg_ent_attdef_set_extrusion(attdef, &point, &error);
-    \param 1 dwg_ent_attdef
-    \param 2 dwg_point_3d
-    \param 3 int ptr &error
+\param[in] attdef dwg_ent_attdef*
+\param[in] vector  dwg_point_3d*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_attdef_set_extrusion(dwg_ent_attdef *attdef, dwg_point_3d *vector,
-                             int *error)
+dwg_ent_attdef_set_extrusion(dwg_ent_attdef *restrict attdef,
+                             const dwg_point_3d *restrict vector,
+                             int *restrict error)
 {
-  if (attdef != 0 && vector != 0)
+  if (attdef && vector)
     {
       *error = 0;
       attdef->extrusion.x = vector->x;
@@ -2343,13 +2299,14 @@ dwg_ent_attdef_set_extrusion(dwg_ent_attdef *attdef, dwg_point_3d *vector,
 
 /// This returns the thickness of a attdef entity.
 /** Usage :- double thickness = dwg_ent_attdef_get_thickness(attdef, &error);
-    \param 1 dwg_ent_attdef
-    \param 2 int ptr &error
+\param[in] attdef dwg_ent_attdef*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_attdef_get_thickness(dwg_ent_attdef *attdef, int *error)
+double
+dwg_ent_attdef_get_thickness(const dwg_ent_attdef *restrict attdef,
+                          int *restrict error)
 {
-  if (attdef != 0)
+  if (attdef)
     {
       *error = 0;
       return attdef->thickness;
@@ -2364,15 +2321,16 @@ dwg_ent_attdef_get_thickness(dwg_ent_attdef *attdef, int *error)
 
 /// This sets the thickness of a attdef entity.
 /** Usage :- dwg_ent_attdef_set_thickness(attdef, thickness, &error);
-    \param 1 dwg_ent_attdef
+\param[in] attdef dwg_ent_attdef*
     \param 2 double
-    \param 3 int ptr &error
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_attdef_set_thickness(dwg_ent_attdef *attdef, BITCODE_BD thickness,
-                             int *error)
+dwg_ent_attdef_set_thickness(dwg_ent_attdef *restrict attdef,
+                          const double thickness,
+                             int *restrict error)
 {
-  if (attdef != 0)
+  if (attdef)
     {
       *error = 0;
       attdef->thickness = thickness;
@@ -2386,13 +2344,14 @@ dwg_ent_attdef_set_thickness(dwg_ent_attdef *attdef, BITCODE_BD thickness,
 
 /// This returns the rotation angle of a attdef entity.
 /** Usage :- double angle = dwg_ent_attdef_get_rot_angle(attdef, &error);
-    \param 1 dwg_ent_attdef
-    \param 2 int ptr &error
+\param[in] attdef dwg_ent_attdef*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_attdef_get_rot_angle(dwg_ent_attdef *attdef, int *error)
+double
+dwg_ent_attdef_get_rot_angle(const dwg_ent_attdef *restrict attdef,
+                          int *restrict error)
 {
-  if (attdef != 0)
+  if (attdef)
     {
       *error = 0;
       return attdef->rotation;
@@ -2407,14 +2366,16 @@ dwg_ent_attdef_get_rot_angle(dwg_ent_attdef *attdef, int *error)
 
 /// This sets the rotation angle of a attdef entity.
 /** Usage :- dwg_ent_attdef_set_rot_angle(attdef, angle, &error);
-    \param 1 dwg_ent_attdef
+\param[in] attdef dwg_ent_attdef*
     \param 2 double
-    \param 3 int ptr &error
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_attdef_set_rot_angle(dwg_ent_attdef *attdef, BITCODE_BD angle, int *error)
+dwg_ent_attdef_set_rot_angle(dwg_ent_attdef *restrict attdef,
+                          const double angle,
+                          int *restrict error)
 {
-  if (attdef != 0)
+  if (attdef)
     {
       *error = 0;
       attdef->rotation = angle;
@@ -2428,14 +2389,15 @@ dwg_ent_attdef_set_rot_angle(dwg_ent_attdef *attdef, BITCODE_BD angle, int *erro
 
 /// This returns the vertical alignment of a attdef entity.
 /** Usage :- short vert_align = dwg_ent_attdef_get_vert_align(attdef, &error);
-    \param 1 dwg_ent_attdef
-    \param 2 int ptr &error
+\param[in] attdef dwg_ent_attdef*
+\param[out] error   int*, is set to 0 for ok, 1 on error
     \return (1 = bottom, 2 = middle, 3 = top)
 */
 BITCODE_BS
-dwg_ent_attdef_get_vert_align(dwg_ent_attdef *attdef, int *error)
+dwg_ent_attdef_get_vert_align(const dwg_ent_attdef *restrict attdef,
+                          int *restrict error)
 {
-  if (attdef != 0)
+  if (attdef)
     {
       *error = 0;
       return attdef->vert_alignment;
@@ -2450,15 +2412,16 @@ dwg_ent_attdef_get_vert_align(dwg_ent_attdef *attdef, int *error)
 
 /// This sets the vertical alignment of a attdef entity.
 /** Usage :- dwg_ent_attdef_set_vert_align(attdef, angle, &error);
-    \param 1 dwg_ent_attdef
+\param[in] attdef dwg_ent_attdef*
     \param 2 short (1 = bottom, 2 = middle, 3 = top)
-    \param 3 int ptr &error
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_attdef_set_vert_align(dwg_ent_attdef *attdef, BITCODE_BS alignment,
-                              int *error)
+dwg_ent_attdef_set_vert_align(dwg_ent_attdef *restrict attdef,
+                              const BITCODE_BS alignment,
+                              int *restrict error)
 {
-  if (attdef != 0)
+  if (attdef)
     {
       *error = 0;
       attdef->vert_alignment = alignment;
@@ -2472,14 +2435,15 @@ dwg_ent_attdef_set_vert_align(dwg_ent_attdef *attdef, BITCODE_BS alignment,
 
 /// This returns the horizontal alignment of a attdef entity.
 /** Usage :- short horiz_align = dwg_ent_attdef_get_horiz_align(attdef, &error);
-    \param 1 dwg_ent_attdef
-    \param 2 int ptr &error
+\param[in] attdef dwg_ent_attdef*
+\param[out] error   int*, is set to 0 for ok, 1 on error
     \return (1 = left, 2 = center, 3 = right)
 */
 BITCODE_BS
-dwg_ent_attdef_get_horiz_align(dwg_ent_attdef *attdef, int *error)
+dwg_ent_attdef_get_horiz_align(const dwg_ent_attdef *restrict attdef,
+                          int *restrict error)
 {
-  if (attdef != 0)
+  if (attdef)
     {
       *error = 0;
       return attdef->horiz_alignment;
@@ -2494,15 +2458,16 @@ dwg_ent_attdef_get_horiz_align(dwg_ent_attdef *attdef, int *error)
 
 /// This sets the horizontal alignment of a attdef entity.
 /** Usage :- dwg_ent_attdef_set_horiz_align(attdef, alignment, &error);
-    \param 1 dwg_ent_attdef
+\param[in] attdef dwg_ent_attdef*
     \param 2 short (1 = left, 2 = center, 3 = right)
-    \param 3 int ptr &error
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_attdef_set_horiz_align(dwg_ent_attdef *attdef, BITCODE_BS alignment,
-                               int *error)
+dwg_ent_attdef_set_horiz_align(dwg_ent_attdef *restrict attdef,
+                          const BITCODE_BS alignment,
+                               int *restrict error)
 {
-  if (attdef != 0)
+  if (attdef)
     {
       *error = 0;
       attdef->horiz_alignment = alignment;
@@ -2520,15 +2485,16 @@ dwg_ent_attdef_set_horiz_align(dwg_ent_attdef *attdef, BITCODE_BS alignment,
 
 /// Sets the point point values.
 /** Usage :- dwg_ent_point_set_point(point, &retpoint, &error);
-\param 1 dwg_ent_point
+\param[in] point dwg_ent_point*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_point_set_point(dwg_ent_point *point, dwg_point_3d *retpoint,
-                        int *error)
+dwg_ent_point_set_point(dwg_ent_point *restrict point,
+                        const dwg_point_3d *restrict retpoint,
+                        int *restrict error)
 {
-  if (point != 0 && retpoint != 0)
+  if (point && retpoint)
     {
       *error = 0;
       point->x = retpoint->x;
@@ -2544,15 +2510,16 @@ dwg_ent_point_set_point(dwg_ent_point *point, dwg_point_3d *retpoint,
 
 /// Returns the point values of point to second argument.
 /** Usage :- dwg_ent_point_get_point(point, &retpoint, &error);
-\param 1 dwg_ent_point
+\param[in] point dwg_ent_point*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_point_get_point(dwg_ent_point *point, dwg_point_3d *retpoint,
-                        int *error)
+dwg_ent_point_get_point(const dwg_ent_point *restrict point,
+                        dwg_point_3d *restrict retpoint,
+                        int *restrict error)
 {
-  if (point != 0 && retpoint != 0)
+  if (point && retpoint)
     {
       *error = 0;
       retpoint->x = point->x;
@@ -2568,13 +2535,14 @@ dwg_ent_point_get_point(dwg_ent_point *point, dwg_point_3d *retpoint,
 
 /// This returns the thickness of a point entity.
 /** Usage :- double thickness = dwg_ent_point_get_thickness(point, &error);
-\param 1 dwg_ent_point
-\param 2 int
+\param[in] point dwg_ent_point*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_point_get_thickness(dwg_ent_point *point, int *error)
+double
+dwg_ent_point_get_thickness(const dwg_ent_point *restrict point,
+                          int *restrict error)
 {
-  if (point != 0)
+  if (point)
     {
       *error = 0;
       return point->thickness;
@@ -2589,15 +2557,16 @@ dwg_ent_point_get_thickness(dwg_ent_point *point, int *error)
 
 /// This sets the thickness of a point entity.
 /** Usage :- dwg_ent_point_set_thickness(point, thickness, &error);
-\param 1 dwg_ent_point
+\param[in] point dwg_ent_point*
 \param 2 double
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_point_set_thickness(dwg_ent_point *point, BITCODE_BD thickness,
-                            int *error)
+dwg_ent_point_set_thickness(dwg_ent_point *restrict point,
+                          const double thickness,
+                            int *restrict error)
 {
-  if (point != 0)
+  if (point)
     {
       *error = 0;
       point->thickness = thickness;
@@ -2611,15 +2580,16 @@ dwg_ent_point_set_thickness(dwg_ent_point *point, BITCODE_BD thickness,
 
 /// Sets the point extrusion values.
 /** Usage :- dwg_ent_point_set_extrusion(point, &retpoint, &error);
-\param 1 dwg_ent_point
+\param[in] point dwg_ent_point*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_point_set_extrusion(dwg_ent_point *point, dwg_point_3d *retpoint,
-                            int *error)
+dwg_ent_point_set_extrusion(dwg_ent_point *restrict point,
+                            const dwg_point_3d *restrict retpoint,
+                            int *restrict error)
 {
-  if (point != 0 && retpoint != 0)
+  if (point && retpoint)
     {
       *error = 0;
       point->extrusion.x = retpoint->x;
@@ -2635,15 +2605,16 @@ dwg_ent_point_set_extrusion(dwg_ent_point *point, dwg_point_3d *retpoint,
 
 /// Returns the extrusion values of point entity.
 /** Usage :- dwg_ent_point_get_extrusion(point, &retpoint, &error);
-\param 1 dwg_ent_point
+\param[in] point dwg_ent_point*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_point_get_extrusion(dwg_ent_point *point, dwg_point_3d *retpoint,
-                            int *error)
+dwg_ent_point_get_extrusion(const dwg_ent_point *restrict point,
+                            dwg_point_3d *restrict retpoint,
+                            int *restrict error)
 {
-  if (point != 0 && retpoint != 0)
+  if (point && retpoint)
     {
       *error = 0;
       retpoint->x = point->extrusion.x;
@@ -2663,13 +2634,14 @@ dwg_ent_point_get_extrusion(dwg_ent_point *point, dwg_point_3d *retpoint,
 
 /// This returns the thickness of a solid entity.
 /** Usage :- double thickness = dwg_ent_solid_get_thickness(solid, &error);
-\param 1 dwg_ent_solid
-\param 2 int
+\param[in] solid dwg_ent_solid*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 double
-dwg_ent_solid_get_thickness(dwg_ent_solid *solid, int *error)
+dwg_ent_solid_get_thickness(const dwg_ent_solid *restrict solid,
+                          int *restrict error)
 {
-  if (solid != 0)
+  if (solid)
     {
       *error = 0;
       return solid->thickness;
@@ -2684,15 +2656,16 @@ dwg_ent_solid_get_thickness(dwg_ent_solid *solid, int *error)
 
 /// This sets the thickness of a solid entity.
 /** Usage :- dwg_ent_solid_set_thickness(solid, 2.0, &error);
-\param 1 dwg_ent_solid
+\param[in] solid dwg_ent_solid*
 \param 2 double
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_solid_set_thickness(dwg_ent_solid *solid, BITCODE_BD thickness,
-                            int *error)
+dwg_ent_solid_set_thickness(dwg_ent_solid *restrict solid,
+                          const double thickness,
+                            int *restrict error)
 {
-  if (solid != 0)
+  if (solid)
     {
       *error = 0;
       solid->thickness = thickness;
@@ -2706,13 +2679,14 @@ dwg_ent_solid_set_thickness(dwg_ent_solid *solid, BITCODE_BD thickness,
 
 /// This returns the elevation of a solid entity.
 /** Usage :- double elev = dwg_ent_solid_get_elevation(solid, &error);
-\param 1 dwg_ent_solid
-\param 2 int
+\param[in] solid dwg_ent_solid*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_solid_get_elevation(dwg_ent_solid *solid, int *error)
+double
+dwg_ent_solid_get_elevation(const dwg_ent_solid *restrict solid,
+                          int *restrict error)
 {
-  if (solid != 0)
+  if (solid)
     {
       *error = 0;
       return solid->elevation;
@@ -2727,15 +2701,16 @@ dwg_ent_solid_get_elevation(dwg_ent_solid *solid, int *error)
 
 /// This sets the elevation of a solid entity.
 /** Usage :- dwg_ent_solid_set_elevation(solid, 20.0, &error);
-\param 1 dwg_ent_solid
+\param[in] solid dwg_ent_solid*
 \param 2 double
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_solid_set_elevation(dwg_ent_solid *solid, BITCODE_BD elevation,
-                            int *error)
+dwg_ent_solid_set_elevation(dwg_ent_solid *restrict solid,
+                          const double elevation,
+                            int *restrict error)
 {
-  if (solid != 0)
+  if (solid)
     {
       *error = 0;
       solid->elevation = elevation;
@@ -2749,15 +2724,16 @@ dwg_ent_solid_set_elevation(dwg_ent_solid *solid, BITCODE_BD elevation,
 
 /// Returns the corner1 values of solid.
 /** Usage :- dwg_ent_solid_get_corner1(solid, &point, &error);
-\param 1 dwg_ent_solid
+\param[in] solid dwg_ent_solid*
 \param 2 dwg_point_2d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_solid_get_corner1(dwg_ent_solid *solid, dwg_point_2d *point,
-                          int *error)
+dwg_ent_solid_get_corner1(const dwg_ent_solid *restrict solid,
+                          dwg_point_2d *restrict point,
+                          int *restrict error)
 {
-  if (solid != 0 && point != 0)
+  if (solid && point)
     {
       *error = 0;
       point->x = solid->corner1.x;
@@ -2772,15 +2748,16 @@ dwg_ent_solid_get_corner1(dwg_ent_solid *solid, dwg_point_2d *point,
 
 /// Sets the solid corner1 values.
 /** Usage :- dwg_ent_solid_set_corner1(solid, &point, &error);
-\param 1 dwg_ent_solid
+\param[in] solid dwg_ent_solid*
 \param 2 dwg_point_2d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_solid_set_corner1(dwg_ent_solid *solid, dwg_point_2d *point,
-                          int *error)
+dwg_ent_solid_set_corner1(dwg_ent_solid *restrict solid,
+                          const dwg_point_2d *restrict point,
+                          int *restrict error)
 {
-  if (solid != 0 && point != 0)
+  if (solid && point)
     {
       *error = 0;
       solid->corner1.x = point->x;
@@ -2795,15 +2772,15 @@ dwg_ent_solid_set_corner1(dwg_ent_solid *solid, dwg_point_2d *point,
 
 /// Returns the corner2 values.
 /** Usage :- dwg_ent_solid_get_corner2(solid, &point, &error);
-\param 1 dwg_ent_solid
+\param[in] solid dwg_ent_solid*
 \param 2 dwg_point_2d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_solid_get_corner2(dwg_ent_solid *solid, dwg_point_2d *point,
-                          int *error)
+dwg_ent_solid_get_corner2(const dwg_ent_solid *restrict solid, dwg_point_2d *restrict point,
+                          int *restrict error)
 {
-  if (solid != 0 && point != 0)
+  if (solid && point)
     {
       *error = 0;
       point->x = solid->corner2.x;
@@ -2818,15 +2795,16 @@ dwg_ent_solid_get_corner2(dwg_ent_solid *solid, dwg_point_2d *point,
 
 /// Sets the solid corner2.
 /** Usage :- dwg_ent_solid_set_corner2(solid, &point, &error);
-\param 1 dwg_ent_solid
+\param[in] solid dwg_ent_solid*
 \param 2 dwg_point_2d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_solid_set_corner2(dwg_ent_solid *solid, dwg_point_2d *point,
-                          int *error)
+dwg_ent_solid_set_corner2(dwg_ent_solid *restrict solid,
+                          const dwg_point_2d *restrict point,
+                          int *restrict error)
 {
-  if (solid != 0 && point != 0)
+  if (solid && point)
     {
       *error = 0;
       solid->corner2.x = point->x;
@@ -2841,15 +2819,15 @@ dwg_ent_solid_set_corner2(dwg_ent_solid *solid, dwg_point_2d *point,
 
 /// Returns the corner3 values.
 /** Usage :- dwg_ent_solid_get_corner3(solid, &point, &error);
-\param 1 dwg_ent_solid
+\param[in] solid dwg_ent_solid*
 \param 2 dwg_point_2d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_solid_get_corner3(dwg_ent_solid *solid, dwg_point_2d *point,
-                          int *error)
+dwg_ent_solid_get_corner3(const dwg_ent_solid *restrict solid, dwg_point_2d *restrict point,
+                          int *restrict error)
 {
-  if (solid != 0 && point != 0)
+  if (solid && point)
     {
       *error = 0;
       point->x = solid->corner3.x;
@@ -2864,15 +2842,16 @@ dwg_ent_solid_get_corner3(dwg_ent_solid *solid, dwg_point_2d *point,
 
 /// Sets the solid corner3 values.
 /** Usage :- dwg_ent_solid_set_corner3(solid, &point, &error);
-\param 1 dwg_ent_solid
+\param[in] solid dwg_ent_solid*
 \param 2 dwg_point_2d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_solid_set_corner3(dwg_ent_solid *solid, dwg_point_2d *point,
-                          int *error)
+dwg_ent_solid_set_corner3(dwg_ent_solid *restrict solid,
+                          const dwg_point_2d *restrict point,
+                          int *restrict error)
 {
-  if (solid != 0 && point != 0)
+  if (solid && point)
     {
       *error = 0;
       solid->corner3.x = point->x;
@@ -2887,15 +2866,15 @@ dwg_ent_solid_set_corner3(dwg_ent_solid *solid, dwg_point_2d *point,
 
 /// Returns the corner4 values.
 /** Usage :- dwg_ent_solid_get_corner4(solid, &point, &error);
-\param 1 dwg_ent_solid
+\param[in] solid dwg_ent_solid*
 \param 2 dwg_point_2d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_solid_get_corner4(dwg_ent_solid *solid, dwg_point_2d *point,
-                          int *error)
+dwg_ent_solid_get_corner4(const dwg_ent_solid *restrict solid, dwg_point_2d *restrict point,
+                          int *restrict error)
 {
-  if (solid != 0 && point != 0)
+  if (solid && point)
     {
       *error = 0;
       point->x = solid->corner4.x;
@@ -2910,15 +2889,16 @@ dwg_ent_solid_get_corner4(dwg_ent_solid *solid, dwg_point_2d *point,
 
 /// Sets the solid corner4 values.
 /** Usage :- dwg_ent_solid_set_corner4(solid, &point, &error);
-\param 1 dwg_ent_solid
+\param[in] solid dwg_ent_solid*
 \param 2 dwg_point_2d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_solid_set_corner4(dwg_ent_solid *solid, dwg_point_2d *point,
-                          int *error)
+dwg_ent_solid_set_corner4(dwg_ent_solid *restrict solid,
+                          const dwg_point_2d *restrict point,
+                          int *restrict error)
 {
-  if (solid != 0 && point != 0)
+  if (solid && point)
     {
       *error = 0;
       solid->corner4.x = point->x;
@@ -2933,15 +2913,16 @@ dwg_ent_solid_set_corner4(dwg_ent_solid *solid, dwg_point_2d *point,
 
 /// Returns the extrusion values.
 /** Usage :- dwg_ent_solid_get_extrusion(solid, &point, &error);
-\param 1 dwg_ent_solid
+\param[in] solid dwg_ent_solid*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_solid_get_extrusion(dwg_ent_solid *solid, dwg_point_3d *vector,
-                            int *error)
+dwg_ent_solid_get_extrusion(const dwg_ent_solid *restrict solid,
+                            dwg_point_3d *restrict vector,
+                            int *restrict error)
 {
-  if (solid != 0 && vector != 0)
+  if (solid && vector)
     {
       *error = 0;
       vector->x = solid->extrusion.x;
@@ -2957,15 +2938,16 @@ dwg_ent_solid_get_extrusion(dwg_ent_solid *solid, dwg_point_3d *vector,
 
 /// Sets the solid extrusion values.
 /** Usage :- dwg_ent_solid_set_extrusion(solid, &point, &error);
-\param 1 dwg_ent_solid
+\param[in] solid dwg_ent_solid*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_solid_set_extrusion(dwg_ent_solid *solid, dwg_point_3d *vector,
-                            int *error)
+dwg_ent_solid_set_extrusion(dwg_ent_solid *restrict solid,
+                            const dwg_point_3d *restrict vector,
+                            int *restrict error)
 {
-  if (solid != 0 && vector != 0)
+  if (solid && vector)
     {
       *error = 0;
       solid->extrusion.x = vector->x;
@@ -2983,19 +2965,24 @@ dwg_ent_solid_set_extrusion(dwg_ent_solid *solid, dwg_point_3d *vector,
 *                   FUNCTIONS FOR BLOCk ENTITY                      *
 ********************************************************************/
 
-/// sets name of the block entity.
-/** Usage :- dwg_ent_block_set_name(block, "blocko", &error);
-\param 1 dwg_ent_block
-\param 2 char *
-\param 3 int
+/// sets name of the block entity (utf-8 encoded)
+/** Usage :- dwg_ent_block_set_name(block, "block_name", &error);
+\param[in] block dwg_ent_block*
+\param 2 utf-8 char *
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_block_set_name(dwg_ent_block *block, char * name, int *error)
+dwg_ent_block_set_name(dwg_ent_block *restrict ent,
+                       const char* name,
+                          int *restrict error)
 {
-  if (block != 0)
+  if (ent)
     {
       *error = 0;
-      block->name = name;
+      if (dwg_version >= R_2007)
+        ent->name = (char*)bit_utf8_to_TU((char*)name);
+      else
+        ent->name = (char*)name;
     }
   else
     {
@@ -3006,16 +2993,20 @@ dwg_ent_block_set_name(dwg_ent_block *block, char * name, int *error)
 
 /// Returns name of the block entity.
 /** Usage :- char * name = dwg_ent_block_get_name(block, &error);
-\param 1 dwg_ent_block
-\param 2 int
+\param[in] block dwg_ent_block*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 char *
-dwg_ent_block_get_name(dwg_ent_block *block, int *error)
+dwg_ent_block_get_name(const dwg_ent_block *restrict block,
+                          int *restrict error)
 {
-  if (block != 0)
+  if (block)
     {
       *error = 0;
-      return block->name;
+      if (dwg_version >= R_2007)
+        return bit_convert_TU((BITCODE_TU)block->name);
+      else
+        return block->name;
     }
   else
     {
@@ -3031,14 +3022,16 @@ dwg_ent_block_get_name(dwg_ent_block *block, int *error)
 
 /// Returns points of ray entity.
 /** Usage :- dwg_ent_ray_get_point(ray, &point, &error);
-\param 1 dwg_ent_ray
+\param[in] ray dwg_ent_ray*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_ray_get_point(dwg_ent_ray *ray, dwg_point_3d *point, int *error)
+dwg_ent_ray_get_point(const dwg_ent_ray *restrict ray,
+                      dwg_point_3d *restrict point,
+                      int *restrict error)
 {
-  if (ray != 0 && point != 0)
+  if (ray && point)
     {
       *error = 0;
       point->x = ray->point.x;
@@ -3054,14 +3047,16 @@ dwg_ent_ray_get_point(dwg_ent_ray *ray, dwg_point_3d *point, int *error)
 
 /// Sets point of ray entity.
 /** Usage :- dwg_ent_ray_set_point(ray, &point, &error);
-\param 1 dwg_ent_ray
+\param[in] ray dwg_ent_ray*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_ray_set_point(dwg_ent_ray *ray, dwg_point_3d *point, int *error)
+dwg_ent_ray_set_point(dwg_ent_ray *restrict ray,
+                      const dwg_point_3d *restrict point,
+                      int *restrict error)
 {
-  if (ray != 0 && point != 0)
+  if (ray && point)
     {
       *error = 0;
       ray->point.x = point->x;
@@ -3077,14 +3072,16 @@ dwg_ent_ray_set_point(dwg_ent_ray *ray, dwg_point_3d *point, int *error)
 
 /// Returns vector of ray entity.
 /** Usage :- dwg_ent_ray_get_vector(ray, &point, &error);
-\param 1 dwg_ent_ray
+\param[in] ray dwg_ent_ray*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_ray_get_vector(dwg_ent_ray *ray, dwg_point_3d *vector, int *error)
+dwg_ent_ray_get_vector(const dwg_ent_ray *restrict ray,
+                       dwg_point_3d *restrict vector,
+                       int *restrict error)
 {
-  if (ray != 0 && vector != 0)
+  if (ray && vector)
     {
       *error = 0;
       vector->x = ray->vector.x;
@@ -3100,14 +3097,16 @@ dwg_ent_ray_get_vector(dwg_ent_ray *ray, dwg_point_3d *vector, int *error)
 
 /// Sets vector of ray entity.
 /** Usage :- dwg_ent_ray_set_vector(ray, &point, &error);
-\param 1 dwg_ent_ray
+\param[in] ray dwg_ent_ray*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_ray_set_vector(dwg_ent_ray *ray, dwg_point_3d *vector, int *error)
+dwg_ent_ray_set_vector(dwg_ent_ray *restrict ray,
+                       const dwg_point_3d *restrict vector,
+                       int *restrict error)
 {
-  if (ray != 0 && vector != 0)
+  if (ray && vector)
     {
       *error = 0;
       ray->vector.x = vector->x;
@@ -3127,14 +3126,16 @@ dwg_ent_ray_set_vector(dwg_ent_ray *ray, dwg_point_3d *vector, int *error)
 
 /// Returns points of xline entity.
 /** Usage :- dwg_ent_xline_get_point(xline, &point, &error);
-\param 1 dwg_ent_xline
+\param[in] xline dwg_ent_xline*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_xline_get_point(dwg_ent_xline *xline, dwg_point_3d *point, int *error)
+dwg_ent_xline_get_point(const dwg_ent_xline *restrict xline,
+                        dwg_point_3d *restrict point,
+                        int *restrict error)
 {
-  if (xline != 0 && point != 0)
+  if (xline && point)
     {
       *error = 0;
       point->x = xline->point.x;
@@ -3150,14 +3151,16 @@ dwg_ent_xline_get_point(dwg_ent_xline *xline, dwg_point_3d *point, int *error)
 
 /// Sets point of xline entity.
 /** Usage :- dwg_ent_xline_set_point(xline, &point, &error);
-\param 1 dwg_ent_xline
+\param[in] xline dwg_ent_xline*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_xline_set_point(dwg_ent_xline *xline, dwg_point_3d *point, int *error)
+dwg_ent_xline_set_point(dwg_ent_xline *restrict xline,
+                        const dwg_point_3d *restrict point,
+                        int *restrict error)
 {
-  if (xline != 0 && point != 0)
+  if (xline && point)
     {
       *error = 0;
       xline->point.x = point->x;
@@ -3173,15 +3176,16 @@ dwg_ent_xline_set_point(dwg_ent_xline *xline, dwg_point_3d *point, int *error)
 
 /// Returns vector of xline entity.
 /** Usage :- dwg_ent_xline_get_vector(xline, &point, &error);
-\param 1 dwg_ent_xline
+\param[in] xline dwg_ent_xline*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_xline_get_vector(dwg_ent_xline *xline, dwg_point_3d *vector,
-                         int *error)
+dwg_ent_xline_get_vector(const dwg_ent_xline *restrict xline,
+                         dwg_point_3d *restrict vector,
+                         int *restrict error)
 {
-  if (xline != 0 && vector != 0)
+  if (xline && vector)
     {
       *error = 0;
       vector->x = xline->vector.x;
@@ -3197,15 +3201,16 @@ dwg_ent_xline_get_vector(dwg_ent_xline *xline, dwg_point_3d *vector,
 
 /// Sets vector of xline entity.
 /** Usage :- dwg_ent_xline_set_vector(xline, &point, &error);
-\param 1 dwg_ent_xline
+\param[in] xline dwg_ent_xline*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_xline_set_vector(dwg_ent_xline *xline, dwg_point_3d *vector,
-                         int *error)
+dwg_ent_xline_set_vector(dwg_ent_xline *restrict xline,
+                         const dwg_point_3d *restrict vector,
+                         int *restrict error)
 {
-  if (xline != 0 && vector != 0)
+  if (xline && vector)
     {
       *error = 0;
       xline->vector.x = vector->x;
@@ -3225,13 +3230,14 @@ dwg_ent_xline_set_vector(dwg_ent_xline *xline, dwg_point_3d *vector,
 
 /// This returns the thickness of a trace entity.
 /** Usage :- double thickness = dwg_ent_trace_get_thickness(trace, &error);
-\param 1 dwg_ent_trace
-\param 2 int
+\param[in] trace dwg_ent_trace*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_trace_get_thickness(dwg_ent_trace *trace, int *error)
+double
+dwg_ent_trace_get_thickness(const dwg_ent_trace *restrict trace,
+                          int *restrict error)
 {
-  if (trace != 0)
+  if (trace)
     {
       *error = 0;
       return trace->thickness;
@@ -3246,15 +3252,16 @@ dwg_ent_trace_get_thickness(dwg_ent_trace *trace, int *error)
 
 /// This sets the thickness of a trace entity.
 /** Usage :- dwg_ent_trace_set_thickness(trace, 2.0, &error);
-\param 1 dwg_ent_trace
+\param[in] trace dwg_ent_trace*
 \param 2 double
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_trace_set_thickness(dwg_ent_trace *trace, BITCODE_BD thickness,
-                            int *error)
+dwg_ent_trace_set_thickness(dwg_ent_trace *restrict trace,
+                            const double thickness,
+                            int *restrict error)
 {
-  if (trace != 0)
+  if (trace)
     {
       *error = 0;
       trace->thickness = thickness;
@@ -3268,13 +3275,14 @@ dwg_ent_trace_set_thickness(dwg_ent_trace *trace, BITCODE_BD thickness,
 
 /// This returns the elevation of a trace entity.
 /** Usage :- double elev = dwg_ent_trace_get_elevation(trace, &error);
-\param 1 dwg_ent_trace
-\param 2 int
+\param[in] trace dwg_ent_trace*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_trace_get_elevation(dwg_ent_trace *trace, int *error)
+double
+dwg_ent_trace_get_elevation(const dwg_ent_trace *restrict trace,
+                            int *restrict error)
 {
-  if (trace != 0)
+  if (trace)
     {
       *error = 0;
       return trace->elevation;
@@ -3289,15 +3297,16 @@ dwg_ent_trace_get_elevation(dwg_ent_trace *trace, int *error)
 
 /// This sets the elevation of a trace entity.
 /** Usage :- dwg_ent_trace_set_elevation(trace, 20, &error);
-\param 1 dwg_ent_trace
+\param[in] trace dwg_ent_trace*
 \param 2 double
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_trace_set_elevation(dwg_ent_trace *trace, BITCODE_BD elevation,
-                            int *error)
+dwg_ent_trace_set_elevation(dwg_ent_trace *restrict trace,
+                            const double elevation,
+                            int *restrict error)
 {
-  if (trace != 0)
+  if (trace)
     {
       *error = 0;
       trace->elevation = elevation;
@@ -3311,15 +3320,16 @@ dwg_ent_trace_set_elevation(dwg_ent_trace *trace, BITCODE_BD elevation,
 
 /// Returns the corner1 values of trace.
 /** Usage :- dwg_ent_trace_get_corner1(trace, &point, &error);
-\param 1 dwg_ent_trace
+\param[in] trace dwg_ent_trace*
 \param 2 dwg_point_2d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_trace_get_corner1(dwg_ent_trace *trace, dwg_point_2d *point,
-                          int *error)
+dwg_ent_trace_get_corner1(const dwg_ent_trace *restrict trace,
+                          dwg_point_2d *restrict point,
+                          int *restrict error)
 {
-  if (trace != 0 && point != 0)
+  if (trace && point)
     {
       *error = 0;
       point->x = trace->corner1.x;
@@ -3334,15 +3344,16 @@ dwg_ent_trace_get_corner1(dwg_ent_trace *trace, dwg_point_2d *point,
 
 /// Sets the corner1 values of trace.
 /** Usage :- dwg_ent_trace_set_corner1(trace, &point, &error);
-\param 1 dwg_ent_trace
+\param[in] trace dwg_ent_trace*
 \param 2 dwg_point_2d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_trace_set_corner1(dwg_ent_trace *trace, dwg_point_2d *point,
-                          int *error)
+dwg_ent_trace_set_corner1(dwg_ent_trace *restrict trace,
+                          const dwg_point_2d *restrict point,
+                          int *restrict error)
 {
-  if (trace != 0 && point != 0)
+  if (trace && point)
     {
       *error = 0;
       trace->corner1.x = point->x;
@@ -3357,15 +3368,16 @@ dwg_ent_trace_set_corner1(dwg_ent_trace *trace, dwg_point_2d *point,
 
 /// Returns the corner2 values of trace.
 /** Usage :- dwg_ent_trace_get_corner2(trace, &point, &error);
-\param 1 dwg_ent_trace
+\param[in] trace dwg_ent_trace*
 \param 2 dwg_point_2d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_trace_get_corner2(dwg_ent_trace *trace, dwg_point_2d *point,
-                          int *error)
+dwg_ent_trace_get_corner2(const dwg_ent_trace *restrict trace,
+                          dwg_point_2d *restrict point,
+                          int *restrict error)
 {
-  if (trace != 0 && point != 0)
+  if (trace && point)
     {
       *error = 0;
       point->x = trace->corner2.x;
@@ -3380,15 +3392,16 @@ dwg_ent_trace_get_corner2(dwg_ent_trace *trace, dwg_point_2d *point,
 
 /// Sets the corner2 values of trace.
 /** Usage :- dwg_ent_trace_set_corner2(trace, &point, &error);
-\param 1 dwg_ent_trace
+\param[in] trace dwg_ent_trace*
 \param 2 dwg_point_2d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_trace_set_corner2(dwg_ent_trace *trace, dwg_point_2d *point,
-                          int *error)
+dwg_ent_trace_set_corner2(dwg_ent_trace *restrict trace,
+                          const dwg_point_2d *restrict point,
+                          int *restrict error)
 {
-  if (trace != 0 && point != 0)
+  if (trace && point)
     {
       *error = 0;
       trace->corner2.x = point->x;
@@ -3403,15 +3416,16 @@ dwg_ent_trace_set_corner2(dwg_ent_trace *trace, dwg_point_2d *point,
 
 /// Returns the corner3 values of trace.
 /** Usage :- dwg_ent_trace_get_corner3(trace, &point, &error);
-\param 1 dwg_ent_trace
+\param[in] trace dwg_ent_trace*
 \param 2 dwg_point_2d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_trace_get_corner3(dwg_ent_trace *trace, dwg_point_2d *point,
-                          int *error)
+dwg_ent_trace_get_corner3(const dwg_ent_trace *restrict trace,
+                          dwg_point_2d *restrict point,
+                          int *restrict error)
 {
-  if (trace != 0 && point != 0)
+  if (trace && point)
     {
       *error = 0;
       point->x = trace->corner3.x;
@@ -3426,15 +3440,16 @@ dwg_ent_trace_get_corner3(dwg_ent_trace *trace, dwg_point_2d *point,
 
 /// Sets the corner3 values of trace.
 /** Usage :- dwg_ent_trace_set_corner3(trace, &point, &error);
-\param 1 dwg_ent_trace
+\param[in] trace dwg_ent_trace*
 \param 2 dwg_point_2d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_trace_set_corner3(dwg_ent_trace *trace, dwg_point_2d *point,
-                          int *error)
+dwg_ent_trace_set_corner3(dwg_ent_trace *restrict trace,
+                          const dwg_point_2d *restrict point,
+                          int *restrict error)
 {
-  if (trace != 0 && point != 0)
+  if (trace && point)
     {
       *error = 0;
       trace->corner3.x = point->x;
@@ -3449,15 +3464,16 @@ dwg_ent_trace_set_corner3(dwg_ent_trace *trace, dwg_point_2d *point,
 
 /// Returns the corner4 values of trace.
 /** Usage :- dwg_ent_trace_get_corner4(trace, &point, &error);
-\param 1 dwg_ent_trace
+\param[in] trace dwg_ent_trace*
 \param 2 dwg_point_2d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_trace_get_corner4(dwg_ent_trace *trace, dwg_point_2d *point,
-                          int *error)
+dwg_ent_trace_get_corner4(const dwg_ent_trace *restrict trace,
+                          dwg_point_2d *restrict point,
+                          int *restrict error)
 {
-  if (trace != 0 && point != 0)
+  if (trace && point)
     {
       *error = 0;
       point->x = trace->corner4.x;
@@ -3472,15 +3488,16 @@ dwg_ent_trace_get_corner4(dwg_ent_trace *trace, dwg_point_2d *point,
 
 /// Sets the corner4 values of trace.
 /** Usage :- dwg_ent_trace_set_corner4(trace, &point, &error);
-\param 1 dwg_ent_trace
+\param[in] trace dwg_ent_trace*
 \param 2 dwg_point_2d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_trace_set_corner4(dwg_ent_trace *trace, dwg_point_2d *point,
-                          int *error)
+dwg_ent_trace_set_corner4(dwg_ent_trace *restrict trace,
+                          const dwg_point_2d *restrict point,
+                          int *restrict error)
 {
-  if (trace != 0 && point != 0)
+  if (trace && point)
     {
       *error = 0;
       trace->corner4.x = point->x;
@@ -3495,15 +3512,16 @@ dwg_ent_trace_set_corner4(dwg_ent_trace *trace, dwg_point_2d *point,
 
 /// Returns the extrusion values of trace.
 /** Usage :- dwg_ent_trace_get_extrusion(trace, &ext, &error);
-\param 1 dwg_ent_trace
+\param[in] trace dwg_ent_trace*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_trace_get_extrusion(dwg_ent_trace *trace, dwg_point_3d *vector,
-                            int *error)
+dwg_ent_trace_get_extrusion(const dwg_ent_trace *restrict trace,
+                            dwg_point_3d *restrict vector,
+                            int *restrict error)
 {
-  if (trace != 0 && vector != 0)
+  if (trace && vector)
     {
       *error = 0;
       vector->x = trace->extrusion.x;
@@ -3519,15 +3537,16 @@ dwg_ent_trace_get_extrusion(dwg_ent_trace *trace, dwg_point_3d *vector,
 
 /// Sets the extrusion values of trace.
 /** Usage :- dwg_ent_trace_set_extrusion(trace, &ext, &error);
-\param 1 dwg_ent_trace
+\param[in] trace dwg_ent_trace*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_trace_set_extrusion(dwg_ent_trace *trace, dwg_point_3d *vector,
-                            int *error)
+dwg_ent_trace_set_extrusion(dwg_ent_trace *restrict trace,
+                            const dwg_point_3d *restrict vector,
+                            int *restrict error)
 {
-  if (trace != 0 && vector != 0)
+  if (trace && vector)
     {
       *error = 0;
       trace->extrusion.x = vector->x;
@@ -3547,13 +3566,14 @@ dwg_ent_trace_set_extrusion(dwg_ent_trace *trace, dwg_point_3d *vector,
 
 /// Returns the flag of vertex_3d.
 /** Usage :- char flag = dwg_ent_vertex_3d_get_flag(vert, &error);
-\param 1 dwg_ent_vertex_3d
-\param 2 int
+\param[in] vertex_3d dwg_ent_vertex_3d*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 char
-dwg_ent_vertex_3d_get_flag(dwg_ent_vertex_3d *vert, int *error)
+dwg_ent_vertex_3d_get_flag(const dwg_ent_vertex_3d *restrict vert,
+                          int *restrict error)
 {
-  if (vert != 0)
+  if (vert)
     {
       *error = 0;
       return vert->flag;
@@ -3568,14 +3588,16 @@ dwg_ent_vertex_3d_get_flag(dwg_ent_vertex_3d *vert, int *error)
 
 /// Sets the flag of vertex_3d.
 /** Usage :- dwg_ent_vertex_3d_set_flag(vert, flag, &error);
-\param 1 dwg_ent_vertex_3d
+\param[in] vertex_3d dwg_ent_vertex_3d*
 \param 2 char
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_vertex_3d_set_flag(dwg_ent_vertex_3d *vert, char flag, int *error)
+dwg_ent_vertex_3d_set_flag(dwg_ent_vertex_3d *restrict vert,
+                           const char flag,
+                          int *restrict error)
 {
-  if (vert != 0)
+  if (vert)
     {
       *error = 0;
       vert->flag = flag;
@@ -3587,17 +3609,19 @@ dwg_ent_vertex_3d_set_flag(dwg_ent_vertex_3d *vert, char flag, int *error)
     }
 }
 
-/// Returns the point of vertex_3d.
-/** Usage : dwg_ent_vertex_3d_get_point(vert, &point, &error);
-\param 1 dwg_ent_vertex_3d
+/** Returns the point of vertex_3d.
+\code Usage: dwg_ent_vertex_3d_get_point(vert, &point, &error);
+\endcode
+\param[in] vertex_3d dwg_ent_vertex_3d*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_vertex_3d_get_point(dwg_ent_vertex_3d *vert, dwg_point_3d *point,
-                            int *error)
+dwg_ent_vertex_3d_get_point(const dwg_ent_vertex_3d *restrict vert,
+                            dwg_point_3d *restrict point,
+                            int *restrict error)
 {
-  if (vert != 0 && point != 0)
+  if (vert && point)
     {
       *error = 0;
       point->x = vert->point.x;
@@ -3611,17 +3635,19 @@ dwg_ent_vertex_3d_get_point(dwg_ent_vertex_3d *vert, dwg_point_3d *point,
     }
 }
 
-/// Sets the point of vertex_3d.
-/** Usage : dwg_ent_vertex_3d_set_point(vert, &point, &error);
-\param 1 dwg_ent_vertex_3d
+/** Sets the point of vertex_3d.
+\code Usage: dwg_ent_vertex_3d_set_point(vert, &point, &error);
+\endcode
+\param[in] vertex_3d dwg_ent_vertex_3d*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_vertex_3d_set_point(dwg_ent_vertex_3d *vert,
-                            dwg_point_3d *point, int *error)
+dwg_ent_vertex_3d_set_point(dwg_ent_vertex_3d *restrict vert,
+                            const dwg_point_3d *restrict point,
+                          int *restrict error)
 {
-  if (vert != 0 && point != 0)
+  if (vert && point)
     {
       *error = 0;
       vert->point.x = point->x;
@@ -3641,13 +3667,14 @@ dwg_ent_vertex_3d_set_point(dwg_ent_vertex_3d *vert,
 
 /// Returns the flag of vertex_mesh.
 /** Usage :- char flag = dwg_ent_vertex_mesh_get_flag(vert, &error);
-\param 1 dwg_ent_vertex_mesh
-\param 2 int
+\param[in] vertex_mesh dwg_ent_vertex_mesh*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 char
-dwg_ent_vertex_mesh_get_flag(dwg_ent_vertex_mesh *vert, int *error)
+dwg_ent_vertex_mesh_get_flag(const dwg_ent_vertex_mesh *restrict vert,
+                             int *restrict error)
 {
-  if (vert != 0)
+  if (vert)
     {
       *error = 0;
       return vert->flag;
@@ -3662,15 +3689,16 @@ dwg_ent_vertex_mesh_get_flag(dwg_ent_vertex_mesh *vert, int *error)
 
 /// Sets the flag of vertex_mesh.
 /** Usage :- dwg_ent_vertex_mesh_set_flag(vert, flag, &error);
-\param 1 dwg_ent_vertex_mesh
+\param[in] vertex_mesh dwg_ent_vertex_mesh*
 \param 2 char
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_vertex_mesh_set_flag(dwg_ent_vertex_mesh *vert, char flags,
-                              int *error)
+dwg_ent_vertex_mesh_set_flag(dwg_ent_vertex_mesh *restrict vert,
+                             const char flags,
+                             int *restrict error)
 {
-  if (vert != 0)
+  if (vert)
     {
       *error = 0;
       vert->flag = flags;
@@ -3682,17 +3710,19 @@ dwg_ent_vertex_mesh_set_flag(dwg_ent_vertex_mesh *vert, char flags,
     }
 }
 
-/// Returns the point of vertex_mesh.
-/** Usage : dwg_ent_vertex_mesh_get_point(vert, &point, &error);
-\param 1 dwg_ent_vertex_mesh
+/** Returns the point of vertex_mesh.
+\code Usage: dwg_ent_vertex_mesh_get_point(vert, &point, &error);
+\endcode
+\param[in] vertex_mesh dwg_ent_vertex_mesh*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_vertex_mesh_get_point(dwg_ent_vertex_mesh *vert, dwg_point_3d *point,
-                              int *error)
+dwg_ent_vertex_mesh_get_point(const dwg_ent_vertex_mesh *restrict vert,
+                              dwg_point_3d *restrict point,
+                              int *restrict error)
 {
-  if (vert != 0 && point != 0)
+  if (vert && point)
     {
       *error = 0;
       point->x = vert->point.x;
@@ -3706,17 +3736,19 @@ dwg_ent_vertex_mesh_get_point(dwg_ent_vertex_mesh *vert, dwg_point_3d *point,
     }
 }
 
-/// Sets the point of vertex_mesh.
-/** Usage : dwg_ent_vertex_mesh_set_point(vert, &point, &error);
-\param 1 dwg_ent_vertex_mesh
+/** Sets the point of vertex_mesh.
+\code Usage: dwg_ent_vertex_mesh_set_point(vert, &point, &error);
+\endcode
+\param[in] vertex_mesh dwg_ent_vertex_mesh*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_vertex_mesh_set_point(dwg_ent_vertex_mesh *vert, dwg_point_3d *point,
-                              int *error)
+dwg_ent_vertex_mesh_set_point(dwg_ent_vertex_mesh *restrict vert,
+                              const dwg_point_3d *restrict point,
+                              int *restrict error)
 {
-  if (vert != 0 && point != 0)
+  if (vert && point)
     {
       *error = 0;
       vert->point.x = point->x;
@@ -3736,13 +3768,14 @@ dwg_ent_vertex_mesh_set_point(dwg_ent_vertex_mesh *vert, dwg_point_3d *point,
 
 /// Returns the flag of vertex_pface.
 /** Usage :- char flag = dwg_ent_vertex_pface_get_flag(vert, &error);
-\param 1 dwg_ent_vertex_pface
-\param 2 int
+\param[in] vertex_pface dwg_ent_vertex_pface*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 char
-dwg_ent_vertex_pface_get_flag(dwg_ent_vertex_pface *vert, int *error)
+dwg_ent_vertex_pface_get_flag(const dwg_ent_vertex_pface *restrict vert,
+                              int *restrict error)
 {
-  if (vert != 0)
+  if (vert)
     {
       *error = 0;
       return vert->flag;
@@ -3757,15 +3790,16 @@ dwg_ent_vertex_pface_get_flag(dwg_ent_vertex_pface *vert, int *error)
 
 /// Sets the flag of vertex_pface.
 /** Usage :- dwg_ent_vertex_pface_set_flag(vert, flag, &error);
-\param 1 dwg_ent_vertex_pface
+\param[in] vertex_pface dwg_ent_vertex_pface*
 \param 2 char
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_vertex_pface_set_flag(dwg_ent_vertex_pface *vert, char flags,
-                               int *error)
+dwg_ent_vertex_pface_set_flag(dwg_ent_vertex_pface *restrict vert,
+                              const char flags,
+                              int *restrict error)
 {
-  if (vert != 0)
+  if (vert)
     {
       *error = 0;
       vert->flag = flags;
@@ -3777,17 +3811,19 @@ dwg_ent_vertex_pface_set_flag(dwg_ent_vertex_pface *vert, char flags,
     }
 }
 
-/// Returns the point of vertex_pface.
-/** Usage : dwg_ent_vertex_pface_get_point(vert, &point, &error);
-\param 1 dwg_ent_vertex_pface
+/** Returns the point of vertex_pface.
+\code Usage: dwg_ent_vertex_pface_get_point(vert, &point, &error);
+\endcode
+\param[in] vertex_pface dwg_ent_vertex_pface*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_vertex_pface_get_point(dwg_ent_vertex_pface *vert,
-                               dwg_point_3d *point, int *error)
+dwg_ent_vertex_pface_get_point(const dwg_ent_vertex_pface *restrict vert,
+                               dwg_point_3d *restrict point,
+                          int *restrict error)
 {
-  if (vert != 0 && point != 0)
+  if (vert && point)
     {
       *error = 0;
       point->x = vert->point.x;
@@ -3801,17 +3837,19 @@ dwg_ent_vertex_pface_get_point(dwg_ent_vertex_pface *vert,
     }
 }
 
-/// Sets the point of vertex_pface.
-/** Usage : dwg_ent_vertex_pface_set_point(vert, &point, &error);
-\param 1 dwg_ent_vertex_pface
+/** Sets the point of vertex_pface.
+\code Usage: dwg_ent_vertex_pface_set_point(vert, &point, &error);
+\endcode
+\param[in] vertex_pface dwg_ent_vertex_pface*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_vertex_pface_set_point(dwg_ent_vertex_pface *vert,
-                               dwg_point_3d *point, int *error)
+dwg_ent_vertex_pface_set_point(dwg_ent_vertex_pface *restrict vert,
+                               const dwg_point_3d *restrict point,
+                          int *restrict error)
 {
-  if (vert != 0 && point != 0)
+  if (vert && point)
     {
       *error = 0;
       vert->point.x = point->x;
@@ -3829,15 +3867,17 @@ dwg_ent_vertex_pface_set_point(dwg_ent_vertex_pface *vert,
 *                 FUNCTIONS FOR VERTEX_2D ENTITY                    *
 ********************************************************************/
 
-/// Returns the flag of vertex_2d
-/** Usage : dwg_ent_vertex_2d_get_flag(vert, &error);
-\param 1 dwg_ent_vertex_2d
-\param 2 int
+/** Returns the flag of vertex_2d
+\code Usage: dwg_ent_vertex_2d_get_flag(vert, &error);
+\endcode
+\param[in] vertex_2d dwg_ent_vertex_2d*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 char
-dwg_ent_vertex_2d_get_flag(dwg_ent_vertex_2d *vert, int *error)
+dwg_ent_vertex_2d_get_flag(const dwg_ent_vertex_2d *restrict vert,
+                          int *restrict error)
 {
-  if (vert != 0)
+  if (vert)
     {
       *error = 0;
       return vert->flag;
@@ -3850,16 +3890,18 @@ dwg_ent_vertex_2d_get_flag(dwg_ent_vertex_2d *vert, int *error)
     }
 }
 
-/// Sets the flag of vertex_2d.
-/** Usage : dwg_ent_vertex_2d_set_flag(vert, flag, &error);
-\param 1 dwg_ent_vertex_mesh
+/** Sets the flag of vertex_2d.
+\code Usage: dwg_ent_vertex_2d_set_flag(vert, flag, &error);
+\endcode
+\param[in] vertex_mesh dwg_ent_vertex_mesh*
 \param 2 char
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_vertex_2d_set_flag(dwg_ent_vertex_2d *vert, char flags, int *error)
+dwg_ent_vertex_2d_set_flag(dwg_ent_vertex_2d *restrict vert, char flags,
+                          int *restrict error)
 {
-  if (vert != 0)
+  if (vert)
     {
       *error = 0;
       vert->flag = flags;
@@ -3871,17 +3913,18 @@ dwg_ent_vertex_2d_set_flag(dwg_ent_vertex_2d *vert, char flags, int *error)
     }
 }
 
-/// Returns the point of vertex_2d.
-/** Usage : dwg_ent_vertex_2d_get_point(vert, &point, &error);
-\param 1 dwg_ent_vertex_2d
+/** Returns the point of vertex_2d.
+\code Usage: dwg_ent_vertex_2d_get_point(vert, &point, &error);
+\endcode
+\param[in] vertex_2d dwg_ent_vertex_2d*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_vertex_2d_get_point(dwg_ent_vertex_2d *vert, dwg_point_3d *point,
-                            int *error)
+dwg_ent_vertex_2d_get_point(const dwg_ent_vertex_2d *restrict vert, dwg_point_3d *restrict point,
+                            int *restrict error)
 {
-  if (vert != 0 && point != 0)
+  if (vert && point)
     {
       *error = 0;
       point->x = vert->point.x;
@@ -3895,17 +3938,19 @@ dwg_ent_vertex_2d_get_point(dwg_ent_vertex_2d *vert, dwg_point_3d *point,
     }
 }
 
-/// Sets the point of vertex_2d.
-/** Usage : dwg_ent_vertex_2d_set_point(vert, &point, &error);
-\param 1 dwg_ent_vertex_2d
+/** Sets the point of vertex_2d.
+\code Usage: dwg_ent_vertex_2d_set_point(vert, &point, &error);
+\endcode
+\param[in] vertex_2d dwg_ent_vertex_2d*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_vertex_2d_set_point(dwg_ent_vertex_2d *vert, dwg_point_3d *point,
-                            int *error)
+dwg_ent_vertex_2d_set_point(dwg_ent_vertex_2d *restrict vert,
+                            const dwg_point_3d *restrict point,
+                            int *restrict error)
 {
-  if (vert != 0 && point != 0)
+  if (vert && point)
     {
       *error = 0;
       vert->point.x = point->x;
@@ -3919,15 +3964,17 @@ dwg_ent_vertex_2d_set_point(dwg_ent_vertex_2d *vert, dwg_point_3d *point,
     }
 }
 
-/// Returns the start width of vertex_2d.
-/** Usage : double width = dwg_ent_vertex_2d_get_start_width(vert, &error);
-\param 1 dwg_ent_vertex_2d
-\param 2 int
+/** Returns the start width of vertex_2d.
+\code Usage: double width = dwg_ent_vertex_2d_get_start_width(vert, &error);
+\endcode
+\param[in] vertex_2d dwg_ent_vertex_2d*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_vertex_2d_get_start_width(dwg_ent_vertex_2d *vert, int *error)
+double
+dwg_ent_vertex_2d_get_start_width(const dwg_ent_vertex_2d *restrict vert,
+                                  int *restrict error)
 {
-  if (vert != 0)
+  if (vert)
     {
       *error = 0;
       return vert->start_width;
@@ -3940,17 +3987,19 @@ dwg_ent_vertex_2d_get_start_width(dwg_ent_vertex_2d *vert, int *error)
     }
 }
 
-/// Sets the start width of vertex_2d.
-/** Usage : dwg_ent_vertex_2d_set_start_width(vert, 20, &error);
-\param 1 dwg_ent_vertex_2d
+/** Sets the start width of vertex_2d.
+\code Usage: dwg_ent_vertex_2d_set_start_width(vert, 20, &error);
+\endcode
+\param[in] vertex_2d dwg_ent_vertex_2d*
 \param 2 double
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_vertex_2d_set_start_width(dwg_ent_vertex_2d *vert, BITCODE_BD start_width,
-                                  int *error)
+dwg_ent_vertex_2d_set_start_width(dwg_ent_vertex_2d *restrict vert,
+                                  const double start_width,
+                                  int *restrict error)
 {
-  if (vert != 0)
+  if (vert)
     {
       *error = 0;
       vert->start_width = start_width;
@@ -3962,15 +4011,17 @@ dwg_ent_vertex_2d_set_start_width(dwg_ent_vertex_2d *vert, BITCODE_BD start_widt
     }
 }
 
-/// Returns the end width of vertex_2d.
-/** Usage : double width = dwg_ent_vertex_2d_get_end_width(vert, &error);
-\param 1 dwg_ent_vertex_2d
-\param 2 int
+/** Returns the end width of vertex_2d.
+\code Usage: double width = dwg_ent_vertex_2d_get_end_width(vert, &error);
+\endcode
+\param[in] vertex_2d dwg_ent_vertex_2d*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_vertex_2d_get_end_width(dwg_ent_vertex_2d *vert, int *error)
+double
+dwg_ent_vertex_2d_get_end_width(const dwg_ent_vertex_2d *restrict vert,
+                                int *restrict error)
 {
-  if (vert != 0)
+  if (vert)
     {
       *error = 0;
       return vert->end_width;
@@ -3983,17 +4034,19 @@ dwg_ent_vertex_2d_get_end_width(dwg_ent_vertex_2d *vert, int *error)
     }
 }
 
-/// Sets the end width of vertex_2d.
-/** Usage : dwg_ent_vertex_2d_set_end_width(vert, 20, &error);
-\param 1 dwg_ent_vertex_2d
+/** Sets the end width of vertex_2d.
+\code Usage: dwg_ent_vertex_2d_set_end_width(vert, 20, &error);
+\endcode
+\param[in] vertex_2d dwg_ent_vertex_2d*
 \param 2 double
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_vertex_2d_set_end_width(dwg_ent_vertex_2d *vert, BITCODE_BD end_width,
-                                int *error)
+dwg_ent_vertex_2d_set_end_width(dwg_ent_vertex_2d *restrict vert,
+                                const double end_width,
+                                int *restrict error)
 {
-  if (vert != 0)
+  if (vert)
     {
       *error = 0;
       vert->end_width = end_width;
@@ -4005,15 +4058,17 @@ dwg_ent_vertex_2d_set_end_width(dwg_ent_vertex_2d *vert, BITCODE_BD end_width,
     }
 }
 
-/// Returns the bulge of vertex_2d.
-/** Usage : double bulge = dwg_ent_vertex_2d_get_bulge(vert, &error);
-\param 1 dwg_ent_vertex_2d
-\param 2 int
+/** Returns the bulge of vertex_2d.
+\code Usage: double bulge = dwg_ent_vertex_2d_get_bulge(vert, &error);
+\endcode
+\param[in] vertex_2d dwg_ent_vertex_2d*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_vertex_2d_get_bulge(dwg_ent_vertex_2d *vert, int *error)
+double
+dwg_ent_vertex_2d_get_bulge(const dwg_ent_vertex_2d *restrict vert,
+                          int *restrict error)
 {
-  if (vert != 0)
+  if (vert)
     {
       *error = 0;
       return vert->bulge;
@@ -4026,16 +4081,19 @@ dwg_ent_vertex_2d_get_bulge(dwg_ent_vertex_2d *vert, int *error)
     }
 }
 
-/// Sets the bulge of vertex_2d.
-/** Usage : dwg_ent_vertex_2d_set_bulge(vert, 20, &error);
-\param 1 dwg_ent_vertex_2d
+/** Sets the bulge of vertex_2d.
+\code Usage: dwg_ent_vertex_2d_set_bulge(vert, 20, &error);
+\endcode
+\param[in] vertex_2d dwg_ent_vertex_2d*
 \param 2 double
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_vertex_2d_set_bulge(dwg_ent_vertex_2d *vert, BITCODE_BD bulge, int *error)
+dwg_ent_vertex_2d_set_bulge(dwg_ent_vertex_2d *restrict vert,
+                          const double bulge,
+                          int *restrict error)
 {
-  if (vert != 0)
+  if (vert)
     {
       *error = 0;
       vert->bulge = bulge;
@@ -4047,15 +4105,17 @@ dwg_ent_vertex_2d_set_bulge(dwg_ent_vertex_2d *vert, BITCODE_BD bulge, int *erro
     }
 }
 
-/// Returns the tangent_dir of vertex_2d.
-/** Usage : double tangent_dir = dwg_ent_vertex_2d_get_tangent_dir(vert, &error);
-\param 1 dwg_ent_vertex_2d
-\param 2 int
+/** Returns the tangent_dir of vertex_2d.
+\code Usage: double tangent_dir = dwg_ent_vertex_2d_get_tangent_dir(vert, &error);
+\endcode
+\param[in] vertex_2d dwg_ent_vertex_2d*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_vertex_2d_get_tangent_dir(dwg_ent_vertex_2d *vert, int *error)
+double
+dwg_ent_vertex_2d_get_tangent_dir(const dwg_ent_vertex_2d *restrict vert,
+                          int *restrict error)
 {
-  if (vert != 0)
+  if (vert)
     {
       *error = 0;
       return vert->tangent_dir;
@@ -4068,17 +4128,19 @@ dwg_ent_vertex_2d_get_tangent_dir(dwg_ent_vertex_2d *vert, int *error)
     }
 }
 
-/// Sets the tangent_dir of vertex_2d.
-/** Usage : dwg_ent_vertex_2d_set_tangent_dir(vert, 20, &error);
-\param 1 dwg_ent_vertex_2d
+/** Sets the tangent_dir of vertex_2d.
+\code Usage: dwg_ent_vertex_2d_set_tangent_dir(vert, 20, &error);
+\endcode
+\param[in] vertex_2d dwg_ent_vertex_2d*
 \param 2 double
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_vertex_2d_set_tangent_dir(dwg_ent_vertex_2d *vert, BITCODE_BD tangent_dir,
-                                  int *error)
+dwg_ent_vertex_2d_set_tangent_dir(dwg_ent_vertex_2d *restrict vert,
+                          const double tangent_dir,
+                                  int *restrict error)
 {
-  if (vert != 0)
+  if (vert)
     {
       *error = 0;
       vert->tangent_dir = tangent_dir;
@@ -4094,17 +4156,18 @@ dwg_ent_vertex_2d_set_tangent_dir(dwg_ent_vertex_2d *vert, BITCODE_BD tangent_di
 *                   FUNCTIONS FOR INSERT ENTITY                     *
 ********************************************************************/
 
-/// Returns the insertion point of insert.
-/** Usage : dwg_ent_insert_get_ins_pt(insert, &point, &error);
-\param 1 dwg_ent_insert
+/** Returns the insertion point of insert.
+\code Usage: dwg_ent_insert_get_ins_pt(insert, &point, &error);
+\endcode
+\param[in] insert dwg_ent_insert*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_insert_get_ins_pt(dwg_ent_insert *insert, dwg_point_3d *point,
-                          int *error)
+dwg_ent_insert_get_ins_pt(const dwg_ent_insert *restrict insert, dwg_point_3d *restrict point,
+                          int *restrict error)
 {
-  if (insert != 0 && point != 0)
+  if (insert && point)
     {
       *error = 0;
       point->x = insert->ins_pt.x;
@@ -4118,17 +4181,19 @@ dwg_ent_insert_get_ins_pt(dwg_ent_insert *insert, dwg_point_3d *point,
     }
 }
 
-/// Sets the insertion point of insert.
-/** Usage : dwg_ent_insert_set_ins_pt(insert, &point, &error);
-\param 1 dwg_ent_insert
+/** Sets the insertion point of insert.
+\code Usage: dwg_ent_insert_set_ins_pt(insert, &point, &error);
+\endcode
+\param[in] insert dwg_ent_insert*
 \param 2 dwg_point_3d
-\param 3 int
+\param error[out]   int*
 */
 void
-dwg_ent_insert_set_ins_pt(dwg_ent_insert *insert, dwg_point_3d *point,
-                          int *error)
+dwg_ent_insert_set_ins_pt(dwg_ent_insert *restrict insert,
+                          const dwg_point_3d *restrict point,
+                          int *restrict error)
 {
-  if (insert != 0 && point != 0)
+  if (insert && point)
     {
       *error = 0;
       insert->ins_pt.x = point->x;
@@ -4142,15 +4207,17 @@ dwg_ent_insert_set_ins_pt(dwg_ent_insert *insert, dwg_point_3d *point,
     }
 }
 
-/// Returns the scale flag of insert
-/** Usage : double flag = dwg_ent_insert_get_flag(insert, &error);
-\param 1 dwg_ent_insert
-\param 2 int
+/** Returns the scale flag of insert
+\code Usage: double flag = dwg_ent_insert_get_flag(insert, &error);
+\endcode
+\param[in] insert dwg_ent_insert*
+\param error[out]   int*
 */
 char
-dwg_ent_insert_get_scale_flag(dwg_ent_insert *insert, int *error)
+dwg_ent_insert_get_scale_flag(const dwg_ent_insert *restrict insert,
+                          int *restrict error)
 {
-  if (insert != 0)
+  if (insert)
     {
       *error = 0;
       return insert->scale_flag;
@@ -4163,16 +4230,19 @@ dwg_ent_insert_get_scale_flag(dwg_ent_insert *insert, int *error)
     }
 }
 
-/// Sets the scale flag of insert.
-/** Usage : dwg_ent_insert_set_scale_flag(insert, flag, &error);
-\param 1 dwg_ent_insert
+/** Sets the scale flag of insert.
+\code Usage: dwg_ent_insert_set_scale_flag(insert, flag, &error);
+\endcode
+\param[in] insert dwg_ent_insert*
 \param 2 char
-\param 3 int
+\param error[out]   int*
 */
 void
-dwg_ent_insert_set_scale_flag(dwg_ent_insert *insert, char flags, int *error)
+dwg_ent_insert_set_scale_flag(dwg_ent_insert *restrict insert,
+                              const char flags,
+                          int *restrict error)
 {
-  if (insert != 0)
+  if (insert)
     {
       *error = 0;
       insert->scale_flag = flags;
@@ -4184,22 +4254,24 @@ dwg_ent_insert_set_scale_flag(dwg_ent_insert *insert, char flags, int *error)
     }
 }
 
-/// Returns the scale of insert.
-/** Usage : dwg_ent_insert_get_scale(insert, &point, &error);
-\param 1 dwg_ent_insert
-\param 2 dwg_point_3d
-\param 3 int
+/** Returns the scale of insert.
+\code Usage: dwg_ent_insert_get_scale(insert, &point, &error);
+\endcode
+\param insert[in]   dwg_ent_insert*
+\param scale3d[out] dwg_point_3d*
+\param error[out]   int*
 */
 void
-dwg_ent_insert_get_scale(dwg_ent_insert *insert, dwg_point_3d *point,
-                         int *error)
+dwg_ent_insert_get_scale(const dwg_ent_insert *restrict insert,
+                         dwg_point_3d *restrict scale3d,
+                         int *restrict error)
 {
-  if (insert != 0 && point != 0)
+  if (insert && scale3d)
     {
       *error = 0;
-      point->x = insert->scale.x;
-      point->y = insert->scale.y;
-      point->z = insert->scale.z;
+      scale3d->x = insert->scale.x;
+      scale3d->y = insert->scale.y;
+      scale3d->z = insert->scale.z;
     }
   else
     {
@@ -4208,22 +4280,24 @@ dwg_ent_insert_get_scale(dwg_ent_insert *insert, dwg_point_3d *point,
     }
 }
 
-/// Sets the scale of insert.
-/** Usage : dwg_ent_insert_set_scale(insert, &point, &error);
-\param 1 dwg_ent_insert
-\param 2 dwg_point_3d
-\param 3 int
+/** Sets the scale of insert.
+\code Usage: dwg_ent_insert_set_scale(insert, &point, &error);
+\endcode
+\param insert[in]   dwg_ent_insert*
+\param scale3d[in]  dwg_point_3d*
+\param error[out]   int*
 */
 void
-dwg_ent_insert_set_scale(dwg_ent_insert *insert, dwg_point_3d *point,
-                         int *error)
+dwg_ent_insert_set_scale(dwg_ent_insert *restrict insert,
+                         const dwg_point_3d *restrict scale3d,
+                         int *restrict error)
 {
-  if (insert != 0 && point != 0)
+  if (insert && scale3d)
     {
       *error = 0;
-      insert->scale.x = point->x;
-      insert->scale.y = point->y;
-      insert->scale.z = point->z;
+      insert->scale.x = scale3d->x;
+      insert->scale.y = scale3d->y;
+      insert->scale.z = scale3d->z;
     }
   else
     {
@@ -4232,15 +4306,17 @@ dwg_ent_insert_set_scale(dwg_ent_insert *insert, dwg_point_3d *point,
     }
 }
 
-/// Returns the rotation angle of insert.
-/** Usage : double angle = dwg_ent_insert_get_rotation(insert, &error);
-\param 1 dwg_ent_insert
-\param 2 int
+/** Returns the rotation angle of insert.
+\code Usage: double angle = dwg_ent_insert_get_rotation(insert, &error);
+\endcode
+\param[in] insert dwg_ent_insert*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_insert_get_rotation(dwg_ent_insert *insert, int *error)
+double
+dwg_ent_insert_get_rotation(const dwg_ent_insert *restrict insert,
+                          int *restrict error)
 {
-  if (insert != 0)
+  if (insert)
     {
       *error = 0;
       return insert->rotation;
@@ -4253,17 +4329,19 @@ dwg_ent_insert_get_rotation(dwg_ent_insert *insert, int *error)
     }
 }
 
-/// Sets the rotation angle of insert.
-/** Usage : dwg_ent_insert_set_rotation(insert, angle, &error);
-\param 1 dwg_ent_insert
+/** Sets the rotation angle of insert.
+\code Usage: dwg_ent_insert_set_rotation(insert, angle, &error);
+\endcode
+\param[in] insert dwg_ent_insert*
 \param 2 double
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_insert_set_rotation(dwg_ent_insert *insert, BITCODE_BD rot_ang,
-                                  int *error)
+dwg_ent_insert_set_rotation(dwg_ent_insert *restrict insert,
+                            const double rot_ang,
+                            int *restrict error)
 {
-  if (insert != 0)
+  if (insert)
     {
       *error = 0;
       insert->rotation = rot_ang;
@@ -4275,17 +4353,19 @@ dwg_ent_insert_set_rotation(dwg_ent_insert *insert, BITCODE_BD rot_ang,
     }
 }
 
-/// Returns the extrusion of insert.
-/** Usage : dwg_ent_insert_get_extrusion(insert, &point, &error);
-\param 1 dwg_ent_insert
+/** Returns the extrusion of insert.
+\code Usage: dwg_ent_insert_get_extrusion(insert, &point, &error);
+\endcode
+\param[in] insert dwg_ent_insert*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_insert_get_extrusion(dwg_ent_insert *insert, dwg_point_3d *point,
-                             int *error)
+dwg_ent_insert_get_extrusion(const dwg_ent_insert *restrict insert,
+                             dwg_point_3d *restrict point,
+                             int *restrict error)
 {
-  if (insert != 0 && point != 0)
+  if (insert && point)
     {
       *error = 0;
       point->x = insert->extrusion.x;
@@ -4299,17 +4379,19 @@ dwg_ent_insert_get_extrusion(dwg_ent_insert *insert, dwg_point_3d *point,
     }
 }
 
-/// Sets the extrusion of insert.
-/** Usage : dwg_ent_insert_set_extrusion(insert, &point, &error);
-\param 1 dwg_ent_insert
+/** Sets the extrusion of insert.
+\code Usage: dwg_ent_insert_set_extrusion(insert, &point, &error);
+\endcode
+\param[in] insert dwg_ent_insert*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_insert_set_extrusion(dwg_ent_insert *insert, dwg_point_3d *point,
-                             int *error)
+dwg_ent_insert_set_extrusion(dwg_ent_insert *restrict insert,
+                             const dwg_point_3d *restrict point,
+                             int *restrict error)
 {
-  if (insert != 0 && point != 0)
+  if (insert && point)
     {
       *error = 0;
       insert->extrusion.x = point->x;
@@ -4323,15 +4405,17 @@ dwg_ent_insert_set_extrusion(dwg_ent_insert *insert, dwg_point_3d *point,
     }
 }
 
-/// Returns the has attribs of insert.
-/** Usage : double attribs = dwg_ent_insert_has_attribs(intrest, &error);
-\param 1 dwg_ent_insert
-\param 2 int
+/** Returns the has attribs of insert.
+\code Usage: double attribs = dwg_ent_insert_has_attribs(intrest, &error);
+\endcode
+\param[in] insert dwg_ent_insert*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 char
-dwg_ent_insert_has_attribs(dwg_ent_insert *insert, int *error)
+dwg_ent_insert_has_attribs(dwg_ent_insert *restrict insert,
+                          int *restrict error)
 {
-  if (insert != 0)
+  if (insert)
     {
       *error = 0;
       return insert->has_attribs;
@@ -4344,18 +4428,20 @@ dwg_ent_insert_has_attribs(dwg_ent_insert *insert, int *error)
     }
 }
 
-/// Returns the owned object count of insert
-/** Usage : BITCODE_BL count = dwg_ent_insert_get_owned_obj_count(insert, &error);
-\param 1 dwg_ent_insert
-\param 2 int
+/** Returns the owned object count of insert
+\code Usage: BITCODE_BL count = dwg_ent_insert_get_num_owned(insert, &error);
+\endcode
+\param[in] insert dwg_ent_insert*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 BITCODE_BL
-dwg_ent_insert_get_owned_obj_count(dwg_ent_insert *insert, int *error)
+dwg_ent_insert_get_num_owned(const dwg_ent_insert *restrict insert,
+                          int *restrict error)
 {
-  if (insert != 0)
+  if (insert)
     {
       *error = 0;
-      return insert->owned_obj_count;
+      return insert->num_owned;
     }
   else
     {
@@ -4365,40 +4451,24 @@ dwg_ent_insert_get_owned_obj_count(dwg_ent_insert *insert, int *error)
     }
 }
 
-/// Sets the owned object count of insert.
-/** Usage : dwg_ent_insert_set_owned_obj_count(insert, 20, &error);
-\param 1 dwg_ent_insert
-\param 2 BITCODE_BL
-\param 3 int
-*/
-void
-dwg_ent_insert_set_owned_obj_count(dwg_ent_insert *insert, BITCODE_BL count,
-                                   int *error)
-{
-  if (insert != 0)
-    {
-      *error = 0;
-      insert->owned_obj_count = count;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty insert", __FUNCTION__)
-      *error = 1;
-    }
-}
+/// FIXME needs to adjust handle array instead: add/delete
+// TODO dwg_ent_insert_add_owned, dwg_ent_insert_delete_owned
+//TODO get_name
 
-/// Returns the ref handle.
-/** Usage : dwg_obj_ref* handle = dwg_ent_insert_get_ref_handle(insert, &error);
-\param 1 dwg_ent_insert
-\param 2 int
+/** Returns the block object.
+\code Usage: dwg_object* block_header = dwg_ent_insert_get_block_header(insert, &error);
+\endcode
+\param[in]  insert  dwg_ent_insert*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-dwg_handle *
-dwg_ent_insert_get_ref_handle(dwg_ent_insert *insert, int *error)
+dwg_object *
+dwg_ent_insert_get_block_header(const dwg_ent_insert *restrict insert,
+                          int *restrict error)
 {
-  if (insert != 0)
+  if (insert)
     {
       *error = 0;
-      return &insert->block_header->handleref;
+      return dwg_obj_ref_get_object(insert->block_header, error);
     }
   else
     {
@@ -4408,42 +4478,22 @@ dwg_ent_insert_get_ref_handle(dwg_ent_insert *insert, int *error)
     }
 }
 
-/// Returns the abs reference.
-/** Usage : BITCODE_BL ref = dwg_ent_insert_get_abs_ref(insert, &error);
-\param 1 dwg_ent_insert
-\param 2 int
-*/
-BITCODE_BL
-dwg_ent_insert_get_abs_ref(dwg_ent_insert *insert, int *error)
-{
-  if (insert != 0)
-    {
-      *error = 0;
-      return insert->block_header->absolute_ref;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty insert", __FUNCTION__)
-      *error = 1;
-      return (BITCODE_BL)-1L;
-    }
-}
-
 /*******************************************************************
 *                  FUNCTIONS FOR MINSERT ENTITY                     *
 ********************************************************************/
 
-/// Returns the insertion point of minsert.
-/** Usage : dwg_ent_minsert_get_ins_pt(minsert, &point, &error);
-\param 1 dwg_ent_minsert
+/** Returns the insertion point of minsert.
+\code Usage: dwg_ent_minsert_get_ins_pt(minsert, &point, &error);
+\endcode
+\param[in] minsert dwg_ent_minsert*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_minsert_get_ins_pt(dwg_ent_minsert *minsert, dwg_point_3d *point,
-                           int *error)
+dwg_ent_minsert_get_ins_pt(const dwg_ent_minsert *restrict minsert, dwg_point_3d *restrict point,
+                           int *restrict error)
 {
-  if (minsert != 0 && point != 0)
+  if (minsert && point)
     {
       *error = 0;
       point->x = minsert->ins_pt.x;
@@ -4457,17 +4507,19 @@ dwg_ent_minsert_get_ins_pt(dwg_ent_minsert *minsert, dwg_point_3d *point,
     }
 }
 
-/// Sets the insertion point of minsert.
-/** Usage : dwg_ent_minsert_set_ins_pt(minsert, &point, &error);
-\param 1 dwg_ent_minsert
+/** Sets the insertion point of minsert.
+\code Usage: dwg_ent_minsert_set_ins_pt(minsert, &point, &error);
+\endcode
+\param[in] minsert dwg_ent_minsert*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_minsert_set_ins_pt(dwg_ent_minsert *minsert, dwg_point_3d *point,
-                           int *error)
+dwg_ent_minsert_set_ins_pt(dwg_ent_minsert *restrict minsert,
+                           const dwg_point_3d *restrict point,
+                           int *restrict error)
 {
-  if (minsert != 0 && point != 0)
+  if (minsert && point)
     {
       *error = 0;
       minsert->ins_pt.x = point->x;
@@ -4481,15 +4533,17 @@ dwg_ent_minsert_set_ins_pt(dwg_ent_minsert *minsert, dwg_point_3d *point,
     }
 }
 
-/// Returns the scale flag of minsert
-/** Usage : double flag = dwg_ent_minsert_get_flag(minsert, &error);
-\param 1 dwg_ent_minsert
-\param 2 int
+/** Returns the scale flag of minsert
+\code Usage: double flag = dwg_ent_minsert_get_flag(minsert, &error);
+\endcode
+\param[in] minsert dwg_ent_minsert*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 char
-dwg_ent_minsert_get_scale_flag(dwg_ent_minsert *minsert, int *error)
+dwg_ent_minsert_get_scale_flag(const dwg_ent_minsert *restrict minsert,
+                          int *restrict error)
 {
-  if (minsert != 0)
+  if (minsert)
     {
       *error = 0;
       return minsert->scale_flag;
@@ -4502,17 +4556,18 @@ dwg_ent_minsert_get_scale_flag(dwg_ent_minsert *minsert, int *error)
     }
 }
 
-/// Sets the scale flag of minsert.
-/** Usage : dwg_ent_minsert_set_scale_flag(minsert, flag, &error);
-\param 1 dwg_ent_minsert
+/** Sets the scale flag of minsert.
+\code Usage: dwg_ent_minsert_set_scale_flag(minsert, flag, &error);
+\endcode
+\param[in] minsert dwg_ent_minsert*
 \param 2 char
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_minsert_set_scale_flag(dwg_ent_minsert *minsert, char flags,
-                               int *error)
+dwg_ent_minsert_set_scale_flag(dwg_ent_minsert *restrict minsert, char flags,
+                               int *restrict error)
 {
-  if (minsert != 0)
+  if (minsert)
     {
       *error = 0;
       minsert->scale_flag = flags;
@@ -4524,22 +4579,23 @@ dwg_ent_minsert_set_scale_flag(dwg_ent_minsert *minsert, char flags,
     }
 }
 
-/// Returns the scale of minsert.
-/** Usage : dwg_ent_minsert_get_scale(minsert, &point, &error);
-\param 1 dwg_ent_minsert
-\param 2 dwg_point_3d
-\param 3 int
+/** Returns the scale of minsert.
+\code Usage: dwg_ent_minsert_get_scale(minsert, &scale3d, &error);
+\endcode
+\param minsert[in]   dwg_ent_insert*
+\param scale3d[out]  dwg_point_3d*
+\param error[out]    int*
 */
 void
-dwg_ent_minsert_get_scale(dwg_ent_minsert *minsert, dwg_point_3d *point,
-                          int *error)
+dwg_ent_minsert_get_scale(const dwg_ent_minsert *restrict minsert, dwg_point_3d *restrict scale3d,
+                          int *restrict error)
 {
-  if (minsert != 0 && point != 0)
+  if (minsert && scale3d)
     {
       *error = 0;
-      point->x = minsert->scale.x;
-      point->y = minsert->scale.y;
-      point->z = minsert->scale.z;
+      scale3d->x = minsert->scale.x;
+      scale3d->y = minsert->scale.y;
+      scale3d->z = minsert->scale.z;
     }
   else
     {
@@ -4548,22 +4604,24 @@ dwg_ent_minsert_get_scale(dwg_ent_minsert *minsert, dwg_point_3d *point,
     }
 }
 
-/// Sets the scale of minsert.
-/** Usage : dwg_ent_minsert_set_scale(minsert, &point, &error);
-\param 1 dwg_ent_minsert
-\param 2 dwg_point_3d
-\param 3 int
+/** Sets the scale of minsert.
+\code Usage: dwg_ent_minsert_set_scale(minsert, &scale3d, &error);
+\endcode
+\param minsert[in]   dwg_ent_insert*
+\param scale3d[in]   dwg_point_3d*
+\param error[out]    int*
 */
 void
-dwg_ent_minsert_set_scale(dwg_ent_minsert *minsert, dwg_point_3d *point,
-                          int *error)
+dwg_ent_minsert_set_scale(dwg_ent_minsert *restrict minsert,
+                          const dwg_point_3d *restrict scale3d,
+                          int *restrict error)
 {
-  if (minsert != 0 && point != 0)
+  if (minsert && scale3d)
     {
       *error = 0;
-      minsert->scale.x = point->x;
-      minsert->scale.y = point->y;
-      minsert->scale.z = point->z;
+      minsert->scale.x = scale3d->x;
+      minsert->scale.y = scale3d->y;
+      minsert->scale.z = scale3d->z;
     }
   else
     {
@@ -4572,15 +4630,17 @@ dwg_ent_minsert_set_scale(dwg_ent_minsert *minsert, dwg_point_3d *point,
     }
 }
 
-/// Returns the rotation angle of minsert.
-/** Usage : double angle = dwg_ent_minsert_get_rotation(minsert, &error);
-\param 1 dwg_ent_minsert
-\param 2 int
+/** Returns the rotation angle of minsert.
+\code Usage: double angle = dwg_ent_minsert_get_rotation(minsert, &error);
+\endcode
+\param[in] minsert dwg_ent_minsert*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_minsert_get_rotation(dwg_ent_minsert *minsert, int *error)
+double
+dwg_ent_minsert_get_rotation(const dwg_ent_minsert *restrict minsert,
+                          int *restrict error)
 {
-  if (minsert != 0)
+  if (minsert)
     {
       *error = 0;
       return minsert->rotation;
@@ -4593,17 +4653,19 @@ dwg_ent_minsert_get_rotation(dwg_ent_minsert *minsert, int *error)
     }
 }
 
-/// Sets the rotation angle of minsert.
-/** Usage : dwg_ent_minsert_set_rotation(minsert, angle, &error);
-\param 1 dwg_ent_minsert
+/** Sets the rotation angle of minsert.
+\code Usage: dwg_ent_minsert_set_rotation(minsert, angle, &error);
+\endcode
+\param[in] minsert dwg_ent_minsert*
 \param 2 double
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_minsert_set_rotation(dwg_ent_minsert *minsert, BITCODE_BD rot_ang,
-                             int *error)
+dwg_ent_minsert_set_rotation(dwg_ent_minsert *restrict minsert,
+                          const double rot_ang,
+                             int *restrict error)
 {
-  if (minsert != 0)
+  if (minsert)
     {
       *error = 0;
       minsert->rotation = rot_ang;
@@ -4615,17 +4677,18 @@ dwg_ent_minsert_set_rotation(dwg_ent_minsert *minsert, BITCODE_BD rot_ang,
     }
 }
 
-/// Returns the extrusion of minsert.
-/** Usage : dwg_ent_minsert_get_extrusion(minsert, &point, &error);
-\param 1 dwg_ent_minsert
+/** Returns the extrusion of minsert.
+\code Usage: dwg_ent_minsert_get_extrusion(minsert, &point, &error);
+\endcode
+\param[in] minsert dwg_ent_minsert*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_minsert_get_extrusion(dwg_ent_minsert *minsert, dwg_point_3d *point,
-                              int *error)
+dwg_ent_minsert_get_extrusion(const dwg_ent_minsert *restrict minsert, dwg_point_3d *restrict point,
+                              int *restrict error)
 {
-  if (minsert != 0 && point != 0)
+  if (minsert && point)
     {
       *error = 0;
       point->x = minsert->extrusion.x;
@@ -4639,17 +4702,19 @@ dwg_ent_minsert_get_extrusion(dwg_ent_minsert *minsert, dwg_point_3d *point,
     }
 }
 
-/// Sets the extrusion of minsert.
-/** Usage : dwg_ent_minsert_set_extrusion(minsert, &point, &error);
-\param 1 dwg_ent_minsert
+/** Sets the extrusion of minsert.
+\code Usage: dwg_ent_minsert_set_extrusion(minsert, &point, &error);
+\endcode
+\param[in] minsert dwg_ent_minsert*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_minsert_set_extrusion(dwg_ent_minsert *minsert, dwg_point_3d *point,
-                              int *error)
+dwg_ent_minsert_set_extrusion(dwg_ent_minsert *restrict minsert,
+                              const dwg_point_3d *restrict point,
+                              int *restrict error)
 {
-  if (minsert != 0 && point != 0)
+  if (minsert && point)
     {
       *error = 0;
       minsert->extrusion.x = point->x;
@@ -4663,15 +4728,17 @@ dwg_ent_minsert_set_extrusion(dwg_ent_minsert *minsert, dwg_point_3d *point,
     }
 }
 
-/// Returns the has attribs of minsert.
-/** Usage : double attribs = dwg_ent_minsert_has_attribs(mintrest, &error);
-\param 1 dwg_ent_minsert
-\param 2 int
+/** Returns the has attribs of minsert.
+\code Usage: double attribs = dwg_ent_minsert_has_attribs(mintrest, &error);
+\endcode
+\param[in] minsert dwg_ent_minsert*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 char
-dwg_ent_minsert_has_attribs(dwg_ent_minsert *minsert, int *error)
+dwg_ent_minsert_has_attribs(dwg_ent_minsert *restrict minsert,
+                          int *restrict error)
 {
-  if (minsert != 0)
+  if (minsert)
     {
       *error = 0;
       return minsert->has_attribs;
@@ -4685,18 +4752,20 @@ dwg_ent_minsert_has_attribs(dwg_ent_minsert *minsert, int *error)
 }
 
 
-/// Returns the owned object count of minsert
-/** Usage : BITCODE_BL count = dwg_ent_minsert_get_owned_obj_count(minsert, &error);
-\param 1 dwg_ent_minsert
-\param 2 int
+/** Returns the owned object count of minsert
+\code Usage: BITCODE_BL count = dwg_ent_minsert_get_num_owned(minsert, &error);
+\endcode
+\param[in] minsert dwg_ent_minsert*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 BITCODE_BL
-dwg_ent_minsert_get_owned_obj_count(dwg_ent_minsert *minsert, int *error)
+dwg_ent_minsert_get_num_owned(const dwg_ent_minsert *restrict minsert,
+                          int *restrict error)
 {
-  if (minsert != 0)
+  if (minsert)
     {
       *error = 0;
-      return minsert->owned_obj_count;
+      return minsert->num_owned;
     }
   else
     {
@@ -4707,36 +4776,23 @@ dwg_ent_minsert_get_owned_obj_count(dwg_ent_minsert *minsert, int *error)
 }
 
 /// Sets the owned object count of minsert.
-/** Usage : dwg_ent_minsert_set_owned_obj_count(minsert, 20, &error);
-\param 1 dwg_ent_insert
-\param 2 BITCODE_BL
-\param 3 int
-*/
-void
-dwg_ent_minsert_set_owned_obj_count(dwg_ent_minsert *minsert, BITCODE_BL count,
-                                    int *error)
-{
-  if (minsert != 0)
-    {
-      *error = 0;
-      minsert->owned_obj_count = count;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
+/// FIXME needs to adjust attrib_handles array: add/delete
 
-/// Returns the num cols of minsert
-/** Usage : BITCODE_BL num_cols = dwg_ent_minsert_get_numcols(minsert, &error);
-\param 1 dwg_ent_minsert
-\param 2 int
+// TODO dwg_ent_minsert_add_owned, dwg_ent_minsert_delete_owned
+// TODO dwg_ent_minsert_add_row, dwg_ent_insert_delete_row
+// TODO dwg_ent_minsert_add_col, dwg_ent_insert_delete_col
+
+/** Returns the num cols of minsert
+\code Usage: BITCODE_BL num_cols = dwg_ent_minsert_get_numcols(minsert, &error);
+\endcode
+\param[in] minsert dwg_ent_minsert*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 BITCODE_BL
-dwg_ent_minsert_get_numcols(dwg_ent_minsert *minsert, int *error)
+dwg_ent_minsert_get_numcols(const dwg_ent_minsert *restrict minsert,
+                            int *restrict error)
 {
-  if (minsert != 0)
+  if (minsert)
     {
       *error = 0;
       return minsert->numcols;
@@ -4749,36 +4805,17 @@ dwg_ent_minsert_get_numcols(dwg_ent_minsert *minsert, int *error)
     }
 }
 
-/// Sets the number of columns of minsert.
-/** Usage : dwg_ent_minsert_set_numcols(minsert, 20, &error);
-\param 1 dwg_ent_insert
-\param 2 BITCODE_BL
-\param 3 int
-*/
-void
-dwg_ent_minsert_set_numcols(dwg_ent_minsert *minsert, BITCODE_BL cols, int *error)
-{
-  if (minsert != 0)
-    {
-      *error = 0;
-      minsert->numcols = cols;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the number of rows of minsert
-/** Usage : BITCODE_BL num_rows = dwg_ent_minsert_get_numrows(minsert, &error);
-\param 1 dwg_ent_minsert
-\param 2 int
+/** Returns the number of rows of minsert
+\code Usage: BITCODE_BL num_rows = dwg_ent_minsert_get_numrows(minsert, &error);
+\endcode
+\param[in] minsert dwg_ent_minsert*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 BITCODE_BL
-dwg_ent_minsert_get_numrows(dwg_ent_minsert *minsert, int *error)
+dwg_ent_minsert_get_numrows(const dwg_ent_minsert *restrict minsert,
+                          int *restrict error)
 {
-  if (minsert != 0)
+  if (minsert)
     {
       *error = 0;
       return minsert->numrows;
@@ -4791,36 +4828,17 @@ dwg_ent_minsert_get_numrows(dwg_ent_minsert *minsert, int *error)
     }
 }
 
-/// Sets the number of rows of minsert.
-/** Usage : dwg_ent_minsert_set_numrows(minsert, 20, &error);
-\param 1 dwg_ent_insert
-\param 2 BITCODE_BL
-\param 3 int
+/** Returns the column spacing of minsert
+\code Usage: double spacing = dwg_ent_minsert_get_col_spacing(minsert, &error);
+\endcode
+\param[in] minsert dwg_ent_minsert*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-void
-dwg_ent_minsert_set_numrows(dwg_ent_minsert *minsert, BITCODE_BL cols, int *error)
+double
+dwg_ent_minsert_get_col_spacing(const dwg_ent_minsert *restrict minsert,
+                          int *restrict error)
 {
-  if (minsert != 0)
-    {
-      *error = 0;
-      minsert->numrows = cols;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns the column spacing of minsert
-/** Usage : double spacing = dwg_ent_minsert_get_col_spacing(minsert, &error);
-\param 1 dwg_ent_minsert
-\param 2 int
-*/
-BITCODE_BD
-dwg_ent_minsert_get_col_spacing(dwg_ent_minsert *minsert, int *error)
-{
-  if (minsert != 0)
+  if (minsert)
     {
       *error = 0;
       return minsert->col_spacing;
@@ -4833,17 +4851,19 @@ dwg_ent_minsert_get_col_spacing(dwg_ent_minsert *minsert, int *error)
     }
 }
 
-/// Sets the column spacing of minsert.
-/** Usage : dwg_ent_minsert_set_col_spacing(minsert, 20, &error);
-\param 1 dwg_ent_insert
+/** Sets the column spacing of minsert.
+\code Usage: dwg_ent_minsert_set_col_spacing(minsert, 20, &error);
+\endcode
+\param[in] insert dwg_ent_insert*
 \param 2 double
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_minsert_set_col_spacing(dwg_ent_minsert *minsert, BITCODE_BD spacing,
-                                int *error)
+dwg_ent_minsert_set_col_spacing(dwg_ent_minsert *restrict minsert,
+                                const double spacing,
+                                int *restrict error)
 {
-  if (minsert != 0)
+  if (minsert)
     {
       *error = 0;
       minsert->col_spacing = spacing;
@@ -4855,15 +4875,17 @@ dwg_ent_minsert_set_col_spacing(dwg_ent_minsert *minsert, BITCODE_BD spacing,
     }
 }
 
-/// Returns the row spacing of minsert
-/** Usage : double spacing = dwg_ent_minsert_get_row_spacing(minsert, &error);
-\param 1 dwg_ent_minsert
-\param 2 int
+/** Returns the row spacing of minsert
+\code Usage: double spacing = dwg_ent_minsert_get_row_spacing(minsert, &error);
+\endcode
+\param[in] minsert dwg_ent_minsert*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_minsert_get_row_spacing(dwg_ent_minsert *minsert, int *error)
+double
+dwg_ent_minsert_get_row_spacing(const dwg_ent_minsert *restrict minsert,
+                          int *restrict error)
 {
-  if (minsert != 0)
+  if (minsert)
     {
       *error = 0;
       return minsert->row_spacing;
@@ -4876,17 +4898,19 @@ dwg_ent_minsert_get_row_spacing(dwg_ent_minsert *minsert, int *error)
     }
 }
 
-/// Sets the row spacing of minsert.
-/** Usage : dwg_ent_minsert_set_row_spacing(minsert, 20, &error);
-\param 1 dwg_ent_insert
+/** Sets the row spacing of minsert.
+\code Usage: dwg_ent_minsert_set_row_spacing(minsert, 20, &error);
+\endcode
+\param[in] insert dwg_ent_insert*
 \param 2 double
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_minsert_set_row_spacing(dwg_ent_minsert *minsert, BITCODE_BD spacing,
-                                int *error)
+dwg_ent_minsert_set_row_spacing(dwg_ent_minsert *restrict minsert,
+                                const double spacing,
+                                int *restrict error)
 {
-  if (minsert != 0)
+  if (minsert)
     {
       *error = 0;
       minsert->row_spacing = spacing;
@@ -4898,22 +4922,50 @@ dwg_ent_minsert_set_row_spacing(dwg_ent_minsert *minsert, BITCODE_BD spacing,
     }
 }
 
+/** Returns the block object.
+\code Usage: dwg_object* block_header = dwg_ent_minsert_get_block_header(minsert, &error);
+\endcode
+\param[in]  minsert dwg_ent_minsert*
+\param[out] error   int*, is set to 0 for ok, 1 on error
+*/
+dwg_object *
+dwg_ent_minsert_get_block_header(const dwg_ent_minsert *restrict minsert,
+                                 int *restrict error)
+{
+  if (minsert)
+    {
+      *error = 0;
+      return dwg_obj_ref_get_object(minsert->block_header, error);
+    }
+  else
+    {
+      LOG_ERROR("%s: empty insert", __FUNCTION__)
+      *error = 1;
+      return NULL;
+    }
+}
+
 /*******************************************************************
 *                FUNCTIONS FOR MLINESTYLE OBJECT                    *
 ********************************************************************/
 
-/// Returns the name of mlinestyle
-/** Usage : char * name = dwg_obj_mlinestyle_get_name(mlinestyle, &error);
+/** Returns the name of mlinestyle (utf-8 encoded)
+\code Usage: char * name = dwg_obj_mlinestyle_get_name(mlinestyle, &error);
+\endcode
 \param 1 dwg_obj_mlinestyle
-\param 2 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 char *
-dwg_obj_mlinestyle_get_name(dwg_obj_mlinestyle *mlinestyle, int *error)
+dwg_obj_mlinestyle_get_name(const dwg_obj_mlinestyle *restrict mlinestyle,
+                          int *restrict error)
 {
-  if (mlinestyle != 0)
+  if (mlinestyle)
     {
       *error = 0;
-      return mlinestyle->name;
+      if (dwg_version >= R_2007)
+        return bit_convert_TU((BITCODE_TU)mlinestyle->entry_name);
+      else
+        return mlinestyle->entry_name;
     }
   else
     {
@@ -4923,20 +4975,25 @@ dwg_obj_mlinestyle_get_name(dwg_obj_mlinestyle *mlinestyle, int *error)
     }
 }
 
-/// Sets the name of mlinestyle object
-/** Usage : dwg_obj_mlinestyle_set_name(minsert, "mstylename", &error);
+/** Sets the name of mlinestyle object
+\code Usage: dwg_obj_mlinestyle_set_name(minsert, "mstylename", &error);
+\endcode
 \param 1 dwg_obj_mlinestyle
 \param 2 char *
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_obj_mlinestyle_set_name(dwg_obj_mlinestyle *mlinestyle, char * name,
-                            int *error)
+dwg_obj_mlinestyle_set_name(dwg_obj_mlinestyle *restrict mlinestyle,
+                            const char *restrict name,
+                            int *restrict error)
 {
-  if (mlinestyle != 0)
+  if (mlinestyle)
     {
       *error = 0;
-      mlinestyle->name = name;
+      if (dwg_version >= R_2007)
+        mlinestyle->entry_name = (char*)bit_utf8_to_TU((char*)name);
+      else
+        mlinestyle->entry_name = (char*)name;
     }
   else
     {
@@ -4945,18 +5002,23 @@ dwg_obj_mlinestyle_set_name(dwg_obj_mlinestyle *mlinestyle, char * name,
     }
 }
 
-/// Returns the desc of mlinestyle
-/** Usage : char * desc = dwg_obj_mlinestyle_get_desc(mlinestyle, &error);
+/** Returns the desc of mlinestyle (utf-8 encoded)
+\code Usage: char * desc = dwg_obj_mlinestyle_get_desc(mlinestyle, &error);
+\endcode
 \param 1 dwg_obj_mlinestyle
-\param 2 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 char *
-dwg_obj_mlinestyle_get_desc(dwg_obj_mlinestyle *mlinestyle, int *error)
+dwg_obj_mlinestyle_get_desc(const dwg_obj_mlinestyle *restrict mlinestyle,
+                          int *restrict error)
 {
-  if (mlinestyle != 0)
+  if (mlinestyle)
     {
       *error = 0;
-      return mlinestyle->desc;
+      if (dwg_version >= R_2007)
+        return bit_convert_TU((BITCODE_TU)mlinestyle->desc);
+      else
+        return mlinestyle->desc;
     }
   else
     {
@@ -4966,20 +5028,25 @@ dwg_obj_mlinestyle_get_desc(dwg_obj_mlinestyle *mlinestyle, int *error)
     }
 }
 
-/// Sets the desc of mlinestyle.
-/** Usage : dwg_obj_mlinestyle_set_desc(minsert, desc, &error);
+/** Sets the desc of mlinestyle. (utf-8 encoded)
+\code Usage: dwg_obj_mlinestyle_set_desc(minsert, desc, &error);
+\endcode
 \param 1 dwg_obj_mlinestyle
-\param 2 char *
-\param 3 int
+\param 2 utf-8 char *
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_obj_mlinestyle_set_desc(dwg_obj_mlinestyle *mlinestyle, char * desc,
-                            int *error)
+dwg_obj_mlinestyle_set_desc(dwg_obj_mlinestyle *restrict mlinestyle,
+                            const char *restrict desc,
+                            int *restrict error)
 {
-  if (mlinestyle != 0)
+  if (mlinestyle)
     {
       *error = 0;
-      mlinestyle->desc = desc;
+      if (dwg_version >= R_2007)
+        mlinestyle->desc = (char*)bit_utf8_to_TU((char*)desc);
+      else
+        mlinestyle->desc = (char*)desc;
     }
   else
     {
@@ -4988,15 +5055,17 @@ dwg_obj_mlinestyle_set_desc(dwg_obj_mlinestyle *mlinestyle, char * desc,
     }
 }
 
-/// Returns the flags of mlinestyle
-/** Usage : int flag = dwg_obj_mlinestyle_get_flag(minsert, &error);
+/** Returns the flags of mlinestyle
+\code Usage: int flag = dwg_obj_mlinestyle_get_flag(minsert, &error);
+\endcode
 \param 1 dwg_obj_mlinestyle
-\param 2 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 int
-dwg_obj_mlinestyle_get_flag(dwg_obj_mlinestyle *mlinestyle, int *error)
+dwg_obj_mlinestyle_get_flag(const dwg_obj_mlinestyle *restrict mlinestyle,
+                          int *restrict error)
 {
-  if (mlinestyle != 0)
+  if (mlinestyle)
     {
       *error = 0;
       return mlinestyle->flag;
@@ -5009,17 +5078,18 @@ dwg_obj_mlinestyle_get_flag(dwg_obj_mlinestyle *mlinestyle, int *error)
     }
 }
 
-/// Sets the flag of mlinestyle
-/** Usage : dwg_obj_mlinestyle_set_flag(mlinestyle, 20, &error);
-\param 1 dwg_ent_insert
-\param 2 int
-\param 3 int
+/** Sets the flag of mlinestyle
+\code Usage: dwg_obj_mlinestyle_set_flag(mlinestyle, 20, &error);
+\endcode
+\param[in] insert dwg_ent_insert*
+\param[out] error   int*, is set to 0 for ok, 1 on error
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_obj_mlinestyle_set_flag(dwg_obj_mlinestyle *mlinestyle, int flags,
-                             int *error)
+dwg_obj_mlinestyle_set_flag(dwg_obj_mlinestyle *restrict mlinestyle, int flags,
+                             int *restrict error)
 {
-  if (mlinestyle != 0)
+  if (mlinestyle)
     {
       *error = 0;
       mlinestyle->flag = flags;
@@ -5031,15 +5101,17 @@ dwg_obj_mlinestyle_set_flag(dwg_obj_mlinestyle *mlinestyle, int flags,
     }
 }
 
-/// Returns the start angle of mlinestyle
-/** Usage : double start_angle = dwg_obj_mlinestyle_get_start_angle(mlinestyle, &error);
+/** Returns the start angle of mlinestyle
+\code Usage: double start_angle = dwg_obj_mlinestyle_get_start_angle(mlinestyle, &error);
+\endcode
 \param 1 dwg_obj_mlinestyle
-\param 2 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_obj_mlinestyle_get_start_angle(dwg_obj_mlinestyle *mlinestyle, int *error)
+double
+dwg_obj_mlinestyle_get_start_angle(const dwg_obj_mlinestyle *restrict mlinestyle,
+                          int *restrict error)
 {
-  if (mlinestyle != 0)
+  if (mlinestyle)
     {
       *error = 0;
       return mlinestyle->start_angle;
@@ -5052,17 +5124,19 @@ dwg_obj_mlinestyle_get_start_angle(dwg_obj_mlinestyle *mlinestyle, int *error)
     }
 }
 
-/// Sets the start angle of mlinestyle
-/** Usage : dwg_obj_mlinestyle_set_start_angle(mlinestyle, 20.00, &error);
+/** Sets the start angle of mlinestyle
+\code Usage: dwg_obj_mlinestyle_set_start_angle(mlinestyle, 20.00, &error);
+\endcode
 \param 1 dwg_obj_mlinestyle
 \param 2 double
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_obj_mlinestyle_set_start_angle(dwg_obj_mlinestyle *mlinestyle,
-                                   double start_angle, int *error)
+dwg_obj_mlinestyle_set_start_angle(dwg_obj_mlinestyle *restrict mlinestyle,
+                                   double start_angle,
+                          int *restrict error)
 {
-  if (mlinestyle != 0)
+  if (mlinestyle)
     {
       *error = 0;
       mlinestyle->start_angle = start_angle;
@@ -5074,15 +5148,17 @@ dwg_obj_mlinestyle_set_start_angle(dwg_obj_mlinestyle *mlinestyle,
     }
 }
 
-/// Returns the end angle of mlinestyle
-/** Usage : double angle = dwg_obj_mlinestyle_get_end_angle(mlinestyle, &error);
+/** Returns the end angle of mlinestyle
+\code Usage: double angle = dwg_obj_mlinestyle_get_end_angle(mlinestyle, &error);
+\endcode
 \param 1 dwg_obj_mlinestyle
-\param 2 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_obj_mlinestyle_get_end_angle(dwg_obj_mlinestyle *mlinestyle, int *error)
+double
+dwg_obj_mlinestyle_get_end_angle(const dwg_obj_mlinestyle *restrict mlinestyle,
+                          int *restrict error)
 {
-  if (mlinestyle != 0)
+  if (mlinestyle)
     {
       *error = 0;
       return mlinestyle->end_angle;
@@ -5095,17 +5171,19 @@ dwg_obj_mlinestyle_get_end_angle(dwg_obj_mlinestyle *mlinestyle, int *error)
     }
 }
 
-/// Sets the end angle of mlinestyle
-/** Usage : dwg_obj_mlinestyle_set_end_angle(mlinestyle, 20.00, &error);
+/** Sets the end angle of mlinestyle
+\code Usage: dwg_obj_mlinestyle_set_end_angle(mlinestyle, 20.00, &error);
+\endcode
 \param 1 dwg_obj_mlinestyle
 \param 2 double
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_obj_mlinestyle_set_end_angle(dwg_obj_mlinestyle *mlinestyle, BITCODE_BD end_angle,
-                                 int *error)
+dwg_obj_mlinestyle_set_end_angle(dwg_obj_mlinestyle *restrict mlinestyle,
+                          const double end_angle,
+                                 int *restrict error)
 {
-  if (mlinestyle != 0)
+  if (mlinestyle)
     {
       *error = 0;
       mlinestyle->end_angle = end_angle;
@@ -5117,16 +5195,17 @@ dwg_obj_mlinestyle_set_end_angle(dwg_obj_mlinestyle *mlinestyle, BITCODE_BD end_
     }
 }
 
-/// Returns the lines in style of mlinestyle
-/** Usage : char lines = dwg_obj_mlinestyle_get_num_lines(mlinestyle, &error);
+/** Returns the lines in style of mlinestyle
+\code Usage: char lines = dwg_obj_mlinestyle_get_num_lines(mlinestyle, &error);
+\endcode
 \param 1 dwg_obj_mlinestyle
-\param 2 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 char
-dwg_obj_mlinestyle_get_num_lines(dwg_obj_mlinestyle *mlinestyle,
-                                 int *error)
+dwg_obj_mlinestyle_get_num_lines(const dwg_obj_mlinestyle *restrict mlinestyle,
+                                 int *restrict error)
 {
-  if (mlinestyle != 0)
+  if (mlinestyle)
     {
       *error = 0;
       return mlinestyle->num_lines;
@@ -5139,41 +5218,21 @@ dwg_obj_mlinestyle_get_num_lines(dwg_obj_mlinestyle *mlinestyle,
     }
 }
 
-/// Sets the lines in style of mlinestyle
-/** Usage : dwg_obj_mlinestyle_get_num_lines(mlinestyle, linestyle, &error);
-\param 1 dwg_obj_mlinestyle
-\param 2 char
-\param 3 int
-*/
-void
-dwg_obj_mlinestyle_set_num_lines(dwg_obj_mlinestyle *mlinestyle,
-                                 char num_lines, int *error)
-{
-  if (mlinestyle != 0)
-    {
-      *error = 0;
-      mlinestyle->num_lines = num_lines;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty mlinestyle", __FUNCTION__)
-      *error = 1;
-    }
-}
-
 /*******************************************************************
 *               FUNCTIONS FOR APPID_CONTROL OBJECT                  *
 ********************************************************************/
 
-/// Returns the number of all registered apps of appid_control
-/** Usage : int num = dwg_obj_appid_control_get_num_entries(appcontrol, &error);
+/** Returns the number of all registered apps of appid_control
+\code Usage: int num = dwg_obj_appid_control_get_num_entries(appcontrol, &error);
+\endcode
 \param 1 dwg_obj_appid_control
-\param 2 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 BITCODE_BS
-dwg_obj_appid_control_get_num_entries(dwg_obj_appid_control *appid, int *error)
+dwg_obj_appid_control_get_num_entries(const dwg_obj_appid_control *restrict appid,
+                                      int *restrict error)
 {
-  if (appid != 0)
+  if (appid)
     {
       *error = 0;
       return appid->num_entries;
@@ -5187,10 +5246,11 @@ dwg_obj_appid_control_get_num_entries(dwg_obj_appid_control *appid, int *error)
 }
 
 dwg_object_ref *
-dwg_obj_appid_control_get_appid(dwg_obj_appid_control *appid,
-                                BITCODE_BS index, int *error)
+dwg_obj_appid_control_get_appid(const dwg_obj_appid_control *restrict appid,
+                                BITCODE_BS index,
+                          int *restrict error)
 {
-  if (appid != 0 && index < appid->num_entries)
+  if (appid && index < appid->num_entries)
     {
       *error = 0;
       return appid->apps[index];
@@ -5207,18 +5267,23 @@ dwg_obj_appid_control_get_appid(dwg_obj_appid_control *appid,
 *                    FUNCTIONS FOR APPID OBJECT                     *
 ********************************************************************/
 
-/// Returns the name of appid
-/** Usage : char * name = dwg_obj_appid_get_entry_name(mlinestyle, &error);
+/** Returns the name of appid (utf-8 encoded)
+\code Usage: char * name = dwg_obj_appid_get_entry_name(mlinestyle, &error);
+\endcode
 \param 1 dwg_obj_appid
-\param 2 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 char *
-dwg_obj_appid_get_entry_name(dwg_obj_appid *appid, int *error)
+dwg_obj_appid_get_entry_name(const dwg_obj_appid *restrict appid,
+                          int *restrict error)
 {
-  if (appid != 0)
+  if (appid)
     {
       *error = 0;
-      return appid->entry_name;
+      if (dwg_version >= R_2007)
+        return bit_convert_TU((BITCODE_TU)appid->entry_name);
+      else
+        return appid->entry_name;
     }
   else
     {
@@ -5228,20 +5293,25 @@ dwg_obj_appid_get_entry_name(dwg_obj_appid *appid, int *error)
     }
 }
 
-/// Sets the name of appid
-/** Usage : dwg_obj_appid_set_name(appid, "appid1", &error);
+/** Sets the name of appid (utf-8 encoded)
+\code Usage: dwg_obj_appid_set_name(appid, "appid1", &error);
+\endcode
 \param 1 dwg_obj_appid
-\param 2 char *
-\param 3 int
+\param 2 utf-8 char *
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_obj_appid_set_entry_name(dwg_obj_appid *appid, char * entry_name,
-                             int *error)
+dwg_obj_appid_set_entry_name(dwg_obj_appid *restrict appid,
+                             const char *restrict entry_name,
+                             int *restrict error)
 {
-  if (appid != 0)
+  if (appid)
     {
       *error = 0;
-      appid->entry_name = entry_name;
+      if (dwg_version >= R_2007)
+        appid->entry_name = (char*)bit_utf8_to_TU((char*)entry_name);
+      else
+        appid->entry_name = (char*)entry_name;
     }
   else
     {
@@ -5250,15 +5320,17 @@ dwg_obj_appid_set_entry_name(dwg_obj_appid *appid, char * entry_name,
     }
 }
 
-/// Returns the flag of appid
-/** Usage : char flag = dwg_obj_appid_get_flag(appid, &error);
+/** Returns the flag of appid, DXF 70.
+\code Usage: char flag = dwg_obj_appid_get_flag(appid, &error);
+\endcode
 \param 1 dwg_obj_appid
-\param 2 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-char
-dwg_obj_appid_get_flag(dwg_obj_appid *appid, int *error)
+BITCODE_RC
+dwg_obj_appid_get_flag(const dwg_obj_appid *restrict appid,
+                          int *restrict error)
 {
-  if (appid != 0)
+  if (appid)
     {
       *error = 0;
       return appid->flag & 1 ||
@@ -5273,16 +5345,18 @@ dwg_obj_appid_get_flag(dwg_obj_appid *appid, int *error)
     }
 }
 
-/// Sets the flag of appid
-/** Usage : dwg_obj_appid_set_flag(appid, flag, &error);
-\param 1 dwg_obj_appid
-\param 2 int
-\param 3 int
+/** Sets the flag of appid, DXF 70.
+\code Usage: dwg_obj_appid_set_flag(appid, flag, &error);
+\endcode
+\param[out] dwg_obj_appid
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_obj_appid_set_flag(dwg_obj_appid *appid, char flag, int *error)
+dwg_obj_appid_set_flag(dwg_obj_appid *restrict appid,
+                       const BITCODE_RC flag,
+                       int *restrict error)
 {
-  if (appid != 0)
+  if (appid)
     {
       *error = 0;
       appid->flag = flag;
@@ -5296,15 +5370,17 @@ dwg_obj_appid_set_flag(dwg_obj_appid *appid, char flag, int *error)
     }
 }
 
-/// Returns the appid control handler
-/** Usage : dwg_obj_appid_control* appid = dwg_obj_appid_get_appid_control(appid, &error);
+/** Returns the appid control handler
+\code Usage: dwg_obj_appid_control* appid = dwg_obj_appid_get_appid_control(appid, &error);
+\endcode
 \param 1 dwg_obj_appid*
-\param 2 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 dwg_obj_appid_control*
-dwg_obj_appid_get_appid_control(dwg_obj_appid *appid, int *error)
+dwg_obj_appid_get_appid_control(const dwg_obj_appid *restrict appid,
+                          int *restrict error)
 {
-  if (appid != 0)
+  if (appid)
     {
       *error = 0;
       return appid->app_control->obj->tio.object->tio.APPID_CONTROL;
@@ -5321,13 +5397,20 @@ dwg_obj_appid_get_appid_control(dwg_obj_appid *appid, int *error)
 *            FUNCTIONS FOR ALL DIMENSION ENTITIES                *
 ********************************************************************/
 
+// (utf-8 encoded)
 char *
-dwg_ent_dim_get_block_name(dwg_ent_dim *dim, int *error)
+dwg_ent_dim_get_block_name(const dwg_ent_dim *restrict dim,
+                          int *restrict error)
 {
-  if (dim != 0)
+  if (dim)
     {
+      char *name = ((dwg_ent_dim_linear *)dim)->
+                     block->obj->tio.object->tio.BLOCK_HEADER->entry_name;
       *error = 0;
-      return ((dwg_ent_dim_linear *)dim)->block->obj->tio.object->tio.BLOCK_HEADER->entry_name;
+      if (dwg_version >= R_2007)
+        return bit_convert_TU((BITCODE_TU)name);
+      else
+        return name;
     }
   else
     {
@@ -5337,15 +5420,17 @@ dwg_ent_dim_get_block_name(dwg_ent_dim *dim, int *error)
     }
 }
 
-/// Returns the elevation, the z-coord for all 11,12, 16 ECS points
-/** Usage : double elevation = dwg_ent_dim_get_elevation(dim, &error);
-\param 1 dwg_ent_dim
-\param 2 int
+/** Returns the elevation, the z-coord for all 11,12, 16 ECS points
+\code Usage: double elevation = dwg_ent_dim_get_elevation(dim, &error);
+\endcode
+\param[in] dim dwg_ent_dim*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_dim_get_elevation(dwg_ent_dim *dim, int *error)
+double
+dwg_ent_dim_get_elevation(const dwg_ent_dim *restrict dim,
+                          int *restrict error)
 {
-  if (dim != 0)
+  if (dim)
     {
       *error = 0;
       return dim->elevation;
@@ -5358,16 +5443,18 @@ dwg_ent_dim_get_elevation(dwg_ent_dim *dim, int *error)
     }
 }
 
-/// Sets the elevation for the 11, 12, 16 ECS points
-/** Usage : dwg_ent_dim_set_elevation(dim, z, &error);
-\param 1 dwg_ent_dim
+/** Sets the elevation for the 11, 12, 16 ECS points
+\code Usage: dwg_ent_dim_set_elevation(dim, z, &error);
+\endcode
+\param[in] dim dwg_ent_dim*
 \param 2 double
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_set_elevation(dwg_ent_dim *dim, double elevation, int *error)
+dwg_ent_dim_set_elevation(dwg_ent_dim *restrict dim, double elevation,
+                          int *restrict error)
 {
-  if (dim != 0)
+  if (dim)
     {
       *error = 0;
       dim->elevation = elevation;
@@ -5379,15 +5466,17 @@ dwg_ent_dim_set_elevation(dwg_ent_dim *dim, double elevation, int *error)
     }
 }
 
-/// Returns the flag1
-/** Usage : char flags1 = dwg_ent_dim_get_flag1(dim, &error);
-\param 1 dwg_ent_dim
-\param 2 int
+/** Returns the flag1
+\code Usage: char flags1 = dwg_ent_dim_get_flag1(dim, &error);
+\endcode
+\param[in] dim dwg_ent_dim*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 char
-dwg_ent_dim_get_flag1(dwg_ent_dim *dim, int *error)
+dwg_ent_dim_get_flag1(const dwg_ent_dim *restrict dim,
+                          int *restrict error)
 {
-  if (dim != 0)
+  if (dim)
     {
       *error = 0;
       return dim->flags_1;
@@ -5400,17 +5489,18 @@ dwg_ent_dim_get_flag1(dwg_ent_dim *dim, int *error)
     }
 }
 
-/// Sets the flag1
-/** Usage : dwg_ent_dim_set_flag1(dim, flag1, &error);
-\param 1 dwg_ent_dim
+/** Sets the flag1
+\code Usage: dwg_ent_dim_set_flag1(dim, flag1, &error);
+\endcode
+\param[in] dim dwg_ent_dim*
 \param 2 char
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_set_flag1(dwg_ent_dim *dim, char flag,
-                      int *error)
+dwg_ent_dim_set_flag1(dwg_ent_dim *restrict dim, char flag,
+                      int *restrict error)
 {
-  if (dim != 0)
+  if (dim)
     {
       *error = 0;
       dim->flags_1 = flag;
@@ -5422,15 +5512,17 @@ dwg_ent_dim_set_flag1(dwg_ent_dim *dim, char flag,
     }
 }
 
-/// Returns the act measurement
-/** Usage : double measure = dwg_ent_dim_get_act_measurement(dim, &error);
-\param 1 dwg_ent_dim
-\param 2 int
+/** Returns the act measurement
+\code Usage: double measure = dwg_ent_dim_get_act_measurement(dim, &error);
+\endcode
+\param[in] dim dwg_ent_dim*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_dim_get_act_measurement(dwg_ent_dim *dim, int *error)
+double
+dwg_ent_dim_get_act_measurement(const dwg_ent_dim *restrict dim,
+                          int *restrict error)
 {
-  if (dim != 0)
+  if (dim)
     {
       *error = 0;
       return dim->act_measurement;
@@ -5443,17 +5535,19 @@ dwg_ent_dim_get_act_measurement(dwg_ent_dim *dim, int *error)
     }
 }
 
-/// Sets the act measurement
-/** Usage : dwg_ent_dim_set_act_measurement(dim, measure, &error);
-\param 1 dwg_ent_dim
+/** Sets the act measurement
+\code Usage: dwg_ent_dim_set_act_measurement(dim, measure, &error);
+\endcode
+\param[in] dim dwg_ent_dim*
 \param 2 double
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_set_act_measurement(dwg_ent_dim *dim,
-                                double act_measurement, int *error)
+dwg_ent_dim_set_act_measurement(dwg_ent_dim *restrict dim,
+                                double act_measurement,
+                          int *restrict error)
 {
-  if (dim != 0)
+  if (dim)
     {
       *error = 0;
       dim->act_measurement = act_measurement;
@@ -5465,15 +5559,17 @@ dwg_ent_dim_set_act_measurement(dwg_ent_dim *dim,
     }
 }
 
-/// Returns the horiz dir
-/** Usage : double horiz_dir = dwg_ent_dim_get_horiz_dir(dim, &error);
-\param 1 dwg_ent_dim
-\param 2 int
+/** Returns the horiz dir
+\code Usage: double horiz_dir = dwg_ent_dim_get_horiz_dir(dim, &error);
+\endcode
+\param[in] dim dwg_ent_dim*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_dim_get_horiz_dir(dwg_ent_dim *dim, int *error)
+double
+dwg_ent_dim_get_horiz_dir(const dwg_ent_dim *restrict dim,
+                          int *restrict error)
 {
-  if (dim != 0)
+  if (dim)
     {
       *error = 0;
       return dim->horiz_dir;
@@ -5486,17 +5582,19 @@ dwg_ent_dim_get_horiz_dir(dwg_ent_dim *dim, int *error)
     }
 }
 
-/// Sets the horiz dir
-/** Usage : dwg_ent_dim_set_horiz_dir(dim, horiz_dir, &error);
-\param 1 dwg_ent_dim
+/** Sets the horiz dir
+\code Usage: dwg_ent_dim_set_horiz_dir(dim, horiz_dir, &error);
+\endcode
+\param[in] dim dwg_ent_dim*
 \param 2 double
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_set_horiz_dir(dwg_ent_dim *dim, BITCODE_BD horiz_dir,
-                          int *error)
+dwg_ent_dim_set_horiz_dir(dwg_ent_dim *restrict dim,
+                          const double horiz_dir,
+                          int *restrict error)
 {
-  if (dim != 0)
+  if (dim)
     {
       *error = 0;
       dim->horiz_dir = horiz_dir;
@@ -5508,15 +5606,17 @@ dwg_ent_dim_set_horiz_dir(dwg_ent_dim *dim, BITCODE_BD horiz_dir,
     }
 }
 
-/// Returns the lspace_factor
-/** Usage : double lspace_factor = dwg_ent_dim_get_lspace_factor(dim, &error);
-\param 1 dwg_ent_dim
-\param 2 int
+/** Returns the lspace_factor
+\code Usage: double lspace_factor = dwg_ent_dim_get_lspace_factor(dim, &error);
+\endcode
+\param[in] dim dwg_ent_dim*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_dim_get_lspace_factor(dwg_ent_dim *dim, int *error)
+double
+dwg_ent_dim_get_lspace_factor(const dwg_ent_dim *restrict dim,
+                          int *restrict error)
 {
-  if (dim != 0)
+  if (dim)
     {
       *error = 0;
       return dim->lspace_factor;
@@ -5529,17 +5629,19 @@ dwg_ent_dim_get_lspace_factor(dwg_ent_dim *dim, int *error)
     }
 }
 
-/// Sets the lspace factor
-/** Usage : dwg_ent_dim_set_lspace_factor(dim, factor, &error);
-\param 1 dwg_ent_dim
+/** Sets the lspace factor
+\code Usage: dwg_ent_dim_set_lspace_factor(dim, factor, &error);
+\endcode
+\param[in] dim dwg_ent_dim*
 \param 2 double
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_set_lspace_factor(dwg_ent_dim *dim,
-                              double factor, int *error)
+dwg_ent_dim_set_lspace_factor(dwg_ent_dim *restrict dim,
+                              double factor,
+                          int *restrict error)
 {
-  if (dim != 0)
+  if (dim)
     {
       *error = 0;
       dim->lspace_factor = factor;
@@ -5551,16 +5653,17 @@ dwg_ent_dim_set_lspace_factor(dwg_ent_dim *dim,
     }
 }
 
-/// Returns the lspace_style
-/** Usage : BITCODE_BS lspace_style = dwg_ent_dim_get_lspace_style(dim, &error);
-\param 1 dwg_ent_dim
-\param 2 int
+/** Returns the lspace_style
+\code Usage: BITCODE_BS lspace_style = dwg_ent_dim_get_lspace_style(dim, &error);
+\endcode
+\param[in] dim dwg_ent_dim*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 BITCODE_BS
-dwg_ent_dim_get_lspace_style(dwg_ent_dim *dim,
-                             int *error)
+dwg_ent_dim_get_lspace_style(const dwg_ent_dim *restrict dim,
+                             int *restrict error)
 {
-  if (dim != 0)
+  if (dim)
     {
       *error = 0;
       return dim->lspace_style;
@@ -5573,17 +5676,19 @@ dwg_ent_dim_get_lspace_style(dwg_ent_dim *dim,
     }
 }
 
-/// Sets the lspace style
-/** Usage : dwg_ent_dim_set_lspace_style(dim, style, &error);
-\param 1 dwg_ent_dim
+/** Sets the lspace style
+\code Usage: dwg_ent_dim_set_lspace_style(dim, style, &error);
+\endcode
+\param[in] dim dwg_ent_dim*
 \param 2 BITCODE_BS
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_set_lspace_style(dwg_ent_dim *dim,
-                             BITCODE_BS style, int *error)
+dwg_ent_dim_set_lspace_style(dwg_ent_dim *restrict dim,
+                             BITCODE_BS style,
+                          int *restrict error)
 {
-  if (dim != 0)
+  if (dim)
     {
       *error = 0;
       dim->lspace_style = style;
@@ -5595,16 +5700,17 @@ dwg_ent_dim_set_lspace_style(dwg_ent_dim *dim,
     }
 }
 
-/// Returns the attachment index
-/** Usage : BITCODE_BS attachment = dwg_ent_dim_get_attachment_pt(dim, &error);
-\param 1 dwg_ent_dim
-\param 2 int
+/** Returns the attachment index
+\code Usage: BITCODE_BS attachment = dwg_ent_dim_get_attachment_pt(dim, &error);
+\endcode
+\param[in] dim dwg_ent_dim*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 BITCODE_BS
-dwg_ent_dim_get_attachment(dwg_ent_dim *dim,
-                           int *error)
+dwg_ent_dim_get_attachment(const dwg_ent_dim *restrict dim,
+                           int *restrict error)
 {
-  if (dim != 0)
+  if (dim)
     {
       *error = 0;
       return dim->attachment;
@@ -5617,17 +5723,19 @@ dwg_ent_dim_get_attachment(dwg_ent_dim *dim,
     }
 }
 
-/// Sets the attachment index
-/** Usage : dwg_ent_dim_set_attachment(dim, attachment, &error);
-    \param 1 dwg_ent_dim
+/** Sets the attachment index
+\code Usage: dwg_ent_dim_set_attachment(dim, attachment, &error);
+\endcode
+\param[in] dim dwg_ent_dim*
     \param 2 BITCODE_BS point index
-    \param 3 int ptr &error
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_set_attachment(dwg_ent_dim *dim,
-                           BITCODE_BS attachment, int *error)
+dwg_ent_dim_set_attachment(dwg_ent_dim *restrict dim,
+                           BITCODE_BS attachment,
+                          int *restrict error)
 {
-  if (dim != 0)
+  if (dim)
     {
       *error = 0;
       dim->attachment = attachment;
@@ -5639,17 +5747,19 @@ dwg_ent_dim_set_attachment(dwg_ent_dim *dim,
     }
 }
 
-/// Returns the extrusion
-/** Usage : dwg_ent_dim_get_extrusion(dim, &point, &error);
-    \param 1 dwg_ent_dim
+/** Returns the extrusion
+\code Usage: dwg_ent_dim_get_extrusion(dim, &point, &error);
+\endcode
+\param[in] dim dwg_ent_dim*
     \param 2 dwg_point_3d
-    \param 3 int ptr &error
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_set_extrusion(dwg_ent_dim *dim,
-                          dwg_point_3d *point, int *error)
+dwg_ent_dim_set_extrusion(dwg_ent_dim *restrict dim,
+                          dwg_point_3d *restrict point,
+                          int *restrict error)
 {
-  if (dim != 0 && point != 0)
+  if (dim && point)
     {
       *error = 0;
       dim->extrusion.x = point->x;
@@ -5663,17 +5773,19 @@ dwg_ent_dim_set_extrusion(dwg_ent_dim *dim,
     }
 }
 
-/// Sets the extrusion
-/** Usage : dwg_ent_dim_set_extrusion(dim, &point, &error);
-    \param 1 dwg_ent_dim
+/** Sets the extrusion
+\code Usage: dwg_ent_dim_set_extrusion(dim, &point, &error);
+\endcode
+\param[in] dim dwg_ent_dim*
     \param 2 dwg_point_3d
-    \param 3 int ptr &error
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_get_extrusion(dwg_ent_dim *dim,
-                          dwg_point_3d *point, int *error)
+dwg_ent_dim_get_extrusion(const dwg_ent_dim *restrict dim,
+                          dwg_point_3d *restrict point,
+                          int *restrict error)
 {
-  if (dim != 0 && point != 0)
+  if (dim && point)
     {
       *error = 0;
       point->x = dim->extrusion.x;
@@ -5687,18 +5799,23 @@ dwg_ent_dim_get_extrusion(dwg_ent_dim *dim,
     }
 }
 
-/// Returns the user text
-/** Usage : char * text  = dwg_ent_dim_get_user_text(dim, &error);
-    \param 1 dwg_ent_dim
-    \param 2 int ptr &error
+/** Returns the user text (utf-8 encoded)
+\code Usage: char * text  = dwg_ent_dim_get_user_text(dim, &error);
+\endcode
+\param[in] dim dwg_ent_dim*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 char *
-dwg_ent_dim_get_user_text(dwg_ent_dim *dim, int *error)
+dwg_ent_dim_get_user_text(const dwg_ent_dim *restrict dim,
+                          int *restrict error)
 {
-  if (dim != 0)
+  if (dim)
     {
       *error = 0;
-      return dim->user_text;
+      if (dwg_version >= R_2007)
+        return bit_convert_TU((BITCODE_TU)dim->user_text);
+      else
+        return dim->user_text;
     }
   else
     {
@@ -5708,20 +5825,25 @@ dwg_ent_dim_get_user_text(dwg_ent_dim *dim, int *error)
     }
 }
 
-/// Sets the user text
-/** Usage : dwg_ent_dim_set_user_text(dim, "dimension texto", &error);
-    \param 1 dwg_ent_dim
+/** Sets the user text (utf-8 encoded)
+\code Usage: dwg_ent_dim_set_user_text(dim, "dimension text", &error);
+\endcode
+\param[in] dim dwg_ent_dim*
     \param 2 char *
-    \param 3 int ptr &error
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_set_user_text(dwg_ent_dim *dim, char * text,
-                          int *error)
+dwg_ent_dim_set_user_text(dwg_ent_dim *restrict dim,
+                          const char *restrict text,
+                          int *restrict error)
 {
-  if (dim != 0)
+  if (dim)
     {
       *error = 0;
-      dim->user_text = text;
+      if (dwg_version >= R_2007)
+        dim->user_text = (char*)bit_utf8_to_TU((char*)text);
+      else
+        dim->user_text = (char*)text;
     }
   else
     {
@@ -5730,15 +5852,17 @@ dwg_ent_dim_set_user_text(dwg_ent_dim *dim, char * text,
     }
 }
 
-/// Returns text rotation
-/** Usage : double text_rot  = dwg_ent_dim_get_text_rot(dim, &error);
-    \param 1 dwg_ent_dim
-    \param 2 int ptr &error
+/** Returns text rotation
+\code Usage: double text_rot  = dwg_ent_dim_get_text_rot(dim, &error);
+\endcode
+\param[in] dim dwg_ent_dim*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_dim_get_text_rot(dwg_ent_dim *dim, int *error)
+double
+dwg_ent_dim_get_text_rot(const dwg_ent_dim *restrict dim,
+                          int *restrict error)
 {
-  if (dim != 0)
+  if (dim)
     {
       *error = 0;
       return dim->text_rot;
@@ -5751,17 +5875,19 @@ dwg_ent_dim_get_text_rot(dwg_ent_dim *dim, int *error)
     }
 }
 
-/// Sets the text rotation
-/** Usage : dwg_ent_dim_set_text_rot(dim, 10.10, &error);
-    \param 1 dwg_ent_dim
+/** Sets the text rotation
+\code Usage: dwg_ent_dim_set_text_rot(dim, 10.10, &error);
+\endcode
+\param[in] dim dwg_ent_dim*
     \param 2 double rot
-    \param 3 int ptr &error
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_set_text_rot(dwg_ent_dim *dim, BITCODE_BD rot,
-                         int *error)
+dwg_ent_dim_set_text_rot(dwg_ent_dim *restrict dim,
+                          const double rot,
+                         int *restrict error)
 {
-  if (dim != 0)
+  if (dim)
     {
       *error = 0;
       dim->text_rot = rot;
@@ -5773,15 +5899,17 @@ dwg_ent_dim_set_text_rot(dwg_ent_dim *dim, BITCODE_BD rot,
     }
 }
 
-/// Returns ins rotation
-/** Usage : double ins_rot  = dwg_ent_dim_get_ins_rotation(dim, &error);
-    \param 1 dwg_ent_dim
-    \param 2 int ptr &error
+/** Returns ins rotation
+\code Usage: double ins_rot  = dwg_ent_dim_get_ins_rotation(dim, &error);
+\endcode
+\param[in] dim dwg_ent_dim*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_dim_get_ins_rotation(dwg_ent_dim *dim, int *error)
+double
+dwg_ent_dim_get_ins_rotation(const dwg_ent_dim *restrict dim,
+                          int *restrict error)
 {
-  if (dim != 0)
+  if (dim)
     {
       *error = 0;
       return dim->ins_rotation;
@@ -5794,17 +5922,19 @@ dwg_ent_dim_get_ins_rotation(dwg_ent_dim *dim, int *error)
     }
 }
 
-/// Sets the ins rotation
-/** Usage : dwg_ent_dim_set_ins_rotation(dim, 10.10, &error);
-    \param 1 dwg_ent_dim
+/** Sets the ins rotation
+\code Usage: dwg_ent_dim_set_ins_rotation(dim, 10.10, &error);
+\endcode
+\param[in] dim dwg_ent_dim*
     \param 2 double
-    \param 3 int ptr &error
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_set_ins_rotation(dwg_ent_dim *dim, BITCODE_BD rot,
-                             int *error)
+dwg_ent_dim_set_ins_rotation(dwg_ent_dim *restrict dim,
+                          const double rot,
+                             int *restrict error)
 {
-  if (dim != 0)
+  if (dim)
     {
       *error = 0;
       dim->ins_rotation = rot;
@@ -5816,15 +5946,17 @@ dwg_ent_dim_set_ins_rotation(dwg_ent_dim *dim, BITCODE_BD rot,
     }
 }
 
-/// Returns flip arrow1
-/** Usage : char arrow1 = dwg_ent_dim_get_flip_arrow1(dim, &error);
-\param 1 dwg_ent_dim
-\param 2 int
+/** Returns flip arrow1
+\code Usage: char arrow1 = dwg_ent_dim_get_flip_arrow1(dim, &error);
+\endcode
+\param[in] dim dwg_ent_dim*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 char
-dwg_ent_dim_get_flip_arrow1(dwg_ent_dim *dim, int *error)
+dwg_ent_dim_get_flip_arrow1(const dwg_ent_dim *restrict dim,
+                          int *restrict error)
 {
-  if (dim != 0)
+  if (dim)
     {
       *error = 0;
       return dim->flip_arrow1;
@@ -5837,17 +5969,19 @@ dwg_ent_dim_get_flip_arrow1(dwg_ent_dim *dim, int *error)
     }
 }
 
-/// Sets the flip arrow1
-/** Usage : dwg_ent_dim_set_flip_arrow1(dim, arrow1, &error);
-\param 1 dwg_ent_dim
+/** Sets the flip arrow1
+\code Usage: dwg_ent_dim_set_flip_arrow1(dim, arrow1, &error);
+\endcode
+\param[in] dim dwg_ent_dim*
 \param 2 char
-    \param 2 int ptr &error
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_set_flip_arrow1(dwg_ent_dim *dim,
-                            char flip_arrow, int *error)
+dwg_ent_dim_set_flip_arrow1(dwg_ent_dim *restrict dim,
+                            char flip_arrow,
+                          int *restrict error)
 {
-  if (dim != 0)
+  if (dim)
     {
       *error = 0;
       dim->flip_arrow1 = flip_arrow;
@@ -5859,15 +5993,17 @@ dwg_ent_dim_set_flip_arrow1(dwg_ent_dim *dim,
     }
 }
 
-/// Returns flip arrow2
-/** Usage : char arrow2 = dwg_ent_dim_get_flip_arrow2(dim, &error);
-\param 1 dwg_ent_dim
-\param 2 int
+/** Returns flip arrow2
+\code Usage: char arrow2 = dwg_ent_dim_get_flip_arrow2(dim, &error);
+\endcode
+\param[in] dim dwg_ent_dim*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 char
-dwg_ent_dim_get_flip_arrow2(dwg_ent_dim *dim, int *error)
+dwg_ent_dim_get_flip_arrow2(const dwg_ent_dim *restrict dim,
+                          int *restrict error)
 {
-  if (dim != 0)
+  if (dim)
     {
       *error = 0;
       return dim->flip_arrow2;
@@ -5880,17 +6016,19 @@ dwg_ent_dim_get_flip_arrow2(dwg_ent_dim *dim, int *error)
     }
 }
 
-/// Sets the flip arrow2
-/** Usage : dwg_ent_dim_set_flip_arrow2(dim, arrow2, &error);
-\param 1 dwg_ent_dim
+/** Sets the flip arrow2
+\code Usage: dwg_ent_dim_set_flip_arrow2(dim, arrow2, &error);
+\endcode
+\param[in] dim dwg_ent_dim*
 \param 2 char
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_set_flip_arrow2(dwg_ent_dim *dim,
-                            char flip_arrow, int *error)
+dwg_ent_dim_set_flip_arrow2(dwg_ent_dim *restrict dim,
+                            char flip_arrow,
+                          int *restrict error)
 {
-  if (dim != 0)
+  if (dim)
     {
       *error = 0;
       dim->flip_arrow2 = flip_arrow;
@@ -5902,17 +6040,19 @@ dwg_ent_dim_set_flip_arrow2(dwg_ent_dim *dim,
     }
 }
 
-/// Returns the text mid point
-/** Usage : dwg_ent_dim_get_text_mid_pt(dim, &point, &error);
-\param 1 dwg_ent_dim
+/** Returns the text mid point
+\code Usage: dwg_ent_dim_get_text_mid_pt(dim, &point, &error);
+\endcode
+\param[in] dim dwg_ent_dim*
 \param 2 dwg_point_2d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_set_text_mid_pt(dwg_ent_dim *dim,
-                            dwg_point_2d *point, int *error)
+dwg_ent_dim_set_text_mid_pt(dwg_ent_dim *restrict dim,
+                            const dwg_point_2d *restrict point,
+                            int *restrict error)
 {
-  if (dim != 0 && point != 0)
+  if (dim && point)
     {
       *error = 0;
       dim->text_midpt.x = point->x;
@@ -5925,17 +6065,19 @@ dwg_ent_dim_set_text_mid_pt(dwg_ent_dim *dim,
     }
 }
 
-/// Sets the text mid point
-/** Usage : dwg_ent_dim_set_text_mid_pt(dim, &point, &error);
-\param 1 dwg_ent_dim
+/** Sets the text mid point
+\code Usage: dwg_ent_dim_set_text_mid_pt(dim, &point, &error);
+\endcode
+\param[in] dim dwg_ent_dim*
 \param 2 dwg_point_2d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_get_text_mid_pt(dwg_ent_dim *dim,
-                            dwg_point_2d *point, int *error)
+dwg_ent_dim_get_text_mid_pt(const dwg_ent_dim *restrict dim,
+                            dwg_point_2d *restrict point,
+                          int *restrict error)
 {
-  if (dim != 0 && point != 0)
+  if (dim && point)
     {
       *error = 0;
       point->x = dim->text_midpt.x;
@@ -5948,22 +6090,24 @@ dwg_ent_dim_get_text_mid_pt(dwg_ent_dim *dim,
     }
 }
 
-/// Sets the ins scale
-/** Usage : dwg_ent_dim_set_ins_scale(dim, &point, &error);
-\param 1 dwg_ent_dim
-\param 2 dwg_point_3d
-\param 3 int
+/** Sets the ins scale
+\code Usage: dwg_ent_dim_set_ins_scale(dim, &point, &error);
+\endcode
+\param dim[in]     dwg_ent_dim*
+\param scale3d[in] dwg_point_3d*
+\param error[out]  int*
 */
 void
-dwg_ent_dim_set_ins_scale(dwg_ent_dim *dim,
-                          dwg_point_3d *point, int *error)
+dwg_ent_dim_set_ins_scale(dwg_ent_dim *restrict dim,
+                          const dwg_point_3d *restrict scale3d,
+                          int *restrict error)
 {
-  if (dim != 0 && point != 0)
+  if (dim && scale3d)
     {
       *error = 0;
-      dim->ins_scale.x = point->x;
-      dim->ins_scale.y = point->y;
-      dim->ins_scale.z = point->z;
+      dim->ins_scale.x = scale3d->x;
+      dim->ins_scale.y = scale3d->y;
+      dim->ins_scale.z = scale3d->z;
     }
   else
     {
@@ -5972,22 +6116,24 @@ dwg_ent_dim_set_ins_scale(dwg_ent_dim *dim,
     }
 }
 
-/// Returns the ins scale
-/** Usage : dwg_ent_dim_get_ins_scale(dim, &point, &error);
-\param 1 dwg_ent_dim
-\param 2 dwg_point_3d
-\param 3 int
+/** Returns the ins scale
+\code Usage: dwg_ent_dim_get_ins_scale(dim, &point, &error);
+\endcode
+\param dim[in]      dwg_ent_dim*
+\param scale3d[out] dwg_point_3d*
+\param error[out]   int*
 */
 void
-dwg_ent_dim_get_ins_scale(dwg_ent_dim *dim,
-                          dwg_point_3d *point, int *error)
+dwg_ent_dim_get_ins_scale(const dwg_ent_dim *restrict dim,
+                          dwg_point_3d *restrict scale3d,
+                          int *restrict error)
 {
-  if (dim != 0 && point != 0)
+  if (dim && scale3d)
     {
       *error = 0;
-      point->x = dim->ins_scale.x;
-      point->y = dim->ins_scale.y;
-      point->z = dim->ins_scale.z;
+      scale3d->x = dim->ins_scale.x;
+      scale3d->y = dim->ins_scale.y;
+      scale3d->z = dim->ins_scale.z;
     }
   else
     {
@@ -5996,17 +6142,19 @@ dwg_ent_dim_get_ins_scale(dwg_ent_dim *dim,
     }
 }
 
-/// Sets the clone_ins point 12
-/** Usage : dwg_ent_dim_set_clone_ins_pt(dim, &point, &error);
-\param 1 dwg_ent_dim
+/** Sets the clone_ins point 12
+\code Usage: dwg_ent_dim_set_clone_ins_pt(dim, &point, &error);
+\endcode
+\param[in] dim dwg_ent_dim*
 \param 2 dwg_point_2d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_set_clone_ins_pt(dwg_ent_dim *dim, dwg_point_2d *point,
-                             int *error)
+dwg_ent_dim_set_clone_ins_pt(dwg_ent_dim *restrict dim,
+                             const dwg_point_2d *restrict point,
+                             int *restrict error)
 {
-  if (dim != 0 && point != 0)
+  if (dim && point)
     {
       *error = 0;
       dim->clone_ins_pt.x = point->x;
@@ -6019,17 +6167,18 @@ dwg_ent_dim_set_clone_ins_pt(dwg_ent_dim *dim, dwg_point_2d *point,
     }
 }
 
-/// Returns the clone_ins point
-/** Usage : dwg_ent_dim_get_clone_ins_pt(dim, &point, &error);
-\param 1 dwg_ent_dim
+/** Returns the clone_ins point
+\code Usage: dwg_ent_dim_get_clone_ins_pt(dim, &point, &error);
+\endcode
+\param[in] dim dwg_ent_dim*
 \param 2 dwg_point_2d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_get_clone_ins_pt(dwg_ent_dim *dim, dwg_point_2d *point,
-                               int *error)
+dwg_ent_dim_get_clone_ins_pt(const dwg_ent_dim *restrict dim, dwg_point_2d *restrict point,
+                               int *restrict error)
 {
-  if (dim != 0 && point != 0)
+  if (dim && point)
     {
       *error = 0;
       point->x = dim->clone_ins_pt.x;
@@ -6046,15 +6195,17 @@ dwg_ent_dim_get_clone_ins_pt(dwg_ent_dim *dim, dwg_point_2d *point,
 *              FUNCTIONS FOR ORDINATE DIMENSION ENTITY             *
 ********************************************************************/
 
-/// Returns flags2
-/** Usage : char flag2 = dwg_ent_dim_ordinate_get_flag2(dim, &error);
-\param 1 dwg_ent_dim_ordinate
-\param 2 int
+/** Returns flags2
+\code Usage: char flag2 = dwg_ent_dim_ordinate_get_flag2(dim, &error);
+\endcode
+\param[in] dim_ordinate dwg_ent_dim_ordinate*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 char
-dwg_ent_dim_ordinate_get_flag2(dwg_ent_dim_ordinate *dim, int *error)
+dwg_ent_dim_ordinate_get_flag2(const dwg_ent_dim_ordinate *restrict dim,
+                          int *restrict error)
 {
-  if (dim != 0)
+  if (dim)
     {
       *error = 0;
       return dim->flags_2;
@@ -6067,17 +6218,18 @@ dwg_ent_dim_ordinate_get_flag2(dwg_ent_dim_ordinate *dim, int *error)
     }
 }
 
-/// Sets flags2
-/** Usage : dwg_ent_dim_ordinate_set_flag2(dim, flag2, &error);
-\param 1 dwg_ent_dim_ordinate
+/** Sets flags2
+\code Usage: dwg_ent_dim_ordinate_set_flag2(dim, flag2, &error);
+\endcode
+\param[in] dim_ordinate dwg_ent_dim_ordinate*
 \param 2 char
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_ordinate_set_flag2(dwg_ent_dim_ordinate *dim, char flag,
-                                int *error)
+dwg_ent_dim_ordinate_set_flag2(dwg_ent_dim_ordinate *restrict dim, char flag,
+                                int *restrict error)
 {
-  if (dim != 0)
+  if (dim)
     {
       *error = 0;
       dim->flags_2 = flag;
@@ -6089,17 +6241,19 @@ dwg_ent_dim_ordinate_set_flag2(dwg_ent_dim_ordinate *dim, char flag,
     }
 }
 
-/// Sets the 10 ucsorigin point
-/** Usage : dwg_ent_dim_ordinate_set_ucsorigin_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_ordinate
+/** Sets the 10 ucsorigin point
+\code Usage: dwg_ent_dim_ordinate_set_ucsorigin_pt(dim, &point, &error);
+\endcode
+\param[in] dim_ordinate dwg_ent_dim_ordinate*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_ordinate_set_ucsorigin_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
-                               int *error)
+dwg_ent_dim_ordinate_set_ucsorigin_pt(dwg_ent_dim_ordinate *restrict dim,
+                                      const dwg_point_3d *restrict point,
+                                      int *restrict error)
 {
-  if (dim != 0 && point != 0)
+  if (dim && point)
     {
       *error = 0;
       dim->ucsorigin_pt.x = point->x;
@@ -6113,17 +6267,18 @@ dwg_ent_dim_ordinate_set_ucsorigin_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *p
     }
 }
 
-/// Returns the 10 ucsorigin point
-/** Usage : dwg_ent_dim_ordinate_get_ucsorigin_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_ordinate
+/** Returns the 10 ucsorigin point
+\code Usage: dwg_ent_dim_ordinate_get_ucsorigin_pt(dim, &point, &error);
+\endcode
+\param[in] dim_ordinate dwg_ent_dim_ordinate*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_ordinate_get_ucsorigin_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
-                               int *error)
+dwg_ent_dim_ordinate_get_ucsorigin_pt(const dwg_ent_dim_ordinate *restrict dim, dwg_point_3d *restrict point,
+                               int *restrict error)
 {
-  if (dim != 0 && point != 0)
+  if (dim && point)
     {
       *error = 0;
       point->x = dim->ucsorigin_pt.x;
@@ -6137,17 +6292,19 @@ dwg_ent_dim_ordinate_get_ucsorigin_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *p
     }
 }
 
-/// Sets the 13 feature_location point
-/** Usage : dwg_ent_dim_ordinate_set_feature_location_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_ordinate
+/** Sets the 13 feature_location point
+\code Usage: dwg_ent_dim_ordinate_set_feature_location_pt(dim, &point, &error);
+\endcode
+\param[in] dim_ordinate dwg_ent_dim_ordinate*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_ordinate_set_feature_location_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
-                               int *error)
+dwg_ent_dim_ordinate_set_feature_location_pt(dwg_ent_dim_ordinate *restrict dim,
+                                             const dwg_point_3d *restrict point,
+                                             int *restrict error)
 {
-  if (dim != 0 && point != 0)
+  if (dim && point)
     {
       *error = 0;
       dim->feature_location_pt.x = point->x;
@@ -6161,17 +6318,18 @@ dwg_ent_dim_ordinate_set_feature_location_pt(dwg_ent_dim_ordinate *dim, dwg_poin
     }
 }
 
-/// Returns the 13 feature_location point
-/** Usage : dwg_ent_dim_ordinate_get_feature_location_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_ordinate
+/** Returns the 13 feature_location point
+\code Usage: dwg_ent_dim_ordinate_get_feature_location_pt(dim, &point, &error);
+\endcode
+\param[in] dim_ordinate dwg_ent_dim_ordinate*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_ordinate_get_feature_location_pt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
-                               int *error)
+dwg_ent_dim_ordinate_get_feature_location_pt(const dwg_ent_dim_ordinate *restrict dim, dwg_point_3d *restrict point,
+                               int *restrict error)
 {
-  if (dim != 0 && point != 0)
+  if (dim && point)
     {
       *error = 0;
       point->x = dim->feature_location_pt.x;
@@ -6185,17 +6343,19 @@ dwg_ent_dim_ordinate_get_feature_location_pt(dwg_ent_dim_ordinate *dim, dwg_poin
     }
 }
 
-/// Sets the 14 leader_endpt
-/** Usage : dwg_ent_dim_ordinate_set_leader_endpt(dim, &point, &error);
-\param 1 dwg_ent_dim_ordinate
+/** Sets the 14 leader_endpt
+\code Usage: dwg_ent_dim_ordinate_set_leader_endpt(dim, &point, &error);
+\endcode
+\param[in] dim_ordinate dwg_ent_dim_ordinate*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_ordinate_set_leader_endpt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
-                               int *error)
+dwg_ent_dim_ordinate_set_leader_endpt(dwg_ent_dim_ordinate *restrict dim,
+                                      const dwg_point_3d *restrict point,
+                                      int *restrict error)
 {
-  if (dim != 0 && point != 0)
+  if (dim && point)
     {
       *error = 0;
       dim->leader_endpt.x = point->x;
@@ -6209,17 +6369,18 @@ dwg_ent_dim_ordinate_set_leader_endpt(dwg_ent_dim_ordinate *dim, dwg_point_3d *p
     }
 }
 
-/// Returns the 14 leader_endpoint point
-/** Usage : dwg_ent_dim_ordinate_get_leader_endpt(dim, &point, &error);
-\param 1 dwg_ent_dim_ordinate
+/** Returns the 14 leader_endpoint point
+\code Usage: dwg_ent_dim_ordinate_get_leader_endpt(dim, &point, &error);
+\endcode
+\param[in] dim_ordinate dwg_ent_dim_ordinate*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_ordinate_get_leader_endpt(dwg_ent_dim_ordinate *dim, dwg_point_3d *point,
-                               int *error)
+dwg_ent_dim_ordinate_get_leader_endpt(const dwg_ent_dim_ordinate *restrict dim, dwg_point_3d *restrict point,
+                               int *restrict error)
 {
-  if (dim != 0 && point != 0)
+  if (dim && point)
     {
       *error = 0;
       point->x = dim->leader_endpt.x;
@@ -6237,17 +6398,19 @@ dwg_ent_dim_ordinate_get_leader_endpt(dwg_ent_dim_ordinate *dim, dwg_point_3d *p
 *              FUNCTIONS FOR LINEAR DIMENSION ENTITY                *
 ********************************************************************/
 
-/// Sets the 10 def point
-/** Usage : dwg_ent_dim_linear_set_def_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_linear
+/** Sets the 10 def point
+\code Usage: dwg_ent_dim_linear_set_def_pt(dim, &point, &error);
+\endcode
+\param[in] dim_linear dwg_ent_dim_linear*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_linear_set_def_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
-                             int *error)
+dwg_ent_dim_linear_set_def_pt(dwg_ent_dim_linear *restrict dim,
+                              const dwg_point_3d *restrict point,
+                              int *restrict error)
 {
-  if (dim != 0 && point != 0)
+  if (dim && point)
     {
       *error = 0;
       dim->def_pt.x = point->x;
@@ -6261,17 +6424,18 @@ dwg_ent_dim_linear_set_def_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
     }
 }
 
-/// Sets the 10 def point
-/** Usage : dwg_ent_dim_linear_set_def_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_linear
+/** Sets the 10 def point
+\code Usage: dwg_ent_dim_linear_set_def_pt(dim, &point, &error);
+\endcode
+\param[in] dim_linear dwg_ent_dim_linear*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_linear_get_def_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
-                             int *error)
+dwg_ent_dim_linear_get_def_pt(const dwg_ent_dim_linear *restrict dim, dwg_point_3d *restrict point,
+                             int *restrict error)
 {
-  if (dim != 0 && point != 0)
+  if (dim && point)
     {
       *error = 0;
       point->x = dim->def_pt.x;
@@ -6285,17 +6449,19 @@ dwg_ent_dim_linear_get_def_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
     }
 }
 
-/// Sets the 13 point
-/** Usage : dwg_ent_dim_linear_set_13_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_linear
+/** Sets the 13 point
+\code Usage: dwg_ent_dim_linear_set_13_pt(dim, &point, &error);
+\endcode
+\param[in] dim_linear dwg_ent_dim_linear*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_linear_set_13_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
-                             int *error)
+dwg_ent_dim_linear_set_13_pt(dwg_ent_dim_linear *restrict dim,
+                             const dwg_point_3d *restrict point,
+                             int *restrict error)
 {
-  if (dim != 0 && point != 0)
+  if (dim && point)
     {
       *error = 0;
       dim->_13_pt.x = point->x;
@@ -6309,17 +6475,18 @@ dwg_ent_dim_linear_set_13_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
     }
 }
 
-/// Sets the 13 point
-/** Usage : dwg_ent_dim_linear_set_13_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_linear
+/** Sets the 13 point
+\code Usage: dwg_ent_dim_linear_set_13_pt(dim, &point, &error);
+\endcode
+\param[in] dim_linear dwg_ent_dim_linear*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_linear_get_13_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
-                             int *error)
+dwg_ent_dim_linear_get_13_pt(const dwg_ent_dim_linear *restrict dim, dwg_point_3d *restrict point,
+                             int *restrict error)
 {
-  if (dim != 0 && point != 0)
+  if (dim && point)
     {
       *error = 0;
       point->x = dim->_13_pt.x;
@@ -6333,17 +6500,19 @@ dwg_ent_dim_linear_get_13_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
     }
 }
 
-/// Sets the 14 point
-/** Usage : dwg_ent_dim_linear_set_14_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_linear
+/** Sets the 14 point
+\code Usage: dwg_ent_dim_linear_set_14_pt(dim, &point, &error);
+\endcode
+\param[in] dim_linear dwg_ent_dim_linear*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_linear_set_14_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
-                             int *error)
+dwg_ent_dim_linear_set_14_pt(dwg_ent_dim_linear *restrict dim,
+                             const dwg_point_3d *restrict point,
+                             int *restrict error)
 {
-  if (dim != 0 && point != 0)
+  if (dim && point)
     {
       *error = 0;
       dim->_14_pt.x = point->x;
@@ -6357,17 +6526,18 @@ dwg_ent_dim_linear_set_14_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
     }
 }
 
-/// Returns the 14 point
-/** Usage : dwg_ent_dim_linear_get_14_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_linear
+/** Returns the 14 point
+\code Usage: dwg_ent_dim_linear_get_14_pt(dim, &point, &error);
+\endcode
+\param[in] dim_linear dwg_ent_dim_linear*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_linear_get_14_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
-                             int *error)
+dwg_ent_dim_linear_get_14_pt(const dwg_ent_dim_linear *restrict dim, dwg_point_3d *restrict point,
+                             int *restrict error)
 {
-  if (dim != 0 && point != 0)
+  if (dim && point)
     {
       *error = 0;
       point->x = dim->_14_pt.x;
@@ -6381,15 +6551,17 @@ dwg_ent_dim_linear_get_14_pt(dwg_ent_dim_linear *dim, dwg_point_3d *point,
     }
 }
 
-/// Returns the ext line rotation
-/** Usage : double rot = dwg_ent_dim_linear_get_ext_line_rotation(dim, &error);
-\param 1 dwg_ent_dim_linear
-\param 2 int
+/** Returns the ext line rotation
+\code Usage: double rot = dwg_ent_dim_linear_get_ext_line_rotation(dim, &error);
+\endcode
+\param[in] dim_linear dwg_ent_dim_linear*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_dim_linear_get_ext_line_rotation(dwg_ent_dim_linear *dim, int *error)
+double
+dwg_ent_dim_linear_get_ext_line_rotation(const dwg_ent_dim_linear *restrict dim,
+                          int *restrict error)
 {
-  if (dim != 0)
+  if (dim)
     {
       *error = 0;
       return dim->ext_line_rot;
@@ -6402,17 +6574,19 @@ dwg_ent_dim_linear_get_ext_line_rotation(dwg_ent_dim_linear *dim, int *error)
     }
 }
 
-/// Sets the ext line rotation
-/** Usage : dwg_ent_dim_linear_set_ext_line_rotation(dim, rot, &error);
-\param 1 dwg_ent_dim_linear
+/** Sets the ext line rotation
+\code Usage: dwg_ent_dim_linear_set_ext_line_rotation(dim, rot, &error);
+\endcode
+\param[in] dim_linear dwg_ent_dim_linear*
 \param 2 double
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_linear_set_ext_line_rotation(dwg_ent_dim_linear *dim, BITCODE_BD rot,
-                                         int *error)
+dwg_ent_dim_linear_set_ext_line_rotation(dwg_ent_dim_linear *restrict dim,
+                          const double rot,
+                                         int *restrict error)
 {
-  if (dim != 0)
+  if (dim)
     {
       *error = 0;
       dim->ext_line_rot = rot;
@@ -6424,15 +6598,17 @@ dwg_ent_dim_linear_set_ext_line_rotation(dwg_ent_dim_linear *dim, BITCODE_BD rot
     }
 }
 
-/// Returns the dim rotation
-/** Usage : double rot = dwg_ent_dim_linear_get_dim_rot(dim, &error);
-\param 1 dwg_ent_dim_linear
-\param 2 int
+/** Returns the dim rotation
+\code Usage: double rot = dwg_ent_dim_linear_get_dim_rot(dim, &error);
+\endcode
+\param[in] dim_linear dwg_ent_dim_linear*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_dim_linear_get_dim_rot(dwg_ent_dim_linear *dim, int *error)
+double
+dwg_ent_dim_linear_get_dim_rot(const dwg_ent_dim_linear *restrict dim,
+                          int *restrict error)
 {
-  if (dim != 0)
+  if (dim)
     {
       *error = 0;
       return dim->dim_rot;
@@ -6445,16 +6621,19 @@ dwg_ent_dim_linear_get_dim_rot(dwg_ent_dim_linear *dim, int *error)
     }
 }
 
-/// Sets the dim rotation
-/** Usage : dwg_ent_dim_linear_set_dim_rot(dim, rot, &error);
-\param 1 dwg_ent_dim_linear
+/** Sets the dim rotation
+\code Usage: dwg_ent_dim_linear_set_dim_rot(dim, rot, &error);
+\endcode
+\param[in] dim_linear dwg_ent_dim_linear*
 \param 2 double
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_linear_set_dim_rot(dwg_ent_dim_linear *dim, BITCODE_BD rot, int *error)
+dwg_ent_dim_linear_set_dim_rot(dwg_ent_dim_linear *restrict dim,
+                          const double rot,
+                          int *restrict error)
 {
-  if (dim != 0)
+  if (dim)
     {
       *error = 0;
       dim->dim_rot = rot;
@@ -6470,17 +6649,19 @@ dwg_ent_dim_linear_set_dim_rot(dwg_ent_dim_linear *dim, BITCODE_BD rot, int *err
 *             FUNCTIONS FOR ALIGNED DIMENSION ENTITY                *
 ********************************************************************/
 
-/// Sets the 10 def point
-/** Usage : dwg_ent_dim_aligned_set_def_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_aligned
+/** Sets the 10 def point
+\code Usage: dwg_ent_dim_aligned_set_def_pt(dim, &point, &error);
+\endcode
+\param[in] dim_aligned dwg_ent_dim_aligned*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_aligned_set_def_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
-                              int *error)
+dwg_ent_dim_aligned_set_def_pt(dwg_ent_dim_aligned *restrict dim,
+                               const dwg_point_3d *restrict point,
+                               int *restrict error)
 {
-  if (dim != 0 && point != 0)
+  if (dim && point)
     {
       *error = 0;
       dim->def_pt.x = point->x;
@@ -6494,17 +6675,18 @@ dwg_ent_dim_aligned_set_def_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
     }
 }
 
-/// Returns the 10 def point
-/** Usage : dwg_ent_dim_aligned_get_def_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_aligned
+/** Returns the 10 def point
+\code Usage: dwg_ent_dim_aligned_get_def_pt(dim, &point, &error);
+\endcode
+\param[in] dim_aligned dwg_ent_dim_aligned*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_aligned_get_def_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
-                              int *error)
+dwg_ent_dim_aligned_get_def_pt(const dwg_ent_dim_aligned *restrict dim, dwg_point_3d *restrict point,
+                              int *restrict error)
 {
-  if (dim != 0 && point != 0)
+  if (dim && point)
     {
       *error = 0;
       point->x = dim->def_pt.x;
@@ -6518,17 +6700,19 @@ dwg_ent_dim_aligned_get_def_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
     }
 }
 
-/// Sets the 13 point
-/** Usage : dwg_ent_dim_aligned_set_13_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_aligned
+/** Sets the 13 point
+\code Usage: dwg_ent_dim_aligned_set_13_pt(dim, &point, &error);
+\endcode
+\param[in] dim_aligned dwg_ent_dim_aligned*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_aligned_set_13_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
-                              int *error)
+dwg_ent_dim_aligned_set_13_pt(dwg_ent_dim_aligned *restrict dim,
+                              const dwg_point_3d *restrict point,
+                              int *restrict error)
 {
-  if (dim != 0 && point != 0)
+  if (dim && point)
     {
       *error = 0;
       dim->_13_pt.x = point->x;
@@ -6542,17 +6726,18 @@ dwg_ent_dim_aligned_set_13_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
     }
 }
 
-/// Returns the 13 point
-/** Usage : dwg_ent_dim_aligned_get_13_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_aligned
+/** Returns the 13 point
+\code Usage: dwg_ent_dim_aligned_get_13_pt(dim, &point, &error);
+\endcode
+\param[in] dim_aligned dwg_ent_dim_aligned*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_aligned_get_13_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
-                              int *error)
+dwg_ent_dim_aligned_get_13_pt(const dwg_ent_dim_aligned *restrict dim, dwg_point_3d *restrict point,
+                              int *restrict error)
 {
-  if (dim != 0 && point != 0)
+  if (dim && point)
     {
       *error = 0;
       point->x = dim->_13_pt.x;
@@ -6566,17 +6751,19 @@ dwg_ent_dim_aligned_get_13_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
     }
 }
 
-/// Sets the 14 point
-/** Usage : dwg_ent_dim_aligned_set_14_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_aligned
+/** Sets the 14 point
+\code Usage: dwg_ent_dim_aligned_set_14_pt(dim, &point, &error);
+\endcode
+\param[in] dim_aligned dwg_ent_dim_aligned*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_aligned_set_14_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
-                              int *error)
+dwg_ent_dim_aligned_set_14_pt(dwg_ent_dim_aligned *restrict dim,
+                              const dwg_point_3d *restrict point,
+                              int *restrict error)
 {
-  if (dim != 0 && point != 0)
+  if (dim && point)
     {
       *error = 0;
       dim->_14_pt.x = point->x;
@@ -6590,17 +6777,18 @@ dwg_ent_dim_aligned_set_14_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
     }
 }
 
-/// Returns the 14 point
-/** Usage : dwg_ent_dim_aligned_get_14_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_aligned
+/** Returns the 14 point
+\code Usage: dwg_ent_dim_aligned_get_14_pt(dim, &point, &error);
+\endcode
+\param[in] dim_aligned dwg_ent_dim_aligned*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_aligned_get_14_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
-                              int *error)
+dwg_ent_dim_aligned_get_14_pt(const dwg_ent_dim_aligned *restrict dim, dwg_point_3d *restrict point,
+                              int *restrict error)
 {
-  if (dim != 0)
+  if (dim)
     {
       *error = 0;
       point->x = dim->_14_pt.x;
@@ -6614,15 +6802,17 @@ dwg_ent_dim_aligned_get_14_pt(dwg_ent_dim_aligned *dim, dwg_point_3d *point,
     }
 }
 
-/// Returns the ext line rotation
-/** Usage : double rot = dwg_ent_dim_aligned_get_ext_line_rotation(dim, &error);
-\param 1 dwg_ent_dim_aligned
-\param 2 int
+/** Returns the ext line rotation
+\code Usage: double rot = dwg_ent_dim_aligned_get_ext_line_rotation(dim, &error);
+\endcode
+\param[in] dim_aligned dwg_ent_dim_aligned*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-BITCODE_BD
-dwg_ent_dim_aligned_get_ext_line_rotation(dwg_ent_dim_aligned *dim, int *error)
+double
+dwg_ent_dim_aligned_get_ext_line_rotation(const dwg_ent_dim_aligned *restrict dim,
+                          int *restrict error)
 {
-  if (dim != 0)
+  if (dim)
     {
       *error = 0;
       return dim->ext_line_rot;
@@ -6635,17 +6825,19 @@ dwg_ent_dim_aligned_get_ext_line_rotation(dwg_ent_dim_aligned *dim, int *error)
     }
 }
 
-/// Sets the ext line rotation
-/** Usage : dwg_ent_dim_aligned_set_ext_line_rotation(dim, rot, &error);
-\param 1 dwg_ent_dim_aligned
+/** Sets the ext line rotation
+\code Usage: dwg_ent_dim_aligned_set_ext_line_rotation(dim, rot, &error);
+\endcode
+\param[in] dim_aligned dwg_ent_dim_aligned*
 \param 2 double
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_aligned_set_ext_line_rotation(dwg_ent_dim_aligned *dim,
-                                          double rot, int *error)
+dwg_ent_dim_aligned_set_ext_line_rotation(dwg_ent_dim_aligned *restrict dim,
+                                          double rot,
+                          int *restrict error)
 {
-  if (dim != 0)
+  if (dim)
     {
       *error = 0;
       dim->ext_line_rot = rot;
@@ -6661,17 +6853,19 @@ dwg_ent_dim_aligned_set_ext_line_rotation(dwg_ent_dim_aligned *dim,
 *              FUNCTIONS FOR ANG3PT DIMENSION ENTITY                *
 ********************************************************************/
 
-/// Sets the 10 point
-/** Usage : dwg_ent_dim_ang3pt_set_10_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_ang3pt
+/** Sets the 10 point
+\code Usage: dwg_ent_dim_ang3pt_set_10_pt(dim, &point, &error);
+\endcode
+\param[in] dim_ang3pt dwg_ent_dim_ang3pt*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_ang3pt_set_def_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
-                             int *error)
+dwg_ent_dim_ang3pt_set_def_pt(dwg_ent_dim_ang3pt *restrict ang,
+                              const dwg_point_3d *restrict point,
+                              int *restrict error)
 {
-  if (ang != 0 && point != 0)
+  if (ang && point)
     {
       *error = 0;
       ang->def_pt.x = point->x;
@@ -6685,17 +6879,18 @@ dwg_ent_dim_ang3pt_set_def_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
     }
 }
 
-/// Returns the 10 def pt
-/** Usage : dwg_ent_dim_ang3pt_get_def_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_ang3pt
+/** Returns the 10 def pt
+\code Usage: dwg_ent_dim_ang3pt_get_def_pt(dim, &point, &error);
+\endcode
+\param[in] dim_ang3pt dwg_ent_dim_ang3pt*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_ang3pt_get_def_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
-                             int *error)
+dwg_ent_dim_ang3pt_get_def_pt(const dwg_ent_dim_ang3pt *restrict ang, dwg_point_3d *restrict point,
+                             int *restrict error)
 {
-  if (ang != 0)
+  if (ang)
     {
       *error = 0;
       point->x = ang->def_pt.x;
@@ -6709,17 +6904,19 @@ dwg_ent_dim_ang3pt_get_def_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
     }
 }
 
-/// Sets the 13 point
-/** Usage : dwg_ent_dim_ang3pt_set_13_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_ang3pt
+/** Sets the 13 point
+\code Usage: dwg_ent_dim_ang3pt_set_13_pt(dim, &point, &error);
+\endcode
+\param[in] dim_ang3pt dwg_ent_dim_ang3pt*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_ang3pt_set_13_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
-                            int *error)
+dwg_ent_dim_ang3pt_set_13_pt(dwg_ent_dim_ang3pt *restrict ang,
+                             const dwg_point_3d *restrict point,
+                             int *restrict error)
 {
-  if (ang != 0 && point != 0)
+  if (ang && point)
     {
       *error = 0;
       ang->_13_pt.x = point->x;
@@ -6733,17 +6930,18 @@ dwg_ent_dim_ang3pt_set_13_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
     }
 }
 
-/// Returns the 13 pt
-/** Usage : dwg_ent_dim_ang3pt_get_13_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_ang3pt
+/** Returns the 13 pt
+\code Usage: dwg_ent_dim_ang3pt_get_13_pt(dim, &point, &error);
+\endcode
+\param[in] dim_ang3pt dwg_ent_dim_ang3pt*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_ang3pt_get_13_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
-                             int *error)
+dwg_ent_dim_ang3pt_get_13_pt(const dwg_ent_dim_ang3pt *restrict ang, dwg_point_3d *restrict point,
+                             int *restrict error)
 {
-  if (ang != 0 && point != 0)
+  if (ang && point)
     {
       *error = 0;
       point->x = ang->_13_pt.x;
@@ -6757,17 +6955,19 @@ dwg_ent_dim_ang3pt_get_13_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
     }
 }
 
-/// Sets the 14 point
-/** Usage : dwg_ent_dim_ang3pt_set_14_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_ang3pt
+/** Sets the 14 point
+\code Usage: dwg_ent_dim_ang3pt_set_14_pt(dim, &point, &error);
+\endcode
+\param[in] dim_ang3pt dwg_ent_dim_ang3pt*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_ang3pt_set_14_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
-                             int *error)
+dwg_ent_dim_ang3pt_set_14_pt(dwg_ent_dim_ang3pt *restrict ang,
+                             const dwg_point_3d *restrict point,
+                             int *restrict error)
 {
-  if (ang != 0 && point != 0)
+  if (ang && point)
     {
       *error = 0;
       ang->_14_pt.x = point->x;
@@ -6781,17 +6981,18 @@ dwg_ent_dim_ang3pt_set_14_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
     }
 }
 
-/// Returns the 14 pt
-/** Usage : dwg_ent_dim_ang3pt_get_14_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_ang3pt
+/** Returns the 14 pt
+\code Usage: dwg_ent_dim_ang3pt_get_14_pt(dim, &point, &error);
+\endcode
+\param[in] dim_ang3pt dwg_ent_dim_ang3pt*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_ang3pt_get_14_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
-                             int *error)
+dwg_ent_dim_ang3pt_get_14_pt(const dwg_ent_dim_ang3pt *restrict ang, dwg_point_3d *restrict point,
+                             int *restrict error)
 {
-  if (ang != 0 && point != 0)
+  if (ang && point)
     {
       *error = 0;
       point->x = ang->_14_pt.x;
@@ -6806,17 +7007,19 @@ dwg_ent_dim_ang3pt_get_14_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
 }
 
 
-/// Sets the 15 first_arc point
-/** Usage : dwg_ent_dim_ang3pt_set_first_arc_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_ang3pt
+/** Sets the 15 first_arc point
+\code Usage: dwg_ent_dim_ang3pt_set_first_arc_pt(dim, &point, &error);
+\endcode
+\param[in] dim_ang3pt dwg_ent_dim_ang3pt*
 \param 2 dwg_point_3d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_ang3pt_set_first_arc_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
-                             int *error)
+dwg_ent_dim_ang3pt_set_first_arc_pt(dwg_ent_dim_ang3pt *restrict ang,
+                                    const dwg_point_3d *restrict point,
+                                    int *restrict error)
 {
-  if (ang != 0 && point != 0)
+  if (ang && point)
     {
       *error = 0;
       ang->first_arc_pt.x = point->x;
@@ -6830,17 +7033,18 @@ dwg_ent_dim_ang3pt_set_first_arc_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point
     }
 }
 
-/// Returns the text 15 first_arc pt
-/** Usage : dwg_ent_dim_ang3pt_get_text_first_arc_pt(dim, &point, &error);
-\param 1 dwg_ent_dim_ang3pt
+/** Returns the text 15 first_arc pt
+\code Usage: dwg_ent_dim_ang3pt_get_text_first_arc_pt(dim, &point, &error);
+\endcode
+\param[in] dim_ang3pt dwg_ent_dim_ang3pt*
 \param 2 dwg_point_2d
-\param 3 int
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_ang3pt_get_first_arc_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point,
-                             int *error)
+dwg_ent_dim_ang3pt_get_first_arc_pt(const dwg_ent_dim_ang3pt *restrict ang, dwg_point_3d *restrict point,
+                             int *restrict error)
 {
-  if (ang != 0 && point != 0)
+  if (ang && point)
     {
       *error = 0;
       point->x = ang->first_arc_pt.x;
@@ -6861,10 +7065,11 @@ dwg_ent_dim_ang3pt_get_first_arc_pt(dwg_ent_dim_ang3pt *ang, dwg_point_3d *point
 
 /// Sets dim ang2ln 10 def point
 void
-dwg_ent_dim_ang2ln_set_def_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
-                             int *error)
+dwg_ent_dim_ang2ln_set_def_pt(dwg_ent_dim_ang2ln *restrict ang,
+                              const dwg_point_3d *restrict point,
+                              int *restrict error)
 {
-  if (ang != 0 && point != 0)
+  if (ang && point)
     {
       *error = 0;
       ang->def_pt.x = point->x;
@@ -6880,10 +7085,10 @@ dwg_ent_dim_ang2ln_set_def_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
 
 /// Returns dim ang2ln 10 def point
 void
-dwg_ent_dim_ang2ln_get_def_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
-                             int *error)
+dwg_ent_dim_ang2ln_get_def_pt(const dwg_ent_dim_ang2ln *restrict ang, dwg_point_3d *restrict point,
+                             int *restrict error)
 {
-  if (ang != 0 && point != 0)
+  if (ang && point)
     {
       *error = 0;
       point->x = ang->def_pt.x;
@@ -6899,10 +7104,11 @@ dwg_ent_dim_ang2ln_get_def_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
 
 /// Sets dim ang2ln 13 point
 void
-dwg_ent_dim_ang2ln_set_13_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
-                             int *error)
+dwg_ent_dim_ang2ln_set_13_pt(dwg_ent_dim_ang2ln *restrict ang,
+                             const dwg_point_3d *restrict point,
+                             int *restrict error)
 {
-  if (ang != 0 && point != 0)
+  if (ang && point)
     {
       *error = 0;
       ang->_13_pt.x = point->x;
@@ -6918,10 +7124,10 @@ dwg_ent_dim_ang2ln_set_13_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
 
 /// Returns dim ang2ln 13 point
 void
-dwg_ent_dim_ang2ln_get_13_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
-                             int *error)
+dwg_ent_dim_ang2ln_get_13_pt(const dwg_ent_dim_ang2ln *restrict ang, dwg_point_3d *restrict point,
+                             int *restrict error)
 {
-  if (ang != 0 && point != 0)
+  if (ang && point)
     {
       *error = 0;
       point->x = ang->_13_pt.x;
@@ -6937,10 +7143,11 @@ dwg_ent_dim_ang2ln_get_13_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
 
 /// Sets dim ang2ln 14 point
 void
-dwg_ent_dim_ang2ln_set_14_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
-                             int *error)
+dwg_ent_dim_ang2ln_set_14_pt(dwg_ent_dim_ang2ln *restrict ang,
+                             const dwg_point_3d *restrict point,
+                             int *restrict error)
 {
-  if (ang != 0 && point != 0)
+  if (ang && point)
     {
       *error = 0;
       ang->_14_pt.x = point->x;
@@ -6956,10 +7163,10 @@ dwg_ent_dim_ang2ln_set_14_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
 
 /// Returns dim ang2ln 14 point
 void
-dwg_ent_dim_ang2ln_get_14_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
-                             int *error)
+dwg_ent_dim_ang2ln_get_14_pt(const dwg_ent_dim_ang2ln *restrict ang, dwg_point_3d *restrict point,
+                             int *restrict error)
 {
-  if (ang != 0 && point != 0)
+  if (ang && point)
     {
       *error = 0;
       point->x = ang->_14_pt.x;
@@ -6976,10 +7183,11 @@ dwg_ent_dim_ang2ln_get_14_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
 
 /// Sets dim ang2ln first_arc 15 point
 void
-dwg_ent_dim_ang2ln_set_first_arc_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
-                             int *error)
+dwg_ent_dim_ang2ln_set_first_arc_pt(dwg_ent_dim_ang2ln *restrict ang,
+                                    const dwg_point_3d *restrict point,
+                                    int *restrict error)
 {
-  if (ang != 0 && point != 0)
+  if (ang && point)
     {
       *error = 0;
       ang->first_arc_pt.x = point->x;
@@ -6995,10 +7203,10 @@ dwg_ent_dim_ang2ln_set_first_arc_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point
 
 /// Returns dim ang2ln first_arc 15 point
 void
-dwg_ent_dim_ang2ln_get_first_arc_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point,
-                             int *error)
+dwg_ent_dim_ang2ln_get_first_arc_pt(const dwg_ent_dim_ang2ln *restrict ang, dwg_point_3d *restrict point,
+                             int *restrict error)
 {
-  if (ang != 0 && point != 0)
+  if (ang && point)
     {
       *error = 0;
       point->x = ang->first_arc_pt.x;
@@ -7015,10 +7223,11 @@ dwg_ent_dim_ang2ln_get_first_arc_pt(dwg_ent_dim_ang2ln *ang, dwg_point_3d *point
 
 /// Sets dim ang2ln 16 point
 void
-dwg_ent_dim_ang2ln_set_16_pt(dwg_ent_dim_ang2ln *ang, dwg_point_2d *point,
-                             int *error)
+dwg_ent_dim_ang2ln_set_16_pt(dwg_ent_dim_ang2ln *restrict ang,
+                             const dwg_point_2d *restrict point,
+                             int *restrict error)
 {
-  if (ang != 0 && point != 0)
+  if (ang && point)
     {
       *error = 0;
       ang->_16_pt.x = point->x;
@@ -7033,10 +7242,10 @@ dwg_ent_dim_ang2ln_set_16_pt(dwg_ent_dim_ang2ln *ang, dwg_point_2d *point,
 
 /// Returns dim ang2ln 16 point
 void
-dwg_ent_dim_ang2ln_get_16_pt(dwg_ent_dim_ang2ln *ang, dwg_point_2d *point,
-                             int *error)
+dwg_ent_dim_ang2ln_get_16_pt(const dwg_ent_dim_ang2ln *restrict ang, dwg_point_2d *restrict point,
+                             int *restrict error)
 {
-  if (ang != 0 && point != 0)
+  if (ang && point)
     {
       *error = 0;
       point->x = ang->_16_pt.x;
@@ -7056,10 +7265,11 @@ dwg_ent_dim_ang2ln_get_16_pt(dwg_ent_dim_ang2ln *ang, dwg_point_2d *point,
 
 /// Sets dim radius def 10 point
 void
-dwg_ent_dim_radius_set_def_pt(dwg_ent_dim_radius *radius, dwg_point_3d *point,
-                             int *error)
+dwg_ent_dim_radius_set_def_pt(dwg_ent_dim_radius *restrict radius,
+                              const dwg_point_3d *restrict point,
+                              int *restrict error)
 {
-  if (radius != 0 && point != 0)
+  if (radius && point)
     {
       *error = 0;
       radius->def_pt.x = point->x;
@@ -7075,10 +7285,10 @@ dwg_ent_dim_radius_set_def_pt(dwg_ent_dim_radius *radius, dwg_point_3d *point,
 
 /// Returns dim radius def 10 point
 void
-dwg_ent_dim_radius_get_def_pt(dwg_ent_dim_radius *radius, dwg_point_3d *point,
-                             int *error)
+dwg_ent_dim_radius_get_def_pt(const dwg_ent_dim_radius *restrict radius, dwg_point_3d *restrict point,
+                             int *restrict error)
 {
-  if (radius != 0 && point != 0)
+  if (radius && point)
     {
       *error = 0;
       point->x = radius->def_pt.x;
@@ -7095,10 +7305,11 @@ dwg_ent_dim_radius_get_def_pt(dwg_ent_dim_radius *radius, dwg_point_3d *point,
 
 /// Sets dim radius first_arc 15 point
 void
-dwg_ent_dim_radius_set_first_arc_pt(dwg_ent_dim_radius *radius, dwg_point_3d *point,
-                             int *error)
+dwg_ent_dim_radius_set_first_arc_pt(dwg_ent_dim_radius *restrict radius,
+                                    const dwg_point_3d *restrict point,
+                                    int *restrict error)
 {
-  if (radius != 0 && point != 0)
+  if (radius && point)
     {
       *error = 0;
       radius->first_arc_pt.x = point->x;
@@ -7114,10 +7325,10 @@ dwg_ent_dim_radius_set_first_arc_pt(dwg_ent_dim_radius *radius, dwg_point_3d *po
 
 /// Returns dim radius first_arc 15 point
 void
-dwg_ent_dim_radius_get_first_arc_pt(dwg_ent_dim_radius *radius, dwg_point_3d *point,
-                             int *error)
+dwg_ent_dim_radius_get_first_arc_pt(const dwg_ent_dim_radius *restrict radius, dwg_point_3d *restrict point,
+                             int *restrict error)
 {
-  if (radius != 0 && point != 0)
+  if (radius && point)
     {
       *error = 0;
       point->x = radius->first_arc_pt.x;
@@ -7132,10 +7343,11 @@ dwg_ent_dim_radius_get_first_arc_pt(dwg_ent_dim_radius *radius, dwg_point_3d *po
 }
 
 /// Returns dim radius leader length
-BITCODE_BD
-dwg_ent_dim_radius_get_leader_length(dwg_ent_dim_radius *radius, int *error)
+double
+dwg_ent_dim_radius_get_leader_length(const dwg_ent_dim_radius *restrict radius,
+                          int *restrict error)
 {
-  if (radius != 0)
+  if (radius)
     {
       *error = 0;
       return radius->leader_len;
@@ -7150,10 +7362,11 @@ dwg_ent_dim_radius_get_leader_length(dwg_ent_dim_radius *radius, int *error)
 
 /// Sets dim radius leader length
 void
-dwg_ent_dim_radius_set_leader_length(dwg_ent_dim_radius *radius, BITCODE_BD length,
-                                     int *error)
+dwg_ent_dim_radius_set_leader_length(dwg_ent_dim_radius *restrict radius,
+                          const double length,
+                                     int *restrict error)
 {
-  if (radius != 0)
+  if (radius)
     {
       *error = 0;
       radius->leader_len = length;
@@ -7172,10 +7385,11 @@ dwg_ent_dim_radius_set_leader_length(dwg_ent_dim_radius *radius, BITCODE_BD leng
 
 /// Sets dim diameter def 10 point
 void
-dwg_ent_dim_diameter_set_def_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *point,
-                               int *error)
+dwg_ent_dim_diameter_set_def_pt(dwg_ent_dim_diameter *restrict dia,
+                                const dwg_point_3d *restrict point,
+                                int *restrict error)
 {
-  if (dia != 0 && point != 0)
+  if (dia && point)
     {
       *error = 0;
       dia->def_pt.x = point->x;
@@ -7191,10 +7405,10 @@ dwg_ent_dim_diameter_set_def_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *point,
 
 /// Returns dim diameter def 10 point
 void
-dwg_ent_dim_diameter_get_def_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *point,
-                               int *error)
+dwg_ent_dim_diameter_get_def_pt(const dwg_ent_dim_diameter *restrict dia, dwg_point_3d *restrict point,
+                               int *restrict error)
 {
-  if (dia != 0 && point != 0)
+  if (dia && point)
     {
       *error = 0;
       point->x = dia->def_pt.x;
@@ -7211,10 +7425,11 @@ dwg_ent_dim_diameter_get_def_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *point,
 
 /// Sets dim diameter first_arc 15 point
 void
-dwg_ent_dim_diameter_set_first_arc_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *point,
-                               int *error)
+dwg_ent_dim_diameter_set_first_arc_pt(dwg_ent_dim_diameter *restrict dia,
+                                      const dwg_point_3d *restrict point,
+                                      int *restrict error)
 {
-  if (dia != 0 && point != 0)
+  if (dia && point)
     {
       *error = 0;
       dia->first_arc_pt.x = point->x;
@@ -7230,10 +7445,10 @@ dwg_ent_dim_diameter_set_first_arc_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *p
 
 /// Returns dim diameter first_arc 15 point
 void
-dwg_ent_dim_diameter_get_first_arc_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *point,
-                               int *error)
+dwg_ent_dim_diameter_get_first_arc_pt(const dwg_ent_dim_diameter *restrict dia, dwg_point_3d *restrict point,
+                               int *restrict error)
 {
-  if (dia != 0 && point != 0)
+  if (dia && point)
     {
       *error = 0;
       point->x = dia->first_arc_pt.x;
@@ -7248,10 +7463,11 @@ dwg_ent_dim_diameter_get_first_arc_pt(dwg_ent_dim_diameter *dia, dwg_point_3d *p
 }
 
 /// Returns dim diameter leader length
-BITCODE_BD
-dwg_ent_dim_diameter_get_leader_length(dwg_ent_dim_diameter *dia, int *error)
+double
+dwg_ent_dim_diameter_get_leader_length(const dwg_ent_dim_diameter *restrict dia,
+                          int *restrict error)
 {
-  if (dia != 0)
+  if (dia)
     {
       *error = 0;
       return dia->leader_len;
@@ -7266,10 +7482,11 @@ dwg_ent_dim_diameter_get_leader_length(dwg_ent_dim_diameter *dia, int *error)
 
 /// Sets dim diameter leader length
 void
-dwg_ent_dim_diameter_set_leader_length(dwg_ent_dim_diameter *dia,
-                                       double length, int *error)
+dwg_ent_dim_diameter_set_leader_length(dwg_ent_dim_diameter *restrict dia,
+                                       double length,
+                          int *restrict error)
 {
-  if (dia != 0)
+  if (dia)
     {
       *error = 0;
       dia->leader_len = length;
@@ -7282,106 +7499,15 @@ dwg_ent_dim_diameter_set_leader_length(dwg_ent_dim_diameter *dia,
 }
 
 /*******************************************************************
-*                   FUNCTIONS FOR ENDBLK ENTITY                     *
-********************************************************************/
-
-/// Returns the dummy
-/** Usage : char dummy = dwg_ent_endblk_get_dummy(endblk, &error);
-\param 1 dwg_ent_endblk
-\param 2 int
-*/
-char
-dwg_ent_endblk_get_dummy(dwg_ent_endblk *endblk, int *error)
-{
-  if (endblk != 0)
-    {
-      *error = 0;
-      return endblk->dummy;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty endblk", __FUNCTION__)
-      *error = 1;
-      return '\0';
-    }
-}
-
-/// Sets the dummy
-/** Usage : dwg_ent_endblk_set_dummy(endblk, dummy, &error);
-\param 1 dwg_ent_endblk
-\param 2 char
-\param 3 int
-*/
-void
-dwg_ent_endblk_set_dummy(dwg_ent_endblk *endblk, char dummy, int *error)
-{
-  if (endblk != 0)
-    {
-      *error = 0;
-      endblk->dummy = dummy;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty endblk", __FUNCTION__)
-      *error = 1;
-    }
-}
-
-/*******************************************************************
-*                   FUNCTIONS FOR SEQEND ENTITY                     *
-********************************************************************/
-
-/// Returns the dummy
-/** Usage : char dummy = dwg_ent_seqend_get_dummy(seqend, &error);
-\param 1 dwg_ent_seqend
-\param 2 int
-*/
-char
-dwg_ent_seqend_get_dummy(dwg_ent_seqend *seqend, int *error)
-{
-  if (seqend != 0)
-    {
-      *error = 0;
-      return seqend->dummy;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty seqend", __FUNCTION__)
-      *error = 1;
-      return '\0';
-    }
-}
-
-/// Sets the dummy
-/** Usage : dwg_ent_seqend_set_dummy(seqend, dummy, &error);
-\param 1 dwg_ent_seqend
-\param 2 char
-\param 3 int
-*/
-void
-dwg_ent_seqend_set_dummy(dwg_ent_seqend *seqend, char dummy, int *error)
-{
-  if (seqend != 0)
-    {
-      *error = 0;
-      seqend->dummy = dummy;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty seqend", __FUNCTION__)
-      *error = 1;
-    }
-}
-
-/*******************************************************************
 *                    FUNCTIONS FOR SHAPE ENTITY                     *
 ********************************************************************/
 
 /// Returns shape ins point
 void
-dwg_ent_shape_get_ins_pt(dwg_ent_shape *shape, dwg_point_3d *point, int *error)
+dwg_ent_shape_get_ins_pt(const dwg_ent_shape *restrict shape, dwg_point_3d *restrict point,
+                          int *restrict error)
 {
-  if (shape != 0 && point != 0)
+  if (shape && point)
     {
       *error = 0;
       point->x = shape->ins_pt.x;
@@ -7397,9 +7523,11 @@ dwg_ent_shape_get_ins_pt(dwg_ent_shape *shape, dwg_point_3d *point, int *error)
 
 /// Sets shape ins point
 void
-dwg_ent_shape_set_ins_pt(dwg_ent_shape *shape, dwg_point_3d *point, int *error)
+dwg_ent_shape_set_ins_pt(dwg_ent_shape *restrict shape,
+                         const dwg_point_3d *restrict point,
+                         int *restrict error)
 {
-  if (shape != 0 && point != 0)
+  if (shape && point)
     {
       *error = 0;
       shape->ins_pt.x = point->x;
@@ -7414,10 +7542,11 @@ dwg_ent_shape_set_ins_pt(dwg_ent_shape *shape, dwg_point_3d *point, int *error)
 }
 
 /// Returns shape scale
-BITCODE_BD
-dwg_ent_shape_get_scale(dwg_ent_shape *shape, int *error)
+double
+dwg_ent_shape_get_scale(const dwg_ent_shape *restrict shape,
+                        int *restrict error)
 {
-  if (shape != 0)
+  if (shape)
     {
       *error = 0;
       return shape->scale;
@@ -7432,9 +7561,11 @@ dwg_ent_shape_get_scale(dwg_ent_shape *shape, int *error)
 
 /// Sets shape scale
 void
-dwg_ent_shape_set_scale(dwg_ent_shape *shape, BITCODE_BD scale, int *error)
+dwg_ent_shape_set_scale(dwg_ent_shape *restrict shape,
+                          const double scale,
+                          int *restrict error)
 {
-  if (shape != 0)
+  if (shape)
     {
       *error = 0;
       shape->scale = scale;
@@ -7447,10 +7578,11 @@ dwg_ent_shape_set_scale(dwg_ent_shape *shape, BITCODE_BD scale, int *error)
 }
 
 /// Returns shape rotation
-BITCODE_BD
-dwg_ent_shape_get_rotation(dwg_ent_shape *shape, int *error)
+double
+dwg_ent_shape_get_rotation(const dwg_ent_shape *restrict shape,
+                          int *restrict error)
 {
-  if (shape != 0)
+  if (shape)
     {
       *error = 0;
       return shape->rotation;
@@ -7465,9 +7597,11 @@ dwg_ent_shape_get_rotation(dwg_ent_shape *shape, int *error)
 
 /// Sets shape rotation
 void
-dwg_ent_shape_set_rotation(dwg_ent_shape *shape, BITCODE_BD rotation, int *error)
+dwg_ent_shape_set_rotation(dwg_ent_shape *restrict shape,
+                          const double rotation,
+                          int *restrict error)
 {
-  if (shape != 0)
+  if (shape)
     {
       *error = 0;
       shape->rotation = rotation;
@@ -7480,10 +7614,11 @@ dwg_ent_shape_set_rotation(dwg_ent_shape *shape, BITCODE_BD rotation, int *error
 }
 
 /// Returns shape width factor
-BITCODE_BD
-dwg_ent_shape_get_width_factor(dwg_ent_shape *shape, int *error)
+double
+dwg_ent_shape_get_width_factor(const dwg_ent_shape *restrict shape,
+                          int *restrict error)
 {
-  if (shape != 0)
+  if (shape)
     {
       *error = 0;
       return shape->width_factor;
@@ -7498,10 +7633,11 @@ dwg_ent_shape_get_width_factor(dwg_ent_shape *shape, int *error)
 
 /// Sets shape width factor
 void
-dwg_ent_shape_set_width_factor(dwg_ent_shape *shape, BITCODE_BD width_factor,
-                               int *error)
+dwg_ent_shape_set_width_factor(dwg_ent_shape *restrict shape,
+                          const double width_factor,
+                               int *restrict error)
 {
-  if (shape != 0)
+  if (shape)
     {
       *error = 0;
       shape->width_factor = width_factor;
@@ -7514,10 +7650,11 @@ dwg_ent_shape_set_width_factor(dwg_ent_shape *shape, BITCODE_BD width_factor,
 }
 
 /// Returns shape oblique
-BITCODE_BD
-dwg_ent_shape_get_oblique(dwg_ent_shape *shape, int *error)
+double
+dwg_ent_shape_get_oblique(const dwg_ent_shape *restrict shape,
+                          int *restrict error)
 {
-  if (shape != 0)
+  if (shape)
     {
       *error = 0;
       return shape->oblique;
@@ -7532,9 +7669,11 @@ dwg_ent_shape_get_oblique(dwg_ent_shape *shape, int *error)
 
 /// Sets shape oblique
 void
-dwg_ent_shape_set_oblique(dwg_ent_shape *shape, BITCODE_BD oblique, int *error)
+dwg_ent_shape_set_oblique(dwg_ent_shape *restrict shape,
+                          const double oblique,
+                          int *restrict error)
 {
-  if (shape != 0)
+  if (shape)
     {
       *error = 0;
       shape->oblique = oblique;
@@ -7547,10 +7686,11 @@ dwg_ent_shape_set_oblique(dwg_ent_shape *shape, BITCODE_BD oblique, int *error)
 }
 
 /// Returns shape thickness
-BITCODE_BD
-dwg_ent_shape_get_thickness(dwg_ent_shape *shape, int *error)
+double
+dwg_ent_shape_get_thickness(const dwg_ent_shape *restrict shape,
+                          int *restrict error)
 {
-  if (shape != 0)
+  if (shape)
     {
       *error = 0;
       return shape->thickness;
@@ -7565,10 +7705,11 @@ dwg_ent_shape_get_thickness(dwg_ent_shape *shape, int *error)
 
 /// Sets shape thickness
 void
-dwg_ent_shape_set_thickness(dwg_ent_shape *shape, BITCODE_BD thickness,
-                            int *error)
+dwg_ent_shape_set_thickness(dwg_ent_shape *restrict shape,
+                          const double thickness,
+                            int *restrict error)
 {
-  if (shape != 0)
+  if (shape)
     {
       *error = 0;
       shape->thickness = thickness;
@@ -7581,10 +7722,11 @@ dwg_ent_shape_set_thickness(dwg_ent_shape *shape, BITCODE_BD thickness,
 }
 
 /// Returns shape shape no
-BITCODE_BD
-dwg_ent_shape_get_shape_no(dwg_ent_shape *shape, int *error)
+double
+dwg_ent_shape_get_shape_no(const dwg_ent_shape *restrict shape,
+                          int *restrict error)
 {
-  if (shape != 0)
+  if (shape)
     {
       *error = 0;
       return shape->shape_no;
@@ -7599,9 +7741,11 @@ dwg_ent_shape_get_shape_no(dwg_ent_shape *shape, int *error)
 
 /// Sets shape shape no
 void
-dwg_ent_shape_set_shape_no(dwg_ent_shape *shape, BITCODE_BD no, int *error)
+dwg_ent_shape_set_shape_no(dwg_ent_shape *restrict shape,
+                          const double no,
+                          int *restrict error)
 {
-  if (shape != 0)
+  if (shape)
     {
       *error = 0;
       shape->shape_no = no;
@@ -7615,10 +7759,10 @@ dwg_ent_shape_set_shape_no(dwg_ent_shape *shape, BITCODE_BD no, int *error)
 
 /// Returns shape extrusion
 void
-dwg_ent_shape_get_extrusion(dwg_ent_shape *shape, dwg_point_3d *point,
-                            int *error)
+dwg_ent_shape_get_extrusion(const dwg_ent_shape *restrict shape, dwg_point_3d *restrict point,
+                            int *restrict error)
 {
-  if (shape != 0 && point != 0)
+  if (shape && point)
     {
       *error = 0;
       point->x = shape->extrusion.x;
@@ -7634,10 +7778,11 @@ dwg_ent_shape_get_extrusion(dwg_ent_shape *shape, dwg_point_3d *point,
 
 /// Sets shape extrusion
 void
-dwg_ent_shape_set_extrusion(dwg_ent_shape *shape, dwg_point_3d *point,
-                            int *error)
+dwg_ent_shape_set_extrusion(dwg_ent_shape *restrict shape,
+                            const dwg_point_3d *restrict point,
+                            int *restrict error)
 {
-  if (shape != 0 && point != 0)
+  if (shape && point)
     {
       *error = 0;
       shape->extrusion.x = point->x;
@@ -7658,10 +7803,11 @@ dwg_ent_shape_set_extrusion(dwg_ent_shape *shape, dwg_point_3d *point,
 
 /// Sets mtext insertion point
 void
-dwg_ent_mtext_set_insertion_pt(dwg_ent_mtext *mtext, dwg_point_3d *point,
-                               int *error)
+dwg_ent_mtext_set_insertion_pt(dwg_ent_mtext *restrict mtext,
+                               const dwg_point_3d *restrict point,
+                               int *restrict error)
 {
-  if (mtext != 0 && point != 0)
+  if (mtext && point)
     {
       *error = 0;
       mtext->insertion_pt.x = point->x;
@@ -7677,10 +7823,10 @@ dwg_ent_mtext_set_insertion_pt(dwg_ent_mtext *mtext, dwg_point_3d *point,
 
 /// Returns mtext insertion point
 void
-dwg_ent_mtext_get_insertion_pt(dwg_ent_mtext *mtext, dwg_point_3d *point,
-                               int *error)
+dwg_ent_mtext_get_insertion_pt(const dwg_ent_mtext *restrict mtext, dwg_point_3d *restrict point,
+                               int *restrict error)
 {
-  if (mtext != 0 && point != 0)
+  if (mtext && point)
     {
       *error = 0;
       point->x = mtext->insertion_pt.x;
@@ -7697,10 +7843,11 @@ dwg_ent_mtext_get_insertion_pt(dwg_ent_mtext *mtext, dwg_point_3d *point,
 
 /// Sets mtext extrusion
 void
-dwg_ent_mtext_set_extrusion(dwg_ent_mtext *mtext, dwg_point_3d *point,
-                            int *error)
+dwg_ent_mtext_set_extrusion(dwg_ent_mtext *restrict mtext,
+                            const dwg_point_3d *restrict point,
+                            int *restrict error)
 {
-  if (mtext != 0 && point != 0)
+  if (mtext && point)
     {
       *error = 0;
       mtext->extrusion.x = point->x;
@@ -7717,10 +7864,11 @@ dwg_ent_mtext_set_extrusion(dwg_ent_mtext *mtext, dwg_point_3d *point,
 
 /// Returns mtext extrusion
 void
-dwg_ent_mtext_get_extrusion(dwg_ent_mtext *mtext, dwg_point_3d *point,
-                            int *error)
+dwg_ent_mtext_get_extrusion(const dwg_ent_mtext *restrict mtext,
+                            dwg_point_3d *restrict point,
+                            int *restrict error)
 {
-  if (mtext != 0 && point != 0)
+  if (mtext && point)
     {
       *error = 0;
       point->x = mtext->extrusion.x;
@@ -7735,17 +7883,18 @@ dwg_ent_mtext_get_extrusion(dwg_ent_mtext *mtext, dwg_point_3d *point,
 
 }
 
-/// Sets mtext x axis dir
+/// Sets the _dwg_entity_MTEXT::x_axis_dir vector, DXF 11 (in WCS)
 void
-dwg_ent_mtext_set_x_axis_dir(dwg_ent_mtext *mtext, dwg_point_3d *point,
-                             int *error)
+dwg_ent_mtext_set_x_axis_dir(dwg_ent_mtext *restrict mtext,
+                             const dwg_point_3d *restrict vector,
+                             int *restrict error)
 {
-  if (mtext != 0 && point != 0)
+  if (mtext && vector)
     {
       *error = 0;
-      mtext->x_axis_dir.x = point->x;
-      mtext->x_axis_dir.y = point->y;
-      mtext->x_axis_dir.z = point->z;
+      mtext->x_axis_dir.x = vector->x;
+      mtext->x_axis_dir.y = vector->y;
+      mtext->x_axis_dir.z = vector->z;
     }
   else
     {
@@ -7755,17 +7904,18 @@ dwg_ent_mtext_set_x_axis_dir(dwg_ent_mtext *mtext, dwg_point_3d *point,
 
 }
 
-/// Returns mtext x axis dir
+/// Returns the _dwg_entity_MTEXT::x_axis_dir vector, DXF 11 (in WCS)
 void
-dwg_ent_mtext_get_x_axis_dir(dwg_ent_mtext *mtext, dwg_point_3d *point,
-                             int *error)
+dwg_ent_mtext_get_x_axis_dir(const dwg_ent_mtext *restrict mtext,
+                             dwg_point_3d *restrict vector,
+                             int *restrict error)
 {
-  if (mtext != 0 && point != 0)
+  if (mtext && vector)
     {
       *error = 0;
-      point->x = mtext->x_axis_dir.x;
-      point->y = mtext->x_axis_dir.y;
-      point->z = mtext->x_axis_dir.z;
+      vector->x = mtext->x_axis_dir.x;
+      vector->y = mtext->x_axis_dir.y;
+      vector->z = mtext->x_axis_dir.z;
     }
   else
     {
@@ -7775,12 +7925,13 @@ dwg_ent_mtext_get_x_axis_dir(dwg_ent_mtext *mtext, dwg_point_3d *point,
 
 }
 
-/// Sets mtext rect height
+/// Sets the _dwg_entity_MTEXT::rect_height, no DXF
 void
-dwg_ent_mtext_set_rect_height(dwg_ent_mtext *mtext, BITCODE_BD rect_height,
-                              int *error)
+dwg_ent_mtext_set_rect_height(dwg_ent_mtext *restrict mtext,
+                              const double rect_height,
+                              int *restrict error)
 {
-  if (mtext != 0)
+  if (mtext)
     {
       *error = 0;
       mtext->rect_height = rect_height;
@@ -7792,11 +7943,12 @@ dwg_ent_mtext_set_rect_height(dwg_ent_mtext *mtext, BITCODE_BD rect_height,
     }
 }
 
-/// Returns mtext rect height
-BITCODE_BD
-dwg_ent_mtext_get_rect_height(dwg_ent_mtext *mtext, int *error)
+/// Returns the _dwg_entity_MTEXT::rect_height, no DXF
+double
+dwg_ent_mtext_get_rect_height(const dwg_ent_mtext *restrict mtext,
+                          int *restrict error)
 {
-  if (mtext != 0)
+  if (mtext)
     {
       *error = 0;
       return mtext->rect_height;
@@ -7809,12 +7961,13 @@ dwg_ent_mtext_get_rect_height(dwg_ent_mtext *mtext, int *error)
     }
 }
 
-/// Sets mtext rect width
+/// Sets the _dwg_entity_MTEXT::rect_width, DXF 41.
 void
-dwg_ent_mtext_set_rect_width(dwg_ent_mtext *mtext, BITCODE_BD rect_width,
-                             int *error)
+dwg_ent_mtext_set_rect_width(dwg_ent_mtext *restrict mtext,
+                             const double rect_width,
+                             int *restrict error)
 {
-  if (mtext != 0)
+  if (mtext)
     {
       *error = 0;
       mtext->rect_width = rect_width;
@@ -7827,11 +7980,12 @@ dwg_ent_mtext_set_rect_width(dwg_ent_mtext *mtext, BITCODE_BD rect_width,
 
 }
 
-/// Returns mtext rect width
-BITCODE_BD
-dwg_ent_mtext_get_rect_width(dwg_ent_mtext *mtext, int *error)
+/// Returns the _dwg_entity_MTEXT::rect_width, DXF 41.
+double
+dwg_ent_mtext_get_rect_width(const dwg_ent_mtext *restrict mtext,
+                          int *restrict error)
 {
-  if (mtext != 0)
+  if (mtext)
     {
       *error = 0;
       return mtext->rect_width;
@@ -7844,12 +7998,13 @@ dwg_ent_mtext_get_rect_width(dwg_ent_mtext *mtext, int *error)
     }
 }
 
-/// Sets mtext text height
+/// Sets the _dwg_entity_MTEXT::text_height, DXF 40.
 void
-dwg_ent_mtext_set_text_height(dwg_ent_mtext *mtext, BITCODE_BD text_height,
-                              int *error)
+dwg_ent_mtext_set_text_height(dwg_ent_mtext *restrict mtext,
+                              const double text_height,
+                              int *restrict error)
 {
-  if (mtext != 0)
+  if (mtext)
     {
       *error = 0;
       mtext->text_height = text_height;
@@ -7862,11 +8017,12 @@ dwg_ent_mtext_set_text_height(dwg_ent_mtext *mtext, BITCODE_BD text_height,
 
 }
 
-/// Returns mtext text height
-BITCODE_BD
-dwg_ent_mtext_get_text_height(dwg_ent_mtext *mtext, int *error)
+/// Returns the _dwg_entity_MTEXT::text_height, DXF 40.
+double
+dwg_ent_mtext_get_text_height(const dwg_ent_mtext *restrict mtext,
+                          int *restrict error)
 {
-  if (mtext != 0)
+  if (mtext)
     {
       *error = 0;
       return mtext->text_height;
@@ -7879,11 +8035,12 @@ dwg_ent_mtext_get_text_height(dwg_ent_mtext *mtext, int *error)
     }
 }
 
-/// Returns mtext attachment
+/// Returns the _dwg_entity_MTEXT::attachment flag, DXF 71.
 BITCODE_BS
-dwg_ent_mtext_get_attachment(dwg_ent_mtext *mtext, int *error)
+dwg_ent_mtext_get_attachment(const dwg_ent_mtext *restrict mtext,
+                             int *restrict error)
 {
-  if (mtext != 0)
+  if (mtext)
     {
       *error = 0;
       return mtext->attachment;
@@ -7896,12 +8053,13 @@ dwg_ent_mtext_get_attachment(dwg_ent_mtext *mtext, int *error)
     }
 }
 
-/// Sets mtext attachment
+/// Sets the _dwg_entity_MTEXT::attachment flag, DXF 71.
 void
-dwg_ent_mtext_set_attachment(dwg_ent_mtext *mtext, BITCODE_BS attachment,
-                             int *error)
+dwg_ent_mtext_set_attachment(dwg_ent_mtext *restrict mtext,
+                             const BITCODE_BS attachment,
+                             int *restrict error)
 {
-  if (mtext != 0)
+  if (mtext)
     {
       *error = 0;
       mtext->attachment = attachment;
@@ -7914,11 +8072,12 @@ dwg_ent_mtext_set_attachment(dwg_ent_mtext *mtext, BITCODE_BS attachment,
 
 }
 
-/// Returns mtext drawing dir
+/// Returns the _dwg_entity_MTEXT::drawing_dir flag, DXF 72.
 BITCODE_BS
-dwg_ent_mtext_get_drawing_dir(dwg_ent_mtext *mtext, int *error)
+dwg_ent_mtext_get_drawing_dir(const dwg_ent_mtext *restrict mtext,
+                          int *restrict error)
 {
-  if (mtext != 0)
+  if (mtext)
     {
       *error = 0;
       return mtext->drawing_dir;
@@ -7931,12 +8090,13 @@ dwg_ent_mtext_get_drawing_dir(dwg_ent_mtext *mtext, int *error)
     }
 }
 
-/// Sets mtext drawing dir
+/// Sets the _dwg_entity_MTEXT::drawing_dir flag, DXF 72.
 void
-dwg_ent_mtext_set_drawing_dir(dwg_ent_mtext *mtext, BITCODE_BS dir,
-                              int *error)
+dwg_ent_mtext_set_drawing_dir(dwg_ent_mtext *restrict mtext,
+                              const BITCODE_BS dir,
+                              int *restrict error)
 {
-  if (mtext != 0)
+  if (mtext)
     {
       *error = 0;
       mtext->drawing_dir = dir;
@@ -7949,11 +8109,12 @@ dwg_ent_mtext_set_drawing_dir(dwg_ent_mtext *mtext, BITCODE_BS dir,
 
 }
 
-/// Returns mtext extents_height
-BITCODE_BD
-dwg_ent_mtext_get_extents_height(dwg_ent_mtext *mtext, int *error)
+/// Returns the _dwg_entity_MTEXT::extents_height, DXF 42.
+double
+dwg_ent_mtext_get_extents_height(const dwg_ent_mtext *restrict mtext,
+                          int *restrict error)
 {
-  if (mtext != 0)
+  if (mtext)
     {
       *error = 0;
       return mtext->extents_height;
@@ -7966,14 +8127,16 @@ dwg_ent_mtext_get_extents_height(dwg_ent_mtext *mtext, int *error)
     }
 }
 
-/// Sets mtext 
+/// Sets the _dwg_entity_MTEXT::extents_height, DXF 42.
 void
-dwg_ent_mtext_set_extents_height(dwg_ent_mtext *mtext, BITCODE_BD ht, int *error)
+dwg_ent_mtext_set_extents_height(dwg_ent_mtext *restrict mtext,
+                                 const double height,
+                                 int *restrict error)
 {
-  if (mtext != 0)
+  if (mtext)
     {
       *error = 0;
-      mtext->extents_height = ht;
+      mtext->extents_height = height;
     }
   else
     {
@@ -7983,11 +8146,12 @@ dwg_ent_mtext_set_extents_height(dwg_ent_mtext *mtext, BITCODE_BD ht, int *error
 
 }
 
-/// Returns mtext extents width
-BITCODE_BD
-dwg_ent_mtext_get_extents_width(dwg_ent_mtext *mtext, int *error)
+/// Returns the _dwg_entity_MTEXT::extents_width, DXF 43.
+double
+dwg_ent_mtext_get_extents_width(const dwg_ent_mtext *restrict mtext,
+                          int *restrict error)
 {
-  if (mtext != 0)
+  if (mtext)
     {
       *error = 0;
       return mtext->extents_width;
@@ -8000,11 +8164,13 @@ dwg_ent_mtext_get_extents_width(dwg_ent_mtext *mtext, int *error)
     }
 }
 
-/// Sets mtext extents_width
+/// Sets the _dwg_entity_MTEXT::extents_width, DXF 43.
 void
-dwg_ent_mtext_set_extents_width(dwg_ent_mtext *mtext, BITCODE_BD wid, int *error)
+dwg_ent_mtext_set_extents_width(dwg_ent_mtext *restrict mtext,
+                                const double wid,
+                                int *restrict error)
 {
-  if (mtext != 0)
+  if (mtext)
     {
       *error = 0;
       mtext->extents_width = wid;
@@ -8017,14 +8183,18 @@ dwg_ent_mtext_set_extents_width(dwg_ent_mtext *mtext, BITCODE_BD wid, int *error
 
 }
 
-/// Returns mtext text
+/// Returns mtext text value (utf-8 encoded)
 char *
-dwg_ent_mtext_get_text(dwg_ent_mtext *mtext, int *error)
+dwg_ent_mtext_get_text(const dwg_ent_mtext *restrict ent,
+                       int *restrict error)
 {
-  if (mtext != 0)
+  if (ent)
     {
       *error = 0;
-      return mtext->text;
+      if (dwg_version >= R_2007)
+        return bit_convert_TU((BITCODE_TU)ent->text); // a copy
+      else
+        return ent->text; // the ref
     }
   else
     {
@@ -8034,14 +8204,18 @@ dwg_ent_mtext_get_text(dwg_ent_mtext *mtext, int *error)
     }
 }
 
-/// Sets mtext text
+/// Sets mtext text value (utf-8 encoded)
 void
-dwg_ent_mtext_set_text(dwg_ent_mtext *mtext, char * text, int *error)
+dwg_ent_mtext_set_text(dwg_ent_mtext *restrict ent, char *text,
+                          int *restrict error)
 {
-  if (mtext != 0)
+  if (ent)
     {
       *error = 0;
-      mtext->text = text;
+      if (dwg_version >= R_2007)
+        ent->text = (char*)bit_utf8_to_TU(text);
+      else
+        ent->text = text;
     }
   else
     {
@@ -8053,9 +8227,10 @@ dwg_ent_mtext_set_text(dwg_ent_mtext *mtext, char * text, int *error)
 
 /// Returns mtext linespace style
 BITCODE_BS
-dwg_ent_mtext_get_linespace_style(dwg_ent_mtext *mtext, int *error)
+dwg_ent_mtext_get_linespace_style(const dwg_ent_mtext *restrict mtext,
+                          int *restrict error)
 {
-  if (mtext != 0)
+  if (mtext)
     {
       *error = 0;
       return mtext->linespace_style;
@@ -8070,10 +8245,10 @@ dwg_ent_mtext_get_linespace_style(dwg_ent_mtext *mtext, int *error)
 
 /// Sets mtext linespace style
 void
-dwg_ent_mtext_set_linespace_style(dwg_ent_mtext *mtext, BITCODE_BS style,
-                                  int *error)
+dwg_ent_mtext_set_linespace_style(dwg_ent_mtext *restrict mtext, BITCODE_BS style,
+                                  int *restrict error)
 {
-  if (mtext != 0)
+  if (mtext)
     {
       *error = 0;
       mtext->linespace_style = style;
@@ -8087,10 +8262,11 @@ dwg_ent_mtext_set_linespace_style(dwg_ent_mtext *mtext, BITCODE_BS style,
 }
 
 /// Returns mtext linespace factor
-BITCODE_BD
-dwg_ent_mtext_get_linespace_factor(dwg_ent_mtext *mtext, int *error)
+double
+dwg_ent_mtext_get_linespace_factor(const dwg_ent_mtext *restrict mtext,
+                          int *restrict error)
 {
-  if (mtext != 0)
+  if (mtext)
     {
       *error = 0;
       return mtext->linespace_factor;
@@ -8105,10 +8281,11 @@ dwg_ent_mtext_get_linespace_factor(dwg_ent_mtext *mtext, int *error)
 
 /// Sets mtext linespace factor
 void
-dwg_ent_mtext_set_linespace_factor(dwg_ent_mtext *mtext, BITCODE_BD factor,
-                                   int *error)
+dwg_ent_mtext_set_linespace_factor(dwg_ent_mtext *restrict mtext,
+                          const double factor,
+                                   int *restrict error)
 {
-  if (mtext != 0)
+  if (mtext)
     {
       *error = 0;
       mtext->linespace_factor = factor;
@@ -8126,10 +8303,10 @@ dwg_ent_mtext_set_linespace_factor(dwg_ent_mtext *mtext, BITCODE_BD factor,
 
 /// Sets leader annot type
 void
-dwg_ent_leader_set_annot_type(dwg_ent_leader *leader, BITCODE_BS type,
-                              int *error)
+dwg_ent_leader_set_annot_type(dwg_ent_leader *restrict leader, BITCODE_BS type,
+                              int *restrict error)
 {
-  if (leader != 0)
+  if (leader)
     {
       *error = 0;
       leader->annot_type = type;
@@ -8143,9 +8320,10 @@ dwg_ent_leader_set_annot_type(dwg_ent_leader *leader, BITCODE_BS type,
 
 /// Returns leader annot type
 BITCODE_BS
-dwg_ent_leader_get_annot_type(dwg_ent_leader *leader, int *error)
+dwg_ent_leader_get_annot_type(const dwg_ent_leader *restrict leader,
+                          int *restrict error)
 {
-  if (leader != 0)
+  if (leader)
     {
       *error = 0;
       return leader->annot_type;
@@ -8160,10 +8338,10 @@ dwg_ent_leader_get_annot_type(dwg_ent_leader *leader, int *error)
 
 /// Sets leader path type
 void
-dwg_ent_leader_set_path_type(dwg_ent_leader *leader, BITCODE_BS type,
-                             int *error)
+dwg_ent_leader_set_path_type(dwg_ent_leader *restrict leader, BITCODE_BS type,
+                             int *restrict error)
 {
-  if (leader != 0)
+  if (leader)
     {
       *error = 0;
       leader->path_type = type;
@@ -8177,9 +8355,10 @@ dwg_ent_leader_set_path_type(dwg_ent_leader *leader, BITCODE_BS type,
 
 /// Returns leader path type
 BITCODE_BS
-dwg_ent_leader_get_path_type(dwg_ent_leader *leader, int *error)
+dwg_ent_leader_get_path_type(const dwg_ent_leader *restrict leader,
+                          int *restrict error)
 {
-  if (leader != 0)
+  if (leader)
     {
       *error = 0;
       return leader->path_type;
@@ -8194,9 +8373,10 @@ dwg_ent_leader_get_path_type(dwg_ent_leader *leader, int *error)
 
 /// Returns leader numpts
 BITCODE_BL
-dwg_ent_leader_get_numpts(dwg_ent_leader *leader, int *error)
+dwg_ent_leader_get_numpts(const dwg_ent_leader *restrict leader,
+                          int *restrict error)
 {
-  if (leader != 0)
+  if (leader)
     {
       *error = 0;
       return leader->numpts;
@@ -8209,29 +8389,15 @@ dwg_ent_leader_get_numpts(dwg_ent_leader *leader, int *error)
     }
 }
 
-/// Sets leader numpts
-void
-dwg_ent_leader_set_numpts(dwg_ent_leader *leader, BITCODE_BL numpts, int *error)
-{
-  if (leader != 0)
-    {
-      *error = 0;
-      leader->numpts = numpts;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-
-}
+//TODO: dwg_ent_leader_add_point, dwg_ent_leader_delete_pts
 
 /// Sets leader end point proj
 void
-dwg_ent_leader_set_origin(dwg_ent_leader *leader, dwg_point_3d *point,
-                               int *error)
+dwg_ent_leader_set_origin(dwg_ent_leader *restrict leader,
+                          const dwg_point_3d *restrict point,
+                          int *restrict error)
 {
-  if (leader != 0 && point != 0)
+  if (leader && point)
     {
       *error = 0;
       leader->origin.x = point->x;
@@ -8248,10 +8414,11 @@ dwg_ent_leader_set_origin(dwg_ent_leader *leader, dwg_point_3d *point,
 
 /// Returns leader origin
 void
-dwg_ent_leader_get_origin(dwg_ent_leader *leader, dwg_point_3d *point,
-                          int *error)
+dwg_ent_leader_get_origin(const dwg_ent_leader *restrict leader,
+                          dwg_point_3d *restrict point,
+                          int *restrict error)
 {
-  if (leader != 0 && point != 0)
+  if (leader && point)
     {
       *error = 0;
       point->x = leader->origin.x;
@@ -8268,10 +8435,11 @@ dwg_ent_leader_get_origin(dwg_ent_leader *leader, dwg_point_3d *point,
 
 /// Sets leader extrusion value
 void
-dwg_ent_leader_set_extrusion(dwg_ent_leader *leader, dwg_point_3d *point,
-                             int *error)
+dwg_ent_leader_set_extrusion(dwg_ent_leader *restrict leader,
+                             const dwg_point_3d *restrict point,
+                             int *restrict error)
 {
-  if (leader != 0 && point != 0)
+  if (leader && point)
     {
       *error = 0;
       leader->extrusion.x = point->x;
@@ -8288,10 +8456,11 @@ dwg_ent_leader_set_extrusion(dwg_ent_leader *leader, dwg_point_3d *point,
 
 /// Returns leader extrusion value
 void
-dwg_ent_leader_get_extrusion(dwg_ent_leader *leader, dwg_point_3d *point,
-                             int *error)
+dwg_ent_leader_get_extrusion(const dwg_ent_leader *restrict leader,
+                             dwg_point_3d *restrict point,
+                             int *restrict error)
 {
-  if (leader != 0 && point != 0)
+  if (leader && point)
     {
       *error = 0;
       point->x = leader->extrusion.x;
@@ -8308,10 +8477,11 @@ dwg_ent_leader_get_extrusion(dwg_ent_leader *leader, dwg_point_3d *point,
 
 /// Sets leader x direction value
 void
-dwg_ent_leader_set_x_direction(dwg_ent_leader *leader, dwg_point_3d *point,
-                               int *error)
+dwg_ent_leader_set_x_direction(dwg_ent_leader *restrict leader,
+                               const dwg_point_3d *restrict point,
+                               int *restrict error)
 {
-  if (leader != 0 && point != 0)
+  if (leader && point)
     {
       *error = 0;
       leader->x_direction.x = point->x;
@@ -8328,10 +8498,11 @@ dwg_ent_leader_set_x_direction(dwg_ent_leader *leader, dwg_point_3d *point,
 
 /// Returns leader x direction value
 void
-dwg_ent_leader_get_x_direction(dwg_ent_leader *leader, dwg_point_3d *point,
-                               int *error)
+dwg_ent_leader_get_x_direction(const dwg_ent_leader *restrict leader,
+                               dwg_point_3d *restrict point,
+                               int *restrict error)
 {
-  if (leader != 0 && point != 0)
+  if (leader && point)
     {
       *error = 0;
       point->x = leader->x_direction.x;
@@ -8348,10 +8519,11 @@ dwg_ent_leader_get_x_direction(dwg_ent_leader *leader, dwg_point_3d *point,
 
 /// Sets leader offset to block insert point
 void
-dwg_ent_leader_set_offset_to_block_ins_pt(dwg_ent_leader *leader,
-                                          dwg_point_3d *point, int *error)
+dwg_ent_leader_set_offset_to_block_ins_pt(dwg_ent_leader *restrict leader,
+                                          const dwg_point_3d *restrict point,
+                                          int *restrict error)
 {
-  if (leader != 0 && point != 0)
+  if (leader && point)
     {
       *error = 0;
       leader->offset_to_block_ins_pt.x = point->x;
@@ -8368,10 +8540,11 @@ dwg_ent_leader_set_offset_to_block_ins_pt(dwg_ent_leader *leader,
 
 /// Returns leader offset to block ins point
 void
-dwg_ent_leader_get_offset_to_block_ins_pt(dwg_ent_leader *leader,
-                                          dwg_point_3d *point, int *error)
+dwg_ent_leader_get_offset_to_block_ins_pt(const dwg_ent_leader *restrict leader,
+                                          dwg_point_3d *restrict point,
+                                          int *restrict error)
 {
-  if (leader != 0 && point != 0)
+  if (leader && point)
     {
       *error = 0;
       point->x = leader->offset_to_block_ins_pt.x;
@@ -8388,9 +8561,11 @@ dwg_ent_leader_get_offset_to_block_ins_pt(dwg_ent_leader *leader,
 
 /// Sets leader dimgap
 void
-dwg_ent_leader_set_dimgap(dwg_ent_leader *leader, BITCODE_BD dimgap, int *error)
+dwg_ent_leader_set_dimgap(dwg_ent_leader *restrict leader,
+                          const double dimgap,
+                          int *restrict error)
 {
-  if (leader != 0)
+  if (leader)
     {
       *error = 0;
       leader->dimgap = dimgap;
@@ -8404,10 +8579,11 @@ dwg_ent_leader_set_dimgap(dwg_ent_leader *leader, BITCODE_BD dimgap, int *error)
 }
 
 /// Returns leader dimgap
-BITCODE_BD
-dwg_ent_leader_get_dimgap(dwg_ent_leader *leader, int *error)
+double
+dwg_ent_leader_get_dimgap(const dwg_ent_leader *restrict leader,
+                          int *restrict error)
 {
-  if (leader != 0)
+  if (leader)
     {
       *error = 0;
       return leader->dimgap;
@@ -8422,10 +8598,11 @@ dwg_ent_leader_get_dimgap(dwg_ent_leader *leader, int *error)
 
 /// Sets leader box height
 void
-dwg_ent_leader_set_box_height(dwg_ent_leader *leader, BITCODE_BD height,
-                              int *error)
+dwg_ent_leader_set_box_height(dwg_ent_leader *restrict leader,
+                          const double height,
+                              int *restrict error)
 {
-  if (leader != 0)
+  if (leader)
     {
       *error = 0;
       leader->box_height = height;
@@ -8439,10 +8616,11 @@ dwg_ent_leader_set_box_height(dwg_ent_leader *leader, BITCODE_BD height,
 }
 
 /// Returns leader box height
-BITCODE_BD
-dwg_ent_leader_get_box_height(dwg_ent_leader *leader, int *error)
+double
+dwg_ent_leader_get_box_height(const dwg_ent_leader *restrict leader,
+                          int *restrict error)
 {
-  if (leader != 0)
+  if (leader)
     {
       *error = 0;
       return leader->box_height;
@@ -8457,9 +8635,11 @@ dwg_ent_leader_get_box_height(dwg_ent_leader *leader, int *error)
 
 /// Sets leader box width
 void
-dwg_ent_leader_set_box_width(dwg_ent_leader *leader, BITCODE_BD width, int *error)
+dwg_ent_leader_set_box_width(dwg_ent_leader *restrict leader,
+                          const double width,
+                          int *restrict error)
 {
-  if (leader != 0)
+  if (leader)
     {
       *error = 0;
       leader->box_width = width;
@@ -8473,10 +8653,11 @@ dwg_ent_leader_set_box_width(dwg_ent_leader *leader, BITCODE_BD width, int *erro
 }
 
 /// Returns leader box width
-BITCODE_BD
-dwg_ent_leader_get_box_width(dwg_ent_leader *leader, int *error)
+double
+dwg_ent_leader_get_box_width(const dwg_ent_leader *restrict leader,
+                          int *restrict error)
 {
-  if (leader != 0)
+  if (leader)
     {
       *error = 0;
       return leader->box_width;
@@ -8491,10 +8672,10 @@ dwg_ent_leader_get_box_width(dwg_ent_leader *leader, int *error)
 
 /// Sets leader hook line on x dir value
 void
-dwg_ent_leader_set_hook_line_on_x_dir(dwg_ent_leader *leader, char hook,
-                                      int *error)
+dwg_ent_leader_set_hook_line_on_x_dir(dwg_ent_leader *restrict leader, char hook,
+                                      int *restrict error)
 {
-  if (leader != 0)
+  if (leader)
     {
       *error = 0;
       leader->hooklineonxdir = hook;
@@ -8509,9 +8690,10 @@ dwg_ent_leader_set_hook_line_on_x_dir(dwg_ent_leader *leader, char hook,
 
 /// Returns leader hook line on x dir value
 char
-dwg_ent_leader_get_hook_line_on_x_dir(dwg_ent_leader *leader, int *error)
+dwg_ent_leader_get_hook_line_on_x_dir(const dwg_ent_leader *restrict leader,
+                          int *restrict error)
 {
-  if (leader != 0)
+  if (leader)
     {
       *error = 0;
       return leader->hooklineonxdir;
@@ -8526,9 +8708,10 @@ dwg_ent_leader_get_hook_line_on_x_dir(dwg_ent_leader *leader, int *error)
 
 /// Sets leader arrowhead on
 void
-dwg_ent_leader_set_arrowhead_on(dwg_ent_leader *leader, char arrow, int *error)
+dwg_ent_leader_set_arrowhead_on(dwg_ent_leader *restrict leader, char arrow,
+                          int *restrict error)
 {
-  if (leader != 0)
+  if (leader)
     {
       *error = 0;
       leader->arrowhead_on = arrow;
@@ -8543,9 +8726,10 @@ dwg_ent_leader_set_arrowhead_on(dwg_ent_leader *leader, char arrow, int *error)
 
 /// Returns leader arrow head on
 char
-dwg_ent_leader_get_arrowhead_on(dwg_ent_leader *leader, int *error)
+dwg_ent_leader_get_arrowhead_on(const dwg_ent_leader *restrict leader,
+                          int *restrict error)
 {
-  if (leader != 0)
+  if (leader)
     {
       *error = 0;
       return leader->arrowhead_on;
@@ -8560,10 +8744,10 @@ dwg_ent_leader_get_arrowhead_on(dwg_ent_leader *leader, int *error)
 
 /// Sets leader arrow head type
 void
-dwg_ent_leader_set_arrowhead_type(dwg_ent_leader *leader, BITCODE_BS type,
-                                  int *error)
+dwg_ent_leader_set_arrowhead_type(dwg_ent_leader *restrict leader, BITCODE_BS type,
+                                  int *restrict error)
 {
-  if (leader != 0)
+  if (leader)
     {
       leader->arrowhead_type = type;
       *error = 0;
@@ -8578,9 +8762,10 @@ dwg_ent_leader_set_arrowhead_type(dwg_ent_leader *leader, BITCODE_BS type,
 
 /// Returns leader arrowhead type
 BITCODE_BS
-dwg_ent_leader_get_arrowhead_type(dwg_ent_leader *leader, int *error)
+dwg_ent_leader_get_arrowhead_type(const dwg_ent_leader *restrict leader,
+                          int *restrict error)
 {
-  if (leader != 0)
+  if (leader)
     {
       *error = 0;
       return leader->arrowhead_type;
@@ -8595,9 +8780,11 @@ dwg_ent_leader_get_arrowhead_type(dwg_ent_leader *leader, int *error)
 
 /// Sets leader dimasz
 void
-dwg_ent_leader_set_dimasz(dwg_ent_leader *leader, BITCODE_BD dimasz, int *error)
+dwg_ent_leader_set_dimasz(dwg_ent_leader *restrict leader,
+                          const double dimasz,
+                          int *restrict error)
 {
-  if (leader != 0)
+  if (leader)
     {
       *error = 0;
       leader->dimasz = dimasz;
@@ -8610,10 +8797,11 @@ dwg_ent_leader_set_dimasz(dwg_ent_leader *leader, BITCODE_BD dimasz, int *error)
 }
 
 /// Returns leader dimasz
-BITCODE_BD
-dwg_ent_leader_get_dimasz(dwg_ent_leader *leader, int *error)
+double
+dwg_ent_leader_get_dimasz(const dwg_ent_leader *restrict leader,
+                          int *restrict error)
 {
-  if (leader != 0)
+  if (leader)
     {
       *error = 0;
       return leader->dimasz;
@@ -8628,10 +8816,10 @@ dwg_ent_leader_get_dimasz(dwg_ent_leader *leader, int *error)
 
 /// Sets leader byblock color
 void
-dwg_ent_leader_set_byblock_color(dwg_ent_leader *leader, BITCODE_BS color,
-                                 int *error)
+dwg_ent_leader_set_byblock_color(dwg_ent_leader *restrict leader, BITCODE_BS color,
+                                 int *restrict error)
 {
-  if (leader != 0)
+  if (leader)
     {
       *error = 0;
       leader->byblock_color = color;
@@ -8645,9 +8833,10 @@ dwg_ent_leader_set_byblock_color(dwg_ent_leader *leader, BITCODE_BS color,
 
 /// Returns leader byblock color
 BITCODE_BS
-dwg_ent_leader_get_byblock_color(dwg_ent_leader *leader, int *error)
+dwg_ent_leader_get_byblock_color(const dwg_ent_leader *restrict leader,
+                          int *restrict error)
 {
-  if (leader != 0)
+  if (leader)
     {
       *error = 0;
       return leader->byblock_color;
@@ -8666,10 +8855,11 @@ dwg_ent_leader_get_byblock_color(dwg_ent_leader *leader, int *error)
 
 /// Sets tolerance height
 void
-dwg_ent_tolerance_set_height(dwg_ent_tolerance *tol, BITCODE_BD height,
-                             int *error)
+dwg_ent_tolerance_set_height(dwg_ent_tolerance *restrict tol,
+                          const double height,
+                             int *restrict error)
 {
-  if (tol != 0)
+  if (tol)
     {
       *error = 0;
       tol->height = height;
@@ -8682,10 +8872,11 @@ dwg_ent_tolerance_set_height(dwg_ent_tolerance *tol, BITCODE_BD height,
 }
 
 /// Returns tolerance height
-BITCODE_BD
-dwg_ent_tolerance_get_height(dwg_ent_tolerance *tol, int *error)
+double
+dwg_ent_tolerance_get_height(const dwg_ent_tolerance *restrict tol,
+                          int *restrict error)
 {
-  if (tol != 0)
+  if (tol)
     {
       *error = 0;
       return tol->height;
@@ -8700,10 +8891,11 @@ dwg_ent_tolerance_get_height(dwg_ent_tolerance *tol, int *error)
 
 /// Sets tolerance dimgap
 void
-dwg_ent_tolerance_set_dimgap(dwg_ent_tolerance *tol, BITCODE_BD dimgap,
-                             int *error)
+dwg_ent_tolerance_set_dimgap(dwg_ent_tolerance *restrict tol,
+                          const double dimgap,
+                             int *restrict error)
 {
-  if (tol != 0)
+  if (tol)
     {
       *error = 0;
       tol->dimgap = dimgap;
@@ -8717,10 +8909,11 @@ dwg_ent_tolerance_set_dimgap(dwg_ent_tolerance *tol, BITCODE_BD dimgap,
 }
 
 /// Returns tolerance dimgap
-BITCODE_BD
-dwg_ent_tolerance_get_dimgap(dwg_ent_tolerance *tol, int *error)
+double
+dwg_ent_tolerance_get_dimgap(const dwg_ent_tolerance *restrict tol,
+                          int *restrict error)
 {
-  if (tol != 0)
+  if (tol)
     {
       *error = 0;
       return tol->dimgap;
@@ -8735,10 +8928,11 @@ dwg_ent_tolerance_get_dimgap(dwg_ent_tolerance *tol, int *error)
 
 /// Sets tolerance insertion point
 void
-dwg_ent_tolerance_set_ins_pt(dwg_ent_tolerance *tol, dwg_point_3d *point,
-                             int *error)
+dwg_ent_tolerance_set_ins_pt(dwg_ent_tolerance *restrict tol,
+                             const dwg_point_3d *restrict point,
+                             int *restrict error)
 {
-  if (tol != 0 && point != 0)
+  if (tol && point)
     {
       *error = 0;
       tol->ins_pt.x = point->x;
@@ -8755,10 +8949,10 @@ dwg_ent_tolerance_set_ins_pt(dwg_ent_tolerance *tol, dwg_point_3d *point,
 
 /// Returns tolerance insertion point
 void
-dwg_ent_tolerance_get_ins_pt(dwg_ent_tolerance *tol, dwg_point_3d *point,
-                             int *error)
+dwg_ent_tolerance_get_ins_pt(const dwg_ent_tolerance *restrict tol, dwg_point_3d *restrict point,
+                             int *restrict error)
 {
-  if (tol != 0 && point != 0)
+  if (tol && point)
     {
       *error = 0;
       point->x = tol->ins_pt.x;
@@ -8775,10 +8969,11 @@ dwg_ent_tolerance_get_ins_pt(dwg_ent_tolerance *tol, dwg_point_3d *point,
 
 /// Sets tolerance x direction
 void
-dwg_ent_tolerance_set_x_direction(dwg_ent_tolerance *tol, dwg_point_3d *point,
-                                  int *error)
+dwg_ent_tolerance_set_x_direction(dwg_ent_tolerance *restrict tol,
+                                  const dwg_point_3d *restrict point,
+                                  int *restrict error)
 {
-  if (tol != 0 && point != 0)
+  if (tol && point)
     {
       *error = 0;
       tol->x_direction.x = point->x;
@@ -8795,10 +8990,10 @@ dwg_ent_tolerance_set_x_direction(dwg_ent_tolerance *tol, dwg_point_3d *point,
 
 /// Returns tolerance x direction
 void
-dwg_ent_tolerance_get_x_direction(dwg_ent_tolerance *tol, dwg_point_3d *point,
-                                  int *error)
+dwg_ent_tolerance_get_x_direction(const dwg_ent_tolerance *restrict tol, dwg_point_3d *restrict point,
+                                  int *restrict error)
 {
-  if (tol != 0 && point != 0)
+  if (tol && point)
     {
       *error = 0;
       point->x = tol->x_direction.x;
@@ -8815,10 +9010,11 @@ dwg_ent_tolerance_get_x_direction(dwg_ent_tolerance *tol, dwg_point_3d *point,
 
 /// Sets tolerance extrusion
 void
-dwg_ent_tolerance_set_extrusion(dwg_ent_tolerance *tol, dwg_point_3d *point,
-                                int *error)
+dwg_ent_tolerance_set_extrusion(dwg_ent_tolerance *restrict tol,
+                                const dwg_point_3d *restrict point,
+                                int *restrict error)
 {
-  if (tol != 0 && point != 0)
+  if (tol && point)
     {
       *error = 0;
       tol->extrusion.x = point->x;
@@ -8835,10 +9031,11 @@ dwg_ent_tolerance_set_extrusion(dwg_ent_tolerance *tol, dwg_point_3d *point,
 
 /// Returns tolerance extrusion
 void
-dwg_ent_tolerance_get_extrusion(dwg_ent_tolerance *tol, dwg_point_3d *point,
-                                int *error)
+dwg_ent_tolerance_get_extrusion(const dwg_ent_tolerance *restrict tol,
+                                dwg_point_3d *restrict point,
+                                int *restrict error)
 {
-  if (tol != 0 && point != 0)
+  if (tol && point)
     {
       *error = 0;
       point->x = tol->extrusion.x;
@@ -8853,15 +9050,19 @@ dwg_ent_tolerance_get_extrusion(dwg_ent_tolerance *tol, dwg_point_3d *point,
 
 }
 
-/// Sets tolerance text string
+/// Sets tolerance text string (utf-8 encoded)
 void
-dwg_ent_tolerance_set_text_string(dwg_ent_tolerance *tol, char * string,
-                                  int *error)
+dwg_ent_tolerance_set_text_string(dwg_ent_tolerance *restrict tol,
+                                  const char *restrict string,
+                                  int *restrict error)
 {
-  if (tol != 0)
+  if (tol)
     {
       *error = 0;
-      tol->text_string = string;
+      if (dwg_version >= R_2007)
+        tol->text_string = (char*)bit_utf8_to_TU((char*)string);
+      else
+        tol->text_string = (char*)string;
     }
   else
     {
@@ -8871,14 +9072,18 @@ dwg_ent_tolerance_set_text_string(dwg_ent_tolerance *tol, char * string,
 
 }
 
-/// Returns tolerance text string
+/// Returns tolerance text string (utf-8 encoded)
 char *
-dwg_ent_tolerance_get_text_string(dwg_ent_tolerance *tol, int *error)
+dwg_ent_tolerance_get_text_string(const dwg_ent_tolerance *restrict tol,
+                          int *restrict error)
 {
-  if (tol != 0)
+  if (tol)
     {
       *error = 0;
-      return tol->text_string;
+      if (dwg_version >= R_2007)
+        return bit_convert_TU((BITCODE_TU)tol->text_string);
+      else
+        return tol->text_string;
     }
   else
     {
@@ -8889,13 +9094,14 @@ dwg_ent_tolerance_get_text_string(dwg_ent_tolerance *tol, int *error)
 }
 
 /*******************************************************************
-*                   FUNCTIONS FOR LWPLINE ENTITY                    *
+*                   FUNCTIONS FOR LWPOLYLINE ENTITY                    *
 ********************************************************************/
 /// Returns lwpline flags
 BITCODE_BS
-dwg_ent_lwpline_get_flag(dwg_ent_lwpline *lwpline, int *error)
+dwg_ent_lwpline_get_flag(const dwg_ent_lwpline *restrict lwpline,
+                          int *restrict error)
 {
-  if (lwpline != 0)
+  if (lwpline)
     {
       *error = 0;
       return lwpline->flag;
@@ -8910,9 +9116,10 @@ dwg_ent_lwpline_get_flag(dwg_ent_lwpline *lwpline, int *error)
 
 /// Sets lwpline flags
 void
-dwg_ent_lwpline_set_flag(dwg_ent_lwpline *lwpline, char flags, int *error)
+dwg_ent_lwpline_set_flag(dwg_ent_lwpline *restrict lwpline, char flags,
+                          int *restrict error)
 {
-  if (lwpline != 0)
+  if (lwpline)
     {
       *error = 0;
       lwpline->flag = flags;
@@ -8925,10 +9132,11 @@ dwg_ent_lwpline_set_flag(dwg_ent_lwpline *lwpline, char flags, int *error)
 }
 
 /// Returns lwpline const width
-BITCODE_BD
-dwg_ent_lwpline_get_const_width(dwg_ent_lwpline *lwpline, int *error)
+double
+dwg_ent_lwpline_get_const_width(const dwg_ent_lwpline *restrict lwpline,
+                          int *restrict error)
 {
-  if (lwpline != 0)
+  if (lwpline)
     {
       *error = 0;
       return lwpline->const_width;
@@ -8943,10 +9151,11 @@ dwg_ent_lwpline_get_const_width(dwg_ent_lwpline *lwpline, int *error)
 
 /// Sets lwpline const width
 void
-dwg_ent_lwpline_set_const_width(dwg_ent_lwpline *lwpline, BITCODE_BD const_width,
-                                int *error)
+dwg_ent_lwpline_set_const_width(dwg_ent_lwpline *restrict lwpline,
+                          const double const_width,
+                                int *restrict error)
 {
-  if (lwpline != 0)
+  if (lwpline)
     {
       *error = 0;
       lwpline->const_width = const_width;
@@ -8958,10 +9167,11 @@ dwg_ent_lwpline_set_const_width(dwg_ent_lwpline *lwpline, BITCODE_BD const_width
     }
 }
 /// Returns lwpline elevation
-BITCODE_BD
-dwg_ent_lwpline_get_elevation(dwg_ent_lwpline *lwpline, int *error)
+double
+dwg_ent_lwpline_get_elevation(const dwg_ent_lwpline *restrict lwpline,
+                          int *restrict error)
 {
-  if (lwpline != 0)
+  if (lwpline)
     {
       *error = 0;
       return lwpline->elevation;
@@ -8976,10 +9186,11 @@ dwg_ent_lwpline_get_elevation(dwg_ent_lwpline *lwpline, int *error)
 
 /// Sets lwpline elevation
 void
-dwg_ent_lwpline_set_elevation(dwg_ent_lwpline *lwpline, BITCODE_BD elevation,
-                              int *error)
+dwg_ent_lwpline_set_elevation(dwg_ent_lwpline *restrict lwpline,
+                          const double elevation,
+                              int *restrict error)
 {
-  if (lwpline != 0)
+  if (lwpline)
     {
       *error = 0;
       lwpline->elevation = elevation;
@@ -8991,10 +9202,11 @@ dwg_ent_lwpline_set_elevation(dwg_ent_lwpline *lwpline, BITCODE_BD elevation,
     }
 }
 /// Returns lwpline thickness
-BITCODE_BD
-dwg_ent_lwpline_get_thickness(dwg_ent_lwpline *lwpline, int *error)
+double
+dwg_ent_lwpline_get_thickness(const dwg_ent_lwpline *restrict lwpline,
+                          int *restrict error)
 {
-  if (lwpline != 0)
+  if (lwpline)
     {
       *error = 0;
       return lwpline->thickness;
@@ -9009,10 +9221,11 @@ dwg_ent_lwpline_get_thickness(dwg_ent_lwpline *lwpline, int *error)
 
 /// Sets lwpline thickness
 void
-dwg_ent_lwpline_set_thickness(dwg_ent_lwpline *lwpline, BITCODE_BD thickness,
-                              int *error)
+dwg_ent_lwpline_set_thickness(dwg_ent_lwpline *restrict lwpline,
+                          const double thickness,
+                              int *restrict error)
 {
-  if (lwpline != 0)
+  if (lwpline)
     {
       *error = 0;
       lwpline->thickness = thickness;
@@ -9025,9 +9238,10 @@ dwg_ent_lwpline_set_thickness(dwg_ent_lwpline *lwpline, BITCODE_BD thickness,
 }
 /// Returns lwpline point count
 BITCODE_BL
-dwg_ent_lwpline_get_num_points(dwg_ent_lwpline *lwpline, int *error)
+dwg_ent_lwpline_get_numpoints(const dwg_ent_lwpline *restrict lwpline,
+                          int *restrict error)
 {
-  if (lwpline != 0)
+  if (lwpline)
     {
       *error = 0;
       return lwpline->num_points;
@@ -9040,27 +9254,12 @@ dwg_ent_lwpline_get_num_points(dwg_ent_lwpline *lwpline, int *error)
     }
 }
 
-/// Sets lwpline points count
-void
-dwg_ent_lwpline_set_num_points(dwg_ent_lwpline *lwpline, BITCODE_BL num_points,
-                               int *error)
-{
-  if (lwpline != 0)
-    {
-      *error = 0;
-      lwpline->num_points = num_points;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
 /// Returns lwpline bulges count
 BITCODE_BL
-dwg_ent_lwpline_get_num_bulges(dwg_ent_lwpline *lwpline, int *error)
+dwg_ent_lwpline_get_numbulges(const dwg_ent_lwpline *restrict lwpline,
+                          int *restrict error)
 {
-  if (lwpline != 0)
+  if (lwpline)
     {
       *error = 0;
       return lwpline->num_bulges;
@@ -9073,27 +9272,13 @@ dwg_ent_lwpline_get_num_bulges(dwg_ent_lwpline *lwpline, int *error)
     }
 }
 
-/// Sets lwpline bulges count
-void
-dwg_ent_lwpline_set_num_bulges(dwg_ent_lwpline *lwpline, BITCODE_BL num_bulges,
-                               int *error)
-{
-  if (lwpline != 0)
-    {
-      *error = 0;
-      lwpline->num_bulges = num_bulges;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
+
 /// Returns lwpline width count
 BITCODE_BL
-dwg_ent_lwpline_get_num_widths(dwg_ent_lwpline *lwpline, int *error)
+dwg_ent_lwpline_get_numwidths(const dwg_ent_lwpline *restrict lwpline,
+                          int *restrict error)
 {
-  if (lwpline != 0)
+  if (lwpline)
     {
       *error = 0;
       return lwpline->num_widths;
@@ -9106,28 +9291,13 @@ dwg_ent_lwpline_get_num_widths(dwg_ent_lwpline *lwpline, int *error)
     }
 }
 
-/// Sets lwpline width count
-void
-dwg_ent_lwpline_set_num_widths(dwg_ent_lwpline *lwpline, BITCODE_BL num_widths,
-                               int *error)
-{
-  if (lwpline != 0)
-    {
-      *error = 0;
-      lwpline->num_widths = num_widths;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
+
 /// Returns lwpline normal
 void
-dwg_ent_lwpline_get_normal(dwg_ent_lwpline *lwpline, dwg_point_3d *point,
-                           int *error)
+dwg_ent_lwpline_get_normal(const dwg_ent_lwpline *restrict lwpline, dwg_point_3d *restrict point,
+                           int *restrict error)
 {
-  if (lwpline != 0 && point != 0)
+  if (lwpline && point)
     {
       *error = 0;
       point->x = lwpline->normal.x;
@@ -9143,10 +9313,11 @@ dwg_ent_lwpline_get_normal(dwg_ent_lwpline *lwpline, dwg_point_3d *point,
 
 /// Sets lwpline normal
 void
-dwg_ent_lwpline_set_normal(dwg_ent_lwpline *lwpline, dwg_point_3d *point,
-                           int *error)
+dwg_ent_lwpline_set_normal(dwg_ent_lwpline *restrict lwpline,
+                           const dwg_point_3d *restrict point,
+                           int *restrict error)
 {
-  if (lwpline != 0 && point != 0)
+  if (lwpline && point)
     {
       *error = 0;
       lwpline->normal.x = point->x;
@@ -9160,11 +9331,12 @@ dwg_ent_lwpline_set_normal(dwg_ent_lwpline *lwpline, dwg_point_3d *point,
     }
 }
 /// Returns lwpline bulges
-BITCODE_BD *
-dwg_ent_lwpline_get_bulges(dwg_ent_lwpline *lwpline, int *error)
+double *
+dwg_ent_lwpline_get_bulges(const dwg_ent_lwpline *restrict lwpline,
+                          int *restrict error)
 {
   BITCODE_BD *ptx = (BITCODE_BD*) malloc(sizeof(BITCODE_BD)* lwpline->num_bulges);
-  if (ptx != 0)
+  if (ptx)
     {
       BITCODE_BL i;
       *error = 0;
@@ -9177,16 +9349,18 @@ dwg_ent_lwpline_get_bulges(dwg_ent_lwpline *lwpline, int *error)
   else
     {
       *error = 1;
+      LOG_ERROR("%s: null malloc", __FUNCTION__)
       return NULL;
     }
 }
 
 /// Returns lwpline points
 dwg_point_2d *
-dwg_ent_lwpline_get_points(dwg_ent_lwpline *lwpline, int *error)
+dwg_ent_lwpline_get_points(const dwg_ent_lwpline *restrict lwpline,
+                          int *restrict error)
 {
   dwg_point_2d *ptx = (dwg_point_2d*) malloc(sizeof(dwg_point_2d)* lwpline->num_points);
-  if (ptx != 0)
+  if (ptx)
     {
       BITCODE_BL i;
       *error = 0;
@@ -9207,11 +9381,12 @@ dwg_ent_lwpline_get_points(dwg_ent_lwpline *lwpline, int *error)
 
 /// Returns lwpline widths
 dwg_lwpline_widths *
-dwg_ent_lwpline_get_widths(dwg_ent_lwpline *lwpline, int *error)
+dwg_ent_lwpline_get_widths(const dwg_ent_lwpline *restrict lwpline,
+                          int *restrict error)
 {
   dwg_lwpline_widths *ptx = (dwg_lwpline_widths*)
     malloc(sizeof(dwg_lwpline_widths)* lwpline->num_widths);
-  if (ptx != 0)
+  if (ptx)
     {
       BITCODE_BL i;
       *error = 0;
@@ -9236,9 +9411,10 @@ dwg_ent_lwpline_get_widths(dwg_ent_lwpline *lwpline, int *error)
 
 /// Returns ole2frame flags
 BITCODE_BS
-dwg_ent_ole2frame_get_flag(dwg_ent_ole2frame *frame, int *error)
+dwg_ent_ole2frame_get_flag(const dwg_ent_ole2frame *restrict frame,
+                          int *restrict error)
 {
-  if (frame != 0)
+  if (frame)
     {
       *error = 0;
       return frame->flag;
@@ -9253,10 +9429,10 @@ dwg_ent_ole2frame_get_flag(dwg_ent_ole2frame *frame, int *error)
 
 /// Sets ole2frame flags
 void
-dwg_ent_ole2frame_set_flag(dwg_ent_ole2frame *frame, BITCODE_BS flags,
-                            int *error)
+dwg_ent_ole2frame_set_flag(dwg_ent_ole2frame *restrict frame, BITCODE_BS flags,
+                            int *restrict error)
 {
-  if (frame != 0)
+  if (frame)
     {
       *error = 0;
       frame->flag = flags;
@@ -9270,9 +9446,10 @@ dwg_ent_ole2frame_set_flag(dwg_ent_ole2frame *frame, BITCODE_BS flags,
 
 /// Returns ole2frame mode
 BITCODE_BS
-dwg_ent_ole2frame_get_mode(dwg_ent_ole2frame *frame, int *error)
+dwg_ent_ole2frame_get_mode(const dwg_ent_ole2frame *restrict frame,
+                          int *restrict error)
 {
-  if (frame != 0)
+  if (frame)
     {
       *error = 0;
       return frame->mode;
@@ -9287,10 +9464,10 @@ dwg_ent_ole2frame_get_mode(dwg_ent_ole2frame *frame, int *error)
 
 /// set ole2frame mode
 void
-dwg_ent_ole2frame_set_mode(dwg_ent_ole2frame *frame, BITCODE_BS mode,
-                           int *error)
+dwg_ent_ole2frame_set_mode(dwg_ent_ole2frame *restrict frame, BITCODE_BS mode,
+                           int *restrict error)
 {
-  if (frame != 0)
+  if (frame)
     {
       *error = 0;
       frame->mode = mode;
@@ -9304,9 +9481,10 @@ dwg_ent_ole2frame_set_mode(dwg_ent_ole2frame *frame, BITCODE_BS mode,
 
 /// Returns ole2frame data length
 BITCODE_BL
-dwg_ent_ole2frame_get_data_length(dwg_ent_ole2frame *frame, int *error)
+dwg_ent_ole2frame_get_data_length(const dwg_ent_ole2frame *restrict frame,
+                          int *restrict error)
 {
-  if (frame != 0)
+  if (frame)
     {
       *error = 0;
       return frame->data_length;
@@ -9321,10 +9499,10 @@ dwg_ent_ole2frame_get_data_length(dwg_ent_ole2frame *frame, int *error)
 
 /// Sets ole2frame data length
 void
-dwg_ent_ole2frame_set_data_length(dwg_ent_ole2frame *frame, BITCODE_BL data_length,
-                                  int *error)
+dwg_ent_ole2frame_set_data_length(dwg_ent_ole2frame *restrict frame, BITCODE_BL data_length,
+                                  int *restrict error)
 {
-  if (frame != 0)
+  if (frame)
     {
       *error = 0;
       frame->data_length = data_length;
@@ -9336,11 +9514,12 @@ dwg_ent_ole2frame_set_data_length(dwg_ent_ole2frame *frame, BITCODE_BL data_leng
     }
 }
 
-/// Returns ole2frame data
+/// Returns ole2frame data (binary)
 char *
-dwg_ent_ole2frame_get_data(dwg_ent_ole2frame *frame, int *error)
+dwg_ent_ole2frame_get_data(const dwg_ent_ole2frame *restrict frame,
+                          int *restrict error)
 {
-  if (frame != 0)
+  if (frame)
     {
       *error = 0;
       return frame->data;
@@ -9355,12 +9534,14 @@ dwg_ent_ole2frame_get_data(dwg_ent_ole2frame *frame, int *error)
 
 /// Sets ole2frame data
 void
-dwg_ent_ole2frame_set_data(dwg_ent_ole2frame *frame, char * data, int *error)
+dwg_ent_ole2frame_set_data(dwg_ent_ole2frame *restrict frame,
+                           const char *restrict data,
+                           int *restrict error)
 {
-  if (frame != 0)
+  if (frame)
     {
       *error = 0;
-      frame->data = data;
+      frame->data = (char*)data;
     }
   else
     {
@@ -9375,9 +9556,10 @@ dwg_ent_ole2frame_set_data(dwg_ent_ole2frame *frame, char * data, int *error)
 
 
 BITCODE_BL
-dwg_obj_proxy_get_class_id(dwg_obj_proxy *proxy, int *error)
+dwg_obj_proxy_get_class_id(const dwg_obj_proxy *restrict proxy,
+                          int *restrict error)
 {
-  if (proxy != 0)
+  if (proxy)
     {
       *error = 0;
       return proxy->class_id;
@@ -9391,10 +9573,11 @@ dwg_obj_proxy_get_class_id(dwg_obj_proxy *proxy, int *error)
 }
 
 void
-dwg_obj_proxy_set_class_id(dwg_obj_proxy *proxy, BITCODE_BL class_id,
-                        int *error)
+dwg_obj_proxy_set_class_id(dwg_obj_proxy *restrict proxy,
+                           const BITCODE_BL class_id,
+                           int *restrict error)
 {
-  if (proxy != 0)
+  if (proxy)
     {
       *error = 0;
       proxy->class_id = class_id;
@@ -9407,9 +9590,10 @@ dwg_obj_proxy_set_class_id(dwg_obj_proxy *proxy, BITCODE_BL class_id,
 }
 
 BITCODE_BL
-dwg_obj_proxy_get_version(dwg_obj_proxy *proxy, int *error)
+dwg_obj_proxy_get_version(const dwg_obj_proxy *restrict proxy,
+                          int *restrict error)
 {
-  if (proxy != 0)
+  if (proxy)
     {
       *error = 0;
       return proxy->version;
@@ -9423,11 +9607,11 @@ dwg_obj_proxy_get_version(dwg_obj_proxy *proxy, int *error)
 }
 
 void
-dwg_obj_proxy_set_version(dwg_obj_proxy *proxy,
+dwg_obj_proxy_set_version(dwg_obj_proxy *restrict proxy,
                           BITCODE_BL version,
-                          int *error)
+                          int *restrict error)
 {
-  if (proxy != 0)
+  if (proxy)
     {
       *error = 0;
       proxy->version = version;
@@ -9440,9 +9624,10 @@ dwg_obj_proxy_set_version(dwg_obj_proxy *proxy,
 }
 
 BITCODE_B
-dwg_obj_proxy_get_from_dxf(dwg_obj_proxy *proxy, int *error)
+dwg_obj_proxy_get_from_dxf(const dwg_obj_proxy *restrict proxy,
+                          int *restrict error)
 {
-  if (proxy != 0)
+  if (proxy)
     {
       *error = 0;
       return proxy->from_dxf;
@@ -9456,11 +9641,11 @@ dwg_obj_proxy_get_from_dxf(dwg_obj_proxy *proxy, int *error)
 }
 
 void
-dwg_obj_proxy_set_from_dxf(dwg_obj_proxy *proxy,
+dwg_obj_proxy_set_from_dxf(dwg_obj_proxy *restrict proxy,
                            BITCODE_B from_dxf,
-                           int *error)
+                           int *restrict error)
 {
-  if (proxy != 0)
+  if (proxy)
     {
       *error = 0;
       proxy->from_dxf = from_dxf;
@@ -9473,9 +9658,10 @@ dwg_obj_proxy_set_from_dxf(dwg_obj_proxy *proxy,
 }
 
 char*
-dwg_obj_proxy_get_data(dwg_obj_proxy *proxy, int *error)
+dwg_obj_proxy_get_data(const dwg_obj_proxy *restrict proxy,
+                          int *restrict error)
 {
-  if (proxy != 0)
+  if (proxy)
     {
       *error = 0;
       return proxy->data;
@@ -9489,13 +9675,14 @@ dwg_obj_proxy_get_data(dwg_obj_proxy *proxy, int *error)
 }
 
 void
-dwg_obj_proxy_set_data(dwg_obj_proxy *proxy, char* data,
-                       int *error)
+dwg_obj_proxy_set_data(dwg_obj_proxy *restrict proxy,
+                       const char *restrict data,
+                       int *restrict error)
 {
-  if (proxy != 0)
+  if (proxy)
     {
       *error = 0;
-      proxy->data = data;
+      proxy->data = (char*)data;
     }
   else
     {
@@ -9505,9 +9692,10 @@ dwg_obj_proxy_set_data(dwg_obj_proxy *proxy, char* data,
 }
 
 dwg_object_ref*
-dwg_obj_proxy_get_parenthandle(dwg_obj_proxy *proxy, int *error)
+dwg_obj_proxy_get_parenthandle(const dwg_obj_proxy *restrict proxy,
+                          int *restrict error)
 {
-  if (proxy != 0)
+  if (proxy)
     {
       *error = 0;
       return proxy->parenthandle;
@@ -9521,9 +9709,10 @@ dwg_obj_proxy_get_parenthandle(dwg_obj_proxy *proxy, int *error)
 }
 
 dwg_object_ref**
-dwg_obj_proxy_get_reactors(dwg_obj_proxy *proxy, int *error)
+dwg_obj_proxy_get_reactors(const dwg_obj_proxy *restrict proxy,
+                          int *restrict error)
 {
-  if (proxy != 0)
+  if (proxy)
     {
       *error = 0;
       return proxy->reactors;
@@ -9537,9 +9726,10 @@ dwg_obj_proxy_get_reactors(dwg_obj_proxy *proxy, int *error)
 }
 
 dwg_object_ref**
-dwg_obj_proxy_get_objid_object_handles(dwg_obj_proxy *proxy, int *error)
+dwg_obj_proxy_get_objid_object_handles(const dwg_obj_proxy *restrict proxy,
+                          int *restrict error)
 {
-  if (proxy != 0)
+  if (proxy)
     {
       *error = 0;
       return proxy->objid_object_handles;
@@ -9558,9 +9748,10 @@ dwg_obj_proxy_get_objid_object_handles(dwg_obj_proxy *proxy, int *error)
 
 
 BITCODE_BL
-dwg_obj_xrecord_get_num_databytes(dwg_obj_xrecord *xrecord, int *error)
+dwg_obj_xrecord_get_num_databytes(const dwg_obj_xrecord *restrict xrecord,
+                          int *restrict error)
 {
-  if (xrecord != 0)
+  if (xrecord)
     {
       *error = 0;
       return xrecord->num_databytes;
@@ -9573,26 +9764,11 @@ dwg_obj_xrecord_get_num_databytes(dwg_obj_xrecord *xrecord, int *error)
     }
 }
 
-void
-dwg_obj_xrecord_set_num_databytes(dwg_obj_xrecord *xrecord, BITCODE_BL num_databytes,
-                                  int *error)
-{
-  if (xrecord != 0)
-    {
-      *error = 0;
-      xrecord->num_databytes = num_databytes;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
 BITCODE_BS
-dwg_obj_xrecord_get_cloning_flags(dwg_obj_xrecord *xrecord, int *error)
+dwg_obj_xrecord_get_cloning_flags(const dwg_obj_xrecord *restrict xrecord,
+                          int *restrict error)
 {
-  if (xrecord != 0)
+  if (xrecord)
     {
       *error = 0;
       return xrecord->cloning_flags;
@@ -9606,10 +9782,10 @@ dwg_obj_xrecord_get_cloning_flags(dwg_obj_xrecord *xrecord, int *error)
 }
 
 void
-dwg_obj_xrecord_set_cloning_flags(dwg_obj_xrecord *xrecord, BITCODE_BS cloning_flags,
-                                  int *error)
+dwg_obj_xrecord_set_cloning_flags(dwg_obj_xrecord *restrict xrecord, BITCODE_BS cloning_flags,
+                                  int *restrict error)
 {
-  if (xrecord != 0)
+  if (xrecord)
     {
       *error = 0;
       xrecord->cloning_flags = cloning_flags;
@@ -9621,10 +9797,11 @@ dwg_obj_xrecord_set_cloning_flags(dwg_obj_xrecord *xrecord, BITCODE_BS cloning_f
     }
 }
 
-unsigned int
-dwg_obj_xrecord_get_num_eed(dwg_obj_xrecord *xrecord, int *error)
+BITCODE_BL
+dwg_obj_xrecord_get_num_eed(const dwg_obj_xrecord *restrict xrecord,
+                          int *restrict error)
 {
-  if (xrecord != 0)
+  if (xrecord)
     {
       *error = 0;
       return xrecord->num_eed;
@@ -9637,27 +9814,11 @@ dwg_obj_xrecord_get_num_eed(dwg_obj_xrecord *xrecord, int *error)
     }
 }
 
-void
-dwg_obj_xrecord_set_num_eed(dwg_obj_xrecord *xrecord,
-                            unsigned int num_eed,
-                            int *error)
-{
-  if (xrecord != 0)
-    {
-      *error = 0;
-      xrecord->num_eed = num_eed;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
 Dwg_Resbuf*
-dwg_obj_xrecord_get_xdata(dwg_obj_xrecord *xrecord, int *error)
+dwg_obj_xrecord_get_xdata(const dwg_obj_xrecord *restrict xrecord,
+                          int *restrict error)
 {
-  if (xrecord != 0)
+  if (xrecord)
     {
       *error = 0;
       return xrecord->xdata;
@@ -9671,13 +9832,14 @@ dwg_obj_xrecord_get_xdata(dwg_obj_xrecord *xrecord, int *error)
 }
 
 void
-dwg_obj_xrecord_set_xdata(dwg_obj_xrecord *xrecord, Dwg_Resbuf* xdata,
-                       int *error)
+dwg_obj_xrecord_set_xdata(dwg_obj_xrecord *restrict xrecord,
+                          const Dwg_Resbuf* xdata,
+                          int *restrict error)
 {
-  if (xrecord != 0)
+  if (xrecord)
     {
       *error = 0;
-      xrecord->xdata = xdata;
+      xrecord->xdata = (Dwg_Resbuf*)xdata;
     }
   else
     {
@@ -9687,9 +9849,10 @@ dwg_obj_xrecord_set_xdata(dwg_obj_xrecord *xrecord, Dwg_Resbuf* xdata,
 }
 
 dwg_object_ref*
-dwg_obj_xrecord_get_parenthandle(dwg_obj_xrecord *xrecord, int *error)
+dwg_obj_xrecord_get_parenthandle(const dwg_obj_xrecord *restrict xrecord,
+                          int *restrict error)
 {
-  if (xrecord != 0)
+  if (xrecord)
     {
       *error = 0;
       return xrecord->parenthandle;
@@ -9703,9 +9866,10 @@ dwg_obj_xrecord_get_parenthandle(dwg_obj_xrecord *xrecord, int *error)
 }
 
 dwg_object_ref**
-dwg_obj_xrecord_get_reactors(dwg_obj_xrecord *xrecord, int *error)
+dwg_obj_xrecord_get_reactors(const dwg_obj_xrecord *restrict xrecord,
+                          int *restrict error)
 {
-  if (xrecord != 0)
+  if (xrecord)
     {
       *error = 0;
       return xrecord->reactors;
@@ -9719,9 +9883,10 @@ dwg_obj_xrecord_get_reactors(dwg_obj_xrecord *xrecord, int *error)
 }
 
 BITCODE_BL
-dwg_obj_xrecord_get_num_objid_handles(dwg_obj_xrecord *xrecord, int *error)
+dwg_obj_xrecord_get_num_objid_handles(const dwg_obj_xrecord *restrict xrecord,
+                          int *restrict error)
 {
-  if (xrecord != 0)
+  if (xrecord)
     {
       *error = 0;
       return xrecord->num_objid_handles;
@@ -9735,9 +9900,10 @@ dwg_obj_xrecord_get_num_objid_handles(dwg_obj_xrecord *xrecord, int *error)
 }
 
 dwg_object_ref**
-dwg_obj_xrecord_get_objid_handles(dwg_obj_xrecord *xrecord, int *error)
+dwg_obj_xrecord_get_objid_handles(const dwg_obj_xrecord *restrict xrecord,
+                          int *restrict error)
 {
-  if (xrecord != 0)
+  if (xrecord)
     {
       *error = 0;
       return xrecord->objid_handles;
@@ -9756,9 +9922,10 @@ dwg_obj_xrecord_get_objid_handles(dwg_obj_xrecord *xrecord, int *error)
 
 /// Returns spline scenario
 BITCODE_BS
-dwg_ent_spline_get_scenario(dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_scenario(const dwg_ent_spline *restrict spline,
+                          int *restrict error)
 {
-  if (spline != 0)
+  if (spline)
     {
       *error = 0;
       return spline->scenario;
@@ -9773,10 +9940,10 @@ dwg_ent_spline_get_scenario(dwg_ent_spline *spline, int *error)
 
 /// Sets spline scenario
 void
-dwg_ent_spline_set_scenario(dwg_ent_spline *spline, BITCODE_BS scenario,
-                               int *error)
+dwg_ent_spline_set_scenario(dwg_ent_spline *restrict spline, BITCODE_BS scenario,
+                               int *restrict error)
 {
-  if (spline != 0)
+  if (spline)
     {
       *error = 0;
       spline->scenario = scenario;
@@ -9790,9 +9957,10 @@ dwg_ent_spline_set_scenario(dwg_ent_spline *spline, BITCODE_BS scenario,
 
 /// Returns spline degree
 BITCODE_BS
-dwg_ent_spline_get_degree(dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_degree(const dwg_ent_spline *restrict spline,
+                          int *restrict error)
 {
-  if (spline != 0)
+  if (spline)
     {
       *error = 0;
       return spline->degree;
@@ -9807,10 +9975,10 @@ dwg_ent_spline_get_degree(dwg_ent_spline *spline, int *error)
 
 /// Sets spline degree
 void
-dwg_ent_spline_set_degree(dwg_ent_spline *spline, BITCODE_BS degree,
-                             int *error)
+dwg_ent_spline_set_degree(dwg_ent_spline *restrict spline, BITCODE_BS degree,
+                             int *restrict error)
 {
-  if (spline != 0)
+  if (spline)
     {
       *error = 0;
       spline->degree = degree;
@@ -9823,10 +9991,11 @@ dwg_ent_spline_set_degree(dwg_ent_spline *spline, BITCODE_BS degree,
 }
 
 /// Returns spline fit tol
-BITCODE_BD
-dwg_ent_spline_get_fit_tol(dwg_ent_spline *spline, int *error)
+double
+dwg_ent_spline_get_fit_tol(const dwg_ent_spline *restrict spline,
+                          int *restrict error)
 {
-  if (spline != 0)
+  if (spline)
     {
       *error = 0;
       return spline->fit_tol;
@@ -9841,9 +10010,10 @@ dwg_ent_spline_get_fit_tol(dwg_ent_spline *spline, int *error)
 
 /// Sets spline fit tol
 void
-dwg_ent_spline_set_fit_tol(dwg_ent_spline *spline, int fit_tol, int *error)
+dwg_ent_spline_set_fit_tol(dwg_ent_spline *restrict spline, int fit_tol,
+                          int *restrict error)
 {
-  if (spline != 0)
+  if (spline)
     {
       *error = 0;
       spline->fit_tol = fit_tol;
@@ -9857,10 +10027,11 @@ dwg_ent_spline_set_fit_tol(dwg_ent_spline *spline, int fit_tol, int *error)
 
 /// Returns spline begin tan vector
 void
-dwg_ent_spline_get_begin_tan_vector(dwg_ent_spline *spline,
-                                    dwg_point_3d *point, int *error)
+dwg_ent_spline_get_begin_tan_vector(const dwg_ent_spline *restrict spline,
+                                    dwg_point_3d *restrict point,
+                          int *restrict error)
 {
-  if (spline != 0 && point != 0)
+  if (spline && point)
     {
       *error = 0;
       point->x = spline->beg_tan_vec.x;
@@ -9876,10 +10047,11 @@ dwg_ent_spline_get_begin_tan_vector(dwg_ent_spline *spline,
 
 /// Sets spline begin tan vector
 void
-dwg_ent_spline_set_begin_tan_vector(dwg_ent_spline *spline,
-                                    dwg_point_3d *point, int *error)
+dwg_ent_spline_set_begin_tan_vector(dwg_ent_spline *restrict spline,
+                                    const dwg_point_3d *restrict point,
+                                    int *restrict error)
 {
-  if (spline != 0 && point != 0)
+  if (spline && point)
     {
       *error = 0;
       spline->beg_tan_vec.x = point->x;
@@ -9895,10 +10067,11 @@ dwg_ent_spline_set_begin_tan_vector(dwg_ent_spline *spline,
 
 /// Returns spline end tan vector points
 void
-dwg_ent_spline_get_end_tan_vector(dwg_ent_spline *spline,
-                                  dwg_point_3d *point, int *error)
+dwg_ent_spline_get_end_tan_vector(const dwg_ent_spline *restrict spline,
+                                  dwg_point_3d *restrict point,
+                          int *restrict error)
 {
-  if (spline != 0 && point != 0)
+  if (spline && point)
     {
       *error = 0;
       point->x = spline->end_tan_vec.x;
@@ -9914,10 +10087,11 @@ dwg_ent_spline_get_end_tan_vector(dwg_ent_spline *spline,
 
 /// Sets spline end tan vector
 void
-dwg_ent_spline_set_end_tan_vector(dwg_ent_spline *spline,
-                                     dwg_point_3d *point, int *error)
+dwg_ent_spline_set_end_tan_vector(dwg_ent_spline *restrict spline,
+                                  const dwg_point_3d *restrict point,
+                                  int *restrict error)
 {
-  if (spline != 0 && point != 0)
+  if (spline && point)
     {
       *error = 0;
       spline->end_tan_vec.x = point->x;
@@ -9932,10 +10106,11 @@ dwg_ent_spline_set_end_tan_vector(dwg_ent_spline *spline,
 }
 
 /// Returns spline knot tol value
-BITCODE_BD
-dwg_ent_spline_get_knot_tol(dwg_ent_spline *spline, int *error)
+double
+dwg_ent_spline_get_knot_tol(const dwg_ent_spline *restrict spline,
+                          int *restrict error)
 {
-  if (spline != 0)
+  if (spline)
     {
       *error = 0;
       return spline->knot_tol;
@@ -9950,10 +10125,11 @@ dwg_ent_spline_get_knot_tol(dwg_ent_spline *spline, int *error)
 
 /// Sets spline knot tol value
 void
-dwg_ent_spline_set_knot_tol(dwg_ent_spline *spline, BITCODE_BD knot_tol,
-                            int *error)
+dwg_ent_spline_set_knot_tol(dwg_ent_spline *restrict spline,
+                          const double knot_tol,
+                            int *restrict error)
 {
-  if (spline != 0)
+  if (spline)
     {
       *error = 0;
       spline->knot_tol = knot_tol;
@@ -9966,10 +10142,11 @@ dwg_ent_spline_set_knot_tol(dwg_ent_spline *spline, BITCODE_BD knot_tol,
 }
 
 /// Returns spline control tol value
-BITCODE_BD
-dwg_ent_spline_get_ctrl_tol(dwg_ent_spline *spline, int *error)
+double
+dwg_ent_spline_get_ctrl_tol(const dwg_ent_spline *restrict spline,
+                          int *restrict error)
 {
-  if (spline != 0)
+  if (spline)
     {
       *error = 0;
       return spline->ctrl_tol;
@@ -9984,10 +10161,11 @@ dwg_ent_spline_get_ctrl_tol(dwg_ent_spline *spline, int *error)
 
 /// Sets spline control tol
 void
-dwg_ent_spline_set_ctrl_tol(dwg_ent_spline *spline, BITCODE_BD ctrl_tol,
-                            int *error)
+dwg_ent_spline_set_ctrl_tol(dwg_ent_spline *restrict spline,
+                          const double ctrl_tol,
+                            int *restrict error)
 {
-  if (spline != 0)
+  if (spline)
     {
       *error = 0;
       spline->ctrl_tol = ctrl_tol;
@@ -10001,9 +10179,10 @@ dwg_ent_spline_set_ctrl_tol(dwg_ent_spline *spline, BITCODE_BD ctrl_tol,
 
 /// Returns spline  number of fit points
 BITCODE_BS
-dwg_ent_spline_get_num_fit_pts(dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_num_fit_pts(const dwg_ent_spline *restrict spline,
+                          int *restrict error)
 {
-  if (spline != 0)
+  if (spline)
     {
       *error = 0;
       return spline->num_fit_pts;
@@ -10016,28 +10195,12 @@ dwg_ent_spline_get_num_fit_pts(dwg_ent_spline *spline, int *error)
     }
 }
 
-/// Sets number of fit points
-void
-dwg_ent_spline_set_num_fit_pts(dwg_ent_spline *spline, BITCODE_BS num_fit_pts,
-                               int *error)
-{
-  if (spline != 0)
-    {
-      *error = 0;
-      spline->num_fit_pts = num_fit_pts;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
 /// Returns spline rational
 char
-dwg_ent_spline_get_rational(dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_rational(const dwg_ent_spline *restrict spline,
+                          int *restrict error)
 {
-  if (spline != 0)
+  if (spline)
     {
       *error = 0;
       return spline->rational;
@@ -10052,10 +10215,10 @@ dwg_ent_spline_get_rational(dwg_ent_spline *spline, int *error)
 
 /// Sets rational value
 void
-dwg_ent_spline_set_rational(dwg_ent_spline *spline, char rational,
-                            int *error)
+dwg_ent_spline_set_rational(dwg_ent_spline *restrict spline, char rational,
+                            int *restrict error)
 {
-  if (spline != 0)
+  if (spline)
     {
       *error = 0;
       spline->rational = rational;
@@ -10069,9 +10232,10 @@ dwg_ent_spline_set_rational(dwg_ent_spline *spline, char rational,
 
 /// Returns spline closed_b
 char
-dwg_ent_spline_get_closed_b(dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_closed_b(const dwg_ent_spline *restrict spline,
+                          int *restrict error)
 {
-  if (spline != 0)
+  if (spline)
     {
       *error = 0;
       return spline->closed_b;
@@ -10086,10 +10250,10 @@ dwg_ent_spline_get_closed_b(dwg_ent_spline *spline, int *error)
 
 /// Sets spline closed_b
 void
-dwg_ent_spline_set_closed_b(dwg_ent_spline *spline, char closed_b,
-                            int *error)
+dwg_ent_spline_set_closed_b(dwg_ent_spline *restrict spline, char closed_b,
+                            int *restrict error)
 {
-  if (spline != 0)
+  if (spline)
     {
       *error = 0;
       spline->closed_b = closed_b;
@@ -10103,9 +10267,10 @@ dwg_ent_spline_set_closed_b(dwg_ent_spline *spline, char closed_b,
 
 /// Returns spline weighted value
 char
-dwg_ent_spline_get_weighted(dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_weighted(const dwg_ent_spline *restrict spline,
+                          int *restrict error)
 {
-  if (spline != 0)
+  if (spline)
     {
       *error = 0;
       return spline->weighted;
@@ -10120,10 +10285,10 @@ dwg_ent_spline_get_weighted(dwg_ent_spline *spline, int *error)
 
 /// Sets spline weighted
 void
-dwg_ent_spline_set_weighted(dwg_ent_spline *spline, char weighted,
-                            int *error)
+dwg_ent_spline_set_weighted(dwg_ent_spline *restrict spline, char weighted,
+                            int *restrict error)
 {
-  if (spline != 0)
+  if (spline)
     {
       *error = 0;
       spline->weighted = weighted;
@@ -10137,9 +10302,10 @@ dwg_ent_spline_set_weighted(dwg_ent_spline *spline, char weighted,
 
 /// Returns spline periodic
 char
-dwg_ent_spline_get_periodic(dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_periodic(const dwg_ent_spline *restrict spline,
+                          int *restrict error)
 {
-  if (spline != 0)
+  if (spline)
     {
       *error = 0;
       return spline->periodic;
@@ -10154,10 +10320,10 @@ dwg_ent_spline_get_periodic(dwg_ent_spline *spline, int *error)
 
 /// Sets spline periodic
 void
-dwg_ent_spline_set_periodic(dwg_ent_spline *spline, char periodic,
-                            int *error)
+dwg_ent_spline_set_periodic(dwg_ent_spline *restrict spline, char periodic,
+                            int *restrict error)
 {
-  if (spline != 0)
+  if (spline)
     {
       *error = 0;
       spline->periodic = periodic;
@@ -10171,9 +10337,10 @@ dwg_ent_spline_set_periodic(dwg_ent_spline *spline, char periodic,
 
 /// Returns spline knots number
 BITCODE_BL
-dwg_ent_spline_get_num_knots(dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_num_knots(const dwg_ent_spline *restrict spline,
+                          int *restrict error)
 {
-  if (spline != 0)
+  if (spline)
     {
       *error = 0;
       return spline->num_knots;
@@ -10186,27 +10353,16 @@ dwg_ent_spline_get_num_knots(dwg_ent_spline *spline, int *error)
     }
 }
 
-/// Sets spline knots number
-void
-dwg_ent_spline_set_num_knots(dwg_ent_spline *spline, BITCODE_BL nums, int *error)
-{
-  if (spline != 0)
-    {
-      *error = 0;
-      spline->num_knots = nums;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
+//TODO: dwg_ent_spline_add_fit_pts, dwg_ent_spline_delete_fit_pts
+//TODO: dwg_ent_spline_add_knots, dwg_ent_spline_delete_knots
+//TODO: dwg_ent_spline_add_ctrl_pts, dwg_ent_spline_delete_ctrl_pts
 
 /// Returns spline control points number
 BITCODE_BL
-dwg_ent_spline_get_num_ctrl_pts(dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_num_ctrl_pts(const dwg_ent_spline *restrict spline,
+                          int *restrict error)
 {
-  if (spline != 0)
+  if (spline)
     {
       *error = 0;
       return spline->num_ctrl_pts;
@@ -10219,30 +10375,13 @@ dwg_ent_spline_get_num_ctrl_pts(dwg_ent_spline *spline, int *error)
     }
 }
 
-/// Sets spline control points number
-void
-dwg_ent_spline_set_num_ctrl_pts(dwg_ent_spline *spline, BITCODE_BL nums,
-                                int *error)
+/// Return all spline fit points
+dwg_spline_point *
+dwg_ent_spline_get_fit_pts(const dwg_ent_spline *restrict spline,
+                          int *restrict error)
 {
-  if (spline != 0)
-    {
-      *error = 0;
-      spline->num_ctrl_pts = nums;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns spline fit points
-dwg_ent_spline_point *
-dwg_ent_spline_get_fit_points(dwg_ent_spline *spline, int *error)
-{
-  dwg_ent_spline_point *ptx = (dwg_ent_spline_point*)
-    malloc(sizeof(dwg_ent_spline_point)* spline->num_fit_pts);
-  if (ptx != 0)
+  dwg_spline_point *ptx = calloc(spline->num_fit_pts, sizeof(dwg_spline_point));
+  if (ptx)
     {
       BITCODE_BS i;
       *error = 0;
@@ -10255,18 +10394,19 @@ dwg_ent_spline_get_fit_points(dwg_ent_spline *spline, int *error)
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: null malloc", __FUNCTION__)
       return NULL;
     }
 }
 
 /// Returns spline control points
-dwg_ent_spline_control_point *
-dwg_ent_spline_get_ctrl_pts(dwg_ent_spline *spline, int *error)
+dwg_spline_control_point *
+dwg_ent_spline_get_ctrl_pts(const dwg_ent_spline *restrict spline,
+                          int *restrict error)
 {
-  dwg_ent_spline_control_point *ptx = (dwg_ent_spline_control_point*)
-    malloc(sizeof(dwg_ent_spline_control_point)* spline->num_ctrl_pts);
-  if (ptx != 0)
+  dwg_spline_control_point *ptx = calloc(spline->num_ctrl_pts,
+                                         sizeof(dwg_spline_control_point));
+  if (ptx)
     {
       BITCODE_BL i;
       *error = 0;
@@ -10279,17 +10419,18 @@ dwg_ent_spline_get_ctrl_pts(dwg_ent_spline *spline, int *error)
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: null malloc", __FUNCTION__)
       return NULL;
     }
 }
 
 /// Returns spline knots
 double *
-dwg_ent_spline_get_knots(dwg_ent_spline *spline, int *error)
+dwg_ent_spline_get_knots(const dwg_ent_spline *restrict spline,
+                          int *restrict error)
 {
   double *ptx = (double*) malloc(sizeof(double)* spline->num_knots);
-  if (ptx != 0)
+  if (ptx)
     {
       BITCODE_BL i;
       *error = 0;
@@ -10302,7 +10443,7 @@ dwg_ent_spline_get_knots(dwg_ent_spline *spline, int *error)
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: null malloc", __FUNCTION__)
       return NULL;
     }
 }
@@ -10313,10 +10454,10 @@ dwg_ent_spline_get_knots(dwg_ent_spline *spline, int *error)
 
 /// Returns viewport center points
 void
-dwg_ent_viewport_get_center(dwg_ent_viewport *vp, dwg_point_3d *point,
-                            int *error)
+dwg_ent_viewport_get_center(const dwg_ent_viewport *restrict vp, dwg_point_3d *restrict point,
+                            int *restrict error)
 {
-  if (vp != 0 && point != 0)
+  if (vp && point)
     {
       *error = 0;
       point->x = vp->center.x;
@@ -10332,10 +10473,11 @@ dwg_ent_viewport_get_center(dwg_ent_viewport *vp, dwg_point_3d *point,
 
 /// Sets viewport center
 void
-dwg_ent_viewport_set_center(dwg_ent_viewport *vp, dwg_point_3d *point,
-                            int *error)
+dwg_ent_viewport_set_center(dwg_ent_viewport *restrict vp,
+                            const dwg_point_3d *restrict point,
+                            int *restrict error)
 {
-  if (vp != 0 && point != 0)
+  if (vp && point)
     {
       *error = 0;
       vp->center.x = point->x;
@@ -10350,10 +10492,11 @@ dwg_ent_viewport_set_center(dwg_ent_viewport *vp, dwg_point_3d *point,
 }
 
 /// Returns viewport width
-BITCODE_BD
-dwg_ent_viewport_get_width(dwg_ent_viewport *vp, int *error)
+double
+dwg_ent_viewport_get_width(const dwg_ent_viewport *restrict vp,
+                          int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       return vp->width;
@@ -10368,9 +10511,11 @@ dwg_ent_viewport_get_width(dwg_ent_viewport *vp, int *error)
 
 /// Sets viewport width
 void
-dwg_ent_viewport_set_width(dwg_ent_viewport *vp, BITCODE_BD width, int *error)
+dwg_ent_viewport_set_width(dwg_ent_viewport *restrict vp,
+                          const double width,
+                          int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       vp->width = width;
@@ -10383,10 +10528,11 @@ dwg_ent_viewport_set_width(dwg_ent_viewport *vp, BITCODE_BD width, int *error)
 }
 
 /// Returns viewport height
-BITCODE_BD
-dwg_ent_viewport_get_height(dwg_ent_viewport *vp, int *error)
+double
+dwg_ent_viewport_get_height(const dwg_ent_viewport *restrict vp,
+                          int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       return vp->height;
@@ -10401,9 +10547,11 @@ dwg_ent_viewport_get_height(dwg_ent_viewport *vp, int *error)
 
 /// Sets viewport height
 void
-dwg_ent_viewport_set_height(dwg_ent_viewport *vp, BITCODE_BD height, int *error)
+dwg_ent_viewport_set_height(dwg_ent_viewport *restrict vp,
+                          const double height,
+                          int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       vp->height = height;
@@ -10417,9 +10565,10 @@ dwg_ent_viewport_set_height(dwg_ent_viewport *vp, BITCODE_BD height, int *error)
 
 /// Returns viewport grid major
 BITCODE_BS
-dwg_ent_viewport_get_grid_major(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_grid_major(const dwg_ent_viewport *restrict vp,
+                          int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       return vp->grid_major;
@@ -10434,10 +10583,10 @@ dwg_ent_viewport_get_grid_major(dwg_ent_viewport *vp, int *error)
 
 /// Sets viewport grid major
 void
-dwg_ent_viewport_set_grid_major(dwg_ent_viewport *vp, BITCODE_BS major,
-                                int *error)
+dwg_ent_viewport_set_grid_major(dwg_ent_viewport *restrict vp, BITCODE_BS major,
+                                int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       vp->grid_major = major;
@@ -10451,12 +10600,13 @@ dwg_ent_viewport_set_grid_major(dwg_ent_viewport *vp, BITCODE_BS major,
 
 /// Returns viewport frozen layer count
 BITCODE_BL
-dwg_ent_viewport_get_frozen_layer_count(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_num_frozen_layers(const dwg_ent_viewport *restrict vp,
+                          int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
-      return vp->frozen_layer_count;
+      return vp->num_frozen_layers;
     }
   else
     {
@@ -10466,15 +10616,15 @@ dwg_ent_viewport_get_frozen_layer_count(dwg_ent_viewport *vp, int *error)
     }
 }
 
-/// Sets viewport frozen layer count
+/// Sets viewport frozen layer count (apparently safe to set)
 void
-dwg_ent_viewport_set_frozen_layer_count(dwg_ent_viewport *vp, BITCODE_BL count,
-                                        int *error)
+dwg_ent_viewport_set_num_frozen_layers(dwg_ent_viewport *restrict vp, BITCODE_BL count,
+                                        int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
-      vp->frozen_layer_count = count;
+      vp->num_frozen_layers = count;
     }
   else
     {
@@ -10483,14 +10633,18 @@ dwg_ent_viewport_set_frozen_layer_count(dwg_ent_viewport *vp, BITCODE_BL count,
     }
 }
 
-/// Returns viewport style sheet
+/// Returns viewport style sheet name (utf-8 encoded)
 char *
-dwg_ent_viewport_get_style_sheet(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_style_sheet(const dwg_ent_viewport *restrict vp,
+                          int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
-      return vp->style_sheet;
+      if (dwg_version >= R_2007)
+        return bit_convert_TU((BITCODE_TU)vp->style_sheet);
+      else
+        return vp->style_sheet;
     }
   else
     {
@@ -10500,15 +10654,18 @@ dwg_ent_viewport_get_style_sheet(dwg_ent_viewport *vp, int *error)
     }
 }
 
-/// Sets viewport style sheet
+/// Sets viewport style sheet name (utf-8 encoded)
 void
-dwg_ent_viewport_set_style_sheet(dwg_ent_viewport *vp, char * sheet,
-                                 int *error)
+dwg_ent_viewport_set_style_sheet(dwg_ent_viewport *restrict vp, char * sheet,
+                                 int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
-      vp->style_sheet = sheet;
+      if (dwg_version >= R_2007)
+        vp->style_sheet = (char*)bit_utf8_to_TU(sheet);
+      else
+        vp->style_sheet = sheet;
     }
   else
     {
@@ -10519,10 +10676,10 @@ dwg_ent_viewport_set_style_sheet(dwg_ent_viewport *vp, char * sheet,
 
 /// Sets circle zoom value
 void
-dwg_ent_viewport_set_circle_zoom(dwg_ent_viewport *vp, BITCODE_BS zoom,
-                                 int *error)
+dwg_ent_viewport_set_circle_zoom(dwg_ent_viewport *restrict vp, BITCODE_BS zoom,
+                                 int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       vp->circle_zoom = zoom;
@@ -10536,9 +10693,10 @@ dwg_ent_viewport_set_circle_zoom(dwg_ent_viewport *vp, BITCODE_BS zoom,
 
 /// Returns circle zoom value
 BITCODE_BS
-dwg_ent_viewport_get_circle_zoom(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_circle_zoom(const dwg_ent_viewport *restrict vp,
+                          int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       return vp->circle_zoom;
@@ -10553,9 +10711,10 @@ dwg_ent_viewport_get_circle_zoom(dwg_ent_viewport *vp, int *error)
 
 /// Sets viewport status flags
 void
-dwg_ent_viewport_set_status_flag(dwg_ent_viewport *vp, BITCODE_BL flags, int *error)
+dwg_ent_viewport_set_status_flag(dwg_ent_viewport *restrict vp, BITCODE_BL flags,
+                          int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       vp->status_flag = flags;
@@ -10569,9 +10728,10 @@ dwg_ent_viewport_set_status_flag(dwg_ent_viewport *vp, BITCODE_BL flags, int *er
 
 /// Returns viewport status flag
 BITCODE_BL
-dwg_ent_viewport_get_status_flag(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_status_flag(const dwg_ent_viewport *restrict vp,
+                          int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       return vp->status_flag;
@@ -10586,9 +10746,10 @@ dwg_ent_viewport_get_status_flag(dwg_ent_viewport *vp, int *error)
 
 /// Returns viewport render mode
 char
-dwg_ent_viewport_get_render_mode(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_render_mode(const dwg_ent_viewport *restrict vp,
+                          int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       return vp->render_mode;
@@ -10603,9 +10764,10 @@ dwg_ent_viewport_get_render_mode(dwg_ent_viewport *vp, int *error)
 
 /// Sets viewport render mode
 void
-dwg_ent_viewport_set_render_mode(dwg_ent_viewport *vp, char mode, int *error)
+dwg_ent_viewport_set_render_mode(dwg_ent_viewport *restrict vp, char mode,
+                          int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       vp->render_mode = mode;
@@ -10619,10 +10781,10 @@ dwg_ent_viewport_set_render_mode(dwg_ent_viewport *vp, char mode, int *error)
 
 /// Sets viewport ucs at origin
 void
-dwg_ent_viewport_set_ucs_at_origin(dwg_ent_viewport *vp, unsigned char origin,
-                                   int *error)
+dwg_ent_viewport_set_ucs_at_origin(dwg_ent_viewport *restrict vp, unsigned char origin,
+                                   int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       vp->ucs_at_origin = origin;
@@ -10636,9 +10798,10 @@ dwg_ent_viewport_set_ucs_at_origin(dwg_ent_viewport *vp, unsigned char origin,
 
 /// Returns viewport ucs at origini value
 unsigned char
-dwg_ent_viewport_get_ucs_at_origin(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_ucs_at_origin(const dwg_ent_viewport *restrict vp,
+                          int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       return vp->ucs_at_origin;
@@ -10653,10 +10816,11 @@ dwg_ent_viewport_get_ucs_at_origin(dwg_ent_viewport *vp, int *error)
 
 /// Sets viewport ucs per viewport
 void
-dwg_ent_viewport_set_ucs_per_viewport(dwg_ent_viewport *vp,
-                                      unsigned char viewport, int *error)
+dwg_ent_viewport_set_ucs_per_viewport(dwg_ent_viewport *restrict vp,
+                                      unsigned char viewport,
+                          int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       vp->ucs_per_viewport = viewport;
@@ -10670,9 +10834,10 @@ dwg_ent_viewport_set_ucs_per_viewport(dwg_ent_viewport *vp,
 
 /// Returns viewport ucs per viewport
 unsigned char
-dwg_ent_viewport_get_ucs_per_viewport(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_ucs_per_viewport(const dwg_ent_viewport *restrict vp,
+                          int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       return vp->ucs_per_viewport;
@@ -10687,10 +10852,11 @@ dwg_ent_viewport_get_ucs_per_viewport(dwg_ent_viewport *vp, int *error)
 
 /// Sets viewport view target
 void
-dwg_ent_viewport_set_view_target(dwg_ent_viewport *vp, dwg_point_3d *point,
-                                 int *error)
+dwg_ent_viewport_set_view_target(dwg_ent_viewport *restrict vp,
+                                 const dwg_point_3d *restrict point,
+                                 int *restrict error)
 {
-  if (vp != 0 && point != 0)
+  if (vp && point)
     {
       *error = 0;
       vp->view_target.x = point->x;
@@ -10706,10 +10872,10 @@ dwg_ent_viewport_set_view_target(dwg_ent_viewport *vp, dwg_point_3d *point,
 
 /// Returns viewport view target
 void
-dwg_ent_viewport_get_view_target(dwg_ent_viewport *vp, dwg_point_3d *point,
-                                 int *error)
+dwg_ent_viewport_get_view_target(const dwg_ent_viewport *restrict vp, dwg_point_3d *restrict point,
+                                 int *restrict error)
 {
-  if (vp != 0 && point != 0)
+  if (vp && point)
     {
       *error = 0;
       point->x = vp->view_target.x;
@@ -10725,10 +10891,11 @@ dwg_ent_viewport_get_view_target(dwg_ent_viewport *vp, dwg_point_3d *point,
 
 /// Sets viewport view direction
 void
-dwg_ent_viewport_set_view_direction(dwg_ent_viewport *vp, dwg_point_3d *point,
-                                    int *error)
+dwg_ent_viewport_set_view_direction(dwg_ent_viewport *restrict vp,
+                                    const dwg_point_3d *restrict point,
+                                    int *restrict error)
 {
-  if (vp != 0 && point != 0)
+  if (vp && point)
     {
       *error = 0;
       vp->view_direction.x = point->x;
@@ -10744,10 +10911,10 @@ dwg_ent_viewport_set_view_direction(dwg_ent_viewport *vp, dwg_point_3d *point,
 
 /// Returns viewport view direction
 void
-dwg_ent_viewport_get_view_direction(dwg_ent_viewport *vp, dwg_point_3d *point,
-                                    int *error)
+dwg_ent_viewport_get_view_direction(const dwg_ent_viewport *restrict vp, dwg_point_3d *restrict point,
+                                    int *restrict error)
 {
-  if (vp != 0 && point != 0)
+  if (vp && point)
     {
       *error = 0;
       point->x = vp->view_direction.x;
@@ -10763,13 +10930,14 @@ dwg_ent_viewport_get_view_direction(dwg_ent_viewport *vp, dwg_point_3d *point,
 
 /// Sets view twist angle
 void
-dwg_ent_viewport_set_view_twist_angle(dwg_ent_viewport *vp, BITCODE_BD angle,
-                                      int *error)
+dwg_ent_viewport_set_view_twist(dwg_ent_viewport *restrict vp,
+                          const double angle,
+                                      int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
-      vp->view_twist_angle = angle;
+      vp->view_twist = angle;
     }
   else
     {
@@ -10779,13 +10947,14 @@ dwg_ent_viewport_set_view_twist_angle(dwg_ent_viewport *vp, BITCODE_BD angle,
 }
 
 /// Returns view twist angle
-BITCODE_BD
-dwg_ent_viewport_get_view_twist_angle(dwg_ent_viewport *vp, int *error)
+double
+dwg_ent_viewport_get_view_twist(const dwg_ent_viewport *restrict vp,
+                          int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
-      return vp->view_twist_angle;
+      return vp->view_twist;
     }
   else
     {
@@ -10797,10 +10966,11 @@ dwg_ent_viewport_get_view_twist_angle(dwg_ent_viewport *vp, int *error)
 
 /// Sets viewport view height
 void
-dwg_ent_viewport_set_view_height(dwg_ent_viewport *vp, BITCODE_BD height,
-                                 int *error)
+dwg_ent_viewport_set_view_height(dwg_ent_viewport *restrict vp,
+                          const double height,
+                                 int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       vp->view_height = height;
@@ -10813,10 +10983,11 @@ dwg_ent_viewport_set_view_height(dwg_ent_viewport *vp, BITCODE_BD height,
 }
 
 /// Returns viewport view height
-BITCODE_BD
-dwg_ent_viewport_get_view_height(dwg_ent_viewport *vp, int *error)
+double
+dwg_ent_viewport_get_view_height(const dwg_ent_viewport *restrict vp,
+                          int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       return vp->view_height;
@@ -10831,10 +11002,11 @@ dwg_ent_viewport_get_view_height(dwg_ent_viewport *vp, int *error)
 
 /// Sets viewport lens length
 void
-dwg_ent_viewport_set_lens_length(dwg_ent_viewport *vp, BITCODE_BD length,
-                                 int *error)
+dwg_ent_viewport_set_lens_length(dwg_ent_viewport *restrict vp,
+                          const double length,
+                                 int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       vp->lens_length = length;
@@ -10847,10 +11019,11 @@ dwg_ent_viewport_set_lens_length(dwg_ent_viewport *vp, BITCODE_BD length,
 }
 
 /// Returns lens length
-BITCODE_BD
-dwg_ent_viewport_get_lens_length(dwg_ent_viewport *vp, int *error)
+double
+dwg_ent_viewport_get_lens_length(const dwg_ent_viewport *restrict vp,
+                          int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       return vp->lens_length;
@@ -10865,10 +11038,11 @@ dwg_ent_viewport_get_lens_length(dwg_ent_viewport *vp, int *error)
 
 /// Sets viewport front clip z value
 void
-dwg_ent_viewport_set_front_clip_z(dwg_ent_viewport *vp, BITCODE_BD front_z,
-                                  int *error)
+dwg_ent_viewport_set_front_clip_z(dwg_ent_viewport *restrict vp,
+                          const double front_z,
+                                  int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       vp->front_clip_z = front_z;
@@ -10881,10 +11055,11 @@ dwg_ent_viewport_set_front_clip_z(dwg_ent_viewport *vp, BITCODE_BD front_z,
 }
 
 /// Returns viewport front clip z value
-BITCODE_BD
-dwg_ent_viewport_get_front_clip_z(dwg_ent_viewport *vp, int *error)
+double
+dwg_ent_viewport_get_front_clip_z(const dwg_ent_viewport *restrict vp,
+                          int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       return vp->front_clip_z;
@@ -10899,10 +11074,11 @@ dwg_ent_viewport_get_front_clip_z(dwg_ent_viewport *vp, int *error)
 
 /// Sets viewport back clip z value
 void
-dwg_ent_viewport_set_back_clip_z(dwg_ent_viewport *vp, BITCODE_BD back_z,
-                                 int *error)
+dwg_ent_viewport_set_back_clip_z(dwg_ent_viewport *restrict vp,
+                          const double back_z,
+                                 int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       vp->back_clip_z = back_z;
@@ -10915,10 +11091,11 @@ dwg_ent_viewport_set_back_clip_z(dwg_ent_viewport *vp, BITCODE_BD back_z,
 }
 
 /// Returns viewport back clip z value
-BITCODE_BD
-dwg_ent_viewport_get_back_clip_z(dwg_ent_viewport *vp, int *error)
+double
+dwg_ent_viewport_get_back_clip_z(const dwg_ent_viewport *restrict vp,
+                          int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       return vp->back_clip_z;
@@ -10933,9 +11110,11 @@ dwg_ent_viewport_get_back_clip_z(dwg_ent_viewport *vp, int *error)
 
 /// Sets viewport snap angle
 void
-dwg_ent_viewport_set_snap_angle(dwg_ent_viewport *vp, BITCODE_BD angle, int *error)
+dwg_ent_viewport_set_snap_angle(dwg_ent_viewport *restrict vp,
+                          const double angle,
+                          int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       vp->snap_angle = angle;
@@ -10948,10 +11127,11 @@ dwg_ent_viewport_set_snap_angle(dwg_ent_viewport *vp, BITCODE_BD angle, int *err
 }
 
 /// Returns viewport snap angle
-BITCODE_BD
-dwg_ent_viewport_get_snap_angle(dwg_ent_viewport *vp, int *error)
+double
+dwg_ent_viewport_get_snap_angle(const dwg_ent_viewport *restrict vp,
+                          int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       return vp->snap_angle;
@@ -10966,10 +11146,10 @@ dwg_ent_viewport_get_snap_angle(dwg_ent_viewport *vp, int *error)
 
 /// Returns viewport view center
 void
-dwg_ent_viewport_get_view_center(dwg_ent_viewport *vp, dwg_point_2d *point,
-                                 int *error)
+dwg_ent_viewport_get_view_center(const dwg_ent_viewport *restrict vp, dwg_point_2d *restrict point,
+                                 int *restrict error)
 {
-  if (vp != 0 && point != 0)
+  if (vp && point)
     {
       *error = 0;
       point->x = vp->view_center.x;
@@ -10984,10 +11164,11 @@ dwg_ent_viewport_get_view_center(dwg_ent_viewport *vp, dwg_point_2d *point,
 
 /// Sets viewport view center
 void
-dwg_ent_viewport_set_view_center(dwg_ent_viewport *vp, dwg_point_2d *point,
-                                 int *error)
+dwg_ent_viewport_set_view_center(dwg_ent_viewport *restrict vp,
+                                 const dwg_point_2d *restrict point,
+                                 int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       vp->view_center.x = point->x;
@@ -11002,10 +11183,10 @@ dwg_ent_viewport_set_view_center(dwg_ent_viewport *vp, dwg_point_2d *point,
 
 /// Returns grid spacing
 void
-dwg_ent_viewport_get_grid_spacing(dwg_ent_viewport *vp, dwg_point_2d *point,
-                                  int *error)
+dwg_ent_viewport_get_grid_spacing(const dwg_ent_viewport *restrict vp, dwg_point_2d *restrict point,
+                                  int *restrict error)
 {
-  if (vp != 0 && point != 0)
+  if (vp && point)
     {
       *error = 0;
       point->x = vp->grid_spacing.x;
@@ -11020,10 +11201,11 @@ dwg_ent_viewport_get_grid_spacing(dwg_ent_viewport *vp, dwg_point_2d *point,
 
 /// Sets grid spacing
 void
-dwg_ent_viewport_set_grid_spacing(dwg_ent_viewport *vp, dwg_point_2d *point,
-                                  int *error)
+dwg_ent_viewport_set_grid_spacing(dwg_ent_viewport *restrict vp,
+                                  const dwg_point_2d *restrict point,
+                                  int *restrict error)
 {
-  if (vp != 0 && point != 0)
+  if (vp && point)
     {
       *error = 0;
       vp->grid_spacing.x = point->x;
@@ -11038,10 +11220,10 @@ dwg_ent_viewport_set_grid_spacing(dwg_ent_viewport *vp, dwg_point_2d *point,
 
 /// Returns viewport snap base
 void
-dwg_ent_viewport_get_snap_base(dwg_ent_viewport *vp, dwg_point_2d *point,
-                               int *error)
+dwg_ent_viewport_get_snap_base(const dwg_ent_viewport *restrict vp, dwg_point_2d *restrict point,
+                               int *restrict error)
 {
-  if (vp != 0 && point != 0)
+  if (vp && point)
     {
       *error = 0;
       point->x = vp->snap_base.x;
@@ -11056,10 +11238,11 @@ dwg_ent_viewport_get_snap_base(dwg_ent_viewport *vp, dwg_point_2d *point,
 
 /// Sets viewport snap base
 void
-dwg_ent_viewport_set_snap_base(dwg_ent_viewport *vp, dwg_point_2d *point,
-                               int *error)
+dwg_ent_viewport_set_snap_base(dwg_ent_viewport *restrict vp,
+                               const dwg_point_2d *restrict point,
+                               int *restrict error)
 {
-  if (vp != 0 && point != 0)
+  if (vp && point)
     {
       *error = 0;
       vp->snap_base.x = point->x;
@@ -11074,10 +11257,10 @@ dwg_ent_viewport_set_snap_base(dwg_ent_viewport *vp, dwg_point_2d *point,
 
 /// Returns viewport snap spacing
 void
-dwg_ent_viewport_get_snap_spacing(dwg_ent_viewport *vp, dwg_point_2d *point,
-                                  int *error)
+dwg_ent_viewport_get_snap_spacing(const dwg_ent_viewport *restrict vp, dwg_point_2d *restrict point,
+                                  int *restrict error)
 {
-  if (vp != 0 && point != 0)
+  if (vp && point)
     {
       *error = 0;
       point->x = vp->snap_spacing.x;
@@ -11092,10 +11275,11 @@ dwg_ent_viewport_get_snap_spacing(dwg_ent_viewport *vp, dwg_point_2d *point,
 
 /// Sets viewport snap spacing
 void
-dwg_ent_viewport_set_snap_spacing(dwg_ent_viewport *vp, dwg_point_2d *point,
-                                  int *error)
+dwg_ent_viewport_set_snap_spacing(dwg_ent_viewport *restrict vp,
+                                  const dwg_point_2d *restrict point,
+                                  int *restrict error)
 {
-  if (vp != 0 && point != 0)
+  if (vp && point)
     {
       *error = 0;
       vp->snap_spacing.x = point->x;
@@ -11110,10 +11294,11 @@ dwg_ent_viewport_set_snap_spacing(dwg_ent_viewport *vp, dwg_point_2d *point,
 
 /// Sets viewport ucs origin
 void
-dwg_ent_viewport_set_ucs_origin(dwg_ent_viewport *vp, dwg_point_3d *point,
-                                int *error)
+dwg_ent_viewport_set_ucs_origin(dwg_ent_viewport *restrict vp,
+                                const dwg_point_3d *restrict point,
+                                int *restrict error)
 {
-  if (vp != 0 && point != 0)
+  if (vp && point)
     {
       *error = 0;
       vp->ucs_origin.x = point->x;
@@ -11129,10 +11314,11 @@ dwg_ent_viewport_set_ucs_origin(dwg_ent_viewport *vp, dwg_point_3d *point,
 
 /// Returns viewport ucs origin
 void
-dwg_ent_viewport_get_ucs_origin(dwg_ent_viewport *vp, dwg_point_3d *point,
-                                int *error)
+dwg_ent_viewport_get_ucs_origin(const dwg_ent_viewport *restrict vp,
+                                dwg_point_3d *restrict point,
+                                int *restrict error)
 {
-  if (vp != 0 && point != 0)
+  if (vp && point)
     {
       *error = 0;
       point->x = vp->ucs_origin.x;
@@ -11148,10 +11334,11 @@ dwg_ent_viewport_get_ucs_origin(dwg_ent_viewport *vp, dwg_point_3d *point,
 
 /// Sets viewport ucs X axis
 void
-dwg_ent_viewport_set_ucs_x_axis(dwg_ent_viewport *vp, dwg_point_3d *point,
-                                int *error)
+dwg_ent_viewport_set_ucs_x_axis(dwg_ent_viewport *restrict vp,
+                                const dwg_point_3d *restrict point,
+                                int *restrict error)
 {
-  if (vp != 0 && point != 0)
+  if (vp && point)
     {
       *error = 0;
       vp->ucs_x_axis.x = point->x;
@@ -11167,10 +11354,11 @@ dwg_ent_viewport_set_ucs_x_axis(dwg_ent_viewport *vp, dwg_point_3d *point,
 
 /// Returns viewport ucs X axis
 void
-dwg_ent_viewport_get_ucs_x_axis(dwg_ent_viewport *vp, dwg_point_3d *point,
-                                int *error)
+dwg_ent_viewport_get_ucs_x_axis(const dwg_ent_viewport *restrict vp,
+                                dwg_point_3d *restrict point,
+                                int *restrict error)
 {
-  if (vp != 0 && point != 0)
+  if (vp && point)
     {
       *error = 0;
       point->x = vp->ucs_x_axis.x;
@@ -11186,10 +11374,11 @@ dwg_ent_viewport_get_ucs_x_axis(dwg_ent_viewport *vp, dwg_point_3d *point,
 
 /// Sets viewport ucs y axis
 void
-dwg_ent_viewport_set_ucs_y_axis(dwg_ent_viewport *vp, dwg_point_3d *point,
-                                int *error)
+dwg_ent_viewport_set_ucs_y_axis(dwg_ent_viewport *restrict vp,
+                                const dwg_point_3d *restrict point,
+                                int *restrict error)
 {
-  if (vp != 0 && point != 0)
+  if (vp && point)
     {
       *error = 0;
       vp->ucs_y_axis.x = point->x;
@@ -11205,10 +11394,11 @@ dwg_ent_viewport_set_ucs_y_axis(dwg_ent_viewport *vp, dwg_point_3d *point,
 
 /// Returns viewport ucs y axis
 void
-dwg_ent_viewport_get_ucs_y_axis(dwg_ent_viewport *vp, dwg_point_3d *point,
-                                int *error)
+dwg_ent_viewport_get_ucs_y_axis(const dwg_ent_viewport *restrict vp,
+                                dwg_point_3d *restrict point,
+                                int *restrict error)
 {
-  if (vp != 0 && point != 0)
+  if (vp && point)
     {
       *error = 0;
       point->x = vp->ucs_y_axis.x;
@@ -11224,10 +11414,11 @@ dwg_ent_viewport_get_ucs_y_axis(dwg_ent_viewport *vp, dwg_point_3d *point,
 
 /// Sets viewport ucs elevation
 void
-dwg_ent_viewport_set_ucs_elevation(dwg_ent_viewport *vp, BITCODE_BD elevation,
-                                   int *error)
+dwg_ent_viewport_set_ucs_elevation(dwg_ent_viewport *restrict vp,
+                                   const double elevation,
+                                   int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       vp->ucs_elevation = elevation;
@@ -11240,10 +11431,11 @@ dwg_ent_viewport_set_ucs_elevation(dwg_ent_viewport *vp, BITCODE_BD elevation,
 }
 
 /// Returns ucs elevation
-BITCODE_BD
-dwg_ent_viewport_get_ucs_elevation(dwg_ent_viewport *vp, int *error)
+double
+dwg_ent_viewport_get_ucs_elevation(const dwg_ent_viewport *restrict vp,
+                                   int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       return vp->ucs_elevation;
@@ -11258,10 +11450,11 @@ dwg_ent_viewport_get_ucs_elevation(dwg_ent_viewport *vp, int *error)
 
 /// Sets UCS ortho view type
 void
-dwg_ent_viewport_set_ucs_ortho_view_type(dwg_ent_viewport *vp,
-                                         BITCODE_BS type, int *error)
+dwg_ent_viewport_set_ucs_ortho_view_type(dwg_ent_viewport *restrict vp,
+                                         const BITCODE_BS type,
+                                         int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       vp->ucs_ortho_view_type = type;
@@ -11275,9 +11468,10 @@ dwg_ent_viewport_set_ucs_ortho_view_type(dwg_ent_viewport *vp,
 
 /// Returns UCS ortho view type
 BITCODE_BS
-dwg_ent_viewport_get_ucs_ortho_view_type(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_ucs_ortho_view_type(const dwg_ent_viewport *restrict vp,
+                          int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       return vp->ucs_ortho_view_type;
@@ -11292,10 +11486,11 @@ dwg_ent_viewport_get_ucs_ortho_view_type(dwg_ent_viewport *vp, int *error)
 
 /// Sets shade plot mode value
 void
-dwg_ent_viewport_set_shadeplot_mode(dwg_ent_viewport *vp,
-                                    BITCODE_BS shadeplot, int *error)
+dwg_ent_viewport_set_shadeplot_mode(dwg_ent_viewport *restrict vp,
+                                    const BITCODE_BS shadeplot,
+                          int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       vp->shadeplot_mode = shadeplot;
@@ -11309,9 +11504,10 @@ dwg_ent_viewport_set_shadeplot_mode(dwg_ent_viewport *vp,
 
 /// Returns shade plot mode value
 BITCODE_BS
-dwg_ent_viewport_get_shadeplot_mode(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_shadeplot_mode(const dwg_ent_viewport *restrict vp,
+                          int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       return vp->shadeplot_mode;
@@ -11326,10 +11522,11 @@ dwg_ent_viewport_get_shadeplot_mode(dwg_ent_viewport *vp, int *error)
 
 /// Sets viewport default lightning usage
 void
-dwg_ent_viewport_set_use_default_lights(dwg_ent_viewport *vp,
-                                    unsigned char lights, int *error)
+dwg_ent_viewport_set_use_default_lights(dwg_ent_viewport *restrict vp,
+                                        const unsigned char lights,
+                                        int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       vp->use_default_lights = lights;
@@ -11343,9 +11540,10 @@ dwg_ent_viewport_set_use_default_lights(dwg_ent_viewport *vp,
 
 /// Returns viewport default lightning usage
 unsigned char
-dwg_ent_viewport_get_use_default_lights(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_use_default_lights(const dwg_ent_viewport *restrict vp,
+                          int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       return vp->use_default_lights;
@@ -11360,10 +11558,11 @@ dwg_ent_viewport_get_use_default_lights(dwg_ent_viewport *vp, int *error)
 
 /// Sets viewport default lightning type
 void
-dwg_ent_viewport_set_default_lighting_type(dwg_ent_viewport *vp, char type,
-                                       int *error)
+dwg_ent_viewport_set_default_lighting_type(dwg_ent_viewport *restrict vp,
+                                           const char type,
+                                           int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       vp->default_lighting_type = type;
@@ -11377,9 +11576,10 @@ dwg_ent_viewport_set_default_lighting_type(dwg_ent_viewport *vp, char type,
 
 /// Returns viewport default lightning type
 char
-dwg_ent_viewport_get_default_lighting_type(dwg_ent_viewport *vp, int *error)
+dwg_ent_viewport_get_default_lighting_type(const dwg_ent_viewport *restrict vp,
+                                           int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       return vp->default_lighting_type;
@@ -11394,10 +11594,11 @@ dwg_ent_viewport_get_default_lighting_type(dwg_ent_viewport *vp, int *error)
 
 /// Sets viewport brightness
 void
-dwg_ent_viewport_set_brightness(dwg_ent_viewport *vp, BITCODE_BD brightness,
-                                int *error)
+dwg_ent_viewport_set_brightness(dwg_ent_viewport *restrict vp,
+                                const double brightness,
+                                int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       vp->brightness = brightness;
@@ -11410,10 +11611,11 @@ dwg_ent_viewport_set_brightness(dwg_ent_viewport *vp, BITCODE_BD brightness,
 }
 
 /// Returns viewport brightness
-BITCODE_BD
-dwg_ent_viewport_get_brightness(dwg_ent_viewport *vp, int *error)
+double
+dwg_ent_viewport_get_brightness(const dwg_ent_viewport *restrict vp,
+                                int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       return vp->brightness;
@@ -11428,10 +11630,11 @@ dwg_ent_viewport_get_brightness(dwg_ent_viewport *vp, int *error)
 
 /// sets viewport contrast
 void
-dwg_ent_viewport_set_contrast(dwg_ent_viewport *vp, BITCODE_BD contrast,
-                              int *error)
+dwg_ent_viewport_set_contrast(dwg_ent_viewport *restrict vp,
+                              const double contrast,
+                              int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       vp->contrast = contrast;
@@ -11444,10 +11647,11 @@ dwg_ent_viewport_set_contrast(dwg_ent_viewport *vp, BITCODE_BD contrast,
 }
 
 /// Returns viewport contrast
-BITCODE_BD
-dwg_ent_viewport_get_contrast(dwg_ent_viewport *vp, int *error)
+double
+dwg_ent_viewport_get_contrast(const dwg_ent_viewport *restrict vp,
+                          int *restrict error)
 {
-  if (vp != 0)
+  if (vp)
     {
       *error = 0;
       return vp->contrast;
@@ -11466,9 +11670,10 @@ dwg_ent_viewport_get_contrast(dwg_ent_viewport *vp, int *error)
 
 /// Returns polyline pface num verts
 BITCODE_BS
-dwg_ent_polyline_pface_get_numverts(dwg_ent_polyline_pface *pface, int *error)
+dwg_ent_polyline_pface_get_numpoints(const dwg_ent_polyline_pface *restrict pface,
+                                     int *restrict error)
 {
-  if (pface != 0)
+  if (pface)
     {
       *error = 0;
       return pface->numverts;
@@ -11481,63 +11686,12 @@ dwg_ent_polyline_pface_get_numverts(dwg_ent_polyline_pface *pface, int *error)
     }
 }
 
-/// Sets num verts
-void
-dwg_ent_polyline_pface_set_numverts(dwg_ent_polyline_pface *pface,
-                                    BITCODE_BS numverts, int *error)
-{
-  if (pface != 0)
-    {
-      *error = 0;
-      pface->numverts = numverts;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      *error = 1;
-    }
-}
-
-/// Returns polyline pface owned object count
-BITCODE_BL
-dwg_ent_polyline_pface_get_owned_obj_count(dwg_ent_polyline_pface *pface,
-                                           int *error)
-{
-  if (pface != 0)
-    {
-      *error = 0;
-      return pface->owned_obj_count;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      *error = 1;
-      return 0L;
-    }
-}
-
-/// Sets polyline pfadce owned object count
-void
-dwg_ent_polyline_pface_set_owned_obj_count(dwg_ent_polyline_pface *pface,
-                                           BITCODE_BL owned_obj_count, int *error)
-{
-  if (pface != 0)
-    {
-      *error = 0;
-      pface->owned_obj_count = owned_obj_count;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      *error = 1;
-    }
-}
-
 /// Returns polyline pface numfaces
 BITCODE_BS
-dwg_ent_polyline_pface_get_numfaces(dwg_ent_polyline_pface *pface, int *error)
+dwg_ent_polyline_pface_get_numfaces(const dwg_ent_polyline_pface *restrict pface,
+                                    int *restrict error)
 {
-  if (pface != 0)
+  if (pface)
     {
       *error = 0;
       return pface->numfaces;
@@ -11550,20 +11704,21 @@ dwg_ent_polyline_pface_get_numfaces(dwg_ent_polyline_pface *pface, int *error)
     }
 }
 
-/// Sets polyline pface numfaces
-void
-dwg_ent_polyline_pface_set_numfaces(dwg_ent_polyline_pface *pface,
-                                    BITCODE_BS numfaces, int *error)
+dwg_point_3d *
+dwg_obj_polyline_pface_get_points(const dwg_object *restrict obj,
+                          int *restrict error)
 {
-  if (pface != 0)
+  if (obj && obj->type == DWG_TYPE_POLYLINE_PFACE)
     {
       *error = 0;
-      pface->numfaces = numfaces;
+      LOG_ERROR("%s: nyi", __FUNCTION__);
+      return NULL; //TODO
     }
   else
     {
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or wrong arg", __FUNCTION__)
       *error = 1;
+      return NULL;
     }
 }
 
@@ -11573,9 +11728,10 @@ dwg_ent_polyline_pface_set_numfaces(dwg_ent_polyline_pface *pface,
 
 /// Returns polyline mesh flags
 BITCODE_BS
-dwg_ent_polyline_mesh_get_flag(dwg_ent_polyline_mesh *mesh, int *error)
+dwg_ent_polyline_mesh_get_flag(const dwg_ent_polyline_mesh *restrict mesh,
+                          int *restrict error)
 {
-  if (mesh != 0)
+  if (mesh)
     {
       *error = 0;
       return mesh->flag;
@@ -11590,10 +11746,11 @@ dwg_ent_polyline_mesh_get_flag(dwg_ent_polyline_mesh *mesh, int *error)
 
 /// Sets polyline mesh flags
 void
-dwg_ent_polyline_mesh_set_flag(dwg_ent_polyline_mesh *mesh,
-                                BITCODE_BS flags, int *error)
+dwg_ent_polyline_mesh_set_flag(dwg_ent_polyline_mesh *restrict mesh,
+                               const BITCODE_BS flags,
+                          int *restrict error)
 {
-  if (mesh != 0)
+  if (mesh)
     {
       *error = 0;
       mesh->flag = flags;
@@ -11607,9 +11764,10 @@ dwg_ent_polyline_mesh_set_flag(dwg_ent_polyline_mesh *mesh,
 
 /// Returns polyline mesh curve type
 BITCODE_BS
-dwg_ent_polyline_mesh_get_curve_type(dwg_ent_polyline_mesh *mesh, int *error)
+dwg_ent_polyline_mesh_get_curve_type(const dwg_ent_polyline_mesh *restrict mesh,
+                          int *restrict error)
 {
-  if (mesh != 0)
+  if (mesh)
     {
       *error = 0;
       return mesh->curve_type;
@@ -11624,10 +11782,11 @@ dwg_ent_polyline_mesh_get_curve_type(dwg_ent_polyline_mesh *mesh, int *error)
 
 /// Sets polyline mesh curve type
 void
-dwg_ent_polyline_mesh_set_curve_type(dwg_ent_polyline_mesh *mesh,
-                                     BITCODE_BS curve_type, int *error)
+dwg_ent_polyline_mesh_set_curve_type(dwg_ent_polyline_mesh *restrict mesh,
+                                     BITCODE_BS curve_type,
+                          int *restrict error)
 {
-  if (mesh != 0)
+  if (mesh)
     {
       *error = 0;
       mesh->curve_type = curve_type;
@@ -11641,13 +11800,13 @@ dwg_ent_polyline_mesh_set_curve_type(dwg_ent_polyline_mesh *mesh,
 
 /// Returns polyline mesh n vert count
 BITCODE_BS
-dwg_ent_polyline_mesh_get_m_vert_count(dwg_ent_polyline_mesh *mesh,
-                                       int *error)
+dwg_ent_polyline_mesh_get_num_m_verts(const dwg_ent_polyline_mesh *restrict mesh,
+                                       int *restrict error)
 {
-  if (mesh != 0)
+  if (mesh)
     {
       *error = 0;
-      return mesh->m_vert_count;
+      return mesh->num_m_verts;
     }
   else
     {
@@ -11657,63 +11816,32 @@ dwg_ent_polyline_mesh_get_m_vert_count(dwg_ent_polyline_mesh *mesh,
     }
 }
 
-/// Sets polyline mesh M vert count
-void
-dwg_ent_polyline_mesh_set_m_vert_count(dwg_ent_polyline_mesh *mesh,
-                                       BITCODE_BS m_vert_count, int *error)
-{
-  if (mesh != 0)
-    {
-      *error = 0;
-      mesh->m_vert_count = m_vert_count;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      *error = 1;
-    }
-}
+/// TODO: dwg_ent_polyline_mesh_add_{m,n}_vert, dwg_ent_polyline_mesh_delete_{m,n}_vert
 
 /// Returns polyline mesh n vert count
 BITCODE_BS
-dwg_ent_polyline_mesh_get_n_vert_count(dwg_ent_polyline_mesh *mesh,
-                                       int *error)
+dwg_ent_polyline_mesh_get_num_n_verts(const dwg_ent_polyline_mesh *restrict mesh,
+                                       int *restrict error)
 {
-  if (mesh != 0)
+  if (mesh)
     {
       *error = 0;
-      return mesh->n_vert_count;
+      return mesh->num_n_verts;
     }
   else
     {
       LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
       return 0;
-    }
-}
-
-/// Sets polyline mesh n vert count
-void
-dwg_ent_polyline_mesh_set_n_vert_count(dwg_ent_polyline_mesh *mesh,
-                                       BITCODE_BS n_vert_count, int *error)
-{
-  if (mesh != 0)
-    {
-      *error = 0;
-      mesh->n_vert_count = n_vert_count;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      *error = 1;
     }
 }
 
 /// Returns polyline mesh n density
 BITCODE_BS
-dwg_ent_polyline_mesh_get_m_density(dwg_ent_polyline_mesh *mesh, int *error)
+dwg_ent_polyline_mesh_get_m_density(const dwg_ent_polyline_mesh *restrict mesh,
+                          int *restrict error)
 {
-  if (mesh != 0)
+  if (mesh)
     {
       *error = 0;
       return mesh->m_density;
@@ -11728,10 +11856,11 @@ dwg_ent_polyline_mesh_get_m_density(dwg_ent_polyline_mesh *mesh, int *error)
 
 /// Sets polyline mesh M density
 void
-dwg_ent_polyline_mesh_set_m_density(dwg_ent_polyline_mesh *mesh,
-                                    BITCODE_BS m_density, int *error)
+dwg_ent_polyline_mesh_set_m_density(dwg_ent_polyline_mesh *restrict mesh,
+                                    const BITCODE_BS m_density,
+                          int *restrict error)
 {
-  if (mesh != 0)
+  if (mesh)
     {
       *error = 0;
       mesh->m_density = m_density;
@@ -11745,9 +11874,10 @@ dwg_ent_polyline_mesh_set_m_density(dwg_ent_polyline_mesh *mesh,
 
 /// Returns polyline mesh n density
 BITCODE_BS
-dwg_ent_polyline_mesh_get_n_density(dwg_ent_polyline_mesh *mesh, int *error)
+dwg_ent_polyline_mesh_get_n_density(const dwg_ent_polyline_mesh *restrict mesh,
+                          int *restrict error)
 {
-  if (mesh != 0)
+  if (mesh)
     {
       *error = 0;
       return mesh->n_density;
@@ -11762,10 +11892,11 @@ dwg_ent_polyline_mesh_get_n_density(dwg_ent_polyline_mesh *mesh, int *error)
 
 /// Sets polyline mesh n density
 void
-dwg_ent_polyline_mesh_set_n_density(dwg_ent_polyline_mesh *mesh,
-                                    BITCODE_BS n_density, int *error)
+dwg_ent_polyline_mesh_set_n_density(dwg_ent_polyline_mesh *restrict mesh,
+                                    const BITCODE_BS n_density,
+                          int *restrict error)
 {
-  if (mesh != 0)
+  if (mesh)
     {
       *error = 0;
       mesh->n_density = n_density;
@@ -11779,13 +11910,13 @@ dwg_ent_polyline_mesh_set_n_density(dwg_ent_polyline_mesh *mesh,
 
 /// Returns polyline mesh owned object count
 BITCODE_BL
-dwg_ent_polyline_mesh_get_owned_obj_count(dwg_ent_polyline_mesh *mesh,
-                                          int *error)
+dwg_ent_polyline_mesh_get_num_owned(const dwg_ent_polyline_mesh *restrict mesh,
+                                    int *restrict error)
 {
-  if (mesh != 0)
+  if (mesh)
     {
       *error = 0;
-      return mesh->owned_obj_count;
+      return mesh->num_owned;
     }
   else
     {
@@ -11795,38 +11926,26 @@ dwg_ent_polyline_mesh_get_owned_obj_count(dwg_ent_polyline_mesh *mesh,
     }
 }
 
-/// Sets polyline mesh owned object count
-void
-dwg_ent_polyline_mesh_set_owned_obj_count(dwg_ent_polyline_mesh *mesh,
-                                          BITCODE_BL owned_obj_count, int *error)
-{
-  if (mesh != 0)
-    {
-      *error = 0;
-      mesh->owned_obj_count = owned_obj_count;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      *error = 1;
-    }
-}
-
 /*******************************************************************
 *                 FUNCTIONS FOR POLYLINE_2D ENTITY                  *
 ********************************************************************/
 
-/// Returns polyline 2d extrusion
+/** Returns the _dwg_entity_POLYLINE_2D::extrusion vector, DXF 210.
+\param[in]  pline2d dwg_ent_polyline_2d*
+\param[out] vector  dwg_point_3d*
+\param[out] error   int*, is set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_polyline_2d_get_extrusion(dwg_ent_polyline_2d *line2d,
-                                  dwg_point_3d *point, int *error)
+dwg_ent_polyline_2d_get_extrusion(const dwg_ent_polyline_2d *restrict pline2d,
+                                  dwg_point_3d *restrict vector,
+                                  int *restrict error)
 {
-  if (line2d != 0 && point != 0)
+  if (pline2d && vector)
     {
       *error = 0;
-      point->x = line2d->extrusion.x;
-      point->y = line2d->extrusion.y;
-      point->z = line2d->extrusion.z;
+      vector->x = pline2d->extrusion.x;
+      vector->y = pline2d->extrusion.y;
+      vector->z = pline2d->extrusion.z;
   }
   else
     {
@@ -11835,17 +11954,22 @@ dwg_ent_polyline_2d_get_extrusion(dwg_ent_polyline_2d *line2d,
     }
 }
 
-/// Sets polyline extrusion
+/** Sets the _dwg_entity_POLYLINE_2D::extrusion vector, DXF 210.
+\param[out] pline2d dwg_ent_polyline_2d*
+\param[in]  vector  dwg_point_3d*
+\param[out] error   int*, is set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_polyline_2d_set_extrusion(dwg_ent_polyline_2d *line2d,
-                                  dwg_point_3d *point, int *error)
+dwg_ent_polyline_2d_set_extrusion(dwg_ent_polyline_2d *restrict pline2d,
+                                  const dwg_point_3d *restrict vector,
+                                  int *restrict error)
 {
-  if (line2d != 0 && point != 0)
+  if (pline2d && vector)
     {
       *error = 0;
-      line2d->extrusion.x = point->x;
-      line2d->extrusion.y = point->y;
-      line2d->extrusion.z = point->z;
+      pline2d->extrusion.x = vector->x;
+      pline2d->extrusion.y = vector->y;
+      pline2d->extrusion.z = vector->z;
   }
   else
     {
@@ -11854,14 +11978,18 @@ dwg_ent_polyline_2d_set_extrusion(dwg_ent_polyline_2d *line2d,
     }
 }
 
-/// Returns polyline 2d start width
-BITCODE_BD
-dwg_ent_polyline_2d_get_start_width(dwg_ent_polyline_2d *line2d, int *error)
+/** Returns the _dwg_entity_POLYLINE_2D::start_width, DXF 40.
+\param[in]  pline2d dwg_ent_polyline_2d*
+\param[out] error   int*, is set to 0 for ok, 1 on error
+*/
+double
+dwg_ent_polyline_2d_get_start_width(const dwg_ent_polyline_2d *restrict pline2d,
+                                    int *restrict error)
 {
-  if (line2d != 0)
+  if (pline2d)
     {
       *error = 0;
-      return line2d->start_width;
+      return pline2d->start_width;
     }
   else
     {
@@ -11871,15 +11999,20 @@ dwg_ent_polyline_2d_get_start_width(dwg_ent_polyline_2d *line2d, int *error)
     }
 }
 
-/// Sets polyline 2d start width
+/** Sets the _dwg_entity_POLYLINE_2D::start_width, DXF 40.
+\param[out] pline2d     dwg_ent_polyline_2d*
+\param[in]  start_width double
+\param[out] error       int*, is set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_polyline_2d_set_start_width(dwg_ent_polyline_2d *line2d,
-                                    double start_width, int *error)
+dwg_ent_polyline_2d_set_start_width(dwg_ent_polyline_2d *restrict pline2d,
+                                    const double start_width,
+                                    int *restrict error)
 {
-  if (line2d != 0)
+  if (pline2d)
     {
       *error = 0;
-      line2d->start_width = start_width;
+      pline2d->start_width = start_width;
     }
   else
     {
@@ -11889,13 +12022,14 @@ dwg_ent_polyline_2d_set_start_width(dwg_ent_polyline_2d *line2d,
 }
 
 /// Returns polyline 2d end width
-BITCODE_BD
-dwg_ent_polyline_2d_get_end_width(dwg_ent_polyline_2d *line2d, int *error)
+double
+dwg_ent_polyline_2d_get_end_width(const dwg_ent_polyline_2d *restrict pline2d,
+                                  int *restrict error)
 {
-  if (line2d != 0)
+  if (pline2d)
     {
       *error = 0;
-      return line2d->end_width;
+      return pline2d->end_width;
     }
   else
     {
@@ -11907,13 +12041,14 @@ dwg_ent_polyline_2d_get_end_width(dwg_ent_polyline_2d *line2d, int *error)
 
 /// Sets polyline 2d end width
 void
-dwg_ent_polyline_2d_set_end_width(dwg_ent_polyline_2d *line2d,
-                                  double end_width, int *error)
+dwg_ent_polyline_2d_set_end_width(dwg_ent_polyline_2d *restrict pline2d,
+                                  const double end_width,
+                                  int *restrict error)
 {
-  if (line2d != 0)
+  if (pline2d)
     {
       *error = 0;
-      line2d->end_width = end_width;
+      pline2d->end_width = end_width;
     }
   else
     {
@@ -11923,13 +12058,14 @@ dwg_ent_polyline_2d_set_end_width(dwg_ent_polyline_2d *line2d,
 }
 
 /// Returns polyline 2d thickness
-BITCODE_BD
-dwg_ent_polyline_2d_get_thickness(dwg_ent_polyline_2d *line2d, int *error)
+double
+dwg_ent_polyline_2d_get_thickness(const dwg_ent_polyline_2d *restrict pline2d,
+                                  int *restrict error)
 {
-  if (line2d != 0)
+  if (pline2d)
     {
       *error = 0;
-      return line2d->thickness;
+      return pline2d->thickness;
     }
   else
     {
@@ -11941,13 +12077,14 @@ dwg_ent_polyline_2d_get_thickness(dwg_ent_polyline_2d *line2d, int *error)
 
 /// Sets polyline 2d thickness
 void
-dwg_ent_polyline_2d_set_thickness(dwg_ent_polyline_2d *line2d,
-                                  double thickness, int *error)
+dwg_ent_polyline_2d_set_thickness(dwg_ent_polyline_2d *restrict pline2d,
+                                  const double thickness,
+                                  int *restrict error)
 {
-  if (line2d != 0)
+  if (pline2d)
     {
       *error = 0;
-      line2d->thickness = thickness;
+      pline2d->thickness = thickness;
     }
   else
     {
@@ -11957,13 +12094,14 @@ dwg_ent_polyline_2d_set_thickness(dwg_ent_polyline_2d *line2d,
 }
 
 /// Returns polyline 2d elevation
-BITCODE_BD
-dwg_ent_polyline_2d_get_elevation(dwg_ent_polyline_2d *line2d, int *error)
+double
+dwg_ent_polyline_2d_get_elevation(const dwg_ent_polyline_2d *restrict pline2d,
+                                  int *restrict error)
 {
-  if (line2d != 0)
+  if (pline2d)
     {
       *error = 0;
-      return line2d->elevation;
+      return pline2d->elevation;
     }
   else
     {
@@ -11975,13 +12113,14 @@ dwg_ent_polyline_2d_get_elevation(dwg_ent_polyline_2d *line2d, int *error)
 
 /// Sets polyline 2d elevation
 void
-dwg_ent_polyline_2d_set_elevation(dwg_ent_polyline_2d *line2d,
-                                  double elevation, int *error)
+dwg_ent_polyline_2d_set_elevation(dwg_ent_polyline_2d *restrict pline2d,
+                                  const double elevation,
+                                  int *restrict error)
 {
-  if (line2d != 0)
+  if (pline2d)
     {
       *error = 0;
-      line2d->elevation = elevation;
+      pline2d->elevation = elevation;
     }
   else
     {
@@ -11990,14 +12129,18 @@ dwg_ent_polyline_2d_set_elevation(dwg_ent_polyline_2d *line2d,
     }
 }
 
-/// Returns polyline 2d flag
+/** Returns the _dwg_entity_POLYLINE_2D::flag, DXF 70.
+\param[in]  pline2d dwg_ent_polyline_2d *
+\param[out] error   int*, is set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_polyline_2d_get_flag(dwg_ent_polyline_2d *line2d, int *error)
+dwg_ent_polyline_2d_get_flag(const dwg_ent_polyline_2d *restrict pline2d,
+                             int *restrict error)
 {
-  if (line2d != 0)
+  if (pline2d)
     {
       *error = 0;
-      return line2d->flag;
+      return pline2d->flag;
     }
   else
     {
@@ -12007,15 +12150,20 @@ dwg_ent_polyline_2d_get_flag(dwg_ent_polyline_2d *line2d, int *error)
     }
 }
 
-/// Sets polyline 2d flags
+/** Sets the _dwg_entity_POLYLINE_2D:: flag, DXF 70.
+\param[out] pline2d dwg_ent_polyline_2d*
+\param[in]  flag    BITCODE_RC
+\param[out] error   int*, is set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_polyline_2d_set_flag(dwg_ent_polyline_2d *line2d, BITCODE_BS flags,
-                              int *error)
+dwg_ent_polyline_2d_set_flag(dwg_ent_polyline_2d *restrict pline2d,
+                             const BITCODE_BS flags,
+                             int *restrict error)
 {
-  if (line2d != 0)
+  if (pline2d)
     {
       *error = 0;
-      line2d->flag = flags;
+      pline2d->flag = flags;
     }
   else
     {
@@ -12026,12 +12174,13 @@ dwg_ent_polyline_2d_set_flag(dwg_ent_polyline_2d *line2d, BITCODE_BS flags,
 
 /// Returns curve type value
 BITCODE_BS
-dwg_ent_polyline_2d_get_curve_type(dwg_ent_polyline_2d *line2d, int *error)
+dwg_ent_polyline_2d_get_curve_type(const dwg_ent_polyline_2d *restrict pline2d,
+                                   int *restrict error)
 {
-  if (line2d != 0)
+  if (pline2d)
     {
       *error = 0;
-      return line2d->curve_type;
+      return pline2d->curve_type;
     }
   else
     {
@@ -12043,13 +12192,14 @@ dwg_ent_polyline_2d_get_curve_type(dwg_ent_polyline_2d *line2d, int *error)
 
 /// Sets curve type value
 void
-dwg_ent_polyline_2d_set_curve_type(dwg_ent_polyline_2d *line2d,
-                                   BITCODE_BS curve_type, int *error)
+dwg_ent_polyline_2d_set_curve_type(dwg_ent_polyline_2d *restrict pline2d,
+                                   const BITCODE_BS curve_type,
+                                   int *restrict error)
 {
-  if (line2d != 0)
+  if (pline2d)
     {
       *error = 0;
-      line2d->curve_type = curve_type;
+      pline2d->curve_type = curve_type;
     }
   else
     {
@@ -12058,38 +12208,146 @@ dwg_ent_polyline_2d_set_curve_type(dwg_ent_polyline_2d *line2d,
     }
 }
 
-/// Returns owned object count
+/// Returns number of vertices
 BITCODE_BL
-dwg_ent_polyline_2d_get_owned_obj_count(dwg_ent_polyline_2d *line2d,
-                                        int *error)
+dwg_obj_polyline_2d_get_numpoints(const dwg_object *restrict obj,
+                                  int *restrict error)
 {
-  if (line2d != 0)
+  if (obj && obj->type == DWG_TYPE_POLYLINE_2D)
     {
+      BITCODE_BL num_points = 0;
+      Dwg_Data *dwg = obj->parent;
+      Dwg_Entity_POLYLINE_2D *_obj = obj->tio.entity->tio.POLYLINE_2D;
+      Dwg_Entity_VERTEX_2D *vertex;
       *error = 0;
-      return line2d->owned_obj_count;
+
+      if (dwg->header.version >= R_2004)
+        return obj->tio.entity->tio.POLYLINE_2D->num_owned;
+      else if (dwg->header.version >= R_13) // iterate over first_vertex - last_vertex
+        {
+          Dwg_Object *vobj = dwg_ref_get_object(dwg, _obj->first_vertex);
+          Dwg_Object *vlast = dwg_ref_get_object(dwg, _obj->last_vertex);
+          if (!vobj)
+            *error = 1;
+          else {
+            do {
+              if ((vertex = dwg_object_to_VERTEX_2D(vobj))) {
+                num_points++;
+              } else {
+                *error = 1; // return not all vertexes, but some
+              }
+            } while ((vobj = dwg_next_object(vobj)) && vobj != vlast);
+          }
+        }
+      else // <r13: iterate over vertices until seqend
+        {
+          Dwg_Object *vobj;
+          while ((vobj = dwg_next_object(obj)) && vobj->type != DWG_TYPE_SEQEND)
+            {
+              if ((vertex = dwg_object_to_VERTEX_2D(vobj)))
+                num_points++;
+              else
+                *error = 1; // return not all vertexes, but some
+            }
+        }
+      return num_points;
     }
   else
     {
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or wrong arg", __FUNCTION__)
       *error = 1;
       return 0L;
     }
 }
 
-/// Sets owned object count
-void
-dwg_ent_polyline_2d_set_owned_obj_count(dwg_ent_polyline_2d *line2d,
-                                        BITCODE_BL owned_obj_count, int *error)
+/// Returns a copy of the points
+dwg_point_2d *
+dwg_obj_polyline_2d_get_points(const dwg_object *restrict obj,
+                          int *restrict error)
 {
-  if (line2d != 0)
+  *error = 0;
+  if (obj && obj->type == DWG_TYPE_POLYLINE_2D)
     {
-      *error = 0;
-      line2d->owned_obj_count = owned_obj_count;
+      BITCODE_BL i;
+      Dwg_Data *dwg = obj->parent;
+      Dwg_Entity_POLYLINE_2D *_obj = obj->tio.entity->tio.POLYLINE_2D;
+      BITCODE_BL num_points = dwg_obj_polyline_2d_get_numpoints(obj, error);
+      dwg_point_2d *ptx = calloc(num_points, sizeof(dwg_point_2d));
+      Dwg_Entity_VERTEX_2D *vertex;
+
+      if (*error)
+        return NULL;
+      if (!ptx)
+        {
+          LOG_ERROR("%s: Out of memory", __FUNCTION__);
+          *error = 1; return NULL;
+        }
+      vertex = NULL;
+      if (dwg->header.version >= R_2004)
+        for (i = 0; i < num_points; i++)
+          {
+            Dwg_Object *vobj = dwg_ref_get_object(dwg, _obj->vertex[i]);
+            if (vobj && (vertex = dwg_object_to_VERTEX_2D(vobj))) {
+              ptx[i].x = vertex->point.x;
+              ptx[i].y = vertex->point.y;
+            } else {
+              *error = 1; // return not all vertexes, but some
+            }
+          }
+      else if (dwg->header.version >= R_13) // iterate over first_vertex - last_vertex
+        {
+          Dwg_Object *vobj = dwg_ref_get_object(dwg, _obj->first_vertex);
+          Dwg_Object *vlast = dwg_ref_get_object(dwg, _obj->last_vertex);
+          if (!vobj)
+            *error = 1;
+          else {
+            i = 0;
+            do {
+              if ((vertex = dwg_object_to_VERTEX_2D(vobj))) {
+                ptx[i].x = vertex->point.x;
+                ptx[i].y = vertex->point.y;
+                i++;
+                if (i > num_points)
+                  {
+                    *error = 1;
+                    break;
+                  }
+              } else {
+                *error = 1; // return not all vertexes, but some
+              }
+            } while ((vobj = dwg_next_object(vobj)) && vobj != vlast);
+          }
+        }
+      else // <r13: iterate over vertices until seqend
+        {
+          Dwg_Object *vobj;
+          i = 0;
+          while ((vobj = dwg_next_object(obj)) && vobj->type != DWG_TYPE_SEQEND)
+            {
+              if ((vertex = dwg_object_to_VERTEX_2D(vobj)))
+                {
+                  ptx[i].x = vertex->point.x;
+                  ptx[i].y = vertex->point.y;
+                  i++;
+                  if (i > num_points)
+                    {
+                      *error = 1;
+                      break;
+                    }
+                }
+              else
+                {
+                  *error = 1; // return not all vertexes, but some
+                }
+            }
+        }
+      return ptx;
     }
   else
     {
       LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
+      return NULL;
     }
 }
 
@@ -12097,14 +12355,18 @@ dwg_ent_polyline_2d_set_owned_obj_count(dwg_ent_polyline_2d *line2d,
 *                 FUNCTIONS FOR POLYLINE_3D ENTITY                  *
 ********************************************************************/
 
-/// Returns polyline 3d flag
+/** Returns the _dwg_entity_POLYLINE_3D:: flag, DXF 70.
+\param[in]  pline3d dwg_ent_polyline_3d *
+\param[out] error   int*, is set to 0 for ok, 1 on error
+*/
 BITCODE_RC
-dwg_ent_polyline_3d_get_flag(dwg_ent_polyline_3d *line3d, int *error)
+dwg_ent_polyline_3d_get_flag(const dwg_ent_polyline_3d *restrict pline3d,
+                             int *restrict error)
 {
-  if (line3d != 0)
+  if (pline3d)
     {
       *error = 0;
-      return line3d->flag;
+      return pline3d->flag;
     }
   else
     {
@@ -12114,15 +12376,20 @@ dwg_ent_polyline_3d_get_flag(dwg_ent_polyline_3d *line3d, int *error)
     }
 }
 
-/// Sets polyline 3d flag
+/** Sets the _dwg_entity_POLYLINE_3D:: flag, DXF 70.
+\param[out] pline3d dwg_ent_polyline_3d *
+\param[in]  flag    BITCODE_RC
+\param[out] error   int*, is set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_polyline_3d_set_flag(dwg_ent_polyline_3d *line3d, BITCODE_RC flag,
-                                int *error)
+dwg_ent_polyline_3d_set_flag(dwg_ent_polyline_3d *restrict pline3d,
+                             const BITCODE_RC flag,
+                             int *restrict error)
 {
-  if (line3d != 0)
+  if (pline3d)
     {
       *error = 0;
-      line3d->flag = flag;
+      pline3d->flag = flag;
     }
   else
     {
@@ -12133,12 +12400,13 @@ dwg_ent_polyline_3d_set_flag(dwg_ent_polyline_3d *line3d, BITCODE_RC flag,
 
 /// Returns polyline 3d flag2
 BITCODE_RC
-dwg_ent_polyline_3d_get_flag2(dwg_ent_polyline_3d *line3d, int *error)
+dwg_ent_polyline_3d_get_flag2(const dwg_ent_polyline_3d *restrict pline3d,
+                              int *restrict error)
 {
-  if (line3d != 0)
+  if (pline3d)
     {
       *error = 0;
-      return line3d->flag2;
+      return pline3d->flag2;
     }
   else
     {
@@ -12150,13 +12418,14 @@ dwg_ent_polyline_3d_get_flag2(dwg_ent_polyline_3d *line3d, int *error)
 
 /// Sets polyline 3d flag2
 void
-dwg_ent_polyline_3d_set_flag2(dwg_ent_polyline_3d *line3d, BITCODE_RC flag2,
-                                int *error)
+dwg_ent_polyline_3d_set_flag2(dwg_ent_polyline_3d *restrict pline3d,
+                              const BITCODE_RC flag2,
+                              int *restrict error)
 {
-  if (line3d != 0)
+  if (pline3d)
     {
       *error = 0;
-      line3d->flag2 = flag2;
+      pline3d->flag2 = flag2;
     }
   else
     {
@@ -12165,38 +12434,153 @@ dwg_ent_polyline_3d_set_flag2(dwg_ent_polyline_3d *line3d, BITCODE_RC flag2,
     }
 }
 
-/// Returns polyline 3d owned object count
+/** Returns the number of _dwg_object:: POLYLINE_3D vertices,
+    the list of associated _dwg_object_VERTEX_3D:: points.
+*/
 BITCODE_BL
-dwg_ent_polyline_3d_get_owned_obj_count(dwg_ent_polyline_3d *line3d,
-                                        int *error)
+dwg_obj_polyline_3d_get_numpoints(const dwg_object *restrict obj,
+                                  int *restrict error)
 {
-  if (line3d != 0)
+  if (obj && obj->type == DWG_TYPE_POLYLINE_3D)
     {
+      BITCODE_BL num_points = 0;
+      Dwg_Data *dwg = obj->parent;
+      Dwg_Entity_POLYLINE_3D *_obj = obj->tio.entity->tio.POLYLINE_3D;
+      Dwg_Entity_VERTEX_3D *vertex;
       *error = 0;
-      return line3d->owned_obj_count;
+
+      if (dwg->header.version >= R_2004)
+        return obj->tio.entity->tio.POLYLINE_3D->num_owned;
+      else if (dwg->header.version >= R_13) // iterate over first_vertex - last_vertex
+        {
+          Dwg_Object *vobj = dwg_ref_get_object(dwg, _obj->first_vertex);
+          Dwg_Object *vlast = dwg_ref_get_object(dwg, _obj->last_vertex);
+          if (!vobj)
+            *error = 1;
+          else {
+            do {
+              if ((vertex = dwg_object_to_VERTEX_3D(vobj))) {
+                num_points++;
+              } else {
+                *error = 1; // return not all vertexes, but some
+              }
+            } while ((vobj = dwg_next_object(vobj)) && vobj != vlast);
+          }
+        }
+      else // <r13: iterate over vertices until seqend
+        {
+          Dwg_Object *vobj;
+          while ((vobj = dwg_next_object(obj)) && vobj->type != DWG_TYPE_SEQEND)
+            {
+              if ((vertex = dwg_object_to_VERTEX_3D(vobj)))
+                num_points++;
+              else
+                *error = 1; // return not all vertexes, but some
+            }
+        }
+      return num_points;
     }
   else
     {
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or wrong arg", __FUNCTION__)
       *error = 1;
       return 0L;
     }
 }
 
-/// Sets polyline 3d owned object count
-void
-dwg_ent_polyline_3d_set_owned_obj_count(dwg_ent_polyline_3d *line3d,
-                                        BITCODE_BL owned_obj_count, int *error)
+/** Returns the _dwg_object:: POLYLINE_3D vertices,
+    the list of associated _dwg_object_VERTEX_3D:: points.
+*/
+dwg_point_3d *
+dwg_obj_polyline_3d_get_points(const dwg_object *restrict obj,
+                               int *restrict error)
 {
-  if (line3d != 0)
+  *error = 0;
+  if (obj && obj->type == DWG_TYPE_POLYLINE_3D)
     {
-      *error = 0;
-      line3d->owned_obj_count = owned_obj_count;
+      BITCODE_BL i;
+      Dwg_Data *dwg = obj->parent;
+      Dwg_Entity_POLYLINE_3D *_obj = obj->tio.entity->tio.POLYLINE_3D;
+      BITCODE_BL num_points = dwg_obj_polyline_3d_get_numpoints(obj, error);
+      dwg_point_3d *ptx = calloc(num_points, sizeof(dwg_point_3d));
+      Dwg_Entity_VERTEX_3D *vertex;
+
+      if (*error)
+        return NULL;
+      if (!ptx)
+        {
+          LOG_ERROR("%s: Out of memory", __FUNCTION__);
+          *error = 1; return NULL;
+        }
+      vertex = NULL;
+      if (dwg->header.version >= R_2004)
+        for (i = 0; i < num_points; i++)
+          {
+            Dwg_Object *vobj = dwg_ref_get_object(dwg, _obj->vertex[i]);
+            if (vobj && (vertex = dwg_object_to_VERTEX_3D(vobj))) {
+              ptx[i].x = vertex->point.x;
+              ptx[i].y = vertex->point.y;
+              ptx[i].z = vertex->point.z;
+            } else {
+              *error = 1; // return not all vertexes, but some
+            }
+          }
+      else if (dwg->header.version >= R_13) // iterate over first_vertex - last_vertex
+        {
+          Dwg_Object *vobj = dwg_ref_get_object(dwg, _obj->first_vertex);
+          Dwg_Object *vlast = dwg_ref_get_object(dwg, _obj->last_vertex);
+          if (!vobj)
+            *error = 1;
+          else {
+            i = 0;
+            do {
+              if ((vertex = dwg_object_to_VERTEX_3D(vobj))) {
+                ptx[i].x = vertex->point.x;
+                ptx[i].y = vertex->point.y;
+                ptx[i].z = vertex->point.z;
+                i++;
+                if (i > num_points)
+                  {
+                    *error = 1;
+                    break;
+                  }
+              } else {
+                *error = 1; // return not all vertexes, but some
+              }
+            } while ((vobj = dwg_next_object(vobj)) && vobj != vlast);
+          }
+        }
+      else // <r13: iterate over vertices until seqend
+        {
+          Dwg_Object *vobj;
+          i = 0;
+          while ((vobj = dwg_next_object(obj)) && vobj->type != DWG_TYPE_SEQEND)
+            {
+              if ((vertex = dwg_object_to_VERTEX_3D(vobj)))
+                {
+                  ptx[i].x = vertex->point.x;
+                  ptx[i].y = vertex->point.y;
+                  ptx[i].z = vertex->point.z;
+                  i++;
+                  if (i > num_points)
+                    {
+                      *error = 1;
+                      break;
+                    }
+                }
+              else
+                {
+                  *error = 1; // return not all vertexes, but some
+                }
+            }
+        }
+      return ptx;
     }
   else
     {
       LOG_ERROR("%s: empty arg", __FUNCTION__)
       *error = 1;
+      return NULL;
     }
 }
 
@@ -12204,15 +12588,17 @@ dwg_ent_polyline_3d_set_owned_obj_count(dwg_ent_polyline_3d *line3d,
 *                   FUNCTIONS FOR 3DFACE ENTITY                     *
 ********************************************************************/
 
-/// Returns the invis flags of a _3dface entity.
-/** Usage :- BITCODE_BS flag = dwg_ent_3dface_get_invis_flags(_3dface, &error);
-\param 1 dwg_ent_3dface
-\param 2 int
+/** Returns the _dwg_entity_3DFACE::invis_flags, DXF 70.
+\code Usage: BITCODE_BS flag = dwg_ent_3dface_get_invis_flags(_3dface, &error);
+\endcode
+\param[in] _3dface  dwg_ent_3dface*
+\param[out] error   set to 0 for ok, 1 on error
 */
 BITCODE_BS
-dwg_ent_3dface_get_invis_flags(dwg_ent_3dface *_3dface, int *error)
+dwg_ent_3dface_get_invis_flags(const dwg_ent_3dface *restrict _3dface,
+                               int *restrict error)
 {
-  if (_3dface != 0)
+  if (_3dface)
     {
       *error = 0;
       return _3dface->invis_flags;
@@ -12225,17 +12611,19 @@ dwg_ent_3dface_get_invis_flags(dwg_ent_3dface *_3dface, int *error)
     }
 }
 
-/// This sets the invis_flags of a _3dface entity.
-/** Usage :- dwg_ent_3dface_set_invis_flagsx(_3dface, flags, &error);
-\param 1 dwg_ent_3dface
-\param 2 BITCODE_BS
-\param 3 int
+/** Sets the _dwg_entity_3DFACE::invis_flags, DXF 70.
+\code Usage: dwg_ent_3dface_set_invis_flagsx(_3dface, flags, &error);
+\endcode
+\param[in,out] 3dface      dwg_ent_3dface*
+\param[in]     invis_flags BITCODE_BS
+\param[out]    error       int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_3dface_set_invis_flags(dwg_ent_3dface *_3dface,
-                               BITCODE_BS invis_flags, int *error)
+dwg_ent_3dface_set_invis_flags(dwg_ent_3dface *restrict _3dface,
+                               const BITCODE_BS invis_flags,
+                               int *restrict error)
 {
-  if (_3dface != 0)
+  if (_3dface)
     {
       *error = 0;
       _3dface->invis_flags = invis_flags;
@@ -12247,17 +12635,19 @@ dwg_ent_3dface_set_invis_flags(dwg_ent_3dface *_3dface,
     }
 }
 
-/// Returns the corner1 values of 3dface.
-/** Usage :- dwg_ent_3dface_get_corner1(face, &point, &error);
-\param 1 dwg_ent_3dface
-\param 2 dwg_point_2d
-\param 3 int
+/** Returns the _dwg_entity_3DFACE::corner1 point, DXF 10.
+\code Usage: dwg_ent_3dface_get_corner1(face, &point, &error);
+\endcode
+\param[in]  3dface  dwg_ent_3dface*
+\param[out] point   dwg_point_2d*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_3dface_get_corner1(dwg_ent_3dface *_3dface, dwg_point_2d *point,
-                           int *error)
+dwg_ent_3dface_get_corner1(const dwg_ent_3dface *restrict _3dface,
+                           dwg_point_2d *restrict point,
+                           int *restrict error)
 {
-  if (_3dface != 0 && point != 0)
+  if (_3dface && point)
     {
       *error = 0;
       point->x = _3dface->corner1.x;
@@ -12270,17 +12660,19 @@ dwg_ent_3dface_get_corner1(dwg_ent_3dface *_3dface, dwg_point_2d *point,
     }
 }
 
-/// Sets the corner1 values of 3dface.
-/** Usage :- dwg_ent_3dface_set_corner1(face, &point, &error);
-\param 1 dwg_ent_3dface
-\param 2 dwg_point_2d
-\param 3 int
+/** Sets the _dwg_entity_3DFACE::corner1 point, DXF 10.
+\code Usage: dwg_ent_3dface_set_corner1(face, &point, &error);
+\endcode
+\param[in,out] 3dface   dwg_ent_3dface*
+\param[in]     point    dwg_point_2d*
+\param[out]    error    int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_3dface_set_corner1(dwg_ent_3dface *_3dface, dwg_point_2d *point,
-                           int *error)
+dwg_ent_3dface_set_corner1(dwg_ent_3dface *restrict _3dface,
+                           const dwg_point_2d *restrict point,
+                           int *restrict error)
 {
-  if (_3dface != 0 && point != 0)
+  if (_3dface && point)
     {
       *error = 0;
       _3dface->corner1.x = point->x;
@@ -12293,17 +12685,19 @@ dwg_ent_3dface_set_corner1(dwg_ent_3dface *_3dface, dwg_point_2d *point,
     }
 }
 
-/// Returns the corner2 values of 3dface.
-/** Usage :- dwg_ent_3dface_get_corner2(face, &point, &error);
-\param 1 dwg_ent_3dface
-\param 2 dwg_point_2d
-\param 3 int
+/** Returns the _dwg_entity_3DFACE::corner2 point, DXF 11.
+\code Usage: dwg_ent_3dface_get_corner2(face, &point, &error);
+\endcode
+\param[in]  3dface  dwg_ent_3dface*
+\param[out] point   dwg_point_2d*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_3dface_get_corner2(dwg_ent_3dface *_3dface, dwg_point_2d *point,
-                           int *error)
+dwg_ent_3dface_get_corner2(const dwg_ent_3dface *restrict _3dface,
+                           dwg_point_2d *restrict point,
+                           int *restrict error)
 {
-  if (_3dface != 0 && point != 0)
+  if (_3dface && point)
     {
       *error = 0;
       point->x = _3dface->corner2.x;
@@ -12316,17 +12710,19 @@ dwg_ent_3dface_get_corner2(dwg_ent_3dface *_3dface, dwg_point_2d *point,
     }
 }
 
-/// Sets the corner2 values of 3dface.
-/** Usage :- dwg_ent_3dface_set_corner2(face, &point, &error);
-\param 1 dwg_ent_3dface
-\param 2 dwg_point_2d
-\param 3 int
+/** Sets the _dwg_entity_3DFACE::corner2 point, DXF 11.
+\code Usage: dwg_ent_3dface_set_corner2(face, &point, &error);
+\endcode
+\param[in,out] 3dface   dwg_ent_3dface*
+\param[in]     point    dwg_point_2d*
+\param[out]    error    int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_3dface_set_corner2(dwg_ent_3dface *_3dface, dwg_point_2d *point,
-                           int *error)
+dwg_ent_3dface_set_corner2(dwg_ent_3dface *restrict _3dface,
+                           const dwg_point_2d *restrict point,
+                           int *restrict error)
 {
-  if (_3dface != 0 && point != 0)
+  if (_3dface && point)
     {
       *error = 0;
       _3dface->corner2.x = point->x;
@@ -12339,17 +12735,19 @@ dwg_ent_3dface_set_corner2(dwg_ent_3dface *_3dface, dwg_point_2d *point,
     }
 }
 
-/// Returns the corner3 values of 3dface.
-/** Usage :- dwg_ent_3dface_get_corner3(face, &point, &error);
-\param 1 dwg_ent_3dface
-\param 2 dwg_point_2d
-\param 3 int
+/** Returns the _dwg_entity_3DFACE::corner1 point, DXF 12.
+\code Usage: dwg_ent_3dface_get_corner3(face, &point, &error);
+\endcode
+\param[in]  3dface  dwg_ent_3dface*
+\param[out] point   dwg_point_2d*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_3dface_get_corner3(dwg_ent_3dface *_3dface, dwg_point_2d *point,
-                           int *error)
+dwg_ent_3dface_get_corner3(const dwg_ent_3dface *restrict _3dface,
+                           dwg_point_2d *restrict point,
+                           int *restrict error)
 {
-  if (_3dface != 0 && point != 0)
+  if (_3dface && point)
     {
       *error = 0;
       point->x = _3dface->corner3.x;
@@ -12362,17 +12760,19 @@ dwg_ent_3dface_get_corner3(dwg_ent_3dface *_3dface, dwg_point_2d *point,
     }
 }
 
-/// Sets the corner3 values of 3dface.
-/** Usage :- dwg_ent_3dface_set_corner3(face, &point, &error);
-\param 1 dwg_ent_3dface
-\param 2 dwg_point_2d
-\param 3 int
+/** Sets the _dwg_entity_3DFACE::corner3 point, DXF 12.
+\code Usage: dwg_ent_3dface_set_corner3(face, &point, &error);
+\endcode
+\param[in,out] 3dface   dwg_ent_3dface*
+\param[in]     point    dwg_point_2d*
+\param[out]    error    int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_3dface_set_corner3(dwg_ent_3dface *_3dface, dwg_point_2d *point,
-                           int *error)
+dwg_ent_3dface_set_corner3(dwg_ent_3dface *restrict _3dface,
+                           const dwg_point_2d *restrict point,
+                           int *restrict error)
 {
-  if (_3dface != 0 && point != 0)
+  if (_3dface && point)
     {
       *error = 0;
       _3dface->corner3.x = point->x;
@@ -12385,17 +12785,19 @@ dwg_ent_3dface_set_corner3(dwg_ent_3dface *_3dface, dwg_point_2d *point,
     }
 }
 
-/// Returns the corner4 values of 3dface.
-/** Usage :- dwg_ent_3dface_get_corner4(face, &point, &error);
-\param 1 dwg_ent_3dface
-\param 2 dwg_point_2d
-\param 3 int
+/** Returns the _dwg_entity_3DFACE::corner1 point, DXF 13.
+\code Usage: dwg_ent_3dface_get_corner4(face, &point, &error);
+\endcode
+\param[in]  3dface  dwg_ent_3dface*
+\param[out] point   dwg_point_2d
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_3dface_get_corner4(dwg_ent_3dface *_3dface, dwg_point_2d *point,
-                           int *error)
+dwg_ent_3dface_get_corner4(const dwg_ent_3dface *restrict _3dface,
+                           dwg_point_2d *restrict point,
+                           int *restrict error)
 {
-  if (_3dface != 0 && point != 0)
+  if (_3dface && point)
     {
       *error = 0;
       point->x = _3dface->corner4.x;
@@ -12408,17 +12810,19 @@ dwg_ent_3dface_get_corner4(dwg_ent_3dface *_3dface, dwg_point_2d *point,
     }
 }
 
-/// Sets the corner4 values of 3dface.
-/** Usage :- dwg_ent_3dface_set_corner4(face, &point, &error);
-\param 1 dwg_ent_3dface
-\param 2 dwg_point_2d
-\param 3 int
+/** Sets the _dwg_entity_3DFACE::corner4 point, DXF 13.
+\code Usage: dwg_ent_3dface_set_corner4(face, &point, &error);
+\endcode
+\param[out]  3dface  dwg_ent_3dface*
+\param[in]   point   dwg_point_2d*
+\param[out]  error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_3dface_set_corner4(dwg_ent_3dface *_3dface, dwg_point_2d *point,
-                           int *error)
+dwg_ent_3dface_set_corner4(dwg_ent_3dface *restrict _3dface,
+                           const dwg_point_2d *restrict point,
+                           int *restrict error)
 {
-  if (_3dface != 0 && point != 0)
+  if (_3dface && point)
     {
       *error = 0;
       _3dface->corner4.x = point->x;
@@ -12437,9 +12841,10 @@ dwg_ent_3dface_set_corner4(dwg_ent_3dface *_3dface, dwg_point_2d *point,
 
 /// Returns image class version
 BITCODE_BL
-dwg_ent_image_get_class_version(dwg_ent_image *image, int *error)
+dwg_ent_image_get_class_version(const dwg_ent_image *restrict image,
+                                int *restrict error)
 {
-  if (image != 0)
+  if (image)
     {
       *error = 0;
       return image->class_version;
@@ -12454,10 +12859,11 @@ dwg_ent_image_get_class_version(dwg_ent_image *image, int *error)
 
 /// Sets image class version
 void
-dwg_ent_image_set_class_version(dwg_ent_image *image, BITCODE_BL class_version,
-                                int *error)
+dwg_ent_image_set_class_version(dwg_ent_image *restrict image,
+                                const BITCODE_BL class_version,
+                                int *restrict error)
 {
-  if (image != 0)
+  if (image)
     {
       *error = 0;
       image->class_version = class_version;
@@ -12471,9 +12877,10 @@ dwg_ent_image_set_class_version(dwg_ent_image *image, BITCODE_BL class_version,
 
 /// Returns image point 0 points
 void
-dwg_ent_image_get_pt0(dwg_ent_image *image, dwg_point_3d *point, int *error)
+dwg_ent_image_get_pt0(const dwg_ent_image *restrict image, dwg_point_3d *restrict point,
+                          int *restrict error)
 {
-  if (image != 0 && point != 0)
+  if (image && point)
     {
       *error = 0;
       point->x = image->pt0.x;
@@ -12489,9 +12896,11 @@ dwg_ent_image_get_pt0(dwg_ent_image *image, dwg_point_3d *point, int *error)
 
 /// Sets image point 0 points
 void
-dwg_ent_image_set_pt0(dwg_ent_image *image, dwg_point_3d *point, int *error)
+dwg_ent_image_set_pt0(dwg_ent_image *restrict image,
+                      const dwg_point_3d *restrict point,
+                          int *restrict error)
 {
-  if (image != 0 && point != 0)
+  if (image && point)
     {
       *error = 0;
       image->pt0.x = point->x;
@@ -12507,10 +12916,10 @@ dwg_ent_image_set_pt0(dwg_ent_image *image, dwg_point_3d *point, int *error)
 
 /// Returns image U_vector points
 void
-dwg_ent_image_get_u_vector(dwg_ent_image *image, dwg_point_3d *point,
-                           int *error)
+dwg_ent_image_get_u_vector(const dwg_ent_image *restrict image, dwg_point_3d *restrict point,
+                           int *restrict error)
 {
-  if (image != 0 && point != 0)
+  if (image && point)
     {
       *error = 0;
       point->x = image->uvec.x;
@@ -12526,10 +12935,11 @@ dwg_ent_image_get_u_vector(dwg_ent_image *image, dwg_point_3d *point,
 
 /// Sets image U_vector points
 void
-dwg_ent_image_set_u_vector(dwg_ent_image *image, dwg_point_3d *point,
-                           int *error)
+dwg_ent_image_set_u_vector(dwg_ent_image *restrict image,
+                           const dwg_point_3d *restrict point,
+                           int *restrict error)
 {
-  if (image != 0 && point != 0)
+  if (image && point)
     {
       *error = 0;
       image->uvec.x = point->x ;
@@ -12545,10 +12955,10 @@ dwg_ent_image_set_u_vector(dwg_ent_image *image, dwg_point_3d *point,
 
 /// Returns image v_vector points
 void
-dwg_ent_image_get_v_vector(dwg_ent_image *image, dwg_point_3d *point,
-                           int *error)
+dwg_ent_image_get_v_vector(const dwg_ent_image *restrict image, dwg_point_3d *restrict point,
+                           int *restrict error)
 {
-  if (image != 0 && point != 0)
+  if (image && point)
     {
       *error = 0;
       point->x = image->vvec.x;
@@ -12564,10 +12974,11 @@ dwg_ent_image_get_v_vector(dwg_ent_image *image, dwg_point_3d *point,
 
 /// Sets v vector points
 void
-dwg_ent_image_set_v_vector(dwg_ent_image *image, dwg_point_3d *point,
-                           int *error)
+dwg_ent_image_set_v_vector(dwg_ent_image *restrict image,
+                           const dwg_point_3d *restrict point,
+                           int *restrict error)
 {
-  if (image != 0 && point != 0)
+  if (image && point)
     {
       *error = 0;
       image->vvec.x = point->x ;
@@ -12582,10 +12993,11 @@ dwg_ent_image_set_v_vector(dwg_ent_image *image, dwg_point_3d *point,
 }
 
 /// Returns image size height
-BITCODE_BD
-dwg_ent_image_get_size_height(dwg_ent_image *image, int *error)
+double
+dwg_ent_image_get_size_height(const dwg_ent_image *restrict image,
+                          int *restrict error)
 {
-  if (image != 0)
+  if (image)
     {
       *error = 0;
       return image->size.height;
@@ -12600,10 +13012,11 @@ dwg_ent_image_get_size_height(dwg_ent_image *image, int *error)
 
 /// Sets image size height
 void
-dwg_ent_image_set_size_height(dwg_ent_image *image, BITCODE_BD size_height,
-                              int *error)
+dwg_ent_image_set_size_height(dwg_ent_image *restrict image,
+                          const double size_height,
+                              int *restrict error)
 {
-  if (image != 0)
+  if (image)
     {
       *error = 0;
       image->size.height = size_height;
@@ -12616,10 +13029,11 @@ dwg_ent_image_set_size_height(dwg_ent_image *image, BITCODE_BD size_height,
 }
 
 /// Returns image size width
-BITCODE_BD
-dwg_ent_image_get_size_width(dwg_ent_image *image, int *error)
+double
+dwg_ent_image_get_size_width(const dwg_ent_image *restrict image,
+                          int *restrict error)
 {
-  if (image != 0)
+  if (image)
     {
       *error = 0;
       return image->size.width;
@@ -12634,10 +13048,11 @@ dwg_ent_image_get_size_width(dwg_ent_image *image, int *error)
 
 /// Sets image size width
 void
-dwg_ent_image_set_size_width(dwg_ent_image *image, BITCODE_BD size_width,
-                             int *error)
+dwg_ent_image_set_size_width(dwg_ent_image *restrict image,
+                          const double size_width,
+                             int *restrict error)
 {
-  if (image != 0)
+  if (image)
     {
       *error = 0;
       image->size.width = size_width;
@@ -12651,9 +13066,10 @@ dwg_ent_image_set_size_width(dwg_ent_image *image, BITCODE_BD size_width,
 
 /// Returns image display props
 BITCODE_BS
-dwg_ent_image_get_display_props(dwg_ent_image *image, int *error)
+dwg_ent_image_get_display_props(const dwg_ent_image *restrict image,
+                                int *restrict error)
 {
-  if (image != 0)
+  if (image)
     {
       *error = 0;
       return image->display_props;
@@ -12668,10 +13084,11 @@ dwg_ent_image_get_display_props(dwg_ent_image *image, int *error)
 
 /// Sets image display props
 void
-dwg_ent_image_set_display_props(dwg_ent_image *image,
-                                BITCODE_BS display_props, int *error)
+dwg_ent_image_set_display_props(dwg_ent_image *restrict image,
+                                const BITCODE_BS display_props,
+                                int *restrict error)
 {
-  if (image != 0)
+  if (image)
     {
       *error = 0;
       image->display_props = display_props;
@@ -12685,9 +13102,10 @@ dwg_ent_image_set_display_props(dwg_ent_image *image,
 
 /// Returns image clipping
 unsigned char
-dwg_ent_image_get_clipping(dwg_ent_image *image, int *error)
+dwg_ent_image_get_clipping(const dwg_ent_image *restrict image,
+                          int *restrict error)
 {
-  if (image != 0)
+  if (image)
     {
       *error = 0;
       return image->clipping;
@@ -12702,10 +13120,11 @@ dwg_ent_image_get_clipping(dwg_ent_image *image, int *error)
 
 /// Sets image clipping
 void
-dwg_ent_image_set_clipping(dwg_ent_image *image, unsigned char clipping,
-                           int *error)
+dwg_ent_image_set_clipping(dwg_ent_image *restrict image,
+                           unsigned char clipping,
+                           int *restrict error)
 {
-  if (image != 0)
+  if (image)
     {
       *error = 0;
       image->clipping = clipping;
@@ -12719,9 +13138,10 @@ dwg_ent_image_set_clipping(dwg_ent_image *image, unsigned char clipping,
 
 /// Returns image brightness
 char
-dwg_ent_image_get_brightness(dwg_ent_image *image, int *error)
+dwg_ent_image_get_brightness(const dwg_ent_image *restrict image,
+                             int *restrict error)
 {
-  if (image != 0)
+  if (image)
     {
       *error = 0;
       return image->brightness;
@@ -12736,9 +13156,11 @@ dwg_ent_image_get_brightness(dwg_ent_image *image, int *error)
 
 /// Sets image brightness
 void
-dwg_ent_image_set_brightness(dwg_ent_image *image, char brightness, int *error)
+dwg_ent_image_set_brightness(dwg_ent_image *restrict image,
+                             const char brightness,
+                             int *restrict error)
 {
-  if (image != 0)
+  if (image)
     {
       *error = 0;
       image->brightness = brightness;
@@ -12752,9 +13174,10 @@ dwg_ent_image_set_brightness(dwg_ent_image *image, char brightness, int *error)
 
 /// Return image contrast
 char
-dwg_ent_image_get_contrast(dwg_ent_image *image, int *error)
+dwg_ent_image_get_contrast(const dwg_ent_image *restrict image,
+                          int *restrict error)
 {
-  if (image != 0)
+  if (image)
     {
       *error = 0;
       return image->contrast;
@@ -12769,9 +13192,11 @@ dwg_ent_image_get_contrast(dwg_ent_image *image, int *error)
 
 /// Sets image contrast
 void
-dwg_ent_image_set_contrast(dwg_ent_image *image, char contrast, int *error)
+dwg_ent_image_set_contrast(dwg_ent_image *restrict image,
+                           const char contrast,
+                           int *restrict error)
 {
-  if (image != 0)
+  if (image)
     {
       *error = 0;
       image->contrast = contrast;
@@ -12785,9 +13210,10 @@ dwg_ent_image_set_contrast(dwg_ent_image *image, char contrast, int *error)
 
 /// Returns image fade
 char
-dwg_ent_image_get_fade(dwg_ent_image *image, int *error)
+dwg_ent_image_get_fade(const dwg_ent_image *restrict image,
+                       int *restrict error)
 {
-  if (image != 0)
+  if (image)
     {
       *error = 0;
       return image->fade;
@@ -12802,9 +13228,11 @@ dwg_ent_image_get_fade(dwg_ent_image *image, int *error)
 
 /// Sets image fade
 void
-dwg_ent_image_set_fade(dwg_ent_image *image, char fade, int *error)
+dwg_ent_image_set_fade(dwg_ent_image *restrict image,
+                       const char fade,
+                       int *restrict error)
 {
-  if (image != 0)
+  if (image)
     {
       *error = 0;
       image->fade = fade;
@@ -12818,9 +13246,10 @@ dwg_ent_image_set_fade(dwg_ent_image *image, char fade, int *error)
 
 /// Returns image clip boundary type
 BITCODE_BS
-dwg_ent_image_get_clip_boundary_type(dwg_ent_image *image, int *error)
+dwg_ent_image_get_clip_boundary_type(const dwg_ent_image *restrict image,
+                                     int *restrict error)
 {
-  if (image != 0)
+  if (image)
     {
       *error = 0;
       return image->clip_boundary_type;
@@ -12835,10 +13264,11 @@ dwg_ent_image_get_clip_boundary_type(dwg_ent_image *image, int *error)
 
 /// Sets image clip boundary type
 void
-dwg_ent_image_set_clip_boundary_type(dwg_ent_image *image, BITCODE_BS type,
-                                     int *error)
+dwg_ent_image_set_clip_boundary_type(dwg_ent_image *restrict image,
+                                     const BITCODE_BS type,
+                                     int *restrict error)
 {
-  if (image != 0)
+  if (image)
     {
       *error = 0;
       image->clip_boundary_type = type;
@@ -12852,10 +13282,11 @@ dwg_ent_image_set_clip_boundary_type(dwg_ent_image *image, BITCODE_BS type,
 
 /// Returns image boundary point 0
 void
-dwg_ent_image_get_boundary_pt0(dwg_ent_image *image, dwg_point_2d *point,
-                               int *error)
+dwg_ent_image_get_boundary_pt0(const dwg_ent_image *restrict image,
+                               dwg_point_2d *restrict point,
+                               int *restrict error)
 {
-  if (image != 0 && point != 0)
+  if (image && point)
     {
       *error = 0;
       point->x = image->boundary_pt0.x;
@@ -12870,10 +13301,11 @@ dwg_ent_image_get_boundary_pt0(dwg_ent_image *image, dwg_point_2d *point,
 
 /// Sets image boundary point 0
 void
-dwg_ent_image_set_boundary_pt0(dwg_ent_image *image, dwg_point_2d *point,
-                               int *error)
+dwg_ent_image_set_boundary_pt0(dwg_ent_image *restrict image,
+                               const dwg_point_2d *restrict point,
+                               int *restrict error)
 {
-  if (image != 0 && point != 0)
+  if (image && point)
     {
       *error = 0;
       image->boundary_pt0.x = point->x;
@@ -12888,10 +13320,11 @@ dwg_ent_image_set_boundary_pt0(dwg_ent_image *image, dwg_point_2d *point,
 
 /// Returns boundary point1
 void
-dwg_ent_image_get_boundary_pt1(dwg_ent_image *image, dwg_point_2d *point,
-                               int *error)
+dwg_ent_image_get_boundary_pt1(const dwg_ent_image *restrict image,
+                               dwg_point_2d *restrict point,
+                               int *restrict error)
 {
-  if (image != 0 && point != 0)
+  if (image && point)
     {
       *error = 0;
       point->x = image->boundary_pt1.x;
@@ -12906,14 +13339,15 @@ dwg_ent_image_get_boundary_pt1(dwg_ent_image *image, dwg_point_2d *point,
 
 /// Sets boundary point1
 void
-dwg_ent_image_set_boundary_pt1(dwg_ent_image *image, dwg_point_2d *point,
-                               int *error)
+dwg_ent_image_set_boundary_pt1(dwg_ent_image *restrict image,
+                               const dwg_point_2d *restrict point,
+                               int *restrict error)
 {
-  if (image != 0 && point != 0)
+  if (image && point)
     {
       *error = 0;
-      point->x = image->boundary_pt1.x;
-      point->y = image->boundary_pt1.y;
+      image->boundary_pt1.x = point->x;
+      image->boundary_pt1.y = point->y;
     }
   else
     {
@@ -12923,10 +13357,11 @@ dwg_ent_image_set_boundary_pt1(dwg_ent_image *image, dwg_point_2d *point,
 }
 
 /// Retuns number of clip verts
-BITCODE_BD
-dwg_ent_image_get_num_clip_verts(dwg_ent_image *image, int *error)
+double
+dwg_ent_image_get_num_clip_verts(const dwg_ent_image *restrict image,
+                                 int *restrict error)
 {
-  if (image != 0)
+  if (image)
     {
       *error = 0;
       return image->num_clip_verts;
@@ -12939,29 +13374,13 @@ dwg_ent_image_get_num_clip_verts(dwg_ent_image *image, int *error)
     }
 }
 
-/// Sets number of clip verts
-void
-dwg_ent_image_set_num_clip_verts(dwg_ent_image *image, BITCODE_BD num, int *error)
-{
-  if (image != 0)
-    {
-      *error = 0;
-      image->num_clip_verts = num;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
 /// Returns image clip verts
 BITCODE_2RD *
-dwg_ent_image_get_clip_verts(dwg_ent_image *image, int *error)
+dwg_ent_image_get_clip_verts(const dwg_ent_image *restrict image,
+                          int *restrict error)
 {
-  BITCODE_2RD *ptx = (BITCODE_2RD*)
-    malloc(sizeof(BITCODE_2RD) * image->num_clip_verts);
-  if (ptx != 0)
+  BITCODE_2RD *ptx = calloc(image->num_clip_verts, sizeof(BITCODE_2RD));
+  if (ptx)
     {
       BITCODE_BL i;
       *error = 0;
@@ -12974,7 +13393,7 @@ dwg_ent_image_get_clip_verts(dwg_ent_image *image, int *error)
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: null malloc", __FUNCTION__)
       return NULL;
     }
 }
@@ -12985,9 +13404,11 @@ dwg_ent_image_get_clip_verts(dwg_ent_image *image, int *error)
 
 /// Sets mline scale value
 void
-dwg_ent_mline_set_scale(dwg_ent_mline *mline, BITCODE_BD scale, int *error)
+dwg_ent_mline_set_scale(dwg_ent_mline *restrict mline,
+                        const double scale,
+                        int *restrict error)
 {
-  if (mline != 0)
+  if (mline)
     {
       *error = 0;
       mline->scale = scale;
@@ -13000,10 +13421,11 @@ dwg_ent_mline_set_scale(dwg_ent_mline *mline, BITCODE_BD scale, int *error)
 }
 
 /// Returns scale value
-BITCODE_BD
-dwg_ent_mline_get_scale(dwg_ent_mline *mline, int *error)
+double
+dwg_ent_mline_get_scale(const dwg_ent_mline *restrict mline,
+                        int *restrict error)
 {
-  if (mline != 0)
+  if (mline)
     {
       *error = 0;
       return mline->scale;
@@ -13018,9 +13440,11 @@ dwg_ent_mline_get_scale(dwg_ent_mline *mline, int *error)
 
 /// sets justification value
 void
-dwg_ent_mline_set_justification(dwg_ent_mline *mline, char justification, int *error)
+dwg_ent_mline_set_justification(dwg_ent_mline *restrict mline,
+                                const char justification,
+                                int *restrict error)
 {
-  if (mline != 0)
+  if (mline)
     {
       *error = 0;
       mline->justification = justification;
@@ -13034,9 +13458,10 @@ dwg_ent_mline_set_justification(dwg_ent_mline *mline, char justification, int *e
 
 /// Returns justification value
 char
-dwg_ent_mline_get_justification(dwg_ent_mline *mline, int *error)
+dwg_ent_mline_get_justification(const dwg_ent_mline *restrict mline,
+                                int *restrict error)
 {
-  if (mline != 0)
+  if (mline)
     {
       *error = 0;
       return mline->justification;
@@ -13051,10 +13476,11 @@ dwg_ent_mline_get_justification(dwg_ent_mline *mline, int *error)
 
 /// Sets base point value
 void
-dwg_ent_mline_set_base_point(dwg_ent_mline *mline, dwg_point_3d *point,
-                             int *error)
+dwg_ent_mline_set_base_point(dwg_ent_mline *restrict mline,
+                             const dwg_point_3d *restrict point,
+                             int *restrict error)
 {
-  if (mline != 0 && point != 0)
+  if (mline && point)
     {
       *error = 0;
       mline->base_point.x = point->x;
@@ -13070,10 +13496,11 @@ dwg_ent_mline_set_base_point(dwg_ent_mline *mline, dwg_point_3d *point,
 
 /// Returns base point value
 void
-dwg_ent_mline_get_base_point(dwg_ent_mline *mline, dwg_point_3d *point,
-                             int *error)
+dwg_ent_mline_get_base_point(const dwg_ent_mline *restrict mline,
+                             dwg_point_3d *restrict point,
+                             int *restrict error)
 {
-  if (mline != 0 && point != 0)
+  if (mline && point)
     {
       *error = 0;
       point->x = mline->base_point.x;
@@ -13089,10 +13516,11 @@ dwg_ent_mline_get_base_point(dwg_ent_mline *mline, dwg_point_3d *point,
 
 /// Sets extrusion points
 void
-dwg_ent_mline_set_extrusion(dwg_ent_mline *mline, dwg_point_3d *point,
-                            int *error)
+dwg_ent_mline_set_extrusion(dwg_ent_mline *restrict mline,
+                            const dwg_point_3d *restrict point,
+                            int *restrict error)
 {
-  if (mline != 0 && point != 0)
+  if (mline && point)
     {
       *error = 0;
       mline->extrusion.x = point->x;
@@ -13108,10 +13536,11 @@ dwg_ent_mline_set_extrusion(dwg_ent_mline *mline, dwg_point_3d *point,
 
 /// Returns extrusion points
 void
-dwg_ent_mline_get_extrusion(dwg_ent_mline *mline, dwg_point_3d *point,
-                            int *error)
+dwg_ent_mline_get_extrusion(const dwg_ent_mline *restrict mline,
+                            dwg_point_3d *restrict point,
+                            int *restrict error)
 {
-  if (mline != 0 && point != 0)
+  if (mline && point)
     {
       *error = 0;
       point->x = mline->extrusion.x;
@@ -13127,10 +13556,11 @@ dwg_ent_mline_get_extrusion(dwg_ent_mline *mline, dwg_point_3d *point,
 
 /// Sets open closed value
 void
-dwg_ent_mline_set_flags(dwg_ent_mline *mline, BITCODE_BS oc,
-                              int *error)
+dwg_ent_mline_set_flags(dwg_ent_mline *restrict mline,
+                        const BITCODE_BS oc,
+                        int *restrict error)
 {
-  if (mline != 0)
+  if (mline)
     {
       *error = 0;
       mline->flags = oc;
@@ -13144,9 +13574,10 @@ dwg_ent_mline_set_flags(dwg_ent_mline *mline, BITCODE_BS oc,
 
 /// Returns flags value
 BITCODE_BS
-dwg_ent_mline_get_flags(dwg_ent_mline *mline, int *error)
+dwg_ent_mline_get_flags(const dwg_ent_mline *restrict mline,
+                        int *restrict error)
 {
-  if (mline != 0)
+  if (mline)
     {
       *error = 0;
       return mline->flags;
@@ -13159,27 +13590,12 @@ dwg_ent_mline_get_flags(dwg_ent_mline *mline, int *error)
     }
 }
 
-/// Sets number of lines
-void
-dwg_ent_mline_set_num_lines(dwg_ent_mline *mline, BITCODE_RC num, int *error)
-{
-  if (mline != 0)
-    {
-      *error = 0;
-      mline->num_lines = num;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
 /// Returns number of lines
 BITCODE_RC
-dwg_ent_mline_get_num_lines(dwg_ent_mline *mline, int *error)
+dwg_ent_mline_get_num_lines(const dwg_ent_mline *restrict mline,
+                            int *restrict error)
 {
-  if (mline != 0)
+  if (mline)
     {
       *error = 0;
       return mline->num_lines;
@@ -13192,28 +13608,36 @@ dwg_ent_mline_get_num_lines(dwg_ent_mline *mline, int *error)
     }
 }
 
-/// Sets number of vertices
-void
-dwg_ent_mline_set_num_verts(dwg_ent_mline *mline, BITCODE_BS num,
-                            int *error)
+/// Returns all mline vertex lines
+dwg_mline_line *
+dwg_mline_vertex_get_lines(const dwg_mline_vertex *restrict vertex,
+                           int *restrict error)
 {
-  if (mline != 0)
+  dwg_mline_line *ptx = calloc(vertex->num_lines, sizeof(dwg_mline_line));
+  if (ptx)
     {
+      BITCODE_BS i;
       *error = 0;
-      mline->num_verts = num;
+      for (i = 0; i < vertex->num_lines ; i++)
+        {
+          ptx[i] = vertex->lines[i];
+        }
+      return ptx;
     }
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: null malloc", __FUNCTION__)
+      return NULL;
     }
 }
 
 /// Returns number of vertices
 BITCODE_BS
-dwg_ent_mline_get_num_verts(dwg_ent_mline *mline, int *error)
+dwg_ent_mline_get_num_verts(const dwg_ent_mline *restrict mline,
+                            int *restrict error)
 {
-  if (mline != 0)
+  if (mline)
     {
       *error = 0;
       return mline->num_verts;
@@ -13227,12 +13651,12 @@ dwg_ent_mline_get_num_verts(dwg_ent_mline *mline, int *error)
 }
 
 /// Returns mline vertices
-dwg_ent_mline_vertex *
-dwg_ent_mline_get_verts(dwg_ent_mline *mline, int *error)
+dwg_mline_vertex *
+dwg_ent_mline_get_verts(const dwg_ent_mline *restrict mline,
+                        int *restrict error)
 {
-  dwg_ent_mline_vertex *ptx = (dwg_ent_mline_vertex*)
-    malloc(sizeof(dwg_ent_mline_vertex)* mline->num_verts);
-  if (ptx != 0)
+  dwg_mline_vertex *ptx = calloc(mline->num_verts, sizeof(dwg_mline_vertex));
+  if (ptx)
     {
       BITCODE_BS i;
       *error = 0;
@@ -13245,7 +13669,7 @@ dwg_ent_mline_get_verts(dwg_ent_mline *mline, int *error)
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: null malloc", __FUNCTION__)
       return NULL;
     }
 }
@@ -13256,9 +13680,9 @@ dwg_ent_mline_get_verts(dwg_ent_mline *mline, int *error)
 
 /// Returns vertex_pface vertind
 BITCODE_BS
-dwg_ent_vertex_pface_face_get_vertind(dwg_ent_vert_pface_face *face)
+dwg_ent_vertex_pface_face_get_vertind(const dwg_ent_vert_pface_face *face)
 {
-  if (face != 0)
+  if (face)
     {
       return face->vertind[3];
     }
@@ -13271,10 +13695,10 @@ dwg_ent_vertex_pface_face_get_vertind(dwg_ent_vert_pface_face *face)
 
 /// Sets vertex_pface vertind
 void
-dwg_ent_vertex_pface_face_set_vertind(dwg_ent_vert_pface_face *face,
+dwg_ent_vertex_pface_face_set_vertind(dwg_ent_vert_pface_face *restrict face,
                                       BITCODE_BS vertind[4])
 {
-  if (face != 0 && vertind != 0)
+  if (face && vertind)
     {
       face->vertind[0] = vertind[0];
       face->vertind[1] = vertind[1];
@@ -13291,11 +13715,12 @@ dwg_ent_vertex_pface_face_set_vertind(dwg_ent_vert_pface_face *face,
 *                  FUNCTIONS FOR 3DSOLID ENTITY                     *
 ********************************************************************/
 
-/// Returns acis empty value
+/// Returns the _dwg_entity_3DSOLID::acis_empty bit
 unsigned char
-dwg_ent_3dsolid_get_acis_empty(dwg_ent_3dsolid *_3dsolid, int *error)
+dwg_ent_3dsolid_get_acis_empty(const dwg_ent_3dsolid *restrict _3dsolid,
+                               int *restrict error)
 {
-  if (_3dsolid != 0)
+  if (_3dsolid)
     {
       *error = 0;
       return _3dsolid->acis_empty;
@@ -13308,15 +13733,16 @@ dwg_ent_3dsolid_get_acis_empty(dwg_ent_3dsolid *_3dsolid, int *error)
     }
 }
 
-/// Sets acis empty value
+/// Sets the _dwg_entity_3DSOLID::acis_empty bit
 void
-dwg_ent_3dsolid_set_acis_empty(dwg_ent_3dsolid *_3dsolid, unsigned char acis,
-                               int *error)
+dwg_ent_3dsolid_set_acis_empty(dwg_ent_3dsolid *restrict _3dsolid,
+                               const unsigned char empty,
+                               int *restrict error)
 {
-  if (_3dsolid != 0)
+  if (_3dsolid)
     {
       *error = 0;
-      _3dsolid->acis_empty = acis;
+      _3dsolid->acis_empty = empty;
     }
   else
     {
@@ -13325,11 +13751,14 @@ dwg_ent_3dsolid_set_acis_empty(dwg_ent_3dsolid *_3dsolid, unsigned char acis,
     }
 }
 
-/// Returns version value
+/// Returns the _dwg_entity_3DSOLID::version
+/// the modeler format version number, DXF 70.
+/// Should be 1, we cannot handle 2 yet
 BITCODE_BS
-dwg_ent_3dsolid_get_version(dwg_ent_3dsolid *_3dsolid, int *error)
+dwg_ent_3dsolid_get_version(const dwg_ent_3dsolid *restrict _3dsolid,
+                            int *restrict error)
 {
-  if (_3dsolid != 0)
+  if (_3dsolid)
     {
       *error = 0;
       return _3dsolid->version;
@@ -13342,45 +13771,12 @@ dwg_ent_3dsolid_get_version(dwg_ent_3dsolid *_3dsolid, int *error)
     }
 }
 
-/// Sets version value
-void
-dwg_ent_3dsolid_set_version(dwg_ent_3dsolid *_3dsolid, BITCODE_BS version,
-                            int *error)
+/// Returns the decrypted _dwg_entity_3DSOLID::acis_data string.
+unsigned char *
+dwg_ent_3dsolid_get_acis_data(const dwg_ent_3dsolid *restrict _3dsolid,
+                              int *restrict error)
 {
-  if (_3dsolid != 0)
-    {
-      *error = 0;
-      _3dsolid->version = version;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns pointer to block size
-BITCODE_BL*
-dwg_ent_3dsolid_get_block_size(dwg_ent_3dsolid *_3dsolid, int *error)
-{
-  if (_3dsolid != 0)
-    {
-      *error = 0;
-      return _3dsolid->block_size;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return NULL;
-    }
-}
-
-/// Returns acis data
-char *
-dwg_ent_3dsolid_get_acis_data(dwg_ent_3dsolid *_3dsolid, int *error)
-{
-  if (_3dsolid != 0)
+  if (_3dsolid)
     {
       *error = 0;
       return _3dsolid->acis_data;
@@ -13393,15 +13789,16 @@ dwg_ent_3dsolid_get_acis_data(dwg_ent_3dsolid *_3dsolid, int *error)
     }
 }
 
-/// Sets acis data
+/// Sets the _dwg_entity_3DSOLID::acis_data string.
 void
-dwg_ent_3dsolid_set_acis_data(dwg_ent_3dsolid *_3dsolid,
-                              char * data, int *error)
+dwg_ent_3dsolid_set_acis_data(dwg_ent_3dsolid *restrict _3dsolid,
+                              const unsigned char *restrict acis_data,
+                              int *restrict error)
 {
-  if (_3dsolid != 0)
+  if (_3dsolid)
     {
       *error = 0;
-      _3dsolid->acis_data = data;
+      _3dsolid->acis_data = (unsigned char*)acis_data;
     }
   else
     {
@@ -13410,12 +13807,12 @@ dwg_ent_3dsolid_set_acis_data(dwg_ent_3dsolid *_3dsolid,
     }
 }
 
-/// Returns wireframe data present value
+/// Returns the _dwg_entity_3DSOLID::wireframe_data_present bit
 char
-dwg_ent_3dsolid_get_wireframe_data_present(dwg_ent_3dsolid *_3dsolid,
-                                           int *error)
+dwg_ent_3dsolid_get_wireframe_data_present(const dwg_ent_3dsolid *restrict _3dsolid,
+                                           int *restrict error)
 {
-  if (_3dsolid != 0)
+  if (_3dsolid)
     {
       *error = 0;
       return _3dsolid->wireframe_data_present;
@@ -13428,15 +13825,16 @@ dwg_ent_3dsolid_get_wireframe_data_present(dwg_ent_3dsolid *_3dsolid,
     }
 }
 
-/// Sets wireframe data present value
+/// Sets the _dwg_entity_3DSOLID::wireframe_data_present bit
 void
-dwg_ent_3dsolid_set_wireframe_data_present(dwg_ent_3dsolid *_3dsolid,
-                                           char data, int *error)
+dwg_ent_3dsolid_set_wireframe_data_present(dwg_ent_3dsolid *restrict _3dsolid,
+                                           const char present,
+                                           int *restrict error)
 {
-  if (_3dsolid != 0)
+  if (_3dsolid)
     {
       *error = 0;
-      _3dsolid->wireframe_data_present = data;
+      _3dsolid->wireframe_data_present = present;
     }
   else
     {
@@ -13445,11 +13843,12 @@ dwg_ent_3dsolid_set_wireframe_data_present(dwg_ent_3dsolid *_3dsolid,
     }
 }
 
-/// Returns point present value
+/// Returns the _dwg_entity_3DSOLID::point_present bit
 char
-dwg_ent_3dsolid_get_point_present(dwg_ent_3dsolid *_3dsolid, int *error)
+dwg_ent_3dsolid_get_point_present(const dwg_ent_3dsolid *restrict _3dsolid,
+                                  int *restrict error)
 {
-  if (_3dsolid != 0)
+  if (_3dsolid)
     {
       *error = 0;
       return _3dsolid->point_present;
@@ -13462,15 +13861,16 @@ dwg_ent_3dsolid_get_point_present(dwg_ent_3dsolid *_3dsolid, int *error)
     }
 }
 
-/// Sets point present value
+/// Sets the _dwg_entity_3DSOLID::point_present bit
 void
-dwg_ent_3dsolid_set_point_present(dwg_ent_3dsolid *_3dsolid, char point,
-                                  int *error)
+dwg_ent_3dsolid_set_point_present(dwg_ent_3dsolid *restrict _3dsolid,
+                                  const char present,
+                                  int *restrict error)
 {
-  if (_3dsolid != 0)
+  if (_3dsolid)
     {
       *error = 0;
-      _3dsolid->point_present = point;
+      _3dsolid->point_present = present;
     }
   else
     {
@@ -13479,12 +13879,13 @@ dwg_ent_3dsolid_set_point_present(dwg_ent_3dsolid *_3dsolid, char point,
     }
 }
 
-/// Returns point value
+/// Returns the _dwg_entity_3DSOLID::point
 void
-dwg_ent_3dsolid_get_point(dwg_ent_3dsolid *_3dsolid, dwg_point_3d *point,
-                          int *error)
+dwg_ent_3dsolid_get_point(const dwg_ent_3dsolid *restrict _3dsolid,
+                          dwg_point_3d *restrict point,
+                          int *restrict error)
 {
-  if (_3dsolid != 0 && point != 0)
+  if (_3dsolid && point)
     {
       *error = 0;
       point->x = _3dsolid->point.x;
@@ -13498,12 +13899,13 @@ dwg_ent_3dsolid_get_point(dwg_ent_3dsolid *_3dsolid, dwg_point_3d *point,
     }
 }
 
-/// Sets point values
+/// Sets the _dwg_entity_3DSOLID::point
 void
-dwg_ent_3dsolid_set_point(dwg_ent_3dsolid *_3dsolid, dwg_point_3d *point,
-                          int *error)
+dwg_ent_3dsolid_set_point(dwg_ent_3dsolid *restrict _3dsolid,
+                          const dwg_point_3d *restrict point,
+                          int *restrict error)
 {
-  if (_3dsolid != 0 && point != 0)
+  if (_3dsolid && point)
     {
       *error = 0;
       _3dsolid->point.x = point->x;
@@ -13517,11 +13919,12 @@ dwg_ent_3dsolid_set_point(dwg_ent_3dsolid *_3dsolid, dwg_point_3d *point,
     }
 }
 
-/// Returns number of isolines
+/// Returns the _dwg_entity_3DSOLID::num_isolines
 BITCODE_BL
-dwg_ent_3dsolid_get_num_isolines(dwg_ent_3dsolid *_3dsolid, int *error)
+dwg_ent_3dsolid_get_num_isolines(const dwg_ent_3dsolid *restrict _3dsolid,
+                                 int *restrict error)
 {
-  if (_3dsolid != 0)
+  if (_3dsolid)
     {
       *error = 0;
       return _3dsolid->num_isolines;
@@ -13534,12 +13937,14 @@ dwg_ent_3dsolid_get_num_isolines(dwg_ent_3dsolid *_3dsolid, int *error)
     }
 }
 
-/// Sets number of isolines
+/// Sets the _dwg_entity_3DSOLID::num_isolines
+/// (apparently safe to set)
 void
-dwg_ent_3dsolid_set_num_isolines(dwg_ent_3dsolid *_3dsolid, BITCODE_BL num,
-                                 int *error)
+dwg_ent_3dsolid_set_num_isolines(dwg_ent_3dsolid *restrict _3dsolid,
+                                 const BITCODE_BL num,
+                                 int *restrict error)
 {
-  if (_3dsolid != 0)
+  if (_3dsolid)
     {
       *error = 0;
       _3dsolid->num_isolines = num;
@@ -13551,11 +13956,13 @@ dwg_ent_3dsolid_set_num_isolines(dwg_ent_3dsolid *_3dsolid, BITCODE_BL num,
     }
 }
 
-/// Returns isoline present value
+/// Returns the _dwg_entity_3DSOLID::isoline_present bit
+/// If set, wires and silhouettes are present.
 char
-dwg_ent_3dsolid_get_isoline_present(dwg_ent_3dsolid *_3dsolid, int *error)
+dwg_ent_3dsolid_get_isoline_present(const dwg_ent_3dsolid *restrict _3dsolid,
+                                    int *restrict error)
 {
-  if (_3dsolid != 0)
+  if (_3dsolid)
     {
       *error = 0;
       return _3dsolid->isoline_present;
@@ -13568,15 +13975,17 @@ dwg_ent_3dsolid_get_isoline_present(dwg_ent_3dsolid *_3dsolid, int *error)
     }
 }
 
-/// Sets isoline present value
+/// Sets the _dwg_entity_3DSOLID::isoline_present bit
+/// If set, wires and silhouettes are present.
 void
-dwg_ent_3dsolid_set_isoline_present(dwg_ent_3dsolid *_3dsolid, char iso,
-                                    int *error)
+dwg_ent_3dsolid_set_isoline_present(dwg_ent_3dsolid *restrict _3dsolid,
+                                    const char present,
+                                    int *restrict error)
 {
-  if (_3dsolid != 0)
+  if (_3dsolid)
     {
       *error = 0;
-      _3dsolid->isoline_present = iso;
+      _3dsolid->isoline_present = present;
     }
   else
     {
@@ -13585,11 +13994,12 @@ dwg_ent_3dsolid_set_isoline_present(dwg_ent_3dsolid *_3dsolid, char iso,
     }
 }
 
-/// Returns number of wires
+/// Returns the number of _dwg_entity_3DSOLID::num_wires wires
 BITCODE_BL
-dwg_ent_3dsolid_get_num_wires(dwg_ent_3dsolid *_3dsolid, int *error)
+dwg_ent_3dsolid_get_num_wires(const dwg_ent_3dsolid *restrict _3dsolid,
+                              int *restrict error)
 {
-  if (_3dsolid != 0)
+  if (_3dsolid)
     {
       *error = 0;
       return _3dsolid->num_wires;
@@ -13602,51 +14012,37 @@ dwg_ent_3dsolid_get_num_wires(dwg_ent_3dsolid *_3dsolid, int *error)
     }
 }
 
-  /// Sets number of wires
-void
-dwg_ent_3dsolid_set_num_wires(dwg_ent_3dsolid *_3dsolid, BITCODE_BL num, int *error)
-{
-  if (_3dsolid != 0)
-    {
-      *error = 0;
-      _3dsolid->num_wires = num;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
 
-/// Returns wire
-dwg_ent_solid_wire *
-dwg_ent_3dsolid_get_wire(dwg_ent_3dsolid *_3dsolid, int *error)
+/// Returns all _dwg_entity_3DSOLID::wire structs, as array of _dwg_3DSOLID_wire::
+dwg_3dsolid_wire *
+dwg_ent_3dsolid_get_wires(const dwg_ent_3dsolid *restrict _3dsolid,
+                          int *restrict error)
 {
-  dwg_ent_solid_wire *ptx = (dwg_ent_solid_wire*)
-    malloc(sizeof(dwg_ent_solid_wire)* _3dsolid->num_wires);
-  if (ptx != 0)
+  dwg_3dsolid_wire *wire = calloc(_3dsolid->num_wires, sizeof(dwg_3dsolid_wire));
+  if (wire)
     {
       BITCODE_BL i;
       *error = 0;
       for (i = 0; i < _3dsolid->num_wires ; i++)
         {
-          ptx[i] = _3dsolid->wires[i];
+          wire[i] = _3dsolid->wires[i];
         }
-      return ptx;
+      return wire;
     }
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: null malloc", __FUNCTION__)
       return NULL;
     }
 }
 
-/// Returns number of silhouettes
+/// Returns the number of _dwg_entity_3DSOLID::num_silhouettes entries.
 BITCODE_BL
-dwg_ent_3dsolid_get_num_silhouettes(dwg_ent_3dsolid *_3dsolid, int *error)
+dwg_ent_3dsolid_get_num_silhouettes(const dwg_ent_3dsolid *restrict _3dsolid,
+                                    int *restrict error)
 {
-  if (_3dsolid != 0)
+  if (_3dsolid)
     {
       *error = 0;
       return _3dsolid->num_silhouettes;
@@ -13659,52 +14055,38 @@ dwg_ent_3dsolid_get_num_silhouettes(dwg_ent_3dsolid *_3dsolid, int *error)
     }
 }
 
-/// Sets number of silhouettes
-void
-dwg_ent_3dsolid_set_num_silhouettes(dwg_ent_3dsolid *_3dsolid,
-                                    BITCODE_BL silhouettes, int *error)
-{
-  if (_3dsolid != 0)
-    {
-      *error = 0;
-      _3dsolid->num_silhouettes = silhouettes;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-  }
 
-/// Returns silhouette
-dwg_ent_solid_silhouette *
-dwg_ent_3dsolid_get_silhouette(dwg_ent_3dsolid *_3dsolid, int *error)
+/// Returns all _dwg_entity_3DSOLID::silhouettes structs, as array of _dwg_3DSOLID_silhouette::
+dwg_3dsolid_silhouette *
+dwg_ent_3dsolid_get_silhouettes(const dwg_ent_3dsolid *restrict _3dsolid,
+                                int *restrict error)
 {
-  dwg_ent_solid_silhouette *ptx = (dwg_ent_solid_silhouette*)
-    malloc(sizeof(dwg_ent_solid_silhouette)* _3dsolid->num_silhouettes);
-  if (ptx != 0)
+  dwg_3dsolid_silhouette *sh = calloc(_3dsolid->num_silhouettes,
+                                      sizeof(dwg_3dsolid_silhouette));
+  if (sh)
     {
       BITCODE_BL i;
       *error = 0;
       for (i = 0; i < _3dsolid->num_silhouettes ; i++)
         {
-          ptx[i] = _3dsolid->silhouettes[i];
+          sh[i] = _3dsolid->silhouettes[i];
         }
-      return ptx;
+      return sh;
     }
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: null malloc", __FUNCTION__)
       return NULL;
     }
 }
 
-/// Returns acis empty 2 value
+/// Returns the _dwg_entity_3DSOLID::acis_empty2 bit
 unsigned char
-dwg_ent_3dsolid_get_acis_empty2(dwg_ent_3dsolid *_3dsolid, int *error)
+dwg_ent_3dsolid_get_acis_empty2(const dwg_ent_3dsolid *restrict _3dsolid,
+                          int *restrict error)
 {
-  if (_3dsolid != 0)
+  if (_3dsolid)
     {
       *error = 0;
       return _3dsolid->acis_empty2;
@@ -13717,12 +14099,12 @@ dwg_ent_3dsolid_get_acis_empty2(dwg_ent_3dsolid *_3dsolid, int *error)
     }
 }
 
-/// Sets acis empty 2 value
+/// Sets the _dwg_entity_3DSOLID::acis_empty2 bit
 void
-dwg_ent_3dsolid_set_acis_empty2(dwg_ent_3dsolid *_3dsolid, unsigned char acis,
-                                int *error)
+dwg_ent_3dsolid_set_acis_empty2(dwg_ent_3dsolid *restrict _3dsolid, unsigned char acis,
+                                int *restrict error)
 {
-  if (_3dsolid != 0)
+  if (_3dsolid)
     {
       *error = 0;
       _3dsolid->acis_empty2 = acis;
@@ -13738,896 +14120,389 @@ dwg_ent_3dsolid_set_acis_empty2(dwg_ent_3dsolid *_3dsolid, unsigned char acis,
 *                   FUNCTIONS FOR REGION ENTITY                     *
 ********************************************************************/
 
-/// Returns acis empty value
+// Returns the Dwg_Entity_REGION::acis_empty bit
 unsigned char
-dwg_ent_region_get_acis_empty(dwg_ent_region *region, int *error)
+dwg_ent_region_get_acis_empty(const dwg_ent_region *restrict region,
+                              int *restrict error)
 {
-  if (region != 0)
-    {
-      *error = 0;
-      return region->acis_empty;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return '\0';
-    }
+  return dwg_ent_3dsolid_get_acis_empty((const dwg_ent_3dsolid *)region, error);
 }
 
-/// Sets acis empty value
+/// Sets the Dwg_Entity_REGION::acis_empty bit
 void
-dwg_ent_region_set_acis_empty(dwg_ent_region *region, unsigned char acis,
-                              int *error)
+dwg_ent_region_set_acis_empty(dwg_ent_region *restrict region, unsigned char empty,
+                              int *restrict error)
 {
-  if (region != 0)
-    {
-      *error = 0;
-      region->acis_empty = acis;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  dwg_ent_3dsolid_set_acis_empty((dwg_ent_3dsolid *)region, empty, error);
 }
 
-/// Returns version value
+/// Returns the Dwg_Entity_REGION::version
+/// the modeler format version number, DXF 70.
+/// Should be 1, we cannot handle 2 yet
 BITCODE_BS
-dwg_ent_region_get_version(dwg_ent_region *region, int *error)
+dwg_ent_region_get_version(const dwg_ent_region *restrict region,
+                          int *restrict error)
 {
-  if (region != 0)
-    {
-      *error = 0;
-      return region->version;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return 0;
-    }
+  return dwg_ent_3dsolid_get_version((const dwg_ent_3dsolid *)region, error);
 }
 
-/// Sets version value
+
+/// Returns the decrypted Dwg_Entity_REGION::acis_data string.
+unsigned char *
+dwg_ent_region_get_acis_data(const dwg_ent_region *restrict region,
+                             int *restrict error)
+{
+  return dwg_ent_3dsolid_get_acis_data((const dwg_ent_3dsolid *)region, error);
+}
+
+/// Sets the Dwg_Entity_REGION::acis_data string.
 void
-dwg_ent_region_set_version(dwg_ent_region *region, BITCODE_BS version,
-                           int *error)
+dwg_ent_region_set_acis_data(dwg_ent_region *restrict region,
+                             const unsigned char *restrict sat_data,
+                             int *restrict error)
 {
-  if (region != 0)
-    {
-      *error = 0;
-      region->version = version;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  dwg_ent_3dsolid_set_acis_data((dwg_ent_3dsolid *)region, sat_data, error);
 }
 
-/// Returns pointer
-BITCODE_BL*
-dwg_ent_region_get_block_size(dwg_ent_region *region, int *error)
-{
-  if (region != 0)
-    {
-      *error = 0;
-      return region->block_size;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return NULL;
-    }
-}
-
-/// Returns acis data
-char *
-dwg_ent_region_get_acis_data(dwg_ent_region *region, int *error)
-{
-  if (region != 0)
-    {
-      *error = 0;
-      return region->acis_data;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return NULL;
-    }
-}
-
-/// Sets acis data
-void
-dwg_ent_region_set_acis_data(dwg_ent_region *region, char * data,
-                             int *error)
-{
-  if (region != 0)
-    {
-      *error = 0;
-      region->acis_data = data;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns wireframe data present value
+/// Returns the Dwg_Entity_REGION::wireframe_data_present bit
 char
-dwg_ent_region_get_wireframe_data_present(dwg_ent_region *region, int *error)
+dwg_ent_region_get_wireframe_data_present(const dwg_ent_region *restrict region,
+                                          int *restrict error)
 {
-  if (region != 0)
-    {
-      *error = 0;
-      return region->wireframe_data_present;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return '\0';
-    }
+  return dwg_ent_3dsolid_get_wireframe_data_present((const dwg_ent_3dsolid *)region, error);
 }
 
-/// Sets wireframe data present value
+/// Sets the Dwg_Entity_REGION::wireframe_data_present bit
 void
-dwg_ent_region_set_wireframe_data_present(dwg_ent_region *region, char data,
-                                          int *error)
+dwg_ent_region_set_wireframe_data_present(dwg_ent_region *restrict region,
+                                          const char present,
+                                          int *restrict error)
 {
-  if (region != 0)
-    {
-      *error = 0;
-      region->wireframe_data_present = data;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  dwg_ent_3dsolid_set_wireframe_data_present((dwg_ent_3dsolid *)region, present, error);
 }
 
-/// Returns point present value
+/// Returns the Dwg_Entity_REGION::point_present bit
 char
-dwg_ent_region_get_point_present(dwg_ent_region *region, int *error)
+dwg_ent_region_get_point_present(const dwg_ent_region *restrict region,
+                                 int *restrict error)
 {
-  if (region != 0)
-    {
-      *error = 0;
-      return region->point_present;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return '\0';
-    }
+  return dwg_ent_3dsolid_get_point_present((const dwg_ent_3dsolid *)region, error);
 }
 
-/// Sets point present value
+/// Sets the Dwg_Entity_REGION::point_present bit
 void
-dwg_ent_region_set_point_present(dwg_ent_region *region, char point,
-                                 int *error)
+dwg_ent_region_set_point_present(dwg_ent_region *restrict region, const char present,
+                                 int *restrict error)
 {
-  if (region != 0)
-    {
-      *error = 0;
-      region->point_present = point;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  dwg_ent_3dsolid_set_point_present((dwg_ent_3dsolid *)region, present, error);
 }
 
-/// Returns point value
+/// Returns the Dwg_Entity_REGION::point
 void
-dwg_ent_region_get_point(dwg_ent_region *region, dwg_point_3d *point,
-                         int *error)
+dwg_ent_region_get_point(const dwg_ent_region *restrict region,
+                         dwg_point_3d *restrict point,
+                         int *restrict error)
 {
-  if (region != 0 && point != 0)
-    {
-      *error = 0;
-      point->x = region->point.x;
-      point->y = region->point.y;
-      point->z = region->point.z;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  return dwg_ent_3dsolid_get_point((const dwg_ent_3dsolid *)region, point, error);
 }
 
-/// Sets point values
+/// Sets the Dwg_Entity_REGION::point
 void
-dwg_ent_region_set_point(dwg_ent_region *region, dwg_point_3d *point,
-                         int *error)
+dwg_ent_region_set_point(dwg_ent_region *restrict region,
+                         const dwg_point_3d *restrict point,
+                         int *restrict error)
 {
-  if (region != 0 && point != 0)
-    {
-      *error = 0;
-      region->point.x = point->x;
-      region->point.y = point->y;
-      region->point.z = point->z;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  dwg_ent_3dsolid_set_point((dwg_ent_3dsolid *)region, point, error);
 }
 
-/// Returns number of isolines
+/// Returns the Dwg_Entity_REGION::num_isolines
 BITCODE_BL
-dwg_ent_region_get_num_isolines(dwg_ent_region *region, int *error)
+dwg_ent_region_get_num_isolines(const dwg_ent_region *restrict region,
+                                int *restrict error)
 {
-  if (region != 0)
-    {
-      *error = 0;
-      return region->num_isolines;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return 0L;
-    }
+  return dwg_ent_3dsolid_get_num_isolines((const dwg_ent_3dsolid *)region, error);
 }
 
-/// Sets number of isolines
+/// Sets the Dwg_Entity_REGION::num_isolines (??)
 void
-dwg_ent_region_set_num_isolines(dwg_ent_region *region, BITCODE_BL num, int *error)
+dwg_ent_region_set_num_isolines(dwg_ent_region *restrict region,
+                                BITCODE_BL num,
+                                int *restrict error)
 {
-  if (region != 0)
-    {
-      *error = 0;
-      region->num_isolines = num;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  dwg_ent_3dsolid_set_num_isolines((dwg_ent_3dsolid *)region, num, error);
 }
 
-/// Returns isoline present value
+/// Returns the Dwg_Entity_REGION::isoline_present bit
+/// If set, wires and silhouettes are present.
 char
-dwg_ent_region_get_isoline_present(dwg_ent_region *region, int *error)
+dwg_ent_region_get_isoline_present(const dwg_ent_region *restrict region,
+                                   int *restrict error)
 {
-  if (region != 0)
-    {
-      *error = 0;
-      return region->isoline_present;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return '\0';
-    }
+  return dwg_ent_3dsolid_get_isoline_present((const dwg_ent_3dsolid *)region, error);
 }
 
-/// Sets isoline present value
+/// Sets the Dwg_Entity_REGION::isoline_present bit
+/// If set, wires and silhouettes are present.
 void
-dwg_ent_region_set_isoline_present(dwg_ent_region *region, char iso,
-                                   int *error)
+dwg_ent_region_set_isoline_present(dwg_ent_region *restrict region, char present,
+                                   int *restrict error)
 {
-  if (region != 0)
-    {
-      *error = 0;
-      region->isoline_present = iso;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  dwg_ent_3dsolid_set_isoline_present((dwg_ent_3dsolid *)region, present, error);
 }
 
-/// Returns number of wires
+/// Returns the number of Dwg_Entity_REGION::num_wires wires
 BITCODE_BL
-dwg_ent_region_get_num_wires(dwg_ent_region *region, int *error)
+dwg_ent_region_get_num_wires(const dwg_ent_region *restrict region,
+                             int *restrict error)
 {
-  if (region != 0)
-    {
-      *error = 0;
-      return region->num_wires;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return 0L;
-    }
+  return dwg_ent_3dsolid_get_num_wires((const dwg_ent_3dsolid *)region, error);
 }
 
-/// Sets number of wires
-void
-dwg_ent_region_set_num_wires(dwg_ent_region *region, BITCODE_BL num, int *error)
+//TODO dwg_ent_region_add_wire, dwg_ent_region_delete_wire
+
+/// Returns all Dwg_Entity_REGION::wire structs, as array of _dwg_3DSOLID_wire::
+dwg_3dsolid_wire *
+dwg_ent_region_get_wires(const dwg_ent_region *restrict region,
+                          int *restrict error)
 {
-  if (region != 0)
-    {
-      *error = 0;
-      region->num_wires = num;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  return dwg_ent_3dsolid_get_wires((const dwg_ent_3dsolid *)region, error);
 }
 
-/// Returns wire
-dwg_ent_solid_wire *
-dwg_ent_region_get_wire(dwg_ent_region *region, int *error)
-{
-  dwg_ent_solid_wire *ptx = (dwg_ent_solid_wire*)
-    malloc(sizeof(dwg_ent_solid_wire)* region->num_wires);
-  if (ptx != 0)
-    {
-      BITCODE_BL i;
-      *error = 0;
-      for (i = 0; i < region->num_wires ; i++)
-        {
-          ptx[i] = region->wires[i];
-        }
-      return ptx;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return NULL;
-    }
-}
-
-/// Returns number of silhouettes
+/// Returns the number of Dwg_Entity_REGION::num_silhouettes entries.
 BITCODE_BL
-dwg_ent_region_get_num_silhouettes(dwg_ent_region *region, int *error)
+dwg_ent_region_get_num_silhouettes(const dwg_ent_region *restrict region,
+                                   int *restrict error)
 {
-  if (region != 0)
-    {
-      *error = 0;
-      return region->num_silhouettes;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return 0L;
-    }
+  return dwg_ent_3dsolid_get_num_silhouettes((const dwg_ent_3dsolid *)region, error);
 }
 
-/// Sets number of silhouettes
-void
-dwg_ent_region_set_num_silhouettes(dwg_ent_region *region, BITCODE_BL silhouettes,
-                                   int *error)
+//TODO dwg_ent_region_add_silhouette, dwg_ent_region_delete_silhouette
+
+/// Returns all Dwg_Entity_REGION::silhouettes structs, as array of _dwg_3DSOLID_silhouette::
+dwg_3dsolid_silhouette *
+dwg_ent_region_get_silhouettes(const dwg_ent_region *restrict region,
+                          int *restrict error)
 {
-  if (region != 0)
-    {
-      *error = 0;
-      region->num_silhouettes = silhouettes;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  return dwg_ent_3dsolid_get_silhouettes((const dwg_ent_3dsolid *)region, error);
 }
 
-/// Returns silhouette
-dwg_ent_solid_silhouette *
-dwg_ent_region_get_silhouette(dwg_ent_region *region, int *error)
-{
-  dwg_ent_solid_silhouette *ptx = (dwg_ent_solid_silhouette*)
-    malloc(sizeof(dwg_ent_solid_silhouette)* region->num_silhouettes);
-  if (ptx != 0)
-    {
-      BITCODE_BL i;
-      *error = 0;
-      for (i = 0; i < region->num_silhouettes ; i++)
-        {
-          ptx[i] = region->silhouettes[i];
-        }
-      return ptx;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return NULL;
-    }
-}
-
-/// Returns acis empty 2 value
+/// Returns the Dwg_Entity_REGION::acis_empty2 bit
 unsigned char
-dwg_ent_region_get_acis_empty2(dwg_ent_region *region, int *error)
+dwg_ent_region_get_acis_empty2(const dwg_ent_region *restrict region,
+                          int *restrict error)
 {
-  if (region != 0)
-    {
-      *error = 0;
-      return region->acis_empty2;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return '\0';
-    }
+  return dwg_ent_3dsolid_get_acis_empty2((const dwg_ent_3dsolid *)region, error);
 }
 
-/// Sets acis empty 2 value
+/// Sets the Dwg_Entity_REGION::acis_empty2 bit
 void
-dwg_ent_region_set_acis_empty2(dwg_ent_region *region, unsigned char acis,
-                               int *error)
+dwg_ent_region_set_acis_empty2(dwg_ent_region *restrict region, unsigned char empty2,
+                               int *restrict error)
 {
-  if (region != 0)
-    {
-      *error = 0;
-      region->acis_empty2 = acis;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  dwg_ent_3dsolid_set_acis_empty2((dwg_ent_3dsolid *)region, empty2, error);
 }
 
 /*******************************************************************
 *                    FUNCTIONS FOR BODY ENTITY                      *
 ********************************************************************/
-/// Returns acis empty value
+
+// Returns the Dwg_Entity_BODY::acis_empty bit
 unsigned char
-dwg_ent_body_get_acis_empty(dwg_ent_body *body, int *error)
+dwg_ent_body_get_acis_empty(const dwg_ent_body *restrict body,
+                              int *restrict error)
 {
-  if (body != 0)
-    {
-      *error = 0;
-      return body->acis_empty;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return '\0';
-    }
+  return dwg_ent_3dsolid_get_acis_empty((const dwg_ent_3dsolid *)body, error);
 }
 
-/// Sets acis empty value
+/// Sets the Dwg_Entity_BODY::acis_empty bit
 void
-dwg_ent_body_set_acis_empty(dwg_ent_body *body, unsigned char acis,
-                            int *error)
+dwg_ent_body_set_acis_empty(dwg_ent_body *restrict body, unsigned char empty,
+                              int *restrict error)
 {
-  if (body != 0)
-    {
-      *error = 0;
-      body->acis_empty = acis;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  dwg_ent_3dsolid_set_acis_empty((dwg_ent_3dsolid *)body, empty, error);
 }
 
-/// Returns version value
+/// Returns the Dwg_Entity_BODY::version
+/// the modeler format version number, DXF 70.
+/// Should be 1, we cannot handle 2 yet
 BITCODE_BS
-dwg_ent_body_get_version(dwg_ent_body *body, int *error)
+dwg_ent_body_get_version(const dwg_ent_body *restrict body,
+                          int *restrict error)
 {
-  if (body != 0)
-    {
-      *error = 0;
-      return body->version;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return 0;
-    }
+  return dwg_ent_3dsolid_get_version((const dwg_ent_3dsolid *)body, error);
 }
 
-/// Sets version value
+
+/// Returns the decrypted Dwg_Entity_BODY::acis_data string.
+unsigned char *
+dwg_ent_body_get_acis_data(const dwg_ent_body *restrict body,
+                             int *restrict error)
+{
+  return dwg_ent_3dsolid_get_acis_data((const dwg_ent_3dsolid *)body, error);
+}
+
+/// Sets the Dwg_Entity_BODY::acis_data string.
 void
-dwg_ent_body_set_version(dwg_ent_body *body, BITCODE_BS version, int *error)
+dwg_ent_body_set_acis_data(dwg_ent_body *restrict body,
+                             const unsigned char *restrict sat_data,
+                             int *restrict error)
 {
-  if (body != 0)
-    {
-      *error = 0;
-      body->version = version;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  dwg_ent_3dsolid_set_acis_data((dwg_ent_3dsolid *)body, sat_data, error);
 }
 
-/// Returns pointer to body block size
-BITCODE_BL *
-dwg_ent_body_get_block_size(dwg_ent_body *body, int *error)
-{
-  if (body != 0)
-    {
-      *error = 0;
-      return body->block_size;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return NULL;
-    }
-}
-
-/// Returns body acis data value
-char *
-dwg_ent_body_get_acis_data(dwg_ent_body *body, int *error)
-{
-  if (body != 0)
-    {
-      *error = 0;
-      return body->acis_data;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return NULL;
-    }
-}
-
-/// Sets acis data of body
-void
-dwg_ent_body_set_acis_data(dwg_ent_body *body, char * data, int *error)
-{
-  if (body != 0)
-    {
-      *error = 0;
-      body->acis_data = data;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns wireframe data present value
+/// Returns the Dwg_Entity_BODY::wireframe_data_present bit
 char
-dwg_ent_body_get_wireframe_data_present(dwg_ent_body *body, int *error)
+dwg_ent_body_get_wireframe_data_present(const dwg_ent_body *restrict body,
+                                          int *restrict error)
 {
-  if (body != 0)
-    {
-      *error = 0;
-      return body->wireframe_data_present;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return '\0';
-    }
+  return dwg_ent_3dsolid_get_wireframe_data_present((const dwg_ent_3dsolid *)body, error);
 }
 
-/// Sets wireframe data present value
+/// Sets the Dwg_Entity_BODY::wireframe_data_present bit
 void
-dwg_ent_body_set_wireframe_data_present(dwg_ent_body *body, char data,
-                                        int *error)
+dwg_ent_body_set_wireframe_data_present(dwg_ent_body *restrict body,
+                                        const char present,
+                                        int *restrict error)
 {
-  if (body != 0)
-    {
-      *error = 0;
-      body->wireframe_data_present = data;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  dwg_ent_3dsolid_set_wireframe_data_present((dwg_ent_3dsolid *)body, present, error);
 }
 
-/// Returns point present value
+/// Returns the Dwg_Entity_BODY::point_present bit
 char
-dwg_ent_body_get_point_present(dwg_ent_body *body, int *error)
+dwg_ent_body_get_point_present(const dwg_ent_body *restrict body,
+                               int *restrict error)
 {
-  if (body != 0)
-    {
-      *error = 0;
-      return body->point_present;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return '\0';
-    }
+  return dwg_ent_3dsolid_get_point_present((const dwg_ent_3dsolid *)body, error);
 }
 
-/// Sets point present value
+/// Sets the Dwg_Entity_BODY::point_present bit
 void
-dwg_ent_body_set_point_present(dwg_ent_body *body, char point, int *error)
+dwg_ent_body_set_point_present(dwg_ent_body *restrict body, const char present,
+                               int *restrict error)
 {
-  if (body != 0)
-    {
-      *error = 0;
-      body->point_present = point;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  dwg_ent_3dsolid_set_point_present((dwg_ent_3dsolid *)body, present, error);
 }
 
-/// Returns point values
+/// Returns the Dwg_Entity_BODY::point
 void
-dwg_ent_body_get_point(dwg_ent_body *body, dwg_point_3d *point, int *error)
+dwg_ent_body_get_point(const dwg_ent_body *restrict body,
+                       dwg_point_3d *restrict point,
+                       int *restrict error)
 {
-  if (body != 0)
-    {
-      *error = 0;
-      point->x = body->point.x;
-      point->y = body->point.y;
-      point->z = body->point.z;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  return dwg_ent_3dsolid_get_point((const dwg_ent_3dsolid *)body, point, error);
 }
 
-/// Sets point of body entity
+/// Sets the Dwg_Entity_BODY::point
 void
-dwg_ent_body_set_point(dwg_ent_body *body, dwg_point_3d *point, int *error)
+dwg_ent_body_set_point(dwg_ent_body *restrict body,
+                       const dwg_point_3d *restrict point,
+                       int *restrict error)
 {
-  if (body != 0)
-    {
-      *error = 0;
-      body->point.x = point->x;
-      body->point.y = point->y;
-      body->point.z = point->z;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  dwg_ent_3dsolid_set_point((dwg_ent_3dsolid *)body, point, error);
 }
 
-/// Returns number of isolines
+/// Returns the Dwg_Entity_BODY::num_isolines
 BITCODE_BL
-dwg_ent_body_get_num_isolines(dwg_ent_body *body, int *error)
+dwg_ent_body_get_num_isolines(const dwg_ent_body *restrict body,
+                              int *restrict error)
 {
-  if (body != 0)
-    {
-      *error = 0;
-      return body->num_isolines;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return 0L;
-    }
+  return dwg_ent_3dsolid_get_num_isolines((const dwg_ent_3dsolid *)body, error);
 }
 
-/// Sets number of isolines
+/// Sets the Dwg_Entity_BODY::num_isolines (??)
 void
-dwg_ent_body_set_num_isolines(dwg_ent_body *body, BITCODE_BL num, int *error)
+dwg_ent_body_set_num_isolines(dwg_ent_body *restrict body,
+                              const BITCODE_BL num,
+                              int *restrict error)
 {
-  if (body != 0)
-    {
-      *error = 0;
-      body->num_isolines = num;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  dwg_ent_3dsolid_set_num_isolines((dwg_ent_3dsolid *)body, num, error);
 }
 
-/// returns isoline present value
+/// Returns the Dwg_Entity_BODY::isoline_present bit
+/// If set, wires and silhouettes are present.
 char
-dwg_ent_body_get_isoline_present(dwg_ent_body *body, int *error)
+dwg_ent_body_get_isoline_present(const dwg_ent_body *restrict body,
+                                 int *restrict error)
 {
-  if (body != 0)
-    {
-      *error = 0;
-      return body->isoline_present;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return '\0';
-    }
+  return dwg_ent_3dsolid_get_isoline_present((const dwg_ent_3dsolid *)body, error);
 }
 
-/// Sets isoline present value
+/// Sets the Dwg_Entity_BODY::isoline_present bit
+/// If set, wires and silhouettes are present.
 void
-dwg_ent_body_set_isoline_present(dwg_ent_body *body, char iso, int *error)
+dwg_ent_body_set_isoline_present(dwg_ent_body *restrict body, char present,
+                                 int *restrict error)
 {
-  if (body != 0)
-    {
-      *error = 0;
-      body->isoline_present = iso;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  dwg_ent_3dsolid_set_isoline_present((dwg_ent_3dsolid *)body, present, error);
 }
 
-/// Returns number of wires
+/// Returns the number of Dwg_Entity_BODY::num_wires wires
 BITCODE_BL
-dwg_ent_body_get_num_wires(dwg_ent_body *body, int *error)
+dwg_ent_body_get_num_wires(const dwg_ent_body *restrict body,
+                           int *restrict error)
 {
-  if (body != 0)
-    {
-      *error = 0;
-      return body->num_wires;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return 0L;
-    }
+  return dwg_ent_3dsolid_get_num_wires((const dwg_ent_3dsolid *)body, error);
 }
 
-/// Sets number of wires
-void
-dwg_ent_body_set_num_wires(dwg_ent_body *body, BITCODE_BL num, int *error)
+//TODO dwg_ent_body_add_wire, dwg_ent_body_delete_wire
+
+/// Returns all Dwg_Entity_BODY::wire structs, as array of _dwg_3DSOLID_wire::
+dwg_3dsolid_wire *
+dwg_ent_body_get_wires(const dwg_ent_body *restrict body,
+                       int *restrict error)
 {
-  if (body != 0)
-    {
-      *error = 0;
-      body->num_wires = num;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  return dwg_ent_3dsolid_get_wires((const dwg_ent_3dsolid *)body, error);
 }
 
-/// Returns wire of body
-dwg_ent_solid_wire *
-dwg_ent_body_get_wire(dwg_ent_body *body, int *error)
-{
-  dwg_ent_solid_wire *ptx = (dwg_ent_solid_wire*)
-    malloc(sizeof(dwg_ent_solid_wire)* body->num_wires);
-  if (ptx != 0)
-    {
-      BITCODE_BL i;
-      *error = 0;
-      for (i = 0; i < body->num_wires ; i++)
-        {
-          ptx[i] = body->wires[i];
-        }
-      return ptx;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return NULL;
-    }
-}
-
-/// Returns number of silhouettes value
+/// Returns the number of Dwg_Entity_BODY::num_silhouettes entries.
 BITCODE_BL
-dwg_ent_body_get_num_silhouettes(dwg_ent_body *body, int *error)
+dwg_ent_body_get_num_silhouettes(const dwg_ent_body *restrict body,
+                                 int *restrict error)
 {
-  if (body != 0)
-    {
-      *error = 0;
-      return body->num_silhouettes;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return 0L;
-    }
+  return dwg_ent_3dsolid_get_num_silhouettes((const dwg_ent_3dsolid *)body, error);
 }
 
-/// Sets number of silhouettes
-void
-dwg_ent_body_set_num_silhouettes(dwg_ent_body *body, BITCODE_BL silhouettes,
-                                 int *error)
+//TODO dwg_ent_body_add_silhouette, dwg_ent_body_delete_silhouette
+
+/// Returns all Dwg_Entity_BODY::silhouettes structs, as array of _dwg_3DSOLID_silhouette::
+dwg_3dsolid_silhouette *
+dwg_ent_body_get_silhouettes(const dwg_ent_body *restrict body,
+                             int *restrict error)
 {
-  if (body != 0)
-    {
-      *error = 0;
-      body->num_silhouettes = silhouettes;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  return dwg_ent_3dsolid_get_silhouettes((const dwg_ent_3dsolid *)body, error);
 }
 
-/// Returns silhouette for body entity
-dwg_ent_solid_silhouette *
-dwg_ent_body_get_silhouette(dwg_ent_body *body,
-                            int *error)
-{
-  dwg_ent_solid_silhouette *ptx = (dwg_ent_solid_silhouette*)
-    malloc(sizeof(dwg_ent_solid_silhouette)* body->num_silhouettes);
-  if (ptx != 0)
-    {
-      BITCODE_BL i;
-      *error = 0;
-      for (i = 0; i < body->num_silhouettes ; i++)
-        {
-          ptx[i] = body->silhouettes[i];
-        }
-      return ptx;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return NULL;
-    }
-}
-
-/// Returns acis empty2 value
+/// Returns the Dwg_Entity_BODY::acis_empty2 bit
 unsigned char
-dwg_ent_body_get_acis_empty2(dwg_ent_body *body, int *error)
+dwg_ent_body_get_acis_empty2(const dwg_ent_body *restrict body,
+                             int *restrict error)
 {
-  if (body != 0)
-    {
-      *error = 0;
-      return body->acis_empty2;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return '\0';
-    }
+  return dwg_ent_3dsolid_get_acis_empty2((const dwg_ent_3dsolid *)body, error);
 }
 
-/// Sets body acis empty2 value
+/// Sets the Dwg_Entity_BODY::acis_empty2 bit
 void
-dwg_ent_body_set_acis_empty2(dwg_ent_body *body, unsigned char acis,
-                             int *error)
+dwg_ent_body_set_acis_empty2(dwg_ent_body *restrict body, unsigned char empty2,
+                             int *restrict error)
 {
-  if (body != 0)
-    {
-      *error = 0;
-      body->acis_empty2 = acis;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
+  dwg_ent_3dsolid_set_acis_empty2((dwg_ent_3dsolid *)body, empty2, error);
 }
 
 /*******************************************************************
 *                    FUNCTIONS FOR TABLE ENTITY                     *
 ********************************************************************/
 
-/// Sets insertion point
+/** Sets _dwg_entity_TABLE::insertion_point, DXF 10.
+\param[in]  table      dwg_ent_table *
+\param[in] point      dwg_point_3d *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_insertion_point(dwg_ent_table *table, dwg_point_3d *point,
-                                  int *error)
+dwg_ent_table_set_insertion_point(dwg_ent_table *restrict table,
+                                  const dwg_point_3d *restrict point,
+                                  int *restrict error)
 {
-  if (table != 0 && point != 0)
+  if (table && point)
     {
       *error = 0;
       table->insertion_point.x = point->x;
@@ -14641,12 +14516,17 @@ dwg_ent_table_set_insertion_point(dwg_ent_table *table, dwg_point_3d *point,
     }
 }
 
-/// Returns insertion point
+/** Returns _dwg_entity_TABLE::insertion point, DXF 10.
+\param[in]  table      dwg_ent_table *
+\param[out] point      dwg_point_3d *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_get_insertion_point(dwg_ent_table *table, dwg_point_3d *point,
-                                  int *error)
+dwg_ent_table_get_insertion_point(const dwg_ent_table *restrict table,
+                                  dwg_point_3d *restrict point,
+                                  int *restrict error)
 {
-  if (table != 0 && point != 0)
+  if (table && point)
     {
       *error = 0;
       point->x = table->insertion_point.x;
@@ -14660,16 +14540,33 @@ dwg_ent_table_get_insertion_point(dwg_ent_table *table, dwg_point_3d *point,
     }
 }
 
-/// Sets scale points
+/** Sets _dwg_entity_TABLE::scale, DXF 41. if r13+
+\param[in]  table      dwg_ent_table*
+\param[in]  scale3d    dwg_point_3d*, scale in x, y, z
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_scale(dwg_ent_table *table, dwg_point_3d *point, int *error)
+dwg_ent_table_set_scale(dwg_ent_table *restrict table,
+                        const dwg_point_3d *restrict scale3d,
+                        int *restrict error)
 {
-  if (table != 0 && point != 0)
+  if (table && scale3d)
     {
       *error = 0;
-      table->scale.x = point->x;
-      table->scale.y = point->y;
-      table->scale.z = point->z;
+      // set data_flags (for r2000+)
+      if (scale3d->x == 1.0) {
+        if (scale3d->y == 1.0 && scale3d->z == 1.0)
+          table->data_flags = 3;
+        else
+          table->data_flags = 1;
+      } else if (scale3d->x == scale3d->y && scale3d->x == scale3d->z)
+        table->data_flags = 2;
+      else
+        table->data_flags = 0;
+
+      table->scale.x = scale3d->x;
+      table->scale.y = scale3d->y;
+      table->scale.z = scale3d->z;
     }
   else
     {
@@ -14678,16 +14575,22 @@ dwg_ent_table_set_scale(dwg_ent_table *table, dwg_point_3d *point, int *error)
     }
 }
 
-/// Returns scale points
+/** Returns _dwg_entity_TABLE::scale, DXF 41. if r13+
+\param[in]  table      dwg_ent_table *
+\param[out] scale3d    dwg_point_3d *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_get_scale(dwg_ent_table *table, dwg_point_3d *point, int *error)
+dwg_ent_table_get_scale(const dwg_ent_table *restrict table,
+                        dwg_point_3d *restrict scale3d,
+                        int *restrict error)
 {
-  if (table != 0 && point != 0)
+  if (table && scale3d)
     {
       *error = 0;
-      point->x = table->scale.x;
-      point->y = table->scale.y;
-      point->z = table->scale.z;
+      scale3d->x = table->scale.x;
+      scale3d->y = table->scale.y;
+      scale3d->z = table->scale.z;
     }
   else
     {
@@ -14696,12 +14599,17 @@ dwg_ent_table_get_scale(dwg_ent_table *table, dwg_point_3d *point, int *error)
     }
 }
 
-/// Sets data flags
+/** Sets _dwg_entity_TABLE::data_flags, if r2000+.
+\param[in]  table      dwg_ent_table *
+\param[in]  flags      0 - 3
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_data_flags(dwg_ent_table *table, unsigned char flags,
-                             int *error)
+dwg_ent_table_set_data_flags(dwg_ent_table *restrict table,
+                          const unsigned char flags,
+                             int *restrict error)
 {
-  if (table != 0)
+  if (table && flags <= 3)
     {
       *error = 0;
       table->data_flags = flags;
@@ -14709,15 +14617,19 @@ dwg_ent_table_set_data_flags(dwg_ent_table *table, unsigned char flags,
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Returns data flags
+/** Returns _dwg_entity_TABLE::data_flags, no DXF.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 unsigned char
-dwg_ent_table_get_data_flags(dwg_ent_table *table, int *error)
+dwg_ent_table_get_data_flags(const dwg_ent_table *restrict table,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->data_flags;
@@ -14730,11 +14642,17 @@ dwg_ent_table_get_data_flags(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets rotation
+/** Sets _dwg_entity_TABLE::rotation, DXF 50.
+\param[in]  table      dwg_ent_table *
+\param[in]  rotation   double
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_rotation(dwg_ent_table *table, BITCODE_BD rotation, int *error)
+dwg_ent_table_set_rotation(dwg_ent_table *restrict table,
+                          const double rotation,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       table->rotation = rotation;
@@ -14746,11 +14664,15 @@ dwg_ent_table_set_rotation(dwg_ent_table *table, BITCODE_BD rotation, int *error
     }
 }
 
-/// Returns rotation
-BITCODE_BD
-dwg_ent_table_get_rotation(dwg_ent_table *table, int *error)
+/** Returns _dwg_entity_TABLE::rotation, DXF 50.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
+double
+dwg_ent_table_get_rotation(const dwg_ent_table *restrict table,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->rotation;
@@ -14763,17 +14685,22 @@ dwg_ent_table_get_rotation(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets extrusion points
+/** Sets _dwg_entity_TABLE::extrusion, DXF 210.
+\param[in,out]  table      dwg_ent_table *
+\param[int] vector     dwg_point_3d *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_extrusion(dwg_ent_table *table, dwg_point_3d *point,
-                            int *error)
+dwg_ent_table_set_extrusion(dwg_ent_table *restrict table,
+                            const dwg_point_3d *restrict vector,
+                            int *restrict error)
 {
-  if (table != 0 && point != 0)
+  if (table && vector)
     {
       *error = 0;
-      table->extrusion.x = point->x;
-      table->extrusion.y = point->y;
-      table->extrusion.z = point->z;
+      table->extrusion.x = vector->x;
+      table->extrusion.y = vector->y;
+      table->extrusion.z = vector->z;
     }
   else
     {
@@ -14782,17 +14709,22 @@ dwg_ent_table_set_extrusion(dwg_ent_table *table, dwg_point_3d *point,
     }
 }
 
-/// Returns extrusion points
+/** Returns _dwg_entity_TABLE::extrusion, DXF 210.
+\param[in]  table      dwg_ent_table *
+\param[out] vector     dwg_point_3d *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_get_extrusion(dwg_ent_table *table, dwg_point_3d *point,
-                            int *error)
+dwg_ent_table_get_extrusion(const dwg_ent_table *restrict table,
+                            dwg_point_3d *restrict vector,
+                            int *restrict error)
 {
-  if (table != 0 && point != 0)
+  if (table && vector)
     {
       *error = 0;
-      point->x = table->extrusion.x;
-      point->y = table->extrusion.y;
-      point->z = table->extrusion.z;
+      vector->x = table->extrusion.x;
+      vector->y = table->extrusion.y;
+      vector->z = table->extrusion.z;
     }
   else
     {
@@ -14802,11 +14734,15 @@ dwg_ent_table_get_extrusion(dwg_ent_table *table, dwg_point_3d *point,
 }
 
 
-/// Returns has attribs
+/** Returns _dwg_entity_TABLE::has_attribs boolean, DXF 66.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 unsigned char
-dwg_ent_table_has_attribs(dwg_ent_table *table, int *error)
+dwg_ent_table_has_attribs(dwg_ent_table *restrict table,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->has_attribs;
@@ -14819,31 +14755,21 @@ dwg_ent_table_has_attribs(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets owned object count
-void
-dwg_ent_table_set_owned_object_count(dwg_ent_table *table, BITCODE_BL count,
-                                     int *error)
-{
-  if (table != 0)
-    {
-      *error = 0;
-      table->owned_object_count = count;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
+// needs to adjust handle array: add/delete
+// TODO dwg_ent_table_add_owned, dwg_ent_table_delete_owned
 
-/// Returns owned object count
+/** Returns _dwg_entity_TABLE::num_owned, no DXF.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BL
-dwg_ent_table_get_owned_object_count(dwg_ent_table *table, int *error)
+dwg_ent_table_get_num_owned(const dwg_ent_table *restrict table,
+                            int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
-      return table->owned_object_count;
+      return table->num_owned;
     }
   else
     {
@@ -14853,12 +14779,22 @@ dwg_ent_table_get_owned_object_count(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets flag for table value
+/** Sets _dwg_entity_TABLE::flag_for_table_value, DXF 90.
+\param[in]  table      dwg_ent_table *
+\param[in]  value      short
+
+    Bit flags, 0x06 (0x02 + 0x04): has block, 0x10: table direction, 0
+    = up, 1 = down, 0x20: title suppressed. Normally 0x06 is always
+    set.
+
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_flag_for_table_value(dwg_ent_table *table,
-                                       BITCODE_BS value, int *error)
+dwg_ent_table_set_flag_for_table_value(dwg_ent_table *restrict table,
+                                       const BITCODE_BS value,
+                                       int *restrict error)
 {
-  if (table != 0)
+  if (table && value < 0x30)
     {
       *error = 0;
       table->flag_for_table_value = value;
@@ -14870,11 +14806,16 @@ dwg_ent_table_set_flag_for_table_value(dwg_ent_table *table,
     }
 }
 
-/// Returns flag for table value
+/** Returns _dwg_entity_TABLE::flag_for_table_value, DXF 90.
+    \sa dwg_ent_table_set_flag_for_table_value
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_flag_for_table_value(dwg_ent_table *table, int *error)
+dwg_ent_table_get_flag_for_table_value(const dwg_ent_table *restrict table,
+                                       int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->flag_for_table_value;
@@ -14887,18 +14828,22 @@ dwg_ent_table_get_flag_for_table_value(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets horiz direction
+/** Sets _dwg_entity_TABLE::horiz_direction, DXF 11.
+\param[in]  table      dwg_ent_table *
+\param[in]  vector      dwg_point_3d *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_horiz_direction(dwg_ent_table *table, dwg_point_3d *point,
-                                  int *error)
+dwg_ent_table_set_horiz_direction(dwg_ent_table *restrict table,
+                                  const dwg_point_3d *restrict vector,
+                                  int *restrict error)
 {
-  if (table != 0 && point != 0)
+  if (table && vector)
     {
       *error = 0;
-      table->horiz_direction.x = point->x;
-      table->horiz_direction.y = point->y;
-      table->horiz_direction.z = point->z;
-
+      table->horiz_direction.x = vector->x;
+      table->horiz_direction.y = vector->y;
+      table->horiz_direction.z = vector->z;
     }
   else
     {
@@ -14907,17 +14852,22 @@ dwg_ent_table_set_horiz_direction(dwg_ent_table *table, dwg_point_3d *point,
     }
 }
 
-/// Returns horiz direction
+/** Returns _dwg_entity_TABLE::horiz_direction, DXF 11.
+\param[in]  table      dwg_ent_table *
+\param[out]  vector      dwg_point_3d *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_get_horiz_direction(dwg_ent_table *table, dwg_point_3d *point,
-                                  int *error)
+dwg_ent_table_get_horiz_direction(const dwg_ent_table *restrict table,
+                                  dwg_point_3d *restrict vector,
+                                  int *restrict error)
 {
-  if (table != 0 && point != 0)
+  if (table && vector)
     {
       *error = 0;
-      point->x = table->horiz_direction.x;
-      point->y = table->horiz_direction.y;
-      point->z = table->horiz_direction.z;
+      vector->x = table->horiz_direction.x;
+      vector->y = table->horiz_direction.y;
+      vector->z = table->horiz_direction.z;
     }
   else
     {
@@ -14926,27 +14876,15 @@ dwg_ent_table_get_horiz_direction(dwg_ent_table *table, dwg_point_3d *point,
     }
 }
 
-/// Sets number of columns
-void
-dwg_ent_table_set_num_cols(dwg_ent_table *table, BITCODE_BL num, int *error)
-{
-  if (table != 0)
-    {
-      *error = 0;
-      table->num_cols = num;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns number of columns
+/** Returns _dwg_entity_TABLE::num_cols number of columns, DXF 91.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BL
-dwg_ent_table_get_num_cols(dwg_ent_table *table, int *error)
+dwg_ent_table_get_num_cols(const dwg_ent_table *restrict table,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->num_cols;
@@ -14959,27 +14897,15 @@ dwg_ent_table_get_num_cols(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets number of rows
-void
-dwg_ent_table_set_num_rows(dwg_ent_table *table, BITCODE_BL num, int *error)
-{
-  if (table != 0)
-    {
-      *error = 0;
-      table->num_rows = num;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/// Returns number of rows
+/** Returns _dwg_entity_TABLE::num_cols number of rows, DXF 92.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BL
-dwg_ent_table_get_num_rows(dwg_ent_table *table, int *error)
+dwg_ent_table_get_num_rows(const dwg_ent_table *restrict table,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->num_rows;
@@ -14992,11 +14918,19 @@ dwg_ent_table_get_num_rows(dwg_ent_table *table, int *error)
     }
 }
 
-/// Returns column widths
+//  TODO dwg_ent_table_add_col, dwg_ent_table_delete_col
+//  TODO dwg_ent_table_add_row, dwg_ent_table_delete_row
+
+
+/** Returns array of _dwg_entity_TABLE::col_widths, DXF 142
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 double *
-dwg_ent_table_get_col_widths(dwg_ent_table *table, int *error)
+dwg_ent_table_get_col_widths(const dwg_ent_table *restrict table,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->col_widths;
@@ -15009,11 +14943,15 @@ dwg_ent_table_get_col_widths(dwg_ent_table *table, int *error)
     }
 }
 
-/// Returns row heights
+/** Returns array of _dwg_entity_TABLE::row_heights, DXF 141
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 double *
-dwg_ent_table_get_row_heights(dwg_ent_table *table, int *error)
+dwg_ent_table_get_row_heights(const dwg_ent_table *restrict table,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->row_heights;
@@ -15026,11 +14964,15 @@ dwg_ent_table_get_row_heights(dwg_ent_table *table, int *error)
     }
 }
 
-/// Returns table overrides present
+/** Returns _dwg_entity_TABLE::has_table_overrides boolean, no DXF.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_B
-dwg_ent_table_has_table_overrides(dwg_ent_table *table, int *error)
+dwg_ent_table_has_table_overrides(dwg_ent_table *restrict table,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->has_table_overrides;
@@ -15043,12 +14985,17 @@ dwg_ent_table_has_table_overrides(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets flag overrrides
+/** Sets _dwg_entity_TABLE::table_flag_override, DXF 90.
+\param[in]  table      dwg_ent_table *
+\param[in]  override   0 - 0x7fffff
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_table_flag_override(dwg_ent_table *table, BITCODE_BL override,
-                                      int *error)
+dwg_ent_table_set_table_flag_override(dwg_ent_table *restrict table,
+                                      const BITCODE_BL override,
+                                      int *restrict error)
 {
-  if (table != 0)
+  if (table != NULL && override < 0x800000)
     {
       *error = 0;
       table->table_flag_override = override;
@@ -15060,11 +15007,15 @@ dwg_ent_table_set_table_flag_override(dwg_ent_table *table, BITCODE_BL override,
     }
 }
 
-/// returns flag overrides
+/** Returns _dwg_entity_TABLE::table_flag_override, DXF 93.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BL
-dwg_ent_table_get_table_flag_override(dwg_ent_table *table, int *error)
+dwg_ent_table_get_table_flag_override(const dwg_ent_table *restrict table,
+                                      int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->table_flag_override;
@@ -15077,15 +15028,21 @@ dwg_ent_table_get_table_flag_override(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets title supressed
+/** Sets _dwg_entity_TABLE::title_suppressed, DXF 280.
+\param[in]  table      dwg_ent_table *
+\param[in]  yesno      0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_title_suppressed(dwg_ent_table *table, unsigned char title,
-                                   int *error)
+dwg_ent_table_set_title_suppressed(dwg_ent_table *restrict table,
+                                   const unsigned char yesno,
+                                   int *restrict error)
 {
-  if (table != 0)
+  if (table != NULL && yesno <= 1)
     {
       *error = 0;
-      table->title_suppressed = title;
+      if (yesno) table->table_flag_override |= 0x1;
+      table->title_suppressed = yesno;
     }
   else
     {
@@ -15094,11 +15051,15 @@ dwg_ent_table_set_title_suppressed(dwg_ent_table *table, unsigned char title,
     }
 }
 
-/// Returns title suppressed
+/** Returns _dwg_entity_TABLE::title_suppressed, DXF 280.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 unsigned char
-dwg_ent_table_get_title_suppressed(dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_suppressed(const dwg_ent_table *restrict table,
+                                   int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->title_suppressed;
@@ -15111,12 +15072,17 @@ dwg_ent_table_get_title_suppressed(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets header suppressed
+/** Sets _dwg_entity_TABLE::header_suppressed, DXF 281.
+\param[in]  table      dwg_ent_table *
+\param[in]  header     0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_header_suppressed(dwg_ent_table *table, unsigned char header,
-                                    int *error)
+dwg_ent_table_set_header_suppressed(dwg_ent_table *restrict table,
+                                    const unsigned char header,
+                                    int *restrict error)
 {
-  if (table != 0)
+  if (table && header <= 1)
     {
       *error = 0;
       table->header_suppressed = header;
@@ -15128,11 +15094,15 @@ dwg_ent_table_set_header_suppressed(dwg_ent_table *table, unsigned char header,
     }
 }
 
-/// Returns header suppressed
+/** Returns _dwg_entity_TABLE::header_suppressed, DXF 281.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 unsigned char
-dwg_ent_table_get_header_suppressed(dwg_ent_table *table, int *error)
+dwg_ent_table_get_header_suppressed(const dwg_ent_table *restrict table,
+                                    int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->header_suppressed;
@@ -15145,14 +15115,20 @@ dwg_ent_table_get_header_suppressed(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets flow direction
+/** Sets _dwg_entity_TABLE::flow_direction, DXF 70.
+\param[in]  table      dwg_ent_table *
+\param[in]  dir        short?
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_flow_direction(dwg_ent_table *table, BITCODE_BS dir,
-                                 int *error)
+dwg_ent_table_set_flow_direction(dwg_ent_table *restrict table,
+                                 const BITCODE_BS dir,
+                                 int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
+      if (dir) table->table_flag_override |= 0x4;
       table->flow_direction = dir;
     }
   else
@@ -15162,11 +15138,15 @@ dwg_ent_table_set_flow_direction(dwg_ent_table *table, BITCODE_BS dir,
     }
 }
 
-/// Returns flow direction
+/** Returns _dwg_entity_TABLE::flow_direction, DXF 70.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_flow_direction(dwg_ent_table *table, int *error)
+dwg_ent_table_get_flow_direction(const dwg_ent_table *restrict table,
+                                 int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->flow_direction;
@@ -15179,14 +15159,21 @@ dwg_ent_table_get_flow_direction(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets horiz cell margin
+/** Sets _dwg_entity_TABLE::horiz_cell_margin, DXF 41.
+\param[in]  table      dwg_ent_table *
+\param[in]  margin     double
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_horiz_cell_margin(dwg_ent_table *table, BITCODE_BD margin,
-                                    int *error)
+dwg_ent_table_set_horiz_cell_margin(dwg_ent_table *restrict table,
+                                    const double margin,
+                                    int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
+      if (margin > 0.0) table->table_flag_override |= 0x8;
+      else table->table_flag_override &= ~0x8;
       table->horiz_cell_margin = margin;
     }
   else
@@ -15196,11 +15183,15 @@ dwg_ent_table_set_horiz_cell_margin(dwg_ent_table *table, BITCODE_BD margin,
     }
 }
 
-/// Returns horiz cell margin
-BITCODE_BD
-dwg_ent_table_get_horiz_cell_margin(dwg_ent_table *table, int *error)
+/** Returns _dwg_entity_TABLE::horiz_cell_margin, DXF 41.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
+double
+dwg_ent_table_get_horiz_cell_margin(const dwg_ent_table *restrict table,
+                                    int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->horiz_cell_margin;
@@ -15213,14 +15204,21 @@ dwg_ent_table_get_horiz_cell_margin(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets vert cell margin
+/** Sets _dwg_entity_TABLE::vert_cell_margin, DXF 41.
+\param[in]  table      dwg_ent_table *
+\param[in]  margin     double
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_vert_cell_margin(dwg_ent_table *table, BITCODE_BD margin,
-                                   int *error)
+dwg_ent_table_set_vert_cell_margin(dwg_ent_table *restrict table,
+                                   const double margin,
+                                   int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
+      if (margin > 0.0) table->table_flag_override |= 0x10;
+      else table->table_flag_override &= ~0x10;
       table->vert_cell_margin = margin;
     }
   else
@@ -15230,11 +15228,15 @@ dwg_ent_table_set_vert_cell_margin(dwg_ent_table *table, BITCODE_BD margin,
     }
 }
 
-/// Returns vert cell margin
-BITCODE_BD
-dwg_ent_table_get_vert_cell_margin(dwg_ent_table *table, int *error)
+/** Returns _dwg_entity_TABLE::vert_cell_margin, DXF 41.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
+double
+dwg_ent_table_get_vert_cell_margin(const dwg_ent_table *restrict table,
+                                   int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->vert_cell_margin;
@@ -15247,14 +15249,20 @@ dwg_ent_table_get_vert_cell_margin(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets title row fill none
+/** Sets _dwg_entity_TABLE::title_row_fill_none, DXF 283.
+\param[in]  table      dwg_ent_table *
+\param[in]  fill       ?
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_title_row_fill_none(dwg_ent_table *table, unsigned char fill,
-                                      int *error)
+dwg_ent_table_set_title_row_fill_none(dwg_ent_table *restrict table,
+                                      const unsigned char fill,
+                                      int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
+      if (fill) table->table_flag_override |= 0x100;
       table->title_row_fill_none = fill;
     }
   else
@@ -15264,11 +15272,15 @@ dwg_ent_table_set_title_row_fill_none(dwg_ent_table *table, unsigned char fill,
     }
 }
 
-/// Returns title row fill none value
+/** Returns _dwg_entity_TABLE::title_row_fill_none, DXF 283.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 unsigned char
-dwg_ent_table_get_title_row_fill_none(dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_row_fill_none(const dwg_ent_table *restrict table,
+                                      int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->title_row_fill_none;
@@ -15281,14 +15293,20 @@ dwg_ent_table_get_title_row_fill_none(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets header row fill none value
+/** Sets _dwg_entity_TABLE::header_row_fill_none, DXF 283.
+\param[in]  table      dwg_ent_table *
+\param[in]  fill       ?
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_header_row_fill_none(dwg_ent_table *table,
-                                       unsigned char fill, int *error)
+dwg_ent_table_set_header_row_fill_none(dwg_ent_table *restrict table,
+                                       const unsigned char fill,
+                                       int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
+      if (fill) table->table_flag_override |= 0x200;
       table->header_row_fill_none = fill;
     }
   else
@@ -15298,11 +15316,15 @@ dwg_ent_table_set_header_row_fill_none(dwg_ent_table *table,
     }
 }
 
-/// Returns header row fill none value
+/** Returns _dwg_entity_TABLE::header_row_fill_none, DXF 283.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 unsigned char
-dwg_ent_table_get_header_row_fill_none(dwg_ent_table *table, int *error)
+dwg_ent_table_get_header_row_fill_none(const dwg_ent_table *restrict table,
+                                       int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->header_row_fill_none;
@@ -15315,14 +15337,20 @@ dwg_ent_table_get_header_row_fill_none(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets data row fill none value
+/** Sets _dwg_entity_TABLE::data_row_fill_none, DXF 283.
+\param[in]  table      dwg_ent_table *
+\param[in]  fill       ?
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_data_row_fill_none(dwg_ent_table *table, unsigned char fill,
-                                     int *error)
+dwg_ent_table_set_data_row_fill_none(dwg_ent_table *restrict table,
+                                     const unsigned char fill,
+                                     int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
+      if (fill) table->table_flag_override |= 0x400;
       table->data_row_fill_none = fill;
     }
   else
@@ -15332,11 +15360,15 @@ dwg_ent_table_set_data_row_fill_none(dwg_ent_table *table, unsigned char fill,
     }
 }
 
-/// Returns data row fill none value
+/** Returns _dwg_entity_TABLE::data_row_fill_none, DXF 283.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 unsigned char
-dwg_ent_table_get_data_row_fill_none(dwg_ent_table *table, int *error)
+dwg_ent_table_get_data_row_fill_none(const dwg_ent_table *restrict table,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->data_row_fill_none;
@@ -15349,15 +15381,23 @@ dwg_ent_table_get_data_row_fill_none(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets title row align value
+/** Sets _dwg_entity_TABLE::title_row_align, DXF 170.
+    and possibly enables bitmask 0x4000 of
+    _dwg_entity_TABLE::table_flag_override, DXF 93 .
+\param[in]  table      dwg_ent_table *
+\param[in]  align      short?
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_title_row_align(dwg_ent_table *table, unsigned char fill,
-                                  int *error)
+dwg_ent_table_set_title_row_align(dwg_ent_table *restrict table,
+                                  const unsigned char align,
+                                  int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
-      table->title_row_align = fill;
+      if (align) table->table_flag_override |= 0x4000;
+      table->title_row_align = align;
     }
   else
     {
@@ -15366,11 +15406,15 @@ dwg_ent_table_set_title_row_align(dwg_ent_table *table, unsigned char fill,
     }
 }
 
-/// Returns title row align
+/** Returns _dwg_entity_TABLE::title_row_align, DXF 170.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_title_row_align(dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_row_align(const dwg_ent_table *restrict table,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->title_row_align;
@@ -15383,14 +15427,21 @@ dwg_ent_table_get_title_row_align(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets header row align
+/** Sets _dwg_entity_TABLE::header_row_align, DXF 170.
+    and possibly enables bitmask 0x8000 of _dwg_entity_TABLE::table_flag_override, DXF 93 .
+\param[in]  table      dwg_ent_table *
+\param[in]  align      short?
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_header_row_align(dwg_ent_table *table, BITCODE_BS align,
-                                   int *error)
+dwg_ent_table_set_header_row_align(dwg_ent_table *restrict table,
+                                   const BITCODE_BS align,
+                                   int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
+      if (align) table->table_flag_override |= 0x8000;
       table->header_row_align = align;
     }
   else
@@ -15400,11 +15451,16 @@ dwg_ent_table_set_header_row_align(dwg_ent_table *table, BITCODE_BS align,
     }
 }
 
-/// Returns header row align
+/** Returns _dwg_entity_TABLE::header_row_align, DXF 170.
+    Might be ignored if bit of 0x8000 of table_flag_override DXF 93 is not set.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_header_row_align(dwg_ent_table *table, int *error)
+dwg_ent_table_get_header_row_align(const dwg_ent_table *restrict table,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->header_row_align;
@@ -15417,14 +15473,23 @@ dwg_ent_table_get_header_row_align(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets data row align
+/** Sets _dwg_entity_TABLE::data_row_align, DXF 170,
+    and possibly table_flag_override 93.
+
+    TODO: possible values?
+\param[in]  table      dwg_ent_table *
+\param[in]  align      short?
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_data_row_align(dwg_ent_table *table, BITCODE_BS align,
-                                 int *error)
+dwg_ent_table_set_data_row_align(dwg_ent_table *restrict table,
+                          const BITCODE_BS align,
+                                 int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
+      if (align) table->table_flag_override |= 0x10000;
       table->data_row_align = align;
     }
   else
@@ -15434,11 +15499,16 @@ dwg_ent_table_set_data_row_align(dwg_ent_table *table, BITCODE_BS align,
     }
 }
 
-/// Returns data row align
+/** Returns _dwg_entity_TABLE::data_row_align, DXF 170.
+    Might be ignored if bit of 0x10000 of table_flag_override, DXF 93 is not set.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_data_row_align(dwg_ent_table *table, int *error)
+dwg_ent_table_get_data_row_align(const dwg_ent_table *restrict table,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->data_row_align;
@@ -15451,14 +15521,21 @@ dwg_ent_table_get_data_row_align(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets title row height
+/** Sets _dwg_entity_TABLE::title_row_height, DXF 140.
+    and en/disables the _dwg_entity_TABLE::table_flag_override
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_title_row_height(dwg_ent_table *table, BITCODE_BD height,
-                                   int *error)
+dwg_ent_table_set_title_row_height(dwg_ent_table *restrict table,
+                          const double height,
+                                   int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
+      if (height > 0.0) table->table_flag_override |= 0x100000;
+      else table->table_flag_override &= ~0x100000;
       table->title_row_height = height;
     }
   else
@@ -15468,11 +15545,15 @@ dwg_ent_table_set_title_row_height(dwg_ent_table *table, BITCODE_BD height,
     }
 }
 
-/// Returns title row height
-BITCODE_BD
-dwg_ent_table_get_title_row_height(dwg_ent_table *table, int *error)
+/** Returns _dwg_entity_TABLE::title_row_height, DXF 140.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
+double
+dwg_ent_table_get_title_row_height(const dwg_ent_table *restrict table,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->title_row_height;
@@ -15485,14 +15566,21 @@ dwg_ent_table_get_title_row_height(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets header row height
+/** Sets _dwg_entity_TABLE::header_row_height, DXF 140.
+    and en/disables the _dwg_entity_TABLE::table_flag_override.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_header_row_height(dwg_ent_table *table, BITCODE_BD height,
-                                    int *error)
+dwg_ent_table_set_header_row_height(dwg_ent_table *restrict table,
+                                    const double height,
+                                    int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
+      if (height > 0.0) table->table_flag_override |= 0x200000;
+      else table->table_flag_override &= ~0x200000;
       table->header_row_height = height;
     }
   else
@@ -15502,11 +15590,15 @@ dwg_ent_table_set_header_row_height(dwg_ent_table *table, BITCODE_BD height,
     }
 }
 
-/// Returns header row height
-BITCODE_BD
-dwg_ent_table_get_header_row_height(dwg_ent_table *table, int *error)
+/** Returns _dwg_entity_TABLE::header_row_height, DXF 140.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
+double
+dwg_ent_table_get_header_row_height(const dwg_ent_table *restrict table,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->header_row_height;
@@ -15519,14 +15611,21 @@ dwg_ent_table_get_header_row_height(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets data row height
+/** Sets _dwg_entity_TABLE::data_row_height, DXF 140.
+    and en/disables the _dwg_entity_TABLE::table_flag_override.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_data_row_height(dwg_ent_table *table, BITCODE_BD height,
-                                  int *error)
+dwg_ent_table_set_data_row_height(dwg_ent_table *restrict table,
+                          const double height,
+                                  int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
+      if (height > 0.0) table->table_flag_override |= 0x400000;
+      else table->table_flag_override &= ~0x400000;
       table->data_row_height = height;
     }
   else
@@ -15536,11 +15635,15 @@ dwg_ent_table_set_data_row_height(dwg_ent_table *table, BITCODE_BD height,
     }
 }
 
-/// Returns data row height value
-BITCODE_BD
-dwg_ent_table_get_data_row_height(dwg_ent_table *table, int *error)
+/** Returns _dwg_entity_TABLE::data_row_height, DXF 140.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
+double
+dwg_ent_table_get_data_row_height(const dwg_ent_table *restrict table,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->data_row_height;
@@ -15553,12 +15656,15 @@ dwg_ent_table_get_data_row_height(dwg_ent_table *table, int *error)
     }
 }
 
-/// Returns border color overrides existance
+/** Returns _dwg_entity_TABLE::has_border_color_overrides, if DXF 94 > 0.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 unsigned char
-dwg_ent_table_has_border_color_overrides(dwg_ent_table *table,
-                                                 int *error)
+dwg_ent_table_has_border_color_overrides(dwg_ent_table *restrict table,
+                                         int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->has_border_color_overrides;
@@ -15571,12 +15677,17 @@ dwg_ent_table_has_border_color_overrides(dwg_ent_table *table,
     }
 }
 
-/// Sets border color overrides flag value
+/** Sets _dwg_entity_TABLE::border_color_overrides_flag, DXF 94.
+    \sa dwg_ent_table_get_border_color_overrides_flag
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_border_color_overrides_flag(dwg_ent_table *table,
-                                              BITCODE_BL overrides, int *error)
+dwg_ent_table_set_border_color_overrides_flag(dwg_ent_table *restrict table,
+                                              const BITCODE_BL overrides,
+                                              int *restrict error)
 {
-  if (table != 0)
+  if (table && overrides <= 1)
     {
       *error = 0;
       table->border_color_overrides_flag = overrides;
@@ -15584,15 +15695,27 @@ dwg_ent_table_set_border_color_overrides_flag(dwg_ent_table *table,
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Returns border color overrides flag value
+/** Returns _dwg_entity_TABLE::border_color_overrides_flag, DXF 94.
+
+    Bitmask 1: has title_horiz_top_color
+            2: has title_horiz_ins_color
+            4: has title_horiz_bottom_color
+            8: has title_vert_left_color
+           10: has title_vert_ins_color
+           20: has title_vert_right_color
+           ...
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+ */
 BITCODE_BL
-dwg_ent_table_get_border_color_overrides_flag(dwg_ent_table *table, int *error)
+dwg_ent_table_get_border_color_overrides_flag(const dwg_ent_table *restrict table,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->border_color_overrides_flag;
@@ -15606,12 +15729,15 @@ dwg_ent_table_get_border_color_overrides_flag(dwg_ent_table *table, int *error)
 }
 
 
-/// Returns border lineweight overrides present value
+/** Returns _dwg_entity_TABLE::has_border_lineweight_overrides, if DXF 95 > 0
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 unsigned char
-dwg_ent_table_has_border_lineweight_overrides(dwg_ent_table *table,
-                                              int *error)
+dwg_ent_table_has_border_lineweight_overrides(dwg_ent_table *restrict table,
+                                              int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->has_border_lineweight_overrides;
@@ -15624,12 +15750,17 @@ dwg_ent_table_has_border_lineweight_overrides(dwg_ent_table *table,
     }
 }
 
-/// Sets border lineweight overrides flag
+/** Sets _dwg_entity_TABLE::border_lineweight_overrides_flag, DXF 95.
+\param[in]  table      dwg_ent_table *
+\param[in]  overrides  0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_border_lineweight_overrides_flag(dwg_ent_table *table,
-                                                   BITCODE_BL overrides, int *error)
+dwg_ent_table_set_border_lineweight_overrides_flag(dwg_ent_table *restrict table,
+                                                   const BITCODE_BL overrides,
+                                                   int *restrict error)
 {
-  if (table != 0)
+  if (table && overrides <= 1)
     {
       *error = 0;
       table->border_lineweight_overrides_flag = overrides;
@@ -15637,16 +15768,19 @@ dwg_ent_table_set_border_lineweight_overrides_flag(dwg_ent_table *table,
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Returns border lineweight overrides flag value
+/** Returns _dwg_entity_TABLE::border_lineweight_overrides_flag, DXF 95.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BL
-dwg_ent_table_get_border_lineweight_overrides_flag(dwg_ent_table *table,
-                                                   int *error)
+dwg_ent_table_get_border_lineweight_overrides_flag(const dwg_ent_table *restrict table,
+                                                   int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->border_lineweight_overrides_flag;
@@ -15659,15 +15793,20 @@ dwg_ent_table_get_border_lineweight_overrides_flag(dwg_ent_table *table,
     }
 }
 
-/// Sets title horiz top lineweight value
+/** Sets _dwg_entity_TABLE::title_horiz_top_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_title_horiz_top_linewt(dwg_ent_table *table,
-                                            BITCODE_BS lw, int *error)
+dwg_ent_table_set_title_horiz_top_linewt(dwg_ent_table *restrict table,
+                                         const BITCODE_BS linewt,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
-      table->title_horiz_top_linewt = lw;
+      table->title_horiz_top_linewt = linewt;
     }
   else
     {
@@ -15676,11 +15815,16 @@ dwg_ent_table_set_title_horiz_top_linewt(dwg_ent_table *table,
     }
 }
 
-/// Returns title horiz top lineweight value
+/** Returns _dwg_entity_TABLE::title_horiz_top_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_title_horiz_top_linewt(dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_horiz_top_linewt(const dwg_ent_table *restrict table,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->title_horiz_top_linewt;
@@ -15693,15 +15837,20 @@ dwg_ent_table_get_title_horiz_top_linewt(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets title horiz ins lineweight value
+/** Sets _dwg_entity_TABLE::title_horiz_ins_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_title_horiz_ins_linewt(dwg_ent_table *table,
-                                             BITCODE_BS lw, int *error)
+dwg_ent_table_set_title_horiz_ins_linewt(dwg_ent_table *restrict table,
+                                         const BITCODE_BS linewt,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
-      table->title_horiz_ins_linewt = lw;
+      table->title_horiz_ins_linewt = linewt;
     }
   else
     {
@@ -15710,11 +15859,16 @@ dwg_ent_table_set_title_horiz_ins_linewt(dwg_ent_table *table,
     }
 }
 
-/// Returns title horiz ins lineweight value
+/** Returns _dwg_entity_TABLE::title_horiz_ins_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_title_horiz_ins_linewt(dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_horiz_ins_linewt(const dwg_ent_table *restrict table,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->title_horiz_ins_linewt;
@@ -15727,15 +15881,20 @@ dwg_ent_table_get_title_horiz_ins_linewt(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets title horiz bottom lineweight value
+/** Sets _dwg_entity_TABLE::title_horiz_bottom_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_title_horiz_bottom_linewt(dwg_ent_table *table,
-                                                BITCODE_BS lw, int *error)
+dwg_ent_table_set_title_horiz_bottom_linewt(dwg_ent_table *restrict table,
+                                         const BITCODE_BS linewt,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
-      table->title_horiz_bottom_linewt = lw;
+      table->title_horiz_bottom_linewt = linewt;
     }
   else
     {
@@ -15744,12 +15903,16 @@ dwg_ent_table_set_title_horiz_bottom_linewt(dwg_ent_table *table,
     }
 }
 
-/// Returns title horiz bottom lineweight value
+/** Returns _dwg_entity_TABLE::title_horiz_bottom_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_title_horiz_bottom_linewt(dwg_ent_table *table,
-                                                int *error)
+dwg_ent_table_get_title_horiz_bottom_linewt(const dwg_ent_table *restrict table,
+                                            int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->title_horiz_bottom_linewt;
@@ -15762,15 +15925,20 @@ dwg_ent_table_get_title_horiz_bottom_linewt(dwg_ent_table *table,
     }
 }
 
-/// Sets title vert left lineweight value
+/** Sets _dwg_entity_TABLE::title_vert_left_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_title_vert_left_linewt(dwg_ent_table *table,
-                                             BITCODE_BS lw, int *error)
+dwg_ent_table_set_title_vert_left_linewt(dwg_ent_table *restrict table,
+                                         const BITCODE_BS linewt,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
-      table->title_vert_left_linewt = lw;
+      table->title_vert_left_linewt = linewt;
     }
   else
     {
@@ -15779,11 +15947,16 @@ dwg_ent_table_set_title_vert_left_linewt(dwg_ent_table *table,
     }
 }
 
-/// Sets title vert left lineweight value
+/** Returns _dwg_entity_TABLE::title_vert_left_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_title_vert_left_linewt(dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_vert_left_linewt(const dwg_ent_table *restrict table,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->title_vert_left_linewt;
@@ -15796,15 +15969,20 @@ dwg_ent_table_get_title_vert_left_linewt(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets title vert ins lineweight value
+/** Sets _dwg_entity_TABLE::title_vert_ins_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_title_vert_ins_linewt(dwg_ent_table *table,
-                                            BITCODE_BS lw, int *error)
+dwg_ent_table_set_title_vert_ins_linewt(dwg_ent_table *restrict table,
+                                        const BITCODE_BS linewt,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
-      table->title_vert_ins_linewt = lw;
+      table->title_vert_ins_linewt = linewt;
     }
   else
     {
@@ -15813,11 +15991,16 @@ dwg_ent_table_set_title_vert_ins_linewt(dwg_ent_table *table,
     }
 }
 
-/// Returns title vert ins lineweight
+/** Returns _dwg_entity_TABLE::title_vert_ins_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_title_vert_ins_linewt(dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_vert_ins_linewt(const dwg_ent_table *restrict table,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->title_vert_ins_linewt;
@@ -15830,15 +16013,20 @@ dwg_ent_table_get_title_vert_ins_linewt(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets title vert right lineweight
+/** Sets _dwg_entity_TABLE::title_vert_right_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_title_vert_right_linewt(dwg_ent_table *table,
-                                              BITCODE_BS lw, int *error)
+dwg_ent_table_set_title_vert_right_linewt(dwg_ent_table *restrict table,
+                                          const BITCODE_BS linewt,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
-      table->title_vert_right_linewt = lw;
+      table->title_vert_right_linewt = linewt;
     }
   else
     {
@@ -15847,11 +16035,16 @@ dwg_ent_table_set_title_vert_right_linewt(dwg_ent_table *table,
     }
 }
 
-/// Returns title vert right lineweight value
+/** Returns _dwg_entity_TABLE::title_vert_right_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_title_vert_right_linewt(dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_vert_right_linewt(const dwg_ent_table *restrict table,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->title_vert_right_linewt;
@@ -15864,15 +16057,20 @@ dwg_ent_table_get_title_vert_right_linewt(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets header horiz top lineweight
+/** Sets _dwg_entity_TABLE::header_horiz_top_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_header_horiz_top_linewt(dwg_ent_table *table,
-                                              BITCODE_BS lw, int *error)
+dwg_ent_table_set_header_horiz_top_linewt(dwg_ent_table *restrict table,
+                                          const BITCODE_BS linewt,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
-      table->header_horiz_top_linewt = lw;
+      table->header_horiz_top_linewt = linewt;
     }
   else
     {
@@ -15881,11 +16079,16 @@ dwg_ent_table_set_header_horiz_top_linewt(dwg_ent_table *table,
     }
 }
 
-/// Returns header horiz top lineweight value
+/** Returns _dwg_entity_TABLE::header_horiz_top_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_header_horiz_top_linewt(dwg_ent_table *table, int *error)
+dwg_ent_table_get_header_horiz_top_linewt(const dwg_ent_table *restrict table,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->header_horiz_top_linewt;
@@ -15898,15 +16101,20 @@ dwg_ent_table_get_header_horiz_top_linewt(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets header horiz ins lineweight
+/** Sets _dwg_entity_TABLE::header_horiz_ins_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_header_horiz_ins_linewt(dwg_ent_table *table,
-                                              BITCODE_BS lw, int *error)
+dwg_ent_table_set_header_horiz_ins_linewt(dwg_ent_table *restrict table,
+                                          const BITCODE_BS linewt,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
-      table->header_horiz_ins_linewt = lw;
+      table->header_horiz_ins_linewt = linewt;
     }
   else
     {
@@ -15915,12 +16123,16 @@ dwg_ent_table_set_header_horiz_ins_linewt(dwg_ent_table *table,
     }
 }
 
-/// Returns header horiz ins lineweight value
+/** Returns _dwg_entity_TABLE::header_horiz_ins_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_header_horiz_ins_linewt(dwg_ent_table *table,
-                                              int *error)
+dwg_ent_table_get_header_horiz_ins_linewt(const dwg_ent_table *restrict table,
+                                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->header_horiz_ins_linewt;
@@ -15933,15 +16145,20 @@ dwg_ent_table_get_header_horiz_ins_linewt(dwg_ent_table *table,
     }
 }
 
-/// Sets header horiz bottom lineweight value
+/** Sets _dwg_entity_TABLE::header_horiz_bottom_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_header_horiz_bottom_linewt(dwg_ent_table *table,
-                                                 BITCODE_BS lw, int *error)
+dwg_ent_table_set_header_horiz_bottom_linewt(dwg_ent_table *restrict table,
+                                             const BITCODE_BS linewt,
+                                             int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
-      table->header_horiz_bottom_linewt = lw;
+      table->header_horiz_bottom_linewt = linewt;
     }
   else
     {
@@ -15950,12 +16167,16 @@ dwg_ent_table_set_header_horiz_bottom_linewt(dwg_ent_table *table,
     }
 }
 
-/// Returns header horiz bottom lineweight value
+/** Returns _dwg_entity_TABLE::header_horiz_bottom_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_header_horiz_bottom_linewt(dwg_ent_table *table,
-                                                 int *error)
+dwg_ent_table_get_header_horiz_bottom_linewt(const dwg_ent_table *restrict table,
+                                             int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->header_horiz_bottom_linewt;
@@ -15968,15 +16189,20 @@ dwg_ent_table_get_header_horiz_bottom_linewt(dwg_ent_table *table,
     }
 }
 
-/// Sets header vert left lineweight value
+/** Sets _dwg_entity_TABLE::header_vert_left_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_header_vert_left_linewt(dwg_ent_table *table,
-                                              BITCODE_BS lw, int *error)
+dwg_ent_table_set_header_vert_left_linewt(dwg_ent_table *restrict table,
+                                          const BITCODE_BS linewt,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
-      table->header_vert_left_linewt = lw;
+      table->header_vert_left_linewt = linewt;
     }
   else
     {
@@ -15985,11 +16211,16 @@ dwg_ent_table_set_header_vert_left_linewt(dwg_ent_table *table,
     }
 }
 
-/// Returns header vert left lineweight value
+/** Returns _dwg_entity_TABLE::header_vert_left_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_header_vert_left_linewt(dwg_ent_table *table, int *error)
+dwg_ent_table_get_header_vert_left_linewt(const dwg_ent_table *restrict table,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->header_vert_left_linewt;
@@ -16002,15 +16233,20 @@ dwg_ent_table_get_header_vert_left_linewt(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets header vert ins lineweight
+/** Sets _dwg_entity_TABLE::header_vert_ins_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_header_vert_ins_linewt(dwg_ent_table *table,
-                                             BITCODE_BS lw, int *error)
+dwg_ent_table_set_header_vert_ins_linewt(dwg_ent_table *restrict table,
+                                         const BITCODE_BS linewt,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
-      table->header_vert_ins_linewt = lw;
+      table->header_vert_ins_linewt = linewt;
     }
   else
     {
@@ -16019,11 +16255,15 @@ dwg_ent_table_set_header_vert_ins_linewt(dwg_ent_table *table,
     }
 }
 
-/// Returns header vert ins lineweight value
+/** Returns _dwg_entity_TABLE::header_vert_ins_linewt
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_header_vert_ins_linewt(dwg_ent_table *table, int *error)
+dwg_ent_table_get_header_vert_ins_linewt(const dwg_ent_table *restrict table,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->header_vert_ins_linewt;
@@ -16036,15 +16276,20 @@ dwg_ent_table_get_header_vert_ins_linewt(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets header vert right lineweight value
+/** Sets _dwg_entity_TABLE::header_vert_right_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_header_vert_right_linewt(dwg_ent_table *table,
-                                               BITCODE_BS lw, int *error)
+dwg_ent_table_set_header_vert_right_linewt(dwg_ent_table *restrict table,
+                                           const BITCODE_BS linewt,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
-      table->header_vert_right_linewt = lw;
+      table->header_vert_right_linewt = linewt;
     }
   else
     {
@@ -16053,12 +16298,15 @@ dwg_ent_table_set_header_vert_right_linewt(dwg_ent_table *table,
     }
 }
 
-/// Returns header vert right lineweight value
+/** Returns _dwg_entity_TABLE::header_vert_right_linewt
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_header_vert_right_linewt(dwg_ent_table *table,
-                                               int *error)
+dwg_ent_table_get_header_vert_right_linewt(const dwg_ent_table *restrict table,
+                                           int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->header_vert_right_linewt;
@@ -16071,15 +16319,20 @@ dwg_ent_table_get_header_vert_right_linewt(dwg_ent_table *table,
     }
 }
 
-/// Sets data horiz top lineweight value
+/** Sets _dwg_entity_TABLE::data_horiz_top_linewt, DXF ?.
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_data_horiz_top_linewt(dwg_ent_table *table,
-                                            BITCODE_BS lw, int *error)
+dwg_ent_table_set_data_horiz_top_linewt(dwg_ent_table *restrict table,
+                                        const BITCODE_BS linewt,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
-      table->data_horiz_top_linewt = lw;
+      table->data_horiz_top_linewt = linewt;
     }
   else
     {
@@ -16088,11 +16341,16 @@ dwg_ent_table_set_data_horiz_top_linewt(dwg_ent_table *table,
     }
 }
 
-/// Returns data horiz top lineweight value
+/** Returns _dwg_entity_TABLE::data_horiz_top_linewt, DXF ?.
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_data_horiz_top_linewt(dwg_ent_table *table, int *error)
+dwg_ent_table_get_data_horiz_top_linewt(const dwg_ent_table *restrict table,
+                                        int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->data_horiz_top_linewt;
@@ -16105,15 +16363,20 @@ dwg_ent_table_get_data_horiz_top_linewt(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets data horiz ins lineweight value
+/** Sets _dwg_entity_TABLE::data_horiz_ins_linewt, DXF ?.
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_data_horiz_ins_linewt(dwg_ent_table *table,
-                                            BITCODE_BS lw, int *error)
+dwg_ent_table_set_data_horiz_ins_linewt(dwg_ent_table *restrict table,
+                                        const BITCODE_BS linewt,
+                                        int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
-      table->data_horiz_ins_linewt = lw;
+      table->data_horiz_ins_linewt = linewt;
     }
   else
     {
@@ -16122,11 +16385,16 @@ dwg_ent_table_set_data_horiz_ins_linewt(dwg_ent_table *table,
     }
 }
 
-/// Returns data horiz ins lineweight value
+/** Returns _dwg_entity_TABLE::data_horiz_ins_linewt, DXF ?.
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_data_horiz_ins_linewt(dwg_ent_table *table, int *error)
+dwg_ent_table_get_data_horiz_ins_linewt(const dwg_ent_table *restrict table,
+                                        int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->data_horiz_ins_linewt;
@@ -16139,15 +16407,20 @@ dwg_ent_table_get_data_horiz_ins_linewt(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets data horiz bottom lineweight
+/** Sets _dwg_entity_TABLE::data_horiz_bottom_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_data_horiz_bottom_linewt(dwg_ent_table *table,
-                                               BITCODE_BS lw, int *error)
+dwg_ent_table_set_data_horiz_bottom_linewt(dwg_ent_table *restrict table,
+                                           const BITCODE_BS linewt,
+                                           int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
-      table->data_horiz_bottom_linewt = lw;
+      table->data_horiz_bottom_linewt = linewt;
     }
   else
     {
@@ -16156,12 +16429,15 @@ dwg_ent_table_set_data_horiz_bottom_linewt(dwg_ent_table *table,
     }
 }
 
-/// Returns data horiz bottom lineweight
+/** Returns _dwg_entity_TABLE::data_horiz_bottom_linewt
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_data_horiz_bottom_linewt(dwg_ent_table *table,
-                                               int *error)
+dwg_ent_table_get_data_horiz_bottom_linewt(const dwg_ent_table *restrict table,
+                                           int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->data_horiz_bottom_linewt;
@@ -16174,15 +16450,20 @@ dwg_ent_table_get_data_horiz_bottom_linewt(dwg_ent_table *table,
     }
 }
 
-/// Sets data vert ins lineweight value
+/** Sets _dwg_entity_TABLE::data_horiz_ins_linewt
+\param[in]  table      dwg_ent_table *
+\param[in]  linewt     short
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_data_vert_ins_linewt(dwg_ent_table *table,
-                                           BITCODE_BS lw, int *error)
+dwg_ent_table_set_data_vert_ins_linewt(dwg_ent_table *restrict table,
+                                       BITCODE_BS linewt,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
-      table->data_horiz_ins_linewt = lw;
+      table->data_horiz_ins_linewt = linewt;
     }
   else
     {
@@ -16191,11 +16472,15 @@ dwg_ent_table_set_data_vert_ins_linewt(dwg_ent_table *table,
     }
 }
 
-/// Returns title border visibility overrides flag
+/** Returns _dwg_entity_TABLE::data_horiz_ins_linewt
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_data_vert_ins_linewt(dwg_ent_table *table, int *error)
+dwg_ent_table_get_data_vert_ins_linewt(const dwg_ent_table *restrict table,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->data_horiz_ins_linewt;
@@ -16209,12 +16494,15 @@ dwg_ent_table_get_data_vert_ins_linewt(dwg_ent_table *table, int *error)
 }
 
 
-/// Returns title border visibility overrides flag
+/** Returns _dwg_entity_TABLE::has_border_visibility_overrides
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 unsigned char
-dwg_ent_table_has_border_visibility_overrides(dwg_ent_table *table,
-                                                      int *error)
+dwg_ent_table_has_border_visibility_overrides(dwg_ent_table *restrict table,
+                                              int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->has_border_visibility_overrides;
@@ -16227,12 +16515,17 @@ dwg_ent_table_has_border_visibility_overrides(dwg_ent_table *table,
     }
 }
 
-/// Sets title border visibility overrides flag
+/** Sets _dwg_entity_TABLE::border_visibility_overrides_flag, DXF 96.
+\param[in]  table      dwg_ent_table *
+\param[in]  overrides  0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_border_visibility_overrides_flag(dwg_ent_table *table,
-                                                   BITCODE_BL overrides, int *error)
+dwg_ent_table_set_border_visibility_overrides_flag(dwg_ent_table *restrict table,
+                                                   BITCODE_BL overrides,
+                                                   int *restrict error)
 {
-  if (table != 0)
+  if (table && overrides <= 1)
     {
       *error = 0;
       table->border_visibility_overrides_flag = overrides;
@@ -16240,16 +16533,19 @@ dwg_ent_table_set_border_visibility_overrides_flag(dwg_ent_table *table,
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Returns title border visibility overrides flag
+/** Returns _dwg_entity_TABLE::border_visibility_overrides_flag, DXF 96.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BL
-dwg_ent_table_get_border_visibility_overrides_flag(dwg_ent_table *table,
-                                                   int *error)
+dwg_ent_table_get_border_visibility_overrides_flag(const dwg_ent_table *restrict table,
+                                                   int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->border_visibility_overrides_flag;
@@ -16262,29 +16558,38 @@ dwg_ent_table_get_border_visibility_overrides_flag(dwg_ent_table *table,
     }
 }
 
-/// Sets title horiz top visibility
+/** Sets _dwg_entity_TABLE::title_horiz_top_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[in]  visibility 0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_title_horiz_top_visibility(dwg_ent_table *table,
+dwg_ent_table_set_title_horiz_top_visibility(dwg_ent_table *restrict table,
                                              BITCODE_BS visibility,
-                                             int *error)
+                                             int *restrict error)
 {
-  if (table != 0)
+  if (table && visibility >=0 && visibility <= 1)
     {
       *error = 0;
+      if (visibility) table->border_visibility_overrides_flag |= 0x1;
       table->title_horiz_top_visibility = visibility;
     }
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Returns title horiz top visibility
+/** Returns _dwg_entity_TABLE::title_horiz_top_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_title_horiz_top_visibility(dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_horiz_top_visibility(const dwg_ent_table *restrict table,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->title_horiz_top_visibility;
@@ -16297,29 +16602,38 @@ dwg_ent_table_get_title_horiz_top_visibility(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets title horiz ins visibility
+/** Sets _dwg_entity_TABLE::title_horiz_ins_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[in]  visibility 0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_title_horiz_ins_visibility(dwg_ent_table *table,
+dwg_ent_table_set_title_horiz_ins_visibility(dwg_ent_table *restrict table,
                                              BITCODE_BS visibility,
-                                             int *error)
+                                             int *restrict error)
 {
-  if (table != 0)
+  if (table && visibility <= 1)
     {
       *error = 0;
+      if (visibility) table->border_visibility_overrides_flag |= 0x2;
       table->title_horiz_ins_visibility = visibility;
     }
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Returns title horiz ins visibility
+/** Returns _dwg_entity_TABLE::title_horiz_ins_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_title_horiz_ins_visibility(dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_horiz_ins_visibility(const dwg_ent_table *restrict table,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->title_horiz_ins_visibility;
@@ -16332,30 +16646,38 @@ dwg_ent_table_get_title_horiz_ins_visibility(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets title horiz bottom visibility
+/** Sets _dwg_entity_TABLE::title_horiz_bottom_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[in]  visibility 0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_title_horiz_bottom_visibility(dwg_ent_table *table,
+dwg_ent_table_set_title_horiz_bottom_visibility(dwg_ent_table *restrict table,
                                                 BITCODE_BS visibility,
-                                                int *error)
+                                                int *restrict error)
 {
-  if (table != 0)
+  if (table && visibility <= 1)
     {
       *error = 0;
+      if (visibility) table->border_visibility_overrides_flag |= 0x4;
       table->title_horiz_bottom_visibility = visibility;
     }
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Returns title horiz bottom visibility
+/** Returns _dwg_entity_TABLE::title_horiz_bottom_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_title_horiz_bottom_visibility(dwg_ent_table *table,
-                                                int *error)
+dwg_ent_table_get_title_horiz_bottom_visibility(const dwg_ent_table *restrict table,
+                                                int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->title_horiz_bottom_visibility;
@@ -16368,29 +16690,38 @@ dwg_ent_table_get_title_horiz_bottom_visibility(dwg_ent_table *table,
     }
 }
 
-/// Sets title vert left visibility
+/** Sets _dwg_entity_TABLE::title_vert_left_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[in]  visibility 0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_title_vert_left_visibility(dwg_ent_table *table,
+dwg_ent_table_set_title_vert_left_visibility(dwg_ent_table *restrict table,
                                              BITCODE_BS visibility,
-                                             int *error)
+                                             int *restrict error)
 {
-  if (table != 0)
+  if (table && visibility <= 1)
     {
       *error = 0;
+      if (visibility) table->border_visibility_overrides_flag |= 0x8;
       table->title_vert_left_visibility = visibility;
     }
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Returns title vert left visibility
+/** Returns _dwg_entity_TABLE::title_vert_left_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_title_vert_left_visibility(dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_vert_left_visibility(const dwg_ent_table *restrict table,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->title_vert_left_visibility;
@@ -16403,29 +16734,38 @@ dwg_ent_table_get_title_vert_left_visibility(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets title vert ins visibility
+/** Sets _dwg_entity_TABLE::title_vert_ins_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[in]  visibility 0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_title_vert_ins_visibility(dwg_ent_table *table,
+dwg_ent_table_set_title_vert_ins_visibility(dwg_ent_table *restrict table,
                                             BITCODE_BS visibility,
-                                            int *error)
+                                            int *restrict error)
 {
-  if (table != 0)
+  if (table && visibility <= 1)
     {
       *error = 0;
+      if (visibility) table->border_visibility_overrides_flag |= 0x10;
       table->title_vert_ins_visibility = visibility;
     }
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Returns title vert ins visibility
+/** Returns _dwg_entity_TABLE::title_vert_ins_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_title_vert_ins_visibility(dwg_ent_table *table, int *error)
+dwg_ent_table_get_title_vert_ins_visibility(const dwg_ent_table *restrict table,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->title_vert_ins_visibility;
@@ -16438,30 +16778,38 @@ dwg_ent_table_get_title_vert_ins_visibility(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets title vert right visibility
+/** Sets _dwg_entity_TABLE::title_vert_right_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[in]  visibility 0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_title_vert_right_visibility(dwg_ent_table *table,
+dwg_ent_table_set_title_vert_right_visibility(dwg_ent_table *restrict table,
                                               BITCODE_BS visibility,
-                                              int *error)
+                                              int *restrict error)
 {
-  if (table != 0)
+  if (table && visibility <= 1)
     {
       *error = 0;
+      if (visibility) table->border_visibility_overrides_flag |= 0x20;
       table->title_vert_right_visibility = visibility;
     }
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Returns title vert right visibility
+/** Returns _dwg_entity_TABLE::title_vert_right_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_title_vert_right_visibility(dwg_ent_table *table,
-                                              int *error)
+dwg_ent_table_get_title_vert_right_visibility(const dwg_ent_table *restrict table,
+                                              int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->title_vert_right_visibility;
@@ -16474,30 +16822,38 @@ dwg_ent_table_get_title_vert_right_visibility(dwg_ent_table *table,
     }
 }
 
-/// Sets data header horiz top visibility
+/** Sets _dwg_entity_TABLE::header_horiz_top_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[in]  visibility 0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_header_horiz_top_visibility(dwg_ent_table *table,
+dwg_ent_table_set_header_horiz_top_visibility(dwg_ent_table *restrict table,
                                               BITCODE_BS visibility,
-                                              int *error)
+                                              int *restrict error)
 {
-  if (table != 0)
+  if (table && visibility <= 1)
     {
       *error = 0;
+      if (visibility) table->border_visibility_overrides_flag |= 0x40;
       table->header_horiz_top_visibility = visibility;
     }
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Returns data header horiz top visibility
+/** Returns _dwg_entity_TABLE::header_horiz_top_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_header_horiz_top_visibility(dwg_ent_table *table,
-                                              int *error)
+dwg_ent_table_get_header_horiz_top_visibility(const dwg_ent_table *restrict table,
+                                              int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->header_horiz_top_visibility;
@@ -16510,30 +16866,38 @@ dwg_ent_table_get_header_horiz_top_visibility(dwg_ent_table *table,
     }
 }
 
-/// Sets data header horiz ins visibility
+/** Sets _dwg_entity_TABLE::header_horiz_ins_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[in]  visibility 0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_header_horiz_ins_visibility(dwg_ent_table *table,
+dwg_ent_table_set_header_horiz_ins_visibility(dwg_ent_table *restrict table,
                                               BITCODE_BS visibility,
-                                              int *error)
+                                              int *restrict error)
 {
-  if (table != 0)
+  if (table && visibility <= 1)
     {
       *error = 0;
+      if (visibility) table->border_visibility_overrides_flag |= 0x80;
       table->header_horiz_ins_visibility = visibility;
     }
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Returns data header horiz ins visibility
+/** Returns _dwg_entity_TABLE::header_horiz_ins_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_header_horiz_ins_visibility(dwg_ent_table *table,
-                                              int *error)
+dwg_ent_table_get_header_horiz_ins_visibility(const dwg_ent_table *restrict table,
+                                              int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->header_horiz_ins_visibility;
@@ -16546,30 +16910,38 @@ dwg_ent_table_get_header_horiz_ins_visibility(dwg_ent_table *table,
     }
 }
 
-/// Sets data header vert left visibility
+/** Sets _dwg_entity_TABLE::header_horiz_bottom_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[in]  visibility 0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_header_horiz_bottom_visibility(dwg_ent_table *table,
+dwg_ent_table_set_header_horiz_bottom_visibility(dwg_ent_table *restrict table,
                                                  BITCODE_BS visibility,
-                                                 int *error)
+                                                 int *restrict error)
 {
-  if (table != 0)
+  if (table && visibility <= 1)
     {
       *error = 0;
+      if (visibility) table->border_visibility_overrides_flag |= 0x100;
       table->header_horiz_bottom_visibility = visibility;
     }
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Get data header horiz_bottom visibility
+/** Returns _dwg_entity_TABLE::header_horiz_bottom_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_header_horiz_bottom_visibility(dwg_ent_table *table,
-                                                 int *error)
+dwg_ent_table_get_header_horiz_bottom_visibility(const dwg_ent_table *restrict table,
+                                                 int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->header_horiz_bottom_visibility;
@@ -16582,12 +16954,38 @@ dwg_ent_table_get_header_horiz_bottom_visibility(dwg_ent_table *table,
     }
 }
 
-/// Returns data header vert left visibility
-BITCODE_BS
-dwg_ent_table_get_header_vert_left_visibility(dwg_ent_table *table,
-                                              int *error)
+/** Sets _dwg_entity_TABLE::header_vert_left_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[in]  visibility 0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
+void
+dwg_ent_table_set_header_vert_left_visibility(dwg_ent_table *restrict table,
+                                               BITCODE_BS visibility,
+                                               int *restrict error)
 {
-  if (table != 0)
+  if (table && visibility <= 1)
+    {
+      *error = 0;
+      if (visibility) table->border_visibility_overrides_flag |= 0x200;
+      table->header_vert_left_visibility = visibility;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
+    }
+}
+
+/** Returns _dwg_entity_TABLE::header_vert_left_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
+BITCODE_BS
+dwg_ent_table_get_header_vert_left_visibility(const dwg_ent_table *restrict table,
+                                              int *restrict error)
+{
+  if (table)
     {
       *error = 0;
       return table->header_vert_left_visibility;
@@ -16600,29 +16998,38 @@ dwg_ent_table_get_header_vert_left_visibility(dwg_ent_table *table,
     }
 }
 
-/// Sets data header vert ins visibility
+/** Sets _dwg_entity_TABLE::header_vert_ins_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[in]  visibility 0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_header_vert_ins_visibility(dwg_ent_table *table,
+dwg_ent_table_set_header_vert_ins_visibility(dwg_ent_table *restrict table,
                                              BITCODE_BS visibility,
-                                             int *error)
+                                             int *restrict error)
 {
-  if (table != 0)
+  if (table && visibility <= 1)
     {
       *error = 0;
+      if (visibility) table->border_visibility_overrides_flag |= 0x400;
       table->header_vert_ins_visibility = visibility;
     }
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Returns data header vert ins visibility
+/** Returns _dwg_entity_TABLE::header_vert_ins_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_header_vert_ins_visibility(dwg_ent_table *table, int *error)
+dwg_ent_table_get_header_vert_ins_visibility(const dwg_ent_table *restrict table,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->header_vert_ins_visibility;
@@ -16635,30 +17042,38 @@ dwg_ent_table_get_header_vert_ins_visibility(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets data header vert right visibility
+/** Sets data header vert right visibility
+\param[in]  table      dwg_ent_table *
+\param[in]  visibility 0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_header_vert_right_visibility(dwg_ent_table *table,
+dwg_ent_table_set_header_vert_right_visibility(dwg_ent_table *restrict table,
                                                BITCODE_BS visibility,
-                                               int *error)
+                                               int *restrict error)
 {
-  if (table != 0)
+  if (table && visibility >=0 && visibility <= 1)
     {
       *error = 0;
+      if (visibility) table->border_visibility_overrides_flag |= 0x800;
       table->header_vert_right_visibility = visibility;
     }
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Returns data header vert right visibility
+/** Returns _dwg_entity_TABLE::header_vert_right_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_header_vert_right_visibility(dwg_ent_table *table,
-                                               int *error)
+dwg_ent_table_get_header_vert_right_visibility(const dwg_ent_table *restrict table,
+                                               int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->header_vert_right_visibility;
@@ -16671,29 +17086,38 @@ dwg_ent_table_get_header_vert_right_visibility(dwg_ent_table *table,
     }
 }
 
-/// Sets data horiz top visibility
+/** Sets _dwg_entity_TABLE::data_horiz_top_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[in]  visibility 0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_data_horiz_top_visibility(dwg_ent_table *table,
+dwg_ent_table_set_data_horiz_top_visibility(dwg_ent_table *restrict table,
                                             BITCODE_BS visibility,
-                                            int *error)
+                                            int *restrict error)
 {
-  if (table != 0)
+  if (table && visibility <= 1)
     {
       *error = 0;
+      if (visibility) table->border_visibility_overrides_flag |= 0x1000;
       table->data_horiz_top_visibility = visibility;
     }
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Returns data horiz top visibility
+/** Returns _dwg_entity_TABLE::data_horiz_top_visibility, DXF ??.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_data_horiz_top_visibility(dwg_ent_table *table, int *error)
+dwg_ent_table_get_data_horiz_top_visibility(const dwg_ent_table *restrict table,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->data_horiz_top_visibility;
@@ -16706,29 +17130,38 @@ dwg_ent_table_get_data_horiz_top_visibility(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets data horiz ins visibility
+/** Sets _dwg_entity_TABLE::data_horiz_ins_visibility, DXF ?
+\param[in]  table      dwg_ent_table *
+\param[in]  visibility 0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_data_horiz_ins_visibility(dwg_ent_table *table,
+dwg_ent_table_set_data_horiz_ins_visibility(dwg_ent_table *restrict table,
                                             BITCODE_BS visibility,
-                                            int *error)
+                                            int *restrict error)
 {
-  if (table != 0)
+  if (table && visibility <= 1)
     {
       *error = 0;
+      if (visibility) table->border_visibility_overrides_flag |= 0x2000;
       table->data_horiz_ins_visibility = visibility;
     }
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Returns data horiz ins visibility
+/** Returns _dwg_entity_TABLE::data_horiz_ins_visibility, DXF ?
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_data_horiz_ins_visibility(dwg_ent_table *table, int *error)
+dwg_ent_table_get_data_horiz_ins_visibility(const dwg_ent_table *restrict table,
+                          int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->data_horiz_ins_visibility;
@@ -16736,35 +17169,43 @@ dwg_ent_table_get_data_horiz_ins_visibility(dwg_ent_table *table, int *error)
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
       return 0;
     }
 }
 
-/// Sets data horiz bottom visibility
+/** Sets _dwg_entity_TABLE::data_horiz_bottom_visibility, DXF ?.
+\param[in]  table      dwg_ent_table *
+\param[in]  visibility 0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_data_horiz_bottom_visibility(dwg_ent_table *table,
+dwg_ent_table_set_data_horiz_bottom_visibility(dwg_ent_table *restrict table,
                                                BITCODE_BS visibility,
-                                               int *error)
+                                               int *restrict error)
 {
-  if (table != 0)
+  if (table && visibility <= 1)
     {
       *error = 0;
+      if (visibility) table->border_visibility_overrides_flag |= 0x4000;
       table->data_horiz_bottom_visibility = visibility;
     }
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Returns data horiz bottom visibility
+/** Returns _dwg_entity_TABLE::data_horiz_bottom_visibility, DXF ?.
+\param[in]  table      dwg_ent_table *
+\param[out] error      set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_data_horiz_bottom_visibility(dwg_ent_table *table,
-                                               int *error)
+dwg_ent_table_get_data_horiz_bottom_visibility(const dwg_ent_table *restrict table,
+                                               int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
       return table->data_horiz_bottom_visibility;
@@ -16777,32 +17218,41 @@ dwg_ent_table_get_data_horiz_bottom_visibility(dwg_ent_table *table,
     }
 }
 
-/// Sets data vert right visibility
+/** Sets _dwg_entity_TABLE::data_vert_left_visibility, DXF ?.
+\param[in]  table      dwg_ent_table *
+\param[in]  visibility 0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_data_vert_ins_visibility(dwg_ent_table *table,
-                                           BITCODE_BS visibility,
-                                           int *error)
+dwg_ent_table_set_data_vert_left_visibility(dwg_ent_table *restrict table,
+                                           const BITCODE_BS visibility,
+                                           int *restrict error)
 {
-  if (table != 0)
+  if (table && visibility >=0 && visibility <= 1)
     {
       *error = 0;
-      table->data_horiz_ins_visibility = visibility;
+      if (visibility) table->border_visibility_overrides_flag |= 0x8000;
+      table->data_vert_left_visibility = visibility;
     }
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
-/// Returns data vert ins visibility
+/** Returns _dwg_entity_TABLE::data_vert_left_visibility, DXF ?.
+\param[in]  table  dwg_ent_table *
+\param[out] error  set to 0 for ok, 1 on error
+*/
 BITCODE_BS
-dwg_ent_table_get_data_vert_ins_visibility(dwg_ent_table *table, int *error)
+dwg_ent_table_get_data_vert_left_visibility(const dwg_ent_table *restrict table,
+                                            int *restrict error)
 {
-  if (table != 0)
+  if (table)
     {
       *error = 0;
-      return table->data_horiz_ins_visibility;
+      return table->data_vert_left_visibility;
     }
   else
     {
@@ -16812,29 +17262,84 @@ dwg_ent_table_get_data_vert_ins_visibility(dwg_ent_table *table, int *error)
     }
 }
 
-/// Sets data vert right visibility
+/** Sets _dwg_entity_TABLE::data_vert_ins_visibility, DXF ?.
+\param[in]  table      dwg_ent_table *
+\param[in]  visibility 0 or 1
+\param[out] error      set to 0 for ok, 1 on error
+*/
 void
-dwg_ent_table_set_data_vert_right_visibility(dwg_ent_table *table,
-                                             BITCODE_BS visibility,
-                                             int *error)
+dwg_ent_table_set_data_vert_ins_visibility(dwg_ent_table *restrict table,
+                                           const BITCODE_BS visibility,
+                                           int *restrict error)
 {
-  if (table != 0)
+  if (table && visibility >=0 && visibility <= 1)
     {
       *error = 0;
-      table->data_vert_right_visibility = visibility;
+      if (visibility) table->border_visibility_overrides_flag |= 0x10000;
+      table->data_vert_ins_visibility = visibility;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
+    }
+}
+
+/** Returns _dwg_entity_TABLE::data_vert_ins_visibility, DXF ?.
+\param[in]  table  dwg_ent_table *
+\param[out] error  set to 0 for ok, 1 on error
+*/
+BITCODE_BS
+dwg_ent_table_get_data_vert_ins_visibility(const dwg_ent_table *restrict table,
+                                           int *restrict error)
+{
+  if (table)
+    {
+      *error = 0;
+      return table->data_vert_ins_visibility;
     }
   else
     {
       *error = 1;
       LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return 0;
     }
 }
 
-/// Returns data vert right visibility
-BITCODE_BS
-dwg_ent_table_get_data_vert_right_visibility(dwg_ent_table *table, int *error)
+/** Sets the table data vert right visibility.
+    Bit 0x20000 of border_visibility override flag, DXF 96
+\param[in]  table      dwg_ent_table *
+\param[in]  visibility short: 0 = visible, 1 = invisible
+\param[out] error      set to 0 for ok, 1 on error
+*/
+void
+dwg_ent_table_set_data_vert_right_visibility(dwg_ent_table *restrict table,
+                                             const BITCODE_BS visibility,
+                                             int *restrict error)
 {
-  if (table != 0)
+  if (table && visibility <= 1)
+    {
+      *error = 0;
+      if (visibility) table->border_visibility_overrides_flag |= 0x20000;
+      table->data_vert_right_visibility = visibility;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
+    }
+}
+
+/** Returns _dwg_entity_TABLE::data vert right visibility, DXF ?.
+    Bit 0x20000 of border_visibility override flag, DXF 96
+\param[in]  table  dwg_ent_table *
+\param[out] error  set to 0 for ok, 1 on error
+*/
+BITCODE_BS
+dwg_ent_table_get_data_vert_right_visibility(const dwg_ent_table *restrict table,
+                                             int *restrict error)
+{
+  if (table)
     {
       *error = 0;
       return table->data_vert_right_visibility;
@@ -16848,40 +17353,52 @@ dwg_ent_table_get_data_vert_right_visibility(dwg_ent_table *table, int *error)
 }
 
 /*******************************************************************
+*                    FUNCTIONS FOR TABLES                          *
+*        First the special tables: BLOCKS and LAYER                *
+********************************************************************/
+
+/*******************************************************************
 *               FUNCTIONS FOR BLOCK_CONTROL OBJECT                  *
 ********************************************************************/
 
-/// Returns block control object from a block header type argument passed to function
-/** Usage :- dwg_obj_block_control *blc = dwg_block_header_get_block_control(hdr);
+/** Returns the block control object from the block header
+\code Usage: dwg_obj_block_control *blk = dwg_block_header_get_block_control(hdr, &error);
+\endcode
+\param[in]  block_header
+\param[out] error  set to 0 for ok, >0 if not found.
 */
 dwg_obj_block_control *
-dwg_block_header_get_block_control(dwg_obj_block_header* block_header,
-                                   int *error)
+dwg_block_header_get_block_control(const dwg_obj_block_header* block_header,
+                                   int *restrict error)
 {
   if (block_header &&
-      block_header->block_control_handle &&
-      block_header->block_control_handle->obj &&
-      block_header->block_control_handle->obj->tio.object)
+      block_header->block_control &&
+      block_header->block_control->obj &&
+      block_header->block_control->obj->type == DWG_TYPE_BLOCK_CONTROL &&
+      block_header->block_control->obj->tio.object)
     {
       *error = 0;
-      return block_header->block_control_handle->obj->tio.object->tio.BLOCK_CONTROL;
+      return block_header->block_control->obj->tio.object->tio.BLOCK_CONTROL;
     }
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: empty or invalid arg", __FUNCTION__)
       return NULL;
     }
 }
 
-/// Extracts and returns all block headers
+/** Extracts and returns all block headers as references
+\param[in]  ctrl
+\param[out] error  set to 0 for ok, >0 if not found.
+*/
 dwg_object_ref **
-dwg_obj_block_control_get_block_headers(dwg_obj_block_control *ctrl,
-                                        int *error)
+dwg_obj_block_control_get_block_headers(const dwg_obj_block_control *restrict ctrl,
+                                        int *restrict error)
 {
   dwg_object_ref **ptx = (dwg_object_ref**)
     malloc(ctrl->num_entries * sizeof(Dwg_Object_Ref *));
-  if (ptx != 0)
+  if (ptx)
     {
       BITCODE_BS i;
       *error = 0;
@@ -16894,16 +17411,20 @@ dwg_obj_block_control_get_block_headers(dwg_obj_block_control *ctrl,
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      LOG_ERROR("%s: null malloc", __FUNCTION__)
       return NULL;
     }
 }
 
-/// Returns number of blocks
+/** Returns number of blocks
+\param[in]  ctrl
+\param[out] error  set to 0 for ok, >0 if not found.
+*/
 BITCODE_BL
-dwg_obj_block_control_get_num_entries(dwg_obj_block_control *ctrl, int *error)
+dwg_obj_block_control_get_num_entries(const dwg_obj_block_control *restrict ctrl,
+                          int *restrict error)
 {
-  if (ctrl != 0)
+  if (ctrl)
     {
       *error = 0;
       return ctrl->num_entries;
@@ -16916,11 +17437,15 @@ dwg_obj_block_control_get_num_entries(dwg_obj_block_control *ctrl, int *error)
     }
 }
 
-/// Returns model space block
+/** Returns reference to model space block
+\param[in]  ctrl
+\param[out] error  set to 0 for ok, >0 if not found.
+*/
 dwg_object_ref *
-dwg_obj_block_control_get_model_space(dwg_obj_block_control *ctrl, int *error)
+dwg_obj_block_control_get_model_space(const dwg_obj_block_control *restrict ctrl,
+                          int *restrict error)
 {
-  if (ctrl != 0)
+  if (ctrl)
     {
       *error = 0;
       return ctrl->model_space;
@@ -16933,11 +17458,15 @@ dwg_obj_block_control_get_model_space(dwg_obj_block_control *ctrl, int *error)
     }
 }
 
-/// Returns paper space block
+/** Returns reference to paper space block
+\param[in]  ctrl
+\param[out] error  set to 0 for ok, >0 if not found.
+*/
 dwg_object_ref *
-dwg_obj_block_control_get_paper_space(dwg_obj_block_control *ctrl, int *error)
+dwg_obj_block_control_get_paper_space(const dwg_obj_block_control *restrict ctrl,
+                          int *restrict error)
 {
-  if (ctrl != 0)
+  if (ctrl)
     {
       *error = 0;
       return ctrl->paper_space;
@@ -16951,43 +17480,26 @@ dwg_obj_block_control_get_paper_space(dwg_obj_block_control *ctrl, int *error)
 }
 
 /*******************************************************************
-*                    FUNCTIONS FOR LAYER OBJECT                     *
-********************************************************************/
-
-/// Get layer Name of the layer type argument passed in function
-/** Usage :- char * layer_name = dwg_obj_layer_get_name(layer);
-*/
-char *
-dwg_obj_layer_get_name(dwg_obj_layer *layer, int *error)
-{
-  if (layer != 0)
-    {
-      *error = 0;
-      return layer->entry_name;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return NULL;
-    }
-
-}
-
-/*******************************************************************
 *                FUNCTIONS FOR BLOCK_HEADER OBJECT                  *
 ********************************************************************/
 
-/// Get Block Name of the block header type argument passed in function
-/** Usage :- char * block_name = dwg_obj_block_header_get_name(hdr);
+/** Get name of the block header (utf-8 encoded)
+\code Usage: char* block_name = dwg_obj_block_header_get_name(hdr, &error);
+\endcode
+\param[in]  hdr
+\param[out] error  set to 0 for ok, >0 if not found.
 */
 char *
-dwg_obj_block_header_get_name(dwg_obj_block_header *hdr, int *error)
+dwg_obj_block_header_get_name(const dwg_obj_block_header *restrict hdr,
+                          int *restrict error)
 {
-  if (hdr != 0)
+  if (hdr)
     {
       *error = 0;
-      return hdr->entry_name;
+      if (dwg_version >= R_2007)
+        return bit_convert_TU((BITCODE_TU)hdr->entry_name);
+      else
+        return hdr->entry_name;
     }
   else
     {
@@ -16997,38 +17509,46 @@ dwg_obj_block_header_get_name(dwg_obj_block_header *hdr, int *error)
     }
 }
 
-/// Returns 1st block header present in the dwg file
-/** Usage :- dwg_obj_block_header = dwg_get_block_header(dwg, &error);
-Usually the model space block.
-\param 1 dwg_data
-\param 2 int
+/** Returns 1st block header present in the dwg file.
+    Usually the model space block.
+\code Usage: dwg_obj_block_header = dwg_get_block_header(dwg, &error);
+\endcode
+\param[in]  dwg
+\param[out] error  set to 0 for ok, >0 if not found.
 */
 dwg_obj_block_header *
-dwg_get_block_header(dwg_data *dwg, int *error)
+dwg_get_block_header(dwg_data *restrict dwg,
+                          int *restrict error)
 {
   Dwg_Object *obj;
   Dwg_Object_BLOCK_HEADER *blk;
 
   *error = 0;
-  assert(dwg->num_classes < 1000);
-  assert(dwg->num_objects < 0xfffffff); // 0x4fa463eb
-  // cached?
-#if 0
-  if (dwg->mspace_block)
-    return dwg->mspace_block->tio.object->tio.BLOCK_HEADER;
-  else if (dwg->pspace_block)
-    return dwg->pspace_block->tio.object->tio.BLOCK_HEADER;
-#endif
+  if (!dwg || dwg->num_classes > 1000 || dwg->num_objects > 0xfffffff)
+    {
+      *error = 1;
+      return NULL;
+    }
+  if (dwg_version == R_INVALID)
+    dwg_version = (Dwg_Version_Type)dwg->header.version;
 
   obj = &dwg->object[0];
   while (obj && obj->type != DWG_TYPE_BLOCK_HEADER)
     {
-      assert(obj->size < 0xffff);
+      if (obj->size > 0xffff)
+        {
+          *error = 2;
+          return NULL;
+        }
       obj = dwg_next_object(obj);
     }
   if (obj && DWG_TYPE_BLOCK_HEADER == obj->type)
     {
-      assert(obj->size < 0xffff);
+      if (obj->size > 0xffff)
+        {
+          *error = 2;
+          return NULL;
+        }
       blk = obj->tio.object->tio.BLOCK_HEADER;
       if (!strcmp(blk->entry_name, "*Paper_Space"))
         dwg->pspace_block = obj;
@@ -17038,8 +17558,505 @@ dwg_get_block_header(dwg_data *dwg, int *error)
     }
   else
     {
-      *error = 1;
+      *error = 3;
       LOG_ERROR("%s: BLOCK_HEADER not found", __FUNCTION__)
+      return NULL;
+    }
+}
+
+/*******************************************************************
+*                    FUNCTIONS FOR LAYER OBJECT                     *
+********************************************************************/
+
+/** Get name of the layer (utf-8 encoded)
+\code Usage: char* layer_name = dwg_obj_layer_get_name(layer, &error);
+\endcode
+\param[in]  layer
+\param[out] error  set to 0 for ok, >0 if not found.
+*/
+char *
+dwg_obj_layer_get_name(const dwg_obj_layer *restrict layer,
+                          int *restrict error)
+{
+  if (layer)
+    {
+      *error = 0;
+      if (dwg_version >= R_2007)
+        return bit_convert_TU((BITCODE_TU)layer->entry_name);
+      else
+        return layer->entry_name;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty arg", __FUNCTION__)
+      return NULL;
+    }
+}
+
+/*******************************************************************
+*           GENERIC FUNCTIONS FOR OTHER TABLE OBJECTS              *
+********************************************************************/
+
+/** Get number of table entries from the generic table control object.
+\code Usage: char* name = dwg_obj_tablectrl_get_num_entries(obj, &error);
+\endcode
+\param[in]  obj    a TABLE_CONTROL dwg_object*
+\param[out] error  set to 0 for ok, >0 if not found.
+*/
+BITCODE_BL
+dwg_obj_tablectrl_get_num_entries(const dwg_object *restrict obj,
+                          int *restrict error)
+{
+  if (obj &&
+      obj->supertype == DWG_SUPERTYPE_OBJECT &&
+      dwg_obj_is_control(obj))
+    {
+      // HACK: we can guarantee that num_entries is always the first field.
+      Dwg_Object_STYLE_CONTROL *ctrl = obj->tio.object->tio.STYLE_CONTROL;
+      *error = 0;
+      return ctrl->num_entries;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty or invalid table control arg %p, type: 0x%x",
+                __FUNCTION__, obj, obj ? obj->type : 0)
+      return 0;
+    }
+}
+
+/** Get all table entries from the generic table control object.
+\code Usage: dwg_object_ref **refs = dwg_obj_tablectrl_get_entries(obj, &error);
+\endcode
+\param[in]  obj    a TABLE_CONTROL dwg_object*
+\param[out] error  set to 0 for ok, >0 if not found.
+*/
+dwg_object_ref **
+dwg_obj_tablectrl_get_entries(const dwg_object *restrict obj,
+                          int *restrict error)
+{
+  if (obj &&
+      obj->supertype == DWG_SUPERTYPE_OBJECT &&
+      dwg_obj_is_control(obj))
+    {
+      // HACK: we can guarantee a common layout of the common fields
+      Dwg_Object_STYLE_CONTROL *ctrl = obj->tio.object->tio.STYLE_CONTROL;
+      return ctrl->styles;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty or invalid table control arg %p, type: 0x%x",
+                __FUNCTION__, obj, obj ? obj->type : 0)
+      return NULL;
+    }
+}
+
+/** Get the nth table entry from the generic table control object.
+\code Usage: dwg_object_ref *ref = dwg_obj_tablectrl_get_entry(obj, 0, &error);
+\endcode
+\param[in]  obj    a TABLE_CONTROL dwg_object*
+\param[in]  index  BITCODE_BS
+\param[out] error  set to 0 for ok, >0 if not found.
+*/
+dwg_object_ref *
+dwg_obj_tablectrl_get_entry(const dwg_object *restrict obj,
+                            const BITCODE_BS index,
+                            int *restrict error)
+{
+  if (obj &&
+      obj->supertype == DWG_SUPERTYPE_OBJECT &&
+      dwg_obj_is_control(obj))
+    {
+      // HACK: we can guarantee a common layout of the common fields
+      Dwg_Object_STYLE_CONTROL *ctrl = obj->tio.object->tio.STYLE_CONTROL;
+      BITCODE_BS count = ctrl->num_entries;
+      if (index < count)
+        {
+          *error = 0;
+          return ctrl->styles[index];
+        }
+      else
+        {
+          *error = 2;
+          LOG_ERROR("%s: index %d out of bounds %d",
+                    __FUNCTION__, index, count);
+          return NULL;
+        }
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty or invalid table control arg %p, type: 0x%x",
+                __FUNCTION__, obj, obj ? obj->type : 0)
+      return NULL;
+    }
+}
+
+/** Get the null_handle from the generic table control object.
+\code Usage: dwg_object_ref *ref = dwg_obj_tablectrl_get_null_handle(obj, &error);
+\endcode
+\param[in]  obj    a TABLE_CONTROL dwg_object*
+\param[out] error  set to 0 for ok, >0 if not found.
+*/
+dwg_object_ref *
+dwg_obj_tablectrl_get_null_handle(const dwg_object *restrict obj,
+                                  int *restrict error)
+{
+  if (obj &&
+      obj->supertype == DWG_SUPERTYPE_OBJECT &&
+      dwg_obj_is_control(obj))
+    {
+      // HACK: we can guarantee a common layout of the common fields
+      Dwg_Object_STYLE_CONTROL *ctrl = obj->tio.object->tio.STYLE_CONTROL;
+      return ctrl->null_handle;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty or invalid table control arg %p, type: 0x%x",
+                __FUNCTION__, obj, obj ? obj->type : 0)
+      return NULL;
+    }
+}
+
+/** Get the xdicobjhandle from the generic table control object.
+\code Usage: dwg_object_ref *ref = dwg_obj_tablectrl_get_xdicobjhandle(obj, &error);
+\endcode
+\param[in]  obj    a TABLE_CONTROL dwg_object*
+\param[out] error  set to 0 for ok, >0 if not found.
+*/
+dwg_object_ref *
+dwg_obj_tablectrl_get_xdicobjhandle(const dwg_object *restrict obj,
+                                    int *restrict error)
+{
+  if (obj &&
+      obj->supertype == DWG_SUPERTYPE_OBJECT &&
+      dwg_obj_is_control(obj))
+    {
+      // HACK: we can guarantee a common layout of the common fields
+      Dwg_Object_STYLE_CONTROL *ctrl = obj->tio.object->tio.STYLE_CONTROL;
+      return ctrl->xdicobjhandle;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty or invalid table control arg %p, type: 0x%x",
+                __FUNCTION__, obj, obj ? obj->type : 0)
+      return NULL;
+    }
+}
+
+/** Get the objid from the generic table control object.
+\code Usage: objid = dwg_obj_tablectrl_get_objid(obj, &error);
+\endcode
+\param[in]  obj    a TABLE_CONTROL dwg_object*
+\param[out] error  set to 0 for ok, >0 if not found.
+*/
+long unsigned int
+dwg_obj_tablectrl_get_objid(const dwg_object *restrict obj,
+                            int *restrict error)
+{
+  if (obj &&
+      obj->supertype == DWG_SUPERTYPE_OBJECT &&
+      dwg_obj_is_control(obj))
+    {
+      // HACK: we can guarantee a common layout of the common fields
+      Dwg_Object_STYLE_CONTROL *ctrl = obj->tio.object->tio.STYLE_CONTROL;
+      return ctrl->objid;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty or invalid table control arg %p, type: 0x%x",
+                __FUNCTION__, obj, obj ? obj->type : 0)
+      return 0;
+    }
+}
+
+/** Returns name of the referenced table entry (as UTF-8). Defaults to ByLayer 
+    Since r2007 it returns a malloc'd copy, before the direct reference to the
+    dwg field or the constant "ByLayer".
+\code Usage: char* name = dwg_ref_get_table_name(ref, &error);
+\endcode
+\param[in]  ref     dwg_obj_ref*   A handle
+\param[out] error   int*, is set to 0 for ok, 1 on error
+*/
+char *
+dwg_ref_get_table_name(const dwg_object_ref *restrict ref,
+                       int *restrict error)
+{
+  char *name = NULL;
+  if (ref && ref->obj)
+    name = dwg_obj_table_get_name(ref->obj, error);
+  if (!name)
+    name = "ByLayer";
+  return name;
+}
+
+// TODO: the same for the dwg_tbl_generic obj
+
+/** Get name of the table object entry (utf-8 encoded)
+    Since r2007 it returns a malloc'd copy, before the direct reference to the
+    dwg field.
+\code Usage: char* name = dwg_obj_table_get_name(obj, &error);
+\endcode
+\param[in]  obj    a TABLE dwg_object*
+\param[out] error  set to 0 for ok, >0 if not found.
+*/
+char *
+dwg_obj_table_get_name(const dwg_object *restrict obj,
+                          int *restrict error)
+{
+  if (obj &&
+      obj->supertype == DWG_SUPERTYPE_OBJECT &&
+      (dwg_obj_is_table(obj) || obj->type == DWG_TYPE_DICTIONARY))
+    {
+      // HACK: we can guarantee that the table entry_name is always the first field,
+      // by using COMMON_TABLE_FLAGS.
+      // TODO: Dictionary also?
+      Dwg_Object_STYLE *table = obj->tio.object->tio.STYLE;
+      *error = 0;
+      if (obj->parent->header.version >= R_2007)
+        return bit_convert_TU((BITCODE_TU)table->entry_name); //creates a copy
+      else
+        return table->entry_name;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: empty or invalid table arg %p, type: 0x%x",
+                __FUNCTION__, obj, obj ? obj->type : 0)
+      return NULL;
+    }
+}
+
+/*******************************************************************
+*                    FUNCTIONS FOR GENERIC ENTITY                  *
+********************************************************************/
+
+/** Returns the entity layer name (as UTF-8), or "0"
+    Since r2007 it returns a malloc'd copy, before the direct reference
+    to the dwg field or the constant "0".
+\code Usage: char* layer = dwg_ent_get_layer_name(ent, &error);
+\endcode
+\param[in]  ent     dwg_obj_ent*
+\param[out] error   int*, is set to 0 for ok, 1 on error
+*/
+char *
+dwg_ent_get_layer_name(const dwg_obj_ent *restrict ent,
+                       int *restrict error)
+{
+  char *name = NULL;
+  Dwg_Object* layer = ent->layer ? ent->layer->obj : NULL;
+
+  if (layer)
+    name = dwg_obj_table_get_name(layer, error);
+  if (!name)
+    name = "0";
+  return name;
+}
+
+/** Returns the entity bitsize
+\code Usage: long bitsize = dwg_ent_get_bitsize(ent, &error);
+\endcode
+\param[in]  ent     dwg_obj_ent*
+\param[out] error   int*, is set to 0 for ok, 1 on error
+*/
+BITCODE_RL
+dwg_ent_get_bitsize(const dwg_obj_ent *restrict ent,
+                    int *restrict error)
+{
+  Dwg_Object *obj = dwg_ent_to_object(ent, error);
+  if (!error) {
+    return obj->bitsize;
+  } else {
+    return 0;
+  }
+}
+
+/** Returns the number of object EED structures.
+\code Usage: int num_eed = dwg_obj_get_num_eed(ent, &error);
+\endcode
+\param[in]  obj     dwg_obj_obj*
+\param[out] error   int*, is set to 0 for ok, 1 on error
+*/
+unsigned int
+dwg_obj_get_num_eed(const dwg_obj_obj *restrict obj,
+                    int *restrict error)
+{
+  if (!obj) {
+    *error = 1;
+    return 0;
+  }
+  *error = 0;
+  return obj->num_eed;
+}
+/** Returns the number of entity EED structures
+See dwg_object_to_entity how to get the ent.
+\code Usage: int num_eed = dwg_ent_get_num_eed(ent,&error);
+\endcode
+\param[in]  ent     dwg_obj_ent*
+\param[out] error   int*, is set to 0 for ok, 1 on error
+*/
+unsigned int
+dwg_ent_get_num_eed(const dwg_obj_ent *restrict ent,
+                    int *restrict error)
+{
+  if (!ent) {
+    *error = 1;
+    return 0;
+  }
+  *error = 0;
+  return ent->num_eed;
+}
+/** Returns the nth EED structure.
+\code Usage: dwg_entity_eed *eed = dwg_ent_get_eed(ent,0,&error);
+\endcode
+\param[in]  ent    dwg_obj_ent*
+\param[in]  index  [0 - num_eed-1]
+\param[out] error  set to 0 for ok, 1 if ent == NULL or 2 if index out of bounds.
+*/
+dwg_entity_eed *
+dwg_ent_get_eed(const dwg_obj_ent *restrict ent,
+                const unsigned int index,
+                int *restrict error)
+{
+  if (!ent) {
+    *error = 1;
+    LOG_ERROR("%s: empty or invalid ent", __FUNCTION__)
+    return NULL;
+  }
+  else if (index >= ent->num_eed) {
+    *error = 2;
+    return NULL;
+  }
+  else {
+    *error = 0;
+    return &ent->eed[index];
+  }
+}
+
+/** Returns the data union of the nth EED structure.
+\code Usage: dwg_entity_eed_data *eed = dwg_ent_get_eed_data(ent,0,&error);
+\endcode
+\param[in]  ent    dwg_obj_ent*
+\param[in]  index  [0 - num_eed-1]
+\param[out] error  set to 0 for ok, 1 if ent == NULL or 2 if index out of bounds.
+*/
+dwg_entity_eed_data *
+dwg_ent_get_eed_data(const dwg_obj_ent *restrict ent,
+                     const unsigned int index,
+                     int *restrict error)
+{
+  if (!ent) {
+    *error = 1;
+    LOG_ERROR("%s: empty or invalid ent", __FUNCTION__)
+    return NULL;
+  }
+  else if (index >= ent->num_eed) {
+    *error = 2;
+    return NULL;
+  }
+  else {
+    *error = 0;
+    return ent->eed[index].data;
+  }
+}
+
+/** Returns dwg_object* from dwg_obj_ent*
+\code Usage: dwg_object* obj = dwg_obj_ent_to_object(ent, &error);
+\endcode
+\param[in]  obj     dwg_obj_ent*
+\param[out] error   int*, is set to 0 for ok, 1 on error
+*/
+dwg_object *
+dwg_ent_to_object(const dwg_obj_ent *restrict obj,
+                  int *restrict error)
+{
+  dwg_data *dwg;
+  dwg_object *retval;
+  if (!obj) {
+    *error = 1;
+    LOG_ERROR("%s: Empty or invalid obj", __FUNCTION__);
+    return NULL;
+  }
+  dwg = obj->dwg;
+  if (dwg_version == R_INVALID)
+    dwg_version = (Dwg_Version_Type)dwg->header.version;
+  if (obj->objid >= dwg->num_objects) {
+    *error = 1;
+    return NULL;
+  }
+  retval = &dwg->object[obj->objid];
+  if (retval->supertype == DWG_SUPERTYPE_ENTITY) {
+    *error = 0;
+    return retval;
+  } else {
+    *error = 1;
+    return NULL;
+  }
+}
+
+/** Returns dwg_object* from any dwg_ent_*, the parent of the parent.
+\code Usage: dwg_object* obj = dwg_ent_generic_to_object(_obj, &error);
+\endcode
+\param[in]  obj     dwg_ent_generic* (line, circle, ...)
+\param[out] error   int*, is set to 0 for ok, 1 on error
+*/
+dwg_object *
+dwg_ent_generic_to_object(const dwg_ent_generic *restrict obj,
+                          int *restrict error)
+{
+  return dwg_obj_generic_to_object((dwg_obj_generic *restrict)obj, error);
+}
+
+/** Returns dwg_obj_ent* from any dwg_ent_* entity
+\code Usage: dwg_obj_ent* ent = dwg_ent_generic_parent(_ent, &error);
+\endcode
+\param[in]  ent     dwg_ent_generic* (line, circle, ...)
+\param[out] error   int*, is set to 0 for ok, 1 on error
+*/
+dwg_obj_ent *
+dwg_ent_generic_parent(const dwg_ent_generic *restrict ent,
+                       int *restrict error)
+{
+  if (ent && ent->parent)
+    {
+      dwg_obj_ent *retval = ent->parent;
+      *error = 0;
+      return retval;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: Empty or invalid obj", __FUNCTION__)
+      return NULL;
+    }
+}
+
+/** Returns dwg_obj_ent* from dwg object
+\code Usage : dwg_obj_ent* ent = dwg_object_to_entity(obj, &error);
+\endcode
+\param obj   dwg_object*
+\param error
+*/
+dwg_obj_ent *
+dwg_object_to_entity(dwg_object *restrict obj,
+                          int *restrict error)
+{
+  if (obj && obj->supertype == DWG_SUPERTYPE_ENTITY)
+    {
+      *error = 0;
+      if (dwg_version == R_INVALID)
+        dwg_version = (Dwg_Version_Type)obj->parent->header.version;
+      return obj->tio.entity;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: Empty or invalid obj", __FUNCTION__)
       return NULL;
     }
 }
@@ -17048,81 +18065,80 @@ dwg_get_block_header(dwg_data *dwg, int *error)
 *                    FUNCTIONS FOR DWG OBJECT                       *
 ********************************************************************/
 
+/** Returns the number of classes or 0
+\code Usage: unsigned num_classes = dwg_get_num_classes(dwg);
+\endcode
+\param[in]  dwg   dwg_data*
+*/
 unsigned int
-dwg_get_num_classes(dwg_data *dwg)
+dwg_get_num_classes(const dwg_data *dwg)
 {
+  if (!dwg)
+    return 0;
+  if (dwg_version == R_INVALID)
+    dwg_version = (Dwg_Version_Type)dwg->header.version;
   return dwg->num_classes;
 }
-long unsigned int
-dwg_get_num_objects(dwg_data *dwg)
-{
-  return dwg->num_objects;
-}
-long unsigned int
-dwg_get_num_entities(dwg_data *dwg)
-{
-  return dwg->num_entities;
-}
 
+/** Returns the nth class or NULL
+\code Usage: dwg_object* obj = dwg_get_object(dwg, 0);
+\endcode
+\param[in]  dwg   dwg_data*
+\param[in]  index
+*/
 dwg_class *
-dwg_get_class(dwg_data *dwg, unsigned int index)
+dwg_get_class(const dwg_data *dwg, unsigned int index)
 {
+  if (!dwg)
+    return NULL;
+  if (dwg_version == R_INVALID)
+    dwg_version = (Dwg_Version_Type)dwg->header.version;
   return (index < dwg->num_classes) ? &dwg->dwg_class[index] : NULL;
 }
 
+/** Returns the nth object or NULL
+\code Usage: dwg_object* obj = dwg_get_object(dwg, 0);
+\endcode
+\param[in]  dwg   dwg_data*
+\param[in]  index
+*/
 dwg_object *
 dwg_get_object(dwg_data *dwg, long unsigned int index)
 {
+  if (!dwg)
+    return NULL;
+  if (dwg_version == R_INVALID)
+    dwg_version = (Dwg_Version_Type)dwg->header.version;
   return (index < dwg->num_objects) ? &dwg->object[index] : NULL;
 }
 
+/** Returns the object bitsize or 0
+\code Usage: long bitsize = dwg_obj_get_bitsize(obj);
+\endcode
+\param[in]  obj   dwg_object*
+*/
 BITCODE_RL
-dwg_obj_get_bitsize(dwg_object *obj)
+dwg_obj_get_bitsize(const dwg_object *obj)
 {
-  return obj->bitsize;
-}
-BITCODE_RL
-dwg_ent_get_bitsize(dwg_obj_ent *obj, int *error)
-{
-  *error = 0;
-  return obj->bitsize;
-}
-unsigned int
-dwg_obj_get_num_eed(dwg_obj_obj *obj, int *error)
-{
-  *error = 0;
-  return obj->num_eed;
-}
-unsigned int
-dwg_ent_get_num_eed(dwg_obj_ent *ent, int *error)
-{
-  *error = 0;
-  return ent->num_eed;
-}
-dwg_entity_eed *
-dwg_ent_get_eed(dwg_obj_ent *ent, unsigned int index, int *error)
-{
-  *error = 0;
-  return (index < ent->num_eed) ? &ent->eed[index] : NULL;
-}
-dwg_entity_eed_data *
-dwg_ent_get_eed_data(dwg_obj_ent *ent, unsigned int index, int *error)
-{
-  *error = 0;
-  return (index < ent->num_eed) ? ent->eed[index].data : NULL;
+  return obj ? obj->bitsize : 0;
 }
 
-/// Returns dwg_object index
-/** Usage : int index = dwg_obj_object_get_index(obj, &error);
-\param 1 dwg_object
-\param 2 int
+/** Returns the global index/objid in the list of all objects.
+    This is the same as a dwg_handle absolute_ref value.
+\code Usage: int index = dwg_obj_object_get_index(obj, &error);
+\endcode
+\param[in]  obj     dwg_object*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
-int
-dwg_obj_object_get_index(dwg_object *obj, int *error)
+unsigned int
+dwg_obj_object_get_index(const dwg_object *restrict obj,
+                          int *restrict error)
 {
-  if (obj != 0)
+  if (obj)
     {
       *error = 0;
+      if (dwg_version == R_INVALID)
+        dwg_version = (Dwg_Version_Type)obj->parent->header.version;
       return obj->index;
     }
   else
@@ -17133,18 +18149,22 @@ dwg_obj_object_get_index(dwg_object *obj, int *error)
     }
 }
 
-/// Returns dwg handle from dwg object
-/** Usage : dwg_handle handle = dwg_object_get_handle(obj, &error);
-\param 1 dwg_object
-\param 2 int
+/** Returns dwg_handle* from dwg_object*
+\code Usage: dwg_handle* handle = dwg_object_get_handle(obj, &error);
+\endcode
+\param[in]  obj     dwg_object*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 dwg_handle *
-dwg_obj_get_handle(dwg_object *obj, int *error)
+dwg_obj_get_handle(dwg_object *restrict obj,
+                          int *restrict error)
 {
-  if (obj != 0)
+  if (obj)
     {
       *error = 0;
-      return &obj->handle;
+      if (dwg_version == R_INVALID)
+        dwg_version = (Dwg_Version_Type)obj->parent->header.version;
+      return &(obj->handle);
     }
   else
     {
@@ -17154,59 +18174,128 @@ dwg_obj_get_handle(dwg_object *obj, int *error)
     }
 }
 
-/// returns object from dwg object
-/** Usage : dwg_obj_obj ent = dwg_object_to_object(obj, &error);
-\param 1 dwg_object
-\param 2 int
+/** Returns dwg_object* from dwg_obj_obj*
+\code Usage: dwg_object* obj = dwg_obj_obj_to_object(_obj, &error);
+\endcode
+\param[in]  obj     dwg_obj_obj*
+\param[out] error   int*, is set to 0 for ok, 1 on error
+*/
+dwg_object *
+dwg_obj_obj_to_object(const dwg_obj_obj *restrict obj,
+                          int *restrict error)
+{
+  dwg_data *dwg;
+  dwg_object *retval;
+
+  if (!obj) {
+    *error = 1;
+    LOG_ERROR("%s: Empty or invalid obj", __FUNCTION__)
+    return NULL;
+  }
+  dwg = obj->dwg;
+  if (dwg_version == R_INVALID)
+    dwg_version = (Dwg_Version_Type)dwg->header.version;
+  if (obj->objid >= dwg->num_objects) {
+    *error = 1;
+    return NULL;
+  }
+  retval = &dwg->object[obj->objid];
+  if (retval->supertype == DWG_SUPERTYPE_OBJECT) {
+    *error = 0;
+    return retval;
+  } else {
+    *error = 1;
+    return NULL;
+  }
+}
+
+/** Returns dwg_object* from any dwg_obj_*
+\code Usage: dwg_object* obj = dwg_obj_generic_to_object(_obj, &error);
+\endcode
+\param[in]  obj     dwg_obj_generic* (layer, block_header, xrecord, ...)
+\param[out] error   int*, is set to 0 for ok, 1 on error
+*/
+dwg_object *
+dwg_obj_generic_to_object(const dwg_obj_generic *restrict obj,
+                          int *restrict error)
+{
+  if (obj && obj->parent && obj->parent->objid)
+    {
+      dwg_data *dwg = obj->parent->dwg;
+      dwg_object *retval = &dwg->object[obj->parent->objid];
+      *error = 0;
+      if (dwg_version == R_INVALID)
+        dwg_version = (Dwg_Version_Type)retval->parent->header.version;
+      return retval;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: Empty or invalid obj", __FUNCTION__)
+      return NULL;
+    }
+}
+
+/** Returns dwg_obj_obj* from any dwg_obj_*
+\code Usage: dwg_obj_obj* obj = dwg_obj_generic_parent(_obj, &error);
+\endcode
+\param[in]  obj     dwg_obj_generic* (layer, block_header, xrecord, ...)
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 dwg_obj_obj *
-dwg_object_to_object(dwg_object *obj, int *error)
+dwg_obj_generic_parent(const dwg_obj_generic *restrict obj,
+                       int *restrict error)
 {
+  if (obj && obj->parent)
+    {
+      dwg_obj_obj *retval = obj->parent;
+      *error = 0;
+      return retval;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: Empty or invalid obj", __FUNCTION__)
+      return NULL;
+    }
+}
 
-  if (obj != 0)
+/** Returns dwg_obj_obj* from dwg_object*
+\code Usage: dwg_obj_obj ent = dwg_object_to_object(obj, &error);
+\endcode
+\param[in]  obj   dwg_object*
+\param[out] error   int*, is set to 0 for ok, 1 on error
+*/
+dwg_obj_obj *
+dwg_object_to_object(dwg_object *restrict obj,
+                     int *restrict error)
+{
+  if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT)
     {
       *error = 0;
+      if (dwg_version == R_INVALID)
+        dwg_version = (Dwg_Version_Type)obj->parent->header.version;
       return obj->tio.object;
     }
   else
     {
       *error = 1;
-      LOG_ERROR("%s: empty obj", __FUNCTION__)
+      LOG_ERROR("%s: Empty or invalid obj", __FUNCTION__)
       return NULL;
     }
 }
 
-/// returns entity from dwg object
-/** Usage : dwg_obj_ent ent = dwg_object_to_entity(obj, &error);
-\param 1 dwg_object
-\param 2 int
-*/
-dwg_obj_ent *
-dwg_object_to_entity(dwg_object *obj, int *error)
-{
-  return obj->tio.entity;
-  if (obj != 0)
-    {
-      *error = 0;
-      return obj->tio.entity;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty obj", __FUNCTION__)
-      return NULL;
-    }
-}
-
-/// Returns object from reference
-/** Usage : dwg_object obj = dwg_obj_reference_get_object(obj, &error);
-\param 1 dwg_object_ref
-\param 2 int
+/** Returns object from reference or NULL
+\code Usage: dwg_object obj = dwg_obj_ref_get_object(obj, &error);
+\endcode
+\param[in]  ref     dwg_object_ref*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 dwg_object *
-dwg_obj_reference_get_object(dwg_object_ref *ref, int *error)
+dwg_obj_ref_get_object(const dwg_object_ref *restrict ref,
+                       int *restrict error)
 {
-  if (ref != 0)
+  if (ref)
     {
       *error = 0;
       return ref->obj;
@@ -17219,15 +18308,34 @@ dwg_obj_reference_get_object(dwg_object_ref *ref, int *error)
     }
 }
 
-/// Returns absolute reference
-/** Usage : BITCODE_BL ref = dwg_obj_ref_get_abs_ref(obj, &error);
-\param 1 dwg_object_ref
-\param 2 int
+/** Returns object from absolute reference or NULL
+\code Usage: dwg_object* obj = dwg_absref_get_object(dwg, absref);
+\endcode
+\param[in]  dwg
+\param[in]  absref
+*/
+dwg_object *
+dwg_absref_get_object(const dwg_data *dwg,
+                      const long unsigned int absref)
+{
+  if (absref)
+      return dwg_resolve_handle(dwg, absref);
+  else
+    return NULL;
+}
+
+/* Returns the absolute handle reference, to be looked up
+   in dwg->object_refs[]
+\code Usage: BITCODE_BL ref = dwg_ref_get_absref(obj, &error);
+\endcode
+\param[in]  ref   dwg_object_ref*
+\param[out] error   int*, is set to 0 for ok, 1 on error
 */
 BITCODE_BL
-dwg_obj_ref_get_abs_ref(dwg_object_ref *ref, int *error)
+dwg_ref_get_absref(const dwg_object_ref *restrict ref,
+                   int *restrict error)
 {
-  if (ref != 0)
+  if (ref)
     {
       *error = 0;
       return ref->absolute_ref;
@@ -17240,14 +18348,19 @@ dwg_obj_ref_get_abs_ref(dwg_object_ref *ref, int *error)
     }
 }
 
-/// Returns Dwg object type
-/** Usage : int type = dwg_get_type(obj);
-\param 1 dwg_object
+/** Returns the dwg object type, see \ref DWG_OBJECT_TYPE "enum DWG_OBJECT_TYPE".
+    With types > 500 you need to check the dxfname instead.
+    \sa dwg_get_dxfname
+\code Usage:
+  int type = dwg_get_type(obj);
+  if (type > 500) dxfname = dwg_get_dxfname(obj);
+\endcode
+\param[in]  obj   dwg_object*
 */
 int
-dwg_get_type(dwg_object *obj)
+dwg_get_type(const dwg_object *obj)
 {
-  if (obj != 0)
+  if (obj)
     {
       return obj->type;
     }
@@ -17258,15 +18371,19 @@ dwg_get_type(dwg_object *obj)
     }
 }
 
-/// Returns Dwg object dxfname
-/** Usage : int type = dwg_get_dxfname(obj);
-\param 1 dwg_object
+/** Returns the object dxfname as ASCII string. Since r2007 utf8 encoded, but
+    we haven't seen unicode names for the dxfname yet.
+\code Usage: const char* name = dwg_get_dxfname(obj);
+\endcode
+\param obj dwg_object*
 */
 char*
-dwg_get_dxfname(dwg_object *obj)
+dwg_get_dxfname(const dwg_object *obj)
 {
   if (obj)
     {
+      if (dwg_version == R_INVALID)
+        dwg_version = (Dwg_Version_Type)obj->parent->header.version;
       return obj->dxfname;
     }
   else

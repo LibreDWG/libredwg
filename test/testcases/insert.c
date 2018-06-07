@@ -18,7 +18,7 @@ low_level_process (dwg_object * obj)
   printf ("extrusion points : x = %f, y = %f, z = %f\n",
 	  insert->extrusion.x, insert->extrusion.y, insert->extrusion.z);
   printf ("attribs for insert : " FORMAT_B "\n", insert->has_attribs);
-  printf ("object count for insert : " FORMAT_BL "\n", insert->owned_obj_count);
+  printf ("object count for insert : " FORMAT_BL "\n", insert->num_owned);
 }
 
 void
@@ -74,8 +74,8 @@ api_process (dwg_object * obj)
     fail ("error in reading attribs");
 
 
-  obj_count = dwg_ent_insert_get_owned_obj_count (insert, &error);
-  if (!error  && obj_count == insert->owned_obj_count)	// error check
+  obj_count = dwg_ent_insert_get_num_owned (insert, &error);
+  if (!error  && obj_count == insert->num_owned)	// error check
     pass ("Working Properly");
   else
     fail ("error in reading object counts");

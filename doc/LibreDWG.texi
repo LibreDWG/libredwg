@@ -35,7 +35,7 @@ Texts.  A copy of the license is included in the section entitled
 @subtitle for version @value{VERSION}, @value{UPDATED}
 @c Hey, if you can change this, you can comment in the next line!
 @author GNU LibreDWG Developers
-@author Thien-Thi Nguyen
+@author and Thien-Thi Nguyen
 @page
 @vskip 0pt plus 1filll
 @insertcopying
@@ -55,9 +55,9 @@ Texts.  A copy of the license is included in the section entitled
 * Overview::            General purpose and information.
 * Usage::               How to use LibreDWG.
 * Types::               Enums, structs.
-* Constants::           Value macros, invariably.
 * Functions::           Call them.
 * Programs::            Useful binaries.
+* Reference API::
 
 * Reporting bugs::      Sending bug reports and feature suggestions.
 * GNU Free Documentation License:: Copying and sharing this documentation.
@@ -110,8 +110,11 @@ reverse-engineered.  The specification is almost complete.
 The LibreDWG implementation of the specification is an ongoing process;
 as of version @value{VERSION}, coverage is approximately 99%.
 
-It can read the formats R13, R14, R2000, R2004 and R2007 for 99%.
-R11, R2010, R2013 and R2018 can be partially read (~80%).
+It can read the formats R13, R14, R2000, R2004, and R2007 for 99%.
+R2010, R2013 and R2018 can be partially read (~90%), but fail on some advanced DWG's.
+R11 and earlier cannot be read yet, only partially.
+Reading R11 and earlier is ony enabled with the development git checkout, not
+the released tarball.
 
 Here is a list of features that are still missing.
 
@@ -120,13 +123,34 @@ Here is a list of features that are still missing.
 @table @asis
 
 @item Reading pre-R13 and R2010+ DWG
-Reading DWG formats for pre-R13 and R2010 and later - R2013, R2018 - is an ongoing effort, some minor parts are missing.
+Reading DWG formats for pre-R13 and some R2010+ objects is an ongoing effort, some minor parts are missing. Simple DWGs can be read already, advanced DWGs not.
+
+Missing:
+
+* PROXY subentities, PROXY_ENTITY
+
+* CELLSTYLEMAP TABLE_Cell struct
+
+Halfway:
+
+* MATERIAL
+
+* SPATIAL_INDEX class/object untested
+
+* WIPEOUTVARIABLES class/object untested
+
+* ACIS: only converted to a raw string
 
 @item Writing pre-R13 and R2004+ DWG
-Writing DWG formats for R2004 and later: R2007, R2010, R2013, R2018 is an ongoing effort and not yet implemented.
+Writing DWG formats for R2004 and later: R2007, R2010, R2013, R2018 is an
+ongoing effort and not yet implemented.
 
 @item Reading and writing ASCII and binary DXF
 DXF support is an ongoing effort, and about halfway implemented.
+Ascii DXF's are generated fully, with much more elements and fields and other free libraries,
+but AutoCAD fails to import them yet.
+Binary DXF are done about 50%.
+Reading DXF is not yet fully implemented, this is under construction.
 
 @end table
 
@@ -152,16 +176,17 @@ But in the meantime it got a DXF reader.
 @item libdxfrw
 Read the DWG format for all versions but with much less elements, only those needed for DXF.
 Written in C++, under the GPLv2 license.
+@item libopencad
+Read the R2000 DWG format.
+Written in C++, under the GPLv2 license.
 @item OpenDWG
 The OpenDWG's license does not allow the usage in free software projects.
 @end table
 
-The 2009 license update of LibreDWG to the version 3 of the GNU GPL
-made it impossible for the free software projects LibreCAD and FreeCAD
-to use LibreDWG.
-
-Compared to libdwg and libdxfrw, LibreDWG can read and write much more details,
-but still fails to read newer DWG's.
+Compared to libdwg, libdxfrw and libopencad, LibreDWG can read and
+write much more details. Which is especially important for attached links
+and data from third party applications: BIM, MAP, GIS, ..., 
+and for dynamic parametric constraints.
 
 @node Usage
 @chapter Usage
@@ -172,8 +197,7 @@ but still fails to read newer DWG's.
 
 This chapter describes how to compile and link a program against
 LibreDWG.  To access LibreDWG interface elements (@pxref{Types},
-@pxref{Constants}, @pxref{Functions}), include its header file
-in the C code.
+@pxref{Functions}), include its header file in the C code.
 
 @example
 #include <dwg.h>
@@ -208,8 +232,8 @@ want to specify @code{-llibredwg}, as that would (try to) link against
 @cindex structs
 
 LibreDWG types map closely to the type system of the DWG file format.
-This chapter describes the enums and structs used to define the constants
-(@pxref{Constants}), and passed around the functions (@pxref{Functions}).
+This chapter describes the enums and structs used to define the single
+DWG structure, which is passed around the functions x(@pxref{Functions}).
 
 @deftypevr {define} BITCODE_RC char
 1 raw signed char
@@ -251,7 +275,10 @@ This chapter describes the enums and structs used to define the constants
 1 bit-encoded double with default
 @end deftypevr
 @deftypevr {define} BITCODE_MC long int
-1 modular char, max 4 bytes
+1-4 modular chars
+@end deftypevr
+@deftypevr {define} BITCODE_UMC long unsigned int
+1-4 unsigned modular chars
 @end deftypevr
 @deftypevr {define} BITCODE_MS long unsigned int
 1 modular short, max 2 words
@@ -292,36 +319,24 @@ platforms.  Or include @file{<stdint.h>} and @file{<inttypes.h>} by
 your own before @file{dwg.h}.
 With the GNU autotools this usually happens automatically.
 
-@node Constants
-@chapter Constants
-
-@cindex constants
-
-This chapter describes the constant objects used in LibreDWG.
-
-@deftypevr {Constant} {(void *)} NULL
-This is the standard value for a pointer that points nowhere.
-You should avoid dereferencing a variable that holds @code{NULL}.
-In fact, that's good advice for LibreDWG, too!
-If you notice LibreDWG segfaulting, that's a bug.
-@xref{Reporting bugs}.
-@end deftypevr
-
-[??? TODO]
-
 @node Functions
 @chapter Functions
 
 @cindex functions
 
 You can use LibreDWG immediately upon loading, without any particular
-initialization.  You usually use one set of functions - either decoding
-or encoding - at a time.  All functions use the common data types
-(@pxref{Types}) and constants (@pxref{Constants}).
+initialization. Only when using some @b{dwg_api} functions you might need to
+initialize the version via @code{dwg_api_init_version(&dwg)}, when you
+need other formats than r2000 and you call an API function which does
+not store the version internally. Most do.
+
+You usually use one set of functions - either decoding or encoding -
+at a time.  All functions use the common data types (@pxref{Types}).
 
 @menu
-* Decoding::                    Functions on the read path.
-* Encoding::                    Functions on the write path.
+* Decoding::                    Functions on the DWG read path.
+* Encoding::                    Functions on the DWG write path.
+* Other Formats::		Functions on the DWG to read or write other formats.
 @end menu
 
 
@@ -341,8 +356,8 @@ Return 0 if successful.
 You can then iterate over the entities in model space or paper space
 via two ways:
 
-1. by using the @file{dwg.h} data structures, via @code{dwg->object[0]}, which is of
-   type @code{DWG_TYPE_BLOCK_CONTROL},
+1. by using the @file{dwg.h} data structures. Via @code{dwg->object[0]}, which is of
+   type @code{Dwg_Object_BLOCK_CONTROL},
    and a custom @code{void process_BLOCK_HEADER((Dwg_Object_Ref* ref)}:
 
 @verbatim
@@ -412,6 +427,60 @@ Return 0 if successful.
 The iterator is similar to above, but you want to encode all data structures, not just the
 entities.
 
+@node Other Formats
+@section Other Formats
+
+@cindex functions, other formats
+
+@menu
+* DXF::                    Write (and soon read) ASCII DXF
+* DXFB::                   Write (and soon read) Binary DXF.
+* JSON::		   Write and read our own JSON serialization of the DWG
+* GeoJSON::		   See the GeoJSON spec
+@end menu
+
+@node DXF
+@subsection DXF
+
+@cindex DXF, ASCII DXF
+
+We can write Ascii DXF files in various versions, with much more data than other free
+DWG libraries, but not as stable as the unfree Teigha library yet.
+AutoCAD fails to import our files still.
+
+Options: @code{--minimal} (see @code{dwg2dxf} or @code{dwgread}) creates
+only a short header with a ACADVER and HANDSEED element, and the
+entities, without any subclass markers, reactors or handles.
+
+Reading DXF is under construction.
+
+@node DXFB
+@subsection DXFB
+
+@cindex DXFB, Binary DXF
+
+We can almost write Binary DXF files in various versions. Under Construction.
+
+Reading DXF is under construction.
+
+@node JSON
+@subsection JSON
+
+@cindex JSON
+
+We write and read to our own JSON format, which is a readable 1:1 mapping of the DWG structures, and carries much more information than the DXF format.
+
+Writing a JSON to stdout is not recommended, as then ending commas are
+still there, which is strictly not valid JSON.
+
+@node GeoJSON
+@subsection GeoJSON
+
+@cindex GeoJSON
+
+Work is ongoing to write to the GeoJSON format as specified at @uref{http://geojson.org/geojson-spec.html}.
+See @code{dwgread} with the @code{--fmt GeoJSON} option.
+
 @node Programs
 @chapter Programs
 
@@ -422,23 +491,63 @@ LibreDWG installs some binary programs to read or write DWG files.
 @table @asis
 
 @item @file{dwgread}
+@cindex dwgread
 
-This is mostly used with @code{--enable-trace} and @code{LIBREDWG_TRACE=n} to debug
-the decoded contents of the DWG.
+This reads a DWG file, and optionally converts its content to some output formats: JSON, GeoJSON, DXF, DXFB (i.e. Binary DXF).
+
+@code{dwgread [OPTION]... DWGFILE}
+
+Options:
+
+       -v[0-9], --verbose [0-9]
+              verbosity
+
+       -O fmt,  --format fmt
+              fmt: JSON, DXF, DXFB, GeoJSON
+
+              Planned formats: YAML, XML/OGR, GPX, SVG, PS
+
+       -o outfile
+              also defines the output fmt. Default: stdout
+
+       --help display this help and exit
+
+       --version
+              output version information and exit
+
+Currently the options need to be specified in this exact same order.
+
+@item @file{dwgwrite}
+@cindex dwgwrite
+
+Create a DWG from a given input file (@pxref{JSON}, @pxref{DXF}, @pxref{DXFB, Binary DXF}),
+optionally via @code{--as-rNNNN} as another version. Experimental.
+For now can only create R2000 DWG files.
 
 @item @file{dwgrewrite}
+@cindex dwgrewrite
 
 Read and write the DWG, optionally via @code{--as-rNNNN} as another
 version, an earlier or later version.
 
+@item @file{dwglayers}
+@cindex dwglayers
+
+Prints all layers in a DWG.
+With @code{-f} or @code{--flags} also the status of frown, on/off and locked.
+With @code{--on} only the visible layers, which are on and not frozen.
+
 @item @file{dwg2SVG}
+@cindex dwg2SVG
 Convert a DWG to a limited SVG. All paperspace and modelspace enties of type:
 TEXT, LINE, CIRCLE, ARC, INSERT.
 
 @item @file{dwg2ps}
+@cindex dwg2ps
 Convert a DWG to a limited Postscript file. All paperspace and modelspace enties of type LINE.
 
 @item @file{dwg2dxf}
+@cindex dwg2dxf
 
 Convert a DWG to DXF, optionally via @code{--as-rNNNN} as another
 version, an earlier or later version, or via @code{-m} or
@@ -448,8 +557,9 @@ classes, tables and objects.
 Some parts of the DXF writers are not yet implemented.
 
 @item @file{dxf2dwg}
+@cindex dxf2dwg
 
-Convert a DXF to DWG, optionally via @code{--as-rVER} as another
+Convert a DXF (or Binary DXF) to DWG, optionally via @code{--as-rVER} as another
 version, an earlier or later version.
 The DXF reader is not yet implemented.
 
@@ -458,9 +568,24 @@ The DXF reader is not yet implemented.
 There are also some more examples in the source distribution:
 
 @file{load_dwg} loads a DWG and adds some entities.
+@cindex load_dwg
 
 @file{dwg2svg2} converts a DWG to SVG similar to @file{dwg2SVG},
 but via the @file{dwg_api.h} only.
+@cindex dwg2svg2
+
+@node Reference API
+@chapter Reference API
+
+@cindex Reference API
+
+See the seperate @uref{../refman/index.html, refman} manual (in pdf or html format, the pdf has ~1800 pages) for a detailled API description, or see the relevant @file{dwg.h}, @file{dwg_api.h} or the @file{*.spec} files.
+
+For reference you might also want to check the public AutoCAD DXF reference manuals,
+and the @file{OpenDesign_Specification_for_dwg_files}.
+
+@comment It is unfortunately not possible to include the doxygen generated tex
+@comment files into this texinfo format.
 
 @node Reporting bugs
 @chapter Reporting bugs

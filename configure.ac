@@ -1,6 +1,6 @@
 dnl configure.ac
 
-dnl Copyright (C) 2010 Free Software Foundation, Inc.
+dnl Copyright (C) 2010, 2014-2015, 2018 Free Software Foundation, Inc.
 dnl
 dnl This program is free software, licensed under the terms of the GNU
 dnl General Public License as published by the Free Software Foundation,
@@ -28,7 +28,7 @@ AC_SUBST(ISODATE)
 
 AC_CANONICAL_HOST
 
-dnl Checks for programs.
+dnl Checks for programs
 PKG_PROG_PKG_CONFIG
 AC_PROG_CC
 AC_PROG_LN_S
@@ -37,7 +37,7 @@ AC_PROG_INSTALL
 AC_PROG_LIBTOOL
 LT_INIT
 
-dnl Checks for libraries.
+dnl Checks for libraries
 AC_CHECK_LIB([ps],[PS_open_file],
   libredwg_have_libps=yes,
   libredwg_have_libps=no)
@@ -51,16 +51,18 @@ fi
 AC_SUBST([XML2_CFLAGS])
 AC_SUBST([XML2_LIBS])
 
-dnl Checks for header files.
+dnl Checks for header files
 AC_HEADER_STDC
-dnl avoid rpl_malloc when cross-compiling. we don't need malloc.h
-dnl we just want to know if it's needed
+dnl Avoid rpl_malloc when cross-compiling. we don't need malloc.h
+dnl We just want to know if it's needed
 ac_cv_func_malloc_0_nonnull=yes
 ac_cv_func_realloc_0_nonnull=yes
-AC_CHECK_HEADERS([stdlib.h string.h unistd.h malloc.h wchar.h ctype.h getopt.h])
+AC_CHECK_HEADERS([stdlib.h string.h unistd.h malloc.h wchar.h ctype.h \
+                  libgen.h getopt.h])
+AX_INCLUDE_STRCASECMP
 
 AC_CHECK_HEADER([dejagnu.h], [],
-  AC_MSG_WARN([Couldn't find dejagnu.h]))
+  AC_MSG_WARN([Couldn't find dejagnu.h. skip test/testcases]))
 AM_CONDITIONAL([HAVE_DEJAGNU], [test x$ac_cv_header_dejagnu_h = xyes])
 
 # Don't bother testing for libps headers if libps is not available.
@@ -68,7 +70,7 @@ if test yes = "$libredwg_have_libps" ; then
   AC_CHECK_HEADERS([libps/pslib.h])
 fi
 
-dnl Checks for typedefs, structures, and compiler characteristics.
+dnl Checks for typedefs, structures, and compiler characteristics
 AC_PROG_CC_C99
 AC_TYPE_SIZE_T
 AC_TYPE_UINT16_T
@@ -81,24 +83,40 @@ dnl AC_CHECK_TYPE([wchar_t],[],[],[[#include <wchar.h>]])
 if test x$ac_cv_header_wchar_h = xyes; then
    AX_COMPILE_CHECK_SIZEOF([wchar_t], [#include <wchar.h>])
 fi
+AC_DEFINE([_POSIX_C_SOURCE],[200809L],[Needed for strdup])
+AC_DEFINE([__XSI_VISIBLE],[700],[Needed for cygwin strdup])
 
 AX_IS_RELEASE([git-directory])
 if test x$ax_is_release = xyes; then
    AC_DEFINE([IS_RELEASE],1,[Define to 1 if this is a release,
-   skipping unknown DWG versions and objects.])
+   skipping unstable DWG features, unknown DWG versions and objects.])
 fi
 
-dnl disable unwanted warnings here. These should be fixed before 1.0
+dnl Disable unwanted warnings here. These should be fixed before 1.0
 enable_Werror=no
 ax_enable_compile_warnings=yes
-AX_COMPILER_FLAGS([WARN_CFLAGS],[WARN_LDFLAGS])
+AX_COMPILER_FLAGS([AM_CFLAGS],[AM_LDFLAGS],[$ax_is_release],[-fvisibility=hidden])
 dnl if test x$ax_cv_check_cflags__Wunused_but_set_variable = xyes; then
 dnl   WARN_CFLAGS="$WARN_CFLAGS -Wno-unused-but-set-variable"
 dnl fi
 dnl if test x$ax_cv_check_cflags__Wunused_variable = xyes; then
 dnl   WARN_CFLAGS="$WARN_CFLAGS -Wno-unused-variable"
 dnl fi
-dnl until we can make a release, favor no optims.
+
+AC_CACHE_CHECK([for __attribute__((visibility("default")))],
+  ac_cv_attribute_visibility_default, [
+  ac_cv_attribute_visibility_default=no
+  AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+    [[ int __attribute__ ((visibility ("default"))) foo (void) { return 1; } ]], [])],
+    [ac_cv_attribute_visibility_default=yes])
+  ])
+if test x$ac_cv_attribute_visibility_default = xyes;
+then
+  AC_DEFINE(HAVE_ATTRIBUTE_VISIBILITY_DEFAULT, 1,
+    [Define if __attribute__((visibility("default"))) is supported.])
+fi
+
+dnl until we can make a release, favor no -O2 optims.
 dnl it's fast enough and better for debugging.
 if test x$ac_compiler_gnu = xyes; then
   CFLAGS="-g -fno-omit-frame-pointer"
@@ -118,14 +136,16 @@ else
 fi
 AC_SUBST(HAVE_C99)
 
-dnl Checks for library functions.
+dnl Checks for library functions
 AC_FUNC_MALLOC
 AC_FUNC_REALLOC
 AC_FUNC_STAT
-AC_CHECK_FUNCS([setenv],[],
-      AC_MSG_WARN([setenv not found - programs will not print error messages]))
+AC_CHECK_FUNC([strdup],[],
+  AC_MSG_ERROR([strdup not found. check your _POSIX_C_SOURCE vs ANSI settings.]))
 AC_CHECK_FUNCS([getopt_long],[],
-      AC_MSG_WARN([getopt_long not found - programs will not accept long options]))
+  AC_MSG_WARN([getopt_long not found. programs will not accept long options.]))
+AC_CHECK_FUNCS([basename],[],
+  AC_MSG_WARN([basename not found. The default outfile will be unexpected.]))
 
 dnl Feature: --enable-trace
 AC_ARG_ENABLE([trace],[AS_HELP_STRING([--enable-trace],[
@@ -135,13 +155,19 @@ AC_ARG_ENABLE([trace],[AS_HELP_STRING([--enable-trace],[
   AC_DEFINE([USE_TRACING],1,[Define to 1 to enable runtime tracing support.])
 ])
 
+AC_CHECK_FUNCS([setenv],[],
+  AS_IF([test x$enable_trace = xyes],
+    [AC_MSG_WARN([setenv not found. --enable-trace is limited with cmdline apps.
+      Only -v args are taken for verbosity not the LIBREDWG_TRACE env var.])],
+    [AC_MSG_RESULT([setenv not needed. no --enable-trace.])]
+    ))
+
 dnl Feature: --enable-write
 AC_ARG_ENABLE([write],[AS_HELP_STRING([--enable-write],[
     Enable write support (default: no).])],[
   AC_DEFINE([USE_WRITE],1,[Define to 1 to enable write support.])
 ])
 AM_CONDITIONAL([USE_WRITE], [test -n "$enable_write"])
-
 
 AC_ARG_ENABLE(gcov,
 	AS_HELP_STRING([--enable-gcov],
@@ -179,7 +205,7 @@ AM_CONDITIONAL(ENABLE_GCOV, test "x$enable_gcov" = "xtrue")
 AM_CONDITIONAL([HAVE_LIBPS],[test yes = "$libredwg_have_libps" &&
                              test yes = "$ac_cv_header_libps_pslib_h"])
 
-dnl check for mingw, cross and wine
+dnl Check for mingw, cross and wine
 AM_CONDITIONAL([HAVE_MINGW], [test "x$host_os" = "xmingw32"])
 AM_CONDITIONAL([HAVE_MINGW_CROSS],
         [test "x$host_os" = "xmingw32" -a "x$build_os" != "xmingw32"])
@@ -195,8 +221,19 @@ if test "x$host_os" = "xmingw32" -a "x$build_os" != "xmingw32"; then
 fi
 AM_CONDITIONAL([HAVE_WINE], [test -n "$WINE"])
 
-dnl optional SWIG + python bindings
-if test x$cross_compiling = xno; then
+dnl Optional SWIG + python bindings
+dnl Feature: --disable-python or --enable-python=python3.6
+AC_ARG_ENABLE(python,
+	AS_HELP_STRING([--disable-python],
+		       [Disable python bindings @<:@default=check@:>@]),
+	[case "${enableval}" in
+	yes) enable_python=true ;;
+	no)  enable_python=false ;;
+	*)   enable_python=true ; PYTHON="${enableval}" ;;
+	esac], [enable_python=check])
+
+AC_MSG_CHECKING([for --disable-python])
+if test x$enable_python != xfalse -a x$cross_compiling = xno; then
     AX_PKG_SWIG([1.3.17], [],
       AC_MSG_WARN([SWIG is required for python bindings. disabled]))
     if test -n "$SWIG"; then
@@ -206,20 +243,30 @@ if test x$cross_compiling = xno; then
     dnl AX_SWIG_ENABLE_CXX
     dnl SWIG_MULTI_MODULE_SUPPORT
 else
-    AC_MSG_WARN([disabled swig bindings: cross-compiled])
+    if test x$enable_python = xfalse; then AC_MSG_RESULT([yes (swig disabled)])
+    else AC_MSG_WARN([disabled swig bindings: cross-compiled])
+    fi
 fi
 AM_CONDITIONAL([HAVE_SWIG_PYTHON],
   [test -n "$SWIG" && test -n "$PYTHON_VERSION"])
 
-dnl check for valgrind
-case $host_os in
-  darwin*)
-    enable_valgrind_helgrind=no
-    enable_valgrind_drd=no
-    ;;
-esac
-dnl passes only on some systems. --enable-valgrind-sgcheck
-AX_VALGRIND_DFLT([sgcheck], [off])
+AC_CHECK_PROGS([DOXYGEN], [doxygen])
+AM_CONDITIONAL([HAVE_DOXYGEN], [test -n "$DOXYGEN"])
+
+if test x$cross_compiling = xno; then
+  dnl check for valgrind
+  case $host_os in
+    darwin*)
+      enable_valgrind_helgrind=no
+      enable_valgrind_drd=no
+      ;;
+  esac
+  dnl passes only on some systems. --enable-valgrind-sgcheck
+  AX_VALGRIND_DFLT([sgcheck], [off])
+else
+ AC_MSG_WARN([disabled valgrind: cross-compiled])
+ enable_valgrind=no
+fi
 AX_VALGRIND_CHECK()
 
 dnl Write it out

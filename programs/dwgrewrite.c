@@ -18,10 +18,10 @@
  * modified by Reini Urban
  */
 
+#include "../src/config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../src/config.h"
 
 #include <dwg.h>
 #include "../src/common.h"
@@ -35,7 +35,7 @@ static int usage(void) {
   return 1;
 }
 static int opt_version(void) {
-  printf("\ndwgrewrite %s\n", PACKAGE_VERSION);
+  printf("dwgrewrite %s\n", PACKAGE_VERSION);
   return 0;
 }
 static int help(void) {
@@ -76,11 +76,13 @@ main (int argc, char *argv[])
   setenv("LIBREDWG_TRACE", "1", 0);
 #endif
 
+  memset(&dwg, 0, sizeof(Dwg_Data));
   if (argc > 2 &&
       (!strcmp(argv[i], "--verbose") ||
        !strncmp(argv[i], "-v", 2)))
     {
       int num_args = verbosity(argc, argv, i, &opts);
+      dwg.opts = opts;
       argc -= num_args;
       i += num_args;
     }
@@ -103,12 +105,12 @@ main (int argc, char *argv[])
     return opt_version();
 
   filename_in = argv[i];
-  if (argc > i)
+  if (argc > i+1)
     filename_out = argv[i+1];
   else
     filename_out = suffix (filename_in, "-rewrite.dwg");
-  
-  if (strcmp(filename_in, filename_out) == 0) {
+
+  if (!filename_out || !strcmp(filename_in, filename_out)) {
     if (filename_out != argv[2])
       free (filename_out);
     return usage();
@@ -128,16 +130,22 @@ main (int argc, char *argv[])
       return error;
   }
 
+  if (opts)
+    printf("\n");
   printf("Writing DWG file %s", filename_out);
 #ifndef USE_WRITE
   error = 1;
 #else
-  if (version) {
+  if (version) { // forced -as-rXXX
     printf(" as %s\n", version);
     if (dwg.header.from_version != dwg.header.version)
       dwg.header.from_version = dwg.header.version;
     //else keep from_version
     dwg.header.version = dwg_version;
+  } else if (dwg.header.version < R_13 || dwg.header.version > R_2000) {
+    // we cannot yet write pre-r13 or 2004+
+    printf(" as r2000\n");
+    dwg.header.version = R_2000;
   } else {
     printf("\n");
   }
@@ -150,6 +158,8 @@ main (int argc, char *argv[])
 
 #ifdef USE_WRITE
   // try to read again
+  if (opts)
+    printf("\n");
   printf("Re-reading created file %s\n", filename_out);
   error = dwg_read_file(filename_out, &dwg);
   if (error)

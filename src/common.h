@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2009 Free Software Foundation, Inc.                        */
+/*  Copyright (C) 2009, 2018 Free Software Foundation, Inc.                  */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -36,6 +36,20 @@
 #  define GCC_DIAG_RESTORE
 #endif
 
+#ifndef EXPORT
+# ifdef _WIN32
+#   ifdef DLL_EXPORT
+#     define EXPORT  __declspec(dllexport)
+#   else
+#     define EXPORT  __declspec(dllimport)
+#   endif
+# elif defined HAVE_ATTRIBUTE_VISIBILITY_DEFAULT
+#   define EXPORT __attribute__((visibility("default")))
+# else
+#   define EXPORT
+# endif
+#endif
+
 #define TODO_ENCODER fprintf(stderr, "TODO: Encoder\n");
 #define TODO_DECODER fprintf(stderr, "TODO: Decoder\n");
 
@@ -48,16 +62,10 @@
 #define PRIOR_VERSIONS else
 #define UNTIL(v) cur_ver = v; if (dat->version <= v)
 #define LATER_VERSIONS else
+#define RESET_VER cur_ver = dat->version;
 
+#define DEBUG_POS()
 #define DEBUG_HERE()
-
-// when writing, check also rewriting from an earlier version and fill in a default then
-#define IF_ENCODE_FROM_EARLIER \
-  if (dat->from_version && dat->from_version < cur_ver)
-#define IF_ENCODE_FROM_PRE_R13 \
-  if (dat->from_version && dat->from_version < R_13)
-#define IF_ENCODE_SINCE_R13 \
-  if (dat->from_version && dat->from_version >= R_13)
 
 #define DWG_VERSIONS 20
 typedef enum DWG_VERSION_TYPE
@@ -70,7 +78,7 @@ typedef enum DWG_VERSION_TYPE
 } Dwg_Version_Type;
 extern char version_codes[DWG_VERSIONS][7];
 
-Dwg_Version_Type dwg_version_as(const char *);
+EXPORT Dwg_Version_Type dwg_version_as(const char *);
 
 /**
  Data types (including compressed forms) used through the project
@@ -85,23 +93,29 @@ Dwg_Version_Type dwg_version_as(const char *);
   BS,  /** bitshort */
   BL,  /** bitlong */
   BD,  /** bitdouble */
-  MC,  /** modular char  */
-  MS,  /** modular short  */
+  MC,  /** modular char */
+  MS,  /** modular short */
   BE,  /** BitExtrusion */
   DD,  /** BitDouble With Default */
   BT,  /** BitThickness */
   H,   /** handle reference (see the HANDLE REFERENCES section) */
   CMC, /** CmColor value */
   T,   /** text (bitshort length, followed by the string) */
+  TV,  /** ASCII text value, -r2007 */
   TU,  /** Unicode text (bitshort character length, followed by
-           Unicode string, 2 bytes per character). Unicode text is read from the
-           “string stream” within the object data. */
+           UCS-2 string). Unicode text is read from the
+           “string stream” within the object data. r2007+ */
+  TF,  /** fixed-length text */
   2RD, /** 2 raw doubles **/
   3RD, /** 3 raw doubles **/
   2BD, /** 2D point (2 bitdoubles) **/
   3BD, /** 3D point (3 bitdoubles) **/
+  2DD, /** 2 doubles with default **/
+  3DD, /** 3 doubles with default **/
   3B,  /** special 3-bit code R24+ */
   BLL, /** bitlonglong R24+ */
+  TIMEBLL, /** time long.long */
+  4BITS, /** 4 bits, r2000+ for VIEWMODE */
 #endif
 
 /**

@@ -1,6 +1,6 @@
 ## Makefile.am
 ##
-## Copyright (C) 2010 Free Software Foundation, Inc.
+## Copyright (C) 2010, 2013-2015, 2018 Free Software Foundation, Inc.
 ##
 ## This file is part of LibreDWG.
 ##
@@ -28,18 +28,29 @@ include_HEADERS = \
 	include/dwg.h \
 	include/dwg_api.h
 
-.PHONY: check-dwg check-dwg-valgrind man scan-build gcov check-wine
+.PHONY: check-dwg check-dwg-valgrind man manual scan-build gcov check-wine
 
 man:
 	$(MAKE) -C programs man
+manual:
+	$(MAKE) -C doc manual
+
+if HAVE_DOXYGEN
+refman doxygen doc/html/index.html: doc/Doxyfile $(include_HEADERS)
+	-rm {src,include}/*_flymake.{c,h}
+	$(DOXYGEN) doc/Doxyfile
+refman-pdf: doc/html/index.html
+	$(MAKE) -C doc/latex
+endif
+
 check-dwg: all
-	-rm check-dwg.log
+	-mv check-dwg.log check-dwg.log~
 	for d in `find test/test-data -iname \*.dwg`; do \
 	  echo programs/dwgread -v3 $$d | tee -a check-dwg.log; \
 	  programs/dwgread -v3 $$d >> check-dwg.log 2>&1; \
 	done
 check-dwg-valgrind: all
-	-rm check-dwg-valgrind.log
+	-mv check-dwg-valgrind.log check-dwg-valgrind.log~
 	for d in `find test/test-data -iname \*.dwg`; do \
 	  echo valgrind --leak-check=full programs/dwgread -v3 $$d | tee -a check-dwg-valgrind.log; \
 	  valgrind --leak-check=full programs/dwgread -v3 $$d >> check-dwg-valgrind.log 2>&1; \
@@ -48,18 +59,21 @@ check-dwg-valgrind: all
 # clang-analyzer.llvm.org
 SCAN_BUILD = scan-build
 scan-build: clean
-	$(SCAN_BUILD) -V -o .analysis $(MAKE) -j4
+	$(SCAN_BUILD) -V -o .analysis $(MAKE) -j4 &
 
 if ENABLE_GCOV
 gcov: check
 	$(MAKE) -C test gcov
 	$(MAKE) -C src gcov
-	gcov2perl test/*/*.gcov src/*.gcov
+	$(MAKE) -C programs gcov
+	$(MAKE) -C examples gcov
+	gcov2perl test/*/*.gcov src/*.gcov programs/*.gcov examples/*.gcov
 	cover -no-gcov
 endif
 
 EXTRA_DIST = README README-alpha
 CLEANFILES = check-dwg.log
+MAINTAINERCLEANFILES  = *~ *.log cover_db .analysis
 
 maintainer-clean-local:
 	-rm -rf cover_db

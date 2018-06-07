@@ -119,6 +119,7 @@ AC_DEFUN([AX_COMPILER_FLAGS_CFLAGS],[
             -Wrestrict dnl
             -Wnull-dereference dnl
             -Wdouble-promotion dnl
+            -Wchar-subscripts dnl
             $4 dnl
             $5 dnl
             $6 dnl

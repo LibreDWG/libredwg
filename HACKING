@@ -14,6 +14,9 @@ someone should probably think about and resolve them!
 
   Aside from the the autotools (see "regen", above),
   you will also need GNU Texinfo to build the manual.
+  See e.g. .travis.yml for the Ubuntu recipe, or .appveyor.yml
+  for Mingw.
+  The compiler needs to support C99, i.e. MSVC cannot be used.
 
 * coding standards
 
@@ -28,11 +31,11 @@ someone should probably think about and resolve them!
 * change log maintenance
 
   Presently, there is only one top-level ChangeLog file, and commits go
-  in without updating it.  Once we get to (??? SOME-MILESTONE), we plan
+  in without updating it.  Once we get to the first release, we plan
   to generate ChangeLog entries at release time based on the commit logs.
   We use the script create-changelog (in build-aux/) for that.
 
-  This means that as of (??? START-DATE) the commit logs should follow
+  This means that then the commit logs should follow
   the GNU Coding Standards.  For example:
 
   | Add foo, with increased bar.
@@ -89,7 +92,7 @@ someone should probably think about and resolve them!
   Don't be uncool; avoid introducing trailing whitespace!  See:
   <http://old.nabble.com/Re:-whitespace-cleanup-p6850253.html>
 
-* branch name
+* branch names
 
   If you want to push a branch that may be "git rebase"d in the future,
   either use the prefix "wip-" (work in progress), or your Savannah
@@ -102,6 +105,9 @@ someone should probably think about and resolve them!
   them under gdb, use:
 
   $ libtool --mode=execute gdb PROGRAM
+
+  But it is easier to pass --disable-shared to configure and call
+  gdb --args directly.
 
 * mingw cross-compilation
 
@@ -134,6 +140,26 @@ someone should probably think about and resolve them!
   $ make check PYTHON=/opt/local/bin/python2.7
 
   because the system python is missing libxml2.
+
+  Or add the macports libxml2 to the system python2.7:
+
+  $ port install py27-libxml2
+  $ sudo cp /opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/libxml2* \
+            /System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/
+
+* fuzzing with afl-fuzz
+
+On darwin I need to set AFL_CC and CC.
+
+  make clean
+  export AFL_CC=clang-mp-3.8
+  CC="afl-clang" ./configure --enable-trace --enable-write --disable-shared
+  make
+  mkdir fuzz-in; cp test/test-data/example_2000.dwg fuzz-in/
+  afl-fuzz -i fuzz-in -o fuzz-out -- programs/dwgread -
+
+Using the fast option and an internal loop would be faster. I get 220/sec uninstrumented
+and 800/sec instrumented without -O2, which is fast enough to finish within 30m for a 32k DWG.
 
 * adding other code
 

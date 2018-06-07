@@ -1,6 +1,6 @@
 ## Makefile.am
 ##
-## Copyright (C) 2015 Free Software Foundation, Inc.
+## Copyright (C) 2015, 2018 Free Software Foundation, Inc.
 ##
 ## This file is part of LibreDWG.
 ##
@@ -17,7 +17,7 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src @WARN_CFLAGS@
+AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src $(WARN_CFLAGS)
 LDADD    = $(top_builddir)/src/libredwg.la
 #SOURCES = $(top_builddir)/src/libredwg.la
 
@@ -72,6 +72,9 @@ TESTS_ENVIRONMENT = \
   INPUT=$(srcdir)/example_2000.dwg
 # todo: more dwg versions, in test/test-data
 
+CLEANFILES = *.o
+MAINTAINERCLEANFILES  = *_flymake.[ch] *~ *.i
+
 update-ignorance:
 	printf '/%s\n' $(check_PROGRAMS) > .gitignore
 
@@ -84,20 +87,13 @@ check-syntax:
 	test -n "$(CHK_SOURCES)" && \
 	  $(COMPILE) -o /dev/null -S $(CHK_SOURCES)
 .PHONY: check-syntax
-MAINTAINERCLEANFILES  = *_flymake.[ch] *~ *.i
 
 if ENABLE_GCOV
 AM_CFLAGS += @GCOV_CFLAGS@
 LIBS      += @GCOV_LIBS@
-#  -e's,$(EXEEXT),,'
 gcov: $(check_PROGRAMS) check
 	-test -f gcov.log && rm gcov.log
-	-for f in $(check_PROGRAMS); do \
-	  c="`echo $$f|sed -e's,.exe,,'`"; \
-	  test -e $$c.c -a -e $$c.gcda && \
-	    echo $(GCOV) $$c.c && $(GCOV) $$c.c >>gcov.log; \
-	 done
-endif
-if ENABLE_GCOV
-CLEANFILES  = *.gcov *.gcno *.gcda gcov.log
+	$(GCOV) *.gcno | tee -a $(builddir)/gcov.log
+
+CLEANFILES  += *.gcov *.gcno *.gcda gcov.log
 endif

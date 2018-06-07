@@ -1,3 +1,4 @@
+# beware: python2 syntax
 import os
 import glob
 import string
@@ -15,21 +16,17 @@ path_to_dwg = srcdir + "/../test-data"
 # The name of the output files folder
 outdir = "test_output"
 
-# Get all the directories (skip 2010+ so far)
+# Get all the directories
 dirs = [d for d in os.listdir(path_to_dwg)
           if os.path.isdir(os.path.join(path_to_dwg, d)) and
-             (d[0] == 'r' or int(d) <= 2007)]
+             (d[0] == 'r' or int(d) <= 2018)]
 
 for dir in dirs:
     for file in os.listdir(os.path.join(path_to_dwg, dir)):
         if file.endswith(".dwg"):
-            #First thing will be to make duplicate directory structure
+            # First thing will be to make duplicate directory structure
             if not os.path.exists(outdir + "/" + dir):
-                #Need to be careful here
-                try:
-                    os.makedirs(outdir + "/" + dir)
-                except OSError, e:
-                    pass
+                os.makedirs(outdir + "/" + dir)
             pass
 
 # generate xml from txt files
@@ -74,13 +71,13 @@ for report in final_output:
     if current_format != report[0]:
         # Print the header of the File Format
         reporthtm.write("\n<div class='heading'>\n<h3>Output for %s File Format</h3>\n</div>" % report[0])
-        print bcolors.HEADER + "\n\n****Output for %s File Format****" % report[0] + bcolors.ENDC
+        print (bcolors.HEADER + "\n\n****Output for %s File Format****" % report[0] + bcolors.ENDC)
 
     if report[2] < 100 and report[2] != 0:
-        print bcolors.OKGREEN + "%s: [%d]" % (report[1], report[2]) + bcolors.ENDC
+        print (bcolors.OKGREEN + "%s: [%d]" % (report[1], report[2]) + bcolors.ENDC)
         reporthtm.write("\n<div class='result_middle'><b>%s</b> was <b>%d</b> percentage matched</div>\n" % (report[1], report[2]))
     elif report[2] == 0:
-        print bcolors.WARNING + "%s: [%d]" % (report[1], report[2]) + bcolors.ENDC
+        print (bcolors.WARNING + "%s: [%d]" % (report[1], report[2]) + bcolors.ENDC)
         reporthtm.write("\n<div class='result_bad'>%s was not read at all</div>\n" % report[1])
     reporthtm.write("\n<div class='attributedetail'><h3>Attribute Details</h3>\n")
     for unmatched in report[3]:
@@ -93,6 +90,6 @@ for report in final_output:
     current_format = report[0]
 
 # All information has been printed. Print the footer
-print bcolors.HEADER + "****End of Report****" + bcolors.ENDC
+print (bcolors.HEADER + "****End of Report****" + bcolors.ENDC)
 reporthtm.write("<div><h1>End of Report</h1></div></body></html>");
 reporthtm.close()

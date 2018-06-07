@@ -6,9 +6,12 @@ os:
 addons:
   apt:
     packages:
+      - texinfo
+      - texlive
       - libxml2
       - python-libxml2
-      - texinfo
+      - swig
+      - help2man
 matrix:
   fast_finish: true
   include:
@@ -19,7 +22,7 @@ matrix:
       #    packages:
       #      - valgrind
     - compiler: gcc
-      env: DISTCHECK=1
+      env: CONF="--enable-write" DISTCHECK=1
     - compiler: clang
       #env: ASAN=1
       #addons:
@@ -41,4 +44,17 @@ script:
   - make -j4
   - make check
   - if [ "$DISTCHECK" = "1" ]; then
-      make distcheck || cat bindings/python/Makefile; fi
+      make distcheck && sha256sum libredwg-*.tar.*;
+    fi
+
+deploy:
+  provider: releases
+  file_glob: true
+  file: libredwg-*.tar.*
+  api_key:
+    secure: "C86usbAdSxmRlFIwteeK+dyu7xASSG4y+jLpvipg/cw8SnRTkwWMIwmzXgbqA5uuskGs4jxyK0OKzrobg4KqnNUNa9wxJ/nLPFi9JxKDLwb9YxskoWigfYbdsXz/unU6XZ6giAsAbjiZQpgTl70DDlk9d1adQQGSkUb5CT6xmlmBuFF+OFubVNtMC3rhQoICS4O5a3uo5+qyY/FUjWJK39h5PfxUCW1VCrD2kuW8uoITKBmc/FAAxydFppwelKLMaI2B4O6pwpV0DBwTKhx6l/uQufDzwC8//hyDLmK7rcIy66YNVKUt/y+cwrpXgzlKsjvqNuHyeGE8N6alwBNU59g0QBJ1h+46aO8SSwRFHPLyLBkN2KY1VvaPTB2I0QYYoUAaACwXVcYpp1hb8RYRLNM6VCByeDhlTZNO9H2Nin2k1kqeGtnVYDbdKgPQL0cXpj4OKKDJlbNjv2hMVW0MPx92GaoXDhI3HfmmV66Qf4OyJT5rnX01kxeYzlkByUkG1i4FGB0xyg1OZSHd7B17KgPr0suVz0f9N2mFN1dGzp2O2alFwRl3GIpgCoAOlwsz5nJs55IqCOyaTvk7Zyh2PkeF6GKgFC2zgLL9g5D58+ZFulTojp5lshbOTepgvj3Oo+1rNoa6ke9F5Jvi0KOtVYM/z2wapr3pTa7bYcJK/lg="
+  skip_cleanup: true
+  overwrite: true
+  on:
+    tags: true
+    condition: $DISTCHECK = 1

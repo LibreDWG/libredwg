@@ -25,6 +25,7 @@
 #include "common.h"
 #include "bits.h"
 #include "dwg.h"
+#include "decode.h"
 #include "print.h"
 
 #define DWG_LOGLEVEL DWG_LOGLEVEL_TRACE
@@ -32,9 +33,6 @@
 
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
-
-extern void
-obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 
 /*--------------------------------------------------------------------------------
  * MACROS
@@ -45,9 +43,9 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 #define FIELD(name,type,dxf) \
   FIELD_G_TRACE(name,type,dxf)
 #define FIELD_TRACE(name,type) \
-  LOG_TRACE(#name ": " FORMAT_##type " " #type "\n", _obj->name)
+  LOG_TRACE(#name ": " FORMAT_##type " [" #type "]\n", _obj->name)
 #define FIELD_G_TRACE(name,type,dxf) \
-  LOG_TRACE(#name ": " FORMAT_##type " " #type " " #dxf "\n", _obj->name)
+  LOG_TRACE(#name ": " FORMAT_##type " [" #type " " #dxf "]\n", _obj->name)
 #define FIELD_CAST(name,type,cast,dxf)             \
   FIELD_G_TRACE(name,cast,dxf)
 
@@ -114,24 +112,31 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 #define FIELD_TIMEBLL(name,dxf) \
   LOG_TRACE(#name " " #dxf ": " FORMAT_BL "." FORMAT_BL "\n", _obj->name.days, _obj->name.ms)
 
+#define VALUE(value,type,dxf) \
+  LOG_TRACE(FORMAT_##type " [" #type " " #dxf "]\n", value)
+#define VALUE_RC(value,dxf) VALUE(value, RC, dxf)
+#define VALUE_RS(value,dxf) VALUE(value, RS, dxf)
+#define VALUE_RL(value,dxf) VALUE(value, RL, dxf)
+#define VALUE_RD(value,dxf) VALUE(value, RD, dxf)
+
 //FIELD_VECTOR_N(name, type, size):
 // reads data of the type indicated by 'type' 'size' times and stores
 // it all in the vector called 'name'.
 #define FIELD_VECTOR_N(name, type, size, dxf)\
   if (size>0)\
     {\
-      for (vcount=0; vcount < (int)size; vcount++)\
+      for (vcount=0; vcount < (long)size; vcount++)\
         {\
-          LOG_TRACE(#name "[%d]: " FORMAT_##type "\n", vcount, _obj->name[vcount])\
+          LOG_TRACE(#name "[%ld]: " FORMAT_##type "\n", vcount, _obj->name[vcount])\
         }\
     }
 #define FIELD_VECTOR_T(name, size, dxf)\
   if (_obj->size > 0)\
     {\
-      for (vcount=0; vcount < (int)_obj->size; vcount++)\
+      for (vcount=0; vcount < (long)_obj->size; vcount++)\
         {\
           PRE (R_2007) { \
-            LOG_TRACE(#name "[%d]: %s\n", vcount, _obj->name[vcount]) \
+            LOG_TRACE(#name "[%ld]: %s\n", vcount, _obj->name[vcount]) \
           } else { \
             LOG_TRACE_TU(#name, _obj->name[vcount], dxf) \
           } \
@@ -141,26 +146,26 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 #define FIELD_VECTOR(name, type, size, dxf) FIELD_VECTOR_N(name, type, _obj->size, dxf)
 
 #define FIELD_2RD_VECTOR(name, size, dxf)\
-  for (vcount=0; vcount < (int)_obj->size; vcount++)\
+  for (vcount=0; vcount < (long)_obj->size; vcount++)\
     {\
       FIELD_2RD(name[vcount], dxf);\
     }
 
 #define FIELD_2DD_VECTOR(name, size, dxf)\
   FIELD_2RD(name[0], 0);\
-  for (vcount = 1; vcount < (int)_obj->size; vcount++)\
+  for (vcount = 1; vcount < (long)_obj->size; vcount++)\
     {\
       FIELD_2DD(name[vcount], FIELD_VALUE(name[vcount - 1].x), FIELD_VALUE(name[vcount - 1].y), dxf);\
     }
 
 #define FIELD_3DPOINT_VECTOR(name, size, dxf)\
-  for (vcount=0; vcount < (int)_obj->size; vcount++)\
+  for (vcount=0; vcount < (long)_obj->size; vcount++)\
     {\
       FIELD_3DPOINT(name[vcount], dxf);\
     }
 
 #define HANDLE_VECTOR_N(name, size, code, dxf) \
-  for (vcount=0; vcount < (int)size; vcount++)\
+  for (vcount=0; vcount < (long)size; vcount++)\
     {\
       FIELD_HANDLE_N(name[vcount], vcount, code, dxf);\
     }
@@ -168,13 +173,15 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 #define HANDLE_VECTOR(name, sizefield, code, dxf) \
   HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code, dxf)
 
-#define FIELD_INSERT_COUNT(insert_count, type, dxf) \
-  FIELD_G_TRACE(insert_count, type, dxf)
+#define FIELD_NUM_INSERTS(num_inserts, type, dxf) \
+  FIELD_G_TRACE(num_inserts, type, dxf)
 
 #define FIELD_XDATA(name, size)
 
 #define REACTORS(code)\
-  for (vcount=0; vcount < (int)obj->tio.object->num_reactors; vcount++)\
+  if (dat->version >= R_2000 && obj->tio.object->num_reactors > 0x1000) { \
+    fprintf(stderr, "Invalid num_reactors: %ld\n", (long)obj->tio.object->num_reactors); return; } \
+  for (vcount=0; vcount < (long)obj->tio.object->num_reactors; vcount++)\
     {\
       FIELD_HANDLE_N(reactors[vcount], vcount, code, dxf);\
     }
@@ -190,21 +197,6 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
       FIELD_HANDLE(xdicobjhandle, code, dxf);\
     }
 
-#define REPEAT_N(times, name, type) \
-  for (rcount=0; rcount<(int)times; rcount++)
-
-#define REPEAT(times, name, type) \
-  for (rcount=0; rcount<(int)_obj->times; rcount++)
-
-#define REPEAT2(times, name, type) \
-  for (rcount2=0; rcount2<(int)_obj->times; rcount2++)
-
-#define REPEAT3(times, name, type) \
-  for (rcount3=0; rcount3<(int)_obj->times; rcount3++)
-
-#define REPEAT4(times, name, type) \
-  for (rcount4=0; rcount4<(int)_obj->times; rcount4++)
-
 #define COMMON_ENTITY_HANDLE_DATA /*  Empty */
 #define SECTION_STRING_STREAM \
   { \
@@ -214,7 +206,7 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
   obj->has_strings = bit_read_B(dat); \
   if (obj->has_strings) { \
     Bit_Chain sav_dat = *dat; \
-    obj_string_stream(dat, obj->bitsize, dat);
+    obj_string_stream(dat, obj, dat);
 #define END_STRING_STREAM \
     *dat = sav_dat; \
   }
@@ -226,7 +218,7 @@ obj_string_stream(Bit_Chain *dat, BITCODE_RL bitsize, Bit_Chain *str);
 static void \
 dwg_print_##token (Bit_Chain * dat, Dwg_Object * obj)\
 {\
-  int vcount, rcount, rcount2, rcount3, rcount4; \
+  long vcount, rcount1, rcount2, rcount3, rcount4; \
   Dwg_Entity_##token *ent, *_obj;\
   Dwg_Object_Entity *_ent;\
   Bit_Chain *hdl_dat = dat;\
@@ -234,7 +226,7 @@ dwg_print_##token (Bit_Chain * dat, Dwg_Object * obj)\
   LOG_INFO("Entity " #token ":\n")\
   _ent = obj->tio.entity;\
   _obj = ent = _ent->tio.token;\
-  LOG_TRACE("Entity handle: %d.%d.%lu\n",\
+  LOG_TRACE("Entity handle: %d.%d.%lX\n",\
     obj->handle.code,\
     obj->handle.size,\
     obj->handle.value)
@@ -245,13 +237,13 @@ dwg_print_##token (Bit_Chain * dat, Dwg_Object * obj)\
 static void \
 dwg_print_ ##token (Bit_Chain * dat, Dwg_Object * obj) \
 { \
-  int vcount, rcount, rcount2, rcount3, rcount4;\
+  long vcount, rcount1, rcount2, rcount3, rcount4;\
   Dwg_Object_##token *_obj;\
   Bit_Chain *hdl_dat = dat;\
   Bit_Chain* str_dat = dat;\
   LOG_INFO("Object " #token ":\n")\
   _obj = obj->tio.object->tio.token;\
-  LOG_TRACE("Object handle: %d.%d.%lu\n",\
+  LOG_TRACE("Object handle: %d.%d.%lX\n",\
     obj->handle.code,\
     obj->handle.size,\
     obj->handle.value)
@@ -350,9 +342,9 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       dwg_print_LAYOUT(dat, obj);
       return 1;
     }
-  if (!strcmp(dxfname, "LWPLINE"))
+  if (!strcmp(dxfname, "LWPOLYLINE"))
     {
-      dwg_print_LWPLINE(dat, obj);
+      dwg_print_LWPOLYLINE(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "MULTILEADER"))
@@ -382,6 +374,14 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       dwg_print_OBJECTCONTEXTDATA(dat, obj);
       return 1;
     }
+  if (!strcmp(dxfname, "OBJECT_PTR")
+      || !strcmp(klass->cppname, "CAseDLPNTableRecord"))
+    {
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      dwg_print_OBJECT_PTR(dat, obj);
+      return 1;
+    }
   if (!strcmp(dxfname, "ACDBPLACEHOLDER"))
     {
       dwg_print_PLACEHOLDER(dat, obj);
@@ -389,7 +389,7 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "PROXY"))
     {
-      dwg_print_PROXY(dat, obj);
+      dwg_print_PROXY_OBJECT(dat, obj);
       return 1;
     }
   if (!strcmp(dxfname, "RASTERVARIABLES"))
@@ -423,11 +423,11 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       dwg_print_TABLE(dat, obj);
       return 1;
     }
-  if (!strcmp(dxfname, "WIPEOUTVARIABLE"))
+  if (!strcmp(dxfname, "WIPEOUTVARIABLES"))
     {
       UNTESTED_CLASS;
-      dwg_print_WIPEOUTVARIABLE(dat, obj);
-      return 0;
+      dwg_print_WIPEOUTVARIABLES(dat, obj);
+      return 1;
     }
   if (!strcmp(dxfname, "WIPEOUT"))
     {
@@ -512,10 +512,55 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "MATERIAL"))
     {
+#ifdef DEBUG_MATERIAL
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      dwg_print_MATERIAL(dat, obj);
+      return 1;
+#else
       UNHANDLED_CLASS;
       assert(!is_entity);
-      //dwg_print_MATERIAL(dat, obj);
       return 0;
+#endif
+    }
+  if (!strcmp(dxfname, "PLOTSETTINGS"))
+    {
+#ifdef DEBUG_PLOTSETTINGS
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      dwg_print_PLOTSETTINGS(dat, obj);
+      return 1;
+#else
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      return 0;
+#endif
+    }
+  if (!strcmp(dxfname, "LIGHT"))
+    {
+#ifdef DEBUG_LIGHT
+      UNTESTED_CLASS;
+      assert(is_entity);
+      dwg_print_LIGHT(dat, obj);
+      return 1;
+#else
+      UNHANDLED_CLASS;
+      assert(is_entity);
+      return 0;
+#endif
+    }
+  if (!strcmp(dxfname, "SUN"))
+    {
+#ifdef DEBUG_SUN
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      dwg_print_SUN(dat, obj);
+      return 1;
+#else
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      return 0;
+#endif
     }
   if (!strcmp(dxfname, "TABLESTYLE"))
     {
@@ -691,7 +736,7 @@ dwg_print_object(Bit_Chain* dat, Dwg_Object *obj)
     case DWG_TYPE_REGION:
       dwg_print_REGION(dat, obj);
       break;
-    case DWG_TYPE_3DSOLID:
+    case DWG_TYPE__3DSOLID:
       dwg_print__3DSOLID(dat, obj);
       break; /* Check the type of the object
               */
@@ -731,11 +776,11 @@ dwg_print_object(Bit_Chain* dat, Dwg_Object *obj)
     case DWG_TYPE_LAYER:
       dwg_print_LAYER(dat, obj);
       break;
-    case DWG_TYPE_SHAPEFILE_CONTROL:
-      dwg_print_SHAPEFILE_CONTROL(dat, obj);
+    case DWG_TYPE_STYLE_CONTROL:
+      dwg_print_STYLE_CONTROL(dat, obj);
       break;
-    case DWG_TYPE_SHAPEFILE:
-      dwg_print_SHAPEFILE(dat, obj);
+    case DWG_TYPE_STYLE:
+      dwg_print_STYLE(dat, obj);
       break;
     case DWG_TYPE_LTYPE_CONTROL:
       dwg_print_LTYPE_CONTROL(dat, obj);
@@ -773,11 +818,11 @@ dwg_print_object(Bit_Chain* dat, Dwg_Object *obj)
     case DWG_TYPE_DIMSTYLE:
       dwg_print_DIMSTYLE(dat, obj);
       break;
-    case DWG_TYPE_VP_ENT_HDR_CONTROL:
-      dwg_print_VP_ENT_HDR_CONTROL(dat, obj);
+    case DWG_TYPE_VPORT_ENTITY_CONTROL:
+      dwg_print_VPORT_ENTITY_CONTROL(dat, obj);
       break;
-    case DWG_TYPE_VP_ENT_HDR:
-      dwg_print_VP_ENT_HDR(dat, obj);
+    case DWG_TYPE_VPORT_ENTITY_HEADER:
+      dwg_print_VPORT_ENTITY_HEADER(dat, obj);
       break;
     case DWG_TYPE_GROUP:
       dwg_print_GROUP(dat, obj);
@@ -794,8 +839,8 @@ dwg_print_object(Bit_Chain* dat, Dwg_Object *obj)
     case DWG_TYPE_LONG_TRANSACTION:
       dwg_print_LONG_TRANSACTION(dat, obj);
       break;
-    case DWG_TYPE_LWPLINE:
-      dwg_print_LWPLINE(dat, obj);
+    case DWG_TYPE_LWPOLYLINE:
+      dwg_print_LWPOLYLINE(dat, obj);
       break;
     case DWG_TYPE_HATCH:
       dwg_print_HATCH(dat, obj);
@@ -832,11 +877,11 @@ dwg_print_object(Bit_Chain* dat, Dwg_Object *obj)
       else if (!dwg_print_variable_type(obj->parent, dat, obj))
         {
           Dwg_Data *dwg = obj->parent;
-          int is_entity;
+          int is_entity = 0;
           int i = obj->type - 500;
           Dwg_Class *klass = NULL;
 
-          if (i <= (int)dwg->num_classes)
+          if (i > 0 && i <= (int)dwg->num_classes)
             {
               klass = &dwg->dwg_class[i];
               is_entity = dwg_class_is_entity(klass);
@@ -857,7 +902,7 @@ dwg_print_object(Bit_Chain* dat, Dwg_Object *obj)
                 {
                   LOG_INFO("Object bitsize: %u\n", obj->bitsize)
                 }
-              LOG_INFO("Object handle: %d.%d.%lu\n",
+              LOG_INFO("Object handle: %d.%d.%lX\n",
                        obj->handle.code, obj->handle.size, obj->handle.value);
             }
         }

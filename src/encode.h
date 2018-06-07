@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2009 Free Software Foundation, Inc.                        */
+/*  Copyright (C) 2009, 2018 Free Software Foundation, Inc.                  */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -11,7 +11,7 @@
 /*****************************************************************************/
 
 /*
- * encode.h: encoding function prototypes
+ * encode.h: encoding function prototypes, write from dwg to dat buffer.
  * written by Felipe Castro
  * modified by Felipe Corrêa da Silva Sances
  * modified by Rodrigo Rodrigues da Silva
@@ -24,7 +24,10 @@
 #include "bits.h"
 #include "dwg.h"
 
-int
-dwg_encode(Dwg_Data *dwg, Bit_Chain *dat);
+int dwg_encode(Dwg_Data *restrict dwg, Bit_Chain *restrict dat);
+
+long dwg_add_UNKNOWN_ENT (Dwg_Data * dwg);
+long dwg_add_UNKNOWN_OBJ (Dwg_Data * dwg);
+void dwg_resolve_objectrefs_silent(Dwg_Data *restrict dwg);
 
 #endif

@@ -12,17 +12,18 @@
 /*****************************************************************************/
 
 /*
- * get_bmp.c: get the bmp thumbnail in a dwg file
+ * dwgbmp.c: get the bmp thumbnail in a dwg file
  * written by Felipe Castro
  * modified by Felipe Corrêa da Silva Sances
+ * modified by Rodrigo Rodrigues da Silva
  * modified by Thien-Thi Nguyen
  * modified by Reini Urban
  */
 
+#include "../src/config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../src/config.h"
 
 #include <dwg.h>
 #include "suffix.inc"
@@ -68,6 +69,7 @@ get_bmp(char *dwgfile, char *bmpfile, unsigned int opts)
     long offset;
   } bmp_h;
 
+  memset(&dwg, 0, sizeof(Dwg_Data));
   dwg.opts = opts;
   /* Read dwg data */
   success = dwg_read_file(dwgfile, &dwg);

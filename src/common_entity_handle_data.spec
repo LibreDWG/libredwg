@@ -1,19 +1,8 @@
 /* -*- c -*- */
 
-#undef IF_ENCODE_FROM_EARLIER
-#define IF_ENCODE_FROM_EARLIER if (0)
-#undef IF_ENCODE_FROM_PRE_R13
-#define IF_ENCODE_FROM_PRE_R13 if (0)
-#ifdef IS_DECODER
-# define IF_IS_DECODER 1
-# define IF_IS_ENCODER 0
-#else
-# define IF_IS_ENCODER 0
-# define IF_IS_DECODER 1
-#endif
+  #include "spec.h"
 
-  if (FIELD_VALUE(entity_mode) == 0
-      || IF_IS_ENCODER)
+  if (FIELD_VALUE(entity_mode) == 0 || IF_IS_ENCODER)
     {
       FIELD_HANDLE(subentity, 4, 0); // doc: owner ref always?
     }
@@ -23,6 +12,18 @@
   VERSIONS(R_13, R_14)
     {
       FIELD_HANDLE(layer, 5, 8);
+      ENCODER {
+        if (dat->from_version == R_2000)
+          FIELD_VALUE(isbylayerlt) = FIELD_VALUE(linetype_flags) == 3 ? 1 : 0;
+      }
+#ifdef IS_DXF
+      switch (FIELD_VALUE(linetype_flags)) {
+      case 0: VALUE_TV("BYLAYER", 6); break;
+      case 1: VALUE_TV("BYBLOCK", 6); break;
+      case 3: VALUE_TV("CONTINUOUS", 6); break;
+      default: break;
+      }
+#endif
       if (!FIELD_VALUE(isbylayerlt))
         FIELD_HANDLE(ltype, 5, 6);
     }
@@ -45,6 +46,14 @@
   VERSION(R_2000)
     {
       FIELD_HANDLE(layer, 5, 8);
+#ifdef IS_DXF
+      switch (FIELD_VALUE(linetype_flags)) {
+      case 0: VALUE_TV("BYLAYER", 6); break;
+      case 1: VALUE_TV("BYBLOCK", 6); break;
+      case 3: VALUE_TV("CONTINUOUS", 6); break;
+      default: break;
+      }
+#endif
       if (FIELD_VALUE(linetype_flags) == 3)
         FIELD_HANDLE(ltype, 5, 6);
     }
@@ -59,7 +68,7 @@
 
   SINCE(R_2000)
     {
-      if (FIELD_VALUE(plotstyle_flags)==3)
+      if (FIELD_VALUE(plotstyle_flags) == 3)
         FIELD_HANDLE(plotstyle, 5, 0);
     }
 
@@ -72,4 +81,3 @@
       if (FIELD_VALUE(has_edge_visualstyle))
         FIELD_HANDLE(edge_visualstyle, 5, 0);
     }
-

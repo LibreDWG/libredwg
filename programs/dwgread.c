@@ -12,26 +12,35 @@
 /*****************************************************************************/
 
 /*
- * test.c: reading and loading a DWG file to memory
+ * dwgread.c: read a DWG file, print verbose logging, and output to
+ *            various formats.
  * written by Felipe Castro
  * modified by Felipe Corrêa da Silva Sances
+ * modified by Rodrigo Rodrigues da Silva
  * modified by Thien-Thi Nguyen
  * modified by Reini Urban
  */
 
-#include <stdio.h>
 #include "../src/config.h"
+#include <stdio.h>
+#include <string.h>
+// strings.h or string.h
+#ifdef AX_STRCASECMP_HEADER
+# include AX_STRCASECMP_HEADER
+#endif
 
-#include <dwg.h>
+#include "dwg.h"
+#include "../src/bits.h"
 #include "suffix.inc"
+#include "out_json.h"
+#include "out_dxf.h"
+
 static int help(void);
 int verbosity(int argc, char **argv, int i, unsigned int *opts);
 #include "common.inc"
-static char *fmt = NULL;
-static char *outfile = NULL;
 
 static int usage(void) {
-  printf("\nUsage: dwgread [-v[0-9]] [-O FMT] [-o OUTFILE] DWGFILE\n");
+  printf("\nUsage: dwgread [-v[0-9]] [-O FMT] [-o OUTFILE] [DWGFILE|-]\n");
   return 1;
 }
 static int opt_version(void) {
@@ -40,11 +49,13 @@ static int opt_version(void) {
 }
 static int help(void) {
   printf("\nUsage: dwgread [OPTION]... DWGFILE\n");
-  printf("Reads the DWG and prints error, success or verbose internal progress.\n"
+  printf("Reads the DWG into some optional output format,\n"
+         "and prints error, success or verbose internal progress.\n"
          "\n");
   printf("  -v[0-9], --verbose [0-9]  verbosity\n");
-  printf("  -O fmt,  --format fmt     fmt: JSON, YAML, XML, DXF, DXFB\n");
-  printf("  -o outfile                \n");
+  printf("  -O fmt,  --format fmt     fmt: JSON, DXF, DXFB\n");
+  printf("           Planned formats: GeoJSON, YAML, XML/OGR, GPX, SVG, PS\n");
+  printf("  -o outfile                also defines the output fmt. Default: stdout\n");
   printf("           --help           display this help and exit\n");
   printf("           --version        output version information and exit\n"
          "\n");
@@ -59,6 +70,9 @@ main(int argc, char *argv[])
   int i = 1;
   int error;
   Dwg_Data dwg;
+  const char *fmt = NULL;
+  const char *outfile = NULL;
+  int has_v = 0;
 
   if (argc < 2)
     {
@@ -72,6 +86,7 @@ main(int argc, char *argv[])
        !strncmp(argv[i], "-v", 2)))
     {
       int num_args = verbosity(argc, argv, i, &opts);
+      has_v = 1;
       argc -= num_args;
       i += num_args;
     }
@@ -90,8 +105,32 @@ main(int argc, char *argv[])
           fmt = argv[i+1];
           num_args = 2;
         }
+      if (!has_v) opts = 0;
       argc -= num_args;
       i += num_args;
+    }
+  if (argc > 2 && !strcmp(argv[i], "-o"))
+    {
+      outfile = argv[i+1];
+      argc -= 2;
+      i += 2;
+      if (!fmt)
+        {
+          if (strstr(outfile, ".json") || strstr(outfile, ".JSON"))
+            fmt = (char*)"json";
+          else
+          if (strstr(outfile, ".dxf") || strstr(outfile, ".DXF"))
+            fmt = (char*)"dxf";
+          else
+          if (strstr(outfile, ".dxfb") || strstr(outfile, ".DXFB"))
+            fmt = (char*)"dxfb";
+          else
+          if (strstr(outfile, ".geojson") || strstr(outfile, ".GeoJSON"))
+            fmt = (char*)"geojson";
+          else {
+            fprintf(stderr, "Unknown output format for %s\n", outfile);
+          }
+        }
     }
   if (argc > 1 && !strcmp(argv[i], "--help"))
     return help();
@@ -99,7 +138,9 @@ main(int argc, char *argv[])
     return opt_version();
 
   REQUIRE_INPUT_FILE_ARG (argc);
-  dwg.opts = opts;
+  memset(&dwg, 0, sizeof(Dwg_Data));
+  if (has_v || !fmt)
+    dwg.opts = opts;
   error = dwg_read_file(argv[i], &dwg);
   if (!fmt)
     {
@@ -108,7 +149,39 @@ main(int argc, char *argv[])
       else
         printf("\nSUCCESS\n");
     }
-  dwg_free(&dwg);
+  else
+    {
+      Bit_Chain dat;
+      if (outfile)
+        dat.fh = fopen(outfile, "w");
+      else
+        dat.fh = stdout;
+      dat.version = dat.from_version = dwg.header.version;
+      // TODO --as-rNNNN version? for now not.
+      // we want the native dump, converters are seperate.
+
+      if (!strcasecmp(fmt, "json"))
+        error = dwg_write_json(&dat, &dwg);
+      else if (!strcasecmp(fmt, "dxfb"))
+        error = dwg_write_dxfb(&dat, &dwg);
+      else if (!strcasecmp(fmt, "dxf"))
+        error = dwg_write_dxf(&dat, &dwg);
+      else if (!strcasecmp(fmt, "geojson"))
+        error = dwg_write_geojson(&dat, &dwg);
+      else {
+        fprintf(stderr, "Invalid output format %s\n", fmt);
+      }
+      if (outfile)
+        {
+          fclose(dat.fh);
+          if (error)
+            printf("\nERROR\n");
+          else
+            printf("\nSUCCESS\n");
+        }
+    }
+  if (dwg.header.version)
+    dwg_free(&dwg);
 
   return error;
 }

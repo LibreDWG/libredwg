@@ -1,4 +1,4 @@
-#define DWG_TYPE DWG_TYPE_3DSOLID
+#define DWG_TYPE DWG_TYPE__3DSOLID
 #include "common.c"
 #include <dejagnu.h>
 
@@ -11,12 +11,12 @@ api_process (dwg_object * obj)
   int error;
   BITCODE_BS version;
   BITCODE_BL *block_size, num_isolines, num_wires, num_sil;
-  char *acis_data;
+  unsigned char *acis_data;
   BITCODE_B wireframe_data_present, point_present, isoline_present; 
   BITCODE_B acis_empty, acis2_empty;
   dwg_point_3d point;
-  dwg_ent_solid_wire *wire;
-  dwg_ent_solid_silhouette *sil;
+  dwg_3dsolid_wire *wire;
+  dwg_3dsolid_silhouette *sil;
 
   dwg_ent_3dsolid *_3dsolid = obj->tio.entity->tio._3DSOLID;
 
@@ -35,7 +35,7 @@ api_process (dwg_object * obj)
           error, version, version);
 
   acis_data = dwg_ent_3dsolid_get_acis_data (_3dsolid, &error);
-  if (error == 0 && !strcmp(acis_data, _3dsolid->acis_data))
+  if (error == 0 && !strcmp((char*)acis_data, (char*)_3dsolid->acis_data))
     pass ("3dsolid_get_acis_data");
   else
     fail ("3dsolid_get_acis_data %d \"%s\" <=> \"%s\"",
@@ -70,14 +70,6 @@ api_process (dwg_object * obj)
       fail ("3dsolid_get_point %d", error);
     }
 
-
-  block_size = dwg_ent_3dsolid_get_block_size (_3dsolid, &error);
-  if (error == 0 && _3dsolid->block_size == block_size)
-    pass ("3dsolid_get_block_size");
-  else
-    fail ("3dsolid_get_block_size %d", error);
-
-
   num_isolines = dwg_ent_3dsolid_get_num_isolines (_3dsolid, &error);
   if (error == 0 && _3dsolid->num_isolines == num_isolines)
     pass ("3dsolid_get_num_isolines");
@@ -99,7 +91,7 @@ api_process (dwg_object * obj)
     fail ("3dsolid_get_num_wires %d", error);
 
 
-  wire = dwg_ent_3dsolid_get_wire (_3dsolid, &error);
+  wire = dwg_ent_3dsolid_get_wires (_3dsolid, &error);
   if (error == 0)
     {
       unsigned long i, matches = 1;
@@ -112,9 +104,9 @@ api_process (dwg_object * obj)
 	}
 
       if (matches)
-        pass ("3dsolid_get_wire matches [%ld]", i);
+        pass ("3dsolid_get_wires matches [%ld]", i);
       else
-        fail ("3dsolid_get_wire matches");
+        fail ("3dsolid_get_wires matches");
     }
   else
     fail ("3dsolid_get_wire matches error %d", error);
@@ -127,7 +119,7 @@ api_process (dwg_object * obj)
     fail ("get_num_silhouettes %d", error);
 
 
-  sil = dwg_ent_3dsolid_get_silhouette (_3dsolid, &error);
+  sil = dwg_ent_3dsolid_get_silhouettes (_3dsolid, &error);
   if (error == 0)
     {
       unsigned long i, matches = 1;
@@ -139,11 +131,11 @@ api_process (dwg_object * obj)
 	    }
 	}
       if (matches)
-        pass ("3dsolid_get_silhouette matches");
+        pass ("3dsolid_get_silhouettes matches");
       else
-        fail ("3dsolid_get_silhouette matches [%d]", i);
+        fail ("3dsolid_get_silhouettes matches [%d]", i);
     }
   else
-    fail ("error in reading silhouette");
+    fail ("error in reading silhouettes");
   
 }

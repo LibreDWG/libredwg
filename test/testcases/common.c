@@ -80,14 +80,12 @@ output_BLOCK_HEADER (dwg_object_ref * ref)
   dwg_object *obj, *variable_obj;
   dwg_obj_block_header *hdr;
   int error;
-  unsigned long abs_ref;
 
-  obj = dwg_obj_reference_get_object (ref, &error);
-  abs_ref = dwg_obj_ref_get_abs_ref (ref, &error);
+  obj = dwg_obj_ref_get_object (ref, &error);
   if (!ref)
     {
       fprintf (stderr,
-	       "Found null object reference. Could not output an SVG symbol for this BLOCK_HEADER\n");
+        "Found null object reference. Could not output an SVG symbol for this BLOCK\n");
       return;
     }
   if (!obj)
@@ -95,9 +93,6 @@ output_BLOCK_HEADER (dwg_object_ref * ref)
       fprintf (stderr, "Found null ref->obj\n");
       return;
     }
-
-  /* TODO: Review.  (This check avoids a segfault, but it is
-     still unclear whether or not the condition is valid.)  */
   if (!dwg_object_to_object (obj, &error))
     {
       fprintf (stderr, "Found null ref->obj->tio.object\n");

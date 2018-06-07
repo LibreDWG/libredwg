@@ -26,6 +26,8 @@ environment:
 #  allow_failures:
 #    - MINGW: 1
 clone_depth: 1
+# we tag only already tested and deployed commits
+skip_tags: true
 #branches:
 #  only:
 #    - master
@@ -57,7 +59,7 @@ init:
   - if "%PLATFORM%"=="x64" set P=64
   - if "%CYGWIN%"=="1" set CYG_ROOT=c:\cygwin%P%
   - if "%CYGWIN%"=="1" appveyor DownloadFile http://cygwin.com/%ISETUP%.exe -FileName %CYG_ROOT%\setup.exe
-  - if "%CYGWIN%"=="1" %CYG_ROOT%\setup.exe -qnNdO -R "%CYG_ROOT%" -s "%CYG_MIRROR%" -l "%CYG_ROOT%\var\cache\setup" -P libxml2,libxml2-devel,libiconv-devel,python2-devel,python2-libxml2,swig
+  - if "%CYGWIN%"=="1" %CYG_ROOT%\setup.exe -qnNdO -R "%CYG_ROOT%" -s "%CYG_MIRROR%" -l "%CYG_ROOT%\var\cache\setup" -P libxml2,libxml2-devel,libiconv-devel,python2-devel,python2-libxml2,swig,help2man
   # skip dejagnu. fails to link
 
 build_script:
@@ -65,7 +67,7 @@ build_script:
   - if "%CYGWIN%"=="1" %CYG_ROOT%\bin\sh -lc "cygcheck -dc cygwin"
   - if "%MINGW%"=="1" call build-aux\msys2.bat
   - bash -c "sh ./autogen.sh"
-  - bash -c "./configure --enable-write --enable-trace || (cat config.log; false)"
+  - bash -c "./configure --enable-write || (cat config.log; false)"
   - bash -c "make || (cat Makefile; false)"
 
 test_script:
@@ -77,10 +79,10 @@ test_script:
 
 artifacts:
   # nightlies
-  - path: libredwg-$(appveyor_build_version)-win32.zip
+  - path: libredwg-$(APPVEYOR_BUILD_VERSION)-win32.zip
     name: nightly-win32
     type: zip
-  - path: libredwg-$(appveyor_build_version)-win64.zip
+  - path: libredwg-$(APPVEYOR_BUILD_VERSION)-win64.zip
     name: nightly-win64
     type: zip
   # tagged
@@ -93,7 +95,7 @@ artifacts:
 
 deploy:
 - provider: GitHub
-  tag: libredwg-win-$(appveyor_build_version)
+  tag: $(APPVEYOR_BUILD_VERSION)
   description: 'libredwg windows nightly'
   auth_token:
     secure: AsIAOIgCJX0QhrUKal2V00aaB5nRWtmtFTFeDVsGnbJLeEQpv9avUp0HT1cA8bNs
@@ -104,7 +106,7 @@ deploy:
   on:
     branch: /(master|relprep|deploy-test)/
 - provider: GitHub
-  tag: libredwg-$(APPVEYOR_REPO_TAG_NAME)-win
+  tag: $(APPVEYOR_REPO_TAG_NAME)
   description: 'libredwg windows tagged'
   auth_token:
     secure: AsIAOIgCJX0QhrUKal2V00aaB5nRWtmtFTFeDVsGnbJLeEQpv9avUp0HT1cA8bNs
@@ -113,3 +115,7 @@ deploy:
   force_update: true
   on:
     appveyor_repo_tag: true
+
+# 80GB quota
+after_deploy:
+  - del libredwg-*.zip

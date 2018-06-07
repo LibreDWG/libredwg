@@ -1,4 +1,4 @@
-#define DWG_TYPE DWG_TYPE_3DSOLID
+#define DWG_TYPE DWG_TYPE__3DSOLID
 #include "common.c"
 
 void
@@ -22,7 +22,7 @@ low_level_process(dwg_object *obj)
     printf("wire[%d] of 3dsolid : " FORMAT_BL "\n", (int)i,
            _3dsolid->wires[i].selection_marker);
 
-  printf("num sil of 3dsolid : " FORMAT_BL "\n", _3dsolid->num_silhouettes);
+  printf("num silhouettes of 3dsolid : " FORMAT_BL "\n", _3dsolid->num_silhouettes);
 
   for (i = 0; i < _3dsolid->num_silhouettes; i++)
     printf("silhouette[%d] of 3dsolid : " FORMAT_BL "\n", (int)i,
@@ -35,12 +35,12 @@ api_process(dwg_object *obj)
   int error;
   BITCODE_BS version;
   BITCODE_BL block_size, num_isolines, num_wires, num_sil;
-  char * acis_data;
+  unsigned char *acis_data;
   BITCODE_B wireframe_data_present, point_present, isoline_present; 
   BITCODE_B acis_empty, acis2_empty;
   dwg_point_3d point;
-  dwg_ent_solid_wire *wire;
-  dwg_ent_solid_silhouette *sil;
+  dwg_3dsolid_wire *wire;
+  dwg_3dsolid_silhouette *sil;
 
   dwg_ent_3dsolid *_3dsolid =  obj->tio.entity->tio._3DSOLID;
 
@@ -109,30 +109,30 @@ api_process(dwg_object *obj)
       printf("error in reading num wires");
  
 
-  wire = dwg_ent_3dsolid_get_wire(_3dsolid, &error);
-  if ( !error ) // error checking
+  wire = dwg_ent_3dsolid_get_wires(_3dsolid, &error);
+  if ( !error )
     {
       for (i = 0; i < num_wires; i++)
           printf("wire[%u] of 3dsolid : " FORMAT_BL "\n", i, wire[i].selection_marker);
     }
   else
-      printf("error in reading num wires");
+      printf("error in reading wires");
 
 
   num_sil = dwg_ent_3dsolid_get_num_silhouettes(_3dsolid, &error);
   if ( !error )
       printf("num sil of 3dsolid : " FORMAT_BL "\n", num_sil);
   else
-      printf("error in reading num silhouette");
+      printf("error in reading num silhouettes");
 
 
-  sil = dwg_ent_3dsolid_get_silhouette(_3dsolid, &error);
+  sil = dwg_ent_3dsolid_get_silhouettes(_3dsolid, &error);
   if ( !error )
     {
       for (i = 0; i < num_sil; i++)
         printf("silhouette[%u] of 3dsolid : " FORMAT_BL "\n", i, sil[i].vp_id);
     }
   else
-      printf("error in reading silhouette");
+      printf("error in reading silhouettes");
     
 }

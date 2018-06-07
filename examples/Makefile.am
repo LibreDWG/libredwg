@@ -41,6 +41,7 @@ TESTS = $(top_srcdir)/programs/alive.test
 
 EXTRA_DIST = load_dwg.py
 CLEANFILES = {example,sample}_2000.{bmp,ps,svg,dxf} {example,sample}_2000.dwg-rewrite.dwg
+MAINTAINERCLEANFILES  = *_flymake.[ch] *~ *.i
 
 .c.i:
 	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -54,6 +55,16 @@ check-syntax:
 	test -n "$(CHK_SOURCES)" && \
 	  $(COMPILE) -o /dev/null -S $(CHK_SOURCES)
 .PHONY: check-syntax
+
+if ENABLE_GCOV
+AM_CFLAGS += @GCOV_CFLAGS@
+LIBS      += @GCOV_LIBS@
+gcov: $(CHECK)
+	-test -f gcov.log && rm gcov.log
+	$(GCOV) *.gcno | tee -a $(builddir)/gcov.log
+
+CLEANFILES  += *.gcov *.gcno *.gcda gcov.log
+endif
 
 #TODO: alive.test => runtests with VALGRIND support
 #@VALGRIND_CHECK_RULES@

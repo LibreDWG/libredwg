@@ -12,16 +12,15 @@ developed by AutoDesk.
 LibreDWG is a fork from LibDWG due to its usage of Esperanto, which we
 think is not the best strategy for a free software project which aims
 to get lots of contributors.  LibreDWG is written in English.  At the
-moment our decoder is almost done, just some R2010+ and pre-R13
-entities fail to read.  Among the example applications we wrote using
-LibreDWG is an initial SVG conversion and a DWG rewrite, i.e saveas
-tool. Please contact us if you can help.
+moment our decoder (i.e. reader) is almost done, just some advanced
+R2010+ and pre-R13 entities fail to read. The writer is good enough
+for R2000.  Among the example applications we wrote using LibreDWG is
+an initial SVG and Postscript conversion, dxf converters and a DWG
+rewrite, i.e saveas tool. Please contact us if you can help.
 
-The program dwg2ps reads DWG and outputs Postscript for most 2D
-elements. It depends on pslib: <http://pslib.sourceforge.net>.  In
-many GNU/Linux distributions, this is available by installing the
-pslib-dev package.  If the configure script does not find pslib,
-dwg2ps will not be built.
+The strings API is utf-8 (wtf8 really, Windows UCS-2 has no surrogate
+pairs), and encodes to the internal 8-bit or UCS-2 strings, depending
+on the DWG version.
 
 Sometimes we hang on our IRC channel which is #libredwg at irc.freenode.net
 If you don't find us there, please email the package maintainers:
@@ -42,9 +41,10 @@ http://www.gnu.org/software/libredwg
 You need the following dependencies:
 - Basic development tools (gcc/clang, autoconf, automake and libtool)
 - SWIG 1.7+
-- Python development headers (debian: python-dev; yum: python-devel)
+- Python 2.7 development headers (debian: python-dev; yum: python-devel)
   and the libxml2 python bindings.
 - TeXinfo for building the docs
+- gmake on BSD's. We use one GNU make extension: *F
 
 See INSTALL for generic instructions.  Basically, you do:
 
@@ -73,28 +73,30 @@ customize the installation dirs.  Other options recognized by configure are:
     Enable write support (default: no). When enabled, you activate the write
     support for the dwg format.
     This is an experimental feature that is under construction, so it's
-    highly unstable.
+    highly unstable. Rewriting test/test-data/sample_2000.dwg works ok in the R_2000
+    format.
 
 == Example usage of the library ==
 
 The programs and examples directories contains some application code that uses our lib:
 
-* dwgread -- A simple DWG reader.
+* dwgread -- A DWG reader supporting various output formats.
 
 * dwgrewrite -- Reads a DWG, writes it back under a different name and optionally
   under a different version, and re-reads it back for confirmation.
   Under construction, only with --enable-write.
 
-* dwg2dxf -- Converts a DWG to a DXF (ascii or binary), optionally
-  under a different version. Under construction.
+* dwgwrite -- A DWG writer supporting various input formats. Under construction.
+
+* dwg2dxf -- Converts a DWG to a DXF (ascii or binary, minimal or full), optionally
+  under a different version. Looks good, but AutoCAD cannot import them yet.
 
 * dxf2dwg -- Converts a ascii or binary DXF to a DWG, optionally
-  under a different version. Under construction.
+  under a different version. Not yet usable.
 
-* load_dwg -- This is a skeleton code, reading the DWG and adding an entity.
-  Look there if you want to have a quickly glance on how to use the library.
+* dwglayers -- Prints the list of layers in a DWG
 
-* dwg_ps -- Opens a DWG file and outputs an PostScript file.  This code
+* dwg2ps -- Opens a DWG file and outputs an PostScript file.  This code
   depends on the PSlib library.  On Debian-based systems this is usually
   available as a package named pslib-dev.
 
@@ -105,6 +107,12 @@ The programs and examples directories contains some application code that uses o
   from DWG since SVG only supports 2-dimensional images.
 
 * dwgbmp -- Extracts the bmp thumbnail of a dwg file when it is available.
+
+* load_dwg -- This is a skeleton code, reading the DWG and adding an entity.
+  Look there if you want to have a quickly glance on how to use the library.
+
+* dwg2svg2 -- Another example how to use the DWG API, bypassing direct access to
+  the DWG struct.
 
 * xmlsuite -- an extensive example library to use the SWIG python bindings
   is in the test/xmlsuite directory.
