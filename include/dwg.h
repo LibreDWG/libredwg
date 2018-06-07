@@ -309,6 +309,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_DICTIONARYVAR,
   DWG_TYPE_DICTIONARYWDLFT,
   DWG_TYPE_EXACXREFPANELOBJECT,
+  DWG_TYPE_EXTRUDEDSURFACE,
   DWG_TYPE_FIELD,
   DWG_TYPE_FIELDLIST,
   DWG_TYPE_GEODATA,
@@ -4122,6 +4123,39 @@ typedef struct _dwg_entity_GEOPOSITIONMARKER
 } Dwg_Entity_GEOPOSITIONMARKER;
 
 /**
+ Entity EXTRUDEDSURFACE (varies) UNKNOWN FIELDS
+ yet unsorted, and unused.
+*/
+typedef struct _dwg_entity_EXTRUDEDSURFACE
+{
+  struct _dwg_object_entity *parent;
+  BITCODE_BS flag;          /*!< DXF 70 */
+  BITCODE_BS flag1;         /*!< DXF 71 */
+  BITCODE_BS flag2;         /*!< DXF 72 */
+  BITCODE_BL class_version; /*!< DXF 90 */
+  BITCODE_BD* sweep_vector; /*!< DXF 40 */
+  BITCODE_BD draft_angle;   /*!< DXF 42 */
+  BITCODE_BD draft_start_distance; /*!< DXF 43 */
+  BITCODE_BD draft_end_distance;   /*!< DXF 44 */
+  BITCODE_BD twist_angle;   /*!< DXF 45 */
+  BITCODE_BD scale_factor;  /*!< DXF 48 */
+  BITCODE_BD align_angle;   /*!< DXF 49 */
+  BITCODE_BD* sweep_entity; /*!< DXF 46 */
+  BITCODE_BD* path_entity;  /*!< DXF 47 */
+  BITCODE_B solid;          /*!< DXF 290 */
+  BITCODE_BS sweep_alignment_flags; /*!< DXF 290.
+                                      0=No alignment, 1=Align sweep entity to path,
+                                      2=Translate sweep entity to path,
+                                      3=Translate path to sweep entity */
+  BITCODE_B align_start; 			/*!< DXF 292 */
+  BITCODE_B bank; 				/*!< DXF 293 */
+  BITCODE_B base_point_set; 			/*!< DXF 294 */
+  BITCODE_B sweep_entity_transform_computed; 	/*!< DXF 295 */
+  BITCODE_B path_entity_transform_computed; 	/*!< DXF 296 */
+  BITCODE_3BD reference_vector_for_controlling_twist; /*!< DXF 11 */
+} Dwg_Entity_EXTRUDEDSURFACE;
+
+/**
  Object SUN (varies) UNKNOWN FIELDS
  */
 typedef struct _dwg_object_SUN
@@ -4308,6 +4342,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_OLE2FRAME *OLE2FRAME;
     Dwg_Entity_CAMERA *CAMERA;
     Dwg_Entity_DUMMY *DUMMY;
+    Dwg_Entity_EXTRUDEDSURFACE *EXTRUDEDSURFACE;
     Dwg_Entity_HATCH *HATCH;
     Dwg_Entity_IMAGE *IMAGE;
     Dwg_Entity_LIGHT *LIGHT;
@@ -4526,7 +4561,7 @@ typedef struct _dwg_class
   char *appname;
   char *cppname;
   char *dxfname; /*!< ASCII or UTF-8 */
-  BITCODE_TU dxfname_u; /* r2007+, always transformed to dxfname as UTF-8 */ 
+  BITCODE_TU dxfname_u; /* r2007+, always transformed to dxfname as UTF-8 */
   BITCODE_B  wasazombie; /*!< really Was-a-proxy flag */
   BITCODE_BS item_class_id; /* Is-an-entity. 1f2 for entities, 1f3 for objects */
   BITCODE_BL num_instances; /* 91 Instance count for a custom class */
@@ -4995,6 +5030,7 @@ EXPORT long dwg_add_DIMASSOC (Dwg_Data * dwg);
 EXPORT long dwg_add_DICTIONARYVAR (Dwg_Data * dwg);
 EXPORT long dwg_add_DICTIONARYWDLFT (Dwg_Data * dwg);
 //EXPORT long dwg_add_EXACXREFPANELOBJECT (Dwg_Data * dwg);
+//EXPORT long dwg_add_EXTRUDEDSURFACE (Dwg_Data * dwg);
 EXPORT long dwg_add_FIELD (Dwg_Data * dwg);
 EXPORT long dwg_add_FIELDLIST (Dwg_Data * dwg);
 EXPORT long dwg_add_GEODATA (Dwg_Data * dwg);

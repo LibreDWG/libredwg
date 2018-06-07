@@ -3455,6 +3455,20 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
       dwg_decode_VISUALSTYLE(dat, obj);
       return 1;
     }
+  if (!strcmp(dxfname, "ACDBSECTIONVIEWSTYLE"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_decode_SECTIONVIEWSTYLE(dat, obj);
+      return 0;
+    }
+  if (!strcmp(dxfname, "ACDBDETAILVIEWSTYLE"))
+    {
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      //dwg_decode_DETAILVIEWSTYLE(dat, obj);
+      return 0;
+    }
   if (!strcmp(dxfname, "ARCALIGNEDTEXT"))
     {
       UNHANDLED_CLASS;
@@ -3534,6 +3548,19 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
       return 0;
 #endif
     }
+  if (!strcmp(dxfname, "EXTRUDEDSURFACE"))
+    {
+#ifdef DEBUG_EXTRUDEDSURFACE
+      UNTESTED_CLASS;
+      assert(is_entity);
+      dwg_decode_EXTRUDEDSURFACE(dat, obj);
+      return 1;
+#else
+      UNHANDLED_CLASS;
+      assert(is_entity);
+      return 0;
+#endif
+    }
   if (!strcmp(dxfname, "TABLESTYLE"))
     {
       UNHANDLED_CLASS;
@@ -3546,20 +3573,6 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
       UNHANDLED_CLASS;
       assert(!is_entity);
       //dwg_decode_DBCOLOR(dat, obj);
-      return 0;
-    }
-  if (!strcmp(dxfname, "ACDBSECTIONVIEWSTYLE"))
-    {
-      UNHANDLED_CLASS;
-      assert(!is_entity);
-      //dwg_decode_SECTIONVIEWSTYLE(dat, obj);
-      return 0;
-    }
-  if (!strcmp(dxfname, "ACDBDETAILVIEWSTYLE"))
-    {
-      UNHANDLED_CLASS;
-      assert(!is_entity);
-      //dwg_decode_DETAILVIEWSTYLE(dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "ACDBASSOCNETWORK"))

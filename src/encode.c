@@ -1384,6 +1384,45 @@ dwg_encode_variable_type(Dwg_Data* dwg, Bit_Chain* dat, Dwg_Object* obj)
       return 0;
 #endif
     }
+  if (!strcmp(dxfname, "SUN"))
+    {
+#ifdef DEBUG_SUN // i.e. test/test-data/2000/1.dwg, referenced by VIEW 361
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      dwg_encode_SUN(dat, obj);
+      return 1;
+#else
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      return 0;
+#endif
+    }
+  if (!strcmp(dxfname, "GEOPOSITIONMARKER"))
+    {
+#ifdef DEBUG_GEOPOSITIONMARKER
+      UNTESTED_CLASS;
+      assert(is_entity);
+      dwg_encode_GEOPOSITIONMARKER(dat, obj);
+      return 1;
+#else
+      UNHANDLED_CLASS;
+      assert(is_entity);
+      return 0;
+#endif
+    }
+  if (!strcmp(dxfname, "EXTRUDEDSURFACE"))
+    {
+#ifdef DEBUG_EXTRUDEDSURFACE
+      UNTESTED_CLASS;
+      assert(is_entity);
+      dwg_encode_EXTRUDEDSURFACE(dat, obj);
+      return 1;
+#else
+      UNHANDLED_CLASS;
+      assert(is_entity);
+      return 0;
+#endif
+    }
   if (!strcmp(dxfname, "SCALE"))
     {
       UNTESTED_CLASS;
@@ -1453,13 +1492,6 @@ dwg_encode_variable_type(Dwg_Data* dwg, Bit_Chain* dat, Dwg_Object* obj)
            klass->number, dxfname, klass->proxyflag,                    \
            klass->wasazombie ? " was proxy" : "")
 
-  /* TODO: CELLSTYLEMAP, DBCOLOR, MATERIAL, MULTILEADER, MLEADERSTYLE,
-     PLOTSETTINGS, SCALE, TABLEGEOMETRY,
-     TABLESTYLE, VBA_PROJECT, VISUALSTYLE, WIPEOUTVARIABLES,
-     ACDBSECTIONVIEWSTYLE, ACDBDETAILVIEWSTYLE,
-     NPOCOLLECTION, EXACXREFPANELOBJECT,
-     ARCALIGNEDTEXT (2000+)
-  */
 #undef UNHANDLED_CLASS
 #undef UNTESTED_CLASS
 

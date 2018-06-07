@@ -547,6 +547,24 @@ dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
       goto unknown;
 #endif
     }
+  if (!strcmp(dxfname, "GEOPOSITIONMARKER"))
+    {
+#ifdef DEBUG_GEOPOSITIONMARKER
+      dwg_free_GEOPOSITIONMARKER(obj);
+      goto known;
+#else
+      goto unknown;
+#endif
+    }
+  if (!strcmp(dxfname, "EXTRUDEDSURFACE"))
+    {
+#ifdef DEBUG_EXTRUDEDSURFACE
+      dwg_free_EXTRUDEDSURFACE(obj);
+      goto known;
+#else
+      goto unknown;
+#endif
+    }
 
  unknown:  
   free(dxfname);

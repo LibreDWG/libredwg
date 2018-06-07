@@ -564,6 +564,32 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       return 0;
 #endif
     }
+  if (!strcmp(dxfname, "GEOPOSITIONMARKER"))
+    {
+#ifdef DEBUG_GEOPOSITIONMARKER
+      UNTESTED_CLASS;
+      assert(is_entity);
+      dwg_print_GEOPOSITIONMARKER(dat, obj);
+      return 1;
+#else
+      UNHANDLED_CLASS;
+      assert(is_entity);
+      return 0;
+#endif
+    }
+  if (!strcmp(dxfname, "EXTRUDEDSURFACE"))
+    {
+#ifdef DEBUG_EXTRUDEDSURFACE
+      UNTESTED_CLASS;
+      assert(is_entity);
+      dwg_print_EXTRUDEDSURFACE(dat, obj);
+      return 1;
+#else
+      UNHANDLED_CLASS;
+      assert(is_entity);
+      return 0;
+#endif
+    }
   if (!strcmp(dxfname, "TABLESTYLE"))
     {
       UNHANDLED_CLASS;

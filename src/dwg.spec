@@ -5523,6 +5523,37 @@ DWG_ENTITY(CAMERA) // i.e. a named view, not persistent in a DWG. CAMERADISPLAY=
   FIELD_HANDLE(view, 5, 0);
 DWG_ENTITY_END
 
+// r2007+
+DWG_ENTITY(EXTRUDEDSURFACE)
+
+  SUBCLASS(AcDbModelerGeometry)
+  FIELD_BS (flag, 70);
+  SUBCLASS(AcDbSurface)
+  FIELD_BS (flag1, 71);
+  FIELD_BS (flag2, 72);
+  SUBCLASS(AcDbExtrudedSurface)
+  FIELD_BL (class_version, 90);
+  FIELD_VECTOR_N (sweep_vector, BD, 16, 40);
+  FIELD_BD (draft_angle, 42);
+  FIELD_BD (draft_start_distance, 43);
+  FIELD_BD (draft_end_distance, 44);
+  FIELD_BD (twist_angle, 45);
+  FIELD_BD (scale_factor, 48);
+  FIELD_BD (align_angle, 49);
+  FIELD_VECTOR_N (sweep_entity, BD, 16, 46);
+  FIELD_VECTOR_N (path_entity, BD, 16, 47);
+  FIELD_B (solid, 290);
+  FIELD_BS (sweep_alignment_flags, 290); //0=No alignment; 1=Align sweep entity to path
+                  // 2=Translate sweep entity to path; 3=Translate path to sweep entity
+  FIELD_B (align_start, 292);
+  FIELD_B (bank, 293);
+  FIELD_B (base_point_set, 294);
+  FIELD_B (sweep_entity_transform_computed, 295);
+  FIELD_B (path_entity_transform_computed, 296);
+  FIELD_3BD (reference_vector_for_controlling_twist, 11);
+
+DWG_ENTITY_END
+
 /* Those undocumented objects are also stored as raw UNKNOWN_OBJ */
 
 #if 0
@@ -5586,3 +5617,4 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
+

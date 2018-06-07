@@ -621,6 +621,13 @@ dwg_json_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       dwg_json_GEOPOSITIONMARKER(dat, obj);
       return 1;
     }
+  if (!strcmp(dxfname, "EXTRUDEDSURFACE"))
+    {
+      UNTESTED_CLASS;
+      assert(is_entity);
+      dwg_json_EXTRUDEDSURFACE(dat, obj);
+      return 1;
+    }
   if (!strcmp(dxfname, "TABLESTYLE"))
     {
       UNHANDLED_CLASS;
