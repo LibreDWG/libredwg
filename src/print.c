@@ -51,11 +51,11 @@ static unsigned int cur_ver = 0;
 
 #define FIELD_VALUE(name) _obj->name
 #define FIELD_2PT_TRACE(name, type, dxf) \
-  LOG_TRACE(#name ": (" FORMAT_BD ", " FORMAT_BD ") [" #type " %d]\n", \
-            _obj->name.x, _obj->name.y, dxf)
+  { LOG_TRACE(#name ": (" FORMAT_BD ", " FORMAT_BD ") [" #type " %d]\n", \
+            _obj->name.x, _obj->name.y, dxf); }
 #define FIELD_3PT_TRACE(name, type, dxf) \
-  LOG_TRACE(#name ": (" FORMAT_BD ", " FORMAT_BD ", " FORMAT_BD ") [" #type " %d]\n", \
-            _obj->name.x, _obj->name.y, _obj->name.z, dxf)
+  { LOG_TRACE(#name ": (" FORMAT_BD ", " FORMAT_BD ", " FORMAT_BD ") [" #type " %d]\n", \
+              _obj->name.x, _obj->name.y, _obj->name.z, dxf); }
 
 #define ANYCODE -1
 #define FIELD_HANDLE(name, handle_code, dxf) \
