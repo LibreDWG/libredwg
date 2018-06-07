@@ -18,15 +18,16 @@ gcov.log
 
 # globs, in specific dirs
 /00*.patch
+/*_20*.log
 /examples/*.log
 /examples/*.bmp
-/examples/*-dwgrewrite.dwg
 /src/*.gcno
 /src/*.gcov
 /src/*.gcda
 /programs/*.log
 /programs/*.bmp
 /programs/*-dwgrewrite.dwg
+/programs/*.dxf
 /test/testcases/*.gcov
 /test/testcases/*.gcno
 /test/testcases/*.gcda
@@ -36,6 +37,8 @@ gcov.log
 /test/unit-testing/*.gcov
 /test/unit-testing/*.gcno
 /test/unit-testing/*.gcda
+/test/test-data-r*/
+/test/test-data-20*/
 
 # specific filenames
 /.gdbinit
