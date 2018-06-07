@@ -241,7 +241,12 @@ dwg_geojson_feature(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
     sprintf(tmp, "%lX", obj->handle.value);
     PAIR_S(EntityHandle, tmp);
     //TODO if has name or text
-    PAIR_NULL(Text);
+    if (obj->type == DWG_TYPE_GEOPOSITIONMARKER) {
+      Dwg_Entity_GEOPOSITIONMARKER *_obj = obj->tio.entity->tio.GEOPOSITIONMARKER;
+      PAIR_S(Text, _obj->text);
+    }
+    else
+      PAIR_NULL(Text);
   ENDHASH;
 }
 
@@ -294,8 +299,31 @@ dwg_geojson_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
     }
   if (!strcmp(dxfname, "GEODATA"))
     {
-      //UNTESTED_CLASS;
-      //dwg_geojson_GEODATA(dat, obj);
+      Dwg_Object_GEODATA *_obj = obj->tio.object->tio.GEODATA;
+      UNTESTED_CLASS;
+      FEATURE(AcDbObject:AcDbGeoData, obj);
+      //which fields?
+      ENDFEATURE;
+      return 1;
+    }
+  if (!strcmp(dxfname, "GEOPOSITIONMARKER"))
+    {
+      Dwg_Entity_GEOPOSITIONMARKER *_obj = obj->tio.entity->tio.GEOPOSITIONMARKER;
+      UNTESTED_CLASS;
+      // now even with text
+      FEATURE(AcDbEntity:AcDbGeoPositionMarker, obj);
+      GEOMETRY(Point);
+      KEY(coordinates);
+      if (fabs(_obj->position.z) > 0.000001)
+        {
+          VALUE_3DPOINT(_obj->position.x, _obj->position.y, _obj->position.z);
+        }
+      else
+        {
+          VALUE_2DPOINT(_obj->position.x, _obj->position.y);
+        }
+      ENDGEOMETRY;
+      ENDFEATURE;
       return 1;
     }
 
