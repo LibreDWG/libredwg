@@ -22,7 +22,7 @@
 #include "spec.h"
 
 /* (1/7) */
-DWG_ENTITY (TEXT)
+DWG_ENTITY(TEXT)
 
   SUBCLASS (AcDbText)
   PRE(R_13) {
@@ -5538,7 +5538,7 @@ DWG_OBJECT(ASSOC2DCONSTRAINTGROUP)
   FIELD_BS(solution_status, 0); // 0 WellDefined, 1 UnderConstrained, 2 OverConstrained,
 	                        // 3 Inconsistent, 4 NotEvaluated, 5 NotAvailable,
                                 // 6 RejectedByClient
-
+  // ...
 DWG_OBJECT_END
 
 DWG_OBJECT(ASSOCGEOMDEPENDENCY)
@@ -5574,6 +5574,12 @@ DWG_OBJECT_END
 
 DWG_OBJECT(NPOCOLLECTION)
 DWG_OBJECT_END
+
+DWG_OBJECT(UNDERLAYDEFINITION)
+DWG_OBJECT_END
+
+DWG_ENTITY(RTEXT)
+DWG_ENTITY_END
 
 DWG_OBJECT(CSACDOCUMENTOPTIONS)
 //size 161
