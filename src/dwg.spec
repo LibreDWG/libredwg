@@ -3872,10 +3872,11 @@ DWG_OBJECT_END
 
 DWG_OBJECT(GEODATA)
 
-  //SUBCLASS (AcDbGeoData)
+  SUBCLASS (AcDbGeoData)
   FIELD_BL (class_version, 90); //1 for r2009, 2 for r2010 (default)
   FIELD_HANDLE (host_block, 4, 330);
-  FIELD_BS (coord_type, 70); // 0 unknown, local grid 1, projected grid 2, geographic (defined by latitude/longitude) 3 (default)
+  FIELD_BS (coord_type, 70); // 0 unknown, local grid 1, projected grid 2,
+                             // geographic (defined by latitude/longitude) 3 (default)
   SINCE(R_2010)
     {
       FIELD_3BD (design_pt, 10);
@@ -3886,7 +3887,9 @@ DWG_OBJECT(GEODATA)
       FIELD_BL (units_value_vert, 92);
       FIELD_3BD (up_dir, 210);
       FIELD_3BD (north_dir, 12);
-      FIELD_BL (scale_est, 95); // None = 1 (default), User specified scale factor = 2, Grid scale at reference point = 3, Prismodial = 4
+      FIELD_BL (scale_est, 95); // None = 1 (default: ScaleEstMethodUnity),
+                                // User defined = 2, Grid scale at reference point = 3,
+                                // Prismodial = 4
       FIELD_BD (user_scale_factor, 141);
       FIELD_B (sea_level_corr, 294);
       FIELD_BD (sea_level_elev, 142);

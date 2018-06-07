@@ -50,6 +50,12 @@ static unsigned int cur_ver = 0;
   FIELD_G_TRACE(name,cast,dxf)
 
 #define FIELD_VALUE(name) _obj->name
+#define FIELD_2PT_TRACE(name, type, dxf) \
+  LOG_TRACE(#name ": (" FORMAT_BD ", " FORMAT_BD ") [" #type " %d]\n", \
+            _obj->name.x, _obj->name.y, dxf)
+#define FIELD_3PT_TRACE(name, type, dxf) \
+  LOG_TRACE(#name ": (" FORMAT_BD ", " FORMAT_BD ", " FORMAT_BD ") [" #type " %d]\n", \
+            _obj->name.x, _obj->name.y, _obj->name.z, dxf)
 
 #define ANYCODE -1
 #define FIELD_HANDLE(name, handle_code, dxf) \
@@ -93,19 +99,15 @@ static unsigned int cur_ver = 0;
 #define FIELD_BT(name,dxf) FIELD(name, BT, dxf);
 #define FIELD_4BITS(name,dxf) FIELD_G_TRACE(name,4BITS,dxf)
 #define FIELD_BE(name,dxf) FIELD_3RD(name,dxf)
-#define FIELD_DD(name, _default, dxf)                                       \
-  LOG_TRACE(#name " " #dxf ": " FORMAT_DD ", default: " FORMAT_DD "\n", _obj->name, _default)
-#define FIELD_2DD(name, d1, d2, dxf) FIELD_DD(name.x, d1, dxf); FIELD_DD(name.y, d2, dxf+10);
-#define FIELD_3DD(name, def, dxf) { \
-    FIELD_DD(name.x, FIELD_VALUE(def.x), dxf); \
-    FIELD_DD(name.y, FIELD_VALUE(def.y), dxf+10); \
-    FIELD_DD(name.z, FIELD_VALUE(def.z), dxf+20); }
-#define FIELD_2RD(name,dxf) {FIELD(name.x, RD, dxf); FIELD(name.y, RD, dxf+10);}
-#define FIELD_2BD(name,dxf) {FIELD(name.x, BD, dxf); FIELD(name.y, BD, dxf+10);}
-#define FIELD_2BD_1(name,dxf) {FIELD(name.x, BD, dxf); FIELD(name.y, BD, dxf+1);}
-#define FIELD_3RD(name,dxf) {FIELD(name.x, RD, dxf); FIELD(name.y, RD, dxf+10); FIELD(name.z, RD, dxf+20);}
-#define FIELD_3BD(name,dxf) {FIELD(name.x, BD, dxf); FIELD(name.y, BD, dxf+10); FIELD(name.z, BD, dxf+20);}
-#define FIELD_3BD_1(name,dxf) {FIELD(name.x, BD, dxf); FIELD(name.y, BD, dxf+1); FIELD(name.z, BD, dxf+2);}
+#define FIELD_DD(name, _default, dxf) 
+#define FIELD_2DD(name, d1, d2, dxf) FIELD_2PT_TRACE(name, DD, dxf)
+#define FIELD_3DD(name, def, dxf) FIELD_3PT_TRACE(name, DD, dxf)
+#define FIELD_2RD(name,dxf) FIELD_2PT_TRACE(name,RD,dxf)
+#define FIELD_2BD(name,dxf) FIELD_2PT_TRACE(name,BD,dxf)
+#define FIELD_2BD_1(name,dxf) FIELD_2PT_TRACE(name,BD,dxf)
+#define FIELD_3RD(name,dxf) FIELD_3PT_TRACE(name,RD,dxf)
+#define FIELD_3BD(name,dxf) FIELD_3PT_TRACE(name,BD,dxf)
+#define FIELD_3BD_1(name,dxf) FIELD_3PT_TRACE(name,BD,dxf)
 #define FIELD_3DPOINT(name,dxf) FIELD_3BD(name,dxf)
 #define FIELD_CMC(name,dxf)\
   LOG_TRACE(#name ": index %d\n", _obj->name.index)
