@@ -61,7 +61,7 @@ static int dat_read_file (Bit_Chain *restrict dat, FILE *restrict fp,
     {
       LOG_ERROR("Not enough memory.\n")
         fclose(fp);
-      return -1;
+      return DWG_ERR_OUTOFMEM;
     }
 
   size = fread(dat->chain, sizeof(char), dat->size, fp);
@@ -73,7 +73,7 @@ static int dat_read_file (Bit_Chain *restrict dat, FILE *restrict fp,
       free(dat->chain);
       dat->chain = NULL;
       dat->size = 0;
-      return -1;
+      return DWG_ERR_IOERROR;
     }
   return 0;
 }
@@ -93,7 +93,7 @@ static int dat_read_stream (Bit_Chain *restrict dat, FILE *restrict fp)
       {
         LOG_ERROR("Not enough memory.\n");
         fclose(fp);
-        return -1;
+        return DWG_ERR_OUTOFMEM;
       }
     size = fread(&dat->chain[dat->size], sizeof(char), 4096, fp);
     dat->size += size;
@@ -106,7 +106,7 @@ static int dat_read_stream (Bit_Chain *restrict dat, FILE *restrict fp)
       fclose(fp);
       free(dat->chain);
       dat->chain = NULL;
-      return -1;
+      return DWG_ERR_IOERROR;
     }
 
   // clear the slack and realloc
@@ -132,6 +132,7 @@ dwg_read_file(const char *restrict filename, Dwg_Data *restrict dwg)
   struct stat attrib;
   size_t size;
   Bit_Chain bit_chain;
+  int error;
 
   loglevel = dwg->opts;
   memset(dwg, 0, sizeof(Dwg_Data));
@@ -146,7 +147,7 @@ dwg_read_file(const char *restrict filename, Dwg_Data *restrict dwg)
       if (stat(filename, &attrib))
         {
           LOG_ERROR("File not found: %s\n", filename);
-          return -1;
+          return DWG_ERR_IOERROR;
         }
       if (!(S_ISREG (attrib.st_mode)
 #ifndef _WIN32
@@ -155,14 +156,14 @@ dwg_read_file(const char *restrict filename, Dwg_Data *restrict dwg)
             ))
         {
           LOG_ERROR("Error: %s\n", filename);
-          return -1;
+          return DWG_ERR_IOERROR;
         }
       fp = fopen(filename, "rb");
     }
   if (!fp)
     {
       LOG_ERROR("Could not open file: %s\n", filename)
-      return -1;
+      return DWG_ERR_IOERROR;
     }
 
   /* Load whole file into memory, even if streamed (for now)
@@ -170,14 +171,12 @@ dwg_read_file(const char *restrict filename, Dwg_Data *restrict dwg)
   memset(&bit_chain, 0, sizeof(Bit_Chain));
   if (fp == stdin)
     {
-      int error;
       error = dat_read_stream(&bit_chain, fp);
       if (error)
         return error;
     }
   else
     {
-      int error;
       bit_chain.size = attrib.st_size;
       error = dat_read_file(&bit_chain, fp, filename);
       if (error)
@@ -186,13 +185,14 @@ dwg_read_file(const char *restrict filename, Dwg_Data *restrict dwg)
   fclose(fp);
 
   /* Decode the dwg structure */
-  if (dwg_decode(&bit_chain, dwg))
+  error = dwg_decode(&bit_chain, dwg);
+  if (error)
     {
       LOG_ERROR("Failed to decode file: %s\n", filename)
       free(bit_chain.chain);
       bit_chain.chain = NULL;
       bit_chain.size = 0;
-      return -1;
+      return error;
     }
 
   //TODO: does dwg hold any char* pointers to the bit_chain or are they all copied?
@@ -225,7 +225,7 @@ dxf_read_file(const char *restrict filename, Dwg_Data *restrict dwg)
   if (stat(filename, &attrib))
     {
       LOG_ERROR("File not found: %s\n", filename)
-      return -1;
+      return DWG_ERR_IOERROR;
     }
   if (!(S_ISREG (attrib.st_mode)
 #ifndef _WIN32
@@ -234,13 +234,13 @@ dxf_read_file(const char *restrict filename, Dwg_Data *restrict dwg)
         ))
     {
       LOG_ERROR("Error: %s\n", filename)
-      return -1;
+      return DWG_ERR_IOERROR;
     }
   fp = fopen(filename, "r");
   if (!fp)
     {
       LOG_ERROR("Could not open file: %s\n", filename)
-      return -1;
+      return DWG_ERR_IOERROR;
     }
 
   /* Load whole file into memory
@@ -255,7 +255,7 @@ dxf_read_file(const char *restrict filename, Dwg_Data *restrict dwg)
     {
       LOG_ERROR("Not enough memory.\n")
       fclose(fp);
-      return -1;
+      return DWG_ERR_OUTOFMEM;
     }
   dat.byte = 0;
   dat.bit = 0;
@@ -271,7 +271,7 @@ dxf_read_file(const char *restrict filename, Dwg_Data *restrict dwg)
       free(dat.chain);
       dat.chain = NULL;
       dat.size = 0;
-      return -1;
+      return DWG_ERR_IOERROR;
     }
   fclose(fp);
 
@@ -282,7 +282,7 @@ dxf_read_file(const char *restrict filename, Dwg_Data *restrict dwg)
       free(dat.chain);
       dat.chain = NULL;
       dat.size = 0;
-      return -1;
+      return DWG_ERR_INVALIDDWG;
     }
   /* See if ascii or binary */
   if (!memcmp(dat.chain, "AutoCAD Binary DXF", sizeof("AutoCAD Binary DXF")-1))
@@ -296,7 +296,7 @@ dxf_read_file(const char *restrict filename, Dwg_Data *restrict dwg)
       free(dat.chain);
       dat.chain = NULL;
       dat.size = 0;
-      return -1;
+      return error;
     }
 
   //TODO: does dwg hold any char* pointers to the dat or are they all copied?
@@ -313,6 +313,7 @@ dwg_write_file(const char *restrict filename, const Dwg_Data *restrict dwg)
   FILE *fh;
   struct stat attrib;
   Bit_Chain dat;
+  int error;
 
   assert(filename);
   assert(dwg);
@@ -321,7 +322,8 @@ dwg_write_file(const char *restrict filename, const Dwg_Data *restrict dwg)
 
   // Encode the DWG struct
   dat.size = 0;
-  if (dwg_encode ((Dwg_Data *)dwg, &dat))
+  error = dwg_encode ((Dwg_Data *)dwg, &dat);
+  if (error)
     {
       LOG_ERROR("Failed to encode datastructure.\n")
       if (dat.size > 0) {
@@ -329,20 +331,20 @@ dwg_write_file(const char *restrict filename, const Dwg_Data *restrict dwg)
         dat.chain = NULL;
         dat.size = 0;
       }
-      return -1;
+      return error;
     }
  
   // try opening the output file in write mode
   if (!stat (filename, &attrib))
     {
       LOG_ERROR("The file already exists. We won't overwrite it.")
-      return -1;
+      return DWG_ERR_IOERROR;
     }
   fh = fopen (filename, "wb");
   if (!fh)
     {
       LOG_ERROR("Failed to create the file: %s\n", filename)
-      return -1;
+      return DWG_ERR_IOERROR;
     }
 
   // Write the data into the file
@@ -353,7 +355,7 @@ dwg_write_file(const char *restrict filename, const Dwg_Data *restrict dwg)
       free (dat.chain);
       dat.chain = NULL;
       dat.size = 0;
-      return -1;
+      return DWG_ERR_IOERROR;
     }
   fclose (fh);
 

@@ -2411,13 +2411,13 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
       ent->num_eed = 0;
       ent->picture_exists = 0;
       ent->num_handles = 0;
-      return 0;
+      return error;
     }
   LOG_TRACE("handle: %d.%d.%lX [5]\n", _obj->handle.code,
             _obj->handle.size, _obj->handle.value)
 
   PRE(R_13) {
-    return 0;
+    return DWG_ERR_NOTYETSUPPORTED;
   }
   error = dwg_decode_eed(dat, (Dwg_Object_Object *)ent);
   if (error)
@@ -4007,7 +4007,7 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
               if (!bit_read_H(dat, &obj->handle))
                 {
                   LOG_TRACE("handle: %d.%d.%lX [5]\n",
-                           obj->handle.code, obj->handle.size, obj->handle.value)
+                            obj->handle.code, obj->handle.size, obj->handle.value)
                 }
               object_address = dat->byte;
               obj->supertype = DWG_SUPERTYPE_UNKNOWN;

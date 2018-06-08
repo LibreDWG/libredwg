@@ -1018,7 +1018,7 @@ bit_read_H(Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
       LOG_ERROR("Invalid handle-reference, longer than 4 bytes: %i.%i.%lu",
                 handle->code, handle->size, handle->value)
       handle->size = 0;
-      return (-1);
+      return DWG_ERR_INVALIDHANDLE;
     }
 
   // TODO: little-endian only
@@ -1026,7 +1026,7 @@ bit_read_H(Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
   for (i = handle->size - 1; i >= 0; i--)
     val[i] = bit_read_RC(dat);
 
-  return (0);
+  return 0;
 }
 
 /** Write handle-references.
