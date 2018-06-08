@@ -328,9 +328,9 @@ static bool env_var_checked_p;
   if (dat->version >= R_2007) bit_set_position(hdl_dat, obj->hdlpos); \
   RESET_VER
 
-/* returns -1 if not added, else returns the new objid.
-   does a complete handleref rescan to invalidate and resolve
-   all internal obj pointers after a realloc.
+/** Returns -1 if not added, else returns the new objid.
+   Does a complete handleref rescan to invalidate and resolve
+   all internal obj pointers after a object[] realloc.
 */
 #define DWG_ENTITY(token) \
 EXPORT long dwg_add_##token (Dwg_Data * dwg)    \
@@ -349,7 +349,7 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)    \
     bit_write_BS(&dat, DWG_TYPE_##token);       \
   }                                             \
   bit_set_position(&dat, 0);                    \
-  if (dwg_decode_add_object(dwg, &dat, &dat, 0)) \
+  if (-1 == dwg_decode_add_object(dwg, &dat, &dat, 0)) \
     dwg_resolve_objectrefs_silent(dwg);         \
   if (num_objs == dwg->num_objects)             \
     return -1;                                  \
@@ -380,9 +380,9 @@ static void dwg_encode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict ob
     } \
 }
 
-/* returns -1 if not added, else returns the new objid.
-   does a complete handleref rescan to invalidate and resolve
-   all internal obj pointers after a realloc.
+/** Returns -1 if not added, else returns the new objid.
+   Does a complete handleref rescan to invalidate and resolve
+   all internal obj pointers after a object[] realloc.
 */
 #define DWG_OBJECT(token) \
 EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
@@ -401,7 +401,7 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
     bit_write_BS(&dat, DWG_TYPE_##token);        \
   }                                              \
   bit_set_position(&dat, 0);                     \
-  if (dwg_decode_add_object(dwg, &dat, &dat, 0)) \
+  if (-1 == dwg_decode_add_object(dwg, &dat, &dat, 0)) \
     dwg_resolve_objectrefs_silent(dwg);          \
   if (num_objs == dwg->num_objects)              \
     return -1;                                   \
@@ -585,7 +585,7 @@ dwg_encode(Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   VERSION(R_2007)
     {
       LOG_ERROR(WE_CAN "We don't encode R2007 sections yet")
-      return 1;
+      return DWG_ERR_NOTYETSUPPORTED;
     }
 
   /* r2004 file header (compressed + encrypted) */
@@ -656,7 +656,7 @@ dwg_encode(Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
     LOG_WARN("TODO write_R2004_section_map(dat, dwg)")
     LOG_TRACE("\n")
-    return 1;
+    return DWG_ERR_NOTYETSUPPORTED;
   }
 
   /*------------------------------------------------------------
@@ -779,7 +779,8 @@ dwg_encode(Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
    */
   omap = (Object_Map *) malloc(dwg->num_objects * sizeof(Object_Map));
   if (!omap) {
-    LOG_ERROR("Out of memory"); return 2;
+    LOG_ERROR("Out of memory");
+    return DWG_ERR_OUTOFMEM;
   }
   for (j = 0; j < dwg->num_objects; j++)
     {
@@ -1062,15 +1063,16 @@ dwg_encode(Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 static int
 encode_preR13(Dwg_Data* dwg, Bit_Chain* dat)
 {
-  return 1;
+  return DWG_ERR_NOTYETSUPPORTED;
 }
 
 
 #include "dwg.spec"
 
 /** dwg_encode_variable_type
- * encode object by class name, not type. if type > 500.
- * returns 1 if object could be encoded and 0 otherwise.
+ * Encode object by class name, not type. if type > 500.
+ * Returns 1 if object could be encoded and 0 otherwise.
+ * FIXME: pass thru error code
  */
 static int
 dwg_encode_variable_type(Dwg_Data* dwg, Bit_Chain* dat, Dwg_Object* obj)

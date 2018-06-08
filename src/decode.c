@@ -3613,8 +3613,8 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
 }
 
 /** Adds an object to the DWG (i.e. dwg->object[dwg->num_objects])
-    Returns 0 or 1 on success.
-    Returns 1 if the dwg->object pool was re-alloced.
+    Returns 0 or -1 on success.
+    Returns -1 if the dwg->object pool was re-alloced.
  */
 int
 dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
@@ -4057,7 +4057,7 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
    */
   dat->byte = oldpos;
   dat->bit = previous_bit;
-  return num == 0 ? 0 : 1; //re-alloced or not
+  return num == 0 ? 0 : -1; //re-alloced or not
 }
 
 #undef IS_DECODER
