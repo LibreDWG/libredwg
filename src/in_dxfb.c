@@ -403,60 +403,35 @@ dwg_dxfb_variable_type(Dwg_Data * dwg, Bit_Chain *dat, Dwg_Object* obj)
                klass->wasazombie ? " was proxy" : "")
   
   if (!strcmp(dxfname, "ACDBDICTIONARYWDFLT"))
-    {
-      assert(!is_entity);
       return dwg_dxfb_DICTIONARYWDLFT(dat, obj);
-    }
   if (!strcmp(dxfname, "DICTIONARYVAR"))
-    {
-      assert(!is_entity);
       return dwg_dxfb_DICTIONARYVAR(dat, obj);
-    }
   if (!strcmp(dxfname, "HATCH"))
-    {
-      assert(!is_entity);
       return dwg_dxfb_HATCH(dat, obj);
-    }
   if (!strcmp(dxfname, "FIELDLIST"))
     {
       UNTESTED_CLASS;
-      assert(!is_entity);
       return dwg_dxfb_FIELDLIST(dat, obj);
     }
   if (!strcmp(dxfname, "GROUP"))
     {
       UNTESTED_CLASS;
-      assert(!is_entity);
       return dwg_dxfb_GROUP(dat, obj);
     }
   if (!strcmp(dxfname, "IDBUFFER"))
-    {
       return dwg_dxfb_IDBUFFER(dat, obj);
-    }
   if (!strcmp(dxfname, "IMAGE"))
-    {
       return dwg_dxfb_IMAGE(dat, obj);
-    }
   if (!strcmp(dxfname, "IMAGEDEF"))
-    {
       return dwg_dxfb_IMAGEDEF(dat, obj);
-    }
   if (!strcmp(dxfname, "IMAGEDEF_REACTOR"))
-    {
       return dwg_dxfb_IMAGEDEF_REACTOR(dat, obj);
-    }
   if (!strcmp(dxfname, "LAYER_INDEX"))
-    {
       return dwg_dxfb_LAYER_INDEX(dat, obj);
-    }
   if (!strcmp(dxfname, "LAYOUT"))
-    {
       return dwg_dxfb_LAYOUT(dat, obj);
-    }
   if (!strcmp(dxfname, "LWPOLYLINE"))
-    {
       return dwg_dxfb_LWPOLYLINE(dat, obj);
-    }
   if (!strcmp(dxfname, "MULTILEADER"))
     {
 #ifdef DEBUG_MULTILEADER
@@ -468,52 +443,29 @@ dwg_dxfb_variable_type(Dwg_Data * dwg, Bit_Chain *dat, Dwg_Object* obj)
 #endif
     }
   if (!strcmp(dxfname, "MLEADERSTYLE"))
-    {
       return dwg_dxfb_MLEADERSTYLE(dat, obj);
-    }
   if (!strcmp(dxfname, "OLE2FRAME"))
-    {
       return dwg_dxfb_OLE2FRAME(dat, obj);
-    }
   if (!strcmp(dxfname, "OBJECTCONTEXTDATA") ||
       !strcmp(klass->cppname, "AcDbObjectContextData"))
-    {
-      return dwg_dxfb_OBJECTCONTEXTDATA(dat, obj);
-    }
+    return dwg_dxfb_OBJECTCONTEXTDATA(dat, obj);
   if (!strcmp(dxfname, "OBJECT_PTR") ||
       !strcmp(klass->cppname, "CAseDLPNTableRecord"))
-    {
-      assert(!is_entity);
-      return dwg_dxfb_OBJECT_PTR(dat, obj);
-    }
+    return dwg_dxfb_OBJECT_PTR(dat, obj);
   if (!strcmp(dxfname, "ACDBPLACEHOLDER"))
-    {
       return dwg_dxfb_PLACEHOLDER(dat, obj);
-    }
   if (!strcmp(dxfname, "PROXY"))
-    {
       return dwg_dxfb_PROXY_OBJECT(dat, obj);
-    }
   if (!strcmp(dxfname, "RASTERVARIABLES"))
-    {
       return dwg_dxfb_RASTERVARIABLES(dat, obj);
-    }
   if (!strcmp(dxfname, "SCALE"))
-    {
       return dwg_dxfb_SCALE(dat, obj);
-    }
   if (!strcmp(dxfname, "SORTENTSTABLE"))
-    {
       return dwg_dxfb_SORTENTSTABLE(dat, obj);
-    }
   if (!strcmp(dxfname, "SPATIAL_FILTER"))
-    {
       return dwg_dxfb_SPATIAL_FILTER(dat, obj);
-    }
   if (!strcmp(dxfname, "SPATIAL_INDEX"))
-    {
       return dwg_dxfb_SPATIAL_INDEX(dat, obj);
-    }
   if (!strcmp(dxfname, "TABLE") ||
       !strcmp(dxfname, "ACAD_TABLE"))
     {
@@ -524,12 +476,10 @@ dwg_dxfb_variable_type(Dwg_Data * dwg, Bit_Chain *dat, Dwg_Object* obj)
     {
       UNTESTED_CLASS;
       return dwg_dxfb_WIPEOUTVARIABLES(dat, obj);
-      return DWG_ERR_UNHANDLEDCLASS;
+      //return DWG_ERR_UNHANDLEDCLASS;
     }
   if (!strcmp(dxfname, "WIPEOUT"))
-    {
       return dwg_dxfb_WIPEOUT(dat, obj);
-    }
   if (!strcmp(dxfname, "FIELDLIST"))
     {
       UNTESTED_CLASS;
@@ -562,14 +512,12 @@ dwg_dxfb_variable_type(Dwg_Data * dwg, Bit_Chain *dat, Dwg_Object* obj)
   if (!strcmp(dxfname, "ACDBSECTIONVIEWSTYLE"))
     {
       UNHANDLED_CLASS;
-      assert(!is_entity);
       //dwg_dxfb_SECTIONVIEWSTYLE(dat, obj);
       return DWG_ERR_UNHANDLEDCLASS;
     }
   if (!strcmp(dxfname, "ACDBDETAILVIEWSTYLE"))
     {
       UNHANDLED_CLASS;
-      assert(!is_entity);
       //dwg_dxfb_DETAILVIEWSTYLE(dat, obj);
       return DWG_ERR_UNHANDLEDCLASS;
     }
@@ -607,7 +555,6 @@ dwg_dxfb_variable_type(Dwg_Data * dwg, Bit_Chain *dat, Dwg_Object* obj)
   if (!strcmp(dxfname, "DIMASSOC"))
     {
       UNHANDLED_CLASS;
-      assert(!is_entity);
       //dwg_dxfb_DIMASSOC(dat, obj);
       return DWG_ERR_UNHANDLEDCLASS;
     }
@@ -615,11 +562,9 @@ dwg_dxfb_variable_type(Dwg_Data * dwg, Bit_Chain *dat, Dwg_Object* obj)
     {
 #ifdef DEBUG_MATERIAL
       UNTESTED_CLASS;
-      assert(!is_entity);
       return dwg_dxfb_MATERIAL(dat, obj);
 #else
       UNHANDLED_CLASS;
-      assert(!is_entity);
       return DWG_ERR_UNHANDLEDCLASS;
 #endif
     }
@@ -627,11 +572,9 @@ dwg_dxfb_variable_type(Dwg_Data * dwg, Bit_Chain *dat, Dwg_Object* obj)
     {
 #ifdef DEBUG_PLOTSETTINGS
       UNTESTED_CLASS;
-      assert(!is_entity);
       return dwg_dxfb_PLOTSETTINGS(dat, obj);
 #else
       UNHANDLED_CLASS;
-      assert(!is_entity);
       return DWG_ERR_UNHANDLEDCLASS;
 #endif
     }
@@ -639,11 +582,9 @@ dwg_dxfb_variable_type(Dwg_Data * dwg, Bit_Chain *dat, Dwg_Object* obj)
     {
 #ifdef DEBUG_LIGHT
       UNTESTED_CLASS;
-      assert(is_entity);
       return dwg_dxfb_LIGHT(dat, obj);
 #else
       UNHANDLED_CLASS;
-      assert(is_entity);
       return DWG_ERR_UNHANDLEDCLASS;
 #endif
     }
@@ -651,46 +592,39 @@ dwg_dxfb_variable_type(Dwg_Data * dwg, Bit_Chain *dat, Dwg_Object* obj)
     {
 #ifdef DEBUG_SUN
       UNTESTED_CLASS;
-      assert(!is_entity);
       return dwg_dxfb_SUN(dat, obj);
 #else
       UNHANDLED_CLASS;
-      assert(!is_entity);
       return DWG_ERR_UNHANDLEDCLASS;
 #endif
     }
   if (!strcmp(dxfname, "TABLESTYLE"))
     {
       UNHANDLED_CLASS;
-      assert(!is_entity);
       //dwg_dxfb_TABLESTYLE(dat, obj);
       return DWG_ERR_UNHANDLEDCLASS;
     }
   if (!strcmp(dxfname, "DBCOLOR"))
     {
       UNHANDLED_CLASS;
-      assert(!is_entity);
       //dwg_dxfb_DBCOLOR(dat, obj);
       return DWG_ERR_UNHANDLEDCLASS;
     }
   if (!strcmp(dxfname, "ACDBASSOCNETWORK"))
     {
       UNHANDLED_CLASS;
-      assert(!is_entity);
       //dwg_dxfb_ASSOCNETWORK(dat, obj);
       return DWG_ERR_UNHANDLEDCLASS;
     }
   if (!strcmp(dxfname, "ACDBASSOC2DCONSTRAINTGROUP"))
     {
       UNHANDLED_CLASS;
-      assert(!is_entity);
       //dwg_dxfb_ASSOC2DCONSTRAINTGROUP(dat, obj);
       return DWG_ERR_UNHANDLEDCLASS;
     }
   if (!strcmp(dxfname, "ACDBASSOCGEOMDEPENDENCY"))
     {
       UNHANDLED_CLASS;
-      assert(!is_entity);
       //dwg_dxfb_ASSOCGEOMDEPENDENCY(dat, obj);
       return DWG_ERR_UNHANDLEDCLASS;
     }
