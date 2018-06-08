@@ -197,9 +197,9 @@ main(int argc, char *argv[])
   memset(&dwg, 0, sizeof(Dwg_Data));
   dwg.opts = opts;
   error = dwg_read_file(argv[i], &dwg);
-  if (error)
+  if (error >= DWG_ERR_CRITICAL)
     {
-      puts("Not able to read dwg file!");
+      fprintf(stderr, "READ ERROR 0x%x\n", error);
       dwg_free(&dwg);
       return 1;
     }

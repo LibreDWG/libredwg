@@ -299,9 +299,9 @@ main(int argc, char *argv[])
   memset(&g_dwg, 0, sizeof(Dwg_Data));
   g_dwg.opts = opts;
   error = dwg_read_file(argv[i], &g_dwg);
-  if (!error)
+  if (error < DWG_ERR_CRITICAL)
     output_SVG(&g_dwg);
 
   dwg_free(&g_dwg);
-  return error;
+  return error >= DWG_ERR_CRITICAL ? 1 : 0;
 }

@@ -144,8 +144,8 @@ main (int argc, char *argv[])
   dwg.opts = opts;
   fprintf(stderr, "Reading DWG file %s\n", filename_in);
   error = dwg_read_file(filename_in, &dwg);
-  if (error)
-      fprintf(stderr, "READ ERROR\n");
+  if (error >= DWG_ERR_CRITICAL)
+    fprintf(stderr, "READ ERROR 0x%x\n", error);
 
   printf("Writing DXF file %s", filename_out);
   if (version)
@@ -179,7 +179,7 @@ main (int argc, char *argv[])
     else
       error = dwg_write_dxf(&dat, &dwg);
   }
-  if (error)
+  if (error >= DWG_ERR_CRITICAL)
     fprintf(stderr, "WRITE ERROR\n");
   if (dat.fh)
     fclose(dat.fh);
@@ -187,5 +187,5 @@ main (int argc, char *argv[])
   if (filename_out != argv[2])
     free (filename_out);
   dwg_free(&dwg);
-  return error;
+  return error >= DWG_ERR_CRITICAL ? 1 : 0;
 }

@@ -172,21 +172,21 @@ dwg_read_file(const char *restrict filename, Dwg_Data *restrict dwg)
   if (fp == stdin)
     {
       error = dat_read_stream(&bit_chain, fp);
-      if (error)
+      if (error > DWG_ERR_CRITICAL)
         return error;
     }
   else
     {
       bit_chain.size = attrib.st_size;
       error = dat_read_file(&bit_chain, fp, filename);
-      if (error)
+      if (error > DWG_ERR_CRITICAL)
         return error;
     }
   fclose(fp);
 
   /* Decode the dwg structure */
   error = dwg_decode(&bit_chain, dwg);
-  if (error)
+  if (error > DWG_ERR_CRITICAL)
     {
       LOG_ERROR("Failed to decode file: %s\n", filename)
       free(bit_chain.chain);
@@ -290,7 +290,7 @@ dxf_read_file(const char *restrict filename, Dwg_Data *restrict dwg)
   else
     error = dwg_read_dxf(&dat, dwg);
   
-  if (error)
+  if (error > DWG_ERR_CRITICAL)
     {
       LOG_ERROR("Failed to decode DXF file: %s\n", filename)
       free(dat.chain);
@@ -323,7 +323,7 @@ dwg_write_file(const char *restrict filename, const Dwg_Data *restrict dwg)
   // Encode the DWG struct
   dat.size = 0;
   error = dwg_encode ((Dwg_Data *)dwg, &dat);
-  if (error)
+  if (error > DWG_ERR_CRITICAL)
     {
       LOG_ERROR("Failed to encode datastructure.\n")
       if (dat.size > 0) {

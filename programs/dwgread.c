@@ -144,10 +144,10 @@ main(int argc, char *argv[])
   error = dwg_read_file(argv[i], &dwg);
   if (!fmt)
     {
-      if (error)
-        printf("\nERROR\n");
+      if (error >= DWG_ERR_CRITICAL)
+        printf("\nERROR 0x%x\n", error);
       else
-        printf("\nSUCCESS\n");
+        printf("\nSUCCESS 0x%x\n", error);
     }
   else
     {
@@ -174,10 +174,10 @@ main(int argc, char *argv[])
       if (outfile)
         {
           fclose(dat.fh);
-          if (error)
-            printf("\nERROR\n");
+          if (error >= DWG_ERR_CRITICAL)
+            printf("\nERROR 0x%x\n", error);
           else
-            printf("\nSUCCESS\n");
+            printf("\nSUCCESS 0x%x\n", error);
         }
     }
   if (dwg.header.version)

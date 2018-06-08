@@ -374,6 +374,7 @@ typedef enum DWG_ERROR
   DWG_ERR_OUTOFMEM         = 1 << 13,/* 8192 */
 
 } Dwg_Error;
+#define DWG_ERR_CRITICAL DWG_ERR_VALUEOUTOFBOUNDS
 
 /**
    handles resolve absolute or relative indices to objects.

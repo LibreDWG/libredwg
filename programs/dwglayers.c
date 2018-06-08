@@ -94,8 +94,8 @@ main (int argc, char *argv[])
   memset(&dwg, 0, sizeof(Dwg_Data));
   dwg.opts = 0;
   error = dwg_read_file(filename_in, &dwg);
-  if (error)
-    fprintf(stderr, "READ ERROR\n");
+  if (error >= DWG_ERR_CRITICAL)
+    fprintf(stderr, "READ ERROR 0x%x\n", error);
 
   for (i=0; i < dwg.layer_control.num_entries; i++)
     {
@@ -119,5 +119,5 @@ main (int argc, char *argv[])
     }
 
   dwg_free(&dwg);
-  return error;
+  return error >= DWG_ERR_CRITICAL ? 1 : 0;
 }

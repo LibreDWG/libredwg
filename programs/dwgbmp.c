@@ -56,7 +56,7 @@ static int
 get_bmp(char *dwgfile, char *bmpfile, unsigned int opts)
 {
   unsigned char *data;
-  int success;
+  int error;
   BITCODE_RL size;
   size_t retval;
   FILE *fh;
@@ -72,15 +72,14 @@ get_bmp(char *dwgfile, char *bmpfile, unsigned int opts)
   memset(&dwg, 0, sizeof(Dwg_Data));
   dwg.opts = opts;
   /* Read dwg data */
-  success = dwg_read_file(dwgfile, &dwg);
-  if (success != 0) {
-    fprintf(stderr, "Unable to read file %s\n", dwgfile);
-    return success;
+  error = dwg_read_file(dwgfile, &dwg);
+  if (error >= DWG_ERR_CRITICAL) {
+    fprintf(stderr, "Unable to read file %s: 0x%x\n", dwgfile, error);
+    return error;
   }
 
   /* Get DIB bitmap data */
   data = dwg_bmp(&dwg, &size);
-
   if (!data) {
     fprintf(stderr, "No thumb in dwg file\n");
     return 0;
@@ -124,7 +123,7 @@ get_bmp(char *dwgfile, char *bmpfile, unsigned int opts)
   printf ("Success. Written preview image to '%s'\n", bmpfile);
   free (bmpfile);
   dwg_free(&dwg);
-  return success;
+  return 0;
 }
 
 int

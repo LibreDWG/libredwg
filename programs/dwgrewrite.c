@@ -121,12 +121,12 @@ main (int argc, char *argv[])
    */
   printf("Reading DWG file %s\n", filename_in);
   error = dwg_read_file(filename_in, &dwg);
-  if (error)
-      printf("READ ERROR\n");
+  if (error >= DWG_ERR_CRITICAL)
+    fprintf(stderr, "READ ERROR 0x%x\n", error);
   num_objects = dwg.num_objects;
   if (!num_objects) {
     printf("Read 0 objects\n");
-    if (error)
+    if (error >= DWG_ERR_CRITICAL)
       return error;
   }
 
@@ -151,8 +151,8 @@ main (int argc, char *argv[])
   }
   error = dwg_write_file(filename_out, &dwg);
 #endif
-  if (error) {
-      printf("WRITE ERROR\n");
+  if (error >= DWG_ERR_CRITICAL) {
+    printf("WRITE ERROR 0x%x\n", error);
   }
   dwg_free(&dwg);
 
@@ -162,10 +162,11 @@ main (int argc, char *argv[])
     printf("\n");
   printf("Re-reading created file %s\n", filename_out);
   error = dwg_read_file(filename_out, &dwg);
-  if (error)
+  if (error >= DWG_ERR_CRITICAL)
       printf("re-READ ERROR\n");
   if (num_objects && (num_objects != dwg.num_objects))
-    printf("re-READ num_objects: %lu, should be %lu\n", dwg.num_objects, num_objects);
+    printf("re-READ num_objects: %lu, should be %lu\n",
+           dwg.num_objects, num_objects);
 #endif
   if (filename_out != argv[2])
     free (filename_out);

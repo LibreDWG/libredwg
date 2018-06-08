@@ -2121,8 +2121,8 @@ decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
       dwg->header.num_infos = 0;
     }
 #endif
-  resolve_objectref_vector(dat, dwg);
 
+  error |= resolve_objectref_vector(dat, dwg);
   return error;
 }
 
