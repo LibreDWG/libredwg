@@ -3335,7 +3335,8 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
       assert(!is_entity);
       return dwg_decode_SPATIAL_INDEX(dat, obj);
     }
-  if (!strcmp(dxfname, "TABLE"))
+  if (!strcmp(dxfname, "TABLE") || 
+      !strcmp(dxfname, "ACAD_TABLE"))
     {
       assert(is_entity);
       return dwg_decode_TABLE(dat, obj);
@@ -3361,32 +3362,28 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
       assert(!is_entity);
       return dwg_decode_SCALE(dat, obj);
     }
-  if (!strcmp(dxfname, "AcDbField"))
+  if (!strcmp(dxfname, "FIELD"))
     {
       UNTESTED_CLASS;
       return dwg_decode_FIELD(dat, obj);
-      return DWG_ERR_UNHANDLEDCLASS;
     }
   if (!strcmp(dxfname, "TABLECONTENT"))
     {
       UNTESTED_CLASS;
       assert(!is_entity);
       return dwg_decode_TABLECONTENT(dat, obj);
-      return DWG_ERR_UNHANDLEDCLASS;
     }
   if (!strcmp(dxfname, "TABLEGEOMETRY"))
     {
       UNTESTED_CLASS;
       assert(!is_entity);
       return dwg_decode_TABLEGEOMETRY(dat, obj);
-      return DWG_ERR_UNHANDLEDCLASS;
     }
   if (!strcmp(dxfname, "GEODATA"))
     {
       UNTESTED_CLASS;
       assert(!is_entity);
       return dwg_decode_GEODATA(dat, obj);
-      return 0;
     }
   if (!strcmp(dxfname, "VBA_PROJECT"))
     {
@@ -3537,6 +3534,18 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
       return DWG_ERR_UNHANDLEDCLASS;
 #endif
     }
+  if (!strcmp(dxfname, "DATATABLE"))
+    {
+#ifdef DEBUG_DATATABLE
+      UNTESTED_CLASS;
+      assert(!is_entity);
+      return dwg_decode_DATATABLE(dat, obj);
+#else      
+      UNHANDLED_CLASS;
+      assert(!is_entity);
+      return DWG_ERR_UNHANDLEDCLASS;
+#endif
+    }
   if (!strcmp(dxfname, "TABLESTYLE"))
     {
       UNHANDLED_CLASS;
@@ -3579,6 +3588,8 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
       //dwg_decode_LEADEROBJECTCONTEXTDATA(dat, obj);
       return DWG_ERR_UNHANDLEDCLASS;
     }
+
+  // TODO: ACSH_BOX_CLASS, ACAD_EVALUATION_GRAPH, ACSH_HISTORY_CLASS
 
   LOG_WARN("Unknown Class %s %d %s (0x%x%s)", is_entity ? "entity" : "object", \
            klass->number, dxfname, klass->proxyflag,                    \

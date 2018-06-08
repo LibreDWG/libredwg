@@ -304,6 +304,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_ASSOCNETWORK,
   DWG_TYPE_CAMERA,
   DWG_TYPE_CELLSTYLEMAP,
+  DWG_TYPE_DATATABLE,
   DWG_TYPE_DBCOLOR,
   DWG_TYPE_DETAILVIEWSTYLE,
   DWG_TYPE_DIMASSOC,
@@ -4269,7 +4270,16 @@ typedef struct _dwg_object_SUN
 } Dwg_Object_SUN;
 
 /**
- Unknown Class entity (unused)
+ Object DATATABLE (varies) UNKNOWN FIELDS
+ */
+typedef struct _dwg_object_DATATABLE
+{
+  struct _dwg_object_object *parent;
+  //...
+} Dwg_Object_DATATABLE;
+
+/**
+ Unknown Class entity, a blob
  */
 typedef struct _dwg_entity_UNKNOWN_ENT
 {
@@ -4282,7 +4292,7 @@ typedef struct _dwg_entity_UNKNOWN_ENT
 } Dwg_Entity_UNKNOWN_ENT;
 
 /**
- Unknown Class object
+ Unknown Class object, a blob
  */
 typedef struct _dwg_object_UNKNOWN_OBJ
 {
@@ -4524,6 +4534,7 @@ typedef struct _dwg_object_object
     //TODO Dwg_Object_ASSOCNETWORK *ASSOCNETWORK;
     //Dwg_Object_CSACDOCUMENTOPTIONS *CSACDOCUMENTOPTIONS;
     Dwg_Object_CELLSTYLEMAP *CELLSTYLEMAP;
+    Dwg_Object_DATATABLE *DATATABLE;
     Dwg_Object_DBCOLOR *DBCOLOR;
     //TODO Dwg_Object_DETAILVIEWSTYLE *DETAILVIEWSTYLE;
     Dwg_Object_DICTIONARY *DICTIONARY;
@@ -5099,6 +5110,7 @@ EXPORT long dwg_add_PROXY_OBJECT (Dwg_Data * dwg);
 //EXPORT long dwg_add_ASSOCGEOMDEPENDENCY (Dwg_Data * dwg);
 //EXPORT long dwg_add_ASSOCNETWORK (Dwg_Data * dwg);
 EXPORT long dwg_add_CELLSTYLEMAP (Dwg_Data * dwg);
+//EXPORT long dwg_add_DATATABLE (Dwg_Data * dwg);
 EXPORT long dwg_add_DBCOLOR (Dwg_Data * dwg);
 EXPORT long dwg_add_DETAILVIEWSTYLE (Dwg_Data * dwg);
 EXPORT long dwg_add_DIMASSOC (Dwg_Data * dwg);

@@ -447,7 +447,8 @@ dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
       free(dxfname);
       return dwg_free_SPATIAL_INDEX(obj);
     }
-  if (!strcmp(dxfname, "TABLE"))
+  if (!strcmp(dxfname, "TABLE") || 
+      !strcmp(dxfname, "ACAD_TABLE"))
     {
       free(dxfname);
       return dwg_free_TABLE(obj);
@@ -578,6 +579,15 @@ dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
       free(dxfname);
 #ifdef DEBUG_EXTRUDEDSURFACE
       return dwg_free_EXTRUDEDSURFACE(obj);
+#else
+      return DWG_ERR_UNHANDLEDCLASS;
+#endif
+    }
+  if (!strcmp(dxfname, "DATATABLE"))
+    {
+      free(dxfname);
+#ifdef DEBUG_DATATABLE
+      return dwg_free_DATATABLE(obj);
 #else
       return DWG_ERR_UNHANDLEDCLASS;
 #endif

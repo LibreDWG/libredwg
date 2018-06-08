@@ -4071,7 +4071,9 @@ DWG_ENTITY(TABLE)
             LOG_ERROR("Invalid data_flags in TABLE entity\n")
             break;
         }
+#ifndef IS_FREE
       FIELD_3PT_TRACE(scale, DD, 41);
+#endif
     }
   
   FIELD_BD (rotation, 50);
@@ -4116,8 +4118,9 @@ DWG_ENTITY(TABLE)
               //total_num_attr_defs += FIELD_VALUE (cells[rcount1].num_attr_defs);
             }
         }
-      if (FIELD_VALUE(cells[rcount1].type) == 1 ||
-          FIELD_VALUE(cells[rcount1].type) == 2)
+      if (FIELD_VALUE(cells) &&
+          (FIELD_VALUE(cells[rcount1].type) == 1 ||
+           FIELD_VALUE(cells[rcount1].type) == 2))
         { /* common to both text and block cells */
           FIELD_B (cells[rcount1].additional_data_flag, 0);
           if (FIELD_VALUE(cells[rcount1].additional_data_flag) == 1)
@@ -5491,6 +5494,13 @@ DWG_OBJECT(SUN)
 
 DWG_OBJECT_END
 
+// (varies) TODO
+DWG_OBJECT(DATATABLE)
+
+  DEBUG_HERE()
+  
+DWG_OBJECT_END
+
 // (varies) UNTESTED
 DWG_OBJECT(OBJECT_PTR) //empty? only xdata. CAseDLPNTableRecord
 
@@ -5683,4 +5693,5 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
+
 

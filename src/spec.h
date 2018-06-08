@@ -161,19 +161,23 @@
 
 #ifndef REPEAT
 
-#define REPEAT_CN(times, name, type)                    \
-  for (rcount1=0; rcount<(long)times; rcount1++)
+#define REPEAT_CN(times, name, type) \
+  if (_obj->name) \
+    for (rcount1=0; rcount<(long)times; rcount1++)
 #define REPEAT_N(times, name, type) \
   if (dat->version >= R_2000 && times > 0x1000) { \
     fprintf(stderr, "Invalid rcount1 %ld", (long)times); return DWG_ERR_VALUEOUTOFBOUNDS; } \
-  for (rcount1=0; rcount1<(long)times; rcount1++)
+  if (_obj->name) \
+    for (rcount1=0; rcount1<(long)times; rcount1++)
 
 #define _REPEAT(times, name, type, idx) \
   if (dat->version >= R_2000 && _obj->times > 0x1000) { \
     fprintf(stderr, "Invalid rcount " #idx " %ld", (long)_obj->times); return DWG_ERR_VALUEOUTOFBOUNDS; } \
-  for (rcount##idx=0; rcount##idx<(long)_obj->times; rcount##idx++)
+  if (_obj->name) \
+    for (rcount##idx=0; rcount##idx<(long)_obj->times; rcount##idx++)
 #define _REPEAT_C(times, name, type, idx) \
-  for (rcount##idx=0; rcount##idx<(long)_obj->times; rcount##idx++)
+  if (_obj->name) \
+    for (rcount##idx=0; rcount##idx<(long)_obj->times; rcount##idx++)
 #define REPEAT(times, name, type)  _REPEAT(times, name, type, 1)
 #define REPEAT2(times, name, type) _REPEAT(times, name, type, 2)
 #define REPEAT3(times, name, type) _REPEAT(times, name, type, 3)
