@@ -1472,15 +1472,16 @@ DWG_ENTITY_END
 #ifdef IS_DECODER
 
 #define DECODE_3DSOLID decode_3dsolid(dat, hdl_dat, obj, _obj);
-void decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj,
+int decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj,
                     Dwg_Entity_3DSOLID* _obj);
 
-void decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj,
+int decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj,
                     Dwg_Entity_3DSOLID* _obj)
 {
   Dwg_Data* dwg = obj->parent;
   int vcount, rcount1, rcount2;
-  int i=0;
+  int error = 0;
+  int i = 0;
   unsigned long j;
   int index;
   int total_size = 0;
@@ -1598,6 +1599,7 @@ void decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj,
           FIELD_HANDLE (history_id, ANYCODE, 350);
       }
     }
+  return error;
 }
 #else
 #define DECODE_3DSOLID {}
@@ -1607,13 +1609,15 @@ void decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj,
 #ifdef IS_ENCODER
 
 #define ENCODE_3DSOLID encode_3dsolid(dat, hdl_dat, obj, _obj);
-static void encode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj,
-                           Dwg_Entity_3DSOLID* _obj)
+static int encode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj,
+                          Dwg_Entity_3DSOLID* _obj)
 {
+  int error = 0;
   //TODO Implement-me
   assert(dat);
   assert(obj);
   LOG_ERROR("encode_3dsolid nyi")
+  return DWG_ERR_NOTYETSUPPORTED;
 }
 #else
 #define ENCODE_3DSOLID {}
@@ -1727,7 +1731,7 @@ DWG_OBJECT(DICTIONARY)
     {
       LOG_ERROR("Invalid dictionary with more than 10.000 entries. Handle: %lu\n",
               obj->handle.value);
-      return;
+      return DWG_ERR_VALUEOUTOFBOUNDS;
     }
 
 #ifdef IS_DXF
@@ -1777,7 +1781,7 @@ DWG_OBJECT(DICTIONARYWDLFT)
     {
       LOG_ERROR("Invalid dictionary with more than 10.000 entries. Handle: %lu\n",
               obj->handle.value);
-      return;
+      return DWG_ERR_VALUEOUTOFBOUNDS;
     }
   FIELD_VECTOR_T (text, numitems, 0);
 
@@ -3799,16 +3803,16 @@ DWG_OBJECT_END
       break; \
     case 128: /* kBuffer */ \
       LOG_ERROR("Unknown data type in TABLE entity: \"kBuffer\".\n") \
-        break; \
+      break; \
     case 256: /* kResBuf */ \
       LOG_ERROR("Unknown data type in TABLE entity: \"kResBuf\".\n") \
-        break; \
+      break; \
     case 512: /* kGeneral since r2007*/ \
       LOG_ERROR("Unknown data type in TABLE entity: \"kGeneral\".\n") \
-        break; \
+      break; \
     default: \
       LOG_ERROR("Invalid data type in TABLE entity\n") \
-        break; \
+      break; \
     } \
   SINCE(R_2007) \
     { \
@@ -5679,3 +5683,4 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
+

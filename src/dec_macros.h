@@ -394,13 +394,13 @@
   for (rcount1=0; rcount1<(long)times; rcount1++)
 #define REPEAT_N(times, name, type) \
   if (dat->version >= R_2010 && times > 0x1000) { \
-    fprintf(stderr, "Invalid rcount %ld", (long)times); return; } \
+    fprintf(stderr, "Invalid rcount %ld", (long)times); return DWG_ERR_VALUEOUTOFBOUNDS; } \
   if (times) _obj->name = (type *) calloc(times, sizeof(type)); \
   for (rcount1=0; rcount1<(long)times; rcount1++)
 
 #define _REPEAT(times, name, type, idx) \
   if (dat->version >= R_2010 && _obj->times > 0x1000) { \
-    fprintf(stderr, "Invalid rcount " #idx " %ld", (long)_obj->times); return; } \
+    fprintf(stderr, "Invalid rcount " #idx " %ld", (long)_obj->times); return DWG_ERR_VALUEOUTOFBOUNDS; } \
   if (_obj->times) _obj->name = (type *) calloc(_obj->times, sizeof(type)); \
   for (rcount##idx=0; rcount##idx<(long)_obj->times; rcount##idx++)
 #define _REPEAT_C(times, name, type, idx) \
@@ -420,10 +420,10 @@
 #define COMMON_ENTITY_HANDLE_DATA \
   SINCE(R_13) {\
     START_HANDLE_STREAM; \
-    dwg_decode_common_entity_handle_data(dat, hdl_dat, obj); \
+    error |= dwg_decode_common_entity_handle_data(dat, hdl_dat, obj); \
   }
 
-#define DWG_ENTITY(token) static void \
+#define DWG_ENTITY(token) static int \
 dwg_decode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
   long vcount, rcount1, rcount2, rcount3, rcount4; \
@@ -432,8 +432,10 @@ dwg_decode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
   Dwg_Data* dwg = obj->parent; \
   Bit_Chain* hdl_dat = dat; \
   Bit_Chain* str_dat; \
+  int error; \
   if (dat->version >= R_2007) { \
     str_dat = malloc(sizeof(Bit_Chain)); /* seperate string buffer */ \
+    if (!str_dat) return DWG_ERR_OUTOFMEM; \
     *str_dat = *dat; \
   } else \
     str_dat = dat; \
@@ -442,16 +444,18 @@ dwg_decode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
   obj->supertype = DWG_SUPERTYPE_ENTITY;\
   _ent = obj->tio.entity = (Dwg_Object_Entity*)calloc(1, sizeof(Dwg_Object_Entity));\
   obj->tio.entity->tio.token = (Dwg_Entity_##token *)calloc(1, sizeof (Dwg_Entity_##token));\
+  if (!_ent || !obj->tio.entity->tio.token) return DWG_ERR_OUTOFMEM; \
   ent = obj->tio.entity->tio.token;\
   _obj = ent;\
   _ent->dwg = dwg; \
   _ent->objid = obj->index; /* obj ptr itself might move */ \
   _obj->parent = obj->tio.entity;\
-  if (dwg_decode_entity(dat, hdl_dat, str_dat, _ent)) return;
+  error = dwg_decode_entity(dat, hdl_dat, str_dat, _ent); \
+  if (error) return error;
 
-#define DWG_ENTITY_END }
+#define DWG_ENTITY_END return error & ~DWG_ERR_UNHANDLEDCLASS; }
 
-#define DWG_OBJECT(token) static void \
+#define DWG_OBJECT(token) static int \
 dwg_decode_ ## token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
   long vcount, rcount1, rcount2, rcount3, rcount4; \
@@ -459,19 +463,24 @@ dwg_decode_ ## token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
   Dwg_Data* dwg = obj->parent;\
   Bit_Chain* hdl_dat = dat; /* handle stream initially the same */ \
   Bit_Chain* str_dat; \
+  int error; \
   if (dat->version >= R_2007) { \
     str_dat = calloc(1, sizeof(Bit_Chain)); /* seperate string buffer */ \
+    if (!str_dat) return DWG_ERR_OUTOFMEM; \
   } else \
     str_dat = dat; \
   LOG_INFO("Object " #token " ")\
   obj->supertype = DWG_SUPERTYPE_OBJECT;\
   obj->tio.object = (Dwg_Object_Object*)calloc (1, sizeof(Dwg_Object_Object)); \
+  if (!obj->tio.object) return DWG_ERR_OUTOFMEM; \
   obj->tio.object->tio.token = (Dwg_Object_##token *)calloc (1, sizeof(Dwg_Object_##token)); \
+  if (!obj->tio.object->tio.token) return DWG_ERR_OUTOFMEM; \
   obj->tio.object->dwg = dwg; \
   obj->tio.object->objid = obj->index; /* obj ptr itself might move */ \
-  if (dwg_decode_object(dat, hdl_dat, str_dat, obj->tio.object)) return; \
+  error = dwg_decode_object(dat, hdl_dat, str_dat, obj->tio.object); \
+  if (error) return error; \
   _obj = obj->tio.object->tio.token; \
   _obj->parent = obj->tio.object;
 
-#define DWG_OBJECT_END }
+#define DWG_OBJECT_END return error & ~DWG_ERR_UNHANDLEDCLASS; }
 

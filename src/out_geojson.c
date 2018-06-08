@@ -253,7 +253,7 @@ dwg_geojson_feature(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
 #define FEATURE(subclass, obj) HASH; dwg_geojson_feature(dat, obj, #subclass)
 #define ENDFEATURE ENDHASH
 
-/* returns 1 if object could be printd and 0 otherwise
+/* returns 0 if object could be printed
  */
 static int
 dwg_geojson_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
@@ -264,11 +264,13 @@ dwg_geojson_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   Dwg_Class *klass;
   int is_entity;
 
-  if ((obj->type - 500) > dwg->num_classes)
-    return 0;
-
   i = obj->type - 500;
+  if (i < 0 || i >= (int)dwg->num_classes)
+    return DWG_ERR_INVALIDTYPE;
+
   klass = &dwg->dwg_class[i];
+  if (!klass || ! klass->dxfname)
+    return DWG_ERR_INTERNALERROR;
   dxfname = klass->dxfname;
   // almost always false
   //is_entity = dwg_class_is_entity(klass);
@@ -295,7 +297,7 @@ dwg_geojson_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
         LASTENDARRAY;
       ENDGEOMETRY;
       ENDFEATURE;
-      return 1;
+      return 0;
     }
   if (!strcmp(dxfname, "GEODATA"))
     {
@@ -304,7 +306,7 @@ dwg_geojson_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       FEATURE(AcDbObject:AcDbGeoData, obj);
       //which fields?
       ENDFEATURE;
-      return 1;
+      return 0;
     }
   if (!strcmp(dxfname, "GEOPOSITIONMARKER"))
     {
@@ -324,7 +326,7 @@ dwg_geojson_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
         }
       ENDGEOMETRY;
       ENDFEATURE;
-      return 1;
+      return 0;
     }
 
   return 0;

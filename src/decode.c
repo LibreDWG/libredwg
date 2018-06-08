@@ -736,6 +736,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
   long unsigned int object_end;
   long unsigned int pvz;
   unsigned int j, k;
+  int error = 0;
 
   {
     int i;
@@ -953,9 +954,9 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
         dwg->layout_number = klass->number;
 
       dwg->num_classes++;
-      if (dwg->num_classes > 100)
+      if (dwg->num_classes > 500)
         {
-          LOG_ERROR("number of classes is greater than 100");
+          LOG_ERROR("number of classes is greater than 500");
           break;
         }
     }
@@ -1005,6 +1006,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
       long unsigned int last_offset;
       //long unsigned int last_handle;
       long unsigned int oldpos = 0;
+      int added;
       startpos = dat->byte;
 
       section_size = bit_read_RS_LE(dat);
@@ -1036,7 +1038,9 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
           if (object_begin > last_offset)
             object_begin = last_offset;
 
-          dwg_decode_add_object(dwg, dat, dat, last_offset);
+          added = dwg_decode_add_object(dwg, dat, dat, last_offset);
+          if (added > 0)
+            error |= added; // else not added (skipped) or -1 for re-allocated
 #if 0
           kobj = dwg->num_objects;
           if (dwg->num_objects > kobj)
@@ -1230,7 +1234,8 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
   //step II of handles parsing: resolve pointers from handle value
   //XXX: move this somewhere else
   LOG_TRACE("\nResolving pointers from ObjectRef vector.\n")
-  return resolve_objectref_vector(dat, dwg);
+  error |= resolve_objectref_vector(dat, dwg);
+  return error;
 }
 
 static int
@@ -1241,32 +1246,30 @@ resolve_objectref_vector(Bit_Chain* dat, Dwg_Data * dwg)
 
   for (i = 0; i < dwg->num_object_refs; i++)
     {
-      LOG_TRACE("==========\n")
-      LOG_TRACE("-objref: HANDLE(%d.%d.%lX) Absolute:%lX/%lu\n",
-                dwg->object_ref[i]->handleref.code,
-                dwg->object_ref[i]->handleref.size,
-                dwg->object_ref[i]->handleref.value,
-                dwg->object_ref[i]->absolute_ref, dwg->object_ref[i]->absolute_ref)
+      Dwg_Object_Ref *ref = dwg->object_ref[i];
+      LOG_INSANE("==========\n")
+      LOG_TRACE("-objref[%3ld]: HANDLE(%d.%d.%lX) Absolute:%lX/%lu\n", i,
+                ref->handleref.code, ref->handleref.size,
+                ref->handleref.value,
+                ref->absolute_ref, ref->absolute_ref)
 
       // search the handle in all objects
-      obj = dwg_resolve_handle(dwg, dwg->object_ref[i]->absolute_ref);
+      obj = dwg_resolve_handle(dwg, ref->absolute_ref);
       if (obj)
         {
-          LOG_TRACE("-found:  HANDLE(%d.%d.%lX)\n",
-              obj->handle.code,
-              obj->handle.size,
-              obj->handle.value)
+          LOG_TRACE("-found:     HANDLE(%d.%d.%lX) => [%ld]\n",
+                    obj->handle.code, obj->handle.size,
+                    obj->handle.value, obj->index)
         }
-
       //assign found pointer to objectref vector
-      dwg->object_ref[i]->obj = obj;
+      ref->obj = obj;
 
-      if (DWG_LOGLEVEL >= DWG_LOGLEVEL_HANDLE)
+      if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE)
         {
           if (obj)
             dwg_print_object(dat, obj);
           else
-            LOG_WARN("Null object pointer: object_ref[%lu]", i)
+            LOG_TRACE("Null object pointer: object_ref[%lu]\n", i)
         }
     }
   return dwg->num_object_refs ? 0 : DWG_ERR_VALUEOUTOFBOUNDS;
@@ -1450,11 +1453,11 @@ decompress_R2004_section(Bit_Chain *restrict dat, char *restrict decomp,
  * The Section Map is a vector of number, size, and address triples used
  * to locate the sections in the file.
  */
-static void
+static int
 read_R2004_section_map(Bit_Chain* dat, Dwg_Data * dwg)
 {
   char *decomp, *ptr;
-  int i;
+  int i, error;
   int section_address;
   int bytes_remaining;
   uint32_t comp_data_size   = dwg->r2004_header.comp_data_size;
@@ -1468,11 +1471,10 @@ read_R2004_section_map(Bit_Chain* dat, Dwg_Data * dwg)
   if (!decomp)
     {
       LOG_ERROR("Out of memory");
-      return;
+      return DWG_ERR_OUTOFMEM;
     }
 
-  decompress_R2004_section(dat, decomp, comp_data_size);
-
+  error = decompress_R2004_section(dat, decomp, comp_data_size);
   LOG_TRACE("\n#### Read 2004 Section Page Map ####\n")
 
   section_address = 0x100;  // starting address
@@ -1491,7 +1493,7 @@ read_R2004_section_map(Bit_Chain* dat, Dwg_Data * dwg)
       if (!dwg->header.section)
         {
           LOG_ERROR("Out of memory");
-          return;
+          return DWG_ERR_OUTOFMEM;
         }
 
       dwg->header.section[i].number  = *((int32_t*)ptr);
@@ -1524,6 +1526,7 @@ read_R2004_section_map(Bit_Chain* dat, Dwg_Data * dwg)
       i++;
     }
   free(decomp);
+  return 0;
 }
 
 static Dwg_Section*
@@ -1537,12 +1540,12 @@ find_section(Dwg_Data *dwg, unsigned long int index)
       if ((unsigned long int)dwg->header.section[i].number == index)
         return &dwg->header.section[i];
     }
-  return 0;
+  return NULL;
 }
 
 /* Read R2004, 2010+ Section Info
  */
-static void
+static int
 read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
                         unsigned long int comp_data_size,
                         unsigned long int decomp_data_size)
@@ -1557,7 +1560,7 @@ read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
   if (!decomp)
     {
       LOG_ERROR("Out of memory");
-      return;
+      return DWG_ERR_OUTOFMEM;
     }
 
   decompress_R2004_section(dat, decomp, comp_data_size);
@@ -1568,7 +1571,7 @@ read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
   if (!dwg->header.section_info)
     {
       LOG_ERROR("Out of memory");
-      return;
+      return DWG_ERR_OUTOFMEM;
     }
 
   LOG_TRACE("\n#### Read 2004 Section Info fields ####\n")
@@ -1612,7 +1615,7 @@ read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
       if (!info->sections)
         {
           LOG_ERROR("Out of memory");
-          return;
+          return DWG_ERR_OUTOFMEM;
         }
 
       if (info->num_sections < 10000)
@@ -1640,9 +1643,12 @@ read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
 	{
 	  LOG_ERROR("Section count %u in area %d too high! Skipping",
                     info->num_sections, i)
+          free(decomp);
+          return DWG_ERR_VALUEOUTOFBOUNDS;
 	}
     }
   free(decomp);
+  return 0;
 }
 
 /* Encrypted Section Header */
@@ -1897,7 +1903,7 @@ read_2004_section_header(Bit_Chain* dat, Dwg_Data *dwg)
       dwg->header_vars.size = bit_read_RL(&sec_dat);
       LOG_TRACE("size: " FORMAT_RL "\n", dwg->header_vars.size);
       PRE (R_2007) {
-        dwg_decode_header_variables(&sec_dat, &sec_dat, &sec_dat, dwg);
+        error |= dwg_decode_header_variables(&sec_dat, &sec_dat, &sec_dat, dwg);
       } else {
         Bit_Chain hdl_dat, str_dat;
         BITCODE_RL endbits = 160; //start bit: 16 sentinel + 4 size
@@ -1914,7 +1920,7 @@ read_2004_section_header(Bit_Chain* dat, Dwg_Data *dwg)
         endbits += dwg->header_vars.bitsize;
         bit_set_position(&hdl_dat, endbits);
         section_string_stream(&sec_dat, dwg->header_vars.bitsize, &str_dat);
-        dwg_decode_header_variables(&sec_dat, &hdl_dat, &str_dat, dwg);
+        error |= dwg_decode_header_variables(&sec_dat, &hdl_dat, &str_dat, dwg);
       }
     }
   free(sec_dat.chain);
@@ -1974,7 +1980,9 @@ read_2004_section_handles(Bit_Chain* dat, Dwg_Data *dwg)
           LOG_TRACE("\n< Next object: %lu\t", dwg->num_objects)
           LOG_HANDLE("Handle: %li\tOffset: %ld @%lu\n", handle, offset, last_offset)
 
-          dwg_decode_add_object(dwg, &obj_dat, &obj_dat, last_offset);
+          error |= dwg_decode_add_object(dwg, &obj_dat, &obj_dat, last_offset);
+          // we dont stop encoding on single errors, but we sum them all up
+          // as combined bitmask
         }
 
       if (hdl_dat.byte == oldpos)
@@ -1990,7 +1998,7 @@ read_2004_section_handles(Bit_Chain* dat, Dwg_Data *dwg)
 
   free(hdl_dat.chain);
   free(obj_dat.chain);
-  return 0;
+  return error;
 }
 
 /* for 2004 and 2010+ */
@@ -2092,13 +2100,13 @@ decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
       FIELD_RL(checksum, 0);
 
       // Data section map, par 4.5
-      read_R2004_section_info(dat, dwg,
-         _obj->comp_data_size, _obj->decomp_data_size);
+      error |= read_R2004_section_info(dat, dwg,
+                 _obj->comp_data_size, _obj->decomp_data_size);
     }
 
-  error += read_2004_section_classes(dat, dwg);
-  error += read_2004_section_header(dat, dwg);
-  error += read_2004_section_handles(dat, dwg);
+  error |= read_2004_section_classes(dat, dwg);
+  error |= read_2004_section_header(dat, dwg);
+  error |= read_2004_section_handles(dat, dwg);
 
   /* Clean up. XXX? Need this to write the sections, at least the name and type */
 #if 0
@@ -2815,13 +2823,14 @@ dwg_decode_header_variables(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_d
 {
   Dwg_Header_Variables* _obj = &dwg->header_vars;
   Dwg_Object* obj = NULL;
+  int error = 0;
 
   #include "header_variables.spec"
 
-  return 0;
+  return error;
 }
 
-static void
+static int
 dwg_decode_common_entity_handle_data(Bit_Chain* dat, Bit_Chain* hdl_dat,
                                      Dwg_Object *restrict obj)
 {
@@ -2830,12 +2839,14 @@ dwg_decode_common_entity_handle_data(Bit_Chain* dat, Bit_Chain* hdl_dat,
   Dwg_Object_Entity *_obj;
   long unsigned int vcount;
   Dwg_Object_Entity *ent;
+  int error = 0;
 
   ent = obj->tio.entity;
   _obj = ent;
 
   #include "common_entity_handle_data.spec"
 
+  return error;
 }
 
 enum RES_BUF_VALUE_TYPE
@@ -3069,6 +3080,7 @@ decode_preR13_entities(unsigned long start, unsigned long end,
                        unsigned long offset,
                        Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
+  int error = 0;
   int num = dwg->num_objects;
   dat->bit = 0;
   LOG_TRACE("entities: (0x%lx-0x%lx, offset 0x%lx) TODO\n", start, end, offset)
@@ -3101,67 +3113,67 @@ decode_preR13_entities(unsigned long start, unsigned long end,
     
       obj->address = dat->byte;
       DEBUG_HERE();
-      error = decode_entity_preR13(dat, obj, ent);
+      error |= decode_entity_preR13(dat, obj, ent); // error: eed not decodable
 
       switch (obj->type)
         {
           case 1:
-            dwg_decode_LINE(dat, obj);
+            error |= dwg_decode_LINE(dat, obj);
             break;
           case 2:
-            dwg_decode_POINT(dat, obj);
+            error |= dwg_decode_POINT(dat, obj);
             break;
           case 3:
-            dwg_decode_CIRCLE(dat, obj);
+            error |= dwg_decode_CIRCLE(dat, obj);
             break;
           case 4:
-            dwg_decode_SHAPE(dat, obj);
+            error |= dwg_decode_SHAPE(dat, obj);
             break;
           case 7:
-            dwg_decode_TEXT(dat, obj);
+            error |= dwg_decode_TEXT(dat, obj);
             break;
           case 8:
-            dwg_decode_ARC(dat, obj);
+            error |= dwg_decode_ARC(dat, obj);
             break;
           case 9:
-            dwg_decode_TRACE(dat, obj);
+            error |= dwg_decode_TRACE(dat, obj);
             break;
           case 11:
-            dwg_decode_SOLID(dat, obj);
+            error |= dwg_decode_SOLID(dat, obj);
             break;
           case 12:
-            dwg_decode_BLOCK(dat, obj);
+            error |= dwg_decode_BLOCK(dat, obj);
             break;
           case 13:
-            dwg_decode_ENDBLK(dat, obj);
+            error |= dwg_decode_ENDBLK(dat, obj);
             break;
           case 14:
-            dwg_decode_INSERT(dat, obj);
+            error |= dwg_decode_INSERT(dat, obj);
             break;
           case 15:
-            dwg_decode_ATTDEF(dat, obj);
+            error |= dwg_decode_ATTDEF(dat, obj);
             break;
           case 16:
-            dwg_decode_ATTRIB(dat, obj);
+            error |= dwg_decode_ATTRIB(dat, obj);
             break;
           case 17:
-            dwg_decode_SEQEND(dat, obj);
+            error |= dwg_decode_SEQEND(dat, obj);
             break;
           case 19:
-            dwg_decode_POLYLINE_2D(dat, obj);
+            error |= dwg_decode_POLYLINE_2D(dat, obj);
             break;
           case 20:
-            dwg_decode_VERTEX_2D(dat, obj);
+            error |= dwg_decode_VERTEX_2D(dat, obj);
             break;
           case 22:
-            dwg_decode__3DFACE(dat, obj);
+            error |= dwg_decode__3DFACE(dat, obj);
             break;
           case 23:
             //TODO check opts for the type of dimension
-            dwg_decode_DIMENSION_LINEAR(dat, obj);
+            error |= dwg_decode_DIMENSION_LINEAR(dat, obj);
             break;
           case 24:
-            dwg_decode_VPORT(dat, obj);
+            error |= dwg_decode_VPORT(dat, obj);
             break;
           default:
             LOG_ERROR("Unknown object type %d", obj->type)
@@ -3182,25 +3194,28 @@ decode_preR13_entities(unsigned long start, unsigned long end,
 
 /** dwg_decode_variable_type
  * decode object by class name, not type. if type > 500.
- * returns 1 if object could be decoded and 0 otherwise.
+ * returns 0 on success
  */
 static int
 dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
                          Dwg_Object *restrict obj)
 {
-  int i;
+  int i, error = 0;
   char *dxfname;
   int is_entity;
   Dwg_Class *klass;
 
-  if (obj->type < 500 || (obj->type - 500) > dwg->num_classes)
+  i = obj->type - 500;
+  if (i < 0 || i >= dwg->num_classes)
     {
-      LOG_ERROR("Invalid object type %d, only %d classes", obj->type, dwg->num_classes);
+      LOG_ERROR("Invalid object type %d, only %u classes",
+                obj->type, dwg->num_classes);
       return DWG_ERR_INVALIDTYPE;
     }
 
-  i = obj->type - 500;
   klass = &dwg->dwg_class[i];
+  if (!klass || ! klass->dxfname)
+    return DWG_ERR_INTERNALERROR;
   dxfname = obj->dxfname = klass->dxfname;
   // almost always false
   is_entity = dwg_class_is_entity(klass);
@@ -3219,183 +3234,158 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
   if (!strcmp(dxfname, "ACDBDICTIONARYWDFLT"))
     {
       assert(!is_entity);
-      dwg_decode_DICTIONARYWDLFT(dat, obj);
       //obj->type = DWG_TYPE_DICTIONARYWDLFT;
-      return 1;
+      return dwg_decode_DICTIONARYWDLFT(dat, obj);
     }
   if (!strcmp(dxfname, "DICTIONARYVAR"))
     {
       assert(!is_entity);
-      dwg_decode_DICTIONARYVAR(dat, obj);
-      return 1;
+      return dwg_decode_DICTIONARYVAR(dat, obj);
     }
   if (!strcmp(dxfname, "HATCH"))
     {
       assert(!is_entity);
-      dwg_decode_HATCH(dat, obj);
-      return 1;
+      return dwg_decode_HATCH(dat, obj);
     }
   if (!strcmp(dxfname, "GROUP"))
     {
       assert(!is_entity);
-      dwg_decode_GROUP(dat, obj);
-      return 1;
+      return dwg_decode_GROUP(dat, obj);
     }
   if (!strcmp(dxfname, "IDBUFFER"))
     {
       assert(!is_entity);
-      dwg_decode_IDBUFFER(dat, obj);
-      return 1;
+      return dwg_decode_IDBUFFER(dat, obj);
     }
   if (!strcmp(dxfname, "IMAGE"))
     {
       assert(is_entity);
-      dwg_decode_IMAGE(dat, obj);
-      return 1;
+      return dwg_decode_IMAGE(dat, obj);
     }
   if (!strcmp(dxfname, "IMAGEDEF"))
     {
       assert(!is_entity);
-      dwg_decode_IMAGEDEF(dat, obj);
-      return 1;
+      return dwg_decode_IMAGEDEF(dat, obj);
     }
   if (!strcmp(dxfname, "IMAGEDEF_REACTOR"))
     {
       assert(!is_entity);
-      dwg_decode_IMAGEDEF_REACTOR(dat, obj);
-      return 1;
+      return dwg_decode_IMAGEDEF_REACTOR(dat, obj);
     }
   if (!strcmp(dxfname, "LAYER_INDEX"))
     {
       assert(!is_entity);
-      dwg_decode_LAYER_INDEX(dat, obj);
-      return 1;
+      return dwg_decode_LAYER_INDEX(dat, obj);
     }
   if (!strcmp(dxfname, "LAYOUT"))
     {
       assert(!is_entity);
-      dwg_decode_LAYOUT(dat, obj);
-      return 1;
+      return dwg_decode_LAYOUT(dat, obj);
     }
   if (!strcmp(dxfname, "LWPOLYLINE"))
     {
       assert(is_entity);
-      dwg_decode_LWPOLYLINE(dat, obj);
-      return 1;
+      return dwg_decode_LWPOLYLINE(dat, obj);
     }
   if (!strcmp(dxfname, "OLE2FRAME"))
     {
       assert(is_entity);
-      dwg_decode_OLE2FRAME(dat, obj);
-      return 1;
+      return dwg_decode_OLE2FRAME(dat, obj);
     }
   if (!strcmp(dxfname, "OBJECTCONTEXTDATA") ||
       !strcmp(klass->cppname, "AcDbObjectContextData"))
     {
       assert(!is_entity);
-      dwg_decode_OBJECTCONTEXTDATA(dat, obj);
-      return 1;
+      return dwg_decode_OBJECTCONTEXTDATA(dat, obj);
     }
-  if (!strcmp(dxfname, "OBJECT_PTR")
-      || !strcmp(klass->cppname, "CAseDLPNTableRecord"))
+  if (!strcmp(dxfname, "OBJECT_PTR") ||
+      !strcmp(klass->cppname, "CAseDLPNTableRecord"))
     {
       UNTESTED_CLASS;
       assert(!is_entity);
-      dwg_decode_OBJECT_PTR(dat, obj);
-      return 1;
+      return dwg_decode_OBJECT_PTR(dat, obj);
     }
   if (!strcmp(dxfname, "ACDBPLACEHOLDER"))
     {
       assert(!is_entity);
-      dwg_decode_PLACEHOLDER(dat, obj);
-      return 1;
+      return dwg_decode_PLACEHOLDER(dat, obj);
     }
   if (!strcmp(dxfname, "PROXY"))
     {
       assert(!is_entity);
-      dwg_decode_PROXY_OBJECT(dat, obj);
-      return 1;
+      return dwg_decode_PROXY_OBJECT(dat, obj);
     }
   if (!strcmp(dxfname, "RASTERVARIABLES"))
     {
       assert(!is_entity);
-      dwg_decode_RASTERVARIABLES(dat, obj);
-      return 1;
+      return dwg_decode_RASTERVARIABLES(dat, obj);
     }
   if (!strcmp(dxfname, "SORTENTSTABLE"))
     {
       assert(!is_entity);
-      dwg_decode_SORTENTSTABLE(dat, obj);
-      return 1;
+      return dwg_decode_SORTENTSTABLE(dat, obj);
     }
   if (!strcmp(dxfname, "SPATIAL_FILTER"))
     {
       assert(!is_entity);
-      dwg_decode_SPATIAL_FILTER(dat, obj);
-      return 1;
+      return dwg_decode_SPATIAL_FILTER(dat, obj);
     }
   if (!strcmp(dxfname, "SPATIAL_INDEX"))
     {
       assert(!is_entity);
-      dwg_decode_SPATIAL_INDEX(dat, obj);
-      return 1;
+      return dwg_decode_SPATIAL_INDEX(dat, obj);
     }
   if (!strcmp(dxfname, "TABLE"))
     {
       assert(is_entity);
-      dwg_decode_TABLE(dat, obj);
-      return 1;
+      return dwg_decode_TABLE(dat, obj);
     }
   if (!strcmp(dxfname, "XRECORD"))
     {
       assert(!is_entity);
-      dwg_decode_XRECORD(dat, obj);
-      return 1;
+      return dwg_decode_XRECORD(dat, obj);
     }
   if (!strcmp(dxfname, "WIPEOUT"))
     {
       assert(is_entity);
-      dwg_decode_WIPEOUT(dat, obj);
-      return 1;
+      return dwg_decode_WIPEOUT(dat, obj);
     }
   if (!strcmp(dxfname, "FIELDLIST"))
     {
       UNTESTED_CLASS;
       assert(!is_entity);
-      dwg_decode_FIELDLIST(dat, obj);
-      return 1;
+      return dwg_decode_FIELDLIST(dat, obj);
     }
   if (!strcmp(dxfname, "SCALE"))
     {
       assert(!is_entity);
-      dwg_decode_SCALE(dat, obj);
-      return 1;
+      return dwg_decode_SCALE(dat, obj);
     }
   if (!strcmp(dxfname, "AcDbField"))
     {
       UNTESTED_CLASS;
-      dwg_decode_FIELD(dat, obj);
-      return 0;
+      return dwg_decode_FIELD(dat, obj);
+      return DWG_ERR_UNHANDLEDCLASS;
     }
   if (!strcmp(dxfname, "TABLECONTENT"))
     {
       UNTESTED_CLASS;
       assert(!is_entity);
-      dwg_decode_TABLECONTENT(dat, obj);
-      return 0;
+      return dwg_decode_TABLECONTENT(dat, obj);
+      return DWG_ERR_UNHANDLEDCLASS;
     }
   if (!strcmp(dxfname, "TABLEGEOMETRY"))
     {
       UNTESTED_CLASS;
       assert(!is_entity);
-      dwg_decode_TABLEGEOMETRY(dat, obj);
-      return 0;
+      return dwg_decode_TABLEGEOMETRY(dat, obj);
+      return DWG_ERR_UNHANDLEDCLASS;
     }
   if (!strcmp(dxfname, "GEODATA"))
     {
       UNTESTED_CLASS;
       assert(!is_entity);
-      dwg_decode_GEODATA(dat, obj);
+      return dwg_decode_GEODATA(dat, obj);
       return 0;
     }
   if (!strcmp(dxfname, "VBA_PROJECT"))
@@ -3404,11 +3394,10 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
 #ifdef DEBUG_VBA_PROJECT
       // Has its own section?
       UNTESTED_CLASS;
-      dwg_decode_VBA_PROJECT(dat, obj);
-      return 1;
+      return dwg_decode_VBA_PROJECT(dat, obj);
 #else
       UNHANDLED_CLASS;
-      return 0;
+      return DWG_ERR_UNHANDLEDCLASS;
 #endif
     }
   if (!strcmp(dxfname, "MULTILEADER"))
@@ -3416,82 +3405,76 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
       assert(is_entity);
 #ifdef DEBUG_MULTILEADER
       UNTESTED_CLASS; //broken Leader_Line's/Points
-      dwg_decode_MULTILEADER(dat, obj);
-      return 1;
+      return dwg_decode_MULTILEADER(dat, obj);
 #else
       UNHANDLED_CLASS;
-      return 0;
+      return DWG_ERR_UNHANDLEDCLASS;
 #endif
     }
   if (!strcmp(dxfname, "MLEADERSTYLE"))
     {
       assert(!is_entity);
-      dwg_decode_MLEADERSTYLE(dat, obj);
-      return 1;
+      return dwg_decode_MLEADERSTYLE(dat, obj);
     }
   if (!strcmp(dxfname, "WIPEOUTVARIABLES"))
     {
       UNTESTED_CLASS;
       assert(!is_entity);
-      dwg_decode_WIPEOUTVARIABLES(dat, obj);
-      return 1;
+      return dwg_decode_WIPEOUTVARIABLES(dat, obj);
     }
   if (!strcmp(dxfname, "CELLSTYLEMAP"))
     {
       assert(!is_entity);
 #ifdef DEBUG_CELLSTYLEMAP
       UNTESTED_CLASS; //broken
-      dwg_decode_CELLSTYLEMAP(dat, obj);
-      return 1;
+      return dwg_decode_CELLSTYLEMAP(dat, obj);
 #else
       UNHANDLED_CLASS;
-      return 0;
+      return DWG_ERR_UNHANDLEDCLASS;
 #endif
     }
   if (!strcmp(dxfname, "VISUALSTYLE"))
     {
-      dwg_decode_VISUALSTYLE(dat, obj);
-      return 1;
+      return dwg_decode_VISUALSTYLE(dat, obj);
     }
   if (!strcmp(dxfname, "ACDBSECTIONVIEWSTYLE"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
       //dwg_decode_SECTIONVIEWSTYLE(dat, obj);
-      return 0;
+      return DWG_ERR_UNHANDLEDCLASS;
     }
   if (!strcmp(dxfname, "ACDBDETAILVIEWSTYLE"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
       //dwg_decode_DETAILVIEWSTYLE(dat, obj);
-      return 0;
+      return DWG_ERR_UNHANDLEDCLASS;
     }
   if (!strcmp(dxfname, "ARCALIGNEDTEXT"))
     {
       UNHANDLED_CLASS;
       //assert(!is_entity);
       //dwg_decode_ARCALIGNEDTEXT(dat, obj);
-      return 0;
+      return DWG_ERR_UNHANDLEDCLASS;
     }
   if (!strcmp(dxfname, "DIMASSOC"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
       //dwg_decode_DIMASSOC(dat, obj);
-      return 0;
+      return DWG_ERR_UNHANDLEDCLASS;
     }
   if (!strcmp(dxfname, "MATERIAL"))
     {
 #ifdef DEBUG_MATERIAL
       UNTESTED_CLASS;
       assert(!is_entity);
-      dwg_decode_MATERIAL(dat, obj);
-      return 1;
+      return dwg_decode_MATERIAL(dat, obj);
 #else
       UNHANDLED_CLASS;
       assert(!is_entity);
-      return 0;
+      return DWG_ERR_UNHANDLEDCLASS;
 #endif
     }
   if (!strcmp(dxfname, "PLOTSETTINGS"))
@@ -3499,12 +3482,11 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
 #ifdef DEBUG_PLOTSETTINGS
       UNTESTED_CLASS;
       assert(!is_entity);
-      dwg_decode_PLOTSETTINGS(dat, obj);
-      return 1;
+      return dwg_decode_PLOTSETTINGS(dat, obj);
 #else
       UNHANDLED_CLASS;
       assert(!is_entity);
-      return 0;
+      return DWG_ERR_UNHANDLEDCLASS;
 #endif
     }
   if (!strcmp(dxfname, "LIGHT"))
@@ -3512,12 +3494,11 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
 #ifdef DEBUG_LIGHT
       UNTESTED_CLASS;
       assert(is_entity);
-      dwg_decode_LIGHT(dat, obj);
-      return 1;
+      return dwg_decode_LIGHT(dat, obj);
 #else
       UNHANDLED_CLASS;
       assert(is_entity);
-      return 0;
+      return DWG_ERR_UNHANDLEDCLASS;
 #endif
     }
   if (!strcmp(dxfname, "SUN"))
@@ -3525,12 +3506,11 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
 #ifdef DEBUG_SUN // i.e. test/test-data/2000/1.dwg, referenced by VIEW 361
       UNTESTED_CLASS;
       assert(!is_entity);
-      dwg_decode_SUN(dat, obj);
-      return 1;
+      return dwg_decode_SUN(dat, obj);
 #else
       UNHANDLED_CLASS;
       assert(!is_entity);
-      return 0;
+      return DWG_ERR_UNHANDLEDCLASS;
 #endif
     }
   if (!strcmp(dxfname, "GEOPOSITIONMARKER"))
@@ -3538,12 +3518,11 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
 #ifdef DEBUG_GEOPOSITIONMARKER
       UNTESTED_CLASS;
       assert(is_entity);
-      dwg_decode_GEOPOSITIONMARKER(dat, obj);
-      return 1;
+      return dwg_decode_GEOPOSITIONMARKER(dat, obj);
 #else
       UNHANDLED_CLASS;
       assert(is_entity);
-      return 0;
+      return DWG_ERR_UNHANDLEDCLASS;
 #endif
     }
   if (!strcmp(dxfname, "EXTRUDEDSURFACE"))
@@ -3551,12 +3530,11 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
 #ifdef DEBUG_EXTRUDEDSURFACE
       UNTESTED_CLASS;
       assert(is_entity);
-      dwg_decode_EXTRUDEDSURFACE(dat, obj);
-      return 1;
+      return dwg_decode_EXTRUDEDSURFACE(dat, obj);
 #else
       UNHANDLED_CLASS;
       assert(is_entity);
-      return 0;
+      return DWG_ERR_UNHANDLEDCLASS;
 #endif
     }
   if (!strcmp(dxfname, "TABLESTYLE"))
@@ -3564,42 +3542,42 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
       UNHANDLED_CLASS;
       assert(!is_entity);
       //dwg_decode_TABLESTYLE(dat, obj);
-      return 0;
+      return DWG_ERR_UNHANDLEDCLASS;
     }
   if (!strcmp(dxfname, "DBCOLOR"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
       //dwg_decode_DBCOLOR(dat, obj);
-      return 0;
+      return DWG_ERR_UNHANDLEDCLASS;
     }
   if (!strcmp(dxfname, "ACDBASSOCNETWORK"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
       //dwg_decode_ASSOCNETWORK(dat, obj);
-      return 0;
+      return DWG_ERR_UNHANDLEDCLASS;
     }
   if (!strcmp(dxfname, "ACDBASSOC2DCONSTRAINTGROUP"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
       //dwg_decode_ASSOC2DCONSTRAINTGROUP(dat, obj);
-      return 0;
+      return DWG_ERR_UNHANDLEDCLASS;
     }
   if (!strcmp(dxfname, "ACDBASSOCGEOMDEPENDENCY"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
       //dwg_decode_ASSOCGEOMDEPENDENCY(dat, obj);
-      return 0;
+      return DWG_ERR_UNHANDLEDCLASS;
     }
   if (!strcmp(dxfname, "ACDB_LEADEROBJECTCONTEXTDATA_CLASS"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
       //dwg_decode_LEADEROBJECTCONTEXTDATA(dat, obj);
-      return 0;
+      return DWG_ERR_UNHANDLEDCLASS;
     }
 
   LOG_WARN("Unknown Class %s %d %s (0x%x%s)", is_entity ? "entity" : "object", \
@@ -3609,12 +3587,13 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
 #undef UNHANDLED_CLASS
 #undef UNTESTED_CLASS
 
-  return 0;
+  return DWG_ERR_UNHANDLEDCLASS;
 }
 
 /** Adds an object to the DWG (i.e. dwg->object[dwg->num_objects])
     Returns 0 or -1 on success.
     Returns -1 if the dwg->object pool was re-alloced.
+    Returns some DWG_ERR_* otherwise
  */
 int
 dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
@@ -3625,6 +3604,7 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
   unsigned char previous_bit;
   Dwg_Object *obj;
   long unsigned int num = dwg->num_objects;
+  int error = 0;
 
   /* Keep the previous address
    */
@@ -3679,279 +3659,280 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
   switch (obj->type)
     {
     case DWG_TYPE_TEXT:
-      dwg_decode_TEXT(dat, obj);
+      error = dwg_decode_TEXT(dat, obj);
       break;
     case DWG_TYPE_ATTRIB:
-      dwg_decode_ATTRIB(dat, obj);
+      error = dwg_decode_ATTRIB(dat, obj);
       break;
     case DWG_TYPE_ATTDEF:
-      dwg_decode_ATTDEF(dat, obj);
+      error = dwg_decode_ATTDEF(dat, obj);
       break;
     case DWG_TYPE_BLOCK:
-      dwg_decode_BLOCK(dat, obj);
+      error = dwg_decode_BLOCK(dat, obj);
       break;
     case DWG_TYPE_ENDBLK:
-      dwg_decode_ENDBLK(dat, obj);
+      error = dwg_decode_ENDBLK(dat, obj);
       break;
     case DWG_TYPE_SEQEND:
-      dwg_decode_SEQEND(dat, obj);
+      error = dwg_decode_SEQEND(dat, obj);
       break;
     case DWG_TYPE_INSERT:
-      dwg_decode_INSERT(dat, obj);
+      error = dwg_decode_INSERT(dat, obj);
       break;
     case DWG_TYPE_MINSERT:
-      dwg_decode_MINSERT(dat, obj);
+      error = dwg_decode_MINSERT(dat, obj);
       break;
     case DWG_TYPE_VERTEX_2D:
-      dwg_decode_VERTEX_2D(dat, obj);
+      error = dwg_decode_VERTEX_2D(dat, obj);
       break;
     case DWG_TYPE_VERTEX_3D:
-      dwg_decode_VERTEX_3D(dat, obj);
+      error = dwg_decode_VERTEX_3D(dat, obj);
       break;
     case DWG_TYPE_VERTEX_MESH:
-      dwg_decode_VERTEX_MESH(dat, obj);
+      error = dwg_decode_VERTEX_MESH(dat, obj);
       break;
     case DWG_TYPE_VERTEX_PFACE:
-      dwg_decode_VERTEX_PFACE(dat, obj);
+      error = dwg_decode_VERTEX_PFACE(dat, obj);
       break;
     case DWG_TYPE_VERTEX_PFACE_FACE:
-      dwg_decode_VERTEX_PFACE_FACE(dat, obj);
+      error = dwg_decode_VERTEX_PFACE_FACE(dat, obj);
       break;
     case DWG_TYPE_POLYLINE_2D:
-      dwg_decode_POLYLINE_2D(dat, obj);
+      error = dwg_decode_POLYLINE_2D(dat, obj);
       break;
     case DWG_TYPE_POLYLINE_3D:
-      dwg_decode_POLYLINE_3D(dat, obj);
+      error = dwg_decode_POLYLINE_3D(dat, obj);
       break;
     case DWG_TYPE_ARC:
-      dwg_decode_ARC(dat, obj);
+      error = dwg_decode_ARC(dat, obj);
       break;
     case DWG_TYPE_CIRCLE:
-      dwg_decode_CIRCLE(dat, obj);
+      error = dwg_decode_CIRCLE(dat, obj);
       break;
     case DWG_TYPE_LINE:
-      dwg_decode_LINE(dat, obj);
+      error = dwg_decode_LINE(dat, obj);
       break;
     case DWG_TYPE_DIMENSION_ORDINATE:
-      dwg_decode_DIMENSION_ORDINATE(dat, obj);
+      error = dwg_decode_DIMENSION_ORDINATE(dat, obj);
       break;
     case DWG_TYPE_DIMENSION_LINEAR:
-      dwg_decode_DIMENSION_LINEAR(dat, obj);
+      error = dwg_decode_DIMENSION_LINEAR(dat, obj);
       break;
     case DWG_TYPE_DIMENSION_ALIGNED:
-      dwg_decode_DIMENSION_ALIGNED(dat, obj);
+      error = dwg_decode_DIMENSION_ALIGNED(dat, obj);
       break;
     case DWG_TYPE_DIMENSION_ANG3PT:
-      dwg_decode_DIMENSION_ANG3PT(dat, obj);
+      error = dwg_decode_DIMENSION_ANG3PT(dat, obj);
       break;
     case DWG_TYPE_DIMENSION_ANG2LN:
-      dwg_decode_DIMENSION_ANG2LN(dat, obj);
+      error = dwg_decode_DIMENSION_ANG2LN(dat, obj);
       break;
     case DWG_TYPE_DIMENSION_RADIUS:
-      dwg_decode_DIMENSION_RADIUS(dat, obj);
+      error = dwg_decode_DIMENSION_RADIUS(dat, obj);
       break;
     case DWG_TYPE_DIMENSION_DIAMETER:
-      dwg_decode_DIMENSION_DIAMETER(dat, obj);
+      error = dwg_decode_DIMENSION_DIAMETER(dat, obj);
       break;
     case DWG_TYPE_POINT:
-      dwg_decode_POINT(dat, obj);
+      error = dwg_decode_POINT(dat, obj);
       break;
     case DWG_TYPE__3DFACE:
-      dwg_decode__3DFACE(dat, obj);
+      error = dwg_decode__3DFACE(dat, obj);
       break;
     case DWG_TYPE_POLYLINE_PFACE:
-      dwg_decode_POLYLINE_PFACE(dat, obj);
+      error = dwg_decode_POLYLINE_PFACE(dat, obj);
       break;
     case DWG_TYPE_POLYLINE_MESH:
-      dwg_decode_POLYLINE_MESH(dat, obj);
+      error = dwg_decode_POLYLINE_MESH(dat, obj);
       break;
     case DWG_TYPE_SOLID:
-      dwg_decode_SOLID(dat, obj);
+      error = dwg_decode_SOLID(dat, obj);
       break;
     case DWG_TYPE_TRACE:
-      dwg_decode_TRACE(dat, obj);
+      error = dwg_decode_TRACE(dat, obj);
       break;
     case DWG_TYPE_SHAPE:
-      dwg_decode_SHAPE(dat, obj);
+      error = dwg_decode_SHAPE(dat, obj);
       break;
     case DWG_TYPE_VIEWPORT:
-      dwg_decode_VIEWPORT(dat, obj);
+      error = dwg_decode_VIEWPORT(dat, obj);
       break;
     case DWG_TYPE_ELLIPSE:
-      dwg_decode_ELLIPSE(dat, obj);
+      error = dwg_decode_ELLIPSE(dat, obj);
       break;
     case DWG_TYPE_SPLINE:
-      dwg_decode_SPLINE(dat, obj);
+      error = dwg_decode_SPLINE(dat, obj);
       break;
     case DWG_TYPE_REGION:
-      dwg_decode_REGION(dat, obj);
+      error = dwg_decode_REGION(dat, obj);
       break;
     case DWG_TYPE__3DSOLID:
-      dwg_decode__3DSOLID(dat, obj);
+      error = dwg_decode__3DSOLID(dat, obj);
       break;
     case DWG_TYPE_BODY:
-      dwg_decode_BODY(dat, obj);
+      error = dwg_decode_BODY(dat, obj);
       break;
     case DWG_TYPE_RAY:
-      dwg_decode_RAY(dat, obj);
+      error = dwg_decode_RAY(dat, obj);
       break;
     case DWG_TYPE_XLINE:
-      dwg_decode_XLINE(dat, obj);
+      error = dwg_decode_XLINE(dat, obj);
       break;
     case DWG_TYPE_DICTIONARY:
-      dwg_decode_DICTIONARY(dat, obj);
+      error = dwg_decode_DICTIONARY(dat, obj);
       break;
     case DWG_TYPE_MTEXT:
-      dwg_decode_MTEXT(dat, obj);
+      error = dwg_decode_MTEXT(dat, obj);
       break;
     case DWG_TYPE_LEADER:
-      dwg_decode_LEADER(dat, obj);
+      error = dwg_decode_LEADER(dat, obj);
       break;
     case DWG_TYPE_TOLERANCE:
-      dwg_decode_TOLERANCE(dat, obj);
+      error = dwg_decode_TOLERANCE(dat, obj);
       break;
     case DWG_TYPE_MLINE:
-      dwg_decode_MLINE(dat, obj);
+      error = dwg_decode_MLINE(dat, obj);
       break;
     case DWG_TYPE_BLOCK_CONTROL:
-      dwg_decode_BLOCK_CONTROL(dat, obj);
+      error = dwg_decode_BLOCK_CONTROL(dat, obj);
       obj->tio.object->tio.BLOCK_CONTROL->objid = num;
       if (obj->tio.object->tio.BLOCK_CONTROL->num_entries)
         dwg->block_control = *obj->tio.object->tio.BLOCK_CONTROL;
       break;
     case DWG_TYPE_BLOCK_HEADER:
-      dwg_decode_BLOCK_HEADER(dat, obj);
+      error = dwg_decode_BLOCK_HEADER(dat, obj);
       /* XXX
        * We cannot cache dwg->*space_block here as dwg->objects might get realloc'ed
        */
       break;
     case DWG_TYPE_LAYER_CONTROL:
-      dwg_decode_LAYER_CONTROL(dat, obj);
+      error = dwg_decode_LAYER_CONTROL(dat, obj);
       obj->tio.object->tio.LAYER_CONTROL->objid = num;
       if (obj->tio.object->tio.LAYER_CONTROL->num_entries)
         dwg->layer_control = *obj->tio.object->tio.LAYER_CONTROL;
       break;
     case DWG_TYPE_LAYER:
-      dwg_decode_LAYER(dat, obj);
+      error = dwg_decode_LAYER(dat, obj);
       break;
     case DWG_TYPE_STYLE_CONTROL:
-      dwg_decode_STYLE_CONTROL(dat, obj);
+      error = dwg_decode_STYLE_CONTROL(dat, obj);
       obj->tio.object->tio.STYLE_CONTROL->objid = num;
       if (obj->tio.object->tio.STYLE_CONTROL->num_entries)
         dwg->style_control = *obj->tio.object->tio.STYLE_CONTROL;
       break;
     case DWG_TYPE_STYLE:
-      dwg_decode_STYLE(dat, obj);
+      error = dwg_decode_STYLE(dat, obj);
       break;
     case DWG_TYPE_LTYPE_CONTROL:
-      dwg_decode_LTYPE_CONTROL(dat, obj);
+      error = dwg_decode_LTYPE_CONTROL(dat, obj);
       obj->tio.object->tio.LTYPE_CONTROL->objid = num;
       if (obj->tio.object->tio.LTYPE_CONTROL->num_entries)
           dwg->ltype_control = *obj->tio.object->tio.LTYPE_CONTROL;
       break;
     case DWG_TYPE_LTYPE:
-      dwg_decode_LTYPE(dat, obj);
+      error = dwg_decode_LTYPE(dat, obj);
       break;
     case DWG_TYPE_VIEW_CONTROL:
-      dwg_decode_VIEW_CONTROL(dat, obj);
+      error = dwg_decode_VIEW_CONTROL(dat, obj);
       obj->tio.object->tio.VIEW_CONTROL->objid = num;
       if (obj->tio.object->tio.VIEW_CONTROL->num_entries)
         dwg->view_control = *obj->tio.object->tio.VIEW_CONTROL;
       break;
     case DWG_TYPE_VIEW:
-      dwg_decode_VIEW(dat, obj);
+      error = dwg_decode_VIEW(dat, obj);
       break;
     case DWG_TYPE_UCS_CONTROL:
-      dwg_decode_UCS_CONTROL(dat, obj);
+      error = dwg_decode_UCS_CONTROL(dat, obj);
       obj->tio.object->tio.UCS_CONTROL->objid = num;
       if (obj->tio.object->tio.UCS_CONTROL->num_entries)
         dwg->ucs_control = *obj->tio.object->tio.UCS_CONTROL;
       break;
     case DWG_TYPE_UCS:
-      dwg_decode_UCS(dat, obj);
+      error = dwg_decode_UCS(dat, obj);
       break;
     case DWG_TYPE_VPORT_CONTROL:
-      dwg_decode_VPORT_CONTROL(dat, obj);
+      error = dwg_decode_VPORT_CONTROL(dat, obj);
       obj->tio.object->tio.VPORT_CONTROL->objid = num;
       if (obj->tio.object->tio.VPORT_CONTROL->num_entries)
         dwg->vport_control = *obj->tio.object->tio.VPORT_CONTROL;
       break;
     case DWG_TYPE_VPORT:
-      dwg_decode_VPORT(dat, obj);
+      error = dwg_decode_VPORT(dat, obj);
       break;
     case DWG_TYPE_APPID_CONTROL:
-      dwg_decode_APPID_CONTROL(dat, obj);
+      error = dwg_decode_APPID_CONTROL(dat, obj);
       obj->tio.object->tio.APPID_CONTROL->objid = num;
       if (obj->tio.object->tio.APPID_CONTROL->num_entries)
         dwg->appid_control = *obj->tio.object->tio.APPID_CONTROL;
       break;
     case DWG_TYPE_APPID:
-      dwg_decode_APPID(dat, obj);
+      error = dwg_decode_APPID(dat, obj);
       break;
     case DWG_TYPE_DIMSTYLE_CONTROL:
-      dwg_decode_DIMSTYLE_CONTROL(dat, obj);
+      error = dwg_decode_DIMSTYLE_CONTROL(dat, obj);
       obj->tio.object->tio.DIMSTYLE_CONTROL->objid = num;
       if (obj->tio.object->tio.DIMSTYLE_CONTROL->num_entries)
         dwg->dimstyle_control = *obj->tio.object->tio.DIMSTYLE_CONTROL;
       break;
     case DWG_TYPE_DIMSTYLE:
-      dwg_decode_DIMSTYLE(dat, obj);
+      error = dwg_decode_DIMSTYLE(dat, obj);
       break;
     case DWG_TYPE_VPORT_ENTITY_CONTROL:
-      dwg_decode_VPORT_ENTITY_CONTROL(dat, obj);
+      error = dwg_decode_VPORT_ENTITY_CONTROL(dat, obj);
       obj->tio.object->tio.VPORT_ENTITY_CONTROL->objid = num;
       if (obj->tio.object->tio.VPORT_ENTITY_CONTROL->num_entries)
         dwg->vport_entity_control = *obj->tio.object->tio.VPORT_ENTITY_CONTROL;
       break;
     case DWG_TYPE_VPORT_ENTITY_HEADER:
-      dwg_decode_VPORT_ENTITY_HEADER(dat, obj);
+      error = dwg_decode_VPORT_ENTITY_HEADER(dat, obj);
       break;
     case DWG_TYPE_GROUP:
-      dwg_decode_GROUP(dat, obj);
+      error = dwg_decode_GROUP(dat, obj);
       break;
     case DWG_TYPE_MLINESTYLE:
-      dwg_decode_MLINESTYLE(dat, obj);
+      error = dwg_decode_MLINESTYLE(dat, obj);
       break;
     case DWG_TYPE_OLE2FRAME:
-      dwg_decode_OLE2FRAME(dat, obj);
+      error = dwg_decode_OLE2FRAME(dat, obj);
       break;
     case DWG_TYPE_DUMMY:
-      dwg_decode_DUMMY(dat, obj);
+      error = dwg_decode_DUMMY(dat, obj);
       break;
     case DWG_TYPE_LONG_TRANSACTION:
-      dwg_decode_LONG_TRANSACTION(dat, obj);
+      error = dwg_decode_LONG_TRANSACTION(dat, obj);
       break;
     case DWG_TYPE_LWPOLYLINE:
-      dwg_decode_LWPOLYLINE(dat, obj);
+      error = dwg_decode_LWPOLYLINE(dat, obj);
       break;
     case DWG_TYPE_HATCH:
-      dwg_decode_HATCH(dat, obj);
+      error = dwg_decode_HATCH(dat, obj);
       break;
     case DWG_TYPE_XRECORD:
-      dwg_decode_XRECORD(dat, obj);
+      error = dwg_decode_XRECORD(dat, obj);
       break;
     case DWG_TYPE_PLACEHOLDER:
-      dwg_decode_PLACEHOLDER(dat, obj);
+      error = dwg_decode_PLACEHOLDER(dat, obj);
       break;
     case DWG_TYPE_PROXY_ENTITY:
-      dwg_decode_PROXY_ENTITY(dat, obj);
+      error = dwg_decode_PROXY_ENTITY(dat, obj);
       break;
     case DWG_TYPE_OLEFRAME:
-      dwg_decode_OLEFRAME(dat, obj);
+      error = dwg_decode_OLEFRAME(dat, obj);
       break;
     case DWG_TYPE_VBA_PROJECT:
       LOG_ERROR("Unhandled Object VBA_PROJECT. Has its own section");
       //dwg_decode_VBA_PROJECT(dat, obj);
+      error = DWG_ERR_UNHANDLEDCLASS;
       break;
     case DWG_TYPE_LAYOUT:
-      dwg_decode_LAYOUT(dat, obj);
+      error = dwg_decode_LAYOUT(dat, obj);
       break;
     default:
       if (obj->type == dwg->layout_number)
-        dwg_decode_LAYOUT(dat, obj);
-
-      //FIXME: return error code, not success
-      else if (!dwg_decode_variable_type(dwg, dat, hdl_dat, obj))
+        error = dwg_decode_LAYOUT(dat, obj);
+      /* > 500 */
+      else if ((error = dwg_decode_variable_type(dwg, dat, hdl_dat, obj))
+               & DWG_ERR_UNHANDLEDCLASS)
         {
           int is_entity = 0;
           int i = obj->type - 500;
@@ -3964,7 +3945,7 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
               LOG_TRACE("wrong offset: %lu, got %lu (%ld/%d)\n",
                         end_address, dat->byte, end_address - dat->byte,
                         obj->bitsize/8)
-            }
+                }
           dat->byte = address;   // restart and read into the UNKNOWN_OBJ object
           dat->bit = 0;
           size = bit_read_MS(dat);
@@ -3982,33 +3963,33 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
             obj->size = 0;
             dat->byte = oldpos;
             dat->bit  = previous_bit;
-            return 0;
+            return error | DWG_ERR_VALUEOUTOFBOUNDS;
           }
           // properly dwg_decode_object/_entity for eed, reactors, xdic
           if (klass && !is_entity)
             {
-              dwg_decode_UNKNOWN_OBJ(dat, obj);
+              error |= dwg_decode_UNKNOWN_OBJ(dat, obj);
               obj->supertype = DWG_SUPERTYPE_UNKNOWN;
             }
           else if (klass)
             {
-              dwg_decode_UNKNOWN_ENT(dat, obj);
+              error |= dwg_decode_UNKNOWN_ENT(dat, obj);
               obj->supertype = DWG_SUPERTYPE_UNKNOWN;
             }
           else // not a class
             {
               LOG_WARN("Unknown object, skipping eed/reactors/xdic");
               SINCE(R_2000)
-              {
-                obj->bitsize = bit_read_RL(dat);
-                LOG_TRACE("bitsize: " FORMAT_RL " @%lu.%u\n", obj->bitsize,
-                         dat->byte, dat->bit);
-              }
+                {
+                  obj->bitsize = bit_read_RL(dat);
+                  LOG_TRACE("bitsize: " FORMAT_RL " @%lu.%u\n", obj->bitsize,
+                            dat->byte, dat->bit);
+                }
               if (!bit_read_H(dat, &obj->handle))
                 {
                   LOG_TRACE("handle: %d.%d.%lX [5]\n",
                             obj->handle.code, obj->handle.size, obj->handle.value)
-                }
+                    }
               object_address = dat->byte;
               obj->supertype = DWG_SUPERTYPE_UNKNOWN;
               obj->tio.unknown = (unsigned char *)bit_read_TF(dat, obj->size);
@@ -4016,15 +3997,6 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
             }
         }
     }
-
-  /*
-   if (obj->supertype != DWG_SUPERTYPE_UNKNOWN)
-     {
-       fprintf (stderr, " Begin address:\t%10lu\n", address);
-       fprintf (stderr, " Last address:\t%10lu\tSize: %10lu\n", dat->byte, obj->size);
-       fprintf (stderr, "End address:\t%10lu (calculated)\n", address + 2 + obj->size);
-     }
-   */
 
   /* Now 1 padding bits until next byte, and then a RS CRC */
   if (dat->bit) {
@@ -4057,7 +4029,7 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
    */
   dat->byte = oldpos;
   dat->bit = previous_bit;
-  return num == 0 ? 0 : -1; //re-alloced or not
+  return num == 0 ? error : -1; //re-alloced or not
 }
 
 #undef IS_DECODER

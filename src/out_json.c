@@ -254,7 +254,7 @@ static unsigned int cur_ver = 0;
 #define START_HANDLE_STREAM
 
 #define DWG_ENTITY(token) \
-static void \
+static int \
 dwg_json_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 {\
   long vcount, rcount1, rcount2, rcount3, rcount4; \
@@ -269,10 +269,10 @@ dwg_json_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
   _FIELD(bitsize,BL,0);\
   ENT_FIELD(picture_exists,B,0);
 
-#define DWG_ENTITY_END }
+#define DWG_ENTITY_END return 0; }
 
 #define DWG_OBJECT(token) \
-static void \
+static int \
 dwg_json_ ##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
   long vcount, rcount1, rcount2, rcount3, rcount4;\
@@ -285,11 +285,11 @@ dwg_json_ ##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
   _FIELD(size,RL,0);\
   _FIELD(bitsize,BL,0);
 
-#define DWG_OBJECT_END }
+#define DWG_OBJECT_END return 0; }
 
 #include "dwg.spec"
 
-/* returns 1 if object could be printd and 0 otherwise
+/* returns 0 on success
  */
 static int
 dwg_json_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
@@ -300,11 +300,13 @@ dwg_json_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   Dwg_Class *klass;
   int is_entity;
 
-  if ((obj->type - 500) > dwg->num_classes)
-    return 0;
-
   i = obj->type - 500;
+  if (i < 0 || i >= (int)dwg->num_classes)
+    return DWG_ERR_INVALIDTYPE;
+
   klass = &dwg->dwg_class[i];
+  if (!klass || ! klass->dxfname)
+    return DWG_ERR_INTERNALERROR;
   dxfname = klass->dxfname;
   // almost always false
   is_entity = dwg_class_is_entity(klass);
@@ -321,258 +323,221 @@ dwg_json_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   if (!strcmp(dxfname, "ACDBDICTIONARYWDFLT"))
     {
       assert(!is_entity);
-      dwg_json_DICTIONARYWDLFT(dat, obj);
-      return 1;
+      return dwg_json_DICTIONARYWDLFT(dat, obj);
     }
   if (!strcmp(dxfname, "DICTIONARYVAR"))
     {
       assert(!is_entity);
-      dwg_json_DICTIONARYVAR(dat, obj);
-      return 1;
+      return dwg_json_DICTIONARYVAR(dat, obj);
     }
   if (!strcmp(dxfname, "HATCH"))
     {
       assert(!is_entity);
-      dwg_json_HATCH(dat, obj);
-      return 1;
+      return dwg_json_HATCH(dat, obj);
     }
   if (!strcmp(dxfname, "FIELDLIST"))
     {
       UNTESTED_CLASS;
       assert(!is_entity);
-      dwg_json_FIELDLIST(dat, obj);
-      return 1;
+      return dwg_json_FIELDLIST(dat, obj);
     }
   if (!strcmp(dxfname, "GROUP"))
     {
       UNTESTED_CLASS;
       assert(!is_entity);
-      dwg_json_GROUP(dat, obj);
-      return 1;
+      return dwg_json_GROUP(dat, obj);
     }
   if (!strcmp(dxfname, "IDBUFFER"))
     {
-      dwg_json_IDBUFFER(dat, obj);
-      return 1;
+      return dwg_json_IDBUFFER(dat, obj);
     }
   if (!strcmp(dxfname, "IMAGE"))
     {
-      dwg_json_IMAGE(dat, obj);
-      return 1;
+      return dwg_json_IMAGE(dat, obj);
     }
   if (!strcmp(dxfname, "IMAGEDEF"))
     {
-      dwg_json_IMAGEDEF(dat, obj);
-      return 1;
+      return dwg_json_IMAGEDEF(dat, obj);
     }
   if (!strcmp(dxfname, "IMAGEDEF_REACTOR"))
     {
-      dwg_json_IMAGEDEF_REACTOR(dat, obj);
-      return 1;
+      return dwg_json_IMAGEDEF_REACTOR(dat, obj);
     }
   if (!strcmp(dxfname, "LAYER_INDEX"))
     {
-      dwg_json_LAYER_INDEX(dat, obj);
-      return 1;
+      return dwg_json_LAYER_INDEX(dat, obj);
     }
   if (!strcmp(dxfname, "LAYOUT"))
     {
-      dwg_json_LAYOUT(dat, obj);
-      return 1;
+      return dwg_json_LAYOUT(dat, obj);
     }
   if (!strcmp(dxfname, "LWPOLYLINE"))
     {
-      dwg_json_LWPOLYLINE(dat, obj);
-      return 1;
+      return dwg_json_LWPOLYLINE(dat, obj);
     }
   if (!strcmp(dxfname, "MULTILEADER"))
     {
 #ifdef DEBUG_MULTILEADER
       UNTESTED_CLASS; //broken Leader_Line's/Points
-      dwg_json_MULTILEADER(dat, obj);
-      return 1;
+      return dwg_json_MULTILEADER(dat, obj);
 #else
       UNHANDLED_CLASS;
-      return 0;
+      return DWG_ERR_UNHANDLEDCLASS;
 #endif
     }
   if (!strcmp(dxfname, "MLEADERSTYLE"))
     {
-      dwg_json_MLEADERSTYLE(dat, obj);
-      return 1;
+      return dwg_json_MLEADERSTYLE(dat, obj);
     }
   if (!strcmp(dxfname, "OLE2FRAME"))
     {
-      dwg_json_OLE2FRAME(dat, obj);
-      return 1;
+      return dwg_json_OLE2FRAME(dat, obj);
     }
-  if (!strcmp(dxfname, "OBJECTCONTEXTDATA")
-      || strcmp(klass->cppname, "AcDbObjectContextData"))
+  if (!strcmp(dxfname, "OBJECTCONTEXTDATA") ||
+      !strcmp(klass->cppname, "AcDbObjectContextData"))
     {
-      dwg_json_OBJECTCONTEXTDATA(dat, obj);
-      return 1;
+      return dwg_json_OBJECTCONTEXTDATA(dat, obj);
     }
-  if (!strcmp(dxfname, "OBJECT_PTR")
-      || !strcmp(klass->cppname, "CAseDLPNTableRecord"))
+  if (!strcmp(dxfname, "OBJECT_PTR") ||
+      !strcmp(klass->cppname, "CAseDLPNTableRecord"))
     {
       UNTESTED_CLASS;
       assert(!is_entity);
-      dwg_json_OBJECT_PTR(dat, obj);
-      return 1;
+      return dwg_json_OBJECT_PTR(dat, obj);
     }
   if (!strcmp(dxfname, "ACDBPLACEHOLDER"))
     {
-      dwg_json_PLACEHOLDER(dat, obj);
-      return 1;
+      return dwg_json_PLACEHOLDER(dat, obj);
     }
   if (!strcmp(dxfname, "PROXY"))
     {
-      dwg_json_PROXY_OBJECT(dat, obj);
-      return 1;
+      return dwg_json_PROXY_OBJECT(dat, obj);
     }
   if (!strcmp(dxfname, "RASTERVARIABLES"))
     {
-      dwg_json_RASTERVARIABLES(dat, obj);
-      return 1;
+      return dwg_json_RASTERVARIABLES(dat, obj);
     }
   if (!strcmp(dxfname, "SCALE"))
     {
-      dwg_json_SCALE(dat, obj);
-      return 1;
+      return dwg_json_SCALE(dat, obj);
     }
   if (!strcmp(dxfname, "SORTENTSTABLE"))
     {
-      dwg_json_SORTENTSTABLE(dat, obj);
-      return 1;
+      return dwg_json_SORTENTSTABLE(dat, obj);
     }
   if (!strcmp(dxfname, "SPATIAL_FILTER"))
     {
-      dwg_json_SPATIAL_FILTER(dat, obj);
-      return 1;
+      return dwg_json_SPATIAL_FILTER(dat, obj);
     }
   if (!strcmp(dxfname, "SPATIAL_INDEX"))
     {
-      dwg_json_SPATIAL_INDEX(dat, obj);
-      return 1;
+      return dwg_json_SPATIAL_INDEX(dat, obj);
     }
   if (!strcmp(dxfname, "TABLE"))
     {
       UNTESTED_CLASS;
-      dwg_json_TABLE(dat, obj);
-      return 1;
+      return dwg_json_TABLE(dat, obj);
     }
   if (!strcmp(dxfname, "WIPEOUTVARIABLES"))
     {
       UNTESTED_CLASS;
-      dwg_json_WIPEOUTVARIABLES(dat, obj);
-      return 0;
+      return dwg_json_WIPEOUTVARIABLES(dat, obj);
     }
   if (!strcmp(dxfname, "WIPEOUT"))
     {
-      dwg_json_WIPEOUT(dat, obj);
-      return 1;
+      return dwg_json_WIPEOUT(dat, obj);
     }
   if (!strcmp(dxfname, "FIELDLIST"))
     {
       UNTESTED_CLASS;
-      dwg_json_FIELDLIST(dat, obj);
-      return 1;
+      return dwg_json_FIELDLIST(dat, obj);
     }
   if (!strcmp(dxfname, "VBA_PROJECT"))
     {
 #ifdef DEBUG_VBA_PROJECT
       UNTESTED_CLASS;
-      dwg_json_VBA_PROJECT(dat, obj);
-      return 1;
+      return dwg_json_VBA_PROJECT(dat, obj);
 #else
       UNHANDLED_CLASS;
-      return 0;
+      return DWG_ERR_UNHANDLEDCLASS;
 #endif
     }
   if (!strcmp(dxfname, "CELLSTYLEMAP"))
     {
 #ifdef DEBUG_CELLSTYLEMAP
       UNTESTED_CLASS;
-      dwg_json_CELLSTYLEMAP(dat, obj);
-      return 1;
+      return dwg_json_CELLSTYLEMAP(dat, obj);
 #else
       UNHANDLED_CLASS;
-      return 0;
+      return DWG_ERR_UNHANDLEDCLASS;
 #endif
     }
   if (!strcmp(dxfname, "VISUALSTYLE"))
     {
-      dwg_json_VISUALSTYLE(dat, obj);
-      return 1;
+      return dwg_json_VISUALSTYLE(dat, obj);
     }
   if (!strcmp(dxfname, "ACDBSECTIONVIEWSTYLE"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
       //dwg_json_SECTIONVIEWSTYLE(dat, obj);
-      return 0;
+      return DWG_ERR_UNHANDLEDCLASS;
     }
   if (!strcmp(dxfname, "ACDBDETAILVIEWSTYLE"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
       //dwg_json_DETAILVIEWSTYLE(dat, obj);
-      return 0;
+      return DWG_ERR_UNHANDLEDCLASS;
     }
   if (!strcmp(dxfname, "AcDbField")) //?
     {
       UNTESTED_CLASS;
-      dwg_json_FIELD(dat, obj);
-      return 1;
+      return dwg_json_FIELD(dat, obj);
     }
   if (!strcmp(dxfname, "TABLECONTENT"))
     {
       UNTESTED_CLASS;
-      dwg_json_TABLECONTENT(dat, obj);
-      return 1;
+      return dwg_json_TABLECONTENT(dat, obj);
     }
   if (!strcmp(dxfname, "TABLEGEOMETRY"))
     {
       UNTESTED_CLASS;
-      dwg_json_TABLEGEOMETRY(dat, obj);
-      return 1;
+      return dwg_json_TABLEGEOMETRY(dat, obj);
     }
   if (!strcmp(dxfname, "GEODATA"))
     {
       UNTESTED_CLASS;
-      dwg_json_GEODATA(dat, obj);
-      return 1;
+      return dwg_json_GEODATA(dat, obj);
     }
   if (!strcmp(dxfname, "XRECORD"))
     {
-      dwg_json_XRECORD(dat, obj);
-      return 1;
+      return dwg_json_XRECORD(dat, obj);
     }
   if (!strcmp(dxfname, "ARCALIGNEDTEXT"))
     {
       UNHANDLED_CLASS;
       //assert(!is_entity);
       //dwg_json_ARCALIGNEDTEXT(dat, obj);
-      return 0;
+      return DWG_ERR_UNHANDLEDCLASS;
     }
   if (!strcmp(dxfname, "DIMASSOC"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
       //dwg_json_DIMASSOC(dat, obj);
-      return 0;
+      return DWG_ERR_UNHANDLEDCLASS;
     }
   if (!strcmp(dxfname, "MATERIAL"))
     {
 #ifdef DEBUG_MATERIAL
       UNTESTED_CLASS;
       assert(!is_entity);
-      dwg_json_MATERIAL(dat, obj);
-      return 1;
+      return dwg_json_MATERIAL(dat, obj);
 #else
       UNHANDLED_CLASS;
       assert(!is_entity);
-      return 0;
+      return DWG_ERR_UNHANDLEDCLASS;
 #endif
     }
   if (!strcmp(dxfname, "PLOTSETTINGS"))
@@ -580,12 +545,11 @@ dwg_json_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
 #ifdef DEBUG_PLOTSETTINGS
       UNTESTED_CLASS;
       assert(!is_entity);
-      dwg_json_PLOTSETTINGS(dat, obj);
-      return 1;
+      return dwg_json_PLOTSETTINGS(dat, obj);
 #else
       UNHANDLED_CLASS;
       assert(!is_entity);
-      return 0;
+      return DWG_ERR_UNHANDLEDCLASS;
 #endif
     }
   if (!strcmp(dxfname, "LIGHT"))
@@ -593,12 +557,11 @@ dwg_json_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
 #ifdef DEBUG_LIGHT
       UNTESTED_CLASS;
       assert(is_entity);
-      dwg_json_LIGHT(dat, obj);
-      return 1;
+      return dwg_json_LIGHT(dat, obj);
 #else
       UNHANDLED_CLASS;
       assert(is_entity);
-      return 0;
+      return DWG_ERR_UNHANDLEDCLASS;
 #endif
     }
   if (!strcmp(dxfname, "SUN"))
@@ -606,332 +569,250 @@ dwg_json_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
 #ifdef DEBUG_SUN
       UNTESTED_CLASS;
       assert(!is_entity);
-      dwg_json_SUN(dat, obj);
-      return 1;
+      return dwg_json_SUN(dat, obj);
 #else
       UNHANDLED_CLASS;
       assert(!is_entity);
-      return 0;
+      return DWG_ERR_UNHANDLEDCLASS;
 #endif
     }
   if (!strcmp(dxfname, "GEOPOSITIONMARKER"))
     {
       UNTESTED_CLASS;
       assert(is_entity);
-      dwg_json_GEOPOSITIONMARKER(dat, obj);
-      return 1;
+      return dwg_json_GEOPOSITIONMARKER(dat, obj);
     }
   if (!strcmp(dxfname, "EXTRUDEDSURFACE"))
     {
       UNTESTED_CLASS;
       assert(is_entity);
-      dwg_json_EXTRUDEDSURFACE(dat, obj);
-      return 1;
+      return dwg_json_EXTRUDEDSURFACE(dat, obj);
     }
   if (!strcmp(dxfname, "TABLESTYLE"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
       //dwg_json_TABLESTYLE(dat, obj);
-      return 0;
+      return DWG_ERR_UNHANDLEDCLASS;
     }
   if (!strcmp(dxfname, "DBCOLOR"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
       //dwg_json_DBCOLOR(dat, obj);
-      return 0;
+      return DWG_ERR_UNHANDLEDCLASS;
     }
   if (!strcmp(dxfname, "ACDBASSOCNETWORK"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
       //dwg_json_ASSOCNETWORK(dat, obj);
-      return 0;
+      return DWG_ERR_UNHANDLEDCLASS;
     }
   if (!strcmp(dxfname, "ACDBASSOC2DCONSTRAINTGROUP"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
       //dwg_json_ASSOC2DCONSTRAINTGROUP(dat, obj);
-      return 0;
+      return DWG_ERR_UNHANDLEDCLASS;
     }
   if (!strcmp(dxfname, "ACDBASSOCGEOMDEPENDENCY"))
     {
       UNHANDLED_CLASS;
       assert(!is_entity);
       //dwg_json_ASSOCGEOMDEPENDENCY(dat, obj);
-      return 0;
+      return DWG_ERR_UNHANDLEDCLASS;
     }
   if (!strcmp(dxfname, "ACDB_LEADEROBJECTCONTEXTDATA_CLASS"))
     {
       //UNHANDLED_CLASS;
       //dwg_json_LEADEROBJECTCONTEXTDATA(dat, obj);
-      return 0;
+      return DWG_ERR_UNHANDLEDCLASS;
     }
 
-  return 0;
+  return DWG_ERR_UNHANDLEDCLASS;
 }
 
-static void
+static int
 dwg_json_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
   switch (obj->type)
     {
     case DWG_TYPE_TEXT:
-      dwg_json_TEXT(dat, obj);
-      break;
+      return dwg_json_TEXT(dat, obj);
     case DWG_TYPE_ATTRIB:
-      dwg_json_ATTRIB(dat, obj);
-      break;
+      return dwg_json_ATTRIB(dat, obj);
     case DWG_TYPE_ATTDEF:
-      dwg_json_ATTDEF(dat, obj);
-      break;
+      return dwg_json_ATTDEF(dat, obj);
     case DWG_TYPE_BLOCK:
-      dwg_json_BLOCK(dat, obj);
-      break;
+      return dwg_json_BLOCK(dat, obj);
     case DWG_TYPE_ENDBLK:
-      dwg_json_ENDBLK(dat, obj);
-      break;
+      return dwg_json_ENDBLK(dat, obj);
     case DWG_TYPE_SEQEND:
-      dwg_json_SEQEND(dat, obj);
-      break;
+      return dwg_json_SEQEND(dat, obj);
     case DWG_TYPE_INSERT:
-      dwg_json_INSERT(dat, obj);
-      break;
+      return dwg_json_INSERT(dat, obj);
     case DWG_TYPE_MINSERT:
-      dwg_json_MINSERT(dat, obj);
-      break;
+      return dwg_json_MINSERT(dat, obj);
     case DWG_TYPE_VERTEX_2D:
-      dwg_json_VERTEX_2D(dat, obj);
-      break;
+      return dwg_json_VERTEX_2D(dat, obj);
     case DWG_TYPE_VERTEX_3D:
-      dwg_json_VERTEX_3D(dat, obj);
-      break;
+      return dwg_json_VERTEX_3D(dat, obj);
     case DWG_TYPE_VERTEX_MESH:
-      dwg_json_VERTEX_MESH(dat, obj);
-      break;
+      return dwg_json_VERTEX_MESH(dat, obj);
     case DWG_TYPE_VERTEX_PFACE:
-      dwg_json_VERTEX_PFACE(dat, obj);
-      break;
+      return dwg_json_VERTEX_PFACE(dat, obj);
     case DWG_TYPE_VERTEX_PFACE_FACE:
-      dwg_json_VERTEX_PFACE_FACE(dat, obj);
-      break;
+      return dwg_json_VERTEX_PFACE_FACE(dat, obj);
     case DWG_TYPE_POLYLINE_2D:
-      dwg_json_POLYLINE_2D(dat, obj);
-      break;
+      return dwg_json_POLYLINE_2D(dat, obj);
     case DWG_TYPE_POLYLINE_3D:
-      dwg_json_POLYLINE_3D(dat, obj);
-      break;
+      return dwg_json_POLYLINE_3D(dat, obj);
     case DWG_TYPE_ARC:
-      dwg_json_ARC(dat, obj);
-      break;
+      return dwg_json_ARC(dat, obj);
     case DWG_TYPE_CIRCLE:
-      dwg_json_CIRCLE(dat, obj);
-      break;
+      return dwg_json_CIRCLE(dat, obj);
     case DWG_TYPE_LINE:
-      dwg_json_LINE(dat, obj);
-      break;
+      return dwg_json_LINE(dat, obj);
     case DWG_TYPE_DIMENSION_ORDINATE:
-      dwg_json_DIMENSION_ORDINATE(dat, obj);
-      break;
+      return dwg_json_DIMENSION_ORDINATE(dat, obj);
     case DWG_TYPE_DIMENSION_LINEAR:
-      dwg_json_DIMENSION_LINEAR(dat, obj);
-      break;
+      return dwg_json_DIMENSION_LINEAR(dat, obj);
     case DWG_TYPE_DIMENSION_ALIGNED:
-      dwg_json_DIMENSION_ALIGNED(dat, obj);
-      break;
+      return dwg_json_DIMENSION_ALIGNED(dat, obj);
     case DWG_TYPE_DIMENSION_ANG3PT:
-      dwg_json_DIMENSION_ANG3PT(dat, obj);
-      break;
+      return dwg_json_DIMENSION_ANG3PT(dat, obj);
     case DWG_TYPE_DIMENSION_ANG2LN:
-      dwg_json_DIMENSION_ANG2LN(dat, obj);
-      break;
+      return dwg_json_DIMENSION_ANG2LN(dat, obj);
     case DWG_TYPE_DIMENSION_RADIUS:
-      dwg_json_DIMENSION_RADIUS(dat, obj);
-      break;
+      return dwg_json_DIMENSION_RADIUS(dat, obj);
     case DWG_TYPE_DIMENSION_DIAMETER:
-      dwg_json_DIMENSION_DIAMETER(dat, obj);
-      break;
+      return dwg_json_DIMENSION_DIAMETER(dat, obj);
     case DWG_TYPE_POINT:
-      dwg_json_POINT(dat, obj);
-      break;
+      return dwg_json_POINT(dat, obj);
     case DWG_TYPE__3DFACE:
-      dwg_json__3DFACE(dat, obj);
-      break;
+      return dwg_json__3DFACE(dat, obj);
     case DWG_TYPE_POLYLINE_PFACE:
-      dwg_json_POLYLINE_PFACE(dat, obj);
-      break;
+      return dwg_json_POLYLINE_PFACE(dat, obj);
     case DWG_TYPE_POLYLINE_MESH:
-      dwg_json_POLYLINE_MESH(dat, obj);
-      break;
+      return dwg_json_POLYLINE_MESH(dat, obj);
     case DWG_TYPE_SOLID:
-      dwg_json_SOLID(dat, obj);
-      break;
+      return dwg_json_SOLID(dat, obj);
     case DWG_TYPE_TRACE:
-      dwg_json_TRACE(dat, obj);
-      break;
+      return dwg_json_TRACE(dat, obj);
     case DWG_TYPE_SHAPE:
-      dwg_json_SHAPE(dat, obj);
-      break;
+      return dwg_json_SHAPE(dat, obj);
     case DWG_TYPE_VIEWPORT:
-      dwg_json_VIEWPORT(dat, obj);
-      break;
+      return dwg_json_VIEWPORT(dat, obj);
     case DWG_TYPE_ELLIPSE:
-      dwg_json_ELLIPSE(dat, obj);
-      break;
+      return dwg_json_ELLIPSE(dat, obj);
     case DWG_TYPE_SPLINE:
-      dwg_json_SPLINE(dat, obj);
-      break;
+      return dwg_json_SPLINE(dat, obj);
     case DWG_TYPE_REGION:
-      dwg_json_REGION(dat, obj);
-      break;
+      return dwg_json_REGION(dat, obj);
     case DWG_TYPE__3DSOLID:
-      dwg_json__3DSOLID(dat, obj);
+      return dwg_json__3DSOLID(dat, obj);
       break; /* Check the type of the object
               */
     case DWG_TYPE_BODY:
-      dwg_json_BODY(dat, obj);
-      break;
+      return dwg_json_BODY(dat, obj);
     case DWG_TYPE_RAY:
-      dwg_json_RAY(dat, obj);
-      break;
+      return dwg_json_RAY(dat, obj);
     case DWG_TYPE_XLINE:
-      dwg_json_XLINE(dat, obj);
-      break;
+      return dwg_json_XLINE(dat, obj);
     case DWG_TYPE_DICTIONARY:
-      dwg_json_DICTIONARY(dat, obj);
-      break;
+      return dwg_json_DICTIONARY(dat, obj);
     case DWG_TYPE_MTEXT:
-      dwg_json_MTEXT(dat, obj);
-      break;
+      return dwg_json_MTEXT(dat, obj);
     case DWG_TYPE_LEADER:
-      dwg_json_LEADER(dat, obj);
-      break;
+      return dwg_json_LEADER(dat, obj);
     case DWG_TYPE_TOLERANCE:
-      dwg_json_TOLERANCE(dat, obj);
-      break;
+      return dwg_json_TOLERANCE(dat, obj);
     case DWG_TYPE_MLINE:
-      dwg_json_MLINE(dat, obj);
-      break;
+      return dwg_json_MLINE(dat, obj);
     case DWG_TYPE_BLOCK_CONTROL:
-      dwg_json_BLOCK_CONTROL(dat, obj);
-      break;
+      return dwg_json_BLOCK_CONTROL(dat, obj);
     case DWG_TYPE_BLOCK_HEADER:
-      dwg_json_BLOCK_HEADER(dat, obj);
-      break;
+      return dwg_json_BLOCK_HEADER(dat, obj);
     case DWG_TYPE_LAYER_CONTROL:
-      dwg_json_LAYER_CONTROL(dat, obj);
-      break;
+      return dwg_json_LAYER_CONTROL(dat, obj);
     case DWG_TYPE_LAYER:
-      dwg_json_LAYER(dat, obj);
-      break;
+      return dwg_json_LAYER(dat, obj);
     case DWG_TYPE_STYLE_CONTROL:
-      dwg_json_STYLE_CONTROL(dat, obj);
-      break;
+      return dwg_json_STYLE_CONTROL(dat, obj);
     case DWG_TYPE_STYLE:
-      dwg_json_STYLE(dat, obj);
-      break;
+      return dwg_json_STYLE(dat, obj);
     case DWG_TYPE_LTYPE_CONTROL:
-      dwg_json_LTYPE_CONTROL(dat, obj);
-      break;
+      return dwg_json_LTYPE_CONTROL(dat, obj);
     case DWG_TYPE_LTYPE:
-      dwg_json_LTYPE(dat, obj);
-      break;
+      return dwg_json_LTYPE(dat, obj);
     case DWG_TYPE_VIEW_CONTROL:
-      dwg_json_VIEW_CONTROL(dat, obj);
-      break;
+      return dwg_json_VIEW_CONTROL(dat, obj);
     case DWG_TYPE_VIEW:
-      dwg_json_VIEW(dat, obj);
-      break;
+      return dwg_json_VIEW(dat, obj);
     case DWG_TYPE_UCS_CONTROL:
-      dwg_json_UCS_CONTROL(dat, obj);
-      break;
+      return dwg_json_UCS_CONTROL(dat, obj);
     case DWG_TYPE_UCS:
-      dwg_json_UCS(dat, obj);
-      break;
+      return dwg_json_UCS(dat, obj);
     case DWG_TYPE_VPORT_CONTROL:
-      dwg_json_VPORT_CONTROL(dat, obj);
-      break;
+      return dwg_json_VPORT_CONTROL(dat, obj);
     case DWG_TYPE_VPORT:
-      dwg_json_VPORT(dat, obj);
-      break;
+      return dwg_json_VPORT(dat, obj);
     case DWG_TYPE_APPID_CONTROL:
-      dwg_json_APPID_CONTROL(dat, obj);
-      break;
+      return dwg_json_APPID_CONTROL(dat, obj);
     case DWG_TYPE_APPID:
-      dwg_json_APPID(dat, obj);
-      break;
+      return dwg_json_APPID(dat, obj);
     case DWG_TYPE_DIMSTYLE_CONTROL:
-      dwg_json_DIMSTYLE_CONTROL(dat, obj);
-      break;
+      return dwg_json_DIMSTYLE_CONTROL(dat, obj);
     case DWG_TYPE_DIMSTYLE:
-      dwg_json_DIMSTYLE(dat, obj);
-      break;
+      return dwg_json_DIMSTYLE(dat, obj);
     case DWG_TYPE_VPORT_ENTITY_CONTROL:
-      dwg_json_VPORT_ENTITY_CONTROL(dat, obj);
-      break;
+      return dwg_json_VPORT_ENTITY_CONTROL(dat, obj);
     case DWG_TYPE_VPORT_ENTITY_HEADER:
-      dwg_json_VPORT_ENTITY_HEADER(dat, obj);
-      break;
+      return dwg_json_VPORT_ENTITY_HEADER(dat, obj);
     case DWG_TYPE_GROUP:
-      dwg_json_GROUP(dat, obj);
-      break;
+      return dwg_json_GROUP(dat, obj);
     case DWG_TYPE_MLINESTYLE:
-      dwg_json_MLINESTYLE(dat, obj);
-      break;
+      return dwg_json_MLINESTYLE(dat, obj);
     case DWG_TYPE_OLE2FRAME:
-      dwg_json_OLE2FRAME(dat, obj);
-      break;
+      return dwg_json_OLE2FRAME(dat, obj);
     case DWG_TYPE_DUMMY:
-      dwg_json_DUMMY(dat, obj);
-      break;
+      return dwg_json_DUMMY(dat, obj);
     case DWG_TYPE_LONG_TRANSACTION:
-      dwg_json_LONG_TRANSACTION(dat, obj);
-      break;
+      return dwg_json_LONG_TRANSACTION(dat, obj);
     case DWG_TYPE_LWPOLYLINE:
-      dwg_json_LWPOLYLINE(dat, obj);
-      break;
+      return dwg_json_LWPOLYLINE(dat, obj);
     case DWG_TYPE_HATCH:
-      dwg_json_HATCH(dat, obj);
-      break;
+      return dwg_json_HATCH(dat, obj);
     case DWG_TYPE_XRECORD:
-      dwg_json_XRECORD(dat, obj);
-      break;
+      return dwg_json_XRECORD(dat, obj);
     case DWG_TYPE_PLACEHOLDER:
-      dwg_json_PLACEHOLDER(dat, obj);
-      break;
+      return dwg_json_PLACEHOLDER(dat, obj);
     case DWG_TYPE_PROXY_ENTITY:
-      dwg_json_PROXY_ENTITY(dat, obj);
-      break;
+      return dwg_json_PROXY_ENTITY(dat, obj);
     case DWG_TYPE_OLEFRAME:
-      dwg_json_OLEFRAME(dat, obj);
-      break;
+      return dwg_json_OLEFRAME(dat, obj);
     case DWG_TYPE_VBA_PROJECT:
       LOG_ERROR("Unhandled Object VBA_PROJECT. Has its own section\n");
       //dwg_json_VBA_PROJECT(dat, obj);
       break;
     case DWG_TYPE_LAYOUT:
-      dwg_json_LAYOUT(dat, obj);
-      break;
+      return dwg_json_LAYOUT(dat, obj);
     default:
       if (obj->type == obj->parent->layout_number)
         {
-          dwg_json_LAYOUT(dat, obj);
+          return dwg_json_LAYOUT(dat, obj);
         }
-      /* > 500:
-         TABLE, DICTIONARYWDLFT, IDBUFFER, IMAGE, IMAGEDEF, IMAGEDEF_REACTOR,
-         LAYER_INDEX, OLE2FRAME, PROXY, RASTERVARIABLES, SORTENTSTABLE, SPATIAL_FILTER,
-         SPATIAL_INDEX
-      */
-      else if (!dwg_json_variable_type(obj->parent, dat, obj))
+      /* > 500 */
+      else if (DWG_ERR_UNHANDLEDCLASS &
+               dwg_json_variable_type(obj->parent, dat, obj))
         {
           Dwg_Data *dwg = obj->parent;
           int is_entity;
           int i = obj->type - 500;
           Dwg_Class *klass = NULL;
 
-          if (i <= (int)dwg->num_classes)
+          if (i >= 0 && i < (int)dwg->num_classes)
             {
               klass = &dwg->dwg_class[i];
               is_entity = dwg_class_is_entity(klass);
@@ -939,11 +820,11 @@ dwg_json_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
           // properly dwg_decode_object/_entity for eed, reactors, xdic
           if (klass && !is_entity)
             {
-              dwg_json_UNKNOWN_OBJ(dat, obj);
+              return dwg_json_UNKNOWN_OBJ(dat, obj);
             }
           else if (klass)
             {
-              dwg_json_UNKNOWN_ENT(dat, obj);
+              return dwg_json_UNKNOWN_ENT(dat, obj);
             }
           else // not a class
             {
@@ -957,6 +838,7 @@ dwg_json_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
             }
         }
     }
+  return DWG_ERR_INVALIDTYPE;
 }
 
 /*
