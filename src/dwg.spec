@@ -5655,6 +5655,18 @@ DWG_OBJECT_END
 DWG_OBJECT(NPOCOLLECTION)
 DWG_OBJECT_END
 
+// NanoSPDS License Parser (flexlm) or nanoCAD SPDS.
+// Probably used by 3rd party extensions or
+// AEC/MAP/MECH to mark or protect their objects.
+// Entity Wall PtDbWall
+// Entity Format mcsDbObjectFormat
+// Entity NOTEPOSITION mcsDbObjectNotePosition
+// Entity mcsDbObject mcsDbObject
+// Entity spdsLevelMark mcsDbObjectLevelMark
+// Entity McDbContainer2 McDbContainer2
+// Entity spdsRelationMark mcsDbObjectRelationMark
+// Entity McDbMarker McDbMarker
+
 DWG_OBJECT(UNDERLAYDEFINITION)
 DWG_OBJECT_END
 
