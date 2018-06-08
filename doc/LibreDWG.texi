@@ -56,6 +56,7 @@ Texts.  A copy of the license is included in the section entitled
 * Usage::               How to use LibreDWG.
 * Types::               Enums, structs.
 * Functions::           Call them.
+* Errors::              Error levels.
 * Programs::            Useful binaries.
 * Reference API::
 
@@ -110,8 +111,8 @@ reverse-engineered.  The specification is almost complete.
 The LibreDWG implementation of the specification is an ongoing process;
 as of version @value{VERSION}, coverage is approximately 99%.
 
-It can read the formats R13, R14, R2000, R2004, and R2007 for 99%.
-R2010, R2013 and R2018 can be partially read (~90%), but fail on some advanced DWG's.
+It can read the formats R13, R14, R2000, R2004, R2007, R2010, R2013 and R2018
+for 99%.
 R11 and earlier cannot be read yet, only partially.
 Reading R11 and earlier is ony enabled with the development git checkout, not
 the released tarball.
@@ -122,8 +123,31 @@ Here is a list of features that are still missing.
 
 @table @asis
 
-@item Reading pre-R13 and R2010+ DWG
-Reading DWG formats for pre-R13 and some R2010+ objects is an ongoing effort, some minor parts are missing. Simple DWGs can be read already, advanced DWGs not.
+@item Reading pre-R13 DWG
+Reading DWG formats for pre-R13 and some R2010+ non-graphical objects is an ongoing effort, some minor parts are missing. Simple DWGs can be read already, advanced DWGs not.
+
+* ACIS: only converted to a raw string
+
+@item Writing pre-R13 and R2004+ DWG
+Writing DWG formats for R2004 and later: R2007, R2010, R2013, R2018 is an
+ongoing effort and not yet implemented. We write as default in the R2000 format.
+
+@item Reading and writing ASCII and binary DXF
+DXF support is an ongoing effort, and about halfway implemented.
+Ascii DXF's are generated fully, with much more elements and fields and other free libraries,
+but AutoCAD fails to import them yet.
+Binary DXF are done about 50%.
+Reading DXF is not yet fully implemented, this is under construction.
+
+@item Enabled entities and objects, but untested:
+
+FIELDLIST, AcDbField, TABLECONTENT, TABLEGEOMETRY, GEODATA,
+WIPEOUTVARIABLES, LONG_TRANSACTION, OBJECT_PTR
+
+@item Unhandled (fields spec'ed but broken/untested):
+
+MATERIAL, CELLSTYLEMAP, MULTILEADER, PROXY, PROXY_ENTITY,
+PLOTSETTINGS, LIGHT, SUN, GEOPOSITIONMARKER, EXTRUDEDSURFACE
 
 Missing:
 
@@ -135,26 +159,46 @@ Halfway:
 
 * MATERIAL
 
-* SPATIAL_INDEX class/object untested
+* SPATIAL_INDEX object untested
 
-* WIPEOUTVARIABLES class/object untested
+* WIPEOUTVARIABLES object untested
 
-* ACIS: only converted to a raw string
+@item Unhandled (i.e. passed through, no DXF and fields):
 
-@item Writing pre-R13 and R2004+ DWG
-Writing DWG formats for R2004 and later: R2007, R2010, R2013, R2018 is an
-ongoing effort and not yet implemented.
+TABLESTYLE, DBCOLOR, VBA_PROJECT, DIMASSOC, LIGHTLIST,
+LEADEROBJECTCONTEXTDATA, ACDBSECTIONVIEWSTYLE, ACDBDETAILVIEWSTYLE,
+ACDBASSOCNETWORK, ACDBASSOC2DCONSTRAINTGROUP,
+ACDBASSOCGEOMDEPENDENCY, ACDB_LEADEROBJECTCONTEXTDATA_CLASS,
+NPOCOLLECTION, EXACXREFPANELOBJECT, ARCALIGNEDTEXT (2000+),
+UNDERLAYDEFINITION (2 strings), OBJECTCONTEXTDATA, RTEXT,
+AcDbAnnotScaleObjectContextData
 
-@item Reading and writing ASCII and binary DXF
-DXF support is an ongoing effort, and about halfway implemented.
-Ascii DXF's are generated fully, with much more elements and fields and other free libraries,
-but AutoCAD fails to import them yet.
-Binary DXF are done about 50%.
-Reading DXF is not yet fully implemented, this is under construction.
+@item no test coverage for entities:
+
+I.e. we need an extended 2018/example_all.dwg with all types,
+compared to 2018/example_2018.dwg - for the following missing entities:
+
+3DFACE 3DSOLID BODY CAMERA DIMENSION_ALIGNED DIMENSION_ANG2LN
+DIMENSION_ANG3PT DIMENSION_DIAMETER DIMENSION_LINEAR
+DIMENSION_ORDINATE DIMENSION_RADIUS DUMMY EXTRUDEDSURFACE
+GEOPOSITIONMARKER IMAGE LEADER LIGHT LONG_TRANSACTION MINSERT MLINE
+MULTILEADER OLE2FRAME OLEFRAME POLYLINE_2D POLYLINE_3D POLYLINE_MESH
+POLYLINE_PFACE PROXY_ENTITY PROXY_LWPOLYLINE SHAPE SOLID TABLE
+TOLERANCE TRACE VERTEX_2D VERTEX_3D VERTEX_MESH VERTEX_PFACE
+VERTEX_PFACE_FACE HELIX
+
+@item likewise no test coverage for the following missing objects:
+
+ARCALIGNEDTEXT ASSOC2DCONSTRAINTGROUP ASSOCGEOMDEPENDENCY
+ASSOCNETWORK CELLSTYLEMAP CSACDOCUMENTOPTIONS DBCOLOR DETAILVIEWSTYLE
+DIMASSOC EXACXREFPANELOBJECT FIELD FIELDLIST GEODATA IDBUFFER IMAGEDEF
+IMAGEDEF_REACTOR LAYER_INDEX LEADEROBJECTCONTEXTDATA LIGHTLIST
+NPOCOLLECTION OBJECTCONTEXTDATA OBJECT_PTR PLOTSETTINGS PROXY_OBJECT
+RASTERVARIABLES SECTIONVIEWSTYLE SORTENTSTABLE SPATIAL_FILTER
+SPATIAL_INDEX SUN TABLECONTENT TABLEGEOMETRY UCS
+VBA_PROJECT VIEW VPORT_ENTITY_CONTROL VPORT_ENTITY_HEADER
 
 @end table
-
-See also the @file{TODO} file in the source distribution.
 
 @section Related projects
 
@@ -174,7 +218,7 @@ Related libraries:
 The old version (documented in Esperanto) which was forked to LibreDWG in 2009.
 But in the meantime it got a DXF reader.
 @item libdxfrw
-Read the DWG format for all versions but with much less elements, only those needed for DXF.
+Read the DWG format for all versions r13+ but with much less elements, only those needed for DXF.
 Written in C++, under the GPLv2 license.
 @item libopencad
 Read the R2000 DWG format.
@@ -185,8 +229,8 @@ The OpenDWG's license does not allow the usage in free software projects.
 
 Compared to libdwg, libdxfrw and libopencad, LibreDWG can read and
 write much more details. Which is especially important for attached links
-and data from third party applications: BIM, MAP, GIS, ..., 
-and for dynamic parametric constraints.
+and data from third party applications: BIM, MAP, GIS, AEC, MECH, ...
+and for 3D solids and dynamic parametric constraints.
 
 @node Usage
 @chapter Usage
@@ -328,10 +372,13 @@ You can use LibreDWG immediately upon loading, without any particular
 initialization. Only when using some @b{dwg_api} functions you might need to
 initialize the version via @code{dwg_api_init_version(&dwg)}, when you
 need other formats than r2000 and you call an API function which does
-not store the version internally. Most do.
+not store the version internally. Most do. This limitation will soon be fixed.
 
 You usually use one set of functions - either decoding or encoding -
 at a time.  All functions use the common data types (@pxref{Types}).
+All functions return an error code, and the high-level functions for
+multiple objects add the error bitmask, which is sorted by severity.
+When the error exceeds DWG_ERR_CRITICAL, processing is stopped.
 
 @menu
 * Decoding::                    Functions on the DWG read path.
@@ -361,7 +408,8 @@ via two ways:
    and a custom @code{void process_BLOCK_HEADER((Dwg_Object_Ref* ref)}:
 
 @verbatim
-  Dwg_Object_BLOCK_CONTROL* block_control = dwg->object[0]->tio.object->tio.BLOCK_CONTROL;
+  Dwg_Object_BLOCK_CONTROL* block_control
+    = dwg->object[0]->tio.object->tio.BLOCK_CONTROL;
 
   // optional
   for (i=0; i < block_control->num_entries; i++)
@@ -378,10 +426,12 @@ or 2. by using the API functions from @file{dwg_api.h}:
 @verbatim
   int error;
   dwg_obj_block_header *hdr = dwg_get_block_header(dwg, &error);
-  dwg_obj_block_control *ctrl = dwg_block_header_get_block_control(hdr, &error);
+  dwg_obj_block_control *ctrl
+    = dwg_block_header_get_block_control(hdr, &error);
 
   // optional
-  dwg_object_ref **hdr_refs = dwg_obj_block_control_get_block_headers(ctrl, &error);
+  dwg_object_ref **hdr_refs
+    = dwg_obj_block_control_get_block_headers(ctrl, &error);
   long num_hdr_objs = dwg_obj_block_control_get_num_entries(ctrl, &error);
   for (i=0; i < num_hdr_objs; i++)
     {
@@ -461,7 +511,7 @@ Reading DXF is under construction.
 
 We can almost write Binary DXF files in various versions. Under Construction.
 
-Reading DXF is under construction.
+Reading DXFB is under construction.
 
 @node JSON
 @subsection JSON
@@ -480,6 +530,42 @@ still there, which is strictly not valid JSON.
 
 Work is ongoing to write to the GeoJSON format as specified at @uref{http://geojson.org/geojson-spec.html}.
 See @code{dwgread} with the @code{--fmt GeoJSON} option.
+
+This is about 70% finished. Check the covered entity types.
+
+@node Errors
+@chapter Errors
+
+@cindex error
+
+LibreDWG is mostly a library, and as such collects error codes from
+the highest level function down to the lowest level functions.
+The error codes are sorted by severity, and only of the error exceeds
+DWG_ERR_CRITICAL, i.e. DWG_ERR_VALUEOUTOFBOUNDS, processing is stopped.
+
+All error bitmasks are collected during read or write and returned at the end.
+
+@table @asis
+@item DWG_ERR_WRONGCRC          1
+@item DWG_ERR_NOTYETSUPPORTED   2
+@item DWG_ERR_UNHANDLEDCLASS    4
+@item DWG_ERR_INVALIDTYPE       8
+@item DWG_ERR_INVALIDHANDLE     16
+@item DWG_ERR_INVALIDEED        32
+@item DWG_ERR_VALUEOUTOFBOUNDS  64 = DWG_ERR_VALUEOUTOFBOUNDS
+@item DWG_ERR_CLASSESNOTFOUND   128
+@item DWG_ERR_SECTIONNOTFOUND   256
+@item DWG_ERR_PAGENOTFOUND      512
+@item DWG_ERR_INTERNALERROR     1024
+@item DWG_ERR_INVALIDDWG        2048
+@item DWG_ERR_IOERROR           4096
+@item DWG_ERR_OUTOFMEM          8192
+@end table
+
+Additionally, verbose warning and error messages are printed to stderr.
+
+Unhandled class and Invalid type errors of objects are not severe. A DWG format can store a serialization of many third party classes and objects, and thus we will never be able read all possible types.
+Unknown types are just stored as binary blob without any DXF codes.
 
 @node Programs
 @chapter Programs
@@ -544,7 +630,9 @@ TEXT, LINE, CIRCLE, ARC, INSERT.
 
 @item @file{dwg2ps}
 @cindex dwg2ps
-Convert a DWG to a limited Postscript file. All paperspace and modelspace enties of type LINE.
+Convert a DWG to a very limited Postscript file. All paperspace and modelspace enties of type LINE.
+
+Noe that the graphical representation for PS and SVG output is severely lacking, block references (insert entities) are not yet exploded, UCS and paper space transformations per entity are not yet done.
 
 @item @file{dwg2dxf}
 @cindex dwg2dxf
@@ -571,7 +659,7 @@ There are also some more examples in the source distribution:
 @cindex load_dwg
 
 @file{dwg2svg2} converts a DWG to SVG similar to @file{dwg2SVG},
-but via the @file{dwg_api.h} only.
+but via the @file{dwg_api.h} only. The graphical representation for PS and SVG output is severely lacking, block references (insert entities) are not yet exploded , UCS and paper space transformations per entity are not yet done.
 @cindex dwg2svg2
 
 @node Reference API
@@ -615,7 +703,8 @@ to reproduce the problem.  Generally speaking, that means:
 @item A description of the problem and samples of any erroneous output.
 @item Options you gave to @command{configure} other than specifying
       installation directories.
-@item Anything else that you think would be helpful.
+@item Anything else that you think would be helpful. Usually that's the failing part
+of the object processed with @file{dwgread -v5}, but only the failing part, not the whole output.
 @end itemize
 
 When in doubt whether something is needed or not, include it.  It's
