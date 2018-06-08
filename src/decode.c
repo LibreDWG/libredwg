@@ -1868,7 +1868,7 @@ read_2004_section_classes(Bit_Chain* dat, Dwg_Data *dwg)
     {
       LOG_ERROR("Failed to find class section sentinel");
       free(sec_dat.chain);
-      return DWG_ERR_INTERNALERROR;
+      return DWG_ERR_CLASSESNOTFOUND;
     }
 
   // then RS: CRC

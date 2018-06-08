@@ -1424,7 +1424,8 @@ bit_write_CMC(Bit_Chain * dat, Dwg_Color* color)
     }
 }
 
-/** Search for a sentinel; if found, positions "dat->byte" immediately after it.
+/** Search for a sentinel; if found, positions "dat->byte" immediately after it
+    and returns -1
  */
 int
 bit_search_sentinel(Bit_Chain * dat, unsigned char sentinel[16])
