@@ -3364,7 +3364,6 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
     }
   if (!strcmp(dxfname, "FIELD"))
     {
-      UNTESTED_CLASS;
       return dwg_decode_FIELD(dat, obj);
     }
   if (!strcmp(dxfname, "TABLECONTENT"))

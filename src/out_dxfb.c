@@ -588,7 +588,6 @@ dwg_dxfb_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
     }
   if (!strcmp(dxfname, "FIELDLIST"))
     {
-      UNTESTED_CLASS;
       assert(!is_entity);
       return dwg_dxfb_FIELDLIST(dat, obj);
     }
@@ -684,7 +683,8 @@ dwg_dxfb_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
     {
       return dwg_dxfb_SPATIAL_INDEX(dat, obj);
     }
-  if (!strcmp(dxfname, "TABLE"))
+  if (!strcmp(dxfname, "TABLE") ||
+      !strcmp(dxfname, "ACAD_TABLE"))
     {
       UNTESTED_CLASS;
       return dwg_dxfb_TABLE(dat, obj);
@@ -728,9 +728,8 @@ dwg_dxfb_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       assert(!is_entity);
       return 0; //dwg_dxfb_DETAILVIEWSTYLE(dat, obj);
     }
-  if (!strcmp(dxfname, "AcDbField")) //?
+  if (!strcmp(dxfname, "FIELD"))
     {
-      UNTESTED_CLASS;
       return dwg_dxfb_FIELD(dat, obj);
     }
   if (!strcmp(dxfname, "TABLECONTENT"))

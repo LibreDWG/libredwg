@@ -3823,24 +3823,24 @@ DWG_OBJECT_END
 
 DWG_OBJECT(FIELD)
 
-  //SUBCLASS (AcDbField)
-  //LOG_INFO("TODO FIELD\n");
+  SUBCLASS (AcDbField)
   FIELD_T (id, 1);
   FIELD_T (code, 2); // and code 3 for subsequent >255 chunks
-  FIELD_BL (num_childhdl, 90);
-  HANDLE_VECTOR (childhdl, num_childhdl, 360, 0);
+  FIELD_BL (num_childs, 90);
+  DECODER { if (_obj->num_childs) _obj->num_childs--; }
+  //DEBUG_HERE()
+  HANDLE_VECTOR (childs, num_childs, 3, 360);
   FIELD_BL (num_objects, 97);
-  HANDLE_VECTOR (objects, num_objects, 331, 0);
-
-  VERSION(R_2004) {
+  HANDLE_VECTOR (objects, num_objects, 5, 331);
+  PRE(R_2007) {
     FIELD_TV (format, 4);
   }
-
   FIELD_BL (evaluation_option, 91);
   FIELD_BL (filing_option, 92);
   FIELD_BL (field_state, 94);
   FIELD_BL (evaluation_status, 95);
   FIELD_BL (evaluation_error_code, 96);
+  //DEBUG_HERE()
   FIELD_T (evaluation_error_msg, 300);
   Table_Value(value)
   FIELD_T (value_string, 301); // and 9 for subsequent >255 chunks

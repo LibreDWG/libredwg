@@ -3491,13 +3491,13 @@ typedef struct _dwg_object_FIELD
 {
   struct _dwg_object_object *parent;
                     /* dxf group code */
-  BITCODE_TV id;    /* 1 */
-  BITCODE_TV code;  /* 2,3 */
-  BITCODE_BL num_childhdl; /* 90 */
-  BITCODE_H *childhdl;     /* 360 */
+  BITCODE_TV id;           /* 1 */
+  BITCODE_TV code;         /* 2,3 */
+  BITCODE_BL num_childs;   /* 90 */
+  BITCODE_H *childs;       /* code:3, 360 */
   BITCODE_BL num_objects;  /* 97 */
-  BITCODE_H *objects;      /* 331 */
-  BITCODE_TV format;       /* 4 */
+  BITCODE_H *objects;      /* code:5, 331 */
+  BITCODE_TV format;       /* 4, until r2004 only */
   BITCODE_BL evaluation_option; /* 91 */
   BITCODE_BL filing_option;     /* 92 */
   BITCODE_BL field_state;       /* 94 */

@@ -208,7 +208,9 @@
 #define DEBUG_HERE()\
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE) { \
     Bit_Chain here = *dat; \
+    int oldloglevel = loglevel; \
     char *tmp; BITCODE_BB bb = 0; BITCODE_RS rs; BITCODE_RL rl;\
+    Dwg_Handle hdl; \
     LOG_TRACE("DEBUG_HERE @%u.%u / 0x%x\n  24RC: ", (unsigned int)dat->byte, dat->bit, \
               (unsigned int)dat->byte); \
     tmp = bit_read_TF(dat, 24);\
@@ -241,7 +243,16 @@
         LOG_TRACE("  BD :"FORMAT_BD "\n", bit_read_BD(dat));    \
         *dat = here;                                            \
       }                                                         \
-    }\
+    }                                                           \
+    if (dat->chain[dat->byte] & 0xf <= 4) {                     \
+      loglevel = 0;                                             \
+      if (!bit_read_H(dat, &hdl)) {                             \
+        LOG_TRACE("  H :(%d.%d.%lX)\n", hdl.code, hdl.size,     \
+                  hdl.value);                                   \
+      }                                                         \
+      loglevel = oldloglevel;                                   \
+    }                                                           \
+    *dat = here;                                                \
   }
 
 //FIELD_VECTOR_N(name, type, size):

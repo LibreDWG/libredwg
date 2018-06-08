@@ -1219,7 +1219,8 @@ dwg_encode_variable_type(Dwg_Data* dwg, Bit_Chain* dat, Dwg_Object* obj)
       assert(!is_entity);
       return dwg_encode_SPATIAL_INDEX(dat, obj);
     }
-  if (!strcmp(dxfname, "TABLE"))
+  if (!strcmp(dxfname, "TABLE") ||
+      !strcmp(dxfname, "ACAD_TABLE"))
     {
       assert(is_entity);
       return dwg_encode_TABLE(dat, obj);
@@ -1236,7 +1237,6 @@ dwg_encode_variable_type(Dwg_Data* dwg, Bit_Chain* dat, Dwg_Object* obj)
     }
   if (!strcmp(dxfname, "FIELDLIST"))
     {
-      UNTESTED_CLASS;
       assert(!is_entity);
       return dwg_encode_FIELDLIST(dat, obj);
     }
@@ -1261,9 +1261,8 @@ dwg_encode_variable_type(Dwg_Data* dwg, Bit_Chain* dat, Dwg_Object* obj)
       assert(!is_entity);
       return dwg_encode_MLEADERSTYLE(dat, obj);
     }
-  if (!strcmp(dxfname, "AcDbField")) //???
+  if (!strcmp(dxfname, "FIELD"))
     {
-      UNTESTED_CLASS;
       assert(!is_entity);
       return dwg_encode_FIELD(dat, obj);
     }

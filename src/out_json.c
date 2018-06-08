@@ -337,7 +337,6 @@ dwg_json_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
     }
   if (!strcmp(dxfname, "FIELDLIST"))
     {
-      UNTESTED_CLASS;
       assert(!is_entity);
       return dwg_json_FIELDLIST(dat, obj);
     }
@@ -433,7 +432,8 @@ dwg_json_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
     {
       return dwg_json_SPATIAL_INDEX(dat, obj);
     }
-  if (!strcmp(dxfname, "TABLE"))
+  if (!strcmp(dxfname, "TABLE") ||
+      !strcmp(dxfname, "ACAD_TABLE"))
     {
       UNTESTED_CLASS;
       return dwg_json_TABLE(dat, obj);
@@ -449,7 +449,6 @@ dwg_json_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
     }
   if (!strcmp(dxfname, "FIELDLIST"))
     {
-      UNTESTED_CLASS;
       return dwg_json_FIELDLIST(dat, obj);
     }
   if (!strcmp(dxfname, "VBA_PROJECT"))
@@ -490,7 +489,7 @@ dwg_json_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       //dwg_json_DETAILVIEWSTYLE(dat, obj);
       return DWG_ERR_UNHANDLEDCLASS;
     }
-  if (!strcmp(dxfname, "AcDbField")) //?
+  if (!strcmp(dxfname, "FIELD"))
     {
       UNTESTED_CLASS;
       return dwg_json_FIELD(dat, obj);

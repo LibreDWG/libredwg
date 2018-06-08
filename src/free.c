@@ -498,7 +498,7 @@ dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
       //return dwg_free_DETAILVIEWSTYLE(obj);
       return DWG_ERR_UNHANDLEDCLASS;
     }
-  if (!strcmp(dxfname, "AcDbField")) //?
+  if (!strcmp(dxfname, "FIELD"))
     {
       free(dxfname);
       return dwg_free_FIELD(obj);

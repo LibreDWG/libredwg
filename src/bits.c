@@ -1013,7 +1013,7 @@ bit_read_H(Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
   handle->code = (handle->code & 0xf0) >> 4;
 
   handle->value = 0;
-  if (handle->size > 4)
+  if (handle->size > 4 || handle->code > 12)
     {
       LOG_ERROR("Invalid handle-reference, longer than 4 bytes: %i.%i.%lu",
                 handle->code, handle->size, handle->value)

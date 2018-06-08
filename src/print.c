@@ -425,7 +425,8 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       dwg_print_SPATIAL_INDEX(dat, obj);
       return DWG_NOERR;
     }
-  if (!strcmp(dxfname, "TABLE"))
+  if (!strcmp(dxfname, "TABLE") ||
+      !strcmp(dxfname, "ACAD_TABLE"))
     {
       UNTESTED_CLASS;
       dwg_print_TABLE(dat, obj);
@@ -475,7 +476,7 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
       dwg_print_VISUALSTYLE(dat, obj);
       return DWG_NOERR;
     }
-  if (!strcmp(dxfname, "AcDbField")) //?
+  if (!strcmp(dxfname, "FIELD"))
     {
       UNTESTED_CLASS;
       dwg_print_FIELD(dat, obj);
