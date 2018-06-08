@@ -352,6 +352,23 @@ typedef enum DWG_OBJECT_TYPE
 } Dwg_Object_Type;
 
 /**
+ Error codes returned.
+ */
+typedef enum DWG_ERROR
+{
+  DWG_NOERR = 0,
+  DWG_ERR_INVALIDTYPE,
+  DWG_ERR_OUTOFMEM,
+  DWG_ERR_UNHANDLEDCLASS,
+  DWG_ERR_INVALIDDWG,
+  DWG_ERR_WRONGCRC,
+  DWG_ERR_VALUEOUTOFBOUNDS,
+  DWG_ERR_INTERNALERROR,
+  DWG_ERR_INVALIDHANDLE,
+
+} Dwg_Error;
+
+/**
    handles resolve absolute or relative indices to objects.
 
    code 2-5: represents the type of the relation: hard/soft, owner/id.

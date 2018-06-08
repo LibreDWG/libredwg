@@ -175,7 +175,7 @@ dwg_decode(Bit_Chain * dat, Dwg_Data * dwg)
           LOG_ERROR("Invalid or unimplemented DWG version code %s",
                     version);
         }
-      return -1;
+      return DWG_ERR_INVALIDDWG;
     }
   dat->version = dwg->header.version;
   dwg->header.from_version = dat->version;
@@ -214,7 +214,7 @@ dwg_decode(Bit_Chain * dat, Dwg_Data * dwg)
 
   // This line should not be reached
   LOG_ERROR("LibreDWG does not support this version: %s.", version)
-  return -1;
+  return DWG_ERR_INVALIDDWG;
 }
 
 // We put the 3x 10 table fields into sections.
@@ -593,7 +593,7 @@ decode_preR13(Bit_Chain* dat, Dwg_Data * dwg)
   if (!dwg->header.section)
     {
       LOG_ERROR("Out of memory");
-      return -2;
+      return DWG_ERR_OUTOFMEM;
     }
 
   entities_start  = bit_read_RL(dat);
@@ -759,7 +759,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
   if (!dwg->header.section)
     {
       LOG_ERROR("Out of memory");
-      return -2;
+      return DWG_ERR_OUTOFMEM;
     }
   /* section 0: header vars
    *         1: class section
@@ -786,7 +786,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
     {
       LOG_ERROR("Header CRC mismatch %x <=> %x", ckr, ckr2);
       //if (dwg->header.version == R_2000)
-      //  return -1;
+      //  return DWG_ERR_WRONGCRC;
       /* The CRC depends on num_sections. XOR result with
          3: 0xa598
          4: 0x8101
@@ -842,7 +842,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
           if (!dwg->picture.chain)
             {
               LOG_ERROR("Out of memory");
-              return -2;
+              return DWG_ERR_OUTOFMEM;
             }
           memcpy(dwg->picture.chain, &dat->chain[start_address],
               dwg->picture.size);
@@ -885,7 +885,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
                dwg->header.section[SECTION_HEADER_R13].number, ckr, ckr2);
       // TODO: xor with num_sections
       //if (dwg->header.version == R_2000)
-      //  return -1;
+      //  return DWG_ERR_WRONGCRC;
     }
 
   /*-------------------------------------------------------------------------
@@ -922,7 +922,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
       if (!dwg->dwg_class)
         {
           LOG_ERROR("Out of memory");
-          return -2;
+          return DWG_ERR_OUTOFMEM;
         }
       klass = &dwg->dwg_class[i];
       memset(klass, 0, sizeof(Dwg_Class));
@@ -979,7 +979,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
       LOG_ERROR("Section[%ld] CRC mismatch %d <=> %d",
                 dwg->header.section[SECTION_CLASSES_R13].number, ckr, ckr2);
       //if (dwg->header.version == R_2000)
-      //  return -1;
+      //  return DWG_ERR_WRONGCRC;
     }
 
   dat->byte += 16;
@@ -1012,7 +1012,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
       if (section_size > 2035)
         {
           LOG_ERROR("Object-map section size greater than 2035!")
-          return -1;
+          return DWG_ERR_VALUEOUTOFBOUNDS;
         }
 
       //last_handle = 0;
@@ -1061,7 +1061,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
           LOG_ERROR("Section CRC mismatch %d <=> %d", ckr, ckr2);
           // fails with r14
           //if (dwg->header.version == R_2000)
-          //  return -1;
+          //  return DWG_ERR_WRONGCRC;
         }
 
       if (dat->byte >= lastmap)
@@ -1269,7 +1269,7 @@ resolve_objectref_vector(Bit_Chain* dat, Dwg_Data * dwg)
             LOG_WARN("Null object pointer: object_ref[%lu]", i)
         }
     }
-  return dwg->num_object_refs ? 0 : 1;
+  return dwg->num_object_refs ? 0 : DWG_ERR_VALUEOUTOFBOUNDS;
 }
 
 void
@@ -1428,7 +1428,7 @@ decompress_R2004_section(Bit_Chain *restrict dat, char *restrict decomp,
       else if (opcode1 == 0x11)
           break;     // Terminates the input stream, everything is ok
       else
-          return 1;  // error in input stream
+          return DWG_ERR_INTERNALERROR;  // error in input stream
 
       LOG_INSANE("got compressed data %d\n", comp_bytes)
       // copy "compressed data"
@@ -1686,7 +1686,7 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *dwg,
   if (!info)
     {
       LOG_WARN("Failed to find section %d", (int)section_type);
-      return 1;
+      return DWG_ERR_INTERNALERROR;
     }
   else
     {
@@ -1699,7 +1699,7 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *dwg,
   if (!decomp)
     {
       LOG_ERROR("Out of memory");
-      return 2;
+      return DWG_ERR_OUTOFMEM;
     }
 
   for (i=0; i < info->num_sections; ++i)
@@ -1798,7 +1798,7 @@ read_2004_section_classes(Bit_Chain* dat, Dwg_Data *dwg)
       if (max_num < 500 || max_num > 5000)
         {
           LOG_ERROR("Invalid max class number %d", max_num)
-          return 1;
+          return DWG_ERR_VALUEOUTOFBOUNDS;
         }
       assert(max_num >= 500);
       assert(max_num < 5000);
@@ -1812,7 +1812,7 @@ read_2004_section_classes(Bit_Chain* dat, Dwg_Data *dwg)
           LOG_ERROR("Out of memory");
           if (sec_dat.chain)
             free(sec_dat.chain);
-          return 2;
+          return DWG_ERR_OUTOFMEM;
         }
 
       for (idc = 0; idc < dwg->num_classes; idc++)
@@ -1868,7 +1868,7 @@ read_2004_section_classes(Bit_Chain* dat, Dwg_Data *dwg)
     {
       LOG_ERROR("Failed to find class section sentinel");
       free(sec_dat.chain);
-      return 1;
+      return DWG_ERR_INTERNALERROR;
     }
 
   // then RS: CRC
@@ -1958,7 +1958,7 @@ read_2004_section_handles(Bit_Chain* dat, Dwg_Data *dwg)
         {
           LOG_ERROR("Object-map section size greater than 2034!");
           free(obj_dat.chain);
-          return 1;
+          return DWG_ERR_VALUEOUTOFBOUNDS;
         }
 
       //last_handle = 0;
@@ -2065,7 +2065,7 @@ decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
   if (!dwg->header.section)
     {
       LOG_ERROR("Failed to read R2004 Section Page Map.")
-      return -1;
+      return DWG_ERR_INTERNALERROR;
     }
 
   /*-------------------------------------------------------------------------
@@ -2180,7 +2180,7 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
           obj->num_eed = 0;
           obj->num_handles = 0;
           obj->num_reactors = 0;
-          return -1; //XXX
+          return DWG_ERR_VALUEOUTOFBOUNDS; //XXX
         }
 
       if (idx) {
@@ -2254,7 +2254,7 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
                     free(obj->eed[idx].data);
                     free(obj->eed);
                     dat->byte = end;
-                    return 1;
+                    return DWG_ERR_VALUEOUTOFBOUNDS;
                   }
                 /* code:1 + len:1 + cp:2 */
                 bit_read_fixed(dat, obj->eed[idx].data->u.eed_0.string, lenc);
@@ -2315,7 +2315,7 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
               break;
             default:
               LOG_ERROR("Unknown EED code %d", code);
-              return 1;
+              return DWG_ERR_INVALIDTYPE;
             }
 #ifdef DEBUG
           // sanity checks
@@ -2446,7 +2446,7 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
           LOG_ERROR("Invalid picture-size: %lu kB. Object: %lu (handle)",
                     (unsigned long)(ent->picture_size / 1000), _obj->handle.value)
           bit_set_position(dat, _obj->address);
-          return 1;
+          return DWG_ERR_VALUEOUTOFBOUNDS;
         }
     }
 
@@ -2570,7 +2570,7 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
 {
   unsigned int i;
   BITCODE_BS size;
-  int error = 2;
+  int error;
   Dwg_Data *dwg = obj->dwg;
   Dwg_Object *_obj = &dwg->object[obj->objid];
 
@@ -2600,16 +2600,14 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
       obj_string_stream(dat, _obj, str_dat);
     }
 
-  if (bit_read_H(dat, &_obj->handle))
+  if ((error = bit_read_H(dat, &_obj->handle)))
     {
-      LOG_ERROR(
-          "\tError in object handle! Bit_Chain current address: 0x%0x",
-          (unsigned int) dat->byte)
+      LOG_ERROR("Wrong object handle at pos 0x%0lx", dat->byte)
       _obj->bitsize = 0;
       obj->num_eed = 0;
       obj->num_handles = 0;
       obj->num_reactors = 0;
-      return -1;
+      return error;
     }
   LOG_TRACE("handle: %d.%d.%lX [5]\n", _obj->handle.code,
             _obj->handle.size, _obj->handle.value)
@@ -3195,10 +3193,10 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
   int is_entity;
   Dwg_Class *klass;
 
-  if ((obj->type - 500) > dwg->num_classes)
+  if (obj->type < 500 || (obj->type - 500) > dwg->num_classes)
     {
       LOG_ERROR("Invalid object type %d, only %d classes", obj->type, dwg->num_classes);
-      return 0;
+      return DWG_ERR_INVALIDTYPE;
     }
 
   i = obj->type - 500;
@@ -3615,6 +3613,7 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
 }
 
 /** Adds an object to the DWG (i.e. dwg->object[dwg->num_objects])
+    Returns 0 or 1 on success.
     Returns 1 if the dwg->object pool was re-alloced.
  */
 int
@@ -3648,7 +3647,7 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
   if (!dwg->object)
     {
       LOG_ERROR("Out of memory");
-      return 0;
+      return DWG_ERR_OUTOFMEM;
     }
 
   LOG_INFO("==========================================\n"
@@ -3951,6 +3950,7 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
       if (obj->type == dwg->layout_number)
         dwg_decode_LAYOUT(dat, obj);
 
+      //FIXME: return error code, not success
       else if (!dwg_decode_variable_type(dwg, dat, hdl_dat, obj))
         {
           int is_entity = 0;
