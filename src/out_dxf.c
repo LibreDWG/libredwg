@@ -348,7 +348,10 @@ dwg_dxf_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
   Dwg_Entity_##token *ent, *_obj;\
   Dwg_Object_Entity *_ent;\
   const int minimal = obj->parent->opts & 0x10;\
-  RECORD(token);\
+  if (!strcmp(#token, "GEOPOSITIONMARKER"))\
+    RECORD(POSITIONMARKER);\
+  else\
+    RECORD(token);\
   LOG_INFO("Entity " #token ":\n")\
   _ent = obj->tio.entity;\
   _obj = ent = _ent->tio.token;\

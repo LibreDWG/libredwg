@@ -310,7 +310,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_DICTIONARYVAR,
   DWG_TYPE_DICTIONARYWDLFT,
   DWG_TYPE_EXACXREFPANELOBJECT,
-  DWG_TYPE_EXTRUDEDSURFACE,
+  DWG_TYPE_EXTRUDEDSURFACE, /* or just SURFACE? */
   DWG_TYPE_FIELD,
   DWG_TYPE_FIELDLIST,
   DWG_TYPE_GEODATA,
@@ -342,7 +342,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_TABLECONTENT,
   DWG_TYPE_TABLEGEOMETRY,
   DWG_TYPE_TABLESTYLE,
-  DWG_TYPE_UNDERLAY,
+  DWG_TYPE_UNDERLAY, /* or seperate DGN,DWF,PDF types? */
   DWG_TYPE_VISUALSTYLE,
   DWG_TYPE_WIPEOUT,
   DWG_TYPE_WIPEOUTVARIABLES,
@@ -4111,23 +4111,25 @@ typedef struct _dwg_entity_CAMERA
 typedef struct _dwg_entity_GEOPOSITIONMARKER
 {
   struct _dwg_object_entity *parent;
+  BITCODE_BS type;        /*!< point, lat_lon, mylocation */
   BITCODE_3BD position;   /*!< DXF 10 */
   BITCODE_3BD extrusion;  /*!< DXF 210 */
   BITCODE_BD radius;      /*!< DXF 40 */
   BITCODE_BD landing_gap; /*!< DXF 41 */
   BITCODE_T text;         /*!< DXF 1 */
-  BITCODE_BS alignment;   /*!< DXF 70  0 left, 1 center, 2 right */
-  BITCODE_H mtext_handle; /*!< DXF ? */
+  BITCODE_BS text_alignment; /*!< DXF 70  0 left, 1 center, 2 right */
   BITCODE_B mtext_visible;/*!< DXF ? */
   BITCODE_B enable_frame_text; /*!< DXF ? */
   BITCODE_T notes;        /*!< DXF 3 */
-  BITCODE_H style;        /*!< DXF 7 */
+  BITCODE_H mtext_handle; /*!< DXF ? */
+  BITCODE_H text_style;   /*!< DXF 7 */
 } Dwg_Entity_GEOPOSITIONMARKER;
 
 /**
  Entity EXTRUDEDSURFACE (varies) UNKNOWN FIELDS
  in DXF as SURFACE and encrypted
  yet unsorted, and unused.
+ There's also LOFTEDSURFACE, PLANESURFACE, REVOLVEDSURFACE
 */
 typedef struct _dwg_entity_EXTRUDEDSURFACE
 {

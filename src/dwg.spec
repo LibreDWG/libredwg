@@ -5495,23 +5495,29 @@ DWG_OBJECT(OBJECT_PTR) //empty? only xdata. CAseDLPNTableRecord
 DWG_OBJECT_END
 
 // (varies) UNTESTED
-// undocumented in DXF, only OARX
+// in DXF as POSITIONMARKER (rename?, no), command: GEOMARKPOSITION, GEOMARKPOINT
 DWG_ENTITY(GEOPOSITIONMARKER)
 
   SUBCLASS (AcDbGeoPositionMarker)
+  FIELD_BS (type, 0); // POINT, LATLONG, MYLOCATION
   FIELD_3BD (position, 10);
+  //FIELD_3BD (lat_lon_alt, 0); // the same?
   FIELD_3BD (extrusion, 210);
   FIELD_BD (radius, 40);
   FIELD_BD (landing_gap, 0);
   FIELD_T (text, 1);
-  FIELD_BS (alignment, 0); // 0 left, 1 center, 2 right
-  FIELD_HANDLE (mtext_handle, 5, 0);
+  FIELD_BS (text_alignment, 0); // 0 left, 1 center, 2 right
   FIELD_B (mtext_visible, 0);
+  //FIELD_B (mtext_is_vertical, 0);
+  //FIELD_BD (mtext_actual_width, 0);
+  //FIELD_BD (mtext_actual_height, 0);
   FIELD_B (enable_frame_text, 0);
   FIELD_T (notes, 0);
 
   COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (style, 5, 7);
+  //FIELD_HANDLE (leader_handle, 5, 0); //or drawn automatically?
+  FIELD_HANDLE (mtext_handle, 5, 0);
+  FIELD_HANDLE (text_style, 5, 7);
 
 DWG_ENTITY_END
 
