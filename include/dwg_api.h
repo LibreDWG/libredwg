@@ -67,6 +67,7 @@ Dwg_Entity_##token **dwg_get_##token (Dwg_Object_Ref * ref) \
   Dwg_Object * obj = get_first_owned_object(ref->obj, hdr); \
   while (obj) \
     { \
+     /* TODO varies */ \
       if (obj->type == DWG_TYPE_##token) \
         counts++; \
       obj = get_next_owned_object(ref->obj, obj, hdr); \
@@ -77,6 +78,7 @@ Dwg_Entity_##token **dwg_get_##token (Dwg_Object_Ref * ref) \
   obj = get_first_owned_object(ref->obj, hdr); \
   while (obj) \
     { \
+      /* TODO varies */ \
       if(obj->type == DWG_TYPE_##token) \
         { \
           ret_##token[x] = obj->tio.entity->tio.token; \
@@ -227,7 +229,7 @@ typedef struct _dwg_3DSOLID_silhouette            dwg_3dsolid_silhouette;
 typedef struct _dwg_entity_TABLE                  dwg_ent_table;
 typedef struct _dwg_entity_HATCH                  dwg_ent_hatch;
 typedef struct _dwg_entity_VERTEX_PFACE_FACE      dwg_ent_vert_pface_face;
-typedef struct _dwg_entity_DUMMY                  dwg_ent_generic;
+typedef struct _dwg_entity_POINT                  dwg_ent_generic;
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -346,10 +348,6 @@ GET_DWG_ENTITY_DECL(TOLERANCE)
 GET_DWG_ENTITY_DECL(MLINE)
 /// extract all OLE2FRAME entities from a block
 GET_DWG_ENTITY_DECL(OLE2FRAME)
-/// extract all DUMMY entities from a block
-GET_DWG_ENTITY_DECL(DUMMY)
-/// extract all LONG_TRANSACTION entities from a block
-GET_DWG_ENTITY_DECL(LONG_TRANSACTION)
 /// extract all lwpline entities from a block
 GET_DWG_ENTITY_DECL(LWPOLYLINE)
 /// extract all PROXY_ENTITY entities from a block
@@ -401,7 +399,6 @@ CAST_DWG_OBJECT_TO_ENTITY_DECL(ARC)
 CAST_DWG_OBJECT_TO_ENTITY_DECL(CIRCLE)
 /// dwg object to line
 CAST_DWG_OBJECT_TO_ENTITY_DECL(LINE)
-
 /// dwg object to common dimension
 EXPORT dwg_ent_dim * dwg_object_to_DIMENSION(dwg_object *obj);
 /// dwg object to dimension ordinate
@@ -456,18 +453,23 @@ CAST_DWG_OBJECT_TO_ENTITY_DECL(TOLERANCE)
 CAST_DWG_OBJECT_TO_ENTITY_DECL(MLINE)
 /// dwg object to ole2frame
 CAST_DWG_OBJECT_TO_ENTITY_DECL(OLE2FRAME)
-/// dwg object to dummy
-CAST_DWG_OBJECT_TO_ENTITY_DECL(DUMMY)
-/// dwg object to long_transaction
-CAST_DWG_OBJECT_TO_ENTITY_DECL(LONG_TRANSACTION)
 /// dwg object to lwpline
 CAST_DWG_OBJECT_TO_ENTITY_DECL(LWPOLYLINE)
 /// dwg object to proxy_entity
 CAST_DWG_OBJECT_TO_ENTITY_DECL(PROXY_ENTITY)
 /// dwg object to hatch
 CAST_DWG_OBJECT_TO_ENTITY_DECL(HATCH)
-/// dwg object to image
+  
+/// dwg object to variable types
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL(IMAGE)
+CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL(CAMERA)
+CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL(EXTRUDEDSURFACE)
+CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL(GEOPOSITIONMARKER)
+CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL(LIGHT)
+CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL(MULTILEADER)
+CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL(TABLE)
+CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL(UNDERLAY)
+CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL(WIPEOUT)
 
 /*******************************************************************
 *     Functions created from macro to dwg object to object     *

@@ -192,6 +192,7 @@ typedef struct _dwg_bitcode_3bd
 #define BITCODE_3RD Dwg_Bitcode_3RD
 #define BITCODE_3BD Dwg_Bitcode_3BD
 #define BITCODE_3DPOINT BITCODE_3BD
+#define BITCODE_3DVECTOR BITCODE_3BD_1
 
 /**
  Object supertypes that exist in dwg-files.
@@ -341,6 +342,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_TABLECONTENT,
   DWG_TYPE_TABLEGEOMETRY,
   DWG_TYPE_TABLESTYLE,
+  DWG_TYPE_UNDERLAY,
   DWG_TYPE_VISUALSTYLE,
   DWG_TYPE_WIPEOUT,
   DWG_TYPE_WIPEOUTVARIABLES,
@@ -2321,20 +2323,20 @@ typedef struct _dwg_entity_OLE2FRAME
 /**
  DUMMY (75) object
  */
-typedef struct _dwg_entity_DUMMY
+typedef struct _dwg_object_DUMMY
 {
-  struct _dwg_object_entity *parent;
+  struct _dwg_object_object *parent;
   /* ??? not seen */
-} Dwg_Entity_DUMMY;
+} Dwg_Object_DUMMY;
 
 /**
  LONG_TRANSACTION (76) object
  */
-typedef struct _dwg_entity_LONG_TRANSACTION
+typedef struct _dwg_object_LONG_TRANSACTION
 {
-  struct _dwg_object_entity *parent;
+  struct _dwg_object_object *parent;
   /* ??? not seen */
-} Dwg_Entity_LONG_TRANSACTION;
+} Dwg_Object_LONG_TRANSACTION;
 
 /* NOT SURE ABOUT THIS ONE (IS IT OBJECT OR ENTITY?): */
 /**
@@ -4124,24 +4126,29 @@ typedef struct _dwg_entity_GEOPOSITIONMARKER
 
 /**
  Entity EXTRUDEDSURFACE (varies) UNKNOWN FIELDS
+ in DXF as SURFACE and encrypted
  yet unsorted, and unused.
 */
 typedef struct _dwg_entity_EXTRUDEDSURFACE
 {
   struct _dwg_object_entity *parent;
-  BITCODE_BS flag;          /*!< DXF 70 */
-  BITCODE_BS flag1;         /*!< DXF 71 */
-  BITCODE_BS flag2;         /*!< DXF 72 */
+  //? sweep_profile, taper_angle
+  BITCODE_BS modeler_format_version; /*!< DXF 70 */
+  BITCODE_BS u_isolines;         /*!< DXF 71 */
+  BITCODE_BS v_isolines;         /*!< DXF 72 */
   BITCODE_BL class_version; /*!< DXF 90 */
-  BITCODE_BD* sweep_vector; /*!< DXF 40 */
+  //sweep_options?
+  BITCODE_BD height;
+  BITCODE_3BD sweep_vector; /*!< DXF 10 */
+  BITCODE_BD* sweep_transmatrix; /*!< DXF 40 */
   BITCODE_BD draft_angle;   /*!< DXF 42 */
   BITCODE_BD draft_start_distance; /*!< DXF 43 */
   BITCODE_BD draft_end_distance;   /*!< DXF 44 */
   BITCODE_BD twist_angle;   /*!< DXF 45 */
   BITCODE_BD scale_factor;  /*!< DXF 48 */
   BITCODE_BD align_angle;   /*!< DXF 49 */
-  BITCODE_BD* sweep_entity; /*!< DXF 46 */
-  BITCODE_BD* path_entity;  /*!< DXF 47 */
+  BITCODE_BD* sweep_entity_transmatrix; /*!< DXF 46 */
+  BITCODE_BD* path_entity_transmatrix;  /*!< DXF 47 */
   BITCODE_B solid;          /*!< DXF 290 */
   BITCODE_BS sweep_alignment_flags; /*!< DXF 290.
                                       0=No alignment, 1=Align sweep entity to path,
@@ -4153,7 +4160,45 @@ typedef struct _dwg_entity_EXTRUDEDSURFACE
   BITCODE_B sweep_entity_transform_computed; 	/*!< DXF 295 */
   BITCODE_B path_entity_transform_computed; 	/*!< DXF 296 */
   BITCODE_3BD reference_vector_for_controlling_twist; /*!< DXF 11 */
+  BITCODE_H sweep_entity;
+  BITCODE_H path_entity;
 } Dwg_Entity_EXTRUDEDSURFACE;
+
+typedef struct _dwg_UNDERLAY_Boundary
+{
+  struct _dwg_entity_UNDERLAY *parent;
+  BITCODE_2BD pt;
+} Dwg_UNDERLAY_Boundary;
+
+/**
+ Entity UNDERLAY, the reference (varies) UNKNOWN FIELDS
+ in DXF as 0 DGNUNDERLAY DWFUNDERLAY PDFUNDERLAY
+ */
+typedef struct _dwg_entity_UNDERLAY
+{
+  struct _dwg_object_entity *parent;
+
+  BITCODE_BS flag; //280: 1 is_clipped, 2 is_on, 4 is_monochrome,
+                       // 8 is_adjusted_for_background, 16 clip_inverted
+  //BITCODE_T name; //? the file => AcDbUnderlay
+  //BITCODE_T file; //? the file path, also host => AcDbUnderlay
+  BITCODE_3BD insertion_pt; // 10
+  BITCODE_3BD scale;   // 41
+  BITCODE_BD angle;    // 50
+  BITCODE_3BD extrusion; // 210 normal
+  BITCODE_BS contrast;  // 281
+  BITCODE_BS fade;      // 282
+  BITCODE_BL num_clip_boundary;
+  Dwg_UNDERLAY_Boundary* clip_boundary; // 11: if 2 rectangle, > polygon
+  //BITCODE_BD width;
+  //BITCODE_BD height;
+
+  BITCODE_H definition_id;
+  BITCODE_H parenthandle;
+  BITCODE_H* reactors;
+  BITCODE_H xdicobjhandle;
+
+} Dwg_Entity_UNDERLAY;
 
 /**
  Object SUN (varies) UNKNOWN FIELDS
@@ -4340,20 +4385,21 @@ typedef struct _dwg_object_entity
     Dwg_Entity_TOLERANCE *TOLERANCE;
     Dwg_Entity_MLINE *MLINE;
     Dwg_Entity_OLE2FRAME *OLE2FRAME;
-    Dwg_Entity_CAMERA *CAMERA;
-    Dwg_Entity_DUMMY *DUMMY;
-    Dwg_Entity_EXTRUDEDSURFACE *EXTRUDEDSURFACE;
     Dwg_Entity_HATCH *HATCH;
+
+    Dwg_Entity_CAMERA *CAMERA;
+    Dwg_Entity_EXTRUDEDSURFACE *EXTRUDEDSURFACE;
+    Dwg_Entity_GEOPOSITIONMARKER *GEOPOSITIONMARKER;
     Dwg_Entity_IMAGE *IMAGE;
     Dwg_Entity_LIGHT *LIGHT;
-    Dwg_Entity_LONG_TRANSACTION *LONG_TRANSACTION;
     Dwg_Entity_LWPOLYLINE *LWPOLYLINE;
     Dwg_Entity_MULTILEADER *MULTILEADER;
-    Dwg_Entity_GEOPOSITIONMARKER *GEOPOSITIONMARKER;
-    Dwg_Entity_PROXY_LWPOLYLINE *PROXY_LWPOLYLINE;
     Dwg_Entity_PROXY_ENTITY *PROXY_ENTITY;
+    Dwg_Entity_PROXY_LWPOLYLINE *PROXY_LWPOLYLINE;
     Dwg_Entity_TABLE *TABLE;
+    Dwg_Entity_UNDERLAY *UNDERLAY;
     Dwg_Entity_WIPEOUT *WIPEOUT;
+
     Dwg_Entity_UNKNOWN_ENT *UNKNOWN_ENT;
   } tio;
 
@@ -4457,6 +4503,7 @@ typedef struct _dwg_object_object
     Dwg_Object_DICTIONARYVAR *DICTIONARYVAR;
     Dwg_Object_DICTIONARYWDLFT *DICTIONARYWDLFT;
     //TODO Dwg_Object_DIMASSOC *DIMASSOC;
+    Dwg_Object_DUMMY *DUMMY;
     //TODO Dwg_Object_EXACXREFPANELOBJECT *EXACXREFPANELOBJECT;
     Dwg_Object_FIELD *FIELD;
     Dwg_Object_FIELDLIST *FIELDLIST;
@@ -4469,6 +4516,7 @@ typedef struct _dwg_object_object
     Dwg_Object_LAYOUT *LAYOUT;
     //TODO Dwg_Object_LEADEROBJECTCONTEXTDATA *LEADEROBJECTCONTEXTDATA;
     //Dwg_Object_LIGHTLIST *LIGHTLIST;
+    Dwg_Object_LONG_TRANSACTION *LONG_TRANSACTION;
     Dwg_Object_MATERIAL *MATERIAL;
     Dwg_Object_MLEADERSTYLE *MLEADERSTYLE;
     Dwg_Object_MLINESTYLE *MLINESTYLE;
@@ -5061,6 +5109,7 @@ EXPORT long dwg_add_TABLE (Dwg_Data * dwg);
 EXPORT long dwg_add_TABLECONTENT (Dwg_Data * dwg);
 EXPORT long dwg_add_TABLEGEOMETRY (Dwg_Data * dwg);
 EXPORT long dwg_add_TABLESTYLE (Dwg_Data * dwg);
+//EXPORT long dwg_add_UNDERLAY (Dwg_Data * dwg);
 EXPORT long dwg_add_VISUALSTYLE (Dwg_Data * dwg);
 EXPORT long dwg_add_WIPEOUT (Dwg_Data * dwg);
 EXPORT long dwg_add_WIPEOUTVARIABLES (Dwg_Data * dwg);

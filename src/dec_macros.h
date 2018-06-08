@@ -190,6 +190,7 @@
 //    FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+1);
 //    FIELDG(name.z, BD, dxf+2); }
 #define FIELD_3DPOINT(name,dxf) FIELD_3BD(name,dxf)
+#define FIELD_3DVECTOR(name,dxf) FIELD_3BD_1(name,dxf)
 #define FIELD_TIMEBLL(name,dxf) \
   { _obj->name = bit_read_TIMEBLL(dat); \
     LOG_TRACE(#name ": " FORMAT_BL "." FORMAT_BL "\n", _obj->name.days, _obj->name.ms); }

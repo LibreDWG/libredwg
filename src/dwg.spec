@@ -1444,6 +1444,7 @@ DWG_ENTITY(SPLINE)
   }
 
   COMMON_ENTITY_HANDLE_DATA;
+
 DWG_ENTITY_END
 
 //TODO: 37, 38 and 39 are ACIS entities
@@ -1753,7 +1754,7 @@ DWG_OBJECT(DICTIONARY)
     }
 #endif
 
-DWG_ENTITY_END
+DWG_OBJECT_END
 
 DWG_OBJECT(DICTIONARYWDLFT)
 
@@ -1947,7 +1948,6 @@ DWG_ENTITY(LEADER)
   SINCE(R_13) { // TODO until 2007?
     FIELD_HANDLE (associated_annotation, 2, 340);
   }
-
   //UNTIL(R_2007) // TODO until 2007?
   {
     FIELD_HANDLE (dimstyle, 5, 2);
@@ -3710,15 +3710,10 @@ DWG_ENTITY(PROXY_ENTITY)
   /*
   //TODO: figure out how to deal with the arbitrary size vector databits described on the spec
   FIELD_RC (*data);
-
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (parenthandle, 4, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
-  FIELD_MS (size);
+  */
 
   COMMON_ENTITY_HANDLE_DATA;
-  */
+  FIELD_MS (size, 0);
 
 DWG_ENTITY_END
 
@@ -4457,6 +4452,7 @@ DWG_ENTITY(TABLE)
       SET_PARENT_OBJ(break_rows)
       END_REPEAT(break_rows);
     }
+  COMMON_ENTITY_HANDLE_DATA;
 
 DWG_ENTITY_END
 
@@ -5015,7 +5011,7 @@ DWG_ENTITY(MULTILEADER)
     FIELD_B (text_extended, 295);
   }
 
-  //COMMON_ENTITY_HANDLE_DATA; //??
+  COMMON_ENTITY_HANDLE_DATA; //??
 
 DWG_ENTITY_END
 #endif
@@ -5167,20 +5163,16 @@ DWG_OBJECT(UNKNOWN_OBJ)
 
 DWG_OBJECT_END
 
-DWG_ENTITY(DUMMY)
+// just a dummy dwg filer, ignored
+DWG_OBJECT(DUMMY)
+  //COMMON_ENTITY_HANDLE_DATA;
+DWG_OBJECT_END
 
-  LOG_INFO("TODO DUMMY\n");
-  COMMON_ENTITY_HANDLE_DATA;
-
-DWG_ENTITY_END
-
-DWG_ENTITY(LONG_TRANSACTION)
-
+DWG_OBJECT(LONG_TRANSACTION)
   SUBCLASS (AcDbLongTransaction)
   LOG_INFO("TODO LONG_TRANSACTION\n");
-  COMMON_ENTITY_HANDLE_DATA;
-
-DWG_ENTITY_END
+  //COMMON_ENTITY_HANDLE_DATA;
+DWG_OBJECT_END
 
 // r2007+
 DWG_OBJECT(VISUALSTYLE)
@@ -5420,6 +5412,8 @@ DWG_ENTITY(LIGHT)
   FIELD_BS (glyph_display_type, 0);
   FIELD_BS (glyph_display, 0);
 
+  COMMON_ENTITY_HANDLE_DATA;
+
 DWG_ENTITY_END
 
 // (varies) UNKNOWN FIELDS
@@ -5515,33 +5509,39 @@ DWG_ENTITY(GEOPOSITIONMARKER)
   FIELD_B (mtext_visible, 0);
   FIELD_B (enable_frame_text, 0);
   FIELD_T (notes, 0);
+
+  COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE (style, 5, 7);
 
 DWG_ENTITY_END
 
 DWG_ENTITY(CAMERA) // i.e. a named view, not persistent in a DWG. CAMERADISPLAY=1
+  
+  COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE(view, 5, 0);
+
 DWG_ENTITY_END
 
 // r2007+
 DWG_ENTITY(EXTRUDEDSURFACE)
 
   SUBCLASS(AcDbModelerGeometry)
-  FIELD_BS (flag, 70);
+  FIELD_BS (modeler_format_version, 70); //def 1
   SUBCLASS(AcDbSurface)
-  FIELD_BS (flag1, 71);
-  FIELD_BS (flag2, 72);
+  FIELD_BS (u_isolines, 71);
+  FIELD_BS (v_isolines, 72);
   SUBCLASS(AcDbExtrudedSurface)
   FIELD_BL (class_version, 90);
-  FIELD_VECTOR_N (sweep_vector, BD, 16, 40);
+  FIELD_3BD (sweep_vector, 10);
+  FIELD_VECTOR_N (sweep_transmatrix, BD, 16, 40);
   FIELD_BD (draft_angle, 42);
   FIELD_BD (draft_start_distance, 43);
   FIELD_BD (draft_end_distance, 44);
   FIELD_BD (twist_angle, 45);
   FIELD_BD (scale_factor, 48);
   FIELD_BD (align_angle, 49);
-  FIELD_VECTOR_N (sweep_entity, BD, 16, 46);
-  FIELD_VECTOR_N (path_entity, BD, 16, 47);
+  FIELD_VECTOR_N (sweep_entity_transmatrix, BD, 16, 46);
+  FIELD_VECTOR_N (path_entity_transmatrix, BD, 16, 47);
   FIELD_B (solid, 290);
   FIELD_BS (sweep_alignment_flags, 290); //0=No alignment; 1=Align sweep entity to path
                   // 2=Translate sweep entity to path; 3=Translate path to sweep entity
@@ -5552,11 +5552,54 @@ DWG_ENTITY(EXTRUDEDSURFACE)
   FIELD_B (path_entity_transform_computed, 296);
   FIELD_3BD (reference_vector_for_controlling_twist, 11);
 
+  COMMON_ENTITY_HANDLE_DATA;
+  FIELD_HANDLE (sweep_entity, 5, 0);
+  FIELD_HANDLE (path_entity, 5, 0);
+
+DWG_ENTITY_END
+
+// (varies) UNKNOWN FIELDS
+// in DXF as 0 DGNUNDERLAY DWFUNDERLAY PDFUNDERLAY
+DWG_ENTITY(UNDERLAY)
+
+  SUBCLASS(AcDbUnderlayReference)
+  FIELD_3DPOINT (insertion_pt, 10);
+  FIELD_3BD_1 (scale, 41);
+  FIELD_BD (angle, 50);
+  FIELD_3BD (extrusion, 210);
+  FIELD_BL (num_clip_boundary, 0);
+  REPEAT(num_clip_boundary, clip_boundary, Dwg_UNDERLAY_Boundary)
+  {
+    FIELD_2BD (clip_boundary->pt, 11);
+  }
+  SET_PARENT_OBJ(clip_boundary)
+  END_REPEAT(clip_boundary);
+  //FIELD_RD (size.width, 13);
+  //FIELD_RD (size.height, 23);
+  FIELD_BS (flag, 280);
+  FIELD_RC (contrast, 281); // 20-100
+  FIELD_RC (fade, 282); // 0-80
+
+  COMMON_ENTITY_HANDLE_DATA;
+  FIELD_HANDLE (definition_id, 5, 340);
+
 DWG_ENTITY_END
 
 /* Those undocumented objects are also stored as raw UNKNOWN_OBJ */
 
 #if 0
+
+/* Missing DXF names:
+  ACAD_PROXY_ENTITY  ACDBPOINTCLOUD  ACDBPOINTCLOUDEX  ARRAY
+  ATTDYNBLOCKREF  DGNUNDERLAY  DWFUNDERLAY  GEOMAPIMAGE  HELIX
+  ATTBLOCKREF  ATTDYNBLOCKREF  BLOCKREF  CENTERMARK CENTERLINE
+  DYNBLOCKREF XREF LOFTEDSURFACE PDFUNDERLAY PLANESURFACE POSITIONMARKER
+  REVOLVEDSURFACE SECTIONOBJECT SWEPTSURFACE
+
+AcDbUnderlayReference: => DXF 0: DGNUNDERLAY  DWFUNDERLAY PDFUNDERLAY
+*/
+
+  
 // r2000+
 DWG_OBJECT(ARCALIGNEDTEXT)
 DWG_OBJECT_END
@@ -5610,6 +5653,7 @@ DWG_OBJECT(UNDERLAYDEFINITION)
 DWG_OBJECT_END
 
 DWG_ENTITY(RTEXT)
+  COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
 DWG_OBJECT(CSACDOCUMENTOPTIONS)
@@ -5617,4 +5661,3 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
-
