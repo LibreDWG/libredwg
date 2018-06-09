@@ -1257,7 +1257,7 @@ resolve_objectref_vector(Bit_Chain* dat, Dwg_Data * dwg)
       obj = dwg_resolve_handle(dwg, ref->absolute_ref);
       if (obj)
         {
-          LOG_TRACE("-found:     HANDLE(%d.%d.%lX) => [%ld]\n",
+          LOG_TRACE("-found:     HANDLE(%d.%d.%lX) => [%u]\n",
                     obj->handle.code, obj->handle.size,
                     obj->handle.value, obj->index)
         }

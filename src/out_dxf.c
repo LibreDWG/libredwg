@@ -825,6 +825,7 @@ dwg_dxf_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
           return error;
         }
     }
+  return DWG_ERR_UNHANDLEDCLASS;
 }
 
 static int

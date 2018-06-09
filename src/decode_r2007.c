@@ -145,7 +145,7 @@ static int read_2007_section_handles(Bit_Chain* dat, Bit_Chain* hdl_dat,
                                      r2007_page *restrict pages_map);
 static r2007_page* read_pages_map(Bit_Chain* dat, int64_t size_comp,
                                   int64_t size_uncomp, int64_t correction);
-static void read_file_header(Bit_Chain *restrict dat,
+static int read_file_header(Bit_Chain *restrict dat,
                              r2007_file_header *restrict file_header);
 static void read_instructions(unsigned char **restrict src,
                               unsigned char *restrict opcode,
@@ -1007,8 +1007,8 @@ sections_destroy(r2007_section *section)
     }
 }
 
-static void
-read_file_header(Bit_Chain*restrict dat, r2007_file_header *restrict file_header)
+static int
+read_file_header(Bit_Chain *restrict dat, r2007_file_header *restrict file_header)
 {
   char data[0x3d8]; //0x400 - 5 long
   char *pedata;
@@ -1035,21 +1035,36 @@ read_file_header(Bit_Chain*restrict dat, r2007_file_header *restrict file_header
 
   // check validity, for debugging only
   if (!error) {
-    assert((uint64_t)file_header->header_size < DBG_MAX_SIZE);
-    assert((uint64_t)file_header->file_size < DBG_MAX_SIZE);
-    assert((uint64_t)file_header->pages_map_offset < DBG_MAX_SIZE);
-    assert((uint64_t)file_header->header2_offset < DBG_MAX_SIZE);
-    assert((uint64_t)file_header->pages_map_offset < DBG_MAX_SIZE);
-    assert((uint64_t)file_header->pages_map_size_comp < DBG_MAX_SIZE);
-    assert((uint64_t)file_header->pages_map_size_uncomp < DBG_MAX_SIZE);
-    assert((uint64_t)file_header->header2_offset < DBG_MAX_SIZE);
 
-    assert((uint64_t)file_header->pages_maxid < DBG_MAX_COUNT);
-    assert((uint64_t)file_header->pages_amount < DBG_MAX_COUNT);
-    assert((uint64_t)file_header->sections_amount < DBG_MAX_COUNT);
+#define VALID_SIZE(var) \
+    if ((uint64_t)var > DBG_MAX_SIZE) { \
+      var = 0; \
+      error |= DWG_ERR_VALUEOUTOFBOUNDS; \
+      LOG_ERROR("%s Invalid %s %lu > MAX_SIZE", __FUNCTION__, #var, \
+                (unsigned long)var)                                 \
+    }
+#define VALID_COUNT(var) \
+    if ((uint64_t)var > DBG_MAX_COUNT) { \
+      var = 0; \
+      error |= DWG_ERR_VALUEOUTOFBOUNDS; \
+      LOG_ERROR("%s Invalid %s %lu > MAX_COUNT", __FUNCTION__, #var, \
+                (unsigned long)var)                                  \
+    }
+
+    VALID_SIZE(file_header->header_size);
+    VALID_SIZE(file_header->file_size);
+    VALID_SIZE(file_header->pages_map_offset);
+    VALID_SIZE(file_header->header2_offset);
+    VALID_SIZE(file_header->pages_map_offset);
+    VALID_SIZE(file_header->pages_map_size_comp);
+    VALID_SIZE(file_header->pages_map_size_uncomp);
+    VALID_COUNT(file_header->pages_maxid);
+    VALID_COUNT(file_header->pages_amount);
+    VALID_COUNT(file_header->sections_amount);
   }
 
   free(pedata);
+  return error;
 }
 
 void
@@ -1424,7 +1439,7 @@ read_r2007_meta_data(Bit_Chain *dat, Bit_Chain *hdl_dat,
     loglevel = atoi (probe);
 #endif
   // @ 0x62
-  read_file_header(dat, &file_header);
+  error = read_file_header(dat, &file_header);
 
   // Pages Map
   dat->byte += 0x28;  // overread check data

@@ -244,7 +244,7 @@
         *dat = here;                                            \
       }                                                         \
     }                                                           \
-    if (dat->chain[dat->byte] & 0xf <= 4) {                     \
+    if ((dat->chain[dat->byte] & 0xf) <= 4) {                   \
       loglevel = 0;                                             \
       if (!bit_read_H(dat, &hdl)) {                             \
         LOG_TRACE("  H :(%d.%d.%lX)\n", hdl.code, hdl.size,     \

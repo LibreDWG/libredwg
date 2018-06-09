@@ -424,7 +424,7 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
       for (vcount=0; vcount < (int)size; vcount++)\
         {\
           sscanf(&dat->chain[dat->byte], #name ": " FORMAT_##type ",\n", \
-            &_obj->name[vcount]); \
+                 &_obj->name[vcount]);                                  \
         }\
     }
 #define FIELD_VECTOR_T(name, size, dxf)\

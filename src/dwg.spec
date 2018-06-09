@@ -5599,8 +5599,8 @@ DWG_ENTITY(UNDERLAY)
   //FIELD_RD (size.width, 13);
   //FIELD_RD (size.height, 23);
   FIELD_BS (flag, 280);
-  FIELD_RC (contrast, 281); // 20-100
-  FIELD_RC (fade, 282); // 0-80
+  FIELD_BS (contrast, 281); // 20-100
+  FIELD_BS (fade, 282); // 0-80
 
   COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE (definition_id, 5, 340);
@@ -5704,4 +5704,3 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
-
