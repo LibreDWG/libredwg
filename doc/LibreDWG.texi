@@ -464,8 +464,7 @@ where @code{process_object} checks the type of each object or entity under the
 @cindex functions, encoding
 @cindex functions, write path
 
-Encoding DWG files is optional and needs to be enabled with
-@code{./configure --enable-write}.
+Encoding DWG files, i.e. DWG write support, can be disabled via @code{./configure --disable-write}. The default format and only useful one is currently r2000.
 
 The highest level function for encoding a bitstream to a file is @code{dwg_write_file}.
 

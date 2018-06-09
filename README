@@ -49,7 +49,7 @@ You need the following dependencies:
 See INSTALL for generic instructions.  Basically, you do:
 
 $ ./autogen.sh (if you checked out the source code from git)
-$ ./configure [--enable-trace] [--enable--write]
+$ ./configure [--enable-trace] [--disable--write]
 $ make
 $ make check    # optional but strongly encouraged while LibreDWG is alpha
 $ sudo make install
@@ -68,25 +68,26 @@ customize the installation dirs.  Other options recognized by configure are:
     variable LIBREDWG_TRACE is consulted on the first decode/encode attempt.
     Its value is an integer: 0 (no output) through 9 (full verbosity).
 
-  --enable-write
+  --disable-write
   
-    Enable write support (default: no). When enabled, you activate the write
-    support for the dwg format.
-    This is an experimental feature that is under construction, so it's
-    highly unstable. Rewriting test/test-data/sample_2000.dwg works ok in the R_2000
-    format.
+    Disable write support (default: no). When enabled, you activate the write
+    support for the DWG format.
+    This is an experimental feature, rewriting most DWG's to the r2000 format
+    usually works fine.
 
 == Example usage of the library ==
 
 The programs and examples directories contains some application code that uses our lib:
 
-* dwgread -- A DWG reader supporting various output formats.
+* dwgread -- A DWG reader supporting various output formats, such as
+  JSON, DXF, DXFB, GeoJSON. Later also YAML, XML/OGR, GPX, SVG, PS.
 
 * dwgrewrite -- Reads a DWG, writes it back under a different name and optionally
-  under a different version, and re-reads it back for confirmation.
-  Under construction, only with --enable-write.
+  under a different version (default r2000), and re-reads it back for confirmation.
 
-* dwgwrite -- A DWG writer supporting various input formats. Under construction.
+* dwgwrite -- A DWG writer supporting various input formats.
+  The input formats DXF, DXFB, JSON, and later GeoJSON, YAML, XML/OGR, GPX
+  are under construction.
 
 * dwg2dxf -- Converts a DWG to a DXF (ascii or binary, minimal or full), optionally
   under a different version. Looks good, but AutoCAD cannot import them yet.
@@ -98,7 +99,7 @@ The programs and examples directories contains some application code that uses o
 
 * dwg2ps -- Opens a DWG file and outputs an PostScript file.  This code
   depends on the PSlib library.  On Debian-based systems this is usually
-  available as a package named pslib-dev.
+  available as a package named pslib-dev. This is very limited so far.
 
 * dwg2SVG -- Opens a DWG file and outputs an SVG (Scalable Vector Graphics)
   file.  SVG is a W3C standard for 2d vector graphics.  You can open these
@@ -115,7 +116,8 @@ The programs and examples directories contains some application code that uses o
   the DWG struct.
 
 * xmlsuite -- an extensive example library to use the SWIG python bindings
-  is in the test/xmlsuite directory.
+  is in the test/xmlsuite directory. It also features code to output entities
+  in XML.
 
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */

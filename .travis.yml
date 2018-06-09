@@ -16,13 +16,13 @@ matrix:
   fast_finish: true
   include:
     - compiler: gcc
-      env: CONF="--enable-trace --enable-write"
+      env: CONF="--enable-trace --disable-write"
       #addons:
       #  apt:
       #    packages:
       #      - valgrind
     - compiler: gcc
-      env: CONF="--enable-write" DISTCHECK=1
+      env: DISTCHECK=1
     - compiler: clang
       #env: ASAN=1
       #addons:

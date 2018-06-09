@@ -147,13 +147,25 @@ AC_CHECK_FUNCS([getopt_long],[],
 AC_CHECK_FUNCS([basename],[],
   AC_MSG_WARN([basename not found. The default outfile will be unexpected.]))
 
+dnl Feature: --disable-write
+AC_MSG_CHECKING([--disable-write])
+AC_ARG_ENABLE([write],AS_HELP_STRING([--disable-write],[
+    Disable write support (default: no).]),[],[enable_write=yes])
+AM_CONDITIONAL([USE_WRITE], [test x$enable_write != xno])
+AS_IF([test x$enable_write != xno],
+  AC_DEFINE([USE_WRITE],1,[Undefine to disable write support.])
+  AC_MSG_RESULT([no]),
+  AC_MSG_RESULT([yes]))
+
 dnl Feature: --enable-trace
-AC_ARG_ENABLE([trace],[AS_HELP_STRING([--enable-trace],[
+AC_MSG_CHECKING([--enable-trace])
+AC_ARG_ENABLE([trace],AS_HELP_STRING([--enable-trace],[
     Enable runtime tracing (default: no).  When enabled, the environment
     variable LIBREDWG_TRACE is consulted on the first decode/encode attempt.
-    Its value is an integer: 0 (no output) through 9 (full verbosity).])],[
+    Its value is an integer: 0 (no output) through 9 (full verbosity).]),
   AC_DEFINE([USE_TRACING],1,[Define to 1 to enable runtime tracing support.])
-])
+  AC_MSG_RESULT([yes]),
+  AC_MSG_RESULT([no]))
 
 AC_CHECK_FUNCS([setenv],[],
   AS_IF([test x$enable_trace = xyes],
@@ -162,13 +174,7 @@ AC_CHECK_FUNCS([setenv],[],
     [AC_MSG_RESULT([setenv not needed. no --enable-trace.])]
     ))
 
-dnl Feature: --enable-write
-AC_ARG_ENABLE([write],[AS_HELP_STRING([--enable-write],[
-    Enable write support (default: no).])],[
-  AC_DEFINE([USE_WRITE],1,[Define to 1 to enable write support.])
-])
-AM_CONDITIONAL([USE_WRITE], [test -n "$enable_write"])
-
+AC_MSG_CHECKING([for --enable-gcov])
 AC_ARG_ENABLE(gcov,
 	AS_HELP_STRING([--enable-gcov],
 		       [turn on test coverage @<:@default=no@:>@]),
@@ -177,8 +183,6 @@ AC_ARG_ENABLE(gcov,
 	no)  enable_gcov=false ;;
 	*)   enable_gcov=true ; gcov="${enableval}" ;;
 	esac], [enable_gcov=false ])
-
-AC_MSG_CHECKING([for --enable-gcov])
 if test "x$enable_gcov" = "xtrue" ; then
 	dnl if test "$GCC" = yes; then
 	dnl 	AC_MSG_ERROR([gcov only works if gcc is used])
