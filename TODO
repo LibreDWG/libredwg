@@ -48,6 +48,8 @@
 * finish binary DXF (easy). cross-check via: filedia 0, dxfout => Binary
 * add DXF reading (medium)
 * finish GeoJSON http://geojson.org/geojson-spec.html
+* add dwggrep, see the branch
+* maybe dwgfilter, as from the osmctools, with keep and drop rules.
 * add getopt_long() for position independent options
 * check osm tools https://gitlab.com/osm-c-tools/osmctools how
   they could import GIS data easier.
@@ -67,11 +69,10 @@
   autolisp (via ARX).
 
 * fix the remaining leaks (xdata?, unicode texts).
-* enhance and document the API functions.
+* finish documentation of the API functions, refman.
 * add the basic DWG layout and API to the docs.
 * publish manual and link to doxygen refman API
 * add more defaults when encoding from older to newer versions.
-* build releases via travis => github (savannah/ftpupload)?
 * add fuzzing and solver-based test generation (bits)
 * check testsuite errors when cross-compiled under wine.
   latest wine needs a new WINEARCH env var.

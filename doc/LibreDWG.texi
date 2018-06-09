@@ -539,7 +539,7 @@ This is about 70% finished. Check the covered entity types.
 
 LibreDWG is mostly a library, and as such collects error codes from
 the highest level function down to the lowest level functions.
-The error codes are sorted by severity, and only of the error exceeds
+The error codes are sorted by severity, and only if the error exceeds
 DWG_ERR_CRITICAL, i.e. DWG_ERR_VALUEOUTOFBOUNDS, processing is stopped.
 
 All error bitmasks are collected during read or write and returned at the end.
@@ -605,15 +605,15 @@ Currently the options need to be specified in this exact same order.
 @item @file{dwgwrite}
 @cindex dwgwrite
 
-Create a DWG from a given input file (@pxref{JSON}, @pxref{DXF}, @pxref{DXFB, Binary DXF}),
+Create a DWG from a given input file (@pxref{DXF}, @pxref{DXFB, Binary DXF}),
 optionally via @code{--as-rNNNN} as another version. Experimental.
-For now can only create R2000 DWG files.
+For now can only create r2000 DWG files.
 
 @item @file{dwgrewrite}
 @cindex dwgrewrite
 
 Read and write the DWG, optionally via @code{--as-rNNNN} as another
-version, an earlier or later version.
+version, an earlier or later version. The default is writing as r2000.
 
 @item @file{dwglayers}
 @cindex dwglayers
@@ -649,6 +649,12 @@ Some parts of the DXF writers are not yet implemented.
 Convert a DXF (or Binary DXF) to DWG, optionally via @code{--as-rVER} as another
 version, an earlier or later version.
 The DXF reader is not yet implemented.
+
+@item @file{dwggrep}
+@cindex dwggrep
+
+Searches DWG files for a text string, via regular expressions.
+This feature is under construction.
 
 @end table
 
