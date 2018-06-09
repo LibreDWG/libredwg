@@ -758,11 +758,11 @@ load_dwg (char *dwgfilename, xmlNodePtr rootnode)
           break;*/
 
         default:
-          if (obj->type < 500 || (obj->type - 500) > dwg.num_classes)
+          if (obj->type < 500 || (obj->type - 500) >= dwg.num_classes)
             break;
           if (!obj->dxfname || obj->supertype == DWG_SUPERTYPE_UNKNOWN)
               break;
-          if (!strcmp(obj->dxfname, "Helix"))
+          if (!strcmp(obj->dxfname, "HELIX"))
             add_helix(rootnode, obj);
 
           break;
