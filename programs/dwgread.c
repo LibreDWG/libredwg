@@ -49,12 +49,12 @@ static int opt_version(void) {
 }
 static int help(void) {
   printf("\nUsage: dwgread [OPTION]... DWGFILE\n");
-  printf("Reads the DWG into some optional output format,\n"
-         "and prints error, success or verbose internal progress.\n"
+  printf("Reads the DWG into some optional output format to stdout or some file,\n"
+         "and prints error, success or verbose internal progress to stderr.\n"
          "\n");
   printf("  -v[0-9], --verbose [0-9]  verbosity\n");
-  printf("  -O fmt,  --format fmt     fmt: JSON, DXF, DXFB\n");
-  printf("           Planned formats: GeoJSON, YAML, XML/OGR, GPX, SVG, PS\n");
+  printf("  -O fmt,  --format fmt     fmt: DXF, DXFB, JSON, GeoJSON\n");
+  printf("           Planned output formats:  YAML, XML/OGR, GPX, SVG, PS\n");
   printf("  -o outfile                also defines the output fmt. Default: stdout\n");
   printf("           --help           display this help and exit\n");
   printf("           --version        output version information and exit\n"

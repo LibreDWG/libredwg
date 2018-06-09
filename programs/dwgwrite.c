@@ -43,7 +43,7 @@ static int opt_version(void) {
 }
 static int help(void) {
   printf("\nUsage: dwgwrite [OPTION]... [-o DWGFILE] INFILE\n");
-  printf("Writes a DWG file from various input formats. (only r2000 for now)\n"
+  printf("Writes a DWG file from various input formats. Only r2000 for now\n"
          "\n");
   printf("  -v[0-9], --verbose [0-9]  verbosity\n");
   printf("  -as-rNNNN                 save as version\n");
@@ -51,8 +51,8 @@ static int help(void) {
   printf("             r12, r14, r2000 (default)\n");
   printf("           Planned versions:\n");
   printf("             r9, r10, r11, r2004, r2007, r2010, r2013, r2018\n");
-  printf("  -I fmt,  --format fmt     JSON, DXF, DXFB\n");
-  printf("           Planned formats: GeoJSON, YAML, XML/OGR, GPX\n");
+  printf("  -I fmt,  --format fmt     DXF, DXFB\n");
+  printf("           Planned input formats: JSON, GeoJSON, YAML, XML/OGR, GPX\n");
   printf("  -o dwgfile                \n");
   printf("           --help           display this help and exit\n");
   printf("           --version        output version information and exit\n"

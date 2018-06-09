@@ -6,16 +6,17 @@ dwgread \- manual page for dwgread 0.4-dev
 .B dwgread
 [\fI\,OPTION\/\fR]... \fI\,DWGFILE\/\fR
 .SH DESCRIPTION
-Reads the DWG into some optional output format,
-and prints error, success or verbose internal progress.
+Reads the DWG into some optional output format to stdout or some file,
+and prints error, success or verbose internal progress to stderr.
 .TP
 \fB\-v[0\-9]\fR, \fB\-\-verbose\fR [0\-9]
 verbosity
 .TP
 \fB\-O\fR fmt,  \fB\-\-format\fR fmt
-fmt: JSON, DXF, DXFB
-.IP
-Planned formats: GeoJSON, YAML, XML/OGR, GPX, SVG, PS
+fmt: DXF, DXFB, JSON, GeoJSON
+.TP
+Planned output formats:
+YAML, XML/OGR, GPX, SVG, PS
 .TP
 \fB\-o\fR outfile
 also defines the output fmt. Default: stdout
