@@ -1017,7 +1017,7 @@ read_file_header(Bit_Chain *restrict dat, r2007_file_header *restrict file_heade
   int64_t compr_crc;
   int32_t compr_len;
   int i;
-  int error = 0;
+  int error = 0, errcount  = 0;
 
   dat->byte = 0x80;
   bit_read_fixed(dat, data, 0x3d8);
@@ -1037,18 +1037,20 @@ read_file_header(Bit_Chain *restrict dat, r2007_file_header *restrict file_heade
   if (!error) {
 
 #define VALID_SIZE(var) \
-    if ((uint64_t)var > DBG_MAX_SIZE) { \
-      var = 0; \
+    if (var < 0 || var > DBG_MAX_SIZE) { \
+      errcount++; \
       error |= DWG_ERR_VALUEOUTOFBOUNDS; \
-      LOG_ERROR("%s Invalid %s %lu > MAX_SIZE", __FUNCTION__, #var, \
-                (unsigned long)var)                                 \
+      LOG_ERROR("%s Invalid %s %ld > MAX_SIZE", __FUNCTION__, #var, \
+                (long)var)                                 \
+      var = 0; \
     }
 #define VALID_COUNT(var) \
-    if ((uint64_t)var > DBG_MAX_COUNT) { \
-      var = 0; \
+    if (var < 0 || var > DBG_MAX_COUNT) { \
+      errcount++; \
       error |= DWG_ERR_VALUEOUTOFBOUNDS; \
-      LOG_ERROR("%s Invalid %s %lu > MAX_COUNT", __FUNCTION__, #var, \
-                (unsigned long)var)                                  \
+      LOG_ERROR("%s Invalid %s %ld > MAX_COUNT", __FUNCTION__, #var, \
+                (long)var)                                  \
+      var = 0; \
     }
 
     VALID_SIZE(file_header->header_size);
@@ -1440,6 +1442,8 @@ read_r2007_meta_data(Bit_Chain *dat, Bit_Chain *hdl_dat,
 #endif
   // @ 0x62
   error = read_file_header(dat, &file_header);
+  if (error >= DWG_ERR_VALUEOUTOFBOUNDS)
+    return error;
 
   // Pages Map
   dat->byte += 0x28;  // overread check data

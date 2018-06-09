@@ -2068,12 +2068,11 @@ decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
 
   }
 
-  read_R2004_section_map(dat, dwg);
-
-  if (!dwg->header.section)
+  error |= read_R2004_section_map(dat, dwg);
+  if (!dwg->header.section || error >= DWG_ERR_CRITICAL)
     {
       LOG_ERROR("Failed to read R2004 Section Page Map.")
-      return DWG_ERR_INTERNALERROR;
+      return error | DWG_ERR_INTERNALERROR;
     }
 
   /*-------------------------------------------------------------------------
@@ -2144,7 +2143,7 @@ decode_R2007(Bit_Chain* dat, Dwg_Data * dwg)
 
   // this includes classes, header, handles + objects
   error = read_r2007_meta_data(dat, &hdl_dat, dwg);
-  if (error)
+  if (error >= DWG_ERR_CRITICAL)
     {
       LOG_ERROR("Failed to read 2007 meta data")
       return error;
@@ -2152,7 +2151,7 @@ decode_R2007(Bit_Chain* dat, Dwg_Data * dwg)
 
   LOG_INFO("Num objects: %lu\n", dwg->num_objects)
   LOG_TRACE("  num object_refs: %lu\n", dwg->num_object_refs)
-  return resolve_objectref_vector(dat, dwg);
+  return error | resolve_objectref_vector(dat, dwg);
 }
 
 /*--------------------------------------------------------------------------------
