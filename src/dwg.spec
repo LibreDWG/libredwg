@@ -1760,7 +1760,7 @@ DWG_OBJECT(DICTIONARY)
 
 DWG_OBJECT_END
 
-DWG_OBJECT(DICTIONARYWDLFT)
+DWG_OBJECT(DICTIONARYWDFLT)
 
   //SUBCLASS (AcDbDictionary)
   SUBCLASS (AcDbDictionaryWithDefault)
@@ -4019,10 +4019,10 @@ DWG_OBJECT(SPATIAL_INDEX)
 
 DWG_OBJECT_END
 
-//pg.229 20.4.96
+//pg.229 20.4.96, also as ACAD_TABLE
 DWG_ENTITY(TABLE)
 
-  // SUBCLASS (AcDbDataTable) or SUBCLASS (AcDbTable)
+  SUBCLASS (AcDbTable)
   SINCE(R_2010)
     {
       FIELD_RC (unknown_rc, 0);
@@ -4658,8 +4658,6 @@ DWG_OBJECT_END
 // pg.246 20.4.102
 // added with r2008, backcompat with r2007
 // unused
-//#define DEBUG_CELLSTYLEMAP
-#ifdef DEBUG_CELLSTYLEMAP
 DWG_OBJECT(CELLSTYLEMAP)
 
   //SUBCLASS (AcDbCellStyleMap)
@@ -4675,7 +4673,6 @@ DWG_OBJECT(CELLSTYLEMAP)
   END_REPEAT (cells);
 
 DWG_OBJECT_END
-#endif
   
 //pg.246 20.4.103
 DWG_OBJECT(TABLEGEOMETRY)
@@ -4771,14 +4768,12 @@ DWG_OBJECT(PLACEHOLDER)
 DWG_OBJECT_END
 
 // just guessing:
-// VBA_PROJECT (81 + varies)
-//#define DEBUG_VBA_PROJECT
-#ifdef DEBUG_VBA_PROJECT
+// VBA_PROJECT (81 + varies), a blob
 DWG_OBJECT(VBA_PROJECT)
 
   //SUBCLASS (AcDbVbaProject)
-  FIELD_RL (num_bytes, 0)
-  FIELD_TF (bytes, num_bytes, 0)
+  FIELD_RL (num_bytes, 0);
+  FIELD_TF (bytes, FIELD_VALUE(num_bytes), 0);
 
   START_HANDLE_STREAM;
   FIELD_HANDLE (parenthandle, 4, 0);
@@ -4786,13 +4781,12 @@ DWG_OBJECT(VBA_PROJECT)
   XDICOBJHANDLE(3);
 
 DWG_OBJECT_END
-#endif
 
 // SCALE (varies)
 // 20.4.92 page 221
 DWG_OBJECT(SCALE)
 
-  //SUBCLASS (AcDbScale)
+  SUBCLASS (AcDbScale)
   FIELD_BS (flag, 70);
   FIELD_T (name, 300);
   FIELD_BD (paper_units, 140);
@@ -4809,8 +4803,6 @@ DWG_OBJECT_END
 /* pg. 157, 20.4.48 (varies)
    AcDbMLeader. broken leader_lines/points
  */
-//#define DEBUG_MULTILEADER
-#ifdef DEBUG_MULTILEADER
 DWG_ENTITY(MULTILEADER)
 
   SUBCLASS (AcDbMLeader)
@@ -4835,17 +4827,17 @@ DWG_ENTITY(MULTILEADER)
       FIELD_3BD (lev1.connection, 10);
       FIELD_3BD (lev1.direction, 11);
       FIELD_BL (lev1.num_breaks, 0);
-      REPEAT2(lev1.num_breaks, lev1.breaks, Leader_Break)
+      REPEAT2(lev1.num_breaks, lev1.breaks, Dwg_Leader_Break)
         {
           FIELD_3BD (lev1.breaks[rcount2].start, 12);
           FIELD_3BD (lev1.breaks[rcount2].end, 13);
         }
-      SET_PARENT(lev1.breaks, &_obj->lev1)
+      SET_PARENT(lev1.breaks, (Dwg_Leader_Line*)&_obj->lev1)
       END_REPEAT (lev1.breaks);
       FIELD_BL (lev1.index, 90);
       FIELD_BD (lev1.landing_distance, 40); //ok
       // num_lines was missing
-      REPEAT2(lev1.num_lines, lev1.lines, Leader_Line)
+      REPEAT2(lev1.num_lines, lev1.lines, Dwg_Leader_Line)
         {
 #         define lev2 lev1.lines[rcount2]
           FIELD_BL (lev2.num_points, 0); //ok?
@@ -4853,11 +4845,10 @@ DWG_ENTITY(MULTILEADER)
             {
               FIELD_3BD (lev2.points[rcount3], 10); //nok
             }
-          SET_PARENT(lev2.points, &_obj->lev2)
           END_REPEAT (lev2.points);
           FIELD_BL (lev2.num_breaks, 0);
           FIELD_BL (lev2.segment_index, 90);
-          REPEAT2(lev2.num_breaks, lev2.breaks, Leader_Break)
+          REPEAT2(lev2.num_breaks, lev2.breaks, Dwg_Leader_Break)
             {
               FIELD_3BD (lev2.breaks[rcount2].start, 11);
               FIELD_3BD (lev2.breaks[rcount2].end, 12);
@@ -4985,7 +4976,7 @@ DWG_ENTITY(MULTILEADER)
   VERSIONS (R_2000, R_2007)
     {
       FIELD_BL (num_arrowheads, 0);
-      REPEAT(num_arrowheads, arrowheads, Leader_ArrowHead)
+      REPEAT(num_arrowheads, arrowheads, Dwg_Leader_ArrowHead)
         {
           FIELD_BL (arrowheads->is_default, 94);
           FIELD_HANDLE (arrowheads->arrowhead, 5, 345);
@@ -4993,7 +4984,7 @@ DWG_ENTITY(MULTILEADER)
       SET_PARENT_OBJ(arrowheads)
       END_REPEAT(arrowheads);
       FIELD_BL (num_blocklabels, 0);
-      REPEAT(num_blocklabels, blocklabels, Leader_BlockLabel)
+      REPEAT(num_blocklabels, blocklabels, Dwg_Leader_BlockLabel)
         {
           FIELD_HANDLE (blocklabels->attdef, 4, 330);
           FIELD_T (blocklabels->label_text, 302);
@@ -5021,7 +5012,6 @@ DWG_ENTITY(MULTILEADER)
   COMMON_ENTITY_HANDLE_DATA; //??
 
 DWG_ENTITY_END
-#endif
 
 /* par 20.4.87 (varies) */
 DWG_OBJECT(MLEADERSTYLE)
@@ -5193,7 +5183,7 @@ DWG_OBJECT_END
    The following entities/objects are stored as raw UNKNOWN_ENT/OBJ,
    unless enabled via -DDEBUG_... */
 
-// (varies) UNTESTED
+// (varies) working on
 DWG_OBJECT(MATERIAL)
 
   SUBCLASS (AcDbMaterial)
@@ -5494,12 +5484,23 @@ DWG_OBJECT(SUN)
 
 DWG_OBJECT_END
 
-// (varies) TODO
-DWG_OBJECT(DATATABLE)
+// (varies) unsorted
+DWG_ENTITY(HELIX)
 
+  SUBCLASS (AcDbHelix)
   DEBUG_HERE()
-  
-DWG_OBJECT_END
+  FIELD_BS (major_version, 90);
+  FIELD_BS (maint_version, 91);
+  FIELD_3BD (axis_base_pt, 10);
+  FIELD_3BD_1 (start_pt, 11);
+  FIELD_3BD_1 (axis_vector, 12);
+  FIELD_BD (radius, 40);
+  FIELD_BD (num_turns, 41);
+  FIELD_BD (height, 42);
+  FIELD_B (handedness, 290); //0 left, 1 right
+  FIELD_BS (constraint_type, 280); //0 constrain turn height, 1 turns, 2 height
+
+DWG_ENTITY_END
 
 // (varies) UNTESTED
 DWG_OBJECT(OBJECT_PTR) //empty? only xdata. CAseDLPNTableRecord
@@ -5543,14 +5544,15 @@ DWG_ENTITY(CAMERA) // i.e. a named view, not persistent in a DWG. CAMERADISPLAY=
 DWG_ENTITY_END
 
 // r2007+
-DWG_ENTITY(EXTRUDEDSURFACE)
+// EXTRUDED, PLANE, LOFTED, REVOLVED, SWEPT
+DWG_ENTITY(SURFACE)
 
   SUBCLASS(AcDbModelerGeometry)
   FIELD_BS (modeler_format_version, 70); //def 1
   SUBCLASS(AcDbSurface)
   FIELD_BS (u_isolines, 71);
   FIELD_BS (v_isolines, 72);
-  SUBCLASS(AcDbExtrudedSurface)
+  //SUBCLASS(AcDbExtrudedSurface)
   FIELD_BL (class_version, 90);
   FIELD_3BD (sweep_vector, 10);
   FIELD_VECTOR_N (sweep_transmatrix, BD, 16, 40);
@@ -5605,6 +5607,14 @@ DWG_ENTITY(UNDERLAY)
 
 DWG_ENTITY_END
 
+// (varies) TODO
+DWG_OBJECT(DATATABLE)
+
+  SUBCLASS (AcDbDataTable)
+  DEBUG_HERE()
+  
+DWG_OBJECT_END
+
 /* Those undocumented objects are also stored as raw UNKNOWN_OBJ */
 
 #if 0
@@ -5657,7 +5667,8 @@ DWG_OBJECT_END
 DWG_OBJECT(DIMASSOC)
 DWG_OBJECT_END
 
-DWG_OBJECT(EXACXREFPANELOBJECT)
+// EXACXREFPANELOBJECT  
+DWG_OBJECT(XREFPANELOBJECT)
 DWG_OBJECT_END
 
 DWG_OBJECT(LEADEROBJECTCONTEXTDATA)
@@ -5693,5 +5704,4 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
-
 

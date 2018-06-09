@@ -220,12 +220,12 @@ static unsigned int cur_ver = 0;
 static int \
 dwg_print_##token (Bit_Chain * dat, Dwg_Object * obj)\
 {\
-  int error = 0; \
   long vcount, rcount1, rcount2, rcount3, rcount4; \
   Dwg_Entity_##token *ent, *_obj;\
   Dwg_Object_Entity *_ent;\
   Bit_Chain *hdl_dat = dat;\
   Bit_Chain* str_dat = dat;\
+  int error = 0; \
   LOG_INFO("Entity " #token ":\n")\
   _ent = obj->tio.entity;\
   _obj = ent = _ent->tio.token;\
@@ -234,17 +234,17 @@ dwg_print_##token (Bit_Chain * dat, Dwg_Object * obj)\
     obj->handle.size,\
     obj->handle.value)
 
-#define DWG_ENTITY_END }
+#define DWG_ENTITY_END return 0; }
 
 #define DWG_OBJECT(token) \
 static int \
 dwg_print_ ##token (Bit_Chain * dat, Dwg_Object * obj) \
 { \
-  int error = 0; \
   long vcount, rcount1, rcount2, rcount3, rcount4;\
   Dwg_Object_##token *_obj;\
   Bit_Chain *hdl_dat = dat;\
   Bit_Chain* str_dat = dat;\
+  int error = 0; \
   LOG_INFO("Object " #token ":\n")\
   _obj = obj->tio.object->tio.token;\
   LOG_TRACE("Object handle: %d.%d.%lX\n",\
@@ -252,7 +252,7 @@ dwg_print_ ##token (Bit_Chain * dat, Dwg_Object * obj) \
     obj->handle.size,\
     obj->handle.value)
 
-#define DWG_OBJECT_END }
+#define DWG_OBJECT_END return 0; }
 
 #include "dwg.spec"
 
@@ -279,379 +279,79 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
   // almost always false
   is_entity = dwg_class_is_entity(klass);
 
-#define UNHANDLED_CLASS \
-      LOG_WARN("Unhandled Class %s %d %s (0x%x%s)", is_entity ? "entity" : "object",\
-               klass->number, dxfname, klass->proxyflag,\
-               klass->wasazombie ? " was proxy" : "")
-#define UNTESTED_CLASS \
-      LOG_WARN("Untested Class %s %d %s (0x%x%s)", is_entity ? "entity" : "object",\
-               klass->number, dxfname, klass->proxyflag,\
-               klass->wasazombie ? " was proxy" : "")
-  
-  if (!strcmp(dxfname, "ACDBDICTIONARYWDFLT"))
-    {
-      assert(!is_entity);
-      dwg_print_DICTIONARYWDLFT(dat, obj);
-      return DWG_NOERR;
-    }
-  if (!strcmp(dxfname, "DICTIONARYVAR"))
-    {
-      assert(!is_entity);
-      dwg_print_DICTIONARYVAR(dat, obj);
-      return DWG_NOERR;
-    }
-  if (!strcmp(dxfname, "HATCH"))
-    {
-      assert(!is_entity);
-      dwg_print_HATCH(dat, obj);
-      return DWG_NOERR;
-    }
-  if (!strcmp(dxfname, "FIELDLIST"))
-    {
-      UNTESTED_CLASS;
-      assert(!is_entity);
-      dwg_print_FIELDLIST(dat, obj);
-      return DWG_NOERR;
-    }
-  if (!strcmp(dxfname, "GROUP"))
-    {
-      UNTESTED_CLASS;
-      assert(!is_entity);
-      dwg_print_GROUP(dat, obj);
-      return DWG_NOERR;
-    }
-  if (!strcmp(dxfname, "IDBUFFER"))
-    {
-      dwg_print_IDBUFFER(dat, obj);
-      return DWG_NOERR;
-    }
-  if (!strcmp(dxfname, "IMAGE"))
-    {
-      dwg_print_IMAGE(dat, obj);
-      return DWG_NOERR;
-    }
-  if (!strcmp(dxfname, "IMAGEDEF"))
-    {
-      dwg_print_IMAGEDEF(dat, obj);
-      return DWG_NOERR;
-    }
-  if (!strcmp(dxfname, "IMAGEDEF_REACTOR"))
-    {
-      dwg_print_IMAGEDEF_REACTOR(dat, obj);
-      return DWG_NOERR;
-    }
-  if (!strcmp(dxfname, "LAYER_INDEX"))
-    {
-      dwg_print_LAYER_INDEX(dat, obj);
-      return DWG_NOERR;
-    }
-  if (!strcmp(dxfname, "LAYOUT"))
-    {
-      dwg_print_LAYOUT(dat, obj);
-      return DWG_NOERR;
-    }
-  if (!strcmp(dxfname, "LWPOLYLINE"))
-    {
-      dwg_print_LWPOLYLINE(dat, obj);
-      return DWG_NOERR;
-    }
-  if (!strcmp(dxfname, "MULTILEADER"))
-    {
-#ifdef DEBUG_MULTILEADER
-      UNTESTED_CLASS; //broken Leader_Line's/Points
-      dwg_print_MULTILEADER(dat, obj);
-      return DWG_NOERR;
-#else
-      UNHANDLED_CLASS;
-      return DWG_ERR_UNHANDLEDCLASS;
-#endif
-    }
-  if (!strcmp(dxfname, "MLEADERSTYLE"))
-    {
-      dwg_print_MLEADERSTYLE(dat, obj);
-      return DWG_NOERR;
-    }
-  if (!strcmp(dxfname, "OLE2FRAME"))
-    {
-      dwg_print_OLE2FRAME(dat, obj);
-      return DWG_NOERR;
-    }
-  if (!strcmp(dxfname, "OBJECTCONTEXTDATA") ||
-      !strcmp(klass->cppname, "AcDbObjectContextData"))
-    {
-      dwg_print_OBJECTCONTEXTDATA(dat, obj);
-      return DWG_NOERR;
-    }
-  if (!strcmp(dxfname, "OBJECT_PTR") ||
-      !strcmp(klass->cppname, "CAseDLPNTableRecord"))
-    {
-      UNTESTED_CLASS;
-      assert(!is_entity);
-      dwg_print_OBJECT_PTR(dat, obj);
-      return DWG_NOERR;
-    }
-  if (!strcmp(dxfname, "ACDBPLACEHOLDER"))
-    {
-      dwg_print_PLACEHOLDER(dat, obj);
-      return DWG_NOERR;
-    }
-  if (!strcmp(dxfname, "PROXY"))
-    {
-      dwg_print_PROXY_OBJECT(dat, obj);
-      return DWG_NOERR;
-    }
-  if (!strcmp(dxfname, "RASTERVARIABLES"))
-    {
-      dwg_print_RASTERVARIABLES(dat, obj);
-      return DWG_NOERR;
-    }
-  if (!strcmp(dxfname, "SCALE"))
-    {
-      dwg_print_SCALE(dat, obj);
-      return DWG_NOERR;
-    }
-  if (!strcmp(dxfname, "SORTENTSTABLE"))
-    {
-      dwg_print_SORTENTSTABLE(dat, obj);
-      return DWG_NOERR;
-    }
-  if (!strcmp(dxfname, "SPATIAL_FILTER"))
-    {
-      dwg_print_SPATIAL_FILTER(dat, obj);
-      return DWG_NOERR;
-    }
-  if (!strcmp(dxfname, "SPATIAL_INDEX"))
-    {
-      dwg_print_SPATIAL_INDEX(dat, obj);
-      return DWG_NOERR;
-    }
-  if (!strcmp(dxfname, "TABLE") ||
-      !strcmp(dxfname, "ACAD_TABLE"))
-    {
-      UNTESTED_CLASS;
-      dwg_print_TABLE(dat, obj);
-      return DWG_NOERR;
-    }
-  if (!strcmp(dxfname, "WIPEOUTVARIABLES"))
-    {
-      UNTESTED_CLASS;
-      dwg_print_WIPEOUTVARIABLES(dat, obj);
-      return DWG_NOERR;
-    }
-  if (!strcmp(dxfname, "WIPEOUT"))
-    {
-      dwg_print_WIPEOUT(dat, obj);
-      return DWG_NOERR;
-    }
-  if (!strcmp(dxfname, "FIELDLIST"))
-    {
-      UNTESTED_CLASS;
-      dwg_print_FIELDLIST(dat, obj);
-      return DWG_NOERR;
-    }
-  if (!strcmp(dxfname, "VBA_PROJECT"))
-    {
-#ifdef DEBUG_VBA_PROJECT
-      UNTESTED_CLASS;
-      dwg_print_VBA_PROJECT(dat, obj);
-      return DWG_NOERR;
-#else
-      UNHANDLED_CLASS;
-      return DWG_ERR_UNHANDLEDCLASS;
-#endif
-    }
-  if (!strcmp(dxfname, "CELLSTYLEMAP"))
-    {
-#ifdef DEBUG_CELLSTYLEMAP
-      UNTESTED_CLASS;
-      dwg_print_CELLSTYLEMAP(dat, obj);
-      return DWG_NOERR;
-#else
-      UNHANDLED_CLASS;
-      return DWG_ERR_UNHANDLEDCLASS;
-#endif
-    }
-  if (!strcmp(dxfname, "VISUALSTYLE"))
-    {
-      dwg_print_VISUALSTYLE(dat, obj);
-      return DWG_NOERR;
-    }
-  if (!strcmp(dxfname, "FIELD"))
-    {
-      UNTESTED_CLASS;
-      dwg_print_FIELD(dat, obj);
-      return DWG_NOERR;
-    }
-  if (!strcmp(dxfname, "TABLECONTENT"))
-    {
-      UNTESTED_CLASS;
-      dwg_print_TABLECONTENT(dat, obj);
-      return DWG_NOERR;
-    }
-  if (!strcmp(dxfname, "TABLEGEOMETRY"))
-    {
-      UNTESTED_CLASS;
-      dwg_print_TABLEGEOMETRY(dat, obj);
-      return DWG_NOERR;
-    }
-  if (!strcmp(dxfname, "GEODATA"))
-    {
-      UNTESTED_CLASS;
-      dwg_print_GEODATA(dat, obj);
-      return DWG_NOERR;
-    }
-  if (!strcmp(dxfname, "XRECORD"))
-    {
-      dwg_print_XRECORD(dat, obj);
-      return DWG_NOERR;
-    }
-  if (!strcmp(dxfname, "ARCALIGNEDTEXT"))
-    {
-      UNHANDLED_CLASS;
-      //assert(!is_entity);
-      //dwg_print_ARCALIGNEDTEXT(dat, obj);
-      return DWG_ERR_UNHANDLEDCLASS;
-    }
-  if (!strcmp(dxfname, "DIMASSOC"))
-    {
-      UNHANDLED_CLASS;
-      assert(!is_entity);
-      //dwg_print_DIMASSOC(dat, obj);
-      return DWG_ERR_UNHANDLEDCLASS;
-    }
-  if (!strcmp(dxfname, "MATERIAL"))
-    {
-#ifdef DEBUG_MATERIAL
-      UNTESTED_CLASS;
-      assert(!is_entity);
-      dwg_print_MATERIAL(dat, obj);
-      return DWG_NOERR;
-#else
-      UNHANDLED_CLASS;
-      assert(!is_entity);
-      return DWG_ERR_UNHANDLEDCLASS;
-#endif
-    }
-  if (!strcmp(dxfname, "PLOTSETTINGS"))
-    {
-#ifdef DEBUG_PLOTSETTINGS
-      UNTESTED_CLASS;
-      assert(!is_entity);
-      dwg_print_PLOTSETTINGS(dat, obj);
-      return DWG_NOERR;
-#else
-      UNHANDLED_CLASS;
-      assert(!is_entity);
-      return DWG_ERR_UNHANDLEDCLASS;
-#endif
-    }
-  if (!strcmp(dxfname, "LIGHT"))
-    {
-#ifdef DEBUG_LIGHT
-      UNTESTED_CLASS;
-      assert(is_entity);
-      dwg_print_LIGHT(dat, obj);
-      return DWG_NOERR;
-#else
-      UNHANDLED_CLASS;
-      assert(is_entity);
-      return DWG_ERR_UNHANDLEDCLASS;
-#endif
-    }
-  if (!strcmp(dxfname, "SUN"))
-    {
-#ifdef DEBUG_SUN
-      UNTESTED_CLASS;
-      assert(!is_entity);
-      dwg_print_SUN(dat, obj);
-      return DWG_NOERR;
-#else
-      UNHANDLED_CLASS;
-      assert(!is_entity);
-      return DWG_ERR_UNHANDLEDCLASS;
-#endif
-    }
-  if (!strcmp(dxfname, "GEOPOSITIONMARKER"))
-    {
-#ifdef DEBUG_GEOPOSITIONMARKER
-      UNTESTED_CLASS;
-      assert(is_entity);
-      dwg_print_GEOPOSITIONMARKER(dat, obj);
-      return DWG_NOERR;
-#else
-      UNHANDLED_CLASS;
-      assert(is_entity);
-      return DWG_ERR_UNHANDLEDCLASS;
-#endif
-    }
-  if (!strcmp(dxfname, "EXTRUDEDSURFACE"))
-    {
-#ifdef DEBUG_EXTRUDEDSURFACE
-      UNTESTED_CLASS;
-      assert(is_entity);
-      dwg_print_EXTRUDEDSURFACE(dat, obj);
-      return DWG_NOERR;
-#else
-      UNHANDLED_CLASS;
-      assert(is_entity);
-      return DWG_ERR_UNHANDLEDCLASS;
-#endif
-    }
-  if (!strcmp(dxfname, "TABLESTYLE"))
-    {
-      UNHANDLED_CLASS;
-      assert(!is_entity);
-      //dwg_print_TABLESTYLE(dat, obj);
-      return DWG_ERR_UNHANDLEDCLASS;
-    }
-  if (!strcmp(dxfname, "DBCOLOR"))
-    {
-      UNHANDLED_CLASS;
-      assert(!is_entity);
-      //dwg_print_DBCOLOR(dat, obj);
-      return DWG_ERR_UNHANDLEDCLASS;
-    }
-  if (!strcmp(dxfname, "ACDBSECTIONVIEWSTYLE"))
-    {
-      UNHANDLED_CLASS;
-      assert(!is_entity);
-      //dwg_print_SECTIONVIEWSTYLE(dat, obj);
-      return DWG_ERR_UNHANDLEDCLASS;
-    }
-  if (!strcmp(dxfname, "ACDBDETAILVIEWSTYLE"))
-    {
-      UNHANDLED_CLASS;
-      assert(!is_entity);
-      //dwg_print_DETAILVIEWSTYLE(dat, obj);
-      return DWG_ERR_UNHANDLEDCLASS;
-    }
-  if (!strcmp(dxfname, "ACDBASSOCNETWORK"))
-    {
-      UNHANDLED_CLASS;
-      assert(!is_entity);
-      //dwg_print_ASSOCNETWORK(dat, obj);
-      return DWG_ERR_UNHANDLEDCLASS;
-    }
-  if (!strcmp(dxfname, "ACDBASSOC2DCONSTRAINTGROUP"))
-    {
-      UNHANDLED_CLASS;
-      assert(!is_entity);
-      //dwg_print_ASSOC2DCONSTRAINTGROUP(dat, obj);
-      return DWG_ERR_UNHANDLEDCLASS;
-    }
-  if (!strcmp(dxfname, "ACDBASSOCGEOMDEPENDENCY"))
-    {
-      UNHANDLED_CLASS;
-      assert(!is_entity);
-      //dwg_print_ASSOCGEOMDEPENDENCY(dat, obj);
-      return DWG_ERR_UNHANDLEDCLASS;
-    }
-  if (!strcmp(dxfname, "ACDB_LEADEROBJECTCONTEXTDATA_CLASS"))
-    {
-      //UNHANDLED_CLASS;
-      //dwg_print_LEADEROBJECTCONTEXTDATA(dat, obj);
-      return DWG_ERR_UNHANDLEDCLASS;
-    }
+  STABLE_CLASS_DXF(print, DICTIONARYWDFLT, ACDBDICTIONARYWDFLT)
+  STABLE_CLASS    (print, DICTIONARYVAR)
+  STABLE_CLASS    (print, HATCH)
+  STABLE_CLASS    (print, GROUP)
+  STABLE_CLASS    (print, IDBUFFER)
+  STABLE_CLASS    (print, IMAGE)
+  STABLE_CLASS    (print, IMAGEDEF)
+  STABLE_CLASS    (print, IMAGEDEF_REACTOR)
+  STABLE_CLASS    (print, LAYER_INDEX)
+  STABLE_CLASS    (print, LAYOUT)
+  STABLE_CLASS    (print, LWPOLYLINE)
+  STABLE_CLASS    (print, OLE2FRAME)
+  STABLE_CLASS_DXF(print, PLACEHOLDER, ACDBPLACEHOLDER)
+  STABLE_CLASS_DXF(print, PROXY_OBJECT, PROXY)
+  STABLE_CLASS    (print, RASTERVARIABLES)
+  STABLE_CLASS    (print, SORTENTSTABLE)
+  STABLE_CLASS    (print, SPATIAL_FILTER)
+  STABLE_CLASS    (print, SPATIAL_INDEX)
+  STABLE_CLASS    (print, TABLE)
+  STABLE_CLASS_DXF(print, TABLE, ACAD_TABLE)
+  STABLE_CLASS    (print, XRECORD)
+  STABLE_CLASS    (print, WIPEOUT)
+  STABLE_CLASS    (print, FIELDLIST)
+  STABLE_CLASS    (print, SCALE)
+  STABLE_CLASS    (print, FIELD)
+  STABLE_CLASS    (print, OBJECTCONTEXTDATA)
+  STABLE_CLASS_CPP(print, OBJECTCONTEXTDATA, AcDbObjectContextData)
+  STABLE_CLASS    (print, MLEADERSTYLE)
+  STABLE_CLASS    (print, VISUALSTYLE)
+
+  // not enough coverage, but assumed ok
+  UNTESTED_CLASS    (print, OBJECT_PTR)
+  UNTESTED_CLASS_CPP(print, OBJECT_PTR, CAseDLPNTableRecord)
+  UNTESTED_CLASS    (print, TABLECONTENT)
+  UNTESTED_CLASS    (print, TABLEGEOMETRY)
+  UNTESTED_CLASS    (print, GEODATA)
+  UNTESTED_CLASS    (print, WIPEOUTVARIABLES)
+  UNTESTED_CLASS    (print, CAMERA)      // not persistent in a DWG
+
+  // coverage exists, but broken. needs -DDEBUG_CLASS
+  DEBUGGING_CLASS  (print, VBA_PROJECT) // Has its own section?
+  DEBUGGING_CLASS  (print, MULTILEADER) // broken Leader_Line's/Points
+  DEBUGGING_CLASS  (print, CELLSTYLEMAP) //broken
+  DEBUGGING_CLASS  (print, MATERIAL)     //working on
+  DEBUGGING_CLASS  (print, PLOTSETTINGS) //yet unsorted
+  DEBUGGING_CLASS  (print, LIGHT) //yet unsorted
+  DEBUGGING_CLASS  (print, SUN) // i.e. 2000/1.dwg
+  DEBUGGING_CLASS  (print, GEOPOSITIONMARKER) //yet unsorted
+  DEBUGGING_CLASS  (print, SURFACE) //yet unsorted
+  DEBUGGING_CLASS  (print, UNDERLAY) // DGN DWF PDF
+  //PROXY_ENTITY has a fixed type
+
+  // no coverage, unimplemented, passed through
+  UNHANDLED_CLASS_DXF(print, SECTIONVIEWSTYLE, ACDBSECTIONVIEWSTYLE)
+  UNHANDLED_CLASS_DXF(print, DETAILVIEWSTYLE, ACDBDETAILVIEWSTYLE)
+  UNHANDLED_CLASS    (print, ARCALIGNEDTEXT)
+  UNHANDLED_CLASS    (print, DIMASSOC)
+  UNHANDLED_CLASS    (print, DATATABLE)
+  UNHANDLED_CLASS    (print, DBCOLOR)
+  UNHANDLED_CLASS    (print, GEODATA)
+  UNHANDLED_CLASS_DXF(print, ASSOCNETWORK, ACDBASSOCNETWORK)
+  UNHANDLED_CLASS_DXF(print, ASSOC2DCONSTRAINTGROUP, ACDBASSOC2DCONSTRAINTGROUP)
+  UNHANDLED_CLASS_DXF(print, ASSOCGEOMDEPENDENCY, ACDBASSOCGEOMDEPENDENCY)
+  UNHANDLED_CLASS_DXF(print, LEADEROBJECTCONTEXTDATA, ACDB_LEADEROBJECTCONTEXTDATA_CLASS)
+  UNHANDLED_CLASS_DXF(print, XREFPANELOBJECT, EXACXREFPANELOBJECT)
+  UNHANDLED_CLASS_DXF(print, POINTCLOUD, ACDBPOINTCLOUD)
+  UNHANDLED_CLASS    (print, LIGHTLIST)
+  UNHANDLED_CLASS    (print, HELIX)
+  UNHANDLED_CLASS    (print, NPOCOLLECTION)
+  UNHANDLED_CLASS    (print, RTEXT)
+  UNHANDLED_CLASS    (print, TABLESTYLE)
+  UNHANDLED_CLASS    (print, UNDERLAYDEFINITION)
+  UNHANDLED_CLASS    (print, CSACDOCUMENTOPTIONS) //or just DOCUMENTOPTIONS?
 
   return DWG_ERR_UNHANDLEDCLASS;
 }
@@ -821,6 +521,7 @@ dwg_print_object(Bit_Chain* dat, Dwg_Object *obj)
    case DWG_TYPE_VBA_PROJECT:
       LOG_ERROR("Unhandled Object VBA_PROJECT. Has its own section\n");
       //dwg_print_VBA_PROJECT(dat, obj);
+      break;
    case DWG_TYPE_LAYOUT:
       return dwg_print_LAYOUT(dat, obj);
    default:
@@ -828,11 +529,7 @@ dwg_print_object(Bit_Chain* dat, Dwg_Object *obj)
         {
           return dwg_print_LAYOUT(dat, obj);
         }
-      /* > 500:
-         TABLE, DICTIONARYWDLFT, IDBUFFER, IMAGE, IMAGEDEF, IMAGEDEF_REACTOR,
-         LAYER_INDEX, OLE2FRAME, PROXY, RASTERVARIABLES, SORTENTSTABLE, SPATIAL_FILTER,
-         SPATIAL_INDEX
-      */
+      /* > 500 */
       else if ((error = dwg_print_variable_type(obj->parent, dat, obj))
                & DWG_ERR_UNHANDLEDCLASS)
         {

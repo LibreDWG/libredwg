@@ -304,18 +304,18 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_ASSOCNETWORK,
   DWG_TYPE_CAMERA,
   DWG_TYPE_CELLSTYLEMAP,
+  DWG_TYPE_CSACDOCUMENTOPTIONS,
   DWG_TYPE_DATATABLE,
   DWG_TYPE_DBCOLOR,
   DWG_TYPE_DETAILVIEWSTYLE,
   DWG_TYPE_DIMASSOC,
   DWG_TYPE_DICTIONARYVAR,
-  DWG_TYPE_DICTIONARYWDLFT,
-  DWG_TYPE_EXACXREFPANELOBJECT,
-  DWG_TYPE_EXTRUDEDSURFACE, /* or just SURFACE? */
+  DWG_TYPE_DICTIONARYWDFLT,
   DWG_TYPE_FIELD,
   DWG_TYPE_FIELDLIST,
   DWG_TYPE_GEODATA,
   DWG_TYPE_GEOPOSITIONMARKER,
+  DWG_TYPE_HELIX,
   DWG_TYPE_IDBUFFER,
   DWG_TYPE_IMAGE,
   DWG_TYPE_IMAGEDEF,
@@ -332,21 +332,27 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_PLOTSETTINGS,
   DWG_TYPE_OBJECTCONTEXTDATA,
   DWG_TYPE_OBJECT_PTR,
+  DWG_TYPE_POINTCLOUD,
   DWG_TYPE_RASTERVARIABLES,
+  DWG_TYPE_RTEXT,
   DWG_TYPE_SCALE,
   DWG_TYPE_SECTIONVIEWSTYLE,
   DWG_TYPE_SORTENTSTABLE,
   DWG_TYPE_SPATIAL_FILTER,
   DWG_TYPE_SPATIAL_INDEX,
   DWG_TYPE_SUN,
+  DWG_TYPE_SURFACE,
   DWG_TYPE_TABLE,
   DWG_TYPE_TABLECONTENT,
   DWG_TYPE_TABLEGEOMETRY,
   DWG_TYPE_TABLESTYLE,
   DWG_TYPE_UNDERLAY, /* or seperate DGN,DWF,PDF types? */
+  DWG_TYPE_UNDERLAYDEFINITION,
   DWG_TYPE_VISUALSTYLE,
   DWG_TYPE_WIPEOUT,
   DWG_TYPE_WIPEOUTVARIABLES,
+  DWG_TYPE_XREFPANELOBJECT,
+  // add new types here!
 
   DWG_TYPE_UNKNOWN_ENT = 0xfffe,
   DWG_TYPE_UNKNOWN_OBJ = 0xffff,
@@ -2594,6 +2600,7 @@ typedef struct _dwg_object_PLACEHOLDER
  */
 typedef struct _dwg_Leader_Break
 {
+  struct _dwg_Leader_Line *parent; /* to Leader and Leader_Line */
   BITCODE_3BD start;
   BITCODE_3BD end;
 } Dwg_Leader_Break;
@@ -2635,6 +2642,7 @@ typedef struct _dwg_Leader_BlockLabel
 
 typedef struct _dwg_Leader
 {
+  struct _dwg_object_MULTILEADER *parent;
   BITCODE_B is_valid;
   BITCODE_B unknown;
   BITCODE_3BD connection;
@@ -2647,13 +2655,11 @@ typedef struct _dwg_Leader
   BITCODE_BD landing_distance;
   /* ... */
   BITCODE_BS attach_dir;
-  struct _dwg_MLeaderAnnotContext *parent;
 } Dwg_Leader;
 
 /* The MLeaderAnnotContext object (par 20.4.86), embedded into an MLEADER */
 typedef struct _dwg_MLeaderAnnotContext
 {
-  struct _dwg_object_MULTILEADER *parent;
   BITCODE_BS class_version;
   BITCODE_B has_xdic_file;
   BITCODE_B is_default;
@@ -2731,6 +2737,8 @@ typedef struct _dwg_MLeaderAnnotContext
 
 typedef struct _dwg_object_MULTILEADER
 {
+  struct _dwg_object_entity *parent;
+
   BITCODE_BS class_version; /*!< r2010+ =2 */
   Dwg_MLeaderAnnotContext ctx;
   BITCODE_H leaderstyle;
@@ -2835,14 +2843,15 @@ typedef struct _dwg_object_MLEADERSTYLE
 
 /**
  VBA_PROJECT (81 + varies) object
- Has its own optional section (probably section[5])
+ Has its own optional section? section[5]?
  */
 typedef struct _dwg_object_VBA_PROJECT
 {
   struct _dwg_object_object *parent;
 
   BITCODE_RL num_bytes;
-  char *bytes;
+  BITCODE_RC *bytes;
+
   BITCODE_H parenthandle;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
@@ -3458,9 +3467,9 @@ typedef struct _dwg_object_DICTIONARYVAR
 } Dwg_Object_DICTIONARYVAR;
 
 /**
- Class DICTIONARYWDLFT (varies)
+ Class DICTIONARYWDFLT (varies)
  */
-typedef struct _dwg_object_DICTIONARYWDLFT
+typedef struct _dwg_object_DICTIONARYWDFLT
 {
   struct _dwg_object_object *parent;
 
@@ -3474,7 +3483,7 @@ typedef struct _dwg_object_DICTIONARYWDLFT
   BITCODE_H xdicobjhandle;
   BITCODE_H* itemhandles;
   BITCODE_H defaultid;
-} Dwg_Object_DICTIONARYWDLFT;
+} Dwg_Object_DICTIONARYWDFLT;
 
 /**
  Class FIELDLIST AcDbField (varies)
@@ -4152,12 +4161,32 @@ typedef struct _dwg_entity_GEOPOSITIONMARKER
 } Dwg_Entity_GEOPOSITIONMARKER;
 
 /**
- Entity EXTRUDEDSURFACE (varies) UNKNOWN FIELDS
+ Entity HELIX (varies) UNKNOWN FIELDS
+ yet unsorted.
+*/
+typedef struct _dwg_entity_HELIX
+{
+  struct _dwg_object_entity *parent;
+  BITCODE_BS major_version;
+  BITCODE_BS maint_version;
+  BITCODE_3BD axis_base_pt;
+  BITCODE_3BD start_pt;
+  BITCODE_3BD axis_vector;
+  BITCODE_BD radius;
+  BITCODE_BD num_turns;
+  BITCODE_BD height;
+  BITCODE_B handedness;
+  BITCODE_BS constraint_type;
+
+} Dwg_Entity_HELIX;
+
+/**
+ Entity SURFACE (varies) UNKNOWN FIELDS
  in DXF as SURFACE and encrypted
  yet unsorted, and unused.
- There's also LOFTEDSURFACE, PLANESURFACE, REVOLVEDSURFACE
+ There's EXTRUDED, LOFTED, PLANE, REVOLVED, SWEPT
 */
-typedef struct _dwg_entity_EXTRUDEDSURFACE
+typedef struct _dwg_entity_SURFACE
 {
   struct _dwg_object_entity *parent;
   //? sweep_profile, taper_angle
@@ -4190,7 +4219,7 @@ typedef struct _dwg_entity_EXTRUDEDSURFACE
   BITCODE_3BD reference_vector_for_controlling_twist; /*!< DXF 11 */
   BITCODE_H sweep_entity;
   BITCODE_H path_entity;
-} Dwg_Entity_EXTRUDEDSURFACE;
+} Dwg_Entity_SURFACE;
 
 typedef struct _dwg_UNDERLAY_Boundary
 {
@@ -4425,8 +4454,9 @@ typedef struct _dwg_object_entity
     Dwg_Entity_HATCH *HATCH;
 
     Dwg_Entity_CAMERA *CAMERA;
-    Dwg_Entity_EXTRUDEDSURFACE *EXTRUDEDSURFACE;
+    Dwg_Entity_SURFACE *SURFACE;
     Dwg_Entity_GEOPOSITIONMARKER *GEOPOSITIONMARKER;
+    Dwg_Entity_HELIX *HELIX;
     Dwg_Entity_IMAGE *IMAGE;
     Dwg_Entity_LIGHT *LIGHT;
     Dwg_Entity_LWPOLYLINE *LWPOLYLINE;
@@ -4539,10 +4569,9 @@ typedef struct _dwg_object_object
     //TODO Dwg_Object_DETAILVIEWSTYLE *DETAILVIEWSTYLE;
     Dwg_Object_DICTIONARY *DICTIONARY;
     Dwg_Object_DICTIONARYVAR *DICTIONARYVAR;
-    Dwg_Object_DICTIONARYWDLFT *DICTIONARYWDLFT;
+    Dwg_Object_DICTIONARYWDFLT *DICTIONARYWDFLT;
     //TODO Dwg_Object_DIMASSOC *DIMASSOC;
     Dwg_Object_DUMMY *DUMMY;
-    //TODO Dwg_Object_EXACXREFPANELOBJECT *EXACXREFPANELOBJECT;
     Dwg_Object_FIELD *FIELD;
     Dwg_Object_FIELDLIST *FIELDLIST;
     Dwg_Object_GEODATA *GEODATA;
@@ -4565,6 +4594,7 @@ typedef struct _dwg_object_object
     Dwg_Object_PLOTSETTINGS *PLOTSETTINGS;
     Dwg_Object_PROXY_OBJECT *PROXY_OBJECT;
     Dwg_Object_RASTERVARIABLES *RASTERVARIABLES;
+    //TODO Dwg_Object_RTEXT *RTEXT;
     Dwg_Object_SCALE *SCALE;
     //TODO Dwg_Object_SECTIONVIEWSTYLE *SECTIONVIEWSTYLE;
     Dwg_Object_SORTENTSTABLE *SORTENTSTABLE;
@@ -4578,6 +4608,7 @@ typedef struct _dwg_object_object
     Dwg_Object_VISUALSTYLE *VISUALSTYLE;
     Dwg_Object_WIPEOUTVARIABLES *WIPEOUTVARIABLES;
     Dwg_Object_XRECORD *XRECORD;
+    //TODO Dwg_Object_XREFPANELOBJECT *XREFPANELOBJECT;
     Dwg_Object_UNKNOWN_OBJ *UNKNOWN_OBJ;
   } tio;
 
@@ -4599,10 +4630,11 @@ typedef struct _dwg_object_object
  */
 typedef struct _dwg_object
 {
-  unsigned int size;
-  unsigned long address;
-  unsigned int type;
-  unsigned int index;
+  unsigned int size;     /*!< in bytes */
+  unsigned long address; /*!< byte offset in the file */
+  unsigned int type;     /*!< fixed or variable (class - 500) */
+  unsigned int index;    /*!< into dwg->object[] */
+  enum DWG_OBJECT_TYPE fixedtype; /*!< into a global list */
 
   long unsigned int bitsize_address; /* bitsize offset: r13-2007 */
   BITCODE_B  has_strings;       /*!< r2007+ */
@@ -5115,14 +5147,13 @@ EXPORT long dwg_add_DBCOLOR (Dwg_Data * dwg);
 EXPORT long dwg_add_DETAILVIEWSTYLE (Dwg_Data * dwg);
 EXPORT long dwg_add_DIMASSOC (Dwg_Data * dwg);
 EXPORT long dwg_add_DICTIONARYVAR (Dwg_Data * dwg);
-EXPORT long dwg_add_DICTIONARYWDLFT (Dwg_Data * dwg);
+EXPORT long dwg_add_DICTIONARYWDFLT (Dwg_Data * dwg);
 //EXPORT long dwg_add_EXACXREFPANELOBJECT (Dwg_Data * dwg);
-//EXPORT long dwg_add_EXTRUDEDSURFACE (Dwg_Data * dwg);
 EXPORT long dwg_add_FIELD (Dwg_Data * dwg);
 EXPORT long dwg_add_FIELDLIST (Dwg_Data * dwg);
 EXPORT long dwg_add_GEODATA (Dwg_Data * dwg);
 //EXPORT long dwg_add_GEOPOSITIONMARKER (Dwg_Data * dwg);
-EXPORT long dwg_add_IDBUFFER (Dwg_Data * dwg);
+//EXPORT long dwg_add_HELIX (Dwg_Data * dwg);
 EXPORT long dwg_add_IMAGE (Dwg_Data * dwg);
 EXPORT long dwg_add_IMAGEDEF (Dwg_Data * dwg);
 EXPORT long dwg_add_IMAGEDEF_REACTOR (Dwg_Data * dwg);
@@ -5144,6 +5175,7 @@ EXPORT long dwg_add_SORTENTSTABLE (Dwg_Data * dwg);
 EXPORT long dwg_add_SPATIAL_FILTER (Dwg_Data * dwg);
 EXPORT long dwg_add_SPATIAL_INDEX (Dwg_Data * dwg);
 EXPORT long dwg_add_SUN (Dwg_Data * dwg);
+//EXPORT long dwg_add_SURFACE (Dwg_Data * dwg);
 EXPORT long dwg_add_TABLE (Dwg_Data * dwg);
 EXPORT long dwg_add_TABLECONTENT (Dwg_Data * dwg);
 EXPORT long dwg_add_TABLEGEOMETRY (Dwg_Data * dwg);

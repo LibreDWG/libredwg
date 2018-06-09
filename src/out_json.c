@@ -311,323 +311,82 @@ dwg_json_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   // almost always false
   is_entity = dwg_class_is_entity(klass);
 
-#define UNHANDLED_CLASS \
-      LOG_WARN("Unhandled Class %s %d %s (0x%x%s)", is_entity ? "entity" : "object",\
-               klass->number, dxfname, klass->proxyflag,\
-               klass->wasazombie ? " was proxy" : "")
-#define UNTESTED_CLASS \
-      LOG_WARN("Untested Class %s %d %s (0x%x%s)", is_entity ? "entity" : "object",\
-               klass->number, dxfname, klass->proxyflag,\
-               klass->wasazombie ? " was proxy" : "")
-  
-  if (!strcmp(dxfname, "ACDBDICTIONARYWDFLT"))
-    {
-      assert(!is_entity);
-      return dwg_json_DICTIONARYWDLFT(dat, obj);
-    }
-  if (!strcmp(dxfname, "DICTIONARYVAR"))
-    {
-      assert(!is_entity);
-      return dwg_json_DICTIONARYVAR(dat, obj);
-    }
-  if (!strcmp(dxfname, "HATCH"))
-    {
-      assert(!is_entity);
-      return dwg_json_HATCH(dat, obj);
-    }
-  if (!strcmp(dxfname, "FIELDLIST"))
-    {
-      assert(!is_entity);
-      return dwg_json_FIELDLIST(dat, obj);
-    }
-  if (!strcmp(dxfname, "GROUP"))
-    {
-      UNTESTED_CLASS;
-      assert(!is_entity);
-      return dwg_json_GROUP(dat, obj);
-    }
-  if (!strcmp(dxfname, "IDBUFFER"))
-    {
-      return dwg_json_IDBUFFER(dat, obj);
-    }
-  if (!strcmp(dxfname, "IMAGE"))
-    {
-      return dwg_json_IMAGE(dat, obj);
-    }
-  if (!strcmp(dxfname, "IMAGEDEF"))
-    {
-      return dwg_json_IMAGEDEF(dat, obj);
-    }
-  if (!strcmp(dxfname, "IMAGEDEF_REACTOR"))
-    {
-      return dwg_json_IMAGEDEF_REACTOR(dat, obj);
-    }
-  if (!strcmp(dxfname, "LAYER_INDEX"))
-    {
-      return dwg_json_LAYER_INDEX(dat, obj);
-    }
-  if (!strcmp(dxfname, "LAYOUT"))
-    {
-      return dwg_json_LAYOUT(dat, obj);
-    }
-  if (!strcmp(dxfname, "LWPOLYLINE"))
-    {
-      return dwg_json_LWPOLYLINE(dat, obj);
-    }
-  if (!strcmp(dxfname, "MULTILEADER"))
-    {
-#ifdef DEBUG_MULTILEADER
-      UNTESTED_CLASS; //broken Leader_Line's/Points
-      return dwg_json_MULTILEADER(dat, obj);
-#else
-      UNHANDLED_CLASS;
-      return DWG_ERR_UNHANDLEDCLASS;
-#endif
-    }
-  if (!strcmp(dxfname, "MLEADERSTYLE"))
-    {
-      return dwg_json_MLEADERSTYLE(dat, obj);
-    }
-  if (!strcmp(dxfname, "OLE2FRAME"))
-    {
-      return dwg_json_OLE2FRAME(dat, obj);
-    }
-  if (!strcmp(dxfname, "OBJECTCONTEXTDATA") ||
-      !strcmp(klass->cppname, "AcDbObjectContextData"))
-    {
-      return dwg_json_OBJECTCONTEXTDATA(dat, obj);
-    }
-  if (!strcmp(dxfname, "OBJECT_PTR") ||
-      !strcmp(klass->cppname, "CAseDLPNTableRecord"))
-    {
-      UNTESTED_CLASS;
-      assert(!is_entity);
-      return dwg_json_OBJECT_PTR(dat, obj);
-    }
-  if (!strcmp(dxfname, "ACDBPLACEHOLDER"))
-    {
-      return dwg_json_PLACEHOLDER(dat, obj);
-    }
-  if (!strcmp(dxfname, "PROXY"))
-    {
-      return dwg_json_PROXY_OBJECT(dat, obj);
-    }
-  if (!strcmp(dxfname, "RASTERVARIABLES"))
-    {
-      return dwg_json_RASTERVARIABLES(dat, obj);
-    }
-  if (!strcmp(dxfname, "SCALE"))
-    {
-      return dwg_json_SCALE(dat, obj);
-    }
-  if (!strcmp(dxfname, "SORTENTSTABLE"))
-    {
-      return dwg_json_SORTENTSTABLE(dat, obj);
-    }
-  if (!strcmp(dxfname, "SPATIAL_FILTER"))
-    {
-      return dwg_json_SPATIAL_FILTER(dat, obj);
-    }
-  if (!strcmp(dxfname, "SPATIAL_INDEX"))
-    {
-      return dwg_json_SPATIAL_INDEX(dat, obj);
-    }
-  if (!strcmp(dxfname, "TABLE") ||
-      !strcmp(dxfname, "ACAD_TABLE"))
-    {
-      UNTESTED_CLASS;
-      return dwg_json_TABLE(dat, obj);
-    }
-  if (!strcmp(dxfname, "WIPEOUTVARIABLES"))
-    {
-      UNTESTED_CLASS;
-      return dwg_json_WIPEOUTVARIABLES(dat, obj);
-    }
-  if (!strcmp(dxfname, "WIPEOUT"))
-    {
-      return dwg_json_WIPEOUT(dat, obj);
-    }
-  if (!strcmp(dxfname, "FIELDLIST"))
-    {
-      return dwg_json_FIELDLIST(dat, obj);
-    }
-  if (!strcmp(dxfname, "VBA_PROJECT"))
-    {
-#ifdef DEBUG_VBA_PROJECT
-      UNTESTED_CLASS;
-      return dwg_json_VBA_PROJECT(dat, obj);
-#else
-      UNHANDLED_CLASS;
-      return DWG_ERR_UNHANDLEDCLASS;
-#endif
-    }
-  if (!strcmp(dxfname, "CELLSTYLEMAP"))
-    {
-#ifdef DEBUG_CELLSTYLEMAP
-      UNTESTED_CLASS;
-      return dwg_json_CELLSTYLEMAP(dat, obj);
-#else
-      UNHANDLED_CLASS;
-      return DWG_ERR_UNHANDLEDCLASS;
-#endif
-    }
-  if (!strcmp(dxfname, "VISUALSTYLE"))
-    {
-      return dwg_json_VISUALSTYLE(dat, obj);
-    }
-  if (!strcmp(dxfname, "ACDBSECTIONVIEWSTYLE"))
-    {
-      UNHANDLED_CLASS;
-      assert(!is_entity);
-      //dwg_json_SECTIONVIEWSTYLE(dat, obj);
-      return DWG_ERR_UNHANDLEDCLASS;
-    }
-  if (!strcmp(dxfname, "ACDBDETAILVIEWSTYLE"))
-    {
-      UNHANDLED_CLASS;
-      assert(!is_entity);
-      //dwg_json_DETAILVIEWSTYLE(dat, obj);
-      return DWG_ERR_UNHANDLEDCLASS;
-    }
-  if (!strcmp(dxfname, "FIELD"))
-    {
-      UNTESTED_CLASS;
-      return dwg_json_FIELD(dat, obj);
-    }
-  if (!strcmp(dxfname, "TABLECONTENT"))
-    {
-      UNTESTED_CLASS;
-      return dwg_json_TABLECONTENT(dat, obj);
-    }
-  if (!strcmp(dxfname, "TABLEGEOMETRY"))
-    {
-      UNTESTED_CLASS;
-      return dwg_json_TABLEGEOMETRY(dat, obj);
-    }
-  if (!strcmp(dxfname, "GEODATA"))
-    {
-      UNTESTED_CLASS;
-      return dwg_json_GEODATA(dat, obj);
-    }
-  if (!strcmp(dxfname, "XRECORD"))
-    {
-      return dwg_json_XRECORD(dat, obj);
-    }
-  if (!strcmp(dxfname, "ARCALIGNEDTEXT"))
-    {
-      UNHANDLED_CLASS;
-      //assert(!is_entity);
-      //dwg_json_ARCALIGNEDTEXT(dat, obj);
-      return DWG_ERR_UNHANDLEDCLASS;
-    }
-  if (!strcmp(dxfname, "DIMASSOC"))
-    {
-      UNHANDLED_CLASS;
-      assert(!is_entity);
-      //dwg_json_DIMASSOC(dat, obj);
-      return DWG_ERR_UNHANDLEDCLASS;
-    }
-  if (!strcmp(dxfname, "MATERIAL"))
-    {
-#ifdef DEBUG_MATERIAL
-      UNTESTED_CLASS;
-      assert(!is_entity);
-      return dwg_json_MATERIAL(dat, obj);
-#else
-      UNHANDLED_CLASS;
-      assert(!is_entity);
-      return DWG_ERR_UNHANDLEDCLASS;
-#endif
-    }
-  if (!strcmp(dxfname, "PLOTSETTINGS"))
-    {
-#ifdef DEBUG_PLOTSETTINGS
-      UNTESTED_CLASS;
-      assert(!is_entity);
-      return dwg_json_PLOTSETTINGS(dat, obj);
-#else
-      UNHANDLED_CLASS;
-      assert(!is_entity);
-      return DWG_ERR_UNHANDLEDCLASS;
-#endif
-    }
-  if (!strcmp(dxfname, "LIGHT"))
-    {
-#ifdef DEBUG_LIGHT
-      UNTESTED_CLASS;
-      assert(is_entity);
-      return dwg_json_LIGHT(dat, obj);
-#else
-      UNHANDLED_CLASS;
-      assert(is_entity);
-      return DWG_ERR_UNHANDLEDCLASS;
-#endif
-    }
-  if (!strcmp(dxfname, "SUN"))
-    {
-#ifdef DEBUG_SUN
-      UNTESTED_CLASS;
-      assert(!is_entity);
-      return dwg_json_SUN(dat, obj);
-#else
-      UNHANDLED_CLASS;
-      assert(!is_entity);
-      return DWG_ERR_UNHANDLEDCLASS;
-#endif
-    }
-  if (!strcmp(dxfname, "GEOPOSITIONMARKER"))
-    {
-      UNTESTED_CLASS;
-      assert(is_entity);
-      return dwg_json_GEOPOSITIONMARKER(dat, obj);
-    }
-  if (!strcmp(dxfname, "EXTRUDEDSURFACE"))
-    {
-      UNTESTED_CLASS;
-      assert(is_entity);
-      return dwg_json_EXTRUDEDSURFACE(dat, obj);
-    }
-  if (!strcmp(dxfname, "TABLESTYLE"))
-    {
-      UNHANDLED_CLASS;
-      assert(!is_entity);
-      //dwg_json_TABLESTYLE(dat, obj);
-      return DWG_ERR_UNHANDLEDCLASS;
-    }
-  if (!strcmp(dxfname, "DBCOLOR"))
-    {
-      UNHANDLED_CLASS;
-      assert(!is_entity);
-      //dwg_json_DBCOLOR(dat, obj);
-      return DWG_ERR_UNHANDLEDCLASS;
-    }
-  if (!strcmp(dxfname, "ACDBASSOCNETWORK"))
-    {
-      UNHANDLED_CLASS;
-      assert(!is_entity);
-      //dwg_json_ASSOCNETWORK(dat, obj);
-      return DWG_ERR_UNHANDLEDCLASS;
-    }
-  if (!strcmp(dxfname, "ACDBASSOC2DCONSTRAINTGROUP"))
-    {
-      UNHANDLED_CLASS;
-      assert(!is_entity);
-      //dwg_json_ASSOC2DCONSTRAINTGROUP(dat, obj);
-      return DWG_ERR_UNHANDLEDCLASS;
-    }
-  if (!strcmp(dxfname, "ACDBASSOCGEOMDEPENDENCY"))
-    {
-      UNHANDLED_CLASS;
-      assert(!is_entity);
-      //dwg_json_ASSOCGEOMDEPENDENCY(dat, obj);
-      return DWG_ERR_UNHANDLEDCLASS;
-    }
-  if (!strcmp(dxfname, "ACDB_LEADEROBJECTCONTEXTDATA_CLASS"))
-    {
-      //UNHANDLED_CLASS;
-      //dwg_json_LEADEROBJECTCONTEXTDATA(dat, obj);
-      return DWG_ERR_UNHANDLEDCLASS;
-    }
+  STABLE_CLASS_DXF(json, DICTIONARYWDFLT, ACDBDICTIONARYWDFLT)
+  STABLE_CLASS    (json, DICTIONARYVAR)
+  STABLE_CLASS    (json, HATCH)
+  STABLE_CLASS    (json, GROUP)
+  STABLE_CLASS    (json, IDBUFFER)
+  STABLE_CLASS    (json, IMAGE)
+  STABLE_CLASS    (json, IMAGEDEF)
+  STABLE_CLASS    (json, IMAGEDEF_REACTOR)
+  STABLE_CLASS    (json, LAYER_INDEX)
+  STABLE_CLASS    (json, LAYOUT)
+  STABLE_CLASS    (json, LWPOLYLINE)
+  STABLE_CLASS    (json, OLE2FRAME)
+  STABLE_CLASS_DXF(json, PLACEHOLDER, ACDBPLACEHOLDER)
+  STABLE_CLASS_DXF(json, PROXY_OBJECT, PROXY)
+  STABLE_CLASS    (json, RASTERVARIABLES)
+  STABLE_CLASS    (json, SORTENTSTABLE)
+  STABLE_CLASS    (json, SPATIAL_FILTER)
+  STABLE_CLASS    (json, SPATIAL_INDEX)
+  STABLE_CLASS    (json, TABLE)
+  STABLE_CLASS_DXF(json, TABLE, ACAD_TABLE)
+  STABLE_CLASS    (json, XRECORD)
+  STABLE_CLASS    (json, WIPEOUT)
+  STABLE_CLASS    (json, FIELDLIST)
+  STABLE_CLASS    (json, SCALE)
+  STABLE_CLASS    (json, FIELD)
+  STABLE_CLASS    (json, OBJECTCONTEXTDATA)
+  STABLE_CLASS_CPP(json, OBJECTCONTEXTDATA, AcDbObjectContextData)
+  STABLE_CLASS    (json, MLEADERSTYLE)
+  STABLE_CLASS    (json, VISUALSTYLE)
+
+  // not enough coverage, but assumed ok
+  UNTESTED_CLASS    (json, OBJECT_PTR)
+  UNTESTED_CLASS_CPP(json, OBJECT_PTR, CAseDLPNTableRecord)
+  UNTESTED_CLASS    (json, TABLECONTENT)
+  UNTESTED_CLASS    (json, TABLEGEOMETRY)
+  UNTESTED_CLASS    (json, GEODATA)
+  UNTESTED_CLASS    (json, WIPEOUTVARIABLES)
+  UNTESTED_CLASS    (json, CAMERA)      // not persistent in a DWG
+
+  // coverage exists, but broken. needs -DDEBUG_CLASS
+  DEBUGGING_CLASS  (json, VBA_PROJECT) // Has its own section?
+  DEBUGGING_CLASS  (json, MULTILEADER) // broken Leader_Line's/Points
+  DEBUGGING_CLASS  (json, CELLSTYLEMAP) //broken
+  DEBUGGING_CLASS  (json, MATERIAL)     //working on
+  DEBUGGING_CLASS  (json, PLOTSETTINGS) //yet unsorted
+  DEBUGGING_CLASS  (json, LIGHT) //yet unsorted
+  DEBUGGING_CLASS  (json, SUN) // i.e. 2000/1.dwg
+  DEBUGGING_CLASS  (json, GEOPOSITIONMARKER) //yet unsorted
+  DEBUGGING_CLASS  (json, SURFACE) //yet unsorted
+  DEBUGGING_CLASS  (json, UNDERLAY) // DGN DWF PDF
+  //PROXY_ENTITY has a fixed type  
+
+  // no coverage, unimplemented, passed through
+  UNHANDLED_CLASS_DXF(json, SECTIONVIEWSTYLE, ACDBSECTIONVIEWSTYLE)
+  UNHANDLED_CLASS_DXF(json, DETAILVIEWSTYLE, ACDBDETAILVIEWSTYLE)
+  UNHANDLED_CLASS    (json, ARCALIGNEDTEXT)
+  UNHANDLED_CLASS    (json, DIMASSOC)
+  UNHANDLED_CLASS    (json, DATATABLE)
+  UNHANDLED_CLASS    (json, DBCOLOR)
+  UNHANDLED_CLASS    (json, GEODATA)
+  UNHANDLED_CLASS_DXF(json, ASSOCNETWORK, ACDBASSOCNETWORK)
+  UNHANDLED_CLASS_DXF(json, ASSOC2DCONSTRAINTGROUP, ACDBASSOC2DCONSTRAINTGROUP)
+  UNHANDLED_CLASS_DXF(json, ASSOCGEOMDEPENDENCY, ACDBASSOCGEOMDEPENDENCY)
+  UNHANDLED_CLASS_DXF(json, LEADEROBJECTCONTEXTDATA, ACDB_LEADEROBJECTCONTEXTDATA_CLASS)
+  UNHANDLED_CLASS_DXF(json, XREFPANELOBJECT, EXACXREFPANELOBJECT)
+  UNHANDLED_CLASS_DXF(json, POINTCLOUD, ACDBPOINTCLOUD)
+  UNHANDLED_CLASS    (json, LIGHTLIST)
+  UNHANDLED_CLASS    (json, HELIX)
+  UNHANDLED_CLASS    (json, NPOCOLLECTION)
+  UNHANDLED_CLASS    (json, RTEXT)
+  UNHANDLED_CLASS    (json, TABLESTYLE)
+  UNHANDLED_CLASS    (json, UNDERLAYDEFINITION)
+  UNHANDLED_CLASS    (json, CSACDOCUMENTOPTIONS) //or just DOCUMENTOPTIONS?
+
+#undef WARN_UNHANDLED_CLASS
+#undef WARN_UNTESTED_CLASS
 
   return DWG_ERR_UNHANDLEDCLASS;
 }
@@ -711,8 +470,6 @@ dwg_json_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       return dwg_json_REGION(dat, obj);
     case DWG_TYPE__3DSOLID:
       return dwg_json__3DSOLID(dat, obj);
-      break; /* Check the type of the object
-              */
     case DWG_TYPE_BODY:
       return dwg_json_BODY(dat, obj);
     case DWG_TYPE_RAY:

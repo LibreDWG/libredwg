@@ -189,15 +189,15 @@ int dwg_obj_is_control(const Dwg_Object *obj);
 
 #define DWG_ENTITY(token) \
 static int \
-dwg_free_ ##token (Dwg_Object * obj)\
+dwg_free_ ##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj)\
 {\
-  int error = 0; \
   long vcount, rcount1, rcount2, rcount3, rcount4;\
   Dwg_Entity_##token *ent, *_obj;\
   Dwg_Object_Entity *_ent;\
   Bit_Chain *hdl_dat = dat;\
   Bit_Chain* str_dat = dat;\
   Dwg_Data* dwg = obj->parent;\
+  int error = 0; \
   LOG_HANDLE("Free entity " #token "\n")\
   _ent = obj->tio.entity;\
   _obj = ent = _ent->tio.token;
@@ -205,19 +205,19 @@ dwg_free_ ##token (Dwg_Object * obj)\
 #define DWG_ENTITY_END      \
   FREE_IF(_obj);            \
   FREE_IF(obj->tio.entity); \
-  return error; \
+  return 0; \
 }
 
 #define DWG_OBJECT(token) \
 static int \
-dwg_free_ ##token (Dwg_Object * obj) \
+dwg_free_ ##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
-  int error = 0; \
   long vcount, rcount1, rcount2, rcount3, rcount4; \
   Dwg_Data* dwg = obj->parent;                   \
   Dwg_Object_##token *_obj;                      \
   Bit_Chain *hdl_dat = dat;                      \
   Bit_Chain* str_dat = dat;                      \
+  int error = 0; \
   LOG_HANDLE("Free object " #token " %p\n", obj) \
   _obj = obj->tio.object->tio.token;
 
@@ -227,9 +227,11 @@ dwg_free_ ##token (Dwg_Object * obj) \
   FREE_IF(obj->tio.object);                             \
   obj->parent = NULL;                                   \
   /* free(obj); obj = NULL; */                          \
-  return error; \
+  return 0; \
 }
 
+//TODO: this should not really be needed as we can just free all refs
+//      at the end. but this might miss some refs not stored in this array.
 static void
 dwg_free_handleref(Dwg_Object_Ref *restrict ref, Dwg_Data *restrict dwg)
 {
@@ -311,6 +313,7 @@ static int
 dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
 {
   int i;
+  int is_entity;
   char *dxfname;
   Dwg_Class *klass;
 
@@ -324,278 +327,87 @@ dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
   dxfname = strdup(klass->dxfname);
   if (!dxfname)
     return DWG_ERR_OUTOFMEM;
+  // almost always false
+  is_entity = dwg_class_is_entity(klass);
 
-  if (!strcmp(dxfname, "DICTIONARYVAR"))
-    {
-      free(dxfname);
-      return dwg_free_DICTIONARYVAR(obj);
-    }
-  if (!strcmp(dxfname, "ACDBDICTIONARYWDFLT"))
-    {
-      free(dxfname);
-      return dwg_free_DICTIONARYWDLFT(obj);
-    }
-  if (!strcmp(dxfname, "HATCH"))
-    {
-      free(dxfname);
-      return dwg_free_HATCH(obj);
-    }
-  if (!strcmp(dxfname, "FIELDLIST"))
-    {
-      free(dxfname);
-      return dwg_free_FIELDLIST(obj);
-    }
-  if (!strcmp(dxfname, "IDBUFFER"))
-    {
-      free(dxfname);
-      return dwg_free_IDBUFFER(obj);
-    }
-  if (!strcmp(dxfname, "IMAGE"))
-    {
-      free(dxfname);
-      return dwg_free_IMAGE(obj);
-    }
-  if (!strcmp(dxfname, "IMAGEDEF"))
-    {
-      free(dxfname);
-      return dwg_free_IMAGEDEF(obj);
-    }
-  if (!strcmp(dxfname, "IMAGEDEF_REACTOR"))
-    {
-      free(dxfname);
-      return dwg_free_IMAGEDEF_REACTOR(obj);
-    }
-  if (!strcmp(dxfname, "LAYER_INDEX"))
-    {
-      free(dxfname);
-      return dwg_free_LAYER_INDEX(obj);
-    }
-  if (!strcmp(dxfname, "LAYOUT"))
-    {
-      free(dxfname);
-      return dwg_free_LAYOUT(obj);
-    }
-  if (!strcmp(dxfname, "LWPOLYLINE"))
-    {
-      free(dxfname);
-      return dwg_free_LWPOLYLINE(obj);
-    }
-  if (!strcmp(dxfname, "MULTILEADER"))
-    {
-#ifdef DEBUG_MULTILEADER
-      //broken Leader_Line's/Points
-      free(dxfname);
-      return dwg_free_MULTILEADER(obj);
-#else
-      return DWG_ERR_UNHANDLEDCLASS;
-#endif
-    }
-  if (!strcmp(dxfname, "MLEADERSTYLE"))
-    {
-      free(dxfname);
-      return dwg_free_MLEADERSTYLE(obj);
-    }
-  if (!strcmp(dxfname, "OLE2FRAME"))
-    {
-      free(dxfname);
-      return dwg_free_OLE2FRAME(obj);
-    }
-  if (!strcmp(dxfname, "OBJECTCONTEXTDATA") ||
-      !strcmp(klass->cppname, "AcDbObjectContextData"))
-    {
-      free(dxfname);
-      return dwg_free_OBJECTCONTEXTDATA(obj);
-    }
-  if (!strcmp(dxfname, "OBJECT_PTR") ||
-      !strcmp(klass->cppname, "CAseDLPNTableRecord"))
-    {
-      free(dxfname);
-      return dwg_free_OBJECT_PTR(obj);
-    }
-  if (!strcmp(dxfname, "ACDBPLACEHOLDER"))
-    {
-      free(dxfname);
-      return dwg_free_PLACEHOLDER(obj);
-    }
-  if (!strcmp(dxfname, "PROXY"))
-    {
-      free(dxfname);
-      return dwg_free_PROXY_OBJECT(obj);
-    }
-  if (!strcmp(dxfname, "RASTERVARIABLES"))
-    {
-      free(dxfname);
-      return dwg_free_RASTERVARIABLES(obj);
-    }
-  if (!strcmp(dxfname, "SCALE"))
-    {
-      free(dxfname);
-      return dwg_free_SCALE(obj);
-    }
-  if (!strcmp(dxfname, "SORTENTSTABLE"))
-    {
-      free(dxfname);
-      return dwg_free_SORTENTSTABLE(obj);
-    }
-  if (!strcmp(dxfname, "SPATIAL_FILTER"))
-    {
-      free(dxfname);
-      return dwg_free_SPATIAL_FILTER(obj);
-    }
-  if (!strcmp(dxfname, "SPATIAL_INDEX"))
-    {
-      free(dxfname);
-      return dwg_free_SPATIAL_INDEX(obj);
-    }
-  if (!strcmp(dxfname, "TABLE") || 
-      !strcmp(dxfname, "ACAD_TABLE"))
-    {
-      free(dxfname);
-      return dwg_free_TABLE(obj);
-    }
-  if (!strcmp(dxfname, "WIPEOUTVARIABLES"))
-    {
-      free(dxfname);
-      return dwg_free_WIPEOUTVARIABLES(obj);
-    }
-  if (!strcmp(dxfname, "WIPEOUT"))
-    {
-      free(dxfname);
-      return dwg_free_WIPEOUT(obj);
-    }
-  if (!strcmp(dxfname, "VBA_PROJECT"))
-    {
-#ifdef DEBUG_VBA_PROJECT
-      free(dxfname);
-      return dwg_free_VBA_PROJECT(obj);
-#else
-      return DWG_ERR_UNHANDLEDCLASS;
-#endif
-    }
-  if (!strcmp(dxfname, "CELLSTYLEMAP"))
-    {
-#ifdef DEBUG_CELLSTYLEMAP
-      free(dxfname);
-      return dwg_free_CELLSTYLEMAP(obj);
-#else
-      return DWG_ERR_UNHANDLEDCLASS;
-#endif
-    }
-  if (!strcmp(dxfname, "VISUALSTYLE"))
-    {
-      free(dxfname);
-      return dwg_free_VISUALSTYLE(obj);
-    }
-  if (!strcmp(dxfname, "ACDBSECTIONVIEWSTYLE"))
-    {
-      free(dxfname);
-      //return dwg_free_SECTIONVIEWSTYLE(obj);
-      return DWG_ERR_UNHANDLEDCLASS;
-    }
-  if (!strcmp(dxfname, "ACDBDETAILVIEWSTYLE"))
-    {
-      free(dxfname);
-      //return dwg_free_DETAILVIEWSTYLE(obj);
-      return DWG_ERR_UNHANDLEDCLASS;
-    }
-  if (!strcmp(dxfname, "FIELD"))
-    {
-      free(dxfname);
-      return dwg_free_FIELD(obj);
-    }
-  if (!strcmp(dxfname, "TABLECONTENT"))
-    {
-      free(dxfname);
-      return dwg_free_TABLECONTENT(obj);
-    }
-  if (!strcmp(dxfname, "TABLEGEOMETRY"))
-    {
-      free(dxfname);
-      return dwg_free_TABLEGEOMETRY(obj);
-    }
-  if (!strcmp(dxfname, "GEODATA"))
-    {
-      free(dxfname);
-      return dwg_free_GEODATA(obj);
-    }
-  if (!strcmp(dxfname, "XRECORD"))
-    {
-      free(dxfname);
-      return dwg_free_XRECORD(obj);
-    }
-  if (!strcmp(dxfname, "DIMASSOC"))
-    {
-      free(dxfname);
-      //return dwg_free_DIMASSOC(obj);
-      return DWG_ERR_UNHANDLEDCLASS;
-    }
-  if (!strcmp(dxfname, "MATERIAL"))
-    {
-#ifdef DEBUG_MATERIAL
-      free(dxfname);
-      return dwg_free_MATERIAL(obj);
-#else
-      return DWG_ERR_UNHANDLEDCLASS;
-#endif
-    }
-  if (!strcmp(dxfname, "PLOTSETTINGS"))
-    {
-#ifdef DEBUG_PLOTSETTINGS
-      free(dxfname);
-      return dwg_free_PLOTSETTINGS(obj);
-#else
-      return DWG_ERR_UNHANDLEDCLASS;
-#endif
-    }
-  if (!strcmp(dxfname, "LIGHT"))
-    {
-#ifdef DEBUG_LIGHT
-      free(dxfname);
-      return dwg_free_LIGHT(obj);
-#else
-      return DWG_ERR_UNHANDLEDCLASS;
-#endif
-    }
-  if (!strcmp(dxfname, "SUN"))
-    {
-#ifdef DEBUG_SUN
-      free(dxfname);
-      return dwg_free_SUN(obj);
-#else
-      return DWG_ERR_UNHANDLEDCLASS;
-#endif
-    }
-  if (!strcmp(dxfname, "GEOPOSITIONMARKER"))
-    {
-#ifdef DEBUG_GEOPOSITIONMARKER
-      free(dxfname);
-      return dwg_free_GEOPOSITIONMARKER(obj);
-#else
-      return DWG_ERR_UNHANDLEDCLASS;
-#endif
-    }
-  if (!strcmp(dxfname, "EXTRUDEDSURFACE"))
-    {
-      free(dxfname);
-#ifdef DEBUG_EXTRUDEDSURFACE
-      return dwg_free_EXTRUDEDSURFACE(obj);
-#else
-      return DWG_ERR_UNHANDLEDCLASS;
-#endif
-    }
-  if (!strcmp(dxfname, "DATATABLE"))
-    {
-      free(dxfname);
-#ifdef DEBUG_DATATABLE
-      return dwg_free_DATATABLE(obj);
-#else
-      return DWG_ERR_UNHANDLEDCLASS;
-#endif
-    }
+  STABLE_CLASS_DXF(free, DICTIONARYWDFLT, ACDBDICTIONARYWDFLT)
+  STABLE_CLASS    (free, DICTIONARYVAR)
+  STABLE_CLASS    (free, HATCH)
+  STABLE_CLASS    (free, GROUP)
+  STABLE_CLASS    (free, IDBUFFER)
+  STABLE_CLASS    (free, IMAGE)
+  STABLE_CLASS    (free, IMAGEDEF)
+  STABLE_CLASS    (free, IMAGEDEF_REACTOR)
+  STABLE_CLASS    (free, LAYER_INDEX)
+  STABLE_CLASS    (free, LAYOUT)
+  STABLE_CLASS    (free, LWPOLYLINE)
+  STABLE_CLASS    (free, OLE2FRAME)
+  STABLE_CLASS_DXF(free, PLACEHOLDER, ACDBPLACEHOLDER)
+  STABLE_CLASS_DXF(free, PROXY_OBJECT, PROXY)
+  STABLE_CLASS    (free, RASTERVARIABLES)
+  STABLE_CLASS    (free, SORTENTSTABLE)
+  STABLE_CLASS    (free, SPATIAL_FILTER)
+  STABLE_CLASS    (free, SPATIAL_INDEX)
+  STABLE_CLASS    (free, TABLE)
+  STABLE_CLASS_DXF(free, TABLE, ACAD_TABLE)
+  STABLE_CLASS    (free, XRECORD)
+  STABLE_CLASS    (free, WIPEOUT)
+  STABLE_CLASS    (free, FIELDLIST)
+  STABLE_CLASS    (free, SCALE)
+  STABLE_CLASS    (free, FIELD)
+  STABLE_CLASS    (free, OBJECTCONTEXTDATA)
+  STABLE_CLASS_CPP(free, OBJECTCONTEXTDATA, AcDbObjectContextData)
+  STABLE_CLASS    (free, MLEADERSTYLE)
+  STABLE_CLASS    (free, VISUALSTYLE)
+
+  // not enough coverage, but assumed ok
+  UNTESTED_CLASS    (free, OBJECT_PTR)
+  UNTESTED_CLASS_CPP(free, OBJECT_PTR, CAseDLPNTableRecord)
+  UNTESTED_CLASS    (free, TABLECONTENT)
+  UNTESTED_CLASS    (free, TABLEGEOMETRY)
+  UNTESTED_CLASS    (free, GEODATA)
+  UNTESTED_CLASS    (free, WIPEOUTVARIABLES)
+  UNTESTED_CLASS    (free, CAMERA)      // not persistent in a DWG
+
+  // coverage exists, but broken. needs -DDEBUG_CLASS
+  DEBUGGING_CLASS  (free, VBA_PROJECT) // Has its own section?
+  DEBUGGING_CLASS  (free, MULTILEADER) // broken Leader_Line's/Points
+  DEBUGGING_CLASS  (free, CELLSTYLEMAP) //broken
+  DEBUGGING_CLASS  (free, MATERIAL)     //working on
+  DEBUGGING_CLASS  (free, PLOTSETTINGS) //yet unsorted
+  DEBUGGING_CLASS  (free, LIGHT) //yet unsorted
+  DEBUGGING_CLASS  (free, SUN) // i.e. 2000/1.dwg
+  DEBUGGING_CLASS  (free, GEOPOSITIONMARKER) //yet unsorted
+  DEBUGGING_CLASS  (free, SURFACE) //yet unsorted
+  DEBUGGING_CLASS  (free, UNDERLAY) // DGN DWF PDF
+  //PROXY_ENTITY has a fixed type
+
+  // no coverage, unimplemented, passed through
+  UNHANDLED_CLASS_DXF(free, SECTIONVIEWSTYLE, ACDBSECTIONVIEWSTYLE)
+  UNHANDLED_CLASS_DXF(free, DETAILVIEWSTYLE, ACDBDETAILVIEWSTYLE)
+  UNHANDLED_CLASS    (free, ARCALIGNEDTEXT)
+  UNHANDLED_CLASS    (free, DIMASSOC)
+  UNHANDLED_CLASS    (free, DATATABLE)
+  UNHANDLED_CLASS    (free, DBCOLOR)
+  UNHANDLED_CLASS    (free, GEODATA)
+  UNHANDLED_CLASS_DXF(free, ASSOCNETWORK, ACDBASSOCNETWORK)
+  UNHANDLED_CLASS_DXF(free, ASSOC2DCONSTRAINTGROUP, ACDBASSOC2DCONSTRAINTGROUP)
+  UNHANDLED_CLASS_DXF(free, ASSOCGEOMDEPENDENCY, ACDBASSOCGEOMDEPENDENCY)
+  UNHANDLED_CLASS_DXF(free, LEADEROBJECTCONTEXTDATA, ACDB_LEADEROBJECTCONTEXTDATA_CLASS)
+  UNHANDLED_CLASS_DXF(free, XREFPANELOBJECT, EXACXREFPANELOBJECT)
+  UNHANDLED_CLASS_DXF(free, POINTCLOUD, ACDBPOINTCLOUD)
+  UNHANDLED_CLASS    (free, LIGHTLIST)
+  UNHANDLED_CLASS    (free, HELIX)
+  UNHANDLED_CLASS    (free, NPOCOLLECTION)
+  UNHANDLED_CLASS    (free, RTEXT)
+  UNHANDLED_CLASS    (free, TABLESTYLE)
+  UNHANDLED_CLASS    (free, UNDERLAYDEFINITION)
+  UNHANDLED_CLASS    (free, CSACDOCUMENTOPTIONS) //or just DOCUMENTOPTIONS?
 
   return DWG_ERR_UNHANDLEDCLASS;
 }
 
+// using the global dat
 void
 dwg_free_object(Dwg_Object *obj)
 {
@@ -614,246 +426,246 @@ dwg_free_object(Dwg_Object *obj)
   switch (obj->type)
     {
     case DWG_TYPE_TEXT:
-      dwg_free_TEXT(obj);
+      dwg_free_TEXT(dat, obj);
       break;
     case DWG_TYPE_ATTRIB:
-      dwg_free_ATTRIB(obj);
+      dwg_free_ATTRIB(dat, obj);
       break;
     case DWG_TYPE_ATTDEF:
-      dwg_free_ATTDEF(obj);
+      dwg_free_ATTDEF(dat, obj);
       break;
     case DWG_TYPE_BLOCK:
-      dwg_free_BLOCK(obj);
+      dwg_free_BLOCK(dat, obj);
       break;
     case DWG_TYPE_ENDBLK:
-      dwg_free_ENDBLK(obj);
+      dwg_free_ENDBLK(dat, obj);
       break;
     case DWG_TYPE_SEQEND:
-      dwg_free_SEQEND(obj);
+      dwg_free_SEQEND(dat, obj);
       break;
     case DWG_TYPE_INSERT:
-      dwg_free_INSERT(obj);
+      dwg_free_INSERT(dat, obj);
       break;
     case DWG_TYPE_MINSERT:
-      dwg_free_MINSERT(obj);
+      dwg_free_MINSERT(dat, obj);
       break;
     case DWG_TYPE_VERTEX_2D:
-      dwg_free_VERTEX_2D(obj);
+      dwg_free_VERTEX_2D(dat, obj);
       break;
     case DWG_TYPE_VERTEX_3D:
-      dwg_free_VERTEX_3D(obj);
+      dwg_free_VERTEX_3D(dat, obj);
       break;
     case DWG_TYPE_VERTEX_MESH:
-      dwg_free_VERTEX_MESH(obj);
+      dwg_free_VERTEX_MESH(dat, obj);
       break;
     case DWG_TYPE_VERTEX_PFACE:
-      dwg_free_VERTEX_PFACE(obj);
+      dwg_free_VERTEX_PFACE(dat, obj);
       break;
     case DWG_TYPE_VERTEX_PFACE_FACE:
-      dwg_free_VERTEX_PFACE_FACE(obj);
+      dwg_free_VERTEX_PFACE_FACE(dat, obj);
       break;
     case DWG_TYPE_POLYLINE_2D:
-      dwg_free_POLYLINE_2D(obj);
+      dwg_free_POLYLINE_2D(dat, obj);
       break;
     case DWG_TYPE_POLYLINE_3D:
-      dwg_free_POLYLINE_3D(obj);
+      dwg_free_POLYLINE_3D(dat, obj);
       break;
     case DWG_TYPE_ARC:
-      dwg_free_ARC(obj);
+      dwg_free_ARC(dat, obj);
       break;
     case DWG_TYPE_CIRCLE:
-      dwg_free_CIRCLE(obj);
+      dwg_free_CIRCLE(dat, obj);
       break;
     case DWG_TYPE_LINE:
-      dwg_free_LINE(obj);
+      dwg_free_LINE(dat, obj);
       break;
     case DWG_TYPE_DIMENSION_ORDINATE:
-      dwg_free_DIMENSION_ORDINATE(obj);
+      dwg_free_DIMENSION_ORDINATE(dat, obj);
       break;
     case DWG_TYPE_DIMENSION_LINEAR:
-      dwg_free_DIMENSION_LINEAR(obj);
+      dwg_free_DIMENSION_LINEAR(dat, obj);
       break;
     case DWG_TYPE_DIMENSION_ALIGNED:
-      dwg_free_DIMENSION_ALIGNED(obj);
+      dwg_free_DIMENSION_ALIGNED(dat, obj);
       break;
     case DWG_TYPE_DIMENSION_ANG3PT:
-      dwg_free_DIMENSION_ANG3PT(obj);
+      dwg_free_DIMENSION_ANG3PT(dat, obj);
       break;
     case DWG_TYPE_DIMENSION_ANG2LN:
-      dwg_free_DIMENSION_ANG2LN(obj);
+      dwg_free_DIMENSION_ANG2LN(dat, obj);
       break;
     case DWG_TYPE_DIMENSION_RADIUS:
-      dwg_free_DIMENSION_RADIUS(obj);
+      dwg_free_DIMENSION_RADIUS(dat, obj);
       break;
     case DWG_TYPE_DIMENSION_DIAMETER:
-      dwg_free_DIMENSION_DIAMETER(obj);
+      dwg_free_DIMENSION_DIAMETER(dat, obj);
       break;
     case DWG_TYPE_POINT:
-      dwg_free_POINT(obj);
+      dwg_free_POINT(dat, obj);
       break;
     case DWG_TYPE__3DFACE:
-      dwg_free__3DFACE(obj);
+      dwg_free__3DFACE(dat, obj);
       break;
     case DWG_TYPE_POLYLINE_PFACE:
-      dwg_free_POLYLINE_PFACE(obj);
+      dwg_free_POLYLINE_PFACE(dat, obj);
       break;
     case DWG_TYPE_POLYLINE_MESH:
-      dwg_free_POLYLINE_MESH(obj);
+      dwg_free_POLYLINE_MESH(dat, obj);
       break;
     case DWG_TYPE_SOLID:
-      dwg_free_SOLID(obj);
+      dwg_free_SOLID(dat, obj);
       break;
     case DWG_TYPE_TRACE:
-      dwg_free_TRACE(obj);
+      dwg_free_TRACE(dat, obj);
       break;
     case DWG_TYPE_SHAPE:
-      dwg_free_SHAPE(obj);
+      dwg_free_SHAPE(dat, obj);
       break;
     case DWG_TYPE_VIEWPORT:
-      dwg_free_VIEWPORT(obj);
+      dwg_free_VIEWPORT(dat, obj);
       break;
     case DWG_TYPE_ELLIPSE:
-      dwg_free_ELLIPSE(obj);
+      dwg_free_ELLIPSE(dat, obj);
       break;
     case DWG_TYPE_SPLINE:
-      dwg_free_SPLINE(obj);
+      dwg_free_SPLINE(dat, obj);
       break;
     case DWG_TYPE_REGION:
-      dwg_free_REGION(obj);
+      dwg_free_REGION(dat, obj);
       break;
     case DWG_TYPE__3DSOLID:
-      dwg_free__3DSOLID(obj);
+      dwg_free__3DSOLID(dat, obj);
       break; /* Check the type of the object */
     case DWG_TYPE_BODY:
-      dwg_free_BODY(obj);
+      dwg_free_BODY(dat, obj);
       break;
     case DWG_TYPE_RAY:
-      dwg_free_RAY(obj);
+      dwg_free_RAY(dat, obj);
       break;
     case DWG_TYPE_XLINE:
-      dwg_free_XLINE(obj);
+      dwg_free_XLINE(dat, obj);
       break;
     case DWG_TYPE_DICTIONARY:
-      dwg_free_DICTIONARY(obj);
+      dwg_free_DICTIONARY(dat, obj);
       break;
     case DWG_TYPE_MTEXT:
-      dwg_free_MTEXT(obj);
+      dwg_free_MTEXT(dat, obj);
       break;
     case DWG_TYPE_LEADER:
-      dwg_free_LEADER(obj);
+      dwg_free_LEADER(dat, obj);
       break;
     case DWG_TYPE_TOLERANCE:
-      dwg_free_TOLERANCE(obj);
+      dwg_free_TOLERANCE(dat, obj);
       break;
     case DWG_TYPE_MLINE:
-      dwg_free_MLINE(obj);
+      dwg_free_MLINE(dat, obj);
       break;
     case DWG_TYPE_BLOCK_CONTROL:
-      dwg_free_BLOCK_CONTROL(obj);
+      dwg_free_BLOCK_CONTROL(dat, obj);
       break;
     case DWG_TYPE_BLOCK_HEADER:
-      dwg_free_BLOCK_HEADER(obj);
+      dwg_free_BLOCK_HEADER(dat, obj);
       break;
     case DWG_TYPE_LAYER_CONTROL:
-      dwg_free_LAYER_CONTROL(obj);
+      dwg_free_LAYER_CONTROL(dat, obj);
       break;
     case DWG_TYPE_LAYER:
-      dwg_free_LAYER(obj);
+      dwg_free_LAYER(dat, obj);
       break;
     case DWG_TYPE_STYLE_CONTROL:
-      dwg_free_STYLE_CONTROL(obj);
+      dwg_free_STYLE_CONTROL(dat, obj);
       break;
     case DWG_TYPE_STYLE:
-      dwg_free_STYLE(obj);
+      dwg_free_STYLE(dat, obj);
       break;
     case DWG_TYPE_LTYPE_CONTROL:
-      dwg_free_LTYPE_CONTROL(obj);
+      dwg_free_LTYPE_CONTROL(dat, obj);
       break;
     case DWG_TYPE_LTYPE:
-      dwg_free_LTYPE(obj);
+      dwg_free_LTYPE(dat, obj);
       break;
     case DWG_TYPE_VIEW_CONTROL:
-      dwg_free_VIEW_CONTROL(obj);
+      dwg_free_VIEW_CONTROL(dat, obj);
       break;
     case DWG_TYPE_VIEW:
-      dwg_free_VIEW(obj);
+      dwg_free_VIEW(dat, obj);
       break;
     case DWG_TYPE_UCS_CONTROL:
-      dwg_free_UCS_CONTROL(obj);
+      dwg_free_UCS_CONTROL(dat, obj);
       break;
     case DWG_TYPE_UCS:
-      dwg_free_UCS(obj);
+      dwg_free_UCS(dat, obj);
       break;
     case DWG_TYPE_VPORT_CONTROL:
-      dwg_free_VPORT_CONTROL(obj);
+      dwg_free_VPORT_CONTROL(dat, obj);
       break;
     case DWG_TYPE_VPORT:
-      dwg_free_VPORT(obj);
+      dwg_free_VPORT(dat, obj);
       break;
     case DWG_TYPE_APPID_CONTROL:
-      dwg_free_APPID_CONTROL(obj);
+      dwg_free_APPID_CONTROL(dat, obj);
       break;
     case DWG_TYPE_APPID:
-      dwg_free_APPID(obj);
+      dwg_free_APPID(dat, obj);
       break;
     case DWG_TYPE_DIMSTYLE_CONTROL:
-      dwg_free_DIMSTYLE_CONTROL(obj);
+      dwg_free_DIMSTYLE_CONTROL(dat, obj);
       break;
     case DWG_TYPE_DIMSTYLE:
-      dwg_free_DIMSTYLE(obj);
+      dwg_free_DIMSTYLE(dat, obj);
       break;
     case DWG_TYPE_VPORT_ENTITY_CONTROL:
-      dwg_free_VPORT_ENTITY_CONTROL(obj);
+      dwg_free_VPORT_ENTITY_CONTROL(dat, obj);
       break;
     case DWG_TYPE_VPORT_ENTITY_HEADER:
-      dwg_free_VPORT_ENTITY_HEADER(obj);
+      dwg_free_VPORT_ENTITY_HEADER(dat, obj);
       break;
     case DWG_TYPE_GROUP:
-      dwg_free_GROUP(obj);
+      dwg_free_GROUP(dat, obj);
       break;
     case DWG_TYPE_MLINESTYLE:
-      dwg_free_MLINESTYLE(obj);
+      dwg_free_MLINESTYLE(dat, obj);
       break;
     case DWG_TYPE_OLE2FRAME:
-      dwg_free_OLE2FRAME(obj);
+      dwg_free_OLE2FRAME(dat, obj);
       break;
     case DWG_TYPE_DUMMY:
-      dwg_free_DUMMY(obj);
+      dwg_free_DUMMY(dat, obj);
       break;
     case DWG_TYPE_LONG_TRANSACTION:
-      dwg_free_LONG_TRANSACTION(obj);
+      dwg_free_LONG_TRANSACTION(dat, obj);
       break;
     case DWG_TYPE_LWPOLYLINE:
-      dwg_free_LWPOLYLINE(obj);
+      dwg_free_LWPOLYLINE(dat, obj);
       break;
     case DWG_TYPE_HATCH:
-      dwg_free_HATCH(obj);
+      dwg_free_HATCH(dat, obj);
       break;
     case DWG_TYPE_XRECORD:
-      dwg_free_XRECORD(obj);
+      dwg_free_XRECORD(dat, obj);
       break;
     case DWG_TYPE_PLACEHOLDER:
-      dwg_free_PLACEHOLDER(obj);
+      dwg_free_PLACEHOLDER(dat, obj);
       break;
     case DWG_TYPE_PROXY_ENTITY:
-      dwg_free_PROXY_ENTITY(obj);
+      dwg_free_PROXY_ENTITY(dat, obj);
       break;
     case DWG_TYPE_OLEFRAME:
-      dwg_free_OLEFRAME(obj);
+      dwg_free_OLEFRAME(dat, obj);
       break;
 #ifdef DEBUG_VBA_PROJECT
     case DWG_TYPE_VBA_PROJECT:
-      dwg_free_VBA_PROJECT(obj);
+      dwg_free_VBA_PROJECT(dat, obj);
       break;
 #endif
     case DWG_TYPE_LAYOUT:
-      dwg_free_LAYOUT(obj);
+      dwg_free_LAYOUT(dat, obj);
       break;
     default:
       if (obj->type == obj->parent->layout_number)
         {
           /*SINCE(R_13) {
-            dwg_free_LAYOUT(obj); // avoid double-free, esp. in eed
+            dwg_free_LAYOUT(dat, obj); // avoid double-free, esp. in eed
           }*/
         }
 
@@ -872,11 +684,11 @@ dwg_free_object(Dwg_Object *obj)
             }
           if (klass && !is_entity)
             {
-              dwg_free_UNKNOWN_OBJ(obj);
+              dwg_free_UNKNOWN_OBJ(dat, obj);
             }
           else if (klass)
             {
-              dwg_free_UNKNOWN_ENT(obj);
+              dwg_free_UNKNOWN_ENT(dat, obj);
             }
           else // not a class
             {

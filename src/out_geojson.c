@@ -274,11 +274,6 @@ dwg_geojson_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   dxfname = klass->dxfname;
   // almost always false
   //is_entity = dwg_class_is_entity(klass);
-
-#define UNTESTED_CLASS \
-      LOG_WARN("Untested Class %s %d %s (0x%x%s)", is_entity ? "entity" : "object",\
-               klass->number, dxfname, klass->proxyflag,\
-               klass->wasazombie ? " was proxy" : "")
   
   if (!strcmp(dxfname, "LWPOLYLINE"))
     {
@@ -302,7 +297,7 @@ dwg_geojson_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   if (!strcmp(dxfname, "GEODATA"))
     {
       Dwg_Object_GEODATA *_obj = obj->tio.object->tio.GEODATA;
-      UNTESTED_CLASS;
+      WARN_UNTESTED_CLASS;
       FEATURE(AcDbObject:AcDbGeoData, obj);
       //which fields?
       ENDFEATURE;
@@ -311,7 +306,7 @@ dwg_geojson_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   if (!strcmp(dxfname, "GEOPOSITIONMARKER"))
     {
       Dwg_Entity_GEOPOSITIONMARKER *_obj = obj->tio.entity->tio.GEOPOSITIONMARKER;
-      UNTESTED_CLASS;
+      WARN_UNTESTED_CLASS;
       // now even with text
       FEATURE(AcDbEntity:AcDbGeoPositionMarker, obj);
       GEOMETRY(Point);
@@ -329,7 +324,7 @@ dwg_geojson_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       return 0;
     }
 
-  return 0;
+  return DWG_ERR_UNHANDLEDCLASS;
 }
 
 static void
