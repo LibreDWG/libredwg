@@ -100,7 +100,7 @@ deploy:
   auth_token:
     secure: AsIAOIgCJX0QhrUKal2V00aaB5nRWtmtFTFeDVsGnbJLeEQpv9avUp0HT1cA8bNs
   artifact: nightly-win32,nightly-win64
-  draft: true
+  #draft: true
   prerelease: true
   force_update: true
   on:
@@ -111,8 +111,8 @@ deploy:
   auth_token:
     secure: AsIAOIgCJX0QhrUKal2V00aaB5nRWtmtFTFeDVsGnbJLeEQpv9avUp0HT1cA8bNs
   artifact: tagged-win32,tagged-win64
-  draft: true
-  force_update: true
+  #draft: true
+  #force_update: true
   on:
     appveyor_repo_tag: true
 
