@@ -218,7 +218,7 @@ static unsigned int cur_ver = 0;
 
 #define DWG_ENTITY(token) \
 static int \
-dwg_print_##token (Bit_Chain * dat, Dwg_Object * obj)\
+dwg_print_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj)\
 {\
   long vcount, rcount1, rcount2, rcount3, rcount4; \
   Dwg_Entity_##token *ent, *_obj;\
@@ -238,7 +238,7 @@ dwg_print_##token (Bit_Chain * dat, Dwg_Object * obj)\
 
 #define DWG_OBJECT(token) \
 static int \
-dwg_print_ ##token (Bit_Chain * dat, Dwg_Object * obj) \
+dwg_print_ ##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
   long vcount, rcount1, rcount2, rcount3, rcount4;\
   Dwg_Object_##token *_obj;\
@@ -256,7 +256,8 @@ dwg_print_ ##token (Bit_Chain * dat, Dwg_Object * obj) \
 
 #include "dwg.spec"
 
-/* returns 0 on success
+/* Returns 0 on success
+   Dispatches on the variable types.
  */
 static int
 dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
@@ -279,84 +280,15 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
   // almost always false
   is_entity = dwg_class_is_entity(klass);
 
-  STABLE_CLASS_DXF(print, DICTIONARYWDFLT, ACDBDICTIONARYWDFLT)
-  STABLE_CLASS    (print, DICTIONARYVAR)
-  STABLE_CLASS    (print, HATCH)
-  STABLE_CLASS    (print, GROUP)
-  STABLE_CLASS    (print, IDBUFFER)
-  STABLE_CLASS    (print, IMAGE)
-  STABLE_CLASS    (print, IMAGEDEF)
-  STABLE_CLASS    (print, IMAGEDEF_REACTOR)
-  STABLE_CLASS    (print, LAYER_INDEX)
-  STABLE_CLASS    (print, LAYOUT)
-  STABLE_CLASS    (print, LWPOLYLINE)
-  STABLE_CLASS    (print, OLE2FRAME)
-  STABLE_CLASS_DXF(print, PLACEHOLDER, ACDBPLACEHOLDER)
-  STABLE_CLASS_DXF(print, PROXY_OBJECT, PROXY)
-  STABLE_CLASS    (print, RASTERVARIABLES)
-  STABLE_CLASS    (print, SORTENTSTABLE)
-  STABLE_CLASS    (print, SPATIAL_FILTER)
-  STABLE_CLASS    (print, SPATIAL_INDEX)
-  STABLE_CLASS    (print, TABLE)
-  STABLE_CLASS_DXF(print, TABLE, ACAD_TABLE)
-  STABLE_CLASS    (print, XRECORD)
-  STABLE_CLASS    (print, WIPEOUT)
-  STABLE_CLASS    (print, FIELDLIST)
-  STABLE_CLASS    (print, SCALE)
-  STABLE_CLASS    (print, FIELD)
-  STABLE_CLASS    (print, OBJECTCONTEXTDATA)
-  STABLE_CLASS_CPP(print, OBJECTCONTEXTDATA, AcDbObjectContextData)
-  STABLE_CLASS    (print, MLEADERSTYLE)
-  STABLE_CLASS    (print, VISUALSTYLE)
-
-  // not enough coverage, but assumed ok
-  UNTESTED_CLASS    (print, OBJECT_PTR)
-  UNTESTED_CLASS_CPP(print, OBJECT_PTR, CAseDLPNTableRecord)
-  UNTESTED_CLASS    (print, TABLECONTENT)
-  UNTESTED_CLASS    (print, TABLEGEOMETRY)
-  UNTESTED_CLASS    (print, GEODATA)
-  UNTESTED_CLASS    (print, WIPEOUTVARIABLES)
-  UNTESTED_CLASS    (print, CAMERA)      // not persistent in a DWG
-
-  // coverage exists, but broken. needs -DDEBUG_CLASS
-  DEBUGGING_CLASS  (print, VBA_PROJECT) // Has its own section?
-  DEBUGGING_CLASS  (print, MULTILEADER) // broken Leader_Line's/Points
-  DEBUGGING_CLASS  (print, CELLSTYLEMAP) //broken
-  DEBUGGING_CLASS  (print, MATERIAL)     //working on
-  DEBUGGING_CLASS  (print, PLOTSETTINGS) //yet unsorted
-  DEBUGGING_CLASS  (print, LIGHT) //yet unsorted
-  DEBUGGING_CLASS  (print, SUN) // i.e. 2000/1.dwg
-  DEBUGGING_CLASS  (print, GEOPOSITIONMARKER) //yet unsorted
-  DEBUGGING_CLASS  (print, SURFACE) //yet unsorted
-  DEBUGGING_CLASS  (print, UNDERLAY) // DGN DWF PDF
-  //PROXY_ENTITY has a fixed type
-
-  // no coverage, unimplemented, passed through
-  UNHANDLED_CLASS_DXF(print, SECTIONVIEWSTYLE, ACDBSECTIONVIEWSTYLE)
-  UNHANDLED_CLASS_DXF(print, DETAILVIEWSTYLE, ACDBDETAILVIEWSTYLE)
-  UNHANDLED_CLASS    (print, ARCALIGNEDTEXT)
-  UNHANDLED_CLASS    (print, DIMASSOC)
-  UNHANDLED_CLASS    (print, DATATABLE)
-  UNHANDLED_CLASS    (print, DBCOLOR)
-  UNHANDLED_CLASS    (print, GEODATA)
-  UNHANDLED_CLASS_DXF(print, ASSOCNETWORK, ACDBASSOCNETWORK)
-  UNHANDLED_CLASS_DXF(print, ASSOC2DCONSTRAINTGROUP, ACDBASSOC2DCONSTRAINTGROUP)
-  UNHANDLED_CLASS_DXF(print, ASSOCGEOMDEPENDENCY, ACDBASSOCGEOMDEPENDENCY)
-  UNHANDLED_CLASS_DXF(print, LEADEROBJECTCONTEXTDATA, ACDB_LEADEROBJECTCONTEXTDATA_CLASS)
-  UNHANDLED_CLASS_DXF(print, XREFPANELOBJECT, EXACXREFPANELOBJECT)
-  UNHANDLED_CLASS_DXF(print, POINTCLOUD, ACDBPOINTCLOUD)
-  UNHANDLED_CLASS    (print, LIGHTLIST)
-  UNHANDLED_CLASS    (print, HELIX)
-  UNHANDLED_CLASS    (print, NPOCOLLECTION)
-  UNHANDLED_CLASS    (print, RTEXT)
-  UNHANDLED_CLASS    (print, TABLESTYLE)
-  UNHANDLED_CLASS    (print, UNDERLAYDEFINITION)
-  UNHANDLED_CLASS    (print, CSACDOCUMENTOPTIONS) //or just DOCUMENTOPTIONS?
+  #define action print
+  #include "classes.inc"
 
   return DWG_ERR_UNHANDLEDCLASS;
 }
 
-/* prints to logging.h OUTPUT (ie stderr). Returns 0 on success */
+/* prints to logging.h OUTPUT (ie stderr). Returns 0 on success
+   Dispatches on the fixed types.
+*/
 int
 dwg_print_object(Bit_Chain* dat, Dwg_Object *obj)
 {

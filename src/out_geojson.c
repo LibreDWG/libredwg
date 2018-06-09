@@ -224,6 +224,12 @@ static unsigned int cur_ver = 0;
   if (_obj->size) NOCOMMA;\
   ENDARRAY;
 
+#define WARN_UNTESTED_CLASS \
+      LOG_WARN("Untested Class %s %d %s (0x%x%s) -@%ld", is_entity ? "entity" : "object",\
+               klass->number, dxfname, klass->proxyflag,\
+               klass->wasazombie ? " was proxy" : "",\
+               obj->address + obj->size)
+
 // common properties
 static void
 dwg_geojson_feature(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
@@ -273,7 +279,7 @@ dwg_geojson_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
     return DWG_ERR_INTERNALERROR;
   dxfname = klass->dxfname;
   // almost always false
-  //is_entity = dwg_class_is_entity(klass);
+  is_entity = dwg_class_is_entity(klass);
   
   if (!strcmp(dxfname, "LWPOLYLINE"))
     {

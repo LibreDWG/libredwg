@@ -3220,92 +3220,15 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
   // almost always false
   is_entity = dwg_class_is_entity(klass);
 
-  //TODO one global class dispatcher:
-  //#define action decode
-  //include "classes.inc"
-
-  STABLE_CLASS_DXF(decode, DICTIONARYWDFLT, ACDBDICTIONARYWDFLT)
-  STABLE_CLASS    (decode, DICTIONARYVAR)
-  STABLE_CLASS    (decode, HATCH)
-  STABLE_CLASS    (decode, GROUP)
-  STABLE_CLASS    (decode, IDBUFFER)
-  STABLE_CLASS    (decode, IMAGE)
-  STABLE_CLASS    (decode, IMAGEDEF)
-  STABLE_CLASS    (decode, IMAGEDEF_REACTOR)
-  STABLE_CLASS    (decode, LAYER_INDEX)
-  STABLE_CLASS    (decode, LAYOUT)
-  STABLE_CLASS    (decode, LWPOLYLINE)
-  STABLE_CLASS    (decode, OLE2FRAME)
-  STABLE_CLASS_DXF(decode, PLACEHOLDER, ACDBPLACEHOLDER)
-  STABLE_CLASS_DXF(decode, PROXY_OBJECT, PROXY)
-  STABLE_CLASS    (decode, RASTERVARIABLES)
-  STABLE_CLASS    (decode, SORTENTSTABLE)
-  STABLE_CLASS    (decode, SPATIAL_FILTER)
-  STABLE_CLASS    (decode, SPATIAL_INDEX)
-  STABLE_CLASS    (decode, TABLE)
-  STABLE_CLASS_DXF(decode, TABLE, ACAD_TABLE)
-  STABLE_CLASS    (decode, XRECORD)
-  STABLE_CLASS    (decode, WIPEOUT)
-  STABLE_CLASS    (decode, FIELDLIST)
-  STABLE_CLASS    (decode, SCALE)
-  STABLE_CLASS    (decode, FIELD)
-  STABLE_CLASS    (decode, OBJECTCONTEXTDATA)
-  STABLE_CLASS_CPP(decode, OBJECTCONTEXTDATA, AcDbObjectContextData)
-  STABLE_CLASS    (decode, MLEADERSTYLE)
-  STABLE_CLASS    (decode, VISUALSTYLE)
-
-  // not enough coverage, but assumed ok
-  UNTESTED_CLASS    (decode, OBJECT_PTR)
-  UNTESTED_CLASS_CPP(decode, OBJECT_PTR, CAseDLPNTableRecord)
-  UNTESTED_CLASS    (decode, TABLECONTENT)
-  UNTESTED_CLASS    (decode, TABLEGEOMETRY)
-  UNTESTED_CLASS    (decode, GEODATA)
-  UNTESTED_CLASS    (decode, WIPEOUTVARIABLES)
-  UNTESTED_CLASS    (decode, CAMERA)      // not persistent in a DWG
-
-  // coverage exists, but broken. needs -DDEBUG_CLASS
-  DEBUGGING_CLASS  (decode, VBA_PROJECT) // Has its own section?
-  DEBUGGING_CLASS  (decode, MULTILEADER) // broken Leader_Line's/Points
-  DEBUGGING_CLASS  (decode, CELLSTYLEMAP) //broken
-  DEBUGGING_CLASS  (decode, MATERIAL)     //working on
-  DEBUGGING_CLASS  (decode, PLOTSETTINGS) //yet unsorted
-  DEBUGGING_CLASS  (decode, LIGHT) //yet unsorted
-  DEBUGGING_CLASS  (decode, SUN) // i.e. 2000/1.dwg
-  DEBUGGING_CLASS  (decode, GEOPOSITIONMARKER) //yet unsorted
-  DEBUGGING_CLASS  (decode, SURFACE) //yet unsorted
-  DEBUGGING_CLASS  (decode, UNDERLAY) // DGN DWF PDF
-  //PROXY_ENTITY has a fixed type
-
-  // no coverage, unimplemented, passed through
-  UNHANDLED_CLASS_DXF(decode, SECTIONVIEWSTYLE, ACDBSECTIONVIEWSTYLE)
-  UNHANDLED_CLASS_DXF(decode, DETAILVIEWSTYLE, ACDBDETAILVIEWSTYLE)
-  UNHANDLED_CLASS    (decode, ARCALIGNEDTEXT)
-  UNHANDLED_CLASS    (decode, DIMASSOC)
-  UNHANDLED_CLASS    (decode, DATATABLE)
-  UNHANDLED_CLASS    (decode, DBCOLOR)
-  UNHANDLED_CLASS    (decode, GEODATA)
-  UNHANDLED_CLASS_DXF(decode, ASSOCNETWORK, ACDBASSOCNETWORK)
-  UNHANDLED_CLASS_DXF(decode, ASSOC2DCONSTRAINTGROUP, ACDBASSOC2DCONSTRAINTGROUP)
-  UNHANDLED_CLASS_DXF(decode, ASSOCGEOMDEPENDENCY, ACDBASSOCGEOMDEPENDENCY)
-  UNHANDLED_CLASS_DXF(decode, LEADEROBJECTCONTEXTDATA, ACDB_LEADEROBJECTCONTEXTDATA_CLASS)
-  UNHANDLED_CLASS_DXF(decode, XREFPANELOBJECT, EXACXREFPANELOBJECT)
-  UNHANDLED_CLASS_DXF(decode, POINTCLOUD, ACDBPOINTCLOUD)
-  UNHANDLED_CLASS    (decode, LIGHTLIST)
-  UNHANDLED_CLASS    (decode, HELIX)
-  UNHANDLED_CLASS    (decode, NPOCOLLECTION)
-  UNHANDLED_CLASS    (decode, RTEXT)
-  UNHANDLED_CLASS    (decode, TABLESTYLE)
-  UNHANDLED_CLASS    (decode, UNDERLAYDEFINITION)
-  UNHANDLED_CLASS    (decode, CSACDOCUMENTOPTIONS) //or just DOCUMENTOPTIONS?
+  // global class dispatcher
+  #define action decode
+  #include "classes.inc"
 
   // TODO: ACSH_BOX_CLASS, ACAD_EVALUATION_GRAPH, ACSH_HISTORY_CLASS
 
   LOG_WARN("Unknown Class %s %d %s (0x%x%s)", is_entity ? "entity" : "object", \
            klass->number, dxfname, klass->proxyflag,                    \
            klass->wasazombie ? " was proxy" : "")
-
-#undef WARN_UNHANDLED_CLASS
-#undef WARN_UNTESTED_CLASS
 
   return DWG_ERR_UNHANDLEDCLASS;
 }

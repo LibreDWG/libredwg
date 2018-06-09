@@ -536,57 +536,8 @@ dwg_dxf_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   if (!is_entity)
     fprintf(dat->fh, "  0\r\n%s\r\n", dxfname);
 
-  STABLE_CLASS_DXF(dxf, DICTIONARYWDFLT, ACDBDICTIONARYWDFLT)
-  STABLE_CLASS    (dxf, DICTIONARYVAR)
-  STABLE_CLASS    (dxf, HATCH)
-  STABLE_CLASS    (dxf, GROUP)
-  STABLE_CLASS    (dxf, IDBUFFER)
-  STABLE_CLASS    (dxf, IMAGE)
-  STABLE_CLASS    (dxf, IMAGEDEF)
-  STABLE_CLASS    (dxf, IMAGEDEF_REACTOR)
-  STABLE_CLASS    (dxf, LAYER_INDEX)
-  STABLE_CLASS    (dxf, LAYOUT)
-  STABLE_CLASS    (dxf, LWPOLYLINE)
-  STABLE_CLASS    (dxf, OLE2FRAME)
-  STABLE_CLASS_DXF(dxf, PLACEHOLDER, ACDBPLACEHOLDER)
-  STABLE_CLASS_DXF(dxf, PROXY_OBJECT, PROXY)
-  STABLE_CLASS    (dxf, RASTERVARIABLES)
-  STABLE_CLASS    (dxf, SORTENTSTABLE)
-  STABLE_CLASS    (dxf, SPATIAL_FILTER)
-  STABLE_CLASS    (dxf, SPATIAL_INDEX)
-  STABLE_CLASS    (dxf, TABLE)
-  STABLE_CLASS_DXF(dxf, TABLE, ACAD_TABLE)
-  STABLE_CLASS    (dxf, XRECORD)
-  STABLE_CLASS    (dxf, WIPEOUT)
-  STABLE_CLASS    (dxf, FIELDLIST)
-  STABLE_CLASS    (dxf, SCALE)
-  STABLE_CLASS    (dxf, FIELD)
-  STABLE_CLASS    (dxf, OBJECTCONTEXTDATA)
-  STABLE_CLASS_CPP(dxf, OBJECTCONTEXTDATA, AcDbObjectContextData)
-  STABLE_CLASS    (dxf, MLEADERSTYLE)
-  STABLE_CLASS    (dxf, VISUALSTYLE)
-
-  // not enough coverage, but assumed ok
-  UNTESTED_CLASS    (dxf, OBJECT_PTR)
-  UNTESTED_CLASS_CPP(dxf, OBJECT_PTR, CAseDLPNTableRecord)
-  UNTESTED_CLASS    (dxf, TABLECONTENT)
-  UNTESTED_CLASS    (dxf, TABLEGEOMETRY)
-  UNTESTED_CLASS    (dxf, GEODATA)
-  UNTESTED_CLASS    (dxf, WIPEOUTVARIABLES)
-  UNTESTED_CLASS    (dxf, CAMERA)      // not persistent in a DWG
-
-  // coverage exists, but broken. needs -DDEBUG_CLASS
-  DEBUGGING_CLASS  (dxf, VBA_PROJECT) // Has its own section?
-  DEBUGGING_CLASS  (dxf, MULTILEADER) // broken Leader_Line's/Points
-  DEBUGGING_CLASS  (dxf, CELLSTYLEMAP) //broken
-  DEBUGGING_CLASS  (dxf, MATERIAL)     //working on
-  DEBUGGING_CLASS  (dxf, PLOTSETTINGS) //yet unsorted
-  DEBUGGING_CLASS  (dxf, LIGHT) //yet unsorted
-  DEBUGGING_CLASS  (dxf, SUN) // i.e. 2000/1.dwg
-  DEBUGGING_CLASS  (dxf, GEOPOSITIONMARKER) //yet unsorted
-  DEBUGGING_CLASS  (dxf, SURFACE) //yet unsorted
-  DEBUGGING_CLASS  (dxf, UNDERLAY) // DGN DWF PDF
-  //PROXY_ENTITY has a fixed type
+  #define action dxf
+  #include "classes.inc"
 
   return DWG_ERR_UNHANDLEDCLASS;
 }
