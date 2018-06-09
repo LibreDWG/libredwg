@@ -263,14 +263,14 @@ main (int argc, char *argv[])
     dat.fh = stdin;
 
 #ifndef DISABLE_DXF
-  /* if ((fmt && !strcasecmp (fmt, "json"))
+  if ((fmt && !strcasecmp (fmt, "json"))
       || (infile && !strcasecmp (infile, ".json")))
     {
       if (opts > 1)
         printf ("Reading JSON file %s\n", infile ? infile : "from stdin");
       error = dwg_read_json (&dat, &dwg);
     }
-  else */
+  else
   if ((fmt && !strcasecmp (fmt, "dxfb"))
       || (infile && !strcasecmp (infile, ".dxfb")))
     {

@@ -23,4 +23,6 @@ fi
 set -e
 autoreconf --install --symlink "$@" -I m4
 
+git submodule update --init --recursive
+
 # autogen.sh ends here

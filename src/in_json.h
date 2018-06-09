@@ -18,10 +18,10 @@
 #ifndef IN_JSON_H
 #define IN_JSON_H
 
-#include "dwg.h"
-#include "bits.h"
+//#include "dwg.h"
+//#include "bits.h"
 
 int dwg_read_json (Bit_Chain *dat, Dwg_Data *dwg);
-void dwg_json_object (Bit_Chain *dat, Dwg_Object *obj);
+void dwg_injson_object (Bit_Chain *dat, Dwg_Object *obj);
 
 #endif

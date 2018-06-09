@@ -66,7 +66,7 @@ dwg_find_tablehandle_silent (Dwg_Data *restrict dwg, const char *restrict name,
 /*------------------------------------------------------------------------------
  * Private functions
  */
-static int
+int
 dat_read_file (Bit_Chain *restrict dat, FILE *restrict fp,
                const char *restrict filename)
 {
@@ -93,7 +93,7 @@ dat_read_file (Bit_Chain *restrict dat, FILE *restrict fp,
   return 0;
 }
 
-static int
+int
 dat_read_stream (Bit_Chain *restrict dat, FILE *restrict fp)
 {
   size_t size = 0;

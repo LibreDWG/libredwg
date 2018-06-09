@@ -41,15 +41,19 @@ libredwg_la_SOURCES += \
         out_dxf.c \
         out_dxfb.c \
         out_geojson.c
+#       out_xml.c \
+#       out_yaml.c
 endif
 if USE_WRITE
 libredwg_la_SOURCES += \
 	encode.c
-#       encode_r2007.c \
-#       in_json.c
+#       encode_r2007.c
 if !DISABLE_DXF
 libredwg_la_SOURCES += \
-	in_dxf.c
+	in_dxf.c \
+	in_json.c
+#       in_xml.c
+#       in_yaml.c
 endif
 endif
 
@@ -89,6 +93,8 @@ EXTRA_HEADERS = \
 if !DISABLE_DXF
 EXTRA_HEADERS += \
 	out_dxf.h
+#       out_xml.h
+#       out_yaml.h
 endif
 if USE_WRITE
 EXTRA_HEADERS += \
@@ -97,6 +103,8 @@ if !DISABLE_DXF
 EXTRA_HEADERS += \
 	in_dxf.h \
 	in_json.h
+#       in_xml.h
+#       in_yaml.h
 endif
 endif
 
