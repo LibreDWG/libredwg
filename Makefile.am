@@ -31,9 +31,11 @@ include_HEADERS = \
 .PHONY: check-dwg check-dwg-valgrind man manual scan-build gcov check-wine
 
 man:
-	$(MAKE) -C programs man
+	$(MAKE) -C programs $@
+regen-man:
+	$(MAKE) -C programs $@
 manual:
-	$(MAKE) -C doc manual
+	$(MAKE) -C doc $@
 
 if HAVE_DOXYGEN
 refman doxygen doc/html/index.html: doc/Doxyfile $(include_HEADERS)

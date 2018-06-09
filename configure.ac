@@ -9,7 +9,8 @@ dnl You should have received a copy of the GNU General Public License
 dnl along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 AC_PREREQ([2.61])
-AC_INIT([LibreDWG],[0.4-dev],[libredwg@gnu.org])
+AC_INIT([LibreDWG],[0.4-dev],[libredwg@gnu.org],,
+        [https://savannah.gnu.org/projects/libredwg/])
 AC_CONFIG_AUX_DIR([build-aux])
 dnl for older systems use this:
 dnl AM_INIT_AUTOMAKE([1.11.6 gnu no-define])
@@ -154,7 +155,7 @@ AC_ARG_ENABLE([write],AS_HELP_STRING([--disable-write],[
 AM_CONDITIONAL([USE_WRITE], [test x$enable_write != xno])
 AS_IF([test x$enable_write != xno],
   AC_DEFINE([USE_WRITE],1,[Undefine to disable write support.])
-  AC_MSG_RESULT([no]),
+  AC_MSG_RESULT([no (default)]),
   AC_MSG_RESULT([yes]))
 
 dnl Feature: --enable-trace
@@ -165,7 +166,7 @@ AC_ARG_ENABLE([trace],AS_HELP_STRING([--enable-trace],[
     Its value is an integer: 0 (no output) through 9 (full verbosity).]),
   AC_DEFINE([USE_TRACING],1,[Define to 1 to enable runtime tracing support.])
   AC_MSG_RESULT([yes]),
-  AC_MSG_RESULT([no]))
+  AC_MSG_RESULT([no (default)]))
 
 AC_CHECK_FUNCS([setenv],[],
   AS_IF([test x$enable_trace = xyes],
@@ -256,6 +257,7 @@ AM_CONDITIONAL([HAVE_SWIG_PYTHON],
 
 AC_CHECK_PROGS([DOXYGEN], [doxygen])
 AM_CONDITIONAL([HAVE_DOXYGEN], [test -n "$DOXYGEN"])
+dnl help2man only by the maintainer
 
 if test x$cross_compiling = xno; then
   dnl check for valgrind

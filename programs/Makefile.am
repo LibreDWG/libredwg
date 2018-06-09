@@ -30,8 +30,6 @@ bin_PROGRAMS += dwg2ps
 dist_man1_MANS += dwg2ps.1
 dwg2ps_SOURCES = dwg2ps.c
 dwg2ps_LDADD = $(LDADD) -lps
-else
-DISTCLEANFILES += dwg2ps.1
 endif
 
 dwgread_SOURCES  = dwgread.c
@@ -44,12 +42,10 @@ if USE_WRITE
 bin_PROGRAMS += dwgrewrite
 # not yet ready
 noinst_PROGRAMS += dxf2dwg dwgwrite
-dist_man1_MANS += dwgrewrite.1 dwgwrite.1 dxf2dwg.1
+dist_man1_MANS  += dwgrewrite.1 dwgwrite.1 dxf2dwg.1
 dwgrewrite_SOURCES = dwgrewrite.c
 dwgwrite_SOURCES   = dwgwrite.c
 dxf2dwg_SOURCES    = dxf2dwg.c
-else
-DISTCLEANFILES += dwgrewrite.1 dwgwrite.1 dxf2dwg.1
 endif
 
 if HAVE_WINE
@@ -67,10 +63,9 @@ endif
 TESTS = alive.test
 
 EXTRA_DIST = suffix.inc common.inc $(TESTS) cmp_dxf.pl
-CLEANFILES = {example_,sample_,Arc,Leader_}*.{bmp,ps,svg,dxf}
-CLEANFILES += {example_,sample_,Arc,Leader_}*rewrite.dwg
-MAINTAINERCLEANFILES = $(dist_man1_MANS)
-MAINTAINERCLEANFILES += *_flymake.[ch] *~ *.i
+CLEANFILES = {example_,sample_,Arc,Leader_}*.{bmp,ps,svg,dxf,log}
+CLEANFILES += {example_,sample_,Arc,Leader_}*rewrite.{dwg,log}
+MAINTAINERCLEANFILES = *_flymake.[ch] *~ *.i
 
 .PHONY: man dsymutil clean-dsymutil check-syntax
 
@@ -79,27 +74,14 @@ MAINTAINERCLEANFILES += *_flymake.[ch] *~ *.i
 	$(COMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -E -o $@ $<
 
 man: $(dist_man1_MANS)
+$(dist_man1_MANS):
 
 if !HAVE_MINGW_CROSS
 # Note: These rules do not work cross-compiled
-dwgread.1: dwgread.c dwgread$(EXEEXT)
-	help2man -p LibreDWG -o $@ dwgread$(EXEEXT) || true
-dwgbmp.1: dwgbmp.c dwgbmp$(EXEEXT)
-	help2man -p LibreDWG -o $@ dwgbmp$(EXEEXT) || true
-dwg2dxf.1: dwg2dxf.c dwg2dxf$(EXEEXT)
-	help2man -p LibreDWG -o $@ dwg2dxf$(EXEEXT) || true
-dwg2SVG.1: dwg2SVG.c dwg2SVG$(EXEEXT)
-	help2man -p LibreDWG -o $@ dwg2SVG$(EXEEXT) || true
-dwglayers.1: dwglayers.c dwglayers$(EXEEXT)
-	help2man -p LibreDWG -o $@ dwglayers$(EXEEXT) || true
-dwg2ps.1: dwg2ps.c dwg2ps$(EXEEXT)
-	help2man -p LibreDWG -o $@ dwg2ps$(EXEEXT) || true
-dwgrewrite.1: dwgrewrite.c dwgrewrite$(EXEEXT)
-	help2man -p LibreDWG -o $@ dwgrewrite$(EXEEXT) || true
-dwgwrite.1: dwgwrite.c dwgwrite$(EXEEXT)
-	help2man -p LibreDWG -o $@ dwgwrite$(EXEEXT) || true
-dxf2dwg.1: dxf2dwg.c dxf2dwg$(EXEEXT)
-	help2man -p LibreDWG -o $@ dxf2dwg$(EXEEXT) || true
+regen-man: $(bin_PROGRAMS) $(noinst_PROGRAMS)
+	-for p in $(dist_man1_MANS); do \
+	  base=`basename $$p .1`; \
+	  help2man -p $(PACKAGE_NAME) -o $$p $$base$(EXEEXT); done
 endif
 
 #.c.1: $(bin_PROGRAMS) $(noinst_PROGRAMS)
