@@ -2329,7 +2329,7 @@ DWG_OBJECT(LTYPE)
   }
   LATER_VERSIONS
   {
-    FIELD_T (description, 48);
+    FIELD_T (description, 3);
     FIELD_BD (pattern_len, 40); // total length
     FIELD_RC (alignment, 72);
   }

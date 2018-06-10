@@ -138,6 +138,10 @@ dwg_dxf_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj);
 
 #define GROUP(dxf) \
     fprintf (dat->fh, "%3i\r\n", dxf)
+/* TODO: avoid empty numbers
+  if (!strcmp(buf, "\r\n") && !strcmp(dxf_format(dxf), "%s"))
+    snprintf (buf, 4096, "0\r\n");
+*/
 #define VALUE(value, type, dxf) \
   if (dxf) { \
     GROUP(dxf);\
