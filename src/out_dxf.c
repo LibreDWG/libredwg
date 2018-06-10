@@ -395,8 +395,10 @@ dwg_dxf_ ##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
   LOG_INFO("Object " #token ":\n")\
   _obj = obj->tio.object->tio.token;\
   if (!dwg_obj_is_control(obj)) { \
+    int dxf = 5; \
     if (obj->type != DWG_TYPE_BLOCK_HEADER) RECORD(token); \
-    fprintf(dat->fh, "%3i\r\n%lX\r\n", 5, obj->handle.value); \
+    if (obj->type == DWG_TYPE_DIMSTYLE) dxf = 105; \
+    fprintf(dat->fh, "%3i\r\n%lX\r\n", dxf, obj->handle.value); \
   } \
   LOG_TRACE("Object handle: %d.%d.%lX\n",\
             obj->handle.code,   \

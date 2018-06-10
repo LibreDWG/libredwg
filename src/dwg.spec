@@ -2824,15 +2824,11 @@ DWG_OBJECT_END
 /*(68)*/
 DWG_OBJECT(DIMSTYLE_CONTROL)
 
-  DXF {
-    VALUE_RL (FIELD_VALUE(num_entries)-1, 70);
-  } else {
-    FIELD_BS (num_entries, 70);
-  }
+  FIELD_BS (num_entries, 70);
+  SUBCLASS (AcDbDimStyleTable)
   SINCE(R_2000)
-    {
-      /* number of additional hard handles, undocumented */
-      FIELD_RC (num_morehandles, 0);
+    { /* number of additional hard handles, undocumented */
+      FIELD_RC (num_morehandles, 71);
     }
 
   START_HANDLE_STREAM;
