@@ -15,7 +15,7 @@ build:
         mingw-w64-${target}-libxml2 mingw-w64-${target}-swig mingw-w64-${target}-python2
         texinfo dejagnu
     - sh ./autogen.sh
-    - ./configure --enable-write
+    - ./configure
     - make
     - make check
     - make distcheck
