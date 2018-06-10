@@ -1107,6 +1107,24 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       dwg_dxf_UNKNOWN_OBJ(dat, &dwg->object[0]);
       ENDTAB();
     }
+  {
+    Dwg_Object_BLOCK_CONTROL *_ctrl = &dwg->block_control;
+    Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
+    Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->model_space);
+    TABLE(BLOCK_RECORD);
+    COMMON_TABLE_CONTROL_FLAGS(null_handle, BlockTable);
+    error |= dwg_dxf_BLOCK_CONTROL(dat, ctrl);
+    if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
+      RECORD(BLOCK_RECORD);
+      error |= dwg_dxf_BLOCK_HEADER(dat, obj);
+    }
+    obj = dwg_ref_get_object(dwg, _ctrl->paper_space);
+    if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
+      RECORD(BLOCK_RECORD);
+      error |= dwg_dxf_BLOCK_HEADER(dat, obj);
+    }
+    ENDTAB();
+  }
   ENDSEC();
   return 0;
 }

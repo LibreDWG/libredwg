@@ -2306,7 +2306,11 @@ DWG_OBJECT_END
 /*(56)*/
 DWG_OBJECT(LTYPE_CONTROL)
 
-  FIELD_BS (num_entries, 70);
+  DXF {
+    VALUE_RL (FIELD_VALUE(num_entries)-2, 70);
+  } else {
+    FIELD_BS (num_entries, 70);
+  }
 
   START_HANDLE_STREAM;
   FIELD_HANDLE (null_handle, 4, 0);
@@ -2508,11 +2512,7 @@ DWG_OBJECT_END
 /*(62)*/
 DWG_OBJECT(UCS_CONTROL)
 
-  DXF {
-    VALUE_RL (FIELD_VALUE(num_entries)-1, 70);
-  } else {
-    FIELD_BS (num_entries, 70); //BS or BL?
-  }
+  FIELD_BS (num_entries, 70); //BS or BL?
 
   START_HANDLE_STREAM;
   FIELD_HANDLE (null_handle, 4, 0);
@@ -2784,11 +2784,7 @@ DWG_OBJECT_END
 /*(66)*/
 DWG_OBJECT(APPID_CONTROL)
 
-  DXF {
-    VALUE_RL (FIELD_VALUE(num_entries)-1, 70);
-  } else {
-    FIELD_BS (num_entries, 70);
-  }
+  FIELD_BS (num_entries, 70);
 
   START_HANDLE_STREAM;
   FIELD_HANDLE (null_handle, 4, 0);
@@ -3096,11 +3092,7 @@ DWG_OBJECT_END
 /* VIEWPORT ENTITY CONTROL (70)*/
 DWG_OBJECT(VPORT_ENTITY_CONTROL)
 
-  DXF {
-    VALUE_RL (FIELD_VALUE(num_entries)-1, 70);
-  } else {
-    FIELD_BS (num_entries, 70);
-  }
+  FIELD_BS (num_entries, 70);
 
   START_HANDLE_STREAM;
   FIELD_HANDLE (null_handle, 4, 0);
