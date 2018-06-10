@@ -35,8 +35,9 @@ static unsigned int cur_ver = 0;
 static char buf[4096];
 
 //private
-static void dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
-                                           Dwg_Object *restrict obj);
+static int
+dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
+                               const Dwg_Object *restrict obj);
 
 /*--------------------------------------------------------------------------------
  * MACROS
@@ -382,7 +383,7 @@ static void dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
 
 #define DWG_ENTITY(token) \
 static int \
-dwg_dxfb_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
+dwg_dxfb_##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
 {\
   int error = 0; \
   long vcount, rcount1, rcount2, rcount3, rcount4; \
@@ -392,12 +393,13 @@ dwg_dxfb_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
   LOG_INFO("Entity " #token ":\n")\
   _ent = obj->tio.entity;\
   _obj = ent = _ent->tio.token;\
-  fprintf(dat->fh, "%3i\r\n%lX\r\n", 5, obj->handle.value); \
+  VALUE_HANDLE (obj->handle, 5, 330); \
+  /*fprintf(dat->fh, "%3i\r\n%lX\r\n", 5, obj->handle.value); */\
   LOG_TRACE("Entity handle: %d.%d.%lX\n",\
     obj->handle.code,\
     obj->handle.size,\
     obj->handle.value) \
-  VALUE_HANDLE (obj->parent->header_vars.BLOCK_RECORD_MSPACE, 5, 330); \
+  VALUE_HANDLE_NAME (obj->parent->header_vars.BLOCK_RECORD_MSPACE, 330, BLOCK_HEADER); \
   if (dat->from_version >= R_2000) \
     VALUE_TV ("AcDbEntity", 100)
 
@@ -405,17 +407,18 @@ dwg_dxfb_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 
 #define DWG_OBJECT(token) \
 static int \
-dwg_dxfb_ ##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
+dwg_dxfb_ ##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
 { \
   long vcount, rcount1, rcount2, rcount3, rcount4;\
   Bit_Chain *hdl_dat = dat;\
   Dwg_Object_##token *_obj;\
   const int minimal = obj->parent->opts & 0x10;\
-  /* if not a _CONTROL object: */ \
-  /* RECORD(token); */ \
   LOG_INFO("Object " #token ":\n")\
   _obj = obj->tio.object->tio.token;\
-  fprintf(dat->fh, "%3i\r\n%lX\r\n", 5, obj->handle.value); \
+  if (!dwg_obj_is_control(obj)) { \
+    if (obj->type != DWG_TYPE_BLOCK_HEADER) RECORD(token); \
+    VALUE_HANDLE (obj->handle, 5, 330); \
+  } \
   LOG_TRACE("Object handle: %d.%d.%lX\n",\
     obj->handle.code,\
     obj->handle.size,\
@@ -480,8 +483,8 @@ dxfb_write_xdata(Bit_Chain *restrict dat, Dwg_Resbuf *restrict rbuf, BITCODE_BL 
 
 // r2000+ converts STANDARD to Standard, BYLAYER to ByLayer, BYBLOCK to ByBlock
 static void
-dxf_write_handle(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
-                 char *restrict entry_name, int dxf)
+dxf_write_handle(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
+                 char *restrict entry_name, const int dxf)
 {
   if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT && entry_name)
     {
@@ -538,12 +541,23 @@ dxf_write_handle(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   dxf_write_handle(dat, obj, _obj->entry_name, 2); \
   FIELD_RC (flag, 70);
 
+#define LAYER_TABLE_FLAGS(owner, acdbname)      \
+  if (!minimal) { \
+    FIELD_HANDLE (owner, 4, 330); \
+    if (dat->from_version >= R_2000) { \
+      VALUE_TV ("AcDbSymbolTableRecord", 100); \
+      VALUE_TV ("AcDb" #acdbname "TableRecord", 100); \
+    }\
+  } \
+  if (_obj->entry_name) dxf_write_handle(dat, obj, _obj->entry_name, 2); \
+  FIELD_RS (flag, 70);
+
 #include "dwg.spec"
 
 /* returns 1 if object could be printd and 0 otherwise
  */
 static int
-dwg_dxfb_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
+dwg_dxfb_variable_type(const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
                        Dwg_Object *restrict obj)
 {
   int i;
@@ -569,7 +583,7 @@ dwg_dxfb_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
 }
 
 static int
-dwg_dxfb_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
+dwg_dxfb_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
 {
 
   switch (obj->type)
@@ -738,7 +752,7 @@ dwg_dxfb_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         }
       /* > 500 */
       else if (DWG_ERR_UNHANDLEDCLASS &
-               dwg_dxfb_variable_type(obj->parent, dat, obj))
+               dwg_dxfb_variable_type(obj->parent, dat, (Dwg_Object*)obj))
         {
           Dwg_Data *dwg = obj->parent;
           int is_entity;
@@ -774,10 +788,20 @@ dwg_dxfb_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
   return DWG_ERR_INVALIDTYPE;
 }
 
-static void
-dxfb_common_entity_handle_data(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
+static int
+dxfb_common_entity_handle_data(Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
 {
-  (void)dat; (void)obj;
+  Dwg_Object_Entity *ent;
+  //Dwg_Data *dwg = obj->parent;
+  Dwg_Object_Entity *_obj;
+  int i, error = 0;
+  long unsigned int vcount = 0;
+  ent = obj->tio.entity;
+  _obj = ent;
+
+  #include "common_entity_handle_data.spec"
+
+  return error;
 }
 
 // see https://www.autodesk.com/techpubs/autocad/acad2000/dxf/header_section_group_codes_dxf_02.htm
@@ -854,16 +878,13 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       for (i=0; i<dwg->vport_control.num_entries; i++)
         {
           Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->vports[i]);
-          if (obj) {
-            RECORD (VPORT);
-            //reordered in the DXF: 2,70,10,11,12,13,14,15,16,...
-            //special-cased in the spec
-            dwg_dxfb_VPORT(dat, obj);
-          }
+          //reordered in the DXF: 2,70,10,11,12,13,14,15,16,...
+          //special-cased in the spec
+          if (obj) dwg_dxfb_VPORT(dat, obj);
         }
       ENDTAB();
     }
-#if 0
+#if 1
   if (dwg->ltype_control.num_entries)
     {
       Dwg_Object_LTYPE_CONTROL *_ctrl = &dwg->ltype_control;
@@ -874,10 +895,7 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       for (i=0; i<dwg->ltype_control.num_entries; i++)
         {
           Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->linetypes[i]);
-          if (obj) {
-            RECORD (LTYPE);
-            dwg_dxfb_LTYPE(dat, obj);
-          }
+          if (obj) dwg_dxfb_LTYPE(dat, obj);
         }
       ENDTAB();
     }
@@ -891,10 +909,7 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       for (i=0; i<dwg->layer_control.num_entries; i++)
         {
           Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->layers[i]);
-          if (obj) {
-            RECORD (LAYER);
-            dwg_dxfb_LAYER(dat, obj);
-          }
+          if (obj) dwg_dxfb_LAYER(dat, obj);
         }
       ENDTAB();
     }
@@ -908,10 +923,7 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       for (i=0; i<dwg->style_control.num_entries; i++)
         {
           Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->styles[i]);
-          if (obj) {
-            RECORD (STYLE);
-            dwg_dxfb_STYLE(dat, obj);
-          }
+          if (obj) dwg_dxfb_STYLE(dat, obj);
         }
       ENDTAB();
     }
@@ -925,10 +937,7 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       for (i=0; i<dwg->view_control.num_entries; i++)
         {
           Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->views[i]);
-          if (obj) {
-            RECORD (VIEW);
-            dwg_dxfb_VIEW(dat, obj);
-          }
+          if (obj) dwg_dxfb_VIEW(dat, obj);
         }
       ENDTAB();
     }
@@ -942,10 +951,7 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       for (i=0; i<dwg->ucs_control.num_entries; i++)
         {
           Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->ucs[i]);
-          if (obj) {
-            RECORD (UCS);
-            dwg_dxfb_UCS(dat, obj);
-          }
+          if (obj) dwg_dxfb_UCS(dat, obj);
         }
       ENDTAB();
     }
@@ -960,10 +966,7 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       for (i=0; i<dwg->appid_control.num_entries; i++)
         {
           Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->apps[i]);
-          if (obj) {
-            RECORD (APPID);
-            dwg_dxfb_APPID(dat, obj);
-          }
+          if (obj) dwg_dxfb_APPID(dat, obj);
         }
       ENDTAB();
     }
@@ -978,10 +981,7 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       for (i=0; i<dwg->dimstyle_control.num_entries; i++)
         {
           Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->dimstyles[i]);
-          if (obj) {
-            RECORD (DIMSTYLE);
-            dwg_dxfb_DIMSTYLE(dat, obj);
-          }
+          if (obj) dwg_dxfb_DIMSTYLE(dat, obj);
         }
       ENDTAB();
     }
@@ -998,7 +998,7 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         {
           Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->block_headers[i]);
           if (obj) {
-            RECORD (BLOCK_RECORD);
+            //RECORD (BLOCK_RECORD);
             dwg_dxfb_BLOCK_HEADER(dat, obj);
           }
         }

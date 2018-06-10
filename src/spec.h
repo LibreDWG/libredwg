@@ -127,7 +127,6 @@
                         FIELD_VALUE(xrefref) << 6; \
   }\
   RESET_VER
-#endif
 
 // Same as above. just _dwg_object_LAYER::flags is short, not RC
 #define LAYER_TABLE_FLAGS(owner, acdbname) \
@@ -158,6 +157,8 @@
                         FIELD_VALUE(xrefref) << 6; \
   }\
   RESET_VER
+#endif
+
 
 #ifndef REPEAT
 

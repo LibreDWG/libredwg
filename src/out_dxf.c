@@ -37,9 +37,9 @@ static char buf1[255];
 
 // private
 static int
-dxf_common_entity_handle_data(Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+dxf_common_entity_handle_data(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
 static int
-dwg_dxf_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
 
 /*--------------------------------------------------------------------------------
  * MACROS
@@ -357,7 +357,7 @@ dwg_dxf_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj);
 
 #define DWG_ENTITY(token) \
 static int \
-dwg_dxf_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
+dwg_dxf_##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
 {\
   int error = 0; \
   long vcount, rcount1, rcount2, rcount3, rcount4; \
@@ -385,18 +385,19 @@ dwg_dxf_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 
 #define DWG_OBJECT(token) \
 static int \
-dwg_dxf_ ##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
+dwg_dxf_ ##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
 { \
   int error = 0; \
   long vcount, rcount1, rcount2, rcount3, rcount4;\
   Bit_Chain *hdl_dat = dat;\
   Dwg_Object_##token *_obj;\
   const int minimal = obj->parent->opts & 0x10;\
-  /* if not a _CONTROL object: */ \
-  /* RECORD(token); */ \
   LOG_INFO("Object " #token ":\n")\
   _obj = obj->tio.object->tio.token;\
-  fprintf(dat->fh, "%3i\r\n%lX\r\n", 5, obj->handle.value); \
+  if (!dwg_obj_is_control(obj)) { \
+    if (obj->type != DWG_TYPE_BLOCK_HEADER) RECORD(token); \
+    fprintf(dat->fh, "%3i\r\n%lX\r\n", 5, obj->handle.value); \
+  } \
   LOG_TRACE("Object handle: %d.%d.%lX\n",\
             obj->handle.code,   \
             obj->handle.size,   \
@@ -463,8 +464,8 @@ dxf_write_xdata(Bit_Chain *restrict dat, Dwg_Resbuf *restrict rbuf, BITCODE_BL s
 
 // r2000+ converts STANDARD to Standard, BYLAYER to ByLayer, BYBLOCK to ByBlock
 static void
-dxf_write_handle(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
-                 char *restrict entry_name, int dxf)
+dxf_write_handle(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
+                 char *restrict entry_name, const int dxf)
 {
   if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT && entry_name)
     {
@@ -506,10 +507,10 @@ dxf_write_handle(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
 
 //TODO: 5 330 100 70. have: 330 100 5 70
 #define COMMON_TABLE_CONTROL_FLAGS(owner, acdbname) \
+    fprintf(dat->fh, "%3i\r\n%lX\r\n", 5, ctrl->handle.value); \
     VALUE_H (_ctrl->null_handle, 330); \
     if (dat->from_version >= R_2000) { \
       VALUE_TV ("AcDbSymbolTable", 100); \
-      VALUE_TV ("AcDb" #acdbname "Table", 100); \
     }
 
 #define COMMON_TABLE_FLAGS(owner, acdbname) \
@@ -523,13 +524,24 @@ dxf_write_handle(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   if (_obj->entry_name) dxf_write_handle(dat, obj, _obj->entry_name, 2); \
   FIELD_RC (flag, 70);
 
+#define LAYER_TABLE_FLAGS(owner, acdbname) \
+  if (!minimal) { \
+    FIELD_HANDLE (owner, 4, 330); \
+    if (dat->from_version >= R_2000) { \
+      VALUE_TV ("AcDbSymbolTableRecord", 100); \
+      VALUE_TV ("AcDb" #acdbname "TableRecord", 100); \
+    }\
+  } \
+  if (_obj->entry_name) dxf_write_handle(dat, obj, _obj->entry_name, 2); \
+  FIELD_RS (flag, 70);
+
 #include "dwg.spec"
 
 
 /* returns 0 on success
  */
 static int
-dwg_dxf_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
+dwg_dxf_variable_type(const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
                       Dwg_Object *restrict obj)
 {
   int i;
@@ -548,8 +560,8 @@ dwg_dxf_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   // almost always false
   is_entity = dwg_class_is_entity(klass);
 
-  if (!is_entity)
-    fprintf(dat->fh, "  0\r\n%s\r\n", dxfname);
+  //if (!is_entity)
+  //  fprintf(dat->fh, "  0\r\n%s\r\n", dxfname);
 
   #define action dxf
   #include "classes.inc"
@@ -558,7 +570,7 @@ dwg_dxf_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
 }
 
 static int
-dwg_dxf_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
+dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
 {
   int error = 0;
   const int minimal = obj->parent->opts & 0x10;
@@ -641,7 +653,6 @@ dwg_dxf_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       return dwg_dxf_REGION(dat, obj);
     case DWG_TYPE__3DSOLID:
       return dwg_dxf__3DSOLID(dat, obj);
-      break; /* Check the type of the object */
     case DWG_TYPE_BODY:
       return dwg_dxf_BODY(dat, obj);
     case DWG_TYPE_RAY:
@@ -650,7 +661,6 @@ dwg_dxf_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       return dwg_dxf_XLINE(dat, obj);
     case DWG_TYPE_DICTIONARY:
       if (!minimal) {
-        RECORD(DICTIONARY);
         return dwg_dxf_DICTIONARY(dat, obj);
       }
     case DWG_TYPE_MTEXT:
@@ -662,106 +672,39 @@ dwg_dxf_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
     case DWG_TYPE_MLINE:
       return dwg_dxf_MLINE(dat, obj);
     case DWG_TYPE_BLOCK_CONTROL:
-      //RECORD(BLOCK);
-      //dwg_dxf_BLOCK_CONTROL(dat, obj);
-      break;
     case DWG_TYPE_BLOCK_HEADER:
-      //RECORD(BLOCK_HEADER);
-      //dwg_dxf_BLOCK_HEADER(dat, obj);
-      break;
     case DWG_TYPE_LAYER_CONTROL:
-      //RECORD(LAYER);
-      //dwg_dxf_LAYER_CONTROL(dat, obj);
-      break;
     case DWG_TYPE_LAYER:
-      //RECORD(LAYER);
-      //dwg_dxf_LAYER(dat, obj);
-      break;
     case DWG_TYPE_STYLE_CONTROL:
-      //RECORD(STYLE);
-      //dwg_dxf_STYLE_CONTROL(dat, obj);
-      break;
     case DWG_TYPE_STYLE:
-      //RECORD(STYLE);
-      //dwg_dxf_STYLE(dat, obj);
-      break;
     case DWG_TYPE_LTYPE_CONTROL:
-      //RECORD(LTYPE);
-      //dwg_dxf_LTYPE_CONTROL(dat, obj);
-      break;
     case DWG_TYPE_LTYPE:
-      //RECORD(LTYPE);
-      //dwg_dxf_LTYPE(dat, obj);
-      break;
     case DWG_TYPE_VIEW_CONTROL:
-      //RECORD(VIEW);
-      //dwg_dxf_VIEW_CONTROL(dat, obj);
-      break;
     case DWG_TYPE_VIEW:
-      //RECORD(VIEW);
-      //dwg_dxf_VIEW(dat, obj);
-      break;
     case DWG_TYPE_UCS_CONTROL:
-      //RECORD(UCS);
-      //dwg_dxf_UCS_CONTROL(dat, obj);
-      break;
     case DWG_TYPE_UCS:
-      //RECORD(UCS);
-      //dwg_dxf_UCS(dat, obj);
-      break;
     case DWG_TYPE_VPORT_CONTROL:
-      //RECORD(VPORT);
-      //dwg_dxf_VPORT_CONTROL(dat, obj);
-      break;
     case DWG_TYPE_VPORT:
-      //RECORD(VPORT);
-      //dwg_dxf_VPORT(dat, obj);
-      break;
     case DWG_TYPE_APPID_CONTROL:
-      //RECORD(APPID);
-      //dwg_dxf_APPID_CONTROL(dat, obj);
-      break;
     case DWG_TYPE_APPID:
-      //RECORD(APPID);
-      //dwg_dxf_APPID(dat, obj);
-      break;
     case DWG_TYPE_DIMSTYLE_CONTROL:
-      //RECORD(DIMSTYLE);
-      //dwg_dxf_DIMSTYLE_CONTROL(dat, obj);
-      break;
     case DWG_TYPE_DIMSTYLE:
-      //RECORD(DIMSTYLE);
-      //dwg_dxf_DIMSTYLE(dat, obj);
-      break;
     case DWG_TYPE_VPORT_ENTITY_CONTROL:
-      //RECORD(VPORT_ENTITY_HEADER);
-      //dwg_dxf_VPORT_ENTITY_CONTROL(dat, obj);
-      break;
     case DWG_TYPE_VPORT_ENTITY_HEADER:
-      //RECORD(VPORT_ENTITY_HEADER);
-      //dwg_dxf_VPORT_ENTITY_HEADER(dat, obj);
       break;
     case DWG_TYPE_GROUP:
-      RECORD(GROUP);
       return dwg_dxf_GROUP(dat, obj);
     case DWG_TYPE_MLINESTYLE:
-      RECORD(MLINESTYLE);
       return dwg_dxf_MLINESTYLE(dat, obj);
     case DWG_TYPE_OLE2FRAME:
       if (!minimal) {
-        RECORD(OLE2FRAME);
         return dwg_dxf_OLE2FRAME(dat, obj);
       }
       break;
     case DWG_TYPE_DUMMY:
-      if (!minimal) {
-        RECORD(DUMMY);
-        return dwg_dxf_DUMMY(dat, obj);
-      }
       break;
     case DWG_TYPE_LONG_TRANSACTION:
       if (!minimal) {
-        RECORD(LONG_TRANSACTION);
         return dwg_dxf_LONG_TRANSACTION(dat, obj);
       }
       break;
@@ -771,36 +714,30 @@ dwg_dxf_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       return dwg_dxf_HATCH(dat, obj);
     case DWG_TYPE_XRECORD:
       if (!minimal) {
-        RECORD(XRECORD);
         return dwg_dxf_XRECORD(dat, obj);
       }
       break;
     case DWG_TYPE_PLACEHOLDER:
       if (!minimal) {
-        RECORD(PLACEHOLDER);
         return dwg_dxf_PLACEHOLDER(dat, obj);
       }
       break;
     case DWG_TYPE_PROXY_ENTITY:
-      //RECORD(PROXY_ENTITY);
       //dwg_dxf_PROXY_ENTITY(dat, obj);
       break;
     case DWG_TYPE_OLEFRAME:
       if (!minimal) {
-        RECORD(OLEFRAME);
         return dwg_dxf_OLEFRAME(dat, obj);
       }
       break;
     case DWG_TYPE_VBA_PROJECT:
       if (!minimal) {
         LOG_ERROR("Unhandled Object VBA_PROJECT. Has its own section\n");
-        //RECORD(VBA_PROJECT);
         //dwg_dxf_VBA_PROJECT(dat, obj);
       }
       break;
     case DWG_TYPE_LAYOUT:
       if (!minimal) {
-        RECORD(LAYOUT);
         return dwg_dxf_LAYOUT(dat, obj);
       }
       break;
@@ -808,12 +745,11 @@ dwg_dxf_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       if (obj->type == obj->parent->layout_number)
         {
           if (!minimal) {
-            RECORD(LAYOUT);
             return dwg_dxf_LAYOUT(dat, obj);
           }
         }
       /* > 500 */
-      else if ((error = dwg_dxf_variable_type(obj->parent, dat, obj))
+      else if ((error = dwg_dxf_variable_type(obj->parent, dat, (Dwg_Object*)obj))
                & DWG_ERR_UNHANDLEDCLASS)
         {
           Dwg_Data *dwg = obj->parent;
@@ -844,7 +780,7 @@ dwg_dxf_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 }
 
 static int
-dxf_common_entity_handle_data(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
+dxf_common_entity_handle_data(Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
 {
   Dwg_Object_Entity *ent;
   //Dwg_Data *dwg = obj->parent;
@@ -1023,7 +959,6 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         {
           Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->vports[i]);
           if (obj) {
-            RECORD (VPORT);
             //reordered in the DXF: 2,70,10,11,12,13,14,15,16,...
             //special-cased in the spec
             error |= dwg_dxf_VPORT(dat, obj);
@@ -1042,11 +977,9 @@ if (1) { //only temp. to test dxf import into acad. this is broken
       error |= dwg_dxf_LTYPE_CONTROL(dat, ctrl);
       // first the 2 builtin ltypes: ByBlock, ByLayer
       if ((obj  = dwg_ref_get_object(dwg, dwg->header_vars.LTYPE_BYBLOCK))) {
-        RECORD (LTYPE);
         dwg_dxf_LTYPE(dat, obj);
       }
       if ((obj  = dwg_ref_get_object(dwg, dwg->header_vars.LTYPE_BYLAYER))) {
-        RECORD (LTYPE);
         error |= dwg_dxf_LTYPE(dat, obj);
       }
       // here LTYPE_CONTINUOUS is already included
@@ -1054,7 +987,6 @@ if (1) { //only temp. to test dxf import into acad. this is broken
         {
           obj = dwg_ref_get_object(dwg, _ctrl->linetypes[i]);
           if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
-            RECORD (LTYPE);
             error |= dwg_dxf_LTYPE(dat, obj);
           }
         }
@@ -1071,7 +1003,6 @@ if (1) { //only temp. to test dxf import into acad. this is broken
         {
           Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->layers[i]);
           if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
-            RECORD (LAYER);
             error |= dwg_dxf_LAYER(dat, obj);
           }
         }
@@ -1088,7 +1019,6 @@ if (1) { //only temp. to test dxf import into acad. this is broken
         {
           Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->styles[i]);
           if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
-            RECORD (STYLE);
             error |= dwg_dxf_STYLE(dat, obj);
           }
         }
@@ -1106,7 +1036,6 @@ if (1) { //only temp. to test dxf import into acad. this is broken
           Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->views[i]);
           //FIXME ignore ACDBSECTIONVIEWSTYLE and ACDBDETAILVIEWSTYLE
           if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
-            RECORD (VIEW);
             error |= dwg_dxf_VIEW(dat, obj);
           }
         }
@@ -1123,7 +1052,6 @@ if (1) { //only temp. to test dxf import into acad. this is broken
         {
           Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->ucs[i]);
           if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
-            RECORD (UCS);
             error |= dwg_dxf_UCS(dat, obj);
           }
         }
@@ -1141,7 +1069,6 @@ if (1) { //only temp. to test dxf import into acad. this is broken
         {
           Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->apps[i]);
           if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
-            RECORD (APPID);
             error |= dwg_dxf_APPID(dat, obj);
           }
         }
@@ -1159,7 +1086,6 @@ if (1) { //only temp. to test dxf import into acad. this is broken
         {
           Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->dimstyles[i]);
           if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
-            RECORD (DIMSTYLE);
             error |= dwg_dxf_DIMSTYLE(dat, obj);
           }
         }
@@ -1177,7 +1103,6 @@ if (1) { //only temp. to test dxf import into acad. this is broken
         {
           Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->vport_entity_headers[i]);
           if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
-            RECORD (VPORT_ENTITY_HEADER);
             error |= dwg_dxf_VPORT_ENTITY_HEADER(dat, obj);
           }
         }
