@@ -1555,6 +1555,7 @@ read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
   uint32_t section_number;
   uint32_t data_size;
   uint64_t start_offset;
+  int error;
 
   decomp = (char *)calloc(decomp_data_size, sizeof(char));
   if (!decomp)
@@ -1563,7 +1564,7 @@ read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
       return DWG_ERR_OUTOFMEM;
     }
 
-  decompress_R2004_section(dat, decomp, comp_data_size);
+  error = decompress_R2004_section(dat, decomp, comp_data_size);
 
   dwg->header.num_infos = *(uint32_t*)decomp;
   dwg->header.section_info = (Dwg_Section_Info*)
@@ -1571,7 +1572,7 @@ read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
   if (!dwg->header.section_info)
     {
       LOG_ERROR("Out of memory");
-      return DWG_ERR_OUTOFMEM;
+      return error | DWG_ERR_OUTOFMEM;
     }
 
   LOG_TRACE("\n#### Read 2004 Section Info fields ####\n")
@@ -1610,17 +1611,15 @@ read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
       LOG_TRACE("Encrypted:       %d (0=no, 1=yes, 2=unknown)\n", info->encrypted)
       LOG_TRACE("SectionName:     %s\n\n", info->name)
 
-      info->sections = (Dwg_Section**)
-        calloc(info->num_sections, sizeof(Dwg_Section*));
-      if (!info->sections)
-        {
-          LOG_ERROR("Out of memory");
-          return DWG_ERR_OUTOFMEM;
-        }
-
       if (info->num_sections < 10000)
 	{
-	  LOG_INFO("Section count %u in area %d\n", info->num_sections, i)
+	  LOG_INFO("Section count %u in area %d\n", info->num_sections, i);
+          info->sections = calloc(info->num_sections, sizeof(Dwg_Section*));
+          if (!info->sections)
+            {
+              LOG_ERROR("Out of memory with %u sections", info->num_sections);
+              return error | DWG_ERR_OUTOFMEM;
+            }
 
 	  for (j = 0; j < info->num_sections; j++)
 	    {
@@ -1642,13 +1641,14 @@ read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
       else
 	{
 	  LOG_ERROR("Section count %u in area %d too high! Skipping",
-                    info->num_sections, i)
-          free(decomp);
-          return DWG_ERR_VALUEOUTOFBOUNDS;
+                    info->num_sections, i);
+          info->num_sections = 0;
+          free (decomp);
+          return error | DWG_ERR_VALUEOUTOFBOUNDS;
 	}
     }
-  free(decomp);
-  return 0;
+  free (decomp);
+  return error;
 }
 
 /* Encrypted Section Header */
@@ -1704,12 +1704,17 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *dwg,
   decomp = (char *)calloc(max_decomp_size, sizeof(char));
   if (!decomp)
     {
-      LOG_ERROR("Out of memory");
+      LOG_ERROR("Out of memory with %u sections", info->num_sections);
       return DWG_ERR_OUTOFMEM;
     }
 
   for (i=0; i < info->num_sections; ++i)
     {
+      if (!info->sections[i])
+        {
+          LOG_WARN("Skip empty class section %d", i);
+          continue;
+        }
       address = info->sections[i]->address;
       dat->byte = address;
       bit_read_fixed(dat, (char*)es.char_data, 32);
