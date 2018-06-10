@@ -139,23 +139,25 @@ dwg_dxf_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj);
 
 #define GROUP(dxf) \
     fprintf (dat->fh, "%3i\r\n", dxf)
-/* TODO: avoid empty numbers
-  if (!strcmp(buf, "\r\n") && !strcmp(dxf_format(dxf), "%s"))
-    snprintf (buf, 4096, "0\r\n");
-*/
+/* avoid empty numbers, and fixup some bad  %f formatting */
 #define VALUE(value, type, dxf) \
   if (dxf) { \
     char *s; \
+    const char *fmt = dxf_format (dxf);\
     GROUP(dxf);\
-    snprintf (buf1, 255, "%s\r\n", dxf_format (dxf));\
+    snprintf (buf1, 255, "%s\r\n", fmt);\
     GCC_DIAG_IGNORE(-Wformat-nonliteral) \
     snprintf(buf, 255, buf1, value); \
-    if (!strcmp(buf, "0.00000000000000\r\n")) \
-      strcpy(buf, "0.0\r\n"); \
-    if ((s = strstr(buf, ".00000000000000\r\n"))) \
-      strcpy(s, ".0\r\n"); \
-    if ((s = strstr(buf, ".50000000000000\r\n"))) \
-      strcpy(s, ".5\r\n"); \
+    if (strcmp(fmt, "%s") && !strcmp(buf, "\r\n")) \
+      snprintf (buf, 255, "0\r\n"); \
+    if (!strcmp(fmt, "%-16.14f")) { \
+      if (!strcmp(buf, "0.00000000000000\r\n")) \
+        strcpy(buf, "0.0\r\n"); \
+      else if ((s = strstr(buf, ".00000000000000\r\n"))) \
+        strcpy(s, ".0\r\n"); \
+      else if ((s = strstr(buf, ".50000000000000\r\n"))) \
+        strcpy(s, ".5\r\n"); \
+    }\
     fprintf(dat->fh, buf, value);\
     GCC_DIAG_RESTORE \
   }
