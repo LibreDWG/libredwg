@@ -32,7 +32,8 @@
 
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
-static char buf[4096];
+static char buf[255];
+static char buf1[255];
 
 // private
 static int
@@ -144,9 +145,17 @@ dwg_dxf_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj);
 */
 #define VALUE(value, type, dxf) \
   if (dxf) { \
+    char *s; \
     GROUP(dxf);\
-    snprintf (buf, 4096, "%s\r\n", dxf_format (dxf));\
+    snprintf (buf1, 255, "%s\r\n", dxf_format (dxf));\
     GCC_DIAG_IGNORE(-Wformat-nonliteral) \
+    snprintf(buf, 255, buf1, value); \
+    if (!strcmp(buf, "0.00000000000000\r\n")) \
+      strcpy(buf, "0.0\r\n"); \
+    if ((s = strstr(buf, ".00000000000000\r\n"))) \
+      strcpy(s, ".0\r\n"); \
+    if ((s = strstr(buf, ".50000000000000\r\n"))) \
+      strcpy(s, ".5\r\n"); \
     fprintf(dat->fh, buf, value);\
     GCC_DIAG_RESTORE \
   }
@@ -237,14 +246,14 @@ dwg_dxf_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj);
 
 #define POINT_3D(name, var, c1, c2, c3)\
   {\
-    fprintf (dat->fh, "%3i\r\n%-16.14f\r\n", c1, dwg->var.x);\
-    fprintf (dat->fh, "%3i\r\n%-16.14f\r\n", c2, dwg->var.y);\
-    fprintf (dat->fh, "%3i\r\n%-16.14f\r\n", c3, dwg->var.z);\
+    VALUE(dwg->var.x, BD, c1);\
+    VALUE(dwg->var.y, BD, c2);\
+    VALUE(dwg->var.z, BD, c3);\
   }
 #define POINT_2D(name, var, c1, c2) \
   {\
-    fprintf (dat->fh, "%3i\r\n%-16.14f\r\n", c1, dwg->var.x);\
-    fprintf (dat->fh, "%3i\r\n%-16.14f\r\n", c2, dwg->var.y);\
+    VALUE(dwg->var.x, BD, c1);\
+    VALUE(dwg->var.y, BD, c2);\
   }
 
 //FIELD_VECTOR_N(name, type, size):
