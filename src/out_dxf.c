@@ -941,159 +941,150 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   const int minimal = 0; //dwg->opts & 0x10;
 
   SECTION(TABLES);
-  if (dwg->vport_control.num_entries)
-    {
-      Dwg_Object_VPORT_CONTROL *_ctrl = &dwg->vport_control;
-      Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
-      TABLE(VPORT);
-      // add handle 5 here at first
-      COMMON_TABLE_CONTROL_FLAGS(null_handle, Viewport);
-      error |= dwg_dxf_VPORT_CONTROL(dat, ctrl);
-      //TODO how far back can DXF read 1000?
-      if (dat->version != dat->from_version && dat->from_version >= R_2000)
-        {
-          /* if saved from newer version, eg. AC1032: */
-          VALUE_TV ("ACAD", 1001);
-          VALUE_TV ("DbSaveVer", 1000);
-          VALUE_RS ((dat->from_version * 3) + 15, 1071); // so that 69 is R_2018
-        }
-      for (i=0; i<dwg->vport_control.num_entries; i++)
-        {
-          Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->vports[i]);
-          if (obj) {
-            //reordered in the DXF: 2,70,10,11,12,13,14,15,16,...
-            //special-cased in the spec
-            error |= dwg_dxf_VPORT(dat, obj);
-          }
-        }
-      ENDTAB();
-    }
-if (1) { //only temp. to test dxf import into acad. this is broken
-  if (dwg->ltype_control.num_entries)
-    {
-      Dwg_Object_LTYPE_CONTROL *_ctrl = &dwg->ltype_control;
-      Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
-      Dwg_Object *obj;
-      TABLE(LTYPE);
-      COMMON_TABLE_CONTROL_FLAGS(null_handle, Linetype);
-      error |= dwg_dxf_LTYPE_CONTROL(dat, ctrl);
-      // first the 2 builtin ltypes: ByBlock, ByLayer
-      if ((obj  = dwg_ref_get_object(dwg, dwg->header_vars.LTYPE_BYBLOCK))) {
-        dwg_dxf_LTYPE(dat, obj);
+  {
+    Dwg_Object_VPORT_CONTROL *_ctrl = &dwg->vport_control;
+    Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
+    TABLE(VPORT);
+    // add handle 5 here at first
+    COMMON_TABLE_CONTROL_FLAGS(null_handle, Viewport);
+    error |= dwg_dxf_VPORT_CONTROL(dat, ctrl);
+    //TODO how far back can DXF read 1000?
+    if (dat->version != dat->from_version && dat->from_version >= R_2000)
+      {
+        /* if saved from newer version, eg. AC1032: */
+        VALUE_TV ("ACAD", 1001);
+        VALUE_TV ("DbSaveVer", 1000);
+        VALUE_RS ((dat->from_version * 3) + 15, 1071); // so that 69 is R_2018
       }
-      if ((obj  = dwg_ref_get_object(dwg, dwg->header_vars.LTYPE_BYLAYER))) {
-        error |= dwg_dxf_LTYPE(dat, obj);
+    for (i=0; i<dwg->vport_control.num_entries; i++)
+      {
+        Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->vports[i]);
+        if (obj) {
+          //reordered in the DXF: 2,70,10,11,12,13,14,15,16,...
+          //special-cased in the spec
+          error |= dwg_dxf_VPORT(dat, obj);
+        }
       }
-      // here LTYPE_CONTINUOUS is already included
-      for (i=0; i<dwg->ltype_control.num_entries; i++)
-        {
-          obj = dwg_ref_get_object(dwg, _ctrl->linetypes[i]);
-          if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
-            error |= dwg_dxf_LTYPE(dat, obj);
-          }
-        }
-      ENDTAB();
+    ENDTAB();
+  }
+  {
+    Dwg_Object_LTYPE_CONTROL *_ctrl = &dwg->ltype_control;
+    Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
+    Dwg_Object *obj;
+    TABLE(LTYPE);
+    COMMON_TABLE_CONTROL_FLAGS(null_handle, Linetype);
+    error |= dwg_dxf_LTYPE_CONTROL(dat, ctrl);
+    // first the 2 builtin ltypes: ByBlock, ByLayer
+    if ((obj  = dwg_ref_get_object(dwg, dwg->header_vars.LTYPE_BYBLOCK))) {
+      dwg_dxf_LTYPE(dat, obj);
     }
-  if (dwg->layer_control.num_entries)
-    {
-      Dwg_Object_LAYER_CONTROL *_ctrl = &dwg->layer_control;
-      Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
-      TABLE(LAYER);
-      COMMON_TABLE_CONTROL_FLAGS(null_handle, Layer);
-      error |= dwg_dxf_LAYER_CONTROL(dat, ctrl);
-      for (i=0; i<dwg->layer_control.num_entries; i++)
-        {
-          Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->layers[i]);
-          if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
-            error |= dwg_dxf_LAYER(dat, obj);
-          }
-        }
-      ENDTAB();
-    }  
-  if (dwg->style_control.num_entries)
-    {
-      Dwg_Object_STYLE_CONTROL *_ctrl = &dwg->style_control;
-      Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
-      TABLE(STYLE);
-      COMMON_TABLE_CONTROL_FLAGS(null_handle, TextStyle);
-      error |= dwg_dxf_STYLE_CONTROL(dat, ctrl);
-      for (i=0; i<dwg->style_control.num_entries; i++)
-        {
-          Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->styles[i]);
-          if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
-            error |= dwg_dxf_STYLE(dat, obj);
-          }
-        }
-      ENDTAB();
+    if ((obj  = dwg_ref_get_object(dwg, dwg->header_vars.LTYPE_BYLAYER))) {
+      error |= dwg_dxf_LTYPE(dat, obj);
     }
-  if (dwg->view_control.num_entries)
-    {
-      Dwg_Object_VIEW_CONTROL *_ctrl = &dwg->view_control;
-      Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
-      TABLE(VIEW);
-      COMMON_TABLE_CONTROL_FLAGS(null_handle, View);
-      error |= dwg_dxf_VIEW_CONTROL(dat, ctrl);
-      for (i=0; i<dwg->view_control.num_entries; i++)
-        {
-          Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->views[i]);
-          //FIXME ignore ACDBSECTIONVIEWSTYLE and ACDBDETAILVIEWSTYLE
-          if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
-            error |= dwg_dxf_VIEW(dat, obj);
-          }
+    // here LTYPE_CONTINUOUS is already included
+    for (i=0; i<dwg->ltype_control.num_entries; i++)
+      {
+        obj = dwg_ref_get_object(dwg, _ctrl->linetypes[i]);
+        if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
+          error |= dwg_dxf_LTYPE(dat, obj);
         }
-      ENDTAB();
-    }
-  if (dwg->ucs_control.num_entries)
-    {
-      Dwg_Object_UCS_CONTROL *_ctrl = &dwg->ucs_control;
-      Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
-      TABLE(UCS);
-      COMMON_TABLE_CONTROL_FLAGS(null_handle, UCS);
-      error |= dwg_dxf_UCS_CONTROL(dat, ctrl);
-      for (i=0; i<dwg->ucs_control.num_entries; i++)
-        {
-          Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->ucs[i]);
-          if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
-            error |= dwg_dxf_UCS(dat, obj);
-          }
+      }
+    ENDTAB();
+  }
+  {
+    Dwg_Object_LAYER_CONTROL *_ctrl = &dwg->layer_control;
+    Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
+    TABLE(LAYER);
+    COMMON_TABLE_CONTROL_FLAGS(null_handle, Layer);
+    error |= dwg_dxf_LAYER_CONTROL(dat, ctrl);
+    for (i=0; i<dwg->layer_control.num_entries; i++)
+      {
+        Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->layers[i]);
+        if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
+          error |= dwg_dxf_LAYER(dat, obj);
         }
-      ENDTAB();
-    }
-}
-  if (dwg->appid_control.num_entries) //FIXME ACAD import
-    {
-      Dwg_Object_APPID_CONTROL *_ctrl = &dwg->appid_control;
-      Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
-      TABLE(APPID);
-      COMMON_TABLE_CONTROL_FLAGS(null_handle, RegApp);
-      error |= dwg_dxf_APPID_CONTROL(dat, ctrl);
-      for (i=0; i<dwg->appid_control.num_entries; i++)
-        {
-          Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->apps[i]);
-          if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
-            error |= dwg_dxf_APPID(dat, obj);
-          }
+      }
+    ENDTAB();
+  }  
+  {
+    Dwg_Object_STYLE_CONTROL *_ctrl = &dwg->style_control;
+    Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
+    TABLE(STYLE);
+    COMMON_TABLE_CONTROL_FLAGS(null_handle, TextStyle);
+    error |= dwg_dxf_STYLE_CONTROL(dat, ctrl);
+    for (i=0; i<dwg->style_control.num_entries; i++)
+      {
+        Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->styles[i]);
+        if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
+          error |= dwg_dxf_STYLE(dat, obj);
         }
-      ENDTAB();
-    }
-  if (dwg->dimstyle_control.num_entries)
-    {
-      Dwg_Object_DIMSTYLE_CONTROL *_ctrl = &dwg->dimstyle_control;
-      Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
-      TABLE(DIMSTYLE);
-      COMMON_TABLE_CONTROL_FLAGS(null_handle, DimStyle);
-      error |= dwg_dxf_DIMSTYLE_CONTROL(dat, ctrl);
-      //ignoring morehandles
-      for (i=0; i<dwg->dimstyle_control.num_entries; i++)
-        {
-          Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->dimstyles[i]);
-          if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
-            error |= dwg_dxf_DIMSTYLE(dat, obj);
-          }
+      }
+    ENDTAB();
+  }
+  {
+    Dwg_Object_VIEW_CONTROL *_ctrl = &dwg->view_control;
+    Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
+    TABLE(VIEW);
+    COMMON_TABLE_CONTROL_FLAGS(null_handle, View);
+    error |= dwg_dxf_VIEW_CONTROL(dat, ctrl);
+    for (i=0; i<dwg->view_control.num_entries; i++)
+      {
+        Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->views[i]);
+        //FIXME ignore ACDBSECTIONVIEWSTYLE and ACDBDETAILVIEWSTYLE
+        if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
+          error |= dwg_dxf_VIEW(dat, obj);
         }
-      ENDTAB();
-    }
-  // fool the warnings. this table is nowhere to be found in the wild
+      }
+    ENDTAB();
+  }
+  {
+    Dwg_Object_UCS_CONTROL *_ctrl = &dwg->ucs_control;
+    Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
+    TABLE(UCS);
+    COMMON_TABLE_CONTROL_FLAGS(null_handle, UCS);
+    error |= dwg_dxf_UCS_CONTROL(dat, ctrl);
+    for (i=0; i<dwg->ucs_control.num_entries; i++)
+      {
+        Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->ucs[i]);
+        if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
+          error |= dwg_dxf_UCS(dat, obj);
+        }
+      }
+    ENDTAB();
+  }
+  SINCE (R_13)
+  {
+    Dwg_Object_APPID_CONTROL *_ctrl = &dwg->appid_control;
+    Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
+    TABLE(APPID);
+    COMMON_TABLE_CONTROL_FLAGS(null_handle, RegApp);
+    error |= dwg_dxf_APPID_CONTROL(dat, ctrl);
+    for (i=0; i<dwg->appid_control.num_entries; i++)
+      {
+        Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->apps[i]);
+        if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
+          error |= dwg_dxf_APPID(dat, obj);
+        }
+      }
+    ENDTAB();
+  }
+  {
+    Dwg_Object_DIMSTYLE_CONTROL *_ctrl = &dwg->dimstyle_control;
+    Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
+    TABLE(DIMSTYLE);
+    COMMON_TABLE_CONTROL_FLAGS(null_handle, DimStyle);
+    error |= dwg_dxf_DIMSTYLE_CONTROL(dat, ctrl);
+    //ignoring morehandles
+    for (i=0; i<dwg->dimstyle_control.num_entries; i++)
+      {
+        Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->dimstyles[i]);
+        if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
+          error |= dwg_dxf_DIMSTYLE(dat, obj);
+        }
+      }
+    ENDTAB();
+  }
+  // fool the warnings. this table is nowhere to be found in the wild. maybe pre-R_11
   if (0 && dwg->vport_entity_control.num_entries)
     {
       Dwg_Object_VPORT_ENTITY_CONTROL *_ctrl = &dwg->vport_entity_control;

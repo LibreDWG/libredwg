@@ -165,21 +165,16 @@
   FIELD_BS (LUPREC, 70);
   FIELD_BS (AUNITS, 70);
   FIELD_BS (AUPREC, 70);
-
   VERSIONS(R_13, R_14)
     {
       FIELD_BS (OSMODE, 70);
     }
-
   FIELD_BS (ATTMODE, 70);
-
   VERSIONS(R_13, R_14)
     {
       FIELD_BS (COORDS, 70);
     }
-
   FIELD_BS (PDMODE, 70);
-
   VERSIONS(R_13, R_14)
     {
       FIELD_BS (PICKSTYLE, 70);
@@ -674,3 +669,4 @@
     FIELD_TU (PROJECTNAME, 1);
     END_STRING_STREAM
   }
+
