@@ -47,15 +47,15 @@ endif
 
 check-dwg: all
 	-mv check-dwg.log check-dwg.log~
-	for d in `find test/test-data -iname \*.dwg`; do \
+	for d in `find test/test-data -iname \*.dwg -size -40M`; do \
 	  echo programs/dwgread -v3 $$d | tee -a check-dwg.log; \
 	  programs/dwgread -v3 $$d >> check-dwg.log 2>&1; \
 	done
 check-dwg-valgrind: all
 	-mv check-dwg-valgrind.log check-dwg-valgrind.log~
-	for d in `find test/test-data -iname \*.dwg`; do \
-	  echo valgrind --leak-check=full programs/dwgread -v3 $$d | tee -a check-dwg-valgrind.log; \
-	  valgrind --leak-check=full programs/dwgread -v3 $$d >> check-dwg-valgrind.log 2>&1; \
+	for d in `find test/test-data -iname \*.dwg -size -10M`; do \
+	  echo valgrind --leak-check=full programs/dwgread $$d | tee -a check-dwg-valgrind.log; \
+	  valgrind --leak-check=full programs/dwgread $$d >> check-dwg-valgrind.log 2>&1; \
 	done
 
 # clang-analyzer.llvm.org
