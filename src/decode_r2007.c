@@ -567,7 +567,7 @@ decode_rs(const char *src, int block_count, int data_size)
       src = ++src_base;
     }
 
-  return (dst_base);
+  return dst_base;
 }
 
 static char*
@@ -1012,21 +1012,29 @@ read_file_header(Bit_Chain *restrict dat, r2007_file_header *restrict file_heade
 {
   char data[0x3d8]; //0x400 - 5 long
   char *pedata;
-  int64_t seqence_crc;
-  int64_t seqence_key;
-  int64_t compr_crc;
-  int32_t compr_len;
+  uint64_t seqence_crc;
+  uint64_t seqence_key;
+  uint64_t compr_crc;
+  int32_t compr_len, len2;
   int i;
   int error = 0, errcount  = 0;
 
   dat->byte = 0x80;
+  LOG_TRACE("\n=== File header ===\n")
   bit_read_fixed(dat, data, 0x3d8);
   pedata = decode_rs(data, 3, 239);
 
-  seqence_crc = *((int64_t*)pedata);
-  seqence_key = *((int64_t*)&pedata[8]);
-  compr_crc   = *((int64_t*)&pedata[16]);
+  // Note: This is unportable to big-endian
+  seqence_crc = *((uint64_t*)pedata);
+  seqence_key = *((uint64_t*)&pedata[8]);
+  compr_crc   = *((uint64_t*)&pedata[16]);
   compr_len   = *((int32_t*)&pedata[24]);
+  len2        = *((int32_t*)&pedata[28]);
+  LOG_TRACE("seqence_crc: %lX\n", (unsigned long)seqence_crc);
+  LOG_TRACE("seqence_key: %lX\n", (unsigned long)seqence_key);
+  LOG_TRACE("compr_crc:   %lX\n", (unsigned long)compr_crc);
+  LOG_TRACE("compr_len:   %d\n", (int)compr_len); // only this is used
+  LOG_TRACE("len2:        %d\n", (int)len2); // 0 when compressed
 
   if (compr_len > 0)
     error = decompress_r2007((char*)file_header, 0x110, &pedata[32], compr_len);
@@ -1287,7 +1295,7 @@ read_2007_section_header(Bit_Chain*restrict dat, Bit_Chain*restrict hdl_dat,
 {
   Bit_Chain sec_dat, str_dat;
   int error;
-  LOG_TRACE("\nHeader\n-------------------\n")
+  LOG_TRACE("\nSection Header\n-------------------\n")
   error = read_data_section(&sec_dat, dat, sections_map,
                             pages_map, SECTION_HEADER);
   if (error)
