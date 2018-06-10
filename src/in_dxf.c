@@ -418,15 +418,20 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
 //FIELD_VECTOR_N(name, type, size):
 // reads data of the type indicated by 'type' 'size' times and stores
 // it all in the vector called 'name'.
+//for BD we need to use %lf not %g
+#undef FORMAT_BD
+#define FORMAT_BD "%lf"
 #define FIELD_VECTOR_N(name, type, size, dxf)\
   if (dxf)\
     {\
       for (vcount=0; vcount < (int)size; vcount++)\
         {\
           sscanf(&dat->chain[dat->byte], #name ": " FORMAT_##type ",\n", \
-                 &_obj->name[vcount]);                                  \
+                 &_obj->name[vcount]);\
         }\
     }
+#undef FORMAT_BD
+#define FORMAT_BD "%g"
 #define FIELD_VECTOR_T(name, size, dxf)\
   if (dxf) {\
     PRE (R_2007) {                                                   \
