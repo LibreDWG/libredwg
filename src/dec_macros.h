@@ -193,7 +193,8 @@
 #define FIELD_3DVECTOR(name,dxf) FIELD_3BD_1(name,dxf)
 #define FIELD_TIMEBLL(name,dxf) \
   { _obj->name = bit_read_TIMEBLL(dat); \
-    LOG_TRACE(#name ": " FORMAT_BL "." FORMAT_BL "\n", _obj->name.days, _obj->name.ms); }
+    LOG_TRACE(#name ": %.8f  (" FORMAT_BL ", " FORMAT_BL ") [TIMEBLL %d]\n", \
+              _obj->name.value, _obj->name.days, _obj->name.ms, dxf); }
 #define FIELD_CMC(name,dxf) \
   { bit_read_CMC(dat, &_obj->name); \
     LOG_TRACE(#name ": index %d\n", _obj->name.index); }

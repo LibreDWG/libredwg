@@ -261,6 +261,7 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
     GROUP(dxf);\
     fwrite(&s, 8, 1, dat->fh);\
   }
+  
 #define FIELD_MC(name,dxf) FIELD_RC(name,dxf)
 #define FIELD_MS(name,dxf)  FIELD_RS(name,dxf)
 #define FIELD_BT(name,dxf)    FIELD_BD(name, dxf);
@@ -281,10 +282,10 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
 #define FIELD_3DPOINT(name,dxf) FIELD_3RD(name,dxf)
 #define FIELD_CMC(name,dxf) VALUE_RS(_obj->name.index, dxf)
 #define HEADER_CMC(name,dxf) \
-    HEADER_9(name);\
-    VALUE_RS(dwg->header_vars.name.index, dxf)
-#define FIELD_TIMEBLL(name,dxf) \
-  VALUE_RL(_obj->name.days, dxf); VALUE_RL(_obj->name.ms, dxf)
+    HEADER_9(name); VALUE_RS(dwg->header_vars.name.index, dxf)
+#define HEADER_TIMEBLL(name,dxf) \
+    HEADER_9(name); FIELD_TIMEBLL(name,dxf)
+#define FIELD_TIMEBLL(name,dxf) VALUE_RD(_obj->name.value, dxf)
 
 //FIELD_VECTOR_N(name, type, size):
 // reads data of the type indicated by 'type' 'size' times and stores

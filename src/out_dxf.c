@@ -122,13 +122,13 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
 
 #define HEADER_3D(name)\
   HEADER_9(name);\
-  POINT_3D (name, header_vars.name, 10, 20, 30);
+  POINT_3D (name, header_vars.name, 10, 20, 30)
 #define HEADER_2D(name)\
   HEADER_9(name);\
-  POINT_2D (name, header_vars.name, 10, 20);
+  POINT_2D (name, header_vars.name, 10, 20)
 #define HEADER_BLL(name, dxf) \
   HEADER_9(name);\
-  VALUE_BLL(dwg->header_vars.name, dxf);
+  VALUE_BLL(dwg->header_vars.name, dxf)
 
 #define SECTION(section) fprintf(dat->fh, "  0\r\nSECTION\r\n  2\r\n" #section "\r\n")
 #define ENDSEC()         fprintf(dat->fh, "  0\r\nENDSEC\r\n")
@@ -239,9 +239,11 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
 #define FIELD_3DPOINT(name,dxf) FIELD_3BD(name,dxf)
 #define FIELD_CMC(name,dxf)\
   VALUE_RS(_obj->name.index, dxf)
+#define HEADER_TIMEBLL(name, dxf) \
+  HEADER_9(name); FIELD_TIMEBLL(name, dxf)
 #define FIELD_TIMEBLL(name,dxf) \
-  GROUP(dxf);\
-  fprintf(dat->fh, FORMAT_BL "." FORMAT_BL "\r\n", _obj->name.days, _obj->name.ms)
+  GROUP(dxf); fprintf(dat->fh, FORMAT_RL "." FORMAT_RL "\r\n", \
+                      _obj->name.days, _obj->name.ms)
 #define HEADER_CMC(name,dxf) \
     HEADER_9(name);\
     VALUE_RS(dwg->header_vars.name.index, dxf)

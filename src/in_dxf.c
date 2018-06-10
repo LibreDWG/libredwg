@@ -266,13 +266,16 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
 
 #define HEADER_3D(name)\
   HEADER_9(name);\
-  POINT_3D (name, header_vars.name, 10, 20, 30);
+  POINT_3D (name, header_vars.name, 10, 20, 30)
 #define HEADER_2D(name)\
   HEADER_9(name);\
-  POINT_2D (name, header_vars.name, 10, 20);
+  POINT_2D (name, header_vars.name, 10, 20)
 #define HEADER_BLL(name, dxf) \
   HEADER_9(name);\
-  VALUE_BLL(dwg->header_vars.name, dxf);
+  VALUE_BLL(dwg->header_vars.name, dxf)
+#define HEADER_TIMEBLL(name, dxf) \
+  HEADER_9(name);\
+  FIELD_TIMEBLL(name, dxf)
 
 #define SECTION(section) RECORD(SECTION); PAIR(2, section)
 #define ENDSEC()       RECORD(ENDSEC)
@@ -378,7 +381,7 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
   VALUE_RS(_obj->name.index, dxf)
 #define FIELD_TIMEBLL(name,dxf) \
   GROUP(dxf);\
-  sscanf(&dat->chain[dat->byte], "%ld.%ld", \
+  sscanf(&dat->chain[dat->byte], "%u.%u", \
         &_obj->name.days, &_obj->name.ms)
 #define HEADER_CMC(name,dxf) \
     HEADER_9(name);\

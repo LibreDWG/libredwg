@@ -156,6 +156,7 @@ extern "C" {
 typedef struct _dwg_time_bll {
   BITCODE_BL days;
   BITCODE_BL ms;
+  BITCODE_BD value;
 } Dwg_Bitcode_TimeBLL;
 
 typedef struct _dwg_bitcode_2rd

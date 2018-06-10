@@ -175,21 +175,16 @@
   }
   HEADER_RC (SKPOLY, 70);
 
-  ms = (double)_obj->TDCREATE.ms;
-  HEADER_VALUE (TDCREATE, RD, 40, _obj->TDCREATE.days + ms);
-  SINCE(R_13) {
-    HEADER_VALUE (TDUCREATE, RD, 40, _obj->TDCREATE.days + ms);
-  }
-  ms = (double)_obj->TDUPDATE.ms;
-  HEADER_VALUE (TDUPDATE, RD, 40, _obj->TDUPDATE.days + ms);
-  SINCE(R_13) { //TODO decode properly
-    ms = (double)_obj->TDUPDATE.ms;
-    HEADER_VALUE (TDUUPDATE, RD, 40, _obj->TDUPDATE.days + ms);
-  }
-  ms = (double)dwg->header_vars.TDINDWG.ms;
-  HEADER_VALUE (TDINDWG, RD, 40, dwg->header_vars.TDINDWG.days + ms);
-  ms = (double)dwg->header_vars.TDUSRTIMER.ms;
-  HEADER_VALUE (TDUSRTIMER, RD, 40, dwg->header_vars.TDUSRTIMER.days + ms);
+  HEADER_TIMEBLL (TDCREATE, 40);
+  /*SINCE(R_13) {
+    HEADER_TIMEBLL (TDUCREATE, 40);
+  }*/
+  HEADER_TIMEBLL (TDUPDATE, 40);
+  /*SINCE(R_13) {
+    HEADER_TIMEBLL (TDUUPDATE, 40);
+  }*/
+  HEADER_TIMEBLL (TDINDWG, 40);
+  HEADER_TIMEBLL (TDUSRTIMER, 40);
 
   HEADER_VALUE (USRTIMER, RC, 70, 1); // 1
   HEADER_RD (ANGBASE, 50);
@@ -326,4 +321,3 @@
   }
 
   ENDSEC();
-
