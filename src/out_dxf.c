@@ -1125,10 +1125,12 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       RECORD(BLOCK_RECORD);
       error |= dwg_dxf_BLOCK_HEADER(dat, obj);
     }
-    obj = dwg_ref_get_object(dwg, _ctrl->paper_space);
-    if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
-      RECORD(BLOCK_RECORD);
-      error |= dwg_dxf_BLOCK_HEADER(dat, obj);
+    if (_ctrl->paper_space) {
+      obj = dwg_ref_get_object(dwg, _ctrl->paper_space);
+      if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
+        RECORD(BLOCK_RECORD);
+        error |= dwg_dxf_BLOCK_HEADER(dat, obj);
+      }
     }
     ENDTAB();
   }
