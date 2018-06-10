@@ -36,8 +36,8 @@ static unsigned int cur_ver = 0;
 
 // only for temp. debugging, to abort on obviously wrong sizes.
 // should be a bit larger then the filesize.
-#define DBG_MAX_COUNT 0x10000
-#define DBG_MAX_SIZE  0xf00000
+#define DBG_MAX_COUNT 0x100000
+#define DBG_MAX_SIZE  0xff0000 /* should be dat->size */
 
 typedef struct r2007_file_header
 {
@@ -597,8 +597,8 @@ read_system_page(Bit_Chain* dat, int64_t size_comp, int64_t size_uncomp,
   // Multiply with codeword size (255) and round to a multiple of 8
   page_size = (block_count * 255 + 7) & ~7;
 
-  assert((uint64_t)size_comp < DBG_MAX_SIZE);
-  assert((uint64_t)size_uncomp < DBG_MAX_SIZE);
+  assert((uint64_t)size_comp < dat->size);
+  assert((uint64_t)size_uncomp < dat->size);
   assert((uint64_t)repeat_count < DBG_MAX_COUNT);
   assert((uint64_t)page_size < DBG_MAX_COUNT);
 
@@ -807,14 +807,18 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
       LOG_HANDLE("  name length:   %"PRIu64"\n", section->name_length)
       LOG_TRACE("  unknown:       %"PRIu64"\n", section->unknown)
       LOG_TRACE("  encoding:      %"PRIu64"\n", section->encoded)
-      LOG_TRACE("  num pages:     %"PRIu64"\n", section->num_pages)
+      LOG_TRACE("  num pages:     %"PRIu64"\n", section->num_pages);
 
       //debugging sanity
-      assert(section->data_size <  DBG_MAX_SIZE);
-      assert(section->max_size  <  DBG_MAX_SIZE);
-      assert(section->name_length <  DBG_MAX_SIZE);
-      assert(section->num_pages < 0x10000);
-
+#if 0
+      /* compressed */
+      if (section->data_size > 2 * dat->size)
+        return DWG_ERR_VALUEOUTOFBOUNDS;
+      assert(section->data_size < dat->size + 0x100000);
+      assert(section->max_size  < dat->size + 0x100000);
+      assert(section->name_length < dat->size);
+      assert(section->num_pages < DBG_MAX_COUNT);
+#endif
       section->next  = NULL;
       section->pages = NULL;
 
@@ -1061,7 +1065,7 @@ read_file_header(Bit_Chain *restrict dat, r2007_file_header *restrict file_heade
   if (!error) {
 
 #define VALID_SIZE(var) \
-    if (var < 0 || var > DBG_MAX_SIZE) { \
+    if (var < 0 || var > dat->size) { \
       errcount++; \
       error |= DWG_ERR_VALUEOUTOFBOUNDS; \
       LOG_ERROR("%s Invalid %s %ld > MAX_SIZE", __FUNCTION__, #var, \
@@ -1069,7 +1073,7 @@ read_file_header(Bit_Chain *restrict dat, r2007_file_header *restrict file_heade
       var = 0; \
     }
 #define VALID_COUNT(var) \
-    if (var < 0 || var > DBG_MAX_COUNT) { \
+    if (var < 0 || var > dat->size) { \
       errcount++; \
       error |= DWG_ERR_VALUEOUTOFBOUNDS; \
       LOG_ERROR("%s Invalid %s %ld > MAX_COUNT", __FUNCTION__, #var, \
@@ -1397,10 +1401,10 @@ read_2007_section_handles(Bit_Chain* dat, Bit_Chain* hdl,
       long unsigned int startpos = hdl_dat.byte;
 
       section_size = bit_read_RS_LE(&hdl_dat);
-      LOG_TRACE("Section size: %u\n", section_size);
-      if (section_size > 2034)
+      LOG_TRACE("\nSection size: %u\n", section_size);
+      if (section_size > 2050)
         {
-          LOG_ERROR("Object-map section size greater than 2034!");
+          LOG_ERROR("Object-map section size greater than 2050!");
           return DWG_ERR_VALUEOUTOFBOUNDS;
         }
 
