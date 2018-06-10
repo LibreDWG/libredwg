@@ -209,6 +209,8 @@ Some projects that use DWG (and specifically LibreDWG) are:
 @table @asis
 @item GRASS GIS
 http://grass.osgeo.org/
+@item PythonCAD
+http://pythoncad.sourceforge.net/dokuwiki/doku.php?id=r38_roadmap
 @end table
 
 Related libraries:
