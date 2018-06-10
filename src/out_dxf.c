@@ -94,9 +94,15 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
   if (dxf && value) { \
     fprintf(dat->fh, "%3i\r\n%lX\r\n", dxf, value->absolute_ref); \
   }
+// names on: 6 7. which else?
 #define FIELD_HANDLE(name, handle_code, dxf) \
   if (dxf && _obj->name) { \
-    fprintf(dat->fh, "%3i\r\n%lX\r\n", dxf, _obj->name->absolute_ref); \
+    if (dxf == 6) \
+      FIELD_HANDLE_NAME(name, dxf, LTYPE) \
+    else if (dxf == 7) \
+      FIELD_HANDLE_NAME(name, dxf, STYLE) \
+    else \
+      fprintf(dat->fh, "%3i\r\n%lX\r\n", dxf, _obj->name->absolute_ref); \
   }
 #define HEADER_9(name) \
     GROUP(9);\
@@ -162,13 +168,14 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
     GCC_DIAG_RESTORE \
   }
 
-#define HEADER_HANDLE_NAME(name, dxf, section) \
-  HEADER_9(name);\
+#define FIELD_HANDLE_NAME(name, dxf, section) \
   {\
-    Dwg_Object_Ref *ref = dwg->header_vars.name;\
+    Dwg_Object_Ref *ref = _obj->name;\
     Dwg_Object *o = ref ? ref->obj : NULL;\
-    dxf_write_handle(dat, o, o ? o->tio.object->tio.section->entry_name : (char*)"", dxf); \
+    dxf_write_handle(dat, o, o ? o->tio.object->tio.section->entry_name : (char*)"0", dxf); \
   }
+#define HEADER_HANDLE_NAME(name, dxf, section) \
+  HEADER_9(name); FIELD_HANDLE_NAME(name, dxf, section)
 
 #define FIELD_DATAHANDLE(name, code, dxf) FIELD_HANDLE(name, code, dxf)
 #define FIELD_HANDLE_N(name, vcount, handle_code, dxf) FIELD_HANDLE(name, handle_code, dxf)
