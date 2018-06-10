@@ -1355,7 +1355,7 @@ read_two_byte_offset(Bit_Chain *restrict dat, int *restrict lit_length)
  */
 static int
 decompress_R2004_section(Bit_Chain *restrict dat, char *restrict decomp,
-                         unsigned long int comp_data_size)
+                         uint32_t comp_data_size)
 {
   int lit_length, i;
   int comp_offset, comp_bytes;
@@ -1363,6 +1363,12 @@ decompress_R2004_section(Bit_Chain *restrict dat, char *restrict decomp,
   long unsigned int start_byte = dat->byte;
   char *src, *dst = decomp;
 
+  if (comp_data_size > dat->size - start_byte) // bytes left to read
+    {
+      LOG_ERROR("Invalid comp_data_size %lu > %lu bytes left",
+                (unsigned long)comp_data_size, dat->size - dat->byte)
+      return DWG_ERR_VALUEOUTOFBOUNDS;
+    }
   // length of the first sequence of uncompressed or literal data.
   lit_length = read_literal_length(dat, &opcode1);
   bit_read_fixed(dat, decomp, lit_length);
@@ -1547,8 +1553,8 @@ find_section(Dwg_Data *dwg, unsigned long int index)
  */
 static int
 read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
-                        unsigned long int comp_data_size,
-                        unsigned long int decomp_data_size)
+                        uint32_t comp_data_size,
+                        uint32_t decomp_data_size)
 {
   char *decomp, *ptr;
   unsigned int i, j;
@@ -1557,7 +1563,7 @@ read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
   uint64_t start_offset;
   int error;
 
-  decomp = (char *)calloc(decomp_data_size, sizeof(char));
+  decomp = (char *)calloc(decomp_data_size, 1);
   if (!decomp)
     {
       LOG_ERROR("Out of memory");
@@ -1655,18 +1661,18 @@ read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
 #pragma pack(1)
 typedef union _encrypted_section_header
 {
-  unsigned long int long_data[8];
+  uint32_t long_data[8];
   unsigned char char_data[32];
   struct
   {
-    unsigned long int tag;
-    BITCODE_RL section_type;
-    unsigned long int data_size;
-    unsigned long int section_size;
-    unsigned long int start_offset;
-    unsigned long int unknown;
-    unsigned long int checksum_1;
-    unsigned long int checksum_2;
+    uint32_t tag;
+    uint32_t section_type;
+    uint32_t data_size;
+    uint32_t section_size;
+    uint32_t start_offset;
+    uint32_t unknown;
+    uint32_t checksum_1;
+    uint32_t checksum_2;
   } fields;
 } encrypted_section_header;
 
@@ -1929,7 +1935,7 @@ read_2004_section_header(Bit_Chain* dat, Dwg_Data *dwg)
       }
     }
   free(sec_dat.chain);
-  return 0;
+  return error;
 }
 
 /* R2004, 2010+ Handles Section
@@ -3093,7 +3099,6 @@ decode_preR13_entities(unsigned long start, unsigned long end,
       Dwg_Object *obj;
       Dwg_Object_Entity* ent;
       BITCODE_RS crc;
-      int error;
 
       if (!num)
         dwg->object = (Dwg_Object *) malloc(REFS_PER_REALLOC * sizeof(Dwg_Object));

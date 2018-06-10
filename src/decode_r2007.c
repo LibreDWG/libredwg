@@ -468,6 +468,11 @@ decompress_r2007(char *restrict dst, int dst_size,
   char *dst_end = dst + dst_size;
   char *src_end = src + src_size;
 
+  if (!src)
+    {
+      LOG_ERROR("Empty src argument to %s\n", __FUNCTION__);
+      return DWG_ERR_INTERNALERROR;
+    }
   unsigned char opcode = *src++;
   LOG_INSANE("decompress_r2007(%p %d %p %d)\n", dst, dst_size, src, src_size);
 
@@ -597,7 +602,13 @@ read_system_page(Bit_Chain* dat, int64_t size_comp, int64_t size_uncomp,
   assert((uint64_t)repeat_count < DBG_MAX_COUNT);
   assert((uint64_t)page_size < DBG_MAX_COUNT);
 
-  data = (char*)malloc(size_uncomp + page_size);
+  if (page_size > dat->size - dat->byte) // bytes left to read
+    {
+      LOG_ERROR("Invalid page_size %ld > %lu bytes left",
+                (long)page_size, dat->size - dat->byte);
+      return NULL;
+    }
+  data = (char*)calloc(size_uncomp, page_size);
   if (!data) {
     LOG_ERROR("Out of memory")
     return NULL;
@@ -611,7 +622,6 @@ read_system_page(Bit_Chain* dat, int64_t size_comp, int64_t size_uncomp,
     (void)decompress_r2007(data, size_uncomp, pedata, size_comp);
   else
     memcpy(data, pedata, size_uncomp);
-
   free(pedata);
 
   return data;
@@ -630,12 +640,11 @@ read_data_page(Bit_Chain* dat, unsigned char *decomp, int64_t page_size,
   char *rsdata;        // RS encoded data
   char *pedata;        // Pre RS encoded data
 
-    // Round to a multiple of 8
+  // Round to a multiple of 8
   pesize = ((size_comp + 7) & ~7);
-
   block_count = (pesize + 0xFB - 1) / 0xFB;
 
-  rsdata = (char*)malloc(page_size * sizeof(char));
+  rsdata = (char*)calloc(1, page_size);
   if (rsdata == NULL) {
     LOG_ERROR("Out of memory")
     return DWG_ERR_OUTOFMEM;
@@ -670,7 +679,7 @@ read_data_section(Bit_Chain *sec_dat, Bit_Chain *dat, r2007_section *sections_ma
   }
 
   max_decomp_size = section->data_size;
-  decomp = malloc(max_decomp_size);
+  decomp = calloc(max_decomp_size, 1);
   if (decomp == NULL) {
     LOG_ERROR("Out of memory")
     return DWG_ERR_OUTOFMEM;
@@ -685,6 +694,13 @@ read_data_section(Bit_Chain *sec_dat, Bit_Chain *dat, r2007_section *sections_ma
           free(decomp);
           LOG_ERROR("Failed to find page %d", (int)section_page->id)
           return DWG_ERR_PAGENOTFOUND;
+        }
+      if (section_page->offset > max_decomp_size)
+        {
+          free(decomp);
+          LOG_ERROR("Invalid section_page->offset %ld > %ld",
+                    (long)section_page->offset, (long)max_decomp_size)
+          return DWG_ERR_VALUEOUTOFBOUNDS;
         }
 
       dat->byte = page->offset;
@@ -1473,6 +1489,13 @@ read_r2007_meta_data(Bit_Chain *dat, Bit_Chain *hdl_dat,
       return DWG_ERR_SECTIONNOTFOUND;
     }
   dat->byte = page->offset;
+  if (file_header.sections_map_size_comp > dat->byte - dat->size)
+    {
+      LOG_ERROR("%s Invalid comp_data_size %lu > %lu bytes left",
+                __FUNCTION__, (unsigned long)file_header.sections_map_size_comp,
+                dat->size - dat->byte)
+      return DWG_ERR_VALUEOUTOFBOUNDS;
+    }
   sections_map = read_sections_map(dat, file_header.sections_map_size_comp,
                                    file_header.sections_map_size_uncomp,
                                    file_header.sections_map_correction);

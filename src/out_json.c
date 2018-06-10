@@ -536,7 +536,7 @@ json_header_write(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Dwg_Header_Variables* _obj = &dwg->header_vars;
   Dwg_Object* obj = NULL;
-  const int minimal = dwg->opts & 0x10;
+  //const int minimal = 0;
   char buf[4096];
   double ms;
   const char* codepage =

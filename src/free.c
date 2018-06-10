@@ -655,7 +655,7 @@ dwg_free(Dwg_Data * dwg)
           env_var_checked_p = 1;
         }
 #endif  /* USE_TRACING */
-      LOG_INFO("dwg_free\n")
+      LOG_INFO("\n============\ndwg_free\n")
       // copied table fields have duplicate pointers, but are freed only once
       for (i=0; i < dwg->num_objects; ++i)
         {
