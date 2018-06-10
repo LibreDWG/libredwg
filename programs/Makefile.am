@@ -23,7 +23,7 @@ LDADD   = $(top_builddir)/src/libredwg.la -lm
 bin_PROGRAMS = dwgread dwgbmp dwg2dxf dwg2SVG dwglayers
 noinst_PROGRAMS =
 dist_man1_MANS = dwgread.1 dwgbmp.1 dwg2dxf.1 dwg2SVG.1 dwglayers.1
-DISTCLEANFILES =
+DISTCLEANFILES = core
 
 if HAVE_LIBPS
 bin_PROGRAMS += dwg2ps

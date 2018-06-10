@@ -73,6 +73,7 @@ run ()
     else
         if test $bprog = dwgrewrite -o $bprog = dwgwrite -o $bprog = dxf2dwg
         then
+            test -f core && rm core
             tmpnum=$(expr 1 + $problems)
             echo $(basename $0): TODO $prog $tmpnum failures
             ls -l $log
