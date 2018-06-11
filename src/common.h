@@ -11,10 +11,11 @@
 /*****************************************************************************/
 
 /*
- * common.c: common general functions and macros
+ * common.h: common general functions and macros
  * written by Felipe Castro
  * modified by Felipe Corrêa da Silva Sances
  * modified by Rodrigo Rodrigues da Silva
+ * modified by Reini Urban
  */
 
 #ifndef COMMON_H
