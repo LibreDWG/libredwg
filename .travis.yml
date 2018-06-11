@@ -32,8 +32,8 @@ matrix:
 
 branches:
   except:
-    - /^v[0-9]+/
     - appveyor
+    - /^work/
 
 install:
   - sh autogen.sh

@@ -28,12 +28,11 @@ environment:
 clone_depth: 1
 # we tag only already tested and deployed commits
 skip_tags: true
-#branches:
-#  only:
-#    - master
-#    - /^smoke/
-#    - /^maint-/
-#    - /^win/
+branches:
+  only:
+    - master
+    - /^smoke/
+    - /^win-/
 
 init:
   - git config --global core.autocrlf input
