@@ -201,7 +201,7 @@ dwg_read_file(const char *restrict filename, Dwg_Data *restrict dwg)
   bit_chain.chain = NULL;
   bit_chain.size = 0;
 
-  return 0;
+  return error;
 }
 
 /* if write support is enabled */
@@ -339,13 +339,13 @@ dwg_write_file(const char *restrict filename, const Dwg_Data *restrict dwg)
   if (!stat (filename, &attrib))
     {
       LOG_ERROR("The file already exists. We won't overwrite it.")
-      return DWG_ERR_IOERROR;
+      return error | DWG_ERR_IOERROR;
     }
   fh = fopen (filename, "wb");
   if (!fh)
     {
       LOG_ERROR("Failed to create the file: %s\n", filename)
-      return DWG_ERR_IOERROR;
+      return error | DWG_ERR_IOERROR;
     }
 
   // Write the data into the file
@@ -356,7 +356,7 @@ dwg_write_file(const char *restrict filename, const Dwg_Data *restrict dwg)
       free (dat.chain);
       dat.chain = NULL;
       dat.size = 0;
-      return DWG_ERR_IOERROR;
+      return error | DWG_ERR_IOERROR;
     }
   fclose (fh);
 
@@ -366,7 +366,7 @@ dwg_write_file(const char *restrict filename, const Dwg_Data *restrict dwg)
     dat.size = 0;
   }
 
-  return 0;
+  return error;
 }
 #endif /* USE_WRITE */ 
 

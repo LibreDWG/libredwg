@@ -80,13 +80,13 @@ test_SVG(char *filename, unsigned int opts)
   memset(&g_dwg, 0, sizeof(dwg_data));
   g_dwg.opts = opts;
   error = dwg_read_file(filename, &g_dwg);
-  if (!error)
+  if (error < DWG_ERR_CRITICAL)
     output_SVG(&g_dwg);
 
   dwg_free(&g_dwg);
   /* This value is the return value for `main',
      so clamp it to either 0 or 1.  */
-  return error ? 1 : 0;
+  return error < DWG_ERR_CRITICAL ? 0 : 1;
 }
 
 static void

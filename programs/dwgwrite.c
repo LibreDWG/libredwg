@@ -66,7 +66,7 @@ main(int argc, char *argv[])
 {
   unsigned int opts = 1; //loglevel 1
   int i = 1;
-  int error;
+  int error = 0;
   Dwg_Data dwg;
   const char *fmt = NULL;
   const char *infile = NULL;
@@ -199,8 +199,8 @@ main(int argc, char *argv[])
   }
   if (!outfile)
     outfile = suffix (infile, "dwg");
-  error = dwg_write_file(outfile, &dwg);
+  error |= dwg_write_file(outfile, &dwg);
   dwg_free(&dwg);
 
-  return error;
+  return error >= DWG_ERR_CRITICAL ? 1 : 0;
 }

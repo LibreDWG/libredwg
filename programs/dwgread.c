@@ -183,5 +183,5 @@ main(int argc, char *argv[])
   if (dwg.header.version)
     dwg_free(&dwg);
 
-  return error;
+  return error >= DWG_ERR_CRITICAL ? 1 : 0;
 }
