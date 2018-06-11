@@ -1097,7 +1097,7 @@ read_file_header(Bit_Chain *restrict dat, r2007_file_header *restrict file_heade
   return error;
 }
 
-void
+int
 obj_string_stream(Bit_Chain *dat,
                   Dwg_Object *restrict obj,
                   Bit_Chain *str)
@@ -1113,7 +1113,7 @@ obj_string_stream(Bit_Chain *dat,
   obj->has_strings = bit_read_B(str);
   LOG_TRACE(" has_strings: %d\n", (int)obj->has_strings);
   if (!obj->has_strings)
-    return;
+    return 0;
 
   bit_advance_position(str, -1);
   str->byte -= 3;
@@ -1134,14 +1134,15 @@ obj_string_stream(Bit_Chain *dat,
   str->byte -= 2;
   if (data_size > obj->bitsize)
     {
-      LOG_ERROR("Invalid string stream data_size: @%lu.%u", str->byte, str->bit & 7);
+      LOG_TRACE("Invalid string stream data_size: @%lu.%u", str->byte, str->bit & 7);
       obj->has_strings = 0;
-      return;
+      return DWG_ERR_NOTYETSUPPORTED; // a very low severity error
     }
   obj->stringstream_size = data_size;
   bit_advance_position(str, -(int)data_size);
   //LOG_TRACE(" %d: @%lu.%u (%lu)\n", -(int)data_size - 16, str->byte, str->bit & 7,
   //          bit_position(str));
+  return 0;
 }
 
 void

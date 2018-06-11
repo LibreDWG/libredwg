@@ -66,7 +66,7 @@ void
 dwg_free_xdata_resbuf(Dwg_Resbuf *rbuf);
 
 /* from decode_r2007.c */
-void
+int
 obj_string_stream(Bit_Chain *dat,
                   Dwg_Object *restrict obj,
                   Bit_Chain *str);

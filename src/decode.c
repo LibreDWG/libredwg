@@ -569,7 +569,7 @@ decode_entity_preR13(Bit_Chain* dat, Dwg_Object *obj, Dwg_Object_Entity *ent)
   if (ent->extra_r11 & 2)
     {
       int error = dwg_decode_eed(dat, (Dwg_Object_Object *)ent);
-      if (error)
+      if (error & (DWG_ERR_INVALIDTYPE|DWG_ERR_VALUEOUTOFBOUNDS))
         return error;
     }
   if (FIELD_VALUE(flag_r11) & 2)
@@ -2385,7 +2385,7 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
 {
   unsigned int i;
   BITCODE_BS size;
-  int error;
+  int error = 0;
   Dwg_Data *dwg = ent->dwg;
   Dwg_Object *_obj = &dwg->object[ent->objid];
 
@@ -2428,11 +2428,11 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
         LOG_HANDLE("hdlpos: %lu)\n", _obj->hdlpos);
       }
       // and set the string stream (restricted to size)
-      obj_string_stream(dat, _obj, str_dat);
+      error |= obj_string_stream(dat, _obj, str_dat);
     }
 
-  error = bit_read_H(dat, &(_obj->handle));
-  if (error)
+  error |= bit_read_H(dat, &(_obj->handle));
+  if (error & DWG_ERR_INVALIDHANDLE)
     {
       LOG_WARN(
           "dwg_decode_entity handle:\tCurrent Bit_Chain address: 0x%0x",
@@ -2449,8 +2449,8 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
   PRE(R_13) {
     return DWG_ERR_NOTYETSUPPORTED;
   }
-  error = dwg_decode_eed(dat, (Dwg_Object_Object *)ent);
-  if (error)
+  error |= dwg_decode_eed(dat, (Dwg_Object_Object *)ent);
+  if (error & (DWG_ERR_INVALIDTYPE|DWG_ERR_VALUEOUTOFBOUNDS))
     return error;
 
   ent->picture_exists = bit_read_B(dat);
@@ -2627,10 +2627,11 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
         LOG_HANDLE("hdlpos: %lu)\n", _obj->hdlpos);
       }
       // and set the string stream (restricted to size)
-      obj_string_stream(dat, _obj, str_dat);
+      error |= obj_string_stream(dat, _obj, str_dat);
     }
 
-  if ((error = bit_read_H(dat, &_obj->handle)))
+  error = bit_read_H(dat, &_obj->handle);
+  if(error & DWG_ERR_INVALIDHANDLE)
     {
       LOG_ERROR("Wrong object handle at pos 0x%0lx", dat->byte)
       _obj->bitsize = 0;
@@ -2642,8 +2643,8 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
   LOG_TRACE("handle: %d.%d.%lX [5]\n", _obj->handle.code,
             _obj->handle.size, _obj->handle.value)
 
-  error = dwg_decode_eed(dat, obj);
-  if (error)
+  error |= dwg_decode_eed(dat, obj);
+  if (error & (DWG_ERR_INVALIDTYPE|DWG_ERR_VALUEOUTOFBOUNDS))
     return error;
 
   VERSIONS(R_13,R_14)
