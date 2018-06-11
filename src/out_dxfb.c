@@ -483,8 +483,9 @@ dxfb_write_xdata(Bit_Chain *restrict dat, Dwg_Resbuf *restrict rbuf, BITCODE_BL 
 }
 
 // r2000+ converts STANDARD to Standard, BYLAYER to ByLayer, BYBLOCK to ByBlock
+//TODO: binary
 static void
-dxf_write_handle(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
+dxfb_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                  char *restrict entry_name, const int dxf)
 {
   if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT && entry_name)
@@ -496,28 +497,28 @@ dxf_write_handle(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       if (dat->from_version >= R_2000 && dat->version < R_2000)
         { // convert the other way round, from newer to older
           if (!strcmp(entry_name, "Standard"))
-            fprintf(dat->fh, "%3i\r\nSTANDARD\r\n", dxf);
+            VALUE_TV ("STANDARD", dxf)
           else if (!strcmp(entry_name, "ByLayer"))
-            fprintf(dat->fh, "%3i\r\nBYLAYER\r\n", dxf);
+            VALUE_TV ("BYLAYER", dxf)
           else if (!strcmp(entry_name, "ByBlock"))
-            fprintf(dat->fh, "%3i\r\nBYBLOCK\r\n", dxf);
+            VALUE_TV ("BYBLOCK", dxf)
           else if (!strcmp(entry_name, "*Active"))
-            fprintf(dat->fh, "%3i\r\n*ACTIVE\r\n", dxf);
+            VALUE_TV ("*ACTIVE", dxf)
           else
-            fprintf(dat->fh, "%3i\r\n%s\r\n", dxf, entry_name);
+            VALUE_TV (entry_name, dxf)
         }
       else
         { // convert some standard names
           if (dat->version >= R_2000 && !strcmp(entry_name, "STANDARD"))
-            fprintf(dat->fh, "%3i\r\nStandard\r\n", dxf);
+            VALUE_TV ("Standard", dxf)
           else if (dat->version >= R_2000 && !strcmp(entry_name, "BYLAYER"))
-            fprintf(dat->fh, "%3i\r\nByLayer\r\n", dxf);
+            VALUE_TV ("ByLayer", dxf)
           else if (dat->version >= R_2000 && !strcmp(entry_name, "BYBLOCK"))
-            fprintf(dat->fh, "%3i\r\nByBlock\r\n", dxf);
+            VALUE_TV ("ByBlock", dxf)
           else if (dat->version >= R_2000 && !strcmp(entry_name, "*ACTIVE"))
-            fprintf(dat->fh, "%3i\r\n*Active\r\n", dxf);
+            VALUE_TV ("*Active", dxf)
           else
-            fprintf(dat->fh, "%3i\r\n%s\r\n", dxf, entry_name);
+            VALUE_TV (entry_name, dxf)
         }
     }
   else {
@@ -539,7 +540,7 @@ dxf_write_handle(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       VALUE_TV ("AcDb" #acdbname "TableRecord", 100); \
     }\
   } \
-  dxf_write_handle(dat, obj, _obj->entry_name, 2); \
+  dxfb_cvt_tablerecord(dat, obj, _obj->entry_name, 2); \
   FIELD_RC (flag, 70);
 
 #define LAYER_TABLE_FLAGS(owner, acdbname)      \
@@ -550,7 +551,7 @@ dxf_write_handle(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       VALUE_TV ("AcDb" #acdbname "TableRecord", 100); \
     }\
   } \
-  if (_obj->entry_name) dxf_write_handle(dat, obj, _obj->entry_name, 2); \
+  if (_obj->entry_name) dxfb_cvt_tablerecord(dat, obj, _obj->entry_name, 2); \
   FIELD_RS (flag, 70);
 
 #include "dwg.spec"

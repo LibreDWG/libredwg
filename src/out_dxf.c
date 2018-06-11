@@ -172,7 +172,7 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
   {\
     Dwg_Object_Ref *ref = _obj->name;\
     Dwg_Object *o = ref ? ref->obj : NULL;\
-    dxf_write_handle(dat, o, o ? o->tio.object->tio.section->entry_name : (char*)"0", dxf); \
+    dxf_cvt_tablerecord(dat, o, o ? o->tio.object->tio.section->entry_name : (char*)"0", dxf); \
   }
 #define HEADER_HANDLE_NAME(name, dxf, section) \
   HEADER_9(name); FIELD_HANDLE_NAME(name, dxf, section)
@@ -475,7 +475,7 @@ dxf_write_xdata(Bit_Chain *restrict dat, Dwg_Resbuf *restrict rbuf, BITCODE_BL s
 
 // r2000+ converts STANDARD to Standard, BYLAYER to ByLayer, BYBLOCK to ByBlock
 static void
-dxf_write_handle(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
+dxf_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                  char *restrict entry_name, const int dxf)
 {
   if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT && entry_name)
@@ -532,7 +532,7 @@ dxf_write_handle(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       VALUE_TV ("AcDb" #acdbname "TableRecord", 100); \
     }\
   } \
-  if (_obj->entry_name) dxf_write_handle(dat, obj, _obj->entry_name, 2); \
+  if (_obj->entry_name) dxf_cvt_tablerecord(dat, obj, _obj->entry_name, 2); \
   FIELD_RC (flag, 70);
 
 #define LAYER_TABLE_FLAGS(owner, acdbname) \
@@ -543,7 +543,7 @@ dxf_write_handle(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       VALUE_TV ("AcDb" #acdbname "TableRecord", 100); \
     }\
   } \
-  if (_obj->entry_name) dxf_write_handle(dat, obj, _obj->entry_name, 2); \
+  if (_obj->entry_name) dxf_cvt_tablerecord(dat, obj, _obj->entry_name, 2); \
   FIELD_RS (flag, 70);
 
 #include "dwg.spec"
