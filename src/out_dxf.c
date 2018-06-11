@@ -357,10 +357,7 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
 #define XDICOBJHANDLE(code)
 #define ENT_XDICOBJHANDLE(code)
 
-#define COMMON_ENTITY_HANDLE_DATA \
-  SINCE(R_13) { \
-    error |= dxf_common_entity_handle_data(dat, obj); \
-  }
+#define COMMON_ENTITY_HANDLE_DATA
 #define SECTION_STRING_STREAM
 #define START_STRING_STREAM
 #define END_STRING_STREAM
@@ -389,7 +386,10 @@ dwg_dxf_##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
             obj->handle.value); \
   VALUE_HANDLE (obj->parent->header_vars.BLOCK_RECORD_MSPACE, 5, 330); \
   if (dat->from_version >= R_2000) \
-    VALUE_TV ("AcDbEntity", 100)
+    VALUE_TV ("AcDbEntity", 100); \
+  SINCE(R_13) { \
+    error |= dxf_common_entity_handle_data(dat, obj); \
+  }
 
 #define DWG_ENTITY_END return error; \
 }
