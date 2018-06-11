@@ -143,7 +143,7 @@ main (int argc, char *argv[])
 
   dwg.opts = opts;
   fprintf(stderr, "Reading DWG file %s\n", filename_in);
-  error = dwg_read_file(filename_in, &dwg);
+  error = dwg_read_file (filename_in, &dwg);
   if (error >= DWG_ERR_CRITICAL)
     fprintf(stderr, "READ ERROR 0x%x\n", error);
 
@@ -167,22 +167,22 @@ main (int argc, char *argv[])
   if (minimal)
     dwg.opts |= 0x10;
   if (binary) {
-    dat.fh = fopen(filename_out, "wb");
+    dat.fh = fopen (filename_out, "wb");
     if (!dat.fh)
-      fprintf(stderr, "WRITE ERROR %s\n", filename_out);
+      fprintf (stderr, "WRITE ERROR %s\n", filename_out);
     else
-      error = dwg_write_dxfb(&dat, &dwg);
+      error = dwg_write_dxfb (&dat, &dwg);
   } else {
-    dat.fh = fopen(filename_out, "w");
+    dat.fh = fopen (filename_out, "wb");
     if (!dat.fh)
-      fprintf(stderr, "WRITE ERROR %s\n", filename_out);
+      fprintf (stderr, "WRITE ERROR %s\n", filename_out);
     else
-      error = dwg_write_dxf(&dat, &dwg);
+      error = dwg_write_dxf (&dat, &dwg);
   }
   if (error >= DWG_ERR_CRITICAL)
-    fprintf(stderr, "WRITE ERROR\n");
+    fprintf (stderr, "WRITE ERROR\n");
   if (dat.fh)
-    fclose(dat.fh);
+    fclose (dat.fh);
 
   if (filename_out != argv[2])
     free (filename_out);

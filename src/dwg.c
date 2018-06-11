@@ -237,7 +237,7 @@ dxf_read_file(const char *restrict filename, Dwg_Data *restrict dwg)
       LOG_ERROR("Error: %s\n", filename)
       return DWG_ERR_IOERROR;
     }
-  fp = fopen(filename, "r");
+  fp = fopen(filename, "rb");
   if (!fp)
     {
       LOG_ERROR("Could not open file: %s\n", filename)
