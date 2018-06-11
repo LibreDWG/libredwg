@@ -101,6 +101,8 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
       FIELD_HANDLE_NAME(name, dxf, LTYPE) \
     else if (dxf == 7) \
       FIELD_HANDLE_NAME(name, dxf, STYLE) \
+    else if (dxf == 8) \
+      FIELD_HANDLE_NAME(name, dxf, LAYER) \
     else \
       fprintf(dat->fh, "%3i\r\n%lX\r\n", dxf, _obj->name->absolute_ref); \
   }
@@ -168,14 +170,14 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
     GCC_DIAG_RESTORE \
   }
 
-#define FIELD_HANDLE_NAME(name, dxf, section) \
+#define FIELD_HANDLE_NAME(name, dxf, table) \
   {\
     Dwg_Object_Ref *ref = _obj->name;\
     Dwg_Object *o = ref ? ref->obj : NULL;\
-    dxf_cvt_tablerecord(dat, o, o ? o->tio.object->tio.section->entry_name : (char*)"0", dxf); \
+    dxf_cvt_tablerecord(dat, o, o ? o->tio.object->tio.table->entry_name : (char*)"0", dxf); \
   }
-#define HEADER_HANDLE_NAME(name, dxf, section) \
-  HEADER_9(name); FIELD_HANDLE_NAME(name, dxf, section)
+#define HEADER_HANDLE_NAME(name, dxf, table) \
+  HEADER_9(name); FIELD_HANDLE_NAME(name, dxf, table)
 
 #define FIELD_DATAHANDLE(name, code, dxf) FIELD_HANDLE(name, code, dxf)
 #define FIELD_HANDLE_N(name, vcount, handle_code, dxf) FIELD_HANDLE(name, handle_code, dxf)

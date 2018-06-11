@@ -238,20 +238,20 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
     HEADER_9(name);\
     VALUE_H(dwg->header_vars.name, dxf)
 
-#define HANDLE_NAME(name, code, section) \
-  VALUE_HANDLE_NAME(dwg->header_vars.name, dxf, section)
+#define HANDLE_NAME(name, code, table) \
+  VALUE_HANDLE_NAME(dwg->header_vars.name, dxf, table)
 //TODO: convert STANDARD to Standard?
-#define VALUE_HANDLE_NAME(value,dxf,section)\
+#define VALUE_HANDLE_NAME(value,dxf,table)\
   {\
     Dwg_Object_Ref *ref = value;\
     if (ref && ref->obj && ref->obj->supertype == DWG_SUPERTYPE_OBJECT) { \
-      VALUE_TV(ref->obj->tio.object->tio.section->entry_name, dxf);} \
+      VALUE_TV(ref->obj->tio.object->tio.table->entry_name, dxf);} \
     else VALUE_TV("", dxf);\
   }
-#define FIELD_HANDLE_NAME(name,dxf,section) VALUE_HANDLE_NAME(_obj->name,dxf,section)
-#define HEADER_HANDLE_NAME(name,dxf,section)\
+#define FIELD_HANDLE_NAME(name,dxf,table) VALUE_HANDLE_NAME(_obj->name,dxf,table)
+#define HEADER_HANDLE_NAME(name,dxf,table)\
     HEADER_9(name);\
-    VALUE_HANDLE_NAME(dwg->header_vars.name,dxf,section)
+    VALUE_HANDLE_NAME(dwg->header_vars.name,dxf,table)
 
 #define HEADER_RLL(name,dxf) \
   {\
