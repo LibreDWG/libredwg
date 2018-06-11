@@ -27,6 +27,8 @@ dwg_inthash *hash_new(uint32_t size)
 {
   dwg_inthash *hash = malloc(sizeof(dwg_inthash));
   uint32_t cap;
+  if (!hash)
+    return NULL;
   // multiply with load factor,
   // and round size to next power of 2 (fast) or prime (secure),
   cap = (uint32_t)(size * 100.0/HASH_LOAD);
@@ -61,6 +63,10 @@ static void hash_resize(dwg_inthash *hash, uint32_t size)
 
   // key+value pairs
   hash->array = realloc(hash->array, size * sizeof(struct _hashbucket));
+  if (!hash->array) {
+    *hash = oldhash;
+    return;
+  }
   hash->size = size;
   // only if different clear the new slack and insert old
   if (oldhash.array != hash->array) // reinsert all the elements
