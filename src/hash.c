@@ -40,51 +40,33 @@ dwg_inthash *hash_new(uint32_t size)
 }
 
 // if exceeds load factor
-static inline int hash_need_resize(dwg_inthash *hash, uint32_t size)
+static inline int hash_need_resize(dwg_inthash *hash)
 {
-  return (uint32_t)(size * 100.0/HASH_LOAD) > hash->size;
+  return (uint32_t)(hash->elems * 100.0/HASH_LOAD) > hash->size;
 }
 
-static void hash_resize(dwg_inthash *hash, uint32_t size)
+static void hash_resize(dwg_inthash *hash)
 {
-  uint32_t cap;
   dwg_inthash oldhash = *hash;
-  // multiply with load factor,
-  // and round size to next power of 2 (fast) or prime (secure).
-  cap = size * 100/HASH_LOAD;
-  while (size <= cap) // this is slow, but only done once
-    size <<= 1U;
-  if (size <= hash->size)
-    {
-      //LOG_TRACE("hash_resize ignored. new hash size smaller than old one %d <= %d",
-      //          size, hash->size);
-      return;
-    }
+  uint32_t size = hash->size * 2;
+  uint32_t i;
 
-  // key+value pairs
-  hash->array = realloc(hash->array, size * sizeof(struct _hashbucket));
+  // allocate key+value pairs afresh
+  hash->array = calloc(size, sizeof(struct _hashbucket));
   if (!hash->array) {
     *hash = oldhash;
     return;
   }
+  hash->elems = 0;
   hash->size = size;
-  // only if different clear the new slack and insert old
-  if (oldhash.array != hash->array) // reinsert all the elements
+  memset(hash->array, 0, size * sizeof(struct _hashbucket));
+  // spread out the old elements in double space, less collisions
+  for (i=0; i<oldhash.size; i++)
     {
-      uint32_t i;
-      memset(hash->array, 0, size * sizeof(struct _hashbucket));
-      // spread out the old elements in double space, less collisions
-      for (i=0; i<oldhash.size; i++)
-        {
-          if (oldhash.array[i].key)
-            hash_set(hash, oldhash.array[i].key,  oldhash.array[i].value);
-        }
+      if (oldhash.array[i].key)
+        hash_set(hash, oldhash.array[i].key, oldhash.array[i].value);
     }
-  else // same ptr: clear the slack at the end
-    {
-      memset(&hash->array[oldhash.size], 0,
-             (size - oldhash.size) * sizeof(struct _hashbucket));
-    }
+  free(oldhash.array);
   return;
 }
 
@@ -121,7 +103,7 @@ uint32_t hash_get(dwg_inthash *hash, uint32_t key)
     return HASH_NOT_FOUND;
 }
 
-// search or insert. key and value 0 is forbidden.
+// search or insert. key 0 is forbidden.
 void hash_set(dwg_inthash *hash, uint32_t key, uint32_t value)
 {
   uint32_t i = hash_func(key) % hash->size;
@@ -134,6 +116,7 @@ void hash_set(dwg_inthash *hash, uint32_t key, uint32_t value)
   if (!hash->array[i].key) {
     hash->array[i].key = key;
     hash->array[i].value = value;
+    hash->elems++;
     return;
   }
   while (hash->array[i].key)
@@ -149,12 +132,11 @@ void hash_set(dwg_inthash *hash, uint32_t key, uint32_t value)
       if (i == j) // not found
         {
           //fprintf(stderr, "set not found at %d\n", i);
-          i++;
           // if does not exist, add at i+1
-          if (hash_need_resize(hash, hash->size+1)) {
-            // up to here we have no coverage!
+          if (hash_need_resize(hash)) {
             //fprintf(stderr, "resize at %d\n", hash->size);
-            hash_resize(hash, hash->size*2);
+            hash_resize(hash);
+            return hash_set(hash, key, value);
           }
           while (hash->array[i].key) // find next empty slot
             {
@@ -166,7 +148,7 @@ void hash_set(dwg_inthash *hash, uint32_t key, uint32_t value)
               if (i == j) // not found
                 {
                   //fprintf(stderr, "not found resize at %d\n", hash->size);
-                  hash_resize(hash, hash->size*2); // guarantees new empty slots
+                  hash_resize(hash); // guarantees new empty slots
                   hash_set(hash, key, value);
                   return;
                 }
@@ -174,6 +156,7 @@ void hash_set(dwg_inthash *hash, uint32_t key, uint32_t value)
                 { // insert at empty slot
                   hash->array[i].key = key;
                   hash->array[i].value = value;
+                  hash->elems++;
                   return;
                 }
             }
@@ -182,6 +165,7 @@ void hash_set(dwg_inthash *hash, uint32_t key, uint32_t value)
   // empty slot
   hash->array[i].key = key;
   hash->array[i].value = value;
+  hash->elems++;
   return;
 }
 
@@ -190,5 +174,6 @@ void hash_free(dwg_inthash *hash)
   free (hash->array);
   hash->array = NULL;
   hash->size = 0;
+  hash->elems = 0;
   free (hash);
 }

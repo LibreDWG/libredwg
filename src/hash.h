@@ -33,6 +33,7 @@ struct _hashbucket {
 typedef struct _inthash {
   struct _hashbucket *array; /* of key, value pairs */
   uint32_t size;
+  uint32_t elems; // to get the fill rate
 } dwg_inthash;
 
 dwg_inthash *hash_new(uint32_t size);

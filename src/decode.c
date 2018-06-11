@@ -3651,8 +3651,8 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
         }
     }
 
-  if (obj->handle.value)
-    hash_set(dwg->object_map, obj->handle.value, num);
+  LOG_TRACE("object_map{%lX} = %lu\n", obj->handle.value, num);
+  hash_set(dwg->object_map, obj->handle.value, num);
 
   /* Now 1 padding bits until next byte, and then a RS CRC */
   if (dat->bit) {
