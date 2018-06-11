@@ -2268,7 +2268,8 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
                   {
                     LOG_ERROR("Invalid EED string len %d, max %d", lenc, size-4);
                     obj->num_eed = 0;
-                    free(obj->eed[idx].raw);
+                    if (obj->eed[idx].size)
+                      free(obj->eed[idx].raw);
                     free(obj->eed[idx].data);
                     free(obj->eed);
                     dat->byte = end;
