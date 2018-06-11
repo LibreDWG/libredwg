@@ -25,6 +25,7 @@
 #include <inttypes.h>
 
 #define HASH_LOAD 75 // in percent
+#define HASH_NOT_FOUND (uint32_t)-1
 
 struct _hashbucket {
   uint32_t key, value;

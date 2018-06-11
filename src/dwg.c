@@ -643,7 +643,8 @@ Dwg_Object *
 dwg_resolve_handle(const Dwg_Data * dwg, const long unsigned int absref)
 {
   uint32_t i = hash_get(dwg->object_map, (uint32_t)absref);
-  if (!i || i >= dwg->num_objects) //the latter being a bug where we do hash_set()...
+  if (i == HASH_NOT_FOUND ||
+      i >= dwg->num_objects) //the latter being a bug where we do hash_set()...
     {
       if (absref)
         {

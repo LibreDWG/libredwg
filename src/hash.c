@@ -101,9 +101,7 @@ static inline uint32_t hash_func(uint32_t key)
   return key;
 }
 
-// 0 are disallowed keys and values, even if there's no deletion.
-// So 0 means not found. We could change the not found return
-// value to -1 eventually.
+// 0 is disallowed as key, even if there's no deletion.
 uint32_t hash_get(dwg_inthash *hash, uint32_t key)
 {
   uint32_t i = hash_func(key) % hash->size;
@@ -115,9 +113,12 @@ uint32_t hash_get(dwg_inthash *hash, uint32_t key)
       if (i == hash->size)
         i = 0;
       if (i == j) // not found
-        return 0;
+        return HASH_NOT_FOUND;
     }
-  return hash->array[i].value;
+  if (hash->array[i].key)
+    return hash->array[i].value;
+  else
+    return HASH_NOT_FOUND;
 }
 
 // search or insert. key and value 0 is forbidden.
@@ -125,8 +126,8 @@ void hash_set(dwg_inthash *hash, uint32_t key, uint32_t value)
 {
   uint32_t i = hash_func(key) % hash->size;
   uint32_t j = i;
-  if (key == 0 || value == 0) {
-      fprintf(stderr, "forbidden 0 key or value");
+  if (key == 0) {
+      fprintf(stderr, "forbidden 0 key");
       return;
   }
   // empty slot
