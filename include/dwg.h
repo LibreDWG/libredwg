@@ -4905,8 +4905,9 @@ typedef struct _dwg_struct
   Dwg_Object * object;           /*!< list of all objects and entities */
 
   long unsigned int num_entities;    /*!< number of entities in object */
-  long unsigned int num_object_refs; /*!< size of object_ref */
-  Dwg_Object_Ref ** object_ref;      /*!< list of all handles */
+  long unsigned int num_object_refs; /*!< number of object_ref's (resolved handles) */
+  Dwg_Object_Ref **object_ref;       /*!< array of all handles */
+  struct _inthash *object_map;       /*!< map of all handles */
   int dirty_refs; /* 1 if we added an entity, and invalidated all the internal ref->obj's */
 
   Dwg_Object * mspace_block;

@@ -31,6 +31,7 @@
 #include "common.h"
 #include "decode.h"
 #include "dwg.h"
+#include "hash.h"
 #include "encode.h"
 #include "in_dxf.h"
 #include "free.h"
@@ -641,19 +642,16 @@ dwg_ref_get_object_relative(const Dwg_Data *restrict dwg,
 Dwg_Object *
 dwg_resolve_handle(const Dwg_Data * dwg, const long unsigned int absref)
 {
-  // TODO hash table or sorted
-  // This is linear search, absref's are currently unsorted. encode sorts them.
-  long unsigned int i;
-  for (i = 0; i < dwg->num_objects; i++)
+  uint32_t i = hash_get(dwg->object_map, (uint32_t)absref);
+  if (!i || i >= dwg->num_objects) //the latter being a bug where we do hash_set()...
     {
-      if (dwg->object[i].handle.value == absref)
-        return &dwg->object[i];
+      if (absref)
+        {
+          LOG_WARN("Object not found: %lu in %ld objects", absref, dwg->num_objects);
+        }
+      return NULL;
     }
-  if (absref)
-    {
-      LOG_WARN("Object not found: %lu in %ld objects", absref, dwg->num_objects);
-    }
-  return NULL;
+  return &dwg->object[i];
 }
 
 /* set ref->absolute_ref from obj, for a subsequent dwg_resolve_handle() */

@@ -32,6 +32,7 @@
 #include "common.h"
 #include "bits.h"
 #include "dwg.h"
+#include "hash.h"
 #include "decode.h"
 #include "print.h"
 
@@ -131,6 +132,16 @@ dwg_decode(Bit_Chain * dat, Dwg_Data * dwg)
   dwg->dwg_class = NULL;
   dwg->object_ref = NULL;
   dwg->object = NULL;
+  dwg->object_map = hash_new(dat->size/1000);
+  if (!dwg->object_map)
+    {
+      dwg->object_map = hash_new(1024); //whatever, we are obviously on a tiny system
+      if (!dwg->object_map)
+        {
+          LOG_ERROR("Out of memory");
+          return DWG_ERR_OUTOFMEM;
+        }
+    }
 
   memset(&dwg->header_vars, 0, sizeof(Dwg_Header_Variables));
   memset(&dwg->r2004_header.file_ID_string[0], 0, sizeof(dwg->r2004_header));
@@ -2701,7 +2712,6 @@ dwg_decode_handleref(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       else if (dwg->num_object_refs % REFS_PER_REALLOC == 0)
         dwg->object_ref = realloc(dwg->object_ref,
               (dwg->num_object_refs + REFS_PER_REALLOC) * sizeof(Dwg_Object_Ref*));
-
       if (!dwg->object_ref)
         {
           LOG_ERROR("Out of memory");
@@ -3640,6 +3650,8 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
             }
         }
     }
+
+  hash_set(dwg->object_map, obj->handle.value, num);
 
   /* Now 1 padding bits until next byte, and then a RS CRC */
   if (dat->bit) {
