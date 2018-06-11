@@ -24,6 +24,10 @@
 /* (1/7) */
 DWG_ENTITY(TEXT)
 
+  DXF {
+    //TODO can be skipped with DXF if STANDARD
+    FIELD_HANDLE (style, 5, 7);
+  }
   SUBCLASS (AcDbText)
   PRE(R_13) {
     FIELD_2RD (insertion_pt, 10);
@@ -114,7 +118,10 @@ DWG_ENTITY(TEXT)
         //FIXME: should really just lookup the style table; style is the index.
         FIELD_VALUE(style) = 0; //dwg_resolve_handle(obj->parent, obj->linetype_rs);
       }
+#ifndef IS_DXF
       FIELD_HANDLE (style, 5, 7);
+#endif
+      SUBCLASS (AcDbText)
     }
 
 DWG_ENTITY_END
@@ -3539,7 +3546,11 @@ DWG_OBJECT_END
 DWG_ENTITY(LWPOLYLINE)
 
   SUBCLASS (AcDbPolyLine)
-  FIELD_BS (flag, 70);
+  #ifdef IS_DXF
+    VALUE_BS (FIELD_VALUE(flag) & 129, 70); //1 closed, 128 plinegen
+  #else
+    FIELD_BS (flag, 70); //1 closed, 128 plinegen
+  #endif
 
   if (FIELD_VALUE(flag) & 4)
     FIELD_BD (const_width, 43);

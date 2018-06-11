@@ -25,6 +25,7 @@
 #define IF_ENCODE_FROM_SINCE_R13 if (0)
 #define IF_IS_ENCODER 0
 #define IF_IS_DECODER 0
+#define IF_IS_DXF 0
 
 #define SET_PARENT(field, obj)
 #define SET_PARENT_OBJ(field)
@@ -85,7 +86,9 @@
 #endif
 #if defined(IS_DXF)
 #undef  DXF
+#undef  IF_IS_DXF
 #define DXF   if (1)
+#define IF_IS_DXF 1
 #endif
 
 #if defined(IS_FREE)
