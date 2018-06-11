@@ -180,8 +180,9 @@ main(int argc, char *argv[])
             printf("\nSUCCESS 0x%x\n", error);
         }
     }
-  if (dwg.header.version)
-    dwg_free(&dwg);
+  // forget about valgrind. really huge DWG's need endlessly here.
+  //if (dwg.header.version)
+  //  dwg_free(&dwg);
 
   return error >= DWG_ERR_CRITICAL ? 1 : 0;
 }

@@ -200,7 +200,8 @@ main(int argc, char *argv[])
   if (!outfile)
     outfile = suffix (infile, "dwg");
   error |= dwg_write_file(outfile, &dwg);
-  dwg_free(&dwg);
+  // forget about valgrind. really huge DWG's need endlessly here.
+  //dwg_free(&dwg);
 
   return error >= DWG_ERR_CRITICAL ? 1 : 0;
 }

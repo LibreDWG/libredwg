@@ -186,6 +186,7 @@ main (int argc, char *argv[])
 
   if (filename_out != argv[2])
     free (filename_out);
-  dwg_free(&dwg);
+  // forget about valgrind. really huge DWG's need endlessly here.
+  //dwg_free(&dwg);
   return error >= DWG_ERR_CRITICAL ? 1 : 0;
 }
