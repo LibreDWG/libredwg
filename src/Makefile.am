@@ -33,6 +33,7 @@ libredwg_la_SOURCES = \
         out_dxfb.c \
         out_geojson.c \
         free.c \
+        hash.c \
 	dwg_api.c \
 	$(EXTRA_HEADERS)
 if USE_WRITE
@@ -64,6 +65,7 @@ EXTRA_HEADERS = \
 	free.h \
         print.h \
 	logging.h \
+        hash.h \
 	out_dxf.h \
 	out_json.h
 if USE_WRITE

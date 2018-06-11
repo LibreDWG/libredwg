@@ -53,11 +53,12 @@ unpaired = \
 	vertex_mesh
 
 private = bits_test \
-	  decode_test
+	  decode_test \
+	  hash_test
 
 check_PROGRAMS = $(paired) $(unpaired) $(private)
 
-# todo: more dwg versions, in test/test-data
+# todo: more dwg versions, from test/test-data
 EXTRA_DIST = \
 	example_2000.dwg \
 	vertex.mesh \
