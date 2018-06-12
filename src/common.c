@@ -86,16 +86,11 @@ char version_codes[DWG_VERSIONS][7] =
 // map [rVER] to our enum number, not the dwg->header.dwgversion
 // Acad 2018 offers SaveAs DWG: 2018,2013,2010,2007,2004,2004,2000,r14
 //                         DXF: 2018,2013,2010,2007,2004,2004,2000,r12
+// libdxfrw dwg2dxf offers R12, v2000, v2004, v2007, v2010
 EXPORT Dwg_Version_Type dwg_version_as(const char *version)
 {
   if (!strcmp(version, "r2000"))
     return R_2000;
-  else if (!strcmp(version, "r11") || !strcmp(version, "r12"))
-    return R_11;
-  else if (!strcmp(version, "r13"))
-    return R_13;
-  else if (!strcmp(version, "r14"))
-    return R_14;
   else if (!strcmp(version, "r2004"))
     return R_2004;
   else if (!strcmp(version, "r2007"))
@@ -106,24 +101,30 @@ EXPORT Dwg_Version_Type dwg_version_as(const char *version)
     return R_2013;
   else if (!strcmp(version, "r2018"))
     return R_2018;
-  else if (!strcmp(version, "r1.1"))
-    return R_1_1;
-  else if (!strcmp(version, "r1.2"))
-    return R_1_2;
-  else if (!strcmp(version, "r1.4"))
-    return R_1_4;
-  else if (!strcmp(version, "r2.0"))
-    return R_2_0;
-  else if (!strcmp(version, "r2.1"))
-    return R_2_1;
-  else if (!strcmp(version, "r2.5"))
-    return R_2_5;
-  else if (!strcmp(version, "r2.6"))
-    return R_2_6;
-  else if (!strcmp(version, "r9"))
-    return R_9;
+  else if (!strcmp(version, "r14"))
+    return R_14;
+  else if (!strcmp(version, "r13"))
+    return R_13;
+  else if (!strcmp(version, "r11") || !strcmp(version, "r12"))
+    return R_11;
   else if (!strcmp(version, "r10"))
     return R_10;
+  else if (!strcmp(version, "r9"))
+    return R_9;
+  else if (!strcmp(version, "r2.6"))
+    return R_2_6;
+  else if (!strcmp(version, "r2.5"))
+    return R_2_5;
+  else if (!strcmp(version, "r2.1"))
+    return R_2_1;
+  else if (!strcmp(version, "r2.0"))
+    return R_2_0;
+  else if (!strcmp(version, "r1.4"))
+    return R_1_4;
+  else if (!strcmp(version, "r1.2"))
+    return R_1_2;
+  else if (!strcmp(version, "r1.1"))
+    return R_1_1;
   else
     return R_INVALID;
 }
