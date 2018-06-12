@@ -3260,9 +3260,9 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
 }
 
 /** Adds an object to the DWG (i.e. dwg->object[dwg->num_objects])
-    Returns 0 or -1 on success.
+    Returns 0 or some error codes on success.
     Returns -1 if the dwg->object pool was re-alloced.
-    Returns some DWG_ERR_* otherwise
+    Returns some DWG_ERR_* otherwise.
  */
 int
 dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
@@ -3274,6 +3274,7 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
   Dwg_Object *obj;
   long unsigned int num = dwg->num_objects;
   int error = 0;
+  int realloced = 0;
 
   /* Keep the previous address
    */
@@ -3291,8 +3292,11 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
    */
   if (!num)
     dwg->object = calloc(REFS_PER_REALLOC, sizeof(Dwg_Object));
-  else if (num % REFS_PER_REALLOC == 0)
+  else if (num % REFS_PER_REALLOC == 0) {
+    Dwg_Object *old = dwg->object;
     dwg->object = realloc(dwg->object, (num + REFS_PER_REALLOC) * sizeof(Dwg_Object));
+    realloced = old != dwg->object;
+  }
   if (!dwg->object)
     {
       LOG_ERROR("Out of memory");
@@ -3691,7 +3695,7 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
    */
   dat->byte = oldpos;
   dat->bit = previous_bit;
-  return num == 0 ? error : -1; //re-alloced or not
+  return realloced ? -1 : error; //re-alloced or not
 }
 
 #undef IS_DECODER
