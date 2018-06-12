@@ -647,7 +647,8 @@ dwg_resolve_handle(const Dwg_Data * dwg, const long unsigned int absref)
   if (i == HASH_NOT_FOUND ||
       i >= dwg->num_objects) //the latter being an invalid handle (read from DWG)
     {
-      if (absref)
+      // ignore warning on invalid handles
+      if (absref && absref < dwg->num_objects)
         {
           LOG_WARN("Object not found: %lu in %ld objects", absref, dwg->num_objects);
         }
