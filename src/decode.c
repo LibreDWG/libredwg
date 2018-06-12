@@ -796,7 +796,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
   ckr2 = bit_read_RS(dat);
   if (ckr != ckr2)
     {
-      LOG_ERROR("Header CRC mismatch %x <=> %x", ckr, ckr2);
+      LOG_ERROR("Header CRC mismatch %X <=> %X", ckr, ckr2);
       //if (dwg->header.version == R_2000)
       //  return DWG_ERR_WRONGCRC;
       /* The CRC depends on num_sections. XOR result with
@@ -893,7 +893,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
     }
   if (ckr != ckr2)
     {
-      LOG_WARN("Section[%ld] CRC mismatch %d <=> %d",
+      LOG_WARN("Section[%ld] CRC mismatch %X <=> %X",
                dwg->header.section[SECTION_HEADER_R13].number, ckr, ckr2);
       // TODO: xor with num_sections
       //if (dwg->header.version == R_2000)
@@ -988,7 +988,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
     }
   if (ckr != ckr2)
     {
-      LOG_ERROR("Section[%ld] CRC mismatch %d <=> %d",
+      LOG_ERROR("Section[%ld] CRC mismatch %X <=> %X",
                 dwg->header.section[SECTION_CLASSES_R13].number, ckr, ckr2);
       //if (dwg->header.version == R_2000)
       //  return DWG_ERR_WRONGCRC;
@@ -1073,7 +1073,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
       ckr2 = bit_calc_CRC(0xC0C1, dat->chain + startpos, section_size);
       if (ckr != ckr2)
         {
-          LOG_ERROR("Section CRC mismatch %d <=> %d", ckr, ckr2);
+          LOG_ERROR("Section CRC mismatch %X <=> %X", ckr, ckr2);
           // fails with r14
           //if (dwg->header.version == R_2000)
           //  return DWG_ERR_WRONGCRC;
