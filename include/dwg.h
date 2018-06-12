@@ -1399,7 +1399,8 @@ typedef struct _dwg_entity_VIEWPORT
   BITCODE_3BD center;
   BITCODE_BD width;
   BITCODE_BD height;
-  BITCODE_RS unknown; /* pre R13 only, DXF 68 */
+  BITCODE_RS on_off; /* DXF 68, -1 should be accepted also */
+  BITCODE_RS id;     /* DXF 69 */
   BITCODE_3BD view_target;  
   BITCODE_3BD view_direction;
   BITCODE_BD view_twist;

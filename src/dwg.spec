@@ -1307,12 +1307,18 @@ DWG_ENTITY(VIEWPORT)
     FIELD_3RD (center, 10);
     FIELD_RD (width, 40);
     FIELD_RD (height, 41);
-    FIELD_RS (unknown, 68);
+    FIELD_RS (on_off, 68);
   }
   LATER_VERSIONS {
     FIELD_3BD (center, 10);
     FIELD_BD (width, 40);
     FIELD_BD (height, 41);
+  }
+  DXF {
+    FIELD_VALUE (on_off) = 1;
+    FIELD_VALUE (id) = 1;
+    FIELD_RS(on_off, 68);
+    FIELD_RS(id, 69);
   }
 
   SINCE(R_2000)
