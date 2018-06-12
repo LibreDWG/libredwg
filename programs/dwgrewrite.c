@@ -154,7 +154,7 @@ main (int argc, char *argv[])
   if (error >= DWG_ERR_CRITICAL) {
     printf("WRITE ERROR 0x%x\n", error);
   }
-  dwg_free(&dwg);
+  dwg_free(&dwg); // this is slow, but on needed on low memory systems
 
 #ifdef USE_WRITE
   // try to read again
@@ -168,7 +168,7 @@ main (int argc, char *argv[])
     printf("re-READ num_objects: %lu, should be %lu\n",
            dwg.num_objects, num_objects);
 #endif
-  if (filename_out != argv[2])
-    free (filename_out);
-  return error;
+  //if (filename_out != argv[2])
+  //  free (filename_out);
+  return error >= DWG_ERR_CRITICAL ? error : 0;
 }
