@@ -361,6 +361,9 @@ DWG_ENTITY(INSERT)
 
   SINCE(R_2000)
     {
+      DXF {
+        FIELD_3BD_1 (scale, 41);
+      }
       DECODER
         {
           FIELD_BB (scale_flag, 0);
@@ -486,6 +489,9 @@ DWG_ENTITY(MINSERT)
 
   SINCE(R_2000)
     {
+      DXF {
+        FIELD_3BD_1 (scale, 41);
+      }
       DECODER
         {
           FIELD_BB (scale_flag, 0);
@@ -618,7 +624,11 @@ DWG_ENTITY(VERTEX_2D)
      wouldn't compress data when saving. So we explicitely implemented
      the encoder routine with the compression technique described in
      the spec. --Juca */
-  DECODER
+    DXF {
+      FIELD_BD (start_width, 40);
+      FIELD_BD (end_width, 41);
+    }
+    DECODER
     {
       FIELD_BD (start_width, 40);
 
@@ -870,6 +880,11 @@ DWG_ENTITY(LINE)
     }
   SINCE(R_2000)
     {
+      DXF
+        {
+          FIELD_3DPOINT (start, 10);
+          FIELD_3DPOINT (end, 11);
+        }
       DECODER
         {
           FIELD_B (Zs_are_zero, 0);
@@ -1128,6 +1143,10 @@ DWG_ENTITY(_3DFACE)
     {
       FIELD_B (has_no_flags, 0);
 
+      DXF
+        {
+          FIELD_3DPOINT (corner1, 10);
+        }
       DECODER
         {
           FIELD_B (z_is_zero, 0);
@@ -1150,8 +1169,8 @@ DWG_ENTITY(_3DFACE)
         }
 
       FIELD_3DD (corner2, corner1, 11);
-      FIELD_3DD (corner3, corner2, 11);
-      FIELD_3DD (corner4, corner3, 11);
+      FIELD_3DD (corner3, corner2, 12);
+      FIELD_3DD (corner4, corner3, 13);
     }
 
   COMMON_ENTITY_HANDLE_DATA;

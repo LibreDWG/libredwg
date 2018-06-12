@@ -378,19 +378,22 @@ dwg_dxf_##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
   const int minimal = obj->parent->opts & 0x10;\
   if (!strcmp(#token, "GEOPOSITIONMARKER"))\
     RECORD(POSITIONMARKER);\
+  else if (dat->version <= R_2000 && !strcmp(#token, "LWPOLYLINE")) \
+    RECORD(POLYLINE);\
   else\
     RECORD(token);\
-  LOG_INFO("Entity " #token ":\n")\
   _ent = obj->tio.entity;\
   _obj = ent = _ent->tio.token;\
-  fprintf(dat->fh, "%3i\r\n%lX\r\n", 5, obj->handle.value); \
+  LOG_INFO("Entity " #token ":\n")\
   LOG_TRACE("Entity handle: %d.%d.%lX\n",\
             obj->handle.code,\
             obj->handle.size,\
             obj->handle.value); \
-  VALUE_HANDLE (obj->parent->header_vars.BLOCK_RECORD_MSPACE, 5, 330); \
-  if (dat->from_version >= R_2000) \
+  SINCE(R_2000) { \
+    fprintf(dat->fh, "%3i\r\n%lX\r\n", 5, obj->handle.value); \
+    VALUE_HANDLE (obj->parent->header_vars.BLOCK_RECORD_MSPACE, 5, 330); \
     VALUE_TV ("AcDbEntity", 100); \
+   } \
   SINCE(R_13) { \
     error |= dxf_common_entity_handle_data(dat, obj); \
   }
@@ -661,7 +664,7 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
     case DWG_TYPE_SHAPE:
       return dwg_dxf_SHAPE(dat, obj);
     case DWG_TYPE_VIEWPORT:
-      return dwg_dxf_VIEWPORT(dat, obj);
+      return minimal ? 0 : dwg_dxf_VIEWPORT(dat, obj);
     case DWG_TYPE_ELLIPSE:
       return dwg_dxf_ELLIPSE(dat, obj);
     case DWG_TYPE_SPLINE:
@@ -677,10 +680,7 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
     case DWG_TYPE_XLINE:
       return dwg_dxf_XLINE(dat, obj);
     case DWG_TYPE_DICTIONARY:
-      if (!minimal) {
-        return dwg_dxf_DICTIONARY(dat, obj);
-      }
-      break;
+      return minimal ? 0 : dwg_dxf_DICTIONARY(dat, obj);
     case DWG_TYPE_MTEXT:
       return dwg_dxf_MTEXT(dat, obj);
     case DWG_TYPE_LEADER:
@@ -715,56 +715,36 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
     case DWG_TYPE_MLINESTYLE:
       return dwg_dxf_MLINESTYLE(dat, obj);
     case DWG_TYPE_OLE2FRAME:
-      if (!minimal) {
-        return dwg_dxf_OLE2FRAME(dat, obj);
-      }
-      break;
+      return minimal ? 0 : dwg_dxf_OLE2FRAME(dat, obj);
     case DWG_TYPE_DUMMY:
       break;
     case DWG_TYPE_LONG_TRANSACTION:
-      if (!minimal) {
-        return dwg_dxf_LONG_TRANSACTION(dat, obj);
-      }
-      break;
+      return minimal ? 0 : dwg_dxf_LONG_TRANSACTION(dat, obj);
     case DWG_TYPE_LWPOLYLINE:
       return dwg_dxf_LWPOLYLINE(dat, obj);
     case DWG_TYPE_HATCH:
       return dwg_dxf_HATCH(dat, obj);
     case DWG_TYPE_XRECORD:
-      if (!minimal) {
-        return dwg_dxf_XRECORD(dat, obj);
-      }
-      break;
+      return minimal ? 0 : dwg_dxf_XRECORD(dat, obj);
     case DWG_TYPE_PLACEHOLDER:
-      if (!minimal) {
-        return dwg_dxf_PLACEHOLDER(dat, obj);
-      }
-      break;
+      return minimal ? 0 : dwg_dxf_PLACEHOLDER(dat, obj);
     case DWG_TYPE_PROXY_ENTITY:
       //dwg_dxf_PROXY_ENTITY(dat, obj);
-      break;
+      return 0;
     case DWG_TYPE_OLEFRAME:
-      if (!minimal) {
-        return dwg_dxf_OLEFRAME(dat, obj);
-      }
-      break;
+      return minimal ? 0 : dwg_dxf_OLEFRAME(dat, obj);
     case DWG_TYPE_VBA_PROJECT:
       if (!minimal) {
         LOG_ERROR("Unhandled Object VBA_PROJECT. Has its own section\n");
         //dwg_dxf_VBA_PROJECT(dat, obj);
       }
-      break;
+      return 0;
     case DWG_TYPE_LAYOUT:
-      if (!minimal) {
-        return dwg_dxf_LAYOUT(dat, obj);
-      }
-      break;
+      return minimal ? 0 : dwg_dxf_LAYOUT(dat, obj);
     default:
       if (obj->type == obj->parent->layout_number)
         {
-          if (!minimal) {
-            return dwg_dxf_LAYOUT(dat, obj);
-          }
+          return minimal ? 0 : dwg_dxf_LAYOUT(dat, obj);
         }
       /* > 500 */
       else if ((error = dwg_dxf_variable_type(obj->parent, dat, (Dwg_Object*)obj))
