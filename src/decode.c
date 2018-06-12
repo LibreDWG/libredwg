@@ -797,7 +797,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
   if (ckr != ckr2)
     {
       LOG_ERROR("Header CRC mismatch %X <=> %X", ckr, ckr2);
-      //if (dwg->header.version == R_2000)
+      //if (dwg->header.version != R_2000)
       //  return DWG_ERR_WRONGCRC;
       /* The CRC depends on num_sections. XOR result with
          3: 0xa598
@@ -805,6 +805,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
          5: 0x3cc4
          6: 0x8461
       */
+      error |= DWG_ERR_WRONGCRC;
     }
 
   if (bit_search_sentinel(dat, dwg_sentinel(DWG_SENTINEL_HEADER_END)))
@@ -891,13 +892,14 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
       ckr2 = bit_calc_CRC(0xC0C1, &(dat->chain[pvz]),
                       dwg->header.section[SECTION_HEADER_R13].size - 34);
     }
-  if (ckr != ckr2)
+  if (ckr != ckr2 && dat->version != R_2000)
     {
+      // Typically with r2000: EFA0 <=> ADEF
       LOG_WARN("Section[%ld] CRC mismatch %X <=> %X",
                dwg->header.section[SECTION_HEADER_R13].number, ckr, ckr2);
       // TODO: xor with num_sections
-      //if (dwg->header.version == R_2000)
-      //  return DWG_ERR_WRONGCRC;
+      if (dwg->header.version != R_2000)
+        error |= DWG_ERR_WRONGCRC;
     }
 
   /*-------------------------------------------------------------------------
@@ -986,12 +988,13 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
       ckr2 = bit_calc_CRC(0xC0C1, &(dat->chain[pvz]),
                       dwg->header.section[SECTION_CLASSES_R13].size - 34);
     }
-  if (ckr != ckr2)
+  if (ckr != ckr2 && dwg->header.version != R_2000)
     {
       LOG_ERROR("Section[%ld] CRC mismatch %X <=> %X",
                 dwg->header.section[SECTION_CLASSES_R13].number, ckr, ckr2);
-      //if (dwg->header.version == R_2000)
+      //if (dwg->header.version != R_2000)
       //  return DWG_ERR_WRONGCRC;
+      error |= DWG_ERR_WRONGCRC;
     }
 
   dat->byte += 16;
@@ -1077,6 +1080,8 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
           // fails with r14
           //if (dwg->header.version == R_2000)
           //  return DWG_ERR_WRONGCRC;
+          if (dat->version != R_14)
+            error |= DWG_ERR_WRONGCRC;
         }
 
       if (dat->byte >= lastmap)
