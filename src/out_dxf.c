@@ -363,6 +363,7 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
 #define END_STRING_STREAM
 #define START_HANDLE_STREAM
 
+//The strcmp is being optimized away at compile-time! https://godbolt.org/g/AqkhwL
 #define DWG_ENTITY(token) \
 static int \
 dwg_dxf_##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
