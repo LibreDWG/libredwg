@@ -643,7 +643,7 @@ Dwg_Object *
 dwg_resolve_handle(const Dwg_Data * dwg, const long unsigned int absref)
 {
   uint32_t i = hash_get(dwg->object_map, (uint32_t)absref);
-  LOG_TRACE("object_map{%lX} => %u\n", absref, i);
+  LOG_HANDLE("object_map{%lX} => %u\n", absref, i);
   if (i == HASH_NOT_FOUND ||
       i >= dwg->num_objects) //the latter being an invalid handle (read from DWG)
     {
