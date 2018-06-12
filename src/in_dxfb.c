@@ -481,8 +481,6 @@ dwg_indxfb_object(Bit_Chain *dat, Dwg_Object *obj)
       return dwg_indxfb_REGION(dat, obj);
     case DWG_TYPE__3DSOLID:
       return dwg_indxfb__3DSOLID(dat, obj);
-      break; /* Check the type of the object
-              */
     case DWG_TYPE_BODY:
       return dwg_indxfb_BODY(dat, obj);
     case DWG_TYPE_RAY:
@@ -616,7 +614,7 @@ dxfb_header_read(Bit_Chain *dat, Dwg_Data* dwg)
   Dwg_Header_Variables* _obj = &dwg->header_vars;
   Dwg_Object* obj = NULL;
   double ms;
-  const int minimal = dwg->opts & 1;
+  const int minimal = dwg->opts & 0x10;
   const char* codepage =
     (dwg->header.codepage == 30 || dwg->header.codepage == 0)
     ? "ANSI_1252"
@@ -710,8 +708,6 @@ dwg_read_dxfb(Bit_Chain *dat, Dwg_Data * dwg)
   fprintf(dat->fh, "AutoCAD Binary DXF%s", "\r\n\0x1a\0");
   //VALUE(999, PACKAGE_STRING);
 
-  // a minimal header requires only $ACADVER, $HANDSEED, and then ENTITIES
-  // see https://pythonhosted.org/ezdxf/dxfinternals/filestructure.html
   dxfb_header_read (dat, dwg);
 
   SINCE(R_2000) {
@@ -733,7 +729,7 @@ dwg_read_dxfb(Bit_Chain *dat, Dwg_Data * dwg)
       goto fail;
   }
 
-  if (dwg->header.version >= R_2000 && !minimal) {
+  SINCE(R_2000) {
     if (dxfb_preview_read (dat, dwg))
       goto fail;
   }

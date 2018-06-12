@@ -90,11 +90,14 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
 
 #define FIELD_VALUE(name) _obj->name
 #define ANYCODE -1
+// the hex code
 #define VALUE_HANDLE(value, handle_code, dxf) \
   if (dxf && value) { \
     fprintf(dat->fh, "%3i\r\n%lX\r\n", dxf, value->absolute_ref); \
   }
-// names on: 6 7. which else?
+// the name in the table, referenced by the handle
+// names on: 6 7 8. which else? there are more styles: plot, ...
+// rather skip unknown handles
 #define FIELD_HANDLE(name, handle_code, dxf) \
   if (dxf && _obj->name) { \
     if (dxf == 6) \
@@ -103,7 +106,7 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
       FIELD_HANDLE_NAME(name, dxf, STYLE) \
     else if (dxf == 8) \
       FIELD_HANDLE_NAME(name, dxf, LAYER) \
-    else \
+    else if (!minimal) \
       fprintf(dat->fh, "%3i\r\n%lX\r\n", dxf, _obj->name->absolute_ref); \
   }
 #define HEADER_9(name) \
@@ -677,6 +680,7 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
       if (!minimal) {
         return dwg_dxf_DICTIONARY(dat, obj);
       }
+      break;
     case DWG_TYPE_MTEXT:
       return dwg_dxf_MTEXT(dat, obj);
     case DWG_TYPE_LEADER:
