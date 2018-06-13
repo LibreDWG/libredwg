@@ -351,7 +351,7 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
 #define FIELD_XDATA(name, size) \
   dxf_write_xdata(dat, _obj->name, _obj->size)
 
-#define _XDICOBJHANDLE(code)
+#define _XDICOBJHANDLE(code) /* TODO */
 #define _REACTORS(code)\
   if (dat->version >= R_13 && obj->tio.object->num_reactors) {\
     fprintf(dat->fh, "102\r\n{ACAD_REACTORS\r\n");\
@@ -746,7 +746,7 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
     case DWG_TYPE_OLE2FRAME:
       return minimal ? 0 : dwg_dxf_OLE2FRAME(dat, obj);
     case DWG_TYPE_DUMMY:
-      break;
+      return 0;
     case DWG_TYPE_LONG_TRANSACTION:
       return minimal ? 0 : dwg_dxf_LONG_TRANSACTION(dat, obj);
     case DWG_TYPE_LWPOLYLINE:
@@ -754,11 +754,13 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
     case DWG_TYPE_HATCH:
       return dwg_dxf_HATCH(dat, obj);
     case DWG_TYPE_XRECORD:
-      return minimal ? 0 : dwg_dxf_XRECORD(dat, obj);
+      //TODO
+      //return minimal ? 0 : dwg_dxf_XRECORD(dat, obj);
+      return DWG_ERR_UNHANDLEDCLASS;
     case DWG_TYPE_PLACEHOLDER:
       return minimal ? 0 : dwg_dxf_PLACEHOLDER(dat, obj);
     case DWG_TYPE_PROXY_ENTITY:
-      //dwg_dxf_PROXY_ENTITY(dat, obj);
+      //TODO dwg_dxf_PROXY_ENTITY(dat, obj);
       return 0;
     case DWG_TYPE_OLEFRAME:
       return minimal ? 0 : dwg_dxf_OLEFRAME(dat, obj);
