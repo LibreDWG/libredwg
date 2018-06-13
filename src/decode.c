@@ -39,7 +39,7 @@
 /* The logging level for the read (decode) path.  */
 static unsigned int loglevel;
 /* the current version per spec block */
-static unsigned int cur_ver = 0;
+static int cur_ver = 0;
 
 #ifdef USE_TRACING
 /* This flag means we have checked the environment variable

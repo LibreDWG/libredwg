@@ -42,7 +42,7 @@
 /* The logging level for the write (encode) path.  */
 static unsigned int loglevel;
 /* the current version per spec block */
-static unsigned int cur_ver = 0;
+static int cur_ver = 0;
 
 #ifdef USE_TRACING
 /* This flag means we have checked the environment variable
@@ -170,10 +170,12 @@ static bool env_var_checked_p;
 #define REACTORS(code)\
   if (dat->version >= R_2000 && obj->tio.object->num_reactors > 0x1000) { \
     fprintf(stderr, "Invalid num_reactors: %ld\n", (long)obj->tio.object->num_reactors); return DWG_ERR_VALUEOUTOFBOUNDS; } \
-  for (vcount=0; vcount < (long)obj->tio.object->num_reactors; vcount++) \
+  SINCE (R_13) { \
+    for (vcount=0; vcount < (long)obj->tio.object->num_reactors; vcount++) \
     {\
       VALUE_HANDLE(obj->tio.object->reactors[vcount], reactors, code, 330); \
-    }
+    }\
+  }
     
 #define XDICOBJHANDLE(code)\
   RESET_VER \
@@ -181,13 +183,15 @@ static bool env_var_checked_p;
     {\
       if (!obj->tio.object->xdic_missing_flag) \
         {\
-          VALUE_HANDLE(obj->tio.object->xdicobjhandle, xdicobjhandle, code, -3); \
+          VALUE_HANDLE(obj->tio.object->xdicobjhandle, xdicobjhandle, code, 360); \
         }\
     }\
-  PRIOR_VERSIONS\
+  else { \
+    SINCE(R_13) \
     {\
-      VALUE_HANDLE(obj->tio.object->xdicobjhandle, xdicobjhandle, code, -3); \
+      VALUE_HANDLE(obj->tio.object->xdicobjhandle, xdicobjhandle, code, 360); \
     } \
+  } \
   RESET_VER
 
 #define ENT_XDICOBJHANDLE(code)\
@@ -196,16 +200,18 @@ static bool env_var_checked_p;
     {\
       if (!obj->tio.entity->xdic_missing_flag)\
         {\
-          VALUE_HANDLE(obj->tio.entity->xdicobjhandle, xdicobjhandle, code, -3); \
+          VALUE_HANDLE(obj->tio.entity->xdicobjhandle, xdicobjhandle, code, 360); \
         }\
     }\
-  PRIOR_VERSIONS\
+  else { \
+    SINCE(R_13) \
     {\
-      VALUE_HANDLE(obj->tio.entity->xdicobjhandle, xdicobjhandle, code, -3); \
+      VALUE_HANDLE(obj->tio.entity->xdicobjhandle, xdicobjhandle, code, 360); \
     } \
+  } \
   RESET_VER
 
-//FIELD_VECTOR_N(name, type, size):
+//FIELD_VECTOR_N(name, type, size, dxf):
 // writes a 'size' elements vector of data of the type indicated by 'type'
 #define FIELD_VECTOR_N(name, type, size, dxf)\
   if (size > 0)\
@@ -213,10 +219,7 @@ static bool env_var_checked_p;
       for (vcount=0; vcount < (long)size; vcount++)\
         {\
           bit_write_##type(dat, _obj->name[vcount]);\
-          if (loglevel>=2)\
-            {\
-              LOG_TRACE(#name "[%ld]: " FORMAT_##type "\n", (long)vcount, _obj->name[vcount]) \
-            }\
+          LOG_TRACE(#name "[%ld]: " FORMAT_##type "\n", (long)vcount, _obj->name[vcount]) \
         }\
     }
 #define FIELD_VECTOR_T(name, size, dxf)\
@@ -452,10 +455,12 @@ dwg_encode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 #define ENT_REACTORS(code)\
   if (dat->version >= R_2000 && _obj->num_reactors > 0x1000) { \
     fprintf(stderr, "Invalid num_reactors: %ld\n", (long)_obj->num_reactors); return DWG_ERR_VALUEOUTOFBOUNDS; } \
-  for (vcount=0; vcount < _obj->num_reactors; vcount++)\
+  SINCE (R_13) { \
+    for (vcount=0; vcount < _obj->num_reactors; vcount++)\
     {\
-      FIELD_HANDLE_N(reactors[vcount], vcount, code, -5); \
-    }
+      FIELD_HANDLE_N(reactors[vcount], vcount, code, 330); \
+    }\
+  }
 
 
 /*--------------------------------------------------------------------------------*/

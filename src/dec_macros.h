@@ -343,7 +343,7 @@
   obj->tio.object->reactors = malloc(sizeof(BITCODE_H) * obj->tio.object->num_reactors); \
   for (vcount=0; vcount < (long)obj->tio.object->num_reactors; vcount++) \
     {\
-      VALUE_HANDLE_N(obj->tio.object->reactors[vcount], reactors, vcount, code, -5); \
+      VALUE_HANDLE_N(obj->tio.object->reactors[vcount], reactors, vcount, code, 330); \
     }
 
 #define ENT_REACTORS(code)\
@@ -351,7 +351,7 @@
   _ent->reactors = malloc(sizeof(BITCODE_H) * _ent->num_reactors); \
   for (vcount=0; vcount < _ent->num_reactors; vcount++)\
     {\
-      VALUE_HANDLE_N(_ent->reactors[vcount], reactors, vcount, code, -5); \
+      VALUE_HANDLE_N(_ent->reactors[vcount], reactors, vcount, code, 330); \
     }
 
 #define XDICOBJHANDLE(code)\
@@ -359,30 +359,34 @@
     {\
       if (!obj->tio.object->xdic_missing_flag)\
         {\
-          VALUE_HANDLE(obj->tio.object->xdicobjhandle, xdicobjhandle, code, 0);\
+          VALUE_HANDLE(obj->tio.object->xdicobjhandle, xdicobjhandle, code, 360);\
         }\
       else \
         {\
           LOG_TRACE("xdic_missing_flag: 1\n"); \
         }\
     }\
-  PRIOR_VERSIONS\
+  else { \
+    SINCE(R_13) \
     {\
-      VALUE_HANDLE(obj->tio.object->xdicobjhandle, xdicobjhandle, code, 0); \
-    }
+      VALUE_HANDLE(obj->tio.object->xdicobjhandle, xdicobjhandle, code, 360); \
+    }\
+  }
 
 #define ENT_XDICOBJHANDLE(code)\
   SINCE(R_2004)\
     {\
       if (!_ent->xdic_missing_flag)\
         {\
-          VALUE_HANDLE(_ent->xdicobjhandle, xdicobjhandle, code, 0); \
+          VALUE_HANDLE(_ent->xdicobjhandle, xdicobjhandle, code, 360); \
         }\
     }\
-  PRIOR_VERSIONS\
+  else { \
+    SINCE(R_13) \
     {\
-      VALUE_HANDLE(_ent->xdicobjhandle, xdicobjhandle, code, 0); \
-    }
+      VALUE_HANDLE(_ent->xdicobjhandle, xdicobjhandle, code, 360); \
+    }\
+  }
 
 #define SECTION_STRING_STREAM \
   { \
