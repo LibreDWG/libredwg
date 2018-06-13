@@ -44,6 +44,7 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
  */
 
 #define IS_PRINT
+#define IS_DXF
 
 #define FIELD(name,type,dxf) \
     if (dxf) { FIELD_##type(name, dxf); }
@@ -877,7 +878,6 @@ static int
 dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   unsigned int i;
-  const int minimal = 0; //dwg->opts & 0x10;
 
   SECTION(TABLES);
   if (dwg->vport_control.num_entries)
@@ -1037,7 +1037,6 @@ dxfb_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Dwg_Object *mspace = NULL, *pspace = NULL;
   Dwg_Object_BLOCK_CONTROL *_ctrl = &dwg->block_control;
   Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
-  const int minimal = 0; //dwg->opts & 0x10;
 
   SECTION(BLOCKS);
   COMMON_TABLE_CONTROL_FLAGS(null_handle);
@@ -1125,19 +1124,22 @@ dxfb_preview_write (Bit_Chain *dat, Dwg_Data * dwg)
 int
 dwg_write_dxfb(Bit_Chain *dat, Dwg_Data * dwg)
 {
-  const int minimal = dwg->opts & 1;
+  const int minimal = dwg->opts & 0x10;
   struct Dwg_Header *obj = &dwg->header;
 
+  if (dat->from_version == R_INVALID)
+    dat->from_version = dat->version;
   fprintf(dat->fh, "AutoCAD Binary DXF%s", "\r\n\0x1a\0");
-  //VALUE(999, PACKAGE_STRING);
+  VALUE_TV(PACKAGE_STRING, 999);
 
   // a minimal header requires only $ACADVER, $HANDSEED, and then ENTITIES
   // see https://pythonhosted.org/ezdxf/dxfinternals/filestructure.html
-  SINCE(R_13)
-  {
-    dxfb_header_write (dat, dwg);
+  dxfb_header_write (dat, dwg);
 
-    SINCE(R_2000) {
+  if (!minimal) {
+    // if downgraded from r2000 to r14, but we still have classes, keep the classes
+    if ((dat->from_version >= R_2000 && dwg->num_classes) ||
+        dat->version >= R_2000) {
       if (dxfb_classes_write (dat, dwg))
         goto fail;
     }
@@ -1152,15 +1154,17 @@ dwg_write_dxfb(Bit_Chain *dat, Dwg_Data * dwg)
   if (dxfb_entities_write (dat, dwg))
     goto fail;
 
-  SINCE(R_13) {
-    if (dxfb_objects_write (dat, dwg))
-      goto fail;
+  if (!minimal) {
+    SINCE(R_13) {
+      if (dxfb_objects_write (dat, dwg))
+        goto fail;
+    }
+    SINCE(R_2000) {
+      if (dxfb_preview_write (dat, dwg))
+        goto fail;
+    }
   }
-
-  if (dwg->header.version >= R_2000 && !minimal) {
-    if (dxfb_preview_write (dat, dwg))
-      goto fail;
-  }
+  RECORD(EOF);
 
   return 0;
  fail:
@@ -1168,3 +1172,4 @@ dwg_write_dxfb(Bit_Chain *dat, Dwg_Data * dwg)
 }
 
 #undef IS_PRINT
+#undef IS_DXF

@@ -407,7 +407,6 @@ dwg_dxf_##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
   long vcount, rcount1, rcount2, rcount3, rcount4; \
   Dwg_Entity_##token *ent, *_obj;\
   Dwg_Object_Entity *_ent;\
-  const int minimal = obj->parent->opts & 0x10;\
   if (!strcmp(#token, "GEOPOSITIONMARKER"))\
     RECORD(POSITIONMARKER);\
   else if (dat->version < R_13 && !strcmp(#token, "LWPOLYLINE")) \
@@ -440,7 +439,6 @@ dwg_dxf_ ##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
   long vcount, rcount1, rcount2, rcount3, rcount4;\
   Bit_Chain *hdl_dat = dat;\
   Dwg_Object_##token *_obj;\
-  const int minimal = obj->parent->opts & 0x10;\
   LOG_INFO("Object " #token ":\n")\
   _obj = obj->tio.object->tio.token;\
   if (!dwg_obj_is_control(obj)) { \
@@ -956,7 +954,6 @@ static int
 dxf_classes_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   unsigned int i;
-  const int minimal = 0; //dwg->opts & 0x10;
 
   SECTION (CLASSES);
   LOG_TRACE("num_classes: %u\n", dwg->num_classes);
@@ -983,7 +980,6 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   int error = 0;
   unsigned int i;
-  const int minimal = 0; //dwg->opts & 0x10;
 
   SECTION(TABLES);
   {
@@ -1183,7 +1179,6 @@ dxf_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Dwg_Object *mspace = NULL, *pspace = NULL;
   Dwg_Object_BLOCK_CONTROL *_ctrl = &dwg->block_control;
   Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
-  const int minimal = 0; //dwg->opts & 0x10;
 
   SECTION(BLOCKS);
   COMMON_TABLE_CONTROL_FLAGS(null_handle, Block);
