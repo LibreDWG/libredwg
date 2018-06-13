@@ -3647,17 +3647,17 @@ DWG_ENTITY(LWPOLYLINE)
     REPEAT(num_points, points, BITCODE_2RD)
       {
         FIELD_2RD (points[rcount1], 10);
-        if ((FIELD_VALUE(num_bulges) == FIELD_VALUE(num_points)) &&
-            (FIELD_VALUE(widths) != NULL) &&
+        if (FIELD_VALUE(num_widths) && FIELD_VALUE(widths) &&
+            FIELD_VALUE(num_bulges) == FIELD_VALUE(num_points) &&
             (FIELD_VALUE(widths[rcount1].start) != 0.0 ||
-              FIELD_VALUE(widths[rcount1].end) != 0.0))
+             FIELD_VALUE(widths[rcount1].end) != 0.0))
           {
             FIELD_BD (widths[rcount1].start, 40);
             FIELD_BD (widths[rcount1].end, 41);
           }
-        if (FIELD_VALUE(num_bulges) == FIELD_VALUE(num_points) &&
-            FIELD_VALUE(bulges) != NULL)
-          FIELD_BD (bulges[rcount1], 42);
+        if (FIELD_VALUE(num_bulges) && FIELD_VALUE(bulges) &&
+            FIELD_VALUE(num_bulges) == FIELD_VALUE(num_points))
+          VALUE (rad2deg(_obj->bulges[rcount1]), RD, 42);
       }
     END_REPEAT(points)
   } else {
