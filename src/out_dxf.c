@@ -436,14 +436,14 @@ dwg_dxf_ ##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
       int dxf = 5; \
       if (obj->type == DWG_TYPE_DIMSTYLE) dxf = 105; \
       fprintf(dat->fh, "%3i\r\n%lX\r\n", dxf, obj->handle.value); \
+      _XDICOBJHANDLE(3); \
+      _REACTORS(4); \
     } \
   } \
   LOG_TRACE("Object handle: %d.%d.%lX\n",\
             obj->handle.code,   \
             obj->handle.size,   \
-            obj->handle.value); \
-  _XDICOBJHANDLE(3); \
-  _REACTORS(4);
+            obj->handle.value)
 
 //then 330, SUBCLASS
 
