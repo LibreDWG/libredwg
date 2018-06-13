@@ -351,8 +351,9 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
 #define FIELD_XDATA(name, size) \
   dxf_write_xdata(dat, _obj->name, _obj->size)
 
-#define REACTORS(code)\
-  if (obj->tio.object->num_reactors) {\
+#define _XDICOBJHANDLE(code)
+#define _REACTORS(code)\
+  if (dat->version >= R_13 && obj->tio.object->num_reactors) {\
     fprintf(dat->fh, "102\r\n{ACAD_REACTORS\r\n");\
     for (vcount=0; vcount < (int)obj->tio.object->num_reactors; vcount++)\
       { /* soft ptr */ \
@@ -361,7 +362,7 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
     fprintf(dat->fh, "102\r\n}\r\n");\
   }
 #define ENT_REACTORS(code)\
-  if (_obj->num_reactors) {\
+  if (dat->version >= R_13 && _obj->num_reactors) {\
     fprintf(dat->fh, "102\r\n{ACAD_REACTORS\r\n");\
     for (vcount=0; vcount < _obj->num_reactors; vcount++)\
       {\
@@ -369,7 +370,7 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
       }\
     fprintf(dat->fh, "102\r\n}\r\n");\
   }
-
+#define REACTORS(code)
 #define XDICOBJHANDLE(code)
 #define ENT_XDICOBJHANDLE(code)
 
@@ -440,8 +441,11 @@ dwg_dxf_ ##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
   LOG_TRACE("Object handle: %d.%d.%lX\n",\
             obj->handle.code,   \
             obj->handle.size,   \
-            obj->handle.value)
-//then REACTORS, 330, SUBCLASS
+            obj->handle.value); \
+  _XDICOBJHANDLE(3); \
+  _REACTORS(4);
+
+//then 330, SUBCLASS
 
 #define DWG_OBJECT_END return error; \
 }

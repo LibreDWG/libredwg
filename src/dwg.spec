@@ -1747,7 +1747,6 @@ DWG_ENTITY_END
 DWG_OBJECT(DICTIONARY)
 
 #ifdef IS_DXF
-  REACTORS(4);
   SINCE(R_14)
     FIELD_RC (hard_owner, 330); // always 0
   SUBCLASS (AcDbDictionary)
@@ -1788,10 +1787,8 @@ DWG_OBJECT(DICTIONARY)
 
   START_HANDLE_STREAM;
   FIELD_HANDLE (parenthandle, 4, 0);
-#ifndef IS_DXF
   REACTORS(4);
   XDICOBJHANDLE(3);
-#endif
   SINCE(R_2000)
     {
       HANDLE_VECTOR(itemhandles, numitems, 2, 0);
@@ -1803,7 +1800,6 @@ DWG_OBJECT_END
 DWG_OBJECT(DICTIONARYWDFLT)
 
 #ifdef IS_DXF
-  REACTORS(4);
   SINCE(R_14)
     FIELD_RC (hard_owner, 330); // always 0
   SUBCLASS (AcDbDictionary)
@@ -1843,10 +1839,8 @@ DWG_OBJECT(DICTIONARYWDFLT)
 
   START_HANDLE_STREAM;
   FIELD_HANDLE (parenthandle, 4, 0);
-#ifndef IS_DXF
   REACTORS(4);
   XDICOBJHANDLE(3);
-#endif
   SINCE(R_2000)
     {
       HANDLE_VECTOR(itemhandles, numitems, 2, 0);
@@ -3188,10 +3182,6 @@ DWG_OBJECT_END
 /* (73) */
 DWG_OBJECT(MLINESTYLE)
 
-#ifdef IS_DXF
-  XDICOBJHANDLE(3);
-  REACTORS(4);
-#endif
   SUBCLASS (AcDbMlineStyle)
   FIELD_T (entry_name, 2);
   FIELD_T (desc, 3);
@@ -3248,10 +3238,8 @@ DWG_OBJECT(MLINESTYLE)
 
   START_HANDLE_STREAM;
   FIELD_HANDLE (parenthandle, 4, 0);
-#ifndef IS_DXF
   REACTORS(4);
   XDICOBJHANDLE(3);
-#endif
 
 DWG_OBJECT_END
 
@@ -3534,10 +3522,6 @@ DWG_OBJECT_END
 //pg.145
 DWG_OBJECT(LAYOUT)
 
-#ifdef IS_DXF
-  XDICOBJHANDLE(3);
-  REACTORS(4);
-#endif
   SUBCLASS (AcDbPlotSettings)
   SUBCLASS (AcDbLayout)
   FIELD_T (page_setup_name, 1);
@@ -3595,10 +3579,8 @@ DWG_OBJECT(LAYOUT)
 
   START_HANDLE_STREAM;
   FIELD_HANDLE (parenthandle, 4, 0);
-#ifndef IS_DXF
   REACTORS(4);
   XDICOBJHANDLE(3);
-#endif
 
   SINCE(R_2004) {
     FIELD_HANDLE (plot_view, 5, 6);
@@ -4831,7 +4813,7 @@ DWG_OBJECT_END
 // VBA_PROJECT (81 + varies), a blob
 DWG_OBJECT(VBA_PROJECT)
 
-  //SUBCLASS (AcDbVbaProject)
+  SUBCLASS (AcDbVbaProject)
   FIELD_RL (num_bytes, 0);
   FIELD_TF (bytes, FIELD_VALUE(num_bytes), 0);
 
