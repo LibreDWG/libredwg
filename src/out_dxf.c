@@ -403,7 +403,6 @@ dwg_dxf_##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
   SINCE(R_2000) { \
     fprintf(dat->fh, "%3i\r\n%lX\r\n", 5, obj->handle.value); \
     VALUE_HANDLE (obj->parent->header_vars.BLOCK_RECORD_MSPACE, 5, 330); \
-    VALUE_TV ("AcDbEntity", 100); \
    } \
   SINCE(R_13) { \
     error |= dxf_common_entity_handle_data(dat, obj); \

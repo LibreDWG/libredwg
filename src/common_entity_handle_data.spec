@@ -8,6 +8,7 @@
     }
   ENT_REACTORS(4)
   ENT_XDICOBJHANDLE(3)
+  SUBCLASS(AcDbEntity)
 
   VERSIONS(R_13, R_14)
     {
