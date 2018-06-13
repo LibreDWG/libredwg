@@ -15,6 +15,17 @@
  * written by Reini Urban
  */
 
+/* TODO: down-conversions from unsupported entities on older DXF versions:
+Since r13: Entities: LWPOLYLINE, HATCH, SPLINE, LEADER, DIMENSION, MTEXT, IMAGE,
+             BLOCK_RECORD.
+           Table BLOCK_RECORD.
+           add CLASSES for those
+           handle 5, 100, 105
+           non-all caps table names.
+Since r14: handle 330
+
+*/
+
 #include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -378,7 +389,7 @@ dwg_dxf_##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
   const int minimal = obj->parent->opts & 0x10;\
   if (!strcmp(#token, "GEOPOSITIONMARKER"))\
     RECORD(POSITIONMARKER);\
-  else if (dat->version <= R_2000 && !strcmp(#token, "LWPOLYLINE")) \
+  else if (dat->version < R_13 && !strcmp(#token, "LWPOLYLINE")) \
     RECORD(POLYLINE);\
   else\
     RECORD(token);\
@@ -1101,6 +1112,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       dwg_dxf_UNKNOWN_OBJ(dat, &dwg->object[0]);
       ENDTAB();
     }
+  SINCE (R_13)
   {
     Dwg_Object_BLOCK_CONTROL *_ctrl = &dwg->block_control;
     Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
