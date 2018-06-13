@@ -26,15 +26,15 @@
 #endif
 
 #define WARN_UNHANDLED_CLASS \
-      LOG_WARN("Unhandled Class %s %d %s (0x%x%s) -@%ld", is_entity ? "entity" : "object",\
+      LOG_WARN("Unhandled Class %s %d %s (0x%x%s) %u/%lX", is_entity ? "entity" : "object",\
                klass->number, dxfname, klass->proxyflag,\
                klass->wasazombie ? " was proxy" : "",\
-               obj->address + obj->size)
+               obj->index, obj->handle.value)
 #define WARN_UNTESTED_CLASS \
-      LOG_WARN("Untested Class %s %d %s (0x%x%s) -@%ld", is_entity ? "entity" : "object",\
+      LOG_WARN("Untested Class %s %d %s (0x%x%s) %u/%lX", is_entity ? "entity" : "object",\
                klass->number, dxfname, klass->proxyflag,\
                klass->wasazombie ? " was proxy" : "",\
-               obj->address + obj->size)
+               obj->index, obj->handle.value)
 
 #define _DWG_FUNC_N(action,name) dwg_ ## action ## _ ## name
 #define DWG_FUNC_N(action,name) _DWG_FUNC_N(action,name)
