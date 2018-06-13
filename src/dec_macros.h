@@ -454,6 +454,7 @@ dwg_decode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
   LOG_INFO("Entity " #token " ")\
   dwg->num_entities++;\
   obj->supertype = DWG_SUPERTYPE_ENTITY;\
+  obj->fixedtype = DWG_TYPE_##token;\
   _ent = obj->tio.entity = (Dwg_Object_Entity*)calloc(1, sizeof(Dwg_Object_Entity));\
   obj->tio.entity->tio.token = (Dwg_Entity_##token *)calloc(1, sizeof (Dwg_Entity_##token));\
   if (!_ent || !obj->tio.entity->tio.token) return DWG_ERR_OUTOFMEM; \
@@ -483,6 +484,7 @@ dwg_decode_ ## token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
     str_dat = dat; \
   LOG_INFO("Object " #token " ")\
   obj->supertype = DWG_SUPERTYPE_OBJECT;\
+  obj->fixedtype = DWG_TYPE_##token;\
   obj->tio.object = (Dwg_Object_Object*)calloc (1, sizeof(Dwg_Object_Object)); \
   if (!obj->tio.object) return DWG_ERR_OUTOFMEM; \
   obj->tio.object->tio.token = (Dwg_Object_##token *)calloc (1, sizeof(Dwg_Object_##token)); \

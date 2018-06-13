@@ -1746,9 +1746,15 @@ DWG_ENTITY_END
 /*(42)*/
 DWG_OBJECT(DICTIONARY)
 
+#ifdef IS_DXF
+  REACTORS(4);
+  SINCE(R_14)
+    FIELD_RC (hard_owner, 330); // always 0
   SUBCLASS (AcDbDictionary)
+  SINCE(R_2000)
+    FIELD_BS (cloning, 281);
+#else
   FIELD_BL (numitems, 0);
-
   VERSION(R_14)
     FIELD_RC (hard_owner, 330); // always 0
   SINCE(R_2000)
@@ -1765,6 +1771,7 @@ DWG_OBJECT(DICTIONARY)
               obj->handle.value);
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
+#endif
 
 #ifdef IS_DXF
     if (FIELD_VALUE(itemhandles) && FIELD_VALUE(text)) {
@@ -1773,31 +1780,37 @@ DWG_OBJECT(DICTIONARY)
         FIELD_T (text[rcount1], 3);
         VALUE_HANDLE (_obj->itemhandles[rcount1], 2, 350);
       }
+      END_REPEAT(text)
     }
-    END_REPEAT(text)
 #else
   FIELD_VECTOR_T (text, numitems, 3);
 #endif
 
   START_HANDLE_STREAM;
   FIELD_HANDLE (parenthandle, 4, 0);
+#ifndef IS_DXF
   REACTORS(4);
   XDICOBJHANDLE(3);
-#ifndef IS_DXF
+#endif
   SINCE(R_2000)
     {
-      HANDLE_VECTOR(itemhandles, numitems, 2, 350);
+      HANDLE_VECTOR(itemhandles, numitems, 2, 0);
     }
-#endif
 
 DWG_OBJECT_END
 
+// DXF as ACDBDICTIONARYWDFLT
 DWG_OBJECT(DICTIONARYWDFLT)
 
-  //SUBCLASS (AcDbDictionary)
-  SUBCLASS (AcDbDictionaryWithDefault)
+#ifdef IS_DXF
+  REACTORS(4);
+  SINCE(R_14)
+    FIELD_RC (hard_owner, 330); // always 0
+  SUBCLASS (AcDbDictionary)
+  SINCE(R_2000)
+    FIELD_BS (cloning, 281);
+#else
   FIELD_BL (numitems, 0);
-
   VERSION(R_14)
     FIELD_RL (cloning_rl, 0); // always 0
   SINCE(R_2000)
@@ -1808,24 +1821,38 @@ DWG_OBJECT(DICTIONARYWDFLT)
       FIELD_BS (cloning, 281);
       FIELD_RC (hard_owner, 0);
     }
-
+#endif
   if (FIELD_VALUE(numitems) > 10000)
     {
       LOG_ERROR("Invalid dictionary with more than 10.000 entries. Handle: %lu\n",
               obj->handle.value);
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
-  FIELD_VECTOR_T (text, numitems, 0);
+#ifdef IS_DXF
+    if (FIELD_VALUE(itemhandles) && FIELD_VALUE(text)) {
+      REPEAT(numitems, text, T)
+      {
+        FIELD_T (text[rcount1], 3);
+        VALUE_HANDLE (_obj->itemhandles[rcount1], 2, 350);
+      }
+      END_REPEAT(text)
+    }
+#else
+  FIELD_VECTOR_T (text, numitems, 3);
+#endif
 
   START_HANDLE_STREAM;
   FIELD_HANDLE (parenthandle, 4, 0);
+#ifndef IS_DXF
   REACTORS(4);
   XDICOBJHANDLE(3);
+#endif
   SINCE(R_2000)
     {
       HANDLE_VECTOR(itemhandles, numitems, 2, 0);
     }
-  FIELD_HANDLE (defaultid, 5, 7);
+  SUBCLASS (AcDbDictionaryWithDefault)
+  FIELD_HANDLE (defaultid, 5, 340);
 
 DWG_OBJECT_END
 
@@ -3161,6 +3188,10 @@ DWG_OBJECT_END
 /* (73) */
 DWG_OBJECT(MLINESTYLE)
 
+#ifdef IS_DXF
+  XDICOBJHANDLE(3);
+  REACTORS(4);
+#endif
   SUBCLASS (AcDbMlineStyle)
   FIELD_T (entry_name, 2);
   FIELD_T (desc, 3);
@@ -3207,8 +3238,10 @@ DWG_OBJECT(MLINESTYLE)
 
   START_HANDLE_STREAM;
   FIELD_HANDLE (parenthandle, 4, 0);
+#ifndef IS_DXF
   REACTORS(4);
   XDICOBJHANDLE(3);
+#endif
 
 DWG_OBJECT_END
 
@@ -3491,6 +3524,11 @@ DWG_OBJECT_END
 //pg.145
 DWG_OBJECT(LAYOUT)
 
+#ifdef IS_DXF
+  XDICOBJHANDLE(3);
+  REACTORS(4);
+#endif
+  SUBCLASS (AcDbPlotSettings)
   SUBCLASS (AcDbLayout)
   FIELD_T (page_setup_name, 1);
   FIELD_T (printer_or_config, 2);
@@ -3547,8 +3585,10 @@ DWG_OBJECT(LAYOUT)
 
   START_HANDLE_STREAM;
   FIELD_HANDLE (parenthandle, 4, 0);
+#ifndef IS_DXF
   REACTORS(4);
   XDICOBJHANDLE(3);
+#endif
 
   SINCE(R_2004) {
     FIELD_HANDLE (plot_view, 5, 6);
@@ -4765,14 +4805,15 @@ DWG_OBJECT(XRECORD)
 DWG_OBJECT_END
 
 //(80 + varies)
+/// DXF as ACDBPLACEHOLDER
 DWG_OBJECT(PLACEHOLDER)
 
-  SUBCLASS (AcDbPlaceHolder)
   // no own data members
   START_HANDLE_STREAM;
   FIELD_HANDLE (parenthandle, 4, 0);
   REACTORS(4);
   XDICOBJHANDLE(3);
+// no SUBCLASS marker
 
 DWG_OBJECT_END
 

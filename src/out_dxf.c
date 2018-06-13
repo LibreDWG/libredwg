@@ -421,15 +421,23 @@ dwg_dxf_ ##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
   LOG_INFO("Object " #token ":\n")\
   _obj = obj->tio.object->tio.token;\
   if (!dwg_obj_is_control(obj)) { \
-    int dxf = 5; \
-    if (obj->type != DWG_TYPE_BLOCK_HEADER) RECORD(token); \
-    if (obj->type == DWG_TYPE_DIMSTYLE) dxf = 105; \
-    fprintf(dat->fh, "%3i\r\n%lX\r\n", dxf, obj->handle.value); \
+    if (obj->fixedtype == DWG_TYPE_DICTIONARYWDFLT) RECORD(ACDBDICTIONARYWDFLT); \
+    else if (obj->fixedtype == DWG_TYPE_PLACEHOLDER) RECORD(ACDBPLACEHOLDER); \
+    else if (obj->fixedtype == DWG_TYPE_ASSOCNETWORK) RECORD(ACDBASSOCNETWORK); \
+    else if (obj->fixedtype == DWG_TYPE_DETAILVIEWSTYLE) RECORD(ACDBDETAILVIEWSTYLE); \
+    else if (obj->fixedtype == DWG_TYPE_SECTIONVIEWSTYLE) RECORD(ACDBSECTIONVIEWSTYLE); \
+    else if (obj->type != DWG_TYPE_BLOCK_HEADER) RECORD(token); \
+    SINCE(R_13) { \
+      int dxf = 5; \
+      if (obj->type == DWG_TYPE_DIMSTYLE) dxf = 105; \
+      fprintf(dat->fh, "%3i\r\n%lX\r\n", dxf, obj->handle.value); \
+    } \
   } \
   LOG_TRACE("Object handle: %d.%d.%lX\n",\
             obj->handle.code,   \
             obj->handle.size,   \
             obj->handle.value)
+//then REACTORS, 330, SUBCLASS
 
 #define DWG_OBJECT_END return error; \
 }
@@ -535,33 +543,37 @@ dxf_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
 
 //TODO: 5 330 100 70. have: 330 100 5 70
 #define COMMON_TABLE_CONTROL_FLAGS(owner, acdbname) \
-    fprintf(dat->fh, "%3i\r\n%lX\r\n", 5, ctrl->handle.value); \
-    VALUE_H (_ctrl->null_handle, 330); \
-    if (dat->from_version >= R_2000) { \
+    SINCE(R_13) { \
+      fprintf(dat->fh, "%3i\r\n%lX\r\n", 5, ctrl->handle.value);\
+    } \
+    SINCE(R_14) { \
+      VALUE_H (_ctrl->null_handle, 330); \
+    } \
+    SINCE(R_2000) {\
       VALUE_TV ("AcDbSymbolTable", 100); \
     }
 
 #define COMMON_TABLE_FLAGS(owner, acdbname) \
-  if (!minimal) { \
-    FIELD_HANDLE (owner, 4, 330); \
-    if (dat->from_version >= R_2000) { \
+    SINCE(R_14) { \
+      FIELD_HANDLE (owner, 4, 330); \
+    } \
+    SINCE(R_2000) { \
       VALUE_TV ("AcDbSymbolTableRecord", 100); \
       VALUE_TV ("AcDb" #acdbname "TableRecord", 100); \
     }\
-  } \
-  if (_obj->entry_name) dxf_cvt_tablerecord(dat, obj, _obj->entry_name, 2); \
-  FIELD_RC (flag, 70);
+    if (_obj->entry_name) dxf_cvt_tablerecord(dat, obj, _obj->entry_name, 2); \
+    FIELD_RC (flag, 70);
 
 #define LAYER_TABLE_FLAGS(owner, acdbname) \
-  if (!minimal) { \
-    FIELD_HANDLE (owner, 4, 330); \
-    if (dat->from_version >= R_2000) { \
+    SINCE(R_14) { \
+      FIELD_HANDLE (owner, 4, 330); \
+    } \
+    SINCE(R_2000) { \
       VALUE_TV ("AcDbSymbolTableRecord", 100); \
       VALUE_TV ("AcDb" #acdbname "TableRecord", 100); \
-    }\
-  } \
-  if (_obj->entry_name) dxf_cvt_tablerecord(dat, obj, _obj->entry_name, 2); \
-  FIELD_RS (flag, 70);
+    } \
+    if (_obj->entry_name) dxf_cvt_tablerecord(dat, obj, _obj->entry_name, 2); \
+    FIELD_RS (flag, 70);
 
 #include "dwg.spec"
 
@@ -605,6 +617,7 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
 
   if (obj->supertype == DWG_SUPERTYPE_UNKNOWN)
     return 0;
+
   switch (obj->type)
     {
     case DWG_TYPE_TEXT:

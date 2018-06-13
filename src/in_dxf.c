@@ -533,6 +533,7 @@ dwg_indxf_##token (Bit_Chain *dat, Dwg_Object * obj) \
   LOG_INFO("Entity " #token ":\n")\
   _ent = obj->tio.entity;\
   _obj = ent = _ent->tio.token;\
+  obj->fixedtype = DWG_TYPE_##token;\
   LOG_TRACE("Entity handle: %d.%d.%lX\n",\
     obj->handle.code,\
     obj->handle.size,\
@@ -549,6 +550,7 @@ dwg_indxf_ ##token (Bit_Chain *dat, Dwg_Object * obj) \
   Bit_Chain *hdl_dat = dat;\
   Dwg_Object_##token *_obj;\
   Dxf_Pair *pair; \
+  obj->fixedtype = DWG_TYPE_##token;\
   LOG_INFO("Object " #token ":\n")\
   _obj = obj->tio.object->tio.token;\
   LOG_TRACE("Object handle: %d.%d.%lX\n",\
