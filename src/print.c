@@ -446,8 +446,6 @@ dwg_print_object(Bit_Chain* dat, Dwg_Object *obj)
       return dwg_print_XRECORD(dat, obj);
    case DWG_TYPE_PLACEHOLDER:
       return dwg_print_PLACEHOLDER(dat, obj);
-   case DWG_TYPE_PROXY_ENTITY:
-      return dwg_print_PROXY_ENTITY(dat, obj);
    case DWG_TYPE_OLEFRAME:
       return dwg_print_OLEFRAME(dat, obj);
    case DWG_TYPE_VBA_PROJECT:
@@ -456,6 +454,10 @@ dwg_print_object(Bit_Chain* dat, Dwg_Object *obj)
       break;
    case DWG_TYPE_LAYOUT:
       return dwg_print_LAYOUT(dat, obj);
+   case DWG_TYPE_PROXY_ENTITY:
+      return dwg_print_PROXY_ENTITY(dat, obj);
+    case DWG_TYPE_PROXY_OBJECT: //DXF name: PROXY
+      return dwg_print_PROXY_OBJECT(dat, obj);
    default:
       if (obj->type == obj->parent->layout_number)
         {

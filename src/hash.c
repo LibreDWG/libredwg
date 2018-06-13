@@ -109,7 +109,7 @@ void hash_set(dwg_inthash *hash, uint32_t key, uint32_t value)
   uint32_t i = hash_func(key) % hash->size;
   uint32_t j = i;
   if (key == 0) {
-      fprintf(stderr, "forbidden 0 key");
+      fprintf(stderr, "forbidden 0 key\n");
       return;
   }
   // empty slot

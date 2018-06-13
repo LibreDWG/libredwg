@@ -577,9 +577,6 @@ dwg_free_object(Dwg_Object *obj)
     case DWG_TYPE_PLACEHOLDER:
       dwg_free_PLACEHOLDER(dat, obj);
       break;
-    case DWG_TYPE_PROXY_ENTITY:
-      dwg_free_PROXY_ENTITY(dat, obj);
-      break;
     case DWG_TYPE_OLEFRAME:
       dwg_free_OLEFRAME(dat, obj);
       break;
@@ -590,6 +587,12 @@ dwg_free_object(Dwg_Object *obj)
 #endif
     case DWG_TYPE_LAYOUT:
       dwg_free_LAYOUT(dat, obj);
+      break;
+    case DWG_TYPE_PROXY_ENTITY:
+      dwg_free_PROXY_ENTITY(dat, obj);
+      break;
+    case DWG_TYPE_PROXY_OBJECT:
+      dwg_free_PROXY_OBJECT(dat, obj);
       break;
     default:
       if (obj->type == obj->parent->layout_number)

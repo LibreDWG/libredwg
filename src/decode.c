@@ -3226,10 +3226,10 @@ static int
 dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
                          Dwg_Object *restrict obj)
 {
-  int i;
-  char *dxfname;
-  int is_entity;
   Dwg_Class *klass;
+  char *dxfname;
+  int i;
+  int is_entity;
 
   i = obj->type - 500;
   if (i < 0 || i >= dwg->num_classes)
@@ -3576,9 +3576,6 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
     case DWG_TYPE_PLACEHOLDER:
       error = dwg_decode_PLACEHOLDER(dat, obj);
       break;
-    case DWG_TYPE_PROXY_ENTITY:
-      error = dwg_decode_PROXY_ENTITY(dat, obj);
-      break;
     case DWG_TYPE_OLEFRAME:
       error = dwg_decode_OLEFRAME(dat, obj);
       break;
@@ -3589,6 +3586,12 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
       break;
     case DWG_TYPE_LAYOUT:
       error = dwg_decode_LAYOUT(dat, obj);
+      break;
+    case DWG_TYPE_PROXY_ENTITY:
+      error = dwg_decode_PROXY_ENTITY(dat, obj);
+      break;
+    case DWG_TYPE_PROXY_OBJECT:
+      error = dwg_decode_PROXY_OBJECT(dat, obj);
       break;
     default:
       if (obj->type == dwg->layout_number)

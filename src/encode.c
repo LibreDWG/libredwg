@@ -1375,9 +1375,6 @@ dwg_encode_add_object(Dwg_Object* obj, Bit_Chain* dat,
   case DWG_TYPE_PLACEHOLDER:
     error = dwg_encode_PLACEHOLDER(dat, obj);
     break;
-  case DWG_TYPE_PROXY_ENTITY:
-    error = dwg_encode_PROXY_ENTITY(dat, obj);
-    break;
   case DWG_TYPE_OLEFRAME:
     error = dwg_encode_OLEFRAME(dat, obj);
     break;
@@ -1387,6 +1384,13 @@ dwg_encode_add_object(Dwg_Object* obj, Bit_Chain* dat,
     break;
   case DWG_TYPE_LAYOUT:
     error |= dwg_encode_LAYOUT(dat, obj);
+    break;
+  case DWG_TYPE_PROXY_ENTITY:
+    error = dwg_encode_PROXY_ENTITY(dat, obj);
+    break;
+  case DWG_TYPE_PROXY_OBJECT:
+    error = dwg_encode_PROXY_OBJECT(dat, obj);
+    break;
   default:
       if (obj->type == obj->parent->layout_number)
         error = dwg_encode_LAYOUT(dat, obj);

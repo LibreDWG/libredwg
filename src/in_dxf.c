@@ -837,8 +837,6 @@ dwg_indxf_object(Bit_Chain *dat, Dwg_Object *obj)
       return dwg_indxf_XRECORD(dat, obj);
     case DWG_TYPE_PLACEHOLDER:
       return dwg_indxf_PLACEHOLDER(dat, obj);
-    case DWG_TYPE_PROXY_ENTITY:
-      return dwg_indxf_PROXY_ENTITY(dat, obj);
     case DWG_TYPE_OLEFRAME:
       return dwg_indxf_OLEFRAME(dat, obj);
     case DWG_TYPE_VBA_PROJECT:
@@ -846,6 +844,10 @@ dwg_indxf_object(Bit_Chain *dat, Dwg_Object *obj)
       //dwg_indxf_VBA_PROJECT(dat, obj);
     case DWG_TYPE_LAYOUT:
       return dwg_indxf_LAYOUT(dat, obj);
+    case DWG_TYPE_PROXY_ENTITY:
+      return dwg_indxf_PROXY_ENTITY(dat, obj);
+    case DWG_TYPE_PROXY_OBJECT:
+      return dwg_indxf_PROXY_OBJECT(dat, obj);
     default:
       if (obj->type == obj->parent->layout_number)
         {

@@ -555,15 +555,18 @@ dwg_indxfb_object(Bit_Chain *dat, Dwg_Object *obj)
       return dwg_indxfb_XRECORD(dat, obj);
     case DWG_TYPE_PLACEHOLDER:
       return dwg_indxfb_PLACEHOLDER(dat, obj);
-    case DWG_TYPE_PROXY_ENTITY:
-      return dwg_indxfb_PROXY_ENTITY(dat, obj);
     case DWG_TYPE_OLEFRAME:
       return dwg_indxfb_OLEFRAME(dat, obj);
     case DWG_TYPE_VBA_PROJECT:
       LOG_ERROR("Unhandled Object VBA_PROJECT. Has its own section\n");
       //dwg_indxfb_VBA_PROJECT(dat, obj);
+      return DWG_ERR_UNHANDLEDCLASS;
     case DWG_TYPE_LAYOUT:
       return dwg_indxfb_LAYOUT(dat, obj);
+    case DWG_TYPE_PROXY_ENTITY:
+      return dwg_indxfb_PROXY_ENTITY(dat, obj);
+    case DWG_TYPE_PROXY_OBJECT:
+      return dwg_indxfb_PROXY_OBJECT(dat, obj);
     default:
       if (obj->type == obj->parent->layout_number)
         {
