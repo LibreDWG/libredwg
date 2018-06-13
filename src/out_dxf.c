@@ -352,8 +352,7 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
     fprintf(dat->fh, "102\r\n{ACAD_REACTORS\r\n");\
     for (vcount=0; vcount < (int)obj->tio.object->num_reactors; vcount++)\
       { /* soft ptr */ \
-        fprintf(dat->fh, "330\r\n"); \
-        FIELD_HANDLE_N(reactors[vcount], vcount, code, -5);\
+        FIELD_HANDLE_N(reactors[vcount], vcount, code, 330);\
       }\
     fprintf(dat->fh, "102\r\n}\r\n");\
   }
@@ -362,8 +361,7 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
     fprintf(dat->fh, "102\r\n{ACAD_REACTORS\r\n");\
     for (vcount=0; vcount < _obj->num_reactors; vcount++)\
       {\
-        fprintf(dat->fh, "330\r\n"); \
-        FIELD_HANDLE_N(reactors[vcount], vcount, code, -5);\
+        FIELD_HANDLE_N(reactors[vcount], vcount, code, 330);\
       }\
     fprintf(dat->fh, "102\r\n}\r\n");\
   }
