@@ -31,6 +31,12 @@
 #define SET_PARENT_OBJ(field)
 #define SET_PARENT_FIELD(field, what_parent, obj)
 
+#ifndef M_PI_2
+# define M_PI_2      1.57079632679489661923132169163975144
+#endif
+#define rad2deg(ang) (ang)*180.0/M_PI_2
+#define deg2rad(ang) (ang) ? M_PI_2/((ang)*180.0) : 0.0
+
 #ifndef VALUE_HANDLE
 #define VALUE_HANDLE(value, handle_code, dxf)
 #endif

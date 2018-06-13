@@ -22,9 +22,6 @@
 //TODO: GEOLATLONGFORMAT, GEOMARKERVISIBILITY, GEOMARKPOSITIONSIZE
 
 #include "spec.h"
-#ifndef M_PI_2
-# define M_PI_2      1.57079632679489661923132169163975144
-#endif
 
 // size, bitsize_hi and bitsize read before
 

@@ -3204,8 +3204,18 @@ DWG_OBJECT(MLINESTYLE)
                              512 = End inner arcs cap,
                              1024 = End round (outer arcs) cap */
   FIELD_CMC (fill_color, 62); /*!< default 256 */
+#ifdef IS_DXF
+  // 0 - 90
+  FIELD_VALUE(start_angle) = rad2deg(FIELD_VALUE(start_angle));
+  FIELD_VALUE(end_angle)   = rad2deg(FIELD_VALUE(end_angle));
+  while (FIELD_VALUE(start_angle) > 90.0) FIELD_VALUE(start_angle) -= 90.0;
+  while (FIELD_VALUE(end_angle)   > 90.0) FIELD_VALUE(end_angle)   -= 90.0;
+  VALUE (FIELD_VALUE(start_angle), RD, 51)
+  VALUE (FIELD_VALUE(end_angle), RD, 52)
+#else
   FIELD_BD (start_angle, 51); /*!< default 90 deg */
   FIELD_BD (end_angle, 52);   /*!< default 90 deg */
+#endif
   FIELD_RC (num_lines, 71);
   REPEAT_C(num_lines, lines, Dwg_MLINESTYLE_line)
   {

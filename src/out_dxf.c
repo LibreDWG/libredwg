@@ -210,7 +210,9 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
 #define VALUE_BS(value,dxf)  VALUE(value, RS, dxf)
 #define VALUE_BL(value,dxf)  VALUE(value, BL, dxf)
 #define VALUE_BLL(value,dxf) VALUE(value, RLL, dxf)
-#define VALUE_BD(value,dxf)  VALUE(value, RD, dxf)
+#define VALUE_BD(value,dxf) \
+  if (dxf >= 50 && dxf < 55) value = rad2deg(value); \
+  VALUE(value, RD, dxf)
 #define VALUE_RC(value,dxf)  VALUE(value, RC, dxf)
 #define VALUE_RS(value,dxf)  VALUE(value, RS, dxf)
 #define VALUE_RD(value,dxf)  VALUE(value, RD, dxf)
@@ -224,7 +226,9 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
 #define FIELD_BS(name,dxf)  FIELD(name, BS, dxf)
 #define FIELD_BL(name,dxf)  FIELD(name, BL, dxf)
 #define FIELD_BLL(name,dxf) FIELD(name, BLL, dxf)
-#define FIELD_BD(name,dxf)  FIELD(name, BD, dxf)
+#define FIELD_BD(name,dxf)  \
+  if (dxf >= 50 && dxf < 55) _obj->name = rad2deg(_obj->name); \
+  FIELD(name, BD, dxf)
 #define FIELD_RC(name,dxf)  FIELD(name, RC, dxf)
 #define FIELD_RS(name,dxf)  FIELD(name, RS, dxf)
 #define FIELD_RD(name,dxf)  FIELD(name, RD, dxf)
@@ -235,9 +239,9 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
 #define FIELD_TF(name,len,dxf)  VALUE_TV(_obj->name, dxf)
 #define FIELD_TFF(name,len,dxf) VALUE_TV(_obj->name, dxf)
 #define FIELD_TV(name,dxf) \
-  if (dxf != 0) { VALUE_TV(_obj->name,dxf); }
+  if (dxf) { VALUE_TV(_obj->name,dxf); }
 #define FIELD_TU(name,dxf) \
-  if (dxf != 0) { VALUE_TU((BITCODE_TU)_obj->name, dxf); }
+  if (dxf) { VALUE_TU((BITCODE_TU)_obj->name, dxf); }
 #define FIELD_T(name,dxf) \
   { if (dat->from_version >= R_2007) { FIELD_TU(name, dxf); } \
     else                             { FIELD_TV(name, dxf); } }
