@@ -56,45 +56,50 @@
 #define FIELD_VALUE(name) _obj->name
 
 #define ANYCODE -1
-#define FIELD_HANDLE(name, handle_code, dxf) \
+#define VALUE_HANDLE(handleptr, name, handle_code, dxf) \
   { \
     if (handle_code >= 0) \
       {\
-        _obj->name = dwg_decode_handleref_with_code(hdl_dat, obj, dwg, handle_code);\
+        handleptr = dwg_decode_handleref_with_code(hdl_dat, obj, dwg, handle_code);\
       }\
     else\
       {\
-        _obj->name = dwg_decode_handleref(hdl_dat, obj, dwg);\
+        handleptr = dwg_decode_handleref(hdl_dat, obj, dwg);\
       }\
-    if (_obj->name)\
+    if (handleptr)\
       {\
         LOG_TRACE(#name ": HANDLE(%d.%d.%lX) absolute:%lX/%lu [%d]\n", \
-                  _obj->name->handleref.code, \
-                  _obj->name->handleref.size, \
-                  _obj->name->handleref.value,\
-                  _obj->name->absolute_ref, _obj->name->absolute_ref, dxf) \
+                  handleptr->handleref.code, \
+                  handleptr->handleref.size, \
+                  handleptr->handleref.value,\
+                  handleptr->absolute_ref, handleptr->absolute_ref, dxf) \
       }\
   }
-#define FIELD_HANDLE_N(name, vcount, handle_code, dxf)  \
+#define FIELD_HANDLE(name, handle_code, dxf) VALUE_HANDLE(_obj->name, name, handle_code, dxf)
+
+#define VALUE_HANDLE_N(handleptr, name, vcount, handle_code, dxf) \
   {\
-    if (handle_code>=0) \
+    if (handle_code >= 0) \
       {\
-        _obj->name = dwg_decode_handleref_with_code(hdl_dat, obj, dwg, handle_code);\
+        handleptr = dwg_decode_handleref_with_code(hdl_dat, obj, dwg, handle_code);\
       }\
     else\
       {\
-        _obj->name = dwg_decode_handleref(hdl_dat, obj, dwg);\
+        handleptr = dwg_decode_handleref(hdl_dat, obj, dwg);\
       }\
-    if (_obj->name)\
+    if (handleptr)\
       {\
         LOG_TRACE(#name "[%d]: HANDLE(%d.%d.%lX) absolute:%lX/%lu [%d]\n",  \
-              (int)vcount,                          \
-              _obj->name->handleref.code,           \
-              _obj->name->handleref.size,           \
-              _obj->name->handleref.value,          \
-              _obj->name->absolute_ref, _obj->name->absolute_ref, dxf) \
+              (int)vcount,                         \
+              handleptr->handleref.code,           \
+              handleptr->handleref.size,           \
+              handleptr->handleref.value,          \
+              handleptr->absolute_ref, handleptr->absolute_ref, dxf) \
       }\
   }
+#define FIELD_HANDLE_N(name, vcount, handle_code, dxf) \
+  VALUE_HANDLE_N(_obj->name, name, vcount, handle_code, dxf)
+
 #define FIELD_DATAHANDLE(name, handle_code, dxf) \
   { \
     _obj->name = dwg_decode_handleref(dat, obj, dwg);\
@@ -335,18 +340,18 @@
 
 #define REACTORS(code)\
   LOG_TRACE("num_reactors: %u\n", (int)obj->tio.object->num_reactors);  \
-  FIELD_VALUE(reactors) = (BITCODE_H*) malloc(sizeof(BITCODE_H) * obj->tio.object->num_reactors);\
+  obj->tio.object->reactors = malloc(sizeof(BITCODE_H) * obj->tio.object->num_reactors); \
   for (vcount=0; vcount < (long)obj->tio.object->num_reactors; vcount++) \
     {\
-      FIELD_HANDLE_N(reactors[vcount], vcount, code, -5);  \
+      VALUE_HANDLE_N(obj->tio.object->reactors[vcount], reactors, vcount, code, -5); \
     }
 
 #define ENT_REACTORS(code)\
-  LOG_TRACE("num_reactors: %u\n", (int)obj->tio.entity->num_reactors); \
-  FIELD_VALUE(reactors) = (BITCODE_H*) malloc(sizeof(BITCODE_H) * obj->tio.entity->num_reactors);\
-  for (vcount=0; vcount < obj->tio.entity->num_reactors; vcount++)\
+  LOG_TRACE("num_reactors: %u\n", (int)_ent->num_reactors); \
+  _ent->reactors = malloc(sizeof(BITCODE_H) * _ent->num_reactors); \
+  for (vcount=0; vcount < _ent->num_reactors; vcount++)\
     {\
-      FIELD_HANDLE_N(reactors[vcount], vcount, code, -5);  \
+      VALUE_HANDLE_N(_ent->reactors[vcount], reactors, vcount, code, -5); \
     }
 
 #define XDICOBJHANDLE(code)\
@@ -354,7 +359,7 @@
     {\
       if (!obj->tio.object->xdic_missing_flag)\
         {\
-          FIELD_HANDLE(xdicobjhandle, code, 0);\
+          VALUE_HANDLE(obj->tio.object->xdicobjhandle, xdicobjhandle, code, 0);\
         }\
       else \
         {\
@@ -363,20 +368,20 @@
     }\
   PRIOR_VERSIONS\
     {\
-      FIELD_HANDLE(xdicobjhandle, code, 0); \
+      VALUE_HANDLE(obj->tio.object->xdicobjhandle, xdicobjhandle, code, 0); \
     }
 
 #define ENT_XDICOBJHANDLE(code)\
   SINCE(R_2004)\
     {\
-      if (!obj->tio.entity->xdic_missing_flag)\
+      if (!_ent->xdic_missing_flag)\
         {\
-          FIELD_HANDLE(xdicobjhandle, code, 0); \
+          VALUE_HANDLE(_ent->xdicobjhandle, xdicobjhandle, code, 0); \
         }\
     }\
   PRIOR_VERSIONS\
     {\
-      FIELD_HANDLE(xdicobjhandle, code, 0); \
+      VALUE_HANDLE(_ent->xdicobjhandle, xdicobjhandle, code, 0); \
     }
 
 #define SECTION_STRING_STREAM \

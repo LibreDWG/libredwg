@@ -86,17 +86,18 @@ static unsigned int cur_ver = 0;
 #define FIELD_VALUE(name) _obj->name
 #define ANYCODE -1
 // todo: only the name, not the ref
-#define FIELD_HANDLE(name, handle_code, dxf)    \
-    PREFIX if (_obj->name) { \
+#define VALUE_HANDLE(hdlptr, name, handle_code, dxf)     \
+  PREFIX if (hdlptr) { \
     fprintf(dat->fh, "\"%s\": \"HANDLE(%d.%d.%lu) absolute:%lu\",\n", #name, \
-           _obj->name->handleref.code,                     \
-           _obj->name->handleref.size,                     \
-           _obj->name->handleref.value,                    \
-           _obj->name->absolute_ref);                      \
+           hdlptr->handleref.code,                     \
+           hdlptr->handleref.size,                     \
+           hdlptr->handleref.value,                    \
+           hdlptr->absolute_ref);                      \
   }
+#define FIELD_HANDLE(name, handle_code, dxf) VALUE_HANDLE(_obj->name, name, handle_code, dxf)
 #define FIELD_DATAHANDLE(name, code, dxf) FIELD_HANDLE(name, code, dxf)
 #define FIELD_HANDLE_N(name, vcount, handle_code, dxf) \
-    PREFIX if (_obj->name) { \
+  PREFIX if (_obj->name) { \
     fprintf(dat->fh, "\"HANDLE(%d.%d.%lu) absolute:%lu\",\n",\
            _obj->name->handleref.code,                     \
            _obj->name->handleref.size,                     \
@@ -231,7 +232,7 @@ static unsigned int cur_ver = 0;
   fprintf(dat->fh, "\"reactors\":"); ARRAY; \
   for (vcount=0; vcount < (int)obj->tio.object->num_reactors; vcount++)\
     {\
-      FIELD_HANDLE_N(reactors[vcount], vcount, code, dxf);\
+      VALUE_HANDLE(obj->tio.object->reactors[vcount], reactors, code, 330); \
     }\
   if (obj->tio.object->num_reactors) NOCOMMA;\
   ENDARRAY;
@@ -240,11 +241,11 @@ static unsigned int cur_ver = 0;
   SINCE(R_2004)\
     {\
       if (!obj->tio.object->xdic_missing_flag)\
-        FIELD_HANDLE(xdicobjhandle, code, dxf);\
+        VALUE_HANDLE(obj->tio.object->xdicobjhandle, xdicobjhandle, code, -3); \
     }\
   PRIOR_VERSIONS\
     {\
-      FIELD_HANDLE(xdicobjhandle, code, dxf);\
+      VALUE_HANDLE(obj->tio.object->xdicobjhandle, xdicobjhandle, code, -3); \
     }
 
 #define COMMON_ENTITY_HANDLE_DATA

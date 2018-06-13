@@ -66,7 +66,8 @@ int dwg_obj_is_control(const Dwg_Object *obj);
 #define FIELD_VALUE(name) _obj->name
 
 #define ANYCODE -1
-#define FIELD_HANDLE(name,code,dxf) dwg_free_handleref(_obj->name, dwg)
+#define FIELD_HANDLE(name,code,dxf) VALUE_HANDLE(_obj->name,code,dxf)
+#define VALUE_HANDLE(hdl,code,dxf)  dwg_free_handleref(hdl, dwg)
 #define FIELD_DATAHANDLE(name,code,dxf) FIELD_HANDLE(name, code, dxf)
 #define FIELD_HANDLE_N(name,vcount,code,dxf) FIELD_HANDLE(name, code, dxf)
 
@@ -142,38 +143,38 @@ int dwg_obj_is_control(const Dwg_Object *obj);
 #define REACTORS(code) \
   for (vcount=0; vcount < (long)obj->tio.object->num_reactors; vcount++) \
     {\
-      FIELD_HANDLE_N(reactors[vcount], vcount, code, -5); \
+      VALUE_HANDLE(obj->tio.object->reactors[vcount], code, 330);  \
     } \
-    FIELD_TV(reactors,0)
+    VALUE_TV(obj->tio.object->reactors, 0)
 #define ENT_REACTORS(code)  \
-  for (vcount=0; vcount < obj->tio.entity->num_reactors; vcount++)\
+  for (vcount=0; vcount < ent->num_reactors; vcount++)\
     {\
-      FIELD_HANDLE_N(reactors[vcount], vcount, code, -5);  \
+      VALUE_HANDLE(ent->reactors[vcount], code, 330);  \
     }\
-  FIELD_TV(reactors,0)
+  VALUE_TV(ent->reactors,0)
 #define XDICOBJHANDLE(code)\
   SINCE(R_2004)\
     {\
       if (!obj->tio.object->xdic_missing_flag)\
         {\
-          FIELD_HANDLE(xdicobjhandle, code, 0); \
+          VALUE_HANDLE(obj->tio.object->xdicobjhandle, code, 0); \
         }\
     }\
   PRIOR_VERSIONS\
     {\
-      FIELD_HANDLE(xdicobjhandle, code, 0); \
+      VALUE_HANDLE(obj->tio.object->xdicobjhandle, code, 0); \
     }
 #define ENT_XDICOBJHANDLE(code)\
   SINCE(R_2004)\
     {\
-      if (!obj->tio.entity->xdic_missing_flag)\
+      if (!ent->xdic_missing_flag)\
         {\
-          FIELD_HANDLE(xdicobjhandle, code, 0); \
+          VALUE_HANDLE(ent->xdicobjhandle, code, 0); \
         }\
     }\
   PRIOR_VERSIONS\
     {\
-      FIELD_HANDLE(xdicobjhandle, code, 0); \
+      VALUE_HANDLE(ent->xdicobjhandle, code, 0); \
     }
 
 #define END_REPEAT(field) FIELD_TV(field,0)

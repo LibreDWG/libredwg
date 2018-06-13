@@ -230,14 +230,15 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
 
 #define FIELD_VALUE(name) _obj->name
 #define ANYCODE -1
-#define FIELD_HANDLE(name, handle_code, dxf) \
-  if (dxf && _obj->name) { \
+#define VALUE_HANDLE(hdlptr, handle_code, dxf) \
+  if (dxf && hdlptr) { \
     if (GROUP(dxf)) { \
       int i = sscanf((char*)&dat->chain[dat->byte], "%lX", \
-                     &_obj->name->absolute_ref); \
+                     &hdlptr->absolute_ref); \
       dat->byte += i; \
     } \
   }
+#define FIELD_HANDLE(name, handle_code, dxf) VALUE_HANDLE(_obj->name, handle_code, dxf)
 #define HEADER_9(name) \
     GROUP(9)
 #define VALUE_H(value,dxf) \
@@ -493,7 +494,7 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
     dxf_free_pair(pair); vcount = 0; \
     while (dxf_check_code(dat, pair, 330)) { \
       vcount++; obj->tio.object->num_reactors++; \
-      FIELD_HANDLE_N(reactors[vcount], vcount, code, -5); \
+      VALUE_HANDLE(obj->tio.object->reactors[vcount], code, 330); \
     } \
     dxf_check_code(dat, pair, 102); \
   }
@@ -504,7 +505,7 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
     dxf_free_pair(pair); vcount = 0; \
     while (dxf_check_code(dat, pair, 330)) { \
       vcount++; _obj->num_reactors++; \
-      FIELD_HANDLE_N(reactors[vcount], vcount, code, -5); \
+      VALUE_HANDLE(obj->tio.entity->reactors[vcount], code, 330); \
     } \
     dxf_check_code(dat, pair, 102); \
   }

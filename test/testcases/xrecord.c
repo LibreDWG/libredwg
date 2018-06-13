@@ -9,7 +9,6 @@ api_process (dwg_object * obj)
   BITCODE_BL i, num_databytes, num_eed, num_objid_handles;
   BITCODE_BS cloning_flags;
   dwg_object_ref* parent;
-  dwg_object_ref** reactors;
 
   dwg_obj_xrecord *xrecord = dwg_object_to_XRECORD (obj);
 
@@ -61,11 +60,5 @@ api_process (dwg_object * obj)
     pass ("Working Properly");
   else
     fail ("error in reading parenthandle");
-  
-  reactors = dwg_obj_xrecord_get_reactors (xrecord, &error);
-  if (!error  && reactors == xrecord->reactors)
-    pass ("Working Properly");
-  else
-    fail ("error in reading reactors");
   
 }

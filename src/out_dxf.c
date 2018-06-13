@@ -117,7 +117,7 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
       FIELD_HANDLE_NAME(name, dxf, STYLE) \
     else if (dxf == 8) \
       FIELD_HANDLE_NAME(name, dxf, LAYER) \
-    else if (!minimal) \
+    else if (dat->version >= R_13) \
       fprintf(dat->fh, "%3i\r\n%lX\r\n", dxf, _obj->name->absolute_ref); \
   }
 #define HEADER_9(name) \
@@ -194,7 +194,6 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
   HEADER_9(name); FIELD_HANDLE_NAME(name, dxf, table)
 
 #define FIELD_DATAHANDLE(name, code, dxf) FIELD_HANDLE(name, code, dxf)
-#define FIELD_HANDLE_N(name, vcount, handle_code, dxf) FIELD_HANDLE(name, handle_code, dxf)
 
 #define HEADER_RC(name,dxf)  HEADER_9(name); FIELD(name, RC, dxf)
 #define HEADER_RS(name,dxf)  HEADER_9(name); FIELD(name, RS, dxf)
@@ -334,11 +333,20 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
       }\
     }
 
+#define VALUE_HANDLE_N(hdlptr, name, vcount, handle_code, dxf) \
+  if (dxf) {\
+    for (vcount=0; vcount < (int)size; vcount++)\
+      {\
+        VALUE_HANDLE(hdlptr[vcount], handle_code, dxf);\
+      }\
+    }
+#define FIELD_HANDLE_N(name, size, handle_code, dxf) \
+  VALUE_HANDLE(_obj->name, handle_code, dxf)
 #define HANDLE_VECTOR_N(name, size, code, dxf) \
   if (dxf) {\
     for (vcount=0; vcount < (int)size; vcount++)\
       {\
-        FIELD_HANDLE_N(name[vcount], vcount, code, dxf);\
+        FIELD_HANDLE(name[vcount], code, dxf);\
       }\
     }
 
@@ -353,11 +361,11 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
 
 #define _XDICOBJHANDLE(code) /* TODO */
 #define _REACTORS(code)\
-  if (dat->version >= R_13 && obj->tio.object->num_reactors) {\
+  if (dat->version >= R_13 && obj->tio.object->num_reactors && obj->tio.object->reactors) {\
     fprintf(dat->fh, "102\r\n{ACAD_REACTORS\r\n");\
     for (vcount=0; vcount < (int)obj->tio.object->num_reactors; vcount++)\
       { /* soft ptr */ \
-        FIELD_HANDLE_N(reactors[vcount], vcount, code, 330);\
+        VALUE_HANDLE(obj->tio.object->reactors[vcount], code, 330); \
       }\
     fprintf(dat->fh, "102\r\n}\r\n");\
   }
@@ -366,7 +374,7 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
     fprintf(dat->fh, "102\r\n{ACAD_REACTORS\r\n");\
     for (vcount=0; vcount < _obj->num_reactors; vcount++)\
       {\
-        FIELD_HANDLE_N(reactors[vcount], vcount, code, 330);\
+        VALUE_HANDLE(_obj->reactors[vcount], code, 330); \
       }\
     fprintf(dat->fh, "102\r\n}\r\n");\
   }

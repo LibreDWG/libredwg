@@ -97,10 +97,13 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
 #define FIELD_VALUE(name) _obj->name
 #define ANYCODE -1
 //TODO
-#define FIELD_HANDLE(name, handle_code, dxf) \
-  if (_obj->name) { \
-    VALUE_HANDLE(_obj->name, handle_code, dxf) \
+#define VALUE_HANDLE(hdlptr, handle_code, dxf) \
+  { \
+     uint32_t i = (uint32_t)hdlptr->absolute_ref; \
+     GROUP(dxf); \
+     fwrite(&i, 4, 4, dat->fh); \
   }
+#define FIELD_HANDLE(name, handle_code, dxf) VALUE_HANDLE(_obj->name, handle_code, dxf)
 
 #define GROUP(code)                  \
     {                                \
@@ -113,15 +116,15 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
     }                                \
   }
 #define FIELD_TV(name,dxf) \
-  if (_obj->name != NULL && dxf != 0) { VALUE_TV(_obj->name,dxf); }
+  if (_obj->name != NULL && dxf != 0) { VALUE_TV(_obj->name,dxf) }
 #define FIELD_TU(name,dxf) \
-  if (_obj->name != NULL && dxf != 0) { VALUE_TU(_obj->name, dxf); }
+  if (_obj->name != NULL && dxf != 0) { VALUE_TU(_obj->name, dxf) }
 #define VALUE_T(value,dxf) \
-  { if (dat->version >= R_2007) { VALUE_TU(value, dxf); } \
-    else                        { VALUE_TV(value, dxf); } }
+  { if (dat->version >= R_2007) VALUE_TU(value, dxf) \
+    else                        VALUE_TV(value, dxf) }
 #define FIELD_T(name,dxf) \
-  { if (dat->version >= R_2007) { FIELD_TU(name, dxf); } \
-    else                        { FIELD_TV(name, dxf); } }
+  { if (dat->version >= R_2007) { FIELD_TU(name, dxf) } \
+    else                        { FIELD_TV(name, dxf) } }
 #define FIELD_TF(name,len,dxf)  VALUE_TV(_obj->name, dxf)
 #define FIELD_TFF(name,len,dxf) VALUE_TV(_obj->name, dxf)
 
@@ -150,7 +153,7 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
     VALUE_TV(#token, 2)
 #define ENDTAB()        VALUE_TV("ENDTAB", 0)
 #define RECORD(record)  VALUE_TV(#record, 0)
-#define SUBCLASS(text)  if (dat->from_version >= R_2000) { VALUE_TV(#text, 100); }
+#define SUBCLASS(text)  if (dat->from_version >= R_2000) { VALUE_TV(#text, 100) }
 
 /*
 #define VALUE(code, value)                   \
@@ -245,8 +248,8 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
   {\
     Dwg_Object_Ref *ref = value;\
     if (ref && ref->obj && ref->obj->supertype == DWG_SUPERTYPE_OBJECT) { \
-      VALUE_TV(ref->obj->tio.object->tio.table->entry_name, dxf);} \
-    else VALUE_TV("", dxf);\
+      VALUE_TV(ref->obj->tio.object->tio.table->entry_name, dxf) } \
+    else VALUE_TV("", dxf) \
   }
 #define FIELD_HANDLE_NAME(name,dxf,table) VALUE_HANDLE_NAME(_obj->name,dxf,table)
 #define HEADER_HANDLE_NAME(name,dxf,table)\
@@ -353,21 +356,21 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
 
 #define REACTORS(code)\
   if (obj->tio.object->num_reactors) {\
-    VALUE_TV("{ACAD_REACTORS", 102);\
+    VALUE_TV("{ACAD_REACTORS", 102) \
     for (vcount=0; vcount < (int)obj->tio.object->num_reactors; vcount++)\
       {\
-        FIELD_HANDLE_N(reactors[vcount], vcount, code, 330);\
+        VALUE_HANDLE(obj->tio.object->reactors[vcount], code, 330);\
       }\
-    VALUE_TV("}", 102);\
+    VALUE_TV("}", 102) \
   }
 #define ENT_REACTORS(code)\
   if (_obj->num_reactors) {\
-    VALUE_TV("{ACAD_REACTORS", 102);\
+    VALUE_TV("{ACAD_REACTORS", 102) \
     for (vcount=0; vcount < (int)_obj->num_reactors; vcount++)\
       {\
-        FIELD_HANDLE_N(reactors[vcount], vcount, code, 330);\
+        VALUE_HANDLE(_obj->reactors[vcount], code, 330);\
       }\
-    VALUE_TV("}", 102);\
+    VALUE_TV("}", 102) \
   }
 
 #define XDICOBJHANDLE(code)
@@ -391,14 +394,20 @@ dwg_dxfb_##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
   LOG_INFO("Entity " #token ":\n")\
   _ent = obj->tio.entity;\
   _obj = ent = _ent->tio.token;\
-  VALUE_HANDLE (obj->handle, 5, 330); \
+  SINCE(R_13) {                             \
+    uint32_t i = (uint32_t)obj->handle.value;\
+    GROUP(330); \
+    fwrite(&i, 4, 4, dat->fh); \
+  } \
   LOG_TRACE("Entity handle: %d.%d.%lX\n",\
     obj->handle.code,\
     obj->handle.size,\
     obj->handle.value) \
-  VALUE_HANDLE_NAME (obj->parent->header_vars.BLOCK_RECORD_MSPACE, 330, BLOCK_HEADER); \
-  if (dat->from_version >= R_2000) \
-    VALUE_TV ("AcDbEntity", 100);  \
+  SINCE(R_14) { \
+    VALUE_HANDLE_NAME (obj->parent->header_vars.BLOCK_RECORD_MSPACE, 330, BLOCK_HEADER); \
+  } \
+  SINCE(R_2000) \
+    VALUE_TV ("AcDbEntity", 100) \
   SINCE(R_13) { \
     error |= dxfb_common_entity_handle_data(dat, obj); \
   }
@@ -416,8 +425,19 @@ dwg_dxfb_ ##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
   LOG_INFO("Object " #token ":\n")\
   _obj = obj->tio.object->tio.token;\
   if (!dwg_obj_is_control(obj)) { \
-    if (obj->type != DWG_TYPE_BLOCK_HEADER) RECORD(token); \
-    VALUE_HANDLE (obj->handle, 5, 330); \
+    if (obj->fixedtype == DWG_TYPE_DICTIONARYWDFLT) RECORD(ACDBDICTIONARYWDFLT) \
+    else if (obj->fixedtype == DWG_TYPE_PLACEHOLDER) RECORD(ACDBPLACEHOLDER) \
+    else if (obj->fixedtype == DWG_TYPE_ASSOCNETWORK) RECORD(ACDBASSOCNETWORK) \
+    else if (obj->fixedtype == DWG_TYPE_DETAILVIEWSTYLE) RECORD(ACDBDETAILVIEWSTYLE) \
+    else if (obj->fixedtype == DWG_TYPE_SECTIONVIEWSTYLE) RECORD(ACDBSECTIONVIEWSTYLE) \
+    else if (obj->type != DWG_TYPE_BLOCK_HEADER) RECORD(token) \
+    SINCE(R_13) { \
+      uint32_t i = (uint32_t)obj->handle.value; \
+      int dxf = 5; \
+      if (obj->type == DWG_TYPE_DIMSTYLE) dxf = 105; \
+      GROUP(dxf);\
+      fwrite(&i, 4, 4, dat->fh); \
+    } \
   } \
   LOG_TRACE("Object handle: %d.%d.%lX\n",\
     obj->handle.code,\
@@ -442,9 +462,9 @@ dxfb_write_xdata(Bit_Chain *restrict dat, Dwg_Resbuf *restrict rbuf, BITCODE_BL 
         {
         case VT_STRING:
           UNTIL(R_2007) {
-            VALUE_TV(rbuf->value.str.u.data, rbuf->type);
+            VALUE_TV(rbuf->value.str.u.data, rbuf->type)
           } LATER_VERSIONS {
-            VALUE_TU(rbuf->value.str.u.wdata, rbuf->type);
+            VALUE_TU(rbuf->value.str.u.wdata, rbuf->type)
           }
           break;
         case VT_REAL:
@@ -527,31 +547,30 @@ dxfb_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
 
 //TODO
 #define COMMON_TABLE_CONTROL_FLAGS(owner) \
+  SINCE(R_14) \
     VALUE_H (_ctrl->null_handle, 330); \
-    if (dat->from_version >= R_2000) \
-      VALUE_TV ("AcDbSymbolTable", 100)
+  SINCE(R_2000) \
+    VALUE_TV ("AcDbSymbolTable", 100)
 
 #define COMMON_TABLE_FLAGS(owner, acdbname) \
-  if (!minimal) { \
+  SINCE(R_14) \
     FIELD_HANDLE (owner, 4, 330); \
-    if (dat->from_version >= R_2000) { \
-      VALUE_TV ("AcDbSymbolTableRecord", 100); \
-      VALUE_TV ("AcDb" #acdbname "TableRecord", 100); \
-    }\
+  SINCE(R_2000) { \
+    VALUE_TV ("AcDbSymbolTableRecord", 100) \
+    VALUE_TV ("AcDb" #acdbname "TableRecord", 100) \
   } \
   dxfb_cvt_tablerecord(dat, obj, _obj->entry_name, 2); \
-  FIELD_RC (flag, 70);
+  FIELD_RC (flag, 70)
 
-#define LAYER_TABLE_FLAGS(owner, acdbname)      \
-  if (!minimal) { \
+#define LAYER_TABLE_FLAGS(owner, acdbname) \
+  SINCE(R_14) \
     FIELD_HANDLE (owner, 4, 330); \
-    if (dat->from_version >= R_2000) { \
-      VALUE_TV ("AcDbSymbolTableRecord", 100); \
-      VALUE_TV ("AcDb" #acdbname "TableRecord", 100); \
-    }\
+  SINCE(R_2000) { \
+    VALUE_TV ("AcDbSymbolTableRecord", 100) \
+    VALUE_TV ("AcDb" #acdbname "TableRecord", 100) \
   } \
   if (_obj->entry_name) dxfb_cvt_tablerecord(dat, obj, _obj->entry_name, 2); \
-  FIELD_RS (flag, 70);
+  FIELD_RS (flag, 70)
 
 #include "dwg.spec"
 

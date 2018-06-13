@@ -68,15 +68,14 @@ static char buf[4096];
 
 #define FIELD_VALUE(name) _obj->name
 #define ANYCODE -1
-//TODO
-#define FIELD_HANDLE(name, handle_code, dxf) \
-  if (_obj->name) { \
-    fprintf(dat->fh, #name ": \"HANDLE(%d.%d.%lu) absolute:%lu\",\n",\
-           _obj->name->handleref.code,                     \
-           _obj->name->handleref.size,                     \
-           _obj->name->handleref.value,                    \
-           _obj->name->absolute_ref);                      \
+//TODO read
+#define VALUE_HANDLE(hdlptr, handle_code, dxf) \
+  if (hdlptr) { \
+     uint32_t hdl = (uint32_t)hdlptr->absolute_ref; \
+     GROUP(dxf); \
+     fwrite(&hdl, 4, 4, dat->fh); \
   }
+#define FIELD_HANDLE(name, handle_code, dxf) VALUE_HANDLE(_obj->name, handle_code, dxf)
 
 #define GROUP(code)                  \
     {                                \
@@ -308,7 +307,7 @@ static char buf[4096];
   fprintf(dat->fh, "[");\
   for (vcount=0; vcount < (int)obj->tio.object->num_reactors; vcount++)\
     {\
-      FIELD_HANDLE_N(reactors[vcount], vcount, code, dxf);\
+      VALUE_HANDLE(obj->tio.object->reactors[vcount], code, 330);\
     }\
   fprintf(dat->fh, "]\n");
 
@@ -316,11 +315,11 @@ static char buf[4096];
   SINCE(R_2004)\
     {\
       if (!obj->tio.object->xdic_missing_flag)\
-        FIELD_HANDLE(xdicobjhandle, code, dxf);\
+        VALUE_HANDLE(obj->tio.object->xdicobjhandle, code, -3);\
     }\
   PRIOR_VERSIONS\
     {\
-      FIELD_HANDLE(xdicobjhandle, code, dxf);\
+      VALUE_HANDLE(obj->tio.object->xdicobjhandle, code, -3);\
     }
 
 #define COMMON_ENTITY_HANDLE_DATA \

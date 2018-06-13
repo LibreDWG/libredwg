@@ -172,7 +172,7 @@ static bool env_var_checked_p;
     fprintf(stderr, "Invalid num_reactors: %ld\n", (long)obj->tio.object->num_reactors); return DWG_ERR_VALUEOUTOFBOUNDS; } \
   for (vcount=0; vcount < (long)obj->tio.object->num_reactors; vcount++) \
     {\
-      FIELD_HANDLE_N(reactors[vcount], vcount, code, -5);    \
+      VALUE_HANDLE(obj->tio.object->reactors[vcount], reactors, code, 330); \
     }
     
 #define XDICOBJHANDLE(code)\
@@ -181,12 +181,12 @@ static bool env_var_checked_p;
     {\
       if (!obj->tio.object->xdic_missing_flag) \
         {\
-          FIELD_HANDLE(xdicobjhandle, code, 0); \
+          VALUE_HANDLE(obj->tio.object->xdicobjhandle, xdicobjhandle, code, -3); \
         }\
     }\
   PRIOR_VERSIONS\
     {\
-      FIELD_HANDLE(xdicobjhandle, code, 0); \
+      VALUE_HANDLE(obj->tio.object->xdicobjhandle, xdicobjhandle, code, -3); \
     } \
   RESET_VER
 
@@ -196,12 +196,12 @@ static bool env_var_checked_p;
     {\
       if (!obj->tio.entity->xdic_missing_flag)\
         {\
-          FIELD_HANDLE(xdicobjhandle, code, 0);   \
+          VALUE_HANDLE(obj->tio.entity->xdicobjhandle, xdicobjhandle, code, -3); \
         }\
     }\
   PRIOR_VERSIONS\
     {\
-      FIELD_HANDLE(xdicobjhandle, code, 0); \
+      VALUE_HANDLE(obj->tio.entity->xdicobjhandle, xdicobjhandle, code, -3); \
     } \
   RESET_VER
 
@@ -238,27 +238,30 @@ static bool env_var_checked_p;
 #define FIELD_VECTOR(name, type, size, dxf) \
   FIELD_VECTOR_N(name, type, _obj->size, dxf)
 
-#define FIELD_HANDLE(name, handle_code, dxf) \
+#define VALUE_HANDLE(hdlptr, name, handle_code, dxf)  \
   IF_ENCODE_SINCE_R13 { \
     RESET_VER \
-    if (!_obj->name) { \
+    if (!hdlptr) { \
       Dwg_Handle null_handle = {0,0,0}; \
       bit_write_H(hdl_dat, &null_handle); \
       LOG_TRACE(#name ": HANDLE(0.0.0) absolute:0 [%d]\n", dxf) \
     } else { \
-      if (handle_code != ANYCODE && _obj->name->handleref.code != handle_code) \
+      if (handle_code != ANYCODE && hdlptr->handleref.code != handle_code) \
         { \
           LOG_WARN("Expected a CODE %d handle, got a %d", \
-                    handle_code, _obj->name->handleref.code); \
+                    handle_code, hdlptr->handleref.code); \
         } \
-      bit_write_H(hdl_dat, &_obj->name->handleref); \
+      bit_write_H(hdl_dat, &hdlptr->handleref); \
       LOG_TRACE(#name ": HANDLE(%d.%d.%lu) absolute:%lu [%d]\n", \
-                _obj->name->handleref.code,\
-                _obj->name->handleref.size,\
-                _obj->name->handleref.value,\
-                _obj->name->absolute_ref, dxf) \
+                hdlptr->handleref.code,\
+                hdlptr->handleref.size,\
+                hdlptr->handleref.value,\
+                hdlptr->absolute_ref, dxf) \
       } \
     }
+
+#define FIELD_HANDLE(name, handle_code, dxf) \
+  VALUE_HANDLE(_obj->name, name, handle_code, dxf)
 #define FIELD_DATAHANDLE(name, handle_code, dxf) \
   { bit_write_H(dat, _obj->name ? &_obj->name->handleref : NULL); }
 

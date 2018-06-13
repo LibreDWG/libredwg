@@ -9865,23 +9865,6 @@ dwg_obj_xrecord_get_parenthandle(const dwg_obj_xrecord *restrict xrecord,
     }
 }
 
-dwg_object_ref**
-dwg_obj_xrecord_get_reactors(const dwg_obj_xrecord *restrict xrecord,
-                          int *restrict error)
-{
-  if (xrecord)
-    {
-      *error = 0;
-      return xrecord->reactors;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return NULL;
-    }
-}
-
 BITCODE_BL
 dwg_obj_xrecord_get_num_objid_handles(const dwg_obj_xrecord *restrict xrecord,
                           int *restrict error)

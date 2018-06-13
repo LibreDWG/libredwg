@@ -58,24 +58,27 @@ static unsigned int cur_ver = 0;
               _obj->name.x, _obj->name.y, _obj->name.z, dxf); }
 
 #define ANYCODE -1
-#define FIELD_HANDLE(name, handle_code, dxf) \
-  if (_obj->name) { \
+#define VALUE_HANDLE(handleptr, name, handle_code, dxf) \
+  if (handleptr) { \
     LOG_TRACE(#name ": HANDLE(%d.%d.%lu) absolute:%lu\n",\
-              _obj->name->handleref.code, \
-              _obj->name->handleref.size, \
-              _obj->name->handleref.value,\
-              _obj->name->absolute_ref);  \
+              handleptr->handleref.code, \
+              handleptr->handleref.size, \
+              handleptr->handleref.value,\
+              handleptr->absolute_ref);  \
   }
+#define FIELD_HANDLE(name, handle_code, dxf) VALUE_HANDLE(_obj->name, name, handle_code, dxf)
 #define FIELD_DATAHANDLE(name, code, dxf) FIELD_HANDLE(name, code, dxf)
-#define FIELD_HANDLE_N(name, vcount, handle_code, dxf)\
-  if (_obj->name) { \
+#define VALUE_HANDLE_N(handleptr, name, vcount, handle_code, dxf)\
+  if (handleptr) { \
     LOG_TRACE(#name "[%d]: HANDLE(%d.%d.%lu) absolute:%lu\n",\
               (int)vcount, \
-              _obj->name->handleref.code, \
-              _obj->name->handleref.size, \
-              _obj->name->handleref.value, \
-              _obj->name->absolute_ref); \
+              handleptr->handleref.code, \
+              handleptr->handleref.size, \
+              handleptr->handleref.value, \
+              handleptr->absolute_ref); \
   }
+#define FIELD_HANDLE_N(name, vcount, handle_code, dxf) \
+  VALUE_HANDLE_N(_obj->name, name, vcount, handle_code, dxf)
 
 #define FIELD_B(name,dxf) FIELD(name, B, dxf);
 #define FIELD_BB(name,dxf) FIELD(name, BB, dxf);
@@ -185,18 +188,18 @@ static unsigned int cur_ver = 0;
     fprintf(stderr, "Invalid num_reactors: %ld\n", (long)obj->tio.object->num_reactors); return DWG_ERR_VALUEOUTOFBOUNDS; } \
   for (vcount=0; vcount < (long)obj->tio.object->num_reactors; vcount++)\
     {\
-      FIELD_HANDLE_N(reactors[vcount], vcount, code, dxf);\
+      VALUE_HANDLE_N(obj->tio.object->reactors[vcount], reactors, vcount, code, -5); \
     }
 
 #define XDICOBJHANDLE(code)\
   SINCE(R_2004)\
     {\
       if (!obj->tio.object->xdic_missing_flag)\
-        FIELD_HANDLE(xdicobjhandle, code, dxf);\
+        VALUE_HANDLE(obj->tio.object->xdicobjhandle, xdicobjhandle, code, 0); \
     }\
   PRIOR_VERSIONS\
     {\
-      FIELD_HANDLE(xdicobjhandle, code, dxf);\
+      VALUE_HANDLE(obj->tio.object->xdicobjhandle, xdicobjhandle, code, 0); \
     }
 
 #define COMMON_ENTITY_HANDLE_DATA /*  Empty */

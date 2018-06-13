@@ -2865,11 +2865,10 @@ dwg_decode_common_entity_handle_data(Bit_Chain* dat, Bit_Chain* hdl_dat,
   Dwg_Data *dwg = obj->parent;
   Dwg_Object_Entity *_obj;
   long unsigned int vcount;
-  Dwg_Object_Entity *ent;
+  Dwg_Object_Entity *_ent;
   int error = 0;
 
-  ent = obj->tio.entity;
-  _obj = ent;
+  _obj = _ent = obj->tio.entity;
 
   #include "common_entity_handle_data.spec"
 

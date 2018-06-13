@@ -28,9 +28,6 @@ api_process(dwg_object *obj)
   BITCODE_BL num_eed;
   Dwg_Resbuf* xdata;
   BITCODE_H parent;
-  BITCODE_BL num_reactors;
-  BITCODE_H* reactors;
-  BITCODE_H xdicobjhandle;
   BITCODE_BL num_objid_handles;
   BITCODE_H* objid_handles;  
 
