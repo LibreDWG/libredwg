@@ -215,6 +215,10 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
 #define IS_ENCODE
 #define IS_DXF
 
+//for sscanf with BD we need to use %lf not %g
+#undef FORMAT_BD
+#define FORMAT_BD "%lf"
+
 #define FIELD(name,type,dxf) dxf_add_field(obj, #name, #type, dxf)
 #define FIELD_CAST(name,type,cast,dxf) FIELD(name,cast,dxf)
 #define FIELD_TRACE(name,type)
@@ -382,7 +386,7 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
   VALUE_RS(_obj->name.index, dxf)
 #define FIELD_TIMEBLL(name,dxf) \
   GROUP(dxf);\
-  sscanf(&dat->chain[dat->byte], "%u.%u", \
+  sscanf((char*)&dat->chain[dat->byte], "%u.%u", \
         &_obj->name.days, &_obj->name.ms)
 #define HEADER_CMC(name,dxf) \
     HEADER_9(name);\
@@ -422,20 +426,16 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
 //FIELD_VECTOR_N(name, type, size):
 // reads data of the type indicated by 'type' 'size' times and stores
 // it all in the vector called 'name'.
-//for BD we need to use %lf not %g
-#undef FORMAT_BD
-#define FORMAT_BD "%lf"
 #define FIELD_VECTOR_N(name, type, size, dxf)\
   if (dxf)\
     {\
       for (vcount=0; vcount < (int)size; vcount++)\
         {\
-          sscanf(&dat->chain[dat->byte], #name ": " FORMAT_##type ",\n", \
+          sscanf((char*)&dat->chain[dat->byte], #name ": " FORMAT_##type ",\n", \
                  &_obj->name[vcount]);\
         }\
     }
-#undef FORMAT_BD
-#define FORMAT_BD "%g"
+
 #define FIELD_VECTOR_T(name, size, dxf)\
   if (dxf) {\
     PRE (R_2007) {                                                   \
