@@ -132,6 +132,9 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
 #define HEADER_TV(name,dxf) \
     HEADER_9(name);\
     VALUE_TV(dwg->header_vars.name, dxf)
+#define HEADER_T(name,dxf) \
+    HEADER_9(name);\
+    VALUE_T(dwg->header_vars.name, dxf)
 #define POINT_3D(name, var, c1, c2, c3)\
     VALUE_RD(dwg->var.x, c1);\
     VALUE_RD(dwg->var.y, c2);\
@@ -231,6 +234,11 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
 #define HEADER_RL(name,dxf) \
     HEADER_9(name);\
     VALUE_RL(dwg->header_vars.name, dxf)
+
+#define HEADER_B(name,dxf)   HEADER_RC(name,dxf)
+#define HEADER_BS(name,dxf)  HEADER_RS(name,dxf)
+#define HEADER_BD(name,dxf)  HEADER_RD(name,dxf)
+#define HEADER_BL(name,dxf)  HEADER_RL(name, dxf)
 
 #define VALUE_H(value,dxf) \
   {\

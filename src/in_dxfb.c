@@ -149,8 +149,13 @@ static char buf[4096];
     fread(&c, 1, 1, dat->fh); \
   }
 #define FIELD_RC(name,dxf)  FIELD(name,RC,dxf)
-#define HEADER_RC(name,dxf)  FIELD(name,RC,dxf)
-#define HEADER_B(name,dxf) HEADER_RC(name,dxf)
+#define HEADER_RC(name,dxf)  HEADER_9(name); FIELD(name,RC,dxf)
+#define HEADER_RLL(name,dxf) HEADER_9(name); FIELD(name, RLL, dxf)
+#define HEADER_T(name,dxf)   HEADER_9(name); VALUE_T(_obj->name, dxf)
+#define HEADER_B(name,dxf)   HEADER_9(name); FIELD(name, B, dxf)
+#define HEADER_BS(name,dxf)  HEADER_9(name); FIELD(name, BS, dxf)
+#define HEADER_BL(name,dxf)  HEADER_9(name); FIELD(name, BL, dxf)
+#define HEADER_BD(name,dxf)  HEADER_9(name); FIELD(name, BD, dxf)
 
 #define VALUE_RS(value,dxf) \
   {\

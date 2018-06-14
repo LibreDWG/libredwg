@@ -15,7 +15,8 @@
  * written by Reini Urban
  */
 
-/* TODO: down-conversions from unsupported entities on older DXF versions.
+/* Works for most r2000 files, but not r2004+.
+TODO: down-conversions from unsupported entities on older DXF versions.
 
 Since r13:
 Entities: LWPOLYLINE, HATCH, SPLINE, LEADER, DIMENSION, MTEXT, IMAGE, BLOCK_RECORD.
@@ -196,8 +197,12 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
 #define HEADER_RD(name,dxf)  HEADER_9(name); FIELD(name, RD, dxf)
 #define HEADER_RL(name,dxf)  HEADER_9(name); FIELD(name, RL, dxf)
 #define HEADER_RLL(name,dxf) HEADER_9(name); FIELD(name, RLL, dxf)
-#define HEADER_TV(name,dxf)  HEADER_9(name); VALUE_TV(_obj->name,dxf)
+#define HEADER_TV(name,dxf)  HEADER_9(name); VALUE_TV(_obj->name, dxf)
 #define HEADER_T(name,dxf)   HEADER_9(name); VALUE_T(_obj->name, dxf)
+#define HEADER_B(name,dxf)   HEADER_9(name); FIELD(name, B, dxf)
+#define HEADER_BS(name,dxf)  HEADER_9(name); FIELD(name, BS, dxf)
+#define HEADER_BD(name,dxf)  HEADER_9(name); FIELD(name, BD, dxf)
+#define HEADER_BL(name,dxf)  HEADER_9(name); FIELD(name, BL, dxf)
 
 #define VALUE_B(value,dxf)   VALUE(value, RC, dxf)
 #define VALUE_BB(value,dxf)  VALUE(value, RC, dxf)
