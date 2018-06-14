@@ -428,6 +428,8 @@ dwg_dxfb_ ##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
   if (!dwg_obj_is_control(obj)) { \
     if (obj->type >= 500 && obj->dxfname) \
       fprintf(dat->fh, "  0\r\n%s\r\n", obj->dxfname); \
+    else if (obj->type == DWG_TYPE_PLACEHOLDER) \
+      RECORD(ACDBPLACEHOLDER) \
     else if (obj->type != DWG_TYPE_BLOCK_HEADER) \
       RECORD(token)                              \
     SINCE(R_13) { \
