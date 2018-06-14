@@ -6,7 +6,14 @@ if HAVE_DEJAGNU
 SUBDIRS += testcases
 endif
 SUBDIRS += xmlsuite
-EXTRA_DIST = test-data
+
+if IS_RELEASE
+TESTDATA = test-data
+else
+# GNU make and BSD make understands the next line
+TESTDATA := $(shell git ls-tree -r --name-only @ test-data)
+endif
+EXTRA_DIST = $(TESTDATA)
 
 if ENABLE_GCOV
 gcov:

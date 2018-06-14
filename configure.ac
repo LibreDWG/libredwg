@@ -92,6 +92,7 @@ if test x$ax_is_release = xyes; then
    AC_DEFINE([IS_RELEASE],1,[Define to 1 if this is a release,
    skipping unstable DWG features, unknown DWG versions and objects.])
 fi
+AM_CONDITIONAL([IS_RELEASE], [test x$ax_is_release = xyes])
 
 dnl Disable unwanted warnings here. These should be fixed before 1.0
 enable_Werror=no
