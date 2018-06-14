@@ -358,13 +358,19 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
   dxf_write_xdata(dat, _obj->name, _obj->size)
 
 #define _XDICOBJHANDLE(code) \
-  if (dat->version >= R_13 && obj->tio.object->xdicobjhandle) {\
+  if (dat->version >= R_13 && \
+      obj->tio.object->xdicobjhandle && \
+      obj->tio.object->xdicobjhandle->absolute_ref) \
+  { \
     fprintf(dat->fh, "102\r\n{ACAD_XDICTIONARY\r\n");\
     VALUE_HANDLE(obj->tio.object->xdicobjhandle, code, 360); \
     fprintf(dat->fh, "102\r\n}\r\n");\
   }
 #define _REACTORS(code)\
-  if (dat->version >= R_13 && obj->tio.object->num_reactors && obj->tio.object->reactors) {\
+  if (dat->version >= R_13 && \
+      obj->tio.object->num_reactors && \
+      obj->tio.object->reactors) \
+  { \
     fprintf(dat->fh, "102\r\n{ACAD_REACTORS\r\n");\
     for (vcount=0; vcount < (int)obj->tio.object->num_reactors; vcount++)\
       { /* soft ptr */ \
@@ -384,7 +390,10 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
 #define REACTORS(code)
 #define XDICOBJHANDLE(code)
 #define ENT_XDICOBJHANDLE(code) \
-  if (dat->version >= R_13 && obj->tio.entity->xdicobjhandle) {\
+  if (dat->version >= R_13 && \
+      obj->tio.entity->xdicobjhandle && \
+      obj->tio.entity->xdicobjhandle->absolute_ref) \
+  { \
     fprintf(dat->fh, "102\r\n{ACAD_XDICTIONARY\r\n");\
     VALUE_HANDLE(obj->tio.entity->xdicobjhandle, code, 360); \
     fprintf(dat->fh, "102\r\n}\r\n");\
