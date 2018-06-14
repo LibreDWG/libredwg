@@ -355,8 +355,20 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
 #define FIELD_XDATA(name, size) \
   dxfb_write_xdata(dat, _obj->name, _obj->size)
 
-#define REACTORS(code)\
-  if (obj->tio.object->num_reactors) {\
+#define _XDICOBJHANDLE(code) \
+  if (dat->version >= R_13 && \
+      obj->tio.object->xdicobjhandle && \
+      obj->tio.object->xdicobjhandle->absolute_ref) \
+  { \
+    VALUE_TV("{ACAD_XDICTIONARY", 102);\
+    VALUE_HANDLE(obj->tio.object->xdicobjhandle, code, 360); \
+    VALUE_TV("}", 102);\
+  }
+#define _REACTORS(code)\
+  if (dat->version >= R_13 && \
+      obj->tio.object->num_reactors && \
+      obj->tio.object->reactors) \
+  { \
     VALUE_TV("{ACAD_REACTORS", 102) \
     for (vcount=0; vcount < (int)obj->tio.object->num_reactors; vcount++)\
       {\
@@ -365,7 +377,7 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
     VALUE_TV("}", 102) \
   }
 #define ENT_REACTORS(code)\
-  if (_obj->num_reactors) {\
+  if (dat->version >= R_13 && _obj->num_reactors) {\
     VALUE_TV("{ACAD_REACTORS", 102) \
     for (vcount=0; vcount < (int)_obj->num_reactors; vcount++)\
       {\
@@ -374,8 +386,17 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
     VALUE_TV("}", 102) \
   }
 
+#define REACTORS(code)
 #define XDICOBJHANDLE(code)
-#define ENT_XDICOBJHANDLE(code)
+#define ENT_XDICOBJHANDLE(code) \
+  if (dat->version >= R_13 && \
+      obj->tio.entity->xdicobjhandle && \
+      obj->tio.entity->xdicobjhandle->absolute_ref) \
+  { \
+    VALUE_TV("{ACAD_XDICTIONARY", 102);\
+    VALUE_HANDLE(obj->tio.entity->xdicobjhandle, code, 360); \
+    VALUE_TV("}", 102);\
+  }
 
 #define COMMON_ENTITY_HANDLE_DATA
 #define SECTION_STRING_STREAM
