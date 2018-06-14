@@ -364,11 +364,11 @@
   FIELD_BD (DIMTM, 40);
 
   SINCE(R_2007)
-    { // not in DXF
-      FIELD_BD (DIMFXL, 0);
-      FIELD_BD (DIMJOGANG, 0);
-      FIELD_BS (DIMTFILL, 0);
-      FIELD_CMC (DIMTFILLCLR, 0);
+    {
+      FIELD_BD (DIMFXL, 40);
+      FIELD_BD (DIMJOGANG, 40);
+      FIELD_BS (DIMTFILL, 70);
+      FIELD_CMC (DIMTFILLCLR, 70);
     }
 
   SINCE(R_2000)
@@ -385,8 +385,8 @@
     }
 
   SINCE(R_2007)
-    { // not in DXF
-      FIELD_BS (DIMARCSYM, 0);
+    {
+      FIELD_BS (DIMARCSYM, 70);
     }
 
   FIELD_BD (DIMTXT, 40);
@@ -446,7 +446,7 @@
     }
 
   SINCE(R_2007)
-    { // not in DXF?
+    {
       FIELD_B (DIMFXLON, 70);
     }
 
@@ -467,10 +467,10 @@
     }
 
   SINCE(R_2007)
-    { // not in DXF?
-      FIELD_HANDLE (DIMLTYPE, 5, 0);
-      FIELD_HANDLE (DIMLTEX1, 5, 0);
-      FIELD_HANDLE (DIMLTEX2, 5, 0);
+    {
+      FIELD_HANDLE (DIMLTYPE, 5, 6);
+      FIELD_HANDLE (DIMLTEX1, 5, 6);
+      FIELD_HANDLE (DIMLTEX2, 5, 6);
     }
 
   SINCE(R_2000)
