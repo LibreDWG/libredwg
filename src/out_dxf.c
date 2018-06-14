@@ -1015,7 +1015,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     for (i=0; i<dwg->vport_control.num_entries; i++)
       {
         Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->vports[i]);
-        if (obj) {
+        if (obj && obj->type == DWG_TYPE_VPORT) {
           //reordered in the DXF: 2,70,10,11,12,13,14,15,16,...
           //special-cased in the spec
           error |= dwg_dxf_VPORT(dat, obj);
@@ -1041,7 +1041,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     for (i=0; i<dwg->ltype_control.num_entries; i++)
       {
         obj = dwg_ref_get_object(dwg, _ctrl->linetypes[i]);
-        if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
+        if (obj && obj->type == DWG_TYPE_LTYPE) {
           error |= dwg_dxf_LTYPE(dat, obj);
         }
       }
@@ -1056,9 +1056,10 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     for (i=0; i<dwg->layer_control.num_entries; i++)
       {
         Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->layers[i]);
-        if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
+        if (obj && obj->type == DWG_TYPE_LAYER)
           error |= dwg_dxf_LAYER(dat, obj);
-        }
+        else if (obj && obj->type == DWG_TYPE_DICTIONARY)
+          error |= dwg_dxf_DICTIONARY(dat, obj);
       }
     ENDTAB();
   }  
@@ -1071,7 +1072,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     for (i=0; i<dwg->style_control.num_entries; i++)
       {
         Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->styles[i]);
-        if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
+        if (obj && obj->type == DWG_TYPE_STYLE) {
           error |= dwg_dxf_STYLE(dat, obj);
         }
       }
@@ -1086,10 +1087,15 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     for (i=0; i<dwg->view_control.num_entries; i++)
       {
         Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->views[i]);
-        //FIXME ignore ACDBSECTIONVIEWSTYLE and ACDBDETAILVIEWSTYLE
-        if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
+        //FIXME implement the other two
+        if (obj && obj->type == DWG_TYPE_VIEW)
           error |= dwg_dxf_VIEW(dat, obj);
-        }
+        /*
+        else if (obj && obj->fixedtype == DWG_TYPE_SECTIONVIEWSTYLE)
+          error |= dwg_dxf_SECTIONVIEWSTYLE(dat, obj);
+        if (obj && obj->fixedtype == DWG_TYPE_DETAILVIEWSTYLE) {
+          error |= dwg_dxf_DETAILVIEWSTYLE(dat, obj);
+        */
       }
     ENDTAB();
   }
@@ -1102,7 +1108,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     for (i=0; i<dwg->ucs_control.num_entries; i++)
       {
         Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->ucs[i]);
-        if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
+        if (obj && obj->type == DWG_TYPE_UCS) {
           error |= dwg_dxf_UCS(dat, obj);
         }
       }
@@ -1118,7 +1124,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     for (i=0; i<dwg->appid_control.num_entries; i++)
       {
         Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->apps[i]);
-        if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
+        if (obj && obj->type == DWG_TYPE_APPID) {
           error |= dwg_dxf_APPID(dat, obj);
         }
       }
@@ -1134,7 +1140,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     for (i=0; i<dwg->dimstyle_control.num_entries; i++)
       {
         Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->dimstyles[i]);
-        if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
+        if (obj && obj->type == DWG_TYPE_DIMSTYLE) {
           error |= dwg_dxf_DIMSTYLE(dat, obj);
         }
       }
@@ -1151,7 +1157,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       for (i=0; i<dwg->vport_entity_control.num_entries; i++)
         {
           Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->vport_entity_headers[i]);
-          if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
+          if (obj && obj->type == DWG_TYPE_VPORT_ENTITY_HEADER) {
             error |= dwg_dxf_VPORT_ENTITY_HEADER(dat, obj);
           }
         }
@@ -1171,16 +1177,15 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     TABLE(BLOCK_RECORD);
     COMMON_TABLE_CONTROL_FLAGS(null_handle, BlockTable);
     error |= dwg_dxf_BLOCK_CONTROL(dat, ctrl);
-    if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
+    if (obj && obj->type == DWG_TYPE_BLOCK_HEADER) {
       mspace = obj;
       RECORD(BLOCK_RECORD);
       error |= dwg_dxf_BLOCK_HEADER(dat, obj);
     }
     if (_ctrl->paper_space) {
       obj = dwg_ref_get_object(dwg, _ctrl->paper_space);
-      if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
+      if (obj && obj->type == DWG_TYPE_BLOCK_HEADER) {
         pspace = obj;
-        assert(obj->type == DWG_TYPE_BLOCK_HEADER);
         RECORD(BLOCK_RECORD);
         error |= dwg_dxf_BLOCK_HEADER(dat, obj);
       }
@@ -1188,9 +1193,9 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     for (i=0; i<dwg->block_control.num_entries; i++)
       {
         Dwg_Object *obj = dwg_ref_get_object(dwg, dwg->block_control.block_headers[i]);
-        if (obj && obj != mspace && obj != pspace)
+        if (obj && obj->type == DWG_TYPE_BLOCK_HEADER &&
+            obj != mspace && obj != pspace)
           {
-            assert(obj->type == DWG_TYPE_BLOCK_HEADER);
             RECORD(BLOCK_RECORD);
             error |= dwg_dxf_BLOCK_HEADER(dat, obj);
           }
