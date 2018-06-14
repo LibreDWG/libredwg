@@ -27,7 +27,7 @@
 #include "decode.h"
 #include "out_dxf.h"
 
-#define DWG_LOGLEVEL DWG_LOGLEVEL_TRACE
+#define DWG_LOGLEVEL DWG_LOGLEVEL_NONE
 #include "logging.h"
 
 /* the current version per spec block */
@@ -448,7 +448,7 @@ dwg_dxfb_ ##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
   _obj = obj->tio.object->tio.token;\
   if (!dwg_obj_is_control(obj)) { \
     if (obj->type >= 500 && obj->dxfname) \
-      fprintf(dat->fh, "  0\r\n%s\r\n", obj->dxfname); \
+      VALUE_TV(obj->dxfname, 0) \
     else if (obj->type == DWG_TYPE_PLACEHOLDER) \
       RECORD(ACDBPLACEHOLDER) \
     else if (obj->type != DWG_TYPE_BLOCK_HEADER) \
@@ -460,11 +460,7 @@ dwg_dxfb_ ##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
       GROUP(dxf);\
       fwrite(&i, 4, 4, dat->fh); \
     } \
-  } \
-  LOG_TRACE("Object handle: %d.%d.%lX\n",\
-    obj->handle.code,\
-    obj->handle.size,\
-    obj->handle.value)
+  }
 
 #define DWG_OBJECT_END return 0; }
 
@@ -1150,8 +1146,8 @@ dwg_write_dxfb(Bit_Chain *dat, Dwg_Data * dwg)
 
   if (dat->from_version == R_INVALID)
     dat->from_version = dat->version;
-  fprintf(dat->fh, "AutoCAD Binary DXF%s", "\r\n\0x1a\0");
-  VALUE_TV(PACKAGE_STRING, 999);
+  fprintf(dat->fh, "AutoCAD Binary DXF\r\n%c%c", 0x1a, 0);
+  //VALUE_TV(PACKAGE_STRING, 999);
 
   // a minimal header requires only $ACADVER, $HANDSEED, and then ENTITIES
   // see https://pythonhosted.org/ezdxf/dxfinternals/filestructure.html
