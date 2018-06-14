@@ -15,15 +15,11 @@
  * written by Reini Urban
  */
 
-/* TODO: down-conversions from unsupported entities on older DXF versions:
-Since r13: Entities: LWPOLYLINE, HATCH, SPLINE, LEADER, DIMENSION, MTEXT, IMAGE,
-             BLOCK_RECORD.
-           Table BLOCK_RECORD.
-           add CLASSES for those
-           handle 5, 100, 105
-           non-all caps table names.
-Since r14: handle 330
+/* TODO: down-conversions from unsupported entities on older DXF versions.
 
+Since r13:
+Entities: LWPOLYLINE, HATCH, SPLINE, LEADER, DIMENSION, MTEXT, IMAGE, BLOCK_RECORD.
+Add CLASSES for those
 */
 
 #include "config.h"
@@ -522,7 +518,7 @@ dxf_write_xdata(Bit_Chain *restrict dat, Dwg_Resbuf *restrict rbuf, BITCODE_BL s
   return 0;
 }
 
-// r2000+ converts STANDARD to Standard, BYLAYER to ByLayer, BYBLOCK to ByBlock
+// r13+ converts STANDARD to Standard, BYLAYER to ByLayer, BYBLOCK to ByBlock
 static void
 dxf_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                  char *restrict entry_name, const int dxf)
@@ -533,7 +529,7 @@ dxf_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
         {
           entry_name = bit_convert_TU((BITCODE_TU)entry_name);
         }
-      if (dat->from_version >= R_2000 && dat->version < R_2000)
+      if (dat->from_version >= R_13 && dat->version < R_13)
         { // convert the other way round, from newer to older
           if (!strcmp(entry_name, "Standard"))
             fprintf(dat->fh, "%3i\r\nSTANDARD\r\n", dxf);
@@ -548,13 +544,13 @@ dxf_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
         }
       else
         { // convert some standard names
-          if (dat->version >= R_2000 && !strcmp(entry_name, "STANDARD"))
+          if (dat->version >= R_13 && !strcmp(entry_name, "STANDARD"))
             fprintf(dat->fh, "%3i\r\nStandard\r\n", dxf);
-          else if (dat->version >= R_2000 && !strcmp(entry_name, "BYLAYER"))
+          else if (dat->version >= R_13 && !strcmp(entry_name, "BYLAYER"))
             fprintf(dat->fh, "%3i\r\nByLayer\r\n", dxf);
-          else if (dat->version >= R_2000 && !strcmp(entry_name, "BYBLOCK"))
+          else if (dat->version >= R_13 && !strcmp(entry_name, "BYBLOCK"))
             fprintf(dat->fh, "%3i\r\nByBlock\r\n", dxf);
-          else if (dat->version >= R_2000 && !strcmp(entry_name, "*ACTIVE"))
+          else if (dat->version >= R_13 && !strcmp(entry_name, "*ACTIVE"))
             fprintf(dat->fh, "%3i\r\n*Active\r\n", dxf);
           else
             fprintf(dat->fh, "%3i\r\n%s\r\n", dxf, entry_name);
