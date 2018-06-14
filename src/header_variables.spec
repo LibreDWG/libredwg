@@ -63,17 +63,16 @@
     }
   VERSIONS(R_13, R_2000)
     {
-      FIELD_HANDLE (vport_entity_header, 5, 0);
+      FIELD_HANDLE (vport_entity_header, 5, 0); //current view
     }
   SINCE(R_13)
     {
       FIELD_B (DIMASO, 70);
       FIELD_B (DIMSHO, 70);
     }
-  VERSIONS(R_13, R_14)
-    {
-      FIELD_B (DIMSAV, 0); // Name of the dimensioning style? not in DXF
-    }
+  VERSIONS(R_13, R_14) {
+    FIELD_B (DIMSAV, 70);
+  }
   SINCE(R_13)
     {
       FIELD_B (PLINEGEN, 70);
@@ -84,15 +83,12 @@
       FIELD_B (PSLTSCALE, 70);
       FIELD_B (LIMCHECK, 70);
     }
-  VERSIONS(R_13, R_14)
-    {
-      FIELD_B (BLIPMODE, 70);
-    }
-
-  SINCE(R_2004)
-    {
-      FIELD_B (unknown_11, 0); //undocumented
-    }
+  VERSIONS(R_13, R_14) {
+    FIELD_B (BLIPMODE, 70);
+  }
+  SINCE(R_2004) {
+    FIELD_B (unknown_11, 0); //undocumented
+  }
 
   FIELD_B (USRTIMER, 70);
   FIELD_B (SKPOLY, 70);
@@ -130,60 +126,42 @@
   FIELD_B (DISPSILH, 70);
   FIELD_B (PELLIPSE, 70);
 
-  VERSION(R_13)
-    {
-      FIELD_BS (SAVEIMAGES, 70); // DXF code?
+  VERSION(R_13) {
+    FIELD_BS (SAVEIMAGES, 70); // ??
+  }
+  FIELD_BS (PROXYGRAPHICS, 70);
+  UNTIL(R_14) {
+    IF_ENCODE_FROM_EARLIER {
+      FIELD_VALUE(DRAGMODE) = 2;
     }
-
-  VERSIONS(R_14, R_2000)
-    {
-      IF_ENCODE_FROM_EARLIER {
-         FIELD_VALUE(PROXYGRAPHICS) = 1;
-      }
-      FIELD_BS (PROXYGRAPHICS, 70);
+    FIELD_BS (DRAGMODE, 70);
+  }
+  SINCE(R_13) {
+    IF_ENCODE_FROM_EARLIER {
+      FIELD_VALUE(TREEDEPTH) = 3020;
     }
-
-  VERSIONS(R_13, R_14)
-    {
-      IF_ENCODE_FROM_EARLIER {
-         FIELD_VALUE(DRAGMODE) = 2;
-      }
-      FIELD_BS (DRAGMODE, 70);
-    }
-
-  SINCE(R_13)
-    {
-      IF_ENCODE_FROM_EARLIER {
-         FIELD_VALUE(TREEDEPTH) = 3020;
-      }
-      FIELD_BS (TREEDEPTH, 70);
-    }
+    FIELD_BS (TREEDEPTH, 70);
+  }
   FIELD_BS (LUNITS, 70);
   FIELD_BS (LUPREC, 70);
   FIELD_BS (AUNITS, 70);
   FIELD_BS (AUPREC, 70);
-  VERSIONS(R_13, R_14)
-    {
-      FIELD_BS (OSMODE, 70);
-    }
+  UNTIL(R_14) {
+    FIELD_BS (OSMODE, 70);
+  }
   FIELD_BS (ATTMODE, 70);
-  VERSIONS(R_13, R_14)
-    {
-      FIELD_BS (COORDS, 70);
-    }
+  UNTIL(R_14) {
+    FIELD_BS (COORDS, 70);
+  }
   FIELD_BS (PDMODE, 70);
-  VERSIONS(R_13, R_14)
-    {
-      FIELD_BS (PICKSTYLE, 70);
-    }
-
-  SINCE(R_2004)
-    {
-      FIELD_BL (unknown_12, 0);
-      FIELD_BL (unknown_13, 0);
-      FIELD_BL (unknown_14, 0);
-      FIELD_BL (unknown_14b, 0); //?
-    }
+  UNTIL(R_14) {
+    FIELD_BS (PICKSTYLE, 70);
+  }
+  SINCE(R_2004) {
+    FIELD_BL (unknown_12, 0);
+    FIELD_BL (unknown_13, 0);
+    FIELD_BL (unknown_14, 0);
+  }
 
   IF_ENCODE_FROM_PRE_R13 {
     FIELD_VALUE(SHADEDGE) = 3;
@@ -666,4 +644,3 @@
     FIELD_TU (PROJECTNAME, 1);
     END_STRING_STREAM
   }
-
