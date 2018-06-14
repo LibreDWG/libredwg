@@ -389,9 +389,9 @@ dwg_dxfb_##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
 {\
   int error = 0; \
   long vcount, rcount1, rcount2, rcount3, rcount4; \
+  Dwg_Data* dwg = obj->parent; \
   Dwg_Entity_##token *ent, *_obj;\
   Dwg_Object_Entity *_ent;\
-  const int minimal = obj->parent->opts & 0x10;\
   LOG_INFO("Entity " #token ":\n")\
   _ent = obj->tio.entity;\
   _obj = ent = _ent->tio.token;\
@@ -421,8 +421,8 @@ dwg_dxfb_ ##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
 { \
   long vcount, rcount1, rcount2, rcount3, rcount4;\
   Bit_Chain *hdl_dat = dat;\
+  Dwg_Data* dwg = obj->parent;\
   Dwg_Object_##token *_obj;\
-  const int minimal = obj->parent->opts & 0x10;\
   LOG_INFO("Object " #token ":\n")\
   _obj = obj->tio.object->tio.token;\
   if (!dwg_obj_is_control(obj)) { \

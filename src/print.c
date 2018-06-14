@@ -228,6 +228,7 @@ dwg_print_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj)\
   Dwg_Object_Entity *_ent;\
   Bit_Chain *hdl_dat = dat;\
   Bit_Chain* str_dat = dat;\
+  Dwg_Data* dwg = obj->parent;\
   int error = 0; \
   LOG_INFO("Entity " #token ":\n")\
   _ent = obj->tio.entity;\
@@ -247,6 +248,7 @@ dwg_print_ ##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
   Dwg_Object_##token *_obj;\
   Bit_Chain *hdl_dat = dat;\
   Bit_Chain* str_dat = dat;\
+  Dwg_Data* dwg = obj->parent;\
   int error = 0; \
   LOG_INFO("Object " #token ":\n")\
   _obj = obj->tio.object->tio.token;\

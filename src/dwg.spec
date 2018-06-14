@@ -116,7 +116,7 @@ DWG_ENTITY(TEXT)
     {
       IF_ENCODE_FROM_PRE_R13 {
         //FIXME: should really just lookup the style table; style is the index.
-        FIELD_VALUE(style) = 0; //dwg_resolve_handle(obj->parent, obj->linetype_rs);
+        FIELD_VALUE(style) = 0; //dwg_resolve_handle(dwg, obj->linetype_rs);
       }
 #ifndef IS_DXF
       FIELD_HANDLE (style, 5, 7);
@@ -2088,7 +2088,7 @@ DWG_OBJECT(BLOCK_CONTROL)
 
   DXF {
     VALUE_RL (FIELD_VALUE(num_entries) +
-              (obj->parent->header_vars.BLOCK_RECORD_PSPACE ? 2 : 1), 70);
+              (dwg->header_vars.BLOCK_RECORD_PSPACE ? 2 : 1), 70);
   } else {
     FIELD_BL (num_entries, 70);
   }
@@ -5494,7 +5494,6 @@ DWG_OBJECT(SUN)
   //find handle stream
   for (vcount=bit_position(dat); dat->byte<9993; bit_set_position(dat,++vcount))
     {
-      Dwg_Data *dwg = obj->parent;
       DEBUG_POS()
       // @9979.6 5.0.0, @9980.0 4.0.0, @9991.1 3.0.0
       // search for a valid code=4 handle followed by a valid code=3

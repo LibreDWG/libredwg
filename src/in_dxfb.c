@@ -355,6 +355,7 @@ dwg_indxfb_ ##token (Bit_Chain *dat, Dwg_Object * obj) \
 { \
   long vcount, rcount1, rcount2, rcount3, rcount4; \
   Bit_Chain *hdl_dat = dat;\
+  Dwg_Data* dwg = obj->parent;\
   Dwg_Object_##token *_obj;\
   int error = 0;\
   LOG_INFO("Object " #token ":\n")\

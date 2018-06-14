@@ -529,6 +529,8 @@ dwg_indxf_##token (Bit_Chain *dat, Dwg_Object * obj) \
   int error = 0;\
   long vcount, rcount1, rcount2, rcount3, rcount4; \
   Dwg_Entity_##token *ent, *_obj;\
+  Bit_Chain *hdl_dat = dat;\
+  Dwg_Data* dwg = obj->parent;\
   Dwg_Object_Entity *_ent;\
   Dxf_Pair *pair; \
   LOG_INFO("Entity " #token ":\n")\
@@ -549,6 +551,7 @@ dwg_indxf_ ##token (Bit_Chain *dat, Dwg_Object * obj) \
   int error = 0; \
   long vcount, rcount1, rcount2, rcount3, rcount4;\
   Bit_Chain *hdl_dat = dat;\
+  Dwg_Data* dwg = obj->parent;\
   Dwg_Object_##token *_obj;\
   Dxf_Pair *pair; \
   obj->fixedtype = DWG_TYPE_##token;\

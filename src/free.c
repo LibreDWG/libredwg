@@ -214,10 +214,10 @@ static int \
 dwg_free_ ##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
   long vcount, rcount1, rcount2, rcount3, rcount4; \
-  Dwg_Data* dwg = obj->parent;                   \
   Dwg_Object_##token *_obj;                      \
   Bit_Chain *hdl_dat = dat;                      \
   Bit_Chain* str_dat = dat;                      \
+  Dwg_Data* dwg = obj->parent;                   \
   int error = 0; \
   LOG_HANDLE("Free object " #token " %p\n", obj) \
   _obj = obj->tio.object->tio.token;

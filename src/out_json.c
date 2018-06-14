@@ -259,6 +259,8 @@ static int \
 dwg_json_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 {\
   long vcount, rcount1, rcount2, rcount3, rcount4; \
+  Bit_Chain *hdl_dat = dat;\
+  Dwg_Data* dwg = obj->parent; \
   Dwg_Entity_##token *ent, *_obj;\
   Dwg_Object_Entity *_ent;\
   LOG_INFO("Entity " #token ":\n")\
@@ -278,6 +280,7 @@ dwg_json_ ##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
   long vcount, rcount1, rcount2, rcount3, rcount4;\
   Bit_Chain *hdl_dat = dat;\
+  Dwg_Data* dwg = obj->parent; \
   Dwg_Object_##token *_obj;\
   LOG_INFO("Object " #token ":\n")\
   _obj = obj->tio.object->tio.token;\

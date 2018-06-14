@@ -370,11 +370,11 @@ dwg_encode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
   int error; \
   long vcount, rcount1, rcount2, rcount3, rcount4; \
-  Dwg_Data* dwg = obj->parent; \
   Dwg_Object_Entity *_ent = obj->tio.entity; \
   Dwg_Entity_##token * _obj = _ent->tio.token; \
   Bit_Chain* hdl_dat = dat; \
   Bit_Chain* str_dat = dat; \
+  Dwg_Data* dwg = obj->parent; \
   error = dwg_encode_entity(obj, dat, hdl_dat, str_dat); \
   if (error) return error; \
   LOG_INFO("Entity " #token ":\n")
@@ -428,9 +428,9 @@ dwg_encode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
   int error = 0; \
   long vcount, rcount1, rcount2, rcount3, rcount4; \
-  Dwg_Data* dwg = obj->parent; \
   Bit_Chain* hdl_dat = dat; \
   Bit_Chain* str_dat = dat; \
+  Dwg_Data* dwg = obj->parent; \
   Dwg_Object_##token * _obj = obj->tio.object->tio.token; \
   error = dwg_encode_object(obj, dat, hdl_dat, str_dat); \
   if (error) return error; \
