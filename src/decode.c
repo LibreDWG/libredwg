@@ -3653,8 +3653,8 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
               if (!bit_read_H(dat, &obj->handle))
                 {
                   LOG_TRACE("handle: %d.%d.%lX [5]\n",
-                            obj->handle.code, obj->handle.size, obj->handle.value)
-                    }
+                            obj->handle.code, obj->handle.size, obj->handle.value);
+                }
               object_address = dat->byte;
               obj->supertype = DWG_SUPERTYPE_UNKNOWN;
               obj->tio.unknown = (unsigned char *)bit_read_TF(dat, obj->size);
@@ -3663,8 +3663,10 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
         }
     }
 
-  LOG_HANDLE("object_map{%lX} = %lu\n", obj->handle.value, num);
-  hash_set(dwg->object_map, obj->handle.value, num);
+  if (obj->handle.value) { // empty only with UNKNOWN
+    LOG_HANDLE("object_map{%lX} = %lu\n", obj->handle.value, num);
+    hash_set(dwg->object_map, obj->handle.value, num);
+  }
 
   /* Now 1 padding bits until next byte, and then a RS CRC */
   if (dat->bit) {
