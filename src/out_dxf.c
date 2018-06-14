@@ -438,12 +438,10 @@ dwg_dxf_ ##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
   LOG_INFO("Object " #token ":\n")\
   _obj = obj->tio.object->tio.token;\
   if (!dwg_obj_is_control(obj)) { \
-    if (obj->fixedtype == DWG_TYPE_DICTIONARYWDFLT) RECORD(ACDBDICTIONARYWDFLT); \
-    else if (obj->fixedtype == DWG_TYPE_PLACEHOLDER) RECORD(ACDBPLACEHOLDER); \
-    else if (obj->fixedtype == DWG_TYPE_ASSOCNETWORK) RECORD(ACDBASSOCNETWORK); \
-    else if (obj->fixedtype == DWG_TYPE_DETAILVIEWSTYLE) RECORD(ACDBDETAILVIEWSTYLE); \
-    else if (obj->fixedtype == DWG_TYPE_SECTIONVIEWSTYLE) RECORD(ACDBSECTIONVIEWSTYLE); \
-    else if (obj->type != DWG_TYPE_BLOCK_HEADER) RECORD(token); \
+    if (obj->type >= 500 && obj->dxfname) \
+      fprintf(dat->fh, "  0\r\n%s\r\n", obj->dxfname); \
+    else if (obj->type != DWG_TYPE_BLOCK_HEADER) \
+      RECORD(token);                             \
     SINCE(R_13) { \
       int dxf = 5; \
       if (obj->type == DWG_TYPE_DIMSTYLE) dxf = 105; \
