@@ -1755,22 +1755,21 @@ DWG_ENTITY_END
 DWG_OBJECT(DICTIONARY)
 
 #ifdef IS_DXF
-  SINCE(R_14)
-    FIELD_RC (hard_owner, 330); // always 0
+  FIELD_HANDLE (parenthandle, 4, 330);
   SUBCLASS (AcDbDictionary)
   SINCE(R_2000)
     FIELD_BS (cloning, 281);
 #else
   FIELD_BL (numitems, 0);
   VERSION(R_14)
-    FIELD_RC (hard_owner, 330); // always 0
+    FIELD_RC (hard_owner, 0); // always 0
   SINCE(R_2000)
     {
       IF_ENCODE_FROM_EARLIER {
         FIELD_VALUE(cloning) = FIELD_VALUE(hard_owner) & 0xffff;
       }
       FIELD_BS (cloning, 281);
-      FIELD_RC (hard_owner, 330);
+      FIELD_RC (hard_owner, 0);
     }
   if (FIELD_VALUE(numitems) > 10000)
     {
@@ -1808,8 +1807,7 @@ DWG_OBJECT_END
 DWG_OBJECT(DICTIONARYWDFLT)
 
 #ifdef IS_DXF
-  SINCE(R_14)
-    FIELD_RC (hard_owner, 330); // always 0
+  FIELD_HANDLE (parenthandle, 4, 330);
   SUBCLASS (AcDbDictionary)
   SINCE(R_2000)
     FIELD_BS (cloning, 281);
@@ -3248,7 +3246,7 @@ DWG_OBJECT(MLINESTYLE)
   END_REPEAT(lines);
 
   START_HANDLE_STREAM;
-  FIELD_HANDLE (parenthandle, 4, 0);
+  FIELD_HANDLE (parenthandle, 4, 330);
   REACTORS(4);
   XDICOBJHANDLE(3);
 
@@ -3260,7 +3258,7 @@ DWG_OBJECT(DICTIONARYVAR)
   SUBCLASS (DictionaryVariables)
   FIELD_RC (intval, 280);
   FIELD_T (str, 1);
-  FIELD_HANDLE (parenthandle, 4, 0);
+  FIELD_HANDLE (parenthandle, 4, 330);
   REACTORS(4);
   XDICOBJHANDLE(3);
 
@@ -3432,7 +3430,7 @@ DWG_OBJECT(IDBUFFER)
   FIELD_BL (num_obj_ids, 0);
 
   START_HANDLE_STREAM;
-  FIELD_HANDLE (parenthandle, 4, 0);
+  FIELD_HANDLE (parenthandle, 4, 330);
   REACTORS(4);
   XDICOBJHANDLE(3);
   HANDLE_VECTOR(obj_ids, num_obj_ids, 4, 330);
@@ -3488,7 +3486,7 @@ DWG_OBJECT(IMAGEDEF)
   FIELD_2RD (pixel_size, 11);
 
   START_HANDLE_STREAM;
-  FIELD_HANDLE (parenthandle, 3, 0);
+  FIELD_HANDLE (parenthandle, 3, 330);
   REACTORS(4);
   XDICOBJHANDLE(3);
 
@@ -3501,7 +3499,7 @@ DWG_OBJECT(IMAGEDEF_REACTOR)
   FIELD_BL (class_version, 90);
 
   START_HANDLE_STREAM;
-  FIELD_HANDLE (parenthandle, 4, 0);
+  FIELD_HANDLE (parenthandle, 4, 330);
   REACTORS(4);
   XDICOBJHANDLE(3);
 
@@ -3523,7 +3521,7 @@ DWG_OBJECT(LAYER_INDEX)
   END_REPEAT(entries)
 
   START_HANDLE_STREAM;
-  FIELD_HANDLE (parenthandle, 4, 0);
+  FIELD_HANDLE (parenthandle, 4, 330);
   REACTORS(4);
   XDICOBJHANDLE(3);
   HANDLE_VECTOR(entry_handles, num_entries, ANYCODE, 0);
@@ -3589,7 +3587,7 @@ DWG_OBJECT(LAYOUT)
   }
 
   START_HANDLE_STREAM;
-  FIELD_HANDLE (parenthandle, 4, 0);
+  FIELD_HANDLE (parenthandle, 4, 330);
   REACTORS(4);
   XDICOBJHANDLE(3);
 
@@ -3796,7 +3794,7 @@ DWG_OBJECT(PROXY_OBJECT)
   //TODO: figure out how to deal with the arbitrary size vector databits
   FIELD_RC (*data);
   START_HANDLE_STREAM;
-  FIELD_HANDLE (parenthandle, 4, 0);
+  FIELD_HANDLE (parenthandle, 4, 330);
   REACTORS(4);
   XDICOBJHANDLE(3);
   */
@@ -4003,7 +4001,7 @@ DWG_OBJECT(RASTERVARIABLES)
   FIELD_BS (units, 72);
 
   START_HANDLE_STREAM;
-  FIELD_HANDLE (parenthandle, 4, 0);
+  FIELD_HANDLE (parenthandle, 4, 330);
   REACTORS(4);
   XDICOBJHANDLE(3);
 
@@ -4017,7 +4015,7 @@ DWG_OBJECT(SORTENTSTABLE)
 
   START_HANDLE_STREAM;
   HANDLE_VECTOR (sort_handles, num_ents, ANYCODE, 0);
-  FIELD_HANDLE (parenthandle, 4, 0);
+  FIELD_HANDLE (parenthandle, 4, 330);
   REACTORS(4);
   XDICOBJHANDLE(3);
   UNTIL(R_2007) {
@@ -4048,7 +4046,7 @@ DWG_OBJECT(SPATIAL_FILTER)
   FIELD_VECTOR_N (clip_bound_transform, BD, 12, 40);
 
   START_HANDLE_STREAM;
-  FIELD_HANDLE (parenthandle, 4, 0);
+  FIELD_HANDLE (parenthandle, 4, 330);
   REACTORS(4);
   XDICOBJHANDLE(3);
 
@@ -4064,7 +4062,7 @@ DWG_OBJECT(SPATIAL_INDEX)
   //TODO: parse this: "unknown X rest of bits to handles"
   SINCE(R_2007) {
     START_HANDLE_STREAM;
-    FIELD_HANDLE (parenthandle, 4, 0);
+    FIELD_HANDLE (parenthandle, 4, 330);
     REACTORS(4);
     XDICOBJHANDLE(3);
   }
@@ -4772,7 +4770,7 @@ DWG_OBJECT(XRECORD)
   }
 
   START_HANDLE_STREAM;
-  FIELD_HANDLE (parenthandle, 4, 0); // 3 or 8
+  FIELD_HANDLE (parenthandle, 4, 330); // 3 or 8
   REACTORS(4);
   XDICOBJHANDLE(3);
 
@@ -4813,7 +4811,7 @@ DWG_OBJECT(PLACEHOLDER)
 
   // no own data members
   START_HANDLE_STREAM;
-  FIELD_HANDLE (parenthandle, 4, 0);
+  FIELD_HANDLE (parenthandle, 4, 330);
   REACTORS(4);
   XDICOBJHANDLE(3);
 // no SUBCLASS marker
@@ -4829,7 +4827,7 @@ DWG_OBJECT(VBA_PROJECT)
   FIELD_TF (bytes, FIELD_VALUE(num_bytes), 0);
 
   START_HANDLE_STREAM;
-  FIELD_HANDLE (parenthandle, 4, 0);
+  FIELD_HANDLE (parenthandle, 4, 330);
   REACTORS(4);
   XDICOBJHANDLE(3);
 
@@ -4847,7 +4845,7 @@ DWG_OBJECT(SCALE)
   FIELD_B (has_unit_scale, 290);
       
   START_HANDLE_STREAM;
-  FIELD_HANDLE (parenthandle, 4, 0);
+  FIELD_HANDLE (parenthandle, 4, 330);
   REACTORS(4);
   XDICOBJHANDLE(3);
 
@@ -5145,7 +5143,7 @@ DWG_OBJECT(WIPEOUTVARIABLES)
   FIELD_BS (display_frame, 0);
 
   START_HANDLE_STREAM;
-  FIELD_HANDLE (parenthandle, 3, 0);
+  FIELD_HANDLE (parenthandle, 3, 330);
   REACTORS(4);
   XDICOBJHANDLE(3);
 
@@ -5509,7 +5507,7 @@ DWG_OBJECT(SUN)
       DEBUG_POS()
       // @9979.6 5.0.0, @9980.0 4.0.0, @9991.1 3.0.0
       // search for a valid code=4 handle followed by a valid code=3
-      FIELD_HANDLE(parenthandle, 4, 0);
+      FIELD_HANDLE(parenthandle, 4, 330);
       if (_obj->parenthandle &&
           _obj->parenthandle->handleref.code == 4 &&
           _obj->parenthandle->absolute_ref < dwg->num_object_refs)
