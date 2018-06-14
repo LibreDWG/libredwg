@@ -43,6 +43,12 @@
 #ifndef VALUE_TV
 #define VALUE_TV(value, dxf)
 #endif
+#ifndef VALUE_3BD
+#define VALUE_3BD(value, dxf)
+#endif
+#ifndef VALUE_BL
+#define VALUE_BL(value, dxf)
+#endif
 #ifndef SUBCLASS
 #define SUBCLASS(text)
 #endif

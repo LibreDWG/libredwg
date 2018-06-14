@@ -326,6 +326,14 @@ DWG_ENTITY(BLOCK)
 
   COMMON_ENTITY_HANDLE_DATA;
 
+  DXF {
+    Dwg_Bitcode_3RD pt = {0,0,0};
+    VALUE_BL(0, 70);
+    VALUE_3BD(pt, 10);
+    FIELD_TV(name, 3);
+    VALUE_TV("", 1);
+  }
+
 DWG_ENTITY_END
 
 /* (5/13) */
@@ -2108,6 +2116,10 @@ DWG_OBJECT_END
 DWG_OBJECT(BLOCK_HEADER)
 
   COMMON_TABLE_FLAGS(block_control, Block)
+  DXF {
+    FIELD_HANDLE (layout_handle, 5, 340);
+    return 0;
+  }
 
   PRE(R_13)
   {

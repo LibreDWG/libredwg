@@ -215,6 +215,8 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
 #define VALUE_RLL(value,dxf) VALUE(value, RLL, dxf)
 #define VALUE_MC(value,dxf)  VALUE(value, MC, dxf)
 #define VALUE_MS(value,dxf)  VALUE(value, MS, dxf)
+#define VALUE_3BD(pt,dxf) { VALUE_BD(pt.x, dxf); VALUE_BD(pt.y, dxf+10); VALUE_BD(pt.z, dxf+20);}
+
 #define FIELD_B(name,dxf)   FIELD(name, B, dxf)
 #define FIELD_BB(name,dxf)  FIELD(name, BB, dxf)
 #define FIELD_3B(name,dxf)  FIELD(name, 3B, dxf)
@@ -573,6 +575,7 @@ dxf_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       VALUE_TV ("AcDbSymbolTable", 100); \
     }
 
+//TODO addd 340
 #define COMMON_TABLE_FLAGS(owner, acdbname) \
     SINCE(R_14) { \
       FIELD_HANDLE (owner, 4, 330); \
@@ -582,7 +585,7 @@ dxf_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       VALUE_TV ("AcDb" #acdbname "TableRecord", 100); \
     }\
     if (_obj->entry_name) dxf_cvt_tablerecord(dat, obj, _obj->entry_name, 2); \
-    FIELD_RC (flag, 70);
+    FIELD_RC (flag, 70)
 
 #define LAYER_TABLE_FLAGS(owner, acdbname) \
     SINCE(R_14) { \
@@ -593,7 +596,7 @@ dxf_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       VALUE_TV ("AcDb" #acdbname "TableRecord", 100); \
     } \
     if (_obj->entry_name) dxf_cvt_tablerecord(dat, obj, _obj->entry_name, 2); \
-    FIELD_RS (flag, 70);
+    FIELD_RS (flag, 70)
 
 #include "dwg.spec"
 
@@ -1147,20 +1150,35 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     Dwg_Object_BLOCK_CONTROL *_ctrl = &dwg->block_control;
     Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
     Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->model_space);
+    Dwg_Object *mspace = NULL, *pspace = NULL;
+
     TABLE(BLOCK_RECORD);
     COMMON_TABLE_CONTROL_FLAGS(null_handle, BlockTable);
     error |= dwg_dxf_BLOCK_CONTROL(dat, ctrl);
     if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
+      mspace = obj;
       RECORD(BLOCK_RECORD);
       error |= dwg_dxf_BLOCK_HEADER(dat, obj);
     }
     if (_ctrl->paper_space) {
       obj = dwg_ref_get_object(dwg, _ctrl->paper_space);
       if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT) {
+        pspace = obj;
+        assert(obj->type == DWG_TYPE_BLOCK_HEADER);
         RECORD(BLOCK_RECORD);
         error |= dwg_dxf_BLOCK_HEADER(dat, obj);
       }
     }
+    for (i=0; i<dwg->block_control.num_entries; i++)
+      {
+        Dwg_Object *obj = dwg_ref_get_object(dwg, dwg->block_control.block_headers[i]);
+        if (obj && obj != mspace && obj != pspace)
+          {
+            assert(obj->type == DWG_TYPE_BLOCK_HEADER);
+            RECORD(BLOCK_RECORD);
+            error |= dwg_dxf_BLOCK_HEADER(dat, obj);
+          }
+      }
     ENDTAB();
   }
   ENDSEC();
@@ -1172,41 +1190,40 @@ dxf_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   int error = 0;
   unsigned int i;
-  Dwg_Object *mspace = NULL, *pspace = NULL;
   Dwg_Object_BLOCK_CONTROL *_ctrl = &dwg->block_control;
   Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
 
   SECTION(BLOCKS);
-  COMMON_TABLE_CONTROL_FLAGS(null_handle, Block);
-  dwg_dxf_BLOCK_CONTROL(dat, ctrl);
   if (_ctrl->model_space)
     {
-      Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->model_space);
-      if (obj) {
-        mspace = obj;
-        assert(obj->type == DWG_TYPE_BLOCK_HEADER);
-        RECORD (BLOCK);
-        error |= dwg_dxf_BLOCK_HEADER(dat, obj);
-      }
-    }
-  if (dwg->block_control.paper_space)
-    {
-      Dwg_Object *obj = dwg_ref_get_object(dwg, dwg->block_control.paper_space);
-      if (obj) {
-        pspace = obj;
-        assert(obj->type == DWG_TYPE_BLOCK_HEADER);
-        RECORD (BLOCK);
-        error |= dwg_dxf_BLOCK_HEADER(dat, obj);
-      }
-    }
-  for (i=0; i<dwg->block_control.num_entries; i++)
-    {
-      Dwg_Object *obj = dwg_ref_get_object(dwg, dwg->block_control.block_headers[i]);
-      if (obj && obj != mspace && obj != pspace)
+      Dwg_Object *hdr = _ctrl->model_space->obj;
+      Dwg_Object_BLOCK_HEADER *_hdr = hdr->tio.object->tio.BLOCK_HEADER;
+      Dwg_Object *obj = get_first_owned_block(hdr, _hdr);
+      while (obj)
         {
-          assert(obj->type == DWG_TYPE_BLOCK_HEADER);
-          RECORD (BLOCK);
-          error |= dwg_dxf_BLOCK_HEADER(dat, obj);
+          error |= dwg_dxf_object(dat, obj);
+          obj = get_next_owned_block(hdr, obj, _hdr);
+          if (obj && obj->type == DWG_TYPE_ENDBLK)
+            {
+              error |= dwg_dxf_ENDBLK(dat, obj);
+              obj = NULL;
+            }
+        }
+    }
+  if (_ctrl->paper_space)
+    {
+      Dwg_Object *hdr = _ctrl->paper_space->obj;
+      Dwg_Object_BLOCK_HEADER *_hdr = hdr->tio.object->tio.BLOCK_HEADER;
+      Dwg_Object * obj = get_first_owned_block(ctrl, _hdr);
+      while (obj)
+        {
+          error |= dwg_dxf_object(dat, obj);
+          obj = get_next_owned_block(hdr, obj, _hdr);
+          if (obj && obj->type == DWG_TYPE_ENDBLK)
+            {
+              error |= dwg_dxf_ENDBLK(dat, obj);
+              obj = NULL;
+            }
         }
     }
   ENDSEC();

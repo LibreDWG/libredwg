@@ -724,17 +724,47 @@ get_next_owned_object(const Dwg_Object* hdr_obj, const Dwg_Object* current,
 
   if (R_13 <= version && version <= R_2000)
     {
-      if (current == hdr->last_entity->obj) return 0;
+      if (current == hdr->last_entity->obj)
+        return NULL;
       return dwg_next_object(current);
     }
 
   if (version >= R_2004)
     {
       hdr->__iterator++;
-      if (hdr->__iterator == hdr->num_owned) return 0;
+      if (hdr->__iterator == hdr->num_owned)
+        return NULL;
       return hdr->entities[hdr->__iterator]->obj;
     }
 
+  LOG_ERROR("Unsupported version: %d\n", version);
+  return NULL;
+}
+
+Dwg_Object*
+get_first_owned_block(const Dwg_Object* hdr_obj, Dwg_Object_BLOCK_HEADER* hdr)
+{
+  unsigned int version = hdr_obj->parent->header.version;
+
+  if (version >= R_13)
+    return hdr->block_entity->obj;
+  //TODO: preR13 block table
+  LOG_ERROR("Unsupported version: %d\n", version);
+  return NULL;
+}
+
+Dwg_Object*
+get_next_owned_block(const Dwg_Object* hdr_obj, const Dwg_Object* current,
+                      Dwg_Object_BLOCK_HEADER* hdr)
+{
+  unsigned int version = hdr_obj->parent->header.version;
+
+  if (version >= R_13)
+    {
+      if (current == hdr->endblk_entity->obj)
+        return NULL;
+      return dwg_next_object(current);
+    }
   LOG_ERROR("Unsupported version: %d\n", version);
   return NULL;
 }
