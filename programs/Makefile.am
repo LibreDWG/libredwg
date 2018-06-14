@@ -81,7 +81,7 @@ if !HAVE_MINGW_CROSS
 regen-man: $(bin_PROGRAMS) $(noinst_PROGRAMS)
 	-for p in $(dist_man1_MANS); do \
 	  base=`basename $$p .1`; \
-	  help2man -p $(PACKAGE_NAME) -o $$p $$base$(EXEEXT); done
+	  help2man -p $(PACKAGE_NAME) -o $$p ./$$base$(EXEEXT); done
 endif
 
 #.c.1: $(bin_PROGRAMS) $(noinst_PROGRAMS)

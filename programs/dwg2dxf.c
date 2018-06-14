@@ -41,7 +41,7 @@ char buf[4096];
 static unsigned int cur_ver = 0;
 
 static int usage(void) {
-  printf("\nUsage: dwg2dxf [-v[N]] [-as-rNNNN] [-m|--minimal] [-b|--binary] <input_file.dwg> [<output_file.dxf>]\n");
+  printf("\nUsage: dwg2dxf [-v[N]] [-as-rNNNN] [-m|--minimal] [-b|--binary] DWGFILES...\n");
   return 1;
 }
 static int opt_version(void) {
@@ -49,9 +49,10 @@ static int opt_version(void) {
   return 0;
 }
 static int help(void) {
-  printf("\nUsage: dwg2dxf [OPTION]... DWGFILE [DXFFILE]\n");
-  printf("Converts the DWG to a DXF.\n");
-  printf("Default DXFFILE: DWGFILE with .dxf extension.\n"
+  printf("\nUsage: dwg2dxf [OPTION]... DWGFILES...\n");
+  printf("Converts DWG files to DXF.\n");
+  printf("Default DXFFILE: DWGFILE with .dxf extension in the current directory.\n"
+         "Existing files are silently overwritten.\n"
          "\n");
   printf("  -v[0-9], --verbose [0-9]  verbosity\n");
   printf("  -as-rNNNN                 save as version\n");
@@ -61,6 +62,7 @@ static int help(void) {
   printf("             r9, r10, r11, r2018\n");
   printf("  -m, --minimal             only $ACADVER, HANDSEED and ENTITIES\n");
   printf("  -b, --binary              save as binary DXF\n");
+  printf("  -o outfile                only valid with one single DWGFILE\n");
   printf("      --help                display this help and exit\n");
   printf("      --version             output version information and exit\n"
          "\n");
@@ -123,70 +125,77 @@ main (int argc, char *argv[])
       argc--;
       i++;
     }
+  if (argc > 2 && !strcmp(argv[i], "-o"))
+    {
+      filename_out = argv[i+1];
+      argc -= 2;
+      i += 2;
+      if (argc > 2)
+        {
+          fprintf(stderr, "Cannot use -o with multiple input files\n");
+          return help();
+        }
+    }
   if (argc > 1 && !strcmp(argv[i], "--help"))
     return help();
   if (argc > 1 && !strcmp(argv[i], "--version"))
     return opt_version();
 
-  filename_in = argv[i];
-  if (argc > 2)
-    filename_out = argv[i+1];
-  else
-    filename_out = suffix (filename_in, "dxf");
-  
-  if (strcmp(filename_in, filename_out) == 0)
+  while (argc > 1)
     {
-      if (filename_out != argv[2])
+      filename_in = argv[i];
+      i++; argc--;
+      if (!filename_out)
+        filename_out = suffix (filename_in, "dxf");
+
+      memset(&dwg, 0, sizeof(Dwg_Data));
+      dwg.opts = opts;
+      fprintf(stderr, "Reading DWG file %s\n", filename_in);
+      error = dwg_read_file (filename_in, &dwg);
+      if (error >= DWG_ERR_CRITICAL)
+        fprintf(stderr, "READ ERROR 0x%x\n", error);
+
+      printf("Writing DXF file %s", filename_out);
+      if (version)
+        {
+          printf(" as %s\n", version);
+          if (dwg.header.from_version != dwg.header.version)
+            dwg.header.from_version = dwg.header.version;
+          //else keep from_version = 0
+          dwg.header.version = dwg_version;
+        }
+      else
+        {
+          printf("\n");
+        }
+      dat.version = dwg.header.version;
+      dat.from_version = dwg.header.from_version;
+
+      if (minimal)
+        dwg.opts |= 0x10;
+      dat.fh = fopen (filename_out, "wb");
+      if (!dat.fh) {
+        fprintf (stderr, "WRITE ERROR %s\n", filename_out);
+        error = DWG_ERR_IOERROR;
+      }
+      else {
+        error = binary ? dwg_write_dxfb (&dat, &dwg) : dwg_write_dxf (&dat, &dwg);
+      }
+
+      if (error >= DWG_ERR_CRITICAL)
+        fprintf (stderr, "WRITE ERROR %s\n", filename_out);
+
+      if (dat.fh)
+        fclose (dat.fh);
+
+      // forget about valgrind. really huge DWG's need endlessly here.
+      if (argc > 1) {
+        dwg_free(&dwg);
         free (filename_out);
-      return usage();
+      }
+      filename_out = NULL;
     }
 
-  dwg.opts = opts;
-  fprintf(stderr, "Reading DWG file %s\n", filename_in);
-  error = dwg_read_file (filename_in, &dwg);
-  if (error >= DWG_ERR_CRITICAL)
-    fprintf(stderr, "READ ERROR 0x%x\n", error);
-
-  printf("Writing DXF file %s", filename_out);
-  if (version)
-    {
-      printf(" as %s\n", version);
-      if (dwg.header.from_version != dwg.header.version)
-        dwg.header.from_version = dwg.header.version;
-      //else keep from_version = 0
-      dwg.header.version = dwg_version;
-    }
-  else
-    {
-      printf("\n");
-    }
-  dat.version = dwg.header.version;
-  dat.from_version = dwg.header.from_version;
-
-  //fprintf(stderr, "WARNING: BLOCKS missing\n");
-  if (minimal)
-    dwg.opts |= 0x10;
-  if (binary) {
-    dat.fh = fopen (filename_out, "wb");
-    if (!dat.fh)
-      fprintf (stderr, "WRITE ERROR %s\n", filename_out);
-    else
-      error = dwg_write_dxfb (&dat, &dwg);
-  } else {
-    dat.fh = fopen (filename_out, "wb");
-    if (!dat.fh)
-      fprintf (stderr, "WRITE ERROR %s\n", filename_out);
-    else
-      error = dwg_write_dxf (&dat, &dwg);
-  }
-  if (error >= DWG_ERR_CRITICAL)
-    fprintf (stderr, "WRITE ERROR\n");
-  if (dat.fh)
-    fclose (dat.fh);
-
-  //if (filename_out != argv[2])
-  //  free (filename_out);
-  // forget about valgrind. really huge DWG's need endlessly here.
-  //dwg_free(&dwg);
+  // but only the result of the last conversion
   return error >= DWG_ERR_CRITICAL ? 1 : 0;
 }

@@ -638,12 +638,14 @@ Noe that the graphical representation for PS and SVG output is severely lacking,
 @item @file{dwg2dxf}
 @cindex dwg2dxf
 
-Convert a DWG to DXF, optionally via @code{--as-rNNNN} as another
+Converts DWG files to DXF, optionally via @code{--as-rNNNN} as another
 version, an earlier or later version, or via @code{-m} or
 @code{--minimal} as a minimal DXF version, skipping most headers vars,
 classes, tables and objects.
-@code{--binary} as a binary DXF file, with full precision.
-Some parts of the DXF writers are not yet implemented.
+
+@code{--binary} as a binary DXF file, with full precision, under construction.
+
+The DXF files are created in the current directory and silently overwritten.
 
 @item @file{dxf2dwg}
 @cindex dxf2dwg

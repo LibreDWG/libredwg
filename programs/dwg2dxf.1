@@ -4,10 +4,11 @@
 dwg2dxf \- manual page for dwg2dxf 0.4-dev
 .SH SYNOPSIS
 .B dwg2dxf
-[\fI\,OPTION\/\fR]... \fI\,DWGFILE \/\fR[\fI\,DXFFILE\/\fR]
+[\fI\,OPTION\/\fR]... \fI\,DWGFILES\/\fR...
 .SH DESCRIPTION
-Converts the DWG to a DXF.
-Default DXFFILE: DWGFILE with .dxf extension.
+Converts DWG files to DXF.
+Default DXFFILE: DWGFILE with .dxf extension in the current directory.
+Existing files are silently overwritten.
 .TP
 \fB\-v[0\-9]\fR, \fB\-\-verbose\fR [0\-9]
 verbosity
@@ -28,6 +29,9 @@ only $ACADVER, HANDSEED and ENTITIES
 .TP
 \fB\-b\fR, \fB\-\-binary\fR
 save as binary DXF
+.TP
+\fB\-o\fR outfile
+only valid with one single DWGFILE
 .TP
 \fB\-\-help\fR
 display this help and exit
