@@ -73,7 +73,7 @@ test_code(char *filename)
   int error;
 
   error = dwg_read_file(filename, &g_dwg);
-  if (!error)
+  if (error < DWG_ERR_CRITICAL)
     {
       output_test(&g_dwg);
       dwg_free(&g_dwg);
@@ -81,7 +81,7 @@ test_code(char *filename)
 
   /* This value is the return value for `main',
      so clamp it to either 0 or 1.  */
-  return error ? 1 : 0;
+  return error >= DWG_ERR_CRITICAL ? 1 : 0;
 }
 
 

@@ -2011,6 +2011,7 @@ read_2004_section_handles(Bit_Chain* dat, Dwg_Data *dwg)
       last_offset = 0;
       while (hdl_dat.byte - startpos < section_size)
         {
+          int added;
           long handle, offset;
           oldpos = dat->byte;
           handle = bit_read_MC(&hdl_dat);
@@ -2020,7 +2021,10 @@ read_2004_section_handles(Bit_Chain* dat, Dwg_Data *dwg)
           LOG_TRACE("\n< Next object: %lu\t", (unsigned long)dwg->num_objects)
           LOG_HANDLE("Handle: %lX\tOffset: %ld @%lu\n", handle, offset, last_offset)
 
-          error |= dwg_decode_add_object(dwg, &obj_dat, &obj_dat, last_offset);
+          added = dwg_decode_add_object(dwg, &obj_dat, &obj_dat, last_offset);
+          if (added > 0)
+            error |= added;
+          //else re-allocated
           // we dont stop encoding on single errors, but we sum them all up
           // as combined bitmask
         }

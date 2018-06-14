@@ -1374,7 +1374,7 @@ read_2007_section_handles(Bit_Chain* dat, Bit_Chain* hdl,
 
   error = read_data_section(&obj_dat, dat, sections_map,
                             pages_map, SECTION_OBJECTS);
-  if (error)
+  if (error >= DWG_ERR_CRITICAL)
     {
       LOG_ERROR("Failed to read objects section");
       if (obj_dat.chain)
@@ -1385,7 +1385,7 @@ read_2007_section_handles(Bit_Chain* dat, Bit_Chain* hdl,
   LOG_TRACE("\nHandles\n-------------------\n")
   error = read_data_section(&hdl_dat, dat, sections_map,
                             pages_map, SECTION_HANDLES);
-  if (error)
+  if (error >= DWG_ERR_CRITICAL)
     {
       LOG_ERROR("Failed to read handles section");
       if (hdl_dat.chain)
@@ -1415,6 +1415,7 @@ read_2007_section_handles(Bit_Chain* dat, Bit_Chain* hdl,
       last_offset = 0;
       while (hdl_dat.byte - startpos < section_size)
         {
+          int added;
           long handle, offset;
           oldpos = hdl_dat.byte;
 
@@ -1425,7 +1426,9 @@ read_2007_section_handles(Bit_Chain* dat, Bit_Chain* hdl,
           LOG_TRACE("\nNext object: %lu\t", (unsigned long)dwg->num_objects)
           LOG_TRACE("Handle: %lX\tOffset: %ld @%lu\n", handle, offset, last_offset)
 
-          dwg_decode_add_object(dwg, &obj_dat, hdl, last_offset);
+          added = dwg_decode_add_object(dwg, &obj_dat, hdl, last_offset);
+          if (added > 0)
+            error |= added;
         }
 
       if (hdl_dat.byte == oldpos)

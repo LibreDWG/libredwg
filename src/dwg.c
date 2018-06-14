@@ -189,7 +189,7 @@ dwg_read_file(const char *restrict filename, Dwg_Data *restrict dwg)
   error = dwg_decode(&bit_chain, dwg);
   if (error >= DWG_ERR_CRITICAL)
     {
-      LOG_ERROR("Failed to decode file: %s\n", filename)
+      LOG_ERROR("Failed to decode file: %s 0x%x\n", filename, error)
       free(bit_chain.chain);
       bit_chain.chain = NULL;
       bit_chain.size = 0;
