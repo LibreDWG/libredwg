@@ -4761,16 +4761,23 @@ DWG_OBJECT_END
 //(79 + varies) pg.247 20.4.104
 DWG_OBJECT(XRECORD)
 
-  SUBCLASS (AcDbXrecord)
+  DXF {
+    FIELD_HANDLE (parenthandle, 4, 330);
+    SUBCLASS (AcDbXrecord)
+    SINCE(R_2000) {
+      FIELD_BS (cloning_flags, 280);
+    }
+  }
   FIELD_BL (num_databytes, 0);
   FIELD_XDATA (xdata, num_databytes);
-
+#ifndef IS_DXF
   SINCE(R_2000) {
     FIELD_BS (cloning_flags, 280);
   }
 
   START_HANDLE_STREAM;
   FIELD_HANDLE (parenthandle, 4, 330); // 3 or 8
+#endif
   REACTORS(4);
   XDICOBJHANDLE(3);
 
@@ -4797,7 +4804,6 @@ DWG_OBJECT(XRECORD)
     #ifdef IS_DXF
     if (FIELD_VALUE(objid_handles)) {
       REPEAT(num_objid_handles, objid_handles, T)
-        //VALUE_TV ("", 102); //TODO xdata string, 102
         VALUE_H (_obj->objid_handles[rcount1], 340);
       END_REPEAT(objid_handles)
     }

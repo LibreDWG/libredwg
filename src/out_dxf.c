@@ -121,11 +121,8 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
     GROUP(9);\
     fprintf (dat->fh, "$%s\r\n", #name)
 #define VALUE_H(value, dxf) \
-  {\
-    Dwg_Object_Ref *ref = value;\
-    if (ref && ref->obj) { VALUE_RS(ref->absolute_ref, dxf); }\
-    else { VALUE_RS(0, dxf); } \
-  }
+    if (dxf) \
+      fprintf(dat->fh, "%3i\r\n%lX\r\n", dxf, value ? value->absolute_ref : 0)
 #define HEADER_H(name,dxf) \
     HEADER_9(name);\
     VALUE_H(dwg->header_vars.name, dxf)
@@ -785,9 +782,9 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
     case DWG_TYPE_HATCH:
       return dwg_dxf_HATCH(dat, obj);
     case DWG_TYPE_XRECORD:
-      //TODO
+      //TODO crashes
       //return minimal ? 0 : dwg_dxf_XRECORD(dat, obj);
-      return DWG_ERR_UNHANDLEDCLASS;
+      return minimal ? 0 : DWG_ERR_UNHANDLEDCLASS;
     case DWG_TYPE_PLACEHOLDER:
       return minimal ? 0 : dwg_dxf_PLACEHOLDER(dat, obj);
     case DWG_TYPE_PROXY_ENTITY:

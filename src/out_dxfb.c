@@ -243,10 +243,10 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
 #define VALUE_H(value,dxf) \
   {\
     Dwg_Object_Ref *ref = value;\
-    if (ref && ref->obj) {VALUE_RS(ref->absolute_ref, dxf);}\
-    else {VALUE_RS(0, dxf);}                                \
+    if (ref && ref->obj) {VALUE_RL(ref->absolute_ref, dxf);}\
+    else {VALUE_RL(0, dxf);} \
   }
-#define HEADER_H(name,dxf) \
+#define HEADER_H(name,dxf)\
     HEADER_9(name);\
     VALUE_H(dwg->header_vars.name, dxf)
 
