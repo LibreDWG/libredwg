@@ -485,47 +485,51 @@ dxf_write_xdata(Bit_Chain *restrict dat, Dwg_Resbuf *restrict rbuf, BITCODE_BL s
 
   while (rbuf)
     {
-      //const char* fmt = dxf_format(rbuf->type);
+      int dxftype = rbuf->type;
+      const char* fmt = dxf_format(rbuf->type);
       short type = get_base_value_type(rbuf->type);
+      if (!strcmp(fmt, "(unknown code)"))
+        dxftype = 70;
 
       tmp = rbuf->next;
       switch (type)
         {
         case VT_STRING:
           UNTIL(R_2007) {
-            VALUE_TV(rbuf->value.str.u.data, rbuf->type);
+            VALUE_TV(rbuf->value.str.u.data, dxftype);
           } LATER_VERSIONS {
-            VALUE_TU(rbuf->value.str.u.wdata, rbuf->type);
+            VALUE_TU(rbuf->value.str.u.wdata, dxftype);
           }
           break;
         case VT_REAL:
-          VALUE_RD(rbuf->value.dbl, rbuf->type);
+          VALUE_RD(rbuf->value.dbl, dxftype);
           break;
         case VT_BOOL:
         case VT_INT8:
-          VALUE_RC(rbuf->value.i8, rbuf->type);
+          VALUE_RC(rbuf->value.i8, dxftype);
           break;
         case VT_INT16:
-          VALUE_RS(rbuf->value.i16, rbuf->type);
+          VALUE_RS(rbuf->value.i16, dxftype);
           break;
         case VT_INT32:
-          VALUE_RL(rbuf->value.i32, rbuf->type);
+          VALUE_RL(rbuf->value.i32, dxftype);
           break;
         case VT_POINT3D:
-          VALUE_RD(rbuf->value.pt[0], rbuf->type);
-          VALUE_RD(rbuf->value.pt[1], rbuf->type+1);
-          VALUE_RD(rbuf->value.pt[2], rbuf->type+2);
+          VALUE_RD(rbuf->value.pt[0], dxftype);
+          VALUE_RD(rbuf->value.pt[1], dxftype+1);
+          VALUE_RD(rbuf->value.pt[2], dxftype+2);
           break;
         case VT_BINARY:
-          VALUE_BINARY(rbuf->value.str.u.data, rbuf->value.str.size, rbuf->type);
+          VALUE_BINARY(rbuf->value.str.u.data, rbuf->value.str.size, dxftype);
           break;
         case VT_HANDLE:
         case VT_OBJECTID:
-          fprintf(dat->fh, "%lX\r\n", (unsigned long)*(uint64_t*)rbuf->value.hdl);
+          fprintf(dat->fh, "%3i\r\n%lX\r\n", dxftype,
+                  (unsigned long)*(uint64_t*)rbuf->value.hdl);
           break;
         case VT_INVALID:
         default:
-          fprintf(dat->fh, "\r\n");
+          fprintf(dat->fh, "%3i\r\n\r\n", dxftype);
           break;
         }
       rbuf = tmp;
@@ -783,18 +787,19 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
       return dwg_dxf_HATCH(dat, obj);
     case DWG_TYPE_XRECORD:
       //TODO crashes
-      return minimal ? 0 : DWG_ERR_UNHANDLEDCLASS; // dwg_dxf_XRECORD(dat, obj);
+      return minimal ? 0 : dwg_dxf_XRECORD(dat, obj);
     case DWG_TYPE_PLACEHOLDER:
       return minimal ? 0 : dwg_dxf_PLACEHOLDER(dat, obj);
     case DWG_TYPE_PROXY_ENTITY:
       //TODO dwg_dxf_PROXY_ENTITY(dat, obj);
-      return 0;
+      return DWG_ERR_UNHANDLEDCLASS;
     case DWG_TYPE_OLEFRAME:
       return minimal ? 0 : dwg_dxf_OLEFRAME(dat, obj);
     case DWG_TYPE_VBA_PROJECT:
       if (!minimal) {
         LOG_ERROR("Unhandled Object VBA_PROJECT. Has its own section\n");
         //dwg_dxf_VBA_PROJECT(dat, obj);
+        return DWG_ERR_UNHANDLEDCLASS;
       }
       return 0;
     case DWG_TYPE_LAYOUT:
