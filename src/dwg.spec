@@ -2667,7 +2667,7 @@ DWG_OBJECT(VPORT)
   SINCE(R_2000) {
     FIELD_RC (render_mode, 281);
   }
-  //TODO 65
+  //TODO 65 (undocumented color index, def: 1)
 
   SINCE(R_2000)
   {
