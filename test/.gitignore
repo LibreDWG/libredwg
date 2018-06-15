@@ -6,6 +6,11 @@
 
 /testcases.log
 /testcases.sum
+/site.bak
+
+/testcases/site.bak
+/testcases/bits_test.cbmc
+/testcases/bits_test.cover
 
 /testcases/3dsolid
 /testcases/arc
@@ -26,6 +31,7 @@
 /testcases/dim_radius
 /testcases/ellipse
 /testcases/endblk
+/testcases/hash_test
 /testcases/insert
 /testcases/libredwg.log
 /testcases/libredwg.sum

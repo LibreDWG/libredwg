@@ -6,6 +6,8 @@
 *~
 *.dSYM
 *.i
+.gdbinit
+.lldbinit
 
 # filenames, anywhere
 Makefile.in
@@ -23,14 +25,19 @@ gcov.log
 /*_20*.dxf
 /*_r1*.dxf
 /examples/*.log
-/examples/*.bmp
-/src/*.gcno
-/src/*.gcov
-/src/*.gcda
+/examples/*.svg
 /programs/*.log
 /programs/*.bmp
 /programs/*-dwgrewrite.dwg
 /programs/*.dxf
+/programs/*.svg
+/programs/*.ps
+/src/*.gcno
+/src/*.gcov
+/src/*.gcda
+/programs/*.gcno
+/programs/*.gcov
+/programs/*.gcda
 /test/testcases/*.gcov
 /test/testcases/*.gcno
 /test/testcases/*.gcda
@@ -44,8 +51,6 @@ gcov.log
 /test/test-data-20*/
 
 # specific filenames
-/.gdbinit
-/.lldbinit
 /.cproject
 /.project
 /.patches
