@@ -3707,6 +3707,8 @@ typedef struct _dwg_entity_LWPOLYLINE
   BITCODE_2RD* points;		/*!< DXF 10,20 */
   BITCODE_BL num_bulges;
   BITCODE_BD* bulges;		/*!< DXF 42 */
+  BITCODE_BL num_vertexids;     /*!< r2010+, same as num_points */
+  BITCODE_BL* vertexids;	/*!< r2010+ DXF 91 */
   BITCODE_BL num_widths;
   Dwg_LWPOLYLINE_width* widths;	/*!< DXF 41,42 */
 } Dwg_Entity_LWPOLYLINE;

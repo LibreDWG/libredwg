@@ -3191,6 +3191,9 @@ DWG_OBJECT_END
 /* (73) */
 DWG_OBJECT(MLINESTYLE)
 
+  DXF {
+    FIELD_HANDLE (parenthandle, 4, 330);
+  }
   SUBCLASS (AcDbMlineStyle)
   FIELD_T (entry_name, 2);
   FIELD_T (desc, 3);
@@ -3246,7 +3249,7 @@ DWG_OBJECT(MLINESTYLE)
   END_REPEAT(lines);
 
   START_HANDLE_STREAM;
-  FIELD_HANDLE (parenthandle, 4, 330);
+  FIELD_HANDLE (parenthandle, 4, 0);
   REACTORS(4);
   XDICOBJHANDLE(3);
 
@@ -3255,10 +3258,11 @@ DWG_OBJECT_END
 //pg.135
 DWG_OBJECT(DICTIONARYVAR)
 
+  DXF { FIELD_HANDLE (parenthandle, 4, 330); }
   SUBCLASS (DictionaryVariables)
   FIELD_RC (intval, 280);
   FIELD_T (str, 1);
-  FIELD_HANDLE (parenthandle, 4, 330);
+  FIELD_HANDLE (parenthandle, 4, 0);
   REACTORS(4);
   XDICOBJHANDLE(3);
 
@@ -3425,12 +3429,13 @@ DWG_OBJECT_END
 //pg.139
 DWG_OBJECT(IDBUFFER)
 
+  DXF { FIELD_HANDLE (parenthandle, 4, 330); }
   SUBCLASS (AcDbIdBuffer)
   FIELD_RC (unknown, 0);
   FIELD_BL (num_obj_ids, 0);
 
   START_HANDLE_STREAM;
-  FIELD_HANDLE (parenthandle, 4, 330);
+  FIELD_HANDLE (parenthandle, 4, 0);
   REACTORS(4);
   XDICOBJHANDLE(3);
   HANDLE_VECTOR(obj_ids, num_obj_ids, 4, 330);
@@ -3477,6 +3482,7 @@ DWG_ENTITY_END
 //pg.142 test-data/*/Leader_*.dwg
 DWG_OBJECT(IMAGEDEF)
 
+  DXF { FIELD_HANDLE (parenthandle, 3, 330); }
   SUBCLASS (AcDbRasterImageDef)
   FIELD_BL (class_version, 90);
   FIELD_2RD (image_size, 10);
@@ -3486,7 +3492,7 @@ DWG_OBJECT(IMAGEDEF)
   FIELD_2RD (pixel_size, 11);
 
   START_HANDLE_STREAM;
-  FIELD_HANDLE (parenthandle, 3, 330);
+  FIELD_HANDLE (parenthandle, 3, 00);
   REACTORS(4);
   XDICOBJHANDLE(3);
 
@@ -3495,11 +3501,12 @@ DWG_OBJECT_END
 //PG.143
 DWG_OBJECT(IMAGEDEF_REACTOR)
 
+  DXF { FIELD_HANDLE (parenthandle, 4, 330); }
   SUBCLASS (AcDbRasterImageDefReactor)
   FIELD_BL (class_version, 90);
 
   START_HANDLE_STREAM;
-  FIELD_HANDLE (parenthandle, 4, 330);
+  FIELD_HANDLE (parenthandle, 4, 0);
   REACTORS(4);
   XDICOBJHANDLE(3);
 
@@ -3508,6 +3515,7 @@ DWG_OBJECT_END
 //pg.144
 DWG_OBJECT(LAYER_INDEX)
 
+  DXF { FIELD_HANDLE (parenthandle, 4, 330); }
   SUBCLASS (AcDbLayerIndex)
   FIELD_BL (timestamp1, 40);
   FIELD_BL (timestamp2, 40);
@@ -3521,7 +3529,7 @@ DWG_OBJECT(LAYER_INDEX)
   END_REPEAT(entries)
 
   START_HANDLE_STREAM;
-  FIELD_HANDLE (parenthandle, 4, 330);
+  FIELD_HANDLE (parenthandle, 4, 0);
   REACTORS(4);
   XDICOBJHANDLE(3);
   HANDLE_VECTOR(entry_handles, num_entries, ANYCODE, 0);
@@ -3531,6 +3539,7 @@ DWG_OBJECT_END
 //pg.145
 DWG_OBJECT(LAYOUT)
 
+  DXF { FIELD_HANDLE (parenthandle, 4, 330); }
   SUBCLASS (AcDbPlotSettings)
   SUBCLASS (AcDbLayout)
   FIELD_T (page_setup_name, 1);
@@ -3587,7 +3596,7 @@ DWG_OBJECT(LAYOUT)
   }
 
   START_HANDLE_STREAM;
-  FIELD_HANDLE (parenthandle, 4, 330);
+  FIELD_HANDLE (parenthandle, 4, 0);
   REACTORS(4);
   XDICOBJHANDLE(3);
 
@@ -3611,11 +3620,12 @@ DWG_OBJECT_END
 //pg.147
 DWG_ENTITY(LWPOLYLINE)
 
-  SUBCLASS (AcDbPolyLine)
+  SUBCLASS (AcDbPolyline)
   #ifdef IS_DXF
-    VALUE_BS (FIELD_VALUE(flag) & 129, 70); //1 closed, 128 plinegen
+    VALUE_BS ((FIELD_VALUE(flag) & 128) + (FIELD_VALUE(flag) & 512 ? 1 : 0),
+              70); //1 closed, 128 plinegen
   #else
-    FIELD_BS (flag, 70); //1 closed, 128 plinegen
+    FIELD_BS (flag, 70); //512 closed, 128 plinegen
   #endif
 
   if (FIELD_VALUE(flag) & 4)
@@ -3624,13 +3634,17 @@ DWG_ENTITY(LWPOLYLINE)
     FIELD_BD (elevation, 38);
   if (FIELD_VALUE(flag) & 2)
     FIELD_BD (thickness, 39);
-  if (FIELD_VALUE(flag) & 1)
+  if (FIELD_VALUE(flag) & 1) //clashes with the dxf closed bit flag 512
     FIELD_3BD (normal, 210);
 
   FIELD_BL (num_points, 90);
 
   if (FIELD_VALUE(flag) & 16)
     FIELD_BL (num_bulges, 0);
+  SINCE(R_2010) {
+    if (FIELD_VALUE(flag) & 1024)
+      FIELD_BL (num_vertexids, 0); //always same as num_points
+  }
   if (FIELD_VALUE(flag) & 32)
     FIELD_BL (num_widths, 0);
 
@@ -3649,6 +3663,11 @@ DWG_ENTITY(LWPOLYLINE)
         if (FIELD_VALUE(num_bulges) && FIELD_VALUE(bulges) &&
             FIELD_VALUE(num_bulges) == FIELD_VALUE(num_points))
           VALUE (rad2deg(_obj->bulges[rcount1]), RD, 42);
+        SINCE(R_2010) {
+          if (FIELD_VALUE(num_vertexids) && FIELD_VALUE(vertexids) &&
+              FIELD_VALUE(num_vertexids) == FIELD_VALUE(num_points))
+            FIELD_BL (vertexids[rcount1], 91);
+        }
       }
     END_REPEAT(points)
   } else {
@@ -3660,6 +3679,9 @@ DWG_ENTITY(LWPOLYLINE)
     }
 
     FIELD_VECTOR (bulges, BD, num_bulges, 42);
+    SINCE(R_2010) {
+      FIELD_VECTOR (vertexids, BL, num_vertexids, 91);
+    }
     REPEAT(num_widths, widths, Dwg_LWPOLYLINE_width)
       {
         FIELD_BD (widths[rcount1].start, 40);
@@ -3774,6 +3796,7 @@ DWG_ENTITY_END
 //(499) pg.149 r2000+
 DWG_OBJECT(PROXY_OBJECT)
 
+  DXF { FIELD_HANDLE (parenthandle, 4, 330); }
   FIELD_BL (class_id, 91);
   PRE(R_2018)
   {
@@ -3994,6 +4017,7 @@ DWG_OBJECT_END
 //pg.220, 20.4.91
 DWG_OBJECT(RASTERVARIABLES)
 
+  DXF { FIELD_HANDLE (parenthandle, 4, 330); }
   SUBCLASS (AcDbRasterVariables)
   FIELD_BL (class_version, 90);
   FIELD_BS (display_frame, 70);
@@ -4001,7 +4025,7 @@ DWG_OBJECT(RASTERVARIABLES)
   FIELD_BS (units, 72);
 
   START_HANDLE_STREAM;
-  FIELD_HANDLE (parenthandle, 4, 330);
+  FIELD_HANDLE (parenthandle, 4, 0);
   REACTORS(4);
   XDICOBJHANDLE(3);
 
@@ -4010,12 +4034,13 @@ DWG_OBJECT_END
 // 20.4.93 page 221
 DWG_OBJECT(SORTENTSTABLE)
 
+  DXF { FIELD_HANDLE (parenthandle, 4, 330); }
   SUBCLASS (AcDbSortentsTable)
   FIELD_BL (num_ents, 0);
 
   START_HANDLE_STREAM;
   HANDLE_VECTOR (sort_handles, num_ents, ANYCODE, 0);
-  FIELD_HANDLE (parenthandle, 4, 330);
+  FIELD_HANDLE (parenthandle, 4, 0);
   REACTORS(4);
   XDICOBJHANDLE(3);
   UNTIL(R_2007) {
@@ -4028,6 +4053,7 @@ DWG_OBJECT_END
 //pg.222, 20.4.94 to clip external references
 DWG_OBJECT(SPATIAL_FILTER)
 
+  DXF { FIELD_HANDLE (parenthandle, 4, 330); }
   SUBCLASS (AcDbSpatialFilter)
   FIELD_BS (num_points, 70);
   FIELD_2RD_VECTOR (points, num_points, 10);
@@ -4046,26 +4072,24 @@ DWG_OBJECT(SPATIAL_FILTER)
   FIELD_VECTOR_N (clip_bound_transform, BD, 12, 40);
 
   START_HANDLE_STREAM;
-  FIELD_HANDLE (parenthandle, 4, 330);
+  FIELD_HANDLE (parenthandle, 4, 0);
   REACTORS(4);
   XDICOBJHANDLE(3);
 
 DWG_OBJECT_END
 
-//pg.153 TODO (Unhandled)
+//pg.153
 DWG_OBJECT(SPATIAL_INDEX)
 
+  DXF { FIELD_HANDLE (parenthandle, 4, 330); }
   SUBCLASS (AcDbSpatialIndex)
   FIELD_BL (timestamp1, 0);
   FIELD_BL (timestamp2, 0);
 
-  //TODO: parse this: "unknown X rest of bits to handles"
-  SINCE(R_2007) {
-    START_HANDLE_STREAM;
-    FIELD_HANDLE (parenthandle, 4, 330);
-    REACTORS(4);
-    XDICOBJHANDLE(3);
-  }
+  START_HANDLE_STREAM;
+  FIELD_HANDLE (parenthandle, 4, 0);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
 
 DWG_OBJECT_END
 
@@ -4828,12 +4852,13 @@ DWG_OBJECT_END
 // VBA_PROJECT (81 + varies), a blob
 DWG_OBJECT(VBA_PROJECT)
 
+  DXF { FIELD_HANDLE (parenthandle, 4, 330); }
   SUBCLASS (AcDbVbaProject)
   FIELD_RL (num_bytes, 0);
   FIELD_TF (bytes, FIELD_VALUE(num_bytes), 0);
 
   START_HANDLE_STREAM;
-  FIELD_HANDLE (parenthandle, 4, 330);
+  FIELD_HANDLE (parenthandle, 4, 0);
   REACTORS(4);
   XDICOBJHANDLE(3);
 
@@ -4843,6 +4868,7 @@ DWG_OBJECT_END
 // 20.4.92 page 221
 DWG_OBJECT(SCALE)
 
+  DXF { FIELD_HANDLE (parenthandle, 4, 330); }
   SUBCLASS (AcDbScale)
   FIELD_BS (flag, 70);
   FIELD_T (name, 300);
@@ -4851,7 +4877,7 @@ DWG_OBJECT(SCALE)
   FIELD_B (has_unit_scale, 290);
       
   START_HANDLE_STREAM;
-  FIELD_HANDLE (parenthandle, 4, 330);
+  FIELD_HANDLE (parenthandle, 4, 0);
   REACTORS(4);
   XDICOBJHANDLE(3);
 
@@ -5145,11 +5171,12 @@ DWG_OBJECT_END
 
 DWG_OBJECT(WIPEOUTVARIABLES)
 
+  DXF { FIELD_HANDLE (parenthandle, 3, 330); }
   SUBCLASS (AcDbWipeoutVariables)
   FIELD_BS (display_frame, 0);
 
   START_HANDLE_STREAM;
-  FIELD_HANDLE (parenthandle, 3, 330);
+  FIELD_HANDLE (parenthandle, 3, 0);
   REACTORS(4);
   XDICOBJHANDLE(3);
 
@@ -5475,6 +5502,7 @@ DWG_ENTITY_END
 // 11 byte+3bit accounted for.
 DWG_OBJECT(SUN)
 
+  DXF { FIELD_HANDLE (parenthandle, 4, 330); }
   SUBCLASS(AcDbSun)
   FIELD_BL (class_version, 90);
   FIELD_B (is_on, 290); // status, isOn
@@ -5533,7 +5561,7 @@ DWG_OBJECT(SUN)
 
   START_HANDLE_STREAM;
   FIELD_HANDLE (skyparams, 5, 0); //AcGiSkyParameters class?
-  FIELD_HANDLE (parenthandle, 4, 330); //@9980.0, @9981.3, @9985.5 (11.0.0)
+  FIELD_HANDLE (parenthandle, 4, 0); //@9980.0, @9981.3, @9985.5 (11.0.0)
   REACTORS(4);
   XDICOBJHANDLE(3); //@9991.1
   //DEBUG_POS() //@9992.1
@@ -5760,3 +5788,4 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
+

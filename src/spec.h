@@ -179,7 +179,7 @@
 
 #define REPEAT_CN(times, name, type) \
   if (_obj->name) \
-    for (rcount1=0; rcount<(long)times; rcount1++)
+    for (rcount1=0; rcount1<(long)times; rcount1++)
 #define REPEAT_N(times, name, type) \
   if (dat->version >= R_2000 && times > 0x1000) { \
     fprintf(stderr, "Invalid rcount1 %ld", (long)times); return DWG_ERR_VALUEOUTOFBOUNDS; } \

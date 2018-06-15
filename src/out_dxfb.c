@@ -192,7 +192,7 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
 #define VALUE_BD(value,dxf) VALUE_RD(value,dxf)
 #define VALUE_RC(value,dxf) \
   {\
-    BITCODE_RC c = value;\
+    BITCODE_RC c = (value); \
     GROUP(dxf);\
     fwrite(&c, 1, 1, dat->fh); \
   }
@@ -204,7 +204,7 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
 
 #define VALUE_RS(value,dxf) \
   {\
-    BITCODE_RS s = value;\
+    BITCODE_RS s = (value); \
     GROUP(dxf);\
     fwrite(&s, 2, 1, dat->fh);\
   }
@@ -215,7 +215,7 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
 
 #define VALUE_RD(value,dxf)\
   {\
-    double d = value;\
+    double d = (value);\
     GROUP(dxf);\
     fwrite(&d, 1, 8, dat->fh); \
   }

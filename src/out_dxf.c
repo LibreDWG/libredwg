@@ -41,7 +41,6 @@ Add CLASSES for those
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
 static char buf[255];
-static char buf1[255];
 
 // private
 static int
@@ -161,21 +160,22 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
     char *s; \
     const char *fmt = dxf_format (dxf);\
     GROUP(dxf);\
-    snprintf (buf1, 255, "%s\r\n", fmt);\
     GCC_DIAG_IGNORE(-Wformat-nonliteral) \
-    snprintf(buf, 255, buf1, value); \
-    if (strcmp(fmt, "%s") && !strcmp(buf, "\r\n")) \
-      snprintf (buf, 255, "0\r\n"); \
-    if (!strcmp(fmt, "%-16.14f")) { \
-      if (!strcmp(buf, "0.00000000000000\r\n")) \
-        strcpy(buf, "0.0\r\n"); \
-      else if ((s = strstr(buf, ".00000000000000\r\n"))) \
-        strcpy(s, ".0\r\n"); \
-      else if ((s = strstr(buf, ".50000000000000\r\n"))) \
-        strcpy(s, ".5\r\n"); \
-    }\
-    fprintf(dat->fh, buf, value);\
+    snprintf(buf, 255, fmt, value); \
     GCC_DIAG_RESTORE \
+    /* not a string, emtpy num, must be zero */ \
+    if (strcmp(fmt, "%s") && !*buf) \
+      strcpy(buf, "0"); \
+    else if (!strcmp(fmt, "%-16.14f")) {   \
+      if (!strcmp(buf, "0.00000000000000")) \
+        strcpy(buf, "0.0"); \
+      else if ((s = strstr(buf, ".00000000000000"))) \
+        strcpy(s, ".0"); \
+      else if ((s = strstr(buf, ".50000000000000"))) \
+        strcpy(s, ".5"); \
+    }\
+    fprintf(dat->fh, "%s", buf); \
+    fprintf(dat->fh, "\r\n"); \
   }
 
 #define FIELD_HANDLE_NAME(name, dxf, table) \
@@ -770,7 +770,7 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
     case DWG_TYPE_GROUP:
       return dwg_dxf_GROUP(dat, obj);
     case DWG_TYPE_MLINESTYLE:
-      return dwg_dxf_MLINESTYLE(dat, obj);
+      return minimal ? 0 : dwg_dxf_MLINESTYLE(dat, obj);
     case DWG_TYPE_OLE2FRAME:
       return minimal ? 0 : dwg_dxf_OLE2FRAME(dat, obj);
     case DWG_TYPE_DUMMY:
@@ -783,8 +783,7 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
       return dwg_dxf_HATCH(dat, obj);
     case DWG_TYPE_XRECORD:
       //TODO crashes
-      //return minimal ? 0 : dwg_dxf_XRECORD(dat, obj);
-      return minimal ? 0 : DWG_ERR_UNHANDLEDCLASS;
+      return minimal ? 0 : DWG_ERR_UNHANDLEDCLASS; // dwg_dxf_XRECORD(dat, obj);
     case DWG_TYPE_PLACEHOLDER:
       return minimal ? 0 : dwg_dxf_PLACEHOLDER(dat, obj);
     case DWG_TYPE_PROXY_ENTITY:
