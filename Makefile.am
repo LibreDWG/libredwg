@@ -46,16 +46,32 @@ refman-pdf: doc/html/index.html
 endif
 
 check-dwg: all
-	-mv check-dwg.log check-dwg.log~
+	-mv check-dwg.log check-dwg.log~ 2>/dev/null
 	for d in `find test/test-data -iname \*.dwg -size -40M`; do \
 	  echo programs/dwgread -v3 $$d | tee -a check-dwg.log; \
 	  programs/dwgread -v3 $$d >> check-dwg.log 2>&1; \
 	done
 check-dwg-valgrind: all
-	-mv check-dwg-valgrind.log check-dwg-valgrind.log~
+	-mv check-dwg-valgrind.log check-dwg-valgrind.log~ 2>/dev/null
 	for d in `find test/test-data -iname \*.dwg -size -10M`; do \
 	  echo valgrind --leak-check=full programs/dwgread $$d | tee -a check-dwg-valgrind.log; \
 	  valgrind --leak-check=full programs/dwgread $$d >> check-dwg-valgrind.log 2>&1; \
+	done
+check-dxf: all
+	-mv check-dxf.log check-dxf.log~ 2>/dev/null
+	for f in test/test-data/Drawing_2*.dwg \
+                 test/test-data/sample_2*.dwg \
+                 test/test-data/example_2000.dwg; \
+          do \
+            echo programs/dwg2dxf -v3 $$f | tee -a check-dxf.log; \
+            programs/dwg2dxf -v3 $$f >>check-dxf.log 2>&1; \
+          done
+	for d in 2000 2004 2007 2010 2013 2018; do \
+          for f in test/test-data/$$d/*.dwg; do \
+            b=`basename $$f .dwg`; \
+            echo programs/dwg2dxf -v3 -o $${b}_$${d}.dxf $$f | tee -a check-dxf.log; \
+            programs/dwg2dxf -v3 -o $${b}_$${d}.dxf $f >>check-dxf.log 2>&1; \
+	  done; \
 	done
 
 # clang-analyzer.llvm.org
@@ -74,7 +90,9 @@ gcov: check
 endif
 
 EXTRA_DIST = README README-alpha
-CLEANFILES = check-dwg.log
+CLEANFILES = check-dwg.log check-dwg-valgrind.log check-dxf.log \
+             check-dwg.log~ check-dwg-valgrind.log~ check-dxf.log~ \
+	     *_20*.dxf *_r1*.dxf
 MAINTAINERCLEANFILES  = *~ *.log cover_db .analysis
 
 maintainer-clean-local:

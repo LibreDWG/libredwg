@@ -19,6 +19,9 @@ gcov.log
 # globs, in specific dirs
 /00*.patch
 /*_20*.log
+/*_r1*.log
+/*_20*.dxf
+/*_r1*.dxf
 /examples/*.log
 /examples/*.bmp
 /src/*.gcno
