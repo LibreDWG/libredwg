@@ -175,7 +175,7 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
         strcpy(s, ".5"); \
     }\
     fprintf(dat->fh, "%s", buf); \
-    fprintf(dat->fh, "\r\n"); \
+    fprintf(dat->fh, "\r\n" /* emacs:" */); \
   }
 
 #define FIELD_HANDLE_NAME(name, dxf, table) \

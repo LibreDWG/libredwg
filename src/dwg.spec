@@ -2334,7 +2334,26 @@ DWG_OBJECT(STYLE)
     FIELD_BD (last_height, 42);
     FIELD_T (font_name, 3);
     FIELD_T (bigfont_name, 4);
-    //TODO 1071  long truetype font’s pitch and family, charset, and italic and bold flags
+    //1001 1000 1071 mandatory r2007+ if .ttf
+    //long truetype font’s pitch and family, charset, and italic and bold flags
+    DXF {
+      char buf[255];
+      char *s;
+      SINCE(R_2007) {
+        s = bit_convert_TU((BITCODE_TU)_obj->font_name);
+        strncpy(buf, s, 255);
+      } else {
+        strncpy(buf, _obj->font_name, 255);
+      }
+      if ((s = strstr(buf, ".ttf")) ||
+          (s = strstr(buf, ".TTF")))
+        {
+          *s = 0;
+          VALUE_TV ("ACAD", 1001);
+          VALUE_TV (buf, 1000);
+          VALUE_RL (34, 1071);
+        }
+    }
 
     START_HANDLE_STREAM;
     FIELD_HANDLE (style_control, 4, 0);

@@ -13,6 +13,7 @@
 #ifndef SPEC_H
 #define SPEC_H
 
+#include <string.h>
 #include "decode.h"
 
 #define DECODER if (0)
