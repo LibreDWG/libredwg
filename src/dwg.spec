@@ -812,7 +812,7 @@ DWG_ENTITY_END
 DWG_ENTITY(ARC)
 
   //SUBCLASS (AcDbCurve)
-  SUBCLASS (AcDbArc)
+  SUBCLASS (AcDbCircle)
   PRE(R_13) {
     FIELD_2RD (center, 10);
     FIELD_RD (radius, 40);
@@ -828,6 +828,7 @@ DWG_ENTITY(ARC)
     FIELD_BD (radius, 40);
     FIELD_BT (thickness, 39);
     FIELD_BE (extrusion, 210);
+    SUBCLASS (AcDbArc)
     FIELD_BD (start_angle, 50);
     FIELD_BD (end_angle, 51);
   }

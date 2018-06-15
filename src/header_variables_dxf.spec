@@ -30,8 +30,11 @@
     return 0;
   }
 
-  SINCE(R_13) {
+  VERSIONS(R_13, R_2013) {
     HEADER_VALUE (ACADMAINTVER, RC, 70, dwg->header.maint_version);
+  }
+  SINCE(R_2018) {
+    HEADER_VALUE (ACADMAINTVER, RC, 90, dwg->header.maint_version);
   }
   SINCE(R_10) {
     HEADER_VALUE (DWGCODEPAGE, TV, 3, codepage);
@@ -403,3 +406,4 @@
     }
 
   ENDSEC();
+
