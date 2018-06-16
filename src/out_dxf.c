@@ -1252,27 +1252,34 @@ dxf_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   /* let's see if this control block is correct... */
   Dwg_Object_Ref *msref = dwg->header_vars.BLOCK_RECORD_MSPACE;
   Dwg_Object_Ref *psref = dwg->header_vars.BLOCK_RECORD_PSPACE;
-  Dwg_Object *hdr;
+  Dwg_Object *hdr, *obj;
 
   // The modelspace header needs to have an block_entity.
   // There are cases (r2010 AEC dwgs) where they don't have one.
-  if (msref && msref->obj && msref->obj->tio.object->tio.BLOCK_HEADER->block_entity)
+  if (msref && msref->obj &&
+      msref->obj->type == DWG_TYPE_BLOCK_HEADER &&
+      msref->obj->tio.object->tio.BLOCK_HEADER->block_entity)
     hdr = msref->obj;
   else
-    hdr = _ctrl->model_space->obj;
+    hdr = _ctrl->model_space->obj; // these two really should be the same
+
+  // If there's no *Model_Space block skip this BLOCKS section.
+  // Or try handle 1F with r2000+, 17 with r14
+  obj = get_first_owned_block(hdr);
+  if (!obj)
+    obj = dwg_resolve_handle(dwg, dwg->header.version >= R_2000 ? 0x1f : 0x17);
+  if (!obj)
+    return 1;
 
   SECTION(BLOCKS);
-  {
-      Dwg_Object *obj = get_first_owned_block(hdr);
-      while (obj)
+  while (obj)
+    {
+      error |= dwg_dxf_object(dat, obj);
+      obj = get_next_owned_block(hdr, obj);
+      if (obj && obj->type == DWG_TYPE_ENDBLK)
         {
-          error |= dwg_dxf_object(dat, obj);
-          obj = get_next_owned_block(hdr, obj);
-          if (obj && obj->type == DWG_TYPE_ENDBLK)
-            {
-              error |= dwg_dxf_ENDBLK(dat, obj);
-              obj = NULL;
-            }
+          error |= dwg_dxf_ENDBLK(dat, obj);
+          obj = NULL;
         }
     }
 
@@ -1280,6 +1287,7 @@ dxf_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     hdr = psref->obj;
   else
     hdr = _ctrl->paper_space->obj;
+
   if (hdr) {
       Dwg_Object *obj = get_first_owned_block(hdr);
       while (obj)
