@@ -5036,11 +5036,11 @@ get_next_owned_object(const Dwg_Object *restrict hdr_obj,
                       Dwg_Object_BLOCK_HEADER *restrict hdr);
 EXPORT Dwg_Object*
 get_first_owned_block(const Dwg_Object *restrict hdr_obj,
-                      Dwg_Object_BLOCK_HEADER *restrict hdr);
+                      const Dwg_Object_BLOCK_HEADER *restrict hdr);
 EXPORT Dwg_Object*
 get_next_owned_block(const Dwg_Object *restrict hdr_obj,
                      const Dwg_Object *restrict current,
-                     Dwg_Object_BLOCK_HEADER *restrict hdr);
+                     const Dwg_Object_BLOCK_HEADER *restrict hdr);
 
 EXPORT Dwg_Object *
 dwg_resolve_handle(const Dwg_Data* dwg,

@@ -694,7 +694,8 @@ dwg_resolve_handleref(Dwg_Object_Ref *restrict ref, const Dwg_Object *restrict o
 }
 
 Dwg_Object*
-get_first_owned_object(const Dwg_Object* hdr_obj, Dwg_Object_BLOCK_HEADER* hdr)
+get_first_owned_object(const Dwg_Object *restrict hdr_obj,
+                       Dwg_Object_BLOCK_HEADER *restrict hdr)
 {
   unsigned int version = hdr_obj->parent->header.version;
 
@@ -717,8 +718,9 @@ get_first_owned_object(const Dwg_Object* hdr_obj, Dwg_Object_BLOCK_HEADER* hdr)
 }
 
 Dwg_Object*
-get_next_owned_object(const Dwg_Object* hdr_obj, const Dwg_Object* current,
-                      Dwg_Object_BLOCK_HEADER* hdr)
+get_next_owned_object(const Dwg_Object *restrict hdr_obj,
+                      const Dwg_Object *restrict current,
+                      Dwg_Object_BLOCK_HEADER *restrict hdr)
 {
   unsigned int version = hdr_obj->parent->header.version;
 
@@ -742,26 +744,28 @@ get_next_owned_object(const Dwg_Object* hdr_obj, const Dwg_Object* current,
 }
 
 Dwg_Object*
-get_first_owned_block(const Dwg_Object* hdr_obj, Dwg_Object_BLOCK_HEADER* hdr)
+get_first_owned_block(const Dwg_Object *restrict hdr_obj,
+                      const Dwg_Object_BLOCK_HEADER *restrict hdr)
 {
   unsigned int version = hdr_obj->parent->header.version;
 
   if (version >= R_13)
-    return hdr->block_entity->obj;
+    return hdr->block_entity ? hdr->block_entity->obj : NULL;
   //TODO: preR13 block table
   LOG_ERROR("Unsupported version: %d\n", version);
   return NULL;
 }
 
 Dwg_Object*
-get_next_owned_block(const Dwg_Object* hdr_obj, const Dwg_Object* current,
-                      Dwg_Object_BLOCK_HEADER* hdr)
+get_next_owned_block(const Dwg_Object *restrict hdr_obj,
+                     const Dwg_Object *restrict current,
+                     const Dwg_Object_BLOCK_HEADER *restrict hdr)
 {
   unsigned int version = hdr_obj->parent->header.version;
 
   if (version >= R_13)
     {
-      if (current == hdr->endblk_entity->obj)
+      if (!hdr->endblk_entity || current == hdr->endblk_entity->obj)
         return NULL;
       return dwg_next_object(current);
     }

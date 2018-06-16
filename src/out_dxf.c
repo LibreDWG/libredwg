@@ -1243,11 +1243,20 @@ dxf_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   unsigned int i;
   Dwg_Object_BLOCK_CONTROL *_ctrl = &dwg->block_control;
   Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
+  /* let's see if this control block is correct... */
+  Dwg_Object_Ref *msref = dwg->header_vars.BLOCK_RECORD_MSPACE;
+  Dwg_Object_Ref *psref = dwg->header_vars.BLOCK_RECORD_PSPACE;
+  Dwg_Object *hdr;
+
+  // The modelspace header needs to have an block_entity.
+  // There are cases (r2010 AEC dwgs) where they don't have one.
+  if (msref && msref->obj && msref->obj->tio.object->tio.BLOCK_HEADER->block_entity)
+    hdr = msref->obj;
+  else
+    hdr = _ctrl->model_space->obj;
 
   SECTION(BLOCKS);
-  if (dwg->header_vars.BLOCK_RECORD_MSPACE && dwg->header_vars.BLOCK_RECORD_MSPACE->obj)
-    {
-      Dwg_Object *hdr = dwg->header_vars.BLOCK_RECORD_MSPACE->obj;
+  {
       Dwg_Object_BLOCK_HEADER *_hdr = hdr->tio.object->tio.BLOCK_HEADER;
       Dwg_Object *obj = get_first_owned_block(hdr, _hdr);
       while (obj)
@@ -1261,11 +1270,14 @@ dxf_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             }
         }
     }
-  if (dwg->header_vars.BLOCK_RECORD_PSPACE && dwg->header_vars.BLOCK_RECORD_PSPACE->obj)
-    {
-      Dwg_Object *hdr = dwg->header_vars.BLOCK_RECORD_PSPACE->obj;
+
+  if (psref && psref->obj && psref->obj->tio.object->tio.BLOCK_HEADER->block_entity)
+    hdr = psref->obj;
+  else
+    hdr = _ctrl->paper_space->obj;
+  if (hdr) {
       Dwg_Object_BLOCK_HEADER *_hdr = hdr->tio.object->tio.BLOCK_HEADER;
-      Dwg_Object * obj = get_first_owned_block(ctrl, _hdr);
+      Dwg_Object *obj = get_first_owned_block(hdr, _hdr);
       while (obj)
         {
           error |= dwg_dxf_object(dat, obj);
