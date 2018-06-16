@@ -1088,8 +1088,8 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->layers[i]);
         if (obj && obj->type == DWG_TYPE_LAYER)
           error |= dwg_dxf_LAYER(dat, obj);
-        else if (obj && obj->type == DWG_TYPE_DICTIONARY)
-          error |= dwg_dxf_DICTIONARY(dat, obj);
+        //else if (obj && obj->type == DWG_TYPE_DICTIONARY)
+        //  error |= dwg_dxf_DICTIONARY(dat, obj);
       }
     ENDTAB();
   }  
