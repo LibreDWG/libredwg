@@ -1844,6 +1844,8 @@ typedef struct _dwg_object_LAYER
   BITCODE_B on;
   BITCODE_B frozen_in_new;
   BITCODE_B locked;
+  BITCODE_B plotflag;
+  BITCODE_RS linewidth;
   //BITCODE_BS flag_s;
   BITCODE_CMC color;
   short      color_rs;    /* preR13, needs to be signed */
