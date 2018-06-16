@@ -287,8 +287,8 @@ output_object(dwg_object* obj){
 static void
 output_BLOCK_HEADER(dwg_object_ref* ref)
 {
-  dwg_object* obj, *variable_obj;
-  dwg_obj_block_header* hdr;
+  dwg_object* hdr, *obj;
+  dwg_obj_block_header* _hdr;
   int error;
   unsigned long abs_ref;
   char *name;
@@ -299,36 +299,27 @@ output_BLOCK_HEADER(dwg_object_ref* ref)
               " Could not output an SVG symbol for this BLOCK_HEADER\n");
       return;
     }
-  obj = dwg_obj_ref_get_object(ref, &error);
+  hdr = dwg_obj_ref_get_object(ref, &error);
   log_if_error("reference_get_object");
   abs_ref = dwg_ref_get_absref(ref, &error);
   log_if_error("ref_get_abs_ref");
-  if (!obj)
+  if (!hdr)
     {
       fprintf(stderr, "Found null ref->obj\n");
       return;
     }
 
-  /* TODO: Review.  (This check avoids a segfault, but it is
-     still unclear whether or not the condition is valid.)  */
-  if (!dwg_object_to_object(obj, &error))
-    {
-      fprintf(stderr, "Found null ref->obj->tio.object\n");
-      return;
-    }
-  log_if_error("object_to_object");
-
-  hdr = dwg_object_to_BLOCK_HEADER(obj);
-  name = dwg_obj_block_header_get_name(hdr, &error);
+  _hdr = dwg_object_to_BLOCK_HEADER(hdr);
+  name = dwg_obj_block_header_get_name(_hdr, &error);
   log_if_error("block_header_get_name");
   printf(
       "\t<g id=\"symbol-%lu\" >\n\t\t<!-- %s -->\n", abs_ref, name);
 
-  variable_obj = get_first_owned_object(obj, hdr);
-  while (variable_obj)
+  obj = get_first_owned_object(hdr);
+  while (obj)
     {
-      output_object(variable_obj);
-      variable_obj = get_next_owned_object(obj, variable_obj, hdr);
+      output_object(obj);
+      obj = get_next_owned_object(hdr, obj);
     }
 
   printf("\t</g>\n");
@@ -340,8 +331,8 @@ output_SVG(dwg_data *dwg)
 {
   unsigned int i, num_hdr_objs;
   int error;
-  dwg_obj_block_header *hdr;
-  dwg_obj_block_control *ctrl;
+  dwg_obj_block_header *_hdr;
+  dwg_obj_block_control *_ctrl;
   dwg_object_ref **hdr_refs; 
 
   double dx = dwg_model_x_max(dwg) - dwg_model_x_min(dwg);
@@ -358,14 +349,14 @@ output_SVG(dwg_data *dwg)
   page_height = dy;
   scale *= (scale_x > scale_y ? scale_x : scale_y);
 
-  hdr = dwg_get_block_header(dwg, &error);
+  _hdr = dwg_get_block_header(dwg, &error);
   log_if_error("get_block_header");
-  ctrl = dwg_block_header_get_block_control(hdr, &error);
+  _ctrl = dwg_block_header_get_block_control(_hdr, &error);
   log_if_error("block_header_get_block_control");
   
-  hdr_refs = dwg_obj_block_control_get_block_headers(ctrl, &error);
+  hdr_refs = dwg_obj_block_control_get_block_headers(_ctrl, &error);
   log_if_error("block_control_get_block_headers");
-  num_hdr_objs = dwg_obj_block_control_get_num_entries(ctrl, &error);
+  num_hdr_objs = dwg_obj_block_control_get_num_entries(_ctrl, &error);
   log_if_error("block_control_get_num_entries");
 
   printf("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
@@ -384,10 +375,10 @@ output_SVG(dwg_data *dwg)
     }
   printf("\t</defs>\n");
 
-  output_BLOCK_HEADER(dwg_obj_block_control_get_model_space(ctrl, &error));
+  output_BLOCK_HEADER(dwg_obj_block_control_get_model_space(_ctrl, &error));
   log_if_error("block_control_get_model_space");
 
-  output_BLOCK_HEADER(dwg_obj_block_control_get_paper_space(ctrl, &error));
+  output_BLOCK_HEADER(dwg_obj_block_control_get_paper_space(_ctrl, &error));
   log_if_error("block_control_get_paper_space");
 
   printf("</svg>\n");

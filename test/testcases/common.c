@@ -77,37 +77,28 @@ test_code (char *filename)
 void
 output_BLOCK_HEADER (dwg_object_ref * ref)
 {
-  dwg_object *obj, *variable_obj;
-  dwg_obj_block_header *hdr;
+  dwg_object *hdr, *obj;
   int error;
 
-  obj = dwg_obj_ref_get_object (ref, &error);
+  hdr = dwg_obj_ref_get_object (ref, &error);
   if (!ref)
     {
       fprintf (stderr,
         "Found null object reference. Could not output an SVG symbol for this BLOCK\n");
       return;
     }
-  if (!obj)
+  if (!hdr)
     {
-      fprintf (stderr, "Found null ref->obj\n");
-      return;
-    }
-  if (!dwg_object_to_object (obj, &error))
-    {
-      fprintf (stderr, "Found null ref->obj->tio.object\n");
+      fprintf (stderr, "Found null reference object\n");
       return;
     }
 
-  hdr = dwg_object_to_BLOCK_HEADER (obj);
-  variable_obj = get_first_owned_object (obj, hdr);
-
-  while (variable_obj)
+  obj = get_first_owned_object (hdr);
+  while (obj)
     {
-      output_object (variable_obj);
-      variable_obj = get_next_owned_object (obj, variable_obj, hdr);
+      output_object (obj);
+      obj = get_next_owned_object (hdr, obj);
     }
-
 }
 
 /// Function for blocks to be iterated
@@ -116,18 +107,18 @@ output_test (dwg_data * dwg)
 {
   unsigned int num_hdr_objs;
   int error;
-  dwg_obj_block_header *hdr;
-  dwg_obj_block_control *ctrl;
+  dwg_obj_block_header *_hdr;
+  dwg_obj_block_control *_ctrl;
   dwg_object_ref **hdr_refs;
 
-  hdr = dwg_get_block_header (dwg, &error);
-  ctrl = dwg_block_header_get_block_control (hdr, &error);
+  _hdr = dwg_get_block_header (dwg, &error);
+  _ctrl = dwg_block_header_get_block_control (_hdr, &error);
 
-  //hdr_refs = dwg_obj_block_control_get_block_headers (ctrl, &error);
-  //num_hdr_objs = dwg_obj_block_control_get_num_entries (ctrl, &error);
+  //hdr_refs = dwg_obj_block_control_get_block_headers (_ctrl, &error);
+  //num_hdr_objs = dwg_obj_block_control_get_num_entries (_ctrl, &error);
 
-  output_BLOCK_HEADER (dwg_obj_block_control_get_model_space (ctrl, &error));
-  output_BLOCK_HEADER (dwg_obj_block_control_get_paper_space (ctrl, &error));
+  output_BLOCK_HEADER (dwg_obj_block_control_get_model_space (_ctrl, &error));
+  output_BLOCK_HEADER (dwg_obj_block_control_get_paper_space (_ctrl, &error));
 
 }
 

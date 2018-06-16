@@ -188,6 +188,11 @@ void output_BLOCK_HEADER(Dwg_Object_Ref* ref)
       fprintf(stderr, "Found null ref->obj\n");
       return;
     }
+  if (ref->obj->type != DWG_TYPE_BLOCK_HEADER)
+    {
+      fprintf(stderr, "Argument not a BLOCK_HEADER reference\n");
+      return;
+    }
 
   /* TODO: Review.  (This check avoids a segfault, but it is
      still unclear whether or not the condition is valid.)  */
@@ -201,12 +206,11 @@ void output_BLOCK_HEADER(Dwg_Object_Ref* ref)
   printf(
       "\t<g id=\"symbol-%lu\" >\n\t\t<!-- %s -->\n", ref->absolute_ref, hdr->entry_name);
 
-  obj = get_first_owned_object(ref->obj, hdr);
-
+  obj = get_first_owned_object(ref->obj);
   while (obj)
     {
       output_object(obj);
-      obj = get_next_owned_object(ref->obj, obj, hdr);
+      obj = get_next_owned_object(ref->obj, obj);
     }
 
   printf("\t</g>\n");

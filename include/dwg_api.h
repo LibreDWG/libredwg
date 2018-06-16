@@ -55,27 +55,26 @@ typedef struct _dwg_LWPLINE_widths
 // Extract All Entities of a specific type from a BLOCK
 #define GET_DWG_ENTITY_DECL(token) \
 EXPORT \
-Dwg_Entity_##token **dwg_get_##token (Dwg_Object_Ref * ref);
+Dwg_Entity_##token **dwg_get_##token (Dwg_Object_Ref * hdr);
 
 #define GET_DWG_ENTITY(token) \
 EXPORT \
-Dwg_Entity_##token **dwg_get_##token (Dwg_Object_Ref * ref) \
+Dwg_Entity_##token **dwg_get_##token (Dwg_Object_Ref * hdr) \
 { \
   int x=0, counts=0; \
   Dwg_Entity_##token ** ret_##token; \
-  Dwg_Object_BLOCK_HEADER *hdr = ref->obj->tio.object->tio.BLOCK_HEADER; \
-  Dwg_Object * obj = get_first_owned_object(ref->obj, hdr); \
+  Dwg_Object * obj = get_first_owned_object(hdr->obj); \
   while (obj) \
     { \
      /* TODO varies */ \
       if (obj->type == DWG_TYPE_##token) \
         counts++; \
-      obj = get_next_owned_object(ref->obj, obj, hdr); \
+      obj = get_next_owned_object(hdr->obj, obj); \
     } \
   if (!counts) \
     return NULL; \
   ret_##token = (Dwg_Entity_##token **)malloc (counts * sizeof(Dwg_Entity_##token *));\
-  obj = get_first_owned_object(ref->obj, hdr); \
+  obj = get_first_owned_object(hdr->obj); \
   while (obj) \
     { \
       /* TODO varies */ \
@@ -84,7 +83,7 @@ Dwg_Entity_##token **dwg_get_##token (Dwg_Object_Ref * ref) \
           ret_##token[x] = obj->tio.entity->tio.token; \
           x++; \
         } \
-        obj = get_next_owned_object(ref->obj, obj, hdr); \
+        obj = get_next_owned_object(hdr->obj, obj); \
     } \
   return ret_##token; \
 }

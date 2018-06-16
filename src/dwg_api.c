@@ -17405,7 +17405,7 @@ dwg_obj_block_control_get_block_headers(const dwg_obj_block_control *restrict ct
 */
 BITCODE_BL
 dwg_obj_block_control_get_num_entries(const dwg_obj_block_control *restrict ctrl,
-                          int *restrict error)
+                                      int *restrict error)
 {
   if (ctrl)
     {
@@ -17426,7 +17426,7 @@ dwg_obj_block_control_get_num_entries(const dwg_obj_block_control *restrict ctrl
 */
 dwg_object_ref *
 dwg_obj_block_control_get_model_space(const dwg_obj_block_control *restrict ctrl,
-                          int *restrict error)
+                                      int *restrict error)
 {
   if (ctrl)
     {
@@ -17447,7 +17447,7 @@ dwg_obj_block_control_get_model_space(const dwg_obj_block_control *restrict ctrl
 */
 dwg_object_ref *
 dwg_obj_block_control_get_paper_space(const dwg_obj_block_control *restrict ctrl,
-                          int *restrict error)
+                                      int *restrict error)
 {
   if (ctrl)
     {

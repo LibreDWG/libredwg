@@ -448,12 +448,11 @@ and inside the @code{process_BLOCK_HEADER} function, you iterate over the object
 from the header ref via:
 
 @verbatim
-  Dwg_Object_BLOCK_HEADER* hdr = ref->obj->tio.object->tio.BLOCK_HEADER;
-  Dwg_Object* obj = get_first_owned_object(ref->obj, hdr);
+  Dwg_Object* obj = get_first_owned_object(ref->obj);
   while (obj)
     {
       process_object(obj);
-      obj = get_next_owned_object(ref->obj, obj, hdr);
+      obj = get_next_owned_object(ref->obj, obj);
     }
 @end verbatim
 

@@ -694,49 +694,60 @@ dwg_resolve_handleref(Dwg_Object_Ref *restrict ref, const Dwg_Object *restrict o
 }
 
 Dwg_Object*
-get_first_owned_object(const Dwg_Object *restrict hdr_obj,
-                       Dwg_Object_BLOCK_HEADER *restrict hdr)
+get_first_owned_object(const Dwg_Object *hdr)
 {
-  unsigned int version = hdr_obj->parent->header.version;
+  unsigned int version = hdr->parent->header.version;
+  Dwg_Object_BLOCK_HEADER *_hdr = hdr->tio.object->tio.BLOCK_HEADER;
+  if (hdr->type != DWG_TYPE_BLOCK_HEADER)
+    {
+      LOG_ERROR("Invalid BLOCK_HEADER type %d", hdr->type);
+      return NULL;
+    }
 
   if (R_13 <= version && version <= R_2000)
     {
-      return hdr->first_entity->obj;
+      return _hdr->first_entity->obj;
     }
 
   if (version >= R_2004)
     {
-      hdr->__iterator = 0;
-      if (hdr->entities && hdr->num_owned && hdr->entities[0])
-        return hdr->entities[0]->obj;
+      _hdr->__iterator = 0;
+      if (_hdr->entities && _hdr->num_owned && _hdr->entities[0])
+        return _hdr->entities[0]->obj;
       else
         return NULL;
     }
+
   //TODO: preR13 block table
   LOG_ERROR("Unsupported version: %d\n", version);
   return NULL;
 }
 
 Dwg_Object*
-get_next_owned_object(const Dwg_Object *restrict hdr_obj,
-                      const Dwg_Object *restrict current,
-                      Dwg_Object_BLOCK_HEADER *restrict hdr)
+get_next_owned_object(const Dwg_Object *restrict hdr,
+                      const Dwg_Object *restrict current)
 {
-  unsigned int version = hdr_obj->parent->header.version;
+  unsigned int version = hdr->parent->header.version;
+  Dwg_Object_BLOCK_HEADER *_hdr = hdr->tio.object->tio.BLOCK_HEADER;
+  if (hdr->type != DWG_TYPE_BLOCK_HEADER)
+    {
+      LOG_ERROR("Invalid BLOCK_HEADER type %d", hdr->type);
+      return NULL;
+    }
 
   if (R_13 <= version && version <= R_2000)
     {
-      if (current == hdr->last_entity->obj)
+      if (current == _hdr->last_entity->obj)
         return NULL;
       return dwg_next_object(current);
     }
 
   if (version >= R_2004)
     {
-      hdr->__iterator++;
-      if (hdr->__iterator == hdr->num_owned)
+      _hdr->__iterator++;
+      if (_hdr->__iterator == _hdr->num_owned)
         return NULL;
-      return hdr->entities[hdr->__iterator]->obj;
+      return _hdr->entities[_hdr->__iterator]->obj;
     }
 
   LOG_ERROR("Unsupported version: %d\n", version);
@@ -744,31 +755,43 @@ get_next_owned_object(const Dwg_Object *restrict hdr_obj,
 }
 
 Dwg_Object*
-get_first_owned_block(const Dwg_Object *restrict hdr_obj,
-                      const Dwg_Object_BLOCK_HEADER *restrict hdr)
+get_first_owned_block(const Dwg_Object *hdr)
 {
-  unsigned int version = hdr_obj->parent->header.version;
+  unsigned int version = hdr->parent->header.version;
+  const Dwg_Object_BLOCK_HEADER *restrict _hdr = hdr->tio.object->tio.BLOCK_HEADER;
+  if (hdr->type != DWG_TYPE_BLOCK_HEADER)
+    {
+      LOG_ERROR("Invalid BLOCK_HEADER type %d", hdr->type);
+      return NULL;
+    }
 
   if (version >= R_13)
-    return hdr->block_entity ? hdr->block_entity->obj : NULL;
+    return _hdr->block_entity ? _hdr->block_entity->obj : NULL;
+
   //TODO: preR13 block table
   LOG_ERROR("Unsupported version: %d\n", version);
   return NULL;
 }
 
 Dwg_Object*
-get_next_owned_block(const Dwg_Object *restrict hdr_obj,
-                     const Dwg_Object *restrict current,
-                     const Dwg_Object_BLOCK_HEADER *restrict hdr)
+get_next_owned_block(const Dwg_Object *restrict hdr,
+                     const Dwg_Object *restrict current)
 {
-  unsigned int version = hdr_obj->parent->header.version;
+  unsigned int version = hdr->parent->header.version;
+  const Dwg_Object_BLOCK_HEADER *restrict _hdr = hdr->tio.object->tio.BLOCK_HEADER;
+  if (hdr->type != DWG_TYPE_BLOCK_HEADER)
+    {
+      LOG_ERROR("Invalid BLOCK_HEADER type %d", hdr->type);
+      return NULL;
+    }
 
   if (version >= R_13)
     {
-      if (!hdr->endblk_entity || current == hdr->endblk_entity->obj)
+      if (!_hdr->endblk_entity || current == _hdr->endblk_entity->obj)
         return NULL;
       return dwg_next_object(current);
     }
+
   LOG_ERROR("Unsupported version: %d\n", version);
   return NULL;
 }

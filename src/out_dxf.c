@@ -1257,12 +1257,11 @@ dxf_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   SECTION(BLOCKS);
   {
-      Dwg_Object_BLOCK_HEADER *_hdr = hdr->tio.object->tio.BLOCK_HEADER;
-      Dwg_Object *obj = get_first_owned_block(hdr, _hdr);
+      Dwg_Object *obj = get_first_owned_block(hdr);
       while (obj)
         {
           error |= dwg_dxf_object(dat, obj);
-          obj = get_next_owned_block(hdr, obj, _hdr);
+          obj = get_next_owned_block(hdr, obj);
           if (obj && obj->type == DWG_TYPE_ENDBLK)
             {
               error |= dwg_dxf_ENDBLK(dat, obj);
@@ -1276,12 +1275,11 @@ dxf_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   else
     hdr = _ctrl->paper_space->obj;
   if (hdr) {
-      Dwg_Object_BLOCK_HEADER *_hdr = hdr->tio.object->tio.BLOCK_HEADER;
-      Dwg_Object *obj = get_first_owned_block(hdr, _hdr);
+      Dwg_Object *obj = get_first_owned_block(hdr);
       while (obj)
         {
           error |= dwg_dxf_object(dat, obj);
-          obj = get_next_owned_block(hdr, obj, _hdr);
+          obj = get_next_owned_block(hdr, obj);
           if (obj && obj->type == DWG_TYPE_ENDBLK)
             {
               error |= dwg_dxf_ENDBLK(dat, obj);
