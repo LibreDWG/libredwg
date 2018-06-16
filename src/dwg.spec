@@ -3682,7 +3682,7 @@ DWG_ENTITY(LWPOLYLINE)
           }
         if (FIELD_VALUE(num_bulges) && FIELD_VALUE(bulges) &&
             FIELD_VALUE(num_bulges) == FIELD_VALUE(num_points))
-          VALUE (rad2deg(_obj->bulges[rcount1]), RD, 42);
+          FIELD_BD (bulges[rcount1], 42);
         SINCE(R_2010) {
           if (FIELD_VALUE(num_vertexids) && FIELD_VALUE(vertexids) &&
               FIELD_VALUE(num_vertexids) == FIELD_VALUE(num_points))
@@ -5808,4 +5808,3 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
-

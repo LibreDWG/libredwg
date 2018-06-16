@@ -158,24 +158,37 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
 #define VALUE(value, type, dxf) \
   if (dxf) { \
     char *s; \
-    const char *fmt = dxf_format (dxf);\
-    GROUP(dxf);\
+    const char *fmt = dxf_format (dxf); \
+    GROUP(dxf); \
     GCC_DIAG_IGNORE(-Wformat-nonliteral) \
     snprintf(buf, 255, fmt, value); \
     GCC_DIAG_RESTORE \
-    /* not a string, emtpy num, must be zero */ \
+    /* not a string, emtpy num. must be zero */ \
     if (strcmp(fmt, "%s") && !*buf) \
       strcpy(buf, "0"); \
-    else if (!strcmp(fmt, "%-16.14f")) {   \
+    else if (!strcmp(fmt, "%-16.14f")) { \
       if (!strcmp(buf, "0.00000000000000")) \
         strcpy(buf, "0.0"); \
       else if ((s = strstr(buf, ".00000000000000"))) \
         strcpy(s, ".0"); \
       else if ((s = strstr(buf, ".50000000000000"))) \
         strcpy(s, ".5"); \
-    }\
-    fprintf(dat->fh, "%s", buf); \
-    fprintf(dat->fh, "\r\n" /* emacs:" */); \
+      else if ((s = strstr(buf, ".12500000000000"))) \
+        strcpy(s, ".125"); \
+    } \
+    fprintf(dat->fh, "%s\r\n", buf); \
+  }
+#define VALUE_RD(value, dxf) \
+  if (dxf) { \
+    GROUP(dxf); \
+    if (value == 0.0 || value == 0) \
+      fprintf(dat->fh, "0.0\r\n"); \
+    else if (value == 0.5) \
+      fprintf(dat->fh, "0.5\r\n"); \
+    else if (value == 0.125) \
+      fprintf(dat->fh, "0.125\r\n"); \
+    else \
+      fprintf(dat->fh, "%-16.14f\r\n", value); \
   }
 
 #define FIELD_HANDLE_NAME(name, dxf, table) \
@@ -191,14 +204,14 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
 
 #define HEADER_RC(name,dxf)  HEADER_9(name); FIELD(name, RC, dxf)
 #define HEADER_RS(name,dxf)  HEADER_9(name); FIELD(name, RS, dxf)
-#define HEADER_RD(name,dxf)  HEADER_9(name); FIELD(name, RD, dxf)
+#define HEADER_RD(name,dxf)  HEADER_9(name); FIELD_RD(name, dxf)
 #define HEADER_RL(name,dxf)  HEADER_9(name); FIELD(name, RL, dxf)
 #define HEADER_RLL(name,dxf) HEADER_9(name); FIELD(name, RLL, dxf)
 #define HEADER_TV(name,dxf)  HEADER_9(name); VALUE_TV(_obj->name, dxf)
 #define HEADER_T(name,dxf)   HEADER_9(name); VALUE_T(_obj->name, dxf)
 #define HEADER_B(name,dxf)   HEADER_9(name); FIELD(name, B, dxf)
 #define HEADER_BS(name,dxf)  HEADER_9(name); FIELD(name, BS, dxf)
-#define HEADER_BD(name,dxf)  HEADER_9(name); FIELD(name, BD, dxf)
+#define HEADER_BD(name,dxf)  HEADER_9(name); FIELD_BD(name, dxf)
 #define HEADER_BL(name,dxf)  HEADER_9(name); FIELD(name, BL, dxf)
 
 #define VALUE_B(value,dxf)   VALUE(value, RC, dxf)
@@ -208,17 +221,17 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
 #define VALUE_BL(value,dxf)  VALUE(value, BL, dxf)
 #define VALUE_BLL(value,dxf) VALUE(value, RLL, dxf)
 #define VALUE_BD(value,dxf) \
-  if (dxf >= 50 && dxf < 55) value = rad2deg(value); \
-  VALUE(value, RD, dxf)
+  { if (dxf >= 50 && dxf < 55) value = rad2deg(value); \
+    VALUE_RD(value, dxf); }
 #define VALUE_RC(value,dxf)  VALUE(value, RC, dxf)
 #define VALUE_RS(value,dxf)  VALUE(value, RS, dxf)
-#define VALUE_RD(value,dxf)  VALUE(value, RD, dxf)
 #define VALUE_RL(value,dxf)  VALUE(value, RL, dxf)
 #define VALUE_RLL(value,dxf) VALUE(value, RLL, dxf)
 #define VALUE_MC(value,dxf)  VALUE(value, MC, dxf)
 #define VALUE_MS(value,dxf)  VALUE(value, MS, dxf)
-#define VALUE_3BD(pt,dxf) { VALUE_BD(pt.x, dxf); VALUE_BD(pt.y, dxf+10); VALUE_BD(pt.z, dxf+20);}
+#define VALUE_3BD(pt,dxf) { VALUE_RD(pt.x, dxf); VALUE_RD(pt.y, dxf+10); VALUE_RD(pt.z, dxf+20);}
 
+#define FIELD_RD(name,dxf)  VALUE_RD(_obj->name, dxf)
 #define FIELD_B(name,dxf)   FIELD(name, B, dxf)
 #define FIELD_BB(name,dxf)  FIELD(name, BB, dxf)
 #define FIELD_3B(name,dxf)  FIELD(name, 3B, dxf)
@@ -226,11 +239,10 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
 #define FIELD_BL(name,dxf)  FIELD(name, BL, dxf)
 #define FIELD_BLL(name,dxf) FIELD(name, BLL, dxf)
 #define FIELD_BD(name,dxf)  \
-  if (dxf >= 50 && dxf < 55) _obj->name = rad2deg(_obj->name); \
-  FIELD(name, BD, dxf)
+  { if (dxf >= 50 && dxf < 55) _obj->name = rad2deg(_obj->name); \
+    FIELD_RD(name, dxf); }
 #define FIELD_RC(name,dxf)  FIELD(name, RC, dxf)
 #define FIELD_RS(name,dxf)  FIELD(name, RS, dxf)
-#define FIELD_RD(name,dxf)  FIELD(name, RD, dxf)
 #define FIELD_RL(name,dxf)  FIELD(name, RL, dxf)
 #define FIELD_RLL(name,dxf) FIELD(name, RLL, dxf)
 #define FIELD_MC(name,dxf)  FIELD(name, MC, dxf)
@@ -256,12 +268,12 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
     FIELD_DD(name.x, FIELD_VALUE(def.x), dxf); \
     FIELD_DD(name.y, FIELD_VALUE(def.y), dxf+10); \
     FIELD_DD(name.z, FIELD_VALUE(def.z), dxf+20); }
-#define FIELD_2RD(name,dxf) {FIELD(name.x, RD, dxf); FIELD(name.y, RD, dxf+10);}
-#define FIELD_2BD(name,dxf) {FIELD(name.x, BD, dxf); FIELD(name.y, BD, dxf+10);}
-#define FIELD_2BD_1(name,dxf) {FIELD(name.x, BD, dxf); FIELD(name.y, BD, dxf+1);}
-#define FIELD_3RD(name,dxf) {FIELD(name.x, RD, dxf); FIELD(name.y, RD, dxf+10); FIELD(name.z, RD, dxf+20);}
-#define FIELD_3BD(name,dxf) {FIELD(name.x, BD, dxf); FIELD(name.y, BD, dxf+10); FIELD(name.z, BD, dxf+20);}
-#define FIELD_3BD_1(name,dxf) {FIELD(name.x, BD, dxf); FIELD(name.y, BD, dxf+1); FIELD(name.z, BD, dxf+2);}
+#define FIELD_2RD(name,dxf) {FIELD_RD(name.x, dxf); FIELD_RD(name.y, dxf+10);}
+#define FIELD_2BD(name,dxf) {FIELD_BD(name.x, dxf); FIELD_BD(name.y, dxf+10);}
+#define FIELD_2BD_1(name,dxf) {FIELD_BD(name.x, dxf); FIELD_BD(name.y, dxf+1);}
+#define FIELD_3RD(name,dxf) {FIELD_RD(name.x, dxf); FIELD_RD(name.y, dxf+10); FIELD_RD(name.z, dxf+20);}
+#define FIELD_3BD(name,dxf) {FIELD_BD(name.x, dxf); FIELD_BD(name.y, dxf+10); FIELD_BD(name.z, dxf+20);}
+#define FIELD_3BD_1(name,dxf) {FIELD_BD(name.x, dxf); FIELD_BD(name.y, dxf+1); FIELD_BD(name.z, dxf+2);}
 #define FIELD_3DPOINT(name,dxf) FIELD_3BD(name,dxf)
 #define FIELD_CMC(name,dxf)\
   VALUE_RS(_obj->name.index, dxf)
@@ -276,14 +288,14 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
 
 #define POINT_3D(name, var, c1, c2, c3)\
   {\
-    VALUE(dwg->var.x, BD, c1);\
-    VALUE(dwg->var.y, BD, c2);\
-    VALUE(dwg->var.z, BD, c3);\
+    VALUE_RD(dwg->var.x, c1);\
+    VALUE_RD(dwg->var.y, c2);\
+    VALUE_RD(dwg->var.z, c3);\
   }
 #define POINT_2D(name, var, c1, c2) \
   {\
-    VALUE(dwg->var.x, BD, c1);\
-    VALUE(dwg->var.y, BD, c2);\
+    VALUE_RD(dwg->var.x, c1);\
+    VALUE_RD(dwg->var.y, c2);\
   }
 
 //FIELD_VECTOR_N(name, type, size):
