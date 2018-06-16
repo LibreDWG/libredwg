@@ -166,6 +166,8 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
     /* not a string, emtpy num. must be zero */ \
     if (strcmp(fmt, "%s") && !*buf) \
       strcpy(buf, "0"); \
+    else if (90 <= dxf && dxf < 100) \
+      snprintf(buf, 255, "%6i", (int32_t)value); \
     else if (!strcmp(fmt, "%-16.14f")) { \
       if (!strcmp(buf, "0.00000000000000")) \
         strcpy(buf, "0.0"); \
@@ -190,6 +192,14 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
     else \
       fprintf(dat->fh, "%-16.14f\r\n", value); \
   }
+#define VALUE_B(value, dxf) \
+  if (dxf) { \
+    GROUP(dxf); \
+    if (value == 0) \
+      fprintf(dat->fh, "     0\r\n"); \
+    else \
+      fprintf(dat->fh, "     1\r\n"); \
+  }
 
 #define FIELD_HANDLE_NAME(name, dxf, table) \
   {\
@@ -209,12 +219,12 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
 #define HEADER_RLL(name,dxf) HEADER_9(name); FIELD(name, RLL, dxf)
 #define HEADER_TV(name,dxf)  HEADER_9(name); VALUE_TV(_obj->name, dxf)
 #define HEADER_T(name,dxf)   HEADER_9(name); VALUE_T(_obj->name, dxf)
-#define HEADER_B(name,dxf)   HEADER_9(name); FIELD(name, B, dxf)
+#define HEADER_B(name,dxf)   HEADER_9(name); FIELD_B(name, dxf)
 #define HEADER_BS(name,dxf)  HEADER_9(name); FIELD(name, BS, dxf)
 #define HEADER_BD(name,dxf)  HEADER_9(name); FIELD_BD(name, dxf)
 #define HEADER_BL(name,dxf)  HEADER_9(name); FIELD(name, BL, dxf)
 
-#define VALUE_B(value,dxf)   VALUE(value, RC, dxf)
+//#define VALUE_B(value,dxf)   VALUE(value, RC, dxf)
 #define VALUE_BB(value,dxf)  VALUE(value, RC, dxf)
 #define VALUE_3B(value,dxf)  VALUE(value, RC, dxf)
 #define VALUE_BS(value,dxf)  VALUE(value, RS, dxf)
@@ -232,7 +242,7 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
 #define VALUE_3BD(pt,dxf) { VALUE_RD(pt.x, dxf); VALUE_RD(pt.y, dxf+10); VALUE_RD(pt.z, dxf+20);}
 
 #define FIELD_RD(name,dxf)  VALUE_RD(_obj->name, dxf)
-#define FIELD_B(name,dxf)   FIELD(name, B, dxf)
+#define FIELD_B(name,dxf)   VALUE_B(_obj->name, dxf)
 #define FIELD_BB(name,dxf)  FIELD(name, BB, dxf)
 #define FIELD_3B(name,dxf)  FIELD(name, 3B, dxf)
 #define FIELD_BS(name,dxf)  FIELD(name, BS, dxf)
