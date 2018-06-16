@@ -15,7 +15,7 @@
  * written by Reini Urban
  */
 
-/* Works for most r2000 files, but not r2004+.
+/* Works for most r13-r2000 files, but not for many r2004+
 TODO: down-conversions from unsupported entities on older DXF versions.
 
 Since r13:
@@ -154,7 +154,7 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
 
 #define GROUP(dxf) \
     fprintf (dat->fh, "%3i\r\n", dxf)
-/* avoid empty numbers, and fixup some bad  %f formatting */
+/* avoid empty numbers, and fixup some bad %f libc formatting */
 #define VALUE(value, type, dxf) \
   if (dxf) { \
     char *s; \
@@ -489,7 +489,13 @@ dxf_write_xdata(Bit_Chain *restrict dat, Dwg_Resbuf *restrict rbuf, BITCODE_BL s
       const char* fmt = dxf_format(rbuf->type);
       short type = get_base_value_type(rbuf->type);
       if (!strcmp(fmt, "(unknown code)"))
-        dxftype = 70;
+        {
+          if (type == VT_INVALID) {
+            LOG_WARN("Invalid xdata code %d", dxftype);
+          } else {
+            LOG_WARN("Unknown xdata code %d => %d", dxftype, (int)type);
+          }
+        }
 
       tmp = rbuf->next;
       switch (type)
@@ -528,6 +534,7 @@ dxf_write_xdata(Bit_Chain *restrict dat, Dwg_Resbuf *restrict rbuf, BITCODE_BL s
                   (unsigned long)*(uint64_t*)rbuf->value.hdl);
           break;
         case VT_INVALID:
+          break; //skip
         default:
           fprintf(dat->fh, "%3i\r\n\r\n", dxftype);
           break;
@@ -869,7 +876,7 @@ dxf_format (int code)
     return "%-16.14f";
   if (code < 80)
     return "%6i";
-  if (90 <= code && code <= 99) //BL
+  if (80 <= code && code <= 99) //BL int32
     return "%9li";
   if (code == 100)
     return "%s";
