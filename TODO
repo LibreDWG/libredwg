@@ -36,6 +36,8 @@
   RASTERVARIABLES SECTIONVIEWSTYLE SORTENTSTABLE SPATIAL_FILTER
   SPATIAL_INDEX SUN TABLECONTENT TABLEGEOMETRY UCS
   VBA_PROJECT VIEW VPORT_ENTITY_CONTROL VPORT_ENTITY_HEADER
+* check-dxf: DXFIN coverage for all generated dxfs. some objects even crash acad:
+  VERTEX_3D, MLINE
 
 * convert XRECORD xdata linked-list ResBuf to array of eed[],
   same structure as common EED.
@@ -44,7 +46,6 @@
   the sections have multiple pages. Only for this version. 2010+ uses
   the 2004 format.
 * encode for 2004+: move the local structs to the dwg, as union?
-* finish DXF writing, test with AutoCAD open.
 * finish binary DXF (easy). cross-check via: filedia 0, dxfout => Binary
 * add DXF reading (medium)
 * finish GeoJSON http://geojson.org/geojson-spec.html

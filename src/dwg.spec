@@ -681,10 +681,11 @@ DWG_ENTITY_END
 /*(11)*/
 DWG_ENTITY(VERTEX_3D)
 
-  //SUBCLASS (AcDbVertex)
-  //SUBCLASS (AcDb3dPolylineVertex)
-  FIELD_RC (flag, 70);
+  SUBCLASS (AcDbVertex)
+  SUBCLASS (AcDb3dPolylineVertex)
+  FIELD_RC (flag, 0);
   FIELD_3BD (point, 10);
+  DXF { FIELD_RC (flag, 70); }
 
   COMMON_ENTITY_HANDLE_DATA;
 
