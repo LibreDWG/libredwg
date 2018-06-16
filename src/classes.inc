@@ -152,8 +152,6 @@
   UNTESTED_CLASS    (action, GEODATA)
   UNTESTED_CLASS    (action, OBJECT_PTR)
   UNTESTED_CLASS_CPP(action, OBJECT_PTR, CAseDLPNTableRecord)
-  UNTESTED_CLASS    (action, TABLECONTENT)
-  UNTESTED_CLASS    (action, TABLEGEOMETRY)
   UNTESTED_CLASS    (action, WIPEOUTVARIABLES)
 
   // coverage exists, but broken and being worked on. needs -DDEBUG_CLASSES. see also
@@ -166,6 +164,8 @@
   DEBUGGING_CLASS  (action, SURFACE)           /*ent, yet unsorted */
   DEBUGGING_CLASS  (action, UNDERLAY)          /*ent DGN DWF PDF */
 
+  DEBUGGING_CLASS  (action, TABLECONTENT) //wrong values
+  DEBUGGING_CLASS  (action, TABLEGEOMETRY) //wrong geom_data
   DEBUGGING_CLASS  (action, CELLSTYLEMAP) //broken
   DEBUGGING_CLASS  (action, MATERIAL)     //working on
   DEBUGGING_CLASS  (action, PLOTSETTINGS) //yet unsorted
