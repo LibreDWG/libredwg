@@ -3649,6 +3649,7 @@ DWG_ENTITY(LWPOLYLINE)
 
   SUBCLASS (AcDbPolyline)
   #ifdef IS_DXF
+    FIELD_BL (num_points, 90);
     VALUE_BS ((FIELD_VALUE(flag) & 128) + (FIELD_VALUE(flag) & 512 ? 1 : 0),
               70); //1 closed, 128 plinegen
   #else
@@ -3664,7 +3665,9 @@ DWG_ENTITY(LWPOLYLINE)
   if (FIELD_VALUE(flag) & 1) //clashes with the dxf closed bit flag 512
     FIELD_3BD (normal, 210);
 
+#ifndef IS_DXF
   FIELD_BL (num_points, 90);
+#endif
 
   if (FIELD_VALUE(flag) & 16)
     FIELD_BL (num_bulges, 0);
