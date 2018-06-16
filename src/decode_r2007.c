@@ -1134,7 +1134,7 @@ obj_string_stream(Bit_Chain *dat,
   str->byte -= 2;
   if (data_size > obj->bitsize)
     {
-      LOG_TRACE("Invalid string stream data_size: @%lu.%u", str->byte, str->bit & 7);
+      LOG_TRACE("Invalid string stream data_size: @%lu.%u\n", str->byte, str->bit & 7);
       obj->has_strings = 0;
       return DWG_ERR_NOTYETSUPPORTED; // a very low severity error
     }

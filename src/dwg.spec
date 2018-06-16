@@ -2044,6 +2044,7 @@ DWG_ENTITY_END
 DWG_ENTITY(MLINE)
 
   SUBCLASS (AcDbMline)
+  DXF { FIELD_HANDLE (mlinestyle, 5, 340); }
   FIELD_BD (scale, 40);
   FIELD_RC (justification, 70); /* spec-typo? Spec says EC instead of RC */
   FIELD_3DPOINT (base_point, 10);
@@ -2086,7 +2087,7 @@ DWG_ENTITY(MLINE)
   END_REPEAT(verts);
 
   COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (mlinestyle, 5, 340);
+  FIELD_HANDLE (mlinestyle, 5, 0);
 
 DWG_ENTITY_END
 
