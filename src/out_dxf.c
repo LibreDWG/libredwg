@@ -778,7 +778,13 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
     case DWG_TYPE_TOLERANCE:
       return dwg_dxf_TOLERANCE(dat, obj);
     case DWG_TYPE_MLINE:
+#ifdef DEBUG_CLASSES
+      // TODO: looks good, but acad import crashes
       return dwg_dxf_MLINE(dat, obj);
+#else
+      LOG_WARN("Unhandled Entity MLINE in out_dxf %u/%lX", obj->index, obj->handle.value)
+      return DWG_ERR_UNHANDLEDCLASS;
+#endif
     case DWG_TYPE_BLOCK_CONTROL:
     case DWG_TYPE_BLOCK_HEADER:
     case DWG_TYPE_LAYER_CONTROL:
