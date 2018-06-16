@@ -1245,9 +1245,9 @@ dxf_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
 
   SECTION(BLOCKS);
-  if (_ctrl->model_space)
+  if (dwg->header_vars.BLOCK_RECORD_MSPACE && dwg->header_vars.BLOCK_RECORD_MSPACE->obj)
     {
-      Dwg_Object *hdr = _ctrl->model_space->obj;
+      Dwg_Object *hdr = dwg->header_vars.BLOCK_RECORD_MSPACE->obj;
       Dwg_Object_BLOCK_HEADER *_hdr = hdr->tio.object->tio.BLOCK_HEADER;
       Dwg_Object *obj = get_first_owned_block(hdr, _hdr);
       while (obj)
