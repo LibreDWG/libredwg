@@ -40,7 +40,8 @@
   VERTEX_3D, MLINE.
 * DXFIN error XRECORD starting at line 5318: Could not set the Color dictionary:
   Drawing_2018, Drawing_2013, Drawing_2010, Drawing_2007
-
+  *2010.dxf: Updating handle seed. Invalid or incomplete DXF input
+  *2007.dxf: XRECORD read error
 
 * convert XRECORD xdata linked-list ResBuf to array of eed[],
   same structure as common EED.

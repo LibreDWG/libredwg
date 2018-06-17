@@ -1250,12 +1250,12 @@ DWG_ENTITY_END
 /* (31/11) */
 DWG_ENTITY(SOLID)
 
-  SUBCLASS (AcDbSolid)
+  SUBCLASS (AcDbTrace)
   PRE(R_13) {
-    FIELD_2RD (corner1, 11);
-    FIELD_2RD (corner2, 12);
-    FIELD_2RD (corner3, 13);
-    FIELD_2RD (corner4, 14);
+    FIELD_2RD (corner1, 10);
+    FIELD_2RD (corner2, 11);
+    FIELD_2RD (corner3, 12);
+    FIELD_2RD (corner4, 13);
     if (R11OPTS(1))
       FIELD_3RD (extrusion, 210);
     if (R11OPTS(2))
@@ -1264,10 +1264,10 @@ DWG_ENTITY(SOLID)
   LATER_VERSIONS {
     FIELD_BT (thickness, 39);
     FIELD_BD (elevation, 38);
-    FIELD_2RD (corner1, 11);
-    FIELD_2RD (corner2, 12);
-    FIELD_2RD (corner3, 13);
-    FIELD_2RD (corner4, 14);
+    FIELD_2RD (corner1, 10);
+    FIELD_2RD (corner2, 11);
+    FIELD_2RD (corner3, 12);
+    FIELD_2RD (corner4, 13);
     FIELD_BE (extrusion, 210);
 
     COMMON_ENTITY_HANDLE_DATA;
