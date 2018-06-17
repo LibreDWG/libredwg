@@ -3221,6 +3221,7 @@ DWG_OBJECT_END
 /*(72)*/
 DWG_OBJECT(GROUP)
 
+  DXF { FIELD_HANDLE (parenthandle, 4, 330); }
   SUBCLASS (AcDbGroup)
   FIELD_T (name, 300);
   FIELD_BS (unnamed, 70);
@@ -3228,7 +3229,7 @@ DWG_OBJECT(GROUP)
   FIELD_BL (num_handles, 0);
 
   START_HANDLE_STREAM;
-  FIELD_HANDLE (parenthandle, 4, 330);
+  FIELD_HANDLE (parenthandle, 4, 0);
   REACTORS(4);
   XDICOBJHANDLE(3);
   HANDLE_VECTOR(group_entries, num_handles, 5, 340);
