@@ -1701,7 +1701,7 @@ static void free_3dsolid(Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
 
 /*(37)*/
 DWG_ENTITY(REGION)
-  SUBCLASS (AcDbRegion)
+  SUBCLASS (AcDbModelerGeometry)
   DECODER
     {
       DECODE_3DSOLID;
