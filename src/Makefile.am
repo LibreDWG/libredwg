@@ -45,7 +45,7 @@ libredwg_la_SOURCES += \
 #       in_json.c
 endif
 
-libredwg_la_LDFLAGS = -version-info 0:0:0 -no-undefined
+libredwg_la_LDFLAGS = -version-info 0:0:0 -no-undefined -lm
 
 EXTRA_HEADERS = \
 	dwg.spec \

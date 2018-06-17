@@ -28,6 +28,7 @@ Add CLASSES for those
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <math.h>
 
 #include "common.h"
 #include "bits.h"
@@ -182,7 +183,7 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
     fprintf(dat->fh, "%s\r\n", buf); \
   }
 #define VALUE_RD(value, dxf) \
-  if (dxf) { \
+  if (dxf && !isnan(value)) { \
     GROUP(dxf); \
     if (value == 0.0 || value == 0) \
       fprintf(dat->fh, "0.0\r\n"); \

@@ -1432,12 +1432,24 @@ DWG_ENTITY(SPLINE)
   SINCE(R_2013) {
     FIELD_BL (splineflags1, 0);
     FIELD_BL (knotparam, 0);
+    if (FIELD_VALUE(splineflags1) & 1)
+      FIELD_VALUE(scenario) = 2;
+    if (FIELD_VALUE(knotparam) == 15)
+      FIELD_VALUE(scenario) = 1;
   }
 
+  DXF {
+    // extrusion on planar
+    VALUE_RD(0.0, 210); VALUE_RD(0.0, 220); VALUE_RD(1.0, 230);
+    FIELD_BL(flag, 70);
+  }
   FIELD_BL (degree, 71);
 
   if (FIELD_VALUE(scenario) & 2) // bezier spline
     {
+      FIELD_VALUE(flag) = 8 + 32 + //planar, not rational
+        // ignore method fit points and closed bits
+        ((FIELD_VALUE(splineflags1) & ~5) << 7);
       FIELD_BD (fit_tol, 44); // def: 0.0000001
       FIELD_3BD (beg_tan_vec, 12);
       FIELD_3BD (end_tan_vec, 13);
@@ -1454,11 +1466,11 @@ DWG_ENTITY(SPLINE)
       FIELD_BL (num_ctrl_pts, 73);
       FIELD_B (weighted, 0);
       
-      FIELD_VALUE(flag) = FIELD_VALUE(closed_b) +
+      FIELD_VALUE(flag) = 8 + //planar
+        FIELD_VALUE(closed_b) +
         (FIELD_VALUE(periodic) << 1) +
         (FIELD_VALUE(rational) << 2) +
         (FIELD_VALUE(weighted) << 3);
-      // planar, linear
     }
   
   if (FIELD_VALUE(scenario) & 1) {
@@ -1471,7 +1483,7 @@ DWG_ENTITY(SPLINE)
       {
         FIELD_3BD (ctrl_pts[rcount1], 10);
         if (!FIELD_VALUE(weighted))
-            FIELD_VALUE(ctrl_pts[rcount1].w) = 0; // skipped when encoding
+          FIELD_VALUE(ctrl_pts[rcount1].w) = 0; // skipped when encoding
         else
           FIELD_BD (ctrl_pts[rcount1].w, 41);
       }

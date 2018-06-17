@@ -37,7 +37,10 @@
   SPATIAL_INDEX SUN TABLECONTENT TABLEGEOMETRY UCS
   VBA_PROJECT VIEW VPORT_ENTITY_CONTROL VPORT_ENTITY_HEADER
 * check-dxf: DXFIN coverage for all generated dxfs. some objects even crash acad:
-  VERTEX_3D, MLINE
+  VERTEX_3D, MLINE.
+* DXFIN error XRECORD starting at line 5318: Could not set the Color dictionary:
+  Drawing_2018, Drawing_2013, Drawing_2010, Drawing_2007
+
 
 * convert XRECORD xdata linked-list ResBuf to array of eed[],
   same structure as common EED.
