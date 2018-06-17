@@ -467,13 +467,14 @@ decompress_r2007(char *restrict dst, int dst_size,
 
   char *dst_end = dst + dst_size;
   char *src_end = src + src_size;
+  unsigned char opcode;
 
   if (!src)
     {
       LOG_ERROR("Empty src argument to %s\n", __FUNCTION__);
       return DWG_ERR_INTERNALERROR;
     }
-  unsigned char opcode = *src++;
+  opcode = *src++;
   LOG_INSANE("decompress_r2007(%p %d %p %d)\n", dst, dst_size, src, src_size);
 
   if ((opcode & 0xf0) == 0x20)
@@ -553,7 +554,7 @@ decode_rs(const char *src, int block_count, int data_size)
   char *dst_base, *dst;
   //TODO: round up data_size from 239 to 255
 
-  dst_base = dst = (char*)malloc(block_count * data_size);
+  dst_base = dst = (char*)calloc(block_count, data_size);
   if (!dst)
     {
       LOG_ERROR("Out of memory")
@@ -905,7 +906,7 @@ read_pages_map(Bit_Chain* dat, int64_t size_comp,
   char *data, *ptr, *ptr_end;
   r2007_page *pages = 0, *last_page = 0, *page;
   int64_t offset = 0x480;   //dat->byte;
-  int64_t index;
+  //int64_t index;
 
   data = read_system_page(dat, size_comp, size_uncomp, correction);
   if (!data) {
@@ -934,11 +935,11 @@ read_pages_map(Bit_Chain* dat, int64_t size_comp,
       page->offset = offset;
       offset += page->size;
 
-      index = page->id > 0 ? page->id : -page->id;
+      //index = page->id > 0 ? page->id : -page->id;
 
       LOG_TRACE("Page [%2"PRId64"]: ", page->id)
       LOG_TRACE("size: 0x%05"PRIx64" ", page->size)
-      //LOG_TRACE("id:      0x%"PRId64" ", page->id)
+      LOG_TRACE("id:      0x%"PRId64" ", page->id)
       LOG_TRACE("offset: 0x6%"PRIx64" \n", page->offset)
 
       page->next = 0;
@@ -1041,6 +1042,7 @@ read_file_header(Bit_Chain *restrict dat, r2007_file_header *restrict file_heade
 
   dat->byte = 0x80;
   LOG_TRACE("\n=== File header ===\n")
+  memset(file_header, 0, sizeof(r2007_file_header));
   bit_read_fixed(dat, data, 0x3d8);
   pedata = decode_rs(data, 3, 239);
 

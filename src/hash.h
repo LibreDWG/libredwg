@@ -28,7 +28,8 @@
 #define HASH_NOT_FOUND (uint32_t)-1
 
 struct _hashbucket {
-  uint32_t key, value;
+  uint32_t key;
+  uint32_t value;
 };
 typedef struct _inthash {
   struct _hashbucket *array; /* of key, value pairs */

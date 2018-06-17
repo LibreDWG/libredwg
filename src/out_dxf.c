@@ -167,6 +167,7 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
     if (strcmp(fmt, "%s") && !*buf) \
       strcpy(buf, "0"); \
     else if (90 <= dxf && dxf < 100) \
+      /* ignore -Wpointer-to-int-cast, cannot happen with 90 */ \
       snprintf(buf, 255, "%6i", (int32_t)value); \
     else if (!strcmp(fmt, "%-16.14f")) { \
       if (!strcmp(buf, "0.00000000000000")) \

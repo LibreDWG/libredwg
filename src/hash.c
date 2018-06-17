@@ -34,7 +34,7 @@ dwg_inthash *hash_new(uint32_t size)
   cap = (uint32_t)(size * 100.0/HASH_LOAD);
   while (size <= cap) // this is slow, but only done once. clz would be much faster
     size <<= 1U;
-  hash->array = calloc(size, 2*sizeof(uint32_t)); // key+value pairs
+  hash->array = calloc(size, sizeof(struct _hashbucket)); // key+value pairs
   hash->size = size;
   return hash;
 }
