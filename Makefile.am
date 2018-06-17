@@ -89,7 +89,7 @@ gcov: check
 	cover -no-gcov
 endif
 
-EXTRA_DIST = README README-alpha
+EXTRA_DIST = README README-alpha dxf_example.lsp dxf_example.sh test-dxf.sh
 CLEANFILES = check-dwg.log check-dwg-valgrind.log check-dxf.log \
              check-dwg.log~ check-dwg-valgrind.log~ check-dxf.log~ \
 	     *_20*.dxf *_r1*.dxf
