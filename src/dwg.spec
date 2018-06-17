@@ -2339,8 +2339,10 @@ DWG_OBJECT(STYLE)
 
   SINCE(R_13)
   {
-    FIELD_B (vertical, 0);     //1
-    FIELD_B (shape_file, 0);   //1
+    FIELD_B (shape_file, 0);   //wrong oda doc
+    FIELD_B (vertical, 0);     //
+    FIELD_VALUE(flag) |= (FIELD_VALUE(vertical) ? 4 : 0) +
+                         (FIELD_VALUE(shape_file) ? 1 : 0);
   }
   PRE(R_13)
   {
@@ -3497,7 +3499,7 @@ DWG_ENTITY(IMAGE)
   FIELD_3DPOINT (uvec, 11);
   FIELD_3DPOINT (vvec, 12);
   FIELD_RD (size.width, 13);
-  FIELD_RD (size.height, 14);
+  FIELD_RD (size.height, 23);
   FIELD_BS (display_props, 70);
   FIELD_B (clipping, 280);
   FIELD_RC (brightness, 281);
@@ -3519,8 +3521,8 @@ DWG_ENTITY(IMAGE)
     }
 
   COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (imagedef, 5, 0); // hard pointer
-  FIELD_HANDLE (imagedefreactor, 3, 0); // hard owner
+  FIELD_HANDLE (imagedef, 5, 340); // hard pointer
+  FIELD_HANDLE (imagedefreactor, 3, 360); // hard owner
 
 DWG_ENTITY_END
 
@@ -5264,8 +5266,8 @@ DWG_ENTITY(WIPEOUT)
     }
 
   COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (imagedef, 5, 0);
-  FIELD_HANDLE (imagedefreactor, 3, 0);
+  FIELD_HANDLE (imagedef, 5, 340);
+  FIELD_HANDLE (imagedefreactor, 3, 360);
 
 DWG_ENTITY_END
 

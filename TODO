@@ -44,7 +44,6 @@
   *2010: Updating handle seed. Invalid or incomplete DXF input
   *2007: XRECORD read error
   *2004: PolyLine3D crashes at AcDb3dPolylineVertex
-  Leader_200[04].dxf, 1-5_2000: Error in STYLE Table. Invalid symbol table record name: ""
   example_2000: REGION starting at line 2506: Xdata wasn't read
   Drawing_2000_min: crash at AcDbLine
 
