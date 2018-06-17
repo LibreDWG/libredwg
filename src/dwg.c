@@ -590,7 +590,10 @@ dwg_get_entity_layer(const Dwg_Object_Entity * ent)
 Dwg_Object*
 dwg_next_object(const Dwg_Object* obj)
 {
-  const Dwg_Data *dwg = obj->parent;
+  Dwg_Data *dwg;
+  if (!obj)
+    return NULL;
+  dwg = obj->parent;
   if ((obj->index+1) > (dwg->num_objects-1))
     return NULL;
   return &dwg->object[obj->index+1];
@@ -602,6 +605,8 @@ dwg_next_object(const Dwg_Object* obj)
 Dwg_Object*
 dwg_ref_get_object(const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
 {
+  if (!ref)
+    return NULL;
   if (ref->obj && !dwg->dirty_refs)
     return ref->obj;
   // Without obj we don't get an absolute_ref from relative OFFSETOBJHANDLE handle types.
