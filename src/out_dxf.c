@@ -48,6 +48,9 @@ static int
 dxf_common_entity_handle_data(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
 static int
 dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
+static int dxf_3dsolid(Bit_Chain *restrict dat,
+                       const Dwg_Object *restrict obj,
+                       Dwg_Entity_3DSOLID *restrict _obj);
 
 /*--------------------------------------------------------------------------------
  * MACROS
@@ -574,6 +577,9 @@ dxf_write_xdata(Bit_Chain *restrict dat, Dwg_Resbuf *restrict rbuf, BITCODE_BL s
   return 0;
 }
 
+#undef DXF_3DSOLID
+#define DXF_3DSOLID dxf_3dsolid(dat, obj, _obj);
+
 // r13+ converts STANDARD to Standard, BYLAYER to ByLayer, BYBLOCK to ByBlock
 static void
 dxf_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
@@ -654,6 +660,118 @@ dxf_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
 
 #include "dwg.spec"
 
+static int dxf_3dsolid(Bit_Chain *restrict dat,
+                       const Dwg_Object *restrict obj,
+                       Dwg_Entity_3DSOLID *restrict _obj)
+{
+  Dwg_Data* dwg = obj->parent;
+  unsigned long j;
+  int vcount, rcount1, rcount2;
+  int error = 0;
+  int i = 0;
+  int index;
+  int total_size = 0;
+  int num_blocks = 0;
+
+  COMMON_ENTITY_HANDLE_DATA;
+
+  FIELD_B (acis_empty, 0);
+  if (!FIELD_VALUE(acis_empty))
+    {
+      FIELD_B (unknown, 0);
+      FIELD_BS (version, 70);
+      if (FIELD_VALUE(version) == 1)
+        {
+          for (i=0; i<FIELD_VALUE(num_blocks); i++)
+            {
+              char *s = FIELD_VALUE(encr_sat_data[i]);
+              int len = strlen(s);
+              // FIELD_BL (block_size[i], 0);
+              // DXF 1 + 3 if >255
+              while (len > 0) {
+                char *n = strchr(s, '\n');
+                int l = len > 255 ? 255 : len;
+                if (n && (n-s < len))
+                  l = n-s;
+                if (l) {
+                  if (l < 255)
+                    GROUP(1);
+                  else
+                    GROUP(3);
+                  if (s[l-1] == '\r')
+                    fprintf(dat->fh, "%.*s\n", l, s);
+                  else
+                    fprintf(dat->fh, "%.*s\r\n", l, s);
+                  l++;
+                  len -= l;
+                  s += l;
+                } else {
+                  len--;
+                  s++;
+                }
+              }
+            }
+          //LOG_TRACE("acis_data [1]:\n%s\n", FIELD_VALUE (acis_data));
+        }
+      else //if (FIELD_VALUE(version)==2)
+        {
+          //TODO
+          LOG_ERROR("TODO: Implement parsing of SAT file (version 2) "
+                    "in entities 37,38 and 39.\n");
+        }
+/*
+      FIELD_B (wireframe_data_present, 0);
+      if (FIELD_VALUE(wireframe_data_present))
+        {
+          FIELD_B (point_present, 0);
+          if (FIELD_VALUE(point_present))
+            {
+              FIELD_3BD (point, 0);
+            }
+          FIELD_BL (num_isolines, 0);
+          FIELD_B (isoline_present, 0);
+          if (FIELD_VALUE(isoline_present))
+            {
+              FIELD_BL (num_wires, 0);
+              REPEAT(num_wires, wires, Dwg_3DSOLID_wire)
+                {
+                  PARSE_WIRE_STRUCT(wires[rcount1])
+                }
+              END_REPEAT(wires);
+              FIELD_BL (num_silhouettes, 0);
+              REPEAT(num_silhouettes, silhouettes, Dwg_3DSOLID_silhouette)
+                {
+                  FIELD_BL (silhouettes[rcount1].vp_id, 0);
+                  FIELD_3BD (silhouettes[rcount1].vp_target, 0);
+                  FIELD_3BD (silhouettes[rcount1].vp_dir_from_target, 0);
+                  FIELD_3BD (silhouettes[rcount1].vp_up_dir, 0);
+                  FIELD_B (silhouettes[rcount1].vp_perspective, 0);
+                  FIELD_BL (silhouettes[rcount1].num_wires, 0);
+                  REPEAT2(silhouettes[rcount1].num_wires, silhouettes[rcount1].wires,
+                          Dwg_3DSOLID_wire)
+                    {
+                      PARSE_WIRE_STRUCT(silhouettes[rcount1].wires[rcount2])
+                    }
+                  END_REPEAT(silhouettes[rcount1].wires);
+                }
+              END_REPEAT(silhouettes);
+            }
+        }
+*/
+      FIELD_B (acis_empty_bit, 0);
+      if (!FIELD_VALUE(acis_empty_bit))
+        {
+          LOG_ERROR("TODO: Implement parsing of ACIS data at the end "
+                    "of 3dsolid object parsing (acis_empty_bit==0).\n");
+        }
+
+      SINCE(R_2007) {
+          FIELD_BL (unknown_2007, 0);
+          FIELD_HANDLE (history_id, ANYCODE, 350);
+      }
+    }
+  return error;
+}
 
 /* returns 0 on success
  */

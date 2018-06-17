@@ -1528,20 +1528,19 @@ DWG_ENTITY_END
       FIELD_B (name.has_shear, 0);                    \
     }
 
-#ifdef IS_DECODER
+#if defined(IS_DECODER)
 
 #define DECODE_3DSOLID decode_3dsolid(dat, hdl_dat, obj, _obj);
-int decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj,
-                    Dwg_Entity_3DSOLID* _obj);
 
-int decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj,
-                    Dwg_Entity_3DSOLID* _obj)
+static int decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat,
+                          Dwg_Object *restrict obj,
+                          Dwg_Entity_3DSOLID *restrict _obj)
 {
   Dwg_Data* dwg = obj->parent;
+  unsigned long j;
   int vcount, rcount1, rcount2;
   int error = 0;
   int i = 0;
-  unsigned long j;
   int index;
   int total_size = 0;
   int num_blocks = 0;
@@ -1563,7 +1562,7 @@ int decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj,
               FIELD_VALUE(block_size) = (BITCODE_BL*)
                 realloc(FIELD_VALUE(block_size), (i+1) * sizeof (BITCODE_BL));
               FIELD_BL (block_size[i], 0);
-              FIELD_TF (encr_sat_data[i], FIELD_VALUE(block_size[i]), 0);
+              FIELD_TF (encr_sat_data[i], FIELD_VALUE(block_size[i]), 1);
               total_size += FIELD_VALUE (block_size[i]);
             } while(FIELD_VALUE (block_size[i++]));
 
@@ -1578,11 +1577,13 @@ int decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj,
                 {
                   if (FIELD_VALUE(encr_sat_data[i][j] <= 32))
                     {
-                      FIELD_VALUE(acis_data)[index++] = FIELD_VALUE (encr_sat_data[i][j]);
+                      FIELD_VALUE(acis_data)[index++]
+                        = FIELD_VALUE (encr_sat_data[i][j]);
                     }
                   else
                     {
-                      FIELD_VALUE(acis_data)[index++] = 159 - FIELD_VALUE (encr_sat_data[i][j]);
+                      FIELD_VALUE(acis_data)[index++]
+                        = 159 - FIELD_VALUE (encr_sat_data[i][j]);
                     }
                 }
             }
@@ -1707,42 +1708,45 @@ static void free_3dsolid(Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
 /*(37)*/
 DWG_ENTITY(REGION)
   SUBCLASS (AcDbModelerGeometry)
-  DECODER
-    {
-      DECODE_3DSOLID;
-    }
-  ENCODER
-    {
-      ENCODE_3DSOLID;
-    }
+  DXF {
+    DXF_3DSOLID
+  }
+  DECODER {
+    DECODE_3DSOLID
+  }
+  ENCODER {
+    ENCODE_3DSOLID
+  }
   FREE_3DSOLID;
 DWG_ENTITY_END
 
 /*(38)*/
 DWG_ENTITY(_3DSOLID)
   SUBCLASS (AcDb3dSolid)
-  DECODER
-    {
-      DECODE_3DSOLID;
-    }
-  ENCODER
-    {
-      ENCODE_3DSOLID;
-    }
+  DXF {
+    DECODE_3DSOLID
+  }
+  DECODER {
+    DECODE_3DSOLID
+  }
+  ENCODER {
+    ENCODE_3DSOLID
+  }
   FREE_3DSOLID;
 DWG_ENTITY_END
 
 /*(39)*/
 DWG_ENTITY(BODY)
   SUBCLASS (AcDbBody)
-  DECODER
-    {
-      DECODE_3DSOLID;
-    }
-  ENCODER
-    {
-      ENCODE_3DSOLID;
-    }
+  DXF {
+    DECODE_3DSOLID
+  }
+  DECODER {
+    DECODE_3DSOLID
+  }
+  ENCODER {
+    ENCODE_3DSOLID
+  }
   FREE_3DSOLID;
 DWG_ENTITY_END
 

@@ -39,19 +39,22 @@
 #define deg2rad(ang) (ang) ? M_PI_2/((ang)*180.0) : 0.0
 
 #ifndef VALUE_HANDLE
-#define VALUE_HANDLE(value, handle_code, dxf)
+# define VALUE_HANDLE(value, handle_code, dxf)
 #endif
 #ifndef VALUE_TV
-#define VALUE_TV(value, dxf)
+# define VALUE_TV(value, dxf)
 #endif
 #ifndef VALUE_3BD
-#define VALUE_3BD(value, dxf)
+# define VALUE_3BD(value, dxf)
 #endif
 #ifndef VALUE_BL
-#define VALUE_BL(value, dxf)
+# define VALUE_BL(value, dxf)
 #endif
 #ifndef SUBCLASS
-#define SUBCLASS(text)
+# define SUBCLASS(text)
+#endif
+#ifndef DXF_3DSOLID
+# define DXF_3DSOLID
 #endif
 #ifndef FIELD_2PT_TRACE
 #define FIELD_2PT_TRACE(name, type, dxf) \
@@ -80,7 +83,7 @@
 #endif
 
 #ifdef IS_DECODER
-#undef  DECODER
+#undef DECODER
 #undef IF_IS_DECODER
 #define IF_IS_DECODER 1
 #define DECODER if (1)
