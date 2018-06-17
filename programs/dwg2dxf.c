@@ -152,8 +152,10 @@ main (int argc, char *argv[])
       dwg.opts = opts;
       fprintf(stderr, "Reading DWG file %s\n", filename_in);
       error = dwg_read_file (filename_in, &dwg);
-      if (error >= DWG_ERR_CRITICAL)
+      if (error >= DWG_ERR_CRITICAL) {
         fprintf(stderr, "READ ERROR 0x%x\n", error);
+        continue;
+      }
 
       printf("Writing DXF file %s", filename_out);
       if (version)
