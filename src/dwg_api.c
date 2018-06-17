@@ -12255,17 +12255,17 @@ dwg_obj_polyline_2d_get_points(const dwg_object *restrict obj,
       Dwg_Data *dwg = obj->parent;
       Dwg_Entity_POLYLINE_2D *_obj = obj->tio.entity->tio.POLYLINE_2D;
       BITCODE_BL num_points = dwg_obj_polyline_2d_get_numpoints(obj, error);
-      dwg_point_2d *ptx = calloc(num_points, sizeof(dwg_point_2d));
-      Dwg_Entity_VERTEX_2D *vertex;
+      Dwg_Entity_VERTEX_2D *vertex = NULL;
+      dwg_point_2d *ptx;
 
-      if (*error)
+      if (!num_points || *error)
         return NULL;
+      ptx = calloc(num_points, sizeof(dwg_point_2d));
       if (!ptx)
         {
           LOG_ERROR("%s: Out of memory", __FUNCTION__);
           *error = 1; return NULL;
         }
-      vertex = NULL;
       if (dwg->header.version >= R_2004)
         for (i = 0; i < num_points; i++)
           {
@@ -12485,11 +12485,12 @@ dwg_obj_polyline_3d_get_points(const dwg_object *restrict obj,
       Dwg_Data *dwg = obj->parent;
       Dwg_Entity_POLYLINE_3D *_obj = obj->tio.entity->tio.POLYLINE_3D;
       BITCODE_BL num_points = dwg_obj_polyline_3d_get_numpoints(obj, error);
-      dwg_point_3d *ptx = calloc(num_points, sizeof(dwg_point_3d));
-      Dwg_Entity_VERTEX_3D *vertex;
+      Dwg_Entity_VERTEX_3D *vertex = NULL;
+      dwg_point_3d *ptx;
 
-      if (*error)
+      if (!num_points || *error)
         return NULL;
+      ptx = calloc(num_points, sizeof(dwg_point_3d));
       if (!ptx)
         {
           LOG_ERROR("%s: Out of memory", __FUNCTION__);
