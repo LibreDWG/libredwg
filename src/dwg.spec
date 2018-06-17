@@ -238,7 +238,7 @@ DWG_ENTITY_END
 /* (3/15) */
 DWG_ENTITY(ATTDEF)
 
-  //SUBCLASS (AcDbAttdef)
+  SUBCLASS (AcDbText)
   PRE(R_13)
     {
       LOG_ERROR("TODO ATTDEF")
@@ -300,6 +300,7 @@ DWG_ENTITY(ATTDEF)
         FIELD_BS (vert_alignment, 74);
     }
 
+  SUBCLASS (AcDbAttributeDefinition)
   FIELD_T (tag, 2);
   FIELD_BS (field_length, 73);
   FIELD_RC (flags, 70); // 1 invisible, 2 constant, 4 verify, 8 preset
