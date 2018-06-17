@@ -442,11 +442,11 @@ dwg_dxf_##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
   Dwg_Object_Entity *_ent;\
   if (!strcmp(#token, "GEOPOSITIONMARKER"))\
     RECORD(POSITIONMARKER);\
-  else if (dat->version < R_13 && !strcmp(#token, "LWPOLYLINE")) \
+  else if (dat->version < R_13 && strlen(#token) == 10 && !strcmp(#token, "LWPOLYLINE")) \
     RECORD(POLYLINE);\
-  else if (!memcmp(#token, "POLYLINE_", 9)) \
+  else if (strlen(#token) > 9 && !memcmp(#token, "POLYLINE_", 9))       \
     RECORD(POLYLINE);\
-  else if (!memcmp(#token, "VERTEX_", 7)) \
+  else if (strlen(#token) > 7 && !memcmp(#token, "VERTEX_", 7)) \
     RECORD(VERTEX);\
   else\
     RECORD(token);\
