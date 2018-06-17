@@ -121,8 +121,8 @@ DWG_ENTITY(TEXT)
 #ifndef IS_DXF
       FIELD_HANDLE (style, 5, 7);
 #endif
-      SUBCLASS (AcDbText)
     }
+  SUBCLASS (AcDbText)
 
 DWG_ENTITY_END
 
