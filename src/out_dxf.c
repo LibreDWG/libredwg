@@ -453,15 +453,15 @@ dwg_dxf_##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
   _ent = obj->tio.entity;\
   _obj = ent = _ent->tio.token;\
   LOG_INFO("Entity " #token ":\n")\
-  LOG_TRACE("Entity handle: %d.%d.%lX\n",\
-            obj->handle.code,\
-            obj->handle.size,\
-            obj->handle.value); \
-  SINCE(R_2000) { \
+  SINCE(R_11) { \
+    LOG_TRACE("Entity handle: %d.%d.%lX\n",\
+              obj->handle.code,\
+              obj->handle.size,\
+              obj->handle.value); \
     fprintf(dat->fh, "%3i\r\n%lX\r\n", 5, obj->handle.value); \
-    VALUE_HANDLE (obj->parent->header_vars.BLOCK_RECORD_MSPACE, 5, 330); \
-   } \
+  } \
   SINCE(R_13) { \
+    VALUE_HANDLE (obj->parent->header_vars.BLOCK_RECORD_MSPACE, 5, 330); \
     error |= dxf_common_entity_handle_data(dat, obj); \
   }
 
@@ -614,8 +614,8 @@ dxf_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
   }
 }
 
-//TODO: 5 330 100 70. have: 330 100 5 70
-#define COMMON_TABLE_CONTROL_FLAGS(owner, acdbname) \
+// 5 written here first
+#define COMMON_TABLE_CONTROL_FLAGS \
     SINCE(R_13) { \
       fprintf(dat->fh, "%3i\r\n%lX\r\n", 5, ctrl->handle.value);\
     } \
@@ -626,7 +626,7 @@ dxf_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       VALUE_TV ("AcDbSymbolTable", 100); \
     }
 
-//TODO addd 340
+//TODO add 340
 #define COMMON_TABLE_FLAGS(owner, acdbname) \
     SINCE(R_14) { \
       FIELD_HANDLE (owner, 4, 330); \
@@ -826,7 +826,6 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
     case DWG_TYPE_HATCH:
       return dwg_dxf_HATCH(dat, obj);
     case DWG_TYPE_XRECORD:
-      //TODO crashes
       return minimal ? 0 : dwg_dxf_XRECORD(dat, obj);
     case DWG_TYPE_PLACEHOLDER:
       return minimal ? 0 : dwg_dxf_PLACEHOLDER(dat, obj);
@@ -837,7 +836,7 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
       return minimal ? 0 : dwg_dxf_OLEFRAME(dat, obj);
     case DWG_TYPE_VBA_PROJECT:
       if (!minimal) {
-        LOG_ERROR("Unhandled Object VBA_PROJECT. Has its own section\n");
+        LOG_ERROR("Unhandled Object VBA_PROJECT");
         //dwg_dxf_VBA_PROJECT(dat, obj);
         return DWG_ERR_UNHANDLEDCLASS;
       }
@@ -866,12 +865,6 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
           if (!klass)
             {
               LOG_WARN("Unknown object, skipping eed/reactors/xdic");
-              SINCE(R_2000)
-                {
-                  LOG_INFO("Object bitsize: %u\n", obj->bitsize)
-                }
-              LOG_INFO("Object handle: %d.%d.%lX\n",
-                       obj->handle.code, obj->handle.size, obj->handle.value);
               return DWG_ERR_INVALIDTYPE;
             }
           return error;
@@ -1043,7 +1036,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
     TABLE(VPORT);
     // add handle 5 here at first
-    COMMON_TABLE_CONTROL_FLAGS(null_handle, Viewport);
+    COMMON_TABLE_CONTROL_FLAGS;
     error |= dwg_dxf_VPORT_CONTROL(dat, ctrl);
     //TODO how far back can DXF read 1000?
     if (dat->version != dat->from_version && dat->from_version >= R_2000)
@@ -1068,8 +1061,9 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     Dwg_Object_LTYPE_CONTROL *_ctrl = &dwg->ltype_control;
     Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
     Dwg_Object *obj;
+
     TABLE(LTYPE);
-    COMMON_TABLE_CONTROL_FLAGS(null_handle, Linetype);
+    COMMON_TABLE_CONTROL_FLAGS;
     error |= dwg_dxf_LTYPE_CONTROL(dat, ctrl);
     // first the 2 builtin ltypes: ByBlock, ByLayer
     if ((obj  = dwg_ref_get_object(dwg, dwg->header_vars.LTYPE_BYBLOCK))) {
@@ -1092,7 +1086,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     Dwg_Object_LAYER_CONTROL *_ctrl = &dwg->layer_control;
     Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
     TABLE(LAYER);
-    COMMON_TABLE_CONTROL_FLAGS(null_handle, Layer);
+    COMMON_TABLE_CONTROL_FLAGS;
     error |= dwg_dxf_LAYER_CONTROL(dat, ctrl);
     for (i=0; i<dwg->layer_control.num_entries; i++)
       {
@@ -1108,7 +1102,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     Dwg_Object_STYLE_CONTROL *_ctrl = &dwg->style_control;
     Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
     TABLE(STYLE);
-    COMMON_TABLE_CONTROL_FLAGS(null_handle, TextStyle);
+    COMMON_TABLE_CONTROL_FLAGS;
     error |= dwg_dxf_STYLE_CONTROL(dat, ctrl);
     for (i=0; i<dwg->style_control.num_entries; i++)
       {
@@ -1123,7 +1117,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     Dwg_Object_VIEW_CONTROL *_ctrl = &dwg->view_control;
     Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
     TABLE(VIEW);
-    COMMON_TABLE_CONTROL_FLAGS(null_handle, View);
+    COMMON_TABLE_CONTROL_FLAGS;
     error |= dwg_dxf_VIEW_CONTROL(dat, ctrl);
     for (i=0; i<dwg->view_control.num_entries; i++)
       {
@@ -1144,7 +1138,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     Dwg_Object_UCS_CONTROL *_ctrl = &dwg->ucs_control;
     Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
     TABLE(UCS);
-    COMMON_TABLE_CONTROL_FLAGS(null_handle, UCS);
+    COMMON_TABLE_CONTROL_FLAGS;
     error |= dwg_dxf_UCS_CONTROL(dat, ctrl);
     for (i=0; i<dwg->ucs_control.num_entries; i++)
       {
@@ -1160,7 +1154,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     Dwg_Object_APPID_CONTROL *_ctrl = &dwg->appid_control;
     Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
     TABLE(APPID);
-    COMMON_TABLE_CONTROL_FLAGS(null_handle, RegApp);
+    COMMON_TABLE_CONTROL_FLAGS;
     error |= dwg_dxf_APPID_CONTROL(dat, ctrl);
     for (i=0; i<dwg->appid_control.num_entries; i++)
       {
@@ -1175,7 +1169,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     Dwg_Object_DIMSTYLE_CONTROL *_ctrl = &dwg->dimstyle_control;
     Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
     TABLE(DIMSTYLE);
-    COMMON_TABLE_CONTROL_FLAGS(null_handle, DimStyle);
+    COMMON_TABLE_CONTROL_FLAGS;
     error |= dwg_dxf_DIMSTYLE_CONTROL(dat, ctrl);
     //ignoring morehandles
     for (i=0; i<dwg->dimstyle_control.num_entries; i++)
@@ -1193,7 +1187,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       Dwg_Object_VPORT_ENTITY_CONTROL *_ctrl = &dwg->vport_entity_control;
       Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
       TABLE(VPORT_ENTITY);
-      COMMON_TABLE_CONTROL_FLAGS(null_handle, Viewport);
+      COMMON_TABLE_CONTROL_FLAGS;
       error |= dwg_dxf_VPORT_ENTITY_CONTROL(dat, ctrl);
       for (i=0; i<dwg->vport_entity_control.num_entries; i++)
         {
@@ -1216,7 +1210,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     Dwg_Object *mspace = NULL, *pspace = NULL;
 
     TABLE(BLOCK_RECORD);
-    COMMON_TABLE_CONTROL_FLAGS(null_handle, BlockTable);
+    COMMON_TABLE_CONTROL_FLAGS;
     error |= dwg_dxf_BLOCK_CONTROL(dat, ctrl);
     if (obj && obj->type == DWG_TYPE_BLOCK_HEADER) {
       mspace = obj;
@@ -1307,7 +1301,7 @@ dxf_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
     }
   ENDSEC();
-  return 0;
+  return error;
 }
 
 static int
@@ -1325,7 +1319,7 @@ dxf_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         error |= dwg_dxf_object(dat, &dwg->object[i]);
     }
   ENDSEC();
-  return 0;
+  return error;
 }
 
 static int
@@ -1341,7 +1335,7 @@ dxf_objects_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         error |= dwg_dxf_object(dat, &dwg->object[i]);
     }
   ENDSEC();
-  return 0;
+  return error;
 }
 
 //TODO: Beware, there's also a new ACDSDATA section, with ACDSSCHEMA elements
@@ -1379,27 +1373,27 @@ dwg_write_dxf(Bit_Chain *dat, Dwg_Data * dwg)
     // if downgraded from r2000 to r14, but we still have classes, keep the classes
     if ((dat->from_version >= R_2000 && dwg->num_classes) ||
         dat->version >= R_2000) {
-      if (dxf_classes_write (dat, dwg))
+      if (dxf_classes_write (dat, dwg) >= DWG_ERR_CRITICAL)
         goto fail;
     }
 
-    if (dxf_tables_write (dat, dwg))
+    if (dxf_tables_write (dat, dwg) >= DWG_ERR_CRITICAL)
       goto fail;
 
-    if (dxf_blocks_write (dat, dwg))
+    if (dxf_blocks_write (dat, dwg) >= DWG_ERR_CRITICAL)
       goto fail;
   }
 
-  if (dxf_entities_write (dat, dwg))
+  if (dxf_entities_write (dat, dwg) >= DWG_ERR_CRITICAL)
     goto fail;
 
   if (!minimal) {
     SINCE(R_13) {
-      if (dxf_objects_write (dat, dwg))
+      if (dxf_objects_write (dat, dwg) >= DWG_ERR_CRITICAL)
         goto fail;
     }
     SINCE(R_2000) {
-      if (dxf_preview_write (dat, dwg))
+      if (dxf_preview_write (dat, dwg) >= DWG_ERR_CRITICAL)
         goto fail;
     }
   }
