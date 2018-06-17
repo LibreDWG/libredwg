@@ -129,7 +129,7 @@ DWG_ENTITY_END
 /* (2/16) */
 DWG_ENTITY(ATTRIB)
 
-  //SUBCLASS (AcDbAttrib)
+  SUBCLASS (AcDbText)
   PRE(R_13)
     {
       LOG_ERROR("TODO ATTRIB")
@@ -201,6 +201,7 @@ DWG_ENTITY(ATTRIB)
 
       if (FIELD_VALUE(type) > 1)
         {
+          SUBCLASS (AcDbMText)
           LOG_WARN("MTEXT fields")
           // TODO fields handles to MTEXT entities. how many?
           FIELD_HANDLE (mtext_handles, 0, 340); //TODO
@@ -215,6 +216,7 @@ DWG_ENTITY(ATTRIB)
         }
     }
 
+  SUBCLASS (AcDbAttribute)
   FIELD_T (tag, 2);
   FIELD_BS (field_length, 73);
   FIELD_RC (flags, 70); // 1 invisible, 2 constant, 4 verify, 8 preset
@@ -356,7 +358,8 @@ DWG_ENTITY_END
 /* (7/14) */
 DWG_ENTITY(INSERT)
 
-  //SUBCLASS (AcDbBlockReference)
+  SUBCLASS (AcDbBlockReference)
+  DXF { FIELD_B (has_attribs, 66); }
   PRE(R_13) {
     FIELD_2RD (ins_pt, 10);
   } else {
@@ -444,7 +447,7 @@ DWG_ENTITY(INSERT)
   } else {
     FIELD_BD (rotation, 50);
     FIELD_3DPOINT (extrusion, 210);
-    FIELD_B (has_attribs, 66);
+    FIELD_B (has_attribs, 0); // 66 above
   }
 
   SINCE(R_2004)
