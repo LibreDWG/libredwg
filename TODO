@@ -38,10 +38,15 @@
   VBA_PROJECT VIEW VPORT_ENTITY_CONTROL VPORT_ENTITY_HEADER
 * check-dxf: DXFIN coverage for all generated dxfs. some objects even crash acad:
   VERTEX_3D, MLINE.
-* DXFIN error XRECORD starting at line 5318: Could not set the Color dictionary:
-  Drawing_2018, Drawing_2013, Drawing_2010, Drawing_2007
-  *2010.dxf: Updating handle seed. Invalid or incomplete DXF input
-  *2007.dxf: XRECORD read error
+* DXFIN errors:
+  Drawing_2007-18: XRECORD starting at line 5318: Could not set the Color dictionary:
+  *: AcDbRotatedDimension (LINEAR). Unexpected DXF group code: 10
+  *2010: Updating handle seed. Invalid or incomplete DXF input
+  *2007: XRECORD read error
+  *2004: PolyLine3D crashes at AcDb3dPolylineVertex
+  Leader_200[04].dxf, 1-5_2000: Error in STYLE Table. Invalid symbol table record name: ""
+  example_2000: REGION starting at line 2506: Xdata wasn't read
+  Drawing_2000_min: crash at AcDbLine
 
 * convert XRECORD xdata linked-list ResBuf to array of eed[],
   same structure as common EED.

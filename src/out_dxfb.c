@@ -425,7 +425,9 @@ dwg_dxfb_##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
     RECORD(POSITIONMARKER)\
   else if (dat->version < R_13 && strlen(#token) == 10 && !strcmp(#token, "LWPOLYLINE")) \
     RECORD(POLYLINE)\
-  else if (strlen(#token) > 9 && !memcmp(#token, "POLYLINE_", 9))       \
+  else if (strlen(#token) > 11 && !memcmp(#token, "DIMENSION_", 11)) \
+    RECORD(DIMENSION)\
+  else if (strlen(#token) > 9 && !memcmp(#token, "POLYLINE_", 9)) \
     RECORD(POLYLINE)\
   else if (strlen(#token) > 7 && !memcmp(#token, "VERTEX_", 7)) \
     RECORD(VERTEX)\

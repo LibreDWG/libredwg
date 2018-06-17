@@ -964,7 +964,7 @@ DWG_ENTITY_END
     FIELD_T (user_text, 1); \
     FIELD_BD (text_rot, 53); \
     FIELD_BD (horiz_dir, 51); \
-    FIELD_3BD (ins_scale, 41); \
+    FIELD_3BD_1 (ins_scale, 41); \
     FIELD_BD (ins_rotation, 54); \
     SINCE(R_2000) \
       { \
@@ -986,8 +986,8 @@ DWG_ENTITY_END
 DWG_ENTITY(DIMENSION_ORDINATE)
 
   SUBCLASS (AcDbDimension)
-  SUBCLASS (AcDbOrdinateDimension)
   DIMENSION_COMMON_DECODE;
+  SUBCLASS (AcDbOrdinateDimension)
   FIELD_3BD (ucsorigin_pt, 10);
   FIELD_3BD (feature_location_pt, 13);
   FIELD_3BD (leader_endpt, 14);
@@ -1007,13 +1007,14 @@ DWG_ENTITY(DIMENSION_LINEAR)
 
   // TODO PRE(R_R13)
   SUBCLASS (AcDbDimension)
-  SUBCLASS (AcDbRotatedDimension)
   DIMENSION_COMMON_DECODE;
+  SUBCLASS (AcDbAlignedDimension)
   FIELD_3BD (_13_pt, 13);
   FIELD_3BD (_14_pt, 14);
   FIELD_3BD (def_pt, 10);
   FIELD_BD (ext_line_rot, 52);
   FIELD_BD (dim_rot, 50);
+  SUBCLASS (AcDbRotatedDimension)
 
   COMMON_ENTITY_HANDLE_DATA;
   UNTIL(R_2007)
@@ -1028,8 +1029,8 @@ DWG_ENTITY_END
 DWG_ENTITY(DIMENSION_ALIGNED)
 
   SUBCLASS (AcDbDimension)
-  SUBCLASS (AcDbAlignedDimension)
   DIMENSION_COMMON_DECODE;
+  SUBCLASS (AcDbAlignedDimension)
   FIELD_3BD (_13_pt, 13);
   FIELD_3BD (_14_pt, 14);
   FIELD_3BD (def_pt, 10);
@@ -1048,8 +1049,8 @@ DWG_ENTITY_END
 DWG_ENTITY(DIMENSION_ANG3PT)
 
   SUBCLASS (AcDbDimension)
-  SUBCLASS (AcDb3PointAngularDimension)
   DIMENSION_COMMON_DECODE;
+  SUBCLASS (AcDb3PointAngularDimension)
   FIELD_3BD (def_pt, 10);
   FIELD_3BD (_13_pt, 13);
   FIELD_3BD (_14_pt, 14);
@@ -1068,8 +1069,8 @@ DWG_ENTITY_END
 DWG_ENTITY(DIMENSION_ANG2LN)
 
   SUBCLASS (AcDbDimension)
-  SUBCLASS (AcDb2LineAngularDimension)
   DIMENSION_COMMON_DECODE;
+  SUBCLASS (AcDb2LineAngularDimension)
   FIELD_2RD (_16_pt, 16);
   FIELD_3BD (_13_pt, 13);
   FIELD_3BD (_14_pt, 14);
@@ -1089,8 +1090,8 @@ DWG_ENTITY_END
 DWG_ENTITY(DIMENSION_RADIUS)
 
   SUBCLASS (AcDbDimension)
-  SUBCLASS (AcDbRadialDimension)
   DIMENSION_COMMON_DECODE;
+  SUBCLASS (AcDbRadialDimension)
   FIELD_3BD (def_pt, 10);
   FIELD_3BD (first_arc_pt, 15);
   FIELD_BD (leader_len, 40);
@@ -1108,8 +1109,8 @@ DWG_ENTITY_END
 DWG_ENTITY(DIMENSION_DIAMETER)
 
   SUBCLASS (AcDbDimension)
-  SUBCLASS (AcDbDiametricDimension)
   DIMENSION_COMMON_DECODE;
+  SUBCLASS (AcDbDiametricDimension)
   FIELD_3BD (first_arc_pt, 15);
   FIELD_3BD (def_pt, 10);
   FIELD_BD (leader_len, 40);
@@ -4143,7 +4144,7 @@ DWG_OBJECT_END
 //pg.229 20.4.96, also as ACAD_TABLE
 DWG_ENTITY(TABLE)
 
-  SUBCLASS (AcDbTable)
+  SUBCLASS (AcDbSymbolTable)
   SINCE(R_2010)
     {
       FIELD_RC (unknown_rc, 0);
