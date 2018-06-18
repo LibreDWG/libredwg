@@ -1,6 +1,7 @@
 #!/bin/sh
 
 find -name .deps -type d -exec rm -rf '{}' 2>/dev/null \;
+git clean -dxf src examples programs test/testcases test/unit-testing test/xmlsuite
 sh autogen.sh
 # autoreconf
 make=make
@@ -67,10 +68,8 @@ gmake -s -j4 clean
 if [ -e /opt/local/bin/arm-elf-gcc-4.7 ]; then
     echo arm-elf-gcc-4.7 --host=arm-elf --disable-shared
     CC=arm-elf-gcc-4.7 ./configure --host=arm-elf --disable-shared && \
-        gmake -s -j4 || \
-        (gmake -s -C src out_dxf.i && mv src/out_dxf.i src/out_dxf.c && gmake -s);
-    gmake -s -j4 -C examples load_dwg dwg2svg2
-    git checkout src/out_dxf.c
+        gmake -s -j4 && \
+        gmake -s -j4 -C examples load_dwg dwg2svg2
     #qemu-arm -L /opt/local/arm-elf programs/dwgread test/test-data/sample_2000.dwg || exit
 fi
 gmake -s -j4 clean
