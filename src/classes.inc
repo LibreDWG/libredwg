@@ -162,8 +162,8 @@
   DEBUGGING_CLASS  (action, MULTILEADER)       /*ent, broken Leader_Line's/Points */
   DEBUGGING_CLASS  (action, SURFACE)           /*ent, yet unsorted */
   DEBUGGING_CLASS  (action, UNDERLAY)          /*ent DGN DWF PDF */
+  DEBUGGING_CLASS  (action, TABLE)             /*ent, pre-2010 pretty ok mostly */
 
-  UNTESTED_CLASS   (action, TABLE)        /* ent, wrong num_rows 2018 */
   DEBUGGING_CLASS  (action, TABLECONTENT) //wrong values
   DEBUGGING_CLASS  (action, TABLEGEOMETRY) //wrong geom_data
   DEBUGGING_CLASS  (action, CELLSTYLEMAP) //broken

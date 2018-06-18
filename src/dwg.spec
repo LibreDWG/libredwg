@@ -4152,10 +4152,10 @@ DWG_OBJECT(SPATIAL_INDEX)
 
 DWG_OBJECT_END
 
-//pg.229 20.4.96, also as ACAD_TABLE
+//pg.229 20.4.96, as ACAD_TABLE
+//this is the pre-2010 variant, deriving from INSERT
 DWG_ENTITY(TABLE)
 
-  SUBCLASS (AcDbSymbolTable)
   SINCE(R_2010)
     {
       FIELD_RC (unknown_rc, 0);
@@ -4166,9 +4166,11 @@ DWG_ENTITY(TABLE)
       VERSION(R_2013)
         FIELD_BL (unknown_bl1, 0);
 
-      //below as 20.4.96.2 AcDbTableContent: 20.4.97
+      //continue as 20.4.96.2 AcDbTableContent subclass: 20.4.97
+      //return dwg_ ##action _TABLECONTENT_fields(dat,obj);
     }
 
+  SUBCLASS (AcDbBlockReference)
   FIELD_3BD (insertion_point, 10);
     
   VERSIONS(R_13, R_14) {
@@ -4218,6 +4220,7 @@ DWG_ENTITY(TABLE)
     FIELD_BL (num_owned, 0);
   }
   
+  SUBCLASS (AcDbTable)
   FIELD_BS (flag_for_table_value, 90);
   FIELD_3BD (horiz_direction, 11);
   FIELD_BL (num_cols, 92);
