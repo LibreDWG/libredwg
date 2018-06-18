@@ -15,10 +15,10 @@ to get lots of contributors.  LibreDWG is written in English.  At the
 moment our decoder (i.e. reader) is done, just some very advanced
 R2010+ and pre-R13 entities fail to read and are skipped over. The
 writer is good enough for R2000.  Among the example applications we
-wrote using LibreDWG is a reader, awriter, a rewriter (i.e. saveas),
+wrote using LibreDWG is a reader, a writer, a rewriter (i.e. saveas),
 an initial SVG and Postscript conversion, dxf converters, and dwglayer
 to print the list of layers. More are in the pipeline.
-Please contact us if you can help.
+Please contact us if you want to help.
 
 The strings API is utf-8 (wtf8 really, Windows UCS-2 has no surrogate
 pairs), and encodes to the internal 8-bit or UCS-2 strings, depending
@@ -41,7 +41,7 @@ http://www.gnu.org/software/libredwg
 == Building and installing the library ==
 
 You need the following dependencies:
-- Basic development tools (gcc/clang, make, autoconf, automake and libtool)
+- Basic development tools (a C99 compiler like gcc/clang, make, autoconf, automake and libtool)
 - SWIG 1.7+
 - Python 2.7 development headers (debian: python-dev; yum: python-devel)
   and the libxml2 python bindings.
@@ -49,8 +49,8 @@ You need the following dependencies:
 
 See INSTALL for generic instructions.  Basically, you do:
 
-$ ./autogen.sh (if you checked out the source code from git)
-$ ./configure [--enable-trace] [--disable--write]
+$ sh ./autogen.sh (if you checked out the source code from git)
+$ ./configure [--enable-trace] [--disable--write] [--disable-shared]
 $ make
 $ make check    # optional but strongly encouraged while LibreDWG is alpha
 $ sudo make install
@@ -68,13 +68,15 @@ customize the installation dirs.  Other options recognized by configure are:
     Enable runtime tracing (default: no).  When enabled, the environment
     variable LIBREDWG_TRACE is consulted on the first decode/encode attempt.
     Its value is an integer: 0 (no output) through 9 (full verbosity).
+    Most tools do support an --verbosity|-v flag instead.
 
   --disable-write
   
     Disable write support (default: no). When enabled, you activate the write
     support for the DWG format.
     This is an experimental feature, rewriting most DWG's to the r2000 format
-    usually works fine.
+    usually works fine, DWG versions since r2004 are not yet supported, and the
+    API usage is very rough so far.
 
 == Example usage of the library ==
 
@@ -83,18 +85,18 @@ The programs and examples directories contains some application code that uses o
 * dwgread -- A DWG reader supporting various output formats, such as
   JSON, DXF, DXFB, GeoJSON. Later also YAML, XML/OGR, GPX, SVG, PS.
 
-* dwgrewrite -- Reads a DWG, writes it back under a different name and optionally
-  under a different version (default r2000), and re-reads it back for confirmation.
-
 * dwgwrite -- A DWG writer supporting various input formats.
   The input formats DXF, DXFB and later JSON, GeoJSON, YAML, XML/OGR, GPX
   are under construction.
 
+* dwgrewrite -- Reads a DWG, writes it back under a different name and optionally
+  under a different version (default r2000), and re-reads it back for confirmation.
+
 * dwg2dxf -- Converts a DWG to a DXF (ascii or binary, minimal or full), optionally
-  under a different version. Looks good, but AutoCAD cannot import them yet.
+  under a different version. About 80% coverage.
 
 * dxf2dwg -- Converts a ascii or binary DXF to a DWG, optionally
-  under a different version. Not yet usable.
+  under a different version. Under construction.
 
 * dwglayers -- Prints the list of layers in a DWG
 
