@@ -1798,6 +1798,7 @@ DWG_OBJECT(DICTIONARY)
     {
       LOG_ERROR("Invalid dictionary with more than 10.000 entries. Handle: %lu\n",
               obj->handle.value);
+      DEBUG_HERE()
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
 #endif
@@ -1851,6 +1852,7 @@ DWG_OBJECT(DICTIONARYWDFLT)
     {
       LOG_ERROR("Invalid dictionary with more than 10.000 entries. Handle: %lu\n",
               obj->handle.value);
+      DEBUG_HERE()
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
 #ifdef IS_DXF
@@ -3412,6 +3414,7 @@ DWG_ENTITY(HATCH)
                       break;
                     default:
                       LOG_ERROR("Invalid type_status in HATCH entity\n")
+                      DEBUG_HERE()
                       break;
                 }
             }
@@ -3940,6 +3943,7 @@ DWG_OBJECT_END
       break; \
     default: \
       LOG_ERROR("Invalid data type in TABLE entity\n") \
+      DEBUG_HERE() \
       break; \
     } \
   SINCE(R_2007) \
@@ -4197,7 +4201,8 @@ DWG_ENTITY(TABLE)
             FIELD_VALUE(scale.z) = 1.0;
             break;
           default:
-            LOG_ERROR("Invalid data_flags in TABLE entity\n")
+            LOG_ERROR("Invalid data_flags in TABLE entity %d\n", (int)FIELD_VALUE(data_flags))
+            DEBUG_HERE()
             break;
         }
 #ifndef IS_FREE
@@ -4217,6 +4222,11 @@ DWG_ENTITY(TABLE)
   FIELD_3BD (horiz_direction, 11);
   FIELD_BL (num_cols, 92);
   FIELD_BL (num_rows, 91);
+  if (FIELD_VALUE(num_rows) > 0x1000) {
+    LOG_ERROR("Invalid TABLE.num_rows %ld", (long)FIELD_VALUE(num_rows));
+    DEBUG_HERE()
+    return DWG_ERR_VALUEOUTOFBOUNDS;
+  }
   FIELD_VECTOR (col_widths, BD, num_cols, 142);
   FIELD_VECTOR (row_heights, BD, num_rows, 141);
   FIELD_VALUE(num_cells) = FIELD_VALUE(num_rows) * FIELD_VALUE(num_cols);

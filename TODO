@@ -19,7 +19,7 @@
   AcDbAnnotScaleObjectContextData
 * add test coverage - i.e. an extended example.dwg with all types,
   compared to 2018/example_2018.dwg - for the following missing entities:
-  3DFACE 3DSOLID BODY CAMERA DIMENSION_ALIGNED DIMENSION_ANG2LN
+  3DFACE 3DSOLID ARC_DIMENSION BODY CAMERA DIMENSION_ALIGNED DIMENSION_ANG2LN
   DIMENSION_ANG3PT DIMENSION_DIAMETER DIMENSION_LINEAR
   DIMENSION_ORDINATE DIMENSION_RADIUS DUMMY EXTRUDEDSURFACE
   GEOPOSITIONMARKER IMAGE LEADER LIGHT LONG_TRANSACTION MINSERT MLINE
@@ -40,7 +40,6 @@
   VERTEX_3D, MLINE.
 * DXFIN errors:
   Drawing_2007-18: XRECORD starting at line 5318: Could not set the Color dictionary:
-  *: AcDbRotatedDimension (LINEAR). Unexpected DXF group code: 10
   *2010: Updating handle seed. Invalid or incomplete DXF input
   *2007: XRECORD read error
   *2004: PolyLine3D crashes at AcDb3dPolylineVertex
