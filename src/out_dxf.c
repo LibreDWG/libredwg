@@ -408,7 +408,7 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
     fprintf(dat->fh, "102\r\n}\r\n");\
   }
 #define ENT_REACTORS(code)\
-  if (dat->version >= R_13 && _obj->num_reactors) {\
+  if (dat->version >= R_13 && _obj->num_reactors && _obj->reactors) {\
     fprintf(dat->fh, "102\r\n{ACAD_REACTORS\r\n");\
     for (vcount=0; vcount < _obj->num_reactors; vcount++)\
       {\

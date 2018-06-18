@@ -385,7 +385,7 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
     VALUE_TV("}", 102) \
   }
 #define ENT_REACTORS(code)\
-  if (dat->version >= R_13 && _obj->num_reactors) {\
+  if (dat->version >= R_13 && _obj->num_reactors && _obj->reactors) {\
     VALUE_TV("{ACAD_REACTORS", 102) \
     for (vcount=0; vcount < (int)_obj->num_reactors; vcount++)\
       {\
