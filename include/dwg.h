@@ -78,10 +78,10 @@ extern "C" {
 #define BITCODE_B unsigned char
 #define FORMAT_B "%d"
 #define BITCODE_BB unsigned char
-#define FORMAT_BB "%uc"
+#define FORMAT_BB "%u"
 /* Since R24 */
 #define BITCODE_3B unsigned char
-#define FORMAT_3B "%uc"
+#define FORMAT_3B "%u"
 #ifdef HAVE_STDINT_H
 # define BITCODE_BS uint16_t
 # define BITCODE_RS uint16_t

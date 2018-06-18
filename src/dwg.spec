@@ -5282,7 +5282,10 @@ DWG_ENTITY(WIPEOUT)
   else
     {
       FIELD_BL (num_clip_verts, 91);
-      FIELD_2RD_VECTOR(clip_verts, num_clip_verts, 14);
+      if (FIELD_VALUE(num_clip_verts) < 0x1000)
+        {
+          FIELD_2RD_VECTOR(clip_verts, num_clip_verts, 14);
+        }
     }
 
   COMMON_ENTITY_HANDLE_DATA;

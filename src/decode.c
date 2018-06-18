@@ -2468,45 +2468,55 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
         }
       SINCE(R_2010)
         {
-          ent->picture_size = bit_read_BLL(dat); //ODA doc bug?
+          ent->picture_size = bit_read_BLL(dat);
         }
 
       LOG_TRACE("picture_size: " FORMAT_BL " \n", ent->picture_size)
       if (ent->picture_size < 210210)
         {
-          ent->picture = bit_read_TF(dat, ent->picture_size); // DXF 310
+          if (ent->picture_size)
+            ent->picture = bit_read_TF(dat, ent->picture_size); // DXF 310
         }
       else
         {
-          LOG_ERROR("Invalid picture-size: %lu kB. Object: %lu (handle)",
+          LOG_ERROR("Invalid picture-size: %lu kB. Object: %lX (handle)",
                     (unsigned long)(ent->picture_size / 1000), _obj->handle.value)
+#ifndef DEBUG_CLASSES
           bit_set_position(dat, _obj->address);
           return DWG_ERR_VALUEOUTOFBOUNDS;
+#endif
         }
     }
 
   VERSIONS(R_13, R_14)
     {
       _obj->bitsize = bit_read_RL(dat);
+      LOG_TRACE("bitsize: " FORMAT_RL " \n", _obj->bitsize)
     }
 
   ent->entity_mode  = bit_read_BB(dat);
-  ent->num_reactors = bit_read_BL(dat);
+  LOG_TRACE("entity_mode: " FORMAT_BB " \n", ent->entity_mode)
+  ent->num_reactors = bit_read_BS(dat);
+  LOG_TRACE("num_reactors: %d\n", (int)ent->num_reactors)
 
   SINCE(R_2004)
     {
       ent->xdic_missing_flag = bit_read_B(dat);
+      LOG_TRACE("xdic_missing_flag: " FORMAT_B " \n", ent->xdic_missing_flag)
     }
   SINCE(R_2013)
     {
       ent->has_ds_binary_data = bit_read_B(dat);
+      LOG_TRACE("has_ds_binary_data: " FORMAT_B " \n", ent->has_ds_binary_data)
     }
   VERSIONS(R_13, R_14)
     {
       ent->isbylayerlt = bit_read_B(dat);
+      LOG_TRACE("isbylayerlt: " FORMAT_B " \n", ent->isbylayerlt)
     }
 
   ent->nolinks = bit_read_B(dat);
+  LOG_TRACE("nolinks: " FORMAT_B " \n", ent->nolinks)
 
   SINCE(R_2004)
     {
@@ -2516,15 +2526,18 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
       if (ent->nolinks == 0)
         {
           color_mode = bit_read_B(dat);
+          LOG_TRACE("color_mode: " FORMAT_B " \n", color_mode) //indexed or rgb
 
           if (color_mode == 1)
             {
               ent->color.index = bit_read_RC(dat);  // color index
               ent->color.rgb = 0L;
+              LOG_TRACE("color.index: %d\n", (int)ent->color.index)
             }
           else
             {
               flags = bit_read_RS(dat);
+              LOG_TRACE("color.flags: 0x%X\n", (unsigned)flags)
 
               if (flags & 0x8000)
                 {
@@ -2539,6 +2552,9 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
                   ent->color.index = 0;
                   ent->color.rgb   = c1 << 24 | c2 << 16 | c3 << 8 | c4;
                   ent->color.name  = name;
+                  LOG_TRACE("color.rgb: 0x%X\n", (unsigned)ent->color.rgb)
+                  if (name && *name)
+                    LOG_TRACE("color.name: %s\n", name)
                 }
 
               /*if (flags & 0x4000)
@@ -2547,12 +2563,15 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
               if (flags & 0x2000)
                 {
                   ent->color.transparency_type = bit_read_BL(dat);
+                  LOG_TRACE("color.transparency_type: 0x%X\n",
+                            (unsigned)ent->color.transparency_type)
                 }
             }
         }
       else
         {
           char color = bit_read_B(dat);
+          LOG_TRACE("color.index: %d\n", (int)color)
           ent->color.index = color;
         }
     }
@@ -2560,19 +2579,24 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
     bit_read_CMC(dat, &ent->color);
 
   ent->linetype_scale = bit_read_BD(dat);
+  LOG_TRACE("linetype_scale: " FORMAT_BD "\n", ent->linetype_scale)
 
   SINCE(R_2000)
     {
       // 00 BYLAYER, 01 BYBLOCK, 10 CONTINUOUS, 11 ltype handle
       ent->linetype_flags = bit_read_BB(dat);
+      LOG_TRACE("linetype_flags: " FORMAT_BB "\n", ent->linetype_flags)
       // 00 BYLAYER, 01 BYBLOCK, 10 CONTINUOUS, 11 plotstyle handle
       ent->plotstyle_flags = bit_read_BB(dat);
+      LOG_TRACE("plotstyle_flags: " FORMAT_BB "\n", ent->plotstyle_flags)
     }
 
   SINCE(R_2007)
     {
       ent->material_flags = bit_read_BB(dat);
+      LOG_TRACE("material_flags: " FORMAT_BB "\n", ent->material_flags)
       ent->shadow_flags = bit_read_RC(dat);
+      LOG_TRACE("shadow_flags: " FORMAT_RC "\n", ent->shadow_flags)
     }
 
   SINCE(R_2010)
@@ -2580,6 +2604,10 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
       ent->has_full_visualstyle = bit_read_B(dat);
       ent->has_face_visualstyle = bit_read_B(dat);
       ent->has_edge_visualstyle = bit_read_B(dat);
+      LOG_TRACE("visualstyles: %d%d%d\n",
+                ent->has_full_visualstyle,
+                ent->has_face_visualstyle,
+                ent->has_edge_visualstyle)
     }
 
   ent->invisible = bit_read_BS(dat); //bit 0: 0 visible, 1 invisible
@@ -2587,6 +2615,7 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
   SINCE(R_2000)
     {
       ent->lineweight = bit_read_RC(dat);
+      LOG_TRACE("lineweight: %d\n", (int)ent->lineweight)
     }
 
   // elsewhere: object data, handles, padding bits, crc

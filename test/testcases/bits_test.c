@@ -86,19 +86,19 @@ bit_write_BB_tests (void)
 void
 bit_read_3B_tests (void)
 {
-  Bit_Chain bitchain = strtobt ("10101010");
+  Bit_Chain bitchain = strtobt ("100111");
   unsigned char result = bit_read_3B (&bitchain);
-  if (result == 1)
+  if (result == 2)
     pass ("bit_read_3B");
   else
     fail ("bit_read_3B %d", result);
   result = bit_read_3B (&bitchain);
-  if (result == 1)
+  if (result == 0)
     pass ("bit_read_3B");
   else
     fail ("bit_read_3B %d", result);
   result = bit_read_3B (&bitchain);
-  if (result == 1)
+  if (result == 7)
     pass ("bit_read_3B");
   else
     fail ("bit_read_3B %d", result);
@@ -142,6 +142,18 @@ bit_read_4BITS_tests (void)
     pass ("bit_read_4BITS");
   else
     fail ("bit_read_4BITS");
+}
+
+void
+bit_read_BLL_tests (void)
+{
+  /* 001 => 1, 00000011 */
+  Bit_Chain bitchain = strtobt ("00100000011");
+  BITCODE_BLL result = bit_read_BLL (&bitchain);
+  if (result == 3)
+    pass ("bit_read_BLL");
+  else
+    fail ("bit_read_BLL %lu", result);
 }
 
 void
@@ -272,6 +284,7 @@ main (int argc, char const *argv[])
   bit_write_3B_tests ();
   bit_read_4BITS_tests ();
   bit_write_4BITS_tests ();
+  bit_read_BLL_tests ();
   bit_read_RC_tests ();
   bit_write_RC_tests ();
   bit_read_RS_tests ();

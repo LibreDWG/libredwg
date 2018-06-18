@@ -155,6 +155,8 @@ bit_write_BOT(Bit_Chain *dat, BITCODE_BS value);
 
 BITCODE_BLL
 bit_read_BLL(Bit_Chain *dat);
+BITCODE_BLL
+bit_read_3BLL(Bit_Chain *dat); /*unused but as documented*/
 
 void
 bit_write_BLL(Bit_Chain *dat, BITCODE_BLL value);

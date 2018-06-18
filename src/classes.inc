@@ -45,7 +45,7 @@
       if (!strcmp(#ACTION, "decode")) \
         obj->fixedtype = DWG_TYPE_##name; \
       if (!strcmp(#ACTION, "free")) \
-        free(dxfname);; \
+        free(dxfname); \
       return DWG_FUNC_N(ACTION,name)(dat, obj); \
     }
 #define STABLE_CLASS_DXF(ACTION, name, _dxfname) \
@@ -54,7 +54,7 @@
       if (!strcmp(#ACTION, "decode")) \
         obj->fixedtype = DWG_TYPE_##name; \
       if (!strcmp(#ACTION, "free")) \
-        free(dxfname);; \
+        free(dxfname); \
       return DWG_FUNC_N(ACTION,name)(dat, obj); \
     }
 #define STABLE_CLASS_CPP(ACTION, name, _cppname) \
@@ -63,7 +63,7 @@
       if (!strcmp(#ACTION, "decode")) \
         obj->fixedtype = DWG_TYPE_##name; \
       if (!strcmp(#ACTION, "free")) \
-        free(dxfname);; \
+        free(dxfname); \
       return DWG_FUNC_N(ACTION,name)(dat, obj); \
     }
 #define UNTESTED_CLASS(ACTION, name) \
@@ -73,7 +73,17 @@
       if (!strcmp(#ACTION, "decode")) \
         obj->fixedtype = DWG_TYPE_##name; \
       if (!strcmp(#ACTION, "free")) \
-        free(dxfname);; \
+        free(dxfname); \
+      return DWG_FUNC_N(ACTION,name)(dat, obj); \
+    }
+#define UNTESTED_CLASS_DXF(ACTION, name, _dxfname) \
+  if (!strcmp(dxfname, #_dxfname)) \
+    { \
+      WARN_UNTESTED_CLASS; \
+      if (!strcmp(#ACTION, "decode") || !memcmp(#ACTION, "in", 2)) \
+        obj->fixedtype = DWG_TYPE_##name; \
+      if (!strcmp(#ACTION, "free")) \
+        free(dxfname); \
       return DWG_FUNC_N(ACTION,name)(dat, obj); \
     }
 #define UNTESTED_CLASS_CPP(ACTION, name, _cppname) \
@@ -83,7 +93,7 @@
       if (!strcmp(#ACTION, "decode")) \
         obj->fixedtype = DWG_TYPE_##name; \
       if (!strcmp(#ACTION, "free")) \
-        free(dxfname);; \
+        free(dxfname); \
       return DWG_FUNC_N(ACTION,name)(dat, obj); \
     }
 #define UNHANDLED_CLASS(ACTION, name) \
@@ -93,7 +103,7 @@
       if (!strcmp(#ACTION, "decode")) \
         obj->fixedtype = DWG_TYPE_##name; \
       if (!strcmp(#ACTION, "free")) \
-        free(dxfname);; \
+        free(dxfname); \
       /* return dwg_##ACTION_##name(dat, obj); */ \
       return DWG_ERR_UNHANDLEDCLASS; \
     }
@@ -104,22 +114,29 @@
       if (!strcmp(#ACTION, "decode") || !memcmp(#ACTION, "in", 2)) \
         obj->fixedtype = DWG_TYPE_##name; \
       if (!strcmp(#ACTION, "free")) \
-        free(dxfname);; \
+        free(dxfname); \
       /* return dwg_##ACTION_##name(dat, obj); */ \
       return DWG_ERR_UNHANDLEDCLASS; \
     }
 
 #ifdef DEBUG_CLASSES
-#define DEBUGGING_CLASS(ACTION, name) UNTESTED_CLASS(ACTION, name)
+#define DEBUGGING_CLASS(ACTION, name)               UNTESTED_CLASS(ACTION, name)
+#define DEBUGGING_CLASS_DXF(ACTION, name, _dxfname) UNTESTED_CLASS_DXF(ACTION, name, _dxfname)
 #else
-#define DEBUGGING_CLASS(ACTION, name) UNHANDLED_CLASS(ACTION, name)
+#define DEBUGGING_CLASS(ACTION, name)               UNHANDLED_CLASS(ACTION, name)
+#define DEBUGGING_CLASS_DXF(ACTION, name, _dxfname) UNHANDLED_CLASS_DXF(ACTION, name, _dxfname)
 #endif
 
   /* Entities */
   STABLE_CLASS    (ACTION, IMAGE)     /*ent*/
   STABLE_CLASS    (ACTION, OLE2FRAME) /*ent (also fixed) */
   STABLE_CLASS    (ACTION, WIPEOUT)   /*ent*/
-  STABLE_CLASS_DXF(ACTION, TABLE, ACAD_TABLE) /*ent*/
+  PRE (R_2010) {
+    STABLE_CLASS_DXF(ACTION, TABLE, ACAD_TABLE) /*ent, pre-2010 ok */
+  } LATER_VERSIONS {
+    DEBUGGING_CLASS_DXF  (ACTION, TABLE, ACAD_TABLE) /*ent, r2010+ needs subclassing */
+  }
+
   /* Objects */
   STABLE_CLASS    (ACTION, DICTIONARYVAR)
   STABLE_CLASS_DXF(ACTION, DICTIONARYWDFLT, ACDBDICTIONARYWDFLT)
@@ -162,12 +179,6 @@
   DEBUGGING_CLASS  (ACTION, MULTILEADER)       /*ent, broken Leader_Line's/Points */
   DEBUGGING_CLASS  (ACTION, SURFACE)           /*ent, yet unsorted */
   DEBUGGING_CLASS  (ACTION, UNDERLAY)          /*ent DGN DWF PDF */
-  PRE (R_2010) {
-    STABLE_CLASS  (ACTION, TABLE)              /*ent, pre-2010 ok */
-  } LATER_VERSIONS {
-    DEBUGGING_CLASS  (ACTION, TABLE)           /*ent, r2010+ needs subclassing */
-  }
-
   DEBUGGING_CLASS  (ACTION, TABLECONTENT) //wrong values
   DEBUGGING_CLASS  (ACTION, TABLEGEOMETRY) //wrong geom_data
   DEBUGGING_CLASS  (ACTION, CELLSTYLEMAP) //broken
