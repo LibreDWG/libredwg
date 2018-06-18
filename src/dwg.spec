@@ -194,6 +194,8 @@ DWG_ENTITY(ATTRIB)
   SINCE(R_2010)
     {
       FIELD_RC (class_version, 280); // 0 = r2010
+      if (FIELD_VALUE(class_version) > 10)
+        return DWG_ERR_VALUEOUTOFBOUNDS;
     }
   SINCE(R_2018)
     {
@@ -312,6 +314,8 @@ DWG_ENTITY(ATTDEF)
   }
   SINCE(R_2010) {
     FIELD_RC (class_version, 280);
+    if (FIELD_VALUE(class_version) > 10)
+      return DWG_ERR_VALUEOUTOFBOUNDS;
   }
   FIELD_T (prompt, 3);
 
@@ -956,6 +960,8 @@ DWG_ENTITY_END
     SINCE(R_2010) \
       { \
         FIELD_RC (class_version, 280); /* 0=r2010 */ \
+        if (FIELD_VALUE(class_version) > 10) \
+          return DWG_ERR_VALUEOUTOFBOUNDS; \
       } \
     FIELD_3BD (extrusion, 210); \
     FIELD_2RD (text_midpt, 11); \
@@ -1948,6 +1954,8 @@ DWG_ENTITY(MTEXT)
       if (!FIELD_VALUE(annotative))
         {
           FIELD_BS (class_version, 0); // def: 0
+          if (FIELD_VALUE(class_version) > 10)
+            return DWG_ERR_VALUEOUTOFBOUNDS;
           FIELD_B (default_flag, 0);   // def: 1
         }
       FIELD_HANDLE (appid, 5, 0);
@@ -3503,6 +3511,8 @@ DWG_ENTITY(IMAGE)
   //SUBCLASS (AcDbImage)
   SUBCLASS (AcDbRasterImage)
   FIELD_BL (class_version, 90);
+  if (FIELD_VALUE(class_version) > 10)
+    return DWG_ERR_VALUEOUTOFBOUNDS;
   FIELD_3DPOINT (pt0, 10);
   FIELD_3DPOINT (uvec, 11);
   FIELD_3DPOINT (vvec, 12);
@@ -3540,6 +3550,8 @@ DWG_OBJECT(IMAGEDEF)
   DXF { FIELD_HANDLE (parenthandle, 3, 330); }
   SUBCLASS (AcDbRasterImageDef)
   FIELD_BL (class_version, 90);
+  if (FIELD_VALUE(class_version) > 10)
+    return DWG_ERR_VALUEOUTOFBOUNDS;
   FIELD_2RD (image_size, 10);
   FIELD_T (file_path, 1);
   FIELD_B (is_loaded, 280);
@@ -3559,6 +3571,8 @@ DWG_OBJECT(IMAGEDEF_REACTOR)
   DXF { FIELD_HANDLE (parenthandle, 4, 330); }
   SUBCLASS (AcDbRasterImageDefReactor)
   FIELD_BL (class_version, 90);
+  if (FIELD_VALUE(class_version) > 10)
+    return DWG_ERR_VALUEOUTOFBOUNDS;
 
   START_HANDLE_STREAM;
   FIELD_HANDLE (parenthandle, 4, 0);
@@ -3889,6 +3903,8 @@ DWG_OBJECT(OBJECTCONTEXTDATA)
       FIELD_VALUE(class_version) = 3;
     }
     FIELD_BS (class_version, 0);
+    if (FIELD_VALUE(class_version) > 10)
+      return DWG_ERR_VALUEOUTOFBOUNDS;
   }
   FIELD_B (has_file, 0);
   FIELD_B (defaultflag, 0);
@@ -4005,6 +4021,8 @@ DWG_OBJECT(GEODATA)
 
   SUBCLASS (AcDbGeoData)
   FIELD_BL (class_version, 90); //1 for r2009, 2 for r2010 (default)
+  if (FIELD_VALUE(class_version) > 10)
+    return DWG_ERR_VALUEOUTOFBOUNDS;
   FIELD_HANDLE (host_block, 4, 330);
   FIELD_BS (coord_type, 70); // 0 unknown, local grid 1, projected grid 2,
                              // geographic (defined by latitude/longitude) 3 (default)
@@ -4079,6 +4097,8 @@ DWG_OBJECT(RASTERVARIABLES)
   DXF { FIELD_HANDLE (parenthandle, 4, 330); }
   SUBCLASS (AcDbRasterVariables)
   FIELD_BL (class_version, 90);
+  if (FIELD_VALUE(class_version) > 10)
+    return DWG_ERR_VALUEOUTOFBOUNDS;
   FIELD_BS (display_frame, 70);
   FIELD_BS (display_quality, 71);
   FIELD_BS (units, 72);
@@ -4965,6 +4985,8 @@ DWG_ENTITY(MULTILEADER)
         FIELD_VALUE(class_version) = 2;
       }
       FIELD_BS (class_version, 270); // default 2
+      if (FIELD_VALUE(class_version) > 10)
+        return DWG_ERR_VALUEOUTOFBOUNDS;
       FIELD_BS (ctx.class_version, 70); // default 3
       FIELD_B (ctx.has_xdic_file, 0);
       FIELD_B (ctx.is_default, 290);
@@ -5176,6 +5198,8 @@ DWG_OBJECT(MLEADERSTYLE)
         FIELD_VALUE(class_version) = 2;
       }
       FIELD_BS (class_version, 179);
+      if (FIELD_VALUE(class_version) > 10)
+        return DWG_ERR_VALUEOUTOFBOUNDS;
     }
 
   FIELD_BS (content_type, 170);
@@ -5259,6 +5283,8 @@ DWG_ENTITY(WIPEOUT)
   //SUBCLASS (AcDbRasterImage)
   SUBCLASS (AcDbWipeout)
   FIELD_BL (class_version, 90);
+  if (FIELD_VALUE(class_version) > 10)
+    return DWG_ERR_VALUEOUTOFBOUNDS;
   FIELD_3DPOINT (pt0, 10);
   FIELD_3DPOINT (uvec, 11);
   FIELD_3DPOINT (vvec, 12);
@@ -5578,6 +5604,8 @@ DWG_OBJECT(SUN)
   DXF { FIELD_HANDLE (parenthandle, 4, 330); }
   SUBCLASS(AcDbSun)
   FIELD_BL (class_version, 90);
+  if (FIELD_VALUE(class_version) > 10)
+    return DWG_ERR_VALUEOUTOFBOUNDS;
   FIELD_B (is_on, 290); // status, isOn
   FIELD_B (has_shadow, 291); // shadow on/off
   FIELD_B (is_dst, 292);  // isDayLightSavingsOn
@@ -5711,6 +5739,8 @@ DWG_ENTITY(SURFACE)
   FIELD_BS (v_isolines, 72);
   //SUBCLASS(AcDbExtrudedSurface)
   FIELD_BL (class_version, 90);
+  if (FIELD_VALUE(class_version) > 10)
+    return DWG_ERR_VALUEOUTOFBOUNDS;
   FIELD_3BD (sweep_vector, 10);
   FIELD_VECTOR_N (sweep_transmatrix, BD, 16, 40);
   FIELD_BD (draft_angle, 42);

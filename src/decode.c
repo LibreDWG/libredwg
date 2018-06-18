@@ -2532,7 +2532,7 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
             {
               ent->color.index = bit_read_RC(dat);  // color index
               ent->color.rgb = 0L;
-              LOG_TRACE("color.index: %d\n", (int)ent->color.index)
+              LOG_TRACE("color.index: %u\n", (unsigned)ent->color.index)
             }
           else
             {
