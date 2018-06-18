@@ -3266,7 +3266,7 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
     are invalidated.
     Returns DWG_ERR_OUTOFMEM otherwise.
  */
-long dwg_add_object (Dwg_Data *dwg)
+EXPORT int dwg_add_object (Dwg_Data *dwg)
 {
   Dwg_Object *obj;
   long unsigned int num = dwg->num_objects;

@@ -5070,10 +5070,10 @@ dwg_free(Dwg_Data * dwg);
 EXPORT void
 dwg_free_object(Dwg_Object *obj);
 
-/** Add the object to the DWG.
+/** Add the empty object to the DWG.
     Returns DWG_ERR_OUTOFMEM, -1 for realloced or 0 if not.
 */
-EXPORT long dwg_add_object (Dwg_Data * dwg);
+EXPORT int dwg_add_object (Dwg_Data * dwg);
 
 /** Initialize the empty entity or object with its three structs.
     All fields are zero'd, some are initialized with default values, as
@@ -5156,57 +5156,87 @@ EXPORT int dwg_add_LWPOLYLINE (Dwg_Object *obj);
 EXPORT int dwg_add_HATCH (Dwg_Object *obj);
 EXPORT int dwg_add_XRECORD (Dwg_Object *obj);
 EXPORT int dwg_add_PLACEHOLDER (Dwg_Object *obj);
-EXPORT int dwg_add_VBA_PROJECT (Dwg_Object *obj);
+#ifdef DEBUG_CLASSES
+  EXPORT int dwg_add_VBA_PROJECT (Dwg_Object *obj);
+#endif
 EXPORT int dwg_add_LAYOUT (Dwg_Object *obj);
 EXPORT int dwg_add_PROXY_ENTITY (Dwg_Object *obj);
 EXPORT int dwg_add_PROXY_OBJECT (Dwg_Object *obj);
+//EXPORT int dwg_add_ACAD_EVALUATION_GRAPH (Dwg_Object *obj);
+//EXPORT int dwg_add_ACSH_HISTORY_CLASS (Dwg_Object *obj);
+//EXPORT int dwg_add_ACSH_SWEEP_CLASS (Dwg_Object *obj);
 //EXPORT int dwg_add_ARCALIGNEDTEXT (Dwg_Object *obj);
+//EXPORT int dwg_add_ARC_DIMENSION (Dwg_Object *obj);
 //EXPORT int dwg_add_ASSOC2DCONSTRAINTGROUP (Dwg_Object *obj);
+//EXPORT int dwg_add_ASSOCACTION (Dwg_Object *obj);
+//EXPORT int dwg_add_ASSOCALIGNEDDIMACTIONBODY (Dwg_Object *obj);
+//EXPORT int dwg_add_ASSOCDEPENDENCY (Dwg_Object *obj);
 //EXPORT int dwg_add_ASSOCGEOMDEPENDENCY (Dwg_Object *obj);
 //EXPORT int dwg_add_ASSOCNETWORK (Dwg_Object *obj);
+//EXPORT int dwg_add_ASSOCOSNAPPOINTREFACTIONPARAM (Dwg_Object *obj);
+//EXPORT int dwg_add_ASSOCPERSSUBENTMANAGER (Dwg_Object *obj);
+//EXPORT int dwg_add_ASSOCVERTEXACTIONPARAM (Dwg_Object *obj);
+EXPORT int dwg_add_CAMERA (Dwg_Object *obj);
+#ifdef DEBUG_CLASSES
 EXPORT int dwg_add_CELLSTYLEMAP (Dwg_Object *obj);
+#endif
+//EXPORT int dwg_add_CSACDOCUMENTOPTIONS (Dwg_Object *obj);
 //EXPORT int dwg_add_DATATABLE (Dwg_Object *obj);
 EXPORT int dwg_add_DBCOLOR (Dwg_Object *obj);
 EXPORT int dwg_add_DETAILVIEWSTYLE (Dwg_Object *obj);
 EXPORT int dwg_add_DIMASSOC (Dwg_Object *obj);
 EXPORT int dwg_add_DICTIONARYVAR (Dwg_Object *obj);
 EXPORT int dwg_add_DICTIONARYWDFLT (Dwg_Object *obj);
-//EXPORT int dwg_add_EXACXREFPANELOBJECT (Dwg_Object *obj);
+//EXPORT int dwg_add_DIMASSOC (Dwg_Object *obj);
 EXPORT int dwg_add_FIELD (Dwg_Object *obj);
 EXPORT int dwg_add_FIELDLIST (Dwg_Object *obj);
 EXPORT int dwg_add_GEODATA (Dwg_Object *obj);
-//EXPORT int dwg_add_GEOPOSITIONMARKER (Dwg_Object *obj);
-//EXPORT int dwg_add_HELIX (Dwg_Object *obj);
+#ifdef DEBUG_CLASSES
+  EXPORT int dwg_add_GEOPOSITIONMARKER (Dwg_Object *obj);
+  EXPORT int dwg_add_HELIX (Dwg_Object *obj);
+#endif
 EXPORT int dwg_add_IMAGE (Dwg_Object *obj);
 EXPORT int dwg_add_IMAGEDEF (Dwg_Object *obj);
 EXPORT int dwg_add_IMAGEDEF_REACTOR (Dwg_Object *obj);
 EXPORT int dwg_add_LAYER_INDEX (Dwg_Object *obj);
 EXPORT int dwg_add_LAYER_FILTER (Dwg_Object *obj);
+//EXPORT int dwg_add_LAYOUTPRINTCONFIG (Dwg_Object *obj);
 EXPORT int dwg_add_LEADEROBJECTCONTEXTDATA (Dwg_Object *obj);
-EXPORT int dwg_add_LIGHT (Dwg_Object *obj);
 //EXPORT int dwg_add_LIGHTLIST (Dwg_Object *obj);
-EXPORT int dwg_add_MATERIAL (Dwg_Object *obj);
-//EXPORT int dwg_add_MULTILEADER (Dwg_Object *obj);
 EXPORT int dwg_add_MLEADERSTYLE (Dwg_Object *obj);
+#ifdef DEBUG_CLASSES
+  EXPORT int dwg_add_LIGHT (Dwg_Object *obj);
+  EXPORT int dwg_add_MATERIAL (Dwg_Object *obj);
+  EXPORT int dwg_add_MULTILEADER (Dwg_Object *obj);
+#endif
 //EXPORT int dwg_add_NPOCOLLECTION (Dwg_Object *obj);
-EXPORT int dwg_add_PLOTSETTINGS (Dwg_Object *obj);
 //EXPORT int dwg_add_OBJECTCONTEXTDATA (Dwg_Object *obj);
+EXPORT int dwg_add_OBJECT_PTR (Dwg_Object *obj);
+//EXPORT int dwg_add_PERSSUBENTMANAGER (Dwg_Object *obj);
+#ifdef DEBUG_CLASSES
+  EXPORT int dwg_add_PLOTSETTINGS (Dwg_Object *obj);
+#endif
+//EXPORT int dwg_add_POINTCLOUD (Dwg_Object *obj);
 EXPORT int dwg_add_RASTERVARIABLES (Dwg_Object *obj);
+//EXPORT int dwg_add_RTEXT (Dwg_Object *obj);
 EXPORT int dwg_add_SCALE (Dwg_Object *obj);
 //EXPORT int dwg_add_SECTIONVIEWSTYLE (Dwg_Object *obj);
 EXPORT int dwg_add_SORTENTSTABLE (Dwg_Object *obj);
 EXPORT int dwg_add_SPATIAL_FILTER (Dwg_Object *obj);
 EXPORT int dwg_add_SPATIAL_INDEX (Dwg_Object *obj);
-EXPORT int dwg_add_SUN (Dwg_Object *obj);
-//EXPORT int dwg_add_SURFACE (Dwg_Object *obj);
-EXPORT int dwg_add_TABLE (Dwg_Object *obj);
-EXPORT int dwg_add_TABLECONTENT (Dwg_Object *obj);
-EXPORT int dwg_add_TABLEGEOMETRY (Dwg_Object *obj);
-EXPORT int dwg_add_TABLESTYLE (Dwg_Object *obj);
-//EXPORT int dwg_add_UNDERLAY (Dwg_Object *obj);
+#ifdef DEBUG_CLASSES
+  EXPORT int dwg_add_SUN (Dwg_Object *obj);
+  EXPORT int dwg_add_TABLE (Dwg_Object *obj);
+  EXPORT int dwg_add_TABLECONTENT (Dwg_Object *obj);
+  EXPORT int dwg_add_TABLEGEOMETRY (Dwg_Object *obj);
+  EXPORT int dwg_add_TABLESTYLE (Dwg_Object *obj);
+  EXPORT int dwg_add_UNDERLAY (Dwg_Object *obj);
+#endif
+//EXPORT int dwg_add_UNDERLAYDEFINITION (Dwg_Object *obj);
 EXPORT int dwg_add_VISUALSTYLE (Dwg_Object *obj);
 EXPORT int dwg_add_WIPEOUT (Dwg_Object *obj);
 EXPORT int dwg_add_WIPEOUTVARIABLES (Dwg_Object *obj);
+//EXPORT int dwg_add_XREFPANELOBJECT (Dwg_Object *obj);
 
 #ifdef __cplusplus
 }

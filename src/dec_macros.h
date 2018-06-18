@@ -452,7 +452,7 @@
 */
 
 #define DWG_ENTITY(token) \
-int dwg_add_##token (Dwg_Object *obj) \
+EXPORT int dwg_add_##token (Dwg_Object *obj) \
 { \
   Dwg_Object_Entity *_ent; \
   Dwg_Entity_##token *_obj; \
@@ -499,7 +499,7 @@ static int dwg_decode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj
 #define DWG_ENTITY_END return error & ~DWG_ERR_UNHANDLEDCLASS; }
 
 #define DWG_OBJECT(token) \
-int dwg_add_ ## token (Dwg_Object *obj) \
+EXPORT int dwg_add_ ## token (Dwg_Object *obj) \
 { \
   Dwg_Object_##token *_obj;\
   LOG_INFO("Add object " #token " ")\
