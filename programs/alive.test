@@ -86,8 +86,8 @@ run ()
     fi
 }
 
-DATA="sample_2000 example_2000 r14/Leader_r14 2000/Leader_2000 2004/Leader_2004"
-DATA="$DATA 2007/Leader_2007 2010/Arc 2013/Arc 2018/Arc"
+DATA="sample_2000 example_2000 example_2004 example_2007 example_2010"
+DATA="$DATA example_2013 example_2018"
 TODO="r11/ACEL10 2010/Leader_2010 2013/Leader_2013 2018/Leader_2018"
 
 for d in $DATA; do
