@@ -7,6 +7,7 @@
 #include <ctype.h>
 #endif
 
+#define ACTION decode
 #define IS_DECODER
 
 #define VALUE(value,type,dxf) \

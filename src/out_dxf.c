@@ -56,6 +56,7 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
  * MACROS
  */
 
+#define ACTION dxf
 #define IS_PRINT
 #define IS_DXF
 
@@ -434,6 +435,9 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
 #define END_STRING_STREAM
 #define START_HANDLE_STREAM
 
+static int
+dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
+
 //The strcmp is being optimized away at compile-time! https://godbolt.org/g/AqkhwL
 #define DWG_ENTITY(token) \
 static int \
@@ -454,6 +458,12 @@ dwg_dxf_##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
     RECORD(POLYLINE);\
   else if (strlen(#token) > 7 && !memcmp(#token, "VERTEX_", 7)) \
     RECORD(VERTEX);\
+  else if (dat->version >= R_2010 && !strcmp(#token, "TABLE")) { \
+    RECORD(ACAD_TABLE);\
+    return dwg_dxf_TABLECONTENT(dat, obj); \
+  } \
+  else if (obj->type >= 500 && obj->dxfname) \
+    fprintf(dat->fh, "  0\r\n%s\r\n", obj->dxfname); \
   else\
     RECORD(token);\
   _ent = obj->tio.entity;\
@@ -486,7 +496,9 @@ dwg_dxf_ ##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
   LOG_INFO("Object " #token ":\n")\
   _obj = obj->tio.object->tio.token;\
   if (!dwg_obj_is_control(obj)) { \
-    if (obj->type >= 500 && obj->dxfname) \
+    if (obj->fixedtype == DWG_TYPE_TABLE) \
+      ; \
+    else if (obj->type >= 500 && obj->dxfname)        \
       fprintf(dat->fh, "  0\r\n%s\r\n", obj->dxfname); \
     else if (obj->type == DWG_TYPE_PLACEHOLDER) \
       RECORD(ACDBPLACEHOLDER); \
@@ -798,7 +810,6 @@ dwg_dxf_variable_type(const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   //if (!is_entity)
   //  fprintf(dat->fh, "  0\r\n%s\r\n", dxfname);
 
-  #define action dxf
   #include "classes.inc"
 
   return DWG_ERR_UNHANDLEDCLASS;

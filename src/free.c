@@ -49,6 +49,7 @@ int dwg_obj_is_control(const Dwg_Object *obj);
  * MACROS
  */
 
+#define ACTION free
 #define IS_FREE
 
 #define FREE_IF(ptr) { if (ptr) free(ptr); ptr = NULL; }
@@ -332,7 +333,6 @@ dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
   is_entity = dwg_class_is_entity(klass);
 
   // global class dispatcher
-  #define action free
   #include "classes.inc"
 
   return DWG_ERR_UNHANDLEDCLASS;

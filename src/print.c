@@ -38,6 +38,7 @@ static unsigned int cur_ver = 0;
  * MACROS
  */
 
+#define ACTION print
 #define IS_PRINT
 
 #define FIELD(name,type,dxf) \
@@ -285,7 +286,6 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
   // almost always false
   is_entity = dwg_class_is_entity(klass);
 
-  #define action print
   #include "classes.inc"
 
   return DWG_ERR_UNHANDLEDCLASS;

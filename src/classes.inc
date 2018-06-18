@@ -21,8 +21,8 @@
  * Variable-typed classes and it's stability
  */
 
-#ifndef action
-# error action define missing (decode, encode, encode, ...)
+#ifndef ACTION
+# error ACTION define missing (decode, encode, dxf, ...)
 #endif
 
 #define WARN_UNHANDLED_CLASS \
@@ -36,171 +36,175 @@
                klass->wasazombie ? " was proxy" : "",\
                obj->index, obj->handle.value)
 
-#define _DWG_FUNC_N(action,name) dwg_ ## action ## _ ## name
-#define DWG_FUNC_N(action,name) _DWG_FUNC_N(action,name)
+//#define _DWG_FUNC_N(ACTION,name) dwg_ ## ACTION ## _ ## name
+//#define DWG_FUNC_N(ACTION,name) _DWG_FUNC_N(ACTION,name)
 
-#define STABLE_CLASS(action, name) \
+#define STABLE_CLASS(ACTION, name) \
   if (!strcmp(dxfname, #name)) \
     { \
-      if (!strcmp(#action, "decode")) \
+      if (!strcmp(#ACTION, "decode")) \
         obj->fixedtype = DWG_TYPE_##name; \
-      if (!strcmp(#action, "free")) \
+      if (!strcmp(#ACTION, "free")) \
         free(dxfname);; \
-      return DWG_FUNC_N(action,name)(dat, obj); \
+      return DWG_FUNC_N(ACTION,name)(dat, obj); \
     }
-#define STABLE_CLASS_DXF(action, name, _dxfname) \
+#define STABLE_CLASS_DXF(ACTION, name, _dxfname) \
   if (!strcmp(dxfname, #_dxfname)) \
     { \
-      if (!strcmp(#action, "decode")) \
+      if (!strcmp(#ACTION, "decode")) \
         obj->fixedtype = DWG_TYPE_##name; \
-      if (!strcmp(#action, "free")) \
+      if (!strcmp(#ACTION, "free")) \
         free(dxfname);; \
-      return DWG_FUNC_N(action,name)(dat, obj); \
+      return DWG_FUNC_N(ACTION,name)(dat, obj); \
     }
-#define STABLE_CLASS_CPP(action, name, _cppname) \
+#define STABLE_CLASS_CPP(ACTION, name, _cppname) \
   if (!strcmp(klass->cppname, #name)) \
     { \
-      if (!strcmp(#action, "decode")) \
+      if (!strcmp(#ACTION, "decode")) \
         obj->fixedtype = DWG_TYPE_##name; \
-      if (!strcmp(#action, "free")) \
+      if (!strcmp(#ACTION, "free")) \
         free(dxfname);; \
-      return DWG_FUNC_N(action,name)(dat, obj); \
+      return DWG_FUNC_N(ACTION,name)(dat, obj); \
     }
-#define UNTESTED_CLASS(action, name) \
+#define UNTESTED_CLASS(ACTION, name) \
   if (!strcmp(dxfname, #name)) \
     { \
       WARN_UNTESTED_CLASS; \
-      if (!strcmp(#action, "decode")) \
+      if (!strcmp(#ACTION, "decode")) \
         obj->fixedtype = DWG_TYPE_##name; \
-      if (!strcmp(#action, "free")) \
+      if (!strcmp(#ACTION, "free")) \
         free(dxfname);; \
-      return DWG_FUNC_N(action,name)(dat, obj); \
+      return DWG_FUNC_N(ACTION,name)(dat, obj); \
     }
-#define UNTESTED_CLASS_CPP(action, name, _cppname) \
+#define UNTESTED_CLASS_CPP(ACTION, name, _cppname) \
   if (!strcmp(klass->cppname, #_cppname)) \
     { \
       WARN_UNTESTED_CLASS; \
-      if (!strcmp(#action, "decode")) \
+      if (!strcmp(#ACTION, "decode")) \
         obj->fixedtype = DWG_TYPE_##name; \
-      if (!strcmp(#action, "free")) \
+      if (!strcmp(#ACTION, "free")) \
         free(dxfname);; \
-      return DWG_FUNC_N(action,name)(dat, obj); \
+      return DWG_FUNC_N(ACTION,name)(dat, obj); \
     }
-#define UNHANDLED_CLASS(action, name) \
+#define UNHANDLED_CLASS(ACTION, name) \
   if (!strcmp(dxfname, #name)) \
     { \
       WARN_UNHANDLED_CLASS; \
-      if (!strcmp(#action, "decode")) \
+      if (!strcmp(#ACTION, "decode")) \
         obj->fixedtype = DWG_TYPE_##name; \
-      if (!strcmp(#action, "free")) \
+      if (!strcmp(#ACTION, "free")) \
         free(dxfname);; \
-      /* return dwg_##action_##name(dat, obj); */ \
+      /* return dwg_##ACTION_##name(dat, obj); */ \
       return DWG_ERR_UNHANDLEDCLASS; \
     }
-#define UNHANDLED_CLASS_DXF(action, name, _dxfname) \
+#define UNHANDLED_CLASS_DXF(ACTION, name, _dxfname) \
   if (!strcmp(dxfname, #_dxfname)) \
     { \
       WARN_UNHANDLED_CLASS; \
-      if (!strcmp(#action, "decode") || !memcmp(#action, "in", 2)) \
+      if (!strcmp(#ACTION, "decode") || !memcmp(#ACTION, "in", 2)) \
         obj->fixedtype = DWG_TYPE_##name; \
-      if (!strcmp(#action, "free")) \
+      if (!strcmp(#ACTION, "free")) \
         free(dxfname);; \
-      /* return dwg_##action_##name(dat, obj); */ \
+      /* return dwg_##ACTION_##name(dat, obj); */ \
       return DWG_ERR_UNHANDLEDCLASS; \
     }
 
 #ifdef DEBUG_CLASSES
-#define DEBUGGING_CLASS(action, name) UNTESTED_CLASS(action, name)
+#define DEBUGGING_CLASS(ACTION, name) UNTESTED_CLASS(ACTION, name)
 #else
-#define DEBUGGING_CLASS(action, name) UNHANDLED_CLASS(action, name)
+#define DEBUGGING_CLASS(ACTION, name) UNHANDLED_CLASS(ACTION, name)
 #endif
 
   /* Entities */
-  STABLE_CLASS    (action, IMAGE)     /*ent*/
-  STABLE_CLASS    (action, OLE2FRAME) /*ent (also fixed) */
-  STABLE_CLASS    (action, WIPEOUT)   /*ent*/
-  STABLE_CLASS_DXF(action, TABLE, ACAD_TABLE) /*ent*/
+  STABLE_CLASS    (ACTION, IMAGE)     /*ent*/
+  STABLE_CLASS    (ACTION, OLE2FRAME) /*ent (also fixed) */
+  STABLE_CLASS    (ACTION, WIPEOUT)   /*ent*/
+  STABLE_CLASS_DXF(ACTION, TABLE, ACAD_TABLE) /*ent*/
   /* Objects */
-  STABLE_CLASS    (action, DICTIONARYVAR)
-  STABLE_CLASS_DXF(action, DICTIONARYWDFLT, ACDBDICTIONARYWDFLT)
-  STABLE_CLASS    (action, FIELD)
-  STABLE_CLASS    (action, FIELDLIST)
-  STABLE_CLASS    (action, GROUP)
-  STABLE_CLASS    (action, HATCH)
-  STABLE_CLASS    (action, IDBUFFER)
-  STABLE_CLASS    (action, IMAGEDEF)
-  STABLE_CLASS    (action, IMAGEDEF_REACTOR)
-  STABLE_CLASS    (action, LAYER_INDEX)
-  STABLE_CLASS    (action, LAYOUT)
-  STABLE_CLASS    (action, LWPOLYLINE)
-  STABLE_CLASS    (action, MLEADERSTYLE)
-  STABLE_CLASS    (action, OBJECTCONTEXTDATA)
-  STABLE_CLASS_CPP(action, OBJECTCONTEXTDATA, AcDbObjectContextData)
-  STABLE_CLASS_DXF(action, PLACEHOLDER, ACDBPLACEHOLDER)
-  //STABLE_CLASS_DXF(action, PROXY_OBJECT, PROXY)
-  STABLE_CLASS    (action, RASTERVARIABLES)
-  STABLE_CLASS    (action, SCALE)
-  STABLE_CLASS    (action, SORTENTSTABLE)
-  STABLE_CLASS    (action, SPATIAL_FILTER)
-  STABLE_CLASS    (action, SPATIAL_INDEX)
-  STABLE_CLASS    (action, VISUALSTYLE)
-  STABLE_CLASS    (action, XRECORD)
+  STABLE_CLASS    (ACTION, DICTIONARYVAR)
+  STABLE_CLASS_DXF(ACTION, DICTIONARYWDFLT, ACDBDICTIONARYWDFLT)
+  STABLE_CLASS    (ACTION, FIELD)
+  STABLE_CLASS    (ACTION, FIELDLIST)
+  STABLE_CLASS    (ACTION, GROUP)
+  STABLE_CLASS    (ACTION, HATCH)
+  STABLE_CLASS    (ACTION, IDBUFFER)
+  STABLE_CLASS    (ACTION, IMAGEDEF)
+  STABLE_CLASS    (ACTION, IMAGEDEF_REACTOR)
+  STABLE_CLASS    (ACTION, LAYER_INDEX)
+  STABLE_CLASS    (ACTION, LAYOUT)
+  STABLE_CLASS    (ACTION, LWPOLYLINE)
+  STABLE_CLASS    (ACTION, MLEADERSTYLE)
+  STABLE_CLASS    (ACTION, OBJECTCONTEXTDATA)
+  STABLE_CLASS_CPP(ACTION, OBJECTCONTEXTDATA, AcDbObjectContextData)
+  STABLE_CLASS_DXF(ACTION, PLACEHOLDER, ACDBPLACEHOLDER)
+  //STABLE_CLASS_DXF(ACTION, PROXY_OBJECT, PROXY)
+  STABLE_CLASS    (ACTION, RASTERVARIABLES)
+  STABLE_CLASS    (ACTION, SCALE)
+  STABLE_CLASS    (ACTION, SORTENTSTABLE)
+  STABLE_CLASS    (ACTION, SPATIAL_FILTER)
+  STABLE_CLASS    (ACTION, SPATIAL_INDEX)
+  STABLE_CLASS    (ACTION, VISUALSTYLE)
+  STABLE_CLASS    (ACTION, XRECORD)
 
   // not enough coverage, but assumed ok
-  UNTESTED_CLASS    (action, CAMERA) /* ent, not persistent in a DWG */
-  UNTESTED_CLASS    (action, GEODATA)
-  UNTESTED_CLASS    (action, OBJECT_PTR)
-  UNTESTED_CLASS_CPP(action, OBJECT_PTR, CAseDLPNTableRecord)
-  UNTESTED_CLASS    (action, WIPEOUTVARIABLES)
+  UNTESTED_CLASS    (ACTION, CAMERA) /* ent, not persistent in a DWG */
+  UNTESTED_CLASS    (ACTION, GEODATA)
+  UNTESTED_CLASS    (ACTION, OBJECT_PTR)
+  UNTESTED_CLASS_CPP(ACTION, OBJECT_PTR, CAseDLPNTableRecord)
+  UNTESTED_CLASS    (ACTION, WIPEOUTVARIABLES)
 
   // coverage exists, but broken and being worked on. needs -DDEBUG_CLASSES. see also
   // the unknown branch with all the unknown blobs of these.
   //PROXY_ENTITY has a fixed type
-  DEBUGGING_CLASS  (action, GEOPOSITIONMARKER) /*ent, yet unsorted */
-  DEBUGGING_CLASS  (action, HELIX)             /*ent, yet unsorted */
-  DEBUGGING_CLASS  (action, LIGHT)             /*ent, yet unsorted */
-  DEBUGGING_CLASS  (action, MULTILEADER)       /*ent, broken Leader_Line's/Points */
-  DEBUGGING_CLASS  (action, SURFACE)           /*ent, yet unsorted */
-  DEBUGGING_CLASS  (action, UNDERLAY)          /*ent DGN DWF PDF */
-  DEBUGGING_CLASS  (action, TABLE)             /*ent, pre-2010 pretty ok mostly */
+  DEBUGGING_CLASS  (ACTION, GEOPOSITIONMARKER) /*ent, yet unsorted */
+  DEBUGGING_CLASS  (ACTION, HELIX)             /*ent, yet unsorted */
+  DEBUGGING_CLASS  (ACTION, LIGHT)             /*ent, yet unsorted */
+  DEBUGGING_CLASS  (ACTION, MULTILEADER)       /*ent, broken Leader_Line's/Points */
+  DEBUGGING_CLASS  (ACTION, SURFACE)           /*ent, yet unsorted */
+  DEBUGGING_CLASS  (ACTION, UNDERLAY)          /*ent DGN DWF PDF */
+  PRE (R_2010) {
+    STABLE_CLASS  (ACTION, TABLE)              /*ent, pre-2010 ok */
+  } LATER_VERSIONS {
+    DEBUGGING_CLASS  (ACTION, TABLE)           /*ent, r2010+ needs subclassing */
+  }
 
-  DEBUGGING_CLASS  (action, TABLECONTENT) //wrong values
-  DEBUGGING_CLASS  (action, TABLEGEOMETRY) //wrong geom_data
-  DEBUGGING_CLASS  (action, CELLSTYLEMAP) //broken
-  DEBUGGING_CLASS  (action, MATERIAL)     //working on
-  DEBUGGING_CLASS  (action, PLOTSETTINGS) //yet unsorted
-  DEBUGGING_CLASS  (action, SUN)          //i.e. 2000/1.dwg
-  DEBUGGING_CLASS  (action, VBA_PROJECT)  //Has its own section?
+  DEBUGGING_CLASS  (ACTION, TABLECONTENT) //wrong values
+  DEBUGGING_CLASS  (ACTION, TABLEGEOMETRY) //wrong geom_data
+  DEBUGGING_CLASS  (ACTION, CELLSTYLEMAP) //broken
+  DEBUGGING_CLASS  (ACTION, MATERIAL)     //working on
+  DEBUGGING_CLASS  (ACTION, PLOTSETTINGS) //yet unsorted
+  DEBUGGING_CLASS  (ACTION, SUN)          //i.e. 2000/1.dwg
+  DEBUGGING_CLASS  (ACTION, VBA_PROJECT)  //Has its own section?
 
   // no coverage, unimplemented, passed through
-  UNHANDLED_CLASS    (action, ACAD_EVALUATION_GRAPH)
-  UNHANDLED_CLASS    (action, ACSH_HISTORY_CLASS)
-  UNHANDLED_CLASS    (action, ACSH_SWEEP_CLASS)
-  UNHANDLED_CLASS    (action, ARCALIGNEDTEXT)
-  UNHANDLED_CLASS    (action, ARC_DIMENSION) //ent
-  UNHANDLED_CLASS_DXF(action, ASSOC2DCONSTRAINTGROUP, ACDBASSOC2DCONSTRAINTGROUP)
-  UNHANDLED_CLASS_DXF(action, ASSOCALIGNEDDIMACTIONBODY, ACDBASSOCALIGNEDDIMACTIONBODY)
-  UNHANDLED_CLASS_DXF(action, ASSOCACTION, ACDBASSOCACTION)
-  UNHANDLED_CLASS_DXF(action, ASSOCDEPENDENCY, ACDBASSOCDEPENDENCY)
-  UNHANDLED_CLASS_DXF(action, ASSOCGEOMDEPENDENCY, ACDBASSOCGEOMDEPENDENCY)
-  UNHANDLED_CLASS_DXF(action, ASSOCNETWORK, ACDBASSOCNETWORK)
-  UNHANDLED_CLASS_DXF(action, ASSOCOSNAPPOINTREFACTIONPARAM, ACDBASSOCOSNAPPOINTREFACTIONPARAM)
-  UNHANDLED_CLASS_DXF(action, ASSOCVERTEXACTIONPARAM, ACDBASSOCVERTEXACTIONPARAM)
-  UNHANDLED_CLASS_DXF(action, ASSOCPERSSUBENTMANAGER, ACDBASSOCPERSSUBENTMANAGER)
-  UNHANDLED_CLASS_DXF(action, PERSSUBENTMANAGER, ACDBPERSSUBENTMANAGER)
-  UNHANDLED_CLASS    (action, CSACDOCUMENTOPTIONS) //or just DOCUMENTOPTIONS?
-  UNHANDLED_CLASS    (action, DATATABLE)
-  UNHANDLED_CLASS    (action, DBCOLOR)
-  UNHANDLED_CLASS_DXF(action, DETAILVIEWSTYLE, ACDBDETAILVIEWSTYLE)
-  UNHANDLED_CLASS    (action, DIMASSOC)
-  UNHANDLED_CLASS    (action, GEODATA)
-  UNHANDLED_CLASS    (action, LAYOUTPRINTCONFIG)
-  UNHANDLED_CLASS_DXF(action, LEADEROBJECTCONTEXTDATA, ACDB_LEADEROBJECTCONTEXTDATA_CLASS)
-  UNHANDLED_CLASS    (action, LIGHTLIST)
-  UNHANDLED_CLASS    (action, NPOCOLLECTION)
-  UNHANDLED_CLASS_DXF(action, POINTCLOUD, ACDBPOINTCLOUD)
-  UNHANDLED_CLASS    (action, RTEXT)
-  UNHANDLED_CLASS_DXF(action, SECTIONVIEWSTYLE, ACDBSECTIONVIEWSTYLE)
-  UNHANDLED_CLASS    (action, TABLESTYLE)
-  UNHANDLED_CLASS    (action, UNDERLAYDEFINITION)
-  UNHANDLED_CLASS_DXF(action, XREFPANELOBJECT, EXACXREFPANELOBJECT)
+  UNHANDLED_CLASS    (ACTION, ACAD_EVALUATION_GRAPH)
+  UNHANDLED_CLASS    (ACTION, ACSH_HISTORY_CLASS)
+  UNHANDLED_CLASS    (ACTION, ACSH_SWEEP_CLASS)
+  UNHANDLED_CLASS    (ACTION, ARCALIGNEDTEXT)
+  UNHANDLED_CLASS    (ACTION, ARC_DIMENSION) //ent
+  UNHANDLED_CLASS_DXF(ACTION, ASSOC2DCONSTRAINTGROUP, ACDBASSOC2DCONSTRAINTGROUP)
+  UNHANDLED_CLASS_DXF(ACTION, ASSOCALIGNEDDIMACTIONBODY, ACDBASSOCALIGNEDDIMACTIONBODY)
+  UNHANDLED_CLASS_DXF(ACTION, ASSOCACTION, ACDBASSOCACTION)
+  UNHANDLED_CLASS_DXF(ACTION, ASSOCDEPENDENCY, ACDBASSOCDEPENDENCY)
+  UNHANDLED_CLASS_DXF(ACTION, ASSOCGEOMDEPENDENCY, ACDBASSOCGEOMDEPENDENCY)
+  UNHANDLED_CLASS_DXF(ACTION, ASSOCNETWORK, ACDBASSOCNETWORK)
+  UNHANDLED_CLASS_DXF(ACTION, ASSOCOSNAPPOINTREFACTIONPARAM, ACDBASSOCOSNAPPOINTREFACTIONPARAM)
+  UNHANDLED_CLASS_DXF(ACTION, ASSOCVERTEXACTIONPARAM, ACDBASSOCVERTEXACTIONPARAM)
+  UNHANDLED_CLASS_DXF(ACTION, ASSOCPERSSUBENTMANAGER, ACDBASSOCPERSSUBENTMANAGER)
+  UNHANDLED_CLASS_DXF(ACTION, PERSSUBENTMANAGER, ACDBPERSSUBENTMANAGER)
+  UNHANDLED_CLASS    (ACTION, CSACDOCUMENTOPTIONS) //or just DOCUMENTOPTIONS?
+  UNHANDLED_CLASS    (ACTION, DATATABLE)
+  UNHANDLED_CLASS    (ACTION, DBCOLOR)
+  UNHANDLED_CLASS_DXF(ACTION, DETAILVIEWSTYLE, ACDBDETAILVIEWSTYLE)
+  UNHANDLED_CLASS    (ACTION, DIMASSOC)
+  UNHANDLED_CLASS    (ACTION, GEODATA)
+  UNHANDLED_CLASS    (ACTION, LAYOUTPRINTCONFIG)
+  UNHANDLED_CLASS_DXF(ACTION, LEADEROBJECTCONTEXTDATA, ACDB_LEADEROBJECTCONTEXTDATA_CLASS)
+  UNHANDLED_CLASS    (ACTION, LIGHTLIST)
+  UNHANDLED_CLASS    (ACTION, NPOCOLLECTION)
+  UNHANDLED_CLASS_DXF(ACTION, POINTCLOUD, ACDBPOINTCLOUD)
+  UNHANDLED_CLASS    (ACTION, RTEXT)
+  UNHANDLED_CLASS_DXF(ACTION, SECTIONVIEWSTYLE, ACDBSECTIONVIEWSTYLE)
+  UNHANDLED_CLASS    (ACTION, TABLESTYLE)
+  UNHANDLED_CLASS    (ACTION, UNDERLAYDEFINITION)
+  UNHANDLED_CLASS_DXF(ACTION, XREFPANELOBJECT, EXACXREFPANELOBJECT)

@@ -28,6 +28,12 @@
 #define IF_IS_DECODER 0
 #define IF_IS_DXF 0
 
+#ifndef ACTION
+# error ACTION define missing: decode, encode, dxf, ...
+#endif
+#define _DWG_FUNC_N(ACTION,name) dwg_ ## ACTION ## _ ## name
+#define DWG_FUNC_N(ACTION,name) _DWG_FUNC_N(ACTION,name)
+
 #define SET_PARENT(field, obj)
 #define SET_PARENT_OBJ(field)
 #define SET_PARENT_FIELD(field, what_parent, obj)

@@ -212,6 +212,7 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
  * MACROS
  */
 
+#define ACTION indxf
 #define IS_ENCODE
 #define IS_DXF
 
@@ -686,7 +687,6 @@ dwg_indxf_variable_type(Dwg_Data * dwg, Bit_Chain *dat, Dwg_Object* obj)
   // almost always false
   is_entity = dwg_class_is_entity(klass);
 
-  #define action indxf
   #include "classes.inc"
 
   return DWG_ERR_UNHANDLEDCLASS;

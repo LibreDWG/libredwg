@@ -4152,11 +4152,256 @@ DWG_OBJECT(SPATIAL_INDEX)
 
 DWG_OBJECT_END
 
+// 20.4.101.3 Content format for TABLECONTENT and Cell_Style_Field
+#define Content_Format(fmt) \
+      FIELD_BL (fmt.property_override_flags, 90); \
+      FIELD_BL (fmt.property_flags, 91); \
+      FIELD_BL (fmt.value_data_type, 92); \
+      FIELD_BL (fmt.value_unit_type, 93); \
+      FIELD_T (fmt.value_format_string, 300); \
+      FIELD_BD (fmt.rotation, 40); \
+      FIELD_BD (fmt.block_scale, 140); \
+      FIELD_BL (fmt.cell_align, 94); \
+      FIELD_CMC (fmt.content_color, 62); \
+      FIELD_HANDLE (fmt.text_style, 3, 92); \
+      FIELD_BD (fmt.text_height, 92)
+
+// Cell style 20.4.101.4 for TABLE, TABLECONTENT and CELLSTYLEMAP
+#define Cell_Style_Fields(sty) \
+      FIELD_BL (sty.type, 90); \
+      FIELD_BS (sty.data_flags, 170); \
+      FIELD_BL (sty.property_override_flags, 91); \
+      FIELD_BL (sty.merge_flags, 92); \
+      FIELD_CMC (sty.background_color, 62); \
+      FIELD_BL (sty.content_layout, 93); \
+      Content_Format(sty.content_format); \
+      FIELD_BS (sty.margin_override_flags, 171); \
+      FIELD_BD (sty.vert_margin, 40); \
+      FIELD_BD (sty.horiz_margin, 40); \
+      FIELD_BD (sty.bottom_margin, 40); \
+      FIELD_BD (sty.right_margin, 40); \
+      FIELD_BD (sty.margin_horiz_spacing, 40); \
+      FIELD_BD (sty.margin_vert_spacing, 40); \
+      FIELD_BL (sty.num_borders, 94); /* 0-6 */ \
+      REPEAT2(sty.num_borders, sty.border, Dwg_BorderStyle) \
+        { \
+          FIELD_BL (sty.border[rcount2].edge_flags, 95); \
+          FIELD_BL (sty.border[rcount2].border_property_overrides_flag, 90); \
+          FIELD_BL (sty.border[rcount2].border_type, 91); \
+          FIELD_CMC (sty.border[rcount2].color, 62); \
+          FIELD_BL (sty.border[rcount2].linewt, 92); \
+          FIELD_HANDLE (sty.border[rcount2].line_type, 3, 340); \
+          FIELD_BL (sty.border[rcount2].invisible, 93); \
+          FIELD_BD (sty.border[rcount2].double_line_spacing, 93); \
+        } \
+      END_REPEAT (sty.border)
+
+//pg.237 20.4.97
+DWG_OBJECT(TABLECONTENT)
+
+  //SUBCLASS (AcDbDataTableContent)
+  FIELD_T (ldata.name, 1);
+  FIELD_T (ldata.desc, 300);
+
+  FIELD_BL (tdata.num_cols, 90);
+  REPEAT(tdata.num_cols, tdata.cols, Dwg_TableDataColumn)
+    {
+      FIELD_T (tdata.cols[rcount1].name, 300);
+      FIELD_BL (tdata.cols[rcount1].custom_data, 91);
+      Cell_Style_Fields(tdata.cols[rcount1].cell_style);
+    }
+  SET_PARENT(tdata.cols, &_obj->tdata)
+  END_REPEAT(tdata.cols);
+  FIELD_BL (tdata.num_rows, 90);
+  REPEAT(tdata.num_rows, tdata.rows, Dwg_TableRow)
+    {
+      #define row tdata.rows[rcount1]
+      FIELD_BL (row.num_cells, 90);
+      REPEAT2(row.num_cells, row.cells, Dwg_TableCell)
+        {
+          #define cell row.cells[rcount2]
+          FIELD_BL (cell.flag, 90);
+          FIELD_T (cell.tooltip, 300);
+          FIELD_BL (cell.customdata, 91);
+          FIELD_BL (cell.num_customdata_items, 90);
+          REPEAT3(cell.num_customdata_items, cell.customdata_items, Dwg_TABLE_CustomDataItem)
+            {
+              FIELD_T (cell.customdata_items[rcount3].name, 300);
+              Table_Value(cell.customdata_items[rcount3].value);
+            }
+          SET_PARENT_FIELD(cell.customdata_items, cell_parent, &_obj->cell)
+          END_REPEAT(cell.customdata_items);
+          FIELD_BL (cell.has_linked_data, 92);
+          if (FIELD_VALUE(cell.has_linked_data))
+            {
+              FIELD_HANDLE (cell.data_link, 5, 340);
+              FIELD_BL (cell.num_rows, 93);
+              FIELD_BL (cell.num_cols, 94);
+              FIELD_BL (cell.unknown, 96);
+            }
+          FIELD_BL (cell.num_cell_contents, 95);
+          REPEAT3(cell.num_cell_contents, cell.cell_contents, Dwg_TableCellContent)
+            {
+              #define content tdata.rows[rcount1].cells[rcount2].cell_contents[rcount3]
+
+              FIELD_BL(content.type, 90);
+              if (FIELD_VALUE(content.type) == 1)
+                {
+                  // 20.4.99 Value, page 241
+                  Table_Value(content.value)
+                }
+              else if (FIELD_VALUE(content.type) == 2) { // Field
+                FIELD_HANDLE (content.handle, 3, 340);
+              }
+              else if (FIELD_VALUE(content.type) == 4) { // Block
+                FIELD_HANDLE (content.handle, 3, 340);
+              }
+              FIELD_BL (content.num_attrs, 91);
+              REPEAT4(content.num_attrs, content.attrs, Dwg_TableCellContent_Attr)
+                {
+                  #define attr content.attrs[rcount4]
+                  FIELD_HANDLE (attr.attdef, 5, 330);
+                  FIELD_T (attr.value, 301);
+                  FIELD_BL (attr.index, 92);
+                  #undef attr
+                }
+              SET_PARENT(content.attrs, &_obj->content)
+              END_REPEAT(content.attrs);
+              if (FIELD_VALUE(content.has_content_format_overrides))
+                {
+                  Content_Format(content.content_format);
+                }
+              #undef content
+            }
+          SET_PARENT(cell.cell_contents, &_obj->cell)
+          END_REPEAT(cell.cell_contents);
+          FIELD_BL (cell.style_id, 90);
+          FIELD_BL (cell.has_geom_data, 91);
+          if (FIELD_VALUE(cell.has_geom_data))
+            {
+              FIELD_BL (cell.geom_data_flag, 91);
+              FIELD_BD (cell.unknown_d40, 40);
+              FIELD_BD (cell.unknown_d41, 41);
+              FIELD_BL (cell.has_cell_geom, 0);
+              FIELD_HANDLE (cell.cell_geom_handle, ANYCODE, 0);
+              if (FIELD_VALUE(cell.has_cell_geom))
+                {
+                  REPEAT_N(1, cell.geom_data, Dwg_CellContentGeometry)
+                    {
+#define geom cell.geom_data[0]
+                      FIELD_3BD (geom.dist_top_left, 0); 
+                      FIELD_3BD (geom.dist_center, 0); 
+                      FIELD_BD (geom.content_width, 0); 
+                      FIELD_BD (geom.width, 0); 
+                      FIELD_BD (geom.height, 0); 
+                      FIELD_BD (geom.unknown, 0);
+#undef geom
+                    }
+                  SET_PARENT_FIELD(cell.geom_data, cell_parent, &_obj->cell)
+                  END_REPEAT (cell.geom_data);
+                }
+            }
+          #undef cell
+        }
+      SET_PARENT_FIELD(row.cells, row_parent, &_obj->row)
+      END_REPEAT(row.cells);
+      FIELD_BL (row.custom_data, 91);
+      FIELD_BL (row.num_customdata_items, 90);
+      REPEAT3(row.num_customdata_items, row.customdata_items, Dwg_TABLE_CustomDataItem)
+        {
+          FIELD_T (row.customdata_items[rcount3].name, 300);
+          Table_Value(row.customdata_items[rcount3].value);
+        }
+      SET_PARENT_FIELD(row.customdata_items, row_parent, &_obj->row)
+      END_REPEAT(row.customdata_items);
+      {
+        Cell_Style_Fields(row.cell_style);
+        FIELD_BL (row.style_id, 90);
+        FIELD_BL (row.height, 40);
+      }
+      #undef row
+    }
+  SET_PARENT(tdata.rows, &_obj->tdata)
+  END_REPEAT(tdata.rows);
+  FIELD_BL (tdata.num_field_refs, 0);
+  HANDLE_VECTOR (tdata.field_refs, tdata.num_field_refs, 3, 0);
+
+  FIELD_BL (fdata.num_merged_cells, 90);
+  REPEAT(fdata.num_merged_cells, fdata.merged_cells, Dwg_FormattedTableMerged)
+    {
+      #define merged fdata.merged_cells[rcount1]
+      FIELD_BL (merged.top_row, 91);
+      FIELD_BL (merged.left_col, 92);
+      FIELD_BL (merged.bottom_row, 93);
+      FIELD_BL (merged.right_col, 94);
+      #undef merged
+    }
+  SET_PARENT(fdata.merged_cells, &_obj->fdata)
+  END_REPEAT(fdata.merged_cells);
+
+  START_HANDLE_STREAM;
+  FIELD_HANDLE (table_style, 3, 340);
+  
+DWG_OBJECT_END
+
+// pg.246 20.4.102
+// added with r2008, backcompat with r2007
+// unused
+DWG_OBJECT(CELLSTYLEMAP)
+
+  //SUBCLASS (AcDbCellStyleMap)
+  FIELD_BL (num_cells, 90);
+  REPEAT(num_cells, cells, Dwg_CELLSTYLEMAP_Cell)
+    {
+      Cell_Style_Fields(cells[rcount1].style);
+      FIELD_BL (cells[rcount1].id, 90);
+      FIELD_BL (cells[rcount1].type, 91);
+      FIELD_T (cells[rcount1].name, 300);
+    }
+  SET_PARENT_OBJ(cells)
+  END_REPEAT (cells);
+
+DWG_OBJECT_END
+  
+//pg.246 20.4.103
+DWG_OBJECT(TABLEGEOMETRY)
+
+  //SUBCLASS (AcDbTableGeometry)
+  FIELD_BL (num_rows, 90);
+  FIELD_BL (num_cols, 91);
+  FIELD_BL (num_cells, 92);
+  REPEAT(num_cells, cells, Dwg_TABLEGEOMETRY_Cell)
+    {
+      #define cell cells[rcount1]
+      FIELD_BL (cell.flag, 93);
+      FIELD_BD (cell.width_w_gap, 40);
+      FIELD_BD (cell.height_w_gap, 41);
+      FIELD_HANDLE (cell.unknown, 3, 330);
+      FIELD_BL (cell.num_geom_data, 94);
+      REPEAT2(cell.num_geom_data, cell.geom_data, Dwg_CellContentGeometry)
+        {
+          #define geom cell.geom_data[rcount2]
+          FIELD_3BD (geom.dist_top_left, 0); 
+          FIELD_3BD (geom.dist_center, 0); 
+          FIELD_BD (geom.content_width, 0); 
+          FIELD_BD (geom.width, 0); 
+          FIELD_BD (geom.height, 0); 
+          FIELD_BD (geom.unknown, 0);
+          #undef geom
+        }
+      SET_PARENT_FIELD(cell.geom_data, geom_parent, &_obj->cell)
+      END_REPEAT(cell.geom_data);
+    }
+  SET_PARENT_OBJ(cells)
+  END_REPEAT(cells);
+
+DWG_OBJECT_END
+
 //pg.229 20.4.96, as ACAD_TABLE
-//this is the pre-2010 variant, deriving from INSERT
+//this works for the pre-2010 variant, deriving from INSERT
 DWG_ENTITY(TABLE)
 
-  SINCE(R_2010)
+  SINCE(R_2010) //AC1024
     {
       FIELD_RC (unknown_rc, 0);
       FIELD_HANDLE (unknown_h, 5, 0);
@@ -4167,7 +4412,9 @@ DWG_ENTITY(TABLE)
         FIELD_BL (unknown_bl1, 0);
 
       //continue as 20.4.96.2 AcDbTableContent subclass: 20.4.97
-      //return dwg_ ##action _TABLECONTENT_fields(dat,obj);
+#ifdef DEBUG_CLASSES      
+      return DWG_FUNC_N(ACTION,TABLECONTENT) (dat, obj);
+#endif
     }
 
   SUBCLASS (AcDbBlockReference)
@@ -4604,251 +4851,6 @@ DWG_ENTITY(TABLE)
   COMMON_ENTITY_HANDLE_DATA;
 
 DWG_ENTITY_END
-
-// 20.4.101.3 Content format for TABLECONTENT and Cell_Style_Field
-#define Content_Format(fmt) \
-      FIELD_BL (fmt.property_override_flags, 90); \
-      FIELD_BL (fmt.property_flags, 91); \
-      FIELD_BL (fmt.value_data_type, 92); \
-      FIELD_BL (fmt.value_unit_type, 93); \
-      FIELD_T (fmt.value_format_string, 300); \
-      FIELD_BD (fmt.rotation, 40); \
-      FIELD_BD (fmt.block_scale, 140); \
-      FIELD_BL (fmt.cell_align, 94); \
-      FIELD_CMC (fmt.content_color, 62); \
-      FIELD_HANDLE (fmt.text_style, 3, 92); \
-      FIELD_BD (fmt.text_height, 92)
-
-// Cell style 20.4.101.4 for TABLE, TABLECONTENT and CELLSTYLEMAP
-#define Cell_Style_Fields(sty) \
-      FIELD_BL (sty.type, 90); \
-      FIELD_BS (sty.data_flags, 170); \
-      FIELD_BL (sty.property_override_flags, 91); \
-      FIELD_BL (sty.merge_flags, 92); \
-      FIELD_CMC (sty.background_color, 62); \
-      FIELD_BL (sty.content_layout, 93); \
-      Content_Format(sty.content_format); \
-      FIELD_BS (sty.margin_override_flags, 171); \
-      FIELD_BD (sty.vert_margin, 40); \
-      FIELD_BD (sty.horiz_margin, 40); \
-      FIELD_BD (sty.bottom_margin, 40); \
-      FIELD_BD (sty.right_margin, 40); \
-      FIELD_BD (sty.margin_horiz_spacing, 40); \
-      FIELD_BD (sty.margin_vert_spacing, 40); \
-      FIELD_BL (sty.num_borders, 94); /* 0-6 */ \
-      REPEAT2(sty.num_borders, sty.border, Dwg_BorderStyle) \
-        { \
-          FIELD_BL (sty.border[rcount2].edge_flags, 95); \
-          FIELD_BL (sty.border[rcount2].border_property_overrides_flag, 90); \
-          FIELD_BL (sty.border[rcount2].border_type, 91); \
-          FIELD_CMC (sty.border[rcount2].color, 62); \
-          FIELD_BL (sty.border[rcount2].linewt, 92); \
-          FIELD_HANDLE (sty.border[rcount2].line_type, 3, 340); \
-          FIELD_BL (sty.border[rcount2].invisible, 93); \
-          FIELD_BD (sty.border[rcount2].double_line_spacing, 93); \
-        } \
-      END_REPEAT (sty.border)
-
-//pg.237 20.4.97
-DWG_OBJECT(TABLECONTENT)
-
-  //SUBCLASS (AcDbDataTableContent)
-  FIELD_T (ldata.name, 1);
-  FIELD_T (ldata.desc, 300);
-
-  FIELD_BL (tdata.num_cols, 90);
-  REPEAT(tdata.num_cols, tdata.cols, Dwg_TableDataColumn)
-    {
-      FIELD_T (tdata.cols[rcount1].name, 300);
-      FIELD_BL (tdata.cols[rcount1].custom_data, 91);
-      Cell_Style_Fields(tdata.cols[rcount1].cell_style);
-    }
-  SET_PARENT(tdata.cols, &_obj->tdata)
-  END_REPEAT(tdata.cols);
-  FIELD_BL (tdata.num_rows, 90);
-  REPEAT(tdata.num_rows, tdata.rows, Dwg_TableRow)
-    {
-      #define row tdata.rows[rcount1]
-      FIELD_BL (row.num_cells, 90);
-      REPEAT2(row.num_cells, row.cells, Dwg_TableCell)
-        {
-          #define cell row.cells[rcount2]
-          FIELD_BL (cell.flag, 90);
-          FIELD_T (cell.tooltip, 300);
-          FIELD_BL (cell.customdata, 91);
-          FIELD_BL (cell.num_customdata_items, 90);
-          REPEAT3(cell.num_customdata_items, cell.customdata_items, Dwg_TABLE_CustomDataItem)
-            {
-              FIELD_T (cell.customdata_items[rcount3].name, 300);
-              Table_Value(cell.customdata_items[rcount3].value);
-            }
-          SET_PARENT_FIELD(cell.customdata_items, cell_parent, &_obj->cell)
-          END_REPEAT(cell.customdata_items);
-          FIELD_BL (cell.has_linked_data, 92);
-          if (FIELD_VALUE(cell.has_linked_data))
-            {
-              FIELD_HANDLE (cell.data_link, 5, 340);
-              FIELD_BL (cell.num_rows, 93);
-              FIELD_BL (cell.num_cols, 94);
-              FIELD_BL (cell.unknown, 96);
-            }
-          FIELD_BL (cell.num_cell_contents, 95);
-          REPEAT3(cell.num_cell_contents, cell.cell_contents, Dwg_TableCellContent)
-            {
-              #define content tdata.rows[rcount1].cells[rcount2].cell_contents[rcount3]
-
-              FIELD_BL(content.type, 90);
-              if (FIELD_VALUE(content.type) == 1)
-                {
-                  // 20.4.99 Value, page 241
-                  Table_Value(content.value)
-                }
-              else if (FIELD_VALUE(content.type) == 2) { // Field
-                FIELD_HANDLE (content.handle, 3, 340);
-              }
-              else if (FIELD_VALUE(content.type) == 4) { // Block
-                FIELD_HANDLE (content.handle, 3, 340);
-              }
-              FIELD_BL (content.num_attrs, 91);
-              REPEAT4(content.num_attrs, content.attrs, Dwg_TableCellContent_Attr)
-                {
-                  #define attr content.attrs[rcount4]
-                  FIELD_HANDLE (attr.attdef, 5, 330);
-                  FIELD_T (attr.value, 301);
-                  FIELD_BL (attr.index, 92);
-                  #undef attr
-                }
-              SET_PARENT(content.attrs, &_obj->content)
-              END_REPEAT(content.attrs);
-              if (FIELD_VALUE(content.has_content_format_overrides))
-                {
-                  Content_Format(content.content_format);
-                }
-              #undef content
-            }
-          SET_PARENT(cell.cell_contents, &_obj->cell)
-          END_REPEAT(cell.cell_contents);
-          FIELD_BL (cell.style_id, 90);
-          FIELD_BL (cell.has_geom_data, 91);
-          if (FIELD_VALUE(cell.has_geom_data))
-            {
-              FIELD_BL (cell.geom_data_flag, 91);
-              FIELD_BD (cell.unknown_d40, 40);
-              FIELD_BD (cell.unknown_d41, 41);
-              FIELD_BL (cell.has_cell_geom, 0);
-              FIELD_HANDLE (cell.cell_geom_handle, ANYCODE, 0);
-              if (FIELD_VALUE(cell.has_cell_geom))
-                {
-                  REPEAT_N(1, cell.geom_data, Dwg_CellContentGeometry)
-                    {
-#define geom cell.geom_data[0]
-                      FIELD_3BD (geom.dist_top_left, 0); 
-                      FIELD_3BD (geom.dist_center, 0); 
-                      FIELD_BD (geom.content_width, 0); 
-                      FIELD_BD (geom.width, 0); 
-                      FIELD_BD (geom.height, 0); 
-                      FIELD_BD (geom.unknown, 0);
-#undef geom
-                    }
-                  SET_PARENT_FIELD(cell.geom_data, cell_parent, &_obj->cell)
-                  END_REPEAT (cell.geom_data);
-                }
-            }
-          #undef cell
-        }
-      SET_PARENT_FIELD(row.cells, row_parent, &_obj->row)
-      END_REPEAT(row.cells);
-      FIELD_BL (row.custom_data, 91);
-      FIELD_BL (row.num_customdata_items, 90);
-      REPEAT3(row.num_customdata_items, row.customdata_items, Dwg_TABLE_CustomDataItem)
-        {
-          FIELD_T (row.customdata_items[rcount3].name, 300);
-          Table_Value(row.customdata_items[rcount3].value);
-        }
-      SET_PARENT_FIELD(row.customdata_items, row_parent, &_obj->row)
-      END_REPEAT(row.customdata_items);
-      {
-        Cell_Style_Fields(row.cell_style);
-        FIELD_BL (row.style_id, 90);
-        FIELD_BL (row.height, 40);
-      }
-      #undef row
-    }
-  SET_PARENT(tdata.rows, &_obj->tdata)
-  END_REPEAT(tdata.rows);
-  FIELD_BL (tdata.num_field_refs, 0);
-  HANDLE_VECTOR (tdata.field_refs, tdata.num_field_refs, 3, 0);
-
-  FIELD_BL (fdata.num_merged_cells, 90);
-  REPEAT(fdata.num_merged_cells, fdata.merged_cells, Dwg_FormattedTableMerged)
-    {
-      #define merged fdata.merged_cells[rcount1]
-      FIELD_BL (merged.top_row, 91);
-      FIELD_BL (merged.left_col, 92);
-      FIELD_BL (merged.bottom_row, 93);
-      FIELD_BL (merged.right_col, 94);
-      #undef merged
-    }
-  SET_PARENT(fdata.merged_cells, &_obj->fdata)
-  END_REPEAT(fdata.merged_cells);
-
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (table_style, 3, 340);
-  
-DWG_OBJECT_END
-
-// pg.246 20.4.102
-// added with r2008, backcompat with r2007
-// unused
-DWG_OBJECT(CELLSTYLEMAP)
-
-  //SUBCLASS (AcDbCellStyleMap)
-  FIELD_BL (num_cells, 90);
-  REPEAT(num_cells, cells, Dwg_CELLSTYLEMAP_Cell)
-    {
-      Cell_Style_Fields(cells[rcount1].style);
-      FIELD_BL (cells[rcount1].id, 90);
-      FIELD_BL (cells[rcount1].type, 91);
-      FIELD_T (cells[rcount1].name, 300);
-    }
-  SET_PARENT_OBJ(cells)
-  END_REPEAT (cells);
-
-DWG_OBJECT_END
-  
-//pg.246 20.4.103
-DWG_OBJECT(TABLEGEOMETRY)
-
-  //SUBCLASS (AcDbTableGeometry)
-  FIELD_BL (num_rows, 90);
-  FIELD_BL (num_cols, 91);
-  FIELD_BL (num_cells, 92);
-  REPEAT(num_cells, cells, Dwg_TABLEGEOMETRY_Cell)
-    {
-      #define cell cells[rcount1]
-      FIELD_BL (cell.flag, 93);
-      FIELD_BD (cell.width_w_gap, 40);
-      FIELD_BD (cell.height_w_gap, 41);
-      FIELD_HANDLE (cell.unknown, 3, 330);
-      FIELD_BL (cell.num_geom_data, 94);
-      REPEAT2(cell.num_geom_data, cell.geom_data, Dwg_CellContentGeometry)
-        {
-          #define geom cell.geom_data[rcount2]
-          FIELD_3BD (geom.dist_top_left, 0); 
-          FIELD_3BD (geom.dist_center, 0); 
-          FIELD_BD (geom.content_width, 0); 
-          FIELD_BD (geom.width, 0); 
-          FIELD_BD (geom.height, 0); 
-          FIELD_BD (geom.unknown, 0);
-          #undef geom
-        }
-      SET_PARENT_FIELD(cell.geom_data, geom_parent, &_obj->cell)
-      END_REPEAT(cell.geom_data);
-    }
-  SET_PARENT_OBJ(cells)
-  END_REPEAT(cells);
-
-DWG_OBJECT_END
 
 //(79 + varies) pg.247 20.4.104
 DWG_OBJECT(XRECORD)
@@ -5856,3 +5858,4 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
+

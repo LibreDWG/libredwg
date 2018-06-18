@@ -57,6 +57,7 @@ static bool env_var_checked_p;
  * spec MACROS
  */
 
+#define ACTION encode
 #define IS_ENCODER
 
 #define ANYCODE -1
@@ -1118,7 +1119,6 @@ dwg_encode_variable_type(Dwg_Data* dwg, Bit_Chain* dat, Dwg_Object* obj)
   // almost always false
   is_entity = dwg_class_is_entity(klass);
 
-  #define action encode
   #include "classes.inc"
 
   LOG_WARN("Unknown Class %s %d %s (0x%x%s)", is_entity ? "entity" : "object", \

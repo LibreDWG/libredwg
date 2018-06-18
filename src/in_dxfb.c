@@ -40,6 +40,7 @@ static char buf[4096];
  * MACROS
  */
 
+#define ACTION indxfb
 #define IS_PRINT
 
 // add the name/type/dxf combo to some structure for this element.
@@ -400,7 +401,6 @@ dwg_dxfb_variable_type(Dwg_Data * dwg, Bit_Chain *dat, Dwg_Object* obj)
   // almost always false
   is_entity = dwg_class_is_entity(klass);
   
-  #define action indxfb
   #include "classes.inc"
 
   return DWG_ERR_UNHANDLEDCLASS;

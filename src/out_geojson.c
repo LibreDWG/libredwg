@@ -71,6 +71,7 @@ static unsigned int cur_ver = 0;
  * MACROS
  */
 
+#define ACTION geojson
 #define IS_PRINT
 
 #define PREFIX   for (int _i=0; _i<dat->bit; _i++) { fprintf (dat->fh, "  "); }

@@ -3246,7 +3246,6 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
   is_entity = dwg_class_is_entity(klass);
 
   // global class dispatcher
-  #define action decode
   #include "classes.inc"
 
   // TODO: ACSH_BOX_CLASS, ACAD_EVALUATION_GRAPH, ACSH_HISTORY_CLASS

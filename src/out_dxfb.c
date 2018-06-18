@@ -43,6 +43,7 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
  * MACROS
  */
 
+#define ACTION dxfb
 #define IS_PRINT
 #define IS_DXF
 
@@ -412,6 +413,9 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
 #define END_STRING_STREAM
 #define START_HANDLE_STREAM
 
+static int
+dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
+
 #define DWG_ENTITY(token) \
 static int \
 dwg_dxfb_##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
@@ -431,6 +435,10 @@ dwg_dxfb_##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
     RECORD(POLYLINE)\
   else if (strlen(#token) > 7 && !memcmp(#token, "VERTEX_", 7)) \
     RECORD(VERTEX)\
+  else if (dat->version >= R_2010 && !strcmp(#token, "TABLE")) { \
+    RECORD(ACAD_TABLE);\
+    return dwg_dxfb_TABLECONTENT(dat, obj); \
+  } \
   else\
     RECORD(token);\
   LOG_INFO("Entity " #token ":\n")\
@@ -463,7 +471,9 @@ dwg_dxfb_ ##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
   LOG_INFO("Object " #token ":\n")\
   _obj = obj->tio.object->tio.token;\
   if (!dwg_obj_is_control(obj)) { \
-    if (obj->type >= 500 && obj->dxfname) \
+    if (obj->fixedtype == DWG_TYPE_TABLE) \
+      ; \
+    else if (obj->type >= 500 && obj->dxfname) \
       VALUE_TV(obj->dxfname, 0) \
     else if (obj->type == DWG_TYPE_PLACEHOLDER) \
       RECORD(ACDBPLACEHOLDER) \
@@ -638,7 +648,6 @@ dwg_dxfb_variable_type(const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   // almost always false
   is_entity = dwg_class_is_entity(klass);
 
-  #define action dxfb
   #include "classes.inc"
 
   return DWG_ERR_UNHANDLEDCLASS;
