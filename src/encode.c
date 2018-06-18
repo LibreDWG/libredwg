@@ -334,11 +334,12 @@ static bool env_var_checked_p;
   if (dat->version >= R_2007) bit_set_position(hdl_dat, obj->hdlpos); \
   RESET_VER
 
-/** Returns -1 if not added, else returns the new objid.
+#if 0
+/** See dec_macro.h instead. 
+   Returns -1 if not added, else returns the new objid.
    Does a complete handleref rescan to invalidate and resolve
    all internal obj pointers after a object[] realloc.
 */
-#define DWG_ENTITY(token) \
 EXPORT long dwg_add_##token (Dwg_Data * dwg)    \
 {                                               \
   Bit_Chain dat;                                \
@@ -363,10 +364,38 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)    \
     return -1;                                  \
   else                                          \
     return (long)dwg->num_objects;              \
-} \
-\
-static int \
-dwg_encode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
+}
+
+EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
+{                                                \
+  Bit_Chain dat;                                 \
+  int error = 0; \
+  BITCODE_BL num_objs  = dwg->num_objects;       \
+  dat.size = sizeof(Dwg_Object_##token) + 40;    \
+  dat.chain = calloc(dat.size, 1);               \
+  dat.version = dwg->header.version;             \
+  dat.from_version = dwg->header.from_version;   \
+  bit_write_MS(&dat, dat.size);                  \
+  if (dat.version >= R_2010) {                   \
+    bit_write_MC(&dat, 8*sizeof(Dwg_Object_##token)); \
+    bit_write_BOT(&dat, DWG_TYPE_##token);       \
+  } else {                                       \
+    bit_write_BS(&dat, DWG_TYPE_##token);        \
+  }                                              \
+  bit_set_position(&dat, 0);                     \
+  error = dwg_decode_add_object(dwg, &dat, &dat, 0);\
+  if (-1 ==  error) \
+    dwg_resolve_objectrefs_silent(dwg);          \
+  if (num_objs == dwg->num_objects)              \
+    return -1;                                   \
+  else                                           \
+    return (long)dwg->num_objects;               \
+}
+
+#endif
+
+#define DWG_ENTITY(token) \
+static int dwg_encode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
   int error; \
   long vcount, rcount1, rcount2, rcount3, rcount4; \
@@ -397,34 +426,7 @@ dwg_encode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
    all internal obj pointers after a object[] realloc.
 */
 #define DWG_OBJECT(token) \
-EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
-{                                                \
-  Bit_Chain dat;                                 \
-  int error = 0; \
-  BITCODE_BL num_objs  = dwg->num_objects;       \
-  dat.size = sizeof(Dwg_Object_##token) + 40;    \
-  dat.chain = calloc(dat.size, 1);               \
-  dat.version = dwg->header.version;             \
-  dat.from_version = dwg->header.from_version;   \
-  bit_write_MS(&dat, dat.size);                  \
-  if (dat.version >= R_2010) {                   \
-    bit_write_MC(&dat, 8*sizeof(Dwg_Object_##token)); \
-    bit_write_BOT(&dat, DWG_TYPE_##token);       \
-  } else {                                       \
-    bit_write_BS(&dat, DWG_TYPE_##token);        \
-  }                                              \
-  bit_set_position(&dat, 0);                     \
-  error = dwg_decode_add_object(dwg, &dat, &dat, 0);\
-  if (-1 ==  error) \
-    dwg_resolve_objectrefs_silent(dwg);          \
-  if (num_objs == dwg->num_objects)              \
-    return -1;                                   \
-  else                                           \
-    return (long)dwg->num_objects;               \
-} \
-\
-static int \
-dwg_encode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
+static int dwg_encode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
   int error = 0; \
   long vcount, rcount1, rcount2, rcount3, rcount4; \
@@ -1146,9 +1148,10 @@ dwg_encode_add_object(Dwg_Object* obj, Bit_Chain* dat,
   LOG_INFO("Object number: %u", obj->index);
   if (dat->byte + obj->size >= dat->size)
     bit_chain_alloc(dat);
-  // TODO: calculate size from the fields. either <0x7fff or more
-  bit_write_MS(dat, obj->size);
 
+  // TODO: calculate size from the fields. either <0x7fff or more
+  // patch it afterwards and check old<>new size if enough space allocated.
+  bit_write_MS(dat, obj->size);
   PRE(R_2010) {
     bit_write_BS(dat, obj->type);
   } LATER_VERSIONS {
@@ -1157,8 +1160,7 @@ dwg_encode_add_object(Dwg_Object* obj, Bit_Chain* dat,
 
   LOG_INFO(", Size: %d, Type: %d\n", obj->size, obj->type)
 
-  /* Check the type of the object
-   */
+  /* Write the specific type to dat */
   switch (obj->type)
     {
   case DWG_TYPE_TEXT:

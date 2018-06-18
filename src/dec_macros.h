@@ -445,8 +445,32 @@
     error |= dwg_decode_common_entity_handle_data(dat, hdl_dat, obj); \
   }
 
-#define DWG_ENTITY(token) static int \
-dwg_decode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
+/** Add the empty entity or object with its three structs to the DWG.
+    All fields are zero'd. TODO: some are initialized with default values, as
+    defined in dwg.spec.
+    Returns 0 or DWG_ERR_OUTOFMEM.
+*/
+
+#define DWG_ENTITY(token) \
+int dwg_add_##token (Dwg_Object *obj) \
+{ \
+  Dwg_Object_Entity *_ent; \
+  Dwg_Entity_##token *_obj; \
+  LOG_INFO("Add entity " #token " ")\
+  obj->parent->num_entities++;\
+  obj->supertype = DWG_SUPERTYPE_ENTITY;\
+  obj->fixedtype = DWG_TYPE_##token;\
+  _ent = obj->tio.entity = calloc(1, sizeof(Dwg_Object_Entity));\
+  if (!_ent) return DWG_ERR_OUTOFMEM; \
+  _ent->tio.token = calloc(1, sizeof (Dwg_Entity_##token));\
+  if (!_ent->tio.token) return DWG_ERR_OUTOFMEM; \
+  _ent->dwg = obj->parent; \
+  _ent->objid = obj->index; /* obj ptr itself might move */ \
+  _ent->tio.token->parent = obj->tio.entity;\
+  return 0; \
+} \
+/**Call dwg_add_##token and write the fields from the bitstream dat to the entity or object. */ \
+static int dwg_decode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
   long vcount, rcount1, rcount2, rcount3, rcount4; \
   Dwg_Entity_##token *ent, *_obj; \
@@ -454,20 +478,16 @@ dwg_decode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
   Dwg_Data* dwg = obj->parent; \
   Bit_Chain* hdl_dat = dat; \
   Bit_Chain* str_dat; \
-  int error; \
+  int error = dwg_add_##token(obj); \
+  if (error) return error; \
   if (dat->version >= R_2007) { \
     str_dat = malloc(sizeof(Bit_Chain)); /* seperate string buffer */ \
     if (!str_dat) return DWG_ERR_OUTOFMEM; \
     *str_dat = *dat; \
   } else \
     str_dat = dat; \
-  LOG_INFO("Entity " #token " ")\
-  dwg->num_entities++;\
-  obj->supertype = DWG_SUPERTYPE_ENTITY;\
-  obj->fixedtype = DWG_TYPE_##token;\
-  _ent = obj->tio.entity = (Dwg_Object_Entity*)calloc(1, sizeof(Dwg_Object_Entity));\
-  obj->tio.entity->tio.token = (Dwg_Entity_##token *)calloc(1, sizeof (Dwg_Entity_##token));\
-  if (!_ent || !obj->tio.entity->tio.token) return DWG_ERR_OUTOFMEM; \
+  LOG_INFO("Decode entity " #token " ")\
+  _ent = obj->tio.entity; \
   ent = obj->tio.entity->tio.token;\
   _obj = ent;\
   _ent->dwg = dwg; \
@@ -478,33 +498,40 @@ dwg_decode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 
 #define DWG_ENTITY_END return error & ~DWG_ERR_UNHANDLEDCLASS; }
 
-#define DWG_OBJECT(token) static int \
-dwg_decode_ ## token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
+#define DWG_OBJECT(token) \
+int dwg_add_ ## token (Dwg_Object *obj) \
+{ \
+  Dwg_Object_##token *_obj;\
+  LOG_INFO("Add object " #token " ")\
+  obj->supertype = DWG_SUPERTYPE_OBJECT;\
+  obj->fixedtype = DWG_TYPE_##token;\
+  obj->tio.object = calloc (1, sizeof(Dwg_Object_Object)); \
+  if (!obj->tio.object) return DWG_ERR_OUTOFMEM; \
+  _obj = obj->tio.object->tio.token = calloc (1, sizeof(Dwg_Object_##token)); \
+  if (!_obj) return DWG_ERR_OUTOFMEM; \
+  _obj->parent = obj->tio.object; \
+  obj->tio.object->dwg = obj->parent; \
+  obj->tio.object->objid = obj->index; /* obj ptr itself might move */ \
+  return 0; \
+} \
+static int dwg_decode_ ## token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
   long vcount, rcount1, rcount2, rcount3, rcount4; \
   Dwg_Object_##token *_obj;\
   Dwg_Data* dwg = obj->parent;\
   Bit_Chain* hdl_dat = dat; /* handle stream initially the same */ \
   Bit_Chain* str_dat; \
-  int error; \
+  int error = dwg_add_##token(obj); \
+  if (error) return error; \
   if (dat->version >= R_2007) { \
     str_dat = calloc(1, sizeof(Bit_Chain)); /* seperate string buffer */ \
     if (!str_dat) return DWG_ERR_OUTOFMEM; \
   } else \
     str_dat = dat; \
-  LOG_INFO("Object " #token " ")\
-  obj->supertype = DWG_SUPERTYPE_OBJECT;\
-  obj->fixedtype = DWG_TYPE_##token;\
-  obj->tio.object = (Dwg_Object_Object*)calloc (1, sizeof(Dwg_Object_Object)); \
-  if (!obj->tio.object) return DWG_ERR_OUTOFMEM; \
-  obj->tio.object->tio.token = (Dwg_Object_##token *)calloc (1, sizeof(Dwg_Object_##token)); \
-  if (!obj->tio.object->tio.token) return DWG_ERR_OUTOFMEM; \
-  obj->tio.object->dwg = dwg; \
-  obj->tio.object->objid = obj->index; /* obj ptr itself might move */ \
-  error = dwg_decode_object(dat, hdl_dat, str_dat, obj->tio.object); \
-  if (error) return error; \
-  _obj = obj->tio.object->tio.token; \
-  _obj->parent = obj->tio.object;
+  LOG_INFO("Decode object " #token " ")\
+  _obj = obj->tio.object->tio.token;\
+  error |= dwg_decode_object(dat, hdl_dat, str_dat, obj->tio.object); \
+  if (error) return error;
 
 #define DWG_OBJECT_END return error & ~DWG_ERR_UNHANDLEDCLASS; }
 

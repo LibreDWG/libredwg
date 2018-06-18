@@ -3258,6 +3258,36 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
   return DWG_ERR_UNHANDLEDCLASS;
 }
 
+/** Adds a new empty obj to the dwg->object[] array.
+    The new object is at &dwg->object[dwg->num_objects-1].
+
+    Returns 0 or some error codes on success.
+    Returns -1 if the dwg->object pool was re-alloced, i.e. pointers within
+    are invalidated.
+    Returns DWG_ERR_OUTOFMEM otherwise.
+ */
+long dwg_add_object (Dwg_Data *dwg)
+{
+  Dwg_Object *obj;
+  long unsigned int num = dwg->num_objects;
+  int realloced = 0;
+  if (!num)
+    dwg->object = calloc(REFS_PER_REALLOC, sizeof(Dwg_Object));
+  else if (num % REFS_PER_REALLOC == 0) {
+    Dwg_Object *old = dwg->object;
+    dwg->object = realloc(dwg->object, (num + REFS_PER_REALLOC) * sizeof(Dwg_Object));
+    realloced = old != dwg->object;
+  }
+  if (!dwg->object) return DWG_ERR_OUTOFMEM;
+
+  obj = &dwg->object[num];
+  memset(obj, 0, sizeof(Dwg_Object));
+  obj->index = num;
+  dwg->num_objects++;
+  obj->parent = dwg;
+  return realloced ? -1 : 0;
+}
+
 /** Adds an object to the DWG (i.e. dwg->object[dwg->num_objects])
     Returns 0 or some error codes on success.
     Returns -1 if the dwg->object pool was re-alloced.
@@ -3289,27 +3319,13 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
   /*
    * Reserve memory space for objects. A realloc violates all internal pointers.
    */
-  if (!num)
-    dwg->object = calloc(REFS_PER_REALLOC, sizeof(Dwg_Object));
-  else if (num % REFS_PER_REALLOC == 0) {
-    Dwg_Object *old = dwg->object;
-    dwg->object = realloc(dwg->object, (num + REFS_PER_REALLOC) * sizeof(Dwg_Object));
-    realloced = old != dwg->object;
-  }
-  if (!dwg->object)
-    {
-      LOG_ERROR("Out of memory");
-      return DWG_ERR_OUTOFMEM;
-    }
-
+  realloced = dwg_add_object(dwg);
+  if (realloced > 0)
+    return realloced; // i.e. DWG_ERR_OUTOFMEM
+  obj = &dwg->object[num];  
   LOG_INFO("==========================================\n"
            "Object number: %lu/%lX", num, num)
 
-  obj = &dwg->object[num];
-  memset(obj, 0, sizeof(Dwg_Object));
-  obj->index = num;
-  dwg->num_objects++;
-  obj->parent = dwg;
   obj->size = bit_read_MS(dat);
   LOG_INFO(", Size: %d/0x%x", obj->size, obj->size)
   obj->address = object_address = dat->byte;

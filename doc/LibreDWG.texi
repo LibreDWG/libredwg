@@ -114,7 +114,7 @@ as of version @value{VERSION}, coverage is approximately 99%.
 It can read the formats R13, R14, R2000, R2004, R2007, R2010, R2013 and R2018
 for 99%.
 R11 and earlier cannot be read yet, only partially.
-Reading R11 and earlier is ony enabled with the development git checkout, not
+Reading R11 and earlier is only enabled with the development git checkout, not
 the released tarball.
 
 Here is a list of features that are still missing.
@@ -168,9 +168,9 @@ Halfway:
 
 @item Unhandled (i.e. passed through, no DXF and fields):
 
-ACAD_EVALUATION_GRAPH, ACSH_HISTORY_CLASS, ACSH_SWEEP_CLASS,
-ARCALIGNEDTEXT, ARC_DIMENSION, ASSOC2DCONSTRAINTGROUP,
-ASSOCALIGNEDDIMACTIONBODY, ASSOCACTION, ASSOCDEPENDENCY,
+ACAD_EVALUATION_GRAPH, ACSH_HISTORY_CLASS, ACSH_SWEEP_CLASS, 
+ARCALIGNEDTEXT, ARC_DIMENSION, ASSOC2DCONSTRAINTGROUP, 
+ASSOCALIGNEDDIMACTIONBODY, ASSOCACTION, ASSOCDEPENDENCY, 
 ASSOCGEOMDEPENDENCY, ASSOCNETWORK, ASSOCOSNAPPOINTREFACTIONPARAM,
 ASSOCVERTEXACTIONPARAM, ASSOCPERSSUBENTMANAGER, PERSSUBENTMANAGER,
 CSACDOCUMENTOPTIONS, DATATABLE, DBCOLOR, DETAILVIEWSTYLE, DIMASSOC,
@@ -417,11 +417,8 @@ or 2. by using the API functions from @file{dwg_api.h}:
 
 @verbatim
   int error;
-  dwg_obj_block_header *hdr = dwg_get_block_header(dwg, &error);
-  dwg_obj_block_control *ctrl
-    = dwg_block_header_get_block_control(hdr, &error);
+  dwg_obj_block_control *ctrl = &dwg->block_control;
 
-  // optional
   dwg_object_ref **hdr_refs
     = dwg_obj_block_control_get_block_headers(ctrl, &error);
   long num_hdr_objs = dwg_obj_block_control_get_num_entries(ctrl, &error);
@@ -455,7 +452,10 @@ where @code{process_object} checks the type of each object or entity under the
 @cindex functions, encoding
 @cindex functions, write path
 
-Encoding DWG files, i.e. DWG write support, can be disabled via @code{./configure --disable-write}. The default format and only useful one is currently r2000.
+Encoding DWG files, i.e. DWG write support, can be disabled via
+@code{./configure --disable-write}. The default format and only useful
+one is currently r2000, and needs much work still to be useful
+enough.
 
 The highest level function for encoding a bitstream to a file is @code{dwg_write_file}.
 
@@ -464,8 +464,29 @@ Open @var{filename} and write the @var{dwg} to it.
 Return 0 if successful.
 @end deftypefn
 
-The iterator is similar to above, but you want to encode all data structures, not just the
-entities.
+@deftypefn {Function} int dwg_add_object (Dwg_Data *@var{dwg})
+Adds a new uninitialized object to the @var{dwg->object[]} array.
+Return 0 or -1 if successful, otherwise DWG_ERR_OUTOFMEM. -1 is the array was re-allocated.
+@end deftypefn
+
+Then for each object or entity type there is a
+@deftypefn {Function} int dwg_add_OBJECT (Dwg_Object *@var{obj})
+Initializes an object for the given OBJECT or ENTITY type, with all fields being zero'ed.
+This does not initialize the @var{obj} size, type, address, handlestream_size, bitsize fields.
+@end deftypefn
+
+The encoder is driven by the fields definition in the @file{dwg.spec}, which adds each field to
+the object. This is done by @file{encode} or any @file{in_*} import module.
+@deftypefn {Function} int dwg_encode_OBJECT (Bit_Chain *@var{dat}, Dwg_Object *@var{obj})
+Sets the fields for the object from the encoded bitstream.
+@end deftypefn
+
+The iterator is similar to above, but you want to encode all data
+structures, not just the entities. But note that there are currently
+not enough helper function to create all needed helper sections to store a
+DWG if you didn't read a DWG into the right a @var{Dwg_Data* dwg}
+struct already. This is especially important when importing from DXF
+or from an earlier or later DWG version.
 
 @node Other Formats
 @section Other Formats
@@ -499,7 +520,7 @@ Reading DXF is under construction.
 
 @cindex DXFB, Binary DXF
 
-We can almost write Binary DXF files in various versions. Under Construction.
+We can almost write Binary DXF files in various versions. Under construction.
 
 Reading DXFB is under construction.
 
@@ -542,7 +563,7 @@ All error bitmasks are collected during read or write and returned at the end.
 @item DWG_ERR_INVALIDTYPE       8
 @item DWG_ERR_INVALIDHANDLE     16
 @item DWG_ERR_INVALIDEED        32
-@item DWG_ERR_VALUEOUTOFBOUNDS  64 = DWG_ERR_VALUEOUTOFBOUNDS
+@item DWG_ERR_VALUEOUTOFBOUNDS  64 = DWG_ERR_CRITICAL
 @item DWG_ERR_CLASSESNOTFOUND   128
 @item DWG_ERR_SECTIONNOTFOUND   256
 @item DWG_ERR_PAGENOTFOUND      512
@@ -668,7 +689,7 @@ but via the @file{dwg_api.h} only. The graphical representation for PS and SVG o
 See the seperate @uref{../refman/index.html, refman} manual (in pdf or html format, the pdf has ~1800 pages) for a detailled API description, or see the relevant @file{dwg.h}, @file{dwg_api.h} or the @file{*.spec} files.
 
 For reference you might also want to check the public AutoCAD DXF reference manuals,
-and the @file{OpenDesign_Specification_for_dwg_files}.
+and the ODA @file{OpenDesign_Specification_for_dwg_files}.
 
 @comment It is unfortunately not possible to include the doxygen generated tex
 @comment files into this texinfo format.
