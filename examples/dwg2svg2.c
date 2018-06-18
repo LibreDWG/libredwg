@@ -331,7 +331,6 @@ output_SVG(dwg_data *dwg)
 {
   unsigned int i, num_hdr_objs;
   int error;
-  dwg_obj_block_header *_hdr;
   dwg_obj_block_control *_ctrl;
   dwg_object_ref **hdr_refs; 
 
@@ -349,11 +348,8 @@ output_SVG(dwg_data *dwg)
   page_height = dy;
   scale *= (scale_x > scale_y ? scale_x : scale_y);
 
-  _hdr = dwg_get_block_header(dwg, &error);
-  log_if_error("get_block_header");
-  _ctrl = dwg_block_header_get_block_control(_hdr, &error);
-  log_if_error("block_header_get_block_control");
-  
+  _ctrl = &dwg->block_control;
+
   hdr_refs = dwg_obj_block_control_get_block_headers(_ctrl, &error);
   log_if_error("block_control_get_block_headers");
   num_hdr_objs = dwg_obj_block_control_get_num_entries(_ctrl, &error);
