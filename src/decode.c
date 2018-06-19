@@ -2389,14 +2389,12 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
                   Dwg_Object_Entity* ent)
 {
   unsigned int i;
-  BITCODE_BS size;
   int error = 0;
   Dwg_Data *dwg = ent->dwg;
-  Dwg_Object *_obj = &dwg->object[ent->objid];
+  Dwg_Object *obj = &dwg->object[ent->objid];
+  Dwg_Object_Entity* _obj = ent;
 
   PRE(R_13) {
-    Dwg_Object *obj = _obj;
-    Dwg_Object_Entity* _obj = ent;
 
     if (FIELD_VALUE(flag_r11) & 4 &&
         FIELD_VALUE(kind_r11) > 2 &&
@@ -2418,38 +2416,35 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
   }
   VERSIONS (R_2000, R_2007)
     {
-      _obj->bitsize = bit_read_RL(dat); // until the handles
-      LOG_TRACE("Entity bitsize: " FORMAT_BL " @%lu.%u\n", _obj->bitsize, dat->byte, dat->bit)
+      obj->bitsize = bit_read_RL(dat); // until the handles
+      LOG_TRACE("Entity bitsize: " FORMAT_BL " @%lu.%u\n", obj->bitsize, dat->byte, dat->bit)
     }
   SINCE (R_2007)
     {
       // The handle stream offset, i.e. end of the object, right after
       // the has_strings bit.
-      _obj->hdlpos = _obj->address * 8 + _obj->bitsize;
+      obj->hdlpos = obj->address * 8 + obj->bitsize;
       SINCE(R_2010)
       {
-        _obj->hdlpos += 8;
-        LOG_HANDLE("(bitsize: " FORMAT_RL ", ", _obj->bitsize);
-        LOG_HANDLE("hdlpos: %lu)\n", _obj->hdlpos);
+        obj->hdlpos += 8;
+        LOG_HANDLE("(bitsize: " FORMAT_RL ", ", obj->bitsize);
+        LOG_HANDLE("hdlpos: %lu)\n", obj->hdlpos);
       }
       // and set the string stream (restricted to size)
-      error |= obj_string_stream(dat, _obj, str_dat);
+      error |= obj_string_stream(dat, obj, str_dat);
     }
 
-  error |= bit_read_H(dat, &(_obj->handle));
+  error |= bit_read_H(dat, &(obj->handle));
   if (error & DWG_ERR_INVALIDHANDLE)
     {
-      LOG_WARN(
-          "dwg_decode_entity handle:\tCurrent Bit_Chain address: 0x%0x",
-          (unsigned int) dat->byte)
-      _obj->bitsize = 0;
+      LOG_WARN("dwg_decode_entity handle @%lu.%u", dat->byte, dat->bit);
+      obj->bitsize = 0;
       ent->num_eed = 0;
       ent->picture_exists = 0;
-      ent->num_handles = 0;
       return error;
     }
-  LOG_TRACE("handle: %d.%d.%lX [5]\n", _obj->handle.code,
-            _obj->handle.size, _obj->handle.value)
+  LOG_TRACE("handle: %d.%d.%lX [5]\n", obj->handle.code,
+            obj->handle.size, obj->handle.value)
 
   PRE(R_13) {
     return DWG_ERR_NOTYETSUPPORTED;
@@ -2458,165 +2453,7 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
   if (error & (DWG_ERR_INVALIDTYPE|DWG_ERR_VALUEOUTOFBOUNDS))
     return error;
 
-  ent->picture_exists = bit_read_B(dat);
-  if (ent->picture_exists)
-    {
-      LOG_TRACE("picture_exists: 1\n")
-      VERSIONS(R_13, R_2007)
-        {
-          ent->picture_size = bit_read_RL(dat);
-        }
-      SINCE(R_2010)
-        {
-          ent->picture_size = bit_read_BLL(dat);
-        }
-
-      LOG_TRACE("picture_size: " FORMAT_BL " \n", ent->picture_size)
-      if (ent->picture_size < 210210)
-        {
-          if (ent->picture_size)
-            ent->picture = bit_read_TF(dat, ent->picture_size); // DXF 310
-        }
-      else
-        {
-          LOG_ERROR("Invalid picture-size: %lu kB. Object: %lX (handle)",
-                    (unsigned long)(ent->picture_size / 1000), _obj->handle.value)
-#ifndef DEBUG_CLASSES
-          bit_set_position(dat, _obj->address);
-          return DWG_ERR_VALUEOUTOFBOUNDS;
-#endif
-        }
-    }
-
-  VERSIONS(R_13, R_14)
-    {
-      _obj->bitsize = bit_read_RL(dat);
-      LOG_TRACE("bitsize: " FORMAT_RL " \n", _obj->bitsize)
-    }
-
-  ent->entity_mode  = bit_read_BB(dat);
-  LOG_TRACE("entity_mode: " FORMAT_BB " \n", ent->entity_mode)
-  ent->num_reactors = bit_read_BS(dat);
-  LOG_TRACE("num_reactors: %d\n", (int)ent->num_reactors)
-
-  SINCE(R_2004)
-    {
-      ent->xdic_missing_flag = bit_read_B(dat);
-      LOG_TRACE("xdic_missing_flag: " FORMAT_B " \n", ent->xdic_missing_flag)
-    }
-  SINCE(R_2013)
-    {
-      ent->has_ds_binary_data = bit_read_B(dat);
-      LOG_TRACE("has_ds_binary_data: " FORMAT_B " \n", ent->has_ds_binary_data)
-    }
-  VERSIONS(R_13, R_14)
-    {
-      ent->isbylayerlt = bit_read_B(dat);
-      LOG_TRACE("isbylayerlt: " FORMAT_B " \n", ent->isbylayerlt)
-    }
-
-  ent->nolinks = bit_read_B(dat);
-  LOG_TRACE("nolinks: " FORMAT_B " \n", ent->nolinks)
-
-  SINCE(R_2004)
-    {
-      BITCODE_B color_mode = 0;
-      unsigned int flags;
-
-      if (ent->nolinks == 0)
-        {
-          color_mode = bit_read_B(dat);
-          LOG_TRACE("color_mode: " FORMAT_B " \n", color_mode) //indexed or rgb
-
-          if (color_mode == 1)
-            {
-              ent->color.index = bit_read_RC(dat);  // color index
-              ent->color.rgb = 0L;
-              LOG_TRACE("color.index: %u\n", (unsigned)ent->color.index)
-            }
-          else
-            {
-              flags = bit_read_RS(dat);
-              LOG_TRACE("color.flags: 0x%X\n", (unsigned)flags)
-
-              if (flags & 0x8000)
-                {
-                  unsigned char c1, c2, c3, c4;
-                  char *name;
-
-                  c1 = bit_read_RC(dat);  // rgb color
-                  c2 = bit_read_RC(dat);
-                  c3 = bit_read_RC(dat);
-                  c4 = bit_read_RC(dat);
-                  name = bit_read_TV(dat);
-                  ent->color.index = 0;
-                  ent->color.rgb   = c1 << 24 | c2 << 16 | c3 << 8 | c4;
-                  ent->color.name  = name;
-                  LOG_TRACE("color.rgb: 0x%X\n", (unsigned)ent->color.rgb)
-                  if (name && *name)
-                    LOG_TRACE("color.name: %s\n", name)
-                }
-
-              /*if (flags & 0x4000)
-                flags = flags;   // has AcDbColor reference (handle)
-              */
-              if (flags & 0x2000)
-                {
-                  ent->color.transparency_type = bit_read_BL(dat);
-                  LOG_TRACE("color.transparency_type: 0x%X\n",
-                            (unsigned)ent->color.transparency_type)
-                }
-            }
-        }
-      else
-        {
-          char color = bit_read_B(dat);
-          LOG_TRACE("color.index: %d\n", (int)color)
-          ent->color.index = color;
-        }
-    }
-  OTHER_VERSIONS
-    bit_read_CMC(dat, &ent->color);
-
-  ent->linetype_scale = bit_read_BD(dat);
-  LOG_TRACE("linetype_scale: " FORMAT_BD "\n", ent->linetype_scale)
-
-  SINCE(R_2000)
-    {
-      // 00 BYLAYER, 01 BYBLOCK, 10 CONTINUOUS, 11 ltype handle
-      ent->linetype_flags = bit_read_BB(dat);
-      LOG_TRACE("linetype_flags: " FORMAT_BB "\n", ent->linetype_flags)
-      // 00 BYLAYER, 01 BYBLOCK, 10 CONTINUOUS, 11 plotstyle handle
-      ent->plotstyle_flags = bit_read_BB(dat);
-      LOG_TRACE("plotstyle_flags: " FORMAT_BB "\n", ent->plotstyle_flags)
-    }
-
-  SINCE(R_2007)
-    {
-      ent->material_flags = bit_read_BB(dat);
-      LOG_TRACE("material_flags: " FORMAT_BB "\n", ent->material_flags)
-      ent->shadow_flags = bit_read_RC(dat);
-      LOG_TRACE("shadow_flags: " FORMAT_RC "\n", ent->shadow_flags)
-    }
-
-  SINCE(R_2010)
-    {
-      ent->has_full_visualstyle = bit_read_B(dat);
-      ent->has_face_visualstyle = bit_read_B(dat);
-      ent->has_edge_visualstyle = bit_read_B(dat);
-      LOG_TRACE("visualstyles: %d%d%d\n",
-                ent->has_full_visualstyle,
-                ent->has_face_visualstyle,
-                ent->has_edge_visualstyle)
-    }
-
-  ent->invisible = bit_read_BS(dat); //bit 0: 0 visible, 1 invisible
-
-  SINCE(R_2000)
-    {
-      ent->lineweight = bit_read_RC(dat);
-      LOG_TRACE("lineweight: %d\n", (int)ent->lineweight)
-    }
+  #include "common_entity_data.spec"
 
   // elsewhere: object data, handles, padding bits, crc
 
@@ -2630,22 +2467,22 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
  */
 static int
 dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
-                  Dwg_Object_Object* obj)
+                  Dwg_Object_Object* _obj)
 {
   unsigned int i;
   BITCODE_BS size;
   int error;
-  Dwg_Data *dwg = obj->dwg;
-  Dwg_Object *_obj = &dwg->object[obj->objid];
+  Dwg_Data *dwg = _obj->dwg;
+  Dwg_Object *obj = &dwg->object[_obj->objid];
 
-  obj->datpos = dat->byte;     // the data stream offset
+  _obj->datpos = dat->byte;     // the data stream offset
   SINCE(R_2007) {
     *str_dat = *dat;
   }
   VERSIONS(R_2000, R_2007)
     {
-      _obj->bitsize = bit_read_RL(dat);
-      LOG_TRACE("bitsize: " FORMAT_RL " ", _obj->bitsize);
+      obj->bitsize = bit_read_RL(dat);
+      LOG_TRACE("bitsize: " FORMAT_RL " ", obj->bitsize);
     }
   SINCE(R_2007)
     {
@@ -2653,55 +2490,54 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
       //         dat->byte, dat->bit, bit_position(dat));
       // The handle stream offset, i.e. end of the object, right after
       // the has_strings bit.
-      _obj->hdlpos = (_obj->address * 8) + _obj->bitsize;
+      obj->hdlpos = (obj->address * 8) + obj->bitsize;
       SINCE(R_2010)
       {
-        _obj->hdlpos += 8;
-        LOG_HANDLE("(bitsize: " FORMAT_RL ", ", _obj->bitsize);
-        LOG_HANDLE("hdlpos: %lu)\n", _obj->hdlpos);
+        obj->hdlpos += 8;
+        LOG_HANDLE("(bitsize: " FORMAT_RL ", ", obj->bitsize);
+        LOG_HANDLE("hdlpos: %lu)\n", obj->hdlpos);
       }
       // and set the string stream (restricted to size)
-      error |= obj_string_stream(dat, _obj, str_dat);
+      error |= obj_string_stream(dat, obj, str_dat);
     }
 
-  error = bit_read_H(dat, &_obj->handle);
+  error = bit_read_H(dat, &obj->handle);
   if(error & DWG_ERR_INVALIDHANDLE)
     {
       LOG_ERROR("Wrong object handle at pos 0x%0lx", dat->byte)
-      _obj->bitsize = 0;
-      obj->num_eed = 0;
-      obj->num_handles = 0;
-      obj->num_reactors = 0;
+      obj->bitsize = 0;
+      _obj->num_eed = 0;
+      _obj->num_reactors = 0;
       return error;
     }
-  LOG_TRACE("handle: %d.%d.%lX [5]\n", _obj->handle.code,
-            _obj->handle.size, _obj->handle.value)
+  LOG_TRACE("handle: %d.%d.%lX [5]\n", obj->handle.code,
+            obj->handle.size, obj->handle.value)
 
-  error |= dwg_decode_eed(dat, obj);
+  error |= dwg_decode_eed(dat, _obj);
   if (error & (DWG_ERR_INVALIDTYPE|DWG_ERR_VALUEOUTOFBOUNDS))
     return error;
 
   VERSIONS(R_13,R_14)
     {
-      _obj->bitsize = bit_read_RL(dat);
+      obj->bitsize = bit_read_RL(dat);
     }
-  // documentation bug
-  obj->num_reactors = bit_read_BL(dat);
+  // documentation bug, same BL type as with entity
+  FIELD_BL(num_reactors, 0);
   SINCE (R_2010)
   {
-    if (obj->num_reactors > 0x1000)
+    if (_obj->num_reactors > 0x1000)
       {
-        obj->num_reactors = 0;
+        _obj->num_reactors = 0;
         LOG_WARN("Invalid num_reactors")
       }
   }
   SINCE(R_2004)
     {
-      obj->xdic_missing_flag = bit_read_B(dat);
+      FIELD_B (xdic_missing_flag, 0);
     }
   SINCE(R_2013)
     {
-      obj->has_ds_binary_data = bit_read_B(dat);
+      FIELD_B (has_ds_binary_data, 0);
     }
 
   return 0;

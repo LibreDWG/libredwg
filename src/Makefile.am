@@ -52,6 +52,7 @@ EXTRA_HEADERS = \
         header_variables.spec \
         header_variables_r11.spec \
         header_variables_dxf.spec \
+        common_entity_data.spec \
         common_entity_handle_data.spec \
         header.spec \
         auxheader.spec \

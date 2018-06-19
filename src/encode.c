@@ -1493,10 +1493,33 @@ static int
 dwg_encode_entity(Dwg_Object* obj,
                   Bit_Chain* hdl_dat, Bit_Chain* str_dat, Bit_Chain* dat)
 {
-  BITCODE_BS i;
+  int error = 0;
   Dwg_Object_Entity* ent = obj->tio.entity;
+  Dwg_Object_Entity* _obj = ent;
+  Dwg_Data *dwg = ent->dwg;
+  BITCODE_BS i;
 
-  SINCE(R_2000)
+  PRE(R_13) {
+
+    if (FIELD_VALUE(flag_r11) & 4 &&
+        FIELD_VALUE(kind_r11) > 2 &&
+        FIELD_VALUE(kind_r11) != 22)
+      FIELD_RD (elevation_r11, 30);
+    if (FIELD_VALUE(flag_r11) & 8)
+      FIELD_RD (thickness_r11, 39);
+    if (FIELD_VALUE(flag_r11) & 0x20) {
+      Dwg_Object_Ref* hdl =
+        dwg_decode_handleref_with_code(dat, obj, dwg, 0);
+      obj->handle = hdl->handleref;
+    }
+    if (FIELD_VALUE(extra_r11) & 4)
+      FIELD_RS (paper_r11, 0);
+  }
+
+  SINCE (R_2007) {
+    *str_dat = *dat;
+  }
+  VERSIONS (R_2000, R_2007)
     {
       obj->bitsize_address = bit_position(dat);
       if (!obj->bitsize)
@@ -1504,12 +1527,31 @@ dwg_encode_entity(Dwg_Object* obj,
       else
         bit_write_RL(dat, obj->bitsize);
     }
+  SINCE (R_2007)
+    {
+      // The handle stream offset, i.e. end of the object, right after
+      // the has_strings bit.
+      obj->hdlpos = obj->address * 8 + obj->bitsize;
+      SINCE(R_2010)
+      {
+        obj->hdlpos += 8;
+        LOG_HANDLE("(bitsize: " FORMAT_RL ", ", obj->bitsize);
+        LOG_HANDLE("hdlpos: %lu)\n", obj->hdlpos);
+      }
+      // and set the string stream (restricted to size)
+      error |= obj_string_stream(dat, obj, str_dat);
+    }
+
   bit_write_H(dat, &(obj->handle));
+  LOG_TRACE("handle: %d.%d.%lX [5]\n", obj->handle.code,
+            obj->handle.size, obj->handle.value)
+  PRE(R_13) {
+    return DWG_ERR_NOTYETSUPPORTED;
+  }
 
   for (i = 0; i < ent->num_eed; i++)
     {
-      BITCODE_BS size;
-      size = ent->eed[i].size;
+      BITCODE_BS size = ent->eed[i].size;
       bit_write_BS(dat, size);
       LOG_TRACE("EED[%u] size: " FORMAT_BS "\n", i, size);
       if (size) // not all eed's have a new handle
@@ -1521,91 +1563,8 @@ dwg_encode_entity(Dwg_Object* obj,
     }
   bit_write_BS(dat, 0);
 
-  bit_write_B(dat, ent->picture_exists);
-  if (ent->picture_exists)
-    {
-      VERSIONS(R_13,R_2007)
-        {
-          bit_write_RL(dat, (BITCODE_RL)ent->picture_size);
-        }
-      SINCE(R_2007)
-        {
-          bit_write_BLL(dat, ent->picture_size);
-        }
-      if (ent->picture_size < 210210)
-        {
-          bit_write_TF(dat, ent->picture, ent->picture_size);
-          /*
-          for (i=0; i< ent->picture_size; i++)
-            bit_write_RC(dat, ent->picture[i]);
-          */
-        }
-      else 
-        {
-          LOG_ERROR(
-              "dwg_encode_entity:  Absurd! Picture-size: %ld kB. "
-              "Object: %lu (handle).",
-              (long)(ent->picture_size / 1000), obj->handle.value)
-          bit_advance_position(dat, -(4 * 8 + 1));
-        }
-     }
-  
-  VERSIONS(R_13, R_14)
-    {
-      obj->bitsize_address = bit_position(dat);
-      if (!obj->bitsize)
-        bit_write_RL(dat, obj->size * 8);
-      else
-        bit_write_RL(dat, obj->bitsize);
-    }
+  #include "common_entity_data.spec"
 
-  bit_write_BB(dat, ent->entity_mode);
-  bit_write_BL(dat, ent->num_reactors);
-
-  SINCE(R_2004)
-    {
-     bit_write_B(dat, ent->xdic_missing_flag);
-    }
-
-  SINCE(R_2013)
-    {
-      bit_write_B(dat, ent->has_ds_binary_data);
-    }
-
-  VERSIONS(R_13,R_14)
-    {
-      bit_write_B(dat, ent->isbylayerlt );
-    }
-
-  bit_write_B(dat, ent->nolinks );
-  bit_write_CMC(dat, &ent->color);
-  bit_write_BD(dat, ent->linetype_scale);
-
-  SINCE(R_2000)
-    {
-       bit_write_BB(dat, ent->linetype_flags);
-       bit_write_BB(dat, ent->plotstyle_flags);
-    }
-
-  SINCE(R_2007)
-    {
-       bit_write_BB(dat, ent->material_flags);
-       bit_write_RC(dat, ent->shadow_flags);
-    }
-
-  SINCE(R_2010)
-    {
-      bit_write_B(dat, ent->has_full_visualstyle);
-      bit_write_B(dat, ent->has_face_visualstyle);
-      bit_write_B(dat, ent->has_edge_visualstyle);
-    }
-
-   bit_write_BS(dat, ent->invisible);
-
-  SINCE(R_2000)
-    {
-       bit_write_RC(dat, ent->lineweight);
-    }
   return 0;
 }
 

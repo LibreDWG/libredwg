@@ -4488,11 +4488,12 @@ typedef struct _dwg_object_entity
   unsigned int num_eed;
   Dwg_Eed *eed; /* see also Dwg_Resbuf* xdata */
 
-  BITCODE_B picture_exists;
-  BITCODE_BL picture_size;
+  /* Common Entity Data */
+  BITCODE_B   picture_exists;
+  BITCODE_BLL picture_size;
   BITCODE_RC *picture;
-
   BITCODE_BB entity_mode;
+  BITCODE_BL num_reactors;
   BITCODE_B xdic_missing_flag;  /*!< r2004+ */
   BITCODE_B has_ds_binary_data; /*!< r2013+ */
   BITCODE_B isbylayerlt;        /*!< r13-r14 */
@@ -4522,12 +4523,7 @@ typedef struct _dwg_object_entity
   BITCODE_RS paper_r11;
   /* preR13 in the obj: eed, elevation/pt.z, thickness, paper */
 
-  /* XXX I think this field is deprecated due to
-     the new handle parsing functions */
-  unsigned int num_handles;
-  
   /* Common Entity Handle Data */
-  BITCODE_BL num_reactors;
   BITCODE_H subentity;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
