@@ -405,9 +405,9 @@ static int dwg_encode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj
   Bit_Chain* hdl_dat = dat; \
   Bit_Chain* str_dat = dat; \
   Dwg_Data* dwg = obj->parent; \
+  LOG_INFO("Entity " #token ":\n") \
   error = dwg_encode_entity(obj, dat, hdl_dat, str_dat); \
-  if (error) return error; \
-  LOG_INFO("Entity " #token ":\n")
+  if (error) return error;
 
 #define DWG_ENTITY_END \
   if (obj->bitsize == 0 && dat->version >= R_13 && dat->version <= R_2010) \
@@ -856,37 +856,13 @@ dwg_encode(Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                 "==========================================\n",
                 j, omap[j].handle, dat->byte);
 
-      if (obj->supertype == DWG_SUPERTYPE_UNKNOWN)
-        {
-          if (dat->byte + obj->size >= dat->size)
-            bit_chain_alloc(dat);
-          LOG_INFO("Unknown object, size %d, type %d\n", obj->size, obj->type);
-          bit_write_MS(dat, obj->size);
-          memcpy(&dat->chain[dat->byte], obj->tio.unknown, obj->size);
-          dat->byte += obj->size;
-        }
-      else
-        {
-	  if (obj->supertype == DWG_SUPERTYPE_ENTITY ||
-              obj->supertype == DWG_SUPERTYPE_OBJECT)
-	    error |= dwg_encode_add_object(obj, dat, dat->byte);
-	  /*
-          if (obj->supertype == DWG_SUPERTYPE_ENTITY)
-            dwg_encode_entity(obj, dat, dat, dat);
-          else if (obj->supertype == DWG_SUPERTYPE_OBJECT)
-            dwg_encode_object(obj, dat, dat, dat);
-	  */
-          else
-            {
-              LOG_ERROR("Error: undefined (super)type of object");
-              exit(-1);
-            }
-        }
+      error |= dwg_encode_add_object(obj, dat, dat->byte);
       bit_write_CRC(dat, omap[j].address, 0xC0C1);
     }
-    for (j = 0; j < dwg->num_objects; j++) 
+  /*for (j = 0; j < dwg->num_objects; j++) 
       LOG_INFO ("Object(%lu): %6lu / Address: %08lX / Idc: %u\n", 
 		 j, omap[j].handle, omap[j].address, omap[j].idc);
+  */
 
   /* Unknown bitdouble between objects and object map (or short?)
    */
@@ -1146,7 +1122,7 @@ dwg_encode_add_object(Dwg_Object* obj, Bit_Chain* dat,
   dat->bit = 0;
 
   LOG_INFO("Object number: %u", obj->index);
-  if (dat->byte + obj->size >= dat->size)
+  while (dat->byte + obj->size >= dat->size)
     bit_chain_alloc(dat);
 
   // TODO: calculate size from the fields. either <0x7fff or more
