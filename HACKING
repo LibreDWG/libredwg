@@ -124,7 +124,7 @@ someone should probably think about and resolve them!
 
   $ make -C .. CFLAGS="-gstabs" && \
     cp ../src/.libs/libredwg-0.dll . && \
-    LIBREDWG_TRACE=4  winedbg .libs/dwgread.exe ../test/test-data/2000/Leader_2000.dwg
+    LIBREDWG_TRACE=4  winedbg .libs/dwgread.exe ../test/test-data/2000/Leader.dwg
   > b dwg_decode_eed
   > cont
 
