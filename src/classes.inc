@@ -135,6 +135,7 @@
     STABLE_CLASS_DXF(ACTION, TABLE, ACAD_TABLE) /*ent, pre-2010 ok */
   } LATER_VERSIONS {
     DEBUGGING_CLASS_DXF  (ACTION, TABLE, ACAD_TABLE) /*ent, r2010+ needs subclassing */
+    DEBUGGING_CLASS  (ACTION, TABLECONTENT) //wrong values
   }
 
   /* Objects */

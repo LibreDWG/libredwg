@@ -153,6 +153,7 @@ main (int argc, char *argv[])
 #endif
   if (error >= DWG_ERR_CRITICAL) {
     printf("WRITE ERROR 0x%x\n", error);
+    return error;
   }
   dwg_free(&dwg); // this is slow, but on needed on low memory systems
 

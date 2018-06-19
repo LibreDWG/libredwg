@@ -189,6 +189,9 @@ int dwg_obj_is_control(const Dwg_Object *obj);
 #define END_STRING_STREAM
 #define START_HANDLE_STREAM
 
+static int dwg_free_UNKNOWN_ENT (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+static int dwg_free_UNKNOWN_OBJ (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+
 #define DWG_ENTITY(token) \
 static int \
 dwg_free_ ##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj)\
@@ -200,6 +203,8 @@ dwg_free_ ##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj)\
   Bit_Chain* str_dat = dat;\
   Dwg_Data* dwg = obj->parent;\
   int error = 0; \
+  if (strcmp(#token, "UNKNOWN_ENT") && obj->supertype == DWG_SUPERTYPE_UNKNOWN) \
+    return dwg_free_UNKNOWN_ENT(dat, obj); \
   LOG_HANDLE("Free entity " #token "\n")\
   _ent = obj->tio.entity;\
   _obj = ent = _ent->tio.token;
@@ -220,6 +225,8 @@ dwg_free_ ##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
   Bit_Chain* str_dat = dat;                      \
   Dwg_Data* dwg = obj->parent;                   \
   int error = 0; \
+  if (strcmp(#token, "UNKNOWN_OBJ") && obj->supertype == DWG_SUPERTYPE_UNKNOWN) \
+    return dwg_free_UNKNOWN_OBJ(dat, obj); \
   LOG_HANDLE("Free object " #token " %p\n", obj) \
   _obj = obj->tio.object->tio.token;
 
