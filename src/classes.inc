@@ -131,12 +131,6 @@
   STABLE_CLASS    (ACTION, IMAGE)     /*ent*/
   STABLE_CLASS    (ACTION, OLE2FRAME) /*ent (also fixed) */
   STABLE_CLASS    (ACTION, WIPEOUT)   /*ent*/
-  PRE (R_2010) {
-    STABLE_CLASS_DXF(ACTION, TABLE, ACAD_TABLE) /*ent, pre-2010 ok */
-  } LATER_VERSIONS {
-    DEBUGGING_CLASS_DXF  (ACTION, TABLE, ACAD_TABLE) /*ent, r2010+ needs subclassing */
-    DEBUGGING_CLASS  (ACTION, TABLECONTENT) //wrong values
-  }
 
   /* Objects */
   STABLE_CLASS    (ACTION, DICTIONARYVAR)
@@ -174,19 +168,20 @@
   // coverage exists, but broken and being worked on. needs -DDEBUG_CLASSES. see also
   // the unknown branch with all the unknown blobs of these.
   //PROXY_ENTITY has a fixed type
-  DEBUGGING_CLASS  (ACTION, GEOPOSITIONMARKER) /*ent, yet unsorted */
-  DEBUGGING_CLASS  (ACTION, HELIX)             /*ent, yet unsorted */
-  DEBUGGING_CLASS  (ACTION, LIGHT)             /*ent, yet unsorted */
-  DEBUGGING_CLASS  (ACTION, MULTILEADER)       /*ent, broken Leader_Line's/Points */
-  DEBUGGING_CLASS  (ACTION, SURFACE)           /*ent, yet unsorted */
-  DEBUGGING_CLASS  (ACTION, UNDERLAY)          /*ent DGN DWF PDF */
-  DEBUGGING_CLASS  (ACTION, TABLECONTENT) //wrong values
-  DEBUGGING_CLASS  (ACTION, TABLEGEOMETRY) //wrong geom_data
-  DEBUGGING_CLASS  (ACTION, CELLSTYLEMAP) //broken
-  DEBUGGING_CLASS  (ACTION, MATERIAL)     //working on
-  DEBUGGING_CLASS  (ACTION, PLOTSETTINGS) //yet unsorted
-  DEBUGGING_CLASS  (ACTION, SUN)          //i.e. 2000/1.dwg
-  DEBUGGING_CLASS  (ACTION, VBA_PROJECT)  //Has its own section?
+  DEBUGGING_CLASS     (ACTION, GEOPOSITIONMARKER) /*ent, yet unsorted */
+  DEBUGGING_CLASS     (ACTION, HELIX)             /*ent, yet unsorted */
+  DEBUGGING_CLASS     (ACTION, LIGHT)             /*ent, yet unsorted */
+  DEBUGGING_CLASS     (ACTION, MULTILEADER)       /*ent, broken Leader_Line's/Points */
+  DEBUGGING_CLASS     (ACTION, SURFACE)           /*ent, yet unsorted */
+  DEBUGGING_CLASS     (ACTION, UNDERLAY)          /*ent DGN DWF PDF */
+  DEBUGGING_CLASS_DXF (ACTION, TABLE, ACAD_TABLE) /*ent, r2010+ needs subclassing */
+  DEBUGGING_CLASS     (ACTION, TABLECONTENT) //wrong values
+  DEBUGGING_CLASS     (ACTION, TABLEGEOMETRY) //wrong geom_data
+  DEBUGGING_CLASS     (ACTION, CELLSTYLEMAP) //broken
+  DEBUGGING_CLASS     (ACTION, MATERIAL)     //working on
+  DEBUGGING_CLASS     (ACTION, PLOTSETTINGS) //yet unsorted
+  DEBUGGING_CLASS     (ACTION, SUN)          //i.e. 2000/1.dwg
+  DEBUGGING_CLASS     (ACTION, VBA_PROJECT)  //Has its own section?
 
   // no coverage, unimplemented, passed through
   UNHANDLED_CLASS    (ACTION, ACAD_EVALUATION_GRAPH)
