@@ -2453,6 +2453,7 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
   if (error & (DWG_ERR_INVALIDTYPE|DWG_ERR_VALUEOUTOFBOUNDS))
     return error;
 
+  //DEBUG_POS()
   #include "common_entity_data.spec"
 
   // elsewhere: object data, handles, padding bits, crc

@@ -465,6 +465,12 @@ static int dwg_encode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj
     }\
   }
 
+#undef DEBUG_POS
+#define DEBUG_POS()\
+  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE) { \
+    LOG_TRACE("DEBUG_POS @%u.%u / 0x%x (%lu)\n", (unsigned int)dat->byte, dat->bit, \
+              (unsigned int)dat->byte, bit_position(dat)); \
+  }
 
 /*--------------------------------------------------------------------------------*/
 typedef struct
@@ -770,6 +776,7 @@ dwg_encode(Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           bit_write_BL(dat, klass->maint_version);
           bit_write_BL(dat, klass->unknown_1);
           bit_write_BL(dat, klass->unknown_2);
+          LOG_TRACE("%d %d\n", (int)klass->num_instances, (int)klass->dwg_version);
         }
     }
 
@@ -808,17 +815,9 @@ dwg_encode(Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   }
   for (j = 0; j < dwg->num_objects; j++)
     {
-
       /* Define the handle of each object, including unknown */
       omap[j].idc = j;
-      if (dwg->object[j].supertype == DWG_SUPERTYPE_ENTITY)
-        omap[j].handle = dwg->object[j].handle.value;
-      else if (dwg->object[j].supertype == DWG_SUPERTYPE_OBJECT)
-        omap[j].handle = dwg->object[j].handle.value;
-      else if (dwg->object[j].supertype == DWG_SUPERTYPE_UNKNOWN)
-        omap[j].handle = dwg->object[j].handle.value;
-      else
-        omap[j].handle = 0x7FFFFFFF; /* Error! */
+      omap[j].handle = dwg->object[j].handle.value;
 
       /* Arrange the sequence of handles according to a growing order  */
       if (j > 0)
@@ -849,8 +848,9 @@ dwg_encode(Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   for (j = 0; j < dwg->num_objects; j++)
     {
       Dwg_Object *obj;
+      unsigned int idc = omap[j].idc;
       omap[j].address = dat->byte;
-      obj = &dwg->object[omap[j].idc];
+      obj = &dwg->object[idc];
       obj->address = dat->byte; // change the address to the linearily sorted one
       LOG_TRACE("\n> Next object: %lu\tHandle: %lu\tOffset: %lu\n"
                 "==========================================\n",
@@ -859,6 +859,7 @@ dwg_encode(Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       error |= dwg_encode_add_object(obj, dat, dat->byte);
       bit_write_CRC(dat, omap[j].address, 0xC0C1);
     }
+
   /*for (j = 0; j < dwg->num_objects; j++) 
       LOG_INFO ("Object(%lu): %6lu / Address: %08lX / Idc: %u\n", 
 		 j, omap[j].handle, omap[j].address, omap[j].idc);
@@ -1525,19 +1526,32 @@ dwg_encode_entity(Dwg_Object* obj,
     return DWG_ERR_NOTYETSUPPORTED;
   }
 
-  for (i = 0; i < ent->num_eed; i++)
-    {
-      BITCODE_BS size = ent->eed[i].size;
-      bit_write_BS(dat, size);
-      LOG_TRACE("EED[%u] size: " FORMAT_BS "\n", i, size);
-      if (size) // not all eed's have a new handle
-        {
-          bit_write_H(dat, &(ent->eed[i].handle));
-          LOG_TRACE("EED[%u] code: %d\n", i, (int)ent->eed[i].data->code);
-          bit_write_TF(dat, ent->eed[i].raw, size);
-        }
-    }
-  bit_write_BS(dat, 0);
+  if (!ent->num_eed) {
+    bit_write_BS(dat, 0);
+  } else {
+    int num_eed = ent->num_eed;
+    bit_write_BS(dat, ent->eed[0].size);
+    for (i = 0; i < num_eed; i++)
+      {
+        BITCODE_BS size = ent->eed[i].size;
+        int code = (int)ent->eed[i].data->code;
+        LOG_TRACE("EED[%u] size: %d, code: %d\n", i, (int)size, code);
+        if (size)
+          {
+            bit_write_H(dat, &(ent->eed[i].handle));
+            LOG_TRACE("EED[%u] handle: %d.%d.%lX\n", i,
+                      ent->eed[i].handle.code, ent->eed[i].handle.size,
+                      ent->eed[i].handle.value);
+            bit_write_TF(dat, ent->eed[i].raw, size);
+          }
+        if (i+1 < num_eed)
+          bit_write_BS(dat, ent->eed[i+1].size);
+        else
+          bit_write_BS(dat, 0);
+      }
+  }
+  //DEBUG_POS()
+  //bit_write_BS(dat, 0);
 
   #include "common_entity_data.spec"
 
@@ -1665,16 +1679,17 @@ dwg_encode_object(Dwg_Object* obj,
     bit_write_BS(dat, ord->eed[0].size);
     for (i = 0; i < num_eed; i++)
       {
-        BITCODE_BS j;
-        LOG_TRACE("EED[%u] size: " FORMAT_BS "\n", i, ord->eed[i].size)
-        bit_write_H(dat, &(ord->eed[i].handle));
-        LOG_TRACE("EED[%u] code: " FORMAT_RC "\n", i, ord->eed[i].data->code)
-        bit_write_TF(dat, ord->eed[i].raw, ord->eed[i].size);
-        /*
-        bit_write_RC(dat, ord->eed[i].data->code);
-        for (j=1; j < ord->eed[i].size-1; j++)
-          bit_write_RC(dat, ord->eed[i].raw[j]);
-        */
+        BITCODE_BS size = ord->eed[i].size;
+        int code = (int)ord->eed[i].data->code;
+        LOG_TRACE("EED[%u] size: %d, code: %d\n", i, (int)size, code);
+        if (size)
+          {
+            bit_write_H(dat, &(ord->eed[i].handle));
+            LOG_TRACE("EED[%u] handle: %d.%d.%lX\n", i,
+                      ord->eed[i].handle.code, ord->eed[i].handle.size,
+                      ord->eed[i].handle.value);
+            bit_write_TF(dat, ord->eed[i].raw, size);
+          }
         if (i+1 < num_eed)
           bit_write_BS(dat, ord->eed[i+1].size);
         else

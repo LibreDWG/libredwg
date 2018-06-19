@@ -1505,6 +1505,7 @@ bit_write_sentinel(Bit_Chain * dat, unsigned char sentinel[16])
 
 /*
  * Allocates memory space for bit_chain
+ * adds 10 4kB pages.
  */
 #define CHAIN_BLOCK 40960
 void
