@@ -1100,7 +1100,6 @@ static int
 dwg_encode_variable_type(Dwg_Data* dwg, Bit_Chain* dat, Dwg_Object* obj)
 {
   int i, error = 0;
-  char *dxfname;
   int is_entity;
   Dwg_Class *klass;
 
@@ -1114,14 +1113,14 @@ dwg_encode_variable_type(Dwg_Data* dwg, Bit_Chain* dat, Dwg_Object* obj)
   klass = &dwg->dwg_class[i];
   if (!klass || ! klass->dxfname)
     return DWG_ERR_INTERNALERROR;
-  dxfname = obj->dxfname = klass->dxfname;
+  obj->dxfname = klass->dxfname;
   // almost always false
   is_entity = dwg_class_is_entity(klass);
 
   #include "classes.inc"
 
   LOG_WARN("Unknown Class %s %d %s (0x%x%s)", is_entity ? "entity" : "object", \
-           klass->number, dxfname, klass->proxyflag,                    \
+           klass->number, klass->dxfname, klass->proxyflag,                    \
            klass->wasazombie ? " was proxy" : "")
 
 #undef WARN_UNHANDLED_CLASS

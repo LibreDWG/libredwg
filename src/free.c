@@ -211,8 +211,10 @@ dwg_free_ ##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj)\
   _obj = ent = _ent->tio.token;
 
 #define DWG_ENTITY_END      \
+  dwg_free_eed(obj);        \
   FREE_IF(_obj);            \
   FREE_IF(obj->tio.entity); \
+  obj->parent = NULL;       \
   return 0;                 \
 }
 
@@ -298,7 +300,6 @@ dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
 {
   int i;
   int is_entity;
-  char *dxfname;
   Dwg_Class *klass;
 
   i = obj->type - 500;
@@ -308,9 +309,6 @@ dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
   klass = &dwg->dwg_class[i];
   if (!klass || !klass->dxfname)
     return DWG_ERR_INTERNALERROR;
-  dxfname = strdup(klass->dxfname);
-  if (!dxfname)
-    return DWG_ERR_OUTOFMEM;
   // almost always false
   is_entity = dwg_class_is_entity(klass);
 

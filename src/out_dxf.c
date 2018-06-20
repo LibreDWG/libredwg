@@ -792,7 +792,6 @@ dwg_dxf_variable_type(const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
                       Dwg_Object *restrict obj)
 {
   int i;
-  char *dxfname;
   Dwg_Class *klass;
   int is_entity;
 
@@ -803,8 +802,6 @@ dwg_dxf_variable_type(const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   klass = &dwg->dwg_class[i];
   if (!klass || ! klass->dxfname)
     return DWG_ERR_INTERNALERROR;
-  dxfname = klass->dxfname;
-  // almost always false
   is_entity = dwg_class_is_entity(klass);
 
   //if (!is_entity)

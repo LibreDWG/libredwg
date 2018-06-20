@@ -3100,7 +3100,6 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
                          Dwg_Object *restrict obj)
 {
   Dwg_Class *klass;
-  char *dxfname;
   int i;
   int is_entity;
 
@@ -3115,7 +3114,7 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
   klass = &dwg->dwg_class[i];
   if (!klass || ! klass->dxfname)
     return DWG_ERR_INTERNALERROR;
-  dxfname = obj->dxfname = klass->dxfname;
+  obj->dxfname = klass->dxfname;
   // almost always false
   is_entity = dwg_class_is_entity(klass);
 
@@ -3125,7 +3124,7 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
   // TODO: ACSH_BOX_CLASS, ACAD_EVALUATION_GRAPH, ACSH_HISTORY_CLASS
 
   LOG_WARN("Unknown Class %s %d %s (0x%x%s)", is_entity ? "entity" : "object", \
-           klass->number, dxfname, klass->proxyflag,                    \
+           klass->number, klass->dxfname, klass->proxyflag,                    \
            klass->wasazombie ? " was proxy" : "")
 
   return DWG_ERR_UNHANDLEDCLASS;

@@ -27,12 +27,12 @@
 
 #define WARN_UNHANDLED_CLASS \
       LOG_WARN("Unhandled Class %s %d %s (0x%x%s) %u/%lX", is_entity ? "entity" : "object",\
-               klass->number, dxfname, klass->proxyflag,\
+               klass->number, klass->dxfname, klass->proxyflag,\
                klass->wasazombie ? " was proxy" : "",\
                obj->index, obj->handle.value)
 #define WARN_UNTESTED_CLASS \
       LOG_WARN("Untested Class %s %d %s (0x%x%s) %u/%lX", is_entity ? "entity" : "object",\
-               klass->number, dxfname, klass->proxyflag,\
+               klass->number, klass->dxfname, klass->proxyflag,\
                klass->wasazombie ? " was proxy" : "",\
                obj->index, obj->handle.value)
 
@@ -40,21 +40,17 @@
 //#define DWG_FUNC_N(ACTION,name) _DWG_FUNC_N(ACTION,name)
 
 #define STABLE_CLASS(ACTION, name) \
-  if (!strcmp(dxfname, #name)) \
+  if (!strcmp(klass->dxfname, #name)) \
     { \
       if (!strcmp(#ACTION, "decode")) \
         obj->fixedtype = DWG_TYPE_##name; \
-      if (!strcmp(#ACTION, "free")) \
-        free(dxfname); \
       return DWG_FUNC_N(ACTION,name)(dat, obj); \
     }
 #define STABLE_CLASS_DXF(ACTION, name, _dxfname) \
-  if (!strcmp(dxfname, #_dxfname)) \
+  if (!strcmp(klass->dxfname, #_dxfname)) \
     { \
       if (!strcmp(#ACTION, "decode")) \
         obj->fixedtype = DWG_TYPE_##name; \
-      if (!strcmp(#ACTION, "free")) \
-        free(dxfname); \
       return DWG_FUNC_N(ACTION,name)(dat, obj); \
     }
 #define STABLE_CLASS_CPP(ACTION, name, _cppname) \
@@ -62,28 +58,22 @@
     { \
       if (!strcmp(#ACTION, "decode")) \
         obj->fixedtype = DWG_TYPE_##name; \
-      if (!strcmp(#ACTION, "free")) \
-        free(dxfname); \
       return DWG_FUNC_N(ACTION,name)(dat, obj); \
     }
 #define UNTESTED_CLASS(ACTION, name) \
-  if (!strcmp(dxfname, #name)) \
+  if (!strcmp(klass->dxfname, #name)) \
     { \
       WARN_UNTESTED_CLASS; \
       if (!strcmp(#ACTION, "decode")) \
         obj->fixedtype = DWG_TYPE_##name; \
-      if (!strcmp(#ACTION, "free")) \
-        free(dxfname); \
       return DWG_FUNC_N(ACTION,name)(dat, obj); \
     }
 #define UNTESTED_CLASS_DXF(ACTION, name, _dxfname) \
-  if (!strcmp(dxfname, #_dxfname)) \
+  if (!strcmp(klass->dxfname, #_dxfname)) \
     { \
       WARN_UNTESTED_CLASS; \
       if (!strcmp(#ACTION, "decode") || !memcmp(#ACTION, "in", 2)) \
         obj->fixedtype = DWG_TYPE_##name; \
-      if (!strcmp(#ACTION, "free")) \
-        free(dxfname); \
       return DWG_FUNC_N(ACTION,name)(dat, obj); \
     }
 #define UNTESTED_CLASS_CPP(ACTION, name, _cppname) \
@@ -92,29 +82,23 @@
       WARN_UNTESTED_CLASS; \
       if (!strcmp(#ACTION, "decode")) \
         obj->fixedtype = DWG_TYPE_##name; \
-      if (!strcmp(#ACTION, "free")) \
-        free(dxfname); \
       return DWG_FUNC_N(ACTION,name)(dat, obj); \
     }
 #define UNHANDLED_CLASS(ACTION, name) \
-  if (!strcmp(dxfname, #name)) \
+  if (!strcmp(klass->dxfname, #name)) \
     { \
       WARN_UNHANDLED_CLASS; \
       if (!strcmp(#ACTION, "decode")) \
         obj->fixedtype = DWG_TYPE_##name; \
-      if (!strcmp(#ACTION, "free")) \
-        free(dxfname); \
       /* return dwg_##ACTION_##name(dat, obj); */ \
       return DWG_ERR_UNHANDLEDCLASS; \
     }
 #define UNHANDLED_CLASS_DXF(ACTION, name, _dxfname) \
-  if (!strcmp(dxfname, #_dxfname)) \
+  if (!strcmp(klass->dxfname, #_dxfname)) \
     { \
       WARN_UNHANDLED_CLASS; \
       if (!strcmp(#ACTION, "decode") || !memcmp(#ACTION, "in", 2)) \
         obj->fixedtype = DWG_TYPE_##name; \
-      if (!strcmp(#ACTION, "free")) \
-        free(dxfname); \
       /* return dwg_##ACTION_##name(dat, obj); */ \
       return DWG_ERR_UNHANDLEDCLASS; \
     }

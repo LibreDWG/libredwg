@@ -269,19 +269,15 @@ static int
 dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
 {
   int i;
-  char *dxfname;
-  Dwg_Class *klass;
   int is_entity;
+  Dwg_Class *klass;
 
   i = obj->type - 500;
   if (i < 0 || i > (int)dwg->num_classes)
     return DWG_ERR_INVALIDTYPE;
 
   klass = &dwg->dwg_class[i];
-  if (!klass)
-    return DWG_ERR_INTERNALERROR;
-  dxfname = klass->dxfname;
-  if (!dxfname)
+  if (!klass || !klass->dxfname)
     return DWG_ERR_INTERNALERROR;
   // almost always false
   is_entity = dwg_class_is_entity(klass);
