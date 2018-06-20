@@ -3743,6 +3743,13 @@ DWG_ENTITY(LWPOLYLINE)
       }
     END_REPEAT(points)
   } else {
+#ifndef IS_RELEASE
+    if (FIELD_VALUE(num_points) > 0x10000) {
+      LOG_ERROR("Invalid LWPOLYLINE.num_points %ld", (long)FIELD_VALUE(num_points));
+      DEBUG_HERE()
+      return DWG_ERR_VALUEOUTOFBOUNDS;
+    }
+#endif
     VERSIONS(R_13, R_14) {
       FIELD_2RD_VECTOR (points, num_points, 10);
     }
@@ -4431,7 +4438,8 @@ DWG_ENTITY(TABLE)
       VERSION(R_2013)
         FIELD_BL (unknown_bl1, 0);
 
-      //continue as 20.4.96.2 AcDbTableContent subclass: 20.4.97
+      //TODO continue as 20.4.96.2 AcDbTableContent subclass: 20.4.97
+      //either as sub-struct or seperate call
 #ifdef DEBUG_CLASSES      
       return DWG_FUNC_N(ACTION,TABLECONTENT) (dat, obj);
 #endif
@@ -4492,11 +4500,13 @@ DWG_ENTITY(TABLE)
   FIELD_3BD (horiz_direction, 11);
   FIELD_BL (num_cols, 92);
   FIELD_BL (num_rows, 91);
+#ifndef IS_RELEASE
   if (FIELD_VALUE(num_rows) > 0x1000) {
     LOG_ERROR("Invalid TABLE.num_rows %ld", (long)FIELD_VALUE(num_rows));
     DEBUG_HERE()
     return DWG_ERR_VALUEOUTOFBOUNDS;
   }
+#endif
   FIELD_VECTOR (col_widths, BD, num_cols, 142);
   FIELD_VECTOR (row_heights, BD, num_rows, 141);
   FIELD_VALUE(num_cells) = FIELD_VALUE(num_rows) * FIELD_VALUE(num_cols);

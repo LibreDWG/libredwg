@@ -149,13 +149,26 @@ static bool env_var_checked_p;
 #define FIELD_BE(name, dxf)\
   bit_write_BE(dat, FIELD_VALUE(name.x), FIELD_VALUE(name.y), FIELD_VALUE(name.z));
 
-#define FIELD_2RD_VECTOR(name, size, dxf)                   \
+// No overflow check with IS_RELEASE
+#ifdef IS_RELEASE
+# define OVERFLOW_CHECK(name, size)
+#else
+# define OVERFLOW_CHECK(name, size) \
+  if ((size) > 0xff00) { \
+    LOG_ERROR("Invalid " #name " %ld", (long)size); \
+    return DWG_ERR_VALUEOUTOFBOUNDS; \
+  }
+#endif
+
+#define FIELD_2RD_VECTOR(name, size, dxf) \
+  OVERFLOW_CHECK(name, _obj->size) \
   for (vcount=0; vcount < (long)_obj->size; vcount++)\
     {\
       FIELD_2RD(name[vcount], dxf);\
     }
 
 #define FIELD_2DD_VECTOR(name, size, dxf)\
+  OVERFLOW_CHECK(name, _obj->size) \
   FIELD_2RD(name[0], dxf); \
   for (vcount = 1; vcount < (long)_obj->size; vcount++)\
     {\
@@ -163,14 +176,14 @@ static bool env_var_checked_p;
     }
 
 #define FIELD_3DPOINT_VECTOR(name, size, dxf)\
-  for (vcount=0; vcount < (long)_obj->size; vcount++)   \
+  OVERFLOW_CHECK(name, _obj->size) \
+  for (vcount=0; vcount < (long)_obj->size; vcount++) \
     {\
       FIELD_3DPOINT(name[vcount], dxf);\
     }
 
 #define REACTORS(code)\
-  if (dat->version >= R_2000 && obj->tio.object->num_reactors > 0x1000) { \
-    fprintf(stderr, "Invalid num_reactors: %ld\n", (long)obj->tio.object->num_reactors); return DWG_ERR_VALUEOUTOFBOUNDS; } \
+  OVERFLOW_CHECK(name, obj->tio.object->num_reactors) \
   SINCE (R_13) { \
     for (vcount=0; vcount < (long)obj->tio.object->num_reactors; vcount++) \
     {\
@@ -217,6 +230,7 @@ static bool env_var_checked_p;
 #define FIELD_VECTOR_N(name, type, size, dxf)\
   if (size > 0)\
     {\
+      OVERFLOW_CHECK(name, size) \
       for (vcount=0; vcount < (long)size; vcount++)\
         {\
           bit_write_##type(dat, _obj->name[vcount]);\
@@ -226,6 +240,7 @@ static bool env_var_checked_p;
 #define FIELD_VECTOR_T(name, size, dxf)\
   if (_obj->size > 0)\
     {\
+      OVERFLOW_CHECK(name, _obj->size) \
       for (vcount=0; vcount < (long)_obj->size; vcount++)\
         {\
           PRE (R_2007) { \
@@ -293,6 +308,7 @@ static bool env_var_checked_p;
 #define HANDLE_VECTOR_N(name, size, code, dxf)\
   if (size>0) \
     assert(_obj->name); \
+  OVERFLOW_CHECK(name, size) \
   for (vcount=0; vcount < (long)size; vcount++)\
     {\
       assert(_obj->name[vcount]); \
@@ -1460,6 +1476,31 @@ dwg_encode_add_object(Dwg_Object* obj, Bit_Chain* dat,
   return error;
 }
 
+/** Only writes the raw part.
+    Only members with size have raw and a handle.
+ */
+static int dwg_encode_eed(Bit_Chain *restrict dat, Dwg_Object_Object *restrict ent)
+{
+  int i, num_eed = ent->num_eed;
+  for (i = 0; i < num_eed; i++)
+    {
+      BITCODE_BS size = ent->eed[i].size;
+      int code = (int)ent->eed[i].data->code;
+      LOG_TRACE("EED[%u] size: %d, code: %d\n", i, (int)size, code);
+      if (size)
+        {
+          bit_write_BS(dat, size);
+          bit_write_H(dat, &(ent->eed[i].handle));
+          LOG_TRACE("EED[%u] handle: %d.%d.%lX\n", i,
+                    ent->eed[i].handle.code, ent->eed[i].handle.size,
+                    ent->eed[i].handle.value);
+          bit_write_TF(dat, ent->eed[i].raw, size);
+        }
+    }
+  bit_write_BS(dat, 0);
+  return 0;
+}
+
 /* The first common part of every entity.
 
    The last common part is common_entity_handle_data.spec
@@ -1474,7 +1515,6 @@ dwg_encode_entity(Dwg_Object* obj,
   Dwg_Object_Entity* ent = obj->tio.entity;
   Dwg_Object_Entity* _obj = ent;
   Dwg_Data *dwg = ent->dwg;
-  BITCODE_BS i;
 
   PRE(R_13) {
 
@@ -1526,36 +1566,13 @@ dwg_encode_entity(Dwg_Object* obj,
     return DWG_ERR_NOTYETSUPPORTED;
   }
 
-  if (!ent->num_eed) {
-    bit_write_BS(dat, 0);
-  } else {
-    int num_eed = ent->num_eed;
-    bit_write_BS(dat, ent->eed[0].size);
-    for (i = 0; i < num_eed; i++)
-      {
-        BITCODE_BS size = ent->eed[i].size;
-        int code = (int)ent->eed[i].data->code;
-        LOG_TRACE("EED[%u] size: %d, code: %d\n", i, (int)size, code);
-        if (size)
-          {
-            bit_write_H(dat, &(ent->eed[i].handle));
-            LOG_TRACE("EED[%u] handle: %d.%d.%lX\n", i,
-                      ent->eed[i].handle.code, ent->eed[i].handle.size,
-                      ent->eed[i].handle.value);
-            bit_write_TF(dat, ent->eed[i].raw, size);
-          }
-        if (i+1 < num_eed)
-          bit_write_BS(dat, ent->eed[i+1].size);
-        else
-          bit_write_BS(dat, 0);
-      }
-  }
-  //DEBUG_POS()
-  //bit_write_BS(dat, 0);
+  error |= dwg_encode_eed(dat, (Dwg_Object_Object *)ent);
+  //if (error & (DWG_ERR_INVALIDTYPE|DWG_ERR_VALUEOUTOFBOUNDS))
+  //  return error;
 
   #include "common_entity_data.spec"
 
-  return 0;
+  return error;
 }
 
 static int
@@ -1645,7 +1662,7 @@ static int
 dwg_encode_object(Dwg_Object* obj,
                   Bit_Chain* hdl_dat, Bit_Chain* str_dat, Bit_Chain* dat)
 {
-  BITCODE_BS i, num_eed;
+  int error = 0;
   Dwg_Object_Object* ord = obj->tio.object;
   
   VERSIONS(R_2000, R_2007)
@@ -1671,31 +1688,7 @@ dwg_encode_object(Dwg_Object* obj,
     }
 
   bit_write_H(dat, &(obj->handle));
-
-  num_eed = ord->num_eed;
-  if (!num_eed) {
-    bit_write_BS(dat, 0);
-  } else {
-    bit_write_BS(dat, ord->eed[0].size);
-    for (i = 0; i < num_eed; i++)
-      {
-        BITCODE_BS size = ord->eed[i].size;
-        int code = (int)ord->eed[i].data->code;
-        LOG_TRACE("EED[%u] size: %d, code: %d\n", i, (int)size, code);
-        if (size)
-          {
-            bit_write_H(dat, &(ord->eed[i].handle));
-            LOG_TRACE("EED[%u] handle: %d.%d.%lX\n", i,
-                      ord->eed[i].handle.code, ord->eed[i].handle.size,
-                      ord->eed[i].handle.value);
-            bit_write_TF(dat, ord->eed[i].raw, size);
-          }
-        if (i+1 < num_eed)
-          bit_write_BS(dat, ord->eed[i+1].size);
-        else
-          bit_write_BS(dat, 0);
-      }
-  }
+  error |= dwg_encode_eed(dat, ord);
 
   VERSIONS(R_13, R_14)
     {
@@ -1712,7 +1705,7 @@ dwg_encode_object(Dwg_Object* obj,
     {
       bit_write_B(dat, ord->xdic_missing_flag);
     }
-  return 0;
+  return error;
 }
 
 static int

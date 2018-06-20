@@ -2370,6 +2370,7 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
               obj->eed = (Dwg_Eed*)realloc(obj->eed, (idx+1) * sizeof(Dwg_Eed));
               obj->eed[idx].handle = obj->eed[idx-1].handle;
               obj->eed[idx].size = 0;
+              obj->eed[idx].raw = NULL;
             }
         }
       dat->byte = end;
@@ -2449,11 +2450,11 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
   PRE(R_13) {
     return DWG_ERR_NOTYETSUPPORTED;
   }
+
   error |= dwg_decode_eed(dat, (Dwg_Object_Object *)ent);
   if (error & (DWG_ERR_INVALIDTYPE|DWG_ERR_VALUEOUTOFBOUNDS))
     return error;
 
-  //DEBUG_POS()
   #include "common_entity_data.spec"
 
   // elsewhere: object data, handles, padding bits, crc
