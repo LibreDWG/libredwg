@@ -204,16 +204,16 @@ dwg_free_ ##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj)\
   Bit_Chain* str_dat = dat;\
   Dwg_Data* dwg = obj->parent;\
   int error = 0; \
+  LOG_HANDLE("Free entity " #token "\n")\
   if (strcmp(#token, "UNKNOWN_ENT") && obj->supertype == DWG_SUPERTYPE_UNKNOWN) \
     return dwg_free_UNKNOWN_ENT(dat, obj); \
-  LOG_HANDLE("Free entity " #token "\n")\
   _ent = obj->tio.entity;\
   _obj = ent = _ent->tio.token;
 
 #define DWG_ENTITY_END      \
   FREE_IF(_obj);            \
   FREE_IF(obj->tio.entity); \
-  return 0; \
+  return 0;                 \
 }
 
 #define DWG_OBJECT(token) \
@@ -226,18 +226,18 @@ dwg_free_ ##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
   Bit_Chain* str_dat = dat;                      \
   Dwg_Data* dwg = obj->parent;                   \
   int error = 0; \
+  LOG_HANDLE("Free object " #token " %p\n", obj) \
   if (strcmp(#token, "UNKNOWN_OBJ") && obj->supertype == DWG_SUPERTYPE_UNKNOWN) \
     return dwg_free_UNKNOWN_OBJ(dat, obj); \
-  LOG_HANDLE("Free object " #token " %p\n", obj) \
   _obj = obj->tio.object->tio.token;
 
-#define DWG_OBJECT_END                                  \
-  dwg_free_eed(obj);                                    \
-  FREE_IF(_obj);                                        \
-  FREE_IF(obj->tio.object);                             \
-  obj->parent = NULL;                                   \
-  /* free(obj); obj = NULL; */                          \
-  return 0; \
+/* obj itself is allocated via dwg->object[], dxfname is klass->dxfname */
+#define DWG_OBJECT_END       \
+  dwg_free_eed(obj);         \
+  FREE_IF(_obj);             \
+  FREE_IF(obj->tio.object);  \
+  obj->parent = NULL;        \
+  return 0;                  \
 }
 
 //TODO: this should not really be needed as we can just free all refs
@@ -252,6 +252,9 @@ dwg_free_handleref(Dwg_Object_Ref *restrict ref, Dwg_Data *restrict dwg)
     return;
   }
   if (ref) {
+    free(ref); ref = NULL;
+  }
+  /*
     for (i=0; i < dwg->num_object_refs; i++)
       {
         if (dwg->object_ref[i] == ref)
@@ -260,7 +263,7 @@ dwg_free_handleref(Dwg_Object_Ref *restrict ref, Dwg_Data *restrict dwg)
             free(ref); ref = NULL;
           }
       }
-  }
+  */
 }
 
 static void
@@ -283,6 +286,7 @@ static void
 dwg_free_xdata(Dwg_Object_XRECORD *obj, int size)
 {
   dwg_free_xdata_resbuf(obj->xdata);
+  obj->xdata = NULL;
 }
 
 static void
@@ -674,6 +678,17 @@ dwg_free(Dwg_Data * dwg)
       dwg_free_header_vars(dwg);
       if (dwg->picture.size && dwg->picture.chain)
         free(dwg->picture.chain);
+      for (i=0; i < dwg->header.num_infos; ++i)
+        FREE_IF(dwg->header.section_info[i].sections);
+      if (dwg->header.num_infos)
+        FREE_IF(dwg->header.section_info);
+      for (i=0; i < dwg->second_header.num_handlers; i++)
+        FREE_IF(dwg->second_header.handlers[i].data);
+      for (i=0; i < dwg->num_objects; ++i)
+        {
+          if (dwg_obj_is_control(&dwg->object[i]))
+            dwg_free_object(&dwg->object[i]);
+        }
       if (dwg->num_classes)
         {
           for (i=0; i < (int)dwg->num_classes; ++i)
@@ -686,19 +701,6 @@ dwg_free(Dwg_Data * dwg)
             }
           FREE_IF(dwg->dwg_class);
         }
-      for (i=0; i < dwg->header.num_infos; ++i)
-        FREE_IF(dwg->header.section_info[i].sections);
-      if (dwg->header.num_infos)
-        FREE_IF(dwg->header.section_info);
-      for (i=0; i < dwg->second_header.num_handlers; i++)
-        FREE_IF(dwg->second_header.handlers[i].data);
-      for (i=0; i < dwg->num_objects; ++i)
-        {
-          if (dwg_obj_is_control(&dwg->object[i]))
-            dwg_free_object(&dwg->object[i]);
-        }
-      for (i=0; i < dwg->num_object_refs; ++i)
-        FREE_IF(dwg->object_ref[i]);
       FREE_IF(dwg->object_ref);
       FREE_IF(dwg->object);
       if (dwg->object_map)
