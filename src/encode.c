@@ -1144,7 +1144,7 @@ dwg_encode_add_object(Dwg_Object* obj, Bit_Chain* dat,
   dat->byte = address;
   dat->bit = 0;
 
-  LOG_INFO("Object number: %lu", obj->index);
+  LOG_INFO("Object number: %lu", (unsigned long)obj->index);
   while (dat->byte + obj->size >= dat->size)
     bit_chain_alloc(dat);
 

@@ -67,7 +67,7 @@ main (int argc, char *argv[])
   const char *version = NULL;
   char* filename_out = NULL;
   Dwg_Version_Type dwg_version;
-  long unsigned int num_objects;
+  BITCODE_BL num_objects;
 
   // check args
   if (argc < 2)
@@ -164,10 +164,10 @@ main (int argc, char *argv[])
   printf("Re-reading created file %s\n", filename_out);
   error = dwg_read_file(filename_out, &dwg);
   if (error >= DWG_ERR_CRITICAL)
-      printf("re-READ ERROR\n");
+      printf("re-READ ERROR 0x%x\n", error);
   if (num_objects && (num_objects != dwg.num_objects))
     printf("re-READ num_objects: %lu, should be %lu\n",
-           dwg.num_objects, num_objects);
+           (unsigned long)dwg.num_objects, (unsigned long)num_objects);
 #endif
   //if (filename_out != argv[2])
   //  free (filename_out);
