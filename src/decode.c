@@ -925,7 +925,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
   j = 0;
   do
     {
-      unsigned int i;
+      BITCODE_BS i;
       Dwg_Class *klass;
 
       i = dwg->num_classes;
@@ -1041,7 +1041,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
           offset = bit_read_MC(dat);
           //last_handle += handle;
           last_offset += offset;
-          LOG_TRACE("\nNext object: %lu\t", dwg->num_objects)
+          LOG_TRACE("\nNext object: %lu\t", (unsigned long)dwg->num_objects)
           LOG_TRACE("Handle: %li\tOffset: %ld @%lu\n", handle, offset, last_offset)
 
           if (dat->byte == oldpos)
@@ -1089,7 +1089,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
     }
   while (section_size > 2);
 
-  LOG_INFO("Num objects: %lu\n", dwg->num_objects)
+  LOG_INFO("Num objects: %lu\n", (unsigned long)dwg->num_objects)
   LOG_INFO("\n"
            "=======> Object Data 2 (start)  : %8X\n",
            (unsigned int) object_begin)
@@ -2004,8 +2004,8 @@ read_2004_section_handles(Bit_Chain* dat, Dwg_Data *dwg)
           offset = bit_read_MC(&hdl_dat);
           //last_handle += handle;
           last_offset += offset;
-          LOG_TRACE("\n< Next object: %lu\t", dwg->num_objects)
-          LOG_HANDLE("Handle: %li\tOffset: %ld @%lu\n", handle, offset, last_offset)
+          LOG_TRACE("\n< Next object: %lu\t", (unsigned long)dwg->num_objects)
+          LOG_HANDLE("Handle: %lX\tOffset: %ld @%lu\n", handle, offset, last_offset)
 
           error |= dwg_decode_add_object(dwg, &obj_dat, &obj_dat, last_offset);
           // we dont stop encoding on single errors, but we sum them all up
@@ -2021,7 +2021,7 @@ read_2004_section_handles(Bit_Chain* dat, Dwg_Data *dwg)
     }
   while (section_size > 2);
 
-  LOG_TRACE("\nNum objects: %lu\n", dwg->num_objects);
+  LOG_TRACE("\nNum objects: %lu\n", (unsigned long)dwg->num_objects);
 
   free(hdl_dat.chain);
   free(obj_dat.chain);
@@ -2176,8 +2176,8 @@ decode_R2007(Bit_Chain* dat, Dwg_Data * dwg)
       return error;
     }
 
-  LOG_INFO("Num objects: %lu\n", dwg->num_objects)
-  LOG_TRACE("  num object_refs: %lu\n", dwg->num_object_refs)
+  LOG_INFO("Num objects: %lu\n", (unsigned long)dwg->num_objects)
+  LOG_TRACE("  num object_refs: %lu\n", (unsigned long)dwg->num_object_refs)
   return error | resolve_objectref_vector(dat, dwg);
 }
 
@@ -2974,7 +2974,7 @@ decode_preR13_entities(unsigned long start, unsigned long end,
                        Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   int error = 0;
-  int num = dwg->num_objects;
+  BITCODE_BL num = dwg->num_objects;
   dat->bit = 0;
   LOG_TRACE("entities: (0x%lx-0x%lx, offset 0x%lx) TODO\n", start, end, offset)
   while (dat->byte < end)
@@ -3135,7 +3135,7 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
 EXPORT int dwg_add_object (Dwg_Data *dwg)
 {
   Dwg_Object *obj;
-  long unsigned int num = dwg->num_objects;
+  BITCODE_BL num = dwg->num_objects;
   int realloced = 0;
   if (!num)
     dwg->object = calloc(REFS_PER_REALLOC, sizeof(Dwg_Object));
@@ -3167,7 +3167,7 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
   long unsigned int object_address, end_address;
   unsigned char previous_bit;
   Dwg_Object *obj;
-  long unsigned int num = dwg->num_objects;
+  BITCODE_BL num = dwg->num_objects;
   int error = 0;
   int realloced = 0;
 
@@ -3190,7 +3190,7 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
     return realloced; // i.e. DWG_ERR_OUTOFMEM
   obj = &dwg->object[num];  
   LOG_INFO("==========================================\n"
-           "Object number: %lu/%lX", num, num)
+           "Object number: %lu/%lX", (unsigned long)num, (unsigned long)num)
 
   obj->size = bit_read_MS(dat);
   LOG_INFO(", Size: %d/0x%x", obj->size, obj->size)
@@ -3546,8 +3546,8 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
     }
 
   if (obj->handle.value) { // empty only with UNKNOWN
-    LOG_HANDLE("object_map{%lX} = %lu\n", obj->handle.value, num);
-    hash_set(dwg->object_map, obj->handle.value, num);
+    LOG_HANDLE("object_map{%lX} = %lu\n", obj->handle.value, (unsigned long)num);
+    hash_set(dwg->object_map, obj->handle.value, (uint32_t)num);
   }
 
   /* Now 1 padding bits until next byte, and then a RS CRC */

@@ -4541,7 +4541,7 @@ dwg_obj_tablectrl_get_null_handle(const dwg_object *restrict obj,
 EXPORT dwg_object_ref *
 dwg_obj_tablectrl_get_xdicobjhandle(const dwg_object *restrict obj,
                                     int *restrict error);
-long unsigned int
+EXPORT BITCODE_BL
 dwg_obj_tablectrl_get_objid(const dwg_object *restrict obj,
                             int *restrict error);
 
@@ -4781,7 +4781,7 @@ dwg_obj_generic_parent(const dwg_obj_generic *restrict obj,
                           int *restrict error);
 
 EXPORT dwg_object *
-dwg_get_object(dwg_data *dwg, long unsigned int index);
+dwg_get_object(dwg_data *dwg, BITCODE_BL index);
 
 EXPORT BITCODE_RL
 dwg_obj_get_bitsize(const dwg_object *obj);
@@ -4839,7 +4839,7 @@ dwg_obj_ref_get_object(const dwg_object_ref *restrict ref,
                           int *restrict error);
 
 dwg_object *
-dwg_absref_get_object(const dwg_data* dwg, const long unsigned int absref);
+dwg_absref_get_object(const dwg_data* dwg, const BITCODE_BL absref);
 
 EXPORT dwg_obj_obj *
 dwg_object_to_object(dwg_object *restrict obj,

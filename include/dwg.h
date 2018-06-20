@@ -1776,7 +1776,7 @@ typedef struct _dwg_entity_MLINE
   BITCODE_H null_handle; \
   BITCODE_H xdicobjhandle; \
   BITCODE_H* entries; \
-  long unsigned int objid; \
+  BITCODE_BL objid; \
   BITCODE_H* reactors  /* ignored */ \
 
 /**
@@ -4645,10 +4645,10 @@ typedef struct _dwg_object
   unsigned int size;     /*!< in bytes */
   unsigned long address; /*!< byte offset in the file */
   unsigned int type;     /*!< fixed or variable (class - 500) */
-  unsigned int index;    /*!< into dwg->object[] */
+  BITCODE_RL index;      /*!< into dwg->object[] */
   enum DWG_OBJECT_TYPE fixedtype; /*!< into a global list */
 
-  long unsigned int bitsize_address; /* bitsize offset: r13-2007 */
+  unsigned long bitsize_address; /* bitsize offset: r13-2007 */
   BITCODE_B  has_strings;       /*!< r2007+ */
   BITCODE_RL stringstream_size; /*!< r2007+ in bits, unused */
   BITCODE_UMC handlestream_size; /*!< r2010+ in bits */
@@ -4909,16 +4909,16 @@ typedef struct _dwg_struct
 
   Dwg_Header_Variables header_vars;
 
-  unsigned int num_classes;  /*!< size of dwg_class */
+  BITCODE_BS num_classes;    /*!< size of dwg_class */
   Dwg_Class * dwg_class;     /*!< list of all classes */
 
-  long unsigned int num_objects; /*!< size of object */
-  Dwg_Object * object;           /*!< list of all objects and entities */
+  BITCODE_BL num_objects;    /*!< size of object */
+  Dwg_Object * object;       /*!< list of all objects and entities */
 
-  long unsigned int num_entities;    /*!< number of entities in object */
-  long unsigned int num_object_refs; /*!< number of object_ref's (resolved handles) */
-  Dwg_Object_Ref **object_ref;       /*!< array of all handles */
-  struct _inthash *object_map;       /*!< map of all handles */
+  BITCODE_BL num_entities;       /*!< number of entities in object */
+  BITCODE_BL num_object_refs;    /*!< number of object_ref's (resolved handles) */
+  Dwg_Object_Ref **object_ref;   /*!< array of all handles */
+  struct _inthash *object_map;   /*!< map of all handles */
   int dirty_refs; /* 1 if we added an entity, and invalidated all the internal ref->obj's */
 
   Dwg_Object * mspace_block;
@@ -4999,10 +4999,10 @@ dwg_get_layer_count(const Dwg_Data *);
 EXPORT Dwg_Object_LAYER**
 dwg_get_layers(const Dwg_Data *);
 
-EXPORT long unsigned int
+EXPORT BITCODE_BL
 dwg_get_num_objects(const Dwg_Data *dwg);
 
-EXPORT long unsigned int
+EXPORT BITCODE_BL
 dwg_get_object_num_objects(const Dwg_Data *dwg);
 
 EXPORT int
@@ -5014,7 +5014,7 @@ dwg_obj_is_control(const Dwg_Object *obj);
 EXPORT int
 dwg_obj_is_table(const Dwg_Object *obj);
 
-EXPORT long unsigned int
+EXPORT BITCODE_BL
 dwg_get_num_entities(const Dwg_Data *);
 
 EXPORT Dwg_Object_Entity **
@@ -5048,7 +5048,7 @@ get_next_owned_block(const Dwg_Object *restrict hdr,
 
 EXPORT Dwg_Object *
 dwg_resolve_handle(const Dwg_Data* dwg,
-                   const unsigned long int absref);
+                   const BITCODE_BL absref);
 EXPORT int
 dwg_resolve_handleref(Dwg_Object_Ref *restrict ref,
                       const Dwg_Object *restrict obj);

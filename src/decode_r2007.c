@@ -1422,8 +1422,8 @@ read_2007_section_handles(Bit_Chain* dat, Bit_Chain* hdl,
           offset = bit_read_MC(&hdl_dat);
           //last_handle += handle;
           last_offset += offset;
-          LOG_TRACE("\nNext object: %lu\t", dwg->num_objects)
-          LOG_TRACE("Handle: %li\tOffset: %ld @%lu\n", handle, offset, last_offset)
+          LOG_TRACE("\nNext object: %lu\t", (unsigned long)dwg->num_objects)
+          LOG_TRACE("Handle: %lX\tOffset: %ld @%lu\n", handle, offset, last_offset)
 
           dwg_decode_add_object(dwg, &obj_dat, hdl, last_offset);
         }
@@ -1437,7 +1437,7 @@ read_2007_section_handles(Bit_Chain* dat, Bit_Chain* hdl,
     }
   while (section_size > 2);
 
-  LOG_INFO("\nNum objects: %lu\n", dwg->num_objects);
+  LOG_INFO("\nNum objects: %lu\n", (unsigned long)dwg->num_objects);
 
   free(hdl_dat.chain);
   free(obj_dat.chain);

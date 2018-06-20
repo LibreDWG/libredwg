@@ -64,7 +64,7 @@ create_postscript(Dwg_Data *dwg, char *output)
   double scale_x;
   double scale_y;
   double scale;
-  unsigned long i;
+  BITCODE_BL i;
   //FILE *fh;
   PSDoc *ps;
 

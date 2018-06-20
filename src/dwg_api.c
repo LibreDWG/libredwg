@@ -17738,7 +17738,7 @@ dwg_obj_tablectrl_get_xdicobjhandle(const dwg_object *restrict obj,
 \param[in]  obj    a TABLE_CONTROL dwg_object*
 \param[out] error  set to 0 for ok, >0 if not found.
 */
-long unsigned int
+BITCODE_BL
 dwg_obj_tablectrl_get_objid(const dwg_object *restrict obj,
                             int *restrict error)
 {
@@ -17843,7 +17843,7 @@ dwg_ent_get_layer_name(const dwg_obj_ent *restrict ent,
 }
 
 /** Returns the entity bitsize
-\code Usage: long bitsize = dwg_ent_get_bitsize(ent, &error);
+\code Usage: bitsize = dwg_ent_get_bitsize(ent, &error);
 \endcode
 \param[in]  ent     dwg_obj_ent*
 \param[out] error   int*, is set to 0 for ok, 1 on error
@@ -18087,7 +18087,7 @@ dwg_get_class(const dwg_data *dwg, unsigned int index)
 \param[in]  index
 */
 dwg_object *
-dwg_get_object(dwg_data *dwg, long unsigned int index)
+dwg_get_object(dwg_data *dwg, BITCODE_BL index)
 {
   if (!dwg)
     return NULL;
@@ -18097,7 +18097,7 @@ dwg_get_object(dwg_data *dwg, long unsigned int index)
 }
 
 /** Returns the object bitsize or 0
-\code Usage: long bitsize = dwg_obj_get_bitsize(obj);
+\code Usage: bitsize = dwg_obj_get_bitsize(obj);
 \endcode
 \param[in]  obj   dwg_object*
 */
@@ -18114,7 +18114,7 @@ dwg_obj_get_bitsize(const dwg_object *obj)
 \param[in]  obj     dwg_object*
 \param[out] error   int*, is set to 0 for ok, 1 on error
 */
-unsigned int
+BITCODE_BL
 dwg_obj_object_get_index(const dwg_object *restrict obj,
                           int *restrict error)
 {
@@ -18141,7 +18141,7 @@ dwg_obj_object_get_index(const dwg_object *restrict obj,
 */
 dwg_handle *
 dwg_obj_get_handle(dwg_object *restrict obj,
-                          int *restrict error)
+                   int *restrict error)
 {
   if (obj)
     {
@@ -18300,7 +18300,7 @@ dwg_obj_ref_get_object(const dwg_object_ref *restrict ref,
 */
 dwg_object *
 dwg_absref_get_object(const dwg_data *dwg,
-                      const long unsigned int absref)
+                      const BITCODE_BL absref)
 {
   if (absref)
       return dwg_resolve_handle(dwg, absref);

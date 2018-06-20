@@ -537,21 +537,21 @@ dwg_get_layers(const Dwg_Data *dwg)
   return layers;
 }
 
-long unsigned int
+BITCODE_BL
 dwg_get_object_num_objects(const Dwg_Data *dwg)
 {
   assert(dwg);
   return dwg->num_objects - dwg->num_entities;
 }
 
-long unsigned int
+BITCODE_BL
 dwg_get_num_objects(const Dwg_Data *dwg)
 {
   assert(dwg);
   return dwg->num_objects;
 }
 
-long unsigned int
+BITCODE_BL
 dwg_get_num_entities(const Dwg_Data *dwg)
 {
   assert(dwg);
@@ -562,7 +562,7 @@ dwg_get_num_entities(const Dwg_Data *dwg)
 Dwg_Object_Entity **
 dwg_get_entities(const Dwg_Data *dwg)
 {
-  long unsigned int i, ent_count = 0;
+  BITCODE_BL i, ent_count = 0;
   Dwg_Object_Entity ** entities;
 
   assert(dwg);
@@ -645,17 +645,18 @@ dwg_ref_get_object_relative(const Dwg_Data *restrict dwg,
  * TODO: Check and update each handleref obj cache.
  */
 Dwg_Object *
-dwg_resolve_handle(const Dwg_Data * dwg, const long unsigned int absref)
+dwg_resolve_handle(const Dwg_Data * dwg, const BITCODE_BL absref)
 {
   uint32_t i = hash_get(dwg->object_map, (uint32_t)absref);
-  LOG_HANDLE("object_map{%lX} => %u\n", absref, i);
+  LOG_HANDLE("object_map{%lX} => %u\n", (unsigned long)absref, i);
   if (i == HASH_NOT_FOUND ||
       i >= dwg->num_objects) //the latter being an invalid handle (read from DWG)
     {
       // ignore warning on invalid handles. These are warned earlier already
       if (absref && absref < dwg->num_objects)
         {
-          LOG_WARN("Object handle not found, %lu in %ld objects", absref, dwg->num_objects);
+          LOG_WARN("Object handle not found, " FORMAT_BL " in " FORMAT_BL " objects",
+                   absref, dwg->num_objects);
         }
       return NULL;
     }

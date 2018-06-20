@@ -493,7 +493,7 @@ typedef struct
 {
   long int handle;
   long int address;
-  unsigned int index;
+  BITCODE_BL index;
 } Object_Map;
 
 /*--------------------------------------------------------------------------------
@@ -544,7 +544,7 @@ dwg_encode(Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 {
   int ckr_missing = 1;
   int i, error = 0;
-  long unsigned int j;
+  BITCODE_BL j;
   long unsigned int section_address;
   unsigned char pvzbit;
   long unsigned int pvzadr;
@@ -838,17 +838,17 @@ dwg_encode(Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       /* Arrange the sequence of handles according to a growing order  */
       if (j > 0)
         {
-          unsigned long k = j;
+          BITCODE_BL k = j;
           while (omap[k].handle < omap[k - 1].handle)
             {
               pvzmap.handle = omap[k].handle;
-              pvzmap.index    = omap[k].index;
+              pvzmap.index  = omap[k].index;
 
               omap[k - 1].handle = pvzmap.handle;
-              omap[k - 1].index    = pvzmap.index;
+              omap[k - 1].index  = pvzmap.index;
 
               omap[k].handle = omap[k - 1].handle;
-              omap[k].index    = omap[k - 1].index;
+              omap[k].index  = omap[k - 1].index;
 
               k--;
               if (k == 0)
@@ -864,14 +864,15 @@ dwg_encode(Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   for (j = 0; j < dwg->num_objects; j++)
     {
       Dwg_Object *obj;
-      unsigned int index = omap[j].index;
-      LOG_TRACE("\n> Next object: %lu\tHandle: %lX\tOffset: %lu\n"
+      BITCODE_BL index = omap[j].index;
+      LOG_TRACE("\n> Next object: " FORMAT_BL " \tHandle: %lX\tOffset: %lu\n"
                 "==========================================\n",
                 j, omap[j].handle, dat->byte);
       omap[j].address = dat->byte;
       if (index > dwg->num_objects)
         {
-          LOG_ERROR("Invalid object map index %d, max %d. Skipping", index, dwg->num_objects)
+          LOG_ERROR("Invalid object map index " FORMAT_BL ", max " FORMAT_BL ". Skipping",
+                    index, dwg->num_objects)
           error |= DWG_ERR_VALUEOUTOFBOUNDS;
           continue;
         }
@@ -904,7 +905,7 @@ dwg_encode(Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   last_handle = 0;
   for (j = 0; j < dwg->num_objects; j++)
     {
-      unsigned int index;
+      BITCODE_BL index;
       long int pvz;
 
       index = omap[j].index;
@@ -1143,7 +1144,7 @@ dwg_encode_add_object(Dwg_Object* obj, Bit_Chain* dat,
   dat->byte = address;
   dat->bit = 0;
 
-  LOG_INFO("Object number: %u", obj->index);
+  LOG_INFO("Object number: %lu", obj->index);
   while (dat->byte + obj->size >= dat->size)
     bit_chain_alloc(dat);
 

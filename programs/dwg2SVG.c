@@ -219,7 +219,7 @@ void output_BLOCK_HEADER(Dwg_Object_Ref* ref)
 static void
 output_SVG(Dwg_Data* dwg)
 {
-  unsigned int i;
+  BITCODE_BS i;
   Dwg_Object *obj;
   Dwg_Object_BLOCK_CONTROL* block_control;
   double dx, dy;
