@@ -1497,6 +1497,8 @@ read_R2004_section_map(Bit_Chain* dat, Dwg_Data * dwg)
     }
 
   error = decompress_R2004_section(dat, decomp, comp_data_size);
+  if (error > DWG_ERR_CRITICAL)
+    return error;
   LOG_TRACE("\n#### Read 2004 Section Page Map ####\n")
 
   section_address = 0x100;  // starting address
@@ -1587,6 +1589,8 @@ read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
     }
 
   error = decompress_R2004_section(dat, decomp, comp_data_size);
+  if (error > DWG_ERR_CRITICAL)
+    return error;
 
   dwg->header.num_infos = *(uint32_t*)decomp;
   dwg->header.section_info = (Dwg_Section_Info*)
@@ -1702,6 +1706,7 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *dwg,
   encrypted_section_header es;
   char *decomp;
   unsigned int i, j;
+  int error = 0;
 
   for (i=0; i < dwg->header.num_infos && !info; ++i)
     {
@@ -1764,8 +1769,10 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *dwg,
       LOG_HANDLE("Checksum2:        0x%x\n\n",
             (unsigned int) es.fields.checksum_2)
 
-      decompress_R2004_section(dat, &decomp[i * info->max_decomp_size],
-        es.fields.data_size);
+      error = decompress_R2004_section(dat, &decomp[i * info->max_decomp_size],
+                                       es.fields.data_size);
+      if (error > DWG_ERR_CRITICAL)
+        return error;
     }
 
   sec_dat->bit     = 0;
