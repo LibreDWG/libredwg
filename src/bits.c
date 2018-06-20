@@ -31,6 +31,7 @@
 #endif
 // else we roll our own, Latin-1 only.
 
+#define DWG_LOGLEVEL DWG_LOGLEVEL_NONE
 #include "logging.h"
 #include "bits.h"
 
@@ -1054,7 +1055,7 @@ bit_read_H(Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
   handle->value = 0;
   if (handle->size > 4 || handle->code > 12)
     {
-      LOG_ERROR("Invalid handle-reference, longer than 4 bytes: %i.%i.%lu",
+      LOG_WARN("Invalid handle-reference, longer than 4 bytes: %i.%i.%lu",
                 handle->code, handle->size, handle->value)
       handle->size = 0;
       return DWG_ERR_INVALIDHANDLE;

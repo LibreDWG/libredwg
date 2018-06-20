@@ -95,7 +95,7 @@ main (int argc, char *argv[])
   dwg.opts = 0;
   error = dwg_read_file(filename_in, &dwg);
   if (error >= DWG_ERR_CRITICAL)
-    fprintf(stderr, "READ ERROR 0x%x\n", error);
+    fprintf(stderr, "READ ERROR %s: 0x%x\n", filename_in, error);
 
   for (i=0; i < dwg.layer_control.num_entries; i++)
     {
