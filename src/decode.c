@@ -1784,7 +1784,7 @@ static int
 read_2004_section_classes(Bit_Chain* dat, Dwg_Data *dwg)
 {
   BITCODE_RL size;
-  BITCODE_BS max_num, idc;
+  BITCODE_BS max_num, i;
   unsigned long int num_objects, dwg_version, maint_version, unknown;
   char c;
   int error;
@@ -1848,53 +1848,53 @@ read_2004_section_classes(Bit_Chain* dat, Dwg_Data *dwg)
           return DWG_ERR_OUTOFMEM;
         }
 
-      for (idc = 0; idc < dwg->num_classes; idc++)
+      for (i = 0; i < dwg->num_classes; i++)
         {
-          dwg->dwg_class[idc].number        = bit_read_BS(&sec_dat);
-          dwg->dwg_class[idc].proxyflag     = bit_read_BS(&sec_dat);
+          dwg->dwg_class[i].number        = bit_read_BS(&sec_dat);
+          dwg->dwg_class[i].proxyflag     = bit_read_BS(&sec_dat);
           LOG_TRACE("-------------------\n")
-          LOG_TRACE("Number:           %d\n", dwg->dwg_class[idc].number)
-          LOG_TRACE("Proxyflag:        %x\n", dwg->dwg_class[idc].proxyflag)
+          LOG_TRACE("Number:           %d\n", dwg->dwg_class[i].number)
+          LOG_TRACE("Proxyflag:        %x\n", dwg->dwg_class[i].proxyflag)
           if (dwg->header.version >= R_2007)
             {
-              dwg->dwg_class[idc].appname       = (char*)bit_read_TU(&str_dat);
-              dwg->dwg_class[idc].cppname       = (char*)bit_read_TU(&str_dat);
-              dwg->dwg_class[idc].dxfname_u     = bit_read_TU(&str_dat);
-              LOG_TRACE_TU("Application name", dwg->dwg_class[idc].appname,0)
-              LOG_TRACE_TU("C++ class name  ", dwg->dwg_class[idc].cppname,0)
-              LOG_TRACE_TU("DXF record name ", dwg->dwg_class[idc].dxfname_u,0)
-              dwg->dwg_class[idc].dxfname = bit_convert_TU(dwg->dwg_class[idc].dxfname_u);
+              dwg->dwg_class[i].appname       = (char*)bit_read_TU(&str_dat);
+              dwg->dwg_class[i].cppname       = (char*)bit_read_TU(&str_dat);
+              dwg->dwg_class[i].dxfname_u     = bit_read_TU(&str_dat);
+              LOG_TRACE_TU("Application name", dwg->dwg_class[i].appname,0)
+              LOG_TRACE_TU("C++ class name  ", dwg->dwg_class[i].cppname,0)
+              LOG_TRACE_TU("DXF record name ", dwg->dwg_class[i].dxfname_u,0)
+              dwg->dwg_class[i].dxfname = bit_convert_TU(dwg->dwg_class[i].dxfname_u);
             }
           else
             {
-              dwg->dwg_class[idc].appname       = bit_read_TV(&sec_dat);
-              dwg->dwg_class[idc].cppname       = bit_read_TV(&sec_dat);
-              dwg->dwg_class[idc].dxfname       = bit_read_TV(&sec_dat);
-              LOG_TRACE("Application name: %s\n", dwg->dwg_class[idc].appname)
-              LOG_TRACE("C++ class name:   %s\n", dwg->dwg_class[idc].cppname)
-              LOG_TRACE("DXF record name:  %s\n", dwg->dwg_class[idc].dxfname)
+              dwg->dwg_class[i].appname       = bit_read_TV(&sec_dat);
+              dwg->dwg_class[i].cppname       = bit_read_TV(&sec_dat);
+              dwg->dwg_class[i].dxfname       = bit_read_TV(&sec_dat);
+              LOG_TRACE("Application name: %s\n", dwg->dwg_class[i].appname)
+              LOG_TRACE("C++ class name:   %s\n", dwg->dwg_class[i].cppname)
+              LOG_TRACE("DXF record name:  %s\n", dwg->dwg_class[i].dxfname)
             }
-          dwg->dwg_class[idc].wasazombie    = bit_read_B(&sec_dat);
-          dwg->dwg_class[idc].item_class_id = bit_read_BS(&sec_dat);
+          dwg->dwg_class[i].wasazombie    = bit_read_B(&sec_dat);
+          dwg->dwg_class[i].item_class_id = bit_read_BS(&sec_dat);
           LOG_TRACE("Class ID:         0x%x "
                     "(0x1f3 for object, 0x1f2 for entity)\n",
-                    dwg->dwg_class[idc].item_class_id)
+                    dwg->dwg_class[i].item_class_id)
 
-          dwg->dwg_class[idc].num_instances = bit_read_BL(&sec_dat);
-          dwg->dwg_class[idc].dwg_version    = bit_read_BS(&sec_dat);
-          dwg->dwg_class[idc].maint_version  = bit_read_BS(&sec_dat);
-          dwg->dwg_class[idc].unknown_1      = bit_read_BL(&sec_dat);
-          dwg->dwg_class[idc].unknown_1      = bit_read_BL(&sec_dat);
+          dwg->dwg_class[i].num_instances = bit_read_BL(&sec_dat);
+          dwg->dwg_class[i].dwg_version    = bit_read_BS(&sec_dat);
+          dwg->dwg_class[i].maint_version  = bit_read_BS(&sec_dat);
+          dwg->dwg_class[i].unknown_1      = bit_read_BL(&sec_dat);
+          dwg->dwg_class[i].unknown_1      = bit_read_BL(&sec_dat);
           LOG_TRACE( "num_instances:    %u\n",
-                    dwg->dwg_class[idc].num_instances)
+                    dwg->dwg_class[i].num_instances)
           LOG_HANDLE("dwg version:      %u (%u)\n",
-                    dwg->dwg_class[idc].dwg_version,
-                    dwg->dwg_class[idc].maint_version)
-          LOG_HANDLE("unknown:          %u %u\n", dwg->dwg_class[idc].unknown_1,
-                    dwg->dwg_class[idc].unknown_2)
+                    dwg->dwg_class[i].dwg_version,
+                    dwg->dwg_class[i].maint_version)
+          LOG_HANDLE("unknown:          %u %u\n", dwg->dwg_class[i].unknown_1,
+                    dwg->dwg_class[i].unknown_2)
 
-          if (strcmp(dwg->dwg_class[idc].dxfname, "LAYOUT") == 0)
-            dwg->layout_number = dwg->dwg_class[idc].number;
+          if (strcmp(dwg->dwg_class[i].dxfname, "LAYOUT") == 0)
+            dwg->layout_number = dwg->dwg_class[i].number;
         }
     }
   else

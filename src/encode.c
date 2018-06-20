@@ -493,7 +493,7 @@ typedef struct
 {
   long int handle;
   long int address;
-  unsigned int idc;
+  unsigned int index;
 } Object_Map;
 
 /*--------------------------------------------------------------------------------
@@ -832,7 +832,7 @@ dwg_encode(Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   for (j = 0; j < dwg->num_objects; j++)
     {
       /* Define the handle of each object, including unknown */
-      omap[j].idc = j;
+      omap[j].index = j;
       omap[j].handle = dwg->object[j].handle.value;
 
       /* Arrange the sequence of handles according to a growing order  */
@@ -842,13 +842,13 @@ dwg_encode(Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           while (omap[k].handle < omap[k - 1].handle)
             {
               pvzmap.handle = omap[k].handle;
-              pvzmap.idc    = omap[k].idc;
+              pvzmap.index    = omap[k].index;
 
               omap[k - 1].handle = pvzmap.handle;
-              omap[k - 1].idc    = pvzmap.idc;
+              omap[k - 1].index    = pvzmap.index;
 
               omap[k].handle = omap[k - 1].handle;
-              omap[k].idc    = omap[k - 1].idc;
+              omap[k].index    = omap[k - 1].index;
 
               k--;
               if (k == 0)
@@ -857,25 +857,25 @@ dwg_encode(Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         }
     }
   //for (i = 0; i < dwg->num_objects; i++)
-  //  printf ("Handle(%i): %lu / Idc: %u\n", i, omap[i].handle, omap[i].idc);
+  //  printf ("Handle(%i): %lu / Idc: %u\n", i, omap[i].handle, omap[i].index);
 
   /* Write the re-sorted objects
    */
   for (j = 0; j < dwg->num_objects; j++)
     {
       Dwg_Object *obj;
-      unsigned int idc = omap[j].idc;
+      unsigned int index = omap[j].index;
       LOG_TRACE("\n> Next object: %lu\tHandle: %lX\tOffset: %lu\n"
                 "==========================================\n",
                 j, omap[j].handle, dat->byte);
       omap[j].address = dat->byte;
-      if (idc > dwg->num_objects)
+      if (index > dwg->num_objects)
         {
-          LOG_ERROR("Invalid object map index %d, max %d. Skipping", idc, dwg->num_objects)
+          LOG_ERROR("Invalid object map index %d, max %d. Skipping", index, dwg->num_objects)
           error |= DWG_ERR_VALUEOUTOFBOUNDS;
           continue;
         }
-      obj = &dwg->object[idc];
+      obj = &dwg->object[index];
       obj->address = dat->byte; // change the address to the linearily sorted one
       error |= dwg_encode_add_object(obj, dat, dat->byte);
       bit_write_CRC(dat, omap[j].address, 0xC0C1);
@@ -883,7 +883,7 @@ dwg_encode(Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
   /*for (j = 0; j < dwg->num_objects; j++) 
       LOG_INFO ("Object(%lu): %6lu / Address: %08lX / Idc: %u\n", 
-		 j, omap[j].handle, omap[j].address, omap[j].idc);
+		 j, omap[j].handle, omap[j].address, omap[j].index);
   */
 
   /* Unknown bitdouble between objects and object map (or short?)
@@ -904,20 +904,20 @@ dwg_encode(Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   last_handle = 0;
   for (j = 0; j < dwg->num_objects; j++)
     {
-      unsigned int idc;
+      unsigned int index;
       long int pvz;
 
-      idc = omap[j].idc;
+      index = omap[j].index;
 
-      pvz = omap[idc].handle - last_handle;
+      pvz = omap[index].handle - last_handle;
       bit_write_MC(dat, pvz);
       //printf ("Handle(%i): %6lu / ", j, pvz);
-      last_handle = omap[idc].handle;
+      last_handle = omap[index].handle;
 
-      pvz = omap[idc].address - last_address;
+      pvz = omap[index].address - last_address;
       bit_write_MC(dat, pvz);
       //printf ("Address: %08X\n", pvz);
-      last_address = omap[idc].address;
+      last_address = omap[index].address;
 
       //dwg dwg_encode_add_object(dwg->object[j], dat, last_address);
 
