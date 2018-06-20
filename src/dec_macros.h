@@ -497,7 +497,10 @@ static int dwg_decode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj
   error = dwg_decode_entity(dat, hdl_dat, str_dat, _ent); \
   if (error) return error;
 
-#define DWG_ENTITY_END return error & ~DWG_ERR_UNHANDLEDCLASS; }
+#define DWG_ENTITY_END \
+  if (dat->version >= R_2007) { free(str_dat); } \
+  return error & ~DWG_ERR_UNHANDLEDCLASS; \
+}
 
 #define DWG_OBJECT(token) \
 EXPORT int dwg_add_ ## token (Dwg_Object *obj) \
@@ -534,5 +537,8 @@ static int dwg_decode_ ## token (Bit_Chain *restrict dat, Dwg_Object *restrict o
   error |= dwg_decode_object(dat, hdl_dat, str_dat, obj->tio.object); \
   if (error) return error;
 
-#define DWG_OBJECT_END return error & ~DWG_ERR_UNHANDLEDCLASS; }
+#define DWG_OBJECT_END \
+  if (dat->version >= R_2007) { free(str_dat); } \
+  return error & ~DWG_ERR_UNHANDLEDCLASS; \
+}
 
