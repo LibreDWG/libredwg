@@ -250,14 +250,16 @@ dwg_free_handleref(Dwg_Object_Ref *restrict ref, Dwg_Data *restrict dwg)
     ref = NULL;
     return;
   }
-  for (i=0; i < dwg->num_object_refs; i++)
-    {
-      if (dwg->object_ref[i] == ref)
-        {
-          dwg->object_ref[i] = NULL;
-          if (ref) { free(ref); ref = NULL; }
-        }
-    }
+  if (ref) {
+    for (i=0; i < dwg->num_object_refs; i++)
+      {
+        if (dwg->object_ref[i] == ref)
+          {
+            dwg->object_ref[i] = NULL;
+            free(ref); ref = NULL;
+          }
+      }
+  }
 }
 
 static void
