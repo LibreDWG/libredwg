@@ -69,7 +69,7 @@ int dwg_obj_is_control(const Dwg_Object *obj);
 
 #define ANYCODE -1
 #define FIELD_HANDLE(name,code,dxf) VALUE_HANDLE(_obj->name,code,dxf)
-#define VALUE_HANDLE(hdl,code,dxf)  dwg_free_handleref(hdl, dwg)
+#define VALUE_HANDLE(hdl,code,dxf)  /* freed globally */
 #define FIELD_DATAHANDLE(name,code,dxf) FIELD_HANDLE(name, code, dxf)
 #define FIELD_HANDLE_N(name,vcount,code,dxf) FIELD_HANDLE(name, code, dxf)
 
@@ -238,32 +238,6 @@ dwg_free_ ##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
   FREE_IF(obj->tio.object);  \
   obj->parent = NULL;        \
   return 0;                  \
-}
-
-//TODO: this should not really be needed as we can just free all refs
-//      at the end. but this might miss some refs not stored in this array.
-static void
-dwg_free_handleref(Dwg_Object_Ref *restrict ref, Dwg_Data *restrict dwg)
-{
-  long unsigned int i;
-  if (!dwg) {
-    free(ref);
-    ref = NULL;
-    return;
-  }
-  if (ref) {
-    free(ref); ref = NULL;
-  }
-  /*
-    for (i=0; i < dwg->num_object_refs; i++)
-      {
-        if (dwg->object_ref[i] == ref)
-          {
-            dwg->object_ref[i] = NULL;
-            free(ref); ref = NULL;
-          }
-      }
-  */
 }
 
 static void
@@ -700,6 +674,10 @@ dwg_free(Dwg_Data * dwg)
                 FREE_IF(dwg->dwg_class[i].dxfname_u);
             }
           FREE_IF(dwg->dwg_class);
+        }
+      for (i=0; i < (int)dwg->num_object_refs; ++i)
+        {
+          FREE_IF(dwg->object_ref[i]);
         }
       FREE_IF(dwg->object_ref);
       FREE_IF(dwg->object);
