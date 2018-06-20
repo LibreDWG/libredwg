@@ -842,7 +842,7 @@ dwg_encode(Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           while (omap[k].handle < omap[k - 1].handle)
             {
               pvzmap.handle = omap[k].handle;
-              pvzmap.idc    = omap[k].handle;
+              pvzmap.idc    = omap[k].idc;
 
               omap[k - 1].handle = pvzmap.handle;
               omap[k - 1].idc    = pvzmap.idc;
@@ -859,19 +859,24 @@ dwg_encode(Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   //for (i = 0; i < dwg->num_objects; i++)
   //  printf ("Handle(%i): %lu / Idc: %u\n", i, omap[i].handle, omap[i].idc);
 
-  /* Write the objects
+  /* Write the re-sorted objects
    */
   for (j = 0; j < dwg->num_objects; j++)
     {
       Dwg_Object *obj;
       unsigned int idc = omap[j].idc;
-      omap[j].address = dat->byte;
-      obj = &dwg->object[idc];
-      obj->address = dat->byte; // change the address to the linearily sorted one
-      LOG_TRACE("\n> Next object: %lu\tHandle: %lu\tOffset: %lu\n"
+      LOG_TRACE("\n> Next object: %lu\tHandle: %lX\tOffset: %lu\n"
                 "==========================================\n",
                 j, omap[j].handle, dat->byte);
-
+      omap[j].address = dat->byte;
+      if (idc > dwg->num_objects)
+        {
+          LOG_ERROR("Invalid object map index %d, max %d. Skipping", idc, dwg->num_objects)
+          error |= DWG_ERR_VALUEOUTOFBOUNDS;
+          continue;
+        }
+      obj = &dwg->object[idc];
+      obj->address = dat->byte; // change the address to the linearily sorted one
       error |= dwg_encode_add_object(obj, dat, dat->byte);
       bit_write_CRC(dat, omap[j].address, 0xC0C1);
     }
