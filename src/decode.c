@@ -2466,7 +2466,7 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
 
   // elsewhere: object data, handles, padding bits, crc
 
-  return 0;
+  return error;
 }
 
 /* The first common part of every object.
@@ -2549,7 +2549,7 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
       FIELD_B (has_ds_binary_data, 0);
     }
 
-  return 0;
+  return error;
 }
 
 /* Store an object reference in a seperate dwg->object_ref array
@@ -2844,7 +2844,7 @@ dwg_free_xdata_resbuf(Dwg_Resbuf *rbuf)
       short type = get_base_value_type(rbuf->type);
       if (type == VT_STRING || type == VT_BINARY)
         free (rbuf->value.str.u.data);
-      free(rbuf);
+      free (rbuf);
       rbuf = next;
     }
 }
@@ -2896,7 +2896,10 @@ dwg_decode_xdata(Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj, int 
                   {
                     LOG_ERROR("Out of memory");
                     if (root)
-                      dwg_free_xdata_resbuf(root);
+                      {
+                        dwg_free_xdata_resbuf(root);
+                        if (rbuf) free(rbuf);
+                      }
                     else
                       dwg_free_xdata_resbuf(rbuf);
                     return NULL;

@@ -129,6 +129,7 @@ static inline void dxf_free_pair(Dxf_Pair* pair)
       free(pair->value.s);
     }
   free(pair);
+  pair = NULL;
 }
 
 static Dxf_Pair* dxf_read_pair(Bit_Chain *dat)
@@ -201,8 +202,8 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
   if (pair->code == code)
     {
       dxf_skip_comment(dat, pair);
-      dxf_free_pair(pair);
       DXF_CHECK_EOF;
+      dxf_free_pair(pair);
       return 1;
     }
   return 0;
@@ -672,7 +673,6 @@ static int
 dwg_indxf_variable_type(Dwg_Data * dwg, Bit_Chain *dat, Dwg_Object* obj)
 {
   int i;
-  char *dxfname;
   Dwg_Class *klass;
   int is_entity;
 
@@ -683,7 +683,6 @@ dwg_indxf_variable_type(Dwg_Data * dwg, Bit_Chain *dat, Dwg_Object* obj)
   klass = &dwg->dwg_class[i];
   if (!klass || ! klass->dxfname)
     return DWG_ERR_INTERNALERROR;
-  dxfname = klass->dxfname;
   // almost always false
   is_entity = dwg_class_is_entity(klass);
 

@@ -128,27 +128,23 @@ static void
 output_INSERT(Dwg_Object* obj)
 {
   Dwg_Entity_INSERT* insert = obj->tio.entity->tio.INSERT;
-  //if (insert->block_header->handleref.code == 5)
-  if(42) //XXX did this to test the new handleref.code handling "code"
+  if (insert->block_header && insert->block_header->handleref.value)
     {
-      printf(
-          "\t<use id=\"dwg-object-%d\" transform=\"translate(%f %f) rotate(%f) scale(%f %f)\" xlink:href=\"#symbol-%lu\" /><!-- block_header->handleref: %d.%d.%lu -->\n",
-          obj->index,
-          transform_X(insert->ins_pt.x), transform_Y(insert->ins_pt.y), (180.0 / M_PI)
-              * insert->rotation, insert->scale.x, insert->scale.y,
-          insert->block_header->absolute_ref,
-          insert->block_header->handleref.code,
-          insert->block_header->handleref.size,
-          insert->block_header->handleref.value);
+      printf("\t<use id=\"dwg-object-%d\" transform=\"translate(%f %f) "
+             "rotate(%f) scale(%f %f)\" xlink:href=\"#symbol-%lu\" />"
+             "<!-- block_header->handleref: %d.%d.%lu -->\n",
+             obj->index,
+             transform_X(insert->ins_pt.x), transform_Y(insert->ins_pt.y),
+             (180.0 / M_PI) * insert->rotation, insert->scale.x, insert->scale.y,
+             insert->block_header->absolute_ref,
+             insert->block_header->handleref.code,
+             insert->block_header->handleref.size,
+             insert->block_header->handleref.value);
     }
   else
     {
-      printf(
-          "\n\n<!-- WRONG INSERT(%d.%d.%lu): handleref = %d.%d.%lu -->\n",
-          obj->handle.code, obj->handle.size, obj->handle.value,
-          insert->block_header->handleref.code,
-          insert->block_header->handleref.size,
-          insert->block_header->handleref.value);
+      printf("\n\n<!-- WRONG INSERT(%d.%d.%lu) -->\n",
+             obj->handle.code, obj->handle.size, obj->handle.value);
     }
 }
 

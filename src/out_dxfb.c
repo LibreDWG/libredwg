@@ -826,10 +826,7 @@ dwg_dxfb_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
           Dwg_Class *klass = NULL;
 
           if (i >= 0 && i < (int)dwg->num_classes)
-            {
-              klass = &dwg->dwg_class[i];
-              is_entity = dwg_class_is_entity(klass);
-            }
+            klass = &dwg->dwg_class[i];
           if (!klass)
             {
               LOG_WARN("Unknown object, skipping eed/reactors/xdic");
@@ -1129,7 +1126,6 @@ dxfb_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   int error = 0;
   unsigned int i;
   Dwg_Object_BLOCK_CONTROL *_ctrl = &dwg->block_control;
-  Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
   /* let's see if this control block is correct... */
   Dwg_Object_Ref *msref = dwg->header_vars.BLOCK_RECORD_MSPACE;
   Dwg_Object_Ref *psref = dwg->header_vars.BLOCK_RECORD_PSPACE;
@@ -1238,7 +1234,6 @@ int
 dwg_write_dxfb(Bit_Chain *dat, Dwg_Data * dwg)
 {
   const int minimal = dwg->opts & 0x10;
-  struct Dwg_Header *obj = &dwg->header;
 
   if (dat->from_version == R_INVALID)
     dat->from_version = dat->version;
