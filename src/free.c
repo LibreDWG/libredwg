@@ -29,6 +29,7 @@
 #include "dwg.h"
 #include "decode.h"
 #include "free.h"
+#include "hash.h"
 
 static unsigned int loglevel;
 #ifdef USE_TRACING
@@ -700,6 +701,8 @@ dwg_free(Dwg_Data * dwg)
         FREE_IF(dwg->object_ref[i]);
       FREE_IF(dwg->object_ref);
       FREE_IF(dwg->object);
+      if (dwg->object_map)
+        hash_free (dwg->object_map);
 #undef FREE_IF
     }
 }
